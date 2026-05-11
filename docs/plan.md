@@ -189,14 +189,9 @@
   - [x] `import_text.py`: 번역 텍스트 가져오기
   - [x] `update_pointers.py`: 포인터 자동 업데이트
   - [x] `build_rom.py`: 최종 ROM 생성
-- [ ] Batch 빌드 스크립트 작성
-  ```batch
-  @echo off
-  python tools/extract_text.py
-  python tools/import_text.py
-  python tools/update_pointers.py
-  python tools/build_rom.py output.gba
-  ```
+- [x] Batch 빌드 스크립트 작성
+  - [x] `build.bat`: Windows용 빌드 스크립트
+  - [x] `build.sh`: Linux/Mac용 빌드 스크립트
 - [ ] 빌드 프로세스 테스트 (텍스트 추출 완료 후)
 
 ### 5-2. 포인터 업데이트 시스템

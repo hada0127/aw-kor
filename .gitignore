@@ -26,4 +26,4 @@ Thumbs.db
 # Build artifacts
 *.o
 *.a
-*.out
+*.out.claude/

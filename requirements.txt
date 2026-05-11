@@ -1,0 +1,20 @@
+# Game Wars GBA 한글화 프로젝트 Python 의존성
+#
+# 설치 방법:
+#   pip install -r requirements.txt
+#
+# 현재 모든 도구는 Python 표준 라이브러리만 사용합니다
+# 앞으로 추가 기능 구현 시 필요한 패키지를 여기에 추가할 예정입니다
+
+# 코어 요구사항
+Python>=3.9
+
+# 개발 도구 (선택사항)
+# pytest>=7.0       # 단위 테스트
+# black>=22.0       # 코드 포매팅
+# pylint>=2.0       # 코드 분석
+# flake8>=4.0       # 스타일 검사
+
+# 문서 생성 (선택사항)
+# sphinx>=4.0       # 문서 생성
+# markdown>=3.0     # Markdown 처리
