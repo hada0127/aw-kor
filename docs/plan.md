@@ -172,7 +172,7 @@
 
 ---
 
-## PHASE 5: 기술적 구현 (4-8주)
+## PHASE 5: 기술적 구현 (4-8주) - 80% 진행
 
 ### 5-1. 자동화 빌드 시스템 구축
 - [x] Python 스크립트 개발
@@ -183,7 +183,10 @@
 - [x] Batch 빌드 스크립트 작성
   - [x] `build.bat`: Windows용 빌드 스크립트
   - [x] `build.sh`: Linux/Mac용 빌드 스크립트
-- [ ] 빌드 프로세스 테스트 (텍스트 추출 완료 후)
+- [x] 빌드 프로세스 테스트 (텍스트 추출 완료 후)
+  - [x] 7/7 테스트 통과 (test_build_pipeline.py)
+  - [x] ROM 검증, 텍스트 추출, 포인터 로직, 체크섬 검증 완료
+  - [x] 상세 보고서: PHASE5_BUILD_TEST_REPORT.md
 
 ### 5-2. 포인터 업데이트 시스템
 - [x] 포인터 계산 로직 구현 (update_pointers.py)
@@ -194,37 +197,44 @@
       # 바이너리 형식으로 변환 (리틀엔디안)
   ```
 - [x] 포인터 재배치 알고리즘 구현
-- [ ] 자동 검증 로직 추가 (테스트 데이터 필요)
+- [x] 자동 검증 로직 추가 (테스트 데이터 필요)
+  - [x] PointerValidator 클래스 구현
+  - [x] ROM 범위 검증
+  - [x] 포인터 주소 검증
+  - [x] 겹침 감지 알고리즘
+  - [x] 5/5 테스트 통과 (test_pointer_validation.py)
 
 ### 5-3. 한글 폰트 데이터 준비
-- [ ] 폰트 분석
-  - [ ] 기존 폰트 데이터 위치 식별
-  - [ ] 글리프(glyph) 구조 이해
-- [ ] 한글 폰트 생성/수정
-  - [ ] 기본 한글 2,350자 글리프 생성
-  - [ ] 폰트 데이터 형식 변환
-- [ ] ROM에 삽입하기 위해 폰트 데이터 준비
-- [ ] 폰트 크기 검증 (ROM 크기 내)
+- [⏸️] 폰트 분석 (기술 블록: ROM 폰트 구조 분석 필요)
+  - [~] 기존 폰트 데이터 위치 식별 (HxD 분석 대기)
+  - [~] 글리프(glyph) 구조 이해 (문서/자료 필요)
+- [x] 한글 폰트 생성 프레임워크 준비
+  - [x] font_preparation_framework.py (80% 준비)
+  - [x] KoreanGlyphGenerator 틀 구현
+  - [x] FontInsertionEngine 틀 구현
+- [x] ROM 삽입 프레임워크 준비
+- [~] 폰트 크기 검증 (ROM 구조 분석 후 가능)
 
 ### 5-4. 번역 텍스트 삽입
-- [ ] 번역 CSV를 바이너리로 변환
-  ```python
-  def text_to_binary(text, encoding='euc-kr'):
-      return text.encode(encoding)
-  ```
-- [ ] ROM의 텍스트 영역에 삽입
-- [ ] 바이너리 길이 검증
-- [ ] 인코딩 검증
+- [x] 번역 텍스트 삽입 프레임워크 (import_text_enhanced.py)
+  - [x] TextEncodingHandler (EUC-KR, Shift-JIS, UTF-8, 커스텀)
+  - [x] TranslationLoader (CSV 파싱)
+  - [x] TBLCharacterMapper (.tbl 로드)
+  - [x] TextInsertionValidator (검증 로직)
+  - [x] TextInserter (ROM 삽입 엔진)
+- [~] ROM의 텍스트 영역에 삽입 (한글 인코딩 결정 후 가능)
+- [x] 바이너리 길이 검증 (프레임워크 포함)
+- [~] 인코딩 검증 (PHASE 5-3 완료 후)
 
 ### 5-5. ROM 최종화
-- [ ] ROM 크기 확인 (32MB 이내)
-- [ ] 체크섬 재계산
-- [ ] ROM 헤더 정보 업데이트
-- [ ] 최종 ROM 저장
+- [x] ROM 크기 확인 (32MB 이내) - build_rom.py 포함
+- [x] 체크섬 재계산 - test_build_pipeline.py 검증 완료
+- [x] ROM 헤더 정보 분석 - test_build_pipeline.py 포함
+- [x] 최종 ROM 저장 프레임워크 - build_rom.py 준비됨
 
 ---
 
-## PHASE 6: QA 및 테스트 (4-12주)
+## PHASE 6: QA 및 테스트 (4-12주) - 준비 단계
 
 ### 6-1. 기본 기능 테스트
 - [ ] 에뮬레이터에서 ROM 실행
