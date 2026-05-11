@@ -1,0 +1,19 @@
+{
+  "total_items": 28347,
+  "dictionary_size": 30,
+  "current_translation_rate": "3.0%",
+  "categories": {
+    "unit": 1464,
+    "dialogue": 9131,
+    "punctuation": 204,
+    "sfx": 72,
+    "special": 0,
+    "unknown": 17476
+  },
+  "next_steps": [
+    "1. 현재 사전에 추가 유닛명 번역 추가",
+    "2. 문법 패턴 분석 (ます, ん, て 등)",
+    "3. 대사 템플릿 식별",
+    "4. 자동 번역 적용"
+  ]
+}
