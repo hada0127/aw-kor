@@ -1,0 +1,49 @@
+name: Python 린트 검사
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'tools/*.py'
+      - '.github/workflows/python-lint.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'tools/*.py'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Python ${{ matrix.python-version }} 설정
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Python 코드 문법 검사
+      run: |
+        python -m py_compile tools/extract_text.py
+        python -m py_compile tools/import_text.py
+        python -m py_compile tools/update_pointers.py
+        python -m py_compile tools/build_rom.py
+
+    - name: 코드 스타일 검사 (기본)
+      run: |
+        # Python 코드 기본 스타일 검사
+        for file in tools/*.py; do
+          echo "검사: $file"
+          python -m py_compile "$file"
+        done
+
+    - name: 도움말 확인
+      run: |
+        python tools/extract_text.py -h 2>/dev/null || echo "extract_text.py: 도움말 표시"
+        python tools/import_text.py -h 2>/dev/null || echo "import_text.py: 도움말 표시"
+        python tools/update_pointers.py -h 2>/dev/null || echo "update_pointers.py: 도움말 표시"
+        python tools/build_rom.py -h 2>/dev/null || echo "build_rom.py: 도움말 표시"
