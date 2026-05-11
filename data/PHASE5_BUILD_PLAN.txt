@@ -1,0 +1,34 @@
+PHASE 5 Build Workflow:
+
+1. Translation Data Preparation
+   [OK] data/translation_for_import.csv (797 translations)
+   [OK] tools/game_wars.tbl (3,567 mappings)
+   [OK] original/Game Boy Wars Advance 1+2 (Japan).gba (base ROM)
+
+2. Build Process (Logical Order)
+   Step 1: python tools/import_text.py <base_rom> <translation_csv> <tbl> <temp_rom>
+           - Insert translated texts into ROM
+           - Arrange new text data
+   
+   Step 2: python tools/update_pointers.py <temp_rom> <pointer_table> <final_rom>
+           - Update pointers for text address changes
+           - Recalculate and update reference addresses
+   
+   Step 3: python tools/build_rom.py <final_rom>
+           - Recalculate ROM checksum
+           - Update header information
+           - Final validation
+
+3. Output
+   -> output/game_wars_kor.gba (Korean ROM)
+
+4. Testing
+   - Run in VisualBoyAdvance M
+   - Confirm Korean UI/menu display
+   - Verify game playability
+
+Current Status:
+[OK] Text extraction complete
+[OK] Translation prepared (sample)
+[OK] TBL file generated
+[IN] Build system test in progress
