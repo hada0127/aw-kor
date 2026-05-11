@@ -90,8 +90,8 @@
 - [x] Python 자동 생성으로 .tbl 파일 생성
   - [x] 3,567개 바이트-문자 매핑 추출
   - [x] tools/game_wars.tbl 생성 (35KB, 3,578 라인)
-- [ ] 수동 수정 및 검증 (필요시)
-- [ ] .tbl 파일 git에 커밋
+- [x] 수동 수정 및 검증 (검증 완료, 3,568 매핑 정상)
+- [x] .tbl 파일 git에 커밋 (2026-05-11 완료)
 
 ### 3-2. 전체 텍스트 추출
 - [x] Python 스크립트로 자동 추출
@@ -113,13 +113,13 @@
 - [ ] 포인터 테이블 검증 (선택사항)
 
 ### 3-4. 데이터 정리
-- [~] CSV 파일 정렬 완료 (data/game_wars_found_texts.csv)
+- [x] CSV 파일 정렬 완료 (data/game_wars_found_texts.csv)
   ```
-  address,pointer_addr,japanese,characters,context,notes
-  0x100000,0x100010,"あなたの名前",6,"캐릭터 이름 입력",메인 캐릭터
+  address,japanese,korean,length
+  0x009294D0,潜水艦,잠수함,6
   ```
-- [ ] 스프레드시트로 공유 준비
-- [ ] 번역팀 공유 용 최종 데이터 세트
+- [x] 스프레드시트로 공유 준비 (CSV 형식 최적화 완료)
+- [x] 번역팀 공유 용 최종 데이터 세트 (translation_for_import.csv, 797개 항목)
 
 ---
 
