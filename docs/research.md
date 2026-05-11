@@ -1,0 +1,470 @@
+# GBA 한글화 프로젝트 - 종합 연구 자료
+
+## 1. 프로젝트 개요
+
+Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 프로젝트입니다.
+이 문서는 WebSearch를 통해 수집한 모든 정보를 통합 정리한 자료입니다.
+
+### 참조 문서
+- `claude_research.md`: 커뮤니티 정보 및 리소스
+- `codex_research.md`: 기술 도구 및 개발 방법론
+- `gemini_research.md`: 종합 가이드 및 체크리스트
+
+---
+
+## 2. Game Boy Advance 플랫폼 이해
+
+### 하드웨어 사양
+- **CPU**: ARM7TDMI (16.78 MHz)
+- **ROM**: 최대 32MB
+- **메모리**: WRAM(32KB), VRAM(96KB), SRAM(32KB)
+- **디스플레이**: 240×160 픽셀, 32,768색
+
+### 텍스트 저장 공간의 제약
+GBA의 가장 큰 제약은 ROM 크기입니다:
+- 원본 롬 크기가 32MB를 초과할 수 없음
+- 한글 폰트 데이터가 상당한 공간 차지
+- 텍스트 길이 증가로 인한 포인터 재배치 필요
+- **결론**: 효율적인 인코딩과 압축 필수
+
+---
+
+## 3. GBA 한글화 핵심 기술
+
+### 3.1 텍스트 추출 및 분석
+
+#### .tbl (Text Table) 파일 이해
+`.tbl` 파일은 ROM의 바이너리 텍스트를 읽을 수 있는 형식으로 변환합니다.
+
+**파일 형식:**
+```
+# 주석
+00=A
+01=B
+7C=ㄱ
+7D=ㄴ
+...
+```
+
+**생성 방법:**
+1. Hex 스캔으로 게임의 문자 위치 파악
+2. RSEARCH 또는 Monkey-Moore 도구로 패턴 추출
+3. 수동으로 .tbl 파일 작성
+4. Hex 편집기(WindHex, HxD)에서 검증
+
+#### 텍스트 추출 도구
+| 도구 | 용도 | 난도 |
+|-----|-----|-----|
+| RSEARCH | 상대적 검색을 통한 테이블 자동 생성 | 중 |
+| Monkey-Moore | 텍스트 패턴 분석 | 중 |
+| WindHex | TBL 로드 및 시각화 | 하 |
+| VisualBoyAdvance | 메모리 디버깅 | 중 |
+
+### 3.2 Hex 편집기 및 도구
+
+#### 주요 Hex 편집기
+- **HxD** (무료): ROM 해킹 표준 도구
+- **HexManiacAdvance** (오픈소스): 포켓몬 GBA 최적화
+- **Crystal Tile 2.5** (오픈소스): GBA/NDS 종합 편집
+  - 폰트 편집 가능
+  - 문자열 테이블 직접 편집
+  - 스프라이트 추출
+
+### 3.3 문자열 포인터 시스템
+
+#### 포인터의 역할
+GBA 게임의 텍스트는 ROM의 고정 위치가 아니라 **포인터**로 참조됩니다.
+
+**포인터 구조:**
+```
+메인 메모리: "대사를 여기서 불러옴"
+            ↑
+            32비트 주소 (4바이트)
+```
+
+#### 포인터 업데이트의 필요성
+- 원본: 영어 "Hello" (5 바이트)
+- 번역: 한글 "안녕하세요" (10 바이트, EUC-KR 기준)
+- 텍스트 길이 변화 → 전체 포인터 재배치 필요
+
+#### 자동화 방법
+```python
+# 예: Python을 이용한 포인터 업데이트 자동화
+def update_pointers(rom_data, new_text_positions):
+    for address, new_pos in new_text_positions.items():
+        # 32비트 리틀엔디안으로 변환
+        pointer = new_pos.to_bytes(4, 'little')
+        rom_data[address:address+4] = pointer
+```
+
+---
+
+## 4. 한글 인코딩 선택 기준
+
+### 인코딩 비교
+
+| 인코딩 | 바이트 | 한글자 수 | 추천 상황 |
+|------|------|---------|---------|
+| EUC-KR | 2 (고정) | 8,836자 | 공간 제약 심할 때 |
+| CP949 | 2 (고정) | 11,172자 | EUC-KR 부족할 때 |
+| UTF-8 | 3 (가변) | 무제한 | 최신 프로젝트 |
+
+### Game Wars에 권장하는 인코딩
+**EUC-KR 권장 이유:**
+- 고정 길이(2바이트): 포인터 계산이 간단
+- 일반적 한글 2,350자 모두 포함
+- 기존 GBA 한글화 프로젝트와 호환성
+
+---
+
+## 5. ROM 해킹 워크플로우
+
+### Phase 1: 준비 단계 (1-2주)
+
+**필요 도구:**
+```bash
+필수:
+- VisualBoyAdvance M v2.1.4 (에뮬레이터)
+- HxD (Hex 편집기)
+- 원본 ROM 파일
+
+권장:
+- Crystal Tile 2.5 (GBA 종합 편집)
+- Python 3.x (자동화 스크립트)
+- Git (버전 관리)
+```
+
+**초기 작업:**
+```
+1. ROM 분석
+   - 파일 크기 확인
+   - 헤더 정보 읽기
+   - 텍스트 위치 대략 파악
+
+2. 게임 플레이
+   - 에뮬레이터에서 모든 신 확인
+   - 텍스트량 추정
+   - UI 구조 파악
+```
+
+### Phase 2: 텍스트 추출 (2-4주)
+
+```
+1. 문자 위치 특정
+   - Hex 에디터에서 문자 검색
+   - 패턴 인식
+   
+2. .tbl 파일 생성
+   - RSEARCH로 패턴 추출
+   - 수동 검증 및 수정
+   
+3. 전체 텍스트 추출
+   - ROM 스캔
+   - 스프레드시트로 정렬 (주소, 원문, 컨텍스트)
+```
+
+### Phase 3: 번역 작업 (6-12개월)
+
+```
+1. 번역팀 구성
+   - 게임 분야 경험자
+   - 게임 톤앤매너 이해자
+   - 기술적 피드백 담당자
+
+2. 번역 진행
+   - 게임 스토리 읽기
+   - 컨텍스트 기반 번역
+   - 용어 일관성 관리
+   
+3. 검수
+   - 네이티브 한글 화자 검토
+   - 게임 느낌 검증
+```
+
+### Phase 4: 기술적 삽입 (4-8주)
+
+```
+1. 자동화 빌드 시스템 구축
+   - 번역 CSV → 바이너리 변환 스크립트
+   - 포인터 업데이트 자동화
+   - ROM 생성 자동화
+   
+2. 폰트 준비
+   - 한글 폰트 글리프 추출/생성
+   - 폰트 데이터 ROM에 삽입
+   
+3. 텍스트 삽입
+   - 포인터 업데이트
+   - 텍스트 바이너리 변환 후 삽입
+```
+
+**자동 빌드 스크립트 예시:**
+```batch
+@echo off
+REM build.bat - Game Wars 한글 패치 자동화
+
+python extract_text.py
+python translate_insert.py
+python update_pointers.py
+python generate_rom.py output.gba
+
+echo Build complete!
+pause
+```
+
+### Phase 5: QA 및 테스트 (4-12주)
+
+```
+1. 에뮬레이터 검증
+   - 전체 게임 플레이
+   - 모든 대사 확인
+   - 메뉴 동작 검증
+   
+2. 버그 추적
+   - 텍스트 오버플로우
+   - 포인터 오류
+   - 인코딩 문제
+   
+3. 수정 및 재테스트
+   - 버그 목록 우선순위 지정
+   - 수정 후 재테스트
+```
+
+---
+
+## 6. Game Wars 한글화 특수 고려사항
+
+### 전략 게임의 특성
+Game Wars는 턴 기반 전략 게임으로:
+- **유닛 이름**: Unit, Magic, Item 문자열
+- **대사량**: 중간 규모 (RPG보다 적음)
+- **메뉴 복잡도**: 높음 (메뉴 포인터 많음)
+- **UI 제약**: 턴 시스템, 상태창 등
+
+### 예상 텍스트량
+- 일본어 원문: 약 300-500KB (텍스트 기준)
+- 한글 번역: 약 350-550KB (길이 변수)
+- 추가 폰트 데이터: 100-200KB
+- **최종 ROM**: 32MB 이내 가능
+
+### 추천 진행 순서
+1. **UI/메뉴 번역 우선** (게임플레이에 필수)
+2. **스토리 모드 번역** (주 콘텐츠)
+3. **추가 모드 번역** (서브 콘텐츠)
+4. **세부 조정** (오류, 폰트 등)
+
+---
+
+## 7. 커뮤니티 리소스 및 도움
+
+### 주요 커뮤니티
+
+#### 한글 패치 커뮤니티
+- **한글로게임** (https://www.hangulogame.com/)
+  - GBA 한글 패치 리스트
+  - 기존 한글화 예시
+  - 패치 다운로드
+
+#### 기술 지원
+- **RomHacking.net** (https://www.romhacking.net/)
+  - 도구 리포지토리
+  - 튜토리얼
+  - 포럼 (English)
+
+- **GBAtemp Forum** (https://gbatemp.net/)
+  - GBA 기술 지원
+  - 에뮬레이터 정보
+  - ROM 해킹 커뮤니티
+
+#### 정보 데이터베이스
+- **Data Crystal** (https://datacrystal.tcrf.net/)
+  - 게임 구조 정보
+  - 주소 매핑
+  - 포인터 위치
+
+- **나무위키** (게임보이 어드밴스)
+  - 게임 기본 정보
+  - 한글 패치 소식
+
+#### 한글 커뮤니티
+- **네이버 카페: 한글화하는 사람들**
+  - 실시간 번역 진행 현황
+  - 기술 질문 및 답변
+
+- **DC Inside 갤러리**
+  - 닌텐도 갤러리
+  - 게임보이 갤러리
+  - 한글 패치 정보 공유
+
+---
+
+## 8. 필수 도구 정리
+
+### 무료 도구 (권장)
+
+```
+┌─ ROM 분석/편집
+│  ├─ VisualBoyAdvance M (에뮬레이터+디버거)
+│  ├─ HxD (Hex 편집기)
+│  ├─ Crystal Tile 2.5 (GBA/NDS 편집)
+│  └─ GBA Explorer (구조 탐색)
+│
+├─ 텍스트 추출/테이블
+│  ├─ RSEARCH (상대적 검색)
+│  ├─ Monkey-Moore (패턴 분석)
+│  └─ WindHex (TBL 지원 Hex 편집)
+│
+├─ 자동화 스크립트
+│  ├─ Python 3.x
+│  ├─ Git (버전 관리)
+│  └─ VS Code (편집기)
+│
+└─ 번역 관리 (선택)
+   ├─ Google Sheets (협업)
+   ├─ OmegaT (번역 메모리)
+   └─ Memsource (고급 번역)
+```
+
+### 필수 기술 스택
+
+```python
+# ROM 분석 및 처리
+import struct      # 바이너리 데이터
+import json        # 설정 관리
+from pathlib import Path
+
+# 포인터 계산 예시
+def read_pointer(rom, address):
+    """ROM에서 포인터 읽기 (리틀엔디안)"""
+    return struct.unpack('<I', rom[address:address+4])[0]
+
+def write_pointer(rom, address, pointer):
+    """ROM에 포인터 쓰기 (리틀엔디안)"""
+    rom[address:address+4] = struct.pack('<I', pointer)
+```
+
+---
+
+## 9. 단계별 체크리스트
+
+### ✓ 준비 단계
+- [ ] 원본 ROM 확보 (일본어판 1, 2)
+- [ ] 에뮬레이터 설치 및 테스트
+- [ ] 모든 도구 다운로드 및 설정
+- [ ] GitHub 리포지토리 생성
+- [ ] 커뮤니티 조사 및 연락
+
+### ✓ 분석 단계
+- [ ] 게임 전체 플레이
+- [ ] ROM 구조 분석
+- [ ] 텍스트 위치 매핑
+- [ ] .tbl 파일 생성
+- [ ] 전체 텍스트 추출 및 정렬
+
+### ✓ 번역 단계
+- [ ] 번역팀 모집
+- [ ] UI/메뉴 번역 (우선)
+- [ ] 메인 스토리 번역
+- [ ] 추가 콘텐츠 번역
+- [ ] 검수 및 수정
+
+### ✓ 개발 단계
+- [ ] 폰트 데이터 준비
+- [ ] 자동 빌드 시스템 구축
+- [ ] 텍스트 삽입 자동화
+- [ ] 포인터 업데이트 자동화
+- [ ] 기본 ROM 생성 및 테스트
+
+### ✓ QA 단계
+- [ ] 전체 게임 플레이
+- [ ] 버그 추적 및 기록
+- [ ] 우선순위별 수정
+- [ ] 최종 검수
+- [ ] 패치 배포
+
+---
+
+## 10. 트러블슈팅 가이드
+
+### 문제: 포인터 오류로 게임 크래시
+**원인**: 포인터 업데이트 누락 또는 오류  
+**해결**:
+```python
+# 모든 포인터 검증
+def validate_pointers(rom, pointer_list):
+    for addr in pointer_list:
+        ptr = read_pointer(rom, addr)
+        if ptr >= len(rom):
+            print(f"Invalid pointer at 0x{addr:X}: 0x{ptr:X}")
+```
+
+### 문제: 텍스트가 화면에 안 보임
+**원인**: 포인터 오류, 인코딩 오류, 폰트 부족  
+**해결**:
+1. Hex 에디터에서 실제 데이터 확인
+2. 인코딩 검증 (EUC-KR 확인)
+3. 폰트 데이터 재확인
+
+### 문제: ROM 체크섬 오류
+**원인**: ROM 수정 후 체크섬 미업데이트  
+**해결**:
+```bash
+# GBA ROM 헤더 체크섬 재계산
+# 도구: Game Boy ROM Analyzer
+# 또는 Python으로 직접 계산
+```
+
+---
+
+## 11. 참고 자료 및 링크
+
+### 기술 문서
+- [RomHacking.net - How To Make Table Files](https://www.romhacking.net/documents/54/)
+- [Text Table Format](https://datacrystal.tcrf.net/wiki/Text_Table)
+- [Emulation General Wiki - ROM hacking resources](https://emulation.gametechwiki.com/index.php/ROM_hacking_resources)
+
+### 도구
+- [Crystal Tile 2.5](https://github.com/Crisp2013/CrystalTile25)
+- [VisualBoyAdvance](https://www.visualboyadvance.org/)
+- [HxD Hex Editor](https://mh-nexus.de/en/hxd/)
+
+### 커뮤니티
+- [한글로게임](https://www.hangulogame.com/lists/gba/)
+- [RomHacking.net](https://www.romhacking.net/)
+- [GBAtemp.net](https://gbatemp.net/)
+- [Data Crystal](https://datacrystal.tcrf.net/)
+
+---
+
+## 12. 결론 및 조언
+
+### 프로젝트 성공을 위한 핵심 요소
+
+1. **체계적 준비**: 분석 → 설계 → 구현 순서 준수
+2. **자동화**: 반복 작업은 스크립트로 자동화
+3. **커뮤니티 활용**: 기존 프로젝트 참고, 도움 요청
+4. **품질 관리**: QA는 마지막이 아니라 처음부터
+5. **버전 관리**: Git으로 모든 변경 추적
+
+### Game Wars 한글화 예상 타임라인
+
+| 단계 | 기간 | 비고 |
+|-----|-----|-----|
+| 준비 & 분석 | 2-4주 | 도구 설정, ROM 구조 파악 |
+| 텍스트 추출 | 2-4주 | .tbl 파일, 전체 스캔 |
+| 번역 | 6-12개월 | 팀 규모에 따라 매우 변수 |
+| 개발 & 삽입 | 4-8주 | 자동화 스크립트 개발 |
+| QA & 수정 | 4-12주 | 철저한 테스트 필수 |
+
+**총 예상 기간**: 7개월~18개월 (팀 규모 및 경험에 따라)
+
+### 최종 조언
+- **작게 시작하기**: Game Wars 1부터 시작
+- **문서화**: 모든 과정을 기록하면 2편이 빨라짐
+- **버전 공개**: 베타 버전부터 공개하여 피드백 받기
+- **커뮤니티 공유**: 완성 후 커뮤니티와 공유 (다른 프로젝트 영감)
+
+---
+
+**마지막 업데이트**: 2026년 5월  
+**정보 출처**: RomHacking.net, 한글로게임, 나무위키, 기타 커뮤니티
