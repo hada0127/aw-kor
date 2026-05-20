@@ -1,0 +1,77 @@
+japanese,korean,category,notes
+そう、,"그래,",dialogue,affirmative
+今日は、,"오늘은,",dialogue,connector
+おぼえておいてね。,기억해 둬.,dialogue,tutorial
+報告します！,보고합니다!,dialogue,report
+なに、,"뭐,",dialogue,reaction
+そうだ。,그래.,dialogue,affirmative
+リョウ,료,name,character name
+よくやってくれたわ！,잘해 줬어!,dialogue,praise
+今は、,"지금,",dialogue,connector
+キャット様、,"캣 님,",name,character name
+ホーク！,호크!,name,character name
+やれやれ・・・,이런...,dialogue,reaction
+ホイップショーグン、,"휩 쇼군,",name,commander name
+ならば、,"그럼,",dialogue,connector
+ぼうや。,꼬마야.,dialogue,address
+はい、,"네,",dialogue,affirmative
+ですが、,"하지만,",dialogue,connector
+なんと！,뭐라고!,dialogue,reaction
+さて、,"그럼,",dialogue,connector
+まずは,먼저,dialogue,connector
+ここで,여기서,dialogue,location
+使えるようになるぞ！,사용 가능해진다!,system,unlock
+副砲での、歩兵系に対する,부포의 보병계 공격,system,attack stat
+副砲での、ヘリ系に対する,부포의 헬기계 공격,system,attack stat
+には、それなりに,에는 그럭저럭,system,fragment
+自動的に副砲に持ちかえて,자동으로 부포로 바꿔,system,weapon explanation
+そこそこのいりょく。,그럭저럭 위력.,system,weapon explanation
+の主砲。,의 주포.,system,weapon fragment
+そこじゃないわ。,거기가 아니야.,dialogue,tutorial
+ここに移動してね。,여기로 이동해.,dialogue,tutorial
+しましょう！,하자!,dialogue,prompt
+あなたの番ね。,네 차례야.,system,turn message
+ごめんなさいね、,"미안하지만,",dialogue,apology
+ここでＡボタンを押してね。,여기서 A 버튼을 눌러.,ui,tutorial
+の能力をためしたいの。,의 능력 시험,dialogue,tutorial
+使ってみてね。,써 봐.,dialogue,tutorial
+攻略のヒント　聞きたい？,공략 힌트 들을래?,dialogue,tutorial
+聞こえるかしら？,들리니?,dialogue,question
+という話よ。,라는 얘기야.,dialogue,explanation
+じゃ、いこーっと！,그럼 가자!,dialogue,start
+じゃ　いってくるね！,그럼 다녀올게!,dialogue,start
+わしは、,"나는,",dialogue,pronoun
+大変です！,큰일이다!,dialogue,alert
+ごめんなさいね。,미안해.,dialogue,apology
+そうか。,그런가.,dialogue,reaction
+それが、,"그게,",dialogue,connector
+うん！,응!,dialogue,affirmative
+がんばります！,힘내겠습니다!,dialogue,resolve
+じゃ、,"그럼,",dialogue,connector
+マップメニューの,맵 메뉴의,ui,menu fragment
+「ショーグン」,「쇼군」,ui,menu label
+ほんと、,"정말,",dialogue,reaction
+落ち着きなさい。,진정해.,dialogue,command
+おう！,오!,dialogue,reaction
+実は、,"사실,",dialogue,connector
+まだ、,"아직,",dialogue,connector
+たしか、,"분명,",dialogue,connector
+まずは、,"먼저,",dialogue,connector
+ブラックキャノン、,"블랙캐논,",weapon,weapon name
+そうよ。,그래.,dialogue,affirmative
+ぼくの勝ちだっ！,내 승리다!,dialogue,victory
+ほら、,"자,",dialogue,prompt
+それを、,"그걸,",dialogue,object fragment
+おう、,"오,",dialogue,reaction
+ちぇっ、,"쳇,",dialogue,reaction
+えーっ、,"뭐,",dialogue,reaction
+あっ、,"앗,",dialogue,reaction
+ホイップのだんな。,휩 나리.,name,address
+だんな、,"나리,",dialogue,address
+キャハハハハ。,캬하하하.,dialogue,laugh
+ええい！,에잇!,dialogue,reaction
+がんばろう！,힘내자!,dialogue,encouragement
+ええ！,그래!,dialogue,affirmative
+キクチヨショーグン。,기쿠치요 쇼군.,name,commander name
+うん、,"응,",dialogue,affirmative
+わからないわ。,모르겠어.,dialogue,negative

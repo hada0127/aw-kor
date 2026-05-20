@@ -1,0 +1,55 @@
+japanese,korean,category,notes
+タマがなくなると、主砲,"탄이 떨어지면 주포",system,ammo explanation
+降伏する,항복한다,ui,command
+うむ。,음.,dialogue,reaction
+ブラックホール軍・・・,블랙홀군...,faction,faction mention
+あら、,"어머,",dialogue,reaction
+そうか、,"그런가,",dialogue,reaction
+だから、,"그러니,",dialogue,connector
+あと、,"또,",dialogue,connector
+ちっ、,"칫,",dialogue,reaction
+了解！,확인!,dialogue,acknowledgement
+やった！,해냈다!,dialogue,reaction
+ククク・・・,크크크...,dialogue,laugh
+よーし、,"좋아,",dialogue,reaction
+もぐる,잠수,command,submerge action
+味方が占領しているなら、,"아군이 점령 중이면,",system,capture explanation
+陸ユニットへの攻撃力。,육상 유닛 공격력.,system,attack stat label
+大きなダメージを与えられる。,큰 피해를 줄 수 있다.,system,damage explanation
+数字は　もっている量。,숫자는 보유량.,system,quantity explanation
+つかんでくれる？,이해했어?,dialogue,tutorial check
+今はこの,지금 이,dialogue,fragment
+すばらしいわ！,훌륭해!,dialogue,praise
+ダミー,더미,system,dummy text
+ブラックホール,블랙홀,faction,faction name
+イエローコメット,옐로코멧,faction,faction name
+グリーンアース,그린어스,faction,faction name
+終了したわ。メニューに戻るわね。,종료했어. 메뉴로 돌아갈게.,system,communication message
+終了したわ。始めるわよ！！,종료했어. 시작할게!!,system,communication message
+準備ができるまで待ってね！！,준비될 때까지 기다려!!,system,communication message
+保存するエリアを選んでね！！,저장할 영역을 골라!!,system,save prompt
+送るマップを選んでね！！,보낼 맵을 골라!!,system,map transfer prompt
+マップを送る人を選んでね！！,맵을 보낼 상대를 골라!!,system,map transfer prompt
+通信準備中よ！！！,통신 준비 중!!!,system,communication message
+　はい　　いいえ, 예    아니오,ui,yes no choice
+レッドスター軍は敗北しました！！,레드스타군 패배!!,system,defeat message
+ブルームーン軍は敗北しました！！,블루문군 패배!!,system,defeat message
+降伏すると負けになっちゃうけど、,"항복하면 패배하지만,",system,surrender warning
+本当に降伏する？　,정말 항복할까? ,system,surrender confirm
+私は、,"나는,",dialogue,pronoun fragment
+また、,"또,",dialogue,connector
+ム・・・,음...,dialogue,reaction
+そして、,"그리고,",dialogue,connector
+はっ、,"핫,",dialogue,reaction
+みなのもの、,"모두들,",dialogue,address
+車両系ユニット。,차량계 유닛.,system,unit class
+歩兵系以外の陸ユニットに,보병계 외 육상 유닛에,system,unit class explanation
+できる,가능,system,ability
+対地ミサイルでの、,대지 미사일로,system,weapon explanation
+に対する,에 대한,system,fragment
+をつかんでくれないかしら？,이해해 줄래?,dialogue,tutorial check
+をしましょう！,을 하자!,dialogue,action prompt
+こっちの,이쪽의,dialogue,fragment
+つかんでね。,이해해 둬.,dialogue,tutorial phrase
+次こそは　がんばってね！,다음엔 꼭 힘내!,dialogue,encouragement
+してね。,해 줘.,dialogue,request fragment

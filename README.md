@@ -1,13 +1,32 @@
-# Game Wars (GBA) 한글화 프로젝트
+# Game Wars 한글화 (Korean Localization)
 
-Game Boy Advance Game Wars 1+2를 100% 한글화하는 프로젝트입니다.
+## 프로젝트 개요
+
+Game Boy Advance 전술 게임 **Game Wars 1+2** 완전 한글화 프로젝트
+
+**현재 상태**: 기술 기반 구축 완료 → **번역 단계 진행 중**
+
+---
+
+## 프로젝트 상태
+
+```
+기술 인프라: ✓ 100% (완료)
+번역 진행률: ⏳ 2.8% (797/28,347 텍스트)
+배포 준비: ✓ 90% (패키지 준비 완료)
+게임 테스트: ⏳ 0% (대기 중)
+```
+
+---
 
 ## 프로젝트 구조
 
 ```
 aw-kor/
-├── original/          # 원본 ROM 파일 (Game Wars 1, 2)
-├── docs/              # 문서 (계획, 분석, 리뷰)
+├── .project-config.json          ← AI/프로젝트 설정 (필수 참고)
+├── README.md                     ← 이 파일
+├── original/                     ← 원본 ROM
+├── docs/
 ├── tools/             # ROM 해킹 및 추출 도구
 ├── data/              # 추출된 게임 데이터 (텍스트, 포인터 등)
 ├── translation/       # 번역 파일 (CSV, 스프레드시트)

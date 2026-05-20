@@ -1,0 +1,30 @@
+{
+  "project": "Game Wars Korean Localization",
+  "version": "1.0",
+  "date": "2026-05-12T05:46:15.244508",
+  "files": {
+    "game_wars_korean_final.gba": {
+      "size_mb": 16.0,
+      "format": "GBA ROM",
+      "purpose": "Main game file"
+    },
+    "README.md": {
+      "purpose": "Distribution documentation"
+    },
+    "RELEASE_NOTES.md": {
+      "purpose": "Version history and features"
+    }
+  },
+  "translation_progress": {
+    "total_texts": 28347,
+    "translated": 797,
+    "percentage": 2.8,
+    "status": "In progress"
+  },
+  "validation": {
+    "rom_integrity": true,
+    "checksum": "0x8B",
+    "header": "GBWARS1+2 BGWJ",
+    "tests_passed": 7
+  }
+}

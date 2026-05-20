@@ -1,0 +1,43 @@
+japanese,korean,category,notes
+プレイヤ,플레이어,ui,label
+攻撃機,공격기,unit,unit name
+列車砲,열차포,unit,unit name
+補給車,보급차,unit,unit name
+中戦車,중전차,unit,unit name
+戦闘工兵,전투공병,unit,unit name
+つうしんがおかしいわ。,통신 이상이야.,system,communication error
+リセットするわよ！,리셋할게!,system,reset message
+リョウ。,료.,name,character name
+これは、,"이건,",dialogue,connector
+だけど、,"하지만,",dialogue,connector
+そうね！,그렇네!,dialogue,affirmative
+おお！,오오!,dialogue,reaction
+まあな。,그렇지.,dialogue,affirmative
+占領した都市から、,"점령한 도시에서,",system,capture explanation
+こんなものが・・・,이런 것이...,dialogue,discovery
+ありがとう！,고마워!,dialogue,thanks
+これは・・・,이건...,dialogue,reaction
+はっ。,앗.,dialogue,reaction
+えっ、,"어,",dialogue,reaction
+ビリー、,"빌리,",name,character name
+あー、,"아,",dialogue,reaction
+これで、,"이걸로,",dialogue,connector
+ぬぬぬ・・・,으으으...,dialogue,reaction
+ハンナ、,"한나,",name,character name
+アスカ、,"아스카,",name,character name
+アニメを表示しません,애니 표시 안 함,system,setting
+移動するごとにへり、なくなる,"이동마다 줄어 사라짐",system,fuel explanation
+と移動できなくなる。,면 이동할 수 없다.,system,movement explanation
+ダメージを与えられる。,피해를 줄 수 있다.,system,damage explanation
+主砲のタマが切れた時は、,"주포 탄이 떨어지면,",system,ammo explanation
+副砲のマシンガン。,부포 기관총.,system,weapon explanation
+ヘリ系に対する攻撃力。,헬기계 공격력.,system,attack stat label
+ロケット砲での、,로켓포로,system,weapon explanation
+敵全滅で勝利よ！がんばってね！,적 전멸로 승리! 힘내!,system,victory condition
+ここでＡボタンよ。,여기서 A 버튼.,ui,tutorial prompt
+できないの。,할 수 없어.,system,negative ability
+」を選んでね。,」를 골라.,ui,selection prompt
+ぬぬぬ・・・次を見ておれよーっ！,으으... 다음엔 두고 봐!,dialogue,defeat line
+次を見ておれよーっ！,다음엔 두고 봐!,dialogue,defeat line
+シレイ！,사령!,role,commander
+岩礁海,암초해,terrain,terrain name

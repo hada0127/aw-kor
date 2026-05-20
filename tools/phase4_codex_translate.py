@@ -18,10 +18,15 @@ def load_translated_texts() -> set:
 
     if trans_file.exists():
         with open(trans_file, 'r', encoding='utf-8', errors='ignore') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row.get('address') and row.get('korean'):
-                    translated.add(row['address'].strip())
+            try:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    addr = row.get('address', '').strip() if row.get('address') else None
+                    korean = row.get('korean', '').strip() if row.get('korean') else None
+                    if addr and korean:
+                        translated.add(addr)
+            except Exception as e:
+                print(f"Warning: Error reading translated texts: {e}")
 
     return translated
 
@@ -51,42 +56,47 @@ def call_codex_translate(japanese_texts: List[str], batch_num: int = 1) -> str:
     # Format texts for translation
     text_lines = "\n".join([f"{i+1}. {text}" for i, text in enumerate(japanese_texts)])
 
-    prompt = f"""You are a professional Game Wars game translator. Translate these Japanese game texts to Korean.
+    prompt = f"""한글로 번역하세요. Game Wars (군사 전술 게임).
+형식: 번호|한글번역 (예: 1|공격)
 
-Rules:
-1. Keep translations concise - match or shorten the original length
-2. Use appropriate gaming terminology
-3. Maintain consistency with existing translations
-4. Use natural Korean expressions, not literal translation
-5. Output format: number|korean_translation
-
-Texts to translate:
+텍스트:
 {text_lines}
 
-Provide translations in the same format (number|korean_translation):"""
+한글 번역 (번호|한글, 한 줄에 하나):"""
 
     try:
-        # Use full path to codex
-        codex_path = Path(r'C:\Users\taro1\AppData\Roaming\npm\codex.cmd')
+        codex_cmd = Path(r'C:\Users\taro1\AppData\Roaming\npm\codex.cmd')
 
+        # Call Codex with simpler approach - just exec and capture output
         result = subprocess.run(
-            [str(codex_path), 'exec', prompt],
+            [str(codex_cmd), 'exec'],
+            input=prompt,
             capture_output=True,
             text=True,
             encoding='utf-8',
             errors='replace',
-            timeout=60,
-            shell=True
+            timeout=120,  # 2분 타임아웃
+            shell=False  # Don't use shell, pass as list
         )
 
-        if result.returncode == 0:
-            return result.stdout
-        else:
-            print(f"  Codex error: {result.stderr}")
-            return ""
+        if result.stdout:
+            # Extract just the translations part (skip system messages)
+            lines = result.stdout.split('\n')
+            translations = []
+            for line in lines:
+                if '|' in line and not line.startswith('[') and not line.startswith('Reading'):
+                    translations.append(line.strip())
+
+            if translations:
+                return '\n'.join(translations)
+            else:
+                # If no pipes found, return original stdout
+                return result.stdout
+
+        return ""
 
     except subprocess.TimeoutExpired:
-        print(f"  Codex timeout on batch {batch_num}")
+        print(f"  Codex timeout on batch {batch_num} (60s exceeded)")
         return ""
     except Exception as e:
         print(f"  Error calling Codex: {e}")
@@ -111,7 +121,7 @@ def parse_codex_output(output: str, original_texts: List[Dict]) -> List[Dict]:
 
                 translations.append({
                     'address': original.get('address', ''),
-                    'japanese': original.get('japanese', ''),
+                    'text': original.get('text', ''),
                     'korean': korean,
                     'length': str(length)
                 })
@@ -126,31 +136,52 @@ def save_translations(translations: List[Dict]) -> int:
     """Append translations to CSV file"""
 
     output_file = Path('data/translation_for_import.csv')
+    fieldnames = ['address', 'japanese', 'korean', 'length']
 
     # Load existing
     existing = {}
     if output_file.exists():
-        with open(output_file, 'r', encoding='utf-8', errors='ignore') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row.get('address'):
-                    existing[row['address']] = row
+        try:
+            with open(output_file, 'r', encoding='utf-8', errors='ignore') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if row and row.get('address'):
+                        addr = row['address'].strip()
+                        # Clean row - keep only expected fields
+                        clean_row = {
+                            'address': addr,
+                            'japanese': row.get('japanese', '').strip() if row.get('japanese') else '',
+                            'korean': row.get('korean', '').strip() if row.get('korean') else '',
+                            'length': row.get('length', '').strip() if row.get('length') else ''
+                        }
+                        existing[addr] = clean_row
+        except Exception as e:
+            print(f"  Warning: Error reading existing translations: {e}")
 
     # Add new translations
     count_new = 0
     for trans in translations:
-        addr = trans.get('address')
+        addr = trans.get('address', '').strip() if trans.get('address') else None
         if addr and addr not in existing:
-            existing[addr] = trans
+            existing[addr] = {
+                'address': addr,
+                'japanese': trans.get('text', '').strip() if trans.get('text') else '',
+                'korean': trans.get('korean', '').strip() if trans.get('korean') else '',
+                'length': trans.get('length', '').strip() if trans.get('length') else ''
+            }
             count_new += 1
 
     # Write all
     if existing:
-        with open(output_file, 'w', encoding='utf-8', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=['address', 'japanese', 'korean', 'length'])
-            writer.writeheader()
-            for addr in sorted(existing.keys()):
-                writer.writerow(existing[addr])
+        try:
+            with open(output_file, 'w', encoding='utf-8', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames, restval='')
+                writer.writeheader()
+                for addr in sorted(existing.keys()):
+                    writer.writerow(existing[addr])
+        except Exception as e:
+            print(f"  Error writing translations: {e}")
+            return 0
 
     return count_new
 
@@ -179,21 +210,22 @@ def main():
     untranslated.sort(key=lambda x: int(x.get('char_count', 0)))
 
     # Process in small batches
-    batch_size = 10
+    batch_size = 20  # Increased for efficiency
     total_translated = 0
     failed_batches = 0
 
     print(f"\n[Step 3] Processing batches (size={batch_size})...")
-    print(f"  Total batches: {(len(untranslated) + batch_size - 1) // batch_size}")
+    total_batches = (len(untranslated) + batch_size - 1) // batch_size
+    print(f"  Total batches: {total_batches}")
 
-    for batch_num in range(0, min(len(untranslated), 50), batch_size):  # Start with 50 texts
+    for batch_num in range(0, len(untranslated), batch_size):  # Process ALL untranslated texts
         batch = untranslated[batch_num:batch_num + batch_size]
         batch_id = (batch_num // batch_size) + 1
 
         print(f"\n  [Batch {batch_id}] Processing {len(batch)} texts...")
 
-        # Extract Japanese texts
-        japanese_texts = [item.get('japanese', '') for item in batch]
+        # Extract Japanese texts (from 'text' column)
+        japanese_texts = [item.get('text', '') for item in batch]
 
         # Call Codex
         print(f"    Calling Codex...")
@@ -203,6 +235,7 @@ def main():
             print(f"    [WARN] Batch {batch_id} failed (no output)")
             failed_batches += 1
             continue
+
 
         # Parse output
         print(f"    Parsing output...")
@@ -221,7 +254,7 @@ def main():
     print("\n" + "="*70)
     print(f"[Summary] Translation Generation Complete")
     print("="*70)
-    print(f"  Batches processed: {(min(len(untranslated), 50) + batch_size - 1) // batch_size}")
+    print(f"  Batches processed: {(min(len(untranslated), 500) + batch_size - 1) // batch_size}")
     print(f"  Failed batches: {failed_batches}")
     print(f"  Total translated: {total_translated}")
 

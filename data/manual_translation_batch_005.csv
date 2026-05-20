@@ -1,0 +1,102 @@
+japanese,korean,category,notes
+クックック・・・,크크크...,dialogue,laugh
+サクテキ時には、敵ユニッ,색적 시 적 유닛,system,fog of war explanation
+トに隣接されないかぎり、,에 인접하지 않으면,system,fog of war explanation
+見つからない。ただし、,"발견되지 않는다. 단,",system,fog of war explanation
+空ユニットはれいがい。,공중 유닛은 예외.,system,fog of war explanation
+補給ができる。,보급 가능.,system,supply
+軍備のひとつ。,군비 중 하나.,system,description
+攻撃力が上がる。,공격력 상승.,system,effect
+戦闘アニメのみ表示します,전투 애니만 표시,system,setting
+データがありません,데이터 없음,system,message
+チュートリアル,튜토리얼,ui,menu label
+らっしゃい！,어서 와!,dialogue,shop greeting
+さあ、なにがいる？,자 뭘 원해?,dialogue,shop prompt
+歩兵系ユニット。,보병계 유닛.,system,unit class
+数字は、もっている量。,숫자는 보유량.,system,quantity explanation
+ほうがよい。,쪽이 좋다.,dialogue,fragment
+主砲での、歩兵系以外の,주포의 보병계 외,system,weapon explanation
+強い。,강함.,system,description
+あつかいやすい。,다루기 쉽다.,system,description
+キャノン砲の弾数。,캐논포 탄수.,system,ammo label
+船系に対する攻撃力。,함선계 공격력.,system,attack stat
+できなくなる。,불가능해진다.,system,negative
+はかいりょくバツグン。,파괴력 발군.,system,description
+主砲の対空ミサイル。,주포 대공미사일.,system,weapon
+対空ミサイルの弾数。,대공미사일 탄수.,system,ammo label
+対空ミサイルでの、ヘリ系に,대공미사일의 헬기계,system,attack stat
+主砲の射程。,주포 사거리.,system,range label
+２ユニット搭載できる。,2유닛 탑재 가능.,system,transport
+に対する攻撃力。,에 대한 공격력.,system,attack stat
+毎ターン１消費する。,매 턴 1 소비.,system,consumption
+毎ターン５消費する。,매 턴 5 소비.,system,consumption
+なくなるとツイラク。,없어지면 추락.,system,fuel warning
+よろしいかしら？,괜찮을까?,dialogue,question
+を表示します,을 표시함,system,setting fragment
+ごめんなさいね,미안해,dialogue,apology
+をしてくれるかしら？,해 줄래?,dialogue,request
+じゃあ、今度はこっちの,"그럼 이번엔 이쪽의",dialogue,tutorial
+次は、がんばってね！,다음엔 힘내!,dialogue,encouragement
+をつかんでくれる？,이해해 줄래?,dialogue,tutorial
+できるの！,가능해!,system,ability
+ここまで移動してね。,여기까지 이동해.,dialogue,tutorial
+きたいしてるわよ！,기대하고 있어!,dialogue,encouragement
+つかんでみてね。,이해해 봐.,dialogue,tutorial
+どうしたんだ？,무슨 일이야?,dialogue,question
+・・・え？？？,...뭐???,dialogue,reaction
+はーっはっはっはっ・・・！,하하하하...!,dialogue,laugh
+・・・わかった。,...알겠어.,dialogue,acknowledgement
+わたしはドミノ。,나는 도미노.,dialogue,introduction
+さん、ドミノ！,"님, 도미노!",dialogue,name call
+・・・・・。,.....,symbol,punctuation
+ここは　逃げるが勝ちっ！,여긴 도망이 상책!,dialogue,tactical advice
+し　しかし・・・,하 하지만...,dialogue,reaction
+いつでもでられるぜっ！,언제든 출격 가능!,dialogue,ready
+・・・まだまだいけるぜっ！,...아직 더 간다!,dialogue,resolve
+わるいヤツじゃないんだけど・・・,나쁜 녀석은 아니지만...,dialogue,comment
+あたまがかたいのよね。,고집이 세단 말이야.,dialogue,comment
+ファクトリーのパイプを撃破せよ！,팩토리 파이프를 격파하라!,mission,objective
+ふーん、,"흐음,",dialogue,reaction
+なあ、,"저기,",dialogue,address
+しかも、,"게다가,",dialogue,connector
+いずれにせよ、,"어쨌든,",dialogue,connector
+やっかいだわ。,성가시네.,dialogue,comment
+がんばってね、,"힘내,",dialogue,encouragement
+えーと、,"음,",dialogue,reaction
+そうよ！,그래!,dialogue,affirmative
+まちがいなく勝てるわ！,틀림없이 이길 거야!,dialogue,encouragement
+コング、,"콩그,",name,character name
+行くぜ！,간다!,dialogue,start
+直接攻撃するユニットよ。,직접 공격 유닛이야.,system,unit explanation
+みたか！,봤냐!,dialogue,boast
+ヘッ、,"흥,",dialogue,reaction
+ただ、,"다만,",dialogue,connector
+お金のウィンドウの下にある,자금 창 아래에 있는,system,tutorial
+灰色の星ゲージ、,"회색 별 게이지,",system,tutorial
+少し色が変わってない？,색이 좀 변하지 않았어?,dialogue,tutorial
+ゲージがたまって星がひかれば、,"게이지가 차 별이 빛나면,",system,tutorial
+ショーグンブレイクを発動できるわ。,쇼군 브레이크 발동 가능.,system,tutorial
+ブレイクの内容は、,"브레이크 내용은,",system,tutorial
+よゆうがある,여유가 있다,system,fragment
+ブレイクには、,"브레이크에는,",system,tutorial
+普通のものと,보통 것과,system,fragment
+もっと待ってスペシャルまでためて,더 기다려 스페셜까지 모아,system,tutorial
+使ってもいいし、,"써도 되고,",system,tutorial
+今使ってもいいし・・・,지금 써도 되고...,system,tutorial
+ブレイクをいつ使うかは、,"브레이크를 언제 쓸지는,",system,tutorial
+あなたの判断しだいね。,네 판단에 달렸어.,dialogue,tutorial
+ブレイクの使い方しだいで、,"브레이크 사용법에 따라,",system,tutorial
+戦況を,전황을,system,fragment
+一変させてしまうこともできるわ！,단번에 바꿀 수도 있어!,system,tutorial
+ブレイクを発動させる時は、,"브레이크를 발동할 때는,",system,tutorial
+マップメニューから,맵 메뉴에서,ui,tutorial
+「ブレイク」,「브레이크」,ui,menu label
+よう、,"여어,",dialogue,greeting
+あばよ。,잘 있어.,dialogue,farewell
+あの、,"저기,",dialogue,address
+キャハ！,캬하!,dialogue,laugh
+このマップは、,"이 맵은,",dialogue,tutorial
+え！？,뭐!?,dialogue,reaction
+く・・・,큭...,dialogue,reaction
+キャサリン司令、,"캐서린 사령,",name,commander
+行くぞ！,간다!,dialogue,start

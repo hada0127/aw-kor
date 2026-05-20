@@ -1,0 +1,87 @@
+japanese,korean,category,notes
+ヘルボウズ様。,헬보우즈 님.,name,character
+かつて、,"한때,",dialogue,story
+せまりくるブラックホール軍！,다가오는 블랙홀군!,mission,briefing
+橋の上で守りきれるか！？,다리 위에서 막아낼까!?,mission,briefing
+正面決戦が今、始まる！,정면 결전이 지금 시작!,mission,briefing
+突然あらわれた敵砲台！,갑자기 나타난 적 포대!,mission,briefing
+撃破する事ができるのか！？,격파할 수 있을까!?,mission,briefing
+はたして制圧できるのか！？,과연 제압할 수 있을까!?,mission,briefing
+ついに敵の本拠地を発見！,마침내 적 본거지 발견!,mission,briefing
+自国をとりもどせるのか！？,조국을 되찾을 수 있을까!?,mission,briefing
+発見した敵の研究所,발견한 적 연구소,mission,title
+決戦の時、きたる,결전의 때가 왔다,mission,title
+たたきつぶせ！,박살내라!,mission,objective
+ふう、,"후,",dialogue,reaction
+あなたは,당신은,dialogue,fragment
+まず、,"먼저,",dialogue,connector
+次はユニットを動かしましょう。,다음은 유닛을 움직이자.,tutorial,instruction
+移動できるはんいよ。,이동 가능한 범위야.,tutorial,instruction
+行動メニューが出るわ。,행동 메뉴가 나와.,tutorial,instruction
+何もすることがない時は,할 일이 없을 때는,tutorial,instruction
+ユニットにはそれぞれ,유닛에는 각각,tutorial,fragment
+ユニットの上で,유닛 위에서,tutorial,fragment
+頼りにしてるわ。,믿고 있어.,dialogue,encouragement
+するユニットなの。,하는 유닛이야.,system,fragment
+そう！,그래!,dialogue,affirmative
+ＨＰ１０の歩兵は、,"HP10 보병은,",tutorial,capture
+１回の占領で耐久力を,1회 점령으로 내구,tutorial,capture
+あなたの勝利よ！,당신의 승리야!,dialogue,victory
+次も、,"다음,",dialogue,connector
+・・・ドミノショーグン、,...도미노 쇼군,,dialogue,name
+川のむこうに敵部隊を確認しました。,강 건너 적 부대를 확인했습니다.,dialogue,report
+こんなイナカなのに・・・,이런 시골인데...,dialogue,reaction
+どうしましょう？,어쩌죠?,dialogue,question
+国土に深く入りこまれては,국토 깊숙이 들어오면,dialogue,warning
+いい判断ね。,좋은 판단.,dialogue,praise
+さすがは,역시,dialogue,praise
+キャサリン司令！,캐서린 사령!,name,commander
+どうしてこんなところに？,왜 이런 곳에?,dialogue,question
+ショーグンを追っていたら、,"쇼군을 쫓다 보니,",dialogue,story
+できれば,가능하면,dialogue,connector
+いいか、,"들어,",dialogue,command
+レッドスターの部隊が・・・,레드스타 부대가...,dialogue,report
+そのとおりよ！,그 말대로야!,dialogue,affirmative
+あなたの,당신의,dialogue,fragment
+ありがとうございます！,감사합니다!,dialogue,thanks
+けれど、,"하지만,",dialogue,connector
+するわ。,할게.,dialogue,fragment
+間接攻撃ユニットなの。,간접 공격 유닛이야.,system,unit explanation
+わかりました。,알겠습니다.,dialogue,acknowledgement
+ドミノ。,도미노.,name,character
+なかなかやるな、,"제법이군,",dialogue,praise
+ブラックホール軍のショーグンね！,블랙홀군의 쇼군이군!,dialogue,story
+次に会うときは、,"다음에 만나면,",dialogue,threat
+こんなもんじゃねぇぞ。,이 정도가 아니야.,dialogue,threat
+それにしても、,"그건 그렇고,",dialogue,connector
+ムカつくーっ！！,열받아!!,dialogue,reaction
+歩兵系は川をわたれるということを、,"보병계는 강을 건널 수 있단 걸,",tutorial,unit ability
+忘れちゃダメよ。,잊으면 안 돼.,tutorial,warning
+申しわけありません・・・,죄송합니다...,dialogue,apology
+次に会ったらゆるさない！,다음엔 용서 안 해!,dialogue,threat
+レッドスターのショーグンども！,레드스타 쇼군들!,dialogue,address
+聞こえるかーっ！,들리냐!,dialogue,shout
+マイクを使っては・・・？,마이크를 쓰면...?,dialogue,suggestion
+いないのかー！,없는 거냐!,dialogue,shout
+さわがしいな。,시끄럽군.,dialogue,reaction
+ゴリラみたいなのが,고릴라 같은 게,dialogue,description
+出てきたな・・・,나왔군...,dialogue,reaction
+ゴリラじゃねえ！,고릴라 아니야!,dialogue,reaction
+コング？,콩그?,name,question
+コードネームか何かか？,암호명 같은 건가?,dialogue,question
+おれはマックスだ。,나는 맥스다.,name,introduction
+おれたちの国を,우리 나라를,dialogue,fragment
+いったいどういうつもりだ？,대체 무슨 속셈이냐?,dialogue,question
+おれたちブラックホールのもんだ。,우리 블랙홀의 것이다.,dialogue,claim
+やれるもんならやってみやがれ！,할 수 있으면 해 봐!,dialogue,taunt
+キャサリン！？,캐서린!?,name,reaction
+戦いは、,"전투는,",dialogue,fragment
+自分の国をメチャクチャにされて,자기 나라가 엉망이 되어,dialogue,story
+怒る気持ちはよくわかるわ。,화나는 마음은 잘 알아.,dialogue,empathy
+心をしずめないと。,진정해야 해.,dialogue,advice
+あいつを倒すのよ。,저놈을 쓰러뜨려.,dialogue,objective
+確かに、,"확실히,",dialogue,connector
+まあな！,그렇지!,dialogue,affirmative
+おうよ！,그래!,dialogue,affirmative
+オレはやれるぜ！,난 할 수 있어!,dialogue,confidence
+その調子よ！,그 기세야!,dialogue,praise

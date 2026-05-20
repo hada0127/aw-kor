@@ -1,0 +1,96 @@
+japanese,korean,category,notes
+しかし・・・,하지만...,dialogue,connector
+敵が、,"적이,",dialogue,fragment
+われわれは、,"우리는,",dialogue,fragment
+この戦いは、,"이 전투는,",dialogue,fragment
+イーグル・・・,이글...,name,character name
+ああ。,그래.,dialogue,affirmative
+ハンナ。,한나.,name,character name
+きっと勝てるわ！,꼭 이길 거야!,dialogue,encouragement
+アスカ！,아스카!,name,character name
+いかん！,안 돼!,dialogue,reaction
+本当に、,"정말,",dialogue,connector
+どうしてここに？,왜 여기에?,dialogue,question
+みんな！,모두!,dialogue,address
+ヘルボウズ様！,헬보우즈 님!,name,character name
+オレにまかせな！,나한테 맡겨!,dialogue,confidence
+ルール,룰,ui,label
+キャットの発明のひとつ。,캣의 발명품 중 하나.,system,description
+敵全ユニットのＨＰに,적 전 유닛 HP에,system,effect
+間接攻撃の射程が,간접 사거리가,system,effect
+さらに１増え、,"추가로 1 증가,",system,effect
+全ユニットの攻撃力が,전 유닛 공격력이,system,effect
+攻撃力と守備力が上がる。,공격력과 방어력 상승.,system,effect
+上書きしますか？,덮어쓸까?,system,prompt
+今日は何がいるんだい？,오늘은 뭐가 필요해?,dialogue,shop
+さあ、何か買っていってくれ！,자 뭔가 사 가!,dialogue,shop
+おっと,어이쿠,dialogue,reaction
+タイヤタイプの移動ができる。,타이어식 이동 가능.,system,movement type
+副砲のマシンガンでの、,부포 기관총으로,system,weapon explanation
+戦車タイプの移動ができる。,전차식 이동 가능.,system,movement type
+高いいりょく。,높은 위력.,system,description
+持っている。,가지고 있다.,system,description
+空ユニットに強い。,공중 유닛에 강함.,system,description
+空系ユニット。,공중계 유닛.,system,unit class
+広い。,넓다.,system,description
+ついにここまで来たわね！,드디어 여기까지 왔네!,dialogue,story
+このマップは敵全滅で勝利よ！,이 맵은 적 전멸로 승리!,system,victory condition
+現在の状況をセーブします。,현재 상태를 저장합니다.,system,save message
+」というコマンドが,」라는 명령이,system,fragment
+それを選んでみて。,그걸 골라 봐.,dialogue,tutorial
+をつかんでくれるかしら？,이해해 줄래?,dialogue,tutorial
+全部終わったら　,전부 끝나면 ,system,fragment
+しかたないわ。,어쩔 수 없어.,dialogue,reaction
+しましょうか。,해 볼까.,dialogue,prompt
+をつかむのよ。,을 익히는 거야,dialogue,tutorial
+あるわよね。,있지?,dialogue,question
+できないわ。,할 수 없어.,dialogue,negative
+ここは「,여긴 「,dialogue,fragment
+つかんでくれないかしら？,이해해 줄래?,dialogue,tutorial
+だから　,그러니 ,dialogue,connector
+やってみて。,해 봐.,dialogue,tutorial
+それじゃ、がんばってね！,그럼 힘내!,dialogue,encouragement
+なの！,라고!,dialogue,fragment
+してみましょう！,해 보자!,dialogue,prompt
+してくれないかしら？,해 줄래?,dialogue,request
+な　なんじゃと？！,뭐 뭐라고?!,dialogue,reaction
+あとは　,남은 건 ,dialogue,fragment
+それからもう一つ。,그리고 또 하나.,dialogue,connector
+をつかんでね！,을 익혀 둬!,dialogue,tutorial
+シレイ、,"사령,",role,commander
+の説明を聞きたいの？,설명을 듣고 싶어?,dialogue,question
+聞いていく？,듣고 갈래?,dialogue,question
+を押してみて。,을 눌러 봐.,ui,tutorial
+マップメニュー,맵 메뉴,ui,menu label
+ただいま、かいはつちゅうです。,현재 개발 중입니다.,system,message
+レッドスター軍をとめるのじゃ！,레드스타군을 막아라!,mission,objective
+残ってないんですが・・・,남아 있지 않은데요...,dialogue,reaction
+わがはいは　あの方にあいにいく！,나는 그분을 만나러 간다!,dialogue,story
+なんとっ？！,뭐라고?!,dialogue,reaction
+キャサリンか。,캐서린인가.,dialogue,name
+・・・・,....,symbol,punctuation
+き　きみは？？？,너 너는???,dialogue,reaction
+レッドスターのショーグンよっ！,레드스타의 쇼군이야!,dialogue,introduction
+そんなんじゃまだまだねっ！,그 정도론 아직 멀었어!,dialogue,taunt
+かおをあらって　でなおしなさいっ！,얼굴 씻고 다시 와!,dialogue,taunt
+は　はあ・・・,하 하아...,dialogue,reaction
+それでは　さらばだ！,그럼 잘 있어라!,dialogue,farewell
+・・・行っちゃったか。,...가 버렸나.,dialogue,reaction
+なかなか　いいやつじゃない。,꽤 괜찮은 녀석이잖아.,dialogue,comment
+「キクチヨ特戦部隊」って？,「기쿠치요 특전부대」가?,dialogue,question
+お金が高いとか。,비용이 높다든가.,dialogue,comment
+どうか、まずはみきわめないとね。,먼저 잘 확인해야겠네.,dialogue,comment
+海ユニットがとっても強いとか。,해상 유닛이 아주 강하다든가.,dialogue,comment
+これでかくしんにかわった。,이걸로 확신으로 바뀌었어.,dialogue,story
+・・・もうあんなところに・・・,...벌써 저런 곳에...,dialogue,reaction
+そのときはかくごしておけ！,그때는 각오해라!,dialogue,threat
+敵ユニットをたおせるか　ね。,적 유닛을 쓰러뜨릴 수 있나.,dialogue,question
+をうまく使って　,을 잘 사용해서 ,dialogue,tutorial
+をゆうせんして　たおすといいわ。,을 우선해서 쓰러뜨려.,dialogue,tutorial
+もう気づいてる？,벌써 눈치챘어?,dialogue,question
+ひっぱりだそうとしてたんだよ。,끌어내려던 거야.,dialogue,story
+うしろ？？？,뒤???,dialogue,reaction
+ごまかそうとしてたわけだね。,속이려던 거구나.,dialogue,story
+でも　もうこれでさいご。,하지만 이제 이걸로 끝.,dialogue,story
+言われなくても助けにいくぞ！,말 안 해도 구하러 간다!,dialogue,resolve
+たのんだわね、,"부탁할게,",dialogue,request

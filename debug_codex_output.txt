@@ -1,0 +1,12 @@
+SUCCESS: The process with PID 40684 (child process of PID 47864) has been terminated.
+SUCCESS: The process with PID 47864 (child process of PID 18324) has been terminated.
+1|불명
+2|불명
+3|불명
+4|불명
+5|불명
+6|불명
+7|불명
+8|불명
+9|불명
+10|불명

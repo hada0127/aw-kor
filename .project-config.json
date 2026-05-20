@@ -1,0 +1,235 @@
+{
+  "project": {
+    "name": "Game Wars 한글화 (Korean Localization)",
+    "version": "1.0 Beta",
+    "date": "2026-05-12",
+    "status": "Translation Phase - Ready for AI/Manual Translation"
+  },
+
+  "translation": {
+    "source_language": "ja",
+    "target_language": "ko",
+    "encoding": {
+      "source": "Shift-JIS",
+      "target": "EUC-KR"
+    },
+    "total_texts": 28347,
+    "translated": 797,
+    "progress_percent": 2.8,
+    "priority_1_ui": {
+      "total": 12242,
+      "translated": 797,
+      "progress_percent": 6.5
+    },
+    "priority_2_story": {
+      "total": 8300,
+      "translated": 0,
+      "progress_percent": 0
+    },
+    "priority_3_other": {
+      "total": 7805,
+      "translated": 0,
+      "progress_percent": 0
+    }
+  },
+
+  "game_info": {
+    "title": "Game Wars 1+2",
+    "platform": "Game Boy Advance (GBA)",
+    "genre": "Tactical Strategy Game",
+    "setting": "Modern Military Scenario",
+    "rom_size_mb": 16.0,
+    "rom_file": "output/game_wars_korean_final.gba"
+  },
+
+  "reference_documents": {
+    "tone_and_manner": "docs/TRANSLATION_TONE_AND_STORY_GUIDE.md",
+    "translation_guide": "docs/TRANSLATION_GUIDE.md",
+    "phase_6_testing": "docs/PHASE6_TESTING_GUIDE.md",
+    "phase_7_distribution": "docs/PHASE7_DISTRIBUTION_PREP.md",
+    "ai_translation_reference": "docs/AI_TRANSLATION_REFERENCE.md"
+  },
+
+  "data_files": {
+    "all_texts": "data/game_wars_found_texts.csv",
+    "translations": "data/translation_for_import.csv",
+    "character_map": "tools/game_wars.tbl",
+    "distribution_rom": "output/game_wars_korean_final.gba"
+  },
+
+  "tools": {
+    "text_extraction": "tools/extract_text_optimized.py",
+    "translation_import": "tools/import_text_enhanced.py",
+    "rom_building": "tools/execute_phase5_4.py",
+    "rom_finalize": "tools/execute_phase5_5.py",
+    "rom_validation": "tools/phase6_basic_test.py"
+  },
+
+  "tone_and_manner": {
+    "style": "Military game menu - concise and formal",
+    "characteristics": [
+      "Military terminology in sino-Korean",
+      "Direct declarative forms",
+      "Short length (3-5 characters preferred)",
+      "Game UI focused",
+      "Strategic and formal tone"
+    ],
+    "key_translation_rules": [
+      "Unit names: 100% consistent (use provided dictionary)",
+      "Actions: Use '할 수 있다' / '할 수 없다' format",
+      "Length: Optimize to match or shorten original",
+      "Avoid: Casual speech, direct translations, emoji/special chars"
+    ],
+    "terminology_source": "docs/TRANSLATION_TONE_AND_STORY_GUIDE.md#6-참고-용어집"
+  },
+
+  "game_units": {
+    "naval": [
+      { "ja": "潜水艦", "ko": "잠수함" },
+      { "ja": "輸送船", "ko": "수송함" },
+      { "ja": "護衛艦", "ko": "호위함" }
+    ],
+    "air": [
+      { "ja": "輸送ヘリ", "ko": "수송헬기" },
+      { "ja": "戦闘ヘリ", "ko": "전투헬기" },
+      { "ja": "爆撃機", "ko": "폭격기" }
+    ],
+    "ground": [
+      { "ja": "潜水艦", "ko": "잠수함" },
+      { "ja": "軽戦車", "ko": "경전차" },
+      { "ja": "重戦車", "ko": "중전차" },
+      { "ja": "対空戦車", "ko": "대공전차" },
+      { "ja": "ロケット砲", "ko": "로켓포" },
+      { "ja": "自走砲", "ko": "자주포" },
+      { "ja": "バズーカ兵", "ko": "바주카병" }
+    ]
+  },
+
+  "quality_checklist": {
+    "translation": [
+      "Correct military terminology?",
+      "Consistent with unit dictionary?",
+      "Proper length (no overflow)?",
+      "Game tone matches?",
+      "Natural Korean?"
+    ],
+    "rom_building": [
+      "Translation CSV validated?",
+      "All text lengths correct?",
+      "No character encoding errors?",
+      "ROM integrity check passed?",
+      "Checksum updated?"
+    ],
+    "gameplay": [
+      "Korean text renders correctly?",
+      "Menu navigation works?",
+      "No display corruption?",
+      "Game progresses normally?"
+    ]
+  },
+
+  "workflow": {
+    "translation_cycle": [
+      "1. Prepare translation batch (50-100 items)",
+      "2. Translate using AI or manual process",
+      "3. Validate translations (format: address,japanese,korean,length)",
+      "4. Add to data/translation_for_import.csv",
+      "5. Run execute_phase5_4.py to update ROM",
+      "6. Run execute_phase5_5.py to finalize",
+      "7. Run phase6_basic_test.py to validate"
+    ],
+    "manual_translation_steps": [
+      "1. Reference TRANSLATION_TONE_AND_STORY_GUIDE.md",
+      "2. Check unit dictionary for consistency",
+      "3. Follow length optimization rules",
+      "4. Use CSV format for data entry",
+      "5. Validate before ROM rebuild"
+    ]
+  },
+
+  "translation_method": "claude_parallel",
+  "codex_cli_settings": {
+    "enabled": true,
+    "parallel_agents": 3,
+    "batch_size": 100,
+    "timeout_seconds": 120,
+    "max_retries": 3,
+    "model": "gpt-4-turbo"
+  },
+  "parallel_translation": {
+    "active_agents": 6,
+    "agent_1": "bb82rv0tx",
+    "agent_2": "bzbrdv3cv",
+    "agent_3": "b2tkyrre6",
+    "agent_4": "b02tmte0e",
+    "agent_5": "b2aha5sr3",
+    "agent_6": "bnvz08sru",
+    "status": "running",
+    "capacity": "600 translations per cycle"
+  },
+  "auto_loop": {
+    "enabled": true,
+    "continue_until_complete": true,
+    "target_translation_count": 28347,
+    "check_interval_minutes": 2
+  },
+
+  "ai_instructions": {
+    "claude": {
+      "role": "AI translation assistant for Game Wars Korean localization",
+      "access": [
+        "Read: docs/TRANSLATION_TONE_AND_STORY_GUIDE.md",
+        "Read: data/translation_for_import.csv (reference completed)",
+        "Read: data/game_wars_found_texts.csv (source texts)",
+        "Write: New translations following format"
+      ],
+      "constraints": [
+        "Maintain 100% unit name consistency",
+        "Follow military game tone",
+        "Keep lengths optimized",
+        "No auto-translate (manual review needed)"
+      ]
+    },
+    "codex": {
+      "role": "Code generation assistant for automation tools",
+      "use_cases": [
+        "Optimize translation scripts",
+        "Improve ROM building pipeline",
+        "Enhance validation logic",
+        "Create test automation"
+      ],
+      "constraints": [
+        "Do not modify translation logic",
+        "Maintain backward compatibility",
+        "Test changes against existing ROMs"
+      ]
+    }
+  },
+
+  "next_steps": {
+    "immediate": [
+      "PHASE 4: Translate 27,550 remaining texts",
+      "Priority: UI/menu (6.5% done) -> Story (0%) -> Other (0%)",
+      "Target: 100-200 translations per session"
+    ],
+    "parallel": [
+      "PHASE 6: Manual game testing in emulator",
+      "Test ROM loading, Korean rendering, gameplay",
+      "Document bugs and issues found"
+    ],
+    "completion": [
+      "PHASE 7: Distribute via GitHub Releases",
+      "Share with Game Wars community",
+      "Collect feedback for future patches"
+    ]
+  },
+
+  "resources": {
+    "gba_emulator": "VisualBoyAdvance M v2.1.4",
+    "rom_output": "output/game_wars_korean_final.gba",
+    "distribution": "dist/",
+    "documentation": "docs/",
+    "tools": "tools/",
+    "data": "data/"
+  }
+}

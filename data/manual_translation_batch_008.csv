@@ -1,0 +1,62 @@
+japanese,korean,category,notes
+そのユニットが移動できない場所へは,그 유닛이 이동 못 하는 곳엔,tutorial,transport
+降車させられないのもいっしょね。,내릴 수 없는 것도 같아.,tutorial,transport
+さーて、,"자,",dialogue,connector
+う・・・,으...,dialogue,reaction
+わかってるって。,알고 있다니까.,dialogue,acknowledgement
+どうも、,"왠지,",dialogue,connector
+ねぇぞ！,없다고!,dialogue,negative
+もっと、,"좀 더,",dialogue,connector
+これからが本当の戦闘だ・・・,이제부터가 진짜 전투다...,dialogue,story
+負けてしまったか・・・,져 버렸나...,dialogue,defeat
+すまねぇ・・・,미안하다...,dialogue,apology
+元気を出しなさい。,기운 내.,dialogue,encouragement
+次に、,"다음,",dialogue,connector
+やっかいよね。,성가시지.,dialogue,comment
+敵を食いとめる戦法がよさそうね。,적을 저지하는 전법이 좋겠어.,dialogue,advice
+まったく面目ねえ・・・,정말 면목 없군...,dialogue,apology
+次は負けん！,담엔 안져!,dialogue,resolve
+コングとかいったな・・・,콩그라고 했지...,dialogue,story
+なかなか手ごわかったぜ！,꽤 만만치 않았어!,dialogue,comment
+あれが、,"저게,",dialogue,fragment
+なに！？,뭐!?,dialogue,reaction
+意外と歩兵相手にもかつやくするわ。,의외로 보병 상대로도 활약해.,system,advice
+へへ、,"헤헤,",dialogue,laugh
+これは間接攻撃ユニットね。,이건 간접 공격 유닛이야.,system,unit explanation
+空ユニットにしか攻撃できないけど、,"공중 유닛만 공격 가능하지만,",system,unit explanation
+圧倒的な強さを持ってるのよ！,압도적인 강함을 지녔어!,system,unit explanation
+かなり広いわ。,상당히 넓어.,system,description
+ケガは無い！？,다친 데 없어!?,dialogue,question
+マックスショーグン！,맥스 쇼군!,name,commander
+なんだこりゃ？,이게 뭐야?,dialogue,reaction
+これは・・・！,이건...!,dialogue,reaction
+研究所の地図じゃない！,연구소 지도잖아!,dialogue,discovery
+研究所の地図？,연구소 지도?,dialogue,question
+ここに示されている研究所を、,"여기에 표시된 연구소를,",dialogue,story
+さがしだす命令を受けていたの。,찾으라는 명령을 받았어.,dialogue,story
+ブラックホール軍が各地で,블랙홀군이 각지에서,dialogue,story
+新兵器を作り出しているとか・・・。,신병기를 만들고 있다나...,dialogue,story
+ブルームーンやイエローコメットにも,블루문과 옐로코멧에도,dialogue,story
+同じ様な研究所があるってことか？,같은 연구소가 있다는 건가?,dialogue,question
+分からないけど・・・,모르겠지만...,dialogue,connector
+かくれて研究しているなら、,"숨어서 연구 중이라면,",dialogue,story
+地図を見つけないと、,"지도를 찾지 않으면,",dialogue,story
+研究所をつきとめるのは,연구소를 찾아내기는,dialogue,story
+むずかしいかもね・・・,어려울지도 몰라...,dialogue,story
+レッドスターにある研究所の場所は,레드스타의 연구소 위치는,dialogue,story
+このミッションが終わったあと,이 미션이 끝난 뒤,system,explanation
+マップセレクトに戻ってから、,"맵 선택으로 돌아간 뒤,",system,explanation
+研究所のあるマップに行けるはずよ！,연구소가 있는 맵에 갈 수 있어!,system,explanation
+たまったわよ！,다 찼어!,system,break gauge
+普通のブレイクよ。,일반 브레이크야.,system,break
+ロケット砲よ。,로켓포야.,unit,unit
+そう考えた方が分かりやすいわ。,그렇게 생각하면 쉬워.,dialogue,advice
+すぐ弾切れになるから、,"금방 탄이 떨어지니까,",system,ammo
+都市の上に配置したり,도시 위에 배치하거나,system,advice
+試してみてね。,시험해 봐.,dialogue,tutorial
+潜水艦は,잠수함은,unit,fragment
+今つかんだのは、,"지금 익힌 것은,",dialogue,tutorial
+これはブレイクゲージよ。,이건 브레이크 게이지야.,system,tutorial
+わかりました！,알겠습니다!,dialogue,acknowledgement
+おめでとう！,축하해!,dialogue,congrats
+対空ミサイ,대공미사,unit,truncated source

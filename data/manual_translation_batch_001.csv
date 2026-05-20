@@ -1,0 +1,69 @@
+japanese,korean,category,notes
+でも、,"다만,",dialogue,short connector
+対する攻撃力。,공격력.,system,attack stat label
+がんばってね！,힘내!,dialogue,encouragement
+次は　がんばってね！,다음엔 힘내!,dialogue,encouragement
+下のタイプのユニットに,아래 유형 유닛에,system,unit type explanation
+対空ミサイル,대공미사일,unit_weapon,anti-air missile
+戦闘機,전투기,unit,unit name
+よし、,"좋아,",dialogue,short reaction
+ええ。,그래.,dialogue,affirmative
+ダミー。,더미.,system,dummy text
+では、,"그럼,",dialogue,transition
+ここは,여기는,dialogue,location phrase
+まあ、,"뭐,",dialogue,softening phrase
+視界（しかい）。,시야.,system,vision glossary
+数字はその範囲。,숫자는 범위.,system,range explanation
+数字は移動力。,숫자는 이동력.,system,movement explanation
+陸ユニットに対する攻撃力。,육상 유닛 공격력.,system,attack stat label
+偵察車,정찰차,unit,unit name
+はい！,네!,dialogue,affirmative
+さあ、,"자,",dialogue,prompt
+しかし、,"하지만,",dialogue,connector
+いや、,"아니,",dialogue,negative
+ああ、,"아아,",dialogue,reaction
+の「もぐる」時には,의 「잠수」 때는,system,submerge action
+それじゃ　がんばってね！,그럼 힘내!,dialogue,encouragement
+次もこの調子で　がんばってね！,다음도 이 기세로!,dialogue,encouragement
+Ａボタン,A 버튼,ui,button label
+セリフなし。,대사 없음.,system,no dialogue
+システム,시스템,ui,menu label
+はっ！,앗!,dialogue,reaction
+ドミノ、,"도미노,",name,character name
+ええ、,"그래,",dialogue,affirmative
+のマシンガンでの,의 기관총으로,system,weapon explanation
+本部占領、もしくは敵全滅で勝利よ。,본부 점령 또는 적 전멸로 승리.,system,victory condition
+をつかんでね。,을 익혀 둬.,dialogue,tutorial phrase
+さあ、出撃よ！,자 출격이야!,dialogue,mission start
+フン、,"흥,",dialogue,reaction
+それは、,"그건,",dialogue,connector
+もう、,"이제,",dialogue,connector
+そうね。,그렇네.,dialogue,affirmative
+リョウ、,"료,",name,character name
+新型戦車,신형전차,unit,unit name
+おい、,"이봐,",dialogue,callout
+よし！,좋아!,dialogue,reaction
+リョウ！,료!,name,character name
+おお、,"오오,",dialogue,reaction
+くそっ！,젠장!,dialogue,reaction
+ショーグン、,"쇼군,",role,commander title
+はできない。,할 수 없다.,system,negative ability
+さん！,님!,dialogue,honorific suffix
+ブラックホール軍の,블랙홀군의,faction,faction name
+だが、,"다만,",dialogue,connector
+ショーグン！,쇼군!,role,commander title
+クックックッ・・・,크크크...,dialogue,laugh
+モップ！,모프!,name,character/name
+トライアルの新しいマップ,트라이얼 새 맵,system,map unlock
+歩兵系に対する攻撃力。,보병계 공격력.,system,attack stat label
+タマがなくなると、,"탄이 떨어지면,",system,ammo explanation
+さん、リョウ！,"님, 료!",dialogue,name call
+さんの勝ちよ！,님의 승리야!,dialogue,victory line
+これで,이걸로,dialogue,connector
+そうね、,"그렇네,",dialogue,affirmative
+ドミノ！,도미노!,name,character name
+ここは、,"여기는,",dialogue,location phrase
+うむ、,"음,",dialogue,reaction
+そう。,그래.,dialogue,affirmative
+キャンペーン以外のモードでも,캠페인 외 모드에서도,system,mode explanation
+副砲での、歩兵系以外の,부포로 보병계 외의,system,weapon explanation
