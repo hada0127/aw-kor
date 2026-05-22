@@ -121,3 +121,24 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 **작동**: 첫 행 (ア-カ) 위치에 A-F 알파벳 정상 표시.
 
 **제한**: 슬롯 stride 0x10 + 글리프 32 bytes 쓰기 → 인접 슬롯 (dakuten) overlap → 행 2+ 글리프 깨짐. 8x4 글리프(v34)는 sparse하여 가독성 낮음. 32-byte 글리프 + slot overlap 해결 필요.
+
+## 12. 정확한 SJIS→Slot 매핑 + Name Input Grid 알파벳 표시 (v37, 2026-05-23)
+
+**산출물**: `output/v37_grid_AZ_idx.gba`
+
+**핵심 발견**:
+1. **`tools/cell_to_slots.py`의 4-tile 공식이 정답**: 각 글자는 4개 타일 슬롯 (top_extra/top/bottom/bot_extra) 사용. 그리드 셀(8x16)은 top_extra(상단 8x8) + bot_extra(하단 8x8) 사용.
+2. **SJIS lookup table at 0x08BE717A**가 진짜 매핑 소스. 게임 변종 SJIS 사용:
+   - 표준 ツ=0x8362, 게임 테이블=0x8363
+   - 표준 テ=0x8364, 게임 테이블=0x8365
+   - 표준 ト=0x8366, 게임 테이블=0x8367
+3. **테이블 idx 9-46이 그리드 셀**(ア,イ,ウ,...). 인덱스 순서대로 SJIS 코드 추출 후 cell_slots()에 넣으면 슬롯이 페이지 경계 빼고는 연속.
+
+**검증**: 그리드 첫 2행에 "ABCDE" "FGHIJ" 정확 표시. 한글 dialog ("네 이름을 알려 줘") 유지.
+
+**제한**: K-Z, 0-9는 화면 위치 매핑(tilemap)이 불완전. 모드 토글(hira/kata) RE 미완.
+
+**도구**:
+- `tools/cell_to_slots.py` — SJIS → 4-tile 슬롯 변환 (FONT_BASE=0xB974D0, SJIS_TBL=0xBE717A)
+- `tools/build_grid_v37.py` — SJIS 테이블 인덱스 직접 추출하여 v27 베이스에 알파벳 주입
+- `/tmp/mgbah` — 헤드리스 mGBA harness (frames/keys/shot/break)

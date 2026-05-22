@@ -573,3 +573,23 @@
 2. 전체 ASCII 영문/숫자 글리프 주입
 3. 이름 입력 동작 + 출력 검증
 4. Welcome 외 다른 dialog로 확장
+
+---
+
+## 2026-05-23 18:00 갱신 — Name Input Grid 알파벳 표시 v37 부분 성공
+
+### ✅ 완료 (이 세션)
+- `tools/cell_to_slots.py` 검증: SJIS lookup table at 0x08BE717A + 4-tile (top_extra/top/bottom/bot_extra) 공식 정확. **첫 발견**: 게임이 변종 SJIS 사용 (ツ=0x8363 등).
+- v36 (50음순 표준 SJIS) 부분 성공 → v37 (SJIS 테이블 idx 순) 정상 성공
+- v37: 그리드 첫 두 행에 ABCDE FGHIJ 정확 표시 + 한글 dialog 유지
+
+### ⏳ 진행 중
+- 그리드의 나머지 셀 (K-Z, 0-9) 시각적 위치 확인 — 모드 토글(hira/kata) RE 필요
+- tilemap에서 어느 슬롯이 어느 그리드 화면 위치에 매핑되는지 추적
+- 이름 입력 후 다음 화면에서 이름 출력 (영문/숫자 저장 흐름)
+
+### 다음 단계 (단순한 것부터)
+1. mGBA에서 그리드의 모드 토글(L/R 버튼) 캡처 — 카타카나/히라가나/영문 분리 페이지 가능성
+2. tilemap layout 덤프 (BG0/BG1 차지 영역) — 어느 슬롯이 어느 화면 grid cell인지
+3. K-Z/0-9 표시 위치 검증
+4. 이름 선택 → 저장 → 다음 화면 출력 동작 RE
