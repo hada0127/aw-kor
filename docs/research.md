@@ -601,3 +601,34 @@ rom_addr = 0x08B974D0 + slot * 32
 - 표준 SJIS 코드로 cell_slots() 호출 시 일부 (ツ/テ/ト/ヂ/ヅ/...)는 다른 페이지로 점프 → 화면 깨짐
 - **반드시 게임의 lookup table을 직접 읽어서 SJIS 코드 추출** 후 cell_slots에 전달
 
+
+---
+
+## Name Input Grid Tile 슬롯 (2026-05-23 검증)
+
+### 그리드 두 영역 분리
+
+GBA 모든 4 BG 레이어 사용 (BG0 cb=0 sb=12 pri=0, BG1 cb=0 sb=30, BG2 cb=2 sb=13 pri=0, BG3 cb=2 sb=31).
+
+**좌측 메인 그리드** (4×5 카타카나 셀):
+- 슬롯 128 + N (top half) + 144 + N (bottom half) for cell N
+- cell_to_slots의 `top` + `bottom` 슬롯 사용
+- 각 셀 = 8×16 픽셀 = 두 타일 stacked
+- ROM tile data: 0x08B974D0 + slot * 32
+
+**우측 작은 패널** (1-9 + ヤユヨ + ワヲン + 기호):
+- 슬롯 (page+5)*32+3+chip (top_extra) + (page+5)*32+19+chip (bot_extra)
+- cell_to_slots의 `top_extra` + `bot_extra` 슬롯
+- 작은 8×8 셀 (one tile each)
+
+### 매핑 검증 절차
+이분탐색으로 발견:
+1. 슬롯 0-287에 'O' marker → 좌측 그리드 전체 'O' → 좌측은 0-287
+2. 슬롯 0-71에 alphabet → 좌측 안 변함 → 좌측은 71+
+3. 슬롯 128-191에 'X' → 좌측 32 셀 모두 'X' → 좌측 메인 = 128-191
+
+### 셀 번호 (idx) → 슬롯 매핑 (page 0 검증)
+- cell N (idx 9+N): top=128+N, bottom=144+N
+- 예: ア (N=0): top=128, bottom=144
+- 예: タ (N=15): top=143, bottom=159
+- page 1+ (idx 25+): top=160+chip, bottom=176+chip (chip 0-15)

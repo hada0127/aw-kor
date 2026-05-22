@@ -142,3 +142,35 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 - `tools/cell_to_slots.py` — SJIS → 4-tile 슬롯 변환 (FONT_BASE=0xB974D0, SJIS_TBL=0xBE717A)
 - `tools/build_grid_v37.py` — SJIS 테이블 인덱스 직접 추출하여 v27 베이스에 알파벳 주입
 - `/tmp/mgbah` — 헤드리스 mGBA harness (frames/keys/shot/break)
+
+## 13. 좌측 Name Input 그리드 알파벳 정상 표시 (v45, 2026-05-23)
+
+**산출물**: `output/v45_grid_8x16.gba`
+**스크린샷**: `docs/screenshots/SUCCESS_v45_grid_alphabet_2026-05-23.png`
+
+**핵심 발견 (대규모 RE)**:
+1. **그리드는 두 영역 분리**:
+   - 좌측 메인 그리드 = cell_to_slots의 **top + bottom** 슬롯 (8x16 셀)
+   - 우측 작은 패널 (1-9 + 작은 카타카나) = **top_extra + bot_extra** 슬롯
+2. **이전 v37의 ABCDE는 우측 패널**에서 보였던 것 (오해)
+3. 좌측 셀 N (idx 9+N) → top=128+N, bottom=144+N (page 0), 페이지 1+에서는 +32 stride
+4. SJIS 테이블 (0x08BE717A) 인덱스 순으로 SJIS 코드 추출 후 cell_slots 사용해야 함
+
+**검증 단계 (실험적 발견)**:
+- v37: top_extra에 ABCDE → 우측 패널에 표시 (잘못된 가설)
+- v38: 슬롯 288-511에 marker → 우측 패널만 영향 → 좌측 ≠ 288+
+- v41: 슬롯 0-287에 'O' → 좌측 그리드 전체 'O' → 좌측은 0-287 범위
+- v42: 슬롯 0-71에 alphabet → 좌측 안 바뀜 → 좌측은 72+ 범위
+- v43: 슬롯 128-191에 'X' → 좌측 첫 32 셀 X → 좌측 메인 영역 = 슬롯 128-191
+- v44: cell_to_slots의 top+bottom 페어로 알파벳 주입 → 작동 (작음)
+- v45: 8x16 풀크기 글리프로 가독성 향상 → **완성**
+
+**결과**:
+- 좌측 그리드 5x5: ABCDE / FGHIJ / KLMNO / PQRST / U... 정확 표시
+- 한글 dialog ("네 이름을 알려 줘") 유지
+- 우측 패널 디지트 (01234/56789) 원본 유지
+
+**도구**:
+- `tools/render_8x16.py` — 8x16 풀크기 알파벳/숫자 글리프
+- `tools/build_grid_v45.py` — SJIS 테이블 idx → cell_slots top+bottom 주입
+- `tools/probe_bisect.py` — 슬롯 범위 이분탐색
