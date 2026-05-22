@@ -1,7 +1,6 @@
 # ROM files
 original/*
-output/*.gba
-output/*.gb
+output/*
 
 # Python
 __pycache__/
@@ -27,3 +26,11 @@ Thumbs.db
 *.o
 *.a
 *.out.claude/
+
+# Backup files
+*.bak
+*.bak[0-9]*
+
+# Temp working directory (Claude/사용자 임시 작업 공간)
+temp/
+!temp/.gitkeep

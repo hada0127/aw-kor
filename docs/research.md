@@ -468,3 +468,73 @@ def validate_pointers(rom, pointer_list):
 
 **마지막 업데이트**: 2026년 5월  
 **정보 출처**: RomHacking.net, 한글로게임, 나무위키, 기타 커뮤니티
+
+---
+
+## 2026-05-23 RE 발견 — Welcome Dialog 시스템
+
+### 핵심 주소
+| 항목 | 주소 | 비고 |
+|------|------|------|
+| Dialog init 함수 entry | 0x8B12984 | 모든 dialog open 시 호출 |
+| Dialog text ptr store | 0x8B1299C | `str r4, [r6, #0x20]` — text addr 저장 |
+| Dialog hook point (init) | 0x8B129D4 | BL trampoline 삽입 위치 (str r0, [r6, #0x3c]) |
+| Text loop body | 0x8B12758 | 매 글자 렌더 호출 |
+| Text loop exit | 0x8B12798 | `pop {r4, r5, r6}` — hook B 위치 |
+| Engine clear function | 0x8B175BA | dialog 영역 BG 데이터 clear (BL 0x8B10E34) |
+| Engine ▼ marker tile | 0xA1B9 (tile 441 + palette 0xA) | BG0 tilemap row 2 col 23 default location |
+
+### Code Cave
+- 0x08A3CF14: hook 코드 권장 위치 (large free space ~798KB)
+- 0x08A3D000+: data 영역
+- 17MB ROM 빈 영역: 0xA3CF14 시작 가용
+
+### Dialog 데이터 구조 (r4 base = 0x03000F80)
+| 오프셋 | 의미 |
+|--------|------|
+| r4+0x20 | text pointer (engine stores addr-2) |
+| r4+0x32 | char counter (1 byte) |
+| r4+0x34 | h-position (advance 2 per char) |
+| r4+0x2E | v-position (not advanced = single line) |
+| r4+0x3C | misc state |
+
+### SJIS → Font Slot 매핑 (Grid 카타카나)
+**검증 공식**: `slot_addr = 0xB984D0 + (sjis_low - 0x41) * 0x10`
+
+| SJIS | char | ROM offset |
+|------|------|------|
+| 0x8341 | ア | 0xB984D0 |
+| 0x8343 | イ | 0xB984F0 |
+| 0x8345 | ウ | 0xB98510 |
+| 0x8347 | エ | 0xB98530 |
+| 0x8349 | オ | 0xB98550 |
+
+- **슬롯 stride**: 0x10 bytes per SJIS code increment
+- **슬롯 크기**: 32 bytes (= 1 8x8 4bpp tile) — 인접 슬롯과 16 bytes overlap
+- **글리프 데이터**: 4-row katakana (bottom half of tile)
+- **dakuten/small variants**: 사이 슬롯 (+0x10) 위치, overlap memory
+
+### Blitter 정보 (Font Copy to VRAM)
+- IWRAM blitter entry: 0x03006744 (Thumb)
+- 호출자 LR: 0x08B1BF0D (welcome dialog text 렌더)
+- 인자: r6 = VRAM dest, r7 = ROM source
+- 호출당 32 bytes (= 1 tile) 복사
+- Welcome dialog: 16 katakana = 16 호출
+- Name input grid: ~165 호출 (50 katakana + 10 digits + cursor/UI 등)
+
+### Hook B 패턴 (Single Line 한글)
+```
+HOOK_B at 0x08A3D000:
+- 인자: flag in EWRAM 0x0203FFF0 (set by HOOK_A)
+- 동작:
+  1. flag != 0 검사
+  2. tilemap row 1 (col 7) 22 entries 복사 (= 내 line 1 top tile refs)
+  3. tilemap row 2 (col 7) 22 entries 복사 (= 내 line 1 bot + marker)
+  4. glyph data (704 halfwords) 복사 to VRAM 0x06002780+
+- 마지막에 원본 ABI 복원: pop {r4, r5, r6}; pop {r0}; bx r0
+```
+
+### Tilemap Marker (▼)
+- 시스템 ▼ tile entry: 0xA1B9 (tile 441 + palette 0xA)
+- 원래 위치: BG0 tilemap row 2 col 23 (engine이 typewriter 끝 자리에 자동 배치)
+- 동적 정렬: hook B에서 row 2의 `marker_cell` 위치에 0xA1B9 직접 배치하면 원하는 위치에 ▼ 표시 (engine 기본 위치 무관)
