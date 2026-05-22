@@ -1,0 +1,46 @@
+frames 320
+keys 8
+frames 30
+keys 0
+frames 120
+shot shot1.png
+
+keys 1
+frames 30
+keys 0
+frames 120
+shot shot2.png
+
+keys 1
+frames 30
+keys 0
+frames 120
+shot shot3.png
+
+keys 1
+frames 30
+keys 0
+frames 120
+shot shot4.png
+
+keys 8
+frames 30
+keys 0
+frames 120
+shot shot5.png
+
+keys 1
+frames 30
+keys 0
+frames 120
+shot shot6.png
+
+keys 1
+frames 30
+keys 0
+frames 120
+shot shot7.png
+
+break 03006754 tools/blitter_hits.log
+frames 1000
+quit

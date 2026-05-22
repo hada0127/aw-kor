@@ -1,0 +1,10 @@
+print("break 0x08B0FFF0 /tmp/mgbah_bp.log")
+print("break 0x08B11E48 KEEP")
+print("break 0x08B1215A KEEP")
+print("frames 300")
+for i in range(100):
+    print("keys 1")
+    print("frames 10")
+    print("keys 0")
+    print("frames 60")
+print("quit")

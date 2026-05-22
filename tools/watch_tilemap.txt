@@ -1,0 +1,34 @@
+frames 320
+keys 8
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 8
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+
+# Watch write to BG0 tilemap for Line 1
+watchaddr 600604E 2 w tools/tilemap_watch.log
+frames 400
+quit

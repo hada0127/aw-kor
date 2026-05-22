@@ -1,0 +1,33 @@
+frames 320
+keys 8
+frames 100
+keys 0
+frames 100
+keys 1
+frames 100
+keys 0
+frames 100
+keys 1
+frames 100
+keys 0
+frames 100
+keys 1
+frames 100
+keys 0
+frames 100
+keys 8
+frames 100
+keys 0
+frames 100
+keys 1
+frames 100
+keys 0
+frames 100
+keys 1
+frames 100
+keys 0
+frames 100
+
+break 030065E0 tools/blitter_hits.log
+frames 5000
+quit

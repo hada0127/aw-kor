@@ -1,0 +1,3 @@
+frames 1000
+dumpmem 04000000 128 io_regs.bin
+quit

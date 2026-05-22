@@ -1,0 +1,4 @@
+# Watch font reads
+watchaddr 08B974E0 32 r tools/font_watch.log
+frames 10000
+quit

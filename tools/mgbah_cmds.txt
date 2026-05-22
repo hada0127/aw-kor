@@ -1,0 +1,12 @@
+break 0x08B0FFF0 /tmp/mgbah_bp.log
+break 0x08B1215A KEEP
+frames 300
+keys 8
+frames 10
+keys 0
+frames 300
+keys 1
+frames 10
+keys 0
+frames 5000
+quit

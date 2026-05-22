@@ -1,0 +1,45 @@
+# Navigation to welcome dialogue
+# keys MASK where MASK is decimal or 0xHEX
+# Start is 8
+# A is 1
+
+frames 320
+keys 8
+frames 10
+keys 0
+frames 30
+
+keys 1
+frames 10
+keys 0
+frames 30
+
+keys 1
+frames 10
+keys 0
+frames 30
+
+keys 1
+frames 10
+keys 0
+frames 30
+
+keys 8
+frames 10
+keys 0
+frames 30
+
+keys 1
+frames 10
+keys 0
+frames 30
+
+keys 1
+frames 10
+keys 0
+frames 30
+
+# Now dialogue should start appearing
+break 0x03006754 tools/blitter_hits.log
+frames 300
+quit

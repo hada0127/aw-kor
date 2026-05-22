@@ -13,10 +13,12 @@ def calculate_gba_checksum(rom_data: bytes, header_offset: int = 0xA0) -> int:
     # GBA checksum is at offset 0xBD (189)
     # It's calculated as: 0 - (sum of bytes 0xA0-0xBC) & 0xFF
 
+    # GBATEK: chk = -(0x19 + sum(bytes 0xA0..0xBC)) AND 0xFF
+    # Real GBA hardware rejects the cart if 0xBD doesn't match this exactly.
     checksum_range = rom_data[header_offset:header_offset+29]  # 0xA0 to 0xBC (29 bytes)
     byte_sum = sum(checksum_range) & 0xFF
 
-    checksum = (0 - byte_sum) & 0xFF
+    checksum = (-(0x19 + byte_sum)) & 0xFF
     return checksum
 
 

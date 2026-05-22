@@ -40,15 +40,44 @@ def save_rom(rom_data: bytearray, output_path: str) -> None:
     print(f"Saved: {output_path} ({len(rom_data):,} bytes, {size_mb:.1f}MB)")
 
 
+# Only insert into the game's text/data region. Addresses below this are code /
+# critical data; extraction produced false-positive "text" there, and writing to
+# them corrupts executable code -> ROM fails to boot (white screen).
+SAFE_MIN_ADDR = 0x800000
+
+
+def load_original_slots(found_csv: str = 'data/game_wars_found_texts.csv') -> dict:
+    """Map address(int) -> (orig_byte_length, orig_hex_bytes) from the source extraction."""
+    slots = {}
+    with open(found_csv, 'r', encoding='utf-8', errors='ignore') as f:
+        for row in csv.DictReader(f):
+            a = (row.get('address') or '').strip()
+            try:
+                ai = int(a, 16)
+            except (ValueError, TypeError):
+                continue
+            try:
+                ln = int(row.get('length') or 0)
+            except ValueError:
+                ln = 0
+            slots[ai] = (ln, (row.get('hex_bytes') or '').strip().lower())
+    return slots
+
+
 def insert_translations(rom_data: bytearray, csv_path: str) -> dict:
-    """Insert Korean translations into ROM"""
+    """Insert Korean translations into ROM, safely bounded to original text slots."""
     stats = {
         'total_translations': 0,
         'successful_insertions': 0,
         'failed_insertions': 0,
         'skipped': 0,
+        'skipped_code_region': 0,
+        'skipped_not_found': 0,
+        'skipped_too_long': 0,
         'errors': []
     }
+
+    slots = load_original_slots()
 
     with open(csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
@@ -56,49 +85,47 @@ def insert_translations(rom_data: bytearray, csv_path: str) -> dict:
             stats['total_translations'] += 1
 
             try:
-                # Parse address
-                address = int(row['address'], 16)
-                korean_text = row.get('korean', '')
-                target_length = int(row.get('length', '0'))
-
+                korean_text = (row.get('korean') or '').strip()
                 if not korean_text:
                     stats['skipped'] += 1
                     continue
 
-                # Encode to EUC-KR
+                # Parse address
+                try:
+                    address = int(row['address'], 16)
+                except (ValueError, TypeError):
+                    stats['skipped_not_found'] += 1
+                    continue
+
+                # Must be a known extracted-text address (bounds the slot length)
+                if address not in slots:
+                    stats['skipped_not_found'] += 1
+                    continue
+                orig_len, _orig_hex = slots[address]
+                if orig_len <= 0:
+                    stats['skipped_not_found'] += 1
+                    continue
+
+                # Skip code / critical-data region (avoid corrupting boot)
+                if address < SAFE_MIN_ADDR:
+                    stats['skipped_code_region'] += 1
+                    continue
+
+                # Encode to EUC-KR and require it to fit the ORIGINAL slot exactly
                 korean_bytes = korean_text.encode('euc-kr', errors='ignore')
-
-                # Verify address is in valid ROM range
-                if address < 0 or address >= len(rom_data):
+                if len(korean_bytes) > orig_len:
+                    stats['skipped_too_long'] += 1
+                    continue
+                if address + orig_len > len(rom_data):
                     stats['failed_insertions'] += 1
-                    stats['errors'].append(f"Invalid address: 0x{address:X}")
+                    stats['errors'].append(f"Slot exceeds ROM at 0x{address:X}")
                     continue
 
-                # Check if we have enough space
-                if address + target_length > len(rom_data):
-                    stats['failed_insertions'] += 1
-                    stats['errors'].append(f"Not enough space at 0x{address:X}")
-                    continue
-
-                # Verify Korean bytes fit in target length
-                if len(korean_bytes) > target_length:
-                    # Try padding with nulls
-                    if len(korean_bytes) <= target_length:
-                        korean_bytes = korean_bytes + b'\x00' * (target_length - len(korean_bytes))
-                    else:
-                        stats['failed_insertions'] += 1
-                        stats['errors'].append(f"Korean text too long at 0x{address:X}")
-                        continue
-
-                # Insert the Korean text
-                # First clear the original Japanese text
-                for i in range(address, min(address + target_length, len(rom_data))):
+                # Clear exactly the original slot, then write Korean (null-padded)
+                for i in range(address, address + orig_len):
                     rom_data[i] = 0x00
-
-                # Then insert Korean text
                 for i, byte in enumerate(korean_bytes):
-                    if address + i < len(rom_data):
-                        rom_data[address + i] = byte
+                    rom_data[address + i] = byte
 
                 stats['successful_insertions'] += 1
 
@@ -179,7 +206,10 @@ def main():
     print(f"  Total translations: {insert_stats['total_translations']}")
     print(f"  Successful: {insert_stats['successful_insertions']}")
     print(f"  Failed: {insert_stats['failed_insertions']}")
-    print(f"  Skipped: {insert_stats['skipped']}")
+    print(f"  Skipped (no korean): {insert_stats['skipped']}")
+    print(f"  Skipped (code region <0x{SAFE_MIN_ADDR:X}): {insert_stats['skipped_code_region']}")
+    print(f"  Skipped (addr not in source): {insert_stats['skipped_not_found']}")
+    print(f"  Skipped (EUC-KR too long for slot): {insert_stats['skipped_too_long']}")
 
     if insert_stats['errors']:
         print(f"\n  First 5 errors:")

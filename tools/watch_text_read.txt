@@ -1,0 +1,34 @@
+frames 320
+keys 8
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 8
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+keys 1
+frames 10
+keys 0
+frames 30
+
+# Watch read from text buffer
+watchaddr 08DF8E16 4 r tools/text_read.log
+frames 500
+quit
