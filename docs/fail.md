@@ -219,3 +219,13 @@
 - **시도**: 처음 welcome 한글화에 v14_tight (font slot 0xB98000+ 한글 주입) 사용
 - **결과**: name input grid에 한글 잔재 노출 (katakana 슬롯과 동일 주소 공유)
 - **결론**: 글로벌 폰트 슬롯 패치는 다른 화면에 부작용. v27에서 원본 ROM + hook B만으로 재구성하여 해결.
+
+### F6. 캐서린 dialog (0xDF8E54) flag=4 시도 (v54, 2026-05-23)
+- **시도**: hook A를 4-way로 재작성 (welcome/name_prompt/hajimemashite/watashi) + hook B에 flag=4 핸들러 추가. addr4 = 0xDF8E54 (double 0a 09 prefix) + 0xDF8E56 (단일 0a 09) 두 가지 시도.
+- **결과**: 두 주소 모두 flag=4 미발화. 다음 화면이 캐서린 dialog 표시 안 함.
+- **분석**:
+  1. 0xDF8E54-0xDF8E57의 "0a 09 0a 09" double prefix는 **이전 hajimemashite block (0xDF8E3C) 내부의 line continuation**일 가능성 (= "줄바꿈 + 새 줄"). hajimemashite block이 line 1 "はじめまして..." + line 2 "私はキャサリン..."를 모두 포함.
+  2. 게임 dialog parser가 0xDF8E54/0xDF8E56을 **별도 block 시작이 아닌 같은 block 내부 줄 전환**으로 처리 → hook A의 `[r6+0x20]` 비교 안 됨.
+  3. hook B 가 hajimemashite block 시작에서 한 번 fire하지만 line 2 전환 시 다시 fire되지 않음 — overlay가 line 1만 덮음.
+- **해결책 (미구현)**: hook B를 multi-line block 인식하도록 확장 (line 전환 시 별도 overlay) 또는 line 2 영역 cells도 한 번에 overlay (단일 hook B 발화에서 line 1+2 모두 덮기, 22+22 cells).
+- **결론**: v53 (hajimemashite 단일 line 한글 overlay) 이 현재 아키텍처의 최대 도달점. 캐서린 dialog 한글화는 hook B 멀티라인 지원이 필요한 별도 과제.
