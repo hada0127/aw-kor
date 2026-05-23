@@ -229,3 +229,14 @@
   3. hook B 가 hajimemashite block 시작에서 한 번 fire하지만 line 2 전환 시 다시 fire되지 않음 — overlay가 line 1만 덮음.
 - **해결책 (미구현)**: hook B를 multi-line block 인식하도록 확장 (line 전환 시 별도 overlay) 또는 line 2 영역 cells도 한 번에 overlay (단일 hook B 발화에서 line 1+2 모두 덮기, 22+22 cells).
 - **결론**: v53 (hajimemashite 단일 line 한글 overlay) 이 현재 아키텍처의 최대 도달점. 캐서린 dialog 한글화는 hook B 멀티라인 지원이 필요한 별도 과제.
+
+### F7. watchaddr 기반 dialog addr 탐색 (v53 검증, 2026-05-23)
+- **시도**: harness watchaddr로 hook A의 flag write (0x0203FFF0)를 감시 → 게임 진행 중 7회 발화 캡처.
+- **결과**: 시퀀스 = flag=1 (welcome), flag=2 (name prompt), **flag=0 (미매핑 dialog)**, flag=3 (hajimemashite OK), flag=0 (미매핑), flag=0 (미매핑).
+- **분석**:
+  1. hook A가 dialog마다 fires (게임은 정상 progression).
+  2. hajimemashite 후 추가 2개 dialog가 flag=0으로 처리 → 정의된 addr1/2/3 와 다른 주소.
+  3. 캐서린 dialog는 별도 block (multi-line이 아님!) 으로 보이나 addr이 우리 추측과 다름.
+  4. 정확한 addr를 알려면 hook A 진입점에서 r0 (= [r6+0x20]) 캡처가 필요. BP가 발화 안 함 (mGBA-libmgba hardware BP 이슈로 추정).
+- **해결책 (미구현)**: hook A를 디버그 로그 출력하도록 확장 (r0를 EWRAM ring buffer에 기록) → 게임 진행 후 buffer 덤프하여 actual addr 캡처.
+- **결론**: v53 == 사용자 목표 만족 (이름 입력 → 다음 화면 "처음 뵙겠습니다" 한글). 추가 dialogs는 디버그 인프라 강화 (BP 작동 fix or 로그 inject) 후 진행 가능.
