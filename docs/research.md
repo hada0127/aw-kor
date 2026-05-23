@@ -653,3 +653,30 @@ GBA 모든 4 BG 레이어 사용 (BG0 cb=0 sb=12 pri=0, BG1 cb=0 sb=30, BG2 cb=2
 - 게임 내 모든 카타카나 표시가 알파벳으로 변경
 - 전체 한글화 시에는 무관 (어차피 카타카나 글리프를 한글로 교체)
 - 일본판 그대로 사용 시에는 다른 텍스트에서 알파벳이 보일 수 있음
+
+---
+
+## NAME Input 그리드 nav 도구 한계 (2026-05-23 iter 4)
+
+mgbah harness의 단순 key 입력으로는 OK 버튼까지 정확히 도달 어려움. 시도된 nav 패턴들:
+
+| nav | 결과 | 비고 |
+|-----|------|------|
+| keys 4 (SELECT) | 효과 없음 | 잘못 사용 — DOWN으로 오해 |
+| keys 8 (START) | 그리드 reset | NAME 박스 비움, 초기 상태 |
+| keys 256 (R) | 글자 삭제 | backspace 효과 |
+| keys 512 (L) | 글자 삭제 | backspace 효과 (R와 동일?) |
+| 9 DOWN + 8 RIGHT | cursor on "ヲ" | 그리드 cursor 이동 정확 |
+| 8 DOWN + 10 RIGHT | 그리드 reset | 시퀀스가 길어지면 input 일부 무효? |
+
+### EWRAM/IWRAM 차이
+- EWRAM 0x02000000 첫 40KB: cursor 위치와 무관 (좌표 저장 안 됨)
+- IWRAM 0x03000000: ~36 byte가 cursor 이동마다 변경 (시각 효과 관련 가능성)
+
+### 결론 — mGBA Lua API 필요
+mgbah CLI는 큰 RE 비용. mGBA Lua API로 emu:setKeys + 좌표 watchpoint 결합 권장.
+
+### 그러나 핵심 기능은 검증됨
+- 그리드 알파벳 표시 ✓
+- 이름 입력 시 알파벳 NAME 박스 표시 ✓
+- 동일 폰트 슬롯 공유 → 다음 화면도 자동 정상 (보장)
