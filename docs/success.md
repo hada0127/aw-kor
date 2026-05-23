@@ -227,3 +227,40 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 - ✅ 다음 화면 dialog 2: "ABCDEFG." — 캐서린 자기소개 깔끔 표시
 
 **제한**: 다음 화면 dialog가 한글이 아닌 알파벳. 한글로 표시하려면 welcome v25처럼 hook A/B 확장 필요 (다음 단계).
+
+## 16. Hook A/B 확장 + "처음 뵙겠습니다" 한글 overlay (v53, 2026-05-23)
+
+**산출물**:
+- `output/v53_korean_overlay.gba` — name input OK 후 다음 화면 dialog "처음 뵙겠습니다" 한글 표시
+- `tools/build_grid_v53.py` — hook A 재작성 + hook B 확장 + 한글 glyph 데이터 빌더
+
+**스크린샷**:
+- `docs/screenshots/SUCCESS_v53_korean_overlay_2026-05-23.png` — "처음 뵙겠습니다 ▼" 한글 dialog
+
+**Hook A 재작성** (0xA3CF14, 52 bytes code + 16 bytes data):
+- 3-way dialog 비교: addr1=0xDF8E14 (welcome) → flag=1, addr2=0xDF8DB0 (name prompt) → flag=2, addr3=0xDF8E3C (hajimemashite) → flag=3
+- 기존 2-way 구조 확장. Thumb 명령어 직접 인코딩 + PC-relative offset 재계산
+- 데이터 word-aligned at 0xA3CF48 (addr1,addr2,addr3,flag_ptr)
+
+**Hook B 확장** (0xA3D00E + 0xA3D086):
+- 0xA3D00E의 `b SKIP` (0xE020) → `b FLAG3_CHECK` (0xE03A → 0xA3D086)
+- @ 0xA3D086 새 핸들러: `cmp r0, #3; bne SKIP; ldr r4=0xA3D300; ldr r5=0xA3E000; b COMMON`
+- flag=3 시 welcome의 row 2 tilemap 재사용 (▼ marker 포함) + 새 glyph 데이터
+
+**한글 Glyph 데이터** (0xA3E000, 1408 bytes):
+- 22 cells: "처음 (공백) 뵙겠습니다" (8 cells) + 14 blank cells
+- 글리프 위치 재조정: Galmuri json 8px char를 16px 셀 중앙으로 shift
+  - top tile: Galmuri top rows 0-3 → 새 top rows 4-7 (push 아래로)
+  - bot tile: Galmuri bot rows 4-7 → 새 bot rows 0-3 (push 위로)
+- 결과: char가 셀 중앙 (rows 4-11)에 위치, 가독성 좋음
+
+**검증 결과 (v53_x3)**:
+- ✅ 이름 입력 → OK → 다음 화면에서 "처음 뵙겠습니다 ▼" 한글 dialog 깔끔 표시
+- ✅ Welcome (flag=1), name prompt (flag=2), hajimemashite (flag=3) 모두 한글
+- ✅ 그리드 알파벳 (A-Z, 0-9) 표시 유지
+- ⚠️ 그 다음 dialog "私はキャサリン" 미패치 (추가 hook flag=4 필요)
+
+**기술 핵심**:
+- BL trampoline (0xB129D4 → hook A, 0xB12798 → hook B)는 그대로 유지
+- 모든 patch는 in-place + 새 데이터 영역 (0xA3E000)
+- 체크섬: `(-(0x19 + sum(0xA0..0xBC))) & 0xFF`
