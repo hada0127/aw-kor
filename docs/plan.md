@@ -614,3 +614,26 @@
 2. 저장된 값 → ASCII 변환 hook (SJIS 카타카나 코드를 ASCII로 치환)
 3. 다음 화면 (스토리/UI 등)에서 이름 표시 함수 RE
 4. ASCII 표시 가능한 다이얼로그 폰트 슬롯 확보 (이미 idx 0-8 = 1-9 디지트 존재, 알파벳은 추가 필요)
+
+---
+
+## 2026-05-23 22:00 — 이름 입력 + 다음 화면 정상 작동 검증 (v51/v52)
+
+### ✅ 완료
+- **OK 셀 navigation RE**: 그리드 진입 후 dialog 한 번 더 dismiss (A) → 진짜 input mode → `DOWN×5 + RIGHT×10` = OK 셀.
+- **다음 화면 dialog 한글화 패턴 확립**: 일본어 SJIS를 distinct katakana로 재작성하면 우리가 채운 알파벳 글리프 슬롯 사용 → 깔끔한 알파벳 출력. 사용자 입력 placeholder (0x69) 유지.
+- **v51**: "はじめまして　_さん！" → "ABCDEF [user] GH!"
+- **v52**: + "私はキャサリン。" → "ABCDEFG."
+- **검증**: 그리드 입력 → OK → 다음 화면 dialog 출력까지 일관된 흐름 자동화 검증 통과 (mGBA harness + raw2png).
+
+### 산출물
+- `output/v51_dialog_alpha.gba`, `output/v52_dialog_alpha2.gba`
+- `tools/build_grid_v51.py`, `tools/build_grid_v52.py`
+- `docs/screenshots/SUCCESS_v52_dialog1_ABCDEF_AGH_2026-05-23.png` (다음 화면 1, 사용자 입력 'A' 정상 출력)
+- `docs/screenshots/SUCCESS_v52_dialog2_ABCDEFG_2026-05-23.png` (다음 화면 2, 캐서린 자기소개)
+- `docs/screenshots/SUCCESS_grid_ok_navigation_2026-05-23.png` (OK 셀 cursor)
+
+### 다음 단계 (선택)
+1. 다음 화면 한글 hook 추가: welcome v25처럼 hook A/B 확장 → "처음 뵙겠습니다 [user]님!", "저는 캐서린입니다." 한글 overlay rendering.
+2. 캐서린 이후 더 다음 화면들 (레드스타 국의 쇼군... 등) 점진 한글화.
+3. 그리드 가운데/우측 잔재 (マミ, abcde, んノフ 등) — 사용자 cursor가 가는 셀이 아니라 시각적 영향만, 선택 정리.

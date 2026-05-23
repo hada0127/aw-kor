@@ -195,4 +195,35 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 - 이 원리로 **다음 화면 출력도 자동으로 알파벳** (별도 hook 불필요)
 - 모든 katakana 사용 위치가 알파벳으로 표시되는 side-effect (전체 한글화 시 무관)
 
-**상태**: OK 버튼 정밀 nav 미완 (다음 화면 직접 캡처 안 됨), 그러나 동일 슬롯 공유 원리로 정상 작동 보장.
+## 15. 이름 입력 OK 셀 navigation + 다음 화면 출력 검증 (v52, 2026-05-23)
+
+**산출물**:
+- `output/v52_dialog_alpha2.gba` — 그리드 + 다음 dialog 2개 (はじめまして, 私はキャサリン) 모두 distinct 카타카나로 패치
+- `output/v51_dialog_alpha.gba` — v52 한 단계 전 (はじめまして만 패치)
+
+**스크린샷**:
+- `docs/screenshots/SUCCESS_grid_ok_navigation_2026-05-23.png` — 그리드에서 OK 셀에 커서
+- `docs/screenshots/SUCCESS_v52_dialog1_ABCDEF_AGH_2026-05-23.png` — 다음 화면 dialog 1 ("ABCDEF [A] GH!", A=사용자 입력)
+- `docs/screenshots/SUCCESS_v52_dialog2_ABCDEFG_2026-05-23.png` — 다음 화면 dialog 2 ("ABCDEFG.")
+
+**OK 셀 navigation 시퀀스**:
+1. 그리드 화면 진입 후 dialog "네 이름을 알려 줘" 추가 A 한 번 더 → 진짜 input mode (cursor 'A' 셀)
+2. 글자 입력 후 OK 셀 좌표 = `DOWN×5 + RIGHT×10`
+3. A 누르면 다음 화면 진입
+
+**다음 화면 dialog 패치 패턴** (`tools/build_grid_v51.py`, `tools/build_grid_v52.py`):
+- 0xDF8E3E "はじめまして" (12 bytes) → "アイウエオカ" → 우리 알파벳 슬롯 → "ABCDEF" 표시
+- 0xDF8E4C 0x69 (name placeholder) 유지 → 사용자 입력 'A' 자동 삽입
+- 0xDF8E4D "さん" (4 bytes) → "キク" → "GH" 표시
+- 0xDF8E58 "私はキャサリン" (14 bytes) → "アイウエオカキ" → "ABCDEFG" 표시
+- 전각 공백/!/. 유지
+
+**검증 결과**:
+- ✅ 그리드 좌측 알파벳 (ABCDEFGHIJKLMNOPQRSTUVWXYZ + 0123) 정상
+- ✅ 그리드 dialog "네 이름을 알려 줘" 한글 정상
+- ✅ 사용자 셀 선택 → A 입력 → NAME 박스 "A" 표시
+- ✅ OK 셀 (D5+R10) → A → 다음 화면 진입
+- ✅ 다음 화면 dialog 1: "ABCDEF [A] GH!" — 사용자 입력 'A' 정상 위치 표시
+- ✅ 다음 화면 dialog 2: "ABCDEFG." — 캐서린 자기소개 깔끔 표시
+
+**제한**: 다음 화면 dialog가 한글이 아닌 알파벳. 한글로 표시하려면 welcome v25처럼 hook A/B 확장 필요 (다음 단계).
