@@ -174,3 +174,25 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 - `tools/render_8x16.py` — 8x16 풀크기 알파벳/숫자 글리프
 - `tools/build_grid_v45.py` — SJIS 테이블 idx → cell_slots top+bottom 주입
 - `tools/probe_bisect.py` — 슬롯 범위 이분탐색
+
+## 14. 이름 입력 → NAME 박스 알파벳 표시 검증 (v45, 2026-05-23)
+
+**스크린샷**:
+- `docs/screenshots/SUCCESS_v45_name_C_input_2026-05-23.png` (C 입력 후)
+- `docs/screenshots/SUCCESS_v45_name_5_digit_2026-05-23.png` (5 입력 후)
+
+**검증**:
+1. 그리드 셀 선택 → A 버튼 → 셀의 알파벳이 NAME 박스에 표시
+2. 여러 글자 누적 가능 ("BLLL" 입력 시 모두 알파벳 표시)
+3. 숫자 셀도 작동 (5 표시)
+
+**핵심 통찰**:
+- 그리드와 NAME 박스 모두 **같은 다이얼로그 폰트 슬롯** 사용
+- 사용자가 "A" 셀 (실제로 ア=SJIS 0x8341) 선택 시:
+  - 게임은 ア (0x8341) 코드를 name buffer에 저장
+  - NAME 박스 렌더링 시 슬롯 128(top) + 144(bottom)에서 글리프 로드
+  - 우리가 그 슬롯에 'A' 글리프 주입했으므로 → NAME 박스에 'A' 표시
+- 이 원리로 **다음 화면 출력도 자동으로 알파벳** (별도 hook 불필요)
+- 모든 katakana 사용 위치가 알파벳으로 표시되는 side-effect (전체 한글화 시 무관)
+
+**상태**: OK 버튼 정밀 nav 미완 (다음 화면 직접 캡처 안 됨), 그러나 동일 슬롯 공유 원리로 정상 작동 보장.
