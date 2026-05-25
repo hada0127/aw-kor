@@ -27,6 +27,7 @@ TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
 SAFE_MIN_ADDR = 0x800000
+FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
 
 FALLBACK = {'·': '・', '∪': '∩'}  # 일부 유니코드 → SJIS 인코딩 가능 등가
 
@@ -120,8 +121,9 @@ def main():
                 continue
             if a + slot > len(rom):
                 st['oob'] += 1; continue
-            for i in range(a, a + slot):
-                rom[i] = 0x00
+            # 빈 공간은 0x00(메시지 조기종료→자동넘어감 버그) 대신 공백(FILL_BYTE)으로 패딩
+            # → 렌더러가 슬롯 뒤 제어코드(6B=▼입력대기)에 정상 도달.
+            rom[a:a + slot] = bytes([FILL_BYTE]) * slot
             rom[a:a + len(enc)] = enc
             st['written'] += 1
 
