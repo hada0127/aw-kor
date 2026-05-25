@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
 """
 PHASE 5-4: Execute text insertion with safety checks
-Inserts Korean translations into ROM with backup and validation
+Inserts Korean translations into ROM with backup and validation.
+
+상태 (2026-05-25 검증):
+- 이 파이프라인(5-4 삽입 → 5-5 체크섬)은 **부팅하는 ROM을 생성**한다.
+  · 삽입은 원본 슬롯 길이(orig_len)로 엄격히 제한되고 SAFE_MIN_ADDR(0x800000) 미만
+    코드 영역은 건드리지 않는다 → 한글 ROM의 코드영역 변경 0바이트, 원본과 동일 부팅.
+  · 체크섬(0xBD)은 5-5에서 올바른 식으로 갱신(텍스트 삽입은 헤더 무변경이라 유효 유지).
+- ⚠️ 단, 여기서 쓰는 **EUC-KR 인코딩 텍스트는 게임에서 한글로 렌더되지 않는다.**
+  게임 대화 폰트는 SJIS-타일 + LZ77/VRAM 경로라, 본문 대화 한글화는 `build_grid_v*.py`
+  의 ARM hook 방식(per-screen)이 필요하다. 풀게임 렌더는 그 hook의 일반화가 과제다.
+  → 이 스크립트는 현재 **부팅/구조 검증용**이며, 한글 렌더 빌드가 아니다.
+  자세한 현황: CLAUDE.md "알려진 핵심 이슈".
 """
 
 import sys
