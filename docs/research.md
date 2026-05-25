@@ -849,3 +849,68 @@ veneer 0x08B1BEFC: r1/r2 16비트화, r3=리터럴[0x08B1BF10]=0x030065E1
 - 전 화면 FONT_BASE read watch로 대화 외(전투/맵/스탯) 같은 경로인지 커버리지 확인.
 - 변환 루틴 ROM 소스(0x08EFE788) 패치 PoC: 예약 코드 1개 → 한글 글리프 렌더.
 - 가나/기호 범위의 정확한 base→glyph index 2차 indirection 확정(현재 한자 테이블 경로가 더 명확).
+
+## [2026-05-25] Phase A 커버리지 + 변환루틴 전체 디스어셈블 + 글리프 배치 경계 확정
+
+SESSION 1 작업. 글리프 블롭(800 dedup 타일) 생성 + 배치 전략 결정을 위한 정밀 RE.
+codex+gemini 리뷰 반영(codex OK, gemini는 메커니즘 오해 우려 → 디스어셈블로 반증).
+
+### Phase A — 텍스트 렌더 경로 커버리지 (정적+동적)
+- **per-char 텍스트 경로(번역 대상 텍스트 전부)는 단일 chokepoint**:
+  - 변환루틴 0x030065E0(ROM 0x08EFE788)는 veneer **0x08B1BEFC**(리터럴 0x08B1BF10=0x030065E1)
+    로만 도달. veneer 0x08B1BEFC의 ROM 호출자는 **정확히 2곳**: `0x08B1275E`(대화 렌더 루프),
+    `0x08B12B1A`(2번째 텍스트 렌더러). 둘 다 동일 변환루틴·동일 FONT_BASE(리터럴 0xEFE97C) 사용.
+  - 동적 확인: hajimemashite 대화 도달 시 copy 0x03006744 BP 167히트 **전부 lr=0x08B1BF0D 단일**.
+- **별도 경로: 폰트 bulk DMA 업로드 2곳**(FONT_BASE 리터럴 중 나머지 2개):
+  - `0x08B11B54~`: DMA3(0x040000D4) src=FONT_BASE, dst=VRAM 0x06000000, CNT=0x80002C00
+    → **idx 0..0x2BF(704타일, 22KB)를 VRAM에 통째 업로드**. (이름입력 그리드 등 프리로드+타일맵 경로)
+  - `0x08B6A86C~`: 동일 패턴, CNT=0x80000100 → idx 0..0xF(16타일) 소형 업로드.
+  - 이 경로들은 **프리로드된 고정 글리프셋**을 타일맵으로 렌더 → per-char 변환루틴 안 거침.
+- **결론**: 번역 텍스트(대화/메뉴/유닛명)는 per-char 단일 변환루틴이 담당 → 한글화는 이 루틴 1곳 처리로 커버.
+  bulk-DMA 화면(가나 입력 그리드/소형 심볼)은 별개 글리프셋 — **잔여 리스크**(그 화면이 번역 텍스트를
+  쓰는지 Session 3 QA에서 확인. 가나 캐릭터 피커면 무관).
+
+### 변환루틴 0x08EFE788 전체 디스어셈블 (글리프 소스 계산 — bound check 없음)
+```
+0xEFE7B0: r3 = (lead<<8)|trail = SJIS;  r7 = byteswap(SJIS)
+0xEFE7BE: r1 = ((SJIS+0xFFFF7EC0)&0xFFF8)<<1 + (SJIS&7)   ; 중간 index
+0xEFE7D2: ip = 8 (기본 width)
+0xEFE7D8: cmp SJIS,0x823F; bhi → 아니면 r5=baseptr[0](0x08B80270[0])   ; 기호/ASCII
+0xEFE800: cmp SJIS,0x833F; bhi → 아니면 r5=baseptr[1], index-=0x200      ; 히라가나
+0xEFE820: cmp SJIS,0x8397; bhi → 아니면 r5=baseptr[2], index-=0x200      ; 가타카나
+0xEFE838: (한자) ip=1; r5=0x08B80B7C(table start, 리터럴 0xEFE970)
+0xEFE844:        r1=0x08B8180C(table end, 리터럴 0xEFE974)
+0xEFE848: 루프: r2=halfword[r5]; cmp r7,r2; beq found; r5+=6; cmp r5,end; blo 루프
+          미발견 시 r5=[baseptr]+0x1e (fallback glyph)
+0xEFE85A: r5+=2 (→ &top_idx)
+0xEFE85E: r3 = 0x08B974D0 (FONT_BASE, 리터럴 @0xEFE97C)   ★repoint 대상
+0xEFE866: r1 = (sel<<1) + r5     ; sel = 0(top)/1(bot)
+0xEFE86A: r0 = halfword[r1 + ip<<1]   ; ★테이블에서 top/bot idx 읽음 (16-bit, 클램프 없음)
+0xEFE86C: r0 = idx << 5            ; idx*0x20
+0xEFE86E: r7 = FONT_BASE + idx*0x20  ; ★글리프 ROM 소스 포인터
+0xEFE87E~: 픽셀 nibble별 팔레트 리맵(>임계 시 sp/sl/sb/리터럴 오프셋 가산)
+```
+- **핵심: idx에 상한 검사(CMP/clamp)가 없다.** 테이블이 주는 idx를 그대로 `FONT_BASE+idx*0x20`. → gemini가 우려한 "하드코딩 bound check"는 **존재하지 않음**(실측 반증). 유일한 경계는 테이블 검색 end 리터럴 0xEFE974(=0x08B8180C) — 확장 시 갱신.
+- per-char 경로는 **ROM→VRAM 동적 글리프 복사**(r7=ROM 소스, 문자당 0x20을 VRAM dst로). 즉 idx는 **ROM 글리프 소스 인덱스**이지 VRAM 타일맵 타일번호가 아님 → gemini의 "10-bit 타일 인덱스/VRAM 오버플로우" 우려는 메커니즘 오해(73KB 블록은 **ROM** 0x08F00000에 위치, VRAM 아님).
+
+### 글리프 배치 경계 확정 (per-char 경로 max idx)
+- 가나/기호 baseptr 인덱스테이블 max idx: sym 0x5F2, hira 0x3F9, kata 0x5F4.
+- 한자 테이블(536엔트리) top/bot max idx: **0x5FF**.
+- **per-char 경로 전체 max glyph idx = 0x5FF** → 폰트 사용 영역 = FONT_BASE..FONT_BASE+0x600*0x20
+  = 파일 0xB974D0..0xBA34D0 = **정확히 48KB**.
+- 도달범위 [0xB974D0, 0xD974B0](16-bit idx) 내 안전 빈공간: 0xFF 12타일뿐(0x00 1148타일은 흩어진
+  그래픽 빈타일 → 덮으면 손상). **연속 25KB 안전공간 없음.**
+- ROM 끝 0xF00000~0xFE0000 = **896KB 빈공간(0x00)**, 단 현 FONT_BASE 기준 16-bit 도달 밖.
+
+### FONT_BASE 리터럴 (0x08B974D0 LE) — ROM에 정확히 3곳
+| 파일오프셋 | 용도 |
+|---|---|
+| 0xEFE97C | **per-char 변환루틴** 글리프 소스 base (repoint 대상) |
+| 0xB11B74 | bulk DMA(704타일) src — 프리로드 경로 |
+| 0xB6A894 | bulk DMA(16타일) src — 소형 프리로드 |
+
+### 글리프 dedup (Phase C-1)
+- 번역문 고유 한글 음절 **1030개**(사전렌더 JSON 1028보다 궈·깎 2개 많음, CSV 기준 재생성).
+- 각 음절 top+bot 8x8 4bpp(ink 10). **타일 dedup → 고유 800타일(top 437+bot 363, 겹침 0) = 25,600B**.
+- `tools/build_korean_glyph_blob.py` → `data/korean_glyph_blob.bin`(25600B) + `data/syllable_to_glyph.json`
+  (음절→로컬 top/bot 타일 idx). blob sha1 2f345701…. empty render 0건.

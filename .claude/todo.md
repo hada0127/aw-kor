@@ -40,45 +40,63 @@
 
 ---
 
-## 📌 SESSION 1 — 커버리지 확인 + 글리프 영역 빌드 (저위험, 인프라)
+## 📌 SESSION 1 — 커버리지 확인 + 글리프 영역 빌드 ✅ 완료 (2026-05-25)
 
-**목표**: 풀게임 렌더 경로가 단일한지 확인 + 1028 음절 글리프 블롭 생성.
+**목표**: 풀게임 렌더 경로가 단일한지 확인 + 음절 글리프 블롭 생성. → 달성. 상세 research/success.md.
 
-1. **Phase A 커버리지** (리뷰 최대 리스크)
-   - [ ] mgbah로 `break 0x03006744` + `keys`로 도달 가능한 모든 화면(타이틀/모드선택/이름입력/대화/가능하면 맵·전투) 순회. copy 호출자(lr) 분포 수집.
-   - [ ] 도달 가능 화면은 이미 단일 경로(lr=0x08B1BF0D) 확인됨. **전투/맵/스탯** 진입 시도(세이브 파일 `output/*.sav` 활용 or 긴 네비).
-   - [ ] 글자 렌더되는데 0x03006744 BP 안 걸리면 → **별도 파이프라인**(tilemap/OBJ). 그 경로 별도 RE 항목으로 fail.md/research.md 기록.
-   - 산출: 렌더 경로별 caller 문서(research.md). **acceptance: 대화+UI가 같은 경로면 OK, 다르면 추가 RE 범위 확정.**
+1. **Phase A 커버리지** ✅
+   - [x] 번역 텍스트(대화/메뉴/유닛명)는 **단일 변환루틴**(ROM 0x08EFE788) — veneer 0x08B1BEFC 호출자
+     정확히 2곳(0x08B1275E, 0x08B12B1A), 동적 167히트 전부 lr=0x08B1BF0D.
+   - [x] 별도 경로 발견: **폰트 bulk DMA→VRAM 업로드 2곳**(0xB11B54=704타일, 0xB6A86C=16타일) —
+     프리로드+타일맵(가나 입력 그리드/심볼). per-char 변환루틴 안 거침.
+   - [~] **잔여**: bulk-DMA 화면이 번역 텍스트를 쓰는지(가나 피커면 무관) — Session 3 QA에서 확인.
+   - [~] 전투/맵/스탯 직접 진입은 미수행(세이브 없음). 정적 분석으로 단일 per-char 경로 확정했으므로
+     배치 전략엔 영향 없음. Session 3 QA에서 화면별 스크린샷으로 보강.
 
-2. **Phase C-1 글리프 블롭**
-   - [ ] `data/translation_for_import.csv`의 고유 한글 음절 추출(약 1028개, `data/korean_glyphs_8px.json`에 사전렌더 있음).
-   - [ ] `tools/render_galmuri_8x16.render_char`로 각 음절 top/bot 타일(각 0x20, ink 인덱스 10) 생성 → 글리프 블롭(`data/korean_glyph_blob.bin`) + 음절→글리프idx 맵.
-   - [ ] 세로 위치 통일(현 PoC는 약간 높음 — top_pad 조정 검토. 최악 UI 기준).
-   - **acceptance: 1028 음절 × (top+bot) 블롭 생성, FONT_BASE 빈 idx 범위에 배치 계획 확정.**
+2. **Phase C-1 글리프 블롭** ✅
+   - [x] `tools/build_korean_glyph_blob.py`: CSV 고유 음절 **1030개**(사전JSON보다 궈·깎 2개 많음) →
+     dedup **고유 800타일=25,600B**(top437+bot363) → `data/korean_glyph_blob.bin` + `data/syllable_to_glyph.json`.
+   - [~] 세로위치 top_pad=3 기본값 사용(PoC와 동일). UI 잘림은 Session 3 QA에서 미세조정.
 
-3. 리뷰 + 커밋.
+3. [x] codex+gemini 리뷰(gemini는 -e none에도 API오류 잦음 → 간결 프롬프트로 성공), 커밋.
+
+**배치 전략 확정**: 한글 글리프는 **0x08F00000(파일 0xF00000, 896KB 빈공간)**에 배치.
+1순위(데이터-only): per-char FONT_BASE 리터럴 **0xEFE97C만 0x08F00000으로 repoint** + 폰트 idx0..0x5FF(48KB)
+복사 + 한글 800타일 idx0x600~0x920 + 테이블 확장(리터럴 0xEFE970/0xEFE974). **변환루틴에 idx bound check 없음 확인.**
+2순위(fallback): 변환루틴 ASM hook + 별도 한글 base. 두 리뷰어 추천이나 RE로 1순위 장애물 해소됨.
 
 ---
 
-## 📌 SESSION 2 — 테이블 확장 + 1개 대화 풀 한글 빌드·검증
+## 📌 SESSION 2 — 테이블 확장 + 1개 대화 풀 한글 빌드·검증 (다음 세션 START)
 
-**목표**: 예약 코드 1028개 → 한자 테이블 확장 + 글리프 주입 + **한 대화를 통째로 한글**로 렌더(인게임 확인).
+**목표**: 800 글리프 주입 + 예약코드↔음절 매핑 + 테이블 확장 → **한 대화를 통째로 한글** 렌더(인게임).
+**확정 파라미터(Session 1 RE)**: 한글 글리프 base **0x08F00000**, 폰트복사 48KB(idx0..0x5FF), 한글 idx 0x600~0x920.
+변환루틴 리터럴: FONT_BASE@**0xEFE97C**, 테이블 start@**0xEFE970**(=0x08B80B7C), end@**0xEFE974**(=0x08B8180C).
 
-1. **예약 코드 할당**
-   - [ ] `data/reserved_codes.json`의 extend_pool에서 1028개 선정(JIS L2 고대역 우선, 원문·테이블·런타임 harvest로 미사용 재확인). 음절→예약코드 1:1 맵(`data/syllable_to_code.json`).
+1. **글리프 주입 + FONT_BASE repoint (1순위 데이터-only)**
+   - [ ] 원본 폰트 파일 0xB974D0..0xBA34D0(48KB=idx0..0x5FF)를 **파일 0xF00000**으로 복사.
+   - [ ] `data/korean_glyph_blob.bin`(800타일,25600B)을 0xF00000+0xC000=**0xF0C000**(idx 0x600)에 기록.
+   - [ ] 리터럴 **0xEFE97C**: 0x08B974D0 → **0x08F00000** 패치. (bulk-DMA용 0xB11B74/0xB6A894는 건드리지 말 것)
+   - [ ] 음절→로컬타일idx(`syllable_to_glyph.json`) → 글로벌 FONT idx = 0x600 + local_idx.
 
-2. **Phase C-2 글리프 주입 + 테이블 확장**
-   - [ ] 한글 글리프 블롭을 FONT_BASE 빈 idx 영역(예: idx 0x1000~, offset 0x20000~)에 주입. idx 16비트 한계 확인.
-   - [ ] 한자 테이블(530엔트리)을 빈 ROM(0xF00000)으로 relocate + 1028 한글 엔트리([code_LE, kor_top_idx, kor_bot_idx]) 추가 = 1558엔트리.
-   - [ ] **변환 루틴 ROM 소스(0x08EFE788)의 테이블 start/end 리터럴**(0x08B80B7C/0x08B8180C → 추정 0x08EFE970 부근)을 새 테이블 주소로 패치. ⚠️ IWRAM은 ROM에서 복사되므로 **ROM 소스를 패치**해야 영구.
-   - [ ] (대안) 테이블 확장이 까다로우면 gemini ASM hook: 0x08EFE788에 예약코드 선형매핑 분기 삽입.
+2. **예약 코드 할당 + 테이블 확장**
+   - [ ] `data/reserved_codes.json` extend_pool에서 음절 1030개에 예약 SJIS 코드 1:1(repoint_pool 13 우선
+     소진 후 extend_pool). 음절→예약코드 맵 `data/syllable_to_code.json`. (코드는 유효 SJIS 한자대역, trail
+     제어코드 충돌 회피.)
+   - [ ] 한자 테이블(536엔트리)을 빈 ROM(예 0xF20000)으로 relocate-copy + 1030 한글 엔트리
+     [code_byteswap(2), top_global_idx(2), bot_global_idx(2)] 추가 = 1566엔트리. ⚠ 검색키는 **byteswap(SJIS)**
+     (루틴 0xEFE848 `cmp r7,r2`, r7=byteswap). top/bot idx는 0x600+local.
+   - [ ] 리터럴 0xEFE970(start)/0xEFE974(end)를 새 테이블 주소로 패치. (idx에 bound check 없음 — 안전)
+   - [ ] (대안) 어려우면 ASM hook: 예약코드 감지→`idx=0x600+(code-KOR_BASE 매핑)`, base 0x08F00000.
 
-3. **1개 대화 풀 한글 빌드**
-   - [ ] hajimemashite "はじめまして　iさん！"를 한글 번역 → 각 음절을 예약코드로 인코딩 → 0xDF8E3C 텍스트 rewrite.
-   - [ ] 빌드 + 헤드리스 네비 + 스크린샷. **acceptance: 대화 한 줄이 예약코드 경유로 통째로 한글 렌더 + 다른 화면 안 깨짐.**
-   - [ ] 실패 시 fail.md 기록(텍스트 전파/테이블 포맷/idx 한계 중 무엇인지).
+3. **1개 대화 풀 한글 빌드 + 검증**
+   - [ ] hajimemashite(0xDF8E3C)를 한글 번역 → 음절을 예약코드로 인코딩 → 텍스트 rewrite.
+   - [ ] 체크섬 재계산, 빌드 + 헤드리스 네비(`temp/raw2png.py`로 PNG) + 스크린샷.
+     **acceptance: 대화 한 줄이 예약코드 경유로 통째로 한글 + 다른 화면 안 깨짐.**
+   - [ ] 실패 시 fail.md(텍스트전파/테이블포맷/idx/리터럴위치 중 무엇).
 
-4. 리뷰 + 커밋(증거 스크린샷 docs/screenshots).
+4. 리뷰 + 커밋(증거 docs/screenshots).
+**도구**: `tools/build_korean_glyph_blob.py`, `temp/raw2png.py`(raw→png), 헤드리스 네비 레시피(아래 치트시트).
 
 ---
 
