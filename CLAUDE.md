@@ -148,6 +148,21 @@ aw-kor/
 
 > **하나의 의미 있는 작업(검증된 ROM 빌드, 새 hook 작동, 영문 변환 완료, RE 발견 등)이 완료되면 다음을 항상 수행한다.**
 
+### 0. codex + gemini 엄격 리뷰 (필수 — 작업 완료 또는 막힘 시 항상)
+> 사용자 지시(2026-05-25): **작업 도중 막히거나 작업을 마칠 때는 항상 codex와 gemini에게 엄격한
+> 리뷰를 받는다.** commit 전에 수행. `.claude/settings.json`의 Stop 훅이 매 턴 리마인드한다.
+
+- **언제**: ① 의미 있는 작업 완료 직전(commit 전), ② 진행 중 막혔을 때(접근법 검증), ③ 중요한 RE 결론·설계 결정 직후.
+- **어떻게** (둘 다, 가능한 한 엄격하게 — "비판적으로 검토하고 결함·누락·대안을 지적하라"는 톤):
+  ```bash
+  # 프롬프트를 파일로 작성 후 (temp/review_prompt.md 등)
+  codex exec "$(cat temp/review_prompt.md)" > temp/codex_review.md 2>/dev/null
+  # ⚠ gemini는 깨진 vscode MCP 확장 때문에 -e none 필수 (없으면 "MCP issues" 후 실패)
+  gemini -e none --approval-mode yolo -p "$(cat temp/review_prompt.md)" > temp/gemini_review.md 2>/dev/null
+  ```
+  - 둘 다 느릴 수 있으니 `run_in_background`로 병렬 실행 후 결과 종합.
+  - 두 의견의 **수렴/상충**을 정리하고, 타당한 지적은 반영, 반영 안 한 건 사유 명시.
+
 ### 1. 문서 업데이트 (4개 핵심 문서)
 | 문서 | 언제 업데이트 | 무엇을 추가 |
 |------|----------|-----------|
