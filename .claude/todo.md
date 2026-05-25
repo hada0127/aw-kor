@@ -126,16 +126,23 @@
    - [ ] (잔여) 제어코드 의미보존 검증, 예약외코드/테이블 lookup실패 빌드게이트 강화.
 
 2. **QA**
-   - [ ] `tools/lint_translation.py` error 0 유지.
-   - [ ] 헤드리스 **cold-boot 직행** 주요화면 순회 스크린샷(`temp/raw2png.py`) — 받침/색/세로위치/잘림.
-     (캐시 글리프 false positive 회피)
-   - [ ] 테이블 선형검색 1566엔트리(3배)→대량출력 프레임드랍 확인.
-   - [ ] 실기 체크섬(0xBD) 유효 + 부팅. (헤더 무변경이면 유지)
+   - [x] 박스폭/줄바꿈 정량화(`tools/qa_text_fit.py`): 수동 줄바꿈+바이트예산이 폭 보장, 시각-넓은행 0.9%(경미).
+   - [x] cold-boot 직행 검증: 이름입력/메뉴 한글 정상(색·간격·받침). (대표화면 일부)
+   - [ ] (잔여) 텍스트엔진별 대표화면 스윕(전투HUD/상점/저장/팝업/엔딩) + 잔존 일본어 분류(overflow vs 별도경로).
+   - [ ] (잔여) 테이블 선형검색 1566(3배)→프레임드랍 확인.
+   - [x] 헤더 체크섬 0xBD 무변경 유지 + 부팅 확인(빌드 assert).
 
 3. **배포**
-   - [ ] BPS 패치 생성(`tools/make_bps.py` 또는 신규), dist/ 릴리스.
+   - [x] BPS 패치 생성(`tools/make_bps.py`) + round-trip 검증 + `dist/game_wars_korean_full_preview_2026-05-26.bps`
+     + `manifest_preview.json`(체크섬). **preview/기술검증 빌드** — 실기 검증 enabler.
+   - [ ] (잔여) 풀 QA 후 정식 릴리스(RELEASE_NOTES 갱신).
 
 4. 리뷰 + success/plan.md 갱신 + 커밋·푸시.
+
+### 다음 iteration 우선순위
+1. overflow ≤2B 1,286행 안전 축약(번역 미세조정 + 재빌드)로 잔존 일본어 감소.
+2. 대표화면 스윕(가능한 네비 범위) + 잔존 일본어 경로 분류.
+3. 정식 릴리스 준비.
 
 ---
 

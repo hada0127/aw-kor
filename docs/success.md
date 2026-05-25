@@ -524,7 +524,24 @@ PoC(개별 글리프) → **프로덕션 풀파이프라인(800글리프+1566테
 
 ### 남은 QA (Session 3 잔여 — fail.md 참조)
 1. 잔존 일본어 분류(overflow-skip vs bulk-DMA/고정타일/압축 경로).
-2. 박스폭/줄바꿈/페이지넘김 — 슬롯-fit ≠ 레이아웃/제어코드 의미보존(codex 지적).
+2. 박스폭/줄바꿈/페이지넘김 — 슬롯-fit ≠ 레이아웃/제어코드 의미보존(codex 지적). → 아래서 정량화.
 3. 텍스트엔진별 대표화면 스윕(전투HUD/상점/저장/팝업/엔딩).
 4. overflow 2,322행 축약(축약번역→용어표→핵심 repoint 순).
-5. 실기/cycle-accurate 확인.
+5. 실기/cycle-accurate 확인. → 아래 BPS로 사용자 실기검증 가능.
+
+## [2026-05-26] SESSION 3 (2차) — 박스폭 정량화 + BPS preview 패치
+
+### 줄바꿈/박스폭 — 바이트예산이 폭도 사실상 보장 (리스크 낮음)
+- 대화는 **수동 줄바꿈(0x0A)** 구조(자동 wrap 아님), 줄 시작 0x09, 줄 끝 제어바이트(ASCII letter).
+  제어코드는 슬롯 밖 → 인코딩 시 보존됨.
+- **핵심 불변식**: 인코딩이 슬롯 바이트(≤원본)를 지키고 한글음절=2B=일본어 전각과 동일이므로,
+  **전각↔전각 줄은 한글 폭 ≤ 일본어 폭**(원본이 이미 박스에 맞음). 예외는 ASCII→전각(숫자/메뉴).
+- `tools/qa_text_fit.py` 정량화: written 13,280행 중 **한글이 시각적으로 더 넓은 행 116(0.9%)**,
+  대부분 ≤1글자 또는 'korean'에 일본어 잔존한 노이즈 행. → **박스폭 오버플로우는 경미.**
+- overflow(슬롯초과→skip) 2,322행 중 **1,286행은 ≤2B 초과** → 번역 미세축약으로 해소 가능.
+
+### BPS preview 패치 (실기 검증 enabler)
+- `python tools/make_bps.py <원본> output/game_wars_korean_full.gba <out.bps>` → 399KB BPS.
+- **round-trip 검증**: 원본+BPS = 한글빌드 정확히 일치, 소스 CRC 일치 → 표준 패처(flips/beat) 호환.
+- 배치: `dist/game_wars_korean_full_preview_2026-05-26.bps` + `dist/manifest_preview.json`(체크섬).
+  원본 ROM sha1 0e805762…, 패치본 sha1 66f031a0…. **preview/기술검증 빌드**로 명시(풀 QA 미완).

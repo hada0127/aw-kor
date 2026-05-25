@@ -1,0 +1,25 @@
+{
+  "name": "Game Boy Wars Advance 1+2 — 한글화 (PREVIEW/기술검증 빌드)",
+  "date": "2026-05-26",
+  "status": "preview — 대화/메뉴 한글 렌더 검증됨, 풀 QA 미완(잔존 일본어 2322행/박스폭/실기 미검증)",
+  "source_rom": {
+    "name": "Game Boy Wars Advance 1+2 (Japan).gba",
+    "sha1": "0e805762d02df41a7c1f840569d17efb2fb92b1c",
+    "crc32": "49ee1fdd",
+    "size": 16777216
+  },
+  "patched_rom": {
+    "sha1": "66f031a03d53da51ea00f976fe58452dc9a8bdd7",
+    "crc32": "45785053",
+    "size": 16777216
+  },
+  "bps_patch": {
+    "file": "game_wars_korean_full_preview_2026-05-26.bps",
+    "sha1": "f36f4b926f5765b1f23203adea77cd382f0ba9a7",
+    "crc32": "2144df1c",
+    "size": 398950
+  },
+  "apply": "Floating IPS(flips)/beat 등에서 원본(Japan) ROM에 BPS 적용",
+  "encoded_rows": 13280,
+  "overflow_japanese_rows": 2322
+}
