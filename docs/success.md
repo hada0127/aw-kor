@@ -264,3 +264,40 @@ Gemini가 제공한 구체적 기술 조언 3가지:
 - BL trampoline (0xB129D4 → hook A, 0xB12798 → hook B)는 그대로 유지
 - 모든 patch는 in-place + 새 데이터 영역 (0xA3E000)
 - 체크섬: `(-(0x19 + sum(0xA0..0xBC))) & 0xFF`
+
+---
+
+## [2026-05-25] 무라마사 한글화 프로젝트 QA 도구 이식 (번역 품질 파이프라인)
+
+`~/project/muramasa-kor`(PS Vita 오보로 무라마사, v1.0.0 성공 종료)의 번역 QA 방법론을
+aw-kor CSV 포맷에 맞게 적응 이식. 상세·매핑: `docs/muramasa_reference/README.md`.
+
+### 이식한 도구 (모두 `data/translation_for_import.csv` 기반, 실행 검증 완료)
+- **`tools/lint_translation.py`** — 번역 품질 검수기. hex토큰누출/가나·한자잔존/바이트예산초과/
+  글리프밖글자/부호공백 검사. Galmuri11-Condensed BDF를 글리프 소스로.
+- **`tools/export_proper_nouns.py`** + **`tools/apply_proper_nouns.py`** — 같은 일본어가
+  다른 한국어로 번역된 불일치 탐지 → 검토 → CSV 역적용 (용어 일관화).
+- **`tools/fix_punctuation.py`** — 한국어 종결어미 분류표(무라마사 919줄에서 이식) + aw-kor
+  안전 게이트(일본어 원문이 종결부호로 끝날 때만 미러링 → 메뉴 라벨 과잉부호 방지).
+
+### lint 베이스라인 (2026-05-25, 18,262 번역행)
+| 규칙 | 건수 | 의미 |
+|---|---|---|
+| **hex_token (error)** | **250** | 추출 시 포인터 주소가 번역에 새어든 손상 (`유0x00D9991D`). ROM 삽입 전 반드시 0으로. |
+| byte_budget (error) | 1 | 재인코딩 바이트수 > length 예산 (삽입 손상) |
+| jp_kana (warn) | 432 | 가나 잔존 (일부 추출 노이즈) |
+| jp_kanji (warn) | 316 | 한자 잔존 |
+| punct_space/bad_punct (warn) | 184 | 부호 공백·연속부호 |
+| empty_budget (info) | 524 | length 비어 예산검사 불가 |
+
+### 검증 결과
+- **proper_nouns**: 첫 추출에서 **813개 용어 불일치** 발견. 예: `「もぐる」`(잠수 능력)이
+  잠수/잠복/잠항 3종 혼용, `下のタイプのユニットに`가 유형/타입 혼용. apply CSV 라운드트립
+  무결(18,767행·헤더·주소열 보존, 의도 행만 변경) 확인.
+- **fix_punctuation**: ja 종결부호 8,371행 중 98.3%가 이미 한국어 부호 있음 → 보정 대상 1행뿐.
+  **aw-kor 번역의 부호 품질이 이미 우수**하다는 검증이자, 도구가 라벨 139행을 올바르게 SKIP함을 확인.
+
+### 다음 활용
+- ROM 빌드 전 `python tools/lint_translation.py --severity error`로 hex_token 250행 + byte_budget
+  1행을 먼저 해소(삽입 손상 직결).
+- `export_proper_nouns` → 불일치 검토 → `apply`로 유닛/지형/CO명 용어 통일.

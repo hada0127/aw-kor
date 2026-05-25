@@ -210,7 +210,11 @@
 ### 4-4. 검수 및 품질 관리
 - [~] 번역 완료 텍스트 검증
   - [x] 길이 검증 (재인코딩 길이 17,508/17,774 = 98.5% 원본 예산 내)
+  - [x] **QA 도구 이식** (2026-05-25, 무라마사 프로젝트에서): `tools/lint_translation.py`,
+        `export/apply_proper_nouns.py`, `fix_punctuation.py` — `docs/muramasa_reference/README.md`
+  - [ ] **lint error 해소**: hex_token 250행 + byte_budget 1행 (삽입 손상 직결, ROM 빌드 전 필수)
   - [~] 톤앤매너 일관성 확인 (지속 검수)
+  - [ ] **용어 일관화**: `export_proper_nouns`가 813개 불일치 탐지 → 표준 표기 결정 후 `apply`
   - [~] 게임 용어 정확성 검증
 
 - [~] ROM 품질 검증
