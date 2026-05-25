@@ -18,6 +18,8 @@
 | `tools/export_proper_nouns.py` | 동명 | 섹션별 추출(Vita) → 평면 CSV에서 **같은 일본어 → 다른 한국어 불일치 탐지** + 반복 고유명사 후보. |
 | `tools/apply_proper_nouns.py` | 동명 | `proper_nouns.json` 편집(ja 정확치환 + 부분문자열 치환)을 CSV에 역적용. dry-run 기본. |
 | `tools/fix_punctuation.py` | 동명(919줄) | 한국어 종결어미 분류표 이식 + **aw-kor 안전 게이트**: 일본어 원문이 종결부호로 끝날 때만 미러링. (메뉴 라벨 과잉부호 방지) |
+| `tools/repair_hex_corruption.py` | (신규) | 추출 손상(포인터 주소 누출) 행 복구. lint hex_token 해소용. |
+| `tools/reflow_dialogs.py` | 동명(DP) | 박스 폭/줄 수 맞춰 줄바꿈 재배치. **현재 미적용**(aw-kor는 단일행+게임 자동 줄바꿈) — 향후 박스 폭 보정 후 사용. `--test`로 동작 시연 가능. condense의 greedy-fill보다 나은 DP 균형 분배라 condense는 별도 이식 안 함. |
 
 ### 워크플로
 ```bash
@@ -96,8 +98,7 @@ UV로 무시 → 실패. 하지만 **이미 존재하는 다른 한자 페이지
 
 - Vita 전용 파이프라인: `cpk_extract/patch`, `ftx_extract`, `auto_font_import`(GPU 텍스처),
   `vita3k_*`, `texture_localize`, `ui_editor` — GBA와 무관.
-- `reflow_dialogs.py`/`condense_dialogs.py`: aw-kor CSV는 대부분 단일행이고 줄바꿈을
-  게임 엔진이 처리 → 현재 불필요. 향후 박스 폭 줄바꿈이 필요해지면 그때 이식(원본 로직은
-  DP 기반, `~/project/muramasa-kor/tools/reflow_dialogs.py` 참조).
+- `condense_dialogs.py`(greedy-fill): `reflow_dialogs.py`의 DP 균형 분배가 상위호환이라
+  별도 이식 안 함. (reflow는 이식 완료 — 위 표 참조)
 - `score_candidates.py`/`verify_batch.py`/`retranslate_batch.py`: gemini 배치 재번역·검증.
   aw-kor는 Claude 에이전트 병렬 번역을 쓰므로 패턴만 참고(`~/project/muramasa-kor/tools/`).
