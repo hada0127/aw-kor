@@ -100,22 +100,39 @@
 
 ---
 
-## 📌 SESSION 3 — 전체 인코딩 + QA + 빌드
+## 📌 SESSION 2 ✅ 완료 (2026-05-25) — 데이터-only 풀파이프라인 인게임 검증
+"はじめまして"→"안녕하십니까" 렌더 성공. `tools/build_korean_poc.py --stage {a,b}`. 상세 success.md.
+산출: `data/syllable_to_code.json`(음절→예약코드), repoint+테이블확장 메커니즘 확정.
+
+---
+
+## 📌 SESSION 3 — 전체 인코딩 + QA + 빌드 (다음 세션 START)
 
 **목표**: 18,262행 번역문 전체를 예약코드로 인코딩한 풀게임 ROM + QA.
+**Session2 완료로 메커니즘은 확정** — 남은 건 스케일업 + 레이아웃/커버리지 QA. byte budget 0행 초과(사전확인).
+
+### ⚠️ 착수 전 게이트 (codex+gemini 리뷰 수렴 — 폰트보다 이게 실패지점)
+0. [ ] **화면별 렌더경로 매트릭스(최우선)**: bulk-DMA 경로(0xB11B74=704타일,0xB6A894=16타일)로 렌더되는
+   화면(이름입력 가나그리드/도움말/메뉴/전투UI/맵/통신)이 번역 텍스트를 쓰는지 판정. 쓰면 그 경로 별도 처리
+   필요. 판정법: 화면 진입 시 폰트소스가 0x08F00000인지 vs 원본 blob인지 + per-char 변환루틴 히트 여부.
+0b.[ ] **줄바꿈 기준 확정**: 자동wrap이 byte/glyph/pixel 중 무엇인지. 제어코드(0x0A 줄바꿈,0x09 등) 포맷.
+   한국어가 길어 박스밖 출력/다음줄침범/선택지겹침이 주 실패 → 빌드타임 줄길이 강제.
 
 1. **전체 인코딩 파이프라인**
-   - [ ] `tools/execute_phase5_4.py`를 EUC-KR → **예약코드 인코딩**으로 교체(음절→예약코드, length 예산 내). 빌드타임 게이트: 예약 외 코드 사용/원문 잔존 충돌 시 실패.
-   - [ ] 글리프·테이블·인코딩 일괄 빌드 스크립트.
+   - [ ] `tools/build_korean_poc.py`의 stage_b를 **전체 CSV 인코딩**으로 확장: 모든 한글음절→예약코드(이미
+     `syllable_to_code.json` 1030개), 행별 텍스트 슬롯에 in-place 치환(length 예산 내, ASCII 1B 유지).
+   - [ ] 빌드타임 fail-fast 게이트: encoded_len>slot_len, 예약외코드, 테이블 lookup실패, 제어코드 손상.
+   - [ ] byte budget 리포트(string_id,offset,orig_len,encoded_len,delta,overflow) 자동생성.
 
 2. **QA**
-   - [ ] `tools/lint_translation.py` (error 0 유지 — hex_token 등).
-   - [ ] 텍스트 폭/줄바꿈: 한국어가 일본어보다 길어 박스 넘침 → `tools/reflow_dialogs.py`로 점검(박스 폭 보정 필요).
-   - [ ] 헤드리스로 주요 화면 순회 스크린샷 — 받침/색/세로위치/잘림 확인.
-   - [ ] 실기 체크섬(0xBD) 유효 + 부팅 확인.
+   - [ ] `tools/lint_translation.py` error 0 유지.
+   - [ ] 헤드리스 **cold-boot 직행** 주요화면 순회 스크린샷(`temp/raw2png.py`) — 받침/색/세로위치/잘림.
+     (캐시 글리프 false positive 회피)
+   - [ ] 테이블 선형검색 1566엔트리(3배)→대량출력 프레임드랍 확인.
+   - [ ] 실기 체크섬(0xBD) 유효 + 부팅. (헤더 무변경이면 유지)
 
 3. **배포**
-   - [ ] BPS 패치 생성(`tools/make_bps.py`), dist/ 릴리스.
+   - [ ] BPS 패치 생성(`tools/make_bps.py` 또는 신규), dist/ 릴리스.
 
 4. 리뷰 + success/plan.md 갱신 + 커밋·푸시.
 
