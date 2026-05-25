@@ -8,22 +8,27 @@
 
 ---
 
-## 현재 상태 (2026-05-21)
+## 현재 상태 (2026-05-25)
 
 | 항목 | 상태 |
 |------|------|
-| 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. (원본 28,347행 중 ~10,254행은 추출 노이즈라 번역 대상 아님) |
-| 한글 폰트 ROM 삽입 | ❌ 미완료 — **이게 현재 핵심 과제** |
-| ROM 빌드 | ✅ `tools/execute_phase5_4→5_5` 파이프라인이 **부팅하는 ROM 생성**(흰 화면 해소, 2026-05-25 검증). 단 본문 대화는 폰트 미해결로 아직 한글 렌더 안 됨(아래) |
-| 에뮬레이터 검증 | ✅ 경로 확보 — **brew `mgba 0.10.5` + `screencapture`** (VBA-M은 GPU 캡처 안 됨) |
+| 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. QA(lint) error 0. 용어 5종 통일. |
+| 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 풀게임 경로 입증. |
+| 한글 폰트 풀빌드 | ⏳ 구현 단계 — 1028 음절 글리프 주입 + 한자 테이블 확장 + 번역문 예약코드 인코딩. `.claude/todo.md` 참조. |
+| ROM 빌드/부팅 | ✅ 체크섬·삽입 안전, 부팅 OK(흰 화면 해소). |
+| 에뮬레이터 검증 | ✅ **brew `mgba 0.10.5` + mgbah 헤드리스 디버거**. **합성 키 입력 작동**(헤드리스 네비 가능). |
 
-**다음 작업 계획서**: [`docs/FONT_HACK_RESEARCH_2026_05_21.md`](docs/FONT_HACK_RESEARCH_2026_05_21.md) — 실기 패치 요건, 폰트 해킹 방법, 단계별 로드맵.
+**다음 작업 계획서(필독 순서)**:
+1. [`.claude/todo.md`](.claude/todo.md) — **다음 3 세션 상세 TODO** (새 세션은 여기부터).
+2. [`docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`](docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md) — Phase A~E 로드맵.
+3. [`docs/research.md`](docs/research.md) 맨 끝 — 대화 렌더 파이프라인 완전 RE(주소·테이블·공식).
 
-### 알려진 핵심 이슈 (반드시 인지)
-- ✅ **체크섬 버그 — 해결됨**: `tools/execute_phase5_5.py:21`이 올바른 식 `(-(0x19 + sum(0xA0..0xBC))) & 0xFF` 사용. 텍스트 삽입은 헤더(0xA0–0xBC)를 안 건드리므로 0xBD 그대로 유효(검증 2026-05-25: 0xBD=0x72 식 일치).
-- ✅ **삽입 손상 — 해결됨**: `execute_phase5_4.py`는 EUC-KR 길이가 원본 슬롯(`orig_len`)을 넘으면 skip, 정확히 `orig_len`만 clear/write, `SAFE_MIN_ADDR=0x800000` 미만(코드 영역)은 skip. 검증: 한글 ROM의 코드영역(<0x800000) 변경 **0바이트** → 원본과 동일하게 부팅.
-- ⚠️ **본문 대화 폰트 렌더 — 미해결(현재 핵심 과제)**: `execute_phase5_4`는 **EUC-KR** 바이트를 삽입하는데, (a) 게임 대화 폰트는 SJIS-타일이고 (b) 흔한 한자(攻/撃 등)는 SJIS→슬롯 테이블(0xBE717A, 5498엔트리)에 없으며 (c) 대화 글리프는 LZ77 압축→VRAM 경로라 FONT_BASE 직접 주입이 안 통함 → EUC-KR이든 SJIS든 **대화는 한글로 안 보임**. 현재 작동하는 유일한 방법은 `build_grid_v*.py`의 **ARM hook**(특정 대화 주소를 0xA3E000 커스텀 글리프로 리다이렉트) — **per-screen**(welcome/이름입력/hajimemashite만). **풀게임 = 이 hook의 일반화**가 남은 큰 RE 과제.
-  - 참고: **그리드/메뉴 폰트(이름입력)** 는 `FONT_BASE(0xB974D0)+slot*32`에 **직접 주입** 가능(비압축, A-Z/0-9 렌더 검증됨). 대화 폰트만 hook 필요.
+### 알려진 핵심 사실 (반드시 인지 — 2026-05-25 갱신)
+- ✅ **체크섬·삽입 버그 — 해결됨**: `execute_phase5_5.py:21` 올바른 식, `execute_phase5_4.py`는 슬롯 길이 제한 + 코드영역 skip. 부팅 검증(코드영역 변경 0바이트).
+- ✅ **대화 한글 렌더 — 메커니즘 검증됨 (이전 "hook 필요/FONT_BASE 안 통함" 결론은 틀렸음)**:
+  - 대화 글리프는 **FONT_BASE(0x08B974D0)+idx*0x20 비압축 타일을 per-char 복사**(IWRAM 0x03006744, 팔레트 리맵). 그 자리에 galmuri 글리프(ink 인덱스 10) 주입 → **대화 한글 렌더 인게임 확인**. ASM hook 불요.
+  - SJIS→글리프 변환: IWRAM 0x030065E0(**ROM 소스 0x08EFE788**). 한자(>0x8397)는 **테이블 0x08B80B7C**(530엔트리×6B=[SJIS_LE,top_idx,bot_idx], 끝 0x08B8180C) 검색. **안 쓰는 한자코드 예약→테이블→한글 글리프** 렌더 PoC 성공(0x8AEF→"테").
+  - 풀게임 구현 = 예약코드(미사용 SJIS 3326풀, `data/reserved_codes.json`) + 글리프 주입 + 테이블 확장 + 인코딩. (build_grid의 per-screen hook은 구식 — 이제 데이터만으로 가능)
 - **추출 노이즈**: `game_wars_found_texts.csv`의 상당수는 깨진 문자(무작위 한자+키릴+기호) — 번역/삽입 대상 아님.
 
 ---
@@ -60,6 +65,7 @@ aw-kor/
 ├── CONTRIBUTING.md        # 기여 가이드
 ├── requirements.txt       # Python 의존성
 ├── .project-config.json   # 프로젝트 설정
+├── .claude/               # settings.json(codex+gemini 리뷰 Stop 훅) + todo.md(★다음 작업 3세션 계획)
 │
 ├── original/              # 원본 자산 (git-ignored *.gba)
 │   ├── Game Boy Wars Advance 1+2 (Japan).gba        # 원본 ROM (16MB)
@@ -83,6 +89,10 @@ aw-kor/
 │   ├── ROM빌드: execute_phase5_4.py(삽입), execute_phase5_5.py(최종화),
 │   │           import_text*.py, update_pointers.py, build_rom.py, build.sh/.bat
 │   ├── 검증:   phase6_basic_test.py, test_*.py, audit_translation_completion.py
+│   ├── QA(무라마사 이식): lint_translation.py(품질검수), export/apply_proper_nouns.py(용어통일),
+│   │           fix_punctuation.py, reflow_dialogs.py, repair_hex_corruption.py(손상복구)
+│   ├── 대화한글화: find_reserved_codes.py(예약코드풀), render_galmuri_8x16.py·galmuri_cell.py·bdf.py(글리프),
+│   │           mgba_harness.c(/tmp/mgbah 헤드리스 BP/watch/네비)
 │   └── 분석:   analyze_rom_header.py, find_pointers.py, analyze_translation_patterns.py
 │
 ├── output/                # 빌드 산출물 (git-ignored *.gba) — Claude는 청소하지 않음
@@ -107,7 +117,7 @@ aw-kor/
 ```
 
 ### docs/ 주요 문서
-- **계획/리서치**: `FONT_HACK_RESEARCH_2026_05_21.md`(★현재 계획), `plan.md`, `research.md`, `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
+- **계획/리서치**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(★현재 계획, Phase A~E), `research.md`(★대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `plan.md`, `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
 - **번역 가이드**: `TRANSLATION_GUIDE.md`, `TRANSLATION_TONE_AND_STORY_GUIDE.md`, `AI_TRANSLATION_REFERENCE.md`, `TRANSLATION_REAUDIT_2026_05_18.md`
 - **폰트(PHASE5-3)**: `PHASE5_3_FONT_ANALYSIS_COMPLETE.md`, `PHASE5_3_FONT_STATUS.md`, `PHASE5_3_ROM_FONT_ANALYSIS.md`
 - **빌드/QA(PHASE5~7)**: `PHASE5_*` , `PHASE6_QA_FRAMEWORK.md`, `PHASE6_TESTING_GUIDE.md`, `PHASE7_DISTRIBUTION_PREP.md`
