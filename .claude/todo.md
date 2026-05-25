@@ -118,11 +118,12 @@
 0b.[ ] **줄바꿈 기준 확정**: 자동wrap이 byte/glyph/pixel 중 무엇인지. 제어코드(0x0A 줄바꿈,0x09 등) 포맷.
    한국어가 길어 박스밖 출력/다음줄침범/선택지겹침이 주 실패 → 빌드타임 줄길이 강제.
 
-1. **전체 인코딩 파이프라인**
-   - [ ] `tools/build_korean_poc.py`의 stage_b를 **전체 CSV 인코딩**으로 확장: 모든 한글음절→예약코드(이미
-     `syllable_to_code.json` 1030개), 행별 텍스트 슬롯에 in-place 치환(length 예산 내, ASCII 1B 유지).
-   - [ ] 빌드타임 fail-fast 게이트: encoded_len>slot_len, 예약외코드, 테이블 lookup실패, 제어코드 손상.
-   - [ ] byte budget 리포트(string_id,offset,orig_len,encoded_len,delta,overflow) 자동생성.
+1. **전체 인코딩 파이프라인** ✅(1차 완료)
+   - [x] `tools/build_korean_full.py`: 전체 CSV 인코딩(한글→예약코드, ASCII 1B, 일본어→shift_jis passthrough).
+     슬롯길이=found_texts(권위), encoded>슬롯이면 skip+리포트. → **13,280행 written, overflow 2,322**.
+   - [x] 인접손상 없음(슬롯 clear후 ≤슬롯 기록). 헤더체크섬·16MB·부팅 OK. 산출 `output/game_wars_korean_full.gba`.
+   - [x] overflow 리포트 `temp/encode_report.csv`. 인게임 한글 렌더 검증(이름입력/메뉴 화면).
+   - [ ] (잔여) 제어코드 의미보존 검증, 예약외코드/테이블 lookup실패 빌드게이트 강화.
 
 2. **QA**
    - [ ] `tools/lint_translation.py` error 0 유지.
