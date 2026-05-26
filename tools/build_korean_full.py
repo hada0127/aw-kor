@@ -36,6 +36,7 @@ DENY_REGIONS = [
     ('font_region',     0xB974D0, 0xBAF338),              # FONT_BASE 글리프
     ('baseptr_tables',  0xB80270, 0xB80B7C),              # 가나/기호 인덱스 테이블
     ('orig_kanji_table',0xB80B7C, 0xB8180C),              # 원본 한자 테이블
+    ('tilemap_renderer',0xB11B00, 0xB11E40),              # 2편/공용 타일맵 렌더러 코드
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
 ]
 
@@ -292,6 +293,93 @@ TRAMP_BYTES = bytes.fromhex('1847c046')          # bx r3 ; mov r8,r8
 LIT_TRAMP_BOT = 0xEFE8E8           # BOT: (lsls r0,#5; adds r7,r0,r1) → adds r1,#0x30; bx r1
 TRAMP_BOT_BYTES = bytes.fromhex('30310847')      # adds r1,#0x30 (0x3130) ; bx r1 (0x4708)
 
+# --- Advance 2 tilemap renderers ---
+# 0x08B11Cxx and 0x08313xxx do not copy glyph pixels per character. They read table top/bot
+# tile entries and write them directly to a BG tilemap. Korean entries therefore keep the
+# bit15 marker in the relocated tables, but the tilemap hooks below consume the marker:
+# copy KOR_BASE[local tile] to a dynamic VRAM tile (0x300 + screen-entry-position) and write
+# that real tile id instead. The marker is never allowed to reach the BG screen entry.
+PART2_HOOK_TOP_313_FILE = HOOK_FILE + 0x100
+PART2_HOOK_BOT_313_FILE = HOOK_FILE + 0x160
+PART2_HOOK_TOP_B11_FILE = HOOK_FILE + 0x1C0
+PART2_HOOK_BOT_B11_FILE = HOOK_FILE + 0x220
+PART2_HOOK_A3_FILE = HOOK_FILE + 0x280
+PART2_HOOK_TOP_313_RT = 0x08F30100
+PART2_HOOK_BOT_313_RT = 0x08F30160
+PART2_HOOK_TOP_B11_RT = 0x08F301C0
+PART2_HOOK_BOT_B11_RT = 0x08F30220
+PART2_HOOK_A3_RT = 0x08F30280
+
+# Assembled for ARM7TDMI Thumb. Patch offset 0x4c with the Thumb return address.
+PART2_HOOK_TOP_TEMPLATE = bytes.fromhex(
+    '1188080404d40698084318800f480047'
+    'fcb44904490c7f20c0461c1c64080440c020800024180a4d49016d18094e6701f619'
+    '83cd83c683cd83c603cd03c60c9820431880fcbc014800470000'
+    '00000000'  # return literal
+    '0000f008'  # KOR_BASE_RT
+    '00000006'  # VRAM base 0x06000000
+)
+PART2_HOOK_BOT_TEMPLATE = bytes.fromhex(
+    '01880a0404d4069a0a431a800f490847'
+    'ffb44904490c7f20c0461c1c64080440c020800024180a4d49016d18094e6701f619'
+    '83cd83c683cd83c603cd03c60e9820431880ffbc014908470000'
+    '00000000'  # return literal
+    '0000f008'  # KOR_BASE_RT
+    '00000006'  # VRAM base 0x06000000
+)
+
+# Hook for the IWRAM-copied glyph-cache renderer sourced at 0x08A3C7C0.
+# The original fallback is at 0x08A3C820: linked glyph miss rewrites the current
+# code as 0x8148 ('?') and restarts lookup. We hook immediately after the
+# prologue/source byte load site, before fallback can run. Korean reserved SJIS
+# codes are resolved through the relocated 6-byte table and copied from KOR_BASE
+# into the two destination VRAM tiles that this renderer would normally fill.
+PART2_HOOK_A3 = bytes.fromhex(
+    '0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d2'
+    '32781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a80'
+    '1889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0f'
+    'c70b4800470498014a3f28094b1847'
+    '60f95208'  # glyph-cache page pointer table literal: 0x0852F960
+    '40880000'  # min Korean reserved SJIS: 0x8840
+    '69930000'  # max Korean reserved SJIS: 0x9369
+    '0000f208'  # relocated table start: 0x08F20000
+    'b424f208'  # relocated table end: 0x08F224B4
+    'ff7f0000'  # strip bit15 marker
+    '0000f008'  # KOR_BASE_RT
+    '00000006'  # VRAM base 0x06000000
+    'c1610003'  # Korean handled return: IWRAM epilogue 0x030061C1
+    '8d600003'  # non-Korean return: IWRAM 0x0300608D
+)
+
+def _part2_hook(template, ret):
+    b = bytearray(template)
+    struct.pack_into('<I', b, 0x4C, ret)
+    return bytes(b)
+
+def _abs_tramp(reg, hook_rt):
+    # 8-byte far Thumb trampoline: ldr reg,[pc,#0]; bx reg; .word hook|1
+    if reg == 0:
+        return bytes.fromhex('00480047') + struct.pack('<I', hook_rt | 1)
+    if reg == 1:
+        return bytes.fromhex('00490847') + struct.pack('<I', hook_rt | 1)
+    if reg == 2:
+        return bytes.fromhex('004a1047') + struct.pack('<I', hook_rt | 1)
+    raise ValueError(reg)
+
+PART2_HOOK_TOP_313 = _part2_hook(PART2_HOOK_TOP_TEMPLATE, 0x08313FC1)
+PART2_HOOK_BOT_313 = _part2_hook(PART2_HOOK_BOT_TEMPLATE, 0x08313FD1)
+PART2_HOOK_TOP_B11 = _part2_hook(PART2_HOOK_TOP_TEMPLATE, 0x08B11DE9)
+PART2_HOOK_BOT_B11 = _part2_hook(PART2_HOOK_BOT_TEMPLATE, 0x08B11DF9)
+
+PART2_PATCHES = [
+    # name, table_start_lit, table_end_lit, top_site, bottom_site, top_hook_rt, bottom_hook_rt
+    ('part2_313', 0x313FFC, 0x314000, 0x313FB8, 0x313FC8, PART2_HOOK_TOP_313_RT, PART2_HOOK_BOT_313_RT),
+    ('tilemap_B11', 0xB11E24, 0xB11E28, 0xB11DE0, 0xB11DF0, PART2_HOOK_TOP_B11_RT, PART2_HOOK_BOT_B11_RT),
+]
+
+PART2_A3_TRAMP_SITE = 0xA3C7E8
+PART2_A3_TRAMP_EXPECT = bytes.fromhex('047840780e4a3f28')
+
 
 def main():
     ap = argparse.ArgumentParser()
@@ -313,6 +401,11 @@ def main():
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
     rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES
+    rom[PART2_HOOK_TOP_313_FILE:PART2_HOOK_TOP_313_FILE + len(PART2_HOOK_TOP_313)] = PART2_HOOK_TOP_313
+    rom[PART2_HOOK_BOT_313_FILE:PART2_HOOK_BOT_313_FILE + len(PART2_HOOK_BOT_313)] = PART2_HOOK_BOT_313
+    rom[PART2_HOOK_TOP_B11_FILE:PART2_HOOK_TOP_B11_FILE + len(PART2_HOOK_TOP_B11)] = PART2_HOOK_TOP_B11
+    rom[PART2_HOOK_BOT_B11_FILE:PART2_HOOK_BOT_B11_FILE + len(PART2_HOOK_BOT_B11)] = PART2_HOOK_BOT_B11
+    rom[PART2_HOOK_A3_FILE:PART2_HOOK_A3_FILE + len(PART2_HOOK_A3)] = PART2_HOOK_A3
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
     P.patch_word(rom, P.LIT_FONTBASE, HOOK_RT | 1)
@@ -338,6 +431,18 @@ def main():
     rom[P.NEW_TBL_FILE:P.NEW_TBL_FILE + len(new_tbl)] = new_tbl
     P.patch_word(rom, P.LIT_TBL_START, P.NEW_TBL_RT)
     P.patch_word(rom, P.LIT_TBL_END, P.NEW_TBL_RT + len(new_tbl))
+
+    # 2편/tilemap 계열도 같은 relocated table을 보게 한다. 이 루틴들은 table idx를
+    # BG tilemap에 직접 쓰므로 write-site hook이 bit15 Korean marker를 VRAM tile id로 변환한다.
+    for _name, start_lit, end_lit, top_site, bot_site, top_hook_rt, bot_hook_rt in PART2_PATCHES:
+        P.patch_word(rom, start_lit, P.NEW_TBL_RT)
+        P.patch_word(rom, end_lit, P.NEW_TBL_RT + len(new_tbl))
+        assert bytes(rom[top_site:top_site + 8]) == bytes.fromhex('1188069808431880')
+        assert bytes(rom[bot_site:bot_site + 8]) == bytes.fromhex('0188069808431880')
+        rom[top_site:top_site + 8] = _abs_tramp(0, top_hook_rt)
+        rom[bot_site:bot_site + 8] = _abs_tramp(1, bot_hook_rt)
+    assert bytes(rom[PART2_A3_TRAMP_SITE:PART2_A3_TRAMP_SITE + 8]) == PART2_A3_TRAMP_EXPECT
+    rom[PART2_A3_TRAMP_SITE:PART2_A3_TRAMP_SITE + 8] = _abs_tramp(2, PART2_HOOK_A3_RT)
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()
