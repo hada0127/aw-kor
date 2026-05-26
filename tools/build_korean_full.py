@@ -40,6 +40,9 @@ DENY_REGIONS = [
 ]
 
 FALLBACK = {'·': '・', '∪': '∩'}  # 일부 유니코드 → SJIS 인코딩 가능 등가
+# 전각 구두점 → 반각(1바이트 절약, overflow 시에만 적용). 한국어 가독성 영향 적음.
+HALFWIDTH = {'！': '!', '？': '?', '，': ',', '．': '.', '：': ':', '；': ';',
+             '（': '(', '）': ')', '　': ' ', '〜': '~', '～': '~'}
 
 
 def in_deny(a, end):
@@ -125,6 +128,19 @@ def encode_text(ko, syl_to_code, unmapped):
                 unmapped[ch] += 1
                 out += b'\x81\x48'  # ？
     return bytes(out)
+
+
+def encode_fit(ko, slot, syl_to_code, unmapped):
+    """슬롯에 맞도록 단계적 압축 인코딩. 맞으면 (bytes, level), 안 맞으면 (None, level).
+    level 0=원본 1=반각구두점 2=반각+공백제거 (가독성 순). 번역 의미는 보존."""
+    cand = [ko,
+            ''.join(HALFWIDTH.get(c, c) for c in ko),
+            ''.join(HALFWIDTH.get(c, c) for c in ko).replace(' ', '')]
+    for level, s in enumerate(cand):
+        enc = encode_text(s, syl_to_code, unmapped)
+        if len(enc) <= slot:
+            return enc, level
+    return None, len(cand)
 
 
 # v56 훅이 직접 처리하는 대화 본문 주소(중복 렌더 방지 위해 내 인코딩에서 제외) + 네임플레이트
@@ -245,11 +261,12 @@ def main():
             deny = in_deny(a, a + slot)
             if deny:
                 st['deny'] += 1; continue   # 중요 데이터 테이블 — 덮어쓰지 않음
-            enc = encode_text(ko, syl_to_code, unmapped)
-            if len(enc) > slot:
+            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+            if enc is None:
                 st['overflow'] += 1
-                report.append((row['address'], ko, len(enc), slot))
+                report.append((row['address'], ko, encode_text(ko, syl_to_code, unmapped).__len__(), slot))
                 continue
+            st[f'level{level}'] += 1   # 0=원본 1=반각 2=반각+공백제거
             if a + slot > len(rom):
                 st['oob'] += 1; continue
             # 빈 공간은 0x00(메시지 조기종료→자동넘어감 버그) 대신 공백(FILL_BYTE)으로 패딩
@@ -273,7 +290,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
