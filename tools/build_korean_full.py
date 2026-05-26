@@ -297,8 +297,9 @@ TRAMP_BOT_BYTES = bytes.fromhex('30310847')      # adds r1,#0x30 (0x3130) ; bx r
 # 0x08B11Cxx and 0x08313xxx do not copy glyph pixels per character. They read table top/bot
 # tile entries and write them directly to a BG tilemap. Korean entries therefore keep the
 # bit15 marker in the relocated tables, but the tilemap hooks below consume the marker:
-# copy KOR_BASE[local tile] to a dynamic VRAM tile (0x300 + screen-entry-position) and write
-# that real tile id instead. The marker is never allowed to reach the BG screen entry.
+# copy KOR_BASE[local tile] to a dynamic VRAM tile (0x300 + screen-entry-position)
+# and write that real tile id instead. The marker is never allowed to reach the BG
+# screen entry.
 PART2_HOOK_TOP_313_FILE = HOOK_FILE + 0x100
 PART2_HOOK_BOT_313_FILE = HOOK_FILE + 0x160
 PART2_HOOK_TOP_B11_FILE = HOOK_FILE + 0x1C0
@@ -380,11 +381,28 @@ PART2_HOOK_SPACE_B11 = bytes.fromhex(
 # already classified the byte. ASCII space never reaches 0x08A3C7E8: the first
 # parser jump-table entry consumes one byte at 0x0831431C without touching x.
 # Patch the 0x20 table entry to consume one byte and advance state[0x32] by one
-# 16px character cell (two BG columns), then return like a normal handled char.
+# 8px BG column, then return like a normal handled char.
 PART2_HOOK_A3_SPACE = bytes.fromhex(
-    '286a01302862291c3231087802300870032001490847c046'
+    '286a01302862291c3231087801300870032001490847c046'
     'f7473108'  # parser handled return: 0x083147F6|1
 )
+
+def _assert_relocated_korean_indices(new_tbl, sylmap, syl_to_code):
+    by_code = {}
+    for off in range(0, len(new_tbl), 6):
+        code = (new_tbl[off] << 8) | new_tbl[off + 1]
+        top, bot = struct.unpack_from('<HH', new_tbl, off + 2)
+        by_code[code] = (top, bot)
+    for ch in ('매', '플', '할', '즐', '혈'):
+        code = syl_to_code[ch]
+        top, bot = by_code[code]
+        expected_top = sylmap[ch]['top'] | 0x8000
+        expected_bot = sylmap[ch]['bot'] | 0x8000
+        if (top, bot) != (expected_top, expected_bot):
+            raise AssertionError(
+                f'{ch} table idx mismatch: got {top & 0x7fff}/{bot & 0x7fff}, '
+                f'expected {expected_top & 0x7fff}/{expected_bot & 0x7fff}'
+            )
 
 def _part2_hook(template, ret):
     b = bytearray(template)
@@ -472,6 +490,7 @@ def main():
         top = sylmap[s]['top'] | 0x8000
         bot = sylmap[s]['bot'] | 0x8000
         new_tbl += bytes([code >> 8, code & 0xFF]) + struct.pack('<H', top) + struct.pack('<H', bot)
+    _assert_relocated_korean_indices(new_tbl, sylmap, syl_to_code)
     rom[P.NEW_TBL_FILE:P.NEW_TBL_FILE + len(new_tbl)] = new_tbl
     P.patch_word(rom, P.LIT_TBL_START, P.NEW_TBL_RT)
     P.patch_word(rom, P.LIT_TBL_END, P.NEW_TBL_RT + len(new_tbl))
