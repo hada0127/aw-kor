@@ -68,47 +68,47 @@ def in_deny(a, end):
 
 
 def patch_name_grid(rom):
-    """이름 입력 그리드를 영문 A-Z / a-z / 0-9 로 교체 (이전 build_grid v56 로직 통합).
+    """이름 입력 그리드를 영문 3구역으로 교체 (정확한 구역 매핑 + 하단정렬).
 
-    SJIS→슬롯 테이블(0xBE717A, 보존됨)로 그리드 셀의 FONT_BASE 슬롯을 찾아 영문 글리프 주입.
-    이 경로는 bulk-DMA 폰트(원본 FONT_BASE)를 쓰므로 per-char 대화 경로(0x08F00000)와 독립.
+    그리드 셀 idx(SJIS 테이블 0xBE717A 순서) → FONT_BASE 슬롯(공식 직접계산, sjis 검색 회피).
+    구역 (RE 확정): 좌(A-Z) idx 9-34, 중(a-z) idx 41-66, 우(0-9) idx 199-208.
+    모든 글자 baseline 하단정렬(top_pad = CELL_BASE - 글리프높이) → 소문자가 대문자와 같은 바닥선.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from cell_to_slots import cell_slots, FONT_BASE
     from render_galmuri_8x16 import render_char
-    SJIS_TBL = 0x08BE717A
+    from bdf import load_bdf, glyph_grid
+    FONT_BASE = 0x08B974D0
     BLANK = bytes(32)
+    CELL_BASE = 14  # 글리프 바닥(마지막 행)을 셀 row 13에 맞춤 → 하단정렬
 
-    def get_sjis(idx):
-        o = (SJIS_TBL - 0x08000000) + idx * 2
-        return (rom[o] << 8) | rom[o + 1]
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
 
-    # cleanup: 그리드 폰트 슬롯 0-1023 비움 (잔여 가나 제거 → 깔끔한 영문 그리드)
+    def slots_from_idx(idx):
+        page = (idx - 9) // 16
+        chip = (idx - 9) % 16
+        top = 128 + page * 32 + chip
+        return top, top + 16  # top, bottom
+
+    # cleanup: 그리드 폰트 슬롯 0-1023 비움 (잔여 가나/v56 글리프 제거 → 깔끔한 3구역)
     for slot in range(1024):
         off = (FONT_BASE + slot * 32) - 0x08000000
         rom[off:off + 32] = BLANK
 
-    def valid_idxs(s, e):
-        return [i for i in range(s, e + 1) if get_sjis(i) != 0]
+    def inject(idx, ch):
+        # 글리프 높이로 하단정렬 top_pad 계산
+        h = glyph_grid(font[ord(ch)])[2] if ord(ch) in font else 11
+        top_pad = max(0, CELL_BASE - h)
+        top, bot = render_char(ch, top_pad=top_pad)
+        ts, bs = slots_from_idx(idx)
+        rom[(FONT_BASE + ts * 32) - 0x08000000:(FONT_BASE + ts * 32) - 0x08000000 + 32] = top
+        rom[(FONT_BASE + bs * 32) - 0x08000000:(FONT_BASE + bs * 32) - 0x08000000 + 32] = bot
 
-    plan = list(zip(valid_idxs(9, 34), "ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
-    plan += list(zip(valid_idxs(35, 60)[:26], "abcdefghijklmnopqrstuvwxyz"))
-    plan += list(zip(valid_idxs(61, 72)[:10], "0123456789"))
-
-    count = 0
+    plan = [(9 + i, c) for i, c in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")]   # 좌 A-Z
+    plan += [(41 + i, c) for i, c in enumerate("abcdefghijklmnopqrstuvwxyz")]  # 중 a-z
+    plan += [(199 + i, c) for i, c in enumerate("0123456789")]                 # 우 0-9
     for idx, ch in plan:
-        sjis = get_sjis(idx)
-        if sjis == 0:
-            continue
-        sl = cell_slots(sjis)
-        if not sl:
-            continue
-        top, bot = render_char(ch)
-        for name, tile in (('top', top), ('bottom', bot)):
-            off = (FONT_BASE + sl[name] * 32) - 0x08000000
-            rom[off:off + 32] = tile
-        count += 1
-    return count
+        inject(idx, ch)
+    return len(plan)
 
 
 def load_slots():
@@ -290,8 +290,9 @@ def main():
             rom[a:a + len(enc)] = enc
             st['written'] += 1
 
-    # 이름 입력 영문 그리드는 base(v56_polished)에 이미 포함됨(훅+글리프). per-char 대화 폰트는
-    # 위에서 원본을 0xF00000으로 복사했으므로 그리드(FONT_BASE)와 독립.
+    # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
+    # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
+    st['grid_glyphs'] = patch_name_grid(rom)
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
