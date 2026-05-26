@@ -8,15 +8,18 @@
 
 ---
 
-## 현재 상태 (2026-05-25)
+## 현재 상태 (2026-05-27)
 
 | 항목 | 상태 |
 |------|------|
 | 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. QA(lint) error 0. 용어 5종 통일. |
 | 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 풀게임 경로 입증. |
-| 한글 폰트 풀빌드 | ⏳ 구현 단계 — 1028 음절 글리프 주입 + 한자 테이블 확장 + 번역문 예약코드 인코딩. `.claude/todo.md` 참조. |
+| 한글 폰트 풀빌드 | ✅ **완료** — `tools/build_korean_full.py`(base `output/v56_polished.gba`) → `output/game_wars_korean_full.gba`. 음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩. |
+| 1편 이름 그리드 | ✅ **완료** — 좌 A-Z / 중 a-z(빈칸 없음, 대문자와 매칭) / 우 0-9(기호행 제거). 선택·미리보기 정상. 실배치 ROM 0x08DF8C38 계열 패치. |
+| 2편(Advance 2) 한글 | ✅ **완료** — 타일맵 렌더 3경로(0x313F8C / 0xB11BB0 / 0xA3C7E4) hook으로 한글 렌더. **반각 공백** + **1편과 동일 11×11 galmuri**. 낱한자/감탄사 발견분 정리. |
 | ROM 빌드/부팅 | ✅ 체크섬·삽입 안전, 부팅 OK(흰 화면 해소). |
-| 에뮬레이터 검증 | ✅ **brew `mgba 0.10.5` + mgbah 헤드리스 디버거**. **합성 키 입력 작동**(헤드리스 네비 가능). |
+| 에뮬레이터 검증 | ✅ **brew `mgba 0.10.5` + mgbah 헤드리스 디버거**(`loadstate` 추가). **합성 키 입력 작동**(헤드리스 네비 가능). |
+| 잔여 | ⏳ overflow 882행(UI 라벨이 한글>슬롯 → 일본어 잔존; 축약/재배치 판단 필요) · 실기 테스트 · 플레이 중 낱한자 추가 발견분 |
 
 **다음 작업 계획서(필독 순서)**:
 1. [`.claude/todo.md`](.claude/todo.md) — **다음 3 세션 상세 TODO** (새 세션은 여기부터).
@@ -29,6 +32,8 @@
   - 대화 글리프는 **FONT_BASE(0x08B974D0)+idx*0x20 비압축 타일을 per-char 복사**(IWRAM 0x03006744, 팔레트 리맵). 그 자리에 galmuri 글리프(ink 인덱스 10) 주입 → **대화 한글 렌더 인게임 확인**. ASM hook 불요.
   - SJIS→글리프 변환: IWRAM 0x030065E0(**ROM 소스 0x08EFE788**). 한자(>0x8397)는 **테이블 0x08B80B7C**(530엔트리×6B=[SJIS_LE,top_idx,bot_idx], 끝 0x08B8180C) 검색. **안 쓰는 한자코드 예약→테이블→한글 글리프** 렌더 PoC 성공(0x8AEF→"테").
   - 풀게임 구현 = 예약코드(미사용 SJIS 3326풀, `data/reserved_codes.json`) + 글리프 주입 + 테이블 확장 + 인코딩. (build_grid의 per-screen hook은 구식 — 이제 데이터만으로 가능)
+- ✅ **1편 이름 그리드 — 실배치는 ROM 0x08DF8C38 계열**(행 SJIS 문자열, `0A 09` prefix + `0A 00 00 00` terminator). 렌더 루틴 0x08B48910~60, 미리보기 0x08B48E50. ⚠ SET1(0x83FAF6)/SET2(0x83FE41)/charlist(0x80505c)는 **死 데이터**(편집 무시됨). 슬롯: 대문자 A-Z=128~143/160~169, 소문자도 동일 패턴. n/p 바닥슬롯 충돌 → KANA_REMAP로 회피.
+- ✅ **2편(Advance 2) — 타일맵 렌더러**(idx→BG 타일맵 strh, per-char 글리프 복사 아님): 0x08313F8C(Advance2) / 0x08B11BB0(공통) / 0x08A3C7E4·IWRAM 0x03006080(MODE SELECT/PROLOGUE 글리프캐시 = "?" 출처). A3는 0x08314270 char 디스패치 점프테이블(0x20 엔트리=0x083142CC). bit15 한글코드(0x8840~0x9369)를 KOR_BASE(0x08F00000)에서 VRAM 복사하도록 hook. 공백 advance +1(반각).
 - **추출 노이즈**: `game_wars_found_texts.csv`의 상당수는 깨진 문자(무작위 한자+키릴+기호) — 번역/삽입 대상 아님.
 
 ---
@@ -47,9 +52,10 @@
 ## ROM 빌드 / 검증
 
 ```bash
-python tools/execute_phase5_4.py   # 텍스트 삽입 (※길이 제한 버그 수정 필요)
-python tools/execute_phase5_5.py   # 체크섬/최종화 (※0x19 체크섬 버그 수정 필요)
-python tools/phase6_basic_test.py  # 기본 검증
+python3 tools/build_korean_full.py   # ★현재 메인 빌드: base output/v56_polished.gba → output/game_wars_korean_full.gba
+                                     #   (음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩 + 1편 그리드 + 2편 hook + 체크섬)
+# (구식: execute_phase5_4/5.py — 이제 build_korean_full.py로 통합)
+# 헤드리스 검증: /tmp/mgbah (tools/mgba_harness.c, loadstate 지원). 네비 스크립트는 temp/nav_*.py.
 # 에뮬레이터 실행(검증):
 DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/mgba -3 output/game_wars_korean_final.gba
 ```
