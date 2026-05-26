@@ -304,11 +304,17 @@ PART2_HOOK_BOT_313_FILE = HOOK_FILE + 0x160
 PART2_HOOK_TOP_B11_FILE = HOOK_FILE + 0x1C0
 PART2_HOOK_BOT_B11_FILE = HOOK_FILE + 0x220
 PART2_HOOK_A3_FILE = HOOK_FILE + 0x280
+PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
+PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
+PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
 PART2_HOOK_TOP_313_RT = 0x08F30100
 PART2_HOOK_BOT_313_RT = 0x08F30160
 PART2_HOOK_TOP_B11_RT = 0x08F301C0
 PART2_HOOK_BOT_B11_RT = 0x08F30220
 PART2_HOOK_A3_RT = 0x08F30280
+PART2_HOOK_A3_SPACE_RT = 0x08F30340
+PART2_HOOK_SPACE_313_RT = 0x08F30360
+PART2_HOOK_SPACE_B11_RT = 0x08F303A0
 
 # Assembled for ARM7TDMI Thumb. Patch offset 0x4c with the Thumb return address.
 PART2_HOOK_TOP_TEMPLATE = bytes.fromhex(
@@ -351,6 +357,35 @@ PART2_HOOK_A3 = bytes.fromhex(
     '8d600003'  # non-Korean return: IWRAM 0x0300608D
 )
 
+# The Advance 2 tilemap renderers are SJIS-oriented: at their main loop they only
+# branch on NUL/newline, then treat every other byte as a two-byte code. Korean
+# prose keeps ASCII 0x20 spaces, so add a one-byte space path that advances the
+# tile cursor by one cell and consumes exactly one input byte.
+PART2_HOOK_SPACE_313 = bytes.fromhex(
+    '307800280fd00a280bd0202801d007480047404601300004000c80460136044800470448004704480047c046'
+    'c33d3108'  # non-control: 0x08313DC2|1
+    'd73f3108'  # loop:        0x08313FD6|1
+    'e33f3108'  # newline:     0x08313FE2|1
+    'ed3f3108'  # exit:        0x08313FEC|1
+)
+PART2_HOOK_SPACE_B11 = bytes.fromhex(
+    '307800280fd00a280bd0202801d007480047404601300004000c80460136044800470448004704480047c046'
+    'e31bb108'  # non-control: 0x08B11BE2|1
+    'ff1db108'  # loop:        0x08B11DFE|1
+    '0b1eb108'  # newline:     0x08B11E0A|1
+    '151eb108'  # exit:        0x08B11E14|1
+)
+
+# MODE SELECT's A3 glyph-cache function is reached after the text parser has
+# already classified the byte. ASCII space never reaches 0x08A3C7E8: the first
+# parser jump-table entry consumes one byte at 0x0831431C without touching x.
+# Patch the 0x20 table entry to consume one byte and advance state[0x32] by one
+# 16px character cell (two BG columns), then return like a normal handled char.
+PART2_HOOK_A3_SPACE = bytes.fromhex(
+    '286a01302862291c3231087802300870032001490847c046'
+    'f7473108'  # parser handled return: 0x083147F6|1
+)
+
 def _part2_hook(template, ret):
     b = bytearray(template)
     struct.pack_into('<I', b, 0x4C, ret)
@@ -379,6 +414,12 @@ PART2_PATCHES = [
 
 PART2_A3_TRAMP_SITE = 0xA3C7E8
 PART2_A3_TRAMP_EXPECT = bytes.fromhex('047840780e4a3f28')
+PART2_A3_SPACE_TABLE_ENTRY = 0x3142CC  # first jump table entry for byte 0x20: 0x08314270 + (0x20 - 0x09) * 4
+PART2_A3_SPACE_TABLE_EXPECT = 0x0831431C
+PART2_SPACE_313_SITE = 0x313FD6
+PART2_SPACE_B11_SITE = 0xB11DFE
+PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a28')
+PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a28')
 
 
 def main():
@@ -406,6 +447,9 @@ def main():
     rom[PART2_HOOK_TOP_B11_FILE:PART2_HOOK_TOP_B11_FILE + len(PART2_HOOK_TOP_B11)] = PART2_HOOK_TOP_B11
     rom[PART2_HOOK_BOT_B11_FILE:PART2_HOOK_BOT_B11_FILE + len(PART2_HOOK_BOT_B11)] = PART2_HOOK_BOT_B11
     rom[PART2_HOOK_A3_FILE:PART2_HOOK_A3_FILE + len(PART2_HOOK_A3)] = PART2_HOOK_A3
+    rom[PART2_HOOK_A3_SPACE_FILE:PART2_HOOK_A3_SPACE_FILE + len(PART2_HOOK_A3_SPACE)] = PART2_HOOK_A3_SPACE
+    rom[PART2_HOOK_SPACE_313_FILE:PART2_HOOK_SPACE_313_FILE + len(PART2_HOOK_SPACE_313)] = PART2_HOOK_SPACE_313
+    rom[PART2_HOOK_SPACE_B11_FILE:PART2_HOOK_SPACE_B11_FILE + len(PART2_HOOK_SPACE_B11)] = PART2_HOOK_SPACE_B11
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
     P.patch_word(rom, P.LIT_FONTBASE, HOOK_RT | 1)
@@ -443,6 +487,12 @@ def main():
         rom[bot_site:bot_site + 8] = _abs_tramp(1, bot_hook_rt)
     assert bytes(rom[PART2_A3_TRAMP_SITE:PART2_A3_TRAMP_SITE + 8]) == PART2_A3_TRAMP_EXPECT
     rom[PART2_A3_TRAMP_SITE:PART2_A3_TRAMP_SITE + 8] = _abs_tramp(2, PART2_HOOK_A3_RT)
+    assert struct.unpack('<I', rom[PART2_A3_SPACE_TABLE_ENTRY:PART2_A3_SPACE_TABLE_ENTRY + 4])[0] == PART2_A3_SPACE_TABLE_EXPECT
+    P.patch_word(rom, PART2_A3_SPACE_TABLE_ENTRY, PART2_HOOK_A3_SPACE_RT)
+    assert bytes(rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8]) == PART2_SPACE_313_EXPECT
+    assert bytes(rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8]) == PART2_SPACE_B11_EXPECT
+    rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_313_RT)
+    rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT)
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()
