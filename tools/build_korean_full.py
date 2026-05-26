@@ -127,24 +127,39 @@ def encode_text(ko, syl_to_code, unmapped):
     return bytes(out)
 
 
+# v56 훅이 직접 처리하는 대화 본문 주소(중복 렌더 방지 위해 내 인코딩에서 제외) + 네임플레이트
+V56_HOOKED_ADDRS = [0xDF8E16, 0xDF8DB2, 0xDF8E3E]
+V56_NAMEPLATES = [0x9292A8, 0x961F30, 0x99A7D4, 0x9D3078]
+V56_SKIP = set(V56_HOOKED_ADDRS + V56_NAMEPLATES)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
     ap.add_argument('--report', default=os.path.join(BASE, 'temp', 'encode_report.csv'))
+    ap.add_argument('--base', default=os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba'),
+                    help='base ROM. 기본=원본. v56_polished 지정 시 영문그리드 시도(단 repoint와 충돌해 미작동 — ASM hook 필요)')
     args = ap.parse_args()
 
-    rom = bytearray(open(P.ROM, 'rb').read())
-    # 1) 글리프/테이블/repoint 메커니즘 적용 (hajimemashite 인코딩은 건너뛰고 전체 인코딩으로 대체)
-    P.stage_a(rom)
+    orig = bytes(open(P.ROM, 'rb').read())   # 대화 폰트/테이블 복사 소스(원본)
+    use_v56 = os.path.abspath(args.base) != os.path.abspath(P.ROM) and os.path.exists(args.base)
+    rom = bytearray(open(args.base, 'rb').read()) if use_v56 else bytearray(orig)
+    skip_addrs = V56_SKIP if use_v56 else set()
+
+    # 1) 대화 per-char 폰트는 **원본**에서 0xF00000으로 복사 (base가 v56면 FONT_BASE에 영문그리드가
+    #    섞여 있으므로 반드시 원본 폰트를 복사해야 대화 가나/한자가 정상)
+    rom[P.NEW_FONT_FILE:P.NEW_FONT_FILE + P.FONT_COPY_LEN] = orig[P.FONT_FILE:P.FONT_FILE + P.FONT_COPY_LEN]
+    assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
+    P.patch_word(rom, P.LIT_FONTBASE, P.NEW_FONT_RT)
     blob = open(P.BLOB, 'rb').read()
     rom[P.KOR_BLOB_FILE:P.KOR_BLOB_FILE + len(blob)] = blob
 
     sylmap = json.load(open(P.SYLMAP, encoding='utf-8'))['map']
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
 
-    # 테이블 확장 (build_korean_poc.stage_b 와 동일)
+    # 테이블 확장 — 원본 한자 테이블 기반(base가 v56여도 원본 테이블 사용)
     syllables = sorted(sylmap.keys())
-    orig_tbl = bytes(rom[P.KTAB_FILE:P.KTAB_END_FILE])
+    orig_tbl = bytes(orig[P.KTAB_FILE:P.KTAB_END_FILE])
     new_tbl = bytearray(orig_tbl)
     for s in syllables:
         code = syl_to_code[s]
@@ -175,6 +190,8 @@ def main():
             slot = slots.get(a, 0)
             if slot <= 0:
                 st['no_slot'] += 1; continue
+            if a in skip_addrs:
+                st['skip_v56'] += 1; continue   # v56 훅/네임플레이트가 처리 — 중복 렌더 방지
             deny = in_deny(a, a + slot)
             if deny:
                 st['deny'] += 1; continue   # 중요 데이터 테이블 — 덮어쓰지 않음
@@ -191,13 +208,11 @@ def main():
             rom[a:a + len(enc)] = enc
             st['written'] += 1
 
-    # 2.5) 이름 입력 영문 그리드 — v56(cell_slots) 로직이 이 빌드에 전이 안 됨(슬롯 매핑 불일치,
-    #      v27_original_base 부재). 별도 RE 필요. 현재는 SJIS-테이블 보존으로 원본 가나 그리드 복원(기능적).
-    # grid_n = patch_name_grid(rom)
+    # 이름 입력 영문 그리드는 base(v56_polished)에 이미 포함됨(훅+글리프). per-char 대화 폰트는
+    # 위에서 원본을 0xF00000으로 복사했으므로 그리드(FONT_BASE)와 독립.
 
-    # 3) 검증 + 저장
-    chk = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
-    assert chk == rom[0xBD], f'checksum 0xBD={rom[0xBD]:#x} != {chk:#x}'
+    # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
+    rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     open(args.out, 'wb').write(rom)
@@ -207,12 +222,12 @@ def main():
         for r in report:
             w.writerow(r)
 
-    print('=== 인코딩 통계 ===')
-    for k in ['rows', 'written', 'overflow', 'deny', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
+    print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
+    for k in ['rows', 'written', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
-    print(f'→ {args.out} (16MB, chk OK), overflow 리포트 {args.report}')
+    print(f'→ {args.out} (16MB, chk recomputed), overflow 리포트 {args.report}')
 
 
 if __name__ == '__main__':
