@@ -45,7 +45,22 @@ HALFWIDTH = {'！': '!', '？': '?', '，': ',', '．': '.', '：': ':', '；': 
              '（': '(', '）': ')', '　': ' ', '〜': '~', '～': '~'}
 
 
+# 이름 입력 그리드 charset/레이아웃 데이터 (가나 시퀀스 = 그리드 글자집합 정의).
+# 텍스트로 오추출됨 — 인코딩하면 그리드 셀↔글자 매핑 깨짐(글자 누락/미리보기 불가). 원본 유지 필수.
+NAME_GRID_DATA = {0x805A24, 0xDA4337}
+NAME_GRID_RANGES = [
+    (0x83FAF0, 0x83FF00),   # 그리드 charset 클러스터(2세트: 0x83FAF6~0x83FC41, 0x83FE41~0x83FEDD)
+    (0xDF8C00, 0xDF8E00),   # DF8C charset(0xDF8C62/CB2), 대화(0xDF8E16+) 앞
+    (0xDF9F00, 0xDF9FF0),   # DF9F charset(0xDF9FB0)
+]
+
+
 def in_deny(a, end):
+    if a in NAME_GRID_DATA:
+        return 'name_grid_data'
+    for cs, ce in NAME_GRID_RANGES:
+        if a < ce and end > cs:
+            return 'name_grid_data'
     for name, cs, ce in DENY_REGIONS:
         if a < ce and end > cs:
             return name
