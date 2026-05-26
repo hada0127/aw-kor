@@ -27,5 +27,11 @@
     "영문 이름그리드",
     "대사 입력대기(▼) 수정",
     "overflow 압축 인코딩"
-  ]
+  ],
+  "ips_patch": {
+    "file": "game_wars_korean_full_preview_2026-05-26.ips",
+    "sha1": "3bf60b984edf0bb7b85c1abe4f0a78d7d94f5930",
+    "size": 502752,
+    "note": "IPS도 동일 ROM 생성(16MB 이내). 원본 검증 없음 — BPS가 안전. 둘 중 편한 것 사용."
+  }
 }
