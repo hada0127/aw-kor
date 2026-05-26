@@ -13,6 +13,7 @@
 #include <mgba/core/config.h>
 #include <mgba/core/log.h>
 #include <mgba/debugger/debugger.h>
+#include <mgba/core/serialize.h>
 #include <mgba-util/vfs.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -212,6 +213,16 @@ int main(int argc, char** argv){
             }
             s_dbg.state=DEBUGGER_RUNNING;
             printf("OK watchaddr %08X len=%u set=%d\n", addr, len, ok);
+        } else if(!strcmp(cmd,"loadstate")){
+            // loadstate FILE : load mGBA save state (.ss0, PNG-wrapped). 화면 도달 가속용.
+            char* fn=strtok(NULL," \t\r\n");
+            struct VFile* sf = VFileOpen(fn, O_RDONLY);
+            if(!sf){ printf("ERR loadstate open %s\n", fn?fn:"(null)"); }
+            else {
+                bool ok = mCoreLoadStateNamed(core, sf, SAVESTATE_SAVEDATA | SAVESTATE_RTC);
+                sf->close(sf);
+                printf("OK loadstate %s ok=%d\n", fn, ok?1:0);
+            }
         } else if(!strcmp(cmd,"quit")){
             printf("OK quit\n"); break;
         } else {

@@ -67,12 +67,95 @@ def in_deny(a, end):
     return None
 
 
-def patch_name_grid(rom):
-    """이름 입력 그리드를 영문 3구역으로 교체 (정확한 구역 매핑 + 하단정렬).
+# ── 이름 그리드 ground-truth 슬롯맵 (2026-05-26 RE 확정) ──────────────────────────
+# 신규 원본 이름화면 VRAM 덤프 → BG0(screenblock14, charblock0) 타일맵에서 각 셀의 타일ID →
+# charblock0 VRAM 타일을 ROM FONT_BASE 슬롯과 exact-byte 역매칭(팔레트 리맵 없음 확인) →
+# 셀→슬롯 ground-truth 도출. 관계 top_slot = bottom_slot - 16 (전 셀 일관 검증).
+# 좌(A-Z): 카타카나 ア~ハ 슬롯(우연히 slots_from_idx와 일치). 중(a-z): マ~ー 슬롯(불연속 — 작은가나
+#   ァィゥェォ/ッャュョー은 별도 블록). 우(0-9): 전각숫자 ０-９ 전용 슬롯(291-300/307-316).
+# ※ 이전 코드 버그: 중간 a-z는 slots_from_idx(41+)=192부터로 어긋났고(참값 174부터), 숫자는
+#   idx9-18 extra(완전 오류, 참값 291-300). 또 슬롯 0-1023 블랭크가 원본 숫자글리프(291-300)를 지움.
+# (검증 스크립트: temp/grid_slotmap.json, temp/sim_render.py)
+# 가나 슬롯 테이블 RE (2026-05-26, codex 검증):
+#   변환루틴 0x08EFE788. 가나(0x8340-0x8397)는 base8=*(0x08B80278)=0x08B8087C 테이블 사용.
+#   kidx = ((SJIS-0x8140)&0xFFF8)*2 + (SJIS&7) - 0x400.   top=base8[kidx], bottom=base8[kidx+8].
+#   → 이 테이블을 패치하면 각 가나 셀의 top/bottom 슬롯을 자유 지정 가능(그리드+대화 공유 주의).
+KANA_TBL = 0x08B8087C
+def _kidx(sjis):
+    return (((sjis - 0x8140) & 0xFFF8) * 2 + (sjis & 7)) - 0x400
 
-    그리드 셀 idx(SJIS 테이블 0xBE717A 순서) → FONT_BASE 슬롯(공식 직접계산, sjis 검색 회피).
-    구역 (RE 확정): 좌(A-Z) idx 9-34, 중(a-z) idx 41-66, 우(0-9) idx 199-208.
-    모든 글자 baseline 하단정렬(top_pad = CELL_BASE - 글리프높이) → 소문자가 대문자와 같은 바닥선.
+# 작은가나(q-y)·ン(p) 슬롯 재배치: 원본은 top=95 공유(q-y) / bottom 220 공유(n,p).
+# base8 테이블에서 q-y top + p bottom 을 미사용 빈 슬롯으로 옮겨 26자 전부 고유 슬롯 확보.
+# (미사용 빈 슬롯: temp 스캔으로 확인, base8 미참조 + all-zero)
+KANA_REMAP = {
+    # SJIS : ('top', new_slot)  또는 ('bot', new_slot)
+    0x8340: ('top', 328),  # q ァ
+    0x8342: ('top', 329),  # r ィ
+    0x8344: ('top', 330),  # s ゥ
+    0x8346: ('top', 332),  # t ェ
+    0x8348: ('top', 333),  # u ォ
+    0x8362: ('top', 334),  # v ッ
+    0x8383: ('top', 344),  # w ャ
+    0x8385: ('top', 345),  # x ュ
+    0x8387: ('top', 346),  # y ョ
+    0x8393: ('bot', 348),  # p ン (bottom 220→348, n=ワ는 220 유지)
+}
+
+# 셀 → (top_slot, bot_slot). 슬롯 프로브(니블1-9 마커)로 ground-truth 확정 + KANA_REMAP 반영.
+NAME_GRID_SLOTS = {
+    # 좌 A-Z
+    'A': (128, 144), 'B': (129, 145), 'C': (130, 146), 'D': (131, 147), 'E': (132, 148),
+    'F': (133, 149), 'G': (134, 150), 'H': (135, 151), 'I': (136, 152), 'J': (137, 153),
+    'K': (138, 154), 'L': (139, 155), 'M': (140, 156), 'N': (141, 157), 'O': (142, 158),
+    'P': (143, 159), 'Q': (160, 176), 'R': (161, 177), 'S': (162, 178), 'T': (163, 179),
+    'U': (164, 180), 'V': (165, 181), 'W': (166, 182), 'X': (167, 183), 'Y': (168, 184),
+    'Z': (169, 185),
+    # 중 a-z (q-y top·p bottom 은 KANA_REMAP으로 fresh 슬롯 재배치 → 26자 전부 고유)
+    'a': (174, 190), 'b': (175, 191), 'c': (192, 208), 'd': (193, 209), 'e': (194, 210),
+    'f': (195, 211), 'g': (196, 212), 'h': (197, 213), 'i': (198, 214), 'j': (199, 215),
+    'k': (200, 216), 'l': (201, 217), 'm': (202, 218), 'n': (203, 220), 'o': (1508, 1524),
+    'p': (204, 348), 'q': (328, 252), 'r': (329, 253), 's': (330, 254), 't': (332, 256),
+    'u': (333, 257), 'v': (334, 259), 'w': (344, 258), 'x': (345, 260), 'y': (346, 261),
+    'z': (290, 306),
+    # 우 0-9 (전각숫자 슬롯)
+    '0': (291, 307), '1': (292, 308), '2': (293, 309), '3': (294, 310), '4': (295, 311),
+    '5': (296, 312), '6': (297, 313), '7': (298, 314), '8': (299, 315), '9': (300, 316),
+}
+# 영문 그리드 미사용 셀(좌영역 Z 뒤 ヒフヘホ) top 슬롯 → 블랭크.
+NAME_GRID_BLANK_TOPSLOTS = [170, 171, 172, 173]
+
+NAME_GRID_ROW_LAYOUTS = {
+    # Live row strings drawn by 0x08B48910..0x08B48960 via 0x08B1311C.
+    # Encoding is raw Shift-JIS bytes, with 0A 09 prefix and 0A 00 00 00 row terminator.
+    # Middle area is compacted to 5 visible cells per row; row2 right symbols are blanked.
+    0x08DF8C38: [0x8341, 0x8343, 0x8345, 0x8347, 0x8349, 0x8140,
+                 0x837D, 0x837E, 0x8380, 0x8381, 0x8382, 0x8140,
+                 0x824F, 0x8250, 0x8251, 0x8252, 0x8253],
+    0x08DF8C60: [0x834A, 0x834C, 0x834E, 0x8350, 0x8352, 0x8140,
+                 0x8384, 0x8386, 0x8388, 0x8389, 0x838A, 0x8140,
+                 0x8254, 0x8255, 0x8256, 0x8257, 0x8258],
+    0x08DF8C88: [0x8354, 0x8356, 0x8358, 0x835A, 0x835C, 0x8140,
+                 0x838B, 0x838C, 0x838D, 0x838F, 0x8392, 0x8140,
+                 0x8140, 0x8140, 0x8140, 0x8140, 0x8140],
+    0x08DF8CB0: [0x835E, 0x8360, 0x8363, 0x8365, 0x8367, 0x8140,
+                 0x8393, 0x8340, 0x8342, 0x8344, 0x8346],
+    0x08DF8CCC: [0x8369, 0x836A, 0x836B, 0x836C, 0x836D, 0x8140,
+                 0x8348, 0x8362, 0x8383, 0x8385, 0x8387],
+    0x08DF8CE8: [0x836E, 0x8371, 0x8374, 0x8377, 0x837A, 0x8140,
+                 0x815B, 0x8140, 0x8140, 0x8140, 0x8140],
+}
+
+
+def _name_grid_row_bytes(codes):
+    return b'\x0A\x09' + b''.join(struct.pack('>H', c) for c in codes) + b'\x0A\x00\x00\x00'
+
+
+def patch_name_grid(rom):
+    """이름 입력 그리드를 영문 3구역(좌 A-Z / 중 a-z / 우 0-9)으로 교체.
+
+    ① base8 가나 슬롯 테이블 패치(KANA_REMAP): q-y top·p bottom 을 fresh 슬롯으로 → 26자 전부 고유.
+    ② NAME_GRID_SLOTS 슬롯에 영문 글리프 주입(하단정렬). 미사용 셀 블랭크.
+    ③ live 행 문자열(0x08DF8C38 계열)을 패치해 중간 갭과 우측 기호행 제거.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from render_galmuri_8x16 import render_char
@@ -83,32 +166,37 @@ def patch_name_grid(rom):
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
 
-    def slots_from_idx(idx):
-        page = (idx - 9) // 16
-        chip = (idx - 9) % 16
-        top = 128 + page * 32 + chip
-        return top, top + 16  # top, bottom
+    # ① base8 가나 테이블 패치
+    for sjis, (which, newslot) in KANA_REMAP.items():
+        kidx = _kidx(sjis) + (8 if which == 'bot' else 0)
+        off = (KANA_TBL + kidx * 2) - 0x08000000
+        rom[off:off + 2] = struct.pack('<H', newslot)
 
-    # cleanup: 그리드 폰트 슬롯 0-1023 비움 (잔여 가나/v56 글리프 제거 → 깔끔한 3구역)
-    for slot in range(1024):
+    def write_slot(slot, data):
         off = (FONT_BASE + slot * 32) - 0x08000000
-        rom[off:off + 32] = BLANK
+        rom[off:off + 32] = data
 
-    def inject(idx, ch):
-        # 글리프 높이로 하단정렬 top_pad 계산
+    def inject(ch):
+        top_slot, bot_slot = NAME_GRID_SLOTS[ch]
         h = glyph_grid(font[ord(ch)])[2] if ord(ch) in font else 11
         top_pad = max(0, CELL_BASE - h)
         top, bot = render_char(ch, top_pad=top_pad)
-        ts, bs = slots_from_idx(idx)
-        rom[(FONT_BASE + ts * 32) - 0x08000000:(FONT_BASE + ts * 32) - 0x08000000 + 32] = top
-        rom[(FONT_BASE + bs * 32) - 0x08000000:(FONT_BASE + bs * 32) - 0x08000000 + 32] = bot
+        write_slot(top_slot, top)
+        write_slot(bot_slot, bot)
 
-    plan = [(9 + i, c) for i, c in enumerate("ABCDEFGHIJKLMNOPQRSTUVWXYZ")]   # 좌 A-Z
-    plan += [(41 + i, c) for i, c in enumerate("abcdefghijklmnopqrstuvwxyz")]  # 중 a-z
-    plan += [(199 + i, c) for i, c in enumerate("0123456789")]                 # 우 0-9
-    for idx, ch in plan:
-        inject(idx, ch)
-    return len(plan)
+    for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789":
+        inject(ch)
+    for top_slot in NAME_GRID_BLANK_TOPSLOTS:   # 미사용 좌영역 셀 비움
+        write_slot(top_slot, BLANK)
+        write_slot(top_slot + 16, BLANK)
+
+    for addr, codes in NAME_GRID_ROW_LAYOUTS.items():
+        new = _name_grid_row_bytes(codes)
+        off = addr - 0x08000000
+        old = rom[off:off + len(new)]
+        assert old[:2] == b'\x0A\x09' and old[-4:] == b'\x0A\x00\x00\x00'
+        rom[off:off + len(new)] = new
+    return len(NAME_GRID_SLOTS)
 
 
 def load_slots():
