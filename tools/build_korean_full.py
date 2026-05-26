@@ -132,39 +132,89 @@ V56_HOOKED_ADDRS = [0xDF8E16, 0xDF8DB2, 0xDF8E3E]
 V56_NAMEPLATES = [0x9292A8, 0x961F30, 0x99A7D4, 0x9D3078]
 V56_SKIP = set(V56_HOOKED_ADDRS + V56_NAMEPLATES)
 
+# --- ASM hook 방식 (repoint 폐기, 원본 FONT_BASE 보존 → 그리드+대화 양립) ---
+KOR_GLYPH_FILE = 0xF00000          # 한글 글리프 블롭 (KOR_BASE=0x08F00000)
+KOR_BASE_RT = 0x08F00000
+HOOK_FILE = 0xF30000               # ASM hook 코드 (runtime 0x08F30000)
+HOOK_RT = 0x08F30000
+# hook(Thumb): 입력 r0=idx. if(idx&0x8000) r7=KOR_BASE+(idx&0x7FFF)*0x20 else r7=FONT_BASE+idx*0x20.
+# ⚠️ GBA(ARMv4T)는 BLX 없음 → 변환루틴(IWRAM 0x030065E0)에서 bx r3로 hook 호출, hook은 하드코딩된
+#   IWRAM 복귀주소(0x030066C9 = 0xEFE870 등가)로 bx r0 복귀. r0,r3만 clobber(이후 dead). r2 보존.
+#   설계 상세: docs/research.md(2026-05-26).
+# 변환루틴은 글리프소스를 2번 계산: TOP(0xEFE86E, 복귀 0xEFE870) + BOT(0xEFE8EA, 복귀 0xEFE8EC).
+# 둘 다 0xEFE97C에서 base 로드 → 둘 다 hook 필요. hook_top/hook_bot은 복귀주소만 다름.
+# IWRAM 매핑 선형: ROM 0xEFE788=IWRAM 0x030065E0. 0xEFE870→0x030066C8, 0xEFE8EC→0x03006744.
+HOOK_RET_TOP = 0x030066C9          # 0xEFE870 | 1
+HOOK_RET_BOT = 0x03006745          # 0xEFE8EC | 1
+
+def _hook(ret):
+    return bytes.fromhex(
+        '0304'  # lsls r3,r0,#16   (bit15 of idx -> N flag)
+        '04d4'  # bmi  +0x0E       (korean)
+        '054b'  # ldr  r3,[pc,#0x14] -> FONT_BASE
+        '4001'  # lsls r0,r0,#5
+        'c718'  # adds r7,r0,r3
+        '0648'  # ldr  r0,[pc,#0x18] -> RET
+        '0047'  # bx   r0
+        '044b'  # ldr  r3,[pc,#0x10] -> KOR_BASE  (kor:)
+        '4004'  # lsls r0,r0,#17
+        '400c'  # lsrs r0,r0,#17
+        '4001'  # lsls r0,r0,#5
+        'c718'  # adds r7,r0,r3
+        '0248'  # ldr  r0,[pc,#0x08] -> RET
+        '0047'  # bx   r0
+    ) + (0x08B974D0).to_bytes(4, 'little') + (0x08F00000).to_bytes(4, 'little') + (ret).to_bytes(4, 'little')
+
+HOOK_TOP_BYTES = _hook(HOOK_RET_TOP)
+HOOK_BOT_BYTES = _hook(HOOK_RET_BOT)
+HOOK_BOT_FILE = HOOK_FILE + 0x30    # 0xF30030 (hook_top|1 + 0x30 = hook_bot|1)
+LIT_TRAMP = 0xEFE86C               # TOP: (lsls r0,#5; adds r7,r0,r3) → bx r3; nop
+TRAMP_BYTES = bytes.fromhex('1847c046')          # bx r3 ; mov r8,r8
+LIT_TRAMP_BOT = 0xEFE8E8           # BOT: (lsls r0,#5; adds r7,r0,r1) → adds r1,#0x30; bx r1
+TRAMP_BOT_BYTES = bytes.fromhex('30310847')      # adds r1,#0x30 (0x3130) ; bx r1 (0x4708)
+
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
     ap.add_argument('--report', default=os.path.join(BASE, 'temp', 'encode_report.csv'))
-    ap.add_argument('--base', default=os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba'),
-                    help='base ROM. 기본=원본. v56_polished 지정 시 영문그리드 시도(단 repoint와 충돌해 미작동 — ASM hook 필요)')
+    ap.add_argument('--base', default=os.path.join(BASE, 'output', 'v56_polished.gba'),
+                    help='base ROM. 기본=v56_polished(영문그리드+훅). ASM hook으로 대화 한글 + 그리드 양립.')
     args = ap.parse_args()
 
-    orig = bytes(open(P.ROM, 'rb').read())   # 대화 폰트/테이블 복사 소스(원본)
+    orig = bytes(open(P.ROM, 'rb').read())   # 원본 (테이블 소스)
     use_v56 = os.path.abspath(args.base) != os.path.abspath(P.ROM) and os.path.exists(args.base)
     rom = bytearray(open(args.base, 'rb').read()) if use_v56 else bytearray(orig)
     skip_addrs = V56_SKIP if use_v56 else set()
 
-    # 1) 대화 per-char 폰트는 **원본**에서 0xF00000으로 복사 (base가 v56면 FONT_BASE에 영문그리드가
-    #    섞여 있으므로 반드시 원본 폰트를 복사해야 대화 가나/한자가 정상)
-    rom[P.NEW_FONT_FILE:P.NEW_FONT_FILE + P.FONT_COPY_LEN] = orig[P.FONT_FILE:P.FONT_FILE + P.FONT_COPY_LEN]
-    assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
-    P.patch_word(rom, P.LIT_FONTBASE, P.NEW_FONT_RT)
+    # === ASM hook 방식: repoint/폰트복사 없음. 원본 FONT_BASE 보존(그리드+대화 가나/한자). ===
+    # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(P.BLOB, 'rb').read()
-    rom[P.KOR_BLOB_FILE:P.KOR_BLOB_FILE + len(blob)] = blob
+    rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
+    # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
+    rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
+    rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES
+    # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
+    assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
+    P.patch_word(rom, P.LIT_FONTBASE, HOOK_RT | 1)
+    # 4) TOP 트램폴린: 0xEFE86C (lsls r0,#5; adds r7,r0,r3) → bx r3; nop  (r3=hook_top|1)
+    assert bytes(rom[LIT_TRAMP:LIT_TRAMP + 4]) == bytes.fromhex('4001c718')
+    rom[LIT_TRAMP:LIT_TRAMP + 4] = TRAMP_BYTES
+    # 5) BOT 트램폴린: 0xEFE8E8 (lsls r0,#5; adds r7,r0,r1) → adds r1,#0x30; bx r1  (r1=hook_top|1→hook_bot|1)
+    assert bytes(rom[LIT_TRAMP_BOT:LIT_TRAMP_BOT + 4]) == bytes.fromhex('40014718')
+    rom[LIT_TRAMP_BOT:LIT_TRAMP_BOT + 4] = TRAMP_BOT_BYTES
 
     sylmap = json.load(open(P.SYLMAP, encoding='utf-8'))['map']
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
 
-    # 테이블 확장 — 원본 한자 테이블 기반(base가 v56여도 원본 테이블 사용)
+    # 5) 테이블 확장 — 원본 한자 테이블 + 한글 엔트리(idx에 bit15 마커 → hook이 KOR_BASE 사용)
     syllables = sorted(sylmap.keys())
     orig_tbl = bytes(orig[P.KTAB_FILE:P.KTAB_END_FILE])
     new_tbl = bytearray(orig_tbl)
     for s in syllables:
         code = syl_to_code[s]
-        top = P.KOR_IDX_BASE + sylmap[s]['top']
-        bot = P.KOR_IDX_BASE + sylmap[s]['bot']
+        top = sylmap[s]['top'] | 0x8000
+        bot = sylmap[s]['bot'] | 0x8000
         new_tbl += bytes([code >> 8, code & 0xFF]) + struct.pack('<H', top) + struct.pack('<H', bot)
     rom[P.NEW_TBL_FILE:P.NEW_TBL_FILE + len(new_tbl)] = new_tbl
     P.patch_word(rom, P.LIT_TBL_START, P.NEW_TBL_RT)

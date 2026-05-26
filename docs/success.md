@@ -567,3 +567,31 @@ PoC(개별 글리프) → **프로덕션 풀파이프라인(800글리프+1566테
 - **round-trip 검증**: 원본+BPS = 한글빌드 정확히 일치, 소스 CRC 일치 → 표준 패처(flips/beat) 호환.
 - 배치: `dist/game_wars_korean_full_preview_2026-05-26.bps` + `dist/manifest_preview.json`(체크섬).
   원본 ROM sha1 0e805762…, 패치본 sha1 66f031a0…. **preview/기술검증 빌드**로 명시(풀 QA 미완).
+
+## [2026-05-26] 🎉 ASM hook으로 대화 한글 + 영문 그리드 양립 (repoint 충돌 해결)
+
+사용자 실기 피드백 #1~#5 대응의 핵심. repoint 방식이 v56 영문 그리드와 충돌하던 문제를
+**ASM hook**(codex/gemini 원안)으로 해결. 원본 FONT_BASE 보존 → 그리드(영문)+대화 가나/한자 정상,
+예약 한글코드만 별도 KOR_BASE 사용.
+
+### 메커니즘 (`tools/build_korean_full.py --base output/v56_polished.gba`)
+- **repoint/폰트복사 없음.** 원본 FONT_BASE(0x08B974D0) 그대로 → v56 영문 그리드 + 대화 가나/한자 작동.
+- 한글 800 글리프 → 0xF00000(KOR_BASE). 한자테이블 한글 엔트리 idx에 **bit15 마커**(local|0x8000).
+- 변환루틴 글리프소스 계산 **2곳**(TOP 0xEFE86C, BOT 0xEFE8E8)에 트램폴린 삽입:
+  - FONT_BASE 리터럴(0xEFE97C) → hook_top|1(0x08F30001).
+  - TOP: `bx r3`(r3=hook_top). BOT: `adds r1,#0x30; bx r1`(r1=hook_top→hook_bot, 별도 리터럴 불요).
+  - hook(0xF30000/0xF30030): `if(idx&0x8000) r7=KOR_BASE+(idx&0x7FFF)*0x20 else r7=FONT_BASE+idx*0x20`.
+    ⚠️ GBA=ARMv4T(BLX 없음) → bx 기반, 하드코딩 IWRAM 복귀(top 0x030066C9, bot 0x03006745).
+    r0,r3만 clobber(이후 dead), r2 보존.
+- ⚠️ 함정(해결): SJIS 슬롯테이블(0xBE717A) 등 데이터테이블 덮어쓰기 방지 denylist 필수.
+
+### 검증 (인게임)
+- 대화: welcome "게임보이워즈에어서와 ▼" 한글 정상(원본 base, top+bot 둘 다 hook). 
+- 영문 그리드: NAME "AAAA" + "UVWXY Zabcd" 영문 정상(v56 base, FONT path).
+- 증거: `docs/screenshots/SUCCESS_hook_dialogue_korean_2026-05-26.png`, `..._english_grid_2026-05-26.png`.
+- 디버깅: bot 타일도 0xEFE97C로 base 로드해 두번째 hook 필요했음(첫 시도 garbled). BLX 미지원(ARMv4T)으로
+  bx+하드코딩복귀로 전환. 트램폴린 바이트 엔디안 오타(adds r0,#0x31 vs adds r1,#0x30) 수정.
+
+### 5개 실기 피드백 종합
+1. #1/#4 자동넘어감 → 0x00→0x20 패딩 (✅). 2. #2 영문그리드 → ASM hook (✅).
+3. #3 미리보기 → SJIS테이블 denylist (✅). 5. #5 일본어대사 → overflow(번역축약 과제, 잔여).

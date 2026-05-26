@@ -269,6 +269,11 @@
 > (게임이 EUC-KR 디코더 없음 — SJIS 예약코드라야 렌더됨).
 
 ## [2026-05-26] 영문 이름 그리드 ✗ FONT_BASE repoint와 아키텍처 충돌 (ASM hook 필요)
+
+> ✅ **[2026-05-26 해결]** ASM hook 구현 완료. 원본 FONT_BASE 보존(그리드+대화), 예약 한글코드만
+> 별도 KOR_BASE(0x08F00000) 사용. TOP/BOT 글리프소스 2곳 트램폴린(bx, ARMv4T BLX 미지원), bit15 마커.
+> 대화 한글 + 영문 그리드 인게임 양립 확인. success.md(2026-05-26) 참조.
+
 - v56_polished는 영문 그리드(ABCDE FGHIJ KLMNO PQRST) 정상 — 훅(0xB12798→0xA3D000, 0xB129D4→0xA3CF14)
   +FONT_BASE 슬롯에 영문 글리프 주입. **그리드는 변환루틴 FONT_BASE 리터럴(0xEFE97C)을 통해 글리프 fetch.**
 - 내 풀게임 대화 방식은 **0xEFE97C를 0x08F00000으로 repoint**(원본폰트 복사+한글). → 그리드도 0x08F00000을
