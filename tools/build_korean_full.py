@@ -559,8 +559,13 @@ def main():
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
     #   "この地に、今、侵略者…" 의 今 = "이 땅에, 지금 침략자…"
-    for faddr, text in {0xA019B6: '지금'}.items():
-        enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)  # 今、(4B) 자리에 지금(4B)
+    # {ROM주소: 한글} — 추출이 놓친 선두 감탄사 프래그먼트(제어바이트 사이 갭, CSV 라인 아님)를 직접 패치.
+    #   각 한글은 원래 JP 바이트수와 같게(가나 1자=2B=한글 1음절 2B). 뒤 구두점(、)은 유지.
+    for faddr, text in {
+        0xA019B6: '지금',   # この地に[今]、 → 이 땅에 [지금]…  (今、4B→지금4B)
+        0xA0E3D0: '아',     # [あ]、료 맥스… → [아]、료…       (あ2B→아2B, 、유지)
+    }.items():
+        enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)
         rom[faddr:faddr + len(enc)] = enc
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
