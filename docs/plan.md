@@ -1,5 +1,31 @@
 # Game Wars 한글화 프로젝트 - 실행 계획서
 
+## 2026-05-27 완료 업데이트
+
+- [x] 안정화 빌드 완료: `python3 tools/build_korean_full.py`
+  - 18,320행 처리, **15,269행 written**, protected/data skip 36.
+  - 슬롯 초과 297행은 깨진 truncation 대신 원문 유지로 되돌림.
+- [x] Part 1/Part 2 렌더러 대응 완료:
+  - Part 1 대화 ASM hook.
+  - Part 2 tilemap/glyph-cache renderer hook.
+  - Part 2 ASCII 공백 렌더.
+- [x] 이름 입력 그리드 완료: A-Z/a-z/0-9 표시와 미리보기 검증.
+- [x] QA/빌드 도구 갱신:
+  - `tools/qa_text_fit.py`가 실제 빌드 인코딩 기준을 사용.
+  - `tools/phase6_basic_test.py`가 최신 full ROM과 GBA 체크섬 식을 사용.
+- [x] 최종 로컬 산출물:
+  - `output/game_wars_korean_full.gba`
+  - `output/game_wars_korean_final.gba`
+  - `dist/game_wars_korean_full_preview_2026-05-27.bps`
+  - `dist/game_wars_korean_full_preview_2026-05-27.ips`
+  - `dist/manifest.json`, `dist/manifest_preview.json`
+- [x] 검증:
+  - `tools/phase6_basic_test.py` 통과.
+  - BPS/IPS round-trip 검증 통과.
+  - 헤드리스 mGBA 이름 그리드/2편 프롤로그 대표 화면 캡처 갱신.
+
+**현재 위상**: 로컬 기준 한글화 stability preview 완료. 공개 최종판 전 권장 작업은 `temp/encode_report.csv` 297행의 문장 축약 번역과 전체 캠페인 실기 플레이스루다.
+
 **프로젝트명**: Game Boy Advance Game Wars (1+2) 완전 한글화
 **목표**: 일본어판 ROM을 100% 한글화하여 완성된 패치 배포
 

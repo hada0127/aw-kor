@@ -8,12 +8,15 @@
 
 사용: python tools/qa_text_fit.py
 """
-import csv, json, os
+import collections, csv, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 SAFE_MIN_ADDR = 0x800000
+
+sys.path.insert(0, os.path.join(BASE, 'tools'))
+from build_korean_full import encode_fit, in_deny, V56_SKIP, SYLCODE
 
 
 def load_slots():
@@ -49,8 +52,11 @@ def vwidth(s):
 
 def main():
     slots = load_slots()
-    written = overflow = wider = 0
-    over_le2 = 0
+    import json
+    syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+    written = overflow = wider = truncated = deny = skip_v56 = 0
+    levels = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    unmapped = collections.Counter()
     with open(TRANS, newline='') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
@@ -61,18 +67,28 @@ def main():
                 continue
             if not ko or a < SAFE_MIN_ADDR or slots.get(a, 0) <= 0:
                 continue
-            el = enc_len(ko)
             slot = slots[a]
-            if el > slot:
+            if a in V56_SKIP:
+                skip_v56 += 1
+                continue
+            if in_deny(a, a + slot):
+                deny += 1
+                continue
+            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+            if enc is None:
                 overflow += 1
-                if el - slot <= 2:
-                    over_le2 += 1
                 continue
             written += 1
+            levels[level] += 1
+            if level == 5:
+                truncated += 1
             if vwidth(ko) > vwidth(ja):
                 wider += 1
     print(f'written(한글 인코딩): {written}')
-    print(f'overflow(슬롯초과 skip→원문): {overflow}  (그중 ≤2B: {over_le2}, 축약 용이)')
+    print('fit levels: ' + ', '.join(f'level{k}={levels[k]}' for k in sorted(levels)))
+    print(f'truncated fallback: {truncated}')
+    print(f'overflow(슬롯초과 skip→원문): {overflow}')
+    print(f'deny/data-skip: {deny}, v56-skip: {skip_v56}')
     print(f'visual-wider than JA: {wider} ({100*wider/max(written,1):.1f}%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)')
 
 

@@ -1,5 +1,25 @@
 # TODO — 본문 대화 한글화 구현 (3 세션 계획)
 
+## ✅ 2026-05-27 최종 진행 상태
+
+- [x] `tools/build_korean_full.py` 안정화 빌드 완료: **15,269행 written**, 슬롯 초과 297행은 원문 유지.
+- [x] Part 1 대화 ASM hook + Part 2 tilemap/glyph-cache hook + Part 2 공백 렌더 적용.
+- [x] 이름 입력 그리드 A-Z/a-z/0-9 및 미리보기 검증 완료.
+- [x] 빌드 게이트 갱신: protected data denylist, 슬롯 패딩 0x20, truncation 비활성화.
+- [x] QA 도구 갱신: `tools/qa_text_fit.py`가 실제 `encode_fit()` 기준 통계를 사용.
+- [x] Phase 6 기본 검사 갱신 및 통과: `tools/phase6_basic_test.py`.
+- [x] 최종 산출물 생성: `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`.
+- [x] 배포 패치 생성 및 round-trip 검증: `dist/game_wars_korean_full_preview_2026-05-27.bps`, `.ips`.
+- [x] 매니페스트/릴리스 노트 갱신: `dist/manifest.json`, `dist/manifest_preview.json`, `dist/README.md`, `dist/RELEASE_NOTES.md`.
+- [x] 헤드리스 mGBA 대표화면 검증:
+  - `docs/screenshots/SUCCESS_final_name_grid_2026-05-27.png`
+  - `docs/screenshots/SUCCESS_final_part2_prologue_2026-05-27.png`
+
+### 남은 수동 폴리시 후보
+- `temp/encode_report.csv`의 **297행**은 슬롯 제약으로 원문 유지됨. 깨진 한글 truncation보다 안전하며,
+  공개 최종판 전에는 이 행들을 사람이 더 자연스럽게 축약하는 것이 좋다.
+- 그래픽 자산에 포함된 일본어 라벨은 텍스트 엔진 대상이 아니므로 별도 그래픽 편집 과제다.
+
 > **새 세션 START: 먼저 이 순서로 읽어라**
 > 1. `CLAUDE.md` (작업 지침)
 > 2. `docs/research.md` 맨 끝 2개 섹션 (대화 렌더 파이프라인 완전 RE — 주소·테이블·공식)

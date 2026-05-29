@@ -4,10 +4,10 @@
 "unique_tiles": 800,
 "blob_bytes": 25600,
 "tile_bytes": 32,
-"ink_index": 10,
+"ink_index": 9,
 "naive_tiles": 2060,
 "empty_render": 0,
-"blob_sha1": "2f345701a20ffa579d2f2b5644609a9e6eef63f5",
+"blob_sha1": "396e556bed1df5311cb5072c2ac2d6f00f5621ba",
 "note": "local idx 0-based; FONT_BASE idx = KOR_TILE_BASE + local_idx (Session 2)"
 },
 "map": {

@@ -5,7 +5,7 @@
 - 한글: Galmuri 7px 폭, 11px 높이 → 8x16 셀 수직중앙
 
 각 셀은 top tile (8x8) + bot tile (8x8) = 8x16 픽셀.
-4bpp packed, ink = palette index 10.
+4bpp packed, ink = palette index 9.
 
 Vertical positioning:
   ASCII (10 height): rows 3-12 of cell (top rows 0-2 pad + char rows 0-4 in top rows 3-7, char rows 5-9 in bot rows 0-4, bot rows 5-7 pad)
@@ -15,7 +15,7 @@ import sys, os
 sys.path.insert(0, os.path.dirname(__file__))
 from bdf import load_bdf, glyph_grid
 
-INK = 10
+INK = 9
 _font_cache = None
 
 def _load():

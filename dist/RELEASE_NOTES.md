@@ -1,54 +1,43 @@
-# Game Wars Korean v1.0 - Release Notes
+# Game Wars Korean Full Preview - Release Notes
 
 ## Release Date
-2026-05-12
+2026-05-27
 
-## What's Included
-- game_wars_korean_final.gba - Korean-localized Game Boy Advance ROM
-  - File size: 16.0 MB
-  - Format: GBA binary
-  - Header: GBWARS1+2 BGWJ
-  - Checksum: Verified
+## Included Files
+- `game_wars_korean_full_preview_2026-05-27.bps` - recommended patch
+- `game_wars_korean_full_preview_2026-05-27.ips` - alternate patch
+- `manifest.json` / `manifest_preview.json` - hashes and build metadata
+- `output/game_wars_korean_final.gba` - local generated ROM
 
 ## Translation Status
-- Complete: ~797 UI/Menu items (2.8%)
-- Remaining: ~27,550 story/dialogue items (97.2%)
-- Status: Playable with partial Korean UI
+- Full build rows written: 15,269
+- Encoding overflow skips: 297, kept as original Japanese for stability
+- Rule-shortened rows: 64
+- Truncated fit fallback rows: 0
+- Protected skips: 36, covering name-grid/font/system data and v56 handled strings
 
-## Technical Specs
-- Original: Game Wars 1+2 (Japan release)
-- Encoding: Shift-JIS to EUC-KR conversion
-- Font: 8x8 pixel bitmap, 1bpp
-- Validation: Passed all integrity checks
+## Technical Changes
+- Rebuilt the full Korean ROM from `output/v56_polished.gba`.
+- Preserved original font base for the English name grid while routing Korean reserved codes to `KOR_BASE`.
+- Added Part 2 tilemap/glyph-cache renderer hooks.
+- Added Part 2 ASCII-space handling.
+- Disabled final truncation fallback after real-game screenshots showed broken dialogue.
+- Short yes/no strings are encoded as `예/아▼` to fit the original 8-byte slot.
+- Name-grid visible rows now keep the original selectable gaps so preview output matches the selected lowercase letter.
+- Updated Phase 6 checksum validation to use the correct GBA header checksum formula.
 
-## Tested Features
-- [OK] ROM loads in VisualBoyAdvance M
-- [OK] Korean text renders correctly
-- [OK] Game menus display in Korean
-- [OK] No file corruption
-- [OK] Binary integrity validated
-
-## Installation
-1. Download game_wars_korean_final.gba
-2. Open in GBA emulator
-3. Play and test
+## Verification
+- ROM size: 16,777,216 bytes
+- Patched ROM SHA1: `1264fcab27d0e349b6caf461fd0247380e981c53`
+- BPS SHA1: `640c2053c3fc8b4213ca640c3ca17b35f4b2196a`
+- IPS SHA1: `5d3798f13e01cab55d4dc17c2f46a07fd750acca`
+- `tools/phase6_basic_test.py`: pass
+- BPS/IPS round-trip: pass
+- Headless screenshots refreshed:
+  - `docs/screenshots/SUCCESS_final_name_grid_2026-05-27.png`
+  - `docs/screenshots/SUCCESS_final_part2_prologue_2026-05-27.png`
 
 ## Known Issues
-- Story text remains in Japanese (pending translation)
-- Some item descriptions in original language
-- Font size fixed to 8x8 pixels
-
-## Future Updates
-- Complete story translation (in progress)
-- Additional UI polish
-- Community feedback integration
-
-## How to Contribute
-See TRANSLATION_GUIDE.md in the project repository
-
-## Support
-For issues or questions, refer to the project documentation.
-
----
-This release represents completion of technical infrastructure.
-Manual translation work continues in parallel.
+- The 297 overflow rows remain Japanese until manually shortened.
+- Graphics-rendered labels can still contain Japanese where they are not text-engine strings.
+- A full campaign playthrough on real hardware remains release-candidate QA, not a build blocker.

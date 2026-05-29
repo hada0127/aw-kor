@@ -45,6 +45,44 @@ FALLBACK = {'·': '・', '∪': '∩'}  # 일부 유니코드 → SJIS 인코딩
 HALFWIDTH = {'！': '!', '？': '?', '，': ',', '．': '.', '：': ':', '；': ';',
              '（': '(', '）': ')', '　': ' ', '〜': '~', '～': '~'}
 
+SHORTEN = [
+    ('할수있', '가능'), ('할수없', '불가'), ('수있', '가능'), ('수없', '불가'),
+    ('있습니다', '있음'), ('없습니다', '없음'), ('했습니다', '했음'), ('합니다', '함'),
+    ('됩니다', '됨'), ('입니다', '임'), ('하십시오', '하라'), ('주세요', '줘'),
+    ('하세요', '해'), ('하려면', '려면'), ('위해서', '위해'), ('때문에', '탓'),
+    ('그러나', '단'), ('하지만', '단'), ('그리고', '또'), ('이번에는', '이번엔'),
+    ('처음부터', '처음'), ('지금부터', '지금'), ('아군의', '아군'), ('적군의', '적군'),
+    ('있는', '있'), ('없는', '없'), ('에게', '에'), ('에서', '서'), ('부터', '서'),
+    ('것이다', '거다'), ('것은', '건'), ('것을', '걸'), ('것이', '게'),
+]
+
+TEXT_OVERRIDES = {
+    # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
+    # routine samples the 2nd and 4th two-byte cells, so this displays "예  아".
+    '예아니오▼': '예예아아',
+    '예아니오': '예예아아',
+    '예 아니오 ▼': '예예아아',
+    '예 아니오': '예예아아',
+    '예　　아니오': '예  아니오',
+}
+
+ADDRESS_TEXT_OVERRIDES = {
+    # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
+    # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
+    0xDF8E3E: '처음 뵙습니다',
+    # ASCII quotes render as symbol debris in this text engine path.
+    0xDF9024: '다음 「모드선택」에서 「작전실」',
+    # The original translation is one byte too long for the 14-byte fragment.
+    0xDF91D0: '포함해서.',
+}
+
+POST_TEXT_RESTORE = {
+    # v56 blanked 0xDF8DB2..0xDF8DCE, two bytes past the 26-byte prompt slot.
+    # Restore the original wait/newline terminator or the parser runs into the
+    # following name-grid data and corrupts the prompt/subsequent dialogue.
+    0xDF8DCC: bytes.fromhex('6b0a0000'),
+}
+
 
 # 이름 입력 그리드 charset/레이아웃 데이터 (가나 시퀀스 = 그리드 글자집합 정의).
 # 텍스트로 오추출됨 — 인코딩하면 그리드 셀↔글자 매핑 깨짐(글자 누락/미리보기 불가). 원본 유지 필수.
@@ -55,8 +93,12 @@ NAME_GRID_RANGES = [
     (0xDF9F00, 0xDF9FF0),   # DF9F charset(0xDF9FB0)
 ]
 
+TEXT_ALLOW_ADDRS = {0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
+
 
 def in_deny(a, end):
+    if a in TEXT_ALLOW_ADDRS:
+        return None
     if a in NAME_GRID_DATA:
         return 'name_grid_data'
     for cs, ce in NAME_GRID_RANGES:
@@ -128,24 +170,25 @@ NAME_GRID_BLANK_TOPSLOTS = [170, 171, 172, 173]
 NAME_GRID_ROW_LAYOUTS = {
     # Live row strings drawn by 0x08B48910..0x08B48960 via 0x08B1311C.
     # Encoding is raw Shift-JIS bytes, with 0A 09 prefix and 0A 00 00 00 row terminator.
-    # Middle area is compacted to 5 visible cells per row; row2 right symbols are blanked.
+    # Middle area keeps the original selectable gaps. Removing those gaps makes
+    # visual cells disagree with the input/preview lookup (for example k -> i).
+    # The right-side symbol row is blanked.
     0x08DF8C38: [0x8341, 0x8343, 0x8345, 0x8347, 0x8349, 0x8140,
                  0x837D, 0x837E, 0x8380, 0x8381, 0x8382, 0x8140,
                  0x824F, 0x8250, 0x8251, 0x8252, 0x8253],
     0x08DF8C60: [0x834A, 0x834C, 0x834E, 0x8350, 0x8352, 0x8140,
-                 0x8384, 0x8386, 0x8388, 0x8389, 0x838A, 0x8140,
+                 0x8384, 0x8140, 0x8386, 0x8140, 0x8388, 0x8140,
                  0x8254, 0x8255, 0x8256, 0x8257, 0x8258],
     0x08DF8C88: [0x8354, 0x8356, 0x8358, 0x835A, 0x835C, 0x8140,
-                 0x838B, 0x838C, 0x838D, 0x838F, 0x8392, 0x8140,
+                 0x8389, 0x838A, 0x838B, 0x838C, 0x838D, 0x8140,
                  0x8140, 0x8140, 0x8140, 0x8140, 0x8140],
     0x08DF8CB0: [0x835E, 0x8360, 0x8363, 0x8365, 0x8367, 0x8140,
-                 0x8393, 0x8340, 0x8342, 0x8344, 0x8346],
+                 0x838F, 0x8140, 0x8392, 0x8140, 0x8393],
     0x08DF8CCC: [0x8369, 0x836A, 0x836B, 0x836C, 0x836D, 0x8140,
-                 0x8348, 0x8362, 0x8383, 0x8385, 0x8387],
+                 0x8340, 0x8342, 0x8344, 0x8346, 0x8348],
     0x08DF8CE8: [0x836E, 0x8371, 0x8374, 0x8377, 0x837A, 0x8140,
-                 0x815B, 0x8140, 0x8140, 0x8140, 0x8140],
+                 0x8362, 0x8383, 0x8385, 0x8387, 0x815B],
 }
-
 
 def _name_grid_row_bytes(codes):
     return b'\x0A\x09' + b''.join(struct.pack('>H', c) for c in codes) + b'\x0A\x00\x00\x00'
@@ -156,7 +199,7 @@ def patch_name_grid(rom):
 
     ① base8 가나 슬롯 테이블 패치(KANA_REMAP): q-y top·p bottom 을 fresh 슬롯으로 → 26자 전부 고유.
     ② NAME_GRID_SLOTS 슬롯에 영문 글리프 주입(하단정렬). 미사용 셀 블랭크.
-    ③ live 행 문자열(0x08DF8C38 계열)을 패치해 중간 갭과 우측 기호행 제거.
+    ③ live 행 문자열(0x08DF8C38 계열)을 패치하되, 선택 로직과 맞는 원본 중간 갭은 유지.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from render_galmuri_8x16 import render_char
@@ -222,6 +265,10 @@ def encode_text(ko, syl_to_code, unmapped):
         if '가' <= ch <= '힣':
             c = syl_to_code[ch]
             out += bytes([c >> 8, c & 0xFF])
+        elif ch == '　':
+            out += b'\x81\x40'
+        elif ch == ' ':
+            out += b'\x20'
         elif 0x20 <= ord(ch) <= 0x7E:
             out += bytes([ord(ch)])
         else:
@@ -235,22 +282,46 @@ def encode_text(ko, syl_to_code, unmapped):
 
 
 def encode_fit(ko, slot, syl_to_code, unmapped):
-    """슬롯에 맞도록 단계적 압축 인코딩. 맞으면 (bytes, level), 안 맞으면 (None, level).
-    level 0=원본 1=반각구두점 2=반각+공백제거 (가독성 순). 번역 의미는 보존."""
-    cand = [ko,
-            ''.join(HALFWIDTH.get(c, c) for c in ko),
-            ''.join(HALFWIDTH.get(c, c) for c in ko).replace(' ', '')]
+    """슬롯에 맞도록 단계적 압축 인코딩.
+
+    맞으면 (bytes, level), 안 맞으면 None을 돌려 원문을 유지한다.
+    level 0=정규화 1=축약규칙.
+    """
+    normalized = ''.join(HALFWIDTH.get(c, c) for c in ko)
+    normalized = ''.join(c for c in normalized if c not in ',.!?:;()[]{}"\'‘’“”・…。、「」『』▼')
+    spaced = normalized.replace(' ', '　')
+    cand = [spaced]
+    shortened = spaced
+    for src, dst in SHORTEN:
+        shortened = shortened.replace(src, dst)
+    cand.append(shortened)
+    # Fallback: keep Korean coverage when full-width spaces do not fit.
+    # ASCII spaces are ignored by the Part 1 renderer, but this is still better
+    # than dropping many more translated lines back to Japanese.
+    cand.append(normalized)
+    shortened_ascii = normalized
+    for src, dst in SHORTEN:
+        shortened_ascii = shortened_ascii.replace(src, dst)
+    cand.append(shortened_ascii)
     for level, s in enumerate(cand):
+        if any('가' <= ch <= '힣' and ch not in syl_to_code for ch in s):
+            continue
         enc = encode_text(s, syl_to_code, unmapped)
         if len(enc) <= slot:
             return enc, level
-    return None, len(cand)
+
+    return None, 5
 
 
-# v56 훅이 직접 처리하는 대화 본문 주소(중복 렌더 방지 위해 내 인코딩에서 제외) + 네임플레이트
-V56_HOOKED_ADDRS = [0xDF8E16, 0xDF8DB2, 0xDF8E3E]
+# v56 base has a Galmuri11 overlay hook for early dialogues. Keep the name-grid
+# base ROM, but disable that overlay in main() so all dialogue, including
+# welcome, uses the same per-character Korean glyph path.
+V56_HOOKED_ADDRS = []
 V56_NAMEPLATES = [0x9292A8, 0x961F30, 0x99A7D4, 0x9D3078]
 V56_SKIP = set(V56_HOOKED_ADDRS + V56_NAMEPLATES)
+
+V56_OVERLAY_ADDR_TABLE = 0xA3CF48
+V56_OVERLAY_ADDR_TABLE_LEN = 12
 
 # --- ASM hook 방식 (repoint 폐기, 원본 FONT_BASE 보존 → 그리드+대화 양립) ---
 KOR_GLYPH_FILE = 0xF00000          # 한글 글리프 블롭 (KOR_BASE=0x08F00000)
@@ -453,6 +524,12 @@ def main():
     rom = bytearray(open(args.base, 'rb').read()) if use_v56 else bytearray(orig)
     skip_addrs = V56_SKIP if use_v56 else set()
 
+    if use_v56:
+        # v56's overlay uses wider pre-rendered welcome glyphs. Disable only
+        # its address matches; the rest of v56, especially name-grid work,
+        # remains the base for this build.
+        rom[V56_OVERLAY_ADDR_TABLE:V56_OVERLAY_ADDR_TABLE + V56_OVERLAY_ADDR_TABLE_LEN] = b'\xFF' * V56_OVERLAY_ADDR_TABLE_LEN
+
     # === ASM hook 방식: repoint/폰트복사 없음. 원본 FONT_BASE 보존(그리드+대화 가나/한자). ===
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(P.BLOB, 'rb').read()
@@ -538,6 +615,7 @@ def main():
             deny = in_deny(a, a + slot)
             if deny:
                 st['deny'] += 1; continue   # 중요 데이터 테이블 — 덮어쓰지 않음
+            ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
             enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
             if enc is None:
                 st['overflow'] += 1
@@ -567,6 +645,11 @@ def main():
     }.items():
         enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)
         rom[faddr:faddr + len(enc)] = enc
+    for faddr, data in POST_TEXT_RESTORE.items():
+        rom[faddr:faddr + len(data)] = data
+
+    suffix = encode_text('님!', syl_to_code, unmapped)
+    rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
@@ -580,7 +663,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

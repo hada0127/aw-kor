@@ -8,6 +8,7 @@ import sys
 import struct
 from pathlib import Path
 import csv
+import argparse
 
 
 def check_rom_integrity(rom_path: str) -> dict:
@@ -65,8 +66,8 @@ def check_rom_integrity(rom_path: str) -> dict:
     # Check 5: Checksum verification
     try:
         stored_checksum = rom_data[0xBD]
-        header_range = rom_data[0xA0:0xBC]
-        calculated_checksum = (0 - sum(header_range)) & 0xFF
+        header_range = rom_data[0xA0:0xBD]
+        calculated_checksum = (-(0x19 + sum(header_range))) & 0xFF
 
         if stored_checksum == calculated_checksum:
             result['checks']['checksum'] = True
@@ -137,11 +138,15 @@ def check_translation_status() -> dict:
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('rom_path', nargs='?', default='output/game_wars_korean_full.gba')
+    args = parser.parse_args()
+
     print("="*60)
     print("PHASE 6: QA Testing - Pre-flight Checks")
     print("="*60)
 
-    rom_path = 'output/game_wars_korean_final.gba'
+    rom_path = args.rom_path
 
     # Check 1: ROM Integrity
     print("\n[Check 1] ROM Integrity Tests...")
@@ -183,7 +188,7 @@ def main():
         print(f"  - ROM should load in VisualBoyAdvance M")
         print(f"  - Game Wars title screen should appear")
         print(f"  - ~{trans['translations']} menu items in Korean")
-        print(f"  - Remaining text in Japanese (not yet translated)")
+        print(f"  - Remaining Japanese is expected only in protected data/graphics or manually skipped areas")
         print(f"\nNext Steps:")
         print(f"  1. Open ROM in VisualBoyAdvance M:")
         print(f"     {Path('original/Visualboy Advance M v2.1.4.x64.exe').resolve()}")

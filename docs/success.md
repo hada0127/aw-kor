@@ -674,3 +674,45 @@ overflow로 일본어 잔존하던 행을 **단계적 압축 인코딩**으로 �
 디스패치 점프테이블 0x08314270**(바이트값 인덱스) 사용 — 0x20 엔트리(0x083142CC)를 공백 hook(0x08F30340,
 cursor state +1)으로 patch. 0x313/0xB11 타일맵 루프 head에도 0x20 공백 hook. Part 1 무영향.
 ※ 공백 폭이 다소 넓음(+2 advance) — 필요시 +1로 조정 가능. 잔여: 낱 한자 번역갭(今 등 ~5행).
+
+## 2026-05-27 — full preview 빌드 완료(overflow 0) + 배포 패치 갱신 (이후 안정화로 superseded)
+
+**결과(당시)**: `tools/build_korean_full.py` 기준 전체 빌드가 **overflow 0**으로 통과. 다만 이후 실기
+스크린샷에서 truncation fallback이 대사를 깨뜨리는 것이 확인되어, 다음 섹션의 안정화 빌드가 현재 기준이다.
+
+### 빌드 통계
+- rows 18,320
+- written 15,566
+- level0 13,250 / level1 3 / level2 1,431 / level3 521 / level4 rule-shortened 64 / level5 truncation 297
+- overflow 0
+- deny 29, v56 skip 7, no_ko 120, code_region 2,441, bad_addr 157
+
+### 검증
+- `python3 tools/phase6_basic_test.py` 통과(크기·헤더·GBA 체크섬·한글 검출).
+- `python3 tools/qa_text_fit.py`가 실제 `encode_fit()` 기준으로 갱신됨.
+- BPS/IPS round-trip 검증 통과.
+- 헤드리스 mGBA 대표화면 캡처:
+  - `docs/screenshots/SUCCESS_final_name_grid_2026-05-27.png`
+  - `docs/screenshots/SUCCESS_final_part2_prologue_2026-05-27.png`
+
+### 산출물 해시
+- patched ROM sha1: `eebd6da6adc8c54d299917aac5bbd072addaf315`
+- BPS sha1: `d23ee5b3719134667bf7f228028eff2f5be2b952`
+- IPS sha1: `0d9cc357aa5d6f13a614879f36350d11796752fb`
+
+### 남은 폴리시
+- `temp/encode_report.csv`의 297행은 slot-fit을 위해 문자 경계 truncation 처리됨. 플레이 가능성 확보 목적의
+  fallback이며, 공개 최종판 전 사람이 자연스럽게 축약하면 품질이 올라간다.
+
+## 2026-05-27 — 실기 스크린샷 피드백 안정화
+
+사용자 스크린샷에서 확인된 문제를 안정성 우선으로 수정.
+
+- **대사 깨짐/색 혼재 완화**: 문자 경계 truncation fallback을 비활성화. 슬롯 초과 297행은 깨진 한글 대신 원문 유지.
+- **예/아니오 깨짐 수정**: 8바이트 슬롯 `はいえ▼`는 `예아니오▼`가 들어가지 않으므로 `예/아▼`로 별도 오버라이드.
+- **이름 입력 k→i 불일치 수정**: 중간 소문자 영역의 시각 레이아웃을 게임의 원래 선택 논리와 같은 공백 포함 구조로 복원.
+  `k`는 `ijklm` 행의 세 번째 위치에 표시되며 선택/미리보기 lookup과 다시 일치한다.
+- 산출물 갱신:
+  - patched ROM sha1: `1264fcab27d0e349b6caf461fd0247380e981c53`
+  - BPS sha1: `640c2053c3fc8b4213ca640c3ca17b35f4b2196a`
+  - IPS sha1: `5d3798f13e01cab55d4dc17c2f46a07fd750acca`

@@ -2,7 +2,7 @@
 """Phase C-1: 한글 글리프 블롭 생성 (dedup).
 
 translation_for_import.csv의 고유 한글 음절을 추출 → render_galmuri_8x16로 각 음절의
-top/bot 8x8 타일(각 0x20 bytes, 4bpp, ink 인덱스 10) 렌더 → 중복 타일 제거 후
+top/bot 8x8 타일(각 0x20 bytes, 4bpp, ink 인덱스 9) 렌더 → 중복 타일 제거 후
 연속 블롭(data/korean_glyph_blob.bin) + 음절→(top_tile, bot_tile) 로컬 인덱스 맵
 (data/syllable_to_glyph.json) 생성.
 
@@ -55,7 +55,7 @@ def main():
         "unique_tiles": len(tile_index),
         "blob_bytes": len(blob),
         "tile_bytes": 0x20,
-        "ink_index": 10,
+        "ink_index": 9,
         "naive_tiles": 2 * len(syl),
         "empty_render": empty,
         "blob_sha1": hashlib.sha1(bytes(blob)).hexdigest(),
