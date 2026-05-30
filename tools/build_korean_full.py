@@ -2577,6 +2577,46 @@ def main():
         + encode_text('을　골라', syl_to_code, unmapped),
         'attack choose row',
     )
+    patch_script_row(
+        0xD8FE02, 0xD8FE24,
+        encode_text('공격상대를　고르는　커서야', syl_to_code, unmapped),
+        'attack cursor intro row',
+    )
+    patch_script_row(
+        0xD8FE27, 0xD8FE3D,
+        encode_text('공격　커서야', syl_to_code, unmapped),
+        'attack cursor name row',
+    )
+    patch_script_row(
+        0xD8FE40, 0xD8FE69,
+        encode_text('지금　공격할　상대는　하나뿐', syl_to_code, unmapped),
+        'single target row',
+    )
+    patch_script_row(
+        0xD8FE6C, 0xD8FE82,
+        encode_text('Ａ버튼으로　전투시작', syl_to_code, unmapped),
+        'battle start row',
+    )
+    patch_script_row(
+        0xD8FE8A, 0xD8FEAA,
+        encode_text('적에게　피해를　줬어', syl_to_code, unmapped),
+        'damage dealt row',
+    )
+    patch_script_row(
+        0xD8FEB2, 0xD8FED6,
+        encode_text('유닛　아래　숫자　보이지', syl_to_code, unmapped),
+        'hp number row',
+    )
+    patch_script_row(
+        0xD8FEDB, 0xD8FEF9,
+        encode_text('그게　유닛　ＨＰ야', syl_to_code, unmapped),
+        'hp label row',
+    )
+    patch_script_row(
+        0xD8FEFE, 0xD8FF20,
+        encode_text('처음엔　모두　１０ＨＰ야', syl_to_code, unmapped),
+        'initial hp row',
+    )
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
