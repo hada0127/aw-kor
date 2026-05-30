@@ -29,6 +29,15 @@ SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
 SAFE_MIN_ADDR = 0x800000
 FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
 
+# Some UI/title tables are consumed by renderers that read strict two-byte SJIS
+# pairs and expect NUL-terminated fixed entries. Padding these with ASCII spaces
+# creates bogus 0x2020 pairs; using Korean reserved codes without extending the
+# renderer's private glyph table can hang the battle transition.
+PAIR_RENDERER_REGIONS = [
+    ('part2_map_mission_title_table', 0xA2D000, 0xA2D8B0),
+]
+ZERO_FILL_REGIONS = PAIR_RENDERER_REGIONS
+
 # 0x800000 위의 '텍스트로 오추출된' 중요 데이터 테이블 — 덮어쓰면 그리드/폰트/렌더 깨짐.
 # (extraction noise가 SJIS-유사 바이트의 데이터 테이블을 텍스트로 잡음)
 DENY_REGIONS = [
@@ -1269,6 +1278,29 @@ def in_deny(a, end):
     return None
 
 
+def in_region(regions, a, end):
+    for name, cs, ce in regions:
+        if a < ce and end > cs:
+            return name
+    return None
+
+
+FULLWIDTH_ASCII = {
+    **{chr(ord('0') + i): chr(ord('０') + i) for i in range(10)},
+    **{chr(ord('A') + i): chr(ord('Ａ') + i) for i in range(26)},
+    **{chr(ord('a') + i): chr(ord('ａ') + i) for i in range(26)},
+    ' ': '　',
+    '-': '－',
+    '+': '＋',
+    '/': '／',
+    '&': '＆',
+}
+
+
+def normalize_pair_renderer_text(text):
+    return ''.join(FULLWIDTH_ASCII.get(ch, ch) for ch in text)
+
+
 # ── 이름 그리드 ground-truth 슬롯맵 (2026-05-26 RE 확정) ──────────────────────────
 # 신규 원본 이름화면 VRAM 덤프 → BG0(screenblock14, charblock0) 타일맵에서 각 셀의 타일ID →
 # charblock0 VRAM 타일을 ROM FONT_BASE 슬롯과 exact-byte 역매칭(팔레트 리맵 없음 확인) →
@@ -1597,6 +1629,142 @@ def patch_part2_companion_hud_name(rom):
     off = 0xBD00B0
     rom[off:off + len(out)] = out
     return 1
+
+
+MISSION_TITLE_TABLE_ORIG_FILE = 0xA3AF04
+MISSION_TITLE_TABLE_LITERAL_FILE = 0x37C548
+MISSION_TITLE_TABLE_FILE = 0xF40000
+MISSION_TITLE_TABLE_RT = 0x08F40000
+MISSION_TITLE_GLYPH_FILE = 0xF42000
+MISSION_TITLE_GLYPH_RT = 0x08F42000
+
+
+def _lz77_literal_block(raw):
+    if len(raw) >= (1 << 24):
+        raise ValueError('LZ77 block too large')
+    out = bytearray([0x10, len(raw) & 0xFF, (len(raw) >> 8) & 0xFF, (len(raw) >> 16) & 0xFF])
+    for i in range(0, len(raw), 8):
+        out.append(0)
+        out += raw[i:i + 8]
+    return bytes(out)
+
+
+def _decode_4bpp_tile(tile):
+    pixels = [[0] * 8 for _ in range(8)]
+    for y in range(8):
+        for xp in range(4):
+            b = tile[y * 4 + xp]
+            pixels[y][xp * 2] = b & 0x0F
+            pixels[y][xp * 2 + 1] = b >> 4
+    return pixels
+
+
+def _pack_32x32_4bpp(pixels):
+    out = bytearray(512)
+    for ty in range(4):
+        for tx in range(4):
+            tile = (ty * 4 + tx) * 32
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                    bi = tile + row * 4 + col // 2
+                    if col & 1:
+                        out[bi] |= value << 4
+                    else:
+                        out[bi] |= value
+    return bytes(out)
+
+
+def _mission_title_hangul_glyph(glyph_pair):
+    """Make a 32x32 4bpp title glyph from the existing 8x16 Hangul tile pair."""
+    top = _decode_4bpp_tile(bytes.fromhex(glyph_pair[0]))
+    bot = _decode_4bpp_tile(bytes.fromhex(glyph_pair[1]))
+    src = top + bot
+    pixels = [[0] * 32 for _ in range(32)]
+    x0 = 8
+    for y in range(16):
+        for x in range(8):
+            if not src[y][x]:
+                continue
+            for sy in range(2):
+                for sx in range(2):
+                    pixels[y * 2 + sy][x0 + x * 2 + sx] = 6
+    return _pack_32x32_4bpp(pixels)
+
+
+def _mission_title_blank_glyph():
+    return bytes(512)
+
+
+def patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code):
+    """Extend the Part 2 mission-title renderer's private 32x32 glyph table.
+
+    The routine at 0x0837C4E4 linearly searches this table without a sentinel.
+    Any code absent from the table can hang the transition into battle, so every
+    two-byte code emitted in the fixed map/mission-name table must be present.
+    """
+    if struct.unpack_from('<I', rom, MISSION_TITLE_TABLE_LITERAL_FILE)[0] not in (0x08A3AF04, MISSION_TITLE_TABLE_RT):
+        raise AssertionError('unexpected mission-title table literal')
+
+    original_entries = []
+    pos = MISSION_TITLE_TABLE_ORIG_FILE
+    while True:
+        code = struct.unpack_from('<H', orig, pos)[0]
+        ptr = struct.unpack_from('<I', orig, pos + 4)[0]
+        adv = struct.unpack_from('<I', orig, pos + 8)[0]
+        if not (0x08000000 <= ptr < 0x09000000 and adv < 0x100):
+            break
+        original_entries.append(orig[pos:pos + 12])
+        pos += 12
+
+    existing = {struct.unpack_from('<H', entry, 0)[0] for entry in original_entries}
+    needed = set()
+    for a, slot in slots.items():
+        if slot <= 0 or not in_region(PAIR_RENDERER_REGIONS, a, a + slot):
+            continue
+        i = a
+        end = a + slot
+        while i < end and rom[i] != 0:
+            if i + 1 >= end:
+                break
+            needed.add((rom[i] << 8) | rom[i + 1])
+            i += 2
+
+    code_to_syl = {code: syl for syl, code in syl_to_code.items()}
+    glyphs = json.load(open(os.path.join(BASE, 'data', 'korean_glyphs_8px.json'), encoding='utf-8'))
+    glyph_blob = bytearray()
+    new_entries = []
+
+    def add_entry(code, raw_glyph):
+        ptr = MISSION_TITLE_GLYPH_RT + len(glyph_blob)
+        comp = _lz77_literal_block(raw_glyph)
+        glyph_blob.extend(comp)
+        while len(glyph_blob) % 4:
+            glyph_blob.append(0)
+        new_entries.append(struct.pack('<HHL', code, 0, ptr) + struct.pack('<I', 0x1A))
+
+    for code in sorted(needed - existing):
+        if code == 0x8140:
+            add_entry(code, _mission_title_blank_glyph())
+            continue
+        syl = code_to_syl.get(code)
+        if syl and syl in glyphs:
+            add_entry(code, _mission_title_hangul_glyph(glyphs[syl]))
+        else:
+            # Keep the renderer bounded for rare fullwidth symbols that the
+            # campaign-title table can contain; missing art is preferable to a
+            # battle-transition hang and can be refined per glyph later.
+            add_entry(code, _mission_title_blank_glyph())
+
+    table = b''.join(original_entries + new_entries) + bytes(12)
+    if MISSION_TITLE_TABLE_FILE + len(table) > MISSION_TITLE_GLYPH_FILE:
+        raise AssertionError('mission-title table overlaps glyph area')
+    if MISSION_TITLE_GLYPH_FILE + len(glyph_blob) > 0x1000000:
+        raise AssertionError('mission-title glyph data exceeds ROM')
+    rom[MISSION_TITLE_TABLE_FILE:MISSION_TITLE_TABLE_FILE + len(table)] = table
+    rom[MISSION_TITLE_GLYPH_FILE:MISSION_TITLE_GLYPH_FILE + len(glyph_blob)] = glyph_blob
+    P.patch_word(rom, MISSION_TITLE_TABLE_LITERAL_FILE, MISSION_TITLE_TABLE_RT)
+    return len(new_entries)
 
 
 def load_slots():
@@ -2070,6 +2238,9 @@ def main():
             if not ko:
                 st['no_ko'] += 1; continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
+            if pair_renderer:
+                ko = normalize_pair_renderer_text(ko)
             enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
             if enc is None:
                 st['overflow'] += 1
@@ -2080,7 +2251,8 @@ def main():
                 st['oob'] += 1; continue
             # 빈 공간은 0x00(메시지 조기종료→자동넘어감 버그) 대신 공백(FILL_BYTE)으로 패딩
             # → 렌더러가 슬롯 뒤 제어코드(6B=▼입력대기)에 정상 도달.
-            rom[a:a + slot] = bytes([FILL_BYTE]) * slot
+            fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+            rom[a:a + slot] = bytes([fill]) * slot
             rom[a:a + len(enc)] = enc
             st['written'] += 1
             written_addrs.add(a)
@@ -2099,6 +2271,8 @@ def main():
         deny = in_deny(a, a + slot)
         if deny:
             continue
+        if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
+            ko = normalize_pair_renderer_text(ko)
         enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
         if enc is None:
             st['overflow'] += 1
@@ -2108,7 +2282,8 @@ def main():
         if a + slot > len(rom):
             st['oob'] += 1
             continue
-        rom[a:a + slot] = bytes([FILL_BYTE]) * slot
+        fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+        rom[a:a + slot] = bytes([fill]) * slot
         rom[a:a + len(enc)] = enc
         st['written'] += 1
         written_addrs.add(a)
@@ -2132,6 +2307,8 @@ def main():
             deny = in_deny(a, a + slot)
             if deny:
                 continue
+            if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
+                ko = normalize_pair_renderer_text(ko)
             enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
             if enc is None:
                 st['overflow'] += 1
@@ -2141,7 +2318,8 @@ def main():
             if a + slot > len(rom):
                 st['oob'] += 1
                 continue
-            rom[a:a + slot] = bytes([FILL_BYTE]) * slot
+            fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+            rom[a:a + slot] = bytes([fill]) * slot
             rom[a:a + len(enc)] = enc
             st['written'] += 1
             written_addrs.add(a)
@@ -2241,6 +2419,8 @@ def main():
     suffix = encode_text('　님', syl_to_code, unmapped)
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 
+    st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code)
+
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
@@ -2253,7 +2433,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
