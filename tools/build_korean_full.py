@@ -2518,6 +2518,28 @@ def main():
             rom[idx:idx + len(old)] = new
             pos = idx + len(new)
 
+    # First-battle attack tutorial lines are assembled from Japanese glue plus
+    # unit/command control spans. Rebuild the visible row so leftover particles
+    # like で/を do not leak between Korean labels.
+    attack_intro_row = (
+        encode_text('이　', syl_to_code, unmapped)
+        + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
+        + encode_text('으로　', syl_to_code, unmapped)
+        + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
+    )
+    if len(attack_intro_row) > 0x20:
+        raise AssertionError(f'attack intro row overflow: {len(attack_intro_row)} > 32')
+    rom[0xD8FBF6:0xD8FC16] = attack_intro_row + bytes([FILL_BYTE]) * (0x20 - len(attack_intro_row))
+
+    attack_target_row = (
+        encode_text('이　', syl_to_code, unmapped)
+        + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
+        + encode_text('을　잡아　줘', syl_to_code, unmapped)
+    )
+    if len(attack_target_row) > 0x24:
+        raise AssertionError(f'attack target row overflow: {len(attack_target_row)} > 36')
+    rom[0xD8FC46:0xD8FC6A] = attack_target_row + bytes([FILL_BYTE]) * (0x24 - len(attack_target_row))
+
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
     # tiny tilemap hook above rewrites the visible row to "예 아니오".
