@@ -401,9 +401,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA029CC: '서둘러 가도',
     0xA029E0: '지면 안 돼',
     # Part 2 tutorial intro slots with strict byte budgets.
-    0xDF5D81: '하는 법 설명이야',
-    0xDF5D9A: '뵙겠습니다',
-    0xDF5DB4: '코스모랜드에 어서 와',
     0xDF619E: '부대라 볼 수 있어',
     0xDF68F6: '지금까지 실력을 시험해 봐',
     0xDF6A47: '나중에 골치 아파져',
@@ -422,6 +419,15 @@ ADDRESS_TEXT_OVERRIDES = {
     # scripted battle text; leaving them as Japanese falls through the remapped
     # name-grid kana glyphs and produces garbage on screen.
     0xD8F33D: '그래서 휩도 병력이 적어',
+    0xD8F377: '너에게는　',
+    0xD8F393: '　2부대가',
+    0xD8F3DE: '파란색은 적군 유닛',
+    0xD8F3FD: '블루문군 부대다',
+    0xD8F42A: '적 유닛을 전부 해치우면',
+    0xD8F44F: '작전 성공이야!',
+    0xD8F466: '이제 유닛에게 명령해 보자',
+    0xD8F496: '명령은 이 커서를 쓰면',
+    0xD8F4BF: '괜찮아.',
     0xD8F4CD: '십자키로 움직여',
     0xD8F4FE: '에게 명령하자',
     0xD8F525: '에　Ａ버튼을',
