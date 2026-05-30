@@ -3131,6 +3131,32 @@ def main():
         (0xD92766, 0xD92768, '와', 'light tank bazooka glue row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD92899, 0xD928C3, '점령중인　유닛이　있으면', 'capturing unit exists row'),
+        (0xD928C6, 0xD928F2, '네　턴　처음에　먼저　행동시켜', 'act first next turn row'),
+        (0xD92904, 0xD92910, '잡고', 'grab capturing unit row'),
+        (0xD92916, 0xD92924, '하자', 'capture command now row'),
+        (0xD9292A, 0xD92930, '아직', 'still not yet row'),
+        (0xD92936, 0xD9294A, '필요없지', 'not needed yet row'),
+        (0xD92953, 0xD9295F, '하자', 'capture second day row'),
+        (0xD9296C, 0xD92988, '이면　행동이　끝나', 'wrong action ends row'),
+        (0xD9298B, 0xD92991, '여긴', 'here capture row'),
+        (0xD92997, 0xD929A5, '하자', 'finish capture action row'),
+        (0xD929AA, 0xD929CC, '이제　이　도시는　아군이야', 'city is ally row'),
+        (0xD929D1, 0xD929EB, '아군색으로　바뀌었지', 'ally color changed row'),
+        (0xD929F2, 0xD92A0E, '즉　여기와　여기는　적도시', 'these are enemy cities row'),
+        (0xD92A11, 0xD92A27, '라는　뜻이야', 'enemy city meaning row'),
+        (0xD92A2E, 0xD92A4A, '참고로　이　회색도시는', 'neutral city intro row'),
+        (0xD92A4D, 0xD92A71, '아무도　점령하지않은　중립도시야', 'neutral city row'),
+        (0xD92A76, 0xD92A84, '돌아갈게', 'return to topic row'),
+        (0xD92A89, 0xD92AB1, '도시는　피해입은　유닛을', 'city heals damaged unit lead row'),
+        (0xD92AB4, 0xD92AE0, '두면　매일　시작에　ＨＰ를　보충해줘', 'city heals hp row'),
+        (0xD92AE5, 0xD92B01, '게다가　점령한　다음날부터', 'funds after capture lead row'),
+        (0xD92B04, 0xD92B28, '하루　１０００Ｇ씩　자금이　들어와', 'daily funds row'),
+        (0xD92B2D, 0xD92B57, '이　자금은　유닛　ＨＰ　보충에', 'funds hp repair lead row'),
+        (0xD92B5A, 0xD92B6C, '필요해', 'funds needed row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
