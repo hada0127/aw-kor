@@ -8,6 +8,7 @@
 //   dumpvram FILE    write 0x06000000..0x06018000 (96KB) to FILE
 //   dumpmem ADDR LEN FILE
 //   shot FILE        write framebuffer as raw: 4-byte header w,h (uint16 LE) then color_t pixels
+//   savestate FILE   save mGBA state (.ss0-compatible)
 //   quit
 #include <mgba/core/core.h>
 #include <mgba/core/config.h>
@@ -222,6 +223,16 @@ int main(int argc, char** argv){
                 bool ok = mCoreLoadStateNamed(core, sf, SAVESTATE_SAVEDATA | SAVESTATE_RTC);
                 sf->close(sf);
                 printf("OK loadstate %s ok=%d\n", fn, ok?1:0);
+            }
+        } else if(!strcmp(cmd,"savestate")){
+            // savestate FILE : save mGBA state for branching input probes.
+            char* fn=strtok(NULL," \t\r\n");
+            struct VFile* sf = VFileOpen(fn, O_CREAT | O_TRUNC | O_WRONLY);
+            if(!sf){ printf("ERR savestate open %s\n", fn?fn:"(null)"); }
+            else {
+                bool ok = mCoreSaveStateNamed(core, sf, SAVESTATE_ALL);
+                sf->close(sf);
+                printf("OK savestate %s ok=%d\n", fn, ok?1:0);
             }
         } else if(!strcmp(cmd,"quit")){
             printf("OK quit\n"); break;
