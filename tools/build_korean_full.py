@@ -352,7 +352,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF8DFA: '맞습니까',
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
-    0xDF8E3E: '뵙겠습니다.　',
+    0xDF8E3E: '뵙겠습니다. ',
     # Part 1 operation room opening. These lines appear immediately after the
     # first name-confirm flow and are sensitive to long Korean fragments.
     0xDF5D62: '커서 조작부터',
@@ -1327,11 +1327,11 @@ POST_TEXT_RESTORE = {
 INTRO_DIRECT_TEXT = {
     # Part 2 first intro uses the same name-control layout as the Part 1 intro:
     # text fragment, byte 0x69 for the entered player name, then さん/さん！.
-    0xDF5D9A: ('뵙겠습니다。　', 14),
+    0xDF5D9A: ('뵙겠습니다. ', 14),
     # These fragments surround the runtime player-name control byte. The generic
     # slot fitter removes punctuation to save bytes, but this intro has enough
     # room and needs the period/spacing to read naturally.
-    0xDF8E3E: ('뵙겠습니다。', 14),
+    0xDF8E3E: ('뵙겠습니다. ', 14),
     0xDF8E58: ('나는　캐서린。', 16),
 }
 
