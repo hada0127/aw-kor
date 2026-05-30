@@ -1099,19 +1099,36 @@ def main():
         (b'\x82\xB1\x82\xCC\x32\x95\xE0\x95\xBA\x30', encode_text('이', syl_to_code, unmapped) + b'\x81\x40\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x95\xE0\x95\xBA\x30', b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x8C\x79\x90\xED\x8E\xD4\x30', b'\x32' + encode_text('경전차', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x90\xED\x93\xAC\x83\x77\x83\x8A\x30', b'\x32' + encode_text('전투헬기', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x97\x41\x91\x97\x83\x77\x83\x8A\x30', b'\x32' + encode_text('수송헬기', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x90\xED\x93\xAC\x8B\x40\x30', b'\x32' + encode_text('전투기', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x94\x9A\x8C\x82\x8B\x40\x30', b'\x32' + encode_text('폭격기', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x97\x41\x91\x97\x8E\xD4\x30', b'\x32' + encode_text('수송차', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x92\xE3\x8E\x40\x8E\xD4\x30', b'\x32' + encode_text('정찰차', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x91\xCE\x8B\xF3\x90\xED\x8E\xD4\x30', b'\x32' + encode_text('대공전차', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x8E\xA9\x91\x96\x96\x43\x30', b'\x32' + encode_text('자주포', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x90\xED\x8A\xCD\x30', b'\x32' + encode_text('전함', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x90\xF6\x90\x85\x8A\xCD\x30', b'\x32' + encode_text('잠수함', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x8D\x55\x8C\x82\x30', b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x91\xD2\x8B\x40\x30', b'\x32' + encode_text('대기', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x91\xD2\x8B\x40\x30', b'\x33' + encode_text('대기', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x8F\x49\x97\xB9\x30', b'\x33' + encode_text('종료', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x90\xE8\x97\xCC\x30', b'\x33' + encode_text('점령', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x95\xE2\x8B\x8B\x30', b'\x33' + encode_text('보급', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x93\x8B\x8D\xDA\x30', b'\x33' + encode_text('탑재', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x93\x73\x8E\x73\x30', b'\x32' + encode_text('도시', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x8D\x48\x8F\xEA\x30', b'\x32' + encode_text('공장', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x8B\xF3\x8D\x60\x30', b'\x32' + encode_text('공항', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x95\xBD\x92\x6E\x30', b'\x32' + encode_text('평지', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x8E\x52\x30', b'\x32' + encode_text('산', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x90\x58\x30', b'\x32' + encode_text('숲', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x93\xB9\x98\x48\x30', b'\x32' + encode_text('도로', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x8D\x60\x30', b'\x32' + encode_text('항', syl_to_code, unmapped) + b'\x30'),
     ]
     for old, new in raw_replacements:
         if len(old) != len(new):
             raise AssertionError('raw tutorial replacement length mismatch')
-        start, end = 0xD8F300, 0xD97000
+        start, end = 0xD8F300, 0xDA5000
         pos = start
         while True:
             idx = rom.find(old, pos, end)
