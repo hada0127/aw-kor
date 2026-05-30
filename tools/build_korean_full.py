@@ -3343,6 +3343,48 @@ def main():
         (0xD93C6A, 0xD93C94, '바로　수리하고　싶지만　이동범위에', 'repair range limitation row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD93C97, 0xD93CAD, '아군도시가　없네', 'no allied city in range row'),
+        (0xD93CB2, 0xD93CC0, '어쩔수없어', 'no allied city fallback row'),
+        (0xD93CC5, 0xD93CEF, '다음날　수리되게　도시근처까지　이동', 'move near city for repair row'),
+        (0xD93CF2, 0xD93D00, '하자', 'move near city tail row'),
+        (0xD93D06, 0xD93D1C, '여기로　이동해줄래', 'move here repair row'),
+        (0xD93D22, 0xD93D30, '미안해', 'wrong repair move apology row'),
+        (0xD93D33, 0xD93D55, '지금은　여기로　이동해줘', 'move here repair retry row'),
+        (0xD93D5A, 0xD93D6E, '그래　그거면돼', 'repair second move correct row'),
+        (0xD93D73, 0xD93D8F, '하지만　이대론　안돼', 'repair still not safe row'),
+        (0xD93D9B, 0xD93DA1, '경전차', 'enemy attack tank label row'),
+        (0xD93DA2, 0xD93DBE, '의　공격이　닿아버려', 'enemy attack reaches row'),
+        (0xD93DC2, 0xD93DCA, '어디까지', 'attack range how far row'),
+        (0xD93DD0, 0xD93DF0, '공격되는지　보려면　커서', 'attack range cursor row'),
+        (0xD93DF3, 0xD93E1B, '맞추고　Ｂ버튼을　계속　눌러봐', 'hold b attack range row'),
+        (0xD93E20, 0xD93E34, '빨간범위가', 'red range lead row'),
+        (0xD93E3A, 0xD93E48, '공격범위야', 'red range tail row'),
+        (0xD93E4E, 0xD93E72, '그래서　어떻게　할까', 'what to do wall row'),
+        (0xD93E75, 0xD93E93, '벽을　만들어보자', 'make wall intro row'),
+        (0xD93E98, 0xD93EBC, '지킬　유닛이　있을때　공격을', 'wall protect unit row'),
+        (0xD93EBF, 0xD93EE5, '안맞게　다른유닛으로　막아', 'wall block with unit row'),
+        (0xD93EEA, 0xD93F10, '이걸　벽　만들기라고　해', 'wall term row'),
+        (0xD93F15, 0xD93F31, '지금　아군유닛이라면', 'wall candidate lead row'),
+        (0xD93F36, 0xD93F40, '이', 'wall candidate this row'),
+        (0xD93F41, 0xD93F4B, '바주카병', 'wall bazooka label row'),
+        (0xD93F4C, 0xD93F56, '이　좋아', 'wall bazooka good row'),
+        (0xD93F5E, 0xD93F86, '여기로　이동시켜　벽을　만들자', 'wall move bazooka row'),
+        (0xD93F8E, 0xD93FA0, '지금은　꼭　이', 'must protect this lead row'),
+        (0xD93FA1, 0xD93FA7, '경전차', 'must protect tank label row'),
+        (0xD93FA8, 0xD93FB6, '를　지켜야해', 'must protect tank row'),
+        (0xD93FBE, 0xD93FDF, '그러니　여기　다른유닛을　둬서', 'block path with unit row'),
+        (0xD93FE3, 0xD93FFF, '못지나가게　해야해', 'block path tail row'),
+        (0xD94006, 0xD9400E, '지금　이', 'only bazooka lead row'),
+        (0xD9400F, 0xD94019, '바주카병', 'only bazooka label row'),
+        (0xD9401A, 0xD94028, '만　가능해', 'only bazooka possible row'),
+        (0xD9402B, 0xD9403D, '그렇지', 'only bazooka confirm row'),
+        (0xD94047, 0xD94051, '바주카병', 'grab wall bazooka label row'),
+        (0xD94052, 0xD94060, '을　잡아줘', 'grab wall bazooka row'),
+        (0xD9406B, 0xD94071, '경전차', 'protect tank label row'),
+        (0xD94072, 0xD94088, '를　지키려면　여기', 'protect tank here row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
