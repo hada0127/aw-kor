@@ -92,6 +92,20 @@ POST_TEXT_RESTORE = {
     0xDF8DCC: bytes.fromhex('6b0a0000'),
 }
 
+INTRO_DIRECT_TEXT = {
+    # These fragments surround the runtime player-name control byte. The generic
+    # slot fitter removes punctuation to save bytes, but this intro has enough
+    # room and needs the period/spacing to read naturally.
+    0xDF8E3E: ('뵙겠습니다。', 14),
+    0xDF8E58: ('나는　캐서린。', 16),
+}
+
+RESTORE_SYMBOL_CODES = [
+    0x8142,  # 。
+    0x8148,  # ？
+    0x8149,  # ！
+]
+
 
 # 이름 입력 그리드 charset/레이아웃 데이터 (가나 시퀀스 = 그리드 글자집합 정의).
 # 텍스트로 오추출됨 — 인코딩하면 그리드 셀↔글자 매핑 깨짐(글자 누락/미리보기 불가). 원본 유지 필수.
@@ -266,6 +280,27 @@ def patch_name_grid(rom):
         assert old[:2] == b'\x0A\x09' and old[-4:] == b'\x0A\x00\x00\x00'
         rom[off:off + len(new)] = new
     return len(NAME_GRID_SLOTS)
+
+
+def _symbol_table_index(sjis):
+    return (((sjis + 0xFFFF7EC0) & 0xFFF8) << 1) + (sjis & 7)
+
+
+def restore_symbol_glyphs(rom, orig):
+    """Recover punctuation tiles that the v56/name-grid base leaves blank."""
+    font_file = 0xB974D0
+    symbol_tbl = 0xB8027C
+    restored = set()
+    for sjis in RESTORE_SYMBOL_CODES:
+        idx = _symbol_table_index(sjis)
+        for table_delta in (0, 8):
+            slot = struct.unpack_from('<H', orig, symbol_tbl + (idx + table_delta) * 2)[0]
+            if slot == 95 or slot in restored:
+                continue
+            off = font_file + slot * 32
+            rom[off:off + 32] = orig[off:off + 32]
+            restored.add(slot)
+    return len(restored)
 
 
 def load_slots():
@@ -716,6 +751,7 @@ def main():
     # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
+    st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -730,6 +766,11 @@ def main():
         rom[faddr:faddr + len(enc)] = enc
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
+    for faddr, (text, slot_len) in INTRO_DIRECT_TEXT.items():
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) > slot_len:
+            raise AssertionError(f'intro text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
+        rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
@@ -752,7 +793,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
