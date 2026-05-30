@@ -73,6 +73,9 @@ TEXT_OVERRIDES = {
 }
 
 ADDRESS_TEXT_OVERRIDES = {
+    # Name-confirm prompt. The original translation used a long phrase whose
+    # final syllables rendered poorly in this compact UI.
+    0xDF8DFA: '맞습니까',
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
     0xDF8E3E: '뵙겠습니다.　',
@@ -401,6 +404,7 @@ PART2_HOOK_A3_FILE = HOOK_FILE + 0x280
 PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
 PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
 PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
+PART1_YESNO_HOOK_FILE = 0xF10000
 PART2_HOOK_TOP_313_RT = 0x08F30100
 PART2_HOOK_BOT_313_RT = 0x08F30160
 PART2_HOOK_TOP_B11_RT = 0x08F301C0
@@ -409,6 +413,60 @@ PART2_HOOK_A3_RT = 0x08F30280
 PART2_HOOK_A3_SPACE_RT = 0x08F30340
 PART2_HOOK_SPACE_313_RT = 0x08F30360
 PART2_HOOK_SPACE_B11_RT = 0x08F303A0
+PART1_YESNO_HOOK_RT = 0x08F10000
+PART1_YESNO_CALL_SITE = 0xB18D2C
+PART1_YESNO_CALL_EXPECT = bytes.fromhex('fff7c8ff')  # bl 0x08B18CC0
+PART1_YESNO_ORIG_FN = 0x08B18CC0
+
+def _thumb_bl(src_rt, dst_rt):
+    off = dst_rt - (src_rt + 4)
+    if off < -(1 << 22) or off >= (1 << 22) or (off & 1):
+        raise ValueError(f'Thumb BL out of range: {src_rt:#x}->{dst_rt:#x}')
+    hi = 0xF000 | ((off >> 12) & 0x7FF)
+    lo = 0xF800 | ((off >> 1) & 0x7FF)
+    return struct.pack('<HH', hi, lo)
+
+def _part1_yesno_hook():
+    # Called around part1's compact choice cursor update. The original compact
+    # renderer writes "아 니 오" for the name-confirm yes/no buffer, then clears
+    # the middle cell, so the final row becomes "아 오". Saved states can also
+    # carry the older two-syllable buffer that only leaves "아". Run the original
+    # update first, refresh the needed glyph-cache tiles, and rewrite only those
+    # exact tilemap-buffer signatures to "예 아니오".
+    b = bytearray(bytes.fromhex(
+        'ffb5'      # push {r0-r7,lr}
+        '00000000'  # bl original compact-choice update (patched below)
+        '2b4801882b4a914202d02a4a91422bd1'
+        '2a482a4900f029f82a482a4900f025f82a482a4900f021f8'
+        '2a482a4900f01df82a482a4900f019f82a482a4900f015f8'
+        '2a482a4900f011f82a482a4900f00df8174800f012f8'
+        '284800f01cf8284800f00cf8274800f016f8'
+        'ffbd'
+        '082203680b6004300431013af9d17047'
+        '22490180224941800c4981800a49c180204901811e4941817047'
+        '1f4901801c4941801e4981801e49c1801e490181184941817047'
+        '184e0102'  # 0x02014E18, source top row x10
+        'e6800000'  # fresh-route signature tile: 0x80E6
+        'e4800000'  # saved-state signature tile: 0x80E4
+        '0046f008401c00062046f008601c0006'  # 예 top/bot -> tiles E2/E3
+        'c03ff008801c0006e03ff008a01c0006'  # 아 top/bot -> tiles E4/E5
+        '4018f008c01c00062015f008e01c0006'  # 니 top/bot -> tiles E6/E7
+        'a046f008001d0006c046f008201d0006'  # 오 top/bot -> tiles E8/E9
+        '584e0102'  # 0x02014E58, source bottom row x10
+        'd4600006'  # 0x060060D4, visible top row x10
+        '14610006'  # 0x06006114, visible bottom row x10
+        'e2800000'  # 예 top tile
+        '64010000'  # blank tile
+        'e8800000'  # 니 top tile
+        'e3800000'  # 예 bottom tile
+        'e5800000'  # 아 bottom tile
+        'e7800000'  # 니 bottom tile
+        'e9800000'  # 오 bottom tile
+    ))
+    b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
+    return bytes(b)
+
+PART1_YESNO_HOOK = _part1_yesno_hook()
 
 # Assembled for ARM7TDMI Thumb. Patch offset 0x4c with the Thumb return address.
 PART2_HOOK_TOP_TEMPLATE = bytes.fromhex(
@@ -567,6 +625,7 @@ def main():
     rom[PART2_HOOK_A3_SPACE_FILE:PART2_HOOK_A3_SPACE_FILE + len(PART2_HOOK_A3_SPACE)] = PART2_HOOK_A3_SPACE
     rom[PART2_HOOK_SPACE_313_FILE:PART2_HOOK_SPACE_313_FILE + len(PART2_HOOK_SPACE_313)] = PART2_HOOK_SPACE_313
     rom[PART2_HOOK_SPACE_B11_FILE:PART2_HOOK_SPACE_B11_FILE + len(PART2_HOOK_SPACE_B11)] = PART2_HOOK_SPACE_B11
+    rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
     P.patch_word(rom, P.LIT_FONTBASE, HOOK_RT | 1)
@@ -611,6 +670,8 @@ def main():
     assert bytes(rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8]) == PART2_SPACE_B11_EXPECT
     rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_313_RT)
     rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT)
+    assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
+    rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()
@@ -669,6 +730,12 @@ def main():
         rom[faddr:faddr + len(enc)] = enc
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
+
+    # Name-confirm compact choices are not part of the normal CSV path because
+    # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
+    # tiny tilemap hook above rewrites the visible row to "예 아니오".
+    yesno_name_confirm = encode_text('예오아니', syl_to_code, unmapped)
+    rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
 
     suffix = encode_text('　님', syl_to_code, unmapped)
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
