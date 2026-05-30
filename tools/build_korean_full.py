@@ -58,18 +58,19 @@ SHORTEN = [
 
 TEXT_OVERRIDES = {
     # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
-    # routine samples the 2nd and 4th two-byte cells, so this displays "예  아".
-    '예아니오▼': '예예아아',
-    '예아니오': '예예아아',
-    '예 아니오 ▼': '예예아아',
-    '예 아니오': '예예아아',
+    # routine samples a compact path; renderer advance hooks proved unstable, so
+    # keep the original four-syllable Korean text and avoid code hooks here.
+    '예아니오▼': '예아니오',
+    '예아니오': '예아니오',
+    '예 아니오 ▼': '예아니오',
+    '예 아니오': '예아니오',
     '예　　아니오': '예  아니오',
 }
 
 ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
-    0xDF8E3E: '처음 뵙습니다',
+    0xDF8E3E: '처음 뵙습니다 ',
     # ASCII quotes render as symbol debris in this text engine path.
     0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
@@ -127,21 +128,22 @@ KANA_TBL = 0x08B8087C
 def _kidx(sjis):
     return (((sjis - 0x8140) & 0xFFF8) * 2 + (sjis & 7)) - 0x400
 
-# 작은가나(q-y)·ン(p) 슬롯 재배치: 원본은 top=95 공유(q-y) / bottom 220 공유(n,p).
-# base8 테이블에서 q-y top + p bottom 을 미사용 빈 슬롯으로 옮겨 26자 전부 고유 슬롯 확보.
+# 작은가나(q-y)·ン(p) 슬롯 재배치: 원본은 일부 top/bottom 슬롯을 공유한다.
+# base8 테이블에서 q-y top/bottom + p bottom 을 미사용 빈 슬롯으로 옮겨
+# 이름 미리보기와 이후 대화에서도 26자 전부 고유 슬롯을 쓰게 한다.
 # (미사용 빈 슬롯: temp 스캔으로 확인, base8 미참조 + all-zero)
 KANA_REMAP = {
-    # SJIS : ('top', new_slot)  또는 ('bot', new_slot)
-    0x8340: ('top', 328),  # q ァ
-    0x8342: ('top', 329),  # r ィ
-    0x8344: ('top', 330),  # s ゥ
-    0x8346: ('top', 332),  # t ェ
-    0x8348: ('top', 333),  # u ォ
-    0x8362: ('top', 334),  # v ッ
-    0x8383: ('top', 344),  # w ャ
-    0x8385: ('top', 345),  # x ュ
-    0x8387: ('top', 346),  # y ョ
-    0x8393: ('bot', 348),  # p ン (bottom 220→348, n=ワ는 220 유지)
+    # SJIS : [(which, new_slot), ...] where which is "top" or "bot".
+    0x8340: [('top', 328), ('bot', 349)],  # q ァ
+    0x8342: [('top', 329), ('bot', 350)],  # r ィ
+    0x8344: [('top', 330), ('bot', 351)],  # s ゥ
+    0x8346: [('top', 332), ('bot', 352)],  # t ェ
+    0x8348: [('top', 333), ('bot', 353)],  # u ォ
+    0x8362: [('top', 334), ('bot', 354)],  # v ッ
+    0x8383: [('top', 344), ('bot', 355)],  # w ャ
+    0x8385: [('top', 345), ('bot', 356)],  # x ュ
+    0x8387: [('top', 346), ('bot', 357)],  # y ョ
+    0x8393: [('bot', 348)],                # p ン (bottom 220→348, n=ワ는 220 유지)
 }
 
 # 셀 → (top_slot, bot_slot). 슬롯 프로브(니블1-9 마커)로 ground-truth 확정 + KANA_REMAP 반영.
@@ -157,8 +159,8 @@ NAME_GRID_SLOTS = {
     'a': (174, 190), 'b': (175, 191), 'c': (192, 208), 'd': (193, 209), 'e': (194, 210),
     'f': (195, 211), 'g': (196, 212), 'h': (197, 213), 'i': (198, 214), 'j': (199, 215),
     'k': (200, 216), 'l': (201, 217), 'm': (202, 218), 'n': (203, 220), 'o': (1508, 1524),
-    'p': (204, 348), 'q': (328, 252), 'r': (329, 253), 's': (330, 254), 't': (332, 256),
-    'u': (333, 257), 'v': (334, 259), 'w': (344, 258), 'x': (345, 260), 'y': (346, 261),
+    'p': (204, 348), 'q': (328, 349), 'r': (329, 350), 's': (330, 351), 't': (332, 352),
+    'u': (333, 353), 'v': (334, 354), 'w': (344, 355), 'x': (345, 356), 'y': (346, 357),
     'z': (290, 306),
     # 우 0-9 (전각숫자 슬롯)
     '0': (291, 307), '1': (292, 308), '2': (293, 309), '3': (294, 310), '4': (295, 311),
@@ -211,10 +213,11 @@ def patch_name_grid(rom):
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
 
     # ① base8 가나 테이블 패치
-    for sjis, (which, newslot) in KANA_REMAP.items():
-        kidx = _kidx(sjis) + (8 if which == 'bot' else 0)
-        off = (KANA_TBL + kidx * 2) - 0x08000000
-        rom[off:off + 2] = struct.pack('<H', newslot)
+    for sjis, remaps in KANA_REMAP.items():
+        for which, newslot in remaps:
+            kidx = _kidx(sjis) + (8 if which == 'bot' else 0)
+            off = (KANA_TBL + kidx * 2) - 0x08000000
+            rom[off:off + 2] = struct.pack('<H', newslot)
 
     def write_slot(slot, data):
         off = (FONT_BASE + slot * 32) - 0x08000000
@@ -648,7 +651,7 @@ def main():
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
 
-    suffix = encode_text('님!', syl_to_code, unmapped)
+    suffix = encode_text('님', syl_to_code, unmapped)
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
