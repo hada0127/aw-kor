@@ -3201,6 +3201,36 @@ def main():
         (0xD92D50, 0xD92D54, '해', 'capture command verb glue row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD92F26, 0xD92F44, '그래　그리고　하나더', 'durability another point row'),
+        (0xD92F4A, 0xD92F5A, '앞으로　얼마나', 'durability how much lead row'),
+        (0xD92F60, 0xD92F76, '남았는지는', 'durability how much tail row'),
+        (0xD92F79, 0xD92F8F, '여길　보면　알아', 'durability look here row'),
+        (0xD92F94, 0xD92FBE, '내구　숫자가　１０이야', 'durability number ten row'),
+        (0xD92FC3, 0xD92FED, '이　수치는　내구력으로', 'durability number meaning row'),
+        (0xD92FF0, 0xD9300E, '０이되면　도시가　아군', 'durability zero city ally row'),
+        (0xD93013, 0xD93029, '최대치는　２０', 'durability max twenty row'),
+        (0xD9302F, 0xD9303B, 'ＨＰ가　１０', 'durability hp ten row'),
+        (0xD9303E, 0xD9304E, '이면　２일에', 'durability two days row'),
+        (0xD93054, 0xD9306A, '점령된단　뜻이야', 'durability capture meaning row'),
+        (0xD9306F, 0xD93075, '물론', 'durability of course row'),
+        (0xD9307B, 0xD93095, '공격으로　다치면　그만큼', 'durability damage lead row'),
+        (0xD93098, 0xD930C4, '내구력을　깎기　어려워지니　조심해', 'durability damage warning row'),
+        (0xD930CA, 0xD930D6, '자　이제', 'capture lesson done lead row'),
+        (0xD930DC, 0xD930F4, '방법은　알겠지', 'capture lesson done tail row'),
+        (0xD930F9, 0xD93121, '이제부터는　전부　네게　맡길게', 'leave rest to player row'),
+        (0xD93126, 0xD9313E, '공략힌트　필요해', 'ask strategy hint row'),
+        (0xD93146, 0xD9314C, '그래', 'hint yes row'),
+        (0xD93150, 0xD93168, '그럼　하나만', 'one hint row'),
+        (0xD9316E, 0xD93184, '적을　전멸시켜도', 'rout enemy win lead row'),
+        (0xD93187, 0xD9319F, '승리할수　있어', 'rout enemy win tail row'),
+        (0xD931A4, 0xD931B0, '하지만　적', 'but enemy lead row'),
+        (0xD931B1, 0xD931B7, '경전차', 'light tank label hint row'),
+        (0xD931B8, 0xD931C6, '부대는　강적', 'light tank strong row'),
+        (0xD931CB, 0xD931EF, '정면으로　싸우는건　좋은작전은', 'front attack bad plan lead row'),
+        (0xD931F2, 0xD931FE, '아니야', 'front attack bad plan tail row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
