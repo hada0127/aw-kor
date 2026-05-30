@@ -3292,6 +3292,25 @@ def main():
         (0xD93802, 0xD93822, '으으으　다음엔　두고봐', 'enemy next time row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD9382A, 0xD93838, '아쉽지만', 'defeat regret row'),
+        (0xD9383B, 0xD93859, '넌　져버렸어', 'defeat lost row'),
+        (0xD9385E, 0xD93876, '다음엔　꼭　힘내', 'defeat try next time row'),
+        (0xD9387E, 0xD9389C, '역시　호이프장군이야', 'whip commander praise row'),
+        (0xD938A1, 0xD938C7, '이　거점　중요성을　잘아는', 'whip understands base row'),
+        (0xD938CA, 0xD938D2, '듯해', 'whip understands tail row'),
+        (0xD938D7, 0xD938FF, '치리치리요새로　간　부대는', 'chiri fort unit row'),
+        (0xD93902, 0xD93918, '거의　당한듯해', 'chiri fort unit defeated row'),
+        (0xD9391E, 0xD93930, '남은건', 'remaining units lead row'),
+        (0xD93931, 0xD93937, '경전차', 'remaining light tank label row'),
+        (0xD93938, 0xD9394A, '２유닛뿐이야', 'two units left row'),
+        (0xD9394F, 0xD93969, '２유닛다　엉망이야', 'two units damaged row'),
+        (0xD9396E, 0xD93992, '하지만　이　고물전차를　써야', 'must use damaged tanks row'),
+        (0xD93995, 0xD939B1, '승산이　있어', 'chance to win row'),
+        (0xD939B6, 0xD939DE, '먼저　２유닛　모두　불러서', 'call back two units row'),
+        (0xD939E1, 0xD939F3, '수리하자', 'repair them row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
