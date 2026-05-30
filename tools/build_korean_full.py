@@ -83,6 +83,14 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
     0xDF91D0: '포함해서.',
+    # Part 2 tutorial battle fragments. These slots are short and run inside
+    # scripted battle text; leaving them as Japanese falls through the remapped
+    # name-grid kana glyphs and produces garbage on screen.
+    0xD8F33D: '그래서 휩도 병력이 적어',
+    0xD8F4CD: '십자키로 움직여',
+    0xD8F92C: '가 적에게 가까운 곳은 여기야',
+    0xD8FBA5: '가 오고 있어',
+    0xD8FE6C: 'A 버튼 전투 시작',
 }
 
 POST_TEXT_RESTORE = {
@@ -630,8 +638,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
     ap.add_argument('--report', default=os.path.join(BASE, 'temp', 'encode_report.csv'))
-    ap.add_argument('--base', default=os.path.join(BASE, 'output', 'v56_polished.gba'),
-                    help='base ROM. 기본=v56_polished(영문그리드+훅). ASM hook으로 대화 한글 + 그리드 양립.')
+    ap.add_argument('--base', default=P.ROM,
+                    help='base ROM. 기본=원본 ROM. v56_polished는 전투 튜토리얼 진입 후 충돌하는 구버전 베이스라 명시 지정할 때만 사용.')
     args = ap.parse_args()
 
     orig = bytes(open(P.ROM, 'rb').read())   # 원본 (테이블 소스)
