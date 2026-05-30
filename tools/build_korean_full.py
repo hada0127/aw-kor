@@ -3157,6 +3157,50 @@ def main():
         (0xD92B5A, 0xD92B6C, '필요해', 'funds needed row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD92B71, 0xD92B9D, '작전룸　말고도　다른데', 'funds other uses row'),
+        (0xD92BA0, 0xD92BCC, '쓰이지만　나중에　설명할게', 'funds later explanation row'),
+        (0xD92BD2, 0xD92BE8, '그럼　이번엔　이쪽', 'next bazooka intro row'),
+        (0xD92BE9, 0xD92BF3, '바주카병', 'bazooka unit label row'),
+        (0xD92C01, 0xD92C13, '해보자', 'try bazooka action row'),
+        (0xD92C17, 0xD92C27, '잡아줄래', 'grab bazooka question row'),
+        (0xD92C2E, 0xD92C36, '지금　이', 'now this bazooka lead row'),
+        (0xD92C37, 0xD92C41, '바주카병', 'bazooka retry label row'),
+        (0xD92C42, 0xD92C50, '을　잡아', 'grab this bazooka row'),
+        (0xD92C53, 0xD92C6D, '여기서　Ａ　눌러', 'press a here bazooka row'),
+        (0xD92C77, 0xD92C81, '바주카병', 'bazooka grab label row'),
+        (0xD92C82, 0xD92C90, '을　잡아줘', 'grab bazooka please row'),
+        (0xD92C96, 0xD92CAA, '자　여기서　문제야', 'capture question intro row'),
+        (0xD92CB2, 0xD92CD8, '이동범위안에　점령할곳이　２곳', 'two capturable places row'),
+        (0xD92CDB, 0xD92CE7, '있지', 'two places tail row'),
+        (0xD92CEC, 0xD92D0A, '중립도시와　적도시야', 'neutral and enemy city row'),
+        (0xD92D0D, 0xD92D1F, '넌　어느쪽을', 'which city question lead row'),
+        (0xD92D25, 0xD92D2B, '할래', 'which city question tail row'),
+        (0xD92D32, 0xD92D4A, '여긴　한쪽　도시를', 'choose one city lead row'),
+        (0xD92D57, 0xD92D67, '골라줘', 'choose one city tail row'),
+        (0xD92D74, 0xD92D90, '이면　행동이　끝나', 'wrong choice ends action row'),
+        (0xD92D93, 0xD92DA3, '한쪽　도시를', 'one city retry lead row'),
+        (0xD92DA9, 0xD92DBD, '골라줄래', 'one city retry tail row'),
+        (0xD92DC2, 0xD92DD6, '그래　정답이야', 'correct capture choice row'),
+        (0xD92DDB, 0xD92DE3, '어느쪽', 'either city row'),
+        (0xD92DE9, 0xD92E09, '골라도　수입은　같아', 'income unchanged row'),
+        (0xD92E0E, 0xD92E2E, '하지만　적도시를　점령하면', 'enemy city capture row'),
+        (0xD92E31, 0xD92E51, '적　수입을　줄일수　있어', 'reduce enemy income row'),
+        (0xD92E56, 0xD92E68, '음　아쉽네', 'wrong city regret row'),
+        (0xD92E6B, 0xD92E89, '이쪽도시는　정답이　아니야', 'wrong city answer row'),
+        (0xD92E8E, 0xD92EB2, '물론　이쪽을　골랐다고', 'wrong city caveat row'),
+        (0xD92EB5, 0xD92ECD, '나쁜건　아니야', 'wrong city not bad row'),
+        (0xD92ED2, 0xD92EFC, '이왕이면　적도시를　점령해서', 'better enemy city row'),
+        (0xD92EFF, 0xD92F1F, '수입을　줄이는게　좋아', 'better reduce income row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD92BF4, 0xD92BF6, '로', 'bazooka with glue row'),
+        (0xD92BFC, 0xD92BFE, '을', 'capture object glue row'),
+        (0xD92C72, 0xD92C76, '지금', 'retry bazooka now glue row'),
+        (0xD92D50, 0xD92D54, '해', 'capture command verb glue row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
