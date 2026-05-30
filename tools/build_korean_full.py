@@ -1961,9 +1961,14 @@ PART2_HOOK_A3_SPACE_RT = 0x08F30340
 PART2_HOOK_SPACE_313_RT = 0x08F30360
 PART2_HOOK_SPACE_B11_RT = 0x08F303A0
 PART1_YESNO_HOOK_RT = 0x08F10000
+PART1_YESNO_FRAME_HOOK_RT = PART1_YESNO_HOOK_RT + 0x0C
 PART1_YESNO_CALL_SITE = 0xB18D2C
 PART1_YESNO_CALL_EXPECT = bytes.fromhex('fff7c8ff')  # bl 0x08B18CC0
 PART1_YESNO_ORIG_FN = 0x08B18CC0
+PART1_YESNO_FRAME_CALL_SITE = 0xB18D40
+PART1_YESNO_FRAME_CALL_EXPECT = bytes.fromhex('10b5041c1e21605e')  # function prologue + first ldrsh
+PART1_YESNO_HANDLER_PTR = 0xD835E8
+PART1_YESNO_HANDLER_EXPECT = 0x08B18D41
 
 def _thumb_bl(src_rt, dst_rt):
     off = dst_rt - (src_rt + 4)
@@ -1974,41 +1979,29 @@ def _thumb_bl(src_rt, dst_rt):
     return struct.pack('<HH', hi, lo)
 
 def _part1_yesno_hook():
-    # Called around part1's compact choice cursor update. The original compact
-    # renderer writes "아 니 오" for the name-confirm yes/no buffer, then clears
-    # the middle cell, so the final row becomes "아 오". Saved states can also
-    # carry the older two-syllable buffer that only leaves "아". Run the original
-    # update first, refresh the needed glyph-cache tiles, and rewrite only those
-    # exact tilemap-buffer signatures to "예 아니오".
+    # The name-confirm compact-choice renderer leaves only fragments of
+    # "예/아니오" in the tilemap. The first entry point wraps the original
+    # compact update; the second entry point is patched into the per-frame
+    # choice cursor routine so loaded save states are repaired without needing a
+    # fresh redraw. Both paths share the same overlay routine:
+    #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
+    #   - rewrite source and visible rows at x8 as "예 아니오"
     b = bytearray(bytes.fromhex(
-        'ffb5'      # push {r0-r7,lr}
-        '00000000'  # bl original compact-choice update (patched below)
-        '2b4801882b4a914202d02a4a91422bd1'
-        '2a482a4900f029f82a482a4900f025f82a482a4900f021f8'
-        '2a482a4900f01df82a482a4900f019f82a482a4900f015f8'
-        '2a482a4900f011f82a482a4900f00df8174800f012f8'
-        '284800f01cf8284800f00cf8274800f016f8'
-        'ffbd'
+        'ffb5'
+        '18f360de'  # bl original compact-choice update (patched below)
+        '00f00df8ffbd'
+        'ffb500f009f8ffbc08bc9e4610b5041c1e21605e324b1847'
+        'ffb53248324b334c334d344e0022815a994209d0a14207d0a94205d0b14203d002320c2af3d3ffbd'
+        '2d482e4900f029f82d482e4900f025f82d482e4900f021f82d482e4900f01df8'
+        '2d482e4900f019f82d482e4900f015f82d482e4900f011f82d482e4900f00df8'
+        '184800f012f82c4800f01cf82b4800f00cf82b4800f016f8ffbd'
         '082203680b6004300431013af9d17047'
-        '22490180224941800c4981800a49c180204901811e4941817047'
-        '1f4901801c4941801e4981801e49c1801e490181184941817047'
-        '184e0102'  # 0x02014E18, source top row x10
-        'e6800000'  # fresh-route signature tile: 0x80E6
-        'e4800000'  # saved-state signature tile: 0x80E4
-        '0046f008401c00062046f008601c0006'  # 예 top/bot -> tiles E2/E3
-        'c03ff008801c0006e03ff008a01c0006'  # 아 top/bot -> tiles E4/E5
-        '4018f008c01c00062015f008e01c0006'  # 니 top/bot -> tiles E6/E7
-        'a046f008001d0006c046f008201d0006'  # 오 top/bot -> tiles E8/E9
-        '584e0102'  # 0x02014E58, source bottom row x10
-        'd4600006'  # 0x060060D4, visible top row x10
-        '14610006'  # 0x06006114, visible bottom row x10
-        'e2800000'  # 예 top tile
-        '64010000'  # blank tile
-        'e8800000'  # 니 top tile
-        'e3800000'  # 예 bottom tile
-        'e5800000'  # 아 bottom tile
-        'e7800000'  # 니 bottom tile
-        'e9800000'  # 오 bottom tile
+        '0f490180254941800e4981800e49c1800e490181214941817047'
+        '204901801e4941801f4981801f49c1801f4901811a4941817047'
+        '0000498db108104e0102e2800000e4800000e6800000e8800000'
+        '0046f008401c00062046f008601c0006c03ff008801c0006e03ff008a01c0006'
+        '4018f008c01c00062015f008e01c0006a046f008001d0006c046f008201d0006'
+        '504e0102d06000061061000664010000e3800000e5800000e7800000e9800000'
     ))
     b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
     return bytes(b)
@@ -2219,6 +2212,12 @@ def main():
     rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT)
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
+    assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT
+    rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8] = (
+        bytes.fromhex('004b1847') + struct.pack('<I', PART1_YESNO_FRAME_HOOK_RT | 1)
+    )
+    assert struct.unpack_from('<I', rom, PART1_YESNO_HANDLER_PTR)[0] == PART1_YESNO_HANDLER_EXPECT
+    struct.pack_into('<I', rom, PART1_YESNO_HANDLER_PTR, PART1_YESNO_FRAME_HOOK_RT | 1)
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()
