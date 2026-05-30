@@ -3311,6 +3311,38 @@ def main():
         (0xD939E1, 0xD939F3, '수리하자', 'repair them row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD939FA, 0xD93A02, '이쪽', 'repair this tank lead row'),
+        (0xD93A03, 0xD93A09, '경전차', 'repair tank label row'),
+        (0xD93A0A, 0xD93A1C, '잡아줄래', 'repair grab tank row'),
+        (0xD93A22, 0xD93A2E, '먼저　이', 'repair first this row'),
+        (0xD93A2F, 0xD93A35, '경전차', 'repair first tank label row'),
+        (0xD93A36, 0xD93A4C, '를　피신시키자', 'repair evacuate first tank row'),
+        (0xD93A4F, 0xD93A67, '잡아줄래', 'repair grab first tank retry row'),
+        (0xD93A6E, 0xD93A92, '수리하려면　아군색　도시에', 'repair needs allied city row'),
+        (0xD93A95, 0xD93AAB, '넣어두면돼', 'repair place in city row'),
+        (0xD93AB7, 0xD93ABD, '경전차', 'repair reach tank label row'),
+        (0xD93ABE, 0xD93AD6, '라면　여기까지　닿아', 'repair reach city row'),
+        (0xD93ADB, 0xD93AF5, '이　도시까지　이동해', 'repair move to city row'),
+        (0xD93AFA, 0xD93B1C, '도시에　두지않으면　ＨＰ보충', 'repair hp city required row'),
+        (0xD93B1F, 0xD93B2B, '못해', 'repair cannot row'),
+        (0xD93B30, 0xD93B44, '여기로　이동시켜', 'repair move here row'),
+        (0xD93B4A, 0xD93B5E, '그래　그거면돼', 'repair correct move row'),
+        (0xD93B63, 0xD93B6D, '이제　이', 'repair result this row'),
+        (0xD93B6E, 0xD93B74, '경전차', 'repair result tank label row'),
+        (0xD93B75, 0xD93B8D, '는　다음날　２ＨＰ', 'repair next day hp row'),
+        (0xD93B90, 0xD93BA0, '수리돼', 'repair completed row'),
+        (0xD93BA6, 0xD93BBC, '그럼　이번엔　이쪽', 'repair second tank intro row'),
+        (0xD93BBD, 0xD93BC3, '경전차', 'repair second tank label row'),
+        (0xD93BC4, 0xD93BCE, '도　피신', 'repair second tank evacuate row'),
+        (0xD93BD1, 0xD93BDF, '시키자', 'repair second tank evacuate tail row'),
+        (0xD93BE4, 0xD93BF4, '잡아줄래', 'repair second tank grab row'),
+        (0xD93BFA, 0xD93C22, '적　근처라　그냥　두면', 'repair second tank danger row'),
+        (0xD93C25, 0xD93C3D, '금방　당할거야', 'repair second tank defeated row'),
+        (0xD93C42, 0xD93C62, '안전한곳으로　이동시키자', 'repair move safe row'),
+        (0xD93C6A, 0xD93C94, '바로　수리하고　싶지만　이동범위에', 'repair range limitation row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
