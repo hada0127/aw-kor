@@ -1145,6 +1145,26 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA34917: '격파하면승리',
     0xA34E40: '애니표시안함',
     0xA354E8: '24레드스타령',
+    # Remaining real text overflows outside the main campaign blocks. Several
+    # are shifted CSV rows, so bind by address.
+    0x9D3570: '맵수신중잠시기다려',
+    0xB82D58: '지도나감',
+    0xB82D82: '애니없음',
+    0xB848BC: '텐구노하나지도',
+    0xB84C4C: '쇼군모프',
+    0xBE701C: '거점전멸불참?',
+    0xD82410: '종료할까요',
+    0xDD099F: '이목숨을걸고도',
+    0xDD12D2: '아뇨아무것도',
+    0xE01922: '움직이기시작',
+    0xE048F2: '절대못하게해',
+    0xE06B80: '한동안안깨어나',
+    0xE0B7F5: '따라오지않아?',
+    0xEC310A: '거점수입설정',
+    0xEC31C2: '애니표시안함',
+    0xEC31DA: '전투점령애니표시',
+    0xEC3342: '애니표시안함',
+    0xEC335A: '전투점령애니표시',
 }
 
 POST_TEXT_RESTORE = {
@@ -1175,6 +1195,11 @@ RESTORE_SYMBOL_CODES = [
 # 이름 입력 그리드 charset/레이아웃 데이터 (가나 시퀀스 = 그리드 글자집합 정의).
 # 텍스트로 오추출됨 — 인코딩하면 그리드 셀↔글자 매핑 깨짐(글자 누락/미리보기 불가). 원본 유지 필수.
 NAME_GRID_DATA = {0x805A24, 0xDA4337}
+FALSE_TEXT_DATA = {
+    0x979755, 0x9EA89D,
+    0xD686DF, 0xD6C87C, 0xD70CE9, 0xD70DD2, 0xD74594,
+    0xD7CDC8, 0xD7CDDB, 0xD7CDEE, 0xD7CE14,
+}
 NAME_GRID_RANGES = [
     (0x83FAF0, 0x83FF00),   # 그리드 charset 클러스터(2세트: 0x83FAF6~0x83FC41, 0x83FE41~0x83FEDD)
     (0xDF8C00, 0xDF8E00),   # DF8C charset(0xDF8C62/CB2), 대화(0xDF8E16+) 앞
@@ -1187,6 +1212,8 @@ TEXT_ALLOW_ADDRS = {0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
 def in_deny(a, end):
     if a in TEXT_ALLOW_ADDRS:
         return None
+    if a in FALSE_TEXT_DATA:
+        return 'false_text_data'
     if a in NAME_GRID_DATA:
         return 'name_grid_data'
     for cs, ce in NAME_GRID_RANGES:
