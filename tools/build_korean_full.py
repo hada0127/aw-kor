@@ -3231,6 +3231,39 @@ def main():
         (0xD931F2, 0xD931FE, '아니야', 'front attack bad plan tail row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD93203, 0xD93227, '먼저　점령도시　근처에서', 'hint near captured city row'),
+        (0xD93230, 0xD93232, '와', 'infantry bazooka conjunction row'),
+        (0xD93233, 0xD9323D, '바주카병', 'hint bazooka label row'),
+        (0xD9323E, 0xD9324E, '맞아싸워', 'hint intercept row'),
+        (0xD93253, 0xD9325D, '그뒤', 'hint after that row'),
+        (0xD9325E, 0xD93264, '경전차', 'hint light tank label row'),
+        (0xD93265, 0xD9327D, '는　정면상대　말고', 'hint avoid direct tank row'),
+        (0xD93280, 0xD93298, '아래로　돌아　수도를', 'hint flank capital lead row'),
+        (0xD9329E, 0xD932AC, '점령하면돼', 'hint capture capital row'),
+        (0xD932B2, 0xD932B8, '경전차', 'tank weakness label row'),
+        (0xD932B9, 0xD932DD, '의　약점은　이동타입이　전차', 'tank weakness lead row'),
+        (0xD932E0, 0xD9330A, '타입이라　산을　이동못해', 'tank mountain weakness row'),
+        (0xD9330F, 0xD9333B, '자세한건　유닛이나　지형에서　Ｒ', 'check unit terrain r row'),
+        (0xD9333E, 0xD93358, '눌러　확인해', 'press r confirm row'),
+        (0xD9335D, 0xD93371, '아　하나더', 'one more hint row'),
+        (0xD93376, 0xD9339C, '자기　수도를　점령당하지마', 'protect own capital row'),
+        (0xD933A1, 0xD933C3, '수도를　점령당하면　그것만으로', 'capital captured lead row'),
+        (0xD933C6, 0xD933DC, '지게되니까', 'capital captured lose row'),
+        (0xD933E1, 0xD933F9, '그럼　힘내', 'good luck row'),
+        (0xD933FE, 0xD9340C, '훌륭해', 'excellent victory row'),
+        (0xD93411, 0xD93439, '네가　카라라요새를　함락해준', 'karara fort captured row'),
+        (0xD9343C, 0xD93466, '덕분에　블루문군은　후퇴해', 'blue moon retreat row'),
+        (0xD9346B, 0xD9348D, '참　하나　말해둘게', 'post victory note lead row'),
+        (0xD93490, 0xD9349E, '있어', 'post victory note tail row'),
+        (0xD934A3, 0xD934C1, '이번에　도시를　점령해서', 'post victory city capture row'),
+        (0xD934C4, 0xD934DA, '자금을　받았지', 'post victory funds gained row'),
+        (0xD934DF, 0xD934FF, '그　자금은　맵　클리어하면', 'post victory funds clear row'),
+        (0xD93502, 0xD93514, '사라져', 'post victory funds vanish row'),
+        (0xD93519, 0xD93539, '다음맵에　못　넘겨', 'post victory funds no carry row'),
+        (0xD9353E, 0xD9355C, '다음도　이대로　힘내', 'next map keep it up row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
