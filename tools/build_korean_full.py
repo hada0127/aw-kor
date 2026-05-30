@@ -1165,6 +1165,23 @@ ADDRESS_TEXT_OVERRIDES = {
     0xEC31DA: '전투점령애니표시',
     0xEC3342: '애니표시안함',
     0xEC335A: '전투점령애니표시',
+    # Blank/malformed import rows whose surrounding found-text entries prove
+    # they are visible text.
+    0x9EEF50: '리셋',
+    0xA10D9E: '네싸움방식은',
+    0xA12940: '이땅사람들이',
+    0xA215F5: '그러고보니',
+    0xA2DD22: '다른쇼군도써봐',
+    0xB83A64: '여기까진안하려했는데',
+    0xD90ACD: 'B버튼으로맵메뉴취소',
+    0xD98581: '육상전이면질일없어',
+    0xD9A330: '공격가능한지알지',
+    0xDA23D0: '적을잡으려면',
+    0xDA3956: '이지형은방어력높아',
+    0xDC3A37: '레드스타엔예전신세를',
+    0xDC4934: '이런고생안했을거야',
+    0xDC716D: '어디서본부대같지',
+    0xE0319E: '추웠다',
 }
 
 POST_TEXT_RESTORE = {
@@ -1196,9 +1213,10 @@ RESTORE_SYMBOL_CODES = [
 # 텍스트로 오추출됨 — 인코딩하면 그리드 셀↔글자 매핑 깨짐(글자 누락/미리보기 불가). 원본 유지 필수.
 NAME_GRID_DATA = {0x805A24, 0xDA4337}
 FALSE_TEXT_DATA = {
-    0x979755, 0x9EA89D,
+    0x979755, 0x9EA89D, 0x8AC8F0,
     0xD686DF, 0xD6C87C, 0xD70CE9, 0xD70DD2, 0xD74594,
-    0xD7CDC8, 0xD7CDDB, 0xD7CDEE, 0xD7CE14,
+    0xD755AF, 0xD7CDC8, 0xD7CDDB, 0xD7CDEE, 0xD7CE14,
+    0xD83198, 0xDFA011,
 }
 NAME_GRID_RANGES = [
     (0x83FAF0, 0x83FF00),   # 그리드 charset 클러스터(2세트: 0x83FAF6~0x83FC41, 0x83FE41~0x83FEDD)
@@ -2013,8 +2031,6 @@ def main():
                 ko = ADDRESS_TEXT_OVERRIDES[a]
             elif jp in SOURCE_TEXT_OVERRIDES and not any('가' <= ch <= '힣' for ch in ko):
                 ko = SOURCE_TEXT_OVERRIDES[jp]
-            if not ko:
-                st['no_ko'] += 1; continue
             if a < SAFE_MIN_ADDR:
                 st['code_region'] += 1; continue
             slot = slots.get(a, 0)
@@ -2025,6 +2041,8 @@ def main():
             deny = in_deny(a, a + slot)
             if deny:
                 st['deny'] += 1; continue   # 중요 데이터 테이블 — 덮어쓰지 않음
+            if not ko:
+                st['no_ko'] += 1; continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
             enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
             if enc is None:

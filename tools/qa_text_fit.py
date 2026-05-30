@@ -16,7 +16,15 @@ FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 SAFE_MIN_ADDR = 0x800000
 
 sys.path.insert(0, os.path.join(BASE, 'tools'))
-from build_korean_full import encode_fit, in_deny, V56_SKIP, SYLCODE
+from build_korean_full import (
+    ADDRESS_TEXT_OVERRIDES,
+    SOURCE_TEXT_OVERRIDES,
+    TEXT_OVERRIDES,
+    SAFE_MIN_ADDR,
+    SYLCODE,
+    encode_fit,
+    in_deny,
+)
 
 
 def load_slots():
@@ -54,9 +62,26 @@ def main():
     slots = load_slots()
     import json
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
-    written = overflow = wider = truncated = deny = skip_v56 = 0
+    written = overflow = wider = compact_shortened = deny = no_ko = code_region = no_slot = 0
     levels = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     unmapped = collections.Counter()
+    seen_import_addrs = set()
+    written_addrs = set()
+
+    def check_text(a, ko, ja):
+        nonlocal written, overflow, wider, compact_shortened
+        enc, level = encode_fit(ko, slots[a], syl_to_code, unmapped)
+        if enc is None:
+            overflow += 1
+            return
+        written += 1
+        written_addrs.add(a)
+        levels[level] += 1
+        if level == 5:
+            compact_shortened += 1
+        if vwidth(ko) > vwidth(ja):
+            wider += 1
+
     with open(TRANS, newline='') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
@@ -65,30 +90,54 @@ def main():
                 a = int(row['address'], 16)
             except (ValueError, TypeError):
                 continue
-            if not ko or a < SAFE_MIN_ADDR or slots.get(a, 0) <= 0:
+            seen_import_addrs.add(a)
+            if a in ADDRESS_TEXT_OVERRIDES:
+                ko = ADDRESS_TEXT_OVERRIDES[a]
+            elif ja in SOURCE_TEXT_OVERRIDES and not any('가' <= ch <= '힣' for ch in ko):
+                ko = SOURCE_TEXT_OVERRIDES[ja]
+            if a < SAFE_MIN_ADDR:
+                code_region += 1
                 continue
-            slot = slots[a]
-            if a in V56_SKIP:
-                skip_v56 += 1
+            if slots.get(a, 0) <= 0:
+                no_slot += 1
                 continue
-            if in_deny(a, a + slot):
+            if in_deny(a, a + slots[a]):
                 deny += 1
                 continue
-            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
-            if enc is None:
-                overflow += 1
+            if not ko:
+                no_ko += 1
                 continue
-            written += 1
-            levels[level] += 1
-            if level == 5:
-                truncated += 1
-            if vwidth(ko) > vwidth(ja):
-                wider += 1
+            ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            check_text(a, ko, ja)
+
+    for a, ko in sorted(ADDRESS_TEXT_OVERRIDES.items()):
+        if a in seen_import_addrs or a < SAFE_MIN_ADDR or slots.get(a, 0) <= 0:
+            continue
+        if in_deny(a, a + slots[a]):
+            continue
+        check_text(a, ko, '')
+
+    with open(FOUND, newline='', encoding='utf-8', errors='ignore') as f:
+        for row in csv.DictReader(f):
+            try:
+                a = int((row.get('address') or '').strip(), 16)
+                slot = int(row.get('length') or 0)
+            except (ValueError, TypeError):
+                continue
+            if a in written_addrs or a in seen_import_addrs:
+                continue
+            ko = SOURCE_TEXT_OVERRIDES.get((row.get('text') or '').strip())
+            if not ko or a < SAFE_MIN_ADDR or slot <= 0:
+                continue
+            if in_deny(a, a + slot):
+                continue
+            check_text(a, ko, row.get('text') or '')
+
     print(f'written(한글 인코딩): {written}')
     print('fit levels: ' + ', '.join(f'level{k}={levels[k]}' for k in sorted(levels)))
-    print(f'truncated fallback: {truncated}')
+    print(f'compact-shortened fallback: {compact_shortened}')
     print(f'overflow(슬롯초과 skip→원문): {overflow}')
-    print(f'deny/data-skip: {deny}, v56-skip: {skip_v56}')
+    print(f'no_ko: {no_ko}, code_region: {code_region}, no_slot: {no_slot}, deny/data-skip: {deny}')
     print(f'visual-wider than JA: {wider} ({100*wider/max(written,1):.1f}%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)')
 
 
