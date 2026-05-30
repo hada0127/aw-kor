@@ -27,7 +27,13 @@ PART1_TITLE_OBJ_LZ77_OFF = 0x00C38BF8
 PART2_TITLE_OBJ_LZ77_OFF = 0x004EAF6C
 PART1_CATHERINE_NAME_LZ77_OFF = 0x00C102A8
 PART1_OPERATION_LOGO_LZ77_OFF = 0x00C18CB4
+PART1_MAP_SELECT_LZ77_OFF = 0x00C18F48
+PART1_SHOP_SELECT_LZ77_OFF = 0x00C191E0
+PART1_HARD_SHOP_LZ77_OFF = 0x00C194D8
+PART1_CAMPAIGN_LZ77_OFF = 0x00C19794
 PART1_MODE_SELECT_LZ77_OFF = 0x00C19A9C
+PART1_RULE_SELECT_LZ77_OFF = 0x00C19D14
+PART1_TEAM_SETTING_LZ77_OFF = 0x00C19FF0
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
@@ -627,18 +633,20 @@ def draw_centered_block_text(
     paint_index_text_aa(layer, (x, y), text, font, fill_idx, stroke_idx, 1, aa_idx=aa_idx)
 
 
-def make_part1_operation_block() -> Image.Image:
+def make_part1_label_block(korean: str, english: str, max_size: int = 20) -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
-    draw_centered_block_text(layer, "작전룸", (0, 0, 80, 22), 20, 2, 15, 7)
-    draw_centered_block_text(layer, "OPERATION", (4, 20, 76, 32), 9, 1, 15, 7, bold=False)
+    draw_centered_block_text(layer, korean, (0, 0, 80, 22), max_size, 2, 15, 7)
+    draw_centered_block_text(layer, english, (3, 20, 77, 32), 8, 1, 15, 7, bold=False)
+    return layer
+
+
+def make_part1_operation_block() -> Image.Image:
+    layer = make_part1_label_block("작전룸", "OPERATION", 20)
     return layer
 
 
 def make_part1_mode_block() -> Image.Image:
-    layer = Image.new("L", (80, 32), 0)
-    draw_centered_block_text(layer, "모드 선택", (0, 0, 80, 22), 18, 2, 15, 7)
-    draw_centered_block_text(layer, "MODE SELECT", (3, 20, 77, 32), 8, 1, 15, 7, bold=False)
-    return layer
+    return make_part1_label_block("모드 선택", "MODE SELECT", 18)
 
 
 def make_part1_catherine_block() -> Image.Image:
@@ -733,15 +741,20 @@ def main() -> None:
         part2_consumed - len(part2_comp)
     )
 
-    p1_operation_idx = make_part1_operation_block()
-    p1_mode_idx = make_part1_mode_block()
+    p1_label_blocks = [
+        ("part1 operation logo", PART1_OPERATION_LOGO_LZ77_OFF, make_part1_operation_block()),
+        ("part1 map select logo", PART1_MAP_SELECT_LZ77_OFF, make_part1_label_block("맵 선택", "MAP SELECT", 20)),
+        ("part1 shop select logo", PART1_SHOP_SELECT_LZ77_OFF, make_part1_label_block("숍 선택", "SHOP SELECT", 20)),
+        ("part1 hard shop logo", PART1_HARD_SHOP_LZ77_OFF, make_part1_label_block("하드 숍", "HARD SHOP", 18)),
+        ("part1 campaign logo", PART1_CAMPAIGN_LZ77_OFF, make_part1_label_block("캠페인", "CAMPAIGN", 20)),
+        ("part1 mode select logo", PART1_MODE_SELECT_LZ77_OFF, make_part1_mode_block()),
+        ("part1 rule select logo", PART1_RULE_SELECT_LZ77_OFF, make_part1_label_block("룰 선택", "RULE SELECT", 20)),
+        ("part1 team setting logo", PART1_TEAM_SETTING_LZ77_OFF, make_part1_label_block("팀 설정", "TEAM SETTING", 20)),
+    ]
     p1_catherine_idx = make_part1_catherine_block()
-    p1_operation_comp, p1_operation_consumed = patch_lz77_whole_block(
-        rom, PART1_OPERATION_LOGO_LZ77_OFF, p1_operation_idx, "part1 operation logo"
-    )
-    p1_mode_comp, p1_mode_consumed = patch_lz77_whole_block(
-        rom, PART1_MODE_SELECT_LZ77_OFF, p1_mode_idx, "part1 mode select logo"
-    )
+    p1_label_results = []
+    for label, off, layer in p1_label_blocks:
+        p1_label_results.append((label, *patch_lz77_whole_block(rom, off, layer, label)))
     p1_catherine_comp, p1_catherine_consumed = patch_lz77_whole_block(
         rom, PART1_CATHERINE_NAME_LZ77_OFF, p1_catherine_idx, "part1 Catherine name"
     )
@@ -762,12 +775,11 @@ def main() -> None:
     part2_preview = part2_idx.convert("RGB").resize((720, 480), Image.Resampling.NEAREST)
     Path(args.part2_preview).parent.mkdir(parents=True, exist_ok=True)
     part2_preview.save(args.part2_preview)
-    p1_operation_idx.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
-        "docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png"
-    )
-    p1_mode_idx.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
-        "docs/title_hangul/drafts/part1_mode_select_insert_layer_3x.png"
-    )
+    for label, _off, layer in p1_label_blocks:
+        safe_label = label.replace(" ", "_")
+        layer.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
+            f"docs/title_hangul/drafts/{safe_label}_insert_layer_3x.png"
+        )
     p1_catherine_idx.convert("RGB").resize((288, 24), Image.Resampling.NEAREST).save(
         "docs/title_hangul/drafts/part1_catherine_name_insert_layer_3x.png"
     )
@@ -776,8 +788,8 @@ def main() -> None:
     print(f"select compressed {len(select_comp)} / {select_consumed} bytes")
     print(f"part1 compressed {len(part1_comp)} / {part1_consumed} bytes")
     print(f"part2 compressed {len(part2_comp)} / {part2_consumed} bytes")
-    print(f"part1 operation compressed {p1_operation_comp} / {p1_operation_consumed} bytes")
-    print(f"part1 mode compressed {p1_mode_comp} / {p1_mode_consumed} bytes")
+    for label, comp_size, consumed_size in p1_label_results:
+        print(f"{label} compressed {comp_size} / {consumed_size} bytes")
     print(f"part1 catherine compressed {p1_catherine_comp} / {p1_catherine_consumed} bytes")
     print(f"preview {args.preview}")
     print(f"select preview {args.select_preview}")
