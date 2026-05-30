@@ -125,6 +125,9 @@ POST_TEXT_RESTORE = {
 }
 
 INTRO_DIRECT_TEXT = {
+    # Part 2 first intro uses the same name-control layout as the Part 1 intro:
+    # text fragment, byte 0x69 for the entered player name, then さん/さん！.
+    0xDF5D9A: ('뵙겠습니다。　', 14),
     # These fragments surround the runtime player-name control byte. The generic
     # slot fitter removes punctuation to save bytes, but this intro has enough
     # room and needs the period/spacing to read naturally.
@@ -531,6 +534,32 @@ def encode_text(ko, syl_to_code, unmapped):
                 unmapped[ch] += 1
                 out += b'\x81\x48'  # ？
     return bytes(out)
+
+
+def patch_name_honorific_fragments(rom, syl_to_code, unmapped):
+    """Localize name-control suffix fragments like <0x69>さん in scripts."""
+    honorific = encode_text('　님', syl_to_code, unmapped)
+    replacements = [
+        (b'\x69\x82\xB3\x82\xF1\x82\xCD', b'\x69' + honorific + encode_text('은', syl_to_code, unmapped)),
+        (b'\x69\x82\xB3\x82\xF1\x82\xAA', b'\x69' + honorific + encode_text('이', syl_to_code, unmapped)),
+        (b'\x69\x82\xB3\x82\xF1\x81\x41', b'\x69' + honorific + b'\x81\x41'),
+        (b'\x69\x82\xB3\x82\xF1\x81\x49', b'\x69' + honorific + b'\x81\x49'),
+        (b'\x69\x82\xB3\x82\xF1\x72', b'\x69' + honorific + b'\x72'),
+        (b'\x69\x82\xB3\x82\xF1', b'\x69' + honorific),
+    ]
+    patched = 0
+    for old, new in replacements:
+        if len(old) != len(new):
+            raise AssertionError('name honorific replacement length mismatch')
+        pos = 0
+        while True:
+            idx = rom.find(old, pos)
+            if idx < 0:
+                break
+            rom[idx:idx + len(old)] = new
+            patched += 1
+            pos = idx + len(new)
+    return patched
 
 
 def encode_fit(ko, slot, syl_to_code, unmapped):
@@ -966,6 +995,7 @@ def main():
         if len(enc) > slot_len:
             raise AssertionError(f'intro text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
+    st['name_honorifics'] = patch_name_honorific_fragments(rom, syl_to_code, unmapped)
 
     # Part 2 tutorial scripts embed small control bytes around object names.
     # Keep those control bytes in place, but replace the Japanese label payloads.
@@ -1019,7 +1049,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
