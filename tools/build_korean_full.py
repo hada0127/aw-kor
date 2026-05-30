@@ -2541,6 +2541,11 @@ def main():
         + encode_text('을　잡아　줘', syl_to_code, unmapped)
     )
     patch_script_row(0xD8FC46, 0xD8FC6A, attack_target_row, 'attack target row')
+    patch_script_row(
+        0xD8FC6D, 0xD8FC8D,
+        encode_text('여기서　Ａ버튼　눌러', syl_to_code, unmapped),
+        'attack select button row',
+    )
 
     patch_script_row(
         0xD8FC92, 0xD8FCB6,
