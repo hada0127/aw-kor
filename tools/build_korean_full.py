@@ -2622,6 +2622,191 @@ def main():
         encode_text('처음엔　모두　１０ＨＰ야', syl_to_code, unmapped),
         'initial hp row',
     )
+    patch_script_row(
+        0xD8FF25, 0xD8FF49,
+        encode_text('전투로　피해받으면', syl_to_code, unmapped),
+        'hp damage row',
+    )
+    patch_script_row(
+        0xD8FF4C, 0xD8FF62,
+        encode_text('점점　줄어들어', syl_to_code, unmapped),
+        'hp decreases row',
+    )
+    patch_script_row(
+        0xD8FF67, 0xD8FF7D,
+        encode_text('숫자가　０이면', syl_to_code, unmapped),
+        'hp zero row',
+    )
+    patch_script_row(
+        0xD8FF80, 0xD8FFA2,
+        encode_text('그　유닛은　사라져', syl_to_code, unmapped),
+        'hp unit gone row',
+    )
+    patch_script_row(
+        0xD8FFA7, 0xD8FFCD,
+        encode_text('이번엔　우리쪽　숫자가', syl_to_code, unmapped),
+        'hp advantage number row',
+    )
+    patch_script_row(
+        0xD8FFD0, 0xD8FFDE,
+        encode_text('더　크지', syl_to_code, unmapped),
+        'hp advantage larger row',
+    )
+    patch_script_row(
+        0xD8FFE3, 0xD9001B,
+        encode_text('전투에선　먼저　공격하면　유리해', syl_to_code, unmapped),
+        'first strike advantage row',
+    )
+    patch_script_row(
+        0xD90021, 0xD9004B,
+        encode_text('맞고만　있으면　불리해', syl_to_code, unmapped),
+        'waiting attacked disadvantage row',
+    )
+    patch_script_row(
+        0xD90050, 0xD90075,
+        encode_text('가능하면　먼저　공격해', syl_to_code, unmapped),
+        'attack first advice row',
+    )
+    patch_script_row(
+        0xD9007F, 0xD90099,
+        encode_text('말이　길었네', syl_to_code, unmapped),
+        'long talk row',
+    )
+    patch_script_row(
+        0xD9009E, 0xD900E7,
+        encode_text('이　적은　한번　더　공격하면　쓰러져', syl_to_code, unmapped),
+        'finish enemy advice row',
+    )
+    patch_script_row(
+        0xD900EE, 0xD90125,
+        encode_text('아직　행동안한　유닛으로　공격하자', syl_to_code, unmapped),
+        'second unit attack row',
+    )
+    patch_script_row(
+        0xD9012E, 0xD9014C,
+        encode_text('이　명령은　나중에', syl_to_code, unmapped),
+        'not this command row',
+    )
+    patch_script_row(
+        0xD90151, 0xD90168,
+        encode_text('지금은　공격하자', syl_to_code, unmapped),
+        'choose attack now row',
+    )
+    patch_script_row(
+        0xD9016B, 0xD90187,
+        encode_text('Ｂ버튼으로　취소', syl_to_code, unmapped),
+        'cancel command row',
+    )
+    patch_script_row(
+        0xD9018E, 0xD901B4,
+        encode_text('행동을　끝내버려', syl_to_code, unmapped),
+        'wrong wait command row',
+    )
+    patch_script_row(
+        0xD901B7, 0xD901D9,
+        encode_text('공격해서　쓰러뜨리자', syl_to_code, unmapped),
+        'attack and finish row',
+    )
+    patch_script_row(
+        0xD901DF, 0xD901F9,
+        encode_text('Ｂ버튼으로　취소해', syl_to_code, unmapped),
+        'cancel menu row',
+    )
+    patch_script_row(
+        0xD90202, 0xD90222,
+        encode_text('아직　행동안한　유닛이', syl_to_code, unmapped),
+        'remaining unit row',
+    )
+    patch_script_row(
+        0xD90226, 0xD90236,
+        encode_text('남았어', syl_to_code, unmapped),
+        'remaining unit tail row',
+    )
+    patch_script_row(
+        0xD9023E, 0xD9024C,
+        encode_text('공격하자', syl_to_code, unmapped),
+        'attack command prompt row',
+    )
+    patch_script_row(
+        0xD90250, 0xD90276,
+        encode_text('Ｂ버튼으로　메뉴　닫아', syl_to_code, unmapped),
+        'close menu row',
+    )
+    patch_script_row(
+        0xD9027A, 0xD90286,
+        encode_text('해냈어', syl_to_code, unmapped),
+        'well done row',
+    )
+    patch_script_row(
+        0xD9028B, 0xD902B1,
+        encode_text('적은　이제　하나뿐', syl_to_code, unmapped),
+        'one enemy left row',
+    )
+    patch_script_row(
+        0xD902B7, 0xD902D9,
+        encode_text('이대로　쓰러뜨리자', syl_to_code, unmapped),
+        'keep going row',
+    )
+    patch_script_row(
+        0xD902DC, 0xD90323,
+        encode_text('이제　유닛은　다　움직였으니　종료해', syl_to_code, unmapped),
+        'turn end advice row',
+    )
+    patch_script_row(
+        0xD90326, 0xD90338,
+        encode_text('뭘　하는　거냐', syl_to_code, unmapped),
+        'enemy commander scold row',
+    )
+    patch_script_row(
+        0xD9033D, 0xD90365,
+        encode_text('내가　가까이　있었다면', syl_to_code, unmapped),
+        'enemy commander nearby row',
+    )
+    patch_script_row(
+        0xD9036A, 0xD90392,
+        encode_text('이런　굴욕은　없었을텐데', syl_to_code, unmapped),
+        'enemy commander humiliation row',
+    )
+    patch_script_row(
+        0xD90397, 0xD903B3,
+        encode_text('어떻게든　쓰러뜨려라', syl_to_code, unmapped),
+        'enemy commander defeat order row',
+    )
+    patch_script_row(
+        0xD903BA, 0xD903C8,
+        encode_text('네　차례야', syl_to_code, unmapped),
+        'your turn row',
+    )
+    patch_script_row(
+        0xD903CD, 0xD903F7,
+        encode_text('남은적　１　아군　２', syl_to_code, unmapped),
+        'remaining force count row',
+    )
+    patch_script_row(
+        0xD903FA, 0xD90414,
+        encode_text('완전히　유리해', syl_to_code, unmapped),
+        'advantage row',
+    )
+    patch_script_row(
+        0xD90419, 0xD90431,
+        encode_text('하지만　잠깐', syl_to_code, unmapped),
+        'wait a second row',
+    )
+    patch_script_row(
+        0xD90436, 0xD90458,
+        encode_text('방금　전투로', syl_to_code, unmapped),
+        'last battle damage lead row',
+    )
+    patch_script_row(
+        0xD9045B, 0xD90479,
+        encode_text('피해를　입었지', syl_to_code, unmapped),
+        'last battle damage row',
+    )
+    patch_script_row(
+        0xD9047E, 0xD904A4,
+        encode_text('피해받으면　공격력이　줄어', syl_to_code, unmapped),
+        'damage lowers attack row',
+    )
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
