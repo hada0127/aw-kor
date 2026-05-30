@@ -96,6 +96,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF71DE: '해상 유닛 설명이야',
     0xDF7346: '지난 작전에 쓴,',
     0xDF7382: '필요한 유닛을 골라',
+    0xDF76D5: '씨가새로쓸수있게',
+    0xDF77BF: '내과외수업듣고싶어',
     # ASCII quotes render as symbol debris in this text engine path.
     0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
