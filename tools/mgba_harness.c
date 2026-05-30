@@ -8,6 +8,7 @@
 //   dumpvram FILE    write 0x06000000..0x06018000 (96KB) to FILE
 //   dumpmem ADDR LEN FILE
 //   shot FILE        write framebuffer as raw: 4-byte header w,h (uint16 LE) then color_t pixels
+//   regs             print r0-r15
 //   savestate FILE   save mGBA state (.ss0-compatible)
 //   quit
 #include <mgba/core/core.h>
@@ -140,6 +141,11 @@ int main(int argc, char** argv){
                 fwrite(row, sizeof(color_t), VW, f);
             }
             fclose(f); printf("OK shot %u %u\n", VW, VH);
+        } else if(!strcmp(cmd,"regs")){
+            uint32_t r[16]; char nm[4];
+            for(int i=0;i<16;i++){ snprintf(nm,sizeof(nm),"r%d",i); r[i]=0; core->readRegister(core,nm,&r[i]); }
+            printf("OK regs r0=%08X r1=%08X r2=%08X r3=%08X r4=%08X r5=%08X r6=%08X r7=%08X r8=%08X r9=%08X r10=%08X r11=%08X r12=%08X sp=%08X lr=%08X pc=%08X\n",
+                   r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],r[14],r[15]);
         } else if(!strcmp(cmd,"watchfont")){
             // watchfont BASE COUNT LOGFILE : set read watchpoints on COUNT glyph slots (32B each) from BASE
             uint32_t base=(uint32_t)strtoul(strtok(NULL," \t\r\n"),NULL,16);
@@ -220,7 +226,7 @@ int main(int argc, char** argv){
             struct VFile* sf = VFileOpen(fn, O_RDONLY);
             if(!sf){ printf("ERR loadstate open %s\n", fn?fn:"(null)"); }
             else {
-                bool ok = mCoreLoadStateNamed(core, sf, SAVESTATE_SAVEDATA | SAVESTATE_RTC);
+                bool ok = mCoreLoadStateNamed(core, sf, SAVESTATE_ALL);
                 sf->close(sf);
                 printf("OK loadstate %s ok=%d\n", fn, ok?1:0);
             }
