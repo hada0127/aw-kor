@@ -353,6 +353,27 @@ ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
     0xDF8E3E: '뵙겠습니다.　',
+    # Part 1 operation room opening. These lines appear immediately after the
+    # first name-confirm flow and are sensitive to long Korean fragments.
+    0xDF5D62: '커서 조작부터',
+    0xDF5D81: '공격법도 설명이야',
+    0xDF5D9A: '처음뵙겠습니다',
+    0xDF5DA9: ' 님',
+    0xDF5E85: '제법 큰 나라야.',
+    0xDF5EA0: '이웃은 블루문국.',
+    0xDF5EC3: '블루문과 사이가 나빠서',
+    0xDF5EE8: '늘 싸움만 하고 있어.',
+    0xDF5F0E: '최근엔 큰 전투도 없었지만',
+    0xDF5F5A: '아, 미안해.',
+    0xDF5F73: '블루문군 휩 장군이',
+    0xDF5FBA: '그 탓에 아라라 지방도',
+    0xDF5FE7: '블루문군 지배하에 들어갔어.',
+    0xDF6016: '사령관 후보생인　',
+    0xDF6038: '당신에게 명령이 내려졌어.',
+    0xDF6061: '아라라에서 블루문군을',
+    0xDF6088: '몰아내는 게 임무야.',
+    0xDF60AD: '내가 지원할게.',
+    0xDF60C6: '자, 출격이야!',
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '너 이 게임 처음이니?',

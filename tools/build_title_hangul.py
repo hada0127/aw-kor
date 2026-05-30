@@ -19,6 +19,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lz77_compress import lz77_compress
 from lz77_scan import lz77_decompress
+from bdf import glyph_grid, load_bdf
 
 
 TITLE_OBJ_LZ77_OFF = 0x00022B2C
@@ -54,6 +55,7 @@ PART1_MODE_OPTION_BLOCKS = [
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
+SMALL_BDF_FONT_PATH = Path("reference/fonts/Galmuri7.bdf")
 
 # Runtime OAM layout captured on the title screen. Lower OAM index draws above
 # higher index for same priority, so these are the Japanese logo text overlays.
@@ -650,6 +652,31 @@ def draw_centered_block_text(
     paint_index_text_aa(layer, (x, y), text, font, fill_idx, stroke_idx, 1, aa_idx=aa_idx)
 
 
+def draw_centered_bdf_text(layer: Image.Image, text: str, fill_idx: int, spacing: int = 1) -> None:
+    font, _ = load_bdf(str(SMALL_BDF_FONT_PATH))
+    glyphs = []
+    total_w = 0
+    for ch in text:
+        grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
+        glyphs.append((grid, w, h, xo, yo))
+        total_w += w + spacing
+    total_w -= spacing
+
+    x = (layer.width - total_w) // 2
+    y = 0
+    px = layer.load()
+    for grid, w, h, xo, _yo in glyphs:
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                dx = x + col + xo
+                dy = y + row
+                if 0 <= dx < layer.width and 0 <= dy < layer.height:
+                    px[dx, dy] = fill_idx
+        x += w + spacing
+
+
 def make_part1_label_block(korean: str, english: str, max_size: int = 20) -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
     draw_centered_block_text(layer, korean, (0, 0, 80, 22), max_size, 2, 15, 7)
@@ -685,7 +712,7 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
 
 def make_part1_catherine_block() -> Image.Image:
     layer = Image.new("L", (96, 8), 0)
-    draw_centered_block_text(layer, "캐서린", (0, 0, 96, 8), 8, 1, 15, 7)
+    draw_centered_bdf_text(layer, "캐서린", 15)
     return layer
 
 
