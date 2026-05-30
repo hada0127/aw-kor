@@ -201,6 +201,176 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD96BD4: '까지쓸수있어',
     0xD96CF3: '을쓸수있을땐',
     0xD96E06: '그래도공중유닛은없을줄알았는데',
+    # Part 2 tutorial rows with empty or shifted CSV translations. The normal
+    # import would leave these as Japanese or write the wrong neighboring line.
+    0xD919BE: '작전처음부터다시하게돼',
+    0xD92458: '을이동',
+    0xD939B6: '먼저두유닛을이쪽으로불러와',
+    0xD9500C: '아군유닛에',
+    0xD952B2: '의능력',
+    0xD95D0A: '그럼이동해보자',
+    0xD9603D: '의능력이야',
+    0xD9703A: '일단육지는이어졌지만못가',
+    0xD975CC: '의능력',
+    0xD9767C: '의이동은',
+    0xD97A5D: '는매일연료',
+    0xD97F73: '두어도HP보충보급안돼',
+    0xD97FC9: '지형이면가능해',
+    0xD983F2: '폭격기',
+    0xD98611: '대공전차',
+    0xD987DE: '의능력이야',
+    0xD98F21: '산위에',
+    0xD990C6: '산위에',
+    0xD995E4: '는공중유닛',
+    0xD99BAA: '의이동은',
+    0xD99C14: '평지를이동하면차이가나',
+    0xD9AAAC: '는공격받지않아',
+    0xD9AD89: '공중유닛과',
+    0xD9AED4: '가공격',
+    0xD9B169: '전함',
+    0xD9DCAE: '이지형숲은옆에갈때까지',
+    0xD9EC2E: '곧장이동하면조우해서',
+    0xD9EFE5: '이동할곳',
+    0xD9F276: '유닛정보야',
+    0xD9FFF4: '여긴모드따라메뉴가늘거나',
+    0xDA01D7: '하지만이걸고르면내가맵을클리어해',
+    0xDA0652: '공중유닛을생산할수있는곳',
+    0xDA1B9A: '중립도시',
+    0xDA1D2B: '이동범위안',
+    0xDA1D4E: '적군도시',
+    0xDA1D5E: '중립도시',
+    0xDA3AF2: '전차계와차량계이동비용은2',
+    0xDA3C83: '이동할때는써도좋지만멈출땐',
+    0xDA4000: '도시',
+    0xDA4010: '공장',
+    0xDA401E: '공항',
+    0xDA402C: '항',
+    # Late Part 2 tutorial battle fragments. These stay in very tight original
+    # slots, so keep them short enough for the fixed-width script records.
+    0xD97020: '는바다이동불가',
+    0xD9709A: '여기서쓸모있는게',
+    0xD970CE: '기억하지',
+    0xD971B4: '의능력시험하자',
+    0xD97284: '을시험하자',
+    0xD972EE: '가못가는',
+    0xD972FF: '바다도이동가능',
+    0xD97336: '같은비용으로이동가능',
+    0xD974A1: '가능위치는',
+    0xD974B5: '가갈수있는지형뿐',
+    0xD974E5: '어느지형',
+    0xD97608: '의능력시험하자',
+    0xD97648: '의능력시험하자',
+    0xD977C7: '능력시험위해',
+    0xD97BCE: '맞서싸울건',
+    0xD97C68: '내일부터잊지마',
+    0xD97D6F: '가라내부하들',
+    0xD98136: '그병력을전멸',
+    0xD9833D: '하지만늦었어',
+    0xD986B8: '는이름대로하늘을날아',
+    0xD98A79: '는매일연료2소모',
+    0xD98C86: '연료바닥',
+    0xD98F0E: '로쳐도좋고',
+    0xD991BB: '힘내',
+    0xD99216: '휩은보급생각없고',
+    0xD99516: '여기서쓸모있는게',
+    0xD9958E: '의능력시험',
+    0xD996C8: '의능력시험',
+    0xD996E3: '그러니여긴',
+    0xD99714: '상자는예를들어',
+    0xD997F6: '공격범위로유인해쓰는',
+    0xD999D9: '있을땐어쩌는지기억해',
+    0xD99D13: '적공중유닛을해치워',
+    0xD99E15: '천천히공략해도좋아',
+    0xD99E5A: '역시',
+    0xD99E69: '이젠내말이필요없겠네',
+    0xD9A117: '을끝까지지켜',
+    0xD9A2E4: '혹시모르니확인',
+    0xD9A327: '을해',
+    0xD9A469: '지금부대만으로해내라',
+    0xD9AA62: '위에겹쳐이동해',
+    0xD9AE4D: '움직여야',
+    0xD9B233: '여기서움직이지마',
+    0xD9B27C: '을골라',
+    0xD9B45A: '의능력시험해',
+    0xD9B581: '여기로이동해야',
+    0xD9B605: '그러니여긴',
+    0xD9B69C: '만큼능력이',
+    0xD9B70F: '마지막이야',
+    0xD9B747: '기억하지',
+    0xD9B95B: '그저가능할뿐이면',
+    0xD9BC44: '얕은여울뿐',
+    0xD9BD74: '하지마',
+    0xD9BDA0: '를시험하자',
+    0xD9BDE4: '갈수있는곳은여울항구뿐',
+    0xD9C166: '가는곳은여울항구뿐',
+    0xD9C390: '연료보급하려면',
+    0xD9C4C9: '캐서린에게공중유닛안잃었으면',
+    0xD9C550: '막상막하야',
+    0xD9C5D2: '의또다른능력시험',
+    0xD9C66A: '는적공격범위안이어도',
+    0xD9C881: '가능',
+    0xD9CC06: '매복했나봐',
+    0xD9D27E: '비가온다',
+    0xD9D418: '휘프는눈에강하고비에약해',
+    0xD9D9CC: '이야기계속할게',
+    0xD9DDB6: '다시얘기할게',
+    0xD9E039: '여기나여기',
+    0xD9E10C: '아무것도못하고끝날뿐아니라',
+    0xD9E7B1: '잘해나갈수있어',
+    0xD9EB86: '여기로보내고싶어',
+    0xD9EDB6: '예를들어커서를이렇게',
+    0xD9EE90: '기억하면편리할지도',
+    0xD9F5FE: '거점이면수입',
+    0xD9F642: '이동비용이어느정도인지',
+    0xD9F927: '가능해',
+    0xD9FD5A: '그럼다음',
+    0xD9FF54: '설명듣고싶어',
+    0xD9FFC5: '항복지도나가기등을고르는곳',
+    0xDA025E: '이지만',
+    0xDA04C5: '처음엔무엇을생산할지망설이면',
+    0xDA0AA3: '기본부분을가르치는수업',
+    0xDA0B0D: '가능한곳은지형',
+    0xDA0BFC: '하고파',
+    0xDA0D08: '소지금이하유닛은생산가능',
+    0xDA0D90: '은맨위라여기서',
+    0xDA0E17: '되었어',
+    0xDA0E48: '상태가돼',
+    0xDA0EDB: '다음은여기',
+    0xDA0FB7: '이걸로이번턴할일은',
+    0xDA105D: '을내려면움직일유닛',
+    0xDA111F: '행동이돼',
+    0xDA14C1: '를골라줘',
+    0xDA1639: '을움직여',
+    0xDA1995: '를파악해',
+    0xDA1B71: '은누구도',
+    0xDA1BB3: '자다시얘기할게',
+    0xDA1DF7: '어느쪽',
+    0xDA1E05: '해도수입자체는',
+    0xDA1E81: '돈없으면생산도못해',
+    0xDA2092: '수입줄면유닛도제대로못만들어',
+    0xDA2341: '방법과간단전략의',
+    0xDA237F: '승리조건은',
+    0xDA24DB: '지금은여기',
+    0xDA25C9: '지금은이',
+    0xDA26C0: '같은유닛끼린이정도',
+    0xDA27D3: '지금움직일유닛은이',
+    0xDA2867: '그러니여기',
+    0xDA28BB: '그러니',
+    0xDA2909: '수많은쪽이이겨',
+    0xDA2C89: '이동력3인데2칸뿐',
+    0xDA2E17: '에들어가',
+    0xDA3358: '그러니여긴',
+    0xDA3820: '조건같으면공격쪽이',
+    0xDA389C: '공격력은현재유닛수로증감',
+    0xDA3AC3: '보병계는이동비용1이매력',
+    0xDA3B20: '색적땐붙어야상황이',
+    0xDA3DC6: '강은보병계외지상유닛불가',
+    0xDA3EB2: '공중유닛은갈수있다고',
+    0xDA3ED2: '공중유닛은지형방어추가없어',
+    0xDA3F79: '지상유닛은보병만이동가능하고',
+    0xDA4093: '이수업은전투진행에필요한',
+    0xDA43C9: '움직일유닛없으면이야기가',
+    0xDA43F9: '안되니생산이가장중요해',
 }
 
 POST_TEXT_RESTORE = {
@@ -1020,16 +1190,20 @@ def main():
     st = collections.Counter()
     unmapped = collections.Counter()
     report = []
+    seen_import_addrs = set()
     with open(TRANS, newline='') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
             st['rows'] += 1
-            if not ko:
-                st['no_ko'] += 1; continue
             try:
                 a = int(row['address'], 16)
             except (ValueError, TypeError):
                 st['bad_addr'] += 1; continue
+            seen_import_addrs.add(a)
+            if a in ADDRESS_TEXT_OVERRIDES:
+                ko = ADDRESS_TEXT_OVERRIDES[a]
+            if not ko:
+                st['no_ko'] += 1; continue
             if a < SAFE_MIN_ADDR:
                 st['code_region'] += 1; continue
             slot = slots.get(a, 0)
@@ -1054,6 +1228,33 @@ def main():
             rom[a:a + slot] = bytes([FILL_BYTE]) * slot
             rom[a:a + len(enc)] = enc
             st['written'] += 1
+
+    # Some extracted text rows are missing from translation_for_import.csv or
+    # have malformed rows there. Address overrides are authoritative for those
+    # tight tutorial fragments, so write them directly from found-text slots.
+    for a, ko in sorted(ADDRESS_TEXT_OVERRIDES.items()):
+        if a in seen_import_addrs:
+            continue
+        if a < SAFE_MIN_ADDR:
+            continue
+        slot = slots.get(a, 0)
+        if slot <= 0:
+            continue
+        deny = in_deny(a, a + slot)
+        if deny:
+            continue
+        enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+        if enc is None:
+            st['overflow'] += 1
+            report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
+            continue
+        st[f'level{level}'] += 1
+        if a + slot > len(rom):
+            st['oob'] += 1
+            continue
+        rom[a:a + slot] = bytes([FILL_BYTE]) * slot
+        rom[a:a + len(enc)] = enc
+        st['written'] += 1
 
     # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
@@ -1109,7 +1310,10 @@ def main():
         (b'\x32\x8E\xA9\x91\x96\x96\x43\x30', b'\x32' + encode_text('자주포', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x90\xED\x8A\xCD\x30', b'\x32' + encode_text('전함', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x90\xF6\x90\x85\x8A\xCD\x30', b'\x32' + encode_text('잠수함', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x90\xED\x93\xAC\x30', b'\x33' + encode_text('전투', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x88\xDA\x93\xAE\x30', b'\x33' + encode_text('이동', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x8D\x55\x8C\x82\x30', b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x90\xB6\x8E\x59\x30', b'\x33' + encode_text('생산', syl_to_code, unmapped) + b'\x30'),
         (b'\x32\x91\xD2\x8B\x40\x30', b'\x32' + encode_text('대기', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x91\xD2\x8B\x40\x30', b'\x33' + encode_text('대기', syl_to_code, unmapped) + b'\x30'),
         (b'\x33\x8F\x49\x97\xB9\x30', b'\x33' + encode_text('종료', syl_to_code, unmapped) + b'\x30'),
