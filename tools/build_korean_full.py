@@ -79,6 +79,9 @@ ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
     0xDF8E3E: '뵙겠습니다.　',
+    # translation_for_import.csv has a malformed row at this address whose
+    # Korean field is another Japanese line. Keep the actual script line Korean.
+    0xDF5E56: '우리가 지금 있는 곳은 레드스타국',
     # ASCII quotes render as symbol debris in this text engine path.
     0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
@@ -330,6 +333,166 @@ def restore_symbol_glyphs(rom, orig):
             rom[off:off + 32] = orig[off:off + 32]
             restored.add(slot)
     return len(restored)
+
+
+def patch_part2_battle_obj_labels(rom):
+    """Patch small OBJ-tile labels used by the Part 2 battle terrain popup."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
+
+    def render_tiles(text, width, height=16, x=0, y=2, ink=1, shadow=15):
+        pixels = [[0] * width for _ in range(height)]
+        cursor = x
+        for ch in text:
+            if ord(ch) not in font:
+                cursor += 8
+                continue
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo
+                    py = y + row
+                    if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                        pixels[py + 1][px + 1] = shadow
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = ink
+            cursor += 8
+
+        tiles = []
+        for ty in range(height // 8):
+            for tx in range(width // 8):
+                tile = bytearray(32)
+                for row in range(8):
+                    for col in range(8):
+                        value = pixels[ty * 8 + row][tx * 8 + col]
+                        bi = row * 4 + col // 2
+                        if col & 1:
+                            tile[bi] = (tile[bi] & 0x0F) | (value << 4)
+                        else:
+                            tile[bi] = (tile[bi] & 0xF0) | value
+                tiles.append(bytes(tile))
+        return tiles
+
+    def write_tiles(start, tiles):
+        for idx, tile in enumerate(tiles):
+            rom[start + idx * 32:start + idx * 32 + 32] = tile
+
+    # The terrain name is drawn as a 16x16 OBJ followed by an 8x16 OBJ. The
+    # source tiles are stored sequentially, but the first OBJ expects its two
+    # rows before the second OBJ's top/bottom tiles.
+    terrain = render_tiles('평지', 24, x=3, y=2)
+    write_tiles(0xB93CD0, [terrain[i] for i in (0, 1, 3, 4, 2, 5)])
+    write_tiles(0xB93BD0, render_tiles('육', 16, x=4, y=2))
+    return 2
+
+
+def patch_part2_mission_start_obj(rom):
+    """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    off = 0xC10B34
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid mission-start LZ77 block at 0x{off:X}')
+    tile_data, consumed = dec
+    width, height = 128, 32
+    pixels = [[0] * width for _ in range(height)]
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
+
+    def draw_scaled(text, x, y, scale=2, ink=10, shadow=14):
+        cursor = x
+        for ch in text:
+            if ord(ch) not in font:
+                cursor += 4 * scale
+                continue
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = cursor + (col + xo) * scale + sx
+                            py = y + row * scale + sy
+                            if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                                pixels[py + 1][px + 1] = shadow
+                            if 0 <= px < width and 0 <= py < height:
+                                pixels[py][px] = ink
+            cursor += (w + 1) * scale if ch != '!' else 4 * scale
+
+    # The original block packs several Japanese labels. On the battle-start
+    # screen the unused labels can bleed in around the main banner, so clear the
+    # sheet and redraw only the active battle-start text.
+    draw_scaled('전투개시!', 14, 4)
+
+    out = bytearray(len(tile_data))
+    # The banner is displayed as two 64x32 OBJs: tile 0x00 for the left half
+    # and tile 0x20 for the right half. Pack the 128x32 canvas into that layout.
+    for ty in range(4):
+        for tx in range(16):
+            tile_idx = ty * 8 + tx if tx < 8 else 0x20 + ty * 8 + (tx - 8)
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                    bi = tile_idx * 32 + row * 4 + col // 2
+                    if col & 1:
+                        out[bi] |= value << 4
+                    else:
+                        out[bi] |= value
+
+    comp = lz77_compress(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'mission-start LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 1
+
+
+def patch_part2_companion_hud_name(rom):
+    """Patch the fixed Part 2 battle HUD OBJ name label for Catherine."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 32, 8
+    pixels = [[0] * width for _ in range(height)]
+    cursor = 5
+    for ch in '캐서린':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = row
+                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                    pixels[py + 1][px + 1] = 3
+                if 0 <= px < width and 0 <= py < height:
+                    pixels[py][px] = 1
+        cursor += w + 1
+
+    out = bytearray()
+    for tx in range(width // 8):
+        tile = bytearray(32)
+        for row in range(8):
+            for col in range(8):
+                value = pixels[row][tx * 8 + col] & 0x0F
+                bi = row * 4 + col // 2
+                if col & 1:
+                    tile[bi] |= value << 4
+                else:
+                    tile[bi] |= value
+        out += tile
+
+    off = 0xBD00B0
+    rom[off:off + len(out)] = out
+    return 1
 
 
 def load_slots():
@@ -781,6 +944,9 @@ def main():
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
+    st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
+    st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
+    st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -853,7 +1019,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
