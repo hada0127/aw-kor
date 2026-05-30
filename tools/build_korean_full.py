@@ -2521,24 +2521,62 @@ def main():
     # First-battle attack tutorial lines are assembled from Japanese glue plus
     # unit/command control spans. Rebuild the visible row so leftover particles
     # like で/を do not leak between Korean labels.
+    def patch_script_row(faddr, fend, payload, label):
+        slot_len = fend - faddr
+        if len(payload) > slot_len:
+            raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
+        rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
+
     attack_intro_row = (
         encode_text('이　', syl_to_code, unmapped)
         + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
         + encode_text('으로　', syl_to_code, unmapped)
         + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
     )
-    if len(attack_intro_row) > 0x20:
-        raise AssertionError(f'attack intro row overflow: {len(attack_intro_row)} > 32')
-    rom[0xD8FBF6:0xD8FC16] = attack_intro_row + bytes([FILL_BYTE]) * (0x20 - len(attack_intro_row))
+    patch_script_row(0xD8FBF6, 0xD8FC16, attack_intro_row, 'attack intro row')
 
     attack_target_row = (
         encode_text('이　', syl_to_code, unmapped)
         + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
         + encode_text('을　잡아　줘', syl_to_code, unmapped)
     )
-    if len(attack_target_row) > 0x24:
-        raise AssertionError(f'attack target row overflow: {len(attack_target_row)} > 36')
-    rom[0xD8FC46:0xD8FC6A] = attack_target_row + bytes([FILL_BYTE]) * (0x24 - len(attack_target_row))
+    patch_script_row(0xD8FC46, 0xD8FC6A, attack_target_row, 'attack target row')
+
+    patch_script_row(
+        0xD8FC92, 0xD8FCB6,
+        b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
+        + encode_text('은　적옆에서만　', syl_to_code, unmapped)
+        + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30',
+        'attack adjacent row',
+    )
+    patch_script_row(
+        0xD8FCE2, 0xD8FD09,
+        b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
+        + encode_text('으로　', syl_to_code, unmapped)
+        + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
+        + encode_text('하려면　적옆에', syl_to_code, unmapped),
+        'attack movement row',
+    )
+    patch_script_row(
+        0xD8FD5A, 0xD8FD80,
+        encode_text('메뉴에　', syl_to_code, unmapped)
+        + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
+        + encode_text('　명령이', syl_to_code, unmapped),
+        'attack menu row',
+    )
+    patch_script_row(
+        0xD8FDAE, 0xD8FDDA,
+        b'\x33' + encode_text('대기', syl_to_code, unmapped) + b'\x30'
+        + encode_text('는　행동종료　명령', syl_to_code, unmapped),
+        'wait command row',
+    )
+    patch_script_row(
+        0xD8FDDD, 0xD8FDFA,
+        encode_text('여기는　', syl_to_code, unmapped)
+        + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
+        + encode_text('을　골라', syl_to_code, unmapped),
+        'attack choose row',
+    )
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
