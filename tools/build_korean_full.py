@@ -1420,6 +1420,12 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
     for src, dst in SHORTEN:
         shortened_ascii = shortened_ascii.replace(src, dst)
     cand.append(shortened_ascii)
+    compact = normalized.replace(' ', '')
+    cand.append(compact)
+    compact_shortened = compact
+    for src, dst in SHORTEN:
+        compact_shortened = compact_shortened.replace(src, dst)
+    cand.append(compact_shortened)
     for level, s in enumerate(cand):
         if any('가' <= ch <= '힣' and ch not in syl_to_code for ch in s):
             continue
