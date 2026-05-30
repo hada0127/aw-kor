@@ -34,6 +34,23 @@ PART1_CAMPAIGN_LZ77_OFF = 0x00C19794
 PART1_MODE_SELECT_LZ77_OFF = 0x00C19A9C
 PART1_RULE_SELECT_LZ77_OFF = 0x00C19D14
 PART1_TEAM_SETTING_LZ77_OFF = 0x00C19FF0
+PART1_MODE_OPTION_BLOCKS = [
+    ("campaign", 0x00C0310C, "캠페인", 30),
+    ("trial", 0x00C03510, "트라이얼", 24),
+    ("record", 0x00C03880, "기록", 28),
+    ("operation_room", 0x00C03AF0, "작전룸", 28),
+    ("wars_shop", 0x00C03F68, "워즈 숍", 28),
+    ("map_design", 0x00C043E0, "맵 디자인", 30),
+    ("single_battle", 0x00C0489C, "1대 대전", 30),
+    ("new_game", 0x00C04D48, "처음부터", 30),
+    ("continue", 0x00C051DC, "계속하기", 30),
+    ("link", 0x00C05658, "통신", 28),
+    ("map_record", 0x00C05994, "맵 기록", 28),
+    ("player_rank", 0x00C05D78, "플레이어 랭크", 22),
+    ("single_card", 0x00C06218, "1카드 통신", 28),
+    ("multi_card", 0x00C0668C, "멀티카드 통신", 24),
+    ("map_trade", 0x00C06B78, "맵 교환", 26),
+]
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
@@ -649,6 +666,23 @@ def make_part1_mode_block() -> Image.Image:
     return make_part1_label_block("모드 선택", "MODE SELECT", 18)
 
 
+def make_part1_option_block(text: str, max_size: int) -> Image.Image:
+    layer = Image.new("L", (128, 32), 0)
+    draw = ImageDraw.Draw(layer)
+    for size in range(max_size, 13, -1):
+        font = ImageFont.truetype(str(FONT_PATH), size)
+        w, h = text_bbox(draw, text, font, 2)
+        if w <= 116 and h <= 28:
+            break
+    x = (128 - w) // 2
+    y = (32 - h) // 2 - 1
+    # Original option sprites use palette-index steps for outline/body/shadow.
+    # Stay inside those indices so each runtime palette keeps its own color.
+    draw.text((x + 1, y + 1), text, font=font, fill=4, stroke_width=2, stroke_fill=4)
+    draw.text((x, y), text, font=font, fill=15, stroke_width=2, stroke_fill=7)
+    return layer
+
+
 def make_part1_catherine_block() -> Image.Image:
     layer = Image.new("L", (96, 8), 0)
     draw_centered_block_text(layer, "캐서린", (0, 0, 96, 8), 8, 1, 15, 7)
@@ -661,6 +695,38 @@ def patch_lz77_whole_block(rom: bytearray, off: int, layer: Image.Image, label: 
         raise RuntimeError(f"invalid LZ77 block for {label} at 0x{off:X}")
     old_data, consumed = dec
     new_data = block_to_tiles(layer)
+    if len(new_data) != len(old_data):
+        raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
+    comp = lz77_compress(new_data, vram_safe=True)
+    if len(comp) > consumed:
+        raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {consumed}")
+    rom[off : off + consumed] = comp + b"\x00" * (consumed - len(comp))
+    return len(comp), consumed
+
+
+def option_layer_to_tiles(layer: Image.Image) -> bytes:
+    if layer.size != (128, 32):
+        raise RuntimeError(f"option layer size mismatch: {layer.size}")
+    tiles = bytearray()
+    px = layer.load()
+    for half in range(2):
+        x_base = half * 64
+        for ty in range(4):
+            for tx in range(8):
+                for y in range(8):
+                    for x_pair in range(4):
+                        lo = int(px[x_base + tx * 8 + x_pair * 2, ty * 8 + y]) & 0xF
+                        hi = int(px[x_base + tx * 8 + x_pair * 2 + 1, ty * 8 + y]) & 0xF
+                        tiles.append(lo | (hi << 4))
+    return bytes(tiles)
+
+
+def patch_part1_option_block(rom: bytearray, off: int, layer: Image.Image, label: str) -> tuple[int, int]:
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise RuntimeError(f"invalid LZ77 block for {label} at 0x{off:X}")
+    old_data, consumed = dec
+    new_data = option_layer_to_tiles(layer)
     if len(new_data) != len(old_data):
         raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
     comp = lz77_compress(new_data, vram_safe=True)
@@ -751,10 +817,17 @@ def main() -> None:
         ("part1 rule select logo", PART1_RULE_SELECT_LZ77_OFF, make_part1_label_block("룰 선택", "RULE SELECT", 20)),
         ("part1 team setting logo", PART1_TEAM_SETTING_LZ77_OFF, make_part1_label_block("팀 설정", "TEAM SETTING", 20)),
     ]
+    p1_option_blocks = [
+        (name, off, make_part1_option_block(text, max_size))
+        for name, off, text, max_size in PART1_MODE_OPTION_BLOCKS
+    ]
     p1_catherine_idx = make_part1_catherine_block()
     p1_label_results = []
     for label, off, layer in p1_label_blocks:
         p1_label_results.append((label, *patch_lz77_whole_block(rom, off, layer, label)))
+    p1_option_results = []
+    for label, off, layer in p1_option_blocks:
+        p1_option_results.append((label, *patch_part1_option_block(rom, off, layer, f"part1 option {label}")))
     p1_catherine_comp, p1_catherine_consumed = patch_lz77_whole_block(
         rom, PART1_CATHERINE_NAME_LZ77_OFF, p1_catherine_idx, "part1 Catherine name"
     )
@@ -780,6 +853,10 @@ def main() -> None:
         layer.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
             f"docs/title_hangul/drafts/{safe_label}_insert_layer_3x.png"
         )
+    for label, _off, layer in p1_option_blocks:
+        layer.convert("RGB").resize((384, 96), Image.Resampling.NEAREST).save(
+            f"docs/title_hangul/drafts/part1_option_{label}_insert_layer_3x.png"
+        )
     p1_catherine_idx.convert("RGB").resize((288, 24), Image.Resampling.NEAREST).save(
         "docs/title_hangul/drafts/part1_catherine_name_insert_layer_3x.png"
     )
@@ -790,6 +867,8 @@ def main() -> None:
     print(f"part2 compressed {len(part2_comp)} / {part2_consumed} bytes")
     for label, comp_size, consumed_size in p1_label_results:
         print(f"{label} compressed {comp_size} / {consumed_size} bytes")
+    for label, comp_size, consumed_size in p1_option_results:
+        print(f"part1 option {label} compressed {comp_size} / {consumed_size} bytes")
     print(f"part1 catherine compressed {p1_catherine_comp} / {p1_catherine_consumed} bytes")
     print(f"preview {args.preview}")
     print(f"select preview {args.select_preview}")
