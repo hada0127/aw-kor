@@ -37,6 +37,11 @@ DENY_REGIONS = [
     ('baseptr_tables',  0xB80270, 0xB80B7C),              # 가나/기호 인덱스 테이블
     ('orig_kanji_table',0xB80B7C, 0xB8180C),              # 원본 한자 테이블
     ('tilemap_renderer',0xB11B00, 0xB11E40),              # 2편/공용 타일맵 렌더러 코드
+    # UI dictionary/list tables rendered by non-dialogue paths. Korean reserved
+    # SJIS codes here can corrupt mode/operation/battle UI before the Hangul
+    # renderer hooks see them; localize these later via their own UI path.
+    ('part1_ui_text_table', 0x805100, 0x805A00),
+    ('part2_ui_text_table', 0xD82740, 0xD83100),
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
 ]
 
@@ -70,7 +75,7 @@ TEXT_OVERRIDES = {
 ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
-    0xDF8E3E: '처음 뵙습니다 ',
+    0xDF8E3E: '뵙겠습니다.　',
     # ASCII quotes render as symbol debris in this text engine path.
     0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
@@ -166,6 +171,14 @@ NAME_GRID_SLOTS = {
     '0': (291, 307), '1': (292, 308), '2': (293, 309), '3': (294, 310), '4': (295, 311),
     '5': (296, 312), '6': (297, 313), '7': (298, 314), '8': (299, 315), '9': (300, 316),
 }
+# Some name renderers bypass the remapped kana table and keep using the original
+# small-kana bottom slots. Mirror the same Latin glyphs there so grid, preview,
+# and later player-name insertion agree.
+NAME_GRID_MIRROR_SLOTS = {
+    'q': [(328, 252)], 'r': [(329, 253)], 's': [(330, 254)],
+    't': [(332, 256)], 'u': [(333, 257)], 'v': [(334, 259)],
+    'w': [(344, 258)], 'x': [(345, 260)], 'y': [(346, 261)],
+}
 # 영문 그리드 미사용 셀(좌영역 Z 뒤 ヒフヘホ) top 슬롯 → 블랭크.
 NAME_GRID_BLANK_TOPSLOTS = [170, 171, 172, 173]
 
@@ -233,6 +246,12 @@ def patch_name_grid(rom):
 
     for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789":
         inject(ch)
+        for top_slot, bot_slot in NAME_GRID_MIRROR_SLOTS.get(ch, []):
+            h = glyph_grid(font[ord(ch)])[2] if ord(ch) in font else 11
+            top_pad = max(0, CELL_BASE - h)
+            top, bot = render_char(ch, top_pad=top_pad)
+            write_slot(top_slot, top)
+            write_slot(bot_slot, bot)
     for top_slot in NAME_GRID_BLANK_TOPSLOTS:   # 미사용 좌영역 셀 비움
         write_slot(top_slot, BLANK)
         write_slot(top_slot + 16, BLANK)
@@ -651,7 +670,7 @@ def main():
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
 
-    suffix = encode_text('님', syl_to_code, unmapped)
+    suffix = encode_text('　님', syl_to_code, unmapped)
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)

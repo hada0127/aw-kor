@@ -25,6 +25,9 @@ TITLE_OBJ_LZ77_OFF = 0x00022B2C
 SELECT_OBJ_LZ77_OFF = 0x00024A34
 PART1_TITLE_OBJ_LZ77_OFF = 0x00C38BF8
 PART2_TITLE_OBJ_LZ77_OFF = 0x004EAF6C
+PART1_CATHERINE_NAME_LZ77_OFF = 0x00C102A8
+PART1_OPERATION_LOGO_LZ77_OFF = 0x00C18CB4
+PART1_MODE_SELECT_LZ77_OFF = 0x00C19A9C
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
@@ -589,6 +592,76 @@ def patch_sprite_tiles(
                 tile_data[tile_no * 32 : tile_no * 32 + 32] = encode_tile(indices)
 
 
+def block_to_tiles(layer: Image.Image) -> bytes:
+    out = bytearray()
+    px = layer.load()
+    for ty in range(layer.height // 8):
+        for tx in range(layer.width // 8):
+            indices: list[int] = []
+            for py in range(8):
+                for px_x in range(8):
+                    indices.append(int(px[tx * 8 + px_x, ty * 8 + py]) & 0xF)
+            out += encode_tile(indices)
+    return bytes(out)
+
+
+def draw_centered_block_text(
+    layer: Image.Image,
+    text: str,
+    box: tuple[int, int, int, int],
+    max_size: int,
+    fill_idx: int,
+    stroke_idx: int,
+    aa_idx: int,
+    bold: bool = True,
+) -> None:
+    draw = ImageDraw.Draw(layer)
+    font_path = BODY_BOLD_FONT_PATH if bold and BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
+    for size in range(max_size, 6, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, text, font, 1)
+        if w <= box[2] - box[0] and h <= box[3] - box[1]:
+            break
+    x = (box[0] + box[2] - w) // 2
+    y = (box[1] + box[3] - h) // 2 - 1
+    paint_index_text_aa(layer, (x, y), text, font, fill_idx, stroke_idx, 1, aa_idx=aa_idx)
+
+
+def make_part1_operation_block() -> Image.Image:
+    layer = Image.new("L", (80, 32), 0)
+    draw_centered_block_text(layer, "작전룸", (0, 0, 80, 22), 20, 2, 15, 7)
+    draw_centered_block_text(layer, "OPERATION", (4, 20, 76, 32), 9, 1, 15, 7, bold=False)
+    return layer
+
+
+def make_part1_mode_block() -> Image.Image:
+    layer = Image.new("L", (80, 32), 0)
+    draw_centered_block_text(layer, "모드 선택", (0, 0, 80, 22), 18, 2, 15, 7)
+    draw_centered_block_text(layer, "MODE SELECT", (3, 20, 77, 32), 8, 1, 15, 7, bold=False)
+    return layer
+
+
+def make_part1_catherine_block() -> Image.Image:
+    layer = Image.new("L", (96, 8), 0)
+    draw_centered_block_text(layer, "캐서린", (0, 0, 96, 8), 8, 1, 15, 7)
+    return layer
+
+
+def patch_lz77_whole_block(rom: bytearray, off: int, layer: Image.Image, label: str) -> tuple[int, int]:
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise RuntimeError(f"invalid LZ77 block for {label} at 0x{off:X}")
+    old_data, consumed = dec
+    new_data = block_to_tiles(layer)
+    if len(new_data) != len(old_data):
+        raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
+    comp = lz77_compress(new_data, vram_safe=True)
+    if len(comp) > consumed:
+        raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {consumed}")
+    rom[off : off + consumed] = comp + b"\x00" * (consumed - len(comp))
+    return len(comp), consumed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default="output/game_wars_korean_final.gba")
@@ -660,6 +733,19 @@ def main() -> None:
         part2_consumed - len(part2_comp)
     )
 
+    p1_operation_idx = make_part1_operation_block()
+    p1_mode_idx = make_part1_mode_block()
+    p1_catherine_idx = make_part1_catherine_block()
+    p1_operation_comp, p1_operation_consumed = patch_lz77_whole_block(
+        rom, PART1_OPERATION_LOGO_LZ77_OFF, p1_operation_idx, "part1 operation logo"
+    )
+    p1_mode_comp, p1_mode_consumed = patch_lz77_whole_block(
+        rom, PART1_MODE_SELECT_LZ77_OFF, p1_mode_idx, "part1 mode select logo"
+    )
+    p1_catherine_comp, p1_catherine_consumed = patch_lz77_whole_block(
+        rom, PART1_CATHERINE_NAME_LZ77_OFF, p1_catherine_idx, "part1 Catherine name"
+    )
+
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
 
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
@@ -676,11 +762,23 @@ def main() -> None:
     part2_preview = part2_idx.convert("RGB").resize((720, 480), Image.Resampling.NEAREST)
     Path(args.part2_preview).parent.mkdir(parents=True, exist_ok=True)
     part2_preview.save(args.part2_preview)
+    p1_operation_idx.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
+        "docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png"
+    )
+    p1_mode_idx.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
+        "docs/title_hangul/drafts/part1_mode_select_insert_layer_3x.png"
+    )
+    p1_catherine_idx.convert("RGB").resize((288, 24), Image.Resampling.NEAREST).save(
+        "docs/title_hangul/drafts/part1_catherine_name_insert_layer_3x.png"
+    )
     print(f"wrote {args.output}")
     print(f"compressed {len(comp)} / {consumed} bytes")
     print(f"select compressed {len(select_comp)} / {select_consumed} bytes")
     print(f"part1 compressed {len(part1_comp)} / {part1_consumed} bytes")
     print(f"part2 compressed {len(part2_comp)} / {part2_consumed} bytes")
+    print(f"part1 operation compressed {p1_operation_comp} / {p1_operation_consumed} bytes")
+    print(f"part1 mode compressed {p1_mode_comp} / {p1_mode_consumed} bytes")
+    print(f"part1 catherine compressed {p1_catherine_comp} / {p1_catherine_consumed} bytes")
     print(f"preview {args.preview}")
     print(f"select preview {args.select_preview}")
     print(f"part1 preview {args.part1_preview}")
