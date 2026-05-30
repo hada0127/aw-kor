@@ -356,6 +356,17 @@ ADDRESS_TEXT_OVERRIDES = {
     # translation_for_import.csv has a malformed row at this address whose
     # Korean field is another Japanese line. Keep the actual script line Korean.
     0xDF5E56: '우리가 지금 있는 곳은 레드스타국',
+    # Part 2 first battle intro. The stock CSV strings fit by dropping spaces
+    # or using cramped wording, which is visibly noisy in the battle text box.
+    0xA026F7: '괜찮나',
+    0xA02713: '료',
+    0xA0271E: '갑자기 불러 ',
+    0xA0272D: '미안해',
+    0xA02816: '지휘관으론',
+    0xA02841: '실전은 아직 부족해',
+    0xA029B8: '서두르지 마',
+    0xA029CC: '서둘러 가도',
+    0xA029E0: '지면 안 돼',
     # Part 2 tutorial intro slots with strict byte budgets.
     0xDF5D81: '하는 법 설명이야',
     0xDF5D9A: '뵙겠습니다',
