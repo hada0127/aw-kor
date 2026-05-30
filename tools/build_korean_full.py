@@ -88,9 +88,30 @@ ADDRESS_TEXT_OVERRIDES = {
     # name-grid kana glyphs and produces garbage on screen.
     0xD8F33D: '그래서 휩도 병력이 적어',
     0xD8F4CD: '십자키로 움직여',
+    0xD8F4FE: '에게 명령하자',
+    0xD8F525: '에Ａ버튼을',
+    0xD8F53C: '눌러 봐',
+    0xD8F571: '여기서Ａ버튼이야',
+    0xD8F58A: '지금 한 건',
+    0xD8F5D2: '앞으로 자주 나올 말이야',
+    0xD8F60C: '유닛을 잡으면 이렇게',
+    0xD8F62F: '주변 색이 바뀌어',
+    0xD8F677: '먼저 적에게 다가가자',
+    0xD8F6CF: '여기에두고Ａ로이동해',
+    0xD8F713: '지금은 여기로 이동해',
+    0xD8F738: '여기에두고Ａ버튼',
+    0xD8F78F: '여기서',
+    0xD8F7A7: '를 고르면 이동',
+    0xD8F7EE: '색이 바뀌었지',
+    0xD8F838: '뜻이야',
+    0xD8F84B: '나중에 또 쓸 수 있어',
+    0xD8F86C: '안심해',
+    0xD8F882: '그럼 이 기세로 이쪽의',
+    0xD8F8A7: '이동해 보자',
+    0xD8F909: '여기서Ａ버튼이야',
     0xD8F92C: '가 적에게 가까운 곳은 여기야',
     0xD8FBA5: '가 오고 있어',
-    0xD8FE6C: 'A 버튼 전투 시작',
+    0xD8FE6C: 'Ａ버튼전투시작',
 }
 
 POST_TEXT_RESTORE = {
@@ -779,6 +800,37 @@ def main():
         if len(enc) > slot_len:
             raise AssertionError(f'intro text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
+
+    # Part 2 tutorial scripts embed small control bytes around object names.
+    # Keep those control bytes in place, but replace the Japanese label payloads.
+    def fixed_text_patch(faddr, slot_len, text):
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) > slot_len:
+            raise AssertionError(f'tutorial text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
+        rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
+
+    fixed_text_patch(0xD8F384, 14, '보병')
+    fixed_text_patch(0xD8F798, 14, '대기')
+
+    raw_replacements = [
+        (b'\x32\x95\xE0\x95\xBA\x30\x82\xE0', b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30' + encode_text('도', syl_to_code, unmapped)),
+        (b'\x82\xB1\x82\xCC\x32\x95\xE0\x95\xBA\x30', encode_text('이', syl_to_code, unmapped) + b'\x81\x40\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'),
+        (b'\x32\x95\xE0\x95\xBA\x30', b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x8D\x55\x8C\x82\x30', b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x91\xD2\x8B\x40\x30', b'\x33' + encode_text('대기', syl_to_code, unmapped) + b'\x30'),
+        (b'\x33\x8F\x49\x97\xB9\x30', b'\x33' + encode_text('종료', syl_to_code, unmapped) + b'\x30'),
+    ]
+    for old, new in raw_replacements:
+        if len(old) != len(new):
+            raise AssertionError('raw tutorial replacement length mismatch')
+        start, end = 0xD8F300, 0xD97000
+        pos = start
+        while True:
+            idx = rom.find(old, pos, end)
+            if idx < 0:
+                break
+            rom[idx:idx + len(old)] = new
+            pos = idx + len(new)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
