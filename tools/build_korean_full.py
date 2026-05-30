@@ -353,6 +353,18 @@ ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
     0xDF8E3E: '뵙겠습니다.　',
+    # Part 1 opening tutorial after name confirm. Keep these short because this
+    # text engine reuses tiny fixed fragments and wraps poorly with long words.
+    0xDF8EAE: '너 이 게임 처음이니?',
+    0xDF8F3F: '게임보이 1대로',
+    0xDF8F64: '대전하는 모드,',
+    0xDF9024: '다음 모드선택에서',
+    0xDF9053: '작전실 골라줘',
+    0xDF9066: '작전룸에서는 내가',
+    0xDF908B: '전투법 알려줄게.',
+    0xDF90A7: '작전룸에 가면',
+    0xDF90CE: '위부터 작전 골라줘.',
+    0xDF911F: '그럼 시작할게.',
     # translation_for_import.csv has a malformed row at this address whose
     # Korean field is another Japanese line. Keep the actual script line Korean.
     0xDF5E56: '우리가 지금 있는 곳은 레드스타국',
@@ -383,8 +395,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF7382: '필요한 유닛을 골라',
     0xDF76D5: '씨가새로쓸수있게',
     0xDF77BF: '내과외수업듣고싶어',
-    # ASCII quotes render as symbol debris in this text engine path.
-    0xDF9024: '다음 「모드선택」에서 「작전실」',
     # The original translation is one byte too long for the 14-byte fragment.
     0xDF91D0: '포함해서.',
     # Part 2 tutorial battle fragments. These slots are short and run inside
@@ -1985,23 +1995,23 @@ def _part1_yesno_hook():
     # choice cursor routine so loaded save states are repaired without needing a
     # fresh redraw. Both paths share the same overlay routine:
     #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
-    #   - rewrite source and visible rows at x8 as "예 아니오"
+    #   - rewrite the visible tilemap row at x8 as "예 아니오"
     b = bytearray(bytes.fromhex(
         'ffb5'
         '18f360de'  # bl original compact-choice update (patched below)
         '00f00df8ffbd'
-        'ffb500f009f8ffbc08bc9e4610b5041c1e21605e324b1847'
-        'ffb53248324b334c334d344e0022815a994209d0a14207d0a94205d0b14203d002320c2af3d3ffbd'
-        '2d482e4900f029f82d482e4900f025f82d482e4900f021f82d482e4900f01df8'
-        '2d482e4900f019f82d482e4900f015f82d482e4900f011f82d482e4900f00df8'
-        '184800f012f82c4800f01cf82b4800f00cf82b4800f016f8ffbd'
+        'ffb500f009f8ffbc08bc9e4610b5041c1e21605e2f4b1847'
+        'ffb52f482f4b304c304d314e0022815a994209d0a14207d0a94205d0b14203d002320c2af3d3ffbd'
+        '2a482b4900f023f82a482b4900f01ff82a482b4900f01bf82a482b4900f017f8'
+        '2a482b4900f013f82a482b4900f00ff82a482b4900f00bf82a482b4900f007f8'
+        '2a4800f00cf82a4800f016f8ffbd'
         '082203680b6004300431013af9d17047'
-        '0f490180254941800e4981800e49c1800e490181214941817047'
-        '204901801e4941801f4981801f49c1801f4901811a4941817047'
+        '0f490180244941800e4981800e49c1800e490181204941817047'
+        '1f4901801d4941801e4981801e49c1801e490181194941817047'
         '0000498db108104e0102e2800000e4800000e6800000e8800000'
         '0046f008401c00062046f008601c0006c03ff008801c0006e03ff008a01c0006'
         '4018f008c01c00062015f008e01c0006a046f008001d0006c046f008201d0006'
-        '504e0102d06000061061000664010000e3800000e5800000e7800000e9800000'
+        'd06000061061000664010000e3800000e5800000e7800000e9800000'
     ))
     b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
     return bytes(b)
