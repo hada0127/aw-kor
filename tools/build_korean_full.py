@@ -3264,6 +3264,34 @@ def main():
         (0xD9353E, 0xD9355C, '다음도　이대로　힘내', 'next map keep it up row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    for faddr, fend, text, label in [
+        (0xD93562, 0xD93570, '훌륭해', 'rout victory excellent row'),
+        (0xD93575, 0xD9357D, '저', 'rout victory that row'),
+        (0xD9357E, 0xD93584, '경전차', 'rout victory tank label row'),
+        (0xD93585, 0xD9359B, '부대를　전멸시키다니', 'rout victory annihilate row'),
+        (0xD9359E, 0xD935AA, '잘했어', 'rout victory praise row'),
+        (0xD935AF, 0xD935D3, '병력차가　있어도　방법에따라', 'rout victory tactics lead row'),
+        (0xD935D6, 0xD935F6, '충분히　싸울수　있지', 'rout victory tactics tail row'),
+        (0xD935FB, 0xD93623, '네가　카라라요새를　함락해준', 'rout karara fort captured row'),
+        (0xD93626, 0xD93650, '덕분에　블루문군은　후퇴해', 'rout blue moon retreat row'),
+        (0xD93655, 0xD93677, '참　하나　말해둘게', 'rout post victory note lead row'),
+        (0xD9367A, 0xD93688, '있어', 'rout post victory note tail row'),
+        (0xD9368D, 0xD936AB, '이번에　도시를　점령해서', 'rout funds city capture row'),
+        (0xD936AE, 0xD936C4, '자금을　받았지', 'rout funds gained row'),
+        (0xD936C9, 0xD936E9, '그　자금은　맵　클리어하면', 'rout funds clear row'),
+        (0xD936EC, 0xD936FE, '사라져', 'rout funds vanish row'),
+        (0xD93703, 0xD93723, '다음맵에　못　넘겨', 'rout funds no carry row'),
+        (0xD93728, 0xD93746, '다음도　이대로　힘내', 'rout next map keep it up row'),
+        (0xD9374E, 0xD93756, '뭐', 'enemy reaction what row'),
+        (0xD93759, 0xD9377B, '카라라요새가　함락됐다고', 'enemy karara fallen row'),
+        (0xD93780, 0xD9379C, '에잇　뭘　한거냐', 'enemy what were you doing row'),
+        (0xD937A2, 0xD937A8, '경전차', 'enemy light tank label row'),
+        (0xD937A9, 0xD937C5, '부대는　뭘　한거냐', 'enemy light tank failure row'),
+        (0xD937C8, 0xD937D8, '쓸모없는　것들', 'enemy useless units row'),
+        (0xD937DD, 0xD937FD, '다음부터는　내가　지휘한다', 'enemy will command row'),
+        (0xD93802, 0xD93822, '으으으　다음엔　두고봐', 'enemy next time row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
