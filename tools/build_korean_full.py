@@ -72,6 +72,115 @@ TEXT_OVERRIDES = {
     '예　　아니오': '예  아니오',
 }
 
+SOURCE_TEXT_OVERRIDES = {
+    # Common untranslated short fragments. Many of these are valid visible
+    # dialogue rows whose Korean field is blank in translation_for_import.csv.
+    'ふふっ': '후후',
+    'ふふっ。': '후후',
+    '条件よ。': '조건이야',
+    'じゃあ': '그럼',
+    'そうそうそれからもう一つ。': '그래그리고하나더',
+    'うっ・・・': '윽',
+    'うう・・・': '으으',
+    'レッドスターには、ちょいとむかしに世話に': '레드스타엔예전에신세를',
+    '・・・・。': '...',
+    '・・・・': '...',
+    '・・・・・。': '...',
+    '・・・・・': '...',
+    '・・・': '...',
+    '・・・！': '!',
+    '！！！': '!',
+    '敵が！': '적이',
+    'さん！': '님',
+    'さん！！': '님',
+    '・・・え？？？': '어',
+    '対空戦車': '대공전차',
+    'ほーっ。': '호오',
+    'ほー！': '호오',
+    '海に戦艦！': '바다에전함',
+    '陸に重戦車！': '육지에중전차',
+    'わね・・・': '그렇지',
+    '護衛艦': '호위함',
+    'もいなかった': '도없었어',
+    'もぐる': '잠수',
+    'もぐった': '잠수했어',
+    'くっ・・・': '큭',
+    'そう。': '그래',
+    'そう・・・': '그래',
+    'そう？': '그래',
+    'そうか、': '그런가',
+    'こんなくろうは　しなかったはずだぜ。': '이런고생은안했을거야',
+    '・・・ああ。': '아아',
+    'おう！': '오',
+    'サクテキマップか・・・。': '색적맵인가',
+    'おぼえてるか': '기억하나',
+    'みよ！': '보라',
+    'はっ！': '네',
+    '強敵よ。': '강적이야',
+    'やれやれ。': '이런이런',
+    'なあ、': '저기',
+    'おーっ！': '오오',
+    'ぬぬぬ・・・ま　また負けてしまった・・・': '으으또져버렸나',
+    '・・・ぐっ。': '윽',
+    '・・・へっ！': '헷',
+    'やられちまう。': '당하고말아',
+    'まぁ　そう言うなって。': '그렇게말하지마',
+    'さあ　聞かせてもらうぞ　ビリー。': '자말해봐빌리',
+    'なんか、見たことあるような部隊じゃないか？': '어디서본듯한부대아냐',
+    '爆撃機': '폭격기',
+    '「キクチヨ特戦部隊」って？': '치요특전부대라고',
+    'おお！': '오오',
+    'ええ。': '그래',
+    'ええ！': '응',
+    'それじゃ': '그럼',
+    'それじゃ、': '그럼',
+    '重戦車': '중전차',
+    '２日に１度は': '이틀에한번은',
+    'おい、': '어이',
+    'なっ・・・': '뭐',
+    'それから・・・': '그리고',
+    'それじゃ、また行ってくらぁ。': '그럼또다녀올게',
+    'あら。': '어머',
+    '当然よっ！': '당연하지',
+    '「チョコあげる」って言ったら': '초코준다고하면',
+    'ぎくっ・・・': '깜짝',
+    '・・・また逃げられたか・・・': '또놓쳤나',
+    'よね・・・': '그렇지',
+    '？？？': '???',
+    'そういえば、モップショーグンって': '그러고보니그사령은',
+    '１０日よ！': '10일이야',
+    'う　やっつけきれなかったか・・・': '다처리못했나',
+    '偵察車': '정찰차',
+    '勝負だ！': '승부다',
+    'グリーンアースで、まだやることがあるんだ。': '그린어스에아직할일이있어',
+    'マックスとよ！': '맥스하고',
+    'グリーンアースの　大部隊が': '그린어스대부대가',
+    'き　きついなー・・・じかんせいげん': '힘드네시간제한',
+    'あのー・・・': '저기',
+    '・・・なあ': '저기',
+    'そこ！': '거기',
+    'いいかなあ。': '괜찮을까',
+    'いーえ！': '아니',
+    '・・・あの・・・': '저기',
+    '・・・うう・・・': '으으',
+    '８日よ！': '8일이야',
+    '・・・何、': '뭐야',
+    'いるし・・・': '있고',
+    'ＯＫだな！': 'OK야',
+    '安全よね。': '안전하지',
+    'が・・・': '가',
+    'すまん。': '미안',
+    'ああ。': '그래',
+    'あ、ああ。': '아그래',
+    'ああ！': '그래',
+    'でも！': '하지만',
+    'あ、ビリー！': '아빌리',
+    '早く！': '빨리',
+    'アスカ！！！': '아스카',
+    'ごめんなさい': '미안해',
+    'みんなつれて　逃げて・・・': '모두데리고도망쳐',
+}
+
 ADDRESS_TEXT_OVERRIDES = {
     # Name-confirm prompt. The original translation used a long phrase whose
     # final syllables rendered poorly in this compact UI.
@@ -404,6 +513,142 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDA4093: '이수업은전투진행에필요한',
     0xDA43C9: '움직일유닛없으면이야기가',
     0xDA43F9: '안되니생산이가장중요해',
+    # Part 2 campaign/battle dialogue: tight slots and a few shifted CSV rows.
+    0xDC2937: '님료',
+    0xDC2DBF: '님료',
+    0xDC2ECA: '전부대를수리할수있으니피해를',
+    0xDC3171: '에게료',
+    0xDC33AF: '님료',
+    0xDC3822: '캐서린초조했네',
+    0xDC3E2A: '캐서린이미늦었어',
+    0xDC4022: '쇼군브레이크때2회행동이',
+    0xDC46EE: '잠수함',
+    0xDC4720: '잠수함',
+    0xDC4760: '잠수함',
+    0xDC478F: '수송선',
+    0xDC4796: '수도에',
+    0xDC58C3: '수송선',
+    0xDC5921: '잠수함',
+    0xDC595D: '잠수함',
+    0xDC6AA5: '그렇다면적어도강이쪽의',
+    0xDC7073: '수송선',
+    0xDC7083: '이게당하면육상유닛을',
+    0xDC70D1: '잠수함',
+    0xDC710D: '잠수함',
+    0xDC7637: '도미노님',
+    0xDC7E27: '도미노님',
+    0xDC826D: '특전부대에들켜버렸네',
+    0xDC88E2: '님료',
+    0xDCADDB: '님료',
+    0xDCB1BE: '바다에서이길사람은드물다는얘기야',
+    0xDCB483: '님료',
+    0xDCB544: '유닛이야',
+    0xDCB929: '수송선',
+    0xDCB9CB: '잠수함',
+    0xDCBEA4: '전투헬기',
+    0xDCC3F3: '수송선',
+    0xDCC489: '잠수함',
+    0xDCD210: '전투헬기',
+    0xDCD804: '수송차',
+    0xDCD862: '잠수함',
+    0xDCDEEB: '님도미노',
+    0xDCE0C8: '님도미노',
+    0xDCE344: '수송선',
+    0xDCE436: '또너인가도미노사령',
+    0xDCE9F8: '전투헬기',
+    0xDCEA43: '님도미노',
+    0xDCF13F: '수송헬기',
+    0xDCF17B: '수송선',
+    0xDCF187: '잠수함',
+    0xDCF1EA: '수송헬기',
+    0xDCF21F: '수송헬기',
+    0xDCF22B: '전투헬기',
+    0xDCF2AA: '료인가',
+    0xDCFE3D: '수송선',
+    0xDCFE47: '수송헬기',
+    0xDC2B1C: '게이지는전투마다차올라',
+    0xDC2BC8: '승리조건은전투에서이기기위한',
+    0xDC335B: '되도록뭉쳐움직이는게',
+    0xDC3741: '평소사거리길고브레이크중엔',
+    0xDC394F: '였던가',
+    0xDC3A0B: '어떻게알았지',
+    0xDC3DBD: '독립행동공중부대가있대',
+    0xDC3F54: '잊었다곤못해',
+    0xDC40BC: '처음엔적을기다렸다강한적을',
+    0xDC427F: '공장육상항구해상유닛',
+    0xDC4420: '잠수함이잠수하면',
+    0xDC44B5: '공격하고또공격하는거다',
+    0xDC47A4: '운반해',
+    0xDC4AF2: '벌써이시간인가',
+    0xDC4B3A: '수도를노릴거야',
+    0xDC4B67: '희생은신경쓰지말고',
+    0xDC4B8A: '전부대로수도를지켜',
+    0xDC4D17: '보통은적이어딘가숨어있어',
+    0xDC50C2: '어떻게든놈들을',
+    0xDC5726: '어떻게든놈들을',
+    0xDC5D83: '난할수있어',
+    0xDC611A: '그리생각하면아직멀었어',
+    0xDC6682: '저할아버진왠지불편해',
+    0xDC678D: '깨는재미가있지',
+    0xDC688A: '무슨수를써서라도',
+    0xDC6B1D: '집중해',
+    0xDC6B62: '전력갖추고천천히가도돼',
+    0xDC6C4E: '숲이나암초에숨으며가는게',
+    0xDC6F06: '레드스타떠난이유는',
+    0xDC7133: '당하고만못있어',
+    0xDC71D8: '독립공중부대얘기들은적이',
+    0xDC7262: '도미노도',
+    0xDC73C7: '다시봤어',
+    0xDC7844: '란바로나다',
+    0xDC7E9A: '다음엔전력으로싸우겠다',
+    0xDC8155: '돈이많거나',
+    0xDC82E1: '그런얘기야',
+    0xDC8319: '돈이많거나',
+    0xDC8521: '돈이많거나',
+    0xDC8751: '지키며싸워',
+    0xDC8A39: '특기유닛을생산하면',
+    0xDC8D35: '오지못하게해야해',
+    0xDC9212: '공항은공중항구는해상유닛',
+    0xDC9A16: '그약점을직접공격으로보완해',
+    0xDC9DC5: '사령관은괜찮았어',
+    0xDC9E71: '두손들수밖에',
+    0xDC9EDA: '육지가안이어져수송선이',
+    0xDCA253: '그런거니',
+    0xDCA3E5: '보통전투맵이면보병등을수송해',
+    0xDCA67F: '앞으로9곳만점령하면돼',
+    0xDCA81D: '했다고생각해',
+    0xDCAD78: '아까와다른곳으로실어봐',
+    0xDCAF67: '그러면패배해',
+    0xDCB726: '기다렸지',
+    0xDCB833: '여긴도망이상책',
+    0xDCB877: '여긴도망이상책',
+    0xDCB8C9: '어딘가',
+    0xDCB9E7: '가면더안전해',
+    0xDCBA1A: '이글과세번째싸움인가',
+    0xDCBB1D: '오해한거아냐',
+    0xDCC2AC: '요란한싸움으로적눈을',
+    0xDCC63A: '바다에서이길사람은드물어',
+    0xDCCC4F: '여긴도망이상책',
+    0xDCCCBC: '시야넓은유닛을앞세워',
+    0xDCD1B9: '적유닛을쓰러뜨릴지',
+    0xDCD2C9: '도전해오는것도이유가있겠네',
+    0xDCD602: '요란한싸움으로적눈을',
+    0xDCD796: '해상유닛연료탄약떨어지면',
+    0xDCD9DA: '바다에서이길사람은드물어',
+    0xDCDAE9: '안그러면안심하고못나아가',
+    0xDCDBE2: '될것같아',
+    0xDCDCE4: '그렇게될테니',
+    0xDCE2F7: '여긴도망이상책',
+    0xDCECEE: '육지엔대공전차중전차가',
+    0xDCEF4A: '요란한싸움으로적눈을',
+    0xDCEF96: '하지만이제마지막',
+    0xDCF148: '로옮기려면',
+    0xDCF19B: '안전하진않아',
+    0xDCF2C7: '지금까지의심했어',
+    0xDCF5A6: '료의복제같아',
+    0xDCF95B: '아직더나와',
+    0xDCF9BF: '쉴틈없다',
+    0xDCFE92: '적도줄어들어',
 }
 
 POST_TEXT_RESTORE = {
@@ -1224,9 +1469,11 @@ def main():
     unmapped = collections.Counter()
     report = []
     seen_import_addrs = set()
+    written_addrs = set()
     with open(TRANS, newline='') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
+            jp = (row.get('japanese') or '').strip()
             st['rows'] += 1
             try:
                 a = int(row['address'], 16)
@@ -1235,6 +1482,8 @@ def main():
             seen_import_addrs.add(a)
             if a in ADDRESS_TEXT_OVERRIDES:
                 ko = ADDRESS_TEXT_OVERRIDES[a]
+            elif not ko and jp in SOURCE_TEXT_OVERRIDES:
+                ko = SOURCE_TEXT_OVERRIDES[jp]
             if not ko:
                 st['no_ko'] += 1; continue
             if a < SAFE_MIN_ADDR:
@@ -1261,6 +1510,7 @@ def main():
             rom[a:a + slot] = bytes([FILL_BYTE]) * slot
             rom[a:a + len(enc)] = enc
             st['written'] += 1
+            written_addrs.add(a)
 
     # Some extracted text rows are missing from translation_for_import.csv or
     # have malformed rows there. Address overrides are authoritative for those
@@ -1288,6 +1538,40 @@ def main():
         rom[a:a + slot] = bytes([FILL_BYTE]) * slot
         rom[a:a + len(enc)] = enc
         st['written'] += 1
+        written_addrs.add(a)
+
+    # Some very short visible fragments are extracted but not present in the
+    # import CSV at all. Apply source-text overrides directly from found-texts.
+    with open(FOUND, newline='', encoding='utf-8', errors='ignore') as f:
+        for row in csv.DictReader(f):
+            try:
+                a = int((row.get('address') or '').strip(), 16)
+                slot = int(row.get('length') or 0)
+            except (ValueError, TypeError):
+                continue
+            if a in written_addrs or a in seen_import_addrs:
+                continue
+            ko = SOURCE_TEXT_OVERRIDES.get((row.get('text') or '').strip())
+            if not ko:
+                continue
+            if a < SAFE_MIN_ADDR or slot <= 0:
+                continue
+            deny = in_deny(a, a + slot)
+            if deny:
+                continue
+            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+            if enc is None:
+                st['overflow'] += 1
+                report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
+                continue
+            st[f'level{level}'] += 1
+            if a + slot > len(rom):
+                st['oob'] += 1
+                continue
+            rom[a:a + slot] = bytes([FILL_BYTE]) * slot
+            rom[a:a + len(enc)] = enc
+            st['written'] += 1
+            written_addrs.add(a)
 
     # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
