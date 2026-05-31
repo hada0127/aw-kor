@@ -4654,13 +4654,18 @@ def main():
             rom[base + off:base + off + 4] = enc
 
     for faddr, slot_len, text in (
+        (0xB83870, 10, '　　　있음'),
+        (0xB8387C, 10, '　　　없음'),
+        (0xB838A4, 10, '　　　　비'),
+        (0xB838B0, 10, '　　　　눈'),
+        (0xB838BC, 10, '　　　맑음'),
         (0xB839A8, 8, '거점수입'),
         (0xB839B4, 12, '매턴수입    '),
         (0xB839C4, 8, '초회수입'),
     ):
         enc = encode_text(text, syl_to_code, unmapped)
         if len(enc) != slot_len:
-            raise AssertionError(f'income label length mismatch at 0x{faddr:X}')
+            raise AssertionError(f'option label length mismatch at 0x{faddr:X}')
         rom[faddr:faddr + slot_len] = enc
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
