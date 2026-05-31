@@ -88,7 +88,7 @@ TEXT_OVERRIDES = {
     # actionable and those rows do not fall back to Japanese.
     '칫,': '쳇,',
     '헉...': '윽...',
-    'BGM 켬': 'BGM ON',
+    'BGM 켬': '음악있음',
 }
 
 SOURCE_TEXT_OVERRIDES = {
@@ -8986,7 +8986,7 @@ def main():
         (0xD9FF54, 0xD9FF68, '설명　듣고싶어?', 'system explanation question row'),
         (0xD9FF72, 0xD9FF94, '그럼　다른걸　해봐', 'system do other row'),
         (0xD9FF9D, 0xD9FFA5, '시스템', 'system title row'),
-        (0xD9FFA6, 0xD9FFC2, '」는　BGM을　들을지', 'system bgm lead row'),
+        (0xD9FFA6, 0xD9FFC2, '」는　음악을　들을지', 'system bgm lead row'),
         (0xD9FFC5, 0xD9FFEF, '항복　맵나가기　등을　고르는곳이야', 'system choices row'),
         (0xD9FFF4, 0xDA001C, '여긴　모드에따라　메뉴가　늘거나', 'system mode changes lead row'),
         (0xDA001F, 0xDA0027, '해', 'system mode changes row'),
