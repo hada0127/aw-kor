@@ -1613,7 +1613,7 @@ FALSE_TEXT_DATA = {
 NAME_GRID_RANGES = [
     (0x83FAF0, 0x83FF00),   # 그리드 charset 클러스터(2세트: 0x83FAF6~0x83FC41, 0x83FE41~0x83FEDD)
     (0xDF8C00, 0xDF8E00),   # DF8C charset(0xDF8C62/CB2), 대화(0xDF8E16+) 앞
-    (0xDF9F00, 0xDF9FF0),   # DF9F charset(0xDF9FB0)
+    (0xDF9F00, 0xDFA110),   # DF9F/DFA0 charset rows; keep all name-grid glyph data original
 ]
 
 TEXT_ALLOW_ADDRS = {0xDF8C02, 0xDF8C0E, 0xDF8C1A, 0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
