@@ -2037,51 +2037,95 @@ def patch_part2_redstar_region_obj(rom):
     return 48
 
 
-def patch_world_map_redstar_tiles(rom):
-    """Patch the small world-map REDSTAR tile label shared by the map and legend."""
+def patch_world_map_label_tiles(rom):
+    """Patch the Part 2 world-map background labels shared by map and legend."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
-    tile_ids = list(range(0x271, 0x277))
-    width, height = len(tile_ids) * 8, 8
 
-    def make_tiles(data):
+    def blank_pixels(data, width, height):
         blank = data[0x2B6 * 32:0x2B6 * 32 + 32]
         pixels = [[0] * width for _ in range(height)]
-        for tile in range(len(tile_ids)):
-            for row in range(8):
-                for col in range(8):
-                    value = blank[row * 4 + col // 2]
-                    pixels[row][tile * 8 + col] = value >> 4 if col & 1 else value & 0x0F
+        for ty in range(height // 8):
+            for tx in range(width // 8):
+                for row in range(8):
+                    for col in range(8):
+                        value = blank[row * 4 + col // 2]
+                        pixels[ty * 8 + row][tx * 8 + col] = value >> 4 if col & 1 else value & 0x0F
+        return pixels
 
-        cursor = 3
-        for ch in '레드스타':
+    def draw_text(pixels, text, x, y=0, scale=1, ink=12, shadow=None):
+        cursor = x
+        for ch in text:
             grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
             for row in range(h):
                 for col in range(w):
                     if not grid[row][col]:
                         continue
-                    px = cursor + col + xo
-                    py = row
-                    if 0 <= px < width and 0 <= py < height:
-                        pixels[py][px] = 12
-            cursor += w + 1
+                    px0 = cursor + (col + xo) * scale
+                    py0 = y + row * scale
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = px0 + sx
+                            py = py0 + sy
+                            if shadow is not None and 0 <= px + 1 < len(pixels[0]) and 0 <= py + 1 < len(pixels) and pixels[py + 1][px + 1] == 0:
+                                pixels[py + 1][px + 1] = shadow
+                            if 0 <= px < len(pixels[0]) and 0 <= py < len(pixels):
+                                pixels[py][px] = ink
+            cursor += (w + 1) * scale
 
-        out = bytearray(len(tile_ids) * 32)
-        for tile in range(len(tile_ids)):
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[row][tile * 8 + col] & 0x0F
-                    bi = tile * 32 + row * 4 + col // 2
-                    if col & 1:
-                        out[bi] |= value << 4
-                    else:
-                        out[bi] |= value
+    def pack_tiles(pixels):
+        tile_cols = len(pixels[0]) // 8
+        tile_rows = len(pixels) // 8
+        out = bytearray(tile_cols * tile_rows * 32)
+        for ty in range(tile_rows):
+            for tx in range(tile_cols):
+                tile_idx = ty * tile_cols + tx
+                for row in range(8):
+                    for col in range(8):
+                        value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                        bi = tile_idx * 32 + row * 4 + col // 2
+                        if col & 1:
+                            out[bi] |= value << 4
+                        else:
+                            out[bi] |= value
         return out
 
+    def put_label(buf, data, tile_ids, text, x=0):
+        pixels = blank_pixels(data, len(tile_ids) * 8, 8)
+        draw_text(pixels, text, x)
+        raw = pack_tiles(pixels)
+        for idx, tile_id in enumerate(tile_ids):
+            start = tile_id * 32
+            buf[start:start + 32] = raw[idx * 32:idx * 32 + 32]
+
+    def put_world_map_title(buf, data):
+        pixels = blank_pixels(data, 48, 32)
+        draw_text(pixels, '월드맵', 0, y=8, scale=2, ink=12, shadow=13)
+        raw = pack_tiles(pixels)
+        for ty, row_ids in enumerate((range(0x26B, 0x271), range(0x277, 0x27D), range(0x284, 0x28A), range(0x293, 0x299))):
+            for tx, tile_id in enumerate(row_ids):
+                src = (ty * 6 + tx) * 32
+                start = tile_id * 32
+                buf[start:start + 32] = raw[src:src + 32]
+
+    def patch_labels(data):
+        buf = bytearray(data)
+        put_world_map_title(buf, data)
+        put_label(buf, data, list(range(0x271, 0x277)), '레드스타', x=3)
+        put_label(buf, data, list(range(0x27D, 0x284)), '블루문', x=5)
+        put_label(buf, data, list(range(0x28A, 0x293)), '옐로코멧', x=5)
+        put_label(buf, data, list(range(0x299, 0x2A1)), '그린어스', x=5)
+        put_label(buf, data, list(range(0x2A1, 0x2A7)), '내해', x=15)
+        put_label(buf, data, list(range(0x2B0, 0x2B2)), '서', x=4)
+        put_label(buf, data, list(range(0x2AE, 0x2B0)), '동', x=4)
+        put_label(buf, data, list(range(0x2B2, 0x2B6)), '해', x=1)
+        return buf
+
+    patched_per_block = 24 + 6 + 7 + 9 + 8 + 6 + 2 + 2 + 4
     patched = 0
     for off in (0x54214C, 0x5AAA68):
         dec = lz77_decompress(rom, off)
@@ -2090,16 +2134,12 @@ def patch_world_map_redstar_tiles(rom):
         data, consumed = dec
         if len(data) <= 0x2B6 * 32 + 32:
             raise AssertionError(f'unexpected world-map tile block size at 0x{off:X}: {len(data)}')
-        buf = bytearray(data)
-        new_tiles = make_tiles(data)
-        for idx, tile_id in enumerate(tile_ids):
-            start = tile_id * 32
-            buf[start:start + 32] = new_tiles[idx * 32:idx * 32 + 32]
-            patched += 1
+        buf = patch_labels(data)
         comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'world-map tile LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
         rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+        patched += patched_per_block
     return patched
 
 
@@ -2860,7 +2900,7 @@ def main():
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
-    st['world_map_redstar_tiles'] = patch_world_map_redstar_tiles(rom)
+    st['world_map_label_tiles'] = patch_world_map_label_tiles(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -9721,7 +9761,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'world_map_redstar_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
