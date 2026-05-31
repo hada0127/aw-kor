@@ -3863,6 +3863,7 @@ def main():
         0xA024D4: '적이',   # ...突破できねえんだ！！k[敵が]w思ったより... control gap
         0xA03280: '으로',   # 輸送車は「補給」[で、]... control gap
         0xA0E82C: '그럼',   # 行っちゃったわ。k[ま、]Wどのみち... control gap
+        0xD8FB9B: '적의',   # [敵の] <unit>... tutorial control gap
         0xD90E32: '지금',   # [今は] <공격>... tutorial command gap
         0xD91392: '지금',   # [今は] <공격>... tutorial command gap
         0xA0E3D0: '아',     # [あ]、료 맥스… → [아]、료…       (あ2B→아2B, 、유지)
@@ -3984,6 +3985,7 @@ def main():
         0xE0092C: '자  ',
         0xE04F52: '어? ',
         0xE0640E: '네? ',
+        0xEE24DC: '없음',
     }.items():
         enc = encode_text(text, syl_to_code, unmapped)
         if len(enc) != 4:
