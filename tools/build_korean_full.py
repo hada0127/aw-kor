@@ -2690,43 +2690,41 @@ def patch_part2_companion_hud_name(rom):
 
 
 def patch_part2_battle_day_hud_label(rom):
-    """Patch the fixed Part 2 battle HUD DAY OBJ letters to a Korean label."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+    """Remove the fixed Part 2 battle HUD DAY OBJ label.
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    The battle HUD prints the ASCII "DAY" string through a generic 8x8 OBJ font
+    sheet. A legible Korean replacement does not fit cleanly in the three tiny
+    8x8 tiles, so remove the English label and leave the day number intact.
+    """
+    def blank_tile():
+        return bytes(32)
 
-    def render_tile(ch):
-        tile = bytearray(32)
-        if not ch:
-            return tile
-        pixels = [[0] * 8 for _ in range(8)]
-        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-        x0 = max(0, (8 - w) // 2)
-        y0 = 1
-        for row in range(h):
-            for col in range(w):
-                if not grid[row][col]:
-                    continue
-                px = x0 + col + xo
-                py = y0 + row
-                if 0 <= px + 1 < 8 and 0 <= py + 1 < 8 and pixels[py + 1][px + 1] == 0:
-                    pixels[py + 1][px + 1] = 3
-                if 0 <= px < 8 and 0 <= py < 8:
-                    pixels[py][px] = 1
-        for row in range(8):
-            for col in range(8):
-                value = pixels[row][col] & 0x0F
-                bi = row * 4 + col // 2
-                if col & 1:
-                    tile[bi] |= value << 4
-                else:
-                    tile[bi] |= value
-        return tile
+    day = rom.find(b'DAY\x00', 0xB82000, 0xB84000)
+    if day < 0:
+        raise AssertionError('Part 2 battle DAY label string not found')
+    rom[day:day + 4] = b'   \x00'
 
-    for off, ch in [(0xBC7860, '일'), (0xBC7800, '수'), (0xBC7B00, '')]:
-        rom[off:off + 32] = render_tile(ch)
-    return 3
+    # 'A' is the start of the contiguous ASCII upper-case run in each copied
+    # HUD font sheet. The HUD text renderer maps spaces in this label to the
+    # 31st tile offset after A in this sheet.
+    tile_a = bytes.fromhex(
+        '00ffff00f011110f1ff11ff11ff11ff11f1111f11ff11ff11ff11ff1ffffffff'
+    )
+    blank = blank_tile()
+    patched = 0
+    pos = 0
+    while True:
+        pos = rom.find(tile_a, pos)
+        if pos < 0:
+            break
+        blank_off = pos + 31 * 32
+        if blank_off + 32 <= len(rom):
+            rom[blank_off:blank_off + 32] = blank
+            patched += 1
+        pos += 32
+    if patched == 0:
+        raise AssertionError('Part 2 battle HUD placeholder glyphs not patched')
+    return patched + 1
 
 
 def patch_part2_ryo_co_name_obj(rom):
