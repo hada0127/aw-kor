@@ -2207,6 +2207,46 @@ def patch_part2_mission_start_obj(rom):
     return 1
 
 
+def patch_part2_battle_start_day_overlay_obj(rom):
+    """Remove the affine-transformed Part 2 battle-start day/start Japanese art."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    blank = bytes(32)
+
+    def patch_block(off, tile_indices):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid battle-start day overlay LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        buf = bytearray(data)
+        patched = 0
+        for tile_idx in tile_indices:
+            start = tile_idx * 32
+            if start + 32 > len(buf):
+                raise AssertionError(f'battle-start day overlay tile out of range at 0x{off:X}: {tile_idx}')
+            buf[start:start + 32] = blank
+            patched += 1
+        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(f'battle-start day overlay LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+        rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+        return patched
+
+    patched = 0
+    # The visible "1日目 作戦開始" overlay is split across repeated compressed
+    # OBJ sheets, then affine-transformed at runtime. Replacing it with Hangul in
+    # the source sheets produces unreadable transformed strokes, so the safe
+    # localization step is to remove the Japanese art entirely.
+    patched += patch_block(0x45EC74, list(range(16, 32)) + list(range(160, 240)))
+    for off in (0x92DF84, 0x966C0C, 0x99F4B0, 0x9D7D54):
+        patched += patch_block(off, list(range(16, 32)) + list(range(160, 192)) + list(range(192, 208)))
+    for off in (0x92EB5C, 0x9677E4, 0x9A0088, 0x9D892C):
+        patched += patch_block(off, list(range(0, 32)))
+    return patched
+
+
 def patch_part2_mission_number_obj(rom):
     """Replace the Part 2 mission overlay's fixed MISSION 1 OBJ text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -2447,6 +2487,46 @@ def patch_part2_companion_hud_name(rom):
     off = 0xBD00B0
     rom[off:off + len(out)] = out
     return 1
+
+
+def patch_part2_battle_day_hud_label(rom):
+    """Patch the fixed Part 2 battle HUD DAY OBJ letters to a Korean label."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+
+    def render_tile(ch):
+        tile = bytearray(32)
+        if not ch:
+            return tile
+        pixels = [[0] * 8 for _ in range(8)]
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        x0 = max(0, (8 - w) // 2)
+        y0 = 1
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = x0 + col + xo
+                py = y0 + row
+                if 0 <= px + 1 < 8 and 0 <= py + 1 < 8 and pixels[py + 1][px + 1] == 0:
+                    pixels[py + 1][px + 1] = 3
+                if 0 <= px < 8 and 0 <= py < 8:
+                    pixels[py][px] = 1
+        for row in range(8):
+            for col in range(8):
+                value = pixels[row][col] & 0x0F
+                bi = row * 4 + col // 2
+                if col & 1:
+                    tile[bi] |= value << 4
+                else:
+                    tile[bi] |= value
+        return tile
+
+    for off, ch in [(0xBC7860, '일'), (0xBC7800, '수'), (0xBC7B00, '')]:
+        rom[off:off + 32] = render_tile(ch)
+    return 3
 
 
 def patch_part2_ryo_co_name_obj(rom):
@@ -3597,10 +3677,12 @@ def main():
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
+    st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
     st['part2_level_label'] = patch_part2_level_label_obj(rom)
     st['part2_check_label'] = patch_part2_check_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
+    st['part2_day_hud'] = patch_part2_battle_day_hud_label(rom)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
@@ -10705,7 +10787,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
