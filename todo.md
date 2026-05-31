@@ -134,6 +134,9 @@
 - [x] Part 2 튜토리얼 전투 행동 메뉴의 `待機` 잔여 일본어 수정.
   - 보호 UI 사전과 고정 라벨 테이블 양쪽에서 `대기` 표시 경로를 연결.
   - 실제 캡처 `temp/wait_label_verify_current/sheet.png` 기준 행동 메뉴 라벨이 `대기`로 표시됨을 확인.
+- [x] Part 2 튜토리얼 대기 명령 설명 문장 재분절.
+  - `대기 을 선택`처럼 보이던 슬롯 경계 문장을 `할 일 없을 땐 대기를 골라`로 조정.
+  - 실제 캡처 `temp/operation_tutorial_follow_after_wait_split/sheet.png`와 `temp/wait_label_action_after_split/sheet.png` 기준 설명 문장과 행동 메뉴 `대기` 라벨을 함께 확인.
 
 ## 현재 우선순위
 
