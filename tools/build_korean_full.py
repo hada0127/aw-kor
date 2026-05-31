@@ -4360,6 +4360,8 @@ def main():
         0xD8310E: '방어',
         0xD83112: '수입',
         0xD83116: '회복',
+        0xD82492: '정보',
+        0xD824AA: '종료',
         0xDF8B72: '거점',
         0xDF8B7A: '수입',
         0xDF8B82: '전멸',
@@ -4651,14 +4653,15 @@ def main():
                 raise AssertionError(f'unit option label length mismatch at 0x{base + off:X}')
             rom[base + off:base + off + 4] = enc
 
-    for faddr, text in {
-        0xB839AC: '거점수입',
-        0xB839C8: '초회수입',
-    }.items():
+    for faddr, slot_len, text in (
+        (0xB839A8, 8, '거점수입'),
+        (0xB839B4, 12, '매턴수입    '),
+        (0xB839C4, 8, '초회수입'),
+    ):
         enc = encode_text(text, syl_to_code, unmapped)
-        if len(enc) != 8:
+        if len(enc) != slot_len:
             raise AssertionError(f'income label length mismatch at 0x{faddr:X}')
-        rom[faddr:faddr + 8] = enc
+        rom[faddr:faddr + slot_len] = enc
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
     # source text directly to make the rendered line "이 화살표로 조작해".
