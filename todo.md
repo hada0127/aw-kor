@@ -2,8 +2,7 @@
 
 이 파일 하나를 현재 진행 기준으로 사용한다. 이전 진행 문서인
 `.claude/todo.md`와 `docs/plan.md`는 이 파일로 통합했으며, 혼선을 막기
-위해 `docs/plan.md`는 제거했다. 앞으로 작업 상태와 완료 기준은 이
-파일만 갱신한다.
+위해 둘 다 제거했다. 앞으로 작업 상태와 완료 기준은 이 파일만 갱신한다.
 
 과거 장기 계획과 상세 조사 기록은 git history, `docs/success.md`,
 `docs/fail.md`, `docs/research.md`에 남겨 둔다. 이 파일은 지금 해야 할
@@ -37,7 +36,7 @@
 - [x] Part 2 튜토리얼 초반 커서/보병/수송차/이동/점령/지형/자주포/맥스/수송헬기 구간 문장 깨짐 교정.
 - [x] Part 2 `0xA06B80-0xA14000` 구간의 일본식 말줄임표, 장음 기호, 미매핑 보조 번역을 정리.
   - ROM 디코드 감사 기준 `0xA06B80-0xA14000` bad=0, blank=0.
-- [x] `docs/plan.md`를 제거하고 진행 기준을 루트 `todo.md` 하나로 통합.
+- [x] `docs/plan.md`와 `.claude/todo.md`를 제거하고 진행 기준을 루트 `todo.md` 하나로 통합.
 - [x] Part 2 `0xA14000-0xA30000` 구간의 CSV 텍스트 슬롯 기준 잔여 일본어/깨짐 후보 정리.
   - CSV 슬롯 감사 기준 `0xA14000-0xA30000` bad=0.
   - `0xA2CAA4` blank 1개는 전각 공백 전용 슬롯이라 표시 문자열 대상에서 제외.
@@ -49,6 +48,9 @@
   - 보호 문자표/그래픽/테이블과 이미 행 단위로 재구성한 CSV 중간 슬롯을 제외한 실제 문장 후보 bad=0.
 - [x] Part 2 보호 전투 UI 테이블의 `항복` 명령 표시 개선.
   - `降車`는 기존 `하차` 글리프 경로를 유지하고, `降伏す`만 컨텍스트 치환으로 `항복` 표시 경로에 연결.
+- [x] Part 2 보호 전투 UI 테이블의 짧은 명령/상태 토큰 추가 개선.
+  - 직접 한글 코드를 쓰지 않고 SJIS 글리프 치환 경로로 `저장`, `잠수`, `부상`, `없음`, `있음` 표시를 연결.
+  - 보호 테이블 감사 기준 `セブ`, `もぐる`, `うかぶ`, `なし`, `あり`, `降伏す` 잔여 count=0.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
@@ -103,5 +105,5 @@
 ## 문서 규칙
 
 - 진행 상태는 이 파일만 수정한다.
-- `docs/plan.md`는 되살리지 않고, `.claude/todo.md`에는 새 체크리스트를 추가하지 않는다.
+- `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
 - 오래된 상세 기록이 필요하면 git history에서 이전 `docs/plan.md`와 `.claude/todo.md`를 확인한다.

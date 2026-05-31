@@ -1719,6 +1719,9 @@ PART2_UI_KANJI_GLYPH_SUBS = {
     # Context-only placeholder used by patch_part2_ui_context_tokens() for the
     # protected "降伏す" command. Keep "降" mapped to "하" for "降車".
     '北': '항',
+    # Additional context-only placeholders for short kana UI tokens whose slots
+    # must stay fixed-width in the protected Part 2 battle dictionaries.
+    '白': '부', '上': '상', '無': '없', '有': '있', '員': '음',
     # Unit/status popup names in the protected Part 2 dictionaries.
     '歩': '보', '兵': '병', '種': '종', '総': '총', '数': '수',
     '滅': '멸', '軽': '경', '重': '중', '偵': '정', '察': '찰',
@@ -1773,6 +1776,11 @@ def patch_part2_ui_context_tokens(rom):
     """Rewrite protected UI tokens while staying inside existing SJIS glyph paths."""
     replacements = [
         ('降伏す', '北復　'),  # 항복
+        ('セブ', '保存'),      # 저장
+        ('もぐる', '潜水　'),  # 잠수
+        ('うかぶ', '白上　'),  # 부상
+        ('なし', '無員'),      # 없음
+        ('あり', '有員'),      # 있음
     ]
     patched = 0
     start, end = 0xD82740, 0xD83100
