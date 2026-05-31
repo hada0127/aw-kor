@@ -1872,6 +1872,108 @@ def patch_part2_ryo_co_name_obj(rom):
     return 1
 
 
+def patch_part2_campaign_header_obj(rom):
+    """Replace the Part 2 campaign-map OBJ header with a Korean label."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 128, 32
+    pixels = [[0] * width for _ in range(height)]
+
+    def draw_syllable(ch, x, y, scale_x=2, scale_y=3):
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                for sy in range(scale_y):
+                    for sx in range(scale_x):
+                        px = x + (col + xo) * scale_x + sx
+                        py = y + row * scale_y + sy
+                        for dx, dy in ((1, 1), (1, 0), (0, 1)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = 14
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                for sy in range(scale_y):
+                    for sx in range(scale_x):
+                        px = x + (col + xo) * scale_x + sx
+                        py = y + row * scale_y + sy
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 1
+
+    # The original header reuses one source chunk for two different A sprites.
+    # Keep that shared chunk transparent and place the three Korean syllables in
+    # non-shared OBJ coverage windows to avoid duplicated fragments.
+    for ch, x in (('캠', 7), ('페', 34), ('인', 76)):
+        draw_syllable(ch, x, 3)
+
+    # OAM uses eight overlapping 16x32 vertical sprites. Keep the original
+    # coordinates and tile IDs, but replace the visible tile payload.
+    sprite_x = {
+        0x200: 4,
+        0x208: 16,
+        0x210: 30,
+        0x218: 45,
+        0x220: 57,
+        0x228: 71,
+        0x230: 81,
+        0x238: 93,
+    }
+    tiles = {}
+    for base_tile, sx0 in sprite_x.items():
+        for ty in range(4):
+            for tx in range(2):
+                tile = bytearray(32)
+                tile_id = base_tile + ty * 2 + tx
+                for row in range(8):
+                    for col in range(8):
+                        sx = sx0 + tx * 8 + col
+                        sy = ty * 8 + row
+                        value = pixels[sy][sx] if 0 <= sx < width else 0
+                        bi = row * 4 + col // 2
+                        if col & 1:
+                            tile[bi] |= value << 4
+                        else:
+                            tile[bi] |= value
+                tiles[tile_id] = bytes(tile)
+
+    # Source chunk offsets inside the final campaign-header LZ77 block. Chunk
+    # 0x000 feeds both OAM tile 0x208 and 0x220 in the original art, so it is
+    # intentionally left transparent.
+    source_chunks = {
+        0x200: 0x0100,
+        0x210: 0x0900,
+        0x218: 0x0C00,
+        0x228: 0x0600,
+        0x230: 0x0400,
+        0x238: 0x0A00,
+    }
+    off = 0x541BB8
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid campaign header LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x1400:
+        raise AssertionError(f'unexpected campaign header block size at 0x{off:X}: {len(data)}')
+    buf = bytearray(len(data))
+    patched = 0
+    for base_tile, source_off in source_chunks.items():
+        for idx in range(8):
+            buf[source_off + idx * 32:source_off + idx * 32 + 32] = tiles[base_tile + idx]
+            patched += 1
+    comp = lz77_compress(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'campaign header LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return patched
+
+
 MISSION_TITLE_TABLE_ORIG_FILE = 0xA3AF04
 MISSION_TITLE_TABLE_LITERAL_FILE = 0x37C548
 MISSION_TITLE_TABLE_FILE = 0xF40000
@@ -2627,6 +2729,7 @@ def main():
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
+    st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -9487,7 +9590,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
