@@ -2256,6 +2256,7 @@ def patch_part2_battle_obj_labels(rom):
     terrain = render_tiles('평지', 24, x=3, y=2)
     write_tiles(0xB93CD0, [terrain[i] for i in (0, 1, 3, 4, 2, 5)])
     write_tiles(0xB93BD0, render_tiles('육', 16, x=4, y=2))
+    write_tiles(0x465468, render_tiles('본부', 32, x=4, y=2))
 
     # Unit names in the same status popup are a fixed 32x16 OBJ tile strip.
     # Redraw the labels that appear through the Part 2 tutorial/battle status UI.
@@ -2282,7 +2283,7 @@ def patch_part2_battle_obj_labels(rom):
     for off, text in unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
         write_tiles(off, render_tiles(text, 32, x=x, y=2))
-    return 2 + len(unit_labels)
+    return 3 + len(unit_labels)
 
 
 def patch_part2_status_header_labels(rom):
