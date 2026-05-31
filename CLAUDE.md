@@ -21,9 +21,9 @@
 | 에뮬레이터 검증 | ✅ **brew `mgba 0.10.5` + mgbah 헤드리스 디버거**(`loadstate` 추가). **합성 키 입력 작동**(헤드리스 네비 가능). |
 | 잔여 | ⏳ overflow 882행(UI 라벨이 한글>슬롯 → 일본어 잔존; 축약/재배치 판단 필요) · 실기 테스트 · 플레이 중 낱한자 추가 발견분 |
 
-**다음 작업 계획서(필독 순서)**:
-1. [`.claude/todo.md`](.claude/todo.md) — **다음 3 세션 상세 TODO** (새 세션은 여기부터).
-2. [`docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`](docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md) — Phase A~E 로드맵.
+**다음 작업 기준(필독 순서)**:
+1. [`todo.md`](todo.md) — **현재 유일한 진행 기준**. 완료/대기/우선순위는 여기만 갱신한다.
+2. [`docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`](docs/DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md) — 구체 구현 로드맵 참고.
 3. [`docs/research.md`](docs/research.md) 맨 끝 — 대화 렌더 파이프라인 완전 RE(주소·테이블·공식).
 
 ### 알려진 핵심 사실 (반드시 인지 — 2026-05-25 갱신)
@@ -71,7 +71,7 @@ aw-kor/
 ├── CONTRIBUTING.md        # 기여 가이드
 ├── requirements.txt       # Python 의존성
 ├── .project-config.json   # 프로젝트 설정
-├── .claude/               # settings.json(codex+gemini 리뷰 Stop 훅) + todo.md(★다음 작업 3세션 계획)
+├── .claude/               # settings.json(codex+gemini 리뷰 Stop 훅)
 │
 ├── original/              # 원본 자산 (git-ignored *.gba)
 │   ├── Game Boy Wars Advance 1+2 (Japan).gba        # 원본 ROM (16MB)
@@ -123,7 +123,8 @@ aw-kor/
 ```
 
 ### docs/ 주요 문서
-- **계획/리서치**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(★현재 계획, Phase A~E), `research.md`(★대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `plan.md`, `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
+- **진행 기준**: 루트 `todo.md` 하나만 사용한다. 구 `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
+- **계획/리서치 참고**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(구체 구현 로드맵), `research.md`(대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
 - **번역 가이드**: `TRANSLATION_GUIDE.md`, `TRANSLATION_TONE_AND_STORY_GUIDE.md`, `AI_TRANSLATION_REFERENCE.md`, `TRANSLATION_REAUDIT_2026_05_18.md`
 - **폰트(PHASE5-3)**: `PHASE5_3_FONT_ANALYSIS_COMPLETE.md`, `PHASE5_3_FONT_STATUS.md`, `PHASE5_3_ROM_FONT_ANALYSIS.md`
 - **빌드/QA(PHASE5~7)**: `PHASE5_*` , `PHASE6_QA_FRAMEWORK.md`, `PHASE6_TESTING_GUIDE.md`, `PHASE7_DISTRIBUTION_PREP.md`
@@ -182,7 +183,7 @@ aw-kor/
 ### 1. 문서 업데이트 (4개 핵심 문서)
 | 문서 | 언제 업데이트 | 무엇을 추가 |
 |------|----------|-----------|
-| `docs/plan.md` | 다음 계획·로드맵 변경 시 | 완료된 항목 ✅ 체크, 새 단계 추가 |
+| `todo.md` | 다음 계획·우선순위 변경 시 | 완료된 항목 체크, 새 단계 추가 |
 | `docs/success.md` | 검증된 작동 결과 확인 시 | 작동한 정확한 방법·산출물·증거 (re-run 가능한 형식) |
 | `docs/fail.md` | 시도 후 실패·dead-end 발견 시 | 사유, 다시 시도하지 않도록 조건 명시 |
 | `docs/research.md` | 새 RE 사실·주소·공식 발견 시 | 주소·디스어셈블·테이블 등 reproducible 사실 |

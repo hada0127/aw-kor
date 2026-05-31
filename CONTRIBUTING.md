@@ -80,7 +80,7 @@ GitHub에서 Pull Request를 생성하고 다음을 포함합니다:
 **역할:** Game Wars의 일본어 텍스트를 한글로 번역
 
 **시작 방법:**
-1. `docs/plan.md`의 PHASE 4 참고
+1. 루트 `todo.md`의 현재 우선순위 참고
 2. `docs/translation_process.md` 읽기
 3. 프로젝트 리더에 연락 → 번역 배정
 
@@ -263,9 +263,9 @@ def extractText(romPath,tblMapping):
 aw-kor/
 ├── original/              # 원본 ROM
 ├── docs/                  # 문서
-│   ├── plan.md           # 프로젝트 계획
 │   ├── rom_analysis_guide.md
 │   └── translation_process.md
+├── todo.md                # 현재 유일한 진행 기준
 ├── tools/                # 스크립트 및 도구
 │   ├── extract_text.py
 │   ├── import_text.py

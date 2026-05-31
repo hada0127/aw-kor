@@ -384,7 +384,7 @@ PHASE 6 완료 기준:
 
 ## 참고 자료
 
-- `docs/plan.md`: 전체 프로젝트 계획
+- `todo.md`: 현재 진행 기준과 우선순위
 - `docs/PHASE5_IMPLEMENTATION_SUMMARY.md`: PHASE 5 상태
 - Game Wars ROM 헤더 정보
 - GBA 에뮬레이터 문서

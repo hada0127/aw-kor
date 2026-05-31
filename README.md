@@ -36,7 +36,7 @@ aw-kor/
 
 ## 진행 상황
 
-자세한 진행 상황은 `docs/plan.md` 참고
+자세한 진행 상황과 현재 우선순위는 루트 [`todo.md`](todo.md)만 참고합니다.
 
 ### 마일스톤 (2026-05-11)
 
@@ -93,7 +93,7 @@ aw-kor/
 
 ## 참고 자료
 
-- 계획: `docs/plan.md`
+- 진행 기준: [`todo.md`](todo.md)
 - ROM 분석: `docs/research.md` (작성 예정)
 - 번역 진행: Google Sheets (준비 예정)
 

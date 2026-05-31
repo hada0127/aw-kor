@@ -37,6 +37,8 @@
 - [x] Part 2 `0xA06B80-0xA14000` 구간의 일본식 말줄임표, 장음 기호, 미매핑 보조 번역을 정리.
   - ROM 디코드 감사 기준 `0xA06B80-0xA14000` bad=0, blank=0.
 - [x] `docs/plan.md`와 `.claude/todo.md`를 제거하고 진행 기준을 루트 `todo.md` 하나로 통합.
+- [x] 활성 안내 문서의 구식 `docs/plan.md`/`.claude/todo.md` 참조를 루트 `todo.md` 기준으로 정리.
+  - `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `docs/PHASE6_QA_FRAMEWORK.md`의 현재 작업 안내가 모두 `todo.md`를 가리키도록 수정.
 - [x] Part 2 `0xA14000-0xA30000` 구간의 CSV 텍스트 슬롯 기준 잔여 일본어/깨짐 후보 정리.
   - CSV 슬롯 감사 기준 `0xA14000-0xA30000` bad=0.
   - `0xA2CAA4` blank 1개는 전각 공백 전용 슬롯이라 표시 문자열 대상에서 제외.
