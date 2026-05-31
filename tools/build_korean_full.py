@@ -2152,6 +2152,64 @@ def patch_part2_battle_obj_labels(rom):
     return 2 + len(unit_labels)
 
 
+def patch_part2_command_menu_co_icon(rom):
+    """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
+    width, height = 16, 24
+    pixels = [[0] * width for _ in range(height)]
+
+    def put(x, y, value):
+        if 0 <= x < width and 0 <= y < height:
+            pixels[y][x] = value
+
+    # Palette bank A on this menu uses 1=light, 3=mid shadow, 4=dark outline.
+    shield_rows = {
+        3: (6, 9),
+        4: (5, 10),
+        5: (4, 11),
+        6: (4, 11),
+        7: (3, 12),
+        8: (3, 12),
+        9: (3, 12),
+        10: (3, 12),
+        11: (4, 11),
+        12: (4, 11),
+        13: (5, 10),
+        14: (5, 10),
+        15: (6, 9),
+        16: (7, 8),
+    }
+    for y, (x0, x1) in shield_rows.items():
+        for x in range(x0, x1 + 1):
+            put(x + 1, y + 1, 3)
+    for y, (x0, x1) in shield_rows.items():
+        for x in range(x0, x1 + 1):
+            border = x in (x0, x1) or y in (3, 16)
+            put(x, y, 4 if border else 2)
+    for x, y in [(8, 6), (8, 7), (8, 8), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (7, 10), (8, 10), (9, 10), (8, 11), (8, 12)]:
+        put(x, y, 1)
+
+    offsets = {
+        (0, 0): 0x454154,
+        (1, 0): 0x454174,
+        (0, 1): 0x453794,
+        (1, 1): 0x4537B4,
+        (0, 2): 0x4537D4,
+        (1, 2): 0x4537F4,
+    }
+    for (tx, ty), off in offsets.items():
+        tile = bytearray(32)
+        for row in range(8):
+            for col in range(8):
+                value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                bi = row * 4 + col // 2
+                if col & 1:
+                    tile[bi] |= value << 4
+                else:
+                    tile[bi] |= value
+        rom[off:off + 32] = tile
+    return len(offsets)
+
+
 def patch_part2_mission_start_obj(rom):
     """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -3685,6 +3743,7 @@ def main():
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
+    st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
@@ -10704,7 +10763,7 @@ def main():
         (0xA2988A, 4, '종료'),
         (0xA29892, 8, '승리조건'),
         (0xA2989E, 4, '상황'),
-        (0xA298A6, 10, '지휘'),
+        (0xA298A6, 10, '정보'),
         (0xA298B6, 6, '규칙'),
         (0xA298C2, 10, '음악있음'),
         (0xA298D2, 10, '음악없음'),
@@ -10738,7 +10797,7 @@ def main():
         (0xB82D1A, 4, '작전'),
         (0xB82D22, 4, '부대'),
         (0xB82D2A, 6, '규칙'),
-        (0xB82D36, 10, '지휘'),
+        (0xB82D36, 10, '정보'),
         (0xB82D4E, 8, '승리조건'),
         (0xB82D58, 14, '나가기'),
         (0xB82D6A, 8, '항복'),
@@ -10796,7 +10855,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
