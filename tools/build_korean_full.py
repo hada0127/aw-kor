@@ -400,6 +400,17 @@ ADDRESS_TEXT_OVERRIDES = {
     0xEE22E8: '통신1',
     0xEE25A0: '항복',
     0xEE2838: '통신준비중!',
+    0xEE212C: '2-6거리',
+    0xEE2138: '3-5거리',
+    0xEE2144: '2-3거리',
+    0xEE21C4: '암초해',
+    0xEE2434: '공격기',
+    0xEE2464: '대공자주포',
+    0xEE2470: '열차포',
+    0xEE248C: '보급차',
+    0xEE2494: '신형전차',
+    0xEE24B8: '중전차',
+    0xEE24C8: '전투공병',
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '너 이 게임 처음이니?',
