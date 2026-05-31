@@ -24,6 +24,7 @@ import build_korean_poc as P
 
 BASE = P.BASE
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
+COMPREHENSIVE_TRANS = os.path.join(BASE, 'data', 'translation_comprehensive.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
 SAFE_MIN_ADDR = 0x800000
@@ -2435,6 +2436,60 @@ def main():
             st['written'] += 1
             written_addrs.add(a)
 
+    # translation_for_import.csv is the curated import base, but the Part 2
+    # script block at 0xA00000-0xA3FFFF still has many audited translations only
+    # in translation_comprehensive.csv. Apply only rows marked Translated, only
+    # when the address was absent from the import file, and only when they fit
+    # the original slot.
+    if os.path.exists(COMPREHENSIVE_TRANS):
+        with open(COMPREHENSIVE_TRANS, newline='') as f:
+            for row in csv.DictReader(f):
+                if row.get('status') != 'Translated':
+                    continue
+                try:
+                    a = int(row['address'], 16)
+                except (ValueError, TypeError):
+                    st['supp_bad_addr'] += 1
+                    continue
+                if a in seen_import_addrs or a in written_addrs:
+                    st['supp_seen'] += 1
+                    continue
+                if not (0xA00000 <= a < 0xA40000):
+                    st['supp_outside'] += 1
+                    continue
+                ko = (row.get('korean') or '').strip()
+                if not ko or ko == '미상' or not any('가' <= ch <= '힣' for ch in ko):
+                    st['supp_no_ko'] += 1
+                    continue
+                slot = slots.get(a, 0)
+                if slot <= 0:
+                    st['supp_no_slot'] += 1
+                    continue
+                if in_deny(a, a + slot):
+                    st['supp_deny'] += 1
+                    continue
+                ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+                if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
+                    ko = normalize_pair_renderer_text(ko)
+                enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+                if enc is None:
+                    st['supp_overflow'] += 1
+                    try:
+                        encoded_len = len(encode_text(ko, syl_to_code, unmapped))
+                    except KeyError:
+                        encoded_len = -1
+                    report.append((row['address'], ko, encoded_len, slot))
+                    continue
+                if a + slot > len(rom):
+                    st['supp_oob'] += 1
+                    continue
+                fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+                rom[a:a + slot] = bytes([fill]) * slot
+                rom[a:a + len(enc)] = enc
+                st['supp_written'] += 1
+                st[f'supp_level{level}'] += 1
+                written_addrs.add(a)
+
     # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
@@ -2532,6 +2587,44 @@ def main():
         if len(payload) > slot_len:
             raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
+
+    for faddr, fend, text, label in [
+        (0xA02684, 0xA0268A, '사령!', 'part2 tutorial commander row'),
+        (0xA026C8, 0xA026CE, '확인.', 'part2 tutorial roger row'),
+        (0xA028E3, 0xA028EB, '적군은,', 'part2 tutorial enemy army row'),
+        (0xA02B08, 0xA02B10, '지금', 'part2 tutorial selected row'),
+        (0xA02B11, 0xA02B19, '종료', 'part2 tutorial end command row'),
+        (0xA02D2C, 0xA02D32, '점령은', 'part2 tutorial capture particle row'),
+        (0xA02DBF, 0xA02DC7, '점령', 'part2 tutorial capture command row'),
+        (0xA02E96, 0xA02E9E, '대기', 'part2 tutorial wait command row'),
+        (0xA02F0D, 0xA02F1D, '수송차는보병을', 'part2 tutorial apc infantry row'),
+        (0xA02F58, 0xA02F5E, '태워?', 'part2 tutorial load question row'),
+        (0xA02FAA, 0xA02FB2, '탑승', 'part2 tutorial load command row'),
+        (0xA02FE5, 0xA02FED, '하차', 'part2 tutorial unload command row'),
+        (0xA0316B, 0xA0317D, '빠질지도몰라', 'part2 tutorial drown row'),
+        (0xA031E7, 0xA031ED, '그때', 'part2 tutorial each time row'),
+        (0xA031F9, 0xA03201, '주포탄', 'part2 tutorial main ammo row'),
+        (0xA03244, 0xA0324C, '되고,', 'part2 tutorial becomes row'),
+        (0xA0326E, 0xA03276, '수송차는', 'part2 tutorial apc row'),
+        (0xA03277, 0xA0327F, '보급', 'part2 tutorial supply command row'),
+        (0xA032EF, 0xA032F7, '급할땐', 'part2 tutorial hurry row'),
+        (0xA032F8, 0xA03300, '보급', 'part2 tutorial supply command repeat row'),
+        (0xA03332, 0xA03340, '수송차는아군을', 'part2 tutorial apc helps row'),
+        (0xA0341A, 0xA03422, '대기', 'part2 tutorial wait repeat row'),
+        (0xA03493, 0xA034A1, '이동타입', 'part2 tutorial movement type row'),
+        (0xA034D9, 0xA034ED, '수송차　이동타입은', 'part2 tutorial apc move type row'),
+        (0xA034EE, 0xA034F6, '전차', 'part2 tutorial tank type row'),
+        (0xA034FE, 0xA0350C, '전차타입은,', 'part2 tutorial tank type lead row'),
+        (0xA03624, 0xA0362C, '종료', 'part2 tutorial end command repeat row'),
+        (0xA0369A, 0xA036A2, '종료', 'part2 tutorial map end command row'),
+        (0xA037CE, 0xA037D6, '억지로', 'part2 tutorial forcefully row'),
+        (0xA0389C, 0xA038A4, '직접공격', 'part2 tutorial direct attack row'),
+        (0xA038DC, 0xA038EA, '이동한뒤,', 'part2 tutorial after moving row'),
+        (0xA0394D, 0xA03955, '반드시적', 'part2 tutorial enemy counter row'),
+        (0xA03A71, 0xA03A7F, '유닛위에', 'part2 tutorial on unit row'),
+        (0xA03B16, 0xA03B1E, '공격', 'part2 tutorial attack command row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     attack_intro_row = (
         encode_text('이　', syl_to_code, unmapped)
@@ -8039,7 +8132,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
