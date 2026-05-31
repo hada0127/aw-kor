@@ -171,6 +171,9 @@
 - [x] Part 2 첫 전투 정보 패널의 프로필 라벨 오독 완화.
   - 작은 정보 패널 폰트에서 `무척`, `아침`이 흐리게 읽히던 문구를 `동료를 아낌`, `싫어함 기상`으로 단축.
   - 실제 캡처 `temp/info_panel_profile_polish_verify2/sheet_long.png` 기준 안정 프레임에서 문구가 깨짐 없이 표시됨을 확인.
+- [x] Part 2 캠페인 프롤로그 초반 대사 일본어/깨짐 정리.
+  - `0xA01970-0xA01CA3`, `0xA0E398-0xA0E819` 구간의 짧은 대사 조각을 화면 폭에 맞게 고정하고, CSV 추출이 놓친 제어 갭 `今、`/`今は`를 직접 한글화.
+  - 실제 캡처 `temp/prologue_part2_initial_current_polished/sheet.png`와 `temp/prologue_part2_dialog_polish_finalcheck/sheet.png` 기준 프롤로그 초반 일본어 잔여와 `슥` 계열 깨짐이 사라짐을 확인.
 
 ## 현재 우선순위
 
