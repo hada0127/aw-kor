@@ -8910,7 +8910,7 @@ def main():
         (0xD9F5DE, 0xD9F5E8, '볼수있어!', 'terrain info detail row'),
         (0xD9F5ED, 0xD9F5FB, '지형방어력,', 'terrain defense row'),
         (0xD9F5FE, 0xD9F610, '거점이면　수입', 'base income row'),
-        (0xD9F615, 0xD9F63F, '「COST」는　그　이동타입　유닛이', 'cost terrain lead row'),
+        (0xD9F615, 0xD9F63F, '「비용」은　그　이동타입　유닛이', 'cost terrain lead row'),
         (0xD9F642, 0xD9F66C, '얼마나　이동비용으로　움직이는지', 'cost terrain row'),
         (0xD9F671, 0xD9F693, '유닛정보와　함께보면', 'terrain with unit info row'),
         (0xD9F696, 0xD9F6A8, '보기　편할거야', 'terrain easier row'),
