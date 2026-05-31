@@ -99,6 +99,9 @@
 - [x] Part 1 이름/문자 그리드 보호 범위 보강.
   - `0xDF9FF2`의 `ハヒフヘホッャュョー` 행이 일반 텍스트처럼 인코딩되던 문제를 막기 위해 `0xDF9F00-0xDFA110` 전체를 이름/문자표 데이터로 보호.
   - 튜토리얼/후속 대사 감사 기준 `0xD8F000-0xDE0000` 잔여 일본어 hits=0, `0xDE0000-0xE18000` 잔여 13건은 이름/문자표 데이터.
+- [x] Part 1 보호 UI 테이블의 공통 전투/룰 설정 토큰 한글화.
+  - Part 2 보호 UI에서 쓰던 안전한 SJIS placeholder+글리프 치환 방식을 Part 1 보호 UI 테이블(`0x805100-0x805A24`)에도 적용.
+  - `索敵`, `てんき`, `ブレイク`, `初回収入`, `毎タン収入`, `アリ`, `ナシ`, `ハレ`, `ユキ`, `メランダム` 등을 보호 테이블 전용 한글 표시 경로로 연결.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`

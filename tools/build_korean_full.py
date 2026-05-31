@@ -50,7 +50,7 @@ DENY_REGIONS = [
     # UI dictionary/list tables rendered by non-dialogue paths. Korean reserved
     # SJIS codes here can corrupt mode/operation/battle UI before the Hangul
     # renderer hooks see them; localize these later via their own UI path.
-    ('part1_ui_text_table', 0x805100, 0x805A00),
+    ('part1_ui_text_table', 0x805100, 0x805A24),
     ('part2_ui_text_table', 0xD82740, 0xD83100),
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
 ]
@@ -1887,6 +1887,10 @@ PART2_UI_KANJI_GLYPH_SUBS = {
     '途': '칠', '届': '흑', '番': '의', '切': '숲',
     '黒': '흑', '幕': '막', '決': '결', '着': '착',
     '夢': '유', '弦': '닛', '箕': '미', '紗': '사', '炒': '일',
+    # Rule/weather setting placeholders shared by protected compact tables.
+    '父': '브', '天': '날', '気': '씨', '初': '초', '毎': '매',
+    '単': '턴', '低': '랜', '強': '덤', '短': '규', '則': '칙',
+    '前': '색',
     # Unit/status popup names in the protected Part 2 dictionaries.
     '歩': '보', '兵': '병', '種': '종', '総': '총', '数': '수',
     '滅': '멸', '軽': '경', '重': '중', '偵': '정', '察': '찰',
@@ -1938,7 +1942,12 @@ def patch_part2_ui_kanji_glyphs(rom, orig):
 
 
 def patch_part2_ui_context_tokens(rom):
-    """Rewrite protected UI tokens while staying inside existing SJIS glyph paths."""
+    """Rewrite protected UI tokens while staying inside existing SJIS glyph paths.
+
+    The same compact dictionaries exist in both Part 1 and Part 2 regions. Use
+    placeholder SJIS kanji plus patched glyphs instead of Korean reserved codes,
+    because these UI renderers are not the normal dialogue path.
+    """
     replacements = [
         ('降伏す', '北復　'),  # 항복
         ('セブ', '保場'),      # 저장
@@ -1997,22 +2006,37 @@ def patch_part2_ui_context_tokens(rom):
         ('グリア', '近緑　'),              # 그린
         ('イエロコメト', '礼路個目　　'),  # 옐로코멧
         ('ブラックホール', '聞落法　　　　'),  # 블랙홀
+        ('ルー', '短則'),                  # 규칙
+        ('索敵', '前敵'),                  # 색적
+        ('てんき', '天気　'),              # 날씨
+        ('ブレイク', '父令移護'),          # 브레이크
+        ('初回収入', '初機収入'),          # 초기수입
+        ('毎タン収入', '毎単収入　'),      # 매턴수입
+        ('アリ', '有員'),                  # 있음
+        ('ナシ', '無員'),                  # 없음
+        ('ハレ', '海　'),                  # 해
+        ('ユキ', '雪　'),                  # 눈
+        ('メランダム', '低強　　　'),      # 랜덤
     ]
     patched = 0
-    start, end = 0xD82740, 0xD83100
+    protected_ranges = [
+        (0x805100, 0x805A24),   # Part 1 compact UI dictionaries
+        (0xD82740, 0xD83100),   # Part 2 compact UI dictionaries
+    ]
     for old_text, new_text in replacements:
         old = old_text.encode('shift_jis')
         new = new_text.encode('shift_jis')
         if len(old) != len(new):
             raise AssertionError(f'part2 UI context replacement length mismatch: {old_text}')
-        pos = start
-        while True:
-            idx = rom.find(old, pos, end)
-            if idx < 0:
-                break
-            rom[idx:idx + len(old)] = new
-            patched += 1
-            pos = idx + len(new)
+        for start, end in protected_ranges:
+            pos = start
+            while True:
+                idx = rom.find(old, pos, end)
+                if idx < 0:
+                    break
+                rom[idx:idx + len(old)] = new
+                patched += 1
+                pos = idx + len(new)
     return patched
 
 
