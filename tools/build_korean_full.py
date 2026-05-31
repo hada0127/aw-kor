@@ -2210,26 +2210,27 @@ def patch_part2_battle_obj_labels(rom):
     from bdf import load_bdf, glyph_grid
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
+    unit_font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
-    def render_tiles(text, width, height=16, x=0, y=2, ink=1, shadow=15):
+    def render_tiles(text, width, height=16, x=0, y=2, ink=1, shadow=15, font_obj=font, advance=8):
         pixels = [[0] * width for _ in range(height)]
         cursor = x
         for ch in text:
-            if ord(ch) not in font:
-                cursor += 8
+            if ord(ch) not in font_obj:
+                cursor += advance
                 continue
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            grid, w, h, xo, _yo = glyph_grid(font_obj[ord(ch)])
             for row in range(h):
                 for col in range(w):
                     if not grid[row][col]:
                         continue
                     px = cursor + col + xo
                     py = y + row
-                    if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                    if shadow is not None and 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
                         pixels[py + 1][px + 1] = shadow
                     if 0 <= px < width and 0 <= py < height:
                         pixels[py][px] = ink
-            cursor += 8
+            cursor += advance
 
         tiles = []
         for ty in range(height // 8):
@@ -2282,7 +2283,7 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
-        write_tiles(off, render_tiles(text, 32, x=x, y=2))
+        write_tiles(off, render_tiles(text, 32, x=x, y=4, shadow=None, font_obj=unit_font))
     return 3 + len(unit_labels)
 
 
