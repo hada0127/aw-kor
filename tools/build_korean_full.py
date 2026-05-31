@@ -7022,6 +7022,29 @@ def main():
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
+    for faddr, fend, text, label in [
+        (0xDCB20E, 0xDCB228, '역시　도미노!　잘아네!', 'domino knows mopp row'),
+        (0xDCB22E, 0xDCB258, '...뭔가　하나　더　잊은것같은데', 'forgot one more thing row'),
+        (0xDCB25B, 0xDCB271, '그런느낌인데...', 'forgot one more tail row'),
+        (0xDCB276, 0xDCB284, '대단하네', 'mopp impressed row'),
+        (0xDCB287, 0xDCB297, '내가　졌어', 'mopp defeated row'),
+        (0xDCB29E, 0xDCB2BA, '네가　모프　쇼군인가?', 'ryo asks mopp row'),
+        (0xDCB2C2, 0xDCB2CC, '맞아', 'mopp yes row'),
+        (0xDCB2D1, 0xDCB2FB, '확인하고싶은게　있었는데', 'mopp wanted confirm row'),
+        (0xDCB2FE, 0xDCB318, '이걸로　확신했어', 'mopp now certain row'),
+        (0xDCB31D, 0xDCB32D, '그럼　또봐!', 'mopp see you row'),
+        (0xDCB332, 0xDCB350, '...벌써　저쪽까지...', 'mopp already far row'),
+        (0xDCB356, 0xDCB380, '먼저　１２거점을　빼앗겼어...', 'lost twelve bases row'),
+        (0xDCB384, 0xDCB392, '님　패배야', 'commander defeat row'),
+        (0xDCB39A, 0xDCB3C4, '모프의　쇼군브레이크는　강력해', 'mopp break strong row'),
+        (0xDCB3C9, 0xDCB3F1, '하지만　우리　쇼군은　료야', 'our co is ryo row'),
+        (0xDCB3F6, 0xDCB41A, '모프가　쇼군브레이크를　쓰면', 'mopp break if row'),
+        (0xDCB41D, 0xDCB447, '맞춰서　쇼군브레이크를　쓰면돼!', 'use break in response row'),
+        (0xDCB44C, 0xDCB462, 'HP가　회복될거야!', 'hp restored row'),
+        (0xDCB467, 0xDCB47B, '다음엔　힘내!', 'mopp advice next cheer row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
     # tiny tilemap hook above rewrites the visible row to "예 아니오".
