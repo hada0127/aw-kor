@@ -1974,6 +1974,135 @@ def patch_part2_campaign_header_obj(rom):
     return patched
 
 
+def patch_part2_redstar_region_obj(rom):
+    """Replace the Part 2 campaign-map REDSTAR OBJ label with Korean art."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 96, 32
+    pixels = [[0] * width for _ in range(height)]
+
+    cursor = 13
+    y0 = 0
+    scale = 2
+    for ch in '레드스타':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px0 = cursor + (col + xo) * scale
+                py0 = y0 + row * scale
+                for sy in range(scale):
+                    for sx in range(scale):
+                        px = px0 + sx
+                        py = py0 + sy
+                        for dx, dy in ((1, 1), (1, 0)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = 7
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 4
+        cursor += (w + 1) * scale
+
+    out = bytearray(48 * 32)
+    # The source block is streamed into three 32x32 square OBJs at tile IDs
+    # 0x100, 0x110, and 0x120. Pack each 32x32 sprite as 4x4 row-major tiles.
+    for sprite in range(3):
+        for ty in range(4):
+            for tx in range(4):
+                tile_idx = sprite * 16 + ty * 4 + tx
+                for row in range(8):
+                    for col in range(8):
+                        value = pixels[ty * 8 + row][sprite * 32 + tx * 8 + col] & 0x0F
+                        bi = tile_idx * 32 + row * 4 + col // 2
+                        if col & 1:
+                            out[bi] |= value << 4
+                        else:
+                            out[bi] |= value
+
+    off = 0x5488A0
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Red Star region LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != len(out):
+        raise AssertionError(f'unexpected Red Star region block size at 0x{off:X}: {len(data)}')
+    comp = lz77_compress(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Red Star region LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 48
+
+
+def patch_world_map_redstar_tiles(rom):
+    """Patch the small world-map REDSTAR tile label shared by the map and legend."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    tile_ids = list(range(0x271, 0x277))
+    width, height = len(tile_ids) * 8, 8
+
+    def make_tiles(data):
+        blank = data[0x2B6 * 32:0x2B6 * 32 + 32]
+        pixels = [[0] * width for _ in range(height)]
+        for tile in range(len(tile_ids)):
+            for row in range(8):
+                for col in range(8):
+                    value = blank[row * 4 + col // 2]
+                    pixels[row][tile * 8 + col] = value >> 4 if col & 1 else value & 0x0F
+
+        cursor = 3
+        for ch in '레드스타':
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo
+                    py = row
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = 12
+            cursor += w + 1
+
+        out = bytearray(len(tile_ids) * 32)
+        for tile in range(len(tile_ids)):
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[row][tile * 8 + col] & 0x0F
+                    bi = tile * 32 + row * 4 + col // 2
+                    if col & 1:
+                        out[bi] |= value << 4
+                    else:
+                        out[bi] |= value
+        return out
+
+    patched = 0
+    for off in (0x54214C, 0x5AAA68):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid world-map tile LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        if len(data) <= 0x2B6 * 32 + 32:
+            raise AssertionError(f'unexpected world-map tile block size at 0x{off:X}: {len(data)}')
+        buf = bytearray(data)
+        new_tiles = make_tiles(data)
+        for idx, tile_id in enumerate(tile_ids):
+            start = tile_id * 32
+            buf[start:start + 32] = new_tiles[idx * 32:idx * 32 + 32]
+            patched += 1
+        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(f'world-map tile LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+        rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return patched
+
+
 MISSION_TITLE_TABLE_ORIG_FILE = 0xA3AF04
 MISSION_TITLE_TABLE_LITERAL_FILE = 0x37C548
 MISSION_TITLE_TABLE_FILE = 0xF40000
@@ -2730,6 +2859,8 @@ def main():
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
+    st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
+    st['world_map_redstar_tiles'] = patch_world_map_redstar_tiles(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -9590,7 +9721,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'world_map_redstar_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
