@@ -561,9 +561,10 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02AAC: '유닛에 명령을 내려보자',
     0xA02ACF: '원하는 유닛에 화살표를 맞춰',
     0xA02AF5: 'Ａ를 눌러',
-    # The infantry explanation is split into 14/20/30-byte fragments. The CSV
-    # wording overruns those records and makes adjacent fragments bleed together.
-    0xA02BD4: '그건 보병이야',
+    # The infantry explanation is split into 14/20/30-byte fragments with
+    # inline separators between records. Keep the first fragment short so the
+    # separator does not attach to the final Hangul glyph.
+    0xA02BD4: '보병이야',
     0xA02BE4: '전투력은 낮지만',
     0xA02BFA: '전투엔 꼭 필요한 유닛이야',
     0xA02B65: '아군 행동이 끝나면',
