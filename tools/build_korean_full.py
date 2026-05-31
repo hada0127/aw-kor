@@ -375,7 +375,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF5D62: '커서 조작부터',
     0xDF5D81: '공격법도 설명이야',
     0xDF5D9A: '처음뵙겠습니다',
-    0xDF5DA9: ' 님',
+    0xDF5DA9: '님',
+    0xDF5DD2: '나는 레드스타국의 사령관',
     0xDF5E85: '제법 큰 나라야.',
     0xDF5EA0: '이웃은 블루문국.',
     0xDF5EC3: '블루문과 사이가 나빠서',
@@ -388,6 +389,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF6016: '사령관 후보생인　',
     0xDF6038: '당신에게 명령이 내려졌어.',
     0xDF6061: '아라라에서 블루문군을',
+    0xDF8E6E: '레드스타국의 사령관',
     0xDF6088: '몰아내는 게 임무야.',
     0xDF60AD: '내가 지원할게.',
     0xDF60C6: '자, 출격이야!',
@@ -1710,13 +1712,10 @@ POST_TEXT_RESTORE = {
 }
 
 INTRO_DIRECT_TEXT = {
-    # Part 2 first intro uses the same name-control layout as the Part 1 intro:
-    # text fragment, byte 0x69 for the entered player name, then さん/さん！.
-    0xDF5D9A: ('뵙겠습니다. ', 14),
-    # These fragments surround the runtime player-name control byte. The generic
-    # slot fitter removes punctuation to save bytes, but this intro has enough
-    # room and needs the period/spacing to read naturally.
-    0xDF8E3E: ('뵙겠습니다. ', 14),
+    # Early name-control intros are compact: text fragment, byte 0x69 for the
+    # entered player name, then さん/さん！. Keep the prefix exactly 14 bytes.
+    0xDF5D9A: ('처음뵙습니다', 14),
+    0xDF8E3E: ('처음뵙습니다', 14),
     0xDF8E58: ('나는　캐서린。', 16),
 }
 
@@ -3262,14 +3261,14 @@ def encode_text(ko, syl_to_code, unmapped):
 
 def patch_name_honorific_fragments(rom, syl_to_code, unmapped):
     """Localize name-control suffix fragments like <0x69>さん in scripts."""
-    honorific = encode_text('　님', syl_to_code, unmapped)
+    honorific = encode_text('님', syl_to_code, unmapped)
     replacements = [
-        (b'\x69\x82\xB3\x82\xF1\x82\xCD', b'\x69' + honorific + encode_text('은', syl_to_code, unmapped)),
-        (b'\x69\x82\xB3\x82\xF1\x82\xAA', b'\x69' + honorific + encode_text('이', syl_to_code, unmapped)),
-        (b'\x69\x82\xB3\x82\xF1\x81\x41', b'\x69' + honorific + b'\x81\x41'),
-        (b'\x69\x82\xB3\x82\xF1\x81\x49', b'\x69' + honorific + b'\x81\x49'),
-        (b'\x69\x82\xB3\x82\xF1\x72', b'\x69' + honorific + b'\x72'),
-        (b'\x69\x82\xB3\x82\xF1', b'\x69' + honorific),
+        (b'\x69\x82\xB3\x82\xF1\x82\xCD', b'\x69' + honorific + encode_text('은', syl_to_code, unmapped) + bytes([FILL_BYTE]) * 2),
+        (b'\x69\x82\xB3\x82\xF1\x82\xAA', b'\x69' + honorific + encode_text('이', syl_to_code, unmapped) + bytes([FILL_BYTE]) * 2),
+        (b'\x69\x82\xB3\x82\xF1\x81\x41', b'\x69' + honorific + bytes([FILL_BYTE]) * 4),
+        (b'\x69\x82\xB3\x82\xF1\x81\x49', b'\x69' + honorific + bytes([FILL_BYTE]) * 4),
+        (b'\x69\x82\xB3\x82\xF1\x72', b'\x69' + honorific + bytes([FILL_BYTE]) * 2 + b'\x72'),
+        (b'\x69\x82\xB3\x82\xF1', b'\x69' + honorific + bytes([FILL_BYTE]) * 2),
     ]
     patched = 0
     for old, new in replacements:
@@ -3391,6 +3390,7 @@ PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
 PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
 PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
 PART1_YESNO_HOOK_FILE = 0xF10000
+PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
 PART2_HOOK_BOT_313_RT = 0x08F30160
 PART2_HOOK_TOP_B11_RT = 0x08F301C0
@@ -3401,6 +3401,7 @@ PART2_HOOK_SPACE_313_RT = 0x08F30360
 PART2_HOOK_SPACE_B11_RT = 0x08F303A0
 PART1_YESNO_HOOK_RT = 0x08F10000
 PART1_YESNO_FRAME_HOOK_RT = PART1_YESNO_HOOK_RT + 0x0C
+PART1_NAME_TRIM_HOOK_RT = 0x08F10180
 PART1_YESNO_CALL_SITE = 0xB18D2C
 PART1_YESNO_CALL_EXPECT = bytes.fromhex('fff7c8ff')  # bl 0x08B18CC0
 PART1_YESNO_ORIG_FN = 0x08B18CC0
@@ -3408,6 +3409,14 @@ PART1_YESNO_FRAME_CALL_SITE = 0xB18D40
 PART1_YESNO_FRAME_CALL_EXPECT = bytes.fromhex('10b5041c1e21605e')  # function prologue + first ldrsh
 PART1_YESNO_HANDLER_PTR = 0xD835E8
 PART1_YESNO_HANDLER_EXPECT = 0x08B18D41
+PART1_NAME_TRIM_SITE = 0xB11298
+PART1_NAME_TRIM_EXPECT = bytes.fromhex('031c002118780028')
+
+PART1_NAME_TRIM_HOOK = bytes.fromhex(
+    '031c00211878002806d0881c0006010e581800780028f8d1002910d0'
+    '881e0006010e5a181078812802d08f2804d006e050784028f0d002e0'
+    '50785a28ecd0c918002088707047'
+)
 
 def _thumb_bl(src_rt, dst_rt):
     off = dst_rt - (src_rt + 4)
@@ -3605,6 +3614,7 @@ def main():
     rom[PART2_HOOK_SPACE_313_FILE:PART2_HOOK_SPACE_313_FILE + len(PART2_HOOK_SPACE_313)] = PART2_HOOK_SPACE_313
     rom[PART2_HOOK_SPACE_B11_FILE:PART2_HOOK_SPACE_B11_FILE + len(PART2_HOOK_SPACE_B11)] = PART2_HOOK_SPACE_B11
     rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
+    rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
     P.patch_word(rom, P.LIT_FONTBASE, HOOK_RT | 1)
@@ -3657,6 +3667,10 @@ def main():
     )
     assert struct.unpack_from('<I', rom, PART1_YESNO_HANDLER_PTR)[0] == PART1_YESNO_HANDLER_EXPECT
     struct.pack_into('<I', rom, PART1_YESNO_HANDLER_PTR, PART1_YESNO_FRAME_HOOK_RT | 1)
+    assert bytes(rom[PART1_NAME_TRIM_SITE:PART1_NAME_TRIM_SITE + 8]) == PART1_NAME_TRIM_EXPECT
+    rom[PART1_NAME_TRIM_SITE:PART1_NAME_TRIM_SITE + 8] = (
+        bytes.fromhex('004b1847') + struct.pack('<I', PART1_NAME_TRIM_HOOK_RT | 1)
+    )
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()

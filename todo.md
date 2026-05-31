@@ -106,6 +106,9 @@
 - [x] Part 1 이름 입력 첫 프롬프트 깨짐 완화.
   - `0xDF8DB2` 이름 입력 프롬프트를 짧은 주소 고정 문구 `이름알려줘`로 교체.
   - 콜드부트 후 이름 화면 재진입 캡처 기준 프롬프트가 깨짐 없이 표시됨을 확인.
+- [x] Part 1 이름 확정 뒤 숨은 이름 패딩 글자 정리.
+  - 이름 버퍼 끝에 남은 `요(0x8F5A)` 패딩이 대사 삽입 제어코드에서 `Kazu요님`처럼 보이던 문제를 `0x08B11298` 이름 trim hook으로 제거.
+  - 실제 캡처 `temp/name_confirm_final_verify/sheet.png` 기준 이름 확정 뒤 `처음뵙습니다Kazu님` 흐름과 `예/아니오` 선택지를 확인.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
