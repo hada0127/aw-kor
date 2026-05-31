@@ -109,6 +109,9 @@
 - [x] Part 1 이름 확정 뒤 숨은 이름 패딩 글자 정리.
   - 이름 버퍼 끝에 남은 `요(0x8F5A)` 패딩이 대사 삽입 제어코드에서 `Kazu요님`처럼 보이던 문제를 `0x08B11298` 이름 trim hook으로 제거.
   - 실제 캡처 `temp/name_confirm_final_verify/sheet.png` 기준 이름 확정 뒤 `처음뵙습니다Kazu님` 흐름과 `예/아니오` 선택지를 확인.
+- [x] Part 1 이름 인사말 suffix 공백 통일.
+  - `0xDF5DA9`와 `0xDF8E4D`의 이름 뒤 `님` suffix를 모두 ` 님` 기준으로 맞춰 이름 제어 바이트 뒤 조사가 붙어 보이는 경로를 줄임.
+  - 실제 캡처 `temp/current_state_check_after_suffix/sheet.png` 기준 `vwxy` 미리보기, `예 아니오`, 이름 확정 뒤 인사말 흐름을 재확인.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
