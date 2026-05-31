@@ -407,6 +407,18 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA029B8: '서두르지 마',
     0xA029CC: '서둘러 가도',
     0xA029E0: '지면 안 돼',
+    # Part 2 first tutorial battle controls. The quoted "cursor" fragment uses
+    # a compact font path where the Japanese brackets render as stray kana-like
+    # pixels, so keep this sequence unquoted and short.
+    0xA02A48: '먼저',
+    0xA02A4F: '유닛에 명령하려면',
+    0xA02A6E: '화살표로　조',
+    0xA02A7B: '작해',
+    0xA02A86: '십자버튼으로 이동해',
+    0xA02AA3: '그럼',
+    0xA02AAC: '유닛에 명령을 내려보자',
+    0xA02ACF: '원하는 유닛에 화살표를 맞춰',
+    0xA02AF5: 'Ａ를 눌러',
     # Part 2 tutorial intro slots with strict byte budgets.
     0xDF619E: '부대라 볼 수 있어',
     0xDF68F6: '지금까지 실력을 시험해 봐',
@@ -3187,6 +3199,10 @@ def main():
     }.items():
         enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)
         rom[faddr:faddr + len(enc)] = enc
+    # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
+    # The extractor starts at the quoted fragment, so patch this missed inline
+    # source text directly to make the rendered line "이 화살표로 조작해".
+    rom[0xA02A69:0xA02A6D] = encode_text('이　', syl_to_code, unmapped)
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
     for faddr, (text, slot_len) in INTRO_DIRECT_TEXT.items():
