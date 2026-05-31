@@ -174,6 +174,10 @@
 - [x] Part 2 캠페인 프롤로그 초반 대사 일본어/깨짐 정리.
   - `0xA01970-0xA01CA3`, `0xA0E398-0xA0E819` 구간의 짧은 대사 조각을 화면 폭에 맞게 고정하고, CSV 추출이 놓친 제어 갭 `今、`/`今は`를 직접 한글화.
   - 실제 캡처 `temp/prologue_part2_initial_current_polished/sheet.png`와 `temp/prologue_part2_dialog_polish_finalcheck/sheet.png` 기준 프롤로그 초반 일본어 잔여와 `슥` 계열 깨짐이 사라짐을 확인.
+- [x] Part 2 프롤로그 후반/첫 전투 진입 대사 일본어 갭과 줄잘림 정리.
+  - CSV 슬롯 밖 제어 갭 `敵が`, `ま、`, 첫 전투 소개의 `まだ` 조각을 직접 패치하고, 프롤로그 후반 `그럼/어차피`, `적이 생각보다 강해서`, `침묵` 계열 대사를 화면 기준으로 조정.
+  - 첫 전투 소개의 `블랙홀군` 설명과 `실전경험 부족해`, `천천히 가` 흐름을 짧은 화면용 문장으로 고정해 오른쪽 잘림과 일본어 잔여를 제거.
+  - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a066_120_sheet.png`, `temp/current_p2_tutorial_battle_smoke/a_066.png`, `temp/current_p2_tutorial_battle_smoke/a_072.png` 기준 해당 구간 표시를 확인.
 
 ## 현재 우선순위
 

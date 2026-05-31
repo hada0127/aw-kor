@@ -540,12 +540,16 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF5E56: '우리가 지금 있는 곳은 레드스타국',
     # Part 2 first battle intro. The stock CSV strings fit by dropping spaces
     # or using cramped wording, which is visibly noisy in the battle text box.
+    0xA02628: '후,',
+    0xA0262F: '대부대는 막았지만',
+    0xA02654: '블랙홀군',
+    0xA0266B: '위험해.',
     0xA026F7: '괜찮나',
     0xA02713: '료',
     0xA0271E: '갑자기 불러 ',
     0xA0272D: '미안해',
     0xA02816: '지휘관으론',
-    0xA02841: '실전은 아직 부족해',
+    0xA02841: '실전경험 부족해',
     0xA028B8: '빨간 유닛이 네 부대야',
     0xA028E3: '적군은',
     0xA028EC: '오른쪽 위 검은 유닛',
@@ -555,8 +559,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02945: '이 땅을 되찾는 거야',
     0xA0295E: '무리하지 말고',
     0xA02982: '진군하자!',
-    0xA029B8: '서두르지 마',
-    0xA029CC: '서둘러 가도',
+    0xA029B8: '천천히 가',
+    0xA029CC: '무리하면',
     0xA029E0: '지면 안 돼',
     # Part 2 first tutorial battle controls. The quoted "cursor" fragment uses
     # a compact font path where the Japanese brackets render as stray kana-like
@@ -1414,6 +1418,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA01E68: '바다너머대치한양군',
     0xA01F0F: '해공적전멸시켜',
     0xA0237C: '해군으로압박하는모프',
+    0xA024F8: '핑계 대지 마!',
+    0xA024D9: ' 생각보다 강해서...',
     0xA033BF: '그건',
     0xA03D5D: '한번에 내구력을',
     0xA04028: '거짓말',
@@ -1473,11 +1479,14 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA0E7A8: '그래,',
     0xA0E7AF: '다들 만나는 건',
     0xA0E7C4: '기뻐!',
-    0xA0E7D1: '자,',
+    0xA0E7D1: '어서',
     0xA0E7D8: '매크로랜드로 가자!!',
-    0xA0E7FC: '잠깐,',
+    0xA0E7FC: '기다려',
     0xA0E807: '료!',
-    0xA0E819: '가 버렸네.',
+    0xA0E819: '도망갔네.',
+    0xA0E831: ' 어차피 매크로랜드에 가면',
+    0xA0E855: '싫어도 싸워야 해.',
+    0xA0E876: '벌써 우울해질 필요 없어.',
     0xA0F2F1: '저녀석쓰러뜨려',
     0xA0F583: '근처공장항구차지',
     0xA0FAE3: '실험대가될약속',
@@ -3847,12 +3856,17 @@ def main():
     #   각 한글은 원래 JP 바이트수와 같게(가나 1자=2B=한글 1음절 2B). 뒤 구두점(、)은 유지.
     for faddr, text in {
         0xA019B6: '지금',   # この地に[今]、 → 이 땅에 [지금]…  (今、4B→지금4B)
+        0xA024D4: '적이',   # ...突破できねえんだ！！k[敵が]w思ったより... control gap
+        0xA0E82C: '그럼',   # 行っちゃったわ。k[ま、]Wどのみち... control gap
         0xA0E3D0: '아',     # [あ]、료 맥스… → [아]、료…       (あ2B→아2B, 、유지)
         0xA0E57B: '나를',   # ムッ、W[今、]Wバカ... control gap repurposed for natural Korean
         0xA0E5E3: '지금',   # ちょっと、W[今は]r... control gap between extracted rows
     }.items():
         enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)
         rom[faddr:faddr + len(enc)] = enc
+    # Part 2 first battle intro has "まだ" between control bytes, outside the
+    # CSV slot. Blank it; the following Korean slot already says the meaning.
+    rom[0xA0283C:0xA02840] = bytes([FILL_BYTE]) * 4
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
     # source text directly to make the rendered line "이 화살표로 조작해".
@@ -3943,7 +3957,7 @@ def main():
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
 
     for faddr, fend, text, label in [
-        (0xA02580, 0xA0258C, '......', 'part2 six-dot row'),
+        (0xA02580, 0xA0258C, '침묵', 'part2 six-dot row'),
         (0xA02684, 0xA0268A, '사령!', 'part2 tutorial commander row'),
         (0xA026C8, 0xA026CE, '확인.', 'part2 tutorial roger row'),
         (0xA02788, 0xA0278E, '...', 'part2 ellipsis row'),
@@ -4236,7 +4250,7 @@ def main():
         (0xA0E4AA, 0xA0E4B0, '적은,', 'part2 enemy row'),
         (0xA0E574, 0xA0E57A, '뭐야', 'part2 hm row'),
         (0xA0E611, 0xA0E617, '아무튼', 'part2 enemy ellipsis row'),
-        (0xA0E812, 0xA0E818, '...', 'part2 surprise ellipsis row'),
+        (0xA0E812, 0xA0E818, '벌써', 'part2 surprise ellipsis row'),
         (0xA0EB9C, 0xA0EBA8, '콩그님!', 'part2 kong sir exclaim row'),
         (0xA0EBAA, 0xA0EBB2, '저편에', 'part2 across row'),
         (0xA0EBF9, 0xA0EC05, '전차를내라.', 'part2 deploy tanks row'),
