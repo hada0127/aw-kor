@@ -574,6 +574,10 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02AAC: '유닛에 명령을 내려보자',
     0xA02ACF: '원하는 유닛에 화살표를 맞춰',
     0xA02AF5: '결정해',
+    0xA02B1F: '할 일이 없다고',
+    0xA02B37: '판단했을 때 쓰는 명령이야',
+    0xA02B56: '이걸 고르면',
+    0xA02B7D: '적 차례가 돼',
     # The infantry explanation is split into 14/20/30-byte fragments with
     # inline separators between records. Keep the first fragment short so the
     # separator does not attach to the final Hangul glyph.
@@ -590,7 +594,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02D00: '맞아!',
     0xA02D0D: '보병 계열이 없으면',
     0xA02D33: '못 해',
-    0xA02B65: '아군 행동이 끝나면',
+    0xA02B65: '아군 행동이 끝나고',
     0xA02D66: '점령 가능한 건 ',
     0xA02D77: '적군이나 중립 거점뿐이야',
     0xA02D92: '거기로 가면',
@@ -3867,6 +3871,7 @@ def main():
     # Part 2 first battle intro has "まだ" between control bytes, outside the
     # CSV slot. Blank it; the following Korean slot already says the meaning.
     rom[0xA0283C:0xA02840] = bytes([FILL_BYTE]) * 4
+    rom[0xA02B1A:0xA02B1E] = bytes([FILL_BYTE]) * 4
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
     # source text directly to make the rendered line "이 화살표로 조작해".
@@ -3962,8 +3967,8 @@ def main():
         (0xA026C8, 0xA026CE, '확인.', 'part2 tutorial roger row'),
         (0xA02788, 0xA0278E, '...', 'part2 ellipsis row'),
         (0xA028E3, 0xA028EB, '적군은', 'part2 tutorial enemy army row'),
-        (0xA02B08, 0xA02B10, '지금', 'part2 tutorial selected row'),
-        (0xA02B11, 0xA02B19, '종료', 'part2 tutorial end command row'),
+        (0xA02B08, 0xA02B10, '방금고른', 'part2 tutorial selected row'),
+        (0xA02B11, 0xA02B19, ' 종료는', 'part2 tutorial end command row'),
         (0xA02D2C, 0xA02D32, '점령은', 'part2 tutorial capture particle row'),
         (0xA02DBF, 0xA02DC7, '점령 ', 'part2 tutorial capture command row'),
         (0xA02E96, 0xA02E9E, '대기를', 'part2 tutorial wait command row'),

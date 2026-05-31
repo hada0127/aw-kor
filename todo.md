@@ -178,6 +178,9 @@
   - CSV 슬롯 밖 제어 갭 `敵が`, `ま、`, 첫 전투 소개의 `まだ` 조각을 직접 패치하고, 프롤로그 후반 `그럼/어차피`, `적이 생각보다 강해서`, `침묵` 계열 대사를 화면 기준으로 조정.
   - 첫 전투 소개의 `블랙홀군` 설명과 `실전경험 부족해`, `천천히 가` 흐름을 짧은 화면용 문장으로 고정해 오른쪽 잘림과 일본어 잔여를 제거.
   - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a066_120_sheet.png`, `temp/current_p2_tutorial_battle_smoke/a_066.png`, `temp/current_p2_tutorial_battle_smoke/a_072.png` 기준 해당 구간 표시를 확인.
+- [x] Part 2 첫 전투 튜토리얼 `종료` 명령 설명 분기 정리.
+  - CSV 슬롯 밖 `は、` 조각을 제거하고 `방금고른 종료는`, `할 일이 없다고`, `판단했을 때 쓰는 명령이야`, `적 차례가 돼`로 짧게 재분절.
+  - 실제 캡처 `temp/end_command_explain_verify_current5/sheet.png` 기준 메뉴에서 `종료`를 선택했을 때 일본어 없이 설명이 표시됨을 확인.
 
 ## 현재 우선순위
 
