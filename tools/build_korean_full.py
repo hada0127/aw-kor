@@ -5838,6 +5838,19 @@ def main():
         (0xDA41BB, 0xDA41C5, '싸울거야', 'use various units row'),
         (0xDA41DB, 0xDA41F9, '워즈　사관학교에　어서와', 'wars academy welcome row'),
         (0xDA41FD, 0xDA4225, '내가　이　학교의　교장　얀　델타다', 'yan delta principal row'),
+        (0xDA422C, 0xDA4258, '본교는　이　게임이　처음인　사람이　어떻게', 'academy purpose lead row'),
+        (0xDA425C, 0xDA427C, '싸울지　배우는　학교다', 'academy purpose row'),
+        (0xDA4283, 0xDA42AF, '무사히　졸업할수있다면　전투에　필요한', 'academy graduation lead row'),
+        (0xDA42B3, 0xDA42CF, '지식을　익히게　될것이다', 'academy graduation row'),
+        (0xDA42D6, 0xDA42E8, '그럼　건투를　빈다', 'academy good luck row'),
+        (0xDA42EC, 0xDA4306, '처음　할일은　점령입니다', 'first action capture tip row'),
+        (0xDA4307, 0xDA4329, '정찰차는　보병상대에　딱입니다', 'recon vs infantry tip row'),
+        (0xDA432C, 0xDA4336, '가나다라마', 'kana sample row a'),
+        (0xDA4337, 0xDA4341, '바사아자차', 'kana sample row ka'),
+        (0xDA43C9, 0xDA43F5, '뭐든　움직일　유닛이　없으면　얘기가', 'production importance lead row'),
+        (0xDA43F9, 0xDA4421, '안되니　생산은　가장　중요한　행동이야', 'production importance row'),
+        (0xDA4428, 0xDA4454, '네가　움직일　유닛이　없어졌을때...', 'no units left lead row'),
+        (0xDA4458, 0xDA447A, '전멸해버리면　네　패배야', 'annihilation defeat row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
