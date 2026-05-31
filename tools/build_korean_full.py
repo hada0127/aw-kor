@@ -2595,6 +2595,12 @@ def main():
             raise AssertionError(f'tutorial text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
 
+    def fixed_zero_text_patch(faddr, slot_len, text):
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) > slot_len:
+            raise AssertionError(f'zero-padded text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
+        rom[faddr:faddr + slot_len] = enc + bytes(slot_len - len(enc))
+
     fixed_text_patch(0xD8F384, 14, '보병')
     fixed_text_patch(0xD8F798, 14, '대기')
 
@@ -9318,6 +9324,67 @@ def main():
         (0xDD1DD0, 0xDD1DE4, '다음엔　힘내!', 'next time cheer row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
+    # Part 2 battle/menu label tables are fixed-width NUL-padded entries, not
+    # dialogue rows. Space padding renders as stray glyphs in this path.
+    for faddr, slot_len, text in [
+        (0xA29840, 16, '메테오공격'),
+        (0xA2985E, 4, '작전'),
+        (0xA29866, 8, '브레이크'),
+        (0xA29872, 6, '저장'),
+        (0xA2987E, 8, '시스템'),
+        (0xA2988A, 4, '종료'),
+        (0xA29892, 8, '승리조건'),
+        (0xA2989E, 4, '상황'),
+        (0xA298A6, 10, '쇼군'),
+        (0xA298B6, 6, '규칙'),
+        (0xA298C2, 10, '음악있음'),
+        (0xA298D2, 10, '음악없음'),
+        (0xA298E2, 8, '애니Ａ'),
+        (0xA298EE, 8, '애니Ｂ'),
+        (0xA298FA, 8, '애니Ｃ'),
+        (0xA29906, 10, '애니없음'),
+        (0xA29916, 8, '처분'),
+        (0xA29922, 8, '항복'),
+        (0xA2992C, 14, '나가기'),
+        (0xA29946, 6, '날씨'),
+        (0xA2996A, 6, '대점령'),
+        (0xA299A6, 6, '잠수'),
+        (0xA299B2, 6, '부상'),
+        (0xA299BE, 8, '미사일'),
+        (0xA299CA, 10, 'Ｓ브레이크'),
+        (0xA29A2C, 6, '파이프'),
+        (0xA29A34, 12, '미사일기지'),
+        (0xA29A4C, 6, '연구소'),
+        (0xA29A54, 12, '미니캐논'),
+        (0xA29A64, 8, '캐논'),
+        (0xA29A70, 10, '레이저포'),
+        (0xA29A84, 12, '팩토리'),
+        (0xA29A94, 12, '헬레이저'),
+        (0xA29AA4, 8, '진입불가'),
+        (0xB82CEE, 4, '종료'),
+        (0xB82CF6, 8, '시스템'),
+        (0xB82D02, 6, '저장'),
+        (0xB82D0E, 8, '브레이크'),
+        (0xB82D1A, 4, '작전'),
+        (0xB82D22, 4, '부대'),
+        (0xB82D2A, 6, '규칙'),
+        (0xB82D36, 10, '쇼군'),
+        (0xB82D4E, 8, '승리조건'),
+        (0xB82D58, 14, '나가기'),
+        (0xB82D6A, 8, '항복'),
+        (0xB82D76, 8, '처분'),
+        (0xB82D82, 10, '애니없음'),
+        (0xB82D92, 8, '애니Ｃ'),
+        (0xB82D9E, 8, '애니Ｂ'),
+        (0xB82DAA, 8, '애니Ａ'),
+        (0xB82DB6, 10, '음악없음'),
+        (0xB82DC6, 10, '음악있음'),
+        (0xB82DD6, 6, '부상'),
+        (0xB82DE2, 6, '잠수'),
+        (0xB82E26, 6, '대점령'),
+    ]:
+        fixed_zero_text_patch(faddr, slot_len, text)
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
