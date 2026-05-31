@@ -2504,6 +2504,67 @@ def patch_part2_mode_menu_obj_labels(rom):
     return patched
 
 
+def patch_part2_splash_logo_bg(rom):
+    """Replace the Part 2 pre-title English BG logo with a compact Korean one."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x4D8AF8
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 splash LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    buf = bytearray(data)
+    layer = Image.new('L', (176, 32), 1)
+    font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+
+    def text_bbox(draw, text, font):
+        box = draw.textbbox((0, 0), text, font=font)
+        return box[2] - box[0], box[3] - box[1]
+
+    def paint_line(text, y, max_size):
+        draw = ImageDraw.Draw(layer)
+        for size in range(max_size, 8, -1):
+            font = ImageFont.truetype(font_path, size)
+            w, h = text_bbox(draw, text, font)
+            if w <= 166 and h <= 13:
+                break
+        x = (176 - w) // 2
+        mask = Image.new('L', layer.size, 0)
+        md = ImageDraw.Draw(mask)
+        md.text((x, y), text, font=font, fill=255)
+        mp, lp = mask.load(), layer.load()
+        for yy in range(layer.height):
+            for xx in range(layer.width):
+                a = mp[xx, yy]
+                if a >= 192:
+                    lp[xx, yy] = 6
+                elif a >= 96:
+                    lp[xx, yy] = 5
+                elif a >= 32:
+                    lp[xx, yy] = 4
+
+    paint_line('게임보이 워즈', 3, 14)
+    paint_line('어드밴스 2', 17, 13)
+
+    out = bytearray()
+    px = layer.load()
+    for ty in range(4):
+        for tx in range(22):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = int(px[tx * 8 + col_pair * 2, ty * 8 + row]) & 0xF
+                    hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0xF
+                    out.append(lo | (hi << 4))
+    buf[0x20:0x20 + len(out)] = out
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 2 splash logo grew: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return 88
+
+
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
     width, height = 16, 24
@@ -4110,6 +4171,7 @@ def main():
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
+    st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -12030,7 +12092,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
