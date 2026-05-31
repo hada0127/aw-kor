@@ -7017,8 +7017,6 @@ def main():
         (0xDCB1A1, 0xDCB1B9, '어떤　쇼군이지?', 'mopp co question row'),
         (0xDCB1BE, 0xDCB1E8, '바다에선　당해낼자가　드물대', 'mopp naval strength row'),
         (0xDCB1EB, 0xDCB209, '해상유닛이　엄청　강하대', 'mopp sea units row'),
-        (0xDCBE1E, 0xDCBE4A, '쇼군브레이크를　쓰기전에　얼마나', 'mopp break warning lead row'),
-        (0xDCBE4D, 0xDCBE69, '적유닛을　줄일지가　중요해', 'mopp break warning row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
@@ -7101,6 +7099,54 @@ def main():
         (0xDCB9D2, 0xDCB9E4, '으로　주변을　보며', 'watch surroundings row'),
         (0xDCB9E7, 0xDCB9FB, '가면　더　안전해!', 'safer advance row'),
         (0xDCB9FF, 0xDCBA13, '다음엔　힘내!', 'missile advice next cheer row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
+    for faddr, fend, text, label in [
+        (0xDCBA1A, 0xDCBA3C, '이글과　싸우는것도　３번째네', 'eagle third fight row'),
+        (0xDCBA41, 0xDCBA61, '슬슬　결판을　내야해', 'eagle settle soon row'),
+        (0xDCBA66, 0xDCBA90, '왜　나를　노리는지　알아내겠어!', 'ryo find reason row'),
+        (0xDCBA96, 0xDCBAA0, '뭐?!', 'domino surprised row'),
+        (0xDCBAA3, 0xDCBAC5, '료가　진지한　말을?!', 'ryo serious row'),
+        (0xDCBACA, 0xDCBADC, '왜그래　료!', 'max asks ryo row'),
+        (0xDCBADF, 0xDCBAF5, '열이라도　났냐?!', 'max fever row'),
+        (0xDCBAFA, 0xDCBB1A, '둘다　뭔가　나를', 'ryo misunderstood lead row'),
+        (0xDCBB1D, 0xDCBB2F, '오해하는거아냐?', 'ryo misunderstood row'),
+        (0xDCBB36, 0xDCBB4C, '모프는　저렇게말했지만', 'eagle mopp said row'),
+        (0xDCBB4F, 0xDCBB67, '아직　못믿겠다!', 'eagle cannot believe row'),
+        (0xDCBB6C, 0xDCBB74, '승부다!', 'eagle challenge row'),
+        (0xDCBB7A, 0xDCBB92, '자　대답해봐!', 'eagle answer me row'),
+        (0xDCBB95, 0xDCBBAB, '왜　나를　노려!', 'ryo asks target row'),
+        (0xDCBBB2, 0xDCBBD0, '끝까지　시치미인가...', 'eagle feigning ignorance row'),
+        (0xDCBBD4, 0xDCBBFC, '그린어스를　습격한걸　잊었다곤', 'eagle green earth attack lead row'),
+        (0xDCBBFF, 0xDCBC0B, '말못해!', 'eagle green earth attack row'),
+        (0xDCBC12, 0xDCBC20, '...뭐???', 'ryo what row'),
+        (0xDCBC26, 0xDCBC4A, '그때　네　얼굴을　이글은', 'eagle face lead row'),
+        (0xDCBC4D, 0xDCBC73, '한순간도　잊은적　없다!', 'eagle never forget row'),
+        (0xDCBC7A, 0xDCBC84, '아니야!', 'ryo denies row'),
+        (0xDCBC87, 0xDCBC95, '내가아냐!', 'ryo not me row'),
+        (0xDCBC9A, 0xDCBCAA, '뭐　뭐라고??', 'eagle what row'),
+        (0xDCBCAE, 0xDCBCC0, '장난치지마!', 'eagle do not joke row'),
+        (0xDCBCC3, 0xDCBCDF, '분명　같은　얼굴이었다!', 'eagle same face row'),
+        (0xDCBCE6, 0xDCBCFE, '절대　내가아냐!', 'ryo absolutely not row'),
+        (0xDCBD03, 0xDCBD1D, '다른나라를　습격하다니', 'ryo attack other country lead row'),
+        (0xDCBD20, 0xDCBD2E, '그럴리없어!', 'ryo no way row'),
+        (0xDCBD36, 0xDCBD40, '.....', 'eagle silence row'),
+        (0xDCBD45, 0xDCBD5F, '좋아　지금은　그말', 'eagle believe for now lead row'),
+        (0xDCBD62, 0xDCBD76, '믿어두지', 'eagle believe for now row'),
+        (0xDCBD7B, 0xDCBDA3, '모프의　말도　신경쓰이니', 'eagle mopp words concern row'),
+        (0xDCBDA7, 0xDCBDCF, '하지만　아직　의심은　남아있다', 'eagle still suspicious row'),
+        (0xDCBDD4, 0xDCBDFA, '정말　네가　한짓이라면　료!', 'eagle if true ryo row'),
+        (0xDCBDFF, 0xDCBE19, '그땐　각오해둬!', 'eagle be prepared row'),
+        (0xDCBE1E, 0xDCBE4A, '적이　쇼군브레이크를　쓰기전에', 'eagle advice break lead row'),
+        (0xDCBE4D, 0xDCBE69, '적유닛을　줄일지가　중요해', 'eagle advice reduce units row'),
+        (0xDCBE6F, 0xDCBE77, '대공전차', 'anti air tank label row'),
+        (0xDCBE7B, 0xDCBE87, '대공미사일', 'missile label repeat row'),
+        (0xDCBE88, 0xDCBE98, '을　잘　써서', 'use anti air well row'),
+        (0xDCBE99, 0xDCBE9F, '폭격기', 'bomber label row'),
+        (0xDCBEA4, 0xDCBEAC, '전투헬기', 'battle copter label row'),
+        (0xDCBEAD, 0xDCBECD, '를　먼저　쓰러뜨려', 'defeat air units first row'),
+        (0xDCBED2, 0xDCBEE6, '다음엔　힘내!', 'eagle advice next cheer row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
