@@ -2114,7 +2114,33 @@ def patch_part2_battle_obj_labels(rom):
     terrain = render_tiles('평지', 24, x=3, y=2)
     write_tiles(0xB93CD0, [terrain[i] for i in (0, 1, 3, 4, 2, 5)])
     write_tiles(0xB93BD0, render_tiles('육', 16, x=4, y=2))
-    return 2
+
+    # Unit names in the same status popup are a fixed 32x16 OBJ tile strip.
+    # Redraw the labels that appear through the Part 2 tutorial/battle status UI.
+    unit_labels = [
+        (0xB94810, '보병'),
+        (0xB94910, '바주카병'),
+        (0xB94A10, '정찰차'),
+        (0xB94B10, '경전차'),
+        (0xB94C10, '중전차'),
+        (0xB94D10, '신형전차'),
+        (0xB94E10, '자주포'),
+        (0xB94F10, '로켓포'),
+        (0xB95010, '대공전차'),
+        (0xB95110, '미사일'),
+        (0xB95210, '전투헬기'),
+        (0xB95310, '수송헬기'),
+        (0xB95410, '전투기'),
+        (0xB95510, '폭격기'),
+        (0xB95610, '전함'),
+        (0xB95710, '잠수함'),
+        (0xB95810, '수송선'),
+        (0xB95910, '호위함'),
+    ]
+    for off, text in unit_labels:
+        x = max(0, (32 - len(text) * 8) // 2)
+        write_tiles(off, render_tiles(text, 32, x=x, y=2))
+    return 2 + len(unit_labels)
 
 
 def patch_part2_mission_start_obj(rom):
