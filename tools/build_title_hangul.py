@@ -27,6 +27,7 @@ SELECT_OBJ_LZ77_OFF = 0x00024A34
 PART1_TITLE_OBJ_LZ77_OFF = 0x00C38BF8
 PART2_TITLE_OBJ_LZ77_OFF = 0x004EAF6C
 PART1_CATHERINE_NAME_LZ77_OFF = 0x00C102A8
+PART1_MISSION_LOGO_LZ77_OFF = 0x00C18738
 PART1_OPERATION_LOGO_LZ77_OFF = 0x00C18CB4
 PART1_MAP_SELECT_LZ77_OFF = 0x00C18F48
 PART1_SHOP_SELECT_LZ77_OFF = 0x00C191E0
@@ -716,6 +717,12 @@ def make_part1_catherine_block() -> Image.Image:
     return layer
 
 
+def make_part1_mission_block() -> Image.Image:
+    layer = Image.new("L", (128, 32), 0)
+    draw_centered_block_text(layer, "작전", (0, 0, 128, 32), 28, 4, 1, 3)
+    return layer
+
+
 def patch_lz77_whole_block(rom: bytearray, off: int, layer: Image.Image, label: str) -> tuple[int, int]:
     dec = lz77_decompress(rom, off)
     if dec is None:
@@ -728,6 +735,25 @@ def patch_lz77_whole_block(rom: bytearray, off: int, layer: Image.Image, label: 
     if len(comp) > consumed:
         raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {consumed}")
     rom[off : off + consumed] = comp + b"\x00" * (consumed - len(comp))
+    return len(comp), consumed
+
+
+def patch_part1_mission_block(rom: bytearray) -> tuple[int, int]:
+    label = "part1 mission logo"
+    dec = lz77_decompress(rom, PART1_MISSION_LOGO_LZ77_OFF)
+    if dec is None:
+        raise RuntimeError(f"invalid LZ77 block for {label} at 0x{PART1_MISSION_LOGO_LZ77_OFF:X}")
+    old_data, consumed = dec
+    layer = make_part1_mission_block()
+    new_data = block_to_tiles(layer) + bytes(len(old_data) - layer.width * layer.height // 2)
+    if len(new_data) != len(old_data):
+        raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
+    comp = lz77_compress(new_data, vram_safe=True)
+    if len(comp) > consumed:
+        raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {consumed}")
+    rom[PART1_MISSION_LOGO_LZ77_OFF : PART1_MISSION_LOGO_LZ77_OFF + consumed] = (
+        comp + b"\x00" * (consumed - len(comp))
+    )
     return len(comp), consumed
 
 
@@ -858,6 +884,7 @@ def main() -> None:
     p1_catherine_comp, p1_catherine_consumed = patch_lz77_whole_block(
         rom, PART1_CATHERINE_NAME_LZ77_OFF, p1_catherine_idx, "part1 Catherine name"
     )
+    p1_mission_comp, p1_mission_consumed = patch_part1_mission_block(rom)
 
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
 
@@ -887,6 +914,9 @@ def main() -> None:
     p1_catherine_idx.convert("RGB").resize((288, 24), Image.Resampling.NEAREST).save(
         "docs/title_hangul/drafts/part1_catherine_name_insert_layer_3x.png"
     )
+    make_part1_mission_block().convert("RGB").resize((384, 96), Image.Resampling.NEAREST).save(
+        "docs/title_hangul/drafts/part1_mission_logo_insert_layer_3x.png"
+    )
     print(f"wrote {args.output}")
     print(f"compressed {len(comp)} / {consumed} bytes")
     print(f"select compressed {len(select_comp)} / {select_consumed} bytes")
@@ -897,6 +927,7 @@ def main() -> None:
     for label, comp_size, consumed_size in p1_option_results:
         print(f"part1 option {label} compressed {comp_size} / {consumed_size} bytes")
     print(f"part1 catherine compressed {p1_catherine_comp} / {p1_catherine_consumed} bytes")
+    print(f"part1 mission logo compressed {p1_mission_comp} / {p1_mission_consumed} bytes")
     print(f"preview {args.preview}")
     print(f"select preview {args.select_preview}")
     print(f"part1 preview {args.part1_preview}")

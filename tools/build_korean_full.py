@@ -2566,6 +2566,131 @@ def patch_part2_splash_logo_bg(rom):
     return 88
 
 
+def patch_part1_battle_day_banner(rom):
+    """Replace Part 1 battle-start day and operation-start OBJ art."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    def font_for(text, max_size, width, height, stroke):
+        font_path = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
+        if not os.path.exists(font_path):
+            font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+        probe = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(probe)
+        for size in range(max_size, 11, -1):
+            font = ImageFont.truetype(font_path, size)
+            box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+            if box[2] - box[0] <= width - 4 and box[3] - box[1] <= height - 2:
+                return font, box
+        return font, box
+
+    def draw_gold_text(text, width, height, max_size, stroke=2, y_adjust=0):
+        scale = 3
+        layer = Image.new('L', (width, height), 0)
+        font, box = font_for(text, max_size, width, height, stroke)
+        x = (width - (box[2] - box[0])) // 2 - box[0]
+        y = (height - (box[3] - box[1])) // 2 - box[1] + y_adjust
+
+        big_size = (width * scale, height * scale)
+        big_font = ImageFont.truetype(font.path, font.size * scale)
+        sx, sy = x * scale, y * scale
+        sw = stroke * scale
+
+        shadow = Image.new('L', big_size, 0)
+        ImageDraw.Draw(shadow).text(
+            (sx + 2 * scale, sy + 2 * scale), text, font=big_font,
+            fill=255, stroke_width=sw, stroke_fill=255,
+        )
+        outline = Image.new('L', big_size, 0)
+        ImageDraw.Draw(outline).text(
+            (sx, sy), text, font=big_font,
+            fill=255, stroke_width=sw, stroke_fill=255,
+        )
+        body = Image.new('L', big_size, 0)
+        ImageDraw.Draw(body).text((sx, sy), text, font=big_font, fill=255)
+
+        shadow = shadow.resize((width, height), Image.Resampling.LANCZOS)
+        outline = outline.resize((width, height), Image.Resampling.LANCZOS)
+        body = body.resize((width, height), Image.Resampling.LANCZOS)
+        sp, op, bp, lp = shadow.load(), outline.load(), body.load(), layer.load()
+        for yy in range(height):
+            band = yy / max(1, height - 1)
+            if band < 0.30:
+                body_idx = 1
+            elif band < 0.55:
+                body_idx = 3
+            elif band < 0.78:
+                body_idx = 5
+            else:
+                body_idx = 6
+            for xx in range(width):
+                if sp[xx, yy] >= 48:
+                    lp[xx, yy] = 8
+                if op[xx, yy] >= 40:
+                    lp[xx, yy] = 14
+                if bp[xx, yy] >= 192:
+                    lp[xx, yy] = body_idx
+                elif bp[xx, yy] >= 64:
+                    lp[xx, yy] = 7
+                elif bp[xx, yy] >= 24 and lp[xx, yy] == 14:
+                    lp[xx, yy] = 9
+        return layer
+
+    def chunk_bytes_from_layer(layer):
+        px = layer.load()
+        chunks = []
+        for chunk in range(layer.width // 32):
+            out = bytearray()
+            x_base = chunk * 32
+            for ty in range(4):
+                for tx in range(4):
+                    for row in range(8):
+                        for col_pair in range(4):
+                            lo = int(px[x_base + tx * 8 + col_pair * 2, ty * 8 + row]) & 0x0F
+                            hi = int(px[x_base + tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
+                            out.append(lo | (hi << 4))
+            chunks.append(bytes(out))
+        return chunks
+
+    def write_chunk_to_tiles(buf, tile_base, chunk):
+        for tile in range(16):
+            start = (tile_base + tile) * 32
+            buf[start:start + 32] = chunk[tile * 32:(tile + 1) * 32]
+
+    phrase_chunks = chunk_bytes_from_layer(draw_gold_text('작전개시', 128, 32, 32, 2, -1))
+    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1))
+
+    # The same day banner is present both as runtime LZ77 OBJ data and as raw
+    # 32x32 tile chunks used during the battle-start animation.
+    raw_phrase_offsets = (0x00BBF8C0, 0x00BBFAC0, 0x00BBFCC0, 0x00BBFEC0)
+    raw_day_offsets = (0x00BC14C0, 0x00BC16C0)
+    for raw_off, chunk in zip(raw_phrase_offsets, phrase_chunks):
+        rom[raw_off:raw_off + len(chunk)] = chunk
+    for raw_off, chunk in zip(raw_day_offsets, day_chunks):
+        rom[raw_off:raw_off + len(chunk)] = chunk
+
+    off = 0xEE5E14
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 1 battle start LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    buf = bytearray(data)
+    patched = 0
+    for source_base, chunk in zip((0, 16, 32, 48), phrase_chunks):
+        write_chunk_to_tiles(buf, source_base, chunk)
+        patched += 16
+    for source_base, chunk in zip((224, 240), day_chunks):
+        write_chunk_to_tiles(buf, source_base, chunk)
+        patched += 16
+
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 1 battle day banner grew: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return patched
+
+
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
     width, height = 16, 24
@@ -4140,6 +4265,7 @@ def main():
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
+    st['part1_battle_day_banner'] = patch_part1_battle_day_banner(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -12060,7 +12186,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
