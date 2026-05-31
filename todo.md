@@ -161,6 +161,9 @@
 - [x] Part 2 전투 HUD의 고정 `DAY` 문자 타일 한글화 준비.
   - OAM/VRAM 추적 기준 `DAY` OBJ 원본 타일 `0xBC7860`, `0xBC7800`, `0xBC7B00`을 `일`, `수`, 공백 타일로 교체.
   - 기존 전투 세이브스테이트는 VRAM까지 복원하므로 즉시 반영되지 않으며, ROM 타일 렌더 `temp/day_hud_rom_tiles_after_patch.png` 기준으로 우선 확인.
+- [x] Part 2 첫 전투 진입 직후 소개 대사 줄붙음 개선.
+  - `0xA028B8-0xA02982` 구간을 짧은 화면용 문장으로 고정해 긴 CSV 번역이 한 줄에 붙어 보이던 문제를 완화.
+  - 실제 캡처 `temp/first_battle_intro_after_shortening/sheet.png` 기준 `빨간 유닛이 네 부대야`, `적군은 오른쪽 위 검은 유닛`, `이번 목표는...` 흐름이 깨짐 없이 표시됨을 확인.
 
 ## 현재 우선순위
 
