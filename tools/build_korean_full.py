@@ -1719,7 +1719,7 @@ PART2_UI_KANJI_GLYPH_SUBS = {
     '装': '장', '備': '비', '闘': '투', '勝': '승', '利': '리',
     '日': '일', '事': '비', '費': '용', '行': '행', '将': '장',
     '資': '자', '金': '금', '立': '립', '拠': '거', '点': '점',
-    '度': '번', '処': '처', '分': '분',
+    '度': '일', '処': '처', '分': '분',
     # Context-only placeholder used by patch_part2_ui_context_tokens() for the
     # protected "降伏す" command. Keep "降" mapped to "하" for "降車".
     '北': '항',
@@ -1808,7 +1808,7 @@ def patch_part2_ui_context_tokens(rom):
     """Rewrite protected UI tokens while staying inside existing SJIS glyph paths."""
     replacements = [
         ('降伏す', '北復　'),  # 항복
-        ('セブ', '保存'),      # 저장
+        ('セブ', '保場'),      # 저장
         ('もぐる', '潜水　'),  # 잠수
         ('うかぶ', '白上　'),  # 부상
         ('なし', '無員'),      # 없음
@@ -1825,6 +1825,8 @@ def patch_part2_ui_context_tokens(rom):
         ('ユニット', '部隊　　'),          # 부대
         ('ふさんか', '不残　　'),          # 불참
         ('行動回', '行動数'),              # 행동수
+        ('嗣汚虞姐', '事費　　'),          # 비용
+        ('存総数', '総数　'),              # 총수
         ('ロケット爆弾', '路編爆弾　　'),  # 로켓폭탄
         ('ロケット砲', '路編砲　　'),      # 로켓포
         ('マシンガ', '魯傑兎　'),          # 기관총

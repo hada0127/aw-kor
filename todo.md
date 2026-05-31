@@ -69,6 +69,11 @@
 - [x] Part 2 보호 UI의 유닛/무기 풀 일부 추가 개선.
   - `미사일`, `지뢰어뢰`, `유닛종`, `로그작` 표시 경로를 연결.
   - `地潜魚雷`, `ョグ作` 잔여 count=0, `箕紗炒`와 `夢弦種`은 글리프 치환 기준으로 확인.
+- [x] Part 2 보호 UI의 문맥 충돌 라벨 개선.
+  - `저장`은 `存` 글리프와 분리하고, `비용`, `1일수입`, `총수`가 각각 올바르게 표시되도록 조정.
+  - 보호 UI 디코드 기준 `セブ`, `保存`, `嗣汚虞姐`, `存総数` 잔여 count=0.
+- [x] Part 2 튜토리얼 실제 ROM 대사 범위 1차 잔여 일본어 감사.
+  - 한글 예약코드 디코드 기준 `0xD8F000-0xDA0000` 추출 행의 가나/한자 잔여 hits=0.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
