@@ -3716,6 +3716,60 @@ def main():
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
+    for faddr, fend, text, label in [
+        (
+            0xD81C24, 0xD81CFC,
+            '플레이조건은수도2개이상과각군의병종또는생산거점필요.'
+            '작성맵은대전또는통신에서사용가능.지형과병종을선택해배치.',
+            'part2 map design help table row',
+        ),
+        (0xD82124, 0xD82132, '플레이조건:', 'part2 map design condition header row'),
+        (0xD8218C, 0xD82196, '게임방법:', 'part2 map design howto header row'),
+        (0xD82334, 0xD8233C, '평지', 'part2 map design plain row'),
+        (0xD82340, 0xD82348, '산', 'part2 map design mountain row'),
+        (0xD8234C, 0xD82354, '숲', 'part2 map design forest row'),
+        (0xD82358, 0xD82360, '자동', 'part2 map design auto row'),
+        (0xD82464, 0xD82470, '이름입력', 'part2 map design name input row'),
+        (0xD8C54C, 0xD8C554, '전보급중', 'part2 all resupply row'),
+        (0xDEA63E, 0xDEA66A, '상대에강한편', 'part1 unit matchup row'),
+        (0xDF578B, 0xDF57A3, '아군이점령중이면,', 'part1 friendly capture row'),
+        (0xDF612E, 0xDF6140, '자출격이야!', 'part1 sortie row'),
+        (0xDF7816, 0xDF7838, '몰라도플레이가능하지만,', 'part1 mode help lead row'),
+        (0xDF783B, 0xDF7863, '알아두면편한걸알려줄게.', 'part1 mode help row'),
+        (0xDFB6C4, 0xDFB6EE, '자장사다천천히보고가', 'part1 shop shifted row'),
+        (0xDFC569, 0xDFC593, '녀석은사격천재다!', 'part1 shop billy shifted row'),
+        (0xDFC746, 0xDFC770, '색적전에서', 'part1 shop fog shifted row'),
+        (0xDFC915, 0xDFC93D, '녀석은사격천재다!', 'part1 shop asuka shifted row'),
+        (0xE00166, 0xE0016C, '호오?', 'campaign short hmm row'),
+        (0xE00218, 0xE00224, '...어라?', 'campaign short huh row'),
+        (0xE009C9, 0xE009D3, '뭐됐다.', 'campaign never mind row'),
+        (0xE02056, 0xE02076, '휩해군터보라...', 'campaign whip navy turbo row'),
+        (0xE02894, 0xE028A2, '의부대가...', 'campaign force suffix row'),
+        (0xE03134, 0xE03154, '휩인가...눈까지', 'campaign whip snow row'),
+        (0xE03986, 0xE03992, '빌리...', 'campaign billy ellipsis row'),
+        (0xE03F3A, 0xE03F42, '그리고', 'campaign then row'),
+        (0xE04063, 0xE0406F, '특기야.', 'campaign specialty row'),
+        (0xE04872, 0xE04878, '뭐?', 'campaign what row'),
+        (0xE048C9, 0xE048ED, '여전하네.', 'campaign as always row'),
+        (0xE04F42, 0xE04F4A, '상황은?', 'campaign status row'),
+        (0xE05205, 0xE0521F, '무리안하면좋겠지만...', 'campaign no overdo row'),
+        (0xE0644E, 0xE06454, '네.', 'campaign yes row'),
+        (0xE06B4A, 0xE06B52, '소용없어', 'campaign useless row'),
+        (0xE06C88, 0xE06C90, '이겼어', 'campaign won row'),
+        (0xE072DA, 0xE072F4, '...배불러...', 'campaign full stomach row'),
+        (0xE083DA, 0xE083F6, '아야...역시강해.', 'campaign ouch strong row'),
+        (0xE08CC2, 0xE08CDC, '음...역시강하네.', 'campaign strong repeat row'),
+        (0xE0A004, 0xE0A00E, '바다다!', 'campaign sea row'),
+        (0xE0A68E, 0xE0A6AA, '아야...역시강해.', 'campaign ouch strong repeat row'),
+        (0xE0AF92, 0xE0AFAC, '음...역시강하네.', 'campaign strong third row'),
+        (0xE0C2B0, 0xE0C2BA, '바다다!', 'campaign sea repeat row'),
+        (0xE0C93A, 0xE0C956, '아야...역시강해.', 'campaign ouch strong third row'),
+        (0xE0D23E, 0xE0D258, '음...역시강하네.', 'campaign strong fourth row'),
+        (0xE0DAB6, 0xE0DAC6, '하하지만...', 'campaign however row'),
+        (0xE0E536, 0xE0E542, '...큭!', 'campaign grr row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
     attack_intro_row = (
         encode_text('이　', syl_to_code, unmapped)
         + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
