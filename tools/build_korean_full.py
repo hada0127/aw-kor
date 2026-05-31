@@ -357,6 +357,10 @@ SOURCE_TEXT_OVERRIDES = {
 }
 
 ADDRESS_TEXT_OVERRIDES = {
+    # Compact Part 1/2 status labels near the name-grid tables.
+    0xDF8C02: '종합',
+    0xDF8C0E: '장비없음',
+    0xDF8C1A: '유닛상황',
     # Name-confirm prompt. The original translation used a long phrase whose
     # final syllables rendered poorly in this compact UI.
     0xDF8DFA: '맞습니까',
@@ -1483,7 +1487,7 @@ NAME_GRID_RANGES = [
     (0xDF9F00, 0xDF9FF0),   # DF9F charset(0xDF9FB0)
 ]
 
-TEXT_ALLOW_ADDRS = {0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
+TEXT_ALLOW_ADDRS = {0xDF8C02, 0xDF8C0E, 0xDF8C1A, 0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
 
 
 def in_deny(a, end):

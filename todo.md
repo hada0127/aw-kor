@@ -74,6 +74,10 @@
   - 보호 UI 디코드 기준 `セブ`, `保存`, `嗣汚虞姐`, `存総数` 잔여 count=0.
 - [x] Part 2 튜토리얼 실제 ROM 대사 범위 1차 잔여 일본어 감사.
   - 한글 예약코드 디코드 기준 `0xD8F000-0xDA0000` 추출 행의 가나/한자 잔여 hits=0.
+- [x] Part 2 후속 실제 ROM 대사 범위 1차 잔여 일본어 감사.
+  - 한글 예약코드 디코드 기준 `0xDA0000-0xDE0000` 추출 행의 가나/한자 잔여 hits=0.
+  - `0xDE0000-0xE18000`의 실제 UI 라벨 `종합`, `장비없음`, `유닛상황`을 한글화.
+  - 같은 범위 잔여 hits=12는 이름 입력/선택용 가나·한자 그리드 데이터라 텍스트 패치 대상에서 제외.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
