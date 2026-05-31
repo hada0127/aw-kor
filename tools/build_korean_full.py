@@ -1716,6 +1716,9 @@ PART2_UI_KANJI_GLYPH_SUBS = {
     '設': '설', '定': '정', '保': '저', '存': '장', '中': '중',
     '断': '단', '開': '개', '始': '시', '戻': '복', '確': '확',
     '認': '인',
+    # Context-only placeholder used by patch_part2_ui_context_tokens() for the
+    # protected "降伏す" command. Keep "降" mapped to "하" for "降車".
+    '北': '항',
     # Unit/status popup names in the protected Part 2 dictionaries.
     '歩': '보', '兵': '병', '種': '종', '総': '총', '数': '수',
     '滅': '멸', '軽': '경', '重': '중', '偵': '정', '察': '찰',
@@ -1763,6 +1766,29 @@ def patch_part2_ui_kanji_glyphs(rom, orig):
         rom[P.FONT_FILE + top_idx * 32:P.FONT_FILE + top_idx * 32 + 32] = top
         rom[P.FONT_FILE + bot_idx * 32:P.FONT_FILE + bot_idx * 32 + 32] = bot
         patched += 1
+    return patched
+
+
+def patch_part2_ui_context_tokens(rom):
+    """Rewrite protected UI tokens while staying inside existing SJIS glyph paths."""
+    replacements = [
+        ('降伏す', '北復　'),  # 항복
+    ]
+    patched = 0
+    start, end = 0xD82740, 0xD83100
+    for old_text, new_text in replacements:
+        old = old_text.encode('shift_jis')
+        new = new_text.encode('shift_jis')
+        if len(old) != len(new):
+            raise AssertionError(f'part2 UI context replacement length mismatch: {old_text}')
+        pos = start
+        while True:
+            idx = rom.find(old, pos, end)
+            if idx < 0:
+                break
+            rom[idx:idx + len(old)] = new
+            patched += 1
+            pos = idx + len(new)
     return patched
 
 
@@ -3272,6 +3298,7 @@ def main():
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
+    st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
@@ -10380,7 +10407,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
