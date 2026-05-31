@@ -269,6 +269,9 @@
   - 미션 번호 OBJ 블록은 원본 잔여 타일이 섞이지 않도록 전체를 지운 뒤 `미션1`만 다시 렌더링.
   - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/sel_064.png` 기준 `미션1` 외 흰 조각/가로선이 사라졌고, `sel_066.png` 기준 전투 진입 뒤 대사까지 충돌 없이 진행됨을 확인.
   - 검증: `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md`.
+- [x] Part 2 튜토리얼 직접 패치 대사의 로마자 버튼 표기 추가 제거.
+  - 주소 고정 대사에 남아 있던 `A를`, `R을`, `R누르면` 계열을 `결정`, `정보키` 문구로 교체.
+  - `tools/build_korean_full.py` 직접 노출 문자열 기준 `A버튼`, `A를`, `R을`, `R누르면` 잔여 count=0.
 
 ## 현재 우선순위
 
