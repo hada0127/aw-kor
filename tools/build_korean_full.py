@@ -1818,6 +1818,60 @@ def patch_part2_companion_hud_name(rom):
     return 1
 
 
+def patch_part2_ryo_co_name_obj(rom):
+    """Patch the Part 2 CO profile OBJ name tiles for Ryo."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    off = 0x45274C
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Ryo CO name LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 12 * 32:
+        raise AssertionError(f'unexpected Ryo CO name block size: {len(data)}')
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri9.bdf'))
+    width, height = 96, 8
+    pixels = [[0] * width for _ in range(height)]
+    cursor = 22
+    for ch in '료':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = row - 1
+                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                    pixels[py + 1][px + 1] = 13
+                if 0 <= px < width and 0 <= py < height:
+                    pixels[py][px] = 10
+        cursor += w + 1
+
+    out = bytearray(12 * 32)
+    for sprite in range(6):
+        for half in range(2):
+            tile_idx = sprite * 2 + half
+            x0 = sprite * 16 + half * 8
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[row][x0 + col] & 0x0F
+                    bi = tile_idx * 32 + row * 4 + col // 2
+                    if col & 1:
+                        out[bi] |= value << 4
+                    else:
+                        out[bi] |= value
+
+    comp = lz77_compress(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Ryo CO name LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 1
+
+
 MISSION_TITLE_TABLE_ORIG_FILE = 0xA3AF04
 MISSION_TITLE_TABLE_LITERAL_FILE = 0x37C548
 MISSION_TITLE_TABLE_FILE = 0xF40000
@@ -2572,6 +2626,7 @@ def main():
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
+    st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -9432,7 +9487,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
