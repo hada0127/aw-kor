@@ -6973,6 +6973,55 @@ def main():
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
+    for faddr, fend, text, label in [
+        (0xDCAD0C, 0xDCAD30, '결국　아무말도　안했잖아', 'mopp transport no answer row'),
+        (0xDCAD33, 0xDCAD3D, '아니야!', 'mopp transport no answer tail row'),
+        (0xDCAD42, 0xDCAD66, '육상유닛을　어디로　나르느냐가', 'transport land unit point lead row'),
+        (0xDCAD69, 0xDCAD73, '핵심이지', 'transport land unit point row'),
+        (0xDCAD78, 0xDCADA0, '아까와　다른곳으로　옮겨보면', 'transport different place row'),
+        (0xDCADA5, 0xDCADB9, '결과도　달라질거야', 'transport result change row'),
+        (0xDCADBE, 0xDCADD2, '다음엔　힘내!', 'transport next cheer row'),
+        (0xDCADDB, 0xDCADE9, '님　료!', 'mopp call commander ryo row'),
+        (0xDCADEC, 0xDCADF6, '들려?', 'catherine can you hear row'),
+        (0xDCADFE, 0xDCAE0C, '캐서린인가', 'ryo catherine row'),
+        (0xDCAE0F, 0xDCAE1D, '무슨일이야?', 'ryo what happened row'),
+        (0xDCAE22, 0xDCAE36, '긴급사태야!', 'emergency row'),
+        (0xDCAE3B, 0xDCAE63, '여기　파라파라요새에　그린어스군', 'parapara fort green earth lead row'),
+        (0xDCAE66, 0xDCAE86, '모프　쇼군이　쳐들어왔어!', 'mopp invaded row'),
+        (0xDCAE8A, 0xDCAEB2, '그린어스와는　사이가　나쁜건', 'green earth relation lead row'),
+        (0xDCAEB5, 0xDCAED7, '아니라서　방심했어!', 'green earth careless row'),
+        (0xDCAEDE, 0xDCAEF8, '적이　잔뜩　있잖아?!', 'many enemies row'),
+        (0xDCAEFE, 0xDCAF24, '여긴　레드스타에　정말', 'red star important lead row'),
+        (0xDCAF27, 0xDCAF37, '중요한곳이야!', 'red star important row'),
+        (0xDCAF3C, 0xDCAF64, '여기　도시를　많이　빼앗기면', 'many cities lost lead row'),
+        (0xDCAF67, 0xDCAF7D, '그대로　패배야!', 'many cities lost row'),
+        (0xDCAF82, 0xDCAFA6, '되도록　빨리　상대보다', 'capture faster than enemy lead row'),
+        (0xDCAFA9, 0xDCAFB7, '많이　점령해!', 'capture more cities row'),
+        (0xDCAFBC, 0xDCAFE4, '그래　공장과　우리수도도　포함해', 'include factory capital row'),
+        (0xDCAFE7, 0xDCB003, '먼저　１２거점을　점령해!', 'capture twelve bases row'),
+        (0xDCB00A, 0xDCB02A, '많이　점령하면　되는거지?', 'ryo capture many row'),
+        (0xDCB02D, 0xDCB037, '알았어!', 'ryo understood row'),
+        (0xDCB03E, 0xDCB056, '공장도　준비했어!', 'factory prepared row'),
+        (0xDCB05C, 0xDCB072, '님이　좋아하는　유닛을', 'commander favorite unit lead row'),
+        (0xDCB075, 0xDCB081, '생산해!', 'produce favorite unit row'),
+        (0xDCB086, 0xDCB09E, '그럼　부탁할게!', 'catherine asks commander row'),
+        (0xDCB0A6, 0xDCB0B2, '맡겨둬!', 'ryo leave it row'),
+        (0xDCB0BA, 0xDCB0C2, '.....', 'ryo silence row'),
+        (0xDCB0CA, 0xDCB0F4, '...점령가능　유닛이　뭐였더라?', 'ryo forgot capture units row'),
+        (0xDCB0F8, 0xDCB0FE, '???', 'ryo confused row'),
+        (0xDCB106, 0xDCB110, '자　그럼', 'mopp starts row'),
+        (0xDCB115, 0xDCB13F, '그　일이　정말　레드스타　짓인지', 'mopp red star suspicion lead row'),
+        (0xDCB142, 0xDCB162, '먼저　확인해야겠어', 'mopp confirm first row'),
+        (0xDCB167, 0xDCB179, '그럼　가볼까!', 'mopp goes row'),
+        (0xDCB17E, 0xDCB19E, '그러고보니　모프　쇼군은', 'mopp co question lead row'),
+        (0xDCB1A1, 0xDCB1B9, '어떤　쇼군이지?', 'mopp co question row'),
+        (0xDCB1BE, 0xDCB1E8, '바다에선　당해낼자가　드물대', 'mopp naval strength row'),
+        (0xDCB1EB, 0xDCB209, '해상유닛이　엄청　강하대', 'mopp sea units row'),
+        (0xDCBE1E, 0xDCBE4A, '쇼군브레이크를　쓰기전에　얼마나', 'mopp break warning lead row'),
+        (0xDCBE4D, 0xDCBE69, '적유닛을　줄일지가　중요해', 'mopp break warning row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
     # tiny tilemap hook above rewrites the visible row to "예 아니오".
