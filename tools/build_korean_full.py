@@ -3631,6 +3631,38 @@ def main():
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
+    for faddr, fend, text, label in [
+        (0xA2D028, 0xA2D038, '빅토리라인', 'part2 map victory line row'),
+        (0xA2D570, 0xA2D57A, '경계방어전', 'part2 border defense title row'),
+        (0xA2D5A0, 0xA2D5B0, '해상도시공략!', 'part2 sea city title row'),
+        (0xA2D5C8, 0xA2D5D6, '내일7일간', 'part2 seven days title row'),
+        (0xA2D5EC, 0xA2D5F6, '경계방어전', 'part2 border defense repeat title row'),
+        (0xA2D640, 0xA2D64C, '포로구출작전', 'part2 prisoner rescue title row'),
+        (0xA2D6C0, 0xA2D6CC, '전율2주간', 'part2 two weeks title row'),
+        (0xA2D6E0, 0xA2D6EE, '신병기탈취!', 'part2 steal weapon title row'),
+        (0xA2D704, 0xA2D716, '미사일섬쟁탈전!', 'part2 missile island title row'),
+        (0xA2D74C, 0xA2D758, '둘의두뇌전', 'part2 brain battle title row'),
+        (0xA2D770, 0xA2D77C, '희망의바다로', 'part2 hope sea title row'),
+        (0xA2D794, 0xA2D7A0, '해상요새폭격', 'part2 sea fortress title row'),
+        (0xA2D7A4, 0xA2D7B2, '협공회전!', 'part2 pincer battle title row'),
+        (0xA2D7B4, 0xA2D7C0, '대함대전격전', 'part2 fleet blitz title row'),
+        (0xA2D7D4, 0xA2D7DE, '해VS공!', 'part2 sea vs air title row'),
+        (0xA2D7E0, 0xA2D7E6, '화염비', 'part2 fire rain title row'),
+        (0xA2D80C, 0xA2D812, '결전전', 'part2 before final title row'),
+        (0xA2E238, 0xA2E25E, '말많은건내나쁜버릇이군!', 'part2 hachi talkative row'),
+        (0xA2EBE2, 0xA2EC0A, '뭐내앞에선풋내기일뿐이지.', 'part2 hachi young row'),
+        (0xA2F454, 0xA2F45A, '나를', 'part2 hachi me row'),
+        (0xA2F729, 0xA2F753, '사무라이요새선택가능!', 'part2 unlock samurai fortress row'),
+        (0xA2F909, 0xA2F933, '스트롱랜드선택가능!', 'part2 unlock strong land row'),
+        (0xA2FA90, 0xA2FAB8, '프리배틀4P새맵', 'part2 free battle 4p new map row'),
+        (0xA2FAB9, 0xA2FAE1, '파이프노아라시선택가능!', 'part2 unlock pipe storm row'),
+        (0xA2FBBD, 0xA2FBE7, '아메바대륙선택가능!', 'part2 unlock amoeba continent row'),
+        (0xA2FF7C, 0xA2FF88, '후우...!', 'part2 whew row'),
+        (0xA2FFAD, 0xA2FFC5, '또덤벼보거라', 'part2 come again row'),
+        (0xA2FFF0, 0xA2FFFC, '호호호', 'part2 laugh row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
     attack_intro_row = (
         encode_text('이　', syl_to_code, unmapped)
         + b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
