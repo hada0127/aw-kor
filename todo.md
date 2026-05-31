@@ -86,6 +86,8 @@
 - [x] Part 2 후속 사거리/유닛명 UI 라벨 추가 정리.
   - `2-6거리`, `3-5거리`, `2-3거리`, `암초해`, `공격기`, `대공자주포`, `열차포`, `보급차`, `신형전차`, `중전차`, `전투공병`을 한글화.
   - `0xEE2000-0xEE2900`, `0xEFA000-0xEFB000` 집중 창의 잔여 17건은 기호/무작위 테이블 데이터로 확인.
+- [x] Part 2 통신 UI 문장 품질 정리.
+  - `대공미사일` 표기를 슬롯에 맞춰 복원하고, `지도을`로 보이던 통신/저장/송수신 문장을 `지도를` 기준으로 수정.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
