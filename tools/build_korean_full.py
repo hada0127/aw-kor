@@ -2285,52 +2285,66 @@ def patch_part2_battle_obj_labels(rom):
     return 2 + len(unit_labels)
 
 
-def patch_part2_status_header_hp_label(rom):
-    """Patch the Part 2 status-list HP header icon text to Korean."""
+def patch_part2_status_header_labels(rom):
+    """Patch the Part 2 status-list header icon text to Korean."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
     width, height = 16, 8
-    pixels = [[0] * width for _ in range(height)]
-    glyphs = []
-    text_width = 0
-    for ch in '체력':
-        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-        glyphs.append((grid, w, h, xo))
-        text_width += w + 1
-    text_width -= 1
-    cursor = max(0, (width - text_width) // 2)
 
-    # Palette bank 5 for this icon uses the same dark outline range as the
-    # original HP letters. Keep the heart graphic above intact and replace only
-    # the lower 16x8 text row.
-    ink, shadow = 5, 1
-    for grid, w, h, xo in glyphs:
-        for row in range(h):
-            for col in range(w):
-                if not grid[row][col]:
-                    continue
-                px = cursor + col + xo
-                py = row
-                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
-                    pixels[py + 1][px + 1] = shadow
-                if 0 <= px < width and 0 <= py < height:
-                    pixels[py][px] = ink
-        cursor += w + 1
+    def render_label(text):
+        pixels = [[0] * width for _ in range(height)]
+        glyphs = []
+        text_width = 0
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            glyphs.append((grid, w, h, xo))
+            text_width += w + 1
+        text_width -= 1
+        cursor = max(0, (width - text_width) // 2)
 
-    for tx, off in enumerate((0xBE77FC, 0xBE781C)):
-        tile = bytearray(32)
-        for row in range(8):
-            for col in range(8):
-                value = pixels[row][tx * 8 + col] & 0x0F
-                bi = row * 4 + col // 2
-                if col & 1:
-                    tile[bi] |= value << 4
-                else:
-                    tile[bi] |= value
-        rom[off:off + 32] = tile
-    return 2
+        # The status header palettes share the same dark text ramp. Keep each
+        # icon graphic above intact and replace only the lower 16x8 text row.
+        ink, shadow = 5, 1
+        for grid, w, h, xo in glyphs:
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo
+                    py = row
+                    if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                        pixels[py + 1][px + 1] = shadow
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = ink
+            cursor += w + 1
+
+        tiles = []
+        for tx in range(2):
+            tile = bytearray(32)
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[row][tx * 8 + col] & 0x0F
+                    bi = row * 4 + col // 2
+                    if col & 1:
+                        tile[bi] |= value << 4
+                    else:
+                        tile[bi] |= value
+            tiles.append(tile)
+        return tiles
+
+    patched = 0
+    for text, offsets in [
+        ('종류', (0xBE80FC, 0xBE811C)),
+        ('체력', (0xBE77FC, 0xBE781C)),
+        ('연료', (0xBE777C, 0xBE779C)),
+        ('탄약', (0xBE76FC, 0xBE771C)),
+    ]:
+        for tile, off in zip(render_label(text), offsets):
+            rom[off:off + 32] = tile
+            patched += 1
+    return patched
 
 
 def patch_part2_command_menu_co_icon(rom):
@@ -3937,7 +3951,7 @@ def main():
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
-    st['part2_status_header_hp'] = patch_part2_status_header_hp_label(rom)
+    st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -11858,7 +11872,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_hp', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
