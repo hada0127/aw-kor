@@ -3861,7 +3861,10 @@ def main():
     for faddr, text in {
         0xA019B6: '지금',   # この地に[今]、 → 이 땅에 [지금]…  (今、4B→지금4B)
         0xA024D4: '적이',   # ...突破できねえんだ！！k[敵が]w思ったより... control gap
+        0xA03280: '으로',   # 輸送車は「補給」[で、]... control gap
         0xA0E82C: '그럼',   # 行っちゃったわ。k[ま、]Wどのみち... control gap
+        0xD90E32: '지금',   # [今は] <공격>... tutorial command gap
+        0xD91392: '지금',   # [今は] <공격>... tutorial command gap
         0xA0E3D0: '아',     # [あ]、료 맥스… → [아]、료…       (あ2B→아2B, 、유지)
         0xA0E57B: '나를',   # ムッ、W[今、]Wバカ... control gap repurposed for natural Korean
         0xA0E5E3: '지금',   # ちょっと、W[今は]r... control gap between extracted rows
