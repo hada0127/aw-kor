@@ -137,6 +137,9 @@
 - [x] Part 2 튜토리얼 대기 명령 설명 문장 재분절.
   - `대기 을 선택`처럼 보이던 슬롯 경계 문장을 `할 일 없을 땐 대기를 골라`로 조정.
   - 실제 캡처 `temp/operation_tutorial_follow_after_wait_split/sheet.png`와 `temp/wait_label_action_after_split/sheet.png` 기준 설명 문장과 행동 메뉴 `대기` 라벨을 함께 확인.
+- [x] Part 2 튜토리얼 작전 설명의 점령 조건/명령 문장 재분절.
+  - `점령 가능한 건보병계라...`, `보병을 위로 이동시켜 바`, `점령 라는 명령`처럼 보이던 조각 경계 문장을 짧은 슬롯 문구로 재구성.
+  - 실제 캡처 `temp/operation_tutorial_capture_spacing_verify/sheet.png` 기준 보병 계열, 점령 가능 거점, `점령 명령이 나올 거야` 문장 표시를 확인.
 
 ## 현재 우선순위
 
