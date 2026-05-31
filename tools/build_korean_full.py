@@ -1587,6 +1587,71 @@ def restore_symbol_glyphs(rom, orig):
     return len(restored)
 
 
+PART2_UI_KANJI_GLYPH_SUBS = {
+    # Protected Part 2 battle/status UI dictionaries. Keep the original SJIS
+    # table bytes intact, but replace the glyphs those bytes resolve to.
+    '攻': '공', '撃': '격', '補': '보', '給': '급', '部': '부',
+    '隊': '대', '全': '전', '待': '대', '状': '상', '況': '황',
+    # Protected Part 2 terrain/status terms.
+    '平': '평', '地': '지', '山': '산', '川': '강', '森': '숲',
+    '道': '도', '路': '로', '都': '도', '市': '시', '海': '해',
+    '港': '항', '橋': '교', '浅': '여', '瀬': '울', '首': '수',
+    '空': '공', '工': '공', '場': '장', '岩': '암', '礁': '초',
+    '防': '방', '御': '어', '収': '수', '入': '입', '回': '회',
+    '復': '복', '一': '1',
+    # Common battle/menu command kanji seen in the same protected UI paths.
+    '作': '작', '戦': '전', '終': '종', '了': '료', '移': '이',
+    '動': '동', '生': '생', '産': '산', '占': '점', '領': '령',
+    '合': '합', '流': '류', '搭': '탑', '載': '재', '降': '하',
+    '車': '차', '軍': '군', '敵': '적', '味': '아', '方': '군',
+    '選': '선', '択': '택', '表': '표', '現': '현', '在': '재',
+    '設': '설', '定': '정', '保': '저', '存': '장', '中': '중',
+    '断': '단', '開': '개', '始': '시', '戻': '복', '確': '확',
+    '認': '인',
+}
+
+
+def _sjis_code(ch):
+    data = ch.encode('shift_jis')
+    if len(data) != 2:
+        raise ValueError(f'not a two-byte SJIS char: {ch!r}')
+    return (data[0] << 8) | data[1]
+
+
+def _kanji_table_slots(orig):
+    slots = {}
+    for pos in range(P.KTAB_FILE, P.KTAB_END_FILE, 6):
+        sjis_le = struct.unpack_from('<H', orig, pos)[0]
+        sjis = ((sjis_le & 0xFF) << 8) | (sjis_le >> 8)
+        top, bot = struct.unpack_from('<HH', orig, pos + 2)
+        slots[sjis] = (top, bot)
+    return slots
+
+
+def patch_part2_ui_kanji_glyphs(rom, orig):
+    """Localize protected Part 2 UI tables by replacing their source glyphs.
+
+    The table at 0xD82740..0xD83100 is consumed by compact UI renderers that do
+    not safely accept Korean reserved SJIS codes. These substitutions leave the
+    original table bytes untouched and change only the kanji font tiles that the
+    renderer already looks up.
+    """
+    from render_galmuri_8x16 import render_char
+
+    slots = _kanji_table_slots(orig)
+    patched = 0
+    for jp, ko in PART2_UI_KANJI_GLYPH_SUBS.items():
+        sjis = _sjis_code(jp)
+        if sjis not in slots:
+            raise AssertionError(f'kanji table missing {jp} {sjis:04X}')
+        top_idx, bot_idx = slots[sjis]
+        top, bot = render_char(ko)
+        rom[P.FONT_FILE + top_idx * 32:P.FONT_FILE + top_idx * 32 + 32] = top
+        rom[P.FONT_FILE + bot_idx * 32:P.FONT_FILE + bot_idx * 32 + 32] = bot
+        patched += 1
+    return patched
+
+
 def patch_part2_battle_obj_labels(rom):
     """Patch small OBJ-tile labels used by the Part 2 battle terrain popup."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -2497,6 +2562,7 @@ def main():
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
+    st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
@@ -9276,7 +9342,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
