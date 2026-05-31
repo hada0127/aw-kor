@@ -2771,7 +2771,10 @@ def patch_part2_mission_number_obj(rom):
                             pixels[py][px] = 1
         cursor += (w + 1) * scale_x
 
-    buf = bytearray(data)
+    # Clear the whole title sheet. Leaving unused original tiles in this block
+    # leaks broken right-side fragments and a horizontal stroke during the
+    # mission-start animation.
+    buf = bytearray(len(data))
     patched = 0
     # The visible title is four 32x16 OBJs. Source rows are split: indices
     # 0x00..0x0F feed the top 8px and 0x20..0x2F feed the bottom 8px.
@@ -3419,47 +3422,12 @@ def _lz77_literal_block(raw):
     return bytes(out)
 
 
-def _decode_4bpp_tile(tile):
-    pixels = [[0] * 8 for _ in range(8)]
-    for y in range(8):
-        for xp in range(4):
-            b = tile[y * 4 + xp]
-            pixels[y][xp * 2] = b & 0x0F
-            pixels[y][xp * 2 + 1] = b >> 4
-    return pixels
-
-
-def _pack_32x32_4bpp(pixels):
-    out = bytearray(512)
-    for ty in range(4):
-        for tx in range(4):
-            tile = (ty * 4 + tx) * 32
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
-                    bi = tile + row * 4 + col // 2
-                    if col & 1:
-                        out[bi] |= value << 4
-                    else:
-                        out[bi] |= value
-    return bytes(out)
-
-
-def _mission_title_hangul_glyph(glyph_pair):
-    """Make a 32x32 4bpp title glyph from the existing 8x16 Hangul tile pair."""
-    top = _decode_4bpp_tile(bytes.fromhex(glyph_pair[0]))
-    bot = _decode_4bpp_tile(bytes.fromhex(glyph_pair[1]))
-    src = top + bot
-    pixels = [[0] * 32 for _ in range(32)]
-    x0 = 8
-    for y in range(16):
-        for x in range(8):
-            if not src[y][x]:
-                continue
-            for sy in range(2):
-                for sx in range(2):
-                    pixels[y * 2 + sy][x0 + x * 2 + sx] = 6
-    return _pack_32x32_4bpp(pixels)
+def _mission_title_hangul_glyph(_syl):
+    """Make a 32x32 4bpp title glyph for the Part 2 mission title renderer."""
+    # The mission-start transition places these 32x32 glyphs at fixed, widely
+    # spaced OBJ positions over the stamp. Hangul reads as scattered white
+    # fragments there, so keep entries present for renderer bounds but blank.
+    return _mission_title_blank_glyph()
 
 
 def _mission_title_blank_glyph():
@@ -3501,25 +3469,24 @@ def patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code):
             i += 2
 
     code_to_syl = {code: syl for syl, code in syl_to_code.items()}
-    glyphs = json.load(open(os.path.join(BASE, 'data', 'korean_glyphs_8px.json'), encoding='utf-8'))
     glyph_blob = bytearray()
     new_entries = []
 
-    def add_entry(code, raw_glyph):
+    def add_entry(code, raw_glyph, adv=0x1A):
         ptr = MISSION_TITLE_GLYPH_RT + len(glyph_blob)
         comp = _lz77_literal_block(raw_glyph)
         glyph_blob.extend(comp)
         while len(glyph_blob) % 4:
             glyph_blob.append(0)
-        new_entries.append(struct.pack('<HHL', code, 0, ptr) + struct.pack('<I', 0x1A))
+        new_entries.append(struct.pack('<HHL', code, 0, ptr) + struct.pack('<I', adv))
 
     for code in sorted(needed - existing):
         if code == 0x8140:
-            add_entry(code, _mission_title_blank_glyph())
+            add_entry(code, _mission_title_blank_glyph(), adv=0x0C)
             continue
         syl = code_to_syl.get(code)
-        if syl and syl in glyphs:
-            add_entry(code, _mission_title_hangul_glyph(glyphs[syl]))
+        if syl:
+            add_entry(code, _mission_title_hangul_glyph(syl), adv=0x0C)
         else:
             # Keep the renderer bounded for rare fullwidth symbols that the
             # campaign-title table can contain; missing art is preferable to a
