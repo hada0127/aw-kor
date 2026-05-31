@@ -80,6 +80,9 @@
   - 한글 예약코드 디코드 기준 `0xDA0000-0xDE0000` 추출 행의 가나/한자 잔여 hits=0.
   - `0xDE0000-0xE18000`의 실제 UI 라벨 `종합`, `장비없음`, `유닛상황`을 한글화.
   - 같은 범위 잔여 hits=12는 이름 입력/선택용 가나·한자 그리드 데이터라 텍스트 패치 대상에서 제외.
+- [x] Part 2 후속 UI/통신 실제 ROM 문자열 추가 정리.
+  - `0xE18000-0xF00000` 카나 잔여 후보 중 실제 UI 문자열 `날씨 설정`, `통신1~4`, `항복`, `통신준비중`을 한글화.
+  - 같은 후보 창의 잔여 카나 4건은 기호/문자표 데이터로 확인해 텍스트 패치 대상에서 제외.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`

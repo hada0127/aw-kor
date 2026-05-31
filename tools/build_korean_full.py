@@ -391,6 +391,15 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 2 companion/support description. Keep this address-pinned because the
     # comprehensive audit file still classifies the same source as untranslated.
     0xA2A90C: '료와 맥스를 지원',
+    # Part 2 option/communication UI rows found in the actual ROM after the
+    # first tutorial ranges. These are short fixed slots and fit cleanly.
+    0xEC32D2: '날씨 설정',
+    0xEE22C4: '통신4',
+    0xEE22D0: '통신3',
+    0xEE22DC: '통신2',
+    0xEE22E8: '통신1',
+    0xEE25A0: '항복',
+    0xEE2838: '통신준비중!',
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '너 이 게임 처음이니?',
