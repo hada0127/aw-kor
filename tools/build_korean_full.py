@@ -6055,6 +6055,21 @@ def main():
         (0xDC4103, 0xDC4113, '로　쓰러뜨려', 'anti air defeat row'),
         (0xDC4117, 0xDC413D, '그러면　훨씬　편해질거야', 'anti air easier row'),
         (0xDC4142, 0xDC4156, '다음엔　힘내!', 'green earth next cheer row'),
+        (0xDC415E, 0xDC4174, '캠페인４장입니다', 'campaign chapter four row'),
+        (0xDC4178, 0xDC4196, '현재　개발중입니다', 'campaign under development row'),
+        (0xDC419E, 0xDC41BC, '젠장　왜　이런　꼬마가...', 'max kid complaint row'),
+        (0xDC41C2, 0xDC41DC, '난　꼬마가　아니야!', 'ryo not kid chapter row'),
+        (0xDC41DF, 0xDC41FB, '레드스타의　쇼군이야!', 'ryo red star co row'),
+        (0xDC4202, 0xDC420A, '호오', 'max oh row'),
+        (0xDC420D, 0xDC4233, '그럼　이번　맵의　공장과　항구', 'factory port map lead row'),
+        (0xDC4236, 0xDC425C, '사용법쯤은　알고있겠지?', 'factory port usage question row'),
+        (0xDC4262, 0xDC427A, '그정도야　간단해!', 'ryo easy row'),
+        (0xDC427F, 0xDC42A1, '공장은　육상　항구는　해상유닛을', 'factory port unit types row'),
+        (0xDC42A4, 0xDC42BC, '생산할수있는　곳이야!', 'factory port production row'),
+        (0xDC42C2, 0xDC42E6, '역시　그정도는　알고있었나', 'max knows basics row'),
+        (0xDC42EB, 0xDC4309, '하지만　쇼군은　능력이　없으면', 'max ability lead row'),
+        (0xDC430C, 0xDC431A, '얘기가　안돼', 'max ability row'),
+        (0xDC431F, 0xDC4343, '네　힘을　보여주마!', 'max show power row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
