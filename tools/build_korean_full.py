@@ -1847,6 +1847,59 @@ def patch_part2_mission_number_obj(rom):
     return patched
 
 
+def patch_part2_level_label_obj(rom):
+    """Replace the small Part 2 map marker LEVEL OBJ label."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    off = 0x547188
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid level-label LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 14 * 32:
+        raise AssertionError(f'unexpected level-label block size at 0x{off:X}: {len(data)}')
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 32, 8
+    pixels = [[15] * width for _ in range(height)]
+    cursor = 8
+    for ch in '레벨':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = row
+                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 15:
+                    pixels[py + 1][px + 1] = 10
+                if 0 <= px < width and 0 <= py < height:
+                    pixels[py][px] = 1
+        cursor += w + 1
+
+    buf = bytearray(data)
+    for tx in range(4):
+        tile = bytearray(32)
+        for row in range(8):
+            for col in range(8):
+                value = pixels[row][tx * 8 + col] & 0x0F
+                bi = row * 4 + col // 2
+                if col & 1:
+                    tile[bi] |= value << 4
+                else:
+                    tile[bi] |= value
+        buf[tx * 32:tx * 32 + 32] = tile
+
+    comp = lz77_compress(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'level-label LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 4
+
+
 def patch_part2_companion_hud_name(rom):
     """Patch the fixed Part 2 battle HUD OBJ name label for Catherine."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -3036,6 +3089,7 @@ def main():
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
+    st['part2_level_label'] = patch_part2_level_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
@@ -9902,7 +9956,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_level_label', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
