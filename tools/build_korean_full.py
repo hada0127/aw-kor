@@ -2188,12 +2188,13 @@ def patch_world_map_label_tiles(rom):
         put_label(buf, data, list(range(0x28A, 0x293)), '옐로코멧', x=5)
         put_label(buf, data, list(range(0x299, 0x2A1)), '그린어스', x=5)
         put_label(buf, data, list(range(0x2A1, 0x2A7)), '내해', x=15)
+        put_label(buf, data, list(range(0x2A7, 0x2AE)), '블랙랜드', x=5)
         put_label(buf, data, list(range(0x2B0, 0x2B2)), '서', x=4)
         put_label(buf, data, list(range(0x2AE, 0x2B0)), '동', x=4)
         put_label(buf, data, list(range(0x2B2, 0x2B6)), '해', x=1)
         return buf
 
-    patched_per_block = 24 + 6 + 7 + 9 + 8 + 6 + 2 + 2 + 4
+    patched_per_block = 24 + 6 + 7 + 9 + 8 + 6 + 7 + 2 + 2 + 4
     patched = 0
     for off in (0x54214C, 0x5AAA68):
         dec = lz77_decompress(rom, off)
