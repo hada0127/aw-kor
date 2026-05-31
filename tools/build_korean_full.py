@@ -2348,6 +2348,162 @@ def patch_part2_status_header_labels(rom):
     return patched
 
 
+def patch_part2_mode_menu_obj_labels(rom):
+    """Redraw Part 2 mode menu OBJ labels that are stored as LZ77 tile blocks."""
+    from PIL import Image, ImageDraw, ImageFont
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    font_bold = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+    font_cond = os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.ttf')
+    option_font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+
+    def text_bbox(draw, text, font, stroke=0):
+        box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+        return box[2] - box[0], box[3] - box[1]
+
+    def paint_text(layer, text, box, max_size, fill_idx, stroke_idx=1, aa_idx=3, stroke=1, font_path=None):
+        draw = ImageDraw.Draw(layer)
+        if font_path is None:
+            font_path = font_bold
+        for size in range(max_size, 7, -1):
+            font = ImageFont.truetype(font_path, size)
+            w, h = text_bbox(draw, text, font, stroke)
+            if w <= box[2] - box[0] and h <= box[3] - box[1]:
+                break
+        x = box[0] + (box[2] - box[0] - w) // 2
+        y = box[1] + (box[3] - box[1] - h) // 2 - 1
+
+        outline = Image.new('L', layer.size, 0)
+        od = ImageDraw.Draw(outline)
+        od.text((x, y), text, font=font, fill=255, stroke_width=stroke, stroke_fill=255)
+        body = Image.new('L', layer.size, 0)
+        bd = ImageDraw.Draw(body)
+        bd.text((x, y), text, font=font, fill=255)
+        op, bp, lp = outline.load(), body.load(), layer.load()
+        for yy in range(layer.height):
+            for xx in range(layer.width):
+                if op[xx, yy] >= 96:
+                    lp[xx, yy] = stroke_idx
+                if bp[xx, yy] >= 192:
+                    lp[xx, yy] = fill_idx
+                elif bp[xx, yy] >= 64:
+                    lp[xx, yy] = aa_idx
+
+    def make_box(width, height, border_idx=15, fill_idx=1, inset_idx=2):
+        layer = Image.new('L', (width, height), 0)
+        draw = ImageDraw.Draw(layer)
+        draw.rectangle((0, 0, width - 1, height - 1), fill=border_idx)
+        draw.rectangle((2, 2, width - 3, height - 3), fill=fill_idx)
+        if height >= 16:
+            draw.line((2, height - 3, width - 3, height - 3), fill=inset_idx)
+        return layer
+
+    def paint_bdf_text(layer, text, box, fill_idx, spacing=1):
+        glyphs = []
+        total_w = 0
+        max_h = 0
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(option_font[ord(ch)])
+            glyphs.append((grid, w, h, xo))
+            total_w += w + spacing
+            max_h = max(max_h, h)
+        total_w -= spacing
+        x = box[0] + (box[2] - box[0] - total_w) // 2
+        y = box[1] + (box[3] - box[1] - max_h) // 2
+        px = layer.load()
+        for grid, w, h, xo in glyphs:
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    dx = x + col + xo
+                    dy = y + row
+                    if 0 <= dx < layer.width and 0 <= dy < layer.height:
+                        px[dx, dy] = fill_idx
+            x += w + spacing
+
+    def make_campaign():
+        layer = make_box(128, 32, border_idx=5, fill_idx=1, inset_idx=3)
+        draw = ImageDraw.Draw(layer)
+        draw.rectangle((0, 27, 127, 31), fill=5)
+        paint_text(layer, '캠페인', (6, 3, 122, 27), 25, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=1)
+        return layer
+
+    def make_small_button(text):
+        layer = make_box(48, 16, border_idx=15, fill_idx=1, inset_idx=2)
+        paint_text(layer, text, (3, 1, 45, 15), 12, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=0, font_path=font_cond)
+        return layer
+
+    def make_option(text):
+        layer = make_box(128, 16, border_idx=15, fill_idx=1, inset_idx=2)
+        paint_bdf_text(layer, text, (8, 1, 120, 15), fill_idx=4)
+        return layer
+
+    def rect_tiles(layer, x, y, width, height):
+        px = layer.load()
+        out = bytearray()
+        for ty in range(height // 8):
+            for tx in range(width // 8):
+                for row in range(8):
+                    for col_pair in range(4):
+                        lo = int(px[x + tx * 8 + col_pair * 2, y + ty * 8 + row]) & 0xF
+                        hi = int(px[x + tx * 8 + col_pair * 2 + 1, y + ty * 8 + row]) & 0xF
+                        out.append(lo | (hi << 4))
+        return bytes(out)
+
+    def patch_lz(off, replacements, label):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid Part 2 mode menu LZ77 block {label} at 0x{off:X}')
+        data, consumed = dec
+        buf = bytearray(data)
+        for pos, payload in replacements:
+            buf[pos:pos + len(payload)] = payload
+        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(
+                f'Part 2 mode menu {label} grew: {len(comp)} > {consumed} at 0x{off:X}'
+            )
+        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+        return len(replacements)
+
+    patched = 0
+    campaign = make_campaign()
+    patched += patch_lz(0x5B7930, [
+        (0x000, rect_tiles(campaign, 0, 0, 64, 32)),
+        (0x400, rect_tiles(campaign, 64, 0, 64, 32)),
+    ], 'campaign logo')
+
+    buttons = [
+        (make_small_button('계속'), 0x000, 0x100),
+        (make_small_button('처음'), 0x180, 0x280),
+    ]
+    button_patches = []
+    for layer, left_pos, right_pos in buttons:
+        button_patches.append((left_pos, rect_tiles(layer, 0, 0, 32, 16)))
+        button_patches.append((right_pos, rect_tiles(layer, 32, 0, 16, 16)))
+    patched += patch_lz(0x5B9474, button_patches, 'new continue buttons')
+
+    for off, text, label in [
+        (0x5B9050, '워즈숍', 'wars shop option'),
+        (0x5B9378, '트라이얼', 'trial option'),
+        (0x5B8F48, '자유전', 'free battle option'),
+        (0x5B917C, '편집', 'edit option'),
+    ]:
+        layer = make_option(text)
+        patches = [
+            (0x000, rect_tiles(layer, 0, 0, 32, 16)),
+            (0x100, rect_tiles(layer, 32, 0, 32, 16)),
+            (0x200, rect_tiles(layer, 64, 0, 32, 16)),
+            (0x300, rect_tiles(layer, 96, 0, 32, 16)),
+        ]
+        patched += patch_lz(off, patches, label)
+
+    return patched
+
+
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
     width, height = 16, 24
@@ -3953,6 +4109,7 @@ def main():
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
+    st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -11873,7 +12030,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
