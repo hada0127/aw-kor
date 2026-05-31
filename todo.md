@@ -102,6 +102,9 @@
 - [x] Part 1 보호 UI 테이블의 공통 전투/룰 설정 토큰 한글화.
   - Part 2 보호 UI에서 쓰던 안전한 SJIS placeholder+글리프 치환 방식을 Part 1 보호 UI 테이블(`0x805100-0x805A24`)에도 적용.
   - `索敵`, `てんき`, `ブレイク`, `初回収入`, `毎タン収入`, `アリ`, `ナシ`, `ハレ`, `ユキ`, `メランダム` 등을 보호 테이블 전용 한글 표시 경로로 연결.
+- [x] Part 1 이름 입력 첫 프롬프트 깨짐 완화.
+  - `0xDF8DB2` 이름 입력 프롬프트를 짧은 주소 고정 문구 `이름알려줘`로 교체.
+  - 콜드부트 후 이름 화면 재진입 캡처 기준 프롬프트가 깨짐 없이 표시됨을 확인.
 - [x] 최근 빌드 검증:
   - `python3 -m py_compile tools/build_korean_full.py`
   - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`

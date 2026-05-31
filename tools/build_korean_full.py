@@ -361,6 +361,9 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF8C02: '종합',
     0xDF8C0E: '장비없음',
     0xDF8C1A: '유닛상황',
+    # Name-entry prompt. This compact pre-dialogue UI clips multi-word Korean
+    # phrases, so keep the prompt short and space-free.
+    0xDF8DB2: '이름알려줘',
     # Name-confirm prompt. The original translation used a long phrase whose
     # final syllables rendered poorly in this compact UI.
     0xDF8DFA: '맞습니까',
