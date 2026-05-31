@@ -1777,6 +1777,76 @@ def patch_part2_mission_start_obj(rom):
     return 1
 
 
+def patch_part2_mission_number_obj(rom):
+    """Replace the Part 2 mission overlay's fixed MISSION 1 OBJ text."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    off = 0x5A38D4
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid mission-number LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 68 * 32:
+        raise AssertionError(f'unexpected mission-number block size at 0x{off:X}: {len(data)}')
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 128, 16
+    pixels = [[0] * width for _ in range(height)]
+
+    cursor = 24
+    y0 = 1
+    scale_x, scale_y = 3, 2
+    for ch in '미션1':
+        if ch == ' ':
+            cursor += 5 * scale_x
+            continue
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px0 = cursor + (col + xo) * scale_x
+                py0 = y0 + row * scale_y
+                for sy in range(scale_y):
+                    for sx in range(scale_x):
+                        px = px0 + sx
+                        py = py0 + sy
+                        for dx, dy, value in ((1, 1, 10), (1, 0, 5), (0, 1, 5)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = value
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 1
+        cursor += (w + 1) * scale_x
+
+    buf = bytearray(data)
+    patched = 0
+    # The visible title is four 32x16 OBJs. Source rows are split: indices
+    # 0x00..0x0F feed the top 8px and 0x20..0x2F feed the bottom 8px.
+    for ty, source_base in enumerate((0x00, 0x20)):
+        for tx in range(16):
+            tile = bytearray(32)
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                    bi = row * 4 + col // 2
+                    if col & 1:
+                        tile[bi] |= value << 4
+                    else:
+                        tile[bi] |= value
+            start = (source_base + tx) * 32
+            buf[start:start + 32] = tile
+            patched += 1
+
+    comp = lz77_compress(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'mission-number LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return patched
+
+
 def patch_part2_companion_hud_name(rom):
     """Patch the fixed Part 2 battle HUD OBJ name label for Catherine."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -2965,6 +3035,7 @@ def main():
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
+    st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
@@ -9831,7 +9902,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_mission_number', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
