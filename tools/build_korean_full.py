@@ -4329,11 +4329,84 @@ def main():
         0xDA1876: '수도',
         0xDA1F6D: '수도',
         0xDA212B: '수도',
+        0xA2993E: '승리',
+        0xA29952: '공격',
+        0xA2995A: '공격',
+        0xA29962: '점령',
+        0xA29976: '탑재',
+        0xA2997E: '하차',
+        0xA29986: '하차',
+        0xA2998E: '합류',
+        0xA29996: '보급',
+        0xA299DC: '평지',
+        0xA299F0: '도로',
+        0xA299F8: '도시',
+        0xA29A1C: '여울',
+        0xA29A24: '공장',
+        0xA29A44: '암초',
+        0xA29A7C: '화산',
+        0xA2A24C: '생산',
+        0xA2A254: '전멸',
+        0xA2A25C: '생존',
+        0xA2A264: '방어',
+        0xA2A26C: '회복',
+        0xA2A274: '무한',
+        0xA2A2B0: '수입',
+        0xA2A2CC: '거점',
+        0xA2A2F0: '연료',
+        0xA2A2F8: '탄수',
+        0xD83106: '공장',
+        0xD8310A: '암초',
+        0xD8310E: '방어',
+        0xD83112: '수입',
+        0xD83116: '회복',
+        0xDF8B72: '거점',
+        0xDF8B7A: '수입',
+        0xDF8B82: '전멸',
+        0xDF8B8A: '생존',
+        0xDF8B92: '방어',
+        0xDF8B9A: '회복',
+        0xA29420: '전함',
+        0xB818C8: '전함',
+        0xB82DF6: '보급',
+        0xB82DFE: '합류',
+        0xB82E06: '하차',
+        0xB82E12: '하차',
+        0xB82E1E: '탑재',
+        0xB82E32: '점령',
+        0xB82E3A: '공격',
+        0xB82E42: '공격',
+        0xB839E8: '정찰',
+        0xA314ED: '보병',
+        0xA31561: '보병',
+        0xA32246: '보급',
+        0xA32265: '공격',
+        0xA32351: '공격',
+        0xA3242A: '공격',
+        0xA32447: '공격',
+        0xA32486: '공격',
+        0xA3261B: '공격',
+        0xA32CD1: '공격',
+        0xA330EB: '공격',
+        0xA33227: '공격',
+        0xA336D0: '공격',
+        0xB81B28: '보병',
+        0xB8291C: '없음',
+        0xEE24D4: '보병',
+        0x942A6C: '공격',
+        0x97AF20: '공격',
+        0x9B37C4: '공격',
+        0x9EC068: '공격',
+        0xEFABB4: '공격',
         0x9294E8: '전함',
         0x962170: '전함',
         0x99AA14: '전함',
         0x9D32B8: '전함',
         0xEE2414: '전함',
+        0xEE258C: '종료',
+        0xEE25AC: '대기',
+        0xEE25B4: '합류',
+        0xEE25BC: '공격',
     }.items():
         enc = encode_text(text, syl_to_code, unmapped)
         if len(enc) != 4:
@@ -4480,6 +4553,24 @@ def main():
         0xDEEA0B: '은',
         0xDEEB1A: '에',
         0xDEEB76: '와',
+        0xA299D8: '외',
+        0xA299E4: '강',
+        0xA299E8: '산',
+        0xA299EC: '숲',
+        0xA29A00: '해',
+        0xA29A04: '수',
+        0xA29A0C: '공',
+        0xA29A0E: '항',
+        0xA29A14: '항',
+        0xA29A18: '교',
+        0xA2A2AC: '일',
+        0xA2A2C0: '육',
+        0xA2A2C4: '해',
+        0xA2A2C8: '공',
+        0xD83102: '수',
+        0xD83104: '공',
+        0xDF8B62: '일',
+        0xDF8B6A: '장',
         0xDF249E: '을',
         0xDF2EEB: '의',
         0xDF2F23: '가',
@@ -4500,6 +4591,74 @@ def main():
         if len(enc) != 2:
             raise AssertionError(f'tutorial particle replacement length mismatch at 0x{faddr:X}')
         rom[faddr:faddr + 2] = enc
+
+    for base in (0x929244, 0x961ECC, 0x99A770, 0x9D3014, 0xEE2168):
+        for off, slot_len, text in (
+            (0, 4, '암초'),
+            (8, 4, '공장'),
+            (16, 4, '여울'),
+            (24, 2, '교'),
+            (28, 2, '항'),
+            (32, 4, '공항'),
+            (40, 4, '수도'),
+            (48, 2, '해'),
+            (52, 4, '도시'),
+            (60, 4, '도로'),
+            (68, 2, '숲'),
+            (72, 2, '산'),
+            (76, 2, '강'),
+            (80, 4, '평지'),
+            (88, 2, '외'),
+        ):
+            enc = encode_text(text, syl_to_code, unmapped)
+            if len(enc) != slot_len:
+                raise AssertionError(f'terrain label length mismatch at 0x{base + off:X}')
+            rom[base + off:base + off + slot_len] = enc
+
+    for faddr, slot_len, text in (
+        (0xD85AA6, 2, '외'),
+        (0xD85AAE, 4, '평지'),
+        (0xD85AB6, 2, '강'),
+        (0xD85ABE, 2, '산'),
+        (0xD85AC6, 2, '숲'),
+        (0xD85ACE, 4, '도로'),
+        (0xD85AD6, 4, '도시'),
+        (0xD85ADE, 2, '해'),
+        (0xD85AE6, 4, '수도'),
+        (0xD85AEE, 4, '공항'),
+        (0xD85AF0, 2, '항'),
+        (0xD85AFE, 2, '교'),
+        (0xD85B06, 4, '여울'),
+        (0xD85B0E, 4, '공장'),
+        (0xD85B16, 4, '암초'),
+    ):
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) != slot_len:
+            raise AssertionError(f'terrain control label length mismatch at 0x{faddr:X}')
+        rom[faddr:faddr + slot_len] = enc
+
+    for base in (0x929660, 0x9622E8, 0x99AB8C, 0x9D3430):
+        for off, text in ((0, '종료'), (32, '대기'), (40, '합류'), (48, '공격')):
+            enc = encode_text(text, syl_to_code, unmapped)
+            if len(enc) != 4:
+                raise AssertionError(f'command label length mismatch at 0x{base + off:X}')
+            rom[base + off:base + off + 4] = enc
+
+    for base in (0x9295A8, 0x962230, 0x99AAD4, 0x9D3378):
+        for off, text in ((0, '보병'), (8, '없음')):
+            enc = encode_text(text, syl_to_code, unmapped)
+            if len(enc) != 4:
+                raise AssertionError(f'unit option label length mismatch at 0x{base + off:X}')
+            rom[base + off:base + off + 4] = enc
+
+    for faddr, text in {
+        0xB839AC: '거점수입',
+        0xB839C8: '초회수입',
+    }.items():
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) != 8:
+            raise AssertionError(f'income label length mismatch at 0x{faddr:X}')
+        rom[faddr:faddr + 8] = enc
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
     # source text directly to make the rendered line "이 화살표로 조작해".
