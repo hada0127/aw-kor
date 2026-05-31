@@ -2037,6 +2037,74 @@ def patch_part2_redstar_region_obj(rom):
     return 48
 
 
+def patch_part2_prologue_logo_obj(rom):
+    """Replace the Part 2 prologue OBJ logo with Korean text."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width, height = 96, 16
+    pixels = [[0] * width for _ in range(height)]
+
+    cursor = 0
+    y0 = 1
+    scale_x = 3
+    scale_y = 2
+    for ch in '프롤로그':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px0 = cursor + (col + xo) * scale_x
+                py0 = y0 + row * scale_y
+                for sy in range(scale_y):
+                    for sx in range(scale_x):
+                        px = px0 + sx
+                        py = py0 + sy
+                        for dx, dy in ((1, 1), (1, 0), (0, 1)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = 7
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 11
+        cursor += (w + 1) * scale_x
+
+    off = 0x5BBB3C
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid prologue logo LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x2000:
+        raise AssertionError(f'unexpected prologue logo block size at 0x{off:X}: {len(data)}')
+    buf = bytearray(data)
+
+    # The 96x16 logo is three 32x16 OBJs. In the source sheet, its top row is
+    # tile indices 0x08..0x13 and the bottom row is 0x28..0x33.
+    patched = 0
+    for ty, source_base in enumerate((0x08, 0x28)):
+        for tx in range(12):
+            tile = bytearray(32)
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                    bi = row * 4 + col // 2
+                    if col & 1:
+                        tile[bi] |= value << 4
+                    else:
+                        tile[bi] |= value
+            start = (source_base + tx) * 32
+            buf[start:start + 32] = tile
+            patched += 1
+
+    comp = lz77_compress(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'prologue logo LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return patched
+
+
 def patch_world_map_label_tiles(rom):
     """Patch the Part 2 world-map background labels shared by map and legend."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -2900,6 +2968,7 @@ def main():
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
+    st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
     st['world_map_label_tiles'] = patch_world_map_label_tiles(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
@@ -9761,7 +9830,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_obj_labels', 'part2_mission_obj', 'part2_companion_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
