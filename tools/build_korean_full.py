@@ -6424,6 +6424,21 @@ def main():
         (0xDC6B3D, 0xDC6B5F, '강　건너편은　강한　유닛을', 'far river strong units lead row'),
         (0xDC6B62, 0xDC6B86, '갖춘뒤　천천히　가도　괜찮아', 'far river slow ok row'),
         (0xDC6B8B, 0xDC6B9F, '다음엔　힘내!', 'twelve points next cheer row'),
+        (0xDC6BA6, 0xDC6BC6, '곳곳에　숲과　암초가　있어...', 'forest reef everywhere row'),
+        (0xDC6BCA, 0xDC6BEE, '빌리가　잘쓰는　간접공격유닛을', 'billy indirect units lead row'),
+        (0xDC6BF1, 0xDC6C0D, '숨기기에　딱　좋겠군', 'hide indirect units row'),
+        (0xDC6C12, 0xDC6C36, '빨리　가서　두들겨주고　싶은', 'want to hit quickly lead row'),
+        (0xDC6C39, 0xDC6C49, '곳이지만...', 'want to hit quickly row'),
+        (0xDC6C4E, 0xDC6C78, '여긴　확실히　숲과　암초에　숨어', 'hide in forest reef lead row'),
+        (0xDC6C7B, 0xDC6C8F, '가는게　현명하겠지', 'hide in forest reef row'),
+        (0xDC6C94, 0xDC6CA2, '그럼　간다!', 'forest reef lets go row'),
+        (0xDC6CAA, 0xDC6CB8, '자...그럼', 'billy serious intro row'),
+        (0xDC6CBD, 0xDC6CE1, '내키진　않지만　여긴　진심으로', 'billy serious lead row'),
+        (0xDC6CE4, 0xDC6CFC, '상대해　볼까', 'billy serious row'),
+        (0xDC6D01, 0xDC6D23, '놈들을　나아가지못하게　하려면', 'stop advance lead row'),
+        (0xDC6D26, 0xDC6D4C, '수송선을　노리는게　좋겠죠', 'target transport ship row'),
+        (0xDC6D51, 0xDC6D77, '육상유닛을　운반못하게　될테니까', 'cannot carry land units row'),
+        (0xDC6D7C, 0xDC6D96, '그럼　가볼까요', 'billy lets go row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
