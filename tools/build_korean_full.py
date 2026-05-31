@@ -9386,13 +9386,30 @@ def main():
     ]:
         fixed_zero_text_patch(faddr, slot_len, text)
 
+    # Normal confirm-choice rows have enough room for "예　　아니오" but should
+    # not retain ASCII space padding after the Korean text; some UI paths render
+    # those filler bytes as stray pixels.
+    for faddr in [
+        0x942CC4,
+        0x97B178,
+        0x9B3A1C,
+        0x9EC2C0,
+        0xA34B6C,
+        0xD835BC,
+        0xEFAE0C,
+    ]:
+        fixed_zero_text_patch(faddr, 16, '예　　아니오')
+
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
     # tiny tilemap hook above rewrites the visible row to "예 아니오".
     yesno_name_confirm = encode_text('예오아니', syl_to_code, unmapped)
     rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
 
-    suffix = encode_text('　님', syl_to_code, unmapped)
+    # This suffix follows the runtime player-name control byte. Use ASCII space
+    # here: the full-width space can render as a visible stale glyph in this
+    # compact Part 1 dialogue path.
+    suffix = encode_text(' 님', syl_to_code, unmapped)
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 
     st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code)
