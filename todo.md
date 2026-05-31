@@ -3,6 +3,7 @@
 이 파일 하나를 현재 진행 기준으로 사용한다. 이전 진행 문서인
 `.claude/todo.md`와 `docs/plan.md`는 이 파일로 통합했으며, 혼선을 막기
 위해 둘 다 제거했다. 앞으로 작업 상태와 완료 기준은 이 파일만 갱신한다.
+현재 루트 `plan.md`도 존재하지 않으며, 새 진행 문서로 되살리지 않는다.
 
 과거 장기 계획과 상세 조사 기록은 git history, `docs/success.md`,
 `docs/fail.md`, `docs/research.md`에 남겨 둔다. 이 파일은 지금 해야 할
@@ -114,6 +115,9 @@
   - `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`
   - `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`
   - `git diff --check`
+- [x] Part 2 튜토리얼 턴 종료 안내 문장 간격 개선.
+  - `0xD8FA60`/`0xD8FA83` 분절 문구를 조정해 `아래에종료`처럼 붙어 보이던 출력을 제거.
+  - 실제 캡처 `temp/verify_endturn_after_todo_unify_v2/sheet.png` 기준 `아래쪽에 종료` / `있어`로 표시 확인.
 
 ## 현재 우선순위
 
@@ -163,5 +167,6 @@
 ## 문서 규칙
 
 - 진행 상태는 이 파일만 수정한다.
+- 루트 `plan.md`도 새로 만들지 않는다.
 - `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
 - 오래된 상세 기록이 필요하면 git history에서 이전 `docs/plan.md`와 `.claude/todo.md`를 확인한다.
