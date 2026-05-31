@@ -6158,6 +6158,23 @@ def main():
         (0xDC4BAD, 0xDC4BCB, '그리고　５일까지　당하지않게', 'survive five days lead row'),
         (0xDC4BCE, 0xDC4BE2, '어떻게든　버텨', 'survive five days row'),
         (0xDC4BE7, 0xDC4BFB, '다음엔　힘내!', 'capital defense next cheer row'),
+        (0xDC4C02, 0xDC4C1A, '색적맵인가...', 'fog map intro row'),
+        (0xDC4C22, 0xDC4C48, '...색적맵이　뭐였더라?', 'fog map forgot row'),
+        (0xDC4C4B, 0xDC4C59, '기억해?', 'fog map remember row'),
+        (0xDC4C66, 0xDC4C78, '오　역시네!', 'fog map praise row'),
+        (0xDC4C7D, 0xDC4C9B, '그럼　설명은　필요없겠네!', 'fog map no explanation row'),
+        (0xDC4CA0, 0xDC4CAE, '시작하자!', 'fog map start row'),
+        (0xDC4CB6, 0xDC4CC6, '어쩔수없군', 'fog map explain anyway row'),
+        (0xDC4CCB, 0xDC4CF3, '이런　앞이　잘　안보이는　맵을', 'fog map poor visibility row'),
+        (0xDC4CF6, 0xDC4D12, '색적맵이라고　해', 'fog map definition row'),
+        (0xDC4D17, 0xDC4D3F, '보통은　적이　어딘가에　숨어있어', 'fog map hidden enemies row'),
+        (0xDC4D46, 0xDC4D4E, '그래!', 'fog map ryo gets it row'),
+        (0xDC4D51, 0xDC4D73, '찾으려면　어떻게　해야해?', 'fog map how find row'),
+        (0xDC4D7A, 0xDC4DA0, '시야가　넓은　정찰차　같은걸', 'fog map recon lead row'),
+        (0xDC4DA3, 0xDC4DCB, '앞으로　보내서　보며　나아가면돼', 'fog map scout forward row'),
+        (0xDC4DD0, 0xDC4DF8, '다만　정찰차는　약하니　경전차로', 'fog map protect recon lead row'),
+        (0xDC4DFB, 0xDC4E17, '지켜주는걸　잊지마', 'fog map protect recon row'),
+        (0xDC4E1C, 0xDC4E26, '가자!', 'fog map go row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
