@@ -302,6 +302,11 @@
   - CO 정보 이후 보병 설명 분기 캡처를 확장하고, `지금유닛`처럼 붙던 이동 범위 설명과 `보병을 위로 보내`처럼 어색한 점령 안내를 짧은 화면용 문장으로 조정.
   - 작은 정보 패널에서 `기계`가 `기개`처럼 읽히던 프로필 문구를 `메카` 기준으로 바꿔 가독성을 높임.
   - 실제 캡처 `temp/p2_tutorial_text_polish_verify/sheet.png`, `temp/p2_profile_mecha_verify/profile_3x.png` 기준 수정 확인.
+- [x] Part 2 첫 전투 튜토리얼 점령 설명 줄잘림 추가 개선.
+  - 시스템 메뉴 이후 보병 선택 분기를 다시 캡처해 `적군이나 중립 거점뿐이야`가 오른쪽으로 잘리는 문제와 `점령 점령 명령` 중복을 확인.
+  - 점령 조건/명령 조각을 `점령은`, `적군 중립 거점에서`, `할 수 있어`, `명령이 나와` 등 짧은 문구로 재분절.
+  - 실제 캡처 `temp/p2_capture_text_shortening_verify3/sheet.png` 기준 줄잘림과 중복 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
 
 ## 현재 우선순위
 
