@@ -325,6 +325,11 @@
   - 커서창/주포 탄수 설명도 화면 폭에 맞춰 `커서창`, `하트 숫자는 체력`, `탱크 숫자는 남은 연료`, `남은 탄수도 여기 보여`로 정리.
   - 실제 캡처 `temp/p2_attack_tutorial_text_verify/sheet.png`, `temp/p2_cursor_window_text_verify/sheet.png` 기준 물음표 깨짐과 줄잘림 없이 표시됨을 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 점령 내구력 설명 사전 정리.
+  - 공격/커서창 설명 뒤 이어지는 `0xA03C9C-0xA03EF1` 점령 내구력 설명 슬롯을 짧은 화면용 문장으로 재분절.
+  - `HP`/숫자 혼용과 긴 원문 번역을 피하고 `보병이`, `점령 시작했어`, `거점 내구력이야`, `체력 좋은 보병은`, `계속 점령해` 같은 안전한 문구로 고정.
+  - 실제 진행 경로는 `temp/p2_attack_replay_current/sheet.png`, `temp/p2_after_attack_unit_select_probe_current/sheet.png`, `temp/p2_capture_durability_verify_current/sheet.png`로 공격 후 보병 선택 분기까지 회귀 없이 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
