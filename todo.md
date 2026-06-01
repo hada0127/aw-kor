@@ -444,6 +444,11 @@
   - 4바이트 슬롯은 널 종료를 유지하기 위해 `공`, `체`, `방` 같은 1음절 축약으로 처리.
   - 대상 테이블의 기존 영어 라벨 검색 hits=0 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 1/Part 2 설정·CO 보조 ASCII 테이블 추가 한글화.
+  - Part 1의 ON/OFF, 다국어 phase prompt, 국가명, CO 약칭, `FORCE /`, `PLAY` 보조 라벨을 한글 슬롯으로 교체.
+  - Part 2의 ON/OFF, 국가명, CO 약칭, `NORMAL`, `FORCE /`, `PLAY` 보조 라벨도 같은 기준으로 교체.
+  - 대상 범위의 기존 영어/다국어 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
 
 ## 현재 우선순위
 
