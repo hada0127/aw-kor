@@ -14,7 +14,7 @@
 - [ ] 캠페인 전체 한글화 완료.
 - [ ] 전투 화면, HUD, 메뉴, 팝업, 결과 화면 한글화 완료.
 - [ ] 튜토리얼 구간을 먼저 끝까지 검수하고, 실제 화면 기준으로 깨짐을 제거.
-- [ ] `full`, `final`, `title_test` 산출물이 같은 한글화 상태로 빌드되도록 정리.
+- [x] `full`, `final`, `title_test` 산출물이 같은 한글화 상태로 빌드되도록 정리.
 - [ ] 잔여 일본어, 깨진 글자, 잘린 문장, 잘못된 색상/스프라이트를 제거.
 - [ ] 최종 BPS/IPS 패치 생성 및 round-trip 검증.
 
@@ -288,6 +288,9 @@
 - [x] Part 1 메뉴 로고 하단 영문 보조문구 제거.
   - `OPERATION`, `MAP SELECT`, `SHOP SELECT`, `HARD SHOP`, `CAMPAIGN`, `MODE SELECT` 등 Part 1 로고 생성 레이어의 영어 subtitle을 제거하고 한글 본문을 중앙 배치.
   - 렌더 미리보기 `docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png` 등 기준 해당 영어 subtitle 잔여가 사라진 것을 확인.
+- [x] `full`, `final`, `title_test` 산출물 한글화 상태 통일.
+  - `build_korean_full.py`에서도 title/menu OBJ 그래픽 패치를 적용하도록 연결해 `full` 생성 시점부터 타이틀 한글화가 포함되도록 정리.
+  - `build_title_hangul.py` 재적용 후에도 `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`의 SHA-256이 모두 `a0d312dd220adbc52ff10aa281ca908d11afdc577bdaa1a20c90d52cb98a17f6`로 동일함을 확인.
 
 ## 현재 우선순위
 

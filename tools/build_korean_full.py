@@ -3016,6 +3016,74 @@ def patch_part2_bg_mission_word(rom):
     return 1
 
 
+def patch_title_hangul_assets(rom):
+    """Apply the title/menu OBJ patches to the full build as well as final."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import build_title_hangul as th
+
+    def patch_obj_block(off, layer, patch_specs, label):
+        dec = th.lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid {label} LZ77 block at 0x{off:X}')
+        tile_data, consumed = dec
+        tile_data = bytearray(tile_data)
+        for sprite_specs, tile_subtract in patch_specs:
+            th.patch_sprite_index_layer(tile_data, layer, sprite_specs, tile_subtract=tile_subtract)
+        comp = th.lz77_compress(bytes(tile_data), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(f'{label} LZ77 overflow: {len(comp)} > {consumed}')
+        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+
+    title_layer = th.make_title_index_layer()
+    patch_obj_block(
+        th.TITLE_OBJ_LZ77_OFF, title_layer,
+        ((th.TEXT_SPRITES, 0), (th.PROMPT_SPRITES, 0)), 'title text',
+    )
+
+    select_layer = th.make_select_index_layer()
+    patch_obj_block(
+        th.SELECT_OBJ_LZ77_OFF, select_layer,
+        ((th.SELECT_TOP_TEXT_SPRITES, 0), (th.SELECT_BOTTOM_TEXT_SPRITES, 0), (th.SELECT_PROMPT_SPRITES, 0)),
+        'select text',
+    )
+
+    part1_layer = th.make_part1_index_layer()
+    patch_obj_block(
+        th.PART1_TITLE_OBJ_LZ77_OFF, part1_layer,
+        ((th.PART1_TITLE_TEXT_SPRITES, 0x200), (th.PART1_PROMPT_SPRITES, 0x200)),
+        'part1 title text',
+    )
+
+    part2_layer = th.make_part2_index_layer()
+    patch_obj_block(
+        th.PART2_TITLE_OBJ_LZ77_OFF, part2_layer,
+        ((th.PART2_TITLE_TEXT_SPRITES, 0), (th.PART2_PROMPT_SPRITES, 0)), 'part2 title text',
+    )
+
+    p1_label_blocks = [
+        ('part1 operation logo', th.PART1_OPERATION_LOGO_LZ77_OFF, th.make_part1_operation_block()),
+        ('part1 map select logo', th.PART1_MAP_SELECT_LZ77_OFF, th.make_part1_label_block('맵 선택', 'MAP SELECT', 20)),
+        ('part1 shop select logo', th.PART1_SHOP_SELECT_LZ77_OFF, th.make_part1_label_block('숍 선택', 'SHOP SELECT', 20)),
+        ('part1 hard shop logo', th.PART1_HARD_SHOP_LZ77_OFF, th.make_part1_label_block('하드 숍', 'HARD SHOP', 18)),
+        ('part1 campaign logo', th.PART1_CAMPAIGN_LZ77_OFF, th.make_part1_label_block('캠페인', 'CAMPAIGN', 20)),
+        ('part1 mode select logo', th.PART1_MODE_SELECT_LZ77_OFF, th.make_part1_mode_block()),
+        ('part1 rule select logo', th.PART1_RULE_SELECT_LZ77_OFF, th.make_part1_label_block('룰 선택', 'RULE SELECT', 20)),
+        ('part1 team setting logo', th.PART1_TEAM_SETTING_LZ77_OFF, th.make_part1_label_block('팀 설정', 'TEAM SETTING', 20)),
+    ]
+    patched = 9
+    for label, off, layer in p1_label_blocks:
+        th.patch_lz77_whole_block(rom, off, layer, label)
+        patched += 1
+    for label, off, text, max_size in th.PART1_MODE_OPTION_BLOCKS:
+        th.patch_part1_option_block(rom, off, th.make_part1_option_block(text, max_size), f'part1 option {label}')
+        patched += 1
+    th.patch_lz77_whole_block(
+        rom, th.PART1_CATHERINE_NAME_LZ77_OFF, th.make_part1_catherine_block(), 'part1 Catherine name'
+    )
+    th.patch_part1_mission_block(rom)
+    return patched + 2
+
+
 def patch_part2_level_label_obj(rom):
     """Replace the small Part 2 map marker LEVEL OBJ label."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4371,6 +4439,7 @@ def main():
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
     st['world_map_label_tiles'] = patch_world_map_label_tiles(rom)
+    st['title_hangul_assets'] = patch_title_hangul_assets(rom)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -12278,7 +12347,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
