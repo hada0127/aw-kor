@@ -294,6 +294,10 @@
 - [x] Part 1 이름 입력 UI의 고정 영어 라벨 한글화.
   - LZ77 OBJ 블록 `0x48EFF0`, `0xC1BAA0`의 `NAME`, `BACK`, `OK!`, `Cancel` 버튼/라벨을 `이름`, `뒤로`, `확인`, `취소`로 재렌더링.
   - 냉부팅 캡처 `temp/p1_name_ui_labels_after_patch/sheet.png` 기준 이름 입력 화면의 고정 영어 UI가 한글로 표시되고, `full/final/title_test` SHA-256 동일성을 재확인.
+- [x] Part 2 첫 전투 튜토리얼 보병/점령 안내 문장 품질 개선.
+  - CO 정보 이후 보병 설명 분기 캡처를 확장하고, `지금유닛`처럼 붙던 이동 범위 설명과 `보병을 위로 보내`처럼 어색한 점령 안내를 짧은 화면용 문장으로 조정.
+  - 작은 정보 패널에서 `기계`가 `기개`처럼 읽히던 프로필 문구를 `메카` 기준으로 바꿔 가독성을 높임.
+  - 실제 캡처 `temp/p2_tutorial_text_polish_verify/sheet.png`, `temp/p2_profile_mecha_verify/profile_3x.png` 기준 수정 확인.
 
 ## 현재 우선순위
 
