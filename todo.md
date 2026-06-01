@@ -434,6 +434,11 @@
   - Part 1/Part 2 공통 색상·플레이어 라벨 `BLUE`, `RED`, `NEUT`, `COM`, `HUMAN`, `NON`도 슬롯 크기에 맞춰 한글화.
   - 대상 전투/통신 블록 검색 기준 위 ASCII 라벨 hits=0 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] 레포 용량 재정리.
+  - 현재 빌드 파이프라인에서 직접 쓰는 Galmuri 폰트 7개만 남기고 unused TTC/TTF/WOFF/BDF 변형과 CSS를 제거.
+  - 재생성 가능한 `output/`, `temp/` 산출물과 중복 원본 백업 ROM, 사용하지 않는 `visualboyadvance-m.app`를 정리.
+  - `git gc`로 loose object를 압축해 작업 폴더 크기를 약 409MB에서 153MB 수준으로 축소.
+  - 폰트 정리 후 `build_korean_full.py`, `build_title_hangul.py` 재빌드 통과.
 
 ## 현재 우선순위
 
