@@ -101,6 +101,10 @@ def extract_japanese_text(rom_path, min_chars=2, sample_every=1):
                     'length': len(text_bytes),
                     'char_count': char_count,
                 })
+            elif i == start_addr:
+                # Invalid Shift-JIS lead byte. Advance once so binary data does
+                # not trap the scanner on the same address forever.
+                i += 1
         else:
             i += 1
 

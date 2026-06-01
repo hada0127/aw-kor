@@ -484,6 +484,10 @@
   - `temp/p2_first_turn_end_confirm/sheet.png` 기준 첫 보병, 두 번째 보병, 수송차를 모두 대기 처리한 뒤 시스템 메뉴 `종료`가 적 2일차로 정상 전환됨을 확인.
   - `temp/p2_enemy_turn_probe/sheet.png` 기준 적 2일차 대사와 공격 설명 구간에서 추가 일본어/글자 깨짐 없이 표시됨을 확인.
   - 공격 설명 이후 실제 조작 대기 상태는 추가 분기 탐색 대상으로 남겨 둠.
+- [x] 잔여 일본어 감사 도구 루프 버그와 저주소 UI 라벨 정리.
+  - `find_japanese_text.py`가 잘못된 SJIS 시작 바이트에서 같은 주소에 멈추던 루프를 수정.
+  - 안전 텍스트 import 대상 밖의 `0x5A375F` 저주소 `コメント` UI 라벨을 8바이트 슬롯 안에서 `코멘트`로 직접 패치.
+  - `full`, `final`, `title_test` SHA-256 동일, `コメント` ROM 검색 count=0, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 

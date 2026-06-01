@@ -5084,6 +5084,9 @@ def main():
     }.items():
         enc = b''.join(struct.pack('>H', syl_to_code[ch]) for ch in text)
         rom[faddr:faddr + len(enc)] = enc
+    # Low-address UI label not covered by the safe text import pass.
+    rom[0x5A375F:0x5A375F + 8] = encode_text('코멘트', syl_to_code, unmapped) + bytes([FILL_BYTE]) * 2
+
     # Part 2 first battle intro has "まだ" between control bytes, outside the
     # CSV slot. Blank it; the following Korean slot already says the meaning.
     rom[0xA0283C:0xA02840] = bytes([FILL_BYTE]) * 4
