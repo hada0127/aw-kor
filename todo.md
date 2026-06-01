@@ -462,6 +462,11 @@
   - 기존 `1일째/작전개시` 제거 패치에서 빠졌던 후반 OBJ 타일 범위를 추가로 비워 화면에 남던 `始` 그래픽 제거.
   - `temp/p2_start_overlay_verify_after_blank/overlay.png` 기준 실제 mGBA 화면 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 첫 전투 조작 UI 1차 분기 검수.
+  - `temp/p2_battle_unit_branch_probe/branch_sheet.png` 기준 시스템 메뉴, 작전 하위 메뉴, CO 정보, 지형/유닛 상태 라벨 한글 표시 확인.
+  - `temp/p2_battle_unit_command_probe/unit_command_sheet.png` 기준 보병 선택/이동 범위와 튜토리얼 안내 대사 한글 표시 확인.
+  - `temp/p2_battle_endturn_probe/endturn_sheet.png` 기준 턴 종료 안내 대사 한글 표시 확인.
+  - 이 분기에서 추가 코드 패치가 필요한 일본어 잔여 그래픽은 발견하지 못함.
 
 ## 현재 우선순위
 
