@@ -3244,6 +3244,60 @@ def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
     return patched
 
 
+def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
+    """Localize fixed ASCII battle/rules strings shared by both games."""
+    def write_slot(off, slot, text):
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) >= slot:
+            raise AssertionError(f'common battle ASCII replacement too long at 0x{off:X}: {text}')
+        rom[off:off + slot] = enc + bytes(slot - len(enc))
+
+    for off, slot, text in [
+        (0x391180, 0x08, '눈:%s'),
+        (0x391188, 0x08, '색적:%s'),
+        (0x3911A0, 0x10, 'R: 색적 있음'),
+        (0x3911B0, 0x10, 'R: 색적 없음'),
+        (0x3911D8, 0x08, '정지'),
+        (0x391950, 0x08, '자금'),
+        (0x391958, 0x08, '능력'),
+        (0x391960, 0x08, '장군'),
+        (0x391968, 0x08, '부대'),
+        (0x391970, 0x08, '색적'),
+        (0x391978, 0x08, '일수'),
+        (0x391980, 0x08, '색상'),
+        (0xB82A94, 0x08, '눈:%s'),
+        (0xB82A9C, 0x08, '색적:%s'),
+        (0xB82AB4, 0x0C, 'R: 색적'),
+        (0xB82AC0, 0x04, '있'),
+        (0xB82AC4, 0x0C, 'R: 색적'),
+        (0xB82AD0, 0x08, '없음'),
+        (0xB82AEC, 0x08, '정지'),
+        (0xB82B14, 0x10, '레드스타 승리'),
+        (0xB82B24, 0x10, '블루문 승리'),
+        (0xB82B3C, 0x10, '부대 전멸'),
+        (0xB82B4C, 0x10, '본부 점령'),
+        (0xB82B5C, 0x0C, '거점 점령'),
+        (0xB82B68, 0x10, '서든 데스'),
+        (0xB84E00, 0x08, '자금'),
+        (0xB84E08, 0x08, '능력'),
+        (0xB84E10, 0x08, '부대'),
+        (0xB84E18, 0x08, '장군'),
+        (0xB84E20, 0x0C, '색적'),
+        (0xB84E2C, 0x08, '정리'),
+        (0xB84E34, 0x08, '색상'),
+        (0x8FC268, 0x10, '부대설정'),
+        (0x8FC278, 0x10, '규칙설정'),
+        (0x8FC288, 0x0C, '상점'),
+        (0x8FC294, 0x0C, '색상편집'),
+        (0x8FC2A0, 0x0C, '지도선택'),
+        (0x8FC2AC, 0x0C, '모드선택'),
+        (0x8FC2B8, 0x10, '장군선택'),
+        (0x8FC2C8, 0x0C, '통신모드'),
+    ]:
+        write_slot(off, slot, text)
+    return 40
+
+
 def patch_title_hangul_assets(rom):
     """Apply the title/menu OBJ patches to the full build as well as final."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4664,6 +4718,7 @@ def main():
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_day_hud'] = patch_part2_battle_day_hud_label(rom)
     st['residual_ascii_labels'] = patch_residual_ascii_labels(rom, syl_to_code, unmapped)
+    st['common_battle_ascii_labels'] = patch_common_battle_ascii_labels(rom, syl_to_code, unmapped)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
@@ -12684,7 +12739,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'residual_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

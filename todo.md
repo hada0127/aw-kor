@@ -349,6 +349,11 @@
   - ROM에 남아 있던 `BLACK HOLE`, `YELLOW COMET`, `GREEN EARTH`, `BLUE MOON`, `RED STAR`, `NEUTRAL`, `CAMPAIGN`, `HARD*CAMPAIGN` 고정 문자열을 한글 예약코드 라벨로 교체.
   - `full`, `final`, `title_test` 산출물 SHA-256 동일성을 확인했고, 해당 ASCII 토큰 8종은 ROM 검색 기준 count=0.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
+- [x] Part 1/Part 2 공통 전투·메뉴 ASCII 라벨 정리.
+  - `PAUSE`, `WIN`, `BUTAI ZENMETU`, `SYUTO SENRYO`, `X SENRYO`, `SUDDEN DEATH`, `SAKUTEKI`, `MONEY`, `BREAK`, `TEAM`, `SYOGUN`, `SORT`, `COLOR` 계열 고정 문자열을 한글 슬롯으로 교체.
+  - Part 1 메뉴 문자열 묶음의 `TEAM*SETTING`, `RULE*SETTING`, `WARS*SHOP`, `COLOR*EDIT`, `MAP*SELECT`, `MODE*SELECT`, `SYOGUN*SELECT`, `LINK*MODE`도 한글화.
+  - `full`, `final`, `title_test` 산출물에서 위 ASCII 후보 검색 count=0, SHA-256 동일성 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
 - [x] Part 2 CO/컴패니언 설명 테이블의 남은 `HP`/일본식 프로필 문구 정리.
   - `0xA2A8DC-0xA2BF92` 범위의 CO 능력/좋아함/싫어함/프로필 행을 짧은 화면용 한글 문구로 고정.
   - 블리자드/츠나미/타이푼/메테오/호크/센세이 설명의 `HP` 계열 표기를 `체력`으로 통일하고, `키라이케무시`류 직역 문구를 자연스러운 한글로 교체.
@@ -421,7 +426,7 @@
 - [ ] Part 1 본편 캠페인 대사 전체 플레이스루 검수.
 - [ ] Part 1 본편 전투 HUD, OBJ 라벨, 결과 화면, 작전실, 상점, CO 정보 검수.
 - [ ] 1+2 선택 화면, 1편 본편, 2편 본편의 타이틀/시작 텍스트 스타일 재검증.
-- [ ] final/title_test/full 산출물 간 한글화 차이 제거.
+- [x] final/title_test/full 산출물 간 한글화 차이 제거.
 - [ ] 배포 전 BPS/IPS 재생성, manifest 갱신, round-trip 검증.
 
 ## 문서 규칙
