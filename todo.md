@@ -350,6 +350,10 @@
   - 블리자드/츠나미/타이푼/메테오/호크/센세이 설명의 `HP` 계열 표기를 `체력`으로 통일하고, `키라이케무시`류 직역 문구를 자연스러운 한글로 교체.
   - ROM 스니펫 검사 기준 `0xA2A800-0xA2C020`의 SJIS `HP`/`ＨＰ` 및 ASCII `HP` 잔여 count=0.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 후속 튜토리얼의 작전/상황 메뉴 설명 문구 개선.
+  - `D9FA81`, `DA002C`, `DC2C3A-DC2D3D`의 전각 숫자와 `쇼군` 메뉴명 혼용을 `세 메뉴`, `세개뿐`, `장군` 기준으로 정리.
+  - `작전룸에선 이 ３개뿐이야`, `승리조건 상황 쇼군`, `３가지 명령`, `남은 ２개 메뉴` 계열 어색한 문구가 소스 패치 기준 남지 않음을 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
