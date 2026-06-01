@@ -2162,6 +2162,8 @@ def patch_part2_ui_context_tokens(rom):
         ('うかぶ', '白上　'),  # 부상
         ('なし', '無員'),      # 없음
         ('あり', '有員'),      # 있음
+        ('ＢＧＭ有員', '員　有員　'),  # 음 있음
+        ('ＢＧＭ無員', '員　無員　'),  # 음 없음
         ('装備していません', '装備無員　　　　'),  # 장비없음
         ('キャンペーン', '甘別認　　　'),  # 캠페인
         ('トライアル', '土楽移悪　'),      # 트라이얼
@@ -5631,6 +5633,22 @@ def main():
         if len(payload) > slot_len:
             raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
+
+    for faddr, fend, text, label in [
+        (0xA045D1, 0xA045E3, '체력10　보병은', 'part2 hp10 infantry row'),
+        (0xA0568D, 0xA056A7, '거점에서　체력회복하면', 'part2 base hp recovery row'),
+        (0xA06891, 0xA068AB, '체력을　더할수있어!', 'part2 join hp add row'),
+        (0xA0690D, 0xA06929, '서로　체력이　더해져', 'part2 join hp total row'),
+        (0xA069A3, 0xA069B7, '체력은　10이　최대야', 'part2 hp max row'),
+        (0xA0BAF4, 0xA0BB0A, '적　체력을　보려면', 'part2 enemy hp cursor row'),
+        (0xA21379, 0xA21391, '체력이　10을　넘으면', 'part2 joined hp over max row'),
+        (0xA21392, 0xA213A0, '남은　체력은', 'part2 surplus hp row'),
+        (0xA2E40F, 0xA2E435, '선생님이　왜　일부러　체력9인', 'part2 sensei hp9 setup row'),
+        (0xDF2D70, 0xDF2D86, '전유닛　체력을', 'part2 co power all unit hp row'),
+        (0xDF394A, 0xDF395E, '또　자기　체력을', 'part2 hide own hp row'),
+        (0xDFBE0C, 0xDFBE2E, '료의　브레이크는　체력회복', 'part2 ryo break hp row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     for faddr, fend, text, label in [
         (0xA02580, 0xA0258C, '침묵', 'part2 six-dot row'),

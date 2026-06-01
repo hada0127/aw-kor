@@ -419,6 +419,12 @@
 - [x] Part 1 이름 확정 뒤 작전룸 안내 문구 표기 통일.
   - 실제 콜드부트 캡처에서 보인 `모드선택`, `작전실` 혼용을 `모드 선택`, `작전룸` 기준으로 정리.
   - 재빌드 후 `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 튜토리얼/전투 설명의 잔여 `HP` 표기 추가 제거.
+  - 합류, 거점 회복, CO 설명, 브레이크 설명 등에 남은 반각 `HP` 행 12개를 `체력` 표기로 주소 고정 패치.
+  - `0xA00000-0xA80000` 실제 텍스트/UI 범위의 ASCII `HP` hits=0 확인.
+  - `0xD80000-0xF00000`의 남은 `HP` hits는 포인터/테이블형 데이터 문맥으로 확인.
+  - 보호 UI 사전의 `ＢＧＭ`도 `음 있음`으로 바꿔 compact 범위의 `ＢＧＭ` hits=0 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
 
 ## 현재 우선순위
 
