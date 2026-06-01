@@ -580,6 +580,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02B37: '판단했을 때 쓰는 명령이야',
     0xA02B56: '이걸 고르면',
     0xA02B7D: '적 차례가 돼',
+    0xA02B9A: '지금은',
+    0xA02BAE: '유닛에게 명령부터 내려',
     # The infantry explanation is split into 14/20/30-byte fragments with
     # inline separators between records. Keep the first fragment short so the
     # separator does not attach to the final Hangul glyph.
@@ -5537,6 +5539,8 @@ def main():
         (0xA028E3, 0xA028EB, '적군은', 'part2 tutorial enemy army row'),
         (0xA02B08, 0xA02B10, '방금고른', 'part2 tutorial selected row'),
         (0xA02B11, 0xA02B19, ' 종료는', 'part2 tutorial end command row'),
+        (0xA02B9A, 0xA02BAC, '지금은', 'part2 tutorial for now row'),
+        (0xA02BAE, 0xA02BD2, '유닛에게　명령부터　내려', 'part2 tutorial order units first row'),
         (0xA02D2C, 0xA02D32, '', 'part2 tutorial capture particle row'),
         (0xA02DBF, 0xA02DC7, '점령 ', 'part2 tutorial capture command row'),
         (0xA02E96, 0xA02E9E, '대기를', 'part2 tutorial wait command row'),

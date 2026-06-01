@@ -330,6 +330,11 @@
   - `HP`/숫자 혼용과 긴 원문 번역을 피하고 `보병이`, `점령 시작했어`, `거점 내구력이야`, `체력 좋은 보병은`, `계속 점령해` 같은 안전한 문구로 고정.
   - 실제 진행 경로는 `temp/p2_attack_replay_current/sheet.png`, `temp/p2_after_attack_unit_select_probe_current/sheet.png`, `temp/p2_capture_durability_verify_current/sheet.png`로 공격 후 보병 선택 분기까지 회귀 없이 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 종료 오입력 안내 문구 가독성 개선.
+  - 시스템 메뉴에서 `종료`를 잘못 골랐을 때 이어지는 `여긴 일단` 문구가 작은 폰트에서 `어건`처럼 보이는 것을 확인.
+  - `0xA02B9A`, `0xA02BAE`를 `지금은 / 유닛에게 명령부터 내려`로 줄여 행 경계와 가독성을 안정화.
+  - 실제 캡처 `temp/p2_end_command_retry_text_verify/sheet.png` 기준 새 문구가 깨짐 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
