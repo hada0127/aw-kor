@@ -405,12 +405,17 @@
   - Part 2 OBJ 유닛명 테이블에서 보급차 항목이 빠져 수송/보급차 커서 팝업이 `자주포` 계열 글자처럼 보이던 문제를 수정.
   - 큰 상태창/소형 커서 팝업 유닛명 테이블 모두 `보병, 바주카병, 정찰차, 경전차, 중전차, 신형전차, 보급차, 자주포...` 순서로 재정렬.
   - 실제 캡처 `temp/p2_apc_popup_label_after_order_fix/sheet.png` 기준 보급차 커서 팝업이 `보급차`로 표시됨을 확인.
-- [x] 레포 대형 임시 생성물 정리.
-  - `temp/`의 대형 로그/스크린샷/RAW 덤프와 `output/`의 재생성 가능한 ROM/패치 산출물을 정리해 작업 폴더를 약 12GB에서 약 529MB 수준으로 축소.
-  - 상태 파일(`*.ss0`)과 임시 진행 스크립트는 유지했고, 현재 ROM 산출물은 다시 빌드해 복원.
+- [x] 레포 대형 임시/중복 생성물 정리.
+  - `temp/`의 대형 로그/스크린샷/상태 파일과 `output/`의 재생성 가능한 ROM 산출물을 비운 뒤, 현재 기준 ROM만 다시 빌드해 복원.
+  - 현재 빌드에 쓰이지 않는 중복 참조 파일 `reference/Unihan_full.zip`, `reference/unihan_tmp/`, `reference/fonts/galmuri.zip`을 삭제.
+  - 작업 폴더 크기는 이번 정리 후 약 413MB 수준으로 축소.
 - [x] Part 2 첫 전투 진입부의 작은 폰트 오독 문구 정리.
   - `블랙홀군`의 마지막 글자와 `대충`의 `충`이 작은 대화 폰트에서 깨져 보이는 구간을 짧은 표현으로 교체.
   - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a_066.png`, `a_070.png` 기준 오른쪽 잘림과 깨진 글자 없이 표시됨을 확인.
+- [x] Part 1/Part 2 보호 전투 UI 사전의 자금 `G` 라벨 제거.
+  - 보호 UI 사전의 자금 단위용 `行動数Ｇ`, `総事費Ｇ`만 `金` 글리프 경로로 바꿔 작은 전투 폰트에서 `금`으로 표시되도록 조정.
+  - `ＢＧＭ`의 `Ｇ`는 유지했고, 보호 UI 범위의 남은 `Ｇ` hits가 BGM 문맥뿐임을 ROM 검색으로 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 

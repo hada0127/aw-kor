@@ -101,10 +101,10 @@ aw-kor/
 │   │           mgba_harness.c(/tmp/mgbah 헤드리스 BP/watch/네비)
 │   └── 분석:   analyze_rom_header.py, find_pointers.py, analyze_translation_patterns.py
 │
-├── output/                # 빌드 산출물 (git-ignored *.gba) — Claude는 청소하지 않음
-│   ├── game_wars_korean_final.gba     # 최종 ROM (현재 흰 화면 = 손상)
-│   ├── game_wars_korean_v1.gba        # 삽입 직후 중간본
-│   └── game_wars_korean_final.sav     # 세이브
+├── output/                # 재생성 가능한 빌드 산출물 (git-ignored *.gba)
+│   ├── game_wars_korean_full.gba
+│   ├── game_wars_korean_final.gba
+│   └── game_wars_korean_title_test.gba
 │
 ├── temp/                  # ★임시 작업 공간 (git-ignored) — 디버그 ROM/스크린샷/덤프
 │
@@ -115,7 +115,7 @@ aw-kor/
 │   └── reports/           # 진행/세션 리포트 (이전 루트의 상태 MD들)
 │
 ├── reference/             # 참고 데이터
-│   ├── Unihan_full.zip, unihan_tmp/   # 한자 분해/참조 데이터
+│   └── fonts/             # 현재 빌드에 필요한 Galmuri 폰트 원본
 │
 └── archive/               # 정리된 임시/구버전 파일 (삭제 대신 보관)
     ├── logs/              # codex/translation 실행 로그
