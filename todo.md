@@ -458,6 +458,10 @@
   - `레드스타 말고도` 앞에 새던 조사 조각 `서`를 제거해 대사 연결을 정리.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
   - `temp/p2_prologue_polish_focus/sheet.png`와 `temp/p2_battle_entry_smoke_after_polish/battle.png` 기준 실제 mGBA 화면 확인 및 전투 진입 무충돌 확인.
+- [x] Part 2 첫 전투 시작 연출 잔여 일본어 그래픽 제거.
+  - 기존 `1일째/작전개시` 제거 패치에서 빠졌던 후반 OBJ 타일 범위를 추가로 비워 화면에 남던 `始` 그래픽 제거.
+  - `temp/p2_start_overlay_verify_after_blank/overlay.png` 기준 실제 mGBA 화면 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 

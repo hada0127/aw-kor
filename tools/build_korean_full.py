@@ -3143,9 +3143,9 @@ def patch_part2_battle_start_day_overlay_obj(rom):
     # OBJ sheets, then affine-transformed at runtime. Replacing it with Hangul in
     # the source sheets produces unreadable transformed strokes, so the safe
     # localization step is to remove the Japanese art entirely.
-    patched += patch_block(0x45EC74, list(range(16, 32)) + list(range(160, 240)))
+    patched += patch_block(0x45EC74, list(range(16, 32)) + list(range(160, 288)))
     for off in (0x92DF84, 0x966C0C, 0x99F4B0, 0x9D7D54):
-        patched += patch_block(off, list(range(16, 32)) + list(range(160, 192)) + list(range(192, 208)))
+        patched += patch_block(off, list(range(16, 32)) + list(range(160, 224)))
     for off in (0x92EB5C, 0x9677E4, 0x9A0088, 0x9D892C):
         patched += patch_block(off, list(range(0, 32)))
     return patched
