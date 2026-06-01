@@ -612,16 +612,19 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02E9F: '골라',
     0xA02F0D: '수송차는 보병을',
     0xA02F23: '태워 옮기고',
+    0xA02FB3: '라는 명령이 나와',
+    0xA02FEE: '명령으로',
     0xA0316B: '빠질 수도',
     0xA0317E: '있겠네',
     0xA0321B: '주포탄이 떨어지면 강한 공격을 못 해',
     0xA03285: '주변에 있는',
+    0xA03301: '명령을 쓰면 좋아',
     0xA03332: '수송차는 아군',
     0xA03397: ' 유닛 주위 색이 바뀌어 있지',
     0xA033C8: '이동 가능 범위야',
     0xA03403: '할 게 없을 땐',
     0xA034AE: '지형 이동 비용과 제한이 달라',
-    0xA0350D: '산이나 강에는 못 들어가',
+    0xA0350D: '산 강 못 가',
     0xA0357C: '어떤 지형을 누가 지나는지',
     0xA035BB: '지형 위에서 정보키',
     0xA0364E: '빈칸에서 결정하면',
@@ -4691,6 +4694,7 @@ def main():
     rom[0xA0283C:0xA02840] = bytes([FILL_BYTE]) * 4
     rom[0xA02B1A:0xA02B1E] = bytes([FILL_BYTE]) * 4
     rom[0xA02F1E:0xA02F22] = bytes([FILL_BYTE]) * 4  # [搭載] label; following text already says "태워"
+    rom[0xA034F6:0xA034FE] = bytes([FILL_BYTE]) * 8  # [よ。]/요. after 이동타입; Korean row already says the type
     rom[0xA03956:0xA0395A] = bytes([FILL_BYTE]) * 4  # [反撃] label; following text already says "반격"
     rom[0xA1F7E7:0xA1F7E9] = bytes([FILL_BYTE]) * 2  # [今] before 정보부 통신; following line carries the meaning
     rom[0xA26085:0xA26087] = bytes([FILL_BYTE]) * 2  # dangling [と] after Korean clause
@@ -5482,13 +5486,13 @@ def main():
         (0xA02DBF, 0xA02DC7, '점령 ', 'part2 tutorial capture command row'),
         (0xA02E96, 0xA02E9E, '대기를', 'part2 tutorial wait command row'),
         (0xA02F0D, 0xA02F1D, '수송차는　보병을', 'part2 tutorial apc infantry row'),
-        (0xA02F58, 0xA02F5E, '태워?', 'part2 tutorial load question row'),
+        (0xA02F58, 0xA02F5E, '태워', 'part2 tutorial load question row'),
         (0xA02FAA, 0xA02FB2, '탑승', 'part2 tutorial load command row'),
         (0xA02FE5, 0xA02FED, '하차', 'part2 tutorial unload command row'),
         (0xA0316B, 0xA0317D, '빠질　수도', 'part2 tutorial drown row'),
         (0xA031E7, 0xA031ED, '그때', 'part2 tutorial each time row'),
         (0xA031F9, 0xA03201, '주포탄', 'part2 tutorial main ammo row'),
-        (0xA03244, 0xA0324C, '되고,', 'part2 tutorial becomes row'),
+        (0xA03244, 0xA0324C, '되고', 'part2 tutorial becomes row'),
         (0xA0326E, 0xA03276, '수송차는', 'part2 tutorial apc row'),
         (0xA03277, 0xA0327F, '보급', 'part2 tutorial supply command row'),
         (0xA032EF, 0xA032F7, '급할땐', 'part2 tutorial hurry row'),
@@ -5496,9 +5500,10 @@ def main():
         (0xA03332, 0xA03340, '수송차는　아군', 'part2 tutorial apc helps row'),
         (0xA0341A, 0xA03422, '대기', 'part2 tutorial wait repeat row'),
         (0xA03493, 0xA034A1, '이동타입', 'part2 tutorial movement type row'),
-        (0xA034D9, 0xA034ED, '수송차　이동타입은', 'part2 tutorial apc move type row'),
-        (0xA034EE, 0xA034F6, '전차', 'part2 tutorial tank type row'),
-        (0xA034FE, 0xA0350C, '전차타입은,', 'part2 tutorial tank type lead row'),
+        (0xA034D9, 0xA034ED, '수송차는', 'part2 tutorial apc move type row'),
+        (0xA034EE, 0xA034F6, '전차형', 'part2 tutorial tank type row'),
+        (0xA034F6, 0xA034FE, '', 'part2 tutorial tank type trailing row'),
+        (0xA034FE, 0xA0350C, '', 'part2 tutorial tank type lead row'),
         (0xA03624, 0xA0362C, '종료', 'part2 tutorial end command repeat row'),
         (0xA0369A, 0xA036A2, '종료', 'part2 tutorial map end command row'),
         (0xA036D4, 0xA036DA, '...', 'part2 win maybe ellipsis row'),

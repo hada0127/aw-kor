@@ -307,6 +307,11 @@
   - 점령 조건/명령 조각을 `점령은`, `적군 중립 거점에서`, `할 수 있어`, `명령이 나와` 등 짧은 문구로 재분절.
   - 실제 캡처 `temp/p2_capture_text_shortening_verify3/sheet.png` 기준 줄잘림과 중복 없이 표시됨을 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
+- [x] Part 2 첫 전투 튜토리얼 수송차 설명 깨짐 정리.
+  - 보병 대기 이후 수송차 선택 분기를 캡처해 `태워c`, `되고c`, `전차타입요c`처럼 문장 끝 기호가 깨지는 구간을 확인.
+  - 탑승/하차/보급 설명의 `커맨드` 표기를 `명령`으로 정리하고, 수송차 이동 타입 설명을 `수송차는 전차형 / 산 강 못 가` 기준으로 줄임.
+  - 실제 캡처 `temp/p2_transport_dialog_verify5/sheet.png`, `temp/p2_transport_type_finalcheck/type_line.png` 기준 해당 깨짐과 오른쪽 잘림이 제거됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
 
 ## 현재 우선순위
 
