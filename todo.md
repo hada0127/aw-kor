@@ -290,7 +290,10 @@
   - 렌더 미리보기 `docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png` 등 기준 해당 영어 subtitle 잔여가 사라진 것을 확인.
 - [x] `full`, `final`, `title_test` 산출물 한글화 상태 통일.
   - `build_korean_full.py`에서도 title/menu OBJ 그래픽 패치를 적용하도록 연결해 `full` 생성 시점부터 타이틀 한글화가 포함되도록 정리.
-  - `build_title_hangul.py` 재적용 후에도 `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`의 SHA-256이 모두 `a0d312dd220adbc52ff10aa281ca908d11afdc577bdaa1a20c90d52cb98a17f6`로 동일함을 확인.
+  - `build_title_hangul.py` 재적용 후에도 `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`의 SHA-256이 모두 동일함을 확인.
+- [x] Part 1 이름 입력 UI의 고정 영어 라벨 한글화.
+  - LZ77 OBJ 블록 `0x48EFF0`, `0xC1BAA0`의 `NAME`, `BACK`, `OK!`, `Cancel` 버튼/라벨을 `이름`, `뒤로`, `확인`, `취소`로 재렌더링.
+  - 냉부팅 캡처 `temp/p1_name_ui_labels_after_patch/sheet.png` 기준 이름 입력 화면의 고정 영어 UI가 한글로 표시되고, `full/final/title_test` SHA-256 동일성을 재확인.
 
 ## 현재 우선순위
 

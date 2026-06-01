@@ -2771,6 +2771,101 @@ def patch_part1_check_label_obj(rom):
     return 6
 
 
+def patch_part1_name_ui_labels(rom):
+    """Replace Part 1 name-entry NAME/BACK/OK/Cancel OBJ labels."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+
+    def read_obj(buf, base_tile, width_tiles, height_tiles):
+        width, height = width_tiles * 8, height_tiles * 8
+        pixels = [[0] * width for _ in range(height)]
+        for ty in range(height_tiles):
+            for tx in range(width_tiles):
+                tile_idx = base_tile + ty * width_tiles + tx
+                start = tile_idx * 32
+                for row in range(8):
+                    for col in range(8):
+                        value = buf[start + row * 4 + col // 2]
+                        value = (value >> 4) if col & 1 else (value & 0x0F)
+                        pixels[ty * 8 + row][tx * 8 + col] = value
+        return pixels
+
+    def write_obj(buf, base_tile, pixels):
+        height = len(pixels)
+        width = len(pixels[0])
+        width_tiles, height_tiles = width // 8, height // 8
+        for ty in range(height_tiles):
+            for tx in range(width_tiles):
+                tile = bytearray(32)
+                for row in range(8):
+                    for col in range(8):
+                        value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
+                        bi = row * 4 + col // 2
+                        if col & 1:
+                            tile[bi] |= value << 4
+                        else:
+                            tile[bi] |= value
+                tile_idx = base_tile + ty * width_tiles + tx
+                buf[tile_idx * 32:tile_idx * 32 + 32] = tile
+
+    def draw_bdf(pixels, text, box, fill_idx, shadow_idx=5):
+        glyphs = []
+        total_w = 0
+        max_h = 0
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            glyphs.append((grid, w, h, xo))
+            total_w += w + 1
+            max_h = max(max_h, h)
+        total_w -= 1
+        x = box[0] + (box[2] - box[0] - total_w) // 2
+        y = box[1] + (box[3] - box[1] - max_h) // 2
+        width, height = len(pixels[0]), len(pixels)
+        for grid, w, h, xo in glyphs:
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = x + col + xo
+                    py = y + row
+                    if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                        pixels[py + 1][px + 1] = shadow_idx
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = fill_idx
+            x += w + 1
+
+    def patch_block(off):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid Part 1 name UI LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        buf = bytearray(data)
+
+        for base_tile, text in ((0, '취소'), (8, '뒤로'), (16, '확인')):
+            pixels = read_obj(buf, base_tile, 4, 2)
+            for y in range(3, 12):
+                for x in range(4, 28):
+                    pixels[y][x] = 2
+            draw_bdf(pixels, text, (3, 3, 29, 12), fill_idx=6)
+            write_obj(buf, base_tile, pixels)
+
+        name_pixels = [[0] * 32 for _ in range(8)]
+        draw_bdf(name_pixels, '이름', (0, 0, 32, 8), fill_idx=1)
+        write_obj(buf, 24, name_pixels)
+
+        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(f'Part 1 name UI LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
+        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+        return 4
+
+    return patch_block(0x0048EFF0) + patch_block(0x00C1BAA0)
+
+
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
     width, height = 16, 24
@@ -4425,6 +4520,7 @@ def main():
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part1_battle_day_banner'] = patch_part1_battle_day_banner(rom)
     st['part1_check_label'] = patch_part1_check_label_obj(rom)
+    st['part1_name_ui_labels'] = patch_part1_name_ui_labels(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -12347,7 +12443,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
