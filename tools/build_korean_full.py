@@ -1732,11 +1732,11 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA2A082: '밀리지만강력',
     0xA2A1DF: '쓰면연사불가',
     0xA2A21A: '파이프와같은장갑',
-    0xA2A4D4: '메카 좋아하는 소년',
+    0xA2A4D4: '기계 좋아 소년',
     0xA2A4ED: '생각나면 바로',
     0xA2A502: '행동하는 타입',
     0xA2A511: '동료를 아낌',
-    0xA2A52C: '좋아함 메카',
+    0xA2A52C: '좋아함 기계',
     0xA2A539: '싫어함 기상',
     0xA2A622: '비뚤어진 일 싫어함',
     0xA2A8A3: '눈내려이동힘들게',
@@ -5200,6 +5200,8 @@ def main():
         rom[faddr:faddr + len(enc)] = enc
     # Low-address UI label not covered by the safe text import pass.
     rom[0x5A375F:0x5A375F + 8] = encode_text('코멘트', syl_to_code, unmapped) + bytes([FILL_BYTE]) * 2
+    # Short Part 2 info header extracted without a text slot.
+    rom[0xA2A2E8:0xA2A2EC] = encode_text('체력', syl_to_code, unmapped)
 
     # Part 2 first battle intro has "まだ" between control bytes, outside the
     # CSV slot. Blank it; the following Korean slot already says the meaning.
