@@ -281,6 +281,10 @@
 - [x] Part 1 튜토리얼 전투 화면의 `CHECK!` OBJ 라벨 한글화.
   - LZ77 OBJ 블록 `0xBA4490`의 16x16 말풍선 조각 3개를 추적하고 원래 프레임을 유지한 채 글자 영역만 `확인`으로 재렌더링.
   - 냉부팅 경로 캡처 `temp/p1_check_label_after_patch3/shot.png` 기준 전투 튜토리얼 커서 말풍선에서 `CHECK!` 잔여가 사라진 것을 확인.
+- [x] Part 2 미션 전환 BG의 `MISSION` 영문 잔여 제거.
+  - 런타임 BG 텍스트 렌더러가 참조하는 ASCII 문자열 `0xB84446`의 `MISSION`을 공백화해, 기존 OBJ `미션1` 패치와 충돌하지 않도록 정리.
+  - 냉부팅 스모크 캡처 `temp/current_p2_tutorial_battle_smoke/sel_064.png` 기준 전환 화면에 `미션1`만 표시되고 `MISSION`은 노출되지 않음을 확인.
+  - `full`, `final`, `title_test` 산출물에서 ASCII `MISSION` 잔여 count=0.
 
 ## 현재 우선순위
 

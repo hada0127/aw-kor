@@ -3006,6 +3006,16 @@ def patch_part2_mission_number_obj(rom):
     return patched
 
 
+def patch_part2_bg_mission_word(rom):
+    """Blank the Part 2 map transition BG renderer's ASCII MISSION word."""
+    off = 0x00B84446
+    old = b'MISSION'
+    if bytes(rom[off:off + len(old)]) != old:
+        raise AssertionError(f'unexpected Part 2 BG mission word at 0x{off:X}')
+    rom[off:off + len(old)] = b' ' * len(old)
+    return 1
+
+
 def patch_part2_level_label_obj(rom):
     """Replace the small Part 2 map marker LEVEL OBJ label."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4351,6 +4361,7 @@ def main():
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
+    st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
     st['part2_level_label'] = patch_part2_level_label_obj(rom)
     st['part2_check_label'] = patch_part2_check_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
@@ -12267,7 +12278,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
