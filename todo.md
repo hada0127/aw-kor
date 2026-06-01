@@ -416,6 +416,9 @@
   - 보호 UI 사전의 자금 단위용 `行動数Ｇ`, `総事費Ｇ`만 `金` 글리프 경로로 바꿔 작은 전투 폰트에서 `금`으로 표시되도록 조정.
   - `ＢＧＭ`의 `Ｇ`는 유지했고, 보호 UI 범위의 남은 `Ｇ` hits가 BGM 문맥뿐임을 ROM 검색으로 확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 1 이름 확정 뒤 작전룸 안내 문구 표기 통일.
+  - 실제 콜드부트 캡처에서 보인 `모드선택`, `작전실` 혼용을 `모드 선택`, `작전룸` 기준으로 정리.
+  - 재빌드 후 `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 
