@@ -369,13 +369,13 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF8DFA: '맞습니까',
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
-    0xDF8E3E: '만나서반가워. ',
+    0xDF8E3E: '반가워. ',
     # Part 1 operation room opening. These lines appear immediately after the
     # first name-confirm flow and are sensitive to long Korean fragments.
     0xDF5D62: '커서 조작부터',
     0xDF5D81: '공격법도 설명이야',
-    0xDF5D9A: '만나서반가워. ',
-    0xDF5DA9: ' 님',
+    0xDF5D9A: '반가워. ',
+    0xDF5DA9: '　님',
     0xDF5DD2: '나는 레드스타국의 사령관',
     0xDF5E85: '제법 큰 나라야.',
     0xDF5EA0: '이웃은 블루문국.',
@@ -1778,8 +1778,8 @@ POST_TEXT_RESTORE = {
 INTRO_DIRECT_TEXT = {
     # Early name-control intros are compact: text fragment, byte 0x69 for the
     # entered player name, then さん/さん！. Keep the prefix exactly 14 bytes.
-    0xDF5D9A: ('만나서반가워. ', 14),
-    0xDF8E3E: ('만나서반가워. ', 14),
+    0xDF5D9A: ('반가워. ', 14),
+    0xDF8E3E: ('반가워. ', 14),
     0xDF8E58: ('나는　캐서린。', 16),
 }
 
@@ -12633,10 +12633,10 @@ def main():
     yesno_name_confirm = encode_text('예오아니', syl_to_code, unmapped)
     rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
 
-    # These suffixes follow the runtime player-name control byte. Use ASCII
-    # space here: the full-width space can render as a visible stale glyph in
-    # this compact Part 1 dialogue path.
-    suffix = encode_text(' 님', syl_to_code, unmapped)
+    # These suffixes follow the runtime player-name control byte. The compact
+    # Part 1 dialogue path gives ASCII space almost no advance, so use a full
+    # width space and verify the name-confirm route by screen capture.
+    suffix = encode_text('　님', syl_to_code, unmapped)
     rom[0xDF5DA9:0xDF5DA9 + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
     rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
 

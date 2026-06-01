@@ -363,6 +363,11 @@
   - 캠페인 지도 상단 `캠페인` OBJ 헤더의 첫 음절이 공유 타일 공백에 걸리지 않도록 `캠` 위치를 보정.
   - 새 ROM 콜드부트 캡처 `temp/current_p2_tutorial_battle_smoke/005_new_confirmed.png`, `a_052.png` 기준 모드 메뉴와 캠페인 지도 라벨을 재확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1 이름 확정 뒤 인사말 공백/문장부호 회귀 수정.
+  - 14바이트 이름 제어 슬롯 안에 문장부호와 이름 앞 공백이 들어가도록 `만나서반가워. `를 `반가워. `로 단축.
+  - 이름 뒤 suffix는 ASCII space 대신 전각 공백을 써서 실제 화면에서 `A 님`처럼 떨어져 보이도록 조정.
+  - 새 ROM 콜드부트 이름 확정 캡처 `temp/p1_after_name_fresh_current/sheet.png` 기준 `반가워 A 님`, `예 아니오` 표시를 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
