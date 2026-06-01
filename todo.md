@@ -453,6 +453,11 @@
   - `FLAG CONTROL`, `SAVEDATA`, `FLASHCLEAR`, `BACKUP UTL`, `TUTORIAL`, `HISTORY` 등 남은 고정 ASCII 라벨을 슬롯 크기 내 한글로 교체.
   - 대상 debug/backup utility 범위의 기존 ASCII 라벨 검색 hits=0 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, mGBA quick smoke 통과.
+- [x] Part 2 프롤로그/첫 전투 전 지도 대사 문구 품질 개선.
+  - `블랙홀군이 또 나타난 모양이야`, `워즈월드에는`, `우울해질 필요 없어`처럼 화면에서 깨져 보이거나 어색한 줄을 짧은 문구로 재작성.
+  - `레드스타 말고도` 앞에 새던 조사 조각 `서`를 제거해 대사 연결을 정리.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+  - `temp/p2_prologue_polish_focus/sheet.png`와 `temp/p2_battle_entry_smoke_after_polish/battle.png` 기준 실제 mGBA 화면 확인 및 전투 진입 무충돌 확인.
 
 ## 현재 우선순위
 
