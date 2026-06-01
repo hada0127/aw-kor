@@ -318,6 +318,13 @@
   - 바다 하차, 탄약/연료 감소, 보급, 이동 타입 정보 안내 문장을 실제 대화창 폭에 맞춰 재분절.
   - 실제 캡처 `temp/p2_transport_from_select_ready_verify2/sheet.png`, `temp/p2_transport_ammo_line_verify2/sheet.png` 기준 물음표 깨짐, 오른쪽 잘림, 하단 픽셀 누수 없이 표시됨을 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 공격/커서창 설명 깨짐 정리.
+  - 수송차 대기 뒤 턴 종료를 실제 진행해 적 턴, 다음 아군 턴, 공격 설명 구간까지 재생.
+  - 직접공격 설명의 `직접 공격이라는 견적`처럼 붙어 보이던 문장을 `직접 공격은 / 적 옆까지 / 이동한 뒤 / 공격하는 거야` 흐름으로 재구성.
+  - `HP` 표기 때문에 `?`로 보이던 적 체력/남은 체력/커서창 하트 숫자 설명을 모두 `체력` 표기로 교체.
+  - 커서창/주포 탄수 설명도 화면 폭에 맞춰 `커서창`, `하트 숫자는 체력`, `탱크 숫자는 남은 연료`, `남은 탄수도 여기 보여`로 정리.
+  - 실제 캡처 `temp/p2_attack_tutorial_text_verify/sheet.png`, `temp/p2_cursor_window_text_verify/sheet.png` 기준 물음표 깨짐과 줄잘림 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
