@@ -381,6 +381,10 @@
   - Part 1 모드 옵션 그래픽에서 `워즈 숍`을 `상점`으로, `1대 대전`처럼 보이던 대전 옵션을 `대전`으로 단축.
   - 새 ROM 콜드부트 캡처 `temp/p1_after_name_long_current/a_15.png` 기준 `대전`, `통신`, `작전룸`, `캐서린` 표시를 재확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
+- [x] Part 2 튜토리얼/CO 설명의 잔여 깨짐 후보 추가 정리.
+  - 첫 전투 후속 대사에서 일본식 말줄임표 슬롯이 작은 폰트에서 `cc`처럼 보이던 두 구간을 빈 슬롯으로 정리.
+  - 초반 CO 설명 테이블의 `HP`/`G.`로 검색되던 체력 회복/능력 행을 `전유닛체력`, `2회복`, `5회복`, `공격력상승`, `이동력도상승` 기준으로 재구성.
+  - `full`, `final`, `title_test` 산출물 SHA-256 동일성과 `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check` 통과.
 
 ## 현재 우선순위
 
