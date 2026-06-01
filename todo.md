@@ -340,6 +340,11 @@
   - 대상 예: `0xD8FEDB`, `0xD8FEFE`, `0xD93B75`, `0xD97F73`, `0xA05401`, `0xA06974`, `0xA2BFF0`, `0xDCB44C`.
   - `tools/build_korean_full.py` 검색 기준 직접 출력 패치 문자열의 `HP`/`ＨＰ` 잔여는 제거했고, 남은 `BGM 켬`은 소스 텍스트 매핑 키라 화면 출력 대상이 아님.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 통신/링크 UI 문장 조사 오류와 영문 잔여 정리.
+  - NUL 종료형 통신 UI 슬롯 `0xB8301C`, `0xB83044`, `0xB830AC`, `0xB830C8`, `0xB8319C`를 `지도을` 대신 `지도를` 기준의 짧은 문구로 고정.
+  - 반복 링크 UI의 `スタートを押してね!!`, `PRESS START`, `ENTRY WAIT` 후보를 `시작을 눌러`, `시작`, `입장대기`로 교체.
+  - ROM 검색 기준 ASCII `START`, `PRESS START`, `ENTRY WAIT` count=0. `CAMPAIGN/HARD*CAMPAIGN`은 내부/화면 용도 추적 전까지 보류.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
