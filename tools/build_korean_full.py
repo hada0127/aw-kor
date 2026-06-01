@@ -3215,6 +3215,35 @@ def patch_part2_bg_mission_word(rom):
     return 1
 
 
+def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
+    """Replace fixed ASCII labels still used by map/menu text renderers."""
+    replacements = {
+        b'BLACK HOLE': '블랙홀',
+        b'YELLOW COMET': '옐로코멧',
+        b'GREEN EARTH': '그린어스',
+        b'BLUE MOON': '블루문',
+        b'RED STAR': '레드스타',
+        b'NEUTRAL': '중립',
+        b'HARD*CAMPAIGN': '하드캠페인',
+        b'CAMPAIGN': '캠페인',
+    }
+    patched = 0
+    for old, text in replacements.items():
+        enc = encode_text(text, syl_to_code, unmapped)
+        if len(enc) > len(old):
+            raise AssertionError(f'residual ASCII replacement too long: {old!r} -> {text}')
+        payload = enc + b'\x00' + bytes(max(0, len(old) - len(enc) - 1))
+        pos = 0
+        while True:
+            idx = rom.find(old, pos)
+            if idx < 0:
+                break
+            rom[idx:idx + len(old)] = payload[:len(old)]
+            patched += 1
+            pos = idx + len(old)
+    return patched
+
+
 def patch_title_hangul_assets(rom):
     """Apply the title/menu OBJ patches to the full build as well as final."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4634,6 +4663,7 @@ def main():
     st['part2_check_label'] = patch_part2_check_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_day_hud'] = patch_part2_battle_day_hud_label(rom)
+    st['residual_ascii_labels'] = patch_residual_ascii_labels(rom, syl_to_code, unmapped)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
@@ -12654,7 +12684,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'residual_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

@@ -345,6 +345,10 @@
   - 반복 링크 UI의 `スタートを押してね!!`, `PRESS START`, `ENTRY WAIT` 후보를 `시작을 눌러`, `시작`, `입장대기`로 교체.
   - ROM 검색 기준 ASCII `START`, `PRESS START`, `ENTRY WAIT` count=0. `CAMPAIGN/HARD*CAMPAIGN`은 내부/화면 용도 추적 전까지 보류.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1/Part 2 잔여 ASCII 국가명·캠페인 라벨 정리.
+  - ROM에 남아 있던 `BLACK HOLE`, `YELLOW COMET`, `GREEN EARTH`, `BLUE MOON`, `RED STAR`, `NEUTRAL`, `CAMPAIGN`, `HARD*CAMPAIGN` 고정 문자열을 한글 예약코드 라벨로 교체.
+  - `full`, `final`, `title_test` 산출물 SHA-256 동일성을 확인했고, 해당 ASCII 토큰 8종은 ROM 검색 기준 count=0.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
 - [x] Part 2 CO/컴패니언 설명 테이블의 남은 `HP`/일본식 프로필 문구 정리.
   - `0xA2A8DC-0xA2BF92` 범위의 CO 능력/좋아함/싫어함/프로필 행을 짧은 화면용 한글 문구로 고정.
   - 블리자드/츠나미/타이푼/메테오/호크/센세이 설명의 `HP` 계열 표기를 `체력`으로 통일하고, `키라이케무시`류 직역 문구를 자연스러운 한글로 교체.
