@@ -170,6 +170,10 @@
 - [x] Part 2 첫 전투 커서 팝업의 본부 OBJ 라벨 한글화.
   - OAM/VRAM 추적으로 HQ 지형 라벨이 `0x465468`의 32x16 OBJ 타일 블록임을 확인하고 `본부`로 재렌더링.
   - 콜드부트 재진입 캡처 `temp/hq_label_after_patch/label_crop_6x.png` 기준 커서 팝업의 `本部` 잔여가 사라진 것을 확인.
+- [x] Part 2 첫 전투 커서 팝업의 소형 지형/유닛 OBJ 라벨 한글화.
+  - 작은 커서 팝업이 큰 상태창과 다른 32x16 OBJ 라벨 테이블(`0x464D68` 지형, `0x466568` 유닛)을 쓰는 것을 확인하고 주요 지형명/유닛명을 재렌더링.
+  - 콜드부트 재진입 캡처 `temp/p2_popup_move_probe_after_patch/sheet.png` 기준 `본부`, `보병`, `평지`, `도로`가 일본어 없이 표시됨을 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
 - [x] Part 2 전투 상태 목록 헤더 한글화.
   - 상태 목록 헤더는 공통 폰트가 아니라 `0xBE76FC` 이후 16x16 OBJ 아이콘 하단 타일임을 확인.
   - `종류`, `체력`, `연료`, `탄약` 네 헤더를 같은 팔레트 기준으로 다시 렌더링하고, 설명 문구도 같은 표기 기준으로 조정.
