@@ -7172,7 +7172,7 @@ def main():
     patch_script_row(
         0xD8FC92, 0xD8FCB6,
         b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
-        + encode_text('은　적옆에서만　', syl_to_code, unmapped)
+        + encode_text('은　적　옆에서만　', syl_to_code, unmapped)
         + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30',
         'attack adjacent row',
     )
@@ -7181,8 +7181,13 @@ def main():
         b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30'
         + encode_text('으로　', syl_to_code, unmapped)
         + b'\x33' + encode_text('공격', syl_to_code, unmapped) + b'\x30'
-        + encode_text('하려면　적옆에', syl_to_code, unmapped),
+        + encode_text('하려면　적　옆에　', syl_to_code, unmapped),
         'attack movement row',
+    )
+    patch_script_row(
+        0xD8FD26, 0xD8FD5A,
+        encode_text('그러니까　여기서　눌러　줘.　', syl_to_code, unmapped),
+        'attack confirm button row',
     )
     patch_script_row(
         0xD8FD5A, 0xD8FD80,
@@ -7211,7 +7216,7 @@ def main():
     )
     patch_script_row(
         0xD8FE27, 0xD8FE3D,
-        encode_text('공격　커서야', syl_to_code, unmapped),
+        encode_text('공격상대를골라전투시작', syl_to_code, unmapped),
         'attack cursor name row',
     )
     patch_script_row(
@@ -7221,7 +7226,7 @@ def main():
     )
     patch_script_row(
         0xD8FE6C, 0xD8FE82,
-        encode_text('전투　시작해', syl_to_code, unmapped),
+        encode_text('이상대를골라전투시작해', syl_to_code, unmapped),
         'battle start row',
     )
     patch_script_row(
