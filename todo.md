@@ -429,6 +429,11 @@
   - 하드 캠페인/음악방 전환과 상점 구매 후 캠페인 진입 안내에서 `SELECT`/`ＳＥＬＥＣＴ`를 `전환키` 표기로 통일.
   - `0xA00000-0xA80000`, `0xD80000-0xE18000` 텍스트 범위의 ASCII `SELECT` hits=0 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] 공통 전투/통신 UI의 고정 ASCII 라벨 추가 정리.
+  - `NEXT PHASE`, `PRESS A BUTTON`, `MAP:%02d`, `YELLOW COMMET`, `WAIT`, `NOT CONNECTED`, `READY`, `ERROR`, `CONNECTED`, `MASTER`를 한글 고정 슬롯으로 교체.
+  - Part 1/Part 2 공통 색상·플레이어 라벨 `BLUE`, `RED`, `NEUT`, `COM`, `HUMAN`, `NON`도 슬롯 크기에 맞춰 한글화.
+  - 대상 전투/통신 블록 검색 기준 위 ASCII 라벨 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
 
 ## 현재 우선순위
 

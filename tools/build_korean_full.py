@@ -3238,6 +3238,7 @@ def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
     replacements = {
         b'BLACK HOLE': '블랙홀',
         b'YELLOW COMET': '옐로코멧',
+        b'YELLOW COMMET': '옐로코멧',
         b'GREEN EARTH': '그린어스',
         b'BLUE MOON': '블루문',
         b'RED STAR': '레드스타',
@@ -3264,18 +3265,31 @@ def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
 
 def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
     """Localize fixed ASCII battle/rules strings shared by both games."""
+    patched = 0
+
     def write_slot(off, slot, text):
+        nonlocal patched
         enc = encode_text(text, syl_to_code, unmapped)
         if len(enc) >= slot:
             raise AssertionError(f'common battle ASCII replacement too long at 0x{off:X}: {text}')
         rom[off:off + slot] = enc + bytes(slot - len(enc))
+        patched += 1
 
     for off, slot, text in [
         (0x391180, 0x08, '눈:%s'),
         (0x391188, 0x08, '색적:%s'),
+        (0x391174, 0x0C, '지도:%02d'),
         (0x3911A0, 0x10, 'R: 색적 있음'),
         (0x3911B0, 0x10, 'R: 색적 없음'),
         (0x3911D8, 0x08, '정지'),
+        (0x391448, 0x0C, '다음단계'),
+        (0x391454, 0x10, '결정키'),
+        (0x391838, 0x08, '파랑'),
+        (0x391840, 0x04, '빨'),
+        (0x391844, 0x08, '중립'),
+        (0x391858, 0x04, '컴'),
+        (0x39185C, 0x08, '인간'),
+        (0x391864, 0x04, '없'),
         (0x391950, 0x08, '자금'),
         (0x391958, 0x08, '능력'),
         (0x391960, 0x08, '장군'),
@@ -3285,6 +3299,7 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
         (0x391980, 0x08, '색상'),
         (0xB82A94, 0x08, '눈:%s'),
         (0xB82A9C, 0x08, '색적:%s'),
+        (0xB82A88, 0x0C, '지도:%02d'),
         (0xB82AB4, 0x0C, 'R: 색적'),
         (0xB82AC0, 0x04, '있'),
         (0xB82AC4, 0x0C, 'R: 색적'),
@@ -3296,6 +3311,14 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
         (0xB82B4C, 0x10, '본부 점령'),
         (0xB82B5C, 0x0C, '거점 점령'),
         (0xB82B68, 0x10, '서든 데스'),
+        (0xB832F8, 0x0C, '다음단계'),
+        (0xB83304, 0x10, '결정키'),
+        (0xB84D28, 0x08, '파랑'),
+        (0xB84D30, 0x04, '빨'),
+        (0xB84D34, 0x08, '중립'),
+        (0xB84D48, 0x04, '컴'),
+        (0xB84D4C, 0x08, '인간'),
+        (0xB84D54, 0x04, '없'),
         (0xB84E00, 0x08, '자금'),
         (0xB84E08, 0x08, '능력'),
         (0xB84E10, 0x08, '부대'),
@@ -3313,7 +3336,20 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
         (0x8FC2C8, 0x0C, '통신모드'),
     ]:
         write_slot(off, slot, text)
-    return 40
+
+    for off in (0x9299C4, 0x962658, 0x99AEFC, 0x9D37A0, 0xEE28FC):
+        write_slot(off, 0x08, '대기중')
+    for off in (0x9299EC, 0x962680, 0x99AF24, 0x9D37C8, 0xEE2924):
+        write_slot(off, 0x10, '미접속')
+    for off in (0x9299FC, 0x962690, 0x99AF34, 0x9D37D8, 0xEE2934):
+        write_slot(off, 0x08, '준비')
+    for off in (0x929A04, 0x962698, 0x99AF3C, 0x9D37E0, 0xEE293C):
+        write_slot(off, 0x08, '오류')
+    for off in (0x929A0C, 0x9626A0, 0x99AF44, 0x9D37E8, 0xEE2944):
+        write_slot(off, 0x0C, '접속')
+    for off in (0x929A18, 0x9626AC, 0x99AF50, 0x9D37F4, 0xEE2950):
+        write_slot(off, 0x08, '호스트')
+    return patched
 
 
 def patch_title_hangul_assets(rom):
