@@ -312,6 +312,12 @@
   - 탑승/하차/보급 설명의 `커맨드` 표기를 `명령`으로 정리하고, 수송차 이동 타입 설명을 `수송차는 전차형 / 산 강 못 가` 기준으로 줄임.
   - 실제 캡처 `temp/p2_transport_dialog_verify5/sheet.png`, `temp/p2_transport_type_finalcheck/type_line.png` 기준 해당 깨짐과 오른쪽 잘림이 제거됨을 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
+- [x] Part 2 첫 전투 튜토리얼 수송차 후속 설명 줄잘림 추가 개선.
+  - 현재 ROM 기준 `select_ready` 상태에서 보병 이동/대기부터 다시 재생해 수송차 설명을 재검수.
+  - 숫자 ASCII가 섞여 `????c`처럼 보이던 보병/수송차 이동력 설명을 숫자 없는 짧은 문장으로 교체.
+  - 바다 하차, 탄약/연료 감소, 보급, 이동 타입 정보 안내 문장을 실제 대화창 폭에 맞춰 재분절.
+  - 실제 캡처 `temp/p2_transport_from_select_ready_verify2/sheet.png`, `temp/p2_transport_ammo_line_verify2/sheet.png` 기준 물음표 깨짐, 오른쪽 잘림, 하단 픽셀 누수 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
