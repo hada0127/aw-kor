@@ -5651,6 +5651,19 @@ def main():
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
 
     for faddr, fend, text, label in [
+        (0xA2C290, 0xA2C2C2, '전환키로　하드캠페인과　바뀌어', 'hard campaign select key row'),
+        (0xA2C2C4, 0xA2C2F2, '전환키로　음악방과　바뀌어', 'sound room select key row'),
+        (0xA2DDAC, 0xA2DDD6, '캠페인에　커서가　있을때', 'campaign cursor select lead row'),
+        (0xA2DDD7, 0xA2DDF3, '전환키를　누르면', 'select key press row'),
+        (0xA2DDF4, 0xA2DE20, '하드캠페인을　고를수있어.', 'hard campaign unlock row'),
+        (0xDFBC5B, 0xDFBC87, '하드캠페인에　들어간적있어?', 'hard campaign entered question row'),
+        (0xDFBC8C, 0xDFBCB8, '전환키를　누른채　캠페인', 'hold select campaign row'),
+        (0xDFD42E, 0xDFD458, '이걸　산뒤　전환키를　누른채', 'after purchase hold select row'),
+        (0xDFD45B, 0xDFD475, '캠페인에　들어가봐!', 'enter campaign after select row'),
+    ]:
+        patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+
+    for faddr, fend, text, label in [
         (0xA02580, 0xA0258C, '침묵', 'part2 six-dot row'),
         (0xA02684, 0xA0268A, '사령!', 'part2 tutorial commander row'),
         (0xA026C8, 0xA026CE, '확인.', 'part2 tutorial roger row'),

@@ -425,6 +425,10 @@
   - `0xD80000-0xF00000`의 남은 `HP` hits는 포인터/테이블형 데이터 문맥으로 확인.
   - 보호 UI 사전의 `ＢＧＭ`도 `음 있음`으로 바꿔 compact 범위의 `ＢＧＭ` hits=0 확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 2 캠페인/상점 안내의 잔여 `SELECT` 표기 제거.
+  - 하드 캠페인/음악방 전환과 상점 구매 후 캠페인 진입 안내에서 `SELECT`/`ＳＥＬＥＣＴ`를 `전환키` 표기로 통일.
+  - `0xA00000-0xA80000`, `0xD80000-0xE18000` 텍스트 범위의 ASCII `SELECT` hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
 
 ## 현재 우선순위
 
