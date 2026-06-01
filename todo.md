@@ -439,6 +439,11 @@
   - 재생성 가능한 `output/`, `temp/` 산출물과 중복 원본 백업 ROM, 사용하지 않는 `visualboyadvance-m.app`를 정리.
   - `git gc`로 loose object를 압축해 작업 폴더 크기를 약 409MB에서 153MB 수준으로 축소.
   - 폰트 정리 후 `build_korean_full.py`, `build_title_hangul.py` 재빌드 통과.
+- [x] 공통 전투 유닛/지형/장군/스탯 고정 ASCII 테이블 한글화.
+  - `0x4925E8-0x492A14`의 유닛명, 지형명, 날씨, CO명, 스탯 축약 라벨을 슬롯 크기에 맞춰 한글로 교체.
+  - 4바이트 슬롯은 널 종료를 유지하기 위해 `공`, `체`, `방` 같은 1음절 축약으로 처리.
+  - 대상 테이블의 기존 영어 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
 
 ## 현재 우선순위
 
