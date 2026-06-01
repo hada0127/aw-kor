@@ -3845,6 +3845,60 @@ def patch_part2_battle_day_hud_label(rom):
     return patched + 1
 
 
+def patch_part2_battle_funds_hud_label(rom):
+    """Replace the fixed Part 2 battle HUD funds "G" label in raw OBJ tiles."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    off = 0x460B28
+    width, height = 64, 32
+    data = rom[off:off + 32 * 32]
+    pixels = [[0] * width for _ in range(height)]
+    for tile_idx in range(32):
+        tx = tile_idx % 8
+        ty = tile_idx // 8
+        base = tile_idx * 32
+        for row in range(8):
+            for col in range(8):
+                b = data[base + row * 4 + col // 2]
+                pixels[ty * 8 + row][tx * 8 + col] = (b & 0x0F) if col % 2 == 0 else (b >> 4)
+
+    # The red strip uses palette index 4. Clear only the old "G." glyph area so
+    # the HUD frame and dynamic number sprites remain untouched.
+    for y in range(4, 12):
+        for x in range(4, 32):
+            pixels[y][x] = 4
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    cursor = 5
+    for ch in '자금':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = 4 + row
+                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 4:
+                    pixels[py + 1][px + 1] = 3
+                if 0 <= px < width and 0 <= py < height:
+                    pixels[py][px] = 1
+        cursor += w + 1
+
+    out = bytearray()
+    for tile_idx in range(32):
+        tx = tile_idx % 8
+        ty = tile_idx // 8
+        for row in range(8):
+            for col_pair in range(4):
+                lo = pixels[ty * 8 + row][tx * 8 + col_pair * 2] & 0x0F
+                hi = pixels[ty * 8 + row][tx * 8 + col_pair * 2 + 1] & 0x0F
+                out.append(lo | (hi << 4))
+
+    rom[off:off + len(out)] = out
+    return 32
+
+
 def patch_part2_ryo_co_name_obj(rom):
     """Patch the Part 2 CO profile OBJ name tiles for Ryo."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4986,6 +5040,7 @@ def main():
     st['part2_check_label'] = patch_part2_check_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
     st['part2_day_hud'] = patch_part2_battle_day_hud_label(rom)
+    st['part2_funds_hud'] = patch_part2_battle_funds_hud_label(rom)
     st['residual_ascii_labels'] = patch_residual_ascii_labels(rom, syl_to_code, unmapped)
     st['common_battle_ascii_labels'] = patch_common_battle_ascii_labels(rom, syl_to_code, unmapped)
     st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
@@ -5921,7 +5976,7 @@ def main():
         (0xA02580, 0xA0258C, '침묵', 'part2 six-dot row'),
         (0xA02684, 0xA0268A, '사령!', 'part2 tutorial commander row'),
         (0xA026C8, 0xA026CE, '확인.', 'part2 tutorial roger row'),
-        (0xA02788, 0xA0278E, '...', 'part2 ellipsis row'),
+        (0xA02788, 0xA0278E, '', 'part2 ellipsis row'),
         (0xA028E3, 0xA028EB, '적군은', 'part2 tutorial enemy army row'),
         (0xA02B08, 0xA02B10, '방금고른', 'part2 tutorial selected row'),
         (0xA02B11, 0xA02B19, ' 종료는', 'part2 tutorial end command row'),
@@ -13065,7 +13120,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
