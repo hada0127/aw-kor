@@ -396,6 +396,9 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 2 companion/support description. Keep this address-pinned because the
     # comprehensive audit file still classifies the same source as untranslated.
     0xA2A90C: '료와 맥스를 지원',
+    # Part 2 mode select help text. The long import translation wraps as
+    # "플레이할 수 이 모드" in the bottom ticker, so keep it screen-sized.
+    0xA2C040: '스토리를 즐기며 플레이하는 모드',
     # Part 2 option/communication UI rows found in the actual ROM after the
     # first tutorial ranges. These are short fixed slots and fit cleanly.
     0xEC32D2: '날씨 설정',

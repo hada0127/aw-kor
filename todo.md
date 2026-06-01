@@ -488,6 +488,10 @@
   - `find_japanese_text.py`가 잘못된 SJIS 시작 바이트에서 같은 주소에 멈추던 루프를 수정.
   - 안전 텍스트 import 대상 밖의 `0x5A375F` 저주소 `コメント` UI 라벨을 8바이트 슬롯 안에서 `코멘트`로 직접 패치.
   - `full`, `final`, `title_test` SHA-256 동일, `コメント` ROM 검색 count=0, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 모드 선택 화면 하단 설명문 줄깨짐 개선.
+  - 캠페인 설명이 `플레이할 수 이 모드`처럼 줄 경계에서 깨지는 것을 실제 캡처로 확인하고, `0xA2C040`을 짧은 화면용 문장 `스토리를 즐기며 플레이하는 모드`로 고정.
+  - `temp/p2_mode_help_verify/sheet.png` 기준 Part 2 모드 선택 화면 하단 설명문이 자연스럽게 표시됨을 확인.
+  - `full`, `final`, `title_test` SHA-256 동일, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 
