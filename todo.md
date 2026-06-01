@@ -449,6 +449,10 @@
   - Part 2의 ON/OFF, 국가명, CO 약칭, `NORMAL`, `FORCE /`, `PLAY` 보조 라벨도 같은 기준으로 교체.
   - 대상 범위의 기존 영어/다국어 라벨 검색 hits=0 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 1/Part 2 디버그·백업 유틸 보조 ASCII 테이블 정리.
+  - `FLAG CONTROL`, `SAVEDATA`, `FLASHCLEAR`, `BACKUP UTL`, `TUTORIAL`, `HISTORY` 등 남은 고정 ASCII 라벨을 슬롯 크기 내 한글로 교체.
+  - 대상 debug/backup utility 범위의 기존 ASCII 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, mGBA quick smoke 통과.
 
 ## 현재 우선순위
 
