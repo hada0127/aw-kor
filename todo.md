@@ -368,6 +368,10 @@
   - 이름 뒤 suffix는 ASCII space 대신 전각 공백을 써서 실제 화면에서 `A 님`처럼 떨어져 보이도록 조정.
   - 새 ROM 콜드부트 이름 확정 캡처 `temp/p1_after_name_fresh_current/sheet.png` 기준 `반가워 A 님`, `예 아니오` 표시를 재확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1 작전룸 선택 화면의 짧은 옵션 라벨 가독성 개선.
+  - Part 1 모드 옵션 그래픽에서 `워즈 숍`을 `상점`으로, `1대 대전`처럼 보이던 대전 옵션을 `대전`으로 단축.
+  - 새 ROM 콜드부트 캡처 `temp/p1_after_name_long_current/a_15.png` 기준 `대전`, `통신`, `작전룸`, `캐서린` 표시를 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
 
 ## 현재 우선순위
 
