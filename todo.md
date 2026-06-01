@@ -472,6 +472,11 @@
   - 보호 UI 렌더러의 2바이트 정렬 때문에 음악 라벨에는 전각 공백을 사용.
   - `temp/p2_system_option_label_polish_verify2/sheet.png` 기준 실제 mGBA 옵션 메뉴에서 `음악??` 없이 정상 표시 확인.
   - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 첫 전투 첫 턴 유닛 이동/대기 메뉴 추가 검수.
+  - `temp/p2_after_wait_b_escape_probe/sheet.png` 기준 첫 보병 대기 후 B 입력으로 실제 맵 조작 상태 복귀 확인.
+  - `temp/p2_up_unit_command_probe/sheet.png` 기준 다음 보병 선택, 이동 범위, 이동 후 `대기` 명령 메뉴 정상 표시 확인.
+  - `temp/p2_after_two_waits_probe/sheet.png` 기준 두 보병 대기 후 상태 확인.
+  - 이 범위에서는 추가 코드 패치가 필요한 일본어 잔여/깨짐을 발견하지 못함.
 
 ## 현재 우선순위
 
