@@ -467,6 +467,11 @@
   - `temp/p2_battle_unit_command_probe/unit_command_sheet.png` 기준 보병 선택/이동 범위와 튜토리얼 안내 대사 한글 표시 확인.
   - `temp/p2_battle_endturn_probe/endturn_sheet.png` 기준 턴 종료 안내 대사 한글 표시 확인.
   - 이 분기에서 추가 코드 패치가 필요한 일본어 잔여 그래픽은 발견하지 못함.
+- [x] Part 2 전투 시스템 옵션 메뉴 라벨 가독성 개선.
+  - `음악있음/음악없음`, `애니전부/애니전투/애니아군/애니없음`을 `음악　있음/음악　없음`, `전부표시/전투만/아군만/표시없음`으로 정리.
+  - 보호 UI 렌더러의 2바이트 정렬 때문에 음악 라벨에는 전각 공백을 사용.
+  - `temp/p2_system_option_label_polish_verify2/sheet.png` 기준 실제 mGBA 옵션 메뉴에서 `음악??` 없이 정상 표시 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
 
 ## 현재 우선순위
 
