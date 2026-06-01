@@ -2261,6 +2261,38 @@ def patch_part2_battle_obj_labels(rom):
     write_tiles(0xB93BD0, render_tiles('육', 16, x=4, y=2))
     write_tiles(0x465468, render_tiles('본부', 32, x=4, y=2))
 
+    # The small cursor popup in Part 2 uses an older uncompressed 32x16 OBJ
+    # label table, separate from the larger status panes above.
+    compact_terrain_labels = [
+        (0x464D68, '평지'),
+        (0x464E68, '강'),
+        (0x464F68, '산'),
+        (0x465068, '숲'),
+        (0x465168, '도로'),
+        (0x465268, '도시'),
+        (0x465368, '해'),
+        (0x465468, '본부'),
+        (0x465568, '항구'),
+        (0x465668, '공항'),
+        (0x465768, '여울'),
+        (0x465868, '다리'),
+        (0x465968, '암초'),
+        (0x465A68, '공장'),
+        (0x465B68, '파이프'),
+        (0x465C68, '미사일'),
+        (0x465D68, '연구소'),
+        (0x465E68, '캐논'),
+        (0x465F68, '화산'),
+        (0x466068, '레이저'),
+        (0x466168, '레이저'),
+        (0x466268, '마그마'),
+        (0x466368, '레이저'),
+        (0x466468, '통행불가'),
+    ]
+    for off, text in compact_terrain_labels:
+        x = max(0, (32 - len(text) * 8) // 2)
+        write_tiles(off, render_tiles(text, 32, x=x, y=2))
+
     # Unit names in the same status popup are a fixed 32x16 OBJ tile strip.
     # Redraw the labels that appear through the Part 2 tutorial/battle status UI.
     unit_labels = [
@@ -2286,7 +2318,15 @@ def patch_part2_battle_obj_labels(rom):
     for off, text in unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
         write_tiles(off, render_tiles(text, 32, x=x, y=4, shadow=None, font_obj=unit_font))
-    return 3 + len(unit_labels)
+
+    compact_unit_labels = [
+        (0x466568 + idx * 0x100, text)
+        for idx, (_off, text) in enumerate(unit_labels)
+    ]
+    for off, text in compact_unit_labels:
+        x = max(0, (32 - len(text) * 8) // 2)
+        write_tiles(off, render_tiles(text, 32, x=x, y=4, shadow=None, font_obj=unit_font))
+    return 3 + len(compact_terrain_labels) + len(unit_labels) + len(compact_unit_labels)
 
 
 def patch_part2_status_header_labels(rom):
