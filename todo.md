@@ -358,6 +358,11 @@
   - 96x16 `프롤로그` OBJ 로고가 3배 가로 확대에서 `프로그로그`처럼 뭉쳐 보이던 문제를 2배 가로 확대 렌더링으로 조정.
   - 새 ROM 콜드부트 재진입 캡처 `temp/current_p2_tutorial_battle_smoke/a_002.png` 기준 상단 라벨이 `프롤로그`로 또렷하게 표시됨을 확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 모드/캠페인 선택 화면 OBJ 라벨 가독성 보강.
+  - Part 2 모드 메뉴의 `워즈숍`이 작은 폰트에서 `위즈숍`처럼 보이던 문제를 `상점` 라벨로 단축.
+  - 캠페인 지도 상단 `캠페인` OBJ 헤더의 첫 음절이 공유 타일 공백에 걸리지 않도록 `캠` 위치를 보정.
+  - 새 ROM 콜드부트 캡처 `temp/current_p2_tutorial_battle_smoke/005_new_confirmed.png`, `a_052.png` 기준 모드 메뉴와 캠페인 지도 라벨을 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 

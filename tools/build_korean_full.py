@@ -2592,7 +2592,7 @@ def patch_part2_mode_menu_obj_labels(rom):
     patched += patch_lz(0x5B9474, button_patches, 'new continue buttons')
 
     for off, text, label in [
-        (0x5B9050, '워즈숍', 'wars shop option'),
+        (0x5B9050, '상점', 'wars shop option'),
         (0x5B9378, '트라이얼', 'trial option'),
         (0x5B8F48, '자유전', 'free battle option'),
         (0x5B917C, '편집', 'edit option'),
@@ -3585,7 +3585,7 @@ def patch_part2_campaign_header_obj(rom):
     # The original header reuses one source chunk for two different A sprites.
     # Keep that shared chunk transparent and place the three Korean syllables in
     # non-shared OBJ coverage windows to avoid duplicated fragments.
-    for ch, x in (('캠', 7), ('페', 34), ('인', 76)):
+    for ch, x in (('캠', 4), ('페', 34), ('인', 76)):
         draw_syllable(ch, x, 3)
 
     # OAM uses eight overlapping 16x32 vertical sprites. Keep the original
