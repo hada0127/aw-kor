@@ -335,6 +335,11 @@
   - `0xA02B9A`, `0xA02BAE`를 `지금은 / 유닛에게 명령부터 내려`로 줄여 행 경계와 가독성을 안정화.
   - 실제 캡처 `temp/p2_end_command_retry_text_verify/sheet.png` 기준 새 문구가 깨짐 없이 표시됨을 확인.
   - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 튜토리얼/후속 설명의 `HP` 표기 잔여 제거.
+  - `HP`/`ＨＰ`가 작은 대화 폰트에서 `?`처럼 깨지는 전례가 있어 직접 노출 문자열과 행 단위 패치에서 `체력` 표기로 통일.
+  - 대상 예: `0xD8FEDB`, `0xD8FEFE`, `0xD93B75`, `0xD97F73`, `0xA05401`, `0xA06974`, `0xA2BFF0`, `0xDCB44C`.
+  - `tools/build_korean_full.py` 검색 기준 직접 출력 패치 문자열의 `HP`/`ＨＰ` 잔여는 제거했고, 남은 `BGM 켬`은 소스 텍스트 매핑 키라 화면 출력 대상이 아님.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 
