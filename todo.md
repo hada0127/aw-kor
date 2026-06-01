@@ -354,6 +354,10 @@
   - `D9FA81`, `DA002C`, `DC2C3A-DC2D3D`의 전각 숫자와 `쇼군` 메뉴명 혼용을 `세 메뉴`, `세개뿐`, `장군` 기준으로 정리.
   - `작전룸에선 이 ３개뿐이야`, `승리조건 상황 쇼군`, `３가지 명령`, `남은 ２개 메뉴` 계열 어색한 문구가 소스 패치 기준 남지 않음을 확인.
   - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 프롤로그 화면 상단 OBJ 라벨 오독 개선.
+  - 96x16 `프롤로그` OBJ 로고가 3배 가로 확대에서 `프로그로그`처럼 뭉쳐 보이던 문제를 2배 가로 확대 렌더링으로 조정.
+  - 새 ROM 콜드부트 재진입 캡처 `temp/current_p2_tutorial_battle_smoke/a_002.png` 기준 상단 라벨이 `프롤로그`로 또렷하게 표시됨을 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
 
 ## 현재 우선순위
 

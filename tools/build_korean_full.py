@@ -3723,9 +3723,9 @@ def patch_part2_prologue_logo_obj(rom):
     width, height = 96, 16
     pixels = [[0] * width for _ in range(height)]
 
-    cursor = 0
+    cursor = 6
     y0 = 1
-    scale_x = 3
+    scale_x = 2
     scale_y = 2
     for ch in '프롤로그':
         grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
