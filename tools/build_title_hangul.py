@@ -678,10 +678,9 @@ def draw_centered_bdf_text(layer: Image.Image, text: str, fill_idx: int, spacing
         x += w + spacing
 
 
-def make_part1_label_block(korean: str, english: str, max_size: int = 20) -> Image.Image:
+def make_part1_label_block(korean: str, _english: str, max_size: int = 20) -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
-    draw_centered_block_text(layer, korean, (0, 0, 80, 22), max_size, 2, 15, 7)
-    draw_centered_block_text(layer, english, (3, 20, 77, 32), 8, 1, 15, 7, bold=False)
+    draw_centered_block_text(layer, korean, (0, 2, 80, 30), max_size + 2, 2, 15, 7)
     return layer
 
 

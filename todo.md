@@ -285,6 +285,9 @@
   - 런타임 BG 텍스트 렌더러가 참조하는 ASCII 문자열 `0xB84446`의 `MISSION`을 공백화해, 기존 OBJ `미션1` 패치와 충돌하지 않도록 정리.
   - 냉부팅 스모크 캡처 `temp/current_p2_tutorial_battle_smoke/sel_064.png` 기준 전환 화면에 `미션1`만 표시되고 `MISSION`은 노출되지 않음을 확인.
   - `full`, `final`, `title_test` 산출물에서 ASCII `MISSION` 잔여 count=0.
+- [x] Part 1 메뉴 로고 하단 영문 보조문구 제거.
+  - `OPERATION`, `MAP SELECT`, `SHOP SELECT`, `HARD SHOP`, `CAMPAIGN`, `MODE SELECT` 등 Part 1 로고 생성 레이어의 영어 subtitle을 제거하고 한글 본문을 중앙 배치.
+  - 렌더 미리보기 `docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png` 등 기준 해당 영어 subtitle 잔여가 사라진 것을 확인.
 
 ## 현재 우선순위
 
