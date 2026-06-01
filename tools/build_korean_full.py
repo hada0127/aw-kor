@@ -2551,11 +2551,11 @@ def patch_part2_mode_menu_obj_labels(rom):
                         px[dx, dy] = fill_idx
             x += w + spacing
 
-    def make_campaign():
+    def make_big_logo(text):
         layer = make_box(128, 32, border_idx=5, fill_idx=1, inset_idx=3)
         draw = ImageDraw.Draw(layer)
         draw.rectangle((0, 27, 127, 31), fill=5)
-        paint_text(layer, '캠페인', (6, 3, 122, 27), 25, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=1)
+        paint_text(layer, text, (6, 3, 122, 27), 25, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=1)
         return layer
 
     def make_small_button(text):
@@ -2597,15 +2597,26 @@ def patch_part2_mode_menu_obj_labels(rom):
         return len(replacements)
 
     patched = 0
-    campaign = make_campaign()
-    patched += patch_lz(0x5B7930, [
-        (0x000, rect_tiles(campaign, 0, 0, 64, 32)),
-        (0x400, rect_tiles(campaign, 64, 0, 64, 32)),
-    ], 'campaign logo')
+    for off, text, label in [
+        (0x5B7930, '캠페인', 'campaign logo'),
+        (0x5B7CB0, '자유전', 'free battle logo'),
+        (0x5B7F38, '상점', 'wars shop logo'),
+        (0x5B82B4, '편집', 'edit mode logo'),
+        (0x5B8564, '통신', 'link mode logo'),
+        (0x5B8850, '트라이얼', 'trial mode logo'),
+        (0x5B8B20, '사운드룸', 'sound room logo'),
+    ]:
+        logo = make_big_logo(text)
+        patched += patch_lz(off, [
+            (0x000, rect_tiles(logo, 0, 0, 64, 32)),
+            (0x400, rect_tiles(logo, 64, 0, 64, 32)),
+        ], label)
 
     buttons = [
         (make_small_button('계속'), 0x000, 0x100),
         (make_small_button('처음'), 0x180, 0x280),
+        (make_small_button('지도'), 0x300, 0x400),
+        (make_small_button('장군'), 0x480, 0x580),
     ]
     button_patches = []
     for layer, left_pos, right_pos in buttons:
@@ -2614,10 +2625,12 @@ def patch_part2_mode_menu_obj_labels(rom):
     patched += patch_lz(0x5B9474, button_patches, 'new continue buttons')
 
     for off, text, label in [
+        (0x5B8E44, '캠페인', 'campaign option'),
         (0x5B9050, '상점', 'wars shop option'),
         (0x5B9378, '트라이얼', 'trial option'),
         (0x5B8F48, '자유전', 'free battle option'),
         (0x5B917C, '편집', 'edit option'),
+        (0x5B9280, '통신', 'link option'),
     ]:
         layer = make_option(text)
         patches = [
