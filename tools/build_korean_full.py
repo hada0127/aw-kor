@@ -2691,6 +2691,86 @@ def patch_part1_battle_day_banner(rom):
     return patched
 
 
+def patch_part1_check_label_obj(rom):
+    """Replace the Part 1 tutorial battle CHECK speech-bubble label."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0xBA4490
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 1 check-label LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    buf = bytearray(data)
+
+    chunk_bases = (76, 72, 68)
+    width, height = 48, 16
+    pixels = [[0] * width for _ in range(height)]
+    for ci, base_tile in enumerate(chunk_bases):
+        for ty in range(2):
+            for tx in range(2):
+                start = (base_tile + ty * 2 + tx) * 32
+                for row in range(8):
+                    for col in range(8):
+                        value = buf[start + row * 4 + col // 2]
+                        value = (value >> 4) if col & 1 else (value & 0x0F)
+                        pixels[ty * 8 + row][ci * 16 + tx * 8 + col] = value
+
+    # Keep the white bubble, pointer, outline, and drop shadow. Clear only the
+    # original English letters in the label body.
+    for y in range(2, 13):
+        for x in range(12, 45):
+            pixels[y][x] = 1
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri9.bdf'))
+    glyphs = []
+    total_w = 0
+    max_h = 0
+    for ch in '확인':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        glyphs.append((grid, w, h, xo))
+        total_w += w + 1
+        max_h = max(max_h, h)
+    total_w -= 1
+    cursor = 14 + (30 - total_w) // 2
+    y0 = 3 + (9 - max_h) // 2
+    for grid, w, h, xo in glyphs:
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = y0 + row
+                if 13 <= px + 1 < 45 and 3 <= py + 1 < 12:
+                    pixels[py + 1][px + 1] = 5
+                if 13 <= px < 45 and 3 <= py < 12:
+                    pixels[py][px] = 7 if row < h // 2 else 8
+        cursor += w + 1
+
+    for ci, base_tile in enumerate(chunk_bases):
+        for ty in range(2):
+            for tx in range(2):
+                tile = bytearray(32)
+                for row in range(8):
+                    for col in range(8):
+                        value = pixels[ty * 8 + row][ci * 16 + tx * 8 + col] & 0x0F
+                        bi = row * 4 + col // 2
+                        if col & 1:
+                            tile[bi] |= value << 4
+                        else:
+                            tile[bi] |= value
+                start = (base_tile + ty * 2 + tx) * 32
+                buf[start:start + 32] = tile
+
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 1 check-label LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return 6
+
+
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
     width, height = 16, 24
@@ -4266,6 +4346,7 @@ def main():
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part1_battle_day_banner'] = patch_part1_battle_day_banner(rom)
+    st['part1_check_label'] = patch_part1_check_label_obj(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
@@ -12186,7 +12267,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
