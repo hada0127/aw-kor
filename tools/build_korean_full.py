@@ -73,14 +73,14 @@ SHORTEN = [
 
 TEXT_OVERRIDES = {
     # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
-    # routine samples a compact path; renderer advance hooks proved unstable, so
-    # keep the original four-syllable Korean text and avoid code hooks here.
-    '예아니오▼': '예아니오',
-    '예아니오': '예아니오',
-    '예 아니오 ▼': '예아니오',
-    '예 아니오': '예아니오',
-    '예 아니요 ▼': '예아니오',
-    '예 아니요': '예아니오',
+    # routine samples only the second/fourth glyph positions. Arrange the
+    # compact row so the visible result becomes "예 오" instead of "아 오".
+    '예아니오▼': '　예　오',
+    '예아니오': '　예　오',
+    '예 아니오 ▼': '　예　오',
+    '예 아니오': '　예　오',
+    '예 아니요 ▼': '　예　오',
+    '예 아니요': '　예　오',
     '예　　아니오': '예  아니오',
     '예　　아니요': '예  아니오',
     # These appear in supplemental rows, but the current glyph table does not
@@ -396,6 +396,12 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 2 companion/support description. Keep this address-pinned because the
     # comprehensive audit file still classifies the same source as untranslated.
     0xA2A90C: '료와 맥스를 지원',
+    # Part 2 mission-title pair renderer removes spaces, so use compact titles
+    # that still read cleanly after normalization.
+    0xA01CB8: '블랙홀 접근',
+    0xA01CD5: '다리 방어전',
+    0xA01E30: '블랙홀 접근',
+    0xA01E4D: '다리 방어전',
     # Part 2 mode select help text. The long import translation wraps as
     # "플레이할 수 이 모드" in the bottom ticker, so keep it screen-sized.
     0xA2C040: '스토리를 즐기며 플레이하는 모드',
@@ -785,15 +791,95 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA041E7: '적 사거리 앞에서 대기하고',
     0xA0420F: '적이 가까이 온 뒤',
     0xA0426C: '다음엔 내 진짜',
+    0xA04294: '도미노 사령관',
+    0xA042AE: '강 건너 적 부대 확인',
+    0xA042D4: '정말?',
+    0xA042E0: '이런 시골에',
+    0xA042FC: '어떻게 할까요',
     0xA0430E: '다른 작전 중이지만 처리할까요',
-    0xA04368: '좋은 판단',
+    0xA04334: '맞아',
+    0xA0433D: '더 깊이 오면',
+    0xA04356: '곤란하지',
+    0xA04368: '좋아.',
+    0xA04376: '역시',
+    0xA0437F: '특수부대 대장답네',
+    0xA043A8: '캐서린 사령!',
+    0xA043BA: '어째서 여기 계세요?',
+    0xA043D4: '레드스타를 습격한',
+    0xA043E9: '사령관을 쫓다 보니',
+    0xA04409: '도미노',
+    0xA04412: '여긴',
+    0xA04419: '네게 맡겨도 될까?',
+    0xA04438: '네!',
+    0xA0443F: '하지만',
+    0xA0444A: '가능하면',
+    0xA04453: '조언해 주시면 든든해요',
+    0xA04478: '응',
+    0xA0447F: '물론이야',
+    0xA0448E: '그럼',
+    0xA04499: '작전을 시작하자',
+    0xA044B4: '콩 님',
+    0xA044C0: '보병대 근처에',
+    0xA044CF: '레드스타 도시가 있습니다',
+    0xA044F4: '뭐?',
+    0xA044FF: '적 도시인가',
     0xA0450E: '점령은 귀찮지만',
-    0xA0454C: '자금을 모으란 얘기도 있어',
-    0xA0456D: '뺏을 건',
-    0xA0461D: '이틀이면 점령 가능해',
+    0xA0452D: '블랙홀군 침공작전 중',
+    0xA0454C: '자금도 필요하지',
+    0xA0456D: '챙길 수 있으면',
+    0xA0457E: '챙겨 둔다',
+    0xA0458D: '잘 들어',
+    0xA04596: '본부든 도시든',
+    0xA045B8: '거점 내구력은 20',
+    0xA045D1: '체력 10 보병은',
+    0xA045E4: '한번에 내구력을',
+    0xA045F9: '10 줄일 수 있어',
+    0xA04612: '무사하면',
+    0xA0461D: '이틀이면 점령 가능',
+    0xA04638: '점령중 움직이거나 쓰러지면',
+    0xA04661: '내구력이 원래대로 돼',
+    0xA0467A: '조심해라',
+    0xA04687: '알았으면 출격이다',
     0xA0469A: '내 부대 힘을',
+    0xA046AD: '보여 주마',
+    0xA046BC: '콩 님!',
+    0xA046C7: '강 건너',
+    0xA046CE: '레드스타 부대가',
+    0xA046EC: '뭐라고?',
+    0xA046F7: '흥',
+    0xA046FE: '별것도 아니군',
+    0xA04715: '좋아',
+    0xA0471C: '경전차대 출격',
+    0xA0472D: '경전차라면',
+    0xA0473A: '빠르고 강하다',
+    0xA04753: '내 힘을 보이기 딱 좋다',
+    0xA04772: '레드스타 따윈',
+    0xA04794: '몇이 오든',
+    0xA047A3: '쓸어버린다',
+    0xA047C0: '도미노는 이제',
     0xA047CF: '기본 조작법은',
-    0xA04868: '지형 효과 높이를 나타내',
+    0xA047E2: '이해하고 있지?',
+    0xA047F6: '그럼...',
+    0xA04805: '아래 상태창을 봐',
+    0xA04830: '본부 아래 별과 숫자가 보이지',
+    0xA0485F: '이건',
+    0xA04868: '지형 효과 높이야',
+    0xA04887: '지형 효과가 높으면',
+    0xA048A4: '전투 때',
+    0xA048AD: '피해를 덜 받아',
+    0xA048CA: '그러니',
+    0xA048D3: '가능하면 지형 효과를',
+    0xA048F0: '활용해서',
+    0xA048FB: '피해를 줄이자',
+    0xA0491C: '지형 효과는 상태창 말고',
+    0xA04948: 'R버튼으로도 확인 가능해',
+    0xA04974: '그럼',
+    0xA0497D: '저 경전차와 싸울 땐',
+    0xA04994: '평지나',
+    0xA0499B: '도로보다 숲에서 공격',
+    0xA049C8: '맞아!',
+    0xA049D8: '힘내',
+    0xA049E7: '도미노!',
     0xA04B95: '할 수 있는 전법도 중요해',
     0xA04C1E: '설명 계속할게',
     0xA04CCB: '해',
@@ -5489,7 +5575,6 @@ def main():
         0xEE24DC: '없음',
         0xA034F7: '요. ',
         0xA03FFC: '그건',
-        0xA04404: '네. ',
         0xA05169: '요. ',
         0xA05242: '에도',
         0xA05294: '특히',
@@ -5709,6 +5794,7 @@ def main():
         if len(enc) != 4:
             raise AssertionError(f'tutorial control gap replacement length mismatch at 0x{faddr:X}')
         rom[faddr:faddr + 4] = enc
+    rom[0xA04404:0xA04409] = bytes([FILL_BYTE]) * 5  # dangling comma/glue before "도미노"
 
     # Additional short Part 2 tutorial/campaign gaps that sit between command
     # control bytes and CSV text slots. These are visible as lone Japanese
@@ -6306,7 +6392,7 @@ def main():
         (0xA040FC, 0xA04106, '다시　한번', 'part2 once more row'),
         (0xA0452D, 0xA0454B, '블랙홀군　침공작전　중', 'part2 black hole invasion row'),
         (0xA04612, 0xA0461C, '무사하면,', 'part2 if unhurt row'),
-        (0xA046C7, 0xA046CD, '저편', 'part2 opposite bank row'),
+        (0xA046C7, 0xA046CD, '강건너', 'part2 opposite bank row'),
         (0xA047F6, 0xA04804, '그럼...', 'part2 well then row'),
         (0xA048A4, 0xA048AC, '전투　때', 'part2 during battle row'),
         (0xA04994, 0xA0499A, '평지나', 'part2 plains row'),
@@ -7523,6 +7609,7 @@ def main():
         (0xA35758, 0xA35766, '레드스타령', 'part2 red star territory row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
+    fixed_zero_text_patch(0xA35758, 14, '레드스타령')
 
     # Script slots that still contain Japanese ellipsis glyphs after the main
     # address overrides. These are visible short rows; keep them ASCII so they
