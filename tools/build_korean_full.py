@@ -8326,11 +8326,11 @@ def main():
         (0xD91E13, 0xD91E27, '다음엔　힘내', 'try next time row'),
         (0xD91E2E, 0xD91E42, '잘했어', 'success praise row'),
         (0xD91E47, 0xD91E6B, '역시　기습부대였나봐', 'ambush unit row'),
-        (0xD91E6E, 0xD91E78, '같네', 'ambush unit tail row'),
-        (0xD91E7D, 0xD91EA3, '네　전투덕에　아군피해는', 'ally damage lead row'),
+        (0xD91E6E, 0xD91E78, '', 'ambush unit tail blank row'),
+        (0xD91E7D, 0xD91EA3, '네　전투　덕에　아군　피해는', 'ally damage lead row'),
         (0xD91EA6, 0xD91EB6, '거의　없어', 'ally damage tail row'),
         (0xD91EBB, 0xD91ED9, '다음도　이대로　가자', 'next keep up row'),
-        (0xD91EDE, 0xD91EF8, '으으　또　작전실패냐', 'enemy commander failed again row'),
+        (0xD91EDE, 0xD91EF8, '으으　또　작전　실패냐', 'enemy commander failed again row'),
         (0xD91EFD, 0xD91F23, '내가　짜낸　작전이', 'enemy commander plan row'),
         (0xD91F26, 0xD91F3C, '또　실패하다니', 'enemy commander failed row'),
         (0xD91F41, 0xD91F61, '으으　다음엔　두고봐', 'enemy commander see next row'),
@@ -13411,6 +13411,19 @@ def main():
         0xEFAE0C,
     ]:
         fixed_zero_text_patch(faddr, 16, '예　　아니오')
+
+    # The post-battle save prompt draws two script rows in one box and samples a
+    # compact choice row. Keep the prompt as one complete sentence. This UI path
+    # visibly has room for three Korean glyphs, so use the least ambiguous
+    # compact form "예아니" instead of the broken "아 오".
+    patch_script_row(
+        0xDF2932, 0xDF294C,
+        encode_text('현재　상황　저장할까요', syl_to_code, unmapped),
+        'save prompt single row'
+    )
+    patch_script_row(0xDF294E, 0xDF295E, b'', 'save prompt tail blank row')
+    patch_script_row(0xDF29CA, 0xDF29DA, b'', 'save prompt repeat tail blank row')
+    fixed_zero_text_patch(0xD835BC, 16, '　예아니오')
 
     # Name-confirm compact choices are not part of the normal CSV path because
     # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
