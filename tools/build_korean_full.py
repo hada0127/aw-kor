@@ -42,6 +42,11 @@ ZERO_FILL_REGIONS = PAIR_RENDERER_REGIONS
 # 0x800000 위의 '텍스트로 오추출된' 중요 데이터 테이블 — 덮어쓰면 그리드/폰트/렌더 깨짐.
 # (extraction noise가 SJIS-유사 바이트의 데이터 테이블을 텍스트로 잡음)
 DENY_REGIONS = [
+    # Backup/save utility string tables. These include FLASH/SAVEDATA markers
+    # used by emulator save-type detection and must stay byte-identical.
+    ('part1_backup_utility', 0x391670, 0x391790),
+    ('part2_backup_utility', 0xB84410, 0xB84510),
+    ('part2_save_seed_name', 0xB7F7D4, 0xB7F7E0),
     ('sjis_slot_table', 0xBE717A, 0xBE717A + 5498 * 2),   # 그리드/UI SJIS→슬롯 테이블 (cell_slots 의존)
     ('font_region',     0xB974D0, 0xBAF338),              # FONT_BASE 글리프
     ('baseptr_tables',  0xB80270, 0xB80B7C),              # 가나/기호 인덱스 테이블
@@ -886,13 +891,39 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA04D92: '생산 거점이 있으면',
     0xA04E2A: '도시가 늘면',
     0xA04E3D: '손해는 없으니까',
-    0xA04EA7: '지금 위치서 먼 적을',
+    0xA04E74: '선택한 유닛은',
+    0xA04E91: '자주포야',
+    0xA04E9C: '자주포는',
+    0xA04EA7: '먼 적을',
+    0xA04EC0: '노려 공격하는',
+    0xA04ED3: '간접공격 유닛이야',
+    0xA04EEA: '멀리서 공격하니',
+    0xA04F05: '공격해도',
+    0xA04F10: '반격을 안 받아',
+    0xA04F31: '대신',
+    0xA04F3E: '직접 공격받으면',
+    0xA04F54: '반격 못 해',
+    0xA04F83: '직접 공격 안 받게',
     0xA04F9C: '조심하겠습니다',
+    0xA04FF9: '간접유닛은 직접유닛',
     0xA0501C: '과는 달리',
+    0xA05029: '이동 후 공격',
+    0xA05036: '불가야',
     0xA0504E: '항상 현재 위치에서',
+    0xA0506C: '알겠습니다',
+    0xA0507C: '매복이나',
+    0xA05091: '지원사격이 특기야',
+    0xA050B4: '맞아!',
+    0xA050C1: '그리고',
+    0xA050C8: '공격 범위를',
+    0xA050DF: '보고 싶을 때 있지',
+    0xA05100: '그럴 땐',
+    0xA0510D: '유닛 위에서',
     0xA0511F: '정보키로',
-    0xA0512A: '공격 가능 범위가 빨갛게 표시돼',
-    0xA0514D: '자주포 공격범위는',
+    0xA0512A: '범위가 빨갛게 표시돼',
+    0xA0514D: '자주포 사거리는',
+    0xA0516F: '',
+    0xA05179: '정보 화면에서도 확인 가능',
     0xA051EF: '점령이나 수송차',
     0xA05211: '산에도 올라',
     0xA052E6: '경전차와도 충분히 싸울 거야',
@@ -2217,6 +2248,20 @@ def restore_symbol_glyphs(rom, orig):
     return len(restored)
 
 
+def restore_backup_utility_tables(rom, orig):
+    """Keep save/backup utility tables byte-identical for emulator save loading."""
+    restored = 0
+    for start, end in [
+        (0x391670, 0x391790),
+        (0xB7F7D4, 0xB7F7E0),
+        (0xB84410, 0xB84510),
+    ]:
+        if rom[start:end] != orig[start:end]:
+            rom[start:end] = orig[start:end]
+            restored += 1
+    return restored
+
+
 PART2_UI_KANJI_GLYPH_SUBS = {
     # Protected Part 2 battle/status UI dictionaries. Keep the original SJIS
     # table bytes intact, but replace the glyphs those bytes resolve to.
@@ -3249,6 +3294,7 @@ def patch_part2_command_menu_co_icon(rom):
 def patch_part2_mission_start_obj(rom):
     """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
@@ -5308,6 +5354,7 @@ def main():
     st['part2_funds_hud'] = patch_part2_battle_funds_hud_label(rom)
     st['residual_ascii_labels'] = patch_residual_ascii_labels(rom, syl_to_code, unmapped)
     st['common_battle_ascii_labels'] = patch_common_battle_ascii_labels(rom, syl_to_code, unmapped)
+    st['backup_utility_tables'] = restore_backup_utility_tables(rom, orig)
     st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
@@ -5549,7 +5596,7 @@ def main():
         0xEE24DC: '없음',
         0xA034F7: '요. ',
         0xA03FFC: '그건',
-        0xA05169: '요. ',
+        0xA05169: '칸  ',
         0xA05242: '에도',
         0xA05294: '특히',
         0xA059FE: '다음',
@@ -6377,9 +6424,9 @@ def main():
         (0xA04B8E, 0xA04B94, '자신만', 'part2 oneself row'),
         (0xA04D72, 0xA04D7C, '매일　시작', 'part2 start of day row'),
         (0xA05401, 0xA05423, '다음날　시작에　체력회복', 'part2 city hp recovery row'),
-        (0xA04FF9, 0xA0501B, '간접유닛은　직접유닛', 'part2 indirect versus direct row'),
+        (0xA04FF9, 0xA0501B, '간접유닛은 직접유닛', 'part2 indirect versus direct row'),
         (0xA05045, 0xA0504D, '공격은', 'part2 attack is row'),
-        (0xA05160, 0xA05168, '2에서3', 'part2 two to three row'),
+        (0xA05160, 0xA05168, '2-3', 'part2 two to three row'),
         (0xA05424, 0xA0542A, '동시에', 'part2 simultaneously row'),
         (0xA054F0, 0xA05500, '그건　특기야', 'part2 specialty row'),
         (0xA055C2, 0xA055CA, '이어서', 'part2 continue row'),
@@ -13408,7 +13455,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
