@@ -395,7 +395,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF60C6: '자, 출격이야!',
     # Part 2 companion/support description. Keep this address-pinned because the
     # comprehensive audit file still classifies the same source as untranslated.
-    0xA2A90C: '료와 맥스를 지원',
+    0xA2A90C: '도미노 사령관',
     # Part 2 mission-title pair renderer removes spaces, so use compact titles
     # that still read cleanly after normalization.
     0xA01CB8: '블랙홀 접근',
@@ -805,9 +805,9 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA0437F: '특수부대 대장답네',
     0xA043A8: '캐서린 사령!',
     0xA043BA: '어째서 여기 계세요?',
-    0xA043D4: '레드스타를 습격한',
-    0xA043E9: '사령관을 쫓다 보니',
-    0xA04409: '도미노',
+    0xA043D4: '적 사령관을',
+    0xA043E9: '쫓아왔어요',
+    0xA04409: '',
     0xA04412: '여긴',
     0xA04419: '네게 맡겨도 될까?',
     0xA04438: '네!',
@@ -859,11 +859,11 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA047C0: '도미노는 이제',
     0xA047CF: '기본 조작법은',
     0xA047E2: '이해하고 있지?',
-    0xA047F6: '그럼...',
+    0xA047F6: '그럼',
     0xA04805: '아래 상태창을 봐',
-    0xA04830: '본부 아래 별과 숫자가 보이지',
-    0xA0485F: '이건',
-    0xA04868: '지형 효과 높이야',
+    0xA04830: '별과 숫자가 보이지?',
+    0xA0485F: '',
+    0xA04868: '지형 효과야',
     0xA04887: '지형 효과가 높으면',
     0xA048A4: '전투 때',
     0xA048AD: '피해를 덜 받아',
@@ -872,9 +872,9 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA048F0: '활용해서',
     0xA048FB: '피해를 줄이자',
     0xA0491C: '지형 효과는 상태창 말고',
-    0xA04948: 'R버튼으로도 확인 가능해',
-    0xA04974: '그럼',
-    0xA0497D: '저 경전차와 싸울 땐',
+    0xA04948: '정보키로도 볼 수 있어',
+    0xA04974: '',
+    0xA0497D: '경전차와 싸울 땐',
     0xA04994: '평지나',
     0xA0499B: '도로보다 숲에서 공격',
     0xA049C8: '맞아!',
@@ -3249,7 +3249,6 @@ def patch_part2_command_menu_co_icon(rom):
 def patch_part2_mission_start_obj(rom):
     """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
@@ -4189,8 +4188,8 @@ def patch_part2_battle_funds_hud_label(rom):
     return 32
 
 
-def patch_part2_ryo_co_name_obj(rom):
-    """Patch the Part 2 CO profile OBJ name tiles for Ryo."""
+def patch_part2_domino_co_name_obj(rom):
+    """Patch the Part 2 CO profile OBJ name tiles for Domino."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress
@@ -4199,46 +4198,20 @@ def patch_part2_ryo_co_name_obj(rom):
     off = 0x45274C
     dec = lz77_decompress(rom, off)
     if dec is None:
-        raise AssertionError(f'invalid Ryo CO name LZ77 block at 0x{off:X}')
+        raise AssertionError(f'invalid Domino CO name LZ77 block at 0x{off:X}')
     data, consumed = dec
     if len(data) != 12 * 32:
-        raise AssertionError(f'unexpected Ryo CO name block size: {len(data)}')
+        raise AssertionError(f'unexpected Domino CO name block size: {len(data)}')
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri9.bdf'))
-    width, height = 96, 8
-    pixels = [[0] * width for _ in range(height)]
-    cursor = 22
-    for ch in '료':
-        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-        for row in range(h):
-            for col in range(w):
-                if not grid[row][col]:
-                    continue
-                px = cursor + col + xo
-                py = row - 1
-                if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
-                    pixels[py + 1][px + 1] = 13
-                if 0 <= px < width and 0 <= py < height:
-                    pixels[py][px] = 10
-        cursor += w + 1
-
+    # This 96x8 name OBJ is arranged by the game as fixed sprite fragments; a
+    # multi-syllable Korean render becomes harder to read than the dialogue
+    # font. Blank the old Japanese graphic and carry the name in the first
+    # profile row instead.
     out = bytearray(12 * 32)
-    for sprite in range(6):
-        for half in range(2):
-            tile_idx = sprite * 2 + half
-            x0 = sprite * 16 + half * 8
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[row][x0 + col] & 0x0F
-                    bi = tile_idx * 32 + row * 4 + col // 2
-                    if col & 1:
-                        out[bi] |= value << 4
-                    else:
-                        out[bi] |= value
 
     comp = lz77_compress(bytes(out), vram_safe=True)
     if len(comp) > consumed:
-        raise AssertionError(f'Ryo CO name LZ77 overflow: {len(comp)} > {consumed}')
+        raise AssertionError(f'Domino CO name LZ77 overflow: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + bytes(consumed - len(comp))
     return 1
 
@@ -5151,7 +5124,8 @@ def main():
             except (ValueError, TypeError):
                 st['bad_addr'] += 1; continue
             seen_import_addrs.add(a)
-            if a in ADDRESS_TEXT_OVERRIDES:
+            addr_override = a in ADDRESS_TEXT_OVERRIDES
+            if addr_override:
                 ko = ADDRESS_TEXT_OVERRIDES[a]
             elif jp in SOURCE_TEXT_OVERRIDES and not any('가' <= ch <= '힣' for ch in ko):
                 ko = SOURCE_TEXT_OVERRIDES[jp]
@@ -5165,7 +5139,7 @@ def main():
             deny = in_deny(a, a + slot)
             if deny:
                 st['deny'] += 1; continue   # 중요 데이터 테이블 — 덮어쓰지 않음
-            if not ko:
+            if not ko and not addr_override:
                 st['no_ko'] += 1; continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
             pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
@@ -5334,7 +5308,7 @@ def main():
     st['part2_funds_hud'] = patch_part2_battle_funds_hud_label(rom)
     st['residual_ascii_labels'] = patch_residual_ascii_labels(rom, syl_to_code, unmapped)
     st['common_battle_ascii_labels'] = patch_common_battle_ascii_labels(rom, syl_to_code, unmapped)
-    st['part2_ryo_co_name'] = patch_part2_ryo_co_name_obj(rom)
+    st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
@@ -5794,7 +5768,11 @@ def main():
         if len(enc) != 4:
             raise AssertionError(f'tutorial control gap replacement length mismatch at 0x{faddr:X}')
         rom[faddr:faddr + 4] = enc
-    rom[0xA04404:0xA04409] = bytes([FILL_BYTE]) * 5  # dangling comma/glue before "도미노"
+    # Remove the dangling "ね。" glue before the next line but keep the 0x6B
+    # input-wait control. If this whole gap is filled with spaces, the dialogue
+    # renderer can leave the previous third row visible at the bottom edge.
+    rom[0xA04404:0xA04408] = bytes([FILL_BYTE]) * 4
+    rom[0xA04408] = 0x6B
 
     # Additional short Part 2 tutorial/campaign gaps that sit between command
     # control bytes and CSV text slots. These are visible as lone Japanese
@@ -6393,7 +6371,7 @@ def main():
         (0xA0452D, 0xA0454B, '블랙홀군　침공작전　중', 'part2 black hole invasion row'),
         (0xA04612, 0xA0461C, '무사하면,', 'part2 if unhurt row'),
         (0xA046C7, 0xA046CD, '강건너', 'part2 opposite bank row'),
-        (0xA047F6, 0xA04804, '그럼...', 'part2 well then row'),
+        (0xA047F6, 0xA04804, '그럼', 'part2 well then row'),
         (0xA048A4, 0xA048AC, '전투　때', 'part2 during battle row'),
         (0xA04994, 0xA0499A, '평지나', 'part2 plains row'),
         (0xA04B8E, 0xA04B94, '자신만', 'part2 oneself row'),
@@ -7432,10 +7410,10 @@ def main():
         (0xA2A0C1, 0xA2A0CF, '피아불문', 'part2 laser friend or foe row'),
         (0xA2A10B, 0xA2A123, '큰화산이몇개있다.', 'part2 volcano description row'),
         (0xA2A8DC, 0xA2A8F0, '적　전체　체력에', 'part2 blizzard enemy hp row'),
-        (0xA2A927, 0xA2A93F, '기센　여자아이', 'part2 nell profile girl row'),
-        (0xA2A940, 0xA2A95A, '특수부대　대장', 'part2 sami special forces row'),
-        (0xA2A95B, 0xA2A96F, '장군이기도　해', 'part2 sami commander row'),
-        (0xA2A970, 0xA2A986, '좋아함　딸기케이크', 'part2 sami likes row'),
+        (0xA2A927, 0xA2A93F, '료와　맥스　지원', 'part2 sami support row'),
+        (0xA2A940, 0xA2A95A, '특수부대　출신', 'part2 sami special forces row'),
+        (0xA2A95B, 0xA2A96F, '공군도　맡아', 'part2 sami air force row'),
+        (0xA2A970, 0xA2A986, '좋아함　케이크', 'part2 sami likes row'),
         (0xA2A987, 0xA2A99D, '싫어함　약한남자', 'part2 sami dislikes row'),
         (0xA2AA64, 0xA2AA76, '체력　줄어도', 'part2 sami low hp capture row'),
         (0xA2AAEE, 0xA2AAFA, '고양이좋아', 'part2 grit likes row'),
@@ -13430,7 +13408,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
