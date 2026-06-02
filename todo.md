@@ -590,6 +590,13 @@
   - `0xA05169` 연결 조각을 `칸  `으로 바꾸고 `0xA0516F`를 blank 처리해 `요이건`처럼 이어 붙는 잔여를 제거.
   - ROM byte 디코드 기준 `선택한 유닛은`, `자주포야`, `정보키로`, `자주포 사거리는`, `2-3칸`, `정보 화면에서도 확인 가능`이 최종 ROM에 들어간 것을 확인.
   - 실제 분기 화면 검증은 미션 2 튜토리얼 조작 루트 재현을 계속 진행해야 함.
+- [x] Part 2 튜토리얼 공격 복습 목표 마커 회귀 수정.
+  - `0xD74495`, `0xD744E8`은 텍스트가 아니라 튜토리얼 목표 화살표/기호 데이터라 텍스트 import에서 보호.
+  - 실제 mGBA 상태 `temp/p2_attack_route_key/selected_before_attack_review.ss0` 기준 `START -> RIGHT -> RIGHT -> A` 루트에서 빨간 목표 화살표, 이동, 전투 애니메이션 재진입을 확인.
+  - `temp/p2_marker_spacing_final_verify/sheet.png`, `temp/p2_after_attack_dialog_spacing_verify/sheet.png` 기준 `훌륭해`, `이번엔 이 보병 골라 봐` 후속 문구가 깨짐 없이 표시됨을 확인.
+- [x] 레포 대량 임시 산출물 재정리.
+  - ROM 비섹션 중 생성된 임시 16MB ROM들과 분기 스윕 RAW/PNG/상태 파일을 삭제.
+  - 핵심 상태와 최종 검증 시트만 보존해 전체 용량을 약 `1.2G -> 206M`, `temp`를 약 `996M -> 12M`로 축소.
 
 ## 현재 우선순위
 

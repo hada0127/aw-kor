@@ -2026,7 +2026,9 @@ RESTORE_SYMBOL_CODES = [
 NAME_GRID_DATA = {0x805A24, 0xDA4337}
 FALSE_TEXT_DATA = {
     0x979755, 0x9EA89D, 0x8AC8F0,
-    0xD686DF, 0xD6C87C, 0xD70CE9, 0xD70DD2, 0xD74594,
+    0xD686DF, 0xD6C87C, 0xD70CE9, 0xD70DD2,
+    # Tutorial marker/symbol data; text import corrupts the red target arrow.
+    0xD74495, 0xD744E8, 0xD74594,
     0xD755AF, 0xD7CDC8, 0xD7CDDB, 0xD7CDEE, 0xD7CE14,
     0xD83198, 0xDFA011,
 }
@@ -8188,16 +8190,16 @@ def main():
         (0xD90D34, 0xD90D4C, '골라　줘', 'select current unit tail row'),
         (0xD90D4F, 0xD90D6F, '여기서　골라', 'select current unit button row'),
         (0xD90D76, 0xD90D88, '먼저　복습이야', 'review lead row'),
-        (0xD90D9F, 0xD90DAD, '해　보자', 'review attack row'),
-        (0xD90DB2, 0xD90DC0, '여기서만', 'only here lead row'),
-        (0xD90DC6, 0xD90DD4, '할수있어', 'only here tail row'),
+        (0xD90D9F, 0xD90DAD, '　해　보자', 'review attack row'),
+        (0xD90DB2, 0xD90DC0, '여기서만　', 'only here lead row'),
+        (0xD90DC6, 0xD90DD4, '　할수있어', 'only here tail row'),
         (0xD90DD7, 0xD90DF7, '지금은　여기로　이동해', 'review move here row'),
         (0xD90E04, 0xD90E20, '은　행동을　끝내는', 'wait command explanation lead row'),
         (0xD90E23, 0xD90E2F, '명령이야', 'wait command explanation tail row'),
-        (0xD90E3C, 0xD90E50, '해　줄래', 'do attack please review row'),
+        (0xD90E3C, 0xD90E50, '　해　줄래', 'do attack please review row'),
         (0xD90E56, 0xD90E64, '훌륭해', 'excellent row'),
-        (0xD90E6A, 0xD90E80, '이번엔　이', 'next unit lead row'),
-        (0xD90E86, 0xD90E94, '골라　봐', 'next unit select row'),
+        (0xD90E6A, 0xD90E80, '이번엔　이　', 'next unit lead row'),
+        (0xD90E86, 0xD90E94, '　골라　봐', 'next unit select row'),
         (0xD90E97, 0xD90EA7, '줄래', 'next unit select tail row'),
         (0xD90EAE, 0xD90EBE, '미안해', 'wrong unit apology row'),
         (0xD90EC1, 0xD90EC9, '지금', 'current unit retry lead row'),
