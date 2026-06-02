@@ -8280,8 +8280,8 @@ def main():
         (0xD918D3, 0xD918EF, '공격하면　이길수있어', 'focus fire tail row'),
         (0xD918F4, 0xD9190C, '적　전멸하면　승리야', 'annihilation victory row'),
         (0xD91912, 0xD91932, '맞다　하나　잊었네', 'one more thing row'),
-        (0xD91937, 0xD91963, '지금　작전　진행중이지만', 'operation in progress row'),
-        (0xD91966, 0xD9198E, '중간에　그만두고　싶을때', 'quit operation lead row'),
+        (0xD91937, 0xD91963, '지금　작전중이지만', 'operation in progress row'),
+        (0xD91966, 0xD9198E, '중간에　그만둘때', 'quit operation lead row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped), label)
     comparison_payload = encode_text('아까　평지와　산의　피해를　비교해　봐', syl_to_code, unmapped)
@@ -8300,9 +8300,9 @@ def main():
         (0xD91B03, 0xD91B13, '열어줘', 'need map menu tail row'),
         (0xD91B17, 0xD91B3B, '지도메뉴는　움직일　유닛이', 'map menu reminder lead row'),
         (0xD91B3E, 0xD91B58, '없는곳에서　결정', 'map menu reminder tail row'),
-        (0xD91B5E, 0xD91B66, '여기', 'save command lead row'),
-        (0xD91B6E, 0xD91B8A, '명령이　있지', 'save command exists row'),
-        (0xD91B99, 0xD91BB7, '전투를　기록하는', 'save command records row'),
+        (0xD91B5E, 0xD91B8A, '여기　저장　명령이　있지', 'save command exists row'),
+        (0xD91B92, 0xD91B98, '저장」', 'save command label row'),
+        (0xD91B99, 0xD91BB7, '은　전투를　기록하는', 'save command records row'),
         (0xD91BBA, 0xD91BC8, '명령이야', 'save command tail row'),
         (0xD91BCD, 0xD91BF9, '중간에　그만둘땐', 'save command quit lead row'),
         (0xD91BFC, 0xD91C0C, '이걸　골라', 'save command choose row'),
