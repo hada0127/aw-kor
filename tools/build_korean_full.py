@@ -761,7 +761,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA03C7A: '항상 확인해',
     0xA03C9C: '보병이',
     0xA03CB1: '점령 시작했어',
-    0xA03CC4: '커서창을 봐',
+    0xA03CC4: '상태창을 봐',
     0xA03CEC: '깜빡이는 숫자는',
     0xA03D09: '거점 내구력이야',
     0xA03D1C: '이게 다 줄면',
@@ -3347,6 +3347,113 @@ def patch_part2_bg_mission_word(rom):
     return 1
 
 
+def patch_part2_result_summary_obj(rom):
+    """Redraw the Part 2 mission-result summary label sheet in Korean."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress
+    from lz77_scan import lz77_decompress
+
+    off = 0x59DA5C
+    dec = lz77_decompress(bytes(rom), off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 result summary LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 1024 * 32:
+        raise AssertionError(f'unexpected Part 2 result summary block size: {len(data)}')
+
+    width = height = 256
+    layer = Image.new('P', (width, height), 0)
+    px = layer.load()
+    for tile_idx in range(1024):
+        tx = (tile_idx % 32) * 8
+        ty = (tile_idx // 32) * 8
+        tile = data[tile_idx * 32:tile_idx * 32 + 32]
+        for row in range(8):
+            for col in range(8):
+                value = tile[row * 4 + col // 2]
+                px[tx + col, ty + row] = (value >> 4) if col & 1 else (value & 0x0F)
+
+    draw = ImageDraw.Draw(layer)
+    title_font_path = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
+    if not os.path.exists(title_font_path):
+        title_font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+    label_font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+
+    def fit_font(text, font_path, max_size, box, stroke=0):
+        for size in range(max_size, 5, -1):
+            font = ImageFont.truetype(font_path, size)
+            bbox = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+            if bbox[2] - bbox[0] <= box[2] - box[0] and bbox[3] - bbox[1] <= box[3] - box[1]:
+                return font, bbox
+        font = ImageFont.truetype(font_path, 6)
+        return font, draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+
+    def draw_centered(text, box, font_path, max_size, fill=1, stroke_fill=14, shadow=12, stroke=1):
+        draw.rectangle(box, fill=0)
+        font, bbox = fit_font(text, font_path, max_size, box, stroke=stroke)
+        tw = bbox[2] - bbox[0]
+        th = bbox[3] - bbox[1]
+        x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
+        y = box[1] + ((box[3] - box[1]) - th) // 2 - bbox[1]
+        if shadow is not None:
+            draw.text((x + 2, y + 2), text, font=font, fill=shadow, stroke_width=stroke, stroke_fill=shadow)
+        draw.text((x, y), text, font=font, fill=fill, stroke_width=stroke, stroke_fill=stroke_fill)
+
+    def draw_label(text, xy, box, max_size=11):
+        draw.rectangle(box, fill=0)
+        font, bbox = fit_font(text, label_font_path, max_size, box, stroke=1)
+        draw.text(xy, text, font=font, fill=1, stroke_width=1, stroke_fill=6)
+
+    # The title is split into four tile groups by the original renderer. Redraw
+    # each syllable inside its source group so the existing tilemap can stay as-is.
+    for text, box in [
+        ('작', (0, 0, 56, 48)),
+        ('전', (64, 0, 128, 48)),
+        ('성', (136, 0, 200, 48)),
+        ('공', (208, 0, 256, 48)),
+    ]:
+        draw_centered(text, box, title_font_path, 30, fill=1, stroke_fill=14, shadow=None, stroke=1)
+
+    # These labels are stored as horizontal strips, then the tilemap positions
+    # each strip segment vertically on the result screen.
+    draw.rectangle((48, 56, 236, 72), fill=0)
+    draw_centered('축하!', (64, 56, 160, 72), label_font_path, 13, fill=1, stroke_fill=6, shadow=None, stroke=1)
+    draw.rectangle((0, 72, 236, 102), fill=0)
+    draw_label('속도', (4, 76), (0, 72, 64, 90), max_size=10)
+    draw_label('화력', (76, 76), (72, 72, 128, 90), max_size=10)
+    draw_label('기술', (144, 76), (140, 72, 216, 90), max_size=10)
+    draw.rectangle((0, 100, 196, 114), fill=0)
+    draw_label('속도', (4, 102), (0, 100, 58, 114), max_size=10)
+    draw_label('화력', (68, 102), (64, 100, 112, 114), max_size=10)
+    draw_label('기술', (132, 102), (128, 100, 196, 114), max_size=10)
+    draw_label('합계', (4, 110), (0, 104, 64, 124), max_size=10)
+
+    # Ranking/explanation variants reuse this tail label strip; clear the old
+    # English labels so they do not leak on alternate score pages.
+    draw.rectangle((0, 240, 256, 256), fill=0)
+
+    out = bytearray(len(data))
+    src = layer.load()
+    for tile_idx in range(1024):
+        tx = (tile_idx % 32) * 8
+        ty = (tile_idx // 32) * 8
+        for row in range(8):
+            for col in range(8):
+                value = src[tx + col, ty + row] & 0x0F
+                bi = tile_idx * 32 + row * 4 + col // 2
+                if col & 1:
+                    out[bi] |= value << 4
+                else:
+                    out[bi] |= value
+
+    comp = lz77_compress(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 2 result summary LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 1
+
+
 def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
     """Replace fixed ASCII labels still used by map/menu text renderers."""
     replacements = {
@@ -5133,6 +5240,7 @@ def main():
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
     st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
+    st['part2_result_summary'] = patch_part2_result_summary_obj(rom)
     st['part2_level_label'] = patch_part2_level_label_obj(rom)
     st['part2_check_label'] = patch_part2_check_label_obj(rom)
     st['part2_companion_hud'] = patch_part2_companion_hud_name(rom)
@@ -6160,7 +6268,7 @@ def main():
         (0xA03C7A, 0xA03C98, '항상　확인해', 'part2 tutorial always check row'),
         (0xA03C9C, 0xA03CB0, '보병이', 'part2 capture infantry row'),
         (0xA03CB1, 0xA03CC1, '점령　시작했어', 'part2 capture started row'),
-        (0xA03CC4, 0xA03CE8, '커서창을　봐', 'part2 capture cursor window row'),
+        (0xA03CC4, 0xA03CE8, '상태창을　봐', 'part2 capture status window row'),
         (0xA03CEC, 0xA03D08, '깜빡이는　숫자는', 'part2 capture blinking number row'),
         (0xA03D09, 0xA03D19, '거점　내구력이야', 'part2 capture durability label row'),
         (0xA03D1C, 0xA03D2E, '이게　다　줄면', 'part2 capture durability zero row'),
@@ -13235,7 +13343,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'part2_ryo_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

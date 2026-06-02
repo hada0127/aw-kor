@@ -224,15 +224,23 @@
 - [x] Part 2 첫 전투 튜토리얼 보급/연료 설명 조각 정리.
   - `0xA031A8` 중간 호출 조각을 비우고, `0xA0329A-0xA03341` 보급/탄약/연료 설명을 짧은 한글 행으로 재분절.
   - 실제 캡처 `temp/p2_apc_text_long_advance2/sheet.png` 기준 `그런데 캐서린 보급`처럼 섞이던 문구가 사라진 것을 확인.
-- [ ] Part 2 첫 전투 수송차 실제 탑승/하차 조작 및 후속 전투 진행 검증.
+- [x] Part 2 첫 전투 수송차 실제 탑승/하차 조작 및 후속 전투 진행 검증.
   - 수송차 설명 텍스트는 정리됐으므로 다음 진행에서 보병 탑승, 하차, 공격 튜토리얼 진입까지 실제 입력 루트를 이어간다.
   - 현재 진행: 수송차 설명 이후 턴 종료와 공격 튜토리얼 설명 진입은 `temp/p2_after_apc_endturn_verify2/sheet.png`, `temp/p2_attack_text_verify_current3/sheet.png` 기준으로 확인.
   - 추가 진행: DAY 5에서 실제 `공격` 명령 메뉴와 전투 화면 재진입을 `temp/p2_day5_attack_command_probe/sheet.png`, `temp/p2_day5_attack_execute_probe/sheet_all.png` 기준으로 확인.
-  - 남은 것: 이후 점령/커서창 설명 구간까지 fresh-run으로 끝까지 확인.
+  - DAY 9 이동/대기, DAY 10 2회 공격, 적 전멸 뒤 작전 성공까지 `temp/p2_day9_move_wait_endturn/sheet.png`, `temp/p2_day10_attack_execute_probe/sheet.png`, `temp/p2_day10_second_attack_execute_probe/sheet.png`, `temp/p2_after_enemy_defeat_dialog_advance/sheet.png` 기준으로 확인.
+  - 이 클리어 루트는 점령 전에 적 전멸로 끝나므로 점령/상태창 설명은 별도 루트에서 계속 확인한다.
+- [ ] Part 2 점령/상태창 설명 튜토리얼 루트 탐색.
+  - `0xA03CC4`의 `커서창을 봐` 오독 표현은 `상태창을 봐`로 교체했지만, 첫 전투 적 전멸 루트에서는 해당 설명이 표시되지 않음.
+  - 다음 진행에서 점령 명령이 필요한 튜토리얼/미션 루트를 찾아 실제 화면 기준으로 `보병이 / 점령 시작했어 / 상태창을 봐` 표시를 확인한다.
 - [x] Part 2 첫 전투 실제 공격 명령과 전투 화면 검증.
   - DAY 4 이동/대기 후 적 턴 전투가 발생하고, 전투 화면의 숫자/상태 표시가 깨지지 않음을 `temp/p2_day4_after_move_endturn_probe/sheet.png` 기준으로 확인.
   - DAY 5 아군 보병에서 `공격 / 대기` 행동 메뉴가 한글로 표시되고, `공격` 선택 후 피해 예측과 전투 화면으로 진입하는 것을 확인.
   - 실제 캡처 `temp/p2_day5_attack_execute_probe/sheet_all.png` 기준 전투 후 맵 상태로 복귀하며 충돌은 발생하지 않음.
+- [x] Part 2 첫 전투 클리어 결과 화면 그래픽 잔여 제거.
+  - 결과 요약 타일 블록 `0x59DA5C`를 빌드 후 LZ77 재압축 패치로 다시 그려 `作戦成功`, `CONGRATULATIONS!`, `スピード`, `パワー`, `テクニック`, `TOTAL` 잔여를 제거.
+  - 실제 새 ROM 진행 캡처 `temp/p2_result_summary_after_patch3/sheet.png` 기준 결과 화면의 큰 제목과 점수 라벨이 한글로 표시됨을 확인.
+  - 전투 화면, 결과 화면, 랭크 표시까지 `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test 통과와 SHA-256 동일성을 재확인.
 - [x] Part 2 첫 전투 수송차 이후 공격 설명 문장 재정리.
   - 수송차/보급 설명 뒤 `??C`처럼 새던 숫자 조각을 제거하고 `보병은 느리지만 / 수송차는 빠르지`로 재분절.
   - `싸우거나` 오독을 피하려고 `전투나 이동하면`으로 바꾸고, 공격 튜토리얼의 `그 기세야` 오독 구간을 `좋아 / 믿고 있을게`로 정리.
@@ -250,6 +258,9 @@
 - [x] 레포 임시 산출물 용량 정리.
   - 재생성 가능한 대량 분기 스캔 결과와 RAW/VRAM 덤프를 제거해 전체 용량을 약 `546M -> 509M`로 축소.
   - 핵심 `ss0` 상태 파일, 현재 `output/*.gba`, 원본/참조 자료는 보존.
+- [x] 레포 대형 임시 탐색 산출물 재정리.
+  - 실패한 `temp/p2_day9_capture_probe` 대량 분기와 오래된 `p2_*` 탐색 디렉터리, `tools/__pycache__/`를 삭제해 전체 용량을 약 `281M -> 206M`, `temp`를 `89M -> 14M`로 축소.
+  - 후속 검증에 필요한 DAY9/DAY10 상태와 최신 `output/*.gba`, 원본/참조 자료는 보존.
 - [x] 레포 재생성 산출물 재정리.
   - 이번 작업 시작 전 기준 `temp` 178M, `output` 48M을 비워 전체 용량을 약 `367M -> 141M`로 축소.
   - 원본 ROM 보관용 `original`, 배포물 `dist`, git 이력은 보존.
