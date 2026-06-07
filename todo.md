@@ -1828,7 +1828,10 @@
    - 같은 도구의 `--range E18000:F00000 --min-score 13` 결과는 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0이다. 별도 리포트는 `temp/japanese_residuals_e18000_report.tsv`에 저장했다.
    - 2026-06-07 current ROM으로 같은 범위를 재검증했다. `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --range E18000:F00000 --min-score 13 --out temp/japanese_residuals_e18000_report.tsv` 기준 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0으로 유지된다.
    - 낮은 임계값 확인용 `--min-score 8 --include-changed --out temp/japanese_residuals_e18000_low_score_report.tsv`에서도 후보는 `0xE745B0` `ゥ・ゞ`, `0xEF9706`/`0xEFA644` `ァ`, `0xE8BE40` `劔...`, `0xEFA237` 심볼열의 5건뿐이다. 모두 `same_original`인 깨진 데이터/심볼표형 잔류라 현 시점에서 실제 대사 패치 대상은 없다.
-4. [ ] 전투 진입/진행 중 충돌 여부를 재검증하고, 충돌이 남아 있으면 먼저 수정한다.
+4. [x] 전투 진입/진행 중 충돌 여부를 재검증하고, 충돌이 남아 있으면 먼저 수정한다.
+   - 2026-06-07 current ROM smoke 기준 전투 진입/진행 중 하네스 충돌은 재현되지 않았다. `temp/active_states/fresh_sav_continue_to_battle_a080.ss0`에서 A 40회 진행한 `temp/single_state_key_sequence/battle_entry_long40_20260607/sheet.png` 기준 작전 대사, 미션 도장 화면, 실제 전투 맵 첫 대사까지 정상 진입했다.
+   - 전투 진행 smoke는 `temp/smoke_battle_crash_current_rom.py`로 `fresh_sav_continue_to_battle_a080`, `fresh_battle_after_wait_a40`, `fresh_attack_probe_A`, `fresh_enemy_after_transport_a40`, `p2_heavy_success_day2_control_after_extra_route`를 current ROM에 로드해 프레임 진행/입력/스크린샷/최종 savestate 저장까지 확인했다. 결과는 `temp/battle_crash_smoke_20260607/summary.tsv` 기준 5/5 OK이며, 전체 플레이스루 검증은 후속 Part 2/Part 1 본편 항목에서 계속 다룬다.
+   - `python3 tools/phase6_basic_test.py`는 `full/final/title_test` 세 산출물 모두 통과했고, 세 SHA-256은 모두 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
 5. [ ] 이름 입력/초반 대사 회귀를 실제 화면 기준으로 계속 검증한다.
    - [x] `vwxy` 소문자 미리보기는 상태 파일 캡처 기준 정상 표시.
    - [x] `예/아니오` 선택지는 상태 파일 캡처 기준 정상 표시.
