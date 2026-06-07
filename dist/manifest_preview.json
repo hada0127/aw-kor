@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "283cfc7b",
-    "sha1": "7420fc693619de029ff6d00974df4b19bf04febb",
-    "sha256": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa"
+    "crc32": "8662d098",
+    "sha1": "c5570659c79f18a83b7b66751fcaf6d43ad5d064",
+    "sha256": "7bf2a588255dcd62f9721ff3f5daa4a6ca2e15dfddc862036b4673362c3c014f"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa",
-    "game_wars_korean_final.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa",
-    "game_wars_korean_title_test.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa"
+    "game_wars_korean_full.gba": "7bf2a588255dcd62f9721ff3f5daa4a6ca2e15dfddc862036b4673362c3c014f",
+    "game_wars_korean_final.gba": "7bf2a588255dcd62f9721ff3f5daa4a6ca2e15dfddc862036b4673362c3c014f",
+    "game_wars_korean_title_test.gba": "7bf2a588255dcd62f9721ff3f5daa4a6ca2e15dfddc862036b4673362c3c014f"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_preview_2026-06-07.bps",
     "size": 687050,
     "crc32": "2144df1c",
-    "sha1": "2fea57db21b0d6a3519625aadb1a1639063decfe",
-    "sha256": "ef30473c34369d5b5f2a41014a33734d94c5954fea2fcdec58af6dfafe46302a",
+    "sha1": "791aa01f82dd88dc2a662dcacfdf243cd0513b79",
+    "sha256": "34953f10090c98faa72fecb171735c176c611c94cd74a4f58f3445b4a6b12052",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_preview_2026-06-07.ips",
     "size": 802945,
-    "crc32": "c56ddd40",
-    "sha1": "5f44b7aa3e888b59b66a6ce3e3bdd447a27570dd",
-    "sha256": "6c6e7f6e164f4998fd6089983fa4460b1bec5d5259d02e70d50e15333501d3dc",
+    "crc32": "adbaaaa3",
+    "sha1": "329459c9507334b79e033e09ffadefa5ddc53cd2",
+    "sha256": "860e0c8e0b5e679829bd51d608b598d46411c29fcf88c4921c52b2e357bb2e6b",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
