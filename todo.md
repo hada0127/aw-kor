@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] Part 2 튜토리얼 전투 메뉴/상태창/팝업 current ROM 재검증.
+  - `temp/current_p2_tutorial_menu_sweep_individual/sheet_verified.png`와 `temp/current_p2_tutorial_extended_sweep/sheet.png` 기준 보병 선택, 점령 안내, 행동 메뉴, 경전차/바주카병/로켓포 메뉴, 보급, 수송차 탑재/하차, 공격범위/공략 힌트, 승리/실패 팝업 흐름에서 즉시 보이는 일본어/영어 잔여나 깨진 아이콘은 없었다.
+  - 상태창/부대 목록은 `temp/current_capture_status_review/sheet.png`, `temp/current_capture_status_window_verify/sheet.png`, 확대본 `temp/p2_tutorial_status_list_recheck_20260607/`로 다시 확인했다. 작은 지형명은 `도시`/`평지` 한글 픽셀 글자이며, 현재 ROM 직접 검색 기준 `都市`/`平地` SJIS 잔여는 0건이다.
+  - 공격/전투 쪽은 기존 `temp/current_visual_check/attack_menu_recheck_latest/sheet.png`, `temp/battle_crash_smoke_20260607/attack_probe_a/sheet.png`, `temp/probes/p2_air_battle_day2_u06_attack_confirm_20260605/sheet.png` 기록과 대조했다. 공격 대상/피해 예측, 부대 목록, 전투 컷신의 `방어` HUD가 현재 패치 상태와 맞고, 새 수정이 필요한 화면 깨짐은 보이지 않았다.
 - [x] 1+2 선택 화면, Part 1, Part 2 타이틀/시작 텍스트 스타일 재검증.
   - 현재 ROM으로 `fresh_title_for_menu_probe`, `fresh_game_select`, `fresh_gbwa2_main_menu`, `fresh_gbwa2_prologue_start`를 다시 로드해 `temp/title_start_style_recheck_20260607/sheet.png`를 생성했다. 공통 타이틀의 큰 한글 로고와 `시작하기`, 1+2 선택 화면의 `게임 선택`, Part 2 메뉴의 `캠페인`/`시작`/`처음`, 프롤로그 시작 텍스트가 화면 안에 들어가며 색상/배치가 기존 패치 의도와 일치했다.
   - Part 1 쪽은 `fresh_game_select`에서 실제 입력으로 진입하는 타이밍 시트를 `temp/part1_title_timing_recheck_20260607_up/sheet.png`에 남겼다. 선택 화면에서 Part 1 진입 뒤 세계지도/VS 인트로로 정상 진행했고, 기존 `temp/part1_graphics_patch_verify/sheet.png`의 Part 1 타이틀/작전실 한글 로고 스타일과 충돌하는 새 깨짐은 보이지 않았다.
@@ -2106,7 +2110,7 @@
 ## 남은 큰 항목
 
 - [ ] Part 2 튜토리얼 잔여 대사 전체 검수 및 깨짐 수정.
-- [ ] Part 2 튜토리얼 전투 화면 명령, 메뉴, 도움말, 팝업 검수.
+- [x] Part 2 튜토리얼 전투 화면 명령, 메뉴, 도움말, 팝업 검수.
 - [ ] Part 2 본편 캠페인 대사 전체 플레이스루 검수.
 - [ ] Part 2 본편 전투 HUD, OBJ 라벨, 결과 화면, 상점, CO 정보 검수.
 - [ ] Part 2 컴패니언/작전실/오퍼레이션 선택 화면 잔여 그래픽 한글화.
