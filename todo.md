@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] 튜토리얼/전투/캠페인 level1 표시 폭 후보 추가 정리.
+  - `tools/build_korean_full.py`의 `ADDRESS_TEXT_OVERRIDES`에 current QA 기준 level1/visual-width 상위 후보 36개를 추가 고정했다. 대표적으로 `0xA26340`은 `포로 적병의 말`, `0xA21C98`은 `명령대로 배치했습니다`, `0xA1F9FD`는 `그리고 선생은 공중전`, `0xA1AFFC`는 `수리 소요일입니다`, `0xA24F30`은 `함께 싸울 생각입니다`, `0xA04D58`은 `아군 도시나 본부는`으로 줄였다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=97→63`, `visual-wider=137→104`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py tools/qa_placeholder_residuals.py`, `python3 tools/phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `9aa49772e39018f71551bc963a24e11272625f0342780b8f7b1d7b0af4bb2323`로 동일하다.
 - [x] 튜토리얼/전투/캠페인 표시 폭 상위 후보 추가 정리.
   - `qa_text_fit.py`의 visual-width 상위 후보 중 실제 대사/도움말/메뉴로 보이는 28개를 슬롯 안에서 더 짧은 화면용 문장으로 고정했다. 대표적으로 `0xD9E2E6`은 `더 자세히 알고 싶거나`, `0xD94EF2`는 `미안 지금은 여기로 이동해`, `0xDC2BC8`는 `승리 조건은 이기기 위한`, `0xDA3E38`는 `지형 방어력 4라 지키기엔`, `0xDF783B`는 `요령 알려 줄게.`로 줄였다.
   - `0x929820`, `0x9624B8`, `0x99AD5C`, `0x9D3600`의 `보낼 지도을 선택해 주세요!!` 계열 조사 오류를 `보낼 지도를 골라요!`로 고정했다. `0xD82058`, `0xA2C644`의 도움말 작성 안내와 `0xD8215C`, `0xA2C748`의 병종/생산 거점 필요 안내도 짧은 표현으로 정리했다.
