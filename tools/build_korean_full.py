@@ -633,7 +633,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD9103F: '생각하지',
     0xD9A55A: '전부 S랭크도 딸 수 있어',
     0xDC6CAA: '자... 그럼',
-    0xDEDA7E: '「2」 사정거리에',
+    0xDEDA7E: '「2」 사거리에',
     0xDFB754: '그게 있으면 「대전」 가능',
     0xA0C539: '예로 보병 시야는 2...',
     0xA0E906: '기존 전법이 안 통할지도...',
@@ -1837,7 +1837,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB839B4: '매턴 수입',
     0xB839E0: '날씨',
     0xB81B14: '장비 없음',
-    0xB82FAC: '지도 저장 중 전원 끄지 마',
+    0xB82FAC: '저장 중 전원 끄지 마',
     0x9B1FF9: '정말 항복할래',
     0xB83F74: '진짜라면 몰라도 복사본 따위에게',
     0xB84020: '뭐됐어',
@@ -2898,7 +2898,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD9FB40: '은',
     0xD9FD5A: '그럼 다음',
     0xD9FD65: '생존 상황',
-    0xD9FE36: '마지막은',
+    0xD9FE36: '끝으로',
     0xD9FE9B: '여기도 십자키 위아래로 내용이',
     0xD9FF54: '설명 듣고 싶어',
     0xD9FF3E: '다시 한 번',
@@ -3129,7 +3129,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDED3A1: '공격력',
     0xDED432: '기관총으로',
     0xDED445: '보병계 공격력',
-    0xDED49B: '보병 외 지상 유닛에',
+    0xDED49B: '보병 외 지상군에',
     0xDED4F2: '기관총으로',
     0xDED505: '헬기계 공격력',
     0xDED528: '에 대해선',
@@ -4496,6 +4496,22 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xDF3AFA: '모든게수수께끼',
     0xEE26CC: '지도 수신 중. 잠시 기다려',
     0xEE26F4: '지도 송신 중. 잠시 기다려',
+})
+
+ADDRESS_TEXT_OVERRIDES.update({
+    # 2026-06-07 visual-width cleanup after level1=0: compact visible
+    # campaign/help lines that still ran wider than the source text.
+    0xA0202F: '전투가 시작된다...',
+    0xA040E0: '그중 「항복」을 고르면,',
+    0xA132BA: '쉽게 이기게 두진 않네・・・',
+    0xA14980: '마을을 지나왔지만...',
+    0xA18A34: '숲속 전투네...',
+    0xA19C6F: '（어떡할래？',
+    0xA1B81C: '이기고 물러난다...?',
+    0xA20427: '혹시 일이 생기면・・・',
+    0xA2D8E0: '내 이름은 「하치」다! 잘 부탁한다!',
+    0xE0B846: '・・・괜찮아?',
+    0xE10ED6: '「스피드」는 빨리 승리하는지를',
 })
 
 POST_TEXT_RESTORE = {
@@ -11731,7 +11747,7 @@ def main():
         (0xD9154A, 0xD91558, '네 차례야', 'your turn terrain row'),
         (0xD9155C, 0xD91582, '아까 바주카병 공격은 조금', 'bazooka attack hurt lead row'),
         (0xD91585, 0xD91599, '아팠겠지', 'bazooka attack hurt tail row'),
-        (0xD9159E, 0xD915BA, '하지만 피해가 적었지', 'less damage infantry row'),
+        (0xD9159E, 0xD915BA, '피해는 적었지', 'less damage infantry row'),
         (0xD915BA, 0xD915E4, '', 'less damage duplicate token rows'),
         (0xD915EA, 0xD915F8, '왜일까', 'why terrain row'),
         (0xD915FD, 0xD9161F, '지형 효과는 공격받을 때도', 'terrain effect defense lead row'),
@@ -14009,7 +14025,7 @@ def main():
         (0xD9FDB7, 0xD9FDD7, '몇 부대 당했는지 보는 곳이야', 'survival defeated row'),
         (0xD9FDDC, 0xD9FE08, '유닛 종류가 4종류를 넘으면', 'survival many types row'),
         (0xD9FE0B, 0xD9FE31, '십자 버튼 위아래로 볼 수 있어', 'survival scroll row'),
-        (0xD9FE36, 0xD9FE3E, '마지막은', 'last status menu row'),
+        (0xD9FE36, 0xD9FE3E, '끝으로', 'last status menu row'),
         (0xD9FE3F, 0xD9FE49, '장군', 'co status label row'),
         (0xD9FE53, 0xD9FE71, '우리 쇼군의 능력이나', 'co status ability lead row'),
         (0xD9FE74, 0xD9FE96, '프로필을 볼 수 있어', 'co status profile row'),
