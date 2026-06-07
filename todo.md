@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] 튜토리얼/전투/캠페인 level1 표시 폭 잔여 0화.
+  - 남은 `qa_text_fit.py` level1 8건 중 직접 패치 tuple 7건과 긴 메뉴 결합 문자열 `0x804FD4`를 추가 정리했다. 대표적으로 `0xD98D25`는 `하나 더`, `0xA1FA8B`는 `언제든 출격 가능!`, `0xA077BC`는 `공격 범위 3~5,`, `0xA09379`는 `간접공격 유닛 중`, `0xDC5B72`는 `호위함도 잠수함도 없는 것`, `0x804FD4`는 공백을 줄인 메뉴 결합 문자열로 맞췄다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=8→0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=104`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `f7631460f8b1272da5662b482b59928b7de76568ac656afee9632ebf00fe7fc3`으로 동일하다.
 - [x] 튜토리얼/전투/캠페인 level1 표시 폭 후보 2차 정리.
   - 남은 import-slot level1 후보 중 직접 패치가 최종 문구를 덮는 행과 데이터성 문자열을 제외하고, 실제 대사/도움말로 보이는 55개를 `ADDRESS_TEXT_OVERRIDES`에 추가 고정했다. 대표적으로 `0xDFC08E`은 `직접 공격 유닛의 공격력은 약하지만,`, `0xA2C1E8`은 `지도 제작과 쇼군 색상 설정 가능`, `0xA2C238`은 `쇼군 색상 설정 가능`, `0xDF29AA`/`0xA34C2E`는 `저장 데이터 모두 삭제.`, `0xA0E9F2`는 `강 건너 적 부대를 확인했습니다.`, `0xDF56CF`/`0xA29B95`는 `에 인접하지 않으면,`으로 줄였다.
   - 이번 변경 후 `qa_text_fit.py` 기준 `level1=63→8`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=104`이다. 남은 level1은 직접 패치 span 또는 데이터/메뉴 결합 문자열 중심이라 별도 경로에서 다룬다.
