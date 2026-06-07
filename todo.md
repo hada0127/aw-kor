@@ -1826,6 +1826,8 @@
    - 재현 가능한 전역 감사용으로 `tools/qa_japanese_residuals.py`를 추가했다. 이 도구는 `game_wars_found_texts.csv`, `translation_for_import.csv`, `build_korean_full.py`의 address/source override와 deny 규칙을 함께 적용하고, 출력 ROM에서 원문 SJIS 바이트가 같은 주소에 그대로 남은 `residual` 후보와 원문은 사라졌지만 coverage 테이블에는 없는 `changed_uncovered` 후보를 분리한다. `translation_overlap`은 출력 ROM 바이트가 실제로 바뀐 경우에만 covered로 세며, `changed_hangul` 외에도 `changed_blank`/`changed_ascii`/`changed_symbol`을 따로 분류한다.
    - `python3 tools/qa_japanese_residuals.py --min-score 13` 기준 전역 covered=16937, uncovered=4326, same_original=2381, changed_hangul=1911, changed_blank=9, changed_ascii=1, changed_symbol=24, candidate=0이다. `ゝ…“〔｛｝］‥ジ゜。  異` 반복 같은 심볼표형 residual은 점수에서 낮춰 실제 문장 후보에서 제외한다.
    - 같은 도구의 `--range E18000:F00000 --min-score 13` 결과는 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0이다. 별도 리포트는 `temp/japanese_residuals_e18000_report.tsv`에 저장했다.
+   - 2026-06-07 current ROM으로 같은 범위를 재검증했다. `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --range E18000:F00000 --min-score 13 --out temp/japanese_residuals_e18000_report.tsv` 기준 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0으로 유지된다.
+   - 낮은 임계값 확인용 `--min-score 8 --include-changed --out temp/japanese_residuals_e18000_low_score_report.tsv`에서도 후보는 `0xE745B0` `ゥ・ゞ`, `0xEF9706`/`0xEFA644` `ァ`, `0xE8BE40` `劔...`, `0xEFA237` 심볼열의 5건뿐이다. 모두 `same_original`인 깨진 데이터/심볼표형 잔류라 현 시점에서 실제 대사 패치 대상은 없다.
 4. [ ] 전투 진입/진행 중 충돌 여부를 재검증하고, 충돌이 남아 있으면 먼저 수정한다.
 5. [ ] 이름 입력/초반 대사 회귀를 실제 화면 기준으로 계속 검증한다.
    - [x] `vwxy` 소문자 미리보기는 상태 파일 캡처 기준 정상 표시.
