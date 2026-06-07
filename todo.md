@@ -1832,12 +1832,14 @@
    - 2026-06-07 current ROM smoke 기준 전투 진입/진행 중 하네스 충돌은 재현되지 않았다. `temp/active_states/fresh_sav_continue_to_battle_a080.ss0`에서 A 40회 진행한 `temp/single_state_key_sequence/battle_entry_long40_20260607/sheet.png` 기준 작전 대사, 미션 도장 화면, 실제 전투 맵 첫 대사까지 정상 진입했다.
    - 전투 진행 smoke는 `temp/smoke_battle_crash_current_rom.py`로 `fresh_sav_continue_to_battle_a080`, `fresh_battle_after_wait_a40`, `fresh_attack_probe_A`, `fresh_enemy_after_transport_a40`, `p2_heavy_success_day2_control_after_extra_route`를 current ROM에 로드해 프레임 진행/입력/스크린샷/최종 savestate 저장까지 확인했다. 결과는 `temp/battle_crash_smoke_20260607/summary.tsv` 기준 5/5 OK이며, 전체 플레이스루 검증은 후속 Part 2/Part 1 본편 항목에서 계속 다룬다.
    - `python3 tools/phase6_basic_test.py`는 `full/final/title_test` 세 산출물 모두 통과했고, 세 SHA-256은 모두 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
-5. [ ] 이름 입력/초반 대사 회귀를 실제 화면 기준으로 계속 검증한다.
+5. [x] 이름 입력/초반 대사 회귀를 실제 화면 기준으로 계속 검증한다.
    - [x] `vwxy` 소문자 미리보기는 상태 파일 캡처 기준 정상 표시.
    - [x] `예/아니오` 선택지는 상태 파일 캡처 기준 정상 표시.
    - [x] 이름 입력 첫 프롬프트는 콜드부트 재진입 기준 `이름알려줘`로 정상 표시.
    - [x] Part 2 미션 시작 오버레이의 흰 픽셀 조각/가로선 깨짐은 `sel_064` 캡처 기준 제거.
-   - [ ] 대사 끝 하얀 픽셀 깨짐과 회색 글자 변화는 후속 대사 흐름에서 추가 검증.
+   - [x] 대사 끝 하얀 픽셀 깨짐과 회색 글자 변화는 후속 대사 흐름에서 추가 검증.
+     - 2026-06-07 current ROM `temp/single_state_key_sequence/battle_entry_long40_20260607/sheet.png` 기준 초반 작전 대사 40회 진행 중 흰 픽셀 조각/회색 글자 변색이 재현되지 않았고, A40 이후 미션 도장과 전투 맵 첫 대사까지 정상 표시됐다.
+     - 확대 확인용 `temp/dialog_artifact_check_20260607/battle_entry_40_A_4x.png`, `battle_dialog_04_A_4x.png`, `enemy_dialog_04_A_4x.png` 기준 대사창 하단과 문장 끝은 말풍선 포인터/선택 삼각형 외에 깨진 잔픽셀이 보이지 않는다. 이후 본편 전체 플레이스루에서 새 화면 문제가 보이면 Part 2/Part 1 본편 검수 항목에서 별도 추적한다.
    - [x] Part 2 저장 확인 compact 선택지는 fresh 진행 기준 문장 붙음 없이 `예아니`로 표시 확인.
 6. [ ] 튜토리얼을 통과한 뒤 Part 2 본편 캠페인/전투 화면 전체로 확장한다.
    - 2026-06-06 `SOURCE_TEXT_OVERRIDES`의 Part 2 공통 대사/유닛 설명/상태 UI 매핑에서 붙어 있던 한국어 표현을 정리했다. 예: `알고 있겠지?`, `점령한 땅에서`, `이런 고생은 안 했을 거야`, `그린어스에 아직 할 일이 있어`, `숫자는 이동력`, `저장 완료`, `중립 거점` 등.
