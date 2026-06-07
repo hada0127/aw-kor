@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] Part 2 컴패니언/작전실/오퍼레이션 선택 배경 그래픽 current ROM 재검증.
+  - `temp/active_states/p2_operation_menu.ss0`는 패치 전 BG3 VRAM을 들고 있어 `RED STAR`/`BLUEMOON`/`GREEN EARTH` 같은 영어 배경 라벨이 다시 보일 수 있음을 확인했다.
+  - 실제 출력 ROM의 작전실 배경 LZ77 블록 `0xBF66F0`을 직접 풀어 `temp/p2_operation_bg_trace_20260607/current_output_bf66f0_tiles_3x.png`로 렌더하면 `레드스타`, `블루문`, `그린어스`, `옐로`/`코멧` 한글 타일이 들어 있다.
+  - 같은 savestate 화면맵에 현재 ROM 타일셋을 적용한 재구성 이미지 `temp/p2_operation_bg_trace_20260607/current_operation_room_bg_korean_reconstruction_sheet.png`에서도 BG3 배경의 즉시 보이는 영어 국가명 잔여는 사라졌다. Part 2 모드 메뉴/트라이얼 계속/작전 선택 진입은 `temp/single_state_key_sequence/p2_operation_fresh_continue_probe_20260607/sheet.png`와 기존 성공 후 다음 작전 연결 시트로 대조했다.
 - [x] Part 2 튜토리얼 전투 메뉴/상태창/팝업 current ROM 재검증.
   - `temp/current_p2_tutorial_menu_sweep_individual/sheet_verified.png`와 `temp/current_p2_tutorial_extended_sweep/sheet.png` 기준 보병 선택, 점령 안내, 행동 메뉴, 경전차/바주카병/로켓포 메뉴, 보급, 수송차 탑재/하차, 공격범위/공략 힌트, 승리/실패 팝업 흐름에서 즉시 보이는 일본어/영어 잔여나 깨진 아이콘은 없었다.
   - 상태창/부대 목록은 `temp/current_capture_status_review/sheet.png`, `temp/current_capture_status_window_verify/sheet.png`, 확대본 `temp/p2_tutorial_status_list_recheck_20260607/`로 다시 확인했다. 작은 지형명은 `도시`/`평지` 한글 픽셀 글자이며, 현재 ROM 직접 검색 기준 `都市`/`平地` SJIS 잔여는 0건이다.
@@ -2113,7 +2117,7 @@
 - [x] Part 2 튜토리얼 전투 화면 명령, 메뉴, 도움말, 팝업 검수.
 - [ ] Part 2 본편 캠페인 대사 전체 플레이스루 검수.
 - [ ] Part 2 본편 전투 HUD, OBJ 라벨, 결과 화면, 상점, CO 정보 검수.
-- [ ] Part 2 컴패니언/작전실/오퍼레이션 선택 화면 잔여 그래픽 한글화.
+- [x] Part 2 컴패니언/작전실/오퍼레이션 선택 화면 잔여 그래픽 한글화.
 - [ ] Part 1 본편 캠페인 대사 전체 플레이스루 검수.
 - [ ] Part 1 본편 전투 HUD, OBJ 라벨, 결과 화면, 작전실, 상점, CO 정보 검수.
 - [x] 1+2 선택 화면, 1편 본편, 2편 본편의 타이틀/시작 텍스트 스타일 재검증.
