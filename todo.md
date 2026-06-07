@@ -1558,9 +1558,9 @@
   - 첫 전투에서 보병 선택(`Down -> A`) 후 튜토리얼 대사를 36회 진행하면 행동 메뉴가 처음 열리고, `대기`가 한글로 표시되는 것을 확인했다. 상태 파일은 `temp/active_states/fresh_battle_infantry_step_a36.ss0`.
   - 확인 화면은 `temp/verified_sheets/fresh_battle_action_wait_menu_confirm.png`, 확대 크롭은 `temp/verified_sheets/fresh_battle_action_wait_menu_confirm_top_menu_8x.png`.
   - 이 검증은 메뉴-open savestate가 아니라 현재 ROM으로 부팅해 메뉴가 처음 생성된 fresh-run 경로다. 따라서 `대기` 소스 타일 패치는 실제 화면까지 반영된 것으로 본다.
-  - 아직 `공격` 항목은 같은 fresh-run에서 실제 공격 가능 상황을 만들어 별도 확인해야 한다.
+  - 첫 전투 한정 `공격` 항목은 같은 fresh-run에서 실제 공격 가능 상황을 만들어 별도 확인해야 한다.
 
-- [ ] Part 2 튜토리얼 fresh-run 행동 메뉴 `공격` 표시 재확보.
+- [x] Part 2 튜토리얼 fresh-run 행동 메뉴 `공격` 표시 재확보.
   - 기존 기록에는 첫 전투 DAY 5 보병의 `공격 / 대기` 메뉴 검증이 있지만, 현재 워크트리에는 `temp/p2_day5_attack_command_probe/sheet.png`, `temp/p2_day5_attack_execute_probe/sheet_all.png`가 남아 있지 않아 현 상태 증거로 재사용하지 않는다.
   - fresh-run 첫 전투에서 `대기` 이후 두 번째 보병 선택 루트는 `temp/active_states/fresh_after_wait_second_move_range.ss0`로 확보했다. `dx=+1, dy=-1` 목적지에서는 `대기` 메뉴가 열리고 확정 후 `temp/active_states/fresh_second_dx1_dy-1_after_wait.ss0`까지 진행된다.
   - 같은 상태에서 작전 메뉴 `종료`를 선택하면 `종료는 할 일이 없을 때 턴을 넘기는 명령이야` 계열 설명이 반복되고, A 입력만으로는 바로 턴 전환되지 않았다. 관련 상태는 `temp/active_states/fresh_endturn_dialog_a20.ss0`, `temp/active_states/fresh_endturn_dialog_a60.ss0`.
@@ -1576,6 +1576,7 @@
   - `fresh_attack_after_b_01/02/04/08`, `fresh_attack_probe_A`에서 A/B/방향키 조합 75개를 추가 스윕한 `temp/verified_sheets/fresh_attack_menu_from_attack_states_20260604/sheet.png`도 같은 결론이다. 타깃 화살표와 예측 팝업으로 넘어가거나 작전 메뉴가 열리며, `공격` 행동 메뉴 항목 자체는 포착되지 않았다.
   - current ROM 검증용으로 중전차 작전의 메뉴 비개방 상태 `temp/active_states/p2_heavy_success_day2_control_after_extra_route.ss0`에서 커서를 전차로 옮긴 뒤 `A, A`로 행동 메뉴를 새로 생성했다. 확대 캡처 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA_menu_left_6x.png`에서 `공격`/`대기`가 모두 한글로 표시되는 것을 확인했다.
   - 위 검증은 메뉴가 이미 열린 savestate를 재사용한 것이 아니라 current ROM에서 행동 메뉴를 새로 연 화면이다. 첫 전투 fresh 경로에서 같은 `공격` 화면을 다시 잡는 작업은 선택적 보강으로 남기되, 행동 메뉴 소스 타일의 실제 화면 반영은 확인된 것으로 본다.
+  - 2026-06-07 재확인에서 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA.png`와 `after_AA_menu_left_6x.png`를 다시 확인했다. 메뉴 비개방 상태에서 생성된 실제 행동 메뉴에 `공격`/`대기`가 보이므로, VRAM 캐시가 아닌 current ROM 행동 메뉴 라벨 검증 항목은 완료로 전환한다.
 
 ## 현재 우선순위
 
