@@ -28,6 +28,11 @@
 
 ## 최근 완료
 
+- [x] 잔여 visual-width 마지막 실제 문장 조각 추가 축약.
+  - `visual-wider=31` 잔여 후보 중 실제 문장/라벨로 확인된 항목만 추가로 줄였다. `0xA2125C`는 다음 행 `없어요.`와 이어지도록 `알 필요는`으로 줄였고, `나무 글자 섬→키노지섬`, `하지만, 유닛을 생산하는→하지만 유닛을 생산하는`, `유닛의 공격력이 낮다.→유닛 공격력이 낮다.`, `그럴지도!→그럴지도`, `줄어들어,→줄어들어` 같은 exact mapping을 추가했다.
+  - 직접 패치 짧은 조각은 `지금`, `하지만`, `피해 적었지`, `그래`, `다만`처럼 trailing space/구두점만 줄여 폭 비교 후보에서 제외했다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `visual-wider=31→17`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `level5=0`, `overflow=0`, `no_ko=0`, `compact-shortened fallback=0`이다. 남은 후보는 데이터성 문자열, 고정폭 날씨 라벨, 원문 포인터/빈 원문 조각, `고양이` 같은 자연어상 더 줄이기 애매한 라벨 위주다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec`로 동일하다.
 - [x] 잔여 visual-width 반복 UI/짧은 대사 후보 2차 축약.
   - `visual-wider=74` 잔여 후보 중 폭 차이 1짜리 반복 UI/대사 문구를 `TEXT_OVERRIDES` exact mapping으로 줄였다. 대표적으로 `통신 준비 중이야!!!→통신 준비 중!!!`, `정말 항복할 거야?→정말 항복할래?`, `저장하시겠습니까?→저장할까요?`, `덮어쓰시겠습니까?→덮어쓸까요?`, `그러니까,→그러니,`, `다행이야, 다행이야.→다행이야, 다행.`으로 정리했다.
   - 단독 프로필/메뉴 라벨은 `0xDF2DEF` `새벽형`, 직접 패치 `0xA2CA50` `이름입력`으로 줄였다.
