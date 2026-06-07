@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] 1+2 선택 화면, Part 1, Part 2 타이틀/시작 텍스트 스타일 재검증.
+  - 현재 ROM으로 `fresh_title_for_menu_probe`, `fresh_game_select`, `fresh_gbwa2_main_menu`, `fresh_gbwa2_prologue_start`를 다시 로드해 `temp/title_start_style_recheck_20260607/sheet.png`를 생성했다. 공통 타이틀의 큰 한글 로고와 `시작하기`, 1+2 선택 화면의 `게임 선택`, Part 2 메뉴의 `캠페인`/`시작`/`처음`, 프롤로그 시작 텍스트가 화면 안에 들어가며 색상/배치가 기존 패치 의도와 일치했다.
+  - Part 1 쪽은 `fresh_game_select`에서 실제 입력으로 진입하는 타이밍 시트를 `temp/part1_title_timing_recheck_20260607_up/sheet.png`에 남겼다. 선택 화면에서 Part 1 진입 뒤 세계지도/VS 인트로로 정상 진행했고, 기존 `temp/part1_graphics_patch_verify/sheet.png`의 Part 1 타이틀/작전실 한글 로고 스타일과 충돌하는 새 깨짐은 보이지 않았다.
+  - 로고 안의 아주 작은 원본 영문 부제와 저작권 표기는 기존 `build_title_hangul.py` 주석처럼 별도 BG/원본 로고 보존 영역으로 남아 있으며, 이번 타이틀/시작 텍스트 스타일 재검증 실패로 보지는 않는다.
 - [x] Part 2 성공 결과 오버레이 current ROM 재검증.
   - `p2_city_defense_victory_follow_a04` 저장 상태는 패치 전 OBJ VRAM을 들고 있어 `CONGRATULATIONS!!`가 보였지만, 출력 ROM의 `0xBFB45C` LZ77 결과 타이틀 블록을 직접 렌더하면 `축하합니다!` / `작전 성공`으로 한글 타일이 들어 있음을 확인했다.
   - 성공 직전 후보 상태 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/success_condition_force_probe2_20260605/base_plus72.ss0`를 최신 ROM으로 로드해 A 진행 시트를 새로 만들었다. `temp/single_state_key_sequence/current_air_success_result_recheck_20260607/sheet.png` 기준 성공 대사, 결과 오버레이, 저장 확인, 다음 작전 선택/브리핑까지 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없었다.
@@ -2108,7 +2112,7 @@
 - [ ] Part 2 컴패니언/작전실/오퍼레이션 선택 화면 잔여 그래픽 한글화.
 - [ ] Part 1 본편 캠페인 대사 전체 플레이스루 검수.
 - [ ] Part 1 본편 전투 HUD, OBJ 라벨, 결과 화면, 작전실, 상점, CO 정보 검수.
-- [ ] 1+2 선택 화면, 1편 본편, 2편 본편의 타이틀/시작 텍스트 스타일 재검증.
+- [x] 1+2 선택 화면, 1편 본편, 2편 본편의 타이틀/시작 텍스트 스타일 재검증.
 - [x] final/title_test/full 산출물 간 한글화 차이 제거.
 - [ ] 배포 전 BPS/IPS 재생성, manifest 갱신, round-trip 검증.
 
