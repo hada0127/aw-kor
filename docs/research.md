@@ -10,6 +10,17 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
 - `codex_research.md`: 기술 도구 및 개발 방법론
 - `gemini_research.md`: 종합 가이드 및 체크리스트
 
+## [2026-06-07] Part 1 full unit info `SPEC` 압축 OBJ 원본
+
+- fresh-run full 정보창의 상단 `SPEC`는 OAM entry 27, x=4 y=0, shape=horizontal size=1,
+  OBJ tile 537, palette 6으로 표시된다.
+- 화면 VRAM의 OBJ tile 537~540(`SPEC` 32x8)은 current ROM raw에는 직접 존재하지 않고, LZ77 블록
+  `0xBC7C00` 해제 결과 offset `0x0`/tile 0~3과 일치한다. 블록 크기는 해제 2624B, 원본 occupied
+  1366B이며 패치 후 decoder consumed는 1309B다. 빌드는 남은 57B를 0으로 채워 원래 영역 안에 유지한다.
+- compact/full 정보창의 `WEAPON` BG 라벨은 별도 LZ77 5개 변형
+  `0x4310D4`, `0x92F0F4`, `0x967D7C`, `0x9A0620`, `0x9D8EC4`의 decompressed offset `0x220`
+  48x8 payload다.
+
 ---
 
 ## 2. Game Boy Advance 플랫폼 이해

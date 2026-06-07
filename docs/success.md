@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-06-07 — Part 1 튜토리얼 full 정보창 `SPEC`/`WEAPON` fresh-run 해소
+
+**결과**: Part 1 튜토리얼 전투 full 정보창에서 즉시 보이는 영어 `SPEC`/`WEAPON` 잔여를 제거했다.
+콜드부트 실제 입력 라우트 증거는 `temp/fresh_part1_fullinfo_cold_route_after_spec_patch_20260607/sheet.png`
+및 최종 프레임 `42_R.png`다. 상단 라벨은 `정보`, 무기 구역은 `무기`로 표시된다.
+
+**작동한 라우트**: 콜드부트 → 이름 `A` 확정 → Part 1 튜토리얼 전투 기준점(`A x120`) → 첫 보병
+`LEFTx4 DOWN A`, `RIGHTx3 A`, 대기 → 두 번째 보병 `LEFT UP UP A`, `RIGHTx3 A`, 대기 → `B -> R`.
+
+**구현**: `tools/build_korean_full.py`의 `patch_part1_full_info_spec_obj_label()`이 LZ77
+`0xBC7C00` decompressed tile 0~3을 `정보`로 교체한다. 기존 Part 1 info BG `WEAPON` 5개 LZ77
+변형은 `patch_part1_info_screen_bg_labels()`의 `무기` 렌더로 유지된다.
+
+**검증**: `py_compile`, `qa_text_fit.py`(`overflow=0`, `level1~5=0`), `qa_japanese_residuals.py`
+`--min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder 0, `phase6_basic_test.py`
+full/final/title_test, `prepare_patch_distribution.py` round-trip, `git diff --check` 통과.
+세 ROM SHA-256은 `7cbebd389e7a5cd19510c9e452e0ac4aa8609acaf16c4463e557340db62cad0b`.
+
 ## 1. 번역 데이터 (완료)
 - **원본 추출**: ROM 텍스트 → `data/game_wars_found_texts.csv` (28,347행, 추출 노이즈 포함)
 - **번역본**: `data/translation_for_import.csv` (address,japanese,korean,length — 한글 18,262행)

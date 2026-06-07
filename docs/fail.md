@@ -4,6 +4,15 @@
 
 ---
 
+## [2026-06-07] Part 1 정보창 savestate 기반 재캡처는 라벨 패치 검증에 부적합
+
+- **시도**: `fresh_battle_after_wait_select.ss0` 및 `temp/fresh_part1_info_route_base_20260607/a140.ss0`
+  기반으로 `B -> R` 재캡처를 수행해 `WEAPON`/`SPEC` 제거를 확인하려 했다.
+- **결과**: ROM raw/LZ77 payload가 패치된 뒤에도 일부 저장상태는 이전 `WEAPON`/`SPEC` OBJ/BG tile을
+  VRAM에 이미 캐시한 채라, 새 ROM 로드만으로 화면이 갱신되지 않았다.
+- **결론**: 정보창 그래픽 라벨 검증은 콜드부트 실제 입력 라우트 또는 ROM LZ77 해제 payload 비교로 해야 한다.
+  stale savestate 화면만 근거로 패치 실패를 판단하지 않는다.
+
 ## 카테고리 A — 매핑 도출 (글리프↔SJIS↔슬롯 자동 추출)
 
 ### A1. SJIS / 고주온 / JIS 마스터 테이블 ROM 검색

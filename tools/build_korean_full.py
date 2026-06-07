@@ -17,7 +17,7 @@ build_korean_poc.stage_b 의 메커니즘(FONT_BASE repoint + 한글 글리프 �
 
 재현: python tools/build_korean_full.py [--out output/game_wars_korean_full.gba]
 """
-import argparse, csv, json, os, struct, sys, collections
+import argparse, collections, csv, hashlib, json, os, struct, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_poc as P
@@ -5302,46 +5302,56 @@ def patch_part2_status_header_labels(rom):
     return patched
 
 
-def patch_part2_info_screen_obj_labels(rom):
-    """Patch raw OBJ labels on the Part 2 unit information screen."""
+def render_32x8_obj_label(font, text, shadow=False):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+    from bdf import glyph_grid
+
+    pixels = [[0] * 32 for _ in range(8)]
+    for y in range(1, 8):
+        for x in range(24):
+            pixels[y][x] = 5
+
+    cursor = 2
+    for ch in text:
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px = cursor + col + xo
+                py = 1 + row
+                if shadow and 0 <= px + 1 < 24 and 0 <= py + 1 < 8:
+                    pixels[py + 1][px + 1] = 3
+                if 0 <= px < 24 and 0 <= py < 8:
+                    pixels[py][px] = 1
+        cursor += 8
+
+    out = bytearray()
+    for tile_idx in range(4):
+        tile = bytearray(32)
+        tx = tile_idx * 8
+        for row in range(8):
+            for col in range(8):
+                value = pixels[row][tx + col] & 0x0F
+                bi = row * 4 + col // 2
+                if col & 1:
+                    tile[bi] |= value << 4
+                else:
+                    tile[bi] |= value
+        out.extend(tile)
+    return bytes(out)
+
+
+def patch_part2_info_screen_obj_labels(rom):
+    """Patch raw OBJ labels on the Part 2 unit/terrain information screens."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
     def encode_32x8_label(off, text, shadow=False):
-        pixels = [[0] * 32 for _ in range(8)]
-        for y in range(1, 8):
-            for x in range(24):
-                pixels[y][x] = 5
-
-        cursor = 2
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = 1 + row
-                    if shadow and 0 <= px + 1 < 24 and 0 <= py + 1 < 8:
-                        pixels[py + 1][px + 1] = 3
-                    if 0 <= px < 24 and 0 <= py < 8:
-                        pixels[py][px] = 1
-            cursor += 8
-
-        for tile_idx in range(4):
-            tile = bytearray(32)
-            tx = tile_idx * 8
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[row][tx + col] & 0x0F
-                    bi = row * 4 + col // 2
-                    if col & 1:
-                        tile[bi] |= value << 4
-                    else:
-                        tile[bi] |= value
-            rom[off + tile_idx * 32:off + tile_idx * 32 + 32] = tile
+        payload = render_32x8_obj_label(font, text, shadow)
+        rom[off:off + len(payload)] = payload
 
     # Unit information page top label ("SPEC").
     encode_32x8_label(0xBE945C, '정보')
@@ -5352,6 +5362,37 @@ def patch_part2_info_screen_obj_labels(rom):
     encode_32x8_label(0xBE9BDC, '설명')
     rom[0xBE9C5C:0xBE9C5C + 64] = bytes(64)
     return 4
+
+
+def patch_part1_full_info_spec_obj_label(rom):
+    """Replace the Part 1 full unit-information SPEC OBJ label."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    off = 0xBC7C00
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 1 full-info SPEC LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    buf = bytearray(data)
+    payload = render_32x8_obj_label(font, '정보')
+    if len(buf) < len(payload):
+        raise AssertionError(f'Part 1 full-info SPEC LZ77 block too small at 0x{off:X}')
+    expected_hash = '11c8965b23359f6bdaf18bfcc88a1d269852d29626530ed62cdfee06ea4256da'
+    actual_hash = hashlib.sha256(buf[:len(payload)]).hexdigest()
+    if actual_hash != expected_hash:
+        raise AssertionError(
+            f'unexpected Part 1 full-info SPEC payload at 0x{off:X}: {actual_hash}'
+        )
+    buf[:len(payload)] = payload
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 1 full-info SPEC LZ77 block grew: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return 1
 
 
 def patch_part2_damage_forecast_label_obj(rom):
@@ -8879,6 +8920,7 @@ def main():
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_info_screen_obj_labels'] = patch_part2_info_screen_obj_labels(rom)
+    st['part1_full_info_spec_obj_label'] = patch_part1_full_info_spec_obj_label(rom)
     st['part2_damage_forecast_label'] = patch_part2_damage_forecast_label_obj(rom)
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
@@ -17077,7 +17119,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
