@@ -874,6 +874,10 @@
 - [ ] Part 2 점령/상태창 설명 튜토리얼 루트 탐색.
   - `0xA03CC4`의 `커서창을 봐` 오독 표현은 `상태창을 봐`로 교체했지만, 첫 전투 적 전멸 루트에서는 해당 설명이 표시되지 않음.
   - 다음 진행에서 점령 명령이 필요한 튜토리얼/미션 루트를 찾아 실제 화면 기준으로 `보병이 / 점령 시작했어 / 상태창을 봐` 표시를 확인한다.
+  - 2026-06-07 재점검에서 코드와 문서가 어긋난 것을 확인했다. `tools/build_korean_full.py`의 실제 `ADDRESS_TEXT_OVERRIDES`/직접 패치에는 아직 `0xA03BB8` `커서창`, `0xA03CC4` `커서창을 봐`, `0xA04805` `아래 커서창을 봐`, `0xA0491C` `지형 효과는 커서창 말고`가 남아 있어 모두 `상태창` 계열 표현으로 고쳤다.
+  - 출력 ROM 역디코드 기준 `0xA03BB8` `상태창`, `0xA03CC4` `상태창을 봐`, `0xA04805` `아래 상태창을 봐`, `0xA0491C` `지형 효과는 상태창 말고`가 들어갔다. 예약코드 검색 기준 `커서창`은 full/final/title_test 세 산출물 모두 0건, `상태창`은 각 5건이다.
+  - current ROM으로 `temp/active_states/p2_heavy_day4_after_capture_strategy_probe.ss0`를 로드해 점령 실행 직후 상태창을 새로 캡처했다. `temp/current_capture_status_window_verify/sheet.png` 기준 점령 명령 실행과 큰 상태창의 `보병`/`도시` 표시는 한글로 보인다. 다만 `상태창을 봐` 대사 자체는 이 상태에서 바로 재노출되지 않아, 실제 튜토리얼 진행 루트 확보는 계속 남긴다.
+  - 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=18956`, `level1=97`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=137`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
 - [x] Part 2 첫 전투 실제 공격 명령과 전투 화면 검증.
   - DAY 4 이동/대기 후 적 턴 전투가 발생하고, 전투 화면의 숫자/상태 표시가 깨지지 않음을 `temp/p2_day4_after_move_endturn_probe/sheet.png` 기준으로 확인.
   - DAY 5 아군 보병에서 `공격 / 대기` 행동 메뉴가 한글로 표시되고, `공격` 선택 후 피해 예측과 전투 화면으로 진입하는 것을 확인.
