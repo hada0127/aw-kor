@@ -28,6 +28,9 @@
 
 ## 최근 완료
 
+- [x] Part 2 성공 결과 오버레이 current ROM 재검증.
+  - `p2_city_defense_victory_follow_a04` 저장 상태는 패치 전 OBJ VRAM을 들고 있어 `CONGRATULATIONS!!`가 보였지만, 출력 ROM의 `0xBFB45C` LZ77 결과 타이틀 블록을 직접 렌더하면 `축하합니다!` / `작전 성공`으로 한글 타일이 들어 있음을 확인했다.
+  - 성공 직전 후보 상태 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/success_condition_force_probe2_20260605/base_plus72.ss0`를 최신 ROM으로 로드해 A 진행 시트를 새로 만들었다. `temp/single_state_key_sequence/current_air_success_result_recheck_20260607/sheet.png` 기준 성공 대사, 결과 오버레이, 저장 확인, 다음 작전 선택/브리핑까지 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없었다.
 - [x] Part 1/2 코스모랜드 진입 대사 span 잔여 정리.
   - Part 1 대표 sweep에서 캐시된 `fresh_sav_continue_to_battle_a060` 화면이 `진정해` 뒤의 `료.` 조각과 `적은,` 뒤의 `코스모랜드...` 조각을 어색하게 붙여 보이는 후보를 재확인했다. 실제 출력 ROM의 `0xA0E494`~`0xA0E4CB` 직접 패치 span을 `진정해, 료.` / `적은 코스모랜드엔 없어.`로 합쳐 중간 control/잔여 조각이 끼지 않도록 했다.
   - 저장 상태 첫 프레임은 이미 렌더된 화면 캐시라 새 문구를 다시 그리지는 못했지만, 출력 ROM 역디코드 기준 해당 span은 의도한 문구로 들어갔다. `fresh_sav_continue_to_battle_a080`/`a020`/`a040`/`a060` 분기 A 진행 시트도 새로 캡처해 주변 전투 진입 흐름이 계속 진행됨을 확인했다.
