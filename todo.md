@@ -28,6 +28,11 @@
 
 ## 최근 완료
 
+- [x] 최신 preview BPS/IPS 패치와 manifest 재생성 및 round-trip 검증.
+  - `tools/make_bps.py`에 BPS apply/CRC 검증을 추가하고, `tools/prepare_patch_distribution.py`를 새로 만들어 patch-only 배포 산출물을 재생성하도록 했다. 이 스크립트는 `full/final/title_test` SHA-256 동일성, BPS round-trip, IPS round-trip을 모두 검증한다.
+  - 최신 preview 산출물은 `dist/game_wars_korean_full_preview_2026-06-07.bps`와 `dist/game_wars_korean_full_preview_2026-06-07.ips`다. 원본 ROM SHA-256은 `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c`, 대상 ROM SHA-256은 `a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec`다.
+  - 파일에서 직접 읽은 BPS/IPS를 원본에 적용해 둘 다 대상 ROM SHA-256과 일치함을 확인했다. BPS SHA-256은 `1e981f0e1fb156309493ad8c4843cbe663dca1247c29f79fc60f9dd594911872`, IPS SHA-256은 `1c002964d9e7c1c4d9f301a3fa0390d3267623481aa93c2335625abe41de1370`다.
+  - `dist/manifest.json`, `dist/manifest_preview.json`, `dist/README.md`, `dist/RELEASE_NOTES.md`, `dist/RELEASE_NOTES_preview.md`를 ROM 배포가 아닌 patch-only preview 기준으로 갱신했다. 최종 캠페인/플레이스루 sign-off가 남아 있으므로 하단의 배포 전 최종 BPS/IPS 항목은 계속 미완료로 둔다.
 - [x] 잔여 visual-width 마지막 실제 문장 조각 추가 축약.
   - `visual-wider=31` 잔여 후보 중 실제 문장/라벨로 확인된 항목만 추가로 줄였다. `0xA2125C`는 다음 행 `없어요.`와 이어지도록 `알 필요는`으로 줄였고, `나무 글자 섬→키노지섬`, `하지만, 유닛을 생산하는→하지만 유닛을 생산하는`, `유닛의 공격력이 낮다.→유닛 공격력이 낮다.`, `그럴지도!→그럴지도`, `줄어들어,→줄어들어` 같은 exact mapping을 추가했다.
   - 직접 패치 짧은 조각은 `지금`, `하지만`, `피해 적었지`, `그래`, `다만`처럼 trailing space/구두점만 줄여 폭 비교 후보에서 제외했다.
