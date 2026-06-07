@@ -9801,6 +9801,7 @@ def main():
 
     fixed_text_patch(0xD8F384, 14, '보병')
     fixed_text_patch(0xD8F798, 14, '대기')
+    fixed_text_patch(0x5A3768, 6, '미설정')
 
     raw_replacements = [
         (b'\x32\x95\xE0\x95\xBA\x30\x82\xE0', b'\x32' + encode_text('보병', syl_to_code, unmapped) + b'\x30' + encode_text('도', syl_to_code, unmapped)),

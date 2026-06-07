@@ -10,6 +10,16 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
 - `codex_research.md`: 기술 도구 및 개발 방법론
 - `gemini_research.md`: 종합 가이드 및 체크리스트
 
+## [2026-06-07] Low-address UI `未設定` 문자열
+
+- `0x005A3768`의 `未設定`은 `SAFE_MIN_ADDR=0x800000` 아래라 일반 CSV import pass에서
+  자동 덮어쓰지 않는다. `data/game_wars_found_texts.csv`에는 6바이트/3글자 행으로 잡히지만,
+  `translation_comprehensive.csv`에는 placeholder `미상`으로 남아 있었다.
+- 주변 `0x5A375F`에는 이미 `코멘트` low-address 직접 패치가 있고, `0x5A3768` 역시 같은 UI 테이블
+  문자열로 판단된다. `미설정`은 한글 3음절=예약코드 6바이트라 원 슬롯에 정확히 들어간다.
+- low-address 범위 `0x5A3000:0x5A4000` 재스캔 기준 `未設定`은 제거됐고, 남은 후보
+  `旧克署繊`, `灯助沫`, `劒屆撼`, `褂鉅鳰`은 주변 패턴상 깨진 데이터/추출 노이즈로 유지한다.
+
 ## [2026-06-07] Part 1 full unit info `SPEC` 압축 OBJ 원본
 
 - fresh-run full 정보창의 상단 `SPEC`는 OAM entry 27, x=4 y=0, shape=horizontal size=1,

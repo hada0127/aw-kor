@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-06-07 — Low-address UI `未設定` 잔여 제거
+
+**결과**: 기본 import pass가 건너뛰는 `0x800000` 미만 UI 테이블의 `未設定` 잔여를 `미설정`으로
+교체했다. 출력 ROM에서 `未設定`, `サクテキの設定`, `テンキの設定` SJIS 원문 검색은 모두 0건이다.
+
+**구현**: `tools/build_korean_full.py`의 low-address 직접 패치 경로에서 `0x5A3768` 6바이트 슬롯을
+`미설정` 예약코드로 덮는다. 같은 테이블의 `0x5A375F` `코멘트` 패치와 인접한 UI 문자열이다.
+
+**검증**: `py_compile`, `qa_text_fit.py`(`overflow=0`, `level1~5=0`), `qa_japanese_residuals.py`
+`--min-score 13` candidate 0, low-address range `0x5A3000:0x5A4000` 재스캔에서 `未設定` 제거,
+`qa_placeholder_residuals.py` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test,
+`prepare_patch_distribution.py` round-trip, `git diff --check` 통과. 세 ROM SHA-256은
+`c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb`.
+
 ## 2026-06-07 — Part 1 튜토리얼 full 정보창 `SPEC`/`WEAPON` fresh-run 해소
 
 **결과**: Part 1 튜토리얼 전투 full 정보창에서 즉시 보이는 영어 `SPEC`/`WEAPON` 잔여를 제거했다.
