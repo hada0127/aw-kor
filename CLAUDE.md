@@ -108,8 +108,8 @@ aw-kor/
 │
 ├── temp/                  # ★임시 작업 공간 (git-ignored) — 디버그 ROM/스크린샷/덤프
 │
-├── dist/                  # 배포본
-│   ├── game_wars_korean_final.gba, manifest.json, RELEASE_NOTES.md, README.md
+├── dist/                  # 배포본 (패치/manifest/릴리스 문서; ROM은 output/에서 재생성)
+│   ├── *.bps, *.ips, manifest*.json, RELEASE_NOTES*.md, README.md
 │
 ├── docs/                  # 문서 (상세 아래)
 │   └── reports/           # 진행/세션 리포트 (이전 루트의 상태 MD들)
@@ -143,7 +143,7 @@ aw-kor/
 | `temp/` | **임시 작업 공간** — 디버그용 ROM 빌드, 테스트 .gba, 작업 중 스크린샷, 메모리 덤프(`*.bin`), 실험용 PNG, 일회성 분석 산출물 | git-ignored. `.gitkeep`만 트래킹. 자유롭게 쓰고 지움. |
 | `output/` | **영구 빌드 산출물** — 최종/중간 한글 ROM, 세이브 파일 | git-ignored. **사용자 자산이므로 Claude가 임의로 비우지 않는다.** |
 | `docs/screenshots/` | **영구 증거 스크린샷** — `SUCCESS_*`, 문서에 인용되는 그림 | git-tracked. 날짜·버전 태그 권장 (예: `SUCCESS_v25_…_2026-05-23.png`). |
-| `dist/` | **배포본** — 릴리스 ROM/패치, manifest, 릴리스 노트 | git-tracked. |
+| `dist/` | **배포본** — 릴리스 패치, manifest, 릴리스 노트 | git-tracked. ROM은 재생성 가능한 산출물이라 `output/`에 둔다. |
 | `archive/` | **구버전 보관** — 삭제 대신 보관할 옛 로그/스크래치 | git-tracked. |
 
 ### Claude 행동 규칙

@@ -26,6 +26,7 @@ Thumbs.db
 *.o
 *.a
 *.out.claude/
+.claude/scheduled_tasks.lock
 
 # Backup files
 *.bak
