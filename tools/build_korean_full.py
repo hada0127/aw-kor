@@ -4915,13 +4915,19 @@ def patch_part2_ui_kanji_glyphs(rom, orig):
 
     The table at 0xD82740..0xD83100 is consumed by compact UI renderers that do
     not safely accept Korean reserved SJIS codes. These substitutions leave the
-    original table bytes untouched and change only the kanji font tiles that the
-    renderer already looks up.
+    original table bytes untouched and change only the kanji/font tiles that the
+    renderer already looks up. Part 1 uses the same compact dictionaries, so the
+    fullwidth-space padding glyph is blanked here as well.
     """
     from render_galmuri_8x16 import render_char
 
     slots = _kanji_table_slots(orig)
     patched = 0
+    if _sjis_code('　') in slots:
+        top_idx, bot_idx = slots[_sjis_code('　')]
+        rom[P.FONT_FILE + top_idx * 32:P.FONT_FILE + top_idx * 32 + 32] = bytes(32)
+        rom[P.FONT_FILE + bot_idx * 32:P.FONT_FILE + bot_idx * 32 + 32] = bytes(32)
+        patched += 1
     for jp, ko in PART2_UI_KANJI_GLYPH_SUBS.items():
         sjis = _sjis_code(jp)
         if sjis not in slots:
@@ -5944,6 +5950,74 @@ def patch_part1_battle_day_banner(rom):
     if len(comp) > consumed:
         raise AssertionError(f'Part 1 battle day banner grew: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return patched
+
+
+def patch_part1_info_screen_bg_labels(rom):
+    """Replace the Part 1 unit-information WEAPON BG label variants."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    label_pos = 0x220
+    width, height = 48, 8
+
+    def render_label(text):
+        pixels = [[0] * width for _ in range(height)]
+        glyphs = []
+        text_width = 0
+        max_height = 0
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            glyphs.append((grid, w, h, xo))
+            text_width += w + 1
+            max_height = max(max_height, h)
+        text_width -= 1
+        cursor = (width - text_width) // 2
+        y0 = (height - max_height) // 2
+
+        for grid, w, h, xo in glyphs:
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo
+                    py = y0 + row
+                    if 0 <= px + 1 < width and 0 <= py + 1 < height and pixels[py + 1][px + 1] == 0:
+                        pixels[py + 1][px + 1] = 3
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = 1
+            cursor += w + 1
+
+        out = bytearray()
+        for tx in range(width // 8):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = pixels[row][tx * 8 + col_pair * 2] & 0x0F
+                    hi = pixels[row][tx * 8 + col_pair * 2 + 1] & 0x0F
+                    out.append(lo | (hi << 4))
+        return bytes(out)
+
+    payload = render_label('무기')
+    patched = 0
+    for off in (0x4310D4, 0x92F0F4, 0x967D7C, 0x9A0620, 0x9D8EC4):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid Part 1 info-screen BG LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        buf = bytearray(data)
+        if label_pos + len(payload) > len(buf):
+            raise AssertionError(f'Part 1 info-screen label block out of range at 0x{off:X}')
+        buf[label_pos:label_pos + len(payload)] = payload
+        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(
+                f'Part 1 info-screen BG block grew at 0x{off:X}: {len(comp)} > {consumed}'
+            )
+        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+        patched += 1
     return patched
 
 
@@ -8811,6 +8885,7 @@ def main():
     st['part1_intro_map_bitmap_labels'] = patch_part1_intro_map_bitmap_labels(rom)
     st['part1_operation_room_bg_labels'] = patch_part1_operation_room_bg_labels(rom)
     st['part1_battle_day_banner'] = patch_part1_battle_day_banner(rom)
+    st['part1_info_screen_bg_labels'] = patch_part1_info_screen_bg_labels(rom)
     st['part1_check_label'] = patch_part1_check_label_obj(rom)
     st['part1_name_ui_labels'] = patch_part1_name_ui_labels(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
@@ -17002,7 +17077,7 @@ def main():
             w.writerow(r)
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
