@@ -28,6 +28,11 @@
 
 ## 최근 완료
 
+- [x] 잔여 visual-width 반복 UI/짧은 대사 후보 2차 축약.
+  - `visual-wider=74` 잔여 후보 중 폭 차이 1짜리 반복 UI/대사 문구를 `TEXT_OVERRIDES` exact mapping으로 줄였다. 대표적으로 `통신 준비 중이야!!!→통신 준비 중!!!`, `정말 항복할 거야?→정말 항복할래?`, `저장하시겠습니까?→저장할까요?`, `덮어쓰시겠습니까?→덮어쓸까요?`, `그러니까,→그러니,`, `다행이야, 다행이야.→다행이야, 다행.`으로 정리했다.
+  - 단독 프로필/메뉴 라벨은 `0xDF2DEF` `새벽형`, 직접 패치 `0xA2CA50` `이름입력`으로 줄였다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `visual-wider=74→31`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `level5=0`, `overflow=0`, `no_ko=0`, `compact-shortened fallback=0`이다. 남은 후보는 데이터성 문자열, 고정폭 날씨 라벨, 원문 포인터 조각, 폭 차이 1 이하의 일부 문장 위주다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `d421888c15968448a8933c491cfa7e72882ad119d1e52a7bc98943a2cdb835a1`로 동일하다.
 - [x] 잔여 visual-width 실제 문장 후보 추가 축약.
   - 직접 패치 span 기준 QA 보정 후 남은 `visual-wider=89` 후보 중 데이터성/고정폭 라벨을 제외하고, 실제 대사/도움말/저장 경고로 보이는 15개 행을 화면용 짧은 문장으로 고정했다. 대표적으로 `0xA040E0`은 `그중 「항복」을 고르면,`, `0xA20427`은 `혹시 일이 생기면・・・`, `0xB82FAC`은 `저장 중 전원 끄지 마`, `0xDED49B`은 `보병 외 지상군에`, `0xE10ED6`은 `「스피드」는 빨리 승리하는지를`로 줄였다.
   - 직접 패치 행 `0xD9159E`는 `피해는 적었지`, `0xD9FE36`은 `끝으로`로 줄이고 주소 override도 같은 문구로 맞췄다.
