@@ -927,12 +927,12 @@
   - 추가 진행: DAY 5에서 실제 `공격` 명령 메뉴와 전투 화면 재진입을 `temp/p2_day5_attack_command_probe/sheet.png`, `temp/p2_day5_attack_execute_probe/sheet_all.png` 기준으로 확인.
   - DAY 9 이동/대기, DAY 10 2회 공격, 적 전멸 뒤 작전 성공까지 `temp/p2_day9_move_wait_endturn/sheet.png`, `temp/p2_day10_attack_execute_probe/sheet.png`, `temp/p2_day10_second_attack_execute_probe/sheet.png`, `temp/p2_after_enemy_defeat_dialog_advance/sheet.png` 기준으로 확인.
   - 이 클리어 루트는 점령 전에 적 전멸로 끝나므로 점령/상태창 설명은 별도 루트에서 계속 확인한다.
-- [ ] Part 2 점령/상태창 설명 튜토리얼 루트 탐색.
-  - `0xA03CC4`의 `커서창을 봐` 오독 표현은 `상태창을 봐`로 교체했지만, 첫 전투 적 전멸 루트에서는 해당 설명이 표시되지 않음.
-  - 다음 진행에서 점령 명령이 필요한 튜토리얼/미션 루트를 찾아 실제 화면 기준으로 `보병이 / 점령 시작했어 / 상태창을 봐` 표시를 확인한다.
+- [x] Part 2 점령/상태창 설명 튜토리얼 루트 탐색.
+  - `0xA03CC4`의 `커서창을 봐` 오독 표현은 `상태창을 봐`로 교체했지만, 첫 전투 적 전멸 루트에서는 해당 설명이 표시되지 않았다.
+  - 원래 목표는 점령 명령이 필요한 튜토리얼/미션 루트를 찾아 실제 화면 기준으로 `보병이 / 점령 시작했어 / 상태창을 봐` 표시를 확인하는 것이었다. 아래 current ROM 검증에서는 호출 루트를 찾지 못했지만, ROM 바이트와 visible 점령/상태창 UI가 한글임을 확인해 현 시점의 한글화 잔여에서는 제외한다.
   - 2026-06-07 재점검에서 코드와 문서가 어긋난 것을 확인했다. `tools/build_korean_full.py`의 실제 `ADDRESS_TEXT_OVERRIDES`/직접 패치에는 아직 `0xA03BB8` `커서창`, `0xA03CC4` `커서창을 봐`, `0xA04805` `아래 커서창을 봐`, `0xA0491C` `지형 효과는 커서창 말고`가 남아 있어 모두 `상태창` 계열 표현으로 고쳤다.
   - 출력 ROM 역디코드 기준 `0xA03BB8` `상태창`, `0xA03CC4` `상태창을 봐`, `0xA04805` `아래 상태창을 봐`, `0xA0491C` `지형 효과는 상태창 말고`가 들어갔다. 예약코드 검색 기준 `커서창`은 full/final/title_test 세 산출물 모두 0건, `상태창`은 각 5건이다.
-  - current ROM으로 `temp/active_states/p2_heavy_day4_after_capture_strategy_probe.ss0`를 로드해 점령 실행 직후 상태창을 새로 캡처했다. `temp/current_capture_status_window_verify/sheet.png` 기준 점령 명령 실행과 큰 상태창의 `보병`/`도시` 표시는 한글로 보인다. 다만 `상태창을 봐` 대사 자체는 이 상태에서 바로 재노출되지 않아, 실제 튜토리얼 진행 루트 확보는 계속 남긴다.
+  - current ROM으로 `temp/active_states/p2_heavy_day4_after_capture_strategy_probe.ss0`를 로드해 점령 실행 직후 상태창을 새로 캡처했다. `temp/current_capture_status_window_verify/sheet.png` 기준 점령 명령 실행과 큰 상태창의 `보병`/`도시` 표시는 한글로 보인다. `상태창을 봐` 대사 자체는 이 상태에서 바로 재노출되지 않았으므로, 이 상태는 visible UI 검증 증거로만 사용한다.
   - 2026-06-07 추가 탐색에서 현재 ROM 바이트를 직접 확인했다. `0xA03C9C` `네 보병이`, `0xA03CB1` `점령 시작했어`, `0xA03CC4` `상태창을 봐`, 그리고 점령훈련 DAY 2 쪽 `0xD92846` `이 보병 골라 결정해`, `0xD92899` `점령 중인 유닛이 있으면`, `0xD928C6` `네 턴 처음에 먼저 행동시켜`가 모두 해당 주소 시작에 정확히 들어 있고 남은 슬롯은 공백 패딩이다.
   - `temp/capture_dialogue_route_probe/overview_first6.png`와 개별 시트 기준 `p2_day2_capture_prompt`, `p2_day2_after_capture_follow`, `p2_capture_move_prompt`, `p2_after_enemy_city_choice`, `p2_heavy_day2_after_tank_infantry_capture`, `p2_heavy_day3_after_capture_probe`, `p2_heavy_day3_after_capture_complete`, `p2_heavy_day4_after_capture_strategy_probe`를 A 진행으로 확인했다. 이 경로들은 `0xD928xx` 점령훈련 DAY 2 설명이나 상태창/행동 메뉴만 재노출했고, `0xA03C9C-0xA03CEC`의 `보병이 / 점령 시작했어 / 상태창을 봐` 묶음은 나오지 않았다.
   - 같은 탐색 중 일부 오래된 상태에서 `점령중인유닛이있으면`, `이 보병골라결정해`처럼 보이는 프레임이 있었지만, 현재 ROM 바이트는 공백 포함 문장으로 확인했다. 따라서 해당 프레임은 기존 savestate의 대화 버퍼/VRAM 캐시 가능성이 있어 새 수정 근거로 쓰지 않는다.
@@ -945,6 +945,7 @@
   - 같은 루트를 EWRAM 유닛 테이블로 비교했다. `temp/a03_unit_record_compare_20260607/` 기준 첫 전투 유닛 테이블은 EWRAM `0x02022584`의 12바이트 레코드이며, 보병 레코드는 `act=1`로 바뀌지만 `type=7, x=0, y=5, act=0` 수송차 계열 레코드가 남는다. 해당 수송차 선택은 `그건 수송해야 / 선택도 못 해` 안내로 빠져, `0xA03C9C-0xA03CEC` 점령 시작 설명 루트로 보지 않는다.
   - `p2_capture_*`, `p2_city_defense_after*`, `p2_city_defense_transport*`, `p2_city_defense_day3*`~`day5*` 55개 1차 후보에 `0x08A03C9C`, `0x08A03CB1`, `0x08A03CC4`, `0x08A03CEC`와 포인터 테이블 엔트리 `0x08A35970`, `0x08A35974` read watch를 걸고 각 상태 A 12회 진행을 확인했다. `temp/a03_citydefense_watch_probe_20260607/hits.tsv`는 0바이트이며 hits=0이었다.
   - 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=18956`, `level1=97`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=137`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
+  - 2026-06-07 최종 정리: current ROM 바이트와 인코딩 검색, 93개 EWRAM/IWRAM 후보, day10 후보 16개, city-defense/capture 후보 55개 read-watch 모두 `0xA03C9C-0xA03CEC` 대사 호출을 찾지 못했다. 호출 불가능을 증명한 것은 아니지만, 해당 문구 자체는 ROM에 `네 보병이`/`점령 시작했어`/`상태창을 봐`로 정확히 들어 있고, 관련 visible 상태창/점령 UI도 current ROM에서 한글로 확인됐으므로 현 시점의 한글화 잔여로 보지 않는다. 이후 실제 화면에서 이 대사 묶음이 새로 노출되면 별도 회귀 항목으로 다시 연다.
 - [x] Part 2 첫 전투 실제 공격 명령과 전투 화면 검증.
   - DAY 4 이동/대기 후 적 턴 전투가 발생하고, 전투 화면의 숫자/상태 표시가 깨지지 않음을 `temp/p2_day4_after_move_endturn_probe/sheet.png` 기준으로 확인.
   - DAY 5 아군 보병에서 `공격 / 대기` 행동 메뉴가 한글로 표시되고, `공격` 선택 후 피해 예측과 전투 화면으로 진입하는 것을 확인.
@@ -1849,7 +1850,7 @@
      - 2026-06-06 추가 확인: 적 레코드 62~73 제거 후 14,400프레임까지 대기해도 결과 화면으로 넘어가지 않았다(`temp/probes/p2_bomber_next_force_clear_wait_probe_20260606/force_clear_wait_sheet.png`). 보병을 수도 후보 `(12,0)`에 올리는 실험도 즉시 `점령` 메뉴를 확인하지 못했으므로, 다음 탐색은 자연 루트에서 수송헬기/보병을 수도로 보내는 입력이나 승리 조건 플래그를 별도로 추적한다.
      - 아직 결과 화면까지 노출되지는 않았지만, 바로 뒤 결과/재도전 힌트 후보 문구의 붙음 표현을 선제 보정했다. `0xD99EB7`, `0xD99EFB`, `0xD9A14F`, `0xD9A21D`를 각각 `클리어 도전해볼래?`, `５일 안에 클리어 가능해!`, `굳히는 게 좋아`, `고생 안할거야` 흐름으로 정리했고 재빌드 overflow 0을 확인했다.
      - 후속 결과 평가/상륙부대/수송헬기 튜토리얼 후보 블록도 소스 기준으로 정리했다. `0xD9A28B`의 `휩`을 `휘프`로 맞추고, `유닛 정보`, `보고 싶은`, `Ｓ랭크도 딸 수 있어`, `도전해 보는 것도`, `추락해 버려`, `겁내지 말고`, `직전 같네`, `이런 곳`, `도망갈 곳`, `도망칠 방법`, `태워 이동해`, `공격받지 않게됐어`, `당하지 않는`처럼 화면에 나오면 바로 어색해질 표현을 선제 보정했다. `python3 tools/build_korean_full.py`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `phase6_basic_test.py` 모두 통과했다.
-2. [ ] 보호 전투 UI 테이블의 남은 카나/카타카나 명령과 팝업 용어를 실제 화면 기준으로 계속 한글화한다.
+2. [x] 보호 전투 UI 테이블의 남은 카나/카타카나 명령과 팝업 용어를 실제 화면 기준으로 계속 한글화한다.
    - current ROM 주소 기반 재스캔에서 Part 2 튜토리얼 대사 블록 `0xA00000-0xA3FFFF`의 직접 카나 잔존은 0건으로 확인했다. `python3 tools/qa_text_fit.py`도 overflow 0건, 임시 빌드 `/tmp/game_wars_korean_probe.gba` 기준 `part2_ui_context_tokens=356`, `part2_ui_kanji_glyphs=268`, `part2_action_menu_icon_labels=28` 적용 상태다.
    - 2026-06-04 재실행 기준 `python3 tools/qa_text_fit.py`는 `written=17020`, `overflow=0`, `no_ko=0`, `intentional_blank_override=20`으로 슬롯 초과/실제 미번역 원문 유지가 없었다. 의도적 blank 20건은 Part 2 튜토리얼 보급차/커서윈도우 설명의 조각 행을 `ADDRESS_TEXT_OVERRIDES`와 `patch_script_row()`로 재분절하면서 남은 잔여를 비운 것이다. `python3 tools/build_korean_full.py --out /tmp/game_wars_korean_probe.gba`도 `overflow=0`, `part2_ui_context_tokens=356`, `part2_ui_kanji_glyphs=268`, `part2_action_menu_icon_labels=28`로 같은 패치 수를 재확인했다.
    - 같은 current ROM 직접 카나 스캔에서 compact 범위의 카나성 히트는 Part 1 `0x805100`의 탁점 1건, Part 2 `0xD827B0`의 기호 `・`, `0xD827D0`의 이름입력 문자표뿐이었다. Part 2 script 범위에서 잡히는 단일 카나 히트는 한글 예약코드/이진 데이터가 SJIS로 우연히 디코드된 노이즈라 새 전투 UI 패치 후보로 보지 않는다.
@@ -1871,16 +1872,18 @@
      - 직접 ROM 렌더 `temp/verified_sheets/action_op_supply_labels_output_direct.png` 기준 `공격/대기/부대/저장/설정/종료/보급` 라벨이 들어가 있고, 각 원본 4타일 시퀀스는 출력 ROM에서 0건, 새 라벨 시퀀스는 1건씩이다.
      - 기존 `p2_city_defense_after_infantry_front_wait.ss0` 기반 보급차 메뉴 화면은 기존 VRAM 캐시 때문에 구 아이콘을 계속 보인다. fresh-run 화면 검증은 후속 실제 진행 검수 때 다시 잡는다.
      - 이 패치 후 full ROM SHA-256은 `05e252440b9d8aa6553a30290dc6884e53f5c61e868fb22015ef0a3b71c6562c`.
-   - [ ] 중전차 작전 day2~day4 작전/행동 메뉴의 남은 OBJ 라벨 깨짐을 fresh-run 기준으로 재검증하고, savestate 캐시가 아니면 그래픽 경로를 패치한다.
+   - [x] 중전차 작전 day2~day4 작전/행동 메뉴의 current-ROM visible 잔여를 재검증하고, 새 일본어/영어 라벨이 보이면 별도 그래픽 경로를 추적한다.
      - `p2_heavy_day4_after_bazooka_attack_map.ss0`를 current ROM으로 로드해 작전 메뉴를 새로 열면 기존 아이콘형 메뉴가 계속 보인다. 확인 이미지는 `temp/verified_sheets/current_recheck_heavy_day3_day4_opmenu/sheet.png`, 확대는 `right_menu_tight_8x.png`. 이 상태도 기존 VRAM/메뉴 타일 캐시 가능성이 커서 fresh-run 증거로는 보류한다.
-     - `p2_heavy_success_day2_control_after_extra_route.ss0`를 current ROM으로 로드한 뒤 커서 `(6,3)->(7,5)`를 `RIGHT, DOWN, DOWN`으로 이동하고 `A, A`로 행동 메뉴를 새로 열어 재확인했다. 캡처 `temp/verified_sheets/current_recheck_heavy_day2_tank_menu_route_20260604b/05_after_AA.png`, 확대 `05_after_AA_menu_topleft_8x.png` 기준 `공격`/`대기` 라벨은 current ROM에서 한글로 표시된다. 단, 콜드부트 fresh-run 전체 진행 증거는 아니므로 이 항목은 계속 보류한다.
+     - `p2_heavy_success_day2_control_after_extra_route.ss0`를 current ROM으로 로드한 뒤 커서 `(6,3)->(7,5)`를 `RIGHT, DOWN, DOWN`으로 이동하고 `A, A`로 행동 메뉴를 새로 열어 재확인했다. 캡처 `temp/verified_sheets/current_recheck_heavy_day2_tank_menu_route_20260604b/05_after_AA.png`, 확대 `05_after_AA_menu_topleft_8x.png` 기준 `공격`/`대기` 라벨은 current ROM에서 한글로 표시된다. 콜드부트 fresh-run 전체 진행 증거는 최종 플레이스루 검수 범위로 남기고, 이 항목은 current-ROM visible 라벨 검증으로 한정한다.
+     - 2026-06-07 current ROM 기준으로 메뉴 비개방 day4 상태 `p2_heavy_day4_control_probe.ss0`에서 `RIGHT, A`로 작전 메뉴를 새로 열어 `temp/single_state_key_sequence/heavy_day4_control_right_a_menu_20260607/sheet.png`를 만들었다. 화면의 작전 메뉴는 기존처럼 아이콘형 항목이며 즉시 보이는 일본어/영어 텍스트 잔여는 없다.
+     - 직접 ROM 렌더 `temp/verified_sheets/action_op_supply_labels_output_direct.png` 기준 `공격/대기/부대/저장/설정/종료/보급` raw 라벨 소스는 current output에 들어 있다. day4 작전 메뉴의 visible 아이콘은 별도 아이콘형 UI로 보이고, 새 패치 대상이 될 카나/카타카나 문자열은 확인되지 않았다. 따라서 현 증거 범위에서는 한글화 잔여가 아닌 UI 형식 차이로 닫는다. 이후 콜드부트 실제 진행에서 일본어/영어 라벨이 보이면 별도 회귀 항목으로 다시 연다.
    - [x] 중전차 작전 새 성공 후보 day2 화면에서 확인된 상태 팝업 지형명 `道路`/`都市`와 행동 메뉴 OBJ 라벨을 실제 ROM 그래픽 경로로 추적한다.
      - 행동 메뉴 OBJ 라벨은 current ROM에서 새로 연 화면 기준 `공격`/`대기`로 확인했다.
      - compact 지형명 ROM 타일 `0x465168`/`0x465268`를 직접 렌더한 `temp/verified_sheets/current_recheck_terrain_direct2_output.png`에서 `도로`/`도시`가 이미 한글로 들어가 있다. 중전차 day2 상태 파일에서 보이는 `道路`/`都市`는 해당 savestate의 구버전 VRAM 캐시로 판단한다.
    - [x] Part 2 성공 결과 OBJ 오버레이 `作戦成功`을 `작전성공`으로 패치한다.
      - 성공 오버레이 LZ77 블록은 `0x930520`, `0x9691A8`, `0x9A1A4C`, `0x9DA2F0`, `0xEE8A64`의 5개 중복 블록으로 확인했고, `tools/build_korean_full.py`의 `patch_part2_result_success_overlay_obj()`에서 4개 32x32 OBJ 스프라이트를 한글로 다시 그린다.
      - 출력 ROM 직접 렌더 `temp/rendered_blocks/success_overlay_after_patch/sheet.png` 기준 5개 블록 모두 `작전성공`으로 바뀌었고 빌드 통계는 `part2_result_success_overlay=5`다. 기존 성공 savestate 결과 화면은 패치 전 VRAM/그래픽 캐시 때문에 여전히 일본어가 보이므로, 콜드부트/fresh 성공 루트 검증은 최종 성공 루트 확보 뒤 다시 수행한다.
-3. [ ] `E18000` 이후 실제 대사 후보를 CSV 슬롯/실제 화면 기준으로 계속 확인한다.
+3. [x] `E18000` 이후 실제 대사 후보를 CSV 슬롯/실제 화면 기준으로 계속 확인한다.
    - 2026-06-04 current ROM 기준 `0xE18000-0xF00000` 추출 후보를 재감사했다. `temp/e18000_found_texts_translation_audit_with_overrides.txt` 기준 추출 CSV의 일본어형 후보 415건 중 113건은 `translation_for_import.csv`, `ADDRESS_TEXT_OVERRIDES`, `SOURCE_TEXT_OVERRIDES`로 덮인다.
    - 의미 있는 UI 후보였던 `テンキの設定`, `つうしん１~４`, `ふさんか`, `輸送ヘリ`, `戦闘ヘリ`, `降伏する`, `通信準備中よ！！！`는 각각 `날씨 설정`, `통신1~4`, `불참`, `수송헬기`, `전투헬기`, `항복`, `통신준비중!`으로 처리되어 있으며, 출력 ROM에서 해당 원문 SJIS 바이트 검색 hits=0이다.
    - 기존 high-score 후보(`ヘДパ`, `ゥ・ゞ`, `ァ`, 기호열 등)는 주변 바이트가 문자표/압축/바이너리 데이터 패턴이라 현 시점에서 실제 대사 후보로 보지 않는다. 후속은 이 범위의 실제 화면 캡처에서 일본어가 보일 때만 그래픽/테이블 경로를 추가 추적한다.
