@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "f46fb421",
-    "sha1": "cbbe67e7d5441fe37b4a37dd63162bc4a94349f3",
-    "sha256": "a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec"
+    "crc32": "283cfc7b",
+    "sha1": "7420fc693619de029ff6d00974df4b19bf04febb",
+    "sha256": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec",
-    "game_wars_korean_final.gba": "a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec",
-    "game_wars_korean_title_test.gba": "a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec"
+    "game_wars_korean_full.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa",
+    "game_wars_korean_final.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa",
+    "game_wars_korean_title_test.gba": "64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_preview_2026-06-07.bps",
-    "size": 687052,
+    "size": 687050,
     "crc32": "2144df1c",
-    "sha1": "defdf296dcffa3304f58d5000234c4f715e6942f",
-    "sha256": "1e981f0e1fb156309493ad8c4843cbe663dca1247c29f79fc60f9dd594911872",
+    "sha1": "2fea57db21b0d6a3519625aadb1a1639063decfe",
+    "sha256": "ef30473c34369d5b5f2a41014a33734d94c5954fea2fcdec58af6dfafe46302a",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_preview_2026-06-07.ips",
-    "size": 802957,
-    "crc32": "52e4dbd2",
-    "sha1": "647a74f017a0b66ad6cf950df4d98fb623919dfb",
-    "sha256": "1c002964d9e7c1c4d9f301a3fa0390d3267623481aa93c2335625abe41de1370",
+    "size": 802945,
+    "crc32": "c56ddd40",
+    "sha1": "5f44b7aa3e888b59b66a6ce3e3bdd447a27570dd",
+    "sha256": "6c6e7f6e164f4998fd6089983fa4460b1bec5d5259d02e70d50e15333501d3dc",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
