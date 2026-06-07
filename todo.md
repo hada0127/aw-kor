@@ -28,6 +28,10 @@
 
 ## 최근 완료
 
+- [x] 직접 패치 span 기준 visual-width QA 오탐 축소.
+  - `tools/qa_text_fit.py`가 직접 패치 tuple의 byte budget은 실제 patch span으로 보면서도 visual-width 비교 원문은 시작 주소의 첫 `found_texts` 조각만 쓰고 있어, 여러 원문 조각을 한 번에 덮는 직접 패치 행이 과도하게 `visual-wider`로 잡혔다.
+  - 직접 패치 행은 patch span 안의 원문 조각들을 이어 붙인 폭과 비교하도록 `load_found_rows()`/`source_text_for_span()`을 추가했다. 이에 따라 최종 ROM 바이트 변경 없이 `qa_text_fit.py` 기준 `visual-wider=104→89`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`이다.
+  - `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 계속 `f7631460f8b1272da5662b482b59928b7de76568ac656afee9632ebf00fe7fc3`으로 동일하다.
 - [x] 튜토리얼/전투/캠페인 level1 표시 폭 잔여 0화.
   - 남은 `qa_text_fit.py` level1 8건 중 직접 패치 tuple 7건과 긴 메뉴 결합 문자열 `0x804FD4`를 추가 정리했다. 대표적으로 `0xD98D25`는 `하나 더`, `0xA1FA8B`는 `언제든 출격 가능!`, `0xA077BC`는 `공격 범위 3~5,`, `0xA09379`는 `간접공격 유닛 중`, `0xDC5B72`는 `호위함도 잠수함도 없는 것`, `0x804FD4`는 공백을 줄인 메뉴 결합 문자열로 맞췄다.
   - 이번 변경 후 `qa_text_fit.py` 기준 `level1=8→0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=104`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.

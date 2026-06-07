@@ -42,6 +42,42 @@ def load_found():
     return slots, texts
 
 
+def load_found_rows():
+    rows = []
+    with open(FOUND, encoding='utf-8', errors='ignore') as f:
+        for r in csv.DictReader(f):
+            try:
+                a = int((r.get('address') or '').strip(), 16)
+                length = int(r.get('length') or 0)
+            except (ValueError, TypeError):
+                continue
+            try:
+                raw = bytes.fromhex(r.get('hex_bytes') or '')
+            except ValueError:
+                raw = b''
+            rows.append((a, a + length, (r.get('text') or '').strip(), raw))
+    return sorted(rows)
+
+
+def source_text_for_span(start, end, found_rows, fallback):
+    parts = []
+    for a, row_end, text, raw in found_rows:
+        if row_end <= start:
+            continue
+        if a >= end:
+            break
+        overlap_start = max(start, a) - a
+        overlap_end = min(end, row_end) - a
+        if overlap_start <= 0 and overlap_end >= row_end - a and text:
+            parts.append(text)
+            continue
+        chunk = raw[overlap_start:overlap_end] if raw else b''
+        piece = chunk.decode('shift_jis', errors='ignore').strip() if chunk else ''
+        if piece:
+            parts.append(piece)
+    return ''.join(parts) if parts else fallback
+
+
 def load_direct_patch_texts():
     """Extract literal direct script and fixed-width label patches."""
     path = os.path.join(BASE, 'tools', 'build_korean_full.py')
@@ -148,6 +184,7 @@ def vwidth(s):
 
 def main():
     slots, found_texts = load_found()
+    found_rows = load_found_rows()
     direct_patches = load_direct_patch_texts()
     import json
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
@@ -207,7 +244,7 @@ def main():
             if a in direct_patches:
                 end, ko = direct_patches[a]
                 slot_override = max(slots[a], end - a)
-                ja = found_texts.get(a, ja)
+                ja = source_text_for_span(a, end, found_rows, found_texts.get(a, ja))
             check_text(a, ko, ja, slot_override=slot_override)
 
     for a, ko in sorted(ADDRESS_TEXT_OVERRIDES.items()):
@@ -219,7 +256,10 @@ def main():
         if a in direct_patches:
             end, ko = direct_patches[a]
             slot_override = max(slots[a], end - a)
-        check_text(a, ko, found_texts.get(a, ''), slot_override=slot_override)
+            ja = source_text_for_span(a, end, found_rows, found_texts.get(a, ''))
+        else:
+            ja = found_texts.get(a, '')
+        check_text(a, ko, ja, slot_override=slot_override)
 
     with open(FOUND, newline='', encoding='utf-8', errors='ignore') as f:
         for row in csv.DictReader(f):
@@ -239,7 +279,10 @@ def main():
             if a in direct_patches:
                 end, ko = direct_patches[a]
                 slot_override = max(slot, end - a)
-            check_text(a, ko, row.get('text') or '', slot_override=slot_override)
+                ja = source_text_for_span(a, end, found_rows, row.get('text') or '')
+            else:
+                ja = row.get('text') or ''
+            check_text(a, ko, ja, slot_override=slot_override)
 
     if os.path.exists(COMPREHENSIVE_TRANS):
         with open(COMPREHENSIVE_TRANS, newline='', encoding='utf-8', errors='replace') as f:
@@ -266,7 +309,10 @@ def main():
                 if a in direct_patches:
                     end, ko = direct_patches[a]
                     slot_override = max(slots[a], end - a)
-                check_text(a, ko, found_texts.get(a, ''), slot_override=slot_override)
+                    ja = source_text_for_span(a, end, found_rows, found_texts.get(a, ''))
+                else:
+                    ja = found_texts.get(a, '')
+                check_text(a, ko, ja, slot_override=slot_override)
 
     for a, (end, ko) in sorted(direct_patches.items()):
         if a in written_addrs or a in seen_import_addrs:
@@ -275,7 +321,8 @@ def main():
             continue
         if in_deny(a, a + slots[a]):
             continue
-        check_text(a, ko, found_texts.get(a, ''), slot_override=max(slots[a], end - a))
+        ja = source_text_for_span(a, end, found_rows, found_texts.get(a, ''))
+        check_text(a, ko, ja, slot_override=max(slots[a], end - a))
 
     print(f'written(한글 인코딩): {written}')
     print('fit levels: ' + ', '.join(f'level{k}={levels[k]}' for k in sorted(levels)))
