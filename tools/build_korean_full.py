@@ -8835,36 +8835,63 @@ def patch_name_honorific_fragments(rom, syl_to_code, unmapped):
     return patched
 
 
+# 슬롯이 부족할 때만 마지막에 제거하는 ASCII 문장부호(부호 보존 후보가 모두 실패한 경우).
+PUNCT_DROP = ',.!?:;()[]{}"\''
+
+
+def _fit_variants(base):
+    """공백/축약 단계별 후보 6종(전각공백/축약, ascii공백/축약, 공백제거/축약)."""
+    out = [base.replace(' ', '　')]
+    sh = out[0]
+    for src, dst in SHORTEN:
+        sh = sh.replace(src, dst)
+    out.append(sh)
+    out.append(base)
+    sa = base
+    for src, dst in SHORTEN:
+        sa = sa.replace(src, dst)
+    out.append(sa)
+    compact = base.replace(' ', '')
+    out.append(compact)
+    cs = compact
+    for src, dst in SHORTEN:
+        cs = cs.replace(src, dst)
+    out.append(cs)
+    return out
+
+
 def encode_fit(ko, slot, syl_to_code, unmapped):
     """슬롯에 맞도록 단계적 압축 인코딩.
 
-    맞으면 (bytes, level), 안 맞으면 None을 돌려 원문을 유지한다.
-    level 0=정규화 1=축약규칙.
+    맞으면 (bytes, level), 안 맞으면 (None, 99)로 원문 유지.
+    level 0~5 = 문장부호 보존(공백/축약 단계). 6~11 = 부호 제거 폴백(슬롯 부족 시에만).
+    Phase B: 기존 무조건 strip을 제거하고 전각 부호를 렌더 검증된 ASCII 등가로 정규화한다.
+    렌더러가 ASCII '. ! ? , : ; ( ) [ ] " ''를 출력함은 출하본(welcome/Part2 대사/0xDCBC12)으로 입증됨.
+    부호가 슬롯을 넘기면 기존 동작과 동일하게 제거하므로 overflow/일본어 폴백은 늘지 않는다.
     """
     ko = normalize_korean_terms(ko)
     ko = ko.replace('지도을', '지도를').replace('지도은', '지도는')
+    # 전각/특수 문장부호 → 렌더 검증된 ASCII 등가(글리프 불확실 문자 의존 제거).
     normalized = ''.join(HALFWIDTH.get(c, c) for c in ko)
-    normalized = ''.join(c for c in normalized if c not in ',.!?:;()[]{}"\'‘’“”・…。、「」『』▼')
-    spaced = normalized.replace(' ', '　')
-    cand = [spaced]
-    shortened = spaced
-    for src, dst in SHORTEN:
-        shortened = shortened.replace(src, dst)
-    cand.append(shortened)
-    # Fallback: keep Korean coverage when full-width spaces do not fit.
-    # ASCII spaces are ignored by the Part 1 renderer, but this is still better
-    # than dropping many more translated lines back to Japanese.
-    cand.append(normalized)
-    shortened_ascii = normalized
-    for src, dst in SHORTEN:
-        shortened_ascii = shortened_ascii.replace(src, dst)
-    cand.append(shortened_ascii)
-    compact = normalized.replace(' ', '')
-    cand.append(compact)
-    compact_shortened = compact
-    for src, dst in SHORTEN:
-        compact_shortened = compact_shortened.replace(src, dst)
-    cand.append(compact_shortened)
+    # 중점(・ U+30FB / · U+00B7): 단독 제거는 단어 결합 오류(좋아함·침략→좋아함침략, 토이·박스→토이박스)
+    # 를 일으키고, ·는 FALLBACK으로 SJIS 中点 재출하됨(글리프 불확실). 연속은 ellipsis, 단독은 공백으로.
+    for run in ('・・・', '···', '・・', '··', '・·', '·・'):
+        normalized = normalized.replace(run, '...')
+    normalized = normalized.replace('・', ' ').replace('·', ' ')
+    # 전각/스마트 부호 → 렌더 검증된 ASCII 등가
+    normalized = (normalized
+                  .replace('…', '...')
+                  .replace('。', '.').replace('、', ',')
+                  .replace('‘', "'").replace('’', "'").replace('“', '"').replace('”', '"')
+                  .replace('「', '"').replace('」', '"').replace('『', '"').replace('』', '"'))
+    # v1 보수(codex/agy 리뷰): 렌더 증거 약/무한 부호([] {} ; )와 제어문자(▼) 제거.
+    # 보존: . ! ? , ( ) : " '  (그중 ( ) : " '는 Phase E 픽셀 검증 전 provisional).
+    normalized = ''.join(c for c in normalized if c not in '[]{};▼')
+
+    cand = _fit_variants(normalized)                       # level 0~5: 부호 보존
+    stripped = ''.join(c for c in normalized if c not in PUNCT_DROP)
+    if stripped != normalized:
+        cand += _fit_variants(stripped)                    # level 6~11: 부호 제거 폴백
     for level, s in enumerate(cand):
         if any('가' <= ch <= '힣' and ch not in syl_to_code for ch in s):
             continue
@@ -8872,7 +8899,7 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
         if len(enc) <= slot:
             return enc, level
 
-    return None, 5
+    return None, 99
 
 
 def write_slot_text(rom, a, slot, enc, ko, level, kind):
@@ -17658,6 +17685,7 @@ def main():
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
+    print(f'  punct_strip_fallback(level>=6): {sum(st[f"level{i}"] for i in range(6, 12))}')
     print(f'→ {args.out} (16MB, chk recomputed), overflow 리포트 {args.report}')
     for peer in synced_outputs:
         print(f'→ synced {peer}')

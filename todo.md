@@ -45,18 +45,18 @@
 - [x] 부호소실 정량화(qa_integrity_map): import 부호보유 11,401행 전부 소실, 15,947자(`.`7522 `!`3539 `,`3222 `?`1093…) — **Phase B before 지표**.
 - 참고: welcome 대사는 `INTRO_DIRECT_TEXT`로 전각 `。`/ASCII `. ` 수동 보존 중(렌더 확인됨) → Phase B 부호복원의 선례.
 
-## Phase P1 — 문장부호 글리프 스트레스 테스트 (Phase B 전제) [small]
-- [ ] 테스트 ROM에 `. ? ! ...`(+후보 전각)을 **4경로**(Part1 normal / Part2 0x313 / 0xB11 / A3) 슬롯에 주입
-- [ ] fresh-boot 캡처로 경로별 ASCII 부호 정상 렌더 + 박스 오버런/`?`폴백 여부 확정 → **렌더러별 부호 whitelist 확정**
-- [ ] 근거: Part2 대사가 이미 ASCII `. ? ! ...` 출하·렌더 중(temp/audit_interim_observations.md 3c) — 픽셀 확정용
+## Phase P1 — 문장부호 글리프 스트레스 테스트 (Phase B 전제) [small] ✅ 정적 확인 완료
+- [x] 정적 확인(무결성맵): 모든 스크립트 렌더러가 ASCII 부호를 이미 출하·렌더 — Part1 `.`441/`!`992/`?`350/`,`113/`(`3/`)`3/`:`2, Part2 `.`500/`!`125/`?`49/`,`300, 캠페인 `.`32 등. import 전용 영역(0x92-0x9E)만 부호 0(strip 피해).
+- [x] 증거 강도: `. ! ? ,` 강(전 영역). `( ) :` 약(Part1만). **`" ' [ ] ;`는 출하 선례 0** → v1 정책에 반영(아래).
+- [ ] 픽셀 확정(박스 오버런 포함)은 **Phase E**로 이관(에뮬 캡처). 가변폭 ASCII 부호 폭 실측 필요(codex/gemini 지적).
 
-## Phase B — 문장부호 소실 복원 (최우선 실제 결함) [medium]
-- [ ] `encode_fit`(build:8844) blanket strip 제거 → **렌더러별 whitelist**로 보존(1차 ASCII `. ? ! , ( ) [ ]`만)
-- [ ] 전각→ASCII 정규화(`…`→`...`, `。`→`.`, `、`→`,`, `「」『』`→ASCII, smart quotes→ASCII), `▼`만 잔존 strip
-- [ ] 후보 ladder에 **부호보존 우선 + 기존 strip 후보 맨끝** → overflow/일본어 폴백 증가 0 보장
-- [ ] 전각 부호는 P1 4경로 통과분만 단계 추가
-- [ ] 무결성맵 + 재빌드 후 0x929750·0xE085EE·0xE02905 등 표본 부호 복원 확인
-- [ ] qqq 연출 6행(0xE02905,0xE05B42,0xE085EE,0xE0A8A2,0xE0CB4E,0xE0E2E2) `???`/선행`...` 복원
+## Phase B — 문장부호 소실 복원 (최우선 실제 결함) [medium] ✅ 인코딩 검증 완료 (시각=Phase E)
+- [x] `encode_fit`(build:8844) blanket strip 제거 → 부호 보존 후보(level 0~5) + strip 폴백(level 6~11). overflow/일본어 폴백 증가 0 보장.
+- [x] 전각→ASCII 정규화: `…`/`・・・`→`...`, `。`→`.`, `、`→`,`, `「」『』`→`"`, smart quotes→ASCII. **보수적 v1: `[] {} ;`·`▼` 제거**, `. ! ? , ( ) :` 보존(`( ) :` provisional).
+- [x] **中점(`・`/`·`) 버그 수정**(codex/gemini): 단독 제거의 단어결합 오류(`토이·박스`→`토이박스`) + `·` FALLBACK SJIS 재출하(208행)를 해결 — 연속→`...`, 단독→공백. `tools/qa_integrity_map.py`에 中점 잔존 FAIL 게이트 추가(현재 import 0).
+- [x] 결과: 부호소실 11,401행/15,947자 → **11행/17자**(전부 benign: 미번역 JP 2·garbage 2·placeholder`[]`4·꽉찬슬롯 trailing 2). qqq 6행 복원 확인. overflow 0, no_ko 0, 무결성맵 PASS. temp SHA `f3c0014d`(中점 수정 후 재빌드).
+- [ ] **Phase E 게이트(릴리스 전 필수)**: ASCII 부호 가변폭 박스 오버런 픽셀 검증, `( ) : " '` 4경로 렌더 확인. 미통과 부호는 제거.
+- [ ] (선택 polish) 꽉 찬 슬롯 2행(`그렇구나!`@0xDC4D46, `사령관이네.`@0xDC9998) 축약 override로 부호 보존 검토.
 
 ## Phase C-full — QA 도구 진실화 (C-min 이후, Phase E와 병행) [medium]
 - [ ] phase6 EUC-KR 검출 → 예약코드(0x8840-0x9369) 카운트로 교체(원본 대비 증가 검증)

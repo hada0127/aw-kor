@@ -134,8 +134,28 @@ def main():
         for a, ko, dec in samples:
             print(f'   0x{a:08X} | {ko!r} | {dec!r}')
 
-    print('\n=== 결과: ' + ('PASS(바이트 무결성)' if ok else 'FAIL(바이트 불일치)')
-          + f' / 부호소실 {loss_rows}행 ===')
+    # --- 3) 中점(・/·) 잔존 검사 (codex 리뷰): encode_fit가 남기면 단어 결합/글리프 불확실 ---
+    mid_import = 0
+    mid_other = 0
+    mid_samples = []
+    for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
+        d = decode_enc(bytes.fromhex(enc_hex), code2syl)
+        if '・' in d or '·' in d:
+            if str(kind).startswith('import'):
+                mid_import += 1
+                if len(mid_samples) < args.show:
+                    mid_samples.append((addr, kind, d[:36]))
+            else:
+                mid_other += 1
+    print(f'\n[中점잔존] import 디코드 ・/· {mid_import}행, 기타(override 등) {mid_other}행 (import는 0이어야 함)')
+    for a, k, s in mid_samples:
+        print(f'   0x{a:08X} [{k}] {s!r}')
+    mid_ok = (mid_import == 0)
+    if not mid_ok:
+        ok = False
+
+    print('\n=== 결과: ' + ('PASS' if ok else 'FAIL')
+          + f' / 바이트{"OK" if not mism else f"불일치{len(mism)}"} / 부호소실 {loss_rows}행 / 中점잔존(import) {mid_import} ===')
     return 0 if ok else 1
 
 

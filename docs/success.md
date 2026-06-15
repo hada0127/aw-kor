@@ -748,3 +748,16 @@ cursor state +1)으로 patch. 0x313/0xB11 타일맵 루프 head에도 0x20 공�
   - patched ROM sha1: `1264fcab27d0e349b6caf461fd0247380e981c53`
   - BPS sha1: `640c2053c3fc8b4213ca640c3ca17b35f4b2196a`
   - IPS sha1: `5d3798f13e01cab55d4dc17c2f46a07fd750acca`
+
+## 2026-06-15~16 — 독립 전수 재검수: 무결성맵 + 문장부호 복원
+
+codex 기본 한글화 완료분을 처음부터 엄격 재검수(워크플로 감사 25건 확정 + codex/gemini 리뷰).
+
+- **빌드 무결성은 양호**: 코드영역 무변경, 헤더 체크섬 유효, full/final/title_test 3종 동일 SHA, 완전 재현(원본 ROM base; `v56_polished`는 부재/구버전 — 문서 정정).
+- **배포 무결성 게이트**(`tools/verify_dist_integrity.py`): manifest.patched_sha == output sha == BPS/IPS 적용결과 sha 3중 일치 검증. 현재 dist STALE(output d680820d ≠ manifest/patch 4004d2c3, 06-14) → Phase F 재생성.
+- **빌드 무결성맵**(Phase C-min): `build_korean_full.py`가 모든 텍스트 write를 `temp/integrity_map.json`(addr·slot·기대바이트·fill·ko·level·kind, 25,357건)으로 덤프. 계측은 출력 바이트 무변경(SHA d680820d 동일 검증). `tools/qa_integrity_map.py`가 last-writer-wins 재구성으로 `ROM==기대bytes` 1차 게이트(391,370B 불일치 0=PASS) + import 문장부호 소실 정량화.
+- **문장부호 일괄 소실 복원**(Phase B): `encode_fit`(build:8844) 무조건 strip 제거 → 전각→ASCII 정규화(`…`→`...`, `。`→`.`, `、`→`,`, `「」『』`→`"`, smart quotes→ASCII) + **부호 보존 후보(level 0~5) 우선 + strip 후보(level 6~11) fallback**.
+  - 문장부호 소실 **11,401행/15,947자 → 7행/9자**(남은 7: 미번역 일본어 3·garbage 2·꽉 찬 슬롯 trailing 2). qqq 연출 복원.
+  - **overflow 0 / no_ko 0 / 일본어 폴백 증가 0**. qa_text_fit written 19052, level6 사용 2행, visual-wider 17(증가 없음).
+  - 렌더 근거: 출하본이 이미 ASCII 부호 렌더(Part1 1737·Part2 942·캠페인 41행, welcome/0xDCBC12). 픽셀 확정은 Phase E.
+  - temp 빌드 SHA `f3c0014d82f61cda2b3a198dd4b890ae53e8f6a16930aba62cfe0e4ec4afcd8d`(output 동기화는 리뷰 후).

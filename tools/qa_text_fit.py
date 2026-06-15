@@ -190,7 +190,8 @@ def main():
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
     written = overflow = wider = compact_shortened = deny = no_ko = code_region = no_slot = 0
     intentional_blank = 0
-    levels = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    # Phase B: encode_fit이 level 6~11(부호 제거 폴백)을 반환할 수 있음.
+    levels = {k: 0 for k in range(12)}
     unmapped = collections.Counter()
     seen_import_addrs = set()
     written_addrs = set()
@@ -204,7 +205,8 @@ def main():
         written += 1
         written_addrs.add(a)
         levels[level] += 1
-        if level == 5:
+        if level >= 6:
+            # 부호 보존 후보가 모두 슬롯 초과 → ASCII 문장부호 제거 폴백 사용(가독성 손실).
             compact_shortened += 1
         if vwidth(ko) > vwidth(ja):
             wider += 1
