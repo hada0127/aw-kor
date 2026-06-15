@@ -78,21 +78,36 @@ def check_rom_integrity(rom_path: str) -> dict:
     except Exception as e:
         result['errors'].append(f"Checksum error: {e}")
 
-    # Check 6: Korean text presence
+    # Check 6: Korean text presence.
+    # ⚠ 한글은 EUC-KR가 아니라 예약 SJIS 코드(syllable_to_code.json 값, 대개 0x8840~0x9369)로
+    # 인코딩되어 big-endian [high,low]로 저장된다. 기존 EUC-KR(0xB0-0xC8/0xA1-0xFE) 카운트는
+    # 원본 미번역 ROM에서도 36만건 검출되는 무의미 지표였다(audit). 예약코드 카운트로 교체한다.
     korean_count = 0
-    for i in range(0, len(rom_data) - 1):
-        byte1 = rom_data[i]
-        # EUC-KR starts with 0xB0-0xC8
-        if 0xB0 <= byte1 <= 0xC8:
-            byte2 = rom_data[i + 1]
-            if 0xA1 <= byte2 <= 0xFE:
-                korean_count += 1
+    try:
+        import json as _json
+        syl_path = Path('data/syllable_to_code.json')
+        reserved = set()
+        if syl_path.exists():
+            for _h, _c in _json.load(open(syl_path, encoding='utf-8')).items():
+                reserved.add(int(_c, 0) if isinstance(_c, str) else int(_c))
+        if reserved:
+            for i in range(0, len(rom_data) - 1):
+                if ((rom_data[i] << 8) | rom_data[i + 1]) in reserved:
+                    korean_count += 1
+        else:
+            result['errors'].append("syllable_to_code.json 없음 — 한글 검출 생략")
+    except Exception as e:
+        result['errors'].append(f"Korean detect error: {e}")
 
-    if korean_count > 0:
+    # 예약코드(0x8840~0x9369)는 일부 원본 SJIS 데이터/misaligned 바이트쌍과 우연히 겹쳐
+    # 미번역 원본도 ~62k 검출된다. 패치본은 한글 주입으로 ~18만+. 임계값으로 분리하되,
+    # 정확한 한글 주입 검증은 tools/qa_integrity_map.py(빌드 write-log↔ROM 대조)가 권위.
+    result['korean_detected'] = korean_count
+    if korean_count > 100000:
         result['checks']['korean_text'] = True
-        result['korean_detected'] = korean_count
     else:
-        result['errors'].append("No Korean text detected in ROM")
+        result['errors'].append(
+            f"Korean(reserved-code) sequences {korean_count} ≤ 100k baseline — 한글 주입 의심(정확검증=qa_integrity_map)")
 
     # Check 7: Japanese text presence (should still exist for untranslated parts)
     japanese_count = 0

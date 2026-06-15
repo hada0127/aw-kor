@@ -59,7 +59,8 @@
 - [ ] (선택 polish) 꽉 찬 슬롯 2행(`그렇구나!`@0xDC4D46, `사령관이네.`@0xDC9998) 축약 override로 부호 보존 검토.
 
 ## Phase C-full — QA 도구 진실화 (C-min 이후, Phase E와 병행) [medium]
-- [ ] phase6 EUC-KR 검출 → 예약코드(0x8840-0x9369) 카운트로 교체(원본 대비 증가 검증)
+- [x] phase6 EUC-KR 검출 → 예약코드(0x8840-0x9369) 카운트로 교체(패치 183k vs 원본 62k, 임계 100k로 분리; 정확검증=qa_integrity_map)
+- [x] **신설 완료: `tools/qa_ascii_residuals.py`** — 큐레이션 UI 토큰 잔존 0 확인(PRESS START·GREEN EARTH·MISSION 등 전부 제거됨), 일반 sweep은 그래픽/폰트 노이즈뿐
 - [ ] qa_text_fit에 원문ko↔인코딩후 부호/공백 소실량 행별 컬럼+경고, level 명명 재정의
 - [ ] qa_text_fit/lint를 CSV 재시뮬이 아닌 **post-build ROM 슬롯 디코드 대조**로 재설계
 - [ ] qa_japanese_residuals: found_texts 비의존 전체 ROM SJIS 히라가나+조사 보조 스윕, covered 판정 전 ROM 디코드 확인, 히라가나 포함=무조건 리포트
