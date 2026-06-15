@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AW 스프라이트 픽셀 에디터</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <strong>AW 스프라이트 픽셀 에디터</strong>
+  <select id="type"><option value="">전체 타입</option></select>
+  <input id="q" type="search" placeholder="id/offset/source 검색…">
+  <label><input type="checkbox" id="curated"> curated만</label>
+  <span id="status"></span>
+</header>
+<main>
+  <section id="list"></section>
+  <section id="editor">
+    <div id="toolbar">
+      <span id="info">스프라이트를 선택하세요</span>
+      <span class="sp"></span>
+      <button id="zoomout">−</button><span id="zoomlbl">12×</span><button id="zoomin">+</button>
+      <label><input type="checkbox" id="grid" checked> 격자</label>
+      <button id="save" disabled>저장</button>
+      <button id="revert" disabled>되돌리기</button>
+    </div>
+    <div id="canvaswrap"><canvas id="cv"></canvas></div>
+  </section>
+  <aside id="palette">
+    <div class="ttl">팔레트 (4bpp · 16색)</div>
+    <div id="swatches"></div>
+    <div class="hint">클릭=선택, 더블클릭=색변경(원본색 지정). 팔레트는 편집본에 저장됩니다.</div>
+    <div class="ttl">현재 색 <span id="selidx">0</span></div>
+  </aside>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

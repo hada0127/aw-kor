@@ -11,7 +11,38 @@
 
 ---
 
-# 🔴 전면 재검수·수정 계획 (2026-06-15, 독립 감사 기반) — 현재 최우선
+# 🟣 한글화 도구체인 구축 (2026-06-16, muramasa-kor 참조) — 신규 최우선
+
+> 사용자 지시: `~/project/muramasa-kor`를 참조해 4개 도구/자산 구축 후 전체 기능 점검.
+> muramasa 참조: `tools/ui_editor/`(stdlib http.server+static 웹), `translations/proper_nouns.json`
+> (`{characters_and_scenes/items/common_terms:[{ja,ko,wii_kr,edit}]}`), `jp_messages.json`(`{sheet:{messages:[{id,ja,ko}]}}`),
+> `fonts/RIDIBatang.otf`+font import 도구.
+
+## T1 — 한글 2350자 폰트 확보
+- [ ] KS X 1001 완성형 2350 hangul 글리프 세트 생성(galmuri 11×11) + 예약코드 매핑을 2350으로 확장(현재 syllable_to_code 1030)
+- [ ] KOR_BASE 글리프 블롭 + 한자테이블 확장 + encode_text가 2350 전 음절 인코딩 가능하게(unmapped 0 목표)
+- [ ] 빌드 통합 + 무결성맵/부팅 검증
+
+## T2 — 원본 ROM 스프라이트 전수 JSON + 픽셀아트 에디터
+- [ ] 원본 ROM의 그래픽/타일/팔레트/OBJ/LZ77 블록 전수 열거 → `data/sprites_index.json`(hash·offset·크기·bpp·palette·png·desc)
+- [ ] **픽셀아트 에디터**(stdlib server + canvas): GBA 저해상도(8×8 4bpp)에 맞춰 **확대 캔버스 + 팔레트 스와치 + 픽셀 단위 페인트**(muramasa식 region-box 아님). 원본 16색 팔레트 그대로 편집·저장(ROM/패치 역기록). (사용자 지시 2026-06-16: 픽셀에디터 느낌)
+
+## T3 — 통일 사전 JSON (명사/인칭/지명/캐릭터명)
+- [ ] `tools/export_proper_nouns.py` → `data/proper_nouns.json`(muramasa 포맷): CO명(료/캐서린/맥스/도미노/빌리/얀/휘프), 국가(레드스타/블루문/그린어스/옐로코멧/블랙홀), 지명(코스모랜드/매크로랜드…), 공통어(쇼군/브레이크…)
+- [ ] `tools/apply_proper_nouns.py` + build의 normalize_korean_terms가 사전 참조하도록 통합
+
+## T4 — 대사 원문→번역 JSON + 편집기 UI (③ 연동)
+- [ ] `tools/build_dialogue_map.py` → `data/dialogue_map.json`: 대사 주소별 {id, address, ja(원문), ko(출하/번역), slot, level}
+- [ ] 웹 편집기(stdlib server + static): 대사 목록 JA→KO 표시·편집·저장
+- [ ] **사전(T3) 연동**: 편집기에서 명사 사전 조회/추가/수정/삭제 + 대사에서 "사전 검사"(명사 KO 불일치 행 플래그)
+- [ ] 편집 결과를 translation/override로 역기록 경로
+
+## TZ — 전체 기능 점검
+- [ ] 위 도구 + 현재 한글화 상태 통합 점검, 누락 내용 0 확인. codex+agy 리뷰.
+
+---
+
+# 🔴 전면 재검수·수정 계획 (2026-06-15, 독립 감사 기반)
 
 > 사용자 지시: codex 기본 한글화 완료분을 **처음부터 엄격히 전수 검수**한다.
 > 화면 깨짐/미번역/꼼수/false-confidence를 색출하고 견고하게 수정한다.

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AW 대사 편집기</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <strong>AW 대사 편집기</strong>
+  <select id="region"><option value="">전체 지역</option></select>
+  <input id="q" type="search" placeholder="원문/번역 검색…">
+  <span class="filters">
+    <button data-f="" class="on">전체</button>
+    <button data-f="real">실대사</button>
+    <button data-f="untranslated">미번역</button>
+    <button data-f="mismatch">사전불일치</button>
+    <button data-f="noise">노이즈</button>
+  </span>
+  <button id="checkAll">사전 검사(전체)</button>
+  <span id="status"></span>
+</header>
+<main>
+  <section id="list">
+    <table>
+      <thead><tr><th>id</th><th>주소</th><th>지역</th><th>원문 (JA)</th><th>번역 (KO)</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+  <aside id="side">
+    <div class="tabs">
+      <button data-tab="dict" class="on">통일 사전</button>
+      <button data-tab="check">검사 결과</button>
+    </div>
+    <div id="tab-dict" class="tabpane">
+      <div class="dictadd">
+        <select id="dcat"></select>
+        <input id="dja" placeholder="원문(JA)">
+        <input id="dko" placeholder="번역(KO)">
+        <button id="dadd">추가</button>
+      </div>
+      <div id="dictlist"></div>
+    </div>
+    <div id="tab-check" class="tabpane" hidden>
+      <div id="checklist"></div>
+    </div>
+  </aside>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

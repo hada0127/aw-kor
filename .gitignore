@@ -35,3 +35,10 @@ Thumbs.db
 # Temp working directory (Claude/사용자 임시 작업 공간)
 temp/
 !temp/.gitkeep
+
+# 도구체인 재생성 대용량 데이터 (생성기로 재생성)
+#  data/dialogue_map.json   ← tools/build_dialogue_map.py
+#  data/sprites_index.json  ← tools/export_sprites.py
+data/dialogue_map.json
+data/sprites_index.json
+data/sprite_edits/
