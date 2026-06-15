@@ -1,6 +1,7 @@
-# AGENTS.md — Game Wars 한글화 프로젝트 (codex/gemini 공용 컨텍스트)
+# AGENTS.md — Game Wars 한글화 프로젝트 (codex/agy 공용 컨텍스트)
 
-> 이 파일은 `codex exec` / `gemini` 리뷰 세션이 프로젝트 규칙·사실을 읽도록 두는
+> 리뷰는 **codex + agy(Antigravity CLI)**. gemini CLI는 2026-06-16 서비스 중단되어 agy로 대체.
+> 이 파일은 `codex exec` / `agy -p` 리뷰 세션이 프로젝트 규칙·사실을 읽도록 두는
 > 공용 진입점이다. **상세 작업 지침과 최신 사실은 [`CLAUDE.md`](CLAUDE.md)가 정본**이며,
 > 이 파일은 그 요약 + 리뷰어 역할 안내다.
 
@@ -19,7 +20,7 @@
   `qa_visual_regions.py`, `phase6_basic_test.py`.
 - RE 사실: `docs/research.md`, 성공/실패 기록 `docs/success.md` / `docs/fail.md`. 진행 기준은 `todo.md`.
 
-## 리뷰어에게 (codex / gemini)
+## 리뷰어에게 (codex / agy)
 - 톤: **엄격·비판적**. 결함·누락·근거 부족·대안을 적극 지적한다. 통과시키려 하지 말 것.
 - 특히 **"꼼수"(fragile hack)** 여부를 본다: 고정주소 raw OBJ 덮어쓰기, LZ77 in-place 재압축,
   ASCII 테이블 blank, 전각→반각 padding 글리프, 폭 맞추기용 텍스트 축약(의미 손상),

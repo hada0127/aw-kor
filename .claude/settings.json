@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"[codex+gemini 리뷰 규칙] 작업/RE 완료 또는 막힘 시, commit 전에 codex와 gemini 엄격 리뷰 필수. 실행: codex exec \\\"PROMPT\\\"  |  gemini -e none --approval-mode yolo -p \\\"PROMPT\\\"\"}'"
+            "command": "echo '{\"systemMessage\":\"[codex+agy 리뷰 규칙] 작업/RE 완료 또는 막힘 시, commit 전에 codex와 agy(Antigravity, 구 gemini 중단) 엄격 리뷰 필수. 실행: codex --dangerously-bypass-approvals-and-sandbox exec \\\"PROMPT\\\" < /dev/null  |  agy --dangerously-skip-permissions -p \\\"PROMPT\\\"\"}'"
           }
         ]
       }
