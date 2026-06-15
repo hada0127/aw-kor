@@ -39,9 +39,14 @@
 - [x] **사전(T3) 연동**: 편집기에서 사전 조회/추가/수정/삭제 + "사전 검사"(명사 KO 불일치 행 플래그, 현재 286건 검출)
 - [x] 편집→dialogue_overrides.json 역기록(빌드 적용 경로는 잔여)
 
-## TZ — 전체 기능 점검
-- [ ] 전 도구·QA 실행 + 현재 한글화 완성도/누락 파악(번역누락 5,603행, 표기흔들림, 스프라이트 커버리지) + codex+agy 리뷰
-- [ ] 발견된 누락(번역누락 실대사, 표기흔들림 통일) 후속 처리 계획
+## TZ — 전체 기능 점검 (진행)
+- [x] 전 QA 실행: 무결성 PASS, overflow0/no_ko0, 영어잔존0, ROM placeholder0, 부팅/체크섬 OK (output fa7b08df).
+- [x] 도구체인 4종 데이터 검증 + codex 리뷰(최대 누락=실화면 시각회귀 QA, VRAM 팔레트 먼저, 미번역 triage, 깨진주소 복구). agy는 긴 리뷰 프롬프트 반복 hang(unreliable) — 짧은 프롬프트만 가능.
+- [x] **깨진 주소 복구**: `tools/fix_broken_addresses.py` — 드롭됐던 번역 7행 복구·출하(색적/미사일 섬 쟁탈전!/14일/상대 공격력 등), 중복106·junk93 정리, 3 슬롯-핏 override로 overflow 0 유지.
+- [ ] **최대 잔여 = 실화면 시각회귀 QA**(codex/gemini/audit Phase E 공통): 세이브스테이트 자동 스크린샷 + 원본 대비 영역 diff(메뉴/대사/전투/유닛정보/생산/수송/튜토리얼/1·2편 분기). 현재 부분 검증만(docs/screenshots/SUCCESS_phaseE_*).
+- [ ] VRAM 팔레트 캡처(0x05000000/0x05000200)로 스프라이트 에디터 실제 색 + LZ77 ROM 역기록(apply_sprite_edits.py, comp_size≤검증)
+- [ ] 미번역 1097종 triage(말줄임/중복/placeholder 제외한 실대사·라벨만) → 대사 편집기로 번역
+- [ ] 표기흔들림 통일 결정·적용(codex: 료/휩 권장; 국가명 — 현 다수 붙임 '레드스타'158 vs 띄움22, codex는 띄움 권장 → **사용자 결정**). proper_nouns.json edit 채우고 apply_proper_nouns_dict.py --apply
 
 ---
 

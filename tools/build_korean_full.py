@@ -436,6 +436,10 @@ SOURCE_TEXT_OVERRIDES = {
 }
 
 ADDRESS_TEXT_OVERRIDES = {
+    # 손상주소 복구분(2026-06-16) 14B 슬롯-핏 축약: 원문 '상대에 대한 공격력.'(19B)/'내일로 향하는 7일간'(22B).
+    0xDED4B6: '상대 공격력.',
+    0xDED6B9: '상대 공격력.',
+    0xA2D5C8: '내일로 7일간',
     # Compact Part 1/2 status labels near the name-grid tables.
     0x805B04: '도움말자료 전체지도 파일로드 저장이름 종료클리어 바다평지 산숲칠 정보자동',
     0xDF8C02: '종합',
