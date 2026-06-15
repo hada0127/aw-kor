@@ -11,9 +11,12 @@
    (Wars 게임의 유닛/지형/CO명·UI 라벨은 일관돼야 함)
 2. recurring_terms — 짧고 자주 나오는 ja(고유명사 후보). 현재 다수표기 ko + edit 칸.
 
-출력: `data/proper_nouns.json`
-각 항목의 `edit` 칸을 채우고 `tools/apply_proper_nouns.py`를 실행하면
-CSV의 korean 필드에 일괄 반영된다.
+⚠ DEPRECATED(2026-06-16): 정본 통일 사전은 카테고리형 `data/proper_nouns.json`
+(characters/nations/places/common_terms)이며 `tools/export_proper_nouns_dict.py`가 생성한다.
+이 generic(inconsistencies/recurring_terms) 도구는 충돌을 피해 출력을
+`data/proper_nouns_inconsistencies.json`으로 보낸다(정본을 덮어쓰지 않음). 표기흔들림 보조 분석용.
+
+출력: `data/proper_nouns_inconsistencies.json`
 
 사용:
   python tools/export_proper_nouns.py
@@ -28,7 +31,7 @@ from collections import defaultdict, Counter
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE, 'data', 'translation_for_import.csv')
-OUT_PATH = os.path.join(BASE, 'data', 'proper_nouns.json')
+OUT_PATH = os.path.join(BASE, 'data', 'proper_nouns_inconsistencies.json')  # deprecated: 정본 충돌 방지
 
 HEXTOK = re.compile(r'0x[0-9A-Fa-f]{2,}')
 # 노이즈/플레이스홀더 후보 제외

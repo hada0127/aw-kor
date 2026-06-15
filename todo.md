@@ -18,27 +18,30 @@
 > (`{characters_and_scenes/items/common_terms:[{ja,ko,wii_kr,edit}]}`), `jp_messages.json`(`{sheet:{messages:[{id,ja,ko}]}}`),
 > `fonts/RIDIBatang.otf`+font import 도구.
 
-## T1 — 한글 2350자 폰트 확보
-- [ ] KS X 1001 완성형 2350 hangul 글리프 세트 생성(galmuri 11×11) + 예약코드 매핑을 2350으로 확장(현재 syllable_to_code 1030)
-- [ ] KOR_BASE 글리프 블롭 + 한자테이블 확장 + encode_text가 2350 전 음절 인코딩 가능하게(unmapped 0 목표)
-- [ ] 빌드 통합 + 무결성맵/부팅 검증
+## T1 — 한글 2350자 폰트 확보 ✅ 완료
+- [x] KS X 1001 완성형 2350 hangul 글리프 생성 + 매핑 2350 확장(`tools/build_korean2350.py` → syllable_to_code_2350.json/syllable_to_glyph_2350.json/kor_glyphs_2350.bin)
+- [x] 기존 1030 byte-identical 호환(코드값·local idx·블롭 prefix 보존), 한자테이블 1030→2350 확장
+- [x] **빌드 통합 완료**(build:SYLCODE/GLYPH_BLOB_2350/SYLMAP_2350): 2350 전 음절 인코딩 가능(매핑 누락 0, 코드 유니크), 무결성맵 PASS, 부팅/체크섬 OK. output 74af7863(additive, 기존 렌더 불변).
 
-## T2 — 원본 ROM 스프라이트 전수 JSON + 픽셀아트 에디터
-- [ ] 원본 ROM의 그래픽/타일/팔레트/OBJ/LZ77 블록 전수 열거 → `data/sprites_index.json`(hash·offset·크기·bpp·palette·png·desc)
-- [ ] **픽셀아트 에디터**(stdlib server + canvas): GBA 저해상도(8×8 4bpp)에 맞춰 **확대 캔버스 + 팔레트 스와치 + 픽셀 단위 페인트**(muramasa식 region-box 아님). 원본 16색 팔레트 그대로 편집·저장(ROM/패치 역기록). (사용자 지시 2026-06-16: 픽셀에디터 느낌)
+## T2 — 원본 ROM 스프라이트 전수 JSON + 픽셀아트 에디터 ✅ 완료(잔여: 팔레트 캡처·ROM 역기록)
+- [x] `tools/export_sprites.py` → `data/sprites_index.json` (1979 스프라이트: curated LZ77 104 + scan LZ77 1874 + font, 4bpp/LZ77 디코드+PNG 렌더)
+- [x] **픽셀아트 에디터** `tools/sprite_editor/`(stdlib server + canvas): ROM→4bpp 인덱스 그리드+16색 팔레트, 확대캔버스 픽셀 페인트, 팔레트 색 지정(원본색), 격자/타일경계, 저장→sprites_overrides.json. (:8781)
+- [ ] 잔여: 진짜 원본 팔레트는 VRAM 캡처 필요(현재 grayscale 추정, 에디터에서 수동 색지정 가능). LZ77 재압축 ROM 역기록(apply_sprite_edits.py) — comp_size≤검증. raw OBJ 블록 추가 커버.
 
-## T3 — 통일 사전 JSON (명사/인칭/지명/캐릭터명)
-- [ ] `tools/export_proper_nouns.py` → `data/proper_nouns.json`(muramasa 포맷): CO명(료/캐서린/맥스/도미노/빌리/얀/휘프), 국가(레드스타/블루문/그린어스/옐로코멧/블랙홀), 지명(코스모랜드/매크로랜드…), 공통어(쇼군/브레이크…)
-- [ ] `tools/apply_proper_nouns.py` + build의 normalize_korean_terms가 사전 참조하도록 통합
+## T3 — 통일 사전 JSON (명사/인칭/지명/캐릭터명) ✅ 완료(잔여: 구 generic 도구 충돌 정리)
+- [x] `tools/export_proper_nouns_dict.py` → `data/proper_nouns.json`(카테고리형): characters12/nations5/places4/common_terms9 + freq/variants/issues(표기흔들림)
+- [x] `tools/apply_proper_nouns_dict.py`(edit 기준 CSV 통일, 드라이런 기본 --apply 반영)
+- [ ] 잔여: 구 `export/apply_proper_nouns.py`(generic inconsistencies 스키마)가 같은 proper_nouns.json 쓰는 충돌 정리(deprecate/리네임). 표기흔들림 통일안 결정(옐로코멧/휘프/료 등).
 
-## T4 — 대사 원문→번역 JSON + 편집기 UI (③ 연동)
-- [ ] `tools/build_dialogue_map.py` → `data/dialogue_map.json`: 대사 주소별 {id, address, ja(원문), ko(출하/번역), slot, level}
-- [ ] 웹 편집기(stdlib server + static): 대사 목록 JA→KO 표시·편집·저장
-- [ ] **사전(T3) 연동**: 편집기에서 명사 사전 조회/추가/수정/삭제 + 대사에서 "사전 검사"(명사 KO 불일치 행 플래그)
-- [ ] 편집 결과를 translation/override로 역기록 경로
+## T4 — 대사 원문→번역 JSON + 편집기 UI (③ 연동) ✅ 완료
+- [x] `tools/build_dialogue_map.py` → `data/dialogue_map.json`: {id,address,ja,ko,ship_ko,slot,kind,region,is_noise} (28,974행/실대사21,605)
+- [x] 웹 편집기 `tools/dialogue_editor/`(stdlib server+web, :8780): 대사 JA→KO 표시·편집·저장(→dialogue_overrides.json)
+- [x] **사전(T3) 연동**: 편집기에서 사전 조회/추가/수정/삭제 + "사전 검사"(명사 KO 불일치 행 플래그, 현재 286건 검출)
+- [x] 편집→dialogue_overrides.json 역기록(빌드 적용 경로는 잔여)
 
 ## TZ — 전체 기능 점검
-- [ ] 위 도구 + 현재 한글화 상태 통합 점검, 누락 내용 0 확인. codex+agy 리뷰.
+- [ ] 전 도구·QA 실행 + 현재 한글화 완성도/누락 파악(번역누락 5,603행, 표기흔들림, 스프라이트 커버리지) + codex+agy 리뷰
+- [ ] 발견된 누락(번역누락 실대사, 표기흔들림 통일) 후속 처리 계획
 
 ---
 

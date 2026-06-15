@@ -1,0 +1,8106 @@
+{
+  "_readme": "텍스트영역(part1/2/campaign/ui, addr>=0x800000)의 coherent 일본어 미번역 후보. 중복(미러 테이블) 통합. 일부는 빌드 raw OBJ 패치로 별도 처리될 수 있어 실제 표시 여부는 확인 필요.",
+  "distinct_count": 1097,
+  "total_rows": 1790,
+  "candidates": [
+    {
+      "ja": "・・・",
+      "count": 153,
+      "addresses": [
+        "0x00A02788",
+        "0x00A036D4",
+        "0x00A0370F",
+        "0x00A04001",
+        "0x00A05828",
+        "0x00A058A4",
+        "0x00A05BAA",
+        "0x00A06C16"
+      ]
+    },
+    {
+      "ja": "輸送ヘリ",
+      "count": 48,
+      "addresses": [
+        "0x009294F0",
+        "0x00962178",
+        "0x0099AA1C",
+        "0x009D32C0",
+        "0x00A29414",
+        "0x00A31663",
+        "0x00A318F3",
+        "0x00A31B45"
+      ]
+    },
+    {
+      "ja": "対する攻撃力。",
+      "count": 36,
+      "addresses": [
+        "0x00A31D75",
+        "0x00A31E88",
+        "0x00A32065",
+        "0x00A3286D",
+        "0x00A3292D",
+        "0x00A32971",
+        "0x00A32A77",
+        "0x00A32C0B"
+      ]
+    },
+    {
+      "ja": "戦闘ヘリ",
+      "count": 34,
+      "addresses": [
+        "0x009294FC",
+        "0x00962184",
+        "0x0099AA28",
+        "0x009D32CC",
+        "0x00A29408",
+        "0x00A3405B",
+        "0x00D975C3",
+        "0x00D975FF"
+      ]
+    },
+    {
+      "ja": "・・・・・・",
+      "count": 23,
+      "addresses": [
+        "0x00A02580",
+        "0x00A06070",
+        "0x00A0843C",
+        "0x00A0A138",
+        "0x00A0D4B4",
+        "0x00A10BA4",
+        "0x00A11340",
+        "0x00A1198C"
+      ]
+    },
+    {
+      "ja": "セリフなし。",
+      "count": 14,
+      "addresses": [
+        "0x00DFF23E",
+        "0x00DFF252",
+        "0x00DFFB2F",
+        "0x00DFFB43",
+        "0x00E0022B",
+        "0x00E0023F",
+        "0x00E00A7A",
+        "0x00E01243"
+      ]
+    },
+    {
+      "ja": "数字は移動力。",
+      "count": 13,
+      "addresses": [
+        "0x00A319CD",
+        "0x00A322D7",
+        "0x00A324D9",
+        "0x00A338E9",
+        "0x00A33943",
+        "0x00A339A3",
+        "0x00A339FD",
+        "0x00A33A41"
+      ]
+    },
+    {
+      "ja": "・・・・。",
+      "count": 12,
+      "addresses": [
+        "0x00DC3B0E",
+        "0x00DC495E",
+        "0x00DC4B2A",
+        "0x00DC51AE",
+        "0x00DC5812",
+        "0x00DC7006",
+        "0x00DC9662",
+        "0x00DCBD36"
+      ]
+    },
+    {
+      "ja": "お父さん、",
+      "count": 11,
+      "addresses": [
+        "0x00A1FB28",
+        "0x00A1FD90",
+        "0x00A1FFF4",
+        "0x00A2014C",
+        "0x00A20510",
+        "0x00A20BF8",
+        "0x00A21D68",
+        "0x00A22020"
+      ]
+    },
+    {
+      "ja": "どうやら、",
+      "count": 9,
+      "addresses": [
+        "0x00A0D7D5",
+        "0x00A12C6D",
+        "0x00A146FB",
+        "0x00A1969C",
+        "0x00A19F6C",
+        "0x00A1BA1C",
+        "0x00A1CC7C",
+        "0x00A1EEFC"
+      ]
+    },
+    {
+      "ja": "ククク・・・",
+      "count": 8,
+      "addresses": [
+        "0x00A11763",
+        "0x00A1180B",
+        "0x00A14BEC",
+        "0x00A1BE94",
+        "0x00A1C05B",
+        "0x00A20858",
+        "0x00A21040",
+        "0x00A21D57"
+      ]
+    },
+    {
+      "ja": "フン・・・",
+      "count": 7,
+      "addresses": [
+        "0x00A06AAA",
+        "0x00A0CE1E",
+        "0x00A0D464",
+        "0x00A12970",
+        "0x00A27C70",
+        "0x00A27F50",
+        "0x00A30098"
+      ]
+    },
+    {
+      "ja": "ム・・・",
+      "count": 7,
+      "addresses": [
+        "0x00A07B60",
+        "0x00A0A8B8",
+        "0x00A0B584",
+        "0x00A0D34C",
+        "0x00A0EC20",
+        "0x00A0FB10",
+        "0x00A12858"
+      ]
+    },
+    {
+      "ja": "もぐる",
+      "count": 7,
+      "addresses": [
+        "0x00A299A6",
+        "0x00A336F5",
+        "0x00D9C713",
+        "0x00D9C767",
+        "0x00D9C7D5",
+        "0x00DC472C",
+        "0x00DEEDE9"
+      ]
+    },
+    {
+      "ja": "降伏する",
+      "count": 6,
+      "addresses": [
+        "0x00929674",
+        "0x009622FC",
+        "0x0099ABA0",
+        "0x009D3444",
+        "0x00A29922",
+        "0x00DA00E3"
+      ]
+    },
+    {
+      "ja": "それから、",
+      "count": 6,
+      "addresses": [
+        "0x00A0AEE0",
+        "0x00A0DB91",
+        "0x00A1428A",
+        "0x00A177BA",
+        "0x00A1D1A8",
+        "0x00A20208"
+      ]
+    },
+    {
+      "ja": "ぬぬぬ・・・",
+      "count": 6,
+      "addresses": [
+        "0x00A19407",
+        "0x00D9648E",
+        "0x00D9810D",
+        "0x00D98223",
+        "0x00D99308",
+        "0x00D9D3AA"
+      ]
+    },
+    {
+      "ja": "攻撃する。",
+      "count": 6,
+      "addresses": [
+        "0x00A31781",
+        "0x00A31CE7",
+        "0x00A31FD3",
+        "0x00A32F85",
+        "0x00A33CB7",
+        "0x00A33E61"
+      ]
+    },
+    {
+      "ja": "ふさんか",
+      "count": 5,
+      "addresses": [
+        "0x009293E4",
+        "0x0096206C",
+        "0x0099A910",
+        "0x009D31B4",
+        "0x00DF8BC6"
+      ]
+    },
+    {
+      "ja": "やれやれ・・・",
+      "count": 5,
+      "addresses": [
+        "0x00A13640",
+        "0x00A14358",
+        "0x00A144F8",
+        "0x00A17309",
+        "0x00A17940"
+      ]
+    },
+    {
+      "ja": "まあまあ、",
+      "count": 5,
+      "addresses": [
+        "0x00A137CC",
+        "0x00A1682C",
+        "0x00A17A64",
+        "0x00A24684",
+        "0x00A28414"
+      ]
+    },
+    {
+      "ja": "やれやれ、",
+      "count": 5,
+      "addresses": [
+        "0x00A18010",
+        "0x00A18B28",
+        "0x00A21094",
+        "0x00A28124",
+        "0x00A28B90"
+      ]
+    },
+    {
+      "ja": "お父さん。",
+      "count": 5,
+      "addresses": [
+        "0x00A1FEDB",
+        "0x00A225FD",
+        "0x00A258B3",
+        "0x00A28CF7",
+        "0x00A29087"
+      ]
+    },
+    {
+      "ja": "そうそう。",
+      "count": 5,
+      "addresses": [
+        "0x00D95862",
+        "0x00D98F79",
+        "0x00D9F816",
+        "0x00DA043A",
+        "0x00DF685A"
+      ]
+    },
+    {
+      "ja": "豎戝贄趁踈",
+      "count": 4,
+      "addresses": [
+        "0x00929308",
+        "0x00961F90",
+        "0x0099A834",
+        "0x009D30D8"
+      ]
+    },
+    {
+      "ja": "つうしん４",
+      "count": 4,
+      "addresses": [
+        "0x00929398",
+        "0x00962020",
+        "0x0099A8C4",
+        "0x009D3168"
+      ]
+    },
+    {
+      "ja": "つうしん３",
+      "count": 4,
+      "addresses": [
+        "0x009293A4",
+        "0x0096202C",
+        "0x0099A8D0",
+        "0x009D3174"
+      ]
+    },
+    {
+      "ja": "つうしん２",
+      "count": 4,
+      "addresses": [
+        "0x009293B0",
+        "0x00962038",
+        "0x0099A8DC",
+        "0x009D3180"
+      ]
+    },
+    {
+      "ja": "つうしん１",
+      "count": 4,
+      "addresses": [
+        "0x009293BC",
+        "0x00962044",
+        "0x0099A8E8",
+        "0x009D318C"
+      ]
+    },
+    {
+      "ja": "対空自走砲",
+      "count": 4,
+      "addresses": [
+        "0x00929538",
+        "0x009621C0",
+        "0x0099AA64",
+        "0x009D3308"
+      ]
+    },
+    {
+      "ja": "對荘藻葺洶",
+      "count": 4,
+      "addresses": [
+        "0x0093C8D7",
+        "0x00974D8B",
+        "0x009AD62F",
+        "0x009E5ED3"
+      ]
+    },
+    {
+      "ja": "狆囹囹囹囹",
+      "count": 4,
+      "addresses": [
+        "0x0093DA12",
+        "0x00975EC6",
+        "0x009AE76A",
+        "0x009E700E"
+      ]
+    },
+    {
+      "ja": "栗隈繰栗隈碁",
+      "count": 4,
+      "addresses": [
+        "0x009412CD",
+        "0x00979781",
+        "0x009B2025",
+        "0x009EA8C9"
+      ]
+    },
+    {
+      "ja": "虎虎虎檎限",
+      "count": 4,
+      "addresses": [
+        "0x00941BCD",
+        "0x0097A081",
+        "0x009B2925",
+        "0x009EB1C9"
+      ]
+    },
+    {
+      "ja": "虎虎虎虎檎",
+      "count": 4,
+      "addresses": [
+        "0x00941BE1",
+        "0x0097A095",
+        "0x009B2939",
+        "0x009EB1DD"
+      ]
+    },
+    {
+      "ja": "虎虎虎虎虎檎",
+      "count": 4,
+      "addresses": [
+        "0x00941C17",
+        "0x0097A0CB",
+        "0x009B296F",
+        "0x009EB213"
+      ]
+    },
+    {
+      "ja": "俚鼓檎來檎血",
+      "count": 4,
+      "addresses": [
+        "0x00941C24",
+        "0x0097A0D8",
+        "0x009B297C",
+        "0x009EB220"
+      ]
+    },
+    {
+      "ja": "鼓鼓鼓鼓鼓鼓鹸",
+      "count": 4,
+      "addresses": [
+        "0x00941C31",
+        "0x0097A0E5",
+        "0x009B2989",
+        "0x009EB22D"
+      ]
+    },
+    {
+      "ja": "アィ楝",
+      "count": 4,
+      "addresses": [
+        "0x00941D5C",
+        "0x0097A210",
+        "0x009B2AB4",
+        "0x009EB358"
+      ]
+    },
+    {
+      "ja": "繰栗隈繰栗隈碁",
+      "count": 4,
+      "addresses": [
+        "0x00942204",
+        "0x0097A6B8",
+        "0x009B2F5C",
+        "0x009EB800"
+      ]
+    },
+    {
+      "ja": "紬紬吾吊紬",
+      "count": 4,
+      "addresses": [
+        "0x0094259E",
+        "0x0097AA52",
+        "0x009B32F6",
+        "0x009EBB9A"
+      ]
+    },
+    {
+      "ja": "紬紬吾鍔紬",
+      "count": 4,
+      "addresses": [
+        "0x009425D4",
+        "0x0097AA88",
+        "0x009B332C",
+        "0x009EBBD0"
+      ]
+    },
+    {
+      "ja": "大変です！",
+      "count": 4,
+      "addresses": [
+        "0x00A02534",
+        "0x00A15E4A",
+        "0x00A19C07",
+        "0x00A271EC"
+      ]
+    },
+    {
+      "ja": "そうか・・・",
+      "count": 4,
+      "addresses": [
+        "0x00A03325",
+        "0x00A0D718",
+        "0x00A0E9A0",
+        "0x00A1CACC"
+      ]
+    },
+    {
+      "ja": "はい・・・",
+      "count": 4,
+      "addresses": [
+        "0x00A04120",
+        "0x00A059C0",
+        "0x00A0A3C8",
+        "0x00A0EF00"
+      ]
+    },
+    {
+      "ja": "それじゃ、",
+      "count": 4,
+      "addresses": [
+        "0x00A0448E",
+        "0x00A0C2A4",
+        "0x00A11A93",
+        "0x00DC8C0A"
+      ]
+    },
+    {
+      "ja": "あなたなら、",
+      "count": 4,
+      "addresses": [
+        "0x00A059F1",
+        "0x00A05FB9",
+        "0x00A08F74",
+        "0x00A0EF31"
+      ]
+    },
+    {
+      "ja": "それから",
+      "count": 4,
+      "addresses": [
+        "0x00A140C8",
+        "0x00D961A2",
+        "0x00D99D90",
+        "0x00E03F3A"
+      ]
+    },
+    {
+      "ja": "主砲の射程。",
+      "count": 4,
+      "addresses": [
+        "0x00A32AEC",
+        "0x00A33284",
+        "0x00DEE122",
+        "0x00DEE95A"
+      ]
+    },
+    {
+      "ja": "主砲での、",
+      "count": 4,
+      "addresses": [
+        "0x00A33830",
+        "0x00A33D3C",
+        "0x00DEEF4A",
+        "0x00DEF496"
+      ]
+    },
+    {
+      "ja": "・・・・・。",
+      "count": 4,
+      "addresses": [
+        "0x00DCA57A",
+        "0x00E08562",
+        "0x00E0A816",
+        "0x00E0CAC2"
+      ]
+    },
+    {
+      "ja": "でも・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A0443F",
+        "0x00A1FD09",
+        "0x00D96BC2"
+      ]
+    },
+    {
+      "ja": "うるせぇ。",
+      "count": 3,
+      "addresses": [
+        "0x00A057C3",
+        "0x00A0ECA3",
+        "0x00A0EFC8"
+      ]
+    },
+    {
+      "ja": "そりゃあ、",
+      "count": 3,
+      "addresses": [
+        "0x00A062B4",
+        "0x00A14D72",
+        "0x00A18E11"
+      ]
+    },
+    {
+      "ja": "私の部隊は、",
+      "count": 3,
+      "addresses": [
+        "0x00A073B3",
+        "0x00A07EE7",
+        "0x00A08727"
+      ]
+    },
+    {
+      "ja": "ブレイクには、",
+      "count": 3,
+      "addresses": [
+        "0x00A0818C",
+        "0x00A09EC0",
+        "0x00A0B82C"
+      ]
+    },
+    {
+      "ja": "戦況を",
+      "count": 3,
+      "addresses": [
+        "0x00A08288",
+        "0x00A09FBD",
+        "0x00A0B928"
+      ]
+    },
+    {
+      "ja": "く・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A0A214",
+        "0x00A0BEF4",
+        "0x00A101D0"
+      ]
+    },
+    {
+      "ja": "そんな事、",
+      "count": 3,
+      "addresses": [
+        "0x00A0C21C",
+        "0x00A120D4",
+        "0x00A186CF"
+      ]
+    },
+    {
+      "ja": "やっぱり",
+      "count": 3,
+      "addresses": [
+        "0x00A0CCE3",
+        "0x00A18E41",
+        "0x00D96D3E"
+      ]
+    },
+    {
+      "ja": "やられた・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A0D0EA",
+        "0x00A12417",
+        "0x00A1260A"
+      ]
+    },
+    {
+      "ja": "まさか・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A0DE63",
+        "0x00A12E7F",
+        "0x00A21677"
+      ]
+    },
+    {
+      "ja": "まあいい。",
+      "count": 3,
+      "addresses": [
+        "0x00A11023",
+        "0x00A1D2AF",
+        "0x00E009C9"
+      ]
+    },
+    {
+      "ja": "フフフ・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A113F4",
+        "0x00A1C2BF",
+        "0x00A1F084"
+      ]
+    },
+    {
+      "ja": "な・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A13C9C",
+        "0x00A14E48",
+        "0x00A23DB0"
+      ]
+    },
+    {
+      "ja": "なんじゃ、",
+      "count": 3,
+      "addresses": [
+        "0x00A13CA6",
+        "0x00A15E80",
+        "0x00A22908"
+      ]
+    },
+    {
+      "ja": "だが・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A14B0C",
+        "0x00A27F7D",
+        "0x00DD1CF0"
+      ]
+    },
+    {
+      "ja": "それなら、",
+      "count": 3,
+      "addresses": [
+        "0x00A15481",
+        "0x00A158D3",
+        "0x00A2692D"
+      ]
+    },
+    {
+      "ja": "あの・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A17B0D",
+        "0x00A18193",
+        "0x00A26ACC"
+      ]
+    },
+    {
+      "ja": "しかし・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A19D18",
+        "0x00A20604",
+        "0x00A206C1"
+      ]
+    },
+    {
+      "ja": "イーグル・・・",
+      "count": 3,
+      "addresses": [
+        "0x00A1C74C",
+        "0x00A1D9D6",
+        "0x00A1DAEC"
+      ]
+    },
+    {
+      "ja": "やっぱり、",
+      "count": 3,
+      "addresses": [
+        "0x00A208E4",
+        "0x00A22C45",
+        "0x00A236D9"
+      ]
+    },
+    {
+      "ja": "持っている。",
+      "count": 3,
+      "addresses": [
+        "0x00A32705",
+        "0x00A333D3",
+        "0x00A335EB"
+      ]
+    },
+    {
+      "ja": "空系ユニット。",
+      "count": 3,
+      "addresses": [
+        "0x00A32B20",
+        "0x00A32CA4",
+        "0x00A32E74"
+      ]
+    },
+    {
+      "ja": "毎ターン１消費する。",
+      "count": 3,
+      "addresses": [
+        "0x00A337DC",
+        "0x00A33C12",
+        "0x00DEEEAE"
+      ]
+    },
+    {
+      "ja": "毎ターン５消費する。",
+      "count": 3,
+      "addresses": [
+        "0x00A33802",
+        "0x00A33B7A",
+        "0x00DEEED8"
+      ]
+    },
+    {
+      "ja": "やってみて。",
+      "count": 3,
+      "addresses": [
+        "0x00D96116",
+        "0x00DA1F53",
+        "0x00DA2111"
+      ]
+    },
+    {
+      "ja": "うっ・・・",
+      "count": 3,
+      "addresses": [
+        "0x00DC348A",
+        "0x00DCA45A",
+        "0x00DCAAA2"
+      ]
+    },
+    {
+      "ja": "・・・・",
+      "count": 3,
+      "addresses": [
+        "0x00DC5D12",
+        "0x00DCB0BA",
+        "0x00E062DE"
+      ]
+    },
+    {
+      "ja": "いてて・・・やっぱり強いや。",
+      "count": 3,
+      "addresses": [
+        "0x00E083DA",
+        "0x00E0A68E",
+        "0x00E0C93A"
+      ]
+    },
+    {
+      "ja": "落ち着いて。",
+      "count": 2,
+      "addresses": [
+        "0x00A02750",
+        "0x00A1FB33"
+      ]
+    },
+    {
+      "ja": "ユニットの上で",
+      "count": 2,
+      "addresses": [
+        "0x00A03543",
+        "0x00A0510D"
+      ]
+    },
+    {
+      "ja": "もう一度、",
+      "count": 2,
+      "addresses": [
+        "0x00A040FC",
+        "0x00A1715E"
+      ]
+    },
+    {
+      "ja": "対岸に",
+      "count": 2,
+      "addresses": [
+        "0x00A046C7",
+        "0x00A0EBAA"
+      ]
+    },
+    {
+      "ja": "そうすれば、",
+      "count": 2,
+      "addresses": [
+        "0x00A04FBD",
+        "0x00A207F4"
+      ]
+    },
+    {
+      "ja": "あんたら、",
+      "count": 2,
+      "addresses": [
+        "0x00A0578A",
+        "0x00A0EC65"
+      ]
+    },
+    {
+      "ja": "なっ・・・！",
+      "count": 2,
+      "addresses": [
+        "0x00A05818",
+        "0x00A0ECF8"
+      ]
+    },
+    {
+      "ja": "出てきたな・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A05B30",
+        "0x00A0F04C"
+      ]
+    },
+    {
+      "ja": "おまえら、",
+      "count": 2,
+      "addresses": [
+        "0x00A05BEC",
+        "0x00A0F10A"
+      ]
+    },
+    {
+      "ja": "落ち着きなさい。",
+      "count": 2,
+      "addresses": [
+        "0x00A05CF3",
+        "0x00A0F207"
+      ]
+    },
+    {
+      "ja": "へへ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A06004",
+        "0x00A0D008"
+      ]
+    },
+    {
+      "ja": "う・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A065A8",
+        "0x00A16D54"
+      ]
+    },
+    {
+      "ja": "なめんじゃ、",
+      "count": 2,
+      "addresses": [
+        "0x00A06ACA",
+        "0x00A0F333"
+      ]
+    },
+    {
+      "ja": "対空戦車よ。",
+      "count": 2,
+      "addresses": [
+        "0x00A0751B",
+        "0x00A0B1E2"
+      ]
+    },
+    {
+      "ja": "研究所の地図？",
+      "count": 2,
+      "addresses": [
+        "0x00A07ED0",
+        "0x00A08710"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍が各地で",
+      "count": 2,
+      "addresses": [
+        "0x00A07F3C",
+        "0x00A0877C"
+      ]
+    },
+    {
+      "ja": "かくれて研究しているなら、",
+      "count": 2,
+      "addresses": [
+        "0x00A07FEB",
+        "0x00A0882B"
+      ]
+    },
+    {
+      "ja": "使ってもいいし、",
+      "count": 2,
+      "addresses": [
+        "0x00A08214",
+        "0x00A0B8B4"
+      ]
+    },
+    {
+      "ja": "今使ってもいいし・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A08225",
+        "0x00A0B8C5"
+      ]
+    },
+    {
+      "ja": "まったく、",
+      "count": 2,
+      "addresses": [
+        "0x00A08580",
+        "0x00A1B71C"
+      ]
+    },
+    {
+      "ja": "ロケット砲よ。",
+      "count": 2,
+      "addresses": [
+        "0x00A09043",
+        "0x00A0B24D"
+      ]
+    },
+    {
+      "ja": "潜水艦は",
+      "count": 2,
+      "addresses": [
+        "0x00A09459",
+        "0x00A09526"
+      ]
+    },
+    {
+      "ja": "ご苦労様。",
+      "count": 2,
+      "addresses": [
+        "0x00A0A470",
+        "0x00A0F6FC"
+      ]
+    },
+    {
+      "ja": "この任務、",
+      "count": 2,
+      "addresses": [
+        "0x00A0A607",
+        "0x00A0F893"
+      ]
+    },
+    {
+      "ja": "ホークが・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0A960",
+        "0x00A0FBB8"
+      ]
+    },
+    {
+      "ja": "ここ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0BACB",
+        "0x00A112F0"
+      ]
+    },
+    {
+      "ja": "名前なんか、",
+      "count": 2,
+      "addresses": [
+        "0x00A0BC24",
+        "0x00A0FEE0"
+      ]
+    },
+    {
+      "ja": "大丈夫かよ？",
+      "count": 2,
+      "addresses": [
+        "0x00A0BCDA",
+        "0x00A0FF96"
+      ]
+    },
+    {
+      "ja": "ふん・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0BD14",
+        "0x00A0FFD4"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍の研究所は。",
+      "count": 2,
+      "addresses": [
+        "0x00A0C0DA",
+        "0x00A11F86"
+      ]
+    },
+    {
+      "ja": "そうそう、",
+      "count": 2,
+      "addresses": [
+        "0x00A0CBDA",
+        "0x00A125BC"
+      ]
+    },
+    {
+      "ja": "コング様・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0CE4C",
+        "0x00A1227C"
+      ]
+    },
+    {
+      "ja": "新兵器・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0CF60",
+        "0x00A12380"
+      ]
+    },
+    {
+      "ja": "新型戦車か！",
+      "count": 2,
+      "addresses": [
+        "0x00A0D2D0",
+        "0x00A125D8"
+      ]
+    },
+    {
+      "ja": "実は・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0D75C",
+        "0x00A12BF4"
+      ]
+    },
+    {
+      "ja": "ムウウ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A0DDB4",
+        "0x00A12DC8"
+      ]
+    },
+    {
+      "ja": "おまえら。",
+      "count": 2,
+      "addresses": [
+        "0x00A0DEDA",
+        "0x00A12EF6"
+      ]
+    },
+    {
+      "ja": "じゃあな。",
+      "count": 2,
+      "addresses": [
+        "0x00A0DEE5",
+        "0x00A190E1"
+      ]
+    },
+    {
+      "ja": "リョウなら、",
+      "count": 2,
+      "addresses": [
+        "0x00A0E2AE",
+        "0x00A1344C"
+      ]
+    },
+    {
+      "ja": "何度来たって",
+      "count": 2,
+      "addresses": [
+        "0x00A0FF5C",
+        "0x00A28A48"
+      ]
+    },
+    {
+      "ja": "はあ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A104E5",
+        "0x00A1C335"
+      ]
+    },
+    {
+      "ja": "すみません、",
+      "count": 2,
+      "addresses": [
+        "0x00A10918",
+        "0x00A1AD20"
+      ]
+    },
+    {
+      "ja": "ご命令どおり",
+      "count": 2,
+      "addresses": [
+        "0x00A11614",
+        "0x00A19AA4"
+      ]
+    },
+    {
+      "ja": "さっそく、",
+      "count": 2,
+      "addresses": [
+        "0x00A11678",
+        "0x00A117A7"
+      ]
+    },
+    {
+      "ja": "うまくいけば",
+      "count": 2,
+      "addresses": [
+        "0x00A11FA3",
+        "0x00A19546"
+      ]
+    },
+    {
+      "ja": "敵も簡単に",
+      "count": 2,
+      "addresses": [
+        "0x00A13133",
+        "0x00A132AF"
+      ]
+    },
+    {
+      "ja": "やれやれ。",
+      "count": 2,
+      "addresses": [
+        "0x00A13C61",
+        "0x00DC5436"
+      ]
+    },
+    {
+      "ja": "キャハハ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A13E31",
+        "0x00A300BC"
+      ]
+    },
+    {
+      "ja": "勝った勝った〜",
+      "count": 2,
+      "addresses": [
+        "0x00A15ADC",
+        "0x00A15C94"
+      ]
+    },
+    {
+      "ja": "何回来たって",
+      "count": 2,
+      "addresses": [
+        "0x00A15B00",
+        "0x00A15CB8"
+      ]
+    },
+    {
+      "ja": "敵味方関係なく",
+      "count": 2,
+      "addresses": [
+        "0x00A15D89",
+        "0x00A2A0C1"
+      ]
+    },
+    {
+      "ja": "ごめん・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A167D1",
+        "0x00A17151"
+      ]
+    },
+    {
+      "ja": "敵襲です！",
+      "count": 2,
+      "addresses": [
+        "0x00A16BFC",
+        "0x00A1FC23"
+      ]
+    },
+    {
+      "ja": "おちつけ、",
+      "count": 2,
+      "addresses": [
+        "0x00A16C4F",
+        "0x00A16C5A"
+      ]
+    },
+    {
+      "ja": "ビリーさん！",
+      "count": 2,
+      "addresses": [
+        "0x00A16EB8",
+        "0x00A195D6"
+      ]
+    },
+    {
+      "ja": "ぼくも",
+      "count": 2,
+      "addresses": [
+        "0x00A16F96",
+        "0x00A28EC7"
+      ]
+    },
+    {
+      "ja": "おじょうちゃん。",
+      "count": 2,
+      "addresses": [
+        "0x00A174BD",
+        "0x00A17887"
+      ]
+    },
+    {
+      "ja": "うそ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A17828",
+        "0x00A20D3C"
+      ]
+    },
+    {
+      "ja": "ビリーさん、",
+      "count": 2,
+      "addresses": [
+        "0x00A17B00",
+        "0x00A190F7"
+      ]
+    },
+    {
+      "ja": "新兵器の設計図、",
+      "count": 2,
+      "addresses": [
+        "0x00A17E50",
+        "0x00A18034"
+      ]
+    },
+    {
+      "ja": "研究所ヲ爆破シマス。",
+      "count": 2,
+      "addresses": [
+        "0x00A17F14",
+        "0x00A17F2C"
+      ]
+    },
+    {
+      "ja": "おひさしぶり、",
+      "count": 2,
+      "addresses": [
+        "0x00A185B0",
+        "0x00A253A8"
+      ]
+    },
+    {
+      "ja": "そうすりゃ、",
+      "count": 2,
+      "addresses": [
+        "0x00A18968",
+        "0x00A19539"
+      ]
+    },
+    {
+      "ja": "そろそろ",
+      "count": 2,
+      "addresses": [
+        "0x00A19B2F",
+        "0x00A23F13"
+      ]
+    },
+    {
+      "ja": "礼を言う。",
+      "count": 2,
+      "addresses": [
+        "0x00A19FCB",
+        "0x00A24675"
+      ]
+    },
+    {
+      "ja": "モップどの。",
+      "count": 2,
+      "addresses": [
+        "0x00A1AB2F",
+        "0x00A1AD7F"
+      ]
+    },
+    {
+      "ja": "修理終わり！",
+      "count": 2,
+      "addresses": [
+        "0x00A1BAB1",
+        "0x00A1BBB1"
+      ]
+    },
+    {
+      "ja": "なるほど。",
+      "count": 2,
+      "addresses": [
+        "0x00A1D444",
+        "0x00A27238"
+      ]
+    },
+    {
+      "ja": "お父さん・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A1FF40",
+        "0x00A20C98"
+      ]
+    },
+    {
+      "ja": "ヤマモト先生？",
+      "count": 2,
+      "addresses": [
+        "0x00A206B0",
+        "0x00A21174"
+      ]
+    },
+    {
+      "ja": "必ず勝てる。",
+      "count": 2,
+      "addresses": [
+        "0x00A20F0F",
+        "0x00A2342A"
+      ]
+    },
+    {
+      "ja": "くっ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A21690",
+        "0x00DC48BA"
+      ]
+    },
+    {
+      "ja": "決着は",
+      "count": 2,
+      "addresses": [
+        "0x00A216B3",
+        "0x00A250D4"
+      ]
+    },
+    {
+      "ja": "そうじゃ。",
+      "count": 2,
+      "addresses": [
+        "0x00A227DD",
+        "0x00A24024"
+      ]
+    },
+    {
+      "ja": "予定どおり",
+      "count": 2,
+      "addresses": [
+        "0x00A22B17",
+        "0x00A2380D"
+      ]
+    },
+    {
+      "ja": "私は・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A230F9",
+        "0x00A27E78"
+      ]
+    },
+    {
+      "ja": "そう・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A232B3",
+        "0x00DCA106"
+      ]
+    },
+    {
+      "ja": "ふむ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A23590",
+        "0x00A245AC"
+      ]
+    },
+    {
+      "ja": "むう・・・",
+      "count": 2,
+      "addresses": [
+        "0x00A23F44",
+        "0x00A24568"
+      ]
+    },
+    {
+      "ja": "なんてこった。",
+      "count": 2,
+      "addresses": [
+        "0x00A28C00",
+        "0x00A28F8C"
+      ]
+    },
+    {
+      "ja": "一度退却して",
+      "count": 2,
+      "addresses": [
+        "0x00A28C33",
+        "0x00A28FC3"
+      ]
+    },
+    {
+      "ja": "攻撃力なら、",
+      "count": 2,
+      "addresses": [
+        "0x00A28E28",
+        "0x00A291EC"
+      ]
+    },
+    {
+      "ja": "お忘れなく。",
+      "count": 2,
+      "addresses": [
+        "0x00A28E99",
+        "0x00A2925F"
+      ]
+    },
+    {
+      "ja": "おいおい、",
+      "count": 2,
+      "addresses": [
+        "0x00A28EE8",
+        "0x00A292B8"
+      ]
+    },
+    {
+      "ja": "オレの爆撃機を",
+      "count": 2,
+      "addresses": [
+        "0x00A28EF3",
+        "0x00A292C3"
+      ]
+    },
+    {
+      "ja": "弾数は無限。",
+      "count": 2,
+      "addresses": [
+        "0x00A2A041",
+        "0x00A2A09B"
+      ]
+    },
+    {
+      "ja": "そうごう",
+      "count": 2,
+      "addresses": [
+        "0x00A2A294",
+        "0x00DF8C02"
+      ]
+    },
+    {
+      "ja": "装備なし",
+      "count": 2,
+      "addresses": [
+        "0x00A2A2A0",
+        "0x00DF8C0E"
+      ]
+    },
+    {
+      "ja": "おまかせ",
+      "count": 2,
+      "addresses": [
+        "0x00A2C944",
+        "0x00D82358"
+      ]
+    },
+    {
+      "ja": "境界防衛戦",
+      "count": 2,
+      "addresses": [
+        "0x00A2D570",
+        "0x00A2D5EC"
+      ]
+    },
+    {
+      "ja": "カンシャしてくれるなら、なんか",
+      "count": 2,
+      "addresses": [
+        "0x00A2EADB",
+        "0x00DFCD38"
+      ]
+    },
+    {
+      "ja": "ガンバレよな。",
+      "count": 2,
+      "addresses": [
+        "0x00A2FE48",
+        "0x00DFD5BA"
+      ]
+    },
+    {
+      "ja": "の主砲の",
+      "count": 2,
+      "addresses": [
+        "0x00A31700",
+        "0x00DECD0E"
+      ]
+    },
+    {
+      "ja": "の主砲",
+      "count": 2,
+      "addresses": [
+        "0x00A31828",
+        "0x00DECE4A"
+      ]
+    },
+    {
+      "ja": "移動力が高く、",
+      "count": 2,
+      "addresses": [
+        "0x00A31948",
+        "0x00DECF91"
+      ]
+    },
+    {
+      "ja": "対して有利。",
+      "count": 2,
+      "addresses": [
+        "0x00A3195F",
+        "0x00DECFAA"
+      ]
+    },
+    {
+      "ja": "もっている。",
+      "count": 2,
+      "addresses": [
+        "0x00A319A3",
+        "0x00DECFF7"
+      ]
+    },
+    {
+      "ja": "軽戦車砲での、",
+      "count": 2,
+      "addresses": [
+        "0x00A31DA4",
+        "0x00DED3CA"
+      ]
+    },
+    {
+      "ja": "重戦車砲での、",
+      "count": 2,
+      "addresses": [
+        "0x00A3208C",
+        "0x00DED69E"
+      ]
+    },
+    {
+      "ja": "高いいりょく。",
+      "count": 2,
+      "addresses": [
+        "0x00A3212D",
+        "0x00A33FBD"
+      ]
+    },
+    {
+      "ja": "燃料、弾の",
+      "count": 2,
+      "addresses": [
+        "0x00A3223B",
+        "0x00DED86F"
+      ]
+    },
+    {
+      "ja": "車両系ユニット。",
+      "count": 2,
+      "addresses": [
+        "0x00A32278",
+        "0x00A3246C"
+      ]
+    },
+    {
+      "ja": "に視界は",
+      "count": 2,
+      "addresses": [
+        "0x00A32552",
+        "0x00DEDB94"
+      ]
+    },
+    {
+      "ja": "ロケット砲での、",
+      "count": 2,
+      "addresses": [
+        "0x00A3262C",
+        "0x00A326C4"
+      ]
+    },
+    {
+      "ja": "かなり強力。",
+      "count": 2,
+      "addresses": [
+        "0x00A32980",
+        "0x00DEDFA4"
+      ]
+    },
+    {
+      "ja": "対空ミサイルの弾数。",
+      "count": 2,
+      "addresses": [
+        "0x00A32A1C",
+        "0x00A32BAC"
+      ]
+    },
+    {
+      "ja": "強力な",
+      "count": 2,
+      "addresses": [
+        "0x00A32CCA",
+        "0x00DEE323"
+      ]
+    },
+    {
+      "ja": "爆弾の弾数。",
+      "count": 2,
+      "addresses": [
+        "0x00A32D14",
+        "0x00DEE3A6"
+      ]
+    },
+    {
+      "ja": "爆弾での、",
+      "count": 2,
+      "addresses": [
+        "0x00A32E18",
+        "0x00DEE4D6"
+      ]
+    },
+    {
+      "ja": "対して",
+      "count": 2,
+      "addresses": [
+        "0x00A330E4",
+        "0x00DEE792"
+      ]
+    },
+    {
+      "ja": "を運ぶ",
+      "count": 2,
+      "addresses": [
+        "0x00A33201",
+        "0x00DEE8C8"
+      ]
+    },
+    {
+      "ja": "海系ユニット。",
+      "count": 2,
+      "addresses": [
+        "0x00A33244",
+        "0x00A33488"
+      ]
+    },
+    {
+      "ja": "対空マシンガンでの、飛行機系",
+      "count": 2,
+      "addresses": [
+        "0x00A335A0",
+        "0x00DEEC92"
+      ]
+    },
+    {
+      "ja": "ユニットもなくなる。",
+      "count": 2,
+      "addresses": [
+        "0x00A33645",
+        "0x00DEED2D"
+      ]
+    },
+    {
+      "ja": "以外には",
+      "count": 2,
+      "addresses": [
+        "0x00A33713",
+        "0x00DEDF0C"
+      ]
+    },
+    {
+      "ja": "は、海ユニット中",
+      "count": 2,
+      "addresses": [
+        "0x00A337B2",
+        "0x00DEEE7C"
+      ]
+    },
+    {
+      "ja": "バズーカ兵タイプの移動が",
+      "count": 2,
+      "addresses": [
+        "0x00A33870",
+        "0x00DEEF8E"
+      ]
+    },
+    {
+      "ja": "主砲なし。",
+      "count": 2,
+      "addresses": [
+        "0x00A33C3C",
+        "0x00DEF332"
+      ]
+    },
+    {
+      "ja": "主砲の弾数。",
+      "count": 2,
+      "addresses": [
+        "0x00A33C78",
+        "0x00DEF376"
+      ]
+    },
+    {
+      "ja": "戦闘アニメのみ",
+      "count": 2,
+      "addresses": [
+        "0x00A34DFC",
+        "0x00DF2BC0"
+      ]
+    },
+    {
+      "ja": "理由は・・・",
+      "count": 2,
+      "addresses": [
+        "0x00D9107F",
+        "0x00DA2E3B"
+      ]
+    },
+    {
+      "ja": "の行動が",
+      "count": 2,
+      "addresses": [
+        "0x00D9112E",
+        "0x00D9C7AA"
+      ]
+    },
+    {
+      "ja": "集中して",
+      "count": 2,
+      "addresses": [
+        "0x00D918C5",
+        "0x00D91DB6"
+      ]
+    },
+    {
+      "ja": "しましょうか。",
+      "count": 2,
+      "addresses": [
+        "0x00D92461",
+        "0x00D951BB"
+      ]
+    },
+    {
+      "ja": "の能力が",
+      "count": 2,
+      "addresses": [
+        "0x00D952B2",
+        "0x00DF2E45"
+      ]
+    },
+    {
+      "ja": "首都を",
+      "count": 2,
+      "addresses": [
+        "0x00D96300",
+        "0x00D98296"
+      ]
+    },
+    {
+      "ja": "そう",
+      "count": 2,
+      "addresses": [
+        "0x00D972D6",
+        "0x00D9B303"
+      ]
+    },
+    {
+      "ja": "それじゃ",
+      "count": 2,
+      "addresses": [
+        "0x00D973BA",
+        "0x00DC8AEE"
+      ]
+    },
+    {
+      "ja": "山の上に",
+      "count": 2,
+      "addresses": [
+        "0x00D98F21",
+        "0x00D990C6"
+      ]
+    },
+    {
+      "ja": "しちゃったら",
+      "count": 2,
+      "addresses": [
+        "0x00D9B294",
+        "0x00D9C794"
+      ]
+    },
+    {
+      "ja": "すれば",
+      "count": 2,
+      "addresses": [
+        "0x00D9C3B8",
+        "0x00DA2DC7"
+      ]
+    },
+    {
+      "ja": "敵軍の",
+      "count": 2,
+      "addresses": [
+        "0x00DA1F66",
+        "0x00DA2124"
+      ]
+    },
+    {
+      "ja": "ぬぬぬ・・・ま　また負けてしまった・・・",
+      "count": 2,
+      "addresses": [
+        "0x00DC56AE",
+        "0x00DC681A"
+      ]
+    },
+    {
+      "ja": "もぐった",
+      "count": 2,
+      "addresses": [
+        "0x00DC5954",
+        "0x00DC7104"
+      ]
+    },
+    {
+      "ja": "・・・ぐっ。",
+      "count": 2,
+      "addresses": [
+        "0x00DC5CCE",
+        "0x00DC7A3A"
+      ]
+    },
+    {
+      "ja": "ドミノどの。",
+      "count": 2,
+      "addresses": [
+        "0x00DC7637",
+        "0x00DC7E27"
+      ]
+    },
+    {
+      "ja": "うう・・・",
+      "count": 2,
+      "addresses": [
+        "0x00DC95F6",
+        "0x00E0625E"
+      ]
+    },
+    {
+      "ja": "なっ・・・",
+      "count": 2,
+      "addresses": [
+        "0x00DC9AA6",
+        "0x00E0F6D2"
+      ]
+    },
+    {
+      "ja": "・・・・・",
+      "count": 2,
+      "addresses": [
+        "0x00DCFCCA",
+        "0x00E0EEDE"
+      ]
+    },
+    {
+      "ja": "勝利条件テスト",
+      "count": 2,
+      "addresses": [
+        "0x00DF1132",
+        "0x00DF1171"
+      ]
+    },
+    {
+      "ja": "海だーっ！",
+      "count": 2,
+      "addresses": [
+        "0x00E0A004",
+        "0x00E0C2B0"
+      ]
+    },
+    {
+      "ja": "うーん　やっぱり強いなあ。",
+      "count": 2,
+      "addresses": [
+        "0x00E0AF92",
+        "0x00E0D23E"
+      ]
+    },
+    {
+      "ja": "リセットするわよ！",
+      "count": 1,
+      "addresses": [
+        "0x009EEF50"
+      ]
+    },
+    {
+      "ja": "ご心配なく。",
+      "count": 1,
+      "addresses": [
+        "0x00A01C1B"
+      ]
+    },
+    {
+      "ja": "期待している。",
+      "count": 1,
+      "addresses": [
+        "0x00A01C78"
+      ]
+    },
+    {
+      "ja": "攻撃せよ！",
+      "count": 1,
+      "addresses": [
+        "0x00A01EEF"
+      ]
+    },
+    {
+      "ja": "山間の敵研究所",
+      "count": 1,
+      "addresses": [
+        "0x00A01F58"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍の本意は・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A020BF"
+      ]
+    },
+    {
+      "ja": "ドミノを救え！",
+      "count": 1,
+      "addresses": [
+        "0x00A0236D"
+      ]
+    },
+    {
+      "ja": "最終決戦！",
+      "count": 1,
+      "addresses": [
+        "0x00A02474"
+      ]
+    },
+    {
+      "ja": "今選んだ",
+      "count": 1,
+      "addresses": [
+        "0x00A02B08"
+      ]
+    },
+    {
+      "ja": "もちろん、",
+      "count": 1,
+      "addresses": [
+        "0x00A02CDB"
+      ]
+    },
+    {
+      "ja": "占領が",
+      "count": 1,
+      "addresses": [
+        "0x00A02D2C"
+      ]
+    },
+    {
+      "ja": "輸送車は歩兵系を",
+      "count": 1,
+      "addresses": [
+        "0x00A02F0D"
+      ]
+    },
+    {
+      "ja": "おぼれてしまうかも",
+      "count": 1,
+      "addresses": [
+        "0x00A0316B"
+      ]
+    },
+    {
+      "ja": "補給って？",
+      "count": 1,
+      "addresses": [
+        "0x00A031BD"
+      ]
+    },
+    {
+      "ja": "その度",
+      "count": 1,
+      "addresses": [
+        "0x00A031E7"
+      ]
+    },
+    {
+      "ja": "主砲の弾",
+      "count": 1,
+      "addresses": [
+        "0x00A031F9"
+      ]
+    },
+    {
+      "ja": "輸送車は",
+      "count": 1,
+      "addresses": [
+        "0x00A0326E"
+      ]
+    },
+    {
+      "ja": "急ぐ時は",
+      "count": 1,
+      "addresses": [
+        "0x00A032EF"
+      ]
+    },
+    {
+      "ja": "輸送車は味方を",
+      "count": 1,
+      "addresses": [
+        "0x00A03332"
+      ]
+    },
+    {
+      "ja": "輸送車の移動タイプは",
+      "count": 1,
+      "addresses": [
+        "0x00A034D9"
+      ]
+    },
+    {
+      "ja": "戦車タイプは、",
+      "count": 1,
+      "addresses": [
+        "0x00A034FE"
+      ]
+    },
+    {
+      "ja": "無理やり",
+      "count": 1,
+      "addresses": [
+        "0x00A037CE"
+      ]
+    },
+    {
+      "ja": "移動してから、",
+      "count": 1,
+      "addresses": [
+        "0x00A038DC"
+      ]
+    },
+    {
+      "ja": "直接攻撃は、",
+      "count": 1,
+      "addresses": [
+        "0x00A03915"
+      ]
+    },
+    {
+      "ja": "必ず敵の",
+      "count": 1,
+      "addresses": [
+        "0x00A0394D"
+      ]
+    },
+    {
+      "ja": "ユニットの上に",
+      "count": 1,
+      "addresses": [
+        "0x00A03A71"
+      ]
+    },
+    {
+      "ja": "しまうから、",
+      "count": 1,
+      "addresses": [
+        "0x00A03ACD"
+      ]
+    },
+    {
+      "ja": "戦闘開始よ！",
+      "count": 1,
+      "addresses": [
+        "0x00A03B5A"
+      ]
+    },
+    {
+      "ja": "全員降伏しろ！",
+      "count": 1,
+      "addresses": [
+        "0x00A03EB8"
+      ]
+    },
+    {
+      "ja": "う〜ん・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A03F0C"
+      ]
+    },
+    {
+      "ja": "まあまあ。",
+      "count": 1,
+      "addresses": [
+        "0x00A03F40"
+      ]
+    },
+    {
+      "ja": "これから",
+      "count": 1,
+      "addresses": [
+        "0x00A03F4C"
+      ]
+    },
+    {
+      "ja": "イヤでも",
+      "count": 1,
+      "addresses": [
+        "0x00A03F55"
+      ]
+    },
+    {
+      "ja": "もうしません",
+      "count": 1,
+      "addresses": [
+        "0x00A0412B"
+      ]
+    },
+    {
+      "ja": "なに・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A044F4"
+      ]
+    },
+    {
+      "ja": "敵の都市か。",
+      "count": 1,
+      "addresses": [
+        "0x00A044FF"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍進攻作戦の中に",
+      "count": 1,
+      "addresses": [
+        "0x00A0452D"
+      ]
+    },
+    {
+      "ja": "無傷なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A04612"
+      ]
+    },
+    {
+      "ja": "軽戦車なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A0472D"
+      ]
+    },
+    {
+      "ja": "じゃあ・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A047F6"
+      ]
+    },
+    {
+      "ja": "戦闘の時",
+      "count": 1,
+      "addresses": [
+        "0x00A048A4"
+      ]
+    },
+    {
+      "ja": "利用して、",
+      "count": 1,
+      "addresses": [
+        "0x00A048F0"
+      ]
+    },
+    {
+      "ja": "平地や",
+      "count": 1,
+      "addresses": [
+        "0x00A04994"
+      ]
+    },
+    {
+      "ja": "いつ見ても、",
+      "count": 1,
+      "addresses": [
+        "0x00A04A4C"
+      ]
+    },
+    {
+      "ja": "自分に",
+      "count": 1,
+      "addresses": [
+        "0x00A04B8E"
+      ]
+    },
+    {
+      "ja": "毎日の始め",
+      "count": 1,
+      "addresses": [
+        "0x00A04D72"
+      ]
+    },
+    {
+      "ja": "自走砲よ。",
+      "count": 1,
+      "addresses": [
+        "0x00A04E91"
+      ]
+    },
+    {
+      "ja": "自走砲は、",
+      "count": 1,
+      "addresses": [
+        "0x00A04E9C"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットなの。",
+      "count": 1,
+      "addresses": [
+        "0x00A04ED3"
+      ]
+    },
+    {
+      "ja": "攻撃しても",
+      "count": 1,
+      "addresses": [
+        "0x00A04F05"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットは直接攻撃ユニット",
+      "count": 1,
+      "addresses": [
+        "0x00A04FF9"
+      ]
+    },
+    {
+      "ja": "移動後の攻撃",
+      "count": 1,
+      "addresses": [
+        "0x00A05029"
+      ]
+    },
+    {
+      "ja": "同時に",
+      "count": 1,
+      "addresses": [
+        "0x00A05424"
+      ]
+    },
+    {
+      "ja": "・・・ム！",
+      "count": 1,
+      "addresses": [
+        "0x00A05504"
+      ]
+    },
+    {
+      "ja": "引き続き",
+      "count": 1,
+      "addresses": [
+        "0x00A055C2"
+      ]
+    },
+    {
+      "ja": "上の方に、",
+      "count": 1,
+      "addresses": [
+        "0x00A05602"
+      ]
+    },
+    {
+      "ja": "数字が",
+      "count": 1,
+      "addresses": [
+        "0x00A0561F"
+      ]
+    },
+    {
+      "ja": "ム・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A05744"
+      ]
+    },
+    {
+      "ja": "引いてやる。",
+      "count": 1,
+      "addresses": [
+        "0x00A057DF"
+      ]
+    },
+    {
+      "ja": "無礼なヤツね。",
+      "count": 1,
+      "addresses": [
+        "0x00A05855"
+      ]
+    },
+    {
+      "ja": "コね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A058C2"
+      ]
+    },
+    {
+      "ja": "うるせぇ、",
+      "count": 1,
+      "addresses": [
+        "0x00A05AB4"
+      ]
+    },
+    {
+      "ja": "重戦車や",
+      "count": 1,
+      "addresses": [
+        "0x00A05E44"
+      ]
+    },
+    {
+      "ja": "戦闘ヘリ、",
+      "count": 1,
+      "addresses": [
+        "0x00A05E50"
+      ]
+    },
+    {
+      "ja": "輸送ヘリ、",
+      "count": 1,
+      "addresses": [
+        "0x00A05E5C"
+      ]
+    },
+    {
+      "ja": "直接攻撃が得意で、",
+      "count": 1,
+      "addresses": [
+        "0x00A05F28"
+      ]
+    },
+    {
+      "ja": "攻撃力が高い・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A05F3B"
+      ]
+    },
+    {
+      "ja": "間接攻撃は",
+      "count": 1,
+      "addresses": [
+        "0x00A0604F"
+      ]
+    },
+    {
+      "ja": "間接なんか、",
+      "count": 1,
+      "addresses": [
+        "0x00A060C5"
+      ]
+    },
+    {
+      "ja": "なくったって",
+      "count": 1,
+      "addresses": [
+        "0x00A060D4"
+      ]
+    },
+    {
+      "ja": "輸送ヘリね。",
+      "count": 1,
+      "addresses": [
+        "0x00A061C1"
+      ]
+    },
+    {
+      "ja": "歩兵や",
+      "count": 1,
+      "addresses": [
+        "0x00A061EB"
+      ]
+    },
+    {
+      "ja": "輸送ヘリなら",
+      "count": 1,
+      "addresses": [
+        "0x00A0628B"
+      ]
+    },
+    {
+      "ja": "便利だな！",
+      "count": 1,
+      "addresses": [
+        "0x00A062BF"
+      ]
+    },
+    {
+      "ja": "同じユニット同士なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A06871"
+      ]
+    },
+    {
+      "ja": "合流して",
+      "count": 1,
+      "addresses": [
+        "0x00A06888"
+      ]
+    },
+    {
+      "ja": "重なっても、",
+      "count": 1,
+      "addresses": [
+        "0x00A06A27"
+      ]
+    },
+    {
+      "ja": "・・・フン！",
+      "count": 1,
+      "addresses": [
+        "0x00A06AE4"
+      ]
+    },
+    {
+      "ja": "・・・ふん、",
+      "count": 1,
+      "addresses": [
+        "0x00A06AF4"
+      ]
+    },
+    {
+      "ja": "レッドスターに来た事、",
+      "count": 1,
+      "addresses": [
+        "0x00A06B8C"
+      ]
+    },
+    {
+      "ja": "後悔させてやるぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00A06BA3"
+      ]
+    },
+    {
+      "ja": "オレは全開だ！",
+      "count": 1,
+      "addresses": [
+        "0x00A06F10"
+      ]
+    },
+    {
+      "ja": "負けてしまったか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A06F41"
+      ]
+    },
+    {
+      "ja": "敵の重戦車が、",
+      "count": 1,
+      "addresses": [
+        "0x00A06FC7"
+      ]
+    },
+    {
+      "ja": "ぶつかれば",
+      "count": 1,
+      "addresses": [
+        "0x00A06FFA"
+      ]
+    },
+    {
+      "ja": "戦う上で",
+      "count": 1,
+      "addresses": [
+        "0x00A0710C"
+      ]
+    },
+    {
+      "ja": "輸送ヘリで",
+      "count": 1,
+      "addresses": [
+        "0x00A0715E"
+      ]
+    },
+    {
+      "ja": "マックスの部隊か。",
+      "count": 1,
+      "addresses": [
+        "0x00A07258"
+      ]
+    },
+    {
+      "ja": "了解・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A07330"
+      ]
+    },
+    {
+      "ja": "戦闘ヘリに、",
+      "count": 1,
+      "addresses": [
+        "0x00A0735D"
+      ]
+    },
+    {
+      "ja": "爆撃機・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0736A"
+      ]
+    },
+    {
+      "ja": "敵の部隊に爆撃機・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A074AC"
+      ]
+    },
+    {
+      "ja": "まあ落ち着いて対処しましょう。",
+      "count": 1,
+      "addresses": [
+        "0x00A074E1"
+      ]
+    },
+    {
+      "ja": "マックスが得意な、",
+      "count": 1,
+      "addresses": [
+        "0x00A07571"
+      ]
+    },
+    {
+      "ja": "対空ミサイル。",
+      "count": 1,
+      "addresses": [
+        "0x00A075D3"
+      ]
+    },
+    {
+      "ja": "きっちり",
+      "count": 1,
+      "addresses": [
+        "0x00A07715"
+      ]
+    },
+    {
+      "ja": "ロケット砲だわ。",
+      "count": 1,
+      "addresses": [
+        "0x00A07788"
+      ]
+    },
+    {
+      "ja": "マックスの場合",
+      "count": 1,
+      "addresses": [
+        "0x00A077E7"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットは",
+      "count": 1,
+      "addresses": [
+        "0x00A07825"
+      ]
+    },
+    {
+      "ja": "苦手だな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A07838"
+      ]
+    },
+    {
+      "ja": "あんまり",
+      "count": 1,
+      "addresses": [
+        "0x00A0787A"
+      ]
+    },
+    {
+      "ja": "戦闘ヘリ隊、",
+      "count": 1,
+      "addresses": [
+        "0x00A078F4"
+      ]
+    },
+    {
+      "ja": "大丈夫だぜ！",
+      "count": 1,
+      "addresses": [
+        "0x00A079CB"
+      ]
+    },
+    {
+      "ja": "空港から引っぱり出してきた。",
+      "count": 1,
+      "addresses": [
+        "0x00A07B74"
+      ]
+    },
+    {
+      "ja": "心配すんな。",
+      "count": 1,
+      "addresses": [
+        "0x00A07BE0"
+      ]
+    },
+    {
+      "ja": "やたら強い。",
+      "count": 1,
+      "addresses": [
+        "0x00A07C4C"
+      ]
+    },
+    {
+      "ja": "戦闘機だ。",
+      "count": 1,
+      "addresses": [
+        "0x00A07CC7"
+      ]
+    },
+    {
+      "ja": "空中戦なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A07D01"
+      ]
+    },
+    {
+      "ja": "報告しておきましょう。",
+      "count": 1,
+      "addresses": [
+        "0x00A08080"
+      ]
+    },
+    {
+      "ja": "普通のブレイクよ。",
+      "count": 1,
+      "addresses": [
+        "0x00A081E0"
+      ]
+    },
+    {
+      "ja": "マックスの部隊は・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A083A8"
+      ]
+    },
+    {
+      "ja": "ムゥ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A08400"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍の侵攻は",
+      "count": 1,
+      "addresses": [
+        "0x00A084B8"
+      ]
+    },
+    {
+      "ja": "また会おうぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00A0854C"
+      ]
+    },
+    {
+      "ja": "いくら攻めてきたって、",
+      "count": 1,
+      "addresses": [
+        "0x00A085A7"
+      ]
+    },
+    {
+      "ja": "あら・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0860D"
+      ]
+    },
+    {
+      "ja": "今回は",
+      "count": 1,
+      "addresses": [
+        "0x00A08930"
+      ]
+    },
+    {
+      "ja": "残念よ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A08987"
+      ]
+    },
+    {
+      "ja": "上の陸上部隊は、",
+      "count": 1,
+      "addresses": [
+        "0x00A08A60"
+      ]
+    },
+    {
+      "ja": "マックスなら、",
+      "count": 1,
+      "addresses": [
+        "0x00A08ABC"
+      ]
+    },
+    {
+      "ja": "でもドミノ、",
+      "count": 1,
+      "addresses": [
+        "0x00A08B98"
+      ]
+    },
+    {
+      "ja": "ドミノあのコ、",
+      "count": 1,
+      "addresses": [
+        "0x00A08D81"
+      ]
+    },
+    {
+      "ja": "・・・はい。",
+      "count": 1,
+      "addresses": [
+        "0x00A08DB8"
+      ]
+    },
+    {
+      "ja": "同じ事よ！",
+      "count": 1,
+      "addresses": [
+        "0x00A08F69"
+      ]
+    },
+    {
+      "ja": "攻撃範囲も",
+      "count": 1,
+      "addresses": [
+        "0x00A0907B"
+      ]
+    },
+    {
+      "ja": "自走砲の強化ユニットと、",
+      "count": 1,
+      "addresses": [
+        "0x00A090A4"
+      ]
+    },
+    {
+      "ja": "この輸送ヘリ、",
+      "count": 1,
+      "addresses": [
+        "0x00A09150"
+      ]
+    },
+    {
+      "ja": "ほうって置けば、",
+      "count": 1,
+      "addresses": [
+        "0x00A09160"
+      ]
+    },
+    {
+      "ja": "２部隊の対空戦車に、",
+      "count": 1,
+      "addresses": [
+        "0x00A09171"
+      ]
+    },
+    {
+      "ja": "護衛艦・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A091B0"
+      ]
+    },
+    {
+      "ja": "輸送ヘリや戦闘ヘリは、",
+      "count": 1,
+      "addresses": [
+        "0x00A0927B"
+      ]
+    },
+    {
+      "ja": "護衛艦に",
+      "count": 1,
+      "addresses": [
+        "0x00A09292"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットの中で",
+      "count": 1,
+      "addresses": [
+        "0x00A09379"
+      ]
+    },
+    {
+      "ja": "海ユニット全てに、",
+      "count": 1,
+      "addresses": [
+        "0x00A09418"
+      ]
+    },
+    {
+      "ja": "半分正解ね。",
+      "count": 1,
+      "addresses": [
+        "0x00A09508"
+      ]
+    },
+    {
+      "ja": "注意が必要よ。",
+      "count": 1,
+      "addresses": [
+        "0x00A0960E"
+      ]
+    },
+    {
+      "ja": "あぶなくなったら",
+      "count": 1,
+      "addresses": [
+        "0x00A0961D"
+      ]
+    },
+    {
+      "ja": "港・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0964B"
+      ]
+    },
+    {
+      "ja": "護衛艦ね。",
+      "count": 1,
+      "addresses": [
+        "0x00A09691"
+      ]
+    },
+    {
+      "ja": "輸送船ね。",
+      "count": 1,
+      "addresses": [
+        "0x00A09775"
+      ]
+    },
+    {
+      "ja": "この輸送船・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A098FC"
+      ]
+    },
+    {
+      "ja": "はい・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A09994"
+      ]
+    },
+    {
+      "ja": "灰色の星ゲージ、",
+      "count": 1,
+      "addresses": [
+        "0x00A099D6"
+      ]
+    },
+    {
+      "ja": "ブレイクの内容は、",
+      "count": 1,
+      "addresses": [
+        "0x00A09A8B"
+      ]
+    },
+    {
+      "ja": "意味もなく、",
+      "count": 1,
+      "addresses": [
+        "0x00A09AF7"
+      ]
+    },
+    {
+      "ja": "へえ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A09BD4"
+      ]
+    },
+    {
+      "ja": "今聞いた通り、",
+      "count": 1,
+      "addresses": [
+        "0x00A09C23"
+      ]
+    },
+    {
+      "ja": "追撃隊が、",
+      "count": 1,
+      "addresses": [
+        "0x00A09C33"
+      ]
+    },
+    {
+      "ja": "２日目ね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A09CD4"
+      ]
+    },
+    {
+      "ja": "燃料を",
+      "count": 1,
+      "addresses": [
+        "0x00A09D26"
+      ]
+    },
+    {
+      "ja": "コングの部隊は、",
+      "count": 1,
+      "addresses": [
+        "0x00A09E10"
+      ]
+    },
+    {
+      "ja": "・・・ドミノ、",
+      "count": 1,
+      "addresses": [
+        "0x00A09E38"
+      ]
+    },
+    {
+      "ja": "大丈夫かしら。",
+      "count": 1,
+      "addresses": [
+        "0x00A09E47"
+      ]
+    },
+    {
+      "ja": "ふう・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0A090"
+      ]
+    },
+    {
+      "ja": "あらためて、",
+      "count": 1,
+      "addresses": [
+        "0x00A0A0D6"
+      ]
+    },
+    {
+      "ja": "めんどうな",
+      "count": 1,
+      "addresses": [
+        "0x00A0A1E8"
+      ]
+    },
+    {
+      "ja": "かならず、",
+      "count": 1,
+      "addresses": [
+        "0x00A0A98C"
+      ]
+    },
+    {
+      "ja": "生産マップ？",
+      "count": 1,
+      "addresses": [
+        "0x00A0AA2C"
+      ]
+    },
+    {
+      "ja": "攻撃の時は、",
+      "count": 1,
+      "addresses": [
+        "0x00A0ADC3"
+      ]
+    },
+    {
+      "ja": "重戦車など、",
+      "count": 1,
+      "addresses": [
+        "0x00A0AE35"
+      ]
+    },
+    {
+      "ja": "偵察車よ。",
+      "count": 1,
+      "addresses": [
+        "0x00A0B116"
+      ]
+    },
+    {
+      "ja": "移動力も高いし、",
+      "count": 1,
+      "addresses": [
+        "0x00A0B17C"
+      ]
+    },
+    {
+      "ja": "新型戦車よ！",
+      "count": 1,
+      "addresses": [
+        "0x00A0B3E2"
+      ]
+    },
+    {
+      "ja": "攻撃力は重戦車以上よ！",
+      "count": 1,
+      "addresses": [
+        "0x00A0B478"
+      ]
+    },
+    {
+      "ja": "まあいい",
+      "count": 1,
+      "addresses": [
+        "0x00A0B596"
+      ]
+    },
+    {
+      "ja": "あの砲台について色々わかったわ。",
+      "count": 1,
+      "addresses": [
+        "0x00A0B5FE"
+      ]
+    },
+    {
+      "ja": "試作品らしくて、",
+      "count": 1,
+      "addresses": [
+        "0x00A0B6B5"
+      ]
+    },
+    {
+      "ja": "強いユニット１部隊を",
+      "count": 1,
+      "addresses": [
+        "0x00A0B6FB"
+      ]
+    },
+    {
+      "ja": "攻撃開始！",
+      "count": 1,
+      "addresses": [
+        "0x00A0B7AD"
+      ]
+    },
+    {
+      "ja": "ブレイクを・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A0B9EA"
+      ]
+    },
+    {
+      "ja": "来たって",
+      "count": 1,
+      "addresses": [
+        "0x00A0BCA3"
+      ]
+    },
+    {
+      "ja": "なに！・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0BD4C"
+      ]
+    },
+    {
+      "ja": "・・・ふーん。",
+      "count": 1,
+      "addresses": [
+        "0x00A0BE08"
+      ]
+    },
+    {
+      "ja": "ブラックキャノンの攻撃・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0BF49"
+      ]
+    },
+    {
+      "ja": "歩兵を搭載し、",
+      "count": 1,
+      "addresses": [
+        "0x00A0C008"
+      ]
+    },
+    {
+      "ja": "いいって、",
+      "count": 1,
+      "addresses": [
+        "0x00A0C244"
+      ]
+    },
+    {
+      "ja": "行きましょう。",
+      "count": 1,
+      "addresses": [
+        "0x00A0C2B9"
+      ]
+    },
+    {
+      "ja": "なれれば、",
+      "count": 1,
+      "addresses": [
+        "0x00A0C34F"
+      ]
+    },
+    {
+      "ja": "この偵察車、",
+      "count": 1,
+      "addresses": [
+        "0x00A0C5D4"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットが",
+      "count": 1,
+      "addresses": [
+        "0x00A0CA69"
+      ]
+    },
+    {
+      "ja": "偵察車を、",
+      "count": 1,
+      "addresses": [
+        "0x00A0CB62"
+      ]
+    },
+    {
+      "ja": "新型戦車を",
+      "count": 1,
+      "addresses": [
+        "0x00A0CF6D"
+      ]
+    },
+    {
+      "ja": "これぐらいしか",
+      "count": 1,
+      "addresses": [
+        "0x00A0D04B"
+      ]
+    },
+    {
+      "ja": "ほうっておいても",
+      "count": 1,
+      "addresses": [
+        "0x00A0D10B"
+      ]
+    },
+    {
+      "ja": "強いユニットも",
+      "count": 1,
+      "addresses": [
+        "0x00A0D20B"
+      ]
+    },
+    {
+      "ja": "あのパイプ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0D81E"
+      ]
+    },
+    {
+      "ja": "物資を",
+      "count": 1,
+      "addresses": [
+        "0x00A0D82F"
+      ]
+    },
+    {
+      "ja": "もうすこし調べてみるから",
+      "count": 1,
+      "addresses": [
+        "0x00A0D8FC"
+      ]
+    },
+    {
+      "ja": "あのファクトリー・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0D937"
+      ]
+    },
+    {
+      "ja": "・・・フン。",
+      "count": 1,
+      "addresses": [
+        "0x00A0DCC8"
+      ]
+    },
+    {
+      "ja": "あきらめな。",
+      "count": 1,
+      "addresses": [
+        "0x00A0DDD9"
+      ]
+    },
+    {
+      "ja": "行ってしまったか。",
+      "count": 1,
+      "addresses": [
+        "0x00A0DF1B"
+      ]
+    },
+    {
+      "ja": "判断して、",
+      "count": 1,
+      "addresses": [
+        "0x00A0E096"
+      ]
+    },
+    {
+      "ja": "空港かしら・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0E1F4"
+      ]
+    },
+    {
+      "ja": "あいつら、",
+      "count": 1,
+      "addresses": [
+        "0x00A0E443"
+      ]
+    },
+    {
+      "ja": "落ち着いて、",
+      "count": 1,
+      "addresses": [
+        "0x00A0E494"
+      ]
+    },
+    {
+      "ja": "この世界・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0E4E8"
+      ]
+    },
+    {
+      "ja": "こりゃあ、",
+      "count": 1,
+      "addresses": [
+        "0x00A0E9AF"
+      ]
+    },
+    {
+      "ja": "コングさま！",
+      "count": 1,
+      "addresses": [
+        "0x00A0EB9C"
+      ]
+    },
+    {
+      "ja": "レッドスターの部隊が・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0EBB3"
+      ]
+    },
+    {
+      "ja": "戦車を出せ。",
+      "count": 1,
+      "addresses": [
+        "0x00A0EBF9"
+      ]
+    },
+    {
+      "ja": "なかなかやるな、",
+      "count": 1,
+      "addresses": [
+        "0x00A0EC2B"
+      ]
+    },
+    {
+      "ja": "いったん引いてやる。",
+      "count": 1,
+      "addresses": [
+        "0x00A0ECB7"
+      ]
+    },
+    {
+      "ja": "おいコング、",
+      "count": 1,
+      "addresses": [
+        "0x00A0F0E9"
+      ]
+    },
+    {
+      "ja": "あいさつ程度。",
+      "count": 1,
+      "addresses": [
+        "0x00A0F399"
+      ]
+    },
+    {
+      "ja": "本部占領、",
+      "count": 1,
+      "addresses": [
+        "0x00A0F643"
+      ]
+    },
+    {
+      "ja": "助かった。",
+      "count": 1,
+      "addresses": [
+        "0x00A0FAA6"
+      ]
+    },
+    {
+      "ja": "あたし帰る。",
+      "count": 1,
+      "addresses": [
+        "0x00A0FB39"
+      ]
+    },
+    {
+      "ja": "そういえば、",
+      "count": 1,
+      "addresses": [
+        "0x00A0FC9C"
+      ]
+    },
+    {
+      "ja": "いや・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0FD94"
+      ]
+    },
+    {
+      "ja": "確かに・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0FE08"
+      ]
+    },
+    {
+      "ja": "よう・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A0FF84"
+      ]
+    },
+    {
+      "ja": "ふーん・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A100D0"
+      ]
+    },
+    {
+      "ja": "どうすれば",
+      "count": 1,
+      "addresses": [
+        "0x00A103E0"
+      ]
+    },
+    {
+      "ja": "新発明の研究で",
+      "count": 1,
+      "addresses": [
+        "0x00A10457"
+      ]
+    },
+    {
+      "ja": "山での",
+      "count": 1,
+      "addresses": [
+        "0x00A10635"
+      ]
+    },
+    {
+      "ja": "いいもんいいもん。",
+      "count": 1,
+      "addresses": [
+        "0x00A10721"
+      ]
+    },
+    {
+      "ja": "ナイショの基地は、",
+      "count": 1,
+      "addresses": [
+        "0x00A10736"
+      ]
+    },
+    {
+      "ja": "そう・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A107C8"
+      ]
+    },
+    {
+      "ja": "一つずつ、",
+      "count": 1,
+      "addresses": [
+        "0x00A108BC"
+      ]
+    },
+    {
+      "ja": "敵軍から",
+      "count": 1,
+      "addresses": [
+        "0x00A10B65"
+      ]
+    },
+    {
+      "ja": "どうして、",
+      "count": 1,
+      "addresses": [
+        "0x00A10D30"
+      ]
+    },
+    {
+      "ja": "おまえの戦いぶりは、",
+      "count": 1,
+      "addresses": [
+        "0x00A10D9E"
+      ]
+    },
+    {
+      "ja": "元々われわれが",
+      "count": 1,
+      "addresses": [
+        "0x00A10FFB"
+      ]
+    },
+    {
+      "ja": "約束どおり",
+      "count": 1,
+      "addresses": [
+        "0x00A110A0"
+      ]
+    },
+    {
+      "ja": "やったぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00A11129"
+      ]
+    },
+    {
+      "ja": "聞いてくれ。",
+      "count": 1,
+      "addresses": [
+        "0x00A111AD"
+      ]
+    },
+    {
+      "ja": "それって・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1128D"
+      ]
+    },
+    {
+      "ja": "どう・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A11363"
+      ]
+    },
+    {
+      "ja": "本土に戻る。",
+      "count": 1,
+      "addresses": [
+        "0x00A11390"
+      ]
+    },
+    {
+      "ja": "あいつめ、",
+      "count": 1,
+      "addresses": [
+        "0x00A113BC"
+      ]
+    },
+    {
+      "ja": "負けた・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A113E4"
+      ]
+    },
+    {
+      "ja": "こどもか。",
+      "count": 1,
+      "addresses": [
+        "0x00A11430"
+      ]
+    },
+    {
+      "ja": "約束どおり、",
+      "count": 1,
+      "addresses": [
+        "0x00A1143B"
+      ]
+    },
+    {
+      "ja": "ま・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1146C"
+      ]
+    },
+    {
+      "ja": "狙っていく。",
+      "count": 1,
+      "addresses": [
+        "0x00A114EE"
+      ]
+    },
+    {
+      "ja": "今の部隊で",
+      "count": 1,
+      "addresses": [
+        "0x00A118D0"
+      ]
+    },
+    {
+      "ja": "行かせてくれ。",
+      "count": 1,
+      "addresses": [
+        "0x00A119B7"
+      ]
+    },
+    {
+      "ja": "・・・しかし、",
+      "count": 1,
+      "addresses": [
+        "0x00A11BC9"
+      ]
+    },
+    {
+      "ja": "ヘヘヘ・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A11DCB"
+      ]
+    },
+    {
+      "ja": "大丈夫だ！",
+      "count": 1,
+      "addresses": [
+        "0x00A11ED1"
+      ]
+    },
+    {
+      "ja": "あせりすぎたな。",
+      "count": 1,
+      "addresses": [
+        "0x00A11EE6"
+      ]
+    },
+    {
+      "ja": "あらドミノ、",
+      "count": 1,
+      "addresses": [
+        "0x00A127A8"
+      ]
+    },
+    {
+      "ja": "この土地の連中が",
+      "count": 1,
+      "addresses": [
+        "0x00A12940"
+      ]
+    },
+    {
+      "ja": "たしか",
+      "count": 1,
+      "addresses": [
+        "0x00A12A54"
+      ]
+    },
+    {
+      "ja": "レッドスター軍の被害は",
+      "count": 1,
+      "addresses": [
+        "0x00A12A7D"
+      ]
+    },
+    {
+      "ja": "オレの",
+      "count": 1,
+      "addresses": [
+        "0x00A12E20"
+      ]
+    },
+    {
+      "ja": "レッドスター侵攻は失敗だ",
+      "count": 1,
+      "addresses": [
+        "0x00A12E27"
+      ]
+    },
+    {
+      "ja": "大変じゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A134E8"
+      ]
+    },
+    {
+      "ja": "敵襲じゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A13540"
+      ]
+    },
+    {
+      "ja": "領土くらい、",
+      "count": 1,
+      "addresses": [
+        "0x00A1366E"
+      ]
+    },
+    {
+      "ja": "イワンです！",
+      "count": 1,
+      "addresses": [
+        "0x00A13725"
+      ]
+    },
+    {
+      "ja": "ぼうや",
+      "count": 1,
+      "addresses": [
+        "0x00A137B3"
+      ]
+    },
+    {
+      "ja": "あたしもコングも",
+      "count": 1,
+      "addresses": [
+        "0x00A138FC"
+      ]
+    },
+    {
+      "ja": "いいじゃん、",
+      "count": 1,
+      "addresses": [
+        "0x00A13950"
+      ]
+    },
+    {
+      "ja": "楽しみー。",
+      "count": 1,
+      "addresses": [
+        "0x00A13A21"
+      ]
+    },
+    {
+      "ja": "雪でも",
+      "count": 1,
+      "addresses": [
+        "0x00A13AC3"
+      ]
+    },
+    {
+      "ja": "実はな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A13B3A"
+      ]
+    },
+    {
+      "ja": "知らなーい。",
+      "count": 1,
+      "addresses": [
+        "0x00A13DB1"
+      ]
+    },
+    {
+      "ja": "いーけど。",
+      "count": 1,
+      "addresses": [
+        "0x00A14040"
+      ]
+    },
+    {
+      "ja": "ここじゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A1407F"
+      ]
+    },
+    {
+      "ja": "誰だ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1453F"
+      ]
+    },
+    {
+      "ja": "貴様は・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A145EC"
+      ]
+    },
+    {
+      "ja": "私はスネーク。",
+      "count": 1,
+      "addresses": [
+        "0x00A147E4"
+      ]
+    },
+    {
+      "ja": "なに・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A14870"
+      ]
+    },
+    {
+      "ja": "いくつか、",
+      "count": 1,
+      "addresses": [
+        "0x00A14975"
+      ]
+    },
+    {
+      "ja": "それなら・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A14AEC"
+      ]
+    },
+    {
+      "ja": "重戦車隊、",
+      "count": 1,
+      "addresses": [
+        "0x00A14C2F"
+      ]
+    },
+    {
+      "ja": "いったい",
+      "count": 1,
+      "addresses": [
+        "0x00A14E51"
+      ]
+    },
+    {
+      "ja": "全滅・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A14E8E"
+      ]
+    },
+    {
+      "ja": "退却せよ！",
+      "count": 1,
+      "addresses": [
+        "0x00A14EA9"
+      ]
+    },
+    {
+      "ja": "え・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A15014"
+      ]
+    },
+    {
+      "ja": "けっこう、",
+      "count": 1,
+      "addresses": [
+        "0x00A15549"
+      ]
+    },
+    {
+      "ja": "北部へ出撃、",
+      "count": 1,
+      "addresses": [
+        "0x00A155DA"
+      ]
+    },
+    {
+      "ja": "こっちから",
+      "count": 1,
+      "addresses": [
+        "0x00A158DE"
+      ]
+    },
+    {
+      "ja": "敵の本部も、",
+      "count": 1,
+      "addresses": [
+        "0x00A159AB"
+      ]
+    },
+    {
+      "ja": "良かった",
+      "count": 1,
+      "addresses": [
+        "0x00A159F6"
+      ]
+    },
+    {
+      "ja": "一日も早く",
+      "count": 1,
+      "addresses": [
+        "0x00A15A6D"
+      ]
+    },
+    {
+      "ja": "なんじゃ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A15E8C"
+      ]
+    },
+    {
+      "ja": "なんじゃあ、",
+      "count": 1,
+      "addresses": [
+        "0x00A15EA0"
+      ]
+    },
+    {
+      "ja": "あれじゃ、",
+      "count": 1,
+      "addresses": [
+        "0x00A15EEB"
+      ]
+    },
+    {
+      "ja": "全軍出撃！",
+      "count": 1,
+      "addresses": [
+        "0x00A15F18"
+      ]
+    },
+    {
+      "ja": "言ってるそばから、",
+      "count": 1,
+      "addresses": [
+        "0x00A15F6F"
+      ]
+    },
+    {
+      "ja": "むむむ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A16248"
+      ]
+    },
+    {
+      "ja": "・・・って、",
+      "count": 1,
+      "addresses": [
+        "0x00A16437"
+      ]
+    },
+    {
+      "ja": "今日中に、",
+      "count": 1,
+      "addresses": [
+        "0x00A16528"
+      ]
+    },
+    {
+      "ja": "占領完了じゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A165BF"
+      ]
+    },
+    {
+      "ja": "なんなら、",
+      "count": 1,
+      "addresses": [
+        "0x00A16696"
+      ]
+    },
+    {
+      "ja": "いったん、",
+      "count": 1,
+      "addresses": [
+        "0x00A166D5"
+      ]
+    },
+    {
+      "ja": "そうか",
+      "count": 1,
+      "addresses": [
+        "0x00A16749"
+      ]
+    },
+    {
+      "ja": "まてリョウ！",
+      "count": 1,
+      "addresses": [
+        "0x00A169C9"
+      ]
+    },
+    {
+      "ja": "楽勝だね",
+      "count": 1,
+      "addresses": [
+        "0x00A16D4A"
+      ]
+    },
+    {
+      "ja": "それって、",
+      "count": 1,
+      "addresses": [
+        "0x00A16D78"
+      ]
+    },
+    {
+      "ja": "大丈夫か？",
+      "count": 1,
+      "addresses": [
+        "0x00A16EA1"
+      ]
+    },
+    {
+      "ja": "時間切れか。",
+      "count": 1,
+      "addresses": [
+        "0x00A16ED1"
+      ]
+    },
+    {
+      "ja": "これからも",
+      "count": 1,
+      "addresses": [
+        "0x00A17020"
+      ]
+    },
+    {
+      "ja": "間接砲ガンガン撃っちゃうけどな。",
+      "count": 1,
+      "addresses": [
+        "0x00A170DE"
+      ]
+    },
+    {
+      "ja": "こんなダメショーグンばっかりじゃ",
+      "count": 1,
+      "addresses": [
+        "0x00A170FF"
+      ]
+    },
+    {
+      "ja": "今こそ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A17243"
+      ]
+    },
+    {
+      "ja": "心配すんな、",
+      "count": 1,
+      "addresses": [
+        "0x00A17368"
+      ]
+    },
+    {
+      "ja": "オレが行く。",
+      "count": 1,
+      "addresses": [
+        "0x00A17380"
+      ]
+    },
+    {
+      "ja": "間接攻撃がトクイなショーグン、",
+      "count": 1,
+      "addresses": [
+        "0x00A17474"
+      ]
+    },
+    {
+      "ja": "天才だし。",
+      "count": 1,
+      "addresses": [
+        "0x00A174E9"
+      ]
+    },
+    {
+      "ja": "ぜーんぶ、",
+      "count": 1,
+      "addresses": [
+        "0x00A175E4"
+      ]
+    },
+    {
+      "ja": "なるほどな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A17608"
+      ]
+    },
+    {
+      "ja": "見せてやるぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00A176BC"
+      ]
+    },
+    {
+      "ja": "楽しみー！",
+      "count": 1,
+      "addresses": [
+        "0x00A176D4"
+      ]
+    },
+    {
+      "ja": "全部隊に告ぐ！",
+      "count": 1,
+      "addresses": [
+        "0x00A176EB"
+      ]
+    },
+    {
+      "ja": "作戦の目的は",
+      "count": 1,
+      "addresses": [
+        "0x00A17703"
+      ]
+    },
+    {
+      "ja": "だ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A177B1"
+      ]
+    },
+    {
+      "ja": "途中に",
+      "count": 1,
+      "addresses": [
+        "0x00A177DE"
+      ]
+    },
+    {
+      "ja": "ふーん",
+      "count": 1,
+      "addresses": [
+        "0x00A178D4"
+      ]
+    },
+    {
+      "ja": "カンベンしてもらいてぇ・・",
+      "count": 1,
+      "addresses": [
+        "0x00A179FB"
+      ]
+    },
+    {
+      "ja": "しまって、",
+      "count": 1,
+      "addresses": [
+        "0x00A17BB0"
+      ]
+    },
+    {
+      "ja": "すみません・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A17BBB"
+      ]
+    },
+    {
+      "ja": "まったくもって",
+      "count": 1,
+      "addresses": [
+        "0x00A17C14"
+      ]
+    },
+    {
+      "ja": "また大声出して・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A17C34"
+      ]
+    },
+    {
+      "ja": "なにより人々のものじゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A17CF8"
+      ]
+    },
+    {
+      "ja": "総員戦闘準備じゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A17DE4"
+      ]
+    },
+    {
+      "ja": "おめぇら。",
+      "count": 1,
+      "addresses": [
+        "0x00A17E42"
+      ]
+    },
+    {
+      "ja": "侵入者発見。",
+      "count": 1,
+      "addresses": [
+        "0x00A17E7B"
+      ]
+    },
+    {
+      "ja": "作動・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A17EA9"
+      ]
+    },
+    {
+      "ja": "侵入者ニ応戦",
+      "count": 1,
+      "addresses": [
+        "0x00A17EB4"
+      ]
+    },
+    {
+      "ja": "設計図消去ヲ開始シマス。",
+      "count": 1,
+      "addresses": [
+        "0x00A17EC2"
+      ]
+    },
+    {
+      "ja": "研究所爆破マデ",
+      "count": 1,
+      "addresses": [
+        "0x00A17EDB"
+      ]
+    },
+    {
+      "ja": "本日終了ト、",
+      "count": 1,
+      "addresses": [
+        "0x00A17F00"
+      ]
+    },
+    {
+      "ja": "敵さんも",
+      "count": 1,
+      "addresses": [
+        "0x00A180C3"
+      ]
+    },
+    {
+      "ja": "敵にミサイルを",
+      "count": 1,
+      "addresses": [
+        "0x00A1819E"
+      ]
+    },
+    {
+      "ja": "・・・あんまり考えてなかった。",
+      "count": 1,
+      "addresses": [
+        "0x00A18378"
+      ]
+    },
+    {
+      "ja": "心配ない。",
+      "count": 1,
+      "addresses": [
+        "0x00A1847F"
+      ]
+    },
+    {
+      "ja": "貴様はキャサリン！",
+      "count": 1,
+      "addresses": [
+        "0x00A185DD"
+      ]
+    },
+    {
+      "ja": "・・・ふん！",
+      "count": 1,
+      "addresses": [
+        "0x00A186C0"
+      ]
+    },
+    {
+      "ja": "かあさん、",
+      "count": 1,
+      "addresses": [
+        "0x00A18B87"
+      ]
+    },
+    {
+      "ja": "空港がポイントね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A18C27"
+      ]
+    },
+    {
+      "ja": "今度の相手は、",
+      "count": 1,
+      "addresses": [
+        "0x00A18C5C"
+      ]
+    },
+    {
+      "ja": "おチビちゃんか。",
+      "count": 1,
+      "addresses": [
+        "0x00A18C6B"
+      ]
+    },
+    {
+      "ja": "あちゃあ、",
+      "count": 1,
+      "addresses": [
+        "0x00A18CFC"
+      ]
+    },
+    {
+      "ja": "ホイップ様・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A18DA0"
+      ]
+    },
+    {
+      "ja": "ホイップ様は、",
+      "count": 1,
+      "addresses": [
+        "0x00A18E4A"
+      ]
+    },
+    {
+      "ja": "イワン逃げるぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00A18F57"
+      ]
+    },
+    {
+      "ja": "それからリョウ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A18F97"
+      ]
+    },
+    {
+      "ja": "マックス・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A18FDC"
+      ]
+    },
+    {
+      "ja": "それからアスカちゃん・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A19043"
+      ]
+    },
+    {
+      "ja": "人の好意を",
+      "count": 1,
+      "addresses": [
+        "0x00A19118"
+      ]
+    },
+    {
+      "ja": "悪は必ず",
+      "count": 1,
+      "addresses": [
+        "0x00A19350"
+      ]
+    },
+    {
+      "ja": "ほっほっほ、",
+      "count": 1,
+      "addresses": [
+        "0x00A193A8"
+      ]
+    },
+    {
+      "ja": "どうじゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A19476"
+      ]
+    },
+    {
+      "ja": "やれやれ・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A19688"
+      ]
+    },
+    {
+      "ja": "国土の大半を",
+      "count": 1,
+      "addresses": [
+        "0x00A1971F"
+      ]
+    },
+    {
+      "ja": "少々おくれをとっただけだ。",
+      "count": 1,
+      "addresses": [
+        "0x00A198E2"
+      ]
+    },
+    {
+      "ja": "空中戦のイーグル、",
+      "count": 1,
+      "addresses": [
+        "0x00A199B7"
+      ]
+    },
+    {
+      "ja": "要塞は",
+      "count": 1,
+      "addresses": [
+        "0x00A19A3B"
+      ]
+    },
+    {
+      "ja": "爆撃準備！",
+      "count": 1,
+      "addresses": [
+        "0x00A19BDA"
+      ]
+    },
+    {
+      "ja": "多数の対空部隊が、",
+      "count": 1,
+      "addresses": [
+        "0x00A19C14"
+      ]
+    },
+    {
+      "ja": "攻撃しましょう。",
+      "count": 1,
+      "addresses": [
+        "0x00A19D05"
+      ]
+    },
+    {
+      "ja": "国の人々が",
+      "count": 1,
+      "addresses": [
+        "0x00A19DEE"
+      ]
+    },
+    {
+      "ja": "貴様たち・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A19E54"
+      ]
+    },
+    {
+      "ja": "敵攻撃力の中心、",
+      "count": 1,
+      "addresses": [
+        "0x00A19E8E"
+      ]
+    },
+    {
+      "ja": "全て・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A19EF1"
+      ]
+    },
+    {
+      "ja": "たたかれたか。",
+      "count": 1,
+      "addresses": [
+        "0x00A19F00"
+      ]
+    },
+    {
+      "ja": "勝ったらしいな。",
+      "count": 1,
+      "addresses": [
+        "0x00A19F77"
+      ]
+    },
+    {
+      "ja": "これから、",
+      "count": 1,
+      "addresses": [
+        "0x00A1A063"
+      ]
+    },
+    {
+      "ja": "何も問題は",
+      "count": 1,
+      "addresses": [
+        "0x00A1A271"
+      ]
+    },
+    {
+      "ja": "イーグルから？",
+      "count": 1,
+      "addresses": [
+        "0x00A1A4D0"
+      ]
+    },
+    {
+      "ja": "今の状況は",
+      "count": 1,
+      "addresses": [
+        "0x00A1A588"
+      ]
+    },
+    {
+      "ja": "ひきいてな。",
+      "count": 1,
+      "addresses": [
+        "0x00A1A65A"
+      ]
+    },
+    {
+      "ja": "一時は",
+      "count": 1,
+      "addresses": [
+        "0x00A1ACE8"
+      ]
+    },
+    {
+      "ja": "はぁ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1B185"
+      ]
+    },
+    {
+      "ja": "まあ見ていて。",
+      "count": 1,
+      "addresses": [
+        "0x00A1B318"
+      ]
+    },
+    {
+      "ja": "ずるいずるい。",
+      "count": 1,
+      "addresses": [
+        "0x00A1B390"
+      ]
+    },
+    {
+      "ja": "おまえも、",
+      "count": 1,
+      "addresses": [
+        "0x00A1B57E"
+      ]
+    },
+    {
+      "ja": "研究所・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1B630"
+      ]
+    },
+    {
+      "ja": "ハンナらしい。",
+      "count": 1,
+      "addresses": [
+        "0x00A1B833"
+      ]
+    },
+    {
+      "ja": "こうなったら、",
+      "count": 1,
+      "addresses": [
+        "0x00A1B95C"
+      ]
+    },
+    {
+      "ja": "合流すれば、",
+      "count": 1,
+      "addresses": [
+        "0x00A1BDAA"
+      ]
+    },
+    {
+      "ja": "救援物資を",
+      "count": 1,
+      "addresses": [
+        "0x00A1BF74"
+      ]
+    },
+    {
+      "ja": "もう少し、",
+      "count": 1,
+      "addresses": [
+        "0x00A1C0AB"
+      ]
+    },
+    {
+      "ja": "あまりキレイな",
+      "count": 1,
+      "addresses": [
+        "0x00A1C252"
+      ]
+    },
+    {
+      "ja": "正面から",
+      "count": 1,
+      "addresses": [
+        "0x00A1C3A0"
+      ]
+    },
+    {
+      "ja": "ごめんなさい。",
+      "count": 1,
+      "addresses": [
+        "0x00A1C53A"
+      ]
+    },
+    {
+      "ja": "救援物資、",
+      "count": 1,
+      "addresses": [
+        "0x00A1C703"
+      ]
+    },
+    {
+      "ja": "ほらほら、",
+      "count": 1,
+      "addresses": [
+        "0x00A1C958"
+      ]
+    },
+    {
+      "ja": "輸送船には、",
+      "count": 1,
+      "addresses": [
+        "0x00A1CF91"
+      ]
+    },
+    {
+      "ja": "考えれば、",
+      "count": 1,
+      "addresses": [
+        "0x00A1CFED"
+      ]
+    },
+    {
+      "ja": "しっかり倒しておかなくちゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A1D146"
+      ]
+    },
+    {
+      "ja": "兵力が・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1D434"
+      ]
+    },
+    {
+      "ja": "地上戦で",
+      "count": 1,
+      "addresses": [
+        "0x00A1D5C9"
+      ]
+    },
+    {
+      "ja": "地上戦は、",
+      "count": 1,
+      "addresses": [
+        "0x00A1D636"
+      ]
+    },
+    {
+      "ja": "行っちゃった。",
+      "count": 1,
+      "addresses": [
+        "0x00A1D680"
+      ]
+    },
+    {
+      "ja": "貴様なら",
+      "count": 1,
+      "addresses": [
+        "0x00A1DBF0"
+      ]
+    },
+    {
+      "ja": "利用する",
+      "count": 1,
+      "addresses": [
+        "0x00A1DD2F"
+      ]
+    },
+    {
+      "ja": "おそらくな。",
+      "count": 1,
+      "addresses": [
+        "0x00A1DDC4"
+      ]
+    },
+    {
+      "ja": "へぇー",
+      "count": 1,
+      "addresses": [
+        "0x00A1DE40"
+      ]
+    },
+    {
+      "ja": "二人の意見が",
+      "count": 1,
+      "addresses": [
+        "0x00A1DE54"
+      ]
+    },
+    {
+      "ja": "敵の大部隊が、",
+      "count": 1,
+      "addresses": [
+        "0x00A1DF54"
+      ]
+    },
+    {
+      "ja": "報告では、",
+      "count": 1,
+      "addresses": [
+        "0x00A1DFA0"
+      ]
+    },
+    {
+      "ja": "敵の新型戦車、",
+      "count": 1,
+      "addresses": [
+        "0x00A1E01C"
+      ]
+    },
+    {
+      "ja": "９日目・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1E0E4"
+      ]
+    },
+    {
+      "ja": "けっきょく、",
+      "count": 1,
+      "addresses": [
+        "0x00A1E36E"
+      ]
+    },
+    {
+      "ja": "ねえイーグル、",
+      "count": 1,
+      "addresses": [
+        "0x00A1E44C"
+      ]
+    },
+    {
+      "ja": "一気に・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1E593"
+      ]
+    },
+    {
+      "ja": "貴様が",
+      "count": 1,
+      "addresses": [
+        "0x00A1E5DC"
+      ]
+    },
+    {
+      "ja": "まったくもう。",
+      "count": 1,
+      "addresses": [
+        "0x00A1E610"
+      ]
+    },
+    {
+      "ja": "毎回毎回、",
+      "count": 1,
+      "addresses": [
+        "0x00A1E639"
+      ]
+    },
+    {
+      "ja": "せまってきたか。",
+      "count": 1,
+      "addresses": [
+        "0x00A1E6B8"
+      ]
+    },
+    {
+      "ja": "さもなければ、",
+      "count": 1,
+      "addresses": [
+        "0x00A1E79C"
+      ]
+    },
+    {
+      "ja": "はっ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1E7CC"
+      ]
+    },
+    {
+      "ja": "私達は",
+      "count": 1,
+      "addresses": [
+        "0x00A1E9B5"
+      ]
+    },
+    {
+      "ja": "キャノン攻略と",
+      "count": 1,
+      "addresses": [
+        "0x00A1EBAB"
+      ]
+    },
+    {
+      "ja": "その・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1ED64"
+      ]
+    },
+    {
+      "ja": "行方不明です。",
+      "count": 1,
+      "addresses": [
+        "0x00A1EEEC"
+      ]
+    },
+    {
+      "ja": "ご苦労さま。",
+      "count": 1,
+      "addresses": [
+        "0x00A1EF48"
+      ]
+    },
+    {
+      "ja": "ハハハ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1F094"
+      ]
+    },
+    {
+      "ja": "グリーンアースの人々にかわって",
+      "count": 1,
+      "addresses": [
+        "0x00A1F0FB"
+      ]
+    },
+    {
+      "ja": "そして・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1F633"
+      ]
+    },
+    {
+      "ja": "多数出現！",
+      "count": 1,
+      "addresses": [
+        "0x00A1F81D"
+      ]
+    },
+    {
+      "ja": "命令あれば、",
+      "count": 1,
+      "addresses": [
+        "0x00A1F854"
+      ]
+    },
+    {
+      "ja": "他に情報は？",
+      "count": 1,
+      "addresses": [
+        "0x00A1F896"
+      ]
+    },
+    {
+      "ja": "敵・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1F8F8"
+      ]
+    },
+    {
+      "ja": "ヤマモト先生！",
+      "count": 1,
+      "addresses": [
+        "0x00A1F920"
+      ]
+    },
+    {
+      "ja": "たまたま",
+      "count": 1,
+      "addresses": [
+        "0x00A1F94B"
+      ]
+    },
+    {
+      "ja": "出撃じゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A1FACB"
+      ]
+    },
+    {
+      "ja": "む・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1FBA8"
+      ]
+    },
+    {
+      "ja": "使い方を・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1FC04"
+      ]
+    },
+    {
+      "ja": "ミサイル基地を",
+      "count": 1,
+      "addresses": [
+        "0x00A1FCB3"
+      ]
+    },
+    {
+      "ja": "一国の長",
+      "count": 1,
+      "addresses": [
+        "0x00A1FD51"
+      ]
+    },
+    {
+      "ja": "で使用可能よ。",
+      "count": 1,
+      "addresses": [
+        "0x00A1FDCA"
+      ]
+    },
+    {
+      "ja": "恐れるな。",
+      "count": 1,
+      "addresses": [
+        "0x00A1FE33"
+      ]
+    },
+    {
+      "ja": "つええ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A1FE5D"
+      ]
+    },
+    {
+      "ja": "ごめんなさい、",
+      "count": 1,
+      "addresses": [
+        "0x00A1FECC"
+      ]
+    },
+    {
+      "ja": "いたた・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A20348"
+      ]
+    },
+    {
+      "ja": "心配じゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A20401"
+      ]
+    },
+    {
+      "ja": "お前は",
+      "count": 1,
+      "addresses": [
+        "0x00A2044D"
+      ]
+    },
+    {
+      "ja": "自分の任務は、",
+      "count": 1,
+      "addresses": [
+        "0x00A204AF"
+      ]
+    },
+    {
+      "ja": "危険すぎる。",
+      "count": 1,
+      "addresses": [
+        "0x00A2067B"
+      ]
+    },
+    {
+      "ja": "・・・行かせて",
+      "count": 1,
+      "addresses": [
+        "0x00A2068C"
+      ]
+    },
+    {
+      "ja": "むむ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A20728"
+      ]
+    },
+    {
+      "ja": "この要塞・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A20921"
+      ]
+    },
+    {
+      "ja": "少々やっかいですからね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A209C6"
+      ]
+    },
+    {
+      "ja": "そんなバカな。",
+      "count": 1,
+      "addresses": [
+        "0x00A20B51"
+      ]
+    },
+    {
+      "ja": "今日は・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A20B80"
+      ]
+    },
+    {
+      "ja": "どうしても必要なショーグンじゃ。",
+      "count": 1,
+      "addresses": [
+        "0x00A20C74"
+      ]
+    },
+    {
+      "ja": "敵はユニットを",
+      "count": 1,
+      "addresses": [
+        "0x00A20DFE"
+      ]
+    },
+    {
+      "ja": "こういう",
+      "count": 1,
+      "addresses": [
+        "0x00A20E6E"
+      ]
+    },
+    {
+      "ja": "敵の位置を",
+      "count": 1,
+      "addresses": [
+        "0x00A20EB3"
+      ]
+    },
+    {
+      "ja": "無性に",
+      "count": 1,
+      "addresses": [
+        "0x00A2104D"
+      ]
+    },
+    {
+      "ja": "見ておれ。",
+      "count": 1,
+      "addresses": [
+        "0x00A2118B"
+      ]
+    },
+    {
+      "ja": "おやおや、",
+      "count": 1,
+      "addresses": [
+        "0x00A211E8"
+      ]
+    },
+    {
+      "ja": "そういえば・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A215F5"
+      ]
+    },
+    {
+      "ja": "・・・やれやれ",
+      "count": 1,
+      "addresses": [
+        "0x00A216D8"
+      ]
+    },
+    {
+      "ja": "ほっほっ、",
+      "count": 1,
+      "addresses": [
+        "0x00A217E0"
+      ]
+    },
+    {
+      "ja": "来なければ",
+      "count": 1,
+      "addresses": [
+        "0x00A21BE7"
+      ]
+    },
+    {
+      "ja": "大々的に発表してやりましょう。",
+      "count": 1,
+      "addresses": [
+        "0x00A21C01"
+      ]
+    },
+    {
+      "ja": "・・・アスカ、",
+      "count": 1,
+      "addresses": [
+        "0x00A21E70"
+      ]
+    },
+    {
+      "ja": "必要なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A222CF"
+      ]
+    },
+    {
+      "ja": "北の山中に、",
+      "count": 1,
+      "addresses": [
+        "0x00A22582"
+      ]
+    },
+    {
+      "ja": "ぬ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A22720"
+      ]
+    },
+    {
+      "ja": "まかせて、",
+      "count": 1,
+      "addresses": [
+        "0x00A22855"
+      ]
+    },
+    {
+      "ja": "む・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A228EC"
+      ]
+    },
+    {
+      "ja": "戦略上の要所よ。",
+      "count": 1,
+      "addresses": [
+        "0x00A2298E"
+      ]
+    },
+    {
+      "ja": "敵は必ず、",
+      "count": 1,
+      "addresses": [
+        "0x00A2299F"
+      ]
+    },
+    {
+      "ja": "降伏しなさい。",
+      "count": 1,
+      "addresses": [
+        "0x00A22CB0"
+      ]
+    },
+    {
+      "ja": "あんたって、",
+      "count": 1,
+      "addresses": [
+        "0x00A22D48"
+      ]
+    },
+    {
+      "ja": "たどりつけば、",
+      "count": 1,
+      "addresses": [
+        "0x00A22F07"
+      ]
+    },
+    {
+      "ja": "勝負だ勝負だ！",
+      "count": 1,
+      "addresses": [
+        "0x00A22F61"
+      ]
+    },
+    {
+      "ja": "おんなじ。",
+      "count": 1,
+      "addresses": [
+        "0x00A23128"
+      ]
+    },
+    {
+      "ja": "いっつも、",
+      "count": 1,
+      "addresses": [
+        "0x00A2313C"
+      ]
+    },
+    {
+      "ja": "どう勝つかって考えてるじゃん。",
+      "count": 1,
+      "addresses": [
+        "0x00A23153"
+      ]
+    },
+    {
+      "ja": "似てる・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A2326C"
+      ]
+    },
+    {
+      "ja": "まず偵察車や",
+      "count": 1,
+      "addresses": [
+        "0x00A2337C"
+      ]
+    },
+    {
+      "ja": "連中の兵力は、",
+      "count": 1,
+      "addresses": [
+        "0x00A23531"
+      ]
+    },
+    {
+      "ja": "でも・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A23647"
+      ]
+    },
+    {
+      "ja": "武人の道に",
+      "count": 1,
+      "addresses": [
+        "0x00A2368E"
+      ]
+    },
+    {
+      "ja": "和平の話、",
+      "count": 1,
+      "addresses": [
+        "0x00A23759"
+      ]
+    },
+    {
+      "ja": "え・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A23780"
+      ]
+    },
+    {
+      "ja": "いかんな。",
+      "count": 1,
+      "addresses": [
+        "0x00A2389D"
+      ]
+    },
+    {
+      "ja": "ふむふむ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A23B64"
+      ]
+    },
+    {
+      "ja": "今さら",
+      "count": 1,
+      "addresses": [
+        "0x00A23B9B"
+      ]
+    },
+    {
+      "ja": "この程度、",
+      "count": 1,
+      "addresses": [
+        "0x00A23C2B"
+      ]
+    },
+    {
+      "ja": "じゃから、",
+      "count": 1,
+      "addresses": [
+        "0x00A23E30"
+      ]
+    },
+    {
+      "ja": "あまり",
+      "count": 1,
+      "addresses": [
+        "0x00A23E3B"
+      ]
+    },
+    {
+      "ja": "おさえて",
+      "count": 1,
+      "addresses": [
+        "0x00A23E66"
+      ]
+    },
+    {
+      "ja": "ひ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A23E88"
+      ]
+    },
+    {
+      "ja": "おや・・・？",
+      "count": 1,
+      "addresses": [
+        "0x00A2428B"
+      ]
+    },
+    {
+      "ja": "一方はブラックホール軍・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A242DC"
+      ]
+    },
+    {
+      "ja": "私の作戦で、",
+      "count": 1,
+      "addresses": [
+        "0x00A24364"
+      ]
+    },
+    {
+      "ja": "彼らと",
+      "count": 1,
+      "addresses": [
+        "0x00A244A0"
+      ]
+    },
+    {
+      "ja": "そろそろ、",
+      "count": 1,
+      "addresses": [
+        "0x00A245CA"
+      ]
+    },
+    {
+      "ja": "いったん",
+      "count": 1,
+      "addresses": [
+        "0x00A246B6"
+      ]
+    },
+    {
+      "ja": "また来るから",
+      "count": 1,
+      "addresses": [
+        "0x00A246EB"
+      ]
+    },
+    {
+      "ja": "いずれまた",
+      "count": 1,
+      "addresses": [
+        "0x00A247BF"
+      ]
+    },
+    {
+      "ja": "いかん・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00A24900"
+      ]
+    },
+    {
+      "ja": "やつらめ",
+      "count": 1,
+      "addresses": [
+        "0x00A24AE9"
+      ]
+    },
+    {
+      "ja": "ホ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A24B52"
+      ]
+    },
+    {
+      "ja": "少々手間どってはいますが・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A24BA1"
+      ]
+    },
+    {
+      "ja": "久しいな。",
+      "count": 1,
+      "addresses": [
+        "0x00A24D44"
+      ]
+    },
+    {
+      "ja": "キクチヨどの。",
+      "count": 1,
+      "addresses": [
+        "0x00A24D51"
+      ]
+    },
+    {
+      "ja": "二対一なら",
+      "count": 1,
+      "addresses": [
+        "0x00A250EC"
+      ]
+    },
+    {
+      "ja": "私達の番ね。",
+      "count": 1,
+      "addresses": [
+        "0x00A2512F"
+      ]
+    },
+    {
+      "ja": "うむうむ、",
+      "count": 1,
+      "addresses": [
+        "0x00A25244"
+      ]
+    },
+    {
+      "ja": "特に",
+      "count": 1,
+      "addresses": [
+        "0x00A2543A"
+      ]
+    },
+    {
+      "ja": "次の戦場？",
+      "count": 1,
+      "addresses": [
+        "0x00A255BC"
+      ]
+    },
+    {
+      "ja": "いられません。",
+      "count": 1,
+      "addresses": [
+        "0x00A2565F"
+      ]
+    },
+    {
+      "ja": "今から",
+      "count": 1,
+      "addresses": [
+        "0x00A25679"
+      ]
+    },
+    {
+      "ja": "大勝利じゃ！",
+      "count": 1,
+      "addresses": [
+        "0x00A25759"
+      ]
+    },
+    {
+      "ja": "やれやれ",
+      "count": 1,
+      "addresses": [
+        "0x00A25768"
+      ]
+    },
+    {
+      "ja": "敵軍が・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A25A14"
+      ]
+    },
+    {
+      "ja": "行ったか。",
+      "count": 1,
+      "addresses": [
+        "0x00A25B77"
+      ]
+    },
+    {
+      "ja": "ブラックホール軍の本拠地か。",
+      "count": 1,
+      "addresses": [
+        "0x00A25BE8"
+      ]
+    },
+    {
+      "ja": "別の場所へ",
+      "count": 1,
+      "addresses": [
+        "0x00A25D55"
+      ]
+    },
+    {
+      "ja": "フーム・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A25EB8"
+      ]
+    },
+    {
+      "ja": "目指すは・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A25F18"
+      ]
+    },
+    {
+      "ja": "なるほど・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A2600C"
+      ]
+    },
+    {
+      "ja": "すべて・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A26106"
+      ]
+    },
+    {
+      "ja": "兵士を一人、",
+      "count": 1,
+      "addresses": [
+        "0x00A2615F"
+      ]
+    },
+    {
+      "ja": "うーむ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A26510"
+      ]
+    },
+    {
+      "ja": "一理ある。",
+      "count": 1,
+      "addresses": [
+        "0x00A2668C"
+      ]
+    },
+    {
+      "ja": "次が本番ね。",
+      "count": 1,
+      "addresses": [
+        "0x00A26738"
+      ]
+    },
+    {
+      "ja": "間接攻撃なら、",
+      "count": 1,
+      "addresses": [
+        "0x00A26984"
+      ]
+    },
+    {
+      "ja": "ロケット砲は、",
+      "count": 1,
+      "addresses": [
+        "0x00A269AC"
+      ]
+    },
+    {
+      "ja": "うっかり",
+      "count": 1,
+      "addresses": [
+        "0x00A26BB9"
+      ]
+    },
+    {
+      "ja": "全滅して",
+      "count": 1,
+      "addresses": [
+        "0x00A26C94"
+      ]
+    },
+    {
+      "ja": "あと３・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A26DAC"
+      ]
+    },
+    {
+      "ja": "貴様がコソコソ",
+      "count": 1,
+      "addresses": [
+        "0x00A26FFA"
+      ]
+    },
+    {
+      "ja": "見せてもらおう。",
+      "count": 1,
+      "addresses": [
+        "0x00A271A1"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台前に",
+      "count": 1,
+      "addresses": [
+        "0x00A271FC"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台を攻撃、",
+      "count": 1,
+      "addresses": [
+        "0x00A272EA"
+      ]
+    },
+    {
+      "ja": "約束通り、",
+      "count": 1,
+      "addresses": [
+        "0x00A273AD"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台に集中攻撃！！",
+      "count": 1,
+      "addresses": [
+        "0x00A274FC"
+      ]
+    },
+    {
+      "ja": "まかせておけ。",
+      "count": 1,
+      "addresses": [
+        "0x00A2751C"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台に攻撃を集中！",
+      "count": 1,
+      "addresses": [
+        "0x00A2764F"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台が、",
+      "count": 1,
+      "addresses": [
+        "0x00A276E5"
+      ]
+    },
+    {
+      "ja": "ミサイル発射台、",
+      "count": 1,
+      "addresses": [
+        "0x00A27758"
+      ]
+    },
+    {
+      "ja": "またしても、",
+      "count": 1,
+      "addresses": [
+        "0x00A277C8"
+      ]
+    },
+    {
+      "ja": "おまえたち全員も",
+      "count": 1,
+      "addresses": [
+        "0x00A2782C"
+      ]
+    },
+    {
+      "ja": "てめぇ",
+      "count": 1,
+      "addresses": [
+        "0x00A27865"
+      ]
+    },
+    {
+      "ja": "・・・自爆する気！？",
+      "count": 1,
+      "addresses": [
+        "0x00A27880"
+      ]
+    },
+    {
+      "ja": "こぞう・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A2790D"
+      ]
+    },
+    {
+      "ja": "グオォォ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A27A3C"
+      ]
+    },
+    {
+      "ja": "ホーク・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A27A4D"
+      ]
+    },
+    {
+      "ja": "ヘルボウズ様・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A27AAD"
+      ]
+    },
+    {
+      "ja": "ホーク何て事を・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A27AC1"
+      ]
+    },
+    {
+      "ja": "あなたたち、",
+      "count": 1,
+      "addresses": [
+        "0x00A27B58"
+      ]
+    },
+    {
+      "ja": "これ以上戦っても、",
+      "count": 1,
+      "addresses": [
+        "0x00A27D43"
+      ]
+    },
+    {
+      "ja": "強い者に、",
+      "count": 1,
+      "addresses": [
+        "0x00A27E85"
+      ]
+    },
+    {
+      "ja": "すまぬ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A27EA7"
+      ]
+    },
+    {
+      "ja": "言いたい事言って、",
+      "count": 1,
+      "addresses": [
+        "0x00A27FC3"
+      ]
+    },
+    {
+      "ja": "どうかな。",
+      "count": 1,
+      "addresses": [
+        "0x00A28004"
+      ]
+    },
+    {
+      "ja": "祝勝会だ！",
+      "count": 1,
+      "addresses": [
+        "0x00A280F9"
+      ]
+    },
+    {
+      "ja": "みなさん、",
+      "count": 1,
+      "addresses": [
+        "0x00A281EF"
+      ]
+    },
+    {
+      "ja": "ハチさん。",
+      "count": 1,
+      "addresses": [
+        "0x00A28217"
+      ]
+    },
+    {
+      "ja": "そうカタい事、",
+      "count": 1,
+      "addresses": [
+        "0x00A282D8"
+      ]
+    },
+    {
+      "ja": "色々あるじゃねーか。",
+      "count": 1,
+      "addresses": [
+        "0x00A28304"
+      ]
+    },
+    {
+      "ja": "ほっほっほっ。",
+      "count": 1,
+      "addresses": [
+        "0x00A2831C"
+      ]
+    },
+    {
+      "ja": "ヤマモト先生。",
+      "count": 1,
+      "addresses": [
+        "0x00A2834D"
+      ]
+    },
+    {
+      "ja": "あんたら",
+      "count": 1,
+      "addresses": [
+        "0x00A2844F"
+      ]
+    },
+    {
+      "ja": "それなら",
+      "count": 1,
+      "addresses": [
+        "0x00A284B5"
+      ]
+    },
+    {
+      "ja": "ぼちぼち帰るかな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A284DD"
+      ]
+    },
+    {
+      "ja": "ん・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A28538"
+      ]
+    },
+    {
+      "ja": "おおざっぱな所も",
+      "count": 1,
+      "addresses": [
+        "0x00A2858B"
+      ]
+    },
+    {
+      "ja": "マックス・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A285AD"
+      ]
+    },
+    {
+      "ja": "ああ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A285D8"
+      ]
+    },
+    {
+      "ja": "さて・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A285E4"
+      ]
+    },
+    {
+      "ja": "せいせき・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A2861F"
+      ]
+    },
+    {
+      "ja": "ふふ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A286CC"
+      ]
+    },
+    {
+      "ja": "手伝うわ。",
+      "count": 1,
+      "addresses": [
+        "0x00A28733"
+      ]
+    },
+    {
+      "ja": "訓練開始だ！",
+      "count": 1,
+      "addresses": [
+        "0x00A28783"
+      ]
+    },
+    {
+      "ja": "貴様もオレが",
+      "count": 1,
+      "addresses": [
+        "0x00A28799"
+      ]
+    },
+    {
+      "ja": "きたえてやるから、",
+      "count": 1,
+      "addresses": [
+        "0x00A287A6"
+      ]
+    },
+    {
+      "ja": "帰ったらまず、",
+      "count": 1,
+      "addresses": [
+        "0x00A2887A"
+      ]
+    },
+    {
+      "ja": "練習場に来い！",
+      "count": 1,
+      "addresses": [
+        "0x00A28889"
+      ]
+    },
+    {
+      "ja": "勝負しろ！",
+      "count": 1,
+      "addresses": [
+        "0x00A288B4"
+      ]
+    },
+    {
+      "ja": "まったく。",
+      "count": 1,
+      "addresses": [
+        "0x00A288EC"
+      ]
+    },
+    {
+      "ja": "ふふふ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A288F8"
+      ]
+    },
+    {
+      "ja": "ハチさん、",
+      "count": 1,
+      "addresses": [
+        "0x00A28975"
+      ]
+    },
+    {
+      "ja": "帰ったら",
+      "count": 1,
+      "addresses": [
+        "0x00A28995"
+      ]
+    },
+    {
+      "ja": "今まで・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A289D2"
+      ]
+    },
+    {
+      "ja": "本当に",
+      "count": 1,
+      "addresses": [
+        "0x00A289E9"
+      ]
+    },
+    {
+      "ja": "いろいろ",
+      "count": 1,
+      "addresses": [
+        "0x00A28AD0"
+      ]
+    },
+    {
+      "ja": "これなら、",
+      "count": 1,
+      "addresses": [
+        "0x00A28F3A"
+      ]
+    },
+    {
+      "ja": "処分する",
+      "count": 1,
+      "addresses": [
+        "0x00A29916"
+      ]
+    },
+    {
+      "ja": "てんき",
+      "count": 1,
+      "addresses": [
+        "0x00A29946"
+      ]
+    },
+    {
+      "ja": "うかぶ",
+      "count": 1,
+      "addresses": [
+        "0x00A299B2"
+      ]
+    },
+    {
+      "ja": "各軍の本拠地。",
+      "count": 1,
+      "addresses": [
+        "0x00A29CA0"
+      ]
+    },
+    {
+      "ja": "サクテキ時には、敵ユニッ",
+      "count": 1,
+      "addresses": [
+        "0x00A29F64"
+      ]
+    },
+    {
+      "ja": "行っている。",
+      "count": 1,
+      "addresses": [
+        "0x00A29FF7"
+      ]
+    },
+    {
+      "ja": "いくつかある大きな火山。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A10B"
+      ]
+    },
+    {
+      "ja": "士官学校出身。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A381"
+      ]
+    },
+    {
+      "ja": "強力な一撃が",
+      "count": 1,
+      "addresses": [
+        "0x00A2A3D1"
+      ]
+    },
+    {
+      "ja": "言っている。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A408"
+      ]
+    },
+    {
+      "ja": "うつすタイプ。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A502"
+      ]
+    },
+    {
+      "ja": "キライ・早おき",
+      "count": 1,
+      "addresses": [
+        "0x00A2A539"
+      ]
+    },
+    {
+      "ja": "特に弱点もなく、色々な",
+      "count": 1,
+      "addresses": [
+        "0x00A2A563"
+      ]
+    },
+    {
+      "ja": "いちもく置かれている、",
+      "count": 1,
+      "addresses": [
+        "0x00A2A784"
+      ]
+    },
+    {
+      "ja": "地位の高いショーグン。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A79B"
+      ]
+    },
+    {
+      "ja": "敵全ユニットのＨＰに",
+      "count": 1,
+      "addresses": [
+        "0x00A2A8DC"
+      ]
+    },
+    {
+      "ja": "移動力が高い。",
+      "count": 1,
+      "addresses": [
+        "0x00A2A9DB"
+      ]
+    },
+    {
+      "ja": "歩兵系以外の",
+      "count": 1,
+      "addresses": [
+        "0x00A2A9EA"
+      ]
+    },
+    {
+      "ja": "射撃の天才。",
+      "count": 1,
+      "addresses": [
+        "0x00A2AAC6"
+      ]
+    },
+    {
+      "ja": "攻撃は苦手。",
+      "count": 1,
+      "addresses": [
+        "0x00A2AF9B"
+      ]
+    },
+    {
+      "ja": "スキ　・海",
+      "count": 1,
+      "addresses": [
+        "0x00A2B0A6"
+      ]
+    },
+    {
+      "ja": "キライ・平和",
+      "count": 1,
+      "addresses": [
+        "0x00A2B291"
+      ]
+    },
+    {
+      "ja": "攻撃力が高い。",
+      "count": 1,
+      "addresses": [
+        "0x00A2B2B1"
+      ]
+    },
+    {
+      "ja": "スキ　・にく",
+      "count": 1,
+      "addresses": [
+        "0x00A2B3F8"
+      ]
+    },
+    {
+      "ja": "キライ・やさい",
+      "count": 1,
+      "addresses": [
+        "0x00A2B405"
+      ]
+    },
+    {
+      "ja": "ユニットの攻撃力が",
+      "count": 1,
+      "addresses": [
+        "0x00A2B518"
+      ]
+    },
+    {
+      "ja": "なってしまう。",
+      "count": 1,
+      "addresses": [
+        "0x00A2B56A"
+      ]
+    },
+    {
+      "ja": "スキ　・おちゃ",
+      "count": 1,
+      "addresses": [
+        "0x00A2BA12"
+      ]
+    },
+    {
+      "ja": "キライ・くすり",
+      "count": 1,
+      "addresses": [
+        "0x00A2BA21"
+      ]
+    },
+    {
+      "ja": "かきあつめ、",
+      "count": 1,
+      "addresses": [
+        "0x00A2BAFB"
+      ]
+    },
+    {
+      "ja": "少し低い。",
+      "count": 1,
+      "addresses": [
+        "0x00A2BC31"
+      ]
+    },
+    {
+      "ja": "攻撃力が低い。",
+      "count": 1,
+      "addresses": [
+        "0x00A2BD70"
+      ]
+    },
+    {
+      "ja": "降下させる。",
+      "count": 1,
+      "addresses": [
+        "0x00A2C005"
+      ]
+    },
+    {
+      "ja": "サクテキの設定",
+      "count": 1,
+      "addresses": [
+        "0x00A2C4F8"
+      ]
+    },
+    {
+      "ja": "テンキの設定",
+      "count": 1,
+      "addresses": [
+        "0x00A2C508"
+      ]
+    },
+    {
+      "ja": "あそべる条件",
+      "count": 1,
+      "addresses": [
+        "0x00A2C710"
+      ]
+    },
+    {
+      "ja": "あそび方",
+      "count": 1,
+      "addresses": [
+        "0x00A2C778"
+      ]
+    },
+    {
+      "ja": "ぬりつぶし",
+      "count": 1,
+      "addresses": [
+        "0x00A2CA88"
+      ]
+    },
+    {
+      "ja": "海上都市を狙え！",
+      "count": 1,
+      "addresses": [
+        "0x00A2D5A0"
+      ]
+    },
+    {
+      "ja": "捕虜救出作戦",
+      "count": 1,
+      "addresses": [
+        "0x00A2D640"
+      ]
+    },
+    {
+      "ja": "戦慄の二週間",
+      "count": 1,
+      "addresses": [
+        "0x00A2D6C0"
+      ]
+    },
+    {
+      "ja": "新兵器を奪え！",
+      "count": 1,
+      "addresses": [
+        "0x00A2D6E0"
+      ]
+    },
+    {
+      "ja": "ミサイル島争奪戦！",
+      "count": 1,
+      "addresses": [
+        "0x00A2D704"
+      ]
+    },
+    {
+      "ja": "二人の頭脳戦",
+      "count": 1,
+      "addresses": [
+        "0x00A2D74C"
+      ]
+    },
+    {
+      "ja": "希望の海原へ",
+      "count": 1,
+      "addresses": [
+        "0x00A2D770"
+      ]
+    },
+    {
+      "ja": "海上要塞爆撃",
+      "count": 1,
+      "addresses": [
+        "0x00A2D794"
+      ]
+    },
+    {
+      "ja": "挟み撃ち会戦！",
+      "count": 1,
+      "addresses": [
+        "0x00A2D7A4"
+      ]
+    },
+    {
+      "ja": "大艦隊電撃戦",
+      "count": 1,
+      "addresses": [
+        "0x00A2D7B4"
+      ]
+    },
+    {
+      "ja": "炎の雨",
+      "count": 1,
+      "addresses": [
+        "0x00A2D7E0"
+      ]
+    },
+    {
+      "ja": "ショーグンを使ってみるのもいいかもな！",
+      "count": 1,
+      "addresses": [
+        "0x00A2DD22"
+      ]
+    },
+    {
+      "ja": "ワシを",
+      "count": 1,
+      "addresses": [
+        "0x00A2F454"
+      ]
+    },
+    {
+      "ja": "フリーバトル「４Ｐマップ」の新しいマップ",
+      "count": 1,
+      "addresses": [
+        "0x00A2FA90"
+      ]
+    },
+    {
+      "ja": "任務完了！",
+      "count": 1,
+      "addresses": [
+        "0x00A2FE88"
+      ]
+    },
+    {
+      "ja": "ふう・・・！",
+      "count": 1,
+      "addresses": [
+        "0x00A2FF7C"
+      ]
+    },
+    {
+      "ja": "ほっほっほっ",
+      "count": 1,
+      "addresses": [
+        "0x00A2FFF0"
+      ]
+    },
+    {
+      "ja": "フ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00A30018"
+      ]
+    },
+    {
+      "ja": "私もそうやって強くなった",
+      "count": 1,
+      "addresses": [
+        "0x00A3007F"
+      ]
+    },
+    {
+      "ja": "まあ　そうカッカしなさんな。",
+      "count": 1,
+      "addresses": [
+        "0x00A30678"
+      ]
+    },
+    {
+      "ja": "ハチ様でい！",
+      "count": 1,
+      "addresses": [
+        "0x00A31054"
+      ]
+    },
+    {
+      "ja": "ほっほっほ",
+      "count": 1,
+      "addresses": [
+        "0x00A31368"
+      ]
+    },
+    {
+      "ja": "どうしなら、",
+      "count": 1,
+      "addresses": [
+        "0x00A315CC"
+      ]
+    },
+    {
+      "ja": "陸ユニットへの攻撃力。",
+      "count": 1,
+      "addresses": [
+        "0x00A31603"
+      ]
+    },
+    {
+      "ja": "の主砲、キャノン砲。",
+      "count": 1,
+      "addresses": [
+        "0x00A32388"
+      ]
+    },
+    {
+      "ja": "キャノン砲の弾数。",
+      "count": 1,
+      "addresses": [
+        "0x00A323C4"
+      ]
+    },
+    {
+      "ja": "キャノン砲の射程。",
+      "count": 1,
+      "addresses": [
+        "0x00A32408"
+      ]
+    },
+    {
+      "ja": "強力な間接攻撃ユニット。",
+      "count": 1,
+      "addresses": [
+        "0x00A32492"
+      ]
+    },
+    {
+      "ja": "攻撃範囲も広い。",
+      "count": 1,
+      "addresses": [
+        "0x00A324AB"
+      ]
+    },
+    {
+      "ja": "主砲のロケット砲。",
+      "count": 1,
+      "addresses": [
+        "0x00A3256C"
+      ]
+    },
+    {
+      "ja": "ロケット砲の弾数。",
+      "count": 1,
+      "addresses": [
+        "0x00A325A8"
+      ]
+    },
+    {
+      "ja": "ロケット砲の射程。",
+      "count": 1,
+      "addresses": [
+        "0x00A325E4"
+      ]
+    },
+    {
+      "ja": "全ユニット中、最高の",
+      "count": 1,
+      "addresses": [
+        "0x00A32B48"
+      ]
+    },
+    {
+      "ja": "主砲の対空ミサイル。",
+      "count": 1,
+      "addresses": [
+        "0x00A32B70"
+      ]
+    },
+    {
+      "ja": "主砲の対地ミサイル。",
+      "count": 1,
+      "addresses": [
+        "0x00A32F00"
+      ]
+    },
+    {
+      "ja": "対地ミサイルの弾数。",
+      "count": 1,
+      "addresses": [
+        "0x00A32F3C"
+      ]
+    },
+    {
+      "ja": "輸送系ユニット。陸ユニットを",
+      "count": 1,
+      "addresses": [
+        "0x00A335F8"
+      ]
+    },
+    {
+      "ja": "魚雷の弾数。",
+      "count": 1,
+      "addresses": [
+        "0x00A33754"
+      ]
+    },
+    {
+      "ja": "サクテキの時、周囲を",
+      "count": 1,
+      "addresses": [
+        "0x00A33ADE"
+      ]
+    },
+    {
+      "ja": "毎ターン２消費する。",
+      "count": 1,
+      "addresses": [
+        "0x00A33BC6"
+      ]
+    },
+    {
+      "ja": "副砲のマシンガン。",
+      "count": 1,
+      "addresses": [
+        "0x00A33D8C"
+      ]
+    },
+    {
+      "ja": "新型兵器。",
+      "count": 1,
+      "addresses": [
+        "0x00A33DBB"
+      ]
+    },
+    {
+      "ja": "新型砲の弾数。",
+      "count": 1,
+      "addresses": [
+        "0x00A33E20"
+      ]
+    },
+    {
+      "ja": "新型砲での、",
+      "count": 1,
+      "addresses": [
+        "0x00A33F0C"
+      ]
+    },
+    {
+      "ja": "歩兵系以外の陸ユニットに",
+      "count": 1,
+      "addresses": [
+        "0x00A33FE7"
+      ]
+    },
+    {
+      "ja": "完全勝利よ！",
+      "count": 1,
+      "addresses": [
+        "0x00A34981"
+      ]
+    },
+    {
+      "ja": "戦闘アニメと占領アニメ",
+      "count": 1,
+      "addresses": [
+        "0x00A34DD8"
+      ]
+    },
+    {
+      "ja": "マップの名前を",
+      "count": 1,
+      "addresses": [
+        "0x00A34EB8"
+      ]
+    },
+    {
+      "ja": "韋韋珥韋韋",
+      "count": 1,
+      "addresses": [
+        "0x00D81E0C"
+      ]
+    },
+    {
+      "ja": "あそべる条件：",
+      "count": 1,
+      "addresses": [
+        "0x00D82124"
+      ]
+    },
+    {
+      "ja": "あそび方：",
+      "count": 1,
+      "addresses": [
+        "0x00D8218C"
+      ]
+    },
+    {
+      "ja": "０１２３４５６７８９箕紗炒マシンガバズーカ砲軽重戦車キャノバルカ対空ロケット爆弾地潜魚雷装備していません部隊セブ終了待機攻撃補給占領合流搭載降車状況もぐるうかぶレイクシステム降伏すアニメＡＢＣなし処分大勝利条件ＢＧＭありプをぬけョグ作",
+      "count": 1,
+      "addresses": [
+        "0x00D82A1C"
+      ]
+    },
+    {
+      "ja": "攻撃補給部隊全待状況",
+      "count": 1,
+      "addresses": [
+        "0x00D82B08"
+      ]
+    },
+    {
+      "ja": "０１２３４５６７８９レッドスターブルムングリアイエロコメトブラックホールキャサリンョウマホイップビークチヨアスカグルモボテトドミノヘズ戦闘首都敵部隊全滅軍勝利！日数総事費Ｇふさんか",
+      "count": 1,
+      "addresses": [
+        "0x00D82BB4"
+      ]
+    },
+    {
+      "ja": "０１２３４５６７８９アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンャュョァィゥェォッーガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ”゜",
+      "count": 1,
+      "addresses": [
+        "0x00D83198"
+      ]
+    },
+    {
+      "ja": "Ｂボタンでマップメニューをキャンセルしてね。",
+      "count": 1,
+      "addresses": [
+        "0x00D90ACD"
+      ]
+    },
+    {
+      "ja": "ここじゃなきゃ",
+      "count": 1,
+      "addresses": [
+        "0x00D90DB2"
+      ]
+    },
+    {
+      "ja": "やりおるな。",
+      "count": 1,
+      "addresses": [
+        "0x00D91459"
+      ]
+    },
+    {
+      "ja": "ふっふっふ、",
+      "count": 1,
+      "addresses": [
+        "0x00D91469"
+      ]
+    },
+    {
+      "ja": "動かしてみて。",
+      "count": 1,
+      "addresses": [
+        "0x00D91881"
+      ]
+    },
+    {
+      "ja": "コマンドなの！",
+      "count": 1,
+      "addresses": [
+        "0x00D91BBA"
+      ]
+    },
+    {
+      "ja": "を移動",
+      "count": 1,
+      "addresses": [
+        "0x00D92458"
+      ]
+    },
+    {
+      "ja": "・・・この",
+      "count": 1,
+      "addresses": [
+        "0x00D93F36"
+      ]
+    },
+    {
+      "ja": "ただ・・・「",
+      "count": 1,
+      "addresses": [
+        "0x00D946BD"
+      ]
+    },
+    {
+      "ja": "うーん",
+      "count": 1,
+      "addresses": [
+        "0x00D94C16"
+      ]
+    },
+    {
+      "ja": "味方ユニットに",
+      "count": 1,
+      "addresses": [
+        "0x00D9500C"
+      ]
+    },
+    {
+      "ja": "・・・敵の",
+      "count": 1,
+      "addresses": [
+        "0x00D95401"
+      ]
+    },
+    {
+      "ja": "時間の問題ね。",
+      "count": 1,
+      "addresses": [
+        "0x00D9542A"
+      ]
+    },
+    {
+      "ja": "敵にも",
+      "count": 1,
+      "addresses": [
+        "0x00D955CE"
+      ]
+    },
+    {
+      "ja": "ヘタに",
+      "count": 1,
+      "addresses": [
+        "0x00D95827"
+      ]
+    },
+    {
+      "ja": "赤い範囲が",
+      "count": 1,
+      "addresses": [
+        "0x00D95934"
+      ]
+    },
+    {
+      "ja": "じゃあ、移動してみましょうか。",
+      "count": 1,
+      "addresses": [
+        "0x00D95D0A"
+      ]
+    },
+    {
+      "ja": "の輸送・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D9601C"
+      ]
+    },
+    {
+      "ja": "の能力ね。",
+      "count": 1,
+      "addresses": [
+        "0x00D9603D"
+      ]
+    },
+    {
+      "ja": "そうそう",
+      "count": 1,
+      "addresses": [
+        "0x00D961DE"
+      ]
+    },
+    {
+      "ja": "敵の首都を",
+      "count": 1,
+      "addresses": [
+        "0x00D96F3E"
+      ]
+    },
+    {
+      "ja": "の能力を",
+      "count": 1,
+      "addresses": [
+        "0x00D975CC"
+      ]
+    },
+    {
+      "ja": "の移動は",
+      "count": 1,
+      "addresses": [
+        "0x00D9767C"
+      ]
+    },
+    {
+      "ja": "そうそう、今回新しく出てきた",
+      "count": 1,
+      "addresses": [
+        "0x00D97931"
+      ]
+    },
+    {
+      "ja": "は、毎日燃料を",
+      "count": 1,
+      "addresses": [
+        "0x00D97A5D"
+      ]
+    },
+    {
+      "ja": "早い日で",
+      "count": 1,
+      "addresses": [
+        "0x00D97C8D"
+      ]
+    },
+    {
+      "ja": "ヘタよね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D97E29"
+      ]
+    },
+    {
+      "ja": "すればいい。",
+      "count": 1,
+      "addresses": [
+        "0x00D98013"
+      ]
+    },
+    {
+      "ja": "爆撃機（ばくげきき）",
+      "count": 1,
+      "addresses": [
+        "0x00D983F2"
+      ]
+    },
+    {
+      "ja": "に・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D98407"
+      ]
+    },
+    {
+      "ja": "の戦いなら　まず負けることはないわ。",
+      "count": 1,
+      "addresses": [
+        "0x00D98581"
+      ]
+    },
+    {
+      "ja": "けれど",
+      "count": 1,
+      "addresses": [
+        "0x00D985D3"
+      ]
+    },
+    {
+      "ja": "対空戦車（たいくうせんしゃ）",
+      "count": 1,
+      "addresses": [
+        "0x00D98611"
+      ]
+    },
+    {
+      "ja": "の能力よ！",
+      "count": 1,
+      "addresses": [
+        "0x00D987DE"
+      ]
+    },
+    {
+      "ja": "そうやって",
+      "count": 1,
+      "addresses": [
+        "0x00D98EAA"
+      ]
+    },
+    {
+      "ja": "こちらも",
+      "count": 1,
+      "addresses": [
+        "0x00D9914C"
+      ]
+    },
+    {
+      "ja": "なかったから　たすかったけれど。",
+      "count": 1,
+      "addresses": [
+        "0x00D9923F"
+      ]
+    },
+    {
+      "ja": "今回の",
+      "count": 1,
+      "addresses": [
+        "0x00D99462"
+      ]
+    },
+    {
+      "ja": "は空ユニットを",
+      "count": 1,
+      "addresses": [
+        "0x00D995E4"
+      ]
+    },
+    {
+      "ja": "もためして",
+      "count": 1,
+      "addresses": [
+        "0x00D9987C"
+      ]
+    },
+    {
+      "ja": "と同じ",
+      "count": 1,
+      "addresses": [
+        "0x00D99956"
+      ]
+    },
+    {
+      "ja": "ただ",
+      "count": 1,
+      "addresses": [
+        "0x00D99ADF"
+      ]
+    },
+    {
+      "ja": "今回出てきた",
+      "count": 1,
+      "addresses": [
+        "0x00D99B4C"
+      ]
+    },
+    {
+      "ja": "の移動は、",
+      "count": 1,
+      "addresses": [
+        "0x00D99BAA"
+      ]
+    },
+    {
+      "ja": "平地を移動するときに、そのちがいがはっきり",
+      "count": 1,
+      "addresses": [
+        "0x00D99C14"
+      ]
+    },
+    {
+      "ja": "ことができるか、ちゃんとわかってるかしら？",
+      "count": 1,
+      "addresses": [
+        "0x00D9A330"
+      ]
+    },
+    {
+      "ja": "とは・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D9A72B"
+      ]
+    },
+    {
+      "ja": "護衛艦（ごえいかん）",
+      "count": 1,
+      "addresses": [
+        "0x00D9A88D"
+      ]
+    },
+    {
+      "ja": "空ユニットと、",
+      "count": 1,
+      "addresses": [
+        "0x00D9AD89"
+      ]
+    },
+    {
+      "ja": "しちゃったら、",
+      "count": 1,
+      "addresses": [
+        "0x00D9AEBC"
+      ]
+    },
+    {
+      "ja": "が攻撃を",
+      "count": 1,
+      "addresses": [
+        "0x00D9AED4"
+      ]
+    },
+    {
+      "ja": "には",
+      "count": 1,
+      "addresses": [
+        "0x00D9BEEC"
+      ]
+    },
+    {
+      "ja": "は・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D9C06A"
+      ]
+    },
+    {
+      "ja": "注意する。",
+      "count": 1,
+      "addresses": [
+        "0x00D9C1B6"
+      ]
+    },
+    {
+      "ja": "以外の",
+      "count": 1,
+      "addresses": [
+        "0x00D9C82D"
+      ]
+    },
+    {
+      "ja": "まちぶせも　通用しなかったか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D9D52E"
+      ]
+    },
+    {
+      "ja": "から、さぐってみましょうか。",
+      "count": 1,
+      "addresses": [
+        "0x00D9DDFB"
+      ]
+    },
+    {
+      "ja": "あなた・・・",
+      "count": 1,
+      "addresses": [
+        "0x00D9E5DC"
+      ]
+    },
+    {
+      "ja": "まっすぐ移動してしまったら、ソウグウして",
+      "count": 1,
+      "addresses": [
+        "0x00D9EC2E"
+      ]
+    },
+    {
+      "ja": "だから、わかってるときには、今教えたとおり",
+      "count": 1,
+      "addresses": [
+        "0x00D9EF25"
+      ]
+    },
+    {
+      "ja": "移動先で",
+      "count": 1,
+      "addresses": [
+        "0x00D9EFE5"
+      ]
+    },
+    {
+      "ja": "さあ、ここはこれくらいにしておきましょうか。",
+      "count": 1,
+      "addresses": [
+        "0x00D9F12B"
+      ]
+    },
+    {
+      "ja": "ユニット情報ね。",
+      "count": 1,
+      "addresses": [
+        "0x00D9F276"
+      ]
+    },
+    {
+      "ja": "地形情報ね。",
+      "count": 1,
+      "addresses": [
+        "0x00D9F5A2"
+      ]
+    },
+    {
+      "ja": "地形の防御力、",
+      "count": 1,
+      "addresses": [
+        "0x00D9F5ED"
+      ]
+    },
+    {
+      "ja": "もういちど",
+      "count": 1,
+      "addresses": [
+        "0x00D9F9A6"
+      ]
+    },
+    {
+      "ja": "状況（じょうきょう）",
+      "count": 1,
+      "addresses": [
+        "0x00D9FA5B"
+      ]
+    },
+    {
+      "ja": "生存状況（せいぞんじょうきょう）",
+      "count": 1,
+      "addresses": [
+        "0x00D9FD65"
+      ]
+    },
+    {
+      "ja": "最後は",
+      "count": 1,
+      "addresses": [
+        "0x00D9FE36"
+      ]
+    },
+    {
+      "ja": "ここも　十字ボタンの上下で書いてあることが",
+      "count": 1,
+      "addresses": [
+        "0x00D9FE9B"
+      ]
+    },
+    {
+      "ja": "もういちど、",
+      "count": 1,
+      "addresses": [
+        "0x00D9FF3E"
+      ]
+    },
+    {
+      "ja": "だけれど、キャンペーンでは、アニメのありなし",
+      "count": 1,
+      "addresses": [
+        "0x00DA0053"
+      ]
+    },
+    {
+      "ja": "の値段よ。",
+      "count": 1,
+      "addresses": [
+        "0x00DA0CD7"
+      ]
+    },
+    {
+      "ja": "十字キー",
+      "count": 1,
+      "addresses": [
+        "0x00DA0D44"
+      ]
+    },
+    {
+      "ja": "で決定よ。",
+      "count": 1,
+      "addresses": [
+        "0x00DA0D79"
+      ]
+    },
+    {
+      "ja": "押してみて。",
+      "count": 1,
+      "addresses": [
+        "0x00DA0DB6"
+      ]
+    },
+    {
+      "ja": "選択してみて。",
+      "count": 1,
+      "addresses": [
+        "0x00DA10D8"
+      ]
+    },
+    {
+      "ja": "さっき作った",
+      "count": 1,
+      "addresses": [
+        "0x00DA119F"
+      ]
+    },
+    {
+      "ja": "の上で",
+      "count": 1,
+      "addresses": [
+        "0x00DA11D9"
+      ]
+    },
+    {
+      "ja": "は敵の",
+      "count": 1,
+      "addresses": [
+        "0x00DA1B2B"
+      ]
+    },
+    {
+      "ja": "されて",
+      "count": 1,
+      "addresses": [
+        "0x00DA1B81"
+      ]
+    },
+    {
+      "ja": "移動範囲内で、",
+      "count": 1,
+      "addresses": [
+        "0x00DA1D2B"
+      ]
+    },
+    {
+      "ja": "敵をやっつけるには、",
+      "count": 1,
+      "addresses": [
+        "0x00DA23D0"
+      ]
+    },
+    {
+      "ja": "一回の",
+      "count": 1,
+      "addresses": [
+        "0x00DA26DD"
+      ]
+    },
+    {
+      "ja": "ここから",
+      "count": 1,
+      "addresses": [
+        "0x00DA2EAB"
+      ]
+    },
+    {
+      "ja": "と今の",
+      "count": 1,
+      "addresses": [
+        "0x00DA2F41"
+      ]
+    },
+    {
+      "ja": "みましょうか。",
+      "count": 1,
+      "addresses": [
+        "0x00DA312B"
+      ]
+    },
+    {
+      "ja": "の防御力は２",
+      "count": 1,
+      "addresses": [
+        "0x00DA3348"
+      ]
+    },
+    {
+      "ja": "延長する？",
+      "count": 1,
+      "addresses": [
+        "0x00DA35D6"
+      ]
+    },
+    {
+      "ja": "有利なの。",
+      "count": 1,
+      "addresses": [
+        "0x00DA384B"
+      ]
+    },
+    {
+      "ja": "やっつける。",
+      "count": 1,
+      "addresses": [
+        "0x00DA388D"
+      ]
+    },
+    {
+      "ja": "はとっても守備力が高い地形だから、",
+      "count": 1,
+      "addresses": [
+        "0x00DA3956"
+      ]
+    },
+    {
+      "ja": "移動する時は使えばいいけど、止まる時は",
+      "count": 1,
+      "addresses": [
+        "0x00DA3C83"
+      ]
+    },
+    {
+      "ja": "せんたく。",
+      "count": 1,
+      "addresses": [
+        "0x00DA4083"
+      ]
+    },
+    {
+      "ja": "戦略の授業よ。",
+      "count": 1,
+      "addresses": [
+        "0x00DA40BF"
+      ]
+    },
+    {
+      "ja": "ふふっ",
+      "count": 1,
+      "addresses": [
+        "0x00DC2A5E"
+      ]
+    },
+    {
+      "ja": "じゃあ",
+      "count": 1,
+      "addresses": [
+        "0x00DC2D66"
+      ]
+    },
+    {
+      "ja": "そうそうそれからもう一つ。",
+      "count": 1,
+      "addresses": [
+        "0x00DC2F20"
+      ]
+    },
+    {
+      "ja": "キャサリン　あせってたな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DC3822"
+      ]
+    },
+    {
+      "ja": "レッドスターには、ちょいとむかしに世話に",
+      "count": 1,
+      "addresses": [
+        "0x00DC3A37"
+      ]
+    },
+    {
+      "ja": "・・・キャサリン　もうおそい・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DC3E2A"
+      ]
+    },
+    {
+      "ja": "ショーグンブレイク時の、２回行動が",
+      "count": 1,
+      "addresses": [
+        "0x00DC4022"
+      ]
+    },
+    {
+      "ja": "海に戦艦！",
+      "count": 1,
+      "addresses": [
+        "0x00DC4466"
+      ]
+    },
+    {
+      "ja": "陸に重戦車！",
+      "count": 1,
+      "addresses": [
+        "0x00DC4473"
+      ]
+    },
+    {
+      "ja": "わね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DC4661"
+      ]
+    },
+    {
+      "ja": "もいなかった",
+      "count": 1,
+      "addresses": [
+        "0x00DC46F5"
+      ]
+    },
+    {
+      "ja": "で首都に",
+      "count": 1,
+      "addresses": [
+        "0x00DC4796"
+      ]
+    },
+    {
+      "ja": "こんなくろうは　しなかったはずだぜ。",
+      "count": 1,
+      "addresses": [
+        "0x00DC4934"
+      ]
+    },
+    {
+      "ja": "・・・ああ。",
+      "count": 1,
+      "addresses": [
+        "0x00DC49F2"
+      ]
+    },
+    {
+      "ja": "どうやらそうらしい。",
+      "count": 1,
+      "addresses": [
+        "0x00DC4A01"
+      ]
+    },
+    {
+      "ja": "サクテキマップか・・・。",
+      "count": 1,
+      "addresses": [
+        "0x00DC4C02"
+      ]
+    },
+    {
+      "ja": "おぼえてるか",
+      "count": 1,
+      "addresses": [
+        "0x00DC4C4B"
+      ]
+    },
+    {
+      "ja": "・・・へっ！",
+      "count": 1,
+      "addresses": [
+        "0x00DC5D56"
+      ]
+    },
+    {
+      "ja": "やられちまう。",
+      "count": 1,
+      "addresses": [
+        "0x00DC6081"
+      ]
+    },
+    {
+      "ja": "まぁ　そう言うなって。",
+      "count": 1,
+      "addresses": [
+        "0x00DC62A6"
+      ]
+    },
+    {
+      "ja": "さあ　聞かせてもらうぞ　ビリー。",
+      "count": 1,
+      "addresses": [
+        "0x00DC6D9E"
+      ]
+    },
+    {
+      "ja": "これがやられちゃったら　陸ユニットを",
+      "count": 1,
+      "addresses": [
+        "0x00DC7083"
+      ]
+    },
+    {
+      "ja": "なんか、見たことあるような部隊じゃないか？",
+      "count": 1,
+      "addresses": [
+        "0x00DC716D"
+      ]
+    },
+    {
+      "ja": "それから・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DC9C3D"
+      ]
+    },
+    {
+      "ja": "それじゃ、また行ってくらぁ。",
+      "count": 1,
+      "addresses": [
+        "0x00DCA2AA"
+      ]
+    },
+    {
+      "ja": "当然よっ！",
+      "count": 1,
+      "addresses": [
+        "0x00DCA31E"
+      ]
+    },
+    {
+      "ja": "「チョコあげる」って言ったら",
+      "count": 1,
+      "addresses": [
+        "0x00DCA53A"
+      ]
+    },
+    {
+      "ja": "ぎくっ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCA7DA"
+      ]
+    },
+    {
+      "ja": "・・・また逃げられたか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCACEC"
+      ]
+    },
+    {
+      "ja": "よね・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCAD69"
+      ]
+    },
+    {
+      "ja": "そういえば、モップショーグンって",
+      "count": 1,
+      "addresses": [
+        "0x00DCB17E"
+      ]
+    },
+    {
+      "ja": "ユニットなの！",
+      "count": 1,
+      "addresses": [
+        "0x00DCB544"
+      ]
+    },
+    {
+      "ja": "う　やっつけきれなかったか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCB852"
+      ]
+    },
+    {
+      "ja": "グリーンアースで、まだやることがあるんだ。",
+      "count": 1,
+      "addresses": [
+        "0x00DCC36E"
+      ]
+    },
+    {
+      "ja": "マックスとよ！",
+      "count": 1,
+      "addresses": [
+        "0x00DCC97E"
+      ]
+    },
+    {
+      "ja": "グリーンアースの　大部隊が",
+      "count": 1,
+      "addresses": [
+        "0x00DCCA2B"
+      ]
+    },
+    {
+      "ja": "き　きついなー・・・じかんせいげん",
+      "count": 1,
+      "addresses": [
+        "0x00DCCAFA"
+      ]
+    },
+    {
+      "ja": "あのー・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCD052"
+      ]
+    },
+    {
+      "ja": "・・・なあ",
+      "count": 1,
+      "addresses": [
+        "0x00DCE0DE"
+      ]
+    },
+    {
+      "ja": "いいかなあ。",
+      "count": 1,
+      "addresses": [
+        "0x00DCE27C"
+      ]
+    },
+    {
+      "ja": "また　きみか・・・ドミノショーグン。",
+      "count": 1,
+      "addresses": [
+        "0x00DCE436"
+      ]
+    },
+    {
+      "ja": "・・・あの・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCE7CE"
+      ]
+    },
+    {
+      "ja": "・・・うう・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCE882"
+      ]
+    },
+    {
+      "ja": "・・・何、",
+      "count": 1,
+      "addresses": [
+        "0x00DCEBEA"
+      ]
+    },
+    {
+      "ja": "いるし・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCED17"
+      ]
+    },
+    {
+      "ja": "安全よね。",
+      "count": 1,
+      "addresses": [
+        "0x00DCF127"
+      ]
+    },
+    {
+      "ja": "が・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCF161"
+      ]
+    },
+    {
+      "ja": "リョウか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCF2AA"
+      ]
+    },
+    {
+      "ja": "ごめんなさい",
+      "count": 1,
+      "addresses": [
+        "0x00DCFF31"
+      ]
+    },
+    {
+      "ja": "みんなつれて　逃げて・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DCFF40"
+      ]
+    },
+    {
+      "ja": "かくしている。",
+      "count": 1,
+      "addresses": [
+        "0x00DD0585"
+      ]
+    },
+    {
+      "ja": "いるな・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DD0ABA"
+      ]
+    },
+    {
+      "ja": "ぼうず・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DD0E23"
+      ]
+    },
+    {
+      "ja": "どうじゃ、",
+      "count": 1,
+      "addresses": [
+        "0x00DD0E6C"
+      ]
+    },
+    {
+      "ja": "ビリーか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DD1042"
+      ]
+    },
+    {
+      "ja": "アスカぁ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DD135E"
+      ]
+    },
+    {
+      "ja": "また負けてしまったか・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DD1B46"
+      ]
+    },
+    {
+      "ja": "そして",
+      "count": 1,
+      "addresses": [
+        "0x00DD1D4A"
+      ]
+    },
+    {
+      "ja": "ビデオ用です。",
+      "count": 1,
+      "addresses": [
+        "0x00DE93F6"
+      ]
+    },
+    {
+      "ja": "歩兵系ユニット。",
+      "count": 1,
+      "addresses": [
+        "0x00DECC9A"
+      ]
+    },
+    {
+      "ja": "けいたい食料。",
+      "count": 1,
+      "addresses": [
+        "0x00DECD9E"
+      ]
+    },
+    {
+      "ja": "バズーカ砲は、",
+      "count": 1,
+      "addresses": [
+        "0x00DECE34"
+      ]
+    },
+    {
+      "ja": "弱いほう。",
+      "count": 1,
+      "addresses": [
+        "0x00DED0CB"
+      ]
+    },
+    {
+      "ja": "かなり強い。",
+      "count": 1,
+      "addresses": [
+        "0x00DED811"
+      ]
+    },
+    {
+      "ja": "対して強い。",
+      "count": 1,
+      "addresses": [
+        "0x00DEE179"
+      ]
+    },
+    {
+      "ja": "キャノン砲での、",
+      "count": 1,
+      "addresses": [
+        "0x00DEEB02"
+      ]
+    },
+    {
+      "ja": "いりょく。",
+      "count": 1,
+      "addresses": [
+        "0x00DEEC09"
+      ]
+    },
+    {
+      "ja": "副砲の対空マシンガン。",
+      "count": 1,
+      "addresses": [
+        "0x00DEEC1A"
+      ]
+    },
+    {
+      "ja": "以外には攻",
+      "count": 1,
+      "addresses": [
+        "0x00DEEE09"
+      ]
+    },
+    {
+      "ja": "戦車タイプの移動。",
+      "count": 1,
+      "addresses": [
+        "0x00DEF026"
+      ]
+    },
+    {
+      "ja": "副砲での、",
+      "count": 1,
+      "addresses": [
+        "0x00DEF5CE"
+      ]
+    },
+    {
+      "ja": "ここは、首都占領、もしくは敵全滅で勝利よ！",
+      "count": 1,
+      "addresses": [
+        "0x00DF1EEE"
+      ]
+    },
+    {
+      "ja": "メカ",
+      "count": 1,
+      "addresses": [
+        "0x00DF2DDE"
+      ]
+    },
+    {
+      "ja": "特殊部隊　しゅっしん。",
+      "count": 1,
+      "addresses": [
+        "0x00DF2F62"
+      ]
+    },
+    {
+      "ja": "しかし、間接攻撃ユニット",
+      "count": 1,
+      "addresses": [
+        "0x00DF3013"
+      ]
+    },
+    {
+      "ja": "しんじょう。",
+      "count": 1,
+      "addresses": [
+        "0x00DF377D"
+      ]
+    },
+    {
+      "ja": "修理が早い。",
+      "count": 1,
+      "addresses": [
+        "0x00DF4296"
+      ]
+    },
+    {
+      "ja": "強いタイプ。",
+      "count": 1,
+      "addresses": [
+        "0x00DF4469"
+      ]
+    },
+    {
+      "ja": "味方が占領しているなら、",
+      "count": 1,
+      "addresses": [
+        "0x00DF578B"
+      ]
+    },
+    {
+      "ja": "間接攻撃ユニットと、",
+      "count": 1,
+      "addresses": [
+        "0x00DF6656"
+      ]
+    },
+    {
+      "ja": "自走砲（じそうほう）",
+      "count": 1,
+      "addresses": [
+        "0x00DF6737"
+      ]
+    },
+    {
+      "ja": "の開発が",
+      "count": 1,
+      "addresses": [
+        "0x00DF6ACA"
+      ]
+    },
+    {
+      "ja": "で、今回の",
+      "count": 1,
+      "addresses": [
+        "0x00DF6D22"
+      ]
+    },
+    {
+      "ja": "ばくげ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00DF6DFB"
+      ]
+    },
+    {
+      "ja": "どうしてもやっつけられちゃ困る",
+      "count": 1,
+      "addresses": [
+        "0x00DF7219"
+      ]
+    },
+    {
+      "ja": "一つは",
+      "count": 1,
+      "addresses": [
+        "0x00DF725F"
+      ]
+    },
+    {
+      "ja": "占拠する。",
+      "count": 1,
+      "addresses": [
+        "0x00DF730B"
+      ]
+    },
+    {
+      "ja": "おともだちとゲームボーイをつないであそぶ、",
+      "count": 1,
+      "addresses": [
+        "0x00DF9384"
+      ]
+    },
+    {
+      "ja": "ウヴカガキギクグケゲコゴサザシジスズセゼソゾタダチヂツヅテデトドハバヒビフブヘベホボパバピビプブペベポボ",
+      "count": 1,
+      "addresses": [
+        "0x00DFA011"
+      ]
+    },
+    {
+      "ja": "ハパヒピフプヘペホポバパビピブプベペボポ山山金金日日一一下下本本大大平平成成元元広広子子条条中中今今力力",
+      "count": 1,
+      "addresses": [
+        "0x00DFA07C"
+      ]
+    },
+    {
+      "ja": "山金日一下本大平成元広子条中今力",
+      "count": 1,
+      "addresses": [
+        "0x00DFA0E7"
+      ]
+    },
+    {
+      "ja": "「タイセン」マップケース用の地図だ！",
+      "count": 1,
+      "addresses": [
+        "0x00DFD20A"
+      ]
+    },
+    {
+      "ja": "フロ入れよ！",
+      "count": 1,
+      "addresses": [
+        "0x00DFD596"
+      ]
+    },
+    {
+      "ja": "ふっふっふ。",
+      "count": 1,
+      "addresses": [
+        "0x00DFF149"
+      ]
+    },
+    {
+      "ja": "・・・あれ？",
+      "count": 1,
+      "addresses": [
+        "0x00E00218"
+      ]
+    },
+    {
+      "ja": "「ホイップ海軍ターボ」ねえ・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E02056"
+      ]
+    },
+    {
+      "ja": "の部隊が・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E02894"
+      ]
+    },
+    {
+      "ja": "ホイップか・・・雪なんか降らせて",
+      "count": 1,
+      "addresses": [
+        "0x00E03134"
+      ]
+    },
+    {
+      "ja": "さむかった・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E0319E"
+      ]
+    },
+    {
+      "ja": "ビリー・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E03986"
+      ]
+    },
+    {
+      "ja": "トクイなの。",
+      "count": 1,
+      "addresses": [
+        "0x00E04063"
+      ]
+    },
+    {
+      "ja": "ムリしなきゃいいけど・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E05205"
+      ]
+    },
+    {
+      "ja": "・・・おなかいっぱい・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E072DA"
+      ]
+    },
+    {
+      "ja": "うーん、やっぱり強いなあ。",
+      "count": 1,
+      "addresses": [
+        "0x00E08CC2"
+      ]
+    },
+    {
+      "ja": "し　しかし・・・",
+      "count": 1,
+      "addresses": [
+        "0x00E0DAB6"
+      ]
+    },
+    {
+      "ja": "・・・くっ！",
+      "count": 1,
+      "addresses": [
+        "0x00E0E536"
+      ]
+    },
+    {
+      "ja": "劔劔劔劔劔劔劔劔",
+      "count": 1,
+      "addresses": [
+        "0x00E1B5E4"
+      ]
+    }
+  ]
+}

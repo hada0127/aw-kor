@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""data/proper_nouns.json의 사용자 편집을 translation_for_import.csv에 역적용.
+"""(DEPRECATED 2026-06-16) generic inconsistencies 사전 적용기.
+
+정본 통일 사전 적용은 `tools/apply_proper_nouns_dict.py`(카테고리형 data/proper_nouns.json)를 쓴다.
+이 도구는 구 generic 스키마(`data/proper_nouns_inconsistencies.json`)용 보조 도구로 유지한다.
 
 무라마사 한글화의 `tools/apply_proper_nouns.py`를 aw-kor 평면 CSV에 맞춰 적응 이식.
 
@@ -22,7 +25,7 @@ import argparse
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE, 'data', 'translation_for_import.csv')
-PN_PATH = os.path.join(BASE, 'data', 'proper_nouns.json')
+PN_PATH = os.path.join(BASE, 'data', 'proper_nouns_inconsistencies.json')  # deprecated: 정본은 _dict 사용
 
 
 def norm(s):
