@@ -29,6 +29,9 @@ FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
 SAFE_MIN_ADDR = 0x800000
 FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
+# 무결성맵(Phase C-min): 텍스트 write 시점에 [addr, slot, enc_len, enc_hex, fill, ko, level, kind]
+# 를 실행 순서대로 누적. 빌드 끝에 temp/integrity_map.json으로 덤프. 출력 바이트는 무변경.
+WRITE_LOG = []
 OKDANDAN_FONT = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
 APPLE_SDGOTHIC_BOLD = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
 
@@ -86,6 +89,21 @@ SHORTEN = [
     ('있는', '있'), ('없는', '없'), ('에게', '에'), ('에서', '서'), ('부터', '서'),
     ('것이다', '거다'), ('것은', '건'), ('것을', '걸'), ('것이', '게'),
 ]
+
+TERM_NORMALIZATION = [
+    ('장군브레이크', '쇼군브레이크'),
+    ('장군 브레이크', '쇼군 브레이크'),
+    ('장군선택', '쇼군선택'),
+    ('장군 선택', '쇼군 선택'),
+    ('휩 장군', '휘프 쇼군'),
+    ('휘프 장군', '휘프 쇼군'),
+]
+
+
+def normalize_korean_terms(text):
+    for src, dst in TERM_NORMALIZATION:
+        text = text.replace(src, dst)
+    return text.replace('장군', '쇼군')
 
 TEXT_OVERRIDES = {
     # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
@@ -426,7 +444,7 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 1 operation room opening. These lines appear immediately after the
     # first name-confirm flow and are sensitive to long Korean fragments.
     0xDF5D62: '커서 조작부터',
-    0xDF5D81: '공격법도 설명이야',
+    0xDF5D81: '방법도 설명이야',
     0xDF5D9A: '반가워. ',
     0xDF5DB4: '코스모랜드에 어서 와',
     0xDF5DA9: '　님',
@@ -821,7 +839,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA08D81: '도미노 그 애,',
     0xA08DB8: '...네.',
     0xA08F69: '같은 거야!',
-    0xA0907B: '공격범위도',
+    0xA0907B: '공격 범위도',
     0xA090A4: '자주포 강화 유닛이고,',
     0xA09150: '이 수송헬기,',
     0xA09160: '그냥 두면,',
@@ -1546,7 +1564,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1E944: '우리도 힘 보태고 싶어.',
     0xA1EBBA: '적 배후로 도는 게 핵심.',
     0xA1EBF6: '조금은 배짱 있어 보이는군.',
-    0xA1ECE7: '내 직접공격으로 한방에,',
+    0xA1ECE7: '직접 공격 한 방에',
     0xA1F215: '블랙홀군 본거지를 함락시켜야',
     0xA1F23F: '진정한 싸움은 끝나지 않아.',
     0xA1F274: '힘든 싸움이 될 듯해.',
@@ -1596,7 +1614,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA26AEF: '어떻게 해야 이길까요?',
     0xA26B79: '일단 공장을 차지하고 싶어.',
     0xA26C70: '중앙 방어군은 부담이 커.',
-    0xA26E7A: '바로 쓸수 있어.',
+    0xA26E7A: '바로 사용 가능.',
     0xA27092: '슬픔도 전원이 맛보라.',
     0xA270C5: '미사일에 불타는 꼴을 봐라.',
     0xA272AC: '피해 갈 수도 없겠군.',
@@ -2107,8 +2125,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA03010: '이렇게 운반하면',
     0xA03027: '느린 보병도',
     0xA03038: '본부까지 금방 가',
-    0xA0306D: '보병 이동력은 3',
-    0xA03087: '수송차 이동력은 6',
+    0xA0306D: '보병은 느리지만',
+    0xA03087: '수송차는 빠르구나',
     0xA030A9: '',
     0xA03154: '바다엔 내리지 마',
     0xA0316B: '빠질 수 있어',
@@ -2461,7 +2479,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA090DE: '그렇게 생각하면 이해하기 쉬워',
     0xA09171: '대공 전차 2부대에',
     0xA09334: '전함이라고 해서',
-    0xA09347: '간접 공격 해상유닛이야',
+    0xA09347: '간접 공격 해상 유닛이야',
     0xA09362: '육지와 바다도 공격',
     0xA094C4: '할 수 있어',
     0xA0955B: '잠수함과 호위함에게만은',
@@ -2609,7 +2627,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF7166: '휘프 부대가 해안 너머에',
     0xDF7189: '나타났어',
     0xDF719C: '단숨에 치는 게 작전이야',
-    0xDF71C9: '자 출격이야!',
+    0xDF71C9: '자, 출격이야!',
     0xDF71DE: '해상 유닛 설명이야',
     0xDF7346: '지난 작전에 쓴,',
     0xDF7382: '필요한 유닛을 골라',
@@ -2653,8 +2671,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD8F762: '이동 후엔 메뉴가 나와',
     0xD8F78F: '여기서 ',
     0xD8F798: '대기',
-    0xD8F7A7: '를 고르면 돼',
-    0xD8F7BE: '골라 줘',
+    0xD8F7A7: '를 골라 줘',
+    0xD8F7BE: '',
     0xD8F7EE: '색이 달라졌어',
     0xD8F811: '이 유닛은 이제',
     0xD8F838: '행동 끝',
@@ -2746,7 +2764,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD93265: '는 정면 상대 말고',
     0xD937C8: '쓸모없는 놈들',
     0xD93A36: '을 도망치게 해줘',
-    0xD93B75: '는 다음 날 체력 2만 회복',
+    0xD93B75: '는 다음 날 체력 2 회복',
     0xD93CC5: '다음 날 수리되게 도시 근처로',
     0xD93E20: '빨간 범위가',
     0xD93E3A: '가능 범위야',
@@ -3337,26 +3355,26 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA01970: '워즈월드의 대륙 하나,',
     0xA01994: '매크로랜드.',
     0xA019AB: '이 땅에,',
-    0xA019BB: '침략자 블랙홀 군의',
+    0xA019BB: ' 침략자 블랙홀군의',
     0xA019D4: '손이 뻗고 있었다',
     0xA019F8: '호크는 있나!',
     0xA01A0C: '여기에...',
     0xA01A1A: '헬보우즈 님.',
     0xA01A2C: '매크로랜드 침공은,',
     0xA01A46: '어찌 됐나?',
-    0xA01A5C: '각 장군 모두,',
+    0xA01A5C: '각 쇼군은 모두',
     0xA01A70: '공격 준비를 마쳤습니다.',
     0xA01A94: '목적은,',
     0xA01A9D: '알고 있겠지?',
-    0xA01AB0: '매크로랜드를,',
+    0xA01AB0: '매크로랜드를',
     0xA01AC1: '워즈월드 안에서',
-    0xA01ADE: '블랙홀 군 거점으로...',
+    0xA01ADE: '블랙홀군 거점으로...',
     0xA01B08: '음.',
-    0xA01B0F: '예전에,',
-    0xA01B18: '나는,',
-    0xA01B21: '이 별 안에서 전쟁을',
+    0xA01B0F: '예전에 ',
+    0xA01B18: '나는 이',
+    0xA01B21: ' 별 안에서 전쟁을',
     0xA01B3F: '그 틈에 공략하려 했지만 실패했다.',
-    0xA01B68: '코스모랜드...',
+    0xA01B68: '코스모랜드에서도',
     0xA01B7B: '그랬다.',
     0xA01B88: '공격했지.',
     0xA01B98: '다신 실패없다',
@@ -3848,7 +3866,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA22004: '적　함정　조사할게',
     0xA2214C: '유리하게 싸워',
     0xA22108: '시제품이라 항상 쓸 수는 없어',
-    0xA22194: '칭찬해도 아무것도 안 나와',
+    0xA22194: '칭찬해도 안 나와',
     0xA222B8: '병기일 뿐입니다',
     0xA22316: '앞으로가 문제입니다',
     0xA223E9: '감사 인사를 들었어',
@@ -3902,12 +3920,12 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA24BD6: '이런　소국　따위',
     0xA24CE1: '적을　몰아내',
     0xA24630: '신형 전차 생산 가능해',
-    0xA2483F: '개발력 얕볼 수 없어',
+    0xA2483F: '개발력 강해',
     0xA24896: '콩그는 뭘 하고 있는 걸까요',
     0xA24900: '안 돼...',
     0xA249DD: '가능하면 육지뿐 아니라',
     0xA249F4: '공중 방어도',
-    0xA24E63: '이긴 거나 같아',
+    0xA24E63: '이미 이겼어',
     0xA2531F: '우리도',
     0xA25427: '힘은 엄청납니다',
     0xA25483: '그에게 패배 직전이라죠',
@@ -4476,54 +4494,54 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xA1D01C: '되는 데까지 해보겠어',
     0xA1D04A: '마지막이면 돼',
     0xA1D1F9: '되는 데까지 해보겠어',
-    0xA1D6B3: '뭐라도된줄아나',
+    0xA1D6B3: '뭐라도 된 줄 아나',
     0xA1D73A: '전장에 사정은 없다',
     0xA1D7D9: '싸움을 유리하게 이끌겠지',
-    0xA1E1FC: '신형전차부대사용이',
-    0xA22194: '칭찬해도아무것도안나와',
+    0xA1E1FC: '신형 전차 부대 사용이',
+    0xA22194: '칭찬해도 안 나와',
     0xA221AF: '오른쪽 위 도시 10개를 뺏기면,',
     0xA2245B: '적 함정을 피해 버렸다면',
     0xA22A22: '전장이 남은 한',
     0xA23340: '작전을 다시 짜야겠어.',
     0xA2346B: '다음엔 반드시 이긴다',
-    0xA2361D: '제안받을생각이다',
-    0xA23A94: '내가승자되는걸',
-    0xA23BBB: '압도적우위가',
-    0xA2483F: '개발력얕볼수없어',
-    0xA249DD: '육지뿐아니라',
-    0xA24E63: '이긴거나같아',
-    0xA2559C: '다음전장으로가야해',
-    0xA26497: '그게자연스러워',
-    0xA29B3D: '이지형보병은',
+    0xA2361D: '제안받을 생각이다',
+    0xA23A94: '내가 승자 되는 걸',
+    0xA23BBB: '압도적 우위가',
+    0xA2483F: '개발력 강해',
+    0xA249DD: '육지뿐 아니라',
+    0xA24E63: '이미 이겼어',
+    0xA2559C: '다음 전장으로 가야 해',
+    0xA26497: '그게 자연스러워',
+    0xA29B3D: '이 지형 보병은',
     0xA29C4A: '육상 유닛 회복 보급이',
-    0xA2A01D: '공격사거리강력',
-    0xA2AA77: '한번에거점점령가능',
+    0xA2A01D: '공격 사거리 강력',
+    0xA2AA77: '한번에 점령 가능',
     0xA2AB0C: '간접공격 사거리',
     0xA2AB5C: '간접공격 사거리',
     0xA2AB90: '간접공격 사거리',
-    0xA2AE4B: '1더증가',
-    0xA2B0D9: '1증가방어력높음',
-    0xA2B17D: '연료절반감소',
-    0xA2B1D3: '연료절반감소',
-    0xA2BB08: '아군도시지상유닛이',
-    0xA3012B: '내가너무강했다',
+    0xA2AE4B: '1 더 증가',
+    0xA2B0D9: '1 증가 방어력 높음',
+    0xA2B17D: '연료 절반 감소',
+    0xA2B1D3: '연료 절반 감소',
+    0xA2BB08: '아군 도시 지상 유닛이',
+    0xA3012B: '내가 강했다',
     0xA32AF9: '이 범위 공중 유닛에',
     0xB81E8C: '세명의과거',
-    0xD93B75: '다음날체력2만회복',
-    0xD96806: '아래중립도시는',
-    0xD96CF3: '쓸수있을땐',
-    0xD98A79: '매일연료2소모',
-    0xD9A117: '끝까지지켜',
-    0xD9AE4D: '이동안하면',
-    0xD9BDE4: '여울항구만가능',
-    0xD9F9A6: '다시한번',
-    0xDA26C0: '같은유닛끼린이정도',
-    0xDA3EB2: '공중유닛은갈수있다고',
-    0xDECCE5: '이동비용으로가능',
-    0xDECFE8: '시야넓음',
-    0xDED83D: '수송가능유닛은보병계',
-    0xDEEC7F: '끝장가능',
-    0xDEEE16: '공격안받고인접안돼',
+    0xD93B75: '다음 날 체력 2 회복',
+    0xD96806: '아래 중립 도시는',
+    0xD96CF3: '쓸 수 있을 땐',
+    0xD98A79: '매일 연료 2 소모',
+    0xD9A117: '끝까지 지켜',
+    0xD9AE4D: '이동 필요',
+    0xD9BDE4: '여울/항구만 가능',
+    0xD9F9A6: '한 번 더',
+    0xDA26C0: '같은 유닛끼린 이 정도',
+    0xDA3EB2: '공중 유닛은 갈 수 있다고',
+    0xDECCE5: '이동 비용으로 가능',
+    0xDECFE8: '시야 넓음',
+    0xDED83D: '수송가능 유닛은 보병계',
+    0xDEEC7F: '끝장 가능',
+    0xDEEE16: '공격 안받고 인접안돼',
     0xDEF07C: '비행 타입은 지형 영향',
     0xDEF442: '주포로 비행기계에 대한',
     0xDF226C: '이면반드시이길수있어!',
@@ -4815,6 +4833,8 @@ def restore_backup_utility_tables(rom, orig):
     return restored
 
 
+PART2_UI_PAD_CHAR = '倶'
+
 PART2_UI_KANJI_GLYPH_SUBS = {
     # Protected Part 2 battle/status UI dictionaries. Keep the original SJIS
     # table bytes intact, but replace the glyphs those bytes resolve to.
@@ -4923,8 +4943,11 @@ def patch_part2_ui_kanji_glyphs(rom, orig):
 
     slots = _kanji_table_slots(orig)
     patched = 0
-    if _sjis_code('　') in slots:
-        top_idx, bot_idx = slots[_sjis_code('　')]
+    for blank_ch in ('　', PART2_UI_PAD_CHAR):
+        sjis = _sjis_code(blank_ch)
+        if sjis not in slots:
+            raise AssertionError(f'kanji table missing blank padding char {blank_ch} {sjis:04X}')
+        top_idx, bot_idx = slots[sjis]
         rom[P.FONT_FILE + top_idx * 32:P.FONT_FILE + top_idx * 32 + 32] = bytes(32)
         rom[P.FONT_FILE + bot_idx * 32:P.FONT_FILE + bot_idx * 32 + 32] = bytes(32)
         patched += 1
@@ -4938,6 +4961,22 @@ def patch_part2_ui_kanji_glyphs(rom, orig):
         rom[P.FONT_FILE + bot_idx * 32:P.FONT_FILE + bot_idx * 32 + 32] = bot
         patched += 1
     return patched
+
+
+def patch_compact_ui_fallback_glyph(rom, orig):
+    """Blank the compact UI missing-glyph tile used by fixed-width padding."""
+
+    off = 0x80FF46
+    expected = bytes.fromhex(
+        '000000000000000000000000000000000000000000ae0a00e0aaae00a00a000a'
+        'a00a00a0a00a0000e0aae00a00aeaa0000000000000000000000000000000000'
+    )
+    if orig[off:off + len(expected)] != expected:
+        raise AssertionError(f'unexpected compact UI fallback glyph at 0x{off:X}')
+    if rom[off:off + len(expected)] != bytes(len(expected)):
+        rom[off:off + len(expected)] = bytes(len(expected))
+        return 1
+    return 0
 
 
 def patch_part2_ui_context_tokens(rom):
@@ -5062,6 +5101,7 @@ def patch_part2_ui_context_tokens(rom):
     ]
     for old_text, new_text in replacements:
         old = old_text.encode('shift_jis')
+        new_text = new_text.replace('　', PART2_UI_PAD_CHAR)
         new = new_text.encode('shift_jis')
         if len(old) != len(new):
             raise AssertionError(f'part2 UI context replacement length mismatch: {old_text}')
@@ -5074,6 +5114,30 @@ def patch_part2_ui_context_tokens(rom):
                 rom[idx:idx + len(old)] = new
                 patched += 1
                 pos = idx + len(new)
+    # Some compact unit-info slots contain non-table SJIS symbols after the
+    # visible "장비없음" label. Use a harmless padding code; the compact fallback
+    # glyph itself is blanked by patch_compact_ui_fallback_glyph().
+    equip_fixed_slot = '装備無員｜→↓夢'.encode('shift_jis')
+    equip_fixed_padded = ('装備無員' + PART2_UI_PAD_CHAR * 4).encode('shift_jis')
+    for start, end in protected_ranges:
+        pos = start
+        while True:
+            idx = rom.find(equip_fixed_slot, pos, end)
+            if idx < 0:
+                break
+            rom[idx:idx + len(equip_fixed_slot)] = equip_fixed_padded
+            patched += 1
+            pos = idx + len(equip_fixed_padded)
+        pos = start
+        fullwidth_space = '　'.encode('shift_jis')
+        blank_pad = PART2_UI_PAD_CHAR.encode('shift_jis')
+        while True:
+            idx = rom.find(fullwidth_space, pos, end)
+            if idx < 0:
+                break
+            rom[idx:idx + len(fullwidth_space)] = blank_pad
+            patched += 1
+            pos = idx + len(blank_pad)
     return patched
 
 
@@ -5607,7 +5671,7 @@ def patch_part2_mode_menu_obj_labels(rom):
         (make_small_button('계속'), 0x000, 0x100),
         (make_small_button('처음'), 0x180, 0x280),
         (make_small_button('지도'), 0x300, 0x400),
-        (make_small_button('장군'), 0x480, 0x580),
+        (make_small_button('쇼군'), 0x480, 0x580),
     ]
     button_patches = []
     for layer, left_pos, right_pos in buttons:
@@ -5618,7 +5682,7 @@ def patch_part2_mode_menu_obj_labels(rom):
     for off, text, label in [
         (0x5B8E44, '캠페인', 'campaign option'),
         (0x5B9050, '상점', 'wars shop option'),
-        (0x5B9378, '트라이얼', 'trial option'),
+        (0x5B9378, '도전', 'trial option'),
         (0x5B8F48, '자유전', 'free battle option'),
         (0x5B917C, '편집', 'edit option'),
         (0x5B9280, '통신', 'link option'),
@@ -5633,6 +5697,246 @@ def patch_part2_mode_menu_obj_labels(rom):
         patched += patch_lz(off, patches, label)
 
     return patched
+
+
+def patch_part2_link_mode_residual_labels(rom):
+    """Replace Part 2 link-mode residual English/Japanese logo OBJ labels."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x54E538
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 link-mode LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x2400:
+        raise AssertionError(f'unexpected Part 2 link-mode block size at 0x{off:X}: {len(data)}')
+    buf = bytearray(data)
+
+    font_bold = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+    font_cond = os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.ttf')
+
+    def text_bbox(draw, text, font, stroke=0):
+        box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+        return box[2] - box[0], box[3] - box[1]
+
+    def paint_text(layer, text, box, max_size, fill_idx, stroke_idx=4, aa_idx=2, stroke=0, font_path=None):
+        if font_path is None:
+            font_path = font_bold
+        draw = ImageDraw.Draw(layer)
+        for size in range(max_size, 6, -1):
+            font = ImageFont.truetype(font_path, size)
+            w, h = text_bbox(draw, text, font, stroke)
+            if w <= box[2] - box[0] and h <= box[3] - box[1]:
+                break
+        x = box[0] + (box[2] - box[0] - w) // 2
+        y = box[1] + (box[3] - box[1] - h) // 2 - 1
+
+        outline = Image.new('L', layer.size, 0)
+        od = ImageDraw.Draw(outline)
+        od.text((x, y), text, font=font, fill=255, stroke_width=stroke, stroke_fill=255)
+        body = Image.new('L', layer.size, 0)
+        bd = ImageDraw.Draw(body)
+        bd.text((x, y), text, font=font, fill=255)
+        op, bp, lp = outline.load(), body.load(), layer.load()
+        for yy in range(layer.height):
+            for xx in range(layer.width):
+                if op[xx, yy] >= 96:
+                    lp[xx, yy] = stroke_idx
+                if bp[xx, yy] >= 192:
+                    lp[xx, yy] = fill_idx
+                elif bp[xx, yy] >= 64:
+                    lp[xx, yy] = aa_idx
+
+    def rect_tiles(layer, x, y, width, height):
+        px = layer.load()
+        out = bytearray()
+        for ty in range(height // 8):
+            for tx in range(width // 8):
+                for row in range(8):
+                    for col_pair in range(4):
+                        lo = int(px[x + tx * 8 + col_pair * 2, y + ty * 8 + row]) & 0x0F
+                        hi = int(px[x + tx * 8 + col_pair * 2 + 1, y + ty * 8 + row]) & 0x0F
+                        out.append(lo | (hi << 4))
+        return bytes(out)
+
+    def make_strip(text):
+        layer = Image.new('L', (128, 16), 0)
+        draw = ImageDraw.Draw(layer)
+        draw.rectangle((0, 3, 127, 13), fill=4)
+        draw.rectangle((0, 3, 127, 4), fill=1)
+        paint_text(layer, text, (6, 2, 122, 14), 13, fill_idx=1, stroke_idx=4, aa_idx=2, stroke=0, font_path=font_cond)
+        return layer
+
+    def make_main(text):
+        layer = Image.new('L', (128, 32), 0)
+        draw = ImageDraw.Draw(layer)
+        draw.rectangle((0, 3, 127, 28), fill=4)
+        draw.rectangle((0, 3, 127, 5), fill=1)
+        draw.rectangle((0, 26, 127, 28), fill=3)
+        paint_text(layer, text, (4, 3, 124, 27), 25, fill_idx=1, stroke_idx=4, aa_idx=2, stroke=1, font_path=font_bold)
+        return layer
+
+    top = make_strip('1팩 대전')
+    main = make_main('멀티팩')
+    bottom = make_strip('맵 교환')
+
+    patches = [
+        (0x1800, rect_tiles(top, 0, 0, 32, 16)),
+        (0x1900, rect_tiles(top, 32, 0, 32, 16)),
+        (0x1A00, rect_tiles(top, 64, 0, 32, 16)),
+        (0x1B00, rect_tiles(top, 96, 0, 32, 16)),
+        (0x0800, rect_tiles(main, 0, 0, 64, 32)),
+        (0x0C00, rect_tiles(main, 64, 0, 64, 32)),
+        (0x2000, rect_tiles(bottom, 0, 0, 32, 16)),
+        (0x2100, rect_tiles(bottom, 32, 0, 32, 16)),
+        (0x2200, rect_tiles(bottom, 64, 0, 32, 16)),
+        (0x2300, rect_tiles(bottom, 96, 0, 32, 16)),
+    ]
+    for pos, payload in patches:
+        buf[pos:pos + len(payload)] = payload
+
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 2 link-mode LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return len(patches)
+
+
+def patch_part2_menu_newspaper_bg(rom):
+    """Replace the Part 2 mode-menu newspaper collage with non-Latin BG art."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x5B5D10
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 menu newspaper LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x2000:
+        raise AssertionError(f'unexpected Part 2 menu newspaper size at 0x{off:X}: {len(data)}')
+
+    width = height = 128
+    layer = Image.new('L', (width, height), 1)
+    draw = ImageDraw.Draw(layer)
+    draw.rectangle((0, 0, width - 1, height - 1), fill=1)
+
+    for x in (0, 42, 84, 127):
+        draw.line((x, 0, x, height), fill=11)
+    for y in (0, 20, 42, 64, 86, 108, 127):
+        draw.line((0, y, width, y), fill=11)
+    for y in (4, 25, 47, 69, 91, 113):
+        draw.rectangle((3, y, 39, y + 3), fill=7)
+        draw.rectangle((45, y, 80, y + 2), fill=9)
+        draw.rectangle((88, y, 124, y + 2), fill=7)
+    for y in range(12, 124, 7):
+        draw.line((5, y, 38, y), fill=4)
+        draw.line((47, y, 80, y), fill=4)
+        draw.line((90, y, 124, y), fill=4)
+
+    draw.rectangle((6, 26, 36, 55), outline=12, fill=3)
+    draw.polygon(((9, 53), (20, 33), (35, 53)), fill=10)
+    draw.ellipse((50, 74, 78, 100), outline=13, fill=5)
+    draw.rectangle((89, 30, 121, 58), outline=12, fill=2)
+    draw.line((92, 55, 118, 34), fill=13, width=2)
+    draw.rectangle((6, 83, 38, 105), outline=12, fill=6)
+    draw.arc((7, 84, 37, 115), 190, 350, fill=13, width=2)
+
+    font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+    font = ImageFont.truetype(font_path, 9)
+    small_font = ImageFont.truetype(font_path, 8)
+
+    def paint_text(text, xy, font_obj, fill=13):
+        mask = Image.new('L', (width, height), 0)
+        md = ImageDraw.Draw(mask)
+        md.text(xy, text, font=font_obj, fill=255)
+        mp = mask.load()
+        lp = layer.load()
+        for yy in range(height):
+            for xx in range(width):
+                if mp[xx, yy] > 96:
+                    lp[xx, yy] = fill
+
+    paint_text('워즈 신문', (43, 4), font, 13)
+    for text, xy in (
+        ('레드스타', (4, 65)),
+        ('블루문', (45, 65)),
+        ('그린어스', (85, 65)),
+        ('옐로코멧', (4, 108)),
+        ('전황 속보', (45, 108)),
+        ('작전 소식', (85, 108)),
+    ):
+        paint_text(text, xy, small_font, 12)
+
+    px = layer.load()
+    out = bytearray()
+    for ty in range(16):
+        for tx in range(16):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = int(px[tx * 8 + col_pair * 2, ty * 8 + row]) & 0x0F
+                    hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
+                    out.append(lo | (hi << 4))
+
+    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 2 menu newspaper LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return len(out) // 32
+
+
+def patch_common_nintendo_presents_bg(rom):
+    """Replace the cold-boot NINTENDO PRESENTS tile sheet with Korean text."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x21CE8
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Nintendo Presents LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x3000:
+        raise AssertionError(f'unexpected Nintendo Presents size at 0x{off:X}: {len(data)}')
+
+    layer = Image.new('L', (256, 96), 0)
+    text = '닌텐도 제공'
+    font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+    draw = ImageDraw.Draw(layer)
+    for size in range(12, 8, -1):
+        font = ImageFont.truetype(font_path, size)
+        box = draw.textbbox((0, 0), text, font=font, stroke_width=0)
+        if box[2] - box[0] <= 120 and box[3] - box[1] <= 12:
+            break
+    x = (layer.width - (box[2] - box[0])) // 2 - box[0]
+    y = (16 - (box[3] - box[1])) // 2 - box[1]
+
+    body = Image.new('L', layer.size, 0)
+    ImageDraw.Draw(body).text((x, y), text, font=font, fill=255, stroke_width=0)
+    px = layer.load()
+    bp = body.load()
+    for yy in range(layer.height):
+        for xx in range(layer.width):
+            if bp[xx, yy]:
+                px[xx, yy] = 1
+
+    out = bytearray()
+    px = layer.load()
+    for ty in range(12):
+        for tx in range(32):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = int(px[tx * 8 + col_pair * 2, ty * 8 + row]) & 0x0F
+                    hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
+                    out.append(lo | (hi << 4))
+
+    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Nintendo Presents LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return len(out) // 32
 
 
 def patch_part2_splash_logo_bg(rom):
@@ -5696,179 +6000,91 @@ def patch_part2_splash_logo_bg(rom):
     return 88
 
 
-def patch_part1_operation_room_bg_labels(rom):
-    """Replace English country labels in the Part 1 operation-room BG tiles."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+def patch_part2_intro_blackhole_bg(rom):
+    """Erase the Part 2 opening-demo newspaper English while preserving paper backing."""
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
-    off = 0xBF66F0
+    off = 0x4E0478
     dec = lz77_decompress(rom, off)
     if dec is None:
-        raise AssertionError(f'invalid Part 1 operation-room BG LZ77 block at 0x{off:X}')
+        raise AssertionError(f'invalid Part 2 intro blackhole LZ77 block at 0x{off:X}')
     data, consumed = dec
-    if len(data) != 0x2780:
-        raise AssertionError(f'unexpected Part 1 operation-room BG size at 0x{off:X}: {len(data)}')
+    if len(data) != 0x2CA0:
+        raise AssertionError(f'unexpected Part 2 intro blackhole size at 0x{off:X}: {len(data)}')
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
-    width = 16 * 8
-    height = ((len(data) // 32 + 15) // 16) * 8
-    pixels = [[0] * width for _ in range(height)]
-    for tile in range(len(data) // 32):
-        x0 = (tile % 16) * 8
-        y0 = (tile // 16) * 8
-        start = tile * 32
-        for row in range(8):
-            for col in range(8):
-                value = data[start + row * 4 + col // 2]
-                pixels[y0 + row][x0 + col] = value >> 4 if col & 1 else value & 0x0F
+    # This block contains the large "BLACKHOLE COMING AGAIN" and the small
+    # newspaper labels in the same BG0 paper tile set. Palette index 0 is not a
+    # suitable blank here; keep the original tile backing and replace the brown
+    # lettering indices with the dominant cream paper shade.
+    out = bytearray(data)
+    text_indices = {7, 9, 10, 11, 12, 13, 14, 15}
+    for i, value in enumerate(out):
+        lo = value & 0x0F
+        hi = value >> 4
+        if lo in text_indices:
+            lo = 5
+        if hi in text_indices:
+            hi = 5
+        out[i] = lo | (hi << 4)
 
-    def fill_rect(x, y, w, h, value):
-        for yy in range(y, y + h):
-            if not (0 <= yy < height):
-                continue
-            for xx in range(x, x + w):
-                if 0 <= xx < width:
-                    pixels[yy][xx] = value
-
-    def draw_text(text, x, y, scale=1, ink=15, shadow=None):
-        cursor = x
-        for ch in text:
-            grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    for sy in range(scale):
-                        for sx in range(scale):
-                            px = cursor + (col + xo) * scale + sx
-                            py = y + (row + yo) * scale + sy
-                            if shadow is not None:
-                                for dx, dy in ((1, 1), (1, 0), (0, 1)):
-                                    qx = px + dx
-                                    qy = py + dy
-                                    if 0 <= qx < width and 0 <= qy < height:
-                                        pixels[qy][qx] = shadow
-                            if 0 <= px < width and 0 <= py < height:
-                                pixels[py][px] = ink
-            cursor += (w + 1) * scale
-
-    # This BG tile sheet wraps horizontally in the operation-room map. The
-    # Yellow Comet label is split across the right and bottom edges, so patch
-    # those fragments separately.
-    fill_rect(35, 39, 49, 9, 3)
-    draw_text('레드스타', 43, 40, scale=1, ink=11, shadow=4)
-    fill_rect(7, 54, 91, 15, 3)
-    draw_text('블루문', 30, 55, scale=2, ink=12, shadow=4)
-    fill_rect(103, 35, 25, 14, 3)
-    draw_text('옐로', 104, 37, scale=1, ink=14, shadow=4)
-    fill_rect(96, 88, 32, 15, 3)
-    draw_text('옐로', 101, 91, scale=1, ink=14, shadow=4)
-    fill_rect(61, 149, 45, 11, 3)
-    draw_text('코멧', 72, 151, scale=1, ink=14, shadow=4)
-    fill_rect(2, 131, 104, 15, 3)
-    draw_text('그린어스', 33, 132, scale=2, ink=13, shadow=2)
-
-    buf = bytearray(len(data))
-    for tile in range(len(data) // 32):
-        x0 = (tile % 16) * 8
-        y0 = (tile // 16) * 8
-        start = tile * 32
-        for row in range(8):
-            for col in range(8):
-                value = pixels[y0 + row][x0 + col] & 0x0F
-                bi = start + row * 4 + col // 2
-                if col & 1:
-                    buf[bi] |= value << 4
-                else:
-                    buf[bi] |= value
-
-    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    comp = lz77_compress_optimal(out, vram_safe=True)
     if len(comp) > consumed:
-        raise AssertionError(f'Part 1 operation-room BG grew: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
-    return 70
+        raise AssertionError(f'Part 2 intro blackhole LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return len(data) // 32
+
+
+def patch_part2_intro_campaign_residual_graphics(rom):
+    """Blank Part 2 pre-menu intro graphics that still show Japanese/English labels."""
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    patched = 0
+    for off, expected_size, label in (
+        (0x4E17C0, 0x13E0, 'campaign/trial newspaper panels'),
+        (0x4ECD60, 0x1000, 'yellow-comet banner text'),
+    ):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid Part 2 intro residual LZ77 block {label} at 0x{off:X}')
+        data, consumed = dec
+        if len(data) != expected_size:
+            raise AssertionError(
+                f'unexpected Part 2 intro residual size for {label} at 0x{off:X}: {len(data)}'
+            )
+        comp = lz77_compress_optimal(bytes(len(data)), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(
+                f'Part 2 intro residual {label} LZ77 overflow: {len(comp)} > {consumed}'
+            )
+        rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+        patched += len(data) // 32
+    return patched
+
+
+def patch_part2_intro_ascii_name_residuals(rom):
+    """Blank opening-demo ASCII CO name overlays rendered with the Latin font."""
+    patches = {
+        0x4CA930: 4,  # CAT\0
+        0x4CA968: 8,  # DOMINO\0\0
+    }
+    patched = 0
+    for off, size in patches.items():
+        if any(rom[off:off + size]):
+            rom[off:off + size] = bytes(size)
+            patched += 1
+    return patched
+
+
+def patch_part1_operation_room_bg_labels(rom):
+    """Keep the original English country labels in the Part 1 operation-room BG."""
+    return 0
 
 
 def patch_part1_intro_map_bitmap_labels(rom):
-    """Replace English country names in the Part 1 mode-4 intro map bitmap."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
-    from lz77_compress import lz77_compress
-    from lz77_scan import lz77_decompress
-
-    blocks = ((0xC2FD70, 0), (0xC30EE8, 80))
-    width, height = 240, 160
-    pixels = [[0] * width for _ in range(height)]
-    raw_blocks = []
-    for off, y_base in blocks:
-        dec = lz77_decompress(rom, off)
-        if dec is None:
-            raise AssertionError(f'invalid Part 1 intro-map bitmap LZ77 block at 0x{off:X}')
-        data, consumed = dec
-        if len(data) != width * 80:
-            raise AssertionError(f'unexpected Part 1 intro-map bitmap size at 0x{off:X}: {len(data)}')
-        raw_blocks.append((off, consumed))
-        for y in range(80):
-            row = data[y * width:(y + 1) * width]
-            pixels[y_base + y][:] = row
-
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
-
-    def fill_rect(x, y, w, h, value):
-        for yy in range(y, y + h):
-            if not (0 <= yy < height):
-                continue
-            for xx in range(x, x + w):
-                if 0 <= xx < width:
-                    pixels[yy][xx] = value
-
-    def draw_text(text, x, y, ink, shadow=None):
-        cursor = x
-        for ch in text:
-            grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = cursor + col + xo
-                    py = y + row + yo
-                    if shadow is not None:
-                        for dx, dy in ((1, 1), (1, 0)):
-                            qx = px + dx
-                            qy = py + dy
-                            if 0 <= qx < width and 0 <= qy < height:
-                                pixels[qy][qx] = shadow
-                    if 0 <= px < width and 0 <= py < height:
-                        pixels[py][px] = ink
-            cursor += w + 1
-
-    # Palette indices are taken from the original country-label regions. The
-    # bitmap is intentionally muted, so keep these labels low-contrast as well.
-    for x, y, w, h, bg, text, tx, ty, ink, shadow in (
-        (42, 19, 45, 16, 2, '레드스타', 49, 23, 16, 9),
-        (119, 55, 47, 15, 13, '블루문', 128, 59, 24, 22),
-        (117, 101, 53, 18, 3, '그린어스', 126, 106, 23, 15),
-        (180, 101, 42, 15, 4, '옐로코멧', 185, 105, 20, 5),
-        (50, 145, 52, 15, 11, '그린어스', 57, 149, 23, 15),
-        (0, 145, 31, 15, 10, '코멧', 3, 149, 20, 12),
-    ):
-        fill_rect(x, y, w, h, bg)
-        draw_text(text, tx, ty, ink, shadow)
-
-    patched = 0
-    for off, consumed in raw_blocks:
-        y_base = 0 if off == blocks[0][0] else 80
-        raw = bytearray()
-        for y in range(y_base, y_base + 80):
-            raw.extend(pixels[y])
-        comp = lz77_compress(bytes(raw), vram_safe=True)
-        if len(comp) > consumed:
-            raise AssertionError(f'Part 1 intro-map bitmap grew at 0x{off:X}: {len(comp)} > {consumed}')
-        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
-        patched += 1
-    return patched
+    """Keep the original English country labels in the Part 1 intro/map bitmap."""
+    return 0
 
 
 def patch_part1_battle_day_banner(rom):
@@ -6056,6 +6272,62 @@ def patch_part1_info_screen_bg_labels(rom):
         if len(comp) > consumed:
             raise AssertionError(
                 f'Part 1 info-screen BG block grew at 0x{off:X}: {len(comp)} > {consumed}'
+            )
+        rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+        patched += 1
+    return patched
+
+
+def patch_part1_compact_info_weapon_labels(rom):
+    """Remove Part 1 compact unit-info Japanese vertical weapon labels."""
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    patched = 0
+
+    for off in (0xBA34D0, 0xEE436C):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid Part 1 compact-info LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        if len(data) != 0x0A00:
+            raise AssertionError(f'unexpected Part 1 compact-info size at 0x{off:X}: {len(data)}')
+
+        width, height = 128, 40
+        pixels = [[0] * width for _ in range(height)]
+        for tile_idx in range(len(data) // 32):
+            x = (tile_idx % 16) * 8
+            y = (tile_idx // 16) * 8
+            base = tile_idx * 32
+            for row in range(8):
+                for col in range(8):
+                    value = data[base + row * 4 + col // 2]
+                    pixels[y + row][x + col] = (value & 0x0F) if col % 2 == 0 else (value >> 4)
+
+        # Remove the orange Japanese weapon-label strokes, keeping the panel backing.
+        for y in range(height):
+            for x in range(86, 126):
+                if pixels[y][x] in (4, 5, 6, 7):
+                    pixels[y][x] = 3
+
+        out = bytearray(len(data))
+        for tile_idx in range(len(data) // 32):
+            x = (tile_idx % 16) * 8
+            y = (tile_idx // 16) * 8
+            base = tile_idx * 32
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[y + row][x + col] & 0x0F
+                    bi = base + row * 4 + col // 2
+                    if col & 1:
+                        out[bi] |= value << 4
+                    else:
+                        out[bi] |= value
+
+        comp = lz77_compress_optimal(bytes(out), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(
+                f'Part 1 compact-info LZ77 block grew at 0x{off:X}: {len(comp)} > {consumed}'
             )
         rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
         patched += 1
@@ -6300,12 +6572,12 @@ def patch_part2_action_menu_icon_labels(rom):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
 
-    # These labels live in fixed 16x16 OBJ icons. The 11px condensed font fits
-    # mathematically but reads as clipped in-game, so use the compact 7px UI font.
+    # These labels share tile pages with neighboring icon art. Only the top 8px
+    # row is replaced; clearing the lower row corrupts adjacent battle sprites.
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
-    def render_block(text):
-        width, height = 16, 16
+    def render_strip(text):
+        width, height = 16, 8
         pixels = [[0] * width for _ in range(height)]
         glyphs = []
         total_w = 0
@@ -6330,18 +6602,17 @@ def patch_part2_action_menu_icon_labels(rom):
             x += w + 1
 
         tiles = []
-        for ty in range(2):
-            for tx in range(2):
-                tile = bytearray(32)
-                for row in range(8):
-                    for col in range(8):
-                        value = pixels[ty * 8 + row][tx * 8 + col] & 0x0F
-                        bi = row * 4 + col // 2
-                        if col & 1:
-                            tile[bi] |= value << 4
-                        else:
-                            tile[bi] |= value
-                tiles.append(bytes(tile))
+        for tx in range(2):
+            tile = bytearray(32)
+            for row in range(8):
+                for col in range(8):
+                    value = pixels[row][tx * 8 + col] & 0x0F
+                    bi = row * 4 + col // 2
+                    if col & 1:
+                        tile[bi] |= value << 4
+                    else:
+                        tile[bi] |= value
+            tiles.append(bytes(tile))
         return tiles
 
     patched = 0
@@ -6354,7 +6625,7 @@ def patch_part2_action_menu_icon_labels(rom):
         (0xBE803C, '종료'),
         (0xBEC5DC, '보급'),
     ]:
-        for idx, tile in enumerate(render_block(text)):
+        for idx, tile in enumerate(render_strip(text)):
             off = start + idx * 32
             rom[off:off + 32] = tile
             patched += 1
@@ -6421,6 +6692,204 @@ def patch_part2_mission_start_obj(rom):
     comp = lz77_compress(bytes(out), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'mission-start LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+    return 1
+
+
+def patch_part2_operation_prompt_labels(rom):
+    """Replace raw Part 2 operation-select prompt/record/enemy OBJ tiles."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+
+    def make_pixels(width, height):
+        return [[0] * width for _ in range(height)]
+
+    def draw_text(pixels, text, x, y, fill, shadow=15, spacing=1):
+        height = len(pixels)
+        width = len(pixels[0])
+        cursor = x
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo + 1
+                    py = y + row + 1
+                    if 0 <= px < width and 0 <= py < height and pixels[py][px] == 0:
+                        pixels[py][px] = shadow
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    px = cursor + col + xo
+                    py = y + row
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = fill
+            cursor += w + spacing
+
+    def draw_scaled_text(pixels, text, x, y, scale=2, fill=6, shadow=15, spacing=1):
+        height = len(pixels)
+        width = len(pixels[0])
+        cursor = x
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = cursor + (col + xo) * scale + sx + 1
+                            py = y + row * scale + sy + 1
+                            if 0 <= px < width and 0 <= py < height and pixels[py][px] == 0:
+                                pixels[py][px] = shadow
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = cursor + (col + xo) * scale + sx
+                            py = y + row * scale + sy
+                            if 0 <= px < width and 0 <= py < height:
+                                pixels[py][px] = fill
+            cursor += (w + spacing) * scale
+
+    def chunk(pixels, x0, y0, tiles_w):
+        out = bytearray()
+        for tx in range(tiles_w):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = pixels[y0 + row][x0 + tx * 8 + col_pair * 2] & 0x0F
+                    hi = pixels[y0 + row][x0 + tx * 8 + col_pair * 2 + 1] & 0x0F
+                    out.append(lo | (hi << 4))
+        return bytes(out)
+
+    prompt = make_pixels(64, 24)
+    draw_text(prompt, '정보', 0, 1, 12)
+    draw_text(prompt, 'A', 0, 9, 3)
+    draw_text(prompt, '확인', 6, 9, 6)
+    draw_text(prompt, 'B', 0, 17, 10)
+    draw_text(prompt, '뒤로', 6, 17, 9)
+
+    enemy = make_pixels(32, 8)
+    draw_text(enemy, '적군', 0, 0, 12)
+    record = make_pixels(64, 8)
+    draw_text(record, '기록', 0, 0, 12)
+    ok = make_pixels(32, 16)
+    draw_scaled_text(ok, '확인', 2, 1, 2, 6, 15)
+    stock = make_pixels(48, 16)
+    for y in range(2, 14):
+        for x in range(0, 48):
+            stock[y][x] = 15
+    draw_scaled_text(stock, '재고', 8, 1, 2, 1, 15)
+
+    chunks = {
+        0x456614: chunk(ok, 0, 0, 4) + chunk(ok, 0, 8, 4),
+        0x456794: chunk(stock, 0, 0, 4) + chunk(stock, 0, 8, 4),
+        0x456894: chunk(stock, 32, 0, 2) + chunk(stock, 32, 8, 2),
+        0x457174: chunk(prompt, 0, 0, 4),
+        0x4571F4: chunk(prompt, 32, 0, 4),
+        0x456C74: chunk(prompt, 0, 8, 4),
+        0x456CF4: chunk(prompt, 32, 8, 4),
+        0x456F74: chunk(prompt, 0, 16, 4),
+        0x456FF4: chunk(prompt, 32, 16, 4),
+        0x456914: chunk(enemy, 0, 0, 4),
+        0x456154: bytes(64),
+        0x457374: chunk(record, 0, 0, 4),
+        0x4573F4: chunk(record, 32, 0, 4),
+    }
+    for off, data in chunks.items():
+        rom[off:off + len(data)] = data
+    return sum(len(data) // 32 for data in chunks.values())
+
+
+def patch_part2_lets_go_obj(rom):
+    """Replace the Part 2 operation-start LET'S GO OBJ cut-in with Korean art."""
+    from PIL import Image, ImageDraw, ImageFont
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x5AF674
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 lets-go LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x2000:
+        raise AssertionError(f'unexpected Part 2 lets-go size at 0x{off:X}: {len(data)}')
+
+    width, height, scale = 256, 64, 4
+    visible_width = 128
+    text = '가자!'
+    font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+    probe = Image.new('L', (width * scale, height * scale), 0)
+    draw = ImageDraw.Draw(probe)
+    for size in range(54, 24, -1):
+        font = ImageFont.truetype(font_path, size * scale)
+        box = draw.textbbox((0, 0), text, font=font, stroke_width=4 * scale)
+        if box[2] - box[0] <= visible_width * scale - 2 * scale and box[3] - box[1] <= height * scale - 4 * scale:
+            break
+
+    box = draw.textbbox((0, 0), text, font=font, stroke_width=4 * scale)
+    x = (visible_width * scale - (box[2] - box[0])) // 2 - box[0]
+    y = (height * scale - (box[3] - box[1])) // 2 - box[1] - 2 * scale
+
+    shadow = Image.new('L', (width * scale, height * scale), 0)
+    outline = Image.new('L', (width * scale, height * scale), 0)
+    white = Image.new('L', (width * scale, height * scale), 0)
+    body = Image.new('L', (width * scale, height * scale), 0)
+    ImageDraw.Draw(shadow).text(
+        (x + 3 * scale, y + 3 * scale), text, font=font,
+        fill=255, stroke_width=3 * scale, stroke_fill=255,
+    )
+    ImageDraw.Draw(outline).text(
+        (x, y), text, font=font,
+        fill=255, stroke_width=4 * scale, stroke_fill=255,
+    )
+    ImageDraw.Draw(white).text(
+        (x, y), text, font=font,
+        fill=255, stroke_width=2 * scale, stroke_fill=255,
+    )
+    ImageDraw.Draw(body).text((x, y), text, font=font, fill=255)
+
+    shadow = shadow.resize((width, height), Image.Resampling.LANCZOS)
+    outline = outline.resize((width, height), Image.Resampling.LANCZOS)
+    white = white.resize((width, height), Image.Resampling.LANCZOS)
+    body = body.resize((width, height), Image.Resampling.LANCZOS)
+
+    layer = Image.new('L', (width, height), 0)
+    sp, op, wp, bp, lp = shadow.load(), outline.load(), white.load(), body.load(), layer.load()
+    for yy in range(height):
+        for xx in range(width):
+            if sp[xx, yy] >= 36:
+                lp[xx, yy] = 3
+            if op[xx, yy] >= 64:
+                lp[xx, yy] = 2
+            if wp[xx, yy] >= 96:
+                lp[xx, yy] = 15
+            if bp[xx, yy] >= 192:
+                lp[xx, yy] = 1
+            elif bp[xx, yy] >= 96:
+                lp[xx, yy] = 13
+            elif bp[xx, yy] >= 32 and lp[xx, yy] == 15:
+                lp[xx, yy] = 12
+
+    px = layer.load()
+    out = bytearray()
+    for ty in range(8):
+        for tx in range(32):
+            for row in range(8):
+                for col_pair in range(4):
+                    lo = int(px[tx * 8 + col_pair * 2, ty * 8 + row]) & 0x0F
+                    hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
+                    out.append(lo | (hi << 4))
+
+    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part 2 lets-go LZ77 overflow: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + bytes(consumed - len(comp))
     return 1
 
@@ -7489,7 +7958,7 @@ def patch_title_hangul_assets(rom):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import build_title_hangul as th
 
-    def patch_obj_block(off, layer, patch_specs, label):
+    def patch_obj_block(off, layer, patch_specs, label, extra_patch=None):
         dec = th.lz77_decompress(rom, off)
         if dec is None:
             raise AssertionError(f'invalid {label} LZ77 block at 0x{off:X}')
@@ -7497,15 +7966,22 @@ def patch_title_hangul_assets(rom):
         tile_data = bytearray(tile_data)
         for sprite_specs, tile_subtract in patch_specs:
             th.patch_sprite_index_layer(tile_data, layer, sprite_specs, tile_subtract=tile_subtract)
+        if extra_patch is not None:
+            extra_patch(tile_data)
         comp = th.lz77_compress(bytes(tile_data), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'{label} LZ77 overflow: {len(comp)} > {consumed}')
         rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
 
+    def patch_select_extra(tile_data):
+        th.patch_select_residual_tiles(tile_data)
+        th.patch_select_top_tm_tiles(tile_data)
+
     title_layer = th.make_title_index_layer()
     patch_obj_block(
         th.TITLE_OBJ_LZ77_OFF, title_layer,
         ((th.TEXT_SPRITES, 0), (th.PROMPT_SPRITES, 0)), 'title text',
+        extra_patch=th.patch_title_residual_tiles,
     )
 
     select_layer = th.make_select_index_layer()
@@ -7513,6 +7989,7 @@ def patch_title_hangul_assets(rom):
         th.SELECT_OBJ_LZ77_OFF, select_layer,
         ((th.SELECT_TOP_TEXT_SPRITES, 0), (th.SELECT_BOTTOM_TEXT_SPRITES, 0), (th.SELECT_PROMPT_SPRITES, 0)),
         'select text',
+        extra_patch=patch_select_extra,
     )
 
     part1_layer = th.make_part1_index_layer()
@@ -7520,12 +7997,14 @@ def patch_title_hangul_assets(rom):
         th.PART1_TITLE_OBJ_LZ77_OFF, part1_layer,
         ((th.PART1_TITLE_TEXT_SPRITES, 0x200), (th.PART1_PROMPT_SPRITES, 0x200)),
         'part1 title text',
+        extra_patch=th.patch_shared_title_tm_tiles,
     )
 
     part2_layer = th.make_part2_index_layer()
     patch_obj_block(
         th.PART2_TITLE_OBJ_LZ77_OFF, part2_layer,
         ((th.PART2_TITLE_TEXT_SPRITES, 0), (th.PART2_PROMPT_SPRITES, 0)), 'part2 title text',
+        extra_patch=th.patch_part2_attract_title_residual_tiles,
     )
 
     p1_label_blocks = [
@@ -7538,12 +8017,19 @@ def patch_title_hangul_assets(rom):
         ('part1 rule select logo', th.PART1_RULE_SELECT_LZ77_OFF, th.make_part1_label_block('룰 선택', 'RULE SELECT', 20)),
         ('part1 team setting logo', th.PART1_TEAM_SETTING_LZ77_OFF, th.make_part1_label_block('팀 설정', 'TEAM SETTING', 20)),
     ]
-    patched = 9
+    patched = 9 + th.patch_title_copyright_blocks(rom)
     for label, off, layer in p1_label_blocks:
-        th.patch_lz77_whole_block(rom, off, layer, label)
+        th.patch_lz77_whole_block(rom, off, layer, label, th.PART1_LOGO_BLOCK_CAPACITY.get(off))
         patched += 1
+    patched += len(th.patch_part1_submenu_logo_blocks(rom))
     for label, off, text, max_size in th.PART1_MODE_OPTION_BLOCKS:
-        th.patch_part1_option_block(rom, off, th.make_part1_option_block(text, max_size), f'part1 option {label}')
+        th.patch_part1_option_block(
+            rom,
+            off,
+            th.make_part1_option_block(text, max_size),
+            f'part1 option {label}',
+            th.PART1_MODE_OPTION_BLOCK_CAPACITY.get(off),
+        )
         patched += 1
     th.patch_lz77_whole_block(
         rom, th.PART1_CATHERINE_NAME_LZ77_OFF, th.make_part1_catherine_block(), 'part1 Catherine name'
@@ -8301,6 +8787,7 @@ def load_slots():
 
 
 def encode_text(ko, syl_to_code, unmapped):
+    ko = normalize_korean_terms(ko)
     out = bytearray()
     for ch in ko:
         if '가' <= ch <= '힣':
@@ -8354,6 +8841,7 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
     맞으면 (bytes, level), 안 맞으면 None을 돌려 원문을 유지한다.
     level 0=정규화 1=축약규칙.
     """
+    ko = normalize_korean_terms(ko)
     ko = ko.replace('지도을', '지도를').replace('지도은', '지도는')
     normalized = ''.join(HALFWIDTH.get(c, c) for c in ko)
     normalized = ''.join(c for c in normalized if c not in ',.!?:;()[]{}"\'‘’“”・…。、「」『』▼')
@@ -8385,6 +8873,14 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
             return enc, level
 
     return None, 5
+
+
+def write_slot_text(rom, a, slot, enc, ko, level, kind):
+    """슬롯에 인코딩 텍스트 기록 + 무결성맵 로깅. 출력 바이트는 기존과 동일."""
+    fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+    rom[a:a + slot] = bytes([fill]) * slot
+    rom[a:a + len(enc)] = enc
+    WRITE_LOG.append([a, slot, len(enc), bytes(enc).hex(), fill, ko, level, kind])
 
 
 # v56 base has a Galmuri11 overlay hook for early dialogues. Keep the name-grid
@@ -8649,6 +9145,8 @@ def main():
     ap.add_argument('--report', default=os.path.join(BASE, 'temp', 'encode_report.csv'))
     ap.add_argument('--base', default=P.ROM,
                     help='base ROM. 기본=원본 ROM. v56_polished는 전투 튜토리얼 진입 후 충돌하는 구버전 베이스라 명시 지정할 때만 사용.')
+    ap.add_argument('--no-sync-outputs', action='store_true',
+                    help='기본 full 빌드 후 final/title_test ROM 동기화를 건너뜁니다.')
     args = ap.parse_args()
 
     orig = bytes(open(P.ROM, 'rb').read())   # 원본 (테이블 소스)
@@ -8784,9 +9282,7 @@ def main():
                 st['oob'] += 1; continue
             # 빈 공간은 0x00(메시지 조기종료→자동넘어감 버그) 대신 공백(FILL_BYTE)으로 패딩
             # → 렌더러가 슬롯 뒤 제어코드(6B=▼입력대기)에 정상 도달.
-            fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
-            rom[a:a + slot] = bytes([fill]) * slot
-            rom[a:a + len(enc)] = enc
+            write_slot_text(rom, a, slot, enc, ko, level, 'import-csv')
             st['written'] += 1
             written_addrs.add(a)
 
@@ -8815,9 +9311,7 @@ def main():
         if a + slot > len(rom):
             st['oob'] += 1
             continue
-        fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
-        rom[a:a + slot] = bytes([fill]) * slot
-        rom[a:a + len(enc)] = enc
+        write_slot_text(rom, a, slot, enc, ko, level, 'import-addr-override')
         st['written'] += 1
         written_addrs.add(a)
 
@@ -8851,9 +9345,7 @@ def main():
             if a + slot > len(rom):
                 st['oob'] += 1
                 continue
-            fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
-            rom[a:a + slot] = bytes([fill]) * slot
-            rom[a:a + len(enc)] = enc
+            write_slot_text(rom, a, slot, enc, ko, level, 'import-found-source')
             st['written'] += 1
             written_addrs.add(a)
 
@@ -8904,9 +9396,7 @@ def main():
                 if a + slot > len(rom):
                     st['supp_oob'] += 1
                     continue
-                fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
-                rom[a:a + slot] = bytes([fill]) * slot
-                rom[a:a + len(enc)] = enc
+                write_slot_text(rom, a, slot, enc, ko, level, 'import-comprehensive')
                 st['supp_written'] += 1
                 st[f'supp_level{level}'] += 1
                 written_addrs.add(a)
@@ -8916,6 +9406,7 @@ def main():
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
+    st['compact_ui_fallback_glyph'] = patch_compact_ui_fallback_glyph(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
@@ -8923,16 +9414,25 @@ def main():
     st['part1_full_info_spec_obj_label'] = patch_part1_full_info_spec_obj_label(rom)
     st['part2_damage_forecast_label'] = patch_part2_damage_forecast_label_obj(rom)
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
+    st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
+    st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
+    st['common_nintendo_presents_bg'] = patch_common_nintendo_presents_bg(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
+    st['part2_intro_blackhole_bg'] = patch_part2_intro_blackhole_bg(rom)
+    st['part2_intro_campaign_residual_graphics'] = patch_part2_intro_campaign_residual_graphics(rom)
+    st['part2_intro_ascii_name_residuals'] = patch_part2_intro_ascii_name_residuals(rom)
     st['part1_intro_map_bitmap_labels'] = patch_part1_intro_map_bitmap_labels(rom)
     st['part1_operation_room_bg_labels'] = patch_part1_operation_room_bg_labels(rom)
     st['part1_battle_day_banner'] = patch_part1_battle_day_banner(rom)
     st['part1_info_screen_bg_labels'] = patch_part1_info_screen_bg_labels(rom)
+    st['part1_compact_info_weapon_labels'] = patch_part1_compact_info_weapon_labels(rom)
     st['part1_check_label'] = patch_part1_check_label_obj(rom)
     st['part1_name_ui_labels'] = patch_part1_name_ui_labels(rom)
     st['part2_command_menu_icon'] = patch_part2_command_menu_co_icon(rom)
     st['part2_action_menu_icon_labels'] = patch_part2_action_menu_icon_labels(rom)
     st['part2_mission_obj'] = patch_part2_mission_start_obj(rom)
+    st['part2_operation_prompt_labels'] = patch_part2_operation_prompt_labels(rom)
+    st['part2_lets_go_obj'] = patch_part2_lets_go_obj(rom)
     st['part2_battle_start_day_overlay'] = patch_part2_battle_start_day_overlay_obj(rom)
     st['part2_mission_number'] = patch_part2_mission_number_obj(rom)
     st['part2_result_summary'] = patch_part2_result_summary_obj(rom)
@@ -9757,6 +10257,7 @@ def main():
             if len(enc) != 4:
                 raise AssertionError(f'unit option label length mismatch at 0x{base + off:X}')
             rom[base + off:base + off + 4] = enc
+            WRITE_LOG.append([base + off, 4, len(enc), bytes(enc).hex(), None, text, None, 'unit-opt-label'])
 
     for faddr, slot_len, text in (
         (0xB83870, 10, '　　　있음'),
@@ -9772,10 +10273,13 @@ def main():
         if len(enc) != slot_len:
             raise AssertionError(f'option label length mismatch at 0x{faddr:X}')
         rom[faddr:faddr + slot_len] = enc
+        WRITE_LOG.append([faddr, slot_len, len(enc), bytes(enc).hex(), None, text, None, 'opt-label'])
     # Part 2 tutorial control text gap: 0x72 [この] 0x77 「カーソル」...
     # The extractor starts at the quoted fragment, so patch this missed inline
     # source text directly to make the rendered line "이 커서를 써 봐".
-    rom[0xA02A69:0xA02A6D] = encode_text('이　', syl_to_code, unmapped)
+    _enc_a02a69 = encode_text('이　', syl_to_code, unmapped)
+    rom[0xA02A69:0xA02A6D] = _enc_a02a69
+    WRITE_LOG.append([0xA02A69, 4, len(_enc_a02a69), bytes(_enc_a02a69).hex(), None, '이　', None, 'inline-direct'])
     for faddr, data in POST_TEXT_RESTORE.items():
         rom[faddr:faddr + len(data)] = data
     for faddr, (text, slot_len) in INTRO_DIRECT_TEXT.items():
@@ -9783,6 +10287,7 @@ def main():
         if len(enc) > slot_len:
             raise AssertionError(f'intro text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
+        WRITE_LOG.append([faddr, slot_len, len(enc), bytes(enc).hex(), FILL_BYTE, text, None, 'intro-direct'])
     st['name_honorifics'] = patch_name_honorific_fragments(rom, syl_to_code, unmapped)
 
     # Part 2 tutorial scripts embed small control bytes around object names.
@@ -9792,12 +10297,14 @@ def main():
         if len(enc) > slot_len:
             raise AssertionError(f'tutorial text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes([FILL_BYTE]) * (slot_len - len(enc))
+        WRITE_LOG.append([faddr, slot_len, len(enc), bytes(enc).hex(), FILL_BYTE, text, None, 'fixed_text'])
 
     def fixed_zero_text_patch(faddr, slot_len, text):
         enc = encode_text(text, syl_to_code, unmapped)
         if len(enc) > slot_len:
             raise AssertionError(f'zero-padded text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes(slot_len - len(enc))
+        WRITE_LOG.append([faddr, slot_len, len(enc), bytes(enc).hex(), 0, text, None, 'fixed_zero_text'])
 
     fixed_text_patch(0xD8F384, 14, '보병')
     fixed_text_patch(0xD8F798, 14, '대기')
@@ -9851,6 +10358,7 @@ def main():
             if idx < 0:
                 break
             rom[idx:idx + len(old)] = new
+            WRITE_LOG.append([idx, len(new), len(new), bytes(new).hex(), None, None, None, 'raw_replace'])
             pos = idx + len(new)
 
     # First-battle attack tutorial lines are assembled from Japanese glue plus
@@ -9861,6 +10369,7 @@ def main():
         if len(payload) > slot_len:
             raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
+        WRITE_LOG.append([faddr, slot_len, len(payload), bytes(payload).hex(), FILL_BYTE, None, None, 'script:' + label])
 
     # This briefing originally inserts the player name between "今回の" and
     # "さんの作戦". In Korean it made the short fragments read as
@@ -10058,7 +10567,7 @@ def main():
         (0xA03F55, 0xA03F5D, '싫어도', 'part2 whether like it or not row'),
         (0xA04001, 0xA04007, '...', 'part2 ellipsis before various row'),
         (0xA04009, 0xA0400F, '여러', 'part2 various row'),
-        (0xA040FC, 0xA04106, '다시한번', 'part2 once more row'),
+        (0xA040FC, 0xA04106, '한 번 더', 'part2 once more row'),
         (0xA0452D, 0xA0454B, '블랙홀 군 침공 작전 중', 'part2 black hole invasion row'),
         (0xA04612, 0xA0461C, '무사하면,', 'part2 if unhurt row'),
         (0xA046C7, 0xA046CD, '강너머', 'part2 opposite bank row'),
@@ -12264,7 +12773,7 @@ def main():
         (0xD93B4A, 0xD93B5E, '그래 그거면 돼', 'repair correct move row'),
         (0xD93B63, 0xD93B6D, '이제 이', 'repair result this row'),
         (0xD93B6E, 0xD93B74, '경전차', 'repair result tank label row'),
-        (0xD93B75, 0xD93B8D, '다음날체력2만회복', 'repair next day hp row'),
+        (0xD93B75, 0xD93B8D, '다음 날 체력 2 회복', 'repair next day hp row'),
         (0xD93B90, 0xD93BA0, '수리돼', 'repair completed row'),
         (0xD93BA6, 0xD93BBC, '그럼 이번엔 이쪽', 'repair second tank intro row'),
         (0xD93BBD, 0xD93BC3, '경전차', 'repair second tank label row'),
@@ -12393,11 +12902,11 @@ def main():
         (0xD947FF, 0xD9480B, '맡길게', 'tutorial hands over row'),
         (0xD94810, 0xD94826, '공략 힌트 들을래?', 'strategy hint ask row'),
         (0xD9482E, 0xD94834, '그래', 'strategy hint no row'),
-        (0xD94839, 0xD9485F, '수도점령이나적전멸로승리야', 'win condition reminder row'),
+        (0xD94839, 0xD9485F, '수도 점령이나 적 전멸로 승리', 'win condition reminder row'),
         (0xD94862, 0xD94870, '힘내', 'hint no good luck row'),
         (0xD94876, 0xD94898, '다음 날부터는 체력 가득한', 'hint full hp next day row'),
         (0xD94899, 0xD9489F, '경전차', 'hint full hp tank label row'),
-        (0xD948A5, 0xD948AF, '쓸수있어', 'hint tank usable row'),
+        (0xD948A5, 0xD948AF, '사용 가능', 'hint tank usable row'),
         (0xD948B5, 0xD948BF, '바주카병', 'hint bazooka label row'),
         (0xD948C0, 0xD948C6, '과 그', 'hint bazooka and row'),
         (0xD948C7, 0xD948CD, '경전차', 'hint tank label row'),
@@ -12687,7 +13196,7 @@ def main():
         (0xD962DB, 0xD962FB, '해 버리면 이제 우리 것이야', 'after tanks ours row'),
         (0xD96300, 0xD96306, '수도 ', 'capital label row'),
         (0xD9630C, 0xD9632C, '하든 적을 전멸시키든', 'capital or rout row'),
-        (0xD9632F, 0xD96347, '마음대로해도돼', 'do as you like row'),
+        (0xD9632F, 0xD96347, '마음대로 해도 돼', 'do as you like row'),
         (0xD9634B, 0xD96363, '그럼 힘내', 'good luck final hint row'),
         (0xD9636A, 0xD96386, '그래 그럼 하나만', 'single hint branch row'),
         (0xD9638C, 0xD96392, '', 'single hint artillery label row'),
@@ -12697,7 +13206,7 @@ def main():
         (0xD963D1, 0xD963D9, '이동 후', 'after move row'),
         (0xD963DF, 0xD963EB, '공격 못 해', 'cannot attack after move row'),
         (0xD963EE, 0xD963FA, '주의해', 'be careful row'),
-        (0xD963FF, 0xD96425, '수도점령이나적전멸로승리야', 'final win condition row'),
+        (0xD963FF, 0xD96425, '수도 점령이나 적 전멸로 승리', 'final win condition row'),
         (0xD96428, 0xD96436, '힘내', 'final good luck row'),
         (0xD9643F, 0xD96445, '자주포', 'victory artillery label row'),
         (0xD96446, 0xD96466, '사용법도 이제 알겠지?', 'victory artillery usage row'),
@@ -12724,7 +13233,7 @@ def main():
         (0xD966AD, 0xD966BB, '괜찮아', 'ignore heavy tank ok row'),
         (0xD966C0, 0xD966C6, '다만 ', 'heavy tank caution lead row'),
         (0xD966C7, 0xD966CD, '중전차', 'heavy tank range label row'),
-        (0xD966CE, 0xD966E8, '공격범위엔들지마', 'avoid heavy tank range row'),
+        (0xD966CE, 0xD966E8, '공격 범위엔 들지 마', 'avoid heavy tank range row'),
         (0xD966EB, 0xD966FD, '주의해', 'avoid heavy tank range tail row'),
         (0xD96701, 0xD96729, '공격 범위 보는 법 기억하지?', 'remember attack range row'),
         (0xD9672E, 0xD96752, '범위 볼 유닛에 커서를', 'attack range cursor row'),
@@ -12743,7 +13252,7 @@ def main():
         (0xD9688A, 0xD968B0, '나머지 공략은 여기 도시를', 'rest strategy city row'),
         (0xD968B9, 0xD968CF, '점령하면 알려 줄게', 'after capture city row'),
         (0xD968D4, 0xD968EC, '그럼 힘내!', 'heavy hint good luck row'),
-        (0xD968F2, 0xD96918, '수도점령이나적전멸로승리야', 'heavy win condition row'),
+        (0xD968F2, 0xD96918, '수도 점령이나 적 전멸로 승리', 'heavy win condition row'),
         (0xD9691B, 0xD96929, '힘내', 'heavy good luck row'),
         (0xD9692C, 0xD9693E, '기대할게!', 'expecting you row'),
         (0xD96946, 0xD96972, '후후후 캐서린 우리 신병기를', 'enemy new weapon row'),
@@ -12753,8 +13262,8 @@ def main():
         (0xD969F7, 0xD96A1D, '그럼 여기서부터 공략을 말할게', 'strategy from here row'),
         (0xD96A23, 0xD96A29, '중전차', 'strategy heavy label row'),
         (0xD96A2F, 0xD96A35, '자주포', 'strategy artillery label row'),
-        (0xD96A36, 0xD96A4E, '를쓰면못잡진않지만', 'can defeat with artillery row'),
-        (0xD96A51, 0xD96A6D, '없지만 꽤 힘들어', 'but very hard row'),
+        (0xD96A36, 0xD96A4E, '를 써도 잡긴 하지만', 'can defeat with artillery row'),
+        (0xD96A51, 0xD96A6D, '꽤 힘들어', 'but very hard row'),
         (0xD96A72, 0xD96A7E, '그보다', 'better strategy row'),
         (0xD96A7F, 0xD96A85, '중전차', 'block heavy label row'),
         (0xD96A86, 0xD96A9E, '를 못 건너오게', 'block heavy crossing row'),
@@ -12764,7 +13273,7 @@ def main():
         (0xD96AF5, 0xD96B0D, '수도 주변을 둘러싸서', 'surround capital row'),
         (0xD96B13, 0xD96B1F, '지키면서', 'protect infantry row'),
         (0xD96B28, 0xD96B3E, '점령이 제일 좋겠어', 'capture best row'),
-        (0xD96B46, 0xD96B6C, '수도점령이나적전멸로승리야', 'heavy branch win condition row'),
+        (0xD96B46, 0xD96B6C, '수도 점령이나 적 전멸로 승리', 'heavy branch win condition row'),
         (0xD96B6F, 0xD96B7D, '힘내', 'heavy branch good luck row'),
         (0xD96B84, 0xD96BAE, '솔직히 이번엔 안 될 줄 알았는데 잘해', 'heavy victory surprise row'),
         (0xD96BB1, 0xD96BBD, '줬어!', 'heavy victory praise row'),
@@ -12812,10 +13321,10 @@ def main():
         (0xD96FDC, 0xD96FEC, '를 고르지 마', 'do not choose row'),
         (0xD96FF2, 0xD9700A, '적 수도는 바로 아래야', 'enemy capital below row'),
         (0xD97012, 0xD9701A, '하지만 ', 'but sea row'),
-        (0xD97020, 0xD97036, '는바다이동불가', 'cannot move sea row'),
+        (0xD97020, 0xD97036, '는 바다 이동 불가', 'cannot move sea row'),
         (0xD9703A, 0xD97066, '일단 육지는 이어져 걸어갈 수는', 'land connected row'),
         (0xD97069, 0xD97095, '있지만　적이　너무　많아', 'too many enemies row'),
-        (0xD9709A, 0xD970AE, '여기쓸만한건', 'useful here row'),
+        (0xD9709A, 0xD970AE, '여기 쓸 만한 건', 'useful here row'),
         (0xD970AF, 0xD970B7, '수송헬기', 'transport copter label row'),
         (0xD970B8, 0xD970BE, '야!', 'transport copter is row'),
         (0xD970C7, 0xD970CD, '수송차', 'remember apc label row'),
@@ -13059,7 +13568,7 @@ def main():
         (0xD987DE, 0xD987E8, '능력이야', 'anti air result row'),
         (0xD987ED, 0xD98811, '하늘 유닛에게는', 'anti air versus air row'),
         (0xD98814, 0xD98834, '압도적으로 강해!', 'anti air overwhelming row'),
-        (0xD98839, 0xD98853, '그밖에육상유닛특히', 'anti air land lead row'),
+        (0xD98839, 0xD98853, '그 밖에 육상 유닛 특히', 'anti air land lead row'),
         (0xD9885C, 0xD98866, ' 바주카병', 'anti air bazooka label row'),
         (0xD9886A, 0xD98876, ' 상대로는', 'anti air against row'),
         (0xD98877, 0xD9887D, '경전차', 'anti air light tank label row'),
@@ -13472,7 +13981,7 @@ def main():
         (0xD9ADFE, 0xD9AE0A, '공격 가능해', 'escort target possible row'),
         (0xD9AE15, 0xD9AE21, '공격하자!', 'escort attack row'),
         (0xD9AE26, 0xD9AE4A, '직접 공격 유닛은 적 옆에', 'direct next to enemy row'),
-        (0xD9AE4D, 0xD9AE59, '이동안하면', 'direct move needed row'),
+        (0xD9AE4D, 0xD9AE59, '이동 필요', 'direct move needed row'),
         (0xD9AE5F, 0xD9AE6D, '공격 못 해', 'direct cannot attack row'),
         (0xD9AE72, 0xD9AE84, '여기로 이동해', 'escort move attack row'),
         (0xD9AE8A, 0xD9AE9E, '공격은 먼저야!', 'escort first strike row'),
@@ -13542,7 +14051,7 @@ def main():
         (0xD9B522, 0xD9B544, '지금은 이 유닛이 좋겠네', 'submarine target now row'),
         (0xD9B54F, 0xD9B55B, '공격해!', 'submarine attack row'),
         (0xD9B55F, 0xD9B565, '잠수함', 'submarine direct repeat label row'),
-        (0xD9B566, 0xD9B57C, '은직접공격유닛이야', 'submarine direct repeat row'),
+        (0xD9B566, 0xD9B57C, '직접공격 유닛이야', 'submarine direct repeat row'),
         (0xD9B581, 0xD9B599, '그러니 여기로 안 가면', 'submarine move needed row'),
         (0xD9B59F, 0xD9B5AB, '공격 못 해', 'submarine cannot attack row'),
         (0xD9B5AE, 0xD9B5C0, '여기로 이동해', 'submarine move here row'),
@@ -13593,7 +14102,7 @@ def main():
         (0xD9B9C0, 0xD9B9C8, '하지만', 'transport ship however row'),
         (0xD9B9C9, 0xD9B9CF, '수송선', 'transport ship capacity label row'),
         (0xD9B9D0, 0xD9B9E2, '은 육상 유닛', 'transport ship land row'),
-        (0xD9B9E5, 0xD9B9F5, '무엇이든두유닛', 'transport ship any two row'),
+        (0xD9B9E5, 0xD9B9F5, '두 개까지', 'transport ship any two row'),
         (0xD9B9FB, 0xD9BA05, '가능해!', 'transport ship possible row'),
         (0xD9BA0A, 0xD9BA14, '두 유닛', 'transport ship two row'),
         (0xD9BA1A, 0xD9BA30, '가능하다는 점에서는', 'transport ship capacity compare row'),
@@ -14145,7 +14654,7 @@ def main():
         (0xD9F966, 0xD9F972, '」 설명이야', 'menu explanation row'),
         (0xD9F977, 0xD9F98D, '맵 메뉴에서 「', 'choose from map menu row'),
         (0xD9F993, 0xD9F9A1, '」를 골라', 'choose menu row'),
-        (0xD9F9A6, 0xD9F9B0, '다시한번', 'again row'),
+        (0xD9F9A6, 0xD9F9B0, '한 번 더', 'again row'),
         (0xD9F9B6, 0xD9F9CA, '설명 듣고 싶어?', 'want explanation row'),
         (0xD9F9D2, 0xD9F9F6, '그럼 다른 메뉴를 골라', 'choose another menu row'),
         (0xD9F9FE, 0xD9FA0E, '어라? 다시', 'again surprise row'),
@@ -14520,7 +15029,7 @@ def main():
         (0xDA235B, 0xDA2363, '수업이야', 'combat lesson topic tail row'),
         (0xDA236A, 0xDA2376, '들을래?', 'combat lesson ask row'),
         (0xDA237F, 0xDA2391, '여기 승리 조건은「', 'combat victory condition lead row'),
-        (0xDA2392, 0xDA2398, '적전멸', 'enemy annihilation label row'),
+        (0xDA2392, 0xDA2398, '전멸', 'enemy annihilation label row'),
         (0xDA2399, 0xDA23A1, '」이야', 'combat victory condition row'),
         (0xDA23A5, 0xDA23C9, '적을 전부 쓰러뜨리면 돼', 'defeat all enemies row'),
         (0xDA23D0, 0xDA23E4, '적을 쓰러뜨리려면,', 'defeat enemies method lead row'),
@@ -14724,8 +15233,8 @@ def main():
         (0xDA3A96, 0xDA3A9C, '」야', 'forest name tail row'),
         (0xDA3A9F, 0xDA3ABD, '지형 방어력은 적당한「2」', 'forest defense row'),
         (0xDA3AC3, 0xDA3AEF, '보병계는 이동 비용 1로 움직일 수 있어', 'forest infantry movement row'),
-        (0xDA3AF2, 0xDA3B1A, '전차계차량계이동비용2', 'forest vehicle movement row'),
-        (0xDA3B20, 0xDA3B48, '색적땐인접해야상황을', 'forest fog vision lead row'),
+        (0xDA3AF2, 0xDA3B1A, '전차/차량 이동 비용 2', 'forest vehicle movement row'),
+        (0xDA3B20, 0xDA3B48, '색적 땐 인접해야 상황을', 'forest fog vision lead row'),
         (0xDA3B4B, 0xDA3B57, '알 수 없는,', 'forest fog vision row'),
         (0xDA3B5D, 0xDA3B85, '즉 색적 범위 안에 적이 있어도', 'forest hidden enemy lead row'),
         (0xDA3B88, 0xDA3BA2, '모른다는 지형이야', 'forest hidden enemy row'),
@@ -15378,7 +15887,7 @@ def main():
         (0xDC6CE4, 0xDC6CFC, '상대해 볼까', 'billy serious row'),
         (0xDC6D01, 0xDC6D23, '놈들을 나아가지 못 하게 하려면', 'stop advance lead row'),
         (0xDC6D26, 0xDC6D4C, '수송선을 노리는 게 좋겠죠', 'target transport ship row'),
-        (0xDC6D51, 0xDC6D77, '육상유닛운반못하게될테니까', 'cannot carry land units row'),
+        (0xDC6D51, 0xDC6D77, '육상 유닛 못 나르게 될 테니까', 'cannot carry land units row'),
         (0xDC6D7C, 0xDC6D96, '그럼 가 볼까요', 'billy lets go row'),
         (0xDC6D9E, 0xDC6DBE, '자 말해 봐 빌리', 'ask billy reason row'),
         (0xDC6DC1, 0xDC6DE7, '왜 블루문으로 가 버린 거야!', 'why blue moon row'),
@@ -17095,13 +17604,17 @@ def main():
     # tiny tilemap hook above rewrites the visible row to "예 아니오".
     yesno_name_confirm = encode_text('예오아니', syl_to_code, unmapped)
     rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
+    WRITE_LOG.append([0xD8273C, 8, len(yesno_name_confirm), bytes(yesno_name_confirm).hex(), None, '예오아니', None, 'yesno-name'])
 
     # These suffixes follow the runtime player-name control byte. The compact
     # Part 1 dialogue path gives ASCII space almost no advance, so use a full
     # width space and verify the name-confirm route by screen capture.
     suffix = encode_text('　님', syl_to_code, unmapped)
-    rom[0xDF5DA9:0xDF5DA9 + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
-    rom[0xDF8E4D:0xDF8E4D + 6] = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
+    _suffix_pad = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
+    rom[0xDF5DA9:0xDF5DA9 + 6] = _suffix_pad
+    rom[0xDF8E4D:0xDF8E4D + 6] = _suffix_pad
+    WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
+    WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
 
     st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code)
 
@@ -17110,6 +17623,20 @@ def main():
     assert len(rom) == 0x1000000
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     open(args.out, 'wb').write(rom)
+    synced_outputs = []
+    default_out = os.path.join(BASE, 'output', 'game_wars_korean_full.gba')
+    default_base = os.path.abspath(P.ROM)
+    if (
+        not args.no_sync_outputs
+        and os.path.abspath(args.out) == os.path.abspath(default_out)
+        and os.path.abspath(args.base) == default_base
+    ):
+        for peer in [
+            os.path.join(BASE, 'output', 'game_wars_korean_final.gba'),
+            os.path.join(BASE, 'output', 'game_wars_korean_title_test.gba'),
+        ]:
+            open(peer, 'wb').write(rom)
+            synced_outputs.append(peer)
 
     report_dir = os.path.dirname(args.report)
     if report_dir:
@@ -17119,12 +17646,21 @@ def main():
         for r in report:
             w.writerow(r)
 
+    # 무결성맵(Phase C-min) 덤프: 텍스트 write 실행 순서 그대로. QA가 last-writer-wins로 ROM 대조.
+    intg_path = os.path.join(BASE, 'temp', 'integrity_map.json')
+    os.makedirs(os.path.dirname(intg_path), exist_ok=True)
+    with open(intg_path, 'w', encoding='utf-8') as f:
+        json.dump(WRITE_LOG, f, ensure_ascii=False)
+    print(f'→ 무결성맵 {intg_path} ({len(WRITE_LOG)} text writes)')
+
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_splash_logo_bg', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
     print(f'→ {args.out} (16MB, chk recomputed), overflow 리포트 {args.report}')
+    for peer in synced_outputs:
+        print(f'→ synced {peer}')
 
 
 if __name__ == '__main__':

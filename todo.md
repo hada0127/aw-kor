@@ -34,15 +34,16 @@
 > 두 리뷰 수렴: ① 배포 재생성은 **맨 마지막 1회**(지금은 게이트만) ② QA는 **빌드 무결성맵(기대bytes==ROM slot)**을 1차 게이트로, 전체 ROM 스캔은 후보 리포트로 강등 ③ 문장부호는 **ASCII만 먼저 + 렌더러별 whitelist + 기존 strip 후보를 fallback로 유지**, 전각은 4경로(Part1/Part2 0x313·0xB11·A3) fresh-캡처 통과 후에만 ④ CSV 무리한 단일화 대신 **overrides 오버레이**.
 > 순서: **A0 → C-min(무결성맵) → P1(글리프 스트레스) → B(부호복원) → D(위생/가드) → C-full+E(QA진실화+시각매트릭스) → F(배포 최종) → G(CSV오버레이, 선택)**
 
-## Phase A0 — 문서·배포 무결성 게이트 (지금, ROM 무변경) [small]
-- [ ] CLAUDE.md/AGENTS.md/빌드 docstring의 stale base(`v56_polished`=부재 파일) → 실제 base(원본 ROM)로 정정
-- [ ] dist 현행본을 **stale로 명시 표기**(manifest patched=4004d2c3 ≠ 현재 output d680820d; 최신 패치 06-14)
-- [ ] `manifest.patched_sha == 실제 output sha == BPS/IPS 적용결과 sha` 3중 일치 **검증 게이트 스크립트** 작성(검증만; 실제 재생성은 Phase F)
+## Phase A0 — 문서·배포 무결성 게이트 (지금, ROM 무변경) [small] ✅ 완료
+- [x] CLAUDE.md/AGENTS.md의 stale base(`v56_polished`=부재 파일) → 실제 base(원본 ROM)로 정정
+- [x] dist 현행본 stale 확인: `tools/verify_dist_integrity.py` 실행 시 FAIL(output d680820d ≠ manifest/patch 4004d2c3)로 명시
+- [x] `manifest.patched_sha == 실제 output sha == BPS/IPS 적용결과 sha` 3중 일치 검증 게이트 `tools/verify_dist_integrity.py` 작성(검증만; 재생성은 Phase F)
 
-## Phase C-min — 빌드 무결성맵 + 부호소실 리포트 (검증 토대) [medium]
-- [ ] 빌드가 write-log 부산물 생성: `(주소, 기대 바이트, 원문, level, 부호/공백 소실 플래그)`
-- [ ] 1차 QA 게이트: `ROM slot bytes == write-log 기대 bytes` (전체 ROM 스캔은 후보 리포트로 강등)
-- [ ] qa_text_fit에 원문ko↔인코딩 부호/공백 소실량 행별 컬럼+경고 카운트, level 명명 재정의(무손실 오인 방지)
+## Phase C-min — 빌드 무결성맵 + 부호소실 리포트 (검증 토대) [medium] ✅ 완료
+- [x] 빌드가 write-log 부산물 생성: `temp/integrity_map.json` (addr·slot·기대바이트·fill·ko·level·kind), 25,357 텍스트 write 포착(import 18,041 + script 6,648 + fixed/raw/opt). 출력 바이트 무변경(SHA d680820d 동일) 검증.
+- [x] 1차 QA 게이트 `tools/qa_integrity_map.py`: last-writer-wins 재구성 → `ROM == 기대 bytes`. 현재 391,370바이트 불일치 0 = PASS.
+- [x] 부호소실 정량화(qa_integrity_map): import 부호보유 11,401행 전부 소실, 15,947자(`.`7522 `!`3539 `,`3222 `?`1093…) — **Phase B before 지표**.
+- 참고: welcome 대사는 `INTRO_DIRECT_TEXT`로 전각 `。`/ASCII `. ` 수동 보존 중(렌더 확인됨) → Phase B 부호복원의 선례.
 
 ## Phase P1 — 문장부호 글리프 스트레스 테스트 (Phase B 전제) [small]
 - [ ] 테스트 ROM에 `. ? ! ...`(+후보 전각)을 **4경로**(Part1 normal / Part2 0x313 / 0xB11 / A3) 슬롯에 주입
