@@ -14,7 +14,7 @@
 |------|------|
 | 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. QA(lint) error 0. 용어 5종 통일. |
 | 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 풀게임 경로 입증. |
-| 한글 폰트 풀빌드 | ✅ **완료** — `tools/build_korean_full.py`(base `output/v56_polished.gba`) → `output/game_wars_korean_full.gba`. 음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩. |
+| 한글 폰트 풀빌드 | ✅ **완료** — `tools/build_korean_full.py`(base=**원본 ROM**, 기본값 `P.ROM`; `output/v56_polished.gba`는 부재/구버전이라 `--base`로만 지정) → `output/game_wars_korean_full.gba`. 음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩. |
 | 1편 이름 그리드 | ✅ **완료** — 좌 A-Z / 중 a-z(빈칸 없음, 대문자와 매칭) / 우 0-9(기호행 제거). 선택·미리보기 정상. 실배치 ROM 0x08DF8C38 계열 패치. |
 | 2편(Advance 2) 한글 | ✅ **완료** — 타일맵 렌더 3경로(0x313F8C / 0xB11BB0 / 0xA3C7E4) hook으로 한글 렌더. **반각 공백** + **1편과 동일 11×11 galmuri**. 낱한자/감탄사 발견분 정리. |
 | ROM 빌드/부팅 | ✅ 체크섬·삽입 안전, 부팅 OK(흰 화면 해소). |
@@ -52,7 +52,7 @@
 ## ROM 빌드 / 검증
 
 ```bash
-python3 tools/build_korean_full.py   # ★현재 메인 빌드: base output/v56_polished.gba → output/game_wars_korean_full.gba
+python3 tools/build_korean_full.py   # ★현재 메인 빌드: base=원본 ROM(기본) → output/game_wars_korean_full.gba  (v56_polished는 부재/구버전, --base로만 사용)
                                      #   (음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩 + 1편 그리드 + 2편 hook + 체크섬)
 # (구식: execute_phase5_4/5.py — 이제 build_korean_full.py로 통합)
 # 헤드리스 검증: /tmp/mgbah (tools/mgba_harness.c, loadstate 지원). 네비 스크립트는 temp/nav_*.py.
