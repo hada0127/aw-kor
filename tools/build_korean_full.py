@@ -26,7 +26,10 @@ BASE = P.BASE
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 COMPREHENSIVE_TRANS = os.path.join(BASE, 'data', 'translation_comprehensive.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
-SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
+# T1: 한글 2350자(KS X 1001 완성형) 폰트 — 기존 1030과 byte-identical 호환(additive, tools/build_korean2350.py 생성).
+SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
+GLYPH_BLOB_2350 = os.path.join(BASE, 'data', 'kor_glyphs_2350.bin')
+SYLMAP_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 SAFE_MIN_ADDR = 0x800000
 FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
 # 무결성맵(Phase C-min): 텍스트 write 시점에 [addr, slot, enc_len, enc_hex, fill, ko, level, kind]
@@ -9201,7 +9204,7 @@ def main():
 
     # === ASM hook 방식: repoint/폰트복사 없음. 원본 FONT_BASE 보존(그리드+대화 가나/한자). ===
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
-    blob = open(P.BLOB, 'rb').read()
+    blob = open(GLYPH_BLOB_2350, 'rb').read()   # T1: 2350자 글리프(기존 prefix-identical)
     rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
@@ -9226,7 +9229,7 @@ def main():
     assert bytes(rom[LIT_TRAMP_BOT:LIT_TRAMP_BOT + 4]) == bytes.fromhex('40014718')
     rom[LIT_TRAMP_BOT:LIT_TRAMP_BOT + 4] = TRAMP_BOT_BYTES
 
-    sylmap = json.load(open(P.SYLMAP, encoding='utf-8'))['map']
+    sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']   # T1: 2350자
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
 
     # 5) 테이블 확장 — 원본 한자 테이블 + 한글 엔트리(idx에 bit15 마커 → hook이 KOR_BASE 사용)
