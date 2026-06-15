@@ -32,6 +32,12 @@ FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기�
 # 무결성맵(Phase C-min): 텍스트 write 시점에 [addr, slot, enc_len, enc_hex, fill, ko, level, kind]
 # 를 실행 순서대로 누적. 빌드 끝에 temp/integrity_map.json으로 덤프. 출력 바이트는 무변경.
 WRITE_LOG = []
+# 미해결 placeholder 번역(ROM에 기록하면 노이즈/데이터 영역 위 한글 예약코드를 덮어씀 → 원본 보존 위해 skip).
+PLACEHOLDER_KO = {
+    '미상', '불명', '번역 필요', '번역필요', '원문 불명', '원문불명',
+    '의미 불명', '의미불명', '판독 불가', '판독불가', '해독 불가', '해독불가',
+    '번역 불가', '번역불가',
+}
 OKDANDAN_FONT = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
 APPLE_SDGOTHIC_BOLD = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
 
@@ -7482,6 +7488,12 @@ def patch_residual_ascii_labels(rom, syl_to_code, unmapped):
             idx = rom.find(old, pos)
             if idx < 0:
                 break
+            # 가드(codex/agy 리뷰): deny 데이터 테이블에 우연히 매칭되면 덮어쓰지 않는다.
+            # ⚠ SAFE_MIN_ADDR(코드영역) 일괄 스킵은 금지 — 국가명 문자열 테이블(0x39108C, 포인터 참조)
+            #   처럼 < 0x800000에도 정당한 표시 텍스트가 있어 영어로 되돌아간다. deny만 가드.
+            if in_deny(idx, idx + len(old)):
+                pos = idx + len(old)
+                continue
             rom[idx:idx + len(old)] = payload[:len(old)]
             patched += 1
             pos = idx + len(old)
@@ -9296,6 +9308,8 @@ def main():
             if not ko and not addr_override:
                 st['no_ko'] += 1; continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            if ko.strip() in PLACEHOLDER_KO:
+                st['placeholder_skip'] += 1; continue   # 미해결 placeholder → 원본 바이트 보존
             pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
             if pair_renderer:
                 ko = normalize_pair_renderer_text(ko)
@@ -9398,7 +9412,7 @@ def main():
                     st['supp_outside'] += 1
                     continue
                 ko = (row.get('korean') or '').strip()
-                if not ko or ko == '미상' or not any('가' <= ch <= '힣' for ch in ko):
+                if not ko or ko in PLACEHOLDER_KO or not any('가' <= ch <= '힣' for ch in ko):
                     st['supp_no_ko'] += 1
                     continue
                 slot = slots.get(a, 0)
