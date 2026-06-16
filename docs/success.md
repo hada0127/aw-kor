@@ -792,3 +792,14 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - 적용 경로: `build_korean_full.py` `TERM_NORMALIZATION`(encode_fit 내 normalize_korean_terms — CSV import·inline·직접패치 전 경로 공통 적용). 국가명 띄어쓰기 정본 붙임 통일도 추가(레드스타/블루문/블랙홀 future-proof).
 - **검증**: 재빌드 후 `qa_terms_from_rom` PASS(hard 0), 역디코드 잔존 료우/휩/호이프/마크로랜드/옐로 코멧 모두 0, 휘프 110·료 312 통일. `qa_integrity_map` PASS(바이트OK). `qa_text_fit` **overflow 0 / no_ko 0**(휩→휘프 +2바이트 확장이 fallback으로 흡수, 회귀 없음). full/final/title_test 동기화.
 - 비교 시트 도구 codex 결함 수정: `panel()` 종횡비 보존(고정 240폭 → 실제 폭), 기본 `--only fresh`(stale는 `--include-stale` opt-in), savestate orig_state fallback 금지, 캡처별 provenance.json(ROM/state SHA·git commit·nav) sidecar.
+
+## 2026-06-16 — 띄어쓰기 결함 대폭 감소 (fit 순서 재배열 + 공백 collapse) + 띄어쓰기 게이트
+
+/goal #2(띄어쓰기·줄바꿈 0) 공략. 신규 hard gate + 결정적 수정.
+
+- **신규 게이트** `tools/qa_spacing_from_rom.py`: 출하 ROM 역디코드로 JAMMED(단어붙음)/ABBREV(SHORTEN 축약)/GRAMMAR(있·없 관형형 훼손)/DOUBLE(연속공백) 분류. `--json` 워크리스트.
+- **근본 수정 1 — `_fit_variants` 순서 재배열**: 전각공백 → **반각공백** → 전각+축약 → 반각+축약 → 공백제거 → 공백제거+축약. 기존엔 전각+축약(L1)이 반각공백(L2)보다 먼저라, 슬롯을 1~2바이트만 초과해도 문법 깨지는 SHORTEN(있는→있, 에게→에)이 적용됐다. 반각공백을 축약보다 우선 → 단어/문법 최대 보존.
+  - 결과: **GRAMMAR 49→5, ABBREV 226→27**. 전각공백이 맞는 다수 행(level0=17753)은 byte-identical(회귀 0).
+- **근본 수정 2 — 中점/이중공백 정리**: `スキ　・X`(좋아함:X) 구분자를 인접 공백과 합쳐 단일화 + 연속/혼합(전각·반각) 공백 collapse. **DOUBLE 24→0**. 단일공백 행은 level0 재전각화로 byte-identical. 예/아니오 메뉴 위치샘플 트릭은 `WS_COLLAPSE_EXEMPT`로 예외.
+- **검증**: integrity PASS, terms PASS, overflow 0, no_ko 0. 남은 JAMMED 142 + ABBREV 27 + GRAMMAR 5(슬롯 대비 진짜 긴 행)는 재번역 워크플로로 처리 중.
+- 재현: `python3 tools/qa_spacing_from_rom.py --json temp/spacing_worklist.json`.
