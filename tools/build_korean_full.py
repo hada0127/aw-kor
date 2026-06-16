@@ -9581,7 +9581,8 @@ PART2_HOOK_A3 = bytes.fromhex(
     'c70b4800470498014a3f28094b1847'
     '60f95208'  # glyph-cache page pointer table literal: 0x0852F960
     '40880000'  # min Korean reserved SJIS: 0x8840
-    '69930000'  # max Korean reserved SJIS: 0x9369
+    'a7e20000'  # max Korean reserved SJIS: 0xE2A7 (2350자 완성형 전범위; 구 0x9369는 1030 한정 →
+                # 2350 확장분 1320음절(0x936A~0xE2A7)이 A3에서 '?'로 깨지던 버그. 표/ bit15로 한·일 구분.
     '0000f208'  # relocated table start: 0x08F20000
     '00000000'  # relocated table end: patched after new_tbl is built
     'ff7f0000'  # strip bit15 marker
@@ -9723,6 +9724,16 @@ def main():
 
     sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']   # T1: 2350자
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+
+    # 회귀 가드(2026-06-16): A3 글리프캐시 렌더러 hook은 예약-한글 코드를 [min,max] 범위로
+    # 1차 판별한다(PART2_HOOK_A3의 0x8840..max 리터럴). max가 실제 2350 최대 코드보다 작으면
+    # 그 위 음절은 A3에서 '?'로 깨진다(과거 0x9369=1030 한정 버그). 코드맵이 바뀌면 hook 동기화 강제.
+    _a3_max = struct.unpack('<I', PART2_HOOK_A3[PART2_HOOK_A3.index(bytes.fromhex('40880000')) + 4:
+                                              PART2_HOOK_A3.index(bytes.fromhex('40880000')) + 8])[0]
+    if max(syl_to_code.values()) > _a3_max:
+        raise AssertionError(
+            f'A3 hook max code 0x{_a3_max:X} < 실제 최대 예약코드 0x{max(syl_to_code.values()):X} — '
+            f'PART2_HOOK_A3 max 리터럴을 갱신하라(2350 확장분이 A3에서 깨짐).')
 
     # 5) 테이블 확장 — 원본 한자 테이블 + 한글 엔트리(idx에 bit15 마커 → hook이 KOR_BASE 사용)
     syllables = sorted(sylmap.keys())

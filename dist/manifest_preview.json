@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "d8c17c98",
-    "sha1": "b6b350d35f7bcaa49bc36d79b1c89db1db5be5be",
-    "sha256": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3"
+    "crc32": "2881de8f",
+    "sha1": "28f168db3c171f89b729aef9b099beb4c59b7f8c",
+    "sha256": "61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3",
-    "game_wars_korean_final.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3",
-    "game_wars_korean_title_test.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3"
+    "game_wars_korean_full.gba": "61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f",
+    "game_wars_korean_final.gba": "61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f",
+    "game_wars_korean_title_test.gba": "61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-06-16.bps",
     "size": 747759,
     "crc32": "2144df1c",
-    "sha1": "48dee2a1c3753761f3fa5624d6be89efc690aecc",
-    "sha256": "2de3e5fe46555aceb9b5d7f704e921a4c66b8e3766b6b7c916aa8f3447ec8de3",
+    "sha1": "8437bf68bbbff1e1416bf6d07d801fdbe1b98d34",
+    "sha256": "fa6b2d9f6e9317dbd1735722f7fb18c2d144d08050297a7007e4d97e49a22053",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-06-16.ips",
     "size": 876262,
-    "crc32": "5bdd92a2",
-    "sha1": "c32a8f2fd992166757c23f9b77fd7aa1f7201370",
-    "sha256": "00b0759747ff7efa452ce27d15de5b23404847302ec8fb68a03cbbb355bdfa6f",
+    "crc32": "46cf2380",
+    "sha1": "280c8b6a08a2171cefc2eb30773627b97d320800",
+    "sha256": "4efc6981f8150c215e272e8a135972fe04313454aa7a5175b567cb43031b025a",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

@@ -859,3 +859,12 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - 음성테스트: apply_bps가 wrong-source를 source-CRC로 거부 / 산출물 3종 triple-identity(1d825104).
 - 해시: source a8ad7c7d…831c, target 1d825104…97b3. 패치 크기 BPS 4.46% / IPS 5.22%(폰트+한자테이블+대사 확장 규모로 타당).
 - stale 미트래킹 패치(full 06-10/06-14, preview 06-08) 정리. 재현: `python3 tools/verify_dist_integrity.py`(PASS=0).
+
+## A3 렌더러 예약코드 범위 버그 수정 (2026-06-16) — UI 에디터 실캡처 부산물
+
+UI 에디터 실캡처 기능 검증 중(canvas-hijack: 0xA2C098 슬롯을 임의 문자열로 덮어 07_part2_main_menu 헤드리스 캡처) **A3 경로의 잠복 렌더 버그** 발견·수정.
+- 버그: PART2_HOOK_A3가 예약-한글 코드를 [0x8840,**0x9369**](구 1030 상한)로 판별 → 2350 확장분(0x936A~0xE2A7, 1320음절)이 A3에서 '?'. (Part1 per-char·313/B11은 bit15 마커라 무영향)
+- 출하 영향: 코드>0x9369 사용 행은 2건뿐이고 둘 다 part1(뤘/뀔) → part1 경로로 정상. A3 화면엔 코드>0x9369 미사용 → 출하 빌드 무영향. 잠복 버그(Part2 편집 시 표면화).
+- 수정: max 0x9369→**0xE2A7**. canvas-hijack 검증으로 가/뤘/캡/뀔/힝/한 전부 정상·인사말 무회귀(`temp/cap_validate/a3fix_*`). build에 회귀 가드 추가(max code>hook max→assert).
+- ROM sha 1d825104→**61d51a2a**. dist 재생성(verify_dist_integrity PASS). 5게이트 PASS.
+- 핵심 인프라 검증: **canvas-hijack 실캡처 작동**(슬롯 패치→헤드리스 nav→실화면 캡처) = UI 에디터 실캡처의 토대.
