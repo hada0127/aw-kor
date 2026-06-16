@@ -5970,6 +5970,57 @@ def patch_common_nintendo_presents_bg(rom):
     return len(out) // 32
 
 
+def patch_part2_strategic_overmap_labels(rom):
+    """전략 오버맵(0xC2FD70+0xC30EE8, 8bpp Mode4 bitmap 반쪽 2개)의 필기체 영어 지명 한글화.
+
+    Red star Palace→레드스타/궁전(2행), Factory→공장, 하단 Palace 오벌→궁전(국가명은 지도색으로
+    시각 구분되어 안전하게 'Palace'만 한글화 — 필기체 국가명 판독 불가로 오역 리스크 회피).
+    각 라벨 영역을 박스 bg색으로 전체 wipe 후 galmuri 한글 렌더. 각 반쪽 재압축 len≤consumed.
+    fresh-boot 확인 완료(2026-06-16).
+    """
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    W = 240
+    dA = lz77_decompress(rom, 0xC2FD70); A = bytearray(dA[0]); cA = dA[1]
+    dB = lz77_decompress(rom, 0xC30EE8); B = bytearray(dB[0]); cB = dB[1]
+    g7 = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))[0]
+    g9 = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri9.bdf'))[0]
+
+    def paint(buf, font, x0, x1, y0, y1, bg, txt, lines):
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                buf[y * W + x] = bg
+        n = len(lines); lh = (y1 - y0) // n
+        for li, ln in enumerate(lines):
+            ws = [(glyph_grid(font[ord(c)])[1] if ord(c) in font else 5) for c in ln]
+            tot = sum(ws) + len(ln) - 1
+            cx = x0 + max(0, ((x1 - x0) - tot) // 2)
+            gh = max((glyph_grid(font[ord(c)])[2] if ord(c) in font else 7) for c in ln)
+            cy = y0 + li * lh + max(0, (lh - gh) // 2)
+            for ch in ln:
+                gobj = font.get(ord(ch))
+                if gobj is None: cx += 5; continue
+                gg, w, h, xo, yo = glyph_grid(gobj)
+                for yy in range(h):
+                    for xx in range(w):
+                        if gg[yy][xx] and 0 <= cx + xx < W and 0 <= cy + yy + (gh - h) < len(buf) // W:
+                            buf[(cy + yy + (gh - h)) * W + cx + xx] = txt
+                cx += w + 1
+
+    paint(A, g7, 50, 116, 15, 37, 2, 16, ['레드스타', '궁전'])     # Red star Palace oval
+    paint(A, g7, 104, 156, 39, 47, 17, 1, ['공장'])               # Factory (red region)
+    paint(B, g9, 122, 180, 23, 43, 3, 6, ['궁전'])                # bottom Palace oval
+    compA = lz77_compress_optimal(bytes(A), vram_safe=True)
+    compB = lz77_compress_optimal(bytes(B), vram_safe=True)
+    if len(compA) > cA or len(compB) > cB:
+        raise AssertionError(f'strategic overmap recompress too big: A {len(compA)}/{cA} B {len(compB)}/{cB}')
+    rom[0xC2FD70:0xC2FD70 + len(compA)] = compA
+    rom[0xC30EE8:0xC30EE8 + len(compB)] = compB
+    return 3
+
+
 def patch_part2_operation_select_country_bg(rom):
     """작전/전투선택 BG(0xBF66F0)의 영어 국가명 배너를 한글로 교체.
 
@@ -9890,6 +9941,7 @@ def main():
     st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
     st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
     st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
+    st['part2_strategic_overmap_labels'] = patch_part2_strategic_overmap_labels(rom)
     st['common_nintendo_presents_bg'] = patch_common_nintendo_presents_bg(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part2_intro_blackhole_bg'] = patch_part2_intro_blackhole_bg(rom)
