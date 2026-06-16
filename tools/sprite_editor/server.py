@@ -49,9 +49,22 @@ def save_json(path, data):
     Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+OBJLABEL_PATH = ROOT / "data" / "objlabel_sprites.json"
+_OBJLABELS = None
+
+
+def load_objlabel_sprites():
+    """빌드가 방출한 OBJ 직접기록 라벨군 합성 스프라이트(흩어진 4bpp 타일). type='synthetic'."""
+    global _OBJLABELS
+    if _OBJLABELS is None:
+        _OBJLABELS = (load_json(OBJLABEL_PATH, {}) or {}).get("sprites", []) or []
+    return _OBJLABELS
+
+
 def sprite_list():
     d = load_json(INDEX_PATH, {"sprites": []})
-    return d.get("sprites", []) if isinstance(d, dict) else d
+    base = d.get("sprites", []) if isinstance(d, dict) else d
+    return list(base) + load_objlabel_sprites()
 
 
 def png_for(sid, orig=False):
@@ -110,6 +123,28 @@ def decode_from_rom(rom, sp):
     if off is None:
         off = int(sp.get("offset", "0x0"), 16)
     typ = sp.get("type")
+    if typ == "synthetic":
+        # 흩어진 ROM 오프셋의 라벨군을 시각순(perm 보정)으로 조립 → 단일 타일스트림.
+        td = bytearray()
+        for lab in (sp.get("labels") or []):
+            loff = lab.get("offset_int")
+            if loff is None:
+                loff = int(lab["offset"], 16)
+            tw, th = lab["tw"], lab["th"]
+            perm = lab.get("perm") or list(range(tw * th))
+            for vis in range(tw * th):
+                ri = perm[vis]
+                td += rom[loff + ri * 32: loff + ri * 32 + 32]
+        tile_data = bytes(td)
+        n = len(tile_data) // ES.TILE_BYTES
+        if n == 0:
+            return None
+        cols = sp.get("tile_cols") or ES.guess_cols(n)
+        pad = (-n) % cols  # 편집캔버스 그리드용 직사각 패딩(셀은 0..n-1만 참조 → onscreen 무영향)
+        if pad:
+            tile_data = tile_data + bytes(pad * 32)
+        grid, w, h = ES.tiles_to_indices(tile_data, cols)
+        return grid, w, h, cols
     if typ == "lz77":
         res = ES.lz77_decompress(rom, off)
         if not res:
@@ -126,8 +161,11 @@ def decode_from_rom(rom, sp):
 
 
 def decode_indices(sp):
-    """원본 ROM에서 디코드(편집기 기본)."""
-    return decode_from_rom(rom_bytes(), sp)
+    """원본 ROM에서 디코드(편집기 기본). 단 합성(synthetic) 스프라이트는 편집 대상이
+    patched-only 영역(한글 라벨이 빌드 ROM에만 존재)이라 patched ROM에서 디코드해야
+    편집 canvas와 onscreen 미리보기가 일치한다."""
+    rom = patched_bytes() if sp.get("type") == "synthetic" else rom_bytes()
+    return decode_from_rom(rom, sp)
 
 
 def render_compare_png(sid, which):
@@ -220,13 +258,40 @@ def build_layout_cells(sp):
             "tile_cols": sp.get("tile_cols"), "build": True}
 
 
+def synthetic_layout_cells(sp):
+    """합성 OBJ 라벨군 → cells. 라벨을 세로로 적층, 각 라벨은 tw×th 격자.
+    tile_off = 조립 타일스트림(decode_from_rom synthetic과 동일 순서)의 순번."""
+    labels = sp.get("labels") or []
+    cells = []
+    y = 0
+    tindex = 0
+    maxw = 0
+    for lab in labels:
+        tw, th = lab["tw"], lab["th"]
+        for ty in range(th):
+            for tx in range(tw):
+                cells.append({"x": tx * 8, "y": y + ty * 8, "tw": 1, "th": 1, "fh": 0, "fv": 0,
+                              "tile_off": tindex + ty * tw + tx, "bank": 0, "palbase": 0})
+        tindex += tw * th
+        maxw = max(maxw, tw * 8)
+        y += th * 8 + 2  # 라벨 간 2px 간격
+    if not cells:
+        return None
+    return {"cells": cells, "x0": 0, "y0": 0, "w": maxw, "h": y, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "synthetic": True}
+
+
 def get_layout(sid):
-    """캡처 레이아웃 우선 → 없으면 빌드 권위 레이아웃(라벨 스트립)."""
+    """캡처 레이아웃 우선 → 합성 스프라이트 → 빌드 권위 레이아웃(라벨 스트립)."""
     lay = load_layouts().get("layouts", {}).get(sid)
     if lay:
         return lay
     sp = sprite_by_id(sid)
-    return build_layout_cells(sp) if sp else None
+    if sp is None:
+        return None
+    if sp.get("type") == "synthetic":
+        return synthetic_layout_cells(sp)
+    return build_layout_cells(sp)
 
 
 def current_tiles(sp):
@@ -301,9 +366,23 @@ def palette_library():
     return d.get("palettes", [])
 
 
+# OBJ 라벨 합성 스프라이트 편집용 고대비 기본 팔레트(잉크 1/5=짙음, 그림자 15/3=회색, 배경=밝음).
+# 실기 팔레트는 화면별로 다르나 편집 도구는 가독성이 우선(런타임에 실제 팔레트 적용).
+def _objlabel_pal():
+    p = [[232, 232, 236] for _ in range(16)]
+    p[0] = [250, 250, 250]
+    p[1] = [28, 28, 34]    # 잉크(terrain/unit/header/menu/info)
+    p[5] = [32, 44, 96]    # 잉크(header/action_menu/info, 짙은 남색)
+    p[15] = [70, 70, 82]   # 잉크/그림자(co_banner '휘프'는 ink=15 → 짙게)
+    p[3] = [158, 158, 168]  # 그림자(밝은 회색, 15와 분리)
+    return p
+
+
 def default_palette_for(sp):
     """source 화면 추정 → 그 화면의 실기 OBJ 팔레트(첫 뱅크)를 기본값으로. 없으면 grayscale.
     (정확한 뱅크는 사용자가 팔레트 드롭다운으로 선택; OAM 정보 없이 자동은 화면까지만 추정)"""
+    if "objlabel" in (sp.get("source") or "").lower() or sp.get("type") == "synthetic":
+        return _objlabel_pal()
     lib = palette_library()
     if not lib:
         return [list(c) for c in ES.GRAYSCALE]
@@ -361,10 +440,21 @@ PART2_PATCH_KO = {
 }
 
 
+OBJLABEL_KO = {
+    "terrain_status": "2편 상태팝업 지형명", "terrain_compact": "2편 커서팝업 지형명",
+    "unit_status": "2편 상태팝업 유닛명", "unit_compact": "2편 커서팝업 유닛명",
+    "co_banner": "2편 적턴 CO 배너 이름", "status_header": "2편 상태리스트 헤더(종류/체력/연료/탄약)",
+    "info_screen": "2편 정보화면 라벨(정보/비용/설명)", "action_menu": "2편 행동메뉴 아이콘(공격/대기 등)",
+}
+
+
 def classify_sprite(source):
     """(is_text, desc_ko). 텍스트=번역 대상 라벨/로고. 비텍스트(배경/캐릭터/폰트/미분류) → 기본 제외."""
     s = (source or "")
     sl = s.lower()
+    if "part2_objlabel/" in sl:
+        key = sl.split("part2_objlabel/")[1]
+        return (True, OBJLABEL_KO.get(key, "2편 OBJ 라벨"))
     if "dialogue glyph" in sl or "font_base" in sl:
         return (False, "대화 폰트 글리프(편집 대상 아님)")
     if "blackhole" in sl:
@@ -410,6 +500,7 @@ def sprite_order_rank(source):
              ("menu_label", 3), ("mode_menu", 3), ("menu", 3), ("newspaper", 3),
              ("splash", 4), ("blackhole", 4), ("prologue", 5), ("intro", 5), ("campaign", 6),
              ("mission", 7), ("redstar", 7), ("operation", 7), ("map_select", 7),
+             ("objlabel", 8), ("terrain", 8), ("unit", 8), ("action_menu", 8),
              ("battle", 8), ("day", 8), ("damage", 8), ("level", 8), ("check", 8),
              ("result", 9), ("congratulations", 9), ("air_", 9)]
     for k, r in table:

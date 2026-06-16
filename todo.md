@@ -2514,3 +2514,12 @@
 - [ ] (후속) 스프라이트 OBJ 직접기록 4종(action_menu/status_header/info_screen_obj/battle_obj)
   합성 스프라이트로 WYSIWYG 노출.
 - [ ] (후속·기존) 주소 잘림 2행(7EBF·808, 실번역 보유하나 코드영역 주소라 미기록) 진위 주소 RE.
+
+# 🟢 OBJ 합성 스프라이트 WYSIWYG + 잘린주소 정리 (2026-06-17, 사용자 "1,2 다")
+
+- [x] **OBJ 직접기록 4종 합성 스프라이트 노출**: 흩어진 ROM 오프셋 라벨군을 type=synthetic으로
+  편집기에 WYSIWYG 표시(8 스프라이트, 79+ 라벨). 빌드 rec_objlabel(출력무영향)+편집기 decode/layout/palette.
+  status_terrain perm=[0,1,4,2,3,5] 보정. 7/8 시각검증 통과.
+- [x] **잘린 주소 2행(7EBF·808) 정리**: 정주소 행과 동일 중복 확정 → 제거(+빈행3, 주소정규화6).
+- [ ] (후속) 편집→ROM 라운드트립(sprites_overrides→build): 전체 스프라이트 공통 미구현. apply_sprite_edits
+  또는 build의 patch_synthetic_block 신설 필요.

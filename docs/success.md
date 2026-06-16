@@ -898,3 +898,25 @@ UI 에디터 실캡처 기능 검증 중(canvas-hijack: 0xA2C098 슬롯을 임�
 - 바이트 무변경: 계측 전/후 빌드 sha 동일(1623481a), qa_integrity_map/glyph PASS.
 - 후속: OBJ 직접기록 4종(action_menu/status_header/info_screen_obj/battle_obj)은 단일
   스프라이트 offset 미매칭 → 합성 스프라이트 필요.
+
+## OBJ 직접기록 라벨 → 합성 스프라이트 WYSIWYG (2026-06-17)
+
+흩어진 ROM 오프셋에 4bpp 타일을 직접 기록하는 4개 OBJ 라벨 함수(단일 LZ77 블록 미매칭이라
+기존 빌드레이아웃으로 노출 불가)를 편집기에 **실화면 형태(WYSIWYG)**로 노출.
+- 빌드: `rec_objlabel` 헬퍼 + 4함수에 기록 호출(순수 추가, 출력 byte-identical, sha 1623481a 불변)
+  → `data/objlabel_sprites.json`(8 합성 스프라이트). 각 라벨=base 오프셋의 tw×th 연속 타일.
+  status_terrain만 OBJ 분할 재배열이라 perm=[0,1,4,2,3,5](시각→ROM) 기록.
+- 편집기(`sprite_editor/server.py`): 새 type `synthetic`. decode_from_rom이 라벨별 perm 보정해
+  세그먼트 조립, `synthetic_layout_cells`가 라벨 적층 셀 생성(tile_off=조립순번 일치),
+  classify/section/order에 part2_objlabel 분기, objlabel 고대비 편집 팔레트(잉크 1/5 짙음).
+- 커버: terrain_status(15+육)·terrain_compact(24)·unit_status(18)·unit_compact(19)·co_banner(휘프)·
+  status_header(종류/체력/연료/탄약)·info_screen(정보/비용/설명)·action_menu(공격/대기 등) = 8 스프라이트.
+- 검증: 8종 전부 목록 노출·디코드·onscreen 렌더 OK. 7종 시각확인(라벨 정확·perm 정상). 5게이트 PASS,
+  dist 무결성 PASS(해시 불변). ⚠ 편집→ROM 라운드트립은 전체 스프라이트 공통 미구현(별도 후속).
+
+## 잘린/형식이상 주소 행 정리 (2026-06-17)
+
+translation_for_import.csv의 잘린 주소 2행('7EBF'·'808', 코드영역이라 미기록)은 정주소 행
+(0xDC7BDB/0xDC7EBF/0xE03808, 전부 기록됨)과 동일 ja+ko **중복**임을 ROM 전수검색으로 확정 → 제거.
+빈 garbage 3행도 제거, 0x 없는 정상주소 6개 정규화. 전부 출력 무영향(sha 1623481a 불변).
+archive/malformed_address_rows.csv 보존.

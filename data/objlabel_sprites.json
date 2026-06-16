@@ -1,0 +1,1586 @@
+{
+ "_doc": "OBJ 직접기록 라벨군 합성 스프라이트(흩어진 4bpp 타일). 편집기 WYSIWYG. 재생성: build_korean_full.py",
+ "sprites": [
+  {
+   "id": "objlabel_p2_terrain_status",
+   "offset": "0xB93CD0",
+   "offset_int": 12139728,
+   "type": "synthetic",
+   "source": "part2_objlabel/terrain_status",
+   "desc": "2편 상태팝업 지형명",
+   "n_tiles": 94,
+   "size": 3008,
+   "tile_cols": 3,
+   "labels": [
+    {
+     "text": "평지",
+     "offset": "0xB93CD0",
+     "offset_int": 12139728,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "숲",
+     "offset": "0xB93D90",
+     "offset_int": 12139920,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "산",
+     "offset": "0xB93E50",
+     "offset_int": 12140112,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "강",
+     "offset": "0xB93F10",
+     "offset_int": 12140304,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "해",
+     "offset": "0xB93FD0",
+     "offset_int": 12140496,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "도시",
+     "offset": "0xB94090",
+     "offset_int": 12140688,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "공장",
+     "offset": "0xB94150",
+     "offset_int": 12140880,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "항구",
+     "offset": "0xB94210",
+     "offset_int": 12141072,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "공항",
+     "offset": "0xB942D0",
+     "offset_int": 12141264,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "수도",
+     "offset": "0xB94390",
+     "offset_int": 12141456,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "도로",
+     "offset": "0xB94450",
+     "offset_int": 12141648,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "다리",
+     "offset": "0xB94510",
+     "offset_int": 12141840,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "여울",
+     "offset": "0xB945D0",
+     "offset_int": 12142032,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "호수",
+     "offset": "0xB94690",
+     "offset_int": 12142224,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "암초",
+     "offset": "0xB94750",
+     "offset_int": 12142416,
+     "tw": 3,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      4,
+      2,
+      3,
+      5
+     ]
+    },
+    {
+     "text": "육",
+     "offset": "0xB93BD0",
+     "offset_int": 12139472,
+     "tw": 2,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_terrain_compact",
+   "offset": "0x464D68",
+   "offset_int": 4607336,
+   "type": "synthetic",
+   "source": "part2_objlabel/terrain_compact",
+   "desc": "2편 커서팝업 지형명",
+   "n_tiles": 192,
+   "size": 6144,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "평지",
+     "offset": "0x464D68",
+     "offset_int": 4607336,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "강",
+     "offset": "0x464E68",
+     "offset_int": 4607592,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "산",
+     "offset": "0x464F68",
+     "offset_int": 4607848,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "숲",
+     "offset": "0x465068",
+     "offset_int": 4608104,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "도로",
+     "offset": "0x465168",
+     "offset_int": 4608360,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "도시",
+     "offset": "0x465268",
+     "offset_int": 4608616,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "해",
+     "offset": "0x465368",
+     "offset_int": 4608872,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "수도",
+     "offset": "0x465468",
+     "offset_int": 4609128,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "항구",
+     "offset": "0x465568",
+     "offset_int": 4609384,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "공항",
+     "offset": "0x465668",
+     "offset_int": 4609640,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "여울",
+     "offset": "0x465768",
+     "offset_int": 4609896,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "다리",
+     "offset": "0x465868",
+     "offset_int": 4610152,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "암초",
+     "offset": "0x465968",
+     "offset_int": 4610408,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "공장",
+     "offset": "0x465A68",
+     "offset_int": 4610664,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "파이프",
+     "offset": "0x465B68",
+     "offset_int": 4610920,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "미사일",
+     "offset": "0x465C68",
+     "offset_int": 4611176,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "연구소",
+     "offset": "0x465D68",
+     "offset_int": 4611432,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "캐논",
+     "offset": "0x465E68",
+     "offset_int": 4611688,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "화산",
+     "offset": "0x465F68",
+     "offset_int": 4611944,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "레이저",
+     "offset": "0x466068",
+     "offset_int": 4612200,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "레이저",
+     "offset": "0x466168",
+     "offset_int": 4612456,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "마그마",
+     "offset": "0x466268",
+     "offset_int": 4612712,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "레이저",
+     "offset": "0x466368",
+     "offset_int": 4612968,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "통행불가",
+     "offset": "0x466468",
+     "offset_int": 4613224,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_unit_status",
+   "offset": "0xB94810",
+   "offset_int": 12142608,
+   "type": "synthetic",
+   "source": "part2_objlabel/unit_status",
+   "desc": "2편 상태팝업 유닛명",
+   "n_tiles": 144,
+   "size": 4608,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "보병",
+     "offset": "0xB94810",
+     "offset_int": 12142608,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "바주카병",
+     "offset": "0xB94910",
+     "offset_int": 12142864,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "정찰차",
+     "offset": "0xB94A10",
+     "offset_int": 12143120,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "대공전차",
+     "offset": "0xB94B10",
+     "offset_int": 12143376,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "경전차",
+     "offset": "0xB94C10",
+     "offset_int": 12143632,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "중전차",
+     "offset": "0xB94D10",
+     "offset_int": 12143888,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "자주포",
+     "offset": "0xB94E10",
+     "offset_int": 12144144,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "로켓포",
+     "offset": "0xB94F10",
+     "offset_int": 12144400,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "보급차",
+     "offset": "0xB95010",
+     "offset_int": 12144656,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "미사일",
+     "offset": "0xB95110",
+     "offset_int": 12144912,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "수송헬기",
+     "offset": "0xB95210",
+     "offset_int": 12145168,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전투헬기",
+     "offset": "0xB95310",
+     "offset_int": 12145424,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전투기",
+     "offset": "0xB95410",
+     "offset_int": 12145680,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "폭격기",
+     "offset": "0xB95510",
+     "offset_int": 12145936,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "수송선",
+     "offset": "0xB95610",
+     "offset_int": 12146192,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전함",
+     "offset": "0xB95710",
+     "offset_int": 12146448,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "호위함",
+     "offset": "0xB95810",
+     "offset_int": 12146704,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "잠수함",
+     "offset": "0xB95910",
+     "offset_int": 12146960,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_unit_compact",
+   "offset": "0x466568",
+   "offset_int": 4613480,
+   "type": "synthetic",
+   "source": "part2_objlabel/unit_compact",
+   "desc": "2편 커서팝업 유닛명",
+   "n_tiles": 152,
+   "size": 4864,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "보병",
+     "offset": "0x466568",
+     "offset_int": 4613480,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "바주카병",
+     "offset": "0x466668",
+     "offset_int": 4613736,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "중전차",
+     "offset": "0x466768",
+     "offset_int": 4613992,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "대공전차",
+     "offset": "0x466868",
+     "offset_int": 4614248,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "경전차",
+     "offset": "0x466968",
+     "offset_int": 4614504,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "정찰차",
+     "offset": "0x466A68",
+     "offset_int": 4614760,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "보급차",
+     "offset": "0x466B68",
+     "offset_int": 4615016,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "자주포",
+     "offset": "0x466C68",
+     "offset_int": 4615272,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "로켓포",
+     "offset": "0x466D68",
+     "offset_int": 4615528,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "신형전차",
+     "offset": "0x466E68",
+     "offset_int": 4615784,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "미사일",
+     "offset": "0x466F68",
+     "offset_int": 4616040,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전투기",
+     "offset": "0x467068",
+     "offset_int": 4616296,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "폭격기",
+     "offset": "0x467168",
+     "offset_int": 4616552,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "수송헬기",
+     "offset": "0x467268",
+     "offset_int": 4616808,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전투헬기",
+     "offset": "0x467368",
+     "offset_int": 4617064,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "전함",
+     "offset": "0x467468",
+     "offset_int": 4617320,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "호위함",
+     "offset": "0x467568",
+     "offset_int": 4617576,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "수송선",
+     "offset": "0x467668",
+     "offset_int": 4617832,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "잠수함",
+     "offset": "0x467768",
+     "offset_int": 4618088,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_co_banner",
+   "offset": "0xBD0230",
+   "offset_int": 12386864,
+   "type": "synthetic",
+   "source": "part2_objlabel/co_banner",
+   "desc": "2편 적턴 CO 배너 이름",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "휘프",
+     "offset": "0xBD0230",
+     "offset_int": 12386864,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_status_header",
+   "offset": "0xBE80FC",
+   "offset_int": 12484860,
+   "type": "synthetic",
+   "source": "part2_objlabel/status_header",
+   "desc": "2편 상태리스트 헤더(종류/체력/연료/탄약)",
+   "n_tiles": 8,
+   "size": 256,
+   "tile_cols": 2,
+   "labels": [
+    {
+     "text": "종류",
+     "offset": "0xBE80FC",
+     "offset_int": 12484860,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "체력",
+     "offset": "0xBE77FC",
+     "offset_int": 12482556,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "연료",
+     "offset": "0xBE777C",
+     "offset_int": 12482428,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "탄약",
+     "offset": "0xBE76FC",
+     "offset_int": 12482300,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_info_screen",
+   "offset": "0xBE945C",
+   "offset_int": 12489820,
+   "type": "synthetic",
+   "source": "part2_objlabel/info_screen",
+   "desc": "2편 정보화면 라벨(정보/비용/설명)",
+   "n_tiles": 16,
+   "size": 512,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "정보",
+     "offset": "0xBE945C",
+     "offset_int": 12489820,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "정보",
+     "offset": "0xBE9A5C",
+     "offset_int": 12491356,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "비용",
+     "offset": "0xBE989C",
+     "offset_int": 12490908,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "설명",
+     "offset": "0xBE9BDC",
+     "offset_int": 12491740,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_action_menu",
+   "offset": "0xBE793C",
+   "offset_int": 12482876,
+   "type": "synthetic",
+   "source": "part2_objlabel/action_menu",
+   "desc": "2편 행동메뉴 아이콘(공격/대기/부대/저장/설정/종료/보급)",
+   "n_tiles": 14,
+   "size": 448,
+   "tile_cols": 2,
+   "labels": [
+    {
+     "text": "공격",
+     "offset": "0xBE793C",
+     "offset_int": 12482876,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "대기",
+     "offset": "0xBE79BC",
+     "offset_int": 12483004,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "부대",
+     "offset": "0xBE7F3C",
+     "offset_int": 12484412,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "저장",
+     "offset": "0xBE7D3C",
+     "offset_int": 12483900,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "설정",
+     "offset": "0xBE7DBC",
+     "offset_int": 12484028,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "종료",
+     "offset": "0xBE803C",
+     "offset_int": 12484668,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "보급",
+     "offset": "0xBEC5DC",
+     "offset_int": 12502492,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  }
+ ]
+}

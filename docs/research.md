@@ -1199,3 +1199,16 @@ data/dialogue_groups.json(group→members+segments+assembled). 수동 보정 dat
   각 span에서 `원본 ROM == 노이즈제거 빌드`(손상 없음), `구 baseline`만 손상 보유.
 - 교훈: `integrity_map` 교집합으로 "표시 여부"를 판정하면 안 됨(stale일 수 있음). 권위는 실제
   빌드 ROM 바이트. placeholder 정의는 빌드/QA 단일소스로 유지(중복 누락 방지).
+
+## OBJ 직접기록 라벨 함수 4종 — 합성 스프라이트 매핑 (2026-06-17)
+
+LZ77 단일블록이 아닌 흩어진 ROM 오프셋에 4bpp OBJ 라벨 타일을 직접 기록하는 함수:
+- patch_part2_battle_obj_labels: status_terrain(0xB93CD0~, 각 24x16=6타일, OBJ분할 재배열
+  (0,1,3,4,2,5)→편집기 perm[0,1,4,2,3,5]) + '육'(0xB93BD0,16x16) + compact_terrain(0x464D68~,32x16)
+  + unit(0xB94810~,32x16,Galmuri7) + compact_unit(0x466568~) + 휘프(0xBD0230,32x8).
+- patch_part2_status_header_labels: 종류/체력/연료/탄약, 각 16x8=2연속타일(0xBE80FC/0xBE77FC/0xBE777C/0xBE76FC).
+- patch_part2_info_screen_obj_labels: 정보/정보/비용/설명, 각 32x8=4타일(0xBE945C/0xBE9A5C/0xBE989C/0xBE9BDC).
+- patch_part2_action_menu_icon_labels: 공격/대기/부대/저장/설정/종료/보급, 각 16x8=2연속타일(0xBE793C~).
+편집기는 base 오프셋에서 tw*th 연속타일을 perm 보정해 읽어 라벨 적층 렌더. 0x465468 '수도'는
+status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어써져 최종은 compact쪽
+(데드코드, objlabel_sprites.json엔 compact 1곳만 기록 → 이중기록 없음).

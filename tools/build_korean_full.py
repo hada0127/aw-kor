@@ -43,6 +43,23 @@ def rec_label_layout(block_off, tile_cols, labels):
     """block_off(int)에 배치된 라벨들의 타일스트립 기록. labels=[{tile_ids:[..],text,row}]."""
     key = '0x%X' % block_off
     SPRITE_BUILD_LAYOUTS[key] = {'kind': 'tilestrip', 'tile_cols': tile_cols, 'labels': labels}
+
+
+# OBJ 직접기록(흩어진 ROM 오프셋) 라벨군을 '합성 스프라이트'로 편집기에 노출하기 위한 기록.
+# 각 라벨은 base 오프셋에서 tw*th 연속 4bpp 타일. perm=시각순→ROM순 타일 순열(OBJ 분할 재배열 보정).
+# data/objlabel_sprites.json으로 덤프 → 편집기가 type="synthetic"으로 읽어 WYSIWYG 렌더/페인트.
+OBJLABEL_SPRITES = []
+
+
+def rec_objlabel(sid, source, desc, labels):
+    """labels=[{'text','off'(int),'tw','th','perm'(opt 시각→ROM)}]. 흩어진 OBJ 라벨군 1개를 합성 스프라이트로 기록."""
+    recs = []
+    for lab in labels:
+        tw, th = lab['tw'], lab['th']
+        perm = lab.get('perm') or list(range(tw * th))
+        recs.append({'text': lab['text'], 'offset': '0x%X' % lab['off'], 'offset_int': lab['off'],
+                     'tw': tw, 'th': th, 'perm': perm})
+    OBJLABEL_SPRITES.append({'id': sid, 'source': source, 'desc': desc, 'labels': recs})
 # 무결성맵(Phase C-min): 텍스트 write 시점에 [addr, slot, enc_len, enc_hex, fill, ko, level, kind]
 # 를 실행 순서대로 누적. 빌드 끝에 temp/integrity_map.json으로 덤프. 출력 바이트는 무변경.
 WRITE_LOG = []
@@ -5357,6 +5374,19 @@ def patch_part2_battle_obj_labels(rom):
     # Enemy-turn CO banner name. This is stored as raw 32x8 OBJ tiles, not as
     # SJIS text, so the protected text-table replacement does not reach it.
     write_tiles(0xBD0230, render_tiles('휘프', 32, height=8, x=8, y=0, ink=15, shadow=None, font_obj=unit_font))
+
+    # WYSIWYG 합성 스프라이트 기록(흩어진 OBJ 라벨군 → 편집기). 출력 바이트 무영향(기록만).
+    rec_objlabel('objlabel_p2_terrain_status', 'part2_objlabel/terrain_status', '2편 상태팝업 지형명',
+                 [{'text': t, 'off': o, 'tw': 3, 'th': 2, 'perm': [0, 1, 4, 2, 3, 5]} for o, t in status_terrain_labels]
+                 + [{'text': '육', 'off': 0xB93BD0, 'tw': 2, 'th': 2}])
+    rec_objlabel('objlabel_p2_terrain_compact', 'part2_objlabel/terrain_compact', '2편 커서팝업 지형명',
+                 [{'text': t, 'off': o, 'tw': 4, 'th': 2} for o, t in compact_terrain_labels])
+    rec_objlabel('objlabel_p2_unit_status', 'part2_objlabel/unit_status', '2편 상태팝업 유닛명',
+                 [{'text': t, 'off': o, 'tw': 4, 'th': 2} for o, t in unit_labels])
+    rec_objlabel('objlabel_p2_unit_compact', 'part2_objlabel/unit_compact', '2편 커서팝업 유닛명',
+                 [{'text': t, 'off': o, 'tw': 4, 'th': 2} for o, t in compact_unit_labels])
+    rec_objlabel('objlabel_p2_co_banner', 'part2_objlabel/co_banner', '2편 적턴 CO 배너 이름',
+                 [{'text': '휘프', 'off': 0xBD0230, 'tw': 4, 'th': 1}])
     return 3 + len(status_terrain_labels) + len(compact_terrain_labels) + len(unit_labels) + len(compact_unit_labels)
 
 
@@ -5410,15 +5440,19 @@ def patch_part2_status_header_labels(rom):
         return tiles
 
     patched = 0
-    for text, offsets in [
+    header_labels = [
         ('종류', (0xBE80FC, 0xBE811C)),
         ('체력', (0xBE77FC, 0xBE781C)),
         ('연료', (0xBE777C, 0xBE779C)),
         ('탄약', (0xBE76FC, 0xBE771C)),
-    ]:
+    ]
+    for text, offsets in header_labels:
         for tile, off in zip(render_label(text), offsets):
             rom[off:off + 32] = tile
             patched += 1
+    rec_objlabel('objlabel_p2_status_header', 'part2_objlabel/status_header',
+                 '2편 상태리스트 헤더(종류/체력/연료/탄약)',
+                 [{'text': t, 'off': offs[0], 'tw': 2, 'th': 1} for t, offs in header_labels])
     return patched
 
 
@@ -5481,6 +5515,11 @@ def patch_part2_info_screen_obj_labels(rom):
     # Terrain comment popup label ("COMMENT"), split as 32x8 + 16x8 OBJ.
     encode_32x8_label(0xBE9BDC, '설명')
     rom[0xBE9C5C:0xBE9C5C + 64] = bytes(64)
+    rec_objlabel('objlabel_p2_info_screen', 'part2_objlabel/info_screen', '2편 정보화면 라벨(정보/비용/설명)',
+                 [{'text': '정보', 'off': 0xBE945C, 'tw': 4, 'th': 1},
+                  {'text': '정보', 'off': 0xBE9A5C, 'tw': 4, 'th': 1},
+                  {'text': '비용', 'off': 0xBE989C, 'tw': 4, 'th': 1},
+                  {'text': '설명', 'off': 0xBE9BDC, 'tw': 4, 'th': 1}])
     return 4
 
 
@@ -6913,7 +6952,7 @@ def patch_part2_action_menu_icon_labels(rom):
         return tiles
 
     patched = 0
-    for start, text in [
+    menu_labels = [
         (0xBE793C, '공격'),
         (0xBE79BC, '대기'),
         (0xBE7F3C, '부대'),
@@ -6921,11 +6960,15 @@ def patch_part2_action_menu_icon_labels(rom):
         (0xBE7DBC, '설정'),
         (0xBE803C, '종료'),
         (0xBEC5DC, '보급'),
-    ]:
+    ]
+    for start, text in menu_labels:
         for idx, tile in enumerate(render_strip(text)):
             off = start + idx * 32
             rom[off:off + 32] = tile
             patched += 1
+    rec_objlabel('objlabel_p2_action_menu', 'part2_objlabel/action_menu',
+                 '2편 행동메뉴 아이콘(공격/대기/부대/저장/설정/종료/보급)',
+                 [{'text': t, 'off': o, 'tw': 2, 'th': 1} for o, t in menu_labels])
     return patched
 
 
@@ -18374,6 +18417,26 @@ def main():
         json.dump({'_doc': '빌드 권위 라벨 타일스트립(캡처 불필요). 편집기 WYSIWYG fallback. '
                    '재생성: build_korean_full.py', 'blocks': SPRITE_BUILD_LAYOUTS}, f, ensure_ascii=False, indent=1)
     print(f'→ 스프라이트 빌드레이아웃 {sbl_path} ({len(SPRITE_BUILD_LAYOUTS)} blocks)')
+
+    # OBJ 직접기록 라벨군 → 합성 스프라이트(흩어진 ROM 오프셋) 덤프(편집기 type="synthetic")
+    objl_path = os.path.join(BASE, 'data', 'objlabel_sprites.json')
+    objl_sprites = []
+    for sp in OBJLABEL_SPRITES:
+        labels = sp['labels']
+        n_tiles = sum(l['tw'] * l['th'] for l in labels)
+        rep = labels[0]['offset'] if labels else '0x0'
+        rep_int = labels[0]['offset_int'] if labels else 0
+        objl_sprites.append({
+            'id': sp['id'], 'offset': rep, 'offset_int': rep_int, 'type': 'synthetic',
+            'source': sp['source'], 'desc': sp['desc'],
+            'n_tiles': n_tiles, 'size': n_tiles * 32,
+            'tile_cols': max((l['tw'] for l in labels), default=1),
+            'labels': labels, 'curated': True, 'palette_guess': 'part2',
+        })
+    with open(objl_path, 'w', encoding='utf-8') as f:
+        json.dump({'_doc': 'OBJ 직접기록 라벨군 합성 스프라이트(흩어진 4bpp 타일). 편집기 WYSIWYG. '
+                   '재생성: build_korean_full.py', 'sprites': objl_sprites}, f, ensure_ascii=False, indent=1)
+    print(f'→ OBJ 라벨 합성 스프라이트 {objl_path} ({len(objl_sprites)} sprites)')
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
     for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
