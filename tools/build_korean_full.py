@@ -8873,26 +8873,34 @@ def patch_name_honorific_fragments(rom, syl_to_code, unmapped):
 # 슬롯이 부족할 때만 마지막에 제거하는 ASCII 문장부호(부호 보존 후보가 모두 실패한 경우).
 PUNCT_DROP = ',.!?:;()[]{}"\''
 
+# 공백 collapse 예외: 메뉴가 글리프 위치를 샘플링하는 예/아니오 트릭 슬롯(이중공백 의도적).
+WS_COLLAPSE_EXEMPT = {'　예　오', '예  아니오'}
+
+
+def _shorten(s):
+    for src, dst in SHORTEN:
+        s = s.replace(src, dst)
+    return s
+
 
 def _fit_variants(base):
-    """공백/축약 단계별 후보 6종(전각공백/축약, ascii공백/축약, 공백제거/축약)."""
-    out = [base.replace(' ', '　')]
-    sh = out[0]
-    for src, dst in SHORTEN:
-        sh = sh.replace(src, dst)
-    out.append(sh)
-    out.append(base)
-    sa = base
-    for src, dst in SHORTEN:
-        sa = sa.replace(src, dst)
-    out.append(sa)
-    compact = base.replace(' ', '')
-    out.append(compact)
-    cs = compact
-    for src, dst in SHORTEN:
-        cs = cs.replace(src, dst)
-    out.append(cs)
-    return out
+    """공백/축약 단계별 후보 6종.
+
+    순서(2026-06-16 수정): 전각공백 → **반각공백** → 전각+축약 → 반각+축약 → 공백제거 → 공백제거+축약.
+    기존엔 전각+축약(L1)이 반각공백(L2)보다 먼저라, 1~2바이트만 넘쳐도 문법 깨지는 SHORTEN
+    (있는→있, 에게→에)이 적용됐다. 반각공백을 축약보다 우선시켜 단어/문법을 최대한 보존한다.
+    전각공백이 맞는 다수 행(L0)은 그대로라 byte-identical.
+    """
+    fw = base.replace(' ', '　')      # 전각공백
+    compact = base.replace(' ', '')   # 공백제거
+    return [
+        fw,                  # L0 전각공백 (현행 기본)
+        base,                # L1 반각공백 (축약보다 우선)
+        _shorten(fw),        # L2 전각+축약
+        _shorten(base),      # L3 반각+축약
+        compact,             # L4 공백제거(단어붙음)
+        _shorten(compact),   # L5 공백제거+축약
+    ]
 
 
 def encode_fit(ko, slot, syl_to_code, unmapped):
@@ -8912,6 +8920,10 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
     # 를 일으키고, ·는 FALLBACK으로 SJIS 中点 재출하됨(글리프 불확실). 연속은 ellipsis, 단독은 공백으로.
     for run in ('・・・', '···', '・・', '··', '・·', '·・'):
         normalized = normalized.replace(run, '...')
+    # 中점이 구분자로 쓰인 'スキ　・X'(좋아함 : X) 류는 인접 공백과 합쳐 단일 공백으로.
+    # 단독 제거 후 전각/반각 공백이 겹쳐 'X　　Y' 이중공백이 되던 문제(DOUBLE 24건) 해소.
+    for sep in ('　・　', ' ・ ', '　・', '・　', ' ・', '・ ', '　·　', ' · ', '　·', '·　', ' ·', '· '):
+        normalized = normalized.replace(sep, ' ')
     normalized = normalized.replace('・', ' ').replace('·', ' ')
     # 전각/스마트 부호 → 렌더 검증된 ASCII 등가
     normalized = (normalized
@@ -8922,6 +8934,21 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
     # v1 보수(codex/agy 리뷰): 렌더 증거 약/무한 부호([] {} ; )와 제어문자(▼) 제거.
     # 보존: . ! ? , ( ) : " '  (그중 ( ) : " '는 Phase E 픽셀 검증 전 provisional).
     normalized = ''.join(c for c in normalized if c not in '[]{};▼')
+
+    # 연속/혼합 공백(전각·반각) → 단일 공백. 원문 유래 이중공백(DOUBLE)·中점 잔여 정리.
+    # 단일 공백 행은 level0에서 다시 전각화되어 byte-identical. 메뉴 위치샘플 트릭은 예외.
+    if normalized not in WS_COLLAPSE_EXEMPT and ('  ' in normalized or '　' in normalized):
+        out = []
+        prev_ws = False
+        for ch in normalized:
+            if ch in (' ', '　'):
+                if not prev_ws:
+                    out.append(' ')
+                prev_ws = True
+            else:
+                out.append(ch)
+                prev_ws = False
+        normalized = ''.join(out)
 
     cand = _fit_variants(normalized)                       # level 0~5: 부호 보존
     stripped = ''.join(c for c in normalized if c not in PUNCT_DROP)

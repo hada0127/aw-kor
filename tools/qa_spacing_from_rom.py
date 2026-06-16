@@ -73,10 +73,12 @@ def main():
         lv = r["level"]
         intended, shipped = r["intended"], r["shipped"]
         r["ja"] = ja.get(r["addr"], "")
-        if lv is not None and lv >= 4 and has_space(intended) and not has_space(shipped):
-            r["reason"] = "JAMMED: 공백 전부 제거(level>=4)"
+        # 2026-06-16 _fit_variants 재배열 후 레벨: 0=전각공백 1=반각공백 2=전각+축약
+        # 3=반각+축약 4=공백제거 5=공백제거+축약, 6~11=부호제거 변형. 축약=2,3,8,9.
+        if has_space(intended) and not has_space(shipped):
+            r["reason"] = "JAMMED: 공백 전부 제거(단어붙음)"
             jammed.append(r)
-        elif lv in (1, 3):
+        elif lv in (2, 3, 8, 9):
             r["reason"] = f"ABBREV: SHORTEN 축약(level{lv})"
             abbrev.append(r)
         for sig, why in GRAMMAR_RISK:
