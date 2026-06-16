@@ -32,7 +32,8 @@
 - [x] iter10: A3 ? 수정 **프롤로그/메뉴 설명문 등 전 A3 화면 적용 확인**(스토리를 즐기며 플레이하는 모드 등 정상). 의미 audit 1차: **부정 극성 불일치 1226행 → LLM 판정 워크플로(wzqkamakv)** 실제 반전/왜곡만 색출 중.
 - [x] iter11: 부정 의미 audit(1226행 LLM 판정) → **실제 의미오류 18행 수정**(CAN/CANNOT 반전 6, 깨진 단편 부정/누락, distortion 7). 판정 오탐(じゃない 발견맥락 등) 식별·skip. 이중권위 script 리터럴 직접수정 다수.
 - [⏳] iter12: 전체 의미 audit(6997행 3청크). chunk0(2333행)→66 flag. **휩→휘프 조사회귀 5행 수정**(받침-조사 보정). chunk0 verify-fix(wf1452yu6)+chunk1/2 audit(wpae7fv20/wuc7dr090) 진행중.
-- [ ] iter: 의미 audit 3청크 확정수정 적용 + fresh-boot 화면 매트릭스(전투/결과/엔딩).
+- [x] iter13: **전체 의미 audit 6997행 완료** — 3청크 LLM 판정 + adjacent-aware verify-fix → 확정 ~72행 수정(반전/오역/정렬오류/관용구/누락/조사). 전 게이트 PASS.
+- [ ] iter: 의미 audit 잔여(borderline 재검토) + fresh-boot 화면 매트릭스(전투/결과/저장/엔딩) — SRAM seed 생성.
 - [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
