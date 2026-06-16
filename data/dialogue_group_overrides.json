@@ -1,0 +1,1 @@
+{"_doc":"수동 그룹 보정. split_before:[주소] 앞에서 강제 분리, join_before:[주소] 앞 강제 결합. tools/build_dialogue_groups.py가 반영.","split_before":[],"join_before":[]}

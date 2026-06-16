@@ -1166,3 +1166,24 @@ auto_playthrough(강화판)으로 캡처·검증(모두 한글 정상, 깨짐 �
 렌더(과거 뤘/캡/뀔/힝 '?'), 정상 인사말 무회귀(`temp/cap_validate/a3fix_*`).
 **회귀 가드**: build에 `max(syl_to_code) > A3_hook_max → AssertionError` 추가(코드맵 변경 시 hook 동기화 강제).
 **교훈**: code∩glyph 대칭(qa_glyph_coverage)은 매핑만 보증, **렌더 경로 범위 cap은 별개**(codex point#4 적중).
+
+### 대사 조각 = 단일 ROM 문자열의 분절 (2026-06-16, codex/agy/claude 자문 종합)
+
+**발견**: dialogue_map의 '조각'들은 별도 포인터 문자열이 아니라 **하나의 연속 ROM 문자열**을
+추출이 제어코드/변수삽입 지점에서 자른 것. 엔진은 포인터 하나(r4+0x20)를 읽어 **0x00(종료)까지
+2바이트씩 walk**하며 한 대사창에 출력(파서 0x08B1215A 계열). 추출이 버린 gap 바이트 = 제어/삽입:
+- `0x00` 종료 / `0x0A` 줄바꿈 / `0x09`·`0x6b`·`0x72`·`0x77`·`0x57`·`0x69` 박스·라인 제어
+- `0x33 <SJIS literal> 0x30`, `0x32 <literal> 0x30` = **변수삽입 토큰**(literal=런타임 치환 기본값, 예 攻撃→〈커맨드〉/〈유닛〉). (B-team kor.tbl 대조)
+
+예: 0xD90050 'できるだけ' + [33 攻撃 30] + 0xD90060 'をしにいったほうがいいわ！' → 한 메시지
+"できるだけ〈攻撃/command〉をしにいったほうがいいわ！". 0xA01970 5조각 → 프롤로그 한 문장.
+
+**그룹화(권위·결정적, tools/build_dialogue_groups.py)**: 주소순 인접 동일 region 비노이즈 조각 중
+**사이 ROM 구간에 0x00 없으면 같은 메시지**, 있으면 경계. 휴리스틱 문법추정(오탐: 제목+부제,
+공격력/방어력 라벨)은 미사용. 결과 9500그룹(멀티조각 3972, 16+조각 플래그 52)/21569조각.
+data/dialogue_groups.json(group→members+segments+assembled). 수동 보정 data/dialogue_group_overrides.json(split_before/join_before).
+
+**편집/빌드 무영향**: 그룹은 표시·문맥용. 저장은 기존대로 주소별 dialogue_overrides.json 역기록
+(조각마다 독립 슬롯·길이). 빌드는 [addr,addr+slot)만 쓰고 gap(제어/삽입)은 손대지 않아 자동 보존
+→ 신규 빌드로직 0. ⚠ 한국어 조사(을/를·이/가)는 삽입 단어 받침 의존 → 번역 시 (을)를 표기 권장
+(런타임 조사 훅은 별도 과제). ⚠ 어순차로 특정 조각 슬롯 초과 가능 → 조각별 byte counter 필수.
