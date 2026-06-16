@@ -5970,6 +5970,68 @@ def patch_common_nintendo_presents_bg(rom):
     return len(out) // 32
 
 
+def patch_part2_strategic_map_mode4_labels(rom):
+    """Mode4 풀스크린 전략지도(0xC2FD70+0xC30EE8)의 영어 필기체 지명 한글화.
+
+    이 두 블록은 LZ77 해제 후 EWRAM→DMA로 Mode4 프레임버퍼(VRAM 0x06000000 상단 /
+    0x06004B00 하단, 각 240×80=0x4B00)에 그대로 들어가 화면 표시된다(fresh-run SWI 로그
+    temp/auto_fresh_p2/mgbah.stderr.log:7800~7806 확인). 타일 간접이 없어 오프라인 렌더
+    (팔레트 0xC2FC90)가 인게임 픽셀과 동일 → 오프라인 검증=인게임 검증.
+
+    실측 라벨(원본): 좌상 회색오벌 'Red star Palace'(파랑잉크 idx16), 중앙 적색구조
+    'Factory'(암적잉크 idx24), 중앙하단 회색오벌 'Cosmo earth Palace'(암잉크 idx4).
+    ⚠ codex_bgblocks의 'Blue moon Palace'·half-B Factory 좌표는 원본 픽셀 검증 결과
+    phantom(실제 텍스트 없음)이라 제외 — 거기 한글을 넣으면 빈 영역에 가짜 라벨이 됨.
+    상단 작은 해양 라벨 1건은 필기체 판독 불가(Cayo/Cargo?)라 미번역 유지(오역 회피).
+
+    'Cosmo earth'=녹색 국가이므로 배너/범례/proper_nouns와 동일하게 '그린어스'로 통일(명사
+    일관, /goal #3). 각 박스를 오벌/구조 bg색으로 wipe 후 galmuri7 정본 한글을 원본 잉크색
+    으로 렌더. 각 반쪽 재압축 len≤consumed 검증.
+    """
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    W = 240
+    dA = lz77_decompress(rom, 0xC2FD70); A = bytearray(dA[0]); cA = dA[1]
+    dB = lz77_decompress(rom, 0xC30EE8); B = bytearray(dB[0]); cB = dB[1]
+    g7 = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))[0]
+
+    def paint(buf, x0, y0, x1, y1, lines, bg, ink):
+        for y in range(y0, y1):
+            for x in range(x0, x1):
+                buf[y * W + x] = bg
+        n = len(lines); lh = (y1 - y0) // n
+        for li, ln in enumerate(lines):
+            ws = [(glyph_grid(g7[ord(c)])[1] if ord(c) in g7 else 5) for c in ln]
+            tot = sum(ws) + len(ln) - 1
+            cx = x0 + max(0, ((x1 - x0) - tot) // 2)
+            gh = max((glyph_grid(g7[ord(c)])[2] if ord(c) in g7 else 7) for c in ln)
+            cy = y0 + li * lh + max(0, (lh - gh) // 2)
+            for ch in ln:
+                gobj = g7.get(ord(ch))
+                if gobj is None:
+                    cx += 5
+                    continue
+                gg, w, h, xo, yo = glyph_grid(gobj)
+                for yy in range(h):
+                    for xx in range(w):
+                        if gg[yy][xx] and 0 <= cx + xx < W and 0 <= cy + yy + (gh - h) < len(buf) // W:
+                            buf[(cy + yy + (gh - h)) * W + cx + xx] = ink
+                cx += w + 1
+
+    paint(A, 42, 18, 100, 34, ['레드스타', '궁전'], 2, 16)     # Red star Palace (회색오벌/파랑)
+    paint(A, 112, 35, 153, 47, ['공장'], 17, 24)               # Factory (적색구조/암적)
+    paint(B, 113, 22, 163, 40, ['그린어스', '궁전'], 2, 4)     # Cosmo earth Palace (회색오벌/암)
+    compA = lz77_compress_optimal(bytes(A), vram_safe=True)
+    compB = lz77_compress_optimal(bytes(B), vram_safe=True)
+    if len(compA) > cA or len(compB) > cB:
+        raise AssertionError(f'strategic map mode4 recompress too big: A {len(compA)}/{cA} B {len(compB)}/{cB}')
+    rom[0xC2FD70:0xC2FD70 + len(compA)] = compA
+    rom[0xC30EE8:0xC30EE8 + len(compB)] = compB
+    return 3
+
+
 def patch_part2_operation_select_country_bg(rom):
     """작전/전투선택 BG(0xBF66F0)의 영어 국가명 배너를 한글로 교체.
 
@@ -9893,13 +9955,11 @@ def main():
     st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
     st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
     st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
-    # NOTE(2026-06-16, codex 리뷰 반영): patch_part2_strategic_overmap_labels(0xC2FD70/0xC30EE8) REMOVED.
-    # 정정: 그 블록은 **표시되는** Mode4 풀스크린 전략지도다(SWI LZ77→EWRAM→DMA 0x06000000/0x06004B00
-    # = Mode4 fb 상/하단, fresh-run 로그 확인). 단 직전 패치가 깨끗하지 않았음 — codex_bgblocks 좌표가
-    # 부분 오류(원본에 없는 'Blue moon Palace' 위치에 phantom 라벨, 중앙 Factory 미반영, 선두 필기체 잔존).
-    # 라벨집합·국가명 정본('Cosmo earth'=그린어스/코스모랜드?) 모호 → 자동 완성 시 phantom/명사불일치(#3)
-    # 리스크. 사용자 게임지식 입력 후 정확 한글화하기로 하고 일단 제거(scope exception, research.md 참조).
-    # 이건 step073 Mode0 대륙 오버맵(BG3 charBase0x8000, 소스 0xC34E10)과는 별개 화면임.
+    # Mode4 풀스크린 전략지도(0xC2FD70/0xC30EE8) 영어 지명 한글화. 표시 확정(fresh-run SWI
+    # 로그: LZ77→EWRAM→DMA 0x06000000/0x06004B00 = Mode4 fb). 실측 라벨 3건만(레드스타 궁전/
+    # 공장/그린어스 궁전); codex의 'Blue moon Palace'·half-B Factory는 phantom이라 제외.
+    # step073 Mode0 대륙 오버맵(BG3 0xC34E10)은 별개 화면(타일 필기체, 추후).
+    st['part2_strategic_map_mode4_labels'] = patch_part2_strategic_map_mode4_labels(rom)
     st['common_nintendo_presents_bg'] = patch_common_nintendo_presents_bg(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part2_intro_blackhole_bg'] = patch_part2_intro_blackhole_bg(rom)

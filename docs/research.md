@@ -1135,13 +1135,13 @@ auto_playthrough(강화판)으로 캡처·검증(모두 한글 정상, 깨짐 �
   `0B`로 팔레트 0xC2FC90→복사, `11`(LZ77)로 0xC2FD70→EWRAM 0x02000000, **DMA 0x02000000→VRAM 0x06000000**(Mode4 fb 상단), 이어 0xC30EE8→0x02000000, **DMA→0x06004B00**(0x4B00=240×80=fb 하단). 즉 두 반쪽이 240×160 8bpp Mode4 프레임버퍼로 들어가 **화면에 그대로 표시**.
 - 따라서 오프라인 렌더(팔레트 0xC2FC90)는 타일 간접 없이 **인게임 픽셀과 동일**(`temp/smap_original.png`). 에뮬 네비 없이 오프라인 검증=인게임 검증.
 - 라벨(원본): 좌상 회색 오벌 `Red star Palace`(2행), 중앙 적색 구조 상단 `Factory`(1행), 중앙하단 회색 오벌 `Cosmo earth Palace`(2행), + 상단중앙/우하단 희미한 소형 라벨. (필기체 청/암색)
-- ⚠ codex_bgblocks.md의 박스 좌표는 부분 오류: `Blue moon Palace`(116-174,55-78)는 **원본에 실제 텍스트 없음**(빈 암색 오벌) — 시험패치 v2가 거기에 phantom `블루문 궁전`을 그렸음. 중앙 `Factory`는 codex 미열거. → 좌표 신뢰 불가.
-- **현 상태: 패치 revert 유지**(`patch_part2_strategic_overmap_labels` 제거). 사유: 직전 패치는 phantom 라벨/오배치 Factory/선두 필기체 잔존으로 **깨끗하지 않음**. 라벨 집합·국가명 정본(특히 "Cosmo earth"=그린어스? 코스모랜드?)이 모호해 자동 완성 시 phantom/명사 불일치(#3) 리스크. **사용자 게임지식 입력 후 정확 한글화 권장** → scope exception(장식 전략지도 라벨).
+- ⚠ codex_bgblocks.md의 박스 좌표는 **부분 오류**(원본 픽셀 재검증): `Blue moon Palace`(116-174,55-78)는 **원본에 실제 텍스트 없음**(빈 암색 오벌); half-B `Factory` 2건(176-212,21-40 / 53-105,59-78)도 **미존재**(지형/해안선뿐). 중앙 적색구조 `Factory`는 codex 미열거. 상단 작은 해양 라벨 1건(필기체 'Cayo/Cargo?')은 판독 불가. → codex 좌표 신뢰 불가, 원본 픽셀 zoom으로 직접 enumerate.
+- **현 상태: 한글화 완료(`patch_part2_strategic_map_mode4_labels`, 사용자 승인 2026-06-16)**. 실측 라벨 3건만: 좌상 회색오벌 'Red star Palace'→**레드스타 궁전**(파랑 idx16), 중앙 적색구조 'Factory'→**공장**(암적 idx24), 중앙하단 회색오벌 'Cosmo earth Palace'→**그린어스 궁전**(암 idx4). 'Cosmo earth'=녹색국가라 배너/범례와 동일 **그린어스**로 통일(#3). phantom/미존재 라벨은 제외(빈 영역에 가짜 라벨 방지). 상단 해양 소형 라벨은 판독불가로 미번역 유지. 오프라인 렌더=인게임(`temp/smap_built_verify.png`). 재압축 A 4249/4471·B 3996/4161 OK.
 
 **(B) Mode0 타일 오버맵 = step073/프레임049-050 대륙 지도** — (A)와 **다른 화면**.
 - DISPCNT=0x1B40 Mode0. 대륙지도=BG3(charBase 0x8000, screenBase 0xE800), charBase0 타일 소스 ROM **0xC34E10**(LZ77 decomp 19200B). "작전" 한글 오버레이=BG1. (`temp/over_bg3.png`)
 - 필기체 영어 지명(Red star Palace/Factory/Cosmo earth Palace/Yellow Comet/Cable·Battle Factory 등 ~10) = 손그림 지도에 박힌 6px 안티에일리어스 **장식 아트**. 깨짐 아님(원본 그대로 정상 출력). 좁아 강제 한글화 시 깨짐 유발 → scope exception.
 
-**결론**: (A)(B) 모두 「비트맵 깨짐」(번역 한글 글리프 손상)은 아니고, **미번역 장식 전략지도 라벨**(명시적 scope exception). 정확 한글화는 사용자 국가명 정본 + 라벨 확정 입력 필요(자동 추정 시 phantom/#3 위반 리스크).
+**결론**: (A) Mode4 풀스크린 전략지도 = **한글화 완료**(레드스타 궁전/공장/그린어스 궁전). (B) Mode0 대륙 오버맵의 타일 기반 6px 필기체 지명 = 아직 미번역(타일 그래픽 0xC34E10에서 라벨 타일 식별→재페인트 필요, 더 어려움). 둘 다 원래 「비트맵 깨짐」(한글 글리프 손상)은 아니었음.
 
 **0xBF66F0 배너(작전/통신 화면 국가명) 한글화 확정·KEEP**: 원본 0xBF66F0 비공백 타일 312/312(100%)가 인게임 배너 VRAM(step057_A)과 verbatim 일치 → 표시 블록 확정. `patch_part2_operation_select_country_bg`로 레드스타/블루문/그린어스/코멧/옐로 한글화. (이건 깔끔히 완료된 별개 화면)
