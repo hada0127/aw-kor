@@ -35,6 +35,9 @@
 - [x] iter13: **전체 의미 audit 6997행 완료** — 3청크 LLM 판정 + adjacent-aware verify-fix → 확정 ~72행 수정(반전/오역/정렬오류/관용구/누락/조사). 전 게이트 PASS.
 - [x] iter14: **codex 독립 리뷰로 의미 audit 검증** — 표본 31행 정상 확인, 과교정 2(잃지 않았다 중복·시야 잘림)+주체 1 정정. 의미 audit 3자 리뷰 완료(~75행 수정).
 - [ ] iter: **/goal #1 fresh-boot 화면 매트릭스** — 전투/결과/저장/상점/엔딩. 진행 SRAM seed 생성(엔딩 도달). 비교 시트 claude/codex 리뷰.
+- [x] iter15: **자동진행 도구 `auto_playthrough.py` 구축**(사용자 선택). 콜드부트 BG-신뢰 캡처로 캠페인 월드맵=한글(블루문) 확정. **영어 잔존 BG 2종 발견**(전략 오버맵 필기체 Red star Palace 등, 작전선택 BG RED STAR/BLUE MOON) — 과거 stale 기각이 실잔존을 가림.
+- [ ] iter16: 영어 잔존 BG 2종 LZ77 한글화 — 블록 식별→디코드→재작도→재압축(comp≤). codex 블록탐색 의뢰.
+- [ ] iter: 자동진행 결과/엔딩 화면 도달(near-victory 또는 정책 개선) + 전체 필름스트립 codex 리뷰.
 - [ ] iter: dist 배포 최종(Phase F) — 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
 - [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
