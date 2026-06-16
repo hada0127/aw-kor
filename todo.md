@@ -22,7 +22,9 @@
 - [x] **iter1: 비교 시트 backbone** `tools/build_comparison_sheet.py` + `data/screen_checkpoints.json`. fresh-boot ground truth(닌텐도 제공/타이틀/선택) 원본 대비 정상 확인.
 - [x] **iter2: codex 리뷰 반영(1차)** — 비교 시트 도구 결함 수정(panel 종횡비/기본 fresh/orig_state 가드/provenance). **명사 통일 hard gate `qa_terms_from_rom.py` 신설 + 72행 통일**(료우→료, 휩/호이프→휘프, 마크로랜드→매크로랜드, 옐로 코멧/그린 어스→붙임). 게이트 PASS, overflow 0.
 - [x] **iter3: 띄어쓰기 결정적 수정** — `qa_spacing_from_rom.py` 신설. `_fit_variants` 재배열(반각공백을 축약보다 우선) → GRAMMAR 49→5, ABBREV 226→27. 中점/이중공백 collapse → DOUBLE 24→0. byte-identical 다수 유지, integrity/terms PASS. **README 번역가 가이드**(서브에이전트) + Pillow 의존성.
-- [⏳] iter4: 재번역 워크플로(JAMMED 142+ABBREV 27+GRAMMAR 5=169행) — 슬롯에 맞는 자연스러운 재번역 생성+검증 → ADDRESS_TEXT_OVERRIDES 적용 → JAMMED 0 목표 (진행중 wf_5d353c8d)
+- [x] iter4: 재번역 워크플로 1차(169행, 186에이전트) → byte-fit 통과 110행 적용. JAMMED 142→37, ABBREV 226→5, GRAMMAR 49→3, DOUBLE 0. gate JAMMED 오탐(명사통일) 수정.
+- [⏳] iter5: 재번역 2차(잔여 42행, 빠듯한 슬롯 + 1차 반려 힌트, wf_18b3d4cb) → JAMMED 0 목표. codex+agy 띄어쓰기 리뷰 진행중.
+- [ ] iter: 전각/반각 공백 렌더 폭 일관성 **실측 확정**(fresh 대사 화면 캡처). 대사 렌더가 per-char 고정폭(monospace)이면 동일 — 검증 필요.
 - [ ] iter: agy 리뷰(짧은 프롬프트) + codex 잔여 — dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 커버리지 확대
 - [ ] iter: 반각/전각 공백 렌더 폭 일관성 확인(1295행 반각 vs 17753행 전각 — 동일폭 여부 fresh 캡처 검증)
 - [ ] iter: 의미 변경 0 — JA 원문 ↔ KO 슬롯 디코드 의미 대조(축약으로 뜻 바뀐 행 색출)
