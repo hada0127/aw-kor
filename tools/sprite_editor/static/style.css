@@ -46,3 +46,8 @@ main { display: flex; height: calc(100vh - 46px); }
 
 /* 허브 임베드: 헤더 일부 정리(섹션은 허브가 제어) */
 html.embed header { padding-top: 4px; }
+
+/* 실제 화면 형태 미리보기 */
+#onscreenwrap { margin-top: 10px; padding: 8px; background: #14141a; border: 1px solid #2a2a36; border-radius: 6px; }
+#onscreenwrap .oslbl { font-size: 12px; color: #9bd; margin-bottom: 6px; }
+#onscreen { image-rendering: pixelated; background: #222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="8" height="8" fill="%23333"/><rect x="8" y="8" width="8" height="8" fill="%23333"/></svg>'); max-width: 100%; border: 1px solid #333; }

@@ -174,6 +174,74 @@ def encode_indices(grid, w, h):
 
 
 PALLIB_PATH = ROOT / "data" / "sprite_palettes.json"
+LAYOUTS_PATH = ROOT / "data" / "sprite_layouts.json"
+_LAYOUTS = None
+
+
+def load_layouts():
+    global _LAYOUTS
+    if _LAYOUTS is None:
+        _LAYOUTS = load_json(LAYOUTS_PATH, {"layouts": {}, "pal_by_screen": {}}) or {"layouts": {}, "pal_by_screen": {}}
+    return _LAYOUTS
+
+
+def current_tiles(sp):
+    """스프라이트의 현재 타일 바이트(편집본 우선→패치 ROM 디코드). 4bpp, 32B/타일."""
+    ov = load_json(OVERRIDES_PATH, {}) or {}
+    rec = ov.get(sp.get("id"))
+    if rec and rec.get("indices"):
+        grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
+        return encode_indices(grid, w, h)
+    dec = decode_from_rom(patched_bytes(), sp)
+    if dec is None:
+        return b""
+    grid, w, h, _ = dec
+    return encode_indices(grid, w, h)
+
+
+def render_onscreen_png(sid):
+    """레이아웃(OAM 셀)+현재 타일+캡처 팔레트로 실제 화면 형태 재조립 PNG. 없으면 None."""
+    import struct as _s
+    lay = load_layouts().get("layouts", {}).get(sid)
+    sp = sprite_by_id(sid)
+    if not lay or sp is None:
+        return None
+    tiles = current_tiles(sp)
+    if not tiles:
+        return None
+    palp = load_layouts().get("pal_by_screen", {}).get(lay["screen"])
+    palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
+    def col(i):
+        v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
+        return ((v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31)
+    def spx(t, x, y):
+        o = t * 32 + y * 4 + x // 2
+        if o >= len(tiles):
+            return 0
+        b = tiles[o]
+        return (b & 0xF) if x % 2 == 0 else (b >> 4) & 0xF
+    from PIL import Image
+    obj1d = lay.get("obj1d", 1)
+    im = Image.new("RGBA", (max(1, lay["w"]), max(1, lay["h"])), (0, 0, 0, 0))
+    px = im.load()
+    for c in lay["cells"]:
+        for ty in range(c["th"]):
+            for tx in range(c["tw"]):
+                t = c["tile_off"] + (ty * c["tw"] + tx if obj1d else ty * 32 + tx)
+                for yy in range(8):
+                    for xx in range(8):
+                        idx = spx(t, 7 - xx if c["fh"] else xx, 7 - yy if c["fv"] else yy)
+                        if idx == 0:
+                            continue
+                        sx = c["x"] - lay["x0"] + (c["tw"] - 1 - tx if c["fh"] else tx) * 8 + xx
+                        sy = c["y"] - lay["y0"] + (c["th"] - 1 - ty if c["fv"] else ty) * 8 + yy
+                        if 0 <= sx < im.width and 0 <= sy < im.height:
+                            r, g, b = col(256 + c["bank"] * 16 + idx)
+                            px[sx, sy] = (r, g, b, 255)
+    import io as _io
+    buf = _io.BytesIO()
+    im.resize((im.width * 3, im.height * 3), Image.NEAREST).save(buf, "PNG")
+    return buf.getvalue()
 
 
 def palette_library():
@@ -350,6 +418,15 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._compare(q))
         if u.path == "/api/palettes":
             return self._send(200, {"palettes": palette_library()})
+        if u.path == "/api/onscreen":
+            sid = q.get("id", [""])[0]
+            try:
+                data = render_onscreen_png(sid)
+            except Exception as e:
+                return self._send(500, {"error": "onscreen: %r" % e})
+            if not data:
+                return self._send(404, {"error": "no onscreen layout for %s" % sid})
+            return self._send(200, data, "image/png")
         return self._send(404, {"error": "not found"})
 
     def _compare(self, q):
@@ -422,20 +499,21 @@ class Handler(BaseHTTPRequestHandler):
         ov = load_json(OVERRIDES_PATH, {}) or {}
         rec = ov.get(sid)
         desc = classify_sprite(sp.get("source"))[1]
+        has_os = sid in load_layouts().get("layouts", {})
         if rec and rec.get("indices"):
             grid = rec["indices"]
             h = len(grid); w = len(grid[0]) if grid else 0
             return {"ok": True, "id": sid, "width": w, "height": h,
                     "tile_cols": w // 8, "type": sp.get("type"),
                     "palette": palette_for(sp), "indices": grid, "edited": True,
-                    "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc}
+                    "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc, "has_onscreen": has_os}
         dec = decode_indices(sp)
         if dec is None:
             return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
         grid, w, h, cols = dec
         return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": cols,
                 "type": sp.get("type"), "palette": palette_for(sp), "indices": grid,
-                "edited": False, "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc}
+                "edited": False, "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc, "has_onscreen": has_os}
 
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)

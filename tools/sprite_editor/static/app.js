@@ -43,7 +43,15 @@ async function selectSprite(id) {
   $("#info").textContent = `${t.desc || id} · ${t.type} ${t.width}×${t.height} · ${t.offset || ""} ${t.edited ? "(편집본)" : ""}`;
   $("#save").disabled = true; $("#revert").disabled = !t.edited;
   $("#compare").disabled = false;
+  refreshOnscreen(t.has_onscreen);
   drawPalette(); draw();
+}
+function refreshOnscreen(has) {
+  const wrap = $("#onscreenwrap");
+  if (has && S.id) {
+    $("#onscreen").src = `/api/onscreen?id=${encodeURIComponent(S.id)}&t=${Date.now()}`;
+    wrap.hidden = false;
+  } else { wrap.hidden = true; }
 }
 
 async function showCompare() {
@@ -140,7 +148,7 @@ function wire() {
   $("#save").onclick = async () => {
     if (!S.id) return;
     const r = await jpost("/api/save", { id: S.id, indices: S.indices, palette: S.palette });
-    if (r.ok) { setStatus(`저장됨 ${S.id} (raw ${r.raw_len}B / 원본 ${r.orig_size}B, fits=${r.fits_raw})`); S.dirty = false; $("#save").disabled = true; $("#revert").disabled = false; loadList(); }
+    if (r.ok) { setStatus(`저장됨 ${S.id} (raw ${r.raw_len}B / 원본 ${r.orig_size}B, fits=${r.fits_raw})`); S.dirty = false; $("#save").disabled = true; $("#revert").disabled = false; loadList(); refreshOnscreen(!$("#onscreenwrap").hidden); }
     else setStatus("오류: " + r.error);
   };
   $("#revert").onclick = async () => {
