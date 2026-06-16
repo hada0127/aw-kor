@@ -38,6 +38,12 @@
       "note": "Part2 타이틀"
     },
     {
+      "name": "07_part2_main_menu",
+      "mode": "fresh",
+      "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120], ["press", "A", 240], ["press", "START", 240], ["press", "A", 240], ["press", "A", 240]],
+      "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+    },
+    {
       "name": "20_mode_select_menu",
       "mode": "savestate",
       "state": "temp/final_original_vs_final_20260615/final_menu.ss0",

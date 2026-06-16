@@ -26,7 +26,10 @@
 - [x] iter5: 재번역 2차+수동 → **띄어쓰기 결함 0 달성**(JAMMED/ABBREV/GRAMMAR/DOUBLE 0). encode_fit 비용기반 재설계(codex: 공백제거 최후수단). 의미검사 `qa_meaning_from_rom` 신설(숫자드리프트 21·부정 WARN).
 - [x] iter6: 숫자드리프트 복원 → **qa_meaning NUMBER 0**. 이중권위(script 인라인 리터럴이 import 덮음) 해결, qa_meaning 정밀화(인접슬롯/もう１/노이즈). agy 실리뷰 hang 확인→claude+codex로 운용.
 - [ ] iter7: **전체 의미 audit**(JA↔KO 전수 LLM 판정) — 숫자/부정 외 오역·의미축소·뉘앙스 색출 워크플로(대규모)
-- [ ] iter8: **/goal #1 비트맵 깨짐** — fresh-boot 전화면 매트릭스 + 깨짐 패치도구. 글리프 슬롯 repurpose 재참조 QA.
+- [x] iter7: 글리프 데이터 clean 확인(render_glyph_sheet, 2350음절 깨짐 0). **fresh-boot Part2 메뉴에서 /goal #1 실결함 발견**: CO 인사말 A3 렌더러 다수 음절 `?` fallback. 증거+research 기록, codex 심층분석 의뢰.
+- [⏳] iter8: **A3 렌더러 `?` 수정**(codex_a3 분석 반영) — glyph-cache/hook 범위 수정 or per-char 타일 전환. 프롤로그 등 동일 경로 확인.
+- [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
+- [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
 - [ ] iter: 전체 의미 audit(JA↔KO 전수) — 숫자/부정 외 오역·의미축소 LLM 판정 워크플로
 - [ ] iter: 전각/반각 공백 폭 실측(within-line 항상 일관, cross-line만 위험) — 비주얼 매트릭스와 함께
 - [ ] iter: agy 리뷰 반영 + codex 잔여(dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 확대, qa_text_fit ROM디코드화)
