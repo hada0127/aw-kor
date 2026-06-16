@@ -9253,6 +9253,9 @@ PART1_YESNO_HANDLER_EXPECT = 0x08B18D41
 PART1_NAME_TRIM_SITE = 0xB11298
 PART1_NAME_TRIM_EXPECT = bytes.fromhex('031c002118780028')
 
+PART2_HOOK_A3_TABLE_START_OFF = 0x88
+PART2_HOOK_A3_TABLE_END_OFF = 0x8C
+
 PART1_NAME_TRIM_HOOK = bytes.fromhex(
     '031c00211878002806d0881c0006010e581800780028f8d1002910d0'
     '881e0006010e5a181078812802d08f2804d006e050784028f0d002e0'
@@ -9330,7 +9333,7 @@ PART2_HOOK_A3 = bytes.fromhex(
     '40880000'  # min Korean reserved SJIS: 0x8840
     '69930000'  # max Korean reserved SJIS: 0x9369
     '0000f208'  # relocated table start: 0x08F20000
-    'b424f208'  # relocated table end: 0x08F224B4
+    '00000000'  # relocated table end: patched after new_tbl is built
     'ff7f0000'  # strip bit15 marker
     '0000f008'  # KOR_BASE_RT
     '00000006'  # VRAM base 0x06000000
@@ -9484,6 +9487,8 @@ def main():
     rom[P.NEW_TBL_FILE:P.NEW_TBL_FILE + len(new_tbl)] = new_tbl
     P.patch_word(rom, P.LIT_TBL_START, P.NEW_TBL_RT)
     P.patch_word(rom, P.LIT_TBL_END, P.NEW_TBL_RT + len(new_tbl))
+    struct.pack_into('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_TABLE_START_OFF, P.NEW_TBL_RT)
+    struct.pack_into('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_TABLE_END_OFF, P.NEW_TBL_RT + len(new_tbl))
 
     # 2편/tilemap 계열도 같은 relocated table을 보게 한다. 이 루틴들은 table idx를
     # BG tilemap에 직접 쓰므로 write-site hook이 bit15 Korean marker를 VRAM tile id로 변환한다.

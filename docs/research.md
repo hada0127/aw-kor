@@ -1075,9 +1075,6 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 ## 2026-06-16 — Part 2 모드선택 메뉴 CO 인사말 "?" 잔존 (A3 렌더러)
 
 - **증상**: fresh-boot Part 2 메인 메뉴(캠페인/도전/자유전 + 여성 CO)의 하단 인사말이 `???? ??부? ?래??니다`로, 한글 음절 다수가 `?`(0x8148 fallback)로 렌더. 증거: `docs/screenshots/ISSUE_part2_menu_greeting_question_marks_2026-06-16.png`.
-- **확정 사실**:
-  - 텍스트는 한글로 번역·인코딩됨(예약코드). `부/래/니/다`가 A3 hook으로 정상 렌더되는 것이 증거(미번역 일본어였다면 가나가 보였을 것).
-  - 실패/성공 음절의 예약코드는 범위가 겹침(간 0x8842 ~ 탁 0x91C3, 니 0x89D4 성공). 단순 코드 범위 제한 아님.
-  - 같은 음절(오/입/만 등)이 **메인 대사 렌더러(TOP/BOT hook)에서는 정상** → 공유 테이블(0x08B80B7C 확장 2350)은 완전. 따라서 **A3 렌더러(0x08A3C7E4, IWRAM 0x03006080) 고유의 버그**.
-  - A3 hook(`PART2_HOOK_A3`)은 설치됨(build 9455/9498). glyph-cache(E2..E9=8타일=약 4글자) 기반 렌더러로, 긴 인사말이 캐시를 초과해 다수 음절이 fallback `?`로 추정(yes/no hook이 정확히 4글자 캐시를 쓰는 것과 일치). 정밀 원인은 런타임 트레이스 필요.
-- **다음**: A3 렌더러 per-glyph 경로를 mgbah 브레이크포인트로 트레이스해 fallback 진입 조건 확인 → glyph-cache 확장 또는 per-char 고유 VRAM 타일 복사로 전환(메인 대사 경로처럼). codex 심층 분석 의뢰함.
+- **확정 원인**: A3 hook(`PART2_HOOK_A3`)의 relocated table end literal이 `0x08F224B4`로 하드코딩되어 있었지만, 실제 2350자 확장 테이블 끝은 `0x08F243A4`다. 원본 536엔트리 뒤 한글 2350엔트리를 붙인 전체 길이는 `0x43A4`이며, 구 literal은 정렬된 한글 엔트리 앞 1030자(`가`..`빚`)만 검색했다. 그래서 `부/래/니/다/만/기/려`는 처리되고 `어/서/오/시/십/입/잠/주`는 검색 실패 → 원본 `0x8148` fallback으로 빠졌다.
+- **캐시 검증**: A3 원본의 `0x0852F960` linked glyph table miss가 fallback 출처지만, 한글 성공 경로는 이 캐시를 쓰지 않고 `KOR_BASE`에서 `r5`가 가리키는 VRAM 2타일로 직접 복사 후 epilogue(`0x030061C1`)로 복귀한다. 따라서 긴 문자열 캐시 초과/충돌이 아니라 A3 hook의 table-end literal 오류다.
+- **수정**: `tools/build_korean_full.py`에서 A3 hook table-end literal을 placeholder로 두고, `new_tbl` 생성 직후 `P.NEW_TBL_RT + len(new_tbl)`를 `PART2_HOOK_A3_FILE + 0x8C`에 패치한다. 현재 산출 ROM 기준 `0xF3030C = A4 43 F2 08`(`0x08F243A4`). fresh capture `temp/a3_fix_visual_20260616/sheet.png`의 `07_part2_main_menu`에서 하단 문구 `캠페인을 처음부터 플레이합니다` 정상 표시 확인.
