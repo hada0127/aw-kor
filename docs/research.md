@@ -1079,9 +1079,10 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 - **캐시 검증**: A3 원본의 `0x0852F960` linked glyph table miss가 fallback 출처지만, 한글 성공 경로는 이 캐시를 쓰지 않고 `KOR_BASE`에서 `r5`가 가리키는 VRAM 2타일로 직접 복사 후 epilogue(`0x030061C1`)로 복귀한다. 따라서 긴 문자열 캐시 초과/충돌이 아니라 A3 hook의 table-end literal 오류다.
 - **수정**: `tools/build_korean_full.py`에서 A3 hook table-end literal을 placeholder로 두고, `new_tbl` 생성 직후 `P.NEW_TBL_RT + len(new_tbl)`를 `PART2_HOOK_A3_FILE + 0x8C`에 패치한다. 현재 산출 ROM 기준 `0xF3030C = A4 43 F2 08`(`0x08F243A4`). fresh capture `temp/a3_fix_visual_20260616/sheet.png`의 `07_part2_main_menu`에서 하단 문구 `캠페인을 처음부터 플레이합니다` 정상 표시 확인.
 
-## 2026-06-16 — A3 렌더러 전각공백 폭 불일치 (후속)
+## 2026-06-16 — A3 전각공백 폭: 오진(이미 1칸 정상) — 픽셀 실측 교훈
 
-- A3 `?` 해결 후, A3가 그리는 모드선택 메뉴/옵션 설명문(0xA2C000~0xA2D200, 104행)의 전각공백(0x8140)이 2칸(16px)으로 렌더돼 단어 간격이 이중공백처럼 넓다. per-char 대사 렌더러는 같은 전각공백을 1칸으로 렌더 → 렌더러 간 불일치.
-- 원인: `PART2_HOOK_A3_SPACE`는 ASCII 공백(0x20)만 1칸 전진 처리. 전각공백 0x8140은 원본 char 경로(2칸)로 감.
-- 수정 방향: A3 파서의 0x8140을 ASCII 공백과 동일하게 1칸 전진(데이터 무변경, 전각공백 유지). codex 의뢰(review_a3space.md).
-- 증거: temp/a3verify/cmp_dlg.png(원본 무공백 vs 패치 이중간격).
+- **결론: A3 전각공백은 이미 1칸(약 9px)으로 정상 렌더된다. "이중공백처럼 넓다"는 초기 진단은 NEAREST 3x 확대 + 무공백 일본어 원본과의 대비에서 온 시각 착시였다.**
+- **픽셀 실측**(`07_part2_main_menu` `캠페인을 처음부터 플레이합니다` 하단 텍스트, y148~158, 흰픽셀 열 분석): 단어 간 gap = **9px (= 1칸 8px + 1)**. `?` 수정만 적용된 ROM과 codex 전각공백 hook 적용 ROM의 gap이 `[59,9,9,54]`로 **완전 동일** → hook은 no-op.
+- 따라서 codex가 추가한 `PART2_HOOK_A3_ZENKAKU_SPACE`(0x08314332 trampoline)는 효과 0이고 비정렬 파서 패치 crash 표면만 늘려 **revert**했다. 출하 ROM은 `?` 테이블-end 수정만 유지(SHA `6a14a710...`).
+- **교훈**: 띄어쓰기 폭 결함은 **확대 육안이 아니라 흰픽셀 열 gap 픽셀 실측**으로 판정한다. 렌더러 간 폭 일치 확인도 동일 방식.
+- (참고 RE, 유효) A3 파서 `0x0831424C`: 첫 바이트 `0x09..0x33`만 1차 jump-table(`0x08314270`)로. `0x20`=엔트리 `0x0831431C`(기존 hook 1칸). `0x8140`의 `0x81`은 `0x08314332: cmp r0,#0x77; bhi 0x083147F4`로 일반 2바이트 문자 경로. 단, 그 경로의 실제 advance는 1칸(실측 9px)이라 별도 수정 불요.
