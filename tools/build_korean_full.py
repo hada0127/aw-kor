@@ -9044,6 +9044,7 @@ ADDRESS_TEXT_OVERRIDES.update({
 ADDRESS_TEXT_OVERRIDES.update({
     # 의미 드리프트(숫자 누락) 복원(2026-06-16, wf_80f24953 + 수동): 게임 수치 보존.
     0xE0F70D: '내가 눈치 못 챈 줄 알았냐!',  # 부정의미 audit
+    0xA2A4D4: '기계광 활기찬 소년',  # CO프로필 元気な 복원
     0xA1DE61: '같을 때도 있는 법.',  # 의미 audit c12 manual
     0xA1F6D2: '파이프 너머 이음매 노릴 수 있어',  # 의미 audit c12 manual
     0xA20256: '적에게 안 뺏기게',  # 의미 audit c12 manual
