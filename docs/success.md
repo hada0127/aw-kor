@@ -814,3 +814,13 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - **신규 게이트 `qa_meaning_from_rom.py`**(codex: LLM 자기검증 백스톱): 출하 KO↔원문 JA 대조. NUMBER(JA 숫자가 KO에 누락+고유어 대체도 없음, 고유어 인식으로 오탐 103→21) / NEGATION(부정 극성 불일치 WARN). 실드리프트 색출: 이동력3→느리지만, CO파워8 누락, 승리조건 3개 누락, 10HP→최대 등 21행.
 - 검증 권위 3종 모두 PASS: `qa_integrity_map`(바이트) / `qa_terms_from_rom`(명사 0) / `qa_spacing_from_rom`(0/0/0/0). overflow 0, no_ko 0.
 - 잔여: 숫자드리프트 21행 재번역(워크플로 진행), 전각/반각 공백 폭 실측, 부정 극성 정밀화, 전체 의미 audit.
+
+## 2026-06-16 — 의미 숫자드리프트 0 + 이중권위(인라인 리터럴) 문제 해결
+
+`qa_meaning_from_rom` NUMBER 0 달성. codex 지적한 "CSV vs 인라인 리터럴 이중권위" 실증·해결.
+
+- 워크플로(wf_80f24953, 24에이전트) + 수동으로 숫자누락 21행 판정·복원. 검증이 원문에 없는 내용 창작(블랙캐논 "격파 승리", "0이 되면 파괴")을 반려.
+- **이중권위 발견**: 일부 주소(0xA2B332 등 CO파워, 0xA348F0 블랙캐논, 0xD8FEFE 초기HP, 0xDC2CEE)는 `script:` 인라인 리터럴(직접패치 span 튜플)이 import-csv를 **나중에 덮어**(last-writer-wins) `ADDRESS_TEXT_OVERRIDES`가 무효. → 해당 리터럴을 직접 수정해야 함(Hawke 회복/피해 1·2, Sturm 메테오 8, 블랙캐논 3개, 초기 체력 10, 남은 두 메뉴). dead override 정리.
+- **qa_meaning 정밀화**: 인접 슬롯 숫자 인식(다행 대사 "0이 되면"이 다음 줄), もう１→또/다른, 자릿수 분해(234=2,3,4), 손상 구두점 노이즈 제외. 오탐 103→0.
+- 전 게이트 PASS: integrity / spacing(0/0/0/0) / terms(0) / meaning NUMBER(0). overflow 0, no_ko 0.
+- **도구 신뢰성 메모**: agy(Antigravity)는 trivial 프롬프트만 동작, 실질 리뷰 프롬프트엔 반복 hang. 3자 리뷰는 claude(본체/서브에이전트) + codex로 운용, agy는 짧은 개념 질문만.
