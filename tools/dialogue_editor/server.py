@@ -37,6 +37,16 @@ STATIC = Path(__file__).resolve().parent / "static"
 DIALOGUE_PATH = ROOT / "data" / "dialogue_map.json"
 DICT_PATH = ROOT / "data" / "proper_nouns.json"
 OVERRIDES_PATH = ROOT / "data" / "dialogue_overrides.json"
+GROUPS_PATH = ROOT / "data" / "dialogue_groups.json"
+_GROUPS_CACHE = None
+
+
+def load_groups():
+    """조립 그룹(대사 조각→인게임 메시지). 1회 로드 캐시(재생성: tools/build_dialogue_groups.py)."""
+    global _GROUPS_CACHE
+    if _GROUPS_CACHE is None:
+        _GROUPS_CACHE = load_json(GROUPS_PATH, {"groups": []})
+    return _GROUPS_CACHE
 
 sys.path.insert(0, str(ROOT / "tools"))
 try:
@@ -135,7 +145,39 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._check_all())
         if u.path.startswith("/preview/"):
             return self._serve_preview(u.path[len("/preview/"):])
+        if u.path == "/api/groups":
+            return self._send(200, self._groups(q))
         return self._send(404, {"error": "not found"})
+
+    def _groups(self, q):
+        """조립 그룹 목록. 섹션 필터 + 멤버별 live ko(overrides 우선). 인게임(주소) 순."""
+        gd = load_groups()
+        groups = gd.get("groups", [])
+        section = (q.get("section", [""])[0] or "").strip()
+        qstr = (q.get("q", [""])[0] or "").strip()
+        only_multi = (q.get("multi", [""])[0] or "") == "1"
+        SEC2REG = {"common": "other", "part1": "part1", "part2": "part2"}
+        want_reg = SEC2REG.get(section)
+        ov = load_json(OVERRIDES_PATH, {}) or {}
+        out = []
+        for g in groups:
+            if want_reg and g.get("region") != want_reg:
+                continue
+            if only_multi and g.get("size", 1) < 2:
+                continue
+            members = []
+            for m in g.get("members", []):
+                ko = ov.get(m.get("address"), m.get("ko") or "")
+                members.append({**m, "ko": ko})
+            if qstr and qstr not in (g.get("assembled_ja") or "") and \
+               all(qstr not in (m.get("ko") or "") for m in members):
+                continue
+            out.append({"group_id": g.get("group_id"), "region": g.get("region"),
+                        "size": g.get("size"), "flagged": g.get("flagged"),
+                        "assembled_ja": g.get("assembled_ja"), "segments": g.get("segments"),
+                        "members": members})
+        return {"meta": gd.get("meta", {}), "count": len(out),
+                "total": len(groups), "lines": out[:1500]}
 
     def _serve_preview(self, name):
         # temp/preview_cache 내 PNG만 제공(경로 탈출 방지)

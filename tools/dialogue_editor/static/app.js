@@ -9,8 +9,65 @@ const el = (t, props = {}, ...kids) => {
 const URLP = new URLSearchParams(location.search);
 const SECTION = URLP.get("section") || "all";
 const EMBED = URLP.get("embed") === "1";
-const state = { filter: "", region: "", q: "", dict: {}, section: SECTION };
+const state = { filter: "", region: "", q: "", dict: {}, section: SECTION, view: "group" };
 if (EMBED) document.documentElement.classList.add("embed");
+
+function byteLen(s) {
+  let n = 0;
+  for (const c of s) { const o = c.codePointAt(0); n += ((o >= 0xAC00 && o <= 0xD7A3) || c === "　") ? 2 : 1; }
+  return n;
+}
+function reload() { return state.view === "group" ? loadGroups() : loadDialogue(); }
+function showView(v) {
+  state.view = v;
+  document.querySelectorAll(".viewtoggle button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  $("#grouplist").hidden = v !== "group";
+  $("#linetable").hidden = v !== "line";
+  reload();
+}
+
+async function loadGroups() {
+  const p = new URLSearchParams({ q: state.q });
+  if (state.section && state.section !== "all") p.set("section", state.section);
+  const d = await jget("/api/groups?" + p);
+  setStatus(`${d.count} 조립그룹 / ${d.total}`);
+  const box = $("#grouplist"); box.textContent = "";
+  for (const g of d.lines) box.append(groupCard(g));
+}
+function groupCard(g) {
+  const memById = {}; for (const m of g.members) memById[m.address] = m;
+  const jaWrap = el("div", { className: "gja" });
+  const koWrap = el("div", { className: "gko" });
+  const inputs = [];
+  for (const s of g.segments) {
+    if (s.kind === "frag") {
+      const m = memById[s.address]; if (!m) continue;
+      jaWrap.append(el("span", { className: "jfrag", textContent: m.ja || "" }));
+      const ta = el("input", { className: "kfrag", value: m.ko || "" });
+      const cnt = el("span", { className: "bcnt" });
+      const upd = () => { const b = byteLen(ta.value); cnt.textContent = `${b}/${m.slot ?? "?"}`; cnt.classList.toggle("over", m.slot && b > m.slot); };
+      ta.oninput = upd; upd();
+      koWrap.append(el("span", { className: "kcell" }, ta, cnt));
+      inputs.push({ m, ta });
+    } else if (s.kind === "var") {
+      jaWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
+      koWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
+    } else if (s.kind === "newline") { jaWrap.append(el("br")); koWrap.append(el("br")); }
+  }
+  const save = el("button", { className: "gsave", textContent: "저장" });
+  save.onclick = async () => {
+    let ok = 0; for (const { m, ta } of inputs) { const r = await jpost("/api/line", { id: m.id, ko: ta.value }); if (r.ok) ok++; }
+    setStatus(`${g.group_id} 저장 ${ok}/${inputs.length}`);
+  };
+  const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처(첫 조각)" });
+  cap.onclick = () => { const m = g.members[0]; previewLine({ id: m.id, region: g.region }, m.ko, cap); };
+  const hd = el("div", { className: "ghd" }, el("b", { textContent: g.group_id }),
+    el("span", { className: "gmeta", textContent: `${g.region} · ${g.size}조각` }), save, cap);
+  if (g.flagged) hd.append(el("span", { className: "gflag", textContent: "⚠검토" }));
+  return el("div", { className: "gcard" + (g.flagged ? " flagged" : "") }, hd,
+    el("div", { className: "glbl", textContent: "원문(JA)" }), jaWrap,
+    el("div", { className: "glbl", textContent: "번역(KO) · ⟦변수⟧는 엔진이 채움(고정)" }), koWrap);
+}
 
 async function jget(u) { return (await fetch(u)).json(); }
 async function jpost(u, b) {
@@ -136,14 +193,15 @@ function switchTab(t) {
 }
 
 function wire() {
+  for (const b of document.querySelectorAll(".viewtoggle button")) b.onclick = () => showView(b.dataset.v);
   for (const b of document.querySelectorAll(".filters button"))
     b.onclick = () => {
       state.filter = b.dataset.f;
       document.querySelectorAll(".filters button").forEach(x => x.classList.toggle("on", x === b));
-      loadDialogue();
+      reload();
     };
-  $("#region").onchange = (e) => { state.region = e.target.value; loadDialogue(); };
-  let t; $("#q").oninput = (e) => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; loadDialogue(); }, 250); };
+  $("#region").onchange = (e) => { state.region = e.target.value; reload(); };
+  let t; $("#q").oninput = (e) => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; reload(); }, 250); };
   $("#checkAll").onclick = checkAll;
   for (const b of document.querySelectorAll(".tabs button")) b.onclick = () => switchTab(b.dataset.tab);
   $("#dadd").onclick = async () => {
@@ -157,4 +215,4 @@ function wire() {
 
 wire();
 loadDict();
-loadDialogue();
+showView("group");

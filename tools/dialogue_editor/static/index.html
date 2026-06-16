@@ -9,6 +9,10 @@
 <body>
 <header>
   <strong>AW 대사 편집기</strong>
+  <span class="viewtoggle">
+    <button data-v="group" class="on">조립 보기</button>
+    <button data-v="line">행 보기</button>
+  </span>
   <select id="region"><option value="">전체 지역</option></select>
   <input id="q" type="search" placeholder="원문/번역 검색…">
   <span class="filters">
@@ -23,7 +27,8 @@
 </header>
 <main>
   <section id="list">
-    <table>
+    <div id="grouplist"></div>
+    <table id="linetable" hidden>
       <thead><tr><th>id</th><th>주소</th><th>지역</th><th>원문 (JA)</th><th>번역 (KO)</th><th></th></tr></thead>
       <tbody id="rows"></tbody>
     </table>

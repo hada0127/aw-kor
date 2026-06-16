@@ -56,3 +56,24 @@ button.cap { margin-left: 4px; }
 
 /* 허브 임베드: 중복 region 선택 숨김(섹션은 허브가 제어) */
 html.embed #region { display: none; }
+
+/* 조립(그룹) 보기 */
+.viewtoggle { display: inline-flex; gap: 2px; }
+.viewtoggle button.on { background: #3a6ea5; color: #fff; }
+#grouplist { display: flex; flex-direction: column; gap: 10px; padding: 6px; }
+.gcard { border: 1px solid #d0d0d8; border-radius: 8px; padding: 8px 10px; background: #fff; }
+.gcard.flagged { border-color: #e0a040; background: #fffaf0; }
+.ghd { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.ghd b { font-size: 12px; color: #557; }
+.gmeta { font-size: 11px; color: #99a; flex: 1; }
+.gflag { color: #c80; font-size: 11px; }
+.glbl { font-size: 11px; color: #889; margin: 4px 0 2px; }
+.gja { color: #333; font-size: 13px; line-height: 1.5; }
+.gja .jfrag { background: #eef3f8; border-radius: 3px; padding: 0 2px; }
+.gko { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.kcell { display: inline-flex; flex-direction: column; }
+.kfrag { font-size: 13px; padding: 2px 4px; border: 1px solid #bcd; border-radius: 4px; min-width: 60px; }
+.bcnt { font-size: 10px; color: #9aa; text-align: right; }
+.bcnt.over { color: #d22; font-weight: 700; }
+.chip { background: #efe2ff; border: 1px solid #cbb0f0; border-radius: 10px; padding: 1px 7px; font-size: 12px; color: #639; white-space: nowrap; user-select: none; }
+.gsave { font-size: 12px; }
