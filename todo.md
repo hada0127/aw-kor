@@ -37,7 +37,9 @@
 - [ ] iter: **/goal #1 fresh-boot 화면 매트릭스** — 전투/결과/저장/상점/엔딩. 진행 SRAM seed 생성(엔딩 도달). 비교 시트 claude/codex 리뷰.
 - [x] iter15: **자동진행 도구 `auto_playthrough.py` 구축**(사용자 선택). 콜드부트 BG-신뢰 캡처로 캠페인 월드맵=한글(블루문) 확정. **영어 잔존 BG 2종 발견**(전략 오버맵 필기체 Red star Palace 등, 작전선택 BG RED STAR/BLUE MOON) — 과거 stale 기각이 실잔존을 가림.
 - [x] iter16: **작전선택 BG(0xBF66F0) 영어 국가명 5종 한글화 완료** — 레드스타/블루문/그린어스/코멧/옐로. galmuri7 7px, 측면장식 보존, 재압축 2756/2952. 전 게이트 PASS, 증거 SUCCESS_op_select_bg_korean.
-- [ ] iter17: 전략 오버맵 BG(0xC2FD70+0xC30EE8, 8bpp Mode4 bitmap) 필기체 영어 지명 한글화 — codex 좌표 활용, 각 반쪽 재압축≤consumed.
+- [x] iter17: **결과/엔딩 자동도달 강화**(사용자 선택). auto_playthrough 전투정책+savestate저장 강화 → 전투 애니메이션/부대목록/월드맵 등 깊은 화면 다수 검증(전부 한글 정상). 부대목록 탄약 무탄약표시 `닛` 미세잔여 발견.
+- [⏳] iter18: 장기 자동진행으로 전투 종료→결과 화면 도달 시도(b466h963a). + `닛` 무탄약 라벨 점검.
+- [ ] iter(보류): 전략 오버맵 8bpp 필기체 지명 한글화(사용자 우선순위 낮춤). 배포 최종(Phase F).
 - [ ] iter: 자동진행 결과/엔딩 화면 도달(near-victory 또는 정책 개선) + 전체 필름스트립 codex 리뷰.
 - [ ] iter: dist 배포 최종(Phase F) — 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
 - [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
