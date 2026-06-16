@@ -6,7 +6,11 @@ const el = (t, props = {}, ...kids) => {
   for (const k of kids) e.append(k);
   return e;
 };
-const state = { filter: "", region: "", q: "", dict: {} };
+const URLP = new URLSearchParams(location.search);
+const SECTION = URLP.get("section") || "all";
+const EMBED = URLP.get("embed") === "1";
+const state = { filter: "", region: "", q: "", dict: {}, section: SECTION };
+if (EMBED) document.documentElement.classList.add("embed");
 
 async function jget(u) { return (await fetch(u)).json(); }
 async function jpost(u, b) {
@@ -16,6 +20,7 @@ function setStatus(s) { $("#status").textContent = s; }
 
 async function loadDialogue() {
   const p = new URLSearchParams({ region: state.region, q: state.q, filter: state.filter });
+  if (state.section && state.section !== "all") p.set("section", state.section);
   const data = await jget("/api/dialogue?" + p);
   const sel = $("#region");
   if (sel.options.length <= 1 && data.regions) {

@@ -273,6 +273,31 @@ def classify_sprite(source):
     return (False, s or "미분류")
 
 
+def sprite_section(source):
+    """공통/1편/2편 구분. (타이틀·선택·카피라이트·폰트=공통)"""
+    s = (source or "").lower()
+    if "part2" in s or "pt2" in s:
+        return "part2"
+    if "part1" in s or "pt1" in s or "menu_label/" in s:
+        return "part1"
+    return "common"
+
+
+# 인게임 출력 순서 근사: 화면 등장 순서 랭크(작을수록 먼저)
+def sprite_order_rank(source):
+    s = (source or "").lower()
+    table = [("copyright", 0), ("title_obj", 1), ("title", 1), ("select_obj", 2), ("select", 2),
+             ("menu_label", 3), ("mode_menu", 3), ("menu", 3), ("newspaper", 3),
+             ("splash", 4), ("blackhole", 4), ("prologue", 5), ("intro", 5), ("campaign", 6),
+             ("mission", 7), ("redstar", 7), ("operation", 7), ("map_select", 7),
+             ("battle", 8), ("day", 8), ("damage", 8), ("level", 8), ("check", 8),
+             ("result", 9), ("congratulations", 9), ("air_", 9)]
+    for k, r in table:
+        if k in s:
+            return r
+    return 10
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -360,14 +385,18 @@ class Handler(BaseHTTPRequestHandler):
         cur = (q.get("curated", [""])[0] or "").strip()
         # text 필터: 기본 1(번역 대상 텍스트 스프라이트만). text=0이면 전체.
         text_only = (q.get("text", ["1"])[0] or "1") != "0"
+        section = (q.get("section", [""])[0] or "").strip()  # 허브: common/part1/part2/all
         edited = {p.stem for p in EDIT_DIR.glob("*.png")} if EDIT_DIR.exists() else set()
         out = []
         n_text = 0
         for s in sprites:
             is_text, desc = classify_sprite(s.get("source"))
+            sec = sprite_section(s.get("source"))
             if is_text:
                 n_text += 1
             if text_only and not is_text:
+                continue
+            if section in ("common", "part1", "part2") and sec != section:
                 continue
             if typ and s.get("type") != typ:
                 continue
@@ -377,7 +406,9 @@ class Handler(BaseHTTPRequestHandler):
                 continue
             if qs and qs not in (s.get("id") or "") and qs not in (s.get("source") or "") and qs not in (desc or ""):
                 continue
-            out.append({**s, "edited": s.get("id") in edited, "desc": desc, "is_text": is_text})
+            out.append({**s, "edited": s.get("id") in edited, "desc": desc, "is_text": is_text, "section": sec})
+        # 인게임 출력 순서: 화면 등장 랭크 → offset
+        out.sort(key=lambda s: (sprite_order_rank(s.get("source")), int(s.get("offset_int") or int(s.get("offset", "0x0"), 16))))
         types = sorted({s.get("type", "") for s in sprites})
         return {"count": len(out), "total": len(sprites), "text_total": n_text, "text_only": text_only,
                 "types": types, "edited_count": len(edited), "sprites": out[:3000]}

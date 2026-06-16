@@ -5,11 +5,16 @@ async function jget(u) { return (await fetch(u)).json(); }
 async function jpost(u, b) { return (await fetch(u, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(b) })).json(); }
 const setStatus = (s) => $("#status").textContent = s;
 
-const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false };
+const URLP = new URLSearchParams(location.search);
+const SECTION = URLP.get("section") || "all";
+const EMBED = URLP.get("embed") === "1";
+if (EMBED) document.documentElement.classList.add("embed");
+const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false, section: SECTION };
 
 async function loadList() {
   const p = new URLSearchParams({ type: $("#type").value, q: $("#q").value,
     curated: $("#curated").checked ? "1" : "", text: $("#textonly").checked ? "1" : "0" });
+  if (S.section && S.section !== "all") p.set("section", S.section);
   const d = await jget("/api/sprites?" + p);
   const tsel = $("#type");
   if (tsel.options.length <= 1) for (const t of d.types) if (t) tsel.append(el("option", { value: t, textContent: t }));

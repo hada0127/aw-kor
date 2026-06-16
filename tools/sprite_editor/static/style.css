@@ -43,3 +43,6 @@ main { display: flex; height: calc(100vh - 46px); }
 .cmpgrid figcaption { font-size: 12px; color: #bcd; margin-bottom: 4px; }
 .cmpgrid img { image-rendering: pixelated; background: #222; border: 1px solid #333; max-width: 360px; display: block; }
 .cmpnote { margin-top: 10px; font-size: 12px; color: #fc9; }
+
+/* 허브 임베드: 헤더 일부 정리(섹션은 허브가 제어) */
+html.embed header { padding-top: 4px; }

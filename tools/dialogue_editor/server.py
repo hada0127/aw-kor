@@ -157,6 +157,11 @@ class Handler(BaseHTTPRequestHandler):
         data = load_json(DIALOGUE_PATH, {"lines": []})
         lines = data.get("lines", [])
         region = (q.get("region", [""])[0] or "").strip()
+        # 허브 섹션(공통/1편/2편)→region 매핑
+        section = (q.get("section", [""])[0] or "").strip()
+        SEC2REG = {"common": "other", "part1": "part1", "part2": "part2"}
+        if section in SEC2REG:
+            region = SEC2REG[section]
         qstr = (q.get("q", [""])[0] or "").strip()
         filt = (q.get("filter", [""])[0] or "").strip()
         pn = load_json(DICT_PATH, {}) if filt == "mismatch" else None
@@ -176,6 +181,13 @@ class Handler(BaseHTTPRequestHandler):
                 if not check_line(ln, pn):
                     continue
             out.append(ln)
+        # 인게임 출력 순서 근사: ROM 주소순(저장=스크립트 순서에 근접)
+        def _addr(l):
+            try:
+                return int((l.get("address") or "0x0"), 16)
+            except Exception:
+                return 0
+        out.sort(key=_addr)
         return {"meta": data.get("meta", {}), "count": len(out), "total": len(lines),
                 "regions": sorted({l.get("region", "") for l in lines}), "lines": out[:2000]}
 
