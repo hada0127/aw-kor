@@ -9052,23 +9052,37 @@ def _shorten(s):
     return s
 
 
-def _fit_variants(base):
-    """공백/축약 단계별 후보 6종.
+SAFE_PUNCT = '.!?,'     # 종결/구분 부호 — 의미 손상 최소, 공백 제거보다 먼저 버림
+LATE_PUNCT = ':;"\''    # 콜론/세미콜론/인용 — 그 다음
+# ()[]{} 괄호류는 자동 제거 금지(을(를)→을를 같은 의미 훼손). 최후 jam 단계에서만.
 
-    순서(2026-06-16 수정): 전각공백 → **반각공백** → 전각+축약 → 반각+축약 → 공백제거 → 공백제거+축약.
-    기존엔 전각+축약(L1)이 반각공백(L2)보다 먼저라, 1~2바이트만 넘쳐도 문법 깨지는 SHORTEN
-    (있는→있, 에게→에)이 적용됐다. 반각공백을 축약보다 우선시켜 단어/문법을 최대한 보존한다.
-    전각공백이 맞는 다수 행(L0)은 그대로라 byte-identical.
+
+def _drop(s, chars):
+    return ''.join(c for c in s if c not in chars)
+
+
+def _fit_candidates(base):
+    """슬롯 핏 후보를 손상 적은→큰 순으로(codex 리뷰 반영, 비용 기반).
+
+    공백 보존 후보(부호 점진 제거 + 축약)를 **모두** 시도한 뒤에야 공백을 제거한다.
+    → 마침표 하나 버리면 들어갈 문장을 단어 붙여(단어붙음) 출하하지 않는다.
+    괄호류 ()[]{}는 의미 훼손이라 jam 직전(최후)에만 제거. 전각공백 fit 다수행은 byte-identical.
+    레벨: 0,1 전체보존 / 2,3 .!?, 제거 / 4,5 :;"' 제거 / 6,7 축약 / 8,9 축약+부호제거 /
+          10~12 공백제거(단어붙음, 최후 수단).
     """
-    fw = base.replace(' ', '　')      # 전각공백
-    compact = base.replace(' ', '')   # 공백제거
+    fw = lambda s: s.replace(' ', '　')
+    nosp = lambda s: s.replace(' ', '')
+    safe = _drop(base, SAFE_PUNCT)
+    late = _drop(safe, LATE_PUNCT)
     return [
-        fw,                  # L0 전각공백 (현행 기본)
-        base,                # L1 반각공백 (축약보다 우선)
-        _shorten(fw),        # L2 전각+축약
-        _shorten(base),      # L3 반각+축약
-        compact,             # L4 공백제거(단어붙음)
-        _shorten(compact),   # L5 공백제거+축약
+        fw(base), base,                        # 0,1 전체 보존(전각/반각)
+        fw(safe), safe,                        # 2,3 .!?, 제거(공백 유지)
+        fw(late), late,                        # 4,5 :;"' 제거(공백 유지)
+        fw(_shorten(base)), _shorten(base),    # 6,7 축약(공백 유지)
+        _shorten(safe), _shorten(late),        # 8,9 축약+부호제거(공백 유지)
+        nosp(base),                            # 10 공백제거(단어붙음) — 최후
+        nosp(_drop(base, PUNCT_DROP)),         # 11 공백제거+전체부호제거
+        nosp(_shorten(_drop(base, PUNCT_DROP))),  # 12 공백제거+축약+부호제거
     ]
 
 
@@ -9119,10 +9133,7 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
                 prev_ws = False
         normalized = ''.join(out)
 
-    cand = _fit_variants(normalized)                       # level 0~5: 부호 보존
-    stripped = ''.join(c for c in normalized if c not in PUNCT_DROP)
-    if stripped != normalized:
-        cand += _fit_variants(stripped)                    # level 6~11: 부호 제거 폴백
+    cand = _fit_candidates(normalized)   # 비용 기반: 공백 보존(부호제거/축약) → 공백제거 최후
     for level, s in enumerate(cand):
         if any('가' <= ch <= '힣' and ch not in syl_to_code for ch in s):
             continue
