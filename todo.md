@@ -29,7 +29,9 @@
 - [x] iter7: 글리프 데이터 clean 확인(render_glyph_sheet, 2350음절 깨짐 0). **fresh-boot Part2 메뉴에서 /goal #1 실결함 발견**: CO 인사말 A3 렌더러 다수 음절 `?` fallback. 증거+research 기록, codex 심층분석 의뢰.
 - [x] iter8: **A3 `?` 결함 수정 완료**(codex: relocated table-end literal을 2350 전범위로 data-driven 주입). fresh-boot 검증 — 메뉴 인사말 `캠페인을 처음부터 플레이합니다` 정상, `?` 0. 전 게이트 PASS.
 - [x] iter9: A3 전각공백 "이중" 오진 정정 — **픽셀 실측 결과 이미 1칸(9px) 정상**. codex hook은 no-op이라 revert. 교훈: 띄어쓰기 폭은 흰픽셀 gap 실측으로 판정(육안 확대 금지).
-- [ ] iter: fresh-boot 화면 매트릭스 확대(프롤로그/전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토. A3 ? 수정이 프롤로그 등 타 A3 화면에도 적용됐는지 캡처 확인.
+- [x] iter10: A3 ? 수정 **프롤로그/메뉴 설명문 등 전 A3 화면 적용 확인**(스토리를 즐기며 플레이하는 모드 등 정상). 의미 audit 1차: **부정 극성 불일치 1226행 → LLM 판정 워크플로(wzqkamakv)** 실제 반전/왜곡만 색출 중.
+- [ ] iter: 부정 audit 결과 수정 + 전체 의미 audit(import-csv 본문 6997행) 확대.
+- [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
 - [ ] iter: 전체 의미 audit(JA↔KO 전수) — 숫자/부정 외 오역·의미축소 LLM 판정 워크플로
