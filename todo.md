@@ -33,7 +33,9 @@
 - [x] iter11: 부정 의미 audit(1226행 LLM 판정) → **실제 의미오류 18행 수정**(CAN/CANNOT 반전 6, 깨진 단편 부정/누락, distortion 7). 판정 오탐(じゃない 발견맥락 등) 식별·skip. 이중권위 script 리터럴 직접수정 다수.
 - [⏳] iter12: 전체 의미 audit(6997행 3청크). chunk0(2333행)→66 flag. **휩→휘프 조사회귀 5행 수정**(받침-조사 보정). chunk0 verify-fix(wf1452yu6)+chunk1/2 audit(wpae7fv20/wuc7dr090) 진행중.
 - [x] iter13: **전체 의미 audit 6997행 완료** — 3청크 LLM 판정 + adjacent-aware verify-fix → 확정 ~72행 수정(반전/오역/정렬오류/관용구/누락/조사). 전 게이트 PASS.
-- [ ] iter: 의미 audit 잔여(borderline 재검토) + fresh-boot 화면 매트릭스(전투/결과/저장/엔딩) — SRAM seed 생성.
+- [x] iter14: **codex 독립 리뷰로 의미 audit 검증** — 표본 31행 정상 확인, 과교정 2(잃지 않았다 중복·시야 잘림)+주체 1 정정. 의미 audit 3자 리뷰 완료(~75행 수정).
+- [ ] iter: **/goal #1 fresh-boot 화면 매트릭스** — 전투/결과/저장/상점/엔딩. 진행 SRAM seed 생성(엔딩 도달). 비교 시트 claude/codex 리뷰.
+- [ ] iter: dist 배포 최종(Phase F) — 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
 - [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
