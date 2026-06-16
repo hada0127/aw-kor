@@ -32,6 +32,17 @@ GLYPH_BLOB_2350 = os.path.join(BASE, 'data', 'kor_glyphs_2350.bin')
 SYLMAP_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 SAFE_MIN_ADDR = 0x800000
 FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
+
+# 스프라이트 에디터 WYSIWYG용: 빌드가 라벨 타일을 배치할 때 그 배열(블록오프셋→라벨 타일스트립)을
+# 기록한다. 인게임 캡처 없이도 빌드 권위 지식으로 실제 화면 형태(라벨 스트립)를 복원 가능.
+# data/sprite_build_layouts.json으로 덤프(편집기가 캡처 레이아웃과 병행 사용).
+SPRITE_BUILD_LAYOUTS = {}
+
+
+def rec_label_layout(block_off, tile_cols, labels):
+    """block_off(int)에 배치된 라벨들의 타일스트립 기록. labels=[{tile_ids:[..],text,row}]."""
+    key = '0x%X' % block_off
+    SPRITE_BUILD_LAYOUTS[key] = {'kind': 'tilestrip', 'tile_cols': tile_cols, 'labels': labels}
 # 무결성맵(Phase C-min): 텍스트 write 시점에 [addr, slot, enc_len, enc_hex, fill, ko, level, kind]
 # 를 실행 순서대로 누적. 빌드 끝에 temp/integrity_map.json으로 덤프. 출력 바이트는 무변경.
 WRITE_LOG = []
@@ -8878,6 +8889,20 @@ def patch_world_map_label_tiles(rom):
         put_label(buf, data, list(range(0x2B2, 0x2B6)), '해', x=1)
         return buf
 
+    # WYSIWYG 레이아웃 기록용 라벨 타일스트립(텍스트 + tile_id 목록)
+    _labels = [
+        {'text': '월드맵', 'tile_ids': list(range(0x26B, 0x271)) + list(range(0x277, 0x27D))
+            + list(range(0x284, 0x28A)) + list(range(0x293, 0x299))},
+        {'text': '레드스타', 'tile_ids': list(range(0x271, 0x277))},
+        {'text': '블루문', 'tile_ids': list(range(0x27D, 0x284))},
+        {'text': '옐로코멧', 'tile_ids': list(range(0x28A, 0x293))},
+        {'text': '그린어스', 'tile_ids': list(range(0x299, 0x2A1))},
+        {'text': '내해', 'tile_ids': list(range(0x2A1, 0x2A7))},
+        {'text': '블랙랜드', 'tile_ids': list(range(0x2A7, 0x2AE))},
+        {'text': '동', 'tile_ids': list(range(0x2AE, 0x2B0))},
+        {'text': '서', 'tile_ids': list(range(0x2B0, 0x2B2))},
+        {'text': '해', 'tile_ids': list(range(0x2B2, 0x2B6))},
+    ]
     patched_per_block = 24 + 6 + 7 + 9 + 8 + 6 + 7 + 2 + 2 + 4
     patched = 0
     for off in (0x54214C, 0x5AAA68):
@@ -8888,6 +8913,7 @@ def patch_world_map_label_tiles(rom):
         if len(data) <= 0x2B6 * 32 + 32:
             raise AssertionError(f'unexpected world-map tile block size at 0x{off:X}: {len(data)}')
         buf = patch_labels(data)
+        rec_label_layout(off, None, _labels)
         comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'world-map tile LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -18207,6 +18233,13 @@ def main():
     with open(intg_path, 'w', encoding='utf-8') as f:
         json.dump(WRITE_LOG, f, ensure_ascii=False)
     print(f'→ 무결성맵 {intg_path} ({len(WRITE_LOG)} text writes)')
+
+    # 스프라이트 WYSIWYG: 빌드가 기록한 라벨 타일스트립 레이아웃(블록오프셋→라벨) 덤프
+    sbl_path = os.path.join(BASE, 'data', 'sprite_build_layouts.json')
+    with open(sbl_path, 'w', encoding='utf-8') as f:
+        json.dump({'_doc': '빌드 권위 라벨 타일스트립(캡처 불필요). 편집기 WYSIWYG fallback. '
+                   '재생성: build_korean_full.py', 'blocks': SPRITE_BUILD_LAYOUTS}, f, ensure_ascii=False, indent=1)
+    print(f'→ 스프라이트 빌드레이아웃 {sbl_path} ({len(SPRITE_BUILD_LAYOUTS)} blocks)')
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
     for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:

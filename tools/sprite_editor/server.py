@@ -185,6 +185,50 @@ def load_layouts():
     return _LAYOUTS
 
 
+BUILD_LAYOUTS_PATH = ROOT / "data" / "sprite_build_layouts.json"
+_BUILD_LAYOUTS = None
+
+
+def load_build_layouts():
+    global _BUILD_LAYOUTS
+    if _BUILD_LAYOUTS is None:
+        _BUILD_LAYOUTS = (load_json(BUILD_LAYOUTS_PATH, {}) or {}).get("blocks", {})
+    return _BUILD_LAYOUTS
+
+
+def build_layout_cells(sp):
+    """빌드 권위 라벨 타일스트립 → cells(캡처 레이아웃과 동일 스키마). 라벨을 세로로 적층.
+    pal_file 없음 → 렌더는 sprite palette_for 사용(인덱스 직접)."""
+    off = sp.get("offset_int")
+    if off is None:
+        off = int(sp.get("offset", "0x0"), 16)
+    blk = load_build_layouts().get("0x%X" % off)
+    if not blk:
+        return None
+    cells = []
+    y = 0
+    maxw = 0
+    for lab in blk["labels"]:
+        for i, tid in enumerate(lab["tile_ids"]):
+            cells.append({"x": i * 8, "y": y, "tw": 1, "th": 1, "fh": 0, "fv": 0,
+                          "tile_off": tid, "bank": 0, "palbase": 0})
+        maxw = max(maxw, len(lab["tile_ids"]) * 8)
+        y += 10  # 8px + 2 gap
+    if not cells:
+        return None
+    return {"cells": cells, "x0": 0, "y0": 0, "w": maxw, "h": y, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True}
+
+
+def get_layout(sid):
+    """캡처 레이아웃 우선 → 없으면 빌드 권위 레이아웃(라벨 스트립)."""
+    lay = load_layouts().get("layouts", {}).get(sid)
+    if lay:
+        return lay
+    sp = sprite_by_id(sid)
+    return build_layout_cells(sp) if sp else None
+
+
 def current_tiles(sp):
     """스프라이트의 현재 타일 바이트(편집본 우선→패치 ROM 디코드). 4bpp, 32B/타일."""
     ov = load_json(OVERRIDES_PATH, {}) or {}
@@ -202,18 +246,26 @@ def current_tiles(sp):
 def render_onscreen_png(sid):
     """레이아웃(OAM 셀)+현재 타일+캡처 팔레트로 실제 화면 형태 재조립 PNG. 없으면 None."""
     import struct as _s
-    lay = load_layouts().get("layouts", {}).get(sid)
     sp = sprite_by_id(sid)
-    if not lay or sp is None:
+    if sp is None:
+        return None
+    lay = get_layout(sid)
+    if not lay:
         return None
     tiles = current_tiles(sp)
     if not tiles:
         return None
-    palp = lay.get("pal_file") or load_layouts().get("pal_by_screen", {}).get(lay.get("screen"))
-    palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
-    def col(i):
-        v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
-        return ((v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31)
+    palp = lay.get("pal_file")
+    if palp and (ROOT / palp).exists():
+        palb = (ROOT / palp).read_bytes()
+        def col(palbase, bank, idx):
+            i = palbase + bank * 16 + idx
+            v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
+            return ((v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31)
+    else:
+        pal16 = [tuple(c) for c in palette_for(sp)]  # 빌드 레이아웃: 인덱스 직접
+        def col(palbase, bank, idx):
+            return pal16[idx & 15]
     def spx(t, x, y):
         o = t * 32 + y * 4 + x // 2
         if o >= len(tiles):
@@ -236,7 +288,7 @@ def render_onscreen_png(sid):
                         sx = c["x"] - lay["x0"] + (c["tw"] - 1 - tx if c["fh"] else tx) * 8 + xx
                         sy = c["y"] - lay["y0"] + (c["th"] - 1 - ty if c["fv"] else ty) * 8 + yy
                         if 0 <= sx < im.width and 0 <= sy < im.height:
-                            r, g, b = col(c.get("palbase", 256) + c["bank"] * 16 + idx)
+                            r, g, b = col(c.get("palbase", 256), c["bank"], idx)
                             px[sx, sy] = (r, g, b, 255)
     import io as _io
     buf = _io.BytesIO()
@@ -437,25 +489,29 @@ class Handler(BaseHTTPRequestHandler):
         import struct as _s
         from collections import Counter
         sid = q.get("id", [""])[0]
-        lay = load_layouts().get("layouts", {}).get(sid)
         sp = sprite_by_id(sid)
-        if not lay or sp is None:
+        if sp is None:
+            return {"ok": False, "error": "no sprite %s" % sid}
+        lay = get_layout(sid)
+        if not lay:
             return {"ok": False, "error": "no layout for %s" % sid}
-        palp = lay.get("pal_file") or load_layouts().get("pal_by_screen", {}).get(lay.get("screen"))
-        palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
-        # 지배적 셀의 (palbase,bank)로 편집 팔레트
-        dom = Counter((c.get("palbase", 256), c["bank"]) for c in lay["cells"]).most_common(1)[0][0]
-        palbase, bank = dom
-
-        def col(i):
-            v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
-            return [(v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31]
         dec = decode_indices(sp)
         cols = dec[3] if dec else (sp.get("tile_cols") or 1)
+        palp = lay.get("pal_file")
+        if palp and (ROOT / palp).exists():
+            palb = (ROOT / palp).read_bytes()
+            dom = Counter((c.get("palbase", 256), c["bank"]) for c in lay["cells"]).most_common(1)[0][0]
+            palbase, bank = dom
+
+            def col(i):
+                v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
+                return [(v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31]
+            palette = [col(palbase + bank * 16 + i) for i in range(16)]
+        else:
+            palette = [list(c) for c in palette_for(sp)]  # 빌드 레이아웃: 인덱스 직접
         return {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
                 "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": lay["cells"],
-                "palette": [col(palbase + bank * 16 + i) for i in range(16)], "bank": bank,
-                "screen": lay.get("screen")}
+                "palette": palette, "screen": lay.get("screen"), "build": lay.get("build", False)}
 
     def _compare(self, q):
         """원본↔적용(패치빌드) 픽셀 동일 여부 + 편집 존재 여부."""
@@ -527,7 +583,7 @@ class Handler(BaseHTTPRequestHandler):
         ov = load_json(OVERRIDES_PATH, {}) or {}
         rec = ov.get(sid)
         desc = classify_sprite(sp.get("source"))[1]
-        has_os = sid in load_layouts().get("layouts", {})
+        has_os = get_layout(sid) is not None
         if rec and rec.get("indices"):
             grid = rec["indices"]
             h = len(grid); w = len(grid[0]) if grid else 0
