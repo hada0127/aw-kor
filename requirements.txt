@@ -3,11 +3,12 @@
 # 설치 방법:
 #   pip install -r requirements.txt
 #
-# 현재 모든 도구는 Python 표준 라이브러리만 사용합니다
-# 앞으로 추가 기능 구현 시 필요한 패키지를 여기에 추가할 예정입니다
+# 대부분 도구는 표준 라이브러리만 쓰지만, 폰트/글리프/스프라이트/화면 캡처
+# 처리는 Pillow(PIL)가 필요합니다(메인 빌드 build_korean_full.py 포함).
 
 # 코어 요구사항
 Python>=3.9
+Pillow>=9.0        # 글리프 렌더, 스프라이트/화면 이미지 처리 (from PIL import ...)
 
 # 개발 도구 (선택사항)
 # pytest>=7.0       # 단위 테스트
