@@ -1086,3 +1086,12 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 - 따라서 codex가 추가한 `PART2_HOOK_A3_ZENKAKU_SPACE`(0x08314332 trampoline)는 효과 0이고 비정렬 파서 패치 crash 표면만 늘려 **revert**했다. 출하 ROM은 `?` 테이블-end 수정만 유지(SHA `6a14a710...`).
 - **교훈**: 띄어쓰기 폭 결함은 **확대 육안이 아니라 흰픽셀 열 gap 픽셀 실측**으로 판정한다. 렌더러 간 폭 일치 확인도 동일 방식.
 - (참고 RE, 유효) A3 파서 `0x0831424C`: 첫 바이트 `0x09..0x33`만 1차 jump-table(`0x08314270`)로. `0x20`=엔트리 `0x0831431C`(기존 hook 1칸). `0x8140`의 `0x81`은 `0x08314332: cmp r0,#0x77; bhi 0x083147F4`로 일반 2바이트 문자 경로. 단, 그 경로의 실제 advance는 1칸(실측 9px)이라 별도 수정 불요.
+
+## 2026-06-16 — 자동진행 fresh-boot로 발견: 영어 잔존 BG 2종 (실잔존, stale 아님)
+
+`tools/auto_playthrough.py` 콜드부트 자동진행(BG 신뢰)으로 발견. 과거 savestate QA가 "stale"로 기각했으나 **fresh-boot 현재 ROM에서 실제 영어 잔존 확인**:
+1. **전략/영토 지도**(작전 진입 오버맵): 필기체 영어 지명 `Red star Palace`/`Blue moon Palace`/`Cosmo earth Palace`/`Factory`가 지도 그래픽에 박힘. 증거 `docs/screenshots/ISSUE_strategic_map_english_palace_labels_2026-06-16.png`. (작전실 BG 0xBF66F0은 한글화됐으나 이 오버맵은 별개 미패치 블록.)
+2. **작전/전투 선택 화면 BG**: `RED STAR`/`BLUE MOON` 영어 국가명 타일. 증거 `docs/screenshots/ISSUE_operation_select_bg_english_2026-06-16.png`. (대사 "내가 싸우는 법을 알려줄게"는 정상.)
+- 캠페인 월드맵은 한글(블루문)로 패치됨 확인(별개). 위 2종만 미패치.
+- 수정 경로: 해당 LZ77 BG 블록 식별 → 디코드 → 영어 지명 타일을 한글(레드스타/블루문/그린어스/코스모랜드 등)로 재작도 → 재압축(comp_size≤). 필기체 라벨은 한글 픽셀로 대체.
+- **교훈**: savestate "stale" 기각이 실잔존을 가렸다. 콜드부트 자동진행이 ground truth.
