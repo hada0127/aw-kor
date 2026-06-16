@@ -9041,6 +9041,13 @@ ADDRESS_TEXT_OVERRIDES.update({
 ADDRESS_TEXT_OVERRIDES.update({
     # 의미 드리프트(숫자 누락) 복원(2026-06-16, wf_80f24953 + 수동): 게임 수치 보존.
     0xE0F70D: '내가 눈치 못 챈 줄 알았냐!',  # 부정의미 audit
+    0xA1CB1B: '나밖에 못 움직인다는 걸',  # 의미 audit distortion(축약)
+    0xA26C00: '적 해상부대 깊이 안 쫓아도',  # 의미 audit distortion(축약)
+    0xA0491C: '지형 효과는 상태창뿐 아니라',  # 의미 audit distortion
+    0xA06E51: '아군이 너무 많이 당하고 있지 않은지',  # 의미 audit distortion
+    0xA135E2: '영토가 엉망진창이 됐잖나.',  # 의미 audit distortion
+    0xDFCA93: '능숙한 사령관이 다뤘을 때의 아스카는,',  # 의미 audit distortion
+    0xE04FEE: '이 정도는, 조사해 두지 않으면',  # 의미 audit distortion
     0xDF953B: '「1대 대전」.',
     0xA0306D: '보병은 이동력 3이지만',
     0xA03087: '수송차는 6이나 되니까',
