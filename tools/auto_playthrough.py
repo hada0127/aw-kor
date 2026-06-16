@@ -23,8 +23,12 @@ from qa_visual_regions import MGBADriver, raw_to_png  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 KEYS = {"A": 1, "B": 2, "SELECT": 4, "START": 8, "RIGHT": 16, "LEFT": 32, "UP": 64, "DOWN": 128}
 
-# 입력 정책: A로 대사/확인 진행 위주, 주기적으로 커서 이동/턴종료를 섞어 메뉴·전투를 진전.
-POLICY = ["A", "A", "A", "DOWN", "A", "RIGHT", "A", "A", "START", "A", "UP", "A", "LEFT", "A", "B", "A"]
+# 입력 정책: A(대사/확인/유닛선택/공격) 위주 + 전투 진전용 이동 매크로 + 주기적 턴종료(START).
+# 전투에서 유닛 선택→이동→공격/대기를 흉내내 진군시키고, 막히면 START로 턴을 넘긴다.
+POLICY = ["A", "A", "RIGHT", "A", "A", "DOWN", "A", "A", "START", "A",
+          "A", "LEFT", "A", "A", "UP", "A", "A", "START", "A", "B"]
+# 막힘 감지 시(같은 화면 반복) 강제로 시도할 탈출 입력
+UNSTICK = ["START", "A", "A", "B", "DOWN", "A"]
 
 
 def frame_sig(img: Image.Image):
@@ -68,6 +72,7 @@ def main():
     ap.add_argument("--steps", type=int, default=160)
     ap.add_argument("--per-step-frames", type=int, default=40)
     ap.add_argument("--diff", type=float, default=11.0, help="새 화면 판정 평균픽셀차 임계")
+    ap.add_argument("--save-states", action="store_true", help="새 화면마다 .ss0 저장(진행 세이브 생성)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "auto_play"))
     ap.add_argument("--harness", default="/tmp/mgbah")
     args = ap.parse_args()
@@ -87,17 +92,19 @@ def main():
                 drv.cmd(f"keys {KEYS[tok]}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(120)
         stuck = 0
         for step in range(args.steps):
-            key = POLICY[step % len(POLICY)]
+            key = UNSTICK[stuck % len(UNSTICK)] if stuck >= 6 else POLICY[step % len(POLICY)]
             drv.cmd(f"keys {KEYS[key]}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(args.per_step_frames)
             img = drv.shot(f"s{step:03d}")
             sig = frame_sig(img)
             if all(mean_diff(sig, s) > args.diff for s in sigs):
                 sigs.append(sig)
                 shots.append((f"{step:03d}:{key}", img.copy()))
+                if args.save_states:
+                    drv.cmd(f"savestate {out / ('state_%03d.ss0' % len(shots))}")
                 stuck = 0
             else:
                 stuck += 1
-        print(f"steps={args.steps} distinct_screens={len(shots)}")
+        print(f"steps={args.steps} distinct_screens={len(shots)}  states_saved={len(shots) if args.save_states else 0}")
     finally:
         drv.close()
     montage(shots, out / "filmstrip.png")
