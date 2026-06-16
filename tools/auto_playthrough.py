@@ -73,6 +73,7 @@ def main():
     ap.add_argument("--per-step-frames", type=int, default=40)
     ap.add_argument("--diff", type=float, default=11.0, help="새 화면 판정 평균픽셀차 임계")
     ap.add_argument("--save-states", action="store_true", help="새 화면마다 .ss0 저장(진행 세이브 생성)")
+    ap.add_argument("--dump-state", action="store_true", help="새 화면마다 VRAM/OAM/팔레트/IO 덤프(레이아웃 추출용)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "auto_play"))
     ap.add_argument("--harness", default="/tmp/mgbah")
     args = ap.parse_args()
@@ -101,6 +102,12 @@ def main():
                 shots.append((f"{step:03d}:{key}", img.copy()))
                 if args.save_states:
                     drv.cmd(f"savestate {out / ('state_%03d.ss0' % len(shots))}")
+                if args.dump_state:
+                    tag = "scr_%03d" % len(shots)
+                    drv.cmd(f"dumpvram {out / (tag + '.vram')}")
+                    drv.cmd(f"dumpmem 7000000 0x400 {out / (tag + '.oam')}")
+                    drv.cmd(f"dumpmem 5000000 0x400 {out / (tag + '.pal')}")
+                    drv.cmd(f"dumpmem 4000000 0x60 {out / (tag + '.io')}")
                 stuck = 0
             else:
                 stuck += 1

@@ -209,7 +209,7 @@ def render_onscreen_png(sid):
     tiles = current_tiles(sp)
     if not tiles:
         return None
-    palp = load_layouts().get("pal_by_screen", {}).get(lay["screen"])
+    palp = lay.get("pal_file") or load_layouts().get("pal_by_screen", {}).get(lay.get("screen"))
     palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
     def col(i):
         v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
@@ -236,7 +236,7 @@ def render_onscreen_png(sid):
                         sx = c["x"] - lay["x0"] + (c["tw"] - 1 - tx if c["fh"] else tx) * 8 + xx
                         sy = c["y"] - lay["y0"] + (c["th"] - 1 - ty if c["fv"] else ty) * 8 + yy
                         if 0 <= sx < im.width and 0 <= sy < im.height:
-                            r, g, b = col(256 + c["bank"] * 16 + idx)
+                            r, g, b = col(c.get("palbase", 256) + c["bank"] * 16 + idx)
                             px[sx, sy] = (r, g, b, 255)
     import io as _io
     buf = _io.BytesIO()
@@ -441,9 +441,11 @@ class Handler(BaseHTTPRequestHandler):
         sp = sprite_by_id(sid)
         if not lay or sp is None:
             return {"ok": False, "error": "no layout for %s" % sid}
-        palp = load_layouts().get("pal_by_screen", {}).get(lay["screen"])
+        palp = lay.get("pal_file") or load_layouts().get("pal_by_screen", {}).get(lay.get("screen"))
         palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
-        bank = Counter(c["bank"] for c in lay["cells"]).most_common(1)[0][0]
+        # 지배적 셀의 (palbase,bank)로 편집 팔레트
+        dom = Counter((c.get("palbase", 256), c["bank"]) for c in lay["cells"]).most_common(1)[0][0]
+        palbase, bank = dom
 
         def col(i):
             v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
@@ -452,8 +454,8 @@ class Handler(BaseHTTPRequestHandler):
         cols = dec[3] if dec else (sp.get("tile_cols") or 1)
         return {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
                 "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": lay["cells"],
-                "palette": [col(256 + bank * 16 + i) for i in range(16)], "bank": bank,
-                "screen": lay["screen"]}
+                "palette": [col(palbase + bank * 16 + i) for i in range(16)], "bank": bank,
+                "screen": lay.get("screen")}
 
     def _compare(self, q):
         """원본↔적용(패치빌드) 픽셀 동일 여부 + 편집 존재 여부."""
