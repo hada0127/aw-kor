@@ -836,3 +836,13 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
   - 전투 화면(맵/유닛정보 HUD/튜토리얼 대사) 동적 렌더 current-ROM clean.
   - **잔여**: 결과/저장/상점/엔딩 등 정적 화면은 savestate가 stale이라 직접 캡처 불가 → **텍스트는 ROM-디코드 게이트로 전수 검증됨**(의미/띄어쓰기/명사 0). 그래픽 직접 캡처는 진행 SRAM seed 또는 Lua 자동진행 필요(잔여 인프라).
 - 현재 출하 ROM: integrity PASS, spacing 0, terms 0, meaning NUMBER 0, overflow 0, no_ko 0.
+
+## QA 디코더 신뢰성 + 글리프 커버리지 게이트 + 전략지도 화면 정리 (2026-06-16, iter19)
+
+**핵심**: 인게임 「비트맵 깨짐 0」을 폰트 음절 커버리지로 정면 보증 + 무결성 게이트의 가짜 결함 제거 + codex 리뷰로 전략지도 화면 정정.
+
+- **qa_integrity_map.py 디코더 수정**: SYLCODE `syllable_to_code.json`(1030) → `syllable_to_code_2350.json`(2350, superset·공유코드 mismatch 0). 구 맵은 1320개 추가 예약코드(예 뤘=0x9868)를 몰라 SJIS 폴백→한자(鷲) 오표시(가짜 '부호소실'). 수정 후 0xDFCA93 '능숙한…다뤘을…'를 정상 디코드. `phase6_basic_test.py` 한글검출도 2350 우선.
+- **신규 게이트 `tools/qa_glyph_coverage.py`**(codex 지적 반영 — ko 필드가 아니라 **enc_hex 출하바이트** 기준이라 ko=None인 script/raw_replace까지 전 경로 커버): integrity_map 25296행·14경로에서 예약-한글 코드 160015회/959음절이 전부 glyph 보유 음절로 해석 → **미렌더 0**. code∩glyph 대칭(2350) + 빌드 encode_text의 `syl_to_code[ch]` KeyError 가드(2350 외 음절 들어오면 빌드 크래시)로 폰트측 보증.
+- **전략지도 화면 2종 정리(codex 리뷰 반영)**: SWI/DMA 로그(`temp/auto_fresh_p2/mgbah.stderr.log:7800~7806`) 재분석으로 `0xC2FD70`/`0xC30EE8`은 **표시되는** Mode4 풀스크린 전략지도 확정(LZ77→EWRAM 0x02000000→DMA 0x06000000/0x06004B00=240×160 fb 상/하단). step073(프레임049-050)는 **다른 화면** = Mode0 대륙 오버맵(BG3 charBase0x8000, 소스 0xC34E10, `over_bg3.png`). 직전 `patch_part2_strategic_overmap_labels`(0xC2FD70)는 phantom 라벨(원본에 없는 'Blue moon Palace' 위치)·오배치 Factory·선두 필기체 잔존으로 깨끗하지 않아 **제거 유지**. 두 화면 필기체 영어 지명 = 미번역 장식 라벨(scope exception, 국가명 정본 입력 후 한글화 권장). 오프라인 렌더=인게임(타일 간접 없는 Mode4 fb DMA): `temp/smap_original.png`.
+- **0xBF66F0 배너 한글화 블록 식별 100% 확정**: 원본 0xBF66F0 비공백 타일 312/312가 인게임 배너 화면 VRAM(step057_A)과 verbatim 일치 → 표시 블록 확정. (레드스타/블루문/그린어스/코멧/옐로 한글, KEEP)
+- 재실행: `python3 tools/qa_glyph_coverage.py` (PASS=0). 5게이트(integrity/terms/spacing/meaning/glyph_coverage) 전부 PASS, overflow 0.

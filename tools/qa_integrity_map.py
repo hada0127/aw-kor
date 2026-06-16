@@ -19,7 +19,10 @@ import os
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
+# 2350자(KS X 1001 완성형) 예약코드 맵 — 1030 맵의 superset(공유 코드 동일). 빌드가 실제로
+# 주입하는 전체 코드를 알아야 reverse-decode가 정확하다. 구 1030 맵이면 1320개 추가 음절
+# (예 뤘=0x9868)을 모르고 SJIS로 폴백해 한자(예 鷲)로 오표시 → 가짜 '부호소실'.
+SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 
 # encode_fit(build:8844)가 제거하는 문장부호 집합
 STRIP_SET = set(',.!?:;()[]{}"\'‘’“”・…。、「」『』▼')

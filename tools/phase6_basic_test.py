@@ -85,7 +85,10 @@ def check_rom_integrity(rom_path: str) -> dict:
     korean_count = 0
     try:
         import json as _json
-        syl_path = Path('data/syllable_to_code.json')
+        # 2350자 맵 우선(1030의 superset). 빌드가 실제 주입하는 전체 예약코드를 카운트해야 한다.
+        syl_path = Path('data/syllable_to_code_2350.json')
+        if not syl_path.exists():
+            syl_path = Path('data/syllable_to_code.json')
         reserved = set()
         if syl_path.exists():
             for _h, _c in _json.load(open(syl_path, encoding='utf-8')).items():
