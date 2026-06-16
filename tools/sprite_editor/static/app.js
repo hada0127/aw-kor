@@ -17,7 +17,7 @@ async function loadList() {
   for (const s of d.sprites) list.append(card(s));
 }
 function card(s) {
-  const img = el("img", { src: `/api/png?id=${encodeURIComponent(s.id)}`, loading: "lazy" });
+  const img = el("img", { src: `/api/render?id=${encodeURIComponent(s.id)}&which=${s.edited ? "edit" : "orig"}`, loading: "lazy" });
   const meta = el("div", { className: "meta" },
     el("b", { textContent: s.id }),
     el("span", { className: "src", textContent: `${s.type} ${s.width}×${s.height} ${s.source || ""}` }));
@@ -54,6 +54,30 @@ async function showCompare() {
   $("#cmpNote").textContent = r.note + (r.build_changed ? "" : "  (원본과 적용 빌드가 동일 — 이 스프라이트는 빌드에서 수정되지 않음.)");
   $("#cmpModal").hidden = false;
   setStatus("비교 표시");
+}
+
+let PALS = [];
+async function loadPalettes() {
+  const r = await jget("/api/palettes");
+  PALS = r.palettes || [];
+  const sel = $("#palpick"); sel.length = 1;
+  // OBJ 먼저(스프라이트용), 그다음 BG
+  for (const region of ["OBJ", "BG"]) {
+    const grp = PALS.filter(p => p.region === region);
+    if (!grp.length) continue;
+    const og = el("optgroup", { label: region });
+    grp.forEach((p, i) => og.append(el("option", { value: p.name, textContent: p.name })));
+    sel.append(og);
+  }
+}
+function applyPalette(name) {
+  const p = PALS.find(x => x.name === name);
+  if (!p || !S.indices) return;
+  S.palette = p.colors.map(c => c.slice(0, 3));
+  while (S.palette.length < 16) S.palette.push([0, 0, 0]);
+  drawPalette(); draw();
+  $("#palfix").disabled = false;
+  setStatus("팔레트 적용: " + name + " (고정하려면 ‘고정’)");
 }
 function rgb(c) { return `rgb(${c[0]},${c[1]},${c[2]})`; }
 function drawPalette() {
@@ -120,5 +144,12 @@ function wire() {
   $("#compare").onclick = showCompare;
   $("#cmpClose").onclick = () => { $("#cmpModal").hidden = true; };
   $("#cmpModal").onclick = (e) => { if (e.target.id === "cmpModal") $("#cmpModal").hidden = true; };
+  $("#palpick").onchange = (e) => applyPalette(e.target.value);
+  $("#palfix").onclick = async () => {
+    if (!S.id || !S.palette) return;
+    const r = await jpost("/api/setpalette", { id: S.id, palette: S.palette });
+    setStatus(r.ok ? `팔레트 고정 저장: ${S.id}` : "오류: " + r.error);
+    if (r.ok) loadList();
+  };
 }
-wire(); loadList();
+wire(); loadPalettes(); loadList();

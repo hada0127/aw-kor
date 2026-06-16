@@ -173,13 +173,40 @@ def encode_indices(grid, w, h):
     return bytes(out)
 
 
+PALLIB_PATH = ROOT / "data" / "sprite_palettes.json"
+
+
+def palette_library():
+    d = load_json(PALLIB_PATH, {}) or {}
+    return d.get("palettes", [])
+
+
+def default_palette_for(sp):
+    """source 화면 추정 → 그 화면의 실기 OBJ 팔레트(첫 뱅크)를 기본값으로. 없으면 grayscale.
+    (정확한 뱅크는 사용자가 팔레트 드롭다운으로 선택; OAM 정보 없이 자동은 화면까지만 추정)"""
+    lib = palette_library()
+    if not lib:
+        return [list(c) for c in ES.GRAYSCALE]
+    src = (sp.get("source") or "").lower()
+    if "select" in src:
+        screen = "part1_select"
+    elif "part2" in src or "mode" in src or "menu" in src:
+        screen = "part2_menu"
+    else:
+        screen = "title"
+    objs = [p for p in lib if p["screen"] == screen and p["region"] == "OBJ"]
+    if not objs:
+        objs = [p for p in lib if p["region"] == "OBJ"] or lib
+    return objs[0]["colors"] if objs else [list(c) for c in ES.GRAYSCALE]
+
+
 def palette_for(sp):
-    """편집/표시용 16색 팔레트. overrides에 저장된 게 있으면 사용, 없으면 grayscale."""
+    """편집/표시용 16색 팔레트. override 우선 → source 기반 실기 팔레트 기본값 → grayscale."""
     ov = load_json(OVERRIDES_PATH, {}) or {}
     rec = ov.get(sp.get("id"))
     if rec and rec.get("palette"):
         return rec["palette"]
-    return [list(c) for c in ES.GRAYSCALE]
+    return default_palette_for(sp)
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -232,6 +259,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, data, "image/png")
         if u.path == "/api/compare":
             return self._send(200, self._compare(q))
+        if u.path == "/api/palettes":
+            return self._send(200, {"palettes": palette_library()})
         return self._send(404, {"error": "not found"})
 
     def _compare(self, q):
@@ -314,7 +343,26 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._save(body))
         if u.path == "/api/revert":
             return self._send(200, self._revert(body))
+        if u.path == "/api/setpalette":
+            return self._send(200, self._setpalette(body))
         return self._send(404, {"error": "not found"})
+
+    def _setpalette(self, body):
+        """픽셀 편집 없이 팔레트만 override에 고정(다음 조회/비교에 반영)."""
+        sid = body.get("id")
+        palette = body.get("palette")
+        sp = sprite_by_id(sid)
+        if sp is None:
+            return {"ok": False, "error": "id 없음: %s" % sid}
+        if not palette or not isinstance(palette, list):
+            return {"ok": False, "error": "palette(16×[r,g,b]) 필요"}
+        with _LOCK:
+            ov = load_json(OVERRIDES_PATH, {}) or {}
+            rec = ov.get(sid, {})
+            rec.update({"offset": sp.get("offset"), "type": sp.get("type"), "palette": palette})
+            ov[sid] = rec
+            save_json(OVERRIDES_PATH, ov)
+        return {"ok": True, "id": sid}
 
     def _save(self, body):
         sid = body.get("id")

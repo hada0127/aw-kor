@@ -29,10 +29,13 @@
     <div id="canvaswrap"><canvas id="cv"></canvas></div>
   </section>
   <aside id="palette">
+    <div class="ttl">실기 팔레트 (색 지정)</div>
+    <select id="palpick"><option value="">— 실기 팔레트 선택 —</option></select>
+    <button id="palfix" disabled title="이 팔레트를 이 스프라이트에 고정 저장">고정</button>
+    <div class="hint">스프라이트 타일엔 색 정보가 없어 기본은 회색입니다. 실기 캡처 팔레트(OBJ 권장)를 골라 색을 입히세요. 화면이 맞으면 ‘고정’으로 저장.</div>
     <div class="ttl">팔레트 (4bpp · 16색)</div>
     <div id="swatches"></div>
-    <div class="hint">클릭=선택, 더블클릭=색변경(원본색 지정). 팔레트는 편집본에 저장됩니다.</div>
-    <div class="ttl">현재 색 <span id="selidx">0</span></div>
+    <div class="hint">스와치 클릭=선택, 더블클릭=색변경. 현재 색 <span id="selidx">0</span></div>
   </aside>
 </main>
 <div id="cmpModal" hidden>
