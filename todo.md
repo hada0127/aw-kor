@@ -2487,3 +2487,14 @@
 - 루트 `plan.md`도 새로 만들지 않는다.
 - `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
 - 오래된 상세 기록이 필요하면 git history에서 이전 `docs/plan.md`와 `.claude/todo.md`를 확인한다.
+
+# 🟢 UI 에디터 실캡처/비교 (2026-06-16, 사용자 요청 "임의 라인까지 실캡처 대공사")
+
+- [x] canvas-hijack 실캡처 검증: 빠른도달 화면(07_part2_main_menu)의 텍스트 슬롯(0xA2C098)을 임의 문자열로 덮어 헤드리스 nav→실렌더 캡처 성공. = 임의 라인 실캡처의 토대.
+- [x] **A3 렌더러 범위버그 발견·수정**(부산물): 0x9369(1030 상한)→0xE2A7. 2350 확장분 1320음절 A3 '?' 깨짐 해소. 출하 무영향(잠복)이었으나 Part2 편집/프리뷰 충실성에 필수. 회귀 가드+dist 재생성.
+- [x] `tools/preview_capture.py`: 임의 텍스트 인게임 실캡처 엔진(compare(ja,ko)=원본 ROM↔패치 ROM). canvas 레지스트리(확장형)+해시 캐시+CLI.
+- [x] 대사 에디터(8780): 행별 🎮 실캡처 버튼→원본(JA)↔적용(KO) 헤드리스 캡처 모달. /api/preview+/preview 서빙. E2E 검증.
+- [x] 스프라이트 에디터(8781): 원본↔적용 비교(타일 디코드=인게임 1:1). /api/compare+/api/render(orig/patched/edit). build_changed 감지. E2E 검증.
+- [ ] (증분) 긴 dialog-box canvas(welcome/battle, 32B 초과 대사용) + part1 전용 canvas(컨텍스트) — 현재 모든 라인은 part2 A3 canvas로 텍스트 충실 렌더(컨텍스트만 part2).
+- [ ] (증분) 스프라이트 인게임-맥락 헤드리스 캡처(sprite→screen 매핑/스프라이트 프리뷰 하니스) — 현재 타일 디코드는 스프라이트 픽셀 자체로 충실.
+- [ ] (증분) 캡처 지연(~30-60s/대사) 단축: 슬롯 nav 단축 canvas, orig 캡처 영구 캐시.
