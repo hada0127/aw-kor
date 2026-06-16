@@ -31,3 +31,15 @@ main { display: flex; height: calc(100vh - 46px); }
 .sw.on { border-color: #000; box-shadow: 0 0 0 2px #fc0; }
 .sw span { position:absolute; bottom:1px; right:2px; font-size:9px; color:#0008; mix-blend-mode:difference; }
 .hint { font-size: 11px; color: #789; margin-top: 6px; }
+
+/* 원본↔적용 비교 모달 */
+#cmpModal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; z-index: 100; }
+#cmpModal[hidden] { display: none; }
+.cmpbox { background: #1b1b1e; color: #eee; border-radius: 8px; padding: 14px 16px; max-width: 90vw; box-shadow: 0 8px 40px rgba(0,0,0,.5); }
+.cmphead { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.cmphead #cmpInfo { color: #9ab; font-size: 12px; flex: 1; }
+.cmpgrid { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+.cmpgrid figure { margin: 0; }
+.cmpgrid figcaption { font-size: 12px; color: #bcd; margin-bottom: 4px; }
+.cmpgrid img { image-rendering: pixelated; background: #222; border: 1px solid #333; max-width: 360px; display: block; }
+.cmpnote { margin-top: 10px; font-size: 12px; color: #fc9; }

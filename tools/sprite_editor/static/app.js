@@ -36,7 +36,24 @@ async function selectSprite(id) {
   S.dirty = false;
   $("#info").textContent = `${id}  ${t.type}  ${t.width}×${t.height}  ${t.offset || ""}  ${t.edited ? "(편집본)" : ""}`;
   $("#save").disabled = true; $("#revert").disabled = !t.edited;
+  $("#compare").disabled = false;
   drawPalette(); draw();
+}
+
+async function showCompare() {
+  if (!S.id) return;
+  setStatus("비교 렌더 중…");
+  const r = await jget(`/api/compare?id=${encodeURIComponent(S.id)}`);
+  if (!r.ok) { setStatus("비교 오류: " + r.error); return; }
+  const bust = "&t=" + Date.now();
+  $("#cmpOrig").src = (r.orig_url || "") + bust;
+  $("#cmpPatched").src = r.patched_url ? r.patched_url + bust : "";
+  if (r.edit_url) { $("#cmpEdit").src = r.edit_url + bust; $("#cmpEditFig").hidden = false; }
+  else $("#cmpEditFig").hidden = true;
+  $("#cmpInfo").textContent = `${r.id} · ${r.type} · ${r.offset || ""} · ${r.build_changed ? "빌드에서 변경됨" : "빌드 동일"}`;
+  $("#cmpNote").textContent = r.note + (r.build_changed ? "" : "  (원본과 적용 빌드가 동일 — 이 스프라이트는 빌드에서 수정되지 않음.)");
+  $("#cmpModal").hidden = false;
+  setStatus("비교 표시");
 }
 function rgb(c) { return `rgb(${c[0]},${c[1]},${c[2]})`; }
 function drawPalette() {
@@ -100,5 +117,8 @@ function wire() {
     if (!S.id || !confirm("편집을 되돌릴까요?")) return;
     await jpost("/api/revert", { id: S.id }); selectSprite(S.id); loadList();
   };
+  $("#compare").onclick = showCompare;
+  $("#cmpClose").onclick = () => { $("#cmpModal").hidden = true; };
+  $("#cmpModal").onclick = (e) => { if (e.target.id === "cmpModal") $("#cmpModal").hidden = true; };
 }
 wire(); loadList();

@@ -80,7 +80,10 @@ if str(ROOT / "tools") not in _sys.path:
 import export_sprites as ES  # noqa: E402  lz77_decompress, tiles_to_indices, GRAYSCALE, read_palette, guess_cols, TILE_BYTES
 
 ROM_PATH = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
+PATCHED_ROM_PATH = ROOT / "output" / "game_wars_korean_full.gba"
+CMP_DIR = ROOT / "temp" / "sprite_cmp"
 _ROM = None
+_PATCHED = None
 
 
 def rom_bytes():
@@ -90,13 +93,19 @@ def rom_bytes():
     return _ROM
 
 
+def patched_bytes():
+    global _PATCHED
+    if _PATCHED is None:
+        _PATCHED = PATCHED_ROM_PATH.read_bytes() if PATCHED_ROM_PATH.exists() else b""
+    return _PATCHED
+
+
 def sprite_by_id(sid):
     return next((s for s in sprite_list() if s.get("id") == sid), None)
 
 
-def decode_indices(sp):
-    """sprite 레코드 → (grid[h][w] 0..15, w, h, tile_cols). 실패 시 None."""
-    rom = rom_bytes()
+def decode_from_rom(rom, sp):
+    """주어진 ROM 바이트에서 sprite 디코드 → (grid,w,h,cols). 실패 시 None."""
     off = sp.get("offset_int")
     if off is None:
         off = int(sp.get("offset", "0x0"), 16)
@@ -114,6 +123,38 @@ def decode_indices(sp):
     cols = sp.get("tile_cols") or ES.guess_cols(n)
     grid, w, h = ES.tiles_to_indices(tile_data, cols)
     return grid, w, h, cols
+
+
+def decode_indices(sp):
+    """원본 ROM에서 디코드(편집기 기본)."""
+    return decode_from_rom(rom_bytes(), sp)
+
+
+def render_compare_png(sid, which):
+    """원본(orig)/패치빌드(patched)/편집(edit) 스프라이트를 PNG 바이트로 렌더.
+    스프라이트는 타일+팔레트에서 1:1 표시되므로 이 디코드 렌더 = 인게임 픽셀과 동일."""
+    sp = sprite_by_id(sid)
+    if sp is None:
+        return None
+    pal = [tuple(c) for c in palette_for(sp)]
+    grid = w = h = None
+    if which == "edit":
+        ov = load_json(OVERRIDES_PATH, {}) or {}
+        rec = ov.get(sid)
+        if rec and rec.get("indices"):
+            grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
+    if grid is None:
+        rom = patched_bytes() if which == "patched" else rom_bytes()
+        if not rom:
+            return None
+        dec = decode_from_rom(rom, sp)
+        if dec is None:
+            return None
+        grid, w, h, _ = dec
+    CMP_DIR.mkdir(parents=True, exist_ok=True)
+    out = CMP_DIR / f"{sid}_{which}.png"
+    ES.render_png(grid, w, h, pal, str(out), scale=3)
+    return out.read_bytes()
 
 
 def encode_indices(grid, w, h):
@@ -177,7 +218,40 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, data, "image/png")
         if u.path == "/api/tile":
             return self._send(200, self._tile(q))
+        if u.path == "/api/render":
+            sid = q.get("id", [""])[0]
+            which = q.get("which", ["orig"])[0]
+            if which not in ("orig", "patched", "edit"):
+                return self._send(400, {"error": "which=orig|patched|edit"})
+            try:
+                data = render_compare_png(sid, which)
+            except Exception as e:
+                return self._send(500, {"error": "render: %r" % e})
+            if not data:
+                return self._send(404, {"error": "no render for %s/%s" % (sid, which)})
+            return self._send(200, data, "image/png")
+        if u.path == "/api/compare":
+            return self._send(200, self._compare(q))
         return self._send(404, {"error": "not found"})
+
+    def _compare(self, q):
+        """원본↔적용(패치빌드) 픽셀 동일 여부 + 편집 존재 여부."""
+        sid = q.get("id", [""])[0]
+        sp = sprite_by_id(sid)
+        if sp is None:
+            return {"ok": False, "error": "id 없음: %s" % sid}
+        o = decode_from_rom(rom_bytes(), sp)
+        p = decode_from_rom(patched_bytes(), sp) if patched_bytes() else None
+        changed = (o and p and o[0] != p[0])
+        ov = load_json(OVERRIDES_PATH, {}) or {}
+        has_edit = sid in ov and bool(ov[sid].get("indices"))
+        return {"ok": True, "id": sid, "offset": sp.get("offset"), "type": sp.get("type"),
+                "source": sp.get("source"),
+                "orig_url": "/api/render?id=%s&which=orig" % urllib.parse.quote(sid),
+                "patched_url": ("/api/render?id=%s&which=patched" % urllib.parse.quote(sid)) if p else None,
+                "edit_url": ("/api/render?id=%s&which=edit" % urllib.parse.quote(sid)) if has_edit else None,
+                "build_changed": bool(changed), "has_edit": has_edit,
+                "note": "스프라이트는 타일+팔레트에서 1:1 표시 → 이 디코드 렌더가 인게임 픽셀과 동일(에뮬 불필요)."}
 
     def _static(self, rel):
         path = (STATIC / rel)

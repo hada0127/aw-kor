@@ -24,6 +24,7 @@
       <label><input type="checkbox" id="grid" checked> 격자</label>
       <button id="save" disabled>저장</button>
       <button id="revert" disabled>되돌리기</button>
+      <button id="compare" disabled>원본↔적용 비교</button>
     </div>
     <div id="canvaswrap"><canvas id="cv"></canvas></div>
   </section>
@@ -34,6 +35,17 @@
     <div class="ttl">현재 색 <span id="selidx">0</span></div>
   </aside>
 </main>
+<div id="cmpModal" hidden>
+  <div class="cmpbox">
+    <div class="cmphead"><strong>원본 ↔ 적용 비교</strong><span id="cmpInfo"></span><button id="cmpClose">✕</button></div>
+    <div class="cmpgrid">
+      <figure><figcaption>원본 (일본판 ROM)</figcaption><img id="cmpOrig" alt="원본"></figure>
+      <figure><figcaption>적용 (한글 빌드 ROM)</figcaption><img id="cmpPatched" alt="적용"></figure>
+      <figure id="cmpEditFig" hidden><figcaption>편집중 (미저장/저장 편집)</figcaption><img id="cmpEdit" alt="편집"></figure>
+    </div>
+    <div id="cmpNote" class="cmpnote"></div>
+  </div>
+</div>
 <script src="/static/app.js"></script>
 </body>
 </html>
