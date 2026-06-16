@@ -9976,6 +9976,41 @@ def main():
                 st[f'supp_level{level}'] += 1
                 written_addrs.add(a)
 
+    # dialogue_overrides.json: 대사 편집기 편집 + 미번역 채움 번역의 **최종 권위 오버레이**
+    # (주소→ko, last-writer-wins). 모든 소스 뒤에 적용해 어떤 주소든(슬롯 있으면) 덮어쓴다.
+    # 편집기→빌드 연결 + 미번역 일괄채움이 ROM에 반영되게 한다.
+    _dlg_ov = {}
+    _ovp = os.path.join(BASE, 'data', 'dialogue_overrides.json')
+    if os.path.exists(_ovp):
+        try:
+            _dlg_ov = json.load(open(_ovp, encoding='utf-8'))
+        except Exception:
+            _dlg_ov = {}
+    st['dialogue_overrides'] = 0
+    for _astr, ko in _dlg_ov.items():
+        ko = (ko or '').strip()
+        if not ko:
+            continue
+        try:
+            a = int(_astr, 16) if isinstance(_astr, str) else int(_astr)
+        except (ValueError, TypeError):
+            continue
+        if a < SAFE_MIN_ADDR:
+            continue
+        slot = slots.get(a, 0)
+        if slot <= 0 or in_deny(a, a + slot) or a in skip_addrs or a + slot > len(rom):
+            continue
+        if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
+            ko = normalize_pair_renderer_text(ko)
+        enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+        if enc is None:
+            st['overflow'] += 1
+            report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
+            continue
+        write_slot_text(rom, a, slot, enc, ko, level, 'dialogue-override')
+        st['dialogue_overrides'] += 1
+        written_addrs.add(a)
+
     # 이름 입력 영문 그리드 재주입 (v56 그리드를 정확한 3구역 매핑으로 덮어씀).
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)

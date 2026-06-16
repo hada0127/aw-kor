@@ -198,6 +198,12 @@ class Handler(BaseHTTPRequestHandler):
     def _dialogue(self, q):
         data = load_json(DIALOGUE_PATH, {"lines": []})
         lines = data.get("lines", [])
+        _ov = load_json(OVERRIDES_PATH, {}) or {}  # 편집/채움 번역을 즉시 반영(line view)
+        if _ov:
+            for ln in lines:
+                a = ln.get("address")
+                if a in _ov and _ov[a]:
+                    ln["ko"] = _ov[a]
         region = (q.get("region", [""])[0] or "").strip()
         # 허브 섹션(공통/1편/2편)→region 매핑
         section = (q.get("section", [""])[0] or "").strip()
