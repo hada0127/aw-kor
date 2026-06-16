@@ -1078,3 +1078,10 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 - **확정 원인**: A3 hook(`PART2_HOOK_A3`)의 relocated table end literal이 `0x08F224B4`로 하드코딩되어 있었지만, 실제 2350자 확장 테이블 끝은 `0x08F243A4`다. 원본 536엔트리 뒤 한글 2350엔트리를 붙인 전체 길이는 `0x43A4`이며, 구 literal은 정렬된 한글 엔트리 앞 1030자(`가`..`빚`)만 검색했다. 그래서 `부/래/니/다/만/기/려`는 처리되고 `어/서/오/시/십/입/잠/주`는 검색 실패 → 원본 `0x8148` fallback으로 빠졌다.
 - **캐시 검증**: A3 원본의 `0x0852F960` linked glyph table miss가 fallback 출처지만, 한글 성공 경로는 이 캐시를 쓰지 않고 `KOR_BASE`에서 `r5`가 가리키는 VRAM 2타일로 직접 복사 후 epilogue(`0x030061C1`)로 복귀한다. 따라서 긴 문자열 캐시 초과/충돌이 아니라 A3 hook의 table-end literal 오류다.
 - **수정**: `tools/build_korean_full.py`에서 A3 hook table-end literal을 placeholder로 두고, `new_tbl` 생성 직후 `P.NEW_TBL_RT + len(new_tbl)`를 `PART2_HOOK_A3_FILE + 0x8C`에 패치한다. 현재 산출 ROM 기준 `0xF3030C = A4 43 F2 08`(`0x08F243A4`). fresh capture `temp/a3_fix_visual_20260616/sheet.png`의 `07_part2_main_menu`에서 하단 문구 `캠페인을 처음부터 플레이합니다` 정상 표시 확인.
+
+## 2026-06-16 — A3 렌더러 전각공백 폭 불일치 (후속)
+
+- A3 `?` 해결 후, A3가 그리는 모드선택 메뉴/옵션 설명문(0xA2C000~0xA2D200, 104행)의 전각공백(0x8140)이 2칸(16px)으로 렌더돼 단어 간격이 이중공백처럼 넓다. per-char 대사 렌더러는 같은 전각공백을 1칸으로 렌더 → 렌더러 간 불일치.
+- 원인: `PART2_HOOK_A3_SPACE`는 ASCII 공백(0x20)만 1칸 전진 처리. 전각공백 0x8140은 원본 char 경로(2칸)로 감.
+- 수정 방향: A3 파서의 0x8140을 ASCII 공백과 동일하게 1칸 전진(데이터 무변경, 전각공백 유지). codex 의뢰(review_a3space.md).
+- 증거: temp/a3verify/cmp_dlg.png(원본 무공백 vs 패치 이중간격).

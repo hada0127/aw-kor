@@ -27,7 +27,8 @@
 - [x] iter6: 숫자드리프트 복원 → **qa_meaning NUMBER 0**. 이중권위(script 인라인 리터럴이 import 덮음) 해결, qa_meaning 정밀화(인접슬롯/もう１/노이즈). agy 실리뷰 hang 확인→claude+codex로 운용.
 - [ ] iter7: **전체 의미 audit**(JA↔KO 전수 LLM 판정) — 숫자/부정 외 오역·의미축소·뉘앙스 색출 워크플로(대규모)
 - [x] iter7: 글리프 데이터 clean 확인(render_glyph_sheet, 2350음절 깨짐 0). **fresh-boot Part2 메뉴에서 /goal #1 실결함 발견**: CO 인사말 A3 렌더러 다수 음절 `?` fallback. 증거+research 기록, codex 심층분석 의뢰.
-- [⏳] iter8: **A3 렌더러 `?` 수정**(codex_a3 분석 반영) — glyph-cache/hook 범위 수정 or per-char 타일 전환. 프롤로그 등 동일 경로 확인.
+- [x] iter8: **A3 `?` 결함 수정 완료**(codex: relocated table-end literal을 2350 전범위로 data-driven 주입). fresh-boot 검증 — 메뉴 인사말 `캠페인을 처음부터 플레이합니다` 정상, `?` 0. 전 게이트 PASS.
+- [⏳] iter9: A3 전각공백 2칸→1칸 ASM 수정(codex_a3space) — per-char 대사와 폭 일치. 데이터 무변경.
 - [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
 - [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
 - [ ] iter: 전체 의미 audit(JA↔KO 전수) — 숫자/부정 외 오역·의미축소 LLM 판정 워크플로
