@@ -1212,3 +1212,11 @@ LZ77 단일블록이 아닌 흩어진 ROM 오프셋에 4bpp OBJ 라벨 타일을
 편집기는 base 오프셋에서 tw*th 연속타일을 perm 보정해 읽어 라벨 적층 렌더. 0x465468 '수도'는
 status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어써져 최종은 compact쪽
 (데드코드, objlabel_sprites.json엔 compact 1곳만 기록 → 이중기록 없음).
+
+## 스프라이트 편집→ROM 오버레이 메커니즘 (2026-06-17)
+
+`data/sprites_overrides.json`{id:{indices,...}} → 빌드 `apply_sprite_overrides(rom)`가 체크섬 직전
+최종 적용. 키 매칭: id가 OBJLABEL_SPRITES(메모리)면 synthetic, sprites_index면 lz77/raw.
+- synthetic: `_grid_to_tiles(indices)`로 조립 타일스트림 복원 → 라벨별 tindex 누적, `rom[off+perm[vis]*32]=tiles[(tindex+vis)*32]` (decode의 정확한 역연산).
+- lz77: 재압축(vram_safe)≤comp_size, 초과 skip. raw: ≤size.
+무오버라이드=무동작(byte-identical). 편집은 라벨 자동그리기를 덮어쓰므로 우선. revert는 override 제거 후 재빌드(자동그리기 원복).

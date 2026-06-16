@@ -2523,3 +2523,10 @@
 - [x] **잘린 주소 2행(7EBF·808) 정리**: 정주소 행과 동일 중복 확정 → 제거(+빈행3, 주소정규화6).
 - [ ] (후속) 편집→ROM 라운드트립(sprites_overrides→build): 전체 스프라이트 공통 미구현. apply_sprite_edits
   또는 build의 patch_synthetic_block 신설 필요.
+
+# 🟢 스프라이트 편집→ROM 라운드트립 (2026-06-17, 사용자 "스프라이트 반영도")
+
+- [x] **편집→ROM 역기록 구현**: build `apply_sprite_overrides`(synthetic perm역변환/lz77 재압축/raw),
+  오버라이드 없으면 byte-identical(해시 1623 불변). 편집기 `/api/build`+'적용' 버튼.
+- [x] E2E 검증: synthetic·lz77 편집→재빌드→ROM 반영·decode 일치, revert→해시복귀, lz77 fit/overflow skip.
+- [ ] (후속) 빠른 in-place 적용(전체 재빌드 없이) — 현재는 '적용'=전체 재빌드(수십 초). revert 정확성 위해 재빌드 채택.

@@ -9842,6 +9842,117 @@ PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a28')
 PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a28')
 
 
+def _grid_to_tiles(grid):
+    """index grid(h×w, 0..15) → 4bpp 타일 바이트(8×8, cols=w//8). 편집기 encode_indices와 동일."""
+    h = len(grid)
+    w = len(grid[0]) if grid else 0
+    cols = w // 8
+    rows = h // 8
+    out = bytearray()
+    for t in range(cols * rows):
+        gx = (t % cols) * 8
+        gy = (t // cols) * 8
+        for r in range(8):
+            for c in range(4):
+                lo = grid[gy + r][gx + c * 2] & 0xF
+                hi = grid[gy + r][gx + c * 2 + 1] & 0xF
+                out.append(lo | (hi << 4))
+    return bytes(out)
+
+
+def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None):
+    """스프라이트 편집기 픽셀 편집(data/sprites_overrides.json)을 ROM에 최종 역기록(오버레이).
+    오버라이드 없으면 무동작 → 출력 byte-identical. synthetic은 라벨별 perm 역변환,
+    lz77은 재압축≤comp_size, raw/font는 size 이내. 적합 실패 시 skip+리포트.
+    objl_specs 미지정 시 빌드 메모리(OBJLABEL_SPRITES) 사용(빌드 인-프로세스)."""
+    if ov_path is None:
+        ov_path = os.path.join(BASE, 'data', 'sprites_overrides.json')
+    if not os.path.exists(ov_path):
+        return {'applied': 0, 'skipped': 0}
+    try:
+        ov = json.load(open(ov_path, encoding='utf-8')) or {}
+    except Exception:
+        return {'applied': 0, 'skipped': 0}
+    if not ov:
+        return {'applied': 0, 'skipped': 0}
+    objl = {s['id']: s for s in (objl_specs if objl_specs is not None else OBJLABEL_SPRITES)}
+    idx = {}
+    if idx_path is None:
+        idx_path = os.path.join(BASE, 'data', 'sprites_index.json')
+    if os.path.exists(idx_path):
+        try:
+            d = json.load(open(idx_path, encoding='utf-8'))
+            for s in (d.get('sprites', d) if isinstance(d, dict) else d):
+                idx[s['id']] = s
+        except Exception:
+            pass
+
+    applied = 0
+    skipped = []
+    for sid, rec in ov.items():
+        grid = rec.get('indices')
+        if not grid:
+            continue
+        tiles = _grid_to_tiles(grid)  # 조립/패딩 타일스트림
+        if sid in objl:
+            # 합성: 라벨별로 perm 역변환(시각→ROM)해 각 흩어진 오프셋에 기록
+            labels = objl[sid].get('labels') or []
+            need = sum((l.get('tw', 0) or 0) * (l.get('th', 0) or 0) for l in labels)
+            if len(tiles) < need * 32:  # 부분기록 방지(짧은 그리드 거부)
+                skipped.append((sid, '합성 그리드 부족(%d<%d 타일)' % (len(tiles) // 32, need)))
+                continue
+            tindex = 0
+            spec_ok = True
+            for lab in labels:
+                try:
+                    off = lab.get('offset_int')
+                    if off is None:
+                        off = int(lab['offset'], 16)
+                    tw, th = int(lab['tw']), int(lab['th'])
+                except (KeyError, TypeError, ValueError):
+                    spec_ok = False
+                    break
+                perm = lab.get('perm') or list(range(tw * th))
+                for vis in range(tw * th):
+                    ri = perm[vis]
+                    src = (tindex + vis) * 32
+                    rom[off + ri * 32: off + ri * 32 + 32] = tiles[src:src + 32]
+                tindex += tw * th
+            if not spec_ok:
+                skipped.append((sid, '합성 라벨 스펙 손상'))
+                continue
+            applied += 1
+        elif sid in idx:
+            sp = idx[sid]
+            off = sp.get('offset_int')
+            if off is None:
+                off = int(sp.get('offset', '0x0'), 16)
+            typ = sp.get('type')
+            size = sp.get('size') or 0
+            if size and len(tiles) != size:  # 디컴프크기 불변(VRAM 할당 초과/부족 방지)
+                skipped.append((sid, '%s 디코드 크기 불일치(%dB!=%dB)' % (typ, len(tiles), size)))
+                continue
+            if typ == 'lz77':
+                from lz77_compress import lz77_compress_optimal
+                comp = lz77_compress_optimal(tiles, vram_safe=True)
+                cap = sp.get('comp_size') or 0
+                if not cap or len(comp) > cap:
+                    skipped.append((sid, 'lz77 재압축 %dB > comp_size %dB' % (len(comp), cap)))
+                    continue
+                rom[off:off + cap] = comp + bytes(cap - len(comp))
+                applied += 1
+            else:  # raw4bpp/font
+                rom[off:off + len(tiles)] = tiles
+                applied += 1
+        else:
+            skipped.append((sid, '알 수 없는 스프라이트(인덱스/objlabel 미존재)'))
+    if applied or skipped:
+        print(f'→ 스프라이트 편집 적용(overrides): {applied} applied, {len(skipped)} skipped')
+        for sid, why in skipped:
+            print(f'   skip {sid}: {why}')
+    return {'applied': applied, 'skipped': len(skipped)}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
@@ -18375,6 +18486,10 @@ def main():
     WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
 
     st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code)
+
+    # 스프라이트 편집기 픽셀 편집 최종 오버레이(라벨 자동그리기 이후 = 편집이 우선).
+    # 오버라이드 없으면 무동작 → 출력 byte-identical.
+    st['sprite_overrides'] = apply_sprite_overrides(rom)['applied']
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF

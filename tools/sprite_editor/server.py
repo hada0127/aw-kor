@@ -702,7 +702,28 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._revert(body))
         if u.path == "/api/setpalette":
             return self._send(200, self._setpalette(body))
+        if u.path == "/api/build":
+            return self._send(200, self._build(body))
         return self._send(404, {"error": "not found"})
+
+    def _build(self, body):
+        """편집(sprites_overrides.json)을 ROM에 반영 = build_korean_full.py 전체 재빌드
+        (overrides가 라벨 자동그리기 뒤 최종 오버레이로 적용). 완료 후 패치 ROM 캐시 무효화."""
+        import subprocess
+        global _PATCHED
+        try:
+            proc = subprocess.run([_sys.executable, str(ROOT / "tools" / "build_korean_full.py")],
+                                  capture_output=True, text=True, cwd=str(ROOT), timeout=900)
+        except Exception as e:
+            return {"ok": False, "error": "빌드 실행 실패: %r" % e}
+        _PATCHED = None  # 재빌드 ROM 재로딩
+        applied = ""
+        for line in (proc.stdout or "").splitlines():
+            if "스프라이트 편집 적용" in line:
+                applied = line.strip()
+        return {"ok": proc.returncode == 0, "applied": applied,
+                "log_tail": (proc.stdout or "")[-1200:],
+                "error": (proc.stderr or "")[-800:] if proc.returncode != 0 else None}
 
     def _setpalette(self, body):
         """픽셀 편집 없이 팔레트만 override에 고정(다음 조회/비교에 반영)."""
@@ -755,7 +776,8 @@ class Handler(BaseHTTPRequestHandler):
                 pass
         return {"ok": True, "id": sid, "raw_len": len(enc), "orig_size": sp.get("size"),
                 "fits_raw": fits,
-                "note": "편집 저장됨. ROM 역기록은 tools/apply_sprite_edits.py (타입 %s, lz77은 재압축 ≤comp_size 검증)." % sp.get("type")}
+                "note": "편집 저장됨(overrides). '적용'(/api/build)으로 재빌드하면 ROM에 반영 — "
+                        "synthetic은 perm 역변환, lz77은 재압축≤comp_size, raw는 size 이내(타입 %s)." % sp.get("type")}
 
     def _revert(self, body):
         sid = body.get("id")

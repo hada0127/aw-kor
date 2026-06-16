@@ -920,3 +920,16 @@ translation_for_import.csv의 잘린 주소 2행('7EBF'·'808', 코드영역이�
 (0xDC7BDB/0xDC7EBF/0xE03808, 전부 기록됨)과 동일 ja+ko **중복**임을 ROM 전수검색으로 확정 → 제거.
 빈 garbage 3행도 제거, 0x 없는 정상주소 6개 정규화. 전부 출력 무영향(sha 1623481a 불변).
 archive/malformed_address_rows.csv 보존.
+
+## 스프라이트 편집 → ROM 라운드트립 (2026-06-17)
+
+스프라이트 에디터 픽셀 편집이 실제 게임 ROM에 반영되도록 빌드 오버레이 구현.
+- 빌드(`build_korean_full.py`): `apply_sprite_overrides(rom)` — 라벨 자동그리기 뒤 최종
+  오버레이로 `data/sprites_overrides.json` 적용. **오버라이드 없으면 무동작→byte-identical(해시 1623481a)**.
+  synthetic=라벨별 perm 역변환(시각→ROM), lz77=재압축≤comp_size(초과 시 skip+리포트), raw=size 이내.
+  체크섬 재계산 직전 호출(편집이 0xBD에 반영).
+- 편집기: `_save`가 overrides 기록 → `/api/build`(재빌드)로 ROM 반영, `_PATCHED` 캐시 무효화.
+  프런트 '적용(ROM 반영)' 버튼 추가.
+- E2E 검증: synthetic(status_header 타일0→index5)·lz77(world_map 0x54214C) 둘 다 편집→재빌드→
+  ROM 오프셋 바이트 0x55 반영·decode 일치, 타 라벨 무변경. 오버라이드 제거→재빌드→해시 1623 복귀.
+  /api/build HTTP OK. 5게이트 PASS.

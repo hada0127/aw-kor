@@ -219,6 +219,16 @@ function wire() {
     if (!S.id || !confirm("편집을 되돌릴까요?")) return;
     await jpost("/api/revert", { id: S.id }); selectSprite(S.id); loadList();
   };
+  $("#applybuild").onclick = async () => {
+    if (!confirm("저장된 모든 편집을 재빌드로 ROM에 반영합니다(수십 초 소요). 진행할까요?")) return;
+    const btn = $("#applybuild"); btn.disabled = true; setStatus("재빌드 중… (편집을 ROM에 반영)");
+    try {
+      const r = await jpost("/api/build", {});
+      if (r.ok) { setStatus("반영 완료 ✓ " + (r.applied || "(오버라이드 없음)")); if (S.id) selectSprite(S.id); }
+      else setStatus("빌드 실패: " + (r.error || "").slice(0, 200));
+    } catch (e) { setStatus("빌드 호출 오류: " + e); }
+    btn.disabled = false;
+  };
   $("#compare").onclick = showCompare;
   $("#cmpClose").onclick = () => { $("#cmpModal").hidden = true; };
   $("#cmpModal").onclick = (e) => { if (e.target.id === "cmpModal") $("#cmpModal").hidden = true; };
