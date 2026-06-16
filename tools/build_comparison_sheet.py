@@ -22,7 +22,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -79,30 +81,80 @@ def _resolve(p: str) -> Path:
     return path if path.is_absolute() else (ROOT / path)
 
 
+def _sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _git_commit() -> str:
+    try:
+        return subprocess.check_output(
+            ["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, text=True
+        ).strip()
+    except Exception:
+        return "unknown"
+
+
 def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str) -> Image.Image:
-    """단일 체크포인트의 단일 ROM 화면을 캡처."""
+    """단일 체크포인트의 단일 ROM 화면을 캡처 + provenance sidecar 기록.
+
+    codex 리뷰 수정: savestate orig_state fallback 금지(없으면 명시 에러).
+    각 캡처 옆에 ROM/state SHA·nav·git commit·harness를 sidecar JSON으로 남겨
+    "어떤 ROM/상태에서 나온 화면인지" 추적 가능하게 한다.
+    """
     name = checkpoint["name"]
     shot_dir = out_dir / f"{name}_{side}"
     shot_dir.mkdir(parents=True, exist_ok=True)
+    prov: dict = {
+        "name": name,
+        "side": side,
+        "mode": checkpoint["mode"],
+        "rom": str(rom),
+        "rom_sha256": _sha256(rom),
+        "git_commit": _git_commit(),
+        "harness": str(harness),
+        "grade": checkpoint.get("grade", "stale_state" if checkpoint.get("stale_bg") else "ground_truth"),
+    }
     driver = MGBADriver(rom, shot_dir, harness)
     try:
         if checkpoint["mode"] == "fresh":
             run_nav(driver, checkpoint["nav"])
+            prov["nav"] = checkpoint["nav"]
         elif checkpoint["mode"] == "savestate":
-            state = checkpoint["state"] if side == "patched" else checkpoint.get("orig_state", checkpoint["state"])
+            if side == "patched":
+                state = checkpoint["state"]
+            else:
+                state = checkpoint.get("orig_state")
+                if not state:
+                    raise ValueError(f"{name}: savestate orig 캡처는 orig_state 필수(patched state를 원본 ROM에 로드 금지)")
+            state_path = _resolve(state)
+            prov["state"] = str(state_path)
+            prov["state_sha256"] = _sha256(state_path)
             driver.frames(1)
-            driver.loadstate(_resolve(state))
+            driver.loadstate(state_path)
             run_nav(driver, checkpoint.get("refresh", [["frames", 20]]))
+            prov["refresh"] = checkpoint.get("refresh", [["frames", 20]])
         else:
             raise ValueError(f"unknown mode: {checkpoint['mode']!r}")
-        return driver.shot("frame")
+        img = driver.shot("frame")
+        (shot_dir / "provenance.json").write_text(
+            json.dumps(prov, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        return img
     finally:
         driver.close()
 
 
 def panel(image: Image.Image, title: str, scale: int = 2) -> Image.Image:
-    """화면 1장을 라벨 헤더가 붙은 패널로 변환."""
-    body = image.resize((GBA_W * scale, GBA_H * scale), Image.NEAREST)
+    """화면 1장을 라벨 헤더가 붙은 패널로 변환.
+
+    codex 리뷰 수정: 고정 240폭 resize는 --compare pair(484폭)를 왜곡한다.
+    실제 이미지 폭/높이를 기준으로 확대해 종횡비를 보존한다.
+    """
+    body = image.resize((image.width * scale, image.height * scale), Image.NEAREST)
     header = 22
     canvas = Image.new("RGB", (body.width, body.height + header), (28, 28, 32))
     canvas.paste(body, (0, header))
@@ -133,6 +185,8 @@ def main() -> None:
     ap.add_argument("--original", default=str(DEFAULT_ORIGINAL))
     ap.add_argument("--compare", action="store_true", help="원본 vs 패치 나란히")
     ap.add_argument("--only", choices=["fresh", "savestate"], help="해당 모드만 캡처")
+    ap.add_argument("--include-stale", action="store_true",
+                    help="savestate(stale-BG) 체크포인트 포함(기본은 fresh ground truth만)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "comparison_sheets"))
     ap.add_argument("--harness", default="/tmp/mgbah")
     ap.add_argument("--cols", type=int, default=0, help="0=자동")
@@ -142,6 +196,11 @@ def main() -> None:
     checkpoints = manifest["checkpoints"]
     if args.only:
         checkpoints = [c for c in checkpoints if c["mode"] == args.only]
+    elif not args.include_stale:
+        # codex 리뷰: 기본은 신뢰 가능한 fresh ground truth만. stale은 명시 opt-in.
+        checkpoints = [c for c in checkpoints if not (c["mode"] == "savestate" and c.get("stale_bg"))]
+    if not checkpoints:
+        raise SystemExit("선택된 체크포인트 없음 (--include-stale 또는 --only savestate 확인)")
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)

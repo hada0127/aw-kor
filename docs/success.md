@@ -777,3 +777,18 @@ codex 기본 한글화 완료분을 처음부터 엄격 재검수(워크플로 �
   - 그래픽 깨짐 검증 → **fresh-boot 캡처** 기준.
 - **재현**: `python3 tools/build_comparison_sheet.py --compare --only fresh` (신뢰 시트) / `python3 tools/build_comparison_sheet.py` (전체 patched 3x). 부팅 타이틀은 ~600프레임에 출력(매니페스트 타이밍 반영).
 - 빌드 무영향(신규 파일만 추가, `build_korean_full.py` 무변경). py_compile OK, 매니페스트 JSON OK.
+
+## 2026-06-16 — 명사 통일 ROM 게이트 + 72행 통일 (codex 리뷰 반영)
+
+codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역디코드가 권위" → ROM-디코드 명사 게이트 신설 + 발견 결함 통일.
+
+- **신규 hard gate** `tools/qa_terms_from_rom.py`: integrity_map enc_hex를 역디코드(2350+1030 음절맵)해 **출하 ROM 실제 한글** 기준으로 `proper_nouns.json` 정본 대비 금지 표기 흔들림을 검사. 1건이라도 있으면 exit 1.
+- **발견·통일된 72행 결함**(출하 ROM 역디코드 기준, 비-고유명사 충돌 0 검증):
+  - リョウ: `료우` 32 → `료`
+  - ホイップ: `휩` 24 + `호이프` 10 → `휘프`(기존 빌드 partial 규칙 `휩 장군→휘프 쇼군` 보완)
+  - マクロランド: `마크로랜드` 3 → `매크로랜드`
+  - イエローコメット: `옐로 코멧` 2 → `옐로코멧`
+  - グリーンアース: `그린 어스` 1 → `그린어스`
+- 적용 경로: `build_korean_full.py` `TERM_NORMALIZATION`(encode_fit 내 normalize_korean_terms — CSV import·inline·직접패치 전 경로 공통 적용). 국가명 띄어쓰기 정본 붙임 통일도 추가(레드스타/블루문/블랙홀 future-proof).
+- **검증**: 재빌드 후 `qa_terms_from_rom` PASS(hard 0), 역디코드 잔존 료우/휩/호이프/마크로랜드/옐로 코멧 모두 0, 휘프 110·료 312 통일. `qa_integrity_map` PASS(바이트OK). `qa_text_fit` **overflow 0 / no_ko 0**(휩→휘프 +2바이트 확장이 fallback으로 흡수, 회귀 없음). full/final/title_test 동기화.
+- 비교 시트 도구 codex 결함 수정: `panel()` 종횡비 보존(고정 240폭 → 실제 폭), 기본 `--only fresh`(stale는 `--include-stale` opt-in), savestate orig_state fallback 금지, 캡처별 provenance.json(ROM/state SHA·git commit·nav) sidecar.

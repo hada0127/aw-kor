@@ -19,10 +19,10 @@
 **확립 원칙(검증 신뢰성)**: 세이브스테이트 캡처는 정적 BG·기존 렌더 텍스트가 **stale**이라 회귀 판정 불가.
 → 텍스트(의미/명사/띄어쓰기) = **ROM 슬롯 디코드** 기준 / 그래픽 깨짐 = **fresh-boot 캡처** 기준으로 분리 검증.
 
-- [x] **iter1: 비교 시트 backbone** `tools/build_comparison_sheet.py` + `data/screen_checkpoints.json`. fresh-boot ground truth(닌텐도 제공/타이틀/선택) 원본 대비 정상 확인. codex+agy 리뷰 진행 중.
-- [ ] iter: codex/agy 리뷰 반영 — savestate stale 한계 처리, fresh 네비 커버리지 확대(엔딩까지), 텍스트 ROM-디코드 회귀 도구
-- [ ] iter: 띄어쓰기/줄바꿈 — 슬롯 디코드로 전수 점검(조사 생략 과축약 "기계 좋아 소년"류, 반각공백 1·2편 일관성)
-- [ ] iter: 명사 통일 0 — proper_nouns.json edit 확정 + dialogue_map/ROM 교차검증, apply_proper_nouns_dict --apply
+- [x] **iter1: 비교 시트 backbone** `tools/build_comparison_sheet.py` + `data/screen_checkpoints.json`. fresh-boot ground truth(닌텐도 제공/타이틀/선택) 원본 대비 정상 확인.
+- [x] **iter2: codex 리뷰 반영(1차)** — 비교 시트 도구 결함 수정(panel 종횡비/기본 fresh/orig_state 가드/provenance). **명사 통일 hard gate `qa_terms_from_rom.py` 신설 + 72행 통일**(료우→료, 휩/호이프→휘프, 마크로랜드→매크로랜드, 옐로 코멧/그린 어스→붙임). 게이트 PASS, overflow 0.
+- [ ] iter: agy 리뷰(짧은 프롬프트) + codex 잔여 — qa_spacing_from_rom hard gate, dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 커버리지 확대
+- [ ] iter: 띄어쓰기/줄바꿈 — 슬롯 디코드로 전수 점검(level≥4 공백제거 2행·level≥6 부호제거 2행 whitelist/수정, 조사 생략 과축약 "기계 좋아 소년"류, 반각공백 1·2편 일관성)
 - [ ] iter: 의미 변경 0 — JA 원문 ↔ KO 슬롯 디코드 의미 대조(축약으로 뜻 바뀐 행 색출)
 - [ ] iter: 비트맵 깨짐 0 — fresh-boot 전 화면 매트릭스(월드맵 BG 영어 국가명 fresh 확정 포함), 깨짐 패치 도구 개선
 - [ ] iter: 엔딩 도달 검증 — 진행 세이브 생성(없으면) + fresh 네비/Lua 자동진행
