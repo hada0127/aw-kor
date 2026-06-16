@@ -5,7 +5,7 @@ distributed here; build outputs stay under `output/`.
 
 ## Current Release
 
-- Patch set: `game_wars_korean_full_2026-06-16.bps` / `game_wars_korean_full_2026-06-16.ips`
+- Patch set: `game_wars_korean_full_2026-06-17.bps` / `game_wars_korean_full_2026-06-17.ips`
 - Target ROM SHA-256: `61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f`
 - Target size: 16777216 bytes
 

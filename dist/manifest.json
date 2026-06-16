@@ -1,6 +1,6 @@
 {
   "name": "Game Boy Wars Advance 1+2 — 한글화",
-  "date": "2026-06-16",
+  "date": "2026-06-17",
   "status": "complete — patch-only distribution; final QA/sign-off complete",
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
@@ -22,7 +22,7 @@
     "game_wars_korean_title_test.gba": "61d51a2abe081ae9160975b6379d248d61369e8595ce8b80798ca37766f2ae3f"
   },
   "bps_patch": {
-    "file": "game_wars_korean_full_2026-06-16.bps",
+    "file": "game_wars_korean_full_2026-06-17.bps",
     "size": 747759,
     "crc32": "2144df1c",
     "sha1": "8437bf68bbbff1e1416bf6d07d801fdbe1b98d34",
@@ -30,7 +30,7 @@
     "round_trip": "OK"
   },
   "ips_patch": {
-    "file": "game_wars_korean_full_2026-06-16.ips",
+    "file": "game_wars_korean_full_2026-06-17.ips",
     "size": 876262,
     "crc32": "46cf2380",
     "sha1": "280c8b6a08a2171cefc2eb30773627b97d320800",
