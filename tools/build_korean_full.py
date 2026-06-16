@@ -5970,6 +5970,130 @@ def patch_common_nintendo_presents_bg(rom):
     return len(out) // 32
 
 
+def patch_part2_operation_select_country_bg(rom):
+    """작전/전투선택 BG(0xBF66F0)의 영어 국가명 배너를 한글로 교체.
+
+    각 국가명은 8px 한 타일행(측면 배너 장식 포함). galmuri7(7px)로 정본 한글을
+    배너 themed 색(최대 채도 인덱스)으로 중앙 렌더, 측면 장식은 보존. 같은 tile ID가
+    상/하단 2곳에 배치돼 1회 교체로 양쪽 반영. fresh-boot 확인 완료(2026-06-16).
+    """
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+
+    off = 0xBF66F0
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid op-select BG LZ77 at 0x{off:X}')
+    data, consumed = bytearray(dec[0]), dec[1]
+    glyphs, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    pal_off = 0xBF7A7C
+
+    def rgb(i):
+        v = struct.unpack('<H', rom[pal_off + i * 2:pal_off + i * 2 + 2])[0]
+        return ((v & 31), ((v >> 5) & 31), ((v >> 10) & 31))
+
+    def sat(i):
+        r, g, b = rgb(i)
+        return max(r, g, b) - min(r, g, b)
+
+    def gp(t, x, y):
+        b = data[t * 32 + y * 4 + x // 2]
+        return (b & 0xF) if x % 2 == 0 else (b >> 4) & 0xF
+
+    def sp(t, x, y, v):
+        i = t * 32 + y * 4 + x // 2
+        b = data[i]
+        data[i] = (b & 0xF0) | (v & 0xF) if x % 2 == 0 else (b & 0x0F) | ((v & 0xF) << 4)
+
+    BG = 3
+
+    def banner(tids, text):
+        W = len(tids) * 8
+        grid = [[gp(tids[x // 8], x % 8, y) for x in range(W)] for y in range(8)]
+        from collections import Counter
+        c = Counter(grid[y][x] for y in range(8) for x in range(W) if grid[y][x] not in (0, 1, 3))
+        cand = [i for i, _ in c.most_common()]
+        text_idx = max(cand, key=sat) if cand else 5
+        cols = [x for x in range(W) if any(grid[y][x] == text_idx for y in range(8))]
+        if not cols:
+            cols = list(range(W // 4, 3 * W // 4))
+        x0, x1 = min(cols), max(cols)
+        for y in range(8):
+            for x in range(max(0, x0 - 1), min(W, x1 + 2)):
+                grid[y][x] = BG
+        widths = [(glyph_grid(glyphs[ord(ch)])[1] if ord(ch) in glyphs else 4) for ch in text]
+        tot = sum(widths) + (len(text) - 1)
+        cx = x0 + max(0, ((x1 - x0 + 1) - tot) // 2)
+        for ch in text:
+            g = glyphs.get(ord(ch))
+            if g is None:
+                cx += 5
+                continue
+            gg, w, h, xo, yo = glyph_grid(g)
+            for yy in range(h):
+                for xx in range(w):
+                    if gg[yy][xx] and 0 <= cx + xx < W:
+                        grid[yy + (8 - h)][cx + xx] = text_idx
+            cx += w + 1
+        for y in range(8):
+            for x in range(W):
+                sp(tids[x // 8], x % 8, y, grid[y][x])
+
+    def banner_multi(rows, text):
+        """여러 타일행(top→bottom)에 걸친 텍스트(예 2행 16px)를 한글로 교체."""
+        H = len(rows) * 8
+        W = len(rows[0]) * 8
+        def gp2(rx, x, y):
+            t = rows[y // 8][x // 8]
+            return gp(t, x % 8, y % 8)
+        def sp2(rx, x, y, v):
+            t = rows[y // 8][x // 8]
+            sp(t, x % 8, y % 8, v)
+        grid = [[gp2(0, x, y) for x in range(W)] for y in range(H)]
+        from collections import Counter
+        c = Counter(grid[y][x] for y in range(H) for x in range(W) if grid[y][x] not in (0, 1, 3))
+        cand = [i for i, _ in c.most_common()]
+        text_idx = max(cand, key=sat) if cand else 5
+        for y in range(H):
+            for x in range(W):
+                grid[y][x] = BG
+        # 큰 글자: galmuri11 condensed bdf 없으니 galmuri7을 2배 세로로... 대신 galmuri7 1행을 중앙(세로)에
+        widths = [(glyph_grid(glyphs[ord(ch)])[1] if ord(ch) in glyphs else 5) for ch in text]
+        tot = sum(widths) + (len(text) - 1)
+        cx = max(0, (W - tot) // 2)
+        oy = max(0, (H - 7) // 2)
+        for ch in text:
+            g = glyphs.get(ord(ch))
+            if g is None:
+                cx += 5
+                continue
+            gg, w, h, xo, yo = glyph_grid(g)
+            for yy in range(h):
+                for xx in range(w):
+                    if gg[yy][xx] and 0 <= cx + xx < W and 0 <= oy + yy + (7 - h) < H:
+                        grid[oy + yy + (7 - h)][cx + xx] = text_idx
+            cx += w + 1
+        for y in range(H):
+            for x in range(W):
+                sp2(0, x, y, grid[y][x])
+
+    banner(list(range(0x50, 0x5C)), '레드스타')
+    banner(list(range(0x70, 0x7D)), '블루문')
+    banner(list(range(0x110, 0x11D)), '그린어스')
+    banner([0x11E, 0x11F, 0x138, 0x139, 0x13A, 0x13B], '코멧')
+    # 우측 2행(16px) 'YELLOW' 분리 라벨 → 옐로
+    banner_multi([[0x4D, 0x4E, 0x4F, 0xAD, 0xAE, 0xAF, 0x10D],
+                  [0x5D, 0x5E, 0x5F, 0xBD, 0xBE, 0xBF, 0x11D]], '옐로')
+
+    comp = lz77_compress_optimal(bytes(data), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'op-select BG recompress too big: {len(comp)} > {consumed}')
+    rom[off:off + len(comp)] = comp
+    return 4
+
+
 def patch_part2_splash_logo_bg(rom):
     """Replace the Part 2 pre-title English BG logo with a compact Korean one."""
     from PIL import Image, ImageDraw, ImageFont
@@ -9765,6 +9889,7 @@ def main():
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
     st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
+    st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
     st['common_nintendo_presents_bg'] = patch_common_nintendo_presents_bg(rom)
     st['part2_splash_logo_bg'] = patch_part2_splash_logo_bg(rom)
     st['part2_intro_blackhole_bg'] = patch_part2_intro_blackhole_bg(rom)
