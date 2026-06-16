@@ -51,3 +51,8 @@ html.embed header { padding-top: 4px; }
 #onscreenwrap { margin-top: 10px; padding: 8px; background: #14141a; border: 1px solid #2a2a36; border-radius: 6px; }
 #onscreenwrap .oslbl { font-size: 12px; color: #9bd; margin-bottom: 6px; }
 #onscreen { image-rendering: pixelated; background: #222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="8" height="8" fill="%23333"/><rect x="8" y="8" width="8" height="8" fill="%23333"/></svg>'); max-width: 100%; border: 1px solid #333; }
+
+/* 화면/타일 편집 모드 토글 */
+.editmode { display: inline-flex; gap: 2px; margin-left: 8px; }
+.editmode button.on { background: #3a6ea5; color: #fff; border-color: #4a8ec5; }
+.editmode button:disabled { opacity: .4; }

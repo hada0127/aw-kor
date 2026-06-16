@@ -427,7 +427,33 @@ class Handler(BaseHTTPRequestHandler):
             if not data:
                 return self._send(404, {"error": "no onscreen layout for %s" % sid})
             return self._send(200, data, "image/png")
+        if u.path == "/api/onscreen_data":
+            return self._send(200, self._onscreen_data(q))
         return self._send(404, {"error": "not found"})
+
+    def _onscreen_data(self, q):
+        """WYSIWYG 편집용: 레이아웃 셀 + 그릴 팔레트(캡처 OBJ 뱅크) + tile_cols.
+        프런트가 현재 indices로 조립 렌더 + 클릭→타일픽셀 역매핑 페인트."""
+        import struct as _s
+        from collections import Counter
+        sid = q.get("id", [""])[0]
+        lay = load_layouts().get("layouts", {}).get(sid)
+        sp = sprite_by_id(sid)
+        if not lay or sp is None:
+            return {"ok": False, "error": "no layout for %s" % sid}
+        palp = load_layouts().get("pal_by_screen", {}).get(lay["screen"])
+        palb = (ROOT / palp).read_bytes() if palp and (ROOT / palp).exists() else b"\x00" * 1024
+        bank = Counter(c["bank"] for c in lay["cells"]).most_common(1)[0][0]
+
+        def col(i):
+            v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
+            return [(v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31]
+        dec = decode_indices(sp)
+        cols = dec[3] if dec else (sp.get("tile_cols") or 1)
+        return {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
+                "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": lay["cells"],
+                "palette": [col(256 + bank * 16 + i) for i in range(16)], "bank": bank,
+                "screen": lay["screen"]}
 
     def _compare(self, q):
         """원본↔적용(패치빌드) 픽셀 동일 여부 + 편집 존재 여부."""

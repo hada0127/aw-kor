@@ -9,7 +9,7 @@ const URLP = new URLSearchParams(location.search);
 const SECTION = URLP.get("section") || "all";
 const EMBED = URLP.get("embed") === "1";
 if (EMBED) document.documentElement.classList.add("embed");
-const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false, section: SECTION };
+const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false, section: SECTION, osmode: false, os: null, cols: 1 };
 
 async function loadList() {
   const p = new URLSearchParams({ type: $("#type").value, q: $("#q").value,
@@ -36,15 +36,28 @@ function card(s) {
 async function selectSprite(id) {
   const t = await jget(`/api/tile?id=${encodeURIComponent(id)}`);
   if (!t.ok) { setStatus("오류: " + t.error); return; }
-  S.id = id; S.w = t.width; S.h = t.height; S.indices = t.indices;
+  S.id = id; S.w = t.width; S.h = t.height; S.indices = t.indices; S.cols = t.tile_cols || (t.width / 8);
   S.palette = (t.palette || []).map(c => c.slice(0, 3));
   while (S.palette.length < 16) S.palette.push([0, 0, 0]);
-  S.dirty = false;
+  S.dirty = false; S.os = null; S.osmode = false;
   $("#info").textContent = `${t.desc || id} · ${t.type} ${t.width}×${t.height} · ${t.offset || ""} ${t.edited ? "(편집본)" : ""}`;
   $("#save").disabled = true; $("#revert").disabled = !t.edited;
   $("#compare").disabled = false;
-  refreshOnscreen(t.has_onscreen);
+  // 실제 화면 형태(WYSIWYG) — 레이아웃 있으면 기본 화면 편집
+  $("#mode-screen").disabled = !t.has_onscreen;
+  if (t.has_onscreen) {
+    const o = await jget(`/api/onscreen_data?id=${encodeURIComponent(id)}`);
+    if (o.ok) { S.os = o; S.osmode = true; S.palette = o.palette.map(c => c.slice(0, 3)); }
+  }
+  setMode(S.osmode ? "screen" : "tile");
+  refreshOnscreen(t.has_onscreen && !S.osmode);
   drawPalette(); draw();
+}
+function setMode(m) {
+  S.osmode = (m === "screen") && !!S.os;
+  $("#mode-screen").classList.toggle("on", S.osmode);
+  $("#mode-tile").classList.toggle("on", !S.osmode);
+  if (S.indices) { drawPalette(); draw(); }
 }
 function refreshOnscreen(has) {
   const wrap = $("#onscreenwrap");
@@ -112,7 +125,55 @@ function drawPalette() {
   });
   $("#selidx").textContent = S.sel;
 }
+// 현재 indices에서 (linear tile T, 읽기 좌표 rx,ry) → indices 그리드 픽셀
+function tilePixel(T, rx, ry) {
+  const gx = (T % S.cols) * 8 + rx, gy = Math.floor(T / S.cols) * 8 + ry;
+  return (S.indices[gy] && S.indices[gy][gx] !== undefined) ? (S.indices[gy][gx] & 15) : 0;
+}
+function setTilePixel(T, rx, ry, v) {
+  const gx = (T % S.cols) * 8 + rx, gy = Math.floor(T / S.cols) * 8 + ry;
+  if (S.indices[gy] && S.indices[gy][gx] !== undefined) S.indices[gy][gx] = v;
+}
+function drawOnscreen() {
+  const o = S.os, z = S.zoom, cv = $("#cv");
+  cv.width = o.w * z; cv.height = o.h * z;
+  const g = cv.getContext("2d");
+  // 투명(idx0) 체커보드 배경
+  for (let y = 0; y < o.h; y++) for (let x = 0; x < o.w; x++) {
+    g.fillStyle = ((x >> 2) + (y >> 2)) & 1 ? "#2a2a2a" : "#222"; g.fillRect(x * z, y * z, z, z);
+  }
+  for (const c of o.cells) {
+    for (let ty = 0; ty < c.th; ty++) for (let tx = 0; tx < c.tw; tx++) {
+      const T = c.tile_off + (o.obj1d ? ty * c.tw + tx : ty * 32 + tx);
+      for (let yy = 0; yy < 8; yy++) for (let xx = 0; xx < 8; xx++) {
+        const idx = tilePixel(T, c.fh ? 7 - xx : xx, c.fv ? 7 - yy : yy);
+        if (idx === 0) continue;
+        const sx = (c.x - o.x0) + (c.fh ? c.tw - 1 - tx : tx) * 8 + xx;
+        const sy = (c.y - o.y0) + (c.fv ? c.th - 1 - ty : ty) * 8 + yy;
+        g.fillStyle = rgb(S.palette[idx]); g.fillRect(sx * z, sy * z, z, z);
+      }
+    }
+  }
+}
+function paintOnscreenAt(ev) {
+  const o = S.os, cv = $("#cv"), r = cv.getBoundingClientRect();
+  const ax = Math.floor((ev.clientX - r.left) / S.zoom), ay = Math.floor((ev.clientY - r.top) / S.zoom);
+  for (const c of o.cells) {
+    const cx = c.x - o.x0, cy = c.y - o.y0;
+    if (ax < cx || ay < cy || ax >= cx + c.tw * 8 || ay >= cy + c.th * 8) continue;
+    const sl = ax - cx, st = ay - cy;
+    const txs = Math.floor(sl / 8), xx = sl % 8, tys = Math.floor(st / 8), yy = st % 8;
+    const tx = c.fh ? c.tw - 1 - txs : txs, ty = c.fv ? c.th - 1 - tys : tys;
+    const rx = c.fh ? 7 - xx : xx, ry = c.fv ? 7 - yy : yy;
+    const T = c.tile_off + (o.obj1d ? ty * c.tw + tx : ty * 32 + tx);
+    if (tilePixel(T, rx, ry) === S.sel) return;
+    setTilePixel(T, rx, ry, S.sel); S.dirty = true; $("#save").disabled = false;
+    drawOnscreen();
+    return;
+  }
+}
 function draw() {
+  if (S.osmode && S.os) return drawOnscreen();
   const z = S.zoom, cv = $("#cv"); cv.width = S.w * z; cv.height = S.h * z;
   const g = cv.getContext("2d");
   for (let y = 0; y < S.h; y++) for (let x = 0; x < S.w; x++) { g.fillStyle = rgb(S.palette[S.indices[y][x] & 15]); g.fillRect(x * z, y * z, z, z); }
@@ -127,6 +188,7 @@ function draw() {
 }
 function paintAt(ev) {
   if (!S.indices) return;
+  if (S.osmode && S.os) return paintOnscreenAt(ev);
   const cv = $("#cv"), r = cv.getBoundingClientRect();
   const x = Math.floor((ev.clientX - r.left) / S.zoom), y = Math.floor((ev.clientY - r.top) / S.zoom);
   if (x < 0 || y < 0 || x >= S.w || y >= S.h) return;
@@ -141,6 +203,8 @@ function wire() {
   $("#zoomin").onclick = () => { S.zoom = Math.min(40, S.zoom + 2); $("#zoomlbl").textContent = S.zoom + "×"; if (S.indices) draw(); };
   $("#zoomout").onclick = () => { S.zoom = Math.max(2, S.zoom - 2); $("#zoomlbl").textContent = S.zoom + "×"; if (S.indices) draw(); };
   $("#grid").onchange = () => { if (S.indices) draw(); };
+  $("#mode-screen").onclick = () => { setMode("screen"); refreshOnscreen(false); };
+  $("#mode-tile").onclick = () => { setMode("tile"); refreshOnscreen(!!S.os); };
   const cv = $("#cv");
   cv.onmousedown = (e) => { S.painting = true; paintAt(e); };
   cv.onmousemove = (e) => { if (S.painting) paintAt(e); };
