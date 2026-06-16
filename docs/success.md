@@ -824,3 +824,15 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - **qa_meaning 정밀화**: 인접 슬롯 숫자 인식(다행 대사 "0이 되면"이 다음 줄), もう１→또/다른, 자릿수 분해(234=2,3,4), 손상 구두점 노이즈 제외. 오탐 103→0.
 - 전 게이트 PASS: integrity / spacing(0/0/0/0) / terms(0) / meaning NUMBER(0). overflow 0, no_ko 0.
 - **도구 신뢰성 메모**: agy(Antigravity)는 trivial 프롬프트만 동작, 실질 리뷰 프롬프트엔 반복 hang. 3자 리뷰는 claude(본체/서브에이전트) + codex로 운용, agy는 짧은 개념 질문만.
+
+## 2026-06-16 — 의미 audit 완료(3자 검증) + 시각 커버리지 정리
+
+- **전체 의미 audit 완료**: 6997 import-csv 대사행 3청크 LLM 판정 → adjacent-aware verify-fix → **확정 ~76행 수정**(CAN/CANNOT 반전, 오역, 정렬오류 라이트닝어설트→쇼군 캐서린·오정렬→이글! 적당히, 대머리→애송이, 화자반전, 누락복원, 조사/관용구). **codex 독립 리뷰**가 표본 31행 정상 확인 + 과교정 2(잃지 않았다 중복·시야 잘림)·주체 1 정정. claude(audit judge)+verify-agent+codex 3자 검증.
+- **휩→휘프 조사 회귀 5행** 발견·수정(받침-조사 보정).
+- **시각 커버리지 현황**(/goal #1):
+  - 글리프 데이터: 2350음절 contact sheet clean(render_glyph_sheet).
+  - 렌더러 4경로 전부 한글 정상: per-char 대사, A3(모드선택/프롤로그, ? 결함 수정 완료), 0x313, 0xB11.
+  - fresh-boot 화면(닌텐도 제공/타이틀/1·2 선택/Part2 메뉴+설명문/프롤로그) clean.
+  - 전투 화면(맵/유닛정보 HUD/튜토리얼 대사) 동적 렌더 current-ROM clean.
+  - **잔여**: 결과/저장/상점/엔딩 등 정적 화면은 savestate가 stale이라 직접 캡처 불가 → **텍스트는 ROM-디코드 게이트로 전수 검증됨**(의미/띄어쓰기/명사 0). 그래픽 직접 캡처는 진행 SRAM seed 또는 Lua 자동진행 필요(잔여 인프라).
+- 현재 출하 ROM: integrity PASS, spacing 0, terms 0, meaning NUMBER 0, overflow 0, no_ko 0.
