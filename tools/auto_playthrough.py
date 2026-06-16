@@ -74,6 +74,7 @@ def main():
     ap.add_argument("--diff", type=float, default=11.0, help="새 화면 판정 평균픽셀차 임계")
     ap.add_argument("--save-states", action="store_true", help="새 화면마다 .ss0 저장(진행 세이브 생성)")
     ap.add_argument("--dump-state", action="store_true", help="새 화면마다 VRAM/OAM/팔레트/IO 덤프(레이아웃 추출용)")
+    ap.add_argument("--policy", default="", help="커스텀 입력 정책(쉼표 키, 예 'DOWN,DOWN,A,B') — 전투/메뉴 전용")
     ap.add_argument("--out", default=str(ROOT / "temp" / "auto_play"))
     ap.add_argument("--harness", default="/tmp/mgbah")
     args = ap.parse_args()
@@ -92,8 +93,9 @@ def main():
             elif tok in KEYS:
                 drv.cmd(f"keys {KEYS[tok]}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(120)
         stuck = 0
+        policy = [k for k in args.policy.split(",") if k in KEYS] or POLICY
         for step in range(args.steps):
-            key = UNSTICK[stuck % len(UNSTICK)] if stuck >= 6 else POLICY[step % len(POLICY)]
+            key = UNSTICK[stuck % len(UNSTICK)] if stuck >= 6 else policy[step % len(policy)]
             drv.cmd(f"keys {KEYS[key]}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(args.per_step_frames)
             img = drv.shot(f"s{step:03d}")
             sig = frame_sig(img)
