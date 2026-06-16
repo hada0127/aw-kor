@@ -45,9 +45,8 @@
   - **신규 게이트 `qa_glyph_coverage.py`**(codex 지적 반영 — ko 필드가 아니라 **enc_hex 출하바이트** 기준): 전 25296행·14개 write경로(import/override/raw_replace/script 리터럴 등)에서 예약-한글 코드 160015회/959음절이 전부 glyph 보유 음절로 해석 → **미렌더 0**. code∩glyph 대칭(2350) + 빌드 KeyError 가드로 폰트측 「비트맵 깨짐 0」 정면 보증.
   - **전략지도 화면 2종 정리(정정)**: codex 리뷰로 SWI/DMA 재분석 → `0xC2FD70`/`0xC30EE8`은 **표시되는** Mode4 풀스크린 전략지도(EWRAM→DMA 0x06000000/0x06004B00=fb 상/하단). step073 Mode0 대륙 오버맵(BG3 0xC34E10)과는 **별개 화면**. 5게이트 PASS.
 - [x] iter20: **Mode4 전략지도 한글화 완료**(사용자 승인). `patch_part2_strategic_map_mode4_labels` — 원본 픽셀 zoom으로 라벨 직접 enumerate(codex 좌표 일부 phantom 확인: 'Blue moon Palace'·half-B Factory 미존재). 실측 3건만: 레드스타 궁전(파랑)/공장(암적)/그린어스 궁전(암). 'Cosmo earth'=녹색국가→그린어스 통일(#3). 오프라인 렌더=인게임(Mode4 fb 직접 DMA, 타일 간접 없음) → `temp/smap_built_verify.png` 확정. 재압축 A4249/4471·B3996/4161 OK. 5게이트 PASS. (상단 해양 소형 라벨 'Cayo/Cargo?'는 판독불가로 미번역 유지.)
-- [ ] iter21 후보: **Mode0 대륙 오버맵(step073/049-050) 타일 필기체 지명 한글화** — 소스 타일 0xC34E10에서 라벨 타일 식별→재페인트(6px 필기체, Mode4보다 어려움). 사용자가 (A) 완료 후 (B)도 원하면 진행.
-- [ ] (선택) ﾆﾙ 무탄약 표시 / 결과·엔딩 near-end 세이브 / Mode4 상단 해양 소형 라벨(판독불가, 사용자 지명 제공 시).
-- [ ] (대기) 배포 최종(Phase F): 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
+- [x] iter21: **배포 최종(Phase F) — 사용자 선택**. Mode0 오버맵은 6px 필기체가 지형 텍스처 위라 한글화 시 글자 뭉개짐/지형 손상(=비트맵 깨짐)으로 판단 → **장식 원본 유지**. `prepare_patch_distribution.py --date 2026-06-16`로 BPS(747759B,4.46%)/IPS(876262B,5.22%)+manifest×2+README+RELEASE_NOTES×2 재생성. `verify_dist_integrity` 3중 해시 게이트 PASS. **adversarial 검증 워크플로(5병렬)**: 독립 BPS 적용기(byte-exact·footer CRC 3종·true source dependence), 독립 IPS 적용기(byte-exact·max offset 0xF66F56<ceiling·무절단), manifest 16필드 전수 일치(both manifests byte-identical), 문서 정확성(stem/sha/date 일치, stale 0), 음성테스트(wrong-source 거부)+triple-identity — **전부 PASS**. stale 미트래킹 패치(06-10/06-14/preview-06-08) 정리. dist sha: src a8ad7c7d / tgt 1d825104.
+- [ ] (선택, 사용자 요청 시) Mode0 대륙 오버맵 타일 필기체 한글화(소스 0xBF7ADC, 6px라 가독성 손해) / ﾆﾙ 무탄약 표시 / Mode4 상단 해양 소형 라벨(판독불가) / 결과·엔딩 near-end 세이브 그래픽 캡처 / 구 tracked preview 패치(05-26/05-28/06-07) git rm 정리.
 - [ ] iter: 자동진행 결과/엔딩 화면 도달(near-victory 또는 정책 개선) + 전체 필름스트립 codex 리뷰.
 - [ ] iter: dist 배포 최종(Phase F) — 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
 - [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.

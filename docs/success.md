@@ -846,3 +846,16 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - **Mode4 전략지도 한글화 완료(codex 리뷰 반영, 사용자 승인)**: SWI/DMA 로그(`temp/auto_fresh_p2/mgbah.stderr.log:7800~7806`)로 `0xC2FD70`/`0xC30EE8`은 **표시되는** Mode4 풀스크린 전략지도 확정(LZ77→EWRAM 0x02000000→DMA 0x06000000/0x06004B00=240×160 fb 상/하단). 타일 간접 없어 오프라인 렌더=인게임. `patch_part2_strategic_map_mode4_labels`로 원본 픽셀 zoom 직접 enumerate한 실측 3라벨만 한글화: 레드스타 궁전(파랑 idx16)/공장(암적 idx24)/그린어스 궁전(암 idx4). codex_bgblocks의 'Blue moon Palace'·half-B Factory 좌표는 원본 검증 결과 phantom(미존재)이라 제외(빈 영역 가짜라벨 방지). 'Cosmo earth'=녹색국가→배너/범례와 동일 그린어스 통일(#3). 재압축 A4249/4471·B3996/4161 OK. 빌드ROM 렌더 확정: `temp/smap_built_verify.png`. (상단 해양 소형 라벨 'Cayo/Cargo?'는 판독불가 미번역.) 별개 화면 = step073 Mode0 대륙 오버맵(BG3 0xC34E10, 타일 6px 필기체, 추후): `over_bg3.png`.
 - **0xBF66F0 배너 한글화 블록 식별 100% 확정**: 원본 0xBF66F0 비공백 타일 312/312가 인게임 배너 화면 VRAM(step057_A)과 verbatim 일치 → 표시 블록 확정. (레드스타/블루문/그린어스/코멧/옐로 한글, KEEP)
 - 재실행: `python3 tools/qa_glyph_coverage.py` (PASS=0). 5게이트(integrity/terms/spacing/meaning/glyph_coverage) 전부 PASS, overflow 0.
+
+## 배포 최종 (Phase F) — 2026-06-16 release (iter21)
+
+`python3 tools/prepare_patch_distribution.py --date 2026-06-16` → BPS/IPS(원본→output/full) 재생성 + 라운드트립 + manifest×2/README/RELEASE_NOTES×2. `verify_dist_integrity.py` 3중 해시 게이트 PASS.
+
+**adversarial 독립 검증(워크플로 5병렬, 전부 PASS)** — 내장 round-trip이 생성코드(make_bps/ips)와 동일 코드라 갖는 사각을 메우려 독립 적용기로 재검증:
+- 독립 BPS 적용기(spec에서 새로 작성, make_bps 미import): 원본+BPS == output **byte-exact**, footer CRC 3종(src 49ee1fdd/tgt d8c17c98/patch fcc4a10e) 일치, footer 경계 정확 착지, source 변조 시 결과 변함(=true source dependence).
+- 독립 IPS 적용기(make_ips 미import): byte-exact, 44517 레코드 well-formed·non-overlap·clean EOF, max offset 0xF66F56 < IPS ceiling 0xFFFFFF(무절단), 음성 컨트롤 통과.
+- manifest 16해시필드(src/tgt/bps/ips × size·crc32·sha1·sha256) 전수 재계산 일치, synced_outputs 3종 일치, manifest.json==manifest_preview.json byte-identical.
+- 문서(README/RELEASE_NOTES×2): stem·target sha·source sha·date 전부 2026-06-16 release와 일치, stale 참조 0.
+- 음성테스트: apply_bps가 wrong-source를 source-CRC로 거부 / 산출물 3종 triple-identity(1d825104).
+- 해시: source a8ad7c7d…831c, target 1d825104…97b3. 패치 크기 BPS 4.46% / IPS 5.22%(폰트+한자테이블+대사 확장 규모로 타당).
+- stale 미트래킹 패치(full 06-10/06-14, preview 06-08) 정리. 재현: `python3 tools/verify_dist_integrity.py`(PASS=0).

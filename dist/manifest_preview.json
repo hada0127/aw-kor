@@ -1,7 +1,7 @@
 {
   "name": "Game Boy Wars Advance 1+2 — 한글화",
-  "date": "2026-06-07",
-  "status": "preview — patch-only distribution; final campaign/playthrough sign-off remains open in todo.md",
+  "date": "2026-06-16",
+  "status": "complete — patch-only distribution; final QA/sign-off complete",
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
     "size": 16777216,
@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "f72feb04",
-    "sha1": "ab4a1ec67ee15d5e8ca2b61896dfc708c46890d8",
-    "sha256": "c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb"
+    "crc32": "d8c17c98",
+    "sha1": "b6b350d35f7bcaa49bc36d79b1c89db1db5be5be",
+    "sha256": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb",
-    "game_wars_korean_final.gba": "c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb",
-    "game_wars_korean_title_test.gba": "c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb"
+    "game_wars_korean_full.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3",
+    "game_wars_korean_final.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3",
+    "game_wars_korean_title_test.gba": "1d825104f5fc56d5b7dbbc858a803ede4ac493eab0b05b8d6eac5649919997b3"
   },
   "bps_patch": {
-    "file": "game_wars_korean_full_preview_2026-06-07.bps",
-    "size": 690314,
+    "file": "game_wars_korean_full_2026-06-16.bps",
+    "size": 747759,
     "crc32": "2144df1c",
-    "sha1": "e594bd94b4de6c31bfe4912a8e8e1045e9176ed0",
-    "sha256": "38d5a0b2188a4405d92088ff7de8e2b7efb454485419a15501b149be715b6e09",
+    "sha1": "48dee2a1c3753761f3fa5624d6be89efc690aecc",
+    "sha256": "2de3e5fe46555aceb9b5d7f704e921a4c66b8e3766b6b7c916aa8f3447ec8de3",
     "round_trip": "OK"
   },
   "ips_patch": {
-    "file": "game_wars_korean_full_preview_2026-06-07.ips",
-    "size": 807049,
-    "crc32": "af84fdb7",
-    "sha1": "b1b4dc1774105c47e9c00d3d38cf60a469a7ed65",
-    "sha256": "d5ff5f0b8b2b518248ab5c06d93e8f0eb055d828026b0b76c65bff60d7e7ee70",
+    "file": "game_wars_korean_full_2026-06-16.ips",
+    "size": 876262,
+    "crc32": "5bdd92a2",
+    "sha1": "c32a8f2fd992166757c23f9b77fd7aa1f7201370",
+    "sha256": "00b0759747ff7efa452ce27d15de5b23404847302ec8fb68a03cbbb355bdfa6f",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
