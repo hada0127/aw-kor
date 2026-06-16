@@ -2498,3 +2498,19 @@
 - [ ] (증분) 긴 dialog-box canvas(welcome/battle, 32B 초과 대사용) + part1 전용 canvas(컨텍스트) — 현재 모든 라인은 part2 A3 canvas로 텍스트 충실 렌더(컨텍스트만 part2).
 - [ ] (증분) 스프라이트 인게임-맥락 헤드리스 캡처(sprite→screen 매핑/스프라이트 프리뷰 하니스) — 현재 타일 디코드는 스프라이트 픽셀 자체로 충실.
 - [ ] (증분) 캡처 지연(~30-60s/대사) 단축: 슬롯 nav 단축 canvas, orig 캡처 영구 캐시.
+
+# 🟢 추출 노이즈 정리 + 비트맵 손상 수정 + 스프라이트 계측 (2026-06-17)
+
+- [x] **해독 불가/판독 불가/깨진 문자열/의미 불명 345행 해결**: 전부 추출 노이즈(코드영역 302 +
+  ≥0x800000 비텍스트 43=가나표/기호표/그래픽)임을 ROM 실바이트로 확정 → `archive/extraction_noise_placeholder_rows.csv`
+  보존 후 `translation_for_import.csv`에서 제거(18121→17776행).
+- [x] **비트맵 손상 수정(부산물·중요)**: `깨진 문자열`이 빌드 PLACEHOLDER_KO에 누락되어 18행이
+  그래픽 위에 예약코드로 덮어써지던 손상 발견(codex+스프라이트에이전트 수렴). 제거로 18/18 원본 복원.
+  권위 ROM sha 61d51a2a→**1623481a**.
+- [x] 방어: PLACEHOLDER_KO에 깨진문자열 계열 추가 + 18 span DENY_REGIONS 등록 + qa_placeholder_residuals
+  단일소스 통일(ROM 스캔 모호토큰 제외). 5게이트 PASS, dist 2026-06-17 재생성·verify PASS.
+- [x] **스프라이트 WYSIWYG 빌드레이아웃 계측 2→26 blocks**(서브에이전트): 16 LZ77 라벨 함수
+  rec_label_layout 추가(출력 무변경, sha 1623481a 불변). 편집기 build_layout_cells 소비 검증.
+- [ ] (후속) 스프라이트 OBJ 직접기록 4종(action_menu/status_header/info_screen_obj/battle_obj)
+  합성 스프라이트로 WYSIWYG 노출.
+- [ ] (후속·기존) 주소 잘림 2행(7EBF·808, 실번역 보유하나 코드영역 주소라 미기록) 진위 주소 RE.

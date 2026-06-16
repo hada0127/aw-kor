@@ -1187,3 +1187,15 @@ data/dialogue_groups.json(group→members+segments+assembled). 수동 보정 dat
 (조각마다 독립 슬롯·길이). 빌드는 [addr,addr+slot)만 쓰고 gap(제어/삽입)은 손대지 않아 자동 보존
 → 신규 빌드로직 0. ⚠ 한국어 조사(을/를·이/가)는 삽입 단어 받침 의존 → 번역 시 (을)를 표기 권장
 (런타임 조사 훅은 별도 과제). ⚠ 어순차로 특정 조각 슬롯 초과 가능 → 조각별 byte counter 필수.
+
+## PLACEHOLDER_KO skip-set 누락 → 비트맵 손상 (2026-06-17)
+
+`build_korean_full.py`의 `PLACEHOLDER_KO`(미해결 번역 skip 집합)에 `깨진 문자열`/`[깨진 문자열]`이
+빠져 있었다. 그 마커를 korean으로 가진 18행이 ≥0x800000·DENY 영역 밖 **그래픽/비텍스트 주소**
+(0x8A298C, 0x8A47CC, 0x8A64D8, 0x8A82A8, 0x8AAF18/98/BC, 0x8AC8D0, 0x8AFA80, 0x8B31D0, 0x8ED57C,
+0x8F0124, 0x9412A1, 0xE88C50, 0xE8A524, 0xE8A548, 0xE8BE00, 0xE8F550)에 위치해, 빌드가 마커
+텍스트를 예약 한글코드로 인코딩해 **원본 그래픽 위에 16~18바이트 덮어써 비트맵을 손상**시켰다.
+- 검출법: 노이즈 행 제거 전/후 빌드 sha 비교(61d51a2a↔1623481a, 289바이트/18영역 차이) +
+  각 span에서 `원본 ROM == 노이즈제거 빌드`(손상 없음), `구 baseline`만 손상 보유.
+- 교훈: `integrity_map` 교집합으로 "표시 여부"를 판정하면 안 됨(stale일 수 있음). 권위는 실제
+  빌드 ROM 바이트. placeholder 정의는 빌드/QA 단일소스로 유지(중복 누락 방지).

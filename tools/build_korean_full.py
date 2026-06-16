@@ -51,6 +51,9 @@ PLACEHOLDER_KO = {
     '미상', '불명', '번역 필요', '번역필요', '원문 불명', '원문불명',
     '의미 불명', '의미불명', '판독 불가', '판독불가', '해독 불가', '해독불가',
     '번역 불가', '번역불가',
+    # 추출 노이즈 마커(비텍스트 영역 오탐) — 과거 skip-set 누락으로 18행이 고주소
+    # 그래픽 위에 인코딩되어 비트맵을 손상시켰음(2026-06-17 발견·수정). 재유입 방어.
+    '깨진 문자열', '깨진문자열', '[깨진 문자열]', '[깨진문자열]',
 }
 OKDANDAN_FONT = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
 APPLE_SDGOTHIC_BOLD = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
@@ -92,6 +95,17 @@ DENY_REGIONS = [
     ('part1_ui_text_table', 0x805100, 0x805A24),
     ('part2_ui_text_table', 0xD82740, 0xD83100),
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
+    # 추출 노이즈(반복 글리프·그래픽 타일)인데 과거 '깨진 문자열' 마커가 PLACEHOLDER_KO
+    # 누락으로 여기 인코딩되어 비트맵을 손상시켰음(2026-06-17 발견·수정). 재유입 영구 차단.
+    ('noise_graphics', 0x8A298C, 0x8A299C), ('noise_graphics', 0x8A47CC, 0x8A47DC),
+    ('noise_graphics', 0x8A64D8, 0x8A64E8), ('noise_graphics', 0x8A82A8, 0x8A82B8),
+    ('noise_graphics', 0x8AAF18, 0x8AAF28), ('noise_graphics', 0x8AAF98, 0x8AAFA8),
+    ('noise_graphics', 0x8AAFBC, 0x8AAFCC), ('noise_graphics', 0x8AC8D0, 0x8AC8E0),
+    ('noise_graphics', 0x8AFA80, 0x8AFA90), ('noise_graphics', 0x8B31D0, 0x8B31E0),
+    ('noise_graphics', 0x8ED57C, 0x8ED58C), ('noise_graphics', 0x8F0124, 0x8F0134),
+    ('noise_graphics', 0x9412A1, 0x9412B1), ('noise_graphics', 0xE88C50, 0xE88C62),
+    ('noise_graphics', 0xE8A524, 0xE8A536), ('noise_graphics', 0xE8A548, 0xE8A558),
+    ('noise_graphics', 0xE8BE00, 0xE8BE12), ('noise_graphics', 0xE8F550, 0xE8F562),
 ]
 
 FALLBACK = {'·': '・', '∪': '∩', '—': '-'}  # 일부 유니코드 → SJIS/ASCII 인코딩 가능 등가
@@ -5494,6 +5508,8 @@ def patch_part1_full_info_spec_obj_label(rom):
             f'unexpected Part 1 full-info SPEC payload at 0x{off:X}: {actual_hash}'
         )
     buf[:len(payload)] = payload
+    # WYSIWYG: '정보'는 32x8 OBJ 라벨(render_32x8_obj_label) = 타일 0..3.
+    rec_label_layout(off, None, [{'text': '정보', 'tile_ids': [0, 1, 2, 3]}])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 1 full-info SPEC LZ77 block grew: {len(comp)} > {consumed}')
@@ -5565,6 +5581,11 @@ def patch_part2_damage_forecast_label_obj(rom):
                     tile[bi] |= value
         buf[label_pos + tile_idx * 32:label_pos + tile_idx * 32 + 32] = tile
 
+    # WYSIWYG: '피해'는 label_pos(0x2C0)부터 16타일(4x4 = 32x32 말풍선)에 그려짐.
+    base_tile = label_pos // 32
+    rec_label_layout(off, None, [
+        {'text': '피해', 'tile_ids': list(range(base_tile, base_tile + 16))},
+    ])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 2 damage forecast LZ77 overflow: {len(comp)} > {consumed}')
@@ -5839,6 +5860,20 @@ def patch_part2_link_mode_residual_labels(rom):
     for pos, payload in patches:
         buf[pos:pos + len(payload)] = payload
 
+    # WYSIWYG: 각 라벨이 차지하는 타일 = (기록위치//32)부터 (payload길이//32)개.
+    def _tids(pos, payload):
+        b = pos // 32
+        return list(range(b, b + len(payload) // 32))
+    rec_label_layout(off, None, [
+        {'text': '1팩 대전', 'tile_ids':
+            _tids(0x1800, patches[0][1]) + _tids(0x1900, patches[1][1])
+            + _tids(0x1A00, patches[2][1]) + _tids(0x1B00, patches[3][1])},
+        {'text': '멀티팩', 'tile_ids':
+            _tids(0x0800, patches[4][1]) + _tids(0x0C00, patches[5][1])},
+        {'text': '맵 교환', 'tile_ids':
+            _tids(0x2000, patches[6][1]) + _tids(0x2100, patches[7][1])
+            + _tids(0x2200, patches[8][1]) + _tids(0x2300, patches[9][1])},
+    ])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 2 link-mode LZ77 overflow: {len(comp)} > {consumed}')
@@ -5922,6 +5957,22 @@ def patch_part2_menu_newspaper_bg(rom):
                     hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
                     out.append(lo | (hi << 4))
 
+    # WYSIWYG: 128x128 BG(16x16 타일). 각 텍스트가 그려진 픽셀박스를 덮는 타일행/열을 기록.
+    # 텍스트는 (x,y)에 9px/8px 폰트로 좌상단 정렬. 폭은 글자수*8 + 여유로 근사.
+    def _box_tids(x, y, text, ch_w=8):
+        tx0 = x // 8
+        tx1 = min(16, (x + len(text) * ch_w + 7) // 8)
+        ty0 = y // 8
+        return [ty0 * 16 + tx for tx in range(tx0, tx1)]
+    rec_label_layout(off, None, [
+        {'text': '워즈 신문', 'tile_ids': _box_tids(43, 4, '워즈 신문', 9)},
+        {'text': '레드스타', 'tile_ids': _box_tids(4, 65, '레드스타')},
+        {'text': '블루문', 'tile_ids': _box_tids(45, 65, '블루문')},
+        {'text': '그린어스', 'tile_ids': _box_tids(85, 65, '그린어스')},
+        {'text': '옐로코멧', 'tile_ids': _box_tids(4, 108, '옐로코멧')},
+        {'text': '전황 속보', 'tile_ids': _box_tids(45, 108, '전황 속보')},
+        {'text': '작전 소식', 'tile_ids': _box_tids(85, 108, '작전 소식')},
+    ])
     comp = lz77_compress_optimal(bytes(out), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 2 menu newspaper LZ77 overflow: {len(comp)} > {consumed}')
@@ -6434,6 +6485,11 @@ def patch_part1_battle_day_banner(rom):
         write_chunk_to_tiles(buf, source_base, chunk)
         patched += 16
 
+    # WYSIWYG: '작전개시'는 32x32 청크 4개(타일 0..63), '일째'는 청크 2개(타일 224..255).
+    rec_label_layout(off, None, [
+        {'text': '작전개시', 'tile_ids': list(range(0, 64))},
+        {'text': '일째', 'tile_ids': list(range(224, 256))},
+    ])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 1 battle day banner grew: {len(comp)} > {consumed}')
@@ -6499,6 +6555,11 @@ def patch_part1_info_screen_bg_labels(rom):
         if label_pos + len(payload) > len(buf):
             raise AssertionError(f'Part 1 info-screen label block out of range at 0x{off:X}')
         buf[label_pos:label_pos + len(payload)] = payload
+        # WYSIWYG: '무기'는 label_pos(0x220)부터 48px(=6타일) 한 줄.
+        base_tile = label_pos // 32
+        rec_label_layout(off, None, [
+            {'text': '무기', 'tile_ids': list(range(base_tile, base_tile + len(payload) // 32))},
+        ])
         comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(
@@ -6638,6 +6699,11 @@ def patch_part1_check_label_obj(rom):
                 start = (base_tile + ty * 2 + tx) * 32
                 buf[start:start + 32] = tile
 
+    # WYSIWYG: '확인'은 chunk_bases(76,72,68) 각 2x2 타일에 그려짐(ci 순서가 좌→우).
+    _check_tids = []
+    for base_tile in chunk_bases:
+        _check_tids += [base_tile + 0, base_tile + 1, base_tile + 2, base_tile + 3]
+    rec_label_layout(off, None, [{'text': '확인', 'tile_ids': _check_tids}])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 1 check-label LZ77 overflow: {len(comp)} > {consumed}')
@@ -7118,6 +7184,9 @@ def patch_part2_lets_go_obj(rom):
                     hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
                     out.append(lo | (hi << 4))
 
+    # WYSIWYG: '가자!' 대형 컷인. 256x64(32x8타일) 블록에서 가시영역은 좌측 128px(tx<16).
+    _letsgo_tids = [ty * 32 + tx for ty in range(8) for tx in range(16)]
+    rec_label_layout(off, None, [{'text': '가자!', 'tile_ids': _letsgo_tids}])
     comp = lz77_compress_optimal(bytes(out), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 2 lets-go LZ77 overflow: {len(comp)} > {consumed}')
@@ -7231,6 +7300,10 @@ def patch_part2_mission_number_obj(rom):
             buf[start:start + 32] = tile
             patched += 1
 
+    # WYSIWYG: '미션1' 타이틀. 가시 4×(32x16) OBJ = 상단 타일 0x00..0x0F + 하단 0x20..0x2F.
+    rec_label_layout(off, None, [
+        {'text': '미션1', 'tile_ids': list(range(0x00, 0x10)) + list(range(0x20, 0x30))},
+    ])
     comp = lz77_compress(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'mission-number LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -7398,6 +7471,11 @@ def patch_part2_result_failure_overlay_obj(rom):
                             out[bi] |= value
 
     patched = 0
+    # WYSIWYG: '작전실패' = 4개의 32x32 OBJ(스프라이트 s = 글자 s, 각 16타일 4x4).
+    _fail_labels = [
+        {'text': ch, 'tile_ids': list(range(s * 16, s * 16 + 16))}
+        for s, ch in enumerate('작전실패')
+    ]
     for off in (0xBFBB54, 0xEE8F68):
         dec = lz77_decompress(bytes(rom), off)
         if dec is None:
@@ -7405,6 +7483,7 @@ def patch_part2_result_failure_overlay_obj(rom):
         data, consumed = dec
         if len(data) != len(out):
             raise AssertionError(f'unexpected Part 2 failure overlay size at 0x{off:X}: {len(data)}')
+        rec_label_layout(off, None, _fail_labels)
         comp = lz77_compress_optimal(bytes(out), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'Part 2 failure overlay LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -7456,6 +7535,11 @@ def patch_part2_result_success_overlay_obj(rom):
                             out[bi] |= value
 
     patched = 0
+    # WYSIWYG: '작전성공' = 4개의 32x32 OBJ(스프라이트 s = 글자 s, 각 16타일 4x4).
+    _success_labels = [
+        {'text': ch, 'tile_ids': list(range(s * 16, s * 16 + 16))}
+        for s, ch in enumerate('작전성공')
+    ]
     for off in (0x930520, 0x9691A8, 0x9A1A4C, 0x9DA2F0, 0xEE8A64):
         dec = lz77_decompress(bytes(rom), off)
         if dec is None:
@@ -7463,6 +7547,7 @@ def patch_part2_result_success_overlay_obj(rom):
         data, consumed = dec
         if len(data) != len(out):
             raise AssertionError(f'unexpected Part 2 success overlay size at 0x{off:X}: {len(data)}')
+        rec_label_layout(off, None, _success_labels)
         comp = lz77_compress_optimal(bytes(out), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'Part 2 success overlay LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -8321,6 +8406,8 @@ def patch_part2_level_label_obj(rom):
                     tile[bi] |= value
         buf[tx * 32:tx * 32 + 32] = tile
 
+    # WYSIWYG: '레벨'은 32x8 OBJ 한 줄(타일 0..3).
+    rec_label_layout(off, None, [{'text': '레벨', 'tile_ids': [0, 1, 2, 3]}])
     comp = lz77_compress(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'level-label LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -8399,6 +8486,10 @@ def patch_part2_check_label_obj(rom):
             start = tile_idx * 32
             buf[start:start + 32] = tile
 
+    # WYSIWYG: '확인' = 32x16 OBJ + 8x16 OBJ. 상단 타일 45..48+53, 하단 49..52+54.
+    rec_label_layout(off, None, [
+        {'text': '확인', 'tile_ids': tile_rows[0] + tile_rows[1]},
+    ])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'check-label LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -8662,6 +8753,12 @@ def patch_part2_campaign_header_obj(rom):
         for idx in range(8):
             buf[source_off + idx * 32:source_off + idx * 32 + 32] = tiles[base_tile + idx]
             patched += 1
+    # WYSIWYG: '캠페인'(3음절). source_chunks가 기록하는 소스 청크 위치(byte//32)별 8타일.
+    _camp_tids = []
+    for source_off in sorted(source_chunks.values()):
+        b = source_off // 32
+        _camp_tids += list(range(b, b + 8))
+    rec_label_layout(off, None, [{'text': '캠페인', 'tile_ids': _camp_tids}])
     comp = lz77_compress(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'campaign header LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
@@ -8725,6 +8822,8 @@ def patch_part2_redstar_region_obj(rom):
     data, consumed = dec
     if len(data) != len(out):
         raise AssertionError(f'unexpected Red Star region block size at 0x{off:X}: {len(data)}')
+    # WYSIWYG: '레드스타' = 3개의 32x32 OBJ(스프라이트당 16타일 4x4) = 타일 0..47.
+    rec_label_layout(off, None, [{'text': '레드스타', 'tile_ids': list(range(0, 48))}])
     comp = lz77_compress(bytes(out), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Red Star region LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')

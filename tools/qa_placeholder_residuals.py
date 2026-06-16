@@ -20,6 +20,7 @@ TRANS = BASE / 'data' / 'translation_for_import.csv'
 sys.path.insert(0, str(BASE / 'tools'))
 from build_korean_full import (  # noqa: E402
     ADDRESS_TEXT_OVERRIDES,
+    PLACEHOLDER_KO,
     SAFE_MIN_ADDR,
     SOURCE_TEXT_OVERRIDES,
     SYLCODE,
@@ -29,17 +30,15 @@ from build_korean_full import (  # noqa: E402
     in_deny,
 )
 
-PLACEHOLDERS = (
-    '미상',
-    '번역 필요',
-    '번역필요',
-    '원문 불명',
-    '원문불명',
-    '의미 불명',
-    '의미불명',
-    '판독 불가',
-    '판독불가',
-)
+# 단일 소스: 빌드의 PLACEHOLDER_KO를 그대로 사용(과거 QA 목록이 '해독 불가'·'깨진 문자열'을
+# 빠뜨려 검출 누락 → 빌드와 통일). import 검사는 '정확일치'라 안전.
+PLACEHOLDERS = tuple(sorted(PLACEHOLDER_KO))
+
+# ROM 스캔은 '부분문자열' 검색이라, 정상 한글 단어의 부분이 되는 짧은 마커는 거짓양성을
+# 낸다(예: '불명' ⊂ 행방불명/정체불명, '불가' ⊂ 가능불가). 이런 모호 토큰만 ROM 스캔에서 제외.
+# 완전형 마커('의미 불명','판독 불가' 등)는 그대로 스캔하므로 진짜 placeholder는 여전히 잡힌다.
+ROM_SCAN_AMBIGUOUS = {'불명', '미상', '불가'}
+ROM_SCAN_PLACEHOLDERS = tuple(p for p in PLACEHOLDERS if p not in ROM_SCAN_AMBIGUOUS)
 
 
 def load_slots():
@@ -73,7 +72,7 @@ def main():
     unmapped = collections.Counter()
 
     rom_hits = []
-    for value in PLACEHOLDERS:
+    for value in ROM_SCAN_PLACEHOLDERS:
         try:
             payload = encode_text(value, syl_to_code, unmapped)
         except KeyError:

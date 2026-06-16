@@ -868,3 +868,33 @@ UI 에디터 실캡처 기능 검증 중(canvas-hijack: 0xA2C098 슬롯을 임�
 - 수정: max 0x9369→**0xE2A7**. canvas-hijack 검증으로 가/뤘/캡/뀔/힝/한 전부 정상·인사말 무회귀(`temp/cap_validate/a3fix_*`). build에 회귀 가드 추가(max code>hook max→assert).
 - ROM sha 1d825104→**61d51a2a**. dist 재생성(verify_dist_integrity PASS). 5게이트 PASS.
 - 핵심 인프라 검증: **canvas-hijack 실캡처 작동**(슬롯 패치→헤드리스 nav→실화면 캡처) = UI 에디터 실캡처의 토대.
+
+## 추출 노이즈 placeholder 행 정리 = 비트맵 손상 수정 (2026-06-17)
+
+사용자 요청 "해독 불가인것도 다 해결". `translation_for_import.csv`의 placeholder 마커 행
+(해독 불가 94 / 판독 불가 202 / 깨진 문자열·[깨진 문자열] 29 / 의미 불명 20 = **345행**)을
+`archive/extraction_noise_placeholder_rows.csv`로 보존 후 제거.
+- 판정 근거: 302행 <0x800000(코드영역, 빌드 skip). 43행 ≥0x800000은 ROM 실바이트가 전부
+  비텍스트(가나 음절표 `8341 8344…`, 기호테이블 `8157 8156…`, 픽셀 그라데이션 `9d 98 95…`,
+  단색채움 `9999…`, 반복글리프 `劔劔劔劔`). 자연어 0건. 대사구조(dialogue_groups) 교집합 0.
+- **핵심 발견(codex+스프라이트에이전트 독립 수렴)**: `깨진 문자열`/`[깨진 문자열]`이 빌드
+  `PLACEHOLDER_KO` skip-set에 **누락** → ≥0x800000·deny밖 **18행이 그래픽 위에 예약코드로
+  인코딩되어 비트맵 손상**(0x8A298C·0xE88C50 등). 제거로 18/18 span이 원본 ROM과 일치 복원
+  (자체 재검증). 구 baseline `61d51a2a`만 손상 보유 → 권위 ROM sha **1623481a**.
+- 방어 강화: `PLACEHOLDER_KO`에 깨진문자열 계열 추가 + 18 span을 DENY_REGIONS에 영구 등록 +
+  `qa_placeholder_residuals.py`를 빌드 PLACEHOLDER_KO 단일소스로 통일(ROM 스캔은 부분문자열
+  모호토큰 '불명/미상/불가' 제외 — '행방불명' 등 거짓양성 회피).
+- 검증: 5게이트 PASS(바이트 0불일치/placeholder 0·0/glyph 미렌더 0/overflow 0/부팅 OK).
+  dist 2026-06-17 재생성, verify_dist_integrity PASS(BPS·IPS 적용 sha=1623481a).
+- 교훈: "integrity_map 교집합 0 ≠ 미표시". stale integrity_map 기준이라 18 손상행을 못 봤음.
+  실제 빌드 ROM 바이트 비교가 권위.
+
+## 스프라이트 WYSIWYG 빌드레이아웃 계측 확장 (2026-06-17)
+
+스프라이트 에디터가 캡처 없이도 "실화면 형태"로 텍스트 라벨을 편집하도록, 빌드의 라벨 패치
+함수에 `rec_label_layout` 계측(순수 추가, 출력 무변경) 확장. **2 → 26 blocks**.
+- 16개 LZ77 라벨 함수 계측(정보/피해/레벨/확인/캠페인/레드스타/가자!/미션1/작전성공·실패 등),
+  각 off가 `sprites_index.json`과 링크 확인(NOT-LINKED 0). 편집기 `build_layout_cells` 소비 검증.
+- 바이트 무변경: 계측 전/후 빌드 sha 동일(1623481a), qa_integrity_map/glyph PASS.
+- 후속: OBJ 직접기록 4종(action_menu/status_header/info_screen_obj/battle_obj)은 단일
+  스프라이트 offset 미매칭 → 합성 스프라이트 필요.
