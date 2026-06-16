@@ -37,7 +37,7 @@ KO_NEG = ["안 ", "못 ", "없", "아니", "말고", "마.", "마,", "마!", "�
 # 한국어가 작은 수를 고유어/한자어로 옮기는 경우(이동력3→느리지만 같은 실드리프트와 구분).
 NATIVE_NUM = {
     "0": ["영", "제로", "다 ", "다.", "모두", "바닥", "전부", "0"],
-    "1": ["한", "하나", "일", "하루", "첫", "혼자", "홑"],
+    "1": ["한", "하나", "일", "하루", "첫", "혼자", "홑", "또", "다른", "더"],  # もう１つ/人→또/다른/더
     "2": ["두", "둘", "이틀", "양", "둘째", "쌍"],
     "3": ["세", "셋", "삼", "사흘"],
     "4": ["네", "넷", "나흘"],
@@ -71,6 +71,14 @@ def main():
     shipped = load_shipped(code2syl)
     ja = load_ja()
 
+    # 다행대사: 인접 슬롯(주소순)에 숫자가 있으면 그 줄에서 표현된 것 → 오탐 방지.
+    addrs = sorted(shipped)
+    pos = {a: i for i, a in enumerate(addrs)}
+
+    def ko_window(addr):
+        i = pos[addr]
+        return "".join(shipped[addrs[j]]["ko"] for j in range(max(0, i - 1), min(len(addrs), i + 3)))
+
     number_hits, neg_hits = [], []
     checked = 0
     for addr, v in shipped.items():
@@ -78,10 +86,16 @@ def main():
         j = ja.get(addr, "")
         if not (KANA.search(j) and HANGUL.search(ko)):
             continue  # 실대사만
+        if re.search(r"[、。，．：；]{2,}", j):
+            continue  # 손상 데이터(연속 구두점 노이즈) 제외
         checked += 1
         jn, kn = nums(j), nums(ko)
-        # KO에 숫자도 없고 그 값의 고유어/한자어 표현도 없으면 '진짜 누락' 후보.
-        missing = {d for d in (jn - kn) if not has_native(d, ko)}
+        win = ko_window(addr)
+        # '진짜 누락': KO(인접 포함)에 숫자도, 자릿수 분해도, 고유어 대체도 없을 때만.
+        missing = {d for d in (jn - kn)
+                   if not has_native(d, ko)
+                   and d not in win
+                   and not all(ch in ko for ch in d)}
         if missing:
             number_hits.append((addr, j, ko, missing))
         if neg(j, JA_NEG) != neg(ko, KO_NEG):

@@ -2757,7 +2757,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD8FE8A: '적에게 피해를 줬어',
     0xD8FEB2: '유닛 아래 숫자 보이지?',
     0xD8FEDB: '그게 유닛 체력이야',
-    0xD8FEFE: '처음엔 모두 체력 최대야',
     # Later Part 2 tutorial battle lines that otherwise remain Japanese because
     # the natural Korean sentence is a few bytes over the original slot.
     0xD9000C: '유리하니까',
@@ -9039,6 +9038,19 @@ ADDRESS_TEXT_OVERRIDES.update({
 })
 
 
+ADDRESS_TEXT_OVERRIDES.update({
+    # 의미 드리프트(숫자 누락) 복원(2026-06-16, wf_80f24953 + 수동): 게임 수치 보존.
+    0xDF953B: '「1대 대전」.',
+    0xA0306D: '보병은 이동력 3이지만',
+    0xA03087: '수송차는 6이나 되니까',
+    0xA2C748: '병종 또는 생산 거점이 1개 이상 필요합니다.',
+    0xD8215C: '병종 또는 생산 거점이 1개 이상 필요합니다.',
+    0xD8FEFE: '처음엔 모든 유닛 체력 10이야',
+    0xDF8F64: '「1대 대전」 모드,',
+    0xDF9328: '「모드 선택」에는 게임보이 1대로',
+})
+
+
 # 슬롯이 부족할 때만 마지막에 제거하는 ASCII 문장부호(부호 보존 후보가 모두 실패한 경우).
 PUNCT_DROP = ',.!?:;()[]{}"\''
 
@@ -11927,7 +11939,7 @@ def main():
         (0xA2B1A9, 0xA2B1BD, '적 전체 체력에', 'part2 typhoon hp row'),
         (0xA2B27E, 0xA2B290, '침략 폭발 좋아', 'part2 sturm likes row'),
         (0xA2B291, 0xA2B29D, '싫어함 평화', 'part2 hates peace row'),
-        (0xA2B332, 0xA2B348, '모든 유닛 체력에', 'part2 meteor hp row'),
+        (0xA2B332, 0xA2B348, '모든 유닛 체력에 8의', 'part2 meteor hp row'),
         (0xA2B2B1, 0xA2B2BF, '공격력 높음.', 'part2 attack high row'),
         (0xA2B3F8, 0xA2B404, '좋아함 고기', 'part2 likes meat row'),
         (0xA2B405, 0xA2B413, '싫어함 채소', 'part2 hates vegetables row'),
@@ -11939,11 +11951,11 @@ def main():
         (0xA2B795, 0xA2B7A9, '더러운 것 싫어', 'part2 adder dislikes row'),
         (0xA2B884, 0xA2B89C, '블랙커피 좋아', 'part2 hawke likes row'),
         (0xA2B89D, 0xA2B8AF, '무능한 놈 싫어', 'part2 hawke dislikes row'),
-        (0xA2B909, 0xA2B91B, '체력 조금 회복', 'part2 hawke hp recover row'),
-        (0xA2B933, 0xA2B947, '적 체력에 피해', 'part2 hawke hp damage row'),
+        (0xA2B909, 0xA2B91B, '체력 1 회복', 'part2 hawke hp recover row'),
+        (0xA2B933, 0xA2B947, '적 체력에 1 피해', 'part2 hawke hp damage row'),
         (0xA2B948, 0xA2B950, '준다.', 'part2 damage give suffix row'),
-        (0xA2B961, 0xA2B973, '체력 크게 회복', 'part2 hawke super hp recover row'),
-        (0xA2B98B, 0xA2B99F, '적 체력에 큰 피해', 'part2 hawke super hp damage row'),
+        (0xA2B961, 0xA2B973, '체력 2 회복', 'part2 hawke super hp recover row'),
+        (0xA2B98B, 0xA2B99F, '적 체력에 2 피해', 'part2 hawke super hp damage row'),
         (0xA2B9A0, 0xA2B9A8, '준다.', 'part2 damage give repeat row'),
         (0xA2BA12, 0xA2BA20, '좋아함 차', 'part2 likes tea row'),
         (0xA2BA21, 0xA2BA2F, '싫어함 약', 'part2 hates medicine row'),
@@ -12046,7 +12058,7 @@ def main():
         (0xA33E20, 0xA33E2E, '신형포 탄수.', 'part2 new cannon ammo row'),
         (0xA33F0C, 0xA33F18, '신형포로', 'part2 new cannon with row'),
         (0xA34183, 0xA34199, '7일 안에 본부 점령,', 'part2 seven day hq row'),
-        (0xA348F0, 0xA34916, '블랙캐논 격파가 승리야', 'part2 black cannon win row'),
+        (0xA348F0, 0xA34916, '블랙캐논 3개 격파가 승리', 'part2 black cannon win row'),
         (0xA34981, 0xA3498D, '완전 승리!', 'part2 perfect victory row'),
         (0xA34CE8, 0xA34D12, '모드 선택으로 돌아갈까?', 'part2 return mode select row'),
         (0xA34DD8, 0xA34DEE, '전투 점령 애니', 'part2 battle capture anime row'),
@@ -12347,7 +12359,7 @@ def main():
     )
     patch_script_row(
         0xD8FEFE, 0xD8FF20,
-        encode_text('처음엔 모두 체력 최대야', syl_to_code, unmapped),
+        encode_text('처음엔 모든 유닛 체력 10이야', syl_to_code, unmapped),
         'initial hp row',
     )
     patch_script_row(
@@ -15600,7 +15612,7 @@ def main():
         (0xDC2C67, 0xDC2C89, '세 명령이 나와', 'operation command list row'),
         (0xDC2C8E, 0xDC2CBA, '여기서 승리 조건을 고르면 이 맵에서', 'victory condition menu lead row'),
         (0xDC2CBD, 0xDC2CE9, '이기기 위해 필요한 조건을 알려 줄게!', 'victory condition menu row'),
-        (0xDC2CEE, 0xDC2D16, '그리고 남은 메뉴 상황,', 'other operation menus lead row'),
+        (0xDC2CEE, 0xDC2D16, '그리고 남은 두 메뉴 상황,', 'other operation menus lead row'),
         (0xDC2D19, 0xDC2D3D, '장군도 봐 두면 좋을 거야', 'other operation menus row'),
         (0xDC2D42, 0xDC2D5E, '쓸 만한 내용이 적혀 있어', 'useful menu contents row'),
         (0xDC2D66, 0xDC2D6C, '그럼', 'campaign advice close lead row'),
