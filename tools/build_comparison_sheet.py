@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+"""전체 화면 비교 시트 생성기 (screen comparison sheet).
+
+진행별 체크포인트(콜드부트 네비 또는 세이브스테이트)에서 ROM 화면을 캡처해
+라벨이 붙은 몽타주 시트로 합친다. claude/codex/agy 시각 리뷰의 입력물.
+
+체크포인트 모드
+  fresh     : 콜드부트 후 키 네비로 화면에 도달 → **현재 ROM 그대로 렌더(ground truth)**.
+              느리지만 stale VRAM 문제가 없어 BG/스프라이트 잔존 판정에 신뢰 가능.
+  savestate : 세이브스테이트 로드 후 refresh 스텝 진행 → 빠르지만 정적 BG는
+              캡처 시점 VRAM이라 **stale일 수 있음**(시트에 [STALE-BG]로 표기).
+
+원본 대비(`--compare`)
+  fresh 체크포인트는 동일 네비를 원본 ROM에도 적용해 좌(원본)/우(패치) 나란히 배치.
+  savestate 체크포인트는 `orig_state`가 있으면 그 상태로 원본을 렌더.
+
+사용 예
+  python3 tools/build_comparison_sheet.py                 # 패치 ROM만, 기본 매니페스트
+  python3 tools/build_comparison_sheet.py --compare       # 원본 vs 패치
+  python3 tools/build_comparison_sheet.py --only fresh    # fresh 체크포인트만(신뢰 시트)
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from qa_visual_regions import MGBADriver, raw_to_png  # noqa: E402
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_MANIFEST = ROOT / "data" / "screen_checkpoints.json"
+DEFAULT_PATCHED = ROOT / "output" / "game_wars_korean_full.gba"
+DEFAULT_ORIGINAL = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
+GBA_W, GBA_H = 240, 160
+
+_FONT_CACHE: dict[int, ImageFont.FreeTypeFont] = {}
+_FONT_PATHS = [
+    "/Library/Fonts/NanumGothic.ttf",
+    "/System/Library/Fonts/Supplemental/AppleGothic.ttf",
+]
+
+
+def label_font(size: int) -> ImageFont.ImageFont:
+    if size in _FONT_CACHE:
+        return _FONT_CACHE[size]
+    for path in _FONT_PATHS:
+        if Path(path).exists():
+            font = ImageFont.truetype(path, size)
+            _FONT_CACHE[size] = font
+            return font
+    return ImageFont.load_default()
+
+
+def run_nav(driver: MGBADriver, steps: list) -> None:
+    """매니페스트 nav/refresh 스텝을 순서대로 실행."""
+    for step in steps:
+        op = step[0]
+        if op == "frames":
+            driver.frames(int(step[1]))
+        elif op == "press":
+            key = step[1]
+            after = int(step[2]) if len(step) > 2 else 120
+            hold = int(step[3]) if len(step) > 3 else 6
+            driver.press(key, hold=hold, after=after)
+        elif op == "keys":
+            driver.cmd(f"keys {int(step[1])}")
+        elif op == "loadstate":
+            driver.loadstate(_resolve(step[1]))
+        else:
+            raise ValueError(f"unknown nav op: {op!r}")
+
+
+def _resolve(p: str) -> Path:
+    path = Path(p)
+    return path if path.is_absolute() else (ROOT / path)
+
+
+def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str) -> Image.Image:
+    """단일 체크포인트의 단일 ROM 화면을 캡처."""
+    name = checkpoint["name"]
+    shot_dir = out_dir / f"{name}_{side}"
+    shot_dir.mkdir(parents=True, exist_ok=True)
+    driver = MGBADriver(rom, shot_dir, harness)
+    try:
+        if checkpoint["mode"] == "fresh":
+            run_nav(driver, checkpoint["nav"])
+        elif checkpoint["mode"] == "savestate":
+            state = checkpoint["state"] if side == "patched" else checkpoint.get("orig_state", checkpoint["state"])
+            driver.frames(1)
+            driver.loadstate(_resolve(state))
+            run_nav(driver, checkpoint.get("refresh", [["frames", 20]]))
+        else:
+            raise ValueError(f"unknown mode: {checkpoint['mode']!r}")
+        return driver.shot("frame")
+    finally:
+        driver.close()
+
+
+def panel(image: Image.Image, title: str, scale: int = 2) -> Image.Image:
+    """화면 1장을 라벨 헤더가 붙은 패널로 변환."""
+    body = image.resize((GBA_W * scale, GBA_H * scale), Image.NEAREST)
+    header = 22
+    canvas = Image.new("RGB", (body.width, body.height + header), (28, 28, 32))
+    canvas.paste(body, (0, header))
+    draw = ImageDraw.Draw(canvas)
+    draw.text((6, 4), title, font=label_font(14), fill=(235, 235, 235))
+    return canvas
+
+
+def build_sheet(panels: list[Image.Image], cols: int, out_path: Path) -> None:
+    if not panels:
+        raise SystemExit("no panels captured")
+    cw = max(p.width for p in panels)
+    ch = max(p.height for p in panels)
+    pad = 10
+    rows = (len(panels) + cols - 1) // cols
+    sheet = Image.new("RGB", (cols * cw + pad * (cols + 1), rows * ch + pad * (rows + 1)), (16, 16, 18))
+    for i, p in enumerate(panels):
+        r, c = divmod(i, cols)
+        sheet.paste(p, (pad + c * (cw + pad), pad + r * (ch + pad)))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out_path)
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--manifest", default=str(DEFAULT_MANIFEST))
+    ap.add_argument("--rom", default=str(DEFAULT_PATCHED))
+    ap.add_argument("--original", default=str(DEFAULT_ORIGINAL))
+    ap.add_argument("--compare", action="store_true", help="원본 vs 패치 나란히")
+    ap.add_argument("--only", choices=["fresh", "savestate"], help="해당 모드만 캡처")
+    ap.add_argument("--out", default=str(ROOT / "temp" / "comparison_sheets"))
+    ap.add_argument("--harness", default="/tmp/mgbah")
+    ap.add_argument("--cols", type=int, default=0, help="0=자동")
+    args = ap.parse_args()
+
+    manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
+    checkpoints = manifest["checkpoints"]
+    if args.only:
+        checkpoints = [c for c in checkpoints if c["mode"] == args.only]
+
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    harness = Path(args.harness)
+    patched = Path(args.rom)
+    original = Path(args.original)
+
+    panels: list[Image.Image] = []
+    for ck in checkpoints:
+        name = ck["name"]
+        stale = " [STALE-BG]" if ck["mode"] == "savestate" and ck.get("stale_bg") else ""
+        note = ck.get("note", "")
+        print(f"[capture] {name} ({ck['mode']}) {note}")
+        patched_img = capture(patched, ck, out_dir, harness, "patched")
+        if args.compare:
+            if ck["mode"] == "fresh" or ck.get("orig_state"):
+                orig_img = capture(original, ck, out_dir, harness, "orig")
+                pair = Image.new("RGB", (GBA_W * 2 + 4, GBA_H), (60, 60, 60))
+                pair.paste(orig_img, (0, 0))
+                pair.paste(patched_img, (GBA_W + 4, 0))
+                panels.append(panel(pair, f"{name}  [원본|패치]{stale}  {note}", scale=2))
+            else:
+                panels.append(panel(patched_img, f"{name}  [패치]{stale}  {note}", scale=3))
+        else:
+            panels.append(panel(patched_img, f"{name}{stale}  {note}", scale=3))
+
+    cols = args.cols or (2 if args.compare else 3)
+    sheet_path = out_dir / ("sheet_compare.png" if args.compare else "sheet.png")
+    build_sheet(panels, cols, sheet_path)
+    print(f"\n[sheet] {sheet_path}  ({len(panels)} panels)")
+
+
+if __name__ == "__main__":
+    main()

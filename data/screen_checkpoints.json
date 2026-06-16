@@ -1,0 +1,90 @@
+{
+  "_doc": "전체 화면 비교 시트용 진행 체크포인트. tools/build_comparison_sheet.py가 사용. mode=fresh는 콜드부트+키네비(ground truth), mode=savestate는 세이브스테이트(빠르지만 정적 BG는 stale 가능). nav/refresh 스텝: [frames,n] / [press,KEY,after] / [keys,mask] / [loadstate,path].",
+  "checkpoints": [
+    {
+      "name": "01_coldboot_nintendo",
+      "mode": "fresh",
+      "nav": [["frames", 300]],
+      "note": "콜드부트 닌텐도 제공"
+    },
+    {
+      "name": "02_common_title",
+      "mode": "fresh",
+      "nav": [["frames", 600]],
+      "note": "공통 타이틀 시작하기"
+    },
+    {
+      "name": "03_select_part1",
+      "mode": "fresh",
+      "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200]],
+      "note": "1/2 선택(Part1)"
+    },
+    {
+      "name": "04_part1_title",
+      "mode": "fresh",
+      "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "A", 240], ["press", "START", 240]],
+      "note": "Part1 타이틀"
+    },
+    {
+      "name": "05_select_part2",
+      "mode": "fresh",
+      "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120]],
+      "note": "1/2 선택(Part2)"
+    },
+    {
+      "name": "06_part2_title",
+      "mode": "fresh",
+      "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120], ["press", "A", 240], ["press", "START", 240]],
+      "note": "Part2 타이틀"
+    },
+    {
+      "name": "20_mode_select_menu",
+      "mode": "savestate",
+      "state": "temp/final_original_vs_final_20260615/final_menu.ss0",
+      "orig_state": "temp/final_original_vs_final_20260615/original_menu.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "모드 선택/월드맵+CO대사"
+    },
+    {
+      "name": "30_battle_attack",
+      "mode": "savestate",
+      "state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "전투 공격 진입"
+    },
+    {
+      "name": "31_battle_dialog",
+      "mode": "savestate",
+      "state": "temp/battle_crash_smoke_20260607/battle_dialog_after_wait/final.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "전투 대사"
+    },
+    {
+      "name": "32_battle_continue",
+      "mode": "savestate",
+      "state": "temp/battle_crash_smoke_20260607/continue_to_battle_a080/final.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "전투 진입(continue)"
+    },
+    {
+      "name": "33_battle_transport",
+      "mode": "savestate",
+      "state": "temp/battle_crash_smoke_20260607/enemy_after_transport/final.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "수송 후 적 턴"
+    },
+    {
+      "name": "40_part1_name_menu",
+      "mode": "savestate",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "refresh": [["frames", 30]],
+      "stale_bg": true,
+      "note": "Part1 이름입력 후 메뉴"
+    }
+  ]
+}

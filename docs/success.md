@@ -761,3 +761,19 @@ codex 기본 한글화 완료분을 처음부터 엄격 재검수(워크플로 �
   - **overflow 0 / no_ko 0 / 일본어 폴백 증가 0**. qa_text_fit written 19052, level6 사용 2행, visual-wider 17(증가 없음).
   - 렌더 근거: 출하본이 이미 ASCII 부호 렌더(Part1 1737·Part2 942·캠페인 41행, welcome/0xDCBC12). 픽셀 확정은 Phase E.
   - temp 빌드 SHA `f3c0014d82f61cda2b3a198dd4b890ae53e8f6a16930aba62cfe0e4ec4afcd8d`(output 동기화는 리뷰 후).
+
+## 2026-06-16 — 전체 화면 비교 시트 생성기 (시각 회귀 backbone)
+
+사용자 지시(/loop): 진행별 세이브 데이터로 전체 화면 비교 시트를 만들고 claude/codex/agy가 엄격 리뷰 → 무결점까지 개선.
+
+- **신규 도구** `tools/build_comparison_sheet.py`: 진행 체크포인트별로 ROM 화면을 캡처해 라벨 montage 시트(PNG) 생성. `qa_visual_regions.MGBADriver`(헤드리스 `/tmp/mgbah`) 재사용.
+  - `fresh` 모드: 콜드부트 + 합성키 네비 → **현재 ROM 그대로 렌더(ground truth)**. stale VRAM 없음.
+  - `savestate` 모드: 세이브스테이트 + refresh 프레임 → 빠르지만 정적 BG/기존 텍스트는 캡처 시점 VRAM(시트에 `[STALE-BG]` 표기).
+  - `--compare`: 원본 vs 패치 좌우 배치(fresh는 동일 네비, savestate는 `orig_state`).
+  - 매니페스트 `data/screen_checkpoints.json`(fresh 6 + savestate 5). nav 스텝: `[frames,n]`/`[press,KEY,after]`/`[keys,mask]`/`[loadstate,path]`.
+- **fresh-boot ground truth 검증**: 콜드부트 닌텐도 제공, 공통 타이틀(시작하기), 1/2 선택, 1·2편 타이틀 — 원본(NINTENDO PRESENTS/PRESS START) 대비 한글 정상 렌더. 시트 `temp/comparison_sheets/sheet_compare.png`.
+- **핵심 원칙 확립(리뷰 반영 예정)**: 세이브스테이트 캡처는 정적 BG와 이미 그려진 텍스트가 **stale**이라 텍스트/배경 회귀 판정에 신뢰 불가. 따라서
+  - 텍스트(의미/명사/띄어쓰기) 검증 → **ROM 슬롯 디코드**(qa_integrity_map / dialogue_map) 기준.
+  - 그래픽 깨짐 검증 → **fresh-boot 캡처** 기준.
+- **재현**: `python3 tools/build_comparison_sheet.py --compare --only fresh` (신뢰 시트) / `python3 tools/build_comparison_sheet.py` (전체 patched 3x). 부팅 타이틀은 ~600프레임에 출력(매니페스트 타이밍 반영).
+- 빌드 무영향(신규 파일만 추가, `build_korean_full.py` 무변경). py_compile OK, 매니페스트 JSON OK.
