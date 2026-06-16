@@ -209,6 +209,70 @@ def palette_for(sp):
     return default_palette_for(sp)
 
 
+# ── 스프라이트 분류/설명 ──────────────────────────────────────────────────
+# source 코드 → (텍스트 여부, 한글 설명). 텍스트=번역 필요 라벨/로고. 비텍스트는 기본 목록 제외.
+MENU_LABEL_KO = {
+    "campaign": "캠페인", "map_design": "지도 편집", "single_battle": "싱글 배틀",
+    "map_record": "지도 기록", "player_rank": "플레이어 랭크", "single_card": "싱글 카드",
+    "multi_card": "멀티 카드", "map_trade": "지도 교환", "trial": "트라이얼", "record": "기록",
+    "operation_room": "작전실", "wars_shop": "워즈 숍", "new_game": "새 게임",
+    "continue": "계속하기", "link": "통신", "cable_battle": "케이블 대전", "connect": "접속",
+}
+PART1_LOGO_KO = {
+    "OPERATION": "작전", "MAP_SELECT": "지도 선택", "SHOP_SELECT": "상점 선택",
+    "HARD_SHOP": "하드 상점", "CAMPAIGN": "캠페인", "MODE_SELECT": "모드 선택",
+    "RULE_SELECT": "룰 선택", "TEAM_SETTING": "팀 설정", "MISSION_LOGO": "미션 로고",
+    "TITLE_OBJ": "1편 타이틀 로고", "CATHERINE_NAME": "캐서린 이름",
+}
+PART2_PATCH_KO = {
+    "mode_menu_obj_labels": "2편 모드 메뉴 라벨(상점/도전/캠페인 등)",
+    "battle_start_day_overlay_obj": "전투 시작 ‘N일째’ 오버레이",
+    "result_success_overlay_obj": "결과: 성공 오버레이", "result_failure_overlay_obj": "결과: 실패 오버레이",
+    "result_summary_obj": "결과 요약", "result_congratulations_obj": "결과: 축하",
+    "domino_co_name_obj": "도미노 CO 이름", "campaign_header_obj": "캠페인 헤더",
+    "level_label_obj": "레벨 라벨", "redstar_region_obj": "레드스타 영역 라벨",
+    "mission_number_obj": "미션 번호", "lets_go_obj": "‘출격’ 라벨", "check_label_obj": "체크 라벨",
+    "splash_logo_bg": "2편 스플래시 로고", "prologue_logo_obj": "프롤로그 로고",
+    "mission_start_obj": "미션 시작", "air_mission_title_obj": "에어 미션 타이틀",
+    "air_supremacy_title_obj": "제공권 타이틀", "damage_forecast_label_obj": "데미지 예측 라벨",
+    "menu_newspaper_bg": "메뉴 신문 배경(텍스트 포함)", "intro_campaign_residual_graphics": "인트로 캠페인 잔여 그래픽",
+    "world_map_label_tiles": "월드맵 지명 라벨", "info_screen_bg_labels": "정보 화면 라벨",
+    "full_info_spec_obj_label": "상세정보 스펙 라벨", "check_label": "체크 라벨", "battle_day_banner": "전투 N일째 배너",
+}
+
+
+def classify_sprite(source):
+    """(is_text, desc_ko). 텍스트=번역 대상 라벨/로고. 비텍스트(배경/캐릭터/폰트/미분류) → 기본 제외."""
+    s = (source or "")
+    sl = s.lower()
+    if "dialogue glyph" in sl or "font_base" in sl:
+        return (False, "대화 폰트 글리프(편집 대상 아님)")
+    if "blackhole" in sl:
+        return (False, "인트로 블랙홀 배경")
+    if sl.startswith("scan_lz77"):
+        return (False, "미분류 스캔 그래픽")
+    if "menu_label/" in sl:
+        key = sl.split("menu_label/")[1]
+        return (True, "1편 메뉴 라벨: " + MENU_LABEL_KO.get(key, key))
+    for k, v in PART2_PATCH_KO.items():
+        if k in sl:
+            return (True, v)
+    if "part1_" in sl and "_lz77_off" in sl:
+        for k, v in PART1_LOGO_KO.items():
+            if "part1_" + k.lower() in sl or k.lower() in sl:
+                return (True, "1편 화면 로고: " + v)
+        return (True, "1편 화면 로고")
+    if "copyright" in sl:
+        return (True, "타이틀 카피라이트(© 표기)")
+    if "select_obj" in sl:
+        return (False, "1/2편 선택 화면 캐릭터/그래픽")
+    if "title_obj" in sl or "part2_title_obj" in sl:
+        return (True, "타이틀 로고")
+    if "patch_block" in sl or "patch_lz" in sl:
+        return (True, "패치 블록(텍스트 포함 가능)")
+    return (False, s or "미분류")
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
@@ -294,21 +358,29 @@ class Handler(BaseHTTPRequestHandler):
         src = (q.get("source", [""])[0] or "").strip()
         qs = (q.get("q", [""])[0] or "").strip()
         cur = (q.get("curated", [""])[0] or "").strip()
+        # text 필터: 기본 1(번역 대상 텍스트 스프라이트만). text=0이면 전체.
+        text_only = (q.get("text", ["1"])[0] or "1") != "0"
         edited = {p.stem for p in EDIT_DIR.glob("*.png")} if EDIT_DIR.exists() else set()
         out = []
+        n_text = 0
         for s in sprites:
+            is_text, desc = classify_sprite(s.get("source"))
+            if is_text:
+                n_text += 1
+            if text_only and not is_text:
+                continue
             if typ and s.get("type") != typ:
                 continue
             if cur == "1" and not s.get("curated"):
                 continue
             if src and src not in (s.get("source") or ""):
                 continue
-            if qs and qs not in (s.get("id") or "") and qs not in (s.get("source") or "") and qs not in (s.get("offset") or ""):
+            if qs and qs not in (s.get("id") or "") and qs not in (s.get("source") or "") and qs not in (desc or ""):
                 continue
-            out.append({**s, "edited": s.get("id") in edited})
+            out.append({**s, "edited": s.get("id") in edited, "desc": desc, "is_text": is_text})
         types = sorted({s.get("type", "") for s in sprites})
-        return {"count": len(out), "total": len(sprites), "types": types,
-                "edited_count": len(edited), "sprites": out[:3000]}
+        return {"count": len(out), "total": len(sprites), "text_total": n_text, "text_only": text_only,
+                "types": types, "edited_count": len(edited), "sprites": out[:3000]}
 
     def _tile(self, q):
         sid = q.get("id", [""])[0]
@@ -318,20 +390,21 @@ class Handler(BaseHTTPRequestHandler):
         # 편집본(인덱스) 우선
         ov = load_json(OVERRIDES_PATH, {}) or {}
         rec = ov.get(sid)
+        desc = classify_sprite(sp.get("source"))[1]
         if rec and rec.get("indices"):
             grid = rec["indices"]
             h = len(grid); w = len(grid[0]) if grid else 0
             return {"ok": True, "id": sid, "width": w, "height": h,
                     "tile_cols": w // 8, "type": sp.get("type"),
                     "palette": palette_for(sp), "indices": grid, "edited": True,
-                    "offset": sp.get("offset"), "source": sp.get("source")}
+                    "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc}
         dec = decode_indices(sp)
         if dec is None:
             return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
         grid, w, h, cols = dec
         return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": cols,
                 "type": sp.get("type"), "palette": palette_for(sp), "indices": grid,
-                "edited": False, "offset": sp.get("offset"), "source": sp.get("source")}
+                "edited": False, "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc}
 
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)

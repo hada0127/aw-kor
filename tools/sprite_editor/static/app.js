@@ -8,19 +8,20 @@ const setStatus = (s) => $("#status").textContent = s;
 const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false };
 
 async function loadList() {
-  const p = new URLSearchParams({ type: $("#type").value, q: $("#q").value, curated: $("#curated").checked ? "1" : "" });
+  const p = new URLSearchParams({ type: $("#type").value, q: $("#q").value,
+    curated: $("#curated").checked ? "1" : "", text: $("#textonly").checked ? "1" : "0" });
   const d = await jget("/api/sprites?" + p);
   const tsel = $("#type");
   if (tsel.options.length <= 1) for (const t of d.types) if (t) tsel.append(el("option", { value: t, textContent: t }));
-  setStatus(`${d.count}/${d.total} 스프라이트 · 편집됨 ${d.edited_count}`);
+  setStatus(`${d.count} 표시 · 텍스트 ${d.text_total} / 전체 ${d.total} · 편집됨 ${d.edited_count}`);
   const list = $("#list"); list.textContent = "";
   for (const s of d.sprites) list.append(card(s));
 }
 function card(s) {
   const img = el("img", { src: `/api/render?id=${encodeURIComponent(s.id)}&which=${s.edited ? "edit" : "orig"}`, loading: "lazy" });
   const meta = el("div", { className: "meta" },
-    el("b", { textContent: s.id }),
-    el("span", { className: "src", textContent: `${s.type} ${s.width}×${s.height} ${s.source || ""}` }));
+    el("b", { className: "desc", textContent: s.desc || s.id }),
+    el("span", { className: "src", textContent: `${s.type} ${s.width}×${s.height} · ${s.id}` }));
   if (s.edited) meta.append(el("span", { className: "ed", textContent: " ●편집됨" }));
   const c = el("div", { className: "card" }, img, meta);
   c.onclick = () => { document.querySelectorAll(".card").forEach(x => x.classList.remove("on")); c.classList.add("on"); selectSprite(s.id); };
@@ -34,7 +35,7 @@ async function selectSprite(id) {
   S.palette = (t.palette || []).map(c => c.slice(0, 3));
   while (S.palette.length < 16) S.palette.push([0, 0, 0]);
   S.dirty = false;
-  $("#info").textContent = `${id}  ${t.type}  ${t.width}×${t.height}  ${t.offset || ""}  ${t.edited ? "(편집본)" : ""}`;
+  $("#info").textContent = `${t.desc || id} · ${t.type} ${t.width}×${t.height} · ${t.offset || ""} ${t.edited ? "(편집본)" : ""}`;
   $("#save").disabled = true; $("#revert").disabled = !t.edited;
   $("#compare").disabled = false;
   drawPalette(); draw();
@@ -123,7 +124,7 @@ function paintAt(ev) {
 
 function wire() {
   let t; $("#q").oninput = () => { clearTimeout(t); t = setTimeout(loadList, 250); };
-  $("#type").onchange = loadList; $("#curated").onchange = loadList;
+  $("#type").onchange = loadList; $("#curated").onchange = loadList; $("#textonly").onchange = loadList;
   $("#zoomin").onclick = () => { S.zoom = Math.min(40, S.zoom + 2); $("#zoomlbl").textContent = S.zoom + "×"; if (S.indices) draw(); };
   $("#zoomout").onclick = () => { S.zoom = Math.max(2, S.zoom - 2); $("#zoomlbl").textContent = S.zoom + "×"; if (S.indices) draw(); };
   $("#grid").onchange = () => { if (S.indices) draw(); };
