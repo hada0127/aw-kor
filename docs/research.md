@@ -1095,3 +1095,17 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 - 캠페인 월드맵은 한글(블루문)로 패치됨 확인(별개). 위 2종만 미패치.
 - 수정 경로: 해당 LZ77 BG 블록 식별 → 디코드 → 영어 지명 타일을 한글(레드스타/블루문/그린어스/코스모랜드 등)로 재작도 → 재압축(comp_size≤). 필기체 라벨은 한글 픽셀로 대체.
 - **교훈**: savestate "stale" 기각이 실잔존을 가렸다. 콜드부트 자동진행이 ground truth.
+
+## 2026-06-16 — 영어 잔존 BG 한글화 레시피 (codex 블록탐색 + 분석 확정)
+
+**0xBF66F0 작전/전투선택 BG (4bpp tiles, 해제 10112B=316타일, consumed 2952B, 팔레트 0xBF7A7C, tilemap raw 0xBF727A 32x32)**
+- 국가명 텍스트는 각 1타일행(8px), 측면 배너 장식 포함. 텍스트는 ~6px 작은 픽셀폰트, cream bg(idx3)+색문자.
+- 교체 대상 텍스트행 타일ID(같은 ID가 상/하단 2곳에 배치 → 1번 교체로 양쪽 반영):
+  - RED STAR: 0x50–0x5B (12타일, tilemap y=6·22 x=1..12)
+  - BLUE MOON: 0x70–0x7C (13타일, y=2·18 x=17..29)
+  - GREEN EARTH: 0x110–0x11C (13타일, y=14·30 x=9..21)
+  - YELLOW COMET: 우측 블록(0xC0–0x114 계열, y=9~14 x=9+) — 정밀 타일ID 추가 확인 필요.
+- 레시피: lz77_decompress→해당 텍스트행 타일에 galmuri 한글(레드스타/블루문/그린어스/옐로코멧) ~7px 렌더(측면 장식 타일은 보존, 중앙 텍스트만 cream로 지우고 문자색으로 그림)→4bpp 재인코드→lz77_compress_optimal, len≤2952 검증. patch_part2_menu_newspaper_bg(build:5838) 패턴 재사용.
+**0xC2FD70 + 0xC30EE8 전략 오버맵 (Mode4 8bpp bitmap 반쪽 2개, 각 0x4B00B=240x80, consumed 4471/4161, 팔레트 0xC2FC90)**
+- 필기체 영어 지명을 bitmap 좌표에 직접 덮어 한글 픽셀로 재작도(좌표는 codex_bgblocks.md). 각 반쪽 LZ77 재압축 len≤consumed.
+- 주의: 필기체 스타일이라 한글은 일반 픽셀체로 대체(가독 우선).
