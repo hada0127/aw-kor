@@ -36,15 +36,41 @@ function rowFor(ln) {
     else setStatus("오류: " + r.error);
   };
   ta.onkeydown = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") save.onclick(); };
+  const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처" });
+  cap.onclick = () => previewLine(ln, ta.value, cap);
   const tr = el("tr", {},
     el("td", { textContent: ln.id }),
     el("td", { textContent: (ln.address || "").replace("0x", "") }),
     el("td", { textContent: ln.region || "" }),
     el("td", { className: "ja", textContent: ln.ja || "" }),
     el("td", { className: "ko" }, ta, miss),
-    el("td", {}, save));
+    el("td", {}, save, cap));
   if (ln.is_noise) tr.className = "noise";
   return tr;
+}
+
+let _capBusy = false;
+async function previewLine(ln, koLive, btn) {
+  if (_capBusy) { setStatus("이미 캡처 중…"); return; }
+  _capBusy = true; const old = btn.textContent; btn.textContent = "…"; btn.disabled = true;
+  setStatus(`#${ln.id} 실캡처 중… (헤드리스 에뮬 진행, 수십초 소요)`);
+  try {
+    const r = await jpost("/api/preview", { id: ln.id, ko: koLive });
+    if (!r.ok) { setStatus("캡처 오류: " + r.error); return; }
+    const bust = "?t=" + Date.now();
+    $("#capOrig").src = r.orig.url + bust;
+    $("#capAppl").src = r.applied.url + bust;
+    $("#capOrigT").textContent = "JA: " + (r.orig.text || "");
+    $("#capApplT").textContent = "KO: " + (r.applied.text || "");
+    $("#capInfo").textContent = `#${ln.id} · ${r.region || ln.region || ""} · canvas=${r.canvas}`;
+    const trunc = (r.orig.truncated || r.applied.truncated);
+    $("#capNote").textContent = trunc
+      ? "⚠ 이 canvas 슬롯 길이를 초과해 텍스트가 잘렸습니다(긴 대사용 dialog-box canvas는 추가 예정)."
+      : "실기 헤드리스 캡처(가짜 합성 아님). 좌=원본 일본판, 우=적용 한글.";
+    $("#capModal").hidden = false;
+    setStatus(`#${ln.id} 캡처 완료`);
+  } catch (e) { setStatus("캡처 실패: " + e); }
+  finally { _capBusy = false; btn.textContent = old; btn.disabled = false; }
 }
 function showMiss(span, tr, issues) {
   if (issues && issues.length) {
@@ -120,6 +146,8 @@ function wire() {
     if (r.ok) { $("#dja").value = $("#dko").value = ""; loadDict(); setStatus("사전 추가됨"); }
     else setStatus("오류: " + r.error);
   };
+  $("#capClose").onclick = () => { $("#capModal").hidden = true; };
+  $("#capModal").onclick = (e) => { if (e.target.id === "capModal") $("#capModal").hidden = true; };
 }
 
 wire();

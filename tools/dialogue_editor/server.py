@@ -26,6 +26,7 @@ API
 """
 import argparse
 import json
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -37,9 +38,24 @@ DIALOGUE_PATH = ROOT / "data" / "dialogue_map.json"
 DICT_PATH = ROOT / "data" / "proper_nouns.json"
 OVERRIDES_PATH = ROOT / "data" / "dialogue_overrides.json"
 
+sys.path.insert(0, str(ROOT / "tools"))
+try:
+    import preview_capture  # 실캡처 엔진(canvas-hijack)
+except Exception as _e:  # PIL/하네스 부재 시 미리보기 비활성
+    preview_capture = None
+    _PREVIEW_ERR = repr(_e)
+
 _LOCK = threading.Lock()
+_PREVIEW_LOCK = threading.Lock()  # mgbah 캡처 직렬화(하네스 로그/리소스 공유)
+PREVIEW_DIR = ROOT / "temp" / "preview_cache"
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
-        ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8"}
+        ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8",
+        ".png": "image/png"}
+
+
+def pick_canvas(line):
+    """대사 라인의 region/kind → 실캡처 canvas 선택. (현재 part2_menu 단일; 확장 예정)"""
+    return "part2_menu"
 
 
 def load_json(path, default=None):
@@ -117,7 +133,16 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, load_json(DICT_PATH, {}))
         if u.path == "/api/check_all":
             return self._send(200, self._check_all())
+        if u.path.startswith("/preview/"):
+            return self._serve_preview(u.path[len("/preview/"):])
         return self._send(404, {"error": "not found"})
+
+    def _serve_preview(self, name):
+        # temp/preview_cache 내 PNG만 제공(경로 탈출 방지)
+        safe = (PREVIEW_DIR / name).resolve()
+        if PREVIEW_DIR.resolve() not in safe.parents or safe.suffix != ".png" or not safe.exists():
+            return self._send(404, {"error": "no preview"})
+        self._send(200, safe.read_bytes(), "image/png")
 
     def _serve_static(self, rel):
         path = (STATIC / rel).resolve()
@@ -180,7 +205,33 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._edit_dict(body))
         if u.path == "/api/check":
             return self._send(200, self._check_one(body))
+        if u.path == "/api/preview":
+            return self._send(200, self._preview(body))
         return self._send(404, {"error": "not found"})
+
+    def _preview(self, body):
+        """대사 한 줄의 원본(JA)↔적용(KO) 실캡처. body={id, ko?(라이브 편집값), canvas?}."""
+        if preview_capture is None:
+            return {"ok": False, "error": "preview 엔진 비활성: %s" % _PREVIEW_ERR}
+        lid = body.get("id")
+        data = load_json(DIALOGUE_PATH, {"lines": []})
+        ln = next((l for l in data.get("lines", []) if l.get("id") == lid), None)
+        if not ln:
+            return {"ok": False, "error": "id %r 없음" % lid}
+        ja = ln.get("ja") or ""
+        ko = body.get("ko") if body.get("ko") is not None else (ln.get("ko") or "")
+        canvas = body.get("canvas") or pick_canvas(ln)
+        try:
+            with _PREVIEW_LOCK:
+                res = preview_capture.compare(ja, ko, canvas=canvas)
+        except Exception as e:
+            return {"ok": False, "error": "캡처 실패: %r" % e}
+
+        def url(png):
+            return "/preview/" + Path(png).name
+        return {"ok": True, "id": lid, "canvas": canvas,
+                "orig": {"url": url(res["orig"]["png"]), "truncated": res["orig"]["truncated"], "text": ja},
+                "applied": {"url": url(res["applied"]["png"]), "truncated": res["applied"]["truncated"], "text": ko}}
 
     def _save_line(self, body):
         lid = body.get("id")

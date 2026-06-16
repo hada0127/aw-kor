@@ -47,6 +47,20 @@
     </div>
   </aside>
 </main>
+<div id="capModal" hidden>
+  <div class="capbox">
+    <div class="caphead">
+      <strong>원본 ↔ 적용 실캡처</strong>
+      <span id="capInfo"></span>
+      <button id="capClose">✕</button>
+    </div>
+    <div class="capgrid">
+      <figure><figcaption>원본 (일본판 ROM)</figcaption><img id="capOrig" alt="원본"><div id="capOrigT" class="captext"></div></figure>
+      <figure><figcaption>적용 (한글 ROM)</figcaption><img id="capAppl" alt="적용"><div id="capApplT" class="captext"></div></figure>
+    </div>
+    <div id="capNote" class="capnote"></div>
+  </div>
+</div>
 <script src="/static/app.js"></script>
 </body>
 </html>
