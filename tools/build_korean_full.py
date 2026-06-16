@@ -9044,6 +9044,18 @@ ADDRESS_TEXT_OVERRIDES.update({
 ADDRESS_TEXT_OVERRIDES.update({
     # 의미 드리프트(숫자 누락) 복원(2026-06-16, wf_80f24953 + 수동): 게임 수치 보존.
     0xE0F70D: '내가 눈치 못 챈 줄 알았냐!',  # 부정의미 audit
+    0xA02B37: '내가 판단했을 때의 명령이야',  # 의미 audit c0
+    0xA0433D: '국토 깊숙이 들어오면',  # 의미 audit c0
+    0xA06EA3: '중요한 건 작전을 성공시키는 거야.',  # 의미 audit c0
+    0xA07A26: '색이 좀 변하지 않았어?',  # 의미 audit c0
+    0xA07B35: '폭격기·전투기 사용 허가가 안 났어!',  # 의미 audit c0
+    0xA0890B: '연구소 맵으로 갈 수 있을 거야!',  # 의미 audit c0
+    0xA0B150: '색적 지도라는 곳에서,',  # 의미 audit c0
+    0xA0D7AB: '그밖에 많은 물자가',  # 의미 audit c0
+    0xA11E4E: '내가 봐도 훌륭한 작전입니다.',  # 의미 audit c0
+    0xA14108: '늦게까지 놀았었지.',  # 의미 audit c0
+    0xA14CE2: '보병이나 바주카병이 닿으면',  # 의미 audit c0
+    0xA15BAF: '지휘관 판단은 목숨을',  # 의미 audit c0
     0xA1CB1B: '나밖에 못 움직인다는 걸',  # 의미 audit distortion(축약)
     0xA26C00: '적 해상부대 깊이 안 쫓아도',  # 의미 audit distortion(축약)
     0xA0491C: '지형 효과는 상태창뿐 아니라',  # 의미 audit distortion
