@@ -803,3 +803,14 @@ codex 엄격 리뷰 반영: "CSV 시뮬레이션이 아니라 post-build ROM 역
 - **근본 수정 2 — 中점/이중공백 정리**: `スキ　・X`(좋아함:X) 구분자를 인접 공백과 합쳐 단일화 + 연속/혼합(전각·반각) 공백 collapse. **DOUBLE 24→0**. 단일공백 행은 level0 재전각화로 byte-identical. 예/아니오 메뉴 위치샘플 트릭은 `WS_COLLAPSE_EXEMPT`로 예외.
 - **검증**: integrity PASS, terms PASS, overflow 0, no_ko 0. 남은 JAMMED 142 + ABBREV 27 + GRAMMAR 5(슬롯 대비 진짜 긴 행)는 재번역 워크플로로 처리 중.
 - 재현: `python3 tools/qa_spacing_from_rom.py --json temp/spacing_worklist.json`.
+
+## 2026-06-16 — 띄어쓰기 결함 0 달성 + 의미 드리프트 검사 (codex 리뷰 반영)
+
+대량 재번역 워크플로 + encode_fit 구조 개선 + 신규 게이트 2종으로 /goal #2(띄어쓰기) 0화.
+
+- **재번역 워크플로 2라운드**(claude 생성 + adversarial 검증 + 결정적 byte-fit): 슬롯 미달로 단어붙음/축약/문법훼손된 대사를 슬롯에 맞는 자연스러운 한국어로 재작성. 1차 110행 + 2차 29행 + 수동 12행 → `ADDRESS_TEXT_OVERRIDES`. 검증이 의미반전(알고 싶잖아↔알고 싶지 않아)·명령형 변질·하지마 띄어쓰기·바이트초과를 색출.
+  - 누계: **JAMMED 142→0, ABBREV 226→0, GRAMMAR 49→0, DOUBLE 24→0**(`qa_spacing_from_rom` PASS).
+- **encode_fit 비용기반 재설계**(codex 핵심 지적): 기존엔 '마침표 제거+공백유지'보다 '공백제거+마침표유지'가 먼저라, 마침표 하나만 버리면 들어갈 문장을 단어 붙여 출하했다. `_fit_candidates`로 전체보존 → `.!?,`제거 → `:;"'`제거 → 축약 → (최후)공백제거 순. 괄호 `()[]{}`는 의미훼손(을(를)→을를)이라 jam 직전만 제거. 다수행 byte-identical, 모든 게이트 PASS.
+- **신규 게이트 `qa_meaning_from_rom.py`**(codex: LLM 자기검증 백스톱): 출하 KO↔원문 JA 대조. NUMBER(JA 숫자가 KO에 누락+고유어 대체도 없음, 고유어 인식으로 오탐 103→21) / NEGATION(부정 극성 불일치 WARN). 실드리프트 색출: 이동력3→느리지만, CO파워8 누락, 승리조건 3개 누락, 10HP→최대 등 21행.
+- 검증 권위 3종 모두 PASS: `qa_integrity_map`(바이트) / `qa_terms_from_rom`(명사 0) / `qa_spacing_from_rom`(0/0/0/0). overflow 0, no_ko 0.
+- 잔여: 숫자드리프트 21행 재번역(워크플로 진행), 전각/반각 공백 폭 실측, 부정 극성 정밀화, 전체 의미 audit.

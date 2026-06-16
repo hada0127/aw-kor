@@ -23,10 +23,11 @@
 - [x] **iter2: codex 리뷰 반영(1차)** — 비교 시트 도구 결함 수정(panel 종횡비/기본 fresh/orig_state 가드/provenance). **명사 통일 hard gate `qa_terms_from_rom.py` 신설 + 72행 통일**(료우→료, 휩/호이프→휘프, 마크로랜드→매크로랜드, 옐로 코멧/그린 어스→붙임). 게이트 PASS, overflow 0.
 - [x] **iter3: 띄어쓰기 결정적 수정** — `qa_spacing_from_rom.py` 신설. `_fit_variants` 재배열(반각공백을 축약보다 우선) → GRAMMAR 49→5, ABBREV 226→27. 中점/이중공백 collapse → DOUBLE 24→0. byte-identical 다수 유지, integrity/terms PASS. **README 번역가 가이드**(서브에이전트) + Pillow 의존성.
 - [x] iter4: 재번역 워크플로 1차(169행, 186에이전트) → byte-fit 통과 110행 적용. JAMMED 142→37, ABBREV 226→5, GRAMMAR 49→3, DOUBLE 0. gate JAMMED 오탐(명사통일) 수정.
-- [⏳] iter5: 재번역 2차(잔여 42행, 빠듯한 슬롯 + 1차 반려 힌트, wf_18b3d4cb) → JAMMED 0 목표. codex+agy 띄어쓰기 리뷰 진행중.
-- [ ] iter: 전각/반각 공백 렌더 폭 일관성 **실측 확정**(fresh 대사 화면 캡처). 대사 렌더가 per-char 고정폭(monospace)이면 동일 — 검증 필요.
-- [ ] iter: agy 리뷰(짧은 프롬프트) + codex 잔여 — dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 커버리지 확대
-- [ ] iter: 반각/전각 공백 렌더 폭 일관성 확인(1295행 반각 vs 17753행 전각 — 동일폭 여부 fresh 캡처 검증)
+- [x] iter5: 재번역 2차+수동 → **띄어쓰기 결함 0 달성**(JAMMED/ABBREV/GRAMMAR/DOUBLE 0). encode_fit 비용기반 재설계(codex: 공백제거 최후수단). 의미검사 `qa_meaning_from_rom` 신설(숫자드리프트 21·부정 WARN).
+- [⏳] iter6: 숫자드리프트 21행 재번역(슬롯 내 숫자 복원, wf_80f24953) → qa_meaning NUMBER 0 목표.
+- [ ] iter: 전체 의미 audit(JA↔KO 전수) — 숫자/부정 외 오역·의미축소 LLM 판정 워크플로
+- [ ] iter: 전각/반각 공백 폭 실측(within-line 항상 일관, cross-line만 위험) — 비주얼 매트릭스와 함께
+- [ ] iter: agy 리뷰 반영 + codex 잔여(dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 확대, qa_text_fit ROM디코드화)
 - [ ] iter: 의미 변경 0 — JA 원문 ↔ KO 슬롯 디코드 의미 대조(축약으로 뜻 바뀐 행 색출)
 - [ ] iter: 비트맵 깨짐 0 — fresh-boot 전 화면 매트릭스(월드맵 BG 영어 국가명 fresh 확정 포함), 깨짐 패치 도구 개선
 - [ ] iter: 엔딩 도달 검증 — 진행 세이브 생성(없으면) + fresh 네비/Lua 자동진행
