@@ -27,6 +27,17 @@ from qa_integrity_map import decode_enc  # noqa: E402
 
 MAP = os.path.join(BASE, "temp", "integrity_map.json")
 
+# 빌드의 명사/띄어쓰기 통일을 의도값에도 적용해야 JAMMED 오탐(옐로 코멧→옐로코멧 등)을 제거.
+try:
+    from build_korean_full import normalize_korean_terms as _norm
+except Exception:  # 빌드 모듈 임포트 실패 시 핵심 국가명만 보수적 정규화
+    _NATION = [('레드 스타', '레드스타'), ('그린 어스', '그린어스'),
+               ('옐로 코멧', '옐로코멧'), ('블루 문', '블루문'), ('블랙 홀', '블랙홀')]
+    def _norm(t):
+        for a, b in _NATION:
+            t = t.replace(a, b)
+        return t
+
 # SHORTEN 중 문법/의미 훼손 위험이 큰 결과 시그니처(축약 후 출하본에 남는 형태)
 GRAMMAR_RISK = [
     ("있 ", "관형형 '있는' 축약"),
@@ -75,7 +86,7 @@ def main():
         r["ja"] = ja.get(r["addr"], "")
         # 2026-06-16 _fit_variants 재배열 후 레벨: 0=전각공백 1=반각공백 2=전각+축약
         # 3=반각+축약 4=공백제거 5=공백제거+축약, 6~11=부호제거 변형. 축약=2,3,8,9.
-        if has_space(intended) and not has_space(shipped):
+        if has_space(_norm(intended)) and not has_space(shipped):
             r["reason"] = "JAMMED: 공백 전부 제거(단어붙음)"
             jammed.append(r)
         elif lv in (2, 3, 8, 9):
