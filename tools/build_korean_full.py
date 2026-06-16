@@ -2104,7 +2104,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA02ACF: '원하는 유닛에 화살표를 맞춰',
     0xA02AF5: '결정해',
     0xA02B1F: '할 일이 없을 때',
-    0xA02B37: '턴을 넘기는 명령이야',
+    0xA02B37: '스스로 판단할 때의 명령이야',  # 의미 audit c0(codex)
     0xA02B56: '이걸 고르면',
     0xA02B7D: '적 차례가 돼',
     0xA02B9A: '지금은',
@@ -9058,7 +9058,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xA2483F: '얕볼 수 없는 개발력',  # 의미 audit c12
     0xA24C0B: '내가 여기에 왔는가...',  # 의미 audit c12
     0xA2A830: '확실하기 때문에',  # 의미 audit c12
-    0xA2C2F4: '있음으로 하면 유닛 시야 밖이 안',  # 의미 audit c12
+    0xA2C2F4: '있음으로 하면 유닛 시야 밖이 안 보임',  # 의미 audit c12(codex)
     0xA2EB9E: '저런 녀석과 정면으로 싸워 이길 녀석은',  # 의미 audit c12
     0xA2FCC1: '「사국 통일」을 선택할 수 있게 된다!',  # 의미 audit c12
     0xB81FF4: '전선기지 확보하라!',  # 의미 audit c12
@@ -9081,7 +9081,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xE0B179: '머리가 너무 굳었네',  # 의미 audit c12
     0xE0D31F: '확인하고 와줄래?',  # 의미 audit c12
     0xE0F68A: '...궁지에 몰았다고?',  # 의미 audit c12
-    0xA02B37: '내가 판단했을 때의 명령이야',  # 의미 audit c0
+    0xA02B37: '스스로 판단할 때의 명령이야',  # 의미 audit c0(codex, winning entry)
     0xA0433D: '국토 깊숙이 들어오면',  # 의미 audit c0
     0xA06EA3: '중요한 건 작전을 성공시키는 거야.',  # 의미 audit c0
     0xA07A26: '색이 좀 변하지 않았어?',  # 의미 audit c0
@@ -14564,7 +14564,7 @@ def main():
         (0xD9C488, 0xD9C498, '전부 끝나면', 'naval all done row'),
         (0xD9C49E, 0xD9C4AA, '을 해', 'naval final command row'),
         (0xD9C4B2, 0xD9C4C4, '이번엔 해전인가', 'enemy naval battle row'),
-        (0xD9C4C9, 0xD9C4F5, '캐서린에게 공중 유닛을 잃지 않았다', 'enemy catherine air row'),
+        (0xD9C4C9, 0xD9C4F5, '캐서린에게 공중 유닛을 잃지', 'enemy catherine air row'),
         (0xD9C4F8, 0xD9C524, '않았다면 이런 고생은 없었을 텐데...', 'enemy no hardship row'),
         (0xD9C529, 0xD9C54D, '저쪽도 거의 못 쓰는 것 같으니', 'enemy equal footing row'),
         (0xD9C550, 0xD9C55E, '승부는 호각', 'enemy equal row'),
