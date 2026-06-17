@@ -209,7 +209,7 @@ function renderSceneItems(box) {
     for (let i = 0; i < shown; i++) {
       const g = D[i];
       const ko = g.members.map(m => m.ko).join(" ");
-      const over = g.members.some(m => !m.budget.estimated && encLen(m.ko || "") > m.budget.slot);
+      const over = g.members.some(m => !m.budget.estimated && m.budget.fits === false);
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "d"; el.dataset.i = i;
       el.innerHTML = `<span class="ja">${esc(g.assembled_ja || "")}</span>
         <span class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.linked_from ? `<span class="badge">관련: ${esc(g.linked_from)}</span>` : ""}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</span>`;
@@ -333,8 +333,11 @@ function updateFragBudget(fr, m) {
   const nlines = fr.querySelectorAll(".lineinput").length;
   total += (nlines - 1); // 줄바꿈 바이트
   const tb = fr.querySelector("[data-total]");
-  const over = !m.budget.estimated && total > slot;
-  let txt = `합계 ${total}/${slot}B (≤${m.budget.max_syllables}자)`;
+  const fitLen = Number.isFinite(m.budget.encoded_len) ? m.budget.encoded_len : total;
+  const over = !m.budget.estimated && m.budget.fits === false && fitLen > slot;
+  let txt = `합계 ${fitLen}/${slot}B`;
+  if (fitLen !== total) txt += ` (원문 ${total}B, 빌드 fit L${m.budget.fit_level})`;
+  else txt += ` (≤${m.budget.max_syllables}자)`;
   if (badAll.length) txt += ` · 미수록 ${[...new Set(badAll)].join("")}`;
   tb.textContent = txt;
   tb.className = "budget" + (over || badAll.length ? " over" : (total > slot * 0.85 ? " warn" : ""));

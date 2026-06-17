@@ -30,6 +30,7 @@ API(요약)
 """
 from __future__ import annotations
 import argparse
+import collections
 import hashlib
 import importlib.util
 import json
@@ -109,6 +110,15 @@ def syl_codes():
     if "syl" not in _CACHE:
         _CACHE["syl"] = json.loads(SYLCODE.read_text(encoding="utf-8"))
     return _CACHE["syl"]
+
+
+def syl_to_code_ints():
+    if "syl_int" not in _CACHE:
+        _CACHE["syl_int"] = {
+            s: int(c, 16) if isinstance(c, str) else int(c)
+            for s, c in syl_codes().items()
+        }
+    return _CACHE["syl_int"]
 
 
 def valid_checkpoints():
@@ -203,6 +213,19 @@ def encoded_len(text: str) -> int:
         else:
             n += 2
     return n
+
+
+def build_fit_budget(text: str, slot):
+    """빌드 encode_fit 기준 길이. UI 표시/저장 게이트가 출하 빌드와 어긋나지 않게 한다."""
+    raw = encoded_len(text or "")
+    if not isinstance(slot, int) or slot <= 0:
+        return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": True}
+    if not B:
+        return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": raw <= slot}
+    enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter())
+    if enc is None:
+        return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False}
+    return {"raw_len": raw, "encoded_len": len(enc), "fit_level": level, "fits": len(enc) <= slot}
 
 
 SAFE_MIN_ADDR = 0x800000  # build_korean_full: 이 미만(코드영역)은 override skip
@@ -427,8 +450,10 @@ def scene_items(scene, want="all"):
             members = []
             for m in g.get("members", []):
                 ko = dov.get(m.get("address"), m.get("ko") or "")
+                budget = line_budget(m)
+                budget.update(build_fit_budget(ko, budget.get("slot")))
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
-                                "kind": m.get("kind"), "budget": line_budget(m)})
+                                "kind": m.get("kind"), "budget": budget})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
                           "flagged": g.get("flagged"), "assembled_ja": g.get("assembled_ja"),
                           "segments": g.get("segments"), "members": members,
@@ -758,10 +783,10 @@ class Handler(BaseHTTPRequestHandler):
         if bad:
             return {"ok": False, "error": "폰트 미수록 음절(인게임 ‘?’): " + "".join(bad), "unsupported": bad}
         slot = member_slot(addr)
-        elen = encoded_len(ko)
-        if isinstance(slot, int) and elen > slot:
-            return {"ok": False, "error": "슬롯 초과 %dB>%dB" % (elen, slot), "over": True,
-                    "encoded_len": elen, "slot": slot}
+        fit = build_fit_budget(ko, slot)
+        if isinstance(slot, int) and not fit["fits"]:
+            return {"ok": False, "error": "슬롯 초과 %dB>%dB" % (fit["raw_len"], slot), "over": True,
+                    "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}
         with _LOCK:
             ov = DE.load_json(DE.OVERRIDES_PATH, {}) or {}
             ov[addr] = ko
@@ -772,7 +797,8 @@ class Handler(BaseHTTPRequestHandler):
                 if ln.get("address") == addr:
                     ln["ko"] = ko
             DE.save_json(DE.DIALOGUE_PATH, data)
-        return {"ok": True, "address": addr, "ko": ko, "encoded_len": encoded_len(ko)}
+        return {"ok": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
+                "raw_len": fit["raw_len"], "fit_level": fit["fit_level"]}
 
     def _edit_dict(self, body):
         """통일 사전 CRUD(add/edit/delete) — proper_nouns.json. DE 로직 재사용(Phase 4 잔여)."""

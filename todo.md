@@ -132,7 +132,7 @@
 - [x] `data/translation_for_import.csv`에도 사전 용어를 덮어쓰기 반영하고, UI 에디터가 현재 출하 ROM/override 문장을 표시하도록 재빌드·재캡처.
 - [x] codex/agy 리뷰 반영: B팀 제어표식 누수 가능성을 제거하기 위해 override를 HEAD 기준으로 재생성 후 안전 적용만 재반영, `qa_terms_from_rom.py`에 B팀 control residual hard gate 추가.
 - [x] 8782 브라우저 검증: mixed scene의 스프라이트+대사 동시 노출, 출력배치 스프라이트 canvas, 전투 시작 회전/개시 오버레이 10개 스프라이트, 사전 모달 input 값(`사령관`/`호이프`/`코스모 랜드`/`매크로 랜드`) 확인.
-- [x] QA: build overflow 0/no_ko 0, integrity byte mismatch 0, hard forbidden term 0, B팀 제어표식 잔류 0, placeholder 0, scene screenshot stale/missing 0, 배정 스프라이트 112개 API 실패 0.
+- [x] QA: build overflow 0/no_ko 0, integrity byte mismatch 0, hard forbidden term 0, B팀 제어표식 잔류 0, placeholder 0, scene screenshot stale/missing 0, 배정 스프라이트 112개 API 실패 0, UI `초과` 오표시 0.
 
 ---
 
