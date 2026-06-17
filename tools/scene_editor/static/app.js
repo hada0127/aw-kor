@@ -407,7 +407,7 @@ function fragTextFor(addr) {
 // ── 스프라이트 편집 ──────────────────────────────────────────────────────
 const SP = {
   id: null, w: 0, h: 0, cols: 0, grid: null, pal: null, sel: 1,
-  zoom: 10, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
+  zoom: 3, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
   os: null, bgUrl: "", bgImg: null, bgReady: false, showBg: true,
   painting: false, paintKey: "", activePaletteKey: null
 };
@@ -425,7 +425,7 @@ async function selectSprite(i, el) {
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = true;
   SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
-  const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 원본 타일 순서";
+  const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 출력 크기";
   ed.innerHTML = `<h3>스프라이트 편집 — ${esc(sp.desc)}</h3>
     <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
     ${sceneShotCard(S.items.screenshot || {})}
@@ -446,8 +446,8 @@ async function selectSprite(i, el) {
   const bg = $("#spBg");
   if (bg) bg.onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
   await setSpriteMode(SP.mode);
-  $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(4, SP.zoom - 2); drawCurrentSprite(); };
-  $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(24, SP.zoom + 2); drawCurrentSprite(); };
+  $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(1, SP.zoom - 1); drawCurrentSprite(); };
+  $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(12, SP.zoom + 1); drawCurrentSprite(); };
   $("#spSave").onclick = saveSprite;
   $("#spRevert").onclick = revertSprite;
   $("#spCompare").onclick = compareSprite;
@@ -506,12 +506,15 @@ function drawCurrentSprite() {
 }
 function drawSprite() {
   const cv = $("#spcv"); const z = effectiveZoom();
-  $("#sphint").textContent = "타일 그리드: 실화면 레이아웃 정보가 없어 원본 타일스트림 순서로 편집합니다.";
+  $("#sphint").textContent = `타일 그리드: 원본 스프라이트 출력 크기 ${SP.w}×${SP.h}px 기준으로 편집합니다. 화면 배치 레이아웃은 아직 없음.`;
   // 네이티브 해상도 ImageData 1회 생성 후 스케일 드로(per-pixel fillRect 루프 제거 → O(W*H) 1회)
   const off = document.createElement("canvas"); off.width = SP.w; off.height = SP.h;
-  const octx = off.getContext("2d"); const img = octx.createImageData(SP.w, SP.h);
+  const octx = off.getContext("2d"); octx.fillStyle = "#08090c"; octx.fillRect(0, 0, SP.w, SP.h);
+  const img = octx.createImageData(SP.w, SP.h);
   for (let y = 0; y < SP.h; y++) for (let x = 0; x < SP.w; x++) {
-    const c = SP.pal[SP.grid[y][x] & 15] || [0, 0, 0];
+    const idx = SP.grid[y][x] & 15;
+    if (idx === 0) continue;
+    const c = SP.pal[idx] || [0, 0, 0];
     const o = (y * SP.w + x) * 4;
     img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
   }
@@ -527,9 +530,9 @@ function drawSprite() {
     if (x < 0 || y < 0 || x >= SP.w || y >= SP.h) return;
     setSheetPixel(x, y, SP.sel);
     const c = SP.pal[SP.sel];
-    ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
+    ctx.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
     const o2 = SP._off.getContext("2d");
-    o2.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; o2.fillRect(x, y, 1, 1);
+    o2.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; o2.fillRect(x, y, 1, 1);
   };
   cv.onmousedown = e => { painting = true; paint(e); window.addEventListener("mouseup", () => (painting = false), { once: true }); };
   cv.onmousemove = e => { if (painting) paint(e); };
