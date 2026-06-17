@@ -63,6 +63,13 @@ def _load_module(name, relpath):
 # 기존 두 편집기의 helper 재사용(모듈로 로드 — main()은 __main__ 가드라 미실행)
 DE = _load_module("de_server", "tools/dialogue_editor/server.py")
 SE = _load_module("se_server", "tools/sprite_editor/server.py")
+# 빌드 모듈(슬롯 권위 load_slots + DENY/PAIR 영역) — 편집 정합성 게이트용. __main__ 가드라 안전.
+try:
+    if str(ROOT / "tools") not in sys.path:
+        sys.path.insert(0, str(ROOT / "tools"))
+    import build_korean_full as B
+except Exception:
+    B = None
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()
@@ -122,24 +129,56 @@ def encoded_len(text: str) -> int:
 SAFE_MIN_ADDR = 0x800000  # build_korean_full: 이 미만(코드영역)은 override skip
 
 
+def build_slots():
+    """빌드 권위 슬롯 길이(found_texts length, addr_int→len). dialogue_groups slot과 49건 불일치
+    → 빌드가 실제 쓰는 이 값이 권위(M9)."""
+    if "build_slots" not in _CACHE:
+        _CACHE["build_slots"] = (B.load_slots() if B else {})
+    return _CACHE["build_slots"]
+
+
+def deny_pair_status(addr_int, slot):
+    """[addr,addr+slot)가 DENY_REGIONS와 겹치면 ('deny',name), PAIR_RENDERER면 ('pair',name). (M10)"""
+    if not B:
+        return (None, None)
+    lo, hi = addr_int, addr_int + max(slot, 1)
+    for name, rlo, rhi in getattr(B, "DENY_REGIONS", []):
+        if lo < rhi and hi > rlo:
+            return ("deny", name)
+    for name, rlo, rhi in getattr(B, "PAIR_RENDERER_REGIONS", []):
+        if lo < rhi and hi > rlo:
+            return ("pair", name)
+    return (None, None)
+
+
 def line_budget(member):
     """member의 slot 예산 + 순한글 최대 음절수 + editable(빌드 적용 가능 여부).
-    빌드는 slot<=0 또는 addr<SAFE_MIN_ADDR 조각을 skip → 편집해도 미반영이라 read-only 표시."""
-    slot = member.get("slot")
+    슬롯 권위 = 빌드 found_texts length(M9). 빌드는 slot<=0/addr<SAFE_MIN_ADDR/DENY 영역을 skip."""
     try:
         addr_int = int((member.get("address") or "0x0"), 16)
     except (ValueError, TypeError):
         addr_int = 0
-    if not isinstance(slot, int):
-        ja = member.get("ja") or ""
-        slot = len(ja) * 2  # SJIS 2바이트 추정(권위 아님)
-        est = True
-    else:
+    # 슬롯 권위: 빌드 found length > dialogue_groups slot. min으로 안전.
+    g_slot = member.get("slot")
+    b_slot = build_slots().get(addr_int)
+    if isinstance(b_slot, int) and b_slot > 0:
+        slot = min(b_slot, g_slot) if isinstance(g_slot, int) and g_slot > 0 else b_slot
         est = False
-    editable = (not est) and slot > 0 and addr_int >= SAFE_MIN_ADDR
+    elif isinstance(g_slot, int) and g_slot > 0:
+        slot = g_slot
+        est = False
+    else:
+        slot = len((member.get("ja") or "")) * 2
+        est = True
+    kind, region = deny_pair_status(addr_int, slot)
+    editable = (not est) and slot > 0 and addr_int >= SAFE_MIN_ADDR and kind != "deny" and kind != "pair"
     reason = ""
     if not editable:
-        if est:
+        if kind == "deny":
+            reason = "빌드 deny 영역(%s) — 덮으면 손상" % region
+        elif kind == "pair":
+            reason = "pair 렌더러 영역(%s) — 특수 처리 필요" % region
+        elif est:
             reason = "슬롯 길이 미상(빌드 미적용 가능)"
         elif addr_int < SAFE_MIN_ADDR:
             reason = "코드영역 주소(<0x800000, 빌드 skip)"
@@ -150,13 +189,19 @@ def line_budget(member):
 
 
 def member_slot(address):
-    """주소 → slot 바이트 길이(없으면 None=추정 불가). dialogue_groups member 권위."""
+    """주소 → 빌드 권위 슬롯 길이. found length 우선, 없으면 dialogue_groups slot."""
+    try:
+        ai = int(address, 16)
+    except (ValueError, TypeError):
+        return None
+    b = build_slots().get(ai)
+    if isinstance(b, int) and b > 0:
+        return b
     if "addr_slot" not in _CACHE:
         idx = {}
         for g in group_index().values():
             for m in g.get("members", []):
-                a = m.get("address")
-                s = m.get("slot")
+                a = m.get("address"); s = m.get("slot")
                 if a is not None and isinstance(s, int):
                     idx[a] = s
         _CACHE["addr_slot"] = idx
@@ -184,33 +229,36 @@ _BUILD_LOCK = threading.Lock()
 
 
 def _run_build():
+    # M6: _BUILD_LOCK은 상태 변경에만(짧게). subprocess(최대 1200s)는 락 밖에서 실행 →
+    # 빌드 중에도 /api/state·/api/build(거부) 등이 응답함. status='building'은 start_build가 이미 설정.
     import subprocess
     with _BUILD_LOCK:
         _BUILD.update(status="building", started=int(time.time()), finished=0, error=None, log_tail="")
-        try:
-            proc = subprocess.run([sys.executable, str(ROOT / "tools" / "build_korean_full.py")],
-                                  capture_output=True, text=True, cwd=str(ROOT), timeout=1200)
-            applied = ""
-            for ln in (proc.stdout or "").splitlines():
-                if "스프라이트 편집 적용" in ln or "스프라이트 편집" in ln:
-                    applied = ln.strip()
+    try:
+        proc = subprocess.run([sys.executable, str(ROOT / "tools" / "build_korean_full.py")],
+                              capture_output=True, text=True, cwd=str(ROOT), timeout=1200)
+        applied = ""
+        for ln in (proc.stdout or "").splitlines():
+            if "스프라이트 편집 적용" in ln or "스프라이트 편집" in ln:
+                applied = ln.strip()
+        with _BUILD_LOCK:
             _BUILD.update(status="success" if proc.returncode == 0 else "fail",
                           finished=int(time.time()),
                           log_tail=(proc.stdout or "")[-1500:],
                           error=(proc.stderr or "")[-800:] if proc.returncode != 0 else None,
                           applied=applied)
-            # ROM/레이아웃 캐시 무효화(stale 방지 — codex 지적)
-            SE._PATCHED = None
-            SE._OBJLABELS = None
-            SE._BUILD_LAYOUTS = None
-            SE._LAYOUTS = None
-            _CACHE.pop("sprites", None)
-            _CACHE.pop("romsha_key", None)
-            DE._GROUPS_CACHE = None
-            _CACHE.pop("groups", None)
-            _CACHE.pop("addr_slot", None)
-        except Exception as e:
+    except Exception as e:
+        with _BUILD_LOCK:
             _BUILD.update(status="fail", finished=int(time.time()), error=repr(e))
+    finally:
+        # ROM/레이아웃/대사 캐시 무효화(stale 방지)
+        SE._PATCHED = None
+        SE._OBJLABELS = None
+        SE._BUILD_LAYOUTS = None
+        SE._LAYOUTS = None
+        DE._GROUPS_CACHE = None
+        for k in ("sprites", "romsha_key", "groups", "addr_slot", "build_slots"):
+            _CACHE.pop(k, None)
 
 
 def start_build():
@@ -471,6 +519,11 @@ class Handler(BaseHTTPRequestHandler):
         which = q.get("which", ["orig"])[0]
         if which not in ("orig", "patched", "edit"):
             return self._send(400, {"error": "which=orig|patched|edit"})
+        if which == "edit":
+            # 편집본 없으면 ROM 폴백 대신 404(‘편집중’에 원본 표시 방지 — m7)
+            ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}
+            if not (ov.get(sid) and ov[sid].get("indices")):
+                return self._send(404, {"error": "편집본 없음"})
         try:
             data = SE.render_compare_png(sid, which)
         except Exception as e:
@@ -541,6 +594,12 @@ class Handler(BaseHTTPRequestHandler):
             addr_int = 0
         if addr_int < SAFE_MIN_ADDR:
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
+        # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
+        kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
+        if kind == "deny":
+            return {"ok": False, "error": "빌드 deny 영역(%s) — 편집 불가(손상 방지)" % region}
+        if kind == "pair":
+            return {"ok": False, "error": "pair 렌더러 영역(%s) — 특수 처리 필요, 편집 불가" % region}
         # 서버측 하드게이트(클라 우회/오차 방어): 슬롯 초과·미수록 음절 차단
         bad = unsupported_syllables(ko)
         if bad:
@@ -595,10 +654,17 @@ class Handler(BaseHTTPRequestHandler):
         if not indices or not isinstance(indices, list) or not indices[0]:
             return {"ok": False, "error": "indices(2D 0..15) 필요"}
         h = len(indices); w = len(indices[0])
+        # 차원 검증(m8): 8의 배수 + 모든 행 길이 일치(빈/비정형 인코딩 차단)
+        if w == 0 or h == 0 or w % 8 or h % 8:
+            return {"ok": False, "error": "indices 차원 오류(8의 배수 필요): %d×%d" % (w, h)}
+        if any(len(row) != w for row in indices):
+            return {"ok": False, "error": "indices 행 길이 불일치"}
         try:
             enc = SE.encode_indices(indices, w, h)
         except Exception as e:
             return {"ok": False, "error": "encode: %r" % e}
+        if not enc:
+            return {"ok": False, "error": "인코딩 결과 0바이트"}
         if sp.get("type") == "lz77":
             fits = (len(enc) == sp.get("size"))
         else:

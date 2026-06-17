@@ -2,9 +2,18 @@
 // AW 통합 화면(scene) 에디터 프런트엔드 (vanilla JS)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const api = async (p, opt) => (await fetch(p, opt)).json();
+// 네트워크/HTTP 오류를 일관된 {ok:false,error} 또는 throw로(미처리 rejection 방지 — m2)
+const api = async (p, opt) => {
+  const res = await fetch(p, opt);
+  if (!res.ok) {
+    let body = {};
+    try { body = await res.json(); } catch (e) { }
+    return { ok: false, error: body.error || `HTTP ${res.status}`, _status: res.status };
+  }
+  return res.json();
+};
 
-const S = { scope: "all", scenes: [], scene: null, items: null, itab: "dialogue", item: null, dict: null, supported: null, dirty: 0 };
+const S = { scope: "all", scenes: [], scene: null, items: null, itab: "dialogue", item: null, dict: null, supported: null, dirty: 0, _reqSeq: 0, _limit: 0, applyAction: null };
 
 // ── 바이트 예산(Python encoded_len 미러: 한글2/전각공백2/줄바꿈1/ASCII1/기타2) ──
 function encLen(t) {
@@ -46,9 +55,11 @@ async function refreshState() {
   try {
     const st = await api("/api/state");
     const rom = st.rom.exists ? `ROM ${st.rom.sha256} · ${(st.rom.size / 1048576).toFixed(0)}MB` : "ROM 없음";
-    const dirtyN = (st.dirty.dialogue_overrides || 0) + (st.dirty.sprite_overrides || 0);
-    S.dirty = dirtyN;
-    const dirty = dirtyN ? `<span class="warn">· 편집 ${dirtyN}건(미빌드)</span>` : `<span class="ok">· 동기</span>`;
+    // dirty=빌드 후 override 파일이 더 새것(미빌드 변경 있음). 숫자는 누적 override 총량(델타 아님).
+    const isDirty = st.dirty.dirty;
+    const totalOv = (st.dirty.dialogue_total || 0) + (st.dirty.sprite_total || 0);
+    S.dirty = isDirty ? totalOv : 0;
+    const dirty = isDirty ? `<span class="warn">· 미빌드 변경 있음(override ${totalOv}건)</span>` : `<span class="ok">· 동기</span>`;
     let build = "";
     if (st.build.status === "building") build = ` <span class="warn">· 빌드중…</span>`;
     else if (st.build.status === "fail") build = ` <span class="bad">· 빌드실패</span>`;
@@ -62,13 +73,17 @@ async function refreshState() {
 // ── 홈: scene 카드 ──────────────────────────────────────────────────────
 async function loadScenes() {
   const q = $("#q").value.trim();
-  const d = await api(`/api/scenes?scope=${S.scope}&q=${encodeURIComponent(q)}`);
+  let d;
+  try { d = await api(`/api/scenes?scope=${S.scope}&q=${encodeURIComponent(q)}`); }
+  catch (e) { toast("scene 목록 로드 실패: " + e, true); return; }
+  if (!d || !d.scenes) { toast("scene 목록 로드 실패: " + ((d && d.error) || ""), true); return; }
   S.scenes = d.scenes;
   const c = d.coverage || {};
   $("#coverage").textContent =
     `scene ${d.scenes.length}개 · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} 배정 · ` +
     `텍스트 스프라이트 ${c.sprites_assigned}개 · 미배정 검토 ${c.dialogue_unassigned + (c.sprites_unassigned - (c.sprites_unassigned_scan_lz77 || 0))}건(+미분류 그래픽 ${c.sprites_unassigned_scan_lz77})`;
   const grid = $("#scenegrid"); grid.innerHTML = "";
+  if (!d.scenes.length) { grid.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
   const SCOPE_KO = { all: "공통", shared_select: "선택", part1: "1편", part2: "2편" };
   for (const s of d.scenes) {
     const el = document.createElement("div");
@@ -86,14 +101,21 @@ async function loadScenes() {
 
 // ── scene 상세 ──────────────────────────────────────────────────────────
 async function openScene(id) {
+  const myReq = ++S._reqSeq;  // 빠른 연속 클릭 경합 방지(최신 요청만 반영 — m3)
   S.scene = id; S.item = null;
-  S.items = await api(`/api/scene/items?id=${encodeURIComponent(id)}&type=all`);
+  let items;
+  try { items = await api(`/api/scene/items?id=${encodeURIComponent(id)}&type=all`); }
+  catch (e) { toast("scene 항목 로드 실패: " + e, true); return; }
+  if (myReq !== S._reqSeq) return;  // 더 최신 클릭이 있으면 폐기
+  if (!items || !items.dialogue) { toast("scene 항목 로드 실패: " + ((items && items.error) || ""), true); return; }
+  S.items = items;
   $("#home").hidden = true; $("#scene").hidden = false;
   $("#sceneTitle").textContent = S.items.title;
   $("#sceneMeta").textContent = `${S.items.subtag} · 실캡처 ${S.items.canvas_status === "ready" ? "지원(" + S.items.canvas + ")" : "미지원"}`;
   $("#cntD").textContent = `(${S.items.dialogue.length})`;
   $("#cntS").textContent = `(${S.items.sprites.length})`;
   S.itab = S.items.dialogue.length ? "dialogue" : "sprite";
+  S._limit = RENDER_LIMIT;
   renderTabs(); renderItems();
   $("#editor").innerHTML = `<div class="empty">가운데에서 편집할 항목을 선택하세요.</div>`;
 }
@@ -102,30 +124,42 @@ function renderTabs() {
   $$("#scene .itemtabs button").forEach(b => b.classList.toggle("on", b.dataset.it === S.itab));
 }
 
+const RENDER_LIMIT = 300;  // 한 번에 그리는 행 상한(대형 scene jank 방지 — M2/M5)
 function renderItems() {
   const box = $("#itemlist"); box.innerHTML = "";
-  if (S.itab === "dialogue") {
-    if (!S.items.dialogue.length) { box.innerHTML = `<div class="row"><span class="ja">대사 없음</span></div>`; return; }
-    S.items.dialogue.forEach((g, i) => {
+  S._limit = S._limit || RENDER_LIMIT;
+  const frag = document.createDocumentFragment();
+  const list = S.itab === "dialogue" ? S.items.dialogue : S.items.sprites;
+  if (!list.length) {
+    box.innerHTML = `<div class="row"><span class="ja">${S.itab === "dialogue" ? "대사" : "스프라이트"} 없음</span></div>`;
+    return;
+  }
+  const shown = Math.min(list.length, S._limit);
+  for (let i = 0; i < shown; i++) {
+    const el = document.createElement("div"); el.className = "row";
+    if (S.itab === "dialogue") {
+      const g = list[i];
       const ko = g.members.map(m => m.ko).join(" ");
       const over = g.members.some(m => !m.budget.estimated && encLen(m.ko || "") > m.budget.slot);
-      const el = document.createElement("div");
-      el.className = "row";
       el.innerHTML = `<div class="ja">${esc(g.assembled_ja || "")}</div>
         <div class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</div>`;
       el.onclick = () => selectDialogue(i, el);
-      box.appendChild(el);
-    });
-  } else {
-    if (!S.items.sprites.length) { box.innerHTML = `<div class="row"><span class="ja">스프라이트 없음</span></div>`; return; }
-    S.items.sprites.forEach((sp, i) => {
-      const el = document.createElement("div");
-      el.className = "row";
-      el.innerHTML = `<img class="thumb" src="/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched" onerror="this.style.display='none'">
+    } else {
+      const sp = list[i];
+      // 지연 로드(loading=lazy)로 썸네일 동시 요청 폭주 방지(M5). ROM 없으면 orig 폴백(m12).
+      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
         <span class="ko">${esc(sp.desc)}</span> <span class="ja">${esc(sp.type)} ${esc(sp.offset || "")}</span>`;
       el.onclick = () => selectSprite(i, el);
-      box.appendChild(el);
-    });
+    }
+    frag.appendChild(el);
+  }
+  box.appendChild(frag);
+  if (list.length > shown) {
+    const more = document.createElement("div"); more.className = "row";
+    more.style.textAlign = "center"; more.style.color = "var(--accent)";
+    more.textContent = `+ ${list.length - shown}개 더 보기 (총 ${list.length})`;
+    more.onclick = () => { S._limit += RENDER_LIMIT; renderItems(); };
+    box.appendChild(more);
   }
 }
 
@@ -231,6 +265,7 @@ function updateFragBudget(fr, m) {
   fr._over = over; fr._bad = [...new Set(badAll)];
 }
 
+// 저장 성공=true / 실패=false 일관 반환(모달 '적용' 게이트가 의존 — M1/M7).
 async function saveDialogue() {
   const g = S.item.g;
   let anyOver = false, anyBad = [];
@@ -240,13 +275,20 @@ async function saveDialogue() {
     if (fr._bad && fr._bad.length) anyBad = anyBad.concat(fr._bad);
     writes.push({ address: g.members[+fr.dataset.mi].address, ko: fragText(fr) });
   });
-  if (!writes.length) return toast("편집 가능한 조각이 없습니다", true);
-  if (anyOver) return toast("슬롯 초과 — 저장 불가(줄여 주세요)", true);
-  if (anyBad.length) return toast("폰트 미수록 음절 — 저장 불가: " + [...new Set(anyBad)].join(""), true);
+  if (!writes.length) { toast("편집 가능한 조각이 없습니다", true); return false; }
+  if (anyOver) { toast("슬롯 초과 — 저장 불가(줄여 주세요)", true); return false; }
+  if (anyBad.length) { toast("폰트 미수록 음절 — 저장 불가: " + [...new Set(anyBad)].join(""), true); return false; }
+  let saved = 0;
   for (const w of writes) {
     const r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(w) });
-    if (!r.ok) return toast("저장 실패: " + (r.error || ""), true);  // 서버 하드게이트
+    if (!r.ok) {
+      // 부분 저장(M3): 이미 기록된 조각을 화면에 반영하고 사실을 알림
+      if (saved > 0) { refreshState(); renderItems(); toast(`일부만 저장(${saved}/${writes.length}) — 나머지 거부: ${r.error || ""}`, true); }
+      else toast("저장 실패: " + (r.error || ""), true);
+      return false;
+    }
     const m = g.members.find(x => x.address === w.address); if (m) m.ko = w.ko;
+    saved++;
   }
   toast("저장됨(빌드 전까지 미반영)"); refreshState(); renderItems();
   return true;
@@ -340,41 +382,57 @@ function renderSwatches() {
     box.appendChild(sw);
   });
 }
+// 캔버스 변 ~1400px 상한(거대 스프라이트 프리즈/메모리 폭증 방지 — M4)
+function effectiveZoom() {
+  const fit = Math.max(1, Math.floor(1400 / Math.max(SP.w, SP.h, 1)));
+  return Math.max(1, Math.min(SP.zoom, fit));
+}
 function drawSprite() {
-  const cv = $("#spcv"); const z = SP.zoom;
-  cv.width = SP.w * z; cv.height = SP.h * z;
-  const ctx = cv.getContext("2d");
+  const cv = $("#spcv"); const z = effectiveZoom();
+  // 네이티브 해상도 ImageData 1회 생성 후 스케일 드로(per-pixel fillRect 루프 제거 → O(W*H) 1회)
+  const off = document.createElement("canvas"); off.width = SP.w; off.height = SP.h;
+  const octx = off.getContext("2d"); const img = octx.createImageData(SP.w, SP.h);
   for (let y = 0; y < SP.h; y++) for (let x = 0; x < SP.w; x++) {
     const c = SP.pal[SP.grid[y][x] & 15] || [0, 0, 0];
-    ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
-    ctx.fillRect(x * z, y * z, z, z);
+    const o = (y * SP.w + x) * 4;
+    img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
   }
+  octx.putImageData(img, 0, 0);
+  cv.width = SP.w * z; cv.height = SP.h * z;
+  const ctx = cv.getContext("2d"); ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(off, 0, 0, cv.width, cv.height);
+  SP._off = off;
   let painting = false;
   const paint = (e) => {
     const r = cv.getBoundingClientRect();
     const x = Math.floor((e.clientX - r.left) / z), y = Math.floor((e.clientY - r.top) / z);
     if (x < 0 || y < 0 || x >= SP.w || y >= SP.h) return;
     SP.grid[y][x] = SP.sel;
-    const c = SP.pal[SP.sel]; ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
+    const c = SP.pal[SP.sel];
+    ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
+    const o2 = SP._off.getContext("2d");
+    o2.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; o2.fillRect(x, y, 1, 1);
   };
-  cv.onmousedown = e => {
-    painting = true;
-    paint(e);
-    window.addEventListener("mouseup", () => (painting = false), { once: true });
-  };
+  cv.onmousedown = e => { painting = true; paint(e); window.addEventListener("mouseup", () => (painting = false), { once: true }); };
   cv.onmousemove = e => { if (painting) paint(e); };
 }
 async function saveSprite() {
   const r = await api("/api/sprite/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id, indices: SP.grid, palette: SP.pal }) });
-  if (!r.ok) return toast("저장 실패: " + (r.error || ""), true);
-  toast(`저장됨 (raw ${r.raw_len}B, fit=${r.fits_raw})`); refreshState();
+  if (!r.ok) { toast("저장 실패: " + (r.error || ""), true); return false; }  // M8: 실패 시 false
+  toast(`저장됨 (raw ${r.raw_len}B, fit=${r.fits_raw})${r.fits_raw === false ? " ⚠빌드서 누락 가능" : ""}`, r.fits_raw === false);
+  refreshState();
+  return true;
 }
 async function revertSprite() {
-  await api("/api/sprite/revert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id }) });
+  const r = await api("/api/sprite/revert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id }) });
+  if (!r.ok) { toast("되돌리기 실패: " + (r.error || ""), true); return; }
   toast("되돌림");
   S.items = await api(`/api/scene/items?id=${encodeURIComponent(S.scene)}&type=all`);
-  selectSprite(S.item.i, $$("#itemlist .row")[S.item.i]);
-  renderItems();
+  renderItems();  // 먼저 새 DOM 생성, 그 다음 새 행에서 재선택(m1/m6/m10)
+  if (S.itab === "sprite") {
+    const row = $$("#itemlist .row")[S.item.i];
+    if (row) selectSprite(S.item.i, row);
+  }
   refreshState();
 }
 async function compareSprite() {
@@ -392,13 +450,20 @@ async function compareSprite() {
 // ── 모달 / 빌드(적용) / 다운로드 ─────────────────────────────────────────
 function openModal(title, gridHtml) {
   $("#modalTitle").textContent = title; $("#modalGrid").innerHTML = gridHtml;
-  $("#modalNote").textContent = ""; $("#modal").hidden = false;
+  $("#modalNote").textContent = "";
+  $("#modalApply").disabled = true;  // M12: 콘텐츠 준비 후에만 활성화(재진입 잔존 방지)
+  $("#modal").hidden = false;
 }
-$("#modalClose").onclick = () => ($("#modal").hidden = true);
+function closeModal() { $("#modal").hidden = true; }
+$("#modalClose").onclick = closeModal;
+// M4(css_dom minor): 오버레이 클릭 / Escape 로 닫기
+$("#modal").onclick = (e) => { if (e.target.id === "modal") closeModal(); };
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#modal").hidden) closeModal(); });
 $("#modalApply").onclick = async () => {
-  // 적용 = (현재 편집 저장) → 전체 빌드. 미저장 편집이 빌드에 빠지지 않게.
-  if (S.applyAction) { const ok = await S.applyAction(); if (ok === false) return; }
-  $("#modal").hidden = true; applyBuild();
+  // 적용 = (현재 편집 저장) → 전체 빌드. 저장 실패(false/undefined 모두)면 빌드 안 함(M1/M7/m13).
+  $("#modalApply").disabled = true;  // 연타 방지
+  if (S.applyAction) { const ok = await S.applyAction(); if (!ok) { closeModal(); return; } }
+  closeModal(); applyBuild();
 };
 
 async function applyBuild() {
@@ -412,9 +477,9 @@ async function pollBuild() {
   refreshState();
   if (j.status === "building") return setTimeout(pollBuild, 2500);
   if (j.status === "success") {
-    // lz77 재압축 초과 등으로 일부 편집이 skip될 수 있음 → 로그에 skip 흔적 있으면 경고
-    const skipped = /skip|초과|comp_size|overflow/i.test(j.log_tail || "");
-    toast(skipped ? "빌드 완료(일부 편집 skip 가능 — 로그 확인)" : "빌드 완료 — ROM 반영됨. 다운로드 가능.", skipped);
+    // 'overflow'는 정상 로그에도 상존(cry-wolf) → 실제 스프라이트 편집 skip 마커만 경고(M11)
+    const skipped = /재압축 초과|comp_size 초과|편집 skip|override skip/i.test(j.log_tail || "");
+    toast(skipped ? "빌드 완료(일부 스프라이트 편집 skip — 로그 확인)" : "빌드 완료 — ROM 반영됨. 다운로드 가능.", skipped);
   } else if (j.status === "fail") toast("빌드 실패: " + (j.error || "").slice(0, 120), true);
 }
 $("#download").onclick = () => {
@@ -432,6 +497,7 @@ $("#q").oninput = () => { clearTimeout($("#q")._t); $("#q")._t = setTimeout(load
 $("#back").onclick = () => { $("#scene").hidden = true; $("#home").hidden = false; S.scene = null; };
 $$("#scene .itemtabs button").forEach(b => b.onclick = () => {
   S.itab = b.dataset.it;
+  S._limit = RENDER_LIMIT;
   renderTabs();
   renderItems();
   $("#editor").innerHTML = `<div class="empty">가운데에서 편집할 항목을 선택하세요.</div>`;

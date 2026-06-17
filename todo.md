@@ -90,7 +90,17 @@
 - [x] **모달 안 닫힘(critical, 사용자 보고)**: 근본원인 CSS `#modal{display:flex}`(ID) > UA `[hidden]{display:none}` → `[hidden]{display:none!important}`로 항상 우선. (agy는 이 버그를 놓침, claude가 잡음)
 - [x] **프리뷰 canvas 불일치(critical, codex 라이브 테스트 발견)**: scene.canvas에 checkpoint id(`07_part2_main_menu`)가 들어가 모든 scene이 "지원"인데 엔진은 `part2_menu`만 알아 전부 실패. → catalog가 checkpoint(게임순)와 canvas(preview_capture 키)를 분리, `canvas_status=ready`는 실제 지원 화면만(현재 22_part2_main_menu→part2_menu 1종), 서버 `_dialogue_preview` canvas 검증.
 - [x] **agy 10건 직접 수정 반영**: 캔버스 mouseup 생명주기(mousedown 내부 등록), 멀티조각 프리뷰 readonly 누락(전 멤버 조립), readonly 사전검사 오진(fragTextFor readonly 처리), 입력칸 HTML 변조(DOM createElement), revert 목록 미갱신(items 재조회), 탭 전환 시 에디터 초기화, 빌드후 대사 캐시 무효화(DE._GROUPS_CACHE/groups/addr_slot), preview 디렉터리 가드, 검색 대소문자, mouseup 리스너 누수.
-- [⏳] 워크플로 5차원 감사 결과 반영(진행중) → 완료 시 추가.
+- [x] **워크플로 5차원 감사(43에이전트, critical 0/major 12/minor 13) 반영 완료**:
+  - [x] **M1/M7/M8 모달 '적용'이 저장 실패에도 20분 빌드 강행**: saveDialogue/saveSprite가 실패=false·성공=true 일관 반환, modalApply 게이트 `if(!ok)return`(undefined 차단)+연타 disable.
+  - [x] **M9 슬롯 출처 불일치(편집기 dialogue_groups vs 빌드 found_texts length, 49건)**: server가 `build_korean_full.load_slots()`(found length)를 권위로 사용(min), 0xA02F00=12 확정.
+  - [x] **M10 DENY/PAIR 영역 편집 노출**: `deny_pair_status`로 DENY_REGIONS(font/테이블/노이즈)·PAIR_RENDERER 겹침 시 editable=False + _save_line 차단(font 저장불가 확인).
+  - [x] **M6 빌드 락 1200s 점유**: `_run_build`가 _BUILD_LOCK은 상태변경에만, subprocess는 락 밖 → 빌드 중 다른 요청 응답.
+  - [x] **M4 거대 스프라이트 per-pixel fillRect 프리즈**: drawSprite를 ImageData 1회+스케일 드로로 교체, 캔버스 변 1400px 상한(줌 연동).
+  - [x] **M2/M5 대형 scene(3000행/1875썸네일) jank·폭주**: renderItems 렌더 상한 300+DocumentFragment+"더 보기", 썸네일 loading=lazy.
+  - [x] **M3 멀티조각 부분저장**: 실패 시 이미 저장분 renderItems+부분저장 토스트.
+  - [x] **M12 모달 재진입 시 적용버튼 잔존**: openModal에서 항상 disabled=true 리셋, 성공 시만 활성.
+  - [x] 부수 minor: revert 재선택 순서(renderItems→select), api() HTTP 오류 처리+loadScenes/openScene try/catch, scene 연속클릭 경합 토큰, 모달 오버레이/Escape 닫기, 검색 0건 안내, render?which=edit 편집본 없으면 404, _sprite_save 차원검증, ROM 없을 때 썸네일 orig 폴백, dirty 문구 정정, 빌드완료 cry-wolf 경고 정밀화.
+  - [ ] (후속) lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트, S.supported await(현재 서버 하드게이트가 안전망).
 
 ---
 
