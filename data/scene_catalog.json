@@ -2825,7 +2825,41 @@
       "order": 190,
       "scope": "part2",
       "subtag": "미션 진입",
-      "title": "2편 미션 시작/에어 미션 타이틀",
+      "title": "2편 에어 미션 타이틀",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "32_battle_continue",
+        "url": "/scene_shots/32_battle_continue.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 진입(continue)"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
+        "lz77_00C11D9C",
+        "lz77_00C1205C"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "26a_part2_battle_start_overlays",
+      "order": 200,
+      "scope": "part2",
+      "subtag": "전투",
+      "title": "2편 전투 시작 회전/개시 오버레이",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
@@ -2847,20 +2881,27 @@
       "dialogue_ids": [],
       "sprite_ids": [
         "lz77_00C10B34",
-        "lz77_00C11D9C",
-        "lz77_00C1205C"
+        "lz77_0045EC74",
+        "lz77_0092DF84",
+        "lz77_0092EB5C",
+        "lz77_00966C0C",
+        "lz77_009677E4",
+        "lz77_0099F4B0",
+        "lz77_009A0088",
+        "lz77_009D7D54",
+        "lz77_009D892C"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 3
+        "sprite": 10
       }
     },
     {
       "id": "26_part2_battle_labels",
-      "order": 200,
+      "order": 210,
       "scope": "part2",
       "subtag": "전투",
-      "title": "2편 전투 라벨(N일째·체크·데미지 예측)",
+      "title": "2편 전투 라벨(체크·데미지 예측)",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "30_battle_attack",
@@ -2881,26 +2922,17 @@
       },
       "dialogue_ids": [],
       "sprite_ids": [
-        "lz77_0045EC74",
         "lz77_0045FCC8",
-        "lz77_0092DF84",
-        "lz77_0092EB5C",
-        "lz77_00966C0C",
-        "lz77_009677E4",
-        "lz77_0099F4B0",
-        "lz77_009A0088",
-        "lz77_009D7D54",
-        "lz77_009D892C",
         "lz77_00BD4FBC"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 11
+        "sprite": 2
       }
     },
     {
       "id": "27_part2_battle_objlabels",
-      "order": 210,
+      "order": 220,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 OBJ 라벨(행동·유닛·지형·상태)",
@@ -2940,7 +2972,7 @@
     },
     {
       "id": "28_part2_result_status",
-      "order": 220,
+      "order": 230,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 성공/실패 오버레이",
@@ -2979,7 +3011,7 @@
     },
     {
       "id": "29_part2_result_summary",
-      "order": 230,
+      "order": 240,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 요약/축하",
@@ -3013,7 +3045,7 @@
     },
     {
       "id": "30_part2_story",
-      "order": 240,
+      "order": 250,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 스토리 대사(전체)",
@@ -6093,7 +6125,7 @@
     },
     {
       "id": "80_campaign_story",
-      "order": 250,
+      "order": 260,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 대사(전체)",
@@ -6577,7 +6609,7 @@
     },
     {
       "id": "85_ui_common",
-      "order": 260,
+      "order": 270,
       "scope": "all",
       "subtag": "UI/공통",
       "title": "공통 UI 라벨/대사",
@@ -7016,7 +7048,7 @@
     },
     {
       "id": "90_other_dialogue",
-      "order": 270,
+      "order": 280,
       "scope": "all",
       "subtag": "대사",
       "title": "기타/공통 대사(분류 전)",

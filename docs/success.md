@@ -33,6 +33,23 @@ claude/codex/agy 3자 독립 계획 → 교차 검증(temp/{claude,codex,agy}_pl
 
 재현: `python3 tools/build_scene_catalog.py && python3 tools/scene_editor/server.py`(→ http://127.0.0.1:8782).
 
+## 2026-06-17 — 전투 시작 회전/개시 오버레이 UI 에디터 보강
+
+**결과**: 2편 전투 시작 시 노출되는 `전투개시!` 배너와 회전/아핀 변환 소스 블록을 별도 scene
+`26a_part2_battle_start_overlays`로 분리했다. LNB는 raw 타일시트 대신 출력배치 썸네일을 사용하고,
+우측 편집 화면은 `0xC10B34`를 원본 256×16 타일시트가 아니라 실제 OBJ 출력 128×32로 재조립한다.
+
+**구현**: `tools/sprite_editor/server.py`에 2편 빌드 기반 레이아웃 fallback을 추가했다. 적용 범위는
+미션/전투 시작 타이틀 3개(128×32), 전투 시작 회전 소스 9개(256×40/24/8), 결과 축하 타이틀
+`0xBFB45C`(128×51)이다. `tools/build_scene_catalog.py`는 전투 시작 장면을 별도 분리하고,
+기존 전투 라벨 장면에는 체크/데미지 예측 라벨만 남긴다.
+
+**검증**: `py_compile`, `node --check`, API `onscreen_data` 전수 확인, 배정 스프라이트 112개 감사
+실패 0(onscreen 94, raw fallback 18), Chrome headless CDP 브라우저 검증. 증거:
+`temp/browser_verify/8782_battle_start_overlays_scene.png`,
+`temp/browser_verify/8782_battle_start_editor.png`,
+`temp/browser_verify/assigned_sprite_audit.json`.
+
 ## 2026-06-07 — Low-address UI `未設定` 잔여 제거
 
 **결과**: 기본 import pass가 건너뛰는 `0x800000` 미만 UI 테이블의 `未設定` 잔여를 `미설정`으로

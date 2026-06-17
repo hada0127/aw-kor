@@ -150,14 +150,18 @@ SCENES = [
                      "lz77_005A38D4", "lz77_005AAA68", "lz77_005AF674"],
          sprite=[], dialogue=dict(regions=[])),
     dict(id="25_part2_mission_titles", scope="part2", subtag="미션 진입",
-         title="2편 미션 시작/에어 미션 타이틀", canvas=None, screenshot="32_battle_continue",
-         sprite_ids=["lz77_00C10B34", "lz77_00C11D9C", "lz77_00C1205C"],
+         title="2편 에어 미션 타이틀", canvas=None, screenshot="32_battle_continue",
+         sprite_ids=["lz77_00C11D9C", "lz77_00C1205C"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="26a_part2_battle_start_overlays", scope="part2", subtag="전투",
+         title="2편 전투 시작 회전/개시 오버레이", canvas=None, screenshot="32_battle_continue",
+         sprite_ids=["lz77_00C10B34", "lz77_0045EC74", "lz77_0092DF84", "lz77_0092EB5C",
+                     "lz77_00966C0C", "lz77_009677E4", "lz77_0099F4B0", "lz77_009A0088",
+                     "lz77_009D7D54", "lz77_009D892C"],
          sprite=[], dialogue=dict(regions=[])),
     dict(id="26_part2_battle_labels", scope="part2", subtag="전투",
-         title="2편 전투 라벨(N일째·체크·데미지 예측)", canvas="30_battle_attack",
-         sprite_ids=["lz77_0045EC74", "lz77_0045FCC8", "lz77_0092DF84", "lz77_0092EB5C",
-                     "lz77_00966C0C", "lz77_009677E4", "lz77_0099F4B0", "lz77_009A0088",
-                     "lz77_009D7D54", "lz77_009D892C", "lz77_00BD4FBC"],
+         title="2편 전투 라벨(체크·데미지 예측)", canvas="30_battle_attack",
+         sprite_ids=["lz77_0045FCC8", "lz77_00BD4FBC"],
          sprite=[], dialogue=dict(regions=[])),
     dict(id="27_part2_battle_objlabels", scope="part2", subtag="전투",
          title="2편 전투 OBJ 라벨(행동·유닛·지형·상태)", canvas=None, screenshot="31_battle_dialog",
@@ -240,6 +244,12 @@ def assign_sprites(scenes, sprites):
         if sid not in bucket[scene_id]:
             bucket[scene_id].append(sid)
 
+    # scene 정의의 sprite_ids 순서는 LNB 노출 순서이기도 하다. 스프라이트 인덱스 파일
+    # 순서로 재정렬되면 실제 활성 라벨보다 비활성/제거 소스가 먼저 보여 혼동된다.
+    for sc in scenes:
+        for sid in sc.get("sprite_ids", []) or []:
+            add_unique(sc["id"], sid)
+
     for sp in sprites:
         src = (sp.get("source") or "")
         sid = sp.get("id")
@@ -248,7 +258,6 @@ def assign_sprites(scenes, sprites):
         seen_sprites.add(sid)
         section = sprite_section(src)
         if sid in explicit:
-            add_unique(explicit[sid], sid)
             continue
         hit = None
         for sc in scenes:

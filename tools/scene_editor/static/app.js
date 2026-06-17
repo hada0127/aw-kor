@@ -491,6 +491,11 @@ async function setSpriteMode(mode) {
       SP.os = os;
       SP.pal = os.palette || SP.pal;
       SP.activePaletteKey = null;
+      if (os.build && !os.screen) {
+        SP.showBg = false;
+        const bg = $("#spBg");
+        if (bg) bg.checked = false;
+      }
       renderSwatches();
       prepareSceneBg();
     }
@@ -600,6 +605,14 @@ function prepareSceneBg() {
 
 function onscreenViewBox() {
   const os = SP.os;
+  if (os && os.build && !os.screen) {
+    return {
+      x: Number(os.x0) || 0,
+      y: Number(os.y0) || 0,
+      w: Math.max(1, Math.ceil(Number(os.w) || SP.w || 1)),
+      h: Math.max(1, Math.ceil(Number(os.h) || SP.h || 1)),
+    };
+  }
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const cell of os.cells || []) {
     const x0 = Math.max(0, cell.x);

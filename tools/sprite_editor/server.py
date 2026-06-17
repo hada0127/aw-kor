@@ -244,6 +244,18 @@ PART1_OPTION_128X32_OFFSETS = {
 PART1_MISSION_128X32_OFFSETS = {0x00C18738}
 PART1_CATHERINE_96X8_OFFSETS = {0x00C102A8}
 
+PART2_MISSION_TITLE_128X32_OFFSETS = {
+    0x00C10B34, 0x00C11D9C, 0x00C1205C,
+}
+PART2_BATTLE_START_LARGE_OFFSETS = {0x0045EC74}
+PART2_BATTLE_START_MEDIUM_OFFSETS = {
+    0x0092DF84, 0x00966C0C, 0x0099F4B0, 0x009D7D54,
+}
+PART2_BATTLE_START_SMALL_OFFSETS = {
+    0x0092EB5C, 0x009677E4, 0x009A0088, 0x009D892C,
+}
+PART2_RESULT_CONGRATS_OFFSETS = {0x00BFB45C}
+
 
 def load_build_layouts():
     global _BUILD_LAYOUTS
@@ -299,13 +311,75 @@ def part1_tiled_layer_layout(sp, off):
     return None
 
 
+def part2_tiled_layer_layout(sp, off):
+    """2편 빌드 산출 OBJ 타일시트를 런타임 출력 배치로 재조립한다.
+
+    캡처 OAM이 없는 전투 시작/결과 타이틀 계열은 원본 tile_cols=32 raw sheet로
+    보면 의미가 깨진다. 빌드 패커의 역배치를 여기서 제공해 편집 canvas가
+    실제 OBJ 묶음 크기와 상대 위치를 따르도록 한다.
+    """
+    if off in PART2_MISSION_TITLE_128X32_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_128x32_title",
+        }
+    if off in PART2_BATTLE_START_LARGE_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 16, "th": 1, "fh": 0, "fv": 0, "tile_off": 16, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 8, "tw": 32, "th": 4, "fh": 0, "fv": 0, "tile_off": 160, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 256, "h": 40, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_battle_start_removed_large",
+        }
+    if off in PART2_BATTLE_START_MEDIUM_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 16, "th": 1, "fh": 0, "fv": 0, "tile_off": 16, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 8, "tw": 32, "th": 2, "fh": 0, "fv": 0, "tile_off": 160, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 256, "h": 24, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_battle_start_removed_medium",
+        }
+    if off in PART2_BATTLE_START_SMALL_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 32, "th": 1, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 256, "h": 8, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_battle_start_removed_small",
+        }
+    if off in PART2_RESULT_CONGRATS_OFFSETS:
+        cells = []
+        for sprite in range(4):
+            cells.append({"x": sprite * 32, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                          "tile_off": 64 + sprite * 8, "bank": 0, "palbase": 0})
+        for sprite in range(4):
+            cells.append({"x": sprite * 32, "y": 19, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                          "tile_off": sprite * 16, "bank": 0, "palbase": 0})
+        return {
+            "cells": cells,
+            "x0": 0, "y0": 0, "w": 128, "h": 51, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_result_congrats",
+        }
+    return None
+
+
+def tiled_layer_layout(sp, off):
+    return part1_tiled_layer_layout(sp, off) or part2_tiled_layer_layout(sp, off)
+
+
 def build_layout_cells(sp):
     """빌드 권위 라벨 타일스트립 → cells(캡처 레이아웃과 동일 스키마). 라벨을 세로로 적층.
     pal_file 없음 → 렌더는 sprite palette_for 사용(인덱스 직접)."""
     off = sprite_offset_int(sp)
-    part1_layout = part1_tiled_layer_layout(sp, off)
-    if part1_layout:
-        return part1_layout
+    fallback_layout = tiled_layer_layout(sp, off)
+    if fallback_layout:
+        return fallback_layout
     blk = load_build_layouts().get("0x%X" % off)
     if not blk:
         return None
@@ -348,20 +422,20 @@ def synthetic_layout_cells(sp):
 
 
 def get_layout(sid):
-    """1편 빌드 레이어 역배치 → 캡처 레이아웃 → 합성 → 빌드 권위 레이아웃.
+    """빌드 레이어 역배치 → 캡처 레이아웃 → 합성 → 빌드 권위 레이아웃.
 
-    1편 라벨 계열은 캡처 OAM이 여러 화면 상태의 큰 bbox로 잡히는 경우가 있어
+    라벨 계열은 캡처 OAM이 없거나 여러 화면 상태의 큰 bbox로 잡히는 경우가 있어
     편집면 권위는 빌드 인코더의 layer size/타일 순서 역배치다.
     """
     sp = sprite_by_id(sid)
     if sp is None:
         return None
     try:
-        part1_layout = part1_tiled_layer_layout(sp, sprite_offset_int(sp))
+        fallback_layout = tiled_layer_layout(sp, sprite_offset_int(sp))
     except Exception:
-        part1_layout = None
-    if part1_layout:
-        return part1_layout
+        fallback_layout = None
+    if fallback_layout:
+        return fallback_layout
     lay = load_layouts().get("layouts", {}).get(sid)
     if lay:
         return lay
@@ -501,14 +575,14 @@ PART1_LOGO_KO = {
 }
 PART2_PATCH_KO = {
     "mode_menu_obj_labels": "2편 모드 메뉴 라벨(상점/도전/캠페인 등)",
-    "battle_start_day_overlay_obj": "전투 시작 ‘N일째’ 오버레이",
+    "battle_start_day_overlay_obj": "전투 시작 회전 소스(일본어 제거 대상)",
     "result_success_overlay_obj": "결과: 성공 오버레이", "result_failure_overlay_obj": "결과: 실패 오버레이",
     "result_summary_obj": "결과 요약", "result_congratulations_obj": "결과: 축하",
     "domino_co_name_obj": "도미노 CO 이름", "campaign_header_obj": "캠페인 헤더",
     "level_label_obj": "레벨 라벨", "redstar_region_obj": "레드스타 영역 라벨",
     "mission_number_obj": "미션 번호", "lets_go_obj": "‘출격’ 라벨", "check_label_obj": "체크 라벨",
     "splash_logo_bg": "2편 스플래시 로고", "prologue_logo_obj": "프롤로그 로고",
-    "mission_start_obj": "미션 시작", "air_mission_title_obj": "에어 미션 타이틀",
+    "mission_start_obj": "전투개시 배너", "air_mission_title_obj": "에어 미션 타이틀",
     "air_supremacy_title_obj": "제공권 타이틀", "damage_forecast_label_obj": "데미지 예측 라벨",
     "menu_newspaper_bg": "메뉴 신문 배경(텍스트 포함)", "intro_campaign_residual_graphics": "인트로 캠페인 잔여 그래픽",
     "world_map_label_tiles": "월드맵 지명 라벨", "info_screen_bg_labels": "정보 화면 라벨",
