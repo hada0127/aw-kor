@@ -1,0 +1,20 @@
+{
+  "_doc": "실캡처 canvas 레지스트리(요구1 화면별 진입). tools/preview_capture.py가 로드. key→{slot(hex 문자열), len, render(a3|dialog), nav(콜드부트 후 스텝), checkpoint(screen_checkpoints id, 게임순 매핑), note}. nav 스텝: [frames,n]/[press,KEY,after]/[loadstate,path]/[keys,mask]. scene_catalog는 canvas.checkpoint로 scene↔canvas를 매핑(tools/build_scene_catalog.py). 새 화면은 여기 추가하면 코드 수정 없이 확장된다(canvas-hijack: 그 화면이 실제로 slot을 렌더해야 유효).",
+  "canvases": {
+    "part2_menu": {
+      "slot": "0x00A2C098",
+      "len": 32,
+      "render": "a3",
+      "checkpoint": "07_part2_main_menu",
+      "nav": [
+        ["frames", 480],
+        ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120],
+        ["press", "A", 240], ["press", "START", 240], ["press", "A", 240], ["press", "A", 240]
+      ],
+      "note": "2편 메인 메뉴 캠페인 설명(A3 글리프캐시 렌더러). 짧은 시스템/메뉴 문구용(≤16자). [검증됨]"
+    }
+  },
+  "_experimental_part1": {
+    "note": "part1 fresh-nav 대사 canvas는 인트로 대사(welcome 0xDF8E16/이름프롬프트 0xDF8DB2)가 입력대기 없이 자동진행→캡처 타이밍 불안정(6회 실측). 안정적인 건 이름 그리드(텍스트 슬롯 미렌더)뿐. 신뢰성 있는 part1 대사 프리뷰는 frame-sweep(대사창 비공백 프레임 선택) 또는 대사창 직전 정밀 savestate가 필요(Phase 7 후속). research.md 기록."
+  }
+}

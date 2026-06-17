@@ -1220,3 +1220,25 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
 - synthetic: `_grid_to_tiles(indices)`로 조립 타일스트림 복원 → 라벨별 tindex 누적, `rom[off+perm[vis]*32]=tiles[(tindex+vis)*32]` (decode의 정확한 역연산).
 - lz77: 재압축(vram_safe)≤comp_size, 초과 skip. raw: ≤size.
 무오버라이드=무동작(byte-identical). 편집은 라벨 자동그리기를 덮어쓰므로 우선. revert는 override 제거 후 재빌드(자동그리기 원복).
+
+## 실캡처 canvas 확장(Phase 7) — part1 fresh-nav 대사 fragility (2026-06-17)
+
+통합 에디터 실캡처(canvas-hijack)를 part1 대사로 확장 시도하며 발견(6회 실측 + codex/agy 자문):
+- **canvas 레지스트리 외부화**: `data/preview_canvases.json`(key→{slot hex,len,render,nav,checkpoint}).
+  `tools/preview_capture._load_registry()`가 병합(JSON이 하드코딩 덮음). `build_scene_catalog`은
+  canvas.checkpoint로 scene↔canvas 매핑. 새 canvas 추가 = 코드 수정 0.
+- **part1 인트로 대사 슬롯**(dialogue_map 실측): welcome=`0xDF8E16`(slot32 'ゲームボーイウォーズへようこそ！'),
+  이름프롬프트=`0xDF8DB2`(slot26 'あなたの名前をおしえてね。'), 'はじめまして'=`0xDF8E3E`(slot14).
+  (agy 추정 0xDF8E14/0xDF8DB0은 2바이트 빗나감 — 실주소는 위.)
+- **fresh-nav 도달은 됨**: 콜드부트→1편선택→1편타이틀→A(처음부터)로 캐서린 환영 대사창 진입 확인
+  (per-char dialog 렌더러, 한글 정상 렌더).
+- **그러나 캡처 불안정**: 인트로 대사(welcome/이름프롬프트)는 **입력 대기 없이 자동 진행**(컷씬).
+  하이재킹한 텍스트가 짧으면 빨리 타이핑→자동 advance→캡처 프레임이 인접 화면(이름 그리드)에 안착.
+  동일 nav라도 하이재킹 텍스트 길이에 따라 결과 화면이 달라짐(welcome↔이름그리드). 입력 대기로
+  안정적인 건 이름 입력 **그리드**(텍스트 슬롯 미렌더)뿐.
+- **결론**: 신뢰성 없는 canvas는 출하 금지(codex "ready 금지 until verified"). part2_menu(A3, 입력
+  대기 메뉴라 안정)만 정식 등록 유지. part1/battle 대사 canvas는 **frame-sweep(대사창 비공백
+  프레임 자동 선택) 또는 대사창 직전 정밀 savestate**가 필요(후속). savestate는 VRAM stale이라
+  단순 frames advance 무효 — 로드 직후 대사 재트리거(press A) 필요(agy/codex 공통 경고).
+- **캐시 키 버그 수정**(codex): preview_capture 캐시 키가 base_rom.name+text뿐이라 nav/슬롯/ROM
+  내용 변경 시 stale 재사용 → 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함.

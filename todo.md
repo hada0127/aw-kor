@@ -75,9 +75,11 @@
 
 ## Phase 7 — canvas/nav 확장 (요구1 scene별 진입)
 - [x] scene별 canvas 상태(ready/none) 카탈로그 노출 + UI 표시. 대사 preview는 scene canvas 사용.
-- [ ] `preview_capture.CANVASES`를 외부 JSON 레지스트리로 분리 + screen_checkpoints fresh nav 연결(현재 part2_menu 1종).
-- [ ] savestate checkpoint state path 보강 + part1 title·menu / battle canvas 추가.
-- 완료기준: shared_select / part1 title·menu / part2 menu / battle·dialogue canvas 각 1개 이상 동작.
+- [x] **canvas 레지스트리 외부화**: `data/preview_canvases.json`(key→slot/len/render/nav/checkpoint), preview_capture `_load_registry()` 병합, build_scene_catalog가 canvas.checkpoint로 scene 매핑. 새 canvas=코드수정 0.
+- [x] **캐시 키 버그 수정(codex)**: preview 캐시 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함(기존 name+text만 → nav/ROM 변경 시 stale).
+- [⏳] **part1 대사 canvas는 fresh-nav fragility로 보류**(6회 실측): 인트로 대사 자동진행→캡처 불안정, 안정적인 건 텍스트슬롯 없는 이름그리드뿐. 신뢰성 canvas는 **frame-sweep(대사창 비공백 프레임 선택) 또는 정밀 savestate** 필요(research.md 기록). 검증 안 된 canvas는 출하 금지(현재 part2_menu만 ready).
+- [ ] (후속) frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성 확보.
+- 완료기준(수정): part2_menu 검증·정식 등록 / 레지스트리 외부화로 확장 경로 확보 / part1·battle은 frame-sweep 후속.
 
 ## Phase 8 — QA + 구서버 폐기판단 + dist + 커밋
 - [ ] 구 2서버 대비 기능 parity 확인.

@@ -34,23 +34,24 @@ DGRP = ROOT / "data" / "dialogue_groups.json"
 OVERRIDES = ROOT / "data" / "scene_catalog_overrides.json"
 OUT = ROOT / "data" / "scene_catalog.json"
 
-# preview_capture가 실제 지원하는 canvas 키(실캡처 hijack). screen_checkpoint id와 별개.
-# scene의 checkpoint(게임순 진입용) → preview canvas 키 매핑(지원하는 화면만).
-# ⚠ 현재 preview_capture.CANVASES는 part2_menu 1종 → 22_part2_main_menu만 실캡처 가능.
-#   Phase 7에서 canvas 추가 시 이 매핑 확장.
-PREVIEW_BY_CHECKPOINT = {"07_part2_main_menu": "part2_menu"}
-
-
-def preview_canvas_keys():
-    """preview_capture.CANVASES의 실제 지원 키 집합(단일 권위)."""
+# scene의 checkpoint(게임순 진입용) → preview canvas 키 매핑은 레지스트리(data/preview_canvases.json)의
+# canvas.checkpoint 필드에서 자동 도출(코드 하드코딩 제거 — 새 canvas 추가만으로 확장).
+def _load_preview_registry():
+    """preview_capture.CANVASES(레지스트리 병합 반영) 로드 → (지원 키 집합, checkpoint→key 맵)."""
     try:
         import importlib.util
         spec = importlib.util.spec_from_file_location("preview_capture", ROOT / "tools" / "preview_capture.py")
         m = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(m)
-        return set(m.CANVASES.keys())
+        keys = set(m.CANVASES.keys())
+        by_chk = {cv.get("checkpoint"): k for k, cv in m.CANVASES.items() if cv.get("checkpoint")}
+        return keys, by_chk
     except Exception:
-        return {"part2_menu"}
+        return {"part2_menu"}, {"07_part2_main_menu": "part2_menu"}
+
+
+def preview_canvas_keys():
+    return _load_preview_registry()[0]
 
 
 def load(p, default=None):
@@ -271,13 +272,13 @@ def main():
                 dl_bucket[sid].remove(x)
                 dl_un.append(x)
 
-    pv_keys = preview_canvas_keys()
+    pv_keys, pv_by_chk = _load_preview_registry()
     out_scenes = []
     for order, sc in enumerate(scenes):
         checkpoint = sc.get("canvas")  # SCENES의 canvas= 는 screen_checkpoint id(게임순 진입용)
         checkpoint_exists = bool(checkpoint and checkpoint in chk_ids)
-        # 실캡처 canvas = preview_capture가 실제 지원하는 키만(없으면 None→미지원).
-        preview = PREVIEW_BY_CHECKPOINT.get(checkpoint) or PREVIEW_BY_CHECKPOINT.get(sc["id"])
+        # 실캡처 canvas = 레지스트리에서 checkpoint→canvas로 도출(지원 키만).
+        preview = pv_by_chk.get(checkpoint) or pv_by_chk.get(sc["id"])
         if preview not in pv_keys:
             preview = None
         canvas_status = "ready" if preview else "none"

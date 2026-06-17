@@ -52,6 +52,31 @@ CANVASES = {
     },
 }
 
+# 외부 레지스트리(data/preview_canvases.json)에서 canvas를 병합/확장(코드 수정 없이 추가 가능).
+# JSON이 동일 key를 정의하면 덮어쓴다. slot은 hex 문자열도 허용.
+_REGISTRY = ROOT / "data" / "preview_canvases.json"
+
+
+def _load_registry():
+    if not _REGISTRY.exists():
+        return
+    try:
+        data = json.loads(_REGISTRY.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    for key, cv in (data.get("canvases") or {}).items():
+        cv = dict(cv)
+        if isinstance(cv.get("slot"), str):
+            try:
+                cv["slot"] = int(cv["slot"], 16)
+            except ValueError:
+                continue
+        if "slot" in cv and "len" in cv and "nav" in cv:
+            CANVASES[key] = cv
+
+
+_load_registry()
+
 
 def _syl_to_code():
     return {s: int(c, 0) for s, c in json.loads(SYLCODE.read_text(encoding="utf-8")).items()}
@@ -118,7 +143,15 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     base_rom = Path(base_rom)
     payload, truncated = encode_payload(text, lang, cv["len"])
     CACHE.mkdir(parents=True, exist_ok=True)
-    key = hashlib.sha1(f"{canvas}|{lang}|{base_rom.name}|{text}".encode("utf-8")).hexdigest()[:16]
+    # 캐시 키에 canvas 정의(slot/len/nav)와 base_rom 식별(크기+mtime)을 포함 — nav/슬롯/ROM이
+    # 바뀌면 캐시 무효화(codex 지적: 기존 key는 base_rom.name+text뿐이라 stale 재사용 위험).
+    try:
+        st = base_rom.stat(); rom_id = f"{st.st_size}:{int(st.st_mtime)}"
+    except OSError:
+        rom_id = base_rom.name
+    cv_sig = json.dumps({"slot": cv.get("slot"), "len": cv.get("len"), "nav": cv.get("nav")},
+                        ensure_ascii=False, sort_keys=True)
+    key = hashlib.sha1(f"{canvas}|{lang}|{rom_id}|{cv_sig}|{text}".encode("utf-8")).hexdigest()[:16]
     png = CACHE / (out_name or f"{canvas}_{lang}_{key}.png")
     if use_cache and png.exists():
         return {"png": str(png), "truncated": truncated, "cached": True}
