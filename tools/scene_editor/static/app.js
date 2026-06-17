@@ -425,7 +425,7 @@ async function selectSprite(i, el) {
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = true;
   SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
-  const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 실화면 배치" : "타일 그리드 · 원본 타일 순서";
+  const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 원본 타일 순서";
   ed.innerHTML = `<h3>스프라이트 편집 — ${esc(sp.desc)}</h3>
     <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
     ${sceneShotCard(S.items.screenshot || {})}
@@ -568,26 +568,53 @@ function prepareSceneBg() {
   SP.bgImg = im;
 }
 
+function onscreenViewBox() {
+  const os = SP.os;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const cell of os.cells || []) {
+    const x0 = Math.max(0, cell.x);
+    const y0 = Math.max(0, cell.y);
+    const x1 = Math.min(240, cell.x + cell.tw * 8);
+    const y1 = Math.min(160, cell.y + cell.th * 8);
+    if (x1 <= x0 || y1 <= y0) continue;
+    minX = Math.min(minX, x0);
+    minY = Math.min(minY, y0);
+    maxX = Math.max(maxX, x1);
+    maxY = Math.max(maxY, y1);
+  }
+  if (Number.isFinite(minX) && Number.isFinite(minY)) {
+    return { x: minX, y: minY, w: Math.max(1, maxX - minX), h: Math.max(1, maxY - minY) };
+  }
+  return {
+    x: Number(os.x0) || 0,
+    y: Number(os.y0) || 0,
+    w: Math.max(1, Math.ceil(Number(os.w) || SP.w || 1)),
+    h: Math.max(1, Math.ceil(Number(os.h) || SP.h || 1)),
+  };
+}
+
 function drawOnscreenSprite() {
   const cv = $("#spcv");
   const os = SP.os;
   const z = SP.osZoom;
-  const nativeW = 240, nativeH = 160;
-  $("#sphint").textContent = `타일 그리드: 화면 좌표/OAM 배치 기준으로 편집합니다. bbox ${os.x0},${os.y0} ${os.w}×${os.h}px`;
+  const box = onscreenViewBox();
+  const originX = box.x, originY = box.y;
+  const nativeW = box.w, nativeH = box.h;
+  $("#sphint").textContent = `타일 그리드: 실제 화면 출력 크기 ${nativeW}×${nativeH}px 안에 OAM 배치를 재조립해 편집합니다. 화면 원점 ${originX},${originY}`;
 
   const off = document.createElement("canvas"); off.width = nativeW; off.height = nativeH;
   const ctx = off.getContext("2d");
   ctx.imageSmoothingEnabled = false;
   if (SP.showBg && SP.bgReady && SP.bgImg) {
     ctx.globalAlpha = 0.45;
-    ctx.drawImage(SP.bgImg, 0, 0, nativeW, nativeH);
+    drawSceneBgCrop(ctx, originX, originY, nativeW, nativeH);
     ctx.globalAlpha = 1;
-    maskOamBounds(ctx);
+    maskOamBounds(ctx, originX, originY);
   } else {
     ctx.fillStyle = "#08090c";
     ctx.fillRect(0, 0, nativeW, nativeH);
   }
-  drawOamCells(ctx, false);
+  drawOamCells(ctx, originX, originY);
 
   cv.width = nativeW * z; cv.height = nativeH * z;
   const cctx = cv.getContext("2d"); cctx.imageSmoothingEnabled = false;
@@ -595,7 +622,9 @@ function drawOnscreenSprite() {
 
   const paint = (e) => {
     const r = cv.getBoundingClientRect();
-    const sx = Math.floor((e.clientX - r.left) / z), sy = Math.floor((e.clientY - r.top) / z);
+    const vx = Math.floor((e.clientX - r.left) / z), vy = Math.floor((e.clientY - r.top) / z);
+    if (vx < 0 || vy < 0 || vx >= nativeW || vy >= nativeH) return;
+    const sx = originX + vx, sy = originY + vy;
     const hit = onscreenTargetAt(sx, sy);
     if (!hit) return;
     if (hit.palette_key && hit.palette_key !== SP.activePaletteKey) {
@@ -612,13 +641,23 @@ function drawOnscreenSprite() {
   cv.onmousemove = e => { if (SP.painting) paint(e); };
 }
 
-function drawOamCells(ctx) {
+function drawSceneBgCrop(ctx, originX, originY, w, h) {
+  ctx.fillStyle = "#08090c";
+  ctx.fillRect(0, 0, w, h);
+  const sx0 = Math.max(0, originX), sy0 = Math.max(0, originY);
+  const sx1 = Math.min(240, originX + w), sy1 = Math.min(160, originY + h);
+  if (sx1 <= sx0 || sy1 <= sy0) return;
+  ctx.drawImage(SP.bgImg, sx0, sy0, sx1 - sx0, sy1 - sy0,
+    sx0 - originX, sy0 - originY, sx1 - sx0, sy1 - sy0);
+}
+
+function drawOamCells(ctx, originX = 0, originY = 0) {
   const os = SP.os;
   for (const cell of os.cells) {
     for (let ty = 0; ty < cell.th; ty++) for (let tx = 0; tx < cell.tw; tx++) {
       const tile = localTileFor(cell, tx, ty);
-      const dx0 = cell.x + (cell.fh ? (cell.tw - 1 - tx) : tx) * 8;
-      const dy0 = cell.y + (cell.fv ? (cell.th - 1 - ty) : ty) * 8;
+      const dx0 = cell.x - originX + (cell.fh ? (cell.tw - 1 - tx) : tx) * 8;
+      const dy0 = cell.y - originY + (cell.fv ? (cell.th - 1 - ty) : ty) * 8;
       for (let yy = 0; yy < 8; yy++) for (let xx = 0; xx < 8; xx++) {
         const px = cell.fh ? 7 - xx : xx;
         const py = cell.fv ? 7 - yy : yy;
@@ -633,11 +672,11 @@ function drawOamCells(ctx) {
   }
 }
 
-function maskOamBounds(ctx) {
+function maskOamBounds(ctx, originX = 0, originY = 0) {
   if (!SP.os) return;
   ctx.fillStyle = "#08090c";
   for (const cell of SP.os.cells) {
-    ctx.fillRect(cell.x, cell.y, cell.tw * 8, cell.th * 8);
+    ctx.fillRect(cell.x - originX, cell.y - originY, cell.tw * 8, cell.th * 8);
   }
 }
 
