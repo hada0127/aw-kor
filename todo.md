@@ -81,10 +81,11 @@
 - [ ] (후속) frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성 확보.
 - 완료기준(수정): part2_menu 검증·정식 등록 / 레지스트리 외부화로 확장 경로 확보 / part1·battle은 frame-sweep 후속.
 
-## Phase 8 — QA + 구서버 폐기판단 + dist + 커밋
-- [ ] 구 2서버 대비 기능 parity 확인.
-- [ ] `qa_text_fit.py` / `qa_placeholder_residuals.py` / `phase6_basic_test.py` 적용 후 실행, byte-identical 정합성.
-- [ ] codex/agy 엄격 리뷰 반영 → 필요 시 dist 재생성 + 커밋/푸시.
+## Phase 8 — QA + 구서버 폐기판단 + dist + 커밋 ✅ 검증
+- [x] **byte-identical 정합성**: 편집기 작업(도구/카탈로그/프런트만)은 빌드 무관 → output ROM sha **1623481a 불변** 확인.
+- [x] 기능 parity: 통합 에디터가 구 2서버 편집 기능 포섭(대사 line/사전 CRUD/preview, 스프라이트 tile/render/compare/onscreen/save/revert/setpalette/build/download). 구 :8780/:8781 모듈 import 정상(폐기 전 유지).
+- [x] 전 도구 py_compile + app.js node --check + 데이터 JSON 유효 + 3자 리뷰(codex/agy/워크플로) 반영.
+- [ ] (후속) dist 재생성은 ROM 변경 없으므로 불필요. 구서버 정식 폐기는 frame-sweep까지 완료 후 판단.
 - 완료기준: scene editor 단독으로 편집·preview·apply·download 가능.
 
 ## 1차 구현 codex+agy 엄격 리뷰 반영 (2026-06-17)
