@@ -1,0 +1,5 @@
+{
+  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거).",
+  "sprite": {},
+  "dialogue": {}
+}

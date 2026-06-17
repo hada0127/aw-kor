@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AW 통합 화면 에디터</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header id="gnb">
+  <strong class="brand">AW 통합 화면 에디터</strong>
+  <span class="scope" id="scope">
+    <button data-scope="all" class="on">전체</button>
+    <button data-scope="shared_select">1+2편 선택</button>
+    <button data-scope="part1">1편</button>
+    <button data-scope="part2">2편</button>
+  </span>
+  <input id="q" type="search" placeholder="화면 검색…">
+  <span class="grow"></span>
+  <span id="state" class="state"></span>
+  <button id="download" title="현재 빌드된 .gba 다운로드">⬇ ROM</button>
+  <button id="apply" title="저장된 편집을 전체 재빌드로 ROM 반영">적용(빌드)</button>
+</header>
+
+<main>
+  <!-- 홈: scene 카드 그리드 -->
+  <section id="home">
+    <div id="coverage" class="coverage"></div>
+    <div id="scenegrid" class="scenegrid"></div>
+  </section>
+
+  <!-- scene 상세 -->
+  <section id="scene" hidden>
+    <div class="scenehead">
+      <button id="back">← 화면 목록</button>
+      <strong id="sceneTitle"></strong>
+      <span id="sceneMeta" class="meta"></span>
+    </div>
+    <div class="scenebody">
+      <div class="items">
+        <div class="itemtabs">
+          <button data-it="dialogue" class="on">대사 <span id="cntD"></span></button>
+          <button data-it="sprite">스프라이트 <span id="cntS"></span></button>
+        </div>
+        <div id="itemlist"></div>
+      </div>
+      <div id="editor" class="editor">
+        <div class="empty">가운데에서 편집할 항목을 선택하세요.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 미리보기 모달 -->
+<div id="modal" hidden>
+  <div class="modalbox">
+    <div class="modalhead"><strong id="modalTitle">미리보기 — 원본 ↔ 편집</strong>
+      <span id="modalInfo"></span><button id="modalClose">✕</button></div>
+    <div class="modalgrid" id="modalGrid"></div>
+    <div class="modalfoot">
+      <span id="modalNote" class="note"></span>
+      <button id="modalApply">적용(빌드)</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

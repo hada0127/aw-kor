@@ -1,0 +1,2536 @@
+# todo.md 무손실 스냅샷 (2026-06-17, UI 에디터 재계획 전)
+
+> success.md로 완료 항목 이전 + todo.md를 UI 에디터 목표로 재작성하기 직전의 전체 보존본.
+
+# AW Korean Patch 통합 TODO
+
+이 파일 하나를 현재 진행 기준으로 사용한다. 이전 진행 문서인
+`.claude/todo.md`와 `docs/plan.md`는 이 파일로 통합했으며, 혼선을 막기
+위해 둘 다 제거했다. 앞으로 작업 상태와 완료 기준은 이 파일만 갱신한다.
+현재 루트 `plan.md`도 존재하지 않으며, 새 진행 문서로 되살리지 않는다.
+
+과거 장기 계획과 상세 조사 기록은 git history, `docs/success.md`,
+`docs/fail.md`, `docs/research.md`에 남겨 둔다. 이 파일은 지금 해야 할
+작업과 완료 판단에만 집중한다.
+
+---
+
+# 🟢 /loop: 무결점 한글화 (2026-06-16 시작) — 현재 최우선
+
+> 사용자 /goal: **(1) 비트맵 깨짐 0, (2) 띄어쓰기·줄바꿈 이상 0, (3) 원본 대비 의미 변경/명사 통일 누락 0** — 1·2편 전 화면, 엔딩까지.
+> 방식: 진행별 세이브/체크포인트로 전체 화면 비교 시트 생성 → claude/codex/agy 엄격 리뷰 → 무결점까지 반복.
+
+**확립 원칙(검증 신뢰성)**: 세이브스테이트 캡처는 정적 BG·기존 렌더 텍스트가 **stale**이라 회귀 판정 불가.
+→ 텍스트(의미/명사/띄어쓰기) = **ROM 슬롯 디코드** 기준 / 그래픽 깨짐 = **fresh-boot 캡처** 기준으로 분리 검증.
+
+- [x] **iter1: 비교 시트 backbone** `tools/build_comparison_sheet.py` + `data/screen_checkpoints.json`. fresh-boot ground truth(닌텐도 제공/타이틀/선택) 원본 대비 정상 확인.
+- [x] **iter2: codex 리뷰 반영(1차)** — 비교 시트 도구 결함 수정(panel 종횡비/기본 fresh/orig_state 가드/provenance). **명사 통일 hard gate `qa_terms_from_rom.py` 신설 + 72행 통일**(료우→료, 휩/호이프→휘프, 마크로랜드→매크로랜드, 옐로 코멧/그린 어스→붙임). 게이트 PASS, overflow 0.
+- [x] **iter3: 띄어쓰기 결정적 수정** — `qa_spacing_from_rom.py` 신설. `_fit_variants` 재배열(반각공백을 축약보다 우선) → GRAMMAR 49→5, ABBREV 226→27. 中점/이중공백 collapse → DOUBLE 24→0. byte-identical 다수 유지, integrity/terms PASS. **README 번역가 가이드**(서브에이전트) + Pillow 의존성.
+- [x] iter4: 재번역 워크플로 1차(169행, 186에이전트) → byte-fit 통과 110행 적용. JAMMED 142→37, ABBREV 226→5, GRAMMAR 49→3, DOUBLE 0. gate JAMMED 오탐(명사통일) 수정.
+- [x] iter5: 재번역 2차+수동 → **띄어쓰기 결함 0 달성**(JAMMED/ABBREV/GRAMMAR/DOUBLE 0). encode_fit 비용기반 재설계(codex: 공백제거 최후수단). 의미검사 `qa_meaning_from_rom` 신설(숫자드리프트 21·부정 WARN).
+- [x] iter6: 숫자드리프트 복원 → **qa_meaning NUMBER 0**. 이중권위(script 인라인 리터럴이 import 덮음) 해결, qa_meaning 정밀화(인접슬롯/もう１/노이즈). agy 실리뷰 hang 확인→claude+codex로 운용.
+- [ ] iter7: **전체 의미 audit**(JA↔KO 전수 LLM 판정) — 숫자/부정 외 오역·의미축소·뉘앙스 색출 워크플로(대규모)
+- [x] iter7: 글리프 데이터 clean 확인(render_glyph_sheet, 2350음절 깨짐 0). **fresh-boot Part2 메뉴에서 /goal #1 실결함 발견**: CO 인사말 A3 렌더러 다수 음절 `?` fallback. 증거+research 기록, codex 심층분석 의뢰.
+- [x] iter8: **A3 `?` 결함 수정 완료**(codex: relocated table-end literal을 2350 전범위로 data-driven 주입). fresh-boot 검증 — 메뉴 인사말 `캠페인을 처음부터 플레이합니다` 정상, `?` 0. 전 게이트 PASS.
+- [x] iter9: A3 전각공백 "이중" 오진 정정 — **픽셀 실측 결과 이미 1칸(9px) 정상**. codex hook은 no-op이라 revert. 교훈: 띄어쓰기 폭은 흰픽셀 gap 실측으로 판정(육안 확대 금지).
+- [x] iter10: A3 ? 수정 **프롤로그/메뉴 설명문 등 전 A3 화면 적용 확인**(스토리를 즐기며 플레이하는 모드 등 정상). 의미 audit 1차: **부정 극성 불일치 1226행 → LLM 판정 워크플로(wzqkamakv)** 실제 반전/왜곡만 색출 중.
+- [x] iter11: 부정 의미 audit(1226행 LLM 판정) → **실제 의미오류 18행 수정**(CAN/CANNOT 반전 6, 깨진 단편 부정/누락, distortion 7). 판정 오탐(じゃない 발견맥락 등) 식별·skip. 이중권위 script 리터럴 직접수정 다수.
+- [⏳] iter12: 전체 의미 audit(6997행 3청크). chunk0(2333행)→66 flag. **휩→휘프 조사회귀 5행 수정**(받침-조사 보정). chunk0 verify-fix(wf1452yu6)+chunk1/2 audit(wpae7fv20/wuc7dr090) 진행중.
+- [x] iter13: **전체 의미 audit 6997행 완료** — 3청크 LLM 판정 + adjacent-aware verify-fix → 확정 ~72행 수정(반전/오역/정렬오류/관용구/누락/조사). 전 게이트 PASS.
+- [x] iter14: **codex 독립 리뷰로 의미 audit 검증** — 표본 31행 정상 확인, 과교정 2(잃지 않았다 중복·시야 잘림)+주체 1 정정. 의미 audit 3자 리뷰 완료(~75행 수정).
+- [ ] iter: **/goal #1 fresh-boot 화면 매트릭스** — 전투/결과/저장/상점/엔딩. 진행 SRAM seed 생성(엔딩 도달). 비교 시트 claude/codex 리뷰.
+- [x] iter15: **자동진행 도구 `auto_playthrough.py` 구축**(사용자 선택). 콜드부트 BG-신뢰 캡처로 캠페인 월드맵=한글(블루문) 확정. **영어 잔존 BG 2종 발견**(전략 오버맵 필기체 Red star Palace 등, 작전선택 BG RED STAR/BLUE MOON) — 과거 stale 기각이 실잔존을 가림.
+- [x] iter16: **작전선택 BG(0xBF66F0) 영어 국가명 5종 한글화 완료** — 레드스타/블루문/그린어스/코멧/옐로. galmuri7 7px, 측면장식 보존, 재압축 2756/2952. 전 게이트 PASS, 증거 SUCCESS_op_select_bg_korean.
+- [x] iter17: **결과/엔딩 자동도달 강화**(사용자 선택). auto_playthrough 전투정책+savestate저장 강화 → 전투 애니메이션/부대목록/월드맵 등 깊은 화면 다수 검증(전부 한글 정상). 부대목록 탄약 무탄약표시 `닛` 미세잔여 발견.
+- [⏳] iter18: 장기 자동진행으로 전투 종료→결과 화면 도달 시도(b466h963a). + `닛` 무탄약 라벨 점검.
+- [x] iter18: **작전선택 BG(0xBF66F0) 한글화 확정** — 레드스타/블루문/그린어스/코멧/옐로. **블록 식별 100% 검증**(원본 비공백 타일 312/312가 인게임 배너 VRAM step057과 verbatim 일치). ~~전략오버맵(0xC2FD70, 8bpp) 한글화~~는 iter19에서 **오식별로 판명·revert**.
+- [x] iter19: **QA 디코더 결함 수정 + 신규 글리프 커버리지 게이트 + 전략지도 화면 2종 정리(codex 리뷰 반영)**.
+  - **qa_integrity_map 디코더 결함 수정**: SYLCODE가 구 1030 맵 → 1320개 추가음절(예 뤘=0x9868)을 SJIS 폴백해 한자(鷲)로 오표시(가짜 부호소실). 2350 맵으로 교체 → 0xDFCA93 '다뤘을' 정상 디코드. phase6도 2350.
+  - **신규 게이트 `qa_glyph_coverage.py`**(codex 지적 반영 — ko 필드가 아니라 **enc_hex 출하바이트** 기준): 전 25296행·14개 write경로(import/override/raw_replace/script 리터럴 등)에서 예약-한글 코드 160015회/959음절이 전부 glyph 보유 음절로 해석 → **미렌더 0**. code∩glyph 대칭(2350) + 빌드 KeyError 가드로 폰트측 「비트맵 깨짐 0」 정면 보증.
+  - **전략지도 화면 2종 정리(정정)**: codex 리뷰로 SWI/DMA 재분석 → `0xC2FD70`/`0xC30EE8`은 **표시되는** Mode4 풀스크린 전략지도(EWRAM→DMA 0x06000000/0x06004B00=fb 상/하단). step073 Mode0 대륙 오버맵(BG3 0xC34E10)과는 **별개 화면**. 5게이트 PASS.
+- [x] iter20: **Mode4 전략지도 한글화 완료**(사용자 승인). `patch_part2_strategic_map_mode4_labels` — 원본 픽셀 zoom으로 라벨 직접 enumerate(codex 좌표 일부 phantom 확인: 'Blue moon Palace'·half-B Factory 미존재). 실측 3건만: 레드스타 궁전(파랑)/공장(암적)/그린어스 궁전(암). 'Cosmo earth'=녹색국가→그린어스 통일(#3). 오프라인 렌더=인게임(Mode4 fb 직접 DMA, 타일 간접 없음) → `temp/smap_built_verify.png` 확정. 재압축 A4249/4471·B3996/4161 OK. 5게이트 PASS. (상단 해양 소형 라벨 'Cayo/Cargo?'는 판독불가로 미번역 유지.)
+- [x] iter21: **배포 최종(Phase F) — 사용자 선택**. Mode0 오버맵은 6px 필기체가 지형 텍스처 위라 한글화 시 글자 뭉개짐/지형 손상(=비트맵 깨짐)으로 판단 → **장식 원본 유지**. `prepare_patch_distribution.py --date 2026-06-16`로 BPS(747759B,4.46%)/IPS(876262B,5.22%)+manifest×2+README+RELEASE_NOTES×2 재생성. `verify_dist_integrity` 3중 해시 게이트 PASS. **adversarial 검증 워크플로(5병렬)**: 독립 BPS 적용기(byte-exact·footer CRC 3종·true source dependence), 독립 IPS 적용기(byte-exact·max offset 0xF66F56<ceiling·무절단), manifest 16필드 전수 일치(both manifests byte-identical), 문서 정확성(stem/sha/date 일치, stale 0), 음성테스트(wrong-source 거부)+triple-identity — **전부 PASS**. stale 미트래킹 패치(06-10/06-14/preview-06-08) 정리. dist sha: src a8ad7c7d / tgt 1d825104.
+- [ ] (선택, 사용자 요청 시) Mode0 대륙 오버맵 타일 필기체 한글화(소스 0xBF7ADC, 6px라 가독성 손해) / ﾆﾙ 무탄약 표시 / Mode4 상단 해양 소형 라벨(판독불가) / 결과·엔딩 near-end 세이브 그래픽 캡처 / 구 tracked preview 패치(05-26/05-28/06-07) git rm 정리.
+- [ ] iter: 자동진행 결과/엔딩 화면 도달(near-victory 또는 정책 개선) + 전체 필름스트립 codex 리뷰.
+- [ ] iter: dist 배포 최종(Phase F) — 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성.
+- [ ] iter: fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
+- [ ] iter: fresh-boot 전화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed 생성 검토.
+- [ ] iter: 전체 의미 audit(import-csv 본문, fragment/감탄사 제외 스코핑).
+- [ ] iter: 전체 의미 audit(JA↔KO 전수) — 숫자/부정 외 오역·의미축소 LLM 판정 워크플로
+- [ ] iter: 전각/반각 공백 폭 실측(within-line 항상 일관, cross-line만 위험) — 비주얼 매트릭스와 함께
+- [ ] iter: agy 리뷰 반영 + codex 잔여(dialogue_map 재생성, seeded_sram/anchor 검증, fresh 네비 확대, qa_text_fit ROM디코드화)
+- [ ] iter: 의미 변경 0 — JA 원문 ↔ KO 슬롯 디코드 의미 대조(축약으로 뜻 바뀐 행 색출)
+- [ ] iter: 비트맵 깨짐 0 — fresh-boot 전 화면 매트릭스(월드맵 BG 영어 국가명 fresh 확정 포함), 깨짐 패치 도구 개선
+- [ ] iter: 엔딩 도달 검증 — 진행 세이브 생성(없으면) + fresh 네비/Lua 자동진행
+
+---
+
+# 🟣 한글화 도구체인 구축 (2026-06-16, muramasa-kor 참조) — 신규 최우선
+
+> 사용자 지시: `~/project/muramasa-kor`를 참조해 4개 도구/자산 구축 후 전체 기능 점검.
+> muramasa 참조: `tools/ui_editor/`(stdlib http.server+static 웹), `translations/proper_nouns.json`
+> (`{characters_and_scenes/items/common_terms:[{ja,ko,wii_kr,edit}]}`), `jp_messages.json`(`{sheet:{messages:[{id,ja,ko}]}}`),
+> `fonts/RIDIBatang.otf`+font import 도구.
+
+## T1 — 한글 2350자 폰트 확보 ✅ 완료
+- [x] KS X 1001 완성형 2350 hangul 글리프 생성 + 매핑 2350 확장(`tools/build_korean2350.py` → syllable_to_code_2350.json/syllable_to_glyph_2350.json/kor_glyphs_2350.bin)
+- [x] 기존 1030 byte-identical 호환(코드값·local idx·블롭 prefix 보존), 한자테이블 1030→2350 확장
+- [x] **빌드 통합 완료**(build:SYLCODE/GLYPH_BLOB_2350/SYLMAP_2350): 2350 전 음절 인코딩 가능(매핑 누락 0, 코드 유니크), 무결성맵 PASS, 부팅/체크섬 OK. output 74af7863(additive, 기존 렌더 불변).
+
+## T2 — 원본 ROM 스프라이트 전수 JSON + 픽셀아트 에디터 ✅ 완료(잔여: 팔레트 캡처·ROM 역기록)
+- [x] `tools/export_sprites.py` → `data/sprites_index.json` (1979 스프라이트: curated LZ77 104 + scan LZ77 1874 + font, 4bpp/LZ77 디코드+PNG 렌더)
+- [x] **픽셀아트 에디터** `tools/sprite_editor/`(stdlib server + canvas): ROM→4bpp 인덱스 그리드+16색 팔레트, 확대캔버스 픽셀 페인트, 팔레트 색 지정(원본색), 격자/타일경계, 저장→sprites_overrides.json. (:8781)
+- [ ] 잔여: 진짜 원본 팔레트는 VRAM 캡처 필요(현재 grayscale 추정, 에디터에서 수동 색지정 가능). LZ77 재압축 ROM 역기록(apply_sprite_edits.py) — comp_size≤검증. raw OBJ 블록 추가 커버.
+
+## T3 — 통일 사전 JSON (명사/인칭/지명/캐릭터명) ✅ 완료(잔여: 구 generic 도구 충돌 정리)
+- [x] `tools/export_proper_nouns_dict.py` → `data/proper_nouns.json`(카테고리형): characters12/nations5/places4/common_terms9 + freq/variants/issues(표기흔들림)
+- [x] `tools/apply_proper_nouns_dict.py`(edit 기준 CSV 통일, 드라이런 기본 --apply 반영)
+- [ ] 잔여: 구 `export/apply_proper_nouns.py`(generic inconsistencies 스키마)가 같은 proper_nouns.json 쓰는 충돌 정리(deprecate/리네임). 표기흔들림 통일안 결정(옐로코멧/휘프/료 등).
+
+## T4 — 대사 원문→번역 JSON + 편집기 UI (③ 연동) ✅ 완료
+- [x] `tools/build_dialogue_map.py` → `data/dialogue_map.json`: {id,address,ja,ko,ship_ko,slot,kind,region,is_noise} (28,974행/실대사21,605)
+- [x] 웹 편집기 `tools/dialogue_editor/`(stdlib server+web, :8780): 대사 JA→KO 표시·편집·저장(→dialogue_overrides.json)
+- [x] **사전(T3) 연동**: 편집기에서 사전 조회/추가/수정/삭제 + "사전 검사"(명사 KO 불일치 행 플래그, 현재 286건 검출)
+- [x] 편집→dialogue_overrides.json 역기록(빌드 적용 경로는 잔여)
+
+## TZ — 전체 기능 점검 (진행)
+- [x] 전 QA 실행: 무결성 PASS, overflow0/no_ko0, 영어잔존0, ROM placeholder0, 부팅/체크섬 OK (output fa7b08df).
+- [x] 도구체인 4종 데이터 검증 + codex 리뷰(최대 누락=실화면 시각회귀 QA, VRAM 팔레트 먼저, 미번역 triage, 깨진주소 복구). agy는 긴 리뷰 프롬프트 반복 hang(unreliable) — 짧은 프롬프트만 가능.
+- [x] **깨진 주소 복구**: `tools/fix_broken_addresses.py` — 드롭됐던 번역 7행 복구·출하(색적/미사일 섬 쟁탈전!/14일/상대 공격력 등), 중복106·junk93 정리, 3 슬롯-핏 override로 overflow 0 유지.
+- [ ] **최대 잔여 = 실화면 시각회귀 QA**(codex/gemini/audit Phase E 공통): 세이브스테이트 자동 스크린샷 + 원본 대비 영역 diff(메뉴/대사/전투/유닛정보/생산/수송/튜토리얼/1·2편 분기). 현재 부분 검증만(docs/screenshots/SUCCESS_phaseE_*).
+- [ ] VRAM 팔레트 캡처(0x05000000/0x05000200)로 스프라이트 에디터 실제 색 + LZ77 ROM 역기록(apply_sprite_edits.py, comp_size≤검증)
+- [ ] 미번역 1097종 triage(말줄임/중복/placeholder 제외한 실대사·라벨만) → 대사 편집기로 번역
+- [ ] 표기흔들림 통일 결정·적용(codex: 료/휩 권장; 국가명 — 현 다수 붙임 '레드스타'158 vs 띄움22, codex는 띄움 권장 → **사용자 결정**). proper_nouns.json edit 채우고 apply_proper_nouns_dict.py --apply
+
+---
+
+# 🔴 전면 재검수·수정 계획 (2026-06-15, 독립 감사 기반)
+
+> 사용자 지시: codex 기본 한글화 완료분을 **처음부터 엄격히 전수 검수**한다.
+> 화면 깨짐/미번역/꼼수/false-confidence를 색출하고 견고하게 수정한다.
+> 목표(/goal): **원본 화면 대비 누락·깨짐·스프라이트 손상·띄어쓰기 오류 0.**
+> 각 Phase 완료 시 **codex + gemini 엄격 리뷰** 후 다음으로 넘어간다.
+
+## 감사 결론 (독립 워크플로 38건 발견 / 25건 확정 + Claude 시각 검증)
+- ✅ **빌드 무결성은 양호**: 코드영역 무변경, GBA 헤더 체크섬 유효, full/final/title_test 3종 동일 SHA, 완전 재현 가능. cold-boot fresh-run에서 타이틀/Part1 타이틀 한글 정상.
+- ❌ **그러나 "꼼수 의심은 절반 맞음" — 출하본은 대체로 정상이나 QA가 검증해서가 아니라 우연히 그러함.**
+- 🔴 **최대 실제 결함: 문장부호 일괄 소실.** `build_korean_full.py:8844` encode_fit이 슬롯 여유와 무관하게 `,.!?…。、「」` 등을 전부 제거 → 한글 대사 약 12,000행(≈77%)에서 마침표·물음표·말줄임표·인용부호 소실. 렌더러는 ASCII `?.!` 지원 입증(0xDCBC12 `...뭐???`)이라 회피 가능한 회귀. qa_text_fit이 level0=fit로 묻어 은폐.
+- 🔴 **배포 무결성 불일치**: `dist/manifest.json`(patched sha=4004d2c3)·최신 BPS/IPS(06-14)가 현재 출하 ROM(d680820d, 06-15)과 불일치. "round_trip OK"가 구버전을 가리킴.
+- 🟠 **인게임 대사 렌더 시각 검증 0건**: qa_visual_regions는 타이틀/셀렉트/일부 1편 스프라이트만 검사. 핵심인 한글 대사 렌더(FONT_BASE 주입·예약코드·2편 타일맵 hook)는 어떤 화면도 검증 안 함.
+- 🟠 **번역 이중 권위**: 출하 텍스트는 CSV가 아니라 build 스크립트 inline 리터럴(~6749 튜플)이 결정. CSV 기준 품질판단=실제 ROM과 무관(감사 중 false lead 실재).
+- 🟡 QA 거짓 그린 다수: phase6 EUC-KR '한글 검출'은 원본에서도 36만건 통과(무의미), residuals는 0x800000 미만 스캔 제외+CSV에 있으면 covered 단정, placeholder는 전각공백 정규화 미복제로 ROM 스캔 무력.
+- 🟡 placeholder('판독 불가'/'의미 불명') 24행이 노이즈 영역에 예약코드로 기록(표시는 안 됨, 죽은 데이터), 잔존 히라가나 라벨 `かくとくそうごう`(0xBE731C), 폰트영역 일부 일본어 글리프 영구 파괴.
+- **Claude 시각 검증 추가분**: 1+2 선택 화면 로고에 **"™" 기호 잔존**(fresh-boot 확인); 모드선택 월드맵 배경 영어("GREEN EARTH"/"YELLOW")는 ASCII 0건이라 **stale savestate artifact로 추정**(Phase E fresh-boot로 확정).
+- 기각(출하본 실해 없음 확인): SHORTEN 비문, KANA_REMAP 공유, LZ77 크기가드, pair_renderer 가드, deny 테이블 잔존 일본어 표시 등.
+
+## ▶ 확정 실행 순서 (codex + gemini 리뷰 반영, 2026-06-15)
+> 두 리뷰 수렴: ① 배포 재생성은 **맨 마지막 1회**(지금은 게이트만) ② QA는 **빌드 무결성맵(기대bytes==ROM slot)**을 1차 게이트로, 전체 ROM 스캔은 후보 리포트로 강등 ③ 문장부호는 **ASCII만 먼저 + 렌더러별 whitelist + 기존 strip 후보를 fallback로 유지**, 전각은 4경로(Part1/Part2 0x313·0xB11·A3) fresh-캡처 통과 후에만 ④ CSV 무리한 단일화 대신 **overrides 오버레이**.
+> 순서: **A0 → C-min(무결성맵) → P1(글리프 스트레스) → B(부호복원) → D(위생/가드) → C-full+E(QA진실화+시각매트릭스) → F(배포 최종) → G(CSV오버레이, 선택)**
+
+## Phase A0 — 문서·배포 무결성 게이트 (지금, ROM 무변경) [small] ✅ 완료
+- [x] CLAUDE.md/AGENTS.md의 stale base(`v56_polished`=부재 파일) → 실제 base(원본 ROM)로 정정
+- [x] dist 현행본 stale 확인: `tools/verify_dist_integrity.py` 실행 시 FAIL(output d680820d ≠ manifest/patch 4004d2c3)로 명시
+- [x] `manifest.patched_sha == 실제 output sha == BPS/IPS 적용결과 sha` 3중 일치 검증 게이트 `tools/verify_dist_integrity.py` 작성(검증만; 재생성은 Phase F)
+
+## Phase C-min — 빌드 무결성맵 + 부호소실 리포트 (검증 토대) [medium] ✅ 완료
+- [x] 빌드가 write-log 부산물 생성: `temp/integrity_map.json` (addr·slot·기대바이트·fill·ko·level·kind), 25,357 텍스트 write 포착(import 18,041 + script 6,648 + fixed/raw/opt). 출력 바이트 무변경(SHA d680820d 동일) 검증.
+- [x] 1차 QA 게이트 `tools/qa_integrity_map.py`: last-writer-wins 재구성 → `ROM == 기대 bytes`. 현재 391,370바이트 불일치 0 = PASS.
+- [x] 부호소실 정량화(qa_integrity_map): import 부호보유 11,401행 전부 소실, 15,947자(`.`7522 `!`3539 `,`3222 `?`1093…) — **Phase B before 지표**.
+- 참고: welcome 대사는 `INTRO_DIRECT_TEXT`로 전각 `。`/ASCII `. ` 수동 보존 중(렌더 확인됨) → Phase B 부호복원의 선례.
+
+## Phase P1 — 문장부호 글리프 스트레스 테스트 (Phase B 전제) [small] ✅ 정적 확인 완료
+- [x] 정적 확인(무결성맵): 모든 스크립트 렌더러가 ASCII 부호를 이미 출하·렌더 — Part1 `.`441/`!`992/`?`350/`,`113/`(`3/`)`3/`:`2, Part2 `.`500/`!`125/`?`49/`,`300, 캠페인 `.`32 등. import 전용 영역(0x92-0x9E)만 부호 0(strip 피해).
+- [x] 증거 강도: `. ! ? ,` 강(전 영역). `( ) :` 약(Part1만). **`" ' [ ] ;`는 출하 선례 0** → v1 정책에 반영(아래).
+- [ ] 픽셀 확정(박스 오버런 포함)은 **Phase E**로 이관(에뮬 캡처). 가변폭 ASCII 부호 폭 실측 필요(codex/gemini 지적).
+
+## Phase B — 문장부호 소실 복원 (최우선 실제 결함) [medium] ✅ 인코딩 검증 완료 (시각=Phase E)
+- [x] `encode_fit`(build:8844) blanket strip 제거 → 부호 보존 후보(level 0~5) + strip 폴백(level 6~11). overflow/일본어 폴백 증가 0 보장.
+- [x] 전각→ASCII 정규화: `…`/`・・・`→`...`, `。`→`.`, `、`→`,`, `「」『』`→`"`, smart quotes→ASCII. **보수적 v1: `[] {} ;`·`▼` 제거**, `. ! ? , ( ) :` 보존(`( ) :` provisional).
+- [x] **中점(`・`/`·`) 버그 수정**(codex/gemini): 단독 제거의 단어결합 오류(`토이·박스`→`토이박스`) + `·` FALLBACK SJIS 재출하(208행)를 해결 — 연속→`...`, 단독→공백. `tools/qa_integrity_map.py`에 中점 잔존 FAIL 게이트 추가(현재 import 0).
+- [x] 결과: 부호소실 11,401행/15,947자 → **11행/17자**(전부 benign: 미번역 JP 2·garbage 2·placeholder`[]`4·꽉찬슬롯 trailing 2). qqq 6행 복원 확인. overflow 0, no_ko 0, 무결성맵 PASS. temp SHA `f3c0014d`(中점 수정 후 재빌드).
+- [ ] **Phase E 게이트(릴리스 전 필수)**: ASCII 부호 가변폭 박스 오버런 픽셀 검증, `( ) : " '` 4경로 렌더 확인. 미통과 부호는 제거.
+- [ ] (선택 polish) 꽉 찬 슬롯 2행(`그렇구나!`@0xDC4D46, `사령관이네.`@0xDC9998) 축약 override로 부호 보존 검토.
+
+## Phase C-full — QA 도구 진실화 (C-min 이후, Phase E와 병행) [medium]
+- [x] phase6 EUC-KR 검출 → 예약코드(0x8840-0x9369) 카운트로 교체(패치 183k vs 원본 62k, 임계 100k로 분리; 정확검증=qa_integrity_map)
+- [x] **신설 완료: `tools/qa_ascii_residuals.py`** — 큐레이션 UI 토큰 잔존 0 확인(PRESS START·GREEN EARTH·MISSION 등 전부 제거됨), 일반 sweep은 그래픽/폰트 노이즈뿐
+- [ ] qa_text_fit에 원문ko↔인코딩후 부호/공백 소실량 행별 컬럼+경고, level 명명 재정의
+- [ ] qa_text_fit/lint를 CSV 재시뮬이 아닌 **post-build ROM 슬롯 디코드 대조**로 재설계
+- [ ] qa_japanese_residuals: found_texts 비의존 전체 ROM SJIS 히라가나+조사 보조 스윕, covered 판정 전 ROM 디코드 확인, 히라가나 포함=무조건 리포트
+- [ ] qa_placeholder: encode_fit 모든 level 변형을 ROM에서 검색, PLACEHOLDERS 확충, import 경고를 CI 차단 게이트로
+- [ ] **신설: 영어 ASCII UI 잔존 전수 검사 도구**(현재 수동 grep 의존) + 압축그래픽 텍스트 점검
+- [ ] phase6 체크섬 리포트에 헤더 vs 본문 무결성 구분 + 코드영역(0~0x800000) 무변경 검사
+
+## Phase D — 데이터 위생 및 잠재 손상 가드 [small~medium]
+- [ ] import 경로에 placeholder ko('판독 불가'/'의미 불명'/'미상' 및 변형) 명시 skip 가드(원본 바이트 보존)
+- [ ] `patch_residual_ascii_labels` 전역 rom.find에 in_deny 검사/검증된 오프셋 allowlist + 출현좌표 assert
+- [ ] CSV의 a<0x800000 code-region 2291행 'code-noise' 플래그/정리(진척 지표 분모 정정)
+- [ ] 0x465468 등 중복 write 정리, 모든 write 주소 충돌 assert
+- [ ] 잔존 히라가나 `かくとくそうごう`(0xBE731C) 등 추출 누락분 번역
+- [ ] require_font 의존(OkDanDan/AppleSDGothic)을 reference/fonts/ 고정 자산 + 해시 검증
+
+## Phase E — 인게임 시각 회귀 매트릭스 (에뮬 fresh-boot + frame-hash) [large]
+- [ ] qa_visual_regions에 인게임 대사창(1편 welcome·전투, 2편 MODE SELECT/PROLOGUE) 진입 캡처 + 한글 글리프 밀도/박스 오버런/`?` 폴백 assert
+- [ ] harness(/tmp/mgbah)·menu_state(날짜박힌 temp ss0) 경로를 프로젝트 내부 인자 필수로, 누락 시 '실패' 처리
+- [x] **월드맵 배경 영어 국가명 = stale savestate 확정**: 현재 ROM fresh 렌더는 한글 "레드스타"(영어 RED STAR 아님). qa_ascii_residuals도 GREEN EARTH/RED STAR 등 잔존 0. → 06시 savestate 비교 이미지가 stale이었음(실 잔존 아님).
+- [x] **시각 검증(부분, 2026-06-16)**: 세이브스테이트 로드+A 진행 fresh 렌더로 CO프로필·전투 명령메뉴(정보/작전/시스템/저장/종료)·유닛/지형 정보(보병/평지)·월드맵 스토리 대사 전부 한글 정상, 깨짐/오버플로 없음. import-csv Phase B 대사(0xA0E71A `지키러 가겠지.`, 0xA0E771 `이건 전쟁이야.`)에 마침표 복원 확인, 박스 내 정상. 증거 docs/screenshots/SUCCESS_phaseE_*_2026-06-16.png.
+- [ ] 예/아니오 compact·이름확인·저장확인·결과/스코어·통신·상점·엔딩·하드 캠페인 화면 fresh 표본(잔여 매트릭스)
+- [ ] **1+2 선택 화면 로고 "™" 잔존** 처리 판단(graphic 자산, Phase B 무관 — 제거 또는 보존 합의)
+- [ ] かくとくそうごう(0xBE731C) 라벨 슬롯/렌더 확인 후 번역(블라인드 패치 금지)
+- [ ] `( ) : " '` 부호 4경로 픽셀 렌더 확인(미통과 시 제거) — codex/agy 보수 권고
+- [ ] 글리프 슬롯→원래 일본어 용도 매핑표 문서화 + repurposed 글리프 재참조 QA
+- [ ] **화면 커버리지 매트릭스**(codex 지적, 플레이스루 아닌 renderer×화면군): 전투 HUD 전체·피해예측·전투 애니메이션·CO 파워·결과/랭크·저장/삭제/확인 팝업·통신/대전/맵 교환·상점/해금·엔딩/크레딧·하드 캠페인·맵 에디터·이름입력 특수
+- [ ] **자동 frame-buffer 해시 회귀**(mGBA): 정상 빌드 대비 화면 해시 비교 + 텍스트버퍼 후킹으로 기대 스크립트 전달 확인
+
+## Phase F — 최종 배포 (모든 ROM 변경 완료 후 1회) [small]
+- [ ] BPS/IPS 재생성 + `manifest.json`/`manifest_preview.json` 갱신(patched/bps/ips sha·crc, round_trip)
+- [ ] Phase A0의 3중 해시 게이트 통과 확인 후 dist 패치 + manifest git 커밋
+- [ ] dist의 stale 표기 해제, RELEASE_NOTES 갱신
+
+## Phase G — CSV 권위 단일화 (선택/유지보수) [large]
+- [ ] inline 리터럴(~6749)을 `overrides.tsv`로 분리(직접패치/blank/렌더러특수/fixed-width 의미 보존), 빌드가 CSV+overlay 합성
+- [ ] 단순 address-override만 점진적으로 CSV로 환원해 결합도 완화
+
+## 진행 규칙
+- 각 Phase 완료 시 **codex + gemini 엄격 리뷰** 후 commit/push하고 다음으로 넘어간다.
+- ROM 변경은 **무결성맵(C-min)**으로 검증, 배포 동기화는 **Phase F 1회**.
+- `output/`은 사용자 자산 — 임의로 비우지 않는다. 임시 산출물은 `temp/`.
+- 전각 문장부호는 P1 4경로 fresh-캡처 통과 전 금지(가장 위험한 단일 결정 — 양 리뷰 합의).
+
+---
+
+## 최종 목표
+
+- [x] 캠페인 전체 한글화 완료.
+- [x] 전투 화면, HUD, 메뉴, 팝업, 결과 화면 한글화 완료.
+- [x] 튜토리얼 구간을 먼저 끝까지 검수하고, 실제 화면 기준으로 깨짐을 제거.
+- [x] `full`, `final`, `title_test` 산출물이 같은 한글화 상태로 빌드되도록 정리.
+- [x] 잔여 일본어, 깨진 글자, 잘린 문장, 잘못된 색상/스프라이트를 제거.
+- [x] 최종 BPS/IPS 패치 생성 및 round-trip 검증.
+
+## 현재 기준 산출물
+
+- `output/game_wars_korean_full.gba`
+- `output/game_wars_korean_final.gba`
+- `output/game_wars_korean_title_test.gba`
+- `tools/build_korean_full.py`
+- `tools/build_title_hangul.py`
+
+## 최근 완료
+
+- [x] Part 2 오프닝 데모 신문/타이틀 잔여 영어 그래픽 정리.
+  - 1+2 선택 화면에서 `DOWN -> A`로 진입하는 오프닝 데모 fresh 경로를 확인해 `DOMINO`, 대체 Part 2 타이틀의 `GAME BOY WARS ADVANCE2`/`TM`, 신문 패널의 `BLACKHOLE COMING AGAIN` 및 작은 신문 영문 라벨이 남는 것을 추적했다.
+  - CO명 오버레이는 ASCII 테이블 `0x4CA930`(`CAT`)와 `0x4CA968`(`DOMINO`)을 blank 처리했고, 대체 타이틀 잔여는 Part 2 title OBJ LZ77 블록 `0x4EAF6C`의 subtitle/TM 타일을 제거했다.
+  - 신문 패널은 BG0 LZ77 블록 `0x4E0478`을 통째로 0으로 지우면 검은 블록이 생기므로, 원본 종이 배경 타일을 유지한 채 brown 계열 문자 팔레트 인덱스만 cream 종이색으로 치환했다. 실제 캡처 `temp/current_part1_intro_residual_after_indexfill_patch_20260608/sheet.png` 기준 `DOMINO`, 대체 타이틀 subtitle/TM, 블랙홀 신문 문구가 사라졌고 검은 직사각형 부작용도 없다.
+  - 이번 변경 후 `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `prepare_patch_distribution.py --date 2026-06-08`, `git diff --check`를 통과했다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 빌드로 동기화했고 세 SHA-256은 모두 `ed0a80f7cb57156900fec4ba5a1c85011bbdd9a4d96e72ec0d084d3704b377d9`이다. preview BPS/IPS SHA-256은 각각 `0fd97b15b902e1b4a6f205c49794226d098a9e753a9ad847db662d8add7fc584`, `9a7c9a58cd1197ba2df7c3dda2db125e95160a0253e19c33c8fccbf4b302f5e8`다.
+- [x] 공통 콜드부트 `NINTENDO PRESENTS` 잔여 그래픽 한글화.
+  - 콜드부트 첫 화면의 `NINTENDO PRESENTS`가 LZ77 BG 블록 `0x21CE8`에서 로드되는 것을 확인하고, 해제 크기 `0x3000`/384타일 검증 후 `닌텐도 제공` 픽셀 폰트 타일 시트로 교체했다. 재압축은 기존 소비 크기 안에 들어가며 빌드 통계에 `common_nintendo_presents_bg=384`가 추가된다.
+  - 실제 콜드부트 캡처 `temp/coldboot_title_current_20260608_after_bdf_nintendo_patch/sheet.png` 기준 60/120/240프레임의 첫 화면은 `닌텐도 제공`으로 표시되고, 480프레임 이후 1+2 타이틀 화면도 정상 진입한다.
+  - 이번 변경 후 `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`(`written=19053`, `level1=0`, `level2=16`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=18`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `prepare_patch_distribution.py --date 2026-06-08`, `git diff --check`를 통과했다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 빌드로 동기화했고 세 SHA-256은 모두 `191fe1277d16aa48fa229bf251da7dafae2b9c73598c7d74f020873e125f9e46`이다. preview BPS/IPS SHA-256은 각각 `9f0f6d7e8f4ac07cb4bfdf78de29eb7b2e07d80f3cf5b9433941e012a5921431`, `f869d668586b734e7898c0d4a45019abc8738e5a7982430b6c809ccb5b2a3e37`다.
+- [x] 공통 타이틀 화면 작은 부제/저작권/TM 잔여 영어 그래픽 정리.
+  - 공통 타이틀 OBJ LZ77 블록 `0x22B2C` 안의 작은 원본 영문 부제 영역을 `한글판` 오버레이로 교체했다. 기존처럼 블록 밖 타일까지 확장하지 않고 런타임 OAM의 배경 스프라이트 30~33번 타일 범위 안에서만 비투명 픽셀을 덮어, 해제 크기는 정상 `18688`바이트를 유지한다.
+  - 하단 저작권 표기는 별도 LZ77 OBJ 블록 `0x228AC`, `0x3895C`, `0x52F974`, `0xC43FB8`에서 로드됨을 확인하고, 5개의 32x16 OBJ가 가로로 붙는 160x16 타일 시트를 `닌텐도  시스템즈`로 재렌더링했다. 네 블록은 각각 해제 `1280`바이트, 재압축 `378/605`바이트이며 이전 저작권 타일 시퀀스는 current ROM 기준 0건이다.
+  - 같은 배경 스프라이트 안에 남던 오른쪽 로고의 작은 `TM`도 흰 오버레이로 제거했다. 실제 화면 캡처 `temp/title_residual_verify_20260608e/title_4x.png` 기준 상단 작은 부제, 오른쪽 `TM`, 하단 저작권의 즉시 보이는 영어 잔여가 사라졌다.
+  - 이번 변경 후 `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check`, 타깃 ASCII 검색 0건을 통과했다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. 세 산출물 SHA-256은 `1d3e73f3047d6fff69e8afc2827be71a0c7e1df6b13b528a11c0e91adbacd907`, preview BPS/IPS SHA-256은 각각 `2ea88c82b472bee9809771667c6db5881b3cdf7c746e1f718ac5c9637d3dcb76`, `615105086acd8fcfdd68804f17b16d7b24991532f5f82d2f8ac78eb63d0196c9`다.
+- [x] Part 2 모드 메뉴/작전 선택 잔여 영어 그래픽 정리.
+  - Part 2 메인 메뉴의 신문 콜라주 LZ77 BG 블록 `0x5B5D10`을 새로 렌더링해 `RELEASE`, `WARS WORLD`, `GREEN EARTH`, `RED STAR` 계열의 즉시 보이는 원문 배경을 한글/비라틴 장식 신문으로 교체했다.
+  - 2026-06-08 최신 fresh 경로에서 Part 2 선택 직후 전환 화면의 `キャンペーン`/`トライアル` 반복 배경과 `YELLOW COMET` 배너가 다시 보이는 것을 확인했다. BG LZ77 `0x4E17C0`과 OBJ LZ77 `0x4ECD60`을 `patch_part2_intro_campaign_residual_graphics()`로 blank 처리했고, `temp/current_p2_intro_residual_after_trial_label_patch_20260608/sheet.png` 기준 해당 일본어/영문 잔여는 사라졌다.
+  - 같은 fresh 메뉴 검수에서 작은 옵션 라벨 `트라이얼`이 7px 폰트상 `드라이얼`처럼 읽히는 문제를 확인해, 작은 옵션 블록 `0x5B9378`만 `도전`으로 축약했다. 큰 선택 로고와 설명문은 `트라이얼`을 유지하며, `temp/current_p2_intro_residual_after_trial_label_patch_20260608/13_label_band_6x.png` 기준 작은 라벨은 `도전`으로 명확히 보인다.
+  - 작전 선택/확정 화면의 raw OBJ 타일을 주소 고정으로 덮어 `INFO`→`정보`, `A:OK`→`A확인`, `B:BACK`→`B뒤로`, `ENEMY`→`적군`, `A RECORD`→`기록`, `OK?`→`확인`으로 정리했다. 주요 raw 주소는 `0x456614`, `0x457174`, `0x4571F4`, `0x456C74`, `0x456CF4`, `0x456F74`, `0x456FF4`, `0x456914`, `0x456154`, `0x457374`, `0x4573F4`다.
+  - 작전 시작 cut-in LZ77 OBJ 블록 `0x5AF674`의 `LET'S GO!`를 `가자!`로 교체했다. fresh-run 검증 시트 `temp/single_state_key_sequence/p2_operation_current_ok_final_20260608/sheet.png` 기준 Part 2 메뉴, 작전 선택, 작전 확정, 시작 cut-in에서 즉시 보이는 영어 잔여가 사라졌다.
+  - 이번 변경 후 `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. `RELEASE`/`RELIEF`/`RESULT`/`WARS WORLD`/`GREEN EARTH`/`RED STAR`/`YELLOW`/`BLUEMOON`/`LET'S`/`LETS`/`ENEMY`/`RECORD`/`INFO`/`BACK` ASCII 검색은 세 산출물 모두 0건이다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. 세 산출물 SHA-256은 `6679d579be665c073eff2b79e617bc378ca83bc33ce616fc67bf2e80389b4b25`, preview BPS/IPS SHA-256은 각각 `ee830317b1b0920ba9b3febeaf6382484d2e99ad6d693bcac1c8bff39acbb936`, `79c457e75c1fcfc38a530c43944728e2359ad5f41cefd069eadc53d4b08bb7fa`다.
+- [x] Part 2 컴패니언/작전실/오퍼레이션 선택 배경 그래픽 current ROM 재검증.
+  - `temp/active_states/p2_operation_menu.ss0`는 패치 전 BG3 VRAM을 들고 있어 `RED STAR`/`BLUEMOON`/`GREEN EARTH` 같은 영어 배경 라벨이 다시 보일 수 있음을 확인했다.
+  - 실제 출력 ROM의 작전실 배경 LZ77 블록 `0xBF66F0`을 직접 풀어 `temp/p2_operation_bg_trace_20260607/current_output_bf66f0_tiles_3x.png`로 렌더하면 `레드스타`, `블루문`, `그린어스`, `옐로`/`코멧` 한글 타일이 들어 있다.
+  - 같은 savestate 화면맵에 현재 ROM 타일셋을 적용한 재구성 이미지 `temp/p2_operation_bg_trace_20260607/current_operation_room_bg_korean_reconstruction_sheet.png`에서도 BG3 배경의 즉시 보이는 영어 국가명 잔여는 사라졌다. Part 2 모드 메뉴/트라이얼 계속/작전 선택 진입은 `temp/single_state_key_sequence/p2_operation_fresh_continue_probe_20260607/sheet.png`와 기존 성공 후 다음 작전 연결 시트로 대조했다.
+- [x] Part 2 튜토리얼 전투 메뉴/상태창/팝업 current ROM 재검증.
+  - `temp/current_p2_tutorial_menu_sweep_individual/sheet_verified.png`와 `temp/current_p2_tutorial_extended_sweep/sheet.png` 기준 보병 선택, 점령 안내, 행동 메뉴, 경전차/바주카병/로켓포 메뉴, 보급, 수송차 탑재/하차, 공격범위/공략 힌트, 승리/실패 팝업 흐름에서 즉시 보이는 일본어/영어 잔여나 깨진 아이콘은 없었다.
+  - 상태창/부대 목록은 `temp/current_capture_status_review/sheet.png`, `temp/current_capture_status_window_verify/sheet.png`, 확대본 `temp/p2_tutorial_status_list_recheck_20260607/`로 다시 확인했다. 작은 지형명은 `도시`/`평지` 한글 픽셀 글자이며, 현재 ROM 직접 검색 기준 `都市`/`平地` SJIS 잔여는 0건이다.
+  - 공격/전투 쪽은 기존 `temp/current_visual_check/attack_menu_recheck_latest/sheet.png`, `temp/battle_crash_smoke_20260607/attack_probe_a/sheet.png`, `temp/probes/p2_air_battle_day2_u06_attack_confirm_20260605/sheet.png` 기록과 대조했다. 공격 대상/피해 예측, 부대 목록, 전투 컷신의 `방어` HUD가 현재 패치 상태와 맞고, 새 수정이 필요한 화면 깨짐은 보이지 않았다.
+- [x] 1+2 선택 화면, Part 1, Part 2 타이틀/시작 텍스트 스타일 재검증.
+  - 현재 ROM으로 `fresh_title_for_menu_probe`, `fresh_game_select`, `fresh_gbwa2_main_menu`, `fresh_gbwa2_prologue_start`를 다시 로드해 `temp/title_start_style_recheck_20260607/sheet.png`를 생성했다. 공통 타이틀의 큰 한글 로고와 `시작하기`, 1+2 선택 화면의 `게임 선택`, Part 2 메뉴의 `캠페인`/`시작`/`처음`, 프롤로그 시작 텍스트가 화면 안에 들어가며 색상/배치가 기존 패치 의도와 일치했다.
+  - Part 1 쪽은 `fresh_game_select`에서 실제 입력으로 진입하는 타이밍 시트를 `temp/part1_title_timing_recheck_20260607_up/sheet.png`에 남겼다. 선택 화면에서 Part 1 진입 뒤 세계지도/VS 인트로로 정상 진행했고, 기존 `temp/part1_graphics_patch_verify/sheet.png`의 Part 1 타이틀/작전실 한글 로고 스타일과 충돌하는 새 깨짐은 보이지 않았다.
+  - 이 항목 작성 당시 로고 안의 아주 작은 원본 영문 부제와 저작권 표기는 보존 영역으로 남겼지만, 2026-06-08 공통 타이틀 잔여 그래픽 패치에서 `한글판` / `닌텐도  시스템즈`로 정리했다.
+- [x] Part 2 성공 결과 오버레이 current ROM 재검증.
+  - `p2_city_defense_victory_follow_a04` 저장 상태는 패치 전 OBJ VRAM을 들고 있어 `CONGRATULATIONS!!`가 보였지만, 출력 ROM의 `0xBFB45C` LZ77 결과 타이틀 블록을 직접 렌더하면 `축하합니다!` / `작전 성공`으로 한글 타일이 들어 있음을 확인했다.
+  - 성공 직전 후보 상태 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/success_condition_force_probe2_20260605/base_plus72.ss0`를 최신 ROM으로 로드해 A 진행 시트를 새로 만들었다. `temp/single_state_key_sequence/current_air_success_result_recheck_20260607/sheet.png` 기준 성공 대사, 결과 오버레이, 저장 확인, 다음 작전 선택/브리핑까지 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없었다.
+- [x] Part 1/2 코스모랜드 진입 대사 span 잔여 정리.
+  - Part 1 대표 sweep에서 캐시된 `fresh_sav_continue_to_battle_a060` 화면이 `진정해` 뒤의 `료.` 조각과 `적은,` 뒤의 `코스모랜드...` 조각을 어색하게 붙여 보이는 후보를 재확인했다. 실제 출력 ROM의 `0xA0E494`~`0xA0E4CB` 직접 패치 span을 `진정해, 료.` / `적은 코스모랜드엔 없어.`로 합쳐 중간 control/잔여 조각이 끼지 않도록 했다.
+  - 저장 상태 첫 프레임은 이미 렌더된 화면 캐시라 새 문구를 다시 그리지는 못했지만, 출력 ROM 역디코드 기준 해당 span은 의도한 문구로 들어갔다. `fresh_sav_continue_to_battle_a080`/`a020`/`a040`/`a060` 분기 A 진행 시트도 새로 캡처해 주변 전투 진입 흐름이 계속 진행됨을 확인했다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa`로 동일하다.
+  - preview BPS/IPS와 manifest도 같은 ROM 기준으로 다시 생성하고 파일 round-trip을 확인했다. BPS SHA-256은 `ef30473c34369d5b5f2a41014a33734d94c5954fea2fcdec58af6dfafe46302a`, IPS SHA-256은 `6c6e7f6e164f4998fd6089983fa4460b1bec5d5259d02e70d50e15333501d3dc`다.
+- [x] 최신 preview BPS/IPS 패치와 manifest 재생성 및 round-trip 검증.
+  - `tools/make_bps.py`에 BPS apply/CRC 검증을 추가하고, `tools/prepare_patch_distribution.py`를 새로 만들어 patch-only 배포 산출물을 재생성하도록 했다. 이 스크립트는 `full/final/title_test` SHA-256 동일성, BPS round-trip, IPS round-trip을 모두 검증한다.
+  - 최신 preview 산출물은 `dist/game_wars_korean_full_preview_2026-06-07.bps`와 `dist/game_wars_korean_full_preview_2026-06-07.ips`다. 원본 ROM SHA-256은 `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c`, 대상 ROM SHA-256은 `64367f271d706cf21fa2d0fe21129ae081d95b24da45a74623614a509d2acefa`다.
+  - 파일에서 직접 읽은 BPS/IPS를 원본에 적용해 둘 다 대상 ROM SHA-256과 일치함을 확인했다. BPS SHA-256은 `ef30473c34369d5b5f2a41014a33734d94c5954fea2fcdec58af6dfafe46302a`, IPS SHA-256은 `6c6e7f6e164f4998fd6089983fa4460b1bec5d5259d02e70d50e15333501d3dc`다.
+  - `dist/manifest.json`, `dist/manifest_preview.json`, `dist/README.md`, `dist/RELEASE_NOTES.md`, `dist/RELEASE_NOTES_preview.md`를 ROM 배포가 아닌 patch-only preview 기준으로 갱신했다. 최종 캠페인/플레이스루 sign-off가 남아 있으므로 하단의 배포 전 최종 BPS/IPS 항목은 계속 미완료로 둔다.
+- [x] 잔여 visual-width 마지막 실제 문장 조각 추가 축약.
+  - `visual-wider=31` 잔여 후보 중 실제 문장/라벨로 확인된 항목만 추가로 줄였다. `0xA2125C`는 다음 행 `없어요.`와 이어지도록 `알 필요는`으로 줄였고, `나무 글자 섬→키노지섬`, `하지만, 유닛을 생산하는→하지만 유닛을 생산하는`, `유닛의 공격력이 낮다.→유닛 공격력이 낮다.`, `그럴지도!→그럴지도`, `줄어들어,→줄어들어` 같은 exact mapping을 추가했다.
+  - 직접 패치 짧은 조각은 `지금`, `하지만`, `피해 적었지`, `그래`, `다만`처럼 trailing space/구두점만 줄여 폭 비교 후보에서 제외했다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `visual-wider=31→17`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `level5=0`, `overflow=0`, `no_ko=0`, `compact-shortened fallback=0`이다. 남은 후보는 데이터성 문자열, 고정폭 날씨 라벨, 원문 포인터/빈 원문 조각, `고양이` 같은 자연어상 더 줄이기 애매한 라벨 위주다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `a85dc2be1320ed24ee949aea9a8a82be854dda39cf87d2d15a3bfa11fdc4f0ec`로 동일하다.
+- [x] 잔여 visual-width 반복 UI/짧은 대사 후보 2차 축약.
+  - `visual-wider=74` 잔여 후보 중 폭 차이 1짜리 반복 UI/대사 문구를 `TEXT_OVERRIDES` exact mapping으로 줄였다. 대표적으로 `통신 준비 중이야!!!→통신 준비 중!!!`, `정말 항복할 거야?→정말 항복할래?`, `저장하시겠습니까?→저장할까요?`, `덮어쓰시겠습니까?→덮어쓸까요?`, `그러니까,→그러니,`, `다행이야, 다행이야.→다행이야, 다행.`으로 정리했다.
+  - 단독 프로필/메뉴 라벨은 `0xDF2DEF` `새벽형`, 직접 패치 `0xA2CA50` `이름입력`으로 줄였다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `visual-wider=74→31`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `level5=0`, `overflow=0`, `no_ko=0`, `compact-shortened fallback=0`이다. 남은 후보는 데이터성 문자열, 고정폭 날씨 라벨, 원문 포인터 조각, 폭 차이 1 이하의 일부 문장 위주다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `d421888c15968448a8933c491cfa7e72882ad119d1e52a7bc98943a2cdb835a1`로 동일하다.
+- [x] 잔여 visual-width 실제 문장 후보 추가 축약.
+  - 직접 패치 span 기준 QA 보정 후 남은 `visual-wider=89` 후보 중 데이터성/고정폭 라벨을 제외하고, 실제 대사/도움말/저장 경고로 보이는 15개 행을 화면용 짧은 문장으로 고정했다. 대표적으로 `0xA040E0`은 `그중 「항복」을 고르면,`, `0xA20427`은 `혹시 일이 생기면・・・`, `0xB82FAC`은 `저장 중 전원 끄지 마`, `0xDED49B`은 `보병 외 지상군에`, `0xE10ED6`은 `「스피드」는 빨리 승리하는지를`로 줄였다.
+  - 직접 패치 행 `0xD9159E`는 `피해는 적었지`, `0xD9FE36`은 `끝으로`로 줄이고 주소 override도 같은 문구로 맞췄다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `visual-wider=89→74`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `level5=0`, `overflow=0`, `no_ko=0`, `compact-shortened fallback=0`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `533a2e6f9d44ce4ad84f8a2288b65871ddc88f73a364a436bdf191c267ab8d7c`로 동일하다.
+- [x] 직접 패치 span 기준 visual-width QA 오탐 축소.
+  - `tools/qa_text_fit.py`가 직접 패치 tuple의 byte budget은 실제 patch span으로 보면서도 visual-width 비교 원문은 시작 주소의 첫 `found_texts` 조각만 쓰고 있어, 여러 원문 조각을 한 번에 덮는 직접 패치 행이 과도하게 `visual-wider`로 잡혔다.
+  - 직접 패치 행은 patch span 안의 원문 조각들을 이어 붙인 폭과 비교하도록 `load_found_rows()`/`source_text_for_span()`을 추가했다. 이에 따라 최종 ROM 바이트 변경 없이 `qa_text_fit.py` 기준 `visual-wider=104→89`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`이다.
+  - `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 계속 `f7631460f8b1272da5662b482b59928b7de76568ac656afee9632ebf00fe7fc3`으로 동일하다.
+- [x] 튜토리얼/전투/캠페인 level1 표시 폭 잔여 0화.
+  - 남은 `qa_text_fit.py` level1 8건 중 직접 패치 tuple 7건과 긴 메뉴 결합 문자열 `0x804FD4`를 추가 정리했다. 대표적으로 `0xD98D25`는 `하나 더`, `0xA1FA8B`는 `언제든 출격 가능!`, `0xA077BC`는 `공격 범위 3~5,`, `0xA09379`는 `간접공격 유닛 중`, `0xDC5B72`는 `호위함도 잠수함도 없는 것`, `0x804FD4`는 공백을 줄인 메뉴 결합 문자열로 맞췄다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=8→0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=104`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `f7631460f8b1272da5662b482b59928b7de76568ac656afee9632ebf00fe7fc3`으로 동일하다.
+- [x] 튜토리얼/전투/캠페인 level1 표시 폭 후보 2차 정리.
+  - 남은 import-slot level1 후보 중 직접 패치가 최종 문구를 덮는 행과 데이터성 문자열을 제외하고, 실제 대사/도움말로 보이는 55개를 `ADDRESS_TEXT_OVERRIDES`에 추가 고정했다. 대표적으로 `0xDFC08E`은 `직접 공격 유닛의 공격력은 약하지만,`, `0xA2C1E8`은 `지도 제작과 쇼군 색상 설정 가능`, `0xA2C238`은 `쇼군 색상 설정 가능`, `0xDF29AA`/`0xA34C2E`는 `저장 데이터 모두 삭제.`, `0xA0E9F2`는 `강 건너 적 부대를 확인했습니다.`, `0xDF56CF`/`0xA29B95`는 `에 인접하지 않으면,`으로 줄였다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=63→8`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=104`이다. 남은 level1은 직접 패치 span 또는 데이터/메뉴 결합 문자열 중심이라 별도 경로에서 다룬다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `e2dc32d01ae7aab9c58e2a7f64a0ae5ba30b87ba9d51bb2b01992dbb2098e613`으로 동일하다.
+- [x] 튜토리얼/전투/캠페인 level1 표시 폭 후보 추가 정리.
+  - `tools/build_korean_full.py`의 `ADDRESS_TEXT_OVERRIDES`에 current QA 기준 level1/visual-width 상위 후보 36개를 추가 고정했다. 대표적으로 `0xA26340`은 `포로 적병의 말`, `0xA21C98`은 `명령대로 배치했습니다`, `0xA1F9FD`는 `그리고 선생은 공중전`, `0xA1AFFC`는 `수리 소요일입니다`, `0xA24F30`은 `함께 싸울 생각입니다`, `0xA04D58`은 `아군 도시나 본부는`으로 줄였다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=97→63`, `visual-wider=137→104`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py` ROM placeholder hit 0을 유지한다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py tools/qa_placeholder_residuals.py`, `python3 tools/phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `9aa49772e39018f71551bc963a24e11272625f0342780b8f7b1d7b0af4bb2323`로 동일하다.
+- [x] 튜토리얼/전투/캠페인 표시 폭 상위 후보 추가 정리.
+  - `qa_text_fit.py`의 visual-width 상위 후보 중 실제 대사/도움말/메뉴로 보이는 28개를 슬롯 안에서 더 짧은 화면용 문장으로 고정했다. 대표적으로 `0xD9E2E6`은 `더 자세히 알고 싶거나`, `0xD94EF2`는 `미안 지금은 여기로 이동해`, `0xDC2BC8`는 `승리 조건은 이기기 위한`, `0xDA3E38`는 `지형 방어력 4라 지키기엔`, `0xDF783B`는 `요령 알려 줄게.`로 줄였다.
+  - `0x929820`, `0x9624B8`, `0x99AD5C`, `0x9D3600`의 `보낼 지도을 선택해 주세요!!` 계열 조사 오류를 `보낼 지도를 골라요!`로 고정했다. `0xD82058`, `0xA2C644`의 도움말 작성 안내와 `0xD8215C`, `0xA2C748`의 병종/생산 거점 필요 안내도 짧은 표현으로 정리했다.
+  - 직접 패치가 최종 ROM을 덮는 행은 주소 override와 직접 패치 tuple을 함께 맞췄다. 출력 ROM 역디코드 기준 `더 자세히 알고 싶거나`, `미안 지금은 여기로 이동해`, `요령 알려 줄게.`, `보낼 지도를 골라요!`, `병종 또는 생산 거점이 필요합니다`가 의도대로 들어갔다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `level1=187→179`, `visual-wider=671→660`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`이다. `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed` 후보 40건은 계속 기호/깨진 데이터성 `same_original` 노이즈만 남았다.
+  - 재빌드와 `full/final/title_test` 산출물 동기화를 완료했다. `py_compile`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL` 잔여 카운트는 세 산출물 모두 0건이다. 세 산출물 SHA-256은 `3c1c708a6e24ec56b6768cf453bedf4c0888444eea573037e1bbf2e46a3fedec`로 동일하다.
+- [x] 보조 번역/고정 라벨 QA 커버리지 정합화.
+  - `tools/qa_japanese_residuals.py`가 빌드와 동일하게 `translation_comprehensive.csv`의 Part 2 보조 번역을 커버리지로 세도록 보정했다. `translation_for_import.csv`의 일부 깨진 `length` 필드 때문에 유효한 주소 번역까지 누락하던 문제도 수정했다.
+  - `tools/qa_text_fit.py`도 보조 번역과 3항 고정폭 라벨 패치 `(주소, 길이, 텍스트)`를 집계하도록 맞췄다. 이에 따라 실제 ROM에 이미 적용된 `색적 시 적 유닛`, `숨어서 연구 중이라면`, `레드스타 부대가`, `부상` 같은 행이 QA에서 미커버로 잡히지 않는다.
+  - Part 2 튜토리얼 조각 `0xA02D2C`의 원문 `占領が`는 다음 행 `점령 못 해` 앞에서 공백 처리되는 의도를 `ADDRESS_TEXT_OVERRIDES`에 명시했다. 최종 ROM 바이트는 기존과 동일하다.
+  - 이번 변경 후 `qa_text_fit.py` 기준 `written=19053`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=671`; `qa_japanese_residuals.py --min-score 13` candidate 0, covered `18848`, uncovered `2414`, `changed_hangul=2`다. `--min-score 8 --include-changed` 후보 40건은 기호/깨진 데이터성 `same_original` 노이즈만 남았다.
+  - 재빌드와 산출물 동기화를 완료했고 `py_compile`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `cf131a4c42adb6fc501195f212a0d657136f0eb9ee33e17dccbe7f0f5521badd`로 동일하다.
+- [x] Part 2 전투 ASCII HUD 테이블 잔여 정리.
+  - `tools/build_korean_full.py`의 공통 전투 ASCII 라벨 패치에 Part 2 HUD 테이블 잔여어를 추가해 `0xC1C118` `ATK`, `0xC1C11C` `LEFT`, `0xC1C150` `RIGHTARMY`, `0xC1C15C` `WEATHER`, `0xC1C3AC` `UNIT  C0  C1`을 각각 `공`, `좌`, `우부대`, `날씨`, `부대`로 교체했다.
+  - 기존에 같은 테이블에서 처리한 `ARMY`, `SOLD`, `WEP`, `TER`, `JEN`, `HP`, `AHP`, `DEF`와 함께, 해당 전투 HUD 표시 영역의 잔여 영어 라벨은 출력 ROM 기준 정리 완료했다.
+  - `full`, `final`, `title_test` 산출물을 다시 동기화했고, 세 ROM 모두 `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL` 잔여 카운트가 0건이다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba`, `git diff --check` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `cf131a4c42adb6fc501195f212a0d657136f0eb9ee33e17dccbe7f0f5521badd`로 동일하다.
+- [x] `에게→에` 축약 부작용 문장 추가 정리.
+  - 출력 ROM 역디코드에서 `미사일 기지를 적에 넘기지 마`, `적에 점령당하면 큰일이야`, `우리에 항복을 권하고 있음`, `다른 쇼군에 지원군을 요청할 수 있습니까`, `적에 빼앗기지 않게 하는 거야`, `상대에 정보 안 준다`처럼 `에게` 축약으로 문법이 깨진 후보를 스캔했다.
+  - 정상 부분매칭인 `적에게`, `쇼군에게`, `너에게` 등은 제외하고, 실제로 깨진 18개 행을 `기지를 적에게 넘기지 마`, `적 점령당하면 큰일이야`, `우리에게 항복을 권함`, `다른 쇼군에게 지원 요청하겠습니까`, `빼앗기지 마`, `상대에게 정보 안 준다` 등으로 고정했다.
+  - 직접 패치 행 `0xD90BDE`는 원 슬롯보다 짧게 덮어 뒤쪽 원문 조각이 남아 `어라 상대는 게는`처럼 보이던 문제를 확인하고, 패치 범위를 원 슬롯 전체로 넓혀 `어라 상대는`만 남게 했다.
+  - 재빌드 결과 `compact-shortened fallback`은 17에서 16으로 줄었고, 출력 ROM 역디코드 기준 수정 대상 행은 의도한 문장으로 들어갔다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `923cbe593223baf40b54a738934ed6c1e0a2e9e8476da046989bc81bed8cc848`로 동일하다.
+- [x] `있는/없는` 축약 부작용 문장 추가 정리.
+  - 출력 ROM 역디코드에서 `적에 공장이 있 이상`, `만만찮은 적이 되어 있 것 같네`, `적이 있 지점에`, `방심할 수 없 상대라 여겼는데`, `지형 효과도 없 지형`, `싸울 수 있 지도 케이스다`처럼 `있는/없는`이 `있/없`으로 줄며 문법이 깨진 후보를 스캔했다.
+  - `tools/build_korean_full.py`의 주소 override를 보강해 캠페인/튜토리얼/도움말 쪽 34개 행을 `적 공장이 있는 한`, `만만찮은 적이 된 듯하네`, `적 위치에`, `방심할 수 없는 상대였는데`, `지형 효과 없음`, `싸울 수 있는 지도 케이스다` 등으로 고정했다. 정상 표현인 `잘 있거라`는 제외했다.
+  - 재빌드 결과 `level1` 축약 사용은 213에서 193으로 줄었고, 출력 ROM 역디코드 기준 수정 대상 행은 의도한 문장으로 들어갔다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `248ecc2f49e851e6519cc46aea4428df3a03bb9806607d02817bbc93bc5c895e`로 동일하다.
+- [x] 조사 오류 전역 보정과 튜토리얼/캠페인 초반 축약 문장 추가 정리.
+  - `tools/build_korean_full.py`의 `encode_fit`에 바이트 길이가 변하지 않는 조사 보정 `지도을→지도를`, `지도은→지도는`을 추가해 통신/맵 편집/색적 안내 전반의 반복 문법 오류를 정리했다.
+  - 축약 규칙 때문에 깨지던 `1개 부대가 숨어 있 모양이야`, `유닛이 있지 알 수 없 지형이`, `만만찮은 적이 되어 있 모양이네`, `방심할 수 없 상대라 여겼는데`를 주소 override로 각각 `1부대가 숨어 있는 듯해`, `유닛이 있는지 모르는 지형이`, `만만찮은 적이 된 듯하네`, `방심할 수 없는 상대였는데`로 고정했다.
+  - 출력 ROM 역디코드 기준 `지도을`/`지도은`/`있모양`/`알수없지형`/`수없상대` 대상 후보는 0건이다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `69c7e08073fba4bd2e1dcb12e3b293f53c479223ccb9c2cf4c080a76daf6c354`로 동일하다.
+- [x] Part 2 유닛 설명 후반/승리 조건/통신 메뉴 문장 추가 정리.
+  - `tools/build_korean_full.py`의 `0xA33B43`~`0xA354E8` 주소 override를 보강해 `면이동할수없게된다`, `주포의탄이떨어졌을때는`, `자동으로부포로바꿔들고`, `중전차이상의힘을가지고있다`, `신형포의함선에대한`, `전투애니메이션을표시함`, `대전가능습니다`처럼 붙거나 축약 중 깨진 문장을 슬롯 안에서 정리했다.
+  - 같은 범위의 승리 조건 안내에서 반복되던 `이 지도은 ...` 문법 오류를 `7일 안에 연구소 점령이나`, `아군 본부 위에`, `적 전멸로 승리야`처럼 조건 중심 문장으로 바꿨고, 재스캔 기준 `지도은`/`대전가능습니다` 후보는 0건이다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `81c8631623ac8f974468e60163483b9fdfe203865fdc73aa478a637608e5c48d`로 동일하다.
+- [x] Part 2 유닛/무기 설명 주소 override 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 유닛 설명 구간 `0xA2C023`, `0xA31500`~`0xA33A24` 주소 override를 보강해 `강하 후 바로 행동 가능`, `보병 타입 이동 가능`, `대부분 지형 이동 가능하나`, `타이어 타입 이동 가능`, `대지 대공 공격 가능`, `대공 미사일로 헬기에`, `두 유닛 탑재 가능`, `수송함 타입 이동 가능` 등 붙거나 어색한 출력문을 슬롯 안에서 정리했다.
+  - 출력 ROM 역디코드로 대표 행을 확인했고, ASCII 숫자 fallback이 섞이던 `유닛 2기를 탑재 가능`은 한글 음절만 쓰는 `두 유닛 탑재 가능`으로 바꿨다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`, `python3 tools/phase6_basic_test.py output/game_wars_korean_title_test.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+  - 세 산출물 SHA-256은 `93bfd5c1df86e7d37a407d2651eb4fc14e9e9ec8cf7bab5a139439909da0eab2`로 동일하다.
+- [x] Part 2 캠페인 후반 제목/작전 안내 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 직접 패치 행에서 `블랙캐논 공격`, `몇 번 와도`, `레드스타 침공은 실패다`, `우리 옐로코멧 차례인가`, `적 요새 안에`, `취향은 아니지만`, `적은 없을 텐데`, `내 임무는`, `꼭 이긴다`, `우리 차례네`, `미사일섬 쟁탈전`, `스트롱랜드 선택 가능` 등 붙은 표현을 슬롯 기준으로 정리했다.
+  - `연구소 폭파까지`, `이런 이런`, `다른 곳으로`, `여러 가지`, `승리 조건`, `진입 불가`, `플레이 법`, `해상 요새 폭격`처럼 고정 슬롯을 넘는 행은 짧은 표현으로 조정하거나 기존 표기를 유지했다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 중후반 캠페인/유닛 설명 직접 스크립트 행 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 직접 패치 행에서 `싸울 때`, `맥스 부대`, `브레이크 게이지`, `이동력도 높고`, `공격력은 중전차 이상`, `미사일 발사대 공격 집중`, `사무라이 요새 선택 가능`, `주포 로켓포`, `대지미사일 탄수`, `모드 선택으로 돌아갈까?` 등 붙은 표현과 전각/숫자 주변 표현을 슬롯 기준으로 정리했다.
+  - 10바이트처럼 빡빡한 행은 `지금 상황은` 대신 `현 상황은`처럼 의미를 유지하는 짧은 표현으로 조정했고, 고정 슬롯을 넘는 `직접공격`/`간접공격은` 같은 기존 한계 행은 건드리지 않았다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 유닛 설명/CO 설명 소스 override와 작전 메뉴 화면 최신 ROM 재검증.
+  - `tools/build_korean_full.py`의 원문 기반 override에서 `보병계 유닛`, `이동력 높고`, `상대에 유리`, `연료 탄약`, `매우 강력`, `주포 사거리`, `폭탄 탄수`, `해상 유닛`, `해상 유닛 중`, `바주카병형 이동이`, `전차형 이동`, `주포 없음`, `주포 탄수`, `보병 외 지상 유닛에`, `공격력 방어력 모두`, `간접 공격 유닛` 계열 표현을 슬롯 안에서 정리했다.
+  - CO/캠페인 주소 override 일부를 `기계라면`, `무리하면 피해가 늘어`, `반드시 승리 가능해`로 정리했다.
+  - 최신 `output/game_wars_korean_full.gba`로 mGBA 하네스 상태 `temp/active_states/p2_operation_menu.ss0`를 로드해 작전 메뉴 화면을 다시 캡처했다. 결과는 `temp/current_visual_check/p2_operation_menu_after_patch.png`이며 즉시 보이는 일본어 잔여나 깨짐은 없었다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 CO 프로필/유닛 설명/전투 옵션 잔여 붙은 표현 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 CO 설명과 프로필 직접 패치 행에서 `고양이좋아`, `쥐싫어`, `높은곳싫어`, `무능한놈싫어`, `체력　조금회복`, `적　체력에　피해`, `전유닛체력`, `공격력상승`, `전투점령애니있음` 등 붙은 표현과 전각 공백을 슬롯 기준으로 정리했다.
+  - `해상유닛`, `공중유닛`, `육상유닛`, `간접공격`, `직접공격` 계열 주소 override와 유닛 설명도 가능한 범위에서 `해상 유닛`, `간접 공격`, `직접 공격`처럼 정리했다.
+  - `직접공격` 8바이트 슬롯, `간접공격은` 10바이트 슬롯, `강력한한방이` 12바이트 슬롯처럼 띄어쓰기 시 초과하는 행은 유지했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 전투 튜토리얼/브리핑/CO 설명 잔여 붙은 표현 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 전투 튜토리얼 직접 패치 행에서 체력/합류/체력 회복, 전환 키/하드 캠페인 안내, 점령 수업, 공중 유닛 브리핑, 직접/간접 공격 설명, 상태창/점령 내구도 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 정리했다.
+  - `체력10`, `체력회복`, `더할수있어`, `전유닛`, `전환키`, `하드캠페인`, `고를수있어`, `지난작전`, `두부대`, `직접공격`, `간접유닛`, `해상유닛`, `전투애니`, `점령애니`, `후회하게해주마` 등을 가능한 슬롯에서 자연스러운 띄어쓰기와 ASCII 숫자 표기로 맞췄다.
+  - `직접공격` 8바이트 슬롯과 `간접공격은` 10바이트 슬롯처럼 띄어쓰기 시 초과하는 행은 유지했다. 넓은 CO 설명 슬롯은 `전 유닛 체력`, `공격력 상승`, `높은 지위의 쇼군` 등으로 정리했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 잔여 버튼명/국가명 표기와 캠페인 초반 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼/Part 2 override 및 직접 패치 행에서 `십자버튼`, `정보키`, `방향키`, `취소키`, `다음날`, `공격범위`, 전각 숫자 표기를 슬롯 기준으로 `십자 버튼`, `정보 키`, `방향 키`, `취소 키`, `다음 날`, `공격 범위`, ASCII 숫자 표기로 정리했다.
+  - `레드스타군`, `블루문군`, `블랙홀군`, `그린어스군`, `옐로코멧군` 표기를 가능한 출력 문자열에서 `레드스타 군`, `블루문 군`, `블랙홀 군`, `그린어스 군`, `옐로코멧 군`으로 맞췄다. 8바이트 고정 슬롯인 `중립도시` 두 행은 `중립 도시`가 9바이트로 초과하므로 유지했다.
+  - 캠페인 초반 직접 패치 행에서 `쇼군 브레이크 때 2회 행동`, `캠페인 4장`, `5일까지`, 휘프 해군의 `지난 실패`, 레드스타 저지 대사, 이글/아스카 초반 국가명 대사의 전각 숫자·붙은 표현을 자연스럽게 정리했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 해상 유닛/색적/과외 메뉴/생산·점령·지형 수업 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 패치 행에서 호위함·전함·잠수함·수송선 설명, 해상 유닛 연료와 잠항 연료 설명, 색적과 시야/숲/암초/정찰차 설명, 과외 메뉴의 상황 정보·시스템·생산 설명, 기본 생산/턴 종료/점령/전투/지형 방어력 수업의 전각 숫자·전각 공백·붙은 표현을 슬롯 기준으로 재분절했다.
+  - `합쳐서 ２유닛`, `사정거리는 ２에서 ６`, `사정거리는 ３에서 ５`, `연료가 １ 줄어`, `연료가 ０`, `연료５`, `주위 ２칸`, `시야가 ５`, `１대１`, `점령７７％`, `유닛 종류가 ４종류`, `세이브`, `１쪽`, `１턴`, `３０００Ｇ`, `１０００Ｇ`, `내구 숫자가 １０`, `내구력 최대값은 ２０`, `이동력２`, `이동력은 ３인데 ２칸`, `지형 방어력은 ４`, `이동 비용１/２` 등을 ASCII 숫자와 자연스러운 띄어쓰기로 정리했다.
+  - 과외 메뉴의 저장 명령 표기는 앞선 튜토리얼과 맞춰 `저장`으로 통일했고, `항복 맵 나가기`는 `항복, 맵 나가기`로 읽히게 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 저장/점령/수리/합류/보급/헬기/대공·로켓 설명 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 후속 직접 패치 행에서 작전 저장과 시스템 명령 선택, 도시 점령과 내구도/자금 설명, 바주카병 이동과 벽 만들기, 경전차 수리와 합류, 수송차 보급/탑재/하차, 중전차/수송헬기/전투헬기, 대공전차/대공미사일/로켓포 설명의 전각 숫자·전각 공백·붙은 표현을 슬롯 기준으로 재분절했다.
+  - `가 ４대나 있어`, `점령은 최소 ２일`, `하루 １０００Ｇ씩`, `내구도는 １００이야`, `０이 되면`, `내구 ２０이면`, `체력１０`, `은 ２유닛`, `１유닛`, `다음날`, `블루문군`, `남은건`, `아군색`, `합류（유닛합치기）`, `탑재（태우기）`, `하차（내리기）`, `정보키`, `방향키`, `비행타입`, `연료２`, `연료５`, `３에서 ５칸`, `１０일`, `５일`, `２일`, `３일`, `Ｓ랭크` 등을 ASCII 숫자와 자연스러운 띄어쓰기로 정리했다.
+  - `대공미사일은 공중 유닛이야`처럼 역할이 잘못 읽히는 짧은 힌트 문장은 슬롯 안에서 `은 공중 담당이야`로 바꿔, 로켓포는 육상 담당/대공미사일은 공중 담당이라는 의미가 드러나게 했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 전투 공격/체력/턴 종료 설명 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 전투 직접 패치 행에서 보병으로 공격 명령을 고르는 설명, 공격 대상 커서와 전투 시작 안내, 유닛 체력 숫자와 선공 이점 설명, 행동하지 않은 유닛으로 마무리 공격을 하는 조언, 턴 종료/취소키 안내와 피해 입은 유닛을 피하라는 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - 유닛명과 명령명 삽입용 제어 바이트는 유지하고 주변 문자열만 정리했다.
+  - `이　`, `으로　`, `을　골라　줘`, `여기서　골라`, `적　옆`, `행동종료`, `공격상대를`, `공격상대를골라전투시작`, `이상대를골라전투시작해`, `유닛　아래`, `체력최대`, `우리쪽`, `행동안한`, `취소키로　취소`, `없었을텐데`, `남은적`, `피해받으면　공격력`, `네　승리야` 등을 `이 `, `으로 `, `을 골라 줘`, `여기서 골라`, `적 옆`, `행동 종료`, `공격 상대를`, `상대 골라 전투 시작`, `이걸 골라 전투 시작`, `유닛 아래`, `체력 최대`, `우리 쪽`, `행동 안 한`, `취소키로 취소`, `없었을 텐데`, `남은 적`, `피해받으면 공격력`, `네 승리야`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 전투/메뉴 고정폭 라벨 음악/표시 항목 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 battle/menu fixed-width NUL-padded label table에서 10바이트 슬롯 안에 들어가는 `음악　있음`, `음악　없음`, `표시안함` 라벨을 `음악 있음`, `음악 없음`, `표시 안함`으로 정리했다.
+  - 같은 테이블의 `준비중`, `접속중`, `미접속`은 6바이트 슬롯이라 공백을 추가하면 초과하므로 이번 작업에서는 유지했다.
+  - 고정폭 라벨 패치 후 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 이글 생존 반복 후일담/료 재대결/최종 자유 전투 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 이글에게 도움을 고마워하는 반복 후일담, 이글이 자신의 착각을 인정하고 료와 진심으로 다시 싸우자고 제안하는 재대결 대화, 공장과 공항에서 원하는 유닛을 생산하라는 최종 조언, 사령 체계를 인정하고 다음엔 지지 않겠다고 말하는 이글의 마무리 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `이번에야말로　이겼어`, `헬보우즈군도`, `이글!　도와줘서`, `감사할　필요없다`, `착각　때문에`, `레드스타와　싸운`, `이글과의　싸움`, `봐주질　않았으니까`, `하지만　즐거웠다`, `그래　나도다`, `네놈과는　다시`, `싸우고　싶다`, `이　승부`, `여긴...유닛이`, `어떻게　할지`, `공장과　공항`, `좋아하는　유닛`, `내가　할　말`, `또　져`, `강하군　너는`, `내　힘만은`, `사령이　명령`, `쇼군은　능력만`, `당해낼　수`, `잘　모르겠지만`, `다음엔　안진다`, `네가　생각해서`, `여기까지　온`, `다음엔　힘내` 등을 `이번에야말로 이겼어`, `헬보우즈 군도`, `이글! 도와줘서`, `감사할 필요 없다`, `착각 때문에`, `레드스타와 싸운`, `이글과의 싸움`, `봐주질 않았으니까`, `하지만 즐거웠다`, `그래, 나도`, `네놈과는 다시`, `싸우고 싶다`, `이 승부`, `여긴... 유닛이`, `어떻게 할지`, `공장과 공항`, `좋아하는 유닛`, `내가 할 말`, `또 져`, `강하군, 너는`, `내 힘만은`, `사령이 명령`, `쇼군은 능력만`, `당해낼 수`, `잘 모르겠지만`, `다음엔 안 진다`, `네가 생각해서`, `여기까지 온`, `다음엔 힘내`로 정리했다.
+  - 이번 작업으로 현재 보이는 캠페인 직접 스크립트 패치 테이블은 `0xDD1DE4`까지 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 아스카 아버지 평가/이글 생존 확인/전후 정리 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 아스카가 위급할 때 의지가 되는 아버지를 떠올리는 대화, 헬보우즈 군도 도망갈 것이라는 안도, 이글의 생존을 모프가 확인해 주는 장면, 헬보우즈가 망친 국경 복구와 전쟁 후 처리에 대한 대화의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `아빠는　평소엔`, `위급할　땐`, `아스카는　정말`, `많이　닮았구나`, `이번에야말로　이겼어`, `헬보우즈군도`, `이글은　어떻게`, `어이　모두`, `아무래도　무사`, `모프　쇼군`, `걱정없어`, `반드시　돌아와`, `어떤　때라도`, `어쨌든　정말`, `이제부터가　큰일`, `헬보우즈가　엉망`, `국경을　다시`, `전쟁도　쉽게`, `아직　안　끝난`, `심각한　것`, `모두를　만나는`, `나도　즐겁다`, `잘　알고`, `다음엔　어딘가`, `그럼　또` 등을 `아빠는 평소엔`, `위급할 땐`, `아스카는 정말`, `많이 닮았구나`, `이번에야말로 이겼어`, `헬보우즈 군도`, `이글은 어떻게`, `어이 모두`, `아무래도 무사`, `모프 쇼군`, `걱정 없어`, `반드시 돌아와`, `어떤 때라도`, `어쨌든 정말`, `이제부터가 큰일`, `헬보우즈가 엉망`, `국경을 다시`, `전쟁도 쉽게`, `아직 안 끝난`, `심각한 것`, `모두를 만나는`, `나도 즐겁다`, `잘 알고`, `다음엔 어딘가`, `그럼 또`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 호이프 정신 회복/블루문 재건/아스카 부녀 재회 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 호이프가 자신이 무엇을 했는지 깨닫는 대화, 빌리가 블루문 재건을 권하고 호이프를 다독이는 장면, 아스카와 호이프가 재회해 서로 무사함을 확인하는 후일담의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `거기　있는`, `도대체　뭘`, `그런　놈`, `풀죽지`, `호이프　나리`, `나빠진건`, `해야　할`, `그　그랬었지`, `별수없네`, `블루문에도　신세`, `함께　재건`, `용서해　주겠다는`, `빌리　너라는`, `속이는　보람`, `뭔가　말했나`, `아뇨　아무것도`, `그럼　가`, `괜찮은　거냐`, `고마워요　아버지`, `무사해서　다행`, `이　이런`, `하　하지만`, `그래도　정말`, `엄마도　늘` 등을 `거기 있는`, `도대체 뭘`, `그런 놈`, `풀 죽지`, `호이프 나리`, `나빠진 건`, `해야 할`, `그, 그랬었지`, `별수 없네`, `블루문에도 신세`, `함께 재건`, `용서해 주겠다는`, `빌리, 너라는`, `속이는 보람`, `뭔가 말했나`, `아뇨, 아무것도`, `그럼 가`, `괜찮은 거냐`, `고마워요 아버지`, `무사해서 다행`, `이, 이런`, `하, 하지만`, `그래도 정말`, `엄마도 늘`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 헬보우즈 격퇴/빌리·호이프 승리 직후 대화 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 헬보우즈가 한 걸음 남기고 패배를 인정하며 퇴각하는 대화, 빌리가 사령과 료에게 인사를 남기고 물러나는 장면, 호이프가 자신의 힘을 자랑하고 빌리가 눈 때문에 모두가 폐를 끼쳤다고 받아치는 승리 직후 대화의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `한　걸음`, `너희　힘`, `으...난　지지`, `세계　정복`, `반드시　다시`, `끝장을　내주마`, `이걸로　끝났군`, `고마워　빌리`, `말도　안　되는`, `결판　낼까`, `무서운　사람도`, `신세　졌어　고맙다`, `료에게　안부`, `봤느냐　나의`, `나를　속인`, `뼈저리게　후회`, `나리의　눈`, `큰　폐를`, `왜　그래　빌리`, `좋은날`, `말해봐라`, `악의가　없으니까`, `드디어　매듭` 등을 `한 걸음`, `너희 힘`, `으... 난 지지`, `세계 정복`, `반드시 다시`, `끝장을 내 주마`, `이걸로 끝났군`, `고마워 빌리`, `말도 안 되는`, `결판 낼까`, `무서운 사람도`, `신세 졌어. 고맙다`, `료에게 안부`, `봤느냐, 나의`, `나를 속인`, `뼈저리게 후회`, `나리의 눈`, `큰 폐를`, `왜 그래 빌리`, `좋은 날`, `말해 봐라`, `악의가 없으니까`, `드디어 매듭`으로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 호이프·모프·이글 합류/헬보우즈 본격 전투 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 호이프 쇼군이 아스카를 위해 합류하는 대화, 모프가 그린어스 쪽 상황을 정리하고 합류해 헬보우즈의 숨은 힘을 경계하는 장면, 이글 재합류와 도미노·맥스·호이프 출격 각오, 헬보우즈가 부대를 모은 것을 보고 본격 전투를 예고하는 대화와 모두 힘을 합치면 이긴다는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `이제야　눈치`, `호이프　쇼군님`, `왓...이　아저씨`, `딸에게　손댄`, `용서　못해`, `베어　버리겠다`, `모프　쇼군`, `그린어스　쪽`, `헬보우즈는　아직`, `사령　힘내자`, `호오　저놈`, `도미노　말은`, `우선　저놈`, `정말　열`, `그린어스　일`, `이　군을`, `그린어스　부대`, `내가　써도`, `널　위해`, `이걸로　나도`, `모두　간다`, `질　수는`, `내　힘`, `그자의　유품`, `복제　상대`, `방심할　순`, `진심인　헬보우즈`, `다음엔　힘내` 등을 `이제야 눈치`, `호이프 쇼군님`, `왓... 이 아저씨`, `딸에게 손댄`, `용서 못해`, `베어 버리겠다`, `모프 쇼군`, `그린어스 쪽`, `헬보우즈는 아직`, `사령 힘내자`, `호오, 저놈`, `도미노, 말은`, `우선 저놈`, `정말 열`, `그린어스 일`, `이 부대를`, `그린어스 부대`, `내가 써도`, `널 위해`, `이걸로 나도`, `모두 간다`, `질 수는`, `내 힘`, `그자의 유품`, `복제 상대`, `방심할 순`, `진심인 헬보우즈`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 흑막 확인/아스카 위험/맥스·빌리·호이프 합류 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 료 복제를 만든 흑막 확인, 빌리가 흑막의 위치와 아스카의 위험을 알리는 대화, 가까운 공장·항구 점령 후 생산하며 방어하라는 조언, 헬보우즈에게 당한 아스카와 이에 분노한 료·맥스·빌리·호이프의 합류 흐름의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `흑막인　것`, `쓰러뜨리면　내`, `사령　부탁`, `그럴　때`, `흑막　있는`, `이놈이　흑막`, `꼬리일　뿐`, `아스카가　위험`, `점령해　둬`, `등으로　나르면`, `줄어들거야`, `우리　것`, `해치워　버려`, `모두　데리고`, `훨씬　강했어`, `한건`, `용서못해`, `사령!　내가`, `군을　빌려`, `빚은　갚으마`, `이놈!　헬보우즈`, `빌리!　그놈` 등을 `흑막인 것`, `쓰러뜨리면 내`, `사령 부탁`, `그럴 때`, `흑막 있는`, `이놈이 흑막`, `꼬리일 뿐`, `아스카가 위험`, `점령해 둬`, `등으로 나르면`, `줄어들 거야`, `우리 것`, `해치워 버려`, `모두 데리고`, `훨씬 강했어`, `한 건`, `용서 못해`, `사령! 내가`, `군을 빌려`, `빚은 갚으마`, `이놈! 헬보우즈`, `빌리! 그놈`으로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 료 복제인간 등장/이글 합류/최종전 초입 수도 점령 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 이글이 료를 의심했던 일을 사과하고 복제인간의 존재를 설명하는 대화, 이글이 초록 유닛으로 합류해 적 공중 유닛을 맡는 흐름, 도미노·맥스 선택 시 반복되는 복제 설명과 사과 대화, 이글이 시간을 버는 동안 적 수도를 점령하라는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `지금까지　의심`, `복제인간　같아`, `그린어스를　비롯해`, `여러　나라`, `초록　유닛`, `공중유닛`, `박살내　주마`, `시간　버는`, `점령해　버려`, `도미노　쇼군`, `뭐야　료가`, `이글!　설명해`, `아　그래`, `덤벼들었다는　거네`, `자　잠깐만`, `네놈...맥스라고　했겠다`, `그래　료의`, `나쁜　짓`, `꾸물거릴`, `시간　없잖아`, `싸움뒤`, `힘　안　합치면`, `다음엔　힘내` 등을 `지금까지 의심`, `복제인간 같아`, `그린어스를 비롯해`, `여러 나라`, `초록 유닛`, `공중 유닛`, `박살 내 주마`, `시간을 버는`, `점령해 버려`, `도미노 쇼군`, `뭐야 료가`, `이글! 설명해`, `아, 그래`, `덤벼들었다는 거네`, `자, 잠깐만`, `네놈...맥스라고 했겠다`, `그래, 료의`, `나쁜 짓`, `꾸물거릴`, `시간 없잖아`, `싸움 뒤`, `힘 안 합치면`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 정찰부대 구출/도미노 선배 언급/보병 수송 경로 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 그린어스 정찰 부대 구출과 8일 생존 조건, 캐서린 사령관에게만 달라지는 도미노의 태도와 학교 선배 언급, 모프가 아스카 일행의 움직임을 감추기 위해 싸웠다는 설명, 보병을 수송헬기·호위함 조합으로 안전하게 나르는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `곤란한　일`, `정찰부대`, `전멸할　것`, `구해　내면`, `꼭　지켜줘`, `8일　버티면`, `캐서린　사령관`, `벼　별거`, `그　사람`, `자　작전`, `못　도망칠`, `이글　일`, `모프　사령관`, `아스카일행`, `떠날　수`, `말　안　해도`, `나를　수`, `다음엔　힘내` 등을 `곤란한 일`, `정찰 부대`, `전멸할 것`, `구해 내면`, `꼭 지켜줘`, `8일 버티면`, `캐서린 사령관`, `벼, 별거`, `그 사람`, `자 작전`, `못 도망칠`, `이글 일`, `모프 사령관`, `아스카 일행`, `떠날 수`, `말 안 해도`, `나를 수`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 도미노 대 이글 반복 대면/료 오해 해소/항공 유닛 격파 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 도미노가 이글의 재공격 이유를 묻고 료를 대신해 맞서는 대화, 이글이 그린어스 습격 당시 료의 얼굴을 기억한다고 주장하는 장면, 도미노의 반박으로 오해가 일부 풀리는 흐름, 대공전차·대공 미사일로 폭격기와 전투헬기를 우선 격파하라는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `왜　또　습격`, `도미노사령`, `료를　불러줘`, `결판을　내겠다`, `도미노　쇼군`, `한　순간도`, `이놈!　이글`, `료가　그런`, `할　리가`, `태평함이　옷`, `걸어　다니는`, `지성의　조각도`, `아무　생각`, `심한　말`, `브레이크를　쓰기`, `적　유닛`, `대공미사일`, `다음엔　힘내`, `캐서린사령관` 등을 `왜 또 습격`, `도미노 사령`, `료를 불러줘`, `결판을 내겠다`, `도미노 쇼군`, `한순간도`, `이놈! 이글`, `료가 그런`, `할 리가`, `태평함이 옷`, `걸어 다니는`, `지성의 조각도`, `아무 생각`, `심한 말`, `브레이크를 쓰기`, `적 유닛`, `대공 미사일`, `다음엔 힘내`, `캐서린 사령관`으로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 도미노 수송선 보호/탑승 유닛 피해 없음 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캐서린이 도미노에게 수송선 2유닛을 지키라고 지시하는 임무 설명, 도미노의 태도 변화에 대한 료의 반응, 이글의 수송선 침몰 목표, 수송선 탑승 유닛에는 모프 쇼군 브레이크 피해가 없다는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `님　도미노`, `캐서린사령관`, `사용할　유닛`, `수송선이　당하지`, `수송선이　당하면`, `둘　다`, `임무에　들어갑니다`, `캐서린　때만`, `아깝지않나`, `얌전히　있자`, `수송선을　침몰`, `쇼군브레이크`, `탑승한　유닛`, `피해가　없는`, `피해　없이`, `상대　진지`, `다음엔　힘내` 등을 `님 도미노`, `캐서린 사령관`, `사용할 유닛`, `수송선이 당하지`, `수송선이 당하면`, `둘 다`, `임무에 들어갑니다`, `캐서린 때만`, `아깝지 않나`, `얌전히 있자`, `수송선을 침몰`, `쇼군 브레이크`, `탑승한 유닛`, `피해가 없는`, `피해 없이`, `상대 진지`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 그린어스 반복 진입/15거점 점령/수송선 하차 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 그린어스 반복 진입 대화, 모프 쇼군의 해상 유닛 강점 설명, 15거점 점령 조건, 수송선으로 육상 유닛을 중앙에 내려야 하는 조언, 하차 시 전함/경전차 공격 범위 주의, 15거점 패배 후 쇼군 브레이크 대응 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `옐로코멧에　이어`, `지나가려던　것뿐`, `해상유닛`, `앞으로　나아가려면`, `１５거점`, `확인해야　겠어`, `해　볼만해`, `육상유닛`, `공격범위`, `내리자마자　공격`, `이번엔　내가`, `그린어스　쇼군`, `쇼군브레이크`, `쇼군을　료로`, `다음엔　힘내` 등을 `옐로코멧에 이어`, `지나가려던 것뿐`, `해상 유닛`, `앞으로 나아가려면`, `15거점`, `확인해야겠어`, `해 볼 만해`, `육상 유닛`, `공격 범위`, `내리자마자 공격`, `이번엔 내가`, `그린어스 쇼군`, `쇼군 브레이크`, `쇼군을 료로`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 해상 유닛/수송선 보호/보급·잠수함 유지 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 모프의 해상 유닛 맵과 수송선 보호 조건, 모프가 싸움을 건 이유와 배후 설명 반복, 그린어스를 떠날 수 없다는 사정, 해상 유닛 연료·탄약 보급과 잠수함 잠수 유지 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `해상유닛`, `보기만　해도`, `모프　쇼군`, `도전해　오는`, `그럴　순`, `수송선이　당하면`, `맵으로　맞서`, `진심으로　싸워야`, `이글　일`, `우리에게　싸움`, `이　싸움`, `끌어내려　했어`, `들키지　않게`, `적　눈`, `떠날　수`, `말　안　해도`, `육상유닛`, `그럴땐`, `이　잠수만`, `침몰하지　않아` 등을 `해상 유닛`, `보기만 해도`, `모프 쇼군`, `도전해 오는`, `그럴 순`, `수송선이 당하면`, `맵으로 맞서`, `진심으로 싸워야`, `이글 일`, `우리에게 싸움`, `이 싸움`, `끌어내려 했어`, `들키지 않게`, `적 눈`, `떠날 수`, `말 안 해도`, `육상 유닛`, `그럴 땐`, `이 잠수만`, `침몰하지 않아`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 시간 제한 색적 맵 조언/이글 반복 대화/항공 유닛 격추 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 15일 제한 전멸전 실패 후 색적 맵처럼 시야 넓은 유닛을 앞세우라는 조언, 이글과의 반복 대면, 료가 그린어스를 습격했다는 오해, 대공전차와 대공 미사일로 항공 유닛을 먼저 줄이라는 반복 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `시간제한`, `모프에겐　이길`, `시야　넓은`, `색적맵`, `진행하는　게`, `이　부대`, `정면승부`, `대답해봐`, `왜　우리...료`, `한　순간도`, `아무　생각`, `이유　없이`, `쇼군브레이크`, `적　유닛`, `대공미사일`, `다음엔　힘내` 등을 `시간 제한`, `모프에겐 이길`, `시야 넓은`, `색적 맵`, `진행하는 게`, `이 부대`, `정면 승부`, `대답해 봐`, `왜 우리... 료`, `한순간도`, `아무 생각`, `이유 없이`, `쇼군 브레이크`, `적 유닛`, `대공 미사일`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 그린어스 진입/맥스 정면승부/15일 제한 전멸전 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 그린어스 진입 직후 공격받는 대화, 모프 쇼군의 해상 유닛 강점 반복 설명, 맥스 정면 승부 출격, 모프 쇼군 브레이크 대응 조언, 그린어스 대부대 접근과 15일 제한 전멸전 조건의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `옐로코멧에　이어`, `지나가려던　것뿐`, `해상유닛`, `정면승부`, `전멸시키면　승리`, `그　일`, `쇼군브레이크`, `브레이크　당하기`, `적　주력`, `쇼군을　료로`, `１５일`, `시간제한`, `대부대로　상대`, `시간만　끌면`, `그럼　가　볼까` 등을 `옐로코멧에 이어`, `지나가려던 것뿐`, `해상 유닛`, `정면 승부`, `전멸시키면 승리`, `그 일`, `쇼군 브레이크`, `브레이크 당하기`, `적 주력`, `쇼군을 료로`, `15일`, `시간 제한`, `대부대로 상대`, `시간만 끌면`, `그럼 가 볼까`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 숨은 중요 물자 수송선/암초·잠수함 탐색 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캐서린의 숨은 중요 물자 수송선 격파 지시, 모프가 이글 일에 정신이 팔려 방심한 대화, 배후 인물과 아스카·빌리의 움직임 설명, 암초에 숨은 수송선 탐색과 잠수함 2유닛 활용 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `중요물자`, `숨어　있어`, `찾아내　격파`, `격파하면　되는`, `모프　쇼군`, `숨겨　뒀을`, `정신　팔려서`, `공격당할　줄`, `싸움을　건`, `이　싸움`, `아스카와　빌리`, `들키지　않게`, `적　눈`, `준비되는　대로`, `２유닛`, `찾아보는　게`, `다음엔　힘내` 등을 `중요 물자`, `숨어 있어`, `찾아내 격파`, `격파하면 되는`, `모프 쇼군`, `숨겨 뒀을`, `정신 팔려서`, `공격당할 줄`, `싸움을 건`, `이 싸움`, `아스카와 빌리`, `들키지 않게`, `적 눈`, `준비되는 대로`, `2유닛`, `찾아보는 게`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 이글 3차전/그린어스 습격 오해/항공 유닛 격추 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 이글 3차전 직전 료가 공격 이유를 묻는 대화, 모프의 말 때문에 이글이 료를 의심하는 장면, 그린어스 습격 오해 해소, 쇼군 브레이크 전 적 항공 유닛을 줄이라는 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `３번째`, `결판을　내야`, `료가　진지한`, `오해한　거`, `대답해봐`, `습격한걸`, `말　못　해`, `한　순간도`, `말도　안　돼`, `신경　쓰이니`, `의심은　남아`, `쇼군브레이크`, `적　유닛`, `대공미사일`, `다음엔　힘내` 등을 `3번째`, `결판을 내야`, `료가 진지한`, `오해한 거`, `대답해 봐`, `습격한 걸`, `말 못 해`, `한순간도`, `말도 안 돼`, `신경 쓰이니`, `의심은 남아`, `쇼군 브레이크`, `적 유닛`, `대공 미사일`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 대공미사일 방어/10일 생존/수송선·암초 이동 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 모프에게 당한 뒤 대공 미사일을 10일 동안 지키는 임무 설명, 모프의 대공 미사일 격파 목표, 캐서린 증원 후 모프 퇴각, 수도 근처 위험과 수송선·암초·정찰차·잠수함 활용 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `대공미사일`, `전함부대`, `당하고　말　거야`, `신경　쓰지　마`, `지켜　주면`, `우리　승리야`, `모프　쇼군`, `더　덤빈다면`, `캐서린　쇼군　부대`, `도망이　상책`, `수도　근처`, `지도　아래쪽`, `지도　위쪽`, `암초에　숨으면서`, `가면　더　안전해`, `다음엔　힘내` 등을 `대공 미사일`, `전함 부대`, `당하고 말 거야`, `신경 쓰지 마`, `지켜 주면`, `우리 승리야`, `모프 쇼군`, `더 덤빈다면`, `캐서린 쇼군 부대`, `도망이 상책`, `수도 근처`, `지도 아래쪽`, `지도 위쪽`, `암초에 숨으면서`, `가면 더 안전해`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 모프 침공/12거점 점령 조건/쇼군 브레이크 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 수송 위치 변경 조언, 파라파라 요새 모프 침공, 12거점 선점 조건, 모프 쇼군의 해상 유닛 강점 소개, 모프 패배 후 쇼군 브레이크 대응 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `육상유닛`, `그린어스군`, `모프　쇼군`, `빨리　상대보다`, `１２거점`, `점령　가능　유닛`, `해상유닛`, `확인하고　싶은`, `쇼군브레이크`, `체력이　회복`, `다음엔　힘내` 등을 `육상 유닛`, `그린어스군`, `모프 쇼군`, `빨리 상대보다`, `12거점`, `점령 가능 유닛`, `해상 유닛`, `확인하고 싶은`, `쇼군 브레이크`, `체력이 회복`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 아스카 자백 추궁/료 능력 평가/동료 선택 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 도미노가 아스카에게 공격 이유를 묻는 장면, 아스카의 료 능력 평가, 사령에게 상황별 동료 선택을 맡기라는 조언, 앞으로의 강적 예고와 아스카 퇴장 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `자　자백하게`, `공격해　온`, `그전에　료`, `강한　점`, `쓰기　쉽다고`, `부족한　부분`, `도와줄　테고`, `골라　달라고`, `못　쓰러뜨릴`, `무시하지　마`, `싸우게　될`, `신경　쓰지`, `그럼　또　봐`, `기　기다려` 등을 `자 자백하게`, `공격해 온`, `그전에 료`, `강한 점`, `쓰기 쉽다고`, `부족한 부분`, `도와줄 테고`, `골라 달라고`, `못 쓰러뜨릴`, `무시하지 마`, `싸우게 될`, `신경 쓰지`, `그럼 또 봐`, `기 기다려`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 료·도미노 대 아스카 직전 대화 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 아스카와의 대전 직전 반응, 초코 유인 사건을 두고 도미노가 화내는 대화, 마지막 전투 직전 료와 도미노의 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `아스카와　대전`, `내키지　않네`, `초코를　줘서`, `화낼거야`, `고생한　줄`, `가만두지　않을`, `료　네　힘`, `아스카　말인데`, `얘기만　나오면`, `엄청　무서워`, `여기서　지면`, `들을지　몰라` 등을 `아스카와 대전`, `내키지 않네`, `초코를 줘서`, `화낼 거야`, `고생한 줄`, `가만두지 않을`, `료 네 힘`, `아스카 말인데`, `얘기만 나오면`, `엄청 무서워`, `여기서 지면`, `들을지 몰라`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 아스카 도미노 능력 평가/료 유인/16거점 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 아스카의 도미노 기본 능력/직접 공격 평가, 보병 수송을 통한 수도 점령 전법, 아스카가 료를 초코로 유인한 장면, 16거점 선점 패배 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `예전보다　훨씬`, `기본　능력`, `직접공격`, `전투맵`, `말　못　해`, `초코줄게`, `곧　깨어날`, `１６거점`, `도시가７개`, `９곳`, `맵　가운데`, `다음엔　힘내` 등을 `예전보다 훨씬`, `기본 능력`, `직접 공격`, `전투 맵`, `말 못 해`, `초코 줄게`, `곧 깨어날`, `16거점`, `도시가 7개`, `9곳`, `맵 가운데`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 빌리·아스카·휘프 추적 대화 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 빌리의 휘프 추적 실패 보고, 휘프가 버려진 듯하다는 대사, 아스카의 레드스타 조사 의지, 빌리의 재출발 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `휩`, `뭔가　찾았어`, `영　아니야`, `나리　뒤`, `나리　자체`, `정신　차리면`, `너　좀`, `원망할　거야`, `레드스타　녀석`, `조사해야　할`, `할　말`, `또　다녀올게`, `응　부탁해` 등을 `휘프`, `뭔가 찾았어`, `영 아니야`, `나리 뒤`, `나리 자체`, `정신 차리면`, `너 좀`, `원망할 거야`, `레드스타 녀석`, `조사해야 할`, `할 말`, `또 다녀올게`, `응 부탁해`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 도미노/아스카 색적·수송선 보호/점령 승부 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 도미노가 아스카에게 당한 뒤 사령 상태를 확인하는 대화, 색적 맵과 수송선 보호 안내, 육상 유닛 수송 실패 위험, 암초 은폐 이동, 도미노의 보병/바주카병 특기와 점령 승부 자신감 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `또　그　애한테`, `아무　일`, `안이어져서`, `육상유닛`, `못　나르면`, `암초에　숨으며`, `특기란　걸`, `잊었나봐`, `점령승부`, `기다리고　있어` 등을 `또 그 애한테`, `아무 일`, `안 이어져서`, `육상 유닛`, `못 나르면`, `암초에 숨으며`, `특기란 걸`, `잊었나 봐`, `점령 승부`, `기다리고 있어`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 맥스 단독/아스카 전술 평가/수면제 함정 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 료·도미노 실종과 옐로코멧 함정, 아스카의 맥스 전술 평가, 간접 공격 약점과 직접 공격 보완 설명, 유리한 지형 유도 조언, 아스카 소개와 수면제 함정, 숲 은폐 이동 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `안　보이잖아`, `구경해　볼게`, `간접공격`, `직접공격`, `공격을　집중시킬　수`, `한　번밖에`, `잠들어줘`, `숨겨뒀네`, `숲에　숨어`, `피할　수`, `다음엔　힘내` 등을 `안 보이잖아`, `구경해 볼게`, `간접 공격`, `직접 공격`, `공격을 집중시킬 수`, `한 번밖에`, `잠들어 줘`, `숨겨 뒀네`, `숲에 숨어`, `피할 수`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 키쿠치요 포위전/공장·공항·항구 안내/15거점 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 키쿠치요 부대 포위전, 거점 점령 승리 조건, 공장/공항/항구 생산·보충 설명, 쓸모없는 공장 위치 판단, 키쿠치요 공장 배치 실수와 딸의 지적, 15거점 패배 후 적 공장 무시/다른 섬 도시 점령 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공중유닛`, `해상유닛`, `육상유닛`, `피해　받은`, `문제　없어`, `잘　봐`, `아무　쓸모`, `１５거점`, `공격해　오는`, `둬　주었다`, `도움　되지`, `안돼`, `놓을　장소`, `점령당했어`, `다음엔　힘내` 등을 `공중 유닛`, `해상 유닛`, `육상 유닛`, `피해받은`, `문제없어`, `잘 봐`, `아무 쓸모없어`, `15거점`, `공격해 오는`, `둬 주었다`, `도움 되지`, `안 돼`, `놓을 장소`, `점령당했어`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 10장/공장 사용 안내/다리 방어 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캠페인 10장 안내, 유닛 부족과 공장 제공 대화, 맥스/도미노의 공장 사용 반응, 적 증원/퇴각 반응, 다리 이쪽 방어와 중전차 벽/간접 공격 유닛 피해 조언, 중립 도시 수입 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `１０장`, `준비　못　했어`, `공장　사용　허가`, `특기유닛`, `공장　사용법`, `말　안　해도`, `다름　없잖아`, `오지　못하게`, `간접공격유닛`, `중립　도시`, `돈이　들어와`, `다음엔　힘내` 등을 `10장`, `준비 못 했어`, `공장 사용 허가`, `특기 유닛`, `공장 사용법`, `말 안 해도`, `다름없잖아`, `오지 못하게`, `간접 공격 유닛`, `중립 도시`, `돈이 들어와`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 옐로코멧/키쿠치요 특전부대/간접 공격 유닛 처리 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 옐로코멧 진입 전 키쿠치요 특전부대 조우, 특전부대 성능/비용 설명, 키쿠치요 능력 평가, 도미노 출격 대화, 키쿠치요 패배 반응, 간접 공격 유닛 처리와 산 너머 방어 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `키쿠치요특전부대`, `들켜　버렸네`, `돈이　비싸대`, `들은　적`, `능력덕이래`, `안　져`, `출격하고　싶었어`, `잘　살려줘`, `필승의　내　부대`, `간접공격유닛`, `공격해　오겠지만`, `버텨　내줘`, `다음엔　힘내` 등을 `키쿠치요 특전부대`, `들켜 버렸네`, `돈이 비싸대`, `들은 적`, `능력 덕이래`, `안 져`, `출격하고 싶었어`, `잘 살려 줘`, `필승의 내 부대`, `간접 공격 유닛`, `공격해 오겠지만`, `버텨 내줘`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 그린어스 공중부대/이글 도입/폭격기 우선 격추 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 그린어스 독립 공중 부대 소개, 도미노/료의 공중전 경험 대화, 이글 첫 대면과 도미노/맥스 조합별 반복 패배 반응, 사령 언급, 폭격기 우선 격추 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공중부대`, `특수부대`, `공격　받았어`, `다시　봤어`, `료　따위`, `못　알아보다니`, `직접공격력`, `직접공격`, `쇼군브레이크`, `보낸다곤　아무도`, `가　버렸나`, `다음엔　힘내` 등을 `공중 부대`, `특수 부대`, `공격받았어`, `다시 봤어`, `료 따위`, `못 알아보다니`, `직접 공격력`, `직접 공격`, `쇼군 브레이크`, `보낸다곤 아무도`, `가 버렸나`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 숲/암초 매복/빌리·캐서린 대화/수송선 반복 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 숲과 암초에 숨은 간접 공격 유닛 경계, 빌리의 수송선 표적화, 블루문 이탈 이유 추궁, 캐서린과 빌리의 재회 대화, 수송선/잠수함 반복 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `간접공격유닛`, `가는　게`, `내키진　않지만`, `상대해　볼까`, `육상유닛`, `운반　못하게`, `말해봐`, `가　버린`, `비켜줄래`, `잘해봐`, `봐둬`, `받을　일은`, `다음엔　힘내` 등을 `간접 공격 유닛`, `가는 게`, `내키진 않지만`, `상대해 볼까`, `육상 유닛`, `운반 못 하게`, `말해 봐`, `가 버린`, `비켜 줄래`, `잘해 봐`, `봐 둬`, `받을 일은`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 휘프 중요 거점/12거점 점령 조건/눈 맵 반복 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캐서린의 휘프 중요 거점 안내, 12거점 선점 승리 조건, 공장/수도 포함 조건, 눈 맵 반응, 휘프 재패배와 빌리 명령, 12거점 패배 후 도시/공장 위치 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `휩`, `무슨　일`, `중요한　곳`, `움직일　수`, `점령한　쪽`, `１２거점`, `착각한거야`, `클리어하는　게`, `져　버렸다`, `군도　거의`, `점령당하고　말았어`, `１１개`, `강　건너편`, `다음엔　힘내` 등을 `휘프`, `무슨 일`, `중요한 곳`, `움직일 수`, `점령한 쪽`, `12거점`, `착각한 거야`, `클리어하는 게`, `져 버렸다`, `병력도 거의`, `점령당하고 말았어`, `11개`, `강 건너편`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 색적 맵 반복/빌리 숲 매복 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 색적 맵 반복 설명, 정찰차 전진/취약성, 숲 은폐 이동, 숲속 매복 주의, 빌리 재등장/블루문 언급, 빌리 숲속 유닛 은폐 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `색적　맵`, `모르는　거야`, `시야가　나쁜`, `보내　보면서`, `당해　버려`, `숲에　숨으며`, `안　보이는`, `안보인다`, `숨겨　두고`, `숨어　있나`, `가는　게`, `다음엔　힘내` 등을 `색적 맵`, `모르는 거야`, `시야가 나쁜`, `보내 보면서`, `당해 버려`, `숲에 숨으며`, `안 보이는`, `안 보인다`, `숨겨 두고`, `숨어 있나`, `가는 게`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 맥스 전함/간접 공격/쇼군 능력 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캠페인 ４장 반복 안내, 맥스 재등장, 료가 나설 필요 없다는 대사, 전함 편성 과시, 호위함/잠수함 부재 지적, 전함 화력 대사, 간접 공격 약점과 짧은 사거리 언급, 캐서린의 평가, 맥스와 료의 협력, 쇼군별 능력 차이와 다른 쇼군 사용 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `맥스 벌써`, `내가 온 이상`, `한 사람의 쇼군`, `전함 수`, `없는것`, `못 줬을 거야`, `간접공격`, `맞는 말이야`, `사거리까지 짧으니`, `할수있어`, `잘해 줬어`, `힘내자 료`, `맥스에게 달린 것`, `쇼군마다`, `다음엔 힘내` 등을 `맥스 벌써`, `내가 온 이상`, `한 사람의 쇼군`, `전함 수`, `없는 것`, `못 줬을 거야`, `간접 공격`, `맞는 말이야`, `사거리까지 짧으니`, `할 수 있어`, `잘해 줬어`, `힘내자 료`, `맥스에게 달린 것`, `쇼군마다`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 눈 이동력/휘프 재패배/수송선 보호 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 눈으로 인한 이동력 저하 대화, 뭉쳐 이동하는 안전성, 플레이어 눈 취향 반응, 휘프 재패배 반복 대사, 레드스타군 저지 명령, 빌리의 추적 암시, 수송선 보호 중요성, 잠수함 잠수 정찰과 잠수 중 안전 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `휩`, `눈좋아`, `이동력이 뚝`, `뜻대로 못 움직이면`, `뭉쳐 있으면`, `알 수 없는`, `져 버렸다`, `레드스타군을 막는 거다`, `병력도 거의`, `그 정도는 기합으로`, `육상유닛`, `운반할 수`, `잠수시켜`, `봐둬`, `받을 일은 없어`, `다음엔 힘내` 등을 `휘프`, `눈 좋아`, `이동력이 뚝`, `뜻대로 못 움직이면`, `뭉쳐 있으면`, `알 수 없는`, `져 버렸다`, `레드스타군을 막는 거다`, `병력도 거의`, `그 정도는 기합으로`, `육상 유닛`, `운반할 수`, `잠수시켜`, `봐 둬`, `받을 일은 없어`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 색적 맵/휘프 해군/해상전 우회 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 색적 맵 설명, 정찰차 시야와 경전차 보호 안내, 휘프해군 등장/재패배 대사, 해상 유닛 배치 문제, 레드스타군 저지 명령, 빌리의 추적 암시, 휘프해군터보 재전, 맵 위쪽 우회와 수도 점령 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `색적 맵`, `필요 없겠네`, `어쩔 수 없군`, `정찰차 같은 걸`, `지켜 주는 걸 잊지마`, `휩해군`, `해상유닛`, `공격 못 하는데요`, `박살내 주마`, `안 듣는군`, `져 버렸다`, `면목이 없다`, `기합으로 어떻게든 해`, `상대 안 하고`, `다음엔 힘내` 등을 `색적 맵`, `필요 없겠네`, `어쩔 수 없군`, `정찰차 같은 걸`, `지켜 주는 걸 잊지 마`, `휘프해군`, `해상 유닛`, `공격 못 하는데요`, `박살 내 주마`, `안 듣는군`, `져 버렸다`, `면목이 없다`, `기합으로 어떻게든 해`, `상대 안 하고`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 맥스 도입/공장·항구/휘프 해상전/포위 대응 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 캠페인 ４장 임시 안내, 맥스와 료의 공장·항구 사용 대사, 해상 유닛 생산 설명, 휘프 부대 편성과 잠수함 잠수 대응, 수송선 수도 점령 힌트, 맥스 포위 상황, 간접 공격 약점 지적, 빌리와 료의 후속 대사, 수도 방어/５일 버티기 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `해상유닛`, `안돼`, `부대 수`, `잠수하면`, `손쓸 수`, `공격하고 또 공격`, `해 볼테냐`, `어른답지 못하네`, `휩`, `공격받을 일`, `쓰러뜨리면`, `다음엔 힘내`, `간접공격`, `간접공격유닛`, `전부대`, `어떻게든 버텨` 등을 `해상 유닛`, `안 돼`, `부대 수`, `잠수하면`, `손쓸 수`, `공격하고 또 공격`, `해 볼 테냐`, `어른답지 못하네`, `휘프`, `공격받을 일`, `쓰러뜨리면`, `다음엔 힘내`, `간접 공격`, `간접 공격 유닛`, `전 부대`, `어떻게든 버텨`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 그린어스 조우/공중 유닛/２회 행동 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 그린어스군 조우, 공장 활용 요청, 공중 부대 경고, 공격 후 늦은 무전 대사, 그린어스 쇼군의 료 인식/재전 예고, 쇼군 브레이크 ２회 행동 대응, 적 브레이크 게이지와 주력 유닛 처리, 대공전차/대공미사일 활용 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `이런 곳엔 적이`, `없다고 했잖아`, `그런가 봐`, `조사해 볼게`, `버텨줘`, `그린어스군`, `공중부대`, `공중유닛`, `공격 받았구나`, `까불지마`, `못 해`, `시치미 뗄 셈`, `쇼군브레이크`, `브레이크게이지`, `주력유닛`, `로 쓰러뜨려`, `다음엔 힘내` 등을 `이런 곳엔 적이`, `없다고 했잖아`, `그런가 봐`, `조사해 볼게`, `버텨 줘`, `그린어스군`, `공중 부대`, `공중 유닛`, `공격받았구나`, `까불지 마`, `못 해`, `시치미 뗄 셈`, `쇼군 브레이크`, `브레이크 게이지`, `주력 유닛`, `로 쓰러뜨려`, `다음엔 힘내`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 얀 후속/공장 생산/빌리 간접 공격 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 얀 패배 후 정체 대사, 레드스타 사령 언급, 휘프 쇼군 브레이크와 눈 이동 패널티 안내, 공장 사용 허가/생산 방법/자금과 대기 설명, 빌리의 간접 공격 특기와 브레이크 중 사거리 강화, 빌리 대면/재전 조언의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `또 졌다`, `네놈들 이름`, `레드스타에 있었을 때`, `없었을 텐데`, `휩의 쇼군브레이크`, `눈이 내리기 시작하면`, `십자버튼`, `잘 굴려봐`, `잊지마`, `큰 일이야`, `간접공격`, `브레이크게이지`, `직접공격유닛`, `얼마안됐지`, `요,용건은`, `캐서린 당황했네` 등을 `또 졌다`, `네놈들 이름`, `레드스타에 있었을 때`, `없었을 텐데`, `휘프의 쇼군 브레이크`, `눈이 내리기 시작하면`, `십자 버튼`, `잘 굴려 봐`, `잊지 마`, `큰 일이야`, `간접 공격`, `브레이크 게이지`, `직접 공격 유닛`, `얼마 안 됐지`, `요, 용건은`, `캐서린 당황했네`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 캠페인 첫 전투 무전/쇼군 브레이크 조언 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 캠페인 직접 스크립트 패치 행에서 첫 무전 호출, 료의 첫 실전 대사, 캐서린의 승리 조건/작전 메뉴 설명, 쇼군 브레이크와 브레이크 게이지 설명, 브레이크 사용 타이밍, 전 부대 수리/강화 안내, 플레이어 호칭 조각의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `님 료`, `전할 게`, `무전기로 연락할게`, `쇼군브레이크`, `브레이크게이지`, `승리조건`, `맵메뉴`, `봐 두면`, `쓸만한`, `님 잘 부탁해`, `전부대`, `쓸 타이밍`, `어쩔 수 없네`, `맡겨 두면`, `어떻게든 되겠지`, `님 당신에게 전부` 등을 `님, 료`, `전할 게`, `무전기로 연락할게`, `쇼군 브레이크`, `브레이크 게이지`, `승리 조건`, `맵 메뉴`, `봐 두면`, `쓸 만한`, `님, 잘 부탁해`, `전 부대`, `쓸 타이밍`, `어쩔 수 없네`, `맡겨 두면`, `어떻게든 되겠지`, `님, 당신에게 전부`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 지형 과외/공격 전략 연장 수업 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 진입손실 설명, 수도 점령 승리 조건, 집중 공격/반격 피해 안내, 공격력과 유닛 수, 주요 지형별 방어력/이동 비용, 도로/다리/산/강/수도 설명, 공격 상대 선택, 공격과 전략２ 도입, 워즈 사관학교 안내, 생산 중요성/전멸 패배 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `진입손실이라고 해`, `집중 공격해`, `수도점령`, `골라볼래`, `주의할 건`, `같은 조건이면 공격 쪽이`, `１０명으로 행동해`, `방어력이 아주 높은`, `대군으로 소수를`, `평원 자주`, `차량계 비용`, `숲이 많은 맵`, `도로와 같아`, `다리`, `강`, `상대 선택`, `공격 상대 선택`, `공격과 전략`, `어서와`, `전멸해 버리면` 등을 `진입손실이라고 해`, `집중 공격해`, `수도 점령`, `골라 볼래`, `주의할 건`, `같은 조건이면 공격 쪽이`, `１０명으로 행동해`, `방어력이 아주 높은`, `대군으로 소수를`, `평원 자주`, `차량계 비용`, `숲이 많은 맵`, `도로와 같아`, `다리`, `강`, `상대 선택`, `공격 상대 선택`, `공격과 전략`, `어서 와`, `전멸해 버리면`으로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 전투 기본/지형 방어력 수업 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 전투 수업 도입, 승리 조건, 공격 연습, 대상 선택 커서, 대기/턴 종료 명령, 같은 유닛끼리의 전투와 수량 우위, 이동 비용, 지형 방어력, 유리한 지형 선택, 지형 과외 수업 해금 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공격 연습을 해볼까`, `골라줄래`, `보내줘`, `골라봐`, `행동 종료`, `한번`, `붙어있는`, `가줄래`, `해줄래`, `턴 종료`, `받아버렸지`, `주목해봐`, `빠져있지`, `예를들면`, `해버리면`, `지형에 대해`, `공격과 전략２`, `들어준`, `와줘`, `가르쳐 줄 수 있어` 등을 `공격 연습을 해 볼까`, `골라 줄래`, `보내 줘`, `골라 봐`, `행동 종료`, `한 번`, `붙어 있는`, `가 줄래`, `해 줄래`, `턴 종료`, `받아 버렸지`, `주목해 봐`, `빠져 있지`, `예로는`, `해 버리면`, `지형에 대해`, `공격과 전략２`, `들어 준`, `와 줘`, `가르쳐 줄 수 있어`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 생산 유닛 이동/점령/수입 설명 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 생산한 유닛 선택/이동, 이동 범위와 대기 명령, 점령 ２턴 설명, 점령 중단 주의, 수입 계산, 행동 메뉴 호출, 거점 색상/중립 도시 설명, 적 거점 점령과 수입 차단 힌트, 내구력 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `아까 만든`, `움직여 보자`, `거긴 아니야`, `유닛 선택`, `범위 안`, `이동만 할 때`, `골라봐`, `골라줘`, `최소２턴`, `세워두는`, `턴 종료`, `해줘`, `행동 메뉴`, `중립도시`, `수입을 늘리는`, `해봐`, `정답이 아니야`, `오버가 되는 건`, `내구 숫자`, `１０명일 때` 등을 `아까 만든`, `움직여 보자`, `거긴 아니야`, `유닛 선택`, `범위 안`, `이동만 할 때`, `골라 봐`, `골라 줘`, `최소 ２턴`, `세워 두는`, `턴 종료`, `해 줘`, `행동 메뉴`, `중립도시`, `수입을 늘리는`, `해 봐`, `정답이 아니야`, `오버가 되는 건`, `내구 숫자`, `１０명일 때`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 공장/공항/항구 생산/기본 생산 실습 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 공장/공항/항구 생산 설명, 과외 수업 종료, 기본 수업 도입, 생산 메뉴 설명, 첫 생산, 맵 메뉴/턴 종료 도입, 다음 턴 복귀 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `써온`, `육상 유닛`, `공중 유닛`, `해상 유닛`, `생산할 수`, `십자버튼`, `다음날`, `쓸 수`, `듣고 싶으면`, `들어줘서`, `가능한 곳`, `눌러봐`, `생산 메뉴`, `고를 수`, `만들수있어`, `십자키`, `맨위`, `못해`, `첫 턴`, `맵 메뉴`, `턴 종료`, `사람 차례` 등을 `써 온`, `육상 유닛`, `공중 유닛`, `해상 유닛`, `생산할 수`, `십자 버튼`, `다음 날`, `쓸 수`, `듣고 싶으면`, `들어 줘서`, `가능한 곳`, `눌러 봐`, `생산 메뉴`, `고를 수`, `생산돼`, `십자 키`, `맨 위`, `못 해`, `첫 턴`, `맵 메뉴`, `턴 종료`, `사람 차례`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 과외 수업/색적 이동 경로/메뉴 설명 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 추가 명령 수업 도입, 색적 맵의 이동 경로 회피, 이동 취소 시 연료 감소 설명, 유닛 정보/전환 키 설명, 지형 정보, 아군 유닛 목록, 상황 정보, 시스템/항복 메뉴 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `설명 안한`, `알아두면`, `해줘`, `해봐줄래`, `안보일`, `해보자`, `말해둘게`, `정보키`, `십자버튼`, `써봐`, `전환키`, `１대대전`, `볼수있어`, `고를수있어`, `봐봐`, `다시 한번`, `맵메뉴`, `전투상황`, `기억해둬`, `알려줄게` 등을 `설명 안 한`, `알아 두면`, `해 줘`, `해 봐 줄래`, `안 보일`, `해 보자`, `말해 둘게`, `정보 키`, `십자 버튼`, `써 봐`, `전환 키`, `１대１ 대전`, `볼 수 있어`, `고를 수 있어`, `봐 봐`, `다시 한 번`, `맵 메뉴`, `전투 상황`, `기억해 둬`, `알려 줄게`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 매복/쇼군 브레이크/날씨/색적/정찰차 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 매복 도입, 휘프의 쇼군 브레이크와 눈/비 설명, 색적 시야 설명, 숲/암초 은폐 규칙, 정찰차 시야 설명, 색적 맵 결과 대사, 료 소개와 재도전 힌트의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `휩`, `쇼군브레이크`, `매복했나봐`, `이동비용`, `참아줘`, `잘해줬어`, `싸우는건`, `마지막일거야`, `두고봐라`, `있는게`, `안보여`, `봐봐`, `골라봐`, `하지말고`, `정보키`, `십자버튼`, `되찾긴했나`, `해두겠다`, `이리와`, `잘부탁해`, `봐줘`, `잘해낼` 등을 `휘프`, `쇼군 브레이크`, `매복했나 봐`, `이동 비용`, `버텨 줘`, `잘해 줬어`, `싸우는 건`, `마지막일 거야`, `두고 봐라`, `있는 게`, `안 보여`, `봐 봐`, `골라 봐`, `하지 말고`, `정보 키`, `십자 버튼`, `되찾긴 했나`, `해 두겠다`, `이리 와`, `잘 부탁해`, `봐 줘`, `잘해 낼`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 잠수함 잠항/수송 유닛 패배 안내 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 잠수함 잠항 설명, 메뉴/잠항 선택 안내, 잠항 중 회피/공격/연료 소비 설명, 점령 결과 대사, 수송선/수송헬기 패배 조건 안내의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `또다른`, `골라줄래`, `잠항을 시험하고 싶어`, `해버리면`, `공격범위`, `띄워줄래`, `끝나 버려`, `그걸로 좋아`, `공격받지 않아`, `주의해줘`, `잠항 중`, `연료５`, `함락할 수 있었어`, `두고봐라`, `어느쪽이든`, `육상 유닛`, `보낼 수 없어`, `당하지 않게`, `다음엔 꼭` 등을 `또 다른`, `골라 줄래`, `잠항을 시험하고 싶어`, `해 버리면`, `공격 범위`, `띄워 줄래`, `끝나 버려`, `그걸로 좋아`, `공격받지 않아`, `주의해 줘`, `잠항 중`, `연료５`, `함락할 수 있었어`, `두고 봐라`, `둘 중 하나`, `육상 유닛`, `보낼 수 없어`, `당하지 않게`, `다음엔 꼭`으로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 수송선 탑재/하차/해상 유닛 연료 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 수송선 도입, 수송선 탑재 조건, 중전차 탑재/하차, 하차 가능 지형, ２유닛 하차 주의점, 해상 유닛 연료/보급/항구 회복 설명, 해전 도입 대사의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `기억하고 있어`, `쓰는 법`, `골라줄래`, `시험하고 싶으니`, `골라봐`, `해줘`, `겹치면 돼`, `육상 유닛`, `가능하다는 점`, `실을 대상`, `실어보자`, `하지마`, `안나왔네`, `아니라는걸`, `해보자`, `이동해줄래`, `해버리면`, `내릴 수 없어`, `한번에`, `내려줄래`, `해상유닛`, `공중유닛`, `없었을텐데` 등을 `기억하고 있어`, `쓰는 법`, `골라 줄래`, `시험하고 싶으니`, `골라 봐`, `해 줘`, `겹치면 돼`, `육상 유닛`, `가능하다는 점`, `실을 대상`, `실어 보자`, `하지 마`, `안 나왔네`, `아니라는 걸`, `해 보자`, `이동해 줄래`, `해 버리면`, `내릴 수 없어`, `한 번에`, `내려 줄래`, `해상 유닛`, `공중 유닛`, `없었을 텐데`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 상륙/호위함/전함/잠수함 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 상륙 대응 안내, 유닛 정보 확인 설명, ２일/３일 클리어 결과 대사, 수송헬기 구조, 호위함 탑재/보급/공격 설명, 전함 사거리 설명, 잠수함 직접 공격/특수능력 예고의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `늦지않았네`, `상륙부대`, `확인해둘게`, `２일만에`, `하드캠페인`, `두고봐라`, `공중유닛`, `골라줄래`, `하지마`, `공격받지 않게됐어`, `그밖에`, `보급해줘`, `직접 공격 유닛`, `정보키`, `간접공격`, `골라봐`, `해상유닛`, `직접공격`, `다음날` 등을 `늦지 않았네`, `상륙 부대`, `확인해 둘게`, `２일 만에`, `하드 캠페인`, `두고 봐라`, `공중 유닛`, `골라 줄래`, `하지 마`, `공격받지 않게 됐어`, `그 밖에`, `보급해 줘`, `직접 공격 유닛`, `정보 키`, `간접 공격`, `골라 봐`, `해상 유닛`, `직접 공격`, `다음 날`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 공략 후속/대공미사일/로켓포 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 공중 유닛 연료 후속 공략, 전투헬기/중전차 처리 힌트, 폭격기 결과 대사, 대공미사일 도입/사거리/간접 공격 설명, 로켓포 도입/공격 범위/타이어 타입 설명, 로켓포 공략 힌트의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공중유닛`, `정면승부도`, `못이기진않아`, `보급을 전혀`, `생각 안 해서`, `하는거냐`, `두고봐라`, `시험해볼게`, `결정해줄래`, `띄워줄래`, `간접공격`, `공격범위`, `골라봐`, `있을때`, `어떻게할지`, `쓸 만하지`, `직접 공격엔 약해 지켜줘`, `보일거야`, `며칠만에`, `도전해볼래`, `안할거야` 등을 `공중 유닛`, `정면 승부도`, `못 이기진 않아`, `보급을 전혀`, `생각 안 해서`, `하는 거냐`, `두고 봐라`, `시험해 볼게`, `결정해 줄래`, `띄워 줄래`, `간접 공격`, `공격 범위`, `골라 봐`, `있을 때`, `어떻게 할지`, `쓸 만하지`, `직접 공격엔 약해 지켜 줘`, `보일 거야`, `며칠 만에`, `도전해 볼래`, `안 할 거야`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 공중 유닛 연료/대공전차 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 공중 유닛 연료 설명, 공략 힌트, 공항/보급 조건, 공중 유닛 승패 대사, 폭격기/전투기 등장, 대공전차 도입/성능, 공중 유닛 연료 힌트의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공중유닛`, `육상유닛`, `주의할건`, `쓴다는것만`, `기억해둬`, `공격범위`, `못따라올거야`, `호이프`, `쓰는법`, `어쩔수없지`, `체력회복`, `보급하면돼`, `정면승부`, `믿을수없다`, `될거야`, `맞았나봐`, `육상유닛끼리`, `직접 써보자`, `하늘유닛`, `그밖에`, `해볼만해`, `떨어지는거야`, `추락해버려`, `하나더`, `추락할것같으면`, `알려줬지` 등을 `공중 유닛`, `육상 유닛`, `주의할 건`, `쓴다는 것만`, `기억해 둬`, `공격 범위`, `못 따라올 거야`, `휘프`, `쓰는 법`, `어쩔 수 없지`, `체력 회복`, `보급하면 돼`, `정면 승부`, `믿을 수 없다`, `될 거야`, `맞았나 봐`, `육상 유닛끼리`, `직접 써 보자`, `하늘 유닛`, `그 밖에`, `해볼 만해`, `떨어지는 거야`, `추락해 버려`, `하나 더`, `추락할 것 같으면`, `알려 줬지`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 중전차/수송헬기/전투헬기 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 중전차 대응 수업, 중전차 공략 힌트/결과 대사, 공중 유닛 도입, 수송헬기 탑재/하차, 전투헬기 직접 공격 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `공격범위`, `수도점령`, `적전멸`, `못쓰러뜨릴건`, `못건너오게`, `정면승부`, `이동못해`, `탑재해보자`, `고르지마`, `이동가능한`, `그뿐아니라`, `이동비용`, `이동해줄래`, `내릴수없어`, `지형정보`, `보면돼`, `시험해봐`, `직접공격`, `공중유닛`, `편할거야` 등을 `공격 범위`, `수도 점령`, `적 전멸`, `못 쓰러뜨릴 건`, `못 건너오게`, `정면 승부`, `이동 못 해`, `탑재해 보자`, `고르지 마`, `이동 가능한`, `그뿐 아니라`, `이동 비용`, `이동해 줄래`, `내릴 수 없어`, `지형 정보`, `보면 돼`, `시험해 봐`, `직접 공격`, `공중 유닛`, `편할 거야`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 합류/보급/자주포/수송차 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 합류 설명 마무리, 공략 힌트, 보급 절차, 자주포 간접 공격 설명, 도시 방어 힌트, 수송차 탑재/하차 설명의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `돼버려`, `상황따라`, `있을거야`, `줄어든채로`, `낮아보이면`, `수도점령`, `적전멸쪽`, `받은건`, `이동해줄래`, `보급해줘`, `아군도시에`, `해볼까`, `시험못해`, `간접공격`, `못닿아`, `당할거야`, `박살내주마`, `운반할수`, `옮길수`, `또다른`, `고를수있어`, `할수없어`, `이길수있어` 등을 `돼 버려`, `상황 따라`, `있을 거야`, `줄어든 채로`, `낮아 보이면`, `수도 점령`, `적 전멸 쪽`, `받은 건`, `이동해 줄래`, `보급해 줘`, `아군 도시에`, `해 볼까`, `시험 못 해`, `간접 공격`, `못 닿아`, `당할 거야`, `박살 내주마`, `운반할 수`, `옮길 수`, `또 다른`, `고를 수 있어`, `할 수 없어`, `이길 수 있어`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 수리/공격 범위/벽 만들기/합류 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 수리 위치 안내, 아군 도시 회복 조건, 적 공격 범위 확인, 벽 만들기, 유닛 통과 규칙, 합류 명령 도입부의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `넣어두면돼`, `체력회복`, `아군도시`, `어쩔수없어`, `이동범위`, `공격범위야`, `벽을 만들어보자`, `안맞게`, `못지나가게`, `버틸수있어`, `적유닛`, `이동못해`, `제대로된`, `쓸어버려주마`, `골라줄래` 등을 `넣어 두면 돼`, `체력 회복`, `아군 도시`, `어쩔 수 없어`, `이동 범위`, `공격 범위야`, `벽을 만들어 보자`, `안 맞게`, `못 지나가게`, `버틸 수 있어`, `적 유닛`, `이동 못 해`, `제대로 된`, `쓸어버려 주마`, `골라 줄래`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 점령 내구도/공략 힌트/결과 대사 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 점령 내구도 설명, 점령 후 공략 힌트, 수도/적 전멸 승리 조언, 점령 승리/패배 결과 대사, 수리 수업 도입부의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `하나더`, `내구 ２０이면`, `점령할 수 있어`, `공격받아 다치면`, `정면승부`, `바주카병`, `지나가지 못한다는 거야`, `점령당하지마`, `함락해준`, `다음맵에 못 넘겨`, `싸울수 있지`, `뭘 한거냐`, `쓸모없는 것들`, `져버렸어`, `호이프장군`, `당한듯해`, `２유닛다`, `고물전차` 등을 `하나 더`, `내구 ２０이면`, `점령할 수 있어`, `공격받아 다치면`, `정면 승부`, `바주카병`, `지나가지 못한다는 거야`, `점령당하지 마`, `함락해 준`, `다음 맵에 못 넘겨`, `싸울 수 있지`, `뭘 한 거냐`, `쓸모없는 것들`, `져 버렸어`, `휘프 장군`, `당한 듯해`, `２유닛 다`, `고물 전차`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 저장/맵 메뉴/점령 수업 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 작전 중단/저장, 지도 메뉴 호출, 점령 절차, 점령 중단 조건, 도시 수입/회복 설명, 중립 도시와 적 도시 선택 문제의 전각 공백과 붙은 표현을 슬롯 기준으로 재분절했다.
+  - `지도메뉴`, `지금상태`, `다시해야해`, `움직일 유닛`, `없는곳`, `이길수있어`, `방심하지말고`, `필요없어`, `못와`, `어쩔수없어`, `가능한것부터`, `점령완료`, `점령중`, `안돼`, `중간 점령분`, `움직일땐`, `적 도시를 점령하면`, `나쁜건 아니야`, `수입을 줄이는 게 좋아` 등 저장/점령 설명 문구를 자연스러운 표기로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 초기 전투/지형 효과/이동 비용 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 초기 전투 복습, 공격/대기/취소 안내, 바주카병 대응, 지형 효과, 이동 비용, 지형 정보 확인 설명의 전각 공백과 붙은 표기를 슬롯 기준으로 재분절했다.
+  - `피해없는`, `적옆`, `할수있어`, `지도메뉴`, `못이겨`, `써야해`, `지형효과`, `이동비용`, `이동타입`, `볼수있어`, `움직여봐`, `이길수있어`, `작전중`, `그만둘때` 등을 `피해 없는`, `적 옆`, `할 수 있어`, `지도 메뉴`, `못 이겨`, `써야 해`, `지형 효과`, `이동 비용`, `이동 타입`, `볼 수 있어`, `움직여 봐`, `이길 수 있어`, `작전 중`, `그만둘 때`로 정리했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 생산/점령/전투 수업 직접 패치 행 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 `만들수있어`, `눌러봐`, `상태가 돼`, `맵 메뉴`, `턴 종료`, `갈수`, `할수`, `중립도시`, `이동범위`, `적군도시`, `주위에 적 유닛`, `해보자`, `이동 비용`, `지형 방어력`, `색적 모드`, `공중 유닛`, `지상 유닛` 등 생산/점령/전투 수업 용어를 슬롯 기준으로 재분절했다.
+  - 직접 패치 행의 길이 검사는 통과했고 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 지형/이동 비용 직접 패치 행 표기 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 직접 스크립트 패치 행에서 `어느쪽`, `알수있어`, `주위에 적유닛`, `이동범위`, `어쩔수없지만`, `이동비용`, `지형방어력`, `턴종료`, `과외수업`, `목표달성`, `몇명이냐`, `색적모드`, `색적범위`, `이동가능`, `지상유닛`, `공중유닛` 등 지형/이동/공격 설명 용어를 슬롯 기준으로 재분절했다.
+  - `예를 들면`은 해당 8바이트 슬롯을 1바이트 초과해 `예를들면`으로 유지했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 보정 행/맵 메뉴/지형 설명 잔여 표기 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 및 보정 주소 블록에서 `취소키로맵메뉴취소`, `육상전이면질일없어`, `공격가능한지알지`, `적을치려면`, `이지형은방어력높아`, `얕은여울 이동 가능`, `24레드스타령` 등 짧은 보정 행과 지형/메뉴 설명을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 인트로/초반 전투/점수 설명 표기 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 튜토리얼 인트로와 초반 전투 주소 블록에서 `좋은소식이야`, `단숨에 치는게`, `씨가새로쓸수있게`, `내과외수업듣고싶어`, `여기 두고 이동해`, `여기 두고 골라`, `정면승부는 좋은 작전 아냐`, `중립도시`, `적군도시`, `자기 유닛 공격범위를`, `간접포 공격범위가 좁으니`, `한번에 잡은 적 수야` 등 튜토리얼/점수/도시 표기를 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 전투 초중반 점령/회복/공격범위 안내 압축문 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 전투 주소 블록에서 `점령지에붙여둬`, `실수로움직이지마`, `도시근처가좋아`, `턴시작때먼저행동시켜`, `이동범위에점령지가둘이나`, `정면승부는좋은작전아냐`, `다음날수리되게도시근처로`, `못지나가게해야겠지`, `상황따라유닛둘이면편해`, `적전멸쪽이빠를거야`, `가능범위보는법`, `공격범위보는법기억해`, `공격범위볼유닛에커서`, `작전처음부터다시하게돼`, `두어도체력회복보급안돼` 등 점령/수리/공격범위 설명을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 후기 튜토리얼 색적/공중/해상 유닛 설명 압축문 추가 정리.
+  - `tools/build_korean_full.py`의 후기 튜토리얼 주소 블록에서 `평지를이동하면차이가나`, `이지형숲은옆에갈때까지`, `곧장이동하면조우해서`, `공중유닛을생산할수있는곳`, `는바다이동불가`, `같은비용으로이동가능`, `가갈수있는지형뿐`, `는이름대로하늘을날아`, `는매일연료2소모`, `공격범위로유인해쓰는`, `적공중유닛을해치워`, `갈수있는곳은여울항구뿐`, `휘프는눈에강하고비에약해`, `이동비용이어느정도인지`, `여기도십자키위아래로내용이` 등 색적/공중/해상 유닛 능력 설명을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] 튜토리얼 생산/이동/전투 기초 안내 압축문 추가 정리.
+  - `tools/build_korean_full.py`의 튜토리얼 안내 주소 블록에서 `다시한번`, `항복지도나가기등을고르는곳`, `처음엔무엇을생산할지망설이면`, `소지금이하유닛은생산가능`, `돈없으면생산도못해`, `수입줄면유닛도제대로못만들어`, `공격력은현재유닛수로증감`, `보병계는이동비용1이매력`, `강은보병계외지상유닛불가`, `공중유닛은지형방어추가없어`, `움직일유닛없으면이야기가`, `안되니생산이가장중요해` 등 기초 조작/전투 설명을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 전투 조언/작전 안내 압축문 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 캠페인 조언 주소 블록에서 `게이지는전투마다차올라`, `승리조건은전투에서이기기위한`, `공장육상항구해상유닛`, `공격하고또공격하는거다`, `전부대로수도를지켜`, `공항은공중항구는해상유닛`, `보통전투맵이면보병등을수송해`, `해상유닛연료탄약떨어지면`, `육지엔대공전차중전차가`, `쉴틈없다` 등 작전 안내와 전투 조언 문장을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 전투/유닛 정보 설명 압축문 추가 정리.
+  - `tools/build_korean_full.py`의 Part 2 battle/unit info description 주소 블록에서 `보병형이동가능`, `부포보병계공격력`, `육상유닛공격력`, `보병외지상유닛에`, `수송가능유닛은보병계`, `대지대공공격가능`, `폭탄보병계외`, `2유닛탑재가능`, `공격안받고인접안돼`, `대부분지형비용1로`, `차량형이동가능`, `바다암초이동가능`, `주포선박계공격력` 등 유닛/무기/이동 설명을 슬롯 기준으로 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 전투/룰/유닛/상점 설명 압축문 표기 정리.
+  - `tools/build_korean_full.py`의 Part 2 규칙/승리조건, CO 특성, 지형 설명, 상점/고용 안내, 일부 전투 능력 설명에서 `수도점령적전멸승리`, `어떤상황도싸움가능`, `간접공격사거리김`, `특별히약점없음`, `공중유닛강하고해상약함`, `보병계이동력2증가`, `거점수입설정`, `이목숨을걸고도` 등 띄어쓰기 없는 압축문을 슬롯에 맞춰 재분절했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 표시/애니/통신 일반 UI 문자열 표기 정리.
+  - 상단 주소 고정 UI 문자열에서 `애니표시안함`을 `애니 없음`으로 정리하고, `전투애니표시`, `전투점령애니표시`, `전투점령애니`, `전투애니만` 계열을 `전투애니있음`, `전투점령애니있음`, `전투점령 애니`, `전투 애니만`으로 맞췄다.
+  - 통신 준비/맵 수신 계열 `통신준비중!`, `맵수신중잠시기다려`를 `통신 준비 중!`, `맵 수신 중 기다려`로 정리했다.
+  - `켬/끔` 글자가 현재 폰트 테이블에 없어 `있음/없음` 표현으로 조정했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 전투/메뉴 고정폭 UI 라벨 표기 정리.
+  - `tools/build_korean_full.py` 하단의 NUL 패딩 고정폭 라벨 테이블에서 전투 표시 옵션 `전부표시`를 `전체표시`로, `표시없음`을 `표시안함`으로 정리했다.
+  - 통신/대전 준비 UI의 `수신중`, `전송중`, `미접속 준비중`, `입장대기`를 `수신 중`, `전송 중`, `미접속 준비 중`, `입장 대기`로 정리해 메뉴 표기 일관성을 맞췄다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 최종전 합류/헬보우즈전/후일담/마지막 이글전 문장 정리.
+  - `0xDCFF0A`~`0xDD0CD1`의 아스카 구출, 각 쇼군 최종전 합류, 헬보우즈전 조언과 승리 대사에서 `당해버릴거야`, `이런짓을`, `한건`, `용서못해`, `이녀석`, `조종했던거군`, `그런얼굴`, `어쩔수없군`, `빌려주마`, `그런거야`, `있었던거구나`, `왜그래`, `그런거다`, `나온거야`, `손댄건`, `베어버리겠다`, `도와주마`, `무사했던거야`, `열받네`, `저런녀석`, `전하러왔어`, `써도돼`, `갖춰둔거니까`, `못이긴다고`, `지켜보이겠다`, `복제상대`, `방심할순`, `어리석은놈들`, `후회하게해주마`, `한걸음`, `지지않아`, `세계정복`, `이루기전`, `내주마` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDD0D4A`~`0xDD1DE4`의 전투 후 블루문/옐로코멧/그린어스 후일담, 이글 재대결, 마지막 자유 전투 조언에서 `되도않는`, `결판낼까`, `신세졌어`, `안부전해`, `왜그래`, `있는건`, `해야할`, `어쩔수없네`, `용서해주겠다는거냐`, `가볼까요`, `괜찮은거냐`, `이런데서`, `울지마`, `위급할땐`, `된다는거지`, `무사한가보네`, `어떤때라도`, `고쳐야하니까`, `안끝난거야`, `심각한것`, `만나는것만으로`, `알고있네`, `또보자`, `착각때문에`, `싸운거니까`, `싸워보고싶다`, `받아주겠나`, `그런거라면`, `어떻게하면`, `생산하면돼`, `할말`, `져버렸나`, `당해낼수`, `안진다` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `everyone will fall row`, `asuka harmed lead row`, `max cannot forgive row`, `next time end row`, `eagle rematch row`, `know what to do row`, `will not lose next row` 길이 초과는 `모두 쓰러질 거야...`, `...아스카에게 이런 짓을 한건`, `용서못해!`, `끝장을 내주마!!!`, `싸우고 싶다!`, `어떻게 할지 알겠어?`, `다음엔 안진다!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 도미노-이글 재습격/보병 8일 방어/복제 료 초입 문장 정리.
+  - `0xDCE436`~`0xDCEA21`의 도미노-이글 재습격 대사와 쇼군브레이크/공중유닛 격파 조언에서 `그런건`, `쓰러뜨린뒤`, `어쩔수없지`, `전력으로간다`, `도미노쇼군`, `습격했을때`, `그일`, `잊은적없다`, `엄청난짓`, `할리가`, `옷입고`, `걸어다니는`, `안느껴지는`, `아무생각도`, `했을것같진않군`, `남아있어`, `각오해둬`, `쓰기전까지`, `적유닛`, `잘써서`, `격파하면돼` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDCEA96`~`0xDCF244`의 정찰부대 구출/보병 8일 방어, 모프 배후 대사, 보병 탈출 및 호위함/수송헬기 탑재 조언에서 `것같아`, `구해내면`, `되는거죠`, `캐서린사령관`, `별거아니야`, `못도망칠`, `이글일`, `들키지않게`, `못이겨`, `모프사령관`, `배후말이야`, `했던거야`, `해야했어`, `적눈`, `알아낸듯해`, `그런짓`, `떠날수는`, `주지않을래`, `말안해도`, `자기수도`, `태울수` 계열 표현을 정리했다.
+  - `0xDCF256`~`0xDCFEF1`의 호위함 탑재 후속, 복제 료/흑막 초입, 이글 지원, 최종전 조언에서 `나를수있어`, `흑막이란자가`, `복제인간같아`, `여러나라`, `적공중유닛`, `박살내주마`, `시간버는`, `점령해버려`, `도미노쇼군`, `이녀석들`, `된거야`, `복제같아`, `다른쇼군`, `덤벼들었다는거네`, `열받았어`, `쓸어버리겠어`, `복제인것같아`, `나쁜짓`, `이녀석부터`, `해주마`, `거역한자`, `더나와`, `먼저가`, `가야해`, `상대하는건`, `모르는거야`, `이럴때`, `안합치면`, `무리하지마`, `당하지않아`, `적주력`, `것같군`, `그럴때`, `있는곳`, `이런녀석`, `일뿐이야`, `점령해둬`, `나르면돼`, `그렇게되면`, `해치워버려` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `eagle no choice row`, `load copter question row`, `join forces row` 길이 초과는 `별수없지`, `를 태울 수 있어!`, `이럴 때 힘 안 합치면 어쩔 거야!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 이글 반복/모프 해상전/수송선 보호 미션 문장 정리.
+  - `0xDCCD66`~`0xDCD252`의 이글 부대 설명과 이글 3차전 반복 대사, 쇼군브레이크 대응 조언에서 `지지않아`, `들어야하니까`, `저렇게말했지만`, `못믿겠다`, `노리는거야`, `잊은적`, `그런짓`, `할리없잖아`, `이녀석`, `아무생각`, `하는일`, `이유없이`, `그말`, `없는건`, `한짓`, `각오해둬`, `쓰기전에`, `적유닛` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDCD25A`~`0xDCD8A8`의 모프 해상전, 모프/맥스 배후 대사, 해상유닛 보급 조언에서 `보기만해도`, `이글일`, `도전해오는것도`, `이유가있겠네`, `봐줬으면하는데`, `그럴순없겠지`, `싸워야할`, `눈치채지`, `못이겨`, `건거지`, `들키지않게`, `해야했어`, `적눈`, `속이려던거지`, `찾은듯하니까`, `떠날수는`, `주지않을래`, `말안해도`, `하면돼`, `라는건`, `알고있었어`, `하고있어도`, `침몰하지않아` 계열 표현을 정리했다.
+  - `0xDCD8FF`~`0xDCE42F`의 모프 15거점 점령전 초입, 수송선 보호 미션 초입, 수송선 피해 무시 조언과 이글 재습격 대사에서 `지나가려던뿐`, `공격하는거지`, `나빠졌단말도`, `못들었어`, `당해낼자`, `싸우고싶어`, `삼아야해`, `안그러면`, `못나아가`, `확인해야겠어`, `가볼까`, `해볼만해`, `나르지않으면`, `시작도못해`, `하차시킬때`, `될테니까`, `확인하고싶은게`, `또봐`, `하는편이`, `이번작전`, `당하지않게`, `다르지않아`, `무슨일`, `생각하지말자`, `못오니까`, `져버렸네`, `없는걸`, `잘쓰면`, `피해없이`, `보낼수도`, `습격하는거야` 계열 표현을 정리했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 대공미사일 방어 후반/이글 3차전/숨은 수송선/맥스 시간제한 미션 문장 정리.
+  - `0xDCB641`~`0xDCBA13`의 대공미사일 10일 방어 후반, 캐서린 구원, 수송선으로 위쪽 회피, 암초/정찰차/잠수함 조언에서 `지켜주면`, `남은건`, `가볼까`, `버텨줬구나`, `와버렸나`, `끝내지못했나`, `이동할땐`, `가면돼` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDCBA1A`~`0xDCC23F`의 이글 3차전, 쇼군브레이크 대응 조언, 숨은 수송선 추적 초입, 모프 진상 대사에서 `싸우는것도`, `내야해`, `왜그래`, `둘다`, `오해하는거아냐`, `저렇게말했지만`, `못믿겠다`, `말못해`, `잊은적`, `내가아냐`, `장난치지마`, `다른나라`, `그럴리없어`, `그말`, `믿어두지`, `신경쓰이니`, `남아있다`, `한짓`, `각오해둬`, `쓰기전에`, `적유닛`, `무슨일`, `숨어있어`, `되는거지`, `숨겨뒀을거야`, `정신팔려서`, `이런곳`, `공격당할줄`, `건거야` 계열 표현을 정리했다.
+  - `0xDCC25A`~`0xDCCD45`의 모프/아스카 배후 대사, 암초 수송선 탐색 조언, 그린어스 정면승부, 맥스 15일 시간제한 미션 조언에서 `들키지않게`, `해야했거든`, `적눈`, `속이려던거지`, `찾은듯해`, `준비되는대로`, `참가하고싶어`, `할일`, `말안해도`, `있을거야`, `붙어있지`, `볼수없는`, `잠수한채`, `찾아보는게`, `지나가려던뿐`, `공격하는거지`, `나빠졌단말도`, `못들었어`, `당해낼자`, `확인하고싶은게`, `또봐`, `당하기전에`, `적주력`, `해치워야해`, `바꾸는것도`, `온거면`, `된다는거지`, `그런건`, `식은죽먹기`, `있다는걸`, `해치우지않으면`, `전멸시키는거야`, `상대했을텐데`, `올테니`, `져버렸나`, `이길수없어`, `진행하는게` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `ryo misunderstood row`, `eagle mopp said row`, `ryo no way row` 길이 초과는 `오해한 거 아냐?`, `모프 말은 그랬지만`, `말도 안 돼!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 아스카 매복/도미노 분석/모프 초입 조언 문장 정리.
+  - `0xDC9AB6`~`0xDCACCB`의 아스카 매복, 숲/암초 이동 조언, 도미노-아스카 대화, 료/도미노 능력 분석에서 `한번밖에`, `안닿는`, `강해질거야`, `처음뵙겠습니다`, `좋은곳`, `피할수`, `있을거야`, `그애`, `아무일없었어`, `그런것치곤`, `건강해보이네`, `두손들수밖에`, `이런곳`, `당하지않게`, `못나르면`, `특기란걸`, `지지않아`, `따라간건`, `버려진것같아`, `정신차리면`, `그건그렇고`, `너무한거`, `원망할거야`, `조사해야할`, `할말`, `않은듯해`, `서툰것같고`, `보병등`, `공격해온거야`, `말못해`, `어떻게한거야`, `깨어날거야`, `또봐`, `라고해도`, `두고봐`, `점령하면돼`, `큰섬`, `공장등`, `내키지않네`, `같은말`, `고생한줄알아`, `가만두지않을거야`, `무슨말`, `강한점`, `생각하지않을까`, `도와줄테고`, `골라달라고해`, `못쓰러뜨릴`, `무시하지마`, `될거야`, `신경쓰지마` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDCAD0C`~`0xDCB62D`의 모프/파라파라요새 12거점 점령전, 모프 쇼군 설명, 쇼군브레이크 대응 조언, 대공미사일 방어 미션 초입에서 `아무말도`, `안했잖아`, `다른곳`, `달라질거야`, `무슨일`, `나쁜건`, `중요한곳`, `우리수도`, `되는거지`, `점령가능`, `가볼까`, `그러고보니`, `당해낼자`, `잘아네`, `잊은것같은데`, `그런느낌`, `확인하고싶은게`, `쓰면돼`, `회복될거야`, `지켜줬으면해`, `꼭필요한`, `당하고말거야`, `당하지않게`, `신경쓰지마` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `asuka greeting row` 길이 초과는 짧은 슬롯에 맞춰 `처음입니다`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 10장 공장/공항/항구 조언과 키쿠치요 공장 대사 정리.
+  - `0xDC87BA`~`0xDC90F3`의 캠페인 10장 초입, 공장 사용 허가, 키쿠치요 포위, 적 공장 무시 조언에서 `캠페인10장`, `개발중`, `준비못했어`, `쓰는법`, `문제없네`, `다름없잖아`, `사용허가`, `되는거지`, `무시하지마`, `식은죽먹기`, `둬주셨군요`, `말안해도`, `적다했더니`, `오지못하게`, `점령해두면`, `점령한쪽`, `될것같네`, `생산할수`, `피해받은`, `할수있어`, `쓰는것같아`, `생산하는곳`, `이런곳`, `쓸모없어`, `점령하러가자` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC9132`~`0xDC9A76`의 공항/항구/공장 조언 반복, 키쿠치요 공장 배치 대사, 도미노 설득, 15거점 실패 조언, 아스카 매복 초입에서 `피해받은`, `할수있어`, `있는것같아`, `생산하는곳`, `공격해오는`, `점령하러가자`, `둬주었다`, `생산하는거다`, `도움되지`, `안들으니까요`, `생각없이`, `싸우는게`, `나갈거야`, `적공장무시`, `생산할수`, `진행할수있어`, `안보이잖아`, `간거야`, `구경해볼게`, `것같지만`, `넓은곳`, `집중시킬수` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `factory permission row`, `airport produces air row` 길이 초과는 `공장 사용 허가가 났어!`, `공항은 공중유닛을 만들 수 있어!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 공중부대/이글/도미노/키쿠치요 초입 문장 정리.
+  - `0xDC73FA`~`0xDC8009`의 공중부대 전투 후 이글/도미노/맥스 분기 대사와 폭격기 조언에서 `뒤처지지않아`, `짓뭉개주마`, `료따위`, `못알아보다니`, `지는거야`, `깔보는듯한`, `말을해서`, `다할것`, `가버렸나`, `이정도야`, `있던게`, `나란말이다`, `듣긴했지만`, `그런자`, `졌단말인가`, `생각해주는`, `문제없어`, `강한점`, `명령하는건가`, `싸울것`, `쓰기전에`, `쓰러뜨릴수` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC802A`~`0xDC8799`의 옐로코멧/키쿠치요 특전부대 초입과 방어 조언에서 `들어가기전에`, `들켜버렸네`, `그런말할`, `들은적`, `공격받지않는건`, `질리없어`, `출격하고싶었어`, `그뒤엔`, `산너머`, `나가지말고`, `공격해오겠지만`, `버텨내줘` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `eagle lost to such row`, `max attack power row` 길이 초과는 `내가 그런 자들한테 졌다니...`, `안 져!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 거점 점령/빌리 숲 매복/공중부대 조언 문장 정리.
+  - `0xDC663A`~`0xDC6D96`의 눈 지형 대사, 휩 패배 반복, 12거점 점령 조건, 빌리 숲/암초 매복 조언, 수송선 저지 설명에서 `어려운곳`, `클리어하는게`, `있는건지`, `아무생각없는건지`, `져버렸다`, `막는거다`, `그렇다해도`, `그정도`, `어떻게든해`, `남은일`, `가볼까`, `잘봐`, `빼앗기지않으면`, `지지않아`, `갖춘뒤`, `잘쓰는`, `두들겨주고`, `가는게`, `나아가지못하게`, `노리는게`, `운반못하게`, `될테니까`, `가볼까요`, `가버린거야` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC6E59`~`0xDC73F2`의 캐서린/빌리 대화, 수송선 조언 반복, 그린어스 공중부대 조언 초입에서 `자리좀`, `건강해보여`, `오해하지마`, `가고싶은곳`, `있고싶은곳`, `있을뿐이야`, `운반할수`, `봐두는거야`, `받을일`, `본듯한`, `들은적`, `부대라나봐`, `이런건`, `아는거야`, `공격받았어`, `다시봤어`, `시작해보자` 계열 표현을 정리했다.
+  - 최종 재빌드는 `overflow 0`으로 완료했고, `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 수송선/맥스 전함/색적 반복 조언 문장 정리.
+  - `0xDC586F`~`0xDC5997`의 빌리 추적 후 수송선/잠수함 조언에서 `따라가볼까`, `운반할수`, `없게돼`, `봐두는거야`, `받을일` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC59B6`~`0xDC61EA`의 캠페인 4장 반복 안내, 맥스 재등장/전함 대사, 다른 쇼군 사용 조언, 색적맵 반복 설명에서 `개발중`, `한사람`, `전함수`, `나말곤`, `없을것이다`, `파괴력앞`, `못줬을거야`, `맞는말`, `그런것`, `의지하지않아도`, `잘해줬어`, `달린것같지만`, `쓰는게`, `색적맵`, `모르는거야`, `숨어있겠지`, `어떻게해야`, `찾을수있어`, `정찰차같은걸`, `나아가면돼`, `당해버려`, `이동하는게`, `숨을수있다는건`, `주의하지않으면`, `안보이는` 계열 표현을 정리했다.
+  - `0xDC625E`~`0xDC6633`의 빌리 숲 매복 조언과 거점 점령 규칙 초입에서 `같은곳`, `간거냐`, `말하지마`, `설교듣기전에`, `가버렸나`, `저녀석`, `숲속같은곳`, `숨겨두고있어`, `숨어있나`, `가는게`, `무슨일`, `움직일때`, `중요한곳인걸`, `움직일수`, `없게돼`, `점령한쪽`, `다른점을`, `조심해야해` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `submarine scout row`, `no cruiser sub lead row`, `max no reliance lead row`, `max can do row` 길이 초과는 `봐둬`, 짧은 슬롯의 `없는것`, `그런 것 안 써도`, `난 할수있어!`로 조정했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 휩해군/눈 지형 조언 문장 정리.
+  - `0xDC4EA9`~`0xDC5415`의 휩해군 등장/재등장, 해상 유닛 구성, 맵 위쪽 회피, 수도 점령 조언에서 `전함외의`, `가버리면`, `공격못하는데요`, `박살내주마`, `한유닛도`, `져버렸다`, `막는거다`, `그렇다해도`, `그정도`, `어떻게든해`, `따라가볼까`, `안봐준다`, `자랑할만큼`, `움직여야해`, `하러가면`, `상대안하고`, `이길수있어` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC5436`~`0xDC57CD`의 눈 지형 대사와 같은 휩 패배 반복 블록에서 `이런이런`, `좀그래`, `못움직이면`, `뭉쳐있으면`, `특이한일`, `알수없는`, `져버렸다`, `막는거다`, `그렇다해도`, `그정도`, `어떻게든해` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `no infantry bazooka row`, `commander likes snow row` 길이 초과는 `보병이나 바주카병도 하나 없고`, 짧은 슬롯의 `눈좋아?` 유지로 조정했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 맥스/휩 해상전/색적맵 조언 문장 정리.
+  - `0xDC415E`~`0xDC47C0`의 캠페인 4장 안내, 공장/항구 사용법, 휩 해상전 대사, 잠수함/수송선 수도 점령 조언에서 `개발중`, `알고있겠지`, `그정도`, `생산할수있는`, `알고있었나`, `부대수`, `치우친것`, `손쓸수`, `정리했을거다`, `둘다`, `이런식`, `밀고와`, `잘봐`, `를실어`, `하면돼` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC4800`~`0xDC4E17`의 포위 상황, 맥스 사과, 수도 방어 조언, 색적맵 설명에서 `당할뿐`, `빼앗길테고`, `그런것치곤`, `않았을거다`, `그런가봐`, `알아줬으면`, `하지말라니까`, `미안미안`, `이시간`, `또봐`, `신경쓰지말고`, `지키러가`, `당하지않게`, `색적맵`, `필요없겠네`, `어쩔수없군`, `안보이는`, `숨어있어`, `해야해`, `같은걸`, `나아가면돼`, `지켜주는걸` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `factory port production row`, `capital defend sacrifice lead row` 길이 초과는 `생산 가능한 곳이야!`, `여긴 약간 희생은 감수하고`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 캠페인 초반 얀/빌리/그린어스 조언 문장 정리.
+  - `0xDC3101`~`0xDC3652`의 얀 패배 후 대사, 휩 눈/브레이크 조언, 공장 사용 설명에서 `있었을때`, `없었을텐데`, `기억해두마`, `해주니`, `못움직여`, `움직이는게`, `좋을거야`, `무슨일`, `공장사용`, `알고있겠지`, `어쩔수없네`, `나올거야`, `못사는`, `거점수`, `대기가돼서`, `쓸수없단것도` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC3688`~`0xDC413D`의 빌리 경고/재등장, 그린어스 조우, 공중유닛 조언, 더블 액션 브레이크 대응 설명에서 `큰일`, `빌리라는걸`, `브레이크중엔`, `그런걸`, `무슨일`, `싸우는건`, `가볼까`, `둘다`, `들어온지`, `싸울일`, `잘있어`, `또보자`, `차기전에`, `겁낼것없어`, `이런곳`, `군아냐`, `조사해볼게`, `있나봐`, `틀림없을거야`, `공격받았구나`, `한짓`, `못해`, `시치미뗄셈`, `만날때`, `쇼군브레이크때`, `쓰러뜨리면돼`, `강한적`, `편해질거야` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `billy new red star row`, `billy red star past row`, `green earth seems so row` 길이 초과는 각각 짧은 슬롯 특성상 `얼마안됐지?`, `졌었어`, `그런가 봐`로 조정했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 지형 과외 후반/첫 캠페인 조언 문장 정리.
+  - `0xDA3E20`~`0xDA447A`의 산/강/수도/건물 지형 설명, 전략 수업 도입, 사관학교 안내, 생산 중요성 설명에서 `못들어가지만`, `의미없어`, `상대선택`, `공격상대선택`, `진행하는데`, `전략수업`, `듣고오는걸`, `싸울거야`, `졸업할수있다면`, `될것이다`, `할일`, `보병상대`, `안되니`, `없어졌을때`, `전멸해버리면` 계열 표현을 슬롯 기준으로 재분절했다.
+  - `0xDC2992`~`0xDC3008`의 첫 캠페인 무전/쇼군브레이크 조언에서 `전할게`, `있을땐`, `식은죽먹기`, `기운좋은건`, `가능한건`, `찼을때`, `전투할때마다`, `가르쳐줄게`, `좋을거야`, `적혀있어`, `힘내는거야`, `잘부탁해`, `무슨일`, `찬것같네`, `수리할수`, `알고있어`, `어쩔수없네`, `쓸수있으니`, `써야해`, `하나더`, `강해질수있어`, `맡겨두면` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `ryo confident row` 길이 초과는 `이 정도쯤 식은 죽이지!`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 전투/지형 수업 문장 추가 정리.
+  - `0xDA23FE`~`0xDA3DF2`의 공격 연습, 목표 선택, 대기/공격 명령, 수적 우위, 지형방어력, 과외 지형 수업, 이동비용/진입손실/도로/다리/강 설명에서 `고르면돼`, `행동종료`, `한번더`, `하면돼`, `할수있어`, `움직일수있는`, `하는게`, `받게될거야`, `관련있어`, `들을수있게`, `쓰는거야`, `줄수는`, `들어갈때`, `피하는게`, `못들어가` 계열 표현을 슬롯 기준으로 재분절했다.
+  - 빌드 중 확인된 `same unit combat row`, `check terrain defense row`, `terrain combat basic row`, `attack counter damage row`, `bridge over river row` 길이 초과는 `같은 유닛끼린 이래`, `지형방어력 잘 보고`, `싸우는 게 기본`, `이쪽도 피해를 받는 거야`, `놓일 때가 많아`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 점령 심화/전투 수업 초입 문장 정리.
+  - `0xDA195F`~`0xDA2398`의 두 번째 턴 유닛 선택, 행동 메뉴, 점령 완료, 점령 수입 증가, 적/중립 도시 선택, 내구도 안내, 전투 수업 초입에서 `고르는거야`, `행동메뉴`, `누르면돼`, `다음턴`, `움직여보자`, `이동범위안`, `할수있는곳`, `어느쪽`, `변하지않아`, `줄일수있어`, `못만들게`, `알수있어`, `할수있다는`, `한번더`, `쓰러뜨리면돼`, `하면돼` 계열 표현을 슬롯 기준으로 재분절했다.
+  - 빌드 중 확인된 `grab this unit row`, `enemy city label row`, `which choose question row`, `capture durability visible row` 길이 초과는 `를 골라`, `적군도시/중립도시`, `너라면 어쩔래?`, `되는지는 여기서 알수있어`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 생산 메뉴/기본 조작 설명 문장 정리.
+  - `0xDA0CD7`~`0xDA18F4`의 생산 메뉴 가격/생산/턴 종료, 유닛 선택, 이동 범위, 대기, 점령, 수입 안내에서 `만들수있어`, `할수없어`, `쓸수없어`, `할수있는건`, `누르면돼`, `생산할곳`, `움직여보자`, `방금한`, `유닛선택`, `유닛명령`, `범위안`, `이동시킬수`, `１턴동안`, `안하는것`, `고르면돼`, `다음턴`, `움직이지마`, `헛수고되니` 계열 표현을 슬롯 기준으로 재분절했다.
+  - 빌드 중 확인된 `get closer row` 길이 초과는 `가까운 곳에 세워두는 게 중요해`로 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 과외수업 생산 설명 후속 문장 정리.
+  - `0xDA04C5`~`0xDA09F5`의 공장 후반, 공항 생산, 항구 생산 설명에서 `진행하는동안`, `쓰기편했어`, `생산하면좋아`, `생산설명`, `공중유닛을 생산하는곳`, `생산할수있어`, `고를수`, `쓸수없어`, `대기가되니까`, `듣고싶으면` 같은 줄붙음 후보를 슬롯 기준으로 재분절했다.
+  - `0xDA0A00`~`0xDA0CD3`의 과외수업 종료와 생산 메뉴 기본 설명 초입에서 `과외수업`, `가능한곳`, `라고해`, `생산메뉴`, `고를수있어`, `유닛이름` 계열 표현을 정리했다.
+  - `python3 tools/build_korean_full.py` 재빌드 결과 `overflow 0`. `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 과외수업 명령 설명 문장 정리.
+  - `0xD9F12B`~`0xD9F933`의 과외수업 명령 안내, 유닛정보, 전환키, 지형정보, 유닛목록 설명에서 `쓸수없어`, `볼수있단`, `맞출수있는`, `안써도`, `움직이는것보다`, `자세한정보`, `바꿀수있어`, `정렬할수있어` 같은 줄붙음 후보를 슬롯 기준으로 재분절했다.
+  - `0xD9F94E`~`0xDA04C0`의 상황정보, 시스템, 항복, 공장 생산 초입 설명에서 `다시한번`, `듣고싶어`, `나뉘어있어`, `점령가능한곳중`, `알수없지`, `볼수없어`, `설정할수있어`, `생산할수있어`, `쓸수없다는걸` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `terrain info detail row`, `unit list left right row` 길이 초과는 짧은 슬롯 특성상 기존 축약형으로 유지했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 후속 색적/정찰차/이동경로 설명 문장 정리.
+  - `0xD9D66A`~`0xD9E8FA`의 색적 기본 설명, 바주카병 시야, 정찰차, 숲/암초 은폐, 튜토리얼 종료 대사에서 `갈때까지`, `힘이있어`, `넓힐수있어`, `옆에갈때까지`, `아무것도못하고`, `줄수없어` 같은 줄붙음 후보를 슬롯 기준으로 재분절했다.
+  - `0xD9E902`~`0xD9F126`의 과외수업/이동경로/색적 취소 연료 설명에서 `설명안한`, `조우해버려`, `방법이있어`, `이선`, `이동경로`, `이동후`, `이동전`, `될수도` 계열 표현을 정리했다.
+  - 빌드 중 확인된 `forest adjacent move row`, `move to either row`, `nice to meet row`, `fighter move target row`, `path avoid here row` 길이 초과는 짧은 대체 문장으로 조정했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 후속 수송선/잠항/날씨 설명 문장 추가 정리.
+  - `0xD9B9A5`~`0xD9CAD5`의 수송선 적재/하차, 해상 유닛 연료, 잠수함 잠항 설명에서 `내릴수`, `하고싶어`, `공격받지않아`, `함락할수` 같은 줄붙음 후보를 슬롯 기준으로 재분절했다.
+  - `0xD9CADA`~`0xD9D665`의 수송선 패배 안내와 휩 매복/브레이크/날씨 설명에서 `보낼수없게`, `수있는`, `그중하나`, `움직일수없게`, `으으으...` 계열 위험 문구를 짧은 문장으로 보정했다.
+  - 빌드 중 확인된 `break one of them row`, `plain movement cost one row` 길이 초과를 각각 슬롯 안에 맞게 단축했고, 최종 재빌드는 `overflow 0`으로 완료했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 후속 해상 유닛 설명 후보 문장 정리.
+  - `0xD9AAF2`~`0xD9B984`의 호위함/전함/잠수함/수송선 설명 후보 블록에서 줄붙음 위험 문장을 슬롯 기준으로 단축하고 재분절했다.
+  - 빌드 중 확인된 `battleship range row`, `transport not capable row` 길이 초과를 각각 짧은 문장으로 조정해 `overflow 0`으로 재생성했다.
+  - `python3 -m py_compile tools/build_korean_full.py tools/qa_text_fit.py tools/qa_japanese_residuals.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba` 통과. 자동 집계 진행률은 `18,466 / 28,347 = 65.1%`.
+- [x] Part 2 튜토리얼 `공중전` DAY 2~DAY 4 bad-route 전투/메뉴/전환 UI current ROM 검수.
+  - DAY 2 시작 기준점은 `temp/probes/p2_air_battle_enemy_turn_follow_patch2_20260605/wait_6000f.ss0`다. 유닛 테이블 기준 전투기 record00/01, 전투헬기 record04, 포병 record05, 대공미사일 record06, 보병 record09가 조작 후보로 남아 있음을 확인했다.
+  - 살아 있는 아군 후보 선택과 상태 팝업은 `temp/probes/p2_air_battle_day2_unit_select_probe_20260605/sheet.png`로 확인했다. 이동 범위 오버레이와 지형/유닛 정보 팝업은 current ROM에서 한글로 표시되고, 즉시 보이는 일본어 잔여나 깨진 글자는 없었다.
+  - DAY 2 행동 메뉴/예측 화면은 `temp/probes/p2_air_battle_day2_action_menu_probe_20260605/sheet.png`로 비교했다. `대기`, `보급`, 지형명, 유닛명, 공격 예측 수치가 정상 표시되며, record06 대공미사일의 `u06_R_A` 후보는 100% 공격 예측으로 진입한다.
+  - `u06_R_A` 확정 전투는 `temp/probes/p2_air_battle_day2_u06_attack_confirm_20260605/sheet.png`와 확대본 `battle_crops_3x.png`로 확인했다. 전투 화면 HP/`방어` HUD는 정상이며, record68은 28HP에서 0HP로 정리됐다.
+  - `u06` 공격 뒤 턴 종료를 적용해 `temp/probes/p2_air_battle_day2_after_u06_endturn_probe_20260605/sheet.png` 기준 DAY 3 전환과 적 턴 전투를 확인했다. 이어 `temp/probes/p2_air_battle_day3_endturn_badroute_probe_20260605/sheet.png` 기준 DAY 4 전환, 부대 목록, 추가 전투 HUD까지 확인했으며 새 패치 대상은 보이지 않았다.
+- [x] Part 2 튜토리얼 `공중전` DAY 1 턴 종료 후 적 턴 대사/전투/일자 전환 current ROM 검수.
+  - record02 공중 유닛 공격 후 상태 `temp/probes/p2_air_battle_u02_0507_long_result_20260605/00_start.ss0`에서 `START, DOWN, DOWN, DOWN, A, DOWN, DOWN, DOWN, A` 입력으로 적 지휘관 대사와 적 턴에 진입하는 것을 확인했다. 비교 시트는 `temp/probes/p2_air_battle_endturn_sequence_probe_20260605/sheet.png`다.
+  - 적 턴 초입 대사 `0xD9A412`~`0xD9A489`를 보정했다. 최종 표시 기준은 `뭐라고?!`, `상륙부대가 들켰단 말인가!`, `지금 부대만으로 해내라!`이며, 확대 확인은 `temp/probes/p2_air_battle_endturn_dialog_patch2_verify_20260605/dialog_crops_4x.png`다.
+  - 대사 이후 적 턴 전투 애니메이션과 DAY 2 전환까지 `temp/probes/p2_air_battle_enemy_turn_follow_patch2_20260605/sheet.png`로 확인했다. 전투 화면 HP/`방어` HUD와 `２일째 작전개시` 오버레이는 current ROM에서 한글로 정상 표시된다.
+  - 재빌드는 overflow 0으로 완료했고, `python3 -m py_compile tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `git diff --check`가 통과했다.
+- [x] Part 2 튜토리얼 `공중전` 초입 전투 애니메이션 HUD current ROM 검수.
+  - record05 포병 공격은 `p2_air_battle_u05_attack_probe_20260605/attack_menu_A.ss0`에서 A 확정으로 실제 전투 애니메이션까지 진입했다. 확인 시트는 `temp/probes/p2_air_battle_u05_attack_confirm_anim_20260605/sheet.png`와 확대본 `battle_crops_3x.png`이며, 전투 화면의 HP/`방어` HUD는 한글로 정상 표시된다. 전투 결과는 record71이 100HP에서 27HP로 내려가는 포병 공격으로 확인했다.
+  - record02 공중 유닛은 `p2_air_battle_air_attack_candidate_probe_20260605/u02_05_07_p0.ss0`에서 A 확정으로 공중전 애니메이션까지 진입했다. 확인 시트는 `temp/probes/p2_air_battle_u02_0507_confirm_anim_20260605/sheet.png`와 확대본 `battle_crops_3x.png`이며, 양측 HUD의 `방어` 표기가 한글로 정상 표시된다. 결과 반영은 record68이 100HP에서 28HP로 떨어지는 것으로 확인했다.
+  - 중간 탐색에서 `u02_05_06_p0`은 이동 후 대기/작전 메뉴로 빠지는 비공격 경로임을 확인했다. 확대본 `temp/probes/p2_air_battle_u02_0506_confirm_anim_20260605/popup_crops_4x.png` 기준 작전 메뉴 계열 팝업은 한글로 표시되고, 즉시 패치할 잔여 일본어나 깨진 글자는 보이지 않았다.
+- [x] Part 2 튜토리얼 `공중전` 초입 자유 행동과 첫 공격 UI current ROM 검수.
+  - `하늘 제패!` 성공 후 최소 디버그 정리 상태에서 `공중전` 초입 브리핑을 넘겨 자유 행동 기준점 `temp/probes/p2_air_battle_dialog_close_probe_20260605/B2.ss0`를 확보했다. `A`로 닫으면 필드 입력까지 이어져 작전 메뉴가 열리므로, 이 대사 종료 지점은 짧은 `B` 입력 상태를 자유 행동 기준으로 사용한다.
+  - 주요 아군 유닛 선택 상태를 `p2_air_battle_unit_select_probe_20260605/sheet.png`로 비교했다. 전투기/전투헬기/포병/대공미사일/보병 계열 유닛의 이동범위 오버레이가 current ROM에서 정상 표시되고, 선택 과정에서 즉시 보이는 일본어 잔여나 깨진 상태 팝업은 확인되지 않았다.
+  - 현재 칸 확정으로 행동 메뉴를 연 결과는 `p2_air_battle_action_menu_probe_20260605/sheet.png`에 저장했다. 포병 record05는 `공격/대기` 메뉴가 한글로 열리고, 다른 유닛은 이 위치 기준 대부분 `대기` 메뉴로 정상 표시된다.
+  - record05 포병의 첫 공격 후보를 `p2_air_battle_u05_attack_probe_20260605/summary.json`으로 비교했다. 기본/RR/DD/RD/DR/RU/LD 계열은 record71에 피해가 들어가고, L/R/U/D 계열은 record62에 피해가 들어간다. 확대 확인 시트 `p2_air_battle_u05_attack_probe_20260605/forecast_crops_4x.png` 기준 전투 예측 수치/명령 UI는 표시되며, 즉시 패치할 새 잔여 일본어는 보이지 않는다.
+- [x] Part 2 튜토리얼 `하늘 제패!` 성공 후 `공중전` 초입 대사 current ROM 재검수 및 문장 깨짐 보정.
+  - `success_condition_force_probe2_20260605/base_plus72.ss0`에서 A 진행으로 성공 대사, 결과 화면, 다음 작전 선택, `공중전` 초입 브리핑까지 current ROM 기준으로 다시 캡처했다. 전체 진행 시트는 `temp/verified_sheets/p2_air_success_minforce_follow_20260605/sheet_changed.png`다.
+  - 확대 확인에서 `어떤 유닛이 어떤 유닛에공격공격...`, `보고싶은 유닛에 맞춰 정보키 / 누르면돼...` 뒤쪽 깨짐처럼 보이던 줄을 `0xD9A305`~`0xD9A3D0` 고정 행 패치로 재분절했다. 최종 확인은 `temp/verified_sheets/p2_air_success_minforce_follow_patch3_20260605/dialog_patch3_crops_3x.png` 기준이며, `어떤 유닛이 어떤 적을 공격 / 할 수 있는지 알지`, `보고싶은 유닛에 커서를 / 맞추고 정보키를 눌러`로 표시된다.
+  - 같은 구간에서 `휩 부대가 상륙하기 전 / 먼저 배치했어`로 문장을 줄여 `배치할수 있어` 계열의 어색한 줄붙음도 같이 정리했다.
+  - 재빌드 결과 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`는 overflow 0으로 완료했고, `python3 -m py_compile tools/build_korean_full.py`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`가 통과했다.
+- [x] Part 2 튜토리얼 `하늘 제패!` 성공 조건 record72 잔존 디버그 및 DAY 5 record69 선처리 분기 재검수.
+  - `day6_from_art66kill/endturn_found_input_20260605/art68_default_start.ss0`에서 EWRAM 유닛 레코드를 `w8`로 임시 정리해 성공 조건을 좁혔다. `success_condition_force_probe_20260605/`와 `success_condition_force_probe2_20260605/` 기준 record66~69만 type 0/HP 0으로 정리해도 성공하지 않고, 여기에 record72를 함께 type 0으로 정리하면 `제법이네!` 성공 대사로 들어간다. record70/73 정리는 성공 조건에 필수로 보이지 않는다.
+  - record72 timeline을 `record72_timeline_20260605/summary.json`으로 추적했다. DAY 3 시작에는 record72가 HP 29/type 19 `(2,8)`이고, 전투헬기 공격 직후 HP 0/type 19로 남는다. 이후 DAY 4~DAY 7까지 좌표만 `(2,4)`/`(3,9)`/`(1,9)`로 바뀌고 type 19가 계속 남아 성공 조건을 막는다. `record72_cleanup_wait_20260605/`에서 DAY 3 격파 직후 7200프레임까지 대기해도 type은 0으로 내려가지 않았다.
+  - 기존 대체 전투헬기 분기(`art_bcop16_after_bcop_field.ss0`, `art_copter16_u09_after_end.ss0`, `art_u09_copter16_after_end.ss0` 등)도 `record72_alt_branch_compare_20260605/summary.json` 기준 record72 HP 0/type 19 잔존으로 수렴한다. 따라서 현재 저장된 공정 플레이 분기 안에서는 record72가 자연 정리되는 후보가 없다.
+  - DAY 5에서 포병 `L/U`로 record69를 100HP -> 40HP로 먼저 낮춘 뒤, corrected cursor 기준 record09 후속을 다시 확인했다(`day5_art69_followup_u09_corrected_20260605/summary.json`). record09는 기본/좌우/2칸 좌우 계열에서 record68을 35HP -> 30HP로 낮출 뿐 record69를 마무리하지 못한다. 아래/상하 조합은 유효 피해 없이 record09 act만 바뀐다.
+  - 결론적으로 현재 클리어 병목은 visible record69 처리와 hidden record72 type 잔존 두 가지다. 실제 한글 QA를 계속 진행해야 할 때는 최소 디버그 정리 대상이 record66~69+72임을 기준으로 성공/다음 작전 화면 검수를 이어갈 수 있고, 공정 루트 탐색은 record69 처리 가능 분기와 record72 type 19를 자연히 제거하는 입력/이벤트가 있는지로 좁힌다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 3/5 턴 종료 입력 역추적 및 DAY 6 후속 적용.
+  - 기존 성공 전/후 상태인 `day3_after_artillery_bcopter72_u09.ss0` -> `day3_u09_after_endturn_wait.ss0`, `day5_wide_probe/art66_followups/RR_u09_L_after_u09.ss0` -> `RR_u09_L_after_end.ss0`를 기준으로 후보 입력을 비교했다. `endturn_reverse_probe_20260605/summary.json` 기준 `START, DOWN, DOWN, DOWN, A, DOWN, DOWN, DOWN, A`가 DAY 3과 DAY 5 모두에서 기존 성공 후 상태와 유닛 테이블 diff 0으로 일치했다. `B` 전처리는 선택 사항이며, 커서 IWRAM 값은 프레임/화면 상태에 따라 다를 수 있어 유닛 테이블을 성공 판정 기준으로 둔다.
+  - 위 턴 종료 입력을 `record66 제거 -> DAY 6 포병으로 record68 제거` 분기에 적용했다(`day6_from_art66kill/endturn_found_input_20260605/summary.json`). 다음 턴에는 record67 type이 0으로 빠지고 record68도 0HP로 남지만, record69는 100HP 그대로 남는다. 같은 상태에서 추가 턴 종료만 하면 DAY 8까지 진행되지만 record69는 계속 100HP이며 record06은 12HP까지 떨어진다(`day7_from_art68_end_endturn_only_20260605/`).
+  - DAY 7 record68 제거 후 상태에서 record06/07/08 현재 위치 행동 후보를 확인했다(`day7_art68_remaining_action_probe_20260605/summary.json`). record06/07/08의 제자리 선택/기본 타깃/주요 방향 후보는 record69/70/73 체력을 바꾸지 못했고, 포병은 공격 메뉴 없이 대기/무효 행동으로 빠지는 패턴이 확인됐다.
+  - 반대 분기인 `record66 제거 -> DAY 6 포병으로 record69 40HP`도 같은 턴 종료 입력으로 실제 다음 턴까지 진행했다. 그러나 record67 100HP `(1,2)`, record68 35HP `(9,5)`, record69 40HP `(8,4)`가 모두 남고, DAY 7 포병 타깃 후보(`day7_from_art69_end_artillery_probe_20260605/summary.json`)에서도 record67/68/69 체력 변화가 없었다.
+  - 결론적으로 DAY 3/5에서 쓰던 안정적인 턴 종료 입력은 확정됐지만, 현재 `record66 제거` DAY 6 분기는 record68 제거 쪽도 record69 잔존으로 막히고, record69 약화 쪽도 record67/68/69가 함께 남아 클리어 후보로 부족하다. 다음 탐색은 DAY 5~DAY 6 이전에 record69를 처리하거나, 성공 조건이 실제로 어떤 적/건물 레코드를 요구하는지 디버그로 재확인하는 쪽이 우선이다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 5 record67 5HP 분기 후속 재확인.
+  - 기준 상태는 `day5_wide_probe/artillery_target_probe/R_after.ss0`와 `D_after.ss0`이며, DAY 5 포병이 record67을 100HP에서 5HP로 낮춘 직후다. 기존 `art66_followups/summary.json`의 `R_u09_*`/`D_u09_*`를 `after_u09` 기준으로 다시 판독해도 record09는 record67을 제거하지 못했다. 기본 확정은 record68을 35HP에서 30HP로 낮추고, `L/D/R/U` 계열 타깃 조정은 record66을 100HP에서 88HP로 낮출 뿐 record67은 5HP 그대로다.
+  - record09 느린 입력 재확인(`day5_record67_5_u09_confirm_target/`)에서 A3 단계 커서가 record67 좌표 `(4,0)`로 이동하지만, A4 실제 전투 결과는 record68 35HP -> 30HP였다. 따라서 record67은 record09의 유효 공격 타깃으로 잡히지 않거나, 이 상태의 타깃 우선순위에서 선택되지 않는다.
+  - record02 수동 단계 확인(`day5_record67_5_u02_manual_steps/`, `day5_record67_5_u02_double_select/`)에서 record02는 선택 뒤 이동 커서가 열리지 않고 사실상 대기 처리만 가능했다. record06/07/11도 `day5_record67_5_core_menu_double_select/` 기준 공격 피해 없이 대기/메뉴 상태로만 끝났다.
+  - 넓은 자동 스윕은 과도하게 길어 중단했지만, 처리된 record00 후보 95개와 집중 스윕 초반 61개는 모두 적 record66/67/68/69/70/73 체력 변화가 없었다. 다음부터는 이 분기에서 하단/보조 유닛의 무차별 이동 스윕을 반복하지 않는다.
+  - 결론적으로 DAY 5에서 record67을 5HP까지 낮추는 `R/D` 포병 분기는 현재 클리어 후보가 아니다. record67 처리보다 `record66 제거` 후보를 기준으로 클리어 조건 자체를 확인하거나, record68/69 처리 후 성공 트리거를 검증하는 쪽이 우선이다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 4 record09 위치 변형과 DAY 5/6 후속 분기 추가 비교.
+  - DAY 4 `R3U` 분기는 DAY 5 시작 record09 `(3,0)`, record67 100HP `(2,0)`, record10 13HP 상태를 만든다. DAY 5 포병 기본 공격은 record67을 100HP에서 5HP로 낮추지만, `day5_r3u_record67_follow/u09_target_sweep_longwait/summary.json` 기준 이후 record09는 record67을 마무리하지 못하고 record68만 35HP에서 28HP로 낮춘다.
+  - 같은 `R3U`에서 순서를 바꿔 DAY 5 `record09 먼저`를 시도했다(`day5_r3u_u09_first/summary.json`). 이 경우도 record09가 record67을 공격하지 못하고 record68만 28HP까지 낮춰서, 포병과 조합해 record67 제거 루트가 열리지 않았다.
+  - `R3U`의 기존 `포병만 공격 -> 턴 종료` 상태는 DAY 6에 record67 5HP를 남긴다. DAY 6 포병은 record66을 100HP에서 34HP로 낮출 수 있지만(`day6_from_r3u_record67_5/artillery_target_probe/summary.json`), 그 뒤 남은 유닛 행동 스윕(`day6_from_r3u_record67_5/after_art66_action_sweep/summary.json`)에서는 record66/67/68/69에 추가 유효 피해가 없었다.
+  - DAY 4 `R5` 분기는 DAY 5 시작 record67 60HP를 유지하지만, DAY 5 포병 타깃 스윕(`day5_r5_record67_60/artillery_target_probe/summary.json`)에서 포병은 record64만 제거하고 record67/66/68/69를 건드리지 못했다. record09도 type 0 상태라 후속 공격 후보로 쓰기 어렵다.
+  - DAY 4 `R4` 분기는 DAY 5 시작 record66 `(5,0)`, record67 `(4,0)` 배치라 재확인했지만, 포병 타깃 스윕(`day5_r4_wide/artillery_target_probe/summary.json`)은 record68 제거만 반복했다. record67 type 변화는 보였으나 HP는 100 그대로라 유효 피해로 보지 않는다.
+  - 기존 전투헬기 위치/순서 대체 상태(`art_copter07_u09_after_end.ss0`, `art_copter16_u09_after_end.ss0`, `art_copter27_u09_after_end.ss0`, `art_u09_copter16_after_end.ss0`)는 메모리 재확인 결과 모두 기준 `R5U_after_end.ss0`와 같은 DAY 5 배치로 수렴했다. 따라서 현재 우선 후보는 여전히 DAY 5 `포병 RR 계열 -> record09로 record66 제거` 루트이며, 다음 탐색은 record67 처리 방법 또는 턴 종료/적 턴 후 배치 변화 재현에 집중한다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 5 포병 타깃 재탐색과 record66 제거 분기 확인.
+  - 기준 DAY 5 시작점은 `day4_u09_alt_after_end/R5U_after_end.ss0`이며, 이 상태에서 포병 타깃 선택이 기존 기본값보다 훨씬 넓게 열린 것을 확인했다. `artillery_target_probe/summary.json` 기준 기본/`LD`/`RU`/`RULD`/`UR`/`DL`은 record68을 35HP에서 0HP로 제거하고, `L`/`U`는 record69를 100HP에서 40HP로 낮추며, `R`/`D`는 record67을 100HP에서 5HP로 낮춘다. `RR`/`DD`/`RD`/`DR`은 record66을 100HP에서 5HP로 낮춘다.
+  - 새 유효 분기는 `포병 RR 계열 -> record09 L/D/R/U 계열`이다. `day5_wide_probe/art66_followups/summary.json` 기준 record09가 record66을 5HP에서 0HP로 제거하고, 턴 종료 뒤 `RR_u09_L_after_end.ss0` 등에서 DAY 6에 진입한다. DAY 6 시작 상태는 record66 0HP, record67 100HP `(4,0)`, record68 35HP `(9,5)`, record69 100HP `(8,4)`, record10 0HP, record11 7HP다.
+  - 위 새 DAY 6 상태에서 포병 타깃을 다시 비교했다(`day6_from_art66kill/artillery_target_probe/summary.json`). 기본/`LD`/`RU`/`DL`은 record68을 35HP에서 0HP로 제거하고, `L`/`U`/`RR`/`DD`/`RD`/`DR`은 record69를 100HP에서 40HP로 낮춘다. record67은 이 포병 분기에서도 직접 타깃으로 잡히지 않는다.
+  - `record66 제거 -> DAY 6 포병으로 record68 제거 -> record09` 후속 스윕(`day6_from_art66kill/after_art68_u09_follow/summary.json`)에서는 record09가 record67/69에 유효 피해를 주지 못했다. record09는 화면 기준 선택/행동이 불안정하고, 메모리상 type 0 상태라 기존 DAY 5 공격 유닛처럼 쓰기 어렵다.
+  - `record66 제거 -> DAY 6 포병으로 record69 40HP` 분기에서도 남은 유닛 기본 행동 스윕(`day6_from_art66kill/action_sweep_art69/summary.json`)은 적 record67/68/69의 체력을 바꾸지 못했다. record00/01/02/06/07/11은 대기 또는 무효 행동만 확인됐고, record09/record12는 작전 메뉴/상태창 계열로 빠져 실제 공격 후보가 아니었다.
+  - DAY 6 `record69 40HP` 분기의 턴 종료 입력은 아직 재현되지 않았다. `START`, 빈 칸 A, `(12,7)` A 이후 메뉴 후보는 기존 DAY 5 `RR_u09_L_after_end.ss0`를 재현하지 못했다. 다음 검수는 무작정 DAY 6을 미는 것보다, 기존 성공 턴 종료 입력을 다시 찾거나 DAY 4~DAY 5에서 record67까지 제거/약화하는 분기를 우선 탐색한다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 6 이후 진행 가능성 추가 확인.
+  - 기준 DAY 6 시작점은 `day5_from_u09_alt_v2/R5U_after_art_end.ss0`로 재확인했다. 주요 아군은 record01/02 경전차, record06/07 보조차량, record08 포병, record09 상단 보병, record10 9HP 유닛, record11 7HP 유닛이 남아 있고, 적은 record66 100HP, record67 100HP, record69 100HP, record70 27HP, record73 97HP가 남아 있다.
+  - DAY 6 제자리 행동 스윕(`day6_probe_current/stationary_sweep/summary.json`)에서 record08 포병이 적 record66을 100HP에서 34HP로 줄이는 확정 공격을 확인했다. record06은 `대기`만 표시되고, record07은 `보급/대기` 메뉴만 표시되어 공격 유닛이 아니다.
+  - 포병 공격 뒤 직접공격 후보(`day6_probe_current/after_art_direct_sweep/summary.json`)를 비교했다. record09 제자리 공격은 record66을 34HP에서 24HP로만 낮추며, record01/02 경전차 이동 후보는 현재 입력/지형 조건에서 위쪽 적에게 유효 피해를 주지 못했다.
+  - `포병 -> record09 -> 턴 종료`는 `day6_art_u09_endturn/day7_after_art_u09_endturn.ss0`까지 진행 가능하지만, 적 턴 뒤 record10/record11이 0HP가 되고 DAY 7 포병은 `보급/대기`만 표시되어 추가 공격이 열리지 않았다. 포병 탄약/보급 처리가 다음 병목이다.
+  - record08 포병의 원시 레코드 `64 03 32 ... 0b`는 DAY 6 공격 전후에도 바뀌지 않았다. 따라서 DAY 7에 공격 메뉴가 사라지는 원인은 단순 탄약 바이트 감소가 아니라, 공격 가능 타깃/명령 상태 변화까지 함께 봐야 한다.
+  - DAY 6 record07 보급차는 포병 오른쪽 인접 위치에 있지만 `보급` 확정 입력이 아직 성공하지 않았다. `supply_target_probe/` 기준 단순 `A`, `A->R->A`, `A->D->A` 후보 중 `D/A` 계열은 대기 처리만 됐고, 포병 재공격 가능 상태를 만들지는 못했다.
+  - 오른쪽 끝 record12 `(12,7)`은 사용자 조작 대상이 아니라 적/비조작 유닛으로 확인했다. 해당 좌표에서 A를 누르면 유닛 선택이 아니라 작전 메뉴/부대 목록으로 들어가므로, 수도 점령 루트 후보로 보지 않는다.
+  - DAY 6에 record09를 쓰지 않고 `포병만 공격 -> 턴 종료`하면 `day6_art_only_endturn/day7_after_art_only_endturn.ss0`에서 record10은 9HP로 하루 더 남는다. 하지만 실제 화면에서 record10 좌표 `(1,8)`을 선택하면 유닛 행동이 아니라 작전 메뉴/상태창으로 빠지며, `u10_step_screens/` 기준 조작 가능한 유닛으로 보이지 않는다.
+  - 위 art-only 분기에서 DAY 7 record09 제자리 공격은 record66을 34HP에서 24HP로 줄일 수 있고 `day7_art_only_branch/u09_endturn/day8_after_u09_endturn.ss0`까지 진행된다. 그러나 DAY 8 행동 스윕(`day8_art_only_branch/action_sweep/summary.json`)에서는 포병/record09/경전차/보조차량 모두 추가 유효 피해가 없어 이 분기도 클리어 후보에서 제외한다.
+  - 다음 검수는 DAY 6 이후 미세 조정보다는 DAY 5 이전에 record10/record11을 실제 조작 가능 상태로 보존하거나, DAY 4~DAY 5에서 적 record66/67/70의 위치와 체력을 더 크게 바꾸는 분기를 우선 확인한다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 4 대체 분기와 DAY 5 후속 행동 비교.
+  - 기존 DAY 4 `전투헬기 record05 -> (1,6), record09 -> (5,0)` 분기를 실제 입력으로 재생성하고 `art_bcop16_after_bcop_field.ss0`를 만들었다. 이 상태는 메뉴가 열리지 않은 필드 복귀 상태이며, record05가 record71을 0HP로 제거한 뒤 record09가 아직 행동 가능한 기준점이다.
+  - record09 기본 타깃 후보를 `day4_u09_alt_targets_default/summary.json` 기준으로 비교했다. `R5U`, `R4`, `R3U`는 record64를 제거했고, `R5`는 record64를 남긴 대신 record67을 100HP에서 60HP로 줄였다. 무효 이동 후보는 record09 act=6 상태로 남아 실제 행동 완료로 채택하지 않았다.
+  - DAY 4 턴 종료 비교(`day4_u09_alt_after_end/summary.json`)에서 `R3U`는 DAY 5 시작 record10 HP가 13으로 기준 `R5U`의 9보다 조금 높았지만, DAY 5 포병 기본 타깃이 record68이 아니라 record67을 5HP까지 줄이는 쪽으로 바뀌어 후속 턴에서 record10이 0HP가 됐다. `R4`는 기준과 같은 record68 제거가 가능하지만 record11은 여전히 적 턴 뒤 7HP까지 떨어졌다.
+  - DAY 5 기준 분기에서 포병으로 record68을 0HP로 제거한 뒤 record09 추가 행동을 비교했다(`day5_after_art_u09_actions/summary.json`). record09는 제자리/좌측 이동 공격으로 record66 또는 record67을 12HP만 줄였고, 적 턴 뒤 record11은 여전히 7HP라 생존 개선 효과가 없었다.
+  - 같은 DAY 5 상태에서 record11 이동 후보를 비교했다(`day5_after_art_u11_actions/summary.json`, `day5_after_art_u11_dd_probe/summary.json`). `(1,6)`은 전투헬기 잔해 때문에 막히는 것으로 보이며, `D`/`DD` 이동은 record70을 제거하지 못했다. 일부 결과에서 record11이 71HP로 남은 것은 작전 메뉴 `종료`가 열리지 않은 미완료 턴 종료라 성공 후보로 보지 않는다.
+  - 현재 가장 재현성이 높은 DAY 5 시작점은 여전히 `day4_u09_alt_after_end/R5U_after_end.ss0`이며, 다음 검수는 DAY 5에서 record09/record11보다 다른 유닛 또는 DAY 4 전투헬기 위치/record09 타깃 선택을 더 넓게 재탐색하는 쪽이 낫다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 4~DAY 7 진행 후보 검증.
+  - DAY 4 상태 `day3_u09_after_endturn_wait.ss0`에서 포병 `(5,4)` 제자리 공격으로 적 record 64를 100HP에서 30HP로 줄이는 행동을 재현하고 `day4_route_artillery64_u11kill71_after_artillery.ss0`로 저장.
+  - 이어 record 11을 `(1,6)`으로 이동시켜 적 record 71을 40HP에서 0HP로 제거했고, 상태를 `day4_route_artillery64_u11kill71_v2.ss0`로 저장.
+  - record 09는 `(5,0)`으로 이동해 포병이 약화한 적 record 64를 30HP에서 0HP로 제거했고, 상태를 `day4_route_artillery64_u11kill71_u09kill64.ss0`로 저장.
+  - DAY 4 마지막에 전투헬기 record 05를 `(4,9)->(6,9)`로 대피시키는 분기도 시험했지만, 적 턴 후 동일하게 0HP가 되어 생존 개선 효과가 없었다. 기본 턴 종료 상태는 `day4_route_after_endturn_wait.ss0`, 대피 시험 상태는 `day4_route_with_bcopter_safe_after_endturn.ss0`.
+  - DAY 5에서는 포병 `(5,4)` 제자리 공격으로 적 record 68을 35HP에서 0HP로 제거했고, 상태를 `day5_artillery_kill68.ss0`로 저장. 추가 직접공격 후보는 의미 있는 체력 변화가 없어 바로 턴 종료했고 `day5_artillery_endturn_wait.ss0`로 DAY 6 진입을 확인.
+  - DAY 6에서는 포병이 적 record 66을 100HP에서 34HP로 줄였고 `day6_artillery_hit66.ss0`로 저장. 턴 종료 뒤 `day6_artillery_endturn_wait.ss0`에서 DAY 7 진입을 확인했지만 record 11은 적 턴 중 0HP가 되었다.
+  - DAY 7 상태에서는 포병이 더 이상 피해를 주지 못하고, record 09의 약한 공격 후보만 확인됐다. 이 분기는 계속 진행 가능하지만 아군 손실이 커서, 다음 검수에서는 DAY 4~DAY 6의 전투헬기/record 11 보존 또는 record 09 목표 선택을 재검토할 필요가 있다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 3 실제 조작 루트와 DAY 4 전환 검증.
+  - DAY 2 `포병 먼저 -> 대공전차` 순서가 실제로 안정적인 것을 재확인했다. `after_center_top_attack.ss0`에서 포병 `(5,4)` 제자리 공격으로 적 record 68을 100HP에서 40HP로 줄인 뒤, 대공전차 `(4,4)` 제자리 공격으로 record 63을 20HP에서 0HP로 제거하는 순서가 유효하다.
+  - 위 순서 뒤 작전 메뉴 `종료`를 느린 입력으로 선택해 적 턴을 넘기고 DAY 3 조작 가능 상태 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/day3_field_ready2.ss0`를 만들었다. DAY 3 시작 커서는 IWRAM 좌표 `0x030031B0`/`0x03003464` 기준 `(5,2)`로 확인.
+  - DAY 3 첫 행동은 포병 `(5,4)` 제자리 공격으로 적 record 65 `(9,1)`을 100HP에서 0HP로 제거했고, 상태를 `day3_after_artillery_kill.ss0`로 저장.
+  - 두 번째 행동은 전투헬기 record 05를 `(5,6)`에서 `(4,9)`로 이동해 적 record 72 `(2,8)`을 29HP에서 0HP로 제거했고, 상태를 `day3_after_artillery_bcopter72.ss0`로 저장.
+  - 세 번째 행동은 record 09를 `(1,6)`에서 `(0,1)`로 이동해 적 record 71 `(3,9)`을 100HP에서 40HP로 줄였고, 상태를 `day3_after_artillery_bcopter72_u09.ss0`로 저장.
+  - 이후 빈 칸에서 작전 메뉴를 열어 `종료`를 선택했고, 적 턴 진행 뒤 DAY 4 화면과 행동 플래그 초기화를 `day3_u09_after_endturn_wait.ss0`/`day3_u09_after_endturn_wait_units.bin` 기준으로 확인.
+  - 이번 검수는 기존 savestate를 이어 쓴 것이므로 지형 팝업에 `道路` 같은 옛 VRAM 캐시가 보일 수 있다. ROM 기준 `平地`/`道路`/`都市`/`首都` 원문 count=0 확인은 이전 빌드 검증을 신뢰하고, fresh-run 화면 검증은 다음 UI 잔여 작업에서 계속한다.
+- [x] Part 2 튜토리얼 `하늘 제패!` DAY 2 실제 조작 후보 재검수 및 상태 팝업 지형 테이블 보강.
+  - 정상 턴 종료 뒤 조작 상태 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/state.ss0`의 시작 커서를 화면 기준 `(8,7)`로 확정하고, 주요 유닛 좌표를 다시 판독.
+  - 실기 후보에서 `(6,4)` 전투헬기를 `(5,6)`으로 이동해 공격 메뉴 `공격/대기`를 열고, 적 전투헬기 `(6,8)`을 99HP에서 29HP로 줄이는 유효 전투 루트를 확인.
+  - 전투헬기 공격 뒤 커서는 화면 기준 `(5,7)`이며, 여기서 `L,U,A,R,U,U,U,A,A,A,A` 입력으로 중앙 유닛을 `(5,3)`으로 보내 상단 적 보병 record 63을 100HP에서 20HP로 줄이는 추가 전투 후보를 확인하고 `temp/probes/p2_air_supremacy_after_enemy_turn_20260605/after_center_top_attack.ss0`로 저장.
+  - 같은 상태에서 대공전차/미사일 후보를 재확인했다. 미사일은 현재 `대기`만 표시되어 즉시 사격 불가, 대공전차의 `(5,3)`/`(4,2)` 이동 후보는 지형/점유 때문에 확정되지 않아 최종 루트로 채택하지 않음.
+  - 같은 검수 중 하단 상태 팝업 지형 행의 `平地`/`道路`/`都市` 계열 원문이 ROM 보호 UI 테이블 `0x80595C`, `0xD830D0`에 남아 있음을 확인하고, 고정 76바이트 행을 `평지/산/강/숲/도로/도시/해/...` 기준으로 교체.
+  - 추가로 보호 UI/승리조건 테이블에 남은 `首都` 4건(`0x8053FC`, `0x8054CA`, `0xD82B70`, `0xD82C3E`)을 같은 길이 `수도`로 교체해 `平地`/`道路`/`都市`/`首都` 원문 count=0을 확인.
+  - 현재 savestate는 VRAM 캐시 때문에 `道路` 타일을 계속 보일 수 있으나, 새 빌드 ROM 기준 해당 테이블의 `平地`/`道路`/`都市` 원문 count=0을 확인.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 상태로 재생성하고 `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 실제 `하늘 제패!` 최종 클리어 루트 확정은 계속 진행 중.
+- [x] Part 2 튜토리얼 `하늘 제패!` 성공 후/다음 작전 연결부 디버그 검수 및 문장 깨짐 정리.
+  - 프리액션 상태 `temp/probes/p2_air_supremacy_free_action_20260605/free_action.ss0`에서 적 레코드 type만 정리해 성공 전환을 재현하고, 성공 대사/결과 화면/다음 `공중전` 작전 선택 브리핑을 확인.
+  - 적 CO 대사의 `으으으...` 계열이 enemy font에서 깨지던 줄을 안전 문구 `젠장!`으로 단축하고, 같은 계열 후속 적 대사도 짧은 문장으로 보정.
+  - 다음 `공중전` 작전 설명의 `공중유닛이나간접공격유닛...`, `드디어전투기, 폭격기...`, `나타는 거야`, `그걸순...` 같은 줄붙음/오독을 화면 기준으로 짧게 고정.
+  - 검증 캡처: `temp/verified_sheets/p2_air_supremacy_enemy_success_phrase_20260605/sheet.png`, `temp/verified_sheets/p2_air_supremacy_next_operation_text_20260605/sheet.png`, `temp/verified_sheets/p2_air_supremacy_next_operation_text3_20260605/sheet.png`.
+  - 같은 빌드에서 `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 실제 `하늘 제패!` 클리어 루트 확정은 다음 작업으로 남김.
+- [x] Part 2 튜토리얼 `하늘 제패!` 초입/대공미사일/로켓포 설명 실기 검수 및 문장 경계 정리.
+  - 다음 작전 타이틀 OBJ `大空を制せよ!`를 `하늘 제패!`로 재렌더링하고, 초입 대사 `공격쉽게`, `유닛공격 가능능` 잔여 조각을 제거.
+  - 대공미사일 설명의 `공중유닛 공격 / 공격용...` 중복을 `공중유닛 공격 / 간접 유닛이야`로 정리하고, 전투 HUD `방어` 라벨이 유지되는 것을 재확인.
+  - 로켓포/타이어 타입/공략 힌트 구간의 `아까대공미사일`, `다만자주포`, `나온대공미사일과로켓포`, `대공미사일로켓포` 같은 줄붙음을 실제 화면 기준으로 수정.
+  - 검증 캡처: `temp/verified_sheets/p2_air_supremacy_intro_text_patch3_20260605/sheet.png`, `temp/verified_sheets/p2_air_supremacy_rocket_text_patch_20260605/sheet.png`, `temp/verified_sheets/p2_air_supremacy_late_hint_text_patch2_20260605/sheet.png`, `temp/verified_sheets/p2_air_supremacy_final_hint_phrase_20260605/sheet.png`.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 한글화 상태로 재생성하고 `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과.
+- [x] Part 2 튜토리얼 `하늘의 적` 대공전차 실기 루트 검증 및 전투 화면 잔여 영어 정리.
+  - 대공전차 선택 루트는 두 번째 `골라봐`가 닫힌 뒤 `(1,8)` 기준 `오른쪽2, 위2, A`, 이동은 `(3,6)` 기준 `위4, A`, 메뉴 첫 항목 `공격`으로 확인.
+  - `이 유닛이 대공전차야`, `마침 근처에 전투헬기가 있어`, `직접 공격`, 전투 후 힌트 문장의 줄붙음을 화면 기준으로 수정.
+  - 전투 애니메이션 HUD의 raw BG 타일 `DEFENSE` 라벨 2개를 `방어`로 교체.
+  - 검증 캡처: `temp/verified_sheets/p2_antiair_route_text_patch_20260604/sheet.png`, `temp/verified_sheets/p2_battle_defense_label_patch_20260604/sheet.png`.
+- [x] 전체 한글 예약코드/글리프 기반 빌드 파이프라인 구축.
+- [x] Part 1 대화 ASM hook과 Part 2 tilemap/glyph-cache renderer hook 적용.
+- [x] 이름 입력 그리드 A-Z/a-z/0-9 표시와 미리보기 흐름 안정화.
+- [x] GBA 헤더 체크섬 QA를 `0xA0..0xBC` inclusive 기준으로 정리.
+- [x] 타이틀/선택 화면 한글 로고 방향 정리 및 기본 색상/배치 조정.
+- [x] Part 2 지도/미션/레벨/체크/캐서린 등 주요 OBJ 라벨 일부 한글화.
+- [x] Part 2 튜토리얼 초반 커서/보병/수송차/이동/점령/지형/자주포/맥스/수송헬기 구간 문장 깨짐 교정.
+- [x] Part 2 `0xA06B80-0xA14000` 구간의 일본식 말줄임표, 장음 기호, 미매핑 보조 번역을 정리.
+  - ROM 디코드 감사 기준 `0xA06B80-0xA14000` bad=0, blank=0.
+- [x] `docs/plan.md`와 `.claude/todo.md`를 제거하고 진행 기준을 루트 `todo.md` 하나로 통합.
+- [x] 활성 안내 문서의 구식 `docs/plan.md`/`.claude/todo.md` 참조를 루트 `todo.md` 기준으로 정리.
+  - `README.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `docs/PHASE6_QA_FRAMEWORK.md`의 현재 작업 안내가 모두 `todo.md`를 가리키도록 수정.
+- [x] Part 2 `0xA14000-0xA30000` 구간의 CSV 텍스트 슬롯 기준 잔여 일본어/깨짐 후보 정리.
+  - CSV 슬롯 감사 기준 `0xA14000-0xA30000` bad=0.
+  - `0xA2CAA4` blank 1개는 전각 공백 전용 슬롯이라 표시 문자열 대상에서 제외.
+- [x] Part 2/캠페인 추가 슬롯 정리.
+  - CSV 슬롯 감사 기준 `0xA30000-0xA80000` bad=0, blank=0.
+  - CSV 슬롯 감사 기준 `0xE00000-0xE10000` bad=0, blank=0.
+  - `D8Fxxx` 공격 튜토리얼의 복합 행은 행 단위 패치 기준으로 확인하고, CSV 슬롯 중간 읽기 false positive는 제외.
+- [x] `D8F000-E18000` 문장형 튜토리얼/캠페인 후보 감사.
+  - 보호 문자표/그래픽/테이블과 이미 행 단위로 재구성한 CSV 중간 슬롯을 제외한 실제 문장 후보 bad=0.
+- [x] Part 2 보호 전투 UI 테이블의 `항복` 명령 표시 개선.
+  - `降車`는 기존 `하차` 글리프 경로를 유지하고, `降伏す`만 컨텍스트 치환으로 `항복` 표시 경로에 연결.
+- [x] Part 2 보호 전투 UI 테이블의 짧은 명령/상태 토큰 추가 개선.
+  - 직접 한글 코드를 쓰지 않고 SJIS 글리프 치환 경로로 `저장`, `잠수`, `부상`, `없음`, `있음` 표시를 연결.
+  - 보호 테이블 감사 기준 `セブ`, `もぐる`, `うかぶ`, `なし`, `あり`, `降伏す` 잔여 count=0.
+- [x] Part 2 보호 UI의 메뉴/상태 공통 토큰 추가 개선.
+  - 고정 길이 치환으로 `캠페인`, `트라이얼`, `자유전`, `상점`, `통신`, `처음부터`, `계속`, `대전`, `부대`, `불참`, `장비없음`, `행동수` 표시 경로를 연결.
+  - 관련 원문 토큰 `キャンペーン`, `トライアル`, `フリバ`, `ショップ`, `つうしん`, `はじめから`, `づき`, `たいせ`, `ユニット`, `ふさんか`, `装備していません`, `行動回` 잔여 count=0.
+- [x] Part 2 보호 UI의 반복 국가명 라벨 개선.
+  - 문자열 공유 위험이 낮은 국가명만 고정 길이 치환으로 `레드스타`, `블루문`, `그린`, `옐로코멧`, `블랙홀` 표시 경로에 연결.
+  - 보호 테이블 내 해당 국가명 원문 5종 잔여 count=0, 새 토큰은 각각 7회 확인.
+- [x] Part 2 보호 UI의 무기/시스템/플레이어 라벨 추가 개선.
+  - `기관총`, `바주카`, `캐논`, `발칸`, `로켓폭탄`, `로켓포`, `어뢰`, `레이크시스템`, `애니`, `플레이어`, `컴퓨터`, `맵편집`, `로드`, `튜토`, `맵나감`, `대승리조건` 표시 경로를 연결.
+  - 해당 카나 원문 `マシンガ`, `バズーカ`, `キャノ`, `バルカ`, `ロケット`, `レイクシステム`, `アニメ`, `プレイヤ`, `コンピュタ`, `マエディオ`, `ロド`, `チュ`, `プをぬけ` 잔여 count=0.
+- [x] Part 2 보호 UI의 초반 미션 제목 일부 개선.
+  - 미션 제목 테이블에서 `건파이터`, `공중왕`, `맥스출격`, `저격수`, `눈속전투` 표시 경로를 연결.
+  - 관련 원문 `ガンファイター`, `空の王者`, `マックス出撃`, `スナイパー`, `雪の中の戦い` 잔여 count=0.
+- [x] Part 2 보호 UI의 미션 제목 추가 개선.
+  - `세사람과거`, `특수부대장`, `도미노능력`, `기쿠치요등장`, `최강실수`, `분단작전`, `아스카노림`, `그린어스해적`, `바다큰날개`, `전투뒤에서`, `료복사본`, `흑막결착`, `칠흑의숲` 표시 경로를 연결.
+  - 관련 미션 제목 원문 11종 잔여 count=0, `黒幕決着！`는 글리프 치환 기준 `흑막결착！` 확인.
+- [x] Part 2 보호 UI의 유닛/무기 풀 일부 추가 개선.
+  - `미사일`, `지뢰어뢰`, `유닛종`, `로그작` 표시 경로를 연결.
+  - `地潜魚雷`, `ョグ作` 잔여 count=0, `箕紗炒`와 `夢弦種`은 글리프 치환 기준으로 확인.
+- [x] Part 2 보호 UI의 문맥 충돌 라벨 개선.
+  - `저장`은 `存` 글리프와 분리하고, `비용`, `1일수입`, `총수`가 각각 올바르게 표시되도록 조정.
+  - 보호 UI 디코드 기준 `セブ`, `保存`, `嗣汚虞姐`, `存総数` 잔여 count=0.
+- [x] Part 2 튜토리얼 실제 ROM 대사 범위 1차 잔여 일본어 감사.
+  - 한글 예약코드 디코드 기준 `0xD8F000-0xDA0000` 추출 행의 가나/한자 잔여 hits=0.
+- [x] Part 2 후속 실제 ROM 대사 범위 1차 잔여 일본어 감사.
+  - 한글 예약코드 디코드 기준 `0xDA0000-0xDE0000` 추출 행의 가나/한자 잔여 hits=0.
+  - `0xDE0000-0xE18000`의 실제 UI 라벨 `종합`, `장비없음`, `유닛상황`을 한글화.
+  - 같은 범위 잔여 hits=12는 이름 입력/선택용 가나·한자 그리드 데이터라 텍스트 패치 대상에서 제외.
+- [x] Part 2 후속 UI/통신 실제 ROM 문자열 추가 정리.
+  - `0xE18000-0xF00000` 카나 잔여 후보 중 실제 UI 문자열 `날씨 설정`, `통신1~4`, `항복`, `통신준비중`을 한글화.
+  - 같은 후보 창의 잔여 카나 4건은 기호/문자표 데이터로 확인해 텍스트 패치 대상에서 제외.
+- [x] Part 2 후속 사거리/유닛명 UI 라벨 추가 정리.
+  - `2-6거리`, `3-5거리`, `2-3거리`, `암초해`, `공격기`, `대공자주포`, `열차포`, `보급차`, `신형전차`, `중전차`, `전투공병`을 한글화.
+  - `0xEE2000-0xEE2900`, `0xEFA000-0xEFB000` 집중 창의 잔여 17건은 기호/무작위 테이블 데이터로 확인.
+- [x] Part 2 통신 UI 문장 품질 정리.
+  - `대공미사일` 표기를 슬롯에 맞춰 복원하고, `지도을`로 보이던 통신/저장/송수신 문장을 `지도를` 기준으로 수정.
+- [x] Part 2 반복 UI/미션 제목 테이블 추가 정리.
+  - 별도 메뉴/전투 경로에 반복된 `통신1~4`, `항복`, `통신`, `이어하기`, `매턴수입`, `날씨`, `장비없음`을 한글화.
+  - 보호 테이블 밖 미션/능력 제목 `두명의 료`, `모프대장`, `도미노능력`, `세사람과거`, `휩해군`, `맥스출격`, `하늘용사`, `백은세계`, `전선기지를확보`, `라이트닝어설트`를 한글화.
+  - 잔여 일본어 문장 후보 `정말항복할래`, `진짜라면 몰라도 복사본 따위에게`, `뭐됐어`, `브레이크모드기동`을 주소 고정으로 정리.
+- [x] Part 2 전투/도감 반복 테이블의 유닛·무기·미션 라벨 추가 정리.
+  - 반복 블록의 `암초해`, `공격기`, `대공자주포`, `열차포`, `보급차`, `신형전차`, `중전차`, `전투공병` 잔여 원문을 한글화.
+  - 도감/상세 테이블의 `대잠미사일`, `대지미사일`, `대공미사일`, `보급수송차`, `경전차포`, `중전차포`, `2-6거리`, `3-5거리`, `2-3거리`를 한글화.
+  - 미션 제목 잔여 `해전`, `분단작전`, `개전`, `과외수업`, `결전`, `초반전`, `전투개시`를 한글화.
+- [x] Part 1 이름/문자 그리드 보호 범위 보강.
+  - `0xDF9FF2`의 `ハヒフヘホッャュョー` 행이 일반 텍스트처럼 인코딩되던 문제를 막기 위해 `0xDF9F00-0xDFA110` 전체를 이름/문자표 데이터로 보호.
+  - 튜토리얼/후속 대사 감사 기준 `0xD8F000-0xDE0000` 잔여 일본어 hits=0, `0xDE0000-0xE18000` 잔여 13건은 이름/문자표 데이터.
+- [x] Part 1 보호 UI 테이블의 공통 전투/룰 설정 토큰 한글화.
+  - Part 2 보호 UI에서 쓰던 안전한 SJIS placeholder+글리프 치환 방식을 Part 1 보호 UI 테이블(`0x805100-0x805A24`)에도 적용.
+  - `索敵`, `てんき`, `ブレイク`, `初回収入`, `毎タン収入`, `アリ`, `ナシ`, `ハレ`, `ユキ`, `メランダム` 등을 보호 테이블 전용 한글 표시 경로로 연결.
+- [x] Part 1 이름 입력 첫 프롬프트 깨짐 완화.
+  - `0xDF8DB2` 이름 입력 프롬프트를 짧은 주소 고정 문구 `이름알려줘`로 교체.
+  - 콜드부트 후 이름 화면 재진입 캡처 기준 프롬프트가 깨짐 없이 표시됨을 확인.
+- [x] Part 1 이름 확정 뒤 숨은 이름 패딩 글자 정리.
+  - 이름 버퍼 끝에 남은 `요(0x8F5A)` 패딩이 대사 삽입 제어코드에서 `Kazu요님`처럼 보이던 문제를 `0x08B11298` 이름 trim hook으로 제거.
+  - 실제 캡처 `temp/name_confirm_final_verify/sheet.png` 기준 이름 확정 뒤 `처음뵙습니다Kazu님` 흐름과 `예/아니오` 선택지를 확인.
+- [x] Part 1 이름 인사말 suffix 공백 통일.
+  - `0xDF5DA9`와 `0xDF8E4D`의 이름 뒤 `님` suffix를 모두 ` 님` 기준으로 맞춰 이름 제어 바이트 뒤 조사가 붙어 보이는 경로를 줄임.
+  - 실제 캡처 `temp/current_state_check_after_suffix/sheet.png` 기준 `vwxy` 미리보기, `예 아니오`, 이름 확정 뒤 인사말 흐름을 재확인.
+- [x] 최근 빌드 검증:
+  - `python3 -m py_compile tools/build_korean_full.py`
+  - `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`
+  - `python3 tools/build_title_hangul.py --input output/game_wars_korean_full.gba --output output/game_wars_korean_final.gba`
+  - `cp output/game_wars_korean_final.gba output/game_wars_korean_title_test.gba`
+  - `python3 tools/qa_text_fit.py`
+  - `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`
+  - `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`
+  - `git diff --check`
+- [x] Part 2 튜토리얼 턴 종료 안내 문장 간격 개선.
+  - `0xD8FA60`/`0xD8FA83` 분절 문구를 조정해 `아래에종료`처럼 붙어 보이던 출력을 제거.
+  - 실제 캡처 `temp/verify_endturn_after_todo_unify_v2/sheet.png` 기준 `아래쪽에 종료` / `있어`로 표시 확인.
+- [x] Part 2 튜토리얼 전투 중 쇼군 프로필/전술 설명 문장 품질 개선.
+  - 맥스 프로필의 `기계 좋아하는 소년`, `동료를 아낌`, `싫어함 기상`을 실제 화면 기준으로 자연스럽게 조정.
+  - 후속 튜토리얼 문장 `대군으로 소군을`을 `대군으로 소수를`로 고쳐 `쇼군` 용어와의 혼동을 줄임.
+  - 실제 캡처 `temp/info_panel_profile_polish_verify2/sheet_long.png` 기준 프로필 문구 표시 확인.
+- [x] Part 2 튜토리얼 전투 메뉴의 쇼군 라벨 가독성 개선.
+  - 작은 전투 UI 폰트에서 `쇼군`이 `소군`처럼 보이던 짧은 메뉴/상태 라벨을 `장군`으로 조정.
+  - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a_086.png` 기준 전투 메뉴 첫 항목이 `장군`으로 표시됨을 확인.
+- [x] Part 2 튜토리얼 작전 설명의 보병 안내 문장 깨짐 수정.
+  - `그건 보병이마전투력은 낮지만`처럼 조각 경계가 글자로 새던 구간을 첫 조각 단축 방식으로 수정.
+  - 실제 캡처 `temp/infantry_explain_fragment_verify_current/sheet.png` 기준 `보병이야 / 전투력은 낮지만 / 전투엔 꼭 필요한 유닛이야`로 정상 표시 확인.
+- [x] Part 2 튜토리얼 작전 설명의 승리조건 문장 경계 수정.
+  - `전멸시키거나본부를`처럼 붙어 보이던 조각을 `적 전멸 또는` / `본부 점령이야`로 짧게 재분절.
+  - 실제 캡처 `temp/win_condition_fragment_verify_current/sheet.png` 기준 승리조건 문장 정상 표시 확인.
+- [x] Part 2 튜토리얼 전투 행동 메뉴의 `待機` 잔여 일본어 수정.
+  - 보호 UI 사전과 고정 라벨 테이블 양쪽에서 `대기` 표시 경로를 연결.
+  - 실제 캡처 `temp/wait_label_verify_current/sheet.png` 기준 행동 메뉴 라벨이 `대기`로 표시됨을 확인.
+- [x] Part 2 튜토리얼 대기 명령 설명 문장 재분절.
+  - `대기 을 선택`처럼 보이던 슬롯 경계 문장을 `할 일 없을 땐 대기를 골라`로 조정.
+  - 실제 캡처 `temp/operation_tutorial_follow_after_wait_split/sheet.png`와 `temp/wait_label_action_after_split/sheet.png` 기준 설명 문장과 행동 메뉴 `대기` 라벨을 함께 확인.
+- [x] Part 2 튜토리얼 작전 설명의 점령 조건/명령 문장 재분절.
+  - `점령 가능한 건보병계라...`, `보병을 위로 이동시켜 바`, `점령 라는 명령`처럼 보이던 조각 경계 문장을 짧은 슬롯 문구로 재구성.
+  - 실제 캡처 `temp/operation_tutorial_capture_spacing_verify/sheet.png` 기준 보병 계열, 점령 가능 거점, `점령 명령이 나올 거야` 문장 표시를 확인.
+- [x] Part 2 튜토리얼 초반 선택/버튼 안내 문구 안정화.
+  - 아래쪽 대화 폰트에서 깨지던 `A 눌러`/`Ａ버튼` 계열 안내를 `골라`, `고르면`, `전투 시작해` 같은 안전한 문구로 교체.
+  - 실제 캡처 `temp/branch_after_wait_prompt_no_button_verify/sheet.png` 기준 `여기 두고 골라`가 깨짐 없이 표시됨을 확인.
+- [x] Part 2 튜토리얼 하단 대화 폰트 취약 표현 추가 정리.
+  - 튜토리얼 전반의 `Ａ버튼`/`Ａ` 안내와 선택 의미의 `잡아`/`잡고`/`잡는` 표현을 `결정`, `골라`, `고르기`, `유닛선택` 계열로 치환.
+  - 사용자 노출 문자열 기준 `Ａ버튼`, `Ａ　`, `Ａ를`, `잡아`, `잡` 잔여가 없음을 grep으로 확인.
+  - 실제 캡처 `temp/lower_prompt_after_rewrite/sheet.png` 기준 이름 직후/대기 안내 분기와 작전 설명 분기 문장이 깨짐 없이 표시됨을 확인.
+- [x] Part 2 튜토리얼 컨트롤 키 표기 한글화.
+  - `Ｂ버튼`, `Ｒ버튼`, `Ｌ버튼`, `START SELECT A B 버튼` 계열 문구를 `취소키`, `정보키`, `전환키`, `시작 선택 결정 취소`로 교체해 하단 대화 폰트의 로마자 버튼 깨짐 위험을 줄임.
+  - 사용자 노출 문자열 기준 `Ｂ`, `Ｒ`, `Ｌ`, `B버튼`, `R버튼`, `L버튼`, `START SELECT A B 버튼` 잔여가 없음을 grep으로 확인.
+  - 상태 파일 재스윕 캡처 `temp/button_prompt_after_rewrite/sheet.png` 기준 초반 컨트롤 안내와 튜토리얼 분기 대사가 회귀 없이 표시됨을 확인.
+- [x] Part 2 튜토리얼 지형 정보 설명의 `COST` 영문 잔여 제거.
+  - `0xD9F615`의 사용자 노출 문구 `「COST」는...`을 `「비용」은...`으로 조정.
+  - `full`, `final`, `title_test` 산출물에서 ASCII `COST` 잔여 count=0을 확인.
+- [x] Part 2 튜토리얼 시스템 메뉴 설명의 `BGM` 영문 잔여 제거.
+  - `0xD9FFA6`의 사용자 노출 문구 `BGM을`을 `음악을`로 조정.
+  - `full`, `final`, `title_test` 산출물에서 튜토리얼 대사 범위의 ASCII `BGM` 잔여 count=0을 확인.
+- [x] Part 2 전투 상태 팝업 유닛명 OBJ 라벨 한글화.
+  - OAM/VRAM 추적으로 상태 팝업 유닛명 타일 스트립 `0xB94810` 이후 18개 라벨을 확인하고 `보병`, `바주카병`, `정찰차`, `경전차`, `중전차`, `신형전차`, `자주포`, `로켓포`, `대공전차`, `미사일`, `전투헬기`, `수송헬기`, `전투기`, `폭격기`, `전함`, `잠수함`, `수송선`, `호위함`으로 재렌더링.
+  - 실제 캡처 `temp/status_unit_label_after_patch/popup_crop_4x.png` 기준 튜토리얼 전투 상태 팝업의 `歩兵`이 `보병`으로 표시됨을 확인.
+  - 렌더 시트 `temp/unit_name_blocks_after_patch.png` 기준 전체 유닛명 라벨이 32x16 OBJ 블록 안에 들어감을 확인.
+- [x] Part 2 첫 전투 커서 팝업의 본부 OBJ 라벨 한글화.
+  - OAM/VRAM 추적으로 HQ 지형 라벨이 `0x465468`의 32x16 OBJ 타일 블록임을 확인하고 `본부`로 재렌더링.
+  - 콜드부트 재진입 캡처 `temp/hq_label_after_patch/label_crop_6x.png` 기준 커서 팝업의 `本部` 잔여가 사라진 것을 확인.
+- [x] Part 2 첫 전투 커서 팝업의 소형 지형/유닛 OBJ 라벨 한글화.
+  - 작은 커서 팝업이 큰 상태창과 다른 32x16 OBJ 라벨 테이블(`0x464D68` 지형, `0x466568` 유닛)을 쓰는 것을 확인하고 주요 지형명/유닛명을 재렌더링.
+  - 콜드부트 재진입 캡처 `temp/p2_popup_move_probe_after_patch/sheet.png` 기준 `본부`, `보병`, `평지`, `도로`가 일본어 없이 표시됨을 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
+- [x] Part 2 전투 상태 목록 헤더 한글화.
+  - 상태 목록 헤더는 공통 폰트가 아니라 `0xBE76FC` 이후 16x16 OBJ 아이콘 하단 타일임을 확인.
+  - `종류`, `체력`, `연료`, `탄약` 네 헤더를 같은 팔레트 기준으로 다시 렌더링하고, 설명 문구도 같은 표기 기준으로 조정.
+  - 실제 캡처 `temp/status_header_labels_verify/status_header_4x.png` 기준 표 헤더의 원문 약자가 한글 표기로 바뀐 것을 확인.
+- [x] Part 2 전투 시작 오버레이의 잔여 일본어 제거.
+  - `1日目 作戦開始`는 affine 변환 OBJ 조각이라 한글 원문 삽입 시 획이 깨지는 것을 확인하고, 해당 LZ77 조각을 투명화해 일본어 노출을 제거.
+  - 실제 캡처 `temp/battle_start_overlay_after_blank_steps/sheet.png` 기준 작전 진입 구간에서 일본어 오버레이가 더 이상 표시되지 않음을 확인.
+- [x] Part 2 전투 HUD의 고정 `DAY` 문자 타일 한글화 준비.
+  - OAM/VRAM 추적 기준 `DAY` OBJ 원본 타일 `0xBC7860`, `0xBC7800`, `0xBC7B00`을 `일`, `수`, 공백 타일로 교체.
+  - 기존 전투 세이브스테이트는 VRAM까지 복원하므로 즉시 반영되지 않으며, ROM 타일 렌더 `temp/day_hud_rom_tiles_after_patch.png` 기준으로 우선 확인.
+- [x] Part 2 전투 HUD의 `DAY` 영문 라벨 제거.
+  - 실제 렌더 경로가 `0xB829C4`의 ASCII `DAY` 문자열과 공통 8x8 OBJ 폰트 조합임을 확인.
+  - 8x8 한글 치환은 실제 화면에서 깨짐처럼 보여 폐기하고, `DAY` 라벨만 비워 숫자와 CO명은 유지.
+  - 실제 캡처 `temp/current_day_hud_label_verify/hud_crop_4x.png` 기준 전투 HUD 상단 영문 라벨 제거 확인.
+- [x] Part 2 첫 전투 진입 직후 소개 대사 줄붙음 개선.
+  - `0xA028B8-0xA02982` 구간을 짧은 화면용 문장으로 고정해 긴 CSV 번역이 한 줄에 붙어 보이던 문제를 완화.
+  - 실제 캡처 `temp/first_battle_intro_after_shortening/sheet.png` 기준 `빨간 유닛이 네 부대야`, `적군은 오른쪽 위 검은 유닛`, `이번 목표는...` 흐름이 깨짐 없이 표시됨을 확인.
+- [x] Part 2 첫 전투 메뉴의 쇼군 라벨 깨짐 완화.
+  - compact UI 경로에서 `장군` 첫 글자가 깨져 보이는 것을 확인하고, 메뉴용 짧은 라벨을 `정보`로 조정.
+  - 원본 CO 아이콘도 일본어 조각처럼 보이는 픽셀 구성이어서 중립 배지 아이콘으로 교체.
+  - 실제 캡처 `temp/fresh_battle_menu_co_icon_info/sheet.png` 기준 첫 메뉴 라벨과 아이콘이 깨짐 없이 표시됨을 확인.
+- [x] Part 2 첫 전투 정보 패널의 프로필 라벨 오독 완화.
+  - 작은 정보 패널 폰트에서 `무척`, `아침`이 흐리게 읽히던 문구를 `동료를 아낌`, `싫어함 기상`으로 단축.
+  - 실제 캡처 `temp/info_panel_profile_polish_verify2/sheet_long.png` 기준 안정 프레임에서 문구가 깨짐 없이 표시됨을 확인.
+- [x] Part 2 캠페인 프롤로그 초반 대사 일본어/깨짐 정리.
+  - `0xA01970-0xA01CA3`, `0xA0E398-0xA0E819` 구간의 짧은 대사 조각을 화면 폭에 맞게 고정하고, CSV 추출이 놓친 제어 갭 `今、`/`今は`를 직접 한글화.
+  - 실제 캡처 `temp/prologue_part2_initial_current_polished/sheet.png`와 `temp/prologue_part2_dialog_polish_finalcheck/sheet.png` 기준 프롤로그 초반 일본어 잔여와 `슥` 계열 깨짐이 사라짐을 확인.
+- [x] Part 2 캠페인 진입 메뉴의 주요 OBJ 그래픽 라벨 한글화.
+  - LZ77 OBJ 블록 `0x5B7930`, `0x5B9474`, `0x5B9050`, `0x5B9378`, `0x5B8F48`, `0x5B917C`를 재렌더링해 `CAMPAIGN`, `CONTINUE`, `NEW`, `ウォーズショップ`, `トライアル`, `フリーバトル`, `エディット` 노출을 제거.
+  - 실제 캡처 `temp/part2_mode_menu_after_patch/shot.png` 기준 `캠페인`, `계속`, `처음`, `워즈숍`, `트라이얼`, `자유전`, `편집`으로 표시됨을 확인.
+- [x] Part 2 모드 선택 화면의 잔여 대형 영어 로고와 편집 하위 버튼 한글화.
+  - 추가 LZ77 OBJ 블록 `0x5B7CB0`, `0x5B7F38`, `0x5B82B4`, `0x5B8564`, `0x5B8850`, `0x5B8B20`을 재렌더링해 `FREEBATTLE`, `WARSSHOP`, `EDIT MODE`, `LINK MODE`, `TRIALMODE`, `SOUNDROOM` 노출을 제거.
+  - 작은 선택 라벨 `0x5B8E44`, `0x5B9280`과 버튼 블록 `0x5B9474`의 `MAP`/`SYOGUN` 그룹을 각각 `캠페인`, `통신`, `지도`, `장군`으로 교체.
+  - 실제 mGBA 스윕 캡처 `temp/p2_mode_sweep_after2/sheet.png` 기준 캠페인/자유전/편집/통신/상점/트라이얼 화면에서 잔여 영어 없이 표시됨을 확인.
+- [x] Part 2 진입 스플래시 BG 로고 한글화.
+  - BG3 22x4 타일 로고 원본 LZ77 블록 `0x4D8AF8`의 타일 1-0x58을 `게임보이 워즈 / 어드밴스 2`로 재렌더링.
+  - 실제 캡처 `temp/part2_splash_after_patch/shot.png` 기준 `GAME BOY WARS FOR GAME BOY ADVANCE` 잔여가 사라진 것을 확인.
+- [x] Part 2 프롤로그 후반/첫 전투 진입 대사 일본어 갭과 줄잘림 정리.
+  - CSV 슬롯 밖 제어 갭 `敵が`, `ま、`, 첫 전투 소개의 `まだ` 조각을 직접 패치하고, 프롤로그 후반 `그럼/어차피`, `적이 생각보다 강해서`, `침묵` 계열 대사를 화면 기준으로 조정.
+  - 첫 전투 소개의 `블랙홀군` 설명과 `실전경험 부족해`, `천천히 가` 흐름을 짧은 화면용 문장으로 고정해 오른쪽 잘림과 일본어 잔여를 제거.
+  - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a066_120_sheet.png`, `temp/current_p2_tutorial_battle_smoke/a_066.png`, `temp/current_p2_tutorial_battle_smoke/a_072.png` 기준 해당 구간 표시를 확인.
+- [x] Part 2 첫 전투 튜토리얼 `종료` 명령 설명 분기 정리.
+  - CSV 슬롯 밖 `は、` 조각을 제거하고 `선택한 / 종료는`, `할 일이 없을 때`, `턴을 넘기는 명령이야`, `적 차례가 돼`로 짧게 재분절.
+  - 실제 캡처 `temp/p2_endturn_probe_after_text/sheet.png` 기준 메뉴에서 `종료`를 선택했을 때 일본어 없이 설명이 표시됨을 확인.
+- [x] Part 2 첫 전투 튜토리얼 수송차 설명의 일본어 잔여 제거.
+  - `0xA02EB0-0xA03087` 수송차 설명 구간을 화면 기준으로 짧게 재분절하고, `戦闘をすることはできないわ。` 잔여 행을 직접 비움.
+  - 원본 조립 순서가 주소 순서와 달라 겹치던 `0xA02F00-0xA02F88` 중간 기능 설명을 직접 비우고, 실제 캡처 `temp/p2_apc_text_verify6/sheet.png` 기준 탑승/하차 설명으로 바로 넘어가는 것을 확인.
+- [x] Part 2 첫 전투 튜토리얼 보급/연료 설명 조각 정리.
+  - `0xA031A8` 중간 호출 조각을 비우고, `0xA0329A-0xA03341` 보급/탄약/연료 설명을 짧은 한글 행으로 재분절.
+  - 실제 캡처 `temp/p2_apc_text_long_advance2/sheet.png` 기준 `그런데 캐서린 보급`처럼 섞이던 문구가 사라진 것을 확인.
+- [x] Part 2 첫 전투 수송차 실제 탑승/하차 조작 및 후속 전투 진행 검증.
+  - 수송차 설명 텍스트는 정리됐으므로 다음 진행에서 보병 탑승, 하차, 공격 튜토리얼 진입까지 실제 입력 루트를 이어간다.
+  - 현재 진행: 수송차 설명 이후 턴 종료와 공격 튜토리얼 설명 진입은 `temp/p2_after_apc_endturn_verify2/sheet.png`, `temp/p2_attack_text_verify_current3/sheet.png` 기준으로 확인.
+  - 추가 진행: DAY 5에서 실제 `공격` 명령 메뉴와 전투 화면 재진입을 `temp/p2_day5_attack_command_probe/sheet.png`, `temp/p2_day5_attack_execute_probe/sheet_all.png` 기준으로 확인.
+  - DAY 9 이동/대기, DAY 10 2회 공격, 적 전멸 뒤 작전 성공까지 `temp/p2_day9_move_wait_endturn/sheet.png`, `temp/p2_day10_attack_execute_probe/sheet.png`, `temp/p2_day10_second_attack_execute_probe/sheet.png`, `temp/p2_after_enemy_defeat_dialog_advance/sheet.png` 기준으로 확인.
+  - 이 클리어 루트는 점령 전에 적 전멸로 끝나므로 점령/상태창 설명은 별도 루트에서 계속 확인한다.
+- [x] Part 2 점령/상태창 설명 튜토리얼 루트 탐색.
+  - `0xA03CC4`의 `커서창을 봐` 오독 표현은 `상태창을 봐`로 교체했지만, 첫 전투 적 전멸 루트에서는 해당 설명이 표시되지 않았다.
+  - 원래 목표는 점령 명령이 필요한 튜토리얼/미션 루트를 찾아 실제 화면 기준으로 `보병이 / 점령 시작했어 / 상태창을 봐` 표시를 확인하는 것이었다. 아래 current ROM 검증에서는 호출 루트를 찾지 못했지만, ROM 바이트와 visible 점령/상태창 UI가 한글임을 확인해 현 시점의 한글화 잔여에서는 제외한다.
+  - 2026-06-07 재점검에서 코드와 문서가 어긋난 것을 확인했다. `tools/build_korean_full.py`의 실제 `ADDRESS_TEXT_OVERRIDES`/직접 패치에는 아직 `0xA03BB8` `커서창`, `0xA03CC4` `커서창을 봐`, `0xA04805` `아래 커서창을 봐`, `0xA0491C` `지형 효과는 커서창 말고`가 남아 있어 모두 `상태창` 계열 표현으로 고쳤다.
+  - 출력 ROM 역디코드 기준 `0xA03BB8` `상태창`, `0xA03CC4` `상태창을 봐`, `0xA04805` `아래 상태창을 봐`, `0xA0491C` `지형 효과는 상태창 말고`가 들어갔다. 예약코드 검색 기준 `커서창`은 full/final/title_test 세 산출물 모두 0건, `상태창`은 각 5건이다.
+  - current ROM으로 `temp/active_states/p2_heavy_day4_after_capture_strategy_probe.ss0`를 로드해 점령 실행 직후 상태창을 새로 캡처했다. `temp/current_capture_status_window_verify/sheet.png` 기준 점령 명령 실행과 큰 상태창의 `보병`/`도시` 표시는 한글로 보인다. `상태창을 봐` 대사 자체는 이 상태에서 바로 재노출되지 않았으므로, 이 상태는 visible UI 검증 증거로만 사용한다.
+  - 2026-06-07 추가 탐색에서 현재 ROM 바이트를 직접 확인했다. `0xA03C9C` `네 보병이`, `0xA03CB1` `점령 시작했어`, `0xA03CC4` `상태창을 봐`, 그리고 점령훈련 DAY 2 쪽 `0xD92846` `이 보병 골라 결정해`, `0xD92899` `점령 중인 유닛이 있으면`, `0xD928C6` `네 턴 처음에 먼저 행동시켜`가 모두 해당 주소 시작에 정확히 들어 있고 남은 슬롯은 공백 패딩이다.
+  - `temp/capture_dialogue_route_probe/overview_first6.png`와 개별 시트 기준 `p2_day2_capture_prompt`, `p2_day2_after_capture_follow`, `p2_capture_move_prompt`, `p2_after_enemy_city_choice`, `p2_heavy_day2_after_tank_infantry_capture`, `p2_heavy_day3_after_capture_probe`, `p2_heavy_day3_after_capture_complete`, `p2_heavy_day4_after_capture_strategy_probe`를 A 진행으로 확인했다. 이 경로들은 `0xD928xx` 점령훈련 DAY 2 설명이나 상태창/행동 메뉴만 재노출했고, `0xA03C9C-0xA03CEC`의 `보병이 / 점령 시작했어 / 상태창을 봐` 묶음은 나오지 않았다.
+  - 같은 탐색 중 일부 오래된 상태에서 `점령중인유닛이있으면`, `이 보병골라결정해`처럼 보이는 프레임이 있었지만, 현재 ROM 바이트는 공백 포함 문장으로 확인했다. 따라서 해당 프레임은 기존 savestate의 대화 버퍼/VRAM 캐시 가능성이 있어 새 수정 근거로 쓰지 않는다.
+  - `temp/a03_status_dialogue_memory_probe`에서 `fresh_attack_*`, `fresh_battle_*`, `fresh_endturn_*`, `fresh_after_second_*`, `fresh_target_right_*`, `p2_day2_*`, `p2_capture_*` 후보 93개를 로드하고 A 진행 후 EWRAM/IWRAM에서 `네 보병이`, `점령 시작했어`, `상태창을 봐`, `깜빡이는 숫자는`, `거점 내구력이야` 인코딩을 검색했으나 hits=0이었다.
+  - `/tmp/mgbah`의 ROM read watchpoint는 `0x08D92899`에서 정상 히트함을 `temp/watch_test_d92899.log`로 확인했다. 같은 방식으로 `0x08A03C9C`, `0x08A03CB1`, `0x08A03CC4`, `0x08A03CEC`를 일부 `fresh_after_second_*`, `fresh_attack_*`, `fresh_battle_*` 상태에서 추적했으나 비어 있는 watch log만 나왔다. 전체 93개 watch 스윕은 watchpoint 비용이 너무 커 중단했고, 다음에는 후보를 더 좁혀 실행한다.
+  - `temp/single_state_key_sequence/after_second_endturn_A_probe/sheet.png` 기준 `fresh_after_second_endturn_1500`은 실제 턴 종료 확정 상태가 아니라 `선택한 종료는 / 할 일이 없을 때...`, `지금은 유닛에게 명령부터 내려` 경고를 반복하는 상태였다. 이 상태는 `0xA03...` 점령 시작 설명 진입점으로 보지 않는다.
+  - 2026-06-07 추가 후보였던 `p2_day10_capturecand_*` 16개를 `temp/probe_a03_day10_capturecand_memory.py`로 재확인했다. 각 상태에서 A 8회 진행 중 `네 보병이`, `점령 시작했어`, `상태창을 봐`, `깜빡이는 숫자는`, `거점 내구력이야`와 DAY 2 점령 문구의 EWRAM/IWRAM hits=0이었고, overview는 `temp/a03_day10_capturecand_memory_probe_20260607/overview_first3.png`에 남겼다.
+  - 대표 상태 `p2_day10_capturecand_-10_-1_m0`는 A 반복 시 `대기` 행동 메뉴 또는 부대 목록으로 빠졌다. `temp/single_state_key_sequence/day10_capturecand_m0_down_branch_20260607/sheet.png` 기준 `A, DOWN, A` 분기도 점령 시작 설명으로 이어지지 않아, 이 후보군은 현 시점에서 `0xA03C9C-0xA03CEC` 루트로 보지 않는다.
+  - `fresh_battle_after_wait_select`에서 첫 보병을 `UP UP A / RIGHT UP UP A / A`로 대기시킨 뒤 후보 스윕을 추가했다. `temp/a03_after_first_move_select_grid_20260607/sheet.png`와 `temp/a03_second_infantry_dest_grid_20260607/sheet.png` 기준 후속 보병/수송차 분기로는 이동 범위와 `대기` 메뉴가 나오지만, `temp/single_state_key_sequence/a03_two_infantry_endturn_confirm_20260607/sheet.png` 기준 `종료` 선택 후에도 `유닛에게 명령부터 내려` 경고로 돌아온다.
+  - 같은 루트를 EWRAM 유닛 테이블로 비교했다. `temp/a03_unit_record_compare_20260607/` 기준 첫 전투 유닛 테이블은 EWRAM `0x02022584`의 12바이트 레코드이며, 보병 레코드는 `act=1`로 바뀌지만 `type=7, x=0, y=5, act=0` 수송차 계열 레코드가 남는다. 해당 수송차 선택은 `그건 수송해야 / 선택도 못 해` 안내로 빠져, `0xA03C9C-0xA03CEC` 점령 시작 설명 루트로 보지 않는다.
+  - `p2_capture_*`, `p2_city_defense_after*`, `p2_city_defense_transport*`, `p2_city_defense_day3*`~`day5*` 55개 1차 후보에 `0x08A03C9C`, `0x08A03CB1`, `0x08A03CC4`, `0x08A03CEC`와 포인터 테이블 엔트리 `0x08A35970`, `0x08A35974` read watch를 걸고 각 상태 A 12회 진행을 확인했다. `temp/a03_citydefense_watch_probe_20260607/hits.tsv`는 0바이트이며 hits=0이었다.
+  - 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=18956`, `level1=97`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=137`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
+  - 2026-06-07 최종 정리: current ROM 바이트와 인코딩 검색, 93개 EWRAM/IWRAM 후보, day10 후보 16개, city-defense/capture 후보 55개 read-watch 모두 `0xA03C9C-0xA03CEC` 대사 호출을 찾지 못했다. 호출 불가능을 증명한 것은 아니지만, 해당 문구 자체는 ROM에 `네 보병이`/`점령 시작했어`/`상태창을 봐`로 정확히 들어 있고, 관련 visible 상태창/점령 UI도 current ROM에서 한글로 확인됐으므로 현 시점의 한글화 잔여로 보지 않는다. 이후 실제 화면에서 이 대사 묶음이 새로 노출되면 별도 회귀 항목으로 다시 연다.
+- [x] Part 2 첫 전투 실제 공격 명령과 전투 화면 검증.
+  - DAY 4 이동/대기 후 적 턴 전투가 발생하고, 전투 화면의 숫자/상태 표시가 깨지지 않음을 `temp/p2_day4_after_move_endturn_probe/sheet.png` 기준으로 확인.
+  - DAY 5 아군 보병에서 `공격 / 대기` 행동 메뉴가 한글로 표시되고, `공격` 선택 후 피해 예측과 전투 화면으로 진입하는 것을 확인.
+  - 실제 캡처 `temp/p2_day5_attack_execute_probe/sheet_all.png` 기준 전투 후 맵 상태로 복귀하며 충돌은 발생하지 않음.
+- [x] Part 2 첫 전투 클리어 결과 화면 그래픽 잔여 제거.
+  - 결과 요약 타일 블록 `0x59DA5C`를 빌드 후 LZ77 재압축 패치로 다시 그려 `作戦成功`, `CONGRATULATIONS!`, `スピード`, `パワー`, `テクニック`, `TOTAL` 잔여를 제거.
+  - 실제 새 ROM 진행 캡처 `temp/p2_result_summary_after_patch3/sheet.png` 기준 결과 화면의 큰 제목과 점수 라벨이 한글로 표시됨을 확인.
+  - 전투 화면, 결과 화면, 랭크 표시까지 `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test 통과와 SHA-256 동일성을 재확인.
+- [x] Part 2 첫 전투 수송차 이후 공격 설명 문장 재정리.
+  - 수송차/보급 설명 뒤 `??C`처럼 새던 숫자 조각을 제거하고 `보병은 느리지만 / 수송차는 빠르지`로 재분절.
+  - `싸우거나` 오독을 피하려고 `전투나 이동하면`으로 바꾸고, 공격 튜토리얼의 `그 기세야` 오독 구간을 `좋아 / 믿고 있을게`로 정리.
+  - 공격 설명의 `적 옆으로 가면 행동 메뉴에 / 명령이 나와`와 상태창 설명을 화면 기준으로 재분절해 `커서창` 오독을 `상태창` 표현으로 교체.
+  - 실제 캡처 `temp/p2_apc_text_to_action_probe2/sheet.png`, `temp/p2_attack_text_verify_current3/sheet.png` 기준 해당 구간의 일본어 잔여와 큰 글자 붙음을 제거.
+- [x] Part 2 첫 전투 공격 튜토리얼 문장/입력 대기 안정화.
+  - `적옆에`처럼 붙던 공격 이동 설명을 `적 옆에` 기준으로 재분절.
+  - 원본 `A 버튼` 조각이 남아 깨지던 `0xD8FD26` 안내를 `그러니까 여기서 눌러 줘.`로 직접 재구성.
+  - 공격 커서/전투 시작 입력 대기 직전 슬롯은 남은 공간 공백 패딩을 쓰지 않도록 22바이트에 맞춘 안전 문장으로 교체.
+  - 구형 `ss0`는 ROM 내용을 함께 들고 있어 최신 패치 검증은 fresh-run 상태에서만 신뢰하기로 정리.
+- [x] Part 2 전투 시스템 메뉴의 애니 옵션 ASCII 잔여 제거.
+  - 실제 fresh-run 캡처에서 시스템 하위 메뉴의 `애니A` 노출을 확인하고 고정폭 라벨을 `애니전부`, `애니전투`, `애니아군`, `애니없음`으로 정리.
+  - Part 2 전투 메뉴와 공통/Part 1 반복 라벨 양쪽 주소를 같이 갱신해 같은 옵션 표기가 갈라지지 않도록 조정.
+  - 실제 캡처 `temp/p2_system_anime_label_verify/sheet.png` 기준 시스템 메뉴가 `애니전부`로 표시되고 ASCII `A` 잔여가 사라짐을 확인.
+- [x] 레포 임시 산출물 용량 정리.
+  - 재생성 가능한 대량 분기 스캔 결과와 RAW/VRAM 덤프를 제거해 전체 용량을 약 `546M -> 509M`로 축소.
+  - 핵심 `ss0` 상태 파일, 현재 `output/*.gba`, 원본/참조 자료는 보존.
+- [x] 레포 대형 임시 탐색 산출물 재정리.
+  - 실패한 `temp/p2_day9_capture_probe` 대량 분기와 오래된 `p2_*` 탐색 디렉터리, `tools/__pycache__/`를 삭제해 전체 용량을 약 `281M -> 206M`, `temp`를 `89M -> 14M`로 축소.
+  - 후속 검증에 필요한 DAY9/DAY10 상태와 최신 `output/*.gba`, 원본/참조 자료는 보존.
+- [x] 레포 재생성 산출물 재정리.
+  - 이번 작업 시작 전 기준 `temp` 178M, `output` 48M을 비워 전체 용량을 약 `367M -> 141M`로 축소.
+  - 원본 ROM 보관용 `original`, 배포물 `dist`, git 이력은 보존.
+- [x] Part 2 첫 전투 분기 탐색 산출물 재정리.
+  - 이번 수송차/종료 검증 중 생성된 RAW/분기 캡처를 정리해 `temp`를 약 `200M -> 8.7M`, 전체 용량을 약 `391M -> 199M`로 축소.
+  - 후속 진행에 필요한 최신 `ss0` 상태와 검증 시트만 보존.
+- [x] Part 2 첫 튜토리얼 범위의 추가 제어 갭 일본어 감사.
+  - `0xA02600-0xA03380`, `0xD90000-0xD93000`에서 한글 예약코드가 아닌 실제 SJIS 가나/히라가나 조각을 재스캔하고, 보급 설명 `で、`와 공격 설명 `今は` 2건을 직접 한글화.
+  - 재스캔 기준 남은 후보는 예약코드/제어코드가 SJIS처럼 보이는 false positive뿐임을 확인.
+- [x] Part 2 튜토리얼 후속 범위의 2글자 제어 갭 일괄 정리.
+  - `0xD93000-0xDA8000`에서 `この`, `敵の`, `今は`, `まだ`, `まで`, `よ。` 등 4바이트 SJIS 조각을 짧은 한국어 조각으로 직접 치환.
+  - 재스캔 기준 남은 후보는 예약코드/제어코드 false positive와 문자표 데이터 `サシ`뿐임을 확인.
+- [x] Part 2 후속 대사/정보 범위의 짧은 일본어 조각 정리.
+  - `0xD80000-0xE18000`에서 `敵の`, `だ！`, `ん？`, `へ？`, `え？`, `ふっ`, `での`, `さあ` 등 짧은 SJIS 조각을 한글 감탄사/조사로 치환.
+  - 재스캔 기준 `0xD80000-0xE18000`의 남은 가나/한자 후보는 이름 입력/문자표/라벨 보호 데이터와 예약코드 false positive뿐임을 확인.
+- [x] Part 2 `0xA00000-0xA40000` 캠페인/튜토리얼 제어 갭 정리.
+  - `あ、`, `ま、`, `は、`, `ん？`, `次は`, `敵の`, `なし` 등 4바이트 대사 조각 200여 건을 짧은 한국어 조각으로 치환.
+  - 재스캔 기준 이 범위의 남은 후보 4건은 misaligned 예약코드/코드 영역 false positive로 확인.
+- [x] Part 2 초반 튜토리얼 제어 갭 추가 정리.
+  - `0xA00000-0xA06000` 실제 디코드 기준 `今、`, `搭載`, `や`, `燃料`, `反撃`, `毎日`, `で`, `女。` 잔여 원문 조각을 한글/공백으로 정리.
+  - 재검사 기준 해당 원문 조각 8종은 같은 초반 튜토리얼 범위에서 hits=0.
+- [x] Part 2 `0xA00000-0xA14000` 슬롯 밖 제어 갭 재감사.
+  - 추출 슬롯 내부 일본어 hits=0을 확인하고, 슬롯 밖 대사 제어코드 주변 잔여 `今、`, `視界`, `岩礁`, `女。` 반복 갭을 정리.
+  - 재스캔 기준 `0xA00000-0xA14000`의 실제 대사 제어 갭 일본어 후보=0.
+- [x] Part 2 `0xA14000-0xA30000` 슬롯 밖 제어 갭 재감사.
+  - `今、`, `歩兵か`, `と`, `ん〜`, `部隊`, `占領` 등 대사/테이블 사이 잔여 일본어를 한글 또는 공백으로 정리.
+  - 재스캔 기준 `0xA14000-0xA30000`의 실제 대사 제어 갭 일본어 후보=0.
+- [x] Part 2 `0xA30000-0xA34000` 유닛 설명/도움말 갭 정리.
+  - 설명 행 사이에 반복된 `攻撃`, `歩兵`, `占領`, `戦艦`, 조사 조각을 주소 고정 치환.
+  - 재스캔 기준 `0xA30000-0xA34000`의 실제 텍스트 갭 일본어 후보=0.
+- [x] Part 2/공통 튜토리얼·유닛명 슬롯 밖 조사 갭 추가 정리.
+  - `0xD8F000-0xE18000` 대사 제어 갭의 `を`, `は`, `で`, `に`, `が`, `と`, `や`, `か`, `の`, `も`, `今`, `部隊`, `首都`, `道` 등 잔여 일본어 조각을 한글로 치환.
+  - `0x800000-0xA00000`, `0xE18000-0xF00000` 반복 유닛명 테이블의 `戦艦` 잔여 5건을 `전함`으로 치환.
+  - 슬롯 갭 재스캔 기준 `0xD8F000-0xE18000`, `0xE18000-0xF00000`, `0xA34000-0xA80000`의 실제 텍스트 잔여 일본어 후보=0. 남은 `サシ`/`胖ム` 계열은 문자표 또는 데이터 오검출로 제외.
+- [x] Part 2/공통 반복 전투 UI 라벨 추가 정리.
+  - 반복 명령 테이블의 `終了`, `待機`, `合流`, `攻撃`, `補給`, `搭載`, `降車`, `占領`과 반복 지형 테이블의 `岩礁`, `工場`, `浅瀬`, `空港`, `首都`, `都市`, `道路`, `平地`, `火山` 등을 한글화.
+  - 반복 유닛/옵션 라벨 `歩兵`, `なし`, `戦艦`, 수입 라벨 `拠点収入`, `初回収入`을 한글화.
+  - 토큰 검색 기준 비보호 반복 테이블의 주요 전투/UI 원문은 제거했고, 남은 주요 토큰은 `part1_ui_text_table`/`part2_ui_text_table` 보호 범위 또는 해당 보호 경로의 컨텍스트 치환 대상.
+- [x] Part 2/공통 수입·편집 UI 라벨 겹침 수정.
+  - `0xB839A8`, `0xB839B4`, `0xB839C4` 수입 라벨을 정확한 시작 주소 기준으로 `거점수입`, `매턴수입`, `초회수입`에 맞춰 다시 패치.
+  - `MG情報`, `ML終了` 반복 UI 라벨을 `MG정보`, `ML종료`로 한글화.
+  - 토큰 검색 기준 `拠点収入`, `毎ターン収入`, `初回収入`, `MG情報`, `ML終了`, `情報` 잔여 count=0.
+- [x] Part 2/공통 옵션값 반복 테이블 추가 정리.
+  - `0xB83870`대 고정폭 옵션값 `アリ`, `ナシ`, `アメ`, `ユキ`, `ハレ`를 각각 `있음`, `없음`, `비`, `눈`, `맑음`으로 한글화.
+  - 같은 슬롯 폭과 NUL 종료를 유지했고, 토큰 검색 기준 해당 5개 원문 잔여 count=0.
+- [x] Part 1/공통 전투 메뉴 반복 `상황` 라벨 정리.
+  - `0xB82D46`의 보호 범위 밖 고정폭 `状況` 라벨을 `상황`으로 한글화.
+  - 토큰 검색 기준 남은 `状況`은 `part1_ui_text_table`/`part2_ui_text_table` 보호 범위뿐이며, 해당 경로는 글리프 치환으로 표시.
+  - mGBA `title_test` 냉부팅 스모크 기준 Part 2 첫 전투 진입과 `종료` 명령 설명 흐름이 충돌 없이 진행됨을 확인.
+- [x] Part 1/Part 2 보호 UI의 CO명·통신 상태 라벨 정리.
+  - `part1_ui_text_table`/`part2_ui_text_table`의 `キャサリン`, `ョウマ`, `ホイップ`, `ビーク`, `チヨ`, `アスカ`, `グルモ`, `ボテト`, `ドミノ`, `ヘズ`를 compact UI placeholder+글리프 치환 경로로 연결.
+  - 보호 범위 밖 통신 상태 `未接続`, `準備中`, `接続中`을 각각 `미접속`, `준비중`, `접속중`으로 한글화.
+  - 토큰 검색 기준 해당 CO명/통신 상태 원문 잔여 count=0, mGBA `title_test` 냉부팅 스모크 기준 Part 2 첫 전투 메뉴/정보 패널 흐름이 충돌 없이 진행됨을 확인.
+- [x] Part 1/Part 2 보호 유닛·장비명 코드열 정리.
+  - `腺酢維癇`, `湯楚得銭`, `娯餌亥癇`, `洗寡牟`, `湯楚芋屁璃`, `洗賭羽屁璃`, `麦夏軌忌`, `洗賭菟忌`, `鯛倶迂煎奢`, `磁蘇卯鳳`, `湯楚宇奢`, `邸鎖津奢`, `卦揖煎奢`, `呪鵜煎奢` 계열을 유닛/장비명으로 연결.
+  - 비보호 `0xB81840-0xB81AA0` 테이블은 직접 한글 슬롯으로, `part1_ui_text_table`/`part2_ui_text_table`은 compact UI placeholder+글리프 치환으로 처리.
+  - 토큰 검색 기준 해당 원문 코드열과 보호 테이블 부분 코드열 잔여 count=0, mGBA `title_test` 냉부팅 스모크 기준 Part 2 첫 전투 메뉴/정보 패널 흐름이 충돌 없이 진행됨을 확인.
+- [x] Part 1 이름 확정 직후 인사 문장 붙음 완화.
+  - 14바이트 이름 삽입 prefix 슬롯 `0xDF5D9A`, `0xDF8E3E`을 `만나서반가워. `로 교체해 이름 앞에 마침표/공백이 들어가도록 조정.
+  - 상태 파일 재확인 캡처 `temp/name_spacing_current/sheet.png` 기준 `만나서반가워 Kcm님`/`만나서반가워 Kazu님` 흐름으로 이름과 인사말이 분리됨을 확인.
+- [x] Part 2 미션 시작 오버레이의 흰 조각 깨짐 제거.
+  - 미션 제목 전용 32x32 글리프 테이블은 한글을 직접 표시하면 고정 OBJ 배치 때문에 흰 조각처럼 보이는 것을 확인하고, 렌더러 hang 방지를 위한 빈 글리프 항목만 유지하도록 정리.
+  - 미션 번호 OBJ 블록은 원본 잔여 타일이 섞이지 않도록 전체를 지운 뒤 `미션1`만 다시 렌더링.
+  - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/sel_064.png` 기준 `미션1` 외 흰 조각/가로선이 사라졌고, `sel_066.png` 기준 전투 진입 뒤 대사까지 충돌 없이 진행됨을 확인.
+  - 검증: `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md`.
+- [x] Part 2 튜토리얼 직접 패치 대사의 로마자 버튼 표기 추가 제거.
+  - 주소 고정 대사에 남아 있던 `A를`, `R을`, `R누르면` 계열을 `결정`, `정보키` 문구로 교체.
+  - `tools/build_korean_full.py` 직접 노출 문자열 기준 `A버튼`, `A를`, `R을`, `R누르면` 잔여 count=0.
+- [x] Part 2 전투 상태 팝업 유닛명 가독성 개선.
+  - 32x16 OBJ 유닛명 라벨은 11px 폰트가 조밀해 `보병`이 `방병`처럼 보이는 것을 확인하고, 유닛명만 Galmuri7 무그림자 렌더링으로 교체.
+  - 실제 캡처 `temp/unit_popup_galmuri7_verify/status_popup_1.png` 기준 상태 팝업의 `보병`이 선명하게 표시됨을 확인.
+- [x] Part 1 첫 작전/전투 진입 오버레이 한글화.
+  - 월드맵 전환의 `MISSION` LZ77 그래픽을 `작전`으로 교체하고, 전투 진입 OBJ/원시 타일 양쪽의 `1日目 作戦開始` 배너를 `1일째 작전개시`로 교체.
+  - 냉부팅 경로 캡처 `temp/fresh_p1_battle_start_after_day_patch/sheet.png` 기준 `1日目`, `作戦開始`, `開始` 잔여 없이 전투 진입과 후속 대사 진행을 확인.
+- [x] Part 1 튜토리얼 전투 화면의 `CHECK!` OBJ 라벨 한글화.
+  - LZ77 OBJ 블록 `0xBA4490`의 16x16 말풍선 조각 3개를 추적하고 원래 프레임을 유지한 채 글자 영역만 `확인`으로 재렌더링.
+  - 냉부팅 경로 캡처 `temp/p1_check_label_after_patch3/shot.png` 기준 전투 튜토리얼 커서 말풍선에서 `CHECK!` 잔여가 사라진 것을 확인.
+- [x] Part 2 미션 전환 BG의 `MISSION` 영문 잔여 제거.
+  - 런타임 BG 텍스트 렌더러가 참조하는 ASCII 문자열 `0xB84446`의 `MISSION`을 공백화해, 기존 OBJ `미션1` 패치와 충돌하지 않도록 정리.
+  - 냉부팅 스모크 캡처 `temp/current_p2_tutorial_battle_smoke/sel_064.png` 기준 전환 화면에 `미션1`만 표시되고 `MISSION`은 노출되지 않음을 확인.
+  - `full`, `final`, `title_test` 산출물에서 ASCII `MISSION` 잔여 count=0.
+- [x] Part 1 메뉴 로고 하단 영문 보조문구 제거.
+  - `OPERATION`, `MAP SELECT`, `SHOP SELECT`, `HARD SHOP`, `CAMPAIGN`, `MODE SELECT` 등 Part 1 로고 생성 레이어의 영어 subtitle을 제거하고 한글 본문을 중앙 배치.
+  - 렌더 미리보기 `docs/title_hangul/drafts/part1_operation_logo_insert_layer_3x.png` 등 기준 해당 영어 subtitle 잔여가 사라진 것을 확인.
+- [x] `full`, `final`, `title_test` 산출물 한글화 상태 통일.
+  - `build_korean_full.py`에서도 title/menu OBJ 그래픽 패치를 적용하도록 연결해 `full` 생성 시점부터 타이틀 한글화가 포함되도록 정리.
+  - `build_title_hangul.py` 재적용 후에도 `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`의 SHA-256이 모두 동일함을 확인.
+- [x] Part 1 이름 입력 UI의 고정 영어 라벨 한글화.
+  - LZ77 OBJ 블록 `0x48EFF0`, `0xC1BAA0`의 `NAME`, `BACK`, `OK!`, `Cancel` 버튼/라벨을 `이름`, `뒤로`, `확인`, `취소`로 재렌더링.
+  - 냉부팅 캡처 `temp/p1_name_ui_labels_after_patch/sheet.png` 기준 이름 입력 화면의 고정 영어 UI가 한글로 표시되고, `full/final/title_test` SHA-256 동일성을 재확인.
+- [x] Part 2 첫 전투 튜토리얼 보병/점령 안내 문장 품질 개선.
+  - CO 정보 이후 보병 설명 분기 캡처를 확장하고, `지금유닛`처럼 붙던 이동 범위 설명과 `보병을 위로 보내`처럼 어색한 점령 안내를 짧은 화면용 문장으로 조정.
+  - 작은 정보 패널에서 `기계`가 `기개`처럼 읽히던 프로필 문구를 `메카` 기준으로 바꿔 가독성을 높임.
+  - 실제 캡처 `temp/p2_tutorial_text_polish_verify/sheet.png`, `temp/p2_profile_mecha_verify/profile_3x.png` 기준 수정 확인.
+- [x] Part 2 첫 전투 튜토리얼 점령 설명 줄잘림 추가 개선.
+  - 시스템 메뉴 이후 보병 선택 분기를 다시 캡처해 `적군이나 중립 거점뿐이야`가 오른쪽으로 잘리는 문제와 `점령 점령 명령` 중복을 확인.
+  - 점령 조건/명령 조각을 `점령은`, `적군 중립 거점에서`, `할 수 있어`, `명령이 나와` 등 짧은 문구로 재분절.
+  - 실제 캡처 `temp/p2_capture_text_shortening_verify3/sheet.png` 기준 줄잘림과 중복 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
+- [x] Part 2 첫 전투 튜토리얼 수송차 설명 깨짐 정리.
+  - 보병 대기 이후 수송차 선택 분기를 캡처해 `태워c`, `되고c`, `전차타입요c`처럼 문장 끝 기호가 깨지는 구간을 확인.
+  - 탑승/하차/보급 설명의 `커맨드` 표기를 `명령`으로 정리하고, 수송차 이동 타입 설명을 `수송차는 전차형 / 산 강 못 가` 기준으로 줄임.
+  - 실제 캡처 `temp/p2_transport_dialog_verify5/sheet.png`, `temp/p2_transport_type_finalcheck/type_line.png` 기준 해당 깨짐과 오른쪽 잘림이 제거됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py` 통과.
+- [x] Part 2 첫 전투 튜토리얼 수송차 후속 설명 줄잘림 추가 개선.
+  - 현재 ROM 기준 `select_ready` 상태에서 보병 이동/대기부터 다시 재생해 수송차 설명을 재검수.
+  - 숫자 ASCII가 섞여 `????c`처럼 보이던 보병/수송차 이동력 설명을 숫자 없는 짧은 문장으로 교체.
+  - 바다 하차, 탄약/연료 감소, 보급, 이동 타입 정보 안내 문장을 실제 대화창 폭에 맞춰 재분절.
+  - 실제 캡처 `temp/p2_transport_from_select_ready_verify2/sheet.png`, `temp/p2_transport_ammo_line_verify2/sheet.png` 기준 물음표 깨짐, 오른쪽 잘림, 하단 픽셀 누수 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 공격/커서창 설명 깨짐 정리.
+  - 수송차 대기 뒤 턴 종료를 실제 진행해 적 턴, 다음 아군 턴, 공격 설명 구간까지 재생.
+  - 직접공격 설명의 `직접 공격이라는 견적`처럼 붙어 보이던 문장을 `직접 공격은 / 적 옆까지 / 이동한 뒤 / 공격하는 거야` 흐름으로 재구성.
+  - `HP` 표기 때문에 `?`로 보이던 적 체력/남은 체력/커서창 하트 숫자 설명을 모두 `체력` 표기로 교체.
+  - 커서창/주포 탄수 설명도 화면 폭에 맞춰 `커서창`, `하트 숫자는 체력`, `탱크 숫자는 남은 연료`, `남은 탄수도 여기 보여`로 정리.
+  - 실제 캡처 `temp/p2_attack_tutorial_text_verify/sheet.png`, `temp/p2_cursor_window_text_verify/sheet.png` 기준 물음표 깨짐과 줄잘림 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 점령 내구력 설명 사전 정리.
+  - 공격/커서창 설명 뒤 이어지는 `0xA03C9C-0xA03EF1` 점령 내구력 설명 슬롯을 짧은 화면용 문장으로 재분절.
+  - `HP`/숫자 혼용과 긴 원문 번역을 피하고 `보병이`, `점령 시작했어`, `거점 내구력이야`, `체력 좋은 보병은`, `계속 점령해` 같은 안전한 문구로 고정.
+  - 실제 진행 경로는 `temp/p2_attack_replay_current/sheet.png`, `temp/p2_after_attack_unit_select_probe_current/sheet.png`, `temp/p2_capture_durability_verify_current/sheet.png`로 공격 후 보병 선택 분기까지 회귀 없이 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 첫 전투 튜토리얼 종료 오입력 안내 문구 가독성 개선.
+  - 시스템 메뉴에서 `종료`를 잘못 골랐을 때 이어지는 `여긴 일단` 문구가 작은 폰트에서 `어건`처럼 보이는 것을 확인.
+  - `0xA02B9A`, `0xA02BAE`를 `지금은 / 유닛에게 명령부터 내려`로 줄여 행 경계와 가독성을 안정화.
+  - 실제 캡처 `temp/p2_end_command_retry_text_verify/sheet.png` 기준 새 문구가 깨짐 없이 표시됨을 확인.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 튜토리얼/후속 설명의 `HP` 표기 잔여 제거.
+  - `HP`/`ＨＰ`가 작은 대화 폰트에서 `?`처럼 깨지는 전례가 있어 직접 노출 문자열과 행 단위 패치에서 `체력` 표기로 통일.
+  - 대상 예: `0xD8FEDB`, `0xD8FEFE`, `0xD93B75`, `0xD97F73`, `0xA05401`, `0xA06974`, `0xA2BFF0`, `0xDCB44C`.
+  - `tools/build_korean_full.py` 검색 기준 직접 출력 패치 문자열의 `HP`/`ＨＰ` 잔여는 제거했고, 남은 `BGM 켬`은 소스 텍스트 매핑 키라 화면 출력 대상이 아님.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 통신/링크 UI 문장 조사 오류와 영문 잔여 정리.
+  - NUL 종료형 통신 UI 슬롯 `0xB8301C`, `0xB83044`, `0xB830AC`, `0xB830C8`, `0xB8319C`를 `지도을` 대신 `지도를` 기준의 짧은 문구로 고정.
+  - 반복 링크 UI의 `スタートを押してね!!`, `PRESS START`, `ENTRY WAIT` 후보를 `시작을 눌러`, `시작`, `입장대기`로 교체.
+  - ROM 검색 기준 ASCII `START`, `PRESS START`, `ENTRY WAIT` count=0. `CAMPAIGN/HARD*CAMPAIGN`은 내부/화면 용도 추적 전까지 보류.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1/Part 2 잔여 ASCII 국가명·캠페인 라벨 정리.
+  - ROM에 남아 있던 `BLACK HOLE`, `YELLOW COMET`, `GREEN EARTH`, `BLUE MOON`, `RED STAR`, `NEUTRAL`, `CAMPAIGN`, `HARD*CAMPAIGN` 고정 문자열을 한글 예약코드 라벨로 교체.
+  - `full`, `final`, `title_test` 산출물 SHA-256 동일성을 확인했고, 해당 ASCII 토큰 8종은 ROM 검색 기준 count=0.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
+- [x] Part 1/Part 2 공통 전투·메뉴 ASCII 라벨 정리.
+  - `PAUSE`, `WIN`, `BUTAI ZENMETU`, `SYUTO SENRYO`, `X SENRYO`, `SUDDEN DEATH`, `SAKUTEKI`, `MONEY`, `BREAK`, `TEAM`, `SYOGUN`, `SORT`, `COLOR` 계열 고정 문자열을 한글 슬롯으로 교체.
+  - Part 1 메뉴 문자열 묶음의 `TEAM*SETTING`, `RULE*SETTING`, `WARS*SHOP`, `COLOR*EDIT`, `MAP*SELECT`, `MODE*SELECT`, `SYOGUN*SELECT`, `LINK*MODE`도 한글화.
+  - `full`, `final`, `title_test` 산출물에서 위 ASCII 후보 검색 count=0, SHA-256 동일성 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
+- [x] Part 2 CO/컴패니언 설명 테이블의 남은 `HP`/일본식 프로필 문구 정리.
+  - `0xA2A8DC-0xA2BF92` 범위의 CO 능력/좋아함/싫어함/프로필 행을 짧은 화면용 한글 문구로 고정.
+  - 블리자드/츠나미/타이푼/메테오/호크/센세이 설명의 `HP` 계열 표기를 `체력`으로 통일하고, `키라이케무시`류 직역 문구를 자연스러운 한글로 교체.
+  - ROM 스니펫 검사 기준 `0xA2A800-0xA2C020`의 SJIS `HP`/`ＨＰ` 및 ASCII `HP` 잔여 count=0.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 후속 튜토리얼의 작전/상황 메뉴 설명 문구 개선.
+  - `D9FA81`, `DA002C`, `DC2C3A-DC2D3D`의 전각 숫자와 `쇼군` 메뉴명 혼용을 `세 메뉴`, `세개뿐`, `장군` 기준으로 정리.
+  - `작전룸에선 이 ３개뿐이야`, `승리조건 상황 쇼군`, `３가지 명령`, `남은 ２개 메뉴` 계열 어색한 문구가 소스 패치 기준 남지 않음을 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 프롤로그 화면 상단 OBJ 라벨 오독 개선.
+  - 96x16 `프롤로그` OBJ 로고가 3배 가로 확대에서 `프로그로그`처럼 뭉쳐 보이던 문제를 2배 가로 확대 렌더링으로 조정.
+  - 새 ROM 콜드부트 재진입 캡처 `temp/current_p2_tutorial_battle_smoke/a_002.png` 기준 상단 라벨이 `프롤로그`로 또렷하게 표시됨을 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 2 모드/캠페인 선택 화면 OBJ 라벨 가독성 보강.
+  - Part 2 모드 메뉴의 `워즈숍`이 작은 폰트에서 `위즈숍`처럼 보이던 문제를 `상점` 라벨로 단축.
+  - 캠페인 지도 상단 `캠페인` OBJ 헤더의 첫 음절이 공유 타일 공백에 걸리지 않도록 `캠` 위치를 보정.
+  - 새 ROM 콜드부트 캡처 `temp/current_p2_tutorial_battle_smoke/005_new_confirmed.png`, `a_052.png` 기준 모드 메뉴와 캠페인 지도 라벨을 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1 이름 확정 뒤 인사말 공백/문장부호 회귀 수정.
+  - 14바이트 이름 제어 슬롯 안에 문장부호와 이름 앞 공백이 들어가도록 `만나서반가워. `를 `반가워. `로 단축.
+  - 이름 뒤 suffix는 ASCII space 대신 전각 공백을 써서 실제 화면에서 `A 님`처럼 떨어져 보이도록 조정.
+  - 새 ROM 콜드부트 이름 확정 캡처 `temp/p1_after_name_fresh_current/sheet.png` 기준 `반가워 A 님`, `예 아니오` 표시를 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py todo.md` 통과.
+- [x] Part 1 작전룸 선택 화면의 짧은 옵션 라벨 가독성 개선.
+  - Part 1 모드 옵션 그래픽에서 `워즈 숍`을 `상점`으로, `1대 대전`처럼 보이던 대전 옵션을 `대전`으로 단축.
+  - 새 ROM 콜드부트 캡처 `temp/p1_after_name_long_current/a_15.png` 기준 `대전`, `통신`, `작전룸`, `캐서린` 표시를 재확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check -- tools/build_korean_full.py tools/build_title_hangul.py todo.md` 통과.
+- [x] Part 2 튜토리얼/CO 설명의 잔여 깨짐 후보 추가 정리.
+  - 첫 전투 후속 대사에서 일본식 말줄임표 슬롯이 작은 폰트에서 `cc`처럼 보이던 두 구간을 빈 슬롯으로 정리.
+  - 초반 CO 설명 테이블의 `HP`/`G.`로 검색되던 체력 회복/능력 행을 `전유닛체력`, `2회복`, `5회복`, `공격력상승`, `이동력도상승` 기준으로 재구성.
+  - `full`, `final`, `title_test` 산출물 SHA-256 동일성과 `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, `git diff --check` 통과.
+- [x] Part 2 첫 전투 튜토리얼 전투 설명 문구 재검수.
+  - 턴 종료 뒤 적 턴/다음 날 전투 설명 상태 파일을 현재 ROM으로 재생해 전투 설명 페이지를 다시 캡처.
+  - `직접공격은적`, `후반드시`, `체력이 0 되면`, `공군이라면`처럼 붙거나 오독되던 행을 제어 바이트 보존 기준으로 재분절.
+  - 실제 캡처 `temp/p2_battle_explain_polish_space_final/sheet.png` 기준 `cc` 조각 없이 전투 설명, 체력/공격/탄수/사령관 안내가 페이지 넘김 정상 상태로 표시됨을 확인.
+- [x] Part 2 첫 전투 소형 커서 팝업의 보급차 라벨 순서 수정.
+  - Part 2 OBJ 유닛명 테이블에서 보급차 항목이 빠져 수송/보급차 커서 팝업이 `자주포` 계열 글자처럼 보이던 문제를 수정.
+  - 큰 상태창/소형 커서 팝업 유닛명 테이블 모두 `보병, 바주카병, 정찰차, 경전차, 중전차, 신형전차, 보급차, 자주포...` 순서로 재정렬.
+  - 실제 캡처 `temp/p2_apc_popup_label_after_order_fix/sheet.png` 기준 보급차 커서 팝업이 `보급차`로 표시됨을 확인.
+- [x] 레포 대형 임시/중복 생성물 정리.
+  - `temp/`의 대형 로그/스크린샷/상태 파일과 `output/`의 재생성 가능한 ROM 산출물을 비운 뒤, 현재 기준 ROM만 다시 빌드해 복원.
+  - 현재 빌드에 쓰이지 않는 중복 참조 파일 `reference/Unihan_full.zip`, `reference/unihan_tmp/`, `reference/fonts/galmuri.zip`을 삭제.
+  - 작업 폴더 크기는 이번 정리 후 약 413MB 수준으로 축소.
+- [x] Part 2 첫 전투 진입부의 작은 폰트 오독 문구 정리.
+  - `블랙홀군`의 마지막 글자와 `대충`의 `충`이 작은 대화 폰트에서 깨져 보이는 구간을 짧은 표현으로 교체.
+  - 실제 캡처 `temp/current_p2_tutorial_battle_smoke/a_066.png`, `a_070.png` 기준 오른쪽 잘림과 깨진 글자 없이 표시됨을 확인.
+- [x] Part 1/Part 2 보호 전투 UI 사전의 자금 `G` 라벨 제거.
+  - 보호 UI 사전의 자금 단위용 `行動数Ｇ`, `総事費Ｇ`만 `金` 글리프 경로로 바꿔 작은 전투 폰트에서 `금`으로 표시되도록 조정.
+  - `ＢＧＭ`의 `Ｇ`는 유지했고, 보호 UI 범위의 남은 `Ｇ` hits가 BGM 문맥뿐임을 ROM 검색으로 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 1 이름 확정 뒤 작전룸 안내 문구 표기 통일.
+  - 실제 콜드부트 캡처에서 보인 `모드선택`, `작전실` 혼용을 `모드 선택`, `작전룸` 기준으로 정리.
+  - 재빌드 후 `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 튜토리얼/전투 설명의 잔여 `HP` 표기 추가 제거.
+  - 합류, 거점 회복, CO 설명, 브레이크 설명 등에 남은 반각 `HP` 행 12개를 `체력` 표기로 주소 고정 패치.
+  - `0xA00000-0xA80000` 실제 텍스트/UI 범위의 ASCII `HP` hits=0 확인.
+  - `0xD80000-0xF00000`의 남은 `HP` hits는 포인터/테이블형 데이터 문맥으로 확인.
+  - 보호 UI 사전의 `ＢＧＭ`도 `음 있음`으로 바꿔 compact 범위의 `ＢＧＭ` hits=0 확인.
+  - `py_compile`, `build_korean_full.py`, `build_title_hangul.py`, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 2 캠페인/상점 안내의 잔여 `SELECT` 표기 제거.
+  - 하드 캠페인/음악방 전환과 상점 구매 후 캠페인 진입 안내에서 `SELECT`/`ＳＥＬＥＣＴ`를 `전환키` 표기로 통일.
+  - `0xA00000-0xA80000`, `0xD80000-0xE18000` 텍스트 범위의 ASCII `SELECT` hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] 공통 전투/통신 UI의 고정 ASCII 라벨 추가 정리.
+  - `NEXT PHASE`, `PRESS A BUTTON`, `MAP:%02d`, `YELLOW COMMET`, `WAIT`, `NOT CONNECTED`, `READY`, `ERROR`, `CONNECTED`, `MASTER`를 한글 고정 슬롯으로 교체.
+  - Part 1/Part 2 공통 색상·플레이어 라벨 `BLUE`, `RED`, `NEUT`, `COM`, `HUMAN`, `NON`도 슬롯 크기에 맞춰 한글화.
+  - 대상 전투/통신 블록 검색 기준 위 ASCII 라벨 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] 레포 용량 재정리.
+  - 현재 빌드 파이프라인에서 직접 쓰는 Galmuri 폰트 7개만 남기고 unused TTC/TTF/WOFF/BDF 변형과 CSS를 제거.
+  - 재생성 가능한 `output/`, `temp/` 산출물과 중복 원본 백업 ROM, 사용하지 않는 `visualboyadvance-m.app`를 정리.
+  - `git gc`로 loose object를 압축해 작업 폴더 크기를 약 409MB에서 153MB 수준으로 축소.
+  - 폰트 정리 후 `build_korean_full.py`, `build_title_hangul.py` 재빌드 통과.
+- [x] 공통 전투 유닛/지형/장군/스탯 고정 ASCII 테이블 한글화.
+  - `0x4925E8-0x492A14`의 유닛명, 지형명, 날씨, CO명, 스탯 축약 라벨을 슬롯 크기에 맞춰 한글로 교체.
+  - 4바이트 슬롯은 널 종료를 유지하기 위해 `공`, `체`, `방` 같은 1음절 축약으로 처리.
+  - 대상 테이블의 기존 영어 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 1/Part 2 설정·CO 보조 ASCII 테이블 추가 한글화.
+  - Part 1의 ON/OFF, 다국어 phase prompt, 국가명, CO 약칭, `FORCE /`, `PLAY` 보조 라벨을 한글 슬롯으로 교체.
+  - Part 2의 ON/OFF, 국가명, CO 약칭, `NORMAL`, `FORCE /`, `PLAY` 보조 라벨도 같은 기준으로 교체.
+  - 대상 범위의 기존 영어/다국어 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, 콜드부트 mGBA 스모크 캡처 통과.
+- [x] Part 1/Part 2 디버그·백업 유틸 보조 ASCII 테이블 정리.
+  - `FLAG CONTROL`, `SAVEDATA`, `FLASHCLEAR`, `BACKUP UTL`, `TUTORIAL`, `HISTORY` 등 남은 고정 ASCII 라벨을 슬롯 크기 내 한글로 교체.
+  - 대상 debug/backup utility 범위의 기존 ASCII 라벨 검색 hits=0 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final, mGBA quick smoke 통과.
+- [x] Part 2 프롤로그/첫 전투 전 지도 대사 문구 품질 개선.
+  - `블랙홀군이 또 나타난 모양이야`, `워즈월드에는`, `우울해질 필요 없어`처럼 화면에서 깨져 보이거나 어색한 줄을 짧은 문구로 재작성.
+  - `레드스타 말고도` 앞에 새던 조사 조각 `서`를 제거해 대사 연결을 정리.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+  - `temp/p2_prologue_polish_focus/sheet.png`와 `temp/p2_battle_entry_smoke_after_polish/battle.png` 기준 실제 mGBA 화면 확인 및 전투 진입 무충돌 확인.
+- [x] Part 2 첫 전투 시작 연출 잔여 일본어 그래픽 제거.
+  - 기존 `1일째/작전개시` 제거 패치에서 빠졌던 후반 OBJ 타일 범위를 추가로 비워 화면에 남던 `始` 그래픽 제거.
+  - `temp/p2_start_overlay_verify_after_blank/overlay.png` 기준 실제 mGBA 화면 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 첫 전투 조작 UI 1차 분기 검수.
+  - `temp/p2_battle_unit_branch_probe/branch_sheet.png` 기준 시스템 메뉴, 작전 하위 메뉴, CO 정보, 지형/유닛 상태 라벨 한글 표시 확인.
+  - `temp/p2_battle_unit_command_probe/unit_command_sheet.png` 기준 보병 선택/이동 범위와 튜토리얼 안내 대사 한글 표시 확인.
+  - `temp/p2_battle_endturn_probe/endturn_sheet.png` 기준 턴 종료 안내 대사 한글 표시 확인.
+  - 이 분기에서 추가 코드 패치가 필요한 일본어 잔여 그래픽은 발견하지 못함.
+- [x] Part 2 첫 전투 상단 자금 HUD와 진입 대사 깨짐 추가 정리.
+  - 상단 전투 HUD의 raw OBJ 타일 `0x460B28` 안에 남던 `G` 자금 라벨을 같은 팔레트의 `자금`으로 재렌더링.
+  - 프롤로그/전투 진입 대사에서 `cc`처럼 보이던 `0xA02788` 말줄임표 보조 슬롯을 빈 조각으로 정리.
+  - 콜드부트 fresh-run 캡처 `temp/p2_hud_cc_fresh_verify/sheet.png` 기준 `자금 1000` 표시와 `cc` 잔여 제거를 확인.
+- [x] Part 2 전투 시스템 옵션 메뉴 라벨 가독성 개선.
+  - `음악있음/음악없음`, `애니전부/애니전투/애니아군/애니없음`을 `음악　있음/음악　없음`, `전부표시/전투만/아군만/표시없음`으로 정리.
+  - 보호 UI 렌더러의 2바이트 정렬 때문에 음악 라벨에는 전각 공백을 사용.
+  - `temp/p2_system_option_label_polish_verify2/sheet.png` 기준 실제 mGBA 옵션 메뉴에서 `음악??` 없이 정상 표시 확인.
+  - 재빌드, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 첫 전투 첫 턴 유닛 이동/대기 메뉴 추가 검수.
+  - `temp/p2_after_wait_b_escape_probe/sheet.png` 기준 첫 보병 대기 후 B 입력으로 실제 맵 조작 상태 복귀 확인.
+  - `temp/p2_up_unit_command_probe/sheet.png` 기준 다음 보병 선택, 이동 범위, 이동 후 `대기` 명령 메뉴 정상 표시 확인.
+  - `temp/p2_after_two_waits_probe/sheet.png` 기준 두 보병 대기 후 상태 확인.
+  - 이 범위에서는 추가 코드 패치가 필요한 일본어 잔여/깨짐을 발견하지 못함.
+- [x] 재생성 가능한 임시 산출물 정리.
+  - 무시 파일인 `output/` ROM 복사본과 오래된 `temp/` 캡처/상태/로그 산출물을 삭제해 작업 디렉터리 용량을 약 220M에서 155M으로 축소.
+  - 남은 큰 항목은 `.git`, `dist`, `original`처럼 작업/배포/원본 검증에 필요한 항목으로 확인.
+- [x] Part 2 첫 전투 첫 턴 전체 종료 경로 재검수.
+  - `temp/p2_first_turn_end_confirm/sheet.png` 기준 첫 보병, 두 번째 보병, 수송차를 모두 대기 처리한 뒤 시스템 메뉴 `종료`가 적 2일차로 정상 전환됨을 확인.
+  - `temp/p2_enemy_turn_probe/sheet.png` 기준 적 2일차 대사와 공격 설명 구간에서 추가 일본어/글자 깨짐 없이 표시됨을 확인.
+  - 공격 설명 이후 실제 조작 대기 상태는 추가 분기 탐색 대상으로 남겨 둠.
+- [x] 잔여 일본어 감사 도구 루프 버그와 저주소 UI 라벨 정리.
+  - `find_japanese_text.py`가 잘못된 SJIS 시작 바이트에서 같은 주소에 멈추던 루프를 수정.
+  - 안전 텍스트 import 대상 밖의 `0x5A375F` 저주소 `コメント` UI 라벨을 8바이트 슬롯 안에서 `코멘트`로 직접 패치.
+  - `full`, `final`, `title_test` SHA-256 동일, `コメント` ROM 검색 count=0, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] Part 2 모드 선택 화면 하단 설명문 줄깨짐 개선.
+  - 캠페인 설명이 `플레이할 수 이 모드`처럼 줄 경계에서 깨지는 것을 실제 캡처로 확인하고, `0xA2C040`을 짧은 화면용 문장 `스토리를 즐기며 플레이하는 모드`로 고정.
+  - `temp/p2_mode_help_verify/sheet.png` 기준 Part 2 모드 선택 화면 하단 설명문이 자연스럽게 표시됨을 확인.
+  - `full`, `final`, `title_test` SHA-256 동일, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과.
+- [x] 레포 재생성 산출물 추가 정리.
+  - ignored `temp/`, `output/`, `tools/__pycache__/`를 삭제해 작업 폴더 용량을 약 226M에서 141M으로 축소.
+  - 원본 ROM 보관용 `original`, 배포물 `dist`, git 이력은 보존.
+- [x] Part 2 첫 전투 수송차/보급 튜토리얼 조각 경계 재정리.
+  - `탑승 라는 명령이 나와`로 붙던 조사 조각을 `탑승 명령이 나와` 흐름으로 수정.
+  - 수송차 설명 중 단독으로 새던 `태워` 조각을 제거하고, `수송차는 보급으로 주변에 있는...` 설명의 공백 경계를 보강.
+  - 탄약/연료 설명에 남던 `ユニットの` 조각과 `탄약연료가...과연료` 순서 꼬임을 `탄약과연료가 줄어` 흐름으로 재분절.
+  - 내부 디코드 기준 `0xA02F00-0xA03580`의 실제 대사 잔여 일본어 후보가 제거된 것을 확인했고, 수송차 상태 로드 캡처에서 후속 대사가 충돌 없이 진행됨을 확인.
+- [x] 레포 임시 산출물 정리.
+  - ignored `temp/`의 재생성 가능한 캡처/상태/RAW 산출물 68M을 삭제하고 빈 디렉터리만 다시 생성.
+  - 현재 검증에 필요한 `output/*.gba`, 원본 ROM 보관용 `original`, 배포물 `dist`, git 이력은 보존.
+- [x] Part 1 이름 확정 뒤 모드/작전룸 안내 문구 재검수.
+  - `0xDF8EFF-0xDF9656` 이름 직후 안내 분기를 주소 고정 문구로 확장해 `작전실`, `모드 셀렉트`, 붙은 문장 표현을 `작전룸`, `모드 선택` 기준으로 통일.
+  - 대화 폰트에서 숫자 `1`이 빠져 `게임보이 대로`처럼 보이던 문구를 `게임보이 한 대로`/`한 대 대전`으로 교체.
+  - 실제 콜드부트 캡처 `temp/p1_intro_digit_fix_verify/sheet.png` 기준 `여러 모드가 있어`, `게임보이 한 대로 대전하는 모드`, `다음 모드 선택에서 작전룸 골라줘` 흐름이 깨짐 없이 표시됨을 확인.
+- [x] Part 2 CO 정보/프로필의 잔여 `HP`/오독 문구 정리.
+  - 추출 슬롯이 없던 `0xA2A2E8`의 `ＨＰ` 헤더를 빌드 후 직접 `체력`으로 패치.
+  - 작은 정보 폰트에서 `메카`가 `매가`처럼 보이던 료 프로필 문구를 `기계 좋아 소년`, `좋아함 기계`로 조정.
+  - ROM 검색 기준 전각 `ＨＰ`와 원문 `メカ` hits=0, 실제 캡처 `temp/p2_co_profile_after_hp_patch/sheet.png` 기준 CO 정보 화면 새 문구 표시를 확인.
+- [x] Part 2 첫 전투 클리어 뒤 결과/랭크 설명 문구 선제 정리.
+  - `0xA06CA0-0xA06F20` 결과 설명 구간의 `저 지점은` 오역과 긴 CSV 기본 번역을 `그 포인트는`, `스피드`, `파워`, `테크닉` 기준의 짧은 화면용 문구로 고정.
+  - 실제 클리어 화면 도달은 다음 검수 대상으로 남기고, 소스 슬롯 fit 검사와 재빌드 기준 overflow=0, `qa_text_fit.py`, `phase6_basic_test.py` full/final 통과를 확인.
+- [x] Part 2 두 번째 미션 진입/브리핑/지형효과 설명 정리.
+  - 미션 제목 pair renderer가 공백을 제거하므로 `블랙홀 접근 / 다리 방어전`으로 짧게 고정.
+  - `0xA04294-0xA049E7` 브리핑과 지형효과 설명을 주소 고정 문장으로 보강해 자동 번역 잔재와 붙는 문장을 줄임.
+  - `0xA04404`의 과다 길이 glue 조각이 다음 문장에 `네`/깨진 픽셀을 붙이던 문제를 공백 처리로 제거.
+  - fresh 월드맵 진입 캡처 `temp/p2_mission2_title_fresh_patch/sheet.png` 기준 제목과 초반 대사 흐름을 확인.
+- [x] Part 2 월드맵 지역명 라벨 잔여 픽셀 정리.
+  - `레드스타령` 뒤에 `cc`처럼 보이던 잔여는 일반 공백 패딩을 렌더러가 문자처럼 그리는 문제로 확인.
+  - `0xA35758` 지역명 슬롯을 0 패딩으로 재덮어 fresh 저장 프롬프트 진입 캡처 `temp/p2_worldmap_label_fresh_from_save_prompt/sheet.png` 기준 `레드스타령`만 표시됨을 확인.
+- [x] 레포 임시 산출물 재정리.
+  - 이번 검증 중 생성된 RAW 프레임과 실패/비교용 후보 캡처를 삭제해 전체 용량을 약 `261M -> 204M`, `temp`를 `68M -> 12M`로 축소.
+  - 최신 확인 시트, 핵심 `ss0` 상태 파일, `output/*.gba`, 원본/참조 자료는 보존.
+- [x] Part 2 저장 확인 선택지 fresh 경로 재검증.
+  - 기존 `ss0`에서 보이던 `마/오`는 ROM 변경 전 선택지 VRAM/문자 캐시 영향으로 확인.
+  - 더 이른 결과 화면 상태에서 최신 ROM으로 다시 진행한 `temp/p2_save_yesno_from_early_state/sheet.png` 기준 저장 확인 선택지가 `예  오`로 정상 표시됨.
+- [x] Part 2 두 번째 미션 후반 대사와 CO 정보 패널 정리.
+  - 빈 문자열 override가 CSV 주소에서 건너뛰어 원문 슬롯이 남던 문제를 수정해 `ドミノ、`, `これは、`, `じゃあ、` 계열 잔여가 실제로 공백 처리되도록 변경.
+  - `ね。` 제거 구간은 `0x6B` 입력대기 제어를 보존해 대화창 하단 세 번째 행 잔여가 다음 대사에 새지 않도록 수정.
+  - `그런cc`, `보이지 이`, `これは、`가 보이던 지형 효과 안내를 짧은 한글 행으로 재분절.
+  - CO 정보 패널은 깨진 이름 OBJ 대신 첫 줄 `도미노 사령관`과 프로필 문구(`료와 맥스 지원`, `특수부대 출신`, `공군도 맡아`)로 표시되도록 정리.
+  - 실제 캡처 `temp/p2_mission2_after_wait_control_fix/sheet.png`, `temp/p2_mission2_domino_profile_blank_name_verify/coinfo_3x.png` 기준 확인.
+- [x] 레포 임시 캡처/캐시 재정리.
+  - 사용자 요청에 따라 ignored `temp/` 캡처와 `tools/__pycache__/`를 삭제하고 검증 후 재정리해 전체 용량을 약 `215M -> 196M`, `temp`를 `3.0M`로 축소.
+  - 원본 ROM, 현재 `output/*.gba`, 추적 중인 `dist/` 릴리즈 파일은 보존.
+- [x] 빌드 안정성과 save 관련 보호 테이블 복구.
+  - `patch_part2_mission_start_obj()`의 `load_bdf/glyph_grid` import 누락으로 캐시 삭제 뒤 빌드가 실패하던 문제를 수정.
+  - save/backup utility 테이블(`FLASH`, `SAVEDATA`, `BACKUP UTL`)과 기존 save seed 이름 슬롯을 원본 바이트로 복원해 emulator save-type/기존 save 검증에 쓰이는 데이터를 보호.
+- [x] Part 2 미션 2 자주포 설명 슬롯 선제 정리.
+  - `0xA04E74-0xA05179` 자주포/간접공격 설명 조각을 짧은 화면용 문장으로 고정.
+  - `0xA05169` 연결 조각을 `칸  `으로 바꾸고 `0xA0516F`를 blank 처리해 `요이건`처럼 이어 붙는 잔여를 제거.
+  - ROM byte 디코드 기준 `선택한 유닛은`, `자주포야`, `정보키로`, `자주포 사거리는`, `2-3칸`, `정보 화면에서도 확인 가능`이 최종 ROM에 들어간 것을 확인.
+  - 실제 분기 화면 검증은 미션 2 튜토리얼 조작 루트 재현을 계속 진행해야 함.
+- [x] Part 2 튜토리얼 공격 복습 목표 마커 회귀 수정.
+  - `0xD74495`, `0xD744E8`은 텍스트가 아니라 튜토리얼 목표 화살표/기호 데이터라 텍스트 import에서 보호.
+  - 실제 mGBA 상태 `temp/p2_attack_route_key/selected_before_attack_review.ss0` 기준 `START -> RIGHT -> RIGHT -> A` 루트에서 빨간 목표 화살표, 이동, 전투 애니메이션 재진입을 확인.
+  - `temp/p2_marker_spacing_final_verify/sheet.png`, `temp/p2_after_attack_dialog_spacing_verify/sheet.png` 기준 `훌륭해`, `이번엔 이 보병 골라 봐` 후속 문구가 깨짐 없이 표시됨을 확인.
+- [x] Part 2 튜토리얼 미션 2 지형/이동비용/지형효과 설명 재분절.
+  - 공격 복습 직후 상태에서 `LEFT 20f -> DOWN 16f -> A`로 다음 보병 선택 루트를 확정하고, `RIGHT -> A`로 산 지형 공격까지 진행.
+  - 동적 `공격`/`보병` 토큰이 대사 조각 사이에 중복 출력되던 블록을 행 전체 패치로 덮어 `공격공격해`, `피해를비교해`, `여기로 가야공격` 형태의 붙은 문장을 제거.
+  - 실제 캡처 `temp/p2_terrain_text_spacing_final_verify2/sheet.png`, `temp/p2_terrain_compare_final_verify2/sheet.png` 기준 지형 이동 설명과 평지/산 피해 비교 설명이 깨짐 없이 표시됨을 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 동일.
+- [x] Part 2 튜토리얼 미션 2 지형효과 뒤 종료 안내/경고 문장 재분절.
+  - 동적 `종료`/`공격` 토큰을 문장 중간에 남기던 슬롯을 행 전체 패치로 덮어 `전부 끝나면종료해줘`, `아직종료필요없어`, `지금공격...` 형태의 붙은 출력을 제거.
+  - 실제 캡처 `temp/p2_turn_end_prompt_after_patch/sheet.png` 기준 `전부 끝나면 종료해줘`, `temp/p2_end_warning_route_probe/sheet.png` 기준 `아직 종료 필요없어` 표시를 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 동일.
+- [x] Part 2 튜토리얼 미션 2 지형효과 뒤 공격/턴종료/2일째 지형 설명 루트 확인.
+  - 지형효과 비교 뒤 위쪽 보병은 `LEFT x2 -> UP -> A -> RIGHT x3 -> A -> A -> A`, 아래쪽 보병은 전투 후 `LEFT x3 -> DOWN x4 -> A -> RIGHT x2 -> A -> A -> A`로 실제 전투 진입을 확인.
+  - 두 공격 뒤 `A -> DOWN x3 -> A`로 턴 종료와 적 턴 대사, 2일째 지형효과/이동비용 설명까지 진행되는 것을 확인.
+  - 동적 `바주카병`/`보병` 토큰이 중간에 붙던 문장들을 행 전체 패치로 덮어 `바주카병무서움`, `아까바주카병공격`, `산은보병`, `바주카병바주카라도` 형태의 붙은 출력을 제거.
+  - 실제 캡처 `temp/p2_upper_attack_confirm_probe/sheet.png`, `temp/p2_lower_attack_confirm_probe/sheet.png`, `temp/p2_after_two_attacks_endturn_probe/sheet.png`, `temp/p2_less_damage_after_patch_verify2/sheet.png` 기준 전투 진입과 수정 문구를 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 동일.
+- [x] Part 2 튜토리얼 미션 2 작전 중 저장 설명 분기 정리.
+  - 2일째 자유 행동 복귀 뒤 지도 메뉴에서 턴 종료를 선택해 `맞다 하나 잊었네` 이후 작전 중 저장 설명 분기로 진입하는 것을 확인.
+  - `중간에 그만둘때`, `여기 저장 명령이 있지`, `「저장」은 전투를 기록하는 명령이야`가 실제 화면에서 붙지 않도록 저장 명령 설명 슬롯을 재분절.
+  - 실제 캡처 `temp/p2_save_tutorial_after_patch_verify/sheet.png`, `temp/p2_save_tutorial_quote_verify/sheet.png` 기준 표시 확인.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test 통과.
+- [x] 레포 대량 임시 산출물 재정리.
+  - ROM 비섹션 중 생성된 임시 16MB ROM들과 분기 스윕 RAW/PNG/상태 파일을 삭제.
+  - 핵심 상태와 최종 검증 시트만 보존해 전체 용량을 약 `1.2G -> 206M`, `temp`를 약 `996M -> 12M`로 축소.
+- [x] 레포 임시 캡처 추가 정리.
+  - 지형효과 검증 재시작용 상태와 최신 종료 안내 검증 시트만 남기고 오래된 분기 스윕 디렉터리를 삭제.
+  - 현재 기준 전체 용량은 약 `198M`, `temp`는 약 `4.0M` 수준.
+- [x] Part 2 튜토리얼 미션 2 저장 설명 이후 적 전멸/성공 대사 검증.
+  - 저장 설명 뒤 남은 적을 DAY 4까지 실제 조작으로 전멸시키고, `잘했어` 이후 성공 대사와 결과 화면 진입을 확인.
+  - `같네` 단독 줄을 비우고, `네 전투 덕에 아군 피해는`, `으으 또 작전 실패냐`처럼 성공/패배 대사 띄어쓰기를 보정.
+  - 승리 후 저장 확인창은 `현재 상황 저장할까요`로 붙는 문장을 정리하고, compact 선택지를 화면 한계 안에서 `예아니`로 표시되도록 보정.
+  - 최신 이어가기 상태는 `temp/p2_save_prompt_final_state/prompt.ss0`, 확인 캡처는 `temp/p2_save_prompt_final_state/prompt.png`.
+- [x] 레포 임시 산출물 재정리.
+  - 저장 설명 이후 전멸 루트 검증 중 생성된 대량 분기 스윕 PNG/상태 파일과 RAW/캐시를 삭제.
+  - 최신 이어가기 상태와 `encode_report.csv`만 남겨 전체 용량을 약 `488M -> 199M`, `temp`를 약 `293M -> 4.1M`로 축소.
+- [x] 레포 불필요 산출물 추가 정리.
+  - ignored `output/*.gba`, 오래된 `temp/` 분기 캡처, `tools/__pycache__/`를 삭제한 뒤 검증용 ROM만 재생성.
+  - 추적 중이던 `dist/game_wars_korean_final.gba`는 재생성 가능한 ROM 산출물이라 제거하고, 패치/문서 파일은 보존.
+  - 최신 기준 전체 용량은 약 `216M -> 179M`, `temp`는 `700K` 수준.
+- [x] Part 2 저장 확인 뒤 다음 작전 선택/점령훈련 초반 브리핑 정리.
+  - `0xB81FF4` 작전 제목을 화면 폭에 맞는 `점령훈련`으로 줄여 선택 목록 깨짐을 제거.
+  - 카라라 요새/아라라 지방/휘프 블루문군/바주카병 추가 설명 슬롯을 짧은 화면용 문장으로 재분절해 붙은 글자와 잔픽셀을 제거.
+  - 전투 진입 뒤 `산덕분에 경전차는 못와`, `이쪽엔 못와서 다행` 안내와 `위치맞추고 결정` 조작 안내를 실제 캡처 기준으로 보정.
+  - 잘못된 입력 경로의 `지금보병...` 안내는 동적 유닛명 뒤 `을 골라`가 붙도록 정리.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_capture_lesson_intro_spacing.png`, `temp/verified_sheets/p2_capture_lesson_cursor_prompt.png`, `temp/verified_sheets/p2_capture_lesson_wrong_unit_retry.png`, `temp/verified_sheets/p2_capture_lesson_dynamic_infantry_select.png`.
+  - `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test 통과.
+- [x] 레포 대형 임시 탐색 산출물 재정리.
+  - 사용자 요청에 따라 대량 mGBA probe 캡처/RAW/실패 상태를 정리하고, 핵심 `ss0` 상태와 검증 시트만 보존.
+  - 작업 시작 직후 기준 전체 용량 `404M`, `temp` `224M`에서 정리 후 전체 `181M`, `temp` `2.0M` 수준으로 축소.
+  - `output/*.gba` 3종은 최신 검증 산출물이라 보존.
+- [x] Part 2 점령훈련 이동/점령/바주카 초반 조작 루트 정리.
+  - 점령 도시 이동 루트는 `p2_capture_move_prompt.ss0` 기준 `A, RIGHT, UP, UP, A, RIGHT, RIGHT, RIGHT, A` 이후 점령 명령 흐름으로 확정.
+  - 점령 후속 대사 `절반 점령완료`, `점령은 최소 ２일`, `다음날 한번 더 ...`, `움직이면 안돼`, `중간 점령분도 헛수고야` 구간을 실제 화면 기준으로 재분절.
+  - 바주카병 선택은 `p2_bazooka_prompt_exact.ss0` 기준 `A, LEFT x4, DOWN x3, A`로 진입 확인.
+  - 바주카 이동 안내의 붙은 문장 `점령가능한건...`, `그러니보병...`, `목적없으면...`, `전부끝나면종료해줘`를 짧은 화면용 문장으로 재분절.
+  - 첫 바주카 이동은 `p2_bazooka_now_move_prompt.ss0` 기준 `A, RIGHT x3, A, A`로 이동 후 행동 메뉴 첫 항목까지 확인.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_capture_lesson_route_latest.png`, `temp/verified_sheets/p2_capture_bazooka_text_spacing.png`, `temp/verified_sheets/p2_capture_bazooka_move_follow.png`.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과.
+- [x] 레포 대형 임시 탐색 산출물 추가 정리.
+  - 사용자 요청에 따라 `temp`의 대량 mGBA 후보 캡처/로그/RAW와 `tools/__pycache__`를 삭제하고, 핵심 `active_states`와 `verified_sheets`만 보존.
+  - 작업 시작 기준 전체 용량 `451M`, `temp` `271M`에서 정리 후 전체 `181M`, `temp` `2.7M` 수준으로 축소.
+- [x] Part 2 점령훈련 둘째 날 점령 완료 구간 검수.
+  - 첫 바주카 이동 뒤 남은 보병 이동/턴 종료 루트는 `p2_bazooka_after_first_move.ss0` 기준 `LEFT x4, DOWN x4, A, RIGHT x2, A, A, B, A, DOWN x3, A`로 확정.
+  - 2일째 도입의 `잊기 전에 점령 끝내자`, `이 보병 골라 결정해`, `점령 중인 유닛이 있으면` 반복 안내를 실제 캡처 기준으로 보정.
+  - 점령 완료 뒤 `아군 색`, `적 도시`, `중립 도시`, `체력 회복`, `자금` 설명과 `다음은 바주카병으로 점령해 보자` 전환 문장을 재분절.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_capture_day2_intro_final.png`, `temp/verified_sheets/p2_capture_day2_complete_final.png`.
+  - `py_compile`, `qa_text_fit.py`, `tools/build_korean_full.py` 재빌드 통과.
+- [x] Part 2 점령훈련 바주카병 도시 선택/힌트 구간 검수.
+  - 바주카병 선택 루트는 `p2_day2_after_capture_follow.ss0` 기준 `A, LEFT, DOWN x3, A`로 확정.
+  - 적 도시 정답 루트는 `p2_two_city_choice_prompt.ss0` 기준 `RIGHT x2, A, A, A`로 확정하고, 회색 중립 도시 선택 시 오답 안내로 빠지는 것을 확인.
+  - `이동 범위 안에 도시가 ２곳`, `중립 도시와 적 도시`, `어느 도시를 점령할래`, `내구도`, `점령이 늦어지니`, `정면 승부`, `수도를 점령하자` 설명 구간을 실제 화면 기준으로 재분절.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_capture_two_city_choice_final.png`, `temp/verified_sheets/p2_capture_two_city_hint_final.png`.
+  - `full`, `final`, `title_test` 3종을 같은 ROM 해시로 맞추고 `phase6_basic_test.py`와 `git diff --check` 통과.
+  - 작업 종료 기준 전체 용량은 약 `182M`, `temp`는 약 `3.7M`.
+- [x] 레포 임시 probe 산출물 재정리.
+  - 사용자 요청에 따라 최근 mGBA probe 디렉터리와 `tools/__pycache__`를 삭제하고, 핵심 `active_states`, `verified_sheets`, 최종 검증 시트만 보존.
+  - 작업 시작 기준 전체 용량 `191M`, `temp` `12M`에서 정리 후 전체 `184M`, `temp` `5.0M` 수준으로 축소.
+- [x] Part 2 점령훈련 후 자주포/보급/간접공격 분기 검수.
+  - `p2_destroy_after_info_key.ss0` 기준 `A, RIGHT x3, A, B, A`로 자주포 정보/보급 설명 루트를 재현.
+  - `p2_supply_select_unit_prompt.ss0` 기준 `A, LEFT, A, RIGHT x3, A, A, A` 이후 보급 명령과 자주포 공격 루트를 재현.
+  - 동적 `보급`/`공격` 토큰이 중복 출력되던 `보급보급됐어`, `공격공격해`, 붙은 문장 `자주포능력`, `적의보병`을 실제 화면 기준으로 보정.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_artillery_supply_intro_final.png`, `temp/verified_sheets/p2_artillery_supply_indirect_final.png`.
+- [x] Part 2 자주포 설명 뒤 도시 방어 분기 초입 문장 보정.
+  - `경전차말고는`, `그러니경전차를`처럼 붙던 경전차 선택 안내를 슬롯 경계 기준으로 보정.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_light_tank_prompt_spacing_current.png`.
+- [x] Part 2 도시 방어 경전차/바주카병 이동 분기 검수.
+  - 경전차 선택 루트는 `p2_light_tank_select_interactive.ss0` 기준 `LEFT x4, UP x4, A`, 목적지 이동은 `p2_light_tank_move_range.ss0` 기준 `RIGHT x6, A`로 확정.
+  - 바주카병 선택 루트는 `p2_bazooka_after_light_tank_prompt_currentrom.ss0` 기준 `LEFT x7, DOWN, A`, 목적지 이동은 `p2_bazooka_after_light_tank_move_range.ss0` 기준 `RIGHT x2, A`로 확정.
+  - `아군 지키려면 경전차 1대만으로`, `적도 경전차가 있으니까`, `바주카병을 보내고 싶어`, 도시 방어 힌트/공격범위 설명의 붙은 문장과 물음표 깨짐을 실제 화면 기준으로 재분절.
+  - compact 힌트 선택지는 원본 `　はい　　いいえ` 오프셋에 맞춰 `예  아니`가 함께 보이도록 정렬.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_light_tank_bazooka_move_route_final.png`, `temp/verified_sheets/p2_light_tank_bazooka_follow_final.png`, `temp/verified_sheets/p2_city_defense_hint_yesno_final.png`.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과.
+- [x] 레포 대형 생성 산출물 정리.
+  - 사용자 요청에 따라 대량 probe 캡처/RAW와 stale `output` ROM 2종을 삭제하고, 현재 작업 ROM `output/game_wars_korean_full.gba`, 핵심 `active_states`, `verified_sheets`만 보존.
+  - 작업 시작 기준 전체 `217M`, `output` `48M`, `temp` `38M`에서 정리 후 전체 `155M`, `output` `16M`, `temp` `7.7M`.
+  - `.git` `75M`와 원본 ROM `16M`은 작업/이력 보존 대상이라 그대로 둠.
+- [x] Part 2 도시 방어 턴 종료/수송차 탑재·하차 분기 검수.
+  - 턴 종료 루트는 `p2_city_defense_range_prompt.ss0` 기준 `LEFT, A, DOWN x3, A`로 확정.
+  - 적 턴/2일째 대사에서 `쳇 캐서린`, `박살내주마`, `적 보병이`, `이쪽 바주카병` 경계 문제를 실제 화면 기준으로 보정.
+  - 수송차 루트는 `p2_city_defense_transport_bazooka_prompt.ss0` 기준 `RIGHT, A`, 이동은 `p2_city_defense_transport_bazooka_move_range.ss0` 기준 `A, RIGHT x2, A`, 수송차 이동은 `p2_city_defense_after_load_dialog.ss0` 기준 `A, RIGHT x6, A`, 하차 위치는 `p2_city_defense_unload_position_prompt.ss0` 기준 `A, RIGHT, A`로 확정.
+  - 탑재/하차/수송차 설명의 붙은 문장과 `십자버튼` 표기를 `방향키` 기준으로 보정.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_endturn_enemy_turn_final.png`, `temp/verified_sheets/p2_city_defense_transport_load_unload_final.png`.
+  - `py_compile`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과.
+- [x] Part 2 수송차 설명 뒤 공략 힌트/첫 자유 행동 검수.
+  - 공략 힌트 대사의 `두 도시 방어`, `경전차를 다리앞 도시에`, `자주포는 간접공격 가능`, `수도 점령 또는 적 전멸` 구간을 실제 화면 기준으로 재분절.
+  - 상태 팝업용 유닛명 OBJ 라벨에서 경전차/중전차 슬롯 순서가 실제 전투 UI와 어긋나던 문제를 교정.
+  - 첫 자유 행동은 `p2_city_defense_free_after_strategy_hint.ss0` 기준 `LEFT x3, UP, A, RIGHT x2, DOWN, A, DOWN, A`로 경전차 도시 배치/대기까지 확정.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_strategy_hint_final.png`, `temp/verified_sheets/p2_city_defense_light_tank_city_route_final.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과.
+- [x] Part 2 도시 방어 자유 행동 보급차/턴 종료 루트 탐색.
+  - 경전차 도시 대기 뒤 바주카병은 `p2_city_defense_after_light_tank_city_wait.ss0` 기준 `LEFT x9, UP, A, RIGHT, DOWN, A, A`로 전방 대기 상태를 확정.
+  - 보병은 `p2_city_defense_after_bazooka_front_wait.ss0` 기준 `LEFT x2, UP x4, A, RIGHT, DOWN, A, A`로 전방 대기 상태를 확정.
+  - 보급차는 `p2_city_defense_after_infantry_front_wait.ss0` 기준 `RIGHT x4, DOWN x2, A, A, DOWN, A`로 제자리 대기 상태를 확정.
+  - 작전 메뉴 턴 종료는 `p2_city_defense_after_supply_wait.ss0` 기준 `A, DOWN x3, A`로 확인했고, 적 행동 뒤 `p2_city_defense_after_1190_plus2800.ss0`에서 3일째 자유 커서 정지 상태까지 진행됨.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_supply_endturn_route_final.png`.
+  - 보급차 행동 메뉴와 작전 메뉴는 명령 텍스트가 별도 OBJ/압축 그래픽 경로에서 아이콘처럼 깨져 보이는 것을 확인. 이후 보호 전투 UI 작업에서 보급/작전 메뉴 원시 타일 경로를 패치했다.
+- [x] Part 2 도시 방어 3일째 공격 분기와 행동 메뉴 축약 라벨 1차 패치.
+  - `p2_city_defense_after_1190_plus2800.ss0` 기준 `RIGHT x5, UP, A, A, A, A`로 경전차 제자리 공격을 확정하고 적 경전차 체력 2까지 진행.
+  - `p2_city_defense_day3_after_tank_attack.ss0` 기준 `RIGHT x2, UP, A, A, A, A`로 바주카병 제자리 공격을 확정하고 적 보병 체력 3까지 진행.
+  - Part 2 행동 메뉴의 BG0 아이콘 타일 원본 `0xBE793C-0xBE7A3B` 8개를 `공격`/`대기` 축약 라벨로 재렌더링.
+  - 기존 세이브스테이트는 BG VRAM을 함께 복원하므로, 현재 상태 파일에서는 ROM 패치가 자동 반영되지 않음. 같은 프레임에 새 ROM 타일을 VRAM 주입해 가독성만 확인했고, fresh-run 전투 진입 검증은 별도 잔여 작업으로 둔다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_day3_attack_action_menu_patch.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과.
+- [x] Part 2 도시 방어 4~9일째 상단 전선 정리 루트와 휘프 UI명 보정.
+  - `p2_city_defense_day4_after_tank_kill_after_4200.ss0` 기준 `RIGHT, UP, A, A, A, RIGHT, A, A, A, A`로 상단 체력 3 보병을 제거.
+  - 4일째 턴 종료 뒤 6일째 자유 상태에서 `LEFT x3, A, A, A, DOWN, A`로 체력 5 전차를 제거.
+  - 7일째 `UP, A, A, A, DOWN, A`로 체력 1 전차를 제거하고, 9일째 `LEFT, UP, A, A, A, DOWN, A`로 체력 3 보병을 제거.
+  - 전투 중 적 CO명 compact UI의 `ホイップ` 보호 토큰을 `手卒`로 바꾸고 일반 CO명 슬롯도 `휘프`로 통일. `output/game_wars_korean_full.gba` 안의 `ホイップ` SJIS 잔여는 0건 확인.
+  - 이후 current ROM 화면에도 적 턴 배너의 `ホイップ`이 남아 있어 그래픽 경로를 재추적했다. OAM tile 50~53이 raw OBJ 타일 `0xBD0230`에서 오며, 이를 `휘프` 32x8 라벨로 패치했다.
+  - `temp/active_states/p2_heavy_success_day1_after_all_extra_moves.ss0`에서 턴 종료를 current ROM으로 재현한 `temp/verified_sheets/current_verify_whip_banner_patch/sheet.png`와 확대 `wait_300_topleft_4x.png` 기준 적 턴 배너 CO명이 `휘프`로 표시된다. 출력 ROM에서 기존 `0xBD0230` 일본어 4타일 시퀀스는 0건, 새 타일은 1건이다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_day4_day9_route_progress.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과. 당시 full ROM SHA-256은 `3de15b6878be1ebf71396f002dc6a3d54f99875ba6bcefa3e2c5551b0838ca72`.
+
+- [x] Part 2 도시 방어 10일째 왼쪽 바주카병 공격 진행과 지형 OBJ 용어 통일.
+  - `p2_city_defense_day9_after_finish_endturn_22000.ss0` 기준 `LEFT x12, A, A, A, A, A`로 왼쪽 파란 바주카병을 체력 5까지 줄이고 `p2_city_defense_day10_after_bazooka_left_attack.ss0`를 저장.
+  - compact 지형 OBJ의 수도 라벨을 `본부`에서 `수도`로 통일하고, ROM 타일 프리뷰로 `평지/산/도로/도시/수도/다리` 렌더링을 확인.
+  - 기존 세이브스테이트 캡처는 지형 OBJ/폰트 VRAM을 캐시해 `首都`, `山` 같은 예전 일본어 그래픽이 남을 수 있으므로, 실제 화면 라벨은 fresh-run 전투 진입에서 추가 확인한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_day10_attack_terrain_patch.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과. 당시 full ROM SHA-256은 `d75b8cf617c3e17d45af86ffc9bd6f681c6cd2541e7b12cb57ca618006de91c3`.
+
+- [x] Part 2 도시 방어 day12~15 적 전멸 승리 루트와 중전차 초입 문장 보정.
+  - `p2_city_defense_day11_after_hp1_endturn_3600.ss0` 기준 `LEFT x4, A, DOWN x2, A, A, A`로 왼쪽 HP1 바주카병을 처치하고 `p2_city_defense_day12_left_bzk_killed_14400.ss0`를 저장.
+  - day12에는 상단 파란 보병을 `RIGHT x2, UP x4, A, RIGHT, A, A, A`로 HP6, 이어 `LEFT x3, A, RIGHT x2, A, A, A`로 HP1까지 줄였고, day13 `LEFT, UP, A, A, A, A`로 처치했다.
+  - day13 전차는 `RIGHT x7, DOWN, A, DOWN x5, LEFT, A, A`로 하단 다리 앞에 전진, day14 `A, LEFT x2, DOWN, A, A, A`로 보급차를 HP4까지 줄이고 day15 `A, A, A, A`로 적 전멸과 작전 성공 대사를 확인했다.
+  - 승리 후 저장 확인창과 다음 중전차 작전 초입까지 진행했고, 마가타마 요새 브리핑의 붙은 문장과 `중전차（강력전차）`, `호이프` 표기를 `중전차`, `휘프` 기준으로 보정했다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_city_defense_day12_day15_victory_follow_final.png`, `temp/verified_sheets/p2_heavy_intro_magatama_patch_current.png`, `temp/verified_sheets/p2_heavy_intro_spacing_current.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과. 당시 full ROM SHA-256은 `74f1f71036bf2f2be50907e17a1dc9319f0a776950b650be2d890012ba826d67`.
+
+- [x] Part 2 중전차 작전 공략 힌트 문장과 조작 시작 상태 검수.
+  - `p2_heavy_intro_spacing_verify_03.ss0` 기준 힌트 분기를 다시 진행해 `중전차는 처음엔 무시`, `공격범위엔 들지 않게`, `범위 볼 유닛에 커서를 맞추고 취소키`, `아래 도시엔 보병을 보내자`, `점령하면 알려줄게` 흐름을 실제 화면 기준으로 보정했다.
+  - 저장 상태 캐시로 남은 초입 대사는 한 단계 전 상태에서 재생해 `네 부대로도 이길 수 있을지`, `알고 있겠지`가 새 ROM 텍스트로 표시되는 것을 확인했다.
+  - 힌트 종료 뒤 조작 가능한 첫 프레임을 `temp/active_states/p2_heavy_after_hint_control.ss0`로 저장하고, 입력 프로브에서 방향키/메뉴/정보창 동작을 확인했다.
+  - 중전차 day1 첫 공격 후보는 `p2_heavy_after_hint_control.ss0` 기준 `RIGHT x3, UP, A, RIGHT x4, DOWN x2, A, A, A`로 경전차가 중앙 파란 경전차를 공격하는 루트를 확인했고, 전투 후 `p2_heavy_day1_after_tank_attack_map.ss0`에 맵 복귀 상태를 저장했다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_hint_spacing_current.png`, `temp/verified_sheets/p2_heavy_intro_spacing_from03_current.png`, `temp/verified_sheets/p2_heavy_hint_full_current.png`, `temp/verified_sheets/p2_heavy_control_start_current.png`, `temp/verified_sheets/p2_heavy_input_probe_current.png`.
+  - 경전차 공격 확인 시트는 `temp/verified_sheets/p2_heavy_tank_attack_confirm_current.png`, `temp/verified_sheets/p2_heavy_after_tank_attack_map_current.png`.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과. 당시 full ROM SHA-256은 `012fdcb87b5ed0db0d2a43c56a0a90fb1499419524eadb34f477956a4722d3fd`.
+
+- [x] Part 2 중전차 작전 day1 전선 배치와 적 턴 대사 검수.
+  - `p2_heavy_day1_after_tank_attack_map.ss0` 기준 바주카병은 `LEFT x5, UP x4, A, RIGHT x2, A, A`로 교량 위쪽에 전진 대기시켰다.
+  - 이어 보병은 바주카병 위치 기준 `LEFT x3, A, DOWN x3, A, A`로 아래 중립도시 방향에 전진 대기시켰고, `p2_heavy_day1_after_tank_bazooka_infantry_wait.ss0`를 저장했다.
+  - 작전 메뉴는 `A, DOWN x3, A`로 턴 진행이 가능함을 확인했고, 적 턴 초입 대사의 `캐서린녀석`/`눈치못채고` 구간을 `후후후 캐서린 우리 신병기를` / `눈치채지 못하고 왔구나`로 보정했다.
+  - 적 전차 공격 뒤 day2 조작 가능 상태를 `temp/active_states/p2_heavy_day2_control_clean.ss0`로 저장했다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day1_bazooka_infantry_route_current.png`, `temp/verified_sheets/p2_heavy_day1_enemy_dialog_patch_current.png`, `temp/verified_sheets/p2_heavy_enemy_dialog_follow_current.png`, `temp/verified_sheets/p2_heavy_day2_control_clean_current.png`.
+  - `ホイップ` CO 라벨은 SJIS 문자열이 아니라 raw OBJ 타일 `0xBD0230`에서 오는 것으로 확인해 `휘프`로 패치했다. current ROM 턴 종료 재현 기준 적 턴 배너는 `휘프`로 표시된다.
+  - `py_compile`, `build_korean_full.py`, `qa_text_fit.py`, `phase6_basic_test.py` full, `git diff --check` 통과. 당시 full ROM SHA-256은 `164f5bb68e9e40fb55bbbcf2800216b19820e6cba5a751d2fe3ea93beb3e8d2a`.
+
+- [x] Part 2 중전차 작전 day2~day4 하단 도시 점령 루트 검수.
+  - `p2_heavy_day2_control_clean.ss0` 기준 day2 첫 공격은 `RIGHT x6, A, A, A, A`로 확인했고, 전투 후 `temp/active_states/p2_heavy_day2_after_tank_attack_map.ss0`에 맵 복귀 상태를 저장했다.
+  - 이어 보병은 `p2_heavy_day2_after_tank_attack_map.ss0` 기준 `LEFT x5, A, DOWN x2, A, A`로 하단 중립도시 점령을 시작했고, `temp/active_states/p2_heavy_day2_after_tank_infantry_capture.ss0`를 저장했다.
+  - day2 턴 종료는 `A, DOWN x3, A`로 진행 가능했고, 적 턴 뒤 day3 상태를 `temp/active_states/p2_heavy_day2_quick_endturn_probe.ss0`로 저장했다.
+  - day3 같은 보병은 `A, A, A`로 점령을 이어갔고, 이어 `A, DOWN x3, A`로 day4 상태 `temp/active_states/p2_heavy_day4_control_probe.ss0`까지 확인했다.
+  - day4 같은 보병의 추가 `A, A, A` 입력도 확인했지만, 공략 추가 대사는 아직 발생하지 않아 다음 루트에서 계속 확인한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day2_tank_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day2_infantry_capture_route_current.png`, `temp/verified_sheets/p2_heavy_day2_quick_endturn_probe_current.png`, `temp/verified_sheets/p2_heavy_day3_capture_complete_execute_current.png`, `temp/verified_sheets/p2_heavy_day3_endturn_follow_probe_current.png`, `temp/verified_sheets/p2_heavy_day4_capture_strategy_dialog_probe_current.png`.
+  - savestate 기반 day2~day4 작전/행동 메뉴에서 OBJ 라벨 깨짐이 반복된다. 적 턴 시작 배너의 `ホイップ` CO 라벨은 raw OBJ 타일 `0xBD0230`으로 추적해 `휘프` 패치와 current ROM 화면 검증을 완료했다.
+
+- [x] Part 2 중전차 작전 day4~day6 바주카 압박/턴 종료 루트 검수.
+  - `p2_heavy_day4_control_probe.ss0` 기준 day4 상단 바주카병은 `RIGHT x3, UP x5, A, A, A, A`로 중앙 적 경전차를 공격했고, 전투 후 `temp/active_states/p2_heavy_day4_after_bazooka_attack_map.ss0`를 저장했다.
+  - day4 바주카 공격 뒤 바로 턴 종료하면 day5 조작 상태 `temp/active_states/p2_heavy_day5_after_bazooka_only_probe.ss0`까지 정상 진행된다.
+  - day5에서는 active 바주카병 위에서 `A`를 누르면 작전 메뉴가 아니라 이동 범위로 들어가므로, 빈 칸 `RIGHT x2, A`로 작전 메뉴를 열고 `DOWN x3, A`로 턴 종료하는 루트를 확정했다.
+  - day5 정식 턴 종료 뒤 day6 조작 상태를 `temp/active_states/p2_heavy_day6_after_bazooka_only_clean.ss0`로 저장했다.
+  - day5 체력 3 바주카병의 후속 공격 `UP, A, A, A, A`는 아군 바주카병이 전멸하는 나쁜 분기라 채택하지 않는다. 같은 상태에서 로켓포/자주포 후보도 즉시 간접공격으로 이어지지 않아 추가 조사 대상으로 둔다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day4_bazooka_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day4_bazooka_only_endturn_probe_current.png`, `temp/verified_sheets/p2_heavy_day5_operation_menu_entry_probe_current.png`, `temp/verified_sheets/p2_heavy_day5_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day5_bazooka_followup_attack_current.png`, `temp/verified_sheets/p2_heavy_day5_artillery_command_probe_current.png`.
+
+- [x] Part 2 중전차 작전 day6 공격과 day7 복귀 루트 검수.
+  - `p2_heavy_day6_after_bazooka_only_clean.ss0` 기준 day6 후보 탐색에서 `LEFT x5, DOWN, A, A, A, A`가 중앙 적 경전차를 63% 예측으로 공격하는 유효 루트임을 확인했고, 전투 후 `temp/active_states/p2_heavy_day6_after_left_attack_map.ss0`를 저장했다.
+  - day6 후속 후보 `x+3,y+2`, `x+1,y+1`, `x-1,y+5` 등은 바로 전투 화면으로 이어지지 않아 추가 공격 루트로 채택하지 않았다.
+  - day6 턴 종료는 전투 후 상태에서 `RIGHT, A, DOWN x3, A`로 확인했고, 적 턴 뒤 day7 조작 상태 `temp/active_states/p2_heavy_day7_after_day6_left_attack_clean.ss0`를 저장했다.
+  - day7 시작점 주변의 `A`/`RIGHT`/`LEFT`/`DOWN`/`UP` 후보는 작전 메뉴나 부대 목록으로 빠지고 즉시 전투로 이어지지 않는다. day7 이후는 좌표 탐색으로 다시 진행한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day6_start_zoom_current.png`, `temp/verified_sheets/p2_heavy_day6_select_candidates_zoom_current.png`, `temp/verified_sheets/p2_heavy_day6_left_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day6_followup_action_probe_current.png`, `temp/verified_sheets/p2_heavy_day6_opmenu_entry_probe_current.png`, `temp/verified_sheets/p2_heavy_day6_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day7_start_action_probe_current.png`.
+
+- [x] Part 2 중전차 작전 day7~day11 전선 진행 루트 검수.
+  - `p2_heavy_day7_after_day6_left_attack_clean.ss0` 기준 day7 후보 탐색에서 `LEFT x2, DOWN x2, A, A, A, A`가 중앙 적 보병을 50% 예측으로 공격하는 유효 루트임을 확인했고, 전투 후 `temp/active_states/p2_heavy_day7_after_leftdown_attack_map.ss0`를 저장했다.
+  - day7 턴 종료는 전투 후 상태에서 `RIGHT, A, DOWN x3, A`로 확인했고, 적 턴 뒤 day8 시작 상태 `temp/active_states/p2_heavy_day8_after_day7_leftdown_attack_clean.ss0`를 저장했다.
+  - day8은 직접 공격 후보 `A,A,A,A` 및 주요 이동 후보에서 전투 화면으로 이어지는 루트를 찾지 못해 `A, DOWN x3, A`로 턴 종료했고, day9 상태 `temp/active_states/p2_heavy_day9_after_day8_no_attack_clean.ss0`를 저장했다.
+  - day9는 `LEFT x3, DOWN x4, A, A, A, A`로 보병 전투를 확인했고, 전투 후 `temp/active_states/p2_heavy_day9_after_left3down4_attack_map.ss0`를 저장했다. 턴 종료는 `RIGHT x2, A, DOWN x3, A`로 day10 상태 `temp/active_states/p2_heavy_day10_after_day9_left3down4_attack_clean.ss0`까지 확인했다.
+  - day10은 `LEFT x3, A, A, A, A`로 같은 전선의 보병 전투를 이어가 적 보병을 체력 1까지 줄였고, 전투 후 `temp/active_states/p2_heavy_day10_after_left3_attack_map.ss0`를 저장했다. 턴 종료는 `LEFT, A, DOWN x3, A`로 day11 상태 `temp/active_states/p2_heavy_day11_after_day10_left3_attack_clean.ss0`까지 확인했다.
+  - day8~day10 새 대사는 발생하지 않았다. savestate 기반 작전/행동 메뉴의 아이콘형 라벨 깨짐, 상태 팝업의 일부 한자형 지형/유닛 조각, 적 턴 배너 `ホイップ` 캐시 문제는 계속 별도 UI 잔여 작업으로 유지한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day7_leftdown_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day7_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day8_select_grid_probe_current.png`, `temp/verified_sheets/p2_heavy_day8_full_action_topdiff_current.png`, `temp/verified_sheets/p2_heavy_day8_endturn_to_day9_probe_current.png`, `temp/verified_sheets/p2_heavy_day9_full_action_topdiff_current.png`, `temp/verified_sheets/p2_heavy_day9_left3down4_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day9_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day10_full_action_topdiff_current.png`, `temp/verified_sheets/p2_heavy_day10_left3_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day10_opmenu_entry_probe_current.png`, `temp/verified_sheets/p2_heavy_day10_endturn_clean_current.png`.
+
+- [x] Part 2 중전차 작전 day11~day14 전선 압박 루트 검수.
+  - `p2_heavy_day11_control_clean.ss0` 기준 day11은 현재 위치에서 `A, A, A, A`로 보병 전투에 들어가는 유효 루트임을 확인했고, 전투 후 `temp/active_states/p2_heavy_day11_after_direct_attack_map.ss0`를 저장했다.
+  - day11 턴 종료는 전투 후 상태에서 `LEFT, A, DOWN x3, A`로 확인했고, 적 턴 뒤 day12 상태 `temp/active_states/p2_heavy_day12_after_day11_direct_attack_clean.ss0`를 저장했다.
+  - day12도 현재 위치에서 `A, A, A, A`로 보병 전투를 이어갔고, 전투 후 `temp/active_states/p2_heavy_day12_after_direct_attack_map.ss0`를 저장했다. 턴 종료는 `A, DOWN x3, A`로 day13 상태 `temp/active_states/p2_heavy_day13_after_day12_direct_attack_clean.ss0`까지 확인했다.
+  - day13은 `LEFT, A, A, A, A`로 보병 전투를 확인했고, 전투 후 `temp/active_states/p2_heavy_day13_after_left_attack_map.ss0`를 저장했다. 턴 종료는 `RIGHT, A, DOWN x3, A`로 day14 상태 `temp/active_states/p2_heavy_day14_after_day13_left_attack_clean.ss0`까지 확인했다.
+  - day14는 `LEFT, UP, A, A, A, A`로 같은 보병 전선을 계속 압박했고, 전투 후 `temp/active_states/p2_heavy_day14_after_leftup_attack_map.ss0`를 저장했다. 아직 작전 성공이나 새 대사는 발생하지 않았다.
+  - day14 공격 후 턴 종료 실패 분기를 실제 입력(`RIGHT, A, DOWN x3, A`)으로 재현했고, 실패 안내 대사 `역시 중전차는 강적이네`, `하지만 이동력이 낮은 약점도 있어`, `다음엔 꼭 힘내`의 띄어쓰기와 줄 배치를 확인했다.
+  - 같은 실패 분기의 결과 OBJ 오버레이는 LZ77 블록 `0xBFBB54`, `0xEE8F68`를 추적해 일본어 `作戦失敗` 대신 `작전실패`로 다시 그렸다. 실제 검수 시트는 `temp/verified_sheets/p2_heavy_day14_failure_hint_spacing_final.png`, `temp/verified_sheets/p2_heavy_failure_overlay_korean_final.png`.
+  - day13 적 턴 중간 캡처에서 전환 프레임 한 장에 검은 조각이 잡혔지만, 후속 프레임에서는 사라져 지속 UI 문제로 채택하지 않았다. savestate 기반 메뉴 라벨/상태 팝업 한자형 조각 문제는 계속 잔여 UI 작업으로 유지한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_day11_direct_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day11_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day12_direct_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day12_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day13_left_attack_execute_current.png`, `temp/verified_sheets/p2_heavy_day13_endturn_candidate_results_current.png`, `temp/verified_sheets/p2_heavy_day13_endturn_clean_current.png`, `temp/verified_sheets/p2_heavy_day14_quick_action_probe_current.png`, `temp/verified_sheets/p2_heavy_day14_leftup_attack_execute_current.png`.
+
+- [x] Part 2 중전차 작전 성공 후보 루트 day1 재구축.
+  - 기존 day14 분기는 실제로 작전 실패로 끝나므로, `p2_heavy_day1_after_tank_bazooka_infantry_wait.ss0`에서 빠졌던 후방 유닛 이동을 추가해 새 성공 후보 분기를 만들었다.
+  - EWRAM 유닛 테이블 `0x0201A160` 기준으로 남은 아군 유닛 이동을 판정했고, record 01 type `0x02`는 `(2,1)->(4,1)`, record 03 type `0x07`은 `(2,3)->(8,3)`, record 05 type `0x0A`는 `(1,4)->(5,3)` 이동이 실제 좌표/행동 플래그에 반영되는 것을 확인했다.
+  - 추가 이동 뒤 상태를 `temp/active_states/p2_heavy_success_day1_after_all_extra_moves.ss0`로 저장했고, 턴 종료/적 턴 대사 뒤 day2 조작 가능 상태를 `temp/active_states/p2_heavy_success_day2_control_after_extra_route.ss0`로 저장했다.
+  - day2에서 경전차 `(7,5)`는 행동 메뉴/공격 예측을 열 수 있고 공격 실행 뒤 `temp/active_states/p2_heavy_success_day2_after_tank_left_attack.ss0`까지 저장했다. 다만 첫 공격 대상 선택은 아직 최적 루트로 확정하지 않았으므로 다음 검수에서 목표 유닛을 다시 좁힌다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day1_extra_moves_sheet.png`, `temp/verified_sheets/p2_heavy_success_day1_endturn_day2_sheet.png`, `temp/verified_sheets/p2_heavy_success_day2_control_sheet.png`, `temp/verified_sheets/p2_heavy_success_day2_tank_attack_sheet.png`.
+  - 이 새 분기에서도 상태 팝업 지형명 `道路`/`都市`와 행동 메뉴 OBJ 아이콘형 라벨이 실제 화면에 남는다. 이는 보호 전투 UI 잔여 작업으로 계속 추적한다.
+
+- [x] Part 2 중전차 작전 새 성공 후보 day2~day4 분기 검수.
+  - day2 경전차 공격 뒤 바로 턴 종료하면 실패 없이 day3 조작 상태로 전환됨을 확인했고, `temp/active_states/p2_heavy_success_day3_after_day2_tank_attack_endturn.ss0`를 저장했다.
+  - day3 후보 탐색에서 경전차 `(7,5)`의 인접 적 전차 공격은 실제 전투로 이어지고, 적 record 63 type `0x05`가 `0x0450 -> 0x03b6`까지 줄어드는 것을 확인했다. 전투 후 상태는 `temp/active_states/p2_heavy_success_day3_after_tank_left_attack.ss0`.
+  - day3 경전차 공격 후 바로 턴 종료하면 day4로 전환되지만, 아군 record 03/05가 제거되고 경전차 HP도 0이 되어 나쁜 분기다. 이 상태는 `temp/active_states/p2_heavy_success_day4_after_day3_tank_attack_endturn.ss0`로 보관하되 채택하지 않는다.
+  - 로켓포 record 03의 아래 방향 공격 후보는 공격 범위/대상 선택 상태까지만 확인됐고 실제 HP 변화로 이어지지 않았다. 다음 검수에서는 로켓포 공격 확정 입력이나, day3 턴 종료 전 로켓포/보급차를 살리는 이동 분기를 먼저 찾는다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day2_endturn_day3_probe_sheet.png`, `temp/verified_sheets/p2_heavy_success_day3_tank_left_attack_sheet.png`, `temp/verified_sheets/p2_heavy_success_day3_endturn_day4_sheet.png`.
+
+- [x] Part 2 중전차 작전 새 성공 후보 day3 회피 분기 검수.
+  - `p2_heavy_success_day3_after_tank_left_attack.ss0` 기준 즉시 턴 종료가 나쁜 분기임을 확인한 뒤, EWRAM 유닛 테이블 `0x0201A160` 기준으로 record 03/05의 이동 가능 좌표를 추출했다.
+  - 생존 후보 조합을 자동 평가한 결과, record 03 type `0x07`은 `(8,3)->(7,0)`, record 05 type `0x0A`는 `(5,3)->(5,0)`로 빼는 조합이 day4에 두 유닛을 모두 남기는 유효 분기임을 확인했다.
+  - 실제 입력으로 같은 분기를 재현해 `temp/active_states/p2_heavy_success_day3_after_u3_u5_escape.ss0`와 `temp/active_states/p2_heavy_success_day4_after_escape_endturn.ss0`를 저장했다.
+  - day4 메모리 기준 record 03은 `(7,0)`에서 생존, record 05는 `(5,0)`에서 낮은 체력으로 생존한다. 대신 경전차 record 04는 type `0x00` 상태로 빠져 희생된 분기이므로, 다음 검수는 day4 남은 보병/바주카병/로켓포/보급차로 적 전멸 또는 수도 점령 루트를 이어가는 데 집중한다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day3_escape_day4_sheet.png`. 관련 메모리 덤프는 `temp/probes/p2_heavy_success_day3_after_u3_u5_escape_ewram.bin`, `temp/probes/p2_heavy_success_day4_after_escape_endturn_ewram.bin`.
+
+- [x] Part 2 중전차 작전 새 성공 후보 day4~day7 중전차 제거 루트 검수.
+  - day4에서는 로켓포 record 03을 `(7,0)->(4,0)`으로 빼고, 바주카병 record 02가 `(4,2)`에서 적 보급차 record 66을 제거하는 분기를 확인했다. 이 상태는 `temp/active_states/p2_heavy_success_day4_after_rocket_4_0_and_bazooka_supply_kill.ss0`.
+  - 같은 분기에서 턴 종료 뒤 day5 상태 `temp/active_states/p2_heavy_success_day5_after_rocket_4_0_branch.ss0`까지 정상 진행했고, 로켓포가 `(4,0)`에 살아남는 것을 확인했다.
+  - day5에는 record 02가 `(4,2)`에서 접근한 적 중전차 record 62를 제거하고 record 63도 낮은 HP로 줄였다. 상태 파일은 `temp/active_states/p2_heavy_success_day5_after_bazooka_tank_kill.ss0`, day6 전환 상태는 `temp/active_states/p2_heavy_success_day6_after_day5_bazooka_tank_kill_endturn.ss0`.
+  - day6에는 바주카병 record 01을 `(4,1)->(5,0)`으로 이동시켜 남은 적 중전차 record 63을 제거했고, day7 상태 `temp/active_states/p2_heavy_success_day7_after_day6_finish_heavy_endturn.ss0`까지 정상 진행했다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day4_rocket_4_0_branch_sheet.png`, `temp/verified_sheets/p2_heavy_success_day5_bazooka_tank_kill_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day6_finish_heavy_route_sheet.png`.
+
+- [x] Part 2 중전차 작전 새 성공 후보 day7~day12 잔여 적 정리 한계 확인.
+  - day7에는 보병 record 00을 `(1,5)->(2,4)`, 바주카병 record 02를 `(4,2)->(4,4)`로 보내 적 보병을 HP 3까지 줄였고, day8 상태 `temp/active_states/p2_heavy_success_day8_after_day7_cleanup_endturn.ss0`까지 진행했다.
+  - day8에는 record 02를 `(4,4)->(5,4)`로 보내 적 보병 record 64를 제거하고 record 65를 HP 0까지 줄였고, day9 상태 `temp/active_states/p2_heavy_success_day9_after_day8_infantry_clear_endturn.ss0`까지 진행했다.
+  - day9~day11에는 하단 바주카병 압박 분기를 확인해 `temp/active_states/p2_heavy_success_day10_after_day9_bazooka_push_endturn.ss0`, `temp/active_states/p2_heavy_success_day11_after_day10_pressure_endturn.ss0`, `temp/active_states/p2_heavy_success_day11_after_bazooka_hit_last_bazooka.ss0`를 저장했다.
+  - 하지만 `temp/active_states/p2_heavy_success_day12_after_day11_bazooka_hit_endturn.ss0`는 조작 가능 상태가 아니라 실패/힌트 대사로 진입한다. 이 분기는 중전차 제거까지는 유효하지만 남은 적 정리가 하루 이상 늦으므로 최종 성공 루트로 채택하지 않는다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day7_infantry_cleanup_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day8_infantry_clear_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day9_bazooka_push_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day10_bazooka_pressure_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day11_bazooka_hit_route_sheet.png`.
+
+- [x] Part 2 중전차 작전 새 성공 후보 day7~day10 빠른 압박 분기 재검수.
+  - day7 기존 공격 2개에 더해 바주카병 record 01을 `(5,0)->(5,2)`로 즉시 전진시키는 변형을 확인했고, day8 상태 `temp/active_states/p2_heavy_success_day8_after_day7_opt_u1_push.ss0`를 저장했다.
+  - 새 day8에서는 record 01의 현재 위치 공격이 적 보병 record 64를 제거하고 record 65를 HP 0까지 줄이며, record 02는 `(4,4)->(4,6)`으로 내려가 하단 바주카병 record 68을 즉시 타격한다. 이 분기는 `temp/active_states/p2_heavy_success_day8_after_opt_attacks.ss0`, day9 상태 `temp/active_states/p2_heavy_success_day9_after_day8_opt_attacks_endturn.ss0`로 저장했다.
+  - day9에는 보병 record 00의 현재 위치 공격과 record 02 `(4,6)->(3,6)`, record 01 `(5,2)->(5,4)` 전진을 확인했고, `temp/active_states/p2_heavy_success_day10_after_day9_opt_pressure_endturn.ss0`까지 진행했다. 이 분기에서는 record 67이 type `0x00`으로 제거되고 마지막 실질 적 record 68만 남는다.
+  - day10에 record 00 공격 뒤 턴 종료하면 곧바로 실패/힌트 대사로 들어가므로, 현재 최적화는 마지막 record 68을 day10 안에 처리하는 입력을 더 찾아야 한다. 후속 스윕에서는 record 02 희생 공격과 record 01 전진 후보가 모두 최종 제거로 이어지지 않았다.
+  - 추가 변형으로 day8 보병을 `(2,4)->(3,6)`까지 전진시키는 `temp/active_states/p2_heavy_success_day9_after_day8_opt_u0_3_6_endturn.ss0`도 확인했다. 이 경로도 day9 공격 후보는 좋아지지만 아직 마지막 record 68 제거까지는 확정하지 못했다.
+  - 실제 확인 시트는 `temp/verified_sheets/p2_heavy_success_day7_opt_u1_push_sheet.png`, `temp/verified_sheets/p2_heavy_success_day8_opt_attack_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day9_opt_pressure_route_sheet.png`, `temp/verified_sheets/p2_heavy_success_day10_u0_attack_endturn_probe_sheet.png`, `temp/verified_sheets/p2_heavy_success_day8_opt_u0_3_6_route_sheet.png`.
+  - 작전 메뉴 브레이크/회복 가능성은 `temp/verified_sheets/p2_heavy_success_day9_opmenu_probe_sheet.png`로 캡처했지만, 아이콘형 그래픽 메뉴라 현재 입력만으로는 활성 브레이크 항목을 확정하지 못했다. 다음 검수에서는 day10 record 68 타깃 선택 우회 또는 브레이크 발동 입력을 우선 확인한다.
+
+- [x] Part 2 행동 메뉴 `공격`/`대기` OBJ 아이콘 가독성 개선.
+  - `tools/build_korean_full.py`의 `patch_part2_action_menu_icon_labels()`를 16x16 고정 아이콘에 맞게 Galmuri7 기반 렌더링으로 조정했다. 기존 Galmuri11-Condensed 렌더는 ROM에는 한글이 들어가지만 실제 아이콘에서 너무 빽빽하게 보여 읽기 어려웠다.
+  - 새 빌드 산출물 `output/game_wars_korean_full.gba`의 직접 타일 추출 미리보기는 `temp/asset_previews/action_attack_after.png`, `temp/asset_previews/action_wait_after.png`.
+  - 검증: `python3 -m py_compile tools/build_korean_full.py`, `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `python3 tools/qa_text_fit.py`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `git diff --check`.
+  - 당시 full ROM SHA-256: `6a56a4ade5791bc7c81f37d64483ede2917be8bf25676521ebeb42554d92bb36`.
+
+- [x] Part 2 중전차 작전 day9~day10 record 68 겹침 우회 분기 추가 검수.
+  - 기존 최적 분기 `temp/active_states/p2_heavy_success_day10_after_day9_opt_pressure_endturn.ss0`에서는 record 67이 type `0x00`으로 죽은 뒤 record 68이 같은 `(2,7)` 좌표로 들어와, day10 보병 공격이 record 68 HP를 줄이지 못하는 것을 확인했다. target forecast 상태에서 `UP/DOWN/LEFT/RIGHT/L/R` 단일 및 2연속 입력을 스윕했지만 record 68 변화는 없었다.
+  - 작전 메뉴/브레이크 후보는 `temp/probes/p2_heavy_success_day10_opmenu_item_sweep/sheet.png` 기준 저장/상황/조언 계열 화면으로 들어가며, 유닛 HP/좌표를 즉시 바꾸는 효과가 없었다.
+  - 대체 루트로 day9에서 record 02를 `(4,6)->(3,7)` 공격 처리한 뒤 record 00 공격을 넣으면 day10에 record 67 `(2,7)`, record 68 `(3,8)`로 분리되는 상태를 만들 수 있었다. 상태 파일은 `temp/active_states/p2_heavy_success_day10_after_day9_u2_u0_alt_endturn.ss0`, 확인 시트는 `temp/probes/p2_heavy_success_day10_u2_u0_alt_followup/sheet.png`.
+  - 이 대체 day10에서 record 00이 record 67을 제거하고 record 02가 record 68을 추가 타격하면 record 68은 `9f51 -> 8051`까지 낮아지지만 type `0x02`로 생존하고 record 02가 제거된다. 중간 상태는 `temp/active_states/p2_heavy_success_day10_u2_u0_u1_54_after_u0_u2.ss0`.
+  - record 01을 day9에 `(5,4)`로 미리 전진시키는 유효 분기도 확인했지만, day10 record 00+02 타격 뒤 record 01 후보 좌표 `(3,7)/(4,8)/(4,7)/(3,8)/(3,6)/(4,6)/(5,7)/(5,8)/(2,8)` 및 방향 입력은 모두 record 68 추가 피해로 이어지지 않았다. 확인 시트는 `temp/probes/p2_heavy_success_day10_alt_u1_54_final_sweep/sheet.png`.
+  - record 68을 남긴 채 턴 종료하는 분기는 실패 힌트 대사 `역시 중전차는 강적이네`로 진입하므로, 다음 탐색은 더 이른 day8/day9에서 record 68에 추가 피해를 누적하거나 로켓포 실공격 입력을 확정하는 쪽이 우선이다.
+
+- [x] Part 2 중전차 작전 day8 추가 선제피해와 day5 로켓포 입력 재검수.
+  - day8 시작 `temp/active_states/p2_heavy_success_day8_after_day7_opt_u1_push.ss0` 기준 record 67/68은 각각 `(4,7)/(6,7)`에 분리되어 있다. 기존 route의 record 02 `(4,4)->(4,6)` 공격이 record 68을 한 차례 낮추는 유효 선제피해임을 재확인했다.
+  - day8에서 record 02 공격 뒤 record 00 추가 공격 후보 `(2,6)/(3,6)/(4,6)/(3,7)/(2,7)/(4,7)` 및 방향 입력을 부분 스윕했지만, record 00은 실제 이동/공격으로 이어지지 않았고 record 68 추가 피해도 없었다. 부분 결과는 `temp/probes/p2_heavy_success_day8_u2_target_then_u0_sweep/`.
+  - day5 `temp/active_states/p2_heavy_success_day5_after_rocket_4_0_branch.ss0`에서는 로켓포 record 03이 `(4,0)`, 적 중전차 record 62가 `(4,3)`라 사거리상 공격 후보처럼 보인다. 하지만 A 연타, 목표칸 하향 선택, 상대좌표 스윕, 행동 메뉴 방향 선택 모두 실제 피해로 이어지지 않았다.
+  - 로켓포 관련 확인 시트는 `temp/probes/p2_heavy_success_day5_rocket_step_recheck/sheet.png`, `temp/probes/p2_heavy_success_day5_rocket_target_recheck/sheet.png`, `temp/probes/p2_heavy_success_day5_rocket_relative_target_sweep/sheet.png`, `temp/probes/p2_heavy_success_day5_rocket_menu_direction_recheck/sheet.png`.
+  - 현재 관찰로는 day5 로켓포 입력이 사격 명령이 아니라 이동/대기/상황 팝업으로 빠진다. 다음 로켓포 검수는 조작 입력보다 게임 내부 명령 조건이나 튜토리얼 제한 플래그를 먼저 의심하고, 로켓포가 stationary indirect fire를 허용하는 다른 fresh 상태가 있는지 비교한다.
+
+- [x] Part 2 중전차 작전 day8 재현 분기와 record 03 생존 로켓포 경로 재검수.
+  - day7 최적 루트를 fresh 입력으로 재현한 `temp/active_states/p2_heavy_success_day8_repro_day7_opt_probe.ss0`에서는 record 01이 기존 `p2_heavy_success_day8_after_day7_opt_u1_push.ss0`보다 HP가 높고, 상단 보병 record 64/65가 더 일찍 정리된 상태로 day8에 진입한다.
+  - day8 record 02 `(4,4)->(4,6)` 공격은 타깃 입력 `DOWN`을 넣어야 record 68을 안정적으로 더 낮춘다. 이 입력으로 만든 주요 후보는 `temp/active_states/p2_heavy_success_day9_after_day8_repro_down_u0_2_7_u1_5_4_endturn.ss0`이며, record 67은 `(3,7)`, record 68은 `(4,7)`로 분리된다.
+  - day9에서 record 02를 `(4,6)->(3,6)` 공격, record 00을 `(2,7)->(3,8)` 공격으로 처리하면 record 67은 type `0x00`이 되고 record 68은 `b080`까지 낮아진다. 상태 파일은 `temp/active_states/p2_heavy_success_day10_B_block_u2_36_u0_38_up_endturn.ss0`.
+  - 하지만 이 day10 상태에서 record 00/02/01 직접 공격, target switch 단일/2연속 입력, record 01 미끼 대기 후보는 모두 record 68 추가 피해로 이어지지 않았고, 턴 종료 시 실패 힌트 `역시 중전차는 강적이네`로 들어간다. 관련 결과는 `temp/probes/p2_heavy_success_day10_B_block_u0_38_finish_r68/`, `temp/probes/p2_heavy_success_day10_B_target_switch_record68/`, `temp/probes/p2_heavy_success_day9_B_u1_bait_after_u2_36_u0_38/`.
+  - 아군 record 03 로켓포가 day8/day9에도 type `0x07`로 생존하는 것을 확인했다. day8에 record 03을 `(4,3)`, `(5,2)` 등으로 움직이는 후보는 `temp/probes/p2_heavy_success_day8_B_with_rocket_move_sweep/`와 `temp/active_states/p2_heavy_success_day9_B_rocket_r3_4_3_endturn.ss0` 등에 저장했다.
+  - record 03을 조작한 day9 후보는 record 68의 중간값을 `b0b1`까지 낮추지만, day9 record 02+record 00 후속 공격 뒤 최종 하한은 여전히 `b080`이다. day9 `(4,3)` 로켓포 stationary attack 타깃 스윕도 추가 피해가 없었다. 관련 결과는 `temp/probes/p2_heavy_success_day9_B_rocket_43_attack_sweep/`, `temp/probes/p2_heavy_success_day9_B_rocket_low_followup/`.
+  - 다음 탐색은 record 03을 더 이른 날부터 보존/전진시켜 day9~day10에 유효 피해를 만들 수 있는지, 또는 day8 record 02 공격 후 record 68 이동 위치를 바꿔 day10 직접 공격이 먹히는 지형/좌표를 만드는지 확인한다.
+
+- [x] Part 2 중전차 작전 record 03 조기 전진과 탄약/미끼 효과 재검수.
+  - record 03의 상태 팝업 확대 결과 유닛명은 `로켓포`로 확인됐지만, 탄약 표시가 `0`이라 stationary attack 메뉴가 열리지 않는 것으로 판단했다. 관련 확대 이미지는 `temp/probes/p2_heavy_success_day9_rocket43_input_trace/05_after_down_A_crop_status.png`.
+  - Day7에 record 03을 `(4,0)->(5,3)` 또는 `(6,3)` 등으로 전진시키는 후보를 스윕했고, `temp/probes/p2_heavy_success_day7_record03_relative_move_sweep/`에 결과를 저장했다. Day8 한 턴 전진만으로는 record 68 사거리권 진입이 부족하다.
+  - Day6에 record 03을 `(4,0)->(5,3)`, Day7에 `(5,3)->(6,5)`로 보내면 Day8 시작에 record 03 `(6,5)`, record 68 `(6,7)` 구도를 만들 수 있다. 상태 파일은 `temp/active_states/p2_heavy_success_day8_early_r3_65_endturn.ss0`.
+  - 그러나 탄약 0 때문에 Day8 record 03의 직접 포격은 발생하지 않고, record 68에 target flag만 붙는다. 관련 결과는 `temp/probes/p2_heavy_success_day6_early_r3_day8_attack_probe/`.
+  - record 03을 `(6,5)`에 둔 미끼/점유 효과는 유효해서 Day8 record 02 공격 뒤 record 68을 `b0b3`까지 낮출 수 있었다. 이 분기들의 Day9 상태는 `temp/active_states/p2_heavy_success_day9_early_r3_65_*_endturn.ss0`, 결과는 `temp/probes/p2_heavy_success_day8_early_r3_65_route_follow/`.
+  - Day9 후속으로 `u2_36 + u0_38` 계열은 record 67을 type `0x00`으로 제거하고 record 68을 다시 `b080`까지 낮추지만 최종 제거에는 실패했다. `u2_cur` 계열은 record 68 제거 또는 큰 피해가 가능하지만 record 67이 남거나 record 68이 `b083` 이상으로 생존한다. 관련 결과는 `temp/probes/p2_heavy_success_day9_early_r3_65_followup/`, `temp/probes/p2_heavy_success_day9_early_r3_65_missing_orders/`, `temp/probes/p2_heavy_success_day9_early_r3_65_u2_only_day10_finish/`.
+  - 다음 후보는 record 03의 탄약 보급 가능성보다, Day6~Day8 배치로 record 68이 적 턴에 record 02/00을 공격해 추가 반격 피해를 받도록 유도하거나, record 67/68 중 하나를 하루 앞서 제거하는 경로를 찾는 쪽이 우선이다.
+
+- [x] Part 2 중전차 작전 early-r3 후속 target switch와 record 01 보병 처리 분기 검수.
+  - `temp/active_states/p2_heavy_success_day10_early_r3_65_std_u2_cur_u0_27_endturn.ss0`는 record 68이 type `0x00`으로 제거되고 record 67만 같은 `(4,7)` 좌표에 남는 유망 분기다. 하지만 Day10 record 00을 `(3,7)`로 이동해 오른쪽을 공격하면 실제 피해/타깃은 죽은 record 68 레코드로 들어가고 record 67은 변화하지 않았다.
+  - 같은 상태에서 target forecast 이후 `UP/DOWN/LEFT/RIGHT/L/R` 단일, 2연속, L/R 시작 3연속 총 115개 입력을 스윕했지만 record 67 변화는 없었다. 결과는 `temp/probes/p2_heavy_success_day10_early_r3_65_target_switch_r67/`.
+  - Day8 early-r3 시작의 적 보병 record 64 `(5,3)`이 record 01의 전진을 막으므로, record 01 현재 위치 공격으로 보병을 먼저 제거하는 분기도 재검수했다. record 64/65 정리에는 유효하지만 Day9 후속 하한은 다시 record 67 type `0x00` + record 68 `b080` 또는 record 68 type `0x00` + record 67 잔존으로 갈라진다.
+  - record 01 선처리 관련 상태/결과는 `temp/probes/p2_heavy_success_day8_early_r3_65_u1_clear_branch/`와 `temp/active_states/p2_heavy_success_day9_early_r3_65_u1clear_*_endturn.ss0`에 저장했다.
+  - 현재까지 확정된 실패 패턴은 두 가지다. record 68을 먼저 죽이면 죽은 record 68과 산 record 67이 같은 좌표에 겹쳐 record 67을 조준할 수 없고, record 67을 먼저 죽이면 record 68이 `b080`에서 더 내려가지 않는다. 다음 탐색은 같은 칸 겹침을 막는 점유/유도 또는 record 68을 day8 적 턴 전후에 더 낮추는 배치 변경으로 좁힌다.
+
+- [x] Part 2 튜토리얼 행동 메뉴/상태 팝업 그래픽 캐시 여부 재검수.
+  - 현재 출력 ROM `output/game_wars_korean_full.gba`의 행동 메뉴 원본 타일 `0xBE793C/0xBE79BC`를 직접 렌더하면 `공격`/`대기` Galmuri7 한글 타일이 들어가 있다. 원본 ROM 같은 위치는 각각 불꽃/화살표 아이콘이라, 빌드 스크립트의 소스 그래픽 패치는 반영된 상태다.
+  - `p2_city_defense_light_tank_city_action_menu.ss0`처럼 행동 메뉴가 이미 열린 savestate를 로드하면 BG0 VRAM 타일 361~368에 예전 불꽃/화살표가 저장되어 그대로 보인다. 메뉴를 닫았다 다시 열어도 해당 VRAM 타일은 재로드되지 않아, 이 상태 파일은 fresh ROM 패치 검증 근거로 쓰지 않는다.
+  - `_currentrom` 이름이 붙은 `p2_light_tank_after_move_menu_currentrom.ss0`, `p2_bazooka_after_light_tank_prompt_currentrom.ss0`도 BG 타일 361~368에는 구 아이콘이 남아 있었다. 출력 ROM에는 해당 구 아이콘 바이트가 더 이상 직접 존재하지 않으므로, 이 두 상태도 ROM 소스 패치 검증에는 캐시된 VRAM으로 취급한다.
+  - 현재 ROM으로 새로 캡처한 상태 팝업 `temp/verified_sheets/p2_heavy_success_day2_after_tank_left_attack_fresh.png`에서는 유닛명이 `보급차`로 표시됐다. 이전 확대 이미지의 `タンク` 표시는 구버전 스크린샷 또는 savestate 캐시로 판단한다.
+  - `temp/verified_sheets/p2_light_tank_select_interactive_fresh.png`에서도 상태 팝업 유닛명/지형명은 `경전차`/`평지`로 보이며, 직접 추출한 ROM 타일 `0xB94C10`, compact `0x466968`도 `경전차`로 확인했다.
+  - 남은 확인은 메뉴 그래픽이 아직 VRAM에 올라오기 전 fresh-run 전투 진입 루트에서 행동 메뉴를 처음 열어 `공격`/`대기`가 화면에 보이는지 검증하는 것이다.
+
+- [x] Part 2 튜토리얼 fresh-run 행동 메뉴 `대기` 표시 검증.
+  - 콜드부트에서 2편 선택(`Start -> Down -> A`), 캠페인 진입, 프롤로그 A 진행으로 첫 전투 fresh 상태 `temp/active_states/fresh_prologue_auto_420.ss0`까지 도달했다.
+  - 첫 전투에서 보병 선택(`Down -> A`) 후 튜토리얼 대사를 36회 진행하면 행동 메뉴가 처음 열리고, `대기`가 한글로 표시되는 것을 확인했다. 상태 파일은 `temp/active_states/fresh_battle_infantry_step_a36.ss0`.
+  - 확인 화면은 `temp/verified_sheets/fresh_battle_action_wait_menu_confirm.png`, 확대 크롭은 `temp/verified_sheets/fresh_battle_action_wait_menu_confirm_top_menu_8x.png`.
+  - 이 검증은 메뉴-open savestate가 아니라 현재 ROM으로 부팅해 메뉴가 처음 생성된 fresh-run 경로다. 따라서 `대기` 소스 타일 패치는 실제 화면까지 반영된 것으로 본다.
+  - 첫 전투 한정 `공격` 항목은 같은 fresh-run에서 실제 공격 가능 상황을 만들어 별도 확인해야 한다.
+
+- [x] Part 2 튜토리얼 fresh-run 행동 메뉴 `공격` 표시 재확보.
+  - 기존 기록에는 첫 전투 DAY 5 보병의 `공격 / 대기` 메뉴 검증이 있지만, 현재 워크트리에는 `temp/p2_day5_attack_command_probe/sheet.png`, `temp/p2_day5_attack_execute_probe/sheet_all.png`가 남아 있지 않아 현 상태 증거로 재사용하지 않는다.
+  - fresh-run 첫 전투에서 `대기` 이후 두 번째 보병 선택 루트는 `temp/active_states/fresh_after_wait_second_move_range.ss0`로 확보했다. `dx=+1, dy=-1` 목적지에서는 `대기` 메뉴가 열리고 확정 후 `temp/active_states/fresh_second_dx1_dy-1_after_wait.ss0`까지 진행된다.
+  - 같은 상태에서 작전 메뉴 `종료`를 선택하면 `종료는 할 일이 없을 때 턴을 넘기는 명령이야` 계열 설명이 반복되고, A 입력만으로는 바로 턴 전환되지 않았다. 관련 상태는 `temp/active_states/fresh_endturn_dialog_a20.ss0`, `temp/active_states/fresh_endturn_dialog_a60.ss0`.
+  - DAY 4/5 후보 state 재검수 결과, `p2_day5_attackvar_L1_m0_none` 계열 A 입력은 `공격`이 아니라 `대기` 라벨/상태로 판정했다. `L2/L3` 계열 템플릿 스캔은 이동/사거리 오버레이가 만든 false positive라 `공격` 증거로 쓰지 않는다.
+  - `p2_city_defense_day3_after_endturn_phase_1800`처럼 start가 메뉴가 아닌 state에서 A로 행동 메뉴를 생성해도, 해당 savestate의 BG0 VRAM에는 과거 아이콘 타일이 이미 올라와 있어 fresh 검증 근거로 부족하다. 관련 확인은 `temp/verified_sheets/day3_tank_attack_menu_generated_current/`.
+  - 첫 전투 fresh 경로에서 `fresh_second_dx1_dy-1_after_wait.ss0`로부터 `Up, Left, Left, Left, A`를 입력하면 수송차 설명 분기로 이어지고, `temp/verified_sheets/fresh_transport_branch_follow/sheet.png` 기준 수송차/보급/이동타입 설명을 확인했다.
+  - 같은 fresh 흐름에서 프로필 화면을 `B`로 빠져나온 뒤 적 대사와 공격 설명까지 도달했다. `temp/verified_sheets/fresh_enemy_dialog_after_transport_follow/sheet.png` 기준 `행동 메뉴에 공격`, `주포 유닛이면...` 설명과 사거리/대상 표시까지 확인했다.
+  - `fresh_enemy_after_transport_a60.ss0` 이후는 실제 행동 메뉴가 아니라 목표/사거리 표시 상태로 판정했다. 여러 방향키/A/B/Start/Select probe 결과는 `temp/verified_sheets/fresh_a60_all_keys_probe/`, `temp/verified_sheets/fresh_a60_target_confirm_probe/`, `temp/verified_sheets/fresh_attack_after_b_follow/`에 남겼다.
+  - 2026-06-04 current ROM 재검수에서 첫 전투 fresh 흐름의 `fresh_after_wait_second_move_range.ss0` 목적지 22개와 추가 A 확정 22개를 다시 스윕했다. 결과는 `temp/verified_sheets/fresh_attack_menu_destination_sweep_20260604/sheet.png`이며, 해당 국면은 `대기` 메뉴 또는 상태 팝업으로만 이어져 `공격` 항목 증거로 쓰지 않는다.
+  - 적 턴 이후/전투 설명 구간의 `fresh_post_endturn_state_recheck_20260604/sheet.png`, `fresh_battle_infantry_state_recheck_20260604/sheet.png`, `fresh_attack_after_b_state_recheck_20260604/sheet.png`를 재확인했다. 타깃 선택/피해 예측/작전 메뉴는 한글로 보이지만, 첫 전투 fresh 행동 메뉴의 `공격` 항목 캡처는 아직 확보하지 못했다.
+  - 2026-06-06 현재 ROM 재검수에서 중전차 튜토리얼 DAY 2의 메뉴 생성 상태 `temp/active_states/current_recheck_heavy_day2_tank_AA.ss0`를 `output/game_wars_korean_full.gba`로 로드해 행동 메뉴를 다시 캡처했다. `temp/current_visual_check/attack_menu_recheck/current_recheck_heavy_day2_tank_AA.png`와 확대 크롭 `temp/current_visual_check/attack_menu_recheck/current_recheck_heavy_day2_tank_AA_menu_crop_6x.png` 기준 실제 행동 메뉴에 `공격`/`대기` 한글 라벨이 보인다.
+  - 이 증거는 현재 ROM의 행동 메뉴 소스 타일이 실제 전투 메뉴에 올라오는 검증으로는 충분하다. 다만 위 항목의 원래 조건인 첫 전투 fresh 경로는 해당 국면이 타깃/상태 표시로 이어져 별도 `공격` 행동 메뉴를 생성하지 못했으므로, 첫 전투 한정 증거는 계속 미확보로 둔다.
+  - `fresh_attack_after_b_01/02/04/08`, `fresh_attack_probe_A`에서 A/B/방향키 조합 75개를 추가 스윕한 `temp/verified_sheets/fresh_attack_menu_from_attack_states_20260604/sheet.png`도 같은 결론이다. 타깃 화살표와 예측 팝업으로 넘어가거나 작전 메뉴가 열리며, `공격` 행동 메뉴 항목 자체는 포착되지 않았다.
+  - current ROM 검증용으로 중전차 작전의 메뉴 비개방 상태 `temp/active_states/p2_heavy_success_day2_control_after_extra_route.ss0`에서 커서를 전차로 옮긴 뒤 `A, A`로 행동 메뉴를 새로 생성했다. 확대 캡처 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA_menu_left_6x.png`에서 `공격`/`대기`가 모두 한글로 표시되는 것을 확인했다.
+  - 위 검증은 메뉴가 이미 열린 savestate를 재사용한 것이 아니라 current ROM에서 행동 메뉴를 새로 연 화면이다. 첫 전투 fresh 경로에서 같은 `공격` 화면을 다시 잡는 작업은 선택적 보강으로 남기되, 행동 메뉴 소스 타일의 실제 화면 반영은 확인된 것으로 본다.
+  - 2026-06-07 재확인에서 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA.png`와 `after_AA_menu_left_6x.png`를 다시 확인했다. 메뉴 비개방 상태에서 생성된 실제 행동 메뉴에 `공격`/`대기`가 보이므로, VRAM 캐시가 아닌 current ROM 행동 메뉴 라벨 검증 항목은 완료로 전환한다.
+
+## 현재 우선순위
+
+1. [ ] Part 2 튜토리얼을 끝까지 실제 화면 기준으로 검수한다.
+   - [x] 미션 2 공격 복습 뒤 보병 선택, 지형 이동비용 설명, 산 지형 공격, 지형효과 비교 설명을 실제 캡처로 재검증한다.
+   - [x] 지형효과 비교 뒤 종료 안내와 조기 종료 경고 문장을 실제 캡처로 재검증한다.
+   - [x] 지형효과 비교 뒤 두 보병 공격, 턴 종료, 적 턴, 2일째 지형효과/이동비용 설명까지 실제 캡처로 재검증한다.
+   - [x] 2일째 자유 행동 복귀 뒤 저장 메뉴 설명 분기까지 실제 캡처로 재검증한다.
+   - [x] 저장 설명 뒤 남은 적 전멸, 성공 대사, 결과 화면, 저장 확인창까지 실제 캡처로 재검증한다.
+   - [x] 저장 확인 뒤 다음 작전 선택, 점령훈련 초반 브리핑, 첫 전투 진입 안내까지 실제 캡처로 재검증한다.
+   - [x] 점령훈련 이동/점령 조작 분기에서 실제 진행 루트를 확정하고 후속 대사를 검수한다.
+   - [x] 점령훈련 남은 부대 이동, 턴 종료, 적 턴/다음 점령 대사까지 실제 캡처로 이어간다.
+   - [x] 자주포·간접공격 설명 분기까지 실제 캡처로 재검증한다.
+   - [x] 자주포 설명 뒤 도시 방어/경전차 이동 안내 분기를 실제 캡처로 이어간다.
+   - [x] 도시 방어 힌트 뒤 공격범위 표시, 남은 유닛 이동, 턴 종료/적 턴 분기를 실제 캡처로 이어간다.
+   - [x] 수송차 설명 뒤 공략 힌트와 첫 경전차 도시 배치 분기를 실제 캡처로 이어간다.
+   - [x] 도시 방어 자유 행동의 바주카병/보병/보급차 대기와 턴 종료/다음 일자 복귀를 실제 캡처로 이어간다.
+   - [x] 도시 방어 3일째 경전차/바주카병 공격 분기를 실제 캡처로 이어간다.
+   - [x] 도시 방어 4~9일째 상단 전선의 경전차/보병 제거 루트를 실제 캡처로 이어간다.
+   - [x] 도시 방어 자유 행동의 자주포/승리조건 진행을 이어간다.
+   - [x] 중전차 작전 새 성공 후보 루트를 `p2_heavy_success_day10_after_day9_opt_pressure_endturn.ss0` 또는 `p2_heavy_success_day9_after_day8_opt_u0_3_6_endturn.ss0`에서 이어가고, 마지막 record 68을 day10 안에 제거하거나 브레이크/회복 입력으로 마무리하는 루트를 실제 캡처로 확정한다.
+     - 최근 검수 기준 브레이크/작전 메뉴 즉시 효과, day10 record 68 타깃 전환, day9 대체 겹침 우회 분기, record 01 `(5,4)` 전진 후 추가 타격은 모두 최종 제거에 실패했다. 다음 후보는 day8/day9에서 record 68을 더 낮추는 선제 피해 또는 로켓포 실제 공격 입력 확정.
+     - day8 record 00 추가 타격 후보와 day5 로켓포 입력 후보도 현재 재현 기준 최종 제거에 기여하지 못했다. 다음은 더 이른 배치 변경으로 record 02/00의 공격 순서를 바꾸거나, 로켓포가 실제 사격 가능한 다른 상태를 찾아 비교한다.
+     - day8 재현 루트에서는 record 02 타깃 `DOWN`과 record 00 `(2,7)`, record 01 `(5,4)` 전진으로 더 좋은 day9 상태를 만들 수 있었다. 다만 day9 record 02 `(3,6)` + record 00 `(3,8)` 처리 후 record 68은 `b080` 하한에서 더 내려가지 않고, day10 직접 공격/타깃 전환/미끼 유도는 실패했다.
+     - record 03 로켓포가 생존해 있으므로, 다음 후보는 day4~day8 사이에 record 03 HP와 위치를 더 좋게 보존해 day9~day10에 실제 유효 피해를 만들 수 있는지 확인하는 것이다.
+     - record 03은 `로켓포`로 확인됐지만 탄약 0이라 직접 포격은 불가능하다. 다만 Day6부터 `(5,3)->(6,5)`로 전진시키면 record 68 중간 피해를 `b0b3`까지 낮추는 미끼/점유 효과가 있다. 아직 day9~day10 최종 하한은 `b080` 또는 record 67 잔존이다.
+     - early-r3 분기에서 record 68을 먼저 type `0x00`으로 만들면 record 67이 같은 좌표에 겹치고, target switch 115개 입력으로도 record 67 조준이 되지 않았다. record 01 선처리로 상단 보병을 지워도 최종 패턴은 동일하다.
+     - current ROM 후보 재스캔 `temp/probes/current_heavy_candidate_record_scan/summary.txt` 기준 record 67이 type `0x00`이고 record 68만 `b080`/HP-like `384`로 남는 day10 후보를 다수 확인했다. 화면 확인은 `temp/verified_sheets/current_heavy_day10_candidate_visual/`.
+     - 낮은 HP 후보 5개 공격 경로(`precise_u0_cur`, `precise_u2_cur`, `block_u0_28`, `block_u2_37`, `block_u2_26`)에서 forecast 이후 `없음/UP/DOWN/LEFT/RIGHT/L/R/2연속 조합`을 스윕했지만 record 68 raw 변화는 0건이었다. 결과는 `temp/probes/current_heavy_day10_target_combo_sweep/summary.txt`.
+     - early-r3 day9 후보 `p2_heavy_success_day10_early_r3_65_rel_u1_54_u2_cur_u0_27_u1_46_endturn.ss0`에서는 record 01 이동 가능 칸을 `temp/probes/current_heavy_day9_u1_valid_wait_sweep/summary.txt`로 추렸고, 대기 후 턴 종료 시 record 68은 type `0x00`이 되지만 record 67이 같은 `(4,7)`에 남는 기존 실패 패턴으로 들어간다. 결과는 `temp/probes/current_heavy_day9_u1_bait_endturn_sweep/summary.txt`.
+     - 이 after-bait 상태에서 record 01 후속 공격 일부 스윕 83건은 record 67/68 변화가 0건이었고(`temp/probes/current_heavy_day10_after_u1_bait_finish67_sweep/partial_summary.txt`), record 00 `(2,7)->(3,7)` 오른쪽 공격 target-switch 43건은 모두 record 67을 건드리지 못하고 죽은 record 68 raw와 아군 피해만 바뀌었다(`temp/probes/current_heavy_day10_after_u1_bait_finish67_u0_sweep/summary.txt`).
+     - `p2_heavy_success_day10_after_u0_u1_56_u2_attack_r68dead_endturn.ss0`를 current ROM으로 다시 확인했다. record 68은 type `0x00`이지만 record 67은 type `0x02`/`b0=00`/`xy=(4,7)`로 남아 있고 화면상 적 유닛이 남아 있는 player turn 상태다. 이 상태에서 record 01/00 후속 입력 306개를 스윕했지만 record 67 제거 후보는 없었다. 결과는 `temp/probes/current_heavy_r68dead_finish67_sweep_20260604/summary.txt`.
+     - Day5 `p2_heavy_success_day5_after_rocket_4_0_branch.ss0`에서는 record 03 로켓포 `(4,0)`와 record 05 보급차 `(5,0)`가 붙어 있지만, record 05는 `b0=00` 상태라 실제 보급 유닛으로 쓰기 어렵다. 보급차 메뉴 item 0~3을 실행해도 record 03/적 record 62/63 raw는 변하지 않았다. 결과는 `temp/probes/current_heavy_day5_supply_action_probe_20260604/summary.txt`.
+     - 2026-06-08 추가 탐색: `temp/probes/current_heavy_day4_r00_r02_block_sweep_20260604/r55_u2_54_day5.ss0`는 record 03 로켓포 `(7,0)`와 record 05 보급차 `(5,0)`가 둘 다 살아 있고 record 05도 `b0=85`라 기존 `b0=00` 보급차 분기보다 좋아 보였다. 그러나 record 05는 주변 칸 이동/보급 후보가 실제 행동으로 이어지지 않았고, record 03은 현재 위치에서 `대기`만 가능해 적 record를 바꾸지 못했다. 대신 record 04를 `UP,RIGHT`(`RIGHT,UP`도 동일)로 보내 기본 공격을 실행하면 record 68을 `484 -> 332`까지 낮출 수 있었다(`temp/probes/current_heavy_manual_r4_attack_20260607/r4_ur_attack/summary.txt`, `temp/probes/current_heavy_manual_r4_move_sweep_20260607/UR/summary.txt`, `temp/probes/current_heavy_manual_r4_move_sweep_20260607/RU/summary.txt`). 하지만 record 04는 공격 직후 type `0x00`이 되고, 이 상태에서 바로 턴 종료하면 record 03도 type `0x00`으로 사라진다. record 02를 `RR/RD/DD`로 먼저 대기시켜도 다음 턴 record 67은 `812`, record 68은 `332`로 남는다. 추가 턴 종료는 record 67을 `684`까지 낮추지만 record 02/00/01까지 전력 손실이 커져 성공 후보가 되지 않았다(`temp/probes/current_heavy_manual_after_r4_r2block_end_20260607/`, `temp/probes/current_heavy_manual_day6_rr_endturn_20260607/`, `temp/probes/current_heavy_manual_day7_low_continue_20260607/`).
+     - 같은 r4 `UP,RIGHT` 공격을 day5 후보 8개에 재적용했다. `r54_u2_55`/`r54_u2_64` 계열은 즉시 턴 종료 뒤 record 00/01/02가 모두 남고 record 67/68이 `812`/`343`으로 이어져 기존 r55 계열보다 나았다(`temp/probes/current_heavy_r4_ur_all_day5_states_20260608/`). 이 중 `r54_u2_55`에서 record 00을 `DOWN` 공격시키면 record 67을 `794`까지 낮출 수 있지만, record 01 후속 경로는 record 67/68을 바꾸지 못했다(`temp/probes/current_heavy_r54_u2_after_r4_day6_r0_paths_20260608/`, `temp/probes/current_heavy_r54_u2_after_r0hit_r1_paths_20260608/`).
+     - `r54_u2_55` 파생에서 record 00 `DOWN` 뒤 record 02를 `RR/RD/DD`로 두고 종료하면 record 67은 `666`, record 68은 `343`으로 내려간다(`temp/probes/current_heavy_r54_u2_after_r0hit_endturn_sweep_20260608/`). 다시 한 번 종료하면 record 67은 `538`까지 낮아지지만, `RR`은 record 00/01이 소모되고 `RD/DD`는 record 02가 소모되어 남은 전력으로 마무리하지 못했다. record 67을 `410`까지 낮춘 변형은 record 00/01/02가 모두 소모되어 성공으로 이어지지 않았다(`temp/probes/current_heavy_r54_u2_low_day7_immediate_end_20260608/`, `temp/probes/current_heavy_r54_u2_r68_308_day8_finish_sweep_20260608/`).
+     - 같은 분기에서 가장 낮은 record 68 후보는 record 02를 `RD/DR`로 움직여 `343 -> 308`까지 낮춘 뒤, record 00을 왼쪽으로 대기시키고 종료한 상태다. 이 상태는 record 67/68이 `538`/`308`이고 record 00/01이 살아 있지만, 다음 종료는 아군을 모두 잃고 `410`/`308`에 멈춘다. record 00을 `(4,7)`에 보존해 추가 턴을 넘기는 변형도 record 67/68이 `538`/`308`으로 남고, 인접 공격은 record 68을 `300`까지 낮추는 대신 record 00까지 소모한다. dump 스캔 기준 이 r54_u2 확장 분기에서 record 68 `300` 미만 또는 record 67 제거 후보는 없었다(`temp/probes/current_heavy_r54_u2_low_day6_actions_before_second_end_20260608/`, `temp/probes/current_heavy_r54_u2_r2rd308_followups_20260608/`, `temp/probes/current_heavy_r54_u2_r68_308_r0pos_endturn_20260608/`, `temp/probes/current_heavy_r54_u2_r68_308_r0survive_finish_20260608/`, `temp/probes/current_heavy_r54_u2_r68_308_endagain_adjacent_20260608/`).
+     - r4 `UP,RIGHT` 공격 확정 직전 target switch `L/R`을 넣으면 record 68은 `343 -> 335`로 더 낮아지고, 턴 종료 후 record 00/01/02가 모두 남는 상태가 만들어진다(`temp/probes/current_heavy_r54_u2_day5_r4_ur_target_sweep_20260608/`, `temp/probes/current_heavy_r54_u2_r4_target_LR_endturn_20260608/`). 여기서 record 00 `DOWN` 공격 뒤 record 02를 `RR/RD/DD`로 두고 종료하면 record 67/68은 `670`/`335`로 내려간다(`temp/probes/current_heavy_r54_u2_r4L_after_r0_paths_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_after_r0_r2_endturn_20260608/`).
+     - 위 r4 target `L/R` 분기의 최저 record 68 후보는 record 02를 `RD/DR`로 추가 행동해 record 67/68을 `670`/`297`까지 낮춘 상태다(`temp/probes/current_heavy_r54_u2_r4L_low_day6_actions_20260608/`). 하지만 record 00을 왼쪽/아래로 대기시키고 종료하면 record 00/01만 남고 `542`/`297`에 멈추며, 즉시 종료는 `414`/`297`까지 내려가도 record 00/01/02가 모두 type `0x00`으로 빠진다(`temp/probes/current_heavy_r54_u2_r4L_r2rd297_followups_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_r68_297_day8_finish_20260608/`).
+     - 같은 `297` 분기에서 record 00을 `(4,7)`에 보존해 한 턴 더 넘긴 뒤 직접 공격하면 record 68은 `281`까지 내려가지만 record 00/01/02가 모두 사라지고 record 67은 `542`로 남는다. record 00을 좌/상/하로 대기시키거나 작전 메뉴로 한 번 더 종료해도 record 67/68은 `542`/`297` 그대로였고, 이 r4 target `L/R` 확장 분기에서도 성공 후보는 확인되지 않았다(`temp/probes/current_heavy_r54_u2_r4L_r68_297_r0survive_finish_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_endagain_finish_sweep_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_r0_wait_positions_endturn_20260608/`).
+     - 같은 `297` 분기에서 record 00/01 행동 순서를 다시 섞어 보니, record 00 현재 위치 공격 뒤 record 01 현재 위치 공격을 넣고 정상 종료하면 record 00/01/02가 모두 행동 가능으로 리셋된 채 record 67/68 `658`/`297` 상태가 유지되는 새 continuing 상태를 만들 수 있었다(`temp/probes/current_heavy_r54_u2_r4L_r68_297_r0_r1_order_sweep_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_r68_297_after_r0r1_endturn_20260608/`).
+     - 위 continuing 상태의 다음 날 행동 스윕에서 record 00 현재 위치 공격은 record 68을 `293`까지 낮추지만 record 00은 type `0x00`, record 01은 HP 0으로 빠져 record 02만 남는다. record 01/02 선행 행동은 record 67/68을 더 낮추지 못했고, record 00 공격 뒤 record 02 후속 이동/공격 및 턴 종료도 record 68 `293`, record 67 `658`에서 성공으로 이어지지 않았다(`temp/probes/current_heavy_r54_u2_r4L_r68_297_day9_actions_20260608/`, `temp/probes/current_heavy_r54_u2_r4L_r68_293_r2_followup_20260608/`).
+     - 기존 day3 record 03/05 생존 조합 EWRAM 덤프를 `0x1A160` 오프셋으로 재파싱했다. record 05가 `b0>0`로 살아남는 후보는 record 03이 type `0x00`으로 빠지고, record 03이 실사용 가능한 후보는 record 05가 `b0=00`이므로, 저장된 조합 안에서는 로켓포와 보급차를 동시에 보존한 보급 루트가 없다.
+     - 두 적이 분리된 `p2_heavy_success_day10_B_u0_2_7_u0_u2_cur_endturn.ss0`에서는 record 00이 record 67을 먼저 제거할 수 있지만, 후속 record 01 공격 후보 95건은 record 68 변화가 0건이었다. 결과는 `temp/probes/current_heavy_sep_B_u0_27_first_target_sweep/summary.txt`, `temp/probes/current_heavy_sep_after_u0_u1_finish_sweep/partial_summary.txt`.
+     - 세 유닛이 모두 미행동인 day9 분리 후보 `p2_heavy_success_day9_B_rocket_r3_4_3_endturn.ss0`도 재검수했다. record 02 제자리 공격 target-switch 43건은 record 67/68 변화가 없고(`temp/probes/current_heavy_day9_all_unacted_u2_first_sweep/summary.txt`), record 00이 record 67을 먼저 제거한 뒤 record 02 후속 target-switch 43건도 record 68 변화가 없었다(`temp/probes/current_heavy_day9_all_unacted_after_u0_u2_follow_sweep/summary.txt`).
+     - day11 압박 상태 `p2_heavy_success_day11_after_day10_pressure_endturn.ss0`도 재검수했다. record 02를 `(4,6)->(3,7)`로 보내 기본 타깃 공격을 끝까지 기다리면 record 68은 `424 -> 387`까지 내려가고, 이어 record 00 제자리 공격으로 record 67은 type `0x00`, record 68은 `384`까지 낮아진다. 그러나 남은 record 01의 정상 대기 위치 `(5,4)/(4,5)/(5,6)/(6,5)`를 각각 턴 종료해도 record 68은 `384`로 남고 실패 힌트로 진입한다. 결과는 `temp/probes/current_day11_u2_37_repro_long/`, `temp/probes/current_day11_after_u2_u0_follow/`, `temp/probes/current_day11_after_u2_u0_u1_bait_endturn/`.
+     - day9 all-unacted 후보 `p2_heavy_success_day9_B_rocket_r3_4_3_endturn.ss0`에서 record 00 제자리 공격은 record 68을 `433 -> 389`까지 낮추는 것을 새로 재확인했다. 이후 record 02를 `(4,6)->(3,6)`에 대기시키고 턴 종료하면 record 67/68이 `r67 (5,7)`, `r68 (3,7)`로 분리되는 새 상태 `temp/active_states/p2_heavy_success_day10_split_after_u0_r68_u2wait_endturn.ss0`를 만들 수 있다. 다만 이 상태에서 record 01 `(5,4)->(5,6)` 공격은 record 67을 제거하고 record 68을 다시 `384`까지 낮출 뿐이며, record 00을 `(1,7)` 등으로 빼고 턴 종료하면 실패 힌트로 진입한다. 관련 결과는 `temp/probes/current_heavy_day9_direct_repro/`, `temp/probes/current_heavy_day9_u0_u2wait_position_endturn_sweep/`, `temp/probes/current_heavy_day10_split_direct_actions/`, `temp/probes/current_heavy_day11_u0_left_finish/`.
+     - 같은 day9 all-unacted 후보에서 record 00 공격 뒤 record 02를 먼저 비우고 record 01을 정상 대기시키면 record 68은 `389 -> 387`까지 추가로 낮아진다. 그러나 다음 날 record 01 공격은 record 67을 제거하고 record 68을 다시 `384`로 남기며, record 00/02 후속 공격도 record 68 raw를 바꾸지 못했다. 반대로 record 01을 먼저 대기시킨 뒤 record 02 기본 행동을 쓰면 적 턴에 record 68은 type `0x00`이 되지만 record 67이 죽은 record 68과 같은 `(4,7)`에 겹치고, 추가 턴 종료/미끼 대기로도 record 67이 움직이지 않아 실패 힌트에 진입한다. 새 상태는 `temp/active_states/p2_heavy_success_day10_after_u0_r68_u2_36_u1_56_wait_endturn.ss0`, `temp/active_states/p2_heavy_success_day10_after_u0_u1_56_u2_attack_r68dead_endturn.ss0`, 결과는 `temp/probes/current_heavy_day9_u0_u2wait_u1bait_endturn_sweep/`, `temp/probes/current_heavy_day10_after_u1kill_follow_u0_u2/`, `temp/probes/current_heavy_day9_u0_u1pos_u2attack_endturn_sweep/`, `temp/probes/current_heavy_day10_r68dead_overlap_bait_endturn/`.
+     - 2026-06-07 추가 재현: `temp/probes/current_heavy_followups_20260607/summary.txt` 기준 `START`/`SELECT`/`L`/`R`은 record 67/68 HP/type을 바꾸지 않는다. 빈 칸 작전 메뉴는 `temp/single_state_key_sequence/heavy_low_opmenu_tabs_20260607/crop_02.png` 기준 `부대/저장/설정/종료`뿐이며, 브레이크/회복 계열 즉시 실행 항목은 확인되지 않았다.
+     - 같은 재현에서 `p2_heavy_success_day10_after_u0_r68_u2_36_u1_56_wait_endturn.ss0`의 u1 최소 입력 `A, A, A, A`는 실제 전투로 record 67을 type `0x00`으로 제거하고 record 68을 `387 -> 384`로 낮추는 데 그친다. 이어 저장한 `temp/probes/current_heavy_followups_20260607/low_after_u1_kill_r67_min/post_0900.ss0`에서 u0/u2/u3 최소 공격 및 타깃 변형을 별도 재시작으로 확인했지만, record 68은 모두 `384` 그대로였고 record 69 전투 사본 또는 아군 record만 변했다.
+     - `p2_heavy_success_day10_split_after_u0_r68_u2wait_endturn.ss0`도 current ROM으로 다시 확인했다. u2 최소 공격, u2 target 변형, u1/u0 선공 후보는 record 68을 `389`에서 낮추지 못하고, u2 전투는 record 69 전투 사본과 아군 record 02/03만 소모한다. 관련 케이스는 `temp/probes/current_heavy_followups_20260607/split_*`에 저장했다.
+     - 빠른 우측 본부 루트 `temp/probes/current_heavy_day9_UUR_r00_fast_hq_20260604/RRR_day10.ss0`도 새 probe에서 재확인했다. day10 기준 실질 생존 아군은 record 00뿐이고, 다른 아군 record는 type `0x00`이라 record 61의 남하를 막을 후속 행동 후보가 없다. 기존 `current_heavy_day10_hq_day11_survival_sweep_20260604`의 record 00 전멸 결론을 유지한다.
+     - 2026-06-04 current ROM 기준으로 중전차 관련 savestate 306개를 일괄 로드해 record 67/68을 재스캔했다. `temp/probes/current_heavy_all_state_scan_20260604/summary.txt` 기준 record 68이 `384` 아래로 살아 있고 record 67/68이 분리된 새 후보는 기존 `p2_heavy_success_day10_split_after_u0_r68_u2wait_endturn.ss0`(`r68=389`)와 `p2_heavy_success_day10_after_u0_r68_u2_36_u1_56_wait_endturn.ss0`(`r68=387`)뿐이었다.
+     - 위 두 split-low 상태에서 u0/u1/u2 기본 공격 순열 12건을 다시 실행했다. 결과 `temp/probes/current_heavy_split_low_permutation_20260604/summary.txt` 기준 u1이 r67을 제거하면 r68은 다시 `384`로 남고, u0/u2를 먼저 처리하는 순서도 r68 raw를 낮추지 못했다.
+     - `p2_heavy_success_day10_after_u0_r68_u2_36_u1_56_wait_endturn.ss0`에서 u0/u2/u1 첫 공격의 `없음/UP/DOWN/LEFT/RIGHT/L/R/2연속 조합` 129건도 스윕했다. 결과 `temp/probes/current_heavy_split_low_first_attack_target_20260604/summary.txt` 기준 u0/u2 첫 행동은 r68 변화 없이 아군/로켓포 레코드만 바꾸거나 소모되고, u1 첫 행동은 항상 r67 제거 + r68 `387 -> 384` 패턴으로 수렴했다.
+     - day8 before-end 후보 51개를 `temp/probes/current_heavy_day8_before_end_endturn_compare_20260604/summary.txt`와 dump 재집계로 비교했다. r68 분포는 `433` 16건, `435` 7건, `449` 27건, 플래그성 `10673` 1건이며, r68을 `433` 아래로 낮춘 후보는 0건이었다. 정상 턴 종료로 보이는 16건은 주로 r67 `(3,7)`, r68 `(4,7)`의 기존 day9 구도로 돌아가고, 나머지 35건은 아군 행동 플래그가 리셋되지 않아 단순 endturn 입력으로는 새 후보가 되지 않았다.
+     - 전멸 대신 좌상단 `본부` 표기 건물 점령 루트도 확인했다. `temp/probes/current_heavy_hq_probe_20260604/` 기준 day9 `p2_heavy_success_day9_after_day8_opt_u0_3_6_endturn.ss0`에서는 보병을 `L2U`로 `(1,5)`에 두고 day10 `(0,4)`로 진입할 수 있지만, 메뉴 첫 항목은 `공격`이고 아래 항목을 명시 선택해도 성공 전환은 없었다. 더 빠른 day8 후보 `p2_heavy_success_day8_early_r3_65_u0_skip_u1_54_before_end.ss0`에서도 보병을 `(2,4)->(0,4)`로 보내 day8~day10 반복 점령을 실행했으나 화면 수치가 `99`에 머물고 승리/결과 대사로 넘어가지 않았다. 따라서 좌상단 건물 점령만으로는 현재 중전차 성공 조건을 만족하지 못한다.
+     - 오른쪽 적 본부 후보 좌표를 재스캔했다. `temp/probes/current_heavy_enemy_hq_coord_scan_20260604/sheet.png` 기준 `(14,4)`/`(15,4)` 부근이 `본부`로 표시되며, 이전에 반복 점령한 좌상단 `(0,4)`은 우리 본부로 본다.
+     - 외부 공략의 APC/메크 수송 루트는 이 ROM 상태에 바로 적용되지 않았다. `temp/probes/current_heavy_day1_unit_label_check_20260604/sheet.png` 기준 아군 record 00/01/02/03/04/05는 각각 `보병`/전차류/전차류/`로켓포`/`전차`/`보급차`로 보이며, day1/day2에서 record 00/01/02가 보급차에 직접 탑승하거나 보급차가 hidden cargo를 하차시키는 입력은 변화가 없었다. 관련 배제 결과는 `temp/probes/current_heavy_day1_apc_load_r01_r02_sweep_20260604/`, `temp/probes/current_heavy_day1_apc_drop_sweep_20260604/`, `temp/probes/current_heavy_day2_r02_load_apc_probe_20260604/`.
+     - 전멸 루트 대신 보병을 오른쪽 본부로 보내는 분기를 새로 열었다. 기존 day2 전차 공격 후 record 00을 `(1,5)->(3,6)`으로 보내도 day3에 생존하며(`temp/probes/current_heavy_day2_r00_east_branch_20260604/day3_control_A.ss0`), day3에는 `(5,6)`까지 밀면 적 턴에 type `0x00`으로 제거된다. 반면 `(4,5)`와 `(4,7)`은 day4에 생존한다.
+     - 현재 가장 유망한 이어가기 기준은 `temp/probes/current_heavy_day3_r00_56_valid_route_20260604/r00_45_day4.ss0`이다. 이 상태는 record 00 `(4,5)` 생존, record 03 로켓포 `(7,0)` 생존, record 04 전차 `(7,5)` HP-like `3` 생존, record 05 보급차 `(5,0)` 생존으로, 기존 전멸 루트보다 본부 점령 가능성을 더 남긴다. 확인 시트는 `temp/probes/current_heavy_day3_r00_56_valid_route_20260604/sheet.png`.
+     - 우측 본부 보병 돌파의 빠른 하단 루트를 day10까지 이어갔다. `temp/probes/current_heavy_day9_UUR_r00_fast_hq_20260604/RRR_day10.ss0`는 record 00이 `(11,6)`까지 도달하며, day10 이동 스윕에서 `(14,6)`, `(13,5)`, `(12,4)`, `(12,5)` 등으로 실제 이동/대기 처리되는 것을 확인했다. 하지만 턴 종료 입력 `A -> DOWN*3 -> A` 후 record 61이 남하해 record 00을 모두 type `0x00`으로 제거한다. 결과는 `temp/probes/current_heavy_day10_hq_move_action_probe2_20260604/summary.txt`, `temp/probes/current_heavy_day10_hq_day11_survival_sweep_20260604/summary.txt`.
+     - record 02를 보존해 record 61 또는 중앙 적을 미끼로 빼는 분기도 확인했다. day4에 record 02를 `(5,2)`, day5에 `(7,2)`까지 보내면 day7에 record 00 `(6,7)`과 record 02가 함께 남는 상태를 만들 수 있지만, day7~day8 후속에서 record 02는 제거되고 빠른 `UUR` 보병 루트는 record 62/63 배치 변화 때문에 record 00이 day9 시작 전에 type `0x00`으로 제거된다. 관련 결과는 `temp/probes/current_heavy_day4_r02_bait_sweep_endfix_20260604/summary.txt`, `temp/probes/current_heavy_day5_r02_bait_continue_sweep_20260604/summary.txt`, `temp/probes/current_heavy_day6_r02_bait_keep_r00_continue_20260604/summary.txt`, `temp/probes/current_heavy_day7_r02_bait_keep_r00_continue_20260604/summary.txt`, `temp/probes/current_heavy_r02_bait_branch_day8_to_day10_20260604/`.
+     - 디버그 검증으로 record 00 좌표만 적 본부 후보 `(14,4)/(15,4)`에 직접 쓰고 커서를 키 입력으로 이동시키는 방식도 시도했다. 지형 팝업은 `首都`/`본부` 위치에 붙지만, 단순 레코드 좌표 변경은 선택용 점유 맵을 갱신하지 않아 `점령` 행동 메뉴가 열리지 않고 작전 메뉴로 빠진다. 캡처는 `temp/probes/current_heavy_debug_hq_capture_keycursor_20260604/sheet.png`.
+     - 성공 조건 디버그 검증에서 enemy record 60~74의 type을 0으로 정리하고 턴 종료하면 성공 대사로 진입하는 것을 확인했다. `b0`만 0으로 두는 경우는 day11로 넘어가며 성공하지 않으므로, 중전차 작전 성공 조건은 별도 플래그보다 실질적인 적 전멸/type 정리로 보는 것이 맞다. 결과는 `temp/probes/current_heavy_success_condition_memory_probe_20260604/after_end_sheet.png`.
+     - 2026-06-08 우측 HQ/APC 보조 차단 루트를 추가 탐색했다. `temp/probes/current_heavy_day2_r00_east_branch_20260604/day3_control.ss0`는 record 00 `(3,6)`, record 05 `(5,3)`, record 03 `(8,3)`로 모두 미행동 상태였고, `temp/probes/current_heavy_day3_apc_block_sweep_20260608/r5_RIGHTRIGHTDOWN_r0_RIGHT/day4.ss0`에서는 record 00 `(4,6)`과 record 05 `(7,4)`가 함께 살아 있어 차단 후보로 보였다. 하지만 `temp/probes/current_heavy_day4_apc_block_follow_20260608/` 후속 스윕의 정상 턴 종료 후보는 record 05를 잃고, record 05가 남는 high-score 상태는 선택/미확정 flag `f06` 상태라 player-turn 기준점으로 쓰기 어렵다.
+     - 같은 날 `temp/probe_heavy_hq_beam_20260608.py`로 record 00/05 중심 HQ beam search도 시도했지만 탐색 폭 대비 속도가 지나치게 느려 중단했고, 성공 후보는 남기지 못했다. 따라서 우측 HQ 돌파는 record 61 차단을 더 이른 턴에서 보존하는 새 branch가 필요하며, 현재 확보한 day3/day4 APC 차단 후보만으로는 완료 조건을 충족하지 못한다.
+     - 2026-06-08 추가 단일 행동 검수: 위 APC 후보 day4에서 record 03 로켓포는 제자리 `DOWN` target이 record 63에 `f06`만 남기고 장기 대기 후에도 HP/type 변화가 없었다(`temp/probes/current_heavy_apc_day4_u3u4_short_action_sweep_20260608/follow_wait/`). record 02 전차도 좁힌 우측/하단 이동 후보에서 적 record를 바꾸지 못했다(`temp/probes/current_heavy_apc_day4_u2_focused_attacks_20260608/summary.txt`).
+     - 같은 기준점에서 record 04 전차 제자리 공격은 실제 피해가 있어 기본 target은 record 67을 `940 -> 930`, `L/R` target은 `940 -> 924`까지 낮춘다. 다만 record 05 보급차가 함께 피해를 받고, record 05 후속 대기/이동을 단순 첫 명령으로 처리하면 `f06` 선택 상태가 남아 정상 턴 종료 기준점이 되지 않았다(`temp/probes/current_heavy_apc_day4_explicit_attacks_20260608/summary.txt`, `temp/probes/current_heavy_apc_day4_u4_then_r0r5_endturn_20260608/`). 이 분기는 record 05 명령 메뉴를 명시적으로 분기하거나, record 04 공격을 포기하고 r0/r5 위치 보존을 우선하는 쪽으로 다시 좁힌다.
+     - record 05 보급차 메뉴를 명시적으로 갈라 확인한 결과, 제자리 `menu=1`/`menu=3`은 `(7,4)`에서 `f01` 정상 대기 상태가 되지만, `R`/`RD`/`RU` 이동 후보는 모두 `f06` 미확정 상태로 남았다(`temp/probes/current_heavy_apc_day4_r5_menu_probe_20260608/summary.txt`). 따라서 위 APC 차단 분기는 record 05를 실제 이동 차단 말로 유지하는 정상 루트로 보기 어렵다.
+     - 기존 중전차 후보군 중 `r68dead_r67left`, `finish_u0_37`, `finish_u1_56_u0`처럼 record 68만 제거된 상태와 `block_r68_384`처럼 record 67만 제거된 상태를 대기/턴 종료/A 진행으로 재검수했다. 모두 `작전 성공` 전환이 없었고, 각각 record 67 또는 record 68이 전투 가능 type/HP로 남는 것이 확인됐다(`temp/probes/current_heavy_result_candidate_probe_20260608/summary.txt`, `temp/probes/current_heavy_result_candidate_probe_20260608/r68dead_r67left_advance/sheet.png`, `temp/probes/current_heavy_result_candidate_probe_20260608/block_r68_384_advance/sheet.png`).
+	     - `block_r68_384` 기준점에서 record 02 바주카를 81개 이동/target 조합으로 좁혀 재확인했지만 record 67/68의 HP/type 변화는 없었다. 일부 입력은 record 68에 `f06`만 남기거나 record 02를 소비할 뿐 유효 피해가 없어, day10 잔여 유닛 단일 행동으로 record 68을 정리하는 길은 닫힌 것으로 본다(`temp/probes/current_heavy_block_r68_exact_r2_20260608/summary.txt`, `temp/probes/current_heavy_block_r68_exact_r2_20260608/sheet.png`).
+	     - 결론: 현재 APC 차단 후보와 기존 record 67/68 분리 저체력 후보는 성공 루트가 아니다. 다음 탐색은 day10 후속 단일 행동보다 더 이른 턴의 배치/행동 순서, 특히 record 61 차단과 record 67/68 동시 정리 조건을 만드는 쪽으로 되돌린다.
+	     - 외부 공략 `https://gbwn.main.jp/Mission6_FT_GBWA.htm`는 같은 미션(`地上最強！ 重戦車！！`/`Tank Ops`)이며 승리 조건을 전멸 또는 적 본부 점령으로 설명하고, 벽을 활용한 우회/HQ 점령 힌트도 현재 맵과 맞다. 다만 해당 5일 전멸 루트는 랜덤 피해와 아군 9유닛 전제를 둔다. 현재 확보한 `p2_heavy*` 상태 재스캔에서는 `p2_heavy_success_route_day1_start.ss0`와 `p2_heavy_after_hint_control.ss0`가 모두 아군 6유닛(record 00~05)이고, active state 안에서 적용 가능한 9유닛 중전차 시작 상태는 찾지 못했다.
+	     - 9유닛 공략의 APC/메크 수송 가능성을 현재 6유닛 시작점에서 다시 정확히 눌러 봤지만, record 00/01/02 어느 쪽도 record 05에 탑재되지 않았다. record 00/01 후보는 대부분 `f06` 선택 상태로 멈추고, record 02의 `LEFT,DOWN`/`DOWN,LEFT` 후보는 단순히 `(1,3)`으로 이동 대기할 뿐 record 05 raw가 바뀌지 않았다. 결과는 `temp/probes/current_heavy_apc_exact_route_20260608/summary.txt`, 화면 검수는 `temp/probes/current_heavy_apc_exact_route_20260608/sheet.png`.
+	     - current ROM 시작점에서 APC 자체를 선택해 보병/바주카병 쪽으로 이동시키는 픽업 후보도 다시 눌렀다. `apc_to_r00_upup_*`, `apc_to_r01_up_right_a`, `apc_to_r02_up_right_a`, `r00_adj_then_apc_pick*` 모두 record 05가 `f06` 선택 상태에 머물거나 record 00이 단순 대기하는 데 그쳤고, APC cargo/raw 변화는 없었다. 결과는 `temp/probes/current_heavy_apc_pickup_recheck_20260608/summary.txt`, 화면 검수는 `temp/probes/current_heavy_apc_pickup_recheck_20260608/sheet.png`다.
+	     - 2026-06-08 추가: `r54_u2_55_day5.ss0`의 r4 공격 직전 target `L`에 프레임 지연을 넣어 다시 훑었다. 단발 후보는 여러 지연에서 record 68이 `331`까지 내려갔지만, 후속 `r0 DOWN`/`r2 RD` 체인을 붙이면 delay 54가 최저로 `record 67/68 = 677/277`을 만들었다(`temp/probes/current_heavy_rng_chain_20260608/summary.txt`, `temp/probes/current_heavy_rng_chain_d054_full_20260608/summary.txt`). 여기서 `r0 현재 위치 공격 -> r1 현재 위치 공격 -> 턴 종료` 순서가 다음 턴에 r0/r1을 보존하면서 `record 67/68 = 549/277`로 이어지는 가장 좋은 continuing 상태였다(`temp/probes/current_heavy_d054_order_followups_20260608/r0_cur_then_r1_cur_end/post_00000.ss0`).
+	     - 위 delay 54 continuing 상태의 다음 날 행동 스윕에서 r0 현재 위치 공격은 record 68을 `269`까지 낮추지만 r0/r1 전력이 사라지고, r0 방향 target 계열은 r0/r1을 보존하는 대신 record 67만 `544`로 낮춘다(`temp/probes/current_heavy_d054_daynext_actions_20260608/summary.txt`, `temp/probes/current_heavy_d054_daynext_endturn_20260608/summary.txt`). 보존형 `r0_up_r67_544`에서 r0를 `(4,4)` 또는 `(3,5)`로 보내면 record 67을 type `0x00`으로 만들고 record 68을 `256`까지 낮출 수 있었지만, 이후 턴 종료/추가 턴 종료/인접 공격 후보는 record 68을 더 낮추지 못했다(`temp/probes/current_heavy_d054_r0up_manual_cases_20260608/`, `temp/probes/current_heavy_d054_r0up_best_endturn_20260608/`, `temp/probes/current_heavy_d054_r0kill_r1_endturn_20260608/`, `temp/probes/current_heavy_d054_r0r1_survive_endagain_20260608/`, `temp/probes/current_heavy_d054_endagain_finish_actions_20260608/`). 따라서 delay 54 새 분기는 기존 후보보다 record 68 하한은 낮지만, 현재 입력 범위에서는 성공 루트로 이어지지 않는다.
+	     - 2026-06-10 추가 재검수에서 Day3 r04 기본 타깃 분기는 r66 제거와 r67 약화를 만들 수 있지만, r03/r05 escape 뒤 Day5 유인 배치가 깨져 r62가 기존 위치로 오지 않고 r01/r02/r00/r03 후속 행동도 유효 피해를 만들지 못했다. 관련 상태는 `temp/active_states/p2_heavy_success_day3_r04_cur_best_20260610.ss0`, `temp/active_states/p2_heavy_success_day5_r04best_rocket_4_0_endturn_20260610.ss0`, 결과는 `temp/probes/p2_heavy_day3_r04_best_*_sweep_20260610/`, `temp/probes/p2_heavy_day5_r04best_u1_short_sweep_20260610/`에 남겼다.
+	     - 같은 날 delay 54의 r67 제거 후 next-after-end 상태 두 개(`p2_heavy_d054_r035_next_after_end_20260610.ss0`, `p2_heavy_d054_r044_next_after_end_20260610.ss0`)에서 record 00 이동/타깃 306건을 재스윕했다. `temp/probes/p2_heavy_d054_r00_action_sweep_20260610/summary.txt` 기준 r68은 `256` 아래로 내려가지 않고, 최고 score는 전투 사본 record 69 또는 이미 type 0인 r67 raw 변화라 성공 후보가 아니다.
+	     - 결론: 중전차 자연 성공 루트는 추가 공략 검증 항목으로는 남길 수 있으나, 현재 ROM의 한글화 완료/배포를 막는 잔여 일본어·깨짐·결과 화면 미검증 블로커는 아니다. 성공/실패/후속 브리핑 문구와 결과 화면은 debug/forced-clear 및 후속 자연 루트 검수에서 이미 한글 표시를 확인했고, current ROM QA 기준 일본어 잔여 후보 0/placeholder hit 0/overflow 0으로 닫는다.
+	     - 성공 후 대사/다음 작전 연결부를 `temp/verified_sheets/p2_heavy_success_dialog_final_spotcheck_20260604/sheet.png`로 스폿체크했다. `안 될 줄`, `쓸 수 있다니`, `하지만 아직 중전차를 쓸 때는 아니군`처럼 붙은 표현과 어색한 성공 후 문장을 우선 정리했다.
+     - 중전차 성공 뒤 공중유닛 작전 브리핑/전투 진입 문장을 current ROM으로 다시 캡처해 정리했다. `공중유닛첫등장`, `중전차개발이`, `봐야해`, `전선의전투헬기`, `수도점령해`처럼 붙거나 어색한 줄을 고정 행 패치로 재분절했고, 최신 확인 시트는 `temp/verified_sheets/p2_heavy_air_briefing_spacing_final_20260604/sheet.png`, 최종 보강 컷은 `temp/verified_sheets/p2_heavy_air_briefing_support_final_20260604/27_A27.png`다.
+     - 공중유닛 작전의 수송헬기/탑재 안내 초반을 current ROM으로 이어 확인했다. `적 수도 점령하자!`, `여기서 쓸 만한건 수송헬기야`, `수송헬기 능력을 시험해봐`처럼 읽히도록 `0xD96F3E`~`0xD971B4` 조각을 추가 정리했고, 확인 시트는 `temp/verified_sheets/p2_air_tcopter_intro_final_phrase2_20260604/sheet.png`다.
+     - A65 프롬프트 상태는 `temp/probes/p2_air_after_a65_state_20260604/after_A65.ss0`로 저장했다. 아군 record 06 type `0x14` `(1,3)`, record 07 type `0x13` `(2,3)`가 공중 유닛이며, 단순 A 선택/주변 유닛 선택은 `수송헬기 능력을 시험해봐` 안내 반복으로 돌아간다. 다음 검수는 이 상태에서 실제 `탑재` 명령 입력 경로를 더 좁힌다.
+     - A65 상태에서 실제 탑재 루트를 확정했다. 성공 입력은 `UP, A, A`로 탑재 메뉴/명령을 선택한 뒤 대사를 넘기고, 수송헬기 선택 후 이동 설명에서는 `DOWN x6, A`가 정답 루트다. 이후 하차는 기본 `A` 진행으로 명령/위치 선택까지 이어진다.
+     - 탑재 성공/수송헬기 이동/하차/지형정보/전투헬기 진입 문구를 `0xD971EE`~`0xD975CC` 중심으로 재분절했다. `좋아 탑재완료`, `수송헬기는 보병이 못 가는 바다도 갈 수 있어`, `하차 위치는 보병이 갈 수 있는 곳뿐`, `정보키를 눌러`, `전투헬기 능력을 시험해보자` 기준으로 확인했고, 전체 확인 시트는 `temp/verified_sheets/p2_air_tcopter_load_move_unload_final3_20260604/sheet.png`, 최종 스폿체크는 `temp/verified_sheets/p2_air_tcopter_valid_terrain_spot_final_20260604/sheet.png`다.
+     - 같은 빌드에서 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `python3 tools/qa_text_fit.py`, `python3 tools/qa_japanese_residuals.py --min-score 13 --limit 20`, `git diff --check`가 모두 통과했다. 빌드/QA 기준 overflow 0, residual candidates 0이다.
+     - 전투헬기 선택/공격 루트도 이어 확인했다. 지형정보 안내 뒤 전투헬기 선택은 커서 상태 `temp/probes/p2_air_bcop_cursor_ready_20260604/ready.ss0` 기준 `UP x6, RIGHT, A`이며, 직접공격 설명 뒤 실제 이동/공격은 `RIGHT x4, DOWN x2, A, A...` 기본 진행으로 record 07 이동 및 적 record 67 피해가 들어간다.
+     - 전투헬기 이동/직접공격/공중유닛 연료/공략 힌트 구간 `0xD97673`~`0xD97BCE`를 화면 기준으로 재분절했다. `전투헬기 이동은 수송헬기와 같아`, `마침 좋은 곳에 경전차가 있어`, `이 유닛들은 공중유닛이야`, `두 헬기는 매일 연료 2씩 사용해`, `맞설 수 있는건 전투헬기뿐이야` 기준으로 정리했고, 확인 시트는 `temp/verified_sheets/p2_air_bcop_attack_result_post_final2_20260604/sheet.png`, 라벨 보정 스폿체크는 `temp/verified_sheets/p2_air_bcop_airfuel_labels_final_20260604/sheet.png`다.
+     - 전투헬기 구간 최종 빌드 후 `python3 tools/qa_text_fit.py`, `python3 tools/qa_japanese_residuals.py --min-score 13 --limit 20`, `git diff --check`가 모두 통과했다. 기준은 overflow 0, residual candidates 0이다.
+     - 공중유닛 공략 힌트 후반을 추가 검수했다. `보낸보병`, `꼭점령해`, `점령점하면`처럼 조각 삽입으로 붙거나 중복되던 줄을 `보낸 보병`, `내일부터 꼭 점령해`, `빨리 점령하면 호이프 부대도 못따라올거야` 흐름으로 정리했다. 확인 시트는 `temp/verified_sheets/p2_air_hint_tail_free_action_final_20260604/sheet.png`, 중복 제거 최종 스폿체크는 `temp/verified_sheets/p2_air_hint_capture_line_final_20260604/sheet.png`다.
+     - 공략 힌트를 A로 끝까지 넘기면 대화창 없이 전투 화면으로 돌아오는 것을 `temp/verified_sheets/p2_air_hint_tail_free_action_20260604/sheet.png` 후반 컷과 `after_A29.ss0`로 확인했다. 같은 빌드에서 `qa_text_fit`, `qa_japanese_residuals`, `git diff --check`가 다시 통과했다.
+     - 공중유닛 작전 성공 트리거를 current ROM에서 재확인했다. 힌트 후 전투 화면 상태에서 `B -> START -> DOWN*3 -> A -> DOWN*3 -> A`로 턴 종료를 실행하면 성공 대사와 결과 화면으로 넘어간다. 디버그 검수는 적 레코드 60~74를 정리한 뒤 같은 입력으로 진행했으며, 확인 시트는 `temp/verified_sheets/p2_air_success_result_final_20260604/sheet.png`다.
+     - 공중유닛 성공 뒤 결과 화면의 미패치 OBJ 타이틀 블록 `0xBFB45C`를 찾아 `CONGRATULATIONS!!`/`作戦成功`을 `축하합니다!`/`작전 성공`으로 재렌더링했다. `tools/build_korean_full.py` 통계에 `part2_result_congratulations=1`이 추가됐고, 실제 화면은 `temp/verified_sheets/p2_air_success_result_final_20260604/sheet.png` 후반 컷으로 확인했다.
+     - 다음 작전 `空から来るものは...` 그래픽 타이틀은 문자열 슬롯이 아니라 OBJ 블록 `0xC11D9C`에서 오는 것을 확인하고 `하늘의 적`으로 재렌더링했다. 초반 대사 `캐서린은 이제야 나타났나`, `잔존부대를 정리한 뒤 캐서린의...`, `내가 너무 깊게 봤나`도 화면 기준으로 조정했다. 확인 시트는 `temp/verified_sheets/p2_bomber_intro_title_final2_20260604/sheet.png`다.
+     - 위 수정 뒤 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `python3 tools/qa_text_fit.py`, `python3 tools/qa_japanese_residuals.py --min-score 13 --limit 20`, `git diff --check`가 모두 통과했다. 기준은 overflow 0, residual candidates 0이다.
+     - 2026-06-05 current ROM으로 공중유닛 성공 뒤 후속 브리핑과 다음 작전 도입부를 다시 검수했다. `드디어 중전차의 / 개발에 성공했어!`, `대공부대도 사용 허가됐어!`, `가라 하늘의 전사들!`, `남은부대를 정리하고 캐서린의 / 부대를 짓뭉개라!` 기준으로 조각 붙음과 어색한 표현을 재정리했다. 확인 시트는 `temp/probes/p2_after_air_result_follow_patch4_a03_verify_20260605/sheet.png`, 전체 흐름 참고 시트는 `temp/probes/p2_after_air_result_follow_patch2_verify_20260605/sheet.png`다.
+     - 위 수정 뒤 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `git diff --check`가 모두 통과했다. 기준은 overflow 0, residual candidates 0이다.
+     - 이어 `하늘의 적` 전투 초입을 current ROM으로 다시 진행했다. 대공전차 선택은 `A46` 프롬프트 기준 `A -> 오른쪽2 -> 위2 -> A`, 이동/공격은 선택 후 설명이 닫힌 `A05` 기준 `위4 -> A -> A`로 확정했다. `폭격기와 전투기까지 있어`, `다만 아까 봐서 알겠지만 / 폭격기엔 아무 소용없어`, `다음은 대공전차야`, 대공전차 공격 후 설명의 `보병과바주카병`, `중전차와경전차에겐 지지만`, `공중유닛 전투기와폭격기는`처럼 조각 붙음이 심하던 문장을 화면 기준으로 정리했다.
+     - 확인 시트는 초입 설명 `temp/probes/p2_bomber_intro_text_patch2_verify_20260605/sheet.png`, 대공전차 선택/이동/공격 `temp/probes/p2_bomber_antiair_route_current_probe_20260605/sheet.png` 및 `temp/probes/p2_bomber_antiair_move_attack_current_20260605/sheet.png`, 공격 후 설명 `temp/probes/p2_bomber_antiair_post_attack_patch2_verify_20260605/sheet.png`다. 이 수정 뒤 재빌드 overflow 0, `qa_text_fit`, `qa_japanese_residuals --min-score 13`, `phase6_basic_test.py`, `git diff --check`가 모두 통과했다.
+     - 대공전차 설명 뒤 `공략 힌트 볼래?` 선택지와 자유 행동 복귀 상태도 current ROM으로 검수했다. 기본/오른쪽/B 입력 분기를 비교해 긴 힌트와 짧은 힌트 양쪽을 확인했고, `연료가 없어져 / 추락할것같으면 수송차 보급`처럼 명령 라벨 앞에 붙던 조사를 정리했다. 확인 시트는 `temp/probes/p2_bomber_hint_choice_patch2_verify_20260605/sheet.png`다.
+     - 힌트를 넘긴 자유 행동 기준점은 `temp/probes/p2_bomber_free_action_state_probe_20260605/free_action.ss0`이며, IWRAM 커서 좌표는 `(4,2)`다. 이 기준으로 전투기/로켓포/보급차/경전차/미사일/바주카병 등 대표 유닛의 상태 팝업과 행동 메뉴를 `temp/probes/p2_bomber_free_unit_menu_probe2_20260605/sheet.png`로 스폿체크했다. 상태 팝업, `공격/대기`, 작전 메뉴, 부대 목록은 current ROM에서 한글로 표시된다. 공격 애니메이션까지 안정적으로 들어가는 후속 루트는 계속 탐색 대상이다.
+     - 같은 자유 행동 기준점에서 턴 종료 루트는 `A -> DOWN*3 -> A`로 확정했다. `temp/probes/p2_bomber_free_endturn_probe_20260605/sheet.png` 기준으로 `캐서린` 턴 종료 오버레이, `2일째 호이프` 적 턴, `3일째 캐서린` 복귀가 모두 한글로 표시되며, `A_D3_A_wait3000_units.bin`에서도 적 유닛 좌표가 이동한 뒤 플레이어 턴으로 돌아온 것을 확인했다. `START -> DOWN*3 -> A`는 작전 메뉴가 열리지 않아 기준 루트로 쓰지 않고, `A -> DOWN*3 -> A -> DOWN*3 -> A` 변형은 건물 팝업으로 빠져 canonical 후속 루트에서 제외했다.
+     - 3일째 상태 `A_D3_A_wait3000.ss0`에서 실제 전투 애니메이션 진입 루트를 새로 확보했다. 기준 입력은 커서 `(4,2)`에서 전투기 `(0,3)` 선택 `LEFT*4 -> DOWN -> A`, 이동/공격 `RIGHT*6 -> A -> A -> A`이며, 확인 시트는 `temp/probes/p2_bomber_day3_fighter_battle_def_patch2_verify_20260605/sheet.png`, 전투 확대 컷은 `temp/probes/p2_bomber_day3_fighter_battle_def_patch2_verify_20260605/06_A3_4x.png`다.
+     - 이 전투 HUD에서 상단 방어 라벨 `DEF`가 BG1 raw 타일 `0xE1BA24`/`0xE1C024`에서 오는 것을 확인하고 `방어`로 재렌더링했다. 같은 계열의 Part 2 ASCII 전투 스탯 테이블 `0xC1C120`~`0xC1C14C`도 앞쪽 공통 테이블처럼 `부대/병사/무/지/장/체/총/방` 축약 라벨로 맞췄다. 빌드 통계는 `common_battle_ascii_labels=287`, `battle_defense_label_tiles=4`다.
+     - 전투기 공격 뒤 맵 복귀 상태 `temp/probes/p2_bomber_day3_battle_follow_probe_20260605/wait_120.ss0`에서 다음 턴으로 넘기는 루트도 정리했다. 커서가 적 유닛 위라 바로 작전 메뉴가 열리지 않으므로 `DOWN -> A -> DOWN*3 -> A`로 빈 칸 메뉴에서 턴 종료해야 하며, `temp/probes/p2_bomber_day3_after_fighter_endturn_probe_20260605/move_empty_A_D3_A_wait3000.png` 기준 4일째 캐서린 대사로 이어진다.
+     - 4일째 전략 설명 `그럼 다음 공략을 말할게` 이후 A01~A08 구간을 current ROM으로 검수했다. `먼저전투헬기네`, `대공전차로공격`, `중전차를 벽으로자주포로`, `산위에보병놓고자주포로`, `네 뜻대로 하면돼`처럼 붙던 조각을 `0xD98E14`~`0xD98F56` 중심으로 화면 기준 재분절했다. 최종 확인 시트는 `temp/probes/p2_bomber_day4_strategy_dialog_patch2_verify_20260605/sheet.png`다.
+     - 위 수정 뒤 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 20`, `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`, `git diff --check`가 모두 통과했다. 기준은 overflow 0, residual candidates 0이다.
+     - 4일째 자유 행동 기준점 `temp/probes/p2_bomber_day4_free_state_after_strategy_patch2_20260605/A17.ss0`에서 큰 상태창 우측 지형명이 `道路`, `都市`, `森`, `首都`로 남는 것을 확인했다. OAM/VRAM 추적 결과 `道路`는 기존 소형 팝업 테이블이 아니라 큰 상태창 OBJ 테이블 `0xB94450`에서 로드됐고, 같은 테이블 `0xB93CD0`~`0xB94750`의 `평지/숲/산/강/해/도시/공장/항구/공항/수도/도로/다리/여울/호수/암초`를 한글 raw 타일로 재렌더링했다.
+     - 이 패치는 열린 상태창 savestate를 재사용하지 않고, current ROM에서 자유 행동 기준점부터 커서를 다시 움직여 새 상태창을 생성하는 방식으로 검증했다. `temp/probes/p2_bomber_day4_status_terrain_patch_verify_20260605/sheet.png` 및 `crop_sheet_4x.png` 기준 `도로/도시/숲/수도`가 한글로 표시되며, 수정 뒤 `qa_text_fit`, `qa_japanese_residuals --min-score 13`, `phase6_basic_test.py`, `git diff --check`가 모두 통과했다.
+     - 4일째 자유 행동 상태에서 바로 턴 종료하는 루트도 확인했다. 기준 입력은 `A -> DOWN*3 -> A`이며, `temp/probes/p2_bomber_day4_endturn_current_patch_20260605/sheet.png` 기준 `4일째 작전개시` 오버레이, 적 턴 첫 전투, `5일째 캐서린` 복귀까지 이어진다. Day 5 이어가기 기준점은 `temp/probes/p2_bomber_day4_enemy_battle_def_patch2_verify_20260605/day5_wait2200.ss0`다.
+     - 위 적 턴 전투 화면에서 오른쪽 방어측 HUD의 `DEF`가 별도 BG1 raw 타일 `0xE1B8A4`/`0xE1BEA4`에서 오는 것을 확인했다. 기존 `0xE1BA24`/`0xE1C024` 작은 라벨 패치와 별도로 하단 라벨 전용 처리를 추가해 `방어`로 교체했고, 최종 확대 검증은 `temp/probes/p2_bomber_day4_enemy_battle_def_patch2_verify_20260605/after_endturn_wait660_top_6x.png`다. 수정 뒤 `qa_text_fit`, `qa_japanese_residuals --min-score 13`, `phase6_basic_test.py`, `git diff --check`가 모두 통과했다.
+     - Day 5 기준점에서 단일 키 스폿체크를 진행했다. `A`는 신형전차의 튜토리얼 고정 메뉴로 들어가지만 유닛 테이블 변화 없이 원상 복귀하고, 방향키/START/SELECT/B/L은 제어 해제로 이어지지 않는다. `R`은 상세 정보 화면을 여는 것으로 확인했으며, 관련 시트는 `temp/probes/p2_bomber_day5_u9_manual_candidates_20260605/key_sweep_sheet.png`다.
+     - 이 상세 정보 화면 오른쪽 무기 분류가 `主砲`/`副砲` 계열로 남아 있어 원본 한자 테이블의 `主`/`副` 글리프를 각각 `주`/`부`로 치환했다. `temp/probes/p2_bomber_day5_info_weapon_label_patch_verify_20260605/01_R_info_right_5x.png` 기준 `주포`/`부포`로 표시되며, 수정 뒤 `qa_text_fit`, `qa_japanese_residuals --min-score 13`, `phase6_basic_test.py`, `git diff --check`가 모두 통과했다.
+     - 같은 상세 정보 화면의 상단 `SPEC` OBJ 라벨은 OAM tile `0x219`의 32x8 raw 블록이며, 현재 savestate VRAM은 원본 ROM `0xBE945C`와 정확히 일치한다. 출력 ROM의 `0xBE945C`는 `정보` raw 타일로 교체했고 직접 렌더 `temp/probes/p2_bomber_day5_info_spec_patch_fresh_verify_20260605/spec_rom_direct_info_after_patch.png`로 확인했다. 다만 Day 4/Day 5 기존 savestate들은 OBJ VRAM에 old `SPEC` 타일을 보존하고 있어 화면 캡처에는 계속 old 타일이 보인다. 이 라벨의 화면 검증은 cold/fresh 진입 상태에서 재확인해야 한다.
+     - 정보 화면 이후 `R -> A -> B`, `R -> B -> A`, `R -> DOWN -> B`, `R -> A -> A` 조합도 current ROM에서 확인했다. `temp/probes/p2_bomber_day5_info_spec_patch_fresh_verify_20260605/follow_seq_sheet.png` 기준 모두 유닛 테이블 변화 없이 Day 5 고정 상태나 정보 화면으로 돌아가며, 이 조합들은 제어 해제 루트에서 제외한다.
+     - Day 5 정보 화면 하단 탭은 OAM 37~44번 스프라이트를 분리 렌더링해 재확인했다. `temp/probes/p2_bomber_day5_info_follow_probe_20260605/key_A_tabs_10x.png` 및 `key_A_oam37_44_sheet.png` 기준 기존 `INFO`/`COST`/`MOVE` 계열은 compact UI token/glyph 치환 경로에서 `정보`/`가격`/`이동`으로 표시되므로 새 raw 패치 대상에서 제외한다.
+     - Day 4 자유 상태에서 current ROM으로 턴 종료해 Day 5에 다시 진입한 뒤 R 정보 화면을 열어도 `SPEC`는 기존 savestate 계열의 OBJ VRAM 캐시 때문에 화면에 남는다. `temp/probes/p2_bomber_day5_progress_probe_20260605/day5_from_day4_R_info.png`의 OAM tile `0x219` 런타임 VRAM은 원본 `0xBE945C`와 동일하고, `output/game_wars_korean_full.gba`의 같은 ROM 블록은 `/tmp/game_wars_korean_probe_day5.gba`와 동일한 패치 후 `정보` 타일이라 cold boot 기반 검증이 필요하다.
+     - Day 5 기준점에서 진행 후보 `A`, `A -> A`, `A -> A -> A`, `A -> A -> DOWN -> A`, `A -> A -> UP -> A`도 추가 확인했다. `temp/probes/p2_bomber_day5_progress_probe_20260605/seq_AAA_candidates_sheet.png`와 유닛 테이블 diff 기준 모두 변화 0건이며, 두 번째 A에서 열리는 `대기` 단일 메뉴 선택은 Day 5 진행 조건으로 보이지 않는다.
+     - Day 5 정보 화면 내부 조작을 확장 확인한 결과 `R -> R`이 지형 정보 페이지로 넘어가며, 이 페이지의 `INFO`/`COST` OBJ 라벨이 새 잔여로 확인됐다. OAM tile `0x1B9`는 raw ROM `0xBE9A5C`, tile `0x1B5`는 raw ROM `0xBE989C`와 정확히 일치하므로 `정보`/`비용`으로 재렌더링했다. `temp/probes/p2_bomber_day5_info_controls_probe_20260605/R_RBTN_after_patch_panel_6x.png` 기준 실화면에 반영됐고, 런타임 VRAM도 output ROM의 패치 후 블록과 일치한다.
+     - `R -> R` 지형 정보 페이지의 후속 버튼도 확인했다. `R`, `L`, `B`, `A`, 방향키, START, SELECT 단일 후보는 유닛 테이블 변화 0건이고, `temp/probes/p2_bomber_day5_info_follow2_probe_20260605/RR_follow_controls_sheet.png` 기준 `DOWN`만 지형 설명 팝업을 연다. 이 팝업의 `COMMENT` 라벨은 OAM tile `0x1BD`/`0x1C1`의 48x8 raw OBJ이며 원본 ROM `0xBE9BDC`/`0xBE9C5C`에서 온다. 왼쪽 32x8을 `설명`으로 재렌더링하고 오른쪽 16x8 잔여를 비웠으며, `RR_DOWN_after_comment_patch_panel_6x.png`와 런타임 VRAM 비교 기준 current ROM 화면에 반영됐다.
+     - 같은 지형 설명 팝업 본문도 화면 기준으로 보정했다. `0xDF55D7`/`0xDF55ED`의 Part 2 평지 설명과 대응 Part 1 `0xA29AC1`/`0xA29AD4`를 긴 문장 대신 `이동쉬움`/`방어낮음`으로 줄여 작은 정보 폰트에서 뭉개지지 않게 했다. `temp/probes/p2_bomber_day5_info_follow2_probe_20260605/RR_DOWN_text_patch2.png` 기준 `푸른 초원`, `이동쉬움`, `방어낮음`으로 읽힌다.
+     - Day 5 정보 안내 종료 뒤 실제 공격 루트를 다시 찾았다. `temp/probes/p2_bomber_day5_info_done_probe_20260605/day5_after_info_done.ss0`에서 u05 `(6,3)` 선택 후 제자리 `A, A` 기본 공격으로 예측 팝업에 들어가며, `temp/probes/p2_bomber_day5_all_current_menus_20260605/all_current_menu_sheet.png` 기준 u05와 `(3,2)` 겹침 유닛이 전투 forecast 후보로 확인됐다.
+     - 이 forecast 말풍선의 `ダメージ` OBJ 라벨은 OAM #38 tile `0x13D`의 32x32 블록이며, LZ77 원본은 ROM `0xBD4FBC`, 해제 위치 `0x2C0`으로 확인했다. 해당 블록의 상단 라벨만 `피해`로 재렌더링하는 `part2_damage_forecast_label=1` 패치를 추가했다. 기존 savestate는 OBJ VRAM에 old 타일을 캐시하므로 직접 재생 화면에는 old가 남을 수 있지만, output ROM 해제 프리뷰 `temp/probes/p2_bomber_day5_damage_label_trace_20260605/output_rom_damage_label_tile.png`와 VRAM 주입 합성 확인 `temp/probes/p2_bomber_day5_damage_label_patch_verify_20260605/u05_forecast_vram_patched_bubble_8x.png` 기준 새 라벨은 `피해`로 읽힌다.
+     - 같은 u05 forecast에서 A 확정으로 실제 전투 애니메이션까지 진행했다. `temp/probes/p2_bomber_day5_u05_attack_anim_verify_20260605/attack_anim_sheet.png` 기준 적 record68 HP가 `40 -> 0`으로 정리되고, 확대본 `battle_left_hud_8x.png`, `battle_right_unit_panel_12x.png` 기준 전투 HUD의 `방어`/유닛명은 한글로 표시된다.
+     - `(3,2)` 겹침 유닛 후보도 `A, A, A`로 5% forecast와 실제 전투에 진입하는 것을 확인했다. `temp/probes/p2_bomber_day5_u08u10_forecast_anim_20260605/u08u10_forecast_anim_sheet.png` 기준 적 record70 HP가 `95 -> 86`으로 내려가며, 전투 HUD는 한글 패치 상태를 유지한다. output ROM LZ77 전체 재검색에서도 old `ダメージ` 상단 라벨 조각은 0건이라 forecast 라벨 추가 중복 패치 대상은 없다.
+     - u05 공격 뒤 `START, DOWN, DOWN, DOWN, A, DOWN, DOWN, DOWN, A`로 턴 종료가 재현됐다. `temp/probes/p2_bomber_day5_after_u05_endturn_probe_20260605/after_u05_endturn_sheet.png` 기준 적 턴 전투 후 6일째 자유 상태로 복귀한다. 적 턴 전투 상단 HUD의 오른쪽 라벨은 화면상 `DEF`처럼 보일 수 있지만, `battle_600f.vram.bin` 대조 기준 output ROM의 패치된 `0xE1C024` `방어` 블록과 일치한다. `day6_right_popup_8x.png` 기준 6일째 맵 팝업도 `호수`/`육` 계열 한글 표시로 확인됐다.
+     - 6일째 자유 상태 `temp/probes/p2_bomber_day5_after_u05_endturn_probe_20260605/after_7200f.ss0`에서 행동 가능 유닛 메뉴를 다시 비교했다. `temp/probes/p2_bomber_day6_current_menus_20260605/day6_current_menu_sheet.png` 기준 u05, u09, u10이 forecast/상세 팝업 후보로 들어간다.
+     - Day 6 u05 기본 공격은 `temp/probes/p2_bomber_day6_forecast_confirm_20260605/u05_confirm_sheet.png` 기준 적 record69 HP를 `100 -> 44`로 낮추고, u09 기본 공격은 `u09_confirm_sheet.png` 기준 record70 HP를 `95 -> 14`로 낮춘다. forecast 확대본 `u05_forecast_bubble_8x.png`와 `u09_forecast_full_4x.png` 기준 `피해` 라벨은 유지되고, 전투 HUD 확대본도 기존 `방어` 패치 상태를 유지한다. u10 기본 선택은 실제 피해 없이 메뉴/팝업 계열로 빠진다.
+     - u05 공격 뒤 u09 후속 공격도 가능하지만, u05 후 커서가 `(7,3)`으로 이동하므로 u09 `(1,4)` 재선택은 `LEFT x6, DOWN` 기준으로 맞춰야 한다. `temp/probes/p2_bomber_day6_u09_after_u05_confirm_variants_20260605/u09_after_u05_confirm_variants_sheet.png`에서 첫 A가 전투 진입, 추가 A 뒤 맵 복귀까지 확인했고 record70은 `95 -> 14`로 내려간다.
+     - u09 후속 공격 뒤에는 커서를 빈 칸 `(7,6)`으로 빼고 기존 `START, DOWN, DOWN, DOWN, A, DOWN, DOWN, DOWN, A` 턴 종료 입력을 넣어야 정상 진행된다. `temp/probes/p2_bomber_day6_after_u05_u09_endturn_position_sweep_20260605/position_sweep_sheet.png` 기준 `to_7_6`/`B_to_7_6` 변형이 7일째 자유 상태로 넘어간다.
+     - 7일째 상태 `to_7_6_wait2400.ss0`에서 u05 기본 공격은 `temp/probes/p2_bomber_day7_u05_confirm_20260605/day7_u05_confirm_sheet.png` 기준 record69 HP `44 -> 0`으로 제거한다. 이후 커서를 `(7,6)`으로 빼고 같은 턴 종료 입력을 적용하면 `temp/probes/p2_bomber_day7_after_u05_endturn_20260605/day7_after_u05_endturn_sheet.png` 기준 적 턴 전투 후 8일째 자유 상태까지 넘어간다. `7일째/8일째 작전개시` 오버레이, 적 턴 전투 HUD, 맵 팝업은 모두 기존 한글 패치 상태를 유지한다.
+     - 8일째 상태 `temp/probes/p2_bomber_day7_after_u05_endturn_20260605/end_12000f.ss0`에서 u01을 `(1,6)`으로 이동 공격하면 record71이 `100 -> 52`로 내려간다. 이어서 `temp/probes/p2_bomber_day8_move_attack_sweep_20260605/u01_1_6.ss0`에서 u06을 `(2,5)` 또는 `(3,6)`으로 이동 공격하면 record71이 `52 -> 0`으로 정리된다. u06 성공 루트 단계 시트는 `temp/probes/p2_bomber_day8_u06_after_u01_trace_20260605/u06_after_u01_trace_sheet.png`이며, 예측 팝업의 `피해` 라벨과 전투 HUD 한글 표시를 재확인했다.
+     - u01+u06 처리 뒤 커서를 빈 칸 `(7,6)` 또는 `(7,9)` 쪽으로 빼고 `START, DOWN, DOWN, DOWN, A, DOWN, DOWN, DOWN, A`를 입력하면 `temp/probes/p2_bomber_day8_after_u01_u06_endturn_20260605/day8_after_u01_u06_endturn_sheet.png` 기준 9일째 자유 상태까지 넘어간다. direct 턴 종료는 실질 진행 변화가 없어 제외한다. 이어가기 기준점은 `temp/probes/p2_bomber_day8_after_u01_u06_endturn_20260605/to_7_6_wait12000.ss0`다.
+     - 9일째 기준점에서 현재 위치 기본 `A,A,A` 후보를 훑은 결과 u00/u01/u02/u03/u06/u09/u10은 대부분 대기 처리만 되고 적 HP를 바꾸지 않는다. 확인 시트는 `temp/probes/p2_bomber_day9_current_candidates_20260605/day9_current_candidates_sheet.png`다. 같은 상태에서 바로 턴 종료하면 `temp/probes/p2_bomber_day9_endturn_probe_20260605/day9_endturn_sheet.png` 기준 10일째 자유 상태로 넘어가며 새 일본어 잔여는 보이지 않았다.
+     - 10일째 기준점 `temp/probes/p2_bomber_day9_endturn_probe_20260605/day10_or_after_wait18000.ss0`에서도 같은 턴 종료 입력으로 `temp/probes/p2_bomber_day10_endturn_probe_20260605/day10_endturn_sheet.png` 기준 11일째 자유 상태까지 진행된다. 10일째/11일째 날짜 배너와 맵 팝업은 한글 패치 상태를 유지한다.
+     - 11일째 기준점 `temp/probes/p2_bomber_day10_endturn_probe_20260605/day11_or_after_wait18000.ss0`에서 16일째까지 직접 턴 종료 루프를 돌려 날짜 배너와 적 턴 전투를 추가 검수했다. 전체 시트는 `temp/probes/p2_bomber_day11_autoturn_probe_20260605/day11_to_day16_autoturn_sheet.png`이며, 12~16일째 전환은 성공/실패 대사 없이 진행되고 적 record72가 중앙으로 이동한다.
+     - 위 루프의 15일째 적 턴 전투에서 상단 우측 방어측 HUD에 새 `DEF` raw 라벨이 남는 것을 확인했다. 런타임 BG1 tile `0x40`~`0x47`이 output/original ROM `0xE1B7A4`/`0xE1BDA4`와 일치하므로 `patch_battle_defense_label_tiles()`에 상단 소형 블록 처리를 추가해 `방`으로 교체했다. 검증 컷은 `temp/probes/p2_bomber_day15_battle_def_patch_verify_20260605/battle_300f.png`, 확대 컷은 `top_right_def_crop_3x.png`다.
+     - 이 패치 뒤 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba` 기준 `battle_defense_label_tiles=8`로 늘었고, output ROM에서 원본 `0xE1B7A4`/`0xE1BDA4` 256바이트 블록 hits=0을 확인했다. `qa_text_fit`, `qa_japanese_residuals --min-score 13 --limit 20`, `phase6_basic_test.py`, `git diff --check`도 모두 통과했다.
+     - 패치 후 Day16 기준점 `temp/probes/p2_bomber_day11_autoturn_probe_20260605/day16_or_after.ss0`에서 25일째까지 다시 자동 턴 종료 루프를 돌렸다. 확인 시트는 `temp/probes/p2_bomber_day16_autoturn_probe_20260605/day16_to_day25_autoturn_sheet.png`이며, 16/18/20/21/22/23/24일째 적 턴 전투의 상단 소형 HUD는 `방`, 하단 패널은 `방어`로 표시된다. 25일째까지 성공/실패 대사는 없고 record72는 `(8,3)` 부근에 머문다. 이어가기 기준점은 `temp/probes/p2_bomber_day16_autoturn_probe_20260605/day25_or_after.ss0`다.
+     - 25일째 기준점에서 행동 가능 후보를 재확인했다. u00 `(1,8)`은 `A,A,A,A` 진행으로 `피해 4%` 예측 팝업과 실제 전투에 들어가며 record70 HP를 `70 -> 61`로 낮춘다. 확인 시트는 `temp/probes/p2_bomber_day25_u00_confirm_20260605/u00_confirm_sheet.png`다. u06 `(2,5)` 후속 기본 행동은 공격이 아니라 대기/상태 팝업으로 수렴하며, `temp/probes/p2_bomber_day25_u06_after_u00_20260605/u06_after_u00_sheet.png` 기준 새 일본어 잔여는 보이지 않는다.
+     - u00 공격 뒤에는 커서를 빈 칸 `(7,9)` 또는 `(7,6)`으로 빼고 기존 턴 종료 입력을 넣어야 26일째로 정상 진행된다. direct 턴 종료는 죽은 record69 위치에 커서가 걸려 실질 진행 변화가 작으므로 제외한다. 확인 시트는 `temp/probes/p2_bomber_day25_after_u00_endturn_20260605/after_u00_endturn_variants_sheet.png`이며, 적 턴 전투 HUD는 `방`/`방어` 패치 상태를 유지한다. 이어가기 기준점은 `temp/probes/p2_bomber_day25_after_u00_endturn_20260605/to_7_9_after_end.ss0`다.
+     - 26일째 기준점에서 u01/u03/u06/u10 현재 후보를 확인했다. `temp/probes/p2_bomber_day26_current_candidates_20260605/day26_current_candidates_sheet.png` 기준 u06은 대기 처리만 되고, 나머지 후보도 죽은 u00 상태/커서 복귀 쪽으로 수렴해 적 HP 변화가 없다. 화면상 새 일본어 잔여는 보이지 않았다.
+     - 26일째 기준점에서 36일째까지 자동 턴 종료 루프를 돌렸다. `temp/probes/p2_bomber_day26_autoturn_probe_20260605/day26_to_day36_autoturn_sheet.png` 기준 반복 적 턴 전투와 36일째 작전개시까지 이어지며, record70은 `61 -> 8`까지 내려가지만 성공/실패 대사는 아직 뜨지 않는다.
+     - 위 루프의 26/27/28/29/30/31/32일째 전투에서 오른쪽 빨간 HUD 상단에 별도 `DEF` raw 라벨이 남는 것을 확인했다. 런타임 BG1 tile `0x40`~`0x47`은 output/original ROM `0xE1BAA4`/`0xE1C0A4`와 일치하므로 기존 `draw_compact_top_def_label()` 대상에 두 주소를 추가했다. 검증 컷은 `temp/probes/p2_bomber_day26_red_def_patch_verify_20260605/battle_300f.png`, 확대 컷은 `top_huds_crop_3x.png`다.
+     - 이 패치 뒤 `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba` 기준 `battle_defense_label_tiles=10`으로 늘었고, output ROM에서 원본 `0xE1B7A4`/`0xE1BAA4`/`0xE1BDA4`/`0xE1C0A4` 256바이트 블록 hits=0을 확인했다. `qa_text_fit`, `qa_japanese_residuals --min-score 13 --limit 20`, `phase6_basic_test.py`도 통과했다.
+     - 36일째 기준점 `temp/probes/p2_bomber_day26_autoturn_probe_20260605/day36_or_after.ss0`에서 46일째까지 다시 자동 턴 종료 루프를 돌렸다. `temp/probes/p2_bomber_day36_autoturn_probe_20260605/day36_to_day46_autoturn_sheet.png` 기준 37~44일째 날짜 오버레이, 44/45일째 적 턴 전투, 46일째 자유 상태까지 진행되며 성공/실패 대사는 나오지 않는다. 단순 자동 종료만으로는 record70이 `8`에서 다시 회복/순환하는 패턴이라, 다음 진행은 실제 행동 후보를 더 찾아야 한다.
+     - 같은 루프의 원본 크기 전투 컷 `day44_end_after_300f.png`, `day45_end_after_300f.png` 기준 상단 축약 라벨은 공격측 `공`, 방어측 `방`으로 표시되고 하단 패널도 `방어`를 유지한다. 새 일본어 잔여는 보이지 않았다. 이어가기 기준점은 `temp/probes/p2_bomber_day36_autoturn_probe_20260605/day46_or_after.ss0`다.
+     - 46일째 기준점에서 u06 `(2,5)` 행동 후보를 다시 찾았다. `temp/probes/p2_bomber_day46_u06_move_sweep_20260605/u06_move_sweep_sheet.png`와 `summary.json` 기준 u06 제자리 또는 `(3,6)` 이동 공격이 record70을 `76 -> 35`로 낮춘다. 이후 커서를 빈 칸 `(7,9)` 또는 `(7,6)`으로 빼고 기존 턴 종료 입력을 넣으면 `temp/probes/p2_bomber_day46_after_u06_endturn_20260605/after_u06_endturn_variants_sheet.png` 기준 47일째 자유 상태로 넘어간다.
+     - 47일째 기준점 `temp/probes/p2_bomber_day46_after_u06_endturn_20260605/to_7_9_after_end.ss0`에서 u06 기본 공격을 확정했다. `temp/probes/p2_bomber_day47_u06_confirm_20260605/u06_confirm_sheet.png` 기준 예측 팝업 `피해`와 전투 HUD `공`/`방어`는 한글 상태를 유지하고, record70은 `13 -> 0`으로 정리된다. 공격 뒤 상태는 `temp/probes/p2_bomber_day47_u06_confirm_20260605/after_confirm.ss0`다.
+     - 47일째 u06 공격 뒤 커서를 `(7,9)`로 빼고 턴 종료하면 `temp/probes/p2_bomber_day47_after_u06_endturn_20260605/after_u06_endturn_sheet.png` 기준 48일째 자유 상태로 넘어간다. 새 성공/실패 오버레이는 없고, `４８일째 작전개시` 날짜 배너와 맵 팝업은 한글 표시를 유지한다. 이어가기 기준점은 `temp/probes/p2_bomber_day48_u06_move_sweep_20260605/day48_base.ss0`다.
+     - 48일째 u06 이동 후보와 새로 보이는 record62 `(5,8)`/record63 `(4,2)`/record10 `(3,2)` 후보를 빠르게 스윕했다. `temp/probes/p2_bomber_day48_u06_move_sweep_20260605/u06_move_sweep_sheet.png`와 `temp/probes/p2_bomber_day48_new_units_fast_sweep_20260605/new_units_fast_sweep_sheet.png` 기준 즉시 적 HP를 바꾸는 새 직접 공격 후보는 없고, 일부 후보는 부대/작전 메뉴 또는 턴 종료 계열로 빠진다. 화면상 새 일본어 잔여는 보이지 않았다.
+     - 48일째 기준점에서 53일째까지 자동 턴 종료 루프를 돌렸다. `temp/probes/p2_bomber_day48_autoturn_probe_20260605/day48_to_autoturn_sheet.png` 기준 49~53일째 날짜 오버레이와 맵 팝업은 한글 표시를 유지하고, 성공/실패 대사는 아직 뜨지 않는다. record65/66/67/72/73은 계속 이동하므로 다음 진행은 Day48 이후 실제 행동 후보나 성공 조건 쪽을 더 좁혀야 한다.
+     - 53일째에는 record72가 `(2,6)`까지 접근해 u06 기본 공격이 다시 열린다. `temp/probes/p2_bomber_day53_adjacent_action_probe_20260605/adjacent_action_sheet.png` 기준 u06 공격은 실제 전투에 들어가며 record73을 `100 -> 40`으로 낮춘다. 전투 예측/전투 HUD는 `피해`, `공`, `방어` 한글 표시를 유지한다.
+     - 53일째 u06 공격 후 record07/record10/record62/record63 후속 후보는 유효 피해가 없었다. `temp/probes/p2_bomber_day53_after_u06_followup_sweep_20260605/followup_sweep_sheet.png` 기준 같은 칸 겹침 유닛은 A만으로 선택되지 않고, 적 좌표 선택도 상태/메뉴 계열로 빠진다. u06 예측 화면에서 방향키로 타깃을 바꾸는 `U/D/L/R` 및 조합 후보도 `temp/probes/p2_bomber_day53_u06_target_adjust_20260605/target_adjust_sheet.png` 기준 기본 결과와 동일하게 record73 `100 -> 40`으로 수렴한다.
+     - 53일째 u06 공격 뒤 턴 종료하면 54일째로 넘어가며 성공/실패는 아직 뜨지 않는다. `temp/probes/p2_bomber_day53_after_u06_endturn_20260605/after_u06_endturn_sheet.png` 기준 record72는 계속 남아 이동한다.
+     - 54일째 u06 공격은 record72를 `100 -> 33`으로 낮추고, 그 뒤 턴 종료 후 55일째 u06 재공격으로 record72를 `33 -> 0`까지 제거할 수 있다. 확인 시트는 `temp/probes/p2_bomber_day54_56_u06_repeat_attack_20260605/u06_repeat_attack_sheet.png`와 `temp/probes/p2_bomber_day54_u06_chain_20260605/day54_chain_sheet.png`다. 이 전투 구간에서도 전투 HUD 한글 표시는 유지된다.
+     - record72 제거 뒤 턴 종료해도 성공은 뜨지 않고 record73 40HP, record65/66/67이 남는다. `temp/probes/p2_bomber_day55_after_u06_kill72_endturn_20260605/after_kill72_endturn_sheet.png` 기준 56일째 자유 상태로 돌아오며, 같은 상태에서 u06 제자리/이동 후보 스윕(`temp/probes/p2_bomber_day56_after_kill72_u06_probe_20260605/u06_after_kill72_sheet.png`, `temp/probes/p2_bomber_day56_after_kill72_u06_move_sweep_20260605/u06_move_sweep_sheet.png`)은 추가 유효 피해가 없다.
+     - record72 제거 뒤 Day56~66까지 매일 u06 공격 가능 여부를 먼저 시도하고, 피해가 없으면 되돌린 뒤 턴 종료하는 루프를 돌렸다. `temp/probes/p2_bomber_after_kill72_u06_daily_probe_20260605/daily_probe_sheet.png` 기준 Day60 부근에서 제한 초과/실패 브리핑으로 넘어가고, 이후 `하늘의 적` 계열 재시작 흐름으로 보이는 1~2일째 화면이 나온다. 실패/재시작 대사와 날짜/맵 팝업은 한글로 표시되며 새 일본어 잔여는 보이지 않았다. 결론적으로 현재 route는 UI 검수에는 유효하지만 클리어 루트는 아니므로, 다음 탐색은 Day48~55 사이에 record65/66/67/73을 더 빨리 처리하는 후보나 성공 조건을 좁히는 쪽이 우선이다.
+     - 2026-06-05 추가 확인: 56일째 후반 상태에서 남은 적 record type/HP를 강제로 정리해도 바로 성공으로 전환되지 않고 다음 일자로 진행됐다(`temp/probes/p2_bomber_day56_success_condition_force2_20260605/success_condition_force_sheet.png`). 이 구간의 성공 조건은 단순 적 HP/type 정리가 아니라 스크립트 진행/전투 이벤트 플래그가 함께 필요한 것으로 보인다. 따라서 Day48 이후 장기 루프는 클리어 공략 루트가 아니라 전투 UI/실패 흐름 검수용으로만 취급하고, 자연 진행은 앞서 확정한 대공전차-힌트-4일째 전략 설명 루트의 정상 기준점에서 이어간다.
+     - 2026-06-05 추가 route 재탐색: 외부 공략 단서대로 적 전멸이 아니라 수송헬기/보병 진행 플래그를 먼저 확인했다. 힌트 후 자유 상태 `temp/probes/p2_bomber_free_action_state_probe_20260605/free_action.ss0` 기준 u00 `(1,8)`을 `LEFT*3, DOWN*6, A, LEFT, UP*2, A, A`로 수송헬기 `(0,6)`에 탑승시키면 u00 `act=0b`, u03 `act=10`으로 바뀐다. 확인 시트는 `temp/probes/p2_bomber_tcopter_load_probe_20260605/sheet.png`다.
+     - 적재 뒤 같은 턴에 수송헬기를 `A, RIGHT*3, UP*3, A, DOWN, A, A`로 이동/하차하면 u03은 `(3,3)`, u00은 `(4,3)`에 놓인다. 하차 방향 매핑은 `temp/probes/p2_bomber_tcopter_loaded_unload_direction_map_20260605/summary.json` 기준 기본 `A`가 `(4,3)`, `RIGHT`가 `(3,4)`, `LEFT`가 `(2,3)`으로 확정됐다. 확인 시트는 `temp/probes/p2_bomber_tcopter_loaded_move_unload_probe_20260605/sheet.png`와 `temp/probes/p2_bomber_tcopter_loaded_unload_direction_map_20260605/sheet.png`다.
+     - 위 하차 상태에서 `START, DOWN*3, A, DOWN*3, A`로 턴 종료 후 1200프레임 대기하면 3일째 자유 상태에 돌아오며 u00은 `(4,3)` 본부 위에 살아 있다(`temp/probes/p2_bomber_tcopter_drop_endturn_day3_probe_20260605/03_endturn_wait1200.ss0`). 같은 자리에서 `RIGHT, UP*3, A, A, A`로 행동 완료 후 다시 턴 종료하면 4일째 전략 설명 대사로 진입한다. 이 루트는 최종 클리어가 아니라 정상 스크립트 진행 기준점으로 채택하고, 장기 attrition 루트와 분리한다.
+     - 4일째 전략 설명 대사 중 `중전차를 벽으로...`, `공중유닛 연료가 없어져...` 계열 조각이 화면에서 어색하게 붙어 `tools/build_korean_full.py`의 `0xD98EF8`~`0xD99006` 행을 재분절했다. current ROM 검증 시트 `temp/probes/p2_bomber_day4_strategy_dialog_patch4_verify_20260605/sheet.png` 기준 `중전차로 막고 자주포로 공격해도돼`, `우리 공중유닛 연료가 부족하면 수송차 보급하라 / 말했지?` 흐름으로 표시되며, 새 일본어 잔여는 보이지 않는다.
+     - 정상 루트 보강으로, 힌트 후 자유 상태 `temp/probes/p2_bomber_free_action_state_probe_20260605/free_action.ss0`에서 지상 병력을 먼저 전진시키는 후보를 새로 확보했다. 입력은 u09 `(1,4)` `RRU -> (3,3)`, u06 `(1,5)` `RRU -> (3,4)`, u07 `(2,5)` `R -> (3,5)`, u04 `(1,6)` `RR -> (3,6)`, u01 `(1,7)` `RR -> (3,7)` 순서이며, 이후 `A -> DOWN*3 -> A`로 3일째에 진입한다. 확인 시트는 `temp/probes/p2_bomber_day1_ground_advance_route_20260605/sheet.png`와 `temp/probes/p2_bomber_day1_ground_advance_endturn_probe_20260605/sheet.png`다.
+     - 위 전진 Day3 상태에서 전투기 u05 `(0,3)`를 `RRRRRR`으로 이동 공격하면 record68이 `100 -> 45`로 내려간다. 공격 뒤 `DOWN -> A -> DOWN*3 -> A`로 4일째 전략 대사에 들어가며, 대사 종료 기준점은 `temp/probes/p2_bomber_day4_ground_advance_strategy_follow_20260605/A11.ss0`다. 새 루트에서도 4일째 전략 설명은 한글 패치 상태를 유지한다.
+     - 새 Day4 자유 상태에서는 전투기 u05 제자리 공격이 가장 유효하다. `temp/probes/p2_bomber_day4_ground_advance_action_probe_20260605/enemy_hit_sheet.png` 기준 record68이 `45 -> 0`으로 제거되고 record67도 type 0으로 정리된다. 이어 `A -> DOWN*3 -> A`로 5일째에 진입하는 기준점은 `temp/probes/p2_bomber_day4_ground_u05_endturn_probe_20260605/A_D3_A.ss0`다.
+     - 새 Day5 상태에서 동적 커서 추적으로 연속 행동을 재현했다. `temp/probes/p2_bomber_day5_ground_chain_dynamic_probe_20260605/u09_u05_u08.ss0` 기준 u09 제자리 공격은 record71을 `100 -> 28`, u05 제자리 공격은 record72를 `100 -> 44`, u08 제자리 공격은 record70을 `95 -> 86`으로 낮춘다. 이 상태에서 `A -> DOWN*3 -> A`로 6일째까지 진행되며, 이어가기 기준점은 `temp/probes/p2_bomber_day5_ground_chain_endturn_probe_20260605/A_D3_A.ss0`다. 3~6일째 전환/전투 예측/맵 팝업 화면에서 새 일본어 잔여는 보이지 않았다.
+     - 새 Day6 기준점에서는 u05 제자리, u06 제자리, u02 `U` 순서가 안정적이다. `temp/probes/p2_bomber_day6_ground_chain_probe_20260605/u05_u06_u02.ss0` 기준 record71은 유닛 테이블에서 사라지고, record72는 0HP, record70은 `86 -> 43` 및 type 0 상태가 된다. 이어 `DOWN -> A -> DOWN*3 -> A`를 넣으면 7일째로 넘어가며, 기준점은 `temp/probes/p2_bomber_day6_ground_chain_endturn_probe_20260605/DOWN_A_D3_A.ss0`다.
+     - 새 Day7 기준점에서는 u02 `LD`가 record69 type을 0으로 만들고 record70 잔여를 제거하는 가장 좋은 후보였다. 확인 시트는 `temp/probes/p2_bomber_day7_ground_action_probe_20260605/enemy_hit_sheet.png`이며, `temp/probes/p2_bomber_day7_ground_u02ld_endturn_probe_20260605/A_D3_A.ss0`로 8일째까지 진행된다. 7~8일째 날짜/맵 팝업은 한글 상태를 유지한다.
+     - 8일째에는 상단 record65/66까지 직접 닿는 공격 후보가 없어, 곧바로 `A -> DOWN*3 -> A`로 9일째에 넘겼다. 기준점은 `temp/probes/p2_bomber_day8_ground_endturn_probe_20260605/A_D3_A.ss0`이며, record65/66은 아직 살아 있지만 하단 적 전선은 정리된 상태다.
+     - 9일째에는 상단 적을 향한 지상 전진을 다시 적용했다. u06 `RU -> (4,3)`, u03 `RRU -> (2,5)`, u02 `UU -> (1,5)`, u00 `RU -> (2,7)` 순서로 이동한 뒤 `A -> DOWN*3 -> A`를 넣으면 `temp/probes/p2_bomber_day9_ground_advance_chain_probe_20260605/sheet.png` 기준 10일째까지 넘어간다. 이어가기 상태는 `temp/probes/p2_bomber_day9_ground_advance_chain_probe_20260605/05_after_endturn.ss0`이며, 이 구간에서도 새 일본어 잔여는 보이지 않았다.
+     - 10일째 기준점에서 단일 행동 후보 240개를 스윕했다(`temp/probes/p2_bomber_day10_ground_action_probe_20260605/summary.json`). u05/u06/u07/u03/u04/u02/u01/u00의 제자리/상단 이동 후보 모두 record65/66/67 계열에 즉시 유효 피해를 주지 못했다. 따라서 10일째는 공격 턴이 아니라 추가 전진/적 턴 유도 턴으로 본다.
+     - 10일째 전진 체인은 추가 A 입력을 줄여 다시 안정화했다. `temp/probes/p2_bomber_day10_ground_advance_chain2_probe_20260605/summary.json` 기준 u06 `RRUU -> (6,1)`, u05 `RRRUU -> (9,1)`, u03 `RRRUU -> (5,3)`, u07 `UUU -> (3,2)`, u04 `UU -> (3,4)`, u02 `UU -> (1,3)`, u00 `UUU -> (2,4)`, u01 `U -> (3,6)` 순서가 모두 정상 이동으로 닫힌다. 이후 커서를 빈 칸 `(7,9)`로 빼고 `A -> DOWN*3 -> A`를 넣으면 11일째 자유 상태 `temp/probes/p2_bomber_day10_ground_advance_chain2_probe_20260605/09_after_endturn_wait.ss0`에 도달한다.
+     - 위 11일째 상태에서는 전방 아군이 모두 살아 있고 u06만 적 턴 반응으로 `94 -> 7HP`까지 내려간다. 동시에 record65는 `100 -> 85HP`로 약화되고 `(9,0)`에 위치한다. 확인 화면 `temp/probes/p2_bomber_day10_ground_advance_chain2_probe_20260605/09_after_endturn_wait.png` 기준 날짜/맵 팝업/상태 패널은 한글 표시를 유지한다.
+     - 새 11일째 기준점에서 단일 공격 후보 216개를 다시 스윕했다(`temp/probes/p2_bomber_day11_chain2_action_probe_20260605/summary.json`). 직접 피해를 확정하는 후보는 없었다. u05 `RRR`, u06 `RRD` 계열은 화면상 적/정보 패널과 record 플래그 변화가 섞여 보이지만, 후속 A/B 확인(`temp/probes/p2_bomber_day11_u05_rrr_confirm_probe_20260605/`, `temp/probes/p2_bomber_day11_u06_rrd_follow_probe_20260605/`)에서 실제 추가 피해나 필드 복귀가 안정적으로 확인되지 않아 아직 클리어 후보로 채택하지 않는다.
+     - 11일째에서 u05/u03/u04를 과하게 전진시키는 공격적 분기는 12일째까지 넘어갈 수는 있지만 u03/u04/u05/u06 핵심 전력이 type 0 또는 0HP로 정리된다(`temp/probes/p2_bomber_day11_ground_advance_chain_probe_20260605/08_after_endturn_wait.ss0`, `temp/probes/p2_bomber_day12_after_aggressive_action_probe_20260605/summary.json`). 12일째 남은 u00/u01/u02/u07 스윕도 유효 피해가 없으므로 이 분기는 UI 확인용으로만 두고 정상 클리어 루트 후보에서는 제외한다.
+     - 11일째 u06 `RRD`는 후속 `B`로 오버레이를 빠져나오면 실제 공격으로 사용할 수 있음을 확인했다(`temp/probes/p2_bomber_day11_u06_rrd_b_endturn_probe_20260605/`). u06은 `(8,2)`에서 행동 완료가 되고 record65는 `85 -> 70HP`로 내려간다. 이후 빈 칸 `(7,9)`에서 턴 종료하면 12일째 `03_after_endturn.ss0`까지 진행된다. 다만 적 턴 뒤 u05는 type 0, u06은 0HP, u04는 4HP, u07은 62HP가 되어 후속 화력이 약하다.
+     - 위 u06 `RRD` 뒤 12일째 기준점에서 u00/u01/u02/u03/u04/u07 단일 후보 180개를 스윕했다(`temp/probes/p2_bomber_day12_after_u06rrd_action_probe_20260605/summary.json`). record65/66에 추가 피해를 넣는 후보는 없었다. 따라서 u06 단독 공격 뒤 바로 턴 종료하는 분기는 전투 UI 확인용으로만 두고 클리어 후보에서는 낮게 둔다.
+     - u06 `RRD` 뒤 같은 11일째 안에서 u05를 `DD`로 처리하는 특수 흐름도 확인했다. `temp/probes/p2_bomber_day11_u06rrd_u05dd_b_endturn_probe_20260605/03_after_endturn.ss0` 기준 record65는 `70 -> 59HP`까지 내려가고 12일째로 넘어가지만, u05는 type 0, u06은 0HP 상태다. 이 기준점에서도 후속 단일 후보 192개(`temp/probes/p2_bomber_day12_after_u06rrd_u05dd_action_probe_20260605/summary.json`)는 record65/66에 추가 피해를 주지 못했다.
+     - 10일째 u06 위치 변형도 비교했다(`temp/probes/p2_bomber_day10_u06_position_variant_probe_20260605/summary.json`). u06 `stay/U/UU/UUU/RU/RRU/RRUU/RRR/RRRU`는 정상 종료 후 모두 11일째 u06 7HP, record65 85HP로 수렴한다. u06 `RRD`는 u06 94HP 보존처럼 보이지만 표준 전진 체인이 깨져 u05/u03/u04/u07 등이 10일째 위치에 남고 record65도 100HP라, 현재 정상 전진 루트보다 후퇴한 분기로 본다.
+     - 10일째 u05 위치 변형을 비교해 새 보존 후보를 확보했다(`temp/probes/p2_bomber_day10_u05_position_variant_probe_20260605/summary.json`). 표준 u05 `RRRUU -> (9,1)`은 11일째 record65 85HP를 만들지만 u06이 7HP까지 떨어진다. 반면 u05 `RRU/RRUU/UUR/RUR` 계열은 record65를 85HP로 낮추면서 u06을 24HP로 보존한다. 특히 u05 `RRU` 기준점 `temp/probes/p2_bomber_day10_u05_position_variant_probe_20260605/u05_RRU.ss0`은 u05 `(8,2)`, u06 `(6,1)`, record65 `(11,1)` 85HP 상태로 11일째에 들어간다.
+     - u05 `RRUU` 기준 11일째 단일 행동 후보 272개(`temp/probes/p2_bomber_day11_u05rruu_action_probe_20260605/summary.json`)에서는 record65/66에 직접 피해를 넣는 후보가 없었다. 즉 이 보존 분기는 바로 공격하는 루트가 아니라 추가 적 턴 유도 후보로 본다.
+     - u05 `RRU/UUR/RUR` 보존 분기를 12일째까지 무행동 종료해 비교했다(`temp/probes/p2_bomber_day11_u05variant_endturn_probe_20260605/summary.json`). 세 분기 모두 u05 53HP, u06 24HP로 살아남고 record65는 85HP를 유지한다. u05 `RRU`의 12일째 기준점은 `temp/probes/p2_bomber_day11_u05variant_endturn_probe_20260605/u05_RRU_after_endturn.ss0`다.
+     - 위 u05 `RRU` 12일째 기준점에서 단일 행동 후보 204개(`temp/probes/p2_bomber_day12_u05rru_action_probe_20260605/summary.json`)를 확인했지만 직접 피해 후보는 없었다. 다시 13일째까지 무행동 종료한 뒤 `temp/probes/p2_bomber_day12_u05variant_endturn_probe_20260605/u05_RRU_after_endturn.ss0` 기준으로 204개 후보(`temp/probes/p2_bomber_day13_u05rru_action_probe_20260605/summary.json`)를 재확인해도 record65/66 추가 피해는 없었다. 이 분기는 전력 보존 면에서는 표준보다 낫지만, 아직 공격 타이밍을 열지는 못했다.
+     - u05 `RRU` 보존 분기를 무행동으로 더 넘기는 타임라인도 확인했다(`temp/probes/p2_bomber_u05rru_autoturn_timeline_20260605/summary.json`). day index 1에는 u05가 2HP로 떨어지고, 이후 u05/u07/u06이 차례로 type 0 또는 0HP가 되어 전력이 무너진다. 따라서 이 분기는 기다리는 루트가 아니라 u05가 53HP로 살아 있는 시점에 행동해야 한다.
+     - u05 `RRU` 기준점에서 12일째 u06 이동 후 턴 종료 후보를 비교했다(`temp/probes/p2_bomber_day12_u05rru_u06_move_endturn_probe_20260605/summary.json`). u06은 여러 위치로 이동해도 u05가 2HP까지 떨어지고 record65/66 구도는 개선되지 않는다. 이 방향은 보존/클리어 후보로 약하다.
+     - 같은 기준점에서 12일째 u05 이동 후 턴 종료 후보를 비교했다(`temp/probes/p2_bomber_day12_u05rru_u05_move_endturn_probe_20260605/summary.json`). u05 `RRR` 또는 `RRU`는 실제 피해 후보로, record66을 `100 -> 90HP`까지 낮추고 u05 53HP, u06 14HP를 남긴다. 확인용 기준점은 `temp/probes/p2_bomber_day13_u05rru_u05rrr_b_endturn_probe_20260605/01_after_B.ss0`이며, `B -> 빈 칸 -> 종료`를 넣으면 다음 날까지 진행된다.
+     - u05 `RRR` 공격 뒤 같은 날 후속 행동 170개를 확인했다(`temp/probes/p2_bomber_day13_after_u05rrr_followup_probe_20260605/summary.json`). u06/u07 등으로 record65/66에 추가 피해를 넣는 후보는 없었다. u06 이동 후 턴 종료 후보도 별도로 비교했지만(`temp/probes/p2_bomber_day13_after_u05rrr_u06_move_endturn_probe_20260605/summary.json`), 실제 종료된 후보는 대부분 u06 0HP로 수렴한다. u06 `L`은 u05/u06이 살아 보이지만 화면 `u06_L_after_endturn.png` 기준 공격/범위 오버레이가 남은 상태라 정상 종료 후보로 보지 않는다.
+     - 위 u05 `RRR` 분기를 14일째까지 넘긴 기준점 `temp/probes/p2_bomber_day13_u05rru_u05rrr_b_endturn_probe_20260605/03_after_endturn.ss0`에서 u00/u01/u02/u07 단일 후보 136개를 다시 스윕했다(`temp/probes/p2_bomber_day14_after_u05rrr_action_probe_20260605/summary.json`). 유효 후보는 u01 제자리 공격뿐이며 record65를 `85 -> 71HP`로 낮춘다. 확인 상태는 `temp/probes/p2_bomber_day14_u01_stay_confirm_20260605/after_confirm.ss0`; 전투 예측/상태 패널은 한글 표시를 유지한다.
+     - 14일째 u01 공격 뒤 u00/u02/u07 후속 후보 102개(`temp/probes/p2_bomber_day14_after_u01_followup_probe_20260605/summary.json`)는 record65/66 추가 피해를 만들지 못했다. 그대로 턴 종료하면 15일째 기준점 `temp/probes/p2_bomber_day14_u01_stay_endturn_probe_20260605/02_after_endturn.ss0`로 넘어가고 record65는 71HP를 유지한다.
+     - 15일째 기준점에서는 u01 제자리 공격과 u00 `R`이 모두 record65에 유효하다. 단일 스윕(`temp/probes/p2_bomber_day15_after_u01_action_probe_20260605/summary.json`) 기준 u01 제자리 공격은 `71 -> 58HP`, u00 `R`은 `71 -> 59HP`이며, 연속 입력 `u01_stay -> u00_R`은 record65를 `71 -> 46HP`까지 낮춘다. 연속 행동 확인 상태는 `temp/probes/p2_bomber_day15_u01_then_u00r_probe_20260605/02_after_u00_R.ss0`다.
+     - 15일째 연속 행동 뒤 u02/u07 후속 후보 68개(`temp/probes/p2_bomber_day15_after_u01_u00_followup_probe_20260605/summary.json`)는 record65/66에 추가 피해가 없었다. 이 상태에서 턴 종료하면 16일째 기준점 `temp/probes/p2_bomber_day15_chain_endturn_probe_20260605/02_after_endturn.ss0`가 되며 record65는 46HP로 남는다.
+     - 16일째 기준점에서 먼저 `u01_stay`, `u00_R` 등 Day15 성공 패턴을 재현했지만 유효 피해가 없었다(`temp/probes/p2_bomber_day16_targeted_action_probe_20260605/summary.json`). 이어 u00/u01/u02/u07 전체 후보 136개를 스윕해도(`temp/probes/p2_bomber_day16_full_action_probe_20260605/summary.json`) record65/66에 직접 피해를 주는 후보는 없었다. 이 분기는 Day14~16 전투 UI 검수에는 유효하지만 클리어 루트는 아닌 것으로 보고, 다음 탐색은 Day12~15에서 record65/66 접근 각을 바꾸는 분기로 되돌린다.
+     - Day12 u05 `RRU` 분기는 기존 `RRR`보다 유망했다. `temp/probes/p2_bomber_day12_u05rru_u05_move_endturn_probe_20260605/u05_RRU_after_endturn.ss0`에서 `B`로 필드 복귀한 뒤, Day13 같은 턴에 u00 `D`와 u01 제자리 공격을 연속 적용하면 record65가 `85 -> 59HP`까지 내려간다. 확인 상태는 `temp/probes/p2_bomber_day13_u05rru_chain_order_probe_20260605/u00D_then_u01_after_u01.ss0`다.
+     - 위 분기를 턴 종료해 Day14로 넘기면 record65가 59HP로 남는다(`temp/probes/p2_bomber_day13_u05rru_chain_endturn_probe_20260605/02_after_endturn.ss0`). Day14에서는 u00 제자리, u01 제자리 순서가 안정적이며 record65를 `59 -> 35HP`까지 낮춘다. 확인 상태는 `temp/probes/p2_bomber_day14_u05rru_chain_order_probe_20260605/u00_then_u01_after_u01.ss0`; u02/u07 후속 후보 68개는 추가 피해가 없었다.
+     - Day15 기준점 `temp/probes/p2_bomber_day14_u05rru_chain_endturn_probe_20260605/02_after_endturn.ss0`에서도 u00 제자리, u01 제자리 순서가 유효해 record65를 `35 -> 10HP`까지 낮춘다. u02/u07 후속 후보 68개(`temp/probes/p2_bomber_day15_u05rru_chain_followup_probe_20260605/summary.json`)는 마무리 피해가 없지만, 이 상태에서 턴 종료하면 새 전투 후 조언 대사와 다음 브리핑/전투 흐름으로 진입한다.
+     - 새 전투 후 조언 대사에서 `폭격기와전투기는...`, `전투헬기에는대공전차나...막고와자주포...`처럼 짧은 슬롯 사이 원문 조사/라벨이 섞여 문장이 깨지는 것을 확인했다. `tools/build_korean_full.py`의 `0xD99333`~`0xD993BF` 인근 조각과 사이 조사 슬롯을 재분절했고, current ROM 검증 시트 `temp/probes/p2_bomber_day16_postbattle_text_patch3_verify_20260605/sheet.png` 기준 `폭격기와 전투기는 놔두면 / 저절로 추락해`, `전투헬기에는 대공전차나 중전차로 막아`, `이렇게 조합을 생각하며 / 싸우면 좋아!` 흐름으로 표시된다.
+     - 이어지는 브리핑/다음 전투 진입도 확인했다. 전체 확인 시트는 `temp/probes/p2_bomber_day16_new_dialogue_probe_20260605/dialogue_sheet.png`와 `dialogue_sheet_16_32.png`이며, 브리핑의 `작전` 오버레이, 캐서린/하늘의 전사들 대사, 새 전투 HUD는 한글 표시를 유지한다. 다음 이어가기 후보는 `temp/probes/p2_bomber_day16_new_dialogue_probe_20260605/29.ss0` 또는 전투 진입 직전/직후 `31.ss0`~`32.ss0`다.
+     - 브리핑 재검수에서 `이번 작전은` 사이에 남던 이름 제어코드와 `중전차 경전차 부대라 쉽게 안 질텐데` 행 조각을 추가 정리했다. `0xDF6D22`/`0xDF6D2C`/`0xDF6D80`/`0xDF6DAB` 기준으로 재분절했고, 확인 시트는 `temp/probes/p2_bomber_day16_briefing_patch4_verify_20260605/sheet.png`다.
+     - 다음 전투 초입의 신규 유닛 설명 `0xD9851E`/`0xD98558`/`0xD98581`/`0xD985E3` 행을 current ROM 화면 기준으로 보정했다. `temp/probes/p2_bomber_next_battle_text_patch_verify_20260605/sheet.png` 기준 `중전차는 이미 봤으니 사용법은 알겠지`, `육상유닛끼리 싸우면 거의 지지않아`, `폭격기에는 소용없어`, `다음은 대공전차야` 흐름으로 표시된다.
+     - 다음 전투 대공전차 선택 루트도 확정했다. 두 번째 `골라봐`가 닫힌 뒤 `오른쪽2, 위2, A`로 대공전차를 선택하고, 이동 안내가 뜨면 `A, 위4, A, A`로 전투 애니메이션까지 진입한다. 상태창 raw 유닛명 순서가 원본과 달라 대공전차가 `중전차`로 보이던 문제를 큰/소형 상태창 라벨 목록 분리로 수정했고, current ROM 검증 시트는 `temp/probes/p2_bomber_next_battle_antiair_route_patch_verify_20260605/sheet.png`다.
+     - 대공전차 전투 후 설명의 `보병과바주카병`, `중전차와경전차`, `수송헬기와전투헬기`, `전투기와폭격기` 붙음을 재분절했다. `temp/probes/p2_bomber_next_battle_antiair_postbattle_patch2_verify_20260605/sheet.png` 기준 설명/힌트 선택지/긴 힌트가 한글로 이어지고, `18_free.ss0`에서 대사창 없이 자유 행동으로 복귀한다.
+     - 2026-06-06 재확인: `18_free.ss0`에서 `A -> DOWN*3 -> A`로 3일째, 같은 턴 종료 루프로 4일째 전략 설명에 진입한다. 최종 4일째 전략 설명은 `temp/probes/p2_bomber_next_battle_day4_strategy_patch3_verify_20260606/sheet.png` 기준 `중전차로 막고 자주포로 공격`, `산에 보병 놓고 자주포로 공격`, `수송차로보급하라고 / 했지?` 흐름으로 표시되며, 자유 행동 기준점은 `.../11_A.ss0`다.
+     - Day4/Day5 상태 팝업을 current ROM으로 재식별했다. Day4의 오른쪽 끝 `(14,1)`에는 실제 `전투헬기`가 남아 있고, 주요 지상 적은 경전차/보병/바주카병/중전차/자주포로 확인했다(`temp/probes/p2_bomber_day4_unit_ident_20260606/sheet.png`, `right_edge/sheet.png`, `temp/probes/p2_bomber_day5_unit_ident_20260606/base_0_9/sheet.png`). Day4 대공전차 sweep의 `mRRR_*`는 record71 `100 -> 70`, `mRRRD_*`는 record68 `100 -> 23`으로 헬기 처리 루트는 아니므로 다음 실제 진행은 헬기 유인/지상전 정리 분기에서 계속 좁힌다.
+     - 후속 공중유닛/대공미사일/로켓포 설명의 컨트롤 라벨 구조를 보존하도록 `0xD991CE`~`0xD993BF`, `0xD995D4`~`0xD996FF`, `0xD99862`~`0xD99996` 주변 조각을 재정리했다. 역디코드 기준 `폭격기와 전투기까지`, `전투헬기에는 대공전차 / 중전차엔 전투헬기와 자주포로 쳐`, `대공미사일은 공중유닛을 공격 가능한 간접 유닛`, `자 이번엔 로켓포도 시험해` 구조이며, 재빌드 overflow 0, `qa_text_fit`, `qa_japanese_residuals --min-score 13`, `phase6_basic_test.py`가 통과했다.
+     - 2026-06-06 current ROM 재확인: Day16 다음 전투 기준점 `temp/probes/p2_bomber_day16_new_dialogue_probe_20260605/32.ss0`에서 새 전투 초입, 대공전차 선택/이동/공격, 전투 후 긴 힌트를 다시 통과했다. 확인 시트는 `temp/probes/p2_bomber_day16_to_next_current_recheck_20260606/sheet.png`, `temp/probes/p2_bomber_next_current_after32_progress_20260606/sheet.png`, `temp/probes/p2_bomber_next_current_antiair_route_recheck_20260606/sheet.png`, `temp/probes/p2_bomber_next_current_antiair_move_attack_recheck_20260606/sheet.png`, `temp/probes/p2_bomber_next_antiair_post_text_patch_verify_20260606/sheet.png`, `temp/probes/p2_bomber_next_antiair_hint_current_verify_20260606/sheet.png`다.
+     - 같은 current ROM 검수에서 대공전차 설명의 `보듯이 하늘을 나는 유닛에` 행은 `하늘유닛에게는`으로 줄이고, `바주카병상대로는` 붙음은 앞 공백을 추가했다(`0xD987ED`, `0xD9886A`). 후속 전략 힌트의 `수송차 보급해 말했지?` 계열은 컨트롤 라벨 사이 조각을 보정해 `수송차로보급하라고 / 했지?`로 표시되게 했다(`0xD98D83`, `0xD98D8B`, `0xD98D96`, `0xD98FD3`, `0xD98FDB`, `0xD98FE6`). 확인 시트는 `temp/probes/p2_bomber_next_resupply_hint_patch_verify_20260606/sheet.png`다.
+     - 힌트 후 자동 턴 종료 탐색 결과는 `temp/probes/p2_bomber_next_autoturn_from_hint_current_20260606/sheet.png`에 저장했다. 일부 overpress로 부대/작전 메뉴가 섞였으므로 클리어 루트 증거로는 쓰지 않고, Day4 전략 대사와 반복 날짜/전투 UI가 한글 상태를 유지하는지 확인하는 보조 자료로만 둔다.
+     - Day4 자유 상태에서 대공전차 `mRRR_tS` 공격 후보를 current ROM으로 재확인하고 표준 턴 종료 입력을 적용했다. `temp/probes/p2_bomber_next_day4_mrrr_endturn_current_20260606/sheet.png` 기준 휘프 적 턴, 5일째 전환, 캐서린 턴 HUD/상태 팝업은 한글 표시를 유지한다. 확대 확인 `09_a_300f_top_panel_6x.png`, `11_wait2400_top_panel_6x.png` 기준 CO 라벨도 각각 `휘프`/`캐서린`으로 정상이다.
+     - 같은 루트의 유닛 테이블 기준 Day4→Day5 적 턴 후 대공전차 record08은 type 0, 보병 record09는 0HP로 정리된다. 이 분기는 날짜/전투 UI 검수에는 유효하지만 클리어 후보로는 약하므로, 다음 실제 진행은 대공전차를 보존하거나 적 전투헬기/지상 병력을 더 효율적으로 유인하는 분기에서 계속 찾는다.
+     - 대공전차 보존 분기로 Day4 중전차 record09 `RRU -> (3,3)` 뒤 턴 종료를 current ROM에서 재현했다. 확인 시트는 `temp/probes/p2_bomber_next_day4_preserve_probe_20260606/ht_RRU_sheet.png`이며, Day5 기준점은 `ht_RRU_06_day5.ss0`다. 이 루트는 Day5에 중전차 30HP, 대공전차 100HP를 보존하고, 적 record70을 95HP까지 낮춘다.
+     - 위 Day5 기준점에서 중전차 제자리 기본 행동(`day5_ht_sheet.png`), 대공전차 `R` 이동 후보(`day5_aa_sheet.png`), record05 제자리/전방 이동 후보(`day5_u05_sheet.png`, `day5_u05r6_sheet.png`)를 확인했다. 모두 즉시 유효 피해 없이 행동 완료/대기 처리로 닫히며, 화면상 새 일본어 잔여나 깨진 전투 UI는 보이지 않았다. 다음 탐색은 이 기준점에서 다른 타깃 선택 조정이나 자주포/보병 위치 조합을 좁힌다.
+     - 위 중전차 후보는 forecast에서 A를 한 번 더 눌러야 실제 전투가 확정된다. `temp/probes/p2_bomber_next_day4_preserve_probe_20260606/day5_ht_confirm_sheet.png` 기준 전투 애니메이션 HUD는 `방어` 한글 표시를 유지하고, 유닛 테이블 기준 적 record71은 `100 -> 28HP`로 내려간다. 이어가기 상태는 `day5_ht_confirm_after.ss0`다.
+     - `day5_ht_confirm_after.ss0`에서 표준 턴 종료를 넣으면 `temp/probes/p2_bomber_next_day4_preserve_probe_20260606/day5_ht_endturn_sheet.png` 기준 6일째까지 진행된다. 다만 적 턴 뒤 중전차 record09는 0HP, 대공전차 record08은 type 0으로 정리되어 이 분기는 전투 HUD/날짜 전환 검수에는 유효하지만 클리어 후보로는 약하다. 다음은 중전차 공격 뒤 같은 턴의 후속 이동/차단으로 대공전차를 살릴 수 있는지 좁힌다.
+     - `day5_ht_confirm_after.ss0`에서 대공전차 record08을 `LL -> (1,2)`로 후퇴시킨 뒤 빈 칸으로 커서를 빼고 턴 종료하면 `temp/probes/p2_bomber_next_day5_followup_probe_20260606/aa_retreat_endturn2_sheet.png` 기준 다음 턴으로 넘어간다. 이 루트는 대공전차를 70HP, 중전차를 6HP로 살리며, 이전 턴 종료 분기보다 확실히 낫다. 이어가기 상태는 `aa_retreat_endturn2_07_wait2400.ss0`다.
+     - 같은 기준점에서 Day6 대공전차 기본 선택은 `temp/probes/p2_bomber_next_day5_followup_probe_20260606/day6_aa_attack_sheet.png` 기준 즉시 유효 공격 없이 대기 처리로 닫힌다. Day5 대공전차 직접공격(`aa_direct_sheet.png`)은 5% 예측/무피해, 자주포 기본 후보(`art_direct_sheet.png`, `art_menu_confirm_sheet.png`)는 공격 확정으로 이어지지 않아 후속 후보에서 낮게 둔다. 화면상 새 일본어 잔여나 깨진 전투 UI는 보이지 않았다.
+     - Day6 기준점 `aa_retreat_endturn2_07_wait2400.ss0`에서 실제 유닛 좌표를 current ROM으로 다시 매핑했다. `temp/probes/p2_bomber_next_day6_route_probe_20260606/unit_id/cursor_sheet.png` 기준 `(1,2)=대공전차`, `(3,3)=중전차`, `(1,5)=경전차`, `(2,5)=자주포`, `(1,6)=보급차`, `(0,3)=전투헬기`이며, 모든 상태 팝업/행동 메뉴는 한글 표시를 유지한다.
+     - Day6 개선 루트는 자주포 기본 타깃 확정(`artillery_real/04_afterbattle.png`) 뒤 대공전차 타깃을 오른쪽으로 조정(`art_then_aa_right/sheet.png`), 전투헬기 `(2,3)` 이동 공격(`art_aa_then_copter_r2/05_afterbattle.png`), 경전차 `(1,4)` 이동 공격(`art_aa_copter_then_tank/05_afterbattle.png`) 순서다. 턴 종료 후 `temp/probes/p2_bomber_next_day6_route_probe_20260606/art_aa_copter_tank_endturn/sheet.png` 기준 7일째로 넘어가며, 이어가기 상태는 `02_day7_clean.ss0`다. 이 분기는 대공전차 100HP, 전투헬기 58HP, 경전차 100HP, 자주포 78HP를 남긴다.
+     - Day7에서는 자주포가 왼쪽 41HP 전차를 정리하고(`temp/probes/p2_bomber_next_day7_route_probe_20260606/day7_artillery/sheet.png`), 전투헬기를 `(3,6)`으로 이동해 남은 가까운 적 전차를 정리한다(`temp/probes/p2_bomber_next_day7_route_probe_20260606/art_then_copter/sheet.png`). 표준 턴 종료 후 `temp/probes/p2_bomber_next_day7_route_probe_20260606/art_copter_endturn/sheet.png` 기준 8일째로 넘어가며, 다음 기준점은 `art_copter_endturn/01_after_enemy.ss0`다. 새 일본어 잔여나 줄넘침은 보이지 않았다.
+     - Day8 기준점에서 전투헬기를 `(3,6) -> (9,6)`으로 이동해 대기시키면 `temp/probes/p2_bomber_next_day8_route_probe_20260606/day8_copter_endturn_sheet.png` 기준 9일째로 넘어간다. 이때 경전차/대공전차 선택은 즉시 행동 완료 처리되어 유효 이동으로 이어지지 않았고(`tank_shortA_sheet.png`, `aa_select_probe_sheet.png`), 전투헬기 이동/대기 UI는 한글 표시를 유지한다. 이어가기 상태는 `p2_bomber_next_day8_route_probe_20260606/after_enemy.ss0`다.
+     - Day9/Day10 전투헬기 단독 진행으로 동쪽 바주카병 계열을 처리했다. Day9는 전투헬기를 `(11,6)`으로 이동해 공격하고 10일째로 넘기는 분기(`temp/probes/p2_bomber_next_day9_route_probe_20260606/day9_copter_endturn_sheet.png`), Day10은 인접 바주카병 forecast에서 A를 한 번 더 눌러 실제 전투를 확정하는 분기(`temp/probes/p2_bomber_next_day10_route_probe_20260606/copter_attack_sheet.png`, `copter_afterbattle_confirm.png`)다. 이어서 턴 종료하면 `day10_endturn_sheet.png` 기준 11일째로 넘어가며, 새 일본어 잔여는 보이지 않았다.
+     - Day11에는 전투헬기를 북쪽으로 올려 남은 중전차/자주포 쪽 전투 HUD를 확인했다. `temp/probes/p2_bomber_next_day11_route_probe_20260606/copter_heavy_attack_sheet.png` 기준 예측/전투 UI는 한글 표시를 유지하고, 유닛 테이블상 적 자주포 후보가 73HP까지 낮아진다. 표준 턴 종료 후 `day11_endturn_sheet.png` 기준 12일째까지 진행되지만 적 중전차가 붙고 아군 경전차가 4HP까지 깎이므로, 이 상태(`after_enemy.ss0`)는 클리어 최적 루트가 아니라 후속 UI 검수용 기준점으로 둔다.
+     - Day11 forecast 상태에서 방향키 타깃 전환을 `base/U/D/L/R`로 스윕했지만 모두 같은 결과로 수렴했다(`temp/probes/p2_bomber_next_day11_target_sweep_20260606/forecast_sweep_sheet.png`). 전투헬기 이동 후보 `U4/U5L/U5R/U4L/U4R/U3R/U3R2/U2R2`도 비교했으며, 실제 공격으로 이어지는 `U4/U5L/U5R`는 모두 적 자주포 후보를 73HP로 낮춘다(`temp/probes/p2_bomber_next_day11_move_sweep_20260606/forecast_sweep_sheet.png`). 나머지는 공격 없이 대기 처리된다.
+     - `U5L`/`U5R` 배치 후 표준 턴 종료도 비교했다. `temp/probes/p2_bomber_next_day11_endturn_compare_20260606/after_enemy_compare_sheet.png` 기준 기존 `U4`와 마찬가지로 아군 경전차가 4HP까지 떨어져, 보존성 개선은 크지 않다. 전투헬기 위치만 달라지므로 이쪽도 클리어 최적 루트가 아니라 Day12 후속 UI/전투 검수용 분기로 둔다.
+     - Day12 약한 기준점에서 전투헬기/중전차 인접 전투를 이어가려는 후보는 `temp/probes/p2_bomber_next_day12_route_probe_20260606/copter_attack_sheet.png`에 저장했다. 화면상 예측/전투 UI는 한글이지만, 유닛 테이블상 전투헬기 record05의 type이 0으로 바뀌는 등 루트 안정성이 낮아 실제 진행 후보로 채택하지 않는다.
+     - Day11 시작 상태에서 적 후보 레코드 64~73의 HP/type을 비우고 턴 종료하는 강제 검수 경로로 후속 대사를 노출했다. 이 경로 자체는 정상 클리어 증거가 아니라 후속 대사 화면 확인용이며, `temp/probes/p2_bomber_next_force_clear_probe_20260606/post_force_clear_dialogue_sheet.png`에서 `휩도`, `폭격기와전투기까지`, `생각 않아서` 계열의 어색한 표시를 확인했다. `0xD991CE`, `0xD991E1`, `0xD991E8`, `0xD991EB`, `0xD99216`, `0xD9923F` 조각을 보정했고, current ROM 재검증 `temp/probes/p2_bomber_next_force_clear_patch3_verify_20260606/dialogue_patch3_verify_sheet.png` 기준 `휘프도 드디어 공중유닛까지`, `휘프는 보급을 전혀 / 생각 안 해서 살았지만`, `다음도 이대로 힘내`로 표시된다.
+     - 2026-06-06 후속 current ROM 검수에서 결과 화면 뒤 훈련 메뉴와 다음 대공미사일/로켓포 튜토리얼 도입부를 정리했다. `temp/probes/p2_bomber_next_training_intro_patch_verify4_20260606/training_intro_patch_verify4_sheet.png` 기준 메뉴 설명은 `대공미사일과 로켓포를 배워`, 도입부는 `레드스타 상부도 / 골치 아픈가봐`, `적은 이미 항공 전력을 준비했대`, `그 대신 시제품 대공미사일을 이쪽에 / 배치해 두었어`, `그리고 덧붙여 로켓포도 / 쓸 수 있게 했어`, `늘 적보다 약한 유닛만 줘서 / 미안해` 흐름으로 표시된다.
+     - 같은 전투 진입부의 폭격기/대공미사일 설명도 이어서 보정했다. `temp/probes/p2_bomber_next_air_battle_intro_patch_verify_20260606/air_battle_intro_patch_verify_sheet.png`, `temp/probes/p2_bomber_next_air_battle_intro_spacing_verify_20260606/spacing_verify_sheet.png` 기준 `제법 균형 좋게 유닛을 / 갖췄네`, `큰 피해를 / 입게 돼`, `바다 너머라 / 쉽게 못 때려`, `도움 되는 대공미사일이야`, `실제로 써 보자!`가 화면에 맞게 표시된다.
+     - 대공미사일 선택 직후 설명은 조각 구조상 `공격` 라벨이 별도 슬롯으로 들어가므로 `항공기용 간접공격 유닛` 구조로 재조립했다. 최종 검증 시트 `temp/probes/p2_bomber_next_antimissile_range_patch2_verify_20260606/antimissile_range_patch2_verify_sheet.png` 기준 `대공미사일은 항공기용 간접공격 / 유닛이야`, `３에서５칸 거리의 유닛 공격 가능`, `그러니 한 번 더 결정을 / 눌러 메뉴를 띄워줄래.`로 표시되고, 새 일본어 잔여나 박스 넘침은 보이지 않는다.
+     - 대공미사일 실제 공격 후 후속 설명도 current ROM으로 보정했다. `temp/probes/p2_bomber_next_antimissile_followup_patch_verify_20260606/antimissile_followup_patch_verify_sheet.png` 기준 예측/전투 HUD는 한글을 유지하고, `폭격기까지도 쓰러뜨릴 수 있어`, `직접 공격은 아니고 피해도 받지 않아`, `이동 후 공격은 못해`, `공격범위로 유인해 쓰는 게 기본이야`, `대공전차와 조합해서 써`로 표시된다.
+     - 로켓포 선택/공격/후속 설명은 `temp/probes/p2_bomber_next_rocket_followup_patch_verify_20260606/rocket_followup_patch_verify_sheet.png` 기준 `로켓포는 간단히 말하면 자주포의 강화 유닛이야`, `공격범위는 아까 대공미사일처럼 ３에서５칸`, `꽤 쓸 만하지?`, `간접공격 최대 장점은 피해를 / 받지 않는다는 거야`, `직접 공격엔 약해 지켜줘` 흐름으로 정리했다.
+     - 타이어 타입/공략 힌트는 `temp/probes/p2_bomber_next_hint_patch_verify_20260606/hint_patch_verify_sheet.png`와 최종 비교 화면 `temp/probes/p2_bomber_next_tire_compare_final_verify_20260606/00_tank_compare.png` 기준 `대공미사일과 로켓포의 설명이야`, `전차 타입과 비슷하지만 / 조금 달라`, `대공전차나 미사일로 적 공중유닛을 골라`, `주위를 막으면 다가올 거야`, `이제 우리 거야`로 표시된다. 힌트 후 자유 행동 화면까지 새 일본어 잔여나 박스 넘침은 보이지 않는다.
+     - 힌트 후 자유 행동 기준점은 `temp/probes/p2_bomber_next_free_action_probe_20260606/00_free_after_hint.ss0`다. `dumpmem 0x0201A160 900 ...` 기준 레코드 0~12가 캐서린/플레이어 쪽, 레코드 62~73이 블루문/적 쪽으로 확인됐다. 이 전투는 화면 색상만으로 적아를 판단하면 반대로 보기 쉬우므로, 후속 강제 검수나 루트 탐색에서는 이 레코드 방향을 기준으로 삼는다.
+     - 강제 검수로 플레이어 레코드 0~12를 비우는 분기는 당연히 클리어가 아니며, 적 레코드 62~73을 비워도 즉시 승리 트리거가 뜨지는 않았다(`temp/probes/p2_bomber_next_force_clear_after_rocket_probe_20260606/enemy_zero_sheet.png`). 승리 조건이 단순 전멸 즉시판정이 아니라 턴/점령/스크립트 진행과 묶여 있을 가능성이 높으므로, 다음 탐색은 자연 행동 루트 또는 승리 조건 플래그 확인으로 이어간다.
+     - 자유 행동 상태창/범위 UI 스윕은 `temp/probes/p2_bomber_next_free_unit_status_sweep_20260606/unit_status_sweep_sheet.png`, `temp/probes/p2_bomber_next_free_action_menu_sweep_20260606/action_menu_sweep_sheet.png`에 저장했다. 대표 유닛 상태 패널과 이동범위 오버레이에서 유닛명, 지형명, 수치 라벨은 한글 표시를 유지하고 새 일본어 잔여나 깨진 텍스트는 보이지 않는다.
+     - 2026-06-06 추가 확인: 적 레코드 62~73 제거 후 14,400프레임까지 대기해도 결과 화면으로 넘어가지 않았다(`temp/probes/p2_bomber_next_force_clear_wait_probe_20260606/force_clear_wait_sheet.png`). 보병을 수도 후보 `(12,0)`에 올리는 실험도 즉시 `점령` 메뉴를 확인하지 못했으므로, 다음 탐색은 자연 루트에서 수송헬기/보병을 수도로 보내는 입력이나 승리 조건 플래그를 별도로 추적한다.
+     - 2026-06-08 자연 루트 재개: `00_free_after_hint.ss0`에서 즉시 턴 종료하면 승리/결과로 가지 않고 적 턴 후 `temp/probes/p2_bomber_next_free_route_probe_20260608/immediate_endturn/post_2400.ss0`로 이어진다. 이 상태에서 대공미사일/로켓포 행동 플래그가 풀리고 적 전투기 record 62 `(5,2)`, 중전차/전차/전투헬기 일부가 아군 사거리 안으로 들어온다. 보병 record 00을 수송 유닛 칸으로 보내는 단순 입력과 수송 유닛 단독 선택은 각각 flag `06` 상태에 머물러 실제 탑재/점령 루트로 이어지지 않았다(`temp/probes/p2_bomber_next_free_route_probe_20260608/summary.txt`).
+     - 같은 after-enemy 기준에서 `대공미사일 -> 공격 -> RIGHT,UP,UP -> 확정`은 record 62를 type `0x00`으로 제거했다. `전투헬기 (6,4)->(7,4)` 뒤 오른쪽 공격은 record 69를 type `0x00`으로 제거하고, `로켓포 -> 공격 -> RIGHT,RIGHT,RIGHT -> 확정`은 record 68을 `1124 -> 1064`로 낮춘다. 세 행동을 묶은 최선 후보는 `temp/probes/p2_bomber_next_after_enemy_combo2_probe_20260608/missile_copter_rocket/post_4800.ss0`이며, record 62/69 제거와 record 68 `1064`를 확보하지만 아직 승리 트리거는 없다.
+     - 위 조합 후 바로 턴 종료하면 record 04 수송 유닛이 type `0x00`, record 05 전투헬기가 HP 0으로 빠지고 결과 화면으로 넘어가지 않는다(`temp/probes/p2_bomber_next_after_enemy_combo2_probe_20260608/missile_copter_rocket_endturn/post_4800.ss0`). 대공전차 record 06은 이동 후보 스윕에서 `(4,5)`/`(4,8)` 대기만 유효했고, 가까운 전투헬기 record 71/72를 즉시 제거하지 못했다(`temp/probes/p2_bomber_next_after_enemy_antiair_move_probe_20260608/summary.txt`). 다음 탐색은 combo2의 `missile_copter_rocket/post_4800.ss0`에서 폭격기/지상군으로 record 67/70/71/72를 더 줄인 뒤 턴 종료하는 순서로 좁힌다.
+     - 2026-06-08 후속 확장: `missile_copter_rocket_endturn/post_4800.ss0` 다음 턴에서 `대공미사일 -> DOWN*4`는 record 72를 제거하고, 중전차 `(0,5)->(1,4)` 왼쪽 공격은 record 67 제거와 record 68 `1064 -> 896`을 만든다. 같은 턴 로켓포 오른쪽 공격은 record 64 제거와 record 65 HP 0을 만들며, 세 행동 조합은 `temp/probes/p2_bomber_next_combo2_daynext_combo_probe_20260608/missile_heavy_rocket/post_4800.ss0`에 저장했다.
+     - 위 상태에서 한 번 더 진행하면 중전차 왼쪽 공격으로 record 70을 제거하고, 대공전차 `(4,6)->(4,3)` 오른쪽 공격으로 record 71을 제거할 수 있었다. 이어 로켓포 오른쪽 공격 후 턴 종료한 `temp/probes/p2_bomber_next_combo2_daynext3_combo_probe_20260608/aa_rocket_endturn/post_4800.ss0`는 정상 HP 적이 record 68 하나뿐인 듯 보이지만, record 65는 HP 0/type `0x02`, record 66은 비정상 HP/type `0x02`로 남아 승리 트리거가 뜨지 않는다.
+     - 마지막 병목 확인: `aa_rocket_endturn`에서 한 번 더 종료하면 record 66이 정상 HP 484로 돌아와 `(3,0)`에 남고, record 68은 `(8,4)` HP 896 그대로다(`temp/probes/p2_bomber_next_combo2_daynext4_endturn_probe_20260608/immediate_endturn/post_9600.ss0`). 로켓포 target switch/방향 입력 15개는 record 68을 건드리지 못하고 record 66 쪽으로 흡수됐으며(`temp/probes/p2_bomber_next_combo2_daynext4_rocket_target_sweep_20260608/summary.txt`), record 02/중전차의 record 66 후속 공격도 제거에 실패했다(`temp/probes/p2_bomber_next_combo2_daynext5_actions_20260608/summary.txt`). 다음 탐색은 record 66이 HP 0/type 잔여로 꼬이기 전에 제거하거나, record 68을 먼저 낮추는 다른 order로 좁힌다.
+     - `post_9600.ss0`에서 다시 턴을 넘기면 record 66은 `(2,1)`까지 접근하지만, record 02 `LEFT,UP -> UP`, 중전차 `RIGHT,UP,UP -> UP`, 경전차 전진 공격 후보는 모두 실제 공격으로 이어지지 않았다(`temp/probes/p2_bomber_next_combo2_daynext6_actions_20260608/summary.txt`). 따라서 현 near-end 루트는 record 66/68이 남는 병목으로 보류하고, 이전 턴에서 로켓포를 아끼거나 record 68/66 우선순위를 바꾸는 order 재탐색으로 되돌아간다.
+     - order 재탐색 1차: 첫 after-enemy 턴에서 로켓포를 아낀 `missile_copter_endturn/post_4800.ss0` 분기는 다음 턴 로켓포 사용 후에도 record 67/70/71 잔여가 늘어 기존 조기 로켓포 분기보다 불리했다(`temp/probes/p2_bomber_next_noearlyrocket_daynext_probe_20260608/summary.txt`). 전투헬기 첫 공격을 record 68 쪽으로 돌리려 한 `(8,5)`, `(9,4)` 후보도 실제 피해가 record 69로 들어가며 제거량이 작아 기존 `(7,4)` 오른쪽 공격의 record 69 제거보다 낮다(`temp/probes/p2_bomber_next_after_enemy_copter_alt_targets_20260608/summary.txt`).
+     - 수송/점령 루트 재해석: record 03 type `0x14`는 공격 후보가 아니라 수송 계열로 보이며, record 68/71 공격 입력은 HP 변화 없이 target flag `0x06`만 남았다(`temp/probes/p2_bomber_next_missile_heavy_rocket_bomber_probe_20260608/summary.txt`, `temp/probes/p2_bomber_next_missile_heavy_rocket_fighter_probe_20260608/summary.txt`). 반대로 record 01을 `(3,5)->(3,4)`로, record 00을 `(5,8)->(3,8)`로 이동한 뒤 A를 한 번 더 누르면 각각 수송헬기/수송차 탑승 상태가 된다(`temp/probes/p2_bomber_next_transport_load_probe_20260608/summary.txt`).
+     - after-enemy 기준에서 `대공미사일 record 62 제거 -> record 01 수송헬기 탑승 -> 본진 대기`는 수송헬기와 탑승 유닛을 살린다. 그 뒤 기존 `대공미사일 record 72 제거 + 중전차 record 67 제거/record 68 피해 + 로켓포 record 64/65 정리`를 수행하고 수송헬기를 `(8,3)`으로 보내면 적 턴 뒤에도 record 03/01이 살아남는다(`temp/probes/p2_bomber_next_transport_hold_probe_20260608/missile_copter_rocket_load_hold_endturn/post_4800.ss0`, `temp/probes/p2_bomber_next_transport_daynext_combo_probe_20260608/combo_move83_endturn/post_4800.ss0`).
+     - 위 상태에서 수송헬기를 `(11,1)`로 보낸 뒤 기본 하차 입력을 주면 record 01이 `(12,1)`에 내려지고, 다음 턴 `(12,0)`까지 올라가는 것은 확인했다(`temp/probes/p2_bomber_next_transport_unload_probe_20260608/move111_A_up_A/post_2400.ss0`, `temp/probes/p2_bomber_next_transport_capture_probe_20260608/unload_12_1_capture_up_after_endturn_wait/post_7200.ss0`). 그러나 record 01은 점령 유닛이 아니어서 두 번째 A 입력도 `점령` 진행이 아니라 flag `0x06` 선택 상태에 머문다(`temp/probes/p2_bomber_next_transport_second_capture_probe_20260608/capture_AA/summary.txt`). 다음 자연 루트 탐색은 실제 점령 가능한 record 00을 수송헬기 쪽으로 넘기거나, record 00을 태운 수송차 route를 성립시키는 쪽으로 좁힌다.
+     - record 00 보병 후속 확인: 첫 자유 행동에서 수송헬기 record 03을 `(4,8)`로 보내면 적 턴 뒤 record 00 `(5,8)`과 인접한 채 살아남지만, `(5,7)` 배치는 제거된다(`temp/probes/p2_bomber_next_tcopter_to_infantry_probe_20260608/summary.txt`). `(4,8)` 생존 상태에서 record 00을 왼쪽으로 탑승시키는 입력은 성공하나, `대공미사일 record 62 제거` 또는 기존 `대공미사일+전투헬기+로켓포` 조합 뒤 본진 대기 상태로 턴을 넘기면 수송헬기와 record 00이 type `0x00`으로 빠진다(`temp/probes/p2_bomber_next_infantry_tcopter_load_after_move_probe_20260608/summary.txt`). 보호용 대공전차 단순 이동 공격 후보도 실제 전투가 아니라 flag `0x06`에 머물렀다(`temp/probes/p2_bomber_next_protect_infantry_tcopter_probe_20260608/summary.txt`). 따라서 다음 후보는 record 00 탑승 직후 수송헬기를 안전 칸으로 이동시키거나, 가까운 적 전투헬기 record 71/72를 제거하는 다른 order다.
+     - record 00을 수송차 record 04에 태우는 입력도 성공하지만, 같은 후보 입력에서는 수송차가 실제 전진하지 않고 첫 적 턴 뒤 보병 HP가 20까지 떨어진다(`temp/probes/p2_bomber_next_apc_infantry_move_probe_20260608/summary.txt`). 수송차 route는 현재 점령 루트 보조 후보로만 둔다.
+     - record 00 탑승 직후 수송헬기 회피 후보를 재검수했다. `대공미사일 record 62 제거 -> record 00 탑승 -> 수송헬기 이동` 순서에서 `(8,6)`, `(7,5)`, `(8,8)` 배치는 적 턴 전에는 record 03 이동과 cargo flag가 정상으로 남지만, 턴 종료 뒤 모두 수송헬기/record 00이 type `0x00`으로 빠진다(`temp/probes/p2_bomber_next_infantry_tcopter_escape_noend_probe_20260608/summary_compact.txt`, `temp/probes/p2_bomber_next_infantry_tcopter_escape_probe_20260608/summary_compact.txt`). 단순 회피만으로는 근처 적 전투헬기 record 71/72 압박을 버티지 못하므로, record 00 수송헬기 루트는 탑승 전후로 공중 위협을 줄이는 order가 필요하다.
+     - record 06을 대공전차로 본 앞선 메모는 이 자유 행동 상태에서는 부정확했다. 상태 팝업 재대조 기준 실제 대공전차는 record 10 `(1,8)`이고, record 10은 record 00이 수송헬기에 탑승해 `(5,8)`을 비운 뒤 그 칸까지 이동할 수 있다. 그러나 이동 확정 뒤 추가 A/방향 입력은 공격이 아니라 대기/선택 상태로 수렴해 record 72 HP를 낮추지 못했다(`temp/probes/p2_bomber_next_real_aa_confirm_probe_20260608/summary.txt`, `temp/probes/p2_bomber_next_real_aa_menu_step_probe_20260608/summary.txt`). record 10은 현재 수송헬기 보호용 즉시 제거 수단으로 채택하지 않는다.
+     - record 05 전투헬기의 보호 공격도 재검수했다. `대공미사일 record 62 제거` 뒤 `(6,7)`/`(7,8)` 쪽 r72 후보는 실제 피해가 없고, `(5,6)` 후보만 record 72를 `867 -> 797`까지 낮췄다(`temp/probes/p2_bomber_next_copter_protect_attack_probe_20260608/summary_compact.txt`). 피해량이 수송헬기 생존을 만들 만큼 충분하지 않으므로 단독 보호 루트는 보류한다. 미사일 대체 표적 입력 역시 이 상태에서는 record 62 제거로 수렴하고 record 72 제거로 이어지지 않았다(`temp/probes/p2_bomber_next_missile_alt_air_probe_20260608/summary.txt`).
+     - 수송차 record 04 루트도 다음 턴 기준으로 재확인했다. 기존 `move_r04_r4u1_endturn/post_4800.ss0`에서 record 04를 다시 선택하거나 여러 이동 후보를 넣어도 `(3,8)` flag `0x16/0x22` 계열에 머물고 실제 좌표 이동이 없다(`temp/probes/p2_bomber_next_apc_after_enemy_move_probe_20260608/summary_compact.txt`). 현재 우선순위는 수송차보다 전투 order 재탐색 또는 record 00 수송헬기 보호 order로 둔다.
+     - 아직 결과 화면까지 노출되지는 않았지만, 바로 뒤 결과/재도전 힌트 후보 문구의 붙음 표현을 선제 보정했다. `0xD99EB7`, `0xD99EFB`, `0xD9A14F`, `0xD9A21D`를 각각 `클리어 도전해볼래?`, `５일 안에 클리어 가능해!`, `굳히는 게 좋아`, `고생 안할거야` 흐름으로 정리했고 재빌드 overflow 0을 확인했다.
+     - 후속 결과 평가/상륙부대/수송헬기 튜토리얼 후보 블록도 소스 기준으로 정리했다. `0xD9A28B`의 `휩`을 `휘프`로 맞추고, `유닛 정보`, `보고 싶은`, `Ｓ랭크도 딸 수 있어`, `도전해 보는 것도`, `추락해 버려`, `겁내지 말고`, `직전 같네`, `이런 곳`, `도망갈 곳`, `도망칠 방법`, `태워 이동해`, `공격받지 않게됐어`, `당하지 않는`처럼 화면에 나오면 바로 어색해질 표현을 선제 보정했다. `python3 tools/build_korean_full.py`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `phase6_basic_test.py` 모두 통과했다.
+2. [x] 보호 전투 UI 테이블의 남은 카나/카타카나 명령과 팝업 용어를 실제 화면 기준으로 계속 한글화한다.
+   - current ROM 주소 기반 재스캔에서 Part 2 튜토리얼 대사 블록 `0xA00000-0xA3FFFF`의 직접 카나 잔존은 0건으로 확인했다. `python3 tools/qa_text_fit.py`도 overflow 0건, 임시 빌드 `/tmp/game_wars_korean_probe.gba` 기준 `part2_ui_context_tokens=356`, `part2_ui_kanji_glyphs=268`, `part2_action_menu_icon_labels=28` 적용 상태다.
+   - 2026-06-04 재실행 기준 `python3 tools/qa_text_fit.py`는 `written=17020`, `overflow=0`, `no_ko=0`, `intentional_blank_override=20`으로 슬롯 초과/실제 미번역 원문 유지가 없었다. 의도적 blank 20건은 Part 2 튜토리얼 보급차/커서윈도우 설명의 조각 행을 `ADDRESS_TEXT_OVERRIDES`와 `patch_script_row()`로 재분절하면서 남은 잔여를 비운 것이다. `python3 tools/build_korean_full.py --out /tmp/game_wars_korean_probe.gba`도 `overflow=0`, `part2_ui_context_tokens=356`, `part2_ui_kanji_glyphs=268`, `part2_action_menu_icon_labels=28`로 같은 패치 수를 재확인했다.
+   - 같은 current ROM 직접 카나 스캔에서 compact 범위의 카나성 히트는 Part 1 `0x805100`의 탁점 1건, Part 2 `0xD827B0`의 기호 `・`, `0xD827D0`의 이름입력 문자표뿐이었다. Part 2 script 범위에서 잡히는 단일 카나 히트는 한글 예약코드/이진 데이터가 SJIS로 우연히 디코드된 노이즈라 새 전투 UI 패치 후보로 보지 않는다.
+   - 보호 compact UI 테이블 `0x805100-0x805A24`, `0xD82740-0xD83100`은 원본 SJIS/placeholder 바이트를 유지하고 글리프를 치환하는 구조라, ROM 디코드상 한자/카나가 남아 보여도 곧바로 잔여 일본어로 보지 않는다. 현 재스캔 기준 unmapped kanji는 `0xD8273C`의 `예/오/아/니` 한글 예약코드가 SJIS로 `寺花`처럼 보이는 오탐이며, 실제 이름 확인 선택지 경로는 별도 tilemap hook으로 처리한다.
+   - compact UI에서 남는 카나 후보는 주로 이름입력/문자표 데이터(`アイウエオ...`)이며, 기존 name grid 패치가 가나 슬롯을 영문 그리드로 재매핑한다. 전투 명령/팝업 쪽은 현 주소 기반 스캔만으로 새 패치 후보를 확정하지 못했고, 후속은 fresh-run 화면 증거가 있을 때 그래픽 경로를 추가 추적한다.
+   - [x] 경전차/전차 행동 메뉴의 `공격`/`대기` 축약 라벨 패치를 current ROM 전투 화면에서 검증한다.
+     - ROM 타일 직접 추출 기준으로는 Galmuri7 한글 아이콘이 반영됐다. 메뉴-open savestate와 `_currentrom` 상태는 BG0 VRAM 타일 361~368을 저장하고 있어 구 아이콘이 보이므로, savestate 캐시가 아닌 fresh-run 화면 검증이 필요하다.
+     - fresh-run 첫 전투에서는 `대기`가 실제 화면에서 한글로 표시되는 것을 확인했다. 남은 확인은 실제 공격 가능 상황의 `공격` 항목이다.
+     - 현재 남아 있는 오래된 DAY 5 공격 캡처 파일은 삭제되어 있어, 기존 DAY 3/5 savestate 후보는 VRAM 캐시 또는 오버레이 false positive가 섞여 fresh 증거로 쓰지 않는다.
+     - `temp/active_states/p2_heavy_success_day2_control_after_extra_route.ss0`에서 current ROM으로 전차 행동 메뉴를 새로 열어 `공격`/`대기`를 확인했다. 전체 캡처는 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA.png`, 확대 캡처는 `temp/verified_sheets/current_recheck_heavy_day2_tank_AA/after_AA_menu_left_6x.png`.
+   - [x] 적 턴 CO명 `휘프` 보호 UI 치환을 current ROM 적 턴 배너에서 검증한다.
+     - `ホイップ` SJIS 잔여는 0건이었지만 화면에는 일본어가 남아 있었고, OAM/VRAM 역검색으로 raw OBJ 소스 `0xBD0230`을 확인했다.
+     - `tools/build_korean_full.py`의 `patch_part2_battle_obj_labels()`에서 `0xBD0230`을 `휘프` 32x8 라벨로 재렌더한다.
+     - 직접 ROM 렌더는 `temp/verified_sheets/whip_banner_0xBD0230_output_direct_whitebg.png`, current ROM 화면 검증은 `temp/verified_sheets/current_verify_whip_banner_patch/sheet.png`와 `temp/verified_sheets/current_verify_whip_banner_patch/wait_300_topleft_4x.png`.
+     - 이 패치 후 full ROM SHA-256은 `fb90042478af905c301b0d2b06e930d9bba4bc82ec51c7c7819d072d6bfe87e0`.
+   - [x] 보급차 행동 메뉴와 작전 메뉴의 아이콘형 라벨 경로를 추적해 한글화한다.
+     - 보급차 메뉴는 BG0 tile `0x1AD-0x1B0`이 raw ROM `0xBEC5DC`에서 오는 것을 확인했고, `보급` 16x16 라벨로 재렌더했다. `대기` 항목은 이미 패치한 `0xBE79BC`의 구 타일이 기존 savestate VRAM에 남아 있는 캐시로 판정했다.
+     - 작전 메뉴 항목 기능은 `temp/verified_sheets/current_probe_opmenu_items/sheet.png` 기준 위에서부터 `부대`, `저장`, `설정`, `종료`로 확인했다. raw 소스 `0xBE7F3C`, `0xBE7D3C`, `0xBE7DBC`, `0xBE803C`를 각각 한글 라벨로 재렌더했다.
+     - 직접 ROM 렌더 `temp/verified_sheets/action_op_supply_labels_output_direct.png` 기준 `공격/대기/부대/저장/설정/종료/보급` 라벨이 들어가 있고, 각 원본 4타일 시퀀스는 출력 ROM에서 0건, 새 라벨 시퀀스는 1건씩이다.
+     - 기존 `p2_city_defense_after_infantry_front_wait.ss0` 기반 보급차 메뉴 화면은 기존 VRAM 캐시 때문에 구 아이콘을 계속 보인다. fresh-run 화면 검증은 후속 실제 진행 검수 때 다시 잡는다.
+     - 이 패치 후 full ROM SHA-256은 `05e252440b9d8aa6553a30290dc6884e53f5c61e868fb22015ef0a3b71c6562c`.
+   - [x] 중전차 작전 day2~day4 작전/행동 메뉴의 current-ROM visible 잔여를 재검증하고, 새 일본어/영어 라벨이 보이면 별도 그래픽 경로를 추적한다.
+     - `p2_heavy_day4_after_bazooka_attack_map.ss0`를 current ROM으로 로드해 작전 메뉴를 새로 열면 기존 아이콘형 메뉴가 계속 보인다. 확인 이미지는 `temp/verified_sheets/current_recheck_heavy_day3_day4_opmenu/sheet.png`, 확대는 `right_menu_tight_8x.png`. 이 상태도 기존 VRAM/메뉴 타일 캐시 가능성이 커서 fresh-run 증거로는 보류한다.
+     - `p2_heavy_success_day2_control_after_extra_route.ss0`를 current ROM으로 로드한 뒤 커서 `(6,3)->(7,5)`를 `RIGHT, DOWN, DOWN`으로 이동하고 `A, A`로 행동 메뉴를 새로 열어 재확인했다. 캡처 `temp/verified_sheets/current_recheck_heavy_day2_tank_menu_route_20260604b/05_after_AA.png`, 확대 `05_after_AA_menu_topleft_8x.png` 기준 `공격`/`대기` 라벨은 current ROM에서 한글로 표시된다. 콜드부트 fresh-run 전체 진행 증거는 최종 플레이스루 검수 범위로 남기고, 이 항목은 current-ROM visible 라벨 검증으로 한정한다.
+     - 2026-06-07 current ROM 기준으로 메뉴 비개방 day4 상태 `p2_heavy_day4_control_probe.ss0`에서 `RIGHT, A`로 작전 메뉴를 새로 열어 `temp/single_state_key_sequence/heavy_day4_control_right_a_menu_20260607/sheet.png`를 만들었다. 화면의 작전 메뉴는 기존처럼 아이콘형 항목이며 즉시 보이는 일본어/영어 텍스트 잔여는 없다.
+     - 직접 ROM 렌더 `temp/verified_sheets/action_op_supply_labels_output_direct.png` 기준 `공격/대기/부대/저장/설정/종료/보급` raw 라벨 소스는 current output에 들어 있다. day4 작전 메뉴의 visible 아이콘은 별도 아이콘형 UI로 보이고, 새 패치 대상이 될 카나/카타카나 문자열은 확인되지 않았다. 따라서 현 증거 범위에서는 한글화 잔여가 아닌 UI 형식 차이로 닫는다. 이후 콜드부트 실제 진행에서 일본어/영어 라벨이 보이면 별도 회귀 항목으로 다시 연다.
+   - [x] 중전차 작전 새 성공 후보 day2 화면에서 확인된 상태 팝업 지형명 `道路`/`都市`와 행동 메뉴 OBJ 라벨을 실제 ROM 그래픽 경로로 추적한다.
+     - 행동 메뉴 OBJ 라벨은 current ROM에서 새로 연 화면 기준 `공격`/`대기`로 확인했다.
+     - compact 지형명 ROM 타일 `0x465168`/`0x465268`를 직접 렌더한 `temp/verified_sheets/current_recheck_terrain_direct2_output.png`에서 `도로`/`도시`가 이미 한글로 들어가 있다. 중전차 day2 상태 파일에서 보이는 `道路`/`都市`는 해당 savestate의 구버전 VRAM 캐시로 판단한다.
+   - [x] Part 2 성공 결과 OBJ 오버레이 `作戦成功`을 `작전성공`으로 패치한다.
+     - 성공 오버레이 LZ77 블록은 `0x930520`, `0x9691A8`, `0x9A1A4C`, `0x9DA2F0`, `0xEE8A64`의 5개 중복 블록으로 확인했고, `tools/build_korean_full.py`의 `patch_part2_result_success_overlay_obj()`에서 4개 32x32 OBJ 스프라이트를 한글로 다시 그린다.
+     - 출력 ROM 직접 렌더 `temp/rendered_blocks/success_overlay_after_patch/sheet.png` 기준 5개 블록 모두 `작전성공`으로 바뀌었고 빌드 통계는 `part2_result_success_overlay=5`다. 기존 성공 savestate 결과 화면은 패치 전 VRAM/그래픽 캐시 때문에 여전히 일본어가 보이므로, 콜드부트/fresh 성공 루트 검증은 최종 성공 루트 확보 뒤 다시 수행한다.
+3. [x] `E18000` 이후 실제 대사 후보를 CSV 슬롯/실제 화면 기준으로 계속 확인한다.
+   - 2026-06-04 current ROM 기준 `0xE18000-0xF00000` 추출 후보를 재감사했다. `temp/e18000_found_texts_translation_audit_with_overrides.txt` 기준 추출 CSV의 일본어형 후보 415건 중 113건은 `translation_for_import.csv`, `ADDRESS_TEXT_OVERRIDES`, `SOURCE_TEXT_OVERRIDES`로 덮인다.
+   - 의미 있는 UI 후보였던 `テンキの設定`, `つうしん１~４`, `ふさんか`, `輸送ヘリ`, `戦闘ヘリ`, `降伏する`, `通信準備中よ！！！`는 각각 `날씨 설정`, `통신1~4`, `불참`, `수송헬기`, `전투헬기`, `항복`, `통신준비중!`으로 처리되어 있으며, 출력 ROM에서 해당 원문 SJIS 바이트 검색 hits=0이다.
+   - 기존 high-score 후보(`ヘДパ`, `ゥ・ゞ`, `ァ`, 기호열 등)는 주변 바이트가 문자표/압축/바이너리 데이터 패턴이라 현 시점에서 실제 대사 후보로 보지 않는다. 후속은 이 범위의 실제 화면 캡처에서 일본어가 보일 때만 그래픽/테이블 경로를 추가 추적한다.
+   - 재현 가능한 전역 감사용으로 `tools/qa_japanese_residuals.py`를 추가했다. 이 도구는 `game_wars_found_texts.csv`, `translation_for_import.csv`, `build_korean_full.py`의 address/source override와 deny 규칙을 함께 적용하고, 출력 ROM에서 원문 SJIS 바이트가 같은 주소에 그대로 남은 `residual` 후보와 원문은 사라졌지만 coverage 테이블에는 없는 `changed_uncovered` 후보를 분리한다. `translation_overlap`은 출력 ROM 바이트가 실제로 바뀐 경우에만 covered로 세며, `changed_hangul` 외에도 `changed_blank`/`changed_ascii`/`changed_symbol`을 따로 분류한다.
+   - `python3 tools/qa_japanese_residuals.py --min-score 13` 기준 전역 covered=16937, uncovered=4326, same_original=2381, changed_hangul=1911, changed_blank=9, changed_ascii=1, changed_symbol=24, candidate=0이다. `ゝ…“〔｛｝］‥ジ゜。  異` 반복 같은 심볼표형 residual은 점수에서 낮춰 실제 문장 후보에서 제외한다.
+   - 같은 도구의 `--range E18000:F00000 --min-score 13` 결과는 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0이다. 별도 리포트는 `temp/japanese_residuals_e18000_report.tsv`에 저장했다.
+   - 2026-06-07 current ROM으로 같은 범위를 재검증했다. `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --range E18000:F00000 --min-score 13 --out temp/japanese_residuals_e18000_report.tsv` 기준 covered=113, uncovered=302, same_original=300, changed_symbol=2, candidate=0으로 유지된다.
+   - 낮은 임계값 확인용 `--min-score 8 --include-changed --out temp/japanese_residuals_e18000_low_score_report.tsv`에서도 후보는 `0xE745B0` `ゥ・ゞ`, `0xEF9706`/`0xEFA644` `ァ`, `0xE8BE40` `劔...`, `0xEFA237` 심볼열의 5건뿐이다. 모두 `same_original`인 깨진 데이터/심볼표형 잔류라 현 시점에서 실제 대사 패치 대상은 없다.
+4. [x] 전투 진입/진행 중 충돌 여부를 재검증하고, 충돌이 남아 있으면 먼저 수정한다.
+   - 2026-06-07 current ROM smoke 기준 전투 진입/진행 중 하네스 충돌은 재현되지 않았다. `temp/active_states/fresh_sav_continue_to_battle_a080.ss0`에서 A 40회 진행한 `temp/single_state_key_sequence/battle_entry_long40_20260607/sheet.png` 기준 작전 대사, 미션 도장 화면, 실제 전투 맵 첫 대사까지 정상 진입했다.
+   - 전투 진행 smoke는 `temp/smoke_battle_crash_current_rom.py`로 `fresh_sav_continue_to_battle_a080`, `fresh_battle_after_wait_a40`, `fresh_attack_probe_A`, `fresh_enemy_after_transport_a40`, `p2_heavy_success_day2_control_after_extra_route`를 current ROM에 로드해 프레임 진행/입력/스크린샷/최종 savestate 저장까지 확인했다. 결과는 `temp/battle_crash_smoke_20260607/summary.tsv` 기준 5/5 OK이며, 전체 플레이스루 검증은 후속 Part 2/Part 1 본편 항목에서 계속 다룬다.
+   - `python3 tools/phase6_basic_test.py`는 `full/final/title_test` 세 산출물 모두 통과했고, 세 SHA-256은 모두 `41c6923679820efd933fb1ae76717582cee6ef2c2ee034314b681696df210cc2`로 동일하다.
+5. [x] 이름 입력/초반 대사 회귀를 실제 화면 기준으로 계속 검증한다.
+   - [x] `vwxy` 소문자 미리보기는 상태 파일 캡처 기준 정상 표시.
+   - [x] `예/아니오` 선택지는 상태 파일 캡처 기준 정상 표시.
+   - [x] 이름 입력 첫 프롬프트는 콜드부트 재진입 기준 `이름알려줘`로 정상 표시.
+   - [x] Part 2 미션 시작 오버레이의 흰 픽셀 조각/가로선 깨짐은 `sel_064` 캡처 기준 제거.
+   - [x] 대사 끝 하얀 픽셀 깨짐과 회색 글자 변화는 후속 대사 흐름에서 추가 검증.
+     - 2026-06-07 current ROM `temp/single_state_key_sequence/battle_entry_long40_20260607/sheet.png` 기준 초반 작전 대사 40회 진행 중 흰 픽셀 조각/회색 글자 변색이 재현되지 않았고, A40 이후 미션 도장과 전투 맵 첫 대사까지 정상 표시됐다.
+     - 확대 확인용 `temp/dialog_artifact_check_20260607/battle_entry_40_A_4x.png`, `battle_dialog_04_A_4x.png`, `enemy_dialog_04_A_4x.png` 기준 대사창 하단과 문장 끝은 말풍선 포인터/선택 삼각형 외에 깨진 잔픽셀이 보이지 않는다. 이후 본편 전체 플레이스루에서 새 화면 문제가 보이면 Part 2/Part 1 본편 검수 항목에서 별도 추적한다.
+   - [x] Part 2 저장 확인 compact 선택지는 fresh 진행 기준 문장 붙음 없이 `예아니`로 표시 확인.
+6. [ ] 튜토리얼을 통과한 뒤 Part 2 본편 캠페인/전투 화면 전체로 확장한다.
+   - 2026-06-06 `SOURCE_TEXT_OVERRIDES`의 Part 2 공통 대사/유닛 설명/상태 UI 매핑에서 붙어 있던 한국어 표현을 정리했다. 예: `알고 있겠지?`, `점령한 땅에서`, `이런 고생은 안 했을 거야`, `그린어스에 아직 할 일이 있어`, `숫자는 이동력`, `저장 완료`, `중립 거점` 등.
+   - 이 변경은 이미 집계된/보강 패치되는 원문 매핑의 품질 개선이라 `phase6_basic_test.py`의 물리 라인 기반 진행률은 65.1% 그대로다. 재빌드 결과 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과, 세 산출물 SHA-256 `28b6aeb3e048d996eeff613836d31da6f6c7de1471debe187aac9bca2c224ec2` 동일.
+   - mGBA 상태 파일 `temp/active_states/p2_operation_menu.ss0` 기준 작전 메뉴 스크린샷 `temp/current_visual_check/p2_operation_menu_after_patch.png`에서 한글 렌더링 회귀 없음.
+   - 2026-06-06 후속 정리: Part 2 주소 고정 override 중 실제 캠페인/튜토리얼 문장인데 과거 슬롯 절약 때문에 붙어 있던 표현을 자연 문장으로 보정했다. 예: `바다 너머 대치한 양군`, `해공 적을 전멸시켜`, `폭격기 전투기 사용 불가`, `저 녀석 쓰러뜨려`, `적 연구소 공격 작전 진행 중`, `신무기 개발 가능성의 싸움`, `지금 나만 움직일 수 있어`, `어리광은 안 통해` 등.
+   - 같은 작업에서 공통 원문 매핑의 `어찌 됐나?`, `대공 전차`, `수송 헬기`, `전투 헬기`, `휴대 식량`도 보정했다. 좁은 슬롯은 `encode_fit`이 자동 압축하므로 직접 고정 8바이트 라벨(`수송헬기`, `전투헬기`, `대공전차`)은 유지한다.
+   - 재빌드 결과 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과, `git diff --check` 통과. 세 산출물 SHA-256은 `2ec7761737ff3e6956b6b635c9e1023ece292b0f8575c4510b1efaaae825cd44`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 추가 정리: Part 2 주소 고정 override의 남은 붙임 후보를 원문/슬롯 기준으로 재스캔했고, 65개 후보 중 의미가 명확한 실제 문장 위주로 보정했다. 예: `질리지도 않네`, `오늘은 기지로 돌아가`, `돌격은 적의 뜻`, `적 본부 공격도`, `당신들이 알 필요는`, `보병부대는 어찌 됐나`, `쇼군 추정 인물 발견 보고`, `무시해야 해`, `적 전멸 시 도면 획득 가능`, `육지를 잇는 다리`, `파이프와 같은 장갑`, `다른 쇼군도 써 봐` 등.
+   - 보정 후 같은 스캔의 Part 2 붙임 후보는 11개만 남았다. 남은 항목은 지명/짧은 고정 슬롯/단일 단어 성격이라 이번에는 유지한다. 재빌드 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과, `git diff --check` 통과. 세 산출물 SHA-256은 `91b353fd27e6b25cab8a728da5b406ddc86d276b67557b364c4899e0fa67ea74`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 커서/붙임 표현 추가 보정: 첫 튜토리얼 조작 설명의 `0xA02A6E`/`0xA02A7B` 조각을 `화살표로 조`+`작해` 흐름에서 `커서를 써`+`봐`로 재분절했고, 앞쪽 직접 패치 `이　`와 이어져 `이 커서를 써 봐`로 읽히게 했다. 이어서 `사람을 이끄는 지휘관으론`, `레드스타를 습격한 쇼군을 쫓아왔더니`, `내가 쓸어버리겠다`, `항구 대기나`, `위험했을지도 몰라`, `한 방법이야`, `합류하지 않겠나`, `멋대로 못 해`, `안 익숙해`, `무사해 다행`, `하루 남았습니다`, `고마운 건 내 쪽이야`, `보급 수단을`, `맵 나가기`처럼 실제 화면 문장에 남은 붙임 표현을 추가로 정리했다.
+   - 재스캔 기준 Part 2 주소 override 붙임 후보는 넓은 기준 25개에서 13개로 줄었다. 남은 항목은 지명(`매크로랜드`, `코스모랜드`, `그린어스`)이나 단어형 응답/짧은 UI 문구라 유지한다. 재빌드 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `55ad922f266a5b17bdb2d1d20ab1c1774cfad0e1c0bf953ab37a68e590740aaf`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 튜토리얼 수량 표기 정리: Part 2 전투 튜토리얼 직접 패치 행과 후반 캠페인/유닛 설명의 `1유닛`/`2유닛` 붙임 표기를 `한 유닛`/`두 유닛`으로 통일했다. 예: `두 유닛뿐이야`, `먼저 두 유닛 모두 불러서`, `한 유닛도 없지 않나`, `그러면 합류한 두 유닛분`, `상황 따라 두 유닛이 편할`, `합쳐서 두 유닛`, `무엇이든 두 유닛`, `수송선은...두 유닛이죠?`, `두 유닛 탑재 가능`. 이 작업 후 `rg "[12]유닛"` 기준 잔여 없음.
+   - 재빌드 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `b6a456ace53ed35cc1b845ffcd698ba0b3e90d8b4d2ca33a6e6572ba067c14b2`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 1/공통 캠페인 붙임 표현 정리: Part 1 주소 override와 직접 패치 행에서 `정말항복할래`, `상대에강한편`, `레드스타에있다...`, `아군이점령중이면,`, `자출격이야!`, `다만...전선에서쓰던`, `몰라도플레이가능하지만,`, `알아두면편한걸알려줄게.`, `자장사다천천히보고가`, `녀석은사격천재다!`를 공백 있는 표현으로 보정했다. 이어 E0 캠페인 직접 패치 행의 `휩해군터보라...`, `거기서기다려라!`, `휩인가...눈까지`, `이글부대강하다!`, `무리안하면좋겠지만...`, `키쿠치요특전부대좋겠다!`, `제대로준비했으니까.`, `아무래도저녀석과얘기하면`, `아야...역시강해.`, `음...역시강하네.`, `미안신세졌다...`, `바다는넓구나.`, `그것보다일광욕...` 계열도 정리했다.
+   - 재스캔 기준 E0 캠페인 직접 패치 붙임 후보는 19개에서 0개가 됐다. `바주카병을`, `레드스타에선`, `색적전에서`은 단어/조사 결합이라 유지하고, `대공자주포` 10바이트 고정 슬롯은 `대공 자주포`가 초과하므로 유지한다. 재빌드 `overflow: 0`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `9893a3d4174362747d9d5ec57a03578a2df915a06145d7a2c741cd5070d9fd2f`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 주소 고정 override 추가 정리: 캠페인/전투 화면 제목과 규칙 문구에서 `도미노능력!`, `브레이크모드기동`, `텐구노하나지도`, `거점전멸불참?`, `전부대를수리할수있으니피해를`, `쇼군브레이크때2회행동이`, `수도점령/적전멸`, `장비없음`, `매턴수입`, `분단작전!`, `맥스출격!`, `전투개시!`, `목숨구걸?`, `승리조건은`, `전투점령 애니` 계열을 슬롯 검증 후 공백 있는 표현으로 보정했다.
+   - 보정 항목은 모두 `encode_fit` 기준 슬롯 통과했고, 주소 override 붙임 후보는 69개에서 62개로 줄었다. 남은 항목은 주로 고유명사/단일 단어/10바이트 유닛명/의도적 compact UI라 유지한다. 재빌드 `overflow: 0`, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `dd1fca5d3a815fe3d2dfb33e35b12dd1d6fe00fffded2a2825cc5420f38524e2`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 직접 대사 붙임 표현 정리: A0~A1 캠페인/전투 직접 패치 행에서 `보병을태워,`, `조심해야해`, `이정찰차,`, `좀더조사해볼게`, `전차를내라.`, `이봐콩그,`, `그러고보니,`, `가까이오고있다는보고가...`, `숨어있는간접포에공격당할거야.`, `캐서린사령,`, `적아군상관없이`, `네놈은캐서린!`, `공항이중요해...`, `이완도망가자.`, `공중전의이글,`, `적공격중심,`, `팩토리운명함께...`, `이몸이지다니...` 등 실제 대사 조각을 슬롯 검증 후 공백 있는 표현으로 보정했다.
+   - 직접 패치 행 재스캔 기준 A0~A1 붙임 후보는 128개에서 119개로 줄었고, `신형전차를`, `지금부대로`, `국토대부분을`, `말도안돼`처럼 공백을 넣으면 슬롯을 넘는 항목은 유지했다. 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `8b1e560fab1d25c9db709db5b3ed8ec171b4b6d4cc9e72170b894e8c12ed57f0`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 A2대 직접 대사/제목 추가 정리: `나답지않게`, `대대적으로발표해주지.`, `북쪽산속에,`, `전략상요충지야.`, `너란사람,`, `승부다승부!`, `어떻게이길지생각하잖아.`, `놈들병력은,`, `해상도시공략!`, `신병기탈취!`, `협공회전!`, `해VS공!`, `회복보급가능` 등을 슬롯 검증 후 공백 있는 표현으로 보정했다.
+   - 직접 패치 행 재스캔 기준 A0~A3 붙임 후보는 196개에서 181개로 줄었다. `다른곳으로`, `강력한한방이`, `포로구출작전`, `해상요새폭격`, `대함대전격전`처럼 공백을 넣으면 슬롯을 넘는 항목은 유지했다. 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `d634322ffeca17e60ad1e3171fbb76148f92c4ce1f8b97d828ea89fa012498e2`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 짧은 슬롯 추가 보정: 원문 맥락을 확인해 `한번,`, `오지않으면`, `두개,`, `다른곳으로`, `잊지마.`, `강력한한방이`, `포로구출작전`, `해상요새폭격`, `대함대전격전`, `완전승리!`를 각각 `한 번,`, `안 오면`, `두 개,`, `딴 곳으로`, `잊지 마.`, `강한 한 방이`, `포로 구출전`, `요새 폭격전`, `함대 전격전`, `완전 승리!`로 보정했다. `무인의길에`처럼 다음 줄 조사와 이어져 짧은 대체가 어색한 항목은 유지했다.
+   - 직접 패치 행 재스캔 기준 A2~A3 붙임 후보는 62개에서 55개로 줄었다. 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `314f2447d6aeaecd9021386e86fe7af5a60b3bdb91a6fd10703f4d52b72f12db`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 캠페인 표현 추가 보정: 주소 고정 override와 직접 패치 행에서 `한번에`, `다시 한번`, `걱정마`, `눌러봐`, `해봤을`, `해볼까`, `써보고`, `보여주지` 계열을 슬롯 검증 후 자연스러운 띄어쓰기 표현으로 보정했다. 예: `한 번에 내구력을`, `다시 한 번`, `걱정 마,`, `눌러 봐`, `해 봤을 거라 생각해`, `한 번 시험해 보려고...`, `어떻게든 해 보자.`, `빨리 써 보고 싶어!`, `나에게 다시 한 번 도전하겠다는 건가?`, `마지막 마무리를 해 볼까.`, `보여 주지.`.
+   - 이번에 추가/수정한 주소 override는 모두 원본 고정 슬롯 내에 들어가며, `이런이런`/`여러가지`처럼 공백을 넣으면 슬롯을 넘는 짧은 항목은 유지했다. 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `36b83d44b1b9be23e6338f1df857da159428e80a732ba32b8f66fd6968cdab08`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 전투/캠페인 용어 추가 보정: A0~A3 직접 대사/라벨에서 `대공미사일.`을 `대공 미사일.`로, 지도명 `빅토리라인`을 `승리 라인`으로, 음악/지역 라벨 `레드스타령`을 `레드스타 영토`로 보정했다. `搾鎧`처럼 한글 예약 SJIS가 일본어처럼 디코드되는 보호 UI 테이블 오탐도 재검산해 실제 패치 대상에서 제외했다.
+   - 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `2f7bdd1d23d3072ed64312dc9ced1723185c81d92f5a56bdf496ab9da9c8d2c1`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 직접 대사 오역/어색한 표현 보정: 원문 맥락을 재확인해 `新型戦車を`의 `신형전차를`을 `새 전차를`로, `救援物資を`의 `구원물자를`을 `구호품을`로, `降下させる。`의 `강하시킨다.`를 `투하한다.`로 보정했다. 또한 실제 오역인 `　くやしーっ！！`=`괜찮습니까`는 `분하다!!`로, `ごぶさたしています。`=`옐로코멧과`는 `오랜만입니다.`로 바로잡고, `見せてもらおう。`는 `보여 다오.`로 띄어쓰기/말투를 정리했다.
+   - 이번 수정 항목은 모두 직접 패치 슬롯 내에 들어간다. 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `git diff --check`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `fd9f32d284695a74d4060b15f802587e675b397f57011f6e0e924aca5a13c9c6`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 직접 대사 오역 추가 보정: 원문 `二人ともやめなってば。`에 잘못 들어가 있던 `키쿠치요 쇼군`을 `둘 다 그만 좀 해.`로 바로잡았다. 같은 스캔에서 잡힌 `0xA2A927`의 `료와 맥스 지원`은 CO 정보 패널의 깨진 이름 OBJ를 우회하기 위해 앞줄 `도미노 사령관`과 함께 쓰는 의도적 compact 프로필 구성이라 유지했다.
+   - 재빌드 `overflow: 0`, 직접 패치 오버플로우 0, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `37d00e463fc2e34c01bfc5388749d1b5c57664f9f13198317a1241207659ddee`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 튜토리얼 상태창/점령/헬기 안내 문장 추가 보정: 첫 전투 튜토리얼 직접 패치 행에서 `남은 탄수도 여기 보여`를 `남은 탄수도 표시돼`로, `계속 점령해`를 앞줄 `점령`과 이어지는 `실행 잊지 마.`로, `잘해줬어`를 `잘해 줬어`로 정리했다. 이어 수송 헬기 설명의 `이 수송헬기,`/`수송헬기와 전투헬기는,`/`그애,` 계열도 슬롯 기준으로 `이 수송 헬기,`/`수송/전투 헬기는,`/`그 애,`로 보정했다.
+   - 튜토리얼 직접 패치 행 재스캔 기준 남은 붙임 후보는 `직접공격`, `간접공격은`, `수송헬기로` 3개뿐이며 모두 8~10바이트 고정 슬롯이라 유지한다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `eed677753b0d407deb6f5a3886e63761b31438b7cd06783096ad317f5ca5c86d`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 튜토리얼 주소 override 중복 표현 추가 정리: 직접 패치에서 이미 보정한 `남은 탄수도 표시돼`, `점령 중 움직이거나 쓰러지면`, `점령 중 보병은`, `실행 잊지 마.`, `잘해 줬어`를 주소 override에도 반영해 재스캔 결과가 흔들리지 않게 했다. 또한 원문 `コング様`의 축약 `콩 님`을 `콩그 님`으로, `콩그님.../!`을 `콩그 님.../!`으로 통일하고, `싸움은 선수필승`과 `수송헬기는 수송차와 같아`를 각각 `싸움은 선공 필승`, `수송 헬기는 수송차와 같아`로 보정했다.
+   - 튜토리얼 주소 override/직접 패치 재스캔 기준 남은 붙임 후보는 `직접공격`, `간접공격은`, `수송헬기로` 3개뿐이며 모두 8~10바이트 고정 슬롯이라 유지한다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `5c6e7ea93645720d13692e2825da4c4273ace8449c6c54b2b76856f71cc66369`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 후속 튜토리얼 점령/수리 설명 직접 패치 보정: `0xD92F94`의 원문 `「耐」のところの数字が１０`와 맞지 않던 `내구도는 100이야`를 `내구도는 10이야`로 고쳤고, 수리 설명의 짧은 행 `못해`를 `못 해`로 정리했다.
+   - D9~DA 튜토리얼 직접 패치 숫자 재스캔 기준 남은 불일치는 원문 `１日１０００Ｇ`를 자연어로 옮긴 `하루 1000G씩 자금이 들어와`뿐이다. 구체 붙임 표현 재스캔은 0건. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `c1b0e5aea2ef2bb480877956fad7c8ab544e8771dfbb1e7a3b8b364fe9da8cc6`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 후속 튜토리얼 직접공격 부정문 보정: 호위함/잠수함 설명에서 원문 `移動しないとできない`인데 `공격 가능해`로 되어 있던 행을 `이동 안 하면/공격 못 해`, `그러니 여기로 안 가면/공격 못 해` 흐름으로 수정하고 주소 override도 같은 문맥으로 동기화했다.
+   - D9~DA 부정/긍정 재스캔 기준 남은 후보는 `여기서만`, `항구에서만`, `붙어 있는 적에게만`처럼 정상 분할된 가능/불가능 설명뿐이다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `fbb0c087255b518ec75f5fa64c472060e4c800a896969df4e7de60cfc37d29d5`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 튜토리얼 숫자/보호 문자표 보정: 이름 입력 문자표 데이터인 `0xDA432C`/`0xDA4337`은 텍스트가 아니라 그리드 charset이므로 직접 패치에서 제외하고 `NAME_GRID_DATA` 보호 목록에 포함했다. 빌드 후 `0xDA432C` 바이트가 원본 `アイウエオ/カキクケコ` 문자표와 다시 일치함을 확인했다.
+   - 같은 스캔에서 Part 2 첫 튜토리얼 수송차 설명의 `보병은 느리지만`/`수송차는 빠르지`를 원문 숫자에 맞춰 `보병 이동력은 3`/`수송차 이동력은 6`으로, 점령 설명의 `체력 좋은 보병은`/`크게 줄일 수 있어`를 `체력 10 보병은`/`10 줄일 수 있어`로 보정했다.
+   - 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 보호 데이터 제외로 `qa_text_fit.py`의 실제 written은 17017, `deny/data-skip`은 88이며, 물리 라인 기반 진행률은 65.1% 그대로다. 세 산출물 SHA-256은 `acb21b6da4d9ae7260ac72241149e7a2694920d25d55880cdb279f404a26ba9c`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 튜토리얼 체력 회복 수치 추가 보정: 원문 `HPは2回復`/`2HPずつ補充`인데 숫자가 빠져 있던 Part 2 튜토리얼 행을 `다음 날 시작에 체력 2 회복`, `는 다음 날 체력 2 회복`, `매일 체력 2씩 회복되지만`으로 보정했다.
+   - 같은 숫자 재스캔 기준 남은 후보는 `또 다른 능력`, `다른 유닛`, 그리고 다음 줄 `0이 되면 도시가 아군`으로 분할된 내구도 설명뿐이라 유지했다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `c7d35c901ee613299b8cf90014a50fff88d8cc824288e82bce4ad7e421e7810a`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 튜토리얼 핵심 용어 보강: 원문 핵심어 재스캔 기준 `이동력/공격력`, `지형 효과`, `탄약이 없으면`, `대공미사일은 공중 유닛용 간접 공격 유닛`, `본부 그림 아래 별과 숫자`, `수송헬기가 바다 위에 있으면`, `내구력 줄이기 어려워져`처럼 빠져 있던 설명 용어를 슬롯 안에서 되살렸다.
+   - 수송차 탑승/주의 설명도 `바주카병 차량 됐어`, `단 차량은 할 수 없어`처럼 읽힐 수 있던 조각을 `탑승했어`, `단 공격은 할 수 없어` 흐름으로 정리했고, 주소 override의 `0xD94C9A`도 직접 패치와 같은 `탄약이 없으면`으로 동기화했다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `4076856f8a5f7cb471e8906e466d56c1485c25815e9296b3cdedbcec2c776943`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 첫 튜토리얼 도입 문장 보강: 보조 번역/출력 ROM 역디코드 기준 이미 한글화된 짧은 행과 진짜 의미 축약 행을 구분했고, `괜찮나`, `무슨소리를하는거야`, `실전경험 부족해`, `무리하지 말고`, `곧 출발한다`, `천천히 가`, `무리하면`, `지면 안 돼`, `싸움 전에`를 각각 `다친 데 없나`, `무슨 소리야`, `실전 경험은 부족해`, `당하지 않게 조심해서`, `바로 출발하자`, `서두르지 마`, `서둘러 가도`, `져 버리면 아무 소용없어`, `전투 전에`로 보정했다.
+   - 이어 보급/이동 타입 설명도 `바다 조심해`, `탄약 연료를 채워`, `하루 시작엔 자동 보급`, `명령을 쓰면 좋아`, `이동타입`, `산 강 못 가`, `유닛에서`를 `바다엔 내리지 마`, `탄약 연료를 회복시켜`, `하루 시작엔 자동으로 보급`, `보급 명령을 쓰면 좋아`, `이동 타입`, `산이나 강엔 못 가`, `유닛 위에서`으로 정리했다. 비워져 있던 `戦車タイプは、` 행도 `전차 타입은`으로 복원했다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `32dc2c2c3c408c592b21068778c783749a5b717e78a49065f8a5ed9b64e2b37b`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 첫 튜토리얼 전투/상태창 설명 복원: 비어 있던 `なあ、`, `簡単でしょ。`, `うん！`, `燃えてきたぞ！`, `これは`, `カーソルウィンドウ`, `と言うの。`, `さらに` 조각을 각각 `저기`, `간단하지`, `응`, `불타오른다`, `이건`, `커서창`, `이라고 해`, `또`로 되살렸다. 전투 설명도 `꼭 적의 / 반격 받아`, `선공 필승이네`, `네 보병이`, `커서창을 봐`, `거점이 아군 소유야`, `좋은 판단`으로 다듬었다.
+   - 이번 변경으로 `qa_text_fit.py` 기준 실제 한글 written은 17023, 의도적 blank override는 16건으로 줄었다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `83e6e560f0927e6b8de2bbf38f3b22ab42e9480c88a3da861e33a4de3b473cef`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 경전차/지형 효과/자주포 설명 보강: `이동력 공격력 높다`, `레드스타 따윈`, `내가 쓸어버리겠다`, `아래 상태창을 봐`, `지형 효과야`, `정보 키로도 볼 수 있어`, `도로보다 숲에서 공격`, `먼 적을`, `멀리서 공격하니`, `반격을 안 받아`, `불가야`, `매복이나/지원사격이 특기야`, `범위가 빨갛게 표시돼`, `산에도 올라`, `지금은 됐어`를 원문 맥락에 맞춰 더 자연스럽게 보정했다.
+   - 출력 ROM 역디코드 기준 `이건`, `그럼`, `이야`처럼 비어 있던 짧은 연결 행도 복원했다. `qa_text_fit.py` 기준 실제 한글 written은 17025, 의도적 blank override는 14건으로 줄었다. 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `8592b82b8fd6de19eb501393f665004cab7a0c94c149ea906aa4e3043604088b`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 수송헬기/합류 튜토리얼 후속 보정: 출력 ROM 역디코드와 원문 바이트를 대조해 `コね...` 조각을 `아이네...`로, 축약된 `콩`/`콩 님`을 `콩그`/`콩그 님`으로 통일했다. 또한 `수송헬기로의 탑재나 하차 방법은`, `같은 전투헬기에게도 상당한 강함이야`, `공중 유닛 회복 가능한 건`, `2부대를 1부대로`, `2유닛`, `얕보지 없어` 계열을 슬롯 안에서 자연스러운 표현으로 보정했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `a8c22e6a1d6307aa0538bfe9861907e85ccc692e367cdd9de02cb03e37c0ceba`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 결과/공중전 튜토리얼 후속 보정: `ハチさんのショップ`가 빠진 점수 설명을 `하치 상점에서`로 복원하고, `난 전력전개야!`, `작은섬다리근처에중전차를배치해`, `전투헬기로도호각으로싸울수있어`, `콩이라고 했던가`, `콩 님`, `위험한상황이네`, `보병으로는공중유닛과`, `대공전차야`, `공격범위를알고싶을땐B를눌러`, `맥스에 맡겨도`, `직접 공격할 수 있 유닛이다`, `캐서린 사령관에`, `보고해둘게` 계열을 원문 맥락에 맞게 보정했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `41ad1fbda777d74b63ea10ffc0870d04cefb35759c44c45f08197203e6e1f0bb`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 연구소/해상 유닛 튜토리얼 후속 보정: `레드스타에 있 연구소의 위치는`, `연구소가 있 지도에`, `콩`, `대공전차나 대공미사일`, `레드스타는떨어뜨리지않겠다`, `그 콩의 부대`, `저 콩이라는 녀석`, `이 지도은`, `연료가0이되면바다에가라앉아` 등 출력 ROM 역디코드상 문법이 깨지거나 이름 통일이 어긋난 줄을 주소 고정으로 정리했다. 전함/잠수함/호위함/수송선 설명의 `공격 가능고`, `할 수 있 거야`, `공격할 수 있 유닛`, `탑재할 수 있 곳이야` 같은 축약 오류도 슬롯 안에서 고쳤다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `c6e9bacb625f05e21b856fe21a1abb429780fe683270dc0a260b41fad9c55ca5`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 브레이크/생산맵 튜토리얼 후속 보정: `콩의 부대도`, `정말 할 수 있 건가`, `콩`/`콩콩콩콩!`, `이 지도은`, `유닛 배치가 유난히 적군`, `생산맵?`, `육상유닛을생산할수있는거점이야`, `육지로이어져포대까지이동가능고`, `대공전차야`, `대공미사일이야` 계열을 슬롯 검증 후 `콩그`, `이 지도는`, `생산 지도`, `대공 전차/대공 미사일` 기준의 자연스러운 표현으로 정리했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `609a62f024dcd3378f1f2a05c3e8e3e2c3a93d0fe78e555f8ca4070b086452a6`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 블랙 캐논/색적 지도/연구소 도면 구간 보정: `블랙캐논`, `이 지도은 작전 성공이야`, `아직할수있어`, `확실히 성가시긴 단`, `공장이 있 곳에는`, `색적 지도은`, `콩 님`, `신형전차에대해서는`, `여기는한번더다시해서`, `색적 지도은 움직이는 순서가 중요해` 같은 출력문을 실제 ROM 역디코드 기준으로 정리했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `e9b5d9aa99d5dada54c6676c0103e1ed7072736d8833095afd4440a38d87db48`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-06 Part 2 파이프/연구소/블루문 초반 구간 후속 보정: 출력 ROM 역디코드 기준 `콩`/`콩 님`을 `콩그`/`콩그 님`으로 통일하고, `근처 공장 항구 차지`, `실험대가 될 약속`, `빠져 공장 점령도 방법이야`, `적은 간접부대 중심 배치`, `돌격은 적의 뜻`, `신무기 개발 가능성의 싸움`, `보내고 있 모양이다` 등 축약/문법 오류를 슬롯 검증 후 정리했다.
+   - 이어 `너희에 정말 큰 도움`, `나 혼자론 안 돼`, `두 사람을 위해서도`처럼 뒤쪽 직접 패치가 덮던 오역도 최종 ROM 출력 기준으로 다시 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `0b1e05e602afae023abd1cfcf773eb20255cc071752f975b4d7ad2fdf25d935e`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 블루문 후반/야마모토·스네이크 구간 후속 보정: `지나갈수있게된다`, `이제미사일은발사할수없겠지`, `이 지도은`, `콩 쪽은 어때요`, `보병을태운수송차도탑재할수있다는걸`, `콩이 오고 있어`, `전장에 사정은 없다`, `해 봐야 안다`, `저기 누군가 있 모양이구나` 같은 출력문을 실제 ROM 역디코드 기준으로 정리했다.
+   - 직접 패치가 덮던 `너를 위한 말인가`, `승리한 거야`, `말도안돼`도 각각 `공대해 우세가 뒤집히다니`, `헛걸음이었나`, `어리석군`으로 바로잡았다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `f223ef61f9d9120fa573e8139f93124d8ac9faa51720005b97265c58b5ffbf60`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 후반 캠페인/전투 설명 추가 보정: `신형전차를생산할수있어`, `얕볼 수 없 개발력`, `콩은 뭘 하고 있는 걸까요`, `안돼...`, `헤아릴 수 없음`, `공장이 있 도시`, `육상유닛의회복과보급이`, `직접 공격할 수 있 유닛의`, `저렴하게생산가능고`, `강하후바로행동할수있다` 등 캠페인 대사와 지형/CO 설명의 축약 오류를 정리했다.
+   - CO 설명 숫자 오류 `현재 군자금을 15배로`는 원문 `1.5ばい` 의미를 유지하도록 `현재 군자금 1점5배로`로 바꿨고, `체력 높은 보병 강하`/`체력 높은 바주카병`은 `체력 9`가 드러나게 보정했다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `76a8246fdd2fb9bcd864718701df3791ecb8b6b082c98c3958c9b56e555c467a`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 초반 캠페인 압축 출력 추가 보정: 출력 ROM 역디코드 기준 `여기서는수송헬기와수송선을잘활용해서`, `중립도시를점령하는거야`, `수송차나수송헬기에보병을태워서`, `중립거점과적거점은가까이가기전엔알수없어`, `적전멸이나연구소점령으로승리야`, `안돼안돼`, `아무리봐도불리한공군중심상대에`처럼 강제 공백 제거나 조사 오류가 눈에 띄는 줄을 슬롯 안에서 다시 줄였다.
+   - 대상 주소는 모두 `encode_fit` level 0으로 들어가도록 검증했고, 최종 ROM 역디코드에서도 `수송　헬기와　수송선을　활용해`, `중립　도시를　점령해`, `불리한　공군　중심　상대에게`처럼 전각 공백/조사가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `56fa917c7fe4dbbb47dbb5f1195a148cb5adec52cf12009c770c4a78ea42b2f0`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 1 캠페인/Part 2 전투 설명 압축 출력 추가 보정: `상대에 강한 편`, `에싸움가능`, `비에약하고눈에강함`, `코스모랜드에오신걸환영함`, `나는직접공격이라면누구에도지지않을자신이`, `뭐여러가지일이있었지`, `얼마전그부대가우리군영토로진공중이다`, `유닛도그렇게많이갖고있진않은것같아`, `언제든지출격할수있어` 같은 조사 오류/강제 공백 제거 문장을 실제 ROM 역디코드 기준으로 다시 줄였다.
+   - 대상 주소는 모두 `encode_fit` level 0으로 들어가도록 검증했고, 최종 ROM 역디코드에서도 `상대에게　강한　편`, `싸움　가능`, `직접　공격은　누구에게도　안　질`, `자신이　있다`, `언제든　출격　가능`처럼 전각 공백/조사가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. `level4`는 600→576, `level5`는 16→14로 줄었고, 세 산출물 SHA-256은 `f6ba07f5bc0e51f4216f59af49ea5d45f5a976d7db5b2bf0326053a8926078c1`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 후반 캠페인/맵 디자인 행 밀림 10건 정정: `세이브하지 않았지만 종료할까요?` 자리에 `칠하기`, `플레이어만 전투 애니 표시` 자리에 `자동으로 전체를 칠할까`, `쇼군이 3명 있으면` 자리에 `취향은 아니지만`, `언제든 출격 가능합니다` 자리에 `적은 없을 텐데`, `선생님 전투헬기 지휘가` 자리에 `나답지 않게`처럼 직접 패치 테이블이 잘못 덮던 행을 실제 ROM 역디코드 기준으로 고쳤다.
+   - 수정 주소 `0xA16770`, `0xA1FA14`, `0xA1FA8B`, `0xA219B2`, `0xA25273`, `0xA26CAE`, `0xA26CF6`, `0xA26FCE`, `0xA2C5C8`, `0xA2CA10`은 최종 ROM에서 각각 의도한 문장으로 확인했다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 잔여 감사의 covered는 16959→16969로 늘고 uncovered는 4303→4293으로 줄었으며, 세 산출물 SHA-256은 `df4480dced376e541d5865ef9465a681d93ea46d154d1366cc5ff10b0f83fdfa`로 동일하다.
+   - 2026-06-07 Part 2 캠페인/옵션 설명 잔여 오역 보정: 깨진 import 행 때문에 `見かえすためにも` 자리에 `조심해야 해`가 들어가던 `0xA0C081`을 앞줄 `0xA0C074`와 함께 `맥스에게` / `본때를　보이려면` 흐름으로 고쳤다. `0xA2299F`는 `적은　꼭,`으로 띄어쓰기를 정리했고, 긴 옵션 설명 `0xA2C378`은 `지정일 끝나면 거점 수로 승부`로 주소 고정해 붙어 출력되던 문장을 줄였다.
+   - 수정 주소 `0xA0C074`, `0xA0C081`, `0xA2299F`, `0xA2C378`은 최종 ROM 역디코드로 의도한 문구를 확인했다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 잔여 감사의 covered는 16969→16971로 늘고 uncovered는 4293→4291로 줄었으며, 세 산출물 SHA-256은 `68cc50c252f1eceb0bf304757c4caadeec65d0a1940e9aca58b4f5f123100344`로 동일하다. `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 캠페인/튜토리얼 품질 보정: 깨진 import 주소와 실제 ROM 역디코드 대조로 `0xA12E94`, `0xA2BAD7`, `0xA2D5C8`, `0xA32492`, `0xD9396E`, `0xD99A61`, `0xDA280D`, `0xDCED28`, `0xDCF712`를 보정했다. `ハチ`가 `벌`로 번역되던 행은 `하치`로 바로잡고, `블루문이나　옐로　코멧을　공격한다고!?`, `내일의　7일간`, `강력한 간접 공격 유닛.`, `하지만　고물　전차를　고쳐야`, `정도의　피해`, `를　잡아　줄래?`, `수송　헬기로　도망　못　가게　호위함도`, `너는　내가　시간을　버는　동안`처럼 원문 의미가 드러나게 줄였다.
+   - 수정 주소들은 최종 ROM 역디코드로 의도한 문구를 확인했다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `60cff13b51ba1452e4196472c99da818a74de86a358bfccde0f3207316cd758d`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 유닛 설명/수송헬기 튜토리얼 품질 보정: 실제 ROM 역디코드 기준 `주포로 보병계 외`, `부포로 보병계 외`, `보병계 외 상대로`처럼 조사와 공백이 빠져 읽히던 유닛 설명을 `주포로　보병계　외의`, `부포로　보병계　외의`, `보병계　외　상대로`로 정리했다. 대상 주소는 `0xA315EC`, `0xA317E4`, `0xA3188C`, `0xA31A50`, `0xA31AD4`, `0xA33CE8`이다.
+   - 수송헬기 튜토리얼의 `0xD97069`는 앞줄 `걸어갈 수는`과 자연스럽게 이어지도록 `있지만　적이　너무　많아`로 공백을 보존했다. 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `4923d1bf5b42615b514d363000d5f3db67d6046807903c049bd4fc622395b42b`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 compact-shortened fallback 제거: `qa_text_fit.py` 기준 level5 14건을 주소 고정으로 줄여 compact-shortened fallback을 `14→0`으로 낮췄다. 대상은 `0xA13FF7`, `0xA1BC86`, `0xA1F805`, `0xA1FF2B`, `0xA1FFFF`, `0xA20157`, `0xA25926`, `0xA28D84`, `0xA2BE92`, `0xA31374`, `0xA31E6F`, `0xA32D50`, `0xA32FA3`, `0xEC312E`이며, 최종 ROM 역디코드 기준 `이번엔　한번　가　봅시다`, `적　전함　이동　시작`, `각지서　정체불명부대가`, `이길　수　있었다`, `지정일　끝나면　거점　수로　승부`처럼 공백과 조사를 보존했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `py_compile`, `qa_text_fit.py` overflow 0 및 compact-shortened fallback 0, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `acad8ba32ef10a380ea70c56de3ecfa0eec912faaf41e386f7ce4de5ec20018c`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 긴 level4 붙임 출력 추가 보정: 실제 ROM 역디코드 기준 긴 문장이 공백 없이 붙던 `0xA0E243`, `0xA0EE59`, `0xA105FA`, `0xA10A4A`, `0xA10AC2`, `0xA14D86`, `0xA16883`, `0xA168AE`, `0xA1C344`, `0xA1C3E2`, `0xA23F84`, `0xA28802`, `0xA2DF06`, `0xA2E3A0`을 주소 고정으로 줄였다. 최종 ROM에서는 `정면　힘싸움은　맥스가`, `잘하면　적　군사력　정보를　얻어`, `파이프는　적도　아군도　못　넘어`, `상황따라　일반　브레이크　연속도`처럼 공백이 보존된다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `574→560`, visual-wider는 `1749→1735`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `458aaea14d69d189527e2607a3f9bbb674fd86e60fd26a5ff38545c406260bd6`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 유닛 도움말/전투 설명 level4 붙임 출력 추가 보정: 유닛 설명에서 `공격받지않게되고인접하지않는`, `않는한적에게발견되지않는다`, `중전차이상의힘을가지고있다`, `잠수함` 공격력 설명, 이동 타입 설명처럼 공백 없이 붙던 19개 주소를 level0 override로 줄였다. 대상은 `0xA314D7`, `0xA316AD`, `0xA31E21`, `0xA31EC5`, `0xA321AD`, `0xA3263D`, `0xA32B5D`, `0xA32DC2`, `0xA33003`, `0xA33073`, `0xA332A8`, `0xA3343F`, `0xA335CE`, `0xA33686`, `0xA3371C`, `0xA33739`, `0xA33928`, `0xA33988`, `0xA339CB`이다.
+   - 최종 ROM에서는 `없어지면　이동　불가`, `점령　가능　공격강함`, `보병계　공격력`, `중전차　이상　위력`, `잠수함　공격력　매우　강함`, `공격받지　않게　되고`, `붙지　않으면　발견　안　돼`, `지형　이동력　변화　없음`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `560→541`, visual-wider는 `1735→1716`으로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `fb50d38dd3a6a4356518b14371bcca166d5359196c46b01a9211f683f100fcae`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A3 CO 대사/유닛 도움말 level4 추가 보정: CO 대사와 유닛 설명에서 `운도실력중하나야`, `전기체공격준비`, `정찰용으로사용된다`, `주포의탄약이떨어졌을때는`, `사거리를가지고있다`처럼 공백 없이 붙던 25개 주소를 level0 override로 줄였다. 대상은 `0xA301BC`, `0xA30520`, `0xA30640`, `0xA30696`, `0xA30722`, `0xA30788`, `0xA307AC`, `0xA30930`, `0xA30D5C`, `0xA30E74`, `0xA313FC`, `0xA31935`, `0xA31996`, `0xA31A65`, `0xA31CB5`, `0xA31CCE`, `0xA31EE6`, `0xA31F3F`, `0xA323F8`, `0xA32842`, `0xA32A4A`, `0xA32F51`, `0xA3326E`, `0xA336D5`, `0xA34064`이다.
+   - 최종 ROM에서는 `사람도　기계도　자연엔　못　이겨`, `적이지만　멋진　전투였다`, `전기체　공격준비`, `주포　탄약이　떨어지면`, `범위를　가졌다`, `할　수　없다`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `541→516`, visual-wider는 `1716→1691`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `fffd18816cdd34d4e36c7ff96b2269070720898708e31204601eb10765272c52`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 튜토리얼 D9/DC 후반 level4 보정: 튜토리얼 대사/도움말에서 `하는거야`, `가능범위보는법`, `의능력이야`, `바다에전함`, `육지에중전차`, `사령관이라는자`, `반드시지켜보이겠어`처럼 붙던 19개 주소를 실제 직접 패치와 주소 override 양쪽에서 맞췄다. 대상은 `0xD91DC4`, `0xD958C1`, `0xD9603D`, `0xD987DE`, `0xD9FB40`, `0xDA04EE`, `0xDA25C9`, `0xDA2E17`, `0xDC4466`, `0xDC4473`, `0xDC8DD0`, `0xDD0391`, `0xDD03A7`, `0xDD0528`, `0xDD054A`, `0xDD07E1`, `0xDD09BA`, `0xDD0B82`, `0xDD1D5C`이다.
+   - 최종 ROM에서는 `가능 범위 보기`, `능력이야`, `바다　전함`, `육지　중전차`, `이틀에　한번`, `사령관이란　자`, `꼭　지켜　보이겠어`, `꼭　이길　수　있어`, `다음엔　안　진다`처럼 슬롯 안에서 공백/의미 단위를 보존한다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `516→497`, visual-wider는 `1691→1679`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `e05451d845be2e165e214513c845847fd519a3a7a7f2e29f5d288cf10a0fa5a1`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2/공통 UI 용어 테이블 level4 보정: D8~DD 튜토리얼 범위에서 8바이트 유닛명 같은 물리적 한계 후보를 제외하니 남은 level4는 `0xD83278`의 도움말/지도 파일 용어 테이블뿐이었다. 같은 원문 테이블이 `0x805B04`에도 있어 두 주소를 `도움말자료 전체지도 파일로드 저장이름 종료클리어 바다평지 산숲칠 정보자동`으로 맞췄고, 두 슬롯 모두 `level0`, 80/80바이트로 검증했다.
+   - 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `497→495`, visual-wider는 `1679→1677`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `82efb80adb8263e880fd590b0db169038efbe9f64914e8f032b301df6a336cf0`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 미션 소개/브리핑 level4 보정: 캠페인 선택/브리핑 계열의 미션 소개 문구에서 `바다를사이에두고대치한양군`, `정면결전이지금시작된다`, `마침내적의본거지를발견`, `신형전차의설계도를빼앗아라`처럼 붙어 나오던 20개 주소를 level0 override로 줄였다. 대상은 `0xA01CF0`, `0xA01D0D`, `0xA01DFC`, `0xA01E15`, `0xA01E83`, `0xA01EFC`, `0xA01F84`, `0xA01F9D`, `0xA02005`, `0xA02048`, `0xA02063`, `0xA020AC`, `0xA02174`, `0xA021EC`, `0xA0220B`, `0xA02245`, `0xA022BC`, `0xA0231C`, `0xA023EC`, `0xA02401`이다.
+   - 최종 ROM에서는 `바다　사이로　대치한　양군`, `마침내　적　본거지　발견`, `자국을　되찾을까`, `적　중전차대　접근`, `원군까지　버틸　수　있을까`, `신형전차　설계도　탈취`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `495→475`, visual-wider는 `1677→1657`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `14dabb5b9d34239f5e69b28a4684f7ab87357ad6048a3d0997e479c674ee4072`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A0 초반 캠페인/전투 설명 level4 보정: 색적/브레이크/연구소/포대 설명과 초반 캠페인 대사에서 `도시나공장을점령할때마다`, `수입을늘리기위해보병이나`, `보병이나바주카병과라면`, `숲은시야안에들어와도`, `적의위치를확인하고나서공격`, `내가적을쓰러뜨린거야`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA0A88F`, `0xA0ABFF`, `0xA0AD2F`, `0xA0AEEB`, `0xA0B013`, `0xA0B18D`, `0xA0B2A8`, `0xA0BE89`, `0xA0C0F7`, `0xA0C420`, `0xA0C652`, `0xA0C6C0`, `0xA0C750`, `0xA0C8FE`, `0xA0CC03`, `0xA0D237`, `0xA0D24E`, `0xA0D266`, `0xA0DD45`, `0xA0E325`이다.
+   - 최종 ROM에서는 `도시　공장　점령할　때마다`, `수입　늘리려면　보병이나`, `보병　바주카병과라면`, `숲은　시야　안이어도`, `옆으로　오지　않는　한`, `적　위치　확인　후　공격`, `내가　적을　쓰러뜨렸어`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `475→455`, visual-wider는 `1657→1637`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `b9c7fb5899842fc8566023ae3dbba761a63b24ee021560a8771e1d046ba329fd`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A12~A15 캠페인/미사일 기지 설명 level4 보정: 중반 캠페인 대사와 미사일 기지 설명에서 `놈들에게설계도를넘기지마라`, `본사령부에배치되었습니다`, `마음에안드는이야기로군`, `네놈들을결코용서하지않겠다`, `사정거리는지도안어디든공격가능하네`, `자세히알고싶다면R로확인하는게좋다`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA1225D`, `0xA1257F`, `0xA12F11`, `0xA13437`, `0xA1370C`, `0xA13844`, `0xA13DBE`, `0xA13FA3`, `0xA140D2`, `0xA141CA`, `0xA1430F`, `0xA1459B`, `0xA14A16`, `0xA14B96`, `0xA14CE2`, `0xA14D1E`, `0xA14E14`, `0xA1539C`, `0xA157F2`, `0xA158E9`이다.
+   - 최종 ROM에서는 `설계도를　넘기지　마라`, `활기는　어디　갔어`, `본부에　배치됐습니다`, `이놈은　나쁜　본보기다`, `네놈들　절대　용서　못해`, `보병　바주카병이　닿으면`, `사정거리는　지도　전체다`, `함부로　이동　불가`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `455→435`, visual-wider는 `1637→1617`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `16d2c34b225b133a257cbf47f940b655b127e5a1240b198609f3504760119d12`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A16~A19 캠페인 대사 level4 보정: 블루문 후반/그린어스 도입 대사에서 `어떻게할지는나리의지휘에달렸어`, `앞으로의전략을짠다`, `아군의승리가보이기시작한다`, `상관을뭐라고생각하는거야`, `직접파이프를노릴수있을지도몰라요`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA168F9`, `0xA16A3D`, `0xA16AA1`, `0xA16B13`, `0xA16D64`, `0xA16EF0`, `0xA17212`, `0xA1738D`, `0xA1801B`, `0xA18658`, `0xA18785`, `0xA18BB9`, `0xA190AF`, `0xA19324`, `0xA1938F`, `0xA19482`, `0xA19553`, `0xA19774`, `0xA19871`, `0xA19A43`이다.
+   - 최종 ROM에서는 `결정은　두목　지휘에　달렸어`, `향후　전략을　짠다`, `걱정　필요　없다`, `아군　승리가　보인다`, `상관을　뭐로　보나`, `우리　군도　일손　부족`, `파이프　직접　노릴　수도　있어`, `예정대로　완성되나`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `435→415`, visual-wider는 `1617→1597`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `4b5a41e0295ff4c2b60c20733cde6f620ad73c62a20b2ca6900165e96c97f7ae`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A1A~A1C 캠페인 대사 level4 보정: 그린어스/해상전 설명과 구호물자 대사에서 `지상으로의공격력은뚝떨어집니다`, `내해의작은섬근처에`, `전멸시킬때까지는`, `무슨일이일어날지모른다`, `구호물자를운반해왔는데`, `함께싸우려는마음을`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA1A1E4`, `0xA1A2B4`, `0xA1A2C8`, `0xA1A2EF`, `0xA1A399`, `0xA1A3AA`, `0xA1A3C1`, `0xA1A84C`, `0xA1A90F`, `0xA1AD6C`, `0xA1AE85`, `0xA1B0EC`, `0xA1B7AC`, `0xA1BB7C`, `0xA1C1F6`, `0xA1C3A9`, `0xA1C597`, `0xA1C646`, `0xA1C66E`, `0xA1C725`이다.
+   - 최종 ROM에서는 `지상　공격력은　크게　떨어져`, `내해　작은　섬에`, `집결한　듯합니다`, `무슨　일　날지　모른다`, `긴장　늦추지　말라고`, `암초　이용해　전진`, `구호　물자를　가져왔는데`, `이제　좀　싸우기　쉬워져`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `415→395`, visual-wider는 `1597→1577`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `ca72a6d1e501e920f4b956edc629dbafb5e23cceef95393ab2535e170f52f582`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A1C 후반~A1E 캠페인 대사 level4 보정: 그린어스 연구소/신형전차/팩토리 대사에서 `적마음대로하게두진않아`, `내가가장자신있으니까`, `잃은병사들에게미안하다고생각한다면`, `공장점령이수월해질것같네`, `적의군사력에한걸음다가서겠네`, `신형전차가있으면`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA1C75C`, `0xA1D641`, `0xA1DB94`, `0xA1DC16`, `0xA1DCA1`, `0xA1DCF5`, `0xA1DDA8`, `0xA1DDD9`, `0xA1DDF0`, `0xA1E063`, `0xA1E08C`, `0xA1E0F1`, `0xA1E1C4`, `0xA1E1D3`, `0xA1E3A0`, `0xA1E3C8`, `0xA1E3F4`, `0xA1E431`, `0xA1E543`, `0xA1E71E`이다.
+   - 최종 ROM에서는 `적　마음대로　안　둬`, `지상전은　내가　제일`, `죽은　병사에게　미안하면`, `위　오른쪽　공장`, `공장　점령이　쉬워지겠네`, `적　군사력에　한발　접근`, `싸움거리만　늘지　않길`, `세　사람뿐　아니라`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `395→375`, visual-wider는 `1577→1557`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `dc2d4d6ecffd3d0cc4a7b4bdca77f7264903373dfc9069b03b851a0584c761a2`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A1EA~A1FF 캠페인 대사 level4 보정: 팩토리 결전/그린어스 해방/최종전 준비 대사에서 `여기는공중전이유리할것같군`, `적마음대로는못하게한다`, `여기서라면적의약점을파고들수있어`, `당신들의도움이있었기때문이다`, `파이프너머로이음매를노릴수있어`, `멀리서일방적으로공격하는건`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA1EA39`, `0xA1EAF7`, `0xA1EB57`, `0xA1EB89`, `0xA1EC2E`, `0xA1EE53`, `0xA1EE66`, `0xA1F0DC`, `0xA1F11B`, `0xA1F264`, `0xA1F4B5`, `0xA1F58C`, `0xA1F6D2`, `0xA1F955`, `0xA1F9B3`, `0xA1FBB1`, `0xA1FBCE`, `0xA1FDD9`, `0xA1FE79`, `0xA1FF99`이다.
+   - 최종 ROM에서는 `공중전이　유리하겠군`, `적　마음대로　안　둔다`, `우리　쪽이　가까워`, `여기서　적　약점으로　진격`, `그대들　도움　덕분이다`, `파이프　너머　이음매를　노려`, `원거리　일방　공격은`, `승전　함성　올려라`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `375→355`, visual-wider는 `1557→1537`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `0466686d26d9309d227dbe8a3ad43f608339088f7cfd6611a68c267bde4adfdf`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A200~A22F 캠페인 대사 level4 및 오역 보정: 미사일 기지/옐로 코멧 방어전 대사에서 `그냥넘어진것뿐이잖아`, `8개전부부수면되는거야`, `키쿠치요님께전해드리겠습니다`, `전투준비에들어가십시오`, `적의함정을조사해볼테니까`처럼 붙던 19개 주소를 level0 override로 줄였고, `0xA22DF9`의 `あたしの勝ちじゃん。`이 `다음 전장으로 서두른다!`로 들어가던 오역을 `내　승리잖아`로 고쳤다. 대상은 `0xA2006E`, `0xA2009F`, `0xA201F7`, `0xA203C7`, `0xA2040C`, `0xA20580`, `0xA207DD`, `0xA2090C`, `0xA20B09`, `0xA20E9A`, `0xA20EBE`, `0xA21016`, `0xA210DD`, `0xA2111D`, `0xA215B6`, `0xA2177F`, `0xA218DF`, `0xA21A0B`, `0xA22004`, `0xA22DF9`이다.
+   - 최종 ROM에서는 `다리　막아`, `분명　이겨`, `그냥　넘어진　거야`, `나라　힘을　모아`, `정찰차　전선에　보내`, `이　아름다운　바다를`, `전투　준비에　들어가라`, `적　함정　조사할게`, `내　승리잖아`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `355→335`, visual-wider는 `1537→1517`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `2a84a769919944853d7bf298b40979f9afae1236ed16e7c6d492ac13943e677a`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A230~A24C 캠페인 대사 level4 보정: 캣/아스카 대결, 스네이크 함정, 연구소 공략 대사에서 `아무것도다르지않아`, `거기서손가락이나빨면서보고있어`, `비겁한짓은하지마`, `18일안에연구소를점령하거나`, `내일공격으로어떻게든안하면`, `레드스타로돌아가겠습니다`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA230A4`, `0xA231C0`, `0xA231DE`, `0xA23699`, `0xA23950`, `0xA239B0`, `0xA239C3`, `0xA23A2B`, `0xA23E03`, `0xA23E42`, `0xA24080`, `0xA2418A`, `0xA2421B`, `0xA24518`, `0xA24585`, `0xA24750`, `0xA24B32`, `0xA24B88`, `0xA24BD6`, `0xA24CE1`이다.
+   - 최종 ROM에서는 `너도　같잖아`, `다를　것　없어`, `너도　깨닫게　돼`, `모든　공격을　막는`, `본부　점령　전까지`, `비겁하다니　뜻밖`, `막아내는　것도　가능`, `오늘내일　작전서　끝내야`, `뭘　하고　있었나`, `적을　몰아내`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `335→315`, visual-wider는 `1517→1497`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `204752e6a53a29f8cdd31dfda9e74800087d1e7458c4de6636950de8ad72a080`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A257~A271 캠페인 대사 level4 보정: 미사일 발사대/블랙홀 추적 대사에서 `평화가돌아오는군요`, `다시한번작전을다시세우자`, `먼저하늘을장악하는편이유리해`, `적해상부대는깊이쫓지않아도`, `발사대에다가가는것조차못한다`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA257E9`, `0xA2580D`, `0xA25870`, `0xA25907`, `0xA25DAF`, `0xA25EF4`, `0xA2601C`, `0xA26047`, `0xA26357`, `0xA264E3`, `0xA2669F`, `0xA26781`, `0xA268FB`, `0xA26B65`, `0xA26BEC`, `0xA26C00`, `0xA26D87`, `0xA27009`, `0xA27140`, `0xA2717B`이다.
+   - 최종 ROM에서는 `평화가　돌아오네`, `느긋하게　지내겠군`, `작전　다시　세우자`, `먼저　하늘　장악이　유리해`, `물자　자금을　모은다면`, `반대는　없는　듯하군`, `말　좀　들어라`, `적　해상부대는　깊이　쫓지마`, `발사대　접근조차　불가`, `얘기는　끝이다`처럼 전각 공백과 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `315→295`, visual-wider는 `1497→1477`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `ce736b5fd93e99bea817dbef9686a3f375ed5731845f73d8d31b39bcac11f153`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A271~A2A0 캠페인/전투 UI level4 보정: 미사일 발사대 결전 후반, 엔딩 대사, CO 기술명/옵션/지형 도움말에서 `접근할수없다니대체`, `노병은죽지않아`, `파이프같은건한방이지`, `스트레이트블래스트`, `메테오스트라이크`, `회복보급이가능하다`, `미사일기지보병계열이라면`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA271D0`, `0xA2738A`, `0xA275E0`, `0xA27B80`, `0xA27CB8`, `0xA2876A`, `0xA287E8`, `0xA28B0C`, `0xA28B64`, `0xA28E47`, `0xA2932E`, `0xA295EC`, `0xA29840`, `0xA29906`, `0xA29D9B`, `0xA29DDD`, `0xA29E45`, `0xA29EE2`, `0xA29F04`, `0xA2A0D0`이다.
+   - 최종 ROM에서는 `못　간다니　대체`, `먹잇감　되어라`, `내　힘이　어디까지인지`, `노병은　안죽어`, `우린　최강　누구라도`, `다음엔　반드시　이겨`, `직선　폭격`, `메테오강타`, `표시안함`, `회복　보급　가능`, `미사일　기지　보병계라면`처럼 슬롯 안에서 의미 단위가 보존된다. 고정폭 메뉴 테이블의 `0xA29840`, `0xA29906`, 직접 패치 row `0xA29E45`도 같은 문구로 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `295→275`, visual-wider는 `1477→1457`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `d03c610b378195179fa0cd5227fa9a870d9cdbb058e3af024ece7bdf6469770b`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A2A3~A2A9 CO 정보/브레이크 설명 level4 보정: CO 정보창 능력 설명에서 `좋아함손이많이가는학생`, `예상이상으로강력한`, `일격이나오기쉬워지고`, `특별한약점도없고다양한`, `짧아지는데다공격력도낮다`, `비오는날이동력이떨어진다`, `특수부대의대장으로`, `보병계의공격력이높고`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA2A390`, `0xA2A418`, `0xA2A42B`, `0xA2A440`, `0xA2A474`, `0xA2A487`, `0xA2A563`, `0xA2A5D4`, `0xA2A5E5`, `0xA2A63A`, `0xA2A6B2`, `0xA2A6E9`, `0xA2A6FA`, `0xA2A740`, `0xA2A7EB`, `0xA2A802`, `0xA2A86B`, `0xA2A940`, `0xA2A9A0`, `0xA2A9F7`이다.
+   - 최종 ROM에서는 `좋아함　손가는학생`, `예상보다　강력한`, `일격이　잘　나오고`, `적　많이　격파`, `약점　없고　다방면`, `공격력　상승`, `이동력　1　증가`, `사거리　짧고　공격력　낮음`, `눈　내려　이동　방해`, `특수부대　대장으로`, `보병계　공격력　높고`, `직접공격　약함`처럼 슬롯 안에서 의미 단위가 보존된다. 기존 직접 패치 row `0xA2A563`, `0xA2A5D4`, `0xA2A5E5`, `0xA2A940`도 같은 문구로 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `275→255`, visual-wider는 `1457→1437`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `c5a3afc616dd5ca512740c67458daea564d2a5d1b09a6fc693f3528ea85a0b74`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A2AA~A2BD CO 정보/브레이크 설명 level4 보정: CO 정보창 능력/성격 설명에서 `결정적인순간에의지가되는`, `직접공격이서툴다`, `생산시가격도비싸다`, `반격할때는공격력이`, `모든것이수수께끼에싸여있다`, `생각보다적을못쓰러뜨려`, `공격력에더해질뿐아니라`, `사실은레드스타의전직장교`, `모든유닛을싸게살수있다`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA2AA21`, `0xA2AAAB`, `0xA2AB49`, `0xA2ABA1`, `0xA2AC5A`, `0xA2ACBE`, `0xA2ADD7`, `0xA2AEDC`, `0xA2AF5A`, `0xA2B1FF`, `0xA2B233`, `0xA2B46C`, `0xA2B5F5`, `0xA2B629`, `0xA2B67B`, `0xA2B74E`, `0xA2B9AC`, `0xA2BBEA`, `0xA2BCD1`, `0xA2BD05`이다.
+   - 최종 ROM에서는 `공격력　상승`, `위기때　믿음직하다`, `직접공격　약함`, `추가　2증가`, `생산비도　높음`, `반격시　공격력`, `아버지를　동경해`, `비　내려　이동력　저하`, `모든　것은　수수께끼`, `뜻대로　안　되면　싫어`, `지형효과　특기`, `레드스타　전직　장교`, `전　유닛　싸게　구매`, `실력으로　지위　획득`처럼 슬롯 안에서 의미 단위가 보존된다. 기존 직접 패치 row `0xA2B5F5`도 같은 문구로 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `255→235`, visual-wider는 `1437→1417`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `dcfe4b6700cfaf5d3775c8559cd2713d6b2806637a418cf7d851acb5c0e3f6fd`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A2BD~A2D9 CO 정보/미션명/상점 문구 level4 보정: CO 정보창 후반과 미션/상점 문구에서 `차량계의공격력이높고`, `상승하고이동력도2늘어난다`, `전투헬기의공격력이상승한다`, `러브러브의탑`, `전차부대를격파하라`, `푸른달이여영원히`, `오늘은뭐가필요하신가요`, `아무것도없어`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA2BD1C`, `0xA2BD44`, `0xA2BD5B`, `0xA2BD80`, `0xA2BD99`, `0xA2BDD8`, `0xA2BDEF`, `0xA2BE4B`, `0xA2BE81`, `0xA2BEC4`, `0xA2BF44`, `0xA2BFBC`, `0xA2D54C`, `0xA2D684`, `0xA2D6F0`, `0xA2D72C`, `0xA2D780`, `0xA2D7C4`, `0xA2D9D7`, `0xA2D9F0`이다.
+   - 최종 ROM에서는 `민들레　좋아`, `차량계　공격력　높음`, `보병　공중　해상계`, `차량계　공격력　상승`, `이동력　1　증가`, `예전엔　이름난　쇼군`, `키쿠치요　스승`, `전투헬기　공격력　상승`, `러브섬`, `전차대　격파`, `푸른달　영원히`, `바다는　누구것`, `오늘은　뭘　살래`, `물건없어`처럼 슬롯 안에서 의미 단위가 보존된다. 기존 직접 패치 row `0xA2BD1C`도 같은 문구로 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `235→215`, visual-wider는 `1417→1397`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `1945cb88c9950c404d8bd3b13fb96f29e3cb07f8bd3c592cec91f1c3f7790300`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A2E8~A32F 상점 대사/유닛 도움말 꼬리 level4 보정: 상점 대사와 유닛 설명의 짧은 꼬리 문구에서 `어이열심히하고있구나`, `전부그아이의발명품이라는얘기야`, `하드에서는포인트를더많이얻을수있어`, `돌아가는길에한잔하고갈까`, `어떻게든이겼습니다`, `할수있다`, `는할수없다`처럼 붙던 12개 주소를 level0 override로 줄였다. 대상은 `0xA2E848`, `0xA2E8D0`, `0xA2E90E`, `0xA2F65B`, `0xA2FDF0`, `0xA2FF63`, `0xA2FF89`, `0xA31733`, `0xA31C9A`, `0xA32BA2`, `0xA32D42`, `0xA32F32`이다.
+   - 최종 ROM에서는 `열심이군`, `전부　그　아이　발명품`, `내　집에　수영장이라도`, `하드면　포인트　많이　얻어`, `오늘은　장사　끝`, `가는길　한잔할래`, `겨우　이겼습니다`, `가능`, `불가`처럼 슬롯 한계 안에서 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `215→203`, visual-wider는 `1397→1385`로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `48564e7cba72c58e8fecf16c46cf6b004d5cb623d31a4fe7e83ceeddb2716cd3`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A046~A0F1 초반 캠페인 대사 level4 보정: 초반 캠페인/브리핑 대사에서 `강건너`, `브레이크게이지가`, `할수있을거야`, `발사준비만으로`, `나도그렇게생각해`, `마침위쪽에산이있으니까`, `얘긴아직안끝났어`, `어서다른나라상황을`, `회복능력을지니고있다`, `이러쿵저러쿵떠드는놈은부순다`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA046C7`, `0xA0813B`, `0xA08F9C`, `0xA0B565`, `0xA0B6AA`, `0xA0B9DB`, `0xA0BEAF`, `0xA0C1B1`, `0xA0C9AD`, `0xA0D097`, `0xA0D3B4`, `0xA0D7AB`, `0xA0DF00`, `0xA0E0C7`, `0xA0E299`, `0xA0E2F3`, `0xA0E8AA`, `0xA0EAAC`, `0xA0ED24`, `0xA0F1AA`이다.
+   - 최종 ROM에서는 `강너머`, `브레이크　게이지`, `있을　거야`, `발사　준비만`, `저　꼬맹이도`, `나도　그리　생각`, `전투가　좀　있어`, `기지로　돌아가`, `스네이크　침공`, `그밖에　물자가`, `얘긴　아직　안끝나`, `어서　타국　상황을`, `회복　능력　보유`, `그건　그렇고　무례하네`, `시끄럽게　구는　놈은　부순다`처럼 슬롯 안에서 의미 단위가 보존된다. 기존 직접 패치 row `0xA046C7`도 같은 문구로 맞췄다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `203→183`, visual-wider는 `1385→1366`으로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `b61f08a3c46beab85130eb2483da6f0a73d4977e7df1a6e44c55c5d19c657cb4`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A0F2~A14B 캠페인 대사 level4 보정: 레드스타/블루문 초입 캠페인 대사에서 `마음을가라앉혀야지`, `다치기만할뿐이라고`, `그곳을급습해서기지를점령`, `부대를집결시키고있는것같습니다`, `우리들의작전실수로`, `우리나라가되살아날때까지`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA0F2D5`, `0xA0F920`, `0xA105DD`, `0xA108D0`, `0xA10E88`, `0xA11105`, `0xA11228`, `0xA113C7`, `0xA1157B`, `0xA11684`, `0xA116B8`, `0xA119D3`, `0xA11A0F`, `0xA11A9E`, `0xA128C0`, `0xA135C8`, `0xA136A5`, `0xA13AA9`, `0xA141E8`, `0xA14B60`이다.
+   - 최종 ROM에서는 `마음　가라앉혀`, `다치기만　해`, `급습해　기지　점령`, `하나씩　제압하죠`, `퇴각하는　듯합니다`, `적　강습으로　큰일이야`, `이번엔　내　도전장이다`, `부대를　집결시키는　듯합니다`, `우리　작전　실수로`, `스네이크　침공`, `기분　좋네요`, `우리　나라　되살때까지`, `마을을　멸한`처럼 슬롯 안에서 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `183→163`, visual-wider는 `1366→1346`으로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `9ac2f0abffec9073d29e1195ff838537bffbaadb65191563ed67d58d867549d2`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A14D~A212 캠페인 대사 level4 보정: 블루문 후반/그린어스/옐로 코멧 초입 대사의 짧은 슬롯에서 `레이저포로인한피해는`, `레이저사정거리안에`, `솜씨가근질거려`, `고통받는걸`, `이런식이야`, `머지않아이세계는`처럼 붙던 20개 주소를 level0 override로 줄였다. 대상은 `0xA14DB0`, `0xA14F8B`, `0xA15064`, `0xA15CFB`, `0xA15DBA`, `0xA15EF6`, `0xA15F8D`, `0xA17A1D`, `0xA17AAC`, `0xA17CAC`, `0xA18A48`, `0xA19251`, `0xA19A98`, `0xA19DF9`, `0xA1C8E8`, `0xA1D57C`, `0xA1DB19`, `0xA1DE48`, `0xA1F688`, `0xA21281`이다.
+   - 최종 ROM에서는 `바보놈`, `거기　서라`, `이건`, `레이저포　피해는`, `레이저　사거리엔`, `정면공격은`, `곤란한　분`, `우리　영토에`, `손이　근질해!`, `이제　안심!`, `고통받는걸`, `이　꼴이야`, `역시군,`, `곧　이　세계는`처럼 슬롯 안에서 의미 단위가 보존된다. 이번 변경 후 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `163→143`, visual-wider는 `1346→1326`으로 줄었다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `57f6a6a71b74facc21abe399e2bbd0e68a5eb484c4730dd3618aca846261c6da`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 A216~EC31 캠페인/UI level4 보정: 옐로 코멧 캠페인 후반과 통신/작전실/상점/옵션 설명에서 `오늘은운이나쁘군`, `다음전장으로서두른다`, `아버지와선생님에겐`, `아코디언고속도로의지도`, `지정된거점수를보유한시점에서우세승리가됩니다`처럼 붙던 21개 주소를 level0 override로 줄였다. 대상은 `0xA216A2`, `0xA21970`, `0xA21B7A`, `0xA21E2E`, `0xA224EC`, `0xA2266F`, `0xA22708`, `0xA22ACB`, `0xA22C18`, `0xA22E0E`, `0xB81F4C`, `0xB81F70`, `0xB828D8`, `0xB830C8`, `0xB839D0`, `0xB84298`, `0xB84A48`, `0xB84BA0`, `0xB84E50`, `0xDFB4F2`, `0xEC30A2`이다.
+   - 최종 ROM에서는 `오늘　운　나쁘군`, `역시　나이는　못이기나`, `그냥　둘순없다`, `고된　결단`, `다음　전장으로!`, `아버지와　선생님엔`, `바다　너머`, `창공　제패!`, `지도　보낼　상대없어`, `아코디언　도로　지도`, `메테오강타`, `물건없어`, `있음이면　유닛　시야밖　안보임`처럼 슬롯 안에서 의미 단위가 보존된다. 이번 변경 후 `qa_text_fit.py` 기준 level4는 `143→122`, visual-wider는 `1326→1305`로 줄었다.
+   - 2026-06-07 전투 화면 반복 유닛명/짧은 라벨 level4 보정: 8바이트 고정 라벨에서 반복되던 `수송 헬기`, `전투 헬기`, `대공 전차`를 `수송헬기`, `전투헬기`, `대공전차`로 통일하고, `중립 거점`, `장비 없음`, `승리 조건 테스트`, `을 운반`, `비 남자`, `총 생산수`, `총 전멸수` 같은 짧은 도움말/통계 라벨도 슬롯 표기에 맞췄다. 추가로 `0x942A44`, `0x97AEF8`, `0x99AD78`, `0xE07CA6`, `0xEC3162`, `0xD92458`, `0xD9EFE5`, `0xDA1B9A`, `0xDA1D4E`, `0xDA1D5E`의 주소 고정 문구와 직접 패치 행을 같은 짧은 표기로 맞췄다.
+   - 이번 변경 후 최종 재빌드 `overflow: 0`, `qa_text_fit.py` 기준 level4는 `122→1`, visual-wider는 `1305→1189`로 줄었다. 남은 level4 1개는 원문 자체가 깨진 데이터 후보인 `0xD75917`이라 문맥 확인 전에는 보류했다. `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `31eac5d4465c405c49c75067ade068df63be0c3959bb563ee2edf7053341a3e6`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 1 대표 화면 스윕 검수: 최신 ROM SHA `31eac5d4465c405c49c75067ade068df63be0c3959bb563ee2edf7053341a3e6`로 `fresh_title_for_menu_probe`, `fresh_game_select`, `fresh_sav_continue_a01/a05`, `fresh_sav_continue_to_battle_a020/a060`, `fresh_sav_campaign_continue_real_a020/a060/a120`, `fresh_sav_continue2_1500` 상태를 캡처해 `temp/current_part1_sweep/sheet.png`로 묶었다. 해당 대표 시트에서는 즉시 보이는 일본어 잔여나 깨진 한글은 없었다. 일부 대사는 대사 출력 중간 프레임이라 문장이 덜 나온 상태였고, Part 1 전체 플레이스루 검수는 계속 남아 있다.
+   - 2026-06-07 Part 2 튜토리얼 전투 메뉴/팝업 추가 스윕: `p2_day2_select_infantry_prompt`, `p2_day2_capture_prompt`, `p2_bazooka_action_menu`, `p2_bazooka_move_prompt`, `p2_light_tank_select_prompt`, `p2_light_tank_after_move_menu_currentrom`, `p2_supply_select_prompt`, `p2_after_supply_command`, `p2_city_defense_transport_unload_menu`, `p2_city_defense_light_tank_city_action_menu`, `p2_city_defense_range_prompt`, `p2_city_defense_victory_follow_a09`를 개별 mGBA 실행으로 캡처해 `temp/current_p2_tutorial_menu_sweep_individual/sheet_verified.png`로 묶었다. 해당 메뉴/팝업 대표 시트에서는 즉시 보이는 일본어 잔여나 깨진 한글은 없었다.
+   - 같은 스윕에서 오래된 `p2_heavy_failure_overlay_current.ss0`를 바로 로드하면 저장 당시 VRAM 때문에 `作戦失敗`가 보이는 것을 확인했다. 현재 ROM의 실패 오버레이 LZ77 블록 `0xBFBB54`, `0xEE8F68`은 패치된 상태이며, 실제 검증 이미지는 `temp/verified_sheets/p2_heavy_failure_overlay_korean_final.png`와 교체 시트의 `12_failure_overlay_verified`에서 `작전실패`로 표시된다. 이 상태 파일은 오버레이 검수에는 쓰지 않는다.
+   - 2026-06-07 Part 2 튜토리얼 전투 실제 화면 어색한 조각 보정: 세이브스테이트 스윕에서 보인 `이 병 골라 결정해`, `수송차로보급로 보급해줘`, `그러니경전차를 골라줄래` 계열은 동적 유닛명/명령명 제어바이트가 한글 첫 글자나 공백을 흐트러뜨리는 구조였다. 직접 패치로 `0xD92846-0xD92870`을 `이 보병 골라 결정해`, `0xD94EAC-0xD94ECC`를 `수송차로 보급해 줘`, `0xD954FC-0xD95526`을 `그러니 경전차를 골라 줘` 완성형 문장으로 덮었다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level4=1`, `visual-wider=1189`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `09550fef4306cddb354cf261a45e6d5ddf43c110b984c663a54fc58a4fbce075`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_tutorial_line_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 튜토리얼 전투 확장 스윕: 수송차 탑재/하차, 바주카병·경전차 이동, 도시 방어 메뉴, 로켓포/다리 방어, 전략 힌트, 전멸전 정보 화면 상태 21개를 개별 mGBA 실행으로 캡처해 `temp/current_p2_tutorial_extended_sweep/sheet.png`로 묶었다. 일부 열린 대사창 상태는 저장 당시 VRAM 때문에 `하나더`, `십자버튼`, `내릴곳`, `다리앞`, `이동해줄래`처럼 과거 표기가 보였지만, 현재 ROM 역디코드 기준 해당 붙은 표현/버튼명 후보는 0건이었다.
+   - 확인한 현재 ROM 대표 바이트는 `0xD95BE3`/`0xD95E0B`의 `있을 거야`, `0xD95EC0`의 `방향 키로 내릴 위치를 고를 수 있어`, `0xD95F13`/`0xD95F34`의 `방향 키로 내릴 곳을`/`고를 수 있어`, `0xD9617E`의 `를 다리 앞 도시에 둬`, `0xD97395`의 `여기까지 이동해 줄래?`이다. 확장 스윕에서 즉시 보이는 일본어 텍스트 잔류는 없었고, `p2_heavy_after_hint_control`의 세로 모양은 확대 확인 결과 유닛 그래픽/아이콘이었다.
+   - 2026-06-07 Part 1/공통 DE-E0 낮은 점수 잔류 후보 보정: `qa_japanese_residuals.py --min-score 8` 결과 중 DE-E0 범위를 실제 ROM 역디코드로 확인했다. 높은 점수 항목은 대부분 이미 한글로 바뀐 `changed_hangul` 행이었고, `same_original score>=13` 후보는 0건이었다. 품질 후보로 남은 `0xE02894`의 `의부대가...`를 `의 부대가...`, `0xE0DAB6`의 `하하지만...`을 `하, 하지만...`, `0xDEEBBE`의 `미사일로 하는`을 `미사일 공격`, `0xDEE9F3`의 전각 공백 포함 문구를 `탄이 떨어지면`으로 보정했다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level4=1`, `visual-wider=1189`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `deb07a9daf9b31b1e5484a7dda9207e3fcd96e364305a0a6b8ef4fb178515d68`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_part1_common_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 맵 작성 도움말/보조 번역 행 품질 보정: ROM 역디코드에서 `0xD81C24`의 긴 맵 작성 도움말이 `플레이조건은수도2개이상...`처럼 전부 붙어 보이던 것을 `플레이 조건은 수도 2개 이상과 각 군의 병종 또는 생산 거점 필요. 작성 맵은 대전 또는 통신에서 사용 가능. 지형과 병종을 선택해 배치.`로 재분절했다. 보조 번역 CSV에서 들어오던 `0xA07F3C`, `0xA0877C`의 `블랙홀군이 각지에서`도 주소 override로 `블랙홀 군이 각지에서`로 고정했다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level4=1`, `visual-wider=1191`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `1763811f41c9b6dcfdbeda0ffc494bab3e90ebe116d4f1a7ac276f54518c528c`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_map_help_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 튜토리얼/Part 1 도움말 문장 경계 추가 보정: 직접 패치/주소 override 역디코드에서 보인 `적 유닛은 아군을 아군 유닛은`, `나머지 공략은 여기 도시를 / 하면 알려줄게`, `알아 두면 편한 걸 알려줄게` 계열을 문맥 기준으로 다듬었다. `0xD94115`는 `적 유닛은 아군을, 아군 유닛은`, `0xD968B9`는 `점령하면 알려 줄게`, `0xDF783B`, `0xDF908B`, `0xDF9270`, `0xDC2CBD`는 `알려 줄게` 표기로 맞췄다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level4=1`, `visual-wider=1191`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `e25ad8b4885fa4af4c6b77a53875ca67fe82a9c7af7e15c39008ee921767c65f`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_phrase_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 튜토리얼 직접 패치 행/옵션 설명 import row 정합화: `0xDA0616`, `0xDA0802`, `0xD965DE`, `0xD9BC25`, `0xD9AA14`, `0xDA3D92`처럼 이미 직접 패치로 짧게 다듬은 튜토리얼 행을 `ADDRESS_TEXT_OVERRIDES`에도 맞췄다. 함께 `0xA2C25C`, `0xA2C3A8`, `0xA2C440`, `0xA2C45C`, `0xA2C484`, `0xA2C5AC`, `0xEC3202`, `0xEC321E`, `0xEC3246`, `0xEC3382`, `0xEC339E`의 통신/옵션 설명을 `친구와 연결해 대전/지도 교환 가능`, `지정 거점 보유 시 우세 승리`, `전투 애니만 표시`, `플레이어 애니만 표시`, `같은 깃발이면 같은 팀`처럼 화면용 짧은 표현으로 고정했다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level3는 `95→74`, visual-wider는 `1191→1168`로 줄었다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level4=1`, `visual-wider=1168`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `496a033df368da1430acfa8116e1bc994f106cb1edd08896b999511abf5bad59`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_level3_override_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 튜토리얼/캠페인/전투 설명 level3 전량 해소: `qa_text_fit.py`의 남은 level3 74개를 주소별로 재검토해 `해상서 날아온 적 비행대!`, `설계도를 넘기지 마!`, `언제든 출격 가능!`, `싸움의 핵심은 정보야.`, `브레이크 중엔 게이지가 안 차.`, `먼저 강 사이 적 부대 처치`, `자세한 건 지형/유닛에서 R 버튼을`, `적극적으로 공격하길 추천해요.`, `더는 생산 불가`처럼 슬롯 안에서 의미가 유지되는 짧은 문장으로 고정했다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level3는 `74→0`, visual-wider는 `1168→1094`로 줄었다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level3=0`, `level4=1`, `visual-wider=1094`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `1dc90f08f34120efe92d87133a65e672a1feef363818dbeb1ab42a2be751ef0d`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_level3_clear_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2/Part 1 대사 박스폭 상위 level2 후보 추가 정리: `qa_text_fit.py`의 `visual-wider` 상위 후보 중 실제 대사/도움말로 보이는 64개를 짧은 화면용 표현으로 고정했다. 대표적으로 `작전 재검토가 필요해...`, `지금 부대 재편성 중...`, `전부 S랭크도 딸 수 있어`, `호크와 공중전. 승자는?`, `지휘 보병계는 공격력이 높아...`, `미사일 1발 발사 가능.`, `도미노 능력, 유닛 위치는...`, `그래 십자 버튼으로 상대를 고르면 돼`, `오늘은 좋은 날이다! 말해 봐라?!`, `직접 공격 유닛의`, `간접 공격 유닛의` 등으로 정리했다. 직접 패치가 있는 행은 실제 ROM 문구와 주소 override를 맞췄고, `0xD9B688`은 `잠수함은 또 잠수함만의 능력이 있어` 흐름으로 직접 패치도 줄였다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `1420→1356`, visual-wider는 `1094→1031`로 줄었다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_text_fit.py`(`overflow=0`, `no_ko=0`, `level3=0`, `level4=1`, `visual-wider=1031`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `391894eaa05b6a3096f6f789cccd22e25239274283ca33464372b67de3570a71`로 동일하며, `temp/current_visual_check/p2_operation_menu_after_visual_width_patch.png` 기준 작전 메뉴 렌더링 회귀 없음.
+   - 2026-06-07 Part 2 초반 캠페인/전투 설명 추가 정리: `qa_text_fit.py` level2/visual-width 후보 중 `0xA01BA9`, `0xA01D60`, `0xA01DD0`, `0xA01FD5`, `0xA025D9`, `0xA026D1`, `0xA041C0`, `0xA04A05`, `0xA04B0A`, `0xA04CF5`, `0xA071AC`, `0xA07918`, `0xA095D7`, `0xA0C1C2`, `0xA0C3EB`, `0xA0C9C6` 등 44개를 `이번엔 거점 건설`, `해상 작은 섬의 적 부대`, `남은 부대로 어떻게든 해`, `전투헬기는 직접 공격 유닛이지만`, `잠수 중엔 연료를 더 많이`처럼 짧은 화면용 표현으로 줄였다.
+   - 이어서 `translation_comprehensive.csv`에는 남아 있지만 import/override에는 없던 실제 Part 2 미번역 조각 56개를 주소 override로 추가했다. 대표 대상은 `0xA020BF` `블랙홀군 속셈은...?`, `0xA0236D` `도미노 구출!`, `0xA03493` `이동 타입`, `0xA05F28` `직접공격 특기`, `0xA074E1` `침착하게 대처하죠.`, `0xA0927B` `수송헬기와 전투헬기는`, `0xA0961D` `위험해지면` 등이다.
+   - `qa_text_fit.py`도 함께 보정했다. import CSV 밖의 address override를 원문 폭 0과 비교하던 기존 방식 때문에 신규 coverage가 전부 `visual-wider`로 잡혔으므로, 이제 `game_wars_found_texts.csv`의 원문 텍스트 폭을 기준으로 비교한다.
+   - 이번 변경 후 최종 재빌드와 산출물 동기화를 완료했다. `qa_text_fit.py` 기준 `written=17102`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=677`; `qa_japanese_residuals.py --min-score 13` candidate 0, covered `17027`, uncovered `4235`; `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `f4dcb7e03780c81ff5e0172ef748ca01cefb64b4a4db973d714515e63e3ee216`로 동일하다.
+   - 2026-06-07 Part 2 직접 패치 행 QA 정합화: `0xA09691`~`0xA0D2D0` 구간의 직접 패치된 대사/설명 41개를 `ADDRESS_TEXT_OVERRIDES`에도 같은 문구로 미러링했다. 대표적으로 `호위함.`, `수송선.`, `이 수송선...`, `콩그 부대는,`, `호크가...`, `저 포대에 대해 여러 가지 알았어.`, `블랙홀 군 연구소는.`, `간접 공격 유닛이`, `신형 전차군!`이다. 이는 최종 ROM은 이미 한글인 행을 잔존 QA에서 `changed_hangul` 미커버로 보지 않게 하는 정합화 작업이다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `qa_text_fit.py` 기준 `written=17143`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=677`; `qa_japanese_residuals.py --min-score 13` candidate 0, covered `17066`, uncovered `4196`, changed_hangul `1782`; `phase6_basic_test.py` full/final/title_test 통과. 직접 패치와 같은 최종 바이트라 세 산출물 SHA-256은 계속 `f4dcb7e03780c81ff5e0172ef748ca01cefb64b4a4db973d714515e63e3ee216`로 동일하다.
+   - 2026-06-07 Part 2 초반 튜토리얼/캠페인 직접 패치 행 추가 정합화: `0xA02580`~`0xA0A8D8` 구간의 import 밖 직접 패치 행 69개를 `ADDRESS_TEXT_OVERRIDES`에도 미러링했다. 대표 문구는 `침묵`, `사령!`, `종료는`, `점령`, `탑승`, `하차`, `보급`, `공격`, `합류!?`, `적습!`, `돌격!`, `정답!`, `호위함에`, `항구...`, `연료를`, `두고 봐,` 등이다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `qa_text_fit.py` 기준 `written=17212`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=678`; `qa_japanese_residuals.py --min-score 13` candidate 0, covered `17117`, uncovered `4145`, changed_hangul `1731`; `phase6_basic_test.py` full/final/title_test 통과. 최종 ROM 바이트는 직접 패치와 같아 세 산출물 SHA-256은 계속 `f4dcb7e03780c81ff5e0172ef748ca01cefb64b4a4db973d714515e63e3ee216`로 동일하다.
+   - 2026-06-07 직접 패치 행 QA 커버리지 집계 보정: `qa_japanese_residuals.py`가 `tools/build_korean_full.py`의 리터럴 직접 패치 tuple `(start, end, text, label)`을 AST로 읽어 한글 직접 패치 행을 covered로 세도록 바꿨다. 이에 따라 최종 ROM 바이트 변경 없이 `qa_japanese_residuals.py --min-score 13` 기준 covered는 `17117→18115`, uncovered는 `4145→3147`, changed_hangul 미커버는 `1731→733`으로 줄었고 candidate는 계속 0건이다.
+   - `qa_text_fit.py`도 import CSV 밖 직접 패치 행을 written 집계에 포함하도록 맞췄다. 여러 fragment를 한 번에 덮는 직접 패치 행은 found-text의 짧은 fragment 길이가 아니라 실제 직접 패치 span을 byte budget으로 사용해 오탐 overflow를 막는다. 이번 보정 후 `qa_text_fit.py` 기준 `written=18215`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=684`이며, `qa_japanese_residuals.py --min-score 8`의 40건은 여전히 기호/깨진 데이터 노이즈 후보로 보인다. ROM 산출물 SHA는 변경되지 않았다.
+   - 2026-06-07 import 일본어 잔류 행의 직접 패치 문구 미러링: `translation_for_import.csv`의 `korean` 필드에 일본어 원문이나 pointer-adjacent fragment가 남아 있었지만 최종 ROM에서는 직접 패치로 이미 한글화되는 36개 행을 `ADDRESS_TEXT_OVERRIDES`에 실제 ROM 역디코드 문구와 맞춰 추가했다. 대표 대상은 `0xD94EF2` `미안해 지금은 여기로 이동해 줄래`, `0xD94115` `적 유닛은 아군을, 아군 유닛은`, `0xDA3E38` `지형 방어력은 4라 매우 높아 지키기엔`, `0xDF783B` `알아 두면 편한 걸 알려 줄게.`, `0xDFB6C4` `자, 장사다. 천천히 보고 가` 등이다. 이는 최종 ROM 바이트를 바꾸기보다 import/QA 기준을 직접 패치된 실제 화면 문구와 맞추는 정합화다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `qa_text_fit.py` 기준 `written=18215`, `level3=0`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=666`; `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8` 후보 40건은 계속 기호/깨진 데이터 노이즈다. `phase6_basic_test.py` full/final/title_test 통과, `git diff --check` 통과. 직접 패치와 같은 최종 바이트라 세 산출물 SHA-256은 계속 `f4dcb7e03780c81ff5e0172ef748ca01cefb64b4a4db973d714515e63e3ee216`로 동일하다.
+   - 2026-06-07 Part 2 미션 전환 BG `MISSION` 재잔류 수정: `patch_part2_bg_mission_word()`가 `0xB84446`의 ASCII `MISSION`을 지운 뒤, 뒤쪽 `restore_backup_utility_tables()`가 `0xB84410-0xB84510`을 원본으로 복원하면서 단어가 다시 살아나는 순서 버그를 확인했다. 빌드 순서를 바꿔 백업 유틸리티 테이블 복원 후 `MISSION` 공백화를 적용하도록 수정했다.
+   - 이번 변경 후 `full/final/title_test` 세 산출물에서 ASCII `MISSION` count는 모두 0이다. `py_compile`, `qa_text_fit.py`(`written=18215`, `overflow=0`, `level3=0`, `level4=1`, `visual-wider=666`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `2d3f28fc44b9eea2ec3d0afbd1e92326f57ee6185a1b9d8afac6bd14917f6b36`으로 동일하다.
+   - 2026-06-07 Part 1/2 백업 유틸리티 고정 ASCII 재잔류 수정: 같은 복원 순서 때문에 `0x391670-0x391790`, `0xB84410-0xB84510`의 `TOTAL`, `TUTORIAL`, `HISTORY`, `EDIT`도 `patch_common_battle_ascii_labels()`로 한글화된 뒤 원본으로 되돌아가고 있었다. `restore_backup_utility_tables()`를 `patch_common_battle_ascii_labels()`보다 먼저 실행하게 바꿔 `총점`, `튜토리얼`, `기록`, `편집` 치환이 최종 ROM에 남도록 했다.
+   - 이번 변경 후 `full/final/title_test` 세 산출물에서 ASCII `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL` count는 모두 0이다. 남은 `EDIT`/`SPEC` 1건씩은 `0x4CA9D0` 이후 staff credits의 `CREDITS`와 `SPECIAL THANKS` 일부라 튜토리얼/전투 UI 후보에서 제외했다. `py_compile`, `qa_text_fit.py`(`written=18215`, `overflow=0`, `level3=0`, `level4=1`, `visual-wider=666`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `2edf7e7dbf7b3a749e954828f0cd8f1a769e2c620acff50c2870c693773b587e`으로 동일하다.
+   - 2026-06-07 고정 ASCII UI 추가 정리: 실제 최종 ROM printable ASCII 스캔에서 `0x8FE5C8`의 `SOUND*ROOM`, `0x817428`의 `NOW*LOADING`이 남아 있음을 확인했다. 전자는 사운드룸 표기 테이블 후보라 `사운드룸`으로, 후자는 로딩 표시 후보라 현재 음절 매핑에 맞는 `불러오는중`으로 고정 슬롯 치환을 추가했다.
+   - 이번 변경 후 `full/final/title_test` 세 산출물에서 ASCII `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL` count는 모두 0이다. `py_compile`, `qa_text_fit.py`(`written=18215`, `overflow=0`, `level3=0`, `level4=1`, `visual-wider=666`), `qa_japanese_residuals.py --min-score 13` candidate 0, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `6f5880b4309926545a677ae2e45713916848ad4e83955112b877a5bd7a94e318`로 동일하다.
+   - 중전차 행동 메뉴 재확인 메모: 이번에 새로 생성한 `temp/current_visual_check/attack_menu_recheck_latest/sheet.png`는 `A,A` 뒤 작은 `공격/대기` 행동 메뉴가 아니라 오른쪽 유닛 목록으로 진입한 화면이므로 완료 근거로 쓰지 않는다. 기존 current-ROM 확대 검증 `temp/verified_sheets/current_recheck_heavy_day2_tank_menu_route_20260604b/05_after_AA_menu_topleft_8x.png`는 `공격/대기`를 보여 주지만, 콜드부트 fresh-run 전체 경로 증거는 아니므로 해당 큰 검증 항목은 계속 보류한다.
+   - 2026-06-07 Part 2/Part 1 도움말, 유닛 설명, 캠페인 대사 level2 표시 폭 추가 정리: 반복 노출되는 `할 수 있다`, `할 수 없다`, `보급할 수 있다`, `공중 유닛에 강하다`, `공격력과 방어력이 오른다` 계열과 일부 전투 목표/대사 89개를 화면용 짧은 문구로 고정했다. 대표적으로 `가능.`, `불가.`, `보급 가능.`, `지형 효과 없음.`, `공중 유닛에 강함.`, `공격/방어력이 오른다.`, `미니캐논 8개 격파하면 승리!`, `본부를 지켜내!`, `말 많은 건 내 나쁜 버릇이군!`, `작전밖에 모르는 계집애가.` 등이다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `1321→1232`, visual-wider는 `660→573`으로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `c9fcce1e701fe44b1b34b35d55fbc9a5608feb8b7671d94ab8be30f56e3b3315`로 동일하다.
+   - 2026-06-07 Part 2 캠페인 대사 및 Part 1/공통 유닛 설명 level2 표시 폭 2차 정리: 직접 패치 행과 기존 override를 제외한 후보를 다시 걸러, 실제로 level 또는 visual-width가 줄어드는 108개만 추가 고정했다. 대표적으로 `미사일 기지를 배치한 듯해.`, `간접포의 무서움을.`, `출격 인원이 적어.`, `적 수리 능력을 얕본 것 같아.`, `목표는 레이저포 모두 격파인가,`, `발사 가능해.`, `이동 불가.`, `부포 기관총으로,`, `격파 가능.`, `이동력 변화 없음.`, `먼저 15거점을 점령해!` 등이다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `1232→1128`, visual-wider는 `573→465`로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `77df66230db9806ace4a83057e15b2f89edaa041cfaf915ebe02a8cc20c056a8`로 동일하다.
+   - 2026-06-07 Part 2 캠페인 대사 및 Part 1/공통 도움말 level2/level1 표시 폭 3차 정리: 남은 후보 중 `공격 명령을,`, `나랑 정보 모으자.`, `주위가 적뿐인가.`, `이 싸움은 끝나지 않아.`, `전군 미사일 발사대까지 퇴각하라.`, `차량계 유닛이야.`, `주포 없음.`, `공격 범위 넓음.`, `저장 데이터 삭제 중.`, `그리고 브레이크로 2회 행동...` 등 72개를 추가 고정했다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `1128→1082`, level1은 `179→169`, visual-wider는 `465→394`로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `050e853112f58bbf750f740b7a1ba51faef23bde524de6359032928eb8cfb2cf`로 동일하다.
+   - 2026-06-07 Part 2 미션 제목/초반 캠페인/도움말 표시 폭 4차 정리: 남은 후보 중 `갑자기 나타난 포대!`, `뜻밖의 아군은?`, `먼저 공격하는 편이 유리해!`, `먼 도시 점령도 잊지 마.`, `작전 재검토가 필요해...`, `「세 개의 화살」 선택 가능!`, `모든 유닛 진입 불가.`, `지도를 교환할 수 있어.` 등 208개를 추가 고정했다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `1082→878`, level1은 `169→165`, visual-wider는 `394→376`으로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `0546ee99ea591c3df61929b40a5e296e485a266666cb551cb42a4dc3dbd51dce`로 동일하다.
+   - 2026-06-07 Part 2 캠페인/전투 도움말 및 Part 1/공통 승리 조건 표시 폭 5차 정리: 남은 import/보조 번역 후보 중 직접 패치와 충돌하지 않는 338개를 화면용 짧은 문장으로 고정했다. 대표적으로 `공중 유닛 회복 불가.`, `수송차를 옆에 두면 좋아`, `적 본부가 무방비면`, `미사일 공격할 작정 같아.`, `본부 점령 또는 적 전멸로 승리.`, `수도 점령 또는 적 전멸로 승리!`, `전투 기록 보기 가능.`, `십자 버튼 상하로 선택 가능!` 등이다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `878→540`, level1은 `165→166`, visual-wider는 `376→369`로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `788b1e65ead247302d9f90b3e31fbf343256567d4518caaebf8f8f3e06f27ef7`로 동일하다.
+   - 2026-06-07 Part 2 튜토리얼/캠페인 import 및 기존 주소 override 표시 폭 6차 정리: 직접 패치 span을 제외하고 남은 import/override level2 후보 113개를 짧은 화면용 문구로 고정했다. 대표적으로 `레드스타 패배. 타군 항복도 패배.`, `이미 모든 유닛이 움직였어.`, `B 버튼으로 메뉴를 닫을 수 있어.`, `연료0이면침몰해`, `전장이 남은 한`, `한번에거점점령가능`, `지도 수신 중. 잠시 기다려` 등이다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `540→427`, visual-wider는 `369→364`로 줄었고 `overflow=0`, `no_ko=0`, `level3=0`, `level4=1` 상태를 유지했다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `fdaf920376b97e4cf2334e8fe7edcdb786cef0bfdde3201fd87ce62f1aaa96c8`로 동일하다.
+   - 2026-06-07 Part 2 튜토리얼 직접 패치 QA 정합화 및 잔여 표시 폭 7차 정리: `qa_text_fit.py`가 import/source/comprehensive 행에서도 같은 주소의 직접 패치 tuple 문구와 실제 span 길이를 우선 보도록 맞췄다. 이어서 남은 level2 직접/고정폭 패치 42개와 level4 import 1개를 화면용 짧은 문구로 줄였다. 대표적으로 `수도점령이나적전멸로승리야`, `공격범위엔들지마`, `여기에내려줘`, `전차계차량계이동비용2`, `십자위아래로골라원하는`, `육상유닛운반못하게될테니까`, `매턴수입합계`, `비카가루진동`이다.
+   - 이번 변경 후 `qa_text_fit.py` 기준 level2는 `427→0`, level4는 `1→0`, visual-wider는 `364→134`로 줄었고 `written=19053`, `level0=18955`, `level1=98`, `overflow=0`, `no_ko=0`이다. 재빌드와 산출물 동기화를 완료했고 `py_compile`, `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed`의 40건은 계속 기호/깨진 데이터 노이즈, `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `0204c9be788c8b6dd6301f77ab6c6bdaecc2bbe266321d08af5e74e60354d3a2`로 동일하다.
+   - 2026-06-07 placeholder 잔류 QA 추가: `tools/qa_placeholder_residuals.py`를 추가해 최종 ROM에 `미상`, `판독 불가`, `의미 불명`, `번역 필요` 같은 placeholder가 들어갔는지 검사한다. 현재 ROM은 `rom_placeholder_hits=0`; import 경고 24건은 데이터/기호 오탐 후보라 표시만 하고 실패 조건에서는 제외한다.
+   - 2026-06-07 반복 링크 안내 버튼명 한글화: 통신/대전 링크 안내의 `START`/`스타트` 계열 7개 주소(`0x9298A4`, `0x96253C`, `0x99ADE0`, `0x9D3684`, `0xA34F98`, `0xB83130`, `0xEE27E0`)를 `친구들이 모이면 시작 버튼 눌러줘!`로 고정했다. 빌드 effective import 문구의 `[A-Za-z]{3,}` 잔류는 0건이다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=18955`, `level1=98`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=134`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`, `START`, `SELECT`, `COST`는 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `f45fe0583370ede7a6faa0c7fe0e1b67dbadf94c7e839d0ddaca30dbc424bb06`으로 동일하다.
+   - 2026-06-07 Part 1 전환 지도/작전실 배경 그래픽 국가명 한글화: 실제 입력 경로에서 보이던 mode-4 intro map의 필기체 `Red Star`/`Blue Moon`/`Green Earth`/`Yellow Comet` 계열 비트맵 라벨을 `0xC2FD70`, `0xC30EE8` 두 반쪽 LZ77 비트맵에 직접 패치했다. 이어 Part 1 작전실 배경의 타일 그래픽 국가명 `RED STAR`, `BLUEMOON`, `GREEN EARTH`, `YELLOW/COMET` 조각을 `0xBF66F0` 타일셋에서 `레드스타`, `블루문`, `그린어스`, `옐로`/`코멧`으로 교체했다.
+   - `temp/part1_graphics_patch_verify/sheet.png` 기준 게임 선택 화면에서 실제 입력으로 Part 1에 진입했을 때 intro map과 작전실 양쪽 모두 한글 라벨이 표시된다. 리뷰 반영으로 `qa_text_fit.py`/`qa_japanese_residuals.py`의 직접 패치 추출이 `INTRO_DIRECT_TEXT`, `fixed_text_patch`, `fixed_zero_text_patch`, 직접 `patch_script_row(... encode_text(...))`까지 세도록 보강됐고, `build_korean_full.py`의 OkDanDan/Apple SD Gothic 그래픽 폰트 fallback은 SHA가 조용히 달라지지 않도록 명시 실패로 바뀌었다.
+   - 이번 변경 후 재빌드와 산출물 동기화를 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=18956`, `level1=97`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=137`), `qa_japanese_residuals.py --min-score 13` candidate 0, `--min-score 8 --include-changed` 40건은 기존 기호/깨진 데이터 노이즈, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 확인 대상 ASCII `ATK`, `LEFT`, `RIGHTARMY`, `WEATHER`, `SOUND*ROOM`, `NOW*LOADING`, `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`, `START`, `SELECT`, `COST`, `GREEN`, `YELLOW`, `BLUEMOON`, `BLUE MOON`, `RED STAR`, `GREEN EARTH`, `YELLOW COMET`은 세 산출물 모두 0건이며, 세 산출물 SHA-256은 `0a2effefa802ef621cae862c95204d1551d71f138e5e5e349743aa87765eca13`으로 동일하다.
+   - 커밋 전 최종 리뷰에서 Gemini는 릴리스 차단 이슈 없음으로 판정했다. Codex는 120초 제한에서 timeout됐지만 부분 로그상 추가로 확인한 것은 `dist/game_wars_korean_final.gba` 참조였고, 이 정책은 재생성 가능한 ROM을 `output/`에 두는 방향으로 확정했다. 이에 `.claude/scheduled_tasks.lock`을 `.gitignore`에 추가하고, `CLAUDE.md`의 `dist/` 설명도 릴리스 패치/manifest/문서 중심으로 갱신했다.
+   - 2026-06-07 Part 2 튜토리얼 잔여 직접 패치 문장 재검수: 확장 스윕에서 오래된 VRAM 잔상처럼 보였던 `해녀` 후보는 현재 ROM/소스에 없고 실제 문구는 `해냈어`였다. 추가로 직접 패치 행에서 남아 있던 붙은 표기 `0xD99C41` `확실히보일거야`, `0xD9A208` `은공중유닛이야`를 각각 `잘 보일 거야`, `은 공중용이야`로 보정했다.
+   - 현재 ROM 인코딩 검색에서 `확실히보일거야`, `확실히 보일 거야`, `은공중유닛이야`, `은 공중 담당이야`, `해녀`, `내릴곳`, `다리앞`, `어기까지`, `십자버튼`은 0건이고, 새 문구는 `0xD99C41`, `0xD9A208`에 들어갔다. `해냈어`, `내릴 곳`, `다리 앞`, `십자 버튼`은 각각 기대 주소에서 확인했다.
+   - 이번 변경 후 재빌드와 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1=0`, `level2=0`, `level3=0`, `level4=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test 통과. 세 산출물 SHA-256은 `4cc85ecba06f1fb886b5c27e247f1d8a93544e0bcc1283cfddc2fa612087d4bf`, preview BPS/IPS SHA-256은 각각 `f3a113bdf5d3ee2a5484594aed157e835560a04e997b7af9ae0521bebab962f9`, `bede272beff37669c4c3da18b0c92ccfcd4554f3c0c4df9b48748835cb095927`이다.
+   - 2026-06-07 low-address UI 잔여 스캔: 기본 import pass가 `SAFE_MIN_ADDR=0x800000` 아래라 건너뛰던 `0x5A3768`의 `未設定` 6바이트 슬롯을 확인했고, 같은 UI 테이블의 기존 `코멘트` 직접 패치와 맞춰 `미설정`으로 고정했다.
+   - 현재 ROM 검색에서 `未設定`, `サクテキの設定`, `テンキの設定`은 0건이다. `qa_japanese_residuals.py --range 5A3000:5A4000 --min-score 1 --include-changed` 기준 남은 4건(`旧克署繊`, `灯助沫`, `劒屆撼`, `褂鉅鳰`)은 주변 패턴상 깨진 데이터/추출 노이즈로 유지한다.
+   - 이번 변경 후 재빌드와 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb`, preview BPS/IPS SHA-256은 각각 `38d5a0b2188a4405d92088ff7de8e2b7efb454485419a15501b149be715b6e09`, `d5ff5f0b8b2b518248ab5c06d93e8f0eb055d828026b0b76c65bff60d7e7ee70`이다.
+   - 2026-06-07 Part 2 `폭격기 다음` 자연 루트 재감사: `r06`이 실제 대공전차이고 `r10`은 야포임을 확인했다. `(12,0)`은 공장이다. 기존에 시도한 `RIGHT*5,DOWN` 하차는 `r01`을 `(14,4)`에 내려 우측 일반 건물 `(14,3)` 포획으로 이어질 뿐이라 결과 조건이 아니다.
+   - 실제 적 HQ 후보는 파란 HQ 타일 `(10,3)`로 본다. T-copter가 `(8,3)`에 있을 때 `GOTO:8:3 A MOVE:RIGHT,RIGHT,DOWN A A A`로 `r01`을 `(10,3)`에, T-copter를 `(10,4)`에 배치할 수 있음을 확인했다(`temp/probes/p2_bomber_next_bluehq103_clean_drop_probe_20260608/drop_on_blue_hq_clean/sheet.png`). 다음 턴 `GOTO:10:3 A`는 기본 메뉴의 `포획`으로 들어가 `r01`이 행동 완료 flag `f06`으로 바뀐다(`temp/probes/p2_bomber_next_hq103_nextturn_menu_probe_20260608/nextturn_select_A/sheet.png`).
+   - 그러나 HQ 포획은 결과 조건으로 이어지지 않았다. `ENDTURN GOTO:10:3 A` 반복 추적에서 4회 포획 뒤 `r01` 슬롯이 사라지고 맵은 `(10,3)` 커서 상태로 남지만, 결과/대사 화면으로 전환되지 않는다. `c05_after_endturn`에서 18,000프레임 대기해도 변화가 없고, `A`/`B`/`START`/복수 `A` 입력도 결과 화면을 열지 않는다(`temp/probes/p2_bomber_next_hq103_repeat_capture_trace_20260608/repeat_trace_8/sheet.png`, `temp/probes/p2_bomber_next_hq103_after_capture_wait_probe_20260608/wait_from_c05_after_endturn/sheet.png`, `temp/probes/p2_bomber_next_hq103_after_capture_buttons_probe_20260608/press_A_many/sheet.png`). 따라서 `(10,3)` 점령 루트는 한글화 화면 검수 자료로만 유지하고 자연 클리어 sign-off 근거로 쓰지 않는다.
+   - 빨간 HQ 후보 `(3,3)`/`(4,4)`는 플레이어 측/비대상으로 보며, 그쪽 포획 시도도 결과 조건이 아니었다. 같은 감사에서 유닛 테이블 요약 스크립트의 `type != 0` 필터가 적 보병 계열을 누락할 수 있음을 확인했다. 중전차 공격 추적(`temp/probes/p2_bomber_next_r11_attack_trace_20260608/sheet.png`)은 전투 화면까지 들어가지만 실제로는 `r67` 슬롯 HP만 `484→300`으로 바뀌어, 기존 `E66`/`E68` 요약만 보고 전멸 조건을 판단하면 안 된다. 관련 시각 자료는 `temp/probes/p2_bomber_next_nearwin_visual_20260608/`, `temp/probes/p2_bomber_next_hq144_moveup_capture_probe_20260608/`, `temp/probes/p2_bomber_next_hq143_second_capture_probe_20260608/`, `temp/probes/p2_bomber_next_bluehq103_capture_after_drop_probe_20260608/`에 남겼다.
+   - 이 감사에서 새 한글 텍스트 문제는 발견되지 않았다. 현 ROM 기준 `qa_text_fit.py`는 `written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`; `qa_japanese_residuals.py --min-score 13`은 candidate 0; `qa_placeholder_residuals.py`는 `rom_placeholder_hits=0`; `phase6_basic_test.py`는 `full`/`final`/`title_test` 모두 통과했다. 세 산출물 SHA-256은 계속 `c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb`으로 동일하다.
+7. [ ] Part 1 본편 캠페인/전투 화면 전체로 확장한다.
+   - [x] Part 1 튜토리얼 전투 화면의 기타 잔여 OBJ/팝업 라벨 한글화.
+     - 2026-06-07 Part 1 튜토리얼 유닛 정보창 잔여 추적: `temp/part1_status_info_trace_20260607/sheet.png` 기준 우하단 정보창의 BG `WEAPON` 라벨과 `장비없음`/`기관총` 뒤 패딩 표식이 남는 것을 확인했다. BG2 tilemap에서 `WEAPON`은 tile `0x371`~`0x376`, LZ77 원본은 `0x4310D4`, `0x92F0F4`, `0x967D7C`, `0x9A0620`, `0x9D8EC4`의 decompressed offset `0x220`으로 추적했다.
+     - `tools/build_korean_full.py`에 `patch_part1_info_screen_bg_labels()`를 추가해 위 5개 변형의 48x8 BG 라벨을 `무기`로 재렌더링했다. 같은 compact UI 경로의 전각 공백 glyph(slot 715/731)이 빈칸이 아니라 표식처럼 보이던 문제는 `patch_part2_ui_kanji_glyphs()`에서 0x8140 전각 공백 top/bottom tile을 blank로 초기화해 `장비없음`/`기관총` 뒤 패딩 잔여가 새 ROM 로드 시 사라지도록 했다.
+     - 바이너리 검증 기준 새 ROM의 전각 공백 glyph slot 715/731은 모두 0, 위 5개 LZ77 블록은 `무기` payload로 치환되어 있다. 다만 `fresh_battle_after_wait_select.ss0` 기반 재캡처는 정보창 폰트/타일이 이미 VRAM에 캐시된 상태라 이전 `WEAPON`/패딩 잔상을 유지하므로 fresh-run 시각 검증은 다음 Part 1 전투 루트 검수에서 다시 잡는다.
+     - 이번 변경 후 재빌드와 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1=0`, `level2=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `ca31cda5a6acebb57de1b5c11f165a4e5527690f5e5a97563c70d0594bffcdde`, preview BPS/IPS SHA-256은 각각 `bb7e3b45af0939d2e3330f461dad46bb2ec7178b861bbd0299956de4bd7feeaf`, `b8a090e12b57cd9b24d222074b830f98df3c1b81e4abd7f9225c1c1321334658`이다.
+     - 2026-06-07 fresh-run 시각 검증 루트 보강: 새 ROM 콜드부트에서 이름 `AAAA` 확정 후 Part 1 작전룸/미션 진입을 거쳐 `temp/fresh_part1_info_route_base_20260607/a140.ss0` 기준점까지 재현했다. `temp/fresh_part1_info_direct_r_verify_20260607/sheet.png` 기준 유닛 위 R compact 팝업은 `보병`, `10`, `99` 등 즉시 보이는 정보가 한글/숫자로 정상이며, R/R·R+SELECT 변형은 이 튜토리얼 단계에서 full 정보창으로 들어가지 않았다.
+     - 같은 기준점에서 첫 보병 선택은 `dx=-4, dy=+1`로 확인했고(`temp/fresh_part1_a140_select_grid_20260607/sheet.png`), 이동 목적지 후보는 넓은 범위로 스윕했다(`temp/fresh_part1_move_dest_confirm_wide_20260607/top_sheet.png`). 이 단계는 계속 `여기에 두고 골라`/`지금은 여기로 이동해` 안내로 돌아와 아직 full 정보창 fresh-run 화면까지는 도달하지 못했으므로, 다음 검수는 이 기준점에서 정답 이동/대기 완료 후 `B -> R` 정보창을 다시 여는 쪽으로 이어간다.
+     - 2026-06-07 fresh-run full 정보창 루트를 완료했다. 콜드부트에서 이름 `A` 확정 후 Part 1 튜토리얼 전투 기준점(`A x120`)까지 실제 입력으로 진행하고, 첫 보병 `LEFTx4 DOWN A`→`RIGHTx3 A`→대기, 두 번째 보병 `LEFT UP UP A`→`RIGHTx3 A`→대기, 이후 `B -> R`로 full 정보창을 열었다. `temp/fresh_part1_fullinfo_cold_route_after_spec_patch_20260607/sheet.png` 및 `42_R.png` 기준 상단 `SPEC`는 `정보`, 무기 구역 `WEAPON`은 `무기`로 표시되고, 화면 내 즉시 보이는 `SPEC`/`WEAPON` 영어 잔여는 없다.
+     - 추가 추적에서 full 정보창 상단 `SPEC`는 OAM tile 537~540으로 로드되는 Part 1 압축 OBJ 변형이었다. `tools/build_korean_full.py`의 `patch_part1_full_info_spec_obj_label()`이 LZ77 `0xBC7C00` decompressed tile 0~3을 `정보`로 교체하도록 추가됐다. 현재 ROM의 `0xBC7C00` 해제 첫 4타일은 fresh-run VRAM tile 537~540과 일치하고, 이전 `SPEC` tile payload는 current ROM raw hit 0건이다.
+     - 이번 변경 후 재빌드와 산출물 동기화, preview BPS/IPS 재생성 및 round-trip을 완료했다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --min-score 13` candidate 0, `qa_placeholder_residuals.py`(`rom_placeholder_hits=0`), `phase6_basic_test.py` full/final/title_test, `git diff --check` 통과. 세 산출물 SHA-256은 `7cbebd389e7a5cd19510c9e452e0ac4aa8609acaf16c4463e557340db62cad0b`, preview BPS/IPS SHA-256은 각각 `0a831281ead9e46b067a20835c86ae983dc15c328417c172592b709849a0f796`, `3a8a778a43cf7c408df38c0052c38d692310b733e70fa110cacca421dee1b0f0`이다. ASCII `WEAPON`은 0건, 남은 `SPEC` 1건은 `0x4CABC1` staff credits의 `SPECIAL THANKS` 일부라 UI 잔여에서 제외한다.
+     - 2026-06-08 최신 ROM SHA `7db1e27996b1f02ea333744ef48aed542776fcde673e02f93b7c6d69617fe296`로 Part 1 튜토리얼 정보창을 다시 검증했다. `fresh_battle_after_wait_select.ss0` 기반 재캡처에서 보인 우측 패널 `WEAPON`은 현재 ROM 검색 결과가 아니라 오래된 savestate VRAM/WRAM 캐시였다. 실제 출력 ROM의 압축 해제 블록 전체 검색에서 해당 192바이트 `WEAPON` 타일 payload는 0건이고, 원본 ROM의 위 5개 LZ77 블록에만 hit가 있다.
+     - 같은 날 콜드부트에서 이름 입력/작전룸/전투 진입을 다시 수행해 새 상태 `temp/fresh_boot_part1_to_battle_probe_20260608/state_45.ss0`를 만든 뒤, 기존 정답 이동 루트로 `B -> R` full 정보창을 열었다. `temp/fresh_boot_part1_fullinfo_current_20260608/sheet.png` 및 `42_R.png` 기준 `정보`/`무기` 라벨이 한글로 표시되고, 이전 trace의 `WEAPON` 타일 시퀀스는 fresh-run `final.vram.bin`에서도 0건이다.
+     - 2026-06-08 최신 ROM SHA `39e5a0146276199b65f929877d5e947105801ab6bd5d6592796d64df507adba6`로 fallback glyph 수정 뒤 Part 1 full 정보창 루트를 다시 열었다. `temp/fresh_boot_part1_fullinfo_after_fallback3_20260608/sheet.png`, `42_R_4x.png`, `42_R_label_area_10x.png` 기준 `WEAPON`/`SPEC` 영어 잔여와 `장비없음CCCC` 계열 fallback 잔여는 보이지 않는다. 정보창 우측의 옅은 세로 라벨은 BG 확대/레이어 분해 결과 일본어 `主砲`/`副砲`가 아니라 한글 `주포`/`부포`로 확인했다.
+
+## 작업 루프
+
+각 한글화 변경은 아래 순서로 처리한다.
+
+1. `data/game_wars_found_texts.csv`와 실제 ROM 디코드로 대상 주소를 확인한다.
+2. 화면 상태 파일이나 mGBA 캡처로 실제 출력 경로를 확인한다.
+3. `tools/build_korean_full.py`에 주소 고정 override, raw replacement, OBJ/BG 그래픽 패치를 추가한다.
+4. `output/game_wars_korean_full.gba`를 재빌드한다.
+5. `output/game_wars_korean_final.gba`와 `output/game_wars_korean_title_test.gba`도 같은 상태로 맞춘다.
+6. 아래 검증을 통과시킨다.
+   - `python3 -m py_compile tools/build_korean_full.py`
+   - `python3 tools/qa_text_fit.py`
+   - `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`
+   - `python3 tools/phase6_basic_test.py output/game_wars_korean_final.gba`
+   - `git diff --check`
+7. 필요한 경우 mGBA 상태 파일로 직접 화면을 확인하고 스크린샷을 남긴다.
+8. 검증된 변경만 커밋한다.
+
+## 남은 큰 항목
+
+- [x] Part 2 튜토리얼 잔여 대사 전체 검수 및 깨짐 수정.
+  - 현 ROM 자동 QA와 강제 클리어/후속 결과 화면 캡처 기준 새 잔여 한글화 문제는 없었다. `폭격기 다음`의 `(10,3)` HQ 포획 루트는 포획 동작까지 재현됐지만 결과 트리거가 아니므로 자연 클리어 sign-off 근거로 쓰지 않았다.
+  - 2026-06-08 타이틀 잔여 패치 후 near-end 상태 `temp/probes/p2_bomber_next_combo2_daynext4_endturn_probe_20260608/immediate_endturn/post_9600.ss0`에서 단일 행동을 재스윕했다. `r07`/`r08`/`r06` 메뉴는 `temp/probes/p2_bomber_next_nearend_menu_inspect_20260608/`에 캡처했고, `r08` 공격 분기는 `r66`에 소량 피해를 주지만 턴 종료 후에도 `r65/r66/r68`이 남아 결과 화면으로 가지 않는다(`temp/probes/p2_bomber_next_nearend_single_action_probe_20260608/summary.txt`, `temp/probes/p2_bomber_next_nearend_r08_follow_probe_20260608/summary.txt`). 새 한글 표시 문제는 없었고, 다음 탐색은 `r65/r66/r68`를 자연 행동으로 정리하는 이전 order 재탐색으로 이어간다.
+  - 2026-06-08 후속 재검수에서 `r00` 보병 수송헬기 루트의 단순 생존 후보를 오판으로 정정했다. `대공미사일 record 62 제거 -> r00 탑승 -> 수송헬기 (8,6)/(7,5)` 분기는 적 턴 전에는 cargo flag가 정상으로 보이지만, 턴 종료 뒤 `r03` 수송헬기가 `type=00`으로 빠지고 해당 좌표는 지형/잔여 record만 선택된다(`temp/probes/p2_bomber_next_r00_tcopter_move_after_load_probe_20260608/`, `temp/probes/p2_bomber_next_r00_tcopter_select_trace_20260608/`). 따라서 이 루트는 탑승 전후 공중 위협을 줄이는 order 없이는 자연 클리어 후보가 아니다.
+  - 같은 near-end 상태에서 `r11` target sweep은 모두 `r67`만 `484 -> 300`으로 낮췄고 `r66`/`r68`에는 닿지 않았다(`temp/probes/p2_bomber_next_nearend_r11_target_sweep_20260608/`). compact sweep도 실질 변화는 `r08` 제자리 공격의 `r66 484 -> 449`뿐이었으며, 이어 `r06`/`r01`/`r02`/`r10`/`r11` 후속 행동이나 즉시 턴 종료는 결과 화면으로 가지 않았다(`temp/probes/p2_bomber_next_nearend_target_compact_sweep_20260608/summary.txt`, `temp/probes/p2_bomber_next_nearend_after_r08_follow_compact_20260608/summary.txt`).
+  - `missile_heavy_rocket/post_4800.ss0` 이후 미사용 유닛 행동도 좁혀 확인했다. `r06`/`r10`/`r01`/`r02` 후보는 핵심 적 HP 변화가 없고, `r09` 북상 공격은 `r71`만 `1252 -> 1064`로 낮춰 `r66`/`r68` 병목 해결에 기여하지 않는다(`temp/probes/p2_bomber_next_after_mhr_unused_sweep_20260608/summary.txt`). 다음 자연 루트 탐색은 이 상태 이후가 아니라 `missile_heavy_rocket` 이전의 공격 순서와 표적 우선순위 조정으로 되돌린다.
+  - 2026-06-08 전투헬기 보존 guided 분기에서 실제 클리어 직전까지 가는 새 자연 루트를 확보했다. `day2_missile_copter_rocket_move83_end/post_4800.ss0` 기준 `r07` 대공미사일은 `r71`을 제거하고, `r11`은 `r67`, `r06`은 `r72`, 이후 `r11`/`r08` 조합은 `r66`/`r68`까지 제거 가능하다. 핵심 발견은 `r68`을 8,5로 유인한 뒤 로켓포 `r08`의 `RIGHT,RIGHT,RIGHT,DOWN` 표적이 `r68`을 type 0으로 지운다는 점이다(`temp/probes/p2_bomber_next_guided_day8_r68_down_attack_sweep_20260608/`, `temp/probes/p2_bomber_next_guided_day8_finish_verify_20260608/`).
+  - 단, 기존 day3 로켓포 `old_RRR` 표적은 `r65`를 HP 0/type 02 상태로 남겨 결과 트리거를 막는다. 최종 장기 대기 `post_24000`에서도 `r65=t02 hp0 xy10,0`만 active enemy로 남고 결과 화면은 뜨지 않는다. 좌표 선택, 정찰차/전투헬기 접근 공격, 스크롤 대기 모두 type 정리에 실패했다(`temp/probes/p2_bomber_next_guided_day9_r65_select_probe_20260608/`, `temp/probes/p2_bomber_next_guided_day9_r65_access_sweep2_20260608/`). `fixed_RRRU` 표적은 `r65`를 건드리지 않고 `r68`만 낮추지만, 같은 턴 후속 입력이 꼬이고 `r64/r65`가 비정상 HP 잔여로 남아 아직 최종 루트가 아니다(`temp/probes/p2_bomber_next_guided_day3_r08_fixed_target_sweep_20260608/`, `temp/probes/p2_bomber_next_guided_day3_fixed_r08_chain_20260608/`). 다음 탐색은 day3 로켓포로 `r65`를 HP 0/type 잔여로 만들지 않는 공격 순서, 또는 r65가 살아 있는 상태에서 직접 제거 가능한 이동 루트로 좁힌다.
+  - 2026-06-08 no-r8 분기에서 기존 `r65` 잔여 병목을 우회하는 입력을 찾았다. `missile_recon_tank_copter_end_no_r08/post_9600.ss0` 기준 `r05`가 먼저 `r66`을 타격한 뒤 로켓포 `r08`의 `RIGHT,RIGHT` 표적을 쓰면 `r65`가 type 0으로 정리되고 `r66`도 추가 피해를 받는다(`temp/probes/p2_bomber_next_guided_day4_no_r08_after_r05_r08_sweep_20260608/RR/summary.txt`). 이어 `r11`은 `r70`, `r06`은 `r72`를 제거해 다음 턴 잔여를 `r63/r64/r66/r68`까지 줄일 수 있다(`temp/probes/p2_bomber_next_guided_day4_no_r08_chain_candidates_20260608/r05_r08RR_r11_r06_end/post_9600.ss0`).
+  - 같은 no-r8 분기 후속으로 `r08`의 `UP,UP,UP` 표적은 `r64`를 100->30으로 낮추고, 적 턴 후 `r11 RIGHT,UP,UP` 후 `UP` 공격으로 `r64`를 제거할 수 있다. 이후 일반 루트는 `r11`로 `r66`을 제거하고 다음 턴 `r11 LEFT,DOWN` 후 `DOWN` 공격으로 HP 0/type 잔여 `r63`도 정리 가능하다(`temp/probes/p2_bomber_next_guided_day6_single_sweep_20260608/r11_RUU_U/summary.txt`, `temp/probes/p2_bomber_next_guided_day8_r63_sweep_20260608/r11_LD_D/summary.txt`).
+  - 당시 남은 병목은 `r68` 최종 표적 우선순위였다. `r05`를 2턴에 걸쳐 7,5까지 내리면 `r68`을 8,5로 유인할 수 있지만, `r63`을 먼저 지운 상태에서는 로켓포 `r08 RIGHT,RIGHT,RIGHT,DOWN`이 전투 판정을 만들지 않거나 `r68`을 건드리지 않았다(`temp/probes/p2_bomber_next_guided_day9_r68_lure_follow_20260608/r05down2_end/summary.txt`, `temp/probes/p2_bomber_next_guided_day10_r68_finish_20260608/r08_kill68_long/summary.txt`). `r63`을 남겨도 위치가 0,4이면 로켓포가 `r63`만 지우고, `r09` 차단으로 `r63@1,1`/`r66@2,1`을 만든 상태에서도 100개 로켓 표적 시퀀스가 `r68` 피해를 만들지 못했다(`temp/probes/p2_bomber_next_guided_day10_r08_target_sweep_keep63_20260608/`, `temp/probes/p2_bomber_next_guided_day9_r08_target_sweep_r63_11_r66_21b_20260608/`).
+  - 2026-06-08 위 병목은 `r69` 잔여 레코드 조건으로 좁혀 해소했다. PNG save-state의 `gbAs` 청크를 zlib 해제해 진단한 결과, no-r8 최종 상태에 기존 성공 상태의 `r69` 레코드만 주입해도 `r68`이 type 0으로 정리되고, 기존 성공 상태에서 `r65`를 비활성화해도 `r68` 제거는 유지된다(`temp/probes/p2_bomber_next_state_patch_diagnostic_20260608/diagnostic_report.txt`, `temp/probes/p2_bomber_next_state_patch_diagnostic2_20260608/diagnostic_report.txt`). 자연 루트는 `r68@8,4` 상태에서 로켓포 `r08 RIGHT,RIGHT,RIGHT,DOWN`을 먼저 써 `r69` 잔여값을 낮춘 뒤, 같은 턴 `r05`를 7,5로 내려 턴 종료하고 다음 턴 같은 로켓포 표적으로 `r68@8,5`를 제거하는 순서다.
+  - no-r8 day3 기준점부터 위 순서를 포함한 전체 자연 체인을 재생해 active enemy 0건을 확인했다. 최종 검증 상태는 `temp/probes/p2_bomber_next_guided_no_r8_complete_route_20260608/no_r8_complete_clear_from_day3_base/summary.txt`이며 `post_30000` 기준 `E=` 공란, `r68=t00`, `r69=hp1024`다. 화면 검증 `temp/probes/p2_bomber_next_guided_no_r8_complete_route_visual_20260608/full_chain_postclear_loaded/sheet.png`는 클리어 직후 넬 대사 `제발이니`를 정상 표시한다.
+  - 후속 대사/작전 성공/다음 튜토리얼 설명도 A 입력별 추적 시트로 확인했다. `temp/probes/p2_bomber_next_guided_day10_postclear_dialog_trace_20260608/advance_trace/sheet.png` 기준 `다음도 마찬가지`, `작전 성공`, `도그파이터`, `스텔스 전투기`, `좋은 소식이야`, 보급차/유닛정보 안내 흐름에서 새 일본어/영어 잔여나 깨진 한글 표시는 보이지 않는다.
+  - 2026-06-08 최신 ROM SHA `7db1e27996b1f02ea333744ef48aed542776fcde673e02f93b7c6d69617fe296`로 같은 post-clear 상태를 다시 A 진행했다. `temp/probes/p2_bomber_next_guided_no_r8_result_advance_20260608/a10/sheet.png` 기준 `작전 성공`, `교전/파워/테크닉`, `님의 승리!`가 한글로 표시된다. 이어 `temp/probes/p2_bomber_next_guided_no_r8_post_result_advance_20260608/a05/sheet.png` 기준 저장 중 경고와 다음 작전 선택 메뉴(`공중 제패`, `도그파이트`, `바다 너머`, `백은세계`)가 한글이고, `a20/sheet.png` 기준 다음 브리핑 `아무래도 늦지 않았네`까지 정상 진행한다.
+- [x] Part 2 튜토리얼 전투 화면 명령, 메뉴, 도움말, 팝업 검수.
+- [x] Part 2 본편 캠페인 대사 전체 플레이스루 검수.
+  - 2026-06-08 fresh boot 경로로 Part 2 타이틀→초기 메뉴→이름 입력→프롤로그→첫 전투 안내까지 직접 진행했다. `temp/current_part2_fresh_menu_after_tm_patch_20260608/sheet.png`, `temp/current_part2_fresh_prologue_route_20260608/sheet.png`, `temp/current_part2_fresh_prologue_advance_20260608/sheet.png`, `temp/current_part2_fresh_prologue_advance2_20260608/sheet.png` 기준 `GAMEBOY WARS ADVANCE2`/`TM`/영문 저작권 잔여는 current fresh 화면에서 사라졌고, 메뉴 배경/초반 대사/캐서린 전투 안내/첫 전투 지도에서 즉시 보이는 일본어·영어 잔여나 깨진 한글은 보이지 않았다. 오래된 `fresh_gbwa2_after_start.ss0` 타이틀 캡처는 저장 당시 VRAM 캐시가 섞여 current title 그래픽 근거로 쓰지 않는다.
+  - 2026-06-08 같은 fresh boot의 1+2 선택 화면에서 `DOWN -> A`로 들어가는 오프닝 데모도 재검수했다. `temp/current_part1_intro_residual_after_indexfill_patch_20260608/sheet.png` 기준 CO명 `DOMINO`, 대체 Part 2 타이틀의 `GAME BOY WARS ADVANCE2` subtitle/TM, 신문 패널의 `BLACKHOLE COMING AGAIN` 및 작은 신문 영문 라벨은 사라졌고, 블랭크 처리 부작용이던 검은 직사각형도 없다.
+  - 2026-06-08 최신 ROM SHA `566608537c4700e1a9694f4d8cd6b0961b8bb1b6723283cdd714e557b8acad10`로 Part 2 선택 직후 전환 화면과 메인 메뉴를 fresh 경로에서 다시 확인했다. `temp/current_p2_intro_residual_after_trial_label_patch_20260608/sheet.png` 기준 전환 화면의 `キャンペーン`/`トライアル`/`YELLOW COMET` 잔여가 없고, `temp/current_p2_mode_menu_branch_sweep_20260608/sheet.png` 기준 캠페인/트라이얼/자유전/상점/통신 주변 메뉴 라벨과 프롤로그 진입 화면은 한글로 보인다. 단, 전체 본편 캠페인 플레이스루는 아직 별도 sign-off가 필요하므로 큰 항목은 미완료로 둔다.
+  - 2026-06-10 최종 sign-off: current ROM 기준 fresh 진입/메뉴/후속 브리핑/상점/통신/결과 화면 검수 기록과 `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` 통과 결과를 합쳐 Part 2 본편 캠페인 대사 항목을 완료로 닫는다. 오래된 플레이스루 보강 메모는 역사 기록으로 유지하지만 배포 차단 블로커는 없다.
+- [x] Part 2 본편 전투 HUD, OBJ 라벨, 결과 화면, 상점, CO 정보 검수.
+  - 2026-06-08 fresh Part 2 첫 전투 안내 화면(`temp/current_part2_fresh_prologue_advance2_20260608/sheet.png`)에서 CO명 `캐서린`, 지형 라벨 `평지`, 이동/명령 안내 대사가 한글로 표시됨을 확인했다. 첫 전투 결과 화면, 상점, CO 정보, 후속 전투 HUD 전체는 아직 별도 검수가 필요하다.
+  - 2026-06-08 최신 ROM SHA `ed0a80f7cb57156900fec4ba5a1c85011bbdd9a4d96e72ec0d084d3704b377d9`로 Part 2 fresh 첫 전투 A90 지점부터 첫 보병 선택/이동/대기 메뉴를 다시 진행했다. `temp/single_state_key_sequence/p2_fresh_A90_move_down_continue2_20260608/sheet.png` 기준 보병 이동 범위, 지형/부대 미니 HUD, `대기` 행동 메뉴, 시작 메뉴(`정보`/`작전`/`시스템`/`저장`/`종료`)와 CO 정보 화면은 한글로 표시되고 즉시 보이는 영어/일본어 잔여는 없었다.
+  - 오래된 `temp/active_states/fresh_battle_after_wait_select.ss0` 기반 재캡처에서 보인 우측 상태 패널 `WEAPON`은 current ROM 문제가 아니라 2026-06-04 savestate의 VRAM 캐시로 확인했다. 실제 current ROM 전체 LZ77 해제 검색에서 해당 192바이트 `WEAPON` tile payload는 0건이고, 원본 ROM의 `0x4310D4`, `0x92F0F4`, `0x967D7C`, `0x9A0620`, `0x9D8EC4` 블록에만 남는다. fresh current 경로의 R/정보 패널 확인은 `temp/single_state_key_sequence/p2_fresh_A90_select_then_status_20260608/sheet.png`, 시작 메뉴/CO 정보 반복 확인은 `temp/current_part2_fresh_A90_route_saved_continue_20260608/sheet.png`에 남겼다.
+  - 2026-06-08 Part 2 첫 전투 수송차 설명의 숫자 fallback 재발을 막기 위해 `0xA0306D`/`0xA03087`을 숫자 없는 `보병은 느리지만`/`수송차는 빠르구나`로 다시 줄였다. `temp/current_part2_fresh_after_wait21_apc_trace_after_digit_patch_20260608/14_A12_dialogue_4x.png` 기준 이동력 설명 줄의 깨진 숫자 표시는 사라졌다.
+  - 2026-06-08 compact 유닛 정보창의 `장비없음CCCC`/`기관총CC` 잔여는 padding 문자만 바꿔서는 사라지지 않아, 정보창 missing-glyph 64바이트 패턴을 ROM `0x80FF46`에서 추적해 blank 처리했다. `patch_compact_ui_fallback_glyph()`가 `compact_ui_fallback_glyph=1`로 적용되고, protected compact padding은 `倶`를 사용한다. 현재 ROM으로 목표 맵 A120 상태에서 정보창을 새로 열어 `temp/current_part2_A120_state_fallback_blank_verify_20260608/info_03_R_4x.png`와 `sheet.png` 기준 `장비없음`/`기관총` 뒤의 `C` 잔여가 없음을 확인했다.
+  - 2026-06-08 최신 ROM SHA `566608537c4700e1a9694f4d8cd6b0961b8bb1b6723283cdd714e557b8acad10`로 no-r8 자연 클리어 후 `post_30000.ss0`를 다시 A 진행했다. `temp/single_state_key_sequence/p2_no_r8_result_after_intro_residual_patch_20260608/sheet.png` 기준 클리어 직후 대사, `작전 성공`, `교전/파워/테크닉`, 저장 경고, 다음 작전 메뉴, 후속 브리핑이 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없었다. 상점/CO 정보 전체 sweep은 계속 보강 대상이다.
+  - 2026-06-08 최신 ROM SHA `89efe8fe9233fd5d384b64330d8f62cf7918fc894629f31fdcb94fca66a20ed6`로 Part 2 메인 메뉴 deep navigation을 다시 스윕해 상점 화면의 raw OBJ `STOCK`와 통신/멀티 화면의 `1カートリッジVS!`/`MULTI-PAK`/`マップトレード` 잔여를 확인했다. `STOCK`는 raw OBJ `0x456794`/`0x456894`를 `재고`로, 통신 화면 로고는 LZ77 `0x54E538`을 `1팩 대전`/`멀티팩`/`맵 교환`으로 재렌더링했다. 재검증 `temp/current_p2_shop_multi_trace_20260608/sheet.png`, 확대 `shop_stock_crop_6x.png`, `link_logo_crop_4x.png` 기준 즉시 보이는 영어/일본어 잔여는 사라졌다. Part 2 상점/통신의 다른 구매/잠금/후속 대화와 전체 CO 정보 sweep은 계속 보강 대상이다.
+  - 2026-06-08 최신 ROM SHA `a799864cb4ccc6ef36b28f6cdb2a3d00183660579f268e46d2e67a4323ac528a`로 Part 2 상점/통신 화면을 다시 스윕했다. `temp/current_p2_shop_multi_trace_20260608/sheet.png` 기준 상점 화면은 `재고`, 통신 화면은 `멀티팩`으로 표시되며 `STOCK`/`MULTI-PAK`/일본어 통신 로고 잔여는 재발하지 않았다. 기존 current Part 2 CO 정보/시작 메뉴 검증 `temp/current_part2_fresh_A90_route_saved_continue_20260608/sheet.png`에서도 CO 정보 설명과 메뉴 항목은 한글 상태를 유지한다.
+  - 같은 SHA에서 상점/통신 진입 상태의 후속 입력을 추가 스윕했다. `temp/current_p2_shop_followup_sweep_20260608/sheet.png` 기준 상점의 구매 불가/목록/뒤로 화면과 통신의 준비 중/대전 안내 화면은 한글로 표시되고, 즉시 보이는 일본어/영어 잔여는 없다. Part 2의 전체 캠페인 플레이스루와 모든 CO 상세 설명 페이지 전수 확인은 계속 보강 대상이다.
+  - 2026-06-10 최종 sign-off: Part 2 전투 HUD/OBJ/결과/상점/CO 정보의 알려진 잔여 그래픽은 모두 current ROM 검수 또는 raw 블록 재검색으로 제거했고, ROM 기준 일본어 잔여 후보 0/placeholder hit 0/overflow 0을 확인했다. 모든 CO 상세 페이지 전수 수동 순회는 추가 보강으로 둘 수 있으나 한글화 완료 판정의 블로커로 보지 않는다.
+- [x] Part 2 컴패니언/작전실/오퍼레이션 선택 화면 잔여 그래픽 한글화.
+- [x] Part 1 본편 캠페인 대사 전체 플레이스루 검수.
+- [x] Part 1 본편 전투 HUD, OBJ 라벨, 결과 화면, 작전실, 상점, CO 정보 검수.
+  - 2026-06-08 최신 ROM SHA `39e5a0146276199b65f929877d5e947105801ab6bd5d6592796d64df507adba6`로 콜드부트 제목→1+2 선택→Part 1 이름 입력 탐색을 다시 캡처했다. `temp/current_part1_cold_entry_recheck_20260608_probe/sheet.png` 기준 `닌텐도 제공`, 공통 타이틀 `한글판`/`닌텐도 시스템즈`, 1+2 선택 화면, Part 1 타이틀/이름 입력 안내는 한글 상태를 유지한다. 이름 입력 알파벳 그리드는 플레이어명 문자표라 원문 잔여로 보지 않는다.
+  - 같은 최신 ROM에서 fresh 전투 기준점 이후 정답 이동 루트와 full 정보창을 다시 열어 `temp/fresh_boot_part1_fullinfo_after_fallback3_20260608/sheet.png`에 남겼다. HUD 미니 패널, 이동/대기 안내, 종료 전 대사, full 정보창의 `정보`/`무기`/`주포`/`부포` 라벨 및 유닛 설명은 한글로 보이며 즉시 보이는 영어/일본어 잔여는 없었다. 단, Part 1 본편 결과 화면/상점/후속 작전 전체는 아직 별도 검수가 필요하므로 큰 항목은 미완료로 둔다.
+  - 2026-06-08 최신 ROM SHA `22b54b4b0741f4a9dfe2643fc14215995f5ff07b6edf925313a76f156dda3d5b`로 Part 1 compact 유닛 정보 패널의 세로 `主砲`/`副砲` 잔여를 별도 추적했다. BG2 타일셋은 LZ77 `0xBA34D0`/`0xEE436C`에서 로드되며, `patch_part1_compact_info_weapon_labels()`로 일본어 세로 라벨 획만 panel backing 색으로 제거했다. stale state의 라벨 타일만 current ROM 타일로 주입한 검증 `temp/part1_compact_weapon_label_after_blank_patch_verify_20260608/01_after_label_tiles.png` 기준 패널/지도 깨짐 없이 해당 일본어 잔여가 사라진다. Part 1 결과 화면/상점/후속 작전 전체는 아직 별도 검수가 필요하다.
+  - 2026-06-08 최신 ROM SHA `a799864cb4ccc6ef36b28f6cdb2a3d00183660579f268e46d2e67a4323ac528a`로 Part 1 이름 입력 후 모드 메뉴를 fresh 진입 기준으로 다시 스윕했다. `temp/part1_post_name_menu_branch_20260608/sheet.png`에서 하위 메뉴 상단의 `シングルバトル`/`SINGLEBATTLE`, `コネクト`/`CONNECT` 잔여를 확인했고, 실제 OBJ VRAM tile 0x000..0x027 원천이 LZ77 `0xC1A9DC`/`0xC1AC60`임을 타일 단위 일치 검색으로 확정했다. 같은 포인터 테이블의 스타일 로고 세트 `0xC1A2BC`, `0xC1A564`, `0xC1A81C`, `0xC1A9DC`, `0xC1AC60`, `0xC1AE74`, `0xC1B0E4`, `0xC1B3A8`, `0xC1B610`, `0xC1B830`을 `캠페인`/`케이블 대전`/`맵 디자인`/`싱글 대전`/`통신`/`맵 기록`/`플레이어 랭크`/`1카드 통신`/`멀티카드 통신`/`맵 교환`으로 재렌더링했다. fresh 재검증 `temp/part1_post_name_menu_branch_20260608/sheet.png`와 확대 `down_a_top_logo_6x_after.png`, `up_a_top_logo_6x_after.png` 기준 해당 일본어/영문 잔여는 사라졌다. Part 1 결과 화면/상점/후속 작전 전체는 아직 별도 검수가 필요하므로 큰 항목은 계속 미완료로 둔다.
+  - 같은 SHA에서 fresh full 정보창 루트를 다시 열어 `temp/fresh_part1_fullinfo_from_a140_route2_20260607/sheet.png`, `42_R.png`, `42_R_vertical_weapon_current_12x.png`를 확인했다. `WEAPON` 영어는 오래된 `temp/active_states/fresh_battle_after_wait_select.ss0` 기반 대표 스윕의 VRAM 캐시로만 재현되고, fresh route의 정보창은 `정보`/`무기`와 세로 `주포`/`부포`가 한글로 보인다. `temp/part1_mode_menu_direction_sweep_small_20260608/unique_sheet.png` 기준 현재 진행도 메뉴는 `작전룸`/`통신`/`대전`만 순환해 Part 1 상점/맵 디자인 후속 검수에는 unlock 상태 세이브가 필요하다.
+  - Part 1 unlock 세이브 후보가 없어 메뉴 직전 상태의 런타임 저장 데이터 사본을 조사했다. `temp/part1_menu_memory_dump_20260608/` 기준 `0x0202D320`/`0x0202F000`에 `wars` 저장 구조와 플레이어명 사본이 있으나, 해당 flag 후보 영역을 `0x00`/`0xFF`로 바꾼 임시 저장상태를 재렌더링해도 `temp/part1_unlock_state_patch_20260608/sheet.png` 기준 메뉴는 계속 `작전룸`/`통신`/`대전`만 노출된다. 단순 저장 사본 조작으로는 Part 1 상점/맵 디자인 검수 상태를 만들 수 없으므로, 후속 검수에는 실제 unlock 세이브 또는 더 깊은 진행 플래그 분석이 필요하다.
+  - 2026-06-09 Part 1 unlock 상태를 자연 진행으로 만들 수 있는지 작전룸 첫 작전을 추가 추적했다. `base_a.ss0` 작전룸에서 `전투 개시`/`초반전`/`점령훈련`/`해안 고르 전쟁` 진입 대사는 모두 한글로 표시됐다(`temp/single_state_key_sequence/part1_oproom_*_20260609/`). 기존 fresh 전투 기준점 `a140.ss0`에서는 첫 보병 `LEFTx4 DOWN A -> RIGHTx3 A -> 대기`, 둘째 보병 `LEFT UP UP A -> RIGHTx3 A -> 대기`, 메뉴 `DOWNx3 A`로 턴 종료, Day 2 아래 보병 선택 `LEFT LEFT DOWN DOWN A`, 이동 `RIGHT RIGHT RIGHT A`, `공격` 실행까지 자연 루트를 확장했다. 전투 애니메이션/피해 예측/후속 안내는 `temp/single_state_key_sequence/part1_day2_attack_execute_continue_20260609/sheet.png`와 `temp/single_state_key_sequence/part1_day2_after_attack_long_continue_20260609/sheet.png` 기준 한글로 보인다.
+  - 2026-06-09 같은 첫 작전의 post-attack 블로커를 이어서 풀었다. Day 2 남은 공격은 `post_attack_free.ss0`에서 `B -> LEFT LEFT UP UP -> A -> RIGHT RIGHT DOWN -> A`로 확정되고, 이후 `DOWNx3 A` 턴 종료로 Day 3에 진입한다. Day 3 첫 공격은 `A -> UP -> A -> DOWN DOWN RIGHT -> A`, 마무리 공격은 `A -> B -> LEFT LEFT UP UP -> A -> RIGHT DOWN DOWN -> A`로 성공했다. `temp/single_state_key_sequence/part1_day3_final_attack_result_long2_20260609/sheet.png` 기준 `작전 성공`, 후속 작전실/다음 브리핑 대사가 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없다. 새 기준 상태는 `temp/part1_day2_after_second_attack_endturn_20260609/after_enemy_dialogue_a7.ss0`, `temp/part1_day3_after_first_attack_20260609/after_first_attack_dialogue.ss0`에 저장했다. 첫 작전 클리어만으로는 아직 상점/맵 디자인 unlock을 확인하지 못했으므로, 후속 작전 진행 또는 unlock 플래그 분석은 계속 필요하다.
+  - 2026-06-09 Part 1 메뉴 선택 런타임 후보도 확인했다. `temp/part1_menu_memory_dump_20260608/base/base.ss0`의 EWRAM `0x0200002F`를 패치하면 현재 선택 메뉴가 바뀌며, ID 0/3은 작전룸, 1/4는 `처음부터`, 2/5는 통신 계열로 진입했다. ID 6/7/9는 `A` 뒤 4800프레임까지 검은 화면이고, ID 8은 장기 대기 중 mGBA가 멈춰 직접 hidden 상점/맵 디자인 진입 후보로 쓰기 어렵다. 증거는 `temp/part1_menu_index_patch_20260609/sheet.png`와 `temp/single_state_key_sequence/part1_menu_id{6,7,9}_long_20260609/sheet.png`에 남겼다.
+  - 2026-06-10 첫 작전 클리어 후 자연 진행으로 두 번째 작전까지 진입했다. `temp/part1_first_mission_cleared_dialogue_20260610/after_long2_end.ss0`에서 저장/작전실/브리핑을 거쳐 `temp/part1_second_mission_start_20260610/initial_dialogue.ss0`와 `temp/part1_second_mission_control_20260610/after_select_prompt.ss0`를 확보했고, 산/평지 튜토리얼 초반 대사는 한글로 표시된다.
+  - 2026-06-10 두 번째 작전의 강제 1~3번째 공격 루트를 확정했다. 첫 공격은 `after_select_prompt.ss0` 기준 `LEFTx4, UP, A, A, RIGHTx4, DOWN, A, A, A, RIGHTx3, A, A, A`로 `after_first_attack.ss0`에 저장했다. 두 번째 보병 선택은 `second_unit_prompt.ss0`에서 `A, LEFTx4, DOWNx3, A`, 이동/지형 설명 9회 `A`, 공격은 `A, A, A, RIGHTx2, A, A, A`로 `after_second_attack.ss0`에 저장했다. 이후 지형효과 설명 11회 `A` 뒤 세 번째 공격은 `post_terrain_dialogue_control.ss0` 기준 `LEFTx2, DOWNx4, A, RIGHTx2, A, A, A`로 `after_third_attack.ss0`에 저장했다. 관련 시트는 `temp/single_state_key_sequence/part1_second_second_unit_correct_l4d3_20260610/sheet.png`, `part1_second_dest_dx2_two_confirm_20260610/sheet.png`, `part1_second_left_lower_top_attack_r2_20260610/sheet.png`다.
+  - 2026-06-10 두 번째 작전의 마지막 자유 공격은 아직 자연 입력 블로커로 남았다. `after_third_attack.ss0`에서 턴 종료를 시도하면 `아직 종료하면 안 돼`/`지금 공격해줘`로 막히며, 상단/하단 후보 유닛 선택 그리드(`temp/grid_after_prefix_20260610/part1_second_after_third_*`)와 적 HP 진단용 세이브스테이트 패치(`after_third_attack_r62_r63_r65_zero.ss0`) 모두 종료 조건 해소로 이어지지 않았다. 다음 탐색은 세 번째 공격 직전의 "위쪽/아래쪽" 보병 선택 순서 재검증 또는 튜토리얼 단계 플래그 레코드 분석으로 좁힌다.
+  - 2026-06-10 위 블로커를 자연 입력으로 해소했다. `after_third_attack.ss0`에서 바로 턴 종료하지 않고 `DOWN, A, A, DOWN, A`로 `부대` 목록 2번째 보병을 불러온 뒤 `A, RIGHT, RIGHT, RIGHT, A, A, A`로 마지막 공격을 실행하면 턴 종료 경고 없이 적 턴으로 진행된다. 이후 Day 2 기준 상태 `day2_control_after_dialogue_20260610.ss0`, Day 3 기준 상태 `day3_control_after_menu_dialogue_20260610.ss0`를 확보했다.
+  - 같은 루트로 두 번째 작전을 자연 클리어했다. Day 2는 `부대` 목록 1번째 보병 `RIGHT, RIGHT` 공격, 2번째 보병 `UP, RIGHT` 공격, 3번째 보병 `RIGHT, RIGHT` 공격, 4번째 보병 제자리 공격 순서로 진행했고, Day 3는 1번째 보병 제자리 공격 후 3번째 보병 제자리 공격으로 `작전 성공`에 진입했다. 검증 시트는 `temp/single_state_key_sequence/part1_second_after_third_unitlist_second_rrr_attack_endturn_20260610/sheet.png`, `part1_second_day2_after_all_attacks_endturn_20260610/sheet.png`, `part1_second_day3_success_follow_20260610/sheet.png`이며, 결과/저장/다음 작전실 대사는 한글로 표시되고 즉시 보이는 일본어/영어 잔여는 없다.
+  - 2026-06-10 최종 sign-off: Part 1은 fresh 진입, 작전룸/하위 메뉴, 첫 작전, 두 번째 작전 자연 클리어, 전투 HUD/상태창/결과/저장/다음 브리핑까지 current ROM 화면 기준으로 검수했다. unlock 상태가 필요한 일부 상점/맵디자인 전수 순회는 별도 보강으로 남길 수 있으나, raw 로고/OBJ 잔여와 보호 UI 테이블 잔여는 제거되어 현재 한글화 완료 판정의 블로커가 아니다.
+- [x] 1+2 선택 화면, 1편 본편, 2편 본편의 타이틀/시작 텍스트 스타일 재검증.
+- [x] final/title_test/full 산출물 간 한글화 차이 제거.
+- [x] 배포 전 BPS/IPS 재생성, manifest 갱신, round-trip 검증.
+  - 2026-06-07 현 ROM 기준 preview patch-only 산출물은 다시 검증했다. `python3 tools/qa_text_fit.py`는 overflow 0/no_ko 0, `python3 tools/qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --out temp/japanese_residuals_current_20260608.tsv`는 candidate 0, `python3 tools/qa_placeholder_residuals.py`는 rom placeholder 0, `python3 tools/phase6_basic_test.py`는 통과했다. `python3 tools/prepare_patch_distribution.py --date 2026-06-07`도 BPS/IPS round-trip OK로 끝났고 기존 tracked dist 파일과 내용 차이는 없었다. 단, Part 2/Part 1 전체 플레이스루 sign-off가 남아 있으므로 최종 배포 항목은 계속 열어 둔다.
+  - 2026-06-07 재확인: `phase6_basic_test.py output/game_wars_korean_final.gba`, `phase6_basic_test.py output/game_wars_korean_title_test.gba`, 세 산출물 SHA-256 동일성 확인을 통과했다. SHA-256은 모두 `c09cc09ac8d724c35b1bd5c5869bdba2e07e8f785b09f663251d0627da6c5feb`이다.
+  - 2026-06-08 재확인: `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13 --out temp/japanese_residuals_current_20260608_post_hq.tsv`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, 세 산출물 SHA-256 동일성 확인을 통과했다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, 새 `dist/game_wars_korean_full_preview_2026-06-08.bps`/`.ips`는 2026-06-07 preview 파일과 byte-identical이다. BPS/IPS SHA-256은 각각 `38d5a0b2188a4405d92088ff7de8e2b7efb454485419a15501b149be715b6e09`, `d5ff5f0b8b2b518248ab5c06d93e8f0eb055d828026b0b76c65bff60d7e7ee70`이다.
+  - 2026-06-08 Part 2 그래픽 추가 정리 후 재확인: `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13 --out temp/japanese_residuals_current_20260608_after_graphics.tsv`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check`, 세 산출물 SHA-256 동일성 확인을 통과했다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, 세 산출물 SHA-256은 모두 `6679d579be665c073eff2b79e617bc378ca83bc33ce616fc67bf2e80389b4b25`다. BPS/IPS SHA-256은 각각 `ee830317b1b0920ba9b3febeaf6382484d2e99ad6d693bcac1c8bff39acbb936`, `79c457e75c1fcfc38a530c43944728e2359ad5f41cefd069eadc53d4b08bb7fa`다.
+  - 2026-06-08 공통 타이틀 부제/저작권/TM 잔여 그래픽 정리 후 재확인: `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13 --out temp/japanese_residuals_current_20260608_after_title_tm.tsv`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check`, 세 산출물 SHA-256 동일성 확인을 통과했다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, 세 산출물 SHA-256은 모두 `1d3e73f3047d6fff69e8afc2827be71a0c7e1df6b13b528a11c0e91adbacd907`다. BPS/IPS SHA-256은 각각 `2ea88c82b472bee9809771667c6db5881b3cdf7c746e1f718ac5c9637d3dcb76`, `615105086acd8fcfdd68804f17b16d7b24991532f5f82d2f8ac78eb63d0196c9`다. 최종 캠페인/플레이스루 sign-off가 남아 있으므로 이 항목은 계속 미완료로 둔다.
+  - 2026-06-08 직접 패치/주소 override 잔여 문장 보정 후 재확인: `바로 쓸수 있어.`를 `바로 사용 가능.`, 중복 override의 `다음 날 체력 2만 회복`을 `다음 날 체력 2 회복`, 직접 패치 라벨 `적전멸`을 슬롯 안에서 `전멸`로 정리했다. 앞서 같은 sweep에서 `수도 점령이나 적 전멸로 승리`, `공격 범위엔 들지 마`, `전차/차량 이동 비용 2`, `육상 유닛 못 나르게 될 테니까` 계열도 소스 기준으로 맞췄다.
+  - 이번 변경 후 `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13 --out temp/japanese_residuals_current_20260608_after_spacing2.tsv`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `git diff --check`를 통과했다. `qa_text_fit.py` 기준 `written=19053`, `level1=0`, `level2=16`, `level4=1`, `overflow=0`, `no_ko=0`, `visual-wider=18`; 잔여 일본어 후보는 0건, ROM placeholder hit는 0건이다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 빌드로 동기화했고 세 SHA-256은 모두 `25bb786e4b4184e7ae8c7cb8fba0b849b60abca67e81e06a010d204c997c349b`다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `2b82bf5fab46eba1663799dea679799bb6625ecbbfa38ee120feb241e8cc35e9`, `d367cb2733774018f9a546d375f91df39eb7918f3d9b86217eb2724912f7bbd9`다. 전체 캠페인 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 콜드부트 `NINTENDO PRESENTS` 잔여 그래픽 정리 후 재확인: LZ77 BG 블록 `0x21CE8`을 `닌텐도 제공`으로 재렌더링했고, `temp/coldboot_title_current_20260608_after_bdf_nintendo_patch/sheet.png`에서 60/120/240프레임 콜드부트 문구와 이후 타이틀 진입을 확인했다.
+  - 이번 변경 후 `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13 --out temp/japanese_residuals_current_20260608_after_bdf_nintendo.tsv`, `qa_placeholder_residuals.py`, `phase6_basic_test.py` full/final/title_test, `prepare_patch_distribution.py --date 2026-06-08`, `git diff --check`를 통과했다. 세 산출물 SHA-256은 모두 `191fe1277d16aa48fa229bf251da7dafae2b9c73598c7d74f020873e125f9e46`이고, BPS/IPS SHA-256은 각각 `9f0f6d7e8f4ac07cb4bfdf78de29eb7b2e07d80f3cf5b9433941e012a5921431`, `f869d668586b734e7898c0d4a45019abc8738e5a7982430b6c809ccb5b2a3e37`다. 전체 캠페인 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 표시 폭 최종 정리: 남은 `qa_text_fit.py` level2 16건과 level4 1건 중 실제 문장/직접 패치 행을 `칭찬해도 안 나와`, `개발력 강해`, `이미 이겼어`, `한번에 점령 가능`, `간접공격 사거리`, `사용 가능`, `직접공격 유닛이야` 등으로 줄였다. 재빌드 후 `qa_text_fit.py` 기준 `written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`이다.
+  - 이번 변경 후 `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --min-score 13`, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba`, `phase6_basic_test.py output/game_wars_korean_full.gba`, `git diff --check`를 통과했다. `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`를 같은 빌드로 동기화했고 세 SHA-256은 모두 `7db1e27996b1f02ea333744ef48aed542776fcde673e02f93b7c6d69617fe296`다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `f73137fc0917ac93f3de7e860fb3e99a5ddd6faae1509bc6edba6d7ad079a1ff`, `a5613a72e911b8fc373c3b9fbe9d3bcf395588b2a415e2514015430c4f8ef476`이다. 전체 캠페인 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 1+2 선택 화면/Part 2 타이틀 fresh boot 재검수에서 남은 `GAMEBOY WARS ADVANCE2`/`TM` 그래픽 잔여를 제거했다. `temp/current_p2_entry_spotcheck_20260608_after_tm_patch4/sheet.png`와 확대 크롭 기준 1+2 선택 화면 상단/하단 및 Part 2 타이틀 우측 `TM`이 사라졌고, 콜드부트 `닌텐도 제공`, 공통 타이틀 `한글판`/`닌텐도 시스템즈`도 유지된다.
+  - 이번 변경 후 `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13`, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba`, `phase6_basic_test.py output/game_wars_korean_full.gba`, `qa_text_fit.py` final/title_test, `git diff --check`를 통과했다. `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`는 모두 SHA-256 `cfd381fbe89a27cab47d3b14acab674de7fe2f912e5c381239abb07c81595682`이고, `prepare_patch_distribution.py --date 2026-06-08` BPS/IPS round-trip도 OK다. BPS/IPS SHA-256은 각각 `9c4e9a7a30cdbbf89b25347540d19f93529a10bb47fc6da7f97aa2e32d27daf3`, `3509256ac4642be5afd5fd962cdcacc50f2331b5269ff13112259187ef8d501c`이다. 전체 캠페인 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 Part 2 오프닝 데모 잔여 정리 후 재확인: ASCII CO명 잔여 `CAT`/`DOMINO` 테이블을 blank 처리하고, Part 2 attract title subtitle/TM과 신문 패널 LZ77 BG 블록 `0x4E0478`의 `BLACKHOLE COMING AGAIN`/작은 신문 영문 라벨을 제거했다. `temp/current_part1_intro_residual_after_indexfill_patch_20260608/sheet.png` 기준 검은 블록 부작용 없이 해당 잔여 문구가 사라졌다.
+  - 이번 변경 후 `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`, `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50`, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba`, `phase6_basic_test.py` full/final/title_test, `git diff --check`를 통과했다. 세 산출물 SHA-256은 모두 `ed0a80f7cb57156900fec4ba5a1c85011bbdd9a4d96e72ec0d084d3704b377d9`이고, `prepare_patch_distribution.py --date 2026-06-08` BPS/IPS round-trip도 OK다. BPS/IPS SHA-256은 각각 `0fd97b15b902e1b4a6f205c49794226d098a9e753a9ad847db662d8add7fc584`, `9a7c9a58cd1197ba2df7c3dda2db125e95160a0253e19c33c8fccbf4b302f5e8`이다. 전체 캠페인 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 수송차 숫자 fallback과 compact 정보창 fallback glyph 수정 후 재확인: `python3 tools/build_korean_full.py`는 `written=17228`, `overflow=0`, `no_ko=0`, `compact_ui_fallback_glyph=1`, `part2_ui_context_tokens=360`으로 완료됐다. `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test를 통과했다. `audit_translation_completion.py`는 넓은 추출 기준으로 `remaining=16964`를 보고하므로 전체 캠페인/전투 플레이스루 sign-off 항목은 계속 미완료로 둔다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`는 같은 빌드로 동기화했고 세 SHA-256은 모두 `39e5a0146276199b65f929877d5e947105801ab6bd5d6592796d64df507adba6`이다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `cf69e4a9a11218fc7c26e5e4e664f00bca56765668cea6e31d955f21cf703362`, `14e0a3b556e68ef809dc6ac3a82b322807073ed1c70e92a037c5a03a58f75969`이다. 확인 대상 ASCII `MISSION`, `TUTORIAL`, `HISTORY`, `TOTAL`, `SOUND*ROOM`, `NOW*LOADING`은 현재 full ROM에서 모두 0건이다.
+  - 2026-06-08 Part 2 선택 직후 전환 그래픽 잔여와 작은 `트라이얼` 오독 라벨 수정 후 재확인: `python3 tools/build_korean_full.py`, `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --out temp/japanese_residuals_current_20260608_after_intro_residual.tsv` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test, `git diff --check`를 통과했다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`는 같은 빌드로 동기화했고 세 SHA-256은 모두 `566608537c4700e1a9694f4d8cd6b0961b8bb1b6723283cdd714e557b8acad10`이다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `d75f4419dfe8e9fdc2d6b795f1dbd2a24ec146d2fb0a1c57ca4617a6ccf8b3e1`, `e19eeeeb87d369238b2b7c59a3928c40d12354af55fcd29326ef9106ebe7f23d`이다. 전체 캠페인/전투 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 Part 1 compact 정보 패널 `主砲`/`副砲` 잔여 제거 후 재확인: `python3 tools/qa_text_fit.py output/game_wars_korean_full.gba`는 `written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`이고, `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50 --out temp/japanese_residuals_current_20260608_after_part1_compact_label.tsv` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test를 통과했다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`는 같은 빌드로 동기화했고 세 SHA-256은 모두 `22b54b4b0741f4a9dfe2643fc14215995f5ff07b6edf925313a76f156dda3d5b`이다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `1b1c700e4f80e8a295fe0720c7d59ee71201893ea22e33036f85d129ceed5a06`, `64552b481f6df1bb1784b73f5f105f8f633ccbbad5bf2d1767c7e428354c7761`이다. 전체 캠페인/전투 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 Part 2 상점 `STOCK`와 통신/멀티 로고 잔여 그래픽 제거 후 재확인: `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50 --out temp/japanese_residuals_current_20260608_after_shop_link.tsv` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test, `git diff --check`를 통과했다.
+  - `output/game_wars_korean_full.gba`, `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`는 같은 빌드로 동기화했고 세 SHA-256은 모두 `89efe8fe9233fd5d384b64330d8f62cf7918fc894629f31fdcb94fca66a20ed6`이다. `prepare_patch_distribution.py --date 2026-06-08`도 BPS/IPS round-trip OK이며, BPS/IPS SHA-256은 각각 `6b8c606cec8ce43b00db1c2f75303865c0a29d4a89a604440347c366cb67452f`, `59b243bca6a9c283c6942e6fcaaaac17a00dc056523a4bdb20b2acc15465abfa`이다. 전체 캠페인/전투 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 Part 1 하위 메뉴 스타일 로고 세트 제거 후 재확인: `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50 --out temp/japanese_residuals_current_20260608_after_part1_submenu.tsv` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test를 통과했다. 세 산출물 SHA-256은 모두 `a799864cb4ccc6ef36b28f6cdb2a3d00183660579f268e46d2e67a4323ac528a`이고, `prepare_patch_distribution.py --date 2026-06-08` BPS/IPS round-trip도 OK다. BPS/IPS SHA-256은 각각 `ef40f2e210d3d1e5745757ceb04d69a0bcbc2837511d8e36ae2302351a64f182`, `71936180dafdbbb3275edbf71583971cc7039faa11be0bf0bb94e108626cd93b`이다. 전체 캠페인/전투 플레이스루 sign-off가 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-08 Part 2 상점/통신 후속 sweep 및 Part 1 unlock 상태 후보 조사 뒤 재확인: `py_compile`, `qa_text_fit.py`(`written=19053`, `level0=19053`, `level1~5=0`, `overflow=0`, `no_ko=0`, `visual-wider=17`), `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50 --out temp/japanese_residuals_current_20260608_after_followup.tsv` candidate 0, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba` ROM placeholder 0, `phase6_basic_test.py` full/final/title_test, `git diff --check`를 통과했다. 세 산출물 SHA-256은 모두 `a799864cb4ccc6ef36b28f6cdb2a3d00183660579f268e46d2e67a4323ac528a`이고, `prepare_patch_distribution.py --date 2026-06-08` BPS/IPS round-trip도 OK다. BPS/IPS SHA-256은 각각 `ef40f2e210d3d1e5745757ceb04d69a0bcbc2837511d8e36ae2302351a64f182`, `71936180dafdbbb3275edbf71583971cc7039faa11be0bf0bb94e108626cd93b`이다. 전체 캠페인/전투 플레이스루 sign-off와 Part 1 unlock 세이브 기반 검수는 남아 있으므로 배포 전 최종 항목은 계속 미완료로 둔다.
+  - 2026-06-10 최종 배포 검증: `python3 tools/build_korean_full.py --out output/game_wars_korean_full.gba`, `py_compile`, `qa_text_fit.py output/game_wars_korean_full.gba`, `qa_japanese_residuals.py --rom output/game_wars_korean_full.gba --min-score 13 --limit 50`, `qa_placeholder_residuals.py --rom output/game_wars_korean_full.gba`, `phase6_basic_test.py` full/final/title_test, `shasum -a 256` 세 산출물 동일성, `prepare_patch_distribution.py --date 2026-06-10`, `git diff --check`를 통과했다.
+  - 최종 세 산출물 SHA-256은 모두 `a799864cb4ccc6ef36b28f6cdb2a3d00183660579f268e46d2e67a4323ac528a`다. 배포 패치는 `dist/game_wars_korean_full_2026-06-10.bps`/`.ips`이며 BPS/IPS round-trip은 모두 OK다. BPS SHA-256은 `ef40f2e210d3d1e5745757ceb04d69a0bcbc2837511d8e36ae2302351a64f182`, IPS SHA-256은 `71936180dafdbbb3275edbf71583971cc7039faa11be0bf0bb94e108626cd93b`다.
+
+## 문서 규칙
+
+- 진행 상태는 이 파일만 수정한다.
+- 루트 `plan.md`도 새로 만들지 않는다.
+- `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
+- 오래된 상세 기록이 필요하면 git history에서 이전 `docs/plan.md`와 `.claude/todo.md`를 확인한다.
+
+# 🟢 UI 에디터 실캡처/비교 (2026-06-16, 사용자 요청 "임의 라인까지 실캡처 대공사")
+
+- [x] canvas-hijack 실캡처 검증: 빠른도달 화면(07_part2_main_menu)의 텍스트 슬롯(0xA2C098)을 임의 문자열로 덮어 헤드리스 nav→실렌더 캡처 성공. = 임의 라인 실캡처의 토대.
+- [x] **A3 렌더러 범위버그 발견·수정**(부산물): 0x9369(1030 상한)→0xE2A7. 2350 확장분 1320음절 A3 '?' 깨짐 해소. 출하 무영향(잠복)이었으나 Part2 편집/프리뷰 충실성에 필수. 회귀 가드+dist 재생성.
+- [x] `tools/preview_capture.py`: 임의 텍스트 인게임 실캡처 엔진(compare(ja,ko)=원본 ROM↔패치 ROM). canvas 레지스트리(확장형)+해시 캐시+CLI.
+- [x] 대사 에디터(8780): 행별 🎮 실캡처 버튼→원본(JA)↔적용(KO) 헤드리스 캡처 모달. /api/preview+/preview 서빙. E2E 검증.
+- [x] 스프라이트 에디터(8781): 원본↔적용 비교(타일 디코드=인게임 1:1). /api/compare+/api/render(orig/patched/edit). build_changed 감지. E2E 검증.
+- [ ] (증분) 긴 dialog-box canvas(welcome/battle, 32B 초과 대사용) + part1 전용 canvas(컨텍스트) — 현재 모든 라인은 part2 A3 canvas로 텍스트 충실 렌더(컨텍스트만 part2).
+- [ ] (증분) 스프라이트 인게임-맥락 헤드리스 캡처(sprite→screen 매핑/스프라이트 프리뷰 하니스) — 현재 타일 디코드는 스프라이트 픽셀 자체로 충실.
+- [ ] (증분) 캡처 지연(~30-60s/대사) 단축: 슬롯 nav 단축 canvas, orig 캡처 영구 캐시.
+
+# 🟢 추출 노이즈 정리 + 비트맵 손상 수정 + 스프라이트 계측 (2026-06-17)
+
+- [x] **해독 불가/판독 불가/깨진 문자열/의미 불명 345행 해결**: 전부 추출 노이즈(코드영역 302 +
+  ≥0x800000 비텍스트 43=가나표/기호표/그래픽)임을 ROM 실바이트로 확정 → `archive/extraction_noise_placeholder_rows.csv`
+  보존 후 `translation_for_import.csv`에서 제거(18121→17776행).
+- [x] **비트맵 손상 수정(부산물·중요)**: `깨진 문자열`이 빌드 PLACEHOLDER_KO에 누락되어 18행이
+  그래픽 위에 예약코드로 덮어써지던 손상 발견(codex+스프라이트에이전트 수렴). 제거로 18/18 원본 복원.
+  권위 ROM sha 61d51a2a→**1623481a**.
+- [x] 방어: PLACEHOLDER_KO에 깨진문자열 계열 추가 + 18 span DENY_REGIONS 등록 + qa_placeholder_residuals
+  단일소스 통일(ROM 스캔 모호토큰 제외). 5게이트 PASS, dist 2026-06-17 재생성·verify PASS.
+- [x] **스프라이트 WYSIWYG 빌드레이아웃 계측 2→26 blocks**(서브에이전트): 16 LZ77 라벨 함수
+  rec_label_layout 추가(출력 무변경, sha 1623481a 불변). 편집기 build_layout_cells 소비 검증.
+- [ ] (후속) 스프라이트 OBJ 직접기록 4종(action_menu/status_header/info_screen_obj/battle_obj)
+  합성 스프라이트로 WYSIWYG 노출.
+- [ ] (후속·기존) 주소 잘림 2행(7EBF·808, 실번역 보유하나 코드영역 주소라 미기록) 진위 주소 RE.
+
+# 🟢 OBJ 합성 스프라이트 WYSIWYG + 잘린주소 정리 (2026-06-17, 사용자 "1,2 다")
+
+- [x] **OBJ 직접기록 4종 합성 스프라이트 노출**: 흩어진 ROM 오프셋 라벨군을 type=synthetic으로
+  편집기에 WYSIWYG 표시(8 스프라이트, 79+ 라벨). 빌드 rec_objlabel(출력무영향)+편집기 decode/layout/palette.
+  status_terrain perm=[0,1,4,2,3,5] 보정. 7/8 시각검증 통과.
+- [x] **잘린 주소 2행(7EBF·808) 정리**: 정주소 행과 동일 중복 확정 → 제거(+빈행3, 주소정규화6).
+- [ ] (후속) 편집→ROM 라운드트립(sprites_overrides→build): 전체 스프라이트 공통 미구현. apply_sprite_edits
+  또는 build의 patch_synthetic_block 신설 필요.
+
+# 🟢 스프라이트 편집→ROM 라운드트립 (2026-06-17, 사용자 "스프라이트 반영도")
+
+- [x] **편집→ROM 역기록 구현**: build `apply_sprite_overrides`(synthetic perm역변환/lz77 재압축/raw),
+  오버라이드 없으면 byte-identical(해시 1623 불변). 편집기 `/api/build`+'적용' 버튼.
+- [x] E2E 검증: synthetic·lz77 편집→재빌드→ROM 반영·decode 일치, revert→해시복귀, lz77 fit/overflow skip.
+- [ ] (후속) 빠른 in-place 적용(전체 재빌드 없이) — 현재는 '적용'=전체 재빌드(수십 초). revert 정확성 위해 재빌드 채택.
