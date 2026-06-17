@@ -23,35 +23,20 @@
 </header>
 
 <main>
-  <!-- 홈: scene 카드 그리드 -->
-  <section id="home">
+  <!-- 좌측 LNB: scope 필터(GNB) + 게임순 scene 목록(아코디언 → 포함 항목) -->
+  <aside id="lnb">
     <div id="coverage" class="coverage"></div>
-    <div id="scenegrid" class="scenegrid"></div>
-  </section>
-
-  <!-- scene 상세 -->
-  <section id="scene" hidden>
-    <div class="scenehead">
-      <button id="back">← 화면 목록</button>
-      <strong id="sceneTitle"></strong>
-      <span id="sceneMeta" class="meta"></span>
-    </div>
-    <div class="scenebody">
-      <div class="items">
-        <div class="itemtabs">
-          <button data-it="dialogue" class="on">대사 <span id="cntD"></span></button>
-          <button data-it="sprite">스프라이트 <span id="cntS"></span></button>
-        </div>
-        <div id="itemlist"></div>
-      </div>
-      <div id="editor" class="editor">
-        <div class="empty">가운데에서 편집할 항목을 선택하세요.</div>
-      </div>
+    <div id="scenelist"></div>
+  </aside>
+  <!-- 우측 메인: 선택 항목 편집 화면 -->
+  <section id="main">
+    <div id="editor" class="editor">
+      <div class="empty">왼쪽에서 화면을 펼쳐 편집할 항목(대사·스프라이트)을 선택하세요.</div>
     </div>
   </section>
 </main>
 
-<!-- 미리보기 모달 -->
+<!-- 미리보기/비교 모달 -->
 <div id="modal" hidden>
   <div class="modalbox">
     <div class="modalhead"><strong id="modalTitle">미리보기 — 원본 ↔ 편집</strong>

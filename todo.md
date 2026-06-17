@@ -49,9 +49,10 @@
 
 ## Phase 3 — 통합 UI 뼈대 (요구 1~4 탐색 흐름) ✅ 완료
 - [x] GNB: scope segmented(전체/1+2편 선택/1편/2편) + 검색 + dirty/build 상태 + .gba 다운로드.
-- [x] 중앙 scene 카드 그리드(subtag chip, 게임순) + scene 상세 중앙 항목 리스트(좌측 메뉴 없음).
-- [x] scene 상세: 대사/스프라이트 count + canvas 지원 상태 표시.
-- 완료기준: 요구1~4 탐색 흐름 동작(가운데 scene→항목 선택). index/css/app.js 서빙·렌더PNG·문법 검증 ✓.
+- [x] **레이아웃 재구성(2026-06-17, 사용자 정정 "LNB 목록 유지 + 우측 메인 편집", 미리보기 옵션A 선택)**:
+  카드 그리드 → **좌측 LNB(게임순 scene 아코디언: 펼치면 포함 대사·스프라이트 항목) + 우측 메인(편집 화면)**.
+  scene head 클릭=펼침/접힘(단일 펼침), 항목 클릭=우측 편집. 대형 scene는 렌더 상한+더보기, 썸네일 lazy.
+- 완료기준: 요구1~4 탐색 흐름 동작(LNB scene→항목→우측 편집). index/css/app.js 서빙·문법·API 스모크 ✓.
 
 ## Phase 4 — 편집 기능 이식 (대사 + 스프라이트) ✅ 대부분 완료
 - [x] 대사 line 저장(주소별 `dialogue_overrides.json`) + 사전검사(클라이언트) + dialogue_map 동기.

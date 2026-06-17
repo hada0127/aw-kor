@@ -70,101 +70,125 @@ async function refreshState() {
   } catch (e) { $("#state").textContent = "상태 조회 실패"; }
 }
 
-// ── 홈: scene 카드 ──────────────────────────────────────────────────────
+const esc = s => (s || "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const RENDER_LIMIT = 300;  // 한 scene 펼침 시 그리는 항목 상한(대형 scene jank 방지 — M2/M5)
+const SCOPE_KO = { all: "공통", shared_select: "선택", part1: "1편", part2: "2편" };
+
+// ── 좌측 LNB: 게임순 scene 목록(아코디언) ─────────────────────────────────
 async function loadScenes() {
   const q = $("#q").value.trim();
   let d;
   try { d = await api(`/api/scenes?scope=${S.scope}&q=${encodeURIComponent(q)}`); }
   catch (e) { toast("scene 목록 로드 실패: " + e, true); return; }
   if (!d || !d.scenes) { toast("scene 목록 로드 실패: " + ((d && d.error) || ""), true); return; }
-  S.scenes = d.scenes;
+  S.scenes = d.scenes; S.scene = null;
   const c = d.coverage || {};
   $("#coverage").textContent =
-    `scene ${d.scenes.length}개 · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} 배정 · ` +
-    `텍스트 스프라이트 ${c.sprites_assigned}개 · 미배정 검토 ${c.dialogue_unassigned + (c.sprites_unassigned - (c.sprites_unassigned_scan_lz77 || 0))}건(+미분류 그래픽 ${c.sprites_unassigned_scan_lz77})`;
-  const grid = $("#scenegrid"); grid.innerHTML = "";
-  if (!d.scenes.length) { grid.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
-  const SCOPE_KO = { all: "공통", shared_select: "선택", part1: "1편", part2: "2편" };
+    `scene ${d.scenes.length} · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} · ` +
+    `텍스트 스프 ${c.sprites_assigned} · 미배정 ${c.dialogue_unassigned + (c.sprites_unassigned - (c.sprites_unassigned_scan_lz77 || 0))}(+그래픽 ${c.sprites_unassigned_scan_lz77})`;
+  const box = $("#scenelist"); box.innerHTML = "";
+  if (!d.scenes.length) { box.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
   for (const s of d.scenes) {
-    const el = document.createElement("div");
-    el.className = "card" + (s.id === "99_unassigned_review" ? " review" : "");
-    el.innerHTML =
-      `<div class="ord">#${(s.order / 10) | 0} · ${s.id}</div>
-       <div class="title">${s.title}</div>
-       <div class="chips"><span class="chip">${s.subtag}</span><span class="chip scope">${SCOPE_KO[s.scope] || s.scope}</span></div>
-       <div class="counts">대사 <b>${s.counts.dialogue}</b> · 스프라이트 <b>${s.counts.sprite}</b></div>
-       <div class="cv ${s.canvas_status}">실캡처 ${s.canvas_status === "ready" ? "지원" : "미지원"}</div>`;
-    el.onclick = () => openScene(s.id);
-    grid.appendChild(el);
+    const row = document.createElement("div");
+    row.className = "scene-row" + (s.id === "99_unassigned_review" ? " review" : "");
+    const cv = s.canvas_status === "ready" ? " · 🎮" : "";
+    row.innerHTML =
+      `<div class="scene-head">
+         <span class="tw">▶</span>
+         <span class="st"><span class="title">${esc(s.title)}</span>
+           <span class="sub"><span class="chip scope">${SCOPE_KO[s.scope] || s.scope}</span> ${esc(s.subtag)}${cv}</span></span>
+         <span class="cnt">대${s.counts.dialogue}·스${s.counts.sprite}</span>
+       </div>
+       <div class="scene-items" hidden></div>`;
+    row.querySelector(".scene-head").onclick = () => toggleScene(s, row);
+    box.appendChild(row);
   }
 }
 
-// ── scene 상세 ──────────────────────────────────────────────────────────
-async function openScene(id) {
-  const myReq = ++S._reqSeq;  // 빠른 연속 클릭 경합 방지(최신 요청만 반영 — m3)
-  S.scene = id; S.item = null;
-  let items;
-  try { items = await api(`/api/scene/items?id=${encodeURIComponent(id)}&type=all`); }
-  catch (e) { toast("scene 항목 로드 실패: " + e, true); return; }
-  if (myReq !== S._reqSeq) return;  // 더 최신 클릭이 있으면 폐기
-  if (!items || !items.dialogue) { toast("scene 항목 로드 실패: " + ((items && items.error) || ""), true); return; }
-  S.items = items;
-  $("#home").hidden = true; $("#scene").hidden = false;
-  $("#sceneTitle").textContent = S.items.title;
-  $("#sceneMeta").textContent = `${S.items.subtag} · 실캡처 ${S.items.canvas_status === "ready" ? "지원(" + S.items.canvas + ")" : "미지원"}`;
-  $("#cntD").textContent = `(${S.items.dialogue.length})`;
-  $("#cntS").textContent = `(${S.items.sprites.length})`;
-  S.itab = S.items.dialogue.length ? "dialogue" : "sprite";
-  S._limit = RENDER_LIMIT;
-  renderTabs(); renderItems();
-  $("#editor").innerHTML = `<div class="empty">가운데에서 편집할 항목을 선택하세요.</div>`;
-}
-
-function renderTabs() {
-  $$("#scene .itemtabs button").forEach(b => b.classList.toggle("on", b.dataset.it === S.itab));
-}
-
-const RENDER_LIMIT = 300;  // 한 번에 그리는 행 상한(대형 scene jank 방지 — M2/M5)
-function renderItems() {
-  const box = $("#itemlist"); box.innerHTML = "";
-  S._limit = S._limit || RENDER_LIMIT;
-  const frag = document.createDocumentFragment();
-  const list = S.itab === "dialogue" ? S.items.dialogue : S.items.sprites;
-  if (!list.length) {
-    box.innerHTML = `<div class="row"><span class="ja">${S.itab === "dialogue" ? "대사" : "스프라이트"} 없음</span></div>`;
+async function toggleScene(s, row) {
+  const head = row.querySelector(".scene-head");
+  const items = row.querySelector(".scene-items");
+  if (head.classList.contains("open")) {  // 접기
+    head.classList.remove("open"); head.querySelector(".tw").textContent = "▶";
+    items.hidden = true; items.innerHTML = ""; S.scene = null;
     return;
   }
-  const shown = Math.min(list.length, S._limit);
-  for (let i = 0; i < shown; i++) {
-    const el = document.createElement("div"); el.className = "row";
-    if (S.itab === "dialogue") {
-      const g = list[i];
-      const ko = g.members.map(m => m.ko).join(" ");
-      const over = g.members.some(m => !m.budget.estimated && encLen(m.ko || "") > m.budget.slot);
-      el.innerHTML = `<div class="ja">${esc(g.assembled_ja || "")}</div>
-        <div class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</div>`;
-      el.onclick = () => selectDialogue(i, el);
-    } else {
-      const sp = list[i];
-      // 지연 로드(loading=lazy)로 썸네일 동시 요청 폭주 방지(M5). ROM 없으면 orig 폴백(m12).
-      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
-        <span class="ko">${esc(sp.desc)}</span> <span class="ja">${esc(sp.type)} ${esc(sp.offset || "")}</span>`;
-      el.onclick = () => selectSprite(i, el);
-    }
-    frag.appendChild(el);
-  }
-  box.appendChild(frag);
-  if (list.length > shown) {
-    const more = document.createElement("div"); more.className = "row";
-    more.style.textAlign = "center"; more.style.color = "var(--accent)";
-    more.textContent = `+ ${list.length - shown}개 더 보기 (총 ${list.length})`;
-    more.onclick = () => { S._limit += RENDER_LIMIT; renderItems(); };
-    box.appendChild(more);
-  }
+  // 다른 열린 scene 접기(단일 펼침)
+  $$("#scenelist .scene-head.open").forEach(h => {
+    h.classList.remove("open"); h.querySelector(".tw").textContent = "▶";
+    const si = h.parentElement.querySelector(".scene-items"); si.hidden = true; si.innerHTML = "";
+  });
+  const myReq = ++S._reqSeq;  // 연속 클릭 경합 방지(m3)
+  items.innerHTML = `<div class="row"><span class="ja">로딩…</span></div>`; items.hidden = false;
+  let data;
+  try { data = await api(`/api/scene/items?id=${encodeURIComponent(s.id)}&type=all`); }
+  catch (e) { items.innerHTML = `<div class="row"><span class="ja">로드 실패: ${esc("" + e)}</span></div>`; return; }
+  if (myReq !== S._reqSeq) return;
+  if (!data || !data.dialogue) { items.innerHTML = `<div class="row"><span class="ja">로드 실패</span></div>`; return; }
+  S.scene = s.id; S.items = data; S._limit = RENDER_LIMIT;
+  head.classList.add("open"); head.querySelector(".tw").textContent = "▼";
+  renderSceneItems(items);
 }
 
-const esc = s => (s || "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-function markSel(el) { $$("#itemlist .row").forEach(r => r.classList.remove("sel")); el.classList.add("sel"); }
+function renderSceneItems(box) {
+  box.innerHTML = "";
+  const D = S.items.dialogue, SPR = S.items.sprites;
+  if (!D.length && !SPR.length) { box.innerHTML = `<div class="row"><span class="ja">편집 항목 없음</span></div>`; return; }
+  const frag = document.createDocumentFragment();
+  const limit = S._limit;
+  // 대사
+  if (D.length) {
+    frag.appendChild(sep(`대사 ${D.length}`));
+    const shown = Math.min(D.length, limit);
+    for (let i = 0; i < shown; i++) {
+      const g = D[i];
+      const ko = g.members.map(m => m.ko).join(" ");
+      const over = g.members.some(m => !m.budget.estimated && encLen(m.ko || "") > m.budget.slot);
+      const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "d"; el.dataset.i = i;
+      el.innerHTML = `<span class="ja">${esc(g.assembled_ja || "")}</span>
+        <span class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</span>`;
+      el.onclick = () => selectDialogue(i, el);
+      frag.appendChild(el);
+    }
+    if (D.length > shown) frag.appendChild(moreRow(D.length - shown, box));
+  }
+  // 스프라이트
+  if (SPR.length) {
+    frag.appendChild(sep(`스프라이트 ${SPR.length}`));
+    const shown = Math.min(SPR.length, limit);
+    for (let i = 0; i < shown; i++) {
+      const sp = SPR[i];
+      const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "s"; el.dataset.i = i;
+      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
+        <span class="ko">${esc(sp.desc)}</span>`;
+      el.onclick = () => selectSprite(i, el);
+      frag.appendChild(el);
+    }
+    if (SPR.length > shown) frag.appendChild(moreRow(SPR.length - shown, box));
+  }
+  box.appendChild(frag);
+}
+function sep(text) { const d = document.createElement("div"); d.className = "row kindsep"; d.textContent = text; return d; }
+function moreRow(n, box) {
+  const m = document.createElement("div"); m.className = "row more"; m.textContent = `+ ${n}개 더 보기`;
+  m.onclick = (e) => { e.stopPropagation(); S._limit += RENDER_LIMIT; renderSceneItems(box); };
+  return m;
+}
+function markSel(el) { $$("#lnb .row").forEach(r => r.classList.remove("sel")); el.classList.add("sel"); }
+function openItemsBox() {
+  const h = $("#scenelist .scene-head.open");
+  return h ? h.parentElement.querySelector(".scene-items") : null;
+}
+// 열린 scene의 항목 목록 재렌더 + 현재 선택 복원(저장/되돌리기 후 LNB 갱신)
+function refreshSceneItems() {
+  const box = openItemsBox(); if (!box) return;
+  renderSceneItems(box);
+  if (S.item) {
+    const k = S.item.kind === "dialogue" ? "d" : "s";
+    const sel = box.querySelector(`.row[data-kind="${k}"][data-i="${S.item.i}"]`);
+    if (sel) sel.classList.add("sel");
+  }
+}
 
 // ── 대사 편집(요구7: 줄당 바이트 예산 + 멀티라인) ─────────────────────────
 function selectDialogue(i, el) {
@@ -283,14 +307,14 @@ async function saveDialogue() {
     const r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(w) });
     if (!r.ok) {
       // 부분 저장(M3): 이미 기록된 조각을 화면에 반영하고 사실을 알림
-      if (saved > 0) { refreshState(); renderItems(); toast(`일부만 저장(${saved}/${writes.length}) — 나머지 거부: ${r.error || ""}`, true); }
+      if (saved > 0) { refreshState(); refreshSceneItems(); toast(`일부만 저장(${saved}/${writes.length}) — 나머지 거부: ${r.error || ""}`, true); }
       else toast("저장 실패: " + (r.error || ""), true);
       return false;
     }
     const m = g.members.find(x => x.address === w.address); if (m) m.ko = w.ko;
     saved++;
   }
-  toast("저장됨(빌드 전까지 미반영)"); refreshState(); renderItems();
+  toast("저장됨(빌드 전까지 미반영)"); refreshState(); refreshSceneItems();
   return true;
 }
 
@@ -427,12 +451,12 @@ async function revertSprite() {
   const r = await api("/api/sprite/revert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id }) });
   if (!r.ok) { toast("되돌리기 실패: " + (r.error || ""), true); return; }
   toast("되돌림");
-  S.items = await api(`/api/scene/items?id=${encodeURIComponent(S.scene)}&type=all`);
-  renderItems();  // 먼저 새 DOM 생성, 그 다음 새 행에서 재선택(m1/m6/m10)
-  if (S.itab === "sprite") {
-    const row = $$("#itemlist .row")[S.item.i];
-    if (row) selectSprite(S.item.i, row);
-  }
+  const fresh = await api(`/api/scene/items?id=${encodeURIComponent(S.scene)}&type=all`);
+  if (fresh && fresh.dialogue) S.items = fresh;
+  refreshSceneItems();  // 새 데이터로 재렌더 + 선택 복원
+  const box = openItemsBox();
+  const row = box && box.querySelector(`.row[data-kind="s"][data-i="${S.item.i}"]`);
+  if (row) selectSprite(S.item.i, row);
   refreshState();
 }
 async function compareSprite() {
@@ -494,14 +518,6 @@ $$("#scope button").forEach(b => b.onclick = () => {
   S.scope = b.dataset.scope; loadScenes();
 });
 $("#q").oninput = () => { clearTimeout($("#q")._t); $("#q")._t = setTimeout(loadScenes, 250); };
-$("#back").onclick = () => { $("#scene").hidden = true; $("#home").hidden = false; S.scene = null; };
-$$("#scene .itemtabs button").forEach(b => b.onclick = () => {
-  S.itab = b.dataset.it;
-  S._limit = RENDER_LIMIT;
-  renderTabs();
-  renderItems();
-  $("#editor").innerHTML = `<div class="empty">가운데에서 편집할 항목을 선택하세요.</div>`;
-});
 
 // 시작
 loadSupported(); loadScenes(); refreshState(); setInterval(refreshState, 8000);
