@@ -1,4 +1,6 @@
 * { box-sizing: border-box; }
+/* hidden 속성은 항상 우선(ID 선택자의 display:flex 등이 [hidden]을 덮어쓰는 버그 방지) */
+[hidden] { display: none !important; }
 :root {
   --bg: #0f1115; --panel: #181b22; --panel2: #1f232c; --line: #2a2f3a;
   --ink: #e6e8ee; --dim: #9aa3b2; --accent: #5b9dff; --ok: #57c98b;

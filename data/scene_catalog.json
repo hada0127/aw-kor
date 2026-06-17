@@ -28,8 +28,10 @@
       "scope": "shared_select",
       "subtag": "인트로",
       "title": "콜드부트 닌텐도 제공",
-      "canvas": "01_coldboot_nintendo",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "01_coldboot_nintendo",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -52,8 +54,10 @@
       "scope": "shared_select",
       "subtag": "시작화면",
       "title": "공통 타이틀(시작하기)",
-      "canvas": "02_common_title",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "02_common_title",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -83,8 +87,10 @@
       "scope": "shared_select",
       "subtag": "1+2편 선택",
       "title": "1+2편 선택 화면",
-      "canvas": "03_select_part1",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "03_select_part1",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -109,8 +115,10 @@
       "scope": "part1",
       "subtag": "시작화면",
       "title": "1편 타이틀",
-      "canvas": "04_part1_title",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "04_part1_title",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -137,6 +145,8 @@
       "title": "1편 모드/메뉴 선택",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": []
       },
@@ -200,8 +210,10 @@
       "scope": "part1",
       "subtag": "이름 입력",
       "title": "1편 이름 입력",
-      "canvas": "40_part1_name_menu",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "40_part1_name_menu",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -227,6 +239,8 @@
       "title": "1편 유닛/상세 정보 화면",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": []
       },
@@ -262,6 +276,8 @@
       "title": "1편 캠페인/미션/전투",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": []
       },
@@ -292,6 +308,8 @@
       "title": "1편 스토리 대사(전체)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": [
           "part1"
@@ -2229,6 +2247,8 @@
       "title": "2편 오프닝/프롤로그(신문·블랙홀·도미노)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": []
       },
@@ -2265,8 +2285,10 @@
       "scope": "part2",
       "subtag": "시작화면",
       "title": "2편 타이틀",
-      "canvas": "06_part2_title",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "06_part2_title",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -2291,8 +2313,10 @@
       "scope": "part2",
       "subtag": "메뉴 선택",
       "title": "2편 메인 메뉴(모드 선택)",
-      "canvas": "07_part2_main_menu",
+      "canvas": "part2_menu",
       "canvas_status": "ready",
+      "checkpoint": "07_part2_main_menu",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": [
           "part2"
@@ -2501,8 +2525,10 @@
       "scope": "part2",
       "subtag": "캠페인 선택",
       "title": "2편 캠페인/작전 선택(월드맵)",
-      "canvas": "20_mode_select_menu",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "20_mode_select_menu",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -2543,8 +2569,10 @@
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투(데미지 예측·N일째·행동메뉴·상태)",
-      "canvas": "30_battle_attack",
-      "canvas_status": "ready",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "30_battle_attack",
+      "checkpoint_exists": true,
       "dialogue_filter": {
         "regions": []
       },
@@ -2597,6 +2625,8 @@
       "title": "2편 결과(성공·실패·요약·축하)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": []
       },
@@ -2633,6 +2663,8 @@
       "title": "2편 스토리 대사(전체)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": [
           "part2"
@@ -5703,6 +5735,8 @@
       "title": "캠페인 대사(전체)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": [
           "campaign"
@@ -6177,6 +6211,8 @@
       "title": "공통 UI 라벨/대사",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": [
           "ui"
@@ -6606,6 +6642,8 @@
       "title": "기타/공통 대사(분류 전)",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "dialogue_filter": {
         "regions": [
           "other"

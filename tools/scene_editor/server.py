@@ -206,6 +206,9 @@ def _run_build():
             SE._LAYOUTS = None
             _CACHE.pop("sprites", None)
             _CACHE.pop("romsha_key", None)
+            DE._GROUPS_CACHE = None
+            _CACHE.pop("groups", None)
+            _CACHE.pop("addr_slot", None)
         except Exception as e:
             _BUILD.update(status="fail", finished=int(time.time()), error=repr(e))
 
@@ -290,8 +293,9 @@ def filter_scenes(scope, tag, q):
         if tag and sc.get("subtag") != tag:
             continue
         if q:
-            hay = (sc.get("title", "") + sc.get("id", "") + sc.get("subtag", ""))
-            if q not in hay:
+            q_lower = q.lower()
+            hay = (sc.get("title", "") + sc.get("id", "") + sc.get("subtag", "")).lower()
+            if q_lower not in hay:
                 continue
         out.append({k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
                                        "canvas", "canvas_status", "counts") if k in sc})
@@ -385,6 +389,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _serve_preview(self, name):
         pdir = DE.PREVIEW_DIR
+        pdir.mkdir(parents=True, exist_ok=True)
         safe = (pdir / name).resolve()
         if pdir.resolve() not in safe.parents or safe.suffix != ".png" or not safe.exists():
             return self._send(404, {"error": "no preview"})
@@ -563,6 +568,11 @@ class Handler(BaseHTTPRequestHandler):
         ja = body.get("ja") or ""
         ko = body.get("ko") or ""
         canvas = body.get("canvas") or "part2_menu"
+        # canvas 검증: preview_capture가 지원하는 키만(scene.canvas는 checkpoint id가 아닌 preview 키).
+        supported = set(getattr(DE.preview_capture, "CANVASES", {}).keys())
+        if canvas not in supported:
+            return {"ok": False, "error": "이 화면은 실캡처 미지원(canvas=%s, 지원=%s)"
+                    % (canvas, ",".join(sorted(supported)) or "없음")}
         try:
             with _PREVIEW_LOCK:
                 res = DE.preview_capture.compare(ja, ko, canvas=canvas)

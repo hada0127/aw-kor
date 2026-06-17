@@ -34,6 +34,24 @@ DGRP = ROOT / "data" / "dialogue_groups.json"
 OVERRIDES = ROOT / "data" / "scene_catalog_overrides.json"
 OUT = ROOT / "data" / "scene_catalog.json"
 
+# preview_capture가 실제 지원하는 canvas 키(실캡처 hijack). screen_checkpoint id와 별개.
+# scene의 checkpoint(게임순 진입용) → preview canvas 키 매핑(지원하는 화면만).
+# ⚠ 현재 preview_capture.CANVASES는 part2_menu 1종 → 22_part2_main_menu만 실캡처 가능.
+#   Phase 7에서 canvas 추가 시 이 매핑 확장.
+PREVIEW_BY_CHECKPOINT = {"07_part2_main_menu": "part2_menu"}
+
+
+def preview_canvas_keys():
+    """preview_capture.CANVASES의 실제 지원 키 집합(단일 권위)."""
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("preview_capture", ROOT / "tools" / "preview_capture.py")
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return set(m.CANVASES.keys())
+    except Exception:
+        return {"part2_menu"}
+
 
 def load(p, default=None):
     p = Path(p)
@@ -253,14 +271,22 @@ def main():
                 dl_bucket[sid].remove(x)
                 dl_un.append(x)
 
+    pv_keys = preview_canvas_keys()
     out_scenes = []
     for order, sc in enumerate(scenes):
-        canvas = sc.get("canvas")
-        canvas_status = "ready" if (canvas and canvas in chk_ids) else ("none" if not canvas else "missing")
+        checkpoint = sc.get("canvas")  # SCENES의 canvas= 는 screen_checkpoint id(게임순 진입용)
+        checkpoint_exists = bool(checkpoint and checkpoint in chk_ids)
+        # 실캡처 canvas = preview_capture가 실제 지원하는 키만(없으면 None→미지원).
+        preview = PREVIEW_BY_CHECKPOINT.get(checkpoint) or PREVIEW_BY_CHECKPOINT.get(sc["id"])
+        if preview not in pv_keys:
+            preview = None
+        canvas_status = "ready" if preview else "none"
         out_scenes.append({
             "id": sc["id"], "order": order * 10, "scope": sc["scope"],
             "subtag": sc["subtag"], "title": sc["title"],
-            "canvas": canvas, "canvas_status": canvas_status,
+            # canvas = 실캡처 프리뷰 키(없으면 None). checkpoint = 게임순 진입(미래 fresh-nav).
+            "canvas": preview, "canvas_status": canvas_status,
+            "checkpoint": checkpoint, "checkpoint_exists": checkpoint_exists,
             "dialogue_filter": sc.get("dialogue", {}),
             "sprite_filter": {"source_contains": sc.get("sprite", [])},
             "dialogue_ids": dl_bucket[sc["id"]],

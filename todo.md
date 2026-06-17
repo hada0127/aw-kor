@@ -84,7 +84,13 @@
 
 ## 1차 구현 codex+agy 엄격 리뷰 반영 (2026-06-17)
 **즉시 반영(critical/major)**: ✅ static 경로탈출 가드(resolve+containment, 직접 단위검증 4케이스) · ✅ 서버측 슬롯 예산 하드게이트(_save_line: encoded_len≤slot) · ✅ 2350 미수록 음절 차단(서버 `unsupported_syllables`+JS `/api/syllables` 셋, '믜' 등 저장불가) · ✅ 빌드중 다운로드 409 가드 · ✅ 빌드중 저장 차단(대사·스프라이트) · ✅ start_build 경합 락(이중 스레드 방지) · ✅ scope/section 교차 가드(part1_battle_day_banner의 part2 scene 오배정 차단→14_part1_campaign) · ✅ dirty=mtime기반(빌드후 깨끗) · ✅ slot미상/코드영역(<0x800000) 조각 read-only(빌드 skip 노출) · ✅ 프리뷰/비교 '적용'=현재 편집 저장 후 빌드(미저장 누락 방지) · ✅ 빌드후 SE 캐시(_OBJLABELS/_BUILD_LAYOUTS/_LAYOUTS/sprites) 무효화 · ✅ dirty 다운로드 confirm · ✅ build catalog dialogue add/remove override · ✅ lz77 재압축 skip 가능성 빌드후 경고.
-**후속(Phase 6/8로 이관)**: ⏳ 빌드 권위 인코더(encode_fit)로 부호 정규화(…/스마트따옴표/▼/괄호) 길이 일치 · ⏳ 세그먼트(0x0A/변수삽입 0x33..0x30) 위치 보존·표시 멀티라인 · ⏳ render_png BytesIO 스레드안전 · ⏳ subtag chip 필터 UI · ⏳ /api/jobs job id · ⏳ input value DOM-property.
+**후속(Phase 6/8로 이관)**: ⏳ 빌드 권위 인코더(encode_fit)로 부호 정규화(…/스마트따옴표/▼/괄호) 길이 일치 · ⏳ 세그먼트(0x0A/변수삽입 0x33..0x30) 위치 보존·표시 멀티라인 · ⏳ render_png BytesIO 스레드안전 · ⏳ subtag chip 필터 UI · ⏳ /api/jobs job id.
+
+## 2차 버그헌트 반영 (2026-06-17, 사용자 "모달 안 닫힘" 보고 → codex+agy+워크플로 5차원 감사)
+- [x] **모달 안 닫힘(critical, 사용자 보고)**: 근본원인 CSS `#modal{display:flex}`(ID) > UA `[hidden]{display:none}` → `[hidden]{display:none!important}`로 항상 우선. (agy는 이 버그를 놓침, claude가 잡음)
+- [x] **프리뷰 canvas 불일치(critical, codex 라이브 테스트 발견)**: scene.canvas에 checkpoint id(`07_part2_main_menu`)가 들어가 모든 scene이 "지원"인데 엔진은 `part2_menu`만 알아 전부 실패. → catalog가 checkpoint(게임순)와 canvas(preview_capture 키)를 분리, `canvas_status=ready`는 실제 지원 화면만(현재 22_part2_main_menu→part2_menu 1종), 서버 `_dialogue_preview` canvas 검증.
+- [x] **agy 10건 직접 수정 반영**: 캔버스 mouseup 생명주기(mousedown 내부 등록), 멀티조각 프리뷰 readonly 누락(전 멤버 조립), readonly 사전검사 오진(fragTextFor readonly 처리), 입력칸 HTML 변조(DOM createElement), revert 목록 미갱신(items 재조회), 탭 전환 시 에디터 초기화, 빌드후 대사 캐시 무효화(DE._GROUPS_CACHE/groups/addr_slot), preview 디렉터리 가드, 검색 대소문자, mouseup 리스너 누수.
+- [⏳] 워크플로 5차원 감사 결과 반영(진행중) → 완료 시 추가.
 
 ---
 

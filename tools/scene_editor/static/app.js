@@ -186,7 +186,14 @@ function buildLines(fr, m, lines) {
 }
 function addLineInput(box, val) {
   const row = document.createElement("div"); row.className = "lineinput";
-  row.innerHTML = `<input type="text" value="${(val || "").replace(/"/g, "&quot;")}"><span class="budget">·</span>`;
+  const inp = document.createElement("input");
+  inp.type = "text";
+  inp.value = val || "";
+  const span = document.createElement("span");
+  span.className = "budget";
+  span.textContent = "·";
+  row.appendChild(inp);
+  row.appendChild(span);
   box.appendChild(row);
 }
 function addLine(fr, m) {
@@ -249,7 +256,13 @@ async function previewDialogue() {
   const g = S.item.g;
   // 멀티 조각이면 첫 조각 기준(canvas 슬롯 길이 한계). assembled로 합쳐 표시.
   const ja = g.assembled_ja || (g.members[0] && g.members[0].ja) || "";
-  const ko = $$("#editor .frag:not(.readonly)").map(fr => fragText(fr)).join(" ").replace(/\n/g, " ");
+  const ko = g.members.map((m, mi) => {
+    if (m.budget.editable) {
+      const fr = $(`#editor .frag[data-mi="${mi}"]`);
+      return fr ? fragText(fr) : (m.ko || "");
+    }
+    return m.ko || "";
+  }).join(" ").replace(/\n/g, " ");
   S.applyAction = saveDialogue;  // 모달 '적용' = 현재 편집 저장 후 빌드
   openModal("미리보기 — 원본 ↔ 편집(실캡처)", `<div class="note">캡처 중… (헤드리스 mGBA, 수십 초 소요)</div>`);
   $("#modalApply").disabled = true;
@@ -278,7 +291,15 @@ async function checkDict() {
   w.textContent = issues.length ? "사전 불일치: " + [...new Set(issues)].join(", ") : "사전 일치 ✓";
   w.style.color = issues.length ? "" : "var(--ok)";
 }
-function fragTextFor(addr) { const fr = $(`#editor .frag[data-addr="${addr}"]`); return fr ? fragText(fr) : ""; }
+function fragTextFor(addr) {
+  const fr = $(`#editor .frag[data-addr="${addr}"]`);
+  if (!fr) return "";
+  if (fr.classList.contains("readonly")) {
+    const mi = +fr.dataset.mi;
+    return (S.item.g.members[mi] && S.item.g.members[mi].ko) || "";
+  }
+  return fragText(fr);
+}
 
 // ── 스프라이트 편집 ──────────────────────────────────────────────────────
 const SP = { id: null, w: 0, h: 0, cols: 0, grid: null, pal: null, sel: 1, zoom: 10, type: null };
@@ -336,9 +357,12 @@ function drawSprite() {
     SP.grid[y][x] = SP.sel;
     const c = SP.pal[SP.sel]; ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
   };
-  cv.onmousedown = e => { painting = true; paint(e); };
+  cv.onmousedown = e => {
+    painting = true;
+    paint(e);
+    window.addEventListener("mouseup", () => (painting = false), { once: true });
+  };
   cv.onmousemove = e => { if (painting) paint(e); };
-  window.addEventListener("mouseup", () => (painting = false), { once: true });
 }
 async function saveSprite() {
   const r = await api("/api/sprite/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id, indices: SP.grid, palette: SP.pal }) });
@@ -347,7 +371,11 @@ async function saveSprite() {
 }
 async function revertSprite() {
   await api("/api/sprite/revert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id }) });
-  toast("되돌림"); selectSprite(S.item.i, $$("#itemlist .row")[S.item.i]); refreshState();
+  toast("되돌림");
+  S.items = await api(`/api/scene/items?id=${encodeURIComponent(S.scene)}&type=all`);
+  selectSprite(S.item.i, $$("#itemlist .row")[S.item.i]);
+  renderItems();
+  refreshState();
 }
 async function compareSprite() {
   const c = await api(`/api/sprite/compare?id=${encodeURIComponent(SP.id)}`);
@@ -402,7 +430,12 @@ $$("#scope button").forEach(b => b.onclick = () => {
 });
 $("#q").oninput = () => { clearTimeout($("#q")._t); $("#q")._t = setTimeout(loadScenes, 250); };
 $("#back").onclick = () => { $("#scene").hidden = true; $("#home").hidden = false; S.scene = null; };
-$$("#scene .itemtabs button").forEach(b => b.onclick = () => { S.itab = b.dataset.it; renderTabs(); renderItems(); });
+$$("#scene .itemtabs button").forEach(b => b.onclick = () => {
+  S.itab = b.dataset.it;
+  renderTabs();
+  renderItems();
+  $("#editor").innerHTML = `<div class="empty">가운데에서 편집할 항목을 선택하세요.</div>`;
+});
 
 // 시작
 loadSupported(); loadScenes(); refreshState(); setInterval(refreshState, 8000);
