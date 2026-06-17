@@ -46,6 +46,9 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .scene-head:hover { background: var(--panel2); }
 .scene-head.open { background: #1a1f2b; }
 .scene-head .tw { width: 12px; color: var(--dim); flex-shrink: 0; }
+.scene-shot { width: 58px; height: 38px; object-fit: cover; image-rendering: pixelated;
+  border: 1px solid var(--line); background: #08090c; flex-shrink: 0; }
+.scene-shot.missing { width: 10px; height: 10px; border-radius: 50%; background: #333844; }
 .scene-head .st { flex: 1; min-width: 0; }
 .scene-head .title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .scene-head .sub { color: var(--dim); font-size: 11px; }
@@ -67,6 +70,13 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .row img.thumb { image-rendering: pixelated; background: #222; border: 1px solid var(--line); vertical-align: middle; margin-right: 6px; max-height: 28px; max-width: 120px; }
 .row.more { text-align: center; color: var(--accent); }
 .row.kindsep { color: var(--dim); font-size: 10px; background: #15171d; cursor: default; text-transform: uppercase; letter-spacing: .05em; }
+.scene-proof { display: flex; gap: 9px; align-items: center; padding: 8px 12px 8px 28px;
+  border-bottom: 1px solid #1d212a; background: #11151d; }
+.scene-proof img { width: 96px; height: 64px; object-fit: cover; image-rendering: pixelated;
+  border: 1px solid var(--line); background: #000; }
+.scene-proof strong { display: block; font-size: 11px; }
+.scene-proof span { display: block; color: var(--dim); font-size: 10px; overflow: hidden; text-overflow: ellipsis; }
+.scene-proof.missing { color: var(--warn); }
 
 /* editor (우측 메인) */
 .editor { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
@@ -89,6 +99,12 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 
 /* sprite editor */
 #spwrap canvas { image-rendering: pixelated; background: #11141a; border: 1px solid var(--line); border-radius: 6px; }
+.editor > .scene-proof { padding: 8px; margin: 8px 0 12px; border: 1px solid var(--line); border-radius: 8px; }
+.sprite-mode { display: flex; gap: 6px; margin: 8px 0; }
+.sprite-mode button.on { background: var(--accent); color: #07101f; border-color: var(--accent); }
+.bgcheck { display: inline-flex; align-items: center; gap: 5px; color: var(--dim);
+  border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; }
+.bgcheck input { margin: 0; }
 .swatches { display: flex; flex-wrap: wrap; gap: 3px; margin: 8px 0; }
 .sw { width: 22px; height: 22px; border-radius: 4px; border: 2px solid transparent; cursor: pointer; }
 .sw.sel { border-color: #fff; }

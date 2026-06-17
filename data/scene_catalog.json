@@ -32,6 +32,14 @@
       "canvas_status": "none",
       "checkpoint": "01_coldboot_nintendo",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "01_coldboot_nintendo",
+        "url": "/scene_shots/01_coldboot_nintendo.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "콜드부트 닌텐도 제공"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -58,6 +66,14 @@
       "canvas_status": "none",
       "checkpoint": "02_common_title",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "02_common_title",
+        "url": "/scene_shots/02_common_title.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "공통 타이틀 시작하기"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -82,15 +98,23 @@
       }
     },
     {
-      "id": "02_select_part",
+      "id": "02_select_part1",
       "order": 20,
       "scope": "shared_select",
       "subtag": "1+2편 선택",
-      "title": "1+2편 선택 화면",
+      "title": "1+2편 선택 화면(1편 선택)",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "03_select_part1",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "03_select_part1",
+        "url": "/scene_shots/03_select_part1.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "1/2 선택(Part1)"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -110,8 +134,39 @@
       }
     },
     {
-      "id": "10_part1_title",
+      "id": "03_select_part2",
       "order": 30,
+      "scope": "shared_select",
+      "subtag": "1+2편 선택",
+      "title": "1+2편 선택 화면(2편 선택)",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "05_select_part2",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "05_select_part2",
+        "url": "/scene_shots/05_select_part2.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "1/2 선택(Part2)"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 0
+      }
+    },
+    {
+      "id": "10_part1_title",
+      "order": 40,
       "scope": "part1",
       "subtag": "시작화면",
       "title": "1편 타이틀",
@@ -119,6 +174,14 @@
       "canvas_status": "none",
       "checkpoint": "04_part1_title",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "04_part1_title",
+        "url": "/scene_shots/04_part1_title.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "Part1 타이틀"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -138,31 +201,28 @@
       }
     },
     {
-      "id": "11_part1_mode_select",
-      "order": 40,
+      "id": "11_part1_world_menu",
+      "order": 50,
       "scope": "part1",
       "subtag": "모드 선택",
-      "title": "1편 모드/메뉴 선택",
+      "title": "1편 월드 메뉴 라벨",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "40_part1_name_menu",
+        "url": "/scene_shots/40_part1_name_menu.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "Part1 이름입력 후 메뉴"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "menu_label/",
-          "part1_mode_select",
-          "MODE_SELECT",
-          "RULE_SELECT",
-          "TEAM_SETTING",
-          "part1_operation",
-          "OPERATION",
-          "MAP_SELECT",
-          "SHOP_SELECT",
-          "HARD_SHOP"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
@@ -180,14 +240,39 @@
         "lz77_00C05D78",
         "lz77_00C06218",
         "lz77_00C0668C",
-        "lz77_00C06B78",
-        "lz77_00C18CB4",
-        "lz77_00C18F48",
-        "lz77_00C191E0",
-        "lz77_00C194D8",
-        "lz77_00C19A9C",
-        "lz77_00C19D14",
-        "lz77_00C19FF0",
+        "lz77_00C06B78"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 15
+      }
+    },
+    {
+      "id": "12_part1_submenus",
+      "order": 60,
+      "scope": "part1",
+      "subtag": "하위 메뉴",
+      "title": "1편 하위 메뉴 라벨(싱글/통신/카드)",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "42_part1_single_battle",
+        "url": "/scene_shots/42_part1_single_battle.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "Part1 싱글 배틀 하위 메뉴"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
         "lz77_00C1A2BC",
         "lz77_00C1A564",
         "lz77_00C1A81C",
@@ -201,12 +286,12 @@
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 32
+        "sprite": 10
       }
     },
     {
-      "id": "12_part1_name_input",
-      "order": 50,
+      "id": "13_part1_name_input",
+      "order": 70,
       "scope": "part1",
       "subtag": "이름 입력",
       "title": "1편 이름 입력",
@@ -214,13 +299,19 @@
       "canvas_status": "none",
       "checkpoint": "40_part1_name_menu",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "40_part1_name_menu",
+        "url": "/scene_shots/40_part1_name_menu.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "Part1 이름입력 후 메뉴"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "CATHERINE_NAME"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
@@ -232,8 +323,47 @@
       }
     },
     {
-      "id": "13_part1_info_screen",
-      "order": 60,
+      "id": "14_part1_operation_logos",
+      "order": 80,
+      "scope": "part1",
+      "subtag": "작전/설정",
+      "title": "1편 작전/지도/상점/룰 화면 로고",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "41_part1_operation_room",
+        "url": "/scene_shots/41_part1_operation_room.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "Part1 작전실/작전 메뉴"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
+        "lz77_00C18CB4",
+        "lz77_00C18F48",
+        "lz77_00C191E0",
+        "lz77_00C194D8",
+        "lz77_00C19A9C",
+        "lz77_00C19D14",
+        "lz77_00C19FF0"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 7
+      }
+    },
+    {
+      "id": "15_part1_info_screen",
+      "order": 90,
       "scope": "part1",
       "subtag": "유닛 정보",
       "title": "1편 유닛/상세 정보 화면",
@@ -241,6 +371,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "32_battle_continue",
+        "url": "/scene_shots/32_battle_continue.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 진입(continue)"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -269,40 +407,75 @@
       }
     },
     {
-      "id": "14_part1_campaign",
-      "order": 70,
+      "id": "16_part1_campaign",
+      "order": 100,
       "scope": "part1",
       "subtag": "캠페인",
-      "title": "1편 캠페인/미션/전투",
+      "title": "1편 캠페인/미션 로고",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "20_mode_select_menu",
+        "url": "/scene_shots/20_mode_select_menu.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "모드 선택/월드맵+CO대사"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "part1_campaign",
-          "CAMPAIGN",
-          "MISSION_LOGO",
-          "part1_battle"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
         "lz77_00C18738",
-        "lz77_00C19794",
+        "lz77_00C19794"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "17_part1_battle",
+      "order": 110,
+      "scope": "part1",
+      "subtag": "전투",
+      "title": "1편 전투 N일째 배너",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "30_battle_attack",
+        "url": "/scene_shots/30_battle_attack.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 공격 진입"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
         "lz77_00EE5E14"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 3
+        "sprite": 1
       }
     },
     {
       "id": "18_part1_story",
-      "order": 80,
+      "order": 120,
       "scope": "part1",
       "subtag": "대사",
       "title": "1편 스토리 대사(전체)",
@@ -310,6 +483,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "31_battle_dialog",
+        "url": "/scene_shots/31_battle_dialog.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 대사"
+      },
       "dialogue_filter": {
         "regions": [
           "part1"
@@ -2240,48 +2421,79 @@
       }
     },
     {
-      "id": "20_part2_intro",
-      "order": 90,
+      "id": "20_part2_intro_newspaper",
+      "order": 130,
       "scope": "part2",
       "subtag": "인트로",
-      "title": "2편 오프닝/프롤로그(신문·블랙홀·도미노)",
+      "title": "2편 인트로 신문/스플래시",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "07_part2_main_menu",
+        "url": "/scene_shots/07_part2_main_menu.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "part2_intro",
-          "intro_blackhole",
-          "intro_campaign",
-          "splash_logo",
-          "prologue_logo",
-          "domino_co_name",
-          "menu_newspaper",
-          "blackhole"
-        ]
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
+        "lz77_004D8AF8",
+        "lz77_005B5D10"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "21_part2_intro_blackhole",
+      "order": 140,
+      "scope": "part2",
+      "subtag": "인트로",
+      "title": "2편 인트로 블랙홀/도미노/프롤로그",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "07_part2_main_menu",
+        "url": "/scene_shots/07_part2_main_menu.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
         "lz77_0045274C",
-        "lz77_004D8AF8",
         "lz77_004E0478",
         "lz77_004E17C0",
         "lz77_004ECD60",
-        "lz77_005B5D10",
         "lz77_005BBB3C"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 7
+        "sprite": 5
       }
     },
     {
-      "id": "21_part2_title",
-      "order": 100,
+      "id": "22_part2_title",
+      "order": 150,
       "scope": "part2",
       "subtag": "시작화면",
       "title": "2편 타이틀",
@@ -2289,6 +2501,14 @@
       "canvas_status": "none",
       "checkpoint": "06_part2_title",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "06_part2_title",
+        "url": "/scene_shots/06_part2_title.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "Part2 타이틀"
+      },
       "dialogue_filter": {
         "regions": []
       },
@@ -2308,8 +2528,8 @@
       }
     },
     {
-      "id": "22_part2_main_menu",
-      "order": 110,
+      "id": "23_part2_main_menu",
+      "order": 160,
       "scope": "part2",
       "subtag": "메뉴 선택",
       "title": "2편 메인 메뉴(모드 선택)",
@@ -2317,6 +2537,14 @@
       "canvas_status": "ready",
       "checkpoint": "07_part2_main_menu",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "07_part2_main_menu",
+        "url": "/scene_shots/07_part2_main_menu.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+      },
       "dialogue_filter": {
         "regions": [
           "part2"
@@ -2520,8 +2748,8 @@
       }
     },
     {
-      "id": "23_part2_campaign",
-      "order": 120,
+      "id": "24_part2_campaign_map",
+      "order": 170,
       "scope": "part2",
       "subtag": "캠페인 선택",
       "title": "2편 캠페인/작전 선택(월드맵)",
@@ -2529,21 +2757,19 @@
       "canvas_status": "none",
       "checkpoint": "20_mode_select_menu",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "20_mode_select_menu",
+        "url": "/scene_shots/20_mode_select_menu.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "모드 선택/월드맵+CO대사"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "campaign_header",
-          "mission_number",
-          "level_label",
-          "lets_go",
-          "redstar_region",
-          "world_map_label",
-          "mission_start",
-          "air_mission",
-          "air_supremacy"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
@@ -2553,42 +2779,71 @@
         "lz77_005488A0",
         "lz77_005A38D4",
         "lz77_005AAA68",
-        "lz77_005AF674",
+        "lz77_005AF674"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 7
+      }
+    },
+    {
+      "id": "25_part2_mission_titles",
+      "order": 180,
+      "scope": "part2",
+      "subtag": "미션 진입",
+      "title": "2편 미션 시작/에어 미션 타이틀",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "32_battle_continue",
+        "url": "/scene_shots/32_battle_continue.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 진입(continue)"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
         "lz77_00C10B34",
         "lz77_00C11D9C",
         "lz77_00C1205C"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 10
+        "sprite": 3
       }
     },
     {
-      "id": "24_part2_battle",
-      "order": 130,
+      "id": "26_part2_battle_labels",
+      "order": 190,
       "scope": "part2",
       "subtag": "전투",
-      "title": "2편 전투(데미지 예측·N일째·행동메뉴·상태)",
+      "title": "2편 전투 라벨(N일째·체크·데미지 예측)",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "30_battle_attack",
       "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "30_battle_attack",
+        "url": "/scene_shots/30_battle_attack.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 공격 진입"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "battle_start_day",
-          "damage_forecast",
-          "check_label",
-          "battle_day_banner",
-          "part2_objlabel/action_menu",
-          "part2_objlabel/terrain",
-          "part2_objlabel/unit",
-          "part2_objlabel/co_banner",
-          "part2_objlabel/status_header",
-          "part2_objlabel/info_screen"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
@@ -2602,7 +2857,39 @@
         "lz77_009A0088",
         "lz77_009D7D54",
         "lz77_009D892C",
-        "lz77_00BD4FBC",
+        "lz77_00BD4FBC"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 11
+      }
+    },
+    {
+      "id": "27_part2_battle_objlabels",
+      "order": 200,
+      "scope": "part2",
+      "subtag": "전투",
+      "title": "2편 전투 OBJ 라벨(행동·유닛·지형·상태)",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "31_battle_dialog",
+        "url": "/scene_shots/31_battle_dialog.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 대사"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
         "objlabel_p2_terrain_status",
         "objlabel_p2_terrain_compact",
         "objlabel_p2_unit_status",
@@ -2614,50 +2901,85 @@
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 19
+        "sprite": 8
       }
     },
     {
-      "id": "25_part2_result",
-      "order": 140,
+      "id": "28_part2_result_status",
+      "order": 210,
       "scope": "part2",
       "subtag": "결과",
-      "title": "2편 결과(성공·실패·요약·축하)",
+      "title": "2편 결과 성공/실패 오버레이",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "33_battle_transport",
+        "url": "/scene_shots/33_battle_transport.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "수송 후 적 턴"
+      },
       "dialogue_filter": {
         "regions": []
       },
       "sprite_filter": {
-        "source_contains": [
-          "result_success",
-          "result_failure",
-          "result_summary",
-          "result_congratulations"
-        ]
+        "source_contains": []
       },
       "dialogue_ids": [],
       "sprite_ids": [
-        "lz77_0059DA5C",
         "lz77_00930520",
         "lz77_009691A8",
         "lz77_009A1A4C",
         "lz77_009DA2F0",
-        "lz77_00BFB45C",
         "lz77_00BFBB54",
         "lz77_00EE8A64",
         "lz77_00EE8F68"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 9
+        "sprite": 7
       }
     },
     {
-      "id": "28_part2_story",
-      "order": 150,
+      "id": "29_part2_result_summary",
+      "order": 220,
+      "scope": "part2",
+      "subtag": "결과",
+      "title": "2편 결과 요약/축하",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "33_battle_transport",
+        "url": "/scene_shots/33_battle_transport.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "수송 후 적 턴"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
+        "lz77_0059DA5C",
+        "lz77_00BFB45C"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "30_part2_story",
+      "order": 230,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 스토리 대사(전체)",
@@ -2665,6 +2987,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "31_battle_dialog",
+        "url": "/scene_shots/31_battle_dialog.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 대사"
+      },
       "dialogue_filter": {
         "regions": [
           "part2"
@@ -5729,7 +6059,7 @@
     },
     {
       "id": "80_campaign_story",
-      "order": 160,
+      "order": 240,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 대사(전체)",
@@ -5737,6 +6067,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "20_mode_select_menu",
+        "url": "/scene_shots/20_mode_select_menu.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "모드 선택/월드맵+CO대사"
+      },
       "dialogue_filter": {
         "regions": [
           "campaign"
@@ -6205,7 +6543,7 @@
     },
     {
       "id": "85_ui_common",
-      "order": 170,
+      "order": 250,
       "scope": "all",
       "subtag": "UI/공통",
       "title": "공통 UI 라벨/대사",
@@ -6213,6 +6551,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "02_common_title",
+        "url": "/scene_shots/02_common_title.png",
+        "mode": "fresh",
+        "grade": "ground_truth",
+        "status": "capturable",
+        "note": "공통 타이틀 시작하기"
+      },
       "dialogue_filter": {
         "regions": [
           "ui"
@@ -6636,7 +6982,7 @@
     },
     {
       "id": "90_other_dialogue",
-      "order": 180,
+      "order": 260,
       "scope": "all",
       "subtag": "대사",
       "title": "기타/공통 대사(분류 전)",
@@ -6644,6 +6990,14 @@
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "31_battle_dialog",
+        "url": "/scene_shots/31_battle_dialog.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "전투 대사"
+      },
       "dialogue_filter": {
         "regions": [
           "other"
@@ -9761,6 +10115,16 @@
       "title": "미배정(검토 필요) — 규칙 미매칭",
       "canvas": null,
       "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "not_a_scene",
+        "note": "미배정 검토 bucket"
+      },
       "dialogue_filter": {},
       "sprite_filter": {},
       "dialogue_ids": [],

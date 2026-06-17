@@ -1510,3 +1510,10 @@ archive/malformed_address_rows.csv 보존.
 - [x] **편집→ROM 역기록 구현**: build `apply_sprite_overrides`(synthetic perm역변환/lz77 재압축/raw),
 - [x] E2E 검증: synthetic·lz77 편집→재빌드→ROM 반영·decode 일치, revert→해시복귀, lz77 fit/overflow skip.
 
+
+### 🟢 통합 scene 에디터 실캡처/분리/WYSIWYG 보강 (2026-06-17)
+
+- [x] **scene별 실제 스크린샷 연결**: `tools/capture_scene_screenshots.py`로 `data/scene_catalog.json`의 `screenshot.checkpoint`를 헤드리스 mGBA에서 캡처해 `temp/scene_screenshots/<checkpoint>_patched/frame.png`와 provenance를 생성. 신규 서버 경로 `/scene_shots/<checkpoint>.png`로 안전 서빙. 실제 game scene 27/27 캡처 존재, `99_unassigned_review`는 검토 bucket으로 제외.
+- [x] **merged scene 분리**: scene catalog를 20 scene+review에서 28 scene+review로 확장. 1+2 선택 Part1/Part2, Part1 월드메뉴/하위메뉴/작전로고/캠페인/전투, Part2 인트로/캠페인/전투/결과 계열을 화면 단위로 분리. 중복 `source` 라벨은 `sprite_ids` 정확 배정으로 오프셋별 분리.
+- [x] **스프라이트 실화면 배치 편집**: 통합 에디터 스프라이트 패널에 `실화면 배치`/`타일 그리드` 모드를 추가. 레이아웃 있는 스프라이트는 240×160 화면 좌표와 캡처 팔레트로 렌더하고, 클릭 좌표를 OAM cell→tile pixel로 역매핑해 기존 `sprites_overrides.json` 저장/빌드 경로와 호환.
+- [x] **검증**: `python3 -m py_compile tools/build_scene_catalog.py tools/capture_scene_screenshots.py tools/scene_editor/server.py`, `node --check tools/scene_editor/static/app.js`, HTTP API 스모크, Chrome headless CDP 브라우저 검증 통과. 브라우저 증거 스크린샷: `temp/browser_verify/scene_editor_onscreen.png`.

@@ -74,6 +74,25 @@ const esc = s => (s || "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", 
 const RENDER_LIMIT = 300;  // 한 scene 펼침 시 그리는 항목 상한(대형 scene jank 방지 — M2/M5)
 const SCOPE_KO = { all: "공통", shared_select: "선택", part1: "1편", part2: "2편" };
 
+function shotUrl(shot) {
+  return shot && shot.exists && shot.url ? `${shot.url}?t=${shot.mtime || 0}` : "";
+}
+function sceneShotThumb(shot) {
+  const url = shotUrl(shot);
+  if (!url) return `<span class="scene-shot missing"></span>`;
+  return `<img class="scene-shot" loading="lazy" decoding="async" src="${url}" alt="">`;
+}
+function sceneShotCard(shot) {
+  const url = shotUrl(shot);
+  const meta = shot && shot.checkpoint ? `${shot.checkpoint} · ${shot.grade || ""}` : "스크린샷 없음";
+  const preview = S.items && S.items.canvas_status === "ready" ? "대사 프리뷰 지원" : "정적 캡처";
+  if (!url) return `<div class="scene-proof missing"><div><strong>실화면 캡처 없음</strong><span>${esc(meta)}</span></div></div>`;
+  return `<div class="scene-proof">
+    <img src="${url}" alt="">
+    <div><strong>헤드리스 mGBA ${preview}</strong><span>${esc(meta)}</span></div>
+  </div>`;
+}
+
 // ── 좌측 LNB: 게임순 scene 목록(아코디언) ─────────────────────────────────
 async function loadScenes() {
   const q = $("#q").value.trim();
@@ -91,10 +110,11 @@ async function loadScenes() {
   for (const s of d.scenes) {
     const row = document.createElement("div");
     row.className = "scene-row" + (s.id === "99_unassigned_review" ? " review" : "");
-    const cv = s.canvas_status === "ready" ? " · 🎮" : "";
+    const cv = s.canvas_status === "ready" ? " · preview" : "";
     row.innerHTML =
       `<div class="scene-head">
          <span class="tw">▶</span>
+         ${sceneShotThumb(s.screenshot)}
          <span class="st"><span class="title">${esc(s.title)}</span>
            <span class="sub"><span class="chip scope">${SCOPE_KO[s.scope] || s.scope}</span> ${esc(s.subtag)}${cv}</span></span>
          <span class="cnt">대${s.counts.dialogue}·스${s.counts.sprite}</span>
@@ -133,8 +153,18 @@ async function toggleScene(s, row) {
 function renderSceneItems(box) {
   box.innerHTML = "";
   const D = S.items.dialogue, SPR = S.items.sprites;
-  if (!D.length && !SPR.length) { box.innerHTML = `<div class="row"><span class="ja">편집 항목 없음</span></div>`; return; }
   const frag = document.createDocumentFragment();
+  const proof = document.createElement("div");
+  proof.innerHTML = sceneShotCard(S.items.screenshot || {});
+  frag.appendChild(proof.firstElementChild);
+  if (!D.length && !SPR.length) {
+    const empty = document.createElement("div");
+    empty.className = "row";
+    empty.innerHTML = `<span class="ja">편집 항목 없음</span>`;
+    frag.appendChild(empty);
+    box.appendChild(frag);
+    return;
+  }
   const limit = S._limit;
   // 대사
   if (D.length) {
@@ -368,32 +398,68 @@ function fragTextFor(addr) {
 }
 
 // ── 스프라이트 편집 ──────────────────────────────────────────────────────
-const SP = { id: null, w: 0, h: 0, cols: 0, grid: null, pal: null, sel: 1, zoom: 10, type: null };
+const SP = {
+  id: null, w: 0, h: 0, cols: 0, grid: null, pal: null, sel: 1,
+  zoom: 10, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
+  os: null, bgUrl: "", bgImg: null, bgReady: false, showBg: true,
+  painting: false, paintKey: ""
+};
 async function selectSprite(i, el) {
   markSel(el);
   const sp = S.items.sprites[i]; S.item = { kind: "sprite", sp, i };
   const d = await api(`/api/sprite/tile?id=${encodeURIComponent(sp.id)}`);
   if (!d.ok) { $("#editor").innerHTML = `<div class="empty">디코드 실패: ${esc(d.error || "")}</div>`; return; }
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
-  SP.pal = d.palette; SP.type = d.type; SP.sel = 1;
+  SP.pal = d.palette; SP.type = d.type; SP.sel = 1; SP.os = null; SP.hasOnscreen = !!d.has_onscreen;
+  SP.mode = SP.hasOnscreen ? "onscreen" : "tile";
+  SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = true;
+  SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
   ed.innerHTML = `<h3>스프라이트 편집 — ${esc(sp.desc)}</h3>
-    <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}</div>
+    <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
+    ${sceneShotCard(S.items.screenshot || {})}
+    <div class="sprite-mode">
+      <button id="spModeOn" ${SP.hasOnscreen ? "" : "disabled"}>실화면 배치</button>
+      <button id="spModeTile">타일 그리드</button>
+      <label class="bgcheck"><input id="spBg" type="checkbox" checked>배경</label>
+    </div>
     <div id="spwrap"><canvas id="spcv"></canvas></div>
     <div class="swatches" id="swatches"></div>
-    <div class="sphint">스와치 클릭=색 선택, 캔버스 클릭/드래그=칠하기. 색은 표시용(실기 팔레트는 화면별 적용).</div>
+    <div class="sphint" id="sphint"></div>
     <div class="btnrow">
       <button id="spZoomOut">−</button><button id="spZoomIn">+</button>
       <button id="spSave">저장</button>
       <button id="spRevert">되돌리기</button>
       <button id="spCompare">원본↔적용 비교</button>
     </div>`;
-  renderSwatches(); drawSprite();
-  $("#spZoomOut").onclick = () => { SP.zoom = Math.max(4, SP.zoom - 2); drawSprite(); };
-  $("#spZoomIn").onclick = () => { SP.zoom = Math.min(24, SP.zoom + 2); drawSprite(); };
+  renderSwatches();
+  $("#spModeOn").onclick = () => setSpriteMode("onscreen");
+  $("#spModeTile").onclick = () => setSpriteMode("tile");
+  $("#spBg").onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
+  await setSpriteMode(SP.mode);
+  $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(4, SP.zoom - 2); drawCurrentSprite(); };
+  $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(24, SP.zoom + 2); drawCurrentSprite(); };
   $("#spSave").onclick = saveSprite;
   $("#spRevert").onclick = revertSprite;
   $("#spCompare").onclick = compareSprite;
+}
+
+async function setSpriteMode(mode) {
+  if (mode === "onscreen" && !SP.hasOnscreen) mode = "tile";
+  SP.mode = mode;
+  $("#spModeOn").classList.toggle("on", SP.mode === "onscreen");
+  $("#spModeTile").classList.toggle("on", SP.mode === "tile");
+  if (SP.mode === "onscreen" && !SP.os) {
+    const os = await api(`/api/sprite/onscreen_data?id=${encodeURIComponent(SP.id)}`);
+    if (!os.ok) { toast(os.error || "실화면 레이아웃 로드 실패", true); SP.mode = "tile"; }
+    else {
+      SP.os = os;
+      SP.pal = os.palette || SP.pal;
+      renderSwatches();
+      prepareSceneBg();
+    }
+  }
+  drawCurrentSprite();
 }
 function renderSwatches() {
   const box = $("#swatches"); box.innerHTML = "";
@@ -411,8 +477,13 @@ function effectiveZoom() {
   const fit = Math.max(1, Math.floor(1400 / Math.max(SP.w, SP.h, 1)));
   return Math.max(1, Math.min(SP.zoom, fit));
 }
+function drawCurrentSprite() {
+  if (SP.mode === "onscreen" && SP.os) drawOnscreenSprite();
+  else drawSprite();
+}
 function drawSprite() {
   const cv = $("#spcv"); const z = effectiveZoom();
+  $("#sphint").textContent = "타일 그리드 모드: 원본 타일스트림을 직접 편집합니다.";
   // 네이티브 해상도 ImageData 1회 생성 후 스케일 드로(per-pixel fillRect 루프 제거 → O(W*H) 1회)
   const off = document.createElement("canvas"); off.width = SP.w; off.height = SP.h;
   const octx = off.getContext("2d"); const img = octx.createImageData(SP.w, SP.h);
@@ -431,7 +502,7 @@ function drawSprite() {
     const r = cv.getBoundingClientRect();
     const x = Math.floor((e.clientX - r.left) / z), y = Math.floor((e.clientY - r.top) / z);
     if (x < 0 || y < 0 || x >= SP.w || y >= SP.h) return;
-    SP.grid[y][x] = SP.sel;
+    setSheetPixel(x, y, SP.sel);
     const c = SP.pal[SP.sel];
     ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
     const o2 = SP._off.getContext("2d");
@@ -439,6 +510,125 @@ function drawSprite() {
   };
   cv.onmousedown = e => { painting = true; paint(e); window.addEventListener("mouseup", () => (painting = false), { once: true }); };
   cv.onmousemove = e => { if (painting) paint(e); };
+}
+
+function sheetCoord(tile, px, py) {
+  return { x: (tile % SP.cols) * 8 + px, y: Math.floor(tile / SP.cols) * 8 + py };
+}
+function localTileFor(cell, tx, ty) {
+  if (!SP.os || SP.os.obj1d) return cell.tile_off + ty * cell.tw + tx;
+  const baseCol = cell.tile_off % 32;
+  const baseRow = Math.floor(cell.tile_off / 32);
+  return (baseRow + ty) * SP.cols + baseCol + tx;
+}
+function sheetPixel(tile, px, py) {
+  const p = sheetCoord(tile, px, py);
+  return (SP.grid[p.y] && SP.grid[p.y][p.x]) || 0;
+}
+function setSheetPixel(x, y, idx) {
+  if (!SP.grid[y] || x < 0 || x >= SP.grid[y].length) return false;
+  SP.grid[y][x] = idx & 15;
+  return true;
+}
+function setTilePixel(tile, px, py, idx) {
+  const p = sheetCoord(tile, px, py);
+  return setSheetPixel(p.x, p.y, idx);
+}
+
+function prepareSceneBg() {
+  if (!SP.bgUrl || SP.bgImg) return;
+  const im = new Image();
+  im.onload = () => { SP.bgReady = true; if (SP.mode === "onscreen") drawOnscreenSprite(); };
+  im.onerror = () => { SP.bgReady = false; };
+  im.src = SP.bgUrl;
+  SP.bgImg = im;
+}
+
+function drawOnscreenSprite() {
+  const cv = $("#spcv");
+  const os = SP.os;
+  const z = SP.osZoom;
+  const nativeW = 240, nativeH = 160;
+  $("#sphint").textContent = `실화면 배치 모드: 화면 좌표 기준으로 편집합니다. bbox ${os.x0},${os.y0} ${os.w}×${os.h}px`;
+
+  const off = document.createElement("canvas"); off.width = nativeW; off.height = nativeH;
+  const ctx = off.getContext("2d");
+  ctx.imageSmoothingEnabled = false;
+  if (SP.showBg && SP.bgReady && SP.bgImg) {
+    ctx.globalAlpha = 0.45;
+    ctx.drawImage(SP.bgImg, 0, 0, nativeW, nativeH);
+    ctx.globalAlpha = 1;
+    maskOamBounds(ctx);
+  } else {
+    ctx.fillStyle = "#08090c";
+    ctx.fillRect(0, 0, nativeW, nativeH);
+  }
+  drawOamCells(ctx, false);
+
+  cv.width = nativeW * z; cv.height = nativeH * z;
+  const cctx = cv.getContext("2d"); cctx.imageSmoothingEnabled = false;
+  cctx.drawImage(off, 0, 0, cv.width, cv.height);
+
+  const paint = (e) => {
+    const r = cv.getBoundingClientRect();
+    const sx = Math.floor((e.clientX - r.left) / z), sy = Math.floor((e.clientY - r.top) / z);
+    const hit = onscreenTargetAt(sx, sy);
+    if (!hit) return;
+    const key = `${hit.tile}:${hit.px}:${hit.py}`;
+    if (key === SP.paintKey) return;
+    SP.paintKey = key;
+    setTilePixel(hit.tile, hit.px, hit.py, SP.sel);
+    drawOnscreenSprite();
+  };
+  cv.onmousedown = e => { SP.painting = true; SP.paintKey = ""; paint(e); window.addEventListener("mouseup", () => (SP.painting = false), { once: true }); };
+  cv.onmousemove = e => { if (SP.painting) paint(e); };
+}
+
+function drawOamCells(ctx) {
+  const os = SP.os;
+  for (const cell of os.cells) {
+    for (let ty = 0; ty < cell.th; ty++) for (let tx = 0; tx < cell.tw; tx++) {
+      const tile = localTileFor(cell, tx, ty);
+      const dx0 = cell.x + (cell.fh ? (cell.tw - 1 - tx) : tx) * 8;
+      const dy0 = cell.y + (cell.fv ? (cell.th - 1 - ty) : ty) * 8;
+      for (let yy = 0; yy < 8; yy++) for (let xx = 0; xx < 8; xx++) {
+        const px = cell.fh ? 7 - xx : xx;
+        const py = cell.fv ? 7 - yy : yy;
+        const idx = sheetPixel(tile, px, py) & 15;
+        if (idx === 0) continue;
+        const c = SP.pal[idx] || [0, 0, 0];
+        ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
+        ctx.fillRect(dx0 + xx, dy0 + yy, 1, 1);
+      }
+    }
+  }
+}
+
+function maskOamBounds(ctx) {
+  if (!SP.os) return;
+  ctx.fillStyle = "#08090c";
+  for (const cell of SP.os.cells) {
+    ctx.fillRect(cell.x, cell.y, cell.tw * 8, cell.th * 8);
+  }
+}
+
+function onscreenTargetAt(sx, sy) {
+  const os = SP.os;
+  for (let ci = os.cells.length - 1; ci >= 0; ci--) {
+    const cell = os.cells[ci];
+    for (let ty = cell.th - 1; ty >= 0; ty--) for (let tx = cell.tw - 1; tx >= 0; tx--) {
+      const dx0 = cell.x + (cell.fh ? (cell.tw - 1 - tx) : tx) * 8;
+      const dy0 = cell.y + (cell.fv ? (cell.th - 1 - ty) : ty) * 8;
+      if (sx < dx0 || sy < dy0 || sx >= dx0 + 8 || sy >= dy0 + 8) continue;
+      const lx = sx - dx0, ly = sy - dy0;
+      const px = cell.fh ? 7 - lx : lx;
+      const py = cell.fv ? 7 - ly : ly;
+      const tile = localTileFor(cell, tx, ty);
+      if ((sheetPixel(tile, px, py) & 15) === 0) continue;
+      return { tile, px, py };
+    }
+  }
+  return null;
 }
 async function saveSprite() {
   const r = await api("/api/sprite/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id, indices: SP.grid, palette: SP.pal }) });

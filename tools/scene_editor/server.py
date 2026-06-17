@@ -33,6 +33,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import re
 import sys
 import threading
 import time
@@ -46,6 +47,8 @@ CATALOG = ROOT / "data" / "scene_catalog.json"
 DGROUPS = ROOT / "data" / "dialogue_groups.json"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
 OUTPUT_ROM = ROOT / "output" / "game_wars_korean_full.gba"
+SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
+LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
 
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8",
@@ -73,6 +76,7 @@ except Exception:
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()
+SAFE_CHECKPOINT_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 
 # ── 인덱스(1회 로드 캐시) ────────────────────────────────────────────────
 _CACHE = {}
@@ -105,6 +109,39 @@ def syl_codes():
     if "syl" not in _CACHE:
         _CACHE["syl"] = json.loads(SYLCODE.read_text(encoding="utf-8"))
     return _CACHE["syl"]
+
+
+def scene_shot_path(checkpoint: str | None):
+    """checkpoint id → 캡처 PNG 경로. 신규 temp/scene_screenshots 우선, 기존 시트는 fallback."""
+    if not checkpoint:
+        return None
+    rel = f"{checkpoint}_patched/frame.png"
+    for base in (SCENE_SHOT_DIR, LEGACY_SCENE_SHOT_DIR):
+        p = (base / rel).resolve()
+        try:
+            if base.resolve() in p.parents and p.exists() and p.is_file():
+                return p
+        except OSError:
+            continue
+    return None
+
+
+def scene_shot_info(sc):
+    shot = dict(sc.get("screenshot") or {})
+    checkpoint = shot.get("checkpoint")
+    p = scene_shot_path(checkpoint)
+    shot["exists"] = bool(p)
+    if p:
+        shot["url"] = f"/scene_shots/{urllib.parse.quote(checkpoint)}.png"
+        shot["mtime"] = int(p.stat().st_mtime)
+    return shot
+
+
+def public_scene(sc):
+    out = {k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
+                              "canvas", "canvas_status", "counts") if k in sc}
+    out["screenshot"] = scene_shot_info(sc)
+    return out
 
 
 # ── 요구7: 바이트 예산 계산(codex 교정 — 대사 슬롯은 NUL 미포함) ──────────
@@ -345,8 +382,7 @@ def filter_scenes(scope, tag, q):
             hay = (sc.get("title", "") + sc.get("id", "") + sc.get("subtag", "")).lower()
             if q_lower not in hay:
                 continue
-        out.append({k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
-                                       "canvas", "canvas_status", "counts") if k in sc})
+        out.append(public_scene(sc))
     out.sort(key=lambda s: s.get("order", 0))
     return out
 
@@ -379,6 +415,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._static("index.html")
         if p.startswith("/static/"):
             return self._static(p[len("/static/"):])
+        if p.startswith("/scene_shots/"):
+            return self._serve_scene_shot(urllib.parse.unquote(p[len("/scene_shots/"):]))
         if p == "/api/state":
             return self._send(200, {"rom": rom_state(), "dirty": dirty_state(),
                                     "build": {k: _BUILD[k] for k in ("status", "started", "finished")}})
@@ -397,6 +435,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {"id": sid, "title": sc.get("title"), "scope": sc.get("scope"),
                                     "subtag": sc.get("subtag"), "canvas": sc.get("canvas"),
                                     "canvas_status": sc.get("canvas_status"),
+                                    "screenshot": scene_shot_info(sc),
                                     "dialogue": d, "sprites": s})
         if p == "/api/dict":
             return self._send(200, load_json(DE.DICT_PATH, {}))
@@ -442,6 +481,23 @@ class Handler(BaseHTTPRequestHandler):
         if pdir.resolve() not in safe.parents or safe.suffix != ".png" or not safe.exists():
             return self._send(404, {"error": "no preview"})
         self._send(200, safe.read_bytes(), "image/png")
+
+    def _serve_scene_shot(self, name):
+        if not name.endswith(".png"):
+            return self._send(404, {"error": "no scene shot"})
+        checkpoint = Path(name).stem
+        if not SAFE_CHECKPOINT_RE.fullmatch(checkpoint):
+            return self._send(403, {"error": "forbidden"})
+        p = scene_shot_path(checkpoint)
+        if not p:
+            return self._send(404, {"error": "scene shot not captured: " + checkpoint})
+        data = p.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", "image/png")
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     # 스프라이트 핸들러 재사용: SE의 Handler 메서드 바디를 모듈 함수로 호출
     def _sprite_proxy(self, kind, q):

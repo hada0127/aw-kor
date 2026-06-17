@@ -61,7 +61,9 @@ def load(p, default=None):
 
 # ── 게임 흐름순 scene 정의(큐레이션) ────────────────────────────────────────
 # 각 scene: id, scope, subtag, title, canvas(checkpoint id 또는 None),
+#   screenshot: scene 증거 스크린샷용 checkpoint id. 없으면 canvas/checkpoint를 사용.
 #   sprite: source_contains 토큰 리스트(부분일치, 첫 매칭 scene에 배정),
+#   sprite_ids: 정확한 sprite id 리스트(중복 source/오프셋 분리용, token보다 우선),
 #   dialogue: {regions:[...], addr_ranges:[[lo,hi],...]?}  (addr_ranges 있으면 그 안만)
 # 순서가 곧 order. 구체 scene(addr_ranges 지정)을 먼저, 광역 버킷(범위 미지정)을 뒤에 둔다.
 SCENES = [
@@ -72,76 +74,117 @@ SCENES = [
     dict(id="01_common_title", scope="shared_select", subtag="시작화면",
          title="공통 타이틀(시작하기)", canvas="02_common_title",
          sprite=["title:TITLE_OBJ", "title:TITLE_COPYRIGHT", "common_title"], dialogue=dict(regions=[])),
-    dict(id="02_select_part", scope="shared_select", subtag="1+2편 선택",
-         title="1+2편 선택 화면", canvas="03_select_part1",
+    dict(id="02_select_part1", scope="shared_select", subtag="1+2편 선택",
+         title="1+2편 선택 화면(1편 선택)", canvas="03_select_part1",
          sprite=["title:SELECT_OBJ", "select_obj"], dialogue=dict(regions=[])),
+    dict(id="03_select_part2", scope="shared_select", subtag="1+2편 선택",
+         title="1+2편 선택 화면(2편 선택)", canvas="05_select_part2",
+         sprite=[], dialogue=dict(regions=[])),
 
     # ── 1편(part1) ──
     dict(id="10_part1_title", scope="part1", subtag="시작화면",
          title="1편 타이틀", canvas="04_part1_title",
          sprite=["part1_title", "PART1_TITLE_OBJ"], dialogue=dict(regions=[])),
-    dict(id="11_part1_mode_select", scope="part1", subtag="모드 선택",
-         title="1편 모드/메뉴 선택", canvas=None,
-         sprite=["menu_label/", "part1_mode_select", "MODE_SELECT", "RULE_SELECT",
-                 "TEAM_SETTING", "part1_operation", "OPERATION", "MAP_SELECT",
-                 "SHOP_SELECT", "HARD_SHOP"], dialogue=dict(regions=[])),
-    dict(id="12_part1_name_input", scope="part1", subtag="이름 입력",
+    dict(id="11_part1_world_menu", scope="part1", subtag="모드 선택",
+         title="1편 월드 메뉴 라벨", canvas=None, screenshot="40_part1_name_menu",
+         sprite_ids=["lz77_00C0310C", "lz77_00C03510", "lz77_00C03880", "lz77_00C03AF0",
+                     "lz77_00C03F68", "lz77_00C043E0", "lz77_00C0489C", "lz77_00C04D48",
+                     "lz77_00C051DC", "lz77_00C05658", "lz77_00C05994", "lz77_00C05D78",
+                     "lz77_00C06218", "lz77_00C0668C", "lz77_00C06B78"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="12_part1_submenus", scope="part1", subtag="하위 메뉴",
+         title="1편 하위 메뉴 라벨(싱글/통신/카드)", canvas=None, screenshot="42_part1_single_battle",
+         sprite_ids=["lz77_00C1A2BC", "lz77_00C1A564", "lz77_00C1A81C", "lz77_00C1A9DC",
+                     "lz77_00C1AC60", "lz77_00C1AE74", "lz77_00C1B0E4", "lz77_00C1B3A8",
+                     "lz77_00C1B610", "lz77_00C1B830"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="13_part1_name_input", scope="part1", subtag="이름 입력",
          title="1편 이름 입력", canvas="40_part1_name_menu",
-         sprite=["CATHERINE_NAME"], dialogue=dict(regions=[])),
-    dict(id="13_part1_info_screen", scope="part1", subtag="유닛 정보",
+         sprite_ids=["lz77_00C102A8"], sprite=[], dialogue=dict(regions=[])),
+    dict(id="14_part1_operation_logos", scope="part1", subtag="작전/설정",
+         title="1편 작전/지도/상점/룰 화면 로고", canvas=None, screenshot="41_part1_operation_room",
+         sprite_ids=["lz77_00C18CB4", "lz77_00C18F48", "lz77_00C191E0", "lz77_00C194D8",
+                     "lz77_00C19A9C", "lz77_00C19D14", "lz77_00C19FF0"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="15_part1_info_screen", scope="part1", subtag="유닛 정보",
          title="1편 유닛/상세 정보 화면", canvas=None,
+         screenshot="32_battle_continue",
          sprite=["part1_info_screen", "part1_full_info_spec", "part1_check_label",
                  "info_screen_bg_labels", "full_info_spec"], dialogue=dict(regions=[])),
-    dict(id="14_part1_campaign", scope="part1", subtag="캠페인",
-         title="1편 캠페인/미션/전투", canvas=None,
-         sprite=["part1_campaign", "CAMPAIGN", "MISSION_LOGO", "part1_battle"],
+    dict(id="16_part1_campaign", scope="part1", subtag="캠페인",
+         title="1편 캠페인/미션 로고", canvas=None, screenshot="20_mode_select_menu",
+         sprite_ids=["lz77_00C18738", "lz77_00C19794"], sprite=[],
+         dialogue=dict(regions=[])),
+    dict(id="17_part1_battle", scope="part1", subtag="전투",
+         title="1편 전투 N일째 배너", canvas=None, screenshot="30_battle_attack",
+         sprite_ids=["lz77_00EE5E14"], sprite=[],
          dialogue=dict(regions=[])),
     dict(id="18_part1_story", scope="part1", subtag="대사",
-         title="1편 스토리 대사(전체)", canvas=None,
+         title="1편 스토리 대사(전체)", canvas=None, screenshot="31_battle_dialog",
          sprite=[], dialogue=dict(regions=["part1"])),
 
     # ── 2편(part2) ──
-    dict(id="20_part2_intro", scope="part2", subtag="인트로",
-         title="2편 오프닝/프롤로그(신문·블랙홀·도미노)", canvas=None,
-         sprite=["part2_intro", "intro_blackhole", "intro_campaign", "splash_logo",
-                 "prologue_logo", "domino_co_name", "menu_newspaper", "blackhole"],
+    dict(id="20_part2_intro_newspaper", scope="part2", subtag="인트로",
+         title="2편 인트로 신문/스플래시", canvas=None, screenshot="07_part2_main_menu",
+         sprite_ids=["lz77_004D8AF8", "lz77_005B5D10"], sprite=[],
          dialogue=dict(regions=[])),
-    dict(id="21_part2_title", scope="part2", subtag="시작화면",
+    dict(id="21_part2_intro_blackhole", scope="part2", subtag="인트로",
+         title="2편 인트로 블랙홀/도미노/프롤로그", canvas=None, screenshot="07_part2_main_menu",
+         sprite_ids=["lz77_0045274C", "lz77_004E0478", "lz77_004E17C0", "lz77_004ECD60",
+                     "lz77_005BBB3C"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="22_part2_title", scope="part2", subtag="시작화면",
          title="2편 타이틀", canvas="06_part2_title",
          sprite=["PART2_TITLE_OBJ", "part2_title"], dialogue=dict(regions=[])),
-    dict(id="22_part2_main_menu", scope="part2", subtag="메뉴 선택",
+    dict(id="23_part2_main_menu", scope="part2", subtag="메뉴 선택",
          title="2편 메인 메뉴(모드 선택)", canvas="07_part2_main_menu",
          sprite=["part2_mode_menu", "mode_menu_obj"],
          dialogue=dict(regions=["part2"], addr_ranges=[[0xA2C000, 0xA2D000]])),
-    dict(id="23_part2_campaign", scope="part2", subtag="캠페인 선택",
+    dict(id="24_part2_campaign_map", scope="part2", subtag="캠페인 선택",
          title="2편 캠페인/작전 선택(월드맵)", canvas="20_mode_select_menu",
-         sprite=["campaign_header", "mission_number", "level_label", "lets_go",
-                 "redstar_region", "world_map_label", "mission_start", "air_mission",
-                 "air_supremacy"], dialogue=dict(regions=[])),
-    dict(id="24_part2_battle", scope="part2", subtag="전투",
-         title="2편 전투(데미지 예측·N일째·행동메뉴·상태)", canvas="30_battle_attack",
-         sprite=["battle_start_day", "damage_forecast", "check_label", "battle_day_banner",
-                 "part2_objlabel/action_menu", "part2_objlabel/terrain",
-                 "part2_objlabel/unit", "part2_objlabel/co_banner",
-                 "part2_objlabel/status_header", "part2_objlabel/info_screen"],
+         sprite_ids=["lz77_00541BB8", "lz77_0054214C", "lz77_00547188", "lz77_005488A0",
+                     "lz77_005A38D4", "lz77_005AAA68", "lz77_005AF674"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="25_part2_mission_titles", scope="part2", subtag="미션 진입",
+         title="2편 미션 시작/에어 미션 타이틀", canvas=None, screenshot="32_battle_continue",
+         sprite_ids=["lz77_00C10B34", "lz77_00C11D9C", "lz77_00C1205C"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="26_part2_battle_labels", scope="part2", subtag="전투",
+         title="2편 전투 라벨(N일째·체크·데미지 예측)", canvas="30_battle_attack",
+         sprite_ids=["lz77_0045EC74", "lz77_0045FCC8", "lz77_0092DF84", "lz77_0092EB5C",
+                     "lz77_00966C0C", "lz77_009677E4", "lz77_0099F4B0", "lz77_009A0088",
+                     "lz77_009D7D54", "lz77_009D892C", "lz77_00BD4FBC"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="27_part2_battle_objlabels", scope="part2", subtag="전투",
+         title="2편 전투 OBJ 라벨(행동·유닛·지형·상태)", canvas=None, screenshot="31_battle_dialog",
+         sprite_ids=["objlabel_p2_terrain_status", "objlabel_p2_terrain_compact",
+                     "objlabel_p2_unit_status", "objlabel_p2_unit_compact",
+                     "objlabel_p2_co_banner", "objlabel_p2_status_header",
+                     "objlabel_p2_info_screen", "objlabel_p2_action_menu"],
+         sprite=[],
          dialogue=dict(regions=[])),
-    dict(id="25_part2_result", scope="part2", subtag="결과",
-         title="2편 결과(성공·실패·요약·축하)", canvas=None,
-         sprite=["result_success", "result_failure", "result_summary",
-                 "result_congratulations"], dialogue=dict(regions=[])),
-    dict(id="28_part2_story", scope="part2", subtag="대사",
-         title="2편 스토리 대사(전체)", canvas=None,
+    dict(id="28_part2_result_status", scope="part2", subtag="결과",
+         title="2편 결과 성공/실패 오버레이", canvas=None, screenshot="33_battle_transport",
+         sprite_ids=["lz77_00930520", "lz77_009691A8", "lz77_009A1A4C", "lz77_009DA2F0",
+                     "lz77_00BFBB54", "lz77_00EE8A64", "lz77_00EE8F68"],
+         sprite=[], dialogue=dict(regions=[])),
+    dict(id="29_part2_result_summary", scope="part2", subtag="결과",
+         title="2편 결과 요약/축하", canvas=None, screenshot="33_battle_transport",
+         sprite_ids=["lz77_0059DA5C", "lz77_00BFB45C"], sprite=[],
+         dialogue=dict(regions=[])),
+    dict(id="30_part2_story", scope="part2", subtag="대사",
+         title="2편 스토리 대사(전체)", canvas=None, screenshot="31_battle_dialog",
          sprite=[], dialogue=dict(regions=["part2"])),
 
     # ── 캠페인/공통 대사 ──
     dict(id="80_campaign_story", scope="part2", subtag="대사",
-         title="캠페인 대사(전체)", canvas=None,
+         title="캠페인 대사(전체)", canvas=None, screenshot="20_mode_select_menu",
          sprite=[], dialogue=dict(regions=["campaign"])),
     dict(id="85_ui_common", scope="all", subtag="UI/공통",
-         title="공통 UI 라벨/대사", canvas=None,
+         title="공통 UI 라벨/대사", canvas=None, screenshot="02_common_title",
          sprite=["patch_block", "check_label"], dialogue=dict(regions=["ui"])),
     dict(id="90_other_dialogue", scope="all", subtag="대사",
-         title="기타/공통 대사(분류 전)", canvas=None,
+         title="기타/공통 대사(분류 전)", canvas=None, screenshot="31_battle_dialog",
          sprite=[], dialogue=dict(regions=["other"])),
 ]
 
@@ -170,13 +213,39 @@ def _scope_section_ok(scope, section):
 
 
 def assign_sprites(scenes, sprites):
-    """source_contains 첫 매칭 scene에 스프라이트 id 배정. scope/section 가드. 미매칭은 unassigned."""
+    """정확한 sprite_ids 우선, 나머지는 source_contains 첫 매칭 scene에 배정."""
     bucket = {sc["id"]: [] for sc in scenes}
+    explicit = {}
+    duplicate_explicit = []
+    for sc in scenes:
+        for sid in sc.get("sprite_ids", []) or []:
+            if sid in explicit and explicit[sid] != sc["id"]:
+                duplicate_explicit.append((sid, explicit[sid], sc["id"]))
+            explicit[sid] = sc["id"]
+    if duplicate_explicit:
+        detail = ", ".join("%s:%s/%s" % x for x in duplicate_explicit[:10])
+        raise ValueError("중복 explicit sprite_ids: " + detail)
+    known = {sp.get("id") for sp in sprites}
+    missing = sorted(set(explicit) - known)
+    if missing:
+        raise ValueError("존재하지 않는 explicit sprite_ids: " + ", ".join(missing[:20]))
+    seen_sprites = set()
     unassigned = []
+
+    def add_unique(scene_id, sid):
+        if sid not in bucket[scene_id]:
+            bucket[scene_id].append(sid)
+
     for sp in sprites:
         src = (sp.get("source") or "")
         sid = sp.get("id")
+        if not sid or sid in seen_sprites:
+            continue
+        seen_sprites.add(sid)
         section = sprite_section(src)
+        if sid in explicit:
+            add_unique(explicit[sid], sid)
+            continue
         hit = None
         for sc in scenes:
             if not _scope_section_ok(sc.get("scope"), section):
@@ -188,7 +257,7 @@ def assign_sprites(scenes, sprites):
             if hit:
                 break
         if hit:
-            bucket[hit].append(sid)
+            add_unique(hit, sid)
         else:
             # scan_lz77(미분류 그래픽)은 비텍스트 → 별도 풀, 그 외 텍스트성은 review
             unassigned.append(sid)
@@ -236,6 +305,7 @@ def assign_dialogue(scenes, groups):
 def main():
     chk = load(CHK, {"checkpoints": []})
     chk_ids = {c["name"] for c in chk.get("checkpoints", [])}
+    chk_by_id = {c["name"]: c for c in chk.get("checkpoints", [])}
     spr = load(SPR, {"sprites": []}).get("sprites", [])
     obj = (load(OBJ, {}) or {}).get("sprites", []) or []
     sprites = list(spr) + list(obj)
@@ -277,6 +347,17 @@ def main():
     for order, sc in enumerate(scenes):
         checkpoint = sc.get("canvas")  # SCENES의 canvas= 는 screen_checkpoint id(게임순 진입용)
         checkpoint_exists = bool(checkpoint and checkpoint in chk_ids)
+        shot_checkpoint = sc.get("screenshot") or checkpoint
+        shot = chk_by_id.get(shot_checkpoint)
+        if shot:
+            shot_grade = shot.get("grade") or ("stale_state" if shot.get("stale_bg") else "ground_truth")
+            screenshot = {"checkpoint": shot_checkpoint,
+                          "url": f"/scene_shots/{shot_checkpoint}.png",
+                          "mode": shot.get("mode"), "grade": shot_grade,
+                          "status": "capturable", "note": shot.get("note", "")}
+        else:
+            screenshot = {"checkpoint": shot_checkpoint, "url": None, "mode": None,
+                          "grade": "missing_checkpoint", "status": "missing_checkpoint", "note": ""}
         # 실캡처 canvas = 레지스트리에서 checkpoint→canvas로 도출(지원 키만).
         preview = pv_by_chk.get(checkpoint) or pv_by_chk.get(sc["id"])
         if preview not in pv_keys:
@@ -288,6 +369,7 @@ def main():
             # canvas = 실캡처 프리뷰 키(없으면 None). checkpoint = 게임순 진입(미래 fresh-nav).
             "canvas": preview, "canvas_status": canvas_status,
             "checkpoint": checkpoint, "checkpoint_exists": checkpoint_exists,
+            "screenshot": screenshot,
             "dialogue_filter": sc.get("dialogue", {}),
             "sprite_filter": {"source_contains": sc.get("sprite", [])},
             "dialogue_ids": dl_bucket[sc["id"]],
@@ -300,6 +382,9 @@ def main():
         "id": "99_unassigned_review", "order": 9990, "scope": "all",
         "subtag": "미배정", "title": "미배정(검토 필요) — 규칙 미매칭",
         "canvas": None, "canvas_status": "none",
+        "checkpoint": None, "checkpoint_exists": False,
+        "screenshot": {"checkpoint": None, "url": None, "mode": None, "grade": "not_a_scene",
+                       "status": "not_a_scene", "note": "미배정 검토 bucket"},
         "dialogue_filter": {}, "sprite_filter": {},
         "dialogue_ids": dl_un, "sprite_ids": sp_un,
         "counts": {"dialogue": len(dl_un), "sprite": len(sp_un)},

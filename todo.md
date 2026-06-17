@@ -59,7 +59,7 @@
 - [x] 스프라이트 픽셀 편집(canvas paint)·save/revert/setpalette(`sprites_overrides.json`).
 - [x] **proper_nouns 통일사전 CRUD UI**(2026-06-17): GNB '📖 사전' → 모달(카테고리별 용어 add/edit/delete, DOM 입력), 서버 POST /api/dict. add→edit→delete 왕복 검증.
 - [x] **요구7 "2줄=2칸" 확인**: dialogue_groups가 멀티-fragment 구조(줄바꿈=ctrl gap)라 각 fragment=한 줄·자체 슬롯 → fragment별 입력칸이 곧 줄별 칸. segments newline 6467/1533그룹 확인.
-- [ ] (잔여) 스프라이트 onscreen WYSIWYG 뷰 통합(현재 픽셀 그리드 편집만).
+- [x] **스프라이트 onscreen WYSIWYG 뷰 통합(2026-06-17)**: 레이아웃 있는 스프라이트는 기본 `실화면 배치` 모드로 240×160 화면 좌표/실캡처 팔레트 위에서 편집. 클릭 좌표를 OAM cell→tile pixel로 역매핑해 기존 `indices` 저장/빌드 경로와 호환.
 
 ## Phase 5 — 미리보기 + 적용(풀빌드 job) + 다운로드 (요구 5·6) ✅ 대부분 완료
 - [x] 대사 preview 모달(원본 JA↔편집 KO 실캡처) + 스프라이트 orig/patched/edit compare 모달.
@@ -77,6 +77,8 @@
 - [x] scene별 canvas 상태(ready/none) 카탈로그 노출 + UI 표시. 대사 preview는 scene canvas 사용.
 - [x] **canvas 레지스트리 외부화**: `data/preview_canvases.json`(key→slot/len/render/nav/checkpoint), preview_capture `_load_registry()` 병합, build_scene_catalog가 canvas.checkpoint로 scene 매핑. 새 canvas=코드수정 0.
 - [x] **캐시 키 버그 수정(codex)**: preview 캐시 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함(기존 name+text만 → nav/ROM 변경 시 stale).
+- [x] **scene proof screenshot 연결(2026-06-17)**: `tools/capture_scene_screenshots.py` 추가. scene_catalog의 `screenshot.checkpoint`를 헤드리스 mGBA로 `temp/scene_screenshots/<checkpoint>_patched/frame.png`에 캡처하고 provenance 기록. UI LNB/scene 상세에 실제 캡처 썸네일 표시. 실제 game scene 27/27 캡처 존재(`99_unassigned_review`는 검토 bucket).
+- [x] **merged scene 분리(2026-06-17)**: 20 scene+review → 28 scene+review. 1+2 선택 Part1/Part2, Part1 월드메뉴/하위메뉴/작전로고/캠페인/전투, Part2 인트로 신문/블랙홀, 캠페인맵/미션타이틀, 전투라벨/OBJ라벨, 결과상태/요약 분리. source 중복 라벨은 `sprite_ids` 정확 배정으로 분리.
 - [⏳] **part1 대사 canvas는 fresh-nav fragility로 보류**(6회 실측): 인트로 대사 자동진행→캡처 불안정, 안정적인 건 텍스트슬롯 없는 이름그리드뿐. 신뢰성 canvas는 **frame-sweep(대사창 비공백 프레임 선택) 또는 정밀 savestate** 필요(research.md 기록). 검증 안 된 canvas는 출하 금지(현재 part2_menu만 ready).
 - [ ] (후속) frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성 확보.
 - 완료기준(수정): part2_menu 검증·정식 등록 / 레지스트리 외부화로 확장 경로 확보 / part1·battle은 frame-sweep 후속.
@@ -85,6 +87,7 @@
 - [x] **byte-identical 정합성**: 편집기 작업(도구/카탈로그/프런트만)은 빌드 무관 → output ROM sha **1623481a 불변** 확인.
 - [x] 기능 parity: 통합 에디터가 구 2서버 편집 기능 포섭(대사 line/사전 CRUD/preview, 스프라이트 tile/render/compare/onscreen/save/revert/setpalette/build/download). 구 :8780/:8781 모듈 import 정상(폐기 전 유지).
 - [x] 전 도구 py_compile + app.js node --check + 데이터 JSON 유효 + 3자 리뷰(codex/agy/워크플로) 반영.
+- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8783` 렌더 확인. scene row 28, scene screenshot img 27 로드, `2편 전투 OBJ 라벨` scene 펼침, sprite row 8, 실화면 배치 canvas 720×480 nonblank, OAM cell 94, palette 16, `onscreenTargetAt` 역매핑 성공. 증거 `temp/browser_verify/scene_editor_onscreen.png`.
 - [ ] (후속) dist 재생성은 ROM 변경 없으므로 불필요. 구서버 정식 폐기는 frame-sweep까지 완료 후 판단.
 - 완료기준: scene editor 단독으로 편집·preview·apply·download 가능.
 

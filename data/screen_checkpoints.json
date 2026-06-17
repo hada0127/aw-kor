@@ -91,6 +91,30 @@
       "refresh": [["frames", 30]],
       "stale_bg": true,
       "note": "Part1 이름입력 후 메뉴"
+    },
+    {
+      "name": "41_part1_operation_room",
+      "mode": "savestate",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "refresh": [["frames", 10], ["press", "A", 160]],
+      "stale_bg": true,
+      "note": "Part1 작전실/작전 메뉴"
+    },
+    {
+      "name": "42_part1_single_battle",
+      "mode": "savestate",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "refresh": [["frames", 10], ["press", "DOWN", 120], ["press", "A", 180]],
+      "stale_bg": true,
+      "note": "Part1 싱글 배틀 하위 메뉴"
+    },
+    {
+      "name": "43_part1_link",
+      "mode": "savestate",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "refresh": [["frames", 10], ["press", "DOWN", 120], ["press", "DOWN", 120], ["press", "A", 180]],
+      "stale_bg": true,
+      "note": "Part1 통신 하위 메뉴"
     }
   ]
 }
