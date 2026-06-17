@@ -519,5 +519,52 @@ $$("#scope button").forEach(b => b.onclick = () => {
 });
 $("#q").oninput = () => { clearTimeout($("#q")._t); $("#q")._t = setTimeout(loadScenes, 250); };
 
+// ── 통일 사전 CRUD(Phase 4 잔여) ─────────────────────────────────────────
+async function openDict() {
+  const d = await api("/api/dict");
+  if (!d || d.ok === false) return toast("사전 로드 실패", true);
+  S.dict = d;
+  const cats = Object.entries(d).filter(([k, v]) => Array.isArray(v));
+  $("#dcat").innerHTML = cats.map(([k]) => `<option value="${esc(k)}">${esc(k)}</option>`).join("");
+  const total = cats.reduce((n, [, v]) => n + v.length, 0);
+  $("#dictInfo").textContent = `${cats.length}개 카테고리 · ${total}개 용어`;
+  const box = $("#dictlist"); box.innerHTML = "";
+  const frag = document.createDocumentFragment();
+  for (const [cat, list] of cats) for (const e of list) frag.appendChild(dictRow(cat, e));
+  box.appendChild(frag);
+  $("#dictModal").hidden = false;
+}
+function dictRow(cat, e) {
+  const row = document.createElement("div"); row.className = "dterm";
+  const c = document.createElement("span"); c.className = "dcat"; c.textContent = cat;
+  const ja = document.createElement("span"); ja.className = "dja"; ja.textContent = e.ja || "";
+  const ko = document.createElement("input"); ko.value = e.ko || ""; ko.placeholder = "번역";
+  const ed = document.createElement("input"); ed.value = e.edit || ""; ed.placeholder = "확정표기";
+  const save = document.createElement("button"); save.textContent = "저장";
+  const del = document.createElement("button"); del.className = "del"; del.textContent = "삭제";
+  save.onclick = async () => {
+    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "edit", category: cat, ja: e.ja, ko: ko.value, edit: ed.value }) });
+    toast(r.ok ? `사전 저장: ${e.ja}` : "실패: " + (r.error || ""), !r.ok);
+  };
+  del.onclick = async () => {
+    if (!confirm(`사전에서 삭제: ${e.ja}?`)) return;
+    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", category: cat, ja: e.ja }) });
+    if (r.ok) { toast("삭제됨"); openDict(); } else toast("실패: " + (r.error || ""), true);
+  };
+  row.append(c, ja, ko, ed, save, del);
+  return row;
+}
+$("#dictBtn").onclick = openDict;
+$("#dictClose").onclick = () => ($("#dictModal").hidden = true);
+$("#dictModal").onclick = (e) => { if (e.target.id === "dictModal") $("#dictModal").hidden = true; };
+$("#dadd").onclick = async () => {
+  const cat = $("#dcat").value, ja = $("#dja").value.trim();
+  if (!ja) return toast("원문(JA) 입력", true);
+  const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", category: cat, ja, ko: $("#dko").value, edit: $("#dedit").value }) });
+  if (r.ok) { toast("추가됨"); $("#dja").value = $("#dko").value = $("#dedit").value = ""; openDict(); }
+  else toast("실패: " + (r.error || ""), true);
+};
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#dictModal").hidden) $("#dictModal").hidden = true; });
+
 // 시작
 loadSupported(); loadScenes(); refreshState(); setInterval(refreshState, 8000);

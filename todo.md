@@ -54,10 +54,12 @@
   scene head 클릭=펼침/접힘(단일 펼침), 항목 클릭=우측 편집. 대형 scene는 렌더 상한+더보기, 썸네일 lazy.
 - 완료기준: 요구1~4 탐색 흐름 동작(LNB scene→항목→우측 편집). index/css/app.js 서빙·문법·API 스모크 ✓.
 
-## Phase 4 — 편집 기능 이식 (대사 + 스프라이트) ✅ 대부분 완료
+## Phase 4 — 편집 기능 이식 (대사 + 스프라이트) ✅ 완료
 - [x] 대사 line 저장(주소별 `dialogue_overrides.json`) + 사전검사(클라이언트) + dialogue_map 동기.
 - [x] 스프라이트 픽셀 편집(canvas paint)·save/revert/setpalette(`sprites_overrides.json`).
-- [ ] (잔여) proper_nouns 사전 CRUD UI(현재 검사만) + 스프라이트 onscreen WYSIWYG 뷰 통합.
+- [x] **proper_nouns 통일사전 CRUD UI**(2026-06-17): GNB '📖 사전' → 모달(카테고리별 용어 add/edit/delete, DOM 입력), 서버 POST /api/dict. add→edit→delete 왕복 검증.
+- [x] **요구7 "2줄=2칸" 확인**: dialogue_groups가 멀티-fragment 구조(줄바꿈=ctrl gap)라 각 fragment=한 줄·자체 슬롯 → fragment별 입력칸이 곧 줄별 칸. segments newline 6467/1533그룹 확인.
+- [ ] (잔여) 스프라이트 onscreen WYSIWYG 뷰 통합(현재 픽셀 그리드 편집만).
 
 ## Phase 5 — 미리보기 + 적용(풀빌드 job) + 다운로드 (요구 5·6) ✅ 대부분 완료
 - [x] 대사 preview 모달(원본 JA↔편집 KO 실캡처) + 스프라이트 orig/patched/edit compare 모달.

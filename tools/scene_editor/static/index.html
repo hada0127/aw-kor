@@ -18,6 +18,7 @@
   <input id="q" type="search" placeholder="화면 검색…">
   <span class="grow"></span>
   <span id="state" class="state"></span>
+  <button id="dictBtn" title="통일 사전(고유명사) 보기/편집">📖 사전</button>
   <button id="download" title="현재 빌드된 .gba 다운로드">⬇ ROM</button>
   <button id="apply" title="저장된 편집을 전체 재빌드로 ROM 반영">적용(빌드)</button>
 </header>
@@ -46,6 +47,22 @@
       <span id="modalNote" class="note"></span>
       <button id="modalApply">적용(빌드)</button>
     </div>
+  </div>
+</div>
+
+<!-- 통일 사전 CRUD 모달 -->
+<div id="dictModal" hidden>
+  <div class="modalbox dictbox">
+    <div class="modalhead"><strong>통일 사전 (고유명사·용어)</strong>
+      <span id="dictInfo"></span><button id="dictClose">✕</button></div>
+    <div class="dictadd">
+      <select id="dcat"></select>
+      <input id="dja" placeholder="원문(JA)">
+      <input id="dko" placeholder="번역(KO)">
+      <input id="dedit" placeholder="확정 표기(edit, 선택)">
+      <button id="dadd">추가</button>
+    </div>
+    <div id="dictlist"></div>
   </div>
 </div>
 
