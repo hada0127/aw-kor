@@ -47,6 +47,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FOUND_CSV = os.path.join(REPO, "data", "game_wars_found_texts.csv")
 TRANS_CSV = os.path.join(REPO, "data", "translation_for_import.csv")
 INTEGRITY = os.path.join(REPO, "temp", "integrity_map.json")
+DIALOGUE_OVERRIDES = os.path.join(REPO, "data", "dialogue_overrides.json")
 DEFAULT_OUT = os.path.join(REPO, "data", "dialogue_map.json")
 
 
@@ -169,6 +170,78 @@ def is_noise(text):
     return False
 
 
+def has_hangul(text):
+    return any("가" <= ch <= "힣" for ch in (text or ""))
+
+
+def load_dialogue_overrides():
+    if not os.path.exists(DIALOGUE_OVERRIDES):
+        return {}
+    try:
+        data = json.load(open(DIALOGUE_OVERRIDES, encoding="utf-8")) or {}
+    except Exception:
+        return {}
+    out = {}
+    for key, value in data.items():
+        v = norm_addr(key)
+        if v is not None:
+            out[v] = value or ""
+    return out
+
+
+def load_build_text_overrides():
+    """빌드가 실제 ROM에 적용하는 텍스트 override를 UI map에도 반영한다.
+
+    scene/dialogue editor는 dialogue_map/groups를 읽기 때문에 여기서 빌드 권위
+    `build_korean_full.py`의 SOURCE/ADDRESS/TEXT override를 반영하지 않으면
+    ROM에는 번역되어 들어가는데 UI에는 미번역처럼 보이는 항목이 생긴다.
+    """
+    try:
+        tools_dir = os.path.join(REPO, "tools")
+        if tools_dir not in sys.path:
+            sys.path.insert(0, tools_dir)
+        import build_korean_full as B  # noqa: WPS433
+        return B.ADDRESS_TEXT_OVERRIDES, B.SOURCE_TEXT_OVERRIDES, B.TEXT_OVERRIDES
+    except Exception:
+        return {}, {}, {}
+
+
+def load_direct_patch_texts():
+    try:
+        import qa_text_fit  # noqa: WPS433
+        return {start: text for start, (_end, text) in qa_text_fit.load_direct_patch_texts().items()}
+    except Exception:
+        return {}
+
+
+def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides):
+    """UI에 보여줄 현재 번역. 우선순위는 빌드 적용 순서와 맞춘다."""
+    ko = csv_ko or ""
+    if addr in addr_overrides:
+        ko = addr_overrides[addr] or ""
+    elif ja in source_overrides and not has_hangul(ko):
+        ko = source_overrides[ja] or ""
+    if ko in text_overrides:
+        ko = text_overrides[ko] or ""
+    direct_hit = addr in direct_patches
+    if direct_hit:
+        ko = direct_patches[addr] or ""
+    if not ko and ship_ko and addr not in addr_overrides and not direct_hit:
+        # integrity_map은 실제 빌드 산출에서 역추출한 문자열이다. CSV/inline 경로에
+        # 없는 직접 패치 라벨도 UI에는 현재 ROM 기준으로 보여야 한다.
+        ko = ship_ko
+    if addr in dialogue_overrides:
+        ko = dialogue_overrides[addr] or ""
+    if ko:
+        try:
+            import build_korean_full as B  # noqa: WPS433
+            ko = B.normalize_korean_terms(ko)
+        except Exception:
+            pass
+        ko = ko.replace("지도을", "지도를").replace("지도은", "지도는")
+    return ko
+
+
 def main():
     ap = argparse.ArgumentParser(description="aw-kor 대사 맵 빌더")
     ap.add_argument("--out", default=DEFAULT_OUT, help="출력 JSON 경로")
@@ -222,6 +295,10 @@ def main():
                 "kind": (e[7] if len(e) > 7 else None),
             }
 
+    addr_overrides, source_overrides, text_overrides = load_build_text_overrides()
+    direct_patches = load_direct_patch_texts()
+    dialogue_overrides = load_dialogue_overrides()
+
     # 모든 주소의 합집합(found 가 superset 이지만 trans-only 10건 등 안전하게 합집합)
     all_addrs = sorted(set(found) | set(trans) | set(integrity))
 
@@ -243,8 +320,11 @@ def main():
         elif t_ent and t_ent["ja"]:
             ja = t_ent["ja"]
 
-        ko = t_ent["ko"] if t_ent else ""
         ship_ko = i_ent["ship_ko"] if i_ent else None
+        ko = display_ko_for(
+            addr, ja, t_ent["ko"] if t_ent else "", ship_ko,
+            addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides,
+        )
         slot = i_ent["slot"] if i_ent else None
         kind = i_ent["kind"] if i_ent else None
 
@@ -287,6 +367,10 @@ def main():
             "translation": os.path.relpath(args.trans, REPO),
             "integrity_map": (os.path.relpath(args.integrity, REPO)
                               if have_integrity else None),
+            "dialogue_overrides": (os.path.relpath(DIALOGUE_OVERRIDES, REPO)
+                                   if os.path.exists(DIALOGUE_OVERRIDES) else None),
+            "build_text_overrides": "tools/build_korean_full.py",
+            "direct_script_patches": "tools/qa_text_fit.py:load_direct_patch_texts",
         },
         "counts": {
             "total_lines": len(lines),

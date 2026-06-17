@@ -134,7 +134,7 @@
 
 - [ ] 전체 의미 audit(JA↔KO 전수 LLM 판정) — 숫자/부정 외 오역·의미축소·뉘앙스 색출(대규모).
 - [ ] /goal #1 fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed/엔딩 도달.
-- [ ] 미번역 1097종 triage(말줄임/중복/placeholder 제외 실대사·라벨) → 편집기로 번역.
+- [ ] 잔여 미번역 triage: B팀/쪼롱이님 script 안전 후보 32건은 병합 완료. 제어마커/inline 제어 토큰/slot overflow/no slot 때문에 자동 제외된 B팀 후보와 dialogue_map real missing 잔여는 편집기에서 수동 검수.
 - [ ] 표기흔들림 통일 결정·적용(국가명 붙임 vs 띄움 — **사용자 결정** 대기) + 구 export/apply_proper_nouns.py deprecate.
 - [ ] VRAM 팔레트 캡처(0x05000000/0x05000200)로 스프라이트 실제 색 + raw OBJ 블록 추가 커버.
 - [ ] qa 도구 진실화(ROM 슬롯 디코드 대조로 재설계), 영어 ASCII UI 잔존 전수 도구, 부호 4경로 픽셀 검증.
