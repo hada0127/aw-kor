@@ -48,7 +48,7 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .scene-head .tw { width: 12px; color: var(--dim); flex-shrink: 0; }
 .scene-shot { width: 58px; height: 38px; object-fit: cover; image-rendering: pixelated;
   border: 1px solid var(--line); background: #08090c; flex-shrink: 0; }
-.scene-shot.missing { width: 10px; height: 10px; border-radius: 50%; background: #333844; }
+.scene-shot.missing { background: #111418 repeating-linear-gradient(45deg, #15181f 0 4px, #111418 4px 8px); }
 .scene-head .st { flex: 1; min-width: 0; }
 .scene-head .title { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .scene-head .sub { color: var(--dim); font-size: 11px; }

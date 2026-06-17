@@ -79,17 +79,21 @@ function shotUrl(shot) {
 }
 function sceneShotThumb(shot) {
   const url = shotUrl(shot);
-  if (!url) return `<span class="scene-shot missing"></span>`;
-  return `<img class="scene-shot" loading="lazy" decoding="async" src="${url}" alt="">`;
+  if (!url) return `<span class="scene-shot missing" title="실화면 캡처 없음"></span>`;
+  const stale = shot && shot.stale === true ? ' title="⚠빌드와 불일치(stale)" style="outline:2px solid var(--warn)"' : "";
+  return `<img class="scene-shot" loading="lazy" decoding="async" src="${url}" alt=""${stale}>`;
 }
 function sceneShotCard(shot) {
   const url = shotUrl(shot);
   const meta = shot && shot.checkpoint ? `${shot.checkpoint} · ${shot.grade || ""}` : "스크린샷 없음";
   const preview = S.items && S.items.canvas_status === "ready" ? "대사 프리뷰 지원" : "정적 캡처";
   if (!url) return `<div class="scene-proof missing"><div><strong>실화면 캡처 없음</strong><span>${esc(meta)}</span></div></div>`;
-  return `<div class="scene-proof">
+  // stale(빌드 ROM과 불일치) 경고 — codex major
+  const stale = shot && shot.stale === true
+    ? ` <span class="badge over">⚠stale(빌드와 불일치 — 재캡처 필요)</span>` : "";
+  return `<div class="scene-proof${shot && shot.stale === true ? " missing" : ""}">
     <img src="${url}" alt="">
-    <div><strong>헤드리스 mGBA ${preview}</strong><span>${esc(meta)}</span></div>
+    <div><strong>헤드리스 mGBA ${preview}</strong>${stale}<span>${esc(meta)}</span></div>
   </div>`;
 }
 
@@ -100,7 +104,9 @@ async function loadScenes() {
   try { d = await api(`/api/scenes?scope=${S.scope}&q=${encodeURIComponent(q)}`); }
   catch (e) { toast("scene 목록 로드 실패: " + e, true); return; }
   if (!d || !d.scenes) { toast("scene 목록 로드 실패: " + ((d && d.error) || ""), true); return; }
-  S.scenes = d.scenes; S.scene = null;
+  S.scenes = d.scenes; S.scene = null; S.items = null; S.item = null;
+  // scope/검색으로 목록 갱신 시 우측 에디터도 초기화(stale 편집 상태 방지 — agy major)
+  $("#editor").innerHTML = `<div class="empty">왼쪽에서 화면을 펼쳐 편집할 항목(대사·스프라이트)을 선택하세요.</div>`;
   const c = d.coverage || {};
   $("#coverage").textContent =
     `scene ${d.scenes.length} · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} · ` +
@@ -407,7 +413,9 @@ const SP = {
 async function selectSprite(i, el) {
   markSel(el);
   const sp = S.items.sprites[i]; S.item = { kind: "sprite", sp, i };
+  const myReq = ++S._reqSeq;  // 연속 클릭 경합 방지(agy major): 뒤늦은 응답이 현재 선택 덮어쓰지 않게
   const d = await api(`/api/sprite/tile?id=${encodeURIComponent(sp.id)}`);
+  if (myReq !== S._reqSeq) return;  // 더 최신 선택이 있으면 폐기
   if (!d.ok) { $("#editor").innerHTML = `<div class="empty">디코드 실패: ${esc(d.error || "")}</div>`; return; }
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
   SP.pal = d.palette; SP.type = d.type; SP.sel = 1; SP.os = null; SP.hasOnscreen = !!d.has_onscreen;
@@ -450,7 +458,9 @@ async function setSpriteMode(mode) {
   $("#spModeOn").classList.toggle("on", SP.mode === "onscreen");
   $("#spModeTile").classList.toggle("on", SP.mode === "tile");
   if (SP.mode === "onscreen" && !SP.os) {
-    const os = await api(`/api/sprite/onscreen_data?id=${encodeURIComponent(SP.id)}`);
+    const id = SP.id;  // 경합 가드(codex major): 응답 도착 시 여전히 같은 스프라이트인지
+    const os = await api(`/api/sprite/onscreen_data?id=${encodeURIComponent(id)}`);
+    if (SP.id !== id) return;  // 그새 다른 스프라이트 선택 → 폐기
     if (!os.ok) { toast(os.error || "실화면 레이아웃 로드 실패", true); SP.mode = "tile"; }
     else {
       SP.os = os;
@@ -537,10 +547,11 @@ function setTilePixel(tile, px, py, idx) {
 
 function prepareSceneBg() {
   if (!SP.bgUrl || SP.bgImg) return;
+  const id = SP.id, url = SP.bgUrl;  // 경합 가드(codex major)
   const im = new Image();
-  im.onload = () => { SP.bgReady = true; if (SP.mode === "onscreen") drawOnscreenSprite(); };
-  im.onerror = () => { SP.bgReady = false; };
-  im.src = SP.bgUrl;
+  im.onload = () => { if (SP.id !== id || SP.bgUrl !== url) return; SP.bgReady = true; if (SP.mode === "onscreen") drawOnscreenSprite(); };
+  im.onerror = () => { if (SP.id !== id) return; SP.bgReady = false; };
+  im.src = url;
   SP.bgImg = im;
 }
 

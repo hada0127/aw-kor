@@ -111,6 +111,22 @@ def syl_codes():
     return _CACHE["syl"]
 
 
+def valid_checkpoints():
+    """서빙 허용 checkpoint = screen_checkpoints 정의 + 카탈로그 screenshot 참조(allowlist)."""
+    if "valid_chk" not in _CACHE:
+        names = set()
+        chk = load_json(ROOT / "data" / "screen_checkpoints.json", {"checkpoints": []})
+        for c in chk.get("checkpoints", []):
+            if c.get("name"):
+                names.add(c["name"])
+        for sc in catalog().get("scenes", []):
+            cp = (sc.get("screenshot") or {}).get("checkpoint")
+            if cp:
+                names.add(cp)
+        _CACHE["valid_chk"] = names
+    return _CACHE["valid_chk"]
+
+
 def scene_shot_path(checkpoint: str | None):
     """checkpoint id → 캡처 PNG 경로. 신규 temp/scene_screenshots 우선, 기존 시트는 fallback."""
     if not checkpoint:
@@ -126,6 +142,12 @@ def scene_shot_path(checkpoint: str | None):
     return None
 
 
+def _current_rom_sha():
+    """현재 output ROM 전체 sha256(rom_state 캐시 재사용)."""
+    rom_state()  # _CACHE['romsha'] 채움
+    return _CACHE.get("romsha")
+
+
 def scene_shot_info(sc):
     shot = dict(sc.get("screenshot") or {})
     checkpoint = shot.get("checkpoint")
@@ -134,6 +156,18 @@ def scene_shot_info(sc):
     if p:
         shot["url"] = f"/scene_shots/{urllib.parse.quote(checkpoint)}.png"
         shot["mtime"] = int(p.stat().st_mtime)
+        # stale 검출(codex major): provenance ROM sha ↔ 현재 ROM sha 비교.
+        prov = p.parent / "provenance.json"
+        shot["stale"] = None  # 판정 불가(provenance 없음)
+        if prov.exists():
+            try:
+                psha = (json.loads(prov.read_text(encoding="utf-8")) or {}).get("rom_sha256")
+                cur = _current_rom_sha()
+                if psha and cur:
+                    shot["stale"] = (psha != cur)
+                    shot["prov_sha"] = psha[:16]
+            except Exception:
+                pass
     return shot
 
 
@@ -483,11 +517,13 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, safe.read_bytes(), "image/png")
 
     def _serve_scene_shot(self, name):
-        if not name.endswith(".png"):
-            return self._send(404, {"error": "no scene shot"})
+        if not name.endswith(".png") or "/" in name or "\\" in name:
+            return self._send(404, {"error": "no scene shot"})  # basename만 허용(codex minor)
         checkpoint = Path(name).stem
         if not SAFE_CHECKPOINT_RE.fullmatch(checkpoint):
             return self._send(403, {"error": "forbidden"})
+        if checkpoint not in valid_checkpoints():  # allowlist: 카탈로그/체크포인트 정의된 것만(codex minor)
+            return self._send(404, {"error": "unknown checkpoint: " + checkpoint})
         p = scene_shot_path(checkpoint)
         if not p:
             return self._send(404, {"error": "scene shot not captured: " + checkpoint})
