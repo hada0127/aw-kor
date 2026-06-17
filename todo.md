@@ -88,7 +88,7 @@
 - [x] **byte-identical 정합성**: 편집기 작업(도구/카탈로그/프런트만)은 빌드 무관 → output ROM sha **1623481a 불변** 확인.
 - [x] 기능 parity: 통합 에디터가 구 2서버 편집 기능 포섭(대사 line/사전 CRUD/preview, 스프라이트 tile/render/compare/onscreen/save/revert/setpalette/build/download). 구 :8780/:8781 모듈 import 정상(폐기 전 유지).
 - [x] 전 도구 py_compile + app.js node --check + 데이터 JSON 유효 + 3자 리뷰(codex/agy/워크플로) 반영.
-- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8782` 렌더 확인. scene row 29, game scene screenshot 28/28(API), layout 있음: raw layout 80×128/0,-96에서 실제 출력 bbox 80×32만 편집면으로 사용(canvas 240×96). layout 없음: `케이블 대전` 64×40 출력 크기 fallback(canvas 192×120). 증거 `temp/browser_verify/scene_editor_visible_output_grid.png`, `temp/browser_verify/8782_missing_layout_cable_fixed.png`.
+- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8782` 렌더 확인. scene row 29, game scene screenshot 28/28(API), layout 있음: raw layout 80×128/0,-96에서 실제 출력 bbox 80×32만 편집면으로 사용(canvas 240×96). 1편 LZ77 라벨/옵션 fallback: 저장 타일 순서를 실제 출력 레이어로 역배치(`케이블 대전` 64×40 타일시트 → 출력 80×32, canvas 240×96; 옵션 블록 128×32). 증거 `temp/browser_verify/scene_editor_visible_output_grid.png`, `temp/browser_verify/8782_cable_battle_part1_layout_final_full.png`.
 - [ ] (후속) dist 재생성은 ROM 변경 없으므로 불필요. 구서버 정식 폐기는 frame-sweep까지 완료 후 판단.
 - 완료기준: scene editor 단독으로 편집·preview·apply·download 가능.
 

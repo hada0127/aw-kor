@@ -226,6 +226,21 @@ def load_layouts():
 BUILD_LAYOUTS_PATH = ROOT / "data" / "sprite_build_layouts.json"
 _BUILD_LAYOUTS = None
 
+PART1_LOGO_80X32_OFFSETS = {
+    0x00C18CB4, 0x00C18F48, 0x00C191E0, 0x00C194D8,
+    0x00C19794, 0x00C19A9C, 0x00C19D14, 0x00C19FF0,
+    0x00C1A2BC, 0x00C1A564, 0x00C1A81C, 0x00C1A9DC,
+    0x00C1AC60, 0x00C1AE74, 0x00C1B0E4, 0x00C1B3A8,
+    0x00C1B610, 0x00C1B830,
+}
+
+PART1_OPTION_128X32_OFFSETS = {
+    0x00C0310C, 0x00C03510, 0x00C03880, 0x00C03AF0,
+    0x00C03F68, 0x00C043E0, 0x00C0489C, 0x00C04D48,
+    0x00C051DC, 0x00C05658, 0x00C05994, 0x00C05D78,
+    0x00C06218, 0x00C0668C, 0x00C06B78,
+}
+
 
 def load_build_layouts():
     global _BUILD_LAYOUTS
@@ -234,12 +249,44 @@ def load_build_layouts():
     return _BUILD_LAYOUTS
 
 
-def build_layout_cells(sp):
-    """빌드 권위 라벨 타일스트립 → cells(캡처 레이아웃과 동일 스키마). 라벨을 세로로 적층.
-    pal_file 없음 → 렌더는 sprite palette_for 사용(인덱스 직접)."""
+def sprite_offset_int(sp):
     off = sp.get("offset_int")
     if off is None:
         off = int(sp.get("offset", "0x0"), 16)
+    return off
+
+
+def part1_tiled_layer_layout(sp, off):
+    """1편 타이틀 라벨 LZ77은 화면 레이어와 저장 타일 순서가 다르다.
+    편집면은 빌드 인코더(part1_logo_layer_to_tiles/option_layer_to_tiles)의 역배치로 제공한다."""
+    if off in PART1_LOGO_80X32_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 2, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 80, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_80x32",
+        }
+    if off in PART1_OPTION_128X32_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_128x32",
+        }
+    return None
+
+
+def build_layout_cells(sp):
+    """빌드 권위 라벨 타일스트립 → cells(캡처 레이아웃과 동일 스키마). 라벨을 세로로 적층.
+    pal_file 없음 → 렌더는 sprite palette_for 사용(인덱스 직접)."""
+    off = sprite_offset_int(sp)
+    part1_layout = part1_tiled_layer_layout(sp, off)
+    if part1_layout:
+        return part1_layout
     blk = load_build_layouts().get("0x%X" % off)
     if not blk:
         return None

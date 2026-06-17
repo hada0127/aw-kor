@@ -427,7 +427,7 @@ async function selectSprite(i, el) {
   const ed = $("#editor");
   const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 출력 크기";
   ed.innerHTML = `<h3>스프라이트 편집 — ${esc(sp.desc)}</h3>
-    <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
+    <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · <span id="spDims">${d.width}×${d.height}px</span>${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
     ${sceneShotCard(S.items.screenshot || {})}
     <div class="sprite-mode">
       <span class="mode-label">${layoutLabel}</span>
@@ -453,6 +453,17 @@ async function selectSprite(i, el) {
   $("#spCompare").onclick = compareSprite;
 }
 
+function updateSpriteDimsMeta() {
+  const el = $("#spDims");
+  if (!el) return;
+  if (SP.mode === "onscreen" && SP.os) {
+    const box = onscreenViewBox();
+    el.textContent = `출력 ${box.w}×${box.h}px · 타일시트 ${SP.w}×${SP.h}px`;
+  } else {
+    el.textContent = `${SP.w}×${SP.h}px`;
+  }
+}
+
 async function setSpriteMode(mode) {
   if (mode === "onscreen" && !SP.hasOnscreen) mode = "tile";
   SP.mode = mode;
@@ -469,6 +480,7 @@ async function setSpriteMode(mode) {
       prepareSceneBg();
     }
   }
+  updateSpriteDimsMeta();
   drawCurrentSprite();
 }
 function renderSwatches() {
