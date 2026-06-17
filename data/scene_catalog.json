@@ -19,8 +19,8 @@
     "sprites_unassigned_scan_lz77": 1874,
     "sprites_unassigned_text_candidate": 0,
     "sprites_unassigned_font": 1,
-    "dialogue_groups_total": 9063,
-    "dialogue_assigned": 9063,
+    "dialogue_groups_total": 9061,
+    "dialogue_assigned": 9061,
     "dialogue_unassigned": 0
   },
   "scenes": [
@@ -7073,8 +7073,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00000808",
-        "g_00007EBF",
         "g_0001940A",
         "g_0001E332",
         "g_0001ED1E",
@@ -10169,7 +10167,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3093,
+        "dialogue": 3091,
         "sprite": 0
       }
     },

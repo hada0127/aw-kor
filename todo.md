@@ -37,7 +37,7 @@
 ## Phase 1 — scene_catalog 토대 ✅ 완료
 - [x] `tools/build_scene_catalog.py` 작성: 게임순 큐레이션 20 scene 정의 + skeleton 생성.
 - [x] 스프라이트 후보 배정(source_contains 토큰): 112 텍스트 스프라이트 배정.
-- [x] 대사 후보 배정(region + addr_ranges, font 제외): **9063/9063 그룹 100% 배정**.
+- [x] 대사 후보 배정(region + addr_ranges, font 제외): **9061/9061 그룹 100% 배정**.
 - [x] `data/scene_catalog_overrides.json`(add/remove 수동보정) 로드 구현 + 스텁.
 - [x] `99_unassigned_review` 생성 + 미배정 count 노출(비-scan 미배정=FONT_BASE 글리프 1뿐, scan_lz77 1874=비텍스트).
 - 완료기준: `data/scene_catalog.json`(20 scene+review) 생성, count 출력, 대사 100% 배정 ✓.
@@ -126,6 +126,14 @@
 - [x] `capture_scene_screenshots.py`에 `MGBA_HARNESS`/`--harness` 지원, ROM/harness 존재 확인, 캡처 후 `frame.png`/`provenance.json` 생성 검증 추가.
 - [x] agy 9건 + codex P2 5건 리뷰 반영 완료.
 
+## 쪼롱이님/B팀 권위 번역·용어사전 반영 (2026-06-17)
+- [x] `temp/bteam/script.txt`를 원본 포인터/빌드 슬롯 기준으로 재매핑하고, 안전 매핑된 B팀 문장은 기존 번역이 있어도 `data/dialogue_overrides.json`에 덮어쓰기 적용.
+- [x] 명사/인칭/지명 사전과 빌드 용어 정규화를 쪼롱이님 기준으로 재작성: `사령관`, `호이프`/허용 `휩`, `코스모 랜드`, `매크로 랜드`, `맵 디자인`.
+- [x] `data/translation_for_import.csv`에도 사전 용어를 덮어쓰기 반영하고, UI 에디터가 현재 출하 ROM/override 문장을 표시하도록 재빌드·재캡처.
+- [x] codex/agy 리뷰 반영: B팀 제어표식 누수 가능성을 제거하기 위해 override를 HEAD 기준으로 재생성 후 안전 적용만 재반영, `qa_terms_from_rom.py`에 B팀 control residual hard gate 추가.
+- [x] 8782 브라우저 검증: mixed scene의 스프라이트+대사 동시 노출, 출력배치 스프라이트 canvas, 전투 시작 회전/개시 오버레이 10개 스프라이트, 사전 모달 input 값(`사령관`/`호이프`/`코스모 랜드`/`매크로 랜드`) 확인.
+- [x] QA: build overflow 0/no_ko 0, integrity byte mismatch 0, hard forbidden term 0, B팀 제어표식 잔류 0, placeholder 0, scene screenshot stale/missing 0, 배정 스프라이트 112개 API 실패 0.
+
 ---
 
 # 🟣 별도 트랙: 잔여(번역/QA/배포) — UI 에디터와 독립 (필요 시 진행)
@@ -134,8 +142,9 @@
 
 - [ ] 전체 의미 audit(JA↔KO 전수 LLM 판정) — 숫자/부정 외 오역·의미축소·뉘앙스 색출(대규모).
 - [ ] /goal #1 fresh-boot 화면 매트릭스 확대(전투/결과/저장/상점/엔딩) — 진행 SRAM seed/엔딩 도달.
-- [ ] 잔여 미번역 triage: B팀/쪼롱이님 script 안전 후보 32건은 병합 완료. 제어마커/inline 제어 토큰/slot overflow/no slot 때문에 자동 제외된 B팀 후보와 dialogue_map real missing 잔여는 편집기에서 수동 검수.
-- [ ] 표기흔들림 통일 결정·적용(국가명 붙임 vs 띄움 — **사용자 결정** 대기) + 구 export/apply_proper_nouns.py deprecate.
+- [ ] 잔여 미번역 triage: 쪼롱이님/B팀 권위 덮어쓰기는 완료. 제어마커/inline 제어 토큰/slot overflow/no group 때문에 자동 제외된 B팀 후보와 dialogue_map real missing 잔여는 편집기에서 수동 검수.
+- [ ] `휩` 허용 표기는 현재 B팀 문맥상 허용으로 전역 allow 처리. 필요하면 Part/scene 범위별 허용 QA로 좁혀 수동 결정.
+- [ ] 표기흔들림 통일 결정·적용(국가명 붙임 vs 띄움 등) + 구 export/apply_proper_nouns.py deprecate.
 - [ ] VRAM 팔레트 캡처(0x05000000/0x05000200)로 스프라이트 실제 색 + raw OBJ 블록 추가 커버.
 - [ ] qa 도구 진실화(ROM 슬롯 디코드 대조로 재설계), 영어 ASCII UI 잔존 전수 도구, 부호 4경로 픽셀 검증.
 - [ ] dist 최종(Phase F): 모든 ROM 변경 완료 후 BPS/IPS+manifest 재생성, 구 tracked preview 패치 git rm 정리.

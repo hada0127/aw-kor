@@ -60,7 +60,10 @@ def collect_edits(pn):
             if old_ko:
                 add_pair(old_ko, ed)
             # variants 에 등장한 한글 표기들도 통일 대상으로 캐스케이드
+            allowed = {norm(v) for v in (e.get('allowed') or [])}
             for v in (e.get('variants') or {}):
+                if norm(v) in allowed:
+                    continue
                 if HANGUL_RE.search(v):
                     add_pair(norm(v), ed)
 
@@ -74,6 +77,9 @@ def collect_edits(pn):
         if len(cs) == len(es):
             for o, n in zip(cs, es):
                 add_pair(o, n)
+        elif len(es) == 1:
+            for o in cs:
+                add_pair(o, es[0])
         else:
             add_pair(cur, ed)
 

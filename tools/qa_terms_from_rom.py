@@ -19,10 +19,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE, "tools"))
+from import_bteam_script import _VAR_TOKEN_TERMS  # noqa: E402
 from qa_integrity_map import decode_enc  # noqa: E402
 
 MAP = os.path.join(BASE, "temp", "integrity_map.json")
@@ -84,9 +86,12 @@ def build_forbidden():
             canon = (t.get("ko") or "").strip()
             if not canon:
                 continue
+            allowed = {str(v).strip() for v in (t.get("allowed") or []) if str(v).strip()}
             label = f"{cat}:{t.get('ja','?')}→{canon}"
             for v in t.get("variants", {}):
                 v = v.strip()
+                if v in allowed:
+                    continue
                 if v and v != canon and v not in canon and canon not in v:
                     rules.append((v, canon, label))
                 elif v and v != canon and (v in canon or canon in v):
@@ -94,8 +99,11 @@ def build_forbidden():
                     rules.append((v, canon, label + " [SUBSTR-AMBIG]"))
     for it in d.get("issues", []):
         canon = (it.get("chosen_ko") or "").strip()
+        allowed = {str(v).strip() for v in (it.get("allowed_ko") or {}) if str(v).strip()}
         for v in it.get("other_ko", {}):
             v = v.strip()
+            if v in allowed:
+                continue
             if v and v != canon:
                 amb = " [SUBSTR-AMBIG]" if (v in canon or canon in v) else ""
                 rules.append((v, canon, f"issue:{it.get('ja','?')}→{canon}{amb}"))
@@ -108,6 +116,25 @@ def build_forbidden():
         seen.add(r[:2])
         uniq.append(r)
     return uniq
+
+
+def find_bteam_control_residuals(shipped, ja):
+    """B팀 script dump의 ASCII 제어표식이 최종 출하 문자열에 남았는지 검사."""
+    var_terms = "|".join(re.escape(t) for t in sorted(_VAR_TOKEN_TERMS, key=len, reverse=True))
+    patterns = [
+        ("player-name marker i", re.compile(r"(?<![A-Za-z])i(?=[가-힣!?.,…・　\s「」『』“”\"']|$)")),
+        ("menu/control prefix", re.compile(r"(?<![A-Za-z0-9])(?:m[a-z]|M[A-Z]|p)(?=[가-힣])")),
+        ("branch/wait marker", re.compile(r"(?<=[가-힣.!?・,　\s「」『』“”\"'])(?:[wW]{2,}p?|[wW]+r|rH?|rq[ny]?|q[ny]?|[Kk])(?=$|[가-힣0-9?!.　\s「」『』“”\"'])")),
+        ("B팀 circled marker", re.compile(r"[㉠㉡㉢]")),
+        ("B팀 variable zero marker", re.compile(rf"(?<![0-9])(?:{var_terms})0")),
+    ]
+    hits: dict[str, list] = {}
+    for addr, v in shipped.items():
+        ko = v["ko"]
+        for label, pat in patterns:
+            if pat.search(ko):
+                hits.setdefault(label, []).append((addr, ja.get(addr, ""), ko))
+    return hits
 
 
 def main():
@@ -150,13 +177,25 @@ def main():
     else:
         print("\n[HARD-OK] 금지 표기 잔존 0건 (자동 스캔 규칙 기준)")
 
+    control_hits = find_bteam_control_residuals(shipped, ja)
+    control_total = sum(len(v) for v in control_hits.values())
+    if control_hits:
+        print(f"\n[HARD-FAIL] B팀 제어표식 잔류: {control_total}건 / {len(control_hits)}종")
+        for key, rows in sorted(control_hits.items(), key=lambda kv: -len(kv[1])):
+            print(f"  ✗ {key}: {len(rows)}건")
+            for addr, j, ko in rows[: args.show]:
+                print(f"      0x{addr:06X} | JA={j[:24]!r} | KO={ko[:40]!r}")
+    else:
+        print("[HARD-OK] B팀 제어표식 잔류 0건")
+
     if ambiguous:
         print(f"\n[INFO] 부분문자열 모호 규칙(수동 확인 필요): {len(ambiguous)}종")
         for k, c in sorted(ambiguous.items(), key=lambda kv: -kv[1]):
             print(f"  ? {k}: 출하 KO에 {c}회 등장(정본 포함 가능)")
 
-    print(f"\n=== 결과: {'FAIL' if hits else 'PASS'} (hard {total}건) ===")
-    return 1 if hits else 0
+    hard_total = total + control_total
+    print(f"\n=== 결과: {'FAIL' if hard_total else 'PASS'} (hard {hard_total}건) ===")
+    return 1 if hard_total else 0
 
 
 if __name__ == "__main__":

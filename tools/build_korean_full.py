@@ -142,25 +142,37 @@ SHORTEN = [
 ]
 
 TERM_NORMALIZATION = [
-    ('장군브레이크', '쇼군브레이크'),
-    ('장군 브레이크', '쇼군 브레이크'),
-    ('장군선택', '쇼군선택'),
-    ('장군 선택', '쇼군 선택'),
-    ('휩 장군', '휘프 쇼군'),
-    ('휘프 장군', '휘프 쇼군'),
-    # --- 명사 통일 (2026-06-16, tools/qa_terms_from_rom.py 게이트 기반) ---
-    # 출하 ROM 역디코드에서 정본과 다른 표기 흔들림 72행을 통일. 비-고유명사
-    # 충돌 0 검증(휩쓸다 등 미존재). 정본은 data/proper_nouns.json ko.
-    # ホイップ=휘프(기존 '휩 장군' 규칙 보완: 호이프 11·휩 39 → 휘프)
-    # 휩(받침○)→휘프(받침✕) 전환 시 뒤따르는 조사 보정(휩이→휘프가 등). 바레 규칙보다 먼저.
-    ('휩이', '휘프가'), ('휩을', '휘프를'), ('휩은', '휘프는'),
-    ('휩과', '휘프와'), ('휩으로', '휘프로'), ('휩아', '휘프야'),
-    ('호이프', '휘프'),
-    ('휩', '휘프'),
+    # --- B팀/쪼롱이님 명칭 권위 반영 (2026-06-17) ---
+    # B팀 script는 ショーグン을 "사령관"으로, ホイップ 기본 표기를 "호이프"로,
+    # 일부 대사의 호칭을 "휩"으로 쓴다. 기존 "쇼군/휘프" 정규화가
+    # B팀 문장을 다시 우리식으로 되돌리지 않게 한다.
+    ('쇼군브레이크', '사령관 브레이크'),
+    ('쇼군 브레이크', '사령관 브레이크'),
+    ('장군브레이크', '사령관 브레이크'),
+    ('장군 브레이크', '사령관 브레이크'),
+    ('쇼군선택', '사령관 선택'),
+    ('쇼군 선택', '사령관 선택'),
+    ('장군선택', '사령관 선택'),
+    ('장군 선택', '사령관 선택'),
+    ('휘프 쇼군', '호이프 사령관'),
+    ('휘프 장군', '호이프 사령관'),
+    ('호이프 쇼군', '호이프 사령관'),
+    ('호이프 장군', '호이프 사령관'),
+    ('휩 쇼군', '휩 사령관'),
+    ('휩 장군', '휩 사령관'),
+    ('휘프이', '호이프가'), ('휘프을', '호이프를'), ('휘프은', '호이프는'),
+    ('휘프과', '호이프와'), ('휘프으로', '호이프로'), ('휘프아', '호이프야'),
+    ('휘프', '호이프'),
     # リョウ=료 (료우 → 료)
     ('료우', '료'),
-    # マクロランド=매크로랜드 (마크로랜드 오기 통일)
-    ('마크로랜드', '매크로랜드'),
+    # B팀 지명 표기: コスモランド/マクロランド는 띄어쓴다.
+    ('코스모랜드', '코스모 랜드'),
+    ('매크로랜드', '매크로 랜드'),
+    ('마크로랜드', '매크로 랜드'),
+    ('마크로 랜드', '매크로 랜드'),
+    # B팀 UI 용어.
+    ('디자인 지도', '디자인 맵'),
+    ('지도 디자인', '맵 디자인'),
     # 국가명 띄어쓰기 → 정본 붙임(json canonical + 출하 다수형)
     ('레드 스타', '레드스타'),
     ('그린 어스', '그린어스'),
@@ -173,7 +185,7 @@ TERM_NORMALIZATION = [
 def normalize_korean_terms(text):
     for src, dst in TERM_NORMALIZATION:
         text = text.replace(src, dst)
-    return text.replace('장군', '쇼군')
+    return text.replace('쇼군', '사령관').replace('장군', '사령관')
 
 TEXT_OVERRIDES = {
     # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
@@ -2023,7 +2035,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB82900: '신형전차',
     0xB82914: '중전차',
     0xB830C8: '지도　보낼　상대없어',
-    0xB839D0: '장군브레이크',
+    0xB839D0: '사령브레이크',
     0xB84A48: '아코디언　도로　지도',
     0xB84BA0: '지혜고리섬　지도',
     0xB84E50: '메테오강타',
@@ -2034,7 +2046,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB81DF0: '모프 대장!',
     0xB81E1C: '도미노 능력!',
     0xB81E8C: '세 명 과거',
-    0xB81ED0: '휩해군!',
+    0xB81ED0: '호이프 해군!',
     0xB81EF4: '맥스 출격!',
     0xB81F04: '하늘 용사!',
     0xB81F40: '백은세계',
@@ -5373,7 +5385,7 @@ def patch_part2_battle_obj_labels(rom):
 
     # Enemy-turn CO banner name. This is stored as raw 32x8 OBJ tiles, not as
     # SJIS text, so the protected text-table replacement does not reach it.
-    write_tiles(0xBD0230, render_tiles('휘프', 32, height=8, x=8, y=0, ink=15, shadow=None, font_obj=unit_font))
+    write_tiles(0xBD0230, render_tiles('호이프', 32, height=8, x=4, y=0, ink=15, shadow=None, font_obj=unit_font))
 
     # WYSIWYG 합성 스프라이트 기록(흩어진 OBJ 라벨군 → 편집기). 출력 바이트 무영향(기록만).
     rec_objlabel('objlabel_p2_terrain_status', 'part2_objlabel/terrain_status', '2편 상태팝업 지형명',
@@ -5386,7 +5398,7 @@ def patch_part2_battle_obj_labels(rom):
     rec_objlabel('objlabel_p2_unit_compact', 'part2_objlabel/unit_compact', '2편 커서팝업 유닛명',
                  [{'text': t, 'off': o, 'tw': 4, 'th': 2} for o, t in compact_unit_labels])
     rec_objlabel('objlabel_p2_co_banner', 'part2_objlabel/co_banner', '2편 적턴 CO 배너 이름',
-                 [{'text': '휘프', 'off': 0xBD0230, 'tw': 4, 'th': 1}])
+                 [{'text': '호이프', 'off': 0xBD0230, 'tw': 4, 'th': 1}])
     return 3 + len(status_terrain_labels) + len(compact_terrain_labels) + len(unit_labels) + len(compact_unit_labels)
 
 
@@ -5773,7 +5785,7 @@ def patch_part2_mode_menu_obj_labels(rom):
         (make_small_button('계속'), 0x000, 0x100),
         (make_small_button('처음'), 0x180, 0x280),
         (make_small_button('지도'), 0x300, 0x400),
-        (make_small_button('쇼군'), 0x480, 0x580),
+        (make_small_button('사령관'), 0x480, 0x580),
     ]
     button_patches = []
     for layer, left_pos, right_pos in buttons:
@@ -11119,6 +11131,7 @@ def main():
             if len(enc) != 4:
                 raise AssertionError(f'command label length mismatch at 0x{base + off:X}')
             rom[base + off:base + off + 4] = enc
+            WRITE_LOG.append([base + off, 4, len(enc), bytes(enc).hex(), None, text, None, 'command-label'])
 
     for base in (0x9295A8, 0x962230, 0x99AAD4, 0x9D3378):
         for off, text in ((0, '보병'), (8, '없음')):

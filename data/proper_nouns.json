@@ -5,7 +5,7 @@
     "nations": 5,
     "places": 4,
     "discovered_candidates": 1,
-    "common_terms": 9,
+    "common_terms": 8,
     "issues": 6
   },
   "characters": [
@@ -72,14 +72,17 @@
     },
     {
       "ja": "ホイップ",
-      "ko": "휘프",
+      "ko": "호이프",
       "freq": 229,
-      "note": "CO (구표기 휩)",
+      "note": "CO. B팀 기준 기본 표기는 호이프, 문맥상 일부 호칭은 휩 허용",
       "variants": {
         "호이프": 11,
         "휩": 39,
         "휘프": 61
       },
+      "allowed": [
+        "휩"
+      ],
       "edit": ""
     },
     {
@@ -191,20 +194,22 @@
   "places": [
     {
       "ja": "コスモランド",
-      "ko": "코스모랜드",
+      "ko": "코스모 랜드",
       "freq": 12,
-      "note": "지명",
+      "note": "지명(B팀 띄어쓰기)",
       "variants": {
+        "코스모 랜드": 6,
         "코스모랜드": 6
       },
       "edit": ""
     },
     {
       "ja": "マクロランド",
-      "ko": "매크로랜드",
+      "ko": "매크로 랜드",
       "freq": 32,
-      "note": "지명",
+      "note": "지명(B팀 띄어쓰기)",
       "variants": {
+        "매크로 랜드": 16,
         "매크로랜드": 9,
         "마크로랜드": 4
       },
@@ -234,65 +239,59 @@
   "discovered_candidates": [
     {
       "ja": "ショーグン",
-      "ko": "쇼군",
+      "ko": "사령관",
       "freq": 5,
-      "note": "auto-discovered",
+      "note": "B팀 기준 common CO title",
       "edit": ""
     }
   ],
   "common_terms": [
     {
-      "term": "쇼군 (장군 금지)",
+      "term": "사령관 (쇼군/장군 금지)",
       "ja_note": "ショーグン",
-      "current": "쇼군",
-      "edit": ""
+      "current": "쇼군/장군",
+      "edit": "사령관"
+    },
+    {
+      "term": "사령관 브레이크",
+      "ja_note": "ショーグンブレイク",
+      "current": "쇼군브레이크/쇼군 브레이크/장군브레이크/장군 브레이크",
+      "edit": "사령관 브레이크"
+    },
+    {
+      "term": "사령관 선택",
+      "ja_note": "ショーグン選択",
+      "current": "쇼군선택/쇼군 선택/장군선택/장군 선택",
+      "edit": "사령관 선택"
+    },
+    {
+      "term": "호이프",
+      "ja_note": "ホイップ",
+      "current": "휘프",
+      "edit": "호이프"
+    },
+    {
+      "term": "코스모 랜드",
+      "ja_note": "コスモランド",
+      "current": "코스모랜드",
+      "edit": "코스모 랜드"
+    },
+    {
+      "term": "매크로 랜드",
+      "ja_note": "マクロランド",
+      "current": "매크로랜드/마크로랜드/마크로 랜드",
+      "edit": "매크로 랜드"
+    },
+    {
+      "term": "맵 디자인",
+      "ja_note": "マップデザイン",
+      "current": "지도 디자인/디자인 지도",
+      "edit": "맵 디자인/디자인 맵"
     },
     {
       "term": "브레이크",
       "ja_note": "ブレイク",
       "current": "브레이크",
-      "edit": ""
-    },
-    {
-      "term": "휘프 (휩 금지)",
-      "ja_note": "ホイップ",
-      "current": "휘프",
-      "edit": ""
-    },
-    {
-      "term": "장군브레이크 -> 쇼군브레이크",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "쇼군브레이크",
-      "edit": ""
-    },
-    {
-      "term": "장군 브레이크 -> 쇼군 브레이크",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "쇼군 브레이크",
-      "edit": ""
-    },
-    {
-      "term": "장군선택 -> 쇼군선택",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "쇼군선택",
-      "edit": ""
-    },
-    {
-      "term": "장군 선택 -> 쇼군 선택",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "쇼군 선택",
-      "edit": ""
-    },
-    {
-      "term": "휩 장군 -> 휘프 쇼군",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "휘프 쇼군",
-      "edit": ""
-    },
-    {
-      "term": "휘프 장군 -> 휘프 쇼군",
-      "ja_note": "(build TERM_NORMALIZATION)",
-      "current": "휘프 쇼군",
       "edit": ""
     }
   ],
@@ -307,12 +306,14 @@
     },
     {
       "ja": "ホイップ",
-      "chosen_ko": "휘프",
+      "chosen_ko": "호이프",
       "other_ko": {
-        "호이프": 11,
-        "휩": 39
+        "휘프": 61
       },
-      "hint": "대사 내 표기 흔들림 — apply 로 통일 검토"
+      "allowed_ko": {
+        "휩": "B팀 문맥상 호칭 허용"
+      },
+      "hint": "B팀 기준 재작성: 기본 호이프, 문맥상 휩 허용, 휘프 금지"
     },
     {
       "ja": "レッドスター",
@@ -340,11 +341,13 @@
     },
     {
       "ja": "マクロランド",
-      "chosen_ko": "매크로랜드",
+      "chosen_ko": "매크로 랜드",
       "other_ko": {
+        "매크로랜드": 9,
+        "마크로 랜드": 4,
         "마크로랜드": 4
       },
-      "hint": "대사 내 표기 흔들림 — apply 로 통일 검토"
+      "hint": "B팀 기준 띄어쓰기"
     }
   ]
 }

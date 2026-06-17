@@ -58,7 +58,7 @@ SEED_CHARACTERS = [
     ('ドミノ', '도미노', 'CO'),
     ('ビリー', '빌리', 'CO'),
     ('ヤン', '얀', 'CO (얀 델타)'),
-    ('ホイップ', '휘프', 'CO (구표기 휩)'),
+    ('ホイップ', '호이프', 'CO. B팀 기준 기본 표기, 문맥상 휩 허용'),
     ('アスカ', '아스카', '캐릭터'),
     ('ナナ', '나나', '캐릭터'),
     ('ボテト', '보테토', '캐릭터'),
@@ -75,17 +75,26 @@ SEED_NATIONS = [
 ]
 
 SEED_PLACES = [
-    ('コスモランド', '코스모랜드', '지명'),
-    ('マクロランド', '매크로랜드', '지명'),
+    ('コスモランド', '코스모 랜드', '지명'),
+    ('マクロランド', '매크로 랜드', '지명'),
     ('カララ', '카라라', '지명'),
     ('アララ', '아라라', '지명'),
 ]
 
 # 통일 유지가 필요한 공통어. current=현재 표기, edit=덮어쓰기.
 SEED_COMMON_TERMS = [
-    {'term': '쇼군 (장군 금지)', 'ja_note': 'ショーグン', 'current': '쇼군', 'edit': ''},
+    {'term': '사령관 (쇼군/장군 금지)', 'ja_note': 'ショーグン', 'current': '쇼군/장군', 'edit': '사령관'},
+    {'term': '사령관 브레이크', 'ja_note': 'ショーグンブレイク',
+     'current': '쇼군브레이크/쇼군 브레이크/장군브레이크/장군 브레이크', 'edit': '사령관 브레이크'},
+    {'term': '사령관 선택', 'ja_note': 'ショーグン選択',
+     'current': '쇼군선택/쇼군 선택/장군선택/장군 선택', 'edit': '사령관 선택'},
+    {'term': '호이프', 'ja_note': 'ホイップ', 'current': '휘프', 'edit': '호이프'},
+    {'term': '코스모 랜드', 'ja_note': 'コスモランド', 'current': '코스모랜드', 'edit': '코스모 랜드'},
+    {'term': '매크로 랜드', 'ja_note': 'マクロランド',
+     'current': '매크로랜드/마크로랜드/마크로 랜드', 'edit': '매크로 랜드'},
+    {'term': '맵 디자인', 'ja_note': 'マップデザイン',
+     'current': '지도 디자인/디자인 지도', 'edit': '맵 디자인/디자인 맵'},
     {'term': '브레이크', 'ja_note': 'ブレイク', 'current': '브레이크', 'edit': ''},
-    {'term': '휘프 (휩 금지)', 'ja_note': 'ホイップ', 'current': '휘프', 'edit': ''},
 ]
 
 # 휴리스틱이 고유명사로 오인하지만 일반/노이즈인 토큰.
@@ -102,9 +111,10 @@ REPEAT3_RE = re.compile(r'(.)\1\1')  # ガガガ 등 의성/노이즈 제거
 # 표기 흔들림 탐지를 위한 추가 후보 철자(데이터에서 관측된 변형).
 # 카논 ko + 띄어쓰기 변형은 자동 생성되고, 여기엔 그 외 변형만 둔다.
 KO_VARIANT_SPELLINGS = {
-    'マクロランド': ['마크로랜드', '마크로 랜드'],
+    'コスモランド': ['코스모랜드'],
+    'マクロランド': ['매크로랜드', '마크로랜드', '마크로 랜드'],
     'リョウ': ['료우'],
-    'ホイップ': ['휩', '호이프'],
+    'ホイップ': ['휩', '휘프'],
 }
 
 
@@ -236,6 +246,42 @@ def detect_issues(groups):
     return issues
 
 
+MANUAL_FIELDS = ('edit', 'allowed', 'allowed_ko')
+
+
+def _manual_key(category, entry):
+    if category == 'common_terms':
+        return (entry.get('term') or '', entry.get('ja_note') or '')
+    if category == 'issues':
+        return (entry.get('ja') or '', entry.get('chosen_ko') or '')
+    return (entry.get('ja') or '', entry.get('ko') or '')
+
+
+def preserve_manual_fields(out_path, out):
+    """기존 사전의 수동 필드(edit/allowed)를 새 스캔 결과에 병합."""
+    if not os.path.exists(out_path):
+        return out
+    try:
+        old = json.load(open(out_path, encoding='utf-8'))
+    except Exception:
+        return out
+    for category in ('characters', 'nations', 'places',
+                     'discovered_candidates', 'common_terms', 'issues'):
+        by_key = {_manual_key(category, e): e for e in old.get(category, [])}
+        by_ja = {e.get('ja'): e for e in old.get(category, [])
+                 if e.get('ja') and category != 'common_terms'}
+        for entry in out.get(category, []):
+            src = by_key.get(_manual_key(category, entry))
+            if src is None and category != 'common_terms':
+                src = by_ja.get(entry.get('ja'))
+            if not src:
+                continue
+            for field in MANUAL_FIELDS:
+                if field in src:
+                    entry[field] = src[field]
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=DEFAULT_OUT)
@@ -287,6 +333,7 @@ def main():
         'common_terms': common_terms,
         'issues': issues,
     }
+    out = preserve_manual_fields(args.out, out)
 
     with open(args.out, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=2)
