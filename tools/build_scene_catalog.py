@@ -382,6 +382,10 @@ def main():
         })
 
     # 미배정 review scene(누락 0 보증)
+    sprites_by_id = {sp.get("id"): sp for sp in sprites}
+    review_scan = sum(1 for sid in sp_un if (sprites_by_id.get(sid, {}).get("source") or "").startswith("scan_lz77"))
+    review_font = sum(1 for sid in sp_un if sprites_by_id.get(sid, {}).get("type") == "font")
+    review_text_candidate = max(0, len(sp_un) - review_scan - review_font)
     out_scenes.append({
         "id": "99_unassigned_review", "order": 9990, "scope": "all",
         "subtag": "미배정", "title": "미배정(검토 필요) — 규칙 미매칭",
@@ -391,12 +395,13 @@ def main():
                        "status": "not_a_scene", "note": "미배정 검토 bucket"},
         "dialogue_filter": {}, "sprite_filter": {},
         "dialogue_ids": dl_un, "sprite_ids": sp_un,
-        "counts": {"dialogue": len(dl_un), "sprite": len(sp_un)},
+        "counts": {"dialogue": len(dl_un), "sprite": len(sp_un),
+                   "sprite_text_candidate": review_text_candidate,
+                   "sprite_scan_lz77": review_scan, "sprite_font": review_font},
     })
 
     # 비텍스트 스캔 스프라이트는 review 안에서 별도 표시용 카운트
-    scan_un = sum(1 for sp in sprites if sp.get("id") in set(sp_un)
-                  and (sp.get("source") or "").startswith("scan_lz77"))
+    scan_un = review_scan
 
     assigned_dl = sum(len(v) for v in dl_bucket.values())
     assigned_sp = sum(len(v) for v in sp_bucket.values())
@@ -412,6 +417,8 @@ def main():
         "coverage": {
             "sprites_total": len(sprites), "sprites_assigned": assigned_sp,
             "sprites_unassigned": len(sp_un), "sprites_unassigned_scan_lz77": scan_un,
+            "sprites_unassigned_text_candidate": review_text_candidate,
+            "sprites_unassigned_font": review_font,
             "dialogue_groups_total": total_dl_groups, "dialogue_assigned": assigned_dl,
             "dialogue_unassigned": len(dl_un),
         },

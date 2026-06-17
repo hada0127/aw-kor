@@ -17,6 +17,8 @@
     "sprites_assigned": 112,
     "sprites_unassigned": 1875,
     "sprites_unassigned_scan_lz77": 1874,
+    "sprites_unassigned_text_candidate": 0,
+    "sprites_unassigned_font": 1,
     "dialogue_groups_total": 9063,
     "dialogue_assigned": 9063,
     "dialogue_unassigned": 0
@@ -12039,7 +12041,10 @@
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 1875
+        "sprite": 1875,
+        "sprite_text_candidate": 0,
+        "sprite_scan_lz77": 1874,
+        "sprite_font": 1
       }
     }
   ]

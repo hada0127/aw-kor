@@ -97,6 +97,15 @@ function sceneShotCard(shot) {
   </div>`;
 }
 
+function sceneCountText(s) {
+  const c = s.counts || {};
+  if (s.id === "99_unassigned_review" && (c.sprite_scan_lz77 || c.sprite_font || c.sprite_text_candidate)) {
+    return `대${c.dialogue || 0}·텍${c.sprite_text_candidate || 0}·그래픽${c.sprite_scan_lz77 || 0}`;
+  }
+  const rel = c.related_dialogue ? `·관련대${c.related_dialogue}` : "";
+  return `대${c.dialogue || 0}${rel}·스${c.sprite || 0}`;
+}
+
 // ── 좌측 LNB: 게임순 scene 목록(아코디언) ─────────────────────────────────
 async function loadScenes() {
   const q = $("#q").value.trim();
@@ -109,9 +118,12 @@ async function loadScenes() {
   // scope/검색으로 목록 갱신 시 우측 에디터도 초기화(stale 편집 상태 방지 — agy major)
   $("#editor").innerHTML = `<div class="empty">왼쪽에서 화면을 펼쳐 편집할 항목(대사·스프라이트)을 선택하세요.</div>`;
   const c = d.coverage || {};
+  const missingText = (c.dialogue_unassigned || 0) + (c.sprites_unassigned_text_candidate || 0);
+  const missingFont = c.sprites_unassigned_font || 0;
+  const missingGraphic = c.sprites_unassigned_scan_lz77 || 0;
   $("#coverage").textContent =
     `scene ${d.scenes.length} · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} · ` +
-    `텍스트 스프 ${c.sprites_assigned} · 미배정 ${c.dialogue_unassigned + (c.sprites_unassigned - (c.sprites_unassigned_scan_lz77 || 0))}(+그래픽 ${c.sprites_unassigned_scan_lz77})`;
+    `텍스트 스프 ${c.sprites_assigned} · 미배정 텍${missingText}·폰트${missingFont}·그래픽${missingGraphic}`;
   const box = $("#scenelist"); box.innerHTML = "";
   if (!d.scenes.length) { box.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
   for (const s of d.scenes) {
@@ -124,7 +136,7 @@ async function loadScenes() {
          ${sceneShotThumb(s.screenshot)}
          <span class="st"><span class="title">${esc(s.title)}</span>
            <span class="sub"><span class="chip scope">${SCOPE_KO[s.scope] || s.scope}</span> ${esc(s.subtag)}${cv}</span></span>
-         <span class="cnt">대${s.counts.dialogue}·스${s.counts.sprite}</span>
+         <span class="cnt">${sceneCountText(s)}</span>
        </div>
        <div class="scene-items" hidden></div>`;
     row.querySelector(".scene-head").onclick = () => toggleScene(s, row);
@@ -173,6 +185,23 @@ function renderSceneItems(box) {
     return;
   }
   const limit = S._limit;
+  // 스프라이트: 편집 대상 화면을 먼저 보여준다. 썸네일도 가능하면 raw 타일시트가 아닌
+  // onscreen 재배치 PNG를 사용해 좌측 목록과 편집면의 모양이 어긋나지 않게 한다.
+  if (SPR.length) {
+    frag.appendChild(sep(`스프라이트 ${SPR.length}`));
+    const shown = Math.min(SPR.length, limit);
+    for (let i = 0; i < shown; i++) {
+      const sp = SPR[i];
+      const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "s"; el.dataset.i = i;
+      const rawUrl = `/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched`;
+      const thumbUrl = sp.has_onscreen ? `/api/sprite/onscreen?id=${encodeURIComponent(sp.id)}` : rawUrl;
+      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="${thumbUrl}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${rawUrl}'}else if(!this.dataset.o){this.dataset.o=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
+        <span class="ko">${esc(sp.desc)}${sp.has_onscreen ? `<span class="badge">출력배치</span>` : ""}</span>`;
+      el.onclick = () => selectSprite(i, el);
+      frag.appendChild(el);
+    }
+    if (SPR.length > shown) frag.appendChild(moreRow(SPR.length - shown, box));
+  }
   // 대사
   if (D.length) {
     frag.appendChild(sep(`대사 ${D.length}`));
@@ -183,25 +212,11 @@ function renderSceneItems(box) {
       const over = g.members.some(m => !m.budget.estimated && encLen(m.ko || "") > m.budget.slot);
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "d"; el.dataset.i = i;
       el.innerHTML = `<span class="ja">${esc(g.assembled_ja || "")}</span>
-        <span class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</span>`;
+        <span class="ko ${over ? "over" : ""}">${esc(ko || "(미번역)")}${g.linked_from ? `<span class="badge">관련: ${esc(g.linked_from)}</span>` : ""}${g.size > 1 ? `<span class="badge">${g.size}조각</span>` : ""}${over ? `<span class="badge over">초과</span>` : ""}</span>`;
       el.onclick = () => selectDialogue(i, el);
       frag.appendChild(el);
     }
     if (D.length > shown) frag.appendChild(moreRow(D.length - shown, box));
-  }
-  // 스프라이트
-  if (SPR.length) {
-    frag.appendChild(sep(`스프라이트 ${SPR.length}`));
-    const shown = Math.min(SPR.length, limit);
-    for (let i = 0; i < shown; i++) {
-      const sp = SPR[i];
-      const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "s"; el.dataset.i = i;
-      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
-        <span class="ko">${esc(sp.desc)}</span>`;
-      el.onclick = () => selectSprite(i, el);
-      frag.appendChild(el);
-    }
-    if (SPR.length > shown) frag.appendChild(moreRow(SPR.length - shown, box));
   }
   box.appendChild(frag);
 }

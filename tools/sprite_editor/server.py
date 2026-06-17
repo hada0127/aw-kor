@@ -241,6 +241,9 @@ PART1_OPTION_128X32_OFFSETS = {
     0x00C06218, 0x00C0668C, 0x00C06B78,
 }
 
+PART1_MISSION_128X32_OFFSETS = {0x00C18738}
+PART1_CATHERINE_96X8_OFFSETS = {0x00C102A8}
+
 
 def load_build_layouts():
     global _BUILD_LAYOUTS
@@ -276,6 +279,22 @@ def part1_tiled_layer_layout(sp, off):
             ],
             "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_128x32",
+        }
+    if off in PART1_MISSION_128X32_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 16, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_mission_128x32",
+        }
+    if off in PART1_CATHERINE_96X8_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 12, "th": 1, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 96, "h": 8, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_catherine_96x8",
         }
     return None
 
@@ -329,13 +348,23 @@ def synthetic_layout_cells(sp):
 
 
 def get_layout(sid):
-    """캡처 레이아웃 우선 → 합성 스프라이트 → 빌드 권위 레이아웃(라벨 스트립)."""
-    lay = load_layouts().get("layouts", {}).get(sid)
-    if lay:
-        return lay
+    """1편 빌드 레이어 역배치 → 캡처 레이아웃 → 합성 → 빌드 권위 레이아웃.
+
+    1편 라벨 계열은 캡처 OAM이 여러 화면 상태의 큰 bbox로 잡히는 경우가 있어
+    편집면 권위는 빌드 인코더의 layer size/타일 순서 역배치다.
+    """
     sp = sprite_by_id(sid)
     if sp is None:
         return None
+    try:
+        part1_layout = part1_tiled_layer_layout(sp, sprite_offset_int(sp))
+    except Exception:
+        part1_layout = None
+    if part1_layout:
+        return part1_layout
+    lay = load_layouts().get("layouts", {}).get(sid)
+    if lay:
+        return lay
     if sp.get("type") == "synthetic":
         return synthetic_layout_cells(sp)
     return build_layout_cells(sp)

@@ -174,6 +174,14 @@ def scene_shot_info(sc):
 def public_scene(sc):
     out = {k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
                               "canvas", "canvas_status", "counts") if k in sc}
+    counts = dict(out.get("counts") or {})
+    refs = related_dialogue_scene_ids(sc) if sc.get("sprite_ids") else []
+    if refs:
+        scenes_by_id = {s.get("id"): s for s in catalog().get("scenes", [])}
+        rel = sum(len((scenes_by_id.get(ref_id) or {}).get("dialogue_ids", [])) for ref_id in refs)
+        if rel:
+            counts["related_dialogue"] = rel
+            out["counts"] = counts
     out["screenshot"] = scene_shot_info(sc)
     return out
 
@@ -371,13 +379,48 @@ def dirty_state():
 
 
 # ── scene 항목 조회 ──────────────────────────────────────────────────────
+def related_dialogue_scene_ids(scene):
+    """그래픽 중심 scene에도 같은 좌측 패널에서 편집할 관련 대사 bucket을 함께 노출한다.
+    정밀 화면별 대사 매핑이 없는 구간은 기존 region bucket을 연결해 누락 없이 접근 가능하게 한다."""
+    sid = scene.get("id")
+    if sid in {"19_part1_story", "30_part2_story", "80_campaign_story",
+               "85_ui_common", "90_other_dialogue", "99_unassigned_review"}:
+        return []
+    if not scene.get("sprite_ids"):
+        return []
+    scope = scene.get("scope")
+    if scope == "part1":
+        return ["19_part1_story", "85_ui_common"]
+    if scope == "part2":
+        if sid in {"24_part2_campaign_map", "25_part2_mission_titles",
+                   "28_part2_result_status", "29_part2_result_summary"}:
+            return ["80_campaign_story", "30_part2_story", "85_ui_common"]
+        return ["30_part2_story", "85_ui_common"]
+    if scope in {"shared_select", "all"}:
+        return ["85_ui_common"]
+    return []
+
+
 def scene_items(scene, want="all"):
     gi = group_index()
     si = sprite_index()
     dov = load_json(DE.OVERRIDES_PATH, {}) or {}
     out_d, out_s = [], []
     if want in ("all", "dialogue"):
-        for gid in scene.get("dialogue_ids", []):
+        dialogue_entries = [(gid, None) for gid in scene.get("dialogue_ids", [])]
+        if want == "all":
+            scenes_by_id = {s.get("id"): s for s in catalog().get("scenes", [])}
+            seen = {gid for gid, _ in dialogue_entries}
+            for ref_id in related_dialogue_scene_ids(scene):
+                ref = scenes_by_id.get(ref_id)
+                if not ref:
+                    continue
+                for gid in ref.get("dialogue_ids", []):
+                    if gid in seen:
+                        continue
+                    seen.add(gid)
+                    dialogue_entries.append((gid, ref.get("title") or ref_id))
+        for gid, linked_from in dialogue_entries:
             g = gi.get(gid)
             if not g:
                 continue
@@ -388,7 +431,8 @@ def scene_items(scene, want="all"):
                                 "kind": m.get("kind"), "budget": line_budget(m)})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
                           "flagged": g.get("flagged"), "assembled_ja": g.get("assembled_ja"),
-                          "segments": g.get("segments"), "members": members})
+                          "segments": g.get("segments"), "members": members,
+                          "linked_from": linked_from})
     if want in ("all", "sprite"):
         for sid in scene.get("sprite_ids", []):
             sp = si.get(sid)
