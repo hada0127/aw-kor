@@ -102,6 +102,8 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .editor > .scene-proof { padding: 8px; margin: 8px 0 12px; border: 1px solid var(--line); border-radius: 8px; }
 .sprite-mode { display: flex; gap: 6px; margin: 8px 0; }
 .sprite-mode button.on { background: var(--accent); color: #07101f; border-color: var(--accent); }
+.mode-label { display: inline-flex; align-items: center; color: var(--ink); font-size: 12px;
+  border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; background: #151923; }
 .bgcheck { display: inline-flex; align-items: center; gap: 5px; color: var(--dim);
   border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; }
 .bgcheck input { margin: 0; }

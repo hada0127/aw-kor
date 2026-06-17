@@ -425,13 +425,13 @@ async function selectSprite(i, el) {
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = true;
   SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
+  const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 실화면 배치" : "타일 그리드 · 원본 타일 순서";
   ed.innerHTML = `<h3>스프라이트 편집 — ${esc(sp.desc)}</h3>
     <div class="sub">${esc(sp.type)} ${esc(sp.offset || "")} · ${d.width}×${d.height}px${d.edited ? " · 편집됨" : ""}${SP.hasOnscreen ? " · 실화면 레이아웃 있음" : ""}</div>
     ${sceneShotCard(S.items.screenshot || {})}
     <div class="sprite-mode">
-      <button id="spModeOn" ${SP.hasOnscreen ? "" : "disabled"}>실화면 배치</button>
-      <button id="spModeTile">타일 그리드</button>
-      <label class="bgcheck"><input id="spBg" type="checkbox" checked>배경</label>
+      <span class="mode-label">${layoutLabel}</span>
+      ${SP.hasOnscreen ? `<label class="bgcheck"><input id="spBg" type="checkbox" checked>배경</label>` : ""}
     </div>
     <div id="spwrap"><canvas id="spcv"></canvas></div>
     <div class="swatches" id="swatches"></div>
@@ -443,9 +443,8 @@ async function selectSprite(i, el) {
       <button id="spCompare">원본↔적용 비교</button>
     </div>`;
   renderSwatches();
-  $("#spModeOn").onclick = () => setSpriteMode("onscreen");
-  $("#spModeTile").onclick = () => setSpriteMode("tile");
-  $("#spBg").onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
+  const bg = $("#spBg");
+  if (bg) bg.onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
   await setSpriteMode(SP.mode);
   $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(4, SP.zoom - 2); drawCurrentSprite(); };
   $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(24, SP.zoom + 2); drawCurrentSprite(); };
@@ -457,8 +456,6 @@ async function selectSprite(i, el) {
 async function setSpriteMode(mode) {
   if (mode === "onscreen" && !SP.hasOnscreen) mode = "tile";
   SP.mode = mode;
-  $("#spModeOn").classList.toggle("on", SP.mode === "onscreen");
-  $("#spModeTile").classList.toggle("on", SP.mode === "tile");
   if (SP.mode === "onscreen" && !SP.os) {
     const id = SP.id;  // 경합 가드(codex major): 응답 도착 시 여전히 같은 스프라이트인지
     const os = await api(`/api/sprite/onscreen_data?id=${encodeURIComponent(id)}`);
@@ -509,7 +506,7 @@ function drawCurrentSprite() {
 }
 function drawSprite() {
   const cv = $("#spcv"); const z = effectiveZoom();
-  $("#sphint").textContent = "타일 그리드 모드: 원본 타일스트림을 직접 편집합니다.";
+  $("#sphint").textContent = "타일 그리드: 실화면 레이아웃 정보가 없어 원본 타일스트림 순서로 편집합니다.";
   // 네이티브 해상도 ImageData 1회 생성 후 스케일 드로(per-pixel fillRect 루프 제거 → O(W*H) 1회)
   const off = document.createElement("canvas"); off.width = SP.w; off.height = SP.h;
   const octx = off.getContext("2d"); const img = octx.createImageData(SP.w, SP.h);
@@ -576,7 +573,7 @@ function drawOnscreenSprite() {
   const os = SP.os;
   const z = SP.osZoom;
   const nativeW = 240, nativeH = 160;
-  $("#sphint").textContent = `실화면 배치 모드: 화면 좌표 기준으로 편집합니다. bbox ${os.x0},${os.y0} ${os.w}×${os.h}px`;
+  $("#sphint").textContent = `타일 그리드: 화면 좌표/OAM 배치 기준으로 편집합니다. bbox ${os.x0},${os.y0} ${os.w}×${os.h}px`;
 
   const off = document.createElement("canvas"); off.width = nativeW; off.height = nativeH;
   const ctx = off.getContext("2d");

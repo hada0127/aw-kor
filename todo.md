@@ -59,7 +59,7 @@
 - [x] 스프라이트 픽셀 편집(canvas paint)·save/revert/setpalette(`sprites_overrides.json`).
 - [x] **proper_nouns 통일사전 CRUD UI**(2026-06-17): GNB '📖 사전' → 모달(카테고리별 용어 add/edit/delete, DOM 입력), 서버 POST /api/dict. add→edit→delete 왕복 검증.
 - [x] **요구7 "2줄=2칸" 확인**: dialogue_groups가 멀티-fragment 구조(줄바꿈=ctrl gap)라 각 fragment=한 줄·자체 슬롯 → fragment별 입력칸이 곧 줄별 칸. segments newline 6467/1533그룹 확인.
-- [x] **스프라이트 onscreen WYSIWYG 뷰 통합(2026-06-17)**: 레이아웃 있는 스프라이트는 기본 `실화면 배치` 모드로 240×160 화면 좌표/실캡처 팔레트 위에서 편집. 클릭 좌표를 OAM cell→tile pixel로 역매핑해 기존 `indices` 저장/빌드 경로와 호환.
+- [x] **스프라이트 onscreen WYSIWYG 뷰 통합(2026-06-17)**: 레이아웃 있는 스프라이트는 별도 모드 분리 없이 기본 타일그리드 자체를 240×160 화면 좌표/OAM 배치와 실캡처 팔레트로 표시해 편집. 클릭 좌표를 OAM cell→tile pixel로 역매핑해 기존 `indices` 저장/빌드 경로와 호환.
 
 ## Phase 5 — 미리보기 + 적용(풀빌드 job) + 다운로드 (요구 5·6) ✅ 대부분 완료
 - [x] 대사 preview 모달(원본 JA↔편집 KO 실캡처) + 스프라이트 orig/patched/edit compare 모달.
@@ -87,7 +87,7 @@
 - [x] **byte-identical 정합성**: 편집기 작업(도구/카탈로그/프런트만)은 빌드 무관 → output ROM sha **1623481a 불변** 확인.
 - [x] 기능 parity: 통합 에디터가 구 2서버 편집 기능 포섭(대사 line/사전 CRUD/preview, 스프라이트 tile/render/compare/onscreen/save/revert/setpalette/build/download). 구 :8780/:8781 모듈 import 정상(폐기 전 유지).
 - [x] 전 도구 py_compile + app.js node --check + 데이터 JSON 유효 + 3자 리뷰(codex/agy/워크플로) 반영.
-- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8783` 렌더 확인. scene row 29, game scene screenshot 28/28(API), `1편 통신 하위 메뉴` 분리 row+proof image, `1편 싱글/맵 하위 메뉴` 스프라이트 실화면 배치 canvas 720×480 nonblank, cell별 팔레트 2개, 투명 픽셀 canvas 클릭 `0→5` 변경 확인. 증거 `temp/browser_verify/scene_editor_after_codex_fixes.png`.
+- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8783` 렌더 확인. scene row 29, game scene screenshot 28/28(API), `1편 통신 하위 메뉴` 분리 row+proof image, `1편 싱글/맵 하위 메뉴` 스프라이트 단일 타일그리드가 `타일 그리드 · 실화면 배치`로 표시, 모드 버튼 0개, canvas 720×480 nonblank, cell별 팔레트 2개, 투명 픽셀 canvas 클릭 `0→5` 변경 확인. 증거 `temp/browser_verify/scene_editor_unified_screen_grid.png`.
 - [ ] (후속) dist 재생성은 ROM 변경 없으므로 불필요. 구서버 정식 폐기는 frame-sweep까지 완료 후 판단.
 - 완료기준: scene editor 단독으로 편집·preview·apply·download 가능.
 
