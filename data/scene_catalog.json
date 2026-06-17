@@ -248,11 +248,11 @@
       }
     },
     {
-      "id": "12_part1_submenus",
+      "id": "12_part1_single_submenus",
       "order": 60,
       "scope": "part1",
       "subtag": "하위 메뉴",
-      "title": "1편 하위 메뉴 라벨(싱글/통신/카드)",
+      "title": "1편 싱글/맵 하위 메뉴 라벨",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
@@ -274,10 +274,8 @@
       "dialogue_ids": [],
       "sprite_ids": [
         "lz77_00C1A2BC",
-        "lz77_00C1A564",
         "lz77_00C1A81C",
         "lz77_00C1A9DC",
-        "lz77_00C1AC60",
         "lz77_00C1AE74",
         "lz77_00C1B0E4",
         "lz77_00C1B3A8",
@@ -286,12 +284,46 @@
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 10
+        "sprite": 8
       }
     },
     {
-      "id": "13_part1_name_input",
+      "id": "13_part1_link_submenus",
       "order": 70,
+      "scope": "part1",
+      "subtag": "하위 메뉴",
+      "title": "1편 통신 하위 메뉴 라벨",
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": "43_part1_link",
+        "url": "/scene_shots/43_part1_link.png",
+        "mode": "savestate",
+        "grade": "stale_state",
+        "status": "capturable",
+        "note": "Part1 통신 하위 메뉴"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
+        "lz77_00C1A564",
+        "lz77_00C1AC60"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 2
+      }
+    },
+    {
+      "id": "14_part1_name_input",
+      "order": 80,
       "scope": "part1",
       "subtag": "이름 입력",
       "title": "1편 이름 입력",
@@ -323,8 +355,8 @@
       }
     },
     {
-      "id": "14_part1_operation_logos",
-      "order": 80,
+      "id": "15_part1_operation_logos",
+      "order": 90,
       "scope": "part1",
       "subtag": "작전/설정",
       "title": "1편 작전/지도/상점/룰 화면 로고",
@@ -362,8 +394,8 @@
       }
     },
     {
-      "id": "15_part1_info_screen",
-      "order": 90,
+      "id": "16_part1_info_screen",
+      "order": 100,
       "scope": "part1",
       "subtag": "유닛 정보",
       "title": "1편 유닛/상세 정보 화면",
@@ -407,8 +439,8 @@
       }
     },
     {
-      "id": "16_part1_campaign",
-      "order": 100,
+      "id": "17_part1_campaign",
+      "order": 110,
       "scope": "part1",
       "subtag": "캠페인",
       "title": "1편 캠페인/미션 로고",
@@ -441,8 +473,8 @@
       }
     },
     {
-      "id": "17_part1_battle",
-      "order": 110,
+      "id": "18_part1_battle",
+      "order": 120,
       "scope": "part1",
       "subtag": "전투",
       "title": "1편 전투 N일째 배너",
@@ -474,8 +506,8 @@
       }
     },
     {
-      "id": "18_part1_story",
-      "order": 120,
+      "id": "19_part1_story",
+      "order": 130,
       "scope": "part1",
       "subtag": "대사",
       "title": "1편 스토리 대사(전체)",
@@ -2422,7 +2454,7 @@
     },
     {
       "id": "20_part2_intro_newspaper",
-      "order": 130,
+      "order": 140,
       "scope": "part2",
       "subtag": "인트로",
       "title": "2편 인트로 신문/스플래시",
@@ -2456,7 +2488,7 @@
     },
     {
       "id": "21_part2_intro_blackhole",
-      "order": 140,
+      "order": 150,
       "scope": "part2",
       "subtag": "인트로",
       "title": "2편 인트로 블랙홀/도미노/프롤로그",
@@ -2493,7 +2525,7 @@
     },
     {
       "id": "22_part2_title",
-      "order": 150,
+      "order": 160,
       "scope": "part2",
       "subtag": "시작화면",
       "title": "2편 타이틀",
@@ -2529,7 +2561,7 @@
     },
     {
       "id": "23_part2_main_menu",
-      "order": 160,
+      "order": 170,
       "scope": "part2",
       "subtag": "메뉴 선택",
       "title": "2편 메인 메뉴(모드 선택)",
@@ -2749,7 +2781,7 @@
     },
     {
       "id": "24_part2_campaign_map",
-      "order": 170,
+      "order": 180,
       "scope": "part2",
       "subtag": "캠페인 선택",
       "title": "2편 캠페인/작전 선택(월드맵)",
@@ -2788,7 +2820,7 @@
     },
     {
       "id": "25_part2_mission_titles",
-      "order": 180,
+      "order": 190,
       "scope": "part2",
       "subtag": "미션 진입",
       "title": "2편 미션 시작/에어 미션 타이틀",
@@ -2823,7 +2855,7 @@
     },
     {
       "id": "26_part2_battle_labels",
-      "order": 190,
+      "order": 200,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 라벨(N일째·체크·데미지 예측)",
@@ -2866,7 +2898,7 @@
     },
     {
       "id": "27_part2_battle_objlabels",
-      "order": 200,
+      "order": 210,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 OBJ 라벨(행동·유닛·지형·상태)",
@@ -2906,7 +2938,7 @@
     },
     {
       "id": "28_part2_result_status",
-      "order": 210,
+      "order": 220,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 성공/실패 오버레이",
@@ -2945,7 +2977,7 @@
     },
     {
       "id": "29_part2_result_summary",
-      "order": 220,
+      "order": 230,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 요약/축하",
@@ -2979,7 +3011,7 @@
     },
     {
       "id": "30_part2_story",
-      "order": 230,
+      "order": 240,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 스토리 대사(전체)",
@@ -6059,7 +6091,7 @@
     },
     {
       "id": "80_campaign_story",
-      "order": 240,
+      "order": 250,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 대사(전체)",
@@ -6543,7 +6575,7 @@
     },
     {
       "id": "85_ui_common",
-      "order": 250,
+      "order": 260,
       "scope": "all",
       "subtag": "UI/공통",
       "title": "공통 UI 라벨/대사",
@@ -6982,7 +7014,7 @@
     },
     {
       "id": "90_other_dialogue",
-      "order": 260,
+      "order": 270,
       "scope": "all",
       "subtag": "대사",
       "title": "기타/공통 대사(분류 전)",

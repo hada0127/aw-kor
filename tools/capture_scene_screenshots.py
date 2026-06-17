@@ -12,6 +12,7 @@ data/scene_catalog.json의 scene.screenshot.checkpoint를 읽고, 각 checkpoint
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -44,6 +45,29 @@ def scene_checkpoint_names(catalog_path: Path) -> list[str]:
     return names
 
 
+def sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def current_capture(frame: Path, rom_sha: str) -> tuple[bool, str]:
+    if not frame.exists() or frame.stat().st_size <= 0:
+        return False, "frame 없음"
+    prov = frame.parent / "provenance.json"
+    if not prov.exists() or prov.stat().st_size <= 0:
+        return False, "provenance 없음"
+    try:
+        data = json.loads(prov.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return False, "provenance JSON 오류"
+    if data.get("rom_sha256") != rom_sha:
+        return False, "ROM SHA 불일치"
+    return True, "current"
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--catalog", default=str(CATALOG))
@@ -71,14 +95,18 @@ def main() -> None:
         raise SystemExit("ROM 없음: " + str(rom))
     if not harness.exists():
         raise SystemExit("mGBA harness 없음: " + str(harness))
+    rom_sha = sha256(rom)
     summary = {"rom": str(rom), "harness": str(harness), "captured": [], "skipped": []}
 
     for name in names:
         frame = out_dir / f"{name}_patched" / "frame.png"
         if frame.exists() and not args.force:
-            print(f"[skip] {name} -> {frame}")
-            summary["skipped"].append(name)
-            continue
+            ok, reason = current_capture(frame, rom_sha)
+            if ok:
+                print(f"[skip] {name} -> {frame}")
+                summary["skipped"].append(name)
+                continue
+            print(f"[recapture] {name}: {reason}")
         print(f"[capture] {name}")
         capture(rom, by_name[name], out_dir, harness, "patched")
         if not frame.exists() or frame.stat().st_size <= 0:

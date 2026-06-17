@@ -100,6 +100,7 @@ function sceneShotCard(shot) {
 // ── 좌측 LNB: 게임순 scene 목록(아코디언) ─────────────────────────────────
 async function loadScenes() {
   const q = $("#q").value.trim();
+  S._reqSeq++;
   let d;
   try { d = await api(`/api/scenes?scope=${S.scope}&q=${encodeURIComponent(q)}`); }
   catch (e) { toast("scene 목록 로드 실패: " + e, true); return; }
@@ -408,7 +409,7 @@ const SP = {
   id: null, w: 0, h: 0, cols: 0, grid: null, pal: null, sel: 1,
   zoom: 10, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
   os: null, bgUrl: "", bgImg: null, bgReady: false, showBg: true,
-  painting: false, paintKey: ""
+  painting: false, paintKey: "", activePaletteKey: null
 };
 async function selectSprite(i, el) {
   markSel(el);
@@ -419,6 +420,7 @@ async function selectSprite(i, el) {
   if (!d.ok) { $("#editor").innerHTML = `<div class="empty">디코드 실패: ${esc(d.error || "")}</div>`; return; }
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
   SP.pal = d.palette; SP.type = d.type; SP.sel = 1; SP.os = null; SP.hasOnscreen = !!d.has_onscreen;
+  SP.activePaletteKey = null;
   SP.mode = SP.hasOnscreen ? "onscreen" : "tile";
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = true;
   SP.bgImg = null; SP.bgReady = false;
@@ -465,6 +467,7 @@ async function setSpriteMode(mode) {
     else {
       SP.os = os;
       SP.pal = os.palette || SP.pal;
+      SP.activePaletteKey = null;
       renderSwatches();
       prepareSceneBg();
     }
@@ -473,7 +476,8 @@ async function setSpriteMode(mode) {
 }
 function renderSwatches() {
   const box = $("#swatches"); box.innerHTML = "";
-  SP.pal.forEach((c, i) => {
+  const pal = currentPalette();
+  pal.forEach((c, i) => {
     const sw = document.createElement("div");
     sw.className = "sw" + (i === SP.sel ? " sel" : "");
     sw.style.background = `rgb(${c[0]},${c[1]},${c[2]})`;
@@ -481,6 +485,18 @@ function renderSwatches() {
     sw.onclick = () => { SP.sel = i; renderSwatches(); };
     box.appendChild(sw);
   });
+}
+function currentPalette() {
+  if (SP.mode === "onscreen" && SP.os && SP.os.palettes && SP.activePaletteKey) {
+    return SP.os.palettes[SP.activePaletteKey] || SP.pal;
+  }
+  return SP.pal || [];
+}
+function paletteForCell(cell) {
+  if (SP.os && SP.os.palettes && cell && cell.palette_key) {
+    return SP.os.palettes[cell.palette_key] || SP.pal;
+  }
+  return SP.pal;
 }
 // 캔버스 변 ~1400px 상한(거대 스프라이트 프리즈/메모리 폭증 방지 — M4)
 function effectiveZoom() {
@@ -585,6 +601,10 @@ function drawOnscreenSprite() {
     const sx = Math.floor((e.clientX - r.left) / z), sy = Math.floor((e.clientY - r.top) / z);
     const hit = onscreenTargetAt(sx, sy);
     if (!hit) return;
+    if (hit.palette_key && hit.palette_key !== SP.activePaletteKey) {
+      SP.activePaletteKey = hit.palette_key;
+      renderSwatches();
+    }
     const key = `${hit.tile}:${hit.px}:${hit.py}`;
     if (key === SP.paintKey) return;
     SP.paintKey = key;
@@ -607,7 +627,8 @@ function drawOamCells(ctx) {
         const py = cell.fv ? 7 - yy : yy;
         const idx = sheetPixel(tile, px, py) & 15;
         if (idx === 0) continue;
-        const c = SP.pal[idx] || [0, 0, 0];
+        const pal = paletteForCell(cell);
+        const c = pal[idx] || [0, 0, 0];
         ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
         ctx.fillRect(dx0 + xx, dy0 + yy, 1, 1);
       }
@@ -624,6 +645,10 @@ function maskOamBounds(ctx) {
 }
 
 function onscreenTargetAt(sx, sy) {
+  return onscreenTargetAtPhase(sx, sy, false) || onscreenTargetAtPhase(sx, sy, true);
+}
+
+function onscreenTargetAtPhase(sx, sy, allowTransparent) {
   const os = SP.os;
   for (let ci = os.cells.length - 1; ci >= 0; ci--) {
     const cell = os.cells[ci];
@@ -635,8 +660,8 @@ function onscreenTargetAt(sx, sy) {
       const px = cell.fh ? 7 - lx : lx;
       const py = cell.fv ? 7 - ly : ly;
       const tile = localTileFor(cell, tx, ty);
-      if ((sheetPixel(tile, px, py) & 15) === 0) continue;
-      return { tile, px, py };
+      if (!allowTransparent && (sheetPixel(tile, px, py) & 15) === 0) continue;
+      return { tile, px, py, palette_key: cell.palette_key || null };
     }
   }
   return null;

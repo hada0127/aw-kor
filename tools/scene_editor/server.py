@@ -584,27 +584,42 @@ class Handler(BaseHTTPRequestHandler):
 
     def _onscreen_data(self, sid, sp):
         import struct as _s
-        from collections import Counter
         lay = SE.get_layout(sid)
         if not lay:
             return {"ok": False, "error": "no layout for %s" % sid}
         dec = SE.decode_indices(sp)
         cols = dec[3] if dec else (sp.get("tile_cols") or 1)
+        cells = [dict(c) for c in lay["cells"]]
         palp = lay.get("pal_file")
+        palettes = {}
         if palp and (ROOT / palp).exists():
             palb = (ROOT / palp).read_bytes()
-            dom = Counter((c.get("palbase", 256), c["bank"]) for c in lay["cells"]).most_common(1)[0][0]
-            palbase, bank = dom
 
-            def col(i):
+            def col(abs_i):
+                if abs_i * 2 + 2 > len(palb):
+                    return [0, 0, 0]
+                i = abs_i
                 v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
                 return [(v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31]
-            palette = [col(palbase + bank * 16 + i) for i in range(16)]
+
+            for cell in cells:
+                palbase = cell.get("palbase", 256)
+                bank = cell.get("bank", 0)
+                key = f"{palbase}:{bank}"
+                cell["palette_key"] = key
+                if key not in palettes:
+                    palettes[key] = [col(palbase + bank * 16 + i) for i in range(16)]
+            first_key = cells[0].get("palette_key") if cells else None
+            palette = palettes.get(first_key, [[0, 0, 0]] * 16)
         else:
             palette = [list(c) for c in SE.palette_for(sp)]
+            palettes["default"] = palette
+            for cell in cells:
+                cell["palette_key"] = "default"
         return {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
-                "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": lay["cells"],
-                "palette": palette, "screen": lay.get("screen"), "build": lay.get("build", False)}
+                "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": cells,
+                "palette": palette, "palettes": palettes,
+                "screen": lay.get("screen"), "build": lay.get("build", False)}
 
     def _sprite_render(self, q):
         sid = q.get("id", [""])[0]

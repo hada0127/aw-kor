@@ -77,8 +77,8 @@
 - [x] scene별 canvas 상태(ready/none) 카탈로그 노출 + UI 표시. 대사 preview는 scene canvas 사용.
 - [x] **canvas 레지스트리 외부화**: `data/preview_canvases.json`(key→slot/len/render/nav/checkpoint), preview_capture `_load_registry()` 병합, build_scene_catalog가 canvas.checkpoint로 scene 매핑. 새 canvas=코드수정 0.
 - [x] **캐시 키 버그 수정(codex)**: preview 캐시 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함(기존 name+text만 → nav/ROM 변경 시 stale).
-- [x] **scene proof screenshot 연결(2026-06-17)**: `tools/capture_scene_screenshots.py` 추가. scene_catalog의 `screenshot.checkpoint`를 헤드리스 mGBA로 `temp/scene_screenshots/<checkpoint>_patched/frame.png`에 캡처하고 provenance 기록. UI LNB/scene 상세에 실제 캡처 썸네일 표시. 실제 game scene 27/27 캡처 존재(`99_unassigned_review`는 검토 bucket).
-- [x] **merged scene 분리(2026-06-17)**: 20 scene+review → 28 scene+review. 1+2 선택 Part1/Part2, Part1 월드메뉴/하위메뉴/작전로고/캠페인/전투, Part2 인트로 신문/블랙홀, 캠페인맵/미션타이틀, 전투라벨/OBJ라벨, 결과상태/요약 분리. source 중복 라벨은 `sprite_ids` 정확 배정으로 분리.
+- [x] **scene proof screenshot 연결(2026-06-17)**: `tools/capture_scene_screenshots.py` 추가. scene_catalog의 `screenshot.checkpoint`를 헤드리스 mGBA로 `temp/scene_screenshots/<checkpoint>_patched/frame.png`에 캡처하고 provenance 기록. UI LNB/scene 상세에 실제 캡처 썸네일 표시. 실제 game scene 28/28 캡처 존재(고유 checkpoint 16개, `99_unassigned_review`는 검토 bucket).
+- [x] **merged scene 분리(2026-06-17)**: 20 scene+review → 29 scene+review(실제 game scene 28 + review 1). 1+2 선택 Part1/Part2, Part1 월드메뉴/싱글·맵 하위메뉴/통신 하위메뉴/작전로고/캠페인/전투, Part2 인트로 신문/블랙홀, 캠페인맵/미션타이틀, 전투라벨/OBJ라벨, 결과상태/요약 분리. source 중복 라벨은 `sprite_ids` 정확 배정으로 분리.
 - [⏳] **part1 대사 canvas는 fresh-nav fragility로 보류**(6회 실측): 인트로 대사 자동진행→캡처 불안정, 안정적인 건 텍스트슬롯 없는 이름그리드뿐. 신뢰성 canvas는 **frame-sweep(대사창 비공백 프레임 선택) 또는 정밀 savestate** 필요(research.md 기록). 검증 안 된 canvas는 출하 금지(현재 part2_menu만 ready).
 - [ ] (후속) frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성 확보.
 - 완료기준(수정): part2_menu 검증·정식 등록 / 레지스트리 외부화로 확장 경로 확보 / part1·battle은 frame-sweep 후속.
@@ -87,7 +87,7 @@
 - [x] **byte-identical 정합성**: 편집기 작업(도구/카탈로그/프런트만)은 빌드 무관 → output ROM sha **1623481a 불변** 확인.
 - [x] 기능 parity: 통합 에디터가 구 2서버 편집 기능 포섭(대사 line/사전 CRUD/preview, 스프라이트 tile/render/compare/onscreen/save/revert/setpalette/build/download). 구 :8780/:8781 모듈 import 정상(폐기 전 유지).
 - [x] 전 도구 py_compile + app.js node --check + 데이터 JSON 유효 + 3자 리뷰(codex/agy/워크플로) 반영.
-- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8783` 렌더 확인. scene row 28, scene screenshot img 27 로드, `2편 전투 OBJ 라벨` scene 펼침, sprite row 8, 실화면 배치 canvas 720×480 nonblank, OAM cell 94, palette 16, `onscreenTargetAt` 역매핑 성공. 증거 `temp/browser_verify/scene_editor_onscreen.png`.
+- [x] **브라우저 검증(2026-06-17)**: Chrome headless CDP로 `http://127.0.0.1:8783` 렌더 확인. scene row 29, game scene screenshot 28/28(API), `1편 통신 하위 메뉴` 분리 row+proof image, `1편 싱글/맵 하위 메뉴` 스프라이트 실화면 배치 canvas 720×480 nonblank, cell별 팔레트 2개, 투명 픽셀 canvas 클릭 `0→5` 변경 확인. 증거 `temp/browser_verify/scene_editor_after_codex_fixes.png`.
 - [ ] (후속) dist 재생성은 ROM 변경 없으므로 불필요. 구서버 정식 폐기는 frame-sweep까지 완료 후 판단.
 - 완료기준: scene editor 단독으로 편집·preview·apply·download 가능.
 
@@ -111,14 +111,18 @@
   - [x] 부수 minor: revert 재선택 순서(renderItems→select), api() HTTP 오류 처리+loadScenes/openScene try/catch, scene 연속클릭 경합 토큰, 모달 오버레이/Escape 닫기, 검색 0건 안내, render?which=edit 편집본 없으면 404, _sprite_save 차원검증, ROM 없을 때 썸네일 orig 폴백, dirty 문구 정정, 빌드완료 cry-wolf 경고 정밀화.
   - [ ] (후속) lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트, S.supported await(현재 서버 하드게이트가 안전망).
 
-## scene screenshot/WYSIWYG agy 리뷰 반영 (2026-06-17)
+## scene screenshot/WYSIWYG codex+agy 리뷰 반영 (2026-06-17)
 - [x] `obj1d=false` 대비 로컬 tile index 변환(`localTileFor`) 추가. 현재 `data/sprite_layouts.json`는 obj1d=1만 존재하지만 향후 2D OBJ 레이아웃에서 `ty*32`를 compact grid에 직접 투영하지 않도록 방어.
-- [x] onscreen hit-test가 투명 픽셀(index 0)을 건너뛰도록 수정해 겹친 OAM cell의 투명 bbox가 클릭을 탈취하지 않게 함.
+- [x] onscreen hit-test를 2단계(보이는 픽셀 우선 → 없을 때 투명 셀 허용)로 수정해 겹친 투명 bbox 탈취와 투명 여백 편집 불가를 동시에 해결.
+- [x] cell별 OBJ palette bank를 `/api/sprite/onscreen_data`의 `palettes`/`palette_key`로 내려주고, 프런트 렌더가 cell 팔레트를 적용하도록 수정.
 - [x] 정적 scene screenshot 배경은 기본 45% dim + OAM cell bbox 마스킹 후 현재 스프라이트를 그리도록 수정. 배경 표시 토글 추가.
-- [x] `/scene_shots/<checkpoint>.png` 정규식 화이트리스트 + `Cache-Control: no-store` 적용. API `mtime` 쿼리 캐시버스터 유지.
+- [x] `/scene_shots/<checkpoint>.png` 정규식+basename+checkpoint allowlist + `Cache-Control: no-store` 적용. API `mtime` 쿼리 캐시버스터 유지.
+- [x] scene screenshot provenance.rom_sha256 ↔ 현재 output ROM sha 비교로 stale 플래그/배지 추가. 캡처 도구는 기존 frame skip 전 provenance ROM SHA를 검증하고 불일치 시 재캡처.
+- [x] 1편 하위 메뉴 merged 항목을 `12_part1_single_submenus`/`13_part1_link_submenus`로 분리하고 `43_part1_link` checkpoint를 실제 scene에 연결.
+- [x] scope/search로 scene 목록 갱신 시 pending sprite 요청을 `_reqSeq++`로 무효화해 stale 응답이 우측 에디터를 되살리는 경합 차단.
 - [x] `sprite_ids` explicit 배정 누락/중복 검증과 bucket 중복 방지 추가.
 - [x] `capture_scene_screenshots.py`에 `MGBA_HARNESS`/`--harness` 지원, ROM/harness 존재 확인, 캡처 후 `frame.png`/`provenance.json` 생성 검증 추가.
-- [x] codex 리뷰 실행은 `temp/codex_review_scene_editor.err`에 세션 로그만 남고 최종 응답 없이 장시간 지연되어 중단. agy 리뷰 지적 중 타당한 항목은 반영 완료.
+- [x] agy 9건 + codex P2 5건 리뷰 반영 완료.
 
 ---
 
@@ -142,12 +146,3 @@
 ## 문서 규칙
 - 진행 기준은 이 파일 하나. 완료=`docs/success.md`, 실패/dead-end=`docs/fail.md`, RE 사실=`docs/research.md`.
 - 작업 완료/막힘 시 codex + agy 엄격 리뷰(`temp/review_prompt.md` → 병렬 실행).
-
-## scene 스크린샷 기능 codex+agy 리뷰 반영 (2026-06-17)
-- [x] **stale 스크린샷 검출(codex major)**: scene_shot_info가 provenance.rom_sha256 ↔ 현재 output ROM sha 비교 → `stale` 플래그, 프런트 ⚠stale 배지(빌드 후 불일치 경고). 현재 27개 모두 fresh.
-- [x] **선택 경합 가드(agy/codex major)**: selectSprite tile fetch + setSpriteMode onscreen_data + prepareSceneBg 이미지 onload에 SP.id/req 토큰 가드(빠른 클릭 시 stale 응답 혼입 방지).
-- [x] **loadScenes 에디터 초기화(agy major)**: scope/검색 갱신 시 S.items/item 리셋 + 우측 에디터 empty(stale 편집상태 방지).
-- [x] **scene_shots 라우트 하드닝(codex minor)**: basename만 허용(서브경로 404) + checkpoint allowlist(카탈로그/screen_checkpoints 정의된 것만).
-- [x] **미배정 썸네일 레이아웃(agy minor)**: 10px 원형 → 58×38 사선 플레이스홀더(정렬 유지).
-- [x] capture 도구 fail-fast(ROM/harness/frame/provenance 검증) 유지(수동 배치 도구라 타당).
-- [ ] (후속) 클린클론 temp 의존(스크린샷·savestate gitignored) — 캡처 재생성으로 해소, 최소 ground-truth 동봉 검토. 배정 순서의존(token in)은 scope/section 가드+override로 완화(아키텍처 개선 후속).
