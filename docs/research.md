@@ -1242,3 +1242,34 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
   단순 frames advance 무효 — 로드 직후 대사 재트리거(press A) 필요(agy/codex 공통 경고).
 - **캐시 키 버그 수정**(codex): preview_capture 캐시 키가 base_rom.name+text뿐이라 nav/슬롯/ROM
   내용 변경 시 stale 재사용 → 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함.
+
+---
+
+## 2026-06-23: Part2 캠페인 대사 메시지 포인터 테이블 RE + 단어붙음 repoint 해소
+
+> 외부 서양판 한글패치(락이다님, GPT 기반 영어베이스)와 완성도 비교 중 발견. **qa_text_fit가
+> dialogue_overrides(쪼롱이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 확인.
+
+### 발견된 사실 (재현 가능)
+- **Part2 메시지 포인터 테이블 = `0x08A357B4` ~ `0x08A38B80`** (3,315 엔트리, 4바이트 LE 포인터,
+  단조 증가, 타깃 0x08A01970~0x08A357A0). 각 엔트리 = 한 대사 메시지의 시작 주소.
+- 메시지 = 라인(0x0A/제어로 구분) + 종단 제어(예 `6B 00 00 00`). **메시지 중간으로 들어오는
+  포인터는 없음**(순차 읽기) → 메시지 전체를 다른 곳으로 옮기고 포인터만 갱신하면 안전.
+- **여유공간 `0x00A3CF14 ~ 0x00B00000`**(약 799KB, 미사용 0xFF). 출력 ROM에서 non-0xFF 0B 확인.
+  빌드는 별도로 `0x08F20000~`(폰트 relocated table)만 사용 → 0xA3D000 블록과 무충돌.
+- found_texts의 라인 span이 메시지를 (라인 + 제어 gap)으로 **무손실 정확 분해**됨(171/171 ok, 후 190/190).
+
+### 단어붙음의 두 출처 (중요)
+1. **dialogue_overrides(쪼롱이님)**: 소스에 공백 온전 → 빌드 encode_fit이 슬롯-fit으로 공백 제거
+   (level≥10). **repoint로 정확 복원 가능(안전).**
+2. **translation_for_import.csv 병합 항목**(미션 목표 등): 여러 시각줄을 한 슬롯에 병합·선-단어붙음
+   저장. per-line 재배치 시 중복 노출 → **건드리면 안 됨(가드로 skip).**
+
+### 해결 (`tools/dialogue_repoint.py`, build_korean_full.py "2.9" 블록)
+- 메시지를 0xA3D000~에 전체 재배치, **슬롯-fit으로 열화된 쪼롱이님 라인만** `encode_full_fidelity`
+  (반각공백 완전충실)로 복원, 포인터 갱신. 비대상 라인·제어 스켈레톤·구주소는 byte-identical.
+- 안전 가드 4중: ①포인터 ROM 내 정확히 1개(테이블) ②(라인+gap) 정확분해 ③메시지 내 라인 간
+  텍스트 중첩(병합 override) 없음 ④여유공간 내 비중첩.
+- 결과: **190 메시지 / 216 라인 단어붙음 해소**, merged-skip 4. 구조검증 errors=0(temp/compare/verify_repoint_struct.py).
+- 잔여 단어붙음 242건은 Part1(0xD8~0xE0)·0xB8 영역 — **분산 포인터 구조**(단조 테이블 아님)라
+  repoint 확장에 별도 RE 필요(후속). `qa_dialogue_jamming.py`로 추적.

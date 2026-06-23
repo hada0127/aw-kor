@@ -459,8 +459,8 @@ SOURCE_TEXT_OVERRIDES = {
     'しんじょう。': '신조',
     '　　　　　海': '해상',
     '海': '해상',
-    '　　　？？？？？': '?????',
-    '？？？？？': '?????',
+    '　　　？？？？？': '미상',
+    '？？？？？': '미상',
     'いる。': '있음',
     '修理が早い。': '수리 빠름',
     '高い。': '높음',
@@ -490,7 +490,7 @@ SOURCE_TEXT_OVERRIDES = {
     '総全滅数': '총전멸수',
     'そうごう': '종합',
     '装備なし': '장비없음',
-    '？？？？？？': '??????',
+    '？？？？？？': '미상',
     'おともだちとゲームボーイをつないであそぶ、': '친구와 연결해 노는',
     '「ツーシン」。': '통신',
     'さあ、': '자',
@@ -7450,11 +7450,12 @@ def patch_part2_result_summary_obj(rom):
     draw_label('속도', (4, 76), (0, 72, 64, 90), max_size=10)
     draw_label('화력', (76, 76), (72, 72, 128, 90), max_size=10)
     draw_label('기술', (144, 76), (140, 72, 216, 90), max_size=10)
-    draw.rectangle((0, 100, 196, 114), fill=0)
+    draw.rectangle((0, 100, 196, 124), fill=0)
     draw_label('속도', (4, 102), (0, 100, 58, 114), max_size=10)
     draw_label('화력', (68, 102), (64, 100, 112, 114), max_size=10)
     draw_label('기술', (132, 102), (128, 100, 196, 114), max_size=10)
     draw_label('합계', (4, 110), (0, 104, 64, 124), max_size=10)
+    draw_label('+전체', (44, 110), (40, 104, 112, 124), max_size=10)
 
     # Ranking/explanation variants reuse this tail label strip; clear the old
     # English labels so they do not leak on alternate score pages.
@@ -9528,14 +9529,11 @@ def _fit_candidates(base):
     ]
 
 
-def encode_fit(ko, slot, syl_to_code, unmapped):
-    """슬롯에 맞도록 단계적 압축 인코딩.
+def normalize_for_fit(ko):
+    """encode_fit의 슬롯-fit 전 정규화 단계만 떼어낸 것(동작 보존).
 
-    맞으면 (bytes, level), 안 맞으면 (None, 99)로 원문 유지.
-    level 0~5 = 문장부호 보존(공백/축약 단계). 6~11 = 부호 제거 폴백(슬롯 부족 시에만).
-    Phase B: 기존 무조건 strip을 제거하고 전각 부호를 렌더 검증된 ASCII 등가로 정규화한다.
-    렌더러가 ASCII '. ! ? , : ; ( ) [ ] " ''를 출력함은 출하본(welcome/Part2 대사/0xDCBC12)으로 입증됨.
-    부호가 슬롯을 넘기면 기존 동작과 동일하게 제거하므로 overflow/일본어 폴백은 늘지 않는다.
+    재배치(repoint) 엔진이 슬롯 제약 없이 '완전충실' 한글을 인코딩할 때 동일 정규화를
+    재사용하려고 추출. 반환은 _fit_candidates에 들어가는 `normalized` 문자열.
     """
     ko = normalize_korean_terms(ko)
     ko = ko.replace('지도을', '지도를').replace('지도은', '지도는')
@@ -9574,7 +9572,19 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
                 out.append(ch)
                 prev_ws = False
         normalized = ''.join(out)
+    return normalized
 
+
+def encode_fit(ko, slot, syl_to_code, unmapped):
+    """슬롯에 맞도록 단계적 압축 인코딩.
+
+    맞으면 (bytes, level), 안 맞으면 (None, 99)로 원문 유지.
+    level 0~5 = 문장부호 보존(공백/축약 단계). 6~11 = 부호 제거 폴백(슬롯 부족 시에만).
+    Phase B: 기존 무조건 strip을 제거하고 전각 부호를 렌더 검증된 ASCII 등가로 정규화한다.
+    렌더러가 ASCII '. ! ? , : ; ( ) [ ] " ''를 출력함은 출하본(welcome/Part2 대사/0xDCBC12)으로 입증됨.
+    부호가 슬롯을 넘기면 기존 동작과 동일하게 제거하므로 overflow/일본어 폴백은 늘지 않는다.
+    """
+    normalized = normalize_for_fit(ko)
     cand = _fit_candidates(normalized)   # 비용 기반: 공백 보존(부호제거/축약) → 공백제거 최후
     for level, s in enumerate(cand):
         if any('가' <= ch <= '힣' and ch not in syl_to_code for ch in s):
@@ -9584,6 +9594,15 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
             return enc, level
 
     return None, 99
+
+
+def encode_full_fidelity(ko, syl_to_code, unmapped):
+    """슬롯 제약 없이 완전충실(반각공백 보존, 부호 보존) 인코딩 — repoint 재배치용.
+
+    encode_fit의 정규화는 동일하게 적용하되 _fit_candidates의 슬롯-축소(부호/공백 제거)는
+    거치지 않는다 → 단어붙음/축약 없는 원문 그대로. 반각공백(0x20)을 써서 최소 폭으로 복원.
+    """
+    return encode_text(normalize_for_fit(ko), syl_to_code, unmapped)
 
 
 def write_slot_text(rom, a, slot, enc, ko, level, kind):
@@ -9973,6 +9992,8 @@ def main():
                     help='base ROM. 기본=원본 ROM. v56_polished는 전투 튜토리얼 진입 후 충돌하는 구버전 베이스라 명시 지정할 때만 사용.')
     ap.add_argument('--no-sync-outputs', action='store_true',
                     help='기본 full 빌드 후 final/title_test ROM 동기화를 건너뜁니다.')
+    ap.add_argument('--no-repoint-dialogue', action='store_true',
+                    help='쪼롱이님 대사 단어붙음 해소용 메시지 재배치(repoint)를 끕니다(디버그용).')
     args = ap.parse_args()
 
     orig = bytes(open(P.ROM, 'rb').read())   # 원본 (테이블 소스)
@@ -12540,6 +12561,7 @@ def main():
         (0xA2B291, 0xA2B29D, '싫어함 평화', 'part2 hates peace row'),
         (0xA2B332, 0xA2B348, '모든 유닛 체력에 8의', 'part2 meteor hp row'),
         (0xA2B2B1, 0xA2B2BF, '공격력 높음.', 'part2 attack high row'),
+        (0xA2B3DF, 0xA2B3F7, '인정받았다.', 'part2 kong hawke recognition row'),
         (0xA2B3F8, 0xA2B404, '좋아함 고기', 'part2 likes meat row'),
         (0xA2B405, 0xA2B413, '싫어함 채소', 'part2 hates vegetables row'),
         (0xA2B518, 0xA2B52A, '유닛 공격력이', 'part2 unit attack lead row'),
@@ -18503,6 +18525,78 @@ def main():
     # 스프라이트 편집기 픽셀 편집 최종 오버레이(라벨 자동그리기 이후 = 편집이 우선).
     # 오버라이드 없으면 무동작 → 출력 byte-identical.
     st['sprite_overrides'] = apply_sprite_overrides(rom)['applied']
+
+    # 2.9) 쪼롱이님 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint)
+    # Part2 메시지 포인터 테이블(0x08A357B4)이 가리키는 대사를 여유공간(0xA3D000~)으로 재배치하고
+    # 슬롯-fit으로 공백이 제거된 쪼롱이님 라인만 완전충실 인코딩으로 복원. 제어 스켈레톤·비대상
+    # 라인·구주소는 불변(회귀 0). 외부 서양판이 쓴 free-space repoint와 동일 기법. (RE: docs/research.md)
+    if not getattr(args, 'no_repoint_dialogue', False):
+        try:
+            from dialogue_repoint import repoint_messages, _line_index as _repoint_line_index
+            _code_to_syl = {v: k for k, v in syl_to_code.items()}
+
+            def _rp_decode(raw):
+                out = []
+                i = 0
+                while i < len(raw):
+                    b = raw[i]
+                    if b == 0x20:
+                        out.append(' '); i += 1
+                    elif b >= 0x81 and i + 1 < len(raw):
+                        c = (b << 8) | raw[i + 1]
+                        if c == 0x8140:
+                            out.append(' ')
+                        elif c in _code_to_syl:
+                            out.append(_code_to_syl[c])
+                        else:
+                            try:
+                                out.append(bytes([b, raw[i + 1]]).decode('shift_jis'))
+                            except Exception:
+                                out.append('\x00')
+                        i += 2
+                    else:
+                        out.append(chr(b) if 0x21 <= b <= 0x7E else '\x00'); i += 1
+                return ''.join(out)
+
+            def _rp_fixable(a):
+                v = _dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a))
+                return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
+
+            def _rp_dlg(a):
+                return (_dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a)) or '').strip()
+
+            def _rp_fixed_bytes(a):
+                return encode_full_fidelity(_rp_dlg(a), syl_to_code, unmapped)
+
+            def _rp_fit_level(a):
+                enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped)
+                return 99 if enc is None else lvl
+
+            from text_metrics import visual_cells as _rp_visual_cells
+
+            def _rp_cell_width(a):
+                # un-jam(완전충실, normalize) 후 시각 폭 — 박스 한계 초과 라인을 수정 제외
+                return _rp_visual_cells(normalize_for_fit(_rp_dlg(a)))
+
+            _rp_manifest, _rp_stats = repoint_messages(
+                rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
+                fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
+                slots=slots, line_index=_repoint_line_index(FOUND), table_offsets=[0xA357B4],
+                free_start=0xA3D000, free_end=0xB00000, min_level=6, max_cells=50)
+            st['repoint_msgs'] = _rp_stats.get('relocated', 0)
+            st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
+            for _m in _rp_manifest:
+                if _m.get('status') == 'relocated':
+                    WRITE_LOG.append([int(_m['new_addr'], 16), _m['new_len'], _m['new_len'],
+                                      '', None, None, None, 'repoint:' + _m['msg']])
+            print(f"→ 대사 재배치(repoint): {_rp_stats.get('relocated',0)} msgs, "
+                  f"{_rp_stats.get('lines_fixed',0)} lines 단어붙음 해소, "
+                  f"merged-skip {_rp_stats.get('skip_merged_fragment',0)}, "
+                  f"free {_rp_stats.get('free_used',0)}/{_rp_stats.get('free_avail',0)}B")
+            _rp_path = os.path.join(BASE, 'temp', 'repoint_manifest.json')
+            json.dump(_rp_manifest, open(_rp_path, 'w'), ensure_ascii=False, indent=1)
+        except Exception as _rp_err:
+            raise AssertionError(f'dialogue repoint failed: {_rp_err}')
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF

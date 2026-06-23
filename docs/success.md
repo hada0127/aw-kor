@@ -1562,3 +1562,49 @@ archive/malformed_address_rows.csv 보존.
 - [x] **UI 초과 표시 정합화**: scene editor의 대사 목록/저장 API가 raw byte 길이만 보던 문제를 수정. 서버가 `build_korean_full.encode_fit`으로 실제 빌드 fallback(공백/구두점 정리)을 계산해 `fits/encoded_len/fit_level`을 내려주고, 프런트는 그 값을 기준으로 `초과` 배지를 표시. 2편 스토리 3046그룹 `fits_false=0`, 브라우저 `visibleOverBadges=0` 확인.
 - [x] **검증**: `python3 tools/build_korean_full.py` 후 ROM SHA `ee17c7d97cd7913d`(full/final/title_test 동일). `qa_integrity_map.py` PASS(바이트 불일치 0), `qa_text_fit.py` overflow 0/no_ko 0, `qa_terms_from_rom.py --show 20` hard 0 PASS + B팀 제어표식 잔류 0, `qa_placeholder_residuals.py` 0, `qa_japanese_residuals.py --min-score 13` 후보 1(기존 table-like 카나열), `phase6_basic_test.py` ROM OK, `qa_visual_regions.py` 23 checks. `tools/capture_scene_screenshots.py --force`로 scene screenshot 고유 checkpoint 16개 재캡처, API stale/missing 0(`99_unassigned_review` 제외).
 - [x] **8782 브라우저 실검증**: Chrome headless CDP로 `http://127.0.0.1:8782` 직접 조작. 홈 `scene 30 · 대사그룹 9061/9061 · 텍스트 스프 112 · 미배정 텍0·폰트1·그래픽1874`, mixed scene `2편 메인 메뉴`는 `스프라이트 14`와 `대사 3607`을 같은 LNB 아래 표시. 스프라이트 편집은 출력 120×16px OAM 재조립 canvas(nonblank 4608/4608 sample)로 열림. `2편 전투 시작 회전/개시 오버레이`는 스프라이트 10/10개가 `/api/sprite/onscreen` 출력배치 썸네일이며, `전투개시 배너`가 출력 128×32px 편집면으로 열림(nonblank 8192/8192 sample). 사전 모달 input 값도 `사령관`/`호이프`/`코스모 랜드`/`매크로 랜드`로 확인. 전체 배정 스프라이트 112개 API 검증(tile/onscreen_data/PNG 실패 0, onscreen 94, raw fallback 18). 증거: `temp/browser_verify/browser_verify_report_final.json`, `temp/browser_verify/scene_editor_sprite_editor_final.png`, `temp/browser_verify/scene_editor_battle_start_sprite_editor_final.png`, `temp/browser_verify/scene_editor_bteam_dialogue_final.png`, `temp/browser_verify/scene_editor_dict_final.png`.
+
+
+### 🟢 UI 에디터 전 장면 실화면 진입점/잔여 컨테이너 재검증 (2026-06-22)
+
+- [x] **1편 잔여 컨테이너 실렌더 스캔**: `temp/story_range_breakscan.py`/`temp/story_exact_watch.py`에 병렬 worker와 입력 정책을 보강한 뒤 실제 savestate 기반으로 19d, 19b, 19a, 19e 잔여 범위를 재검증. 결과: 19d exact 352건 hit 0, 19d range 2376건 hit 0, 19b 224건 hit 0, 19a 430건 hit 0, 19e 24건 hit 0.
+- [x] **2편 잔여 컨테이너 실렌더 스캔**: 30a 14건 hit 0, 30b는 기존 split `30b1` hit를 확인 후 제외 재스캔 48건 hit 0, 30c 68건 hit 0, 30d/30g 경계 보정 후 294건 hit 0, 30e 264건 hit 0, 30f 910건 hit 0. 모든 결과는 `temp/scene_entrypoints/part2_*_residual_break_subset_*/results.json`에 재현 가능하게 남김.
+- [x] **30d/30g 경계 오류 수정**: render-breakpoint가 `0x00A1C000`(`g_00A1BFD8`)에서 호크/블랙홀 대사를 실제 화면으로 잡았고, 기존 `30d2_part2_green_earth_story_late` 끝이 `0xA1C000`이라 대사 그룹을 중간에서 잘랐음. `tools/build_scene_catalog.py`에서 30d2/30d 끝을 `0xA1C06C`로 늘리고 30g 시작을 `0xA1C06C`로 이동. 기존 `scene_30d2_part2_green_earth_story_late` 화면 흐름에 속하는 것으로 판정.
+- [x] **카탈로그/진입점/브라우저 검증**: `python3 tools/build_scene_catalog.py` 재생성 후 `audit_scene_catalog.py --strict`, `audit_scene_entrypoints.py --strict`, `audit_scene_semantics.py --strict` 모두 critical 0. Chrome CDP 검증 `python3 temp/cdp_verify_all_scene_editor.py` 결과 game scene 63, total scene 78, sprite 107, failure 0. 리포트: `temp/browser_verify/all_scene_editor_verify.json`.
+- [x] **codex+agy 리뷰 반영**: 두 리뷰 모두 13개 container를 완료로 간주하지 말 것, 특히 container에 대표 entrypoint/checkpoint가 남으면 실제 scene으로 오해될 수 있음을 지적. `tools/build_scene_catalog.py`가 container에는 `entrypoint`를 붙이지 않도록 수정하고, `audit_scene_catalog.py`/`audit_scene_entrypoints.py`/`audit_scene_semantics.py`가 container entrypoint를 critical로 잡도록 강화. 원천 `data/scene_entrypoints.json`/`data/screen_checkpoints.json`에서도 container 13개 대표 항목을 제거. 재생성 후 checkpoint 88→75, game scene unique checkpoint 63 유지, strict audit critical 0, CDP failure 0.
+- [x] **잔여 container 증거 정식화**: `data/scene_residual_scans.json`과 `tools/audit_scene_residual_scans.py` 추가. 13개 container(대사 2884개)에 대해 결과 파일 존재/case 수/hit 수/known split hit를 strict로 감사한다. 19c/30b/30d에서 나온 hit 3건은 기존 split 또는 경계 수정으로 설명되고, 최종 감사 결과 scan case 7793, hit 3, known hit 3, critical 0. 마지막 `88_common_comm_labels`는 Part1/Part2 menu/focus/row 상태 1967건에서 hit 0으로 독립 화면 노출 없음.
+- [x] **최종 리뷰 반영 보강**: codex가 지적한 스프라이트 편집면 crop 문제를 수정. `tools/scene_editor/static/app.js`의 onscreen 편집 viewbox는 nontransparent content bbox가 아니라 서버 layout `os.x0/os.y0/os.w/os.h`를 그대로 사용한다. `temp/cdp_verify_all_scene_editor.py`는 onscreen 원본/편집 캔버스 native size가 layout×zoom과 일치하지 않으면 실패하도록 강화했고, 재검증 결과 scene 63, sprite 107, failure 0. residual evidence도 현재 ROM SHA와 각 `results.json` SHA를 `data/scene_residual_scans.json`에 고정하고 audit가 검사하도록 보강했다.
+
+
+### 🟢 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint) + 완성도 인프라 (2026-06-23)
+
+> 외부 서양판 한글패치(락이다님 GPT 영어베이스)와 완성도 비교 중, **qa_text_fit가 dialogue_overrides
+> (쪼롱이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 발견. 쪼롱이님 **어절/단어를
+> 바꾸지 않고**(빌드 공통 정규화 `・・・→...`·전각공백→반각만 — in-place 렌더와 동일, 새 변형 아님)
+> 외부판과 동일한 free-space repoint 기법으로 해소.
+
+- [x] **메시지 포인터 테이블 RE**: Part2 대사 = `0x08A357B4`(3315엔트리, 단조증가) 테이블 참조, 메시지 중간
+  참조 없음(순차). 여유공간 `0xA3CF14~0xB00000`(799KB 미사용 0xFF). docs/research.md에 기록.
+- [x] **재배치 엔진** `tools/dialogue_repoint.py`: 슬롯-fit으로 공백 제거된 쪼롱이님 라인만 `encode_full_fidelity`
+  (반각공백 완전충실)로 복원, 메시지 전체를 0xA3D000~에 쓰고 포인터 갱신. 비대상 라인·제어 스켈레톤·구주소 불변.
+  **5중 안전가드**: ①포인터 ROM 내 정확히 1개(테이블) ②(라인+gap) 정확분해 ③라인 간 텍스트 중첩(병합 override) 없음
+  ④여유공간 비중첩 ⑤un-jam 후 시각폭>50(박스한계) 라인 제외(=잘림 회귀 방지).
+- [x] **빌드 통합**: `build_korean_full.py` "2.9" 블록(체크섬 직전), `--no-repoint-dialogue` 플래그.
+  `encode_fit`의 정규화를 `normalize_for_fit`로 추출(동작 보존) + `encode_full_fidelity` 추가.
+- [x] **결과**: **188 메시지 / 214 라인 단어붙음 해소**, merged-skip 4, wide-skip 2. ROM SHA `0725a175fae699b9`.
+- [x] **검증**: 구조 무결성 errors=0(`temp/compare/verify_repoint_struct.py`, --no-repoint 베이스 기준 —
+  A=587 control gap / B=214 fixed / C=373 non-fix preserved / 포인터 188/188). 부팅·체크섬 OK,
+  무결성맵 PASS(바이트OK), overflow0/no_ko0, 일본어 잔존 새 노출 0. **3-렌즈 적대검증(crash/fidelity/render)
+  모두 safe·high**, 독립 에이전트가 pre-repoint 베이스 복원→재배치 재실행 시 출하 ROM과 byte-identical(diff=0) 확인.
+- [x] **QA 사각지대 해소** `tools/qa_dialogue_jamming.py`: dialogue_overrides 단어붙음 추적 + repoint 효과
+  (in-place 단어붙음 429 / 축약 73 → repoint 214 해소 → 잔여 단어붙음 244는 Part1·0xB8 분산포인터 영역).
+- [x] **ROM 직접 무결성 게이트** `tools/qa_repoint_integrity.py`(codex 리뷰): temp manifest 불신,
+  출하 ROM에서 in-place 베이스 복원→repoint 재실행이 출하본과 **byte-identical** 검증. PASS.
+- [x] **바이트예산 SSOT** `tools/text_metrics.py`(+`test_text_metrics.py`): encoded_len/visual_cells,
+  app.js encLen 미러 박제 + node 패리티 테스트(py↔js 25,319행 일치) + 2350 미수록 음절 검출.
+- [x] **엔드유저 원클릭 배포** `dist/apply_patch.py`(stdlib only, BPS 적용+SHA256/CRC 검증+자동탐색) +
+  `dist/README_KO.md` + 2026-06-23 BPS/IPS/manifest 재생성. verify_dist_integrity PASS,
+  apply_patch 엔드투엔드(원본→결과 SHA=output) 일치 확인.
+- [x] **외부 참조 정리** `docs/external_ref/create-kr-patch/`(mcpads/create-retro-game-kr-patch 스킬, MIT)
+  + `CREATE_KR_PATCH_NOTES.md`(GBA 적용 인사이트). 증거리포트 `docs/reports/COMPLETENESS_EVIDENCE_2026-06-23.md`.
+- 잔여: Part1(0xD8~0xE0)·0xB8 단어붙음 244건은 분산포인터 구조라 repoint 테이블 확장에 별도 RE 필요(후속).
+  실기(real GBA) 검증, 재배치 폭>50 제외 2건의 실화면 확인 미완.

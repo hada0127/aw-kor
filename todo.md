@@ -134,7 +134,27 @@
 - [x] 8782 브라우저 검증: mixed scene의 스프라이트+대사 동시 노출, 출력배치 스프라이트 canvas, 전투 시작 회전/개시 오버레이 10개 스프라이트, 사전 모달 input 값(`사령관`/`호이프`/`코스모 랜드`/`매크로 랜드`) 확인.
 - [x] QA: build overflow 0/no_ko 0, integrity byte mismatch 0, hard forbidden term 0, B팀 제어표식 잔류 0, placeholder 0, scene screenshot stale/missing 0, 배정 스프라이트 112개 API 실패 0, UI `초과` 오표시 0.
 
+## /goal: 1·2편 모든 화면 캡처/진입점 재검증 (2026-06-22)
+- [x] 1편 19d/19b/19a/19e 잔여 story bucket을 실제 savestate+렌더 breakpoint로 재검증하고 추가 화면 hit 0 확인.
+- [x] 2편 30a/30b/30c/30d·30g/30e/30f 잔여 story bucket을 실제 savestate+렌더 breakpoint로 재검증하고 추가 화면 hit 0 확인.
+- [x] 30d2/30g 경계 오류 수정: `g_00A1BFD8`가 `0x00A1C000`에서 실제 렌더되어 30d2 끝을 `0xA1C06C`로 확장, 30g 시작을 `0xA1C06C`로 이동.
+- [x] scene catalog 재생성 및 엄격 감사 통과: catalog/entrypoint/semantic critical 0, missing/stale capture 0.
+- [x] 8782 UI 에디터 전체 브라우저 검증: game scene 63, total scene 78, sprite 107, failure 0 (`temp/browser_verify/all_scene_editor_verify.json`).
+- [x] 완료 판정 전 codex+agy 엄격 리뷰 실행 및 1차 반영: container 대표 entrypoint/checkpoint 제거, 감사 critical 강화, 재빌드/재감사/CDP 재검증.
+- [x] 13개 tracked container(대사 2884개)를 container별 residual scan manifest와 후속 근거 감사로 정식화: `data/scene_residual_scans.json`, `tools/audit_scene_residual_scans.py --strict` critical 0, scan case 7793, hit 3/known 3, `88_common_comm_labels` 1967건 hit 0.
+
 ---
+
+# 🟢 외부판 비교 완성도 향상 (2026-06-23) — 대부분 완료
+
+> 외부 서양판 한글패치(락이다님)와 냉정 비교 후 격차 축소. 상세 docs/success.md, docs/research.md.
+- [x] 캠페인 대사 단어붙음 해소: Part2 메시지 repoint로 188 메시지/214 라인(쪼롱이님 문구 불변). errors=0, 적대검증 safe.
+- [x] QA 사각지대 해소: `qa_dialogue_jamming.py`(dialogue_overrides 단어붙음 추적), 바이트예산 SSOT `text_metrics.py`+py↔js 테스트.
+- [x] 엔드유저 원클릭 배포 `dist/apply_patch.py`+README_KO+2026-06-23 패치, 외부스킬 참조 `docs/external_ref/`.
+- [ ] **잔여 단어붙음 244건(Part1 0xD8~0xE0·0xB8)**: 분산포인터 구조 → 영역별 포인터테이블 RE 후 repoint 확장.
+- [ ] repoint 폭>50 제외 2건(0xA2C378/0xA2C484) 실화면 확인 — 잘리면 어절 줄바꿈.
+- [ ] 0xA27AAD 등 in-place 매핑 stale('헤,'→'헬보우즈 님') 별도 버그 검토(repoint 무관).
+- [ ] 실기(real GBA) 검증 — 외부판 대비 잔여 격차(하드웨어 필요).
 
 # 🟣 별도 트랙: 잔여(번역/QA/배포) — UI 에디터와 독립 (필요 시 진행)
 
