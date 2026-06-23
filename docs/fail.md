@@ -388,3 +388,18 @@
 2. **mGBA Lua 스크립팅** 메모리 콜백(C 디버거와 별개 경로 — breakpoint가 될 수 있음).
 3. **libmgba 디버거 수정**(execution breakpoint 발화 + loadstate 후 watchpoint 재설치) — 소스 빌드 필요.
 어느 경우든 적용 전 **실기/플레이테스트로 실제 대사 렌더 확인** 필수.
+
+## [2026-06-23 續4] Part1 — mGBA Lua 스크립팅 임베딩 시도(4번째 접근)
+
+C 디버거(breakpoint 사망·loadstate watchpoint 사망)를 우회하려 mGBA Lua 경로 시도.
+- **Lua 엔진은 libmgba에 있음**: 심볼 `_mSCRIPT_ENGINE_LUA`, liblua5.5 링크됨. `tools/mgba_lua.c`로
+  헤드리스 임베딩(mScriptContextInit/RegisterEngines/AttachCore/AttachStdlib/LoadFile) 빌드 성공.
+- **컴파일은 됨**: .lua 문법오류가 정확히 보고됨(Lua 엔진이 isScript+load로 컴파일).
+- **그러나 top-level chunk가 실행되지 않음**: `emu:write32` 마커가 메모리에 안 박히고 `console:log`
+  무출력, top-level 런타임 에러도 미보고. 시도한 조합: ⓐ LoadFile 후 mScriptContextTriggerCallback("frame")
+  ⓑ 엔진 mScriptEngineContext->run() 직접 호출(출력 전체 소실) ⓒ attach 순서 변경(stdlib/core를 엔진 등록
+  전). 전부 실패. 헤드리스 임베딩에서 **스크립트 실행 트리거를 못 찾음**(mGBA 프론트엔드 소스 미공개).
+- **결론(4접근 종합)**: Part1 대사 repoint의 런타임 트레이싱은 ① C 디버거(broken) ② fresh-boot watchpoint
+  (추적 불가) ③ 정적(커맨드 인터프리터, 비수렴) ④ Lua(실행 트리거 미발견) 모두 막힘. **현 도구셋으로
+  자율 불가** 확정. 다음은 소스 빌드 mGBA(디버거 수정) 또는 GUI 디버거+수동 플레이테스트가 현실적.
+  `tools/mgba_lua.c`는 임베딩 스캐폴드로 보존(run 트리거만 RE하면 재사용 가능).
