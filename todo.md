@@ -27,7 +27,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [ ] **A2 맵 선택 섬 이름 '??'** (de-risked): 대사 3렌더러(313/B11/A3, 0x8840-0xE2A7→KOR_BASE)는 마/메 정상.
   맵선택=**4번째 미훅 렌더러**(fallback 0x8148). 정석: `/tmp/mgbah`로 8BC3/8BED read·0x8148 write PC trace →
   4번째 렌더러에 A3식 hook 또는 글리프뱅크 확장.
-- [ ] **A3 24/30f2 fresh-boot 재캡처**: stale-BG vs 실잔존 확정(현 캡처 provenance는 stale=False라 데이터근거만으론 불충분).
+- [x] **A3 확증 완료(fresh-render)**: 결과 = **실제 잔존**(stale-BG 아님). 맵선택·CO선택 거친 fresh 렌더(증거
+  A3_rule_labels_REAL_residual_*.png)에서도 룰 요약 라벨 **収入/日数/能力/アニメ/天気 일본어 유지**(하단 fog 도움말만 한글).
+  codex가 옳았음(내 stale-BG 추정 철회). 부수: 동일 nav에서 A1 도미노(한글)·A2 소라??섬 재확인.
+- [ ] **A3-fix 룰 요약 라벨 한글화**: 収入/日数/能力/アニメ/天気/視界 등은 compact 사전과 별개의 **미번역 그래픽/스프라이트**.
+  소스 위치 RE 후 한글 렌더(A1식). compact 사전엔 수입/일수/능력 존재하나 이 요약화면은 다른 렌더 경로.
 - [ ] **A4 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): sprite editor로 한글/기호화(정책상 영어 0이면 결함).
 - [ ] **A5 part1 단어붙음 117 + qa_integrity 부호소실 10행**: "띄어쓰기/누락 0" 목표 기준 잔여.
 - [ ] **A6 0xA2C378/0xA2C484 폭>50 실화면 확인 + 0xA27AAD in-place stale**.

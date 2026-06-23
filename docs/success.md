@@ -1716,3 +1716,14 @@ archive/malformed_address_rows.csv 보존.
   증거: `docs/screenshots/SUCCESS_A1_*_2026-06-24.png`(맥스/도미노 한글, stale→korean montage).
 - 이로써 codex·agy가 요구한 "fresh-boot 입증"을 충족: A1 CO 이름 OBJ는 인게임에서 한글 렌더됨이 시각 확증됨.
 - 이 엔진은 30f2/80c/24 등 다른 stale-BG 의심 scene도 동일 기법(load+refresh-nav)으로 확증 가능(후속 매니페스트 확장).
+
+## [2026-06-24] fresh-render 엔진으로 A3 확증 — stale-BG vs 실잔존 판별
+- **fresh-render 엔진이 두 사례를 명확히 구분**:
+  - **A1 = stale-BG(수정됨)**: CO 프로필 스크롤 재렌더 시 이름박스 한글(맥스/도미노) → savestate만 stale.
+  - **A3 = 실제 잔존(미수정)**: 맵선택·CO선택 거친 fresh 렌더(state_020→B,B,B,A,A,START,A)에서도 룰 요약
+    라벨 収入/日数/能力/アニメ/天気 일본어 유지 → **stale-BG 아님, 미번역 그래픽**. (codex 지적이 옳았고 내 stale-BG 추정 철회.)
+- 증거: `docs/screenshots/A3_rule_labels_REAL_residual_freshrender_2026-06-24.png`(fog 도움말만 한글, 룰 라벨 일본어),
+  `SUCCESS_A1_domino_korean_freshrender2_*.png`(동일 nav에서 A1 한글 재확인).
+- **방법론적 성과**: savestate 캡처의 stale-BG 한계를 fresh-render(load+refresh-nav)로 우회해, 실잔존을 과대(A3)도
+  과소(A1)도 아닌 정확히 판별. `data/freshrender_checkpoints.json`에 co_profile/rule_summary 등록.
+- A3-fix(룰 요약 라벨 한글화)는 별도 과제로 todo 등록.
