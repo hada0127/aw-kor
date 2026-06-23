@@ -18573,16 +18573,21 @@ def main():
                 return 99 if enc is None else lvl
 
             from text_metrics import visual_cells as _rp_visual_cells
+            from dialogue_repoint import scan_command_messages as _rp_scan_cmd
 
             def _rp_cell_width(a):
                 # un-jam(완전충실, normalize) 후 시각 폭 — 박스 한계 초과 라인을 수정 제외
                 return _rp_visual_cells(normalize_for_fit(_rp_dlg(a)))
 
+            # Part1: 0x19(show-message) 커맨드 참조 메시지(런타임 트레이싱 확증). 1805 메시지.
+            _rp_extra = _rp_scan_cmd(orig)
+
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_repoint_line_index(FOUND), table_offsets=[0xA357B4],
-                free_start=0xA3D000, free_end=0xB00000, min_level=6, max_cells=50)
+                extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
+                min_level=6, max_cells=50)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
             for _m in _rp_manifest:

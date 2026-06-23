@@ -1608,3 +1608,28 @@ archive/malformed_address_rows.csv 보존.
   + `CREATE_KR_PATCH_NOTES.md`(GBA 적용 인사이트). 증거리포트 `docs/reports/COMPLETENESS_EVIDENCE_2026-06-23.md`.
 - 잔여: Part1(0xD8~0xE0)·0xB8 단어붙음 244건은 분산포인터 구조라 repoint 테이블 확장에 별도 RE 필요(후속).
   실기(real GBA) 검증, 재배치 폭>50 제외 2건의 실화면 확인 미완.
+
+
+### 🟢 Part1 캠페인 대사 단어붙음 해소 — 커맨드-스트림(0x19) repoint, 런타임 트레이싱 (2026-06-23)
+
+> Part2 메시지테이블 repoint(214라인) 후, Part1 대사는 테이블이 아니라 **커맨드 스트림**임을 mGBA
+> 디버거 런타임 트레이싱으로 RE하고 repoint 확장. 상세 docs/research.md 續3.
+
+- [x] **mGBA 소스 빌드/디버거 RE**: mGBA 0.10.5 소스 클론(temp/mgba-src). 디버거 구동(mDebuggerRun의
+  hasBreakpoints→step-mode→checkBreakpoints) 확인 → **디버거는 원래 정상**(이전 "사망" 결론은 테스트 주소
+  false-negative). breakpoint·loadstate 후 breakpoint 작동 확정(0x08337382 7352히트).
+- [x] **런타임 트레이싱**: 텍스트 ptr store 0x08B1299C에 breakpoint, 작전룸(base_a)에서 메뉴 이동 →
+  r4=메시지주소 캡처(0x08DF5D60 등) → 포인터 위치(0xDF7A9C) 앞 워드 = **opcode 0x19**(show-message).
+- [x] **커맨드-스트림 repoint**: `dialogue_repoint.scan_command_messages`(0x19+ptr 1805 메시지) +
+  `extra_messages` 파라미터. 기존 가드(단일포인터/decompose/헤더갭struct/폭/merged) + **과확장 span
+  가드**(참조 포인터가 자기 span 안이면 skip). 빌드 통합(build "2.9" 블록).
+- [x] **결과**: Part1+2 합쳐 **357 메시지 / 403 라인 단어붙음 해소**(Part1 169 메시지 추가). 잔여 244→85.
+  ROM SHA `b59df0e252ad6b59`.
+- [x] **검증(10 게이트 PASS)**: 부팅/체크섬, 무결성맵 바이트OK, overflow0/no_ko0, ROM 직접 무결성
+  (in-place 복원→재배치=byte-identical, 357/403), 구조검증 errors=0, 단어붙음 회귀게이트(85≤85),
+  일본어잔존 무변, text_metrics, 배포 무결성, apply_patch 엔드투엔드 SHA 일치. 디코드 검증: 재배치 Part1
+  메시지가 실제 캐서린 튜토리얼 한글("거기가 아니에요. 여기서 A 버튼이에요." 등)로 un-jam.
+- [x] **디버거 도구**: tools/mgba_harness.c에 break hasBreakpoints 진단 추가(/tmp/mgbah_dbg). 핵심 명령
+  `break ADDR LOG`(HARDWARE만; SOFTWARE는 mGBA에서 abort), `watchaddr`(fresh-boot만), `loadstate`.
+- 잔여: 단어붙음 85(0xB8/0xEC 비-0x19 + merged/wide/multi-ptr/과확장). 실기 플레이테스트(savestate가
+  구빌드라 폰트캐시 불일치로 시각검증은 신빌드 savestate 필요).

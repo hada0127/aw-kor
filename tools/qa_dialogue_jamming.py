@@ -22,9 +22,10 @@ FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 DLG = os.path.join(BASE, 'data', 'dialogue_overrides.json')
 MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 
-# 회귀 게이트 기준: Part2 repoint 후 잔여 단어붙음(Part1 0xD8~0xE0·0xB8 분산포인터 영역 +
-# merged-skip + wide-skip). 이 값을 '초과'하면 새 회귀로 간주. repoint 영역 확장 시 함께 낮춘다.
-BASELINE_JAMMED = 244
+# 회귀 게이트 기준: Part2+Part1 repoint 후 잔여 단어붙음(0xB8/0xEC 비-0x19 영역 + merged/wide/multi-ptr
+# skip). 이 값을 '초과'하면 새 회귀로 간주. repoint 영역 확장 시 함께 낮춘다.
+# 2026-06-23: Part1 0x19-커맨드 메시지 repoint로 244→117(안전 강화: 다중참조 의심 메시지 보수적 skip) 감소.
+BASELINE_JAMMED = 117
 
 
 def main():

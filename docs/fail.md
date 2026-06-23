@@ -403,3 +403,15 @@ C 디버거(breakpoint 사망·loadstate watchpoint 사망)를 우회하려 mGBA
   (추적 불가) ③ 정적(커맨드 인터프리터, 비수렴) ④ Lua(실행 트리거 미발견) 모두 막힘. **현 도구셋으로
   자율 불가** 확정. 다음은 소스 빌드 mGBA(디버거 수정) 또는 GUI 디버거+수동 플레이테스트가 현실적.
   `tools/mgba_lua.c`는 임베딩 스캐폴드로 보존(run 트리거만 RE하면 재사용 가능).
+
+## [2026-06-23 續5] 정정: 디버거는 정상이었음 + Part1 repoint 성공
+
+**중대 정정**: 續2~4의 "execution breakpoint 사망 / loadstate 후 breakpoint 사망" 결론은 **틀렸음**.
+mGBA 0.10.5 소스(temp/mgba-src)로 mDebuggerRun을 읽으니 hasBreakpoints()→step-mode→checkBreakpoints
+경로가 정상. 실측 재검증: breakpoint at 0x08337382 → loadstate 후에도 **7352히트**. 이전 0히트는
+**테스트 주소(0x0800247E 등)가 그 짧은 프레임 창에서 실행 안 된 false-negative**였다. watchpoint만
+loadstate가 메모리 shim을 제거해 미발화(breakpoint는 shim 무관이라 생존).
+→ 교훈: "breakpoint 미발화 = 도구 고장"으로 단정 말 것. **확실히 실행되는 주소**(현재 PC)로 먼저 검증.
+
+**결과**: 작동하는 디버거로 Part1 대사 런타임 트레이싱 성공(0x19 커맨드 RE) → Part1 repoint 완료
+(続3, success.md). SOFTWARE breakpoint는 mGBA에서 abort()하니 HARDWARE만 사용.

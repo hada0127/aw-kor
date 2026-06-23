@@ -28,15 +28,24 @@ def main():
     if len(shipped) != len(orig):
         print('[FAIL] ROM 크기 불일치'); return 1
 
-    # 재배치된 포인터가 하나도 없으면(=repoint off 빌드) 통과(검증 대상 없음).
-    relocated_ptrs = sum(1 for o in range(TABLE, TABLE + TABLE_N * 4, 4)
-                         if FREE_START <= struct.unpack_from('<I', shipped, o)[0] - 0x08000000 < FREE_END)
+    from dialogue_repoint import scan_command_messages
+    extra = scan_command_messages(orig)
+    # 재배치된 포인터(여유공간 가리킴): Part2 테이블 + Part1 0x19-커맨드 포인터 모두 카운트.
+    def _into_free(o):
+        v = struct.unpack_from('<I', shipped, o)[0] - 0x08000000
+        return FREE_START <= v < FREE_END
+    relocated_ptrs = sum(1 for o in range(TABLE, TABLE + TABLE_N * 4, 4) if _into_free(o))
+    relocated_ptrs += sum(1 for offs in extra.values() for o in offs if _into_free(o))
     if relocated_ptrs == 0:
         print('[OK] 재배치 포인터 0 — repoint 미적용 빌드(검증 생략)'); return 0
 
-    # 1) 출하 ROM에서 in-place 베이스라인 복원: 포인터테이블→원본, 여유공간→원본(0xFF)
+    # 1) 출하 ROM에서 in-place 베이스라인 복원: Part2 포인터테이블 + Part1 0x19-커맨드 포인터 + 여유공간
+    base = bytearray(shipped)
     base = bytearray(shipped)
     base[TABLE:TABLE + TABLE_N * 4] = orig[TABLE:TABLE + TABLE_N * 4]
+    for offs in extra.values():
+        for off in offs:
+            base[off:off + 4] = orig[off:off + 4]
     base[FREE_START:FREE_END] = orig[FREE_START:FREE_END]
 
     # 2) repoint 엔진 재실행에 필요한 헬퍼(build와 동형)
@@ -93,7 +102,8 @@ def main():
         base, orig, fixable=fixable, fixed_bytes=fixed_bytes, fit_level_dlg=fit_level_dlg,
         decode_text=decode_text, cell_width=lambda a: visual_cells(B.normalize_for_fit(dlg.get(a) or '')),
         slots=slots, line_index=_line_index(os.path.join(BASE, 'data', 'game_wars_found_texts.csv')),
-        table_offsets=[TABLE], free_start=FREE_START, free_end=FREE_END, min_level=6, max_cells=50)
+        table_offsets=[TABLE], extra_messages=extra, free_start=FREE_START, free_end=FREE_END,
+        min_level=6, max_cells=50)
 
     # 3) 재구성한 baseline+repoint == 출하 ROM ? (byte-identical)
     if bytes(base) != bytes(shipped):

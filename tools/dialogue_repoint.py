@@ -47,6 +47,23 @@ def _read_table(orig, tbl_off):
     return entries
 
 
+def scan_command_messages(orig, lo=0x08B80000, hi=0x08E10000, opcode=0x19, scan_lo=0xD80000, scan_hi=0xE00000):
+    """Part1 커맨드 스트림의 show-message 명령(opcode 0x19) 뒤에 오는 메시지 포인터를 수집.
+    (2026-06-23 런타임 트레이싱으로 확증: 캐서린 대사 0xDF5D60 등이 0x19 뒤 포인터로 로드됨.)
+    반환: {msg_addr: [ptr_offset...]}. 각 ptr_offset은 ROM 내 4바이트 포인터 워드 위치.
+    """
+    out = {}
+    o = scan_lo
+    n = min(len(orig), scan_hi)
+    while o + 8 <= n:
+        if struct.unpack_from('<I', orig, o)[0] == opcode:
+            v = struct.unpack_from('<I', orig, o + 4)[0]
+            if lo <= v < hi:
+                out.setdefault(v - GBA, []).append(o + 4)
+        o += 4
+    return out
+
+
 def _line_index(found_csv):
     import csv
     idx = {}
@@ -64,7 +81,8 @@ def _line_index(found_csv):
 
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
-                     min_level=6, max_cells=50, max_header_gap=16, align=4, log=None):
+                     extra_messages=None, min_level=6, max_cells=50, max_header_gap=16,
+                     align=4, log=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(쪼롱이님 per-line 대사만 복원)**:
@@ -92,6 +110,16 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             table_entries.append((off, tgt, tbl))
             all_targets.add(tgt)
         stats[f'table_0x{tbl:06X}_entries'] = len(ents)
+    # Part1: 0x19(show-message) 커맨드로 참조되는 메시지(2026-06-23 런타임 트레이싱으로 확증).
+    # extra_messages = {msg_addr: [ptr_offset...]}. 테이블이 아니라 흩어진 포인터지만 같은 로직으로 처리.
+    # 전체 메시지를 sorted_t에 넣어야 span(=다음 메시지 시작)이 정확하다.
+    extra_messages = extra_messages or {}
+    for msg, offs in extra_messages.items():
+        for off in offs:
+            table_entries.append((off, msg, None))
+        all_targets.add(msg)
+    if extra_messages:
+        stats['extra_messages'] = len(extra_messages)
     sorted_t = sorted(all_targets)
 
     def span_of(msg):
@@ -120,7 +148,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     for ms in msg_lines:
         msg_lines[ms].sort()
 
-    # 포인터 인덱스: msg_addr -> ROM 내 4바이트 정렬 포인터 위치 목록
+    # 포인터 인덱스: msg_addr -> ROM 내 4바이트 정렬 포인터 위치 목록.
+    # Part1 extra_messages는 0x19 스캔으로 위치를 이미 알므로 그걸 쓴다(우연매치 회피 + 빠름).
     def ptr_sites(msg_addr):
         needle = struct.pack('<I', GBA + msg_addr)
         sites = []
@@ -132,12 +161,22 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             if i % 4 == 0:
                 sites.append(i)
             pos = i + 1
+        if msg_addr in extra_messages:
+            # ROM 전체에서 찾은 실제 포인터들이 0x19 스캔된 오프셋의 부분집합인지 확인.
+            # 만약 다른 곳에서도 이 주소를 참조한다면 다중 참조가 있는 것이므로
+            # sites 전체를 반환하여 len(sites) != 1 가드에 걸려 안전하게 skip되도록 함.
+            expected = set(extra_messages[msg_addr])
+            found = set(sites)
+            if not found.issubset(expected):
+                return sites
         return sites
 
     table_off_set = set()
     for tbl in table_offsets:
         for off, _tgt in _read_table(orig, tbl):
             table_off_set.add(off)
+    for offs in extra_messages.values():
+        table_off_set.update(offs)
 
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
     for ptr_off, msg, _tbl in sorted(table_entries):
@@ -194,6 +233,14 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             continue
 
         me = span_of(msg)
+        # 과확장 span 가드(2026-06-23 Part1): 메시지의 참조 포인터가 자기 span 안에 있으면
+        # span이 메시지 종단을 넘어 (다음 0x19 시작까지) 커맨드-스트림/타 메시지를 포함한 것.
+        # 재배치 시 그 포인터를 갱신하면 구위치가 바뀌고(렌더는 종단서 멈춰 무해하나) 여유공간 낭비·
+        # 검증 복잡. 정상 메시지는 참조 포인터가 텍스트 앞(span 밖)이다 → 안쪽이면 skip(보수적).
+        if any(msg <= off < me for off in ptr_sites(msg)):
+            stats['skip_overextended'] += 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_overextended'})
+            continue
         # 안전: 포인터 정확히 1개 & 테이블 안
         sites = ptr_sites(msg)
         if len(sites) != 1 or sites[0] not in table_off_set:

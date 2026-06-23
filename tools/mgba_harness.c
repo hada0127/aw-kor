@@ -193,7 +193,8 @@ int main(int argc, char** argv){
             int ok=0;
             if(s_dbg.platform && s_dbg.platform->setBreakpoint){ s_dbg.platform->setBreakpoint(s_dbg.platform,&bp); ok=1; }
             s_dbg.state=DEBUGGER_RUNNING;
-            printf("OK break %08X ok=%d\n", addr, ok);
+            int hb = (s_dbg.platform && s_dbg.platform->hasBreakpoints) ? s_dbg.platform->hasBreakpoints(s_dbg.platform) : -1;
+            printf("OK break %08X ok=%d hasBreakpoints=%d\n", addr, ok, hb);
         } else if(!strcmp(cmd,"watchaddr")){
             // watchaddr ADDR LEN TYPE LOGFILE : TYPE r=read w=write a=rw
             uint32_t addr=(uint32_t)strtoul(strtok(NULL," \t\r\n"),NULL,16);

@@ -1297,3 +1297,30 @@ Part1 repoint는 0건(빌드 미적용).
 **다음 경로(후속)**: 런타임 트레이싱 — mgba 헤드리스로 Part1 대사 1개를 화면에 띄우고 렌더러의
 포인터 로드(PC/주소)를 watch해 **진짜 대사 테이블 위치를 역추적**. 그 테이블을 확보한 뒤에야
 `table_offsets`에 추가 가능. 실기/플레이테스트 동반 권장(쪼롱이님 캠페인 대사 손상 방지).
+
+### 2026-06-23 (續3): Part1 대사 = 커맨드 스트림(opcode 0x19) — 런타임 트레이싱으로 RE + repoint 완료
+
+> 사용자 "옵션1: mGBA 소스 빌드해서 디버거 고쳐줘". mGBA 0.10.5 소스를 클론해 디버거 구동을 읽었더니
+> **디버거는 원래 정상**이었음(이전 "breakpoint/watchpoint 사망" 결론은 **테스트 주소가 그 프레임 창에서
+> 실행 안 된 false-negative**). execution breakpoint·loadstate 후 breakpoint 모두 작동 확인(0x08337382에서
+> 7352히트). watchpoint만 loadstate가 메모리 shim을 제거해 미발화(breakpoint는 step-mode 경로라 무관).
+
+**런타임 트레이싱(작동하는 디버거)**:
+- 텍스트 ptr store `0x08B1299C str r4,[r6,#0x20]`에 breakpoint. 작전룸 savestate(base_a)에서 캐서린
+  메뉴 이동(Down/Up) → store가 **r4=메시지 주소** 캡처: `0x08DF5D60`, `0x08DF612C`, `0x08DF6274`.
+- 그 포인터들이 ROM 어디 있나 스캔 → `0xDF7A9C`, `0xDF7C6C`, `0xDF7D8C`. 그 앞 워드 = **`0x00000019`**.
+
+**구조 = 커맨드 스트림**: Part1 대사는 Part2식 포인터 배열이 아니라, 0xD8~0xE0 영역의 **커맨드 인터프리터**
+스크립트다. `0x19`(show-message) opcode 뒤 4바이트가 메시지 텍스트 포인터. (다른 opcode: 0x22/0x12/0x38/
+0x39/0x04 + 핸들러 코드포인터 0x08B19355 등). 즉 메시지는 **0x19 뒤 포인터로 개별 참조** → repoint 가능.
+
+**스캔 결과**: `0x19 + ptr(0x08B80000~0x08E10000)` = **1805 메시지**. 단어붙음 239건 중 **224건 커버**
+(154 메시지), 150/154 단일포인터, 헤더갭≤16(struct아님)·decompose 154/154. 디코드 = 실제 캐서린 대사.
+
+**구현/결과**: `dialogue_repoint.scan_command_messages` + `extra_messages` 파라미터(기존 가드 재사용 +
+과확장 span 가드). Part1+2 합쳐 **357 메시지/403 라인 단어붙음 해소**(잔여 244→85). ROM 직접 무결성
+게이트(qa_repoint_integrity, extra 포함) byte-identical PASS. 잔여 85 = 0xB8/0xEC 비-0x19 영역 +
+merged/wide/multi-ptr/과확장 skip.
+
+**하네스 사실**: tools/mgba_lua.c(Lua 임베딩)는 컴파일되나 스크립트 top-level 실행 트리거 미발견 → 보류.
+디버거는 tools/mgba_harness.c(/tmp/mgbah_dbg = break에 hasBreakpoints 진단 추가본)로 충분.
