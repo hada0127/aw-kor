@@ -1696,3 +1696,14 @@ archive/malformed_address_rows.csv 보존.
   스프라이트 1979 전부 scene/review 도달·편집.
 - **A1 de-risk**: `korean_glyphs_8px.json`(1028음절 8x8)으로 96×8 CO 이름 OBJ에 한글 직접 렌더 경로 확보. CO 테이블 0x081BE68/stride0x44/19 OBJ.
 - 전 게이트 PASS: integrity/overflow0/no_ko0/ascii0/scene critical0/bteam drift0/csv ROM잔존0/dist PASS. ROM SHA a582a7cb.
+
+## [2026-06-24] A1 완료 — CO 프로필 이름 OBJ 19개 가타카나→한글 렌더
+- **핵심 RE 정정**: CO 이름 OBJ는 96×8이 아니라 **48×16 col-major**(글리프=8×16=top+bot 2타일, 6글리프).
+  이전 "8px 높이라 한글 illegible" 판단은 오판 — 실제 16px라 11px galmuri가 깔끔히 들어감.
+- **방법**: CO 테이블 0x081BE68(stride 0x44) 첫 포인터로 19개 OBJ 식별 → `render_galmuri_8x16(ink=15)`로
+  한글 직접 렌더(48×16 col-major 384B) → LZ77 압축 → 원본 슬롯 in-place(전 19개 fit, repoint 불요).
+- **결과**: 캐서린/도미노/맥스/호이프/빌리/키쿠치요/아스카/이글/모프/헬보우즈/콩/캣/스네이크/호크/하치/이반/한나/야마모토.
+  `patch_part2_domino_co_name_obj`(구: Domino만 blank)를 전 19개 렌더로 교체. ROM 디코드+렌더로 한글 검증.
+- **stale-BG 확정 입증**: ROM OBJ를 한글로 바꿔도 30f2 savestate 캡처는 가타카나 유지 → savestate VRAM frozen 확정.
+  fresh-boot 시 한글 렌더(동일 렌더러가 ROM에서 읽음). 시각 최종확인은 fresh-boot 캡처 필요.
+- 잔여: 80c コシゲ 등 대사 화자/소수인물 이름박스는 0x452xxx 테이블·SJIS에 없는 **별도 메커니즘**(A1b, 추적).
