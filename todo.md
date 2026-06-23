@@ -151,7 +151,10 @@
 - [x] 캠페인 대사 단어붙음 해소: Part2 메시지 repoint로 188 메시지/214 라인(쪼롱이님 문구 불변). errors=0, 적대검증 safe.
 - [x] QA 사각지대 해소: `qa_dialogue_jamming.py`(dialogue_overrides 단어붙음 추적), 바이트예산 SSOT `text_metrics.py`+py↔js 테스트.
 - [x] 엔드유저 원클릭 배포 `dist/apply_patch.py`+README_KO+2026-06-23 패치, 외부스킬 참조 `docs/external_ref/`.
-- [ ] **잔여 단어붙음 244건(Part1 0xD8~0xE0·0xB8)**: 분산포인터 구조 → 영역별 포인터테이블 RE 후 repoint 확장.
+- [ ] **잔여 단어붙음 244건(Part1 0xD8~0xE0·0xB8)**: repoint 확장 시도했으나 **진짜 대사 테이블 식별 불가**
+  (조밀 테이블이 struct/이벤트 테이블, decompose 통과해도 디코드하면 쓰레기 — docs/research.md·fail.md 2026-06-23 續).
+  엔진에 헤더갭>16 struct 차단 가드 추가. **다음**: mgba 런타임 트레이싱으로 렌더러 포인터 로드를 watch해
+  진짜 Part1 대사 테이블 역추적(실기/플레이테스트 동반). 그 전엔 Part1 repoint 미적용(게임 손상 방지).
 - [ ] repoint 폭>50 제외 2건(0xA2C378/0xA2C484) 실화면 확인 — 잘리면 어절 줄바꿈.
 - [ ] 0xA27AAD 등 in-place 매핑 stale('헤,'→'헬보우즈 님') 별도 버그 검토(repoint 무관).
 - [ ] 실기(real GBA) 검증 — 외부판 대비 잔여 격차(하드웨어 필요).

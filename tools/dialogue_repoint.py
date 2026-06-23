@@ -64,7 +64,7 @@ def _line_index(found_csv):
 
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
-                     min_level=6, max_cells=50, align=4, log=None):
+                     min_level=6, max_cells=50, max_header_gap=16, align=4, log=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(쪼롱이님 per-line 대사만 복원)**:
@@ -143,6 +143,13 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     for ptr_off, msg, _tbl in sorted(table_entries):
         lines = msg_lines.get(msg, [])
         if not lines:
+            continue
+        # 구조 가드(2026-06-23 Part1 RE 교훈): 진짜 대사 메시지는 첫 라인이 메시지 시작 근처(헤더갭 작음,
+        # Part2 실측 최대 12)에서 시작한다. struct/이벤트 테이블은 텍스트 라인 앞에 큰 비-텍스트 헤더
+        # (실측 178~195B)가 있어 decompose는 통과해도 대사가 아니다. 헤더갭이 크면 비-대사로 보고 skip
+        # → 잘못된 테이블을 넘겨도 struct 재배치(게임 손상)를 차단한다.
+        if lines[0][0] - msg > max_header_gap:
+            stats['skip_struct_header'] += 1
             continue
         # 고칠 라인(쪼롱이님 per-line 대사 + in-place 열화) 존재?
         # 폭 가드: 단어붙음은 공백을 지워 폭을 줄였을 수 있다. un-jam(공백 복원) 후 시각 폭이

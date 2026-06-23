@@ -1273,3 +1273,27 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
 - 결과: **190 메시지 / 216 라인 단어붙음 해소**, merged-skip 4. 구조검증 errors=0(temp/compare/verify_repoint_struct.py).
 - 잔여 단어붙음 242건은 Part1(0xD8~0xE0)·0xB8 영역 — **분산 포인터 구조**(단조 테이블 아님)라
   repoint 확장에 별도 RE 필요(후속). `qa_dialogue_jamming.py`로 추적.
+
+### 2026-06-23 (續): Part1 대사 repoint 시도 — 메시지 테이블 식별 불가(struct 함정)
+
+사용자 요청으로 Part1(0xD8~0xE0·0xB8) 잔여 단어붙음 244건의 repoint 확장을 시도, **안전하게 불가** 판정.
+
+**RE 결과**:
+- Part1 대사 라인은 **개별 포인터 없음**(메시지-중간 라인, Part2와 동형). 0xE0 대사는 순차 텍스트
+  (0xE00166 'ほう？', 0xE00171 'こんなところに…' 등 found_texts 실재).
+- 그러나 **진짜 대사 메시지 포인터 테이블을 분리 불가**. ROM 전수 스캔(0x08D9xxxx 등)은 **우연 매치
+  대량 포함**(예 0x06E43C의 0x08D9BDC5는 주변이 그래픽/코드). 조밀 연속 테이블(≥20)은 103개나
+  검출되나, 큰 것들이 **struct/이벤트 테이블**이다.
+- **결정적 반례**: 테이블 0xE1075C(n=98)가 가리키는 '메시지' 시작 `0xE017B8` = `00 00 00 00 89 89
+  b3 08 00 …`(zeros+int 필드 = struct), 대사 아님. found_texts 라인이 그 span 안에 있어 decompose는
+  통과하지만 디코드하면 `····演ｳ····` 쓰레기. → **decompose 가드만으론 struct 오인식을 못 막음.**
+
+**판별자 발견 + 엔진 하드닝**: 진짜 대사 메시지는 **헤더갭(메시지시작→첫 found_texts 라인)이 작다**
+(Part2 실측 최대 12, 3247개 중 갭>16 = 0). struct 테이블은 갭 178~195. → `dialogue_repoint`에
+`max_header_gap=16` 가드 추가(헤더갭>16이면 비-대사로 skip). Part2 출력 byte-identical(SHA 0725a175),
+잘못된 테이블을 넘겨도 struct 재배치(게임 손상) 차단. **단, 진짜 Part1 대사 테이블은 여전히 미발견**이라
+Part1 repoint는 0건(빌드 미적용).
+
+**다음 경로(후속)**: 런타임 트레이싱 — mgba 헤드리스로 Part1 대사 1개를 화면에 띄우고 렌더러의
+포인터 로드(PC/주소)를 watch해 **진짜 대사 테이블 위치를 역추적**. 그 테이블을 확보한 뒤에야
+`table_offsets`에 추가 가능. 실기/플레이테스트 동반 권장(쪼롱이님 캠페인 대사 손상 방지).
