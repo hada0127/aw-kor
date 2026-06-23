@@ -106,6 +106,17 @@ def main():
             if not match:
                 ok = False
 
+    # B팀(쪼롱이) 권위문 drift + CSV 손상 ROM 일본어 잔존을 배포 전 하드게이트로 묶는다(codex 리뷰).
+    import subprocess
+    here = os.path.dirname(os.path.abspath(__file__))
+    for label, tool, extra in [('B팀 drift', 'qa_bteam_drift.py', []),
+                               ('CSV ROM 일본어 잔존', 'qa_csv_integrity.py', ['--fail-on-rom-japanese'])]:
+        rc = subprocess.run([sys.executable, os.path.join(here, tool), *extra],
+                            capture_output=True, text=True).returncode
+        print(f'[{ "OK" if rc == 0 else "FAIL"}] {label} 게이트 (rc={rc})')
+        if rc != 0:
+            ok = False
+
     print('\n=== 결과: ' + ('PASS' if ok else 'FAIL (배포본을 Phase F에서 재생성 필요)') + ' ===')
     return 0 if ok else 1
 

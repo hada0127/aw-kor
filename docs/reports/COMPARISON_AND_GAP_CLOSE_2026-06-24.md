@@ -50,3 +50,21 @@
 5. container residual scan을 현재 SHA로 재생성 → `audit_scene_residual_scans --strict` PASS.
 6. 24 rule-label fresh-boot 재캡처로 stale-BG vs 실잔존 확정.
 7. 실기(real GBA) 검증.
+
+---
+## 후반 세션 (2026-06-24) — 정석 전수 진행 + codex·agy 2차 적대 재리뷰
+
+### 닫은 것 (검증)
+- **B팀 보호 3+층**: ①권위문 복원 ②`qa_bteam_drift.py`(3340주소 baseline, drift 0) ③:8782·:8780 `_save_line` save-time 차단(confirm_bteam)
+  ④`--accept`=AW_BTEAM_ACCEPT=1 ⑤`verify_dist_integrity` 게이트 연동. → 0xDF5E식 우발 변형 5중 차단.
+- **B1 CSV 손상 = ROM 결함 0 확정**: `qa_csv_integrity.py` ROM-디코드 권위화. 손상 239행이나 출하 ROM 일본어 텍스트 잔존 0.
+- **C 편집 커버리지**: 실대사 99.0% 편집가능(차단 200=정당), 스프라이트 1979 전부 도달·편집. 쪼롱이 요구 충족.
+- **A1 de-risk**: `korean_glyphs_8px.json`(8px 한글, agy 발견)으로 96×8 이름 OBJ 직접 렌더 가능. CO 테이블 0x081BE68/stride0x44/19 OBJ 식별.
+
+### codex·agy 2차 verdict (수렴)
+- **/goal "잔존 결함 0" 미달(약 70~80%)**: 현재 캡처에 A1(CO명 가타카나)·A2(맵 '??')·A3(룰라벨) **실잔존이 보임**.
+  stale-BG 재판정은 **fresh-boot 입증 전 인정 불가**(둘 다). 데이터 정합/배포/B팀 보호는 크게 닫혔으나 적대 리뷰는 화면을 본다.
+- **남은 진짜 결함(우선순위)**: P0 fresh-boot 재캡처+A1/A3 trace, P0 residual scan strict 재생성, P1 A2 4번째 렌더러 hook,
+  P1 영어 sprite UI·단어붙음117·부호소실10, P1 B팀 보호 잔여(app.js confirm UI, 전수 디코더), F1 실기.
+- **정직한 결론**: 외부판 대비 범위·완성형·QA·도구·B팀보호·아키텍처 우위는 유지. "외부판보다 부족함 0"의 화면 마감(이름/맵글리프)은
+  미완 — 단 외부판도 이름은 라틴(기반게임差)·맵이름은 영문유지라 직접 열세는 제한적. A1/A2는 de-risked 경로 확보.

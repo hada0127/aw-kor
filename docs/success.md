@@ -1665,3 +1665,34 @@ archive/malformed_address_rows.csv 보존.
 - **UI 에디터 라이브 검증**: :8782 대사 save/슬롯 하드게이트/스프라이트 save·revert 전부 동작.
 - **dist 재생성+PASS**: 보정 ROM a582a7cb에 BPS/IPS/manifest 동기, `verify_dist_integrity` PASS.
 - 전체: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`. ROM SHA a582a7cb.
+
+## [2026-06-24 정리] scene 기반 통합 UI 에디터 /goal — Phase 0~8 완료 이전
+> todo.md에서 이전. 상세 증거는 git history(2026-06-17~24 커밋)와 아래 항목.
+
+- **Phase 0~4 완료**: scene_catalog 토대(20→78 scene, 대사 9061 100%배정), 단일서버 :8782(read-only MVP),
+  통합 UI(LNB scene 아코디언+우측 편집), 대사+스프라이트 편집 이식, proper_nouns 사전 CRUD, 2줄=2칸, 스프라이트 onscreen WYSIWYG.
+- **Phase 5 완료**: 대사/스프라이트 preview 모달, POST /api/build 비동기 job + polling, /api/download/gba.
+- **Phase 6 완료**: encLen 바이트예산 하드게이트(한글2/ASCII1), \n 멀티라인 입력칸, 초과 저장차단.
+- **Phase 7 완료(part1 canvas 제외)**: scene canvas ready/none, preview_canvases.json 외부화, 캐시키 수정,
+  scene proof screenshot(capture_scene_screenshots.py), merged scene 분리(29), 전투개시 오버레이 분리.
+- **Phase 8 검증**: byte-identical 정합성, 구 2서버 기능 parity, py_compile+node --check, Chrome CDP 브라우저 검증.
+- **codex+agy 1·2차 리뷰 반영**: static 경로탈출 가드, 슬롯 하드게이트, 2350 미수록 차단, 모달 닫힘 버그,
+  프리뷰 canvas 불일치, 워크플로 5차원 감사(43에이전트, critical 0) 12 major 반영.
+- **쪼롱이/B팀 권위 반영**: bteam/script.txt 재매핑 override 7615, 용어사전 정규화(사령관/호이프/코스모랜드/매크로랜드),
+  qa_terms_from_rom.py B팀 control residual hard gate.
+- **1·2편 모든 화면 캡처/진입점 재검증(2026-06-22)**: 1편 19x·2편 30x story bucket savestate+렌더 breakpoint
+  재검증 hit 0, scene catalog 엄격감사 critical 0, 8782 game scene 63/sprite 107 failure 0,
+  13 container residual scan manifest(scan 7793/hit 3 known).
+- **외부판 비교 완성도(2026-06-23)**: Part2 repoint 214라인+Part1 repoint 191라인(합계 357/403, 쪼롱이 불변),
+  qa_dialogue_jamming.py, text_metrics.py SSOT, dist/apply_patch.py 원클릭 배포.
+
+## [2026-06-24 후반] B팀 보호 5중화 + CSV ROM-진실 + 편집 커버리지 (정석 전수 진행)
+- **B팀(쪼롱이) 보호 5층** (codex·agy 적대 리뷰 반영): ①권위문 복원(0xDF5E12/35/56) ②`data/bteam_addresses.json`(3340)
+  +`bteam_baseline.json`+`tools/qa_bteam_drift.py`(drift 0) ③`:8782`+`:8780` `_save_line` save-time 차단(confirm_bteam 필요)
+  ④`--accept`=`AW_BTEAM_ACCEPT=1` 승인 ⑤`verify_dist_integrity`에 drift+CSV 게이트 연동. 절대제약 사고 방지 다중화.
+- **B1 CSV 손상 ROM-진실 검증**: `qa_csv_integrity.py`를 출하 ROM 디코드 권위로 재작성(가나/한자만 일본어, 0x81 심볼 제외,
+  의도적 테이블 제외). CSV 손상 239행이나 **ROM 실제 일본어 텍스트 잔존 0**. 빌드 inline 리터럴이 권위라 CSV 손상 미전파 입증.
+- **편집 커버리지(쪼롱이 요구)**: 실대사 19450/19650(99.0%) 편집가능, 차단 200=정당(font/컴팩트UI/pair, 사유 노출).
+  스프라이트 1979 전부 scene/review 도달·편집.
+- **A1 de-risk**: `korean_glyphs_8px.json`(1028음절 8x8)으로 96×8 CO 이름 OBJ에 한글 직접 렌더 경로 확보. CO 테이블 0x081BE68/stride0x44/19 OBJ.
+- 전 게이트 PASS: integrity/overflow0/no_ko0/ascii0/scene critical0/bteam drift0/csv ROM잔존0/dist PASS. ROM SHA a582a7cb.

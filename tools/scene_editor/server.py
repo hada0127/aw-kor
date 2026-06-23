@@ -286,6 +286,25 @@ def build_slots():
     return _CACHE["build_slots"]
 
 
+def bteam_addresses():
+    """B팀(쪼롱이) 권위 적용 주소 집합(정규화 0x%08X). 편집 시 경고 플래그용.
+    쪼롱이 본인 편집은 허용하되, 우발적 변형은 qa_bteam_drift.py 게이트가 별도 차단."""
+    if "bteam_addrs" not in _CACHE:
+        try:
+            data = json.loads((ROOT / "data" / "bteam_addresses.json").read_text(encoding="utf-8"))
+            _CACHE["bteam_addrs"] = set(data.get("addresses", []))
+        except Exception:
+            _CACHE["bteam_addrs"] = set()
+    return _CACHE["bteam_addrs"]
+
+
+def is_bteam(address):
+    try:
+        return ("0x%08X" % int(address, 16)) in bteam_addresses()
+    except (ValueError, TypeError):
+        return False
+
+
 def deny_pair_status(addr_int, slot):
     """[addr,addr+slot)가 DENY_REGIONS와 겹치면 ('deny',name), PAIR_RENDERER면 ('pair',name). (M10)"""
     if not B:
@@ -488,6 +507,9 @@ def scene_items(scene, want="all"):
                 ko = dov.get(m.get("address"), m.get("ko") or "")
                 budget = line_budget(m)
                 budget.update(build_fit_budget(ko, budget.get("slot")))
+                budget["bteam"] = is_bteam(m.get("address"))
+                if budget["bteam"]:
+                    budget["bteam_warn"] = "쪼롱이님(B팀) 권위 번역 — 신중히 편집(우발 변형은 qa_bteam_drift 게이트가 차단)"
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
                                 "kind": m.get("kind"), "budget": budget})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
@@ -862,6 +884,18 @@ class Handler(BaseHTTPRequestHandler):
         bad = unsupported_syllables(ko)
         if bad:
             return {"ok": False, "error": "폰트 미수록 음절(인게임 ‘?’): " + "".join(bad), "unsupported": bad}
+        # B팀(쪼롱이) 권위 주소 save-time 보호(쪼롱이 본인 편집은 허용하되 우발 변형 차단).
+        # confirm_bteam=True 명시 전에는 차단 + baseline 대비 무엇이 바뀌는지 알린다.
+        if is_bteam(addr) and not body.get("confirm_bteam"):
+            try:
+                _base = DE.load_json(ROOT / "data" / "bteam_baseline.json", {}) or {}
+                _want = (_base.get("overrides") or {}).get("0x%08X" % int(addr, 16))
+            except Exception:
+                _want = None
+            if _want is None or _want != ko:
+                return {"ok": False, "bteam_confirm_required": True,
+                        "error": "쪼롱이님(B팀) 권위 번역 주소입니다. 변경하려면 confirm_bteam=true로 재전송하세요.",
+                        "bteam_baseline": _want}
         slot = member_slot(addr)
         fit = build_fit_budget(ko, slot)
         if isinstance(slot, int) and not fit["fits"]:

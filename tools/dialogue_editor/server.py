@@ -306,10 +306,20 @@ class Handler(BaseHTTPRequestHandler):
                     break
             if hit is None:
                 return {"ok": False, "error": "id %r 없음" % lid}
+            # B팀(쪼롱이) 권위 주소 save-time 보호(우발 변형 차단; scene_editor와 동일 정책).
+            addr = hit.get("address")
+            if addr and not body.get("confirm_bteam"):
+                try:
+                    _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
+                    if ("0x%08X" % int(addr, 16)) in _bt:
+                        return {"ok": False, "bteam_confirm_required": True,
+                                "error": "쪼롱이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요."}
+                except (ValueError, TypeError):
+                    pass
             save_json(DIALOGUE_PATH, data)
             ov = load_json(OVERRIDES_PATH, {})
-            if hit.get("address"):
-                ov[hit["address"]] = ko
+            if addr:
+                ov[addr] = ko
                 save_json(OVERRIDES_PATH, ov)
         return {"ok": True, "id": lid, "ko": ko, "check": check_line(hit, load_json(DICT_PATH, {}))}
 
