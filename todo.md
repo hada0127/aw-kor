@@ -16,9 +16,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 ## A. 실화면 잔존 결함 0 (최우선 — codex+agy가 보는 화면). **codex·agy 공통: 아직 실잔존(미닫힘)**
 > 2026-06-24 후반 codex·agy 적대 재리뷰: A1/A2/A3는 현재 캡처에 실제로 보이는 결함이며, stale-BG는
 > **fresh-boot 재캡처로 입증 전 "오탐"으로 닫지 말 것**(savestate VRAM stale 가능성은 증거 아님).
-- [ ] **A1 CO/인물 이름 라벨 가타카나 잔존** (de-risked): `data/korean_glyphs_8px.json`(1028음절 8x8)으로 96×8 이름
-  OBJ에 한글 직접 렌더 가능(agy/codex 합의 — blank+본문이관은 임시). **CO 테이블=0x081BE68, stride 0x44, 19개 실 이름 OBJ**(0x452650~0x845357C).
-  남은 일: 각 OBJ→한글이름 매핑(가타카나 판독/병렬 테이블 RE) + 8px 렌더+inject + fresh-boot 검증.
+- [x] **A1 CO 프로필 이름 OBJ 19개 한글 렌더 완료**(2026-06-24): OBJ는 96×8이 아니라 **48×16 col-major(8×16 글리프)**
+  → 11px galmuri 직접 렌더(render_galmuri_8x16, ink=15). `patch_part2_domino_co_name_obj` 전면 교체:
+  캐서린/도미노/맥스/호이프/빌리/키쿠치요/아스카/이글/모프/헬보우즈/콩/캣/스네이크/호크/하치/이반/한나/야마모토.
+  전 19개 원본 압축 슬롯에 in-place fit. **ROM 디코드+렌더로 한글 검증**(temp/co_names_patched.png).
+  ※ savestate 캡처(30f2)는 frozen VRAM이라 여전히 가타카나 표시 → **savestate=stale-BG 확정 입증**. fresh-boot 시 한글 렌더(renderer가 ROM에서 읽음).
+- [ ] **A1b 대사 화자 이름박스 가타카나**(80c コシゲ 등): CO 프로필 OBJ(0x452xxx)와 **별도 메커니즘** — 미조사. 화자명 소스 RE 필요.
 - [ ] **A2 맵 선택 섬 이름 '??'** (de-risked): 대사 3렌더러(313/B11/A3, 0x8840-0xE2A7→KOR_BASE)는 마/메 정상.
   맵선택=**4번째 미훅 렌더러**(fallback 0x8148). 정석: `/tmp/mgbah`로 8BC3/8BED read·0x8148 write PC trace →
   4번째 렌더러에 A3식 hook 또는 글리프뱅크 확장.

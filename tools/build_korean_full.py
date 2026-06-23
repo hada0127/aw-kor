@@ -8686,32 +8686,71 @@ def patch_part2_battle_funds_hud_label(rom):
     return 32
 
 
-def patch_part2_domino_co_name_obj(rom):
-    """Patch the Part 2 CO profile OBJ name tiles for Domino."""
+# CO 프로필 이름 OBJ 테이블: 0x081BE68, stride 0x44, 첫 필드가 이름 OBJ 포인터.
+# 각 OBJ = 384B = 12타일, **48×16 col-major**(글리프=8×16=top+bot 2타일, 6글리프).
+# 이전엔 96×8로 오인해 Domino만 blank+본문이관했으나, 실제 16px 높이라 11px galmuri가 들어간다.
+# 2026-06-24 A1: 19개 CO 이름 OBJ를 가타카나→한글로 직접 렌더(원본 압축 슬롯에 in-place fit 확인).
+CO_NAME_OBJ_TABLE = 0x81BE68
+CO_NAME_OBJ_STRIDE = 0x44
+CO_NAME_KO = [
+    '캐서린', '도미노', '맥스', '호이프', '도미노', '빌리', '키쿠치요', '아스카', '이글', '모프',
+    '헬보우즈', '콩', '캣', '스네이크', '호크', '하치', '이반', '한나', '야마모토',
+]
+CO_NAME_OBJ_INK = 15  # 원본 가타카나 OBJ의 주 ink 팔레트 인덱스
+
+
+def _render_co_name_obj(name, ink=CO_NAME_OBJ_INK):
+    """한글 이름 → 384B(12타일, 48×16 col-major). 글리프=8×16(top+bot)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+    from render_galmuri_8x16 import render_char
+    tiles = []
+    for i in range(6):
+        if i < len(name):
+            top, bot = render_char(name[i], ink=ink)
+        else:
+            top, bot = bytes(32), bytes(32)
+        tiles.append(top)
+        tiles.append(bot)
+    return b''.join(tiles)
+
+
+def patch_part2_domino_co_name_obj(rom):
+    """CO 프로필 이름 OBJ 19개를 한글로 렌더(가타카나 잔존 제거). orig 슬롯에 in-place.
+
+    이름은 CO 테이블(0x081BE68, stride 0x44)의 첫 포인터로 찾는다. 중복 OBJ는 1회만 기록.
+    원본 압축 슬롯 크기를 넘기지 않음(빌드 시 검증; 전 19개 fit 확인됨)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
-    off = 0x45274C
-    dec = lz77_decompress(rom, off)
-    if dec is None:
-        raise AssertionError(f'invalid Domino CO name LZ77 block at 0x{off:X}')
-    data, consumed = dec
-    if len(data) != 12 * 32:
-        raise AssertionError(f'unexpected Domino CO name block size: {len(data)}')
+    offs = []
+    seen = set()
+    for k in range(24):
+        p = struct.unpack_from('<I', rom, CO_NAME_OBJ_TABLE + k * CO_NAME_OBJ_STRIDE)[0]
+        if not (0x08452000 <= p < 0x08460000):
+            break
+        fo = p - 0x08000000
+        if fo in seen:
+            continue
+        seen.add(fo)
+        offs.append(fo)
+    if len(offs) != len(CO_NAME_KO):
+        raise AssertionError(f'CO name OBJ count {len(offs)} != names {len(CO_NAME_KO)}')
 
-    # This 96x8 name OBJ is arranged by the game as fixed sprite fragments; a
-    # multi-syllable Korean render becomes harder to read than the dialogue
-    # font. Blank the old Japanese graphic and carry the name in the first
-    # profile row instead.
-    out = bytearray(12 * 32)
-
-    comp = lz77_compress(bytes(out), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'Domino CO name LZ77 overflow: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return 1
+    written = 0
+    for i, off in enumerate(offs):
+        dec = lz77_decompress(rom, off)
+        if dec is None:
+            raise AssertionError(f'invalid CO name LZ77 block at 0x{off:X}')
+        data, consumed = dec
+        if len(data) != 12 * 32:
+            raise AssertionError(f'unexpected CO name block size: {len(data)} at 0x{off:X}')
+        comp = lz77_compress(_render_co_name_obj(CO_NAME_KO[i]), vram_safe=True)
+        if len(comp) > consumed:
+            raise AssertionError(f'CO name OBJ overflow #{i} {CO_NAME_KO[i]}: {len(comp)} > {consumed}')
+        rom[off:off + consumed] = comp + bytes(consumed - len(comp))
+        written += 1
+    return written
 
 
 def patch_part2_campaign_header_obj(rom):
