@@ -364,3 +364,27 @@
 - **종합**: Part1 대사 repoint는 ① 하네스 디버거 loadstate 미발화 수정 또는 fresh-boot 네비로
   런타임 트레이싱, ② 커맨드-스트림/이벤트 시스템 RE, ③ 실기 플레이테스트가 모두 필요한 다세션 작업.
   현 시점 안전 적용 불가 → **Part2 214라인 해소로 마감, Part1은 미적용 유지**(게임/쪼롱이님 캠페인 보호).
+
+## [2026-06-23 續3] Part1 런타임 트레이싱 — 하네스 디버거 근본 한계 확정(옵션1·2 모두 시도)
+
+사용자 "1,2 go"로 ① fresh-boot 네비, ② 하네스 디버거 수정을 모두 시도. 결과:
+
+- **execution breakpoint는 타입 무관 전혀 미발화**: `break`를 HARDWARE/SOFTWARE 둘 다, 확실 실행
+  주소(부팅 VRAM 루프 `0x0800247E`)에 걸어도 0히트. fresh boot에서도 안 됨 → mDebuggerRunFrame가
+  execution breakpoint 체크를 안 하는 하네스/libmgba 경로 문제.
+- **watchpoint는 fresh boot에서만 작동**: fresh boot VRAM 쓰기 52히트·IWRAM 188히트. 그러나
+  **loadstate 후엔 미발화**. 수정 시도 전부 실패: ⓐ mDebuggerAttach 재호출 ⓑ core->attachDebugger
+  (USE_DEBUGGERS 매크로 필요, ABI 불일치로 크래시) ⓒ GBAAttachDebugger(core->board) 직접 재배선
+  (크래시 없으나 미발화). loadstate가 CPU activeRegion/prefetch를 fast-path로 복원해 watchpoint
+  slow-path를 우회하는 mGBA 내부 동작.
+- **결론**: 가용 도구는 fresh-boot watchpoint 뿐. breakpoint/스테핑이 없어 "메시지 텍스트 read →
+  포인터 로드(테이블) 역추적"이 불가. 정적 추적도 커맨드 인터프리터로 비수렴(續2).
+
+**다음에 시도할 구체 방법(가용 primitive로 가능)**:
+1. **쓰기 watchpoint 역인덱싱**: fresh-boot 네비로 Part1 대사 도달 → IWRAM/EWRAM 쓰기 watchpoint →
+   new값이 Part1 대사 포인터(0x08D8xxxx~0x08E1xxxx)인 store(=0x8B1299C) 캡처 → **실제 메시지 주소
+   시퀀스** 확보 → 그 주소들을 **연속으로 담은 ROM 테이블** 검색(우연매치 아닌 실주소라 정밀).
+   테이블이 있으면 repoint 가능, 없으면 커맨드-스트림 확정. (struct 함정은 헤더갭 가드로 이미 차단.)
+2. **mGBA Lua 스크립팅** 메모리 콜백(C 디버거와 별개 경로 — breakpoint가 될 수 있음).
+3. **libmgba 디버거 수정**(execution breakpoint 발화 + loadstate 후 watchpoint 재설치) — 소스 빌드 필요.
+어느 경우든 적용 전 **실기/플레이테스트로 실제 대사 렌더 확인** 필수.
