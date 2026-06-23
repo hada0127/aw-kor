@@ -1343,3 +1343,19 @@ merged/wide/multi-ptr/과확장 skip.
 - **결론**: repoint 정확성은 ROM 직접 무결성 게이트(byte-identical, 권위) + 메커니즘 확증(store가
   커맨드포인터 읽음) + 디코드 검증(재배치=실제 un-jam 한글)으로 증명됨. 클린 시각 확인은 실기/에뮬
   **신규 플레이**에서 Part1 캠페인 미션 진입 시 가능(savestate 불가).
+
+### 2026-06-23 (續5): Part1 repoint 인게임 검증 — fresh-boot 풀 네비 신규 트리거 (성공)
+
+續4의 savestate 한계를 fresh-boot로 우회. **재현 가능한 네비**(harness press=keys K/frames6/keys0/frames N):
+```
+frames 480; A(200); START(200); A(240); START(240)   # Part1 타이틀
+A(240); A(200); A(200)                                 # 새게임→이름 그리드
+A(80)x3; START(120)                                    # 'AAA' 입력→확인
+A(120) ...                                             # 캐서린 인트로 대사 진행
+```
+- **신규 0x19 트리거**: 인트로 대사 진행 중 store(0x8B1299C) r4=**0x08A446DC**(재배치 여유공간) 캡처.
+  = 게임이 갱신된 커맨드-스트림 포인터를 따라 재배치본 로드(인게임 확증). 0xA446DC=메시지 0xDF8E6C 재배치.
+- **디코드 대조**: 0xA446DC(읽힌 곳)="레드스타의 사령관,캐서린이에요"(un-jam) vs 0xDF8E6C(죽은 사본,
+  안 읽힘)="레드스타의사령관캐서린이에요"(단어붙음). 시각: 이름그리드/인트로 대사 모두 깨끗한 공백 렌더.
+- **교훈**: repoint 인게임 검증 = **fresh-boot 네비 + store 0x8B1299C로 r4 캡처**(재배치=0xA3D~0xB0).
+  savestate는 캐시된 구 포인터라 불가. 이름입력은 그리드에서 A로 글자선택 후 START 확인.

@@ -1633,3 +1633,23 @@ archive/malformed_address_rows.csv 보존.
   `break ADDR LOG`(HARDWARE만; SOFTWARE는 mGBA에서 abort), `watchaddr`(fresh-boot만), `loadstate`.
 - 잔여: 단어붙음 85(0xB8/0xEC 비-0x19 + merged/wide/multi-ptr/과확장). 실기 플레이테스트(savestate가
   구빌드라 폰트캐시 불일치로 시각검증은 신빌드 savestate 필요).
+
+
+### 🟢🟢 Part1 repoint 인게임 검증 완료 — fresh-boot 풀 네비 신규 트리거 (2026-06-23)
+
+> savestate는 pre-repoint라 캐시된 구 포인터/폰트 VRAM 때문에 검증 불가(research.md 續4). **fresh-boot
+> 풀 네비**(콜드부트→타이틀→Part1→새게임→이름입력 'AAA'→인트로 대사)로 **신규 0x19 트리거** 달성.
+
+- [x] **fresh-boot 네비**: screen_checkpoints의 fresh nav 패턴(press/frames) 확장. 콜드부트→Part1 타이틀
+  →새게임→**이름 그리드**(A-Z/a-z/0-9, fresh라 글리프 깨끗) 'AAA' 입력→확인→캐서린 인트로 대사.
+- [x] **결정적 증거 ①(메커니즘)**: 인트로 대사 진행 중 store(0x8B1299C)가 **r4=0x08A446DC** 캡처 —
+  **재배치 여유공간(0xA3D000~0xB00000) 주소**. 게임이 갱신된 커맨드-스트림 포인터를 따라 **재배치본을
+  여유공간에서 로드**함을 인게임 확증.
+- [x] **결정적 증거 ②(디코드)**: 0xA446DC(게임이 읽은 곳)=`"레드스타의 사령관,캐서린이에요."`(공백 복원,
+  un-jam) ↔ 원위치 0xDF8E6C(in-place 죽은 사본, 안 읽힘)=`"레드스타의사령관캐서린이에요"`(단어붙음).
+  → 재배치본=쪼롱이님 원문, 게임이 그걸 읽음.
+- [x] **결정적 증거 ③(시각)**: fresh-boot 대사가 모두 깨끗한 공백 렌더 — "반가워 AAA 님" /
+  "나는 캐서린." / "첫 번째 작전은 전투 개시 예요" / "레드스타의 사령관,…". 증거:
+  `docs/screenshots/SUCCESS_part1_repoint_freshboot_reloc_2026-06-23.png` 외 2.
+- **결론**: Part1 repoint가 실게임(에뮬 fresh-boot)에서 작동 확정. 재배치 메시지 = 여유공간에서 로드 +
+  un-jam 렌더. ROM SHA 08d50127.
