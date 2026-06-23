@@ -121,7 +121,9 @@ def load_direct_patch_texts():
         return None
 
     def add_patch(start, end, text, lineno):
-        if isinstance(start, int) and isinstance(end, int) and end > start and text and HANGUL_RE.search(text):
+        # Direct patch tables are authoritative even for punctuation-only
+        # fragments that intentionally remove a Japanese sentence tail.
+        if isinstance(start, int) and isinstance(end, int) and end > start and text:
             patches.append((lineno, start, end, text))
 
     for node in ast.walk(tree):

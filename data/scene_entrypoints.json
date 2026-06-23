@@ -1,0 +1,599 @@
+{
+  "_doc": "장면별 실제 화면 캡처/진입점 보정. tools/build_scene_catalog.py가 SCENES 기본값보다 이 파일을 우선한다.",
+  "generated_from": [
+    "temp/scene_entrypoints/part1_main_sweep_current/distinct_screens.json",
+    "temp/scene_entrypoints/part2_main_sweep/distinct_screens.json",
+    "temp/scene_entrypoints/part1_menu_sweep/distinct_screens.json",
+    "temp/scene_entrypoints/part2_menu_sweep/distinct_screens.json",
+    "temp/auto_results/state_003.ss0",
+    "temp/auto_results2/state_020.ss0",
+    "temp/auto_battle_end/state_007.ss0",
+    "temp/scene_entrypoints/part2_menu_focus_scan/distinct_screens.json",
+    "temp/scene_entrypoints/part2_menu_row_scan/distinct_screens.json",
+    "temp/scene_entrypoints/surrender_confirm_scan/distinct_screens.json",
+    "temp/scene_entrypoints/system_surrender_scan_a/distinct_screens.json"
+  ],
+  "scenes": {
+    "00_coldboot_nintendo": {
+      "checkpoint": "01_coldboot_nintendo",
+      "screenshot": "01_coldboot_nintendo",
+      "note": "기존 fresh 콜드부트 닌텐도 제공 화면",
+      "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "01_common_title": {
+      "checkpoint": "02_common_title",
+      "screenshot": "02_common_title",
+      "note": "기존 fresh 공통 타이틀 시작 화면",
+      "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "02_select_part1": {
+      "checkpoint": "03_select_part1",
+      "screenshot": "03_select_part1",
+      "note": "기존 fresh 1+2 선택 화면: 1편 선택",
+      "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "03_select_part2": {
+      "checkpoint": "05_select_part2",
+      "screenshot": "05_select_part2",
+      "note": "기존 fresh 1+2 선택 화면: 2편 선택",
+      "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "10_part1_title": {
+      "checkpoint": "04_part1_title",
+      "screenshot": "04_part1_title",
+      "note": "기존 fresh 1편 타이틀",
+      "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "11_part1_world_menu": {
+      "checkpoint": "40_part1_name_menu",
+      "screenshot": "40_part1_name_menu",
+      "note": "기존 Part1 이름 입력 후 월드 메뉴",
+      "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+    },
+    "12_part1_single_submenus": {
+      "checkpoint": "42_part1_single_battle",
+      "screenshot": "42_part1_single_battle",
+      "note": "기존 Part1 싱글 배틀 하위 메뉴",
+      "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+    },
+    "13_part1_link_submenus": {
+      "checkpoint": "43_part1_link",
+      "screenshot": "43_part1_link",
+      "note": "기존 Part1 통신 하위 메뉴",
+      "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+    },
+    "14_part1_name_input": {
+      "checkpoint": "scene_14_part1_name_input",
+      "screenshot": "scene_14_part1_name_input",
+      "note": "fresh sweep: Part1 이름 입력 그리드",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0",
+      "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
+    },
+    "15_part1_operation_logos": {
+      "checkpoint": "41_part1_operation_room",
+      "screenshot": "41_part1_operation_room",
+      "note": "기존 Part1 작전실/작전 메뉴",
+      "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
+      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+    },
+    "16_part1_info_screen": {
+      "checkpoint": "scene_16_part1_info_screen",
+      "screenshot": "scene_16_part1_info_screen",
+      "note": "verified: Part1 전투 유닛/부대 정보 리스트",
+      "source_state": "temp/auto_battle_end/state_007.ss0",
+      "capture_path": "temp/scene_screenshots/scene_16_part1_info_screen_patched/frame.png",
+      "provenance_path": "temp/auto_battle_end/state_007.ss0"
+    },
+    "17_part1_campaign": {
+      "checkpoint": "scene_17_part1_campaign",
+      "screenshot": "scene_17_part1_campaign",
+      "note": "fresh sweep: Part1 캠페인/모드 로고",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0",
+      "capture_path": "temp/scene_screenshots/scene_17_part1_campaign_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0"
+    },
+    "18_part1_battle": {
+      "checkpoint": "scene_18_part1_battle",
+      "screenshot": "scene_18_part1_battle",
+      "note": "fresh sweep: Part1 전투 1일째 배너",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
+      "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
+    },
+    "19a1_part1_tutorial_opening": {
+      "checkpoint": "scene_19a1_part1_tutorial_opening",
+      "screenshot": "scene_19a1_part1_tutorial_opening",
+      "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
+    },
+    "19a2_part1_heavy_tank_advice_story": {
+      "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
+      "screenshot": "scene_19a2_part1_heavy_tank_advice_story",
+      "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+    },
+    "19b1_part1_hoip_ambush_weather_story": {
+      "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
+      "screenshot": "scene_19b1_part1_hoip_ambush_weather_story",
+      "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
+    },
+    "19b2_part1_hoip_landing_setup_story": {
+      "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
+      "screenshot": "scene_19b2_part1_hoip_landing_setup_story",
+      "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+    },
+    "19c1_part1_mid_campaign_radio_story": {
+      "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
+      "screenshot": "scene_19c1_part1_mid_campaign_radio_story",
+      "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
+    },
+    "19c2_part1_mid_fog_map_story": {
+      "checkpoint": "scene_19c2_part1_mid_fog_map_story",
+      "screenshot": "scene_19c2_part1_mid_fog_map_story",
+      "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+    },
+    "19e1_part1_unit_info_detail_help": {
+      "checkpoint": "scene_19e1_part1_unit_info_detail_help",
+      "screenshot": "scene_19e1_part1_unit_info_detail_help",
+      "note": "validated visual text: g_00DECA12 보병계 유닛 상세 설명; direct displayed state from first battle day-2 info probe",
+      "source_state": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19e1_part1_unit_info_detail_help_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0"
+    },
+    "19e7_part1_hoip_co_weather_help": {
+      "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
+      "screenshot": "scene_19e7_part1_hoip_co_weather_help",
+      "note": "validated visual text: g_00DF7452 오늘은 작전 전에 휩 사령관에 대해; exact watch evidence: temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/watch.log",
+      "source_state": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0"
+    },
+    "19e6_part1_unit_help_late": {
+      "checkpoint": "scene_19e6_part1_unit_help_late",
+      "screenshot": "scene_19e6_part1_unit_help_late",
+      "note": "verified visual text: g_00DF5D62/g_00DF5E12 계열 유닛/작전 설명 후반 대사; exact watch evidence: temp/scene_entrypoints/part1_19e6_primary_watch_current, temp/scene_entrypoints/part1_19e6_exact_watch_current",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0",
+      "extra_screenshots": [
+        {
+          "checkpoint": "scene_19e6_part1_unit_help_late_b",
+          "label": "작전 설명 후속 대사",
+          "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_b_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part1_19e6_exact_watch_current/part1_main_sweep_current/state_007/hit.ss0"
+        }
+      ],
+      "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+    },
+    "19f_part1_extra_story": {
+      "checkpoint": "scene_19f_part1_extra_story",
+      "screenshot": "scene_19f_part1_extra_story",
+      "note": "fresh sweep exact step: Part1 추가/더미 스토리 실제 대사창",
+      "source_state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0",
+      "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0"
+    },
+    "20_part2_intro_newspaper": {
+      "checkpoint": "scene_20_part2_intro_newspaper",
+      "screenshot": "scene_20_part2_intro_newspaper",
+      "note": "fresh frame scan: Part2 진입 스플래시 로고",
+      "source_state": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0",
+      "capture_path": "temp/scene_screenshots/scene_20_part2_intro_newspaper_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0"
+    },
+    "20a_part2_menu_newspaper_bg": {
+      "checkpoint": "scene_20a_part2_menu_newspaper_bg",
+      "screenshot": "scene_20a_part2_menu_newspaper_bg",
+      "note": "fresh frame scan: Part2 메뉴 전 신문 배경",
+      "source_state": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0",
+      "capture_path": "temp/scene_screenshots/scene_20a_part2_menu_newspaper_bg_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0"
+    },
+    "21_part2_intro_blackhole": {
+      "checkpoint": "scene_21_part2_intro_blackhole",
+      "screenshot": "scene_21_part2_intro_blackhole",
+      "note": "fresh sweep: Part2 프롤로그/블랙홀 대사",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0",
+      "capture_path": "temp/scene_screenshots/scene_21_part2_intro_blackhole_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0"
+    },
+    "21a_part2_prologue_story": {
+      "checkpoint": "08_part2_prologue_map_text",
+      "screenshot": "08_part2_prologue_map_text",
+      "note": "기존 fresh Part2 프롤로그 지도 대사",
+      "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "22_part2_title": {
+      "checkpoint": "06_part2_title",
+      "screenshot": "06_part2_title",
+      "note": "기존 fresh 2편 타이틀",
+      "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "23_part2_main_menu": {
+      "checkpoint": "07_part2_main_menu",
+      "screenshot": "07_part2_main_menu",
+      "note": "기존 fresh Part2 메인 메뉴",
+      "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "23a_part2_wars_shop": {
+      "checkpoint": "scene_23a_part2_wars_shop",
+      "screenshot": "scene_23a_part2_wars_shop",
+      "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면",
+      "source_state": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0",
+      "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
+    },
+    "23b_part2_comm_multiplayer": {
+      "checkpoint": "scene_23b_part2_comm_multiplayer",
+      "screenshot": "scene_23b_part2_comm_multiplayer",
+      "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
+      "source_state": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0",
+      "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+    },
+    "23c_part2_sound_room": {
+      "checkpoint": "scene_23c_part2_sound_room",
+      "screenshot": "scene_23c_part2_sound_room",
+      "note": "verified loadtempsav route: 33380 complete save -> Part2 menu 자유전 -> UP×3 상점 -> SELECT gallery -> A, actual BGM track list",
+      "source_state": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0",
+      "capture_path": "temp/scene_screenshots/scene_23c_part2_sound_room_patched/frame.png",
+      "provenance_path": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0"
+    },
+    "24_part2_campaign_map": {
+      "checkpoint": "scene_24_part2_campaign_map",
+      "screenshot": "scene_24_part2_campaign_map",
+      "note": "fresh sweep: Part2 캠페인/작전 선택 지도",
+      "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0",
+      "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
+    },
+    "24a_part2_operation_select": {
+      "checkpoint": "10_part2_region_map_redstar",
+      "screenshot": "10_part2_region_map_redstar",
+      "note": "기존 fresh Part2 레드스타 지역 지도",
+      "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
+      "provenance_path": "data/screen_checkpoints.json"
+    },
+    "24b_part2_strategic_map_mode4": {
+      "checkpoint": "scene_24b_part2_strategic_map_mode4",
+      "screenshot": "scene_24b_part2_strategic_map_mode4",
+      "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
+      "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0",
+      "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
+    },
+    "25_part2_mission_titles": {
+      "checkpoint": "scene_25_part2_mission_titles",
+      "screenshot": "scene_25_part2_mission_titles",
+      "note": "fresh sweep: Part2 미션 스탬프/타이틀",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0",
+      "capture_path": "temp/scene_screenshots/scene_25_part2_mission_titles_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0"
+    },
+    "26a_part2_battle_start_overlays": {
+      "checkpoint": "scene_26a_part2_battle_start_overlays",
+      "screenshot": "scene_26a_part2_battle_start_overlays",
+      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f060 대표, f040/f060/f108/f144 보조 프레임",
+      "source_state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
+      "extra_screenshots": [
+        {
+          "checkpoint": "scene_26a_part2_battle_start_overlay_f040",
+          "label": "f040 회전 도입",
+          "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f040_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f040.ss0"
+        },
+        {
+          "checkpoint": "scene_26a_part2_battle_start_overlay_f060",
+          "label": "f060 중앙 표시",
+          "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f060_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
+        },
+        {
+          "checkpoint": "scene_26a_part2_battle_start_overlay_f108",
+          "label": "f108 축소/퇴장",
+          "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f108_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f108.ss0"
+        },
+        {
+          "checkpoint": "scene_26a_part2_battle_start_overlay_f144",
+          "label": "f144 HUD 복귀",
+          "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f144_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f144.ss0"
+        }
+      ],
+      "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlays_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
+    },
+    "26_part2_battle_labels": {
+      "checkpoint": "30_battle_attack",
+      "screenshot": "30_battle_attack",
+      "note": "기존 전투 공격/데미지 예측 라벨",
+      "source_state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
+      "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
+      "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
+    },
+    "27_part2_battle_objlabels": {
+      "checkpoint": "scene_27_part2_battle_objlabels",
+      "screenshot": "scene_27_part2_battle_objlabels",
+      "note": "verified: Part2 전투 정보/OBJ 라벨 메뉴",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0",
+      "capture_path": "temp/scene_screenshots/scene_27_part2_battle_objlabels_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0"
+    },
+    "28_part2_result_status": {
+      "checkpoint": "scene_28_part2_result_status",
+      "screenshot": "scene_28_part2_result_status",
+      "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
+      "source_state": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0",
+      "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
+    },
+    "29_part2_result_summary": {
+      "checkpoint": "scene_29_part2_result_summary",
+      "screenshot": "scene_29_part2_result_summary",
+      "note": "fresh battle clear route: 실제 작전 성공 S 랭크 결과 요약",
+      "source_state": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0",
+      "capture_path": "temp/scene_screenshots/scene_29_part2_result_summary_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0"
+    },
+    "30a1_part2_redstar_story_early": {
+      "checkpoint": "scene_30a1_part2_redstar_story_early",
+      "screenshot": "scene_30a1_part2_redstar_story_early",
+      "note": "verified visual text: g_00A01C90/g_00A01CA3 계열 레드스타 초반 스토리",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0",
+      "extra_screenshots": [
+        {
+          "checkpoint": "scene_30a1_part2_redstar_story_early_b",
+          "label": "레드스타 초반 후속 대사",
+          "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_b_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_011/a01.ss0"
+        },
+        {
+          "checkpoint": "scene_30a1_part2_redstar_story_early_c",
+          "label": "블랙홀 군 잔당 안내",
+          "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_c_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0"
+        }
+      ],
+      "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0"
+    },
+    "30b1_part2_redstar_liberation_macro_briefing_story": {
+      "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+      "screenshot": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+      "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0"
+    },
+    "30c1_part2_yellowcomet_north_invasion_story": {
+      "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
+      "screenshot": "scene_30c1_part2_yellowcomet_north_invasion_story",
+      "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+    },
+    "30d2_part2_green_earth_story_late": {
+      "checkpoint": "scene_30d2_part2_green_earth_story_late",
+      "screenshot": "scene_30d2_part2_green_earth_story_late",
+      "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+      "source_state": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+    },
+    "30g0_part2_green_earth_reinforcement_story": {
+      "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
+      "screenshot": "scene_30g0_part2_green_earth_reinforcement_story",
+      "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+    },
+    "30g1_part2_green_earth_volcano_sortie_story": {
+      "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
+      "screenshot": "scene_30g1_part2_green_earth_volcano_sortie_story",
+      "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+    },
+    "30g2_part2_green_earth_volcano_lava_story": {
+      "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "screenshot": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+    },
+    "30g3_part2_green_earth_suspicious_area_story": {
+      "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
+      "screenshot": "scene_30g3_part2_green_earth_suspicious_area_story",
+      "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+    },
+    "30e4_part2_blackhole_yellowcomet_fortress_story": {
+      "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+      "screenshot": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+      "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
+      "source_state": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
+    },
+    "30e3_part2_blackhole_yellowcomet_supply_briefing_story": {
+      "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "screenshot": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+    },
+    "30e1_part2_blackhole_missile_approach_story": {
+      "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
+      "screenshot": "scene_30e1_part2_blackhole_missile_approach_story",
+      "note": "validated visual text: g_00A26D48 미사일 발사대는 완성됐나; exact watch evidence: temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30e1_part2_blackhole_missile_approach_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0"
+    },
+    "30e2_part2_blackhole_final_missile_story": {
+      "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
+      "screenshot": "scene_30e2_part2_blackhole_final_missile_story",
+      "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+      "source_state": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+    },
+    "30f2_part2_co_profile_story": {
+      "checkpoint": "scene_30f2_part2_co_profile_story",
+      "screenshot": "scene_30f2_part2_co_profile_story",
+      "note": "verified visual screen: Part2 CO 설명/프로필 대사",
+      "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+      "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0"
+    },
+    "80a_campaign_story_early": {
+      "checkpoint": "scene_80a_campaign_story_early",
+      "screenshot": "scene_80a_campaign_story_early",
+      "note": "fresh sweep: 캠페인 초반 전투 진입 대사",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0",
+      "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0"
+    },
+    "80b_campaign_story_mid": {
+      "checkpoint": "scene_80b_campaign_story_mid",
+      "screenshot": "scene_80b_campaign_story_mid",
+      "note": "fresh sweep: 캠페인 중반 전투 대사",
+      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0",
+      "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
+    },
+    "80c_campaign_story_late": {
+      "checkpoint": "scene_80c_campaign_story_late",
+      "screenshot": "scene_80c_campaign_story_late",
+      "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
+      "source_state": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0",
+      "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
+    },
+    "85_ui_common": {
+      "checkpoint": "scene_85_ui_common",
+      "screenshot": "scene_85_ui_common",
+      "note": "fresh sweep: 공통 전투 START 메뉴 UI",
+      "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0",
+      "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0"
+    },
+    "86_common_compact_menu_tables": {
+      "checkpoint": "scene_86_common_compact_menu_tables",
+      "screenshot": "scene_86_common_compact_menu_tables",
+      "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
+      "source_state": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0",
+      "extra_screenshots": [
+        {
+          "checkpoint": "40_part1_name_menu",
+          "label": "1편 모드 선택",
+          "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+          "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+        },
+        {
+          "checkpoint": "42_part1_single_battle",
+          "label": "1편 싱글/맵 하위 메뉴",
+          "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+          "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+        },
+        {
+          "checkpoint": "43_part1_link",
+          "label": "1편 통신 하위 메뉴",
+          "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+          "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+        },
+        {
+          "checkpoint": "07_part2_main_menu",
+          "label": "2편 메인 메뉴",
+          "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
+        },
+        {
+          "checkpoint": "scene_23a_part2_wars_shop",
+          "label": "2편 워즈 숍",
+          "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
+        },
+        {
+          "checkpoint": "scene_23b_part2_comm_multiplayer",
+          "label": "2편 통신/멀티팩",
+          "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+          "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+        }
+      ],
+      "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
+    },
+    "87_common_rule_settings": {
+      "checkpoint": "scene_87_common_rule_settings",
+      "screenshot": "scene_87_common_rule_settings",
+      "note": "fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
+      "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0",
+      "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0"
+    },
+    "89_common_battle_system_results": {
+      "checkpoint": "scene_89_common_battle_system_results",
+      "screenshot": "scene_89_common_battle_system_results",
+      "note": "fresh battle-system scan: 전투 시스템 메뉴(항복/전체표시 포함)",
+      "source_state": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0",
+      "capture_path": "temp/scene_screenshots/scene_89_common_battle_system_results_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0"
+    },
+    "89a_common_battle_surrender_confirm": {
+      "checkpoint": "scene_89a_common_battle_surrender_confirm",
+      "screenshot": "scene_89a_common_battle_surrender_confirm",
+      "note": "fresh surrender scan: 항복 확인 대사 화면",
+      "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
+      "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+    },
+    "89b_common_battle_defeat_comm_messages": {
+      "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
+      "screenshot": "scene_89b_common_battle_defeat_comm_messages",
+      "note": "fresh 3P free-battle surrender route: 실제 중간 패배 메시지(레드스타 군은 패배했습니다)",
+      "source_state": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0",
+      "capture_path": "temp/scene_screenshots/scene_89b_common_battle_defeat_comm_messages_patched/frame.png",
+      "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0"
+    }
+  }
+}

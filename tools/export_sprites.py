@@ -202,7 +202,9 @@ def collect_curated():
 
     def add(off, src):
         if off in curated:
-            curated[off] = curated[off] + '; ' + src
+            parts = curated[off].split('; ')
+            if src not in parts:
+                curated[off] = curated[off] + '; ' + src
         else:
             curated[off] = src
 
@@ -244,6 +246,23 @@ def collect_curated():
                     v = int(a.group(1), 16)
                     if 0x300000 <= v < 0x1000000:
                         add(v, f'full:{cur_fn}')
+        # Common cold-boot Nintendo Presents lives in the low title area
+        # (0x21CE8), so the broad high-address graphic sweep above misses it.
+        m = re.search(
+            r'def patch_common_nintendo_presents_bg\(.*?\n\s*off\s*=\s*(0x[0-9A-Fa-f]+)',
+            txt,
+            re.S,
+        )
+        if m:
+            add(int(m.group(1), 16), 'full:patch_common_nintendo_presents_bg')
+        for off, src in {
+            0x00C2FD70: 'full:patch_part2_strategic_map_mode4_labels',
+            0x00C30EE8: 'full:patch_part2_strategic_map_mode4_labels',
+        }.items():
+            if curated.get(off) == 'full:lz77_decompress':
+                curated[off] = src
+            else:
+                add(off, src)
     return curated
 
 

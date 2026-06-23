@@ -415,3 +415,12 @@ loadstate가 메모리 shim을 제거해 미발화(breakpoint는 shim 무관이�
 
 **결과**: 작동하는 디버거로 Part1 대사 런타임 트레이싱 성공(0x19 커맨드 RE) → Part1 repoint 완료
 (続3, success.md). SOFTWARE breakpoint는 mGBA에서 abort()하니 HARDWARE만 사용.
+
+## [2026-06-24] 이름 라벨/맵 글리프 무위험 자율수정 — 이번 세션 보류(deep RE 필요)
+- **이름 라벨 가타카나 잔존**(CO 프로필 30f2 등): 이름은 SJIS 대화스트림 밖. 반각 SJIS 직접검색 실패
+  (`コシゲ`/`ﾄﾞﾐﾉ` 미발견) → OBJ 타일/인덱스 렌더 경로로 추정. Domino만 `patch_part2_domino_co_name_obj`로
+  OBJ blank+본문이관 처리됨. 타 CO는 per-character 테이블 RE 필요 → 무위험 즉시수정 불가, 추적.
+- **맵 선택 섬 이름 '??'**(87, 마=8BC3/메=8BED): ROM 인코딩은 정확(∈2350)인데 컴팩트 렌더러가 fallback
+  0x8148='?'로 렌더 → 맵선택 컴팩트 글리프뱅크에 해당 음절 미주입. 글리프뱅크 주입점 RE 필요, 추적.
+- **CSV 109행 ROM 위험분 일괄수정 금지**: korean이 일본어/빈칸인 행 다수가 part1_campaign/part_dialogue(쪼롱이
+  인접)라 행별 맥락검수 없이 일괄 번역하면 쪼롱이 보호 위반/오역 위험. `qa_csv_integrity.py`로 추적, 신중 복구.

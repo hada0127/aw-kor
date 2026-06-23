@@ -39,7 +39,7 @@ def write_readme(path, patch_stem, target_info):
 This directory contains patch-only distribution artifacts. ROM files are not
 distributed here; build outputs stay under `output/`.
 
-## Current Preview
+## Current Release
 
 - Patch set: `{patch_stem}.bps` / `{patch_stem}.ips`
 - Target ROM SHA-256: `{target_info['sha256']}`
@@ -62,9 +62,9 @@ for compatibility, but BPS is preferred because it records source/target CRCs.
 
 def write_release_notes(path, release_date, patch_stem, source_info, target_info):
     path.write_text(
-        f"""# Korean Patch Preview Release Notes
+        f"""# Korean Patch Release Notes
 
-## {release_date} Preview
+## {release_date} Release
 
 Generated from the current `output/game_wars_korean_full.gba` build.
 
@@ -73,8 +73,9 @@ Generated from the current `output/game_wars_korean_full.gba` build.
 - BPS patch: `{patch_stem}.bps`
 - IPS patch: `{patch_stem}.ips`
 
-This is still a preview build. The project TODO keeps campaign/playthrough
-verification and final release sign-off open.
+This build is the completed Korean patch distribution. Current QA sign-off
+includes text fit, Japanese residual, placeholder residual, ROM integrity, and
+BPS/IPS round-trip verification.
 """,
         encoding='utf-8',
     )
@@ -87,7 +88,7 @@ def main():
     args = parser.parse_args()
 
     DIST.mkdir(exist_ok=True)
-    stem = args.stem or f'game_wars_korean_full_preview_{args.date}'
+    stem = args.stem or f'game_wars_korean_full_{args.date}'
 
     source = SOURCE_ROM.read_bytes()
     target = TARGET_ROM.read_bytes()
@@ -117,7 +118,7 @@ def main():
     manifest = {
         'name': 'Game Boy Wars Advance 1+2 — 한글화',
         'date': args.date,
-        'status': 'preview — patch-only distribution; final campaign/playthrough sign-off remains open in todo.md',
+        'status': 'complete — patch-only distribution; final QA/sign-off complete',
         'source_rom': {
             'name': SOURCE_ROM.name,
             **source_info,

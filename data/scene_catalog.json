@@ -3,6 +3,7 @@
   "_doc": "게임 흐름순 scene 카탈로그(통합 UI 에디터 정본). tools/build_scene_catalog.py 생성. 수동보정 data/scene_catalog_overrides.json. 미배정은 99_unassigned_review로 100% 수렴.",
   "generated_from": {
     "checkpoints": "data/screen_checkpoints.json",
+    "entrypoints": "data/scene_entrypoints.json",
     "sprites": "data/sprites_index.json",
     "dialogue": "data/dialogue_groups.json"
   },
@@ -14,15 +15,16 @@
   ],
   "coverage": {
     "sprites_total": 1988,
-    "sprites_assigned": 119,
-    "sprites_unassigned": 1871,
-    "sprites_unassigned_scan_lz77": 1870,
+    "sprites_assigned": 107,
+    "sprites_unassigned": 1883,
+    "sprites_unassigned_scan_lz77": 1882,
     "sprites_unassigned_text_candidate": 0,
     "sprites_unassigned_font": 1,
     "dialogue_groups_total": 9061,
-    "dialogue_assigned": 8975,
-    "dialogue_review_only": 3019,
-    "dialogue_unassigned": 86
+    "dialogue_game_scene_assigned": 5689,
+    "dialogue_assigned": 9061,
+    "dialogue_review_only": 3372,
+    "dialogue_unassigned": 0
   },
   "scenes": [
     {
@@ -31,6 +33,8 @@
       "scope": "shared_select",
       "subtag": "인트로",
       "title": "콜드부트 닌텐도 제공",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "01_coldboot_nintendo",
@@ -41,7 +45,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "콜드부트 닌텐도 제공"
+        "note": "콜드부트 닌텐도 제공",
+        "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -59,6 +65,13 @@
       "counts": {
         "dialogue": 0,
         "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "01_coldboot_nintendo",
+        "screenshot": "01_coldboot_nintendo",
+        "note": "기존 fresh 콜드부트 닌텐도 제공 화면",
+        "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -67,6 +80,8 @@
       "scope": "shared_select",
       "subtag": "시작화면",
       "title": "공통 타이틀(시작하기)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "02_common_title",
@@ -77,7 +92,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "공통 타이틀 시작하기"
+        "note": "공통 타이틀 시작하기",
+        "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -100,6 +117,13 @@
       "counts": {
         "dialogue": 0,
         "sprite": 5
+      },
+      "entrypoint": {
+        "checkpoint": "02_common_title",
+        "screenshot": "02_common_title",
+        "note": "기존 fresh 공통 타이틀 시작 화면",
+        "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -108,6 +132,8 @@
       "scope": "shared_select",
       "subtag": "1+2편 선택",
       "title": "1+2편 선택 화면(1편 선택)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "03_select_part1",
@@ -118,7 +144,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "1/2 선택(Part1)"
+        "note": "1/2 선택(Part1)",
+        "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -134,6 +162,13 @@
       "counts": {
         "dialogue": 0,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "03_select_part1",
+        "screenshot": "03_select_part1",
+        "note": "기존 fresh 1+2 선택 화면: 1편 선택",
+        "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -142,6 +177,8 @@
       "scope": "shared_select",
       "subtag": "1+2편 선택",
       "title": "1+2편 선택 화면(2편 선택)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "05_select_part2",
@@ -152,7 +189,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "1/2 선택(Part2)"
+        "note": "1/2 선택(Part2)",
+        "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -168,6 +207,13 @@
       "counts": {
         "dialogue": 0,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "05_select_part2",
+        "screenshot": "05_select_part2",
+        "note": "기존 fresh 1+2 선택 화면: 2편 선택",
+        "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -176,6 +222,8 @@
       "scope": "part1",
       "subtag": "시작화면",
       "title": "1편 타이틀",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "04_part1_title",
@@ -186,7 +234,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "Part1 타이틀"
+        "note": "Part1 타이틀",
+        "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -204,6 +254,13 @@
       "counts": {
         "dialogue": 0,
         "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "04_part1_title",
+        "screenshot": "04_part1_title",
+        "note": "기존 fresh 1편 타이틀",
+        "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -212,17 +269,21 @@
       "scope": "part1",
       "subtag": "모드 선택",
       "title": "1편 월드 메뉴 라벨",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "40_part1_name_menu",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "40_part1_name_menu",
         "url": "/scene_shots/40_part1_name_menu.png",
         "mode": "savestate",
         "grade": "stale_state",
         "status": "capturable",
-        "note": "Part1 이름입력 후 메뉴"
+        "note": "Part1 이름입력 후 메뉴",
+        "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -287,6 +348,14 @@
       "counts": {
         "dialogue": 27,
         "sprite": 15
+      },
+      "entrypoint": {
+        "checkpoint": "40_part1_name_menu",
+        "screenshot": "40_part1_name_menu",
+        "note": "기존 Part1 이름 입력 후 월드 메뉴",
+        "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+        "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       }
     },
     {
@@ -295,17 +364,21 @@
       "scope": "part1",
       "subtag": "하위 메뉴",
       "title": "1편 싱글/맵 하위 메뉴 라벨",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "42_part1_single_battle",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "42_part1_single_battle",
         "url": "/scene_shots/42_part1_single_battle.png",
         "mode": "savestate",
         "grade": "stale_state",
         "status": "capturable",
-        "note": "Part1 싱글 배틀 하위 메뉴"
+        "note": "Part1 싱글 배틀 하위 메뉴",
+        "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -343,7 +416,6 @@
         "g_00805B58",
         "g_0081B104",
         "g_00D81C24",
-        "g_00D81E0C",
         "g_00D82004",
         "g_00D82028",
         "g_00D82058",
@@ -397,8 +469,16 @@
         "lz77_00C1B830"
       ],
       "counts": {
-        "dialogue": 46,
+        "dialogue": 45,
         "sprite": 8
+      },
+      "entrypoint": {
+        "checkpoint": "42_part1_single_battle",
+        "screenshot": "42_part1_single_battle",
+        "note": "기존 Part1 싱글 배틀 하위 메뉴",
+        "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+        "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       }
     },
     {
@@ -407,17 +487,21 @@
       "scope": "part1",
       "subtag": "하위 메뉴",
       "title": "1편 통신 하위 메뉴 라벨",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "43_part1_link",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "43_part1_link",
         "url": "/scene_shots/43_part1_link.png",
         "mode": "savestate",
         "grade": "stale_state",
         "status": "capturable",
-        "note": "Part1 통신 하위 메뉴"
+        "note": "Part1 통신 하위 메뉴",
+        "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -453,7 +537,6 @@
       "dialogue_ids": [
         "g_00805AE0",
         "g_009292A8",
-        "g_00929308",
         "g_00929398",
         "g_009293A4",
         "g_009293B0",
@@ -489,7 +572,6 @@
         "g_009298D4",
         "g_009298FC",
         "g_00961F30",
-        "g_00961F90",
         "g_00962020",
         "g_0096202C",
         "g_00962038",
@@ -525,7 +607,6 @@
         "g_0096256C",
         "g_00962594",
         "g_0099A7D4",
-        "g_0099A834",
         "g_0099A8C4",
         "g_0099A8D0",
         "g_0099A8DC",
@@ -561,7 +642,6 @@
         "g_0099AE10",
         "g_0099AE38",
         "g_009D3078",
-        "g_009D30D8",
         "g_009D3168",
         "g_009D3174",
         "g_009D3180",
@@ -602,8 +682,16 @@
         "lz77_00C1AC60"
       ],
       "counts": {
-        "dialogue": 145,
+        "dialogue": 141,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "43_part1_link",
+        "screenshot": "43_part1_link",
+        "note": "기존 Part1 통신 하위 메뉴",
+        "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+        "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       }
     },
     {
@@ -612,17 +700,21 @@
       "scope": "part1",
       "subtag": "이름 입력",
       "title": "1편 이름 입력",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "40_part1_name_menu",
+      "checkpoint": "scene_14_part1_name_input",
       "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "40_part1_name_menu",
-        "url": "/scene_shots/40_part1_name_menu.png",
+        "checkpoint": "scene_14_part1_name_input",
+        "url": "/scene_shots/scene_14_part1_name_input.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part1 이름입력 후 메뉴"
+        "note": "fresh sweep: Part1 이름 입력 그리드",
+        "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -664,30 +756,8 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00805A24",
-        "g_0083FAF6",
-        "g_0083FB4A",
-        "g_0083FB6E",
-        "g_0083FB8C",
-        "g_0083FBAB",
-        "g_0083FC16",
-        "g_0083FC41",
-        "g_0083FE41",
-        "g_0083FE65",
-        "g_0083FE89",
-        "g_0083FEAD",
-        "g_0083FEC5",
-        "g_0083FEDD",
         "g_0083FF0C",
-        "g_00D8273C",
-        "g_00D83198",
         "g_00D835BC",
-        "g_00DF8C3A",
-        "g_00DF8C62",
-        "g_00DF8C8A",
-        "g_00DF8CB2",
-        "g_00DF8CCE",
-        "g_00DF8CEA",
         "g_00DF8DB2",
         "g_00DF8DD2",
         "g_00DF8DFA",
@@ -704,18 +774,22 @@
         "g_00DF948E",
         "g_00DF9656",
         "g_00DF9676",
-        "g_00DF969A",
-        "g_00DF9F5C",
-        "g_00DFA011",
-        "g_00DFA07C",
-        "g_00DFA0E7"
+        "g_00DF969A"
       ],
       "sprite_ids": [
         "lz77_00C102A8"
       ],
       "counts": {
-        "dialogue": 45,
+        "dialogue": 19,
         "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "scene_14_part1_name_input",
+        "screenshot": "scene_14_part1_name_input",
+        "note": "fresh sweep: Part1 이름 입력 그리드",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0",
+        "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
       }
     },
     {
@@ -724,17 +798,21 @@
       "scope": "part1",
       "subtag": "작전/설정",
       "title": "1편 작전/지도/상점/룰 화면 로고",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "41_part1_operation_room",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "41_part1_operation_room",
         "url": "/scene_shots/41_part1_operation_room.png",
         "mode": "savestate",
         "grade": "stale_state",
         "status": "capturable",
-        "note": "Part1 작전실/작전 메뉴"
+        "note": "Part1 작전실/작전 메뉴",
+        "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -756,7 +834,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_008059C4",
         "g_00DFAE9E",
         "g_00DFB216",
         "g_00DFB4C6",
@@ -822,8 +899,16 @@
         "lz77_00C19FF0"
       ],
       "counts": {
-        "dialogue": 55,
+        "dialogue": 54,
         "sprite": 7
+      },
+      "entrypoint": {
+        "checkpoint": "41_part1_operation_room",
+        "screenshot": "41_part1_operation_room",
+        "note": "기존 Part1 작전실/작전 메뉴",
+        "source_state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+        "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
+        "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
       }
     },
     {
@@ -832,17 +917,21 @@
       "scope": "part1",
       "subtag": "유닛 정보",
       "title": "1편 유닛/상세 정보 화면",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_16_part1_info_screen",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "32_battle_continue",
-        "url": "/scene_shots/32_battle_continue.png",
+        "checkpoint": "scene_16_part1_info_screen",
+        "url": "/scene_shots/scene_16_part1_info_screen.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 진입(continue)"
+        "note": "verified: Part1 전투 유닛/부대 정보 리스트",
+        "capture_path": "temp/scene_screenshots/scene_16_part1_info_screen_patched/frame.png",
+        "provenance_path": "temp/auto_battle_end/state_007.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -874,43 +963,6 @@
         ]
       },
       "dialogue_ids": [
-        "g_00805204",
-        "g_00805224",
-        "g_00805290",
-        "g_008052A8",
-        "g_00805394",
-        "g_008053AC",
-        "g_00805428",
-        "g_00805440",
-        "g_008054F8",
-        "g_00805510",
-        "g_008055BC",
-        "g_008055D4",
-        "g_008056A8",
-        "g_00805730",
-        "g_008057BC",
-        "g_008058AC",
-        "g_0080591C",
-        "g_0080595C",
-        "g_008059AC",
-        "g_00D82978",
-        "g_00D82998",
-        "g_00D82A04",
-        "g_00D82A1C",
-        "g_00D82B08",
-        "g_00D82B20",
-        "g_00D82B9C",
-        "g_00D82BB4",
-        "g_00D82C6C",
-        "g_00D82C84",
-        "g_00D82D30",
-        "g_00D82D48",
-        "g_00D82E1C",
-        "g_00D82EA4",
-        "g_00D82F30",
-        "g_00D83020",
-        "g_00D83090",
-        "g_00D830D0",
         "g_00D83120",
         "g_00D83138",
         "g_00DF8BBA",
@@ -918,8 +970,7 @@
         "g_00DF8BF6",
         "g_00DF8C02",
         "g_00DF8C0E",
-        "g_00DF8C1A",
-        "g_00DF8C2A"
+        "g_00DF8C1A"
       ],
       "sprite_ids": [
         "lz77_004310D4",
@@ -931,8 +982,16 @@
         "lz77_00BC7C00"
       ],
       "counts": {
-        "dialogue": 46,
+        "dialogue": 8,
         "sprite": 7
+      },
+      "entrypoint": {
+        "checkpoint": "scene_16_part1_info_screen",
+        "screenshot": "scene_16_part1_info_screen",
+        "note": "verified: Part1 전투 유닛/부대 정보 리스트",
+        "source_state": "temp/auto_battle_end/state_007.ss0",
+        "capture_path": "temp/scene_screenshots/scene_16_part1_info_screen_patched/frame.png",
+        "provenance_path": "temp/auto_battle_end/state_007.ss0"
       }
     },
     {
@@ -941,17 +1000,21 @@
       "scope": "part1",
       "subtag": "캠페인",
       "title": "1편 캠페인/미션 로고",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_17_part1_campaign",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "20_mode_select_menu",
-        "url": "/scene_shots/20_mode_select_menu.png",
+        "checkpoint": "scene_17_part1_campaign",
+        "url": "/scene_shots/scene_17_part1_campaign.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "모드 선택/월드맵+CO대사"
+        "note": "fresh sweep: Part1 캠페인/모드 로고",
+        "capture_path": "temp/scene_screenshots/scene_17_part1_campaign_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -972,20 +1035,22 @@
       "sprite_filter": {
         "source_contains": []
       },
-      "dialogue_ids": [
-        "g_00805104",
-        "g_00D82748",
-        "g_00D827B0",
-        "g_00D827D0",
-        "g_00D82878"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [
         "lz77_00C18738",
         "lz77_00C19794"
       ],
       "counts": {
-        "dialogue": 5,
+        "dialogue": 0,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "scene_17_part1_campaign",
+        "screenshot": "scene_17_part1_campaign",
+        "note": "fresh sweep: Part1 캠페인/모드 로고",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0",
+        "capture_path": "temp/scene_screenshots/scene_17_part1_campaign_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0"
       }
     },
     {
@@ -994,17 +1059,21 @@
       "scope": "part1",
       "subtag": "전투",
       "title": "1편 전투 N일째 배너",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_18_part1_battle",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "30_battle_attack",
-        "url": "/scene_shots/30_battle_attack.png",
+        "checkpoint": "scene_18_part1_battle",
+        "url": "/scene_shots/scene_18_part1_battle.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 공격 진입"
+        "note": "fresh sweep: Part1 전투 1일째 배너",
+        "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -1058,25 +1127,37 @@
       "counts": {
         "dialogue": 30,
         "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "scene_18_part1_battle",
+        "screenshot": "scene_18_part1_battle",
+        "note": "fresh sweep: Part1 전투 1일째 배너",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
+        "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
       }
     },
     {
-      "id": "19a_part1_tutorial_story",
+      "id": "19a1_part1_tutorial_opening",
       "order": 130,
       "scope": "part1",
       "subtag": "대사",
-      "title": "1편 튜토리얼/초반 스토리 대사",
+      "title": "1편 튜토리얼 초반 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_19a1_part1_tutorial_opening",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_19a1_part1_tutorial_opening",
+        "url": "/scene_shots/scene_19a1_part1_tutorial_opening.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
+        "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -1085,7 +1166,7 @@
         "addr_ranges": [
           [
             14217216,
-            14254080
+            14229918
           ]
         ]
       },
@@ -1186,7 +1267,125 @@
         "g_00D920B0",
         "g_00D920C2",
         "g_00D920DE",
-        "g_00D9213A",
+        "g_00D9213A"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 94,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19a1_part1_tutorial_opening",
+        "screenshot": "scene_19a1_part1_tutorial_opening",
+        "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
+      }
+    },
+    {
+      "id": "19a2_part1_heavy_tank_advice_story",
+      "order": 140,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 중전차/정면승부 회피 조언 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
+        "url": "/scene_shots/scene_19a2_part1_heavy_tank_advice_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14247183,
+            14249390
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00D9650F",
+        "g_00D965DE",
+        "g_00D96692",
+        "g_00D96782",
+        "g_00D96806",
+        "g_00D9688A",
+        "g_00D968F2",
+        "g_00D96946",
+        "g_00D969D2",
+        "g_00D96A72",
+        "g_00D96B46",
+        "g_00D96B84",
+        "g_00D96C7A",
+        "g_00D96D3E"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 14,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
+        "screenshot": "scene_19a2_part1_heavy_tank_advice_story",
+        "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+      }
+    },
+    {
+      "id": "19a_part1_tutorial_story",
+      "order": 150,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 튜토리얼/초반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "1편 튜토리얼/초반 스토리 잔여 대사 bucket. 실제 화면은 19a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14217216,
+            14254080
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00D9219E",
         "g_00D921E5",
         "g_00D92250",
@@ -1327,20 +1526,6 @@
         "g_00D96446",
         "g_00D9648E",
         "g_00D964B6",
-        "g_00D9650F",
-        "g_00D965DE",
-        "g_00D96692",
-        "g_00D96782",
-        "g_00D96806",
-        "g_00D9688A",
-        "g_00D968F2",
-        "g_00D96946",
-        "g_00D969D2",
-        "g_00D96A72",
-        "g_00D96B46",
-        "g_00D96B84",
-        "g_00D96C7A",
-        "g_00D96D3E",
         "g_00D96DAE",
         "g_00D96E06",
         "g_00D96E52",
@@ -1379,27 +1564,151 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 283,
+        "dialogue": 175,
         "sprite": 0
+      },
+      "related_dialogue_scene_ids": [
+        "19a1_part1_tutorial_opening",
+        "19a2_part1_heavy_tank_advice_story"
+      ]
+    },
+    {
+      "id": "19b2_part1_hoip_landing_setup_story",
+      "order": 160,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 호이프 상륙 전 안내 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
+        "url": "/scene_shots/scene_19b2_part1_hoip_landing_setup_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14262890,
+            14263296
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00D9A26A"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 1,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
+        "screenshot": "scene_19b2_part1_hoip_landing_setup_story",
+        "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+      }
+    },
+    {
+      "id": "19b1_part1_hoip_ambush_weather_story",
+      "order": 170,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 호이프 매복/날씨 브레이크 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
+        "url": "/scene_shots/scene_19b1_part1_hoip_ambush_weather_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14273486,
+            14276046
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00D9CBCE",
+        "g_00D9CCC6",
+        "g_00D9CD66",
+        "g_00D9CFA2",
+        "g_00D9D07E",
+        "g_00D9D0F6",
+        "g_00D9D1EA",
+        "g_00D9D27E",
+        "g_00D9D37A",
+        "g_00D9D3E2",
+        "g_00D9D52E"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 11,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
+        "screenshot": "scene_19b1_part1_hoip_ambush_weather_story",
+        "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
       }
     },
     {
       "id": "19b_part1_campaign_story_redstar",
-      "order": 140,
+      "order": 180,
       "scope": "part1",
       "subtag": "대사",
       "title": "1편 레드스타 캠페인 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "1편 레드스타 캠페인 잔여 대사 bucket. 실제 화면은 19b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -1461,7 +1770,6 @@
         "g_00D9A032",
         "g_00D9A082",
         "g_00D9A0E2",
-        "g_00D9A26A",
         "g_00D9A412",
         "g_00D9A48E",
         "g_00D9A5D6",
@@ -1546,17 +1854,6 @@
         "g_00D9C9DE",
         "g_00D9CA96",
         "g_00D9CADA",
-        "g_00D9CBCE",
-        "g_00D9CCC6",
-        "g_00D9CD66",
-        "g_00D9CFA2",
-        "g_00D9D07E",
-        "g_00D9D0F6",
-        "g_00D9D1EA",
-        "g_00D9D27E",
-        "g_00D9D37A",
-        "g_00D9D3E2",
-        "g_00D9D52E",
         "g_00D9D5CE",
         "g_00D9D66A",
         "g_00D9D750",
@@ -1746,32 +2043,39 @@
         "g_00DA413B",
         "g_00DA41DB",
         "g_00DA42EC",
-        "g_00DA432C",
         "g_00DA434B"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 332,
+        "dialogue": 319,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "19b2_part1_hoip_landing_setup_story",
+        "19b1_part1_hoip_ambush_weather_story"
+      ]
     },
     {
-      "id": "19c_part1_campaign_story_mid",
-      "order": 150,
+      "id": "19c1_part1_mid_campaign_radio_story",
+      "order": 190,
       "scope": "part1",
       "subtag": "대사",
-      "title": "1편 중반 캠페인 대사",
+      "title": "1편 중반 무전기/작전 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
+        "url": "/scene_shots/scene_19c1_part1_mid_campaign_radio_story.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -1779,8 +2083,8 @@
         ],
         "addr_ranges": [
           [
-            14428416,
-            14458880
+            14428471,
+            14434270
           ]
         ]
       },
@@ -1847,7 +2151,117 @@
         "g_00DC3F2E",
         "g_00DC3F72",
         "g_00DC3F86",
-        "g_00DC3FAE",
+        "g_00DC3FAE"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 60,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
+        "screenshot": "scene_19c1_part1_mid_campaign_radio_story",
+        "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
+      }
+    },
+    {
+      "id": "19c2_part1_mid_fog_map_story",
+      "order": 200,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 중반 색적 맵 설명 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19c2_part1_mid_fog_map_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19c2_part1_mid_fog_map_story",
+        "url": "/scene_shots/scene_19c2_part1_mid_fog_map_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14437378,
+            14437934
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00DC4C02",
+        "g_00DC4C22",
+        "g_00DC4C66",
+        "g_00DC4CB6",
+        "g_00DC4D46",
+        "g_00DC4D7A"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 6,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19c2_part1_mid_fog_map_story",
+        "screenshot": "scene_19c2_part1_mid_fog_map_story",
+        "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+      }
+    },
+    {
+      "id": "19c_part1_campaign_story_mid",
+      "order": 210,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 중반 캠페인 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "1편 중반 캠페인 잔여 대사 bucket. 실제 화면은 19c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14428416,
+            14458880
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00DC3FDE",
         "g_00DC4022",
         "g_00DC415E",
@@ -1884,12 +2298,6 @@
         "g_00DC4AC6",
         "g_00DC4B2A",
         "g_00DC4B3A",
-        "g_00DC4C02",
-        "g_00DC4C22",
-        "g_00DC4C66",
-        "g_00DC4CB6",
-        "g_00DC4D46",
-        "g_00DC4D7A",
         "g_00DC4E2E",
         "g_00DC4F02",
         "g_00DC4F7E",
@@ -2135,27 +2543,35 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 344,
+        "dialogue": 278,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "19c1_part1_mid_campaign_radio_story",
+        "19c2_part1_mid_fog_map_story"
+      ]
     },
     {
       "id": "19d_part1_campaign_story_late",
-      "order": 160,
+      "order": 220,
       "scope": "part1",
       "subtag": "대사",
       "title": "1편 후반 캠페인 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "1편 후반 캠페인 잔여 대사 bucket. 별도 화면 hit는 현재 없으며, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -2560,22 +2976,26 @@
       }
     },
     {
-      "id": "19e_part1_unit_story_help",
-      "order": 170,
+      "id": "19e1_part1_unit_info_detail_help",
+      "order": 230,
       "scope": "part1",
       "subtag": "대사",
-      "title": "1편 유닛/작전 설명 대사",
+      "title": "1편 유닛 정보 상세 설명",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_19e1_part1_unit_info_detail_help",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_19e1_part1_unit_info_detail_help",
+        "url": "/scene_shots/scene_19e1_part1_unit_info_detail_help.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "validated visual text: g_00DECA12 보병계 유닛 상세 설명; direct displayed state from first battle day-2 info probe",
+        "capture_path": "temp/scene_screenshots/scene_19e1_part1_unit_info_detail_help_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -2583,12 +3003,8 @@
         ],
         "addr_ranges": [
           [
-            14585856,
-            14614528
-          ],
-          [
-            14614528,
-            14647296
+            14600722,
+            14611937
           ]
         ]
       },
@@ -2596,32 +3012,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00DE93F6",
-        "g_00DE95C7",
-        "g_00DE973B",
-        "g_00DE98DA",
-        "g_00DE9A5A",
-        "g_00DE9BFA",
-        "g_00DE9D8E",
-        "g_00DE9F4A",
-        "g_00DEA136",
-        "g_00DEA376",
-        "g_00DEA54A",
-        "g_00DEA8AA",
-        "g_00DEAA9E",
-        "g_00DEAC6E",
-        "g_00DEADDE",
-        "g_00DEB802",
-        "g_00DEB81A",
-        "g_00DEB83E",
-        "g_00DEB85E",
-        "g_00DEB88A",
-        "g_00DEB8A2",
-        "g_00DEB8BE",
-        "g_00DEB8FE",
-        "g_00DEB916",
-        "g_00DEB93A",
-        "g_00DEB95A",
         "g_00DECA12",
         "g_00DECA7B",
         "g_00DECAD4",
@@ -2770,7 +3160,280 @@
         "g_00DEF552",
         "g_00DEF57A",
         "g_00DEF5A6",
-        "g_00DEF5CE",
+        "g_00DEF5CE"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 149,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19e1_part1_unit_info_detail_help",
+        "screenshot": "scene_19e1_part1_unit_info_detail_help",
+        "note": "validated visual text: g_00DECA12 보병계 유닛 상세 설명; direct displayed state from first battle day-2 info probe",
+        "source_state": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19e1_part1_unit_info_detail_help_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0"
+      }
+    },
+    {
+      "id": "19e7_part1_hoip_co_weather_help",
+      "order": 240,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 호이프/날씨/사령관 능력 설명",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
+        "url": "/scene_shots/scene_19e7_part1_hoip_co_weather_help.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00DF7452 오늘은 작전 전에 휩 사령관에 대해; exact watch evidence: temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14643558,
+            14644672
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00DF7166",
+        "g_00DF71DE",
+        "g_00DF71F6",
+        "g_00DF72E2",
+        "g_00DF7346",
+        "g_00DF7422",
+        "g_00DF7452",
+        "g_00DF756A"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 8,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
+        "screenshot": "scene_19e7_part1_hoip_co_weather_help",
+        "note": "validated visual text: g_00DF7452 오늘은 작전 전에 휩 사령관에 대해; exact watch evidence: temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/watch.log",
+        "source_state": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0"
+      }
+    },
+    {
+      "id": "19e6_part1_unit_help_late",
+      "order": 250,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 유닛/작전 설명 후반 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_19e6_part1_unit_help_late",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_19e6_part1_unit_help_late",
+        "url": "/scene_shots/scene_19e6_part1_unit_help_late.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "verified visual text: g_00DF5D62 계열 유닛/작전 설명 후반 대사",
+        "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14636483,
+            14647296
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00DF55C3",
+        "g_00DF5607",
+        "g_00DF5657",
+        "g_00DF56B3",
+        "g_00DF5723",
+        "g_00DF577B",
+        "g_00DF57D3",
+        "g_00DF580F",
+        "g_00DF5863",
+        "g_00DF587B",
+        "g_00DF58DB",
+        "g_00DF5937",
+        "g_00DF597B",
+        "g_00DF59CF",
+        "g_00DF5A2F",
+        "g_00DF5D62",
+        "g_00DF5D9A",
+        "g_00DF5DD2",
+        "g_00DF5E12",
+        "g_00DF5F0E",
+        "g_00DF5F5A",
+        "g_00DF5FBA",
+        "g_00DF6016",
+        "g_00DF60DA",
+        "g_00DF612E",
+        "g_00DF6146",
+        "g_00DF61BA",
+        "g_00DF61FE",
+        "g_00DF627C",
+        "g_00DF628E",
+        "g_00DF63A6",
+        "g_00DF6420",
+        "g_00DF6442",
+        "g_00DF649A",
+        "g_00DF6532",
+        "g_00DF6576",
+        "g_00DF6656",
+        "g_00DF669F",
+        "g_00DF672E",
+        "g_00DF67BA",
+        "g_00DF685A",
+        "g_00DF689A",
+        "g_00DF68F6",
+        "g_00DF6946",
+        "g_00DF6A66",
+        "g_00DF6A7A",
+        "g_00DF6A96",
+        "g_00DF6BD6",
+        "g_00DF6C36",
+        "g_00DF6C7E",
+        "g_00DF6D22",
+        "g_00DF6D4A",
+        "g_00DF6E0E",
+        "g_00DF6E5A",
+        "g_00DF6EAA",
+        "g_00DF6F3A",
+        "g_00DF6F96",
+        "g_00DF7032",
+        "g_00DF706E",
+        "g_00DF7082",
+        "g_00DF70D2",
+        "g_00DF7136",
+        "g_00DF75DA",
+        "g_00DF763E",
+        "g_00DF7662",
+        "g_00DF7686",
+        "g_00DF76D5",
+        "g_00DF77A2",
+        "g_00DF77B6",
+        "g_00DF77DE",
+        "g_00DF786A"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 71,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19e6_part1_unit_help_late",
+        "screenshot": "scene_19e6_part1_unit_help_late",
+        "note": "verified visual text: g_00DF5D62/g_00DF5E12 계열 유닛/작전 설명 후반 대사; exact watch evidence: temp/scene_entrypoints/part1_19e6_primary_watch_current, temp/scene_entrypoints/part1_19e6_exact_watch_current",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0",
+        "extra_screenshots": [
+          {
+            "checkpoint": "scene_19e6_part1_unit_help_late_b",
+            "label": "작전 설명 후속 대사",
+            "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_b_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part1_19e6_exact_watch_current/part1_main_sweep_current/state_007/hit.ss0"
+          }
+        ],
+        "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+      }
+    },
+    {
+      "id": "19e_part1_unit_story_help",
+      "order": 260,
+      "scope": "part1",
+      "subtag": "대사",
+      "title": "1편 유닛/작전 설명 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "1편 유닛/작전 설명 잔여 대사 bucket. 실제 화면은 19e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part1"
+        ],
+        "addr_ranges": [
+          [
+            14585856,
+            14614528
+          ],
+          [
+            14614528,
+            14647296
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00DE93F6",
+        "g_00DE95C7",
+        "g_00DE973B",
+        "g_00DE98DA",
+        "g_00DE9A5A",
+        "g_00DE9BFA",
+        "g_00DE9D8E",
+        "g_00DE9F4A",
+        "g_00DEA136",
+        "g_00DEA376",
+        "g_00DEA54A",
+        "g_00DEA8AA",
+        "g_00DEAA9E",
+        "g_00DEAC6E",
+        "g_00DEADDE",
+        "g_00DEB802",
+        "g_00DEB81A",
+        "g_00DEB83E",
+        "g_00DEB85E",
+        "g_00DEB88A",
+        "g_00DEB8A2",
+        "g_00DEB8BE",
+        "g_00DEB8FE",
+        "g_00DEB916",
+        "g_00DEB93A",
+        "g_00DEB95A",
         "g_00DEF5FA",
         "g_00DEFD82",
         "g_00DF0E48",
@@ -2852,110 +3515,40 @@
         "g_00DF43FA",
         "g_00DF4452",
         "g_00DF44A2",
-        "g_00DF44F6",
-        "g_00DF55C3",
-        "g_00DF5607",
-        "g_00DF5657",
-        "g_00DF56B3",
-        "g_00DF5723",
-        "g_00DF577B",
-        "g_00DF57D3",
-        "g_00DF580F",
-        "g_00DF5863",
-        "g_00DF587B",
-        "g_00DF58DB",
-        "g_00DF5937",
-        "g_00DF597B",
-        "g_00DF59CF",
-        "g_00DF5A2F",
-        "g_00DF5D62",
-        "g_00DF5D9A",
-        "g_00DF5DD2",
-        "g_00DF5E12",
-        "g_00DF5F0E",
-        "g_00DF5F5A",
-        "g_00DF5FBA",
-        "g_00DF6016",
-        "g_00DF60DA",
-        "g_00DF612E",
-        "g_00DF6146",
-        "g_00DF61BA",
-        "g_00DF61FE",
-        "g_00DF627C",
-        "g_00DF628E",
-        "g_00DF63A6",
-        "g_00DF6420",
-        "g_00DF6442",
-        "g_00DF649A",
-        "g_00DF6532",
-        "g_00DF6576",
-        "g_00DF6656",
-        "g_00DF669F",
-        "g_00DF672E",
-        "g_00DF67BA",
-        "g_00DF685A",
-        "g_00DF689A",
-        "g_00DF68F6",
-        "g_00DF6946",
-        "g_00DF6A66",
-        "g_00DF6A7A",
-        "g_00DF6A96",
-        "g_00DF6BD6",
-        "g_00DF6C36",
-        "g_00DF6C7E",
-        "g_00DF6D22",
-        "g_00DF6D4A",
-        "g_00DF6E0E",
-        "g_00DF6E5A",
-        "g_00DF6EAA",
-        "g_00DF6F3A",
-        "g_00DF6F96",
-        "g_00DF7032",
-        "g_00DF706E",
-        "g_00DF7082",
-        "g_00DF70D2",
-        "g_00DF7136",
-        "g_00DF7166",
-        "g_00DF71DE",
-        "g_00DF71F6",
-        "g_00DF72E2",
-        "g_00DF7346",
-        "g_00DF7422",
-        "g_00DF7452",
-        "g_00DF756A",
-        "g_00DF75DA",
-        "g_00DF763E",
-        "g_00DF7662",
-        "g_00DF7686",
-        "g_00DF76D5",
-        "g_00DF77A2",
-        "g_00DF77B6",
-        "g_00DF77DE",
-        "g_00DF786A"
+        "g_00DF44F6"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 336,
+        "dialogue": 108,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "19e1_part1_unit_info_detail_help",
+        "19e7_part1_hoip_co_weather_help",
+        "19e6_part1_unit_help_late"
+      ]
     },
     {
       "id": "19f_part1_extra_story",
-      "order": 180,
+      "order": 270,
       "scope": "part1",
       "subtag": "대사",
       "title": "1편 추가/더미 스토리 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_19f_part1_extra_story",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_19f_part1_extra_story",
+        "url": "/scene_shots/scene_19f_part1_extra_story.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "fresh sweep exact step: Part1 추가/더미 스토리 실제 대사창",
+        "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -3000,25 +3593,37 @@
       "counts": {
         "dialogue": 23,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_19f_part1_extra_story",
+        "screenshot": "scene_19f_part1_extra_story",
+        "note": "fresh sweep exact step: Part1 추가/더미 스토리 실제 대사창",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0",
+        "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0"
       }
     },
     {
       "id": "20_part2_intro_newspaper",
-      "order": 190,
+      "order": 280,
       "scope": "part2",
       "subtag": "인트로",
-      "title": "2편 인트로 신문/스플래시",
+      "title": "2편 진입 스플래시 로고",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_20_part2_intro_newspaper",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "07_part2_main_menu",
-        "url": "/scene_shots/07_part2_main_menu.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_20_part2_intro_newspaper",
+        "url": "/scene_shots/scene_20_part2_intro_newspaper.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+        "note": "fresh frame scan: Part2 진입 스플래시 로고",
+        "capture_path": "temp/scene_screenshots/scene_20_part2_intro_newspaper_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -3028,31 +3633,87 @@
       },
       "dialogue_ids": [],
       "sprite_ids": [
-        "lz77_004D8AF8",
+        "lz77_004D8AF8"
+      ],
+      "counts": {
+        "dialogue": 0,
+        "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "scene_20_part2_intro_newspaper",
+        "screenshot": "scene_20_part2_intro_newspaper",
+        "note": "fresh frame scan: Part2 진입 스플래시 로고",
+        "source_state": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0",
+        "capture_path": "temp/scene_screenshots/scene_20_part2_intro_newspaper_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0"
+      }
+    },
+    {
+      "id": "20a_part2_menu_newspaper_bg",
+      "order": 290,
+      "scope": "part2",
+      "subtag": "인트로",
+      "title": "2편 메뉴 신문 배경",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_20a_part2_menu_newspaper_bg",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_20a_part2_menu_newspaper_bg",
+        "url": "/scene_shots/scene_20a_part2_menu_newspaper_bg.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "fresh frame scan: Part2 메뉴 전 신문 배경",
+        "capture_path": "temp/scene_screenshots/scene_20a_part2_menu_newspaper_bg_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0"
+      },
+      "dialogue_filter": {
+        "regions": []
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [],
+      "sprite_ids": [
         "lz77_005B5D10"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 2
+        "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "scene_20a_part2_menu_newspaper_bg",
+        "screenshot": "scene_20a_part2_menu_newspaper_bg",
+        "note": "fresh frame scan: Part2 메뉴 전 신문 배경",
+        "source_state": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0",
+        "capture_path": "temp/scene_screenshots/scene_20a_part2_menu_newspaper_bg_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0"
       }
     },
     {
       "id": "21_part2_intro_blackhole",
-      "order": 200,
+      "order": 300,
       "scope": "part2",
       "subtag": "인트로",
       "title": "2편 인트로 블랙홀/도미노/프롤로그",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_21_part2_intro_blackhole",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "07_part2_main_menu",
-        "url": "/scene_shots/07_part2_main_menu.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_21_part2_intro_blackhole",
+        "url": "/scene_shots/scene_21_part2_intro_blackhole.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+        "note": "fresh sweep: Part2 프롤로그/블랙홀 대사",
+        "capture_path": "temp/scene_screenshots/scene_21_part2_intro_blackhole_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -3062,34 +3723,43 @@
       },
       "dialogue_ids": [],
       "sprite_ids": [
-        "lz77_0045274C",
         "lz77_004E0478",
-        "lz77_004E17C0",
-        "lz77_004ECD60",
         "lz77_005BBB3C"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 5
+        "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "scene_21_part2_intro_blackhole",
+        "screenshot": "scene_21_part2_intro_blackhole",
+        "note": "fresh sweep: Part2 프롤로그/블랙홀 대사",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0",
+        "capture_path": "temp/scene_screenshots/scene_21_part2_intro_blackhole_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0"
       }
     },
     {
       "id": "21a_part2_prologue_story",
-      "order": 210,
+      "order": 310,
       "scope": "part2",
       "subtag": "인트로",
       "title": "2편 프롤로그 지도/호크 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "08_part2_prologue_map_text",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "08_part2_prologue_map_text",
         "url": "/scene_shots/08_part2_prologue_map_text.png",
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "Part2 프롤로그 지도/나레이션"
+        "note": "Part2 프롤로그 지도/나레이션",
+        "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3121,14 +3791,23 @@
       "counts": {
         "dialogue": 10,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "08_part2_prologue_map_text",
+        "screenshot": "08_part2_prologue_map_text",
+        "note": "기존 fresh Part2 프롤로그 지도 대사",
+        "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
       "id": "22_part2_title",
-      "order": 220,
+      "order": 320,
       "scope": "part2",
       "subtag": "시작화면",
       "title": "2편 타이틀",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "06_part2_title",
@@ -3139,7 +3818,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "Part2 타이틀"
+        "note": "Part2 타이틀",
+        "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3167,14 +3848,23 @@
       "counts": {
         "dialogue": 1,
         "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "06_part2_title",
+        "screenshot": "06_part2_title",
+        "note": "기존 fresh 2편 타이틀",
+        "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
       "id": "23_part2_main_menu",
-      "order": 230,
+      "order": 330,
       "scope": "part2",
       "subtag": "메뉴 선택",
       "title": "2편 메인 메뉴(모드 선택)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": "part2_menu",
       "canvas_status": "ready",
       "checkpoint": "07_part2_main_menu",
@@ -3185,7 +3875,9 @@
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)",
+        "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3365,8 +4057,7 @@
         "g_00A2CFB0",
         "g_00A2CFC0",
         "g_00A2CFD4",
-        "g_00A2CFE8",
-        "g_00A2CFF8"
+        "g_00A2CFE8"
       ],
       "sprite_ids": [
         "lz77_005B7930",
@@ -3385,27 +4076,38 @@
         "lz77_005B9474"
       ],
       "counts": {
-        "dialogue": 162,
+        "dialogue": 161,
         "sprite": 14
+      },
+      "entrypoint": {
+        "checkpoint": "07_part2_main_menu",
+        "screenshot": "07_part2_main_menu",
+        "note": "기존 fresh Part2 메인 메뉴",
+        "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
-      "id": "23a_part2_shop_sound_comm",
-      "order": 240,
+      "id": "23a_part2_wars_shop",
+      "order": 340,
       "scope": "part2",
       "subtag": "메뉴 선택",
-      "title": "2편 상점/사운드/통신 메뉴",
+      "title": "2편 워즈 숍/해금 상점",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_23a_part2_wars_shop",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "07_part2_main_menu",
-        "url": "/scene_shots/07_part2_main_menu.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_23a_part2_wars_shop",
+        "url": "/scene_shots/scene_23a_part2_wars_shop.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)"
+        "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면",
+        "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -3415,10 +4117,6 @@
           [
             10672312,
             10681968
-          ],
-          [
-            10702636,
-            10704728
           ]
         ]
       },
@@ -3511,7 +4209,59 @@
         "g_00A2FE20",
         "g_00A2FE38",
         "g_00A2FE48",
-        "g_00A2FE58",
+        "g_00A2FE58"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 86,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_23a_part2_wars_shop",
+        "screenshot": "scene_23a_part2_wars_shop",
+        "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면",
+        "source_state": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0",
+        "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
+      }
+    },
+    {
+      "id": "23b_part2_comm_multiplayer",
+      "order": 350,
+      "scope": "part2",
+      "subtag": "메뉴 선택",
+      "title": "2편 통신 메뉴/맵 교환",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_23b_part2_comm_multiplayer",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_23b_part2_comm_multiplayer",
+        "url": "/scene_shots/scene_23b_part2_comm_multiplayer.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
+        "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10702636,
+            10703540
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A34F2C",
         "g_00A34F48",
         "g_00A34F5C",
@@ -3536,7 +4286,59 @@
         "g_00A351FD",
         "g_00A35228",
         "g_00A35258",
-        "g_00A35280",
+        "g_00A35280"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 25,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_23b_part2_comm_multiplayer",
+        "screenshot": "scene_23b_part2_comm_multiplayer",
+        "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
+        "source_state": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0",
+        "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+      }
+    },
+    {
+      "id": "23c_part2_sound_room",
+      "order": 360,
+      "scope": "part2",
+      "subtag": "메뉴 선택",
+      "title": "2편 사운드룸 트랙 목록",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_23c_part2_sound_room",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_23c_part2_sound_room",
+        "url": "/scene_shots/scene_23c_part2_sound_room.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "verified loadtempsav route: 33380 complete save -> Part2 menu 자유전 -> UP×3 상점 -> SELECT gallery -> A, actual BGM track list",
+        "capture_path": "temp/scene_screenshots/scene_23c_part2_sound_room_patched/frame.png",
+        "provenance_path": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10703540,
+            10704728
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A352B4",
         "g_00A352CC",
         "g_00A352E4",
@@ -3586,27 +4388,39 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 157,
+        "dialogue": 46,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_23c_part2_sound_room",
+        "screenshot": "scene_23c_part2_sound_room",
+        "note": "verified loadtempsav route: 33380 complete save -> Part2 menu 자유전 -> UP×3 상점 -> SELECT gallery -> A, actual BGM track list",
+        "source_state": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0",
+        "capture_path": "temp/scene_screenshots/scene_23c_part2_sound_room_patched/frame.png",
+        "provenance_path": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0"
       }
     },
     {
       "id": "24_part2_campaign_map",
-      "order": 250,
+      "order": 370,
       "scope": "part2",
       "subtag": "캠페인 선택",
       "title": "2편 캠페인/작전 선택(월드맵)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "20_mode_select_menu",
+      "checkpoint": "scene_24_part2_campaign_map",
       "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "20_mode_select_menu",
-        "url": "/scene_shots/20_mode_select_menu.png",
+        "checkpoint": "scene_24_part2_campaign_map",
+        "url": "/scene_shots/scene_24_part2_campaign_map.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "모드 선택/월드맵+CO대사"
+        "note": "fresh sweep: Part2 캠페인/작전 선택 지도",
+        "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -3627,135 +4441,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00A2D008",
-        "g_00A2D018",
-        "g_00A2D028",
-        "g_00A2D03C",
-        "g_00A2D04C",
-        "g_00A2D05C",
-        "g_00A2D070",
-        "g_00A2D080",
-        "g_00A2D090",
-        "g_00A2D0A0",
-        "g_00A2D0B4",
-        "g_00A2D0C4",
-        "g_00A2D0D4",
-        "g_00A2D0E4",
-        "g_00A2D0F8",
-        "g_00A2D108",
-        "g_00A2D118",
-        "g_00A2D12C",
-        "g_00A2D13C",
-        "g_00A2D150",
-        "g_00A2D160",
-        "g_00A2D170",
-        "g_00A2D180",
-        "g_00A2D190",
-        "g_00A2D1A0",
-        "g_00A2D1B4",
-        "g_00A2D1C4",
-        "g_00A2D1D4",
-        "g_00A2D1E4",
-        "g_00A2D1F4",
-        "g_00A2D204",
-        "g_00A2D214",
-        "g_00A2D224",
-        "g_00A2D234",
-        "g_00A2D248",
-        "g_00A2D25C",
-        "g_00A2D270",
-        "g_00A2D280",
-        "g_00A2D290",
-        "g_00A2D29C",
-        "g_00A2D2AC",
-        "g_00A2D2BC",
-        "g_00A2D2CC",
-        "g_00A2D2DC",
-        "g_00A2D2F0",
-        "g_00A2D304",
-        "g_00A2D310",
-        "g_00A2D320",
-        "g_00A2D334",
-        "g_00A2D344",
-        "g_00A2D358",
-        "g_00A2D36C",
-        "g_00A2D37C",
-        "g_00A2D38C",
-        "g_00A2D39C",
-        "g_00A2D3AC",
-        "g_00A2D3C0",
-        "g_00A2D3D4",
-        "g_00A2D3E4",
-        "g_00A2D3F8",
-        "g_00A2D40C",
-        "g_00A2D41C",
-        "g_00A2D42C",
-        "g_00A2D440",
-        "g_00A2D450",
-        "g_00A2D45C",
-        "g_00A2D46C",
-        "g_00A2D480",
-        "g_00A2D490",
-        "g_00A2D4A0",
-        "g_00A2D4B4",
-        "g_00A2D4C4",
-        "g_00A2D4D8",
-        "g_00A2D4EC",
-        "g_00A2D500",
-        "g_00A2D514",
-        "g_00A2D528",
-        "g_00A2D538",
-        "g_00A2D54C",
-        "g_00A2D55C",
-        "g_00A2D570",
-        "g_00A2D57C",
-        "g_00A2D58C",
-        "g_00A2D5A0",
-        "g_00A2D5B4",
-        "g_00A2D5C8",
-        "g_00A2D5D8",
-        "g_00A2D5EC",
-        "g_00A2D5F8",
-        "g_00A2D608",
-        "g_00A2D61C",
-        "g_00A2D62C",
-        "g_00A2D640",
-        "g_00A2D650",
-        "g_00A2D660",
-        "g_00A2D674",
-        "g_00A2D684",
-        "g_00A2D698",
-        "g_00A2D6AC",
-        "g_00A2D6C0",
-        "g_00A2D6D0",
-        "g_00A2D6E0",
-        "g_00A2D6F0",
-        "g_00A2D704",
-        "g_00A2D718",
-        "g_00A2D72C",
-        "g_00A2D73C",
-        "g_00A2D74C",
-        "g_00A2D75C",
-        "g_00A2D770",
-        "g_00A2D780",
-        "g_00A2D794",
-        "g_00A2D7A4",
-        "g_00A2D7B4",
-        "g_00A2D7C4",
-        "g_00A2D7D4",
-        "g_00A2D7E0",
-        "g_00A2D7E8",
-        "g_00A2D7FC",
-        "g_00A2D814",
-        "g_00A2D828",
-        "g_00A2D838",
-        "g_00A2D848",
-        "g_00A2D858",
-        "g_00A2D86C",
-        "g_00A2D878",
-        "g_00A2D889",
-        "g_00A2D894",
-        "g_00A2D8A8",
         "g_00A35758",
         "g_00A35768",
         "g_00A35778",
@@ -3770,27 +4455,39 @@
         "lz77_005AAA68"
       ],
       "counts": {
-        "dialogue": 134,
+        "dialogue": 5,
         "sprite": 5
+      },
+      "entrypoint": {
+        "checkpoint": "scene_24_part2_campaign_map",
+        "screenshot": "scene_24_part2_campaign_map",
+        "note": "fresh sweep: Part2 캠페인/작전 선택 지도",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0",
+        "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
       }
     },
     {
       "id": "24a_part2_operation_select",
-      "order": 260,
+      "order": 380,
       "scope": "part2",
       "subtag": "캠페인 선택",
       "title": "2편 작전 선택/출격 화면",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "10_part2_region_map_redstar",
+      "checkpoint_exists": true,
       "screenshot": {
         "checkpoint": "10_part2_region_map_redstar",
         "url": "/scene_shots/10_part2_region_map_redstar.png",
         "mode": "fresh",
         "grade": "ground_truth",
         "status": "capturable",
-        "note": "Part2 레드스타 지역 지도/작전 진입"
+        "note": "Part2 레드스타 지역 지도/작전 진입",
+        "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3858,25 +4555,36 @@
       "counts": {
         "dialogue": 42,
         "sprite": 3
+      },
+      "entrypoint": {
+        "checkpoint": "10_part2_region_map_redstar",
+        "screenshot": "10_part2_region_map_redstar",
+        "note": "기존 fresh Part2 레드스타 지역 지도",
+        "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
       "id": "24b_part2_strategic_map_mode4",
-      "order": 270,
+      "order": 390,
       "scope": "part2",
       "subtag": "전략지도",
       "title": "2편 전략지도 Mode4 지명 라벨",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_24b_part2_strategic_map_mode4",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "10_part2_region_map_redstar",
-        "url": "/scene_shots/10_part2_region_map_redstar.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_24b_part2_strategic_map_mode4",
+        "url": "/scene_shots/scene_24b_part2_strategic_map_mode4.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part2 레드스타 지역 지도/작전 진입"
+        "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
+        "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -3893,6 +4601,14 @@
         "dialogue": 0,
         "sprite": 2
       },
+      "entrypoint": {
+        "checkpoint": "scene_24b_part2_strategic_map_mode4",
+        "screenshot": "scene_24b_part2_strategic_map_mode4",
+        "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0",
+        "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
+      },
       "related_dialogue_scene_ids": [
         "21a_part2_prologue_story",
         "24a_part2_operation_select"
@@ -3900,21 +4616,25 @@
     },
     {
       "id": "25_part2_mission_titles",
-      "order": 280,
+      "order": 400,
       "scope": "part2",
       "subtag": "미션 진입",
       "title": "2편 에어 미션 타이틀",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_25_part2_mission_titles",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "32_battle_continue",
-        "url": "/scene_shots/32_battle_continue.png",
+        "checkpoint": "scene_25_part2_mission_titles",
+        "url": "/scene_shots/scene_25_part2_mission_titles.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 진입(continue)"
+        "note": "fresh sweep: Part2 미션 스탬프/타이틀",
+        "capture_path": "temp/scene_screenshots/scene_25_part2_mission_titles_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -3930,25 +4650,37 @@
       "counts": {
         "dialogue": 0,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "scene_25_part2_mission_titles",
+        "screenshot": "scene_25_part2_mission_titles",
+        "note": "fresh sweep: Part2 미션 스탬프/타이틀",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0",
+        "capture_path": "temp/scene_screenshots/scene_25_part2_mission_titles_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0"
       }
     },
     {
       "id": "26a_part2_battle_start_overlays",
-      "order": 290,
+      "order": 410,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 시작 회전/개시 오버레이",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_26a_part2_battle_start_overlays",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "32_battle_continue",
-        "url": "/scene_shots/32_battle_continue.png",
+        "checkpoint": "scene_26a_part2_battle_start_overlays",
+        "url": "/scene_shots/scene_26a_part2_battle_start_overlays.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 진입(continue)"
+        "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f060 대표",
+        "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlays_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -3958,28 +4690,55 @@
       },
       "dialogue_ids": [],
       "sprite_ids": [
-        "lz77_00C10B34",
-        "lz77_0045EC74",
-        "lz77_0092DF84",
-        "lz77_0092EB5C",
-        "lz77_00966C0C",
-        "lz77_009677E4",
-        "lz77_0099F4B0",
-        "lz77_009A0088",
-        "lz77_009D7D54",
-        "lz77_009D892C"
+        "lz77_00C10B34"
       ],
       "counts": {
         "dialogue": 0,
-        "sprite": 10
+        "sprite": 1
+      },
+      "entrypoint": {
+        "checkpoint": "scene_26a_part2_battle_start_overlays",
+        "screenshot": "scene_26a_part2_battle_start_overlays",
+        "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f060 대표, f040/f060/f108/f144 보조 프레임",
+        "source_state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
+        "extra_screenshots": [
+          {
+            "checkpoint": "scene_26a_part2_battle_start_overlay_f040",
+            "label": "f040 회전 도입",
+            "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f040_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f040.ss0"
+          },
+          {
+            "checkpoint": "scene_26a_part2_battle_start_overlay_f060",
+            "label": "f060 중앙 표시",
+            "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f060_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
+          },
+          {
+            "checkpoint": "scene_26a_part2_battle_start_overlay_f108",
+            "label": "f108 축소/퇴장",
+            "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f108_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f108.ss0"
+          },
+          {
+            "checkpoint": "scene_26a_part2_battle_start_overlay_f144",
+            "label": "f144 HUD 복귀",
+            "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f144_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f144.ss0"
+          }
+        ],
+        "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlays_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
       }
     },
     {
       "id": "26_part2_battle_labels",
-      "order": 300,
+      "order": 420,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 라벨(체크·데미지 예측)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": "30_battle_attack",
@@ -3990,7 +4749,9 @@
         "mode": "savestate",
         "grade": "stale_state",
         "status": "capturable",
-        "note": "전투 공격 진입"
+        "note": "전투 공격 진입",
+        "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
+        "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -4162,25 +4923,37 @@
       "counts": {
         "dialogue": 139,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "30_battle_attack",
+        "screenshot": "30_battle_attack",
+        "note": "기존 전투 공격/데미지 예측 라벨",
+        "source_state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
+        "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
+        "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
       }
     },
     {
       "id": "27_part2_battle_objlabels",
-      "order": 310,
+      "order": 430,
       "scope": "part2",
       "subtag": "전투",
       "title": "2편 전투 OBJ 라벨(행동·유닛·지형·상태)",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_27_part2_battle_objlabels",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_27_part2_battle_objlabels",
+        "url": "/scene_shots/scene_27_part2_battle_objlabels.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "verified: Part2 전투 정보/OBJ 라벨 메뉴",
+        "capture_path": "temp/scene_screenshots/scene_27_part2_battle_objlabels_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -4361,25 +5134,37 @@
       "counts": {
         "dialogue": 150,
         "sprite": 8
+      },
+      "entrypoint": {
+        "checkpoint": "scene_27_part2_battle_objlabels",
+        "screenshot": "scene_27_part2_battle_objlabels",
+        "note": "verified: Part2 전투 정보/OBJ 라벨 메뉴",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0",
+        "capture_path": "temp/scene_screenshots/scene_27_part2_battle_objlabels_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0"
       }
     },
     {
       "id": "28_part2_result_status",
-      "order": 320,
+      "order": 440,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 성공/실패 오버레이",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_28_part2_result_status",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "33_battle_transport",
-        "url": "/scene_shots/33_battle_transport.png",
+        "checkpoint": "scene_28_part2_result_status",
+        "url": "/scene_shots/scene_28_part2_result_status.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "수송 후 적 턴"
+        "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
+        "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
       },
       "dialogue_filter": {
         "regions": []
@@ -4400,25 +5185,37 @@
       "counts": {
         "dialogue": 0,
         "sprite": 7
+      },
+      "entrypoint": {
+        "checkpoint": "scene_28_part2_result_status",
+        "screenshot": "scene_28_part2_result_status",
+        "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
+        "source_state": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0",
+        "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
       }
     },
     {
       "id": "29_part2_result_summary",
-      "order": 330,
+      "order": 450,
       "scope": "part2",
       "subtag": "결과",
       "title": "2편 결과 요약/축하",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_29_part2_result_summary",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "33_battle_transport",
-        "url": "/scene_shots/33_battle_transport.png",
+        "checkpoint": "scene_29_part2_result_summary",
+        "url": "/scene_shots/scene_29_part2_result_summary.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "수송 후 적 턴"
+        "note": "fresh battle clear route: 실제 작전 성공 S 랭크 결과 요약",
+        "capture_path": "temp/scene_screenshots/scene_29_part2_result_summary_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -4462,25 +5259,37 @@
       "counts": {
         "dialogue": 19,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "scene_29_part2_result_summary",
+        "screenshot": "scene_29_part2_result_summary",
+        "note": "fresh battle clear route: 실제 작전 성공 S 랭크 결과 요약",
+        "source_state": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0",
+        "capture_path": "temp/scene_screenshots/scene_29_part2_result_summary_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0"
       }
     },
     {
-      "id": "30a_part2_story_opening_redstar",
-      "order": 340,
+      "id": "30a1_part2_redstar_story_early",
+      "order": 460,
       "scope": "part2",
       "subtag": "대사",
-      "title": "2편 초반/레드스타 스토리 대사",
+      "title": "2편 레드스타 초반 스토리 대사 1",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_30a1_part2_redstar_story_early",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_30a1_part2_redstar_story_early",
+        "url": "/scene_shots/scene_30a1_part2_redstar_story_early.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "verified visual text: g_00A01C90/g_00A01CA3 계열 레드스타 초반 스토리",
+        "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -4489,7 +5298,7 @@
         "addr_ranges": [
           [
             10492928,
-            10518528
+            10505316
           ]
         ]
       },
@@ -4634,7 +5443,73 @@
         "g_00A04AD0",
         "g_00A04B4C",
         "g_00A04BC0",
-        "g_00A04BF8",
+        "g_00A04BF8"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 138,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30a1_part2_redstar_story_early",
+        "screenshot": "scene_30a1_part2_redstar_story_early",
+        "note": "verified visual text: g_00A01C90/g_00A01CA3 계열 레드스타 초반 스토리",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0",
+        "extra_screenshots": [
+          {
+            "checkpoint": "scene_30a1_part2_redstar_story_early_b",
+            "label": "레드스타 초반 후속 대사",
+            "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_b_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_011/a01.ss0"
+          },
+          {
+            "checkpoint": "scene_30a1_part2_redstar_story_early_c",
+            "label": "블랙홀 군 잔당 안내",
+            "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_c_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0"
+          }
+        ],
+        "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0"
+      }
+    },
+    {
+      "id": "30a_part2_story_opening_redstar",
+      "order": 470,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 초반/레드스타 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 레드스타 초반 잔여 대사 bucket. 실제 화면은 30a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10492928,
+            10518528
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A04C64",
         "g_00A04CEC",
         "g_00A04D3C",
@@ -4777,27 +5652,138 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 277,
+        "dialogue": 139,
         "sprite": 0
+      },
+      "related_dialogue_scene_ids": [
+        "30a1_part2_redstar_story_early"
+      ]
+    },
+    {
+      "id": "30b1_part2_redstar_liberation_macro_briefing_story",
+      "order": 480,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 레드스타 해방 후 매크로랜드 브리핑 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+        "url": "/scene_shots/scene_30b1_part2_redstar_liberation_macro_briefing_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10544024,
+            10547708
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A0E398",
+        "g_00A0E3D5",
+        "g_00A0E434",
+        "g_00A0E464",
+        "g_00A0E494",
+        "g_00A0E4D5",
+        "g_00A0E4E8",
+        "g_00A0E538",
+        "g_00A0E550",
+        "g_00A0E574",
+        "g_00A0E59C",
+        "g_00A0E5D8",
+        "g_00A0E6A0",
+        "g_00A0E6D4",
+        "g_00A0E738",
+        "g_00A0E768",
+        "g_00A0E7A8",
+        "g_00A0E7FC",
+        "g_00A0E831",
+        "g_00A0E89C",
+        "g_00A0E9A0",
+        "g_00A0E9D8",
+        "g_00A0EA18",
+        "g_00A0EA40",
+        "g_00A0EA78",
+        "g_00A0EAAC",
+        "g_00A0EAEC",
+        "g_00A0EB1C",
+        "g_00A0EB80",
+        "g_00A0EB9C",
+        "g_00A0EBD0",
+        "g_00A0EC20",
+        "g_00A0EC44",
+        "g_00A0EC98",
+        "g_00A0ECF8",
+        "g_00A0ED08",
+        "g_00A0ED40",
+        "g_00A0ED80",
+        "g_00A0EDA8",
+        "g_00A0EDDB",
+        "g_00A0EF00",
+        "g_00A0EF28",
+        "g_00A0EF6C",
+        "g_00A0EFA0",
+        "g_00A0EFC8",
+        "g_00A0F014",
+        "g_00A0F039",
+        "g_00A0F060",
+        "g_00A0F098",
+        "g_00A0F0C0",
+        "g_00A0F164",
+        "g_00A0F1CC"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 52,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+        "screenshot": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
+        "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0"
       }
     },
     {
       "id": "30b_part2_story_bluemoon",
-      "order": 350,
+      "order": 490,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 블루문/초중반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 블루문/초중반 잔여 대사 bucket. 실제 화면은 30b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -5096,58 +6082,6 @@
         "g_00A0E31C",
         "g_00A0E33C",
         "g_00A0E36C",
-        "g_00A0E398",
-        "g_00A0E3D5",
-        "g_00A0E434",
-        "g_00A0E464",
-        "g_00A0E494",
-        "g_00A0E4D5",
-        "g_00A0E4E8",
-        "g_00A0E538",
-        "g_00A0E550",
-        "g_00A0E574",
-        "g_00A0E59C",
-        "g_00A0E5D8",
-        "g_00A0E6A0",
-        "g_00A0E6D4",
-        "g_00A0E738",
-        "g_00A0E768",
-        "g_00A0E7A8",
-        "g_00A0E7FC",
-        "g_00A0E831",
-        "g_00A0E89C",
-        "g_00A0E9A0",
-        "g_00A0E9D8",
-        "g_00A0EA18",
-        "g_00A0EA40",
-        "g_00A0EA78",
-        "g_00A0EAAC",
-        "g_00A0EAEC",
-        "g_00A0EB1C",
-        "g_00A0EB80",
-        "g_00A0EB9C",
-        "g_00A0EBD0",
-        "g_00A0EC20",
-        "g_00A0EC44",
-        "g_00A0EC98",
-        "g_00A0ECF8",
-        "g_00A0ED08",
-        "g_00A0ED40",
-        "g_00A0ED80",
-        "g_00A0EDA8",
-        "g_00A0EDDB",
-        "g_00A0EF00",
-        "g_00A0EF28",
-        "g_00A0EF6C",
-        "g_00A0EFA0",
-        "g_00A0EFC8",
-        "g_00A0F014",
-        "g_00A0F039",
-        "g_00A0F060",
-        "g_00A0F098",
-        "g_00A0F0C0",
-        "g_00A0F164",
-        "g_00A0F1CC",
         "g_00A0F1FC",
         "g_00A0F21C",
         "g_00A0F22C",
@@ -5205,27 +6139,138 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 388,
+        "dialogue": 336,
         "sprite": 0
+      },
+      "related_dialogue_scene_ids": [
+        "30b1_part2_redstar_liberation_macro_briefing_story"
+      ]
+    },
+    {
+      "id": "30c1_part2_yellowcomet_north_invasion_story",
+      "order": 500,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 옐로코멧 북방 침공 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
+        "url": "/scene_shots/scene_30c1_part2_yellowcomet_north_invasion_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10572352,
+            10575884
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A15240",
+        "g_00A15280",
+        "g_00A152B0",
+        "g_00A152F0",
+        "g_00A15308",
+        "g_00A15318",
+        "g_00A1534C",
+        "g_00A153B0",
+        "g_00A153F0",
+        "g_00A15428",
+        "g_00A1543C",
+        "g_00A15448",
+        "g_00A15498",
+        "g_00A154CC",
+        "g_00A1550C",
+        "g_00A155A4",
+        "g_00A155C0",
+        "g_00A155F8",
+        "g_00A15609",
+        "g_00A1563C",
+        "g_00A15670",
+        "g_00A156F9",
+        "g_00A15720",
+        "g_00A15754",
+        "g_00A15780",
+        "g_00A157BC",
+        "g_00A15828",
+        "g_00A15878",
+        "g_00A158C9",
+        "g_00A15918",
+        "g_00A15954",
+        "g_00A1597C",
+        "g_00A15994",
+        "g_00A159D0",
+        "g_00A15A00",
+        "g_00A15A30",
+        "g_00A15AA0",
+        "g_00A15ACC",
+        "g_00A15B30",
+        "g_00A15B70",
+        "g_00A15BA5",
+        "g_00A15C84",
+        "g_00A15CE8",
+        "g_00A15D3C",
+        "g_00A15D78",
+        "g_00A15E34",
+        "g_00A15E80",
+        "g_00A15EBC",
+        "g_00A15F18",
+        "g_00A15F68",
+        "g_00A15FA5",
+        "g_00A15FC4"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 52,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
+        "screenshot": "scene_30c1_part2_yellowcomet_north_invasion_story",
+        "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
       }
     },
     {
       "id": "30c_part2_story_yellow_comet",
-      "order": 360,
+      "order": 510,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 옐로코멧/중반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 옐로코멧/중반 잔여 대사 bucket. 실제 화면은 30c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -5552,58 +6597,6 @@
         "g_00A150D0",
         "g_00A151A8",
         "g_00A151C0",
-        "g_00A15240",
-        "g_00A15280",
-        "g_00A152B0",
-        "g_00A152F0",
-        "g_00A15308",
-        "g_00A15318",
-        "g_00A1534C",
-        "g_00A153B0",
-        "g_00A153F0",
-        "g_00A15428",
-        "g_00A1543C",
-        "g_00A15448",
-        "g_00A15498",
-        "g_00A154CC",
-        "g_00A1550C",
-        "g_00A155A4",
-        "g_00A155C0",
-        "g_00A155F8",
-        "g_00A15609",
-        "g_00A1563C",
-        "g_00A15670",
-        "g_00A156F9",
-        "g_00A15720",
-        "g_00A15754",
-        "g_00A15780",
-        "g_00A157BC",
-        "g_00A15828",
-        "g_00A15878",
-        "g_00A158C9",
-        "g_00A15918",
-        "g_00A15954",
-        "g_00A1597C",
-        "g_00A15994",
-        "g_00A159D0",
-        "g_00A15A00",
-        "g_00A15A30",
-        "g_00A15AA0",
-        "g_00A15ACC",
-        "g_00A15B30",
-        "g_00A15B70",
-        "g_00A15BA5",
-        "g_00A15C84",
-        "g_00A15CE8",
-        "g_00A15D3C",
-        "g_00A15D78",
-        "g_00A15E34",
-        "g_00A15E80",
-        "g_00A15EBC",
-        "g_00A15F18",
-        "g_00A15F68",
-        "g_00A15FA5",
-        "g_00A15FC4",
         "g_00A1600C",
         "g_00A16038",
         "g_00A1604C",
@@ -5717,27 +6710,209 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 472,
+        "dialogue": 420,
         "sprite": 0
+      },
+      "related_dialogue_scene_ids": [
+        "30c1_part2_yellowcomet_north_invasion_story"
+      ]
+    },
+    {
+      "id": "30d2_part2_green_earth_story_late",
+      "order": 520,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 그린어스 전반 스토리 대사 2",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30d2_part2_green_earth_story_late",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30d2_part2_green_earth_story_late",
+        "url": "/scene_shots/scene_30d2_part2_green_earth_story_late.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+        "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10592108,
+            10600556
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A19F6C",
+        "g_00A19F8C",
+        "g_00A19FA0",
+        "g_00A19FBC",
+        "g_00A19FC4",
+        "g_00A1A018",
+        "g_00A1A048",
+        "g_00A1A088",
+        "g_00A1A0C8",
+        "g_00A1A0EC",
+        "g_00A1A110",
+        "g_00A1A160",
+        "g_00A1A204",
+        "g_00A1A258",
+        "g_00A1A2A0",
+        "g_00A1A2B4",
+        "g_00A1A2E0",
+        "g_00A1A318",
+        "g_00A1A384",
+        "g_00A1A3F0",
+        "g_00A1A3F8",
+        "g_00A1A49C",
+        "g_00A1A4D0",
+        "g_00A1A500",
+        "g_00A1A514",
+        "g_00A1A580",
+        "g_00A1A5B4",
+        "g_00A1A5CC",
+        "g_00A1A668",
+        "g_00A1A6C4",
+        "g_00A1A700",
+        "g_00A1A728",
+        "g_00A1A77C",
+        "g_00A1A7A4",
+        "g_00A1A7E0",
+        "g_00A1A82C",
+        "g_00A1A84C",
+        "g_00A1A860",
+        "g_00A1A94C",
+        "g_00A1A9D4",
+        "g_00A1AA20",
+        "g_00A1AAA0",
+        "g_00A1AB10",
+        "g_00A1AB28",
+        "g_00A1AB57",
+        "g_00A1ABB8",
+        "g_00A1AC2C",
+        "g_00A1AC44",
+        "g_00A1AC70",
+        "g_00A1ACB8",
+        "g_00A1ACE0",
+        "g_00A1ACE8",
+        "g_00A1AD0C",
+        "g_00A1AD6C",
+        "g_00A1AE7C",
+        "g_00A1AEE0",
+        "g_00A1AF2C",
+        "g_00A1AF64",
+        "g_00A1AF88",
+        "g_00A1AFC4",
+        "g_00A1AFFC",
+        "g_00A1B04C",
+        "g_00A1B0BC",
+        "g_00A1B0EC",
+        "g_00A1B185",
+        "g_00A1B194",
+        "g_00A1B1C8",
+        "g_00A1B230",
+        "g_00A1B29C",
+        "g_00A1B318",
+        "g_00A1B374",
+        "g_00A1B3C8",
+        "g_00A1B3EC",
+        "g_00A1B420",
+        "g_00A1B454",
+        "g_00A1B469",
+        "g_00A1B478",
+        "g_00A1B4BC",
+        "g_00A1B4EC",
+        "g_00A1B528",
+        "g_00A1B554",
+        "g_00A1B5BC",
+        "g_00A1B5F0",
+        "g_00A1B628",
+        "g_00A1B704",
+        "g_00A1B71C",
+        "g_00A1B758",
+        "g_00A1B788",
+        "g_00A1B7AC",
+        "g_00A1B7BC",
+        "g_00A1B804",
+        "g_00A1B81C",
+        "g_00A1B844",
+        "g_00A1B8B4",
+        "g_00A1B8EC",
+        "g_00A1B945",
+        "g_00A1B95C",
+        "g_00A1B9C0",
+        "g_00A1B9E0",
+        "g_00A1B9FC",
+        "g_00A1BA50",
+        "g_00A1BAA8",
+        "g_00A1BAD4",
+        "g_00A1BB00",
+        "g_00A1BB1C",
+        "g_00A1BB38",
+        "g_00A1BB7C",
+        "g_00A1BBA8",
+        "g_00A1BBD4",
+        "g_00A1BC00",
+        "g_00A1BC1C",
+        "g_00A1BC38",
+        "g_00A1BC78",
+        "g_00A1BCA7",
+        "g_00A1BDF8",
+        "g_00A1BE24",
+        "g_00A1BE94",
+        "g_00A1BECC",
+        "g_00A1BEF0",
+        "g_00A1BF24",
+        "g_00A1BF74",
+        "g_00A1BFC4",
+        "g_00A1BFD8"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 123,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30d2_part2_green_earth_story_late",
+        "screenshot": "scene_30d2_part2_green_earth_story_late",
+        "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+        "source_state": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
       }
     },
     {
       "id": "30d_part2_story_green_earth",
-      "order": 370,
+      "order": 530,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 그린어스 전반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 그린어스 전반 잔여 대사 bucket. 실제 화면은 30d* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -5746,7 +6921,7 @@
         "addr_ranges": [
           [
             10584064,
-            10600448
+            10600556
           ]
         ]
       },
@@ -5875,154 +7050,38 @@
         "g_00A19E54",
         "g_00A19ECC",
         "g_00A19F00",
-        "g_00A19F34",
-        "g_00A19F6C",
-        "g_00A19F8C",
-        "g_00A19FA0",
-        "g_00A19FBC",
-        "g_00A19FC4",
-        "g_00A1A018",
-        "g_00A1A048",
-        "g_00A1A088",
-        "g_00A1A0C8",
-        "g_00A1A0EC",
-        "g_00A1A110",
-        "g_00A1A160",
-        "g_00A1A204",
-        "g_00A1A258",
-        "g_00A1A2A0",
-        "g_00A1A2B4",
-        "g_00A1A2E0",
-        "g_00A1A318",
-        "g_00A1A384",
-        "g_00A1A3F0",
-        "g_00A1A3F8",
-        "g_00A1A49C",
-        "g_00A1A4D0",
-        "g_00A1A500",
-        "g_00A1A514",
-        "g_00A1A580",
-        "g_00A1A5B4",
-        "g_00A1A5CC",
-        "g_00A1A668",
-        "g_00A1A6C4",
-        "g_00A1A700",
-        "g_00A1A728",
-        "g_00A1A77C",
-        "g_00A1A7A4",
-        "g_00A1A7E0",
-        "g_00A1A82C",
-        "g_00A1A84C",
-        "g_00A1A860",
-        "g_00A1A94C",
-        "g_00A1A9D4",
-        "g_00A1AA20",
-        "g_00A1AAA0",
-        "g_00A1AB10",
-        "g_00A1AB28",
-        "g_00A1AB57",
-        "g_00A1ABB8",
-        "g_00A1AC2C",
-        "g_00A1AC44",
-        "g_00A1AC70",
-        "g_00A1ACB8",
-        "g_00A1ACE0",
-        "g_00A1ACE8",
-        "g_00A1AD0C",
-        "g_00A1AD6C",
-        "g_00A1AE7C",
-        "g_00A1AEE0",
-        "g_00A1AF2C",
-        "g_00A1AF64",
-        "g_00A1AF88",
-        "g_00A1AFC4",
-        "g_00A1AFFC",
-        "g_00A1B04C",
-        "g_00A1B0BC",
-        "g_00A1B0EC",
-        "g_00A1B185",
-        "g_00A1B194",
-        "g_00A1B1C8",
-        "g_00A1B230",
-        "g_00A1B29C",
-        "g_00A1B318",
-        "g_00A1B374",
-        "g_00A1B3C8",
-        "g_00A1B3EC",
-        "g_00A1B420",
-        "g_00A1B454",
-        "g_00A1B469",
-        "g_00A1B478",
-        "g_00A1B4BC",
-        "g_00A1B4EC",
-        "g_00A1B528",
-        "g_00A1B554",
-        "g_00A1B5BC",
-        "g_00A1B5F0",
-        "g_00A1B628",
-        "g_00A1B704",
-        "g_00A1B71C",
-        "g_00A1B758",
-        "g_00A1B788",
-        "g_00A1B7AC",
-        "g_00A1B7BC",
-        "g_00A1B804",
-        "g_00A1B81C",
-        "g_00A1B844",
-        "g_00A1B8B4",
-        "g_00A1B8EC",
-        "g_00A1B945",
-        "g_00A1B95C",
-        "g_00A1B9C0",
-        "g_00A1B9E0",
-        "g_00A1B9FC",
-        "g_00A1BA50",
-        "g_00A1BAA8",
-        "g_00A1BAD4",
-        "g_00A1BB00",
-        "g_00A1BB1C",
-        "g_00A1BB38",
-        "g_00A1BB7C",
-        "g_00A1BBA8",
-        "g_00A1BBD4",
-        "g_00A1BC00",
-        "g_00A1BC1C",
-        "g_00A1BC38",
-        "g_00A1BC78",
-        "g_00A1BCA7",
-        "g_00A1BDF8",
-        "g_00A1BE24",
-        "g_00A1BE94",
-        "g_00A1BECC",
-        "g_00A1BEF0",
-        "g_00A1BF24",
-        "g_00A1BF74",
-        "g_00A1BFC4",
-        "g_00A1BFD8"
+        "g_00A19F34"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 245,
+        "dialogue": 122,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "30d2_part2_green_earth_story_late"
+      ]
     },
     {
-      "id": "30g_part2_story_green_earth_late",
-      "order": 380,
+      "id": "30g0_part2_green_earth_reinforcement_story",
+      "order": 540,
       "scope": "part2",
       "subtag": "대사",
-      "title": "2편 그린어스 후반 스토리 대사",
+      "title": "2편 그린어스 원군/버티기 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
+        "url": "/scene_shots/scene_30g0_part2_green_earth_reinforcement_story.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -6030,8 +7089,8 @@
         ],
         "addr_ranges": [
           [
-            10600448,
-            10616832
+            10600556,
+            10605124
           ]
         ]
       },
@@ -6110,7 +7169,59 @@
         "g_00A1D068",
         "g_00A1D0B0",
         "g_00A1D0F0",
-        "g_00A1D23C",
+        "g_00A1D23C"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 72,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
+        "screenshot": "scene_30g0_part2_green_earth_reinforcement_story",
+        "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+      }
+    },
+    {
+      "id": "30g1_part2_green_earth_volcano_sortie_story",
+      "order": 550,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 그린어스 화산 출격 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
+        "url": "/scene_shots/scene_30g1_part2_green_earth_volcano_sortie_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10605124,
+            10605904
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A1D244",
         "g_00A1D264",
         "g_00A1D294",
@@ -6128,7 +7239,59 @@
         "g_00A1D4A0",
         "g_00A1D4BC",
         "g_00A1D50C",
-        "g_00A1D51C",
+        "g_00A1D51C"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 18,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
+        "screenshot": "scene_30g1_part2_green_earth_volcano_sortie_story",
+        "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      }
+    },
+    {
+      "id": "30g2_part2_green_earth_volcano_lava_story",
+      "order": 560,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 그린어스 화산/용암 전술 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
+        "url": "/scene_shots/scene_30g2_part2_green_earth_volcano_lava_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10605904,
+            10608516
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A1D550",
         "g_00A1D57C",
         "g_00A1D5C0",
@@ -6172,7 +7335,132 @@
         "g_00A1DE78",
         "g_00A1DEF0",
         "g_00A1DF18",
-        "g_00A1DF30",
+        "g_00A1DF30"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 44,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
+        "screenshot": "scene_30g2_part2_green_earth_volcano_lava_story",
+        "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      }
+    },
+    {
+      "id": "30g3_part2_green_earth_suspicious_area_story",
+      "order": 570,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 그린어스 후반 수상 지역 브리핑 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
+        "url": "/scene_shots/scene_30g3_part2_green_earth_suspicious_area_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10615512,
+            10617012
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A1FAD8",
+        "g_00A1FB28",
+        "g_00A1FBA8",
+        "g_00A1FC14",
+        "g_00A1FC30",
+        "g_00A1FC4C",
+        "g_00A1FCD8",
+        "g_00A1FD09",
+        "g_00A1FD48",
+        "g_00A1FD90",
+        "g_00A1FE14",
+        "g_00A1FE5D",
+        "g_00A1FEAC",
+        "g_00A1FECC",
+        "g_00A1FEFC",
+        "g_00A1FF40",
+        "g_00A1FF50",
+        "g_00A1FF8C",
+        "g_00A1FFAC",
+        "g_00A1FFD1",
+        "g_00A1FFF4"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 21,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
+        "screenshot": "scene_30g3_part2_green_earth_suspicious_area_story",
+        "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+      }
+    },
+    {
+      "id": "30g_part2_story_green_earth_late",
+      "order": 580,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 그린어스 후반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 그린어스 후반 잔여 대사 bucket. 실제 화면은 30g* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10600556,
+            10616832
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A1DF84",
         "g_00A1DFA0",
         "g_00A1DFC8",
@@ -6286,52 +7574,41 @@
         "g_00A1F9AC",
         "g_00A1F9D8",
         "g_00A1FA54",
-        "g_00A1FAA4",
-        "g_00A1FAD8",
-        "g_00A1FB28",
-        "g_00A1FBA8",
-        "g_00A1FC14",
-        "g_00A1FC30",
-        "g_00A1FC4C",
-        "g_00A1FCD8",
-        "g_00A1FD09",
-        "g_00A1FD48",
-        "g_00A1FD90",
-        "g_00A1FE14",
-        "g_00A1FE5D",
-        "g_00A1FEAC",
-        "g_00A1FECC",
-        "g_00A1FEFC",
-        "g_00A1FF40",
-        "g_00A1FF50",
-        "g_00A1FF8C",
-        "g_00A1FFAC",
-        "g_00A1FFD1",
-        "g_00A1FFF4"
+        "g_00A1FAA4"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 269,
+        "dialogue": 114,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "30g0_part2_green_earth_reinforcement_story",
+        "30g1_part2_green_earth_volcano_sortie_story",
+        "30g2_part2_green_earth_volcano_lava_story",
+        "30g3_part2_green_earth_suspicious_area_story"
+      ]
     },
     {
-      "id": "30e_part2_story_blackhole_late",
-      "order": 390,
+      "id": "30e4_part2_blackhole_yellowcomet_fortress_story",
+      "order": 590,
       "scope": "part2",
       "subtag": "대사",
-      "title": "2편 블랙홀 후반 스토리 대사",
+      "title": "2편 블랙홀/옐로코멧 대형 요새 브리핑 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
+        "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+        "url": "/scene_shots/scene_30e4_part2_blackhole_yellowcomet_fortress_story.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 대사"
+        "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
+        "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -6339,8 +7616,8 @@
         ],
         "addr_ranges": [
           [
-            10616832,
-            10649600
+            10617556,
+            10620728
           ]
         ]
       },
@@ -6348,11 +7625,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00A200B4",
-        "g_00A20104",
-        "g_00A20129",
-        "g_00A2014C",
-        "g_00A20284",
         "g_00A202D4",
         "g_00A202F4",
         "g_00A20330",
@@ -6396,7 +7668,59 @@
         "g_00A20D68",
         "g_00A20DD0",
         "g_00A20E30",
-        "g_00A20F20",
+        "g_00A20F20"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 44,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+        "screenshot": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+        "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
+        "source_state": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
+      }
+    },
+    {
+      "id": "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "order": 600,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 블랙홀/옐로코멧 보급 브리핑 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+        "url": "/scene_shots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10620728,
+            10622297
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00A20F38",
         "g_00A20F64",
         "g_00A20FB4",
@@ -6412,7 +7736,263 @@
         "g_00A212E0",
         "g_00A213D0",
         "g_00A2144C",
-        "g_00A214C0",
+        "g_00A214C0"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 16,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+        "screenshot": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+        "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+      }
+    },
+    {
+      "id": "30e1_part2_blackhole_missile_approach_story",
+      "order": 610,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 블랙홀 미사일 기지 접근 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
+        "url": "/scene_shots/scene_30e1_part2_blackhole_missile_approach_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A26D48 미사일 발사대는 완성됐나; exact watch evidence: temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30e1_part2_blackhole_missile_approach_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10644808,
+            10645540
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A26D48",
+        "g_00A26D7C",
+        "g_00A26D9C",
+        "g_00A26DAC",
+        "g_00A26DDC",
+        "g_00A26E0C",
+        "g_00A26E1C",
+        "g_00A26E28",
+        "g_00A26E44",
+        "g_00A26E68",
+        "g_00A26F1C",
+        "g_00A26F48",
+        "g_00A26F6C",
+        "g_00A26F80",
+        "g_00A26F98",
+        "g_00A26FB4"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 16,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
+        "screenshot": "scene_30e1_part2_blackhole_missile_approach_story",
+        "note": "validated visual text: g_00A26D48 미사일 발사대는 완성됐나; exact watch evidence: temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30e1_part2_blackhole_missile_approach_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0"
+      }
+    },
+    {
+      "id": "30e2_part2_blackhole_final_missile_story",
+      "order": 620,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 블랙홀 최종 미사일 기지 후반 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
+        "url": "/scene_shots/scene_30e2_part2_blackhole_final_missile_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+        "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10645540,
+            10649600
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A27024",
+        "g_00A2706C",
+        "g_00A270F0",
+        "g_00A27118",
+        "g_00A27160",
+        "g_00A27174",
+        "g_00A271B4",
+        "g_00A271EC",
+        "g_00A27238",
+        "g_00A27274",
+        "g_00A272AC",
+        "g_00A272D1",
+        "g_00A27318",
+        "g_00A27334",
+        "g_00A27374",
+        "g_00A2739C",
+        "g_00A273D8",
+        "g_00A27410",
+        "g_00A27440",
+        "g_00A27460",
+        "g_00A274A0",
+        "g_00A274B8",
+        "g_00A274FC",
+        "g_00A2751C",
+        "g_00A2754C",
+        "g_00A27581",
+        "g_00A275B8",
+        "g_00A275E0",
+        "g_00A27618",
+        "g_00A2763C",
+        "g_00A27670",
+        "g_00A27698",
+        "g_00A276D4",
+        "g_00A27708",
+        "g_00A27738",
+        "g_00A27758",
+        "g_00A27784",
+        "g_00A27794",
+        "g_00A277B0",
+        "g_00A277C8",
+        "g_00A27840",
+        "g_00A2785D",
+        "g_00A27880",
+        "g_00A27898",
+        "g_00A278B8",
+        "g_00A278CC",
+        "g_00A278D8",
+        "g_00A2790D",
+        "g_00A27920",
+        "g_00A2795C",
+        "g_00A27980",
+        "g_00A279A4",
+        "g_00A279D4",
+        "g_00A279F4",
+        "g_00A27A3C",
+        "g_00A27A70",
+        "g_00A27A85",
+        "g_00A27AA0",
+        "g_00A27AAD",
+        "g_00A27AE1",
+        "g_00A27B40",
+        "g_00A27B48",
+        "g_00A27B80",
+        "g_00A27BFC",
+        "g_00A27C24",
+        "g_00A27C70",
+        "g_00A27CCF",
+        "g_00A27D04",
+        "g_00A27D68",
+        "g_00A27DA4",
+        "g_00A27DAC",
+        "g_00A27E1C",
+        "g_00A27E44",
+        "g_00A27E78",
+        "g_00A27EA0",
+        "g_00A27ECC",
+        "g_00A27F0C",
+        "g_00A27F50",
+        "g_00A27FBC"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 79,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
+        "screenshot": "scene_30e2_part2_blackhole_final_missile_story",
+        "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+        "source_state": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+      }
+    },
+    {
+      "id": "30e_part2_story_blackhole_late",
+      "order": 630,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 블랙홀 후반 스토리 대사",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 블랙홀 후반 잔여 대사 bucket. 실제 화면은 30e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10616832,
+            10649600
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A200B4",
+        "g_00A20104",
+        "g_00A20129",
+        "g_00A2014C",
+        "g_00A20284",
         "g_00A21559",
         "g_00A215A7",
         "g_00A215C8",
@@ -6728,126 +8308,227 @@
         "g_00A26C00",
         "g_00A26C70",
         "g_00A26CC4",
-        "g_00A26D10",
-        "g_00A26D48",
-        "g_00A26D7C",
-        "g_00A26D9C",
-        "g_00A26DAC",
-        "g_00A26DDC",
-        "g_00A26E0C",
-        "g_00A26E1C",
-        "g_00A26E28",
-        "g_00A26E44",
-        "g_00A26E68",
-        "g_00A26F1C",
-        "g_00A26F48",
-        "g_00A26F6C",
-        "g_00A26F80",
-        "g_00A26F98",
-        "g_00A26FB4",
-        "g_00A27024",
-        "g_00A2706C",
-        "g_00A270F0",
-        "g_00A27118",
-        "g_00A27160",
-        "g_00A27174",
-        "g_00A271B4",
-        "g_00A271EC",
-        "g_00A27238",
-        "g_00A27274",
-        "g_00A272AC",
-        "g_00A272D1",
-        "g_00A27318",
-        "g_00A27334",
-        "g_00A27374",
-        "g_00A2739C",
-        "g_00A273D8",
-        "g_00A27410",
-        "g_00A27440",
-        "g_00A27460",
-        "g_00A274A0",
-        "g_00A274B8",
-        "g_00A274FC",
-        "g_00A2751C",
-        "g_00A2754C",
-        "g_00A27581",
-        "g_00A275B8",
-        "g_00A275E0",
-        "g_00A27618",
-        "g_00A2763C",
-        "g_00A27670",
-        "g_00A27698",
-        "g_00A276D4",
-        "g_00A27708",
-        "g_00A27738",
-        "g_00A27758",
-        "g_00A27784",
-        "g_00A27794",
-        "g_00A277B0",
-        "g_00A277C8",
-        "g_00A27840",
-        "g_00A2785D",
-        "g_00A27880",
-        "g_00A27898",
-        "g_00A278B8",
-        "g_00A278CC",
-        "g_00A278D8",
-        "g_00A2790D",
-        "g_00A27920",
-        "g_00A2795C",
-        "g_00A27980",
-        "g_00A279A4",
-        "g_00A279D4",
-        "g_00A279F4",
-        "g_00A27A3C",
-        "g_00A27A70",
-        "g_00A27A85",
-        "g_00A27AA0",
-        "g_00A27AAD",
-        "g_00A27AE1",
-        "g_00A27B40",
-        "g_00A27B48",
-        "g_00A27B80",
-        "g_00A27BFC",
-        "g_00A27C24",
-        "g_00A27C70",
-        "g_00A27CCF",
-        "g_00A27D04",
-        "g_00A27D68",
-        "g_00A27DA4",
-        "g_00A27DAC",
-        "g_00A27E1C",
-        "g_00A27E44",
-        "g_00A27E78",
-        "g_00A27EA0",
-        "g_00A27ECC",
-        "g_00A27F0C",
-        "g_00A27F50",
-        "g_00A27FBC"
+        "g_00A26D10"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 476,
+        "dialogue": 321,
         "sprite": 0
+      },
+      "related_dialogue_scene_ids": [
+        "30e4_part2_blackhole_yellowcomet_fortress_story",
+        "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+        "30e1_part2_blackhole_missile_approach_story",
+        "30e2_part2_blackhole_final_missile_story"
+      ]
+    },
+    {
+      "id": "30f2_part2_co_profile_story",
+      "order": 640,
+      "scope": "part2",
+      "subtag": "대사",
+      "title": "2편 CO 설명/프로필 대사",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_30f2_part2_co_profile_story",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_30f2_part2_co_profile_story",
+        "url": "/scene_shots/scene_30f2_part2_co_profile_story.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "verified visual screen: Part2 CO 설명/프로필 대사",
+        "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10655780,
+            10665984
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A29824",
+        "g_00A29840",
+        "g_00A29866",
+        "g_00A29872",
+        "g_00A2987E",
+        "g_00A298A6",
+        "g_00A298B6",
+        "g_00A298C2",
+        "g_00A298D2",
+        "g_00A298E2",
+        "g_00A298EE",
+        "g_00A298FA",
+        "g_00A29906",
+        "g_00A29916",
+        "g_00A29922",
+        "g_00A2992C",
+        "g_00A29946",
+        "g_00A299A6",
+        "g_00A299B2",
+        "g_00A299BE",
+        "g_00A299CA",
+        "g_00A29A2C",
+        "g_00A29A34",
+        "g_00A29A54",
+        "g_00A29A64",
+        "g_00A29A70",
+        "g_00A29A84",
+        "g_00A29A94",
+        "g_00A29AB0",
+        "g_00A29AE8",
+        "g_00A29B2C",
+        "g_00A29B7C",
+        "g_00A29BDC",
+        "g_00A29C24",
+        "g_00A29C6C",
+        "g_00A29CA0",
+        "g_00A29CE8",
+        "g_00A29D38",
+        "g_00A29D88",
+        "g_00A29DC0",
+        "g_00A29E08",
+        "g_00A29E5C",
+        "g_00A29EC0",
+        "g_00A29F04",
+        "g_00A29F64",
+        "g_00A29FC4",
+        "g_00A2A004",
+        "g_00A2A050",
+        "g_00A2A0A8",
+        "g_00A2A0F8",
+        "g_00A2A154",
+        "g_00A2A1A0",
+        "g_00A2A1F8",
+        "g_00A2A288",
+        "g_00A2A294",
+        "g_00A2A2A0",
+        "g_00A2A2DC",
+        "g_00A2A300",
+        "g_00A2A320",
+        "g_00A2A33C",
+        "g_00A2A3BC",
+        "g_00A2A418",
+        "g_00A2A474",
+        "g_00A2A4D4",
+        "g_00A2A548",
+        "g_00A2A594",
+        "g_00A2A5B4",
+        "g_00A2A5F8",
+        "g_00A2A660",
+        "g_00A2A6D0",
+        "g_00A2A710",
+        "g_00A2A754",
+        "g_00A2A7D0",
+        "g_00A2A858",
+        "g_00A2A890",
+        "g_00A2A90C",
+        "g_00A2A9A0",
+        "g_00A2AA08",
+        "g_00A2AA34",
+        "g_00A2AA90",
+        "g_00A2AB0C",
+        "g_00A2AB5C",
+        "g_00A2AB90",
+        "g_00A2ABC0",
+        "g_00A2AC30",
+        "g_00A2AC70",
+        "g_00A2AC90",
+        "g_00A2ACE4",
+        "g_00A2AD68",
+        "g_00A2ADF0",
+        "g_00A2AE38",
+        "g_00A2AEB4",
+        "g_00A2AF28",
+        "g_00A2AFA8",
+        "g_00A2AFD0",
+        "g_00A2B044",
+        "g_00A2B0C4",
+        "g_00A2B140",
+        "g_00A2B194",
+        "g_00A2B218",
+        "g_00A2B2A0",
+        "g_00A2B304",
+        "g_00A2B394",
+        "g_00A2B414",
+        "g_00A2B494",
+        "g_00A2B518",
+        "g_00A2B57C",
+        "g_00A2B610",
+        "g_00A2B668",
+        "g_00A2B6B8",
+        "g_00A2B724",
+        "g_00A2B7AC",
+        "g_00A2B7F4",
+        "g_00A2B814",
+        "g_00A2B834",
+        "g_00A2B8B0",
+        "g_00A2B8FC",
+        "g_00A2B954",
+        "g_00A2B9AC",
+        "g_00A2BA30",
+        "g_00A2BA7C",
+        "g_00A2BAC4",
+        "g_00A2BB38",
+        "g_00A2BBCC",
+        "g_00A2BC3C",
+        "g_00A2BC60",
+        "g_00A2BCB8",
+        "g_00A2BD44",
+        "g_00A2BD80",
+        "g_00A2BDD8",
+        "g_00A2BE34",
+        "g_00A2BEC4",
+        "g_00A2BF44",
+        "g_00A2BFBC"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 134,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_30f2_part2_co_profile_story",
+        "screenshot": "scene_30f2_part2_co_profile_story",
+        "note": "verified visual screen: Part2 CO 설명/프로필 대사",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+        "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0"
       }
     },
     {
       "id": "30f_part2_story_final_and_co",
-      "order": 400,
+      "order": 650,
       "scope": "part2",
       "subtag": "대사",
       "title": "2편 최종전/CO 설명 대사",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "31_battle_dialog",
-        "url": "/scene_shots/31_battle_dialog.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 대사"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "2편 최종전/CO 설명 잔여 대사 bucket. 실제 화면은 30f* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -6997,165 +8678,38 @@
         "g_00A297D4",
         "g_00A297EC",
         "g_00A297FC",
-        "g_00A29810",
-        "g_00A29824",
-        "g_00A29840",
-        "g_00A29866",
-        "g_00A29872",
-        "g_00A2987E",
-        "g_00A298A6",
-        "g_00A298B6",
-        "g_00A298C2",
-        "g_00A298D2",
-        "g_00A298E2",
-        "g_00A298EE",
-        "g_00A298FA",
-        "g_00A29906",
-        "g_00A29916",
-        "g_00A29922",
-        "g_00A2992C",
-        "g_00A29946",
-        "g_00A299A6",
-        "g_00A299B2",
-        "g_00A299BE",
-        "g_00A299CA",
-        "g_00A29A2C",
-        "g_00A29A34",
-        "g_00A29A54",
-        "g_00A29A64",
-        "g_00A29A70",
-        "g_00A29A84",
-        "g_00A29A94",
-        "g_00A29AB0",
-        "g_00A29AE8",
-        "g_00A29B2C",
-        "g_00A29B7C",
-        "g_00A29BDC",
-        "g_00A29C24",
-        "g_00A29C6C",
-        "g_00A29CA0",
-        "g_00A29CE8",
-        "g_00A29D38",
-        "g_00A29D88",
-        "g_00A29DC0",
-        "g_00A29E08",
-        "g_00A29E5C",
-        "g_00A29EC0",
-        "g_00A29F04",
-        "g_00A29F64",
-        "g_00A29FC4",
-        "g_00A2A004",
-        "g_00A2A050",
-        "g_00A2A0A8",
-        "g_00A2A0F8",
-        "g_00A2A154",
-        "g_00A2A1A0",
-        "g_00A2A1F8",
-        "g_00A2A288",
-        "g_00A2A294",
-        "g_00A2A2A0",
-        "g_00A2A2DC",
-        "g_00A2A300",
-        "g_00A2A320",
-        "g_00A2A33C",
-        "g_00A2A3BC",
-        "g_00A2A418",
-        "g_00A2A474",
-        "g_00A2A4D4",
-        "g_00A2A548",
-        "g_00A2A594",
-        "g_00A2A5B4",
-        "g_00A2A5F8",
-        "g_00A2A660",
-        "g_00A2A6D0",
-        "g_00A2A710",
-        "g_00A2A754",
-        "g_00A2A7D0",
-        "g_00A2A858",
-        "g_00A2A890",
-        "g_00A2A90C",
-        "g_00A2A9A0",
-        "g_00A2AA08",
-        "g_00A2AA34",
-        "g_00A2AA90",
-        "g_00A2AB0C",
-        "g_00A2AB5C",
-        "g_00A2AB90",
-        "g_00A2ABC0",
-        "g_00A2AC30",
-        "g_00A2AC70",
-        "g_00A2AC90",
-        "g_00A2ACE4",
-        "g_00A2AD68",
-        "g_00A2ADF0",
-        "g_00A2AE38",
-        "g_00A2AEB4",
-        "g_00A2AF28",
-        "g_00A2AFA8",
-        "g_00A2AFD0",
-        "g_00A2B044",
-        "g_00A2B0C4",
-        "g_00A2B140",
-        "g_00A2B194",
-        "g_00A2B218",
-        "g_00A2B2A0",
-        "g_00A2B304",
-        "g_00A2B394",
-        "g_00A2B414",
-        "g_00A2B494",
-        "g_00A2B518",
-        "g_00A2B57C",
-        "g_00A2B610",
-        "g_00A2B668",
-        "g_00A2B6B8",
-        "g_00A2B724",
-        "g_00A2B7AC",
-        "g_00A2B7F4",
-        "g_00A2B814",
-        "g_00A2B834",
-        "g_00A2B8B0",
-        "g_00A2B8FC",
-        "g_00A2B954",
-        "g_00A2B9AC",
-        "g_00A2BA30",
-        "g_00A2BA7C",
-        "g_00A2BAC4",
-        "g_00A2BB38",
-        "g_00A2BBCC",
-        "g_00A2BC3C",
-        "g_00A2BC60",
-        "g_00A2BCB8",
-        "g_00A2BD44",
-        "g_00A2BD80",
-        "g_00A2BDD8",
-        "g_00A2BE34",
-        "g_00A2BEC4",
-        "g_00A2BF44",
-        "g_00A2BFBC"
+        "g_00A29810"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 268,
+        "dialogue": 134,
         "sprite": 0
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "30f2_part2_co_profile_story"
+      ]
     },
     {
       "id": "80a_campaign_story_early",
-      "order": 410,
+      "order": 660,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 초반 루트 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_80a_campaign_story_early",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "20_mode_select_menu",
-        "url": "/scene_shots/20_mode_select_menu.png",
+        "checkpoint": "scene_80a_campaign_story_early",
+        "url": "/scene_shots/scene_80a_campaign_story_early.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "모드 선택/월드맵+CO대사"
+        "note": "fresh sweep: 캠페인 초반 전투 진입 대사",
+        "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -7299,25 +8853,37 @@
       "counts": {
         "dialogue": 122,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_80a_campaign_story_early",
+        "screenshot": "scene_80a_campaign_story_early",
+        "note": "fresh sweep: 캠페인 초반 전투 진입 대사",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0",
+        "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0"
       }
     },
     {
       "id": "80b_campaign_story_mid",
-      "order": 420,
+      "order": 670,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 중반 루트 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_80b_campaign_story_mid",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "20_mode_select_menu",
-        "url": "/scene_shots/20_mode_select_menu.png",
+        "checkpoint": "scene_80b_campaign_story_mid",
+        "url": "/scene_shots/scene_80b_campaign_story_mid.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "모드 선택/월드맵+CO대사"
+        "note": "fresh sweep: 캠페인 중반 전투 대사",
+        "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -7474,25 +9040,37 @@
       "counts": {
         "dialogue": 135,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_80b_campaign_story_mid",
+        "screenshot": "scene_80b_campaign_story_mid",
+        "note": "fresh sweep: 캠페인 중반 전투 대사",
+        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0",
+        "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
       }
     },
     {
       "id": "80c_campaign_story_late",
-      "order": 430,
+      "order": 680,
       "scope": "part2",
       "subtag": "대사",
       "title": "캠페인 후반/랭크 안내 대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_80c_campaign_story_late",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "20_mode_select_menu",
-        "url": "/scene_shots/20_mode_select_menu.png",
+        "checkpoint": "scene_80c_campaign_story_late",
+        "url": "/scene_shots/scene_80c_campaign_story_late.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "모드 선택/월드맵+CO대사"
+        "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
+        "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -7706,25 +9284,37 @@
       "counts": {
         "dialogue": 192,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_80c_campaign_story_late",
+        "screenshot": "scene_80c_campaign_story_late",
+        "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
+        "source_state": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0",
+        "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
       }
     },
     {
       "id": "85_ui_common",
-      "order": 440,
+      "order": 690,
       "scope": "all",
       "subtag": "UI/공통",
       "title": "공통 UI 라벨/대사",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_85_ui_common",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "02_common_title",
-        "url": "/scene_shots/02_common_title.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_85_ui_common",
+        "url": "/scene_shots/scene_85_ui_common.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "공통 타이틀 시작하기"
+        "note": "fresh sweep: 공통 전투 START 메뉴 UI",
+        "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -7773,14 +9363,7 @@
       },
       "dialogue_ids": [
         "g_00942020",
-        "g_009420A2",
         "g_009420EF",
-        "g_00942204",
-        "g_009422C9",
-        "g_009422D9",
-        "g_009424FC",
-        "g_0094259E",
-        "g_009425D4",
         "g_0094298C",
         "g_00942A38",
         "g_00942A44",
@@ -7794,26 +9377,8 @@
         "g_009452D9",
         "g_009455D5",
         "g_009455EC",
-        "g_00979755",
-        "g_00979781",
-        "g_00979843",
-        "g_00979853",
-        "g_00979A72",
-        "g_0097A081",
-        "g_0097A095",
-        "g_0097A0CB",
-        "g_0097A0D8",
-        "g_0097A0E5",
-        "g_0097A210",
         "g_0097A4D4",
-        "g_0097A556",
         "g_0097A5A3",
-        "g_0097A6B8",
-        "g_0097A77D",
-        "g_0097A78D",
-        "g_0097A9B0",
-        "g_0097AA52",
-        "g_0097AA88",
         "g_0097AE40",
         "g_0097AEEC",
         "g_0097AEF8",
@@ -7828,25 +9393,9 @@
         "g_0097DDF1",
         "g_0097DE08",
         "g_009B1FF9",
-        "g_009B2025",
-        "g_009B20E7",
-        "g_009B20F7",
-        "g_009B2316",
-        "g_009B2925",
-        "g_009B2939",
-        "g_009B296F",
-        "g_009B297C",
-        "g_009B2989",
-        "g_009B2AB4",
         "g_009B2D78",
         "g_009B2DFA",
         "g_009B2E47",
-        "g_009B2F5C",
-        "g_009B3021",
-        "g_009B3031",
-        "g_009B3254",
-        "g_009B32F6",
-        "g_009B332C",
         "g_009B36E4",
         "g_009B3790",
         "g_009B379C",
@@ -7860,26 +9409,8 @@
         "g_009B6399",
         "g_009B6695",
         "g_009B66AC",
-        "g_009EA89D",
-        "g_009EA8C9",
-        "g_009EA98B",
-        "g_009EA99B",
-        "g_009EABBA",
-        "g_009EB1C9",
-        "g_009EB1DD",
-        "g_009EB213",
-        "g_009EB220",
-        "g_009EB22D",
-        "g_009EB358",
         "g_009EB61C",
-        "g_009EB69E",
         "g_009EB6EB",
-        "g_009EB800",
-        "g_009EB8C5",
-        "g_009EB8D5",
-        "g_009EBAF8",
-        "g_009EBB9A",
-        "g_009EBBD0",
         "g_009EBF88",
         "g_009EC034",
         "g_009EC040",
@@ -7899,27 +9430,39 @@
         "lz77_00C1BAA0"
       ],
       "counts": {
-        "dialogue": 121,
+        "dialogue": 62,
         "sprite": 2
+      },
+      "entrypoint": {
+        "checkpoint": "scene_85_ui_common",
+        "screenshot": "scene_85_ui_common",
+        "note": "fresh sweep: 공통 전투 START 메뉴 UI",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0",
+        "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0"
       }
     },
     {
       "id": "86_common_compact_menu_tables",
-      "order": 450,
+      "order": 700,
       "scope": "all",
       "subtag": "UI/공통",
       "title": "공통 압축 메뉴/선택 라벨 테이블",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_86_common_compact_menu_tables",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "02_common_title",
-        "url": "/scene_shots/02_common_title.png",
-        "mode": "fresh",
-        "grade": "ground_truth",
+        "checkpoint": "scene_86_common_compact_menu_tables",
+        "url": "/scene_shots/scene_86_common_compact_menu_tables.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "공통 타이틀 시작하기"
+        "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
+        "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -7938,32 +9481,81 @@
       "dialogue_ids": [
         "g_00804FC8",
         "g_00804FD4",
-        "g_0080503C",
-        "g_0080505C"
+        "g_0080503C"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 4,
+        "dialogue": 3,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_86_common_compact_menu_tables",
+        "screenshot": "scene_86_common_compact_menu_tables",
+        "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
+        "source_state": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0",
+        "extra_screenshots": [
+          {
+            "checkpoint": "40_part1_name_menu",
+            "label": "1편 모드 선택",
+            "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+            "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+          },
+          {
+            "checkpoint": "42_part1_single_battle",
+            "label": "1편 싱글/맵 하위 메뉴",
+            "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+            "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+          },
+          {
+            "checkpoint": "43_part1_link",
+            "label": "1편 통신 하위 메뉴",
+            "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+            "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+          },
+          {
+            "checkpoint": "07_part2_main_menu",
+            "label": "2편 메인 메뉴",
+            "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
+          },
+          {
+            "checkpoint": "scene_23a_part2_wars_shop",
+            "label": "2편 워즈 숍",
+            "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
+          },
+          {
+            "checkpoint": "scene_23b_part2_comm_multiplayer",
+            "label": "2편 통신/멀티팩",
+            "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+            "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+          }
+        ],
+        "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
       }
     },
     {
       "id": "87_common_rule_settings",
-      "order": 460,
+      "order": 710,
       "scope": "all",
       "subtag": "설정",
       "title": "공통 룰/환경 설정 설명",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_87_common_rule_settings",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "42_part1_single_battle",
-        "url": "/scene_shots/42_part1_single_battle.png",
+        "checkpoint": "scene_87_common_rule_settings",
+        "url": "/scene_shots/scene_87_common_rule_settings.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "Part1 싱글 배틀 하위 메뉴"
+        "note": "fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
+        "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -8013,25 +9605,37 @@
       "counts": {
         "dialogue": 24,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_87_common_rule_settings",
+        "screenshot": "scene_87_common_rule_settings",
+        "note": "fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0",
+        "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0"
       }
     },
     {
       "id": "88_common_comm_labels",
-      "order": 470,
+      "order": 720,
       "scope": "all",
       "subtag": "통신",
       "title": "공통 통신/플레이어 라벨",
+      "scene_role": "container",
+      "capture_required": false,
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
       "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "43_part1_link",
-        "url": "/scene_shots/43_part1_link.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "Part1 통신 하위 메뉴"
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "공통 통신 라벨 데이터 bucket. 독립 실화면 캡처 대상이 아니며, menu/focus residual scan은 scene_residual_scans 감사로 추적한다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -8052,7 +9656,6 @@
         "g_00EE2138",
         "g_00EE2144",
         "g_00EE21CC",
-        "g_00EE2238",
         "g_00EE22C4",
         "g_00EE22D0",
         "g_00EE22DC",
@@ -8090,27 +9693,31 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 39,
+        "dialogue": 38,
         "sprite": 0
       }
     },
     {
       "id": "89_common_battle_system_results",
-      "order": 480,
+      "order": 730,
       "scope": "all",
       "subtag": "전투",
-      "title": "공통 전투 시스템/항복/패배 메시지",
+      "title": "공통 전투 시스템 메뉴",
+      "scene_role": "screen",
+      "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": null,
-      "checkpoint_exists": false,
+      "checkpoint": "scene_89_common_battle_system_results",
+      "checkpoint_exists": true,
       "screenshot": {
-        "checkpoint": "30_battle_attack",
-        "url": "/scene_shots/30_battle_attack.png",
+        "checkpoint": "scene_89_common_battle_system_results",
+        "url": "/scene_shots/scene_89_common_battle_system_results.png",
         "mode": "savestate",
-        "grade": "stale_state",
+        "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "전투 공격 진입"
+        "note": "fresh battle-system scan: 전투 시스템 메뉴(항복/전체표시 포함)",
+        "capture_path": "temp/scene_screenshots/scene_89_common_battle_system_results_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -8119,7 +9726,7 @@
         "addr_ranges": [
           [
             15706836,
-            15719936
+            15707680
           ]
         ]
       },
@@ -8130,21 +9737,137 @@
         "g_00EFAAD4",
         "g_00EFAB80",
         "g_00EFAB8C",
-        "g_00EFAE0C",
+        "g_00EFAE0C"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 4,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_89_common_battle_system_results",
+        "screenshot": "scene_89_common_battle_system_results",
+        "note": "fresh battle-system scan: 전투 시스템 메뉴(항복/전체표시 포함)",
+        "source_state": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0",
+        "capture_path": "temp/scene_screenshots/scene_89_common_battle_system_results_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0"
+      }
+    },
+    {
+      "id": "89a_common_battle_surrender_confirm",
+      "order": 740,
+      "scope": "all",
+      "subtag": "전투",
+      "title": "공통 전투 항복 확인",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_89a_common_battle_surrender_confirm",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_89a_common_battle_surrender_confirm",
+        "url": "/scene_shots/scene_89a_common_battle_surrender_confirm.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "fresh surrender scan: 항복 확인 대사 화면",
+        "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "other"
+        ],
+        "addr_ranges": [
+          [
+            15719072,
+            15719168
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00EFDAA0",
+        "g_00EFDAC1"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 2,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_89a_common_battle_surrender_confirm",
+        "screenshot": "scene_89a_common_battle_surrender_confirm",
+        "note": "fresh surrender scan: 항복 확인 대사 화면",
+        "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
+        "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+      }
+    },
+    {
+      "id": "89b_common_battle_defeat_comm_messages",
+      "order": 750,
+      "scope": "all",
+      "subtag": "전투",
+      "title": "공통 전투 패배/통신 오류 메시지",
+      "scene_role": "screen",
+      "capture_required": true,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
+      "checkpoint_exists": true,
+      "screenshot": {
+        "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
+        "url": "/scene_shots/scene_89b_common_battle_defeat_comm_messages.png",
+        "mode": "savestate",
+        "grade": "fresh_savestate",
+        "status": "capturable",
+        "note": "fresh 3P free-battle surrender route: 실제 중간 패배 메시지(레드스타 군은 패배했습니다)",
+        "capture_path": "temp/scene_screenshots/scene_89b_common_battle_defeat_comm_messages_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "other"
+        ],
+        "addr_ranges": [
+          [
+            15718564,
+            15718912
+          ],
+          [
+            15719869,
+            15719936
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
         "g_00EFD8A4",
         "g_00EFD8C8",
         "g_00EFD8EC",
         "g_00EFD914",
         "g_00EFD93C",
-        "g_00EFDAA0",
-        "g_00EFDAC1",
         "g_00EFDDBD",
         "g_00EFDDD4"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 13,
+        "dialogue": 7,
         "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
+        "screenshot": "scene_89b_common_battle_defeat_comm_messages",
+        "note": "fresh 3P free-battle surrender route: 실제 중간 패배 메시지(레드스타 군은 패배했습니다)",
+        "source_state": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0",
+        "capture_path": "temp/scene_screenshots/scene_89b_common_battle_defeat_comm_messages_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0"
       }
     },
     {
@@ -8152,7 +9875,7 @@
       "order": 9980,
       "scope": "review",
       "subtag": "검토",
-      "title": "추출 노이즈/빌드 제외 대사(편집 제외)",
+      "title": "저신뢰 추출 후보/빌드 제외 대사(장면 연결 제외)",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
@@ -8163,7 +9886,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "not_a_scene",
-        "note": "코드/그래픽/보호 테이블에서 잡힌 문자열 후보. 실제 화면 대사로 연결하지 않음."
+        "note": "코드/그래픽/보호 테이블/저신뢰 데이터 대역에서 잡힌 문자열 후보. 실제 화면 대사로 연결하지 않음."
       },
       "dialogue_filter": {},
       "sprite_filter": {},
@@ -10085,8 +11808,46 @@
         "g_007FB6B3",
         "g_007FB6C3",
         "g_007FDF78",
+        "g_00800729",
+        "g_0080089B",
         "g_00800C7A",
         "g_00804188",
+        "g_0080505C",
+        "g_00805104",
+        "g_00805204",
+        "g_00805224",
+        "g_00805290",
+        "g_008052A8",
+        "g_00805394",
+        "g_008053AC",
+        "g_00805428",
+        "g_00805440",
+        "g_008054F8",
+        "g_00805510",
+        "g_008055BC",
+        "g_008055D4",
+        "g_008056A8",
+        "g_00805730",
+        "g_008057BC",
+        "g_008058AC",
+        "g_0080591C",
+        "g_0080595C",
+        "g_008059AC",
+        "g_008059C4",
+        "g_00805A24",
+        "g_0083FAF6",
+        "g_0083FB4A",
+        "g_0083FB6E",
+        "g_0083FB8C",
+        "g_0083FBAB",
+        "g_0083FC16",
+        "g_0083FC41",
+        "g_0083FE41",
+        "g_0083FE65",
+        "g_0083FE89",
+        "g_0083FEAD",
+        "g_0083FEC5",
+        "g_0083FEDD",
         "g_0087FB48",
         "g_008808B6",
         "g_00898230",
@@ -10108,6 +11869,7 @@
         "g_0089B659",
         "g_0089B66E",
         "g_0089B6BD",
+        "g_0089BBAF",
         "g_0089BC0A",
         "g_0089C5BB",
         "g_008A298C",
@@ -10122,6 +11884,8 @@
         "g_008AAF7B",
         "g_008AAF98",
         "g_008AAFBC",
+        "g_008ABCE9",
+        "g_008ABDE5",
         "g_008AC8B3",
         "g_008AC8D0",
         "g_008AC8F0",
@@ -10166,6 +11930,7 @@
         "g_0090BA1C",
         "g_0090DC4A",
         "g_009173CB",
+        "g_00929308",
         "g_0093C8D7",
         "g_0093DA12",
         "g_00940C62",
@@ -10207,7 +11972,15 @@
         "g_00941C24",
         "g_00941C31",
         "g_00941D5C",
+        "g_009420A2",
+        "g_00942204",
+        "g_009422C9",
+        "g_009422D9",
+        "g_009424FC",
+        "g_0094259E",
+        "g_009425D4",
         "g_0094FE33",
+        "g_00961F90",
         "g_00974D8B",
         "g_00975EC6",
         "g_00979116",
@@ -10238,7 +12011,26 @@
         "g_00979270",
         "g_009795E8",
         "g_00979659",
+        "g_00979755",
+        "g_00979781",
+        "g_00979843",
+        "g_00979853",
+        "g_00979A72",
+        "g_0097A081",
+        "g_0097A095",
+        "g_0097A0CB",
+        "g_0097A0D8",
+        "g_0097A0E5",
+        "g_0097A210",
+        "g_0097A556",
+        "g_0097A6B8",
+        "g_0097A77D",
+        "g_0097A78D",
+        "g_0097A9B0",
+        "g_0097AA52",
+        "g_0097AA88",
         "g_009886D7",
+        "g_0099A834",
         "g_009AD62F",
         "g_009AE76A",
         "g_009B19BA",
@@ -10269,7 +12061,24 @@
         "g_009B1B14",
         "g_009B1E8C",
         "g_009B1EFD",
+        "g_009B2025",
+        "g_009B20E7",
+        "g_009B20F7",
+        "g_009B2316",
+        "g_009B2925",
+        "g_009B2939",
+        "g_009B296F",
+        "g_009B297C",
+        "g_009B2989",
+        "g_009B2AB4",
+        "g_009B2F5C",
+        "g_009B3021",
+        "g_009B3031",
+        "g_009B3254",
+        "g_009B32F6",
+        "g_009B332C",
         "g_009C0F7B",
+        "g_009D30D8",
         "g_009E5ED3",
         "g_009E700E",
         "g_009EA25E",
@@ -10300,6 +12109,154 @@
         "g_009EA3B8",
         "g_009EA730",
         "g_009EA7A1",
+        "g_009EA89D",
+        "g_009EA8C9",
+        "g_009EA98B",
+        "g_009EA99B",
+        "g_009EABBA",
+        "g_009EB1C9",
+        "g_009EB1DD",
+        "g_009EB213",
+        "g_009EB220",
+        "g_009EB22D",
+        "g_009EB358",
+        "g_009EB69E",
+        "g_009EB800",
+        "g_009EB8C5",
+        "g_009EB8D5",
+        "g_009EBAF8",
+        "g_009EBB9A",
+        "g_009EBBD0",
+        "g_00A2CFF8",
+        "g_00A2D008",
+        "g_00A2D018",
+        "g_00A2D028",
+        "g_00A2D03C",
+        "g_00A2D04C",
+        "g_00A2D05C",
+        "g_00A2D070",
+        "g_00A2D080",
+        "g_00A2D090",
+        "g_00A2D0A0",
+        "g_00A2D0B4",
+        "g_00A2D0C4",
+        "g_00A2D0D4",
+        "g_00A2D0E4",
+        "g_00A2D0F8",
+        "g_00A2D108",
+        "g_00A2D118",
+        "g_00A2D12C",
+        "g_00A2D13C",
+        "g_00A2D150",
+        "g_00A2D160",
+        "g_00A2D170",
+        "g_00A2D180",
+        "g_00A2D190",
+        "g_00A2D1A0",
+        "g_00A2D1B4",
+        "g_00A2D1C4",
+        "g_00A2D1D4",
+        "g_00A2D1E4",
+        "g_00A2D1F4",
+        "g_00A2D204",
+        "g_00A2D214",
+        "g_00A2D224",
+        "g_00A2D234",
+        "g_00A2D248",
+        "g_00A2D25C",
+        "g_00A2D270",
+        "g_00A2D280",
+        "g_00A2D290",
+        "g_00A2D29C",
+        "g_00A2D2AC",
+        "g_00A2D2BC",
+        "g_00A2D2CC",
+        "g_00A2D2DC",
+        "g_00A2D2F0",
+        "g_00A2D304",
+        "g_00A2D310",
+        "g_00A2D320",
+        "g_00A2D334",
+        "g_00A2D344",
+        "g_00A2D358",
+        "g_00A2D36C",
+        "g_00A2D37C",
+        "g_00A2D38C",
+        "g_00A2D39C",
+        "g_00A2D3AC",
+        "g_00A2D3C0",
+        "g_00A2D3D4",
+        "g_00A2D3E4",
+        "g_00A2D3F8",
+        "g_00A2D40C",
+        "g_00A2D41C",
+        "g_00A2D42C",
+        "g_00A2D440",
+        "g_00A2D450",
+        "g_00A2D45C",
+        "g_00A2D46C",
+        "g_00A2D480",
+        "g_00A2D490",
+        "g_00A2D4A0",
+        "g_00A2D4B4",
+        "g_00A2D4C4",
+        "g_00A2D4D8",
+        "g_00A2D4EC",
+        "g_00A2D500",
+        "g_00A2D514",
+        "g_00A2D528",
+        "g_00A2D538",
+        "g_00A2D54C",
+        "g_00A2D55C",
+        "g_00A2D570",
+        "g_00A2D57C",
+        "g_00A2D58C",
+        "g_00A2D5A0",
+        "g_00A2D5B4",
+        "g_00A2D5C8",
+        "g_00A2D5D8",
+        "g_00A2D5EC",
+        "g_00A2D5F8",
+        "g_00A2D608",
+        "g_00A2D61C",
+        "g_00A2D62C",
+        "g_00A2D640",
+        "g_00A2D650",
+        "g_00A2D660",
+        "g_00A2D674",
+        "g_00A2D684",
+        "g_00A2D698",
+        "g_00A2D6AC",
+        "g_00A2D6C0",
+        "g_00A2D6D0",
+        "g_00A2D6E0",
+        "g_00A2D6F0",
+        "g_00A2D704",
+        "g_00A2D718",
+        "g_00A2D72C",
+        "g_00A2D73C",
+        "g_00A2D74C",
+        "g_00A2D75C",
+        "g_00A2D770",
+        "g_00A2D780",
+        "g_00A2D794",
+        "g_00A2D7A4",
+        "g_00A2D7B4",
+        "g_00A2D7C4",
+        "g_00A2D7D4",
+        "g_00A2D7E0",
+        "g_00A2D7E8",
+        "g_00A2D7FC",
+        "g_00A2D814",
+        "g_00A2D828",
+        "g_00A2D838",
+        "g_00A2D848",
+        "g_00A2D858",
+        "g_00A2D86C",
+        "g_00A2D878",
+        "g_00A2D889",
+        "g_00A2D894",
+        "g_00A2D8A8",
         "g_00B1F689",
         "g_00B1F787",
         "g_00B54E18",
@@ -10308,6 +12265,7 @@
         "g_00B59034",
         "g_00B5C485",
         "g_00B7F7D4",
+        "g_00B7F89B",
         "g_00BC2191",
         "g_00BC2D91",
         "g_00BC2E0C",
@@ -10317,6 +12275,7 @@
         "g_00BE720C",
         "g_00BE7244",
         "g_00BE7308",
+        "g_00BF2819",
         "g_00C2BB0C",
         "g_00C2DADD",
         "g_00C2DAEE",
@@ -10706,7 +12665,9 @@
         "g_00D64709",
         "g_00D64719",
         "g_00D64729",
+        "g_00D6474B",
         "g_00D64828",
+        "g_00D649C1",
         "g_00D649DA",
         "g_00D64C5D",
         "g_00D64C6D",
@@ -10719,6 +12680,7 @@
         "g_00D658B0",
         "g_00D65936",
         "g_00D65AF4",
+        "g_00D65FB4",
         "g_00D65FD8",
         "g_00D661EE",
         "g_00D66C09",
@@ -10726,7 +12688,9 @@
         "g_00D66C61",
         "g_00D66CD1",
         "g_00D6724F",
+        "g_00D672A0",
         "g_00D6744B",
+        "g_00D67CB7",
         "g_00D68327",
         "g_00D6833F",
         "g_00D6908D",
@@ -10750,6 +12714,7 @@
         "g_00D6A59A",
         "g_00D6A5B1",
         "g_00D6A5F4",
+        "g_00D6A617",
         "g_00D6A646",
         "g_00D6A67C",
         "g_00D6A6B3",
@@ -10766,6 +12731,7 @@
         "g_00D6A773",
         "g_00D6A953",
         "g_00D6A95C",
+        "g_00D6A9CA",
         "g_00D6AAB9",
         "g_00D6AAC2",
         "g_00D6AACB",
@@ -10775,6 +12741,30 @@
         "g_00D6AB35",
         "g_00D6AB45",
         "g_00D6AB4E",
+        "g_00D6AD44",
+        "g_00D6AD54",
+        "g_00D6AD62",
+        "g_00D6AD70",
+        "g_00D6AD9D",
+        "g_00D6ADB8",
+        "g_00D6ADC8",
+        "g_00D6ADD6",
+        "g_00D6ADE4",
+        "g_00D6ADF9",
+        "g_00D6AE07",
+        "g_00D6AE15",
+        "g_00D6AE44",
+        "g_00D6AE54",
+        "g_00D6AE62",
+        "g_00D6AE70",
+        "g_00D6AE83",
+        "g_00D6AE93",
+        "g_00D6AEA1",
+        "g_00D6AEAF",
+        "g_00D6AEC3",
+        "g_00D6AED3",
+        "g_00D6AEE1",
+        "g_00D6AEEF",
         "g_00D6B020",
         "g_00D6B029",
         "g_00D6B032",
@@ -10815,6 +12805,7 @@
         "g_00D6B854",
         "g_00D6B86B",
         "g_00D6B8AE",
+        "g_00D6B8E2",
         "g_00D6B901",
         "g_00D6B937",
         "g_00D6B96E",
@@ -10856,6 +12847,7 @@
         "g_00D6C127",
         "g_00D6C132",
         "g_00D6C86D",
+        "g_00D6C87C",
         "g_00D6C8D2",
         "g_00D6CBE8",
         "g_00D6D3EB",
@@ -10872,6 +12864,7 @@
         "g_00D6E07D",
         "g_00D6E9DB",
         "g_00D6F1AB",
+        "g_00D6F1C5",
         "g_00D6F1DD",
         "g_00D6F207",
         "g_00D6F22D",
@@ -10886,7 +12879,13 @@
         "g_00D6F7A1",
         "g_00D7017B",
         "g_00D705E1",
+        "g_00D70915",
         "g_00D70AB4",
+        "g_00D70CBA",
+        "g_00D70CE9",
+        "g_00D70DD2",
+        "g_00D71011",
+        "g_00D71117",
         "g_00D711E2",
         "g_00D716DF",
         "g_00D71761",
@@ -10898,6 +12897,7 @@
         "g_00D71CDD",
         "g_00D71CF4",
         "g_00D71CFD",
+        "g_00D71D0E",
         "g_00D71DBA",
         "g_00D71DCE",
         "g_00D71DE5",
@@ -10927,10 +12927,12 @@
         "g_00D71FC1",
         "g_00D71FD8",
         "g_00D71FE1",
+        "g_00D71FF2",
         "g_00D7205A",
         "g_00D7206B",
         "g_00D72074",
         "g_00D721AA",
+        "g_00D721B5",
         "g_00D727A7",
         "g_00D727B2",
         "g_00D73322",
@@ -10944,10 +12946,15 @@
         "g_00D741DD",
         "g_00D741EA",
         "g_00D74424",
+        "g_00D74495",
+        "g_00D74594",
         "g_00D7462F",
         "g_00D746F6",
         "g_00D74706",
         "g_00D74925",
+        "g_00D74D15",
+        "g_00D74D97",
+        "g_00D74DE4",
         "g_00D74F03",
         "g_00D74FCB",
         "g_00D74FDB",
@@ -10955,8 +12962,10 @@
         "g_00D755AF",
         "g_00D755E0",
         "g_00D757A6",
+        "g_00D75917",
         "g_00D75A19",
         "g_00D76012",
+        "g_00D76181",
         "g_00D7619C",
         "g_00D76266",
         "g_00D76581",
@@ -10971,13 +12980,23 @@
         "g_00D771A0",
         "g_00D771D8",
         "g_00D7727C",
+        "g_00D79FDE",
+        "g_00D7A007",
+        "g_00D7A02F",
         "g_00D7A047",
+        "g_00D7A06B",
+        "g_00D7A2CF",
+        "g_00D7A343",
+        "g_00D7B298",
+        "g_00D7B5AF",
         "g_00D7B7B2",
         "g_00D7B8B2",
+        "g_00D7B9C8",
         "g_00D7BBA6",
         "g_00D7BBEB",
         "g_00D7BBF4",
         "g_00D7BC02",
+        "g_00D7BC14",
         "g_00D7BC28",
         "g_00D7BC3A",
         "g_00D7BC4E",
@@ -11000,6 +13019,7 @@
         "g_00D7BDD4",
         "g_00D7BDDF",
         "g_00D7BDE7",
+        "g_00D7BE03",
         "g_00D7BE26",
         "g_00D7BE30",
         "g_00D7BE3F",
@@ -11046,8 +13066,16 @@
         "g_00D7C153",
         "g_00D7C15C",
         "g_00D7C16C",
+        "g_00D7C372",
+        "g_00D7C687",
+        "g_00D7CAB0",
         "g_00D7CD29",
         "g_00D7CD3C",
+        "g_00D7CDC8",
+        "g_00D7CDDB",
+        "g_00D7CDEE",
+        "g_00D7CE01",
+        "g_00D7CE14",
         "g_00D7CFF2",
         "g_00D7D010",
         "g_00D7D133",
@@ -11072,6 +13100,43 @@
         "g_00D7DE81",
         "g_00D7DF5B",
         "g_00D7DFA7",
+        "g_00D81E0C",
+        "g_00D8273C",
+        "g_00D82748",
+        "g_00D827B0",
+        "g_00D827D0",
+        "g_00D82878",
+        "g_00D82978",
+        "g_00D82998",
+        "g_00D82A04",
+        "g_00D82A1C",
+        "g_00D82B08",
+        "g_00D82B20",
+        "g_00D82B9C",
+        "g_00D82BB4",
+        "g_00D82C6C",
+        "g_00D82C84",
+        "g_00D82D30",
+        "g_00D82D48",
+        "g_00D82E1C",
+        "g_00D82EA4",
+        "g_00D82F30",
+        "g_00D83020",
+        "g_00D83090",
+        "g_00D830D0",
+        "g_00D83198",
+        "g_00DA432C",
+        "g_00DF8C2A",
+        "g_00DF8C3A",
+        "g_00DF8C62",
+        "g_00DF8C8A",
+        "g_00DF8CB2",
+        "g_00DF8CCE",
+        "g_00DF8CEA",
+        "g_00DF9F5C",
+        "g_00DFA011",
+        "g_00DFA07C",
+        "g_00DFA0E7",
         "g_00E1B5E4",
         "g_00E5BEC8",
         "g_00E5CC36",
@@ -11094,6 +13159,7 @@
         "g_00E779D9",
         "g_00E779EE",
         "g_00E77A3D",
+        "g_00E77F2F",
         "g_00E77F8A",
         "g_00E7893B",
         "g_00E7ED0C",
@@ -11108,6 +13174,8 @@
         "g_00E872FB",
         "g_00E87318",
         "g_00E8733C",
+        "g_00E88069",
+        "g_00E88165",
         "g_00E88C33",
         "g_00E88C50",
         "g_00E88C70",
@@ -11118,7 +13186,10 @@
         "g_00E8A548",
         "g_00E8BDE3",
         "g_00E8BE00",
+        "g_00E8BE20",
         "g_00E8BE40",
+        "g_00E8BE60",
+        "g_00E8BE80",
         "g_00E8BF54",
         "g_00E8BF74",
         "g_00E8F082",
@@ -11140,6 +13211,7 @@
         "g_00E92A98",
         "g_00EA4469",
         "g_00ECFFB3",
+        "g_00EE2238",
         "g_00EF4A1F",
         "g_00EF5B5A",
         "g_00EF8DAA",
@@ -11169,6 +13241,7 @@
         "g_00EF8EF9",
         "g_00EF8F04",
         "g_00EF927C",
+        "g_00EF92ED",
         "g_00EF93E9",
         "g_00EF9415",
         "g_00EF94D7",
@@ -11180,6 +13253,9 @@
         "g_00EF9D6C",
         "g_00EF9D79",
         "g_00EF9EA4",
+        "g_00EFA168",
+        "g_00EFA1EA",
+        "g_00EFA237",
         "g_00EFA34C",
         "g_00EFA411",
         "g_00EFA421",
@@ -11190,7 +13266,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3019,
+        "dialogue": 3372,
         "sprite": 0
       }
     },
@@ -11214,95 +13290,20 @@
       },
       "dialogue_filter": {},
       "sprite_filter": {},
-      "dialogue_ids": [
-        "g_00800729",
-        "g_0080089B",
-        "g_0089BBAF",
-        "g_008ABCE9",
-        "g_008ABDE5",
-        "g_00B7F89B",
-        "g_00BF2819",
-        "g_00D6474B",
-        "g_00D649C1",
-        "g_00D65FB4",
-        "g_00D672A0",
-        "g_00D67CB7",
-        "g_00D6A617",
-        "g_00D6A9CA",
-        "g_00D6AD44",
-        "g_00D6AD54",
-        "g_00D6AD62",
-        "g_00D6AD70",
-        "g_00D6AD9D",
-        "g_00D6ADB8",
-        "g_00D6ADC8",
-        "g_00D6ADD6",
-        "g_00D6ADE4",
-        "g_00D6ADF9",
-        "g_00D6AE07",
-        "g_00D6AE15",
-        "g_00D6AE44",
-        "g_00D6AE54",
-        "g_00D6AE62",
-        "g_00D6AE70",
-        "g_00D6AE83",
-        "g_00D6AE93",
-        "g_00D6AEA1",
-        "g_00D6AEAF",
-        "g_00D6AEC3",
-        "g_00D6AED3",
-        "g_00D6AEE1",
-        "g_00D6AEEF",
-        "g_00D6B8E2",
-        "g_00D6C87C",
-        "g_00D6F1C5",
-        "g_00D70915",
-        "g_00D70CBA",
-        "g_00D70CE9",
-        "g_00D70DD2",
-        "g_00D71011",
-        "g_00D71117",
-        "g_00D71D0E",
-        "g_00D71FF2",
-        "g_00D721B5",
-        "g_00D74495",
-        "g_00D74594",
-        "g_00D74D15",
-        "g_00D74D97",
-        "g_00D74DE4",
-        "g_00D75917",
-        "g_00D76181",
-        "g_00D79FDE",
-        "g_00D7A007",
-        "g_00D7A02F",
-        "g_00D7A06B",
-        "g_00D7A2CF",
-        "g_00D7A343",
-        "g_00D7B298",
-        "g_00D7B5AF",
-        "g_00D7B9C8",
-        "g_00D7BC14",
-        "g_00D7BE03",
-        "g_00D7C372",
-        "g_00D7C687",
-        "g_00D7CAB0",
-        "g_00D7CDC8",
-        "g_00D7CDDB",
-        "g_00D7CDEE",
-        "g_00D7CE01",
-        "g_00D7CE14",
-        "g_00E77F2F",
-        "g_00E88069",
-        "g_00E88165",
-        "g_00E8BE20",
-        "g_00E8BE60",
-        "g_00E8BE80",
-        "g_00EF92ED",
-        "g_00EFA168",
-        "g_00EFA1EA",
-        "g_00EFA237"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [
+        "lz77_0045274C",
+        "lz77_0045EC74",
+        "lz77_004E17C0",
+        "lz77_004ECD60",
+        "lz77_0092DF84",
+        "lz77_0092EB5C",
+        "lz77_00966C0C",
+        "lz77_009677E4",
+        "lz77_0099F4B0",
+        "lz77_009A0088",
+        "lz77_009D7D54",
+        "lz77_009D892C",
         "font_00B974D0",
         "lz77_00014930",
         "lz77_004E3928",
@@ -13176,10 +15177,10 @@
         "lz77_00BF2878"
       ],
       "counts": {
-        "dialogue": 86,
-        "sprite": 1871,
+        "dialogue": 0,
+        "sprite": 1883,
         "sprite_text_candidate": 0,
-        "sprite_scan_lz77": 1870,
+        "sprite_scan_lz77": 1882,
         "sprite_font": 1
       }
     }

@@ -13,7 +13,7 @@
   python3 tools/auto_playthrough.py --fresh --nav-part2-menu --steps 200 --out temp/auto_p2
 """
 from __future__ import annotations
-import argparse, hashlib, sys, os
+import argparse, hashlib, json, sys, os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -21,7 +21,18 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from qa_visual_regions import MGBADriver, raw_to_png  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-KEYS = {"A": 1, "B": 2, "SELECT": 4, "START": 8, "RIGHT": 16, "LEFT": 32, "UP": 64, "DOWN": 128}
+KEYS = {
+    "A": 1,
+    "B": 2,
+    "SELECT": 4,
+    "START": 8,
+    "RIGHT": 16,
+    "LEFT": 32,
+    "UP": 64,
+    "DOWN": 128,
+    "R": 256,
+    "L": 512,
+}
 
 # 입력 정책: A(대사/확인/유닛선택/공격) 위주 + 전투 진전용 이동 매크로 + 주기적 턴종료(START).
 # 전투에서 유닛 선택→이동→공격/대기를 흉내내 진군시키고, 막히면 START로 턴을 넘긴다.
@@ -73,15 +84,22 @@ def main():
     ap.add_argument("--per-step-frames", type=int, default=40)
     ap.add_argument("--diff", type=float, default=11.0, help="새 화면 판정 평균픽셀차 임계")
     ap.add_argument("--save-states", action="store_true", help="새 화면마다 .ss0 저장(진행 세이브 생성)")
+    ap.add_argument("--save-every-step", action="store_true",
+                    help="중복 화면 여부와 관계없이 매 입력 step 직후 .ss0 저장")
     ap.add_argument("--dump-state", action="store_true", help="새 화면마다 VRAM/OAM/팔레트/IO 덤프(레이아웃 추출용)")
     ap.add_argument("--policy", default="", help="커스텀 입력 정책(쉼표 키, 예 'DOWN,DOWN,A,B') — 전투/메뉴 전용")
+    ap.add_argument("--rom", default=str(ROOT / "output" / "game_wars_korean_full.gba"),
+                    help="실행할 ROM 경로(기본: output/game_wars_korean_full.gba)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "auto_play"))
     ap.add_argument("--harness", default="/tmp/mgbah")
     args = ap.parse_args()
 
     out = Path(args.out); out.mkdir(parents=True, exist_ok=True)
-    drv = MGBADriver(Path(ROOT / "output" / "game_wars_korean_full.gba"), out, Path(args.harness))
-    sigs = []; shots = []
+    rom = Path(args.rom)
+    if not rom.is_absolute():
+        rom = ROOT / rom
+    drv = MGBADriver(rom, out, Path(args.harness))
+    sigs = []; shots = []; manifest = []
     try:
         drv.frames(1)
         if args.state:
@@ -98,18 +116,39 @@ def main():
             key = UNSTICK[stuck % len(UNSTICK)] if stuck >= 6 else policy[step % len(policy)]
             drv.cmd(f"keys {KEYS[key]}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(args.per_step_frames)
             img = drv.shot(f"s{step:03d}")
+            step_state_path = None
+            if args.save_every_step:
+                step_state_path = out / ("step_%03d.ss0" % step)
+                drv.cmd(f"savestate {step_state_path}")
             sig = frame_sig(img)
             if all(mean_diff(sig, s) > args.diff for s in sigs):
                 sigs.append(sig)
                 shots.append((f"{step:03d}:{key}", img.copy()))
                 if args.save_states:
-                    drv.cmd(f"savestate {out / ('state_%03d.ss0' % len(shots))}")
+                    state_path = out / ('state_%03d.ss0' % len(shots))
+                    drv.cmd(f"savestate {state_path}")
+                else:
+                    state_path = None
                 if args.dump_state:
                     tag = "scr_%03d" % len(shots)
                     drv.cmd(f"dumpvram {out / (tag + '.vram')}")
                     drv.cmd(f"dumpmem 7000000 0x400 {out / (tag + '.oam')}")
                     drv.cmd(f"dumpmem 5000000 0x400 {out / (tag + '.pal')}")
                     drv.cmd(f"dumpmem 4000000 0x60 {out / (tag + '.io')}")
+                manifest.append({
+                    "index": len(shots),
+                    "step": step,
+                    "key": key,
+                    "png": str(out / f"s{step:03d}.png"),
+                    "state": str(state_path) if state_path else None,
+                    "prenav": args.prenav,
+                    "policy": policy,
+                    "per_step_frames": args.per_step_frames,
+                    "diff": args.diff,
+                    "source_state": args.state,
+                    "fresh": bool(args.fresh),
+                    "step_state": str(step_state_path) if step_state_path else None,
+                })
                 stuck = 0
             else:
                 stuck += 1
@@ -117,6 +156,10 @@ def main():
     finally:
         drv.close()
     montage(shots, out / "filmstrip.png")
+    (out / "distinct_screens.json").write_text(
+        json.dumps({"screens": manifest}, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 if __name__ == "__main__":

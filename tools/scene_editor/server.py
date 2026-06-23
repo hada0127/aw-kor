@@ -123,9 +123,14 @@ def syl_to_code_ints():
 
 def valid_checkpoints():
     """서빙 허용 checkpoint = screen_checkpoints 정의 + 카탈로그 screenshot 참조(allowlist)."""
-    if "valid_chk" not in _CACHE:
+    checkpoint_path = ROOT / "data" / "screen_checkpoints.json"
+    mtimes = (
+        checkpoint_path.stat().st_mtime if checkpoint_path.exists() else 0,
+        CATALOG.stat().st_mtime if CATALOG.exists() else 0,
+    )
+    if _CACHE.get("valid_chk_mtimes") != mtimes:
         names = set()
-        chk = load_json(ROOT / "data" / "screen_checkpoints.json", {"checkpoints": []})
+        chk = load_json(checkpoint_path, {"checkpoints": []})
         for c in chk.get("checkpoints", []):
             if c.get("name"):
                 names.add(c["name"])
@@ -134,7 +139,18 @@ def valid_checkpoints():
             if cp:
                 names.add(cp)
         _CACHE["valid_chk"] = names
+        _CACHE["valid_chk_mtimes"] = mtimes
     return _CACHE["valid_chk"]
+
+
+def checkpoint_index():
+    checkpoint_path = ROOT / "data" / "screen_checkpoints.json"
+    mtime = checkpoint_path.stat().st_mtime if checkpoint_path.exists() else 0
+    if _CACHE.get("checkpoint_index_mtime") != mtime:
+        chk = load_json(checkpoint_path, {"checkpoints": []})
+        _CACHE["checkpoint_index"] = {c.get("name"): c for c in chk.get("checkpoints", []) if c.get("name")}
+        _CACHE["checkpoint_index_mtime"] = mtime
+    return _CACHE["checkpoint_index"]
 
 
 def scene_shot_path(checkpoint: str | None):
@@ -181,18 +197,49 @@ def scene_shot_info(sc):
     return shot
 
 
+def scene_extra_shots_info(sc):
+    out = []
+    by_name = checkpoint_index()
+    for extra in ((sc.get("entrypoint") or {}).get("extra_screenshots") or []):
+        if isinstance(extra, str):
+            checkpoint = extra
+            label = ""
+        else:
+            checkpoint = extra.get("checkpoint")
+            label = extra.get("label", "")
+        if not checkpoint:
+            continue
+        meta = by_name.get(checkpoint, {})
+        shot = {
+            "checkpoint": checkpoint,
+            "label": label,
+            "mode": meta.get("mode"),
+            "grade": meta.get("grade"),
+            "note": meta.get("note", ""),
+            "capture_path": meta.get("capture_path"),
+            "provenance_path": meta.get("provenance_path"),
+        }
+        out.append(scene_shot_info({"screenshot": shot}))
+    return out
+
+
 def public_scene(sc):
     out = {k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
+                              "scene_role", "capture_required",
                               "canvas", "canvas_status", "counts") if k in sc}
     counts = dict(out.get("counts") or {})
-    refs = related_dialogue_scene_ids(sc) if sc.get("sprite_ids") else []
+    refs = related_dialogue_scene_ids(sc)
     if refs:
         scenes_by_id = {s.get("id"): s for s in catalog().get("scenes", [])}
         rel = sum(len((scenes_by_id.get(ref_id) or {}).get("dialogue_ids", [])) for ref_id in refs)
         if rel:
             counts["related_dialogue"] = rel
             out["counts"] = counts
+        out["related_dialogue_scene_ids"] = refs
     out["screenshot"] = scene_shot_info(sc)
+    extra = scene_extra_shots_info(sc)
+    if extra:
+        out["extra_screenshots"] = extra
     return out
 
 
@@ -404,24 +451,13 @@ def dirty_state():
 # ── scene 항목 조회 ──────────────────────────────────────────────────────
 def related_dialogue_scene_ids(scene):
     """그래픽 중심 scene에도 같은 좌측 패널에서 편집할 관련 대사 bucket을 함께 노출한다.
-    정밀 화면별 대사 매핑이 없는 구간은 기존 region bucket을 연결해 누락 없이 접근 가능하게 한다."""
+    카탈로그에 명시된 연결만 따른다. 과거에는 scope 단위 전체 대사 bucket을 자동 연결했지만
+    타이틀/메뉴처럼 실제 대사가 없는 화면에 수백~수천 개 대사가 붙어 장면 의미가 깨졌다."""
     sid = scene.get("id")
     if sid in {"19_part1_story", "30_part2_story", "80_campaign_story",
                "85_ui_common", "90_other_dialogue", "99_unassigned_review"}:
         return []
-    if not scene.get("sprite_ids"):
-        return []
-    scope = scene.get("scope")
-    if scope == "part1":
-        return ["19_part1_story", "85_ui_common"]
-    if scope == "part2":
-        if sid in {"24_part2_campaign_map", "25_part2_mission_titles",
-                   "28_part2_result_status", "29_part2_result_summary"}:
-            return ["80_campaign_story", "30_part2_story", "85_ui_common"]
-        return ["30_part2_story", "85_ui_common"]
-    if scope in {"shared_select", "all"}:
-        return ["85_ui_common"]
-    return []
+    return list(scene.get("related_dialogue_scene_ids") or [])
 
 
 def scene_items(scene, want="all"):
@@ -460,13 +496,15 @@ def scene_items(scene, want="all"):
                           "linked_from": linked_from})
     if want in ("all", "sprite"):
         for sid in scene.get("sprite_ids", []):
-            sp = si.get(sid)
+            sp = si.get(sid) or SE.sprite_by_id(sid)
             if not sp:
                 continue
             is_text, desc = SE.classify_sprite(sp.get("source"))
+            desc = sp.get("desc_override") or desc
+            has_onscreen = (SE.get_layout(sid) is not None) and not SE.is_mode4_bitmap(sp)
             out_s.append({"id": sid, "source": sp.get("source"), "type": sp.get("type"),
                           "offset": sp.get("offset"), "desc": desc, "is_text": is_text,
-                          "has_onscreen": SE.get_layout(sid) is not None})
+                          "has_onscreen": has_onscreen})
     return out_d, out_s
 
 
@@ -536,9 +574,14 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(404, {"error": "no scene %s" % sid})
             d, s = scene_items(sc, q.get("type", ["all"])[0])
             return self._send(200, {"id": sid, "title": sc.get("title"), "scope": sc.get("scope"),
-                                    "subtag": sc.get("subtag"), "canvas": sc.get("canvas"),
+                                    "subtag": sc.get("subtag"),
+                                    "scene_role": sc.get("scene_role"),
+                                    "capture_required": sc.get("capture_required"),
+                                    "canvas": sc.get("canvas"),
                                     "canvas_status": sc.get("canvas_status"),
+                                    "related_dialogue_scene_ids": related_dialogue_scene_ids(sc),
                                     "screenshot": scene_shot_info(sc),
+                                    "extra_screenshots": scene_extra_shots_info(sc),
                                     "dialogue": d, "sprites": s})
         if p == "/api/dict":
             return self._send(200, load_json(DE.DICT_PATH, {}))
@@ -611,24 +654,51 @@ class Handler(BaseHTTPRequestHandler):
         if sp is None:
             return self._send(404, {"error": "id 없음: %s" % sid})
         if kind == "tile":
-            return self._send(200, self._tile_data(sid, sp))
+            return self._send(200, self._tile_data(sid, sp, q))
         if kind == "compare":
             return self._send(200, self._compare_data(sid, sp))
         if kind == "onscreen_data":
             return self._send(200, self._onscreen_data(sid, sp))
 
-    def _tile_data(self, sid, sp):
+    def _tile_data(self, sid, sp, q):
+        which = (q.get("which", ["current"])[0] or "current").strip()
+        if which not in ("current", "orig"):
+            return {"ok": False, "error": "which=current|orig"}
         ov = load_json(SE.OVERRIDES_PATH, {}) or {}
-        rec = ov.get(sid)
-        desc = SE.classify_sprite(sp.get("source"))[1]
+        key = SE.override_id(sp)
+        rec = ov.get(key)
+        desc = sp.get("desc_override") or SE.classify_sprite(sp.get("source"))[1]
         has_os = SE.get_layout(sid) is not None
+        if SE.is_mode4_bitmap(sp):
+            qid = urllib.parse.quote(sid)
+            data = SE.decode_mode4_bitmap(SE.rom_bytes() if which == "orig" else SE.patched_bytes(), sp)
+            if data is None:
+                return {"ok": False, "error": "Mode4 비트맵 디코드 실패"}
+            _, w, h = data
+            return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": 0,
+                    "type": "mode4_bitmap", "palette": [], "indices": [],
+                    "edited": False, "offset": sp.get("offset"), "source": sp.get("source"),
+                    "desc": desc, "has_onscreen": False, "readonly": True,
+                    "readonly_reason": "Mode4 8bpp 프레임버퍼 리소스라 4bpp 타일 편집으로 저장할 수 없습니다.",
+                    "orig_url": "/api/sprite/render?id=%s&which=orig" % qid,
+                    "patched_url": "/api/sprite/render?id=%s&which=patched" % qid,
+                    "which": which}
+        if which == "orig":
+            dec = SE.decode_indices(sp)
+            if dec is None:
+                return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
+            grid, w, h, cols = dec
+            return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": cols,
+                    "type": sp.get("type"), "palette": SE.default_palette_for(sp), "indices": grid,
+                    "edited": False, "offset": sp.get("offset"), "source": sp.get("source"),
+                    "desc": desc, "has_onscreen": has_os, "which": "orig"}
         if rec and rec.get("indices"):
             grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
             return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": w // 8,
                     "type": sp.get("type"), "palette": SE.palette_for(sp), "indices": grid,
                     "edited": True, "offset": sp.get("offset"), "source": sp.get("source"),
                     "desc": desc, "has_onscreen": has_os}
-        dec = SE.decode_indices(sp)
+        dec = SE.decode_current_indices(sp)
         if dec is None:
             return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
         grid, w, h, cols = dec
@@ -638,11 +708,17 @@ class Handler(BaseHTTPRequestHandler):
                 "desc": desc, "has_onscreen": has_os}
 
     def _compare_data(self, sid, sp):
-        o = SE.decode_from_rom(SE.rom_bytes(), sp)
-        pat = SE.decode_from_rom(SE.patched_bytes(), sp) if SE.patched_bytes() else None
-        changed = (o and pat and o[0] != pat[0])
+        if SE.is_mode4_bitmap(sp):
+            o = SE.decode_mode4_bitmap(SE.rom_bytes(), sp)
+            pat = SE.decode_mode4_bitmap(SE.patched_bytes(), sp) if SE.patched_bytes() else None
+            changed = bool(o and pat and o[0] != pat[0])
+        else:
+            o = SE.decode_from_rom(SE.rom_bytes(), sp)
+            pat = SE.decode_from_rom(SE.patched_bytes(), sp) if SE.patched_bytes() else None
+            changed = (o and pat and o[0] != pat[0])
         ov = load_json(SE.OVERRIDES_PATH, {}) or {}
-        has_edit = sid in ov and bool(ov[sid].get("indices"))
+        key = SE.override_id(sp)
+        has_edit = key in ov and bool(ov[key].get("indices"))
         qid = urllib.parse.quote(sid)
         return {"ok": True, "id": sid, "offset": sp.get("offset"), "type": sp.get("type"),
                 "source": sp.get("source"),
@@ -656,7 +732,7 @@ class Handler(BaseHTTPRequestHandler):
         lay = SE.get_layout(sid)
         if not lay:
             return {"ok": False, "error": "no layout for %s" % sid}
-        dec = SE.decode_indices(sp)
+        dec = SE.decode_current_indices(sp)
         cols = dec[3] if dec else (sp.get("tile_cols") or 1)
         cells = [dict(c) for c in lay["cells"]]
         palp = lay.get("pal_file")
@@ -695,10 +771,14 @@ class Handler(BaseHTTPRequestHandler):
         which = q.get("which", ["orig"])[0]
         if which not in ("orig", "patched", "edit"):
             return self._send(400, {"error": "which=orig|patched|edit"})
+        sp = SE.sprite_by_id(sid)
+        if sp is None:
+            return self._send(404, {"error": "id 없음: %s" % sid})
         if which == "edit":
             # 편집본 없으면 ROM 폴백 대신 404(‘편집중’에 원본 표시 방지 — m7)
             ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}
-            if not (ov.get(sid) and ov[sid].get("indices")):
+            key = SE.override_id(sp)
+            if not (ov.get(key) and ov[key].get("indices")):
                 return self._send(404, {"error": "편집본 없음"})
         try:
             data = SE.render_compare_png(sid, which)
@@ -884,30 +964,32 @@ class Handler(BaseHTTPRequestHandler):
             fits = (len(enc) == sp.get("size"))
         else:
             fits = (len(enc) <= (sp.get("size") or len(enc)))
+        key = SE.override_id(sp)
         with _LOCK:
             ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}
-            ov[sid] = {"offset": sp.get("offset"), "type": sp.get("type"), "width": w, "height": h,
+            ov[key] = {"offset": sp.get("offset"), "type": sp.get("type"), "width": w, "height": h,
                        "indices": indices, "palette": palette, "raw_len": len(enc),
                        "orig_size": sp.get("size"), "comp_size": sp.get("comp_size"), "fits_raw": fits}
             SE.save_json(SE.OVERRIDES_PATH, ov)
             try:
                 SE.EDIT_DIR.mkdir(parents=True, exist_ok=True)
                 pal = [tuple(c) for c in (palette or [list(c) for c in SE.ES.GRAYSCALE])]
-                SE.ES.render_png(indices, w, h, pal, str(SE.EDIT_DIR / f"{sid}.png"), scale=2)
+                SE.ES.render_png(indices, w, h, pal, str(SE.EDIT_DIR / f"{key}.png"), scale=2)
             except Exception:
                 pass
-        return {"ok": True, "id": sid, "raw_len": len(enc), "orig_size": sp.get("size"), "fits_raw": fits}
+        return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"), "fits_raw": fits}
 
     def _sprite_revert(self, body):
         sid = body.get("id")
+        key = SE.override_id(sid)
         with _LOCK:
-            ep = SE.EDIT_DIR / f"{sid}.png"
+            ep = SE.EDIT_DIR / f"{key}.png"
             if ep.exists():
                 ep.unlink()
             ov = SE.load_json(SE.OVERRIDES_PATH, {})
-            ov.pop(sid, None)
+            ov.pop(key, None)
             SE.save_json(SE.OVERRIDES_PATH, ov)
-        return {"ok": True, "id": sid}
+        return {"ok": True, "id": sid, "base_id": key}
 
     def _sprite_setpalette(self, body):
         sid = body.get("id")
@@ -917,13 +999,14 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": False, "error": "id 없음: %s" % sid}
         if not palette or not isinstance(palette, list):
             return {"ok": False, "error": "palette(16×[r,g,b]) 필요"}
+        key = SE.override_id(sp)
         with _LOCK:
             ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}
-            rec = ov.get(sid, {})
+            rec = ov.get(key, {})
             rec.update({"offset": sp.get("offset"), "type": sp.get("type"), "palette": palette})
-            ov[sid] = rec
+            ov[key] = rec
             SE.save_json(SE.OVERRIDES_PATH, ov)
-        return {"ok": True, "id": sid}
+        return {"ok": True, "id": sid, "base_id": key}
 
 
 def main():

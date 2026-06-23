@@ -6,6 +6,30 @@
 
 ---
 
+# 🔴 외부판 비교 재분석 + 격차 클로징 (2026-06-24, claude+codex+agy 적대적)
+
+> 사용자 /goal: 우리 패치가 외부 USA판 한글패치(AW1 v0.38/AW2 v0.31)보다 부족함이 없어야 하고,
+> codex·agy 적대적 리뷰로 우위 입증. 쪼롱이/B팀 불변. 전체 보고서: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`.
+
+## 완료 (이번 세션)
+- [x] 전 63 game scene 재캡처(76 stale→0), `audit_scene_entrypoints` critical=0 — 장면 진입 전수 확인.
+- [x] 실화면 잔존 13에이전트 병렬 시각검증 → 결함목록(`temp/residual_defects_2026-06-24.md`).
+- [x] **B팀 대사 변형 복원**(0x00DF5E12/35/56 — 슬롯 여유에도 축약됐던 것 HEAD 복원). 절대제약 보호.
+- [x] CSV 손상 위생 복구 2행(0x00A2C2F4/0x00A2C378) + 영구 탐지기 `tools/qa_csv_integrity.py`.
+- [x] UI 에디터(:8782) 대사+스프라이트 편집 라이브 검증(저장·가드·revert 전부 동작).
+- [x] 픽셀폭 도구 `tools/qa_pixel_width.py` + 시각검증 교차(실박스 클리핑 0).
+- [x] B팀 복원 ROM(a582a7cb)에 dist BPS/IPS/manifest 재생성, `verify_dist_integrity` PASS, 구 06-23 패치 정리.
+
+## 추적 (우위 확보 잔여 — 깊은 RE/검수 필요, 무위험 자율 즉시수정 보류)
+- [ ] **CO/인물 이름 라벨 가타카나 잔존**: 이름 테이블(OBJ/인덱스 렌더) RE → per-CO blank+본문이관(Domino 방식) 확장.
+- [ ] **맵 선택 섬 이름 '??'**(마/메): 컴팩트 렌더러 글리프뱅크에 누락음절 공급 후 87/컴팩트 UI 재캡처.
+- [ ] **CSV 109행 진짜 ROM 위험분**(korean 일본어/빈칸/주소혼입+override無) 행별 검수·복구(쪼롱이 인접 보호) → `qa_csv_integrity --fail-on-rom-affecting` 게이트화.
+- [ ] container residual scan을 현재 SHA로 재생성 → `audit_scene_residual_scans --strict` PASS(현재 critical 17=SHA 스탬프 stale, 실제 신규잔존 0).
+- [ ] 24_part2_campaign_map 룰 라벨 fresh-boot 재캡처(stale-BG vs 실잔존 확정).
+- [ ] 영어 sprite UI(PRESS A 등) sprite editor 한글화(선택, 외부판도 영문 유지).
+
+---
+
 # 🟢 /goal: 화면(scene) 기반 통합 UI 에디터 — 현재 최우선 (2026-06-17 시작)
 
 > **사용자 /goal: 전체 계획 완수.** 게임 흐름(scene) 기반으로, 한 화면에 포함되는 텍스트·스프라이트를

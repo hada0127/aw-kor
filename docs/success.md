@@ -1653,3 +1653,15 @@ archive/malformed_address_rows.csv 보존.
   `docs/screenshots/SUCCESS_part1_repoint_freshboot_reloc_2026-06-23.png` 외 2.
 - **결론**: Part1 repoint가 실게임(에뮬 fresh-boot)에서 작동 확정. 재배치 메시지 = 여유공간에서 로드 +
   un-jam 렌더. ROM SHA 08d50127.
+
+## [2026-06-24] 외부판 비교 재분석 + 격차 클로징 (claude+codex+agy 적대적)
+- **전 63 game scene 재캡처**: ROM 변경(08d50127→a582a7cb)으로 stale된 76 캡처를 `capture_scene_screenshots.py --force`로
+  재생성 → `audit_scene_entrypoints.py` critical=0. "장면 진입기로 모든 장면 진입 확인" 요구 충족.
+- **실화면 잔존 시각검증(13에이전트)**: 정적 잔존스캔 21k행이 거의 노이즈임을 확증하고, 실제 화면 잔존을
+  HIGH 3(이름 라벨 가타카나)·MED 4로 정밀 도출. `temp/visual_verify_result.json`.
+- **B팀 대사 변형 복원**: codex 적발 — 작업트리에서 `0x00DF5E12/35/56`(코스모랜드 설명 대사)이 슬롯 여유에도
+  축약·개작돼 있었음 → HEAD 권위본 복원, 재빌드 검증. 절대제약(쪼롱이/B팀 불변) 보호.
+- **신규 QA 도구 2종**: `qa_pixel_width.py`(렌더러 advance 8px/4px 모델), `qa_csv_integrity.py`(CSV 손상 탐지·심각도분류).
+- **UI 에디터 라이브 검증**: :8782 대사 save/슬롯 하드게이트/스프라이트 save·revert 전부 동작.
+- **dist 재생성+PASS**: 보정 ROM a582a7cb에 BPS/IPS/manifest 동기, `verify_dist_integrity` PASS.
+- 전체: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`. ROM SHA a582a7cb.

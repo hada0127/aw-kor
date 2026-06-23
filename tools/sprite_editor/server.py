@@ -35,6 +35,24 @@ ORIG_PNG_DIR = ROOT / "temp" / "sprites_png"
 EDIT_DIR = ROOT / "data" / "sprite_edits"
 OVERRIDES_PATH = ROOT / "data" / "sprites_overrides.json"
 
+SELECT_OBJ_ID = "lz77_00024A34"
+SELECT_TOP_TITLE_ID = SELECT_OBJ_ID + "#select_top_title"
+SELECT_BOTTOM_TITLE_ID = SELECT_OBJ_ID + "#select_bottom_title"
+SELECT_VIRTUAL_SPRITES = {
+    SELECT_TOP_TITLE_ID: {
+        "base_id": SELECT_OBJ_ID,
+        "layout_variant": "select_top_title",
+        "source_suffix": "select_top_title",
+        "desc": "1/2편 선택 화면 상단 제목",
+    },
+    SELECT_BOTTOM_TITLE_ID: {
+        "base_id": SELECT_OBJ_ID,
+        "layout_variant": "select_bottom_title",
+        "source_suffix": "select_bottom_title",
+        "desc": "1/2편 선택 화면 하단 제목",
+    },
+}
+
 _LOCK = threading.Lock()
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".png": "image/png", ".json": "application/json; charset=utf-8"}
@@ -64,7 +82,20 @@ def load_objlabel_sprites():
 def sprite_list():
     d = load_json(INDEX_PATH, {"sprites": []})
     base = d.get("sprites", []) if isinstance(d, dict) else d
-    return list(base) + load_objlabel_sprites()
+    sprites = list(base) + load_objlabel_sprites()
+    select_base = next((s for s in sprites if s.get("id") == SELECT_OBJ_ID), None)
+    if select_base:
+        for sid, meta in SELECT_VIRTUAL_SPRITES.items():
+            sp = dict(select_base)
+            sp.update({
+                "id": sid,
+                "base_id": meta["base_id"],
+                "layout_variant": meta["layout_variant"],
+                "desc_override": meta["desc"],
+                "source": f"{select_base.get('source') or ''}:{meta['source_suffix']}",
+            })
+            sprites.append(sp)
+    return sprites
 
 
 def png_for(sid, orig=False):
@@ -97,6 +128,9 @@ PATCHED_ROM_PATH = ROOT / "output" / "game_wars_korean_full.gba"
 CMP_DIR = ROOT / "temp" / "sprite_cmp"
 _ROM = None
 _PATCHED = None
+MODE4_STRATEGIC_MAP_OFFSETS = {0x00C2FD70, 0x00C30EE8}
+MODE4_STRATEGIC_MAP_PALETTE_OFF = 0x00C2FC90
+MODE4_STRATEGIC_MAP_W = 240
 
 
 def rom_bytes():
@@ -117,11 +151,32 @@ def sprite_by_id(sid):
     return next((s for s in sprite_list() if s.get("id") == sid), None)
 
 
-def decode_from_rom(rom, sp):
-    """주어진 ROM 바이트에서 sprite 디코드 → (grid,w,h,cols). 실패 시 None."""
+def sprite_offset_int(sp):
     off = sp.get("offset_int")
     if off is None:
         off = int(sp.get("offset", "0x0"), 16)
+    return off
+
+
+def is_mode4_bitmap(sp):
+    """Mode4 8bpp framebuffer halves. These are screen bitmaps, not 4bpp tiles."""
+    src = (sp.get("source") or "").lower()
+    return "mode4" in src or sprite_offset_int(sp) in MODE4_STRATEGIC_MAP_OFFSETS
+
+
+def override_id(sp_or_sid):
+    """저장/빌드 적용 키. 가상 화면 항목은 같은 base LZ77 블록에 합쳐 저장한다."""
+    if isinstance(sp_or_sid, dict):
+        return sp_or_sid.get("base_id") or sp_or_sid.get("id")
+    sp = sprite_by_id(sp_or_sid)
+    return (sp.get("base_id") or sp.get("id")) if sp else sp_or_sid
+
+
+def decode_from_rom(rom, sp):
+    """주어진 ROM 바이트에서 sprite 디코드 → (grid,w,h,cols). 실패 시 None."""
+    if is_mode4_bitmap(sp):
+        return None
+    off = sprite_offset_int(sp)
     typ = sp.get("type")
     if typ == "synthetic":
         # 흩어진 ROM 오프셋의 라벨군을 시각순(perm 보정)으로 조립 → 단일 타일스트림.
@@ -161,10 +216,17 @@ def decode_from_rom(rom, sp):
 
 
 def decode_indices(sp):
-    """원본 ROM에서 디코드(편집기 기본). 단 합성(synthetic) 스프라이트는 편집 대상이
-    patched-only 영역(한글 라벨이 빌드 ROM에만 존재)이라 patched ROM에서 디코드해야
-    편집 canvas와 onscreen 미리보기가 일치한다."""
-    rom = patched_bytes() if sp.get("type") == "synthetic" else rom_bytes()
+    """원본 ROM에서 디코드. 비교/검증에서 원본 기준이 필요할 때만 쓴다.
+
+    합성(synthetic) 스프라이트도 원본 ROM의 같은 직접 오프셋에서 조립할 수
+    있으므로 좌측 비교 패널에서는 원본 바이트를 그대로 보여준다.
+    """
+    return decode_from_rom(rom_bytes(), sp)
+
+
+def decode_current_indices(sp):
+    """편집기 기본값: 최종 빌드 ROM 우선, 없을 때만 원본 ROM fallback."""
+    rom = patched_bytes() or rom_bytes()
     return decode_from_rom(rom, sp)
 
 
@@ -174,13 +236,17 @@ def render_compare_png(sid, which):
     sp = sprite_by_id(sid)
     if sp is None:
         return None
+    if is_mode4_bitmap(sp):
+        return render_mode4_bitmap_png(sid, which)
     pal = [tuple(c) for c in palette_for(sp)]
     grid = w = h = None
     if which == "edit":
         ov = load_json(OVERRIDES_PATH, {}) or {}
-        rec = ov.get(sid)
+        rec = ov.get(override_id(sp))
         if rec and rec.get("indices"):
             grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
+        else:
+            return None
     if grid is None:
         rom = patched_bytes() if which == "patched" else rom_bytes()
         if not rom:
@@ -192,6 +258,59 @@ def render_compare_png(sid, which):
     CMP_DIR.mkdir(parents=True, exist_ok=True)
     out = CMP_DIR / f"{sid}_{which}.png"
     ES.render_png(grid, w, h, pal, str(out), scale=3)
+    return out.read_bytes()
+
+
+def _gba_palette256(rom):
+    import struct as _s
+    colors = []
+    for i in range(256):
+        o = MODE4_STRATEGIC_MAP_PALETTE_OFF + i * 2
+        if o + 2 > len(rom):
+            colors.append((0, 0, 0))
+            continue
+        v = _s.unpack("<H", rom[o:o + 2])[0]
+        colors.append(((v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31))
+    return colors
+
+
+def decode_mode4_bitmap(rom, sp):
+    """Return (indices,w,h) for 8bpp Mode4 framebuffer half."""
+    off = sprite_offset_int(sp)
+    res = ES.lz77_decompress(rom, off)
+    if not res:
+        return None
+    data = res[0]
+    w = MODE4_STRATEGIC_MAP_W
+    h = max(1, len(data) // w)
+    return data[:w * h], w, h
+
+
+def render_mode4_bitmap_png(sid, which):
+    """원본/한글 빌드 Mode4 전략지도 반쪽을 실제 팔레트로 렌더. 편집 저장은 지원하지 않는다."""
+    sp = sprite_by_id(sid)
+    if sp is None:
+        return None
+    if which == "edit":
+        return None
+    rom = patched_bytes() if which == "patched" else rom_bytes()
+    if not rom:
+        return None
+    dec = decode_mode4_bitmap(rom, sp)
+    if dec is None:
+        return None
+    data, w, h = dec
+    pal = _gba_palette256(rom)
+    from PIL import Image
+    im = Image.new("RGB", (w, h), (0, 0, 0))
+    px = im.load()
+    for y in range(h):
+        row = y * w
+        for x in range(w):
+            px[x, y] = pal[data[row + x]]
+    CMP_DIR.mkdir(parents=True, exist_ok=True)
+    out = CMP_DIR / f"{sid}_{which}.png"
+    im.resize((w * 3, h * 3), Image.NEAREST).save(out, "PNG")
     return out.read_bytes()
 
 
@@ -243,9 +362,94 @@ PART1_OPTION_128X32_OFFSETS = {
 
 PART1_MISSION_128X32_OFFSETS = {0x00C18738}
 PART1_CATHERINE_96X8_OFFSETS = {0x00C102A8}
+PART1_TITLE_OBJ_OFFSETS = {0x00C38BF8}
+PART1_BATTLE_DAY_BANNER_OFFSETS = {0x00EE5E14}
+PART1_CHECK_LABEL_OFFSETS = {0x00BA4490}
+COMMON_NINTENDO_PRESENTS_BG_OFFSETS = {0x00021CE8}
+COMMON_SELECT_OBJ_OFFSETS = {0x00024A34}
+
+PART1_TITLE_TEXT_SPECS = (
+    (16, 12, 8, 4, 0x118, 1),
+    (80, 12, 8, 4, 0x138, 1),
+    (144, 12, 8, 4, 0x158, 1),
+    (208, 12, 2, 4, 0x178, 1),
+    (16, 44, 4, 2, 0x180, 1),
+    (48, 44, 4, 2, 0x188, 1),
+    (80, 44, 4, 2, 0x190, 1),
+    (112, 44, 4, 2, 0x198, 1),
+    (144, 44, 4, 2, 0x1A0, 1),
+    (176, 44, 4, 2, 0x1A8, 1),
+    (208, 44, 1, 2, 0x1B0, 1),
+)
+PART1_TITLE_PROMPT_SPECS = (
+    (75, 107, 4, 2, 0x000, 2),
+    (107, 107, 4, 2, 0x008, 2),
+    (139, 107, 4, 2, 0x010, 2),
+)
+
+SELECT_TOP_TEXT_SPECS = (
+    (12, 4, 8, 4, 0x000, 0),
+    (12, 36, 4, 2, 0x020, 0),
+    (44, 36, 4, 2, 0x028, 0),
+    (76, 4, 8, 4, 0x030, 0),
+    (140, 4, 8, 4, 0x050, 0),
+    (76, 36, 4, 2, 0x070, 0),
+    (108, 36, 4, 2, 0x078, 0),
+    (140, 36, 4, 2, 0x080, 0),
+    (172, 36, 4, 2, 0x088, 0),
+)
+SELECT_BOTTOM_TEXT_SPECS = (
+    (24, 92, 8, 4, 0x172, 1),
+    (88, 92, 8, 4, 0x192, 1),
+    (152, 92, 8, 4, 0x1B2, 1),
+)
+SELECT_PROMPT_SPECS = (
+    (19, 144, 4, 2, 0x2DC, 6),
+    (51, 144, 4, 2, 0x2E4, 6),
+    (83, 144, 4, 2, 0x2EC, 6),
+    (115, 144, 4, 2, 0x2F4, 6),
+)
+SELECT_RESIDUAL_SPECS = (
+    (-4, 1, 8, 8, 0x090, 3),
+    (60, 1, 8, 8, 0x0D0, 3),
+    (124, 1, 8, 8, 0x110, 3),
+    (188, 1, 4, 8, 0x150, 3),
+    (16, 80, 8, 8, 0x1FC, 4),
+    (80, 80, 8, 8, 0x23C, 4),
+    (144, 80, 8, 8, 0x27C, 4),
+    (208, 80, 4, 8, 0x2BC, 4),
+    (194, 122, 2, 1, 0x170, 1),
+    (192, 80, 4, 4, 0x1D2, 2),
+    (224, 80, 2, 4, 0x1E2, 2),
+    (192, 112, 4, 2, 0x1EA, 2),
+    (224, 112, 2, 2, 0x1F2, 2),
+    (192, 128, 4, 1, 0x1F6, 2),
+    (224, 128, 2, 1, 0x1FA, 2),
+)
+SELECT_CURSOR_SPECS = (
+    (104, 48, 2, 2, 0x2FC, 5),
+    (104, 68, 2, 2, 0x2FC, 5),
+)
 
 PART2_MISSION_TITLE_128X32_OFFSETS = {
     0x00C10B34, 0x00C11D9C, 0x00C1205C,
+}
+PART2_TITLE_OBJ_OFFSETS = {0x004EAF6C}
+PART2_SPLASH_LOGO_BG_OFFSETS = {0x004D8AF8}
+PART2_DOMINO_CO_NAME_OFFSETS = {0x0045274C}
+PART2_INTRO_BG_FULLSHEET_OFFSETS = {0x004E0478, 0x004E17C0, 0x004ECD60}
+PART2_PROLOGUE_LOGO_OFFSETS = {0x005BBB3C}
+PART2_CAMPAIGN_HEADER_OFFSETS = {0x00541BB8}
+PART2_REDSTAR_REGION_OFFSETS = {0x005488A0}
+PART2_MISSION_NUMBER_OFFSETS = {0x005A38D4}
+PART2_LETS_GO_OFFSETS = {0x005AF674}
+PART2_MODE_MENU_BIG_LOGO_OFFSETS = {
+    0x005B7930, 0x005B7CB0, 0x005B7F38, 0x005B82B4,
+    0x005B8564, 0x005B8850, 0x005B8B20,
+}
+PART2_MODE_MENU_OPTION_OFFSETS = {
+    0x005B8E44, 0x005B8F48, 0x005B9050,
+    0x005B917C, 0x005B9280, 0x005B9378,
 }
 PART2_BATTLE_START_LARGE_OFFSETS = {0x0045EC74}
 PART2_BATTLE_START_MEDIUM_OFFSETS = {
@@ -254,7 +458,14 @@ PART2_BATTLE_START_MEDIUM_OFFSETS = {
 PART2_BATTLE_START_SMALL_OFFSETS = {
     0x0092EB5C, 0x009677E4, 0x009A0088, 0x009D892C,
 }
+PART2_CHECK_LABEL_OFFSETS = {0x0045FCC8}
+PART2_DAMAGE_FORECAST_OFFSETS = {0x00BD4FBC}
+PART2_RESULT_SUCCESS_OVERLAY_OFFSETS = {
+    0x00930520, 0x009691A8, 0x009A1A4C, 0x009DA2F0, 0x00EE8A64,
+}
+PART2_RESULT_FAILURE_OVERLAY_OFFSETS = {0x00BFBB54, 0x00EE8F68}
 PART2_RESULT_CONGRATS_OFFSETS = {0x00BFB45C}
+PART2_RESULT_SUMMARY_OFFSETS = {0x0059DA5C}
 
 
 def load_build_layouts():
@@ -271,9 +482,31 @@ def sprite_offset_int(sp):
     return off
 
 
+def _layout_cells_from_specs(specs, palbase=256):
+    return [
+        {"x": x, "y": y, "tw": tw, "th": th, "fh": 0, "fv": 0,
+         "tile_off": tile_off, "bank": bank, "palbase": palbase}
+        for x, y, tw, th, tile_off, bank in specs
+    ]
+
+
 def part1_tiled_layer_layout(sp, off):
     """1편 타이틀 라벨 LZ77은 화면 레이어와 저장 타일 순서가 다르다.
     편집면은 빌드 인코더(part1_logo_layer_to_tiles/option_layer_to_tiles)의 역배치로 제공한다."""
+    if off in PART1_TITLE_OBJ_OFFSETS:
+        captured = load_layouts().get("layouts", {}).get(sp.get("id"), {})
+        pal_file = "temp/screen_state/part1_title.pal"
+        if not (ROOT / pal_file).exists():
+            pal_file = captured.get("pal_file")
+        cells = _layout_cells_from_specs(PART1_TITLE_TEXT_SPECS)
+        cells.extend(_layout_cells_from_specs(PART1_TITLE_PROMPT_SPECS))
+        return {
+            "cells": cells,
+            "x0": 16, "y0": 12, "w": 208, "h": 111, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "pal_file": pal_file,
+            "fallback": "part1_title_text_prompt",
+        }
     if off in PART1_LOGO_80X32_OFFSETS:
         return {
             "cells": [
@@ -308,6 +541,32 @@ def part1_tiled_layer_layout(sp, off):
             "x0": 0, "y0": 0, "w": 96, "h": 8, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_catherine_96x8",
         }
+    if off in PART1_CHECK_LABEL_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 2, "th": 2, "fh": 0, "fv": 0, "tile_off": 76, "bank": 0, "palbase": 0},
+                {"x": 16, "y": 0, "tw": 2, "th": 2, "fh": 0, "fv": 0, "tile_off": 72, "bank": 0, "palbase": 0},
+                {"x": 32, "y": 0, "tw": 2, "th": 2, "fh": 0, "fv": 0, "tile_off": 68, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 48, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_check_label_bubble",
+        }
+    if off in PART1_BATTLE_DAY_BANNER_OFFSETS:
+        captured = load_layouts().get("layouts", {}).get(sp.get("id"), {})
+        cells = []
+        for i, tile_off in enumerate((0, 16, 32, 48)):
+            cells.append({"x": i * 32, "y": 0, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                          "tile_off": tile_off, "bank": 3, "palbase": 256})
+        for i, tile_off in enumerate((224, 240)):
+            cells.append({"x": 32 + i * 32, "y": 42, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                          "tile_off": tile_off, "bank": 3, "palbase": 256})
+        return {
+            "cells": cells,
+            "x0": 0, "y0": 0, "w": 128, "h": 74, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "pal_file": captured.get("pal_file"),
+            "fallback": "part1_battle_day_banner_chunks",
+        }
     return None
 
 
@@ -326,6 +585,141 @@ def part2_tiled_layer_layout(sp, off):
             ],
             "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_128x32_title",
+        }
+    if off in PART2_TITLE_OBJ_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 0x0E8, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 0x108, "bank": 0, "palbase": 0},
+                {"x": 128, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 0x128, "bank": 0, "palbase": 0},
+                {"x": 40, "y": 80, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 0x170, "bank": 0, "palbase": 0},
+                {"x": 72, "y": 80, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 0x178, "bank": 0, "palbase": 0},
+                {"x": 104, "y": 80, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 0x180, "bank": 0, "palbase": 0},
+                {"x": 136, "y": 80, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 0x188, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 192, "h": 96, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_title_obj_text",
+        }
+    if off in PART2_SPLASH_LOGO_BG_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 22, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 1, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 176, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_splash_logo_bg",
+        }
+    if off in PART2_DOMINO_CO_NAME_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 12, "th": 1, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 96, "h": 8, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_domino_co_name",
+        }
+    if off in PART2_INTRO_BG_FULLSHEET_OFFSETS:
+        tw = max(1, int(sp.get("tile_cols") or 1))
+        th = max(1, int((sp.get("n_tiles") or tw) + tw - 1) // tw)
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": tw, "th": th, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": tw * 8, "h": th * 8, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_intro_bg_fullsheet",
+        }
+    if off in PART2_PROLOGUE_LOGO_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 12, "th": 1, "fh": 0, "fv": 0,
+                 "tile_off": 0x08, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 8, "tw": 12, "th": 1, "fh": 0, "fv": 0,
+                 "tile_off": 0x28, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 96, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_prologue_logo",
+        }
+    if off in PART2_CAMPAIGN_HEADER_OFFSETS:
+        cells = []
+        for tile_off, x in (
+            (0x008, 4),
+            (0x048, 30),
+            (0x060, 45),
+            (0x030, 71),
+            (0x020, 81),
+            (0x050, 93),
+        ):
+            cells.append({"x": x, "y": 0, "tw": 2, "th": 4, "fh": 0, "fv": 0,
+                          "tile_off": tile_off, "bank": 0, "palbase": 0})
+        return {
+            "cells": cells,
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_campaign_header_oam",
+        }
+    if off in PART2_REDSTAR_REGION_OFFSETS:
+        return {
+            "cells": [
+                {"x": i * 32, "y": 0, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": i * 16, "bank": 0, "palbase": 0}
+                for i in range(3)
+            ],
+            "x0": 0, "y0": 0, "w": 96, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_redstar_region_96x32",
+        }
+    if off in PART2_MISSION_NUMBER_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 16, "th": 1, "fh": 0, "fv": 0,
+                 "tile_off": 0x000, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 8, "tw": 16, "th": 1, "fh": 0, "fv": 0,
+                 "tile_off": 0x020, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_mission_number_128x16",
+        }
+    if off in PART2_LETS_GO_OFFSETS:
+        cells = []
+        for ty in range(8):
+            cells.append({"x": 0, "y": ty * 8, "tw": 16, "th": 1, "fh": 0, "fv": 0,
+                          "tile_off": ty * 0x20, "bank": 0, "palbase": 0})
+        return {
+            "cells": cells,
+            "x0": 0, "y0": 0, "w": 128, "h": 64, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_lets_go_visible_128x64",
+        }
+    if off in PART2_MODE_MENU_BIG_LOGO_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 32, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_mode_menu_big_logo",
+        }
+    if off in PART2_MODE_MENU_OPTION_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 32, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 8, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 16, "bank": 0, "palbase": 0},
+                {"x": 96, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 24, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_mode_menu_option",
         }
     if off in PART2_BATTLE_START_LARGE_OFFSETS:
         return {
@@ -353,6 +747,39 @@ def part2_tiled_layer_layout(sp, off):
             "x0": 0, "y0": 0, "w": 256, "h": 8, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_battle_start_removed_small",
         }
+    if off in PART2_CHECK_LABEL_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 4, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 45, "bank": 0, "palbase": 0},
+                {"x": 32, "y": 0, "tw": 1, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 53, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 40, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True,
+            "fallback": "part2_check_label_40x16",
+        }
+    if off in PART2_DAMAGE_FORECAST_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 22, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 32, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True,
+            "fallback": "part2_damage_forecast_bubble_32x32",
+        }
+    if off in PART2_RESULT_SUCCESS_OVERLAY_OFFSETS or off in PART2_RESULT_FAILURE_OVERLAY_OFFSETS:
+        return {
+            "cells": [
+                {"x": i * 32, "y": 0, "tw": 4, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": i * 16, "bank": 0, "palbase": 0}
+                for i in range(4)
+            ],
+            "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True,
+            "fallback": "part2_result_status_128x32",
+        }
     if off in PART2_RESULT_CONGRATS_OFFSETS:
         cells = []
         for sprite in range(4):
@@ -366,10 +793,86 @@ def part2_tiled_layer_layout(sp, off):
             "x0": 0, "y0": 0, "w": 128, "h": 51, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_result_congrats",
         }
+    if off in PART2_RESULT_SUMMARY_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 7, "th": 6, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+                {"x": 40, "y": 0, "tw": 8, "th": 6, "fh": 0, "fv": 0,
+                 "tile_off": 8, "bank": 0, "palbase": 0},
+                {"x": 89, "y": 0, "tw": 8, "th": 6, "fh": 0, "fv": 0,
+                 "tile_off": 17, "bank": 0, "palbase": 0},
+                {"x": 133, "y": 0, "tw": 6, "th": 6, "fh": 0, "fv": 0,
+                 "tile_off": 26, "bank": 0, "palbase": 0},
+                {"x": 32, "y": 46, "tw": 24, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 7 * 32 + 6, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 66, "tw": 8, "th": 3, "fh": 0, "fv": 0,
+                 "tile_off": 9 * 32, "bank": 0, "palbase": 0},
+                {"x": 72, "y": 66, "tw": 7, "th": 3, "fh": 0, "fv": 0,
+                 "tile_off": 9 * 32 + 9, "bank": 0, "palbase": 0},
+                {"x": 136, "y": 66, "tw": 10, "th": 3, "fh": 0, "fv": 0,
+                 "tile_off": 9 * 32 + 17, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 92, "tw": 8, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 12 * 32, "bank": 0, "palbase": 0},
+                {"x": 64, "y": 92, "tw": 6, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 12 * 32 + 8, "bank": 0, "palbase": 0},
+                {"x": 128, "y": 92, "tw": 9, "th": 2, "fh": 0, "fv": 0,
+                 "tile_off": 12 * 32 + 16, "bank": 0, "palbase": 0},
+                {"x": 0, "y": 112, "tw": 16, "th": 3, "fh": 0, "fv": 0,
+                 "tile_off": 13 * 32, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 224, "h": 136, "obj1d": 0,
+            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part2_result_summary_label_groups",
+        }
     return None
 
 
 def tiled_layer_layout(sp, off):
+    if off in COMMON_NINTENDO_PRESENTS_BG_OFFSETS:
+        return {
+            "cells": [
+                {"x": 0, "y": 0, "tw": 25, "th": 4, "fh": 0, "fv": 0,
+                 "tile_off": 0, "bank": 0, "palbase": 0},
+            ],
+            "x0": 0, "y0": 0, "w": 200, "h": 32, "obj1d": 0,
+            "tile_cols": sp.get("tile_cols"), "build": True,
+            "fallback": "common_nintendo_presents_text_region",
+        }
+    if off in COMMON_SELECT_OBJ_OFFSETS:
+        captured = load_layouts().get("layouts", {}).get(sp.get("id"), {})
+        cells = []
+        variant = sp.get("layout_variant")
+        if variant == "select_top_title":
+            cells.extend(_layout_cells_from_specs(SELECT_TOP_TEXT_SPECS))
+            return {
+                "cells": cells,
+                "x0": 12, "y0": 4, "w": 192, "h": 48, "obj1d": 1,
+                "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+                "pal_file": captured.get("pal_file") or load_layouts().get("layouts", {}).get(SELECT_OBJ_ID, {}).get("pal_file"),
+                "fallback": "common_select_obj_top_title",
+            }
+        if variant == "select_bottom_title":
+            cells.extend(_layout_cells_from_specs(SELECT_BOTTOM_TEXT_SPECS))
+            return {
+                "cells": cells,
+                "x0": 24, "y0": 92, "w": 192, "h": 32, "obj1d": 1,
+                "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+                "pal_file": captured.get("pal_file") or load_layouts().get("layouts", {}).get(SELECT_OBJ_ID, {}).get("pal_file"),
+                "fallback": "common_select_obj_bottom_title",
+            }
+        # This catalogue item is the 1/2 select title/logo.  The same LZ77 OBJ
+        # block also contains cursor/prompt/residual tiles, but including them
+        # here makes the editor look like a full-screen composite instead of the
+        # editable title sprite group.
+        cells.extend(_layout_cells_from_specs(SELECT_TOP_TEXT_SPECS))
+        cells.extend(_layout_cells_from_specs(SELECT_BOTTOM_TEXT_SPECS))
+        return {
+            "cells": cells,
+            "x0": 12, "y0": 4, "w": 204, "h": 120, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "pal_file": captured.get("pal_file"),
+            "fallback": "common_select_obj_title_text",
+        }
     return part1_tiled_layer_layout(sp, off) or part2_tiled_layer_layout(sp, off)
 
 
@@ -447,11 +950,11 @@ def get_layout(sid):
 def current_tiles(sp):
     """스프라이트의 현재 타일 바이트(편집본 우선→패치 ROM 디코드). 4bpp, 32B/타일."""
     ov = load_json(OVERRIDES_PATH, {}) or {}
-    rec = ov.get(sp.get("id"))
+    rec = ov.get(override_id(sp))
     if rec and rec.get("indices"):
         grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
         return encode_indices(grid, w, h)
-    dec = decode_from_rom(patched_bytes(), sp)
+    dec = decode_from_rom(patched_bytes() or rom_bytes(), sp)
     if dec is None:
         return b""
     grid, w, h, _ = dec
@@ -505,6 +1008,9 @@ def render_onscreen_png(sid):
                         if 0 <= sx < im.width and 0 <= sy < im.height:
                             r, g, b = col(c.get("palbase", 256), c["bank"], idx)
                             px[sx, sy] = (r, g, b, 255)
+    bbox = im.getchannel("A").getbbox()
+    if bbox:
+        im = im.crop(bbox)
     import io as _io
     buf = _io.BytesIO()
     im.resize((im.width * 3, im.height * 3), Image.NEAREST).save(buf, "PNG")
@@ -552,7 +1058,7 @@ def default_palette_for(sp):
 def palette_for(sp):
     """편집/표시용 16색 팔레트. override 우선 → source 기반 실기 팔레트 기본값 → grayscale."""
     ov = load_json(OVERRIDES_PATH, {}) or {}
-    rec = ov.get(sp.get("id"))
+    rec = ov.get(override_id(sp))
     if rec and rec.get("palette"):
         return rec["palette"]
     return default_palette_for(sp)
@@ -578,13 +1084,15 @@ PART2_PATCH_KO = {
     "battle_start_day_overlay_obj": "전투 시작 회전 소스(일본어 제거 대상)",
     "result_success_overlay_obj": "결과: 성공 오버레이", "result_failure_overlay_obj": "결과: 실패 오버레이",
     "result_summary_obj": "결과 요약", "result_congratulations_obj": "결과: 축하",
-    "domino_co_name_obj": "도미노 CO 이름", "campaign_header_obj": "캠페인 헤더",
+    "domino_co_name_obj": "도미노 CO 이름(원본 그래픽 제거)", "campaign_header_obj": "캠페인 헤더",
     "level_label_obj": "레벨 라벨", "redstar_region_obj": "레드스타 영역 라벨",
     "mission_number_obj": "미션 번호", "lets_go_obj": "‘출격’ 라벨", "check_label_obj": "체크 라벨",
     "splash_logo_bg": "2편 스플래시 로고", "prologue_logo_obj": "프롤로그 로고",
     "mission_start_obj": "전투개시 배너", "air_mission_title_obj": "에어 미션 타이틀",
     "air_supremacy_title_obj": "제공권 타이틀", "damage_forecast_label_obj": "데미지 예측 라벨",
     "menu_newspaper_bg": "메뉴 신문 배경(텍스트 포함)", "intro_campaign_residual_graphics": "인트로 캠페인 잔여 그래픽",
+    "operation_select_country_bg": "작전 선택 국가 배경",
+    "strategic_map_mode4_labels": "전략지도 Mode4 지명 라벨",
     "world_map_label_tiles": "월드맵 지명 라벨", "info_screen_bg_labels": "정보 화면 라벨",
     "full_info_spec_obj_label": "상세정보 스펙 라벨", "check_label": "체크 라벨", "battle_day_banner": "전투 N일째 배너",
 }
@@ -617,6 +1125,8 @@ def classify_sprite(source):
     for k, v in PART2_PATCH_KO.items():
         if k in sl:
             return (True, v)
+    if "common_nintendo_presents_bg" in sl or "nintendo_presents" in sl:
+        return (True, "콜드부트 닌텐도 제공")
     if "part1_" in sl and "_lz77_off" in sl:
         for k, v in PART1_LOGO_KO.items():
             if "part1_" + k.lower() in sl or k.lower() in sl:
@@ -625,7 +1135,7 @@ def classify_sprite(source):
     if "copyright" in sl:
         return (True, "타이틀 카피라이트(© 표기)")
     if "select_obj" in sl:
-        return (False, "1/2편 선택 화면 캐릭터/그래픽")
+        return (True, "1/2편 선택 화면 제목/로고")
     if "title_obj" in sl or "part2_title_obj" in sl:
         return (True, "타이틀 로고")
     if "patch_block" in sl or "patch_lz" in sl:
@@ -728,7 +1238,6 @@ class Handler(BaseHTTPRequestHandler):
         """WYSIWYG 편집용: 레이아웃 셀 + 그릴 팔레트(캡처 OBJ 뱅크) + tile_cols.
         프런트가 현재 indices로 조립 렌더 + 클릭→타일픽셀 역매핑 페인트."""
         import struct as _s
-        from collections import Counter
         sid = q.get("id", [""])[0]
         sp = sprite_by_id(sid)
         if sp is None:
@@ -736,23 +1245,42 @@ class Handler(BaseHTTPRequestHandler):
         lay = get_layout(sid)
         if not lay:
             return {"ok": False, "error": "no layout for %s" % sid}
-        dec = decode_indices(sp)
+        dec = decode_current_indices(sp)
         cols = dec[3] if dec else (sp.get("tile_cols") or 1)
         palp = lay.get("pal_file")
+        cells = []
+        palettes = None
+        for c in lay.get("cells") or []:
+            cc = dict(c)
+            if "palette_key" not in cc:
+                cc["palette_key"] = "%s:%s" % (cc.get("palbase", 256), cc.get("bank", 0))
+            cells.append(cc)
         if palp and (ROOT / palp).exists():
             palb = (ROOT / palp).read_bytes()
-            dom = Counter((c.get("palbase", 256), c["bank"]) for c in lay["cells"]).most_common(1)[0][0]
-            palbase, bank = dom
 
             def col(i):
                 v = _s.unpack("<H", palb[i * 2:i * 2 + 2])[0]
                 return [(v & 31) * 255 // 31, ((v >> 5) & 31) * 255 // 31, ((v >> 10) & 31) * 255 // 31]
-            palette = [col(palbase + bank * 16 + i) for i in range(16)]
+            palettes = {}
+            for c in cells:
+                key = c["palette_key"]
+                if key in palettes:
+                    continue
+                palbase = int(c.get("palbase", 256))
+                bank = int(c.get("bank", 0))
+                palettes[key] = [col(palbase + bank * 16 + i) for i in range(16)]
+            first_key = cells[0]["palette_key"] if cells else None
+            palette = palettes.get(first_key) if first_key else None
+            if palette is None:
+                palette = [list(c) for c in palette_for(sp)]
         else:
             palette = [list(c) for c in palette_for(sp)]  # 빌드 레이아웃: 인덱스 직접
-        return {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
-                "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": lay["cells"],
-                "palette": palette, "screen": lay.get("screen"), "build": lay.get("build", False)}
+        out = {"ok": True, "w": lay["w"], "h": lay["h"], "x0": lay["x0"], "y0": lay["y0"],
+               "obj1d": lay.get("obj1d", 1), "tile_cols": cols, "cells": cells,
+               "palette": palette, "screen": lay.get("screen"), "build": lay.get("build", False)}
+        if palettes:
+            out["palettes"] = palettes
+        return out
 
     def _compare(self, q):
         """원본↔적용(패치빌드) 픽셀 동일 여부 + 편집 존재 여부."""
@@ -764,7 +1292,7 @@ class Handler(BaseHTTPRequestHandler):
         p = decode_from_rom(patched_bytes(), sp) if patched_bytes() else None
         changed = (o and p and o[0] != p[0])
         ov = load_json(OVERRIDES_PATH, {}) or {}
-        has_edit = sid in ov and bool(ov[sid].get("indices"))
+        has_edit = override_id(sp) in ov and bool(ov[override_id(sp)].get("indices"))
         return {"ok": True, "id": sid, "offset": sp.get("offset"), "type": sp.get("type"),
                 "source": sp.get("source"),
                 "orig_url": "/api/render?id=%s&which=orig" % urllib.parse.quote(sid),
@@ -817,14 +1345,26 @@ class Handler(BaseHTTPRequestHandler):
 
     def _tile(self, q):
         sid = q.get("id", [""])[0]
+        which = (q.get("which", ["current"])[0] or "current").strip()
         sp = sprite_by_id(sid)
         if sp is None:
             return {"ok": False, "error": "id 없음: %s" % sid}
+        if which not in ("current", "orig"):
+            return {"ok": False, "error": "which=current|orig"}
         # 편집본(인덱스) 우선
         ov = load_json(OVERRIDES_PATH, {}) or {}
-        rec = ov.get(sid)
-        desc = classify_sprite(sp.get("source"))[1]
+        rec = ov.get(override_id(sp))
+        desc = sp.get("desc_override") or classify_sprite(sp.get("source"))[1]
         has_os = get_layout(sid) is not None
+        if which == "orig":
+            dec = decode_indices(sp)
+            if dec is None:
+                return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
+            grid, w, h, cols = dec
+            return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": cols,
+                    "type": sp.get("type"), "palette": default_palette_for(sp), "indices": grid,
+                    "edited": False, "offset": sp.get("offset"), "source": sp.get("source"),
+                    "desc": desc, "has_onscreen": has_os, "which": "orig"}
         if rec and rec.get("indices"):
             grid = rec["indices"]
             h = len(grid); w = len(grid[0]) if grid else 0
@@ -832,7 +1372,7 @@ class Handler(BaseHTTPRequestHandler):
                     "tile_cols": w // 8, "type": sp.get("type"),
                     "palette": palette_for(sp), "indices": grid, "edited": True,
                     "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc, "has_onscreen": has_os}
-        dec = decode_indices(sp)
+        dec = decode_current_indices(sp)
         if dec is None:
             return {"ok": False, "error": "디코드 실패(타입 %s)" % sp.get("type")}
         grid, w, h, cols = dec
@@ -884,13 +1424,14 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": False, "error": "id 없음: %s" % sid}
         if not palette or not isinstance(palette, list):
             return {"ok": False, "error": "palette(16×[r,g,b]) 필요"}
+        key = override_id(sp)
         with _LOCK:
             ov = load_json(OVERRIDES_PATH, {}) or {}
-            rec = ov.get(sid, {})
+            rec = ov.get(key, {})
             rec.update({"offset": sp.get("offset"), "type": sp.get("type"), "palette": palette})
-            ov[sid] = rec
+            ov[key] = rec
             save_json(OVERRIDES_PATH, ov)
-        return {"ok": True, "id": sid}
+        return {"ok": True, "id": sid, "base_id": key}
 
     def _save(self, body):
         sid = body.get("id")
@@ -911,9 +1452,10 @@ class Handler(BaseHTTPRequestHandler):
             fits = (len(enc) == sp.get("size"))  # 타일수 동일해야 함(압축적합은 apply에서)
         else:
             fits = (len(enc) <= (sp.get("size") or len(enc)))
+        key = override_id(sp)
         with _LOCK:
             ov = load_json(OVERRIDES_PATH, {}) or {}
-            ov[sid] = {"offset": sp.get("offset"), "type": sp.get("type"),
+            ov[key] = {"offset": sp.get("offset"), "type": sp.get("type"),
                        "width": w, "height": h, "indices": indices, "palette": palette,
                        "raw_len": len(enc), "orig_size": sp.get("size"),
                        "comp_size": sp.get("comp_size"), "fits_raw": fits}
@@ -921,24 +1463,25 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 EDIT_DIR.mkdir(parents=True, exist_ok=True)
                 pal = [tuple(c) for c in (palette or [list(c) for c in ES.GRAYSCALE])]
-                ES.render_png(indices, w, h, pal, str(EDIT_DIR / f"{sid}.png"), scale=2)
+                ES.render_png(indices, w, h, pal, str(EDIT_DIR / f"{key}.png"), scale=2)
             except Exception:
                 pass
-        return {"ok": True, "id": sid, "raw_len": len(enc), "orig_size": sp.get("size"),
+        return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"),
                 "fits_raw": fits,
                 "note": "편집 저장됨(overrides). '적용'(/api/build)으로 재빌드하면 ROM에 반영 — "
                         "synthetic은 perm 역변환, lz77은 재압축≤comp_size, raw는 size 이내(타입 %s)." % sp.get("type")}
 
     def _revert(self, body):
         sid = body.get("id")
+        key = override_id(sid)
         with _LOCK:
-            ep = EDIT_DIR / f"{sid}.png"
+            ep = EDIT_DIR / f"{key}.png"
             if ep.exists():
                 ep.unlink()
             ov = load_json(OVERRIDES_PATH, {})
-            ov.pop(sid, None)
+            ov.pop(key, None)
             save_json(OVERRIDES_PATH, ov)
-        return {"ok": True, "id": sid}
+        return {"ok": True, "id": sid, "base_id": key}
 
 
 def main():

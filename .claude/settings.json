@@ -11,5 +11,8 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "create-kr-patch@kr-patch": true
   }
 }

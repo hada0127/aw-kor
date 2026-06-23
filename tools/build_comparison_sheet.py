@@ -110,6 +110,7 @@ def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str
     shot_dir.mkdir(parents=True, exist_ok=True)
     prov: dict = {
         "name": name,
+        "scene_id": checkpoint.get("scene_id"),
         "side": side,
         "mode": checkpoint["mode"],
         "rom": str(rom),
@@ -117,6 +118,7 @@ def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str
         "git_commit": _git_commit(),
         "harness": str(harness),
         "grade": checkpoint.get("grade", "stale_state" if checkpoint.get("stale_bg") else "ground_truth"),
+        "note": checkpoint.get("note"),
     }
     driver = MGBADriver(rom, shot_dir, harness)
     try:
