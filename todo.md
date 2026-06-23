@@ -20,7 +20,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   → 11px galmuri 직접 렌더(render_galmuri_8x16, ink=15). `patch_part2_domino_co_name_obj` 전면 교체:
   캐서린/도미노/맥스/호이프/빌리/키쿠치요/아스카/이글/모프/헬보우즈/콩/캣/스네이크/호크/하치/이반/한나/야마모토.
   전 19개 원본 압축 슬롯에 in-place fit. **ROM 디코드+렌더로 한글 검증**(temp/co_names_patched.png).
-  ※ savestate 캡처(30f2)는 frozen VRAM이라 여전히 가타카나 표시 → **savestate=stale-BG 확정 입증**. fresh-boot 시 한글 렌더(renderer가 ROM에서 읽음).
+  ※ **인게임 시각 확증 완료(2026-06-24)**: `tools/capture_freshrender.py`(savestate 로드+refresh-nav로 ROM 재렌더)로
+  CO 프로필 스크롤 시 이름박스 **맥스/도미노 한글 표시 확인**(stale 가타카나→한글). 증거 docs/screenshots/SUCCESS_A1_*.
+- [x] **fresh-render 캡처 엔진**: savestate stale-BG 우회. A3(24/30f2 등) 확증에도 재사용 가능(매니페스트 확장).
 - [ ] **A1b 대사 화자 이름박스 가타카나**(80c コシゲ 등): CO 프로필 OBJ(0x452xxx)와 **별도 메커니즘** — 미조사. 화자명 소스 RE 필요.
 - [ ] **A2 맵 선택 섬 이름 '??'** (de-risked): 대사 3렌더러(313/B11/A3, 0x8840-0xE2A7→KOR_BASE)는 마/메 정상.
   맵선택=**4번째 미훅 렌더러**(fallback 0x8148). 정석: `/tmp/mgbah`로 8BC3/8BED read·0x8148 write PC trace →

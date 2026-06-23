@@ -1707,3 +1707,12 @@ archive/malformed_address_rows.csv 보존.
 - **stale-BG 확정 입증**: ROM OBJ를 한글로 바꿔도 30f2 savestate 캡처는 가타카나 유지 → savestate VRAM frozen 확정.
   fresh-boot 시 한글 렌더(동일 렌더러가 ROM에서 읽음). 시각 최종확인은 fresh-boot 캡처 필요.
 - 잔여: 80c コシゲ 등 대사 화자/소수인물 이름박스는 0x452xxx 테이블·SJIS에 없는 **별도 메커니즘**(A1b, 추적).
+
+## [2026-06-24] A1 인게임 시각 확증 + fresh-render 캡처 엔진
+- **fresh-render 엔진**(`tools/capture_freshrender.py` + `data/freshrender_checkpoints.json`): savestate 로드 후
+  refresh-nav(스크롤/재진입)로 OBJ/BG를 현재 ROM에서 **재렌더** → savestate frozen-VRAM(stale-BG) 우회.
+- **A1 확정**: CO 프로필 savestate 로드 시 이름박스는 ﾄﾞﾐﾉ(가타카나, stale VRAM)였으나, RIGHT 스크롤로
+  CO 전환 시 이름 OBJ가 ROM에서 재렌더 → **맥스 / 도미노 한글 표시 확인**.
+  증거: `docs/screenshots/SUCCESS_A1_*_2026-06-24.png`(맥스/도미노 한글, stale→korean montage).
+- 이로써 codex·agy가 요구한 "fresh-boot 입증"을 충족: A1 CO 이름 OBJ는 인게임에서 한글 렌더됨이 시각 확증됨.
+- 이 엔진은 30f2/80c/24 등 다른 stale-BG 의심 scene도 동일 기법(load+refresh-nav)으로 확증 가능(후속 매니페스트 확장).

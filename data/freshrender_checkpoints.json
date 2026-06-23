@@ -1,0 +1,19 @@
+{
+  "_doc": "Fresh-render 캡처 매니페스트. savestate 로드 후 refresh-nav로 OBJ/BG를 ROM에서 재렌더해 stale-BG 우회(tools/capture_freshrender.py). A1 검증용 CO 프로필 스크롤 등.",
+  "checkpoints": [
+    {
+      "name": "co_profile_maxg",
+      "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+      "settle": 20,
+      "refresh": [["press", "RIGHT", 50]],
+      "note": "CO 프로필 스크롤 1회 → 이름 OBJ 재렌더(맥스, 한글)"
+    },
+    {
+      "name": "co_profile_domino",
+      "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+      "settle": 20,
+      "refresh": [["press", "RIGHT", 50], ["press", "RIGHT", 50]],
+      "note": "CO 프로필 스크롤 2회 → 도미노(한글)"
+    }
+  ]
+}
