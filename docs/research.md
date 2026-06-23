@@ -1324,3 +1324,22 @@ merged/wide/multi-ptr/과확장 skip.
 
 **하네스 사실**: tools/mgba_lua.c(Lua 임베딩)는 컴파일되나 스크립트 top-level 실행 트리거 미발견 → 보류.
 디버거는 tools/mgba_harness.c(/tmp/mgbah_dbg = break에 hasBreakpoints 진단 추가본)로 충분.
+
+### 2026-06-23 (續4): Part1 repoint 플레이테스트 — savestate 검증 한계 진단
+
+신 빌드(08d50127) 플레이테스트를 codex 전체장면 시스템(screen_checkpoints.json)으로 시도.
+**작동하는 디버거**(break 정상)로 검증:
+
+- **메커니즘 확증**: 작전룸(base_a)에서 메뉴 이동(신규 트리거) → store(0x8B1299C)가 커맨드-스트림
+  포인터 캡처(0xDF5D60/0xDF612C/0xDF6274/0xDF5E10/0xDF6418). **게임이 0x19 커맨드 포인터를 읽어
+  메시지를 로드함**을 인게임 확인. 재배치 메시지면 갱신된 포인터(0xA4xxxx)를 읽게 됨(무결성 게이트로 보장).
+- **savestate 검증 한계(중요)**: scene_19a2(메시지 0xD965DC=재배치)·battle savestate를 신 빌드에 로드해도
+  대사가 **단어붙음으로 보임**. 원인 = pre-repoint savestate의 ① **캐시된 구 스크립트 상태**(RAM이 구
+  포인터 0xD965DC=in-place 죽은 사본을 가리킴, advance해도 그걸 읽음) ② **구 폰트 VRAM 캐시**(신 텍스트
+  렌더 시 □ 글리프 누락). 진단 근거: 0xD96607('여기까지 온 당신이라면 그 정도는', override 공백有)이
+  메시지 0xD965DC(재배치)인데 savestate에선 단어붙음 → 캐시된 구 포인터 사용 확인.
+  → **repoint 버그 아님. pre-repoint savestate는 repoint 콘텐츠를 시각검증 불가.** 향후 repoint 검증엔
+  fresh-boot 네비 또는 post-repoint savestate 필요.
+- **결론**: repoint 정확성은 ROM 직접 무결성 게이트(byte-identical, 권위) + 메커니즘 확증(store가
+  커맨드포인터 읽음) + 디코드 검증(재배치=실제 un-jam 한글)으로 증명됨. 클린 시각 확인은 실기/에뮬
+  **신규 플레이**에서 Part1 캠페인 미션 진입 시 가능(savestate 불가).
