@@ -336,3 +336,31 @@
 - **다시 시도하지 않을 조건**: "조밀 단조 포인터 테이블 = 대사 테이블"이라는 가정. Part1은 struct
   테이블이 대사 영역을 가리키는 경우가 많다. 반드시 **디코드해서 실제 대사인지** 확인하거나, 런타임
   렌더러 포인터 로드를 트레이싱해 진짜 테이블을 찾을 것. 헤더갭>16 가드로 자동 차단은 해 뒀음.
+
+## [2026-06-23 續2] Part1 대사 런타임 트레이싱 — 하네스 디버거 loadstate 후 미발화
+
+- **목표**: Part1 대사 표시 중 렌더러의 메시지 포인터 로드를 watchpoint/breakpoint로 잡아 진짜
+  대사 테이블 역추적(static 분리 불가 결론 이후의 정공법).
+- **진행**: mgbah(tools/mgba_harness.c)로 first_battle savestate 로드 → Part1 캠페인 대사 화면 확인
+  (캐서린 튜토리얼 "점령은…", CO 도감 "기계광 활기찬 소년…"). 텍스트 ptr store `0x8B1299C
+  str r4,[r6,#0x20]`, copy chokepoint `0x8B1BF08`, 파서 `0x8B11E48`에 break/watch.
+- **막힌 점**: **loadstate 후 watchpoint/breakpoint가 발화하지 않음**. 검증: fresh boot(loadstate 無)에선
+  VRAM 쓰기 watchpoint 52히트·IWRAM rw 188히트로 **정상 작동**하나, `loadstate` 직후엔 동일 watchpoint가
+  0히트. loadstate 핸들러에서 디버거 재attach(mDebuggerAttach+init) 패치해도 미발화 → mGBA가 loadstate 시
+  CPU fast-path 메모리 접근으로 복원해 디버거 슬로우패스(watchpoint 체크)를 우회하는 라이브러리 내부 이슈.
+- **static 분석 결과**: store `0x8B1299C`의 r4(텍스트 ptr)는 `[sp,#0x10]`(스택 인자)에서 옴 → 함수
+  `0x8B12984`가 텍스트 ptr를 인자로 받음. 콜체인 위로 다단계 추적해야 테이블 로드(`ldr rX,[rBase,...]`)
+  도달. 가능하나 레지스터 juggling 多.
+- **다시 시도할 때**: ① mgbah를 loadstate 후 watchpoint가 살아나도록 고치거나(mGBA fast-path 무효화 +
+  debugger 재설치 — 깊은 작업), ② **fresh-boot 네비**로 Part1 대사 도달 후 watchpoint(이 경로는 작동),
+  ③ mGBA **Lua 스크립팅** 메모리 콜백(C 디버거와 별개 경로), ④ static 콜체인 디스어셈블 완주.
+  어느 경우든 **실기/플레이테스트로 실제 대사 렌더 확인** 후에만 Part1 repoint 적용(쪼롱이님 캠페인 손상 방지).
+
+- **static 추적 최종 결론**: 텍스트 ptr는 렌더러 함수들(`0x8B12910`→`0x8B12984`)의 인자로 위에서
+  내려오며, caller가 참조하는 `0x08D826E4`는 **텍스트 커맨드 인터프리터의 핸들러 테이블**
+  (`08B127A1`+flags 등 함수포인터 구조)이지 메시지 텍스트 테이블이 아니다. 즉 **Part1 대사는 Part2
+  같은 깨끗한 메시지-포인터 배열이 아니라 커맨드-스트림 아키텍처**라, "테이블 1개 추가"로 repoint 확장이
+  안 된다. 대사 선택은 게임 이벤트/스크립트 시스템(렌더러에서 5~10단계+ 위)에서 ID로 이뤄진다.
+- **종합**: Part1 대사 repoint는 ① 하네스 디버거 loadstate 미발화 수정 또는 fresh-boot 네비로
+  런타임 트레이싱, ② 커맨드-스트림/이벤트 시스템 RE, ③ 실기 플레이테스트가 모두 필요한 다세션 작업.
+  현 시점 안전 적용 불가 → **Part2 214라인 해소로 마감, Part1은 미적용 유지**(게임/쪼롱이님 캠페인 보호).
