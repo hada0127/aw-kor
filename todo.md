@@ -119,3 +119,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 ## 완료 판정
 - A·B·C 전부 닫고 `python3 tools/build_korean_full.py` 후 전 QA 게이트 PASS + scene 재캡처 critical 0
   + codex·agy 적대 재리뷰에서 신규 결함 0이면 /goal 달성. F1만 잔여로 사용자 통지.
+
+### B2 CSV length 손상 — 해결(2026-06-24): 기능적 무해, 수정 불필요(회귀위험)
+- 239 손상행(length 필드 비숫자/빈값)은 **빌드가 fallback length(=len(ko))로 정상 import** → ROM에서 한글 올바르게 렌더(qa_csv: 185 korean, 진짜 일본어 잔존 0).
+- 검증: ①length 교정 시 일부 부패 ko(일본어) 노출 ②ko 비움 시 **18 회귀(한글→일본어)** — 손상행 한글 ko가 실제 렌더 소스임 확인.
+- 즉 손상 length는 **cosmetic**(구조 지저분)이나 **기능 무해**. 수정은 검증된 ROM(b27ba3d)을 회귀시킴 → 불필요·금지.
+- 완전 구조 클린은 행별 정본 ja+ko+length 재구성 필요(B1식 deep). ROM은 이미 정확.
