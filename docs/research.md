@@ -1428,3 +1428,32 @@ A3 hook이 자동 한글 렌더(대사와 동일 인프라). build_korean_full�
 잔여: ①state_21 캐릭터(コシゲ, 0x80591C 미발견 — 별도 story 테이블 가능성) 정확 소스 = A3 파서
 (0x0831BBDC) r0 추적 ②이름 테이블 전수 한글 readings 인코딩 + slot fit ③fresh-render 검증.
 기반게임差(외부 USA판=라틴이름)지만 메커니즘 확보로 한글화 가능(보류→실행가능 격상).
+
+---
+## [2026-06-24] A1b 최종 결론 — 화자명은 이미 한글(A1 완료), コシゲ는 stale VRAM 오탐
+
+런타임 트레이스 + 전수 디코드로 A1b "이름테이블 한글 인코딩"의 진실을 규명:
+
+**핵심 정정(워크플로 src 추정 뒤집음)**: 이름창은 SJIS 문자열도, save/RAM 상주도 아니다.
+**OBJ LZ77 그래픽**이다 — 이름 글리프는 프리베이크 타일(코드의 문자열 아님)이라 ROM에서 'コシゲ'
+바이트검색이 0건이었던 것.
+
+**렌더 메커니즘(확정)**:
+- 이름창 = OBJ 스프라이트(panel rows5-6, y40, pal8, tiles 0x2ac~0x2b4=6자 8x16).
+- 글리프 소스 = **CO 이름 OBJ 테이블 0x81BE68**(stride 0x44, 24엔트리=19 distinct 슬롯, A1 도메인).
+  각 엔트리 첫워드 = LZ77 그래픽 포인터(0x08452650~0x0845357C).
+- 캐릭터별 슬롯 디코드 = **BIOS SWI 0x11**(LZ77UnCompReadNormalWrite8bit, wrapper 0x0838B450) →
+  OBJ VRAM. 호출자 0x08311D1D. watchaddr 확증: r0=슬롯ptr, r1=OBJ VRAM dest.
+- 슬롯 인덱싱: 캐릭터 ID → 테이블 인덱스 → 슬롯ptr. コシゲ(state_21)=인덱스[11]=0x08453004.
+
+**A1b = 오탐(stale VRAM)**:
+- state_21 savestate는 **구 ROM(A1 번역 전) 캡처** → VRAM에 가타카나 コシゲ 잔상. 새 ROM 로드해도
+  VRAM은 stale(재렌더 전까지 구 글리프).
+- LEFT→RIGHT로 **재렌더** 시 새 ROM에서 디코드 → **'콩'(한글)** 표시 + 프로필도 완전 한글
+  ("블랙홀군 최강...인정받았다", stale의 '인정받이????' 사라짐). temp/koshige/rerendered_3x.png 확증.
+- 전수검증: 0x81BE68의 **19 distinct 슬롯 전부 출력≠원본(=A1 한글화됨)**, 미번역 가타카나 0개.
+  렌더: 캐서린/도미노/맥스/호이프/빌리/키쿠치요/아스카/이글/모프/헬보우즈/콩/캣/스네이크/호크/하치/이반/한나/야마모토.
+
+**결론**: 화자명 테이블은 **이미 A1(patch_part2_domino_co_name_obj)이 한글 인코딩 완료**. 추가 작업 불요.
+교훈(재확인): savestate 캡처는 provenance OK여도 **VRAM stale 가능** → OBJ/BG 변경의 잔존 판정은
+반드시 **fresh-render 재캡처**로 확증(capture_freshrender). state_21류 구 savestate를 결함증거로 쓰지 말 것.

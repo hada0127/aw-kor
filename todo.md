@@ -23,11 +23,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   ※ **인게임 시각 확증 완료(2026-06-24)**: `tools/capture_freshrender.py`(savestate 로드+refresh-nav로 ROM 재렌더)로
   CO 프로필 스크롤 시 이름박스 **맥스/도미노 한글 표시 확인**(stale 가타카나→한글). 증거 docs/screenshots/SUCCESS_A1_*.
 - [x] **fresh-render 캡처 엔진**: savestate stale-BG 우회. A3(24/30f2 등) 확증에도 재사용 가능(매니페스트 확장).
-- [~] **A1b 화자명 박스 — 렌더 메커니즘 완전 RE 돌파(2026-06-24, 실행가능 격상)**: ①RIGHT/LEFT 캐릭터
-  사이클로 재렌더 ②렌더러=대사와 동일 **A3 hook(0x08F30280)**: 예약코드 0x8840~0xE2A7=한글(테이블 0x08F20000→
-  KOR_BASE), 그 외=FONT 가타카나 폴백 ③캐릭터 **이름테이블 0x80591C**(SJIS 가타카나, A1 CO OBJ와 별개). 수정경로:
-  이름테이블 가타카나→한글 예약코드 인코딩(build 인프라 재사용). 잔여: state_21 캐릭터 정확 소스 파서추적 +
-  이름 전수 인코딩+fit + fresh-render 검증. docs/research.md 상세.
+- [x] **A1b 화자명 박스 — 해결(2026-06-24): 이미 A1 한글화 완료, コシゲ는 stale VRAM 오탐**. 이름창=OBJ LZ77 그래픽(테이블 0x81BE68, SWI 0x11 디코드), 19 distinct 슬롯 전부 A1이 한글화(캐서린~야마모토). state_21의 コシゲ는 구 ROM savestate VRAM 잔상 — 재렌더 시 '콩'(한글) 확증. docs/research.md 상세.
 - [x] **A2 맵 선택 섬 이름 '??' 완료(2026-06-24, ASM hook)**: 근본원인 = watchaddr trace로 확정 — 맵선택 리스트
   렌더러(파서 0x0831Bxxx, glyph는 A3 hook 공유)가 **ASCII 공백 0x20을 소비 안 함** → 공백 뒤 1바이트 밀림으로
   [0x20,다음high]를 잘못된 코드로 읽어 fallback '?'. B팀 맵명("소라 마메 섬")이 12B 슬롯 fit 위해 전각(0x8140,2B)
