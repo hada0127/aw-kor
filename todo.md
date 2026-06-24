@@ -50,10 +50,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **외부 패치 전체 번역 디코드(2026-06-24)**: `tools/decode_reference_patch.py`로 USA AW2 한글패치 복원+디코드(2940 문자열,
   미해독 0%). 폰트 0x810000/8x16 4bpp, code→glyph idx=(low)+(-0x90+(lead-0xc0)*122), galmuri glyph-match.
   `data/reference/aw2_korean_strings.json`(벤치마크) + `gap_targets.json`(우리 UI 갭 타깃). USA 미션/CO파워/진영/맵명은 기반게임差로 제외.
-- [~] **A4 영어 sprite UI — triage 확정, 보류(2026-06-24)**: operation_prompt_labels가 정보/확인/뒤로/적군/기록/재고
-  이미 한글화. 남은 영어(R.MAP/R.INFO/GALLERY/PRESS A/COLOR)는 0x456xxx OBJ인데 **OAM 비선형 배열**이라 표시 화면
-  savestate+OAM 매핑 필요(A3식). codex/agy triage: A/B/L/R/SELECT/START 버튼기호 유지, R.MAP/R.INFO/ENEMY/GALLERY/PRESS만
-  한글. 표시 화면(operation room?) 미확정 → savestate 확보 후 진행(외부판도 영문 유지=동급).
+- [x] **A4 영어 sprite UI — 해결(2026-06-24): 표시 영문 전부 이미 한글화, GALLERY/R.MAP은 미존재(오독)**.
+  실재 영문 = NEXT PHASE/PRESS A BUTTON(@0x391454)→'다음단계/결정키', COLOR(@0x391980)→'색상', TURN/SAKU 등 —
+  전부 빌드 텍스트 import가 한글화 완료(2바이트 한글코드 디코드 확증). EXIT/NO/UNIT(@0x17/0x4ca)는 코드/압축/디버그
+  포맷('UNIT C0 C1 PSQ(%1d)')=미표시. qa_ascii_residuals 큐레이션 잔존 0 + scene audit critical 0 교차확인.
 - [x] **A5 단어붙음 — 정밀 재진단+추가해소(2026-06-24, codex P4 계기)**: qa_spacing 도구는 WRITE_LOG(in-place stale)를
   디코드 → **대량 오탐**. 렌더 기준 정밀분석: 524 jammed 중 **451 relocated(공백복원)·47 in-place공백보유** = 오탐,
   **진짜 jammed 26행**(96% 이미 해소). Part2 커맨드스트림(테이블 0xA357B4)은 이미 451행 repoint 완료.
