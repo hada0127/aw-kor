@@ -1,298 +1,357 @@
 {
-  "_doc": "scene_role=container address bucket의 실제 화면 잔여 여부 검증 manifest. tools/audit_scene_residual_scans.py가 결과 파일의 case/hit 수와 known split hit를 감사한다.",
-  "version": 1,
-  "generated_on": "2026-06-22",
-  "containers": [
+ "_doc": "scene_role=container address bucket의 실제 화면 잔여 여부 검증 manifest. tools/audit_scene_residual_scans.py가 결과 파일의 case/hit 수와 known split hit를 감사한다.",
+ "version": 1,
+ "generated_on": "2026-06-22",
+ "containers": [
+  {
+   "container_scene_id": "19a_part1_tutorial_story",
+   "container_ranges": [
+    "0x00D8F000:0x00D98000"
+   ],
+   "related_screen_scene_ids": [
+    "19a1_part1_tutorial_opening",
+    "19a2_part1_heavy_tank_advice_story"
+   ],
+   "evidence": [
     {
-      "container_scene_id": "19a_part1_tutorial_story",
-      "container_ranges": ["0x00D8F000:0x00D98000"],
-      "related_screen_scene_ids": [
-        "19a1_part1_tutorial_opening",
-        "19a2_part1_heavy_tank_advice_story"
-      ],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part1_19a_steps_break_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "18c41e6ef0b4217fede0538f8882929fd9db0a7dac7b5ffce465dda823ebc224",
-          "expected_cases": 430,
-          "expected_hit_count": 0,
-          "note": "split 진입점 주변 step state에서 parent range 잔여 대사 렌더링 없음"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19b_part1_campaign_story_redstar",
-      "container_ranges": ["0x00D98000:0x00DA5000"],
-      "related_screen_scene_ids": [
-        "19b2_part1_hoip_landing_setup_story",
-        "19b1_part1_hoip_ambush_weather_story"
-      ],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part1_19b_aw1_break_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "d68125b9947234ba8c7f519767ed2c833614113a4b303e70fc564c5d0b202300",
-          "expected_cases": 224,
-          "expected_hit_count": 0,
-          "note": "AW1 campaign save/state routes에서 parent range 잔여 대사 렌더링 없음"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19c_part1_campaign_story_mid",
-      "container_ranges": ["0x00DC2900:0x00DCA000"],
-      "related_screen_scene_ids": [
-        "19c1_part1_mid_campaign_radio_story",
-        "19c2_part1_mid_fog_map_story"
-      ],
-      "evidence": [
-        {
-          "method": "direct_watch_known_split_hit",
-          "result_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "a7011ae1347569972d0614ed39357581c03b4645c3eea495ee239c96bf0a48a0",
-          "expected_cases": 208,
-          "expected_hit_count": 1,
-          "known_hits": [
-            {
-              "offset": "0x00DC4C02",
-              "group": "g_00DC4C02",
-              "target_scene_id": "19c2_part1_mid_fog_map_story",
-              "status": "existing_split"
-            }
-          ],
-          "note": "직접 watch에서 19c2 split의 g_00DC4C02만 검출"
-        },
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part1_19c_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "c3aae9bbec2c1ba636e1bfb8670f2db80336d8cba49c6383d67f3e88a6a3622c",
-          "expected_cases": 224,
-          "expected_hit_count": 0,
-          "note": "19c1/19c2 split ranges 제외 후 parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19d_part1_campaign_story_late",
-      "container_ranges": ["0x00DCA000:0x00DD2000"],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "method": "exact_watch_no_hit",
-          "result_path": "temp/scene_entrypoints/part1_19d_11186_exact_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "f494b8a83cbdd07085cd6167398106020f2b88314cdac6ffcf032b9906bef166",
-          "expected_cases": 352,
-          "expected_hit_count": 0,
-          "note": "후반 후보 exact watch route에서 19d parent range 렌더링 없음"
-        },
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part1_19d_nodes_break_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "57623db6daea7fbfb865529a208eef3557aa5a77d2102df4dc141b2e10f554c4",
-          "expected_cases": 2376,
-          "expected_hit_count": 0,
-          "note": "노드/route 확장 render breakpoint scan에서도 19d parent range 렌더링 없음"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19e_part1_unit_story_help",
-      "container_ranges": ["0x00DE9000:0x00DF0000", "0x00DF0000:0x00DF8000"],
-      "related_screen_scene_ids": [
-        "19e1_part1_unit_info_detail_help",
-        "19e7_part1_hoip_co_weather_help",
-        "19e6_part1_unit_help_late"
-      ],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part1_19e_steps_break_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "b170b61f8d78e77235756625f1e60ee4ad0c88047c86a41d3075b60f339dbcec",
-          "expected_cases": 24,
-          "expected_hit_count": 0,
-          "note": "known 19e split 화면 외 parent range 잔여 렌더링 없음"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30a_part2_story_opening_redstar",
-      "container_ranges": ["0x00A01C00:0x00A08000"],
-      "related_screen_scene_ids": ["30a1_part2_redstar_story_early"],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30a_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "fbd08e57c542a09851b9d642c6d3a9e7ec0a1835ea9299f7d5836c04d538d96d",
-          "expected_cases": 14,
-          "expected_hit_count": 0,
-          "note": "Part2 30a residual subset routes 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30b_part2_story_bluemoon",
-      "container_ranges": ["0x00A08000:0x00A10000"],
-      "related_screen_scene_ids": ["30b1_part2_redstar_liberation_macro_briefing_story"],
-      "evidence": [
-        {
-          "method": "render_breakpoint_known_split_hit",
-          "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "22990b68af24f99d3b031a90b0ae4227f143bed1933479a9b831a6b91c226554",
-          "expected_cases": 41,
-          "expected_hit_count": 1,
-          "known_hits": [
-            {
-              "offset": "0x00A0E398",
-              "group": "g_00A0E398",
-              "target_scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
-              "status": "existing_split"
-            }
-          ],
-          "note": "첫 residual scan의 유일 hit는 기존 30b1 split"
-        },
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v2/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "f06b5d98638502188b64eade1d31ce2ded7851cfe0396501dccef80011de5442",
-          "expected_cases": 48,
-          "expected_hit_count": 0,
-          "note": "30b1 split 제외 후 parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30c_part2_story_yellow_comet",
-      "container_ranges": ["0x00A10000:0x00A18000"],
-      "related_screen_scene_ids": ["30c1_part2_yellowcomet_north_invasion_story"],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30c_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "d7e72b3552acf55c7fe5fc6af0e3ec4b462d0d9b35b42d38b66bec9348007aae",
-          "expected_cases": 68,
-          "expected_hit_count": 0,
-          "note": "30c1 split 제외 후 parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30d_part2_story_green_earth",
-      "container_ranges": ["0x00A18000:0x00A1C06C"],
-      "related_screen_scene_ids": ["30d2_part2_green_earth_story_late"],
-      "evidence": [
-        {
-          "method": "render_breakpoint_known_boundary_hit",
-          "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "d2637f1fac3b15353b1e3a32d79b48e916ed334576c1e664cb093b506d8f66bb",
-          "expected_cases": 55,
-          "expected_hit_count": 1,
-          "known_hits": [
-            {
-              "offset": "0x00A1C000",
-              "group": "g_00A1BFD8",
-              "target_scene_id": "30d2_part2_green_earth_story_late",
-              "status": "boundary_fixed_to_split"
-            }
-          ],
-          "note": "A1C000 boundary hit로 30d2 end와 30g start를 A1C06C로 수정"
-        },
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
-          "expected_cases": 294,
-          "expected_hit_count": 0,
-          "note": "boundary fix 이후 30d/30g parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30g_part2_story_green_earth_late",
-      "container_ranges": ["0x00A1C06C:0x00A20000"],
-      "related_screen_scene_ids": [
-        "30g0_part2_green_earth_reinforcement_story",
-        "30g1_part2_green_earth_volcano_sortie_story",
-        "30g2_part2_green_earth_volcano_lava_story",
-        "30g3_part2_green_earth_suspicious_area_story"
-      ],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
-          "expected_cases": 294,
-          "expected_hit_count": 0,
-          "note": "boundary fix 이후 30d/30g parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30e_part2_story_blackhole_late",
-      "container_ranges": ["0x00A20000:0x00A28000"],
-      "related_screen_scene_ids": [
-        "30e4_part2_blackhole_yellowcomet_fortress_story",
-        "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-        "30e1_part2_blackhole_missile_approach_story",
-        "30e2_part2_blackhole_final_missile_story"
-      ],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30e_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "a96524f700a914f705e6d63668d19a84a743a16831f23b86d28bfa810510f851",
-          "expected_cases": 264,
-          "expected_hit_count": 0,
-          "note": "known 30e split 제외 후 parent residual 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30f_part2_story_final_and_co",
-      "container_ranges": ["0x00A28000:0x00A2C000"],
-      "related_screen_scene_ids": ["30f2_part2_co_profile_story"],
-      "evidence": [
-        {
-          "method": "render_breakpoint_residual_scan",
-          "result_path": "temp/scene_entrypoints/part2_30f_residual_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "600408000e00b61fcb11a90c04a668d22348928bdccb8123fe8db07245e4027b",
-          "expected_cases": 910,
-          "expected_hit_count": 0,
-          "note": "CO/profile/final residual routes 무히트"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "88_common_comm_labels",
-      "container_ranges": ["0x00EE212C:0x00EE2848"],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "method": "render_breakpoint_menu_state_scan",
-          "result_path": "temp/scene_entrypoints/common_88_comm_labels_break_subset_v1/results.json",
-          "rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-          "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
-          "expected_cases": 1967,
-          "expected_hit_count": 0,
-          "note": "Part1/Part2 menu/focus/row states x A/start/wait/direction policies에서 공통 통신 라벨 렌더링 없음"
-        }
-      ]
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part1_19a_steps_break_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "18c41e6ef0b4217fede0538f8882929fd9db0a7dac7b5ffce465dda823ebc224",
+     "expected_cases": 430,
+     "expected_hit_count": 0,
+     "note": "split 진입점 주변 step state에서 parent range 잔여 대사 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
     }
-  ]
+   ]
+  },
+  {
+   "container_scene_id": "19b_part1_campaign_story_redstar",
+   "container_ranges": [
+    "0x00D98000:0x00DA5000"
+   ],
+   "related_screen_scene_ids": [
+    "19b2_part1_hoip_landing_setup_story",
+    "19b1_part1_hoip_ambush_weather_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part1_19b_aw1_break_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "d68125b9947234ba8c7f519767ed2c833614113a4b303e70fc564c5d0b202300",
+     "expected_cases": 224,
+     "expected_hit_count": 0,
+     "note": "AW1 campaign save/state routes에서 parent range 잔여 대사 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "19c_part1_campaign_story_mid",
+   "container_ranges": [
+    "0x00DC2900:0x00DCA000"
+   ],
+   "related_screen_scene_ids": [
+    "19c1_part1_mid_campaign_radio_story",
+    "19c2_part1_mid_fog_map_story"
+   ],
+   "evidence": [
+    {
+     "method": "direct_watch_known_split_hit",
+     "result_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "a7011ae1347569972d0614ed39357581c03b4645c3eea495ee239c96bf0a48a0",
+     "expected_cases": 208,
+     "expected_hit_count": 1,
+     "known_hits": [
+      {
+       "offset": "0x00DC4C02",
+       "group": "g_00DC4C02",
+       "target_scene_id": "19c2_part1_mid_fog_map_story",
+       "status": "existing_split"
+      }
+     ],
+     "note": "직접 watch에서 19c2 split의 g_00DC4C02만 검출",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    },
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part1_19c_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "c3aae9bbec2c1ba636e1bfb8670f2db80336d8cba49c6383d67f3e88a6a3622c",
+     "expected_cases": 224,
+     "expected_hit_count": 0,
+     "note": "19c1/19c2 split ranges 제외 후 parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "19d_part1_campaign_story_late",
+   "container_ranges": [
+    "0x00DCA000:0x00DD2000"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "method": "exact_watch_no_hit",
+     "result_path": "temp/scene_entrypoints/part1_19d_11186_exact_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "f494b8a83cbdd07085cd6167398106020f2b88314cdac6ffcf032b9906bef166",
+     "expected_cases": 352,
+     "expected_hit_count": 0,
+     "note": "후반 후보 exact watch route에서 19d parent range 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    },
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part1_19d_nodes_break_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "57623db6daea7fbfb865529a208eef3557aa5a77d2102df4dc141b2e10f554c4",
+     "expected_cases": 2376,
+     "expected_hit_count": 0,
+     "note": "노드/route 확장 render breakpoint scan에서도 19d parent range 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "19e_part1_unit_story_help",
+   "container_ranges": [
+    "0x00DE9000:0x00DF0000",
+    "0x00DF0000:0x00DF8000"
+   ],
+   "related_screen_scene_ids": [
+    "19e1_part1_unit_info_detail_help",
+    "19e7_part1_hoip_co_weather_help",
+    "19e6_part1_unit_help_late"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part1_19e_steps_break_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "b170b61f8d78e77235756625f1e60ee4ad0c88047c86a41d3075b60f339dbcec",
+     "expected_cases": 24,
+     "expected_hit_count": 0,
+     "note": "known 19e split 화면 외 parent range 잔여 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30a_part2_story_opening_redstar",
+   "container_ranges": [
+    "0x00A01C00:0x00A08000"
+   ],
+   "related_screen_scene_ids": [
+    "30a1_part2_redstar_story_early"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30a_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "fbd08e57c542a09851b9d642c6d3a9e7ec0a1835ea9299f7d5836c04d538d96d",
+     "expected_cases": 14,
+     "expected_hit_count": 0,
+     "note": "Part2 30a residual subset routes 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30b_part2_story_bluemoon",
+   "container_ranges": [
+    "0x00A08000:0x00A10000"
+   ],
+   "related_screen_scene_ids": [
+    "30b1_part2_redstar_liberation_macro_briefing_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_known_split_hit",
+     "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "22990b68af24f99d3b031a90b0ae4227f143bed1933479a9b831a6b91c226554",
+     "expected_cases": 41,
+     "expected_hit_count": 1,
+     "known_hits": [
+      {
+       "offset": "0x00A0E398",
+       "group": "g_00A0E398",
+       "target_scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
+       "status": "existing_split"
+      }
+     ],
+     "note": "첫 residual scan의 유일 hit는 기존 30b1 split",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    },
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v2/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "f06b5d98638502188b64eade1d31ce2ded7851cfe0396501dccef80011de5442",
+     "expected_cases": 48,
+     "expected_hit_count": 0,
+     "note": "30b1 split 제외 후 parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30c_part2_story_yellow_comet",
+   "container_ranges": [
+    "0x00A10000:0x00A18000"
+   ],
+   "related_screen_scene_ids": [
+    "30c1_part2_yellowcomet_north_invasion_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30c_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "d7e72b3552acf55c7fe5fc6af0e3ec4b462d0d9b35b42d38b66bec9348007aae",
+     "expected_cases": 68,
+     "expected_hit_count": 0,
+     "note": "30c1 split 제외 후 parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30d_part2_story_green_earth",
+   "container_ranges": [
+    "0x00A18000:0x00A1C06C"
+   ],
+   "related_screen_scene_ids": [
+    "30d2_part2_green_earth_story_late"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_known_boundary_hit",
+     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "d2637f1fac3b15353b1e3a32d79b48e916ed334576c1e664cb093b506d8f66bb",
+     "expected_cases": 55,
+     "expected_hit_count": 1,
+     "known_hits": [
+      {
+       "offset": "0x00A1C000",
+       "group": "g_00A1BFD8",
+       "target_scene_id": "30d2_part2_green_earth_story_late",
+       "status": "boundary_fixed_to_split"
+      }
+     ],
+     "note": "A1C000 boundary hit로 30d2 end와 30g start를 A1C06C로 수정",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    },
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
+     "expected_cases": 294,
+     "expected_hit_count": 0,
+     "note": "boundary fix 이후 30d/30g parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30g_part2_story_green_earth_late",
+   "container_ranges": [
+    "0x00A1C06C:0x00A20000"
+   ],
+   "related_screen_scene_ids": [
+    "30g0_part2_green_earth_reinforcement_story",
+    "30g1_part2_green_earth_volcano_sortie_story",
+    "30g2_part2_green_earth_volcano_lava_story",
+    "30g3_part2_green_earth_suspicious_area_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
+     "expected_cases": 294,
+     "expected_hit_count": 0,
+     "note": "boundary fix 이후 30d/30g parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30e_part2_story_blackhole_late",
+   "container_ranges": [
+    "0x00A20000:0x00A28000"
+   ],
+   "related_screen_scene_ids": [
+    "30e4_part2_blackhole_yellowcomet_fortress_story",
+    "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+    "30e1_part2_blackhole_missile_approach_story",
+    "30e2_part2_blackhole_final_missile_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30e_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "a96524f700a914f705e6d63668d19a84a743a16831f23b86d28bfa810510f851",
+     "expected_cases": 264,
+     "expected_hit_count": 0,
+     "note": "known 30e split 제외 후 parent residual 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "30f_part2_story_final_and_co",
+   "container_ranges": [
+    "0x00A28000:0x00A2C000"
+   ],
+   "related_screen_scene_ids": [
+    "30f2_part2_co_profile_story"
+   ],
+   "evidence": [
+    {
+     "method": "render_breakpoint_residual_scan",
+     "result_path": "temp/scene_entrypoints/part2_30f_residual_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "600408000e00b61fcb11a90c04a668d22348928bdccb8123fe8db07245e4027b",
+     "expected_cases": 910,
+     "expected_hit_count": 0,
+     "note": "CO/profile/final residual routes 무히트",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  },
+  {
+   "container_scene_id": "88_common_comm_labels",
+   "container_ranges": [
+    "0x00EE212C:0x00EE2848"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "method": "render_breakpoint_menu_state_scan",
+     "result_path": "temp/scene_entrypoints/common_88_comm_labels_break_subset_v1/results.json",
+     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+     "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
+     "expected_cases": 1967,
+     "expected_hit_count": 0,
+     "note": "Part1/Part2 menu/focus/row states x A/start/wait/direction policies에서 공통 통신 라벨 렌더링 없음",
+     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+    }
+   ]
+  }
+ ],
+ "reverified_2026_06_24": {
+  "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+  "method": "static_residual_reverification + scene_capture_audit_crossref",
+  "note": "breakpoint-scan step-state 세이브스테이트는 prior ROM 빌드 종속이라 동적 재실행 불가. 대신 현재 ROM에서 ①13 컨테이너 주소범위 정적 kana 잔존 디코드(14 run) ②각 run을 repoint 매니페스트·내용 분석 → 전부 의도적 카타카나 음절표(アイウエオ...カキクケコ @0xDA432C 이름입력 그리드용, 번역대상 아님), 실 번역잔존 0 ③scene 캡처 audit critical=0(현재 ROM)이 렌더 기준 교차확인. 원 동적스캔 0-hit 결론이 현재 ROM에서 유효."
+ }
 }
