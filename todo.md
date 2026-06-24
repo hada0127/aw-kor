@@ -23,7 +23,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   ※ **인게임 시각 확증 완료(2026-06-24)**: `tools/capture_freshrender.py`(savestate 로드+refresh-nav로 ROM 재렌더)로
   CO 프로필 스크롤 시 이름박스 **맥스/도미노 한글 표시 확인**(stale 가타카나→한글). 증거 docs/screenshots/SUCCESS_A1_*.
 - [x] **fresh-render 캡처 엔진**: savestate stale-BG 우회. A3(24/30f2 등) 확증에도 재사용 가능(매니페스트 확장).
-- [ ] **A1b 대사 화자 이름박스 가타카나**(80c コシゲ 등): CO 프로필 OBJ(0x452xxx)와 **별도 메커니즘** — 미조사. 화자명 소스 RE 필요.
+- [~] **A1b 화자명 박스(コシゲ) — 정밀 조사 완료, 보류(2026-06-24)**: BG 글리프-인덱스 렌더 확정(OBJ 아님,
+  CO OBJ테이블 밖, SJIS 문자열 없음). 프로필 텍스트(0xA2B3FF)는 한글이나 이름은 캐릭터ID별 인덱스 배열로 별도 렌더.
+  인덱스테이블 발견엔 런타임 트레이스 필요(prior 세션 벽). 기반게임差+다세션 RE → 보류. 다음단계 docs/research.md 기록.
 - [x] **A2 맵 선택 섬 이름 '??' 완료(2026-06-24, ASM hook)**: 근본원인 = watchaddr trace로 확정 — 맵선택 리스트
   렌더러(파서 0x0831Bxxx, glyph는 A3 hook 공유)가 **ASCII 공백 0x20을 소비 안 함** → 공백 뒤 1바이트 밀림으로
   [0x20,다음high]를 잘못된 코드로 읽어 fallback '?'. B팀 맵명("소라 마메 섬")이 12B 슬롯 fit 위해 전각(0x8140,2B)
@@ -50,7 +52,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **외부 패치 전체 번역 디코드(2026-06-24)**: `tools/decode_reference_patch.py`로 USA AW2 한글패치 복원+디코드(2940 문자열,
   미해독 0%). 폰트 0x810000/8x16 4bpp, code→glyph idx=(low)+(-0x90+(lead-0xc0)*122), galmuri glyph-match.
   `data/reference/aw2_korean_strings.json`(벤치마크) + `gap_targets.json`(우리 UI 갭 타깃). USA 미션/CO파워/진영/맵명은 기반게임差로 제외.
-- [ ] **A4 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): sprite editor로 한글/기호화(정책상 영어 0이면 결함).
+- [~] **A4 영어 sprite UI — triage 확정, 보류(2026-06-24)**: operation_prompt_labels가 정보/확인/뒤로/적군/기록/재고
+  이미 한글화. 남은 영어(R.MAP/R.INFO/GALLERY/PRESS A/COLOR)는 0x456xxx OBJ인데 **OAM 비선형 배열**이라 표시 화면
+  savestate+OAM 매핑 필요(A3식). codex/agy triage: A/B/L/R/SELECT/START 버튼기호 유지, R.MAP/R.INFO/ENEMY/GALLERY/PRESS만
+  한글. 표시 화면(operation room?) 미확정 → savestate 확보 후 진행(외부판도 영문 유지=동급).
 - [x] **A5 단어붙음 — 정밀 재진단+추가해소(2026-06-24, codex P4 계기)**: qa_spacing 도구는 WRITE_LOG(in-place stale)를
   디코드 → **대량 오탐**. 렌더 기준 정밀분석: 524 jammed 중 **451 relocated(공백복원)·47 in-place공백보유** = 오탐,
   **진짜 jammed 26행**(96% 이미 해소). Part2 커맨드스트림(테이블 0xA357B4)은 이미 451행 repoint 완료.
