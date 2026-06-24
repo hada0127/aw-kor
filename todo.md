@@ -32,7 +32,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   codex가 옳았음(내 stale-BG 추정 철회). 부수: 동일 nav에서 A1 도미노(한글)·A2 소라??섬 재확인.
 - [x] **A3-fix 룰 요약 라벨 한글화 완료(2026-06-24)**: VRAM trace(dumpvram+OAM)로 룰 라벨 = **0x45D334~0x45D934 7개 32×16 OBJ**(raw, 0x100 간격) 발견.
   `patch_part2_campaign_rule_summary_labels`로 정찰/날씨/수입/일수/우세/능력/애니 렌더(render_galmuri_8x16, ink=15). **fresh-render 인게임 확증**
-  (docs/screenshots/SUCCESS_A3_rule_labels_korean_*). 잔여: 값 라벨(アリ/ナシ/ハレ/ユキ/ランダム/タイプ)은 32×16에 4값 패킹 구조 — minor 후속.
+  (docs/screenshots/SUCCESS_A3_rule_labels_korean_*).
+- [⛔] **A3 값 라벨(アリ/ナシ/ハレ/ユキ/ランダム/タイプ) = 8px 높이 벽**: VRAM/OAM trace로 값 스프라이트 위치 확정
+  (0x45DA34+, OAM spr17/19/21/23/30/34 = **32×8·16×8 = 8px 높이**). 그러나 legible 한글은 11px 필요(라벨이 16px 쓴 이유).
+  korean_glyphs_8px도 실제 8×16(11px), 11px→8px 압축은 mushed/illegible 확인. 카타카나는 단순해 8px 가독하나 한글 음절은 불가.
+  → 값 한글화는 **스프라이트 16px 확장(OAM 셋업 코드 RE, 레이아웃 시프트 위험)** 필요. 위험/이득 낮아 보류. 메인 카테고리 라벨은 한글 완료.
 - [~] **A3-old(진행중이던 설명)**: 24 campaign-map 룰 요약 라벨(日数/能力/天気/アニメ)은
   **baked OBJ 그래픽 확정**(출력 ROM 能力 SJIS=0인데 화면 표시 → dict 텍스트 아님). A1 이름OBJ·`patch_part2_status_header_labels`(종류/체력/연료/탄약)와 동류.
   fix 경로: 룰요약 OBJ 타일 오프셋 찾기 → 기존 `render_label`(Galmuri7, 16x8 OBJ타일)로 한글 렌더 주입.
