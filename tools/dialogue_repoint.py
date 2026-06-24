@@ -295,6 +295,14 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             cur = a + L
         new_msg += rom[cur:me]                    # 종단 제어 보존
 
+        # terminator 보존 검증(2026-06-25 qa_repoint_integrity): 원본이 0x00 종단인데 new_msg가 0x00 종단이
+        # 아니면 = 라인 extent가 종단(0x00 run)까지 삼켜 fixed_bytes 교체 시 terminator 손실 → run-off corrupt.
+        # (patch_script_row류 라인이 메시지 종단까지 덮은 케이스) → 안전 skip(in-place 유지).
+        if me > msg and orig[me - 1] == 0 and (not new_msg or new_msg[-1] != 0):
+            stats['skip_no_terminator'] = stats.get('skip_no_terminator', 0) + 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_no_terminator'})
+            continue
+
         # 제어 바이트 보존 검증(라인 외 전부 동일)
         # (분해가 검증됐고 gap은 orig 복사이므로 자명하지만 명시 확인)
         nlen = len(new_msg)

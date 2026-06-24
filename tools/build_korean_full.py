@@ -10529,6 +10529,23 @@ def main():
     def _strip_norm_ov(s):
         return ''.join(ch for ch in (s or '') if ch not in _OV_PUNCT)
 
+    _OV_CONJ_V = {0, 1, 4, 5, 6, 9, 10, 14, 15}  # ㅏㅐㅓㅔㅕㅘㅙㅝㅞ
+
+    def _ov_acceptable_aux(csv):
+        # CSV가 acceptable 보조용언(놀아 줘류, 맞춤법47항)이면 override(공백제거판)도 한국어 허용 → skip 안 함
+        # (codex 리뷰 반영: 자연스러운 붙임 편집을 CSV로 되돌리지 않음).
+        t = (csv or '').strip()
+        parts = t.replace('　', ' ').split(' ')
+        if len(parts) != 2 or not parts[1]:
+            return False
+        w = parts[0].rstrip(" 　.,!?…‘’“”\"'「」")
+        if not w or not ('가' <= w[-1] <= '힣'):
+            return False
+        x = ord(w[-1]) - 0xAC00
+        if x % 28 != 0 or (x // 28) % 21 not in _OV_CONJ_V:
+            return False
+        return parts[1][0] in '줘주줄둬두봐보봅버'
+
     st['override_jam_skipped'] = 0
     for _astr, ko in _dlg_ov.items():
         ko = (ko or '').strip()
@@ -10544,7 +10561,8 @@ def main():
         if a not in _bt_resolved:
             _ck = _csv_ko.get(a)
             if _ck and _strip_norm_ov(_ck) == _strip_norm_ov(ko) \
-                    and (_ck.count(' ') + _ck.count('　')) > (ko.count(' ') + ko.count('　')):
+                    and (_ck.count(' ') + _ck.count('　')) > (ko.count(' ') + ko.count('　')) \
+                    and not _ov_acceptable_aux(_ck):   # 보조용언 acceptable이면 override 존중(skip 안 함)
                 st['override_jam_skipped'] += 1
                 continue
         slot = slots.get(a, 0)
@@ -18913,9 +18931,13 @@ def main():
             _words = _array.array('I')
             _words.frombytes(orig[:(len(orig) // 4) * 4])
             _rp_ptr_index = {}
+            # codex 리뷰(2026-06-25): 포인터 OFFSET을 **대사/스크립트 영역(0xA00000~0xE10000)**으로 제한 →
+            # 코드영역 우연 4바이트 일치로 인한 오재배치(코드 오염) 위험 차단. 실 메시지 포인터테이블은 전부 이 범위.
             for _idx, _v in enumerate(_words):
                 if 0x08B80000 <= _v < 0x08E10000:
-                    _rp_ptr_index.setdefault(_v - 0x08000000, []).append(_idx * 4)
+                    _off = _idx * 4
+                    if 0xA00000 <= _off < 0xE10000:
+                        _rp_ptr_index.setdefault(_v - 0x08000000, []).append(_off)
 
             def _rp_msg_start(_a):
                 _s = _a

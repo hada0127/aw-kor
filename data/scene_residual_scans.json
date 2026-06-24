@@ -16,12 +16,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19a_part1_tutorial_story.json",
-     "result_sha256": "9d880809c1694a15b4cf4d9d548e39427c1ef314b7a37e9eec805855ba04aee6",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "7182e400f30d8088e859d9f5c8ed208b86ddad18e22d0fe9caaef0dfe0706134",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -38,12 +38,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
-     "result_sha256": "b1c648339f62e93b1da20a82a254f5ae0f1047195e8df6e7c291de321dcc33d6",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "af347547b1e2135b2c7e6aec93bd6c7783754511ae9bcd73439cb01594433d5e",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -60,12 +60,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19c_part1_campaign_story_mid.json",
-     "result_sha256": "6945a896f8217e0acc5c3906dee6677c0ae72e1cd9d53b3256be9cf8b88a4661",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "9d97dbd4916bad33051cb4c2f09974fda193b0cf10f9722dd37fc6e1bd2cb874",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -79,12 +79,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19d_part1_campaign_story_late.json",
-     "result_sha256": "ae1c8e3569e9497fc25c4fa2fb171db9956f4071a032ece83a3b65df9dc5257d",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "430f05828a42c48c675d50a6d9c0e75848663ac4c1753f11f9efc4fbe265ac3e",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -103,12 +103,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19e_part1_unit_story_help.json",
-     "result_sha256": "8c9577f4a9e3a597b86cb0a57dc9f67fa2b3a330e24e6e6de3e910af4c8ea616",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "33804aa00e7c65993e18922c2573d85b963b1c8b01a873bd2310e8bee553e54a",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -124,12 +124,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30a_part2_story_opening_redstar.json",
-     "result_sha256": "3157ed0b6050aff46102b390a9ebc609a1a0d33f0281faa5861173fa2872aeb8",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "a7939db6151ebf9f7a2d6f07c276a73a98ee2881d84e0c0f49ae5944ec9c8998",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -145,12 +145,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30b_part2_story_bluemoon.json",
-     "result_sha256": "fd25f1e6e578ecd0868583204a8a91b3064abe91aed8fba24d3d3d1c5a26ff61",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "c7157104453c5d9adfed1cfc2c6ee780e40a40a8a0a6f408eb8c5703703fcc11",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -166,12 +166,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30c_part2_story_yellow_comet.json",
-     "result_sha256": "d94e62e055a30aea39434e2a8d67a0f56a615b80b91b13798a5461d43ddb3838",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "12c0a5a612aaab89d8336ca6468cd49bf6b46c56c6c1cb78aecda20f54616579",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -187,12 +187,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30d_part2_story_green_earth.json",
-     "result_sha256": "aa119104fe224e70e4938e7fa0094df78c2adf4dce3c18455c1c83409800dc8f",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "93097570b9df2fe84387ef93bcf5a3dfcec44967f915908a892228aab9207469",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -211,12 +211,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30g_part2_story_green_earth_late.json",
-     "result_sha256": "a32465fa23ce06ca9d35d2b5481c3eb35a02cbf7952c374507cc05be22820f04",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "7611b5299273c96442e442a5ebc030b8a6b46889570bafdfb3ee01317bd3c5e7",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -235,12 +235,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30e_part2_story_blackhole_late.json",
-     "result_sha256": "8506345ba8c7c5284c369f726b7eb143773b37c413a768eff8b23816f5ab3ca0",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "f1721119a0a3a32579842075ce4c8a5e796fad3376355eae1ab1095212145a28",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -256,12 +256,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30f_part2_story_final_and_co.json",
-     "result_sha256": "fb53f3cf7373c6183ee79acd4775a9a97201565651b9c58d29529ba6e651e133",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "18ddaccb0fa7e84d54df28383745749d9b292ae47d0386d6d358ddb20b9d7ac3",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   },
@@ -275,12 +275,12 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/88_common_comm_labels.json",
-     "result_sha256": "02248a97edf4ae6bba78521e6e50200dad0e23bdb517866b50776b773cc3d3d8",
-     "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+     "result_sha256": "f9b958f2e22b47c0ae8a87d6e5863bcb2ee594131beb460ec8e952bc39bc1150",
+     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c 재배치 ROM(f09d111f) 정적 재검증. kana는 의도적 카타카나 음절표, 실 번역잔존 0.",
-     "historical_dynamic_scan": "구 동적 scan은 git 이력 보존"
+     "note": "A5c hardened ROM 정적 재검증",
+     "historical_dynamic_scan": "git 이력"
     }
    ]
   }
@@ -294,5 +294,8 @@
   "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
   "method": "static_residual_reverification",
   "note": "A5c 단어붙음 재배치(jam 102→19)로 ROM 변경 → 재스탬프"
+ },
+ "reverified_a5c_hardened": {
+  "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed"
  }
 }

@@ -1500,3 +1500,22 @@ ROM f09d111f. B3 재스탬프·scene 70 재캡처·dist BPS/IPS 재생성.
 
 **잔여 19**(genuine 한계): 메시지가 0x19 sub-start 포함(line이 sub-entry로 매핑, NOT_IN_MAN 10) / 무포인터
 mid-fragment 5 / 다중포인터 3 / merged 실중복 1. 일부는 acceptable(bracket-space '그건, 「'→'그건「'). 게이트 정직 보고.
+
+---
+## [2026-06-25] A5c hardening — codex/agy 적대 리뷰 4개 우려 반영
+
+A5c 단어붙음 해소(102→19) 직후 codex/agy 리뷰가 blocker급 우려 제기 → 전부 반영(ROM 84ec5fde):
+
+1. **span_of truncation(codex#1, blocker)**: 라인 extent가 메시지 종단(0x00 run)까지 삼킨 patch_script_row류는
+   fixed_bytes 교체 시 terminator 손실 → run-off corrupt. → dialogue_repoint.py에 **terminator 보존 검증**
+   (원본 0x00 종단인데 new_msg가 아니면 skip_no_terminator). qa_repoint_integrity로 전수 0 corrupt 확증.
+2. **override-skip 편집 되돌림(codex#2,agy#2)**: 비-B팀 잼 override skip이 acceptable 보조용언(놀아줘/가버렸네)을
+   CSV로 되돌릴 위험 → **_ov_acceptable_aux**(앞=용언활용+뒤=보조용언)면 override 존중(skip 안 함).
+3. **trusted 포인터 우연일치(codex#3,agy#1)**: ROM 전체 정렬워드를 포인터 후보로 → 코드영역 우연일치로 오염 위험.
+   → 포인터 OFFSET을 **대사/스크립트 영역(0xA00000~0xE10000)으로 제한**(코드영역 제외).
+4. **QA가 무회귀 증명 못함(codex#4)**: qa_spacing은 relocated를 intended로 간주(free-space 미follow). →
+   **tools/qa_repoint_integrity.py 갱신**: manifest new_addr를 **포인터로 독립 확인** + free-space 블롭 실디코드
+   (terminator/garbage/공백). 450 재배치 전수 PASS(문제 0).
+
+최종 게이트: integrity·B팀drift0·csv0·scene entrypoint·residual critical0·**qa_repoint_integrity 0**·dist PASS.
+jam 102→19 유지. repoint 450msgs/510lines. 70 scene 재캡처·B3 재스탬프·dist BPS/IPS 재생성.
