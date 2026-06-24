@@ -8775,7 +8775,9 @@ def _render_rule_label_obj(korean, ink=CAMPAIGN_RULE_LABEL_INK):
     from render_galmuri_8x16 import render_char
     tops = [bytes(32)] * 4
     bots = [bytes(32)] * 4
-    n = min(len(korean), 4)
+    if len(korean) > 4:
+        raise AssertionError(f'rule label "{korean}" >4 cells (32×16 한계, silent truncation 방지)')
+    n = len(korean)
     start = (4 - n) // 2
     for i in range(n):
         top, bot = render_char(korean[i], ink=ink)
@@ -8784,8 +8786,16 @@ def _render_rule_label_obj(korean, ink=CAMPAIGN_RULE_LABEL_INK):
     return b''.join(tops) + b''.join(bots)
 
 
+CAMPAIGN_RULE_LABEL_SIG = 'b0737cb2af452fa2'   # orig 0x45D334~0x45D934(7×0x100) 시그니처
+CAMPAIGN_RULE_VALUE_SIG = 'c25863505c6b1186'   # orig 값 영역 시그니처
+
+
 def patch_part2_campaign_rule_summary_labels(rom):
     """campaign-map 룰 요약 라벨 6개를 한글 OBJ로 렌더(raw in-place, 256B 고정)."""
+    import hashlib
+    sig = hashlib.sha256(bytes(rom[0x45D334:0x45D334 + 7 * 0x100])).hexdigest()[:16]
+    if sig != CAMPAIGN_RULE_LABEL_SIG:
+        raise AssertionError(f'룰 라벨 영역 시그니처 불일치({sig}) — 잘못된 base ROM? raw 타일 오염 방지')
     written = 0
     for off, ko in CAMPAIGN_RULE_LABELS:
         data = _render_rule_label_obj(ko)
@@ -8826,6 +8836,8 @@ def _render_value_obj(korean, n_tiles, ink=CAMPAIGN_RULE_LABEL_INK):
         glyphs.append((grid, w, h, xo))
         tw += w + 1
     tw -= 1
+    if tw > width:
+        raise AssertionError(f'value label "{korean}" 폭 {tw}px > {width}px (silent clipping 방지)')
     cur = max(0, (width - tw) // 2)
     for grid, w, h, xo in glyphs:
         for row in range(min(h, 8)):
@@ -8852,6 +8864,11 @@ def _render_value_obj(korean, n_tiles, ink=CAMPAIGN_RULE_LABEL_INK):
 
 def patch_part2_campaign_rule_value_labels(rom):
     """campaign-map 룰 값 인디케이터(있음/없음/맑음/눈/랜덤/타입A·B·C)를 한글 렌더(raw in-place)."""
+    import hashlib
+    vb = b''.join(bytes(rom[off:off + nt * 32]) for off, _ko, nt in CAMPAIGN_RULE_VALUES)
+    sig = hashlib.sha256(vb).hexdigest()[:16]
+    if sig != CAMPAIGN_RULE_VALUE_SIG:
+        raise AssertionError(f'룰 값 영역 시그니처 불일치({sig}) — 잘못된 base ROM? raw 타일 오염 방지')
     written = 0
     for off, ko, nt in CAMPAIGN_RULE_VALUES:
         data = _render_value_obj(ko, nt)
@@ -8860,6 +8877,50 @@ def patch_part2_campaign_rule_value_labels(rom):
         rom[off:off + nt * 32] = data
         written += 1
     return written
+
+
+def patch_mapname_fullwidth_ascii(rom, slots):
+    """맵명 테이블(0xA2CBxx~0xA2CDxx)의 1바이트 ASCII(digit/letter)를 전각 SJIS로 변환.
+    맵선택 리스트 렌더러(0x0831Bxxx)는 2바이트 코드만 처리 → 1바이트 ASCII는 정렬 붕괴('?').
+    예: "4Ｐ 맵"의 '4'(0x34) → '４'(0x8253). 공백(0x20)은 PART2_HOOK_SPACE_A2CC가 처리하므로 보존.
+    (codex 리뷰 2026-06-24: 0x20만 아니라 모든 1바이트 코드가 misalign 후보)."""
+    def _fw(c):
+        if 0x30 <= c <= 0x39:
+            return 0x824F + (c - 0x30)   # ０..９
+        if 0x41 <= c <= 0x5A:
+            return 0x8260 + (c - 0x41)   # Ａ..Ｚ
+        if 0x61 <= c <= 0x7A:
+            return 0x8281 + (c - 0x61)   # ａ..ｚ
+        return None
+    converted = 0
+    for a in sorted(slots):
+        if not (0xA2CB00 <= a <= 0xA2CE00):
+            continue
+        ln = slots[a]
+        content = bytes(rom[a:a + ln]).rstrip(b'\x20\x00')   # 후미 패딩 제거
+        out = bytearray()
+        i = 0
+        changed = False
+        while i < len(content):
+            b = content[i]
+            if 0x81 <= b <= 0xE2 and i + 1 < len(content):
+                out += content[i:i + 2]
+                i += 2
+            elif 0x21 <= b <= 0x7E and _fw(b) is not None:
+                f = _fw(b)
+                out += bytes([f >> 8, f & 0xFF])
+                changed = True
+                i += 1
+            else:
+                out.append(b)
+                i += 1
+        if changed and len(out) <= ln:
+            rom[a:a + ln] = bytes(out) + b'\x20' * (ln - len(out))
+            # 무결성맵(WRITE_LOG)에 기록 — import가 쓴 1바이트 ASCII본을 덮어쓴 last-writer.
+            WRITE_LOG.append([a, ln, len(out), bytes(out).hex(), 0x20, None, None,
+                              'mapname-fullwidth-ascii'])
+            converted += 1
+    return converted
 
 
 def patch_part2_campaign_header_obj(rom):
@@ -10530,6 +10591,7 @@ def main():
     st['battle_defense_label_tiles'] = patch_battle_defense_label_tiles(rom)
     st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
     st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
+    st['mapname_fullwidth_ascii'] = patch_mapname_fullwidth_ascii(rom, slots)
     st['part2_campaign_rule_labels'] = patch_part2_campaign_rule_summary_labels(rom)
     st['part2_campaign_rule_values'] = patch_part2_campaign_rule_value_labels(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
