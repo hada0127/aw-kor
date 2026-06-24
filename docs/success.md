@@ -1739,3 +1739,15 @@ archive/malformed_address_rows.csv 보존.
 - 산출물: `data/reference/aw2_korean_strings.json`(벤치마크), `aw2_gap_candidates.json`, `gap_targets.json`.
 - 한계: 우리 대사는 쪼롱이님 완료, 잔존은 대부분 그래픽(룰라벨/sprite UI). 외부 텍스트는 **타깃 한글 출처**로 활용(A3-fix 등).
   맵명은 외부=의미번역(누에콩섬), 우리=음역(소라마메섬)으로 다르나 쪼롱이 영역이라 불변.
+
+## [2026-06-24] A3-fix 완료 — campaign-map 룰 요약 라벨 7개 한글 (VRAM trace)
+- **소스 발견(VRAM trace)**: 룰 요약 라벨이 dict 텍스트도 아니고 OBJ인데 위치 불명 → 하네스 `dumpvram`+OAM 덤프로
+  실렌더 타일 역추적. 룰 라벨 = OAM sprite 16/18/20/22/24/29 → VRAM 타일 0x372~0x39A → **ROM 0x45D334~0x45D934
+  (7개 32×16 OBJ, raw, 0x100 간격 깔끔한 테이블)**.
+- **fix(A1식)**: `patch_part2_campaign_rule_summary_labels` — render_galmuri_8x16(ink=15)로 32×16 OBJ에 한글 렌더.
+  サクテキ(索敵)→정찰, テンキ(天気)→날씨, 収入→수입, 日数→일수, ユウセイ(優勢)→우세, 能力→능력, アニメ→애니.
+  타깃은 외부 AW2 디코드(gap_targets.json)와 일관.
+- **인게임 확증**: fresh-render(state_020→B,B,B,A,A,START,A)로 7개 라벨 전부 한글 표시 확인.
+  증거 `docs/screenshots/SUCCESS_A3_rule_labels_korean_freshrender_2026-06-24.png`.
+- 잔여(minor): 값 라벨(アリ/ナシ/ハレ/ユキ/ランダム/タイプ)은 32×16에 16×8 값 4개 패킹 구조 — 후속.
+- 전 QA PASS, scene critical 0, dist PASS. ROM SHA cdeccf3a.

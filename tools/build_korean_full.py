@@ -8753,6 +8753,49 @@ def patch_part2_domino_co_name_obj(rom):
     return written
 
 
+# Part 2 campaign-map 룰 요약 HUD 라벨 OBJ(32×16 = 4×2 타일, raw, 1D). VRAM trace로 발견:
+# OAM sprite 16/18/20/22/24/29 → VRAM 타일 0x372~0x39A → ROM 0x45D434~0x45D934(0x100 간격).
+# A3-fix: 일본어(テンキ/収入/日数/ユウセイ/能力/アニメ) → 한글(날씨/수입/일수/우세/능력/애니).
+# 타깃은 외부 AW2 디코드 참조(data/reference/gap_targets.json)와 일관. 룰 SETTING 메뉴(0xB839AC)는 별개로 이미 번역됨.
+CAMPAIGN_RULE_LABELS = [
+    (0x45D334, '정찰'),   # サクテキ(索敵) — fog/recon
+    (0x45D434, '날씨'),   # テンキ(天気)
+    (0x45D534, '수입'),   # 収入
+    (0x45D634, '일수'),   # 日数
+    (0x45D734, '우세'),   # ユウセイ(優勢)
+    (0x45D834, '능력'),   # 能力
+    (0x45D934, '애니'),   # アニメ
+]
+CAMPAIGN_RULE_LABEL_INK = 15
+
+
+def _render_rule_label_obj(korean, ink=CAMPAIGN_RULE_LABEL_INK):
+    """32×16 OBJ(8타일, 4열×2행 row-major 1D). 한글 가운데 정렬. 256B."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from render_galmuri_8x16 import render_char
+    tops = [bytes(32)] * 4
+    bots = [bytes(32)] * 4
+    n = min(len(korean), 4)
+    start = (4 - n) // 2
+    for i in range(n):
+        top, bot = render_char(korean[i], ink=ink)
+        tops[start + i] = top
+        bots[start + i] = bot
+    return b''.join(tops) + b''.join(bots)
+
+
+def patch_part2_campaign_rule_summary_labels(rom):
+    """campaign-map 룰 요약 라벨 6개를 한글 OBJ로 렌더(raw in-place, 256B 고정)."""
+    written = 0
+    for off, ko in CAMPAIGN_RULE_LABELS:
+        data = _render_rule_label_obj(ko)
+        if len(data) != 256:
+            raise AssertionError(f'rule label size {len(data)} != 256')
+        rom[off:off + 256] = data
+        written += 1
+    return written
+
+
 def patch_part2_campaign_header_obj(rom):
     """Replace the Part 2 campaign-map OBJ header with a Korean label."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -10393,6 +10436,7 @@ def main():
     st['battle_defense_label_tiles'] = patch_battle_defense_label_tiles(rom)
     st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
     st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
+    st['part2_campaign_rule_labels'] = patch_part2_campaign_rule_summary_labels(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
