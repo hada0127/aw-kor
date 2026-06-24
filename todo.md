@@ -58,7 +58,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   (보급 수송차/하늘의 용사!/지혜의 고리 섬 등). repoint 362→369 lines.
   **잔여 ~19**: 0xE0xxxx 순차(포인터0)·decompose 실패 3·0xA2C484(폭51>박스50 WONTFIX) — fail.md의 다세션
   이벤트시스템 RE 필요분.
-- [ ] **A5b qa_spacing 도구 보정**: WRITE_LOG stale → 실 ROM 디코드 or last-writer-wins로 오탐 제거(정확 카운트).
+- [x] **A5b qa_spacing 도구 렌더 정확화 완료(2026-06-24)**: ① repoint 매니페스트로 relocated 메시지 제외(공백복원
+  렌더), ② 비-relocated는 실 ROM 바이트 디코드(패딩 strip), ③ JAMMED는 같은번역 정확일치 공백제거만(다른/축약 제외).
+  **jammed 433→159(진짜만), ABBREV 74→24**. codex P4 해소. 159는 짧은구('맡겨 둬!'→'맡겨둬!')·인용부호 인접 등
+  슬롯-tight 잔여(진단용, dist 하드게이트 아님).
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
   0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.

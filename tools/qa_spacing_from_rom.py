@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
-"""띄어쓰기/줄바꿈 ROM-디코드 게이트 (qa_spacing_from_rom).
+"""띄어쓰기/줄바꿈 **렌더 기준** ROM-디코드 게이트 (qa_spacing_from_rom).
 
-출하 ROM 역디코드(integrity_map enc_hex) 기준으로 띄어쓰기 결함을 색출한다.
-codex 리뷰: CSV 시뮬레이션이 아니라 post-build ROM 권위.
+★2026-06-24 렌더 정확화(codex P4 반영): 이전엔 WRITE_LOG enc_hex(빌드 in-place 기록)를 디코드해
+repoint된 라인을 stale로 봐 **대량 오탐**(433행)이었다. 이제 **게임이 실제 렌더하는 본문** 기준:
+  ① repoint 매니페스트(temp/repoint_manifest.json)의 relocated 메시지 = free space 공백복원본
+     렌더 → 결함 검사 제외(in-place는 stale).
+  ② 비-relocated = 출하 ROM **실 바이트**를 디코드(trailing 패딩 strip).
+  ③ JAMMED는 출하본이 의도값의 **같은 번역 공백제거판(정확일치, interior 공백)**일 때만 — 다른/축약
+     번역은 제외(축약은 ABBREV로 분류). → 진짜 단어붙음만(159행 등).
 
 검사
-  1) [JAMMED] 의도 KO에는 공백이 있었으나 출하본은 공백이 0 (level≥4 압축) → 단어 붙음.
-  2) [ABBREV] SHORTEN 축약 적용행(level 1/3) — 문법/의미 훼손 위험(에게→에, 있는→있 등).
-  3) [GRAMMAR] 출하 KO에 깨진 조사/관형형 시그니처(' 있 ', ' 없 ', '에 ' 인칭 등) 잔존.
-  4) [DOUBLE] 연속 공백/선두·후미 공백 이상.
+  1) [JAMMED] 같은 번역인데 공백이 전부 제거됨(단어붙음).
+  2) [ABBREV] SHORTEN 축약 적용행(level 6~9) — 문법/의미 훼손 위험.
+  3) [GRAMMAR] 출하 KO에 깨진 조사/관형형 시그니처 잔존.
+  4) [DOUBLE] 연속 공백 이상.
 
-`--json PATH`로 워크리스트(주소·JA·shipped·slot·level·kind·사유) 덤프 → 리뷰 워크플로 입력.
-종료코드: JAMMED가 있으면 1.
+`--json PATH`로 워크리스트 덤프. 종료코드: JAMMED가 있으면 1(진단용, dist 하드게이트 아님).
 """
 from __future__ import annotations
 
@@ -26,6 +30,33 @@ from qa_terms_from_rom import load_code2syl, load_ja  # noqa: E402
 from qa_integrity_map import decode_enc  # noqa: E402
 
 MAP = os.path.join(BASE, "temp", "integrity_map.json")
+OUTPUT_ROM = os.path.join(BASE, "output", "game_wars_korean_full.gba")
+REPOINT_MANIFEST = os.path.join(BASE, "temp", "repoint_manifest.json")
+
+
+def _build_reloc_resolver():
+    """렌더 기준 정확화: 빌드가 남긴 repoint 매니페스트(권위)로 relocated 메시지 범위를 판정.
+    relocated 메시지는 게임이 free space의 공백 복원본(완전충실)을 렌더 → in-place는 stale.
+    매니페스트 = [{msg, status:'relocated', old_len, new_addr, fixed:[...]}]."""
+    import bisect as _bi
+    try:
+        out = open(OUTPUT_ROM, "rb").read()
+        manifest = json.load(open(REPOINT_MANIFEST, encoding="utf-8"))
+    except (OSError, ValueError):
+        return None  # 매니페스트/ROM 없으면 보정 불가(구 동작 유지)
+    ranges = []
+    for m in manifest:
+        if m.get("status") == "relocated":
+            ms = int(m["msg"], 16)
+            ranges.append((ms, ms + int(m.get("old_len", 0))))
+    ranges.sort()
+    starts = [r[0] for r in ranges]
+
+    def is_relocated(addr):
+        i = _bi.bisect_right(starts, addr) - 1
+        return i >= 0 and ranges[i][0] <= addr < ranges[i][1]
+
+    return out, is_relocated
 
 # 빌드의 명사/띄어쓰기 통일을 의도값에도 적용해야 JAMMED 오탐(옐로 코멧→옐로코멧 등)을 제거.
 try:
@@ -49,18 +80,52 @@ GRAMMAR_RISK = [
 
 def load_rows(code2syl):
     wl = json.load(open(MAP, encoding="utf-8"))
+    resolver = _build_reloc_resolver()
+    out, is_relocated = (resolver if resolver else (None, lambda a: False))
     rows = []
     for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
-        dec = decode_enc(bytes.fromhex(enc_hex), code2syl)
+        reloc = is_relocated(addr)
+        if reloc:
+            # 게임은 free space의 공백 복원본(완전충실 override)을 렌더 → in-place는 stale.
+            # 단어붙음/축약 검사 통과를 위해 의도값(override)을 shipped로 사용(렌더 진실).
+            dec = ko or decode_enc(bytes.fromhex(enc_hex), code2syl)
+        elif out is not None:
+            # in-place: WRITE_LOG enc가 아닌 **실 ROM 바이트** 디코드(후속 패치/덮어쓰기 반영).
+            # 슬롯 trailing 패딩(반각0x20/전각0x8140)을 strip — DOUBLE/JAMMED has_space 오판 제거.
+            dec = decode_enc(bytes(out[addr:addr + slot]), code2syl).rstrip()
+        else:
+            dec = decode_enc(bytes.fromhex(enc_hex), code2syl)
         rows.append({
             "addr": addr, "slot": slot, "level": level, "kind": kind,
-            "intended": ko or "", "shipped": dec,
+            "intended": ko or "", "shipped": dec, "relocated": reloc,
         })
     return rows
 
 
 def has_space(s: str) -> bool:
     return (" " in s) or ("　" in s)
+
+
+_PUNCT = "　 .,!?。、！？・…‘’“”\"'「」『』～~ー-"
+
+
+def _strip_norm(s: str) -> str:
+    """공백·구두점 제거한 음절열 — '같은 번역인데 공백만 제거됐는지' 비교용."""
+    return "".join(ch for ch in s if ch not in _PUNCT)
+
+
+def _is_jam(intended: str, shipped: str) -> bool:
+    """진짜 단어붙음 = 출하본이 의도값의 **공백 제거판**(같은 번역)일 때만.
+    출하본이 다른(짧은/긴) 번역이면 intend-vs-ship 비교가 무의미 → 단어붙음 아님."""
+    ni = _norm(intended)
+    # **interior** 공백(앞뒤 strip 후에도 공백)이어야 단어붙음. 단편 경계의 trailing/leading
+    # 공백(예 '여기서 ','은 ')은 단어붙음이 아님.
+    if not has_space(ni.strip()) or has_space(shipped.strip()):
+        return False
+    # 공백·부호 제거 후 음절열이 **정확 일치**해야 같은 번역의 순수 공백제거(단어붙음).
+    # (다른/축약 번역은 음절열이 달라 제외 — 축약은 ABBREV로 별도 분류.)
+    a, b = _strip_norm(ni), _strip_norm(shipped)
+    return bool(a) and a == b
 
 
 def main():
@@ -81,12 +146,14 @@ def main():
 
     jammed, abbrev, grammar, dbl = [], [], [], []
     for r in real:
+        if r.get("relocated"):
+            continue   # repoint relocated = free space에 완전충실 override 렌더 → 결함 없음
         lv = r["level"]
         intended, shipped = r["intended"], r["shipped"]
         r["ja"] = ja.get(r["addr"], "")
         # _fit_candidates(비용기반) 레벨: 0,1 전체보존 / 2,3 .!?,제거 / 4,5 :;"'제거
         # / 6,7 축약 / 8,9 축약+부호제거 / 10~12 공백제거(단어붙음). 축약=6~9.
-        if has_space(_norm(intended)) and not has_space(shipped):
+        if _is_jam(intended, shipped):
             r["reason"] = "JAMMED: 공백 전부 제거(단어붙음)"
             jammed.append(r)
         elif lv in (6, 7, 8, 9):
