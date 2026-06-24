@@ -139,17 +139,35 @@ def _load_bteam_addrs():
 
 _BTEAM = _load_bteam_addrs()
 
+_CONJ_VOWELS = {0, 1, 4, 5, 6, 9, 10, 14, 15}  # ㅏㅐㅓㅔㅕㅘㅙㅝㅞ (용언 활용 연결어미)
+
+
+def _is_aux_attach(before):
+    """공백 앞 어절이 용언 활용형(보조용언 붙임 허용)인가 — 끝음절 모음이 ㅏ/ㅓ/ㅕ/ㅐ/ㅘ류 + 받침 없음.
+    (놀아·맡겨·보여·들어·가·힘내·봐 → 허용 / 대공·전투·비밀·이름 명사 → 비허용)."""
+    w = before.rstrip(" 　.,!?…\"'「」』『】")
+    if not w or not ("가" <= w[-1] <= "힣"):
+        return False
+    x = ord(w[-1]) - 0xAC00
+    vowel = (x // 28) % 21
+    final = x % 28
+    return final == 0 and vowel in _CONJ_VOWELS
+
 
 def _jam_grade(addr, intended):
-    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 짧은구=한국어 허용 붙임),
-    'real'(비B팀 다중공백/긴문장=진짜 결함)."""
+    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 보조용언/조사 붙임=한국어 허용),
+    'real'(비B팀 명사구/다중공백/긴문장=진짜 결함). agy 리뷰 반영: 명사구(대공 전차 등) 실오류는 real로."""
     if addr in _BTEAM:
         return "bteam"
     t = _norm(intended).strip()
     interior = t.count(" ") + t.count("　")
     syl = sum(1 for c in t if "가" <= c <= "힣")
-    if interior <= 1 and syl <= 6:
-        return "acceptable"
+    if interior == 1 and syl <= 6:
+        parts = t.replace("　", " ").split(" ")
+        # 정확히 두 어절 + 앞=용언 활용형 + 뒤=보조용언(줘/둬/주마/봐/봅시다/버려…)으로 시작일 때만 허용.
+        # (수리가 빠르다=조사+본용언, 대공 전차=명사구 → real)
+        if len(parts) == 2 and _is_aux_attach(parts[0]) and parts[1] and parts[1][0] in "줘주줄둬두봐보봅버":
+            return "acceptable"
     return "real"
 
 
