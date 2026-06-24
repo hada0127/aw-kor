@@ -56,7 +56,7 @@ function groupCard(g) {
   }
   const save = el("button", { className: "gsave", textContent: "저장" });
   save.onclick = async () => {
-    let ok = 0; for (const { m, ta } of inputs) { const r = await jpost("/api/line", { id: m.id, ko: ta.value }); if (r.ok) ok++; }
+    let ok = 0; for (const { m, ta } of inputs) { const r = await saveLineConfirm({ id: m.id, ko: ta.value }); if (r.ok) ok++; }
     setStatus(`${g.group_id} 저장 ${ok}/${inputs.length}`);
   };
   const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처(첫 조각)" });
@@ -72,6 +72,19 @@ function groupCard(g) {
 async function jget(u) { return (await fetch(u)).json(); }
 async function jpost(u, b) {
   return (await fetch(u, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(b) })).json();
+}
+// C5: 쪼롱이님(B팀) 권위 번역 — 서버가 confirm 요구 시 명시 승인 후 재전송.
+async function saveLineConfirm(payload) {
+  let r = await jpost("/api/line", payload);
+  if (!r.ok && r.bteam_confirm_required) {
+    const ok = confirm(
+      "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n변경(제안):\n  " + payload.ko +
+      "\n\n정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
+    );
+    if (!ok) return { ok: false, cancelled: true };
+    r = await jpost("/api/line", { ...payload, confirm_bteam: true });
+  }
+  return r;
 }
 function setStatus(s) { $("#status").textContent = s; }
 
@@ -93,8 +106,9 @@ function rowFor(ln) {
   const miss = el("span", { className: "miss" });
   const save = el("button", { className: "save", textContent: "저장" });
   save.onclick = async () => {
-    const r = await jpost("/api/line", { id: ln.id, ko: ta.value });
+    const r = await saveLineConfirm({ id: ln.id, ko: ta.value });
     if (r.ok) { setStatus(`저장됨 #${ln.id}`); showMiss(miss, tr, r.check); }
+    else if (r.cancelled) setStatus("B팀 번역 저장 취소");
     else setStatus("오류: " + r.error);
   };
   ta.onkeydown = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") save.onclick(); };

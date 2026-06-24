@@ -312,8 +312,12 @@ function selectDialogue(i, el) {
         <div class="fragfoot"><span class="est">🔒 편집 불가 — ${esc(m.budget.reason || "빌드 미적용")}</span></div></div>`;
       return;
     }
-    html += `<div class="frag" data-addr="${m.address}" data-mi="${mi}">
+    const bteamBadge = m.budget.bteam
+      ? `<div class="bteamwarn" title="${esc(m.budget.bteam_warn || "쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요")}">⚠ 쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요</div>`
+      : "";
+    html += `<div class="frag${m.budget.bteam ? " bteam" : ""}" data-addr="${m.address}" data-mi="${mi}">
       <div class="fja">원문: ${esc(m.ja || "")} <span class="ja">@${m.address}</span></div>
+      ${bteamBadge}
       <div class="lines"></div>
       <div class="fragfoot">
         <button class="addline" type="button">+ 줄</button>
@@ -413,7 +417,19 @@ async function saveDialogue() {
   if (anyBad.length) { toast("폰트 미수록 음절 — 저장 불가: " + [...new Set(anyBad)].join(""), true); return false; }
   let saved = 0;
   for (const w of writes) {
-    const r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(w) });
+    let r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(w) });
+    // C5: 쪼롱이님(B팀) 권위 번역 — 서버가 confirm 요구 시 baseline 보여주고 명시 승인 후 재전송.
+    if (!r.ok && r.bteam_confirm_required) {
+      const base = r.bteam_baseline || "(baseline 없음)";
+      const ok = confirm(
+        "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n\n" +
+        "기준(baseline):\n  " + base + "\n\n" +
+        "변경(제안):\n  " + w.ko + "\n\n" +
+        "정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
+      );
+      if (!ok) { toast("B팀 번역 저장 취소", true); return false; }
+      r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...w, confirm_bteam: true }) });
+    }
     if (!r.ok) {
       // 부분 저장(M3): 이미 기록된 조각을 화면에 반영하고 사실을 알림
       if (saved > 0) { refreshState(); refreshSceneItems(); toast(`일부만 저장(${saved}/${writes.length}) — 나머지 거부: ${r.error || ""}`, true); }
