@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "da01aa43",
-    "sha1": "3470778c549b636b1a57312addb6c3e9ee70fc7d",
-    "sha256": "cdeccf3aef2cad3aad4cff6df067e996498b320bdb09e0c3a3d0c2bf194657df"
+    "crc32": "731e3551",
+    "sha1": "a4ec8a57763e94f8f129b4a01e7e56c5e9ef458b",
+    "sha256": "6c54adac8e3abcca69e0b4b3da7c4798eb6cbd6ff64fd059357a902e7be9ff8e"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "cdeccf3aef2cad3aad4cff6df067e996498b320bdb09e0c3a3d0c2bf194657df",
-    "game_wars_korean_final.gba": "cdeccf3aef2cad3aad4cff6df067e996498b320bdb09e0c3a3d0c2bf194657df",
-    "game_wars_korean_title_test.gba": "cdeccf3aef2cad3aad4cff6df067e996498b320bdb09e0c3a3d0c2bf194657df"
+    "game_wars_korean_full.gba": "6c54adac8e3abcca69e0b4b3da7c4798eb6cbd6ff64fd059357a902e7be9ff8e",
+    "game_wars_korean_final.gba": "6c54adac8e3abcca69e0b4b3da7c4798eb6cbd6ff64fd059357a902e7be9ff8e",
+    "game_wars_korean_title_test.gba": "6c54adac8e3abcca69e0b4b3da7c4798eb6cbd6ff64fd059357a902e7be9ff8e"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-06-24.bps",
-    "size": 787428,
+    "size": 788200,
     "crc32": "2144df1c",
-    "sha1": "60c24d7fdd90ff108b3191aaa4bfb1c51dd7be5c",
-    "sha256": "0e2e79b6e576738dee6755c7734ad7b097f40910488479937fbc5d1e01a02157",
+    "sha1": "21935658a7f6d50d336a861669d53c1e7174c918",
+    "sha256": "a378161ec09ec040be66bf4a82c98fe3f09dc8e41e4a35a5dc2a6e0d3e36236e",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-06-24.ips",
-    "size": 918794,
-    "crc32": "05ebd3ca",
-    "sha1": "490f0934229734bf8d059fe5869255150ae8c9a6",
-    "sha256": "08e776f520f51e7ebd4415ddd6f43b3c787213ed94283bd5db5426ba95849c32",
+    "size": 919867,
+    "crc32": "ffe531e2",
+    "sha1": "7dac0047c2960579946bdf2b69537f77c42bdc31",
+    "sha256": "665a9e990fa662f3a97331d0c37e3d400aa26e7a1b50e283c3e9a2a0e776cc4b",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

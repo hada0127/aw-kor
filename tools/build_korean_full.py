@@ -8796,6 +8796,72 @@ def patch_part2_campaign_rule_summary_labels(rom):
     return written
 
 
+# 룰 요약 값 인디케이터(8px 높이, 16×8/32×8). VRAM/OAM trace로 풀 위치 발견(0x45DA34~).
+# 8px라 11px galmuri는 안 들어가지만 **Galmuri7(7px)**은 들어감(status header와 동일).
+# (offset, 한글, n_tiles): 2타일=16px, 4타일=32px.
+CAMPAIGN_RULE_VALUES = [
+    (0x45DA34, '있음', 2),   # アリ
+    (0x45DA74, '랜덤', 4),   # ランダム
+    (0x45DAF4, '눈', 2),     # ユキ
+    (0x45DB34, '없음', 2),   # ナシ
+    (0x45DB74, '맑음', 2),   # ハレ
+    (0x45DBB4, '있음', 2),   # アリ(중복)
+    (0x45DBF4, '타입A', 4),  # タイプA
+    (0x45DC34, '타입B', 4),  # タイプB
+    (0x45DC74, '타입C', 4),  # タイプC
+]
+
+
+def _render_value_obj(korean, n_tiles, ink=CAMPAIGN_RULE_LABEL_INK):
+    """8px 높이 OBJ(연속 n_tiles개 8×8). Galmuri7로 가운데 정렬. 32*n_tiles 바이트."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    width = n_tiles * 8
+    pixels = [[0] * width for _ in range(8)]
+    glyphs = []
+    tw = 0
+    for ch in korean:
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        glyphs.append((grid, w, h, xo))
+        tw += w + 1
+    tw -= 1
+    cur = max(0, (width - tw) // 2)
+    for grid, w, h, xo in glyphs:
+        for row in range(min(h, 8)):
+            for col in range(w):
+                if grid[row][col]:
+                    px = cur + col + xo
+                    if 0 <= px < width:
+                        pixels[row][px] = ink
+        cur += w + 1
+    out = bytearray()
+    for ti in range(n_tiles):
+        tile = bytearray(32)
+        for r in range(8):
+            for c in range(8):
+                v = pixels[r][ti * 8 + c] & 0xF
+                bi = r * 4 + c // 2
+                if c & 1:
+                    tile[bi] |= v << 4
+                else:
+                    tile[bi] |= v
+        out += tile
+    return bytes(out)
+
+
+def patch_part2_campaign_rule_value_labels(rom):
+    """campaign-map 룰 값 인디케이터(있음/없음/맑음/눈/랜덤/타입A·B·C)를 한글 렌더(raw in-place)."""
+    written = 0
+    for off, ko, nt in CAMPAIGN_RULE_VALUES:
+        data = _render_value_obj(ko, nt)
+        if len(data) != nt * 32:
+            raise AssertionError(f'value label size mismatch {ko}')
+        rom[off:off + nt * 32] = data
+        written += 1
+    return written
+
+
 def patch_part2_campaign_header_obj(rom):
     """Replace the Part 2 campaign-map OBJ header with a Korean label."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -10437,6 +10503,7 @@ def main():
     st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
     st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
     st['part2_campaign_rule_labels'] = patch_part2_campaign_rule_summary_labels(rom)
+    st['part2_campaign_rule_values'] = patch_part2_campaign_rule_value_labels(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)

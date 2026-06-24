@@ -1751,3 +1751,13 @@ archive/malformed_address_rows.csv 보존.
   증거 `docs/screenshots/SUCCESS_A3_rule_labels_korean_freshrender_2026-06-24.png`.
 - 잔여(minor): 값 라벨(アリ/ナシ/ハレ/ユキ/ランダム/タイプ)은 32×16에 16×8 값 4개 패킹 구조 — 후속.
 - 전 QA PASS, scene critical 0, dist PASS. ROM SHA cdeccf3a.
+
+## [2026-06-24] A3 값 라벨 완료 — 8px 값을 Galmuri7로 한글 (A3 완전 완료)
+- **8px 벽 돌파**: 이전 "8px라 한글 불가"는 galmuri11(11px) 기준 오판. **Galmuri7(7px)**은 8px에 legible하게 들어감
+  (빌드의 status header 종류/체력/연료/탄약이 이미 그 방식). 값 8개 음절 전부 Galmuri7 렌더 가독 확인.
+- **값 풀 매핑(VRAM/OAM trace)**: 0x45DA34~0x45DC74. アリ→있음, ランダム→랜덤(4타일), ユキ→눈, ナシ→없음,
+  ハレ→맑음, アリ중복→있음, タイプA/B/C→타입A/B/C(각 4타일).
+- **fix**: `patch_part2_campaign_rule_value_labels` — Galmuri7로 8px 높이 OBJ(16×8/32×8)에 한글 렌더, ink=15, raw in-place.
+- **인게임 확증**: fresh-render로 룰 요약 화면 **라벨(정찰/날씨/수입/일수/우세/능력/애니) + 값(있음/랜덤/없음/타입) 전부 한글**.
+  증거 `docs/screenshots/SUCCESS_A3_rule_labels_AND_values_korean_2026-06-24.png`.
+- 전 QA PASS, scene critical 0, dist PASS. ROM SHA 6c54adac. → A3(라벨+값) 완전 완료.
