@@ -51,12 +51,13 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   미해독 0%). 폰트 0x810000/8x16 4bpp, code→glyph idx=(low)+(-0x90+(lead-0xc0)*122), galmuri glyph-match.
   `data/reference/aw2_korean_strings.json`(벤치마크) + `gap_targets.json`(우리 UI 갭 타깃). USA 미션/CO파워/진영/맵명은 기반게임差로 제외.
 - [ ] **A4 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): sprite editor로 한글/기호화(정책상 영어 0이면 결함).
-- [~] **A5 단어붙음 — 정밀 재진단(2026-06-24, codex P4 계기)**: qa_spacing 도구는 WRITE_LOG(repoint 전 in-place)를
-  디코드 → repoint된 라인 **67% 오탐**(예: 0xD9A28B는 실제 공백 보유). 표본 보정: 433 중 **실제 ~143행 진짜 jammed**.
-  이들은 **비-B팀 Part2 스토리 대사**(폭≤50, repoint 가능 크기)인데 **ROM 직접 포인터 0개**(단순 테이블 아닌
-  미스캔 **커맨드 스트림**으로 접근) → 현 repoint(0xA357B4 테이블+Part1 0x19 scan)가 미커버.
-  **해결경로**: Part1 0x19처럼 **Part2 대사 커맨드 스트림 RE**(런타임 트레이싱) 후 repoint 확장 OR qa_spacing 도구
-  last-writer-wins 보정. **깊은 잔여(미완)**.
+- [x] **A5 단어붙음 — 정밀 재진단+추가해소(2026-06-24, codex P4 계기)**: qa_spacing 도구는 WRITE_LOG(in-place stale)를
+  디코드 → **대량 오탐**. 렌더 기준 정밀분석: 524 jammed 중 **451 relocated(공백복원)·47 in-place공백보유** = 오탐,
+  **진짜 jammed 26행**(96% 이미 해소). Part2 커맨드스트림(테이블 0xA357B4)은 이미 451행 repoint 완료.
+  **추가 해소**: 진짜 26행 중 **단일 포인터(0x19 아닌 opcode 참조) 10행 발견 → extra_messages 추가로 +7행 공백 복원**
+  (보급 수송차/하늘의 용사!/지혜의 고리 섬 등). repoint 362→369 lines.
+  **잔여 ~19**: 0xE0xxxx 순차(포인터0)·decompose 실패 3·0xA2C484(폭51>박스50 WONTFIX) — fail.md의 다세션
+  이벤트시스템 RE 필요분.
 - [ ] **A5b qa_spacing 도구 보정**: WRITE_LOG stale → 실 ROM 디코드 or last-writer-wins로 오탐 제거(정확 카운트).
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).

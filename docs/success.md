@@ -1776,3 +1776,13 @@ archive/malformed_address_rows.csv 보존.
   공백 정상 빈칸, '?' 완전 제거. 증거 docs/screenshots/SUCCESS_A2_map_names_spaces_korean_2026-06-24.png.
 - **B팀 보호**: dialogue_overrides.json 미변경 → qa_bteam_drift 0. 텍스트가 아닌 렌더러 메커니즘만 수정.
 - 전 QA PASS, 체크섬 OK, scene critical 0, dist PASS. ROM SHA 432d0ec8.
+
+## [2026-06-24] A5 단어붙음 정밀 재진단 + 추가 해소 (codex P4 계기)
+- **qa_spacing 도구 대량 오탐 규명**: 도구가 WRITE_LOG(repoint 전 in-place) 디코드 → relocated 라인을 stale
+  jammed로 표시. 렌더 기준 정밀분석(Part2 테이블 0xA357B4 relocation + 0x19 + 단일포인터 추적):
+  **524 jammed 중 451 relocated + 47 in-place공백보유 = 오탐, 진짜 jammed 26행**(단어붙음 96% 기해소).
+- **추가 해소 +7행**: 진짜 26행 중 단일 포인터(0x19 아닌 opcode가 참조, Part2테이블/0x19스캔 미커버) 10행을
+  repoint extra_messages에 추가(포인터 검증). 7행 free space 재배치+공백 복원(보급 수송차/하늘의 용사!/백은의
+  세계/대공을 제압하라!/지혜의 고리 섬/반달가슴곰 운하·섬). repoint 362→369 lines. drift 0, QA PASS.
+- **잔여 ~19**: 0xE0xxxx Part1 대사 순차접근(포인터0)·decompose 실패 3·0xA2C484(폭51>박스50 WONTFIX).
+  fail.md가 적시한 이벤트/스크립트 시스템 RE(다세션) 필요. ROM SHA b27ba3d.

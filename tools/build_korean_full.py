@@ -18821,6 +18821,15 @@ def main():
 
             # Part1: 0x19(show-message) 커맨드 참조 메시지(런타임 트레이싱 확증). 1805 메시지.
             _rp_extra = _rp_scan_cmd(orig)
+            # 단어붙음 잔여 중 **단일 포인터**(0x19 아닌 opcode가 참조, Part2테이블/0x19스캔 미커버) 10행 추가.
+            # qa_spacing 정밀 재진단(2026-06-24): 실제 jammed 26행 중 이 10개가 단일 포인터→repoint로 공백 복원 가능.
+            # Part1 유닛/맵/미션명(대잠 미사일·보급 수송차·하늘의 용사! 등). 포인터 검증 후에만 추가.
+            for _ma, _po in ((0xB81884, 0xD85390), (0xB81A20, 0xD84BCC), (0xB81F04, 0xD8AD5C),
+                             (0xB81F40, 0xD8AC30), (0xB81F70, 0xD8AB7C), (0xB820D8, 0xD8A708),
+                             (0xB824F8, 0xD89844), (0xB826FC, 0xD8913C), (0xB828E4, 0xD8B834),
+                             (0xB84BA0, 0xDF07E8)):
+                if struct.unpack_from('<I', orig, _po)[0] == _ma + 0x08000000 and _ma not in _rp_extra:
+                    _rp_extra[_ma] = [_po]
 
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
