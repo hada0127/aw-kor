@@ -60,8 +60,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   이벤트시스템 RE 필요분.
 - [x] **A5b qa_spacing 도구 렌더 정확화 완료(2026-06-24)**: ① repoint 매니페스트로 relocated 메시지 제외(공백복원
   렌더), ② 비-relocated는 실 ROM 바이트 디코드(패딩 strip), ③ JAMMED는 같은번역 정확일치 공백제거만(다른/축약 제외).
-  **jammed 433→159(진짜만), ABBREV 74→24**. codex P4 해소. 159는 짧은구('맡겨 둬!'→'맡겨둬!')·인용부호 인접 등
-  슬롯-tight 잔여(진단용, dist 하드게이트 아님).
+  **jammed 433→159(진짜만), ABBREV 74→24**. codex P4 해소.
+- [~] **A5c 159 진짜 단어붙음 — 근본원인 진단(2026-06-24, 수정 보류)**: 짧은 구('맡겨 둬!'→'맡겨둬!') 위주.
+  분해: **110행=override 공백정상인데 미repoint**(메시지가 repoint coverage/decompose 밖, 깊은 내부문제),
+  **36행=override가 jammed**(repoint fit_level0=미열화로 봄, 데이터품질), **13행=CSV(override無)**.
+  override 공백복원 시도 → **B팀 resolved 인접 드리프트(0xE084A2) + 저수율(+8/159)**로 되돌림. 깊은 repoint
+  decompose/coverage 확장 + 데이터 정제 필요(고위험·저가치 minor 잔여).
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
   0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.
