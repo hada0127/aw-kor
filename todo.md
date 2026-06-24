@@ -30,8 +30,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **A3 확증 완료(fresh-render)**: 결과 = **실제 잔존**(stale-BG 아님). 맵선택·CO선택 거친 fresh 렌더(증거
   A3_rule_labels_REAL_residual_*.png)에서도 룰 요약 라벨 **収入/日数/能力/アニメ/天気 일본어 유지**(하단 fog 도움말만 한글).
   codex가 옳았음(내 stale-BG 추정 철회). 부수: 동일 nav에서 A1 도미노(한글)·A2 소라??섬 재확인.
-- [ ] **A3-fix 룰 요약 라벨 한글화**: 収入/日数/能力/アニメ/天気/視界 등은 compact 사전과 별개의 **미번역 그래픽/스프라이트**.
-  소스 위치 RE 후 한글 렌더(A1식). compact 사전엔 수입/일수/능력 존재하나 이 요약화면은 다른 렌더 경로.
+- [ ] **A3-fix 룰 요약 라벨 한글화**: 収入/日数/能力/アニメ/天気/視界 등은 별개 **미번역 그래픽**. A1식 그래픽 RE+galmuri 렌더.
+  **타깃 한글 확보(외부 AW2 디코드)**: 거점 수입/제한 일수/지휘관 파워/날씨 설정/안개 설정/전투와 점령 표시. → `data/reference/gap_targets.json`.
+- [x] **외부 패치 전체 번역 디코드(2026-06-24)**: `tools/decode_reference_patch.py`로 USA AW2 한글패치 복원+디코드(2940 문자열,
+  미해독 0%). 폰트 0x810000/8x16 4bpp, code→glyph idx=(low)+(-0x90+(lead-0xc0)*122), galmuri glyph-match.
+  `data/reference/aw2_korean_strings.json`(벤치마크) + `gap_targets.json`(우리 UI 갭 타깃). USA 미션/CO파워/진영/맵명은 기반게임差로 제외.
 - [ ] **A4 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): sprite editor로 한글/기호화(정책상 영어 0이면 결함).
 - [ ] **A5 part1 단어붙음 117 + qa_integrity 부호소실 10행**: "띄어쓰기/누락 0" 목표 기준 잔여.
 - [ ] **A6 0xA2C378/0xA2C484 폭>50 실화면 확인 + 0xA27AAD in-place stale**.

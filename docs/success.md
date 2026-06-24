@@ -1727,3 +1727,15 @@ archive/malformed_address_rows.csv 보존.
 - **방법론적 성과**: savestate 캡처의 stale-BG 한계를 fresh-render(load+refresh-nav)로 우회해, 실잔존을 과대(A3)도
   과소(A1)도 아닌 정확히 판별. `data/freshrender_checkpoints.json`에 co_profile/rule_summary 등록.
 - A3-fix(룰 요약 라벨 한글화)는 별도 과제로 todo 등록.
+
+## [2026-06-24] 외부 USA판 한글패치 전체 번역 디코드 (갭 타깃 확보)
+- **사용자 통찰 실현**: 다운로드한 외부 AW1/AW2 개별 한글패치를 분석해 우리 미번역 UI 갭의 타깃 번역을 확보.
+- **방법**(`tools/decode_reference_patch.py`): full-delta(.bin) 복원 → 커스텀 한글 인코딩 디코드.
+  폰트 0x810000(AW2)/8x16 4bpp, **code→glyph idx = (low byte) + (-0x90 + (lead-0xc0)*122)**(c0:-0x90,c1:-0x16,c2:+0x64),
+  Galmuri11-Condensed로 glyph-match(픽셀 일치)해 code→음절 표 자동 구축(2350 참조). AW2 **2940 문자열 디코드, 미해독 0%**.
+- **갭 분석**: 그들 UI 라벨 378개 중 우리에 없는 103개 → USA 전용(CO명 앤디/맥스/이글, 맵명 누에콩섬, 진영 오렌지스타령, 테마) 필터 후
+  **보편 UI/룰/시스템 갭** 도출. A3 룰 라벨 타깃 확보: 거점수입/제한일수/지휘관파워/날씨설정/안개설정/전투와점령표시.
+  검증: 제한일수·지휘관파워·안개설정·전투와점령표시는 우리 미번역 확정.
+- 산출물: `data/reference/aw2_korean_strings.json`(벤치마크), `aw2_gap_candidates.json`, `gap_targets.json`.
+- 한계: 우리 대사는 쪼롱이님 완료, 잔존은 대부분 그래픽(룰라벨/sprite UI). 외부 텍스트는 **타깃 한글 출처**로 활용(A3-fix 등).
+  맵명은 외부=의미번역(누에콩섬), 우리=음역(소라마메섬)으로 다르나 쪼롱이 영역이라 불변.
