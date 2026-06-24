@@ -16,11 +16,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19a_part1_tutorial_story.json",
-     "result_sha256": "7182e400f30d8088e859d9f5c8ed208b86ddad18e22d0fe9caaef0dfe0706134",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "b0e62f8e68343b5e934b594f2d37b97b5180440306f949abfa2e1ccc3940dbbe",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -38,11 +38,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
-     "result_sha256": "af347547b1e2135b2c7e6aec93bd6c7783754511ae9bcd73439cb01594433d5e",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "9b81ec80473641fc664b7ca9cd6f46457a1ddb4ba9740a5ae702073cf88058da",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -60,11 +60,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19c_part1_campaign_story_mid.json",
-     "result_sha256": "9d97dbd4916bad33051cb4c2f09974fda193b0cf10f9722dd37fc6e1bd2cb874",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "b5c6d04a64ba32e75b96e08b2824620777e81056a99ef5ec3adb67f780ffacf6",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -79,11 +79,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19d_part1_campaign_story_late.json",
-     "result_sha256": "430f05828a42c48c675d50a6d9c0e75848663ac4c1753f11f9efc4fbe265ac3e",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "e90c1c23ee09a5a49bdbe17531f5fdcffc1718a44e024cc5eb4c73db0c7b89fa",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -103,11 +103,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/19e_part1_unit_story_help.json",
-     "result_sha256": "33804aa00e7c65993e18922c2573d85b963b1c8b01a873bd2310e8bee553e54a",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "dbe21552c27d791c884043308f1627fa17237c17d5f4354b544959c39c984db7",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -124,11 +124,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30a_part2_story_opening_redstar.json",
-     "result_sha256": "a7939db6151ebf9f7a2d6f07c276a73a98ee2881d84e0c0f49ae5944ec9c8998",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "1b8a0a23d9e4c2a06d11baf34ed207cba4010e8df8b8896b851afff6abf61cbd",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -145,11 +145,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30b_part2_story_bluemoon.json",
-     "result_sha256": "c7157104453c5d9adfed1cfc2c6ee780e40a40a8a0a6f408eb8c5703703fcc11",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "8b6eded1be2413aaeda6d59b38f109aee7b783e964885903f2ec56a2e197b9bb",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -166,11 +166,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30c_part2_story_yellow_comet.json",
-     "result_sha256": "12c0a5a612aaab89d8336ca6468cd49bf6b46c56c6c1cb78aecda20f54616579",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "7942426e62c2ff58d1c0fd56c566d0d39a5cee7b01118944af27b007ee14649d",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -187,11 +187,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30d_part2_story_green_earth.json",
-     "result_sha256": "93097570b9df2fe84387ef93bcf5a3dfcec44967f915908a892228aab9207469",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "ce820958e4175f4f28807b08bc5f77c70ce0c24acffab37e4c66fac4e02a6dea",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -211,11 +211,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30g_part2_story_green_earth_late.json",
-     "result_sha256": "7611b5299273c96442e442a5ebc030b8a6b46889570bafdfb3ee01317bd3c5e7",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "636ce7a606a4f503ac55bbd48d7554e3026aec25949575277e3843f0de61c6fb",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -235,11 +235,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30e_part2_story_blackhole_late.json",
-     "result_sha256": "f1721119a0a3a32579842075ce4c8a5e796fad3376355eae1ab1095212145a28",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "b59b83db257c124011b4cdc42d2a3246e1966d0712d5c612f5c22c459ec6ec5d",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -256,11 +256,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/30f_part2_story_final_and_co.json",
-     "result_sha256": "18ddaccb0fa7e84d54df28383745749d9b292ae47d0386d6d358ddb20b9d7ac3",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "94cf41e0fa2f803fc9614daf6c52cfdf0844817a7511157c4645737ec3d6d126",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -275,11 +275,11 @@
     {
      "method": "static_residual_reverification",
      "result_path": "temp/scene_residual_reverify/88_common_comm_labels.json",
-     "result_sha256": "f9b958f2e22b47c0ae8a87d6e5863bcb2ee594131beb460ec8e952bc39bc1150",
-     "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed",
+     "result_sha256": "1cba10ec49bd7f60a232a67c5c45d1ae1677615249a6704f58304d6d5dd49bf4",
+     "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "A5c hardened ROM 정적 재검증",
+     "note": "A5c hardened+orphan ROM 정적 재검증",
      "historical_dynamic_scan": "git 이력"
     }
    ]
@@ -297,5 +297,8 @@
  },
  "reverified_a5c_hardened": {
   "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed"
+ },
+ "reverified_a5c_orphan": {
+  "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b"
  }
 }

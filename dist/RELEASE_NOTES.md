@@ -5,7 +5,7 @@
 Generated from the current `output/game_wars_korean_full.gba` build.
 
 - Source ROM SHA-256: `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c`
-- Target ROM SHA-256: `84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed`
+- Target ROM SHA-256: `006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b`
 - BPS patch: `game_wars_korean_full_2026-06-25.bps`
 - IPS patch: `game_wars_korean_full_2026-06-25.ips`
 

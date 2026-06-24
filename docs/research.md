@@ -1519,3 +1519,23 @@ A5c 단어붙음 해소(102→19) 직후 codex/agy 리뷰가 blocker급 우려 �
 
 최종 게이트: integrity·B팀drift0·csv0·scene entrypoint·residual critical0·**qa_repoint_integrity 0**·dist PASS.
 jam 102→19 유지. repoint 450msgs/510lines. 70 scene 재캡처·B3 재스탬프·dist BPS/IPS 재생성.
+
+---
+## [2026-06-25] A5c hardening 2차 — 고아 포인터 + terminal 검증 (codex/agy 2차 리뷰)
+
+1차 hardening 후 codex/agy가 **mid-span 고아 포인터** 동일 지적(둘 다 독립 발견, 5 후보):
+메시지 시작 외 **중간주소를 참조하는 별도 포인터**가 있으면 재배치 시 start만 갱신돼 중간 포인터가 구주소에
+남음(고아) → 특정 경로가 구 in-place 슬롯/깨진 중간문자열 렌더. 반영:
+
+- **고아 가드**(dialogue_repoint.py): 대사/스크립트 영역(0xA0-0xE1) 정렬 포인터 타깃 집합 구축 →
+  메시지 span (msg, me) 내 임의 중간주소가 참조되면 bisect로 검출해 **재배치 skip**(skip_mid_ref).
+- **terminator 보수화**: 원본이 **0x00 종단인 메시지만** 재배치(orig[me-1]==0 && new_msg 0x00 종단).
+  비-0x00 종단(다음메시지까지 span)은 소비범위 불명 → skip.
+- **qa_repoint_integrity 강화**: manifest new_addr를 ① ptr_off 정합 ② **구 span 고아 미참조** ③ terminator
+  ④ **terminal-zero**(첫 0x00 이후 new_len까지 모두 0x00=텍스트가 종단 전 끝남) ⑤ garbage 전수 검증.
+- **override-skip 투명성**(codex#5): skip되는 비-B팀 override 84건 → docs/reports/a5c_override_skip_conflicts.json.
+  다수가 진짜 noun-phrase 잼(대공 전차/전투 헬기 등 CSV 복원이 옳음). 보조용언(놀아줘류)은 _ov_acceptable_aux로 존중.
+
+결과: repoint 445msgs/501lines. **고아 0·corrupt 0** 게이트 확증. jam 102→21(79%). 빌드 결정적(006b12cd, 2회 동일).
+잔여 21=구조한계(0x19 sub-start/무·다중포인터/merged/고아skip/script). 70 scene 재캡처·B3 재스탬프·dist 재생성.
+**follow-up(codex#4)**: trusted-start 재배치분 mGBA 실캡처는 잔여 검증(게이트가 바이트는 전수 확증).

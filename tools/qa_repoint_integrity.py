@@ -84,19 +84,40 @@ def main():
 
     # manifest의 재배치 타깃(new_addr)을 **포인터로 독립 확인**(ptr_off가 정말 new_addr를 가리키는가) +
     # free-space 블롭 실디코드 검증. manifest가 거짓 relocation을 주장하면 포인터 불일치로 잡힌다.
+    # 출력 ROM의 대사/스크립트 영역 정렬 포인터 타깃 집합(고아 검증용).
+    import array
+    _w = array.array("I")
+    _w.frombytes(rom[: (len(rom) // 4) * 4])
+    ref_targets = set()
+    for _i, _v in enumerate(_w):
+        if 0x08B80000 <= _v < 0x08E10000 and 0xA00000 <= _i * 4 < 0xE10000:
+            ref_targets.add(_v - GBA)
+    sorted_ref = sorted(ref_targets)
+
     issues = []
     garbage_total = 0
     no_space = 0
     for m in man:
         na = int(m["new_addr"], 16)
         nl = int(m.get("new_len", 0))
+        ol = int(m.get("old_len", 0))
+        msg = int(m["msg"], 16)
         po = int(m["ptr_off"], 16)
         ptr_val = struct.unpack_from("<I", rom, po)[0]
         if ptr_val != GBA + na:
             issues.append((m["msg"], f"ptr-mismatch @{po:#x}={ptr_val:#x}!={GBA + na:#x}"))
+        # 고아 포인터(codex/agy): 재배치된 구 span 내부(msg, msg+old_len)를 가리키는 포인터가 남아 있으면 FAIL.
+        _ri = __import__("bisect").bisect_right(sorted_ref, msg)
+        if _ri < len(sorted_ref) and sorted_ref[_ri] < msg + ol:
+            issues.append((m["msg"], f"orphan-mid-ref @{sorted_ref[_ri]:#x}"))
         text, term, garb, has_sp = _decode(rom, na, nl + 8, c2s)
         if not term:
             issues.append((m["msg"], "no-terminator-runoff"))
+        else:
+            # terminal 0x00 검증(codex): 첫 0x00 이후 new_len 끝까지 모두 0x00이어야(텍스트가 종단 전에 끝남).
+            consumed = len(rom[na:na + nl].split(b"\x00", 1)[0])
+            if any(b != 0 for b in rom[na + consumed: na + nl]):
+                issues.append((m["msg"], "non-terminal-zero(중간 0x00 후 텍스트)"))
         if garb > 2:
             issues.append((m["msg"], f"garbage{garb}: {text[:20]!r}"))
         garbage_total += garb

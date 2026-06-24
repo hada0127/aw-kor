@@ -191,10 +191,33 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     for offs in extra_messages.values():
         table_off_set.update(offs)
 
+    # 고아 포인터 방지(agy 리뷰 2026-06-25): 대사/스크립트 영역(0xA00000~0xE10000) 정렬 포인터가 가리키는
+    # **모든 타깃 주소** 집합. 메시지의 **중간 라인 주소**(시작 외)를 참조하는 포인터가 따로 있으면,
+    # 재배치 시 시작 포인터만 갱신되고 중간 포인터는 구주소에 남아(고아) 불일치 → 그런 메시지는 skip.
+    import array as _arr
+    _w = _arr.array('I')
+    _w.frombytes(orig[:(len(orig) // 4) * 4])
+    referenced_targets = set()
+    for _i, _v in enumerate(_w):
+        if 0x08B80000 <= _v < 0x08E10000:
+            _o = _i * 4
+            if 0xA00000 <= _o < 0xE10000:
+                referenced_targets.add(_v - GBA)
+    _sorted_ref = sorted(referenced_targets)
+
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
     for ptr_off, msg, _tbl in sorted(table_entries):
         lines = msg_lines.get(msg, [])
         if not lines:
+            continue
+        # 고아 포인터 가드(agy 2026-06-25): 메시지 **span 내 임의 중간주소**(시작 외)를 참조하는 포인터가
+        # 따로 있으면 재배치 시 그 포인터가 구주소에 남아 불일치(고아) → skip. bisect로 (msg, me) 범위 검사.
+        # (시작 주소 참조 ptr_off는 new_addr로 갱신됨. 라인 시작뿐 아니라 라인 내부 주소도 포함해 보수적.)
+        _me_chk = span_of(msg)
+        _ri = bisect.bisect_right(_sorted_ref, msg)
+        if _ri < len(_sorted_ref) and _sorted_ref[_ri] < _me_chk:
+            stats['skip_mid_ref'] = stats.get('skip_mid_ref', 0) + 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_mid_ref'})
             continue
         # 구조 가드(2026-06-23 Part1 RE 교훈): 진짜 대사 메시지는 첫 라인이 메시지 시작 근처(헤더갭 작음,
         # Part2 실측 최대 12)에서 시작한다. struct/이벤트 테이블은 텍스트 라인 앞에 큰 비-텍스트 헤더
@@ -295,10 +318,10 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             cur = a + L
         new_msg += rom[cur:me]                    # 종단 제어 보존
 
-        # terminator 보존 검증(2026-06-25 qa_repoint_integrity): 원본이 0x00 종단인데 new_msg가 0x00 종단이
-        # 아니면 = 라인 extent가 종단(0x00 run)까지 삼켜 fixed_bytes 교체 시 terminator 손실 → run-off corrupt.
-        # (patch_script_row류 라인이 메시지 종단까지 덮은 케이스) → 안전 skip(in-place 유지).
-        if me > msg and orig[me - 1] == 0 and (not new_msg or new_msg[-1] != 0):
+        # terminator 보존 검증(2026-06-25, codex/agy 보수화): **원본이 0x00 종단인 메시지만** 재배치하고,
+        # 그 경우 new_msg도 0x00 종단이어야 함. 원본 비-0x00 종단(다음 메시지까지 span)은 엔진 소비범위 불명
+        # → 재배치 시 run-off 위험이므로 보수적 skip. patch_script_row류(라인이 종단 삼킴)도 여기서 차단.
+        if me <= msg or orig[me - 1] != 0 or (not new_msg or new_msg[-1] != 0):
             stats['skip_no_terminator'] = stats.get('skip_no_terminator', 0) + 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_no_terminator'})
             continue
