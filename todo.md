@@ -68,8 +68,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   **51 B팀(권위=WONTFIX)·6 순수 보조용언(맞춤법47항 허용)·102 진짜 fixable**.
   qa_spacing에 _jam_grade 추가 → 게이트가 **진짜 102에만 FAIL**(B팀/짧은구 보류). 시도: repoint를 spaced
   intended(WRITE_LOG ko) 소스로 확장 → +2행만(73은 decompose/msg_lines 가드에 막힘), scope 확장이라 되돌림.
-  **잔여 102**: 메시지가 repoint coverage(table/0x19)엔 있으나 decompose/msg_lines 가드 통과 못 함 — codex의
-  trusted_message_start 경로(메시지시작 증명 후 header-gap 예외) RE 필요. fail.md 다세션 이벤트시스템 작업.
+  **잔여 102 소진 분석(2026-06-24)**: 포인터 전수 → **3 단일포인터 메시지시작**(0xA2CA50/0xD82464 '이름 입력'·
+  0xD8C54C '전 보급 중', 안전재배치 가능하나 저가치 UI compound) + **99 무포인터 mid-message 프래그먼트**.
+  99는 개별 포인터 없어 컨테이너 메시지 전체 재배치 필요하나 그 메시지가 **skip_merged 48**(라인 substring 중복=중복
+  노출 회귀위험) / NOT_IN_MANIFEST 30 / no_msg 22 가드에 막힘. codex/agy '가드 완화 금지'(회귀방지) 준수 →
+  안전 자동수정 불가. fine-grained 메시지 포인터/terminator RE = 다세션, 회귀위험. 게이트는 102 정직 보고.
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
   0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.
