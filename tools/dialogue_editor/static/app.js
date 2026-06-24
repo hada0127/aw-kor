@@ -43,11 +43,14 @@ function groupCard(g) {
     if (s.kind === "frag") {
       const m = memById[s.address]; if (!m) continue;
       jaWrap.append(el("span", { className: "jfrag", textContent: m.ja || "" }));
-      const ta = el("input", { className: "kfrag", value: m.ko || "" });
+      const ta = el("input", { className: "kfrag" + (m.bteam ? " bteam" : ""), value: m.ko || "" });
+      if (m.bteam) ta.title = "⚠ 쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요";
       const cnt = el("span", { className: "bcnt" });
       const upd = () => { const b = byteLen(ta.value); cnt.textContent = `${b}/${m.slot ?? "?"}`; cnt.classList.toggle("over", m.slot && b > m.slot); };
       ta.oninput = upd; upd();
-      koWrap.append(el("span", { className: "kcell" }, ta, cnt));
+      const cell = el("span", { className: "kcell" }, ta, cnt);
+      if (m.bteam) cell.append(el("span", { className: "bteambadge", textContent: "⚠B팀", title: "쪼롱이님(B팀) 권위 번역" }));
+      koWrap.append(cell);
       inputs.push({ m, ta });
     } else if (s.kind === "var") {
       jaWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
@@ -56,8 +59,16 @@ function groupCard(g) {
   }
   const save = el("button", { className: "gsave", textContent: "저장" });
   save.onclick = async () => {
-    let ok = 0; for (const { m, ta } of inputs) { const r = await saveLineConfirm({ id: m.id, ko: ta.value }); if (r.ok) ok++; }
-    setStatus(`${g.group_id} 저장 ${ok}/${inputs.length}`);
+    let ok = 0, fail = 0, cancelled = false;
+    for (const { m, ta } of inputs) {
+      const r = await saveLineConfirm({ id: m.id, ko: ta.value });
+      if (r.ok) { ok++; continue; }
+      if (r.cancelled) { cancelled = true; break; }   // B팀 취소 → 그룹 저장 중단(나머지 조각 프롬프트 안 함)
+      fail++;
+    }
+    setStatus(cancelled
+      ? `${g.group_id} 저장 ${ok}/${inputs.length} — B팀 취소로 중단(나머지 미저장)`
+      : `${g.group_id} 저장 ${ok}/${inputs.length}${fail ? ` (실패 ${fail})` : ""}`);
   };
   const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처(첫 조각)" });
   cap.onclick = () => { const m = g.members[0]; previewLine({ id: m.id, region: g.region }, m.ko, cap); };
@@ -77,8 +88,10 @@ async function jpost(u, b) {
 async function saveLineConfirm(payload) {
   let r = await jpost("/api/line", payload);
   if (!r.ok && r.bteam_confirm_required) {
+    const base = r.bteam_baseline || "(baseline 없음)";
     const ok = confirm(
-      "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n변경(제안):\n  " + payload.ko +
+      "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n\n기준(baseline):\n  " + base +
+      "\n\n변경(제안):\n  " + payload.ko +
       "\n\n정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
     );
     if (!ok) return { ok: false, cancelled: true };

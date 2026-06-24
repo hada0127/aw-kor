@@ -14,14 +14,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part1_19a_steps_break_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/19a_part1_tutorial_story.json",
+     "result_sha256": "0d86e1b5601abc0879a321be44a050eb3c53110340fe54b00a0ca2e44b249e9d",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "18c41e6ef0b4217fede0538f8882929fd9db0a7dac7b5ffce465dda823ebc224",
-     "expected_cases": 430,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "split 진입점 주변 step state에서 parent range 잔여 대사 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -36,14 +36,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part1_19b_aw1_break_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
+     "result_sha256": "6b9f2b85c805a3caad28abe844a4299c618dc7af21b1e2e881a326840af54896",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "d68125b9947234ba8c7f519767ed2c833614113a4b303e70fc564c5d0b202300",
-     "expected_cases": 224,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "AW1 campaign save/state routes에서 parent range 잔여 대사 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -58,32 +58,14 @@
    ],
    "evidence": [
     {
-     "method": "direct_watch_known_split_hit",
-     "result_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/19c_part1_campaign_story_mid.json",
+     "result_sha256": "ed0e8024b12d85f092325b94997543ef56b46f465b4b31ecaca9319fff05617d",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "a7011ae1347569972d0614ed39357581c03b4645c3eea495ee239c96bf0a48a0",
-     "expected_cases": 208,
-     "expected_hit_count": 1,
-     "known_hits": [
-      {
-       "offset": "0x00DC4C02",
-       "group": "g_00DC4C02",
-       "target_scene_id": "19c2_part1_mid_fog_map_story",
-       "status": "existing_split"
-      }
-     ],
-     "note": "직접 watch에서 19c2 split의 g_00DC4C02만 검출",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
-    },
-    {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part1_19c_residual_break_subset_v1/results.json",
-     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "c3aae9bbec2c1ba636e1bfb8670f2db80336d8cba49c6383d67f3e88a6a3622c",
-     "expected_cases": 224,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "19c1/19c2 split ranges 제외 후 parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -95,24 +77,14 @@
    "related_screen_scene_ids": [],
    "evidence": [
     {
-     "method": "exact_watch_no_hit",
-     "result_path": "temp/scene_entrypoints/part1_19d_11186_exact_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/19d_part1_campaign_story_late.json",
+     "result_sha256": "ecd1caa99f28f0d657561a9df95c1d049f3856de22c5079d1bb3e268f2d9994f",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "f494b8a83cbdd07085cd6167398106020f2b88314cdac6ffcf032b9906bef166",
-     "expected_cases": 352,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "후반 후보 exact watch route에서 19d parent range 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
-    },
-    {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part1_19d_nodes_break_v1/results.json",
-     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "57623db6daea7fbfb865529a208eef3557aa5a77d2102df4dc141b2e10f554c4",
-     "expected_cases": 2376,
-     "expected_hit_count": 0,
-     "note": "노드/route 확장 render breakpoint scan에서도 19d parent range 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -129,14 +101,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part1_19e_steps_break_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/19e_part1_unit_story_help.json",
+     "result_sha256": "4496a2fa820570eac846a1dc73864ab325ebc0c5ca4097c1cb03f30118d3ad3e",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "b170b61f8d78e77235756625f1e60ee4ad0c88047c86a41d3075b60f339dbcec",
-     "expected_cases": 24,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "known 19e split 화면 외 parent range 잔여 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -150,14 +122,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30a_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30a_part2_story_opening_redstar.json",
+     "result_sha256": "b8c77e0a1e8b9ea70b73c904141445d9007230e48dc8673bb76e90293832e114",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "fbd08e57c542a09851b9d642c6d3a9e7ec0a1835ea9299f7d5836c04d538d96d",
-     "expected_cases": 14,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "Part2 30a residual subset routes 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -171,32 +143,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_known_split_hit",
-     "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30b_part2_story_bluemoon.json",
+     "result_sha256": "e890af83f9536136df65cbf373175daf984026b252a11e8e25261cfc1768f18a",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "22990b68af24f99d3b031a90b0ae4227f143bed1933479a9b831a6b91c226554",
-     "expected_cases": 41,
-     "expected_hit_count": 1,
-     "known_hits": [
-      {
-       "offset": "0x00A0E398",
-       "group": "g_00A0E398",
-       "target_scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
-       "status": "existing_split"
-      }
-     ],
-     "note": "첫 residual scan의 유일 hit는 기존 30b1 split",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
-    },
-    {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30b_residual_break_subset_v2/results.json",
-     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "f06b5d98638502188b64eade1d31ce2ded7851cfe0396501dccef80011de5442",
-     "expected_cases": 48,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "30b1 split 제외 후 parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -210,14 +164,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30c_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30c_part2_story_yellow_comet.json",
+     "result_sha256": "bb403a5621644e091394a740c9913badaf61eb2a31463bc185f9117ab7910d25",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "d7e72b3552acf55c7fe5fc6af0e3ec4b462d0d9b35b42d38b66bec9348007aae",
-     "expected_cases": 68,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "30c1 split 제외 후 parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -231,32 +185,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_known_boundary_hit",
-     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30d_part2_story_green_earth.json",
+     "result_sha256": "dc98cd5449ccb20c1037a8331fcdd9b59ffe6a9629f70419b9df12bcd5f7297b",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "d2637f1fac3b15353b1e3a32d79b48e916ed334576c1e664cb093b506d8f66bb",
-     "expected_cases": 55,
-     "expected_hit_count": 1,
-     "known_hits": [
-      {
-       "offset": "0x00A1C000",
-       "group": "g_00A1BFD8",
-       "target_scene_id": "30d2_part2_green_earth_story_late",
-       "status": "boundary_fixed_to_split"
-      }
-     ],
-     "note": "A1C000 boundary hit로 30d2 end와 30g start를 A1C06C로 수정",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
-    },
-    {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
-     "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
-     "expected_cases": 294,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "boundary fix 이후 30d/30g parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -273,14 +209,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30d30g_residual_break_subset_v2/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30g_part2_story_green_earth_late.json",
+     "result_sha256": "9dd86ca4d94e5f4f24b0ab0faaa49dc24e9acda2dd5b8cb252719a329e45e834",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "5a0fed73865890ba9d191f366ab372a13869cdbe075bfe2250f5eceada2c1c4a",
-     "expected_cases": 294,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "boundary fix 이후 30d/30g parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -297,14 +233,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30e_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30e_part2_story_blackhole_late.json",
+     "result_sha256": "648a9028b44e1cccb33452c915f371ee42c45b9f8997a612c8ea007c16732dd4",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "a96524f700a914f705e6d63668d19a84a743a16831f23b86d28bfa810510f851",
-     "expected_cases": 264,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "known 30e split 제외 후 parent residual 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -318,14 +254,14 @@
    ],
    "evidence": [
     {
-     "method": "render_breakpoint_residual_scan",
-     "result_path": "temp/scene_entrypoints/part2_30f_residual_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/30f_part2_story_final_and_co.json",
+     "result_sha256": "0ec93603eeb528634b49da385937cf6627b12793e0e5069ac7db186f04a00f2b",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "600408000e00b61fcb11a90c04a668d22348928bdccb8123fe8db07245e4027b",
-     "expected_cases": 910,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "CO/profile/final residual routes 무히트",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   },
@@ -337,21 +273,21 @@
    "related_screen_scene_ids": [],
    "evidence": [
     {
-     "method": "render_breakpoint_menu_state_scan",
-     "result_path": "temp/scene_entrypoints/common_88_comm_labels_break_subset_v1/results.json",
+     "method": "static_residual_reverification",
+     "result_path": "temp/scene_residual_reverify/88_common_comm_labels.json",
+     "result_sha256": "b1bfa87d9646406e7ebfa2ed921d7a077748f2fc89eeb051877e1e01a93d9bc2",
      "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-     "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
-     "expected_cases": 1967,
+     "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "Part1/Part2 menu/focus/row states x A/start/wait/direction policies에서 공통 통신 라벨 렌더링 없음",
-     "reverified": "2026-06-24 static+capture-crossref (동적 재실행은 savestate ROM-tie로 불가)"
+     "note": "동적 breakpoint-scan은 step-state savestate가 prior ROM 빌드 종속이라 재실행 불가. 현재 ROM에서 컨테이너 주소범위 정적 kana 디코드로 재검증. 발견 kana는 전부 의도적 카타카나 음절표(@0xDA432C)이며 실 번역잔존 0. scene 캡처 audit critical=0(렌더 기준) 교차확인.",
+     "historical_dynamic_scan": "구 동적 breakpoint-scan(prior ROM) 결과는 git 이력 + temp/scene_entrypoints/ 보존"
     }
    ]
   }
  ],
  "reverified_2026_06_24": {
   "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-  "method": "static_residual_reverification + scene_capture_audit_crossref",
-  "note": "breakpoint-scan step-state 세이브스테이트는 prior ROM 빌드 종속이라 동적 재실행 불가. 대신 현재 ROM에서 ①13 컨테이너 주소범위 정적 kana 잔존 디코드(14 run) ②각 run을 repoint 매니페스트·내용 분석 → 전부 의도적 카타카나 음절표(アイウエオ...カキクケコ @0xDA432C 이름입력 그리드용, 번역대상 아님), 실 번역잔존 0 ③scene 캡처 audit critical=0(현재 ROM)이 렌더 기준 교차확인. 원 동적스캔 0-hit 결론이 현재 ROM에서 유효."
+  "method": "static_residual_reverification",
+  "note": "evidence를 현재 ROM 정적 재검증으로 교체(agy 정직성 지적 반영). 구 동적 result의 rom_sha 가식 제거."
  }
 }

@@ -79,6 +79,22 @@ def save_json(path, data):
     Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+_BTEAM_CACHE = None
+
+
+def is_bteam(address):
+    """주소가 쪼롱이님(B팀) 권위 주소인가(사전 경고 배지용). resolved 3340 집합."""
+    global _BTEAM_CACHE
+    if _BTEAM_CACHE is None:
+        _BTEAM_CACHE = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
+    if not address:
+        return False
+    try:
+        return ("0x%08X" % int(str(address), 16)) in _BTEAM_CACHE
+    except (ValueError, TypeError):
+        return False
+
+
 def dict_categories(d):
     """proper_nouns.json에서 카테고리별 리스트 키를 반환(리스트 값만)."""
     return [k for k, v in d.items() if isinstance(v, list)]
@@ -168,7 +184,7 @@ class Handler(BaseHTTPRequestHandler):
             members = []
             for m in g.get("members", []):
                 ko = ov.get(m.get("address"), m.get("ko") or "")
-                members.append({**m, "ko": ko})
+                members.append({**m, "ko": ko, "bteam": is_bteam(m.get("address"))})
             if qstr and qstr not in (g.get("assembled_ja") or "") and \
                all(qstr not in (m.get("ko") or "") for m in members):
                 continue
@@ -249,7 +265,8 @@ class Handler(BaseHTTPRequestHandler):
             iss = check_line(ln, pn)
             if iss:
                 res.append({"id": ln.get("id"), "address": ln.get("address"),
-                            "ja": ln.get("ja"), "ko": ln.get("ko"), "issues": iss})
+                            "ja": ln.get("ja"), "ko": ln.get("ko"), "issues": iss,
+                            "bteam": is_bteam(ln.get("address"))})
         return {"count": len(res), "mismatches": res[:1000]}
 
     # ---- POST ----
@@ -312,8 +329,11 @@ class Handler(BaseHTTPRequestHandler):
                 try:
                     _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
                     if ("0x%08X" % int(addr, 16)) in _bt:
+                        _base = (load_json(ROOT / "data" / "bteam_baseline.json", {}).get("overrides") or {}
+                                 ).get("0x%08X" % int(addr, 16))
                         return {"ok": False, "bteam_confirm_required": True,
-                                "error": "쪼롱이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요."}
+                                "error": "쪼롱이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요.",
+                                "bteam_baseline": _base}
                 except (ValueError, TypeError):
                     pass
             save_json(DIALOGUE_PATH, data)

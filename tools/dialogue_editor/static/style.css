@@ -77,3 +77,7 @@ html.embed #region { display: none; }
 .bcnt.over { color: #d22; font-weight: 700; }
 .chip { background: #efe2ff; border: 1px solid #cbb0f0; border-radius: 10px; padding: 1px 7px; font-size: 12px; color: #639; white-space: nowrap; user-select: none; }
 .gsave { font-size: 12px; }
+
+/* C5: 쪼롱이님(B팀) 권위 번역 사전 경고 */
+.kfrag.bteam { border-color: #8d6a27; box-shadow: inset 2px 0 0 #e8b84b; }
+.bteambadge { color: #e8b84b; font-size: 10px; margin-left: 4px; white-space: nowrap; }
