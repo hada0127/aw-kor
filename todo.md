@@ -24,9 +24,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   CO 프로필 스크롤 시 이름박스 **맥스/도미노 한글 표시 확인**(stale 가타카나→한글). 증거 docs/screenshots/SUCCESS_A1_*.
 - [x] **fresh-render 캡처 엔진**: savestate stale-BG 우회. A3(24/30f2 등) 확증에도 재사용 가능(매니페스트 확장).
 - [ ] **A1b 대사 화자 이름박스 가타카나**(80c コシゲ 등): CO 프로필 OBJ(0x452xxx)와 **별도 메커니즘** — 미조사. 화자명 소스 RE 필요.
-- [ ] **A2 맵 선택 섬 이름 '??'** (de-risked): 대사 3렌더러(313/B11/A3, 0x8840-0xE2A7→KOR_BASE)는 마/메 정상.
-  맵선택=**4번째 미훅 렌더러**(fallback 0x8148). 정석: `/tmp/mgbah`로 8BC3/8BED read·0x8148 write PC trace →
-  4번째 렌더러에 A3식 hook 또는 글리프뱅크 확장.
+- [x] **A2 맵 선택 섬 이름 '??' 완료(2026-06-24, ASM hook)**: 근본원인 = watchaddr trace로 확정 — 맵선택 리스트
+  렌더러(파서 0x0831Bxxx, glyph는 A3 hook 공유)가 **ASCII 공백 0x20을 소비 안 함** → 공백 뒤 1바이트 밀림으로
+  [0x20,다음high]를 잘못된 코드로 읽어 fallback '?'. B팀 맵명("소라 마메 섬")이 12B 슬롯 fit 위해 전각(0x8140,2B)
+  대신 반각(0x20,1B)을 써서 발생(슬롯 빠듯해 데이터로 0x8140 치환 불가 → 렌더러 수정 필수).
+  **fix**: `PART2_HOOK_SPACE_A2CC`(0xF30400) — 루프top(0x831BCFC) 트램폴린. [r4]==0x20이면 0x8140(빈칸) 렌더 +
+  r4=space-1(→+2후 space+1) → 0x831BD10 bl 복귀; 아니면 원본 4명령 재현 후 0x831BD04 복귀.
+  **인게임 확증**: 소라 마메 섬·타마 타마 섬 공백 정상 빈칸 렌더, '?' 제거(docs/screenshots/SUCCESS_A2_*).
+  **B팀 드리프트 0**(오버라이드 텍스트 불변, 인코딩/렌더만 수정).
 - [x] **A3 확증 완료(fresh-render)**: 결과 = **실제 잔존**(stale-BG 아님). 맵선택·CO선택 거친 fresh 렌더(증거
   A3_rule_labels_REAL_residual_*.png)에서도 룰 요약 라벨 **収入/日数/能力/アニメ/天気 일본어 유지**(하단 fog 도움말만 한글).
   codex가 옳았음(내 stale-BG 추정 철회). 부수: 동일 nav에서 A1 도미노(한글)·A2 소라??섬 재확인.

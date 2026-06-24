@@ -9827,6 +9827,7 @@ PART2_HOOK_A3_FILE = HOOK_FILE + 0x280
 PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
 PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
 PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
+PART2_HOOK_SPACE_A2CC_FILE = HOOK_FILE + 0x400   # 맵선택 리스트 렌더러(0x831Bxxx) 공백 핸들러
 PART1_YESNO_HOOK_FILE = 0xF10000
 PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
@@ -9837,6 +9838,7 @@ PART2_HOOK_A3_RT = 0x08F30280
 PART2_HOOK_A3_SPACE_RT = 0x08F30340
 PART2_HOOK_SPACE_313_RT = 0x08F30360
 PART2_HOOK_SPACE_B11_RT = 0x08F303A0
+PART2_HOOK_SPACE_A2CC_RT = 0x08F30400
 PART1_YESNO_HOOK_RT = 0x08F10000
 PART1_YESNO_FRAME_HOOK_RT = PART1_YESNO_HOOK_RT + 0x0C
 PART1_NAME_TRIM_HOOK_RT = 0x08F10180
@@ -9957,6 +9959,27 @@ PART2_HOOK_SPACE_B11 = bytes.fromhex(
     '0b1eb108'  # newline:     0x08B11E0A|1
     '151eb108'  # exit:        0x08B11E14|1
 )
+# MAP SELECT 리스트 렌더러(parser 0x0831Bxxx, glyph는 A3 hook 공유)는 2바이트씩만 처리하고
+# ASCII 공백(0x20)을 소비하지 않는다 → 공백 뒤 1바이트 밀림으로 [0x20,다음high]를 잘못된 코드로
+# 읽어 fallback '?'. B팀 맵명("소라 마메 섬")이 12B 슬롯에 fit하려 전각공백(0x8140,2B)대신
+# 반각(0x20,1B)을 써서 발생. 슬롯이 빠듯해 데이터로 0x8140 치환 불가 → 렌더러에 공백 핸들러 추가.
+# 루프 top(0x0831BCFC) 트램폴린 → [r4]==0x20이면 r4+=1·셀(r7)+2(빈칸), 아니면 원본 4명령 재현 후 복귀.
+PART2_HOOK_SPACE_A2CC = bytes.fromhex(
+    '20782028'  # ldrb r0,[r4]; cmp r0,#0x20
+    '05d0d620'  # beq space(0x8F30412); movs r0,#0xd6   (원본 0x831BCFC 재현)
+    '80004044'  # lsls r0,r0,#2; add r0,r8             (원본 0x831BD00)
+    '0188084b'  # ldrh r1,[r0]; ldr r3,[pc,#0x20]->ret1
+    '1847013c'  # bx r3 (비공백 복귀); subs r4,#1       (space: 1바이트 공백 보정)
+    'd6208000'  # movs r0,#0xd6; lsls r0,r0,#2
+    '40440188'  # add r0,r8; ldrh r1,[r0]              (출력 셀 base)
+    'c9190904'  # adds r1,r1,r7; lsls r1,#16
+    '090c4b46'  # lsrs r1,#16(=출력위치); mov r3,sb
+    '1a0c01a0'  # lsrs r2,r3,#16; adr r0,#4(->0x8140 리터럴)
+    '024b1847'  # ldr r3,[pc,#8]->ret2; bx r3 (0x831BD10 bl 렌더로 복귀=빈칸 렌더)
+    '81400000'  # 리터럴: 전각공백 코드 0x8140 (high=0x81,low=0x40) + pad
+    '05bd3108'  # ret1: 0x0831BD05 (비공백, 원본 0x831BD04 continue)
+    '11bd3108'  # ret2: 0x0831BD11 (0x831BD10 bl 0x831bbdc; r4=space-1 → +2후 space+1)
+)
 
 # MODE SELECT's A3 glyph-cache function is reached after the text parser has
 # already classified the byte. ASCII space never reaches 0x08A3C7E8: the first
@@ -10019,6 +10042,8 @@ PART2_SPACE_313_SITE = 0x313FD6
 PART2_SPACE_B11_SITE = 0xB11DFE
 PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a28')
 PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a28')
+PART2_SPACE_A2CC_SITE = 0x31BCFC   # MAP SELECT 리스트 렌더러 루프 top
+PART2_SPACE_A2CC_EXPECT = bytes.fromhex('d620800040440188')
 
 
 def _grid_to_tiles(grid):
@@ -10228,6 +10253,9 @@ def main():
     assert bytes(rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8]) == PART2_SPACE_B11_EXPECT
     rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_313_RT)
     rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT)
+    rom[PART2_HOOK_SPACE_A2CC_FILE:PART2_HOOK_SPACE_A2CC_FILE + len(PART2_HOOK_SPACE_A2CC)] = PART2_HOOK_SPACE_A2CC
+    assert bytes(rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8]) == PART2_SPACE_A2CC_EXPECT
+    rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_A2CC_RT)
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
     assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT

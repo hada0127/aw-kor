@@ -1359,3 +1359,25 @@ A(120) ...                                             # 캐서린 인트로 대
   안 읽힘)="레드스타의사령관캐서린이에요"(단어붙음). 시각: 이름그리드/인트로 대사 모두 깨끗한 공백 렌더.
 - **교훈**: repoint 인게임 검증 = **fresh-boot 네비 + store 0x8B1299C로 r4 캡처**(재배치=0xA3D~0xB0).
   savestate는 캐시된 구 포인터라 불가. 이름입력은 그리드에서 A로 글자선택 후 START 확인.
+
+---
+## [2026-06-24] A2 맵선택 리스트 렌더러(4번째) RE + 공백 ASM hook
+
+**렌더러 식별(watchaddr trace)**: 맵 이름(0x08A2CC3C "소라 마메 섬" 등)을 읽는 PC를
+`watchaddr 08A2CC40 r`로 추적 → 파서 **0x0831Bxxx**, glyph는 공유 A3 hook(0x08F30284) 호출.
+즉 313/B11/MODE SELECT(0x8314xxx) 외 **4번째 텍스트 렌더러는 0x831Bxxx**.
+
+**파서 루프(0x0831BCFC~0x0831BD1C, Thumb)**:
+- r4=문자열 포인터, r7=출력 셀 오프셋(+2/글리프), r8=베이스. 매 iter `ldrh`로 2바이트 코드 읽어
+  0x831bbdc(→0x838c224 글리프캐시writer, r3=상태 0x03005D60)로 렌더, r4+=2, r7+=2, [r4]!=0 loop.
+- 출력위치 r1 = [0x358+r8] + r7. 0x831BD10 = `bl 0x831bbdc`(렌더 호출 사이트).
+- **공백 미처리**: 0x20(ASCII space)을 2바이트 코드의 일부로 오독 → 정렬 붕괴.
+
+**공백 코드 형식**: 정상 맵명은 SJIS 전각공백 **0x8140**(bytes 81 40, high/low) 사용 → 렌더러가
+2바이트 코드로 정상(빈칸). 0x8140은 한글예약범위(0x8840~0xE2A7) 밖 → A3 hook이 non-Korean
+경로로 원본 0x8140 글리프(빈칸) 렌더.
+
+**hook(PART2_HOOK_SPACE_A2CC, 0x08F30400)**: 루프top 0x0831BCFC 트램폴린. [r4]==0x20이면
+코드 0x8140을 리터럴(hook 내 bytes 81 40)로 가리켜 렌더(r0=&literal via adr), r4-=1 후 0x831BD10
+복귀(0x831BD14 +2로 space+1 정렬). 비공백이면 원본 4명령(movs/lsls/add r8/ldrh) 재현 후 0x831BD04 복귀.
+far-call(0xF30400→0x831bbdc ~7MB>±4MB) 회피: 직접 bl 대신 원본 bl 사이트(0x831BD10)로 복귀.

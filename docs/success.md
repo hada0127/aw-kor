@@ -1761,3 +1761,18 @@ archive/malformed_address_rows.csv 보존.
 - **인게임 확증**: fresh-render로 룰 요약 화면 **라벨(정찰/날씨/수입/일수/우세/능력/애니) + 값(있음/랜덤/없음/타입) 전부 한글**.
   증거 `docs/screenshots/SUCCESS_A3_rule_labels_AND_values_korean_2026-06-24.png`.
 - 전 QA PASS, scene critical 0, dist PASS. ROM SHA 6c54adac. → A3(라벨+값) 완전 완료.
+
+## [2026-06-24] A2 맵 선택 섬 이름 '??' 완료 — 4번째 렌더러 공백 ASM hook
+- **근본원인(watchaddr trace 확정)**: 맵선택 리스트 렌더러(파서 0x0831Bxxx; glyph는 A3 hook 0xF30280 공유)는
+  2바이트씩만 처리하고 **ASCII 공백 0x20을 소비 안 함**. 공백 뒤 1바이트 밀림 → hook이 [0x20,다음high]=0x208B
+  같은 out-of-range 코드를 형성 → 원본 fallback '?'(0x8148). 정상 이름(도넛[8140]섬)은 전각공백(SJIS 0x8140,
+  2B, 렌더러가 2바이트 코드로 정상 처리) 사용. 영향명은 B팀 권위번역("소라 마메 섬"/"타마 타마 섬"/"마른 잎 섬")이
+  12B 슬롯 fit 위해 반각(0x20) 사용 → 슬롯 빠듯해 데이터로 0x8140 치환 불가(overflow).
+- **fix(ASM hook, B팀 텍스트 불변)**: `PART2_HOOK_SPACE_A2CC`(RT 0x08F30400, 56B). 루프top 0x0831BCFC(원본
+  d620800040440188)에 `_abs_tramp` → hook. [r4]==0x20이면 0x8140(빈칸) 코드를 리터럴로 렌더(r0=&0x8140,
+  r4=space-1로 +2후 space+1 정렬) → 0x831BD10 bl 0x831bbdc 복귀; 비공백이면 원본 4명령 재현 후 0x831BD04 복귀.
+  파서 디스어셈블+capstone 검증. far-call 회피 위해 렌더는 원본 bl 사이트(0x831BD10)로 복귀시켜 수행.
+- **인게임 확증**: fresh-render(state_020→B,B,B,A) 맵선택 = 클래식/소라 마메 섬/도넛 섬/주먹밥 섬/타마 타마 섬/곡옥 섬.
+  공백 정상 빈칸, '?' 완전 제거. 증거 docs/screenshots/SUCCESS_A2_map_names_spaces_korean_2026-06-24.png.
+- **B팀 보호**: dialogue_overrides.json 미변경 → qa_bteam_drift 0. 텍스트가 아닌 렌더러 메커니즘만 수정.
+- 전 QA PASS, 체크섬 OK, scene critical 0, dist PASS. ROM SHA 432d0ec8.
