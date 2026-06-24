@@ -1396,3 +1396,35 @@ far-call(0xF30400→0x831bbdc ~7MB>±4MB) 회피: 직접 bl 대신 원본 bl 사
 - **우선순위**: 기반게임差(외부 USA판=라틴이름이라 비대칭) + 다세션 깊은 RE → 보류(codex: "보류 사유이지 해결
   판정 사유 아님"). 다음 단계: state_21 로드 → 명패 BG tilemap 좌표/타일 덤프 → 그 타일 write watchpoint →
   렌더러 PC → 글리프 idx 배열(=name 테이블) 역추적 → Korean idx로 치환.
+
+---
+## [2026-06-24] A1b 화자명 박스 — 렌더 메커니즘 완전 RE (돌파, prior 세션 벽 통과)
+
+80c 인물 프로필 이름창(コシゲ 등 가타카나) 렌더 메커니즘을 런타임 트레이스로 완전 해독.
+
+**핵심 돌파 1 — 재렌더 경로**: 80c 프로필은 **RIGHT/LEFT로 캐릭터 사이클**(コシゲ↔ドミノ…) → 이름 재렌더.
+savestate frozen-VRAM 우회 가능(MGBADriver press RIGHT, 이름창 crop diff 2537).
+
+**핵심 돌파 2 — 렌더러 = A3 글리프 hook(0x08F30280)**: watchaddr(06000800 write)로 PC=0x08F302EC,
+lr=0x0831BBED(A3 파서). 즉 **이름창은 대사와 동일한 A3 hook으로 렌더**. hook 디스어셈(capstone):
+```
+08F30280 ldrb r4,[r0]      ; 문자열ptr r0에서 high byte
+08F30282 ldrb r1,[r0,#1]   ; low byte → code=(r4<<8)|r1
+08F3028A cmp r1,#0x3f; bls fallback   ; 제어/단일바이트 → 원본 FONT
+08F30290 ldr =0x8840; blo fallback    ; code<0x8840 → 원본 FONT(가타카나!)
+08F30296 ldr =0xE2A7; bhi fallback    ; code>0xE2A7 → 원본 FONT
+08F3029C 테이블 0x08F20000~0x08F243A4 6B엔트리 검색(code→top/bot glyph idx)
+08F302C6 KOR_BASE=0x08F00000 + idx*0x20 → BG VRAM copy(0x302CC~0x302EC stm)
+```
+→ **예약코드 0x8840~0xE2A7 = 한글**(테이블→KOR_BASE), 그 외 = FONT_BASE 가타카나 폴백.
+프로필 본문(한글)은 한글경로(0x302EC), 이름(가타카나)은 FONT 폴백.
+
+**핵심 돌파 3 — 캐릭터 이름 테이블 = 0x80591C**(원본 ROM): SJIS 가타카나 이름 연접
+'キャサリン ョウマ ホイップ ビーク クチヨ アスカ グルモ ボテト ドミノ ヘズ'(+0x805440 동일). A1의 CO OBJ
+테이블(0x81BE68)과 **별개 메커니즘**(SJIS 문자열, A3 hook 렌더). ドミノ는 0x80516A/0x80591C 등 다수.
+
+**A1b 수정 경로(확정)**: 이름 테이블(0x80591C 계열)의 가타카나 이름을 **한글 예약코드로 인코딩** →
+A3 hook이 자동 한글 렌더(대사와 동일 인프라). build_korean_full의 예약코드+테이블+글리프 체계 재사용.
+잔여: ①state_21 캐릭터(コシゲ, 0x80591C 미발견 — 별도 story 테이블 가능성) 정확 소스 = A3 파서
+(0x0831BBDC) r0 추적 ②이름 테이블 전수 한글 readings 인코딩 + slot fit ③fresh-render 검증.
+기반게임差(외부 USA판=라틴이름)지만 메커니즘 확보로 한글화 가능(보류→실행가능 격상).
