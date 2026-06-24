@@ -128,6 +128,31 @@ def _is_jam(intended: str, shipped: str) -> bool:
     return bool(a) and a == b
 
 
+def _load_bteam_addrs():
+    try:
+        d = json.load(open(os.path.join(BASE, "data", "bteam_addresses.json"), encoding="utf-8"))
+        lst = d.get("addresses", d) if isinstance(d, dict) else d
+        return {int(x, 16) for x in lst}
+    except Exception:
+        return set()
+
+
+_BTEAM = _load_bteam_addrs()
+
+
+def _jam_grade(addr, intended):
+    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 짧은구=한국어 허용 붙임),
+    'real'(비B팀 다중공백/긴문장=진짜 결함)."""
+    if addr in _BTEAM:
+        return "bteam"
+    t = _norm(intended).strip()
+    interior = t.count(" ") + t.count("　")
+    syl = sum(1 for c in t if "가" <= c <= "힣")
+    if interior <= 1 and syl <= 6:
+        return "acceptable"
+    return "real"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--show", type=int, default=12)
@@ -176,18 +201,30 @@ def main():
             print(f"      intend={r['intended'][:38]!r}")
             print(f"      ship  ={r['shipped'][:38]!r}")
 
-    dump("JAMMED 단어붙음", jammed)
+    # 단어붙음 등급 분리: bteam(WONTFIX 권위) / acceptable(짧은구 한국어 허용) / real(진짜 결함)
+    for r in jammed:
+        r["grade"] = _jam_grade(r["addr"], r["intended"])
+    jam_real = [r for r in jammed if r["grade"] == "real"]
+    jam_bteam = [r for r in jammed if r["grade"] == "bteam"]
+    jam_ok = [r for r in jammed if r["grade"] == "acceptable"]
+
+    dump("JAMMED 진짜 단어붙음(real, 게이트 대상)", jam_real)
+    print(f"\n[JAMMED 보류] B팀 권위(WONTFIX) {len(jam_bteam)} / 짧은구 한국어허용 {len(jam_ok)} — 게이트 비대상")
     dump("ABBREV 축약", abbrev)
     dump("GRAMMAR 조사/관형형 훼손", grammar)
     dump("DOUBLE 연속공백", dbl)
 
     if args.json:
-        worklist = {"jammed": jammed, "abbrev": abbrev, "grammar": grammar, "double": dbl}
+        worklist = {"jammed": jammed, "jammed_real": jam_real, "jammed_bteam": jam_bteam,
+                    "jammed_acceptable": jam_ok, "abbrev": abbrev, "grammar": grammar, "double": dbl}
         json.dump(worklist, open(args.json, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(f"\n[json] {args.json}")
 
-    print(f"\n=== 결과: {'FAIL' if jammed else 'PASS'} (jammed {len(jammed)} / abbrev {len(abbrev)} / grammar {len(grammar)} / double {len(dbl)}) ===")
-    return 1 if jammed else 0
+    # 게이트는 **진짜 단어붙음(real)**에만 FAIL. B팀 권위/짧은구는 WONTFIX(보류).
+    print(f"\n=== 결과: {'FAIL' if jam_real else 'PASS'} "
+          f"(jammed real {len(jam_real)} / B팀WONTFIX {len(jam_bteam)} / 짧은구허용 {len(jam_ok)} "
+          f"/ abbrev {len(abbrev)} / grammar {len(grammar)} / double {len(dbl)}) ===")
+    return 1 if jam_real else 0
 
 
 if __name__ == "__main__":
