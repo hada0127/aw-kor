@@ -72,7 +72,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   0xD8C54C '전 보급 중', 안전재배치 가능하나 저가치 UI compound) + **99 무포인터 mid-message 프래그먼트**.
   99는 개별 포인터 없어 컨테이너 메시지 전체 재배치 필요하나 그 메시지가 **skip_merged 48**(라인 substring 중복=중복
   노출 회귀위험) / NOT_IN_MANIFEST 30 / no_msg 22 가드에 막힘. codex/agy '가드 완화 금지'(회귀방지) 준수 →
-  안전 자동수정 불가. fine-grained 메시지 포인터/terminator RE = 다세션, 회귀위험. 게이트는 102 정직 보고.
+  안전 자동수정 불가. fine-grained 메시지 포인터/terminator RE = 다세션, 회귀위험. 게이트는 102 정직 보고(전체: jammed real 102/abbrev 24/grammar 8/double 246 — 102만이 아님). 정확 성격: '안전수정 불가'가 아니라 **현재 자동 재배치 정책+가드로 미닫음**. 닫으려면 주소별 allowlist(이름입력류 compound)/WONTFIX 증거 또는 repoint 코어(span_of 세분화·trusted_message_start) RE 필요(회귀위험 동반).
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
   0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.
@@ -120,8 +120,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - A·B·C 전부 닫고 `python3 tools/build_korean_full.py` 후 전 QA 게이트 PASS + scene 재캡처 critical 0
   + codex·agy 적대 재리뷰에서 신규 결함 0이면 /goal 달성. F1만 잔여로 사용자 통지.
 
-### B2 CSV length 손상 — 해결(2026-06-24): 기능적 무해, 수정 불필요(회귀위험)
-- 239 손상행(length 필드 비숫자/빈값)은 **빌드가 fallback length(=len(ko))로 정상 import** → ROM에서 한글 올바르게 렌더(qa_csv: 185 korean, 진짜 일본어 잔존 0).
-- 검증: ①length 교정 시 일부 부패 ko(일본어) 노출 ②ko 비움 시 **18 회귀(한글→일본어)** — 손상행 한글 ko가 실제 렌더 소스임 확인.
-- 즉 손상 length는 **cosmetic**(구조 지저분)이나 **기능 무해**. 수정은 검증된 ROM(b27ba3d)을 회귀시킴 → 불필요·금지.
-- 완전 구조 클린은 행별 정본 ja+ko+length 재구성 필요(B1식 deep). ROM은 이미 정확.
+### B2 CSV 손상 — 재분류(2026-06-24, codex 반영): ROM benign, source dirty(load-bearing 필드부패)
+- 정확 성격: 단순 length 손상이 아니라 **CSV 행병합/필드밀림/일본어·한국어 필드 오염**(주소가 ja/ko에 누출). codex 지적.
+- **ROM benign**: qa_csv --fail-on-rom-japanese=0, 185행 한글 정상 렌더. 빌드는 손상행도 import해 한글 출력.
+- **부패가 load-bearing**(검증): ①length 교정 ②ko 비움(18 회귀) ③ja-clean 모두 SHA 변경 → 빌드가 손상 ja의
+  len을 fallback 슬롯길이로, ko를 렌더소스로 사용. 단순 필드패치는 byte-identical 불가(검증 ROM 회귀).
+- **안전 클린 경로**(codex): 행별로 정본 ja(found_texts)+ko(authoritative)+length 재구성 후 **rebuild byte-identical
+  (b27ba3d) 검증** 필수. 239행 deep 재구성(B1식, B1은 109행 완료) = 다세션. ROM은 이미 정확하므로 source 위생은
+  비차단 부채. 현 상태 정직 분류: **ROM 결함 0, CSV source dirty(deep-clean 대기)**.

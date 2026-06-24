@@ -1457,3 +1457,21 @@ A3 hook이 자동 한글 렌더(대사와 동일 인프라). build_korean_full�
 **결론**: 화자명 테이블은 **이미 A1(patch_part2_domino_co_name_obj)이 한글 인코딩 완료**. 추가 작업 불요.
 교훈(재확인): savestate 캡처는 provenance OK여도 **VRAM stale 가능** → OBJ/BG 변경의 잔존 판정은
 반드시 **fresh-render 재캡처**로 확증(capture_freshrender). state_21류 구 savestate를 결함증거로 쓰지 말 것.
+
+---
+## [2026-06-24] codex 세션리뷰 반영 — A4 ASCII 잔존 provenance + A1b 옛 가설 폐기
+
+### A4 EXIT/NO/UNIT ASCII 잔존 주소별 비표시 근거(codex 요청)
+- **EXIT** @0x17FF27, @0x70369F: 컨텍스트 `<19>?_9..EXIT5IM4..` = 비-텍스트 바이너리(압축/코드 블록 내 우연
+  ASCII). 포인터 참조 0건 → 텍스트 렌더 경로 없음. 미표시.
+- **NO** @0x1787F, @0xFC70F: `JNL..N[N1NO·G`, `%5$SK)NO/*` = 압축/코드 데이터 중간의 2글자 우연일치. 단어 아님.
+- **UNIT** @0x4CA3B4: `UNIT  C0  C1····PSQ(%1d)····ASQ(%1d)` = **printf 디버그 포맷**(%1d 포맷지정자). 참조는
+  있으나 디버그 오버레이용(정상 플레이 미표시). 플레이어 대면 UI 아님.
+- 결론: 표시되는 영문 UI 잔존 0(qa_ascii 큐레이션 0 + scene audit critical 0과 정합). 위 3종은 코드/압축/디버그.
+
+### A1b 옛 가설 폐기(DEPRECATED) 명시
+- 이 문서 위쪽 A1b 서술 중 **(a) BG 글리프-인덱스 렌더 가설**, **(b) A3 hook(0x08F30280) 텍스트 렌더 가설**,
+  **(c) 이름테이블 0x80591C / save·RAM 상주 가설**은 전부 **폐기(DEPRECATED)**.
+- **최종 확정 결론(권위)**: 화자명 = **OBJ LZ77 그래픽**(CO 이름 OBJ 테이블 0x81BE68, SWI 0x11 디코드, 19 슬롯).
+  A1(patch_part2_domino_co_name_obj)이 전부 한글화 완료. state_21 'コシゲ'는 구 ROM savestate VRAM 잔상(오탐).
+  나머지 옛 서술은 추적 과정 기록일 뿐 결론 아님.
