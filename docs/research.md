@@ -1475,3 +1475,28 @@ A3 hook이 자동 한글 렌더(대사와 동일 인프라). build_korean_full�
 - **최종 확정 결론(권위)**: 화자명 = **OBJ LZ77 그래픽**(CO 이름 OBJ 테이블 0x81BE68, SWI 0x11 디코드, 19 슬롯).
   A1(patch_part2_domino_co_name_obj)이 전부 한글화 완료. state_21 'コシゲ'는 구 ROM savestate VRAM 잔상(오탐).
   나머지 옛 서술은 추적 과정 기록일 뿐 결론 아님.
+
+---
+## [2026-06-25] A5c 단어붙음 대량 해소 — jam 102→19 (81% 감소, ROM 확장 불요)
+
+사용자 제안(슬롯 강제확장)에서 출발했으나, 근본은 **free space 부족이 아니라 repoint coverage/granularity**였음.
+5개 기법 결합으로 free space 내(795KB 중 48KB 사용) 해결:
+
+1. **span_of terminator 세분화**(dialogue_repoint.py): 0x19 메시지는 sparse라 'next 메시지 시작'까지 span이
+   다음 0x19 미참조 메시지들까지 grab → 527라인 거대블록·거짓 merged. SJIS 본문엔 0x00 없으므로 **첫 0x00=실제
+   종단**. min(next, terminator)로 한정 → merged 오탐 제거(merged-skip 13→6).
+2. **CSV-source 확장**(_rp_dlg): 비-B팀 라인은 빌드 의도값(WRITE_LOG ko 공백본)을 repoint 소스로(override가
+   stale-jammed이거나 없을 때). B팀은 override 권위 유지.
+3. **trusted_message_start 자동 coverage**: 포인터 인덱스(array)로 jammed 라인의 메시지시작(직전 0x00 뒤)이
+   **단일 포인터**(포인터테이블 엔트리)면 _rp_extra 추가 → 0x19/0xA357B4 미커버 메시지(포인터테이블 참조분) 재배치.
+4. **in-place-jam 감지**(_rp_inplace_jammed): script/override가 CSV 공백본을 잼으로 덮은 경우 source는 fit이라도
+   in-place ROM 바이트가 공백제거판이면 _rp_fit_level=6 강제 → 재배치로 공백 복원. script row 다수 해소.
+5. **비-B팀 잼-override skip**: dialogue-override가 import 공백본의 같은번역 공백제거판이면 skip(CSV 공백본 살림).
+   import-* 전 종류 + 구두점 무시 비교.
+
+결과: repoint 369→448 msgs, 504 lines. jam 102→19. drift 0, integrity PASS, scene critical 0, dist PASS.
+재배치 인게임 확증(실 바이트 디코드): '매크로 랜드 침공 작전은,/특기인 해군으로.../지상 유닛에 대한 공격력' 등 공백 복원.
+ROM f09d111f. B3 재스탬프·scene 70 재캡처·dist BPS/IPS 재생성.
+
+**잔여 19**(genuine 한계): 메시지가 0x19 sub-start 포함(line이 sub-entry로 매핑, NOT_IN_MAN 10) / 무포인터
+mid-fragment 5 / 다중포인터 3 / merged 실중복 1. 일부는 acceptable(bracket-space '그건, 「'→'그건「'). 게이트 정직 보고.

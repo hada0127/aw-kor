@@ -64,15 +64,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **A5b qa_spacing 도구 렌더 정확화 완료(2026-06-24)**: ① repoint 매니페스트로 relocated 메시지 제외(공백복원
   렌더), ② 비-relocated는 실 ROM 바이트 디코드(패딩 strip), ③ JAMMED는 같은번역 정확일치 공백제거만(다른/축약 제외).
   **jammed 433→159(진짜만), ABBREV 74→24**. codex P4 해소.
-- [x] **A5c 159 단어붙음 — resolved 재분류 + 게이트 재등급(2026-06-24, codex/agy 반영)**: resolved B팀 기준 재분류:
-  **51 B팀(권위=WONTFIX)·6 순수 보조용언(맞춤법47항 허용)·102 진짜 fixable**.
-  qa_spacing에 _jam_grade 추가 → 게이트가 **진짜 102에만 FAIL**(B팀/짧은구 보류). 시도: repoint를 spaced
-  intended(WRITE_LOG ko) 소스로 확장 → +2행만(73은 decompose/msg_lines 가드에 막힘), scope 확장이라 되돌림.
-  **잔여 102 소진 분석(2026-06-24)**: 포인터 전수 → **3 단일포인터 메시지시작**(0xA2CA50/0xD82464 '이름 입력'·
-  0xD8C54C '전 보급 중', 안전재배치 가능하나 저가치 UI compound) + **99 무포인터 mid-message 프래그먼트**.
-  99는 개별 포인터 없어 컨테이너 메시지 전체 재배치 필요하나 그 메시지가 **skip_merged 48**(라인 substring 중복=중복
-  노출 회귀위험) / NOT_IN_MANIFEST 30 / no_msg 22 가드에 막힘. codex/agy '가드 완화 금지'(회귀방지) 준수 →
-  안전 자동수정 불가. fine-grained 메시지 포인터/terminator RE = 다세션, 회귀위험. 게이트는 102 정직 보고(전체: jammed real 102/abbrev 24/grammar 8/double 246 — 102만이 아님). 정확 성격: '안전수정 불가'가 아니라 **현재 자동 재배치 정책+가드로 미닫음**. 닫으려면 주소별 allowlist(이름입력류 compound)/WONTFIX 증거 또는 repoint 코어(span_of 세분화·trusted_message_start) RE 필요(회귀위험 동반).
+- [x] **A5c 단어붙음 대량 해소(2026-06-25): jam 102→19 (81% 감소)**. 5기법 결합(span_of terminator 세분화 + CSV-source 확장 + trusted_message_start 단일포인터 coverage + in-place-jam 강제재배치 + 비B팀 잼-override skip). repoint 369→448msgs/504lines, free 48KB(ROM 확장 불요). drift 0/integrity/scene critical 0/dist PASS. 잔여 19=구조한계(0x19 sub-start/무포인터/다중포인터/merged). docs/research.md 상세.
+
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
   0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.

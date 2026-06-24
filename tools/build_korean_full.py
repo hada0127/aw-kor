@@ -10510,6 +10510,26 @@ def main():
         except Exception:
             _dlg_ov = {}
     st['dialogue_overrides'] = 0
+    # A5c(2026-06-25): 비-B팀 잼 override가 좋은 CSV(공백본)를 덮어쓰는 경우 skip(CSV 공백본 살림=in-place 단어붙음 해소).
+    # CSV import는 이미 실행됨 → WRITE_LOG에서 import-csv ko 수집.
+    _csv_ko = {}
+    for _e in WRITE_LOG:
+        if len(_e) >= 8 and _e[7] and str(_e[7]).startswith('import-') and _e[5]:
+            _csv_ko.setdefault(_e[0], _e[5])  # 최초 import(공백본) 우선
+    try:
+        _bt_resolved = {int(x, 16) for x in json.load(open(os.path.join(BASE, 'data', 'bteam_addresses.json'))).get('addresses', [])}
+    except Exception:
+        _bt_resolved = set()
+
+    def _sp_only(s):
+        return (s or '').replace(' ', '').replace('　', '')
+
+    _OV_PUNCT = "　 .,!?。、！？・…‘’“”\"'「」『』～~ー-"
+
+    def _strip_norm_ov(s):
+        return ''.join(ch for ch in (s or '') if ch not in _OV_PUNCT)
+
+    st['override_jam_skipped'] = 0
     for _astr, ko in _dlg_ov.items():
         ko = (ko or '').strip()
         if not ko:
@@ -10520,6 +10540,13 @@ def main():
             continue
         if a < SAFE_MIN_ADDR:
             continue
+        # 비-B팀 + override가 CSV의 **같은 번역**(공백·구두점 제거 시 일치)인데 공백을 줄인 잼본 → skip(CSV 공백본 유지)
+        if a not in _bt_resolved:
+            _ck = _csv_ko.get(a)
+            if _ck and _strip_norm_ov(_ck) == _strip_norm_ov(ko) \
+                    and (_ck.count(' ') + _ck.count('　')) > (ko.count(' ') + ko.count('　')):
+                st['override_jam_skipped'] += 1
+                continue
         slot = slots.get(a, 0)
         if slot <= 0 or in_deny(a, a + slot) or a in skip_addrs or a + slot > len(rom):
             continue
@@ -18798,19 +18825,67 @@ def main():
                         out.append(chr(b) if 0x21 <= b <= 0x7E else '\x00'); i += 1
                 return ''.join(out)
 
+            # A5c(2026-06-25): 빌드 import 의도값(WRITE_LOG ko, 공백본)을 비-B팀 라인 공백복원 소스로.
+            # span_of terminator 세분화로 거짓 merged 제거 + 이 확장으로 비-B팀 CSV-only/jammed-override 라인을
+            # fixable화 → 실제 작은 0x19 메시지가 재배치되어 단어붙음 해소.
+            _rp_intended = {}
+            for _e in WRITE_LOG:
+                if len(_e) >= 6 and _e[5]:
+                    _rp_intended.setdefault(_e[0], _e[5])
+            try:
+                _bt = json.load(open(os.path.join(BASE, 'data', 'bteam_addresses.json')))
+                _rp_bteam = {int(x, 16) for x in (_bt.get('addresses', _bt) if isinstance(_bt, dict) else _bt)}
+            except Exception:
+                _rp_bteam = set()
+
+            def _rp_strip_sp(s):
+                return (s or '').replace(' ', '').replace('　', '')
+
+            def _rp_ov(a):
+                return (_dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a)) or '').strip()
+
             def _rp_fixable(a):
-                v = _dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a))
+                v = _rp_dlg(a)
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
-                return (_dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a)) or '').strip()
+                ov = _rp_ov(a)
+                if a in _rp_bteam:
+                    return ov   # B팀: override 권위 — 치환 금지(렌더 텍스트 불변)
+                intended = (_rp_intended.get(a) or '').strip()
+                if not intended or not any('가' <= ch <= '힣' for ch in intended):
+                    return ov
+                if not ov or (_rp_strip_sp(ov) == _rp_strip_sp(intended)
+                              and (intended.count(' ') + intended.count('　')) > (ov.count(' ') + ov.count('　'))):
+                    return intended
+                return ov
 
             def _rp_fixed_bytes(a):
                 return encode_full_fidelity(_rp_dlg(a), syl_to_code, unmapped)
 
+            def _rp_inplace_jammed(a):
+                # in-place ROM 바이트가 spaced source(_rp_dlg)의 공백제거판(같은 번역)인가 — script/override가
+                # 공백본을 잼으로 덮어쓴 경우. 그러면 source는 fit이라도 강제 재배치 대상.
+                sp = slots.get(a, 0)
+                if sp <= 0:
+                    return False
+                src = _rp_dlg(a)
+                si = src.count(' ') + src.count('　')
+                if si == 0:
+                    return False
+                try:
+                    inplace = _rp_decode(bytes(rom[a:a + sp])).rstrip()
+                except Exception:
+                    return False
+                ii = inplace.count(' ') + inplace.count('　')
+                return si > ii and _rp_strip_sp(src) == _rp_strip_sp(inplace)
+
             def _rp_fit_level(a):
                 enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped)
-                return 99 if enc is None else lvl
+                base = 99 if enc is None else lvl
+                if base < 6 and _rp_inplace_jammed(a):
+                    return 6   # in-place 잼(script/override가 공백제거) → 강제 재배치로 공백 복원
+                return base
 
             from text_metrics import visual_cells as _rp_visual_cells
             from dialogue_repoint import scan_command_messages as _rp_scan_cmd
@@ -18831,10 +18906,68 @@ def main():
                 if struct.unpack_from('<I', orig, _po)[0] == _ma + 0x08000000 and _ma not in _rp_extra:
                     _rp_extra[_ma] = [_po]
 
+            # A5c trusted_message_start(2026-06-25): 단어붙음/축약(level>=6) 비-B팀 라인의 메시지 시작
+            # (직전 0x00 뒤=terminator 경계)이 ROM 전체에서 **단일 포인터**(포인터 테이블 엔트리)면 coverage 추가.
+            # span_of terminator 세분화 + CSV확장과 결합 → 0x19/0xA357B4 미커버 메시지(포인터테이블 참조분) 안전 재배치.
+            import array as _array
+            _words = _array.array('I')
+            _words.frombytes(orig[:(len(orig) // 4) * 4])
+            _rp_ptr_index = {}
+            for _idx, _v in enumerate(_words):
+                if 0x08B80000 <= _v < 0x08E10000:
+                    _rp_ptr_index.setdefault(_v - 0x08000000, []).append(_idx * 4)
+
+            def _rp_msg_start(_a):
+                _s = _a
+                while _s > 0 and orig[_s - 1] != 0:
+                    _s -= 1
+                return _s
+
+            _trusted_added = 0
+            for _e in WRITE_LOG:
+                if len(_e) < 7 or not isinstance(_e[6], int) or _e[6] < 6:
+                    continue
+                _a = _e[0]
+                if _a in _rp_bteam:
+                    continue
+                _ms = _rp_msg_start(_a)
+                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                    continue
+                _sites = _rp_ptr_index.get(_ms, [])
+                if len(_sites) == 1:
+                    _rp_extra[_ms] = _sites
+                    _trusted_added += 1
+            # found_texts에 없는 script row(WRITE_LOG 한글)를 line_index에 병합 → trusted detection + repoint가
+            # script row를 보고 재배치(decompose 미정렬 시 안전 skip). found_texts 우선.
+            _merged_li = dict(_repoint_line_index(FOUND))
+            for _e in WRITE_LOG:
+                if len(_e) >= 8 and _e[5] and _e[0] not in _merged_li \
+                        and 0xB80000 <= _e[0] < 0xE10000 and isinstance(_e[1], int) and _e[1] > 0 \
+                        and any('가' <= ch <= '힣' for ch in _e[5]):
+                    _merged_li[_e[0]] = (_e[1], _e[5])
+            # 추가: 병합 line_index 전수 — spaced source가 있는데 in-place가 잼(script/override 덮음)이거나
+            # slot 미fit(lvl>=6)이면 단일포인터 메시지시작 coverage 추가(_rp_fit_level이 in-place-jam 포함).
+            for _la in _merged_li:
+                if _la in _rp_bteam or not (0xB80000 <= _la < 0xE10000):
+                    continue
+                _src = _rp_dlg(_la)
+                if not _src or (_src.count(' ') + _src.count('　')) == 0 or not _rp_fixable(_la):
+                    continue
+                if _rp_fit_level(_la) < 6:
+                    continue
+                _ms = _rp_msg_start(_la)
+                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                    continue
+                _sites = _rp_ptr_index.get(_ms, [])
+                if len(_sites) == 1:
+                    _rp_extra[_ms] = _sites
+                    _trusted_added += 1
+            st['repoint_trusted_starts'] = _trusted_added
+
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
-                slots=slots, line_index=_repoint_line_index(FOUND), table_offsets=[0xA357B4],
+                slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
                 min_level=6, max_cells=50)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)

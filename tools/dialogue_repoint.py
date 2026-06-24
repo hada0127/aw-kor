@@ -128,11 +128,24 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # 향후 영역 확장 시 nxt<=msg가 되어 분해검증이 무조건 깨지는 취약점이 있어 견고화(codex/agy 리뷰).
         i = sorted_t.index(msg)
         if i + 1 < len(sorted_t):
-            return sorted_t[i + 1]
-        nxt = len(orig)
-        for t in table_offsets:
-            if msg < t < nxt:
-                nxt = t
+            nxt = sorted_t[i + 1]
+        else:
+            nxt = len(orig)
+            for t in table_offsets:
+                if msg < t < nxt:
+                    nxt = t
+        # 2026-06-25 terminator 세분화(A5c): 0x19 메시지는 sparse라 'next 메시지 시작'까지의 span이
+        # 다음 0x19 미참조 메시지들까지 grab → 거대블록·거짓 merged 유발. SJIS 본문엔 0x00 없으므로
+        # 첫 0x00이 실제 메시지 종단. min(next, terminator+1)로 실제 메시지에 한정(merged 오탐 제거).
+        term = msg
+        while term < nxt and orig[term] != 0x00:
+            term += 1
+        if term < nxt:
+            # 0x00 런 끝까지 포함(연속 패딩 0x00). 다음 라인은 0x00 뒤부터.
+            e = term
+            while e < nxt and orig[e] == 0x00:
+                e += 1
+            nxt = e
         return nxt
 
     # msg_addr -> 그 메시지의 라인 [(addr,len)] (정렬)
