@@ -51,8 +51,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   미해독 0%). 폰트 0x810000/8x16 4bpp, code→glyph idx=(low)+(-0x90+(lead-0xc0)*122), galmuri glyph-match.
   `data/reference/aw2_korean_strings.json`(벤치마크) + `gap_targets.json`(우리 UI 갭 타깃). USA 미션/CO파워/진영/맵명은 기반게임差로 제외.
 - [ ] **A4 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): sprite editor로 한글/기호화(정책상 영어 0이면 결함).
-- [ ] **A5 part1 단어붙음 117 + qa_integrity 부호소실 10행**: "띄어쓰기/누락 0" 목표 기준 잔여.
-- [ ] **A6 0xA2C378/0xA2C484 폭>50 실화면 확인 + 0xA27AAD in-place stale**.
+- [x] **A5 단어붙음 — 사실상 해소 확인(2026-06-24)**: repoint로 362행 해소, 잔여 level2+ **단 10행**("117"은 stale).
+  남은 단어붙음은 박스폭(50셀) 초과로 un-jam 불가한 B팀 장문(아래 A6) — 정상 trade-off.
+- [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
+  **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
+  0xA27AAD = ROM은 올바른 한글 대사('헬보우즈님... 호크 무슨 짓을...!') 렌더 — '헤,' override는 stale/무해, 실결함 0.
 
 ## B. 데이터 무결성
 - [x] **B1 CSV 손상 ROM-진실 검증 완료**: `qa_csv_integrity.py`를 출하 ROM 디코드 기반으로 재작성.
