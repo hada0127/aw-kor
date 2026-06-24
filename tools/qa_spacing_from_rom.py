@@ -154,9 +154,9 @@ def _is_aux_attach(before):
     return final == 0 and vowel in _CONJ_VOWELS
 
 
-def _jam_grade(addr, intended):
-    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 보조용언/조사 붙임=한국어 허용),
-    'real'(비B팀 명사구/다중공백/긴문장=진짜 결함). agy 리뷰 반영: 명사구(대공 전차 등) 실오류는 real로."""
+def _jam_grade(addr, intended, shipped=""):
+    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 보조용언 붙임=한국어 허용),
+    'real'(비B팀 명사구/다중공백/긴문장/구두점변형=진짜 결함). agy·codex 리뷰 반영."""
     if addr in _BTEAM:
         return "bteam"
     t = _norm(intended).strip()
@@ -164,9 +164,11 @@ def _jam_grade(addr, intended):
     syl = sum(1 for c in t if "가" <= c <= "힣")
     if interior == 1 and syl <= 6:
         parts = t.replace("　", " ").split(" ")
-        # 정확히 두 어절 + 앞=용언 활용형 + 뒤=보조용언(줘/둬/주마/봐/봅시다/버려…)으로 시작일 때만 허용.
-        # (수리가 빠르다=조사+본용언, 대공 전차=명사구 → real)
-        if len(parts) == 2 and _is_aux_attach(parts[0]) and parts[1] and parts[1][0] in "줘주줄둬두봐보봅버":
+        de_spaced = t.replace(" ", "").replace("　", "")
+        # 허용 조건(모두 충족): ①정확히 두 어절 ②앞=용언 활용형 ③뒤=보조용언(줘/둬/주마/봐/봅시다/버려…)
+        # ④**순수 공백제거**(shipped == 공백뺀 intended, 구두점 변형 없음 — codex: 힘내봅시다,(.→,) 제외).
+        if (len(parts) == 2 and _is_aux_attach(parts[0]) and parts[1] and parts[1][0] in "줘주줄둬두봐보봅버"
+                and _norm(shipped).strip() == de_spaced):
             return "acceptable"
     return "real"
 
@@ -221,7 +223,7 @@ def main():
 
     # 단어붙음 등급 분리: bteam(WONTFIX 권위) / acceptable(짧은구 한국어 허용) / real(진짜 결함)
     for r in jammed:
-        r["grade"] = _jam_grade(r["addr"], r["intended"])
+        r["grade"] = _jam_grade(r["addr"], r["intended"], r["shipped"])
     jam_real = [r for r in jammed if r["grade"] == "real"]
     jam_bteam = [r for r in jammed if r["grade"] == "bteam"]
     jam_ok = [r for r in jammed if r["grade"] == "acceptable"]

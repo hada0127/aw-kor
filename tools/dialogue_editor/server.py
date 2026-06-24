@@ -315,15 +315,10 @@ class Handler(BaseHTTPRequestHandler):
         ko = body.get("ko", "")
         with _LOCK:
             data = load_json(DIALOGUE_PATH, {"lines": []})
-            hit = None
-            for ln in data.get("lines", []):
-                if ln.get("id") == lid:
-                    ln["ko"] = ko
-                    hit = ln
-                    break
+            hit = next((ln for ln in data.get("lines", []) if ln.get("id") == lid), None)
             if hit is None:
                 return {"ok": False, "error": "id %r 없음" % lid}
-            # B팀(쪼롱이) 권위 주소 save-time 보호(우발 변형 차단; scene_editor와 동일 정책).
+            # B팀(쪼롱이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
             addr = hit.get("address")
             if addr and not body.get("confirm_bteam"):
                 try:
@@ -336,6 +331,7 @@ class Handler(BaseHTTPRequestHandler):
                                 "bteam_baseline": _base}
                 except (ValueError, TypeError):
                     pass
+            hit["ko"] = ko   # 검사 통과 후에만 변형
             save_json(DIALOGUE_PATH, data)
             ov = load_json(OVERRIDES_PATH, {})
             if addr:
