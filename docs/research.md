@@ -1607,3 +1607,33 @@ Phase 2a(단일포인터) 후 추가 해소:
 → 792는 **작동하는 87% 수정을 깨지 않는 안전 floor**. 추가 해소는 멀티페이지 구조 RE + 가드 정교화 필요.
 
 부작용 부호소실 1733: 비재배치 메시지가 전각 fit 위해 부호 떨굼(가독>부호, 승인된 트레이드오프).
+
+---
+## [2026-06-25] Phase 2c — 멀티페이지 중간 0x00 가설 반증 + orphan 가드 정교화
+
+**검증 결론**: `0xDFC248` 사례는 빌드가 중간에 spurious `0x00`을 넣은 것이 아니다.
+원본/출하/재빌드 모두 `0xDFC248..0xDFC430` 구간의 `0x00`은 종단 `0xDFC430` 1개뿐이다.
+`0xDFC274`는 출하 ROM에서 `0x7E`이며, 중간 truncation 증거 없음. `0x00`은 대사 종료,
+`0x6B`는 페이지 전환/입력대기 제어로 보존해야 한다.
+
+실제 원인: `skip_mid_ref`가 대사/스크립트 영역 정렬워드의 **모든 pointer-shaped 값**을 고아 포인터로
+봤다. `0xDFC248`을 막은 값은 `0xC789BC -> 0xDFC2DA`였는데, `0xDFC2DA`는 라인 시작이 아니라 SJIS 본문
+한가운데이며 `0xC7xxxx`는 추출 노이즈/데이터 영역이다. 즉 멀티페이지 부모 재배치가 맞지만, 고아 가드가
+그래픽/압축 데이터의 우연 값을 과신해 막고 있었다.
+
+**수정**:
+- `dialogue_repoint.py`: 고아 포인터 가드를 `line_index` 라인 시작 또는 알려진 메시지 시작(`all_targets`)만
+  차단하도록 정교화. 본문 중간 바이트를 가리키는 pointer-shaped 값은 고아 위험에서 제외.
+- 동일 `(ptr_off,msg)`가 table/extra 양쪽에서 들어올 때 Python 3.12 정렬이 `_tbl=None/int` 비교로 실패하는
+  빌드 블로커를 명시 key 정렬로 수정.
+- `qa_repoint_integrity.py`: 빌드와 같은 entry-target 기준으로 orphan-mid-ref를 판정해, 실제 라인/메시지
+  엔트리 고아만 FAIL 처리.
+
+**결과(출하 빌드 SHA `71ab0d6a...`)**:
+- `0xDFC248` 부모 메시지 재배치 성공: `new_addr=0xA82930`, old 492B → new 521B, 13라인,
+  fixed `0xDFC28E/0xDFC2B9/0xDFC31E/0xDFC378/0xDFC3A1`.
+- render-jam **792→718**. 재배치 **2829→2860**. `qa_repoint_integrity` PASS(2860, 문제 0),
+  `qa_integrity_map` PASS, B팀 drift 0, `phase6_basic_test` PASS.
+- 잔여 718 재분류: parent pointer continuation 241(`skip_merged` 206, `no_manifest` 23,
+  `skip_ptr` 7, `skip_no_terminator` 4, `skip_decompose` 1), exact_ptr 1, no_parent_ptr 476.
+  남은 주 병목은 중간 0x00이 아니라 **포인터 미식별 476 + merged/구조가드 241**이다.

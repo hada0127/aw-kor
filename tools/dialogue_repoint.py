@@ -192,22 +192,28 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         table_off_set.update(offs)
 
     # 고아 포인터 방지(agy 리뷰 2026-06-25): 대사/스크립트 영역(0xA00000~0xE10000) 정렬 포인터가 가리키는
-    # **모든 타깃 주소** 집합. 메시지의 **중간 라인 주소**(시작 외)를 참조하는 포인터가 따로 있으면,
-    # 재배치 시 시작 포인터만 갱신되고 중간 포인터는 구주소에 남아(고아) 불일치 → 그런 메시지는 skip.
+    # **텍스트 엔트리 타깃 주소** 집합. 전역 워드 스캔은 그래픽/압축데이터 안의 pointer-shaped 값을
+    # 많이 잡으므로, 라인 시작 또는 알려진 메시지 시작이 아닌 본문 중간 바이트는 고아 위험으로 보지 않는다.
+    # 실제 중간 라인 주소를 참조하는 포인터가 따로 있으면 재배치 시 시작 포인터만 갱신되고 중간 포인터는
+    # 구주소에 남아(고아) 불일치 → 그런 메시지는 skip.
     import array as _arr
     _w = _arr.array('I')
     _w.frombytes(orig[:(len(orig) // 4) * 4])
+    entry_targets = set(line_index) | set(all_targets)
     referenced_targets = set()
     for _i, _v in enumerate(_w):
-        if 0x08B80000 <= _v < 0x08E10000:
+        if 0x08A00000 <= _v < 0x08E10000:
+            _tgt = _v - GBA
+            if _tgt not in entry_targets:
+                continue
             _o = _i * 4
             if 0xA00000 <= _o < 0xE10000:
-                referenced_targets.add(_v - GBA)
+                referenced_targets.add(_tgt)
     _sorted_ref = sorted(referenced_targets)
 
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
     _relocated_msgs = set()   # 다중포인터 메시지 중복 재배치 방지(1회 재배치 + 전 site 갱신)
-    for ptr_off, msg, _tbl in sorted(table_entries):
+    for ptr_off, msg, _tbl in sorted(table_entries, key=lambda e: (e[0], e[1], -1 if e[2] is None else e[2])):
         if msg in _relocated_msgs:
             continue
         lines = msg_lines.get(msg, [])

@@ -20,10 +20,13 @@ import json
 import os
 import struct
 import sys
+import csv
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(BASE, "output", "game_wars_korean_full.gba")
 SYLCODE = os.path.join(BASE, "data", "syllable_to_code_2350.json")
+FOUND = os.path.join(BASE, "data", "game_wars_found_texts.csv")
+MAP = os.path.join(BASE, "temp", "integrity_map.json")
 GBA = 0x08000000
 FREE_START, FREE_END = 0xA3D000, 0xB00000
 SCAN_LO, SCAN_HI = 0xA00000, 0xE10000   # 포인터 OFFSET 검색 범위(대사/스크립트; 코드영역 제외)
@@ -68,6 +71,35 @@ def _decode(rom, off, maxlen, c2s):
     return "".join(out), False, garbage, has_space
 
 
+def _load_entry_targets(man):
+    """Known text/message entry targets for orphan-pointer checks.
+
+    Raw aligned-word scans over ROM data produce pointer-shaped values inside
+    graphics/compressed blobs. Those should not fail repoint integrity unless
+    they point to a real text entry boundary.
+    """
+    out = {int(m["msg"], 16) for m in man}
+    try:
+        with open(FOUND, encoding="utf-8", errors="ignore") as f:
+            for r in csv.DictReader(f):
+                try:
+                    a = int((r.get("address") or "").strip(), 16)
+                    L = int(r.get("length") or 0)
+                except (TypeError, ValueError):
+                    continue
+                if L > 0:
+                    out.add(a)
+    except OSError:
+        pass
+    try:
+        for e in json.load(open(MAP, encoding="utf-8")):
+            if isinstance(e, list) and len(e) >= 2 and isinstance(e[0], int):
+                out.add(e[0])
+    except (OSError, ValueError):
+        pass
+    return out
+
+
 def main():
     out_path = sys.argv[1] if len(sys.argv) > 1 else OUT
     rom = open(out_path, "rb").read()
@@ -88,10 +120,13 @@ def main():
     import array
     _w = array.array("I")
     _w.frombytes(rom[: (len(rom) // 4) * 4])
+    entry_targets = _load_entry_targets(man)
     ref_targets = set()
     for _i, _v in enumerate(_w):
         if 0x08B80000 <= _v < 0x08E10000 and 0xA00000 <= _i * 4 < 0xE10000:
-            ref_targets.add(_v - GBA)
+            tgt = _v - GBA
+            if tgt in entry_targets:
+                ref_targets.add(tgt)
     sorted_ref = sorted(ref_targets)
 
     issues = []

@@ -18947,7 +18947,7 @@ def main():
             # codex 리뷰(2026-06-25): 포인터 OFFSET을 **대사/스크립트 영역(0xA00000~0xE10000)**으로 제한 →
             # 코드영역 우연 4바이트 일치로 인한 오재배치(코드 오염) 위험 차단. 실 메시지 포인터테이블은 전부 이 범위.
             for _idx, _v in enumerate(_words):
-                if 0x08B80000 <= _v < 0x08E10000:
+                if 0x08A00000 <= _v < 0x08E10000:
                     _off = _idx * 4
                     if 0xA00000 <= _off < 0xE10000:
                         _rp_ptr_index.setdefault(_v - 0x08000000, []).append(_off)
@@ -18966,7 +18966,7 @@ def main():
                 if _a in _rp_bteam:
                     continue
                 _ms = _rp_msg_start(_a)
-                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                if _ms in _rp_extra or not (0xA00000 <= _ms < 0xE10000):
                     continue
                 _sites = _rp_ptr_index.get(_ms, [])
                 if len(_sites) == 1:
@@ -18977,13 +18977,13 @@ def main():
             _merged_li = dict(_repoint_line_index(FOUND))
             for _e in WRITE_LOG:
                 if len(_e) >= 8 and _e[5] and _e[0] not in _merged_li \
-                        and 0xB80000 <= _e[0] < 0xE10000 and isinstance(_e[1], int) and _e[1] > 0 \
+                        and 0xA00000 <= _e[0] < 0xE10000 and isinstance(_e[1], int) and _e[1] > 0 \
                         and any('가' <= ch <= '힣' for ch in _e[5]):
                     _merged_li[_e[0]] = (_e[1], _e[5])
             # 추가: 병합 line_index 전수 — spaced source가 있는데 in-place가 잼(script/override 덮음)이거나
             # slot 미fit(lvl>=6)이면 단일포인터 메시지시작 coverage 추가(_rp_fit_level이 in-place-jam 포함).
             for _la in _merged_li:
-                if not (0xB80000 <= _la < 0xE10000):   # B팀 허용(전각화=렌더링 수정, drift 검증)
+                if not (0xA00000 <= _la < 0xE10000):   # B팀 허용(전각화=렌더링 수정, drift 검증)
                     continue
                 _src = _rp_dlg(_la)
                 if not _src or (_src.count(' ') + _src.count('　')) == 0 or not _rp_fixable(_la):
@@ -18991,7 +18991,7 @@ def main():
                 if _rp_fit_level(_la) < 1:   # 전각-full 미적합(level>=1)이면 재배치 coverage 추가
                     continue
                 _ms = _rp_msg_start(_la)
-                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                if _ms in _rp_extra or not (0xA00000 <= _ms < 0xE10000):
                     continue
                 _sites = _rp_ptr_index.get(_ms, [])
                 if len(_sites) >= 1:   # 다중포인터 지원(repoint가 전 site 갱신)
@@ -19015,14 +19015,14 @@ def main():
             _rj_added = 0
             for _e in WRITE_LOG:
                 _a = _e[0]; _slot = _e[1]; _ko = _e[5]
-                if not _ko or not any('가' <= c <= '힣' for c in _ko) or not (0xB80000 <= _a < 0xE10000):
+                if not _ko or not any('가' <= c <= '힣' for c in _ko) or not (0xA00000 <= _a < 0xE10000):
                     continue
                 # B팀도 허용: 0x20→0x8140은 **렌더링 수정(텍스트 불변)**이라 B팀 제약상 허용(drift로 검증).
                 # B팀 대사도 그동안 잼 렌더됐으므로 전각화로 정상 렌더(재배치 conversion이 공백만 변환).
                 if not _rp_has_renderjam(_a, _slot):
                     continue
                 _ms = _rp_msg_start(_a)
-                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                if _ms in _rp_extra or not (0xA00000 <= _ms < 0xE10000):
                     continue
                 _sites = _rp_ptr_index.get(_ms, [])
                 if len(_sites) >= 1:   # 다중포인터 지원

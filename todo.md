@@ -65,6 +65,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   렌더), ② 비-relocated는 실 ROM 바이트 디코드(패딩 strip), ③ JAMMED는 같은번역 정확일치 공백제거만(다른/축약 제외).
   **jammed 433→159(진짜만), ABBREV 74→24**. codex P4 해소.
 - [x] **A5c 단어붙음 대량 해소(2026-06-25): jam 102→19 (81% 감소)**. 5기법 결합(span_of terminator 세분화 + CSV-source 확장 + trusted_message_start 단일포인터 coverage + in-place-jam 강제재배치 + 비B팀 잼-override skip). repoint 369→448msgs/504lines, free 48KB(ROM 확장 불요). drift 0/integrity/scene critical 0/dist PASS. 잔여 19=구조한계(0x19 sub-start/무포인터/다중포인터/merged). docs/research.md 상세.
+- [x] **A5d render-jam 멀티페이지 재조사(2026-06-25)**: `0xDFC248` 중간 spurious `0x00` 가설 반증(출하/재빌드 모두 `0xDFC430` 종단 1개). 실제 병목은 `skip_mid_ref`가 그래픽/압축 데이터의 pointer-shaped 값을 고아 포인터로 오인한 것. orphan 가드를 라인/메시지 entry-target 기준으로 정교화 + QA 동기화 → `0xDFC248/0xDFC3A1` 부모 메시지 재배치 성공, render-jam **792→718**, repoint 2860, integrity/repoint/B팀/phase6 PASS.
 
 - [x] **A6 결론(2026-06-24)**: 0xA2C378/0xA2C484 = B팀 텍스트 un-jam 시 **51셀 > 박스 50셀** → repoint가
   **올바르게 skip**(공백복원 시 클리핑). 단어붙음(완전텍스트)이 클리핑보다 안전 → WONTFIX(텍스트 불변 원칙).
