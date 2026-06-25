@@ -1853,3 +1853,12 @@ decode-safety 워크플로가 발견한 stray 0xEF를 단서로 **렌더되는 �
 - 검증: 렌더 content(in-place 마지막writer + 재배치목적지, content-bound) **한글+invalid 동시 0건**. drift0/
   qa_repoint(2852)/integrity/render-jam0/dist 전부 PASS.
 - 비-residual: 0xD6/0xD7 추출노이즈(원본도 garbage tile data "宀＋「）ー？楡6␣5␣4...", 대사 미렌더)는 대상 외.
+
+### merged-skip 가드 정밀화 — 미션목표 nosp-jam 추가 해소(2026-06-25)
+잔여 nosp 단어붙음 baseline 검증 중, merged-skip 가드(라인 텍스트가 다른 라인의 부분문자열이면 재배치 skip)가
+**미션목표 패턴**("산을 넘어, 캣의 연구 기지를 공격하라!" + 짧은 목표 "공격하라!")을 과잉 차단함을 발견. 짧은 라인
+(L2)이 **별도 포인터 0개**(메시지 단위로만 표시)임을 확인 → 메시지 재배치 시 L1+L2 구조 그대로 보존되어
+중복노출 위험 없음. 가드를 **부분문자열 라인이 sorted_t(테이블/0x19 별도참조)일 때만 skip**으로 정밀화.
+결과: 재배치 2852→**2881**(+29), nosp 단어붙음 **15→8**, 전 게이트 PASS(drift0/qa_repoint 2881 0문제/
+integrity/render-jam0), 재배치 목적지 invalid 코드 0. 남은 8 = false positive 5(relocated/script-row 공백 렌더,
+qa가 in-place orphan 라인 카운트) + 무포인터 하드한계 3(0xE0/0xEC 룰텍스트, 재배치할 포인터 없음).

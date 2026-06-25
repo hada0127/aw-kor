@@ -284,10 +284,15 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 eff.append(nosp(decode_text(fixed_bytes(a))))
             else:
                 eff.append(nosp(decode_text(bytes(rom[a:a + L]))))
+        # ★2026-06-25 정밀화: 부분문자열 라인(jj)이 **별도 메시지로도 참조**(sorted_t=테이블/0x19 타깃)될 때만
+        # 병합-중복노출 위험 → skip. jj가 이 메시지 내부 sub-line일 뿐(별도 포인터 0)이면 메시지 단위로 함께
+        # 이동해 L1+L2 구조가 그대로 보존되므로 안전(미션목표 "...공격하라!"+"공격하라!" 류 4건 재배치 가능).
+        sorted_t_set = set(sorted_t)
         merged = False
         for ii in range(len(eff)):
             for jj in range(len(eff)):
-                if ii != jj and len(eff[jj]) >= 4 and eff[jj] in eff[ii]:
+                if (ii != jj and len(eff[jj]) >= 4 and eff[jj] in eff[ii]
+                        and lines[jj][0] in sorted_t_set):
                     merged = True
                     break
             if merged:
