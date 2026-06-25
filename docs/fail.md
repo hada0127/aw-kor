@@ -424,3 +424,23 @@ loadstate가 메모리 shim을 제거해 미발화(breakpoint는 shim 무관이�
   0x8148='?'로 렌더 → 맵선택 컴팩트 글리프뱅크에 해당 음절 미주입. 글리프뱅크 주입점 RE 필요, 추적.
 - **CSV 109행 ROM 위험분 일괄수정 금지**: korean이 일본어/빈칸인 행 다수가 part1_campaign/part_dialogue(쪼롱이
   인접)라 행별 맥락검수 없이 일괄 번역하면 쪼롱이 보호 위반/오역 위험. `qa_csv_integrity.py`로 추적, 신중 복구.
+
+---
+## [2026-06-25] 대사 렌더러 0x20-advance hook — off-by-one 회귀 (revert)
+
+단어붙음(반각공백 0x20 미렌더)의 정석 근본해결로 **Part1 대사 파서 0x20 핸들러 hook**(0x20을 한 칸 advance)을
+codex가 구현 시도. 결과는 **off-by-one 렌더 회귀**라 revert.
+
+**메커니즘(확정)**: Part1 대사 파서 jump table 0x08B12098+(char-0x09)*4. 0x20 엔트리(0xB120F4)는 원래
+0x08B12144(byte ptr만 +1, x advance 없음=잼). codex hook(0x08F30500): 0x20 다음 바이트가 content(한글
+0x88-0xE2 / ASCII 0x21-7E 중 제어코드 제외)면 x([state+0x34]) +2, char count([state+0x32]) +1.
+
+**실패 원인**: fresh-render 시 공백이 **한 음절씩 늦게** 렌더("캐서린이없 는레"=캐서린이 없는이어야). 파서가
+0x20 다음 글리프를 **hook advance가 적용되기 전에 배치**(lookahead/pipeline). [state+0x34]가 글리프 tile
+위치(0x08B12640 ldrh r2,[r0,#0x34])에 쓰이나, content 핸들러가 그 값을 0x20 처리 시점보다 먼저 읽음.
+
+**재시도 조건**: 파서의 x 계산 타이밍을 **런타임 트레이스**(watchaddr [state+0x34], 한 글자씩)로 규명 후,
+hook을 올바른 시점(다음 글리프 배치 전)에 걸어야 함. codex 37분 시도로도 미해결. 단순 advance값 조정 아님.
+
+**대안(현 채택)**: 전각(0x8140)화+재배치로 5976→718(88%) 해소. 718 잔여(무포인터 sequential chunk 476 +
+guard-skip)는 hook이 정석이나 위 파서 RE 선행 필요.
