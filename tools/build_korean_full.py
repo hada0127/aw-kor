@@ -18999,6 +18999,35 @@ def main():
                     _trusted_added += 1
             st['repoint_trusted_starts'] = _trusted_added
 
+            # Phase 2a(2026-06-25): render-jam(content 사이 반각0x20→화면 잼) 단일포인터 메시지 coverage 추가.
+            # fixable 아니어도 재배치 블롭의 interior 변환이 해소하므로(dialogue_repoint render-jam 허용) 재배치.
+            _RES_CODES = set(int(v, 16) for v in syl_to_code.values()) if isinstance(next(iter(syl_to_code.values()), 0), str) else set(syl_to_code.values())
+            def _rp_has_renderjam(_a, _slot):
+                seg = bytes(rom[_a:_a + _slot]); i = 0
+                while i < len(seg) - 1:
+                    b = seg[i]
+                    if 0x81 <= b <= 0xE2:
+                        i += 2; continue
+                    if b == 0x20 and (0x81 <= seg[i + 1] <= 0xE2 or 0x21 <= seg[i + 1] <= 0x7E):
+                        return True
+                    i += 1
+                return False
+            _rj_added = 0
+            for _e in WRITE_LOG:
+                _a = _e[0]; _slot = _e[1]; _ko = _e[5]
+                if not _ko or not any('가' <= c <= '힣' for c in _ko) or not (0xB80000 <= _a < 0xE10000):
+                    continue
+                if _a in _rp_bteam or not _rp_has_renderjam(_a, _slot):
+                    continue
+                _ms = _rp_msg_start(_a)
+                if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
+                    continue
+                _sites = _rp_ptr_index.get(_ms, [])
+                if len(_sites) == 1:
+                    _rp_extra[_ms] = _sites
+                    _rj_added += 1
+            st['repoint_renderjam_starts'] = _rj_added
+
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,

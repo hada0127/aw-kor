@@ -1569,3 +1569,19 @@ free space 574KB 여유 → **병목은 ROM 용량이 아니라 포인터**. 단
 무포인터 3105는 서브메시지(순차참조)/미참조 추정 → 부모 메시지 재배치 또는 포인터 RE 필요.
 
 부작용: 부호소실 1733(비-재배치가 전각 fit 위해 부호 떨굼). 트레이드오프=가독 공백 > 부호(사용자 승인).
+
+---
+## [2026-06-25] Phase 2a — render-jam 단일포인터 coverage 확장: 5976→970 (84%)
+
+Phase 1 후 잔여 측정이 **재배치 메시지의 stale in-place 라인을 오집계**(4402)함을 발견 → 재배치 범위
+[msg, msg+old_len) 제외하면 정확 잔여는 **970**. 즉 Phase1만으로도 이미 대폭 해소.
+
+Phase 2a: dialogue_repoint에 **render-jam 허용**(fixable 라인 없어도 content 사이 0x20 있으면 재배치 →
+interior 변환이 해소) + build에 **단일포인터 render-jam 메시지 coverage**(repoint_renderjam_starts).
+→ 재배치 2667개, 렌더잼 **5976→970**, free 283KB/795KB, drift0, qa_repoint PASS(2667 문제0).
+
+잔여 970 포인터 분석: **무포인터 587 / 단일 246 / 다중 137**. free space 충분(병목=포인터):
+- 다중 137: 다중포인터 재배치 지원(전 site 갱신)으로 해결 가능
+- 단일 246: decompose/struct 가드로 skip 추정 — 케이스 조사
+- 무포인터 587: 서브메시지(순차참조)/미참조 — 부모 메시지 재배치 또는 포인터 RE 필요
+ROM 확장은 space가 아니라 무포인터 587의 포인터 문제라 직접 해결 안 됨(free 충분).

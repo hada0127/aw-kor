@@ -241,7 +241,27 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         if skipped_wide:
             stats['skip_wide_line'] += skipped_wide
         if not fix_addrs:
-            continue
+            # 2026-06-25 render-jam 허용: fixable 라인이 없어도 **content 사이 반각공백(0x20)**이 있으면
+            # 재배치 블롭의 interior 변환(0x20→0x8140)이 화면 단어붙음을 해소하므로 재배치한다.
+            # (클린소스 없는 잼=무포인터 외 단일포인터분 커버). 2바이트 코드 lead는 건너뛰어 오탐 방지.
+            _has_jam = False
+            for a, L in lines:
+                seg = rom[a:a + L]
+                i = 0
+                while i < len(seg) - 1:
+                    b = seg[i]
+                    if 0x81 <= b <= 0xE2:
+                        i += 2
+                        continue
+                    if b == 0x20 and (0x81 <= seg[i + 1] <= 0xE2 or 0x21 <= seg[i + 1] <= 0x7E):
+                        _has_jam = True
+                        break
+                    i += 1
+                if _has_jam:
+                    break
+            if not _has_jam:
+                continue
+            stats['relocate_renderjam'] = stats.get('relocate_renderjam', 0) + 1
 
         # 안전 가드: **실제 렌더 텍스트** 기준 라인 간 중첩 검사.
         # 각 라인의 effective 텍스트 = fixed면 override(새 텍스트), 아니면 현재 rom 바이트 디코드.
