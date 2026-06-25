@@ -1862,3 +1862,17 @@ decode-safety 워크플로가 발견한 stray 0xEF를 단서로 **렌더되는 �
 결과: 재배치 2852→**2881**(+29), nosp 단어붙음 **15→8**, 전 게이트 PASS(drift0/qa_repoint 2881 0문제/
 integrity/render-jam0), 재배치 목적지 invalid 코드 0. 남은 8 = false positive 5(relocated/script-row 공백 렌더,
 qa가 in-place orphan 라인 카운트) + 무포인터 하드한계 3(0xE0/0xEC 룰텍스트, 재배치할 포인터 없음).
+
+---
+## [2026-06-26] VS설정 도움말 4건 단축 → 재배치 → in-game 공백렌더 확증
+
+박스폭 초과로 단어붙음(nosp) 남던 B팀 도움말/대사 4건을, **사용자 승인 + codex/agy 합의**로 자연스럽게 단축:
+- 0xEC312E/0xA2C378 "종료되었을 때"→"종료되면", 0xA2C484 "고르는 것으로"→"선택하면",
+  0xDFD082 "여기서만 하는 얘긴데"→"이건 비밀인데" (각 visual_cells 46, 박스 ~30자).
+
+포인터 발견(0xEC312C→테이블0xEC2708@0xEC2714, 0xEC3244→코드 LDR0xB71218)으로 재배치 + fullwidth 공백 렌더.
+B팀 baseline `AW_BTEAM_ACCEPT=1 qa_bteam_drift --accept`로 단축본 확정 갱신.
+
+**★fresh-render 확증**(scene_87→A×3 룰진입→우측이동, 타자기 완료 대기): 룰설정 도움말 바에
+**"지정일이 종료되면 소유 거점 수로 결판을 냅니다"** 공백 정상 + 한 줄 완전 표시(잘림0).
+증거: docs/screenshots/SUCCESS_rule_help_shortened_2026-06-26.png. drift0/qa_repoint2890/render-jam0/dist PASS. 커밋 86cac17.
