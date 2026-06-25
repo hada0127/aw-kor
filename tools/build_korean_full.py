@@ -125,7 +125,7 @@ DENY_REGIONS = [
     ('noise_graphics', 0xE8BE00, 0xE8BE12), ('noise_graphics', 0xE8F550, 0xE8F562),
 ]
 
-FALLBACK = {'·': '・', '∪': '∩', '—': '-'}  # 일부 유니코드 → SJIS/ASCII 인코딩 가능 등가
+FALLBACK = {'·': '・', '∪': '∩', '—': '-', '─': '-', '―': '-', '━': '-', '─': '-'}  # 유니코드 → 렌더 가능 등가(박스드로잉 대시→ASCII '-')
 # 전각 구두점 → 반각(1바이트 절약, overflow 시에만 적용). 한국어 가독성 영향 적음.
 HALFWIDTH = {'！': '!', '？': '?', '，': ',', '．': '.', '：': ':', '；': ';',
              '（': '(', '）': ')', '　': ' ', '〜': '~', '～': '~'}
@@ -9418,10 +9418,17 @@ def encode_text(ko, syl_to_code, unmapped):
         else:
             src = FALLBACK.get(ch, ch)
             try:
-                out += src.encode('shift_jis')
+                enc = src.encode('shift_jis')
             except Exception:
-                unmapped[ch] += 1
-                out += b'\x81\x48'  # ？
+                enc = b''
+            # ★렌더 가능 검증(2026-06-25): 대사 렌더러는 예약 한글 + 전각공백(0x8140) + 전각 기호·영숫자
+            # (0x81-0x82 lead)만 안정 렌더. ─(박스드로잉)·宀(비-음절 한자)·Υ/Χ(그리스)·Б(키릴) 등은 렌더 불가
+            # SJIS(0x83-0x9F/0x84xx 등) → 화면 garbage. 안전 코드(ASCII 1바이트 OR 전각 0x81-0x82)만 emit,
+            # 그 외(번역에 섞인 노이즈 특수문자)는 drop. 한자 고유명사는 빌드 전단계에서 예약코드로 remap됨.
+            if len(enc) == 1 or (len(enc) == 2 and 0x81 <= enc[0] <= 0x82):
+                out += enc
+            else:
+                unmapped[ch] += 1   # 렌더 불가 문자 → drop
     return bytes(out)
 
 
@@ -19137,12 +19144,25 @@ def main():
                     _rj_added += 1
             st['repoint_renderjam_starts'] = _rj_added
 
+            # 렌더 가능 코드집합: 예약 한글(syl_to_code) + 한자테이블(rom 0xB80B7C, LE) + 전각공백.
+            # repoint 안전게이트가 new_msg의 모든 2바이트 코드를 이 집합으로 검증(garbage 출하 차단).
+            _rp_valid = set()
+            for _v in syl_to_code.values():
+                _rp_valid.add(int(_v, 16) if isinstance(_v, str) else int(_v))
+            _rp_valid.add(0x8140)
+            _hp = 0xB80B7C
+            while _hp + 1 < 0xB82000:
+                _hc = rom[_hp] | (rom[_hp + 1] << 8)
+                if _hc in (0x0000, 0xFFFF):
+                    break
+                _rp_valid.add(_hc)
+                _hp += 6
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
-                min_level=1, max_cells=50)
+                min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid))
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
             for _m in _rp_manifest:

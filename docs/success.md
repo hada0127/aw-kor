@@ -1840,3 +1840,16 @@ render hook 사각(jump table 경로의 0x20-before-ASCII)을 **데이터 변환
 - 게이트 qa_render_jam을 **content(enc_len) 범위·마지막 writer**로 수정(슬롯 끝 FILL이 다음 구조 ▼와 잼 오인하던
   156 false positive 제거) → **render-jam 잔여 0**.
 - FAIL 0. 잔여 우려는 비치명(부호소실 정책, greedy 부분변환 경고, 재배치 stray 0xEF — 공백변환과 무관 별도 follow-up).
+
+### 재배치/인코딩 stray-code 잔여 전수 정리(2026-06-25)
+decode-safety 워크플로가 발견한 stray 0xEF를 단서로 **렌더되는 전체 content를 valid-codes(예약+한자테이블+
+전각) 전수 검증** → 모든 garbage 코드 근절:
+- **repoint stray-code 게이트**(dialogue_repoint.py): new_msg의 모든 2바이트 코드가 렌더 가능한지 검증, 다른
+  writer의 slot 경계가 코드 분할로 만든 orphan(8DEF '수'→0xEF) 등 invalid 있으면 재배치 skip→in-place 유지.
+  valid_codes는 build가 syl_to_code+한자테이블(rom)+0x8140로 구성해 전달. skip 2건(number-template line-split).
+- **encode_text 렌더가능 검증**(build_korean_full.py): fallback이 ─(박스드로잉)·宀(비음절한자)·Υ/Χ(그리스)·
+  Б(키릴) 등을 렌더불가 SJIS로 emit하던 것을 **안전코드(ASCII/전각 0x81-0x82)만 emit, 노이즈 drop**. FALLBACK에
+  대시류(─―━→'-') 추가 → "젠장────!!!"이 "젠장----!!!"로 정상 렌더.
+- 검증: 렌더 content(in-place 마지막writer + 재배치목적지, content-bound) **한글+invalid 동시 0건**. drift0/
+  qa_repoint(2852)/integrity/render-jam0/dist 전부 PASS.
+- 비-residual: 0xD6/0xD7 추출노이즈(원본도 garbage tile data "宀＋「）ー？楡6␣5␣4...", 대사 미렌더)는 대상 외.

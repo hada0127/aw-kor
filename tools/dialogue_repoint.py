@@ -82,7 +82,7 @@ def _line_index(found_csv):
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
                      extra_messages=None, min_level=6, max_cells=50, max_header_gap=16,
-                     align=4, log=None):
+                     align=4, log=None, valid_codes=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(쪼롱이님 per-line 대사만 복원)**:
@@ -368,6 +368,35 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             else:
                 _conv += bytes([_b]); _i += 1
         new_msg = _conv
+
+        # ★stray-code 안전게이트(2026-06-25): new_msg의 **모든 2바이트 코드가 렌더 가능**(예약 한글 / 한자테이블 /
+        # 전각공백 0x8140 / 전각 기호·영숫자 0x81-0x82)한지 전수 검증. 다른 writer의 slot 경계가 코드를 분할해
+        # 생긴 orphan(8DEF '수'→0xEF + 다음 = garbage 0xEF81), number-template 잔여(8F92), 특수문자 미변환
+        # (ー→0x849F) 등 **invalid 코드가 하나라도 있으면 재배치 skip → in-place(마지막 writer, render hook이
+        # 0x20 렌더) 유지**. garbage 출하 방지(decode-safety 워크플로 발견 + 완전 valid-codes 재스캔으로 확장).
+        if valid_codes is not None:
+            _j = 0
+            _stray = False
+            while _j < len(new_msg):
+                _bb = new_msg[_j]
+                if (0x81 <= _bb <= 0x9F or 0xE0 <= _bb <= 0xEF) and _j + 1 < len(new_msg):
+                    _cc = (_bb << 8) | new_msg[_j + 1]
+                    _lo = _cc & 0xFF
+                    _ok = (_cc in valid_codes) or (
+                        (_cc >> 8) in (0x81, 0x82) and (0x40 <= _lo <= 0x7E or 0x80 <= _lo <= 0xFC))
+                    if not _ok:
+                        _stray = True
+                        break
+                    _j += 2
+                elif _bb < 0x80 or 0xA1 <= _bb <= 0xDF:
+                    _j += 1
+                else:                       # 0x80, 0xA0, 0xF0-0xFF (유효 lead 아님)
+                    _stray = True
+                    break
+            if _stray:
+                stats['skip_stray_code'] = stats.get('skip_stray_code', 0) + 1
+                manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_stray_code'})
+                continue
 
         # terminator 보존 검증(2026-06-25, codex/agy 보수화): **원본이 0x00 종단인 메시지만** 재배치하고,
         # 그 경우 new_msg도 0x00 종단이어야 함. 원본 비-0x00 종단(다음 메시지까지 span)은 엔진 소비범위 불명
