@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "021adb56",
-    "sha1": "01a9946d5f096ff31bf9ddbcaa0e2aeded1b9629",
-    "sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b"
+    "crc32": "afde314c",
+    "sha1": "b76de2d415841b6e88f66218088580117233c500",
+    "sha256": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
-    "game_wars_korean_final.gba": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b",
-    "game_wars_korean_title_test.gba": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b"
+    "game_wars_korean_full.gba": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942",
+    "game_wars_korean_final.gba": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942",
+    "game_wars_korean_title_test.gba": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-06-25.bps",
-    "size": 804535,
+    "size": 1072170,
     "crc32": "2144df1c",
-    "sha1": "3cd502cf44bfaa96f750c7b31a7de7e2f31b9840",
-    "sha256": "d6b0e1fca50bd9d142322c48a21156619bed78a0184b62568fdb2bc18b7cbd9b",
+    "sha1": "a1ea743a32ed931c0ee17044d2702ff60c14f977",
+    "sha256": "6867729ac28fe2cd18e89b43c7a00d585358061ccfa442c61881db943e971b1d",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-06-25.ips",
-    "size": 936733,
-    "crc32": "805a2ab3",
-    "sha1": "f4d039a530f17694d866874c22d3169b2a0f9c3c",
-    "sha256": "a1597b687c9f236ba0d227809f24cfae224b2d7efc0f917157cb2396ef83f0c9",
+    "size": 1215672,
+    "crc32": "e25adbd0",
+    "sha1": "9007a8caebde1117e1d9f151e656ca155fdff5ab",
+    "sha256": "058b891938fccf620bffdd3cea10ae276a02b9b20930bcee03d97bc1154ae5c7",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
