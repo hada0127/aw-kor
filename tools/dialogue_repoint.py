@@ -318,6 +318,26 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             cur = a + L
         new_msg += rom[cur:me]                    # 종단 제어 보존
 
+        # ★2026-06-25 전각공백 변환: 대사 렌더러는 반각공백(0x20)을 글리프 폭 0으로 스킵(화면 잼)하므로,
+        # free space(폭 여유)인 재배치 블롭은 **content 사이 0x20을 전각(0x8140)으로** 바꿔 화면에 공백이
+        # 보이게 한다. 비-fixed 라인(클린소스 없는 잼)까지 정상화. (다음이 content가 아닌 0x20=trailing 패딩,
+        # 제어코드 앞 0x20은 미변환=무해 스킵.) 2바이트 코드 lead는 건너뛰어 코드 내부 0x20 오변환 방지.
+        _conv = bytearray(); _i = 0
+        while _i < len(new_msg):
+            _b = new_msg[_i]
+            if 0x81 <= _b <= 0xE2 and _i + 1 < len(new_msg):
+                _conv += new_msg[_i:_i + 2]; _i += 2
+            elif _b == 0x20:
+                _nx = new_msg[_i + 1] if _i + 1 < len(new_msg) else 0
+                if 0x81 <= _nx <= 0xE2 or 0x21 <= _nx <= 0x7E:   # 다음이 content → interior space
+                    _conv += b'\x81\x40'
+                else:
+                    _conv += b'\x20'
+                _i += 1
+            else:
+                _conv += bytes([_b]); _i += 1
+        new_msg = _conv
+
         # terminator 보존 검증(2026-06-25, codex/agy 보수화): **원본이 0x00 종단인 메시지만** 재배치하고,
         # 그 경우 new_msg도 0x00 종단이어야 함. 원본 비-0x00 종단(다음 메시지까지 span)은 엔진 소비범위 불명
         # → 재배치 시 run-off 위험이므로 보수적 skip. patch_script_row류(라인이 종단 삼킴)도 여기서 차단.

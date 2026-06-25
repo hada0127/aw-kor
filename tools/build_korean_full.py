@@ -9718,20 +9718,30 @@ def _fit_candidates(base):
 
     공백 보존 후보(부호 점진 제거 + 축약)를 **모두** 시도한 뒤에야 공백을 제거한다.
     → 마침표 하나 버리면 들어갈 문장을 단어 붙여(단어붙음) 출하하지 않는다.
-    괄호류 ()[]{}는 의미 훼손이라 jam 직전(최후)에만 제거. 전각공백 fit 다수행은 byte-identical.
-    레벨: 0,1 전체보존 / 2,3 .!?, 제거 / 4,5 :;"' 제거 / 6,7 축약 / 8,9 축약+부호제거 /
-          10~12 공백제거(단어붙음, 최후 수단).
+
+    ★2026-06-25 전각 우선 재정렬(렌더 검증): 대사 렌더러는 **글리프 폭 단위로 전진**하므로
+    반각공백(0x20, ASCII)은 글리프가 없어 **전진하지 않음=화면에선 잼**(전각 0x8140만 공백 렌더).
+    따라서 **모든 전각(0x8140) 후보(0~5)를 먼저** 시도하고, 그래도 안 맞으면 반각(6~9, 잼렌더지만
+    텍스트 보존) → 공백제거(10~12). min_level=6 ⇒ "전각 미적합(=화면 잼)이면 재배치"로 자연 정렬됨.
+    레벨: 0 fw전체 / 1 fw.!?, / 2 fw:;"' / 3 fw축약 / 4 fw축약+.!?, / 5 fw축약+:;"'
+          / 6~9 반각(잼렌더→재배치) / 10~12 공백제거.
     """
     fw = lambda s: s.replace(' ', '　')
     nosp = lambda s: s.replace(' ', '')
     safe = _drop(base, SAFE_PUNCT)
     late = _drop(safe, LATE_PUNCT)
     return [
-        fw(base), base,                        # 0,1 전체 보존(전각/반각)
-        fw(safe), safe,                        # 2,3 .!?, 제거(공백 유지)
-        fw(late), late,                        # 4,5 :;"' 제거(공백 유지)
-        fw(_shorten(base)), _shorten(base),    # 6,7 축약(공백 유지)
-        _shorten(safe), _shorten(late),        # 8,9 축약+부호제거(공백 유지)
+        fw(base),                              # 0 fw 전체 보존(전각공백=정상 렌더)
+        fw(safe),                              # 1 fw .!?, 제거
+        fw(late),                              # 2 fw :;"' 제거
+        fw(_shorten(base)),                    # 3 fw 축약
+        fw(_shorten(safe)),                    # 4 fw 축약+.!?, 제거
+        fw(_shorten(late)),                    # 5 fw 축약+:;"' 제거
+        # --- 6+ = 반각공백(0x20, 렌더 스킵=잼) 또는 공백제거 → 재배치 대상(min_level=6) ---
+        base,                                  # 6 반각 전체 보존(잼렌더, 텍스트 보존)
+        safe,                                  # 7 반각 .!?, 제거
+        late,                                  # 8 반각 :;"' 제거
+        _shorten(base),                        # 9 반각 축약
         nosp(base),                            # 10 공백제거(단어붙음) — 최후
         nosp(_drop(base, PUNCT_DROP)),         # 11 공백제거+전체부호제거
         nosp(_shorten(_drop(base, PUNCT_DROP))),  # 12 공백제거+축약+부호제거
@@ -9806,12 +9816,15 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
 
 
 def encode_full_fidelity(ko, syl_to_code, unmapped):
-    """슬롯 제약 없이 완전충실(반각공백 보존, 부호 보존) 인코딩 — repoint 재배치용.
+    """슬롯 제약 없이 완전충실(부호 보존) 인코딩 — repoint 재배치용.
 
     encode_fit의 정규화는 동일하게 적용하되 _fit_candidates의 슬롯-축소(부호/공백 제거)는
-    거치지 않는다 → 단어붙음/축약 없는 원문 그대로. 반각공백(0x20)을 써서 최소 폭으로 복원.
+    거치지 않는다 → 단어붙음/축약 없는 원문 그대로.
+
+    ★2026-06-25 전각공백(0x8140) 사용: 대사 렌더러는 글리프 폭 단위 전진이라 반각공백(0x20)을
+    스킵(화면 잼)하므로, 재배치(free space=폭 여유)는 반드시 전각으로 복원해 **화면에서 공백이 보이게** 한다.
     """
-    return encode_text(normalize_for_fit(ko), syl_to_code, unmapped)
+    return encode_text(normalize_for_fit(ko).replace(' ', '　'), syl_to_code, unmapped)
 
 
 def write_slot_text(rom, a, slot, enc, ko, level, kind):
@@ -18975,7 +18988,7 @@ def main():
                 _src = _rp_dlg(_la)
                 if not _src or (_src.count(' ') + _src.count('　')) == 0 or not _rp_fixable(_la):
                     continue
-                if _rp_fit_level(_la) < 6:
+                if _rp_fit_level(_la) < 1:   # 전각-full 미적합(level>=1)이면 재배치 coverage 추가
                     continue
                 _ms = _rp_msg_start(_la)
                 if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
@@ -18991,7 +19004,7 @@ def main():
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
-                min_level=6, max_cells=50)
+                min_level=1, max_cells=50)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
             for _m in _rp_manifest:

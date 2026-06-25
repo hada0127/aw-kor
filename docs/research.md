@@ -1539,3 +1539,33 @@ jam 102→19 유지. repoint 450msgs/510lines. 70 scene 재캡처·B3 재스탬�
 결과: repoint 445msgs/501lines. **고아 0·corrupt 0** 게이트 확증. jam 102→21(79%). 빌드 결정적(006b12cd, 2회 동일).
 잔여 21=구조한계(0x19 sub-start/무·다중포인터/merged/고아skip/script). 70 scene 재캡처·B3 재스탬프·dist 재생성.
 **follow-up(codex#4)**: trusted-start 재배치분 mGBA 실캡처는 잔여 검증(게이트가 바이트는 전수 확증).
+
+---
+## [2026-06-25] ★단어붙음의 진짜 원인 — 반각공백(0x20) 미렌더 (실캡처 검증으로 발견)
+
+**발견 경위**: A5c 재배치를 fresh-render(key-advance, stale savestate 아님)로 5배 확대 검증 중,
+같은 대사 박스에서 `0xDFF1CA "캐서린이[전각0x8140]없는…"`은 넓은 gap 렌더, `0xDFF1F1 "이[반각0x20]몸의…"`는
+공백 완전 스킵(잼) 확인. 바이트 대조로 확정.
+
+**메커니즘**: 대사 렌더러가 **글리프 폭 단위로 커서 전진** → 반각공백(0x20, ASCII)은 글리프가 없어 전진 0 = 화면 잼.
+일본어 원본이 공백에 전각(0x8140)을 쓰므로 렌더러는 0x8140만 공백으로 인식(A2 맵선택 '??'와 동일).
+
+**규모**: 출하 ROM 바이트 기준 **5976개 대사가 0x20 사용→화면 단어붙음**(qa_spacing은 바이트만 봐서, savestate
+캡처는 구 ROM VRAM 보존이라 둘 다 못 잡음). **그동안 싸워온 단어붙음의 진짜 원인**.
+
+**stale VRAM 확정(codex #4)**: savestate scene 캡처를 orig ROM(일본어)으로 로드해도 동일 한글 렌더 →
+savestate VRAM이 만들어진 ROM의 화면을 보존, 1-frame refresh로 현 ROM 미반영. fresh-render(key-advance)만 신뢰.
+
+**Phase 1 수정(구현)**:
+- `_fit_candidates` 전각 우선 재정렬(0~5 전각 / 6~9 반각 / 10~12 공백제거)
+- `encode_full_fidelity` 전각(0x8140)화
+- 재배치 블롭의 **interior 0x20→0x8140 변환**(content 사이만; trailing 패딩·제어 앞은 유지; 2바이트 코드 lead 건너뜀)
+- `min_level=1`(전각-full 미적합이면 재배치=부호+전각 완전충실)
+- 결과: **재배치 1958개 완전 정상화(잼 0)**, 렌더잼 5976→4452, free 221KB/795KB, drift 0, qa_repoint PASS
+
+**Phase 2 잔여(4452 비-재배치 in-place)**: 분석 결과 **무포인터 3105 / 단일 1224 / 다중 123**.
+free space 574KB 여유 → **병목은 ROM 용량이 아니라 포인터**. 단일/다중(1347)은 재배치 커버리지 확장(fix_addrs
+없어도 interior 변환이 잼 해소하므로 render-jam 메시지 relocate 허용)으로 기존 free space에 해결 가능.
+무포인터 3105는 서브메시지(순차참조)/미참조 추정 → 부모 메시지 재배치 또는 포인터 RE 필요.
+
+부작용: 부호소실 1733(비-재배치가 전각 fit 위해 부호 떨굼). 트레이드오프=가독 공백 > 부호(사용자 승인).
