@@ -9794,7 +9794,50 @@ def normalize_for_fit(ko):
     return normalized
 
 
-def encode_fit(ko, slot, syl_to_code, unmapped):
+DIALOG_BAND = (0xA00000, 0xE10000)   # 대사 렌더러(0x8140 전각공백 렌더) 사용 영역. 밖(메뉴/UI)은 변환 금지.
+
+
+def _fw_before_ascii(enc, slot, addr=None):
+    """enc 내 standalone 반각공백(0x20)의 **다음 글자가 ASCII(0x21-0x7E)**면 전각공백(0x8140)으로 변환.
+
+    근거(2026-06-25): Part1 대사 0x20 렌더 hook은 content path(다음=SJIS 0x81-0xE2)만 처리.
+    숫자/기호(ASCII)는 jump table 경로라 hook이 안 닿아 0x20이 화면에서 스킵(단어붙음). 전각공백
+    0x8140은 content path 글리프라 정상 렌더 → "이동력은 3인데"의 '3' 앞 공백이 보이게 한다.
+    0x20-before-한글은 hook이 렌더하므로 보존(1바이트 절약). slot 여유(slack)만큼 greedy 변환.
+    SJIS 2바이트 코드(lead 0x81-0xE2)의 저바이트가 0x20인 경우는 토큰 파싱으로 건너뛴다.
+    ★region 가드(codex/agy 리뷰): addr이 대사밴드(0xA0-0xE1) 밖이면 변환 안 함 — 0x8140을 미렌더하는
+    UI 렌더러(예: protected_ranges의 fullwidth_space→blank) 보호. addr=None은 호출처 명시 누락 → 변환 적용."""
+    if addr is not None and not (DIALOG_BAND[0] <= addr < DIALOG_BAND[1]):
+        return enc
+    b = bytes(enc)
+    fw = '　'.encode('shift_jis')          # b'\x81\x40' (전각공백)
+    converts = []
+    i = 0
+    while i < len(b):
+        c = b[i]
+        if 0x81 <= c <= 0xE2 and i + 1 < len(b):   # SJIS 2바이트 코드
+            i += 2
+        elif c == 0x20:
+            nb = b[i + 1] if i + 1 < len(b) else 0
+            if 0x21 <= nb <= 0x7E:                  # 다음=printable ASCII
+                converts.append(i)
+            i += 1
+        else:
+            i += 1
+    if not converts:
+        return enc
+    slack = slot - len(b)                            # FILL 패딩 여유(전각화 1바이트/건 비용)
+    n = min(len(converts), slack)
+    if n <= 0:
+        return enc
+    chosen = set(converts[:n])
+    out = bytearray()
+    for idx, byte in enumerate(b):
+        out += fw if idx in chosen else bytes([byte])
+    return bytes(out)
+
+
+def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
     """슬롯에 맞도록 단계적 압축 인코딩.
 
     맞으면 (bytes, level), 안 맞으면 (None, 99)로 원문 유지.
@@ -9802,6 +9845,7 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
     Phase B: 기존 무조건 strip을 제거하고 전각 부호를 렌더 검증된 ASCII 등가로 정규화한다.
     렌더러가 ASCII '. ! ? , : ; ( ) [ ] " ''를 출력함은 출하본(welcome/Part2 대사/0xDCBC12)으로 입증됨.
     부호가 슬롯을 넘기면 기존 동작과 동일하게 제거하므로 overflow/일본어 폴백은 늘지 않는다.
+    ★반각(level 6~9) 선택 시 ASCII 앞 0x20을 전각공백으로 후처리(_fw_before_ascii) — render hook 사각 보완.
     """
     normalized = normalize_for_fit(ko)
     cand = _fit_candidates(normalized)   # 비용 기반: 공백 보존(부호제거/축약) → 공백제거 최후
@@ -9810,7 +9854,7 @@ def encode_fit(ko, slot, syl_to_code, unmapped):
             continue
         enc = encode_text(s, syl_to_code, unmapped)
         if len(enc) <= slot:
-            return enc, level
+            return _fw_before_ascii(enc, slot, addr), level
 
     return None, 99
 
@@ -10445,7 +10489,7 @@ def main():
             pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
             if pair_renderer:
                 ko = normalize_pair_renderer_text(ko)
-            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+            enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
             if enc is None:
                 st['overflow'] += 1
                 report.append((row['address'], ko, encode_text(ko, syl_to_code, unmapped).__len__(), slot))
@@ -10475,7 +10519,7 @@ def main():
             continue
         if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
             ko = normalize_pair_renderer_text(ko)
-        enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+        enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
         if enc is None:
             st['overflow'] += 1
             report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
@@ -10509,7 +10553,7 @@ def main():
                 continue
             if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
                 ko = normalize_pair_renderer_text(ko)
-            enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+            enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
             if enc is None:
                 st['overflow'] += 1
                 report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
@@ -10557,7 +10601,7 @@ def main():
                 ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
                 if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
                     ko = normalize_pair_renderer_text(ko)
-                enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+                enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
                 if enc is None:
                     st['supp_overflow'] += 1
                     try:
@@ -10645,7 +10689,7 @@ def main():
             continue
         if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
             ko = normalize_pair_renderer_text(ko)
-        enc, level = encode_fit(ko, slot, syl_to_code, unmapped)
+        enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
         if enc is None:
             st['overflow'] += 1
             report.append((f'0x{a:08X}', ko, len(encode_text(ko, syl_to_code, unmapped)), slot))
@@ -11563,7 +11607,7 @@ def main():
         WRITE_LOG.append([faddr, slot_len, len(enc), bytes(enc).hex(), FILL_BYTE, text, None, 'fixed_text'])
 
     def fixed_zero_text_patch(faddr, slot_len, text):
-        enc = encode_text(text, syl_to_code, unmapped)
+        enc = _fw_before_ascii(encode_text(text, syl_to_code, unmapped), slot_len, faddr)
         if len(enc) > slot_len:
             raise AssertionError(f'zero-padded text overflow at 0x{faddr:X}: {len(enc)} > {slot_len}')
         rom[faddr:faddr + slot_len] = enc + bytes(slot_len - len(enc))
@@ -11629,6 +11673,7 @@ def main():
     # like で/を do not leak between Korean labels.
     def patch_script_row(faddr, fend, payload, label):
         slot_len = fend - faddr
+        payload = _fw_before_ascii(payload, slot_len, faddr)   # ASCII 앞 0x20 → 전각공백(render hook 사각 보완)
         if len(payload) > slot_len:
             raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
@@ -18974,7 +19019,7 @@ def main():
                 return si > ii and _rp_strip_sp(src) == _rp_strip_sp(inplace)
 
             def _rp_fit_level(a):
-                enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped)
+                enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped, a)
                 base = 99 if enc is None else lvl
                 if base < 6 and _rp_inplace_jammed(a):
                     return 6   # in-place 잼(script/override가 공백제거) → 강제 재배치로 공백 복원

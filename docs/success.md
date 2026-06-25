@@ -1823,3 +1823,20 @@ codex 지적 3건 반영: ①**hook 조건 협소**(0x88-0xE2 한글만 → 0x20
 정밀 게이트 결과: **Part1 SJIS hook 1565메시지(2485 공백) 렌더**, Part2 면제(313/B11 자체 공백hook, 기존 완료),
 **진짜 잔여 186메시지(188 공백)=Part1 next-ASCII**(숫자/기호 앞 0x20, jump table 렌더라 content render hook 미적용
 — "이동력 3인데 2칸뿐" 등). 잔여 해소엔 jump table 렌더 hook 또는 해당 슬롯 데이터 fullwidth화 필요(follow-up).
+
+### Part1 next-ASCII(숫자/기호 앞 공백) 데이터 변환 — 끝까지 완료(2026-06-25)
+render hook 사각(jump table 경로의 0x20-before-ASCII)을 **데이터 변환**으로 해소. `_fw_before_ascii`
+(build_korean_full.py): enc 내 standalone 0x20의 다음이 ASCII(0x21-0x7E)면 **전각공백 0x8140**(content path
+글리프=정상 렌더)으로 변환, slot slack 한도 greedy. 0x20-before-한글은 hook 처리라 보존(바이트 절약).
+적용 경로: encode_fit / patch_script_row / fixed_zero_text_patch(authoritative writer=script:* 가 import-csv 덮어씀).
+**region 가드**(0xA0-0xE1 대사밴드)로 비대사(UI) 보호.
+
+**다중에이전트 적대검증(워크플로 wf_222b09cd, 5에이전트)**:
+- decode-safety **PASS**: 변환공백 682엔트리 음절경계 침범 0, "이동력 3이지만"·"체력 10"·"수송차는 6이나" 정상
+  디코드. ??40 코드 오인 구조적 불가(high 0x81+low 0x40 = 0x8140 단 하나).
+- regression **PASS**: 4게이트 통과, 변환 180건 100% 대사밴드 내.
+- scan: content 0x20-before-ASCII 8건은 전부 **재배치 orphan 소스/숫자정렬 템플릿**(포인터 미지정=렌더 안 됨),
+  재배치 목적지·렌더 텍스트는 잼 0. 진짜 단어붙음(0x20→한글) 10,552건 정상 공백.
+- 게이트 qa_render_jam을 **content(enc_len) 범위·마지막 writer**로 수정(슬롯 끝 FILL이 다음 구조 ▼와 잼 오인하던
+  156 false positive 제거) → **render-jam 잔여 0**.
+- FAIL 0. 잔여 우려는 비치명(부호소실 정책, greedy 부분변환 경고, 재배치 stray 0xEF — 공백변환과 무관 별도 follow-up).

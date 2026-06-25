@@ -35,24 +35,26 @@ def main():
         return i >= 0 and a < ranges[i][1]
 
     def render_jam(off, maxn):
-        """content 사이의 반각공백(0x20)을 next 바이트 종류로 분류:
+        """content(=enc_len 범위) 내부 반각공백(0x20)을 next 바이트 종류로 분류:
         - sjis: next=SJIS lead(0x81-0xE2, content path) → Part1 render hook이 화면 공백 렌더.
         - asc : next=printable ASCII(0x21-0x7E, jump table 경로) → render hook 미적용 = 잔여.
-        prev_content = 직전이 렌더 글리프(SJIS 2바이트 OR printable)."""
+        ★maxn=enc_len(슬롯 아님). **다음 글자도 content 내부**(i+1<end)여야 잼 — 슬롯 끝 FILL 패딩이
+        다음 구조(▼=0x6B/제어/다음 메시지)와 잼으로 오인되던 false positive 제거(2026-06-25)."""
         i = off
         prev = False
         sjis = asc = 0
         end = off + maxn
-        while i < end and i + 1 < len(out):
+        while i < end:
             b = out[i]
             if b == 0:
                 break
             if b == 0x20:
-                nb = out[i + 1]
-                if prev and 0x81 <= nb <= 0xE2:
-                    sjis += 1
-                elif prev and 0x21 <= nb <= 0x7E:
-                    asc += 1
+                if prev and i + 1 < end:            # 다음 글자가 content 내부일 때만
+                    nb = out[i + 1]
+                    if 0x81 <= nb <= 0xE2:
+                        sjis += 1
+                    elif 0x21 <= nb <= 0x7E:
+                        asc += 1
                 i += 1
                 prev = False
             elif 0x81 <= b <= 0xE2:
@@ -75,17 +77,22 @@ def main():
     )
     P1 = 0xC00000  # Part1/Part2 경계(render-jam은 Part1=0xD8-0xDC, Part2=0xA0-0xA3)
 
-    hook_msgs = hook_total = jam_msgs = jam_total = 0
-    seen = set()
-    worst = []
+    # 주소별 **마지막 writer**(ROM 바이트 = 마지막 write)의 enc_len을 content 범위로 사용.
+    # (import-csv를 script:*/dialogue-override가 덮어쓰는 다중 writer 정합 — enc_len이 실제 content 길이.)
+    last = {}
     for e in wl:
-        a, slot, ko = e[0], e[1], e[5]
-        if not ko or not any("가" <= c <= "힣" for c in ko) or not (0xA00000 <= a < 0xE10000) or a in seen:
+        last[e[0]] = e
+
+    hook_msgs = hook_total = jam_msgs = jam_total = 0
+    worst = []
+    for a in sorted(last):
+        e = last[a]
+        slot, enclen, ko = e[1], e[2], e[5]
+        if not (0xA00000 <= a < 0xE10000) or enclen <= 0:
             continue
-        seen.add(a)
         if in_reloc(a):
             continue
-        sjis, asc = render_jam(a, slot)
+        sjis, asc = render_jam(a, enclen)   # ★content(enc_len) 범위만 — 슬롯 FILL 패딩 제외
         if sjis + asc <= 0:
             continue
         # 렌더 hook 적용 범위:
@@ -103,15 +110,15 @@ def main():
         if residual:
             jam_msgs += 1
             jam_total += residual
-            worst.append((residual, a, "Part1-ASCII(jumptable)", ko))
+            worst.append((residual, a, "Part1-ASCII(jumptable)", str(ko)[:30]))
 
     worst.sort(reverse=True, key=lambda x: x[0])
-    print("=== render-jam 게이트(반각공백 미렌더) ===")
+    print("=== render-jam 게이트(반각공백 미렌더, content=enc_len 범위) ===")
     if HOOK_ON:
         print(f"  ✅ Part1 대사 0x20 렌더 hook ON → Part1 next=SJIS {hook_msgs}메시지({hook_total} 공백) 화면 렌더")
-    print(f"  ⚠ 잔여 {jam_msgs}메시지({jam_total} 공백) — Part2 별도파서 / Part1 next=ASCII(jump table 미hook):")
+    print(f"  ⚠ 잔여 {jam_msgs}메시지({jam_total} 공백) — Part1 next=ASCII(jump table) / 기타:")
     for r, a, tag, ko in worst[:12]:
-        print(f"   0x{a:06X} [{tag}] 잼×{r}: {ko[:30]!r}")
+        print(f"   0x{a:06X} [{tag}] 잼×{r}: {ko!r}")
     print(f"\n=== 결과: render-jam 잔여 {jam_total} 공백/{jam_msgs} 메시지 (Part1 SJIS hook {hook_total} 제외) ===")
     return 0
 
