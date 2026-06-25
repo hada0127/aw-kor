@@ -18983,7 +18983,7 @@ def main():
             # 추가: 병합 line_index 전수 — spaced source가 있는데 in-place가 잼(script/override 덮음)이거나
             # slot 미fit(lvl>=6)이면 단일포인터 메시지시작 coverage 추가(_rp_fit_level이 in-place-jam 포함).
             for _la in _merged_li:
-                if _la in _rp_bteam or not (0xB80000 <= _la < 0xE10000):
+                if not (0xB80000 <= _la < 0xE10000):   # B팀 허용(전각화=렌더링 수정, drift 검증)
                     continue
                 _src = _rp_dlg(_la)
                 if not _src or (_src.count(' ') + _src.count('　')) == 0 or not _rp_fixable(_la):
@@ -19017,7 +19017,9 @@ def main():
                 _a = _e[0]; _slot = _e[1]; _ko = _e[5]
                 if not _ko or not any('가' <= c <= '힣' for c in _ko) or not (0xB80000 <= _a < 0xE10000):
                     continue
-                if _a in _rp_bteam or not _rp_has_renderjam(_a, _slot):
+                # B팀도 허용: 0x20→0x8140은 **렌더링 수정(텍스트 불변)**이라 B팀 제약상 허용(drift로 검증).
+                # B팀 대사도 그동안 잼 렌더됐으므로 전각화로 정상 렌더(재배치 conversion이 공백만 변환).
+                if not _rp_has_renderjam(_a, _slot):
                     continue
                 _ms = _rp_msg_start(_a)
                 if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
