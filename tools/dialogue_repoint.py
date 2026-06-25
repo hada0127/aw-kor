@@ -47,7 +47,7 @@ def _read_table(orig, tbl_off):
     return entries
 
 
-def scan_command_messages(orig, lo=0x08B80000, hi=0x08E10000, opcode=0x19, scan_lo=0xD80000, scan_hi=0xE00000):
+def scan_command_messages(orig, lo=0x08B80000, hi=0x08E10000, opcode=0x19, scan_lo=0xD80000, scan_hi=0xE20000):
     """Part1 커맨드 스트림의 show-message 명령(opcode 0x19) 뒤에 오는 메시지 포인터를 수집.
     (2026-06-23 런타임 트레이싱으로 확증: 캐서린 대사 0xDF5D60 등이 0x19 뒤 포인터로 로드됨.)
     반환: {msg_addr: [ptr_offset...]}. 각 ptr_offset은 ROM 내 4바이트 포인터 워드 위치.
