@@ -18994,7 +18994,7 @@ def main():
                 if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
                     continue
                 _sites = _rp_ptr_index.get(_ms, [])
-                if len(_sites) == 1:
+                if len(_sites) >= 1:   # 다중포인터 지원(repoint가 전 site 갱신)
                     _rp_extra[_ms] = _sites
                     _trusted_added += 1
             st['repoint_trusted_starts'] = _trusted_added
@@ -19023,7 +19023,7 @@ def main():
                 if _ms in _rp_extra or not (0xB80000 <= _ms < 0xE10000):
                     continue
                 _sites = _rp_ptr_index.get(_ms, [])
-                if len(_sites) == 1:
+                if len(_sites) >= 1:   # 다중포인터 지원
                     _rp_extra[_ms] = _sites
                     _rj_added += 1
             st['repoint_renderjam_starts'] = _rj_added

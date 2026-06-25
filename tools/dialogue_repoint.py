@@ -206,7 +206,10 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     _sorted_ref = sorted(referenced_targets)
 
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
+    _relocated_msgs = set()   # 다중포인터 메시지 중복 재배치 방지(1회 재배치 + 전 site 갱신)
     for ptr_off, msg, _tbl in sorted(table_entries):
+        if msg in _relocated_msgs:
+            continue
         lines = msg_lines.get(msg, [])
         if not lines:
             continue
@@ -297,9 +300,11 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             stats['skip_overextended'] += 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_overextended'})
             continue
-        # 안전: 포인터 정확히 1개 & 테이블 안
+        # 안전: 포인터가 1개 이상 & **전부** 테이블 안(2026-06-25 다중포인터 지원: 모든 site가 인식된
+        # 포인터테이블 엔트리면 1회 재배치 후 전 site를 새 주소로 갱신 → 고아 없음. 우연/미인식 포인터가
+        # 섞이면 보수적 skip).
         sites = ptr_sites(msg)
-        if len(sites) != 1 or sites[0] not in table_off_set:
+        if len(sites) < 1 or not all(s in table_off_set for s in sites):
             stats['skip_ptr_ambiguous'] += 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_ptr', 'sites': [hex(s) for s in sites]})
             continue
@@ -376,8 +381,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         free += nlen
         if free % align:
             free += align - (free % align)
-        # 포인터 갱신
-        struct.pack_into('<I', rom, ptr_off, GBA + new_addr)
+        # 포인터 갱신 — 다중포인터면 전 site 갱신(고아 방지)
+        for _s in sites:
+            struct.pack_into('<I', rom, _s, GBA + new_addr)
+        if len(sites) > 1:
+            stats['relocated_multi'] = stats.get('relocated_multi', 0) + 1
+        _relocated_msgs.add(msg)
         stats['relocated'] += 1
         stats['lines_fixed'] += len(fix_addrs)
         manifest.append({
