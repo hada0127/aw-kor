@@ -1786,3 +1786,40 @@ archive/malformed_address_rows.csv 보존.
   세계/대공을 제압하라!/지혜의 고리 섬/반달가슴곰 운하·섬). repoint 362→369 lines. drift 0, QA PASS.
 - **잔여 ~19**: 0xE0xxxx Part1 대사 순차접근(포인터0)·decompose 실패 3·0xA2C484(폭51>박스50 WONTFIX).
   fail.md가 적시한 이벤트/스크립트 시스템 RE(다세션) 필요. ROM SHA b27ba3d.
+
+---
+## [2026-06-25] ★Part1 대사 반각공백(0x20) 렌더 hook 완성 — 단어붙음 근본해결
+
+단어붙음의 진짜 원인(0x20 미렌더)을 **ASM hook 2개로 근본해결**. render-jam 718→11(Part1 707 hook 렌더, 98.5%).
+in-game 확증. codex 37분 미해결 + 11시간+ 추적 끝에 완성.
+
+**파서 구조(런타임 트레이스 확정, state=0x03000E00)**:
+- 화면 위치 = `[state+0x28](base) + [state+0x32](열)×2 + [state+0x33](행)×64`, 계산함수 **0x08B11B80**.
+- caller(0x08B126F0~, 글자당 1회 호출되는 render-one-char): ①0x8b1271e `bl 0x8b11b80`→위치(**파서 전** 계산)
+  ②0x8b12728 파서 ③0x8b12758~ render(0x8b12762 `adds r0,r4; adds r1,r5; bl 0x8b12640`) ④0x8b1277A~ 전진
+  ⑤0x8b12792 `ldrsb [r6]`([state+0x39]) **return 검사**(루프 아님 — 상위가 글자당 호출).
+- **[state+0x34]는 글리프 타일인덱스(저장위치, +2/char=2타일)** — 위치 아님. codex/1차가 이걸 advance해 무효.
+
+**off-by-one 근본**: 위치가 파서 전(0x8b1271e)에 [state+0x32]로 계산 → 0x20 열 advance가 다음 글자 적용.
+
+**hook 2개(build_korean_full.py PART1_DIALOG_SPACE_HOOK / RENDER_HOOK)**:
+1. jump table 0x20엔트리(0xB120F4→0xF30500): 다음=한글이면 [state+0x32](열)+1, 0x20 소비, loop top 복귀.
+2. render site 0x8b12764(**4정렬 필수** — _abs_tramp는 ldr[pc,#0]라 4정렬 site여야; 0x8b12762=2정렬 회피)→
+   0xF30540: render 직전 위치를 [state+0x32]로 **재계산**, 0x8b12640 호출, 0x8b1276A replicate, 0x8b1276C 복귀.
+   ★함정: .after 복귀 ldr offset 오류(`[pc,#8]`→render주소 재로드=무한루프 262853회)→`[pc,#12]`(복귀주소)로 수정.
+
+**검증**: 함수호출 19회(작동본 동일, 무한루프0), 위치 0x20에서 +4(char+2+공백+2), in-game
+"여기까지 온 너라면 그 정도는"(SUCCESS_renderjam_hook_yeogikkaji). **회귀0**: fullwidth "캐서린이 없는 레드스타 군"
+(SUCCESS_..._fullwidth_noregression), Part2 맵라벨 정상. drift0/qa_repoint/integrity/dist 전부 PASS.
+
+**재현**: `python3 tools/build_korean_full.py` → hook 자동 적용. `python3 tools/qa_render_jam.py`(Part1 hook 707 렌더).
+잔여 11=Part2(0xA0-0xA3 별도 파서 0x313/0xB11/0xA3 — follow-up).
+
+### codex 적대 리뷰 반영(2026-06-25)
+codex 지적 3건 반영: ①**hook 조건 협소**(0x88-0xE2 한글만 → 0x20 앞 전각기호 0x81-0x87 미처리) → hook을
+**0x81-0xE2(SJIS content lead)로 확장**(content path>0x77라 render hook 적용, 안전). ②**QA 과면제**(Part1 전체
+면제) → next 바이트 종류로 정밀화: Part1 next=SJIS만 hook 렌더, **Part1 next=ASCII(jump table 경로)는 잔여**.
+③**stale tile** → 여기까지=페이지전환(하지만 다음) 공백 깨끗으로 확증.
+정밀 게이트 결과: **Part1 SJIS hook 1565메시지(2485 공백) 렌더**, Part2 면제(313/B11 자체 공백hook, 기존 완료),
+**진짜 잔여 186메시지(188 공백)=Part1 next-ASCII**(숫자/기호 앞 0x20, jump table 렌더라 content render hook 미적용
+— "이동력 3인데 2칸뿐" 등). 잔여 해소엔 jump table 렌더 hook 또는 해당 슬롯 데이터 fullwidth화 필요(follow-up).

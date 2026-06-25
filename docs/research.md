@@ -1637,3 +1637,29 @@ Phase 2a(단일포인터) 후 추가 해소:
 - 잔여 718 재분류: parent pointer continuation 241(`skip_merged` 206, `no_manifest` 23,
   `skip_ptr` 7, `skip_no_terminator` 4, `skip_decompose` 1), exact_ptr 1, no_parent_ptr 476.
   남은 주 병목은 중간 0x00이 아니라 **포인터 미식별 476 + merged/구조가드 241**이다.
+
+---
+## [2026-06-25] Part1 대사 파서 — 반각공백(0x20) 렌더 완전 RE + hook 주소
+
+런타임 트레이스(mGBA 하네스 break/regs + capstone)로 Part1 대사 파서 완전 규명. state 베이스=0x03000E00.
+
+**화면 위치 공식**: `위치(VRAM 타일맵) = [state+0x28](base) + [state+0x32](열)×2 + [state+0x33](행)×64`.
+계산 함수 **0x08B11B80**(`adds r0,#0x32; ldrb; lsls #1; ldr [r2,#0x28]; adds r2,#0x33; ldrb; lsls #6`).
+- **[state+0x32] = 열(화면 x)**. 글자당 0x8b12782에서 +1.
+- **[state+0x33] = 행(화면 y)**. 줄바꿈 시 +1.
+- **[state+0x34] = 글리프 타일인덱스**(저장위치, 글자당 +2=2타일). **위치 아님**(혼동 주의).
+- [state+0x39] = render-one-char return 플래그(0=정상 1글자 후 return).
+
+**render-one-char 함수(0x08B126F0~0x08B12798)**: 상위 루프가 글자당 1회 호출.
+- 0x8b1271e `bl 0x8b11b80`→위치(**파서 실행 전** 계산, off-by-one 원인).
+- 0x8b12728 `bl 0x8b12074`(파서 루프). 0x8b12758 render(0x8b1befc 글리프변환 + **0x8b12762** `adds r0,r4;
+  adds r1,r5; bl 0x8b12640`(타일쓰기: tile=[state+0x34]|[state+0x2c], [r1]+[r1+0x40] 2타일)).
+- 0x8b1277A~ 전진([state+0x20]+=2, [state+0x32]+=1, [state+0x34]+=2). 0x8b12792 return검사.
+
+**파서 루프(0x08B12074)**: jump table 0x08B12098+(char-9)×4. 0x20엔트리=**0xB120F4**(원래 0x08B12144=
+byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
+
+**0x20 렌더 hook(완성, build_korean_full.py)**:
+1. table 0xB120F4 → 0x08F30500: 다음=한글(0x88-0xE2)이면 [state+0x32]+1, 0x20 소비, 0x08B1207D 복귀.
+2. render site **0x8b12764**(4정렬, _abs_tramp ldr[pc,#0] 요건) → 0x08F30540: 위치 [state+0x32] **재계산**
+   (파서가 0x20 소비 후이므로 정확), 0x8b12640 호출, 0x8b1276A(adds r0,r4) replicate, 0x08B1276C 복귀.

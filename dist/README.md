@@ -6,7 +6,7 @@ distributed here; build outputs stay under `output/`.
 ## Current Release
 
 - Patch set: `game_wars_korean_full_2026-06-25.bps` / `game_wars_korean_full_2026-06-25.ips`
-- Target ROM SHA-256: `71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942`
+- Target ROM SHA-256: `ad6652eb4d212e7945e78f349c386bca0db620108aa4a95d41aebee255c6d4b3`
 - Target size: 16777216 bytes
 
 Apply the BPS patch to `Game Boy Wars Advance 1+2 (Japan).gba`. IPS is included

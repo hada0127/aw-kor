@@ -9902,6 +9902,61 @@ PART2_HOOK_A3_SPACE_FILE = HOOK_FILE + 0x340
 PART2_HOOK_SPACE_313_FILE = HOOK_FILE + 0x360
 PART2_HOOK_SPACE_B11_FILE = HOOK_FILE + 0x3A0
 PART2_HOOK_SPACE_A2CC_FILE = HOOK_FILE + 0x400   # 맵선택 리스트 렌더러(0x831Bxxx) 공백 핸들러
+# ★Part1 대사 파서 반각공백(0x20) 렌더 hook (2026-06-25 런타임 트레이스 완성, in-game 확증).
+# 화면 위치 = [state+0x28] + [state+0x32]*2 + [state+0x33]*64 (0x8b11b80). 즉 [state+0x32]=열.
+# off-by-one: 위치가 파서 전(0x8b1271e) 계산 → 0x20 열 advance가 다음글자 적용. 그래서 hook 2개:
+#  ①0x20 hook(table 0xB120F4→0xF30500): 다음=한글이면 [state+0x32]+1 후 0x20 소비, loop top 복귀.
+#  ②render hook(site 0x8b12764 4정렬→0xF30540): render 직전 위치를 [state+0x32]로 **재계산** 후
+#    0x8b12640 호출, 0x8b1276A(adds r0,r4) replicate, 0x8b1276C 복귀. → 0x20이 화면 한 칸 차지.
+PART1_DIALOG_SPACE_HOOK_FILE = HOOK_FILE + 0x500
+PART1_DIALOG_SPACE_HOOK_RT = 0x08F30500
+PART1_DIALOG_SPACE_TABLE_ENTRY = 0xB120F4
+PART1_DIALOG_SPACE_HOOK = bytes.fromhex(
+    '286a'    # ldr r0,[r5,#0x20]   byte ptr
+    '4178'    # ldrb r1,[r0,#1]     다음 바이트
+    '8129'    # cmp r1,#0x81        ; SJIS content lead(0x81-0xE2: 전각기호+한글) — content path(>0x77)라 render hook 적용
+    '05d3'    # blo .consume(+0x14)
+    'e229'    # cmp r1,#0xe2
+    '03d8'    # bhi .consume
+    '3223'    # movs r3,#0x32
+    'ea5c'    # ldrb r2,[r5,r3]     [state+0x32] 열
+    '0132'    # adds r2,#1
+    'ea54'    # strb r2,[r5,r3]     열+1
+    '286a'    # .consume ldr r0,[r5,#0x20]
+    '0130'    # adds r0,#1
+    '2862'    # str r0,[r5,#0x20]   0x20 소비
+    '0148'    # ldr r0,[pc,#4]
+    '0047'    # bx r0
+    'c046'    # nop
+    '7d20b108'  # .word 0x08B1207D (loop top)
+)
+PART1_DIALOG_RENDER_HOOK_FILE = HOOK_FILE + 0x540
+PART1_DIALOG_RENDER_HOOK_RT = 0x08F30540
+PART1_DIALOG_RENDER_SITE = 0xB12764               # 4정렬: adds r1,r5; bl 0x8b12640; adds r0,r4
+PART1_DIALOG_RENDER_SITE_EXPECT = bytes.fromhex('291cfff76bff201c')
+PART1_DIALOG_RENDER_HOOK = bytes.fromhex(
+    '3221'    # movs r1,#0x32
+    '625c'    # ldrb r2,[r4,r1]    [state+0x32] 열
+    '5200'    # lsls r2,r2,#1
+    'a16a'    # ldr r1,[r4,#0x28]  base
+    '8918'    # adds r1,r1,r2
+    '3323'    # movs r3,#0x33
+    'e35c'    # ldrb r3,[r4,r3]    [state+0x33] 행
+    '9b01'    # lsls r3,r3,#6
+    'c918'    # adds r1,r1,r3      r1=위치(재계산)
+    '2046'    # mov r0,r4          state
+    '034a'    # ldr r2,[pc,#12]    .after|1
+    '9646'    # mov lr,r2
+    '034b'    # ldr r3,[pc,#12]    0x8b12641
+    '1847'    # bx r3              →render, 복귀 .after
+    '2046'    # .after mov r0,r4   replicate 0x8b1276A
+    '034b'    # ldr r3,[pc,#12]    0x8b1276d
+    '1847'    # bx r3              →0x8b1276C
+    'c046'    # nop
+    '5d05f308'  # .word 0x08F3055D (.after|1)
+    '4126b108'  # .word 0x08B12641 (render)
+    '6d27b108'  # .word 0x08B1276D (복귀)
+)
 PART1_YESNO_HOOK_FILE = 0xF10000
 PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
@@ -10330,6 +10385,13 @@ def main():
     rom[PART2_HOOK_SPACE_A2CC_FILE:PART2_HOOK_SPACE_A2CC_FILE + len(PART2_HOOK_SPACE_A2CC)] = PART2_HOOK_SPACE_A2CC
     assert bytes(rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8]) == PART2_SPACE_A2CC_EXPECT
     rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_A2CC_RT)
+    # Part1 대사 0x20 렌더 hook (2개): table 패치 + 4정렬 render site 트램폴린
+    rom[PART1_DIALOG_SPACE_HOOK_FILE:PART1_DIALOG_SPACE_HOOK_FILE + len(PART1_DIALOG_SPACE_HOOK)] = PART1_DIALOG_SPACE_HOOK
+    assert struct.unpack_from('<I', rom, PART1_DIALOG_SPACE_TABLE_ENTRY)[0] == 0x08B12144
+    struct.pack_into('<I', rom, PART1_DIALOG_SPACE_TABLE_ENTRY, PART1_DIALOG_SPACE_HOOK_RT)
+    rom[PART1_DIALOG_RENDER_HOOK_FILE:PART1_DIALOG_RENDER_HOOK_FILE + len(PART1_DIALOG_RENDER_HOOK)] = PART1_DIALOG_RENDER_HOOK
+    assert bytes(rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8]) == PART1_DIALOG_RENDER_SITE_EXPECT
+    rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8] = _abs_tramp(0, PART1_DIALOG_RENDER_HOOK_RT)
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
     assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT

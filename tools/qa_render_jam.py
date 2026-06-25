@@ -35,31 +35,47 @@ def main():
         return i >= 0 and a < ranges[i][1]
 
     def render_jam(off, maxn):
-        """한글 예약코드 사이의 반각공백(0x20) 수 = 화면 잼 공백."""
+        """content 사이의 반각공백(0x20)을 next 바이트 종류로 분류:
+        - sjis: next=SJIS lead(0x81-0xE2, content path) → Part1 render hook이 화면 공백 렌더.
+        - asc : next=printable ASCII(0x21-0x7E, jump table 경로) → render hook 미적용 = 잔여.
+        prev_content = 직전이 렌더 글리프(SJIS 2바이트 OR printable)."""
         i = off
         prev = False
-        jam = 0
+        sjis = asc = 0
         end = off + maxn
         while i < end and i + 1 < len(out):
             b = out[i]
             if b == 0:
                 break
             if b == 0x20:
-                j = i + 1
-                nk = j + 1 < len(out) and 0x88 <= out[j] <= 0xE2 and ((out[j] << 8) | out[j + 1]) in RES
-                if prev and nk:
-                    jam += 1
+                nb = out[i + 1]
+                if prev and 0x81 <= nb <= 0xE2:
+                    sjis += 1
+                elif prev and 0x21 <= nb <= 0x7E:
+                    asc += 1
                 i += 1
                 prev = False
             elif 0x81 <= b <= 0xE2:
-                prev = ((b << 8) | out[i + 1]) in RES
+                prev = True
                 i += 2
+            elif 0x21 <= b <= 0x7E:
+                prev = True
+                i += 1
             else:
                 prev = False
                 i += 1
-        return jam
+        return sjis, asc
 
-    jam_msgs = jam_total = 0
+    # Part1 대사 파서(0x8b12xxx) 0x20 렌더 hook 적용 여부(2026-06-25 완성, in-game 확증).
+    # 적용 시 Part1 영역(>=0xC00000) interior 0x20은 화면에 공백 렌더 → 잼 아님(hook 처리).
+    HOOK_ON = (
+        len(out) > 0xB120F8
+        and int.from_bytes(out[0xB120F4:0xB120F8], "little") == 0x08F30500
+        and out[0xB12764:0xB1276C] == bytes.fromhex("004800474105f308")
+    )
+    P1 = 0xC00000  # Part1/Part2 경계(render-jam은 Part1=0xD8-0xDC, Part2=0xA0-0xA3)
+
+    hook_msgs = hook_total = jam_msgs = jam_total = 0
     seen = set()
     worst = []
     for e in wl:
@@ -69,19 +85,34 @@ def main():
         seen.add(a)
         if in_reloc(a):
             continue
-        j = render_jam(a, slot)
-        if j > 0:
+        sjis, asc = render_jam(a, slot)
+        if sjis + asc <= 0:
+            continue
+        # 렌더 hook 적용 범위:
+        #  - Part1(>=0xC00000): render hook이 content path(next=SJIS 0x81-0xE2)만 처리. next=ASCII(jump table)는 잔여.
+        #  - Part2(<0xC00000): 별도 파서(0x313/0xB11) 자체 공백 hook이 0x20 렌더(기존 "완료"). → 면제.
+        if a >= P1:
+            hooked = sjis if HOOK_ON else 0
+            residual = asc
+        else:
+            hooked = sjis + asc       # Part2 공백 hook 렌더
+            residual = 0
+        if hooked:
+            hook_msgs += 1
+            hook_total += hooked
+        if residual:
             jam_msgs += 1
-            jam_total += j
-            worst.append((j, a, ko))
+            jam_total += residual
+            worst.append((residual, a, "Part1-ASCII(jumptable)", ko))
 
-    worst.sort(reverse=True)
-    print(f"=== render-jam 게이트(반각공백 미렌더): 화면 단어붙음 {jam_msgs}개 메시지({jam_total} 공백) ===")
-    print("  worst:")
-    for j, a, ko in worst[:10]:
-        print(f"   0x{a:06X} 잼공백×{j}: {ko[:34]!r}")
-    # 게이트: 0 목표이나 비-재배치(무포인터/guard) 한계 존재 → 회귀 감시용 상한선
-    print(f"\n=== 결과: render-jam {jam_msgs} (비-재배치 한계분; 회귀=증가 감시) ===")
+    worst.sort(reverse=True, key=lambda x: x[0])
+    print("=== render-jam 게이트(반각공백 미렌더) ===")
+    if HOOK_ON:
+        print(f"  ✅ Part1 대사 0x20 렌더 hook ON → Part1 next=SJIS {hook_msgs}메시지({hook_total} 공백) 화면 렌더")
+    print(f"  ⚠ 잔여 {jam_msgs}메시지({jam_total} 공백) — Part2 별도파서 / Part1 next=ASCII(jump table 미hook):")
+    for r, a, tag, ko in worst[:12]:
+        print(f"   0x{a:06X} [{tag}] 잼×{r}: {ko[:30]!r}")
+    print(f"\n=== 결과: render-jam 잔여 {jam_total} 공백/{jam_msgs} 메시지 (Part1 SJIS hook {hook_total} 제외) ===")
     return 0
 
 
