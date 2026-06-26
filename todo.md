@@ -200,6 +200,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_routes_contact.png`,
     `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_filmstrip.png`.
     구 `final_menu.ss0` 계열에서 보이던 single/link 하단 노이즈는 stale savestate VRAM/text cache로, coldboot fresh route에서는 재현되지 않았다.
+  - [x] 2026-06-26 추가 스크린샷 triage: 같은 contact의 `single_map` 화면에 보이는 `??????` 3행은
+    한글 fallback/깨짐이 아니라 원본 `？` placeholder 데이터다(잠금/unknown 맵명으로 추정). read-watch 결과 `0x08DF8C2A` 12B가
+    맵 리스트 렌더 중 144회 읽혔고, 원본/패치 모두 `8148`×6으로 byte-identical이다.
+    4x crop에서도 물음표 글리프 겹침/타일 깨짐은 보이지 않는다. 증거 `data/part1_single_map_question_watch_20260626.json`.
 - [ ] E3 잔여 미번역 triage(제어마커/slot overflow/no group 자동제외분 수동검수).
 - [ ] E4 표기흔들림 통일(국가명 붙임/띄움) + 구 apply_proper_nouns.py deprecate.
 - [ ] E5 VRAM 팔레트 캡처(0x05000000/0x05000200) 스프라이트 실색.

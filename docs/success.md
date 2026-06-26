@@ -2196,6 +2196,8 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   굵은 라벨 외곽선/획을 제거하는 것이다.
 - **검증**: 최종 output 3종 SHA는
   `8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e`로 동기화했다.
+  추가 스크린샷 triage로 `single_map` 화면의 `??????`는 `0x08DF8C2A` 원본 `？？？？？？`
+  placeholder read-hit(144회), 원본/패치 byte-identical, 4x crop상 글리프 정상 분리를 확인해 깨짐 아님으로 분류했다.
   `qa_visual_regions.py`가 모든 Part1 option block의 compact bbox/palette와 도움말 intrusive-dark 상한을 검사한다.
   리뷰 지적을 반영해 이 게이트는 구 savestate 대신 coldboot fresh route를 기본 입력으로 쓴다.
   모드 선택/싱글/통신 필름스트립과 사용자 화면 대응 라우트 7장은

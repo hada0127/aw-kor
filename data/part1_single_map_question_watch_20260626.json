@@ -1,0 +1,20 @@
+{
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
+  "screen": "Part1 single battle map select question-placeholder list",
+  "screenshot_reference": "docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_routes_contact.png",
+  "visual_crop": "docs/screenshots/part1_menu_label_shrink_2026-06-26/single_map_question_rows_crop_4x.png",
+  "route": "coldboot Part1 post-name menu, enter operation once, return, DOWN,A,A",
+  "watch_address": "0x08DF8C2A",
+  "watch_length": 12,
+  "watch_access": "read",
+  "watch_log": "temp/part1_single_map_question_watch_20260626/watch_08df8c2a.log",
+  "watch_hits": 144,
+  "source_bytes_original": "814881488148814881488148",
+  "source_bytes_patched": "814881488148814881488148",
+  "decoded_source": "？？？？？？",
+  "classification": "original SJIS question-mark placeholder, not Hangul fallback or bitmap corruption",
+  "visual_classification": "The 4x crop shows separated question-mark glyphs with no visible overlap or tile corruption.",
+  "interpretation": "Likely an unknown/locked-map placeholder, but the runtime proof only establishes that the displayed text is original 0x8148 question-mark data preserved byte-identically.",
+  "notes": "The visible ?????? rows are rendered from the original SJIS question-mark bytes at 0x00DF8C2A. The patched ROM preserves the same bytes byte-identically."
+}

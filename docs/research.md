@@ -1790,6 +1790,21 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **해결**: `/api/groups` 응답을 address 기준으로 `dialogue_map.json` canonical line에 재동기화해 실제 id/slot/kind를
   내려준다. `/api/line`은 payload에 address가 있으면 address를 우선해 저장 대상을 찾고, 프런트는 group/list 양쪽에서
   `{id,address,ko}`를 전송한다. dry-run 저장을 추가해 보호 주소 차단을 데이터 변경 없이 검증할 수 있게 했다.
+
+---
+## [2026-06-26] Part1 single map list `??????` 스크린샷 triage
+
+- **관찰**: `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_routes_contact.png`의
+  `single_map` 패널에는 맵 리스트 3행이 `??????`로 보인다. 한글 fallback처럼 보일 수 있으므로 별도 확인했다.
+- **런타임 확인**: current SHA `8a34a570…`에서 같은 coldboot route로 `watchaddr 08DF8C2A 12 r`를 걸고
+  Part1 대전→맵 선택에 진입하면 `0x08DF8C2A`가 144회 read-hit한다.
+- **바이트 확인**: 원본 ROM과 패치 ROM 모두 `0x00DF8C2A..0x00DF8C35`가
+  `814881488148814881488148`(`？？？？？？`)으로 byte-identical이다.
+- **시각 확인**: `docs/screenshots/part1_menu_label_shrink_2026-06-26/single_map_question_rows_crop_4x.png` crop에서 물음표 6개는
+  서로 분리되어 보이며 글리프 겹침/타일 깨짐은 관측되지 않는다.
+- **판정**: 이 화면의 `??????`는 패치가 만든 한글 렌더 fallback이나 비트맵 손상이 아니라, 원본의 `？`
+  placeholder 데이터를 그대로 표시한 것이다. 잠금/unknown 맵명이라는 의미 해석은 추정으로만 둔다. 증거 요약은
+  `data/part1_single_map_question_watch_20260626.json`.
 - **검증**: 새 서버에서 `코스모랜드 설명을` 검색 시 `0x00DF5E12` member id는 `29424`로 보정되고,
   stale 문장 `당신에게는,코스모 랜드에 대해` 검색 hit는 0이다. `/api/line` dry-run 저장은
   `빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소` 오류로 차단된다.
