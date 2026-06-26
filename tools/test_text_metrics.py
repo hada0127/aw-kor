@@ -38,12 +38,13 @@ def corpus():
 
 def test_unmapped():
     """unmapped_syllables: 2350 폰트에 없는 음절을 잡는다(빈 입력/정상 입력은 빈 목록)."""
-    sset = TM._load_syllable_set()
+    sset = TM.syllable_set()
     assert sset, '2350 음절셋 로드 실패'
     assert TM.unmapped_syllables('안녕하세요', sset) == []
     assert TM.unmapped_syllables('', sset) == []
-    # 거의 안 쓰이는 음절은 셋에 없을 수 있음 — 함수가 동작만 하면 됨
-    assert isinstance(TM.unmapped_syllables('aA1 가', sset), list)
+    assert TM.unmapped_syllables('힣뷁힣 안녕', sset) == ['힣', '뷁']
+    assert TM.has_unmapped_syllables('힣', sset)
+    assert not TM.has_unmapped_syllables('안녕', sset)
     print('  ✓ unmapped_syllables 동작')
 
 

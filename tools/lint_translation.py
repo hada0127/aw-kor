@@ -12,8 +12,8 @@
 - replacement (error) : U+FFFD 깨진 문자
 - control (error)     : 개행/탭 외 제어문자
 - byte_budget (error) : 재인코딩 바이트수 > length(원본 예산). 초과 시 인접 데이터 손상.
-                        (인코딩 모델: 한글/비ASCII=2바이트, ASCII=1바이트 — execute_phase5_4와 동일)
-- glyph (error)       : Galmuri11-Condensed BDF에 없는 한글 (현 폰트는 11,172 전체라 거의 0)
+                        (판정 모델: build_korean_full.encode_fit, raw 길이는 text_metrics.encoded_len)
+- glyph (error)       : ROM에 주입된 2350 완성형 맵에 없는 한글 음절
 - jp_kana (warning)   : 가나 잔존 (미번역 또는 추출 노이즈)
 - jp_kanji (warning)  : 한자 잔존
 - jp_punct (warning)  : 일본 문장부호
@@ -33,14 +33,32 @@
   python tools/lint_translation.py --json temp/lint.json # 전체 결과 JSON
 """
 import csv
+import json
 import re
 import os
+import sys
 import argparse
 from collections import Counter
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV_PATH = os.path.join(BASE, 'data', 'translation_for_import.csv')
-BDF_PATH = os.path.join(BASE, 'reference', 'fonts', 'Galmuri11-Condensed.bdf')
+OVERRIDES_PATH = os.path.join(BASE, 'data', 'dialogue_overrides.json')
+BTEAM_BASELINE = os.path.join(BASE, 'data', 'bteam_baseline.json')
+sys.path.insert(0, os.path.join(BASE, 'tools'))
+import text_metrics as TM  # noqa: E402
+from build_korean_full import (  # noqa: E402
+    ADDRESS_TEXT_OVERRIDES,
+    SAFE_MIN_ADDR,
+    SOURCE_TEXT_OVERRIDES,
+    SYLCODE,
+    TEXT_OVERRIDES,
+    V56_SKIP,
+    encode_fit,
+    encode_text,
+    in_deny,
+    load_direct_script_metadata,
+    load_slots,
+)
 
 # 유니코드 범위는 리터럴 한자/가나가 의도와 다른 코드포인트로 입력되는 함정을 피해
 # 명시적 \u 이스케이프로 지정한다.
@@ -53,23 +71,6 @@ HEXTOK = re.compile(r'0x[0-9A-Fa-f]{2,}')                    # 누출된 포인�
 REPL = '�'
 
 
-def enc_len(s):
-    """재인코딩 바이트수. 한글/비ASCII=2, ASCII=1 (execute_phase5_4.py EUC-KR 모델)."""
-    return sum(1 if ord(c) < 0x80 else 2 for c in s)
-
-
-def load_glyphs():
-    """Galmuri11-Condensed BDF에 존재하는 코드포인트 집합."""
-    try:
-        import sys
-        sys.path.insert(0, os.path.join(BASE, 'tools'))
-        from bdf import load_bdf
-        gl, _ = load_bdf(BDF_PATH)
-        return set(gl.keys())
-    except Exception:
-        return None  # BDF 못 읽으면 글리프 검사 생략
-
-
 def is_noise(ja):
     """원문(ja)이 추출 노이즈(가나/한자/기호 범벅, 한글 무의미)인지 휴리스틱."""
     if not ja:
@@ -80,7 +81,53 @@ def is_noise(ja):
     return False
 
 
-def check(ja, ko, glyphs, budget):
+def canonical_addr(value):
+    try:
+        addr = int(str(value or '').strip(), 16)
+    except (TypeError, ValueError):
+        return None
+    if not 0 <= addr <= 0xFFFFFFFF:
+        return None
+    return '0x%08X' % addr
+
+
+def load_dialogue_overrides(path=OVERRIDES_PATH):
+    if not os.path.exists(path):
+        return {}
+    try:
+        raw = json.load(open(path, encoding='utf-8')) or {}
+    except Exception:
+        return {}
+    out = {}
+    for key, value in raw.items():
+        ckey = canonical_addr(key)
+        if ckey:
+            out[ckey] = value
+    return out
+
+
+def load_bteam_addresses(path=BTEAM_BASELINE):
+    try:
+        data = json.load(open(path, encoding='utf-8')) or {}
+    except Exception:
+        return set()
+    return {canonical_addr(k) for k in (data.get('overrides') or {}) if canonical_addr(k)}
+
+
+def effective_korean(addr, ja, ko, dialogue_overrides):
+    """빌드 입력 기준 유효 번역. CSV → build_korean_full 오버라이드 → dialogue_overrides 순."""
+    if addr in ADDRESS_TEXT_OVERRIDES:
+        ko = ADDRESS_TEXT_OVERRIDES[addr]
+    elif ja in SOURCE_TEXT_OVERRIDES and not any('가' <= ch <= '힣' for ch in ko):
+        ko = SOURCE_TEXT_OVERRIDES[ja]
+    ko = ADDRESS_TEXT_OVERRIDES.get(addr, TEXT_OVERRIDES.get(ko, ko))
+    caddr = '0x%08X' % addr
+    if caddr in dialogue_overrides:
+        ko = dialogue_overrides[caddr]
+    return (ko or '').strip()
+
+
+def check(addr, ja, ko, sylset, budget, syl_to_code, skip_byte_budget=False, check_build_encoding=True):
     """한 행의 korean에 대한 (severity, rule, message) 리스트."""
     issues = []
     def add(sev, rule, msg): issues.append((sev, rule, msg))
@@ -98,18 +145,36 @@ def check(ja, ko, glyphs, budget):
         add('error', 'control', f'제어문자: {[hex(ord(c)) for c in ctrl]}')
 
     # --- 바이트 예산 (삽입 손상 방지) ---
-    if budget is not None:
-        e = enc_len(ko)
-        if e > budget:
-            add('error', 'byte_budget', f'재인코딩 {e}B > 예산 {budget}B (초과 {e-budget}B)')
+    if skip_byte_budget:
+        pass
+    elif budget is not None:
+        raw_len = TM.encoded_len(ko)
+        if syl_to_code:
+            enc, level = encode_fit(ko, budget, syl_to_code, Counter(), addr)
+            if enc is None:
+                add('error', 'byte_budget', f'재인코딩 {raw_len}B > 예산 {budget}B (encode_fit 실패)')
+        elif raw_len > budget:
+            add('error', 'byte_budget', f'재인코딩 {raw_len}B > 예산 {budget}B (초과 {raw_len-budget}B)')
     else:
         add('info', 'empty_budget', 'length 비었거나 비숫자')
 
-    # --- 글리프 (폰트에 없는 한글) ---
-    if glyphs is not None:
-        bad = sorted({c for c in ko if HANGUL.match(c) and ord(c) not in glyphs})
+    # --- 글리프 (ROM 주입 2350 완성형 밖 한글) ---
+    if sylset:
+        bad = TM.unmapped_syllables(ko, sylset)
         if bad:
-            add('error', 'glyph', f'폰트에 없는 글자: {"".join(bad)}')
+            add('error', 'glyph', f'2350 미수록 음절: {"".join(bad)}')
+    if check_build_encoding and syl_to_code:
+        dropped = Counter()
+        try:
+            encoded = encode_text(ko, syl_to_code, dropped)
+        except KeyError as exc:
+            add('error', 'glyph', f'2350 미수록 음절: {exc.args[0]}')
+            encoded = b''
+        if dropped:
+            sample = ''.join(ch for ch, _n in dropped.most_common(12))
+            add('error', 'render_unsupported', f'렌더 불가 문자 drop: {sample}')
+        if not encoded and ko.strip():
+            add('error', 'empty_encoding', '빌드 인코딩 결과가 비어 있음')
 
     # --- 일본어 잔존 ---
     if KANA.search(ko):
@@ -155,18 +220,34 @@ def main():
     ap.add_argument('--hide-noise', action='store_true', help='추출 노이즈 행 제외')
     a = ap.parse_args()
 
-    glyphs = load_glyphs()
-    if glyphs is None:
-        print('[경고] Galmuri BDF를 못 읽어 glyph 검사 생략')
+    sylset = TM.syllable_set()
+    if not sylset:
+        print('[경고] 2350 음절 맵을 못 읽어 glyph 검사 생략')
+    dialogue_overrides = load_dialogue_overrides()
+    bteam_addrs = load_bteam_addresses()
+    try:
+        syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+    except Exception:
+        syl_to_code = {}
+    direct_script_slots, _direct_members = load_direct_script_metadata()
+    build_slots = load_slots()
 
     rows = []
     n_total = n_noise = 0
+    seen_csv_addrs = set()
     with open(a.csv, encoding='utf-8') as f:
         for r in csv.DictReader(f):
+            ja = (r.get('japanese') or '')
+            try:
+                addr = int((r.get('address') or '').strip(), 16)
+            except (TypeError, ValueError):
+                addr = None
             ko = (r.get('korean') or '').strip()
+            if addr is not None:
+                seen_csv_addrs.add(addr)
+                ko = effective_korean(addr, ja, ko, dialogue_overrides)
             if not ko:
                 continue
-            ja = (r.get('japanese') or '')
             n_total += 1
             noise = is_noise(ja)
             if noise:
@@ -175,7 +256,21 @@ def main():
                 continue
             ln = (r.get('length') or '').strip()
             budget = int(ln) if ln.isdigit() else None
-            for sev, rule, msg in check(ja, ko, glyphs, budget):
+            if addr is not None and isinstance(budget, int):
+                budget = max(budget, direct_script_slots.get(addr, 0))
+            skip_byte_budget = ('0x%08X' % addr) in bteam_addrs if addr is not None else False
+            override_applied = ('0x%08X' % addr) in dialogue_overrides if addr is not None else False
+            check_build_encoding = (
+                addr is not None
+                and addr >= SAFE_MIN_ADDR
+                and isinstance(budget, int)
+                and budget > 0
+                and addr not in V56_SKIP
+                and not in_deny(addr, addr + budget)
+                and (bool(HANGUL.search(ko)) or override_applied)
+            )
+            for sev, rule, msg in check(addr, ja, ko, sylset, budget, syl_to_code,
+                                        skip_byte_budget, check_build_encoding):
                 if a.severity != 'all' and sev != a.severity:
                     continue
                 if a.rule and rule != a.rule:
@@ -183,6 +278,28 @@ def main():
                 rows.append({'address': r.get('address', ''), 'severity': sev,
                              'rule': rule, 'message': msg, 'noise': noise,
                              'ja': ja[:40], 'ko': ko.replace('\n', '⏎')[:70]})
+
+    for caddr, ko in sorted(dialogue_overrides.items()):
+        try:
+            addr = int(caddr, 16)
+        except (TypeError, ValueError):
+            continue
+        if addr in seen_csv_addrs or addr < SAFE_MIN_ADDR or addr in V56_SKIP:
+            continue
+        budget = max(build_slots.get(addr, 0), direct_script_slots.get(addr, 0))
+        if budget <= 0 or in_deny(addr, addr + budget):
+            continue
+        n_total += 1
+        skip_byte_budget = caddr in bteam_addrs
+        for sev, rule, msg in check(addr, '[dialogue_override]', (ko or '').strip(), sylset,
+                                    budget, syl_to_code, skip_byte_budget):
+            if a.severity != 'all' and sev != a.severity:
+                continue
+            if a.rule and rule != a.rule:
+                continue
+            rows.append({'address': caddr, 'severity': sev, 'rule': rule, 'message': msg,
+                         'noise': False, 'ja': '[dialogue_override]',
+                         'ko': (ko or '').replace('\n', '⏎')[:70]})
 
     by = Counter((x['severity'], x['rule']) for x in rows)
     cnt = Counter(x['severity'] for x in rows)
@@ -194,7 +311,6 @@ def main():
         print(f'  [{sev:7}] {rule:14} {n}')
 
     if a.json:
-        import json
         json.dump(rows, open(a.json, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
         print(f'→ {a.json} ({len(rows)}건)')
     if a.limit:

@@ -8,12 +8,12 @@
   ASCII 0x20~0x7E → 1
   그 외           → 2  (SJIS 폴백 / ？)
 이 모듈을 build/qa/scene_editor가 공통 사용해 "한글=2 추정" 같은 드리프트를 없앤다.
-(todo: 공통 text_metrics 추출 + py↔js 일치 테스트 + 2350 미수록 음절 차단)
 
 JS 미러는 _JS_ENCLEN 문자열로 박제하고, tests에서 node로 실행해 동일성을 강제한다.
 """
 import json
 import os
+from functools import lru_cache
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SYLCODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
@@ -53,19 +53,39 @@ def visual_cells(text):
     return w
 
 
-def _load_syllable_set(path=None):
+@lru_cache(maxsize=None)
+def syllable_set(path=None):
+    """빌드에 주입된 한글 음절 셋. 기본은 2350 완성형, 없으면 구 1030 맵 fallback."""
     for p in ([path] if path else [SYLCODE_2350, SYLCODE]):
         if p and os.path.exists(p):
             data = json.load(open(p, encoding='utf-8'))
-            return set(data.keys())
-    return set()
+            return frozenset(data.keys())
+    return frozenset()
+
+
+def _load_syllable_set(path=None):
+    """옛 테스트/도구 호환용 별칭."""
+    return syllable_set(path)
 
 
 def unmapped_syllables(text, sylset=None):
-    """폰트(2350 완성형)에 없는 한글 음절 목록 — 인코딩 시 ？로 깨질 글자."""
+    """폰트(2350 완성형)에 없는 한글 음절 목록 — 인코딩 시 ?로 깨질 글자.
+
+    반환값은 입력 순서를 보존한 unique 목록이다. 같은 글자가 여러 번 나오면 UI/QA 메시지에
+    중복 표시하지 않는다.
+    """
     if sylset is None:
-        sylset = _load_syllable_set()
-    return [ch for ch in (text or '') if '가' <= ch <= '힣' and ch not in sylset]
+        sylset = syllable_set()
+    bad = []
+    for ch in text or '':
+        if '가' <= ch <= '힣' and ch not in sylset and ch not in bad:
+            bad.append(ch)
+    return bad
+
+
+def has_unmapped_syllables(text, sylset=None):
+    """미수록 한글 음절이 하나라도 있는가."""
+    return bool(unmapped_syllables(text, sylset))
 
 
 def fits(text, slot_bytes):

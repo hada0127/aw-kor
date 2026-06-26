@@ -14,7 +14,9 @@
       "note": "2편 메인 메뉴 캠페인 설명(A3 글리프캐시 렌더러). 짧은 시스템/메뉴 문구용(≤16자). [검증됨]"
     },
     "part1_welcome": {
-      "slot": "0x00A7AB56",
+      "slot": "0x00A7AA56",
+      "repoint_msg": "0x00DF8E14",
+      "repoint_fixed": "0x00DF8E16",
       "len": 37,
       "terminator": "none",
       "pad": "0x20",
@@ -34,7 +36,7 @@
         "threshold": 1200,
         "min_score": 250
       },
-      "note": "1편 튜토리얼 첫 welcome 대사창(per-char dialog 렌더러). 실제 표시 command-stream 복사본 0xA7AB56의 37B span만 패치하고 뒤따르는 0x6B/0x0A 제어코드는 보존한다. 컷신 자동진행으로 고정 프레임 캡처가 불안정하므로 frame-sweep으로 대사창 프레임을 선택한다. [검증됨]"
+      "note": "1편 튜토리얼 첫 welcome 대사창(per-char dialog 렌더러). temp/repoint_manifest.json의 0xDF8E14->new_addr와 fixed 0xDF8E16 delta로 현재 표시 command-stream span을 계산한다(현재 fallback 0xA7AA56, 37B). 뒤따르는 0x6B/0x0A 제어코드는 보존한다. 컷신 자동진행으로 고정 프레임 캡처가 불안정하므로 frame-sweep으로 대사창 프레임을 선택한다. [검증됨]"
     }
   },
   "_experimental_part1": {

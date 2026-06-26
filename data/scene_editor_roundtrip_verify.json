@@ -2,11 +2,11 @@
   "summary": {
     "generated_on": "2026-06-26",
     "server": "http://127.0.0.1:8782",
-    "rom_sha256": "6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8",
+    "rom_sha256": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91",
     "scene_count": 78,
     "dialogue_group_count": 10336,
     "sprite_count": 1990,
-    "editable_member_count": 23411,
+    "editable_member_count": 23374,
     "bteam_editable_member_count": 3260,
     "current_dry_run_failures": 0,
     "bteam_confirm_failures": 0,
@@ -49,11 +49,11 @@
         "slot": 52,
         "expected_hex": "88408840884088408840884088408840884088408840884088408840884088408840884088408840884088408840884020202020",
         "actual_hex": "88408840884088408840884088408840884088408840884088408840884088408840884088408840884088408840884020202020",
-        "build_output_tail": "art1_check_label: 6\n  part1_name_ui_labels: 8\n  part2_command_menu_icon: 6\n  part2_action_menu_icon_labels: 14\n  part2_mission_obj: 1\n  part2_operation_prompt_labels: 58\n  part2_lets_go_obj: 1\n  part2_battle_start_day_overlay: 592\n  part2_mission_number: 32\n  part2_bg_mission_word: 1\n  part2_result_summary: 1\n  part2_result_success_overlay: 5\n  part2_result_failure_overlay: 2\n  part2_result_congratulations: 1\n  part2_air_mission_title: 1\n  part2_air_supremacy_title: 1\n  part2_level_label: 4\n  part2_check_label: 10\n  part2_companion_hud: 1\n  part2_day_hud: 8\n  part2_funds_hud: 32\n  residual_ascii_labels: 66\n  common_battle_ascii_labels: 294\n  battle_defense_label_tiles: 10\n  backup_utility_tables: 0\n  part2_domino_co_name: 19\n  part2_campaign_header: 48\n  part2_redstar_region: 48\n  part2_prologue_logo: 24\n  world_map_label_tiles: 150\n  title_hangul_assets: 48\n  name_honorifics: 1\n  pair_title_glyphs: 258\n  unmapped chars (167): {'劔': 102, 'イ': 14, '吠': 13, 'ン': 12, '勦': 10, '蕗': 10, 'ッ': 10, 'ク': 10, 'ト': 9, '凉': 9}\n  punct_strip_fallback(level>=6): 362\n→ temp/scene_editor_roundtrip_direct_script.gba (16MB, chk recomputed), overflow 리포트 temp/scene_editor_roundtrip_encode_report.csv\n"
+        "build_output_tail": "art2_action_menu_icon_labels: 14\n  part2_mission_obj: 1\n  part2_operation_prompt_labels: 58\n  part2_lets_go_obj: 1\n  part2_battle_start_day_overlay: 592\n  part2_mission_number: 32\n  part2_bg_mission_word: 1\n  part2_result_summary: 1\n  part2_result_success_overlay: 5\n  part2_result_failure_overlay: 2\n  part2_result_congratulations: 1\n  part2_air_mission_title: 1\n  part2_air_supremacy_title: 1\n  part2_level_label: 4\n  part2_check_label: 10\n  part2_companion_hud: 1\n  part2_day_hud: 8\n  part2_funds_hud: 32\n  residual_ascii_labels: 66\n  common_battle_ascii_labels: 294\n  battle_defense_label_tiles: 10\n  backup_utility_tables: 0\n  part2_domino_co_name: 19\n  part2_campaign_header: 48\n  part2_redstar_region: 48\n  part2_prologue_logo: 24\n  world_map_label_tiles: 150\n  title_hangul_assets: 48\n  name_honorifics: 1\n  pair_title_glyphs: 258\n  sprite_overrides: 0\n  sprite_overrides_skipped: 0\n  sprite_overrides_ignored: 0\n  unmapped chars (152): {'劔': 102, '吠': 13, '勦': 10, '蕗': 10, 'ッ': 9, '凉': 9, 'ク': 7, 'イ': 7, '劵': 6, 'ン': 6}\n  punct_strip_fallback(level>=6): 362\n→ temp/scene_editor_roundtrip_direct_script.gba (16MB, chk recomputed), overflow 리포트 temp/scene_editor_roundtrip_encode_report.csv\n"
       }
     },
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 251.46
+    "elapsed_sec": 258.16
   },
   "failures": [],
   "bteam_confirm_failures": [],

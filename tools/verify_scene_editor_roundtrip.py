@@ -39,11 +39,13 @@ DIALOGUE_MAP = ROOT / "data" / "dialogue_map.json"
 DEFAULT_OUT = ROOT / "data" / "scene_editor_roundtrip_verify.json"
 BUILD_SAMPLE_ROM = ROOT / "temp" / "scene_editor_roundtrip_direct_script.gba"
 BUILD_SAMPLE_REPORT = ROOT / "temp" / "scene_editor_roundtrip_encode_report.csv"
+INTEGRITY_MAP = ROOT / "temp" / "integrity_map.json"
 SPRITE_BUILD_LAYOUTS = ROOT / "data" / "sprite_build_layouts.json"
 OBJLABEL_SPRITES = ROOT / "data" / "objlabel_sprites.json"
 
 sys.path.insert(0, str(ROOT / "tools"))
 import build_korean_full as B  # noqa: E402
+import text_metrics as TM  # noqa: E402
 
 
 def sha256(path: Path) -> str:
@@ -75,21 +77,6 @@ def scene_items(base_url: str, scene_id: str) -> dict:
     return http_json(base_url, f"/api/scene/items?{q}")
 
 
-def enc_len(text: str) -> int:
-    n = 0
-    for ch in text or "":
-        c = ord(ch)
-        if "가" <= ch <= "힣" or ch == "　":
-            n += 2
-        elif ch == "\n":
-            n += 1
-        elif 0x20 <= c <= 0x7E:
-            n += 1
-        else:
-            n += 2
-    return n
-
-
 def alternate_candidates(text: str, slot: int | None) -> list[str]:
     """Small in-slot alternatives for B-team confirm dry-runs."""
     candidates: list[str] = []
@@ -116,7 +103,7 @@ def alternate_candidates(text: str, slot: int | None) -> list[str]:
         if not cand or cand == text or cand in seen:
             continue
         seen.add(cand)
-        if not isinstance(slot, int) or slot <= 0 or enc_len(cand) <= slot:
+        if not isinstance(slot, int) or slot <= 0 or TM.encoded_len(cand) <= slot:
             out.append(cand)
     return out
 
@@ -200,22 +187,30 @@ def build_direct_script_sample(sample: dict) -> dict:
         str(BUILD_SAMPLE_REPORT.relative_to(ROOT)),
         "--no-sync-outputs",
     ]
+    integrity_existed = INTEGRITY_MAP.exists()
+    integrity_bytes = INTEGRITY_MAP.read_bytes() if integrity_existed else None
     try:
-        run = subprocess.run(
-            cmd,
-            cwd=ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            timeout=360,
-        )
-    except subprocess.TimeoutExpired as exc:
-        return {
-            "ok": False,
-            "error": "build timed out",
-            "timeout_sec": exc.timeout,
-            "output_tail": ((exc.stdout or "")[-4000:] if isinstance(exc.stdout, str) else ""),
-        }
+        try:
+            run = subprocess.run(
+                cmd,
+                cwd=ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                timeout=360,
+            )
+        except subprocess.TimeoutExpired as exc:
+            return {
+                "ok": False,
+                "error": "build timed out",
+                "timeout_sec": exc.timeout,
+                "output_tail": ((exc.stdout or "")[-4000:] if isinstance(exc.stdout, str) else ""),
+            }
+    finally:
+        if integrity_existed:
+            INTEGRITY_MAP.write_bytes(integrity_bytes or b"")
+        elif INTEGRITY_MAP.exists():
+            INTEGRITY_MAP.unlink()
     if run.returncode != 0:
         return {
             "ok": False,

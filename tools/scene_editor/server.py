@@ -55,6 +55,7 @@ OUTPUT_VARIANTS = {
 }
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
+REVIEW_ONLY_SCENE_IDS = {"98_extraction_noise_review"}
 
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8",
@@ -252,21 +253,7 @@ def public_scene(sc):
 # ── 요구7: 바이트 예산 계산(codex 교정 — 대사 슬롯은 NUL 미포함) ──────────
 def encoded_len(text: str) -> int:
     """한글=2 / 전각공백=2 / 검증 ASCII=1 / 기타=2(경고대상). dialogue slot 기준 바이트수."""
-    if TM:
-        return TM.encoded_len(text)
-    n = 0
-    for ch in text:
-        if "가" <= ch <= "힣":
-            n += 2
-        elif ch == "　":
-            n += 2
-        elif ch == "\n":
-            n += 1
-        elif 0x20 <= ord(ch) <= 0x7E:
-            n += 1
-        else:
-            n += 2
-    return n
+    return TM.encoded_len(text)
 
 
 def build_fit_budget(text: str, slot):
@@ -276,6 +263,19 @@ def build_fit_budget(text: str, slot):
         return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": True}
     if not B:
         return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": raw <= slot}
+    dropped = collections.Counter()
+    try:
+        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped)
+    except KeyError as exc:
+        return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False,
+                "unsupported": [exc.args[0]], "error": "폰트 미수록 음절"}
+    if dropped:
+        return {"raw_len": raw, "encoded_len": len(raw_enc), "fit_level": 99, "fits": False,
+                "unsupported": [ch for ch, _n in dropped.most_common()],
+                "error": "렌더 불가 문자"}
+    if not raw_enc and (text or "").strip():
+        return {"raw_len": raw, "encoded_len": 0, "fit_level": 99, "fits": False,
+                "unsupported": [], "error": "빌드 인코딩 결과가 비어 있음"}
     enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter())
     if enc is None:
         return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False}
@@ -314,9 +314,12 @@ def is_bteam(address):
 
 def canon_addr(address):
     try:
-        return "0x%08X" % int(address, 16)
+        addr = int(str(address or "").strip(), 16)
     except (ValueError, TypeError):
         return None
+    if not 0 <= addr <= 0xFFFFFFFF:
+        return None
+    return "0x%08X" % addr
 
 
 def canonical_override_map(raw):
@@ -423,13 +426,7 @@ def member_slot(address):
 
 def unsupported_syllables(text):
     """2350 셋에 없는 완성형 한글(인게임 '?' 깨짐 원인)을 반환. ASCII/공백/줄바꿈은 무시."""
-    s2c = syl_codes()
-    bad = []
-    for ch in text:
-        c = ord(ch)
-        if 0xAC00 <= c <= 0xD7A3 and ch not in s2c and ch not in bad:
-            bad.append(ch)
-    return bad
+    return TM.unmapped_syllables(text, frozenset(syl_codes().keys()))
 
 
 def is_building():
@@ -604,6 +601,7 @@ def scene_items(scene, want="all"):
     si = sprite_index()
     dov = load_json(DE.OVERRIDES_PATH, {}) or {}
     out_d, out_s = [], []
+    review_only_scene = scene.get("id") in REVIEW_ONLY_SCENE_IDS
     if want in ("all", "dialogue"):
         dialogue_entries = [(gid, None) for gid in scene.get("dialogue_ids", [])]
         if want == "all":
@@ -627,6 +625,9 @@ def scene_items(scene, want="all"):
                 ko = dov.get(m.get("address"), m.get("ko") or "")
                 budget = line_budget(m)
                 budget.update(build_fit_budget(ko, budget.get("slot")))
+                if review_only_scene and (budget.get("unsupported") is not None or budget.get("error")):
+                    budget["editable"] = False
+                    budget["reason"] = "저신뢰 추출 후보 검토 bucket — 현재 값이 빌드 렌더러에서 보존되지 않음"
                 budget["bteam"] = is_bteam(m.get("address"))
                 if budget["bteam"]:
                     budget["bteam_warn"] = "쪼롱이님(B팀) 권위 번역 — 신중히 편집(우발 변형은 qa_bteam_drift 게이트가 차단)"
@@ -1037,6 +1038,10 @@ class Handler(BaseHTTPRequestHandler):
                         "bteam_baseline": _want}
         slot = member_slot(addr)
         fit = build_fit_budget(ko, slot)
+        if fit.get("unsupported") is not None:
+            return {"ok": False, "error": fit.get("error") or "렌더 불가 문자",
+                    "unsupported": fit.get("unsupported"), "encoded_len": fit["encoded_len"],
+                    "raw_len": fit["raw_len"], "slot": slot}
         if isinstance(slot, int) and not fit["fits"]:
             return {"ok": False, "error": "슬롯 초과 %dB>%dB" % (fit["raw_len"], slot), "over": True,
                     "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}

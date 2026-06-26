@@ -26,6 +26,7 @@ from build_korean_full import (
     encode_fit,
     in_deny,
 )
+import text_metrics as TM
 
 
 def load_found():
@@ -163,25 +164,6 @@ def load_direct_patch_texts():
     return direct
 
 
-def enc_len(ko):
-    n = 0
-    for ch in ko:
-        if '가' <= ch <= '힣':
-            n += 2
-        elif 0x20 <= ord(ch) <= 0x7E:
-            n += 1
-        else:
-            n += 2
-    return n
-
-
-def vwidth(s):
-    w = 0
-    for ch in s:
-        w += 1 if (ch == ' ' or 0x20 <= ord(ch) <= 0x7E) else 2
-    return w
-
-
 def main():
     slots, found_texts = load_found()
     found_rows = load_found_rows()
@@ -208,7 +190,7 @@ def main():
         if level >= 6:
             # 부호 보존 후보가 모두 슬롯 초과 → ASCII 문장부호 제거 폴백 사용(가독성 손실).
             compact_shortened += 1
-        if vwidth(ko) > vwidth(ja):
+        if TM.visual_cells(ko) > TM.visual_cells(ja):
             wider += 1
 
     with open(TRANS, newline='') as f:

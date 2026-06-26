@@ -30,6 +30,7 @@ PATCHED_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
 HARNESS = Path("/tmp/mgbah")
 CACHE = ROOT / "temp" / "preview_cache"
+REPOINT_MANIFEST = ROOT / "temp" / "repoint_manifest.json"
 
 # ── Canvas 레지스트리 ──────────────────────────────────────────────────────
 # 각 canvas: 빠르게 도달 가능한 화면 + 그 화면이 표시하는 텍스트 슬롯.
@@ -77,6 +78,49 @@ def _load_registry():
 
 
 _load_registry()
+
+
+def _parse_int(value):
+    try:
+        return int(str(value).strip(), 16) if isinstance(value, str) else int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _resolve_slot(cv: dict) -> int:
+    fallback = _parse_int(cv.get("slot"))
+    source_fixed = _parse_int(cv.get("repoint_fixed"))
+    if source_fixed is None or not REPOINT_MANIFEST.exists():
+        if fallback is None:
+            raise ValueError("canvas slot is missing")
+        return fallback
+    source_msg = _parse_int(cv.get("repoint_msg"))
+    try:
+        rows = json.loads(REPOINT_MANIFEST.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        if fallback is None:
+            raise
+        return fallback
+    for row in rows if isinstance(rows, list) else []:
+        if row.get("status") != "relocated":
+            continue
+        fixed = {_parse_int(v) for v in (row.get("fixed") or [])}
+        if source_fixed not in fixed:
+            continue
+        msg = _parse_int(row.get("msg"))
+        new_addr = _parse_int(row.get("new_addr"))
+        if source_msg is not None and msg != source_msg:
+            continue
+        old_base = source_msg if source_msg is not None else msg
+        if msg is None or new_addr is None or old_base is None:
+            continue
+        delta = source_fixed - old_base
+        if delta < 0 or delta >= int(row.get("new_len") or 0):
+            continue
+        return new_addr + delta
+    if fallback is None:
+        raise ValueError("canvas slot could not be resolved")
+    return fallback
 
 
 def _syl_to_code():
@@ -224,6 +268,7 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     if canvas not in CANVASES:
         raise ValueError(f"unknown canvas {canvas!r}; have {list(CANVASES)}")
     cv = CANVASES[canvas]
+    slot = _resolve_slot(cv)
     if base_rom is None:
         base_rom = ORIG_ROM if lang == "ja" else PATCHED_ROM
     base_rom = Path(base_rom)
@@ -242,7 +287,7 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
         st = base_rom.stat(); rom_id = f"{st.st_size}:{int(st.st_mtime)}"
     except OSError:
         rom_id = base_rom.name
-    cv_sig = json.dumps({"slot": cv.get("slot"), "len": cv.get("len"),
+    cv_sig = json.dumps({"slot": slot, "configured_slot": cv.get("slot"), "len": cv.get("len"),
                          "terminator": terminator, "pad": pad_byte,
                          "nav": cv.get("nav"), "sweep": cv.get("sweep")},
                         ensure_ascii=False, sort_keys=True)
@@ -262,7 +307,7 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     work = CACHE / f"_rom_{key}.gba"
     shutil.copyfile(base_rom, work)
     b = bytearray(work.read_bytes())
-    b[cv["slot"]: cv["slot"] + cv["len"]] = payload
+    b[slot: slot + cv["len"]] = payload
     work.write_bytes(b)
     drv = MGBADriver(work, CACHE, HARNESS)
     meta = {}

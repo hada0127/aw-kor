@@ -1241,8 +1241,10 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
   동일 nav라도 하이재킹 텍스트 길이에 따라 결과 화면이 달라짐(welcome↔이름그리드). 입력 대기로
   안정적인 건 이름 입력 **그리드**(텍스트 슬롯 미렌더)뿐.
 - **2026-06-26 갱신**: frame-sweep 구현 후 `part1_welcome`은 정식 승격. 단순 원본 슬롯
-  `0xDF8E16` 패치는 화면에 반영되지 않았고, 실제 표시 command-stream 복사본 `0xA7AB56`
-  37B span을 NUL 없이 패치해야 했다(뒤따르는 `0x6B/0x0A` 제어코드 보존 필수). nav 후
+  `0xDF8E16` 패치는 화면에 반영되지 않았고, 실제 표시 command-stream 복사본 37B span을 NUL 없이
+  패치해야 했다(뒤따르는 `0x6B/0x0A` 제어코드 보존 필수). 이후 repoint 배치가 바뀌며 초기
+  `0xA7AB56`은 뒤쪽 안내문으로 밀렸고, 현재 정본은 `temp/repoint_manifest.json`의
+  `0xDF8E14 -> new_addr` + fixed `0xDF8E16` delta로 계산한다(현재 fallback `0x00A7AA56`). nav 후
   frame 108/120/132/144를 sweep하고 `score_box=[20,124,220,148]`에서 ink score 최대 프레임을 선택한다.
   `tools/verify_preview_canvases.py`가 payload A/B 픽셀 차이를 검사해 잘못된 slot ready 회귀를 차단한다.
   battle 대사 canvas는 아직 **대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증** 필요. savestate는 VRAM stale이라
@@ -1699,3 +1701,32 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 **0xEC312E 잔존 사유**(잼): ① B팀 보호주소(텍스트 단축=제약위반, drift는 override 기준이라 미검출 — 단축 시도→
 즉시 revert) ② visual_cells 51 > max_cells 50(전각 재배치 시 58 half-cell, 단일라인 도움말박스 폭 초과 → 잘림 위험).
 즉 포인터는 있으나 **B팀+폭** 이중 제약으로 재배치 불가. 동류 0xA2C378/0xA2C484/0xDFD082도 B팀+폭(51-52셀).
+
+---
+## [2026-06-26] D1 text metrics/preview canvas 재검증 사실
+
+- **text metrics 권위**: Python 쪽 byte 길이/visual cell/2350 미수록 음절 판정은 `tools/text_metrics.py`가 정본이다.
+  JS `encLen`은 `tools/scene_editor/static/app.js`의 UI 표시용 mirror이며, `tools/test_text_metrics.py`가 CSV/override/
+  dialogue group 코퍼스 전체로 py↔js parity를 검증한다.
+- **lint budget 권위**: `tools/lint_translation.py`의 byte-budget 판정은 빌드와 같은 `build_korean_full.encode_fit`을
+  호출해야 한다. direct `script:*`는 found_texts 첫 조각 길이가 아니라 build direct span을 써야 false positive가 없다.
+  `dialogue_overrides.json` overlay가 최종 권위이므로 CSV만 보는 lint는 stale/over-budget 오판을 만든다.
+- **B팀 byte-budget 예외**: B팀 baseline 문장은 편집/드리프트 보호 대상이지 일반 lint 단축 대상이 아니다.
+  B팀 주소의 byte-budget 문제는 `qa_bteam_drift.py`, repoint/fit 게이트, build overflow report가 보호한다.
+- **part1_welcome canvas drift**: repoint 블롭은 새 빌드마다 배치가 움직일 수 있다. SHA `7e79670c…`에서는 welcome
+  runtime command-stream text span이 `0x00A7AA56..0x00A7AA7A`(37B, 뒤 `0x6B/0x0A` 보존)이다.
+  이전 `0x00A7AB56`은 같은 블롭의 뒤쪽 `"1대 대전"` 안내문으로 이동해 payload diff 0이 된다. 그러므로 canvas는
+  "캡처가 nonblank"가 아니라 `tools/verify_preview_canvases.py`의 A/B payload pixel diff로만 ready 판정한다.
+  `tools/preview_capture.py`는 이 취약성을 줄이기 위해 `temp/repoint_manifest.json`에서 `msg=0xDF8E14`,
+  `fixed=0xDF8E16`, `new_addr`를 찾아 `new_addr + 2`를 현재 slot으로 계산하고, manifest가 없을 때만
+  레지스트리 fallback slot을 쓴다.
+- **scene screenshot provenance**: `verify_scene_editor_cdp.py`의 stale_screenshot failure는 화면 렌더 오류가 아니라
+  `temp/scene_screenshots/<checkpoint>_patched/provenance.json`의 `rom_sha256` 불일치다. ROM SHA 변경 후에는
+  `tools/capture_scene_screenshots.py --force`로 카탈로그 참조 screenshot/extra를 재캡처하고
+  `tools/audit_scene_entrypoints.py --strict` stale 0을 먼저 만든 뒤 CDP 검증을 돌린다.
+- **review-only bucket 편집 정책**: `98_extraction_noise_review`는 화면에 연결하지 않는 저신뢰 추출 후보 보관소다.
+  `scene_editor/server.py`는 이 scene 전체를 차단하지 않고, 현재 값이 build renderer에서 보존되지 않는
+  unsupported/error member만 non-editable로 내린다. 따라서 B팀 실제 문장 `0x00DF3AFA`처럼 렌더 가능한 문장은
+  review bucket 안에서도 `editable:true`와 B팀 경고를 유지한다. 노이즈 sentinel은 빌더에서 더 강하게 막는다:
+  `문자 깨짐`/`[문자 깨짐]`/`해독·번역·판독 불가(문자 깨짐)`은 `PLACEHOLDER_KO` skip 대상이며,
+  `0x009B2DFA` 포함 고주소 8행의 `：！｀￣ヾ〃仝々浦〆〇〇` 패턴은 원본 바이트를 보존한다.

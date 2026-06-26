@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "92aec563",
-    "sha1": "aa53fade891ea3ec7adb563e25a44a5db61a13fe",
-    "sha256": "6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8"
+    "crc32": "bdd3b9d0",
+    "sha1": "5de1177a30967a13b2436b0267d66cc990cb991d",
+    "sha256": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8",
-    "game_wars_korean_final.gba": "6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8",
-    "game_wars_korean_title_test.gba": "6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8"
+    "game_wars_korean_full.gba": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91",
+    "game_wars_korean_final.gba": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91",
+    "game_wars_korean_title_test.gba": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-06-26.bps",
-    "size": 1042825,
+    "size": 1042233,
     "crc32": "2144df1c",
-    "sha1": "b2fb7db601d5fedfbe510d675ae7f851a9e77cbe",
-    "sha256": "7d67be3a5450d4f950f896f370f6e449d285bcee219afe06399942d923acb9f6",
+    "sha1": "6028fc900e0c74aa5aa2a8e2cbdb4d3e7b335339",
+    "sha256": "67949ed70ffc6678f99b6dcad05009fa734ef8f2314dcd6959c6ad4d65b9430c",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-06-26.ips",
-    "size": 1185220,
-    "crc32": "07e2eec7",
-    "sha1": "a0759a513f1be9a45265c645916fd116e2973122",
-    "sha256": "94a72df5f3b33de6be1f62cf460c4ea23cd47be0bc2ac0b29520dba279dbc845",
+    "size": 1184483,
+    "crc32": "2ef6ff01",
+    "sha1": "7c862a0c9403dee9c83477ae7c594d68f1fa54cc",
+    "sha256": "7383c8c7e07e3c4a27090a42d51d671de009e4dc6cc9af182c0c140a4eb62759",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

@@ -72,6 +72,10 @@ PLACEHOLDER_KO = {
     # 추출 노이즈 마커(비텍스트 영역 오탐) — 과거 skip-set 누락으로 18행이 고주소
     # 그래픽 위에 인코딩되어 비트맵을 손상시켰음(2026-06-17 발견·수정). 재유입 방어.
     '깨진 문자열', '깨진문자열', '[깨진 문자열]', '[깨진문자열]',
+    '문자 깨짐', '문자깨짐', '[문자 깨짐]', '[문자깨짐]',
+    '해독 불가(문자 깨짐)', '해독불가(문자깨짐)',
+    '번역 불가(문자 깨짐)', '번역불가(문자깨짐)',
+    '판독 불가(문자 깨짐)', '판독불가(문자깨짐)',
 }
 OKDANDAN_FONT = os.path.expanduser('~/Library/Fonts/OkDanDan-Bold.otf')
 APPLE_SDGOTHIC_BOLD = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
@@ -121,12 +125,14 @@ DENY_REGIONS = [
     ('noise_graphics', 0x8AAFBC, 0x8AAFCC), ('noise_graphics', 0x8AC8D0, 0x8AC8E0),
     ('noise_graphics', 0x8AFA80, 0x8AFA90), ('noise_graphics', 0x8B31D0, 0x8B31E0),
     ('noise_graphics', 0x8ED57C, 0x8ED58C), ('noise_graphics', 0x8F0124, 0x8F0134),
-    ('noise_graphics', 0x9412A1, 0x9412B1), ('noise_graphics', 0xE88C50, 0xE88C62),
+    ('noise_graphics', 0x9412A1, 0x9412B1), ('noise_graphics', 0x9B2DFA, 0x9B2E12),
+    ('noise_graphics', 0xE88C50, 0xE88C62),
     ('noise_graphics', 0xE8A524, 0xE8A536), ('noise_graphics', 0xE8A548, 0xE8A558),
     ('noise_graphics', 0xE8BE00, 0xE8BE12), ('noise_graphics', 0xE8F550, 0xE8F562),
 ]
 
-FALLBACK = {'·': '・', '∪': '∩', '—': '-', '─': '-', '―': '-', '━': '-', '─': '-'}  # 유니코드 → 렌더 가능 등가(박스드로잉 대시→ASCII '-')
+FALLBACK = {'·': '・', '∪': '∩', '—': '-', '─': '-', '―': '-', '━': '-',
+            '〜': '~', '～': '~'}  # 유니코드 → 렌더 가능 등가(박스드로잉 대시/물결표→ASCII)
 # 전각 구두점 → 반각(1바이트 절약, overflow 시에만 적용). 한국어 가독성 영향 적음.
 HALFWIDTH = {'！': '!', '？': '?', '，': ',', '．': '.', '：': ':', '；': ';',
              '（': '(', '）': ')', '　': ' ', '〜': '~', '～': '~'}
@@ -9483,10 +9489,13 @@ def direct_script_override_text(faddr, fend, members_by_start, overrides):
 
 
 def canonical_override_addr(value):
-    text = str(value or "").strip()
-    if not re.fullmatch(r"0x[0-9A-Fa-f]{1,8}", text):
+    try:
+        addr = int(str(value or "").strip(), 16)
+    except (TypeError, ValueError):
         return None
-    return "0x%08X" % int(text, 16)
+    if not 0 <= addr <= 0xFFFFFFFF:
+        return None
+    return "0x%08X" % addr
 
 
 def encode_text(ko, syl_to_code, unmapped):

@@ -80,7 +80,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `tools/reverify_scene_residual_scans.py` 추가. 기존 raw 가타카나 blanket-pass를 폐기하고
   `game_wars_found_texts.csv` 추출행 + `qa_japanese_residuals.py`의 covered/same-original 판정 재사용.
   raw kana는 별도 observation으로 남기며 설명 없는 항목은 `audit_scene_residual_scans.py --strict`가 critical 처리.
-  현재 SHA `6cb201dc…` 기준 13 container/2884 dialogue, extracted case 13, hit 0, critical 0. `verify_dist_integrity.py`
+  현재 SHA `7e79670c…` 기준 13 container/2881 dialogue, residual/evidence case 14, hit 0, critical 0. `verify_dist_integrity.py`
   배포 게이트에도 연결. E8 시각 evidence까지 포함한 residual audit는 case 14/hit 0/critical 0.
 
 ## C. 웹에디터 전(全) 대사·스프라이트 편집 가능 (쪼롱이 요구)
@@ -95,15 +95,18 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   B팀 변경은 dry-run 단계에서 confirm을 받고, 승인 시 `confirm_bteam:true`로 저장. 취소/초과/미수록은 저장 시작 전 반환.
 - [x] **C6 8782 브라우저/저장 게이트 전수 검증 완료(2026-06-26)**:
   Chrome CDP 63 scene/107 sprite 열람 failure 0. `tools/verify_scene_editor_roundtrip.py`로
-  :8782 라이브 API 기준 78 scene/10,336 dialogue group/1,990 sprite/23,411 editable member dry-run failure 0,
+  :8782 라이브 API 기준 78 scene/10,336 dialogue group/1,990 sprite/23,374 editable member dry-run failure 0,
   B팀 3,260 member confirm dry-run failure 0/skip 0. 대표 실제 저장/원복 2건(일반 0x00DFA5E6, B팀 0x00DFA616)
   성공. direct script 확장-span 대표 0x00D8FD26는 실제 저장→임시 ROM 빌드→build slot 44 < direct slot 52 조건에서 span 바이트 대조 성공. 테스트 후 편집 파일은
   실행 전 해시로 원복.
 
 ## D. 에디터/QA 폴리시 (Phase 6~8 잔여)
-- [ ] D1 공통 `text_metrics.py` 추출 + py↔js 일치 테스트, 2350 미수록 음절 차단 일원화.
-  - 2026-06-26 부분 완료: `test_text_metrics.py` py↔js 25,319 코퍼스 PASS, `scene_editor/server.py`는
-    `text_metrics.encoded_len` 참조로 전환. 단, `qa_text_fit.py`/`lint_translation.py` 등 중복 예산 함수가 남아 완전 SSOT는 아님.
+- [x] D1 공통 `text_metrics.py` 추출 + py↔js 일치 테스트, 2350 미수록 음절 차단 일원화 완료(2026-06-26).
+  `text_metrics.syllable_set()`/`unmapped_syllables()`/`has_unmapped_syllables()`를 추가하고,
+  `qa_text_fit.py`, `lint_translation.py`, `scene_editor/server.py`, `verify_scene_editor_roundtrip.py`가 공통
+  `encoded_len`/2350 음절 권위를 쓰도록 전환했다. `lint_translation.py`는 빌드의 `encode_fit`/direct script span/
+  dialogue override overlay를 반영하며, B팀 baseline byte-budget은 `qa_bteam_drift.py`/repoint 게이트로 위임한다.
+  검증: `tools/test_text_metrics.py` py↔js 25,296 코퍼스 PASS, `lint_translation.py --severity error` 0건.
 - [ ] D2 인게임 대사 박스 셀 폭 실측 → 줄당 최대 글자수(현재 fragment slot 총량 권위).
 - [x] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX 완료(2026-06-26).
   :8782 `/api/state`가 output full/final/title_test SHA 동기성을 `output_sync`로 노출하고, `/api/build` 완료 직후
@@ -111,12 +114,17 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `output SHA 검증`을 표시. `tools/verify_scene_editor_apply_state.py`가 clean→mtime dirty→restore 상태를
   비파괴 검증하고, `tools/verify_scene_editor_cdp.py`로 상단 DOM + Chrome CDP 63 scene/107 sprite failure 0 UI 회귀도 확인.
   CDP 리포트는 scene별 중간 저장으로 내구화.
-- [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(현재 part2_menu만 ready).
+- [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(part1_welcome/part2_menu ready, battle dialogue pending).
   - 2026-06-26 부분 완료: `tools/preview_capture.py`에 frame-sweep 선택(`sweep.frames`/`score_box`)과
     NUL 없는 command-stream span 패치(`terminator:none`, `pad`) 지원 추가. `part1_welcome` canvas는 실제 표시
-    복사본 `0x00A7AB56` 37B span + frame 108/120/132/144 sweep으로 승격했고,
+    복사본 `0x00A7AA56` 37B span + frame 108/120/132/144 sweep으로 승격했고,
     `tools/verify_preview_canvases.py`가 active canvas 2개(part1_welcome, part2_menu)에 대해 서로 다른 payload가
     실제 캡처 픽셀을 바꾸는지 검증한다. 남은 범위: battle dialogue canvas 신뢰성 확보.
+  - 2026-06-26 재검증: 현재 repoint SHA `7e79670c…`에서 이전 `0x00A7AB56`은 뒤쪽 안내문으로 밀려 payload diff 0이 됨.
+    ROM prefix 디코드로 welcome runtime span을 `0x00A7AA56..0x00A7AA7A`로 재확정했고,
+    `preview_capture.py`는 `temp/repoint_manifest.json`의 `0xDF8E14 -> new_addr`, fixed `0xDF8E16` delta로 slot을 자동 계산
+    (fallback `0x00A7AA56`)하도록 보강했다.
+    `verify_preview_canvases.py` 결과 failure 0(`part1_welcome` diff 314px, `part2_menu` diff 7383px).
   - 2026-06-26 추가 조사: `31_battle_dialog` 캡처는 이름과 달리 대사창이 아닌 전투/정보 UI 화면이며 provenance도
     구 SHA stale라 battle dialogue canvas 근거로 사용 금지. `89a_common_battle_surrender_confirm`,
     `89b_common_battle_defeat_comm_messages`는 실제 대사 화면이지만 최종 savestate를 slot hijack하면 payload diff 0
@@ -128,7 +136,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   override SHA/records/applied/skipped/ignored와 LZ77 `compressed_size <= comp_size` 결과를 남긴다.
   `tools/audit_sprite_override_report.py --strict`와 `verify_dist_integrity.py`의 `sprite override fit` 게이트가
   non-empty override의 stale report, 재압축 초과, size mismatch, skip을 critical로 막는다. 현재 override 0건,
-  report ok/skipped 0, output 3종 SHA `6cb201dc…` 유지.
+  report ok/skipped 0, output 3종 SHA `7e79670c…` 유지.
+  추가로 claude/agy 리뷰 지적 반영: `문자 깨짐`/`[문자 깨짐]`/`해독·번역·판독 불가(문자 깨짐)` sentinel은
+  `PLACEHOLDER_KO` skip으로 원본 보존. 고주소 sentinel 8행(0x009411A5..0x009EB69E)은 원본==출력 바이트로 확인.
 
 ## E. 백로그 (독립 트랙 — 결함 0 달성 후/병행)
 - [ ] E1 전체 의미 audit(JA↔KO 전수 LLM 판정) — 오역·의미축소·뉘앙스.

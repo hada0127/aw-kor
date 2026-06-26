@@ -21,9 +21,9 @@
     "sprites_unassigned_text_candidate": 0,
     "sprites_unassigned_font": 1,
     "dialogue_groups_total": 9061,
-    "dialogue_game_scene_assigned": 5689,
+    "dialogue_game_scene_assigned": 5684,
     "dialogue_assigned": 9061,
-    "dialogue_review_only": 3372,
+    "dialogue_review_only": 3377,
     "dialogue_unassigned": 0
   },
   "scenes": [
@@ -756,7 +756,6 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_0083FF0C",
         "g_00D835BC",
         "g_00DF8DB2",
         "g_00DF8DD2",
@@ -780,7 +779,7 @@
         "lz77_00C102A8"
       ],
       "counts": {
-        "dialogue": 19,
+        "dialogue": 18,
         "sprite": 1
       },
       "entrypoint": {
@@ -3502,9 +3501,6 @@
         "g_00DF392F",
         "g_00DF3996",
         "g_00DF3A32",
-        "g_00DF3AC3",
-        "g_00DF3AD2",
-        "g_00DF3AFA",
         "g_00DF422E",
         "g_00DF426E",
         "g_00DF42A6",
@@ -3519,7 +3515,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 108,
+        "dialogue": 105,
         "sprite": 0
       },
       "related_dialogue_scene_ids": [
@@ -9389,7 +9385,6 @@
         "g_0097DE08",
         "g_009B1FF9",
         "g_009B2D78",
-        "g_009B2DFA",
         "g_009B2E47",
         "g_009B36E4",
         "g_009B3790",
@@ -9425,7 +9420,7 @@
         "lz77_00C1BAA0"
       ],
       "counts": {
-        "dialogue": 62,
+        "dialogue": 61,
         "sprite": 2
       },
       "entrypoint": {
@@ -11848,6 +11843,7 @@
         "g_0083FEAD",
         "g_0083FEC5",
         "g_0083FEDD",
+        "g_0083FF0C",
         "g_0087FB48",
         "g_008808B6",
         "g_00898230",
@@ -12071,6 +12067,7 @@
         "g_009B297C",
         "g_009B2989",
         "g_009B2AB4",
+        "g_009B2DFA",
         "g_009B2F5C",
         "g_009B3021",
         "g_009B3031",
@@ -13126,6 +13123,9 @@
         "g_00D830D0",
         "g_00D83198",
         "g_00DA432C",
+        "g_00DF3AC3",
+        "g_00DF3AD2",
+        "g_00DF3AFA",
         "g_00DF8C2A",
         "g_00DF8C3A",
         "g_00DF8C62",
@@ -13266,7 +13266,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3372,
+        "dialogue": 3377,
         "sprite": 0
       }
     },

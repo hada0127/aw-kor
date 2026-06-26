@@ -1889,7 +1889,7 @@ codex/agy/claude 엄격 리뷰가 지적한 "green check가 자기확인" 문제
   browser 검증 및 E8 후속 확인과 함께 해석한다.
 - **감사 하드닝**: `tools/audit_scene_residual_scans.py`가 `hit`뿐 아니라 `translation_residual`,
   `raw_kana_unexplained_count`도 strict critical로 본다. `verify_dist_integrity.py` 배포 게이트에 연결했다.
-  현재 SHA `6cb201dc…` 기준 13 container/2884 dialogue, extracted case 13, hit 0, critical 0.
+  당시 SHA `6cb201dc…` 기준 13 container/2884 dialogue, extracted case 13, hit 0, critical 0.
 - **raw kana observation 투명화**: 이름 그리드 charset continuation(0xDA4342)과 공통 통신 numeric/control table의
   단일 `ソ`(0xEE22AC)는 좁은 allowlist와 reason으로만 허용. `0xEE22AC`는 잔류 문장 후보는 아니나, UI 노출 여부
   보강 확인은 todo E8에 남김.
@@ -1915,7 +1915,7 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **C6 라운드트립 검증 도구화**: `tools/verify_scene_editor_roundtrip.py` 추가. 라이브 :8782 API에서 모든 scene의
   editable 대사 member에 대해 실제 저장 API와 같은 `/api/dialogue/line dry_run`을 호출한다. 전체 쓰기는 churn을 만들기
   때문에 dry-run을 기본으로 하고, 대표 2건만 실제 저장 후 원복한다.
-- **C6 결과**: 현재 ROM SHA `6cb201dc…` 기준 78 scene, 10,336 dialogue group, 1,990 sprite,
+- **C6 결과**: 당시 ROM SHA `6cb201dc…` 기준 78 scene, 10,336 dialogue group, 1,990 sprite,
   23,411 editable member dry-run failure 0. B팀 editable 3,260 member는 미승인 dry-run confirm 요구 +
   승인 dry-run 성공 흐름 failure 0/skip 0. 실제 저장/원복 샘플은 일반 `0x00DFA5E6`와 B팀 `0x00DFA616` 2건 모두 성공.
   direct script 확장-span 대표 `0x00D8FD26`는 실제 저장→임시 ROM 빌드→build slot 44 < direct slot 52 조건에서 span 바이트 expected/actual 대조까지 성공.
@@ -1961,7 +1961,7 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **CDP 리포트 내구성**: `tools/verify_scene_editor_cdp.py`는 상단 상태 DOM(`적용됨`, `output SHA 검증`,
   다운로드 활성)을 직접 단언하고, `temp/browser_verify/all_scene_editor_verify.json`을 검증 시작/scene별 진행/완료
   시점에 갱신해 중간 실패 때도 진행 증거를 남긴다.
-- **검증 결과**: 현재 ROM SHA `6cb201dc…` 기준
+- **검증 결과**: 당시 ROM SHA `6cb201dc…` 기준
   `python3 tools/verify_scene_editor_apply_state.py` PASS
   (`rom_sha256 == output_sha256 == 6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8`).
   실제 Chrome CDP에서 상단 상태 DOM은 `ROM 6cb201dc81d0d234 · 16MB · 적용됨· output SHA 검증`,
@@ -1974,8 +1974,9 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **frame-sweep 엔진**: `tools/preview_capture.py`에 `sweep.frames`/`score_box` 기반 프레임 선택을 추가했다.
   고정 프레임 1장 캡처 대신 nav 후 여러 프레임을 찍고 대사창 ROI ink score가 가장 큰 프레임을 최종 PNG로 사용한다.
 - **command-stream span 패치**: NUL 종료 슬롯 외에 `terminator:none` + `pad` 옵션을 지원한다. 1편 welcome은
-  원본 슬롯 `0xDF8E16`이 아니라 실제 표시 복사본 `0x00A7AB56` 37B span을 패치해야 했고, 뒤따르는
-  `0x6B/0x0A` 제어코드는 보존해야 대사창이 유지된다.
+  원본 슬롯 `0xDF8E16`이 아니라 실제 표시 복사본 37B span을 패치해야 했고, 뒤따르는
+  `0x6B/0x0A` 제어코드는 보존해야 대사창이 유지된다. 초기 `0x00A7AB56` 주소는 이후 repoint에서 뒤쪽 안내문으로
+  이동했으며, 현재는 `temp/repoint_manifest.json` 기반 동적 slot 계산이 정본이다.
 - **part1_welcome 승격**: `data/preview_canvases.json`에 `part1_welcome` 추가. `scene_19a1_part1_tutorial_opening`
   scene이 `canvas=ready`가 됐다. probe 결과 `캡처테스트입니다`가 실제 mGBA 캡처에 반영됨.
 - **검증 도구**: `tools/verify_preview_canvases.py` 추가. active canvas 2개(`part1_welcome`, `part2_menu`)에 대해
@@ -2002,7 +2003,47 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   raw decoded size, LZ77 `compressed_size`/`comp_size`, skipped reason이 들어간다.
 - `tools/audit_sprite_override_report.py --strict`를 추가했다. non-empty override에서 report 누락/stale,
   `ok=false`, skipped record, applied LZ77의 cap 초과를 critical로 실패시킨다.
-- `verify_dist_integrity.py`에 `sprite override fit` 게이트를 연결했다. 현재 override 0건 기준 report
-  `applied=0/skipped=0/ignored=0`, output full/final/title_test SHA는 기존 `6cb201dc…`로 유지.
+- `verify_dist_integrity.py`에 `sprite override fit` 게이트를 연결했다. 당시 override 0건 기준 report
+  `applied=0/skipped=0/ignored=0`, output full/final/title_test SHA는 당시 `6cb201dc…`로 유지.
 - temp 검증: 원본 `lz77_000228AC` indices override는 `compressed_size 368 <= comp_size 605`로 applied,
   의도적으로 줄인 grid는 size mismatch skipped로 audit 실패를 확인했다.
+
+---
+## [2026-06-26] D1 text metrics SSOT 완료 + 현재 SHA 전수 검증
+
+이번 라운드는 `7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91` 기준으로 문서/배포/에디터
+증거를 다시 맞췄다.
+
+- **text metrics SSOT**: `tools/text_metrics.py`에 2350 음절 집합(`syllable_set`)과
+  `unmapped_syllables`/`has_unmapped_syllables`를 추가했다. `qa_text_fit.py`, `lint_translation.py`,
+  `scene_editor/server.py`, `verify_scene_editor_roundtrip.py`가 공통 `encoded_len`/2350 미수록 음절 권위를 쓰도록 정리했다.
+- **lint 빌드권위 정합화**: `lint_translation.py`는 `build_korean_full.encode_fit`을 byte-budget 권위로 쓰고,
+  `dialogue_overrides.json` 최종 overlay와 direct script span을 반영한다. B팀 baseline 주소는 byte-budget lint 대상에서
+  제외하고 `qa_bteam_drift.py`/repoint 무결성 게이트가 보호한다.
+- **리뷰 적발 결함 수정**: codex 리뷰가 B-team override 11건의 CO 파워명이 카타카나로 남아 실제 출력이 blank/drop될 수 있음을 적발했다.
+  `메테오 스트라이크` 등 CSV의 한국어 권위문으로 `data/dialogue_overrides.json`/`bteam_baseline.json`을 맞췄고,
+  `qa_bteam_drift.py` drift 0과 ROM 역디코드로 확인했다.
+- **렌더 불가 문자 차단/노이즈 보존**: `lint_translation.py`와 :8782 저장 게이트가 `encode_text` drop을 실패로 처리하게 했다.
+  agy/claude 리뷰 후 `98_extraction_noise_review`의 non-editable 조건은 build renderer가 보존하지 못하는 unsupported/error member로만 좁혔다.
+  B팀 실제 문장 `0x00DF3AFA`는 API에서 `editable:true`/B팀 경고 노출을 확인했다. `문자 깨짐`/`[문자 깨짐]`/
+  `해독·번역·판독 불가(문자 깨짐)` sentinel은 `PLACEHOLDER_KO` skip으로 원본 보존하며, 고주소 sentinel 8행
+  (`0x009411A5..0x009EB69E`, `0x009B2DFA` 포함)은 원본==출력 바이트로 확인했다.
+  `verify_scene_editor_roundtrip.py`는 임시 direct-script build 후 `temp/integrity_map.json`을 원복하며,
+  roundtrip 전후 map SHA `498ff629…` 동일 + `qa_integrity_map.py` PASS로 확인했다.
+- **D4 회귀 보정**: 새 repoint 후 `part1_welcome` runtime span이 `0x00A7AA56..0x00A7AA7A`로 이동했다.
+  기존 `0x00A7AB56`은 뒤쪽 안내문 위치라 payload diff 0이었고, `verify_preview_canvases.py`가 이를 잡았다.
+  레지스트리는 `temp/repoint_manifest.json`의 `0xDF8E14 -> new_addr`, fixed `0xDF8E16` delta로 slot을 자동 계산하고,
+  `0x00A7AA56`을 fallback으로 둔다. 갱신 후 active canvas 2개 failure 0(`part1_welcome` diff 314px,
+  `part2_menu` diff 7383px).
+- **scene screenshot 현재화**: `tools/capture_scene_screenshots.py --force`로 카탈로그 참조 screenshot/extra 70개를
+  현재 ROM으로 재캡처했다. `tools/audit_scene_entrypoints.py --strict` 결과 game scene 63, audited capture 76,
+  missing/stale 0, critical 0.
+- **:8782 전수 검증**: 라이브 서버에서 `tools/verify_scene_editor_roundtrip.py` 결과 78 scene, 10,336 dialogue group,
+  1,990 sprite, 23,374 editable member dry-run failure 0. B팀 3,260 member confirm failure 0/skip 0. 실제 저장/원복
+  2건과 direct-script 임시 ROM build byte 대조 성공. Chrome CDP `tools/verify_scene_editor_cdp.py`는 63 scene/107 sprite
+  failure 0.
+- **배포/QA 결과**: output 3종 full/final/title_test SHA 동일 `7e79670c…`, BPS/IPS round-trip OK,
+  `verify_dist_integrity.py` PASS. `test_text_metrics.py` py↔js 25,296 코퍼스 PASS, `lint_translation.py --severity error`
+  0건, `qa_text_fit.py` overflow 0/no_ko 0, `audit_scene_residual_scans.py --strict` case 14/hit 0/critical 0,
+  `audit_scene_entrypoints.py --strict` missing/stale 0/critical 0, `qa_integrity_map.py` byte mismatch 0,
+  `qa_visual_regions.py` 23 checks, placeholder 0, B팀 drift 0, `qa_terms_from_rom.py` hard 0, phase6 basic PASS.
