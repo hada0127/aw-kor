@@ -98,7 +98,7 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/defeat_watch.log",
+        "watch_log": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/defeat_watch.log",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
         "required": "watch log의 addr=08xxxxxx 런타임 hit 그룹을 scene_catalog_overrides.json으로 해당 scene에 연결",

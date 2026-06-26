@@ -1989,8 +1989,9 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 
 - `89b_common_battle_defeat_comm_messages`의 최신 캡처는 실제 중간 패배 메시지 화면이지만, 런타임 watch log는
   공통 `0xEFD8A4`가 아니라 Part2 복사본 `0xA34D18`을 읽는다.
-- `data/scene_catalog_overrides.json`로 `g_00A34D18`~`g_00A34DB0`을 89b에 이동 연결했다. 재생성 후
-  `89b` dialogue count는 12, `26_part2_battle_labels`는 139→134로 줄어 잘못 묶인 패배 메시지가 빠졌다.
+- `data/scene_catalog_overrides.json`로 `g_00A34D18`~`g_00A34DB0`을 89b에 이동 연결했다. 최종 재생성 후
+  `89b` dialogue count는 실제 Part2 패배 메시지 5개이고, 공통/통신오류 복제본은
+  `89b_common_battle_defeat_comm_messages_common_copies` container로 분리했다.
 - `tools/audit_scene_semantics.py`에 89b watch-log 기반 가드를 추가했다. `defeat_watch.log`의
   `addr=08A34D18` hit를 `g_00A34D18`로 환산해 scene dialogue_ids와 대조하므로, 3P surrender defeat 화면이
   실제 런타임 hit 그룹 없이 green 처리되는 것을 막는다.
@@ -2071,3 +2072,27 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **리뷰 반영**: agy가 지적한 “공통 복제본을 preview-ready scene에 섞으면 잘못된 주소 편집이 정상 preview처럼
   보일 수 있다”는 blocker를 container 분리로 해소했다. claude는 최종 변경의 런타임 소스 식별과
   32B command-stream 경계(`0xA34CD0` 제어코드 보존)를 타당하다고 평가했다.
+
+---
+## [2026-06-26] D4 battle_defeat_message canvas 승격
+
+- **실제 런타임 소스 특정**: 3P free-battle 항복 후 패배 메시지는 공통 `0xEFD8A4` 계열이 아니라
+  Part2 복제본 `0xA34D18`을 읽는다. watch log의 `08A34D18` hit와 payload scan으로 확인했다.
+- **state/nav 보정**: 최종 표시 뒤 상태인 `state_011_confirm_yes.ss0`은 이미 렌더된 VRAM이라 payload diff 0이다.
+  `part2_3p_surrender_defeat_probe_v4/state_010_confirm_left_yes.ss0`에서 A 입력으로 대사창을 다시 생성해야
+  diff가 발생한다. ad-hoc scan에서 해당 경로는 frame 80 기준 diff 288px였고,
+  `part2_3p_surrender_confirm_fine/state_000_before_a.ss0` + A도 같은 조건으로 동작했다. scene entrypoint의
+  최종 화면 스크린샷 state와 preview canvas의 재생성 직전 state는 목적이 다르므로 분리 유지한다.
+- **canvas 승격**: `data/preview_canvases.json`에 `battle_defeat_message` 추가.
+  `0xA34D18` 32B span을 `terminator:none` + `pad=0x20`으로 hijack하고, frame-sweep `32/48/64/80/96` 중
+  대사창 ROI ink score가 큰 프레임을 선택한다.
+- **UI 에디터 매핑 보정**: `89b_common_battle_defeat_comm_messages`는 실제 검증 그룹
+  `g_00A34D18/g_00A34D3C/g_00A34D60/g_00A34D88/g_00A34DB0` 5개만 `canvas=ready`로 노출한다.
+  공통/통신오류 복제본 `g_00EFD8A4` 계열과 `g_00EFDDBD` 계열은
+  `89b_common_battle_defeat_comm_messages_common_copies` container로 분리했다.
+- **검증**: `python3 tools/verify_preview_canvases.py` active canvas 4/failure 0
+  (`battle_defeat_message` diff 302px, selected frame 48). `audit_scene_catalog.py --strict`,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_semantics.py --strict` 모두 critical 0. 라이브 :8782 API preview는
+  대사창 영역 diff 229px. Chrome CDP `tools/verify_scene_editor_cdp.py`는 63 scene/107 sprite/failure 0.
+  전체 roundtrip은 80 scene/10,336 dialogue group/1,990 sprite/23,374 editable member dry-run failure 0,
+  B팀 confirm failure 0, actual save/restore 2건과 direct-script 임시 ROM build byte 대조 성공.

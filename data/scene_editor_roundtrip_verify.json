@@ -3,7 +3,7 @@
     "generated_on": "2026-06-26",
     "server": "http://127.0.0.1:8782",
     "rom_sha256": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91",
-    "scene_count": 79,
+    "scene_count": 80,
     "dialogue_group_count": 10336,
     "sprite_count": 1990,
     "editable_member_count": 23374,
@@ -53,7 +53,7 @@
       }
     },
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 248.35
+    "elapsed_sec": 252.29
   },
   "failures": [],
   "bteam_confirm_failures": [],

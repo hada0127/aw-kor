@@ -57,9 +57,29 @@
       },
       "min_payload_diff": 20,
       "note": "공통 전투 항복 확인 대사창(per-char dialog 렌더러). 3P free-battle 항복 메뉴 직전 state에서 A로 확인창을 재생성한다. 이 화면의 런타임 소스는 공통 0xEFDAA0이 아니라 Part2 복제본 0xA34CB0/0xA34CD1이며, canvas는 첫 줄 0xA34CB0 32B span만 hijack한다. 2026-06-26 pair scan에서 0xA34CB0만 payload diff 614px, 0xEFDAA0 등 다른 복제본은 diff 0. verify_preview_canvases canvas diff 302px. [검증됨]"
+    },
+    "battle_defeat_message": {
+      "slot": "0x00A34D18",
+      "len": 32,
+      "terminator": "none",
+      "pad": "0x20",
+      "render": "dialog",
+      "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
+      "nav": [
+        ["loadstate", "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_010_confirm_left_yes.ss0"],
+        ["press", "A", 0]
+      ],
+      "sweep": {
+        "frames": [32, 48, 64, 80, 96],
+        "score_box": [20, 112, 224, 150],
+        "threshold": 1200,
+        "min_score": 250
+      },
+      "min_payload_diff": 20,
+      "note": "공통 전투 패배 메시지 대사창(per-char dialog 렌더러). 3P free-battle 항복 확인에서 '예' 선택 직전 state를 로드한 뒤 A로 패배 메시지를 재생성한다. 이 화면의 런타임 소스는 공통 0xEFD8A4가 아니라 Part2 복제본 0xA34D18이며, canvas는 레드스타 패배 첫 줄 0xA34D18 32B span만 hijack한다. 2026-06-26 state scan에서 state_010_confirm_left_yes+A는 payload diff 288px, state_011_confirm_yes는 diff 0. verify_preview_canvases canvas diff 302px. [검증됨]"
     }
   },
   "_experimental_part1": {
-    "note": "part1_welcome과 battle_surrender_confirm은 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)는 아직 대사창 직전 정밀 nav 필요. 31_battle_dialog은 대사창이 아닌 전투/정보 UI 화면이므로 battle dialogue 근거로 사용 금지. 89b 패배 메시지는 아직 최종 savestate payload diff 0이라 별도 재트리거 state가 필요."
+    "note": "part1_welcome, battle_surrender_confirm, battle_defeat_message는 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)는 아직 대사창 직전 정밀 nav 필요. 31_battle_dialog은 대사창이 아닌 전투/정보 UI 화면이므로 battle dialogue 근거로 사용 금지."
   }
 }

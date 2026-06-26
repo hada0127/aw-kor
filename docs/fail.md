@@ -4,7 +4,7 @@
 
 ---
 
-## [2026-06-26] D4 battle dialogue preview canvas 후보 실패
+## [2026-06-26] D4 battle dialogue preview canvas 후보 실패(최종 표시 state 금지)
 
 - `31_battle_dialog`은 실제 전투 대사 화면이 아니다. 현재 캡처는 전투/정보 UI 화면이고 provenance도 구 SHA stale라
   battle dialogue canvas 근거로 쓰면 false green이 된다.
@@ -12,15 +12,16 @@
   맞지만, ROM slot payload를 바꿔도 캡처 diff가 0이다. 이미 렌더된 VRAM 상태라 `preview_capture` canvas로
   승격하면 안 된다.
 - `89b`의 `0xA34D18` ROM 패치는 loadstate 뒤 bus dump에는 정상 반영된다. 실패 원인은 ROM 패치가 아니라
-  대사 생성 직전 state/nav 부재다. `part2_3p_surrender_confirm_fine/state_000_before_a.ss0` 단독 replay도
-  저장된 `014_after_f20` 중간 패배 메시지로 재진입하지 못한다.
+  대사 생성 직전 state/nav 선택이었다. `state_011_confirm_yes.ss0`처럼 이미 확인 입력 뒤의 상태는
+  저장된 중간 패배 메시지로 재진입하지 못해 payload diff가 0이다.
 - 후속 해결: `89a` 항복 확인은 최종 표시 state가 아니라
   `part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`에서 A 입력으로 대사창을 재생성하고,
   실제 Part2 복제본 `0xA34CB0`을 패치해야 payload diff가 발생한다. 자세한 성공 근거는
   `docs/success.md`의 `D4 battle_surrender_confirm canvas 승격` 항목을 따른다.
-- 남은 실패 조건: `89b` 패배 메시지는 아직 대사 생성 직전 state/nav가 없으므로, fresh-nav로 생성 직전까지
-  안정 도달하거나 savestate 직후 런타임 text source를 재트리거하는 별도 지원을 만든 뒤
-  `verify_preview_canvases.py`의 payload diff>0을 통과해야 한다.
+- 후속 해결: `89b` 패배 메시지는
+  `part2_3p_surrender_defeat_probe_v4/state_010_confirm_left_yes.ss0`에서 A 입력으로 대사창을 재생성하고,
+  실제 Part2 복제본 `0xA34D18`을 패치해야 payload diff가 발생한다. 자세한 성공 근거는
+  `docs/success.md`의 `D4 battle_defeat_message canvas 승격` 항목을 따른다.
 
 ## [2026-06-07] Part 1 정보창 savestate 기반 재캡처는 라벨 패치 검증에 부적합
 
