@@ -2096,3 +2096,22 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   대사창 영역 diff 229px. Chrome CDP `tools/verify_scene_editor_cdp.py`는 63 scene/107 sprite/failure 0.
   전체 roundtrip은 80 scene/10,336 dialogue group/1,990 sprite/23,374 editable member dry-run failure 0,
   B팀 confirm failure 0, actual save/restore 2건과 direct-script 임시 ROM build byte 대조 성공.
+
+---
+## [2026-06-26] D2 pixel-width 정적 QA 1차 고도화
+
+- `tools/qa_pixel_width.py`가 CSV 원문만 보던 문제를 수정했다. 이제 `dialogue_overrides`, `ADDRESS_TEXT_OVERRIDES`,
+  `SOURCE_TEXT_OVERRIDES`, `TEXT_OVERRIDES`, `PLACEHOLDER_KO`, DENY range, `translation_comprehensive.csv` fallback,
+  found-text source override, 직접 패치 텍스트, `encode_fit(addr)`를 `build_korean_full.py`/`qa_text_fit.py`와 같은
+  입력원 순서에 가깝게 반영한다. 이로써 `0xDA38C9`처럼 CSV 번역은 길지만 실제 빌드는 직접 패치 축약문을 쓰는 행의 오탐을 제거했다.
+- 최종 encoded byte stream을 half-cell 단위로 재계산해 `--max-cells`(기본 50=200px) 초과 후보를 별도 TSV로 남긴다.
+  리포트에는 scene catalog range 힌트도 포함해, 초과 후보가 실제 대사 박스인지 메뉴/테이블 계열인지 바로 추적할 수 있다.
+- 검증 결과: `python3 -m py_compile tools/qa_pixel_width.py` PASS,
+  `python3 tools/qa_pixel_width.py --top 20` → built 18752, KO>JA 227(1.21%), `>50` 후보 13.
+  `python3 tools/qa_text_fit.py`는 기존과 동일하게 overflow 0/no_ko 0, visual-wider 21(0.1%).
+- 한계: 이 도구는 런타임 동치 검증이 아니라 정적 근사다. scene 힌트도 주소 range 기반 보조정보이며, 50셀 기본값은
+  대사 박스 전역 기준일 뿐 메뉴/도움말/CO 파워명 UI의 허용폭을 보장하지 않는다.
+- 해석: `>50` 후보 13개는 현재 모두 메뉴/도움말/CO 파워명/공통 UI 테이블 계열로 분류되며, story/dialogue 계열의
+  `>50` 행은 관측되지 않았다. 단, D2는 아직 완료가 아니다. UI별 허용폭은 50셀보다 좁을 수 있으므로 이 13개는
+  블로커 후보로 남기고, 각 scene fresh capture와 UI별 max-cell 산정으로 실제 줄분리/테이블 렌더/클리핑 여부를
+  확인해야 한다.

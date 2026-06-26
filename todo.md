@@ -108,6 +108,17 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   dialogue override overlay를 반영하며, B팀 baseline byte-budget은 `qa_bteam_drift.py`/repoint 게이트로 위임한다.
   검증: `tools/test_text_metrics.py` py↔js 25,296 코퍼스 PASS, `lint_translation.py --severity error` 0건.
 - [ ] D2 인게임 대사 박스 셀 폭 실측 → 줄당 최대 글자수(현재 fragment slot 총량 권위).
+  - [x] 2026-06-26: `tools/qa_pixel_width.py` 정적 근사 범위를 빌드 입력원에 맞춰 확장.
+    `dialogue_overrides`/직접 패치 텍스트/
+    `ADDRESS_TEXT_OVERRIDES`/`SOURCE_TEXT_OVERRIDES`/`translation_comprehensive.csv` fallback/`encode_fit(addr)`/
+    DENY/placeholder를 반영하고, 최종 encoded half-cell 폭 + scene 힌트를 출력한다.
+    현재 `qa_text_fit.py` overflow 0, `qa_pixel_width.py` 기준 story/dialogue 계열의 `>50` 행은 관측되지 않았다.
+  - [ ] 남은 `final encoded cells > 50` 후보 13개는 대사문이 아니라 메뉴/도움말/CO 파워명/공통 UI 테이블 계열이지만,
+    UI별 허용폭은 50셀보다 좁을 수 있으므로 **블로커 후보**로 취급한다.
+    (`temp/dialogue_box_width_over_max.tsv`: `0xD81C24`, `0xA3B880`, `0x804FD4`, `0x805B04`,
+    `0xD83278`, `0xD83138`, `0x94298C`, `0x97AE40`, `0x9B36E4`, `0x9EBF88`, `0xEFAAD4`,
+    `0xD721B5`, `0xB842E8`). 각 scene fresh capture와 UI별 max-cell 산정으로 실제 줄분리/테이블 렌더/
+    클리핑 여부 확인 전 D2 완료 금지.
 - [x] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX 완료(2026-06-26).
   :8782 `/api/state`가 output full/final/title_test SHA 동기성을 `output_sync`로 노출하고, `/api/build` 완료 직후
   SHA 불일치 또는 freshness threshold 이전 산출물이면 fail 처리한다. dirty 판정은 ns mtime 기준 `apply_needed`로 내려가며 프런트 상단은 `적용됨`/`적용 필요`와
