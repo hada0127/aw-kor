@@ -13,7 +13,7 @@ const api = async (p, opt) => {
   return res.json();
 };
 
-const S = { scope: "all", scenes: [], scene: null, items: null, itab: "dialogue", item: null, dict: null, supported: null, dirty: 0, _reqSeq: 0, _limit: 0, applyAction: null };
+const S = { scope: "all", scenes: [], scene: null, items: null, itab: "dialogue", item: null, dict: null, supported: null, dirty: 0, applyNeeded: false, outputSyncOk: true, _reqSeq: 0, _limit: 0, applyAction: null };
 
 // ── 바이트 예산(Python encoded_len 미러: 한글2/전각공백2/줄바꿈1/ASCII1/기타2) ──
 function encLen(t) {
@@ -54,18 +54,32 @@ function toast(msg, bad) {
 async function refreshState() {
   try {
     const st = await api("/api/state");
-    const rom = st.rom.exists ? `ROM ${st.rom.sha256} · ${(st.rom.size / 1048576).toFixed(0)}MB` : "ROM 없음";
+    const outputSync = st.output_sync || {};
+    const romSha = outputSync.sha256 || (st.rom && st.rom.sha256);
+    const rom = st.rom.exists ? `ROM ${romSha} · ${(st.rom.size / 1048576).toFixed(0)}MB` : "ROM 없음";
     // dirty=빌드 후 override 파일이 더 새것(미빌드 변경 있음). 숫자는 누적 override 총량(델타 아님).
-    const isDirty = st.dirty.dirty;
+    const isDirty = st.dirty.dirty || st.apply_needed;
     const totalOv = (st.dirty.dialogue_total || 0) + (st.dirty.sprite_total || 0);
     S.dirty = isDirty ? totalOv : 0;
-    const dirty = isDirty ? `<span class="warn">· 미빌드 변경 있음(override ${totalOv}건)</span>` : `<span class="ok">· 동기</span>`;
+    S.applyNeeded = !!isDirty;
+    S.outputSyncOk = outputSync.ok !== false;
+    const dirty = isDirty
+      ? `<span class="warn">· 적용 필요(override ${totalOv}건)</span>`
+      : (S.outputSyncOk ? `<span class="ok">· 적용됨</span>` : `<span class="bad">· 출력 확인 필요</span>`);
+    const sync = outputSync.ok === false
+      ? `<span class="bad">· output SHA 불일치</span>`
+      : (outputSync.sha256 ? `<span class="ok">· output SHA 검증</span>` : "");
     let build = "";
     if (st.build.status === "building") build = ` <span class="warn">· 빌드중…</span>`;
     else if (st.build.status === "fail") build = ` <span class="bad">· 빌드실패</span>`;
-    $("#state").innerHTML = `${rom} ${dirty}${build}`;
+    $("#state").innerHTML = `${rom} ${dirty}${sync}${build}`;
     $("#apply").disabled = st.build.status === "building";
-    $("#download").disabled = !st.rom.exists || st.build.status === "building";
+    $("#apply").classList.toggle("need", S.applyNeeded);
+    const dl = $("#download");
+    dl.disabled = !st.rom.exists || st.build.status === "building" || !S.outputSyncOk;
+    dl.title = !st.rom.exists ? "output ROM 없음"
+      : (st.build.status === "building" ? "빌드 완료 후 다운로드 가능"
+        : (!S.outputSyncOk ? "output SHA 불일치 — 먼저 적용(빌드)을 다시 실행하세요" : ""));
     return st;
   } catch (e) { $("#state").textContent = "상태 조회 실패"; }
 }
@@ -1063,11 +1077,13 @@ async function pollBuild() {
   if (j.status === "success") {
     // 'overflow'는 정상 로그에도 상존(cry-wolf) → 실제 스프라이트 편집 skip 마커만 경고(M11)
     const skipped = /재압축 초과|comp_size 초과|편집 skip|override skip/i.test(j.log_tail || "");
-    toast(skipped ? "빌드 완료(일부 스프라이트 편집 skip — 로그 확인)" : "빌드 완료 — ROM 반영됨. 다운로드 가능.", skipped);
+    const sha = j.output_verify && j.output_verify.sha256 ? ` SHA ${j.output_verify.sha256}` : "";
+    toast(skipped ? `빌드 완료${sha}(일부 스프라이트 편집 skip — 로그 확인)` : `빌드 완료${sha} — ROM 반영됨.`, skipped);
   } else if (j.status === "fail") toast("빌드 실패: " + (j.error || "").slice(0, 120), true);
 }
 $("#download").onclick = () => {
-  if (S.dirty > 0 && !confirm(`미빌드 편집 ${S.dirty}건이 있습니다. 지금 받는 ROM에는 반영되지 않습니다.\n먼저 ‘적용(빌드)’을 권장합니다. 그래도 현재 ROM을 받으시겠습니까?`)) return;
+  if (!S.outputSyncOk) return toast("output SHA 불일치 — 먼저 적용(빌드)을 다시 실행하세요", true);
+  if (S.dirty > 0 && !confirm(`적용 필요 편집 ${S.dirty}건이 있습니다. 지금 받는 ROM에는 반영되지 않습니다.\n먼저 ‘적용(빌드)’을 권장합니다. 그래도 현재 ROM을 받으시겠습니까?`)) return;
   window.location = "/api/download/gba?variant=full";
 };
 $("#apply").onclick = applyBuild;

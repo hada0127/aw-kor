@@ -105,7 +105,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   - 2026-06-26 부분 완료: `test_text_metrics.py` py↔js 25,319 코퍼스 PASS, `scene_editor/server.py`는
     `text_metrics.encoded_len` 참조로 전환. 단, `qa_text_fit.py`/`lint_translation.py` 등 중복 예산 함수가 남아 완전 SSOT는 아님.
 - [ ] D2 인게임 대사 박스 셀 폭 실측 → 줄당 최대 글자수(현재 fragment slot 총량 권위).
-- [ ] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX.
+- [x] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX 완료(2026-06-26).
+  :8782 `/api/state`가 output full/final/title_test SHA 동기성을 `output_sync`로 노출하고, `/api/build` 완료 직후
+  SHA 불일치 또는 freshness threshold 이전 산출물이면 fail 처리한다. dirty 판정은 ns mtime 기준 `apply_needed`로 내려가며 프런트 상단은 `적용됨`/`적용 필요`와
+  `output SHA 검증`을 표시. `tools/verify_scene_editor_apply_state.py`가 clean→mtime dirty→restore 상태를
+  비파괴 검증하고, `tools/verify_scene_editor_cdp.py`로 상단 DOM + Chrome CDP 63 scene/107 sprite failure 0 UI 회귀도 확인.
+  CDP 리포트는 scene별 중간 저장으로 내구화.
 - [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(현재 part2_menu만 ready).
 - [ ] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트.
 

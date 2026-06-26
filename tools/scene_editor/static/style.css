@@ -30,6 +30,7 @@ input:focus, textarea:focus { outline: none; border-color: var(--accent); }
 .state .ok { color: var(--ok); } .state .warn { color: var(--warn); } .state .bad { color: var(--bad); }
 #download { background: #243; border-color: #2e5; }
 #apply { background: #234; border-color: var(--accent); }
+#apply.need { border-color: var(--warn); box-shadow: 0 0 0 1px rgba(232, 184, 75, .35) inset; }
 
 /* 2분할: 좌 LNB(scene 목록) + 우 메인(편집) */
 main { display: flex; align-items: stretch; height: calc(100vh - 53px); }

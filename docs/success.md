@@ -1569,10 +1569,10 @@ archive/malformed_address_rows.csv 보존.
 - [x] **1편 잔여 컨테이너 실렌더 스캔**: `temp/story_range_breakscan.py`/`temp/story_exact_watch.py`에 병렬 worker와 입력 정책을 보강한 뒤 실제 savestate 기반으로 19d, 19b, 19a, 19e 잔여 범위를 재검증. 결과: 19d exact 352건 hit 0, 19d range 2376건 hit 0, 19b 224건 hit 0, 19a 430건 hit 0, 19e 24건 hit 0.
 - [x] **2편 잔여 컨테이너 실렌더 스캔**: 30a 14건 hit 0, 30b는 기존 split `30b1` hit를 확인 후 제외 재스캔 48건 hit 0, 30c 68건 hit 0, 30d/30g 경계 보정 후 294건 hit 0, 30e 264건 hit 0, 30f 910건 hit 0. 모든 결과는 `temp/scene_entrypoints/part2_*_residual_break_subset_*/results.json`에 재현 가능하게 남김.
 - [x] **30d/30g 경계 오류 수정**: render-breakpoint가 `0x00A1C000`(`g_00A1BFD8`)에서 호크/블랙홀 대사를 실제 화면으로 잡았고, 기존 `30d2_part2_green_earth_story_late` 끝이 `0xA1C000`이라 대사 그룹을 중간에서 잘랐음. `tools/build_scene_catalog.py`에서 30d2/30d 끝을 `0xA1C06C`로 늘리고 30g 시작을 `0xA1C06C`로 이동. 기존 `scene_30d2_part2_green_earth_story_late` 화면 흐름에 속하는 것으로 판정.
-- [x] **카탈로그/진입점/브라우저 검증**: `python3 tools/build_scene_catalog.py` 재생성 후 `audit_scene_catalog.py --strict`, `audit_scene_entrypoints.py --strict`, `audit_scene_semantics.py --strict` 모두 critical 0. Chrome CDP 검증 `python3 temp/cdp_verify_all_scene_editor.py` 결과 game scene 63, total scene 78, sprite 107, failure 0. 리포트: `temp/browser_verify/all_scene_editor_verify.json`.
+- [x] **카탈로그/진입점/브라우저 검증**: `python3 tools/build_scene_catalog.py` 재생성 후 `audit_scene_catalog.py --strict`, `audit_scene_entrypoints.py --strict`, `audit_scene_semantics.py --strict` 모두 critical 0. Chrome CDP 검증 `python3 tools/verify_scene_editor_cdp.py` 결과 game scene 63, total scene 78, sprite 107, failure 0. 리포트: `temp/browser_verify/all_scene_editor_verify.json`.
 - [x] **codex+agy 리뷰 반영**: 두 리뷰 모두 13개 container를 완료로 간주하지 말 것, 특히 container에 대표 entrypoint/checkpoint가 남으면 실제 scene으로 오해될 수 있음을 지적. `tools/build_scene_catalog.py`가 container에는 `entrypoint`를 붙이지 않도록 수정하고, `audit_scene_catalog.py`/`audit_scene_entrypoints.py`/`audit_scene_semantics.py`가 container entrypoint를 critical로 잡도록 강화. 원천 `data/scene_entrypoints.json`/`data/screen_checkpoints.json`에서도 container 13개 대표 항목을 제거. 재생성 후 checkpoint 88→75, game scene unique checkpoint 63 유지, strict audit critical 0, CDP failure 0.
 - [x] **잔여 container 증거 정식화**: `data/scene_residual_scans.json`과 `tools/audit_scene_residual_scans.py` 추가. 13개 container(대사 2884개)에 대해 결과 파일 존재/case 수/hit 수/known split hit를 strict로 감사한다. 19c/30b/30d에서 나온 hit 3건은 기존 split 또는 경계 수정으로 설명되고, 최종 감사 결과 scan case 7793, hit 3, known hit 3, critical 0. 마지막 `88_common_comm_labels`는 Part1/Part2 menu/focus/row 상태 1967건에서 hit 0으로 독립 화면 노출 없음.
-- [x] **최종 리뷰 반영 보강**: codex가 지적한 스프라이트 편집면 crop 문제를 수정. `tools/scene_editor/static/app.js`의 onscreen 편집 viewbox는 nontransparent content bbox가 아니라 서버 layout `os.x0/os.y0/os.w/os.h`를 그대로 사용한다. `temp/cdp_verify_all_scene_editor.py`는 onscreen 원본/편집 캔버스 native size가 layout×zoom과 일치하지 않으면 실패하도록 강화했고, 재검증 결과 scene 63, sprite 107, failure 0. residual evidence도 현재 ROM SHA와 각 `results.json` SHA를 `data/scene_residual_scans.json`에 고정하고 audit가 검사하도록 보강했다.
+- [x] **최종 리뷰 반영 보강**: codex가 지적한 스프라이트 편집면 crop 문제를 수정. `tools/scene_editor/static/app.js`의 onscreen 편집 viewbox는 nontransparent content bbox가 아니라 서버 layout `os.x0/os.y0/os.w/os.h`를 그대로 사용한다. `tools/verify_scene_editor_cdp.py`는 onscreen 원본/편집 캔버스 native size가 layout×zoom과 일치하지 않으면 실패하도록 강화했고, 재검증 결과 scene 63, sprite 107, failure 0. residual evidence도 현재 ROM SHA와 각 `results.json` SHA를 `data/scene_residual_scans.json`에 고정하고 audit가 검사하도록 보강했다.
 
 
 ### 🟢 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint) + 완성도 인프라 (2026-06-23)
@@ -1941,3 +1941,29 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `data/scene_residual_scans.json` evidence에 연결했고, audit가 리포트 SHA뿐 아니라 7개 PNG SHA,
   캡처 provenance ROM SHA, primary/stale 증거 역할, 보조 scan SHA까지 확인한다.
   `tools/audit_scene_residual_scans.py --strict` 결과 container 13, case 14, hit 0, critical 0.
+
+---
+## [2026-06-26] :8782 적용 상태 D3 하드닝
+
+- **output SHA 자동검증**: `tools/scene_editor/server.py`가 `output/game_wars_korean_full.gba`,
+  `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba` 3종 SHA를 `/api/state.output_sync`로
+  노출한다. `/api/build` 완료 직후에도 같은 검증을 수행하며, 세 산출물 중 하나라도 없거나 full SHA와 다르면
+  build status를 `fail`로 내리고 다운로드를 409로 차단한다. 빌드 직후 검증은 1초 안전 마진을 둔 freshness threshold로
+  각 산출물 mtime을 확인해 오래된 sync 파일을 성공으로 오판하지 않는다.
+- **dirty → 적용 필요 UX**: override mtime이 output ROM보다 최신이면 `/api/state.apply_needed=true`가 내려가고,
+  프런트 상단은 `적용 필요(override N건)`으로 표시한다. 판정은 ns mtime 기준이다. 깨끗한 상태는
+  `적용됨 · output SHA 검증`으로 표시하며, 적용 버튼에는 warning outline을 붙인다.
+- **다운로드 variant 정합성**: `/api/download/gba?variant=full|final|title_test`는 요청 variant의 실제 파일을 내려주고,
+  알 수 없는 variant는 400으로 거부한다.
+- **비파괴 verifier**: `tools/verify_scene_editor_apply_state.py` 추가. 라이브 :8782에서 clean 상태와 output SHA sync를
+  확인한 뒤 `dialogue_overrides.json` mtime만 임시로 미래로 옮겨 `apply_needed=true`를 검증하고 원래 mtime으로 복구한다.
+  검증 중 파일 mtime이 다른 값으로 바뀌면 동시 편집으로 보고 강제 복구하지 않고 실패한다.
+- **CDP 리포트 내구성**: `tools/verify_scene_editor_cdp.py`는 상단 상태 DOM(`적용됨`, `output SHA 검증`,
+  다운로드 활성)을 직접 단언하고, `temp/browser_verify/all_scene_editor_verify.json`을 검증 시작/scene별 진행/완료
+  시점에 갱신해 중간 실패 때도 진행 증거를 남긴다.
+- **검증 결과**: 현재 ROM SHA `6cb201dc…` 기준
+  `python3 tools/verify_scene_editor_apply_state.py` PASS
+  (`rom_sha256 == output_sha256 == 6cb201dc81d0d23417980d738dc6b588c6d90c728ec02be22f97e4a75576bca8`).
+  실제 Chrome CDP에서 상단 상태 DOM은 `ROM 6cb201dc81d0d234 · 16MB · 적용됨· output SHA 검증`,
+  `apply.need=false`, `download.disabled=false`. `python3 tools/verify_scene_editor_cdp.py`도
+  scene 63/sprite 107/failure 0.

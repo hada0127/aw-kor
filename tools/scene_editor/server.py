@@ -48,6 +48,11 @@ CATALOG = ROOT / "data" / "scene_catalog.json"
 DGROUPS = ROOT / "data" / "dialogue_groups.json"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
 OUTPUT_ROM = ROOT / "output" / "game_wars_korean_full.gba"
+OUTPUT_VARIANTS = {
+    "full": OUTPUT_ROM,
+    "final": ROOT / "output" / "game_wars_korean_final.gba",
+    "title_test": ROOT / "output" / "game_wars_korean_title_test.gba",
+}
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
 
@@ -432,16 +437,20 @@ def is_building():
 
 
 # ── 빌드 job(비동기, 직렬화) ─────────────────────────────────────────────
-_BUILD = {"status": "idle", "started": 0, "finished": 0, "log_tail": "", "error": None}
+_BUILD = {"status": "idle", "started": 0, "finished": 0, "log_tail": "", "error": None, "output_verify": None}
 _BUILD_LOCK = threading.Lock()
+BUILD_FRESHNESS_MARGIN_NS = 1_000_000_000
 
 
 def _run_build():
     # M6: _BUILD_LOCK은 상태 변경에만(짧게). subprocess(최대 1200s)는 락 밖에서 실행 →
     # 빌드 중에도 /api/state·/api/build(거부) 등이 응답함. status='building'은 start_build가 이미 설정.
     import subprocess
+    build_started_ns = time.time_ns()
+    fresh_after_ns = max(0, build_started_ns - BUILD_FRESHNESS_MARGIN_NS)
     with _BUILD_LOCK:
-        _BUILD.update(status="building", started=int(time.time()), finished=0, error=None, log_tail="")
+        _BUILD.update(status="building", started=int(build_started_ns / 1_000_000_000),
+                      finished=0, error=None, log_tail="")
     try:
         proc = subprocess.run([sys.executable, str(ROOT / "tools" / "build_korean_full.py")],
                               capture_output=True, text=True, cwd=str(ROOT), timeout=1200)
@@ -449,15 +458,21 @@ def _run_build():
         for ln in (proc.stdout or "").splitlines():
             if "스프라이트 편집 적용" in ln or "스프라이트 편집" in ln:
                 applied = ln.strip()
+        output_verify = output_sync_state(min_mtime_ns=fresh_after_ns) if proc.returncode == 0 else None
+        ok = proc.returncode == 0 and bool(output_verify and output_verify.get("ok"))
+        error = (proc.stderr or "")[-800:] if proc.returncode != 0 else None
+        if proc.returncode == 0 and not ok:
+            error = "빌드 산출물 SHA 불일치: " + "; ".join(output_verify.get("issues") or [])
         with _BUILD_LOCK:
-            _BUILD.update(status="success" if proc.returncode == 0 else "fail",
+            _BUILD.update(status="success" if ok else "fail",
                           finished=int(time.time()),
                           log_tail=(proc.stdout or "")[-1500:],
-                          error=(proc.stderr or "")[-800:] if proc.returncode != 0 else None,
-                          applied=applied)
+                          error=error,
+                          applied=applied,
+                          output_verify=output_verify)
     except Exception as e:
         with _BUILD_LOCK:
-            _BUILD.update(status="fail", finished=int(time.time()), error=repr(e))
+            _BUILD.update(status="fail", finished=int(time.time()), error=repr(e), output_verify=None)
     finally:
         # ROM/레이아웃/대사 캐시 무효화(stale 방지)
         SE._PATCHED = None
@@ -475,20 +490,74 @@ def start_build():
         if _BUILD["status"] == "building":
             return {"ok": False, "error": "이미 빌드 중"}
         _BUILD["status"] = "building"
+        _BUILD["output_verify"] = None
     threading.Thread(target=_run_build, daemon=True).start()
     return {"ok": True, "status": "building"}
+
+
+def sha256_path(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def output_sync_state(min_mtime_ns: int | None = None):
+    variants = {}
+    issues = []
+    full_sha = None
+    out_cache = _CACHE.setdefault("outputsha", {})
+    for name, path in OUTPUT_VARIANTS.items():
+        if not path.exists():
+            variants[name] = {"exists": False}
+            issues.append(f"{name} 없음")
+            continue
+        st = path.stat()
+        key = (st.st_mtime_ns, st.st_size)
+        rec = out_cache.get(name)
+        if not rec or rec[0] != key:
+            rec = (key, sha256_path(path))
+            out_cache[name] = rec
+        sha = rec[1]
+        variants[name] = {
+            "exists": True,
+            "sha256": sha[:16],
+            "full_sha256": sha,
+            "size": st.st_size,
+            "mtime": int(st.st_mtime),
+            "mtime_ns": st.st_mtime_ns,
+        }
+        if min_mtime_ns is not None and st.st_mtime_ns < min_mtime_ns:
+            issues.append(f"{name} 이전 빌드 산출물(mtime < build freshness threshold)")
+        if name == "full":
+            full_sha = sha
+    if full_sha:
+        for name, info in variants.items():
+            if info.get("exists") and info.get("full_sha256") != full_sha:
+                issues.append(f"{name} SHA != full")
+    ok = bool(full_sha) and not issues
+    return {
+        "ok": ok,
+        "sha256": full_sha[:16] if full_sha else None,
+        "full_sha256": full_sha,
+        "variants": variants,
+        "issues": issues,
+    }
 
 
 def rom_state():
     if not OUTPUT_ROM.exists():
         return {"exists": False}
     st = OUTPUT_ROM.stat()
-    key = ("romsha", st.st_mtime, st.st_size)
+    key = ("romsha", st.st_mtime_ns, st.st_size)
     if _CACHE.get("romsha_key") != key:
         _CACHE["romsha_key"] = key
-        _CACHE["romsha"] = hashlib.sha256(OUTPUT_ROM.read_bytes()).hexdigest()
+        rec = (_CACHE.get("outputsha") or {}).get("full")
+        output_key = (st.st_mtime_ns, st.st_size)
+        _CACHE["romsha"] = rec[1] if rec and rec[0] == output_key else sha256_path(OUTPUT_ROM)
     return {"exists": True, "sha256": _CACHE["romsha"][:16], "size": st.st_size,
-            "mtime": int(st.st_mtime)}
+            "mtime": st.st_mtime, "mtime_ns": st.st_mtime_ns, "full_sha256": _CACHE["romsha"]}
 
 
 def dirty_state():
@@ -496,15 +565,26 @@ def dirty_state():
     개수도 함께 반환(전체 override 규모 표시용)."""
     dov = load_json(DE.OVERRIDES_PATH, {}) or {}
     sov = load_json(SE.OVERRIDES_PATH, {}) or {}
-    rom_m = OUTPUT_ROM.stat().st_mtime if OUTPUT_ROM.exists() else 0
+    rom_st = OUTPUT_ROM.stat() if OUTPUT_ROM.exists() else None
+    rom_m = rom_st.st_mtime if rom_st else 0
+    rom_m_ns = rom_st.st_mtime_ns if rom_st else 0
+
     def newer(p):
-        return Path(p).exists() and Path(p).stat().st_mtime > rom_m + 1
+        return Path(p).exists() and Path(p).stat().st_mtime_ns > rom_m_ns + 1_000_000
+
     d_dirty = newer(DE.OVERRIDES_PATH)
     s_dirty = newer(SE.OVERRIDES_PATH)
+    newest_override_m_ns = max(
+        [Path(p).stat().st_mtime_ns for p in (DE.OVERRIDES_PATH, SE.OVERRIDES_PATH) if Path(p).exists()] or [0]
+    )
     return {"dialogue_overrides": len(dov) if d_dirty else 0,
             "sprite_overrides": len(sov) if s_dirty else 0,
             "dialogue_total": len(dov), "sprite_total": len(sov),
-            "dirty": bool(d_dirty or s_dirty)}
+            "rom_mtime": rom_m, "rom_mtime_ns": rom_m_ns,
+            "newest_override_mtime": newest_override_m_ns / 1_000_000_000 if newest_override_m_ns else 0,
+            "newest_override_mtime_ns": newest_override_m_ns,
+            "dirty": bool(d_dirty or s_dirty),
+            "apply_needed": bool(d_dirty or s_dirty)}
 
 
 # ── scene 항목 조회 ──────────────────────────────────────────────────────
@@ -621,8 +701,14 @@ class Handler(BaseHTTPRequestHandler):
         if p.startswith("/scene_shots/"):
             return self._serve_scene_shot(urllib.parse.unquote(p[len("/scene_shots/"):]))
         if p == "/api/state":
-            return self._send(200, {"rom": rom_state(), "dirty": dirty_state(),
-                                    "build": {k: _BUILD[k] for k in ("status", "started", "finished")}})
+            dirty = dirty_state()
+            output_sync = output_sync_state()
+            return self._send(200, {"rom": rom_state(), "dirty": dirty,
+                                    "apply_needed": dirty.get("apply_needed"),
+                                    "output_sync": output_sync,
+                                    "build": {k: _BUILD.get(k) for k in (
+                                        "status", "started", "finished", "output_verify"
+                                    )}})
         if p == "/api/scenes":
             return self._send(200, {"scenes": filter_scenes(q.get("scope", [""])[0],
                                                              q.get("tag", [""])[0],
@@ -667,7 +753,9 @@ class Handler(BaseHTTPRequestHandler):
         if p == "/api/palettes":
             return self._send(200, {"palettes": SE.palette_library()})
         if p == "/api/jobs":
-            return self._send(200, {k: _BUILD[k] for k in ("status", "started", "finished", "log_tail", "error")})
+            return self._send(200, {k: _BUILD.get(k) for k in (
+                "status", "started", "finished", "log_tail", "error", "output_verify"
+            )})
         if p == "/api/download/gba":
             return self._download()
         return self._send(404, {"error": "not found"})
@@ -863,12 +951,25 @@ class Handler(BaseHTTPRequestHandler):
     def _download(self):
         if is_building():
             return self._send(409, {"error": "빌드 중 — 완료 후 다운로드하세요"})
-        if not OUTPUT_ROM.exists():
-            return self._send(404, {"error": "output ROM 없음 — 먼저 빌드하세요"})
-        data = OUTPUT_ROM.read_bytes()
+        u = urllib.parse.urlparse(self.path)
+        q = urllib.parse.parse_qs(u.query)
+        variant = (q.get("variant", ["full"])[0] or "full").strip()
+        if variant not in OUTPUT_VARIANTS:
+            return self._send(400, {"error": "unknown variant: " + variant,
+                                    "variants": sorted(OUTPUT_VARIANTS)})
+        path = OUTPUT_VARIANTS[variant]
+        if not path.exists():
+            return self._send(404, {"error": f"output ROM 없음({variant}) — 먼저 빌드하세요"})
+        # 배포 불변식: full/final/title_test 3종은 항상 byte-identical이어야 한다.
+        # 한 variant라도 어긋나면 사용자가 어느 파일을 받든 배포 상태가 불명확하므로 전부 차단한다.
+        sync = output_sync_state()
+        if not sync.get("ok"):
+            return self._send(409, {"error": "output ROM SHA 불일치 — 먼저 적용(빌드)을 다시 실행하세요",
+                                    "output_sync": sync})
+        data = path.read_bytes()
         self.send_response(200)
         self.send_header("Content-Type", "application/octet-stream")
-        self.send_header("Content-Disposition", 'attachment; filename="game_wars_korean_full.gba"')
+        self.send_header("Content-Disposition", f'attachment; filename="{path.name}"')
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
