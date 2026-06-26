@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """text_metrics 동형성 테스트:
- 1) text_metrics.encoded_len == len(build.encode_text)  (실제 인코더 바이트 길이와 일치)
- 2) text_metrics.encoded_len == app.js encLen (node 실행, 동일 코퍼스)  — py↔js 드리프트 차단
- 3) app.js의 실제 encLen 소스가 text_metrics._JS_ENCLEN 미러와 일치
+ 1) text_metrics.encoded_len == app.js encLen (node 실행, 동일 코퍼스)  — py↔js 드리프트 차단
+ 2) app.js의 실제 encLen 소스가 text_metrics._JS_ENCLEN 미러와 일치
+
+주의: encoded_len은 UI/QA의 클라이언트 예산 모델이다. build.encode_text는 FALLBACK
+정규화가 있어 직접 길이 비교 권위로 쓰지 않는다.
 실데이터(translation_for_import.csv + dialogue_overrides.json)에서 코퍼스를 뽑아 검사.
 """
 import csv, json, os, re, subprocess, sys, tempfile, shutil
@@ -10,7 +12,6 @@ import csv, json, os, re, subprocess, sys, tempfile, shutil
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 import text_metrics as TM
-import build_korean_full as B
 
 
 def corpus():

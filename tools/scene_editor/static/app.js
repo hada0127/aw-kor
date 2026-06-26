@@ -391,10 +391,10 @@ function updateFragBudget(fr, m) {
   const nlines = fr.querySelectorAll(".lineinput").length;
   total += (nlines - 1); // 줄바꿈 바이트
   const tb = fr.querySelector("[data-total]");
-  const fitLen = Number.isFinite(m.budget.encoded_len) ? m.budget.encoded_len : total;
-  const over = !m.budget.estimated && m.budget.fits === false && fitLen > slot;
-  let txt = `합계 ${fitLen}/${slot}B`;
-  if (fitLen !== total) txt += ` (원문 ${total}B, 빌드 fit L${m.budget.fit_level})`;
+  const buildLen = Number.isFinite(m.budget.encoded_len) ? m.budget.encoded_len : null;
+  const over = !m.budget.estimated && total > slot;
+  let txt = `합계 ${total}/${slot}B`;
+  if (buildLen !== null && buildLen !== total) txt += ` (초기 빌드 fit ${buildLen}B, L${m.budget.fit_level})`;
   else txt += ` (≤${m.budget.max_syllables}자)`;
   if (badAll.length) txt += ` · 미수록 ${[...new Set(badAll)].join("")}`;
   tb.textContent = txt;
@@ -405,20 +405,18 @@ function updateFragBudget(fr, m) {
 // 저장 성공=true / 실패=false 일관 반환(모달 '적용' 게이트가 의존 — M1/M7).
 async function saveDialogue() {
   const g = S.item.g;
-  let anyOver = false, anyBad = [];
+  let anyBad = [];
   const writes = [];
   $$("#editor .frag:not(.readonly)").forEach((fr) => {
-    if (fr._over) anyOver = true;
+    const member = g.members[+fr.dataset.mi];
     if (fr._bad && fr._bad.length) anyBad = anyBad.concat(fr._bad);
-    writes.push({ address: g.members[+fr.dataset.mi].address, ko: fragText(fr) });
+    writes.push({ address: member.address, ko: fragText(fr), member });
   });
   if (!writes.length) { toast("편집 가능한 조각이 없습니다", true); return false; }
-  if (anyOver) { toast("슬롯 초과 — 저장 불가(줄여 주세요)", true); return false; }
   if (anyBad.length) { toast("폰트 미수록 음절 — 저장 불가: " + [...new Set(anyBad)].join(""), true); return false; }
-  let saved = 0;
   for (const w of writes) {
-    let r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(w) });
-    // C5: 쪼롱이님(B팀) 권위 번역 — 서버가 confirm 요구 시 baseline 보여주고 명시 승인 후 재전송.
+    const prePayload = { address: w.address, ko: w.ko, dry_run: true };
+    let r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(prePayload) });
     if (!r.ok && r.bteam_confirm_required) {
       const base = r.bteam_baseline || "(baseline 없음)";
       const ok = confirm(
@@ -428,7 +426,28 @@ async function saveDialogue() {
         "정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
       );
       if (!ok) { toast("B팀 번역 저장 취소", true); return false; }
-      r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...w, confirm_bteam: true }) });
+      w.confirm_bteam = true;
+      r = await api("/api/dialogue/line", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...prePayload, confirm_bteam: true }),
+      });
+    }
+    if (!r.ok) {
+      toast("저장 전 검증 실패: " + (r.error || ""), true);
+      return false;
+    }
+  }
+  let saved = 0;
+  for (const w of writes) {
+    const payload = { address: w.address, ko: w.ko };
+    if (w.confirm_bteam) payload.confirm_bteam = true;
+    let r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    // C5: 사전검증 이후에도 서버가 confirm을 요구하면 상태가 바뀐 것이라 저장을 중단한다.
+    if (!r.ok && r.bteam_confirm_required) {
+      if (saved > 0) { refreshState(); refreshSceneItems(); }
+      toast("B팀 확인 상태가 바뀌었습니다 — 새로고침 후 다시 저장하세요", true);
+      return false;
     }
     if (!r.ok) {
       // 부분 저장(M3): 이미 기록된 조각을 화면에 반영하고 사실을 알림

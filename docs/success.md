@@ -1876,3 +1876,32 @@ B팀 baseline `AW_BTEAM_ACCEPT=1 qa_bteam_drift --accept`로 단축본 확정 �
 **★fresh-render 확증**(scene_87→A×3 룰진입→우측이동, 타자기 완료 대기): 룰설정 도움말 바에
 **"지정일이 종료되면 소유 거점 수로 결판을 냅니다"** 공백 정상 + 한 줄 완전 표시(잘림0).
 증거: docs/screenshots/SUCCESS_rule_help_shortened_2026-06-26.png. drift0/qa_repoint2890/render-jam0/dist PASS. 커밋 86cac17.
+
+---
+## [2026-06-26] container residual 감사 하드닝 + :8782 저장 UX 검증
+
+codex/agy/claude 엄격 리뷰가 지적한 "green check가 자기확인" 문제를 반영해 B3/C5를 정리.
+
+- **B3 재검증 방식 교체**: `tools/reverify_scene_residual_scans.py` 추가. 기존 raw Shift-JIS 가타카나 스캔의
+  blanket allow를 폐기하고, `game_wars_found_texts.csv` 추출 행 + `qa_japanese_residuals.py`의 covered/same-original
+  판정을 재사용. 한글 예약코드를 Shift-JIS CJK로 오인하는 문제를 피하기 위해 임의 CJK raw scan은 residual 권위로
+  쓰지 않는다. 이 게이트가 증명하는 범위는 CSV 추출행 + raw kana observation이며, 전체 화면 비노출성은 scene capture/
+  browser 검증 및 E8 후속 확인과 함께 해석한다.
+- **감사 하드닝**: `tools/audit_scene_residual_scans.py`가 `hit`뿐 아니라 `translation_residual`,
+  `raw_kana_unexplained_count`도 strict critical로 본다. `verify_dist_integrity.py` 배포 게이트에 연결했다.
+  현재 SHA `485ef5e88…` 기준 13 container/2884 dialogue, case 13, hit 0, critical 0.
+- **raw kana observation 투명화**: 이름 그리드 charset continuation(0xDA4342)과 공통 통신 numeric/control table의
+  단일 `ソ`(0xEE22AC)는 좁은 allowlist와 reason으로만 허용. `0xEE22AC`는 잔류 문장 후보는 아니나, UI 노출 여부
+  보강 확인은 todo E8에 남김.
+- **C5 저장 UX 수정**: :8782 `app.js`가 모든 조각을 서버 `dry_run`으로 먼저 검증한다. 슬롯 초과는 서버
+  `encode_fit` 권위로 차단해 raw 길이 과차단을 피하고, B팀 변경은 dry-run 단계에서 confirm을 먼저 받는다.
+  승인 시 `confirm_bteam:true`, 취소/초과/미수록은 실제 저장 시작 전 반환.
+- **브라우저 검증**: Chrome CDP로 63 scene/107 sprite 열람 failure 0. B팀 대표 대사 `0x00DFA616`
+  취소(false, ko 불변)→승인 저장(true)→원복(true), 초과 입력 `2000/6B` dry-run 차단(false),
+  서버 초과 하드게이트 `2000B>6B` 확인. 테스트 후 `dialogue_overrides.json`/`dialogue_map.json` diff 0.
+- **D1 부분 진전**: `scene_editor/server.py`가 `text_metrics.encoded_len`을 참조. `test_text_metrics.py`는
+  py↔js 25,319 코퍼스 PASS. 단, `qa_text_fit.py` 등 중복 예산 함수가 남아 완전 SSOT는 아님.
+- **동시 QA**: `qa_integrity_map.py` 바이트 불일치 0(부호소실 1731행은 기존 정책 리스크), `qa_text_fit.py`
+  overflow 0/no_ko 0, `qa_japanese_residuals.py --min-score 13` 후보 1(0x80089B 테이블형 기존 부채),
+  placeholder 0, ASCII curated 0, B팀 drift 0, repoint 문제 0, visual regions 23 checks, dist PASS,
+  phase6 basic 3종 PASS.

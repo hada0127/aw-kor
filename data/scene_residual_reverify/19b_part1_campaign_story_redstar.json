@@ -1,0 +1,61 @@
+[
+ {
+  "label": "static_residual_reverify::19b_part1_campaign_story_redstar",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "485ef5e88ce76d0abf057bc0a06d00946ad9dd7045a3cac1398a5a3d23681969",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00D98000:0x00DA5000",
+    "extracted": {
+     "covered_count": 1800,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 3,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DA432C",
+       "length": 10,
+       "text": "アイウエオ",
+       "allowed": true,
+       "reason": "deny_region:name_grid_data",
+       "containing_extracted_addr": "0x00DA432C"
+      },
+      {
+       "offset": "0x00DA4337",
+       "length": 10,
+       "text": "カキクケコ",
+       "allowed": true,
+       "reason": "deny_region:name_grid_data",
+       "containing_extracted_addr": "0x00DA4337"
+      },
+      {
+       "offset": "0x00DA4342",
+       "length": 4,
+       "text": "サシ",
+       "allowed": true,
+       "reason": "name-grid charset continuation after 0x00DA432C/0x00DA4337; raw grid data must stay SJIS for selection layout",
+       "containing_extracted_addr": null
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 1800,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 3,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

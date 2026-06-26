@@ -76,8 +76,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   CSV 손상 239행이나 **출하 ROM 실제 일본어 텍스트 잔존 0**(빌드 inline 리터럴 권위; 109행 디코드 = 한글61/혼합26/노이즈22).
   `--fail-on-rom-japanese` 게이트 PASS + 배포 게이트 연동. (codex 보강 필요: 손상행 한정 40B 디코더 → 전수 디코더로 확장)
 - [ ] **B2 CSV length-only 손상 239행 소스 위생 복구**(ROM 무해지만 정본 부채): 정수 length·꼬리잘림 복구.
-- [ ] **B3 container residual scan 현재 SHA 재생성** → `audit_scene_residual_scans --strict` 현재 exit 1/critical 17
-  (= scan SHA 스탬프 stale, 실 hit 0). breakpoint-scan 하네스 재실행 필요(부기).
+- [x] **B3 container residual scan 현재 SHA 재생성 + 감사 하드닝 완료(2026-06-26)**:
+  `tools/reverify_scene_residual_scans.py` 추가. 기존 raw 가타카나 blanket-pass를 폐기하고
+  `game_wars_found_texts.csv` 추출행 + `qa_japanese_residuals.py`의 covered/same-original 판정 재사용.
+  raw kana는 별도 observation으로 남기며 설명 없는 항목은 `audit_scene_residual_scans.py --strict`가 critical 처리.
+  현재 SHA `485ef5e8…` 기준 13 container/2884 dialogue, case 13, hit 0, critical 0. `verify_dist_integrity.py`
+  배포 게이트에도 연결. 증명 범위는 CSV 추출행 + raw kana observation이며, 화면 비노출 보강은 E8로 추적.
 
 ## C. 웹에디터 전(全) 대사·스프라이트 편집 가능 (쪼롱이 요구)
 - [x] **C1 대사 편집 커버리지**: 실대사(addr≥0x800000) 19650 중 **19450(99.0%) 편집가능**. 차단 200=전부 정당
@@ -86,11 +90,18 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **C3 차단 사유 노출**: line_budget.reason + budget.bteam_warn으로 사유/경고 내려줌.
 - [x] **C4 B팀 보호 게이트(3+층)**: ① 권위문 복원, ② `data/bteam_addresses.json`(3340)+`bteam_baseline.json`+`tools/qa_bteam_drift.py`(drift 0),
   ③ :8782·:8780 `_save_line` save-time 차단(confirm_bteam 필요), ④ `--accept`는 AW_BTEAM_ACCEPT=1, ⑤ verify_dist_integrity 게이트 연동.
-- [ ] **C5 프런트(app.js) confirm_bteam 전송·bteam_warn 표시**(codex: 서버 게이트는 있으나 UI 미연결).
+- [x] **C5 프런트(app.js) confirm_bteam 전송·bteam_warn 표시 완료(2026-06-26)**:
+  모든 조각을 `dry_run`으로 서버 `encode_fit` 기준 사전검증한 뒤 실제 저장을 시작한다.
+  B팀 변경은 dry-run 단계에서 confirm을 받고, 승인 시 `confirm_bteam:true`로 저장. 취소/초과/미수록은 저장 시작 전 반환.
 - [ ] **C6 8782 브라우저 전수 검증**: 모든 scene 대사·스프라이트 열림/저장 + B팀 confirm 흐름.
+  - 2026-06-26 현재: Chrome CDP로 63 scene/107 sprite 열람 failure 0.
+  - B팀 대표 경로 취소/승인/원복, 초과 입력 dry-run 차단, 서버 초과 하드게이트 검증 완료.
+  - 미완: 모든 editable 대사의 비파괴 저장 라운드트립/transaction 검증은 아직 없음(대표 저장 검증만 완료).
 
 ## D. 에디터/QA 폴리시 (Phase 6~8 잔여)
 - [ ] D1 공통 `text_metrics.py` 추출 + py↔js 일치 테스트, 2350 미수록 음절 차단 일원화.
+  - 2026-06-26 부분 완료: `test_text_metrics.py` py↔js 25,319 코퍼스 PASS, `scene_editor/server.py`는
+    `text_metrics.encoded_len` 참조로 전환. 단, `qa_text_fit.py`/`lint_translation.py` 등 중복 예산 함수가 남아 완전 SSOT는 아님.
 - [ ] D2 인게임 대사 박스 셀 폭 실측 → 줄당 최대 글자수(현재 fragment slot 총량 권위).
 - [ ] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX.
 - [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(현재 part2_menu만 ready).
@@ -104,6 +115,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [ ] E5 VRAM 팔레트 캡처(0x05000000/0x05000200) 스프라이트 실색.
 - [ ] E6 CSV 권위 단일화(inline 리터럴 → overrides.tsv 분리).
 - [ ] E7 캡처 지연 단축(슬롯 nav 단축 canvas + orig 캡처 영구 캐시).
+- [ ] E8 `88_common_comm_labels` raw 단일 `ソ`(0x00EE22AC) 실제 UI 노출 재확인.
+  현재 잔류 문장 후보는 아니고 원본과 동일한 통신 숫자/control table observation이지만, fresh menu/focus 재검증으로
+  "화면 비노출" 근거를 최신 SHA에서 보강할 것.
 
 ## F. 하드웨어 (사용자/물리 필요)
 - [ ] F1 실기(real GBA) 검증 — 플래시카트 부팅·주요화면. **자율 불가(하드웨어 필요)**.

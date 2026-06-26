@@ -71,6 +71,24 @@ def hit_offset(row: dict) -> str | None:
     return str(offset) if offset else None
 
 
+def residual_payloads(row: dict) -> list[dict]:
+    out = []
+    if isinstance(row.get("residuals"), list):
+        out.extend(item for item in row["residuals"] if isinstance(item, dict))
+    if row.get("translation_residual", 0) and hit_payload(row):
+        payload = hit_payload(row)
+        if payload and payload not in out:
+            out.append(payload)
+    return out
+
+
+def safe_int(value, default=0) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def rel(path: Path) -> str:
     try:
         return str(path.relative_to(ROOT))
@@ -202,6 +220,14 @@ def main() -> None:
                 })
                 continue
             hits = [item for item in results if hit_payload(item)]
+            unexplained_residual_rows = [
+                item for item in results
+                if safe_int(item.get("translation_residual")) != len(residual_payloads(item))
+            ]
+            raw_unexplained_rows = [
+                item for item in results
+                if safe_int(item.get("raw_kana_unexplained_count")) > 0
+            ]
             row["case_count"] += len(results)
             row["hit_count"] += len(hits)
             if expected_cases is not None and len(results) != int(expected_cases):
@@ -221,6 +247,23 @@ def main() -> None:
                     "issue": "scan hit 수 불일치",
                     "expected": int(expected_hits),
                     "actual": len(hits),
+                })
+            for item in unexplained_residual_rows:
+                issues.append({
+                    "severity": "critical",
+                    "container_scene_id": sid,
+                    "path": rel(result_path),
+                    "issue": "translation_residual count와 residual payload 수 불일치",
+                    "translation_residual": item.get("translation_residual"),
+                    "payload_count": len(residual_payloads(item)),
+                })
+            for item in raw_unexplained_rows:
+                issues.append({
+                    "severity": "critical",
+                    "container_scene_id": sid,
+                    "path": rel(result_path),
+                    "issue": "설명되지 않은 raw kana observation",
+                    "raw_kana_unexplained_count": item.get("raw_kana_unexplained_count"),
                 })
 
             known_hits = evidence.get("known_hits") or []

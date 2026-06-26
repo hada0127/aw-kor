@@ -1,0 +1,45 @@
+[
+ {
+  "label": "static_residual_reverify::30g_part2_story_green_earth_late",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "485ef5e88ce76d0abf057bc0a06d00946ad9dd7045a3cac1398a5a3d23681969",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00A1C06C:0x00A20000",
+    "extracted": {
+     "covered_count": 795,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 1,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00A1D35E",
+       "length": 2,
+       "text": "ヨ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1D349"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 795,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 1,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

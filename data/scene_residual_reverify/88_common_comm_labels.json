@@ -1,0 +1,57 @@
+[
+ {
+  "label": "static_residual_reverify::88_common_comm_labels",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "485ef5e88ce76d0abf057bc0a06d00946ad9dd7045a3cac1398a5a3d23681969",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00EE212C:0x00EE2848",
+    "extracted": {
+     "covered_count": 56,
+     "uncovered_count": 1,
+     "same_original_uncovered_count": 1,
+     "current_kind_counts": {
+      "same_original": 1
+     },
+     "residual_candidates": [],
+     "low_score_same_original": [
+      {
+       "offset": "0x00EE2238",
+       "length": 10,
+       "chars": 5,
+       "score": 5,
+       "same_original": true,
+       "current_kind": "same_original",
+       "text": "豎戝贄趁踈"
+      }
+     ]
+    },
+    "raw_kana": {
+     "raw_kana_count": 1,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00EE22AC",
+       "length": 2,
+       "text": "ソ",
+       "allowed": true,
+       "reason": "common comm numeric/control table single kana; same as original. Historical menu/focus residual scan found no visible hit; keep visual follow-up in todo.",
+       "containing_extracted_addr": null
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 56,
+  "extracted_uncovered_count": 1,
+  "same_original_uncovered_count": 1,
+  "raw_kana_count": 1,
+  "raw_kana_unexplained_count": 0,
+  "classification": "low_score_same_original_only",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

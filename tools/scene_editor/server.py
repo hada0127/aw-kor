@@ -72,8 +72,10 @@ try:
     if str(ROOT / "tools") not in sys.path:
         sys.path.insert(0, str(ROOT / "tools"))
     import build_korean_full as B
+    import text_metrics as TM
 except Exception:
     B = None
+    TM = None
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()
@@ -246,15 +248,16 @@ def public_scene(sc):
 # ── 요구7: 바이트 예산 계산(codex 교정 — 대사 슬롯은 NUL 미포함) ──────────
 def encoded_len(text: str) -> int:
     """한글=2 / 전각공백=2 / 검증 ASCII=1 / 기타=2(경고대상). dialogue slot 기준 바이트수."""
+    if TM:
+        return TM.encoded_len(text)
     n = 0
-    s2c = syl_codes()
     for ch in text:
-        if ch in s2c:
+        if "가" <= ch <= "힣":
             n += 2
         elif ch == "　":
             n += 2
         elif ch == "\n":
-            n += 1  # 줄바꿈 0x0A
+            n += 1
         elif 0x20 <= ord(ch) <= 0x7E:
             n += 1
         else:
@@ -901,6 +904,9 @@ class Handler(BaseHTTPRequestHandler):
         if isinstance(slot, int) and not fit["fits"]:
             return {"ok": False, "error": "슬롯 초과 %dB>%dB" % (fit["raw_len"], slot), "over": True,
                     "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}
+        if body.get("dry_run"):
+            return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
+                    "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot}
         with _LOCK:
             ov = DE.load_json(DE.OVERRIDES_PATH, {}) or {}
             ov[addr] = ko

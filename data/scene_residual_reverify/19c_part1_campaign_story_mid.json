@@ -1,0 +1,36 @@
+[
+ {
+  "label": "static_residual_reverify::19c_part1_campaign_story_mid",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "485ef5e88ce76d0abf057bc0a06d00946ad9dd7045a3cac1398a5a3d23681969",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00DC2900:0x00DCA000",
+    "extracted": {
+     "covered_count": 997,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 0,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 997,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 0,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]
