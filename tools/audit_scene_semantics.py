@@ -95,6 +95,16 @@ ANIMATION_FRAME_REQUIREMENTS = {
     },
 }
 
+RUNTIME_WATCH_REQUIREMENTS = {
+    "89b_common_battle_defeat_comm_messages": {
+        "severity": "critical",
+        "watch_log": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/defeat_watch.log",
+        "required_hits": {"g_00A34D18"},
+        "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
+        "required": "watch log의 addr=08xxxxxx 런타임 hit 그룹을 scene_catalog_overrides.json으로 해당 scene에 연결",
+    },
+}
+
 
 def load(path: Path, default):
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
@@ -130,6 +140,24 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def watch_hit_group_ids(log_path: str) -> set[str]:
+    path = ROOT / log_path
+    if not path.exists():
+        return set()
+    ids: set[str] = set()
+    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        for token in line.split():
+            if not token.startswith("addr="):
+                continue
+            try:
+                bus_addr = int(token.split("=", 1)[1], 16)
+            except ValueError:
+                continue
+            if 0x08000000 <= bus_addr < 0x0A000000:
+                ids.add(f"g_{bus_addr - 0x08000000:08X}")
+    return ids
 
 
 def main() -> None:
@@ -237,6 +265,36 @@ def main() -> None:
                 "required": "재현 가능한 source_state 또는 fresh nav를 scene entrypoint에 기록",
                 "state": checkpoint.get("state"),
             })
+        watch_req = RUNTIME_WATCH_REQUIREMENTS.get(scene_id)
+        if watch_req:
+            observed = watch_hit_group_ids(watch_req["watch_log"])
+            missing_watch = sorted(watch_req["required_hits"] - observed)
+            if missing_watch:
+                issues.append({
+                    "scene": scene_id,
+                    "title": scene.get("title"),
+                    "checkpoint": checkpoint_name,
+                    "severity": watch_req["severity"],
+                    "issue": "기록된 watch log에 필수 런타임 hit 주소가 없음",
+                    "required": "watch log/provenance를 재확보하거나 audit 요구 주소를 갱신",
+                    "missing_watch_hits": missing_watch,
+                    "watch_log": watch_req["watch_log"],
+                    "state": checkpoint.get("state"),
+                })
+            have = set(scene.get("dialogue_ids") or [])
+            missing = sorted(watch_req["required_hits"] - have)
+            if missing:
+                issues.append({
+                    "scene": scene_id,
+                    "title": scene.get("title"),
+                    "checkpoint": checkpoint_name,
+                    "severity": watch_req["severity"],
+                    "issue": watch_req["issue"],
+                    "required": watch_req["required"],
+                    "missing_dialogue_ids": missing,
+                    "watch_log": watch_req["watch_log"],
+                    "state": checkpoint.get("state"),
+                })
 
     for digest, owners in sorted(frame_hash_owners.items(), key=lambda item: item[1][0]["scene"]):
         if len(owners) <= 1:

@@ -1243,6 +1243,20 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
   `tools/verify_preview_canvases.py`가 payload A/B 픽셀 차이를 검사해 잘못된 slot ready 회귀를 차단한다.
   battle 대사 canvas는 아직 **대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증** 필요. savestate는 VRAM stale이라
   단순 frames advance 무효 — 로드 직후 대사 재트리거(press A) 필요(agy/codex 공통 경고).
+- **2026-06-26 battle dialogue 후보 실측**:
+  - `31_battle_dialog`은 이름과 달리 실제 대사 화면이 아니라 전투 정보/UI 화면(우측 료 초상+자금 1000)이며
+    provenance도 구 SHA `4f6898d...` 기반 stale다. battle dialogue canvas 근거로 사용하면 안 된다.
+  - 실제 대사 화면 후보는 `89a_common_battle_surrender_confirm`(항복 확인)와
+    `89b_common_battle_defeat_comm_messages`(레드스타 군은 패배했습니다). 최종 표시 savestate에
+    `0xEFDAA0`/`0xEFDAC1`/`0xA34D18`/`0xEFD8A4` payload를 바꿔 캡처해도 diff=0:
+    이미 렌더된 VRAM을 캡처하는 상태라 canvas-hijack 신뢰 조건을 만족하지 않는다.
+  - `0xA34D18` ROM 파일 패치는 loadstate 뒤 `dumpmem 0x08A34D18`에서 정상 반영됨을 확인했다. 따라서 문제는
+    ROM 패치 불능이 아니라, 대사 생성 직전 state/nav가 아직 독립 재현되지 않은 것이다.
+  - `part2_3p_surrender_confirm_fine/state_000_before_a.ss0`는 단독 loadstate 후 A hold/release replay에서
+    저장된 `014_after_f20` 중간 메시지로 재진입하지 못하고 HUD 전환으로 빠진다. 이 state는 canvas 후보로
+    승격 금지. fresh-nav 또는 재트리거 가능한 직전 state를 새로 확보해야 한다.
+  - `89b` 캡처의 실제 런타임 read는 watch log상 `0x08A34D18`이다. scene_catalog는 기존에 공통
+    `0xEFD8A4` 버킷만 연결하고 있었으므로 `g_00A34D18`~`g_00A34DB0`을 89b에 수동 보정했다.
 - **캐시 키 버그 수정**(codex): preview_capture 캐시 키가 base_rom.name+text뿐이라 nav/슬롯/ROM
   내용 변경 시 stale 재사용 → 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함.
 

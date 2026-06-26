@@ -1982,3 +1982,14 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   서로 다른 payload 2종을 캡처하고, 선택 ROI 픽셀 차이가 발생하는지 검사한다. 결과:
   canvas 2/failure 0, `part1_welcome` diff 314px, `part2_menu` diff 7383px.
 - **남은 범위**: battle dialogue canvas는 아직 미승격. 대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증 필요.
+
+---
+## [2026-06-26] 89b 전투 패배 메시지 scene 실제 표시 주소 연결 보정
+
+- `89b_common_battle_defeat_comm_messages`의 최신 캡처는 실제 중간 패배 메시지 화면이지만, 런타임 watch log는
+  공통 `0xEFD8A4`가 아니라 Part2 복사본 `0xA34D18`을 읽는다.
+- `data/scene_catalog_overrides.json`로 `g_00A34D18`~`g_00A34DB0`을 89b에 이동 연결했다. 재생성 후
+  `89b` dialogue count는 12, `26_part2_battle_labels`는 139→134로 줄어 잘못 묶인 패배 메시지가 빠졌다.
+- `tools/audit_scene_semantics.py`에 89b watch-log 기반 가드를 추가했다. `defeat_watch.log`의
+  `addr=08A34D18` hit를 `g_00A34D18`로 환산해 scene dialogue_ids와 대조하므로, 3P surrender defeat 화면이
+  실제 런타임 hit 그룹 없이 green 처리되는 것을 막는다.

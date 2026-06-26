@@ -4900,11 +4900,6 @@
         "g_00A34C9F",
         "g_00A34CB0",
         "g_00A34CE8",
-        "g_00A34D18",
-        "g_00A34D3C",
-        "g_00A34D60",
-        "g_00A34D88",
-        "g_00A34DB0",
         "g_00A34DD8",
         "g_00A34DFC",
         "g_00A34E18",
@@ -4921,7 +4916,7 @@
         "lz77_00BD4FBC"
       ],
       "counts": {
-        "dialogue": 139,
+        "dialogue": 134,
         "sprite": 2
       },
       "entrypoint": {
@@ -9854,11 +9849,16 @@
         "g_00EFD914",
         "g_00EFD93C",
         "g_00EFDDBD",
-        "g_00EFDDD4"
+        "g_00EFDDD4",
+        "g_00A34D18",
+        "g_00A34D3C",
+        "g_00A34D60",
+        "g_00A34D88",
+        "g_00A34DB0"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 7,
+        "dialogue": 12,
         "sprite": 0
       },
       "entrypoint": {

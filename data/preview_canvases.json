@@ -38,6 +38,6 @@
     }
   },
   "_experimental_part1": {
-    "note": "part1_welcome은 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)와 battle dialogue canvas는 아직 대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증 필요."
+    "note": "part1_welcome은 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)는 아직 대사창 직전 정밀 nav 필요. battle dialogue는 2026-06-26 probe에서 31_battle_dialog 오분류, 89a/89b 최종 savestate payload diff 0으로 미승격. fresh-nav 또는 재트리거 가능한 직전 state를 확보한 뒤 verify_preview_canvases diff>0일 때만 추가."
   }
 }

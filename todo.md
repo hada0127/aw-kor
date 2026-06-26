@@ -117,6 +117,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     복사본 `0x00A7AB56` 37B span + frame 108/120/132/144 sweep으로 승격했고,
     `tools/verify_preview_canvases.py`가 active canvas 2개(part1_welcome, part2_menu)에 대해 서로 다른 payload가
     실제 캡처 픽셀을 바꾸는지 검증한다. 남은 범위: battle dialogue canvas 신뢰성 확보.
+  - 2026-06-26 추가 조사: `31_battle_dialog` 캡처는 이름과 달리 대사창이 아닌 전투/정보 UI 화면이며 provenance도
+    구 SHA stale라 battle dialogue canvas 근거로 사용 금지. `89a_common_battle_surrender_confirm`,
+    `89b_common_battle_defeat_comm_messages`는 실제 대사 화면이지만 최종 savestate를 slot hijack하면 payload diff 0
+    (이미 렌더된 VRAM). `89b` 직전 후보 `state_000_before_a`도 현 하네스 단독 replay에서는 같은 중간 메시지로
+    재진입하지 못함. 다음 작업은 fresh-nav로 대사 생성 직전까지 안정 도달하거나, savestate 직후 런타임 text source를
+    재트리거하는 별도 canvas 지원을 만든 뒤 `verify_preview_canvases.py --canvas <battle>` diff>0로 승격.
 - [ ] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트.
 
 ## E. 백로그 (독립 트랙 — 결함 0 달성 후/병행)
