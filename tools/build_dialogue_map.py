@@ -201,7 +201,13 @@ def load_build_text_overrides():
         if tools_dir not in sys.path:
             sys.path.insert(0, tools_dir)
         import build_korean_full as B  # noqa: WPS433
-        return B.ADDRESS_TEXT_OVERRIDES, B.SOURCE_TEXT_OVERRIDES, B.TEXT_OVERRIDES
+        addr_overrides = dict(B.ADDRESS_TEXT_OVERRIDES)
+        slots = B.load_slots()
+        for addr, text in list(addr_overrides.items()):
+            slot = slots.get(addr, 1)
+            if B.in_region(B.PAIR_RENDERER_REGIONS, addr, addr + max(slot, 1)):
+                addr_overrides[addr] = B.normalize_pair_renderer_text(text)
+        return addr_overrides, B.SOURCE_TEXT_OVERRIDES, B.TEXT_OVERRIDES
     except Exception:
         return {}, {}, {}
 
@@ -220,10 +226,11 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
     protected_addr_override = addr in addr_overrides
     if protected_addr_override:
         ko = addr_overrides[addr] or ""
-    elif ja in source_overrides and not has_hangul(ko):
-        ko = source_overrides[ja] or ""
-    if ko in text_overrides:
-        ko = text_overrides[ko] or ""
+    else:
+        if ja in source_overrides and not has_hangul(ko):
+            ko = source_overrides[ja] or ""
+        if ko in text_overrides:
+            ko = text_overrides[ko] or ""
     direct_hit = addr in direct_patches
     if direct_hit:
         ko = direct_patches[addr] or ""
@@ -233,13 +240,17 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
         ko = ship_ko
     if addr in dialogue_overrides and addr not in addr_overrides:
         ko = dialogue_overrides[addr] or ""
+    if protected_addr_override:
+        # Protected rows skip editor overlays/display normalizers, but later
+        # direct script patches still win because build_korean_full writes them
+        # after the import/override pass.
+        return ko
     if ko:
-        if not protected_addr_override:
-            try:
-                import build_korean_full as B  # noqa: WPS433
-                ko = B.normalize_korean_terms(ko)
-            except Exception:
-                pass
+        try:
+            import build_korean_full as B  # noqa: WPS433
+            ko = B.normalize_korean_terms(ko)
+        except Exception:
+            pass
         ko = ko.replace("지도을", "지도를").replace("지도은", "지도는")
     return ko
 

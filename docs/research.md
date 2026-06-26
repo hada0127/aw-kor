@@ -1793,3 +1793,27 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **검증**: 새 서버에서 `코스모랜드 설명을` 검색 시 `0x00DF5E12` member id는 `29424`로 보정되고,
   stale 문장 `당신에게는,코스모 랜드에 대해` 검색 hit는 0이다. `/api/line` dry-run 저장은
   `빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소` 오류로 차단된다.
+
+---
+## [2026-06-26] `ADDRESS_TEXT_OVERRIDES` 거버넌스 audit와 D2 미커버 watch
+
+- **source duplicate 구조**: `ADDRESS_TEXT_OVERRIDES` 단일 dict 내부 중복은 0으로 보였지만, 후속
+  `ADDRESS_TEXT_OVERRIDES.update({...})` 블록이 앞선 값을 덮는 중복이 142주소/145라인 남아 있었다.
+  이 구조는 최종 ROM을 바꾸지 않더라도 새 override가 숨어 들어갈 수 있으므로, 최종 effective 값을 보존한 채
+  앞선 중복 정의를 제거했다. audit 기준은 source entries=effective=4118, duplicate 0.
+- **final effective 산정 정정**: 보호주소 final text는 raw `ADDRESS_TEXT_OVERRIDES[addr]`만이 아니다.
+  import/override pass 뒤에 `patch_script_row` 등 direct patch가 같은 주소를 다시 쓰는 경우가 있고, pair-renderer
+  영역은 `normalize_pair_renderer_text`로 전각 공백/숫자 변환 후 인코딩된다. audit 기준은
+  `direct patch > pair normalize > raw ADDRESS_TEXT_OVERRIDES` 순서다. 현재 pair normalize 4건, direct patch collision
+  970건(분기 502)이다.
+- **overlay 분기**: `dialogue_overrides.json`에는 보호주소 collision 1111건이 남아 있고, final effective 기준 1072건은
+  실제 출하 text와 다르다. 이는 편집기/legacy 권위문과 출하 안전문이 분기된 상태를 명시적으로 보여 주는 리포트
+  대상이다. 빌드/에디터 표시/저장 게이트는 final effective text를 권위로 쓴다.
+- **UI 표시 동기화**: `dialogue_map.json`과 `dialogue_groups.json`은 final effective text 기준으로 검사한다.
+  리뷰에서 raw 보호값 기준 early-return이 direct patch 502건과 pair normalize 4건을 숨기는 결함임을 확인해 철회했다.
+  현재 audit 기준 `dialogue_map` 보호주소 mismatch 0, `dialogue_groups` 보호주소 mismatch 0.
+- **D2 미커버 watch**: 현재 SHA `8a34a570…`에서 `0xD81C24`, `0xA3B880`, `0xB842E8` 본문 head와 정적 포인터 위치를
+  `temp/part1_menu_fresh_final_current/state_003.ss0`, `temp/part1_post_name_menu_branch_20260608/menu_base.ss0`,
+  battle/Part2 sweep 계열 4개 state 주변 15케이스로 read-watch했다. 결과는 모두 hit 0이며 요약은
+  `data/d2_width_uncovered_watch_probe_20260626.json`. 이 결과는 기존 checkpoint가 실제 노출 화면이 아님을 뜻할 뿐,
+  해당 후보의 클리핑 안전성을 증명하지 않는다.

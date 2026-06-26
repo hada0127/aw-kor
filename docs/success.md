@@ -2233,3 +2233,21 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict`,
   `audit_scene_residual_scans.py --strict`, `verify_dist_integrity.py`가 모두 PASS했다.
   residual case 16/hit 0/critical 0.
+
+---
+## [2026-06-26] E10 `ADDRESS_TEXT_OVERRIDES` 거버넌스 audit 완료
+
+- `tools/audit_address_text_overrides.py --strict`를 추가했다. 이 도구는
+  `tools/build_korean_full.py`의 `ADDRESS_TEXT_OVERRIDES` assign/update literal을 AST로 읽어 source duplicate key,
+  runtime/static mismatch, final effective transform, `dialogue_overrides` 보호주소 collision, `dialogue_map.json`/
+  `dialogue_groups.json` 표시 mismatch를 보고한다.
+- 기존 후속 `ADDRESS_TEXT_OVERRIDES.update()`가 앞선 값을 덮던 142주소/145라인을 제거했다. 최종 effective 값은
+  그대로라 재빌드 후 output 3종 SHA는 `8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e`로 유지된다.
+- codex/claude 리뷰에서 raw `ADDRESS_TEXT_OVERRIDES` 기준 early-return이 direct patch 502건과 pair-renderer normalize 4건을
+  숨긴다고 지적해 기준을 수정했다. final effective는 pair-normalized 4건, direct-patch collision 970건(분기 502)을
+  반영한다.
+- `dialogue_overrides.json`은 보호주소 collision 1111건(분기 1072, 동일 39)을 여전히 가진다. 이는 legacy/editor 권위문이
+  남아 있는 상태라 report-only로 둔다. hard invariant는 build/editor 표시가 final effective 값을 우선하는 것이다.
+- `build_dialogue_map.py` 표시 우선순위를 보강해 final effective 기준 `dialogue_map` 보호주소 mismatch 0,
+  `dialogue_groups` 보호주소 mismatch 0을 확인했다. `verify_dist_integrity.py`에 새 strict audit를 연결했고,
+  `verify_dist_integrity.py` PASS로 배포 게이트에 편입됐다.

@@ -1,0 +1,198 @@
+{
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
+  "purpose": "D2 uncovered >50 candidates read-watch probe for 0xD81C24, 0xA3B880, 0xB842E8. hit 0 means these checkpoint routes do not prove actual exposure.",
+  "cases": [
+    {
+      "case": "d81_fresh_00",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_01",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "DOWN",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_02",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "UP",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_03",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "DOWN",
+        "DOWN",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_04",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "START",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_05",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "SELECT",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_06",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "RIGHT",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_fresh_07",
+      "state": "temp/part1_menu_fresh_final_current/state_003.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "LEFT",
+        "A",
+        60
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_oldbranch_00",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_oldbranch_01",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "DOWN",
+        "A",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "d81_oldbranch_02",
+      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
+      "steps": [
+        "DOWN",
+        "A",
+        "START",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "a3_b842_00",
+      "state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
+      "steps": [
+        120,
+        "A",
+        120,
+        "B",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "a3_b842_01",
+      "state": "temp/battle_crash_smoke_20260607/heavy_day2_control/final.ss0",
+      "steps": [
+        120,
+        "START",
+        120,
+        "A",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "a3_b842_02",
+      "state": "temp/scene_entrypoints/part2_main_sweep_current/state_022.ss0",
+      "steps": [
+        60,
+        "A",
+        120,
+        "DOWN",
+        120,
+        "A",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    },
+    {
+      "case": "a3_b842_03",
+      "state": "temp/scene_entrypoints/freebattle_after_attack_6_5_endturn_probe/final.ss0",
+      "steps": [
+        120,
+        "START",
+        120,
+        "A",
+        120
+      ],
+      "watch_lines": 0,
+      "first_hits": []
+    }
+  ]
+}

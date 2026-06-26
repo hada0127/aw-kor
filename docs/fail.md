@@ -488,3 +488,17 @@ guard-skip)는 hook이 정석이나 위 파서 RE 선행 필요.
 
 **대안(현 채택)**: 전각(0x8140)화+재배치로 5976→718(88%). 718은 0x20 메시지(슬롯 빠듯해 전각 미적합 + 무포인터
 재배치불가). hook 완성 시 0x20이 슬롯맞고 렌더되어 718+부호소실 1733 근본해결 가능.
+
+---
+## [2026-06-26] D2 폭 후보 미커버 read-watch — 기존 checkpoint 주변 hit 0
+
+`0xD81C24` 맵 디자인 도움말, `0xA3B880/0xB842E8` CO 파워명 후보를 기존 scene checkpoint 주변에서 다시
+read-watch했다. 결과는 `data/d2_width_uncovered_watch_probe_20260626.json`에 보존했다.
+
+- Part1 fresh 메뉴 state와 구 `menu_base.ss0`에서 `DOWN/A/START/SELECT/좌우` 조합 11케이스:
+  `0x08D81C24` 본문 head와 `0x08B059F0` 포인터 read hit 0.
+- Part2 전투/메인 sweep/freebattle state 4케이스:
+  `0x08A3B880`, `0x08B842E8` 본문 head 및 `0x083806FC/0x08381300/0x08B3C1F8` 포인터 read hit 0.
+
+이 실패 경로로 D2를 닫지 않는다. 결론은 "기존 checkpoint 주변은 실제 노출 화면이 아니다"이며,
+다음 재시도는 맵 디자인 도움말 메뉴 직접 진입 state 또는 CO 파워 발동/상세 화면 state 확보가 먼저다.

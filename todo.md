@@ -134,6 +134,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
       화면에 직접 도달하지 못했으므로 D2 완료 금지.
       `0xA3B880/0xB842E8`는 CO 프로필 스크롤 read-watch hit 0, 정적 포인터는 존재하므로 CO 파워 발동/상세 화면
       state 확보 전까지 실제 클리핑 여부를 닫지 않는다.
+      2026-06-26 추가 재확인: 현재 SHA `8a34a570…`에서
+      `data/d2_width_uncovered_watch_probe_20260626.json`에 15개 checkpoint 주변 read-watch probe를 보존했다.
+      `0x08D81C24`/`0x08A3B880`/`0x08B842E8` 본문 및 정적 포인터 watch 모두 hit 0. 이는 기존 checkpoint가
+      실제 노출 화면이 아님을 강화할 뿐, 후보 안전성을 증명하지 않으므로 D2 완료 금지.
       후속 계획: ① Part1/Part2 맵 디자인 도움말 메뉴로 직접 진입하는 checkpoint 작성,
       ② CO 파워 발동 또는 CO 상세/파워명 노출 state 확보.
 - [x] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX 완료(2026-06-26).
@@ -212,9 +216,13 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `ADDRESS_TEXT_OVERRIDES`의 Part1 메뉴 도움말은 안전 음절/짧은 슬롯 제약 때문에 `대결 법 가르 드려`처럼 어색한
   축약이 남아 있다. `삼인`/`사인` 등 숫자 의미 보존 가능 여부와 safe syllable 충돌을 fresh route로 검증해
   플레이어 수/통신 방식 정보 손실을 줄인다.
-- [ ] E10 `ADDRESS_TEXT_OVERRIDES` 거버넌스 하드닝.
-  이번 라운드에서 동일값 중복 키 9건은 제거했지만, 향후 재발 방지를 위해 source duplicate-key lint와
-  `dialogue_overrides`↔빌드 effective text 분기 리포트를 추가한다.
+- [x] E10 `ADDRESS_TEXT_OVERRIDES` 거버넌스 하드닝 완료(2026-06-26).
+  `tools/audit_address_text_overrides.py --strict` 추가. source duplicate key 142주소/145라인을 최종 effective 값
+  보존 방식으로 제거해 source entries=effective=4118, duplicate 0, runtime/static mismatch 0.
+  리뷰 반영으로 final effective 산정은 raw `ADDRESS_TEXT_OVERRIDES`가 아니라 pair-renderer normalize 4건과
+  후단 direct patch collision 970건(분기 502)을 포함한다. `dialogue_overrides` 보호주소 collision 1111
+  (분기 1072/동일 39)은 리포트로 남기고 hard fail 대상에서는 제외한다. `dialogue_map.json` 보호주소 표시
+  mismatch 0, `dialogue_groups.json` 보호주소 표시 mismatch 0. `verify_dist_integrity.py` 배포 게이트에 strict audit 연결.
 - [ ] E11 통합 QA runner/CI 정리.
   codex/agy 리뷰 지적: 현재 배포 전 QA는 수동 나열 중심이다. `build`, text QA, visual QA, scene audit,
   editor smoke, dist integrity를 한 번에 실행하는 runner와 CI/로컬 gate 분리를 설계한다.
