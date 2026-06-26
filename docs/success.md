@@ -2115,3 +2115,18 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `>50` 행은 관측되지 않았다. 단, D2는 아직 완료가 아니다. UI별 허용폭은 50셀보다 좁을 수 있으므로 이 13개는
   블로커 후보로 남기고, 각 scene fresh capture와 UI별 max-cell 산정으로 실제 줄분리/테이블 렌더/클리핑 여부를
   확인해야 한다.
+
+---
+## [2026-06-26] D2 `>50` UI 후보 1차 재캡처 분류
+
+- `capture_scene_screenshots.py --force`로 `12_part1_single_submenus`, `26_part2_battle_labels`,
+  `86_common_compact_menu_tables`, `16_part1_info_screen`, `85_ui_common`, `89_common_battle_system_results`를
+  현재 ROM 기준 재캡처했다. `--force`는 temp scene screenshot을 갱신하므로, 커밋 증거는 아래 4개 PNG만
+  `docs/screenshots/`에 별도 보존했다.
+- 증거 PNG를 `docs/screenshots/d2_width_candidates_2026-06-26/`에 보존했다.
+  `common_compact_menu_tables.png`, `part1_info_screen.png`, `ui_common_start_menu.png`, `battle_system_menu.png`.
+- 판정: `0x804FD4/0x805B04`, `0xD83138`, `0x94298C/0x97AE40/0x9B36E4/0x9EBF88`, `0xEFAAD4`는 해당 캡처에서
+  전체 테이블이 한 줄로 출력되지 않고 항목 단위로 렌더된다. 이 1차 확인 범위에서는 50셀 초과로 인한 클리핑은 보이지 않는다.
+  이는 해당 화면의 캡처 근거일 뿐, D2 완료나 UI별 폭 동치 검증을 뜻하지 않는다.
+- 미완: `0xD81C24` 맵 디자인 도움말 본문, `0xA3B880/0xB842E8` CO 파워명, `0xD721B5` 문장부호/어깨 테이블은
+  현재 scene checkpoint가 실제 후보 노출 화면이 아니므로 별도 fresh navigation/state가 필요하다.
