@@ -112,7 +112,8 @@ def main():
     here = os.path.dirname(os.path.abspath(__file__))
     for label, tool, extra in [('B팀 drift', 'qa_bteam_drift.py', []),
                                ('CSV ROM 일본어 잔존', 'qa_csv_integrity.py', ['--fail-on-rom-japanese']),
-                               ('scene container residual', 'audit_scene_residual_scans.py', ['--strict'])]:
+                               ('scene container residual', 'audit_scene_residual_scans.py', ['--strict']),
+                               ('sprite override fit', 'audit_sprite_override_report.py', ['--strict'])]:
         rc = subprocess.run([sys.executable, os.path.join(here, tool), *extra],
                             capture_output=True, text=True).returncode
         print(f'[{ "OK" if rc == 0 else "FAIL"}] {label} 게이트 (rc={rc})')

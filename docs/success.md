@@ -1993,3 +1993,16 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - `tools/audit_scene_semantics.py`에 89b watch-log 기반 가드를 추가했다. `defeat_watch.log`의
   `addr=08A34D18` hit를 `g_00A34D18`로 환산해 scene dialogue_ids와 대조하므로, 3P surrender defeat 화면이
   실제 런타임 hit 그룹 없이 green 처리되는 것을 막는다.
+
+---
+## [2026-06-26] D5 sprite override LZ77 fit/skip 리포트 게이트 완료
+
+- `build_korean_full.py`의 `apply_sprite_overrides`가 항상 `temp/sprite_override_report.json`을 쓴다.
+  리포트에는 `data/sprites_overrides.json` SHA, override count, per-sprite status, synthetic tile 수,
+  raw decoded size, LZ77 `compressed_size`/`comp_size`, skipped reason이 들어간다.
+- `tools/audit_sprite_override_report.py --strict`를 추가했다. non-empty override에서 report 누락/stale,
+  `ok=false`, skipped record, applied LZ77의 cap 초과를 critical로 실패시킨다.
+- `verify_dist_integrity.py`에 `sprite override fit` 게이트를 연결했다. 현재 override 0건 기준 report
+  `applied=0/skipped=0/ignored=0`, output full/final/title_test SHA는 기존 `6cb201dc…`로 유지.
+- temp 검증: 원본 `lz77_000228AC` indices override는 `compressed_size 368 <= comp_size 605`로 applied,
+  의도적으로 줄인 grid는 size mismatch skipped로 audit 실패를 확인했다.

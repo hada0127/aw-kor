@@ -123,7 +123,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     (이미 렌더된 VRAM). `89b` 직전 후보 `state_000_before_a`도 현 하네스 단독 replay에서는 같은 중간 메시지로
     재진입하지 못함. 다음 작업은 fresh-nav로 대사 생성 직전까지 안정 도달하거나, savestate 직후 런타임 text source를
     재트리거하는 별도 canvas 지원을 만든 뒤 `verify_preview_canvases.py --canvas <battle>` diff>0로 승격.
-- [ ] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트.
+- [x] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트 완료(2026-06-26).
+  `build_korean_full.py`가 `data/sprites_overrides.json` 적용 시 `temp/sprite_override_report.json`에
+  override SHA/records/applied/skipped/ignored와 LZ77 `compressed_size <= comp_size` 결과를 남긴다.
+  `tools/audit_sprite_override_report.py --strict`와 `verify_dist_integrity.py`의 `sprite override fit` 게이트가
+  non-empty override의 stale report, 재압축 초과, size mismatch, skip을 critical로 막는다. 현재 override 0건,
+  report ok/skipped 0, output 3종 SHA `6cb201dc…` 유지.
 
 ## E. 백로그 (독립 트랙 — 결함 0 달성 후/병행)
 - [ ] E1 전체 의미 audit(JA↔KO 전수 LLM 판정) — 오역·의미축소·뉘앙스.

@@ -10331,20 +10331,60 @@ def _grid_to_tiles(grid):
     return bytes(out)
 
 
-def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None):
+def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, report_path=None):
     """스프라이트 편집기 픽셀 편집(data/sprites_overrides.json)을 ROM에 최종 역기록(오버레이).
     오버라이드 없으면 무동작 → 출력 byte-identical. synthetic은 라벨별 perm 역변환,
     lz77은 재압축≤comp_size, raw/font는 size 이내. 적합 실패 시 skip+리포트.
     objl_specs 미지정 시 빌드 메모리(OBJLABEL_SPRITES) 사용(빌드 인-프로세스)."""
     if ov_path is None:
         ov_path = os.path.join(BASE, 'data', 'sprites_overrides.json')
+    if report_path is None:
+        report_path = os.path.join(BASE, 'temp', 'sprite_override_report.json')
+
+    def _rel(p):
+        try:
+            return os.path.relpath(p, BASE)
+        except Exception:
+            return str(p)
+
+    def _write_report(rep):
+        os.makedirs(os.path.dirname(report_path), exist_ok=True)
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(rep, f, ensure_ascii=False, indent=2)
+            f.write('\n')
+
+    report = {
+        'schema': 1,
+        'override_path': _rel(ov_path),
+        'override_exists': os.path.exists(ov_path),
+        'override_sha256': None,
+        'override_count': 0,
+        'applied': 0,
+        'skipped': 0,
+        'ignored': 0,
+        'ok': True,
+        'records': [],
+    }
     if not os.path.exists(ov_path):
+        _write_report(report)
         return {'applied': 0, 'skipped': 0}
     try:
-        ov = json.load(open(ov_path, encoding='utf-8')) or {}
-    except Exception:
-        return {'applied': 0, 'skipped': 0}
+        raw = open(ov_path, 'rb').read()
+        report['override_sha256'] = hashlib.sha256(raw).hexdigest()
+        ov = json.loads(raw.decode('utf-8')) or {}
+    except Exception as exc:
+        report['ok'] = False
+        report['error'] = 'override json load failed: %r' % exc
+        _write_report(report)
+        raise
+    if not isinstance(ov, dict):
+        report['ok'] = False
+        report['error'] = 'override json must be object'
+        _write_report(report)
+        raise AssertionError(report['error'])
+    report['override_count'] = len(ov)
     if not ov:
+        _write_report(report)
         return {'applied': 0, 'skipped': 0}
     objl = {s['id']: s for s in (objl_specs if objl_specs is not None else OBJLABEL_SPRITES)}
     idx = {}
@@ -10360,17 +10400,27 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None):
 
     applied = 0
     skipped = []
+    ignored = 0
     for sid, rec in ov.items():
+        rec_report = {'id': sid}
         grid = rec.get('indices')
         if not grid:
+            ignored += 1
+            rec_report.update({'status': 'ignored', 'reason': 'indices missing'})
+            report['records'].append(rec_report)
             continue
         tiles = _grid_to_tiles(grid)  # 조립/패딩 타일스트림
+        rec_report['decoded_size'] = len(tiles)
         if sid in objl:
             # 합성: 라벨별로 perm 역변환(시각→ROM)해 각 흩어진 오프셋에 기록
             labels = objl[sid].get('labels') or []
             need = sum((l.get('tw', 0) or 0) * (l.get('th', 0) or 0) for l in labels)
+            rec_report.update({'kind': 'synthetic', 'required_tiles': need, 'tile_count': len(tiles) // 32})
             if len(tiles) < need * 32:  # 부분기록 방지(짧은 그리드 거부)
-                skipped.append((sid, '합성 그리드 부족(%d<%d 타일)' % (len(tiles) // 32, need)))
+                why = '합성 그리드 부족(%d<%d 타일)' % (len(tiles) // 32, need)
+                skipped.append((sid, why))
+                rec_report.update({'status': 'skipped', 'reason': why})
+                report['records'].append(rec_report)
                 continue
             tindex = 0
             spec_ok = True
@@ -10390,9 +10440,14 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None):
                     rom[off + ri * 32: off + ri * 32 + 32] = tiles[src:src + 32]
                 tindex += tw * th
             if not spec_ok:
-                skipped.append((sid, '합성 라벨 스펙 손상'))
+                why = '합성 라벨 스펙 손상'
+                skipped.append((sid, why))
+                rec_report.update({'status': 'skipped', 'reason': why})
+                report['records'].append(rec_report)
                 continue
             applied += 1
+            rec_report.update({'status': 'applied'})
+            report['records'].append(rec_report)
         elif sid in idx:
             sp = idx[sid]
             off = sp.get('offset_int')
@@ -10400,28 +10455,49 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None):
                 off = int(sp.get('offset', '0x0'), 16)
             typ = sp.get('type')
             size = sp.get('size') or 0
+            rec_report.update({'kind': typ, 'offset': '0x%08X' % off, 'expected_size': size})
             if size and len(tiles) != size:  # 디컴프크기 불변(VRAM 할당 초과/부족 방지)
-                skipped.append((sid, '%s 디코드 크기 불일치(%dB!=%dB)' % (typ, len(tiles), size)))
+                why = '%s 디코드 크기 불일치(%dB!=%dB)' % (typ, len(tiles), size)
+                skipped.append((sid, why))
+                rec_report.update({'status': 'skipped', 'reason': why})
+                report['records'].append(rec_report)
                 continue
             if typ == 'lz77':
                 from lz77_compress import lz77_compress_optimal
                 comp = lz77_compress_optimal(tiles, vram_safe=True)
                 cap = sp.get('comp_size') or 0
+                rec_report.update({'compressed_size': len(comp), 'comp_size': cap})
                 if not cap or len(comp) > cap:
-                    skipped.append((sid, 'lz77 재압축 %dB > comp_size %dB' % (len(comp), cap)))
+                    why = 'lz77 재압축 %dB > comp_size %dB' % (len(comp), cap)
+                    skipped.append((sid, why))
+                    rec_report.update({'status': 'skipped', 'reason': why})
+                    report['records'].append(rec_report)
                     continue
                 rom[off:off + cap] = comp + bytes(cap - len(comp))
                 applied += 1
+                rec_report.update({'status': 'applied'})
+                report['records'].append(rec_report)
             else:  # raw4bpp/font
                 rom[off:off + len(tiles)] = tiles
                 applied += 1
+                rec_report.update({'status': 'applied'})
+                report['records'].append(rec_report)
         else:
-            skipped.append((sid, '알 수 없는 스프라이트(인덱스/objlabel 미존재)'))
+            why = '알 수 없는 스프라이트(인덱스/objlabel 미존재)'
+            skipped.append((sid, why))
+            rec_report.update({'status': 'skipped', 'reason': why})
+            report['records'].append(rec_report)
+    report['applied'] = applied
+    report['skipped'] = len(skipped)
+    report['ignored'] = ignored
+    report['ok'] = not skipped
+    _write_report(report)
     if applied or skipped:
         print(f'→ 스프라이트 편집 적용(overrides): {applied} applied, {len(skipped)} skipped')
         for sid, why in skipped:
             print(f'   skip {sid}: {why}')
-    return {'applied': applied, 'skipped': len(skipped)}
+    print(f'→ 스프라이트 편집 리포트 {report_path} (applied {applied}, skipped {len(skipped)}, ignored {ignored})')
+    return {'applied': applied, 'skipped': len(skipped), 'ignored': ignored, 'report': report_path}
 
 
 def main():
@@ -19043,7 +19119,10 @@ def main():
 
     # 스프라이트 편집기 픽셀 편집 최종 오버레이(라벨 자동그리기 이후 = 편집이 우선).
     # 오버라이드 없으면 무동작 → 출력 byte-identical.
-    st['sprite_overrides'] = apply_sprite_overrides(rom)['applied']
+    _sprite_override_result = apply_sprite_overrides(rom)
+    st['sprite_overrides'] = _sprite_override_result['applied']
+    st['sprite_overrides_skipped'] = _sprite_override_result['skipped']
+    st['sprite_overrides_ignored'] = _sprite_override_result.get('ignored', 0)
 
     # 2.9) 쪼롱이님 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint)
     # Part2 메시지 포인터 테이블(0x08A357B4)이 가리키는 대사를 여유공간(0xA3D000~)으로 재배치하고
@@ -19354,7 +19433,7 @@ def main():
     print(f'→ OBJ 라벨 합성 스프라이트 {objl_path} ({len(objl_sprites)} sprites)')
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs', 'sprite_overrides', 'sprite_overrides_skipped', 'sprite_overrides_ignored']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

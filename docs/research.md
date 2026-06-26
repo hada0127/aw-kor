@@ -1220,6 +1220,10 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
 - synthetic: `_grid_to_tiles(indices)`로 조립 타일스트림 복원 → 라벨별 tindex 누적, `rom[off+perm[vis]*32]=tiles[(tindex+vis)*32]` (decode의 정확한 역연산).
 - lz77: 재압축(vram_safe)≤comp_size, 초과 skip. raw: ≤size.
 무오버라이드=무동작(byte-identical). 편집은 라벨 자동그리기를 덮어쓰므로 우선. revert는 override 제거 후 재빌드(자동그리기 원복).
+- **2026-06-26 D5 보강**: 위 skip은 더 이상 콘솔 로그만이 아니다. 빌드는 `temp/sprite_override_report.json`에
+  override SHA, per-sprite applied/skipped/ignored, LZ77 `compressed_size`/`comp_size`를 기록한다.
+  `tools/audit_sprite_override_report.py --strict`와 `verify_dist_integrity.py`의 `sprite override fit` 게이트가
+  non-empty override의 stale report, 재압축 초과, size mismatch, skipped record를 critical 처리한다.
 
 ## 실캡처 canvas 확장(Phase 7) — part1 fresh-nav 대사 fragility (2026-06-17)
 
