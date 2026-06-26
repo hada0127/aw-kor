@@ -1112,8 +1112,10 @@ class Handler(BaseHTTPRequestHandler):
         def url(png):
             return "/preview/" + Path(png).name
         return {"ok": True, "canvas": canvas,
-                "orig": {"url": url(res["orig"]["png"]), "truncated": res["orig"]["truncated"], "text": ja},
-                "applied": {"url": url(res["applied"]["png"]), "truncated": res["applied"]["truncated"], "text": ko}}
+                "orig": {"url": url(res["orig"]["png"]), "truncated": res["orig"]["truncated"],
+                         "text": ja, "sweep": res["orig"].get("sweep")},
+                "applied": {"url": url(res["applied"]["png"]), "truncated": res["applied"]["truncated"],
+                            "text": ko, "sweep": res["applied"].get("sweep")}}
 
     def _sprite_save(self, body):
         sid = body.get("id")

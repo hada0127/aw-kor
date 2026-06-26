@@ -112,6 +112,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   비파괴 검증하고, `tools/verify_scene_editor_cdp.py`로 상단 DOM + Chrome CDP 63 scene/107 sprite failure 0 UI 회귀도 확인.
   CDP 리포트는 scene별 중간 저장으로 내구화.
 - [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(현재 part2_menu만 ready).
+  - 2026-06-26 부분 완료: `tools/preview_capture.py`에 frame-sweep 선택(`sweep.frames`/`score_box`)과
+    NUL 없는 command-stream span 패치(`terminator:none`, `pad`) 지원 추가. `part1_welcome` canvas는 실제 표시
+    복사본 `0x00A7AB56` 37B span + frame 108/120/132/144 sweep으로 승격했고,
+    `tools/verify_preview_canvases.py`가 active canvas 2개(part1_welcome, part2_menu)에 대해 서로 다른 payload가
+    실제 캡처 픽셀을 바꾸는지 검증한다. 남은 범위: battle dialogue canvas 신뢰성 확보.
 - [ ] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트.
 
 ## E. 백로그 (독립 트랙 — 결함 0 달성 후/병행)

@@ -35,6 +35,7 @@ CACHE = ROOT / "temp" / "preview_cache"
 # 각 canvas: 빠르게 도달 가능한 화면 + 그 화면이 표시하는 텍스트 슬롯.
 #   slot/len : ROM 파일 오프셋과 바이트 길이(슬롯에 덮어쓸 영역)
 #   nav      : MGBADriver 네비 스텝(아래 _nav 참고). 콜드부트 후 실행.
+#   sweep    : optional. nav 뒤 여러 frame을 캡처해 score_box의 ink가 가장 큰 프레임을 선택.
 #   render   : 'a3' | 'dialog' (해당 화면의 렌더 경로 — 참고용)
 #   note     : 설명
 # ※ 슬롯 길이가 짧으면 긴 대사는 잘린다(canvas마다 한계). 더 긴 슬롯 canvas는 추가 예정.
@@ -82,8 +83,13 @@ def _syl_to_code():
     return {s: int(c, 0) for s, c in json.loads(SYLCODE.read_text(encoding="utf-8")).items()}
 
 
-def encode_payload(text: str, lang: str, slot_len: int) -> bytes:
-    """text를 canvas 슬롯 바이트로 인코딩. ko=예약코드, ja=SJIS. 0x00 종료 + 패딩."""
+def encode_payload(text: str, lang: str, slot_len: int,
+                   add_terminator: bool = True, pad_byte: int = 0x00) -> tuple[bytes, bool]:
+    """text를 canvas 슬롯 바이트로 인코딩.
+
+    기본은 기존 NUL 종료 슬롯(0x00 종료 + 패딩). 일부 command stream은 뒤따르는
+    0x6B/0x0A 같은 제어코드를 보존해야 하므로 add_terminator=False로 고정 span만 채운다.
+    """
     out = bytearray()
     if lang == "ko":
         s2c = _syl_to_code()
@@ -108,12 +114,17 @@ def encode_payload(text: str, lang: str, slot_len: int) -> bytes:
                     out += ch.encode("shift_jis")
                 except Exception:
                     out += b"\x81\x48"
-    truncated = len(out) + 1 > slot_len
-    if truncated:
-        # 슬롯 한계까지 자른다(2바이트 코드 경계 보존은 호출측 책임 — 여기선 단순 컷)
-        out = out[: slot_len - 1]
-    out += b"\x00"
-    out += b"\x00" * (slot_len - len(out))
+    if add_terminator:
+        truncated = len(out) + 1 > slot_len
+        if truncated:
+            # 슬롯 한계까지 자른다(2바이트 코드 경계 보존은 호출측 책임 — 여기선 단순 컷)
+            out = out[: slot_len - 1]
+        out += b"\x00"
+    else:
+        truncated = len(out) > slot_len
+        if truncated:
+            out = out[:slot_len]
+    out += bytes([pad_byte & 0xFF]) * (slot_len - len(out))
     return bytes(out[:slot_len]), truncated
 
 
@@ -132,6 +143,81 @@ def _nav(drv, nav):
             drv.cmd(f"keys {int(step[1])}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(60)
 
 
+def _frame_list(sweep: dict) -> list[int]:
+    if isinstance(sweep.get("frames"), list):
+        return sorted({int(v) for v in sweep["frames"]})
+    start = int(sweep.get("start", 0))
+    end = int(sweep.get("end", start))
+    step = max(1, int(sweep.get("step", 1)))
+    return list(range(start, end + 1, step))
+
+
+def _ink_score(img, box: list[int], threshold: int = 1200) -> int:
+    crop = img.crop(tuple(int(v) for v in box)).convert("RGB")
+    colors = crop.getcolors(maxcolors=1_000_000)
+    if not colors:
+        return 0
+    dominant = max(colors)[1]
+    score = 0
+    for px in crop.getdata():
+        dist = sum((px[i] - dominant[i]) ** 2 for i in range(3))
+        if dist > threshold:
+            score += 1
+    return score
+
+
+def _capture_sweep(drv, final_png: Path, sweep: dict) -> dict:
+    frames = _frame_list(sweep)
+    if not frames:
+        raise ValueError("sweep frames empty")
+    score_box = sweep.get("score_box")
+    if not score_box or len(score_box) != 4:
+        raise ValueError("sweep requires score_box=[x0,y0,x1,y1]")
+    threshold = int(sweep.get("threshold", 1200))
+    min_score = int(sweep.get("min_score", 1))
+    keep_all = bool(sweep.get("keep_all"))
+    best = None
+    last = 0
+    candidates = []
+    for frame in frames:
+        delta = frame - last
+        if delta < 0:
+            raise ValueError("sweep frames must be sorted")
+        if delta:
+            drv.frames(delta)
+        last = frame
+        stem = f"{final_png.stem}_f{frame:04d}"
+        img = drv.shot(stem)
+        score = _ink_score(img, score_box, threshold)
+        rec = {"frame": frame, "score": score, "png": str(final_png.with_name(stem + ".png"))}
+        candidates.append(rec)
+        if best is None or score > best["score"]:
+            best = {"frame": frame, "score": score, "image": img, "png": rec["png"]}
+    if best is None or best["score"] < min_score:
+        raise AssertionError(f"sweep failed: best={best} min_score={min_score}")
+    best["image"].save(final_png)
+    if not keep_all:
+        for rec in candidates:
+            p = Path(rec["png"])
+            raw = p.with_suffix(".raw")
+            try:
+                p.unlink()
+            except OSError:
+                pass
+            try:
+                raw.unlink()
+            except OSError:
+                pass
+    return {
+        "sweep": {
+            "selected_frame": best["frame"],
+            "selected_score": best["score"],
+            "score_box": score_box,
+            "candidates": [{"frame": r["frame"], "score": r["score"]} for r in candidates],
+        }
+    }
+
+
 def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
             base_rom: Path | None = None, out_name: str | None = None, use_cache: bool = True) -> dict:
     """canvas 슬롯에 text를 써서 실캡처. {png, truncated, cached} 반환."""
@@ -141,7 +227,14 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     if base_rom is None:
         base_rom = ORIG_ROM if lang == "ja" else PATCHED_ROM
     base_rom = Path(base_rom)
-    payload, truncated = encode_payload(text, lang, cv["len"])
+    terminator = (cv.get("terminator") or "nul").lower()
+    pad_raw = cv.get("pad", "0x00")
+    pad_byte = int(pad_raw, 0) if isinstance(pad_raw, str) else int(pad_raw)
+    payload, truncated = encode_payload(
+        text, lang, cv["len"],
+        add_terminator=(terminator != "none"),
+        pad_byte=pad_byte,
+    )
     CACHE.mkdir(parents=True, exist_ok=True)
     # 캐시 키에 canvas 정의(slot/len/nav)와 base_rom 식별(크기+mtime)을 포함 — nav/슬롯/ROM이
     # 바뀌면 캐시 무효화(codex 지적: 기존 key는 base_rom.name+text뿐이라 stale 재사용 위험).
@@ -149,12 +242,21 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
         st = base_rom.stat(); rom_id = f"{st.st_size}:{int(st.st_mtime)}"
     except OSError:
         rom_id = base_rom.name
-    cv_sig = json.dumps({"slot": cv.get("slot"), "len": cv.get("len"), "nav": cv.get("nav")},
+    cv_sig = json.dumps({"slot": cv.get("slot"), "len": cv.get("len"),
+                         "terminator": terminator, "pad": pad_byte,
+                         "nav": cv.get("nav"), "sweep": cv.get("sweep")},
                         ensure_ascii=False, sort_keys=True)
     key = hashlib.sha1(f"{canvas}|{lang}|{rom_id}|{cv_sig}|{text}".encode("utf-8")).hexdigest()[:16]
     png = CACHE / (out_name or f"{canvas}_{lang}_{key}.png")
+    meta_path = png.with_suffix(".json")
     if use_cache and png.exists():
-        return {"png": str(png), "truncated": truncated, "cached": True}
+        meta = {}
+        if meta_path.exists():
+            try:
+                meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                meta = {}
+        return {"png": str(png), "truncated": truncated, "cached": True, **meta}
 
     from qa_visual_regions import MGBADriver  # noqa: E402
     work = CACHE / f"_rom_{key}.gba"
@@ -163,16 +265,22 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     b[cv["slot"]: cv["slot"] + cv["len"]] = payload
     work.write_bytes(b)
     drv = MGBADriver(work, CACHE, HARNESS)
+    meta = {}
     try:
         _nav(drv, cv["nav"])
-        img = drv.shot(png.stem)
+        if cv.get("sweep"):
+            meta = _capture_sweep(drv, png, cv["sweep"])
+        else:
+            drv.shot(png.stem)
     finally:
         drv.close()
     try:
         work.unlink()
     except OSError:
         pass
-    return {"png": str(png), "truncated": truncated, "cached": False}
+    if meta:
+        meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"png": str(png), "truncated": truncated, "cached": False, **meta}
 
 
 def compare(text_ja: str, text_ko: str, canvas: str = "part2_menu", use_cache: bool = True) -> dict:

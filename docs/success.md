@@ -1967,3 +1967,18 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   실제 Chrome CDP에서 상단 상태 DOM은 `ROM 6cb201dc81d0d234 · 16MB · 적용됨· output SHA 검증`,
   `apply.need=false`, `download.disabled=false`. `python3 tools/verify_scene_editor_cdp.py`도
   scene 63/sprite 107/failure 0.
+
+---
+## [2026-06-26] D4 frame-sweep preview canvas 부분 완료
+
+- **frame-sweep 엔진**: `tools/preview_capture.py`에 `sweep.frames`/`score_box` 기반 프레임 선택을 추가했다.
+  고정 프레임 1장 캡처 대신 nav 후 여러 프레임을 찍고 대사창 ROI ink score가 가장 큰 프레임을 최종 PNG로 사용한다.
+- **command-stream span 패치**: NUL 종료 슬롯 외에 `terminator:none` + `pad` 옵션을 지원한다. 1편 welcome은
+  원본 슬롯 `0xDF8E16`이 아니라 실제 표시 복사본 `0x00A7AB56` 37B span을 패치해야 했고, 뒤따르는
+  `0x6B/0x0A` 제어코드는 보존해야 대사창이 유지된다.
+- **part1_welcome 승격**: `data/preview_canvases.json`에 `part1_welcome` 추가. `scene_19a1_part1_tutorial_opening`
+  scene이 `canvas=ready`가 됐다. probe 결과 `캡처테스트입니다`가 실제 mGBA 캡처에 반영됨.
+- **검증 도구**: `tools/verify_preview_canvases.py` 추가. active canvas 2개(`part1_welcome`, `part2_menu`)에 대해
+  서로 다른 payload 2종을 캡처하고, 선택 ROI 픽셀 차이가 발생하는지 검사한다. 결과:
+  canvas 2/failure 0, `part1_welcome` diff 314px, `part2_menu` diff 7383px.
+- **남은 범위**: battle dialogue canvas는 아직 미승격. 대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증 필요.

@@ -1236,9 +1236,12 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
   하이재킹한 텍스트가 짧으면 빨리 타이핑→자동 advance→캡처 프레임이 인접 화면(이름 그리드)에 안착.
   동일 nav라도 하이재킹 텍스트 길이에 따라 결과 화면이 달라짐(welcome↔이름그리드). 입력 대기로
   안정적인 건 이름 입력 **그리드**(텍스트 슬롯 미렌더)뿐.
-- **결론**: 신뢰성 없는 canvas는 출하 금지(codex "ready 금지 until verified"). part2_menu(A3, 입력
-  대기 메뉴라 안정)만 정식 등록 유지. part1/battle 대사 canvas는 **frame-sweep(대사창 비공백
-  프레임 자동 선택) 또는 대사창 직전 정밀 savestate**가 필요(후속). savestate는 VRAM stale이라
+- **2026-06-26 갱신**: frame-sweep 구현 후 `part1_welcome`은 정식 승격. 단순 원본 슬롯
+  `0xDF8E16` 패치는 화면에 반영되지 않았고, 실제 표시 command-stream 복사본 `0xA7AB56`
+  37B span을 NUL 없이 패치해야 했다(뒤따르는 `0x6B/0x0A` 제어코드 보존 필수). nav 후
+  frame 108/120/132/144를 sweep하고 `score_box=[20,124,220,148]`에서 ink score 최대 프레임을 선택한다.
+  `tools/verify_preview_canvases.py`가 payload A/B 픽셀 차이를 검사해 잘못된 slot ready 회귀를 차단한다.
+  battle 대사 canvas는 아직 **대사창 직전 정밀 savestate 또는 별도 frame-sweep 검증** 필요. savestate는 VRAM stale이라
   단순 frames advance 무효 — 로드 직후 대사 재트리거(press A) 필요(agy/codex 공통 경고).
 - **캐시 키 버그 수정**(codex): preview_capture 캐시 키가 base_rom.name+text뿐이라 nav/슬롯/ROM
   내용 변경 시 stale 재사용 → 키에 canvas sig(slot/len/nav)+base_rom(size:mtime) 포함.

@@ -1145,8 +1145,8 @@
       "title": "1편 튜토리얼 초반 대사",
       "scene_role": "screen",
       "capture_required": true,
-      "canvas": null,
-      "canvas_status": "none",
+      "canvas": "part1_welcome",
+      "canvas_status": "ready",
       "checkpoint": "scene_19a1_part1_tutorial_opening",
       "checkpoint_exists": true,
       "screenshot": {
