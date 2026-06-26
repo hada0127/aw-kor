@@ -122,7 +122,7 @@ def effective_korean(addr, ja, ko, dialogue_overrides):
         ko = SOURCE_TEXT_OVERRIDES[ja]
     ko = ADDRESS_TEXT_OVERRIDES.get(addr, TEXT_OVERRIDES.get(ko, ko))
     caddr = '0x%08X' % addr
-    if caddr in dialogue_overrides:
+    if caddr in dialogue_overrides and addr not in ADDRESS_TEXT_OVERRIDES:
         ko = dialogue_overrides[caddr]
     return (ko or '').strip()
 
@@ -284,7 +284,7 @@ def main():
             addr = int(caddr, 16)
         except (TypeError, ValueError):
             continue
-        if addr in seen_csv_addrs or addr < SAFE_MIN_ADDR or addr in V56_SKIP:
+        if addr in seen_csv_addrs or addr < SAFE_MIN_ADDR or addr in V56_SKIP or addr in ADDRESS_TEXT_OVERRIDES:
             continue
         budget = max(build_slots.get(addr, 0), direct_script_slots.get(addr, 0))
         if budget <= 0 or in_deny(addr, addr + budget):

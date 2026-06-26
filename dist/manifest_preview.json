@@ -1,7 +1,7 @@
 {
   "name": "Game Boy Wars Advance 1+2 — 한글화",
   "date": "2026-06-26",
-  "status": "complete — patch-only distribution; final QA/sign-off complete",
+  "status": "automated QA pass — patch-only distribution; real-hardware sign-off pending",
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
     "size": 16777216,
@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "8c9c6091",
-    "sha1": "134d194bbada75e5993ee0d0bcdf51a31271c57a",
-    "sha256": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164"
+    "crc32": "f3c861d3",
+    "sha1": "1736e49462d02a55ad63f48eeae39d52464d8847",
+    "sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e"
   },
   "synced_outputs": {
-    "game_wars_korean_full.gba": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164",
-    "game_wars_korean_final.gba": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164",
-    "game_wars_korean_title_test.gba": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164"
+    "game_wars_korean_full.gba": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
+    "game_wars_korean_final.gba": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
+    "game_wars_korean_title_test.gba": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e"
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-06-26.bps",
-    "size": 1042105,
+    "size": 1042509,
     "crc32": "2144df1c",
-    "sha1": "ba5fdd5a45a443ba7113df5b54c7bb4a1ecf2dfa",
-    "sha256": "7418e0006d254c01ab210fc3863c2bf1792b3b77b06c5b47323bbbc590c7b02b",
+    "sha1": "fe46120ebd5972fbcfb7b629d2eeba0b1b0336f5",
+    "sha256": "1b7b2023621bd9aac05124679688dc0821a7e4dde45015f33f65246097585053",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-06-26.ips",
-    "size": 1184349,
-    "crc32": "be7e1203",
-    "sha1": "7c6beb04a5fff5a8a56ad785ab3f335206608818",
-    "sha256": "ebfa02d73cc8e4fd5eedb7b4f27f03b5208e6f36553b2e7f71b32a587346aea9",
+    "size": 1185847,
+    "crc32": "ae956f7c",
+    "sha1": "dc7dcb6887f5467eb5ee0b811f11f400698aa339",
+    "sha256": "dfe795ed73509a65a0aa83caaff1dc9f4179be6d1645758316f54a803f243cf8",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

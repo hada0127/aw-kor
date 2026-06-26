@@ -73,9 +73,10 @@ Generated from the current `output/game_wars_korean_full.gba` build.
 - BPS patch: `{patch_stem}.bps`
 - IPS patch: `{patch_stem}.ips`
 
-This build is the completed Korean patch distribution. Current QA sign-off
-includes text fit, Japanese residual, placeholder residual, ROM integrity, and
-BPS/IPS round-trip verification.
+This build has passed the current automated QA gate: text fit, Japanese
+residual, placeholder residual, ROM integrity, scene residual, sprite override,
+and BPS/IPS round-trip verification. Real-hardware sign-off is still tracked
+separately in `todo.md`.
 """,
         encoding='utf-8',
     )
@@ -118,7 +119,7 @@ def main():
     manifest = {
         'name': 'Game Boy Wars Advance 1+2 — 한글화',
         'date': args.date,
-        'status': 'complete — patch-only distribution; final QA/sign-off complete',
+        'status': 'automated QA pass — patch-only distribution; real-hardware sign-off pending',
         'source_rom': {
             'name': SOURCE_ROM.name,
             **source_info,

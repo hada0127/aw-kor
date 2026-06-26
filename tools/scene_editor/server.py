@@ -312,6 +312,22 @@ def is_bteam(address):
         return False
 
 
+def is_address_text_override(address):
+    if not B:
+        return False
+    try:
+        return int(str(address), 16) in B.ADDRESS_TEXT_OVERRIDES
+    except (ValueError, TypeError):
+        return False
+
+
+def effective_member_ko(member, dialogue_overrides):
+    addr = member.get("address")
+    if is_address_text_override(addr):
+        return member.get("ko") or ""
+    return dialogue_overrides.get(addr, member.get("ko") or "")
+
+
 def canon_addr(address):
     try:
         addr = int(str(address or "").strip(), 16)
@@ -622,7 +638,7 @@ def scene_items(scene, want="all"):
                 continue
             members = []
             for m in g.get("members", []):
-                ko = dov.get(m.get("address"), m.get("ko") or "")
+                ko = effective_member_ko(m, dov)
                 budget = line_budget(m)
                 budget.update(build_fit_budget(ko, budget.get("slot")))
                 if review_only_scene and (budget.get("unsupported") is not None or budget.get("error")):
@@ -631,6 +647,9 @@ def scene_items(scene, want="all"):
                 budget["bteam"] = is_bteam(m.get("address"))
                 if budget["bteam"]:
                     budget["bteam_warn"] = "쪼롱이님(B팀) 권위 번역 — 신중히 편집(우발 변형은 qa_bteam_drift 게이트가 차단)"
+                if is_address_text_override(m.get("address")):
+                    budget["editable"] = False
+                    budget["reason"] = "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용"
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
                                 "kind": m.get("kind"), "budget": budget})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
@@ -1014,6 +1033,8 @@ class Handler(BaseHTTPRequestHandler):
         addr_int = int(addr, 16)
         if addr_int < SAFE_MIN_ADDR:
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
+        if is_address_text_override(addr):
+            return {"ok": False, "error": "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용, 편집 불가"}
         # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
         kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
         if kind == "deny":

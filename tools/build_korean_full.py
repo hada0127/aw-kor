@@ -539,6 +539,28 @@ ADDRESS_TEXT_OVERRIDES = {
     # Name-variable dialogue. 0xDF8E3E is followed by byte 0x69 (player name)
     # and then the 0xDF8E4D suffix slot, so it must fit the original 14 bytes.
     0xDF8E3E: '반가워. ',
+    # Part 1 world/single/link menu help boxes use the compact Part 1 text
+    # parser. ASCII digits are unsafe there, and some Hangul reserved codes
+    # collide with the original Part 1 glyph table. Keep these hints short and
+    # limited to syllables verified in this renderer.
+    0xDFA64A: '대결',
+    0xDFA66B: ' 가능',
+    0xDFA6AA: '대결 법 가르 드려',
+    0xDFA6CD: '들러 봐!',
+    0xDFA752: '기기 대결',
+    0xDFA775: '대결 가능 모드',
+    0xDFA79A: '새로 대결 가능',
+    0xDFA7BE: '계속 대결 가능',
+    0xDFA8AA: '나만 대결 가능',
+    0xDFA8CB: '다른 사령관 상대',
+    0xDFA942: '대결 모드',
+    0xDFA95B: '고르기',
+    0xDFA972: '대결',
+    0xDFA989: '모두 대결',
+    0xDFA9AE: '동료 대결',
+    0xDFA9C7: '가능',
+    0xDFA9DA: '동료',
+    0xDFA9E9: '맵 보내기 받기',
     # Part 1 operation room opening. These lines appear immediately after the
     # first name-confirm flow and are sensitive to long Korean fragments.
     0xDF5D62: '커서 조작부터',
@@ -547,6 +569,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF5DB4: '코스모랜드에 어서 와',
     0xDF5DA9: '　님',
     0xDF5DD2: '나는 레드스타국의 사령관',
+    0xDF5E12: '코스모랜드 설명을',
+    0xDF5E35: '해 줄게.',
     0xDF5E85: '제법 큰 나라야.',
     0xDF5EA0: '이웃은 블루문국.',
     0xDF5EC3: '블루문과 사이가 나빠서',
@@ -1143,7 +1167,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF59CF: '공장 보유 도시.',
     0xDF61E7: '생각할 만하네.',
     0xDF6420: '간단한 전략 설명이야.',
-    0xDFA942: '통신 케이블로,',
     0xDFB462: '말할지도 모르지만!',
     0xDFB54B: '우리 가게엔 뭐든 있어.',
     0xDFB809: '여기서만 말하는데, 우리는 쇼군을',
@@ -1558,7 +1581,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF57A7: '육상 유닛 보충, 보급이',
     0xDF59FF: '육상 유닛 생산과',
     0xDF6882: '받을 수 있대.',
-    0xDFA9E9: '지도를 교환할 수 있어.',
     0xDFBEC3: '공격에 쓸 수 있어!',
     0xDFCC58: '눈치채고 있었나?',
     0xE0095B: '십자 버튼 상하로 선택 가능!',
@@ -1870,7 +1892,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF72E2: '이 두 유닛을 지키며 바다 건너편을',
     0xDF77DE: '더 자세히 알고 싶은 사람',
     0xDFA68C: '전투 기록 보기 가능.',
-    0xDFA90A: '3인 대전 가능.',
+    0xDFA90A: '대결 가능',
     0xDFB439: '몇 번 가게에 오다 보면 언젠가',
     0xDFBAA6: '한 번 클리어론 아직 멀었어!',
     0xDFC01D: '유닛 이동력이 길다는 건 알았나?',
@@ -3393,13 +3415,11 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF599B: '승하차',
     0xDF59AD: '가능',
     0xDF5A15: '보충/보급 가능',
-    0xDF8C1A: '유닛상황',
     0xDFA6FB: '여러 쇼핑 가능',
     0xDFA84D: '특별특별특별',
     0xDFA872: '특별이어하기',
     0xDFA885: '특별특별특별특별',
-    0xDFA926: '4인 대전할래',
-    0xDFA95B: '플레이 모드야',
+    0xDFA926: '대결 가능',
     0xDFB4F2: '물건없어',
     0xDFB5E5: '날씨 좋은 날엔 장사 말고',
     0xDFB644: '방금 얘긴 없던 거',
@@ -3497,9 +3517,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA033BF: '그건',
     0xA03D5D: '한 번에 내구력을',
     0xA04028: '거짓말',
-    0xA045E4: '한 번에 내구력을',
-    0xA04661: '내구력이 되돌아가',
-    0xA0471C: '경전차대 출격',
     0xA04B2D: '그건',
     0xA04DE2: '여긴 공장이 없어서',
     0xA05DE6: '저 녀석 쓰러뜨려',
@@ -4172,7 +4189,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA2AE4B: '추가로 1 증가',
     0xA2AEDC: '아버지를　동경해',
     0xA2AF5A: '연료　소모　적고',
-    0xA2B078: '자주 달래고 있다',
     0xA2B122: '비에도 이동력 안 줄어',
     0xA2B1FF: '비　내려　이동력　저하',
     0xA2B233: '모든　것은　수수께끼',
@@ -4202,7 +4218,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA2B873: '수단 안 가림',
     0xA2BEDB: '수송계 이동력도 1 증가',
     0xA2BF28: '차량/해상 공격은 약함',
-    0xA2BF5F: '또한 아군 도시 위에',
     0xA2C358: '거점수입 설정',
     0xA2C404: '애니 없음',
     0xA2C41C: '전투 점령 애니 있음',
@@ -9466,6 +9481,8 @@ def load_direct_script_slots():
 
 
 def member_override_text(member, overrides):
+    if member['address'] in ADDRESS_TEXT_OVERRIDES:
+        return str(ADDRESS_TEXT_OVERRIDES[member['address']] or '')
     key = "0x%08X" % member['address']
     if key in overrides:
         return str(overrides.get(key) or '')
@@ -9475,6 +9492,8 @@ def member_override_text(member, overrides):
 def direct_script_override_text(faddr, fend, members_by_start, overrides):
     members = members_by_start.get(faddr) or []
     if not members:
+        if faddr in ADDRESS_TEXT_OVERRIDES:
+            return str(ADDRESS_TEXT_OVERRIDES[faddr] or '').strip() or None
         return str(overrides.get("0x%08X" % faddr) or '').strip() or None
     span_members = [
         m for m in members
@@ -10861,6 +10880,9 @@ def main():
         return parts[1][0] in '줘주줄둬두봐보봅버'
 
     st['override_jam_skipped'] = 0
+    # ADDRESS_TEXT_OVERRIDES are hand-verified build safety overrides for tight
+    # command-stream fragments and compact UI rows. Do not let the editor
+    # overlay reintroduce longer strings that have already failed on screen.
     for _astr, ko in _dlg_ov.items():
         ko = (ko or '').strip()
         if not ko:
@@ -10870,6 +10892,9 @@ def main():
         except (ValueError, TypeError):
             continue
         if a < SAFE_MIN_ADDR:
+            continue
+        if a in ADDRESS_TEXT_OVERRIDES:
+            st['dialogue_override_protected_skip'] += 1
             continue
         # 비-B팀 + override가 CSV의 **같은 번역**(공백·구두점 제거 시 일치)인데 공백을 줄인 잼본 → skip(CSV 공백본 유지)
         if a not in _bt_resolved:

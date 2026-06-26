@@ -1318,32 +1318,33 @@ def make_part1_mode_block() -> Image.Image:
     return layer
 
 
+def part1_option_display_text(text: str) -> str:
+    return text
+
+
 def make_part1_option_block(text: str, max_size: int) -> Image.Image:
     layer = Image.new("L", (128, 32), 0)
-    if text in {"작전룸", "통신", "대전"}:
-        target_w = {"작전룸": 78, "통신": 62, "대전": 60}[text]
-        draw_centered_title_font_text(
-            layer, text, (8, 0, 120, 31), min(max_size, 25), 2, 15, 7, target_min_w=target_w
-        )
-    else:
-        draw = ImageDraw.Draw(layer)
-        font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
-        width_limit = 108 if len(text) >= 6 else 92
-        for size in range(min(max_size, 25), 7, -1):
-            font = ImageFont.truetype(str(font_path), size)
-            w, h = text_bbox(draw, text, font, 1)
-            if w <= width_limit and h <= 28:
-                break
+    label = part1_option_display_text(text)
+    draw = ImageDraw.Draw(layer)
+    font_path = BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
+    width_limit = 78 if len(label) >= 5 else 62
+    start_size = max(8, min(max_size, 12))
+    font = ImageFont.truetype(str(font_path), start_size)
+    for size in range(start_size, 7, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, label, font, 0)
+        if w <= width_limit and h <= 13:
+            break
 
-        box = draw.textbbox((0, 0), text, font=font, stroke_width=1)
-        x = (128 - (box[2] - box[0])) // 2 - box[0]
-        y = (32 - (box[3] - box[1])) // 2 - box[1] - 1
-        paint_index_text_aa(layer, (x + 1, y + 1), text, font, 9, 15, 1, aa_idx=9)
-        paint_index_text_aa(layer, (x, y), text, font, 2, 15, 1, aa_idx=7)
-    if text == "작전룸":
-        strengthen_operation_room_rieul(layer)
-    if text == "통신":
-        strengthen_first_tong_tieut(layer)
+    box = draw.textbbox((0, 0), label, font=font, stroke_width=0)
+    w = box[2] - box[0]
+    x = (128 - w) // 2 - box[0]
+    y = 5 - box[1]
+    # These OBJ labels scroll behind the translucent Part1 help box. Keep them
+    # low-profile: no drop shadow or outline. The original menu scrolls option
+    # OBJs behind the translucent help box, so extra edge pixels hurt the help
+    # text more than they improve the off-center carousel labels.
+    paint_index_text_aa(layer, (x, y), label, font, 2, 2, 0, aa_idx=2)
     return layer
 
 

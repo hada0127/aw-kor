@@ -54,6 +54,10 @@ try:
 except Exception as _e:  # PIL/하네스 부재 시 미리보기 비활성
     preview_capture = None
     _PREVIEW_ERR = repr(_e)
+try:
+    import build_korean_full as B
+except Exception:
+    B = None
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()  # mgbah 캡처 직렬화(하네스 로그/리소스 공유)
@@ -109,6 +113,22 @@ def dict_entries(d):
 
 def effective_ko(entry):
     return (entry.get("edit") or "").strip() or (entry.get("ko") or "").strip()
+
+
+def is_address_text_override(address):
+    if not B:
+        return False
+    try:
+        return int(str(address), 16) in B.ADDRESS_TEXT_OVERRIDES
+    except (ValueError, TypeError):
+        return False
+
+
+def canon_addr(address):
+    try:
+        return "0x%08X" % int(str(address or "").strip(), 16)
+    except (ValueError, TypeError):
+        return None
 
 
 def check_line(line, pn):
@@ -175,6 +195,12 @@ class Handler(BaseHTTPRequestHandler):
         SEC2REG = {"common": "other", "part1": "part1", "part2": "part2"}
         want_reg = SEC2REG.get(section)
         ov = load_json(OVERRIDES_PATH, {}) or {}
+        dialogue_lines = load_json(DIALOGUE_PATH, {"lines": []}).get("lines", [])
+        by_addr = {
+            canon_addr(ln.get("address")): ln
+            for ln in dialogue_lines
+            if canon_addr(ln.get("address"))
+        }
         out = []
         for g in groups:
             if want_reg and g.get("region") != want_reg:
@@ -183,8 +209,19 @@ class Handler(BaseHTTPRequestHandler):
                 continue
             members = []
             for m in g.get("members", []):
-                ko = ov.get(m.get("address"), m.get("ko") or "")
-                members.append({**m, "ko": ko, "bteam": is_bteam(m.get("address"))})
+                addr = canon_addr(m.get("address")) or m.get("address")
+                canonical = by_addr.get(addr) or {}
+                member = {**m}
+                if canonical:
+                    member.update({
+                        "id": canonical.get("id"),
+                        "slot": canonical.get("slot", member.get("slot")),
+                        "kind": canonical.get("kind", member.get("kind")),
+                        "ship_ko": canonical.get("ship_ko", member.get("ship_ko")),
+                    })
+                base_ko = canonical.get("ko", m.get("ko") or "")
+                ko = base_ko if is_address_text_override(addr) else ov.get(addr, base_ko)
+                members.append({**member, "address": addr, "ko": ko, "bteam": is_bteam(addr)})
             if qstr and qstr not in (g.get("assembled_ja") or "") and \
                all(qstr not in (m.get("ko") or "") for m in members):
                 continue
@@ -218,7 +255,7 @@ class Handler(BaseHTTPRequestHandler):
         if _ov:
             for ln in lines:
                 a = ln.get("address")
-                if a in _ov and _ov[a]:
+                if a in _ov and _ov[a] and not is_address_text_override(a):
                     ln["ko"] = _ov[a]
         region = (q.get("region", [""])[0] or "").strip()
         # 허브 섹션(공통/1편/2편)→region 매핑
@@ -315,11 +352,18 @@ class Handler(BaseHTTPRequestHandler):
         ko = body.get("ko", "")
         with _LOCK:
             data = load_json(DIALOGUE_PATH, {"lines": []})
-            hit = next((ln for ln in data.get("lines", []) if ln.get("id") == lid), None)
+            addr = canon_addr(body.get("address"))
+            if addr:
+                hit = next((ln for ln in data.get("lines", []) if canon_addr(ln.get("address")) == addr), None)
+            else:
+                hit = next((ln for ln in data.get("lines", []) if ln.get("id") == lid), None)
             if hit is None:
-                return {"ok": False, "error": "id %r 없음" % lid}
+                key = addr or ("id %r" % lid)
+                return {"ok": False, "error": "%s 없음" % key}
             # B팀(쪼롱이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
-            addr = hit.get("address")
+            addr = canon_addr(hit.get("address"))
+            if is_address_text_override(addr):
+                return {"ok": False, "error": "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용, 편집 불가"}
             if addr and not body.get("confirm_bteam"):
                 try:
                     _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
@@ -331,6 +375,10 @@ class Handler(BaseHTTPRequestHandler):
                                 "bteam_baseline": _base}
                 except (ValueError, TypeError):
                     pass
+            check_target = {**hit, "ko": ko}
+            if body.get("dry_run"):
+                return {"ok": True, "dry_run": True, "id": hit.get("id"), "address": addr,
+                        "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {}))}
             hit["ko"] = ko   # 검사 통과 후에만 변형
             save_json(DIALOGUE_PATH, data)
             ov = load_json(OVERRIDES_PATH, {})

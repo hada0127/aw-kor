@@ -61,7 +61,7 @@ function groupCard(g) {
   save.onclick = async () => {
     let ok = 0, fail = 0, cancelled = false;
     for (const { m, ta } of inputs) {
-      const r = await saveLineConfirm({ id: m.id, ko: ta.value });
+      const r = await saveLineConfirm({ id: m.id, address: m.address, ko: ta.value });
       if (r.ok) { ok++; continue; }
       if (r.cancelled) { cancelled = true; break; }   // B팀 취소 → 그룹 저장 중단(나머지 조각 프롬프트 안 함)
       fail++;
@@ -119,7 +119,7 @@ function rowFor(ln) {
   const miss = el("span", { className: "miss" });
   const save = el("button", { className: "save", textContent: "저장" });
   save.onclick = async () => {
-    const r = await saveLineConfirm({ id: ln.id, ko: ta.value });
+    const r = await saveLineConfirm({ id: ln.id, address: ln.address, ko: ta.value });
     if (r.ok) { setStatus(`저장됨 #${ln.id}`); showMiss(miss, tr, r.check); }
     else if (r.cancelled) setStatus("B팀 번역 저장 취소");
     else setStatus("오류: " + r.error);

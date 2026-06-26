@@ -1940,7 +1940,7 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   1967 case/281 state/hit 0/break_size nonzero 0를 재검증 가능하게 보존했다. 새 시각 리포트를
   `data/scene_residual_scans.json` evidence에 연결했고, audit가 리포트 SHA뿐 아니라 7개 PNG SHA,
   캡처 provenance ROM SHA, primary/stale 증거 역할, 보조 scan SHA까지 확인한다.
-  `tools/audit_scene_residual_scans.py --strict` 결과 container 13, case 14, hit 0, critical 0.
+  최종 SHA `8a34a570…` 기준 `tools/audit_scene_residual_scans.py --strict` 결과 container 15, case 16, hit 0, critical 0.
 
 ---
 ## [2026-06-26] :8782 적용 상태 D3 하드닝
@@ -2150,3 +2150,86 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   BPS/IPS/manifest 및 scene residual evidence를 현재 SHA로 재생성했다. scene screenshot 70개도 현재 SHA로 재캡처해
   `audit_scene_entrypoints.py --strict`/`audit_scene_semantics.py --strict`/`audit_scene_catalog.py --strict` PASS,
   `verify_dist_integrity.py` PASS.
+
+---
+## [2026-06-26] Part1 작전룸/전투 튜토리얼 fresh 가비지 수정
+
+- **실증 경로**: cold boot → Part1 title → 새 게임/이름 입력 → 작전룸 진입 fresh route에서
+  첫 설명 화면 하단 대사에 점/가비지 글리프가 섞이는 실제 결함을 확인했다.
+  수정 전 증거는 `docs/screenshots/d2_operation_intro_fix_2026-06-26/s021_before.png`,
+  수정 후 증거는 `s021_fixed.png`, `s034_battle_tutorial_fixed.png`, `filmstrip_fixed.png`.
+- **원인**: `dialogue_overrides.json` 최종 overlay가 Part1 command-stream의 hand-safe `ADDRESS_TEXT_OVERRIDES`
+  문장을 다시 긴 문장/문장부호 포함 편집기 문장으로 덮어쓴 상태였다. 같은 문제가 작전룸 첫 설명
+  `0x00DF5E12` 계열과 전투 튜토리얼 `0x00D8F3DE` 계열에서 fresh 화면 가비지로 재현됐다.
+- **수정**: `ADDRESS_TEXT_OVERRIDES`를 빌드 안전 권위로 승격해, 최종 `dialogue_overrides.json` overlay가 해당
+  주소들을 덮지 못하게 했다. 누락됐던 `0xDF5E12`/`0xDF5E35` hand-safe fragment는
+  `코스모랜드 설명을`/`해 줄게.`로 추가했다. `dialogue_overrides.json`과 `bteam_baseline.json`은 기존 B팀/편집기
+  권위문으로 복원했으며, `qa_bteam_drift.py` drift 0을 유지했다.
+- **해당 수정 직후 산출물**: output 3종 SHA는
+  `045d528814dd6ab5da8dbb56f8cdadc58214a58ce62dd77922c634f5f8c7c20f`로 동기화했다.
+  BPS/IPS와 `dist/manifest*.json`, scene residual evidence, E8 시각 증거, scene screenshot provenance를 현재 SHA로 갱신했다.
+- **검증**: `qa_text_fit.py` overflow 0/no_ko 0, `qa_pixel_width.py` `>50` 후보 12 유지,
+  `qa_integrity_map.py` byte mismatch 0, `qa_bteam_drift.py` drift 0,
+  `audit_scene_residual_scans.py --strict` case 16/hit 0/critical 0,
+  `audit_scene_entrypoints.py --strict` stale 0/critical 0,
+  `audit_scene_catalog.py --strict` critical 0, `audit_scene_semantics.py --strict` critical 0,
+  `qa_placeholder_residuals.py` ROM hit 0, `qa_ascii_residuals.py --general` 큐레이션 잔존 0,
+  `qa_terms_from_rom.py` hard 0, `phase6_basic_test.py` PASS, `verify_dist_integrity.py` PASS.
+- **남은 D2 범위**: `0xD81C24` 맵 디자인 도움말과 `0xA3B880/0xB842E8` CO 파워명은 아직 실제 노출 화면 state를 확보하지
+  못했으므로 완료 처리하지 않았다. E8 재캡처 중 보인 Part1 single/link 하단 설명 노이즈는 이후 Part1 메뉴 fresh route에서
+  stale savestate VRAM/text cache로 재분류했다.
+
+---
+## [2026-06-26] Part1 모드/통신 메뉴 OBJ 라벨 도움말 충돌 수정
+
+- **보고 증거**: 사용자가 mGBA에서 추가 캡처한 Part1 모드 선택/대전/통신 메뉴 7장에서 대형 한글 OBJ 라벨이
+  하단 반투명 도움말 박스 뒤로 지나가며 설명문과 겹치는 현상을 확인했다. 보고 접촉시트는
+  `docs/screenshots/part1_menu_label_shrink_2026-06-26/reported_contact.png`.
+- **원인**: Part1 option OBJ 라벨은 원본 엔진의 스크롤식 메뉴 구조상 도움말 박스 뒤로 지나가는 것이 정상이나,
+  `tools/build_title_hangul.py::make_part1_option_block()`이 짧은 한글 라벨(`작전룸`/`통신`/`대전`)을
+  `target_min_w`로 강제 확대하고 긴 통신 라벨을 32px 슬롯에 크게 렌더해 원본보다 도움말 가독성을 크게 해쳤다.
+- **수정**: Part1 option label을 Galmuri11-Bold 12px 이하 본문-only compact 자산으로 바꾸고, drop shadow/outline을 제거했다.
+  codex/claude 리뷰 후 원 표기 `1카드 통신`/`멀티카드 통신`도 compact bbox 안에 들어감을 확인해 복원했다.
+  LZ77 주소/주입 방식은 그대로 유지하고, 빌드가 원본 ROM에서 재생성한다.
+- **판정 기준**: 원본도 라벨이 반투명 도움말 뒤로 지나가므로 "겹침 0"은 엔진 동작과 다르다.
+  원본 reference contact는 `original_overlap_reference_contact.png`에 보존했고, 한글 패치 기준은 도움말보다 강하게 보이는
+  굵은 라벨 외곽선/획을 제거하는 것이다.
+- **검증**: 최종 output 3종 SHA는
+  `8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e`로 동기화했다.
+  `qa_visual_regions.py`가 모든 Part1 option block의 compact bbox/palette와 도움말 intrusive-dark 상한을 검사한다.
+  리뷰 지적을 반영해 이 게이트는 구 savestate 대신 coldboot fresh route를 기본 입력으로 쓴다.
+  모드 선택/싱글/통신 필름스트립과 사용자 화면 대응 라우트 7장은
+  `fresh_final_filmstrip.png`/`fresh_final_routes_contact.png`에 보존했다.
+  구 `final_menu.ss0` stale-state E8 보조 캡처에서 보였던 Part1 single/link 하단 문장 노이즈는 coldboot fresh route에서
+  재현되지 않았으므로 현 ROM 결함 증거로 쓰지 않는다.
+
+---
+## [2026-06-26] Part1 메뉴 라벨·보호 대사·에디터 저장 경로 최종 재검증
+
+- **최종 산출물**: output 3종 SHA는
+  `8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e`로 동기화했다.
+  BPS/IPS round-trip OK, `verify_dist_integrity.py` PASS.
+- **Part1 option 라벨 보강**: codex/agy 리뷰 지적을 반영해 option OBJ 라벨을 실제 팔레트 2번 단색만 쓰도록
+  강화했다. `qa_visual_regions.py`는 모든 Part1 option block에서 `values=[2]`, `edge=0`을 요구하고,
+  mode/single/link 도움말 ROI 침범 픽셀을 함께 검사한다. claude/codex 리뷰의 stale-state 블로커를 반영해
+  Part1 메뉴 화면 검사는 기본적으로 coldboot fresh route에서 시작한다. 현재 `visual_region_checks=39` PASS.
+- **리뷰 후 보강**: compact 폰트에서 원 표기가 bbox 안에 들어감을 확인해 `1카드 통신`/`멀티카드 통신` 표기를 복원했다.
+  `ADDRESS_TEXT_OVERRIDES` 동일값 중복 키 9건도 제거해 source duplicate 0을 확인했다.
+- **보호 대사 우선순위 완전 차단**: `ADDRESS_TEXT_OVERRIDES`가 `dialogue_overrides.json` 최종 overlay,
+  direct script patch, dialogue map/lint/UI editor display 경로에서 다시 덮이지 않도록 막았다.
+  `0x00DF5E12`는 `코스모랜드 설명을`로 출하/에디터 양쪽에서 표시되며, :8782 저장은
+  `빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소` 오류로 차단된다.
+- **대사 에디터(:8780) 그룹 저장 id 오염 수정**: `/api/groups`의 member id가 `dialogue_map.json` 실제 id와
+  어긋나 그룹 저장 시 인접 line을 수정할 수 있는 문제를 발견했다. 그룹 응답을 address 기준 canonical line으로
+  보정하고, `/api/line`은 address가 있으면 address로 저장 대상을 찾게 했다. 프런트도 `{id,address,ko}`를 전송한다.
+  dry-run 저장 지원을 추가해 보호 주소 저장 차단을 비파괴 검증했다.
+- **검증**: `build_korean_full.py`, `build_dialogue_map.py`, `build_dialogue_groups.py`,
+  `qa_visual_regions.py`, `qa_text_fit.py`, `qa_integrity_map.py`, `qa_bteam_drift.py`,
+  `qa_repoint_integrity.py`, `qa_dialogue_jamming.py`, `qa_placeholder_residuals.py`,
+  `qa_ascii_residuals.py`, `qa_terms_from_rom.py`, `phase6_basic_test.py`, `verify_preview_canvases.py`,
+  `verify_scene_editor_apply_state.py`, `verify_scene_editor_cdp.py`,
+  `verify_scene_editor_roundtrip.py`, `audit_scene_residual_scans.py --strict`,
+  `verify_dist_integrity.py` PASS. 최종 재확인으로 scene screenshot 70개를 현재 SHA로 재캡처했고,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict`,
+  `audit_scene_residual_scans.py --strict`, `verify_dist_integrity.py`가 모두 PASS했다.
+  residual case 16/hit 0/critical 0.

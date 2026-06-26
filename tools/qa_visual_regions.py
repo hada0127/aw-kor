@@ -4,6 +4,8 @@
 This checks the high-risk Korean graphics that are easy to miss with text-only
 QA: cold-boot Nintendo Presents, 1/2 select lower marker, Part 1 mode option
 sprite sizes, and Part 1 submenu top-left logo visibility/safe zones.
+Part 1 menu screen checks use a cold-boot route by default; cross-ROM
+savestates can carry stale VRAM/text cache and must not be the main gate.
 """
 from __future__ import annotations
 
@@ -34,6 +36,21 @@ KEYS = {
     "L": 512,
 }
 
+PART1_MENU_PRENAV = [
+    "A",
+    "START",
+    "A",
+    "START",
+    "A",
+    "A",
+    "A",
+    "A",
+    "A",
+    "A",
+    "START",
+]
+PART1_MENU_ADVANCE_A_PRESSES = 17
+
 
 def layer_bbox(layer: Image.Image) -> tuple[int, int, int, int]:
     bbox = layer.getbbox()
@@ -48,6 +65,8 @@ def assert_bbox(
     *,
     min_w: int = 1,
     min_h: int = 1,
+    max_w: int | None = None,
+    max_h: int | None = None,
     x0_min: int = 0,
     y0_min: int = 0,
     x1_max: int = 999,
@@ -61,6 +80,10 @@ def assert_bbox(
         errors.append(f"width {w} < {min_w}")
     if h < min_h:
         errors.append(f"height {h} < {min_h}")
+    if max_w is not None and w > max_w:
+        errors.append(f"width {w} > {max_w}")
+    if max_h is not None and h > max_h:
+        errors.append(f"height {h} > {max_h}")
     if x0 < x0_min:
         errors.append(f"x0 {x0} < {x0_min}")
     if y0 < y0_min:
@@ -98,6 +121,26 @@ def assert_title_style_palette(label: str, layer: Image.Image) -> str:
     if counts.get(10, 0) < 60 or counts.get(14, 0) < 60:
         raise AssertionError(f"{label}: title-style body/outline too weak, counts={counts}")
     return f"values={sorted(values)}:style_pixels={style_pixels}"
+
+
+def assert_compact_option_palette(label: str, layer: Image.Image) -> str:
+    counts: dict[int, int] = {}
+    for value in layer.getdata():
+        if value:
+            counts[int(value)] = counts.get(int(value), 0) + 1
+    values = set(counts)
+    missing = sorted({2} - values)
+    if missing:
+        raise AssertionError(f"{label}: missing compact fill index {missing}, values={sorted(values)}")
+    extra = sorted(values - {2})
+    if extra:
+        raise AssertionError(f"{label}: unexpected high-profile option palette indices {extra}, values={sorted(values)}")
+    pixels = sum(counts.values())
+    if pixels < 35:
+        raise AssertionError(f"{label}: too few compact label pixels ({pixels} < 35)")
+    if counts.get(15, 0) > 0:
+        raise AssertionError(f"{label}: outline pixels remain in compact option label, counts={counts}")
+    return f"values={sorted(values)}:pixels={pixels}:edge={counts.get(15, 0)}"
 
 
 def assert_select_logo_style(
@@ -220,21 +263,28 @@ def run_asset_checks() -> list[str]:
     except AssertionError as exc:
         failures.append(str(exc))
 
-    option_targets = {
-        "operation_room": ("작전룸", 70, 24),
-        "link": ("통신", 58, 25),
-        "single_battle": ("대전", 58, 20),
-    }
+    # Part1 option labels scroll behind the translucent help box. Check every
+    # option block, including long communication labels, so the replacement
+    # cannot regress back to oversized/shadow-heavy graphics.
     for name, _off, text, max_size in th.PART1_MODE_OPTION_BLOCKS:
-        if name not in option_targets:
-            continue
-        _expected_text, min_w, min_h = option_targets[name]
         try:
             layer = th.make_part1_option_block(text, max_size)
             bbox = layer_bbox(layer)
-            assert_bbox(f"part1 option {name}", bbox, min_w=min_w, min_h=min_h, y0_min=1, y1_max=31)
-            style = assert_title_style_palette(f"part1 option {name}", layer)
-            checked.append(f"asset:part1_option:{name}:{bbox}:{style}")
+            assert_bbox(
+                f"part1 option {name}",
+                bbox,
+                min_w=18,
+                min_h=8,
+                max_w=96,
+                max_h=16,
+                x0_min=10,
+                y0_min=4,
+                x1_max=118,
+                y1_max=24,
+            )
+            style = assert_compact_option_palette(f"part1 option {name}", layer)
+            display_text = th.part1_option_display_text(text)
+            checked.append(f"asset:part1_option:{name}:{display_text}:{bbox}:{style}")
         except AssertionError as exc:
             failures.append(str(exc))
 
@@ -333,6 +383,16 @@ class MGBADriver:
         self.proc.wait(timeout=5)
 
 
+def drive_part1_menu_from_coldboot(driver: MGBADriver) -> None:
+    """Reach the Part 1 post-name mode menu without loading a savestate."""
+    driver.frames(480)
+    for key in PART1_MENU_PRENAV:
+        driver.press(key, after=120)
+    for _ in range(PART1_MENU_ADVANCE_A_PRESSES):
+        driver.press("A", after=160)
+    driver.frames(10)
+
+
 def foreground_bbox(
     image: Image.Image,
     box: tuple[int, int, int, int],
@@ -389,6 +449,15 @@ def count_dark_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int
     count = 0
     for r, g, b in crop.getdata():
         if max(r, g, b) < 120 and (max(r, g, b) - min(r, g, b) > 20):
+            count += 1
+    return count
+
+
+def count_intrusive_help_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int:
+    crop = image.crop(box).convert("RGB")
+    count = 0
+    for r, g, b in crop.getdata():
+        if max(r, g, b) < 70 and (max(r, g, b) - min(r, g, b) > 15):
             count += 1
     return count
 
@@ -469,7 +538,7 @@ def count_top_left_label_edge_pixels(image: Image.Image) -> int:
     return sum(count_clipped_logo_text_pixels(image, box) for box in boxes)
 
 
-def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Path) -> list[str]:
+def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Path | None) -> list[str]:
     checked: list[str] = []
     failures: list[str] = []
     if not harness.exists():
@@ -535,10 +604,17 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
     menu.mkdir(parents=True, exist_ok=True)
     driver = MGBADriver(rom, menu, harness)
     try:
-        driver.frames(1)
-        driver.loadstate(menu_state)
-        driver.frames(10)
-        driver.shot("00_loaded_stale_possible")
+        if menu_state is not None:
+            driver.frames(1)
+            driver.loadstate(menu_state)
+            driver.frames(10)
+            driver.shot("00_loaded_external_state")
+            checked.append(f"screen:part1_menu_entry=external_state:{menu_state}")
+        else:
+            drive_part1_menu_from_coldboot(driver)
+            driver.shot("00_fresh_menu")
+            driver.cmd(f"savestate {menu / 'fresh_menu.ss0'}")
+            checked.append("screen:part1_menu_entry=fresh_coldboot")
         driver.press("A", after=160)
         driver.shot("01_operation")
         driver.press("B", after=180)
@@ -550,10 +626,14 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
             "mode_link": (75, 26, 130, 62),
             "mode_operation": (42, 58, 128, 98),
         }.items():
-            dark = count_dark_pixels(menu_img, box)
-            if dark < 20:
-                failures.append(f"{label}: too few visible text/outline pixels ({dark})")
-            checked.append(f"screen:{label}:dark_pixels={dark}")
+            light = count_light_pixels(menu_img, box)
+            if light < 80:
+                failures.append(f"{label}: too few visible compact label pixels ({light})")
+            checked.append(f"screen:{label}:light_pixels={light}")
+        help_intrusive = count_intrusive_help_pixels(menu_img, (8, 108, 140, 154))
+        if help_intrusive > 60:
+            failures.append(f"mode help box has intrusive dark label pixels ({help_intrusive} > 60)")
+        checked.append(f"screen:mode_help_intrusive_dark={help_intrusive}")
 
         driver.press("DOWN", after=120)
         driver.shot("03_menu_single_selected")
@@ -565,7 +645,11 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
             failures.append(f"single battle top-left clipped logo text: edge colored pixels {single_edge} > 24")
         if single_visible < 35:
             failures.append(f"single battle top-left label missing/unreadable: visible label pixels {single_visible} < 35")
+        single_help_intrusive = count_intrusive_help_pixels(single, (8, 108, 150, 154))
+        if single_help_intrusive > 60:
+            failures.append(f"single battle help box has intrusive dark label pixels ({single_help_intrusive} > 60)")
         checked.append(f"screen:single_top_left:visible={single_visible}:edge={single_edge}")
+        checked.append(f"screen:single_help_intrusive_dark={single_help_intrusive}")
 
         driver.press("B", after=180)
         driver.press("DOWN", after=120)
@@ -578,7 +662,11 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
             failures.append(f"connect top-left clipped logo text: edge colored pixels {link_edge} > 24")
         if link_visible < 35:
             failures.append(f"connect top-left label missing/unreadable: visible label pixels {link_visible} < 35")
+        link_help_intrusive = count_intrusive_help_pixels(link, (8, 108, 150, 154))
+        if link_help_intrusive > 60:
+            failures.append(f"connect help box has intrusive dark label pixels ({link_help_intrusive} > 60)")
         checked.append(f"screen:connect_top_left:visible={link_visible}:edge={link_edge}")
+        checked.append(f"screen:connect_help_intrusive_dark={link_help_intrusive}")
     finally:
         driver.close()
 
@@ -648,7 +736,8 @@ def main() -> None:
     parser.add_argument("--harness", default="/tmp/mgbah")
     parser.add_argument(
         "--menu-state",
-        default=str(ROOT / "temp/final_original_vs_final_20260615/final_menu.ss0"),
+        default="",
+        help="Optional debug-only Part1 menu savestate. Default uses a coldboot fresh route.",
     )
     parser.add_argument("--asset-only", action="store_true")
     args = parser.parse_args()
@@ -664,7 +753,8 @@ def main() -> None:
         failures.append(str(exc))
     if not args.asset_only:
         try:
-            checked.extend(run_emulator_checks(Path(args.rom), out_dir, Path(args.harness), Path(args.menu_state)))
+            menu_state = Path(args.menu_state) if args.menu_state else None
+            checked.extend(run_emulator_checks(Path(args.rom), out_dir, Path(args.harness), menu_state))
         except AssertionError as exc:
             failures.append(str(exc))
         try:

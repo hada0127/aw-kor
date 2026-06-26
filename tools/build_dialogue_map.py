@@ -217,7 +217,8 @@ def load_direct_patch_texts():
 def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides):
     """UI에 보여줄 현재 번역. 우선순위는 빌드 적용 순서와 맞춘다."""
     ko = csv_ko or ""
-    if addr in addr_overrides:
+    protected_addr_override = addr in addr_overrides
+    if protected_addr_override:
         ko = addr_overrides[addr] or ""
     elif ja in source_overrides and not has_hangul(ko):
         ko = source_overrides[ja] or ""
@@ -230,14 +231,15 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
         # integrity_map은 실제 빌드 산출에서 역추출한 문자열이다. CSV/inline 경로에
         # 없는 직접 패치 라벨도 UI에는 현재 ROM 기준으로 보여야 한다.
         ko = ship_ko
-    if addr in dialogue_overrides:
+    if addr in dialogue_overrides and addr not in addr_overrides:
         ko = dialogue_overrides[addr] or ""
     if ko:
-        try:
-            import build_korean_full as B  # noqa: WPS433
-            ko = B.normalize_korean_terms(ko)
-        except Exception:
-            pass
+        if not protected_addr_override:
+            try:
+                import build_korean_full as B  # noqa: WPS433
+                ko = B.normalize_korean_terms(ko)
+            except Exception:
+                pass
         ko = ko.replace("지도을", "지도를").replace("지도은", "지도는")
     return ko
 

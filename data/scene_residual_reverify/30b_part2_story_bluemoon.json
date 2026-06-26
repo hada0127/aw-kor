@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30b_part2_story_bluemoon",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164",
+  "rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
   "min_score": 7,
   "ranges": [
    {

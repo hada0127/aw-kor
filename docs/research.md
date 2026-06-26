@@ -1730,3 +1730,66 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   review bucket 안에서도 `editable:true`와 B팀 경고를 유지한다. 노이즈 sentinel은 빌더에서 더 강하게 막는다:
   `문자 깨짐`/`[문자 깨짐]`/`해독·번역·판독 불가(문자 깨짐)`은 `PLACEHOLDER_KO` skip 대상이며,
   `0x009B2DFA` 포함 고주소 8행의 `：！｀￣ヾ〃仝々浦〆〇〇` 패턴은 원본 바이트를 보존한다.
+
+---
+## [2026-06-26] `ADDRESS_TEXT_OVERRIDES` vs `dialogue_overrides` 우선순위 fresh 깨짐
+
+- **재현**: stale savestate가 아니라 cold boot 기반 fresh route가 필요하다.
+  `auto_playthrough.py --fresh --prenav frames480,A,START,A,START,A,A,A,A,A,A,START ...` 계열로
+  Part1 새 게임/이름 입력 후 작전룸에 들어가면 하단 대사창 첫 설명이 재생성된다.
+- **증상**: 수정 전 ROM에서는 `0x00DF5E12` 계열 첫 설명 화면과, 같은 fresh route 후반 `0x00D8F3DE`
+  전투 튜토리얼 화면 하단에 점/가비지 글리프가 섞였다. 같은 state에서 기다려도 사라지지 않아 typewriter
+  지연이 아니며, command-stream 렌더 결과 자체가 감염된 것이다.
+- **주소/데이터 경계**: `ADDRESS_TEXT_OVERRIDES`에는 이미 Part1 작전룸/튜토리얼용 hand-safe 짧은 fragment가
+  들어 있었지만, 빌드 후반 `dialogue_overrides.json` 최종 overlay가 같은 주소를 다시 긴 편집기/B팀 권위문으로
+  덮어썼다. CSV/정적 fit만 확인하면 이 우선순위 문제를 놓친다.
+- **해결 원칙**: `ADDRESS_TEXT_OVERRIDES`는 빌드 안전 권위다. final editor overlay가 이 주소들을 덮으면
+  과거에 화면 검증으로 만든 tight command-stream fragment가 무효화되므로, 빌드는 `a in ADDRESS_TEXT_OVERRIDES`
+  인 경우 dialogue overlay를 skip한다. 누락됐던 `0xDF5E12`/`0xDF5E35`는 `코스모랜드 설명을`/`해 줄게.`로
+  추가했다. `dialogue_overrides.json`/`bteam_baseline.json` 권위문은 변경하지 않는다.
+- **주의**: `0xD81C24` 맵 디자인 도움말 조사 중 발견됐지만, 이 결함은 `0xD81C24`가 아니라 Part1 작전룸 intro row다.
+  D81 watch hit 0 결과와 혼동하지 않는다.
+
+---
+## [2026-06-26] Part1 모드 메뉴 OBJ 라벨과 반투명 도움말 충돌
+
+- **관찰**: Part1 모드 선택/대전/통신 메뉴의 스크롤식 대형 OBJ 라벨은 원본에서도 하단 반투명 도움말 박스 뒤를
+  지나간다. 따라서 "라벨이 도움말 뒤에 일부 보인다" 자체는 엔진 구조상 버그가 아니다.
+  원본 비교 contact는 `docs/screenshots/part1_menu_label_shrink_2026-06-26/original_overlap_reference_contact.png`.
+- **실제 결함**: 한글 패치의 `make_part1_option_block()`은 짧은 라벨을 원본 일본어 폭에 맞추려 `target_min_w`로
+  nearest 확대했고, 긴 통신 항목도 128x32 option OBJ 안에서 큰 OkDanDan 글자로 렌더했다. 이 때문에 도움말 문장 위에
+  진한 외곽선/획이 남아 원본보다 가독성이 나빠졌다.
+- **수정 원칙**: OAM 위치나 도움말 박스 불투명도는 건드리지 않는다. 같은 라벨 OBJ가 선택/비선택/스크롤 위치에
+  재사용되므로 위치별 특수 처리는 취약하다. 대신 소스 그래픽 자체를 Galmuri11-Bold 12px 이하 본문-only compact로
+  줄이고, drop shadow/outline을 제거한다. 리뷰 후 `1카드 통신`/`멀티카드 통신` 원 표기는 compact 폰트에서
+  96x16 bbox 안에 들어감을 확인해 보존했다.
+- **회귀 기준**: `qa_visual_regions.py`는 모든 Part1 option block을 직접 검사한다. bbox는 최대 96x16, y1<=24,
+  palette는 `{2}` 단색만 허용하고 검은 edge(15)는 0px이어야 한다. mGBA screen check는 도움말 ROI의
+  매우 어두운 침범 픽셀을 mode/single/link 각각 60px 이하로 제한한다. 2026-06-26 리뷰 반영 후 기본 입력은
+  구 `final_menu.ss0`가 아니라 coldboot fresh route이며, `--menu-state`는 debug-only 옵션이다.
+- **검증 경로**: fresh route `frames480,A,START,A,START,A,A,A,A,A,A,START`에서 Part1 이름 입력 후 메뉴 state를
+  얻고, 그 state에서 `DOWN,A`, `DOWN,DOWN,A`, `DOWN,DOWN,A,RIGHT/DOWN/UP`을 눌러 사용자 보고 화면 7종을
+  재캡처했다. 수정 후 증거는
+  `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_routes_contact.png`와
+  `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_filmstrip.png`.
+- **stale state 주의**: `temp/final_original_vs_final_20260615/final_menu.ss0` 계열처럼 구 ROM에서 만든
+  savestate를 새 ROM에 로드하면 VRAM/text cache가 남아 Part1 single/link 하단 문장이 깨진 것처럼 보일 수 있다.
+  현재 SHA `8a34a570…` coldboot fresh route의 `state_003.ss0`에서 만든 7-route contact에서는 해당 노이즈가
+  재현되지 않는다. Part1 메뉴의 확정 결함은 large option OBJ 라벨의 도움말 침범이며, stale-state 대사 깨짐은
+  현 ROM 결함 증거로 쓰지 않는다.
+
+---
+## [2026-06-26] 대사 에디터 그룹 member id와 dialogue_map id 불일치
+
+- **증상**: :8780 대사 에디터의 `/api/groups`는 `data/dialogue_groups.json`의 member `id`를 그대로 반환했지만,
+  `/api/line` 저장은 `data/dialogue_map.json`에서 같은 `id`를 찾았다. 두 파일의 id는 항상 동치가 아니며,
+  `g_00DF5E12`에서는 그룹 member id `29423`이 dialogue_map의 인접 주소 `0x00DF5DF3`를 가리켰다.
+- **위험**: 그룹 화면에서 저장하면 표시 중인 주소가 아니라 인접 line이 override될 수 있다. 특히
+  `ADDRESS_TEXT_OVERRIDES` 보호 주소를 검증하는 과정에서 `0x00DF5E12` 대신 `0x00DF5DF3` override가 생기는 것을
+  확인했고 즉시 제거했다.
+- **해결**: `/api/groups` 응답을 address 기준으로 `dialogue_map.json` canonical line에 재동기화해 실제 id/slot/kind를
+  내려준다. `/api/line`은 payload에 address가 있으면 address를 우선해 저장 대상을 찾고, 프런트는 group/list 양쪽에서
+  `{id,address,ko}`를 전송한다. dry-run 저장을 추가해 보호 주소 차단을 데이터 변경 없이 검증할 수 있게 했다.
+- **검증**: 새 서버에서 `코스모랜드 설명을` 검색 시 `0x00DF5E12` member id는 `29424`로 보정되고,
+  stale 문장 `당신에게는,코스모 랜드에 대해` 검색 hit는 0이다. `/api/line` dry-run 저장은
+  `빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소` 오류로 차단된다.
