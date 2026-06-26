@@ -2128,5 +2128,25 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - 판정: `0x804FD4/0x805B04`, `0xD83138`, `0x94298C/0x97AE40/0x9B36E4/0x9EBF88`, `0xEFAAD4`는 해당 캡처에서
   전체 테이블이 한 줄로 출력되지 않고 항목 단위로 렌더된다. 이 1차 확인 범위에서는 50셀 초과로 인한 클리핑은 보이지 않는다.
   이는 해당 화면의 캡처 근거일 뿐, D2 완료나 UI별 폭 동치 검증을 뜻하지 않는다.
-- 미완: `0xD81C24` 맵 디자인 도움말 본문, `0xA3B880/0xB842E8` CO 파워명, `0xD721B5` 문장부호/어깨 테이블은
+- 미완: `0xD81C24` 맵 디자인 도움말 본문, `0xA3B880/0xB842E8` CO 파워명은
   현재 scene checkpoint가 실제 후보 노출 화면이 아니므로 별도 fresh navigation/state가 필요하다.
+
+---
+## [2026-06-26] D2 `0xD721B5` 문장부호 테이블 오염 차단
+
+- D2 `>50` 후보 중 scene이 없던 `0xD721B5`를 정적 조사했다. 원본 `0xD721B5..0xD7222F`는 전각 문장부호
+  반복 + `肩` 122B 테이블이고, 저주소 `0x0025DF75/0x007E16ED`에도 같은 패턴이 반복된다. 포인터 참조는 없었다.
+- 기존 빌드는 CSV 번역을 적용해 이 span 122B 중 119B를 ASCII 문장부호/한글 예약코드/공백 패딩으로 바꾸고 있었다.
+  이는 대사 폭 문제가 아니라 데이터 테이블 오염이다.
+- `DENY_REGIONS`에 `punctuation_width_table_noise`(`0xD721B5..0xD7222F`)를 추가해 원본 보존으로 전환했다.
+  재빌드 후 해당 span은 원본과 byte-identical(변경 0B)이며 `qa_pixel_width.py`의 `>50` 후보는 13→12,
+  `qa_text_fit.py` deny/data-skip은 89→90이다.
+- `claude`/`agy` 리뷰에서 요구한 추가 검증으로 동일 122B 패턴을 전수 검색했다. 원본 내 동일 패턴은
+  `0x25DF75`, `0x7E16ED`, `0xD721B5` 3곳이며, 출력 ROM에서 세 곳 모두 원본과 byte-identical(변경 0B)이다.
+  `qa_integrity_map.py`도 바이트 불일치 0으로 PASS.
+- residual manifest 자동 동기화는 `scene_catalog` container 15개와 `scene_residual_scans.json` manifest 15개가 1:1로 맞고,
+  빈 `addr_ranges` container가 없음을 확인했다. 누락된 새 container 2개는 current SHA clean evidence로 추가됨.
+- 출력 3종 SHA는 `112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164`로 동기화했고,
+  BPS/IPS/manifest 및 scene residual evidence를 현재 SHA로 재생성했다. scene screenshot 70개도 현재 SHA로 재캡처해
+  `audit_scene_entrypoints.py --strict`/`audit_scene_semantics.py --strict`/`audit_scene_catalog.py --strict` PASS,
+  `verify_dist_integrity.py` PASS.

@@ -116,6 +116,11 @@ DENY_REGIONS = [
     # renderer hooks see them; localize these later via their own UI path.
     ('part1_ui_text_table', 0x805100, 0x805A24),
     ('part2_ui_text_table', 0xD82740, 0xD83100),
+    # Punctuation/width lookup-like table mis-extracted as text. Importing the
+    # CSV "translation" rewrites fullwidth punctuation to ASCII and pads the
+    # record, corrupting 119/122 bytes of the original table. DENY_REGIONS uses
+    # half-open [start, end), so this preserves exactly the 122B found row.
+    ('punctuation_width_table_noise', 0xD721B5, 0xD7222F),
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
     # 추출 노이즈(반복 글리프·그래픽 타일)인데 과거 '깨진 문자열' 마커가 PLACEHOLDER_KO
     # 누락으로 여기 인코딩되어 비트맵을 손상시켰음(2026-06-17 발견·수정). 재유입 영구 차단.

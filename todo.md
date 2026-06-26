@@ -113,22 +113,23 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `ADDRESS_TEXT_OVERRIDES`/`SOURCE_TEXT_OVERRIDES`/`translation_comprehensive.csv` fallback/`encode_fit(addr)`/
     DENY/placeholder를 반영하고, 최종 encoded half-cell 폭 + scene 힌트를 출력한다.
     현재 `qa_text_fit.py` overflow 0, `qa_pixel_width.py` 기준 story/dialogue 계열의 `>50` 행은 관측되지 않았다.
-  - [ ] 남은 `final encoded cells > 50` 후보 13개는 대사문이 아니라 메뉴/도움말/CO 파워명/공통 UI 테이블 계열이지만,
+  - [ ] 남은 `final encoded cells > 50` 후보 12개는 대사문이 아니라 메뉴/도움말/CO 파워명/공통 UI 테이블 계열이지만,
     UI별 허용폭은 50셀보다 좁을 수 있으므로 **블로커 후보**로 취급한다.
     (`temp/dialogue_box_width_over_max.tsv`: `0xD81C24`, `0xA3B880`, `0x804FD4`, `0x805B04`,
     `0xD83278`, `0xD83138`, `0x94298C`, `0x97AE40`, `0x9B36E4`, `0x9EBF88`, `0xEFAAD4`,
-    `0xD721B5`, `0xB842E8`). 각 scene fresh capture와 UI별 max-cell 산정으로 실제 줄분리/테이블 렌더/
+    `0xB842E8`). 각 scene fresh capture와 UI별 max-cell 산정으로 실제 줄분리/테이블 렌더/
     클리핑 여부 확인 전 D2 완료 금지.
     - [x] 2026-06-26 재캡처 1차: `0x804FD4/0x805B04` 공통 compact 메뉴,
       `0xD83138` Part1 정보 화면, `0x94298C/0x97AE40/0x9B36E4/0x9EBF88` 공통 START 메뉴,
       `0xEFAAD4` 전투 시스템 메뉴는 현재 캡처에서 항목 단위로 쪼개져 표시되어 한 줄 50셀 초과 클리핑은 관측되지 않음.
       증거: `docs/screenshots/d2_width_candidates_2026-06-26/`.
-    - [ ] 미커버: `0xD81C24` 맵 디자인 도움말 본문 실제 화면, `0xA3B880/0xB842E8` CO 파워명 실제 발동/상세 화면,
-      `0xD721B5` 문장부호/어깨 테이블의 실제 UI 소스. 현재 scene checkpoint는 해당 후보를 직접 노출하지 않으므로
+    - [x] `0xD721B5`는 실제 UI 문장이 아니라 문장부호/폭 테이블성 데이터로 판정해 DENY 추가.
+      출력 ROM `0xD721B5..0xD7222F`는 원본과 byte-identical 복구됐고, `qa_pixel_width.py` 후보에서 제거됨.
+    - [ ] 미커버: `0xD81C24` 맵 디자인 도움말 본문 실제 화면, `0xA3B880/0xB842E8` CO 파워명 실제 발동/상세 화면.
+      현재 scene checkpoint는 해당 후보를 직접 노출하지 않으므로
       fresh navigation/state 추가 필요.
       후속 계획: ① Part1/Part2 맵 디자인 도움말 메뉴로 직접 진입하는 checkpoint 작성,
-      ② CO 파워 발동 또는 CO 상세/파워명 노출 state 확보,
-      ③ `0xD721B5`는 참조/렌더 경로를 먼저 역추적해 실제 UI 노출 여부 판정.
+      ② CO 파워 발동 또는 CO 상세/파워명 노출 state 확보.
 - [x] D3 적용 직후 .gba SHA = output SHA 자동검증, dirty→"적용 필요" UX 완료(2026-06-26).
   :8782 `/api/state`가 output full/final/title_test SHA 동기성을 `output_sync`로 노출하고, `/api/build` 완료 직후
   SHA 불일치 또는 freshness threshold 이전 산출물이면 fail 처리한다. dirty 판정은 ns mtime 기준 `apply_needed`로 내려가며 프런트 상단은 `적용됨`/`적용 필요`와

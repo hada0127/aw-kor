@@ -277,6 +277,32 @@ def scan_range(
     }
 
 
+def format_ranges(items) -> list[str]:
+    return [normalize_range(item)[2] for item in (items or [])]
+
+
+def sync_manifest_containers(manifest: dict, catalog: dict) -> None:
+    entries = manifest.setdefault("containers", [])
+    seen = {entry.get("container_scene_id") for entry in entries}
+    for scene in catalog.get("scenes", []):
+        if scene.get("scene_role") != "container":
+            continue
+        sid = scene.get("id")
+        if not sid or sid in seen:
+            continue
+        dialogue_filter = scene.get("dialogue_filter") or {}
+        ranges = format_ranges(dialogue_filter.get("addr_ranges") or [])
+        if not ranges:
+            raise ValueError(f"container scene has no dialogue addr_ranges: {sid}")
+        entries.append({
+            "container_scene_id": sid,
+            "container_ranges": ranges,
+            "related_screen_scene_ids": [],
+            "evidence": [],
+        })
+        seen.add(sid)
+
+
 def classify(range_rows: list[dict]) -> str:
     residuals = sum(
         len(row["extracted"]["residual_candidates"])
@@ -307,6 +333,7 @@ def main() -> None:
 
     catalog = load_json(CATALOG)
     manifest = load_json(MANIFEST)
+    sync_manifest_containers(manifest, catalog)
     scenes = {scene.get("id"): scene for scene in catalog.get("scenes", []) if scene.get("id")}
     rom = ROM.read_bytes()
     rom_sha = hashlib.sha256(rom).hexdigest()

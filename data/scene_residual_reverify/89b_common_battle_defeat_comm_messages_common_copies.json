@@ -1,14 +1,31 @@
 [
  {
-  "label": "static_residual_reverify::19d_part1_campaign_story_late",
+  "label": "static_residual_reverify::89b_common_battle_defeat_comm_messages_common_copies",
   "method": "extracted_text_residual_reverification",
   "rom_sha256": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164",
   "min_score": 7,
   "ranges": [
    {
-    "range": "0x00DCA000:0x00DD2000",
+    "range": "0x00EFD8A4:0x00EFDA00",
     "extracted": {
-     "covered_count": 1082,
+     "covered_count": 5,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 0,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [],
+     "raw_kana_unexplained": []
+    }
+   },
+   {
+    "range": "0x00EFDDBD:0x00EFDE00",
+    "extracted": {
+     "covered_count": 2,
      "uncovered_count": 0,
      "same_original_uncovered_count": 0,
      "current_kind_counts": {},
@@ -23,7 +40,7 @@
     }
    }
   ],
-  "extracted_covered_count": 1082,
+  "extracted_covered_count": 7,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
   "raw_kana_count": 0,

@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30c_part2_story_yellow_comet",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "7e79670c7a99134b91ba1071f839cb800021bcab8e2b643c9c7074fb06001d91",
+  "rom_sha256": "112f536a0fc69c8964467def1984c436f051459fe1e882264a910b674e5ab164",
   "min_score": 7,
   "ranges": [
    {
