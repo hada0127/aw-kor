@@ -19,6 +19,8 @@ CATALOG = ROOT / "data" / "scene_catalog.json"
 MANIFEST = ROOT / "data" / "scene_residual_scans.json"
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUT_DIR = ROOT / "temp" / "scene_residual_scan_audit"
+VISUAL_GRADES = {"fresh_savestate", "ground_truth", "stale_state"}
+VISUAL_ROLES = {"primary_current_sha", "supplementary_stale_state"}
 
 
 def load(path: Path, default):
@@ -94,6 +96,302 @@ def rel(path: Path) -> str:
         return str(path.relative_to(ROOT))
     except ValueError:
         return str(path)
+
+
+def add_issue(
+    issues: list[dict],
+    sid: str | None,
+    issue: str,
+    *,
+    severity: str = "critical",
+    **extra,
+) -> None:
+    payload = {
+        "severity": severity,
+        "container_scene_id": sid,
+        "issue": issue,
+    }
+    payload.update(extra)
+    issues.append(payload)
+
+
+def validate_result_reference(
+    ref: dict,
+    *,
+    sid: str | None,
+    label: str,
+    issues: list[dict],
+):
+    path_value = ref.get("result_path")
+    if not path_value:
+        add_issue(issues, sid, f"{label} result_path 없음")
+        return None
+    path = ROOT / path_value
+    if not path.exists():
+        add_issue(issues, sid, f"{label} result_path 없음", path=rel(path))
+        return None
+    expected_sha = ref.get("result_sha256")
+    if expected_sha:
+        actual_sha = sha256(path)
+        if expected_sha != actual_sha:
+            add_issue(
+                issues,
+                sid,
+                f"{label} result SHA 불일치",
+                path=rel(path),
+                expected=expected_sha,
+                actual=actual_sha,
+            )
+    return path
+
+
+def validate_visual_reverification(
+    *,
+    sid: str | None,
+    item: dict,
+    index: int,
+    current_rom_sha: str,
+    screen_scene_ids: set[str],
+    issues: list[dict],
+) -> None:
+    if item.get("method") != "current_sha_visual_reverification":
+        add_issue(
+            issues,
+            sid,
+            "visual reverify row method 불일치",
+            row_index=index,
+            actual=item.get("method"),
+        )
+    if item.get("rom_sha256") != current_rom_sha:
+        add_issue(
+            issues,
+            sid,
+            "visual reverify ROM SHA 불일치",
+            row_index=index,
+            expected=current_rom_sha,
+            actual=item.get("rom_sha256"),
+        )
+    if item.get("container_scene_id") != sid:
+        add_issue(
+            issues,
+            sid,
+            "visual reverify container_scene_id 불일치",
+            row_index=index,
+            actual=item.get("container_scene_id"),
+        )
+
+    static_ref = item.get("static_residual_reverify")
+    if not isinstance(static_ref, dict):
+        add_issue(issues, sid, "visual reverify static_residual_reverify 없음", row_index=index)
+    else:
+        validate_result_reference(
+            static_ref,
+            sid=sid,
+            label="visual static residual",
+            issues=issues,
+        )
+
+    dynamic_ref = item.get("historical_dynamic_scan")
+    if isinstance(dynamic_ref, dict):
+        dynamic_path = validate_result_reference(
+            dynamic_ref,
+            sid=sid,
+            label="visual historical dynamic scan",
+            issues=issues,
+        )
+        if dynamic_path:
+            try:
+                dynamic_results = json.loads(dynamic_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                add_issue(
+                    issues,
+                    sid,
+                    f"visual historical dynamic scan JSON 오류: {exc}",
+                    path=rel(dynamic_path),
+                )
+                dynamic_results = None
+            if isinstance(dynamic_results, list):
+                dynamic_hits = [row for row in dynamic_results if hit_payload(row)]
+                expected_cases = dynamic_ref.get("case_count")
+                expected_hits = dynamic_ref.get("hit_count")
+                if expected_cases is not None and len(dynamic_results) != int(expected_cases):
+                    add_issue(
+                        issues,
+                        sid,
+                        "visual historical dynamic scan case 수 불일치",
+                        path=rel(dynamic_path),
+                        expected=int(expected_cases),
+                        actual=len(dynamic_results),
+                    )
+                if expected_hits is not None and len(dynamic_hits) != int(expected_hits):
+                    add_issue(
+                        issues,
+                        sid,
+                        "visual historical dynamic scan hit 수 불일치",
+                        path=rel(dynamic_path),
+                        expected=int(expected_hits),
+                        actual=len(dynamic_hits),
+                    )
+            elif dynamic_results is not None:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual historical dynamic scan 결과가 list가 아님",
+                    path=rel(dynamic_path),
+                )
+
+    screenshots = item.get("current_sha_screenshots")
+    if not isinstance(screenshots, list) or not screenshots:
+        add_issue(issues, sid, "visual reverify current_sha_screenshots 없음", row_index=index)
+    else:
+        primary_count = 0
+        for shot_index, shot in enumerate(screenshots):
+            if not isinstance(shot, dict):
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot 항목이 dict가 아님",
+                    row_index=index,
+                    shot_index=shot_index,
+                )
+                continue
+            path_value = shot.get("path")
+            if not path_value:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot path 없음",
+                    row_index=index,
+                    shot_index=shot_index,
+                )
+                continue
+            shot_path = ROOT / path_value
+            if not shot_path.exists():
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot 파일 없음",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                )
+                continue
+            expected_sha = shot.get("sha256")
+            if not expected_sha:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot SHA 없음",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                )
+            else:
+                actual_sha = sha256(shot_path)
+                if expected_sha != actual_sha:
+                    add_issue(
+                        issues,
+                        sid,
+                        "visual reverify screenshot SHA 불일치",
+                        path=rel(shot_path),
+                        row_index=index,
+                        shot_index=shot_index,
+                        expected=expected_sha,
+                        actual=actual_sha,
+                    )
+            if shot.get("provenance_rom_sha256") != current_rom_sha:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot ROM SHA 불일치",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    expected=current_rom_sha,
+                    actual=shot.get("provenance_rom_sha256"),
+                )
+            scene_id = shot.get("scene_id")
+            if scene_id not in screen_scene_ids:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot scene_id가 screen scene이 아님",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    scene_id=scene_id,
+                )
+            if "visual_result" not in shot:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot visual_result 없음",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                )
+            grade = shot.get("grade")
+            role = shot.get("evidence_role")
+            if grade not in VISUAL_GRADES:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot grade 값이 유효하지 않음",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    grade=grade,
+                )
+            if role not in VISUAL_ROLES:
+                add_issue(
+                    issues,
+                    sid,
+                    "visual reverify screenshot evidence_role 값이 유효하지 않음",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    role=role,
+                )
+            if role == "primary_current_sha":
+                primary_count += 1
+            if grade == "stale_state" and role != "supplementary_stale_state":
+                add_issue(
+                    issues,
+                    sid,
+                    "stale_state screenshot이 primary 증거로 분류됨",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    role=role,
+                )
+            if grade != "stale_state" and role != "primary_current_sha":
+                add_issue(
+                    issues,
+                    sid,
+                    "fresh/ground-truth screenshot evidence_role 불일치",
+                    path=rel(shot_path),
+                    row_index=index,
+                    shot_index=shot_index,
+                    grade=grade,
+                    role=role,
+                )
+        if primary_count <= 0:
+            add_issue(
+                issues,
+                sid,
+                "visual reverify primary_current_sha screenshot 없음",
+                row_index=index,
+            )
+
+    for stale in item.get("excluded_stale_artifacts") or []:
+        if isinstance(stale, dict) and stale.get("path"):
+            add_issue(
+                issues,
+                sid,
+                "excluded stale artifact가 파일 경로를 증거처럼 보존함",
+                row_index=index,
+                path=stale.get("path"),
+            )
 
 
 def main() -> None:
@@ -218,6 +516,47 @@ def main() -> None:
                     "path": rel(result_path),
                     "issue": "scan results가 list가 아님",
                 })
+                continue
+            if evidence.get("method") == "current_sha_visual_reverification":
+                hits = [item for item in results if isinstance(item, dict) and hit_payload(item)]
+                row["case_count"] += len(results)
+                row["hit_count"] += len(hits)
+                if expected_cases is not None and len(results) != int(expected_cases):
+                    add_issue(
+                        issues,
+                        sid,
+                        "visual reverify case 수 불일치",
+                        path=rel(result_path),
+                        expected=int(expected_cases),
+                        actual=len(results),
+                    )
+                if expected_hits is not None and len(hits) != int(expected_hits):
+                    add_issue(
+                        issues,
+                        sid,
+                        "visual reverify hit 수 불일치",
+                        path=rel(result_path),
+                        expected=int(expected_hits),
+                        actual=len(hits),
+                    )
+                for index, item in enumerate(results):
+                    if isinstance(item, dict):
+                        validate_visual_reverification(
+                            sid=sid,
+                            item=item,
+                            index=index,
+                            current_rom_sha=current_rom_sha,
+                            screen_scene_ids=screen_scene_ids,
+                            issues=issues,
+                        )
+                    else:
+                        add_issue(
+                            issues,
+                            sid,
+                            "visual reverify row가 dict가 아님",
+                            path=rel(result_path),
+                            row_index=index,
+                        )
                 continue
             hits = [item for item in results if hit_payload(item)]
             unexplained_residual_rows = [

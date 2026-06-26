@@ -17,7 +17,7 @@ build_korean_poc.stage_b 의 메커니즘(FONT_BASE repoint + 한글 글리프 �
 
 재현: python tools/build_korean_full.py [--out output/game_wars_korean_full.gba]
 """
-import argparse, collections, csv, hashlib, json, os, struct, sys
+import argparse, collections, csv, hashlib, json, os, re, struct, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_poc as P
@@ -26,6 +26,7 @@ BASE = P.BASE
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 COMPREHENSIVE_TRANS = os.path.join(BASE, 'data', 'translation_comprehensive.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
+DGROUPS = os.path.join(BASE, 'data', 'dialogue_groups.json')
 # T1: 한글 2350자(KS X 1001 완성형) 폰트 — 기존 1030과 byte-identical 호환(additive, tools/build_korean2350.py 생성).
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 GLYPH_BLOB_2350 = os.path.join(BASE, 'data', 'kor_glyphs_2350.bin')
@@ -9402,6 +9403,92 @@ def load_slots():
     return slots
 
 
+def load_direct_script_metadata():
+    """Direct script patch metadata from dialogue_groups.json.
+
+    found_texts can contain only the first source fragment for these rows. The
+    direct patcher below writes the full [start,end) span, so editor overrides
+    for script rows must be budgeted against that span.
+    """
+    slots = {}
+    members_by_start = {}
+    if not os.path.exists(DGROUPS):
+        print(f'WARN: {DGROUPS} missing; direct script slot metadata unavailable', file=sys.stderr)
+        return slots, members_by_start
+    try:
+        data = json.load(open(DGROUPS, encoding='utf-8'))
+    except Exception as exc:
+        print(f'WARN: failed to load {DGROUPS}: {exc}', file=sys.stderr)
+        return slots, members_by_start
+    for group in data.get('groups', []):
+        parsed = []
+        for member in group.get('members', []):
+            try:
+                addr = int(member.get('address'), 16)
+                slot = int(member.get('slot') or 0)
+            except (TypeError, ValueError):
+                continue
+            parsed.append({
+                'address': addr,
+                'slot': slot,
+                'kind': str(member.get('kind') or ''),
+                'ko': member.get('ko') or '',
+            })
+        for member in parsed:
+            if not member['kind'].startswith('script:'):
+                continue
+            addr = member['address']
+            slot = member['slot']
+            if slot > 0:
+                slots[addr] = max(slots.get(addr, 0), slot)
+                end = addr + slot
+                members_by_start[addr] = [
+                    m for m in parsed
+                    if addr <= m['address'] < end
+                ]
+    return slots, members_by_start
+
+
+def load_direct_script_slots():
+    slots, _members_by_start = load_direct_script_metadata()
+    return slots
+
+
+def member_override_text(member, overrides):
+    key = "0x%08X" % member['address']
+    if key in overrides:
+        return str(overrides.get(key) or '')
+    return str(member.get('ko') or '')
+
+
+def direct_script_override_text(faddr, fend, members_by_start, overrides):
+    members = members_by_start.get(faddr) or []
+    if not members:
+        return str(overrides.get("0x%08X" % faddr) or '').strip() or None
+    span_members = [
+        m for m in members
+        if faddr <= m['address'] < fend
+    ]
+    touched = any(("0x%08X" % m['address']) in overrides for m in span_members)
+    if not touched:
+        return None
+    if len(span_members) <= 1:
+        return member_override_text(span_members[0], overrides).strip() or None
+    parts = []
+    for member in span_members:
+        text = member_override_text(member, overrides)
+        if text:
+            parts.append(text)
+    return ''.join(parts).strip() or None
+
+
+def canonical_override_addr(value):
+    text = str(value or "").strip()
+    if not re.fullmatch(r"0x[0-9A-Fa-f]{1,8}", text):
+        return None
+    return "0x%08X" % int(text, 16)
+
+
 def encode_text(ko, syl_to_code, unmapped):
     ko = normalize_korean_terms(ko)
     out = bytearray()
@@ -10458,6 +10545,13 @@ def main():
 
     # 2) 전체 텍스트 인코딩
     slots = load_slots()
+    direct_script_slots, direct_script_members = load_direct_script_metadata()
+
+    def slot_for_editable_addr(addr):
+        slot = slots.get(addr, 0)
+        direct_slot = direct_script_slots.get(addr, 0)
+        return max(slot, direct_slot)
+
     st = collections.Counter()
     unmapped = collections.Counter()
     report = []
@@ -10632,7 +10726,11 @@ def main():
     _ovp = os.path.join(BASE, 'data', 'dialogue_overrides.json')
     if os.path.exists(_ovp):
         try:
-            _dlg_ov = json.load(open(_ovp, encoding='utf-8'))
+            _raw_ov = json.load(open(_ovp, encoding='utf-8'))
+            for _astr, _ko in (_raw_ov or {}).items():
+                _addr_key = canonical_override_addr(_astr)
+                if _addr_key:
+                    _dlg_ov[_addr_key] = _ko
         except Exception:
             _dlg_ov = {}
     st['dialogue_overrides'] = 0
@@ -10691,7 +10789,7 @@ def main():
                     and not _ov_acceptable_aux(_ck):   # 보조용언 acceptable이면 override 존중(skip 안 함)
                 st['override_jam_skipped'] += 1
                 continue
-        slot = slots.get(a, 0)
+        slot = slot_for_editable_addr(a)
         if slot <= 0 or in_deny(a, a + slot) or a in skip_addrs or a + slot > len(rom):
             continue
         if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
@@ -11680,11 +11778,20 @@ def main():
     # like で/を do not leak between Korean labels.
     def patch_script_row(faddr, fend, payload, label):
         slot_len = fend - faddr
-        payload = _fw_before_ascii(payload, slot_len, faddr)   # ASCII 앞 0x20 → 전각공백(render hook 사각 보완)
+        text_for_log = None
+        ov = direct_script_override_text(faddr, fend, direct_script_members, _dlg_ov)
+        if ov:
+            payload, level = encode_fit(ov, slot_len, syl_to_code, unmapped, faddr)
+            if payload is None:
+                raw_len = len(encode_text(ov, syl_to_code, unmapped))
+                raise AssertionError(f'{label} override overflow: {raw_len} > {slot_len}')
+            text_for_log = ov
+        else:
+            payload = _fw_before_ascii(payload, slot_len, faddr)   # ASCII 앞 0x20 → 전각공백(render hook 사각 보완)
         if len(payload) > slot_len:
             raise AssertionError(f'{label} overflow: {len(payload)} > {slot_len}')
         rom[faddr:fend] = payload + bytes([FILL_BYTE]) * (slot_len - len(payload))
-        WRITE_LOG.append([faddr, slot_len, len(payload), bytes(payload).hex(), FILL_BYTE, None, None, 'script:' + label])
+        WRITE_LOG.append([faddr, slot_len, len(payload), bytes(payload).hex(), FILL_BYTE, text_for_log, None, 'script:' + label])
 
     # This briefing originally inserts the player name between "今回の" and
     # "さんの作戦". In Korean it made the short fragments read as

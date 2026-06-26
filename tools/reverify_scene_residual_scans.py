@@ -43,7 +43,8 @@ RAW_KANA_ALLOWLIST = {
     ),
     0x00EE22AC: (
         "common comm numeric/control table single kana; same as original. "
-        "Historical menu/focus residual scan found no visible hit; keep visual follow-up in todo."
+        "Historical menu/focus residual scan found no visible hit; current-sha visual "
+        "reverification is tracked in data/comm_label_visual_reverify.json."
     ),
 }
 
@@ -353,7 +354,18 @@ def main() -> None:
             "translation_residual": len(residuals),
         }]
 
-        evidence = (entry.get("evidence") or [{}])[0]
+        old_evidence = entry.get("evidence") or []
+        evidence = next(
+            (
+                item for item in old_evidence
+                if item.get("method") == "extracted_text_residual_reverification"
+            ),
+            {},
+        )
+        extra_evidence = [
+            item for item in old_evidence
+            if item.get("method") != "extracted_text_residual_reverification"
+        ]
         result_path = OUT_DIR / f"{sid}.json"
         if args.write:
             write_json(result_path, result)
@@ -367,7 +379,7 @@ def main() -> None:
                 f"{date.today().isoformat()} current ROM extracted-text residual reverify "
                 f"(min_score={args.min_score}; raw kana observations retained)"
             )
-            entry["evidence"] = [evidence]
+            entry["evidence"] = [evidence] + extra_evidence
         changed.append((sid, len(residuals), len(raw_unexplained), result_path))
 
     stamp = f"reverified_{date.today().isoformat().replace('-', '_')}"

@@ -1889,7 +1889,7 @@ codex/agy/claude 엄격 리뷰가 지적한 "green check가 자기확인" 문제
   browser 검증 및 E8 후속 확인과 함께 해석한다.
 - **감사 하드닝**: `tools/audit_scene_residual_scans.py`가 `hit`뿐 아니라 `translation_residual`,
   `raw_kana_unexplained_count`도 strict critical로 본다. `verify_dist_integrity.py` 배포 게이트에 연결했다.
-  현재 SHA `485ef5e88…` 기준 13 container/2884 dialogue, case 13, hit 0, critical 0.
+  현재 SHA `6cb201dc…` 기준 13 container/2884 dialogue, extracted case 13, hit 0, critical 0.
 - **raw kana observation 투명화**: 이름 그리드 charset continuation(0xDA4342)과 공통 통신 numeric/control table의
   단일 `ソ`(0xEE22AC)는 좁은 allowlist와 reason으로만 허용. `0xEE22AC`는 잔류 문장 후보는 아니나, UI 노출 여부
   보강 확인은 todo E8에 남김.
@@ -1905,3 +1905,39 @@ codex/agy/claude 엄격 리뷰가 지적한 "green check가 자기확인" 문제
   overflow 0/no_ko 0, `qa_japanese_residuals.py --min-score 13` 후보 1(0x80089B 테이블형 기존 부채),
   placeholder 0, ASCII curated 0, B팀 drift 0, repoint 문제 0, visual regions 23 checks, dist PASS,
   phase6 basic 3종 PASS.
+
+---
+## [2026-06-26] :8782 전 대사 저장 게이트 + 88 공통 통신 라벨 시각 재확인
+
+C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이트와 관련 메뉴 캡처" 범위이며,
+하드웨어 실기 검증(F1)과 전체 fresh-boot 매트릭스 확대(E2)를 대체하지 않는다.
+
+- **C6 라운드트립 검증 도구화**: `tools/verify_scene_editor_roundtrip.py` 추가. 라이브 :8782 API에서 모든 scene의
+  editable 대사 member에 대해 실제 저장 API와 같은 `/api/dialogue/line dry_run`을 호출한다. 전체 쓰기는 churn을 만들기
+  때문에 dry-run을 기본으로 하고, 대표 2건만 실제 저장 후 원복한다.
+- **C6 결과**: 현재 ROM SHA `6cb201dc…` 기준 78 scene, 10,336 dialogue group, 1,990 sprite,
+  23,411 editable member dry-run failure 0. B팀 editable 3,260 member는 미승인 dry-run confirm 요구 +
+  승인 dry-run 성공 흐름 failure 0/skip 0. 실제 저장/원복 샘플은 일반 `0x00DFA5E6`와 B팀 `0x00DFA616` 2건 모두 성공.
+  direct script 확장-span 대표 `0x00D8FD26`는 실제 저장→임시 ROM 빌드→build slot 44 < direct slot 52 조건에서 span 바이트 expected/actual 대조까지 성공.
+  테스트 후 편집 관련 파일은 실행 전 해시로 원복.
+- **저장 API false-positive 수정**: :8782 `line_budget`이 direct `script:*` patch의 명시 span 대신 found_texts 첫 조각
+  길이를 슬롯으로 보던 문제를 수정했다. 빌드는 direct script span 전체에 쓰므로, 기존 방식은 현재 출하 문장 자체를
+  over-budget으로 오판했다. 또한 `deny_pair_status`가 `build_korean_full.in_deny()`를 호출하도록 해 name-grid/false-text
+  데이터가 editable로 노출되는 문제를 막았다.
+- **direct script 빌드 반영 수정**: `build_korean_full.py`의 direct `patch_script_row`가 `dialogue_overrides.json`을
+  최종 권위로 보되, 서버와 같은 `encode_fit` 기준으로 span-fit을 판단하게 했다. 이전에는 에디터 저장이 성공해도
+  direct script 하드코딩 문장이 빌드 말미에 다시 덮어써 사용자 수정이 ROM에 반영되지 않을 수 있었다. 이 전환 과정에서
+  이미 묵살 중이던 B팀 direct override 2건(`0x00A039E4`, `0x00DF6A7A`)과 일반 direct override 1건(`0x00A03A46`)을
+  출하 가능 문장으로 정리하고 B팀 baseline을 갱신했다.
+- **E8 현재 SHA 시각 재확인**: `data/comm_label_visual_reverify.json` 추가. `88_common_comm_labels`의 raw 단일 `ソ`
+  (`0x00EE22AC`)는 잔류 문장이 아니라 원본과 동일한 통신 숫자/control table observation으로 유지한다. 현재 SHA
+  통신/공통 메뉴 캡처 7장을 수동 확인해 visible `ソ` 0. 이 중 primary current-sha 증거는 fresh/ground-truth
+  4장(`23b_part2_comm_multiplayer`, `86_common_compact_menu_tables`, Part2 main/shop)이며, Part1 link/name/single
+  3장은 stale_state라 보조 증거로만 분류했다. 오래된 `scene_88_common_comm_labels_patched` 캡처는 ROM SHA
+  `a27f083…`라 현 증거에서 제외했다.
+- **E8 감사 연결**: 과거 동적 scan 원본은
+  `data/scene_residual_reverify/88_common_comm_labels_dynamic_scan_results.json`으로 고정해
+  1967 case/281 state/hit 0/break_size nonzero 0를 재검증 가능하게 보존했다. 새 시각 리포트를
+  `data/scene_residual_scans.json` evidence에 연결했고, audit가 리포트 SHA뿐 아니라 7개 PNG SHA,
+  캡처 provenance ROM SHA, primary/stale 증거 역할, 보조 scan SHA까지 확인한다.
+  `tools/audit_scene_residual_scans.py --strict` 결과 container 13, case 14, hit 0, critical 0.

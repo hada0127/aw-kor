@@ -80,8 +80,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `tools/reverify_scene_residual_scans.py` 추가. 기존 raw 가타카나 blanket-pass를 폐기하고
   `game_wars_found_texts.csv` 추출행 + `qa_japanese_residuals.py`의 covered/same-original 판정 재사용.
   raw kana는 별도 observation으로 남기며 설명 없는 항목은 `audit_scene_residual_scans.py --strict`가 critical 처리.
-  현재 SHA `485ef5e8…` 기준 13 container/2884 dialogue, case 13, hit 0, critical 0. `verify_dist_integrity.py`
-  배포 게이트에도 연결. 증명 범위는 CSV 추출행 + raw kana observation이며, 화면 비노출 보강은 E8로 추적.
+  현재 SHA `6cb201dc…` 기준 13 container/2884 dialogue, extracted case 13, hit 0, critical 0. `verify_dist_integrity.py`
+  배포 게이트에도 연결. E8 시각 evidence까지 포함한 residual audit는 case 14/hit 0/critical 0.
 
 ## C. 웹에디터 전(全) 대사·스프라이트 편집 가능 (쪼롱이 요구)
 - [x] **C1 대사 편집 커버리지**: 실대사(addr≥0x800000) 19650 중 **19450(99.0%) 편집가능**. 차단 200=전부 정당
@@ -93,10 +93,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [x] **C5 프런트(app.js) confirm_bteam 전송·bteam_warn 표시 완료(2026-06-26)**:
   모든 조각을 `dry_run`으로 서버 `encode_fit` 기준 사전검증한 뒤 실제 저장을 시작한다.
   B팀 변경은 dry-run 단계에서 confirm을 받고, 승인 시 `confirm_bteam:true`로 저장. 취소/초과/미수록은 저장 시작 전 반환.
-- [ ] **C6 8782 브라우저 전수 검증**: 모든 scene 대사·스프라이트 열림/저장 + B팀 confirm 흐름.
-  - 2026-06-26 현재: Chrome CDP로 63 scene/107 sprite 열람 failure 0.
-  - B팀 대표 경로 취소/승인/원복, 초과 입력 dry-run 차단, 서버 초과 하드게이트 검증 완료.
-  - 미완: 모든 editable 대사의 비파괴 저장 라운드트립/transaction 검증은 아직 없음(대표 저장 검증만 완료).
+- [x] **C6 8782 브라우저/저장 게이트 전수 검증 완료(2026-06-26)**:
+  Chrome CDP 63 scene/107 sprite 열람 failure 0. `tools/verify_scene_editor_roundtrip.py`로
+  :8782 라이브 API 기준 78 scene/10,336 dialogue group/1,990 sprite/23,411 editable member dry-run failure 0,
+  B팀 3,260 member confirm dry-run failure 0/skip 0. 대표 실제 저장/원복 2건(일반 0x00DFA5E6, B팀 0x00DFA616)
+  성공. direct script 확장-span 대표 0x00D8FD26는 실제 저장→임시 ROM 빌드→build slot 44 < direct slot 52 조건에서 span 바이트 대조 성공. 테스트 후 편집 파일은
+  실행 전 해시로 원복.
 
 ## D. 에디터/QA 폴리시 (Phase 6~8 잔여)
 - [ ] D1 공통 `text_metrics.py` 추출 + py↔js 일치 테스트, 2350 미수록 음절 차단 일원화.
@@ -115,9 +117,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 - [ ] E5 VRAM 팔레트 캡처(0x05000000/0x05000200) 스프라이트 실색.
 - [ ] E6 CSV 권위 단일화(inline 리터럴 → overrides.tsv 분리).
 - [ ] E7 캡처 지연 단축(슬롯 nav 단축 canvas + orig 캡처 영구 캐시).
-- [ ] E8 `88_common_comm_labels` raw 단일 `ソ`(0x00EE22AC) 실제 UI 노출 재확인.
-  현재 잔류 문장 후보는 아니고 원본과 동일한 통신 숫자/control table observation이지만, fresh menu/focus 재검증으로
-  "화면 비노출" 근거를 최신 SHA에서 보강할 것.
+- [x] E8 `88_common_comm_labels` raw 단일 `ソ`(0x00EE22AC) 실제 UI 노출 재확인 완료(2026-06-26).
+  현재 SHA 관련 통신/공통 메뉴 캡처 7장 수동 시각검사에서 visible `ソ` 0. fresh/ground-truth 4장은 primary,
+  Part1 stale_state 3장은 보조 증거로 분리했다. 기존 1967-case menu/focus/row 동적 스캔 hit 0 원본은
+  `data/scene_residual_reverify/88_common_comm_labels_dynamic_scan_results.json`에 보존. `data/comm_label_visual_reverify.json`을
+  residual manifest에 연결했고 audit가 리포트/PNG/provenance/primary-stale 역할/보조 scan SHA까지 검증한다.
+  `audit_scene_residual_scans.py --strict` 결과 case 14/hit 0/critical 0.
 
 ## F. 하드웨어 (사용자/물리 필요)
 - [ ] F1 실기(real GBA) 검증 — 플래시카트 부팅·주요화면. **자율 불가(하드웨어 필요)**.

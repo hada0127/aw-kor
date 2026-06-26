@@ -73,9 +73,8 @@ try:
         sys.path.insert(0, str(ROOT / "tools"))
     import build_korean_full as B
     import text_metrics as TM
-except Exception:
-    B = None
-    TM = None
+except Exception as exc:
+    raise RuntimeError("scene editor requires build_korean_full/text_metrics for safe save gates") from exc
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()
@@ -308,11 +307,33 @@ def is_bteam(address):
         return False
 
 
+def canon_addr(address):
+    try:
+        return "0x%08X" % int(address, 16)
+    except (ValueError, TypeError):
+        return None
+
+
+def canonical_override_map(raw):
+    out = {}
+    for key, value in (raw or {}).items():
+        ckey = canon_addr(key)
+        if ckey:
+            out[ckey] = value
+    return out
+
+
 def deny_pair_status(addr_int, slot):
     """[addr,addr+slot)가 DENY_REGIONS와 겹치면 ('deny',name), PAIR_RENDERER면 ('pair',name). (M10)"""
     if not B:
         return (None, None)
     lo, hi = addr_int, addr_int + max(slot, 1)
+    try:
+        deny = B.in_deny(lo, hi)
+    except Exception:
+        deny = None
+    if deny:
+        return ("deny", deny)
     for name, rlo, rhi in getattr(B, "DENY_REGIONS", []):
         if lo < rhi and hi > rlo:
             return ("deny", name)
@@ -332,7 +353,13 @@ def line_budget(member):
     # 슬롯 권위: 빌드 found length > dialogue_groups slot. min으로 안전.
     g_slot = member.get("slot")
     b_slot = build_slots().get(addr_int)
-    if isinstance(b_slot, int) and b_slot > 0:
+    if str(member.get("kind") or "").startswith("script:") and isinstance(g_slot, int) and g_slot > 0:
+        # Direct script patches write the explicit [start,end) span in build_korean_full.py.
+        # found_texts often contains only the first source fragment, so using b_slot would
+        # falsely expose the current shipped text as over budget.
+        slot = g_slot
+        est = False
+    elif isinstance(b_slot, int) and b_slot > 0:
         slot = min(b_slot, g_slot) if isinstance(g_slot, int) and g_slot > 0 else b_slot
         est = False
     elif isinstance(g_slot, int) and g_slot > 0:
@@ -365,18 +392,28 @@ def member_slot(address):
         ai = int(address, 16)
     except (ValueError, TypeError):
         return None
-    b = build_slots().get(ai)
-    if isinstance(b, int) and b > 0:
-        return b
+    key = "0x%08X" % ai
     if "addr_slot" not in _CACHE:
         idx = {}
         for g in group_index().values():
             for m in g.get("members", []):
                 a = m.get("address"); s = m.get("slot")
                 if a is not None and isinstance(s, int):
-                    idx[a] = s
+                    k = canon_addr(a)
+                    if not k:
+                        continue
+                    rec = idx.setdefault(k, {"slot": s, "script_slot": None})
+                    rec["slot"] = max(rec["slot"], s)
+                    if str(m.get("kind") or "").startswith("script:"):
+                        rec["script_slot"] = max(rec["script_slot"] or 0, s)
         _CACHE["addr_slot"] = idx
-    return _CACHE["addr_slot"].get(address)
+    rec = _CACHE["addr_slot"].get(key) or {}
+    if rec.get("script_slot"):
+        return rec["script_slot"]
+    b = build_slots().get(ai)
+    if isinstance(b, int) and b > 0:
+        return b
+    return rec.get("slot")
 
 
 def unsupported_syllables(text):
@@ -866,15 +903,13 @@ class Handler(BaseHTTPRequestHandler):
         """대사 ko 저장(주소 기준 override). 그룹 멤버(조각)별 독립 슬롯."""
         addr = body.get("address")
         ko = body.get("ko", "")
+        addr = canon_addr(addr)
         if not addr:
             return {"ok": False, "error": "address 필요"}
         if is_building():
             return {"ok": False, "error": "빌드 중 — 완료 후 저장하세요"}
         # 빌드 미적용(코드영역/슬롯미상) 조각 차단 — 편집해도 ROM 미반영
-        try:
-            addr_int = int(addr, 16)
-        except (ValueError, TypeError):
-            addr_int = 0
+        addr_int = int(addr, 16)
         if addr_int < SAFE_MIN_ADDR:
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
         # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
@@ -908,13 +943,13 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
                     "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot}
         with _LOCK:
-            ov = DE.load_json(DE.OVERRIDES_PATH, {}) or {}
+            ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
             ov[addr] = ko
             DE.save_json(DE.OVERRIDES_PATH, ov)
             # dialogue_map.json의 ko도 동기(편집 표시 일관)
             data = DE.load_json(DE.DIALOGUE_PATH, {"lines": []})
             for ln in data.get("lines", []):
-                if ln.get("address") == addr:
+                if canon_addr(ln.get("address")) == addr:
                     ln["ko"] = ko
             DE.save_json(DE.DIALOGUE_PATH, data)
         return {"ok": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
