@@ -114,12 +114,12 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `output SHA 검증`을 표시. `tools/verify_scene_editor_apply_state.py`가 clean→mtime dirty→restore 상태를
   비파괴 검증하고, `tools/verify_scene_editor_cdp.py`로 상단 DOM + Chrome CDP 63 scene/107 sprite failure 0 UI 회귀도 확인.
   CDP 리포트는 scene별 중간 저장으로 내구화.
-- [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(part1_welcome/part2_menu ready, battle dialogue pending).
+- [ ] D4 frame-sweep 캡처 엔진 + part1 welcome/battle dialogue canvas 신뢰성(part1_welcome/part2_menu/89a surrender ready, 89b defeat pending).
   - 2026-06-26 부분 완료: `tools/preview_capture.py`에 frame-sweep 선택(`sweep.frames`/`score_box`)과
     NUL 없는 command-stream span 패치(`terminator:none`, `pad`) 지원 추가. `part1_welcome` canvas는 실제 표시
     복사본 `0x00A7AA56` 37B span + frame 108/120/132/144 sweep으로 승격했고,
     `tools/verify_preview_canvases.py`가 active canvas 2개(part1_welcome, part2_menu)에 대해 서로 다른 payload가
-    실제 캡처 픽셀을 바꾸는지 검증한다. 남은 범위: battle dialogue canvas 신뢰성 확보.
+    실제 캡처 픽셀을 바꾸는지 검증한다.
   - 2026-06-26 재검증: 현재 repoint SHA `7e79670c…`에서 이전 `0x00A7AB56`은 뒤쪽 안내문으로 밀려 payload diff 0이 됨.
     ROM prefix 디코드로 welcome runtime span을 `0x00A7AA56..0x00A7AA7A`로 재확정했고,
     `preview_capture.py`는 `temp/repoint_manifest.json`의 `0xDF8E14 -> new_addr`, fixed `0xDF8E16` delta로 slot을 자동 계산
@@ -131,6 +131,15 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     (이미 렌더된 VRAM). `89b` 직전 후보 `state_000_before_a`도 현 하네스 단독 replay에서는 같은 중간 메시지로
     재진입하지 못함. 다음 작업은 fresh-nav로 대사 생성 직전까지 안정 도달하거나, savestate 직후 런타임 text source를
     재트리거하는 별도 canvas 지원을 만든 뒤 `verify_preview_canvases.py --canvas <battle>` diff>0로 승격.
+  - 2026-06-26 추가 완료: `89a` 항복 확인은 최종 표시 state가 아니라
+    `part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`에서 A 입력으로 대사창을 재생성해야
+    payload diff가 난다. 후보 pair scan 결과 실제 소스는 공통 `0xEFDAA0/0xEFDAC1`이 아니라
+    Part2 복제본 `0xA34CB0/0xA34CD1`(`A34CB0` diff 614px, 다른 후보 diff 0). `battle_surrender_confirm`
+    canvas를 `0xA34CB0` 32B span + `terminator:none`/space pad + frame-sweep으로 승격했고,
+    active canvas 3개 failure 0(`battle_surrender_confirm` diff 302px). UI 에디터는 실제 89a scene에
+    `g_00A34CB0`만 preview-ready로 노출하고, `g_00EFDAA0/g_00EFDAC1` 공통 복제본은 별도 container
+    `89a_common_battle_surrender_confirm_common_copies`로 분리해 false preview를 막는다. 남은 범위: `89b`
+    패배 메시지 canvas 재트리거 state/nav 확보.
 - [x] D5 lz77 실제 재압축 fit 검증, 빌드 skip 구조화 리포트 완료(2026-06-26).
   `build_korean_full.py`가 `data/sprites_overrides.json` 적용 시 `temp/sprite_override_report.json`에
   override SHA/records/applied/skipped/ignored와 LZ77 `compressed_size <= comp_size` 결과를 남긴다.

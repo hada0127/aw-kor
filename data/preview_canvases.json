@@ -37,9 +37,29 @@
         "min_score": 250
       },
       "note": "1편 튜토리얼 첫 welcome 대사창(per-char dialog 렌더러). temp/repoint_manifest.json의 0xDF8E14->new_addr와 fixed 0xDF8E16 delta로 현재 표시 command-stream span을 계산한다(현재 fallback 0xA7AA56, 37B). 뒤따르는 0x6B/0x0A 제어코드는 보존한다. 컷신 자동진행으로 고정 프레임 캡처가 불안정하므로 frame-sweep으로 대사창 프레임을 선택한다. [검증됨]"
+    },
+    "battle_surrender_confirm": {
+      "slot": "0x00A34CB0",
+      "len": 32,
+      "terminator": "none",
+      "pad": "0x20",
+      "render": "dialog",
+      "checkpoint": "scene_89a_common_battle_surrender_confirm",
+      "nav": [
+        ["loadstate", "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"],
+        ["press", "A", 20]
+      ],
+      "sweep": {
+        "frames": [72, 96, 120, 144, 168],
+        "score_box": [20, 112, 224, 150],
+        "threshold": 1200,
+        "min_score": 250
+      },
+      "min_payload_diff": 20,
+      "note": "공통 전투 항복 확인 대사창(per-char dialog 렌더러). 3P free-battle 항복 메뉴 직전 state에서 A로 확인창을 재생성한다. 이 화면의 런타임 소스는 공통 0xEFDAA0이 아니라 Part2 복제본 0xA34CB0/0xA34CD1이며, canvas는 첫 줄 0xA34CB0 32B span만 hijack한다. 2026-06-26 pair scan에서 0xA34CB0만 payload diff 614px, 0xEFDAA0 등 다른 복제본은 diff 0. verify_preview_canvases canvas diff 302px. [검증됨]"
     }
   },
   "_experimental_part1": {
-    "note": "part1_welcome은 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)는 아직 대사창 직전 정밀 nav 필요. battle dialogue는 2026-06-26 probe에서 31_battle_dialog 오분류, 89a/89b 최종 savestate payload diff 0으로 미승격. fresh-nav 또는 재트리거 가능한 직전 state를 확보한 뒤 verify_preview_canvases diff>0일 때만 추가."
+    "note": "part1_welcome과 battle_surrender_confirm은 command-stream span + frame-sweep으로 정식 승격. 이름프롬프트(0xDF8DB2)는 아직 대사창 직전 정밀 nav 필요. 31_battle_dialog은 대사창이 아닌 전투/정보 UI 화면이므로 battle dialogue 근거로 사용 금지. 89b 패배 메시지는 아직 최종 savestate payload diff 0이라 별도 재트리거 state가 필요."
   }
 }

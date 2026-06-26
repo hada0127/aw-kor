@@ -9,6 +9,11 @@
     }
   },
   "dialogue": {
+    "89a_common_battle_surrender_confirm": {
+      "add": [
+        "g_00A34CB0"
+      ]
+    },
     "89b_common_battle_defeat_comm_messages": {
       "add": [
         "g_00A34D18",

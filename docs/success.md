@@ -2047,3 +2047,27 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   0건, `qa_text_fit.py` overflow 0/no_ko 0, `audit_scene_residual_scans.py --strict` case 14/hit 0/critical 0,
   `audit_scene_entrypoints.py --strict` missing/stale 0/critical 0, `qa_integrity_map.py` byte mismatch 0,
   `qa_visual_regions.py` 23 checks, placeholder 0, B팀 drift 0, `qa_terms_from_rom.py` hard 0, phase6 basic PASS.
+
+---
+## [2026-06-26] D4 battle_surrender_confirm canvas 승격
+
+- **실제 런타임 소스 특정**: 3P free-battle 항복 확인 화면은 공통 `0xEFDAA0/0xEFDAC1`이 아니라
+  Part2 복제본 `0xA34CB0/0xA34CD1`을 읽는다. 전체 후보 동시 패치 diff 614px, pair scan에서는
+  `0xA34CB0/0xA34CD1`만 diff 614px이고 `0xEFDAA0/0xEFDAC1` 등 다른 후보는 diff 0이었다.
+- **canvas 승격**: `data/preview_canvases.json`에 `battle_surrender_confirm` 추가.
+  `0xA34CB0` 32B 첫 줄 span만 `terminator:none` + `pad=0x20`으로 hijack하고,
+  `state_008_sub_down_to_surrender.ss0`에서 A 입력 후 frame-sweep으로 항복 확인 대사창을 선택한다.
+- **UI 에디터 매핑 보정**: `89a_common_battle_surrender_confirm`은 실제 검증 그룹 `g_00A34CB0`만
+  `canvas=ready`로 노출한다. `g_00EFDAA0/g_00EFDAC1` 공통 복제본은
+  `89a_common_battle_surrender_confirm_common_copies` container로 분리해, preview가 반응하지 않는 주소를
+  실제 화면 preview처럼 보이게 하는 false feedback을 막았다.
+- **검증**: `python3 tools/verify_preview_canvases.py` active canvas 3/failure 0
+  (`battle_surrender_confirm` diff 302px, `part1_welcome` diff 314px, `part2_menu` diff 7383px).
+  `python3 tools/audit_scene_catalog.py --strict`, `audit_scene_entrypoints.py --strict`,
+  `audit_scene_semantics.py --strict` 모두 critical 0. 라이브 :8782 API preview는 대사창 영역 diff 518px,
+  `tools/verify_scene_editor_roundtrip.py --no-actual-sample --no-build-sample`는 79 scene/10,336 dialogue group/
+  23,374 editable member dry-run failure 0. Chrome CDP `tools/verify_scene_editor_cdp.py`는
+  63 scene/107 sprite/failure 0.
+- **리뷰 반영**: agy가 지적한 “공통 복제본을 preview-ready scene에 섞으면 잘못된 주소 편집이 정상 preview처럼
+  보일 수 있다”는 blocker를 container 분리로 해소했다. claude는 최종 변경의 런타임 소스 식별과
+  32B command-stream 경계(`0xA34CD0` 제어코드 보존)를 타당하다고 평가했다.

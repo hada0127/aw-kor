@@ -84,6 +84,7 @@ CONTAINER_SCENE_REASONS = {
     "30f_part2_story_final_and_co": "2편 최종전/CO 설명 잔여 대사 bucket. 실제 화면은 30f* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
     "30g_part2_story_green_earth_late": "2편 그린어스 후반 잔여 대사 bucket. 실제 화면은 30g* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
     "88_common_comm_labels": "공통 통신 라벨 데이터 bucket. 독립 실화면 캡처 대상이 아니며, menu/focus residual scan은 scene_residual_scans 감사로 추적한다.",
+    "89a_common_battle_surrender_confirm_common_copies": "항복 확인 공통 복제본 bucket. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
 }
 
 # scene의 checkpoint(게임순 진입용) → preview canvas 키 매핑은 레지스트리(data/preview_canvases.json)의
@@ -600,8 +601,13 @@ SCENES = [
          ])),
     dict(id="89a_common_battle_surrender_confirm", scope="all", subtag="전투",
          title="공통 전투 항복 확인", canvas=None, screenshot="30_battle_attack",
+         sprite=[], dialogue=dict(regions=["part2"], addr_ranges=[
+             [0xA34CB0, 0xA34CE8],  # 실제 3P free-battle 항복 확인 메시지 복제본
+         ])),
+    dict(id="89a_common_battle_surrender_confirm_common_copies", scope="all", subtag="전투",
+         title="공통 전투 항복 확인 복제본(미검증)", canvas=None, screenshot="30_battle_attack",
          sprite=[], dialogue=dict(regions=["other"], addr_ranges=[
-             [0xEFDAA0, 0xEFDB00],  # 항복 확인 메시지
+             [0xEFDAA0, 0xEFDB00],  # 공통 항복 확인 메시지 copy; 별도 활성 화면 미확보
          ])),
     dict(id="89b_common_battle_defeat_comm_messages", scope="all", subtag="전투",
          title="공통 전투 패배/통신 오류 메시지", canvas=None, screenshot="30_battle_attack",

@@ -4894,7 +4894,6 @@
         "g_00A34C2E",
         "g_00A34C66",
         "g_00A34C9F",
-        "g_00A34CB0",
         "g_00A34CE8",
         "g_00A34DD8",
         "g_00A34DFC",
@@ -4912,7 +4911,7 @@
         "lz77_00BD4FBC"
       ],
       "counts": {
-        "dialogue": 134,
+        "dialogue": 133,
         "sprite": 2
       },
       "entrypoint": {
@@ -9751,8 +9750,8 @@
       "title": "공통 전투 항복 확인",
       "scene_role": "screen",
       "capture_required": true,
-      "canvas": null,
-      "canvas_status": "none",
+      "canvas": "battle_surrender_confirm",
+      "canvas_status": "ready",
       "checkpoint": "scene_89a_common_battle_surrender_confirm",
       "checkpoint_exists": true,
       "screenshot": {
@@ -9764,6 +9763,59 @@
         "note": "fresh surrender scan: 항복 확인 대사 화면",
         "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
         "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+      },
+      "dialogue_filter": {
+        "regions": [
+          "part2"
+        ],
+        "addr_ranges": [
+          [
+            10702000,
+            10702056
+          ]
+        ]
+      },
+      "sprite_filter": {
+        "source_contains": []
+      },
+      "dialogue_ids": [
+        "g_00A34CB0"
+      ],
+      "sprite_ids": [],
+      "counts": {
+        "dialogue": 1,
+        "sprite": 0
+      },
+      "entrypoint": {
+        "checkpoint": "scene_89a_common_battle_surrender_confirm",
+        "screenshot": "scene_89a_common_battle_surrender_confirm",
+        "note": "fresh surrender scan: 항복 확인 대사 화면",
+        "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
+        "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
+        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+      }
+    },
+    {
+      "id": "89a_common_battle_surrender_confirm_common_copies",
+      "order": 750,
+      "scope": "all",
+      "subtag": "전투",
+      "title": "공통 전투 항복 확인 복제본(미검증)",
+      "scene_role": "container",
+      "capture_required": false,
+      "canvas": null,
+      "canvas_status": "none",
+      "checkpoint": null,
+      "checkpoint_exists": false,
+      "screenshot": {
+        "checkpoint": null,
+        "url": null,
+        "mode": null,
+        "grade": "not_a_scene",
+        "status": "container",
+        "note": "항복 확인 공통 복제본 bucket. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
+        "capture_path": null,
+        "provenance_path": null
       },
       "dialogue_filter": {
         "regions": [
@@ -9787,19 +9839,11 @@
       "counts": {
         "dialogue": 2,
         "sprite": 0
-      },
-      "entrypoint": {
-        "checkpoint": "scene_89a_common_battle_surrender_confirm",
-        "screenshot": "scene_89a_common_battle_surrender_confirm",
-        "note": "fresh surrender scan: 항복 확인 대사 화면",
-        "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
-        "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
       }
     },
     {
       "id": "89b_common_battle_defeat_comm_messages",
-      "order": 750,
+      "order": 760,
       "scope": "all",
       "subtag": "전투",
       "title": "공통 전투 패배/통신 오류 메시지",
