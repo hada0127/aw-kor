@@ -1,0 +1,247 @@
+{
+  "generated_at": "2026-06-27T22:35:46.891827+00:00",
+  "build": false,
+  "dist_date": null,
+  "editor": false,
+  "cdp": false,
+  "only_editor": false,
+  "failed_count": 0,
+  "results": [
+    {
+      "label": "py-compile",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-m",
+        "py_compile",
+        "tools/build_korean_full.py",
+        "tools/dialogue_repoint.py",
+        "tools/verify_dist_integrity.py",
+        "tools/audit_csv_override_shadow.py",
+        "tools/audit_repoint_punctuation.py",
+        "tools/qa_part1_compact_help.py",
+        "tools/run_release_qa.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.251,
+      "stdout_tail": "",
+      "stderr_tail": ""
+    },
+    {
+      "label": "csv-integrity",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_csv_integrity.py",
+        "--fail-on-rom-japanese"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.096,
+      "stdout_tail": "총 CSV 손상행: 0 (length/korean 손상; 빌드는 inline 리터럴 권위라 ROM은 별개)\n  손상 종류: {}\n  ROM 실제 렌더: {}\n  심각도: {}\n  ★ 진짜 ROM 일본어 잔존(의도적 테이블 제외): 0\n리포트: /Users/tarucy/project/aw-kor/temp/csv_integrity_report.tsv\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "translation-lint",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/lint_translation.py",
+        "--severity",
+        "error"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 1.138,
+      "stdout_tail": "번역행 19144 (추출노이즈 추정 1405) / 지적된 행 0\n총 0건 (error 0 / warning 0 / info 0)\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "text-fit",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_text_fit.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 5.165,
+      "stdout_tail": "written(한글 인코딩): 19001\nfit levels: level0=17673, level1=1278, level2=8, level3=8, level4=2, level5=0, level6=29, level7=3, level8=0, level9=0, level10=0, level11=0\ncompact-shortened fallback: 32\noverflow(슬롯초과 skip→원문): 0\nno_ko: 0, intentional_blank_override: 15, code_region: 2165, no_slot: 0, deny/data-skip: 90\nvisual-wider than JA: 13 (0.1%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "placeholder-residuals",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_placeholder_residuals.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.511,
+      "stdout_tail": "rom_placeholder_hits=0\nimport_placeholder_warnings=7\nimport 0x9411A5 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x9420A2 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x979659 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x97A556 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x9B1EFD 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x9EA7A1 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\nimport 0x9EB69E 문자 깨짐 ja='：！｀￣ヾ〃仝々浦〆〇〇' ko='문자 깨짐'\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "japanese-residuals",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_japanese_residuals.py",
+        "--min-score",
+        "13"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.708,
+      "stdout_tail": "range=0x800000:0xF00000\ncovered=18808 uncovered=2434 same_original=2398 changed_blank=14 changed_hangul=1 changed_other=4 changed_symbol=17\ncandidates(score>=13, include_changed=False)=1\nscore=13 same=1 same_original   0x80089B len=054 chars=027 txt='アゥェォカギグゲゴシスセソダヂツデドニネバヒピブベホポ'\nwrote /Users/tarucy/project/aw-kor/temp/japanese_residuals_report.tsv\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "address-overrides",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_address_text_overrides.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.996,
+      "stdout_tail": "ADDRESS_TEXT_OVERRIDES audit\n- source entries: 4143 effective: 4145\n- duplicate source keys: 0\n- runtime/static mismatches: 0\n- final effective transforms: pair-normalized 4, direct-patch collisions 972 (divergent 504)\n- dialogue_overrides collisions: 1135 (divergent 1099, same 36)\n- dialogue_map protected rows: 4145 mismatches: 0\n- dialogue_groups protected rows: 4142 mismatches: 0\n- report: temp/address_text_overrides_audit.json\n[OK] ADDRESS_TEXT_OVERRIDES governance\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "csv-override-shadow",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_csv_override_shadow.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.852,
+      "stdout_tail": "CSV override shadow audit\n- csv rows: 17758 valid: 17758\n- shadowed/explained rows: 11595\n- unexplained output shadows: 0\n- model/actual divergences (informational): 95\n- reasons:\n  address_override: 3662\n  dialogue_override: 5024\n  direct_patch: 4761\n  display_override: 71\n  pair_renderer_normalize: 109\n  repoint_payload: 2193\n  source_text_override: 3\n  text_override: 66\n  write_kind:fixed_zero_text: 2\n  write_kind:script:air hint probably row: 1\n  write_kind:script:apc cannot tail row: 1\n  write_kind:script:bazooka unit label row: 1\n  write_kind:script:finish capture tail row: 1\n  write_kind:script:less damage duplicate token rows: 1\n  write_kind:script:plain mountain damage comparison rows: 1\n  write_kind:script:save prompt repeat tail blank row: 1\n  write_kind:script:save prompt tail blank row: 1\n- report: temp/csv_override_shadow_audit.json\n[OK] CSV override shadow audit\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "repoint-punctuation",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_repoint_punctuation.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.229,
+      "stdout_tail": "Repoint punctuation audit\n- relocated messages: 2081\n- fixed lines: 2414\n- source commas: ascii=551 fullwidth=0\n- payload totals: {'ascii_space': 27378, 'fullwidth_comma': 1887, 'fullwidth_space': 22230, 'interior_ascii_space': 5232}\n- payload issue count: 0\n- source counts: {'address_override': 277, 'bteam_dialogue_override': 377, 'csv': 304, 'dialogue_override': 734, 'display_override': 2, 'write_log': 720}\n- report: temp/repoint_punctuation_audit.json\n[OK] Repoint punctuation audit\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "repoint-integrity",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_repoint_integrity.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.579,
+      "stdout_tail": "=== repoint 무결성(ROM 직접, 포인터 정합 검증): 2081 재배치 ===\n  garbage 총합: 0 · 공백없는 블롭: 8(짧은 라벨 등 정상 가능)\n  문제: 0\n\n=== 결과: PASS (2081 재배치, 문제 0) ===\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "glyph-dictionary",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_glyph_dictionary_tables.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.164,
+      "stdout_tail": "{\"dictionary_count\": 2, \"issue_count\": 0, \"report\": \"temp/glyph_dictionary_qa.json\"}\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "part1-compact-help",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_part1_compact_help.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.155,
+      "stdout_tail": "{\"target_count\": 34, \"issue_count\": 0, \"visual_evidence_current_count\": 23, \"visual_evidence_missing_count\": 11, \"synthetic_render_evidence_count\": 11, \"live_code_injection_evidence_count\": 11, \"render_evidence_missing_count\": 0, \"report\": \"temp/part1_compact_help_qa.json\"}\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "scene-catalog",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_scene_catalog.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.24,
+      "stdout_tail": "scene audit: /Users/tarucy/project/aw-kor/temp/scene_catalog_audit/report.md\n{\"scene_count\": 81, \"game_scene_count\": 63, \"container_count\": 16, \"container_dialogue_count\": 3359, \"checkpoint_count\": 75, \"checkpoint_modes\": {\"fresh\": 15, \"savestate\": 60}, \"coverage\": {\"sprites_total\": 1988, \"sprites_assigned\": 108, \"sprites_unassigned\": 1882, \"sprites_unassigned_scan_lz77\": 1881, \"sprites_unassigned_text_candidate\": 0, \"sprites_unassigned_font\": 1, \"dialogue_groups_total\": 9579, \"dialogue_game_scene_assigned\": 6200, \"dialogue_assigned\": 9579, \"dialogue_review_only\": 3379, \"dialogue_unassigned\": 0}, \"critical_count\": 0, \"warning_count\": 16}\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "scene-semantics",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_scene_semantics.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.071,
+      "stdout_tail": "{\"scene_count\": 63, \"container_count\": 16, \"container_dialogue_count\": 3359, \"issue_count\": 0, \"critical_count\": 0, \"major_count\": 0}\nsemantic audit: /Users/tarucy/project/aw-kor/temp/scene_semantic_audit/report.md\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "scene-residuals",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/audit_scene_residual_scans.py",
+        "--strict"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 0.08,
+      "stdout_tail": "scene residual scan audit: /Users/tarucy/project/aw-kor/temp/scene_residual_scan_audit/report.md\n{\"container_count\": 16, \"manifest_count\": 16, \"audited_container_count\": 16, \"dialogue_count\": 3359, \"case_count\": 17, \"hit_count\": 0, \"known_hit_count\": 0, \"critical_count\": 0}\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "visual-regions",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/qa_visual_regions.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 9.403,
+      "stdout_tail": "asset:select_top_logo:bbox=(26, 18, 203, 40):body=881:counts={15: 698, 13: 205, 1: 549, 9: 306, 8: 165, 10: 219, 6: 183, 2: 174, 4: 140}\nasset:select_bottom_logo:bbox=(29, 96, 214, 120):body=944:counts={1: 731, 14: 253, 15: 545, 9: 335, 4: 173, 6: 188, 8: 205, 5: 222, 7: 156}\nasset:select_top_tm:bbox=(204, 28, 217, 36):counts={2: 58, 1: 25, 3: 3}\nasset:part1_title_tm:bbox=(213, 35, 226, 43):counts={2: 58, 1: 25, 3: 3}\nasset:part2_title_logo:bbox=(28, 25, 205, 47):body=881:counts={1: 698, 14: 205, 15: 549, 9: 306, 4: 165, 5: 219, 6: 183, 8: 174, 7: 140}\nasset:part1_option:campaign:캠페인:(46, 5, 80, 16):values=[2]:pixels=206:edge=0\nasset:part1_option:trial:트라이얼:(40, 5, 86, 16):values=[2]:pixels=281:edge=0\nasset:part1_option:record:기록:(52, 5, 75, 16):values=[2]:pixels=117:edge=0\nasset:part1_option:operation_room:작전룸:(46, 5, 81, 16):values=[2]:pixels=207:edge=0\nasset:part1_option:wars_shop:상점:(52, 5, 74, 16):values=[2]:pixels=136:edge=0\nasset:part1_option:map_design:맵 디자인:(37, 5, 88, 16):values=[2]:pixels=273:edge=0\nasset:part1_option:single_battle:대전:(52, 5, 74, 16):values=[2]:pixels=135:edge=0\nasset:part1_option:new_game:처음부터:(40, 5, 86, 16):values=[2]:pixels=268:edge=0\nasset:part1_option:continue:계속하기:(40, 5, 86, 16):values=[2]:pixels=248:edge=0\nasset:part1_option:link:통신:(52, 5, 74, 16):values=[2]:pixels=124:edge=0\nasset:part1_option:map_record:맵 기록:(43, 5, 83, 16):values=[2]:pixels=200:edge=0\nasset:part1_option:player_rank:플레이어 랭크:(25, 5, 101, 16):values=[2]:pixels=414:edge=0\nasset:part1_option:single_card:1카드 통신:(35, 5, 91, 16):values=[2]:pixels=274:edge=0\nasset:part1_option:multi_card:멀티카드 통신:(25, 5, 100, 16):values=[2]:pixels=396:edge=0\nasset:part1_option:map_trade:맵 교환:(43, 5, 83, 16):values=[2]:pixels=215:edge=0\nasset:part1_submenu:single_battle:(5, 5, 77, 26):pixels=1132:values=[1, 2, 5, 6, 9, 10, 14, 15]:style_pixels=954\nasset:part1_submenu:connect:(17, 5, 65, 27):pixels=866:values=[1, 2, 5, 6, 9, 10, 14, 15]:style_pixels=751\nasset:part1_submenu:single_card:(11, 5, 67, 16):pixels=274\nasset:part1_submenu:multi_card:(13, 5, 64, 16):pixels=270\nasset:part1_submenu:cable_battle:(7, 5, 70, 16):pixels=343\nscreen:nintendo:(79, 8, 143, 19):density=0.467\nscreen:select_top_tm:dark=64:light=25\nscreen:select_part2_lower_right:preserved=774:edge_preserved=198:bottom_logo_bright=17\nscreen:part1_menu_entry=fresh_coldboot\nscreen:mode_battle:light_pixels=1221\nscreen:mode_link:light_pixels=1781\nscreen:mode_operation:light_pixels=3436\nscreen:mode_help_intrusive_dark=0\nscreen:single_top_left:visible=61:edge=0\nscreen:single_help_intrusive_dark=0\nscreen:connect_top_left:visible=76:edge=0\nscreen:connect_help_intrusive_dark=0\nscreen:part1_title_tm:bright=45:dark=58\nscreen:part2_title_logo:dark=546:saturated=5887\nvisual_region_checks=39\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "phase6-basic",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/phase6_basic_test.py",
+        "output/game_wars_korean_full.gba"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 3.884,
+      "stdout_tail": "============================================================\nPHASE 6: QA Testing - Pre-flight Checks\n============================================================\n\n[Check 1] ROM Integrity Tests...\n  File exists: True\n  File size correct: True\n  Header valid: True\n  Checksum valid: True\n  Korean text detected: True\n  Japanese text detected: True\n    Korean sequences found: 300,752\n    Japanese sequences found: 1,267,003\n\n[Check 2] Translation Status...\n  Total texts: 28,347\n  Translated: 17,758\n  Progress: 62.6%\n\n============================================================\n[Assessment] Ready for PHASE 6?\n============================================================\n\n[OK] ROM passed pre-flight checks\n\nExpected Behavior:\n  - ROM should load in VisualBoyAdvance M\n  - Game Wars title screen should appear\n  - ~17758 menu items in Korean\n  - Remaining Japanese is expected only in protected data/graphics or manually skipped areas\n\nNext Steps:\n  1. Open ROM in VisualBoyAdvance M:\n     /Users/tarucy/project/aw-kor/original/Visualboy Advance M v2.1.4.x64.exe\n  2. Load ROM: /Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba\n  3. Verify game loads and shows Korean text\n  4. Run through PHASE 6 test checklist\n",
+      "stderr_tail": ""
+    },
+    {
+      "label": "dist-integrity",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "tools/verify_dist_integrity.py"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "elapsed_sec": 18.367,
+      "stdout_tail": "=== 배포 무결성 게이트 (verify_dist_integrity) ===\n산출물 SHA: full=f95a8573, final=f95a8573, title_test=f95a8573\n[OK] 산출물 3종 바이트 동일\n[OK] Part2 결과 요약 숫자/랭크 타일 보존: preserved_nonzero=219, current_nonzero=368, compressed=10153/11504\n[OK] E12 compact visual matrix 동기화: matrix_sha=f95a8573, manual_current=13, manual_accepted=13\n\n--- manifest.json ---\nmanifest.patched_rom.sha256 = f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292\n현재 output(full).sha256     = f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292\n[OK] manifest.patched_sha == 현재 output sha\nbps_patch(game_wars_korean_full_2026-06-28.bps) 적용결과 sha = f95a857354a84119  [OK]\nips_patch(game_wars_korean_full_2026-06-28.ips) 적용결과 sha = f95a857354a84119  [OK]\n\n--- manifest_preview.json ---\nmanifest.patched_rom.sha256 = f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292\n현재 output(full).sha256     = f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292\n[OK] manifest.patched_sha == 현재 output sha\nbps_patch(game_wars_korean_full_2026-06-28.bps) 적용결과 sha = f95a857354a84119  [OK]\nips_patch(game_wars_korean_full_2026-06-28.ips) 적용결과 sha = f95a857354a84119  [OK]\n[OK] B팀 drift 게이트 (rc=0)\n[OK] CSV ROM 일본어 잔존 게이트 (rc=0)\n[OK] text fit 게이트 (rc=0)\n[OK] ADDRESS_TEXT_OVERRIDES governance 게이트 (rc=0)\n[OK] CSV override shadow 게이트 (rc=0)\n[OK] repoint punctuation 게이트 (rc=0)\n[OK] repoint integrity 게이트 (rc=0)\n[OK] CO glyph dictionary coverage 게이트 (rc=0)\n[OK] Part1 compact help 게이트 (rc=0)\n[OK] scene container residual 게이트 (rc=0)\n[OK] visual region 게이트 (rc=0)\n[OK] sprite override fit 게이트 (rc=0)\n\n=== 결과: PASS ===\n",
+      "stderr_tail": ""
+    }
+  ]
+}

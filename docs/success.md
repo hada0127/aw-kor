@@ -2994,3 +2994,20 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `python3 tools/verify_dist_integrity.py`와
   `python3 tools/run_release_qa.py --editor --cdp --timeout 300`은 PASS.
 - **경계**: E12는 완료가 아니다. matrix direct 수치는 A2 0/36, B84 1/11, B8 13/459다.
+
+## [2026-06-28] 사용자 추가 스크린샷 current 재확인
+
+- **입력**: `temp/user_added_screenshots_20260628/manifest.json`의 Downloads 7장과 contact sheet를
+  `docs/screenshots/user_report_triage_2026-06-28/`에 보존했다.
+- **판정**: current ROM SHA `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  Part1 작전실 title 깨짐, Part1 mode/single/link 라벨 침범, `single_map ??????`,
+  1카드/멀티카드/맵교환 도움말 깨짐은 fresh route로 재현되지 않는다. 이는 기존 라벨 축소,
+  도움말 공백 복원, `미공개` hook, 작전실 compact title 정리 패치가 current ROM에서 정상 작동함을
+  교차 확인한 것이다.
+- **증거**: `current_routes_contact.png`, `current_operation_room_contact.png`, `triage.md`.
+- **검증**: `python3 tools/qa_visual_regions.py` PASS,
+  `python3 tools/qa_part1_compact_help.py` PASS(`issue_count=0`, direct visual 23, missing direct 11),
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_user_screenshot_retriage_20260628.json` PASS.
+  영구 보존본은 `docs/screenshots/user_report_triage_2026-06-28/release_qa_report.json`.
+- **경계**: 이 항목은 사용자 제보 화면의 current 판정이다. E12 compact display matrix와 E16 hidden/player-count
+  direct route 부채는 계속 TODO에 남긴다.

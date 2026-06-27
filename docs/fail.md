@@ -907,3 +907,20 @@ read-watch를 시도했다.
   `temp/agy_review_b84_source_only_release_20260628.md`.
 - **판정**: 실질 리뷰 결과가 없으므로 반영할 지적은 없다. 같은 긴 프롬프트 반복 대신, 다음 리뷰는
   “B84 source-only 결론” 또는 “E12 stale evidence 정책”처럼 질문을 더 좁혀 요청한다.
+
+## [2026-06-28] E12 B8 작전실 DOWN16 current mutation proof 실패
+
+- **시도**: stale SHA `3e3bae33...`의 예전 probe가 언급한 B8 작전명 후보
+  `0x00B81F04`(`하늘 용사`), `0x00B81F10`(`건 파이터`), `0x00B81F24`(`개전`),
+  `0x00B81F2C`(`과외수업`)을 current SHA `f95a8573...`에서 다시 확인했다.
+  route는 `41_part1_operation_room` + `DOWN` 16회, expected diff box는 `0,32,80,104`다.
+- **결과**: 4개 mutation 모두 null-control pixel diff 0, mutation pixel diff 0, bbox `null`이었다.
+  결과 파일은 `docs/screenshots/user_report_triage_2026-06-28/e12_b8_down16_negative_summary.json`.
+- **판정**: 이 route는 네 주소의 direct visual/source evidence가 아니다. 예전 stale probe는 current evidence로
+  승격하지 않는다. 다만 이는 route 음성일 뿐 target 전역 미사용 증명이 아니므로, 다른 state/route에서 재시도 가능성은 남긴다.
+
+## [2026-06-28] 사용자 스크린샷 재확인 후속 claude CLI timeout
+
+- **시도**: `temp/review_prompt_user_screenshot_retriage_20260628.md`로 claude/agy에 좁은 리뷰를 요청했다.
+- **결과**: agy는 실질 리뷰를 반환했고, "not-reproduced"보다 기존 패치가 current fresh route에서 fixed 상태로
+  작동함을 명시하라는 지적과 temp 요약 영구 보존 권고를 반영했다. claude는 120초 timeout으로 stdout/stderr 0바이트였다.

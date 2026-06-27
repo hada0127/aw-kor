@@ -2812,3 +2812,22 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **경계**: 이번 변경은 사용자 화면 가독성 결함 수정과 evidence freshness 복구다.
   B8 direct evidence는 여전히 Part1 작전실 편중이며, A2/B84 나머지와 Part2-B8 HUD/상점/무기/데미지예측 계열은
   route-specific read-watch, mutation diff, 또는 WRAM/VRAM/DMA chain 증거가 필요하다.
+
+---
+## [2026-06-28] 사용자 추가 스크린샷 current triage 및 B8 DOWN16 음성
+
+- **스크린샷 출처**: `temp/user_added_screenshots_20260628/manifest.json`은
+  `~/Downloads/스크린샷 2026-06-26 오후 4.57.xx~4.58.xx.png` 7장을 가리킨다.
+  보존본은 `docs/screenshots/user_report_triage_2026-06-28/`이다.
+- **current 비교**: current SHA `f95a8573...`에서 같은 계열 fresh route를 재캡처하면
+  Part1 mode/single/link 하단 도움말 침범, `single_map ??????`, 1카드/멀티카드/맵교환 깨짐은 재현되지 않는다.
+  이는 기존 라벨 축소, 도움말 공백 복원, `미공개` hook, 작전실 compact title 정리 패치가 current ROM에서
+  정상 작동함을 교차 확인한 것이다. 작전실도 `current_operation_room_contact.png` 기준 공백 있는 compact title이
+  정상 표시된다.
+- **B8 DOWN16 확인**: 과거 stale SHA probe가 힌트를 남겼던 `0x00B81F04/10/24/2C`
+  (`하늘 용사`, `건 파이터`, `개전`, `과외수업`)은 current SHA에서 DOWN 16 route로 다시 mutation proof를 실행해도
+  pixel diff 0이다. 영구 보존 요약은
+  `docs/screenshots/user_report_triage_2026-06-28/e12_b8_down16_negative_summary.json`이다.
+  이 route의 최종 프레임은 해당 주소를 화면 source로 쓰지 않는 것으로 본다.
+- **해석 경계**: DOWN16 음성은 해당 route의 direct proof 부적합 판정이지, 네 주소의 전역 미사용 증명이 아니다.
+  E12 추가 증거는 다른 작전실 state나 Part2 compact renderer route에서 target-level read/diff/VRAM chain을 따로 잡아야 한다.

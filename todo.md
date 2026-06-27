@@ -680,6 +680,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `data/compact_display_visual_matrix.json` 기준 direct 수치는 A2 0/36, B84 1/11, B8 13/459이며
     accepted manual evidence는 13건 모두 Part1 작전실 B8 계열이다. `verify_dist_integrity.py`와
     `run_release_qa.py --editor --cdp --timeout 300`은 PASS. E12는 계속 미완료다.
+  - [x] 2026-06-28 사용자 추가 스크린샷 current triage 재확인:
+    `temp/user_added_screenshots_20260628` 및 `~/Downloads` manifest의 7장 contact를 current SHA
+    `f95a8573...`와 다시 대조했다. 원본 제보의 Part1 작전실 title 깨짐, mode/single/link 대형 라벨 하단 침범,
+    `single_map ??????`, 1카드/멀티카드/맵교환 도움말 깨짐은 current fresh route에서 재현되지 않는다.
+    이는 기존 라벨 축소/도움말 공백 복원/`미공개` hook/작전실 compact title 패치가 current ROM에서
+    정상 작동함을 재확인한 것이다. 증거를 `docs/screenshots/user_report_triage_2026-06-28/`에 보존했다. 같은 확인에서
+    `qa_visual_regions.py`와 `qa_part1_compact_help.py`는 PASS했다.
+  - [x] 2026-06-28 E12 B8 DOWN16 현행 재시도 음성 기록:
+    stale SHA `3e3bae33...` probe가 남겼던 `0x00B81F04/10/24/2C`
+    (`하늘 용사`, `건 파이터`, `개전`, `과외수업`) 후보를 current SHA `f95a8573...`에서 다시
+    `tools/prove_compact_display_mutation.py --append-nav-step press:DOWN:120` x16으로 검증했다.
+    4주소 모두 null-control diff 0, mutation pixel diff 0이라 current route의 direct evidence로 승격하지 않았다.
+    결과: `docs/screenshots/user_report_triage_2026-06-28/e12_b8_down16_negative_summary.json`.
   - [ ] 2026-06-27 다음 실제 증거 확보:
     B8 작전명 13건과 B84 `0x00B84F04` 1건은 source가 current SHA에서 확정됐지만
     A2는 direct 0, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
