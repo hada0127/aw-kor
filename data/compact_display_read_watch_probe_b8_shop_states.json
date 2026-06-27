@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "b8_compact_display_table_all"
  ],
@@ -24,7 +24,7 @@
    "mode": "savestate",
    "state": "temp/external_saves/profile_plus_aw2_zophar_matrix/33380/state_shop_enter.ss0",
    "state_sha256": "fb762a9488735fb841fb593482d54c71375c06aee8ff3edd7c443d9ecde62b0a",
-   "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -39,7 +39,7 @@
      "response": "OK watchaddr 08B81800 len=14336 set=14336"
     }
    ],
-   "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -57,7 +57,7 @@
    "mode": "savestate",
    "state": "temp/external_saves/profile_plus_aw2_zophar_matrix/33381/state_shop_enter.ss0",
    "state_sha256": "7c68ef5a33d4b094f6593ed9c6260db114486169be483c334a2834dbbe57f148",
-   "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -72,7 +72,7 @@
      "response": "OK watchaddr 08B81800 len=14336 set=14336"
     }
    ],
-   "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -90,7 +90,7 @@
    "mode": "savestate",
    "state": "temp/external_saves/profile_plus_aw2_zophar_matrix/5759/state_shop_enter.ss0",
    "state_sha256": "c8b4cab0bc13f39a2194671ce9652da80dde28b9d4cde43b80c2aa7bf0618ae5",
-   "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -105,7 +105,7 @@
      "response": "OK watchaddr 08B81800 len=14336 set=14336"
     }
    ],
-   "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -123,7 +123,7 @@
    "mode": "savestate",
    "state": "temp/external_saves/profile_plus_aw2_zophar_matrix/5760/state_shop_enter.ss0",
    "state_sha256": "ee5e4139fd7361356e1da85ebcf5b9721a04723d8d14385e7b96076b5237cbf3",
-   "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -138,7 +138,7 @@
      "response": "OK watchaddr 08B81800 len=14336 set=14336"
     }
    ],
-   "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -156,7 +156,7 @@
    "mode": "savestate",
    "state": "temp/external_saves/profile_plus_aw2_zophar_matrix/5761/state_shop_enter.ss0",
    "state_sha256": "5ec5860801ba274e8c5ea5898e61c53f5a06aeb83f254a28597bc3daee2f654f",
-   "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -171,7 +171,7 @@
      "response": "OK watchaddr 08B81800 len=14336 set=14336"
     }
    ],
-   "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,

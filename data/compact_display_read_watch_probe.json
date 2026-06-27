@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "a2_co_power_profile_display_overrides",
   "b84_compact_power_display_overrides"
@@ -24,7 +24,7 @@
    "name": "07_part2_main_menu",
    "mode": "fresh",
    "scene_id": null,
-   "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/screen_07_part2_main_menu/watch.log",
+   "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/screen_07_part2_main_menu/watch.log",
    "watchpoint_caveat": null,
    "screen_steps": [],
    "watch_mode": "ranges",
@@ -87,7 +87,7 @@
      240
     ]
    ],
-   "frame": "temp/compact_display_read_watch_probe_20260627_resha/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/screen_07_part2_main_menu/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -104,7 +104,7 @@
    "name": "co_profile_maxg",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_maxg/watch.log",
+   "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_maxg/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "watch_mode": "ranges",
    "watches": [
@@ -132,7 +132,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_maxg/frame.png",
+   "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_maxg/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -149,7 +149,7 @@
    "name": "co_profile_domino",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_domino/watch.log",
+   "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_domino/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "watch_mode": "ranges",
    "watches": [
@@ -182,7 +182,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_domino/frame.png",
+   "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_domino/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,

@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "b8_compact_display_table_all"
  ],
@@ -32,7 +32,7 @@
    "mode": "savestate",
    "state": "temp/first_battle_state31_action_a30/a30_action_menu.ss0",
    "state_sha256": "5a22a147a855a50ceaf34056442f20be17c6a0e88a39873af2fc1604d6e32f04",
-   "watch_log": "temp/e12_action_menu_a30_b8_exact_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
+   "watch_log": "temp/e12_action_menu_a30_b8_exact_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [],
@@ -81,7 +81,7 @@
      "response": "OK watchaddr 08B82E42 len=4 set=4"
     }
    ],
-   "frame": "temp/e12_action_menu_a30_b8_exact_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png",
+   "frame": "temp/e12_action_menu_a30_b8_exact_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,

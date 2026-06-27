@@ -691,7 +691,7 @@ def write_markdown(report: dict) -> None:
         "",
         "## Summary",
         "",
-        "| Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Direct target proof |",
+        "| Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Target runtime/source proof |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for group in report["groups"]:
@@ -827,12 +827,12 @@ def write_markdown(report: dict) -> None:
         "",
         "## Remaining E12 Gap",
         "",
-        f"- Direct target proof is currently {direct_total}; this includes runtime/source provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.",
+        f"- Target runtime/source proof count is currently {direct_total}; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.",
         "- Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.",
         "- Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.",
         "- A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.",
         "- Current read-watch probes over the fresh main route, CO profile refresh, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates produced no A2/B84/Part2-B8-HUD target reads; these are route/subset negatives, not global non-use proof.",
-        f"- B8 now has {direct_by_group.get('b8_compact_display_table_all', 0)} target proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and A2/B84 plus most B8 targets still lack target-level provenance.",
+        f"- B8 now has {direct_by_group.get('b8_compact_display_table_all', 0)} target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and A2/B84 plus most B8 targets still lack target-level provenance.",
         "- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven targets; additional A2/B84/B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.",
         "- B8/B84 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/CO/break labels.",
         "- A2 CO power names have static glyph-dictionary coverage and one current CO-profile representative screen, but not 36 per-power screen captures.",
@@ -942,7 +942,7 @@ def main() -> int:
         "representative_contact_sheet": rel(OUT_CONTACT),
         "limitations": [
             "current_screen_capture_assigned means the owning screen scene has a current capture, not that this exact target is visible.",
-            "direct_target_visual_evidence is a compatibility field for target-level proof. It may be set by renderer trace, read-watch direct hit, or manual mutation proof; mutation proof establishes live source provenance, not full visual-integrity coverage.",
+            "direct_target_visual_evidence is a compatibility field for target-level runtime/source proof. It may be set by renderer trace, read-watch direct hit, or manual mutation proof; mutation proof establishes live source provenance, not full visual-integrity coverage.",
         ],
     }
 

@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "b8_compact_display_table_all"
  ],
@@ -18,14 +18,14 @@
   "renderer_trace": "data/compact_display_renderer_trace.json"
  },
  "case_count": 1,
- "hit_count": 69,
- "direct_target_read_count": 69,
+ "hit_count": 66,
+ "direct_target_read_count": 66,
  "direct_hits": [
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 0,
     "addr": 146284568,
@@ -44,7 +44,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "0 addr=08B82018 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=0000002C old=0000008F new=00000000"
@@ -53,8 +53,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 1,
     "addr": 146284568,
@@ -73,7 +73,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "1 addr=08B82018 pc=08B12ABC lr=08B12BC9 r0=0000E48B r1=02010AD4 old=0000C88F new=00000000"
@@ -82,8 +82,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 2,
     "addr": 146284568,
@@ -102,7 +102,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "2 addr=08B82018 pc=08B12B14 lr=08B12BC9 r0=02010CF4 r1=02010ADA old=0000C88F new=00000000"
@@ -111,8 +111,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 3,
     "addr": 146284569,
@@ -132,7 +132,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "3 addr=08B82019 pc=0300660C lr=08B1BF0D r0=08B82018 r1=00000000 old=000000C8 new=00000000"
@@ -141,8 +141,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 4,
     "addr": 146284568,
@@ -161,7 +161,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "4 addr=08B82018 pc=0300660E lr=08B1BF0D r0=08B82018 r1=000000C8 old=0000008F new=00000000"
@@ -170,8 +170,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 5,
     "addr": 146284570,
@@ -191,7 +191,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "5 addr=08B8201A pc=08B12B2E lr=08B1BF0D r0=0000002E r1=00000009 old=00000091 new=00000000"
@@ -200,8 +200,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 6,
     "addr": 146284570,
@@ -221,7 +221,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "6 addr=08B8201A pc=08B12ABC lr=08B1BF0D r0=0000C88F r1=02010AD4 old=0000F491 new=00000000"
@@ -230,8 +230,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 7,
     "addr": 146284570,
@@ -251,7 +251,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "7 addr=08B8201A pc=08B12B14 lr=08B1BF0D r0=02010CF6 r1=02010ADA old=0000F491 new=00000000"
@@ -260,8 +260,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 8,
     "addr": 146284571,
@@ -281,7 +281,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "8 addr=08B8201B pc=0300660C lr=08B1BF0D r0=08B8201A r1=00000000 old=000000F4 new=00000000"
@@ -290,8 +290,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 9,
     "addr": 146284570,
@@ -311,7 +311,7 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
     "raw": "9 addr=08B8201A pc=0300660E lr=08B1BF0D r0=08B8201A r1=000000F4 old=00000091 new=00000000"
@@ -320,8 +320,8 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 10,
     "addr": 146284556,
@@ -340,7 +340,7 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
     "raw": "10 addr=08B8200C pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000036 old=00000090 new=00000000"
@@ -349,16 +349,16 @@
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 11,
     "addr": 146284556,
     "pc": 145828540,
     "lr": 145828809,
-    "r0": 8224,
+    "r0": 20366,
     "r1": 33622740,
-    "old": 59280,
+    "old": 56464,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -369,17 +369,17 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "11 addr=08B8200C pc=08B12ABC lr=08B12BC9 r0=00002020 r1=02010AD4 old=0000E790 new=00000000"
+    "raw": "11 addr=08B8200C pc=08B12ABC lr=08B12BC9 r0=00004F8E r1=02010AD4 old=0000DC90 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 12,
     "addr": 146284556,
@@ -387,7 +387,7 @@
     "lr": 145828809,
     "r0": 33623294,
     "r1": 33622746,
-    "old": 59280,
+    "old": 56464,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -398,17 +398,17 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "12 addr=08B8200C pc=08B12B14 lr=08B12BC9 r0=02010CFE r1=02010ADA old=0000E790 new=00000000"
+    "raw": "12 addr=08B8200C pc=08B12B14 lr=08B12BC9 r0=02010CFE r1=02010ADA old=0000DC90 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 13,
     "addr": 146284557,
@@ -416,7 +416,7 @@
     "lr": 145866509,
     "r0": 146284556,
     "r1": 0,
-    "old": 231,
+    "old": 220,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -428,24 +428,24 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "13 addr=08B8200D pc=0300660C lr=08B1BF0D r0=08B8200C r1=00000000 old=000000E7 new=00000000"
+    "raw": "13 addr=08B8200D pc=0300660C lr=08B1BF0D r0=08B8200C r1=00000000 old=000000DC new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 14,
     "addr": 146284556,
     "pc": 50357774,
     "lr": 145866509,
     "r0": 146284556,
-    "r1": 231,
+    "r1": 220,
     "old": 144,
     "new": 0,
     "source": {
@@ -457,25 +457,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "14 addr=08B8200C pc=0300660E lr=08B1BF0D r0=08B8200C r1=000000E7 old=00000090 new=00000000"
+    "raw": "14 addr=08B8200C pc=0300660E lr=08B1BF0D r0=08B8200C r1=000000DC old=00000090 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 15,
     "addr": 146284558,
     "pc": 145828654,
     "lr": 145866509,
     "r0": 56,
-    "r1": 144,
-    "old": 140,
+    "r1": 9,
+    "old": 129,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -487,25 +487,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "15 addr=08B8200E pc=08B12B2E lr=08B1BF0D r0=00000038 r1=00000090 old=0000008C new=00000000"
+    "raw": "15 addr=08B8200E pc=08B12B2E lr=08B1BF0D r0=00000038 r1=00000009 old=00000081 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 16,
     "addr": 146284558,
     "pc": 145828540,
     "lr": 145866509,
-    "r0": 59280,
+    "r0": 56464,
     "r1": 33622740,
-    "old": 44684,
+    "old": 16513,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -517,114 +517,24 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "16 addr=08B8200E pc=08B12ABC lr=08B1BF0D r0=0000E790 r1=02010AD4 old=0000AE8C new=00000000"
+    "raw": "16 addr=08B8200E pc=08B12ABC lr=08B1BF0D r0=0000DC90 r1=02010AD4 old=00004081 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
     "order": 17,
-    "addr": 146284558,
-    "pc": 145828628,
-    "lr": 145866509,
-    "r0": 33623296,
-    "r1": 33622746,
-    "old": 44684,
-    "new": 0,
-    "source": {
-     "kind": "import-addr-override",
-     "target_span_match": true,
-     "read_address": "0x08B8200E",
-     "read_offset": "0x00B8200E",
-     "target_start": "0x00B8200C",
-     "span_end": "0x00B82018",
-     "address": "0x00B8200C",
-     "group_id": "b8_compact_display_table_all",
-     "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
-     "ja": "序盤戦！"
-    },
-    "raw": "17 addr=08B8200E pc=08B12B14 lr=08B1BF0D r0=02010D00 r1=02010ADA old=0000AE8C new=00000000"
-   }
-  },
-  {
-   "case": "41_part1_operation_room",
-   "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
-   "hit": {
-    "order": 18,
-    "addr": 146284559,
-    "pc": 50357772,
-    "lr": 145866509,
-    "r0": 146284558,
-    "r1": 0,
-    "old": 174,
-    "new": 0,
-    "source": {
-     "kind": "import-addr-override",
-     "target_span_match": true,
-     "read_address": "0x08B8200F",
-     "read_offset": "0x00B8200F",
-     "target_start": "0x00B8200C",
-     "span_end": "0x00B82018",
-     "address": "0x00B8200C",
-     "group_id": "b8_compact_display_table_all",
-     "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
-     "ja": "序盤戦！"
-    },
-    "raw": "18 addr=08B8200F pc=0300660C lr=08B1BF0D r0=08B8200E r1=00000000 old=000000AE new=00000000"
-   }
-  },
-  {
-   "case": "41_part1_operation_room",
-   "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
-   "hit": {
-    "order": 19,
-    "addr": 146284558,
-    "pc": 50357774,
-    "lr": 145866509,
-    "r0": 146284558,
-    "r1": 174,
-    "old": 140,
-    "new": 0,
-    "source": {
-     "kind": "import-addr-override",
-     "target_span_match": true,
-     "read_address": "0x08B8200E",
-     "read_offset": "0x00B8200E",
-     "target_start": "0x00B8200C",
-     "span_end": "0x00B82018",
-     "address": "0x00B8200C",
-     "group_id": "b8_compact_display_table_all",
-     "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
-     "ja": "序盤戦！"
-    },
-    "raw": "19 addr=08B8200E pc=0300660E lr=08B1BF0D r0=08B8200E r1=000000AE old=0000008C new=00000000"
-   }
-  },
-  {
-   "case": "41_part1_operation_room",
-   "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
-   "hit": {
-    "order": 20,
     "addr": 146284532,
     "pc": 145828482,
     "lr": 145828809,
     "r0": 0,
-    "r1": 58,
+    "r1": 56,
     "old": 143,
     "new": 0,
     "source": {
@@ -636,23 +546,23 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "20 addr=08B81FF4 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=0000003A old=0000008F new=00000000"
+    "raw": "17 addr=08B81FF4 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000038 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 21,
+    "order": 18,
     "addr": 146284532,
     "pc": 145828540,
     "lr": 145828809,
-    "r0": 44684,
+    "r0": 56464,
     "r1": 33622740,
     "old": 51343,
     "new": 0,
@@ -665,19 +575,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "21 addr=08B81FF4 pc=08B12ABC lr=08B12BC9 r0=0000AE8C r1=02010AD4 old=0000C88F new=00000000"
+    "raw": "18 addr=08B81FF4 pc=08B12ABC lr=08B12BC9 r0=0000DC90 r1=02010AD4 old=0000C88F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 22,
+    "order": 19,
     "addr": 146284534,
     "pc": 145828654,
     "lr": 145828809,
@@ -695,23 +605,23 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "22 addr=08B81FF6 pc=08B12B2E lr=08B12BC9 r0=000E0000 r1=0000C88F old=0000008D new=00000000"
+    "raw": "19 addr=08B81FF6 pc=08B12B2E lr=08B12BC9 r0=000E0000 r1=0000C88F old=0000008D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 23,
+    "order": 20,
     "addr": 146284534,
     "pc": 145828540,
     "lr": 145828809,
-    "r0": 44684,
+    "r0": 56464,
     "r1": 33622740,
     "old": 49805,
     "new": 0,
@@ -725,23 +635,23 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "23 addr=08B81FF6 pc=08B12ABC lr=08B12BC9 r0=0000AE8C r1=02010AD4 old=0000C28D new=00000000"
+    "raw": "20 addr=08B81FF6 pc=08B12ABC lr=08B12BC9 r0=0000DC90 r1=02010AD4 old=0000C28D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 24,
+    "order": 21,
     "addr": 146284534,
     "pc": 145828628,
     "lr": 145828809,
-    "r0": 33623298,
+    "r0": 33623296,
     "r1": 33622746,
     "old": 49805,
     "new": 0,
@@ -755,19 +665,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "24 addr=08B81FF6 pc=08B12B14 lr=08B12BC9 r0=02010D02 r1=02010ADA old=0000C28D new=00000000"
+    "raw": "21 addr=08B81FF6 pc=08B12B14 lr=08B12BC9 r0=02010D00 r1=02010ADA old=0000C28D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 25,
+    "order": 22,
     "addr": 146284535,
     "pc": 50357772,
     "lr": 145866509,
@@ -785,19 +695,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "25 addr=08B81FF7 pc=0300660C lr=08B1BF0D r0=08B81FF6 r1=00000000 old=000000C2 new=00000000"
+    "raw": "22 addr=08B81FF7 pc=0300660C lr=08B1BF0D r0=08B81FF6 r1=00000000 old=000000C2 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 26,
+    "order": 23,
     "addr": 146284534,
     "pc": 50357774,
     "lr": 145866509,
@@ -815,19 +725,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "26 addr=08B81FF6 pc=0300660E lr=08B1BF0D r0=08B81FF6 r1=000000C2 old=0000008D new=00000000"
+    "raw": "23 addr=08B81FF6 pc=0300660E lr=08B1BF0D r0=08B81FF6 r1=000000C2 old=0000008D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 27,
+    "order": 24,
     "addr": 146284508,
     "pc": 145828482,
     "lr": 145828809,
@@ -844,23 +754,23 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "27 addr=08B81FDC pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000044 old=00000088 new=00000000"
+    "raw": "24 addr=08B81FDC pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000044 old=00000088 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 28,
+    "order": 25,
     "addr": 146284508,
     "pc": 145828540,
     "lr": 145828809,
-    "r0": 18061,
+    "r0": 8224,
     "r1": 33622740,
     "old": 26248,
     "new": 0,
@@ -873,19 +783,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "28 addr=08B81FDC pc=08B12ABC lr=08B12BC9 r0=0000468D r1=02010AD4 old=00006688 new=00000000"
+    "raw": "25 addr=08B81FDC pc=08B12ABC lr=08B12BC9 r0=00002020 r1=02010AD4 old=00006688 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 29,
+    "order": 26,
     "addr": 146284508,
     "pc": 145828628,
     "lr": 145828809,
@@ -902,19 +812,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "29 addr=08B81FDC pc=08B12B14 lr=08B12BC9 r0=02010D0C r1=02010ADA old=00006688 new=00000000"
+    "raw": "26 addr=08B81FDC pc=08B12B14 lr=08B12BC9 r0=02010D0C r1=02010ADA old=00006688 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 30,
+    "order": 27,
     "addr": 146284509,
     "pc": 50357772,
     "lr": 145866509,
@@ -932,19 +842,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "30 addr=08B81FDD pc=0300660C lr=08B1BF0D r0=08B81FDC r1=00000000 old=00000066 new=00000000"
+    "raw": "27 addr=08B81FDD pc=0300660C lr=08B1BF0D r0=08B81FDC r1=00000000 old=00000066 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 31,
+    "order": 28,
     "addr": 146284508,
     "pc": 50357774,
     "lr": 145866509,
@@ -961,19 +871,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "31 addr=08B81FDC pc=0300660E lr=08B1BF0D r0=08B81FDC r1=00000066 old=00000088 new=00000000"
+    "raw": "28 addr=08B81FDC pc=0300660E lr=08B1BF0D r0=08B81FDC r1=00000066 old=00000088 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 32,
+    "order": 29,
     "addr": 146284510,
     "pc": 145828654,
     "lr": 145866509,
@@ -991,19 +901,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "32 addr=08B81FDE pc=08B12B2E lr=08B1BF0D r0=00000046 r1=00000900 old=0000008C new=00000000"
+    "raw": "29 addr=08B81FDE pc=08B12B2E lr=08B1BF0D r0=00000046 r1=00000900 old=0000008C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 33,
+    "order": 30,
     "addr": 146284510,
     "pc": 145828540,
     "lr": 145866509,
@@ -1021,19 +931,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "33 addr=08B81FDE pc=08B12ABC lr=08B1BF0D r0=00006688 r1=02010AD4 old=00006C8C new=00000000"
+    "raw": "30 addr=08B81FDE pc=08B12ABC lr=08B1BF0D r0=00006688 r1=02010AD4 old=00006C8C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 34,
+    "order": 31,
     "addr": 146284510,
     "pc": 145828628,
     "lr": 145866509,
@@ -1051,19 +961,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "34 addr=08B81FDE pc=08B12B14 lr=08B1BF0D r0=02010D0E r1=02010ADA old=00006C8C new=00000000"
+    "raw": "31 addr=08B81FDE pc=08B12B14 lr=08B1BF0D r0=02010D0E r1=02010ADA old=00006C8C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 35,
+    "order": 32,
     "addr": 146284511,
     "pc": 50357772,
     "lr": 145866509,
@@ -1081,19 +991,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "35 addr=08B81FDF pc=0300660C lr=08B1BF0D r0=08B81FDE r1=00000000 old=0000006C new=00000000"
+    "raw": "32 addr=08B81FDF pc=0300660C lr=08B1BF0D r0=08B81FDE r1=00000000 old=0000006C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 36,
+    "order": 33,
     "addr": 146284510,
     "pc": 50357774,
     "lr": 145866509,
@@ -1111,19 +1021,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "36 addr=08B81FDE pc=0300660E lr=08B1BF0D r0=08B81FDE r1=0000006C old=0000008C new=00000000"
+    "raw": "33 addr=08B81FDE pc=0300660E lr=08B1BF0D r0=08B81FDE r1=0000006C old=0000008C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 37,
+    "order": 34,
     "addr": 146284568,
     "pc": 145825922,
     "lr": 145830279,
@@ -1140,19 +1050,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "37 addr=08B82018 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B82018 old=0000008F new=00000000"
+    "raw": "34 addr=08B82018 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B82018 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 38,
+    "order": 35,
     "addr": 146284568,
     "pc": 145826142,
     "lr": 145830279,
@@ -1169,19 +1079,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "38 addr=08B82018 pc=08B1215E lr=08B13187 r0=00000086 r1=08B82018 old=0000008F new=00000000"
+    "raw": "35 addr=08B82018 pc=08B1215E lr=08B13187 r0=00000086 r1=08B82018 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 39,
+    "order": 36,
     "addr": 146284569,
     "pc": 50357344,
     "lr": 145866561,
@@ -1199,19 +1109,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "39 addr=08B82019 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B82018 old=000000C8 new=00000000"
+    "raw": "36 addr=08B82019 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B82018 old=000000C8 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 40,
+    "order": 37,
     "addr": 146284568,
     "pc": 50357348,
     "lr": 145866561,
@@ -1228,19 +1138,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "40 addr=08B82018 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B82018 old=0000008F new=00000000"
+    "raw": "37 addr=08B82018 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B82018 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 41,
+    "order": 38,
     "addr": 146284570,
     "pc": 145825922,
     "lr": 145830279,
@@ -1258,19 +1168,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "41 addr=08B8201A pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8201A old=00000091 new=00000000"
+    "raw": "38 addr=08B8201A pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8201A old=00000091 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 42,
+    "order": 39,
     "addr": 146284570,
     "pc": 145826142,
     "lr": 145830279,
@@ -1288,19 +1198,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "42 addr=08B8201A pc=08B1215E lr=08B13187 r0=00000088 r1=08B8201A old=00000091 new=00000000"
+    "raw": "39 addr=08B8201A pc=08B1215E lr=08B13187 r0=00000088 r1=08B8201A old=00000091 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 43,
+    "order": 40,
     "addr": 146284571,
     "pc": 50357344,
     "lr": 145866561,
@@ -1318,19 +1228,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "43 addr=08B8201B pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8201A old=000000F4 new=00000000"
+    "raw": "40 addr=08B8201B pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8201A old=000000F4 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 44,
+    "order": 41,
     "addr": 146284570,
     "pc": 50357348,
     "lr": 145866561,
@@ -1348,19 +1258,19 @@
      "address": "0x00B82018",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B82018",
-     "ko": "전투개시",
+     "ko": "전투 개시",
      "ja": "戦闘開始！"
     },
-    "raw": "44 addr=08B8201A pc=03006464 lr=08B1BF41 r0=0000F400 r1=08B8201A old=00000091 new=00000000"
+    "raw": "41 addr=08B8201A pc=03006464 lr=08B1BF41 r0=0000F400 r1=08B8201A old=00000091 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 45,
+    "order": 42,
     "addr": 146284556,
     "pc": 145825922,
     "lr": 145830279,
@@ -1377,19 +1287,19 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "45 addr=08B8200C pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200C old=00000090 new=00000000"
+    "raw": "42 addr=08B8200C pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200C old=00000090 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 46,
+    "order": 43,
     "addr": 146284556,
     "pc": 145826142,
     "lr": 145830279,
@@ -1406,25 +1316,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "46 addr=08B8200C pc=08B1215E lr=08B13187 r0=00000087 r1=08B8200C old=00000090 new=00000000"
+    "raw": "43 addr=08B8200C pc=08B1215E lr=08B13187 r0=00000087 r1=08B8200C old=00000090 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 47,
+    "order": 44,
     "addr": 146284557,
     "pc": 50357344,
     "lr": 145866561,
     "r0": 12288,
     "r1": 146284556,
-    "old": 231,
+    "old": 220,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -1436,23 +1346,23 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "47 addr=08B8200D pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200C old=000000E7 new=00000000"
+    "raw": "44 addr=08B8200D pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200C old=000000DC new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 48,
+    "order": 45,
     "addr": 146284556,
     "pc": 50357348,
     "lr": 145866561,
-    "r0": 59136,
+    "r0": 56320,
     "r1": 146284556,
     "old": 144,
     "new": 0,
@@ -1465,25 +1375,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "48 addr=08B8200C pc=03006464 lr=08B1BF41 r0=0000E700 r1=08B8200C old=00000090 new=00000000"
+    "raw": "45 addr=08B8200C pc=03006464 lr=08B1BF41 r0=0000DC00 r1=08B8200C old=00000090 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 49,
+    "order": 46,
     "addr": 146284558,
     "pc": 145825922,
     "lr": 145830279,
     "r0": 50335424,
     "r1": 146284558,
-    "old": 140,
+    "old": 129,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -1495,25 +1405,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "49 addr=08B8200E pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200E old=0000008C new=00000000"
+    "raw": "46 addr=08B8200E pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200E old=00000081 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 50,
+    "order": 47,
     "addr": 146284558,
     "pc": 145826142,
     "lr": 145830279,
-    "r0": 131,
+    "r0": 120,
     "r1": 146284558,
-    "old": 140,
+    "old": 129,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -1525,25 +1435,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "50 addr=08B8200E pc=08B1215E lr=08B13187 r0=00000083 r1=08B8200E old=0000008C new=00000000"
+    "raw": "47 addr=08B8200E pc=08B1215E lr=08B13187 r0=00000078 r1=08B8200E old=00000081 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 51,
+    "order": 48,
     "addr": 146284559,
     "pc": 50357344,
     "lr": 145866561,
     "r0": 12288,
     "r1": 146284558,
-    "old": 174,
+    "old": 64,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -1555,25 +1465,25 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "51 addr=08B8200F pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200E old=000000AE new=00000000"
+    "raw": "48 addr=08B8200F pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200E old=00000040 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 52,
+    "order": 49,
     "addr": 146284558,
     "pc": 50357348,
     "lr": 145866561,
-    "r0": 44544,
+    "r0": 16384,
     "r1": 146284558,
-    "old": 140,
+    "old": 129,
     "new": 0,
     "source": {
      "kind": "import-addr-override",
@@ -1585,19 +1495,19 @@
      "address": "0x00B8200C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B8200C",
-     "ko": "초반전",
+     "ko": "첫 전투",
      "ja": "序盤戦！"
     },
-    "raw": "52 addr=08B8200E pc=03006464 lr=08B1BF41 r0=0000AE00 r1=08B8200E old=0000008C new=00000000"
+    "raw": "49 addr=08B8200E pc=03006464 lr=08B1BF41 r0=00004000 r1=08B8200E old=00000081 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 53,
+    "order": 50,
     "addr": 146284532,
     "pc": 145825922,
     "lr": 145830279,
@@ -1614,19 +1524,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "53 addr=08B81FF4 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF4 old=0000008F new=00000000"
+    "raw": "50 addr=08B81FF4 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF4 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 54,
+    "order": 51,
     "addr": 146284532,
     "pc": 145826142,
     "lr": 145830279,
@@ -1643,19 +1553,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "54 addr=08B81FF4 pc=08B1215E lr=08B13187 r0=00000086 r1=08B81FF4 old=0000008F new=00000000"
+    "raw": "51 addr=08B81FF4 pc=08B1215E lr=08B13187 r0=00000086 r1=08B81FF4 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 55,
+    "order": 52,
     "addr": 146284533,
     "pc": 50357344,
     "lr": 145866561,
@@ -1673,19 +1583,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "55 addr=08B81FF5 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF4 old=000000C8 new=00000000"
+    "raw": "52 addr=08B81FF5 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF4 old=000000C8 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 56,
+    "order": 53,
     "addr": 146284532,
     "pc": 50357348,
     "lr": 145866561,
@@ -1702,19 +1612,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "56 addr=08B81FF4 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B81FF4 old=0000008F new=00000000"
+    "raw": "53 addr=08B81FF4 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B81FF4 old=0000008F new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 57,
+    "order": 54,
     "addr": 146284534,
     "pc": 145825922,
     "lr": 145830279,
@@ -1732,19 +1642,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "57 addr=08B81FF6 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF6 old=0000008D new=00000000"
+    "raw": "54 addr=08B81FF6 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF6 old=0000008D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 58,
+    "order": 55,
     "addr": 146284534,
     "pc": 145826142,
     "lr": 145830279,
@@ -1762,19 +1672,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "58 addr=08B81FF6 pc=08B1215E lr=08B13187 r0=00000084 r1=08B81FF6 old=0000008D new=00000000"
+    "raw": "55 addr=08B81FF6 pc=08B1215E lr=08B13187 r0=00000084 r1=08B81FF6 old=0000008D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 59,
+    "order": 56,
     "addr": 146284535,
     "pc": 50357344,
     "lr": 145866561,
@@ -1792,19 +1702,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "59 addr=08B81FF7 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF6 old=000000C2 new=00000000"
+    "raw": "56 addr=08B81FF7 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF6 old=000000C2 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 60,
+    "order": 57,
     "addr": 146284534,
     "pc": 50357348,
     "lr": 145866561,
@@ -1822,19 +1732,19 @@
      "address": "0x00B81FF4",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FF4",
-     "ko": "전선기지확보",
+     "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！"
     },
-    "raw": "60 addr=08B81FF6 pc=03006464 lr=08B1BF41 r0=0000C200 r1=08B81FF6 old=0000008D new=00000000"
+    "raw": "57 addr=08B81FF6 pc=03006464 lr=08B1BF41 r0=0000C200 r1=08B81FF6 old=0000008D new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 61,
+    "order": 58,
     "addr": 146284508,
     "pc": 145825922,
     "lr": 145830279,
@@ -1851,19 +1761,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "61 addr=08B81FDC pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDC old=00000088 new=00000000"
+    "raw": "58 addr=08B81FDC pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDC old=00000088 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 62,
+    "order": 59,
     "addr": 146284508,
     "pc": 145826142,
     "lr": 145830279,
@@ -1880,19 +1790,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "62 addr=08B81FDC pc=08B1215E lr=08B13187 r0=0000007F r1=08B81FDC old=00000088 new=00000000"
+    "raw": "59 addr=08B81FDC pc=08B1215E lr=08B13187 r0=0000007F r1=08B81FDC old=00000088 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 63,
+    "order": 60,
     "addr": 146284509,
     "pc": 50357344,
     "lr": 145866561,
@@ -1910,19 +1820,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "63 addr=08B81FDD pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDC old=00000066 new=00000000"
+    "raw": "60 addr=08B81FDD pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDC old=00000066 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 64,
+    "order": 61,
     "addr": 146284508,
     "pc": 50357348,
     "lr": 145866561,
@@ -1939,19 +1849,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "64 addr=08B81FDC pc=03006464 lr=08B1BF41 r0=00006600 r1=08B81FDC old=00000088 new=00000000"
+    "raw": "61 addr=08B81FDC pc=03006464 lr=08B1BF41 r0=00006600 r1=08B81FDC old=00000088 new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 65,
+    "order": 62,
     "addr": 146284510,
     "pc": 145825922,
     "lr": 145830279,
@@ -1969,19 +1879,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "65 addr=08B81FDE pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDE old=0000008C new=00000000"
+    "raw": "62 addr=08B81FDE pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDE old=0000008C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 66,
+    "order": 63,
     "addr": 146284510,
     "pc": 145826142,
     "lr": 145830279,
@@ -1999,19 +1909,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "66 addr=08B81FDE pc=08B1215E lr=08B13187 r0=00000083 r1=08B81FDE old=0000008C new=00000000"
+    "raw": "63 addr=08B81FDE pc=08B1215E lr=08B13187 r0=00000083 r1=08B81FDE old=0000008C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 67,
+    "order": 64,
     "addr": 146284511,
     "pc": 50357344,
     "lr": 145866561,
@@ -2029,19 +1939,19 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "67 addr=08B81FDF pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDE old=0000006C new=00000000"
+    "raw": "64 addr=08B81FDF pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDE old=0000006C new=00000000"
    }
   },
   {
    "case": "41_part1_operation_room",
    "case_type": "screen_checkpoint",
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "hit": {
-    "order": 68,
+    "order": 65,
     "addr": 146284510,
     "pc": 50357348,
     "lr": 145866561,
@@ -2059,10 +1969,10 @@
      "address": "0x00B81FDC",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81FDC",
-     "ko": "고물전차출격",
+     "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！"
     },
-    "raw": "68 addr=08B81FDE pc=03006464 lr=08B1BF41 r0=00006C00 r1=08B81FDE old=0000008C new=00000000"
+    "raw": "65 addr=08B81FDE pc=03006464 lr=08B1BF41 r0=00006C00 r1=08B81FDE old=0000008C new=00000000"
    }
   }
  ],
@@ -2073,7 +1983,7 @@
    "name": "41_part1_operation_room",
    "mode": "fresh",
    "scene_id": "15_part1_operation_logos",
-   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
    "watchpoint_caveat": null,
    "screen_steps": [],
    "watch_mode": "exact_targets",
@@ -2253,13 +2163,13 @@
      200
     ]
    ],
-   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
    "summary": {
-    "hit_count": 69,
-    "direct_target_read_count": 69,
+    "hit_count": 66,
+    "direct_target_read_count": 66,
     "direct_target_count": 4,
     "by_group": {
-     "b8_compact_display_table_all": 69
+     "b8_compact_display_table_all": 66
     },
     "top_pcs": [
      {
@@ -2284,15 +2194,15 @@
      },
      {
       "pc": "0x0300660C",
-      "count": 7
+      "count": 6
      },
      {
       "pc": "0x0300660E",
-      "count": 7
+      "count": 6
      },
      {
       "pc": "0x08B12B14",
-      "count": 7
+      "count": 6
      },
      {
       "pc": "0x08B12A82",
@@ -2314,7 +2224,7 @@
      },
      {
       "target_start": "0x00B8200C",
-      "count": 18
+      "count": 15
      },
      {
       "target_start": "0x00B82018",
@@ -2341,7 +2251,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "0 addr=08B82018 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=0000002C old=0000008F new=00000000"
@@ -2364,7 +2274,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "1 addr=08B82018 pc=08B12ABC lr=08B12BC9 r0=0000E48B r1=02010AD4 old=0000C88F new=00000000"
@@ -2387,7 +2297,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "2 addr=08B82018 pc=08B12B14 lr=08B12BC9 r0=02010CF4 r1=02010ADA old=0000C88F new=00000000"
@@ -2411,7 +2321,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "3 addr=08B82019 pc=0300660C lr=08B1BF0D r0=08B82018 r1=00000000 old=000000C8 new=00000000"
@@ -2434,7 +2344,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "4 addr=08B82018 pc=0300660E lr=08B1BF0D r0=08B82018 r1=000000C8 old=0000008F new=00000000"
@@ -2458,7 +2368,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "5 addr=08B8201A pc=08B12B2E lr=08B1BF0D r0=0000002E r1=00000009 old=00000091 new=00000000"
@@ -2482,7 +2392,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "6 addr=08B8201A pc=08B12ABC lr=08B1BF0D r0=0000C88F r1=02010AD4 old=0000F491 new=00000000"
@@ -2506,7 +2416,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "7 addr=08B8201A pc=08B12B14 lr=08B1BF0D r0=02010CF6 r1=02010ADA old=0000F491 new=00000000"
@@ -2530,7 +2440,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "8 addr=08B8201B pc=0300660C lr=08B1BF0D r0=08B8201A r1=00000000 old=000000F4 new=00000000"
@@ -2554,7 +2464,7 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
      "raw": "9 addr=08B8201A pc=0300660E lr=08B1BF0D r0=08B8201A r1=000000F4 old=00000091 new=00000000"
@@ -2577,7 +2487,7 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
      "raw": "10 addr=08B8200C pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000036 old=00000090 new=00000000"
@@ -2587,9 +2497,9 @@
      "addr": 146284556,
      "pc": 145828540,
      "lr": 145828809,
-     "r0": 8224,
+     "r0": 20366,
      "r1": 33622740,
-     "old": 59280,
+     "old": 56464,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -2600,10 +2510,10 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "11 addr=08B8200C pc=08B12ABC lr=08B12BC9 r0=00002020 r1=02010AD4 old=0000E790 new=00000000"
+     "raw": "11 addr=08B8200C pc=08B12ABC lr=08B12BC9 r0=00004F8E r1=02010AD4 old=0000DC90 new=00000000"
     },
     {
      "order": 12,
@@ -2612,7 +2522,7 @@
      "lr": 145828809,
      "r0": 33623294,
      "r1": 33622746,
-     "old": 59280,
+     "old": 56464,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -2623,10 +2533,10 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "12 addr=08B8200C pc=08B12B14 lr=08B12BC9 r0=02010CFE r1=02010ADA old=0000E790 new=00000000"
+     "raw": "12 addr=08B8200C pc=08B12B14 lr=08B12BC9 r0=02010CFE r1=02010ADA old=0000DC90 new=00000000"
     },
     {
      "order": 13,
@@ -2635,7 +2545,7 @@
      "lr": 145866509,
      "r0": 146284556,
      "r1": 0,
-     "old": 231,
+     "old": 220,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -2647,10 +2557,10 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "13 addr=08B8200D pc=0300660C lr=08B1BF0D r0=08B8200C r1=00000000 old=000000E7 new=00000000"
+     "raw": "13 addr=08B8200D pc=0300660C lr=08B1BF0D r0=08B8200C r1=00000000 old=000000DC new=00000000"
     },
     {
      "order": 14,
@@ -2658,7 +2568,7 @@
      "pc": 50357774,
      "lr": 145866509,
      "r0": 146284556,
-     "r1": 231,
+     "r1": 220,
      "old": 144,
      "new": 0,
      "source": {
@@ -2670,10 +2580,10 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "14 addr=08B8200C pc=0300660E lr=08B1BF0D r0=08B8200C r1=000000E7 old=00000090 new=00000000"
+     "raw": "14 addr=08B8200C pc=0300660E lr=08B1BF0D r0=08B8200C r1=000000DC old=00000090 new=00000000"
     },
     {
      "order": 15,
@@ -2681,8 +2591,8 @@
      "pc": 145828654,
      "lr": 145866509,
      "r0": 56,
-     "r1": 144,
-     "old": 140,
+     "r1": 9,
+     "old": 129,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -2694,19 +2604,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "15 addr=08B8200E pc=08B12B2E lr=08B1BF0D r0=00000038 r1=00000090 old=0000008C new=00000000"
+     "raw": "15 addr=08B8200E pc=08B12B2E lr=08B1BF0D r0=00000038 r1=00000009 old=00000081 new=00000000"
     },
     {
      "order": 16,
      "addr": 146284558,
      "pc": 145828540,
      "lr": 145866509,
-     "r0": 59280,
+     "r0": 56464,
      "r1": 33622740,
-     "old": 44684,
+     "old": 16513,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -2718,90 +2628,18 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "16 addr=08B8200E pc=08B12ABC lr=08B1BF0D r0=0000E790 r1=02010AD4 old=0000AE8C new=00000000"
+     "raw": "16 addr=08B8200E pc=08B12ABC lr=08B1BF0D r0=0000DC90 r1=02010AD4 old=00004081 new=00000000"
     },
     {
      "order": 17,
-     "addr": 146284558,
-     "pc": 145828628,
-     "lr": 145866509,
-     "r0": 33623296,
-     "r1": 33622746,
-     "old": 44684,
-     "new": 0,
-     "source": {
-      "kind": "import-addr-override",
-      "target_span_match": true,
-      "read_address": "0x08B8200E",
-      "read_offset": "0x00B8200E",
-      "target_start": "0x00B8200C",
-      "span_end": "0x00B82018",
-      "address": "0x00B8200C",
-      "group_id": "b8_compact_display_table_all",
-      "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
-      "ja": "序盤戦！"
-     },
-     "raw": "17 addr=08B8200E pc=08B12B14 lr=08B1BF0D r0=02010D00 r1=02010ADA old=0000AE8C new=00000000"
-    },
-    {
-     "order": 18,
-     "addr": 146284559,
-     "pc": 50357772,
-     "lr": 145866509,
-     "r0": 146284558,
-     "r1": 0,
-     "old": 174,
-     "new": 0,
-     "source": {
-      "kind": "import-addr-override",
-      "target_span_match": true,
-      "read_address": "0x08B8200F",
-      "read_offset": "0x00B8200F",
-      "target_start": "0x00B8200C",
-      "span_end": "0x00B82018",
-      "address": "0x00B8200C",
-      "group_id": "b8_compact_display_table_all",
-      "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
-      "ja": "序盤戦！"
-     },
-     "raw": "18 addr=08B8200F pc=0300660C lr=08B1BF0D r0=08B8200E r1=00000000 old=000000AE new=00000000"
-    },
-    {
-     "order": 19,
-     "addr": 146284558,
-     "pc": 50357774,
-     "lr": 145866509,
-     "r0": 146284558,
-     "r1": 174,
-     "old": 140,
-     "new": 0,
-     "source": {
-      "kind": "import-addr-override",
-      "target_span_match": true,
-      "read_address": "0x08B8200E",
-      "read_offset": "0x00B8200E",
-      "target_start": "0x00B8200C",
-      "span_end": "0x00B82018",
-      "address": "0x00B8200C",
-      "group_id": "b8_compact_display_table_all",
-      "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
-      "ja": "序盤戦！"
-     },
-     "raw": "19 addr=08B8200E pc=0300660E lr=08B1BF0D r0=08B8200E r1=000000AE old=0000008C new=00000000"
-    },
-    {
-     "order": 20,
      "addr": 146284532,
      "pc": 145828482,
      "lr": 145828809,
      "r0": 0,
-     "r1": 58,
+     "r1": 56,
      "old": 143,
      "new": 0,
      "source": {
@@ -2813,17 +2651,17 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "20 addr=08B81FF4 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=0000003A old=0000008F new=00000000"
+     "raw": "17 addr=08B81FF4 pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000038 old=0000008F new=00000000"
     },
     {
-     "order": 21,
+     "order": 18,
      "addr": 146284532,
      "pc": 145828540,
      "lr": 145828809,
-     "r0": 44684,
+     "r0": 56464,
      "r1": 33622740,
      "old": 51343,
      "new": 0,
@@ -2836,13 +2674,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "21 addr=08B81FF4 pc=08B12ABC lr=08B12BC9 r0=0000AE8C r1=02010AD4 old=0000C88F new=00000000"
+     "raw": "18 addr=08B81FF4 pc=08B12ABC lr=08B12BC9 r0=0000DC90 r1=02010AD4 old=0000C88F new=00000000"
     },
     {
-     "order": 22,
+     "order": 19,
      "addr": 146284534,
      "pc": 145828654,
      "lr": 145828809,
@@ -2860,17 +2698,17 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "22 addr=08B81FF6 pc=08B12B2E lr=08B12BC9 r0=000E0000 r1=0000C88F old=0000008D new=00000000"
+     "raw": "19 addr=08B81FF6 pc=08B12B2E lr=08B12BC9 r0=000E0000 r1=0000C88F old=0000008D new=00000000"
     },
     {
-     "order": 23,
+     "order": 20,
      "addr": 146284534,
      "pc": 145828540,
      "lr": 145828809,
-     "r0": 44684,
+     "r0": 56464,
      "r1": 33622740,
      "old": 49805,
      "new": 0,
@@ -2884,17 +2722,17 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "23 addr=08B81FF6 pc=08B12ABC lr=08B12BC9 r0=0000AE8C r1=02010AD4 old=0000C28D new=00000000"
+     "raw": "20 addr=08B81FF6 pc=08B12ABC lr=08B12BC9 r0=0000DC90 r1=02010AD4 old=0000C28D new=00000000"
     },
     {
-     "order": 24,
+     "order": 21,
      "addr": 146284534,
      "pc": 145828628,
      "lr": 145828809,
-     "r0": 33623298,
+     "r0": 33623296,
      "r1": 33622746,
      "old": 49805,
      "new": 0,
@@ -2908,13 +2746,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "24 addr=08B81FF6 pc=08B12B14 lr=08B12BC9 r0=02010D02 r1=02010ADA old=0000C28D new=00000000"
+     "raw": "21 addr=08B81FF6 pc=08B12B14 lr=08B12BC9 r0=02010D00 r1=02010ADA old=0000C28D new=00000000"
     },
     {
-     "order": 25,
+     "order": 22,
      "addr": 146284535,
      "pc": 50357772,
      "lr": 145866509,
@@ -2932,13 +2770,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "25 addr=08B81FF7 pc=0300660C lr=08B1BF0D r0=08B81FF6 r1=00000000 old=000000C2 new=00000000"
+     "raw": "22 addr=08B81FF7 pc=0300660C lr=08B1BF0D r0=08B81FF6 r1=00000000 old=000000C2 new=00000000"
     },
     {
-     "order": 26,
+     "order": 23,
      "addr": 146284534,
      "pc": 50357774,
      "lr": 145866509,
@@ -2956,13 +2794,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "26 addr=08B81FF6 pc=0300660E lr=08B1BF0D r0=08B81FF6 r1=000000C2 old=0000008D new=00000000"
+     "raw": "23 addr=08B81FF6 pc=0300660E lr=08B1BF0D r0=08B81FF6 r1=000000C2 old=0000008D new=00000000"
     },
     {
-     "order": 27,
+     "order": 24,
      "addr": 146284508,
      "pc": 145828482,
      "lr": 145828809,
@@ -2979,17 +2817,17 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "27 addr=08B81FDC pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000044 old=00000088 new=00000000"
+     "raw": "24 addr=08B81FDC pc=08B12A82 lr=08B12BC9 r0=00000000 r1=00000044 old=00000088 new=00000000"
     },
     {
-     "order": 28,
+     "order": 25,
      "addr": 146284508,
      "pc": 145828540,
      "lr": 145828809,
-     "r0": 18061,
+     "r0": 8224,
      "r1": 33622740,
      "old": 26248,
      "new": 0,
@@ -3002,13 +2840,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "28 addr=08B81FDC pc=08B12ABC lr=08B12BC9 r0=0000468D r1=02010AD4 old=00006688 new=00000000"
+     "raw": "25 addr=08B81FDC pc=08B12ABC lr=08B12BC9 r0=00002020 r1=02010AD4 old=00006688 new=00000000"
     },
     {
-     "order": 29,
+     "order": 26,
      "addr": 146284508,
      "pc": 145828628,
      "lr": 145828809,
@@ -3025,13 +2863,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "29 addr=08B81FDC pc=08B12B14 lr=08B12BC9 r0=02010D0C r1=02010ADA old=00006688 new=00000000"
+     "raw": "26 addr=08B81FDC pc=08B12B14 lr=08B12BC9 r0=02010D0C r1=02010ADA old=00006688 new=00000000"
     },
     {
-     "order": 30,
+     "order": 27,
      "addr": 146284509,
      "pc": 50357772,
      "lr": 145866509,
@@ -3049,13 +2887,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "30 addr=08B81FDD pc=0300660C lr=08B1BF0D r0=08B81FDC r1=00000000 old=00000066 new=00000000"
+     "raw": "27 addr=08B81FDD pc=0300660C lr=08B1BF0D r0=08B81FDC r1=00000000 old=00000066 new=00000000"
     },
     {
-     "order": 31,
+     "order": 28,
      "addr": 146284508,
      "pc": 50357774,
      "lr": 145866509,
@@ -3072,13 +2910,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "31 addr=08B81FDC pc=0300660E lr=08B1BF0D r0=08B81FDC r1=00000066 old=00000088 new=00000000"
+     "raw": "28 addr=08B81FDC pc=0300660E lr=08B1BF0D r0=08B81FDC r1=00000066 old=00000088 new=00000000"
     },
     {
-     "order": 32,
+     "order": 29,
      "addr": 146284510,
      "pc": 145828654,
      "lr": 145866509,
@@ -3096,13 +2934,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "32 addr=08B81FDE pc=08B12B2E lr=08B1BF0D r0=00000046 r1=00000900 old=0000008C new=00000000"
+     "raw": "29 addr=08B81FDE pc=08B12B2E lr=08B1BF0D r0=00000046 r1=00000900 old=0000008C new=00000000"
     },
     {
-     "order": 33,
+     "order": 30,
      "addr": 146284510,
      "pc": 145828540,
      "lr": 145866509,
@@ -3120,13 +2958,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "33 addr=08B81FDE pc=08B12ABC lr=08B1BF0D r0=00006688 r1=02010AD4 old=00006C8C new=00000000"
+     "raw": "30 addr=08B81FDE pc=08B12ABC lr=08B1BF0D r0=00006688 r1=02010AD4 old=00006C8C new=00000000"
     },
     {
-     "order": 34,
+     "order": 31,
      "addr": 146284510,
      "pc": 145828628,
      "lr": 145866509,
@@ -3144,13 +2982,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "34 addr=08B81FDE pc=08B12B14 lr=08B1BF0D r0=02010D0E r1=02010ADA old=00006C8C new=00000000"
+     "raw": "31 addr=08B81FDE pc=08B12B14 lr=08B1BF0D r0=02010D0E r1=02010ADA old=00006C8C new=00000000"
     },
     {
-     "order": 35,
+     "order": 32,
      "addr": 146284511,
      "pc": 50357772,
      "lr": 145866509,
@@ -3168,13 +3006,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "35 addr=08B81FDF pc=0300660C lr=08B1BF0D r0=08B81FDE r1=00000000 old=0000006C new=00000000"
+     "raw": "32 addr=08B81FDF pc=0300660C lr=08B1BF0D r0=08B81FDE r1=00000000 old=0000006C new=00000000"
     },
     {
-     "order": 36,
+     "order": 33,
      "addr": 146284510,
      "pc": 50357774,
      "lr": 145866509,
@@ -3192,13 +3030,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "36 addr=08B81FDE pc=0300660E lr=08B1BF0D r0=08B81FDE r1=0000006C old=0000008C new=00000000"
+     "raw": "33 addr=08B81FDE pc=0300660E lr=08B1BF0D r0=08B81FDE r1=0000006C old=0000008C new=00000000"
     },
     {
-     "order": 37,
+     "order": 34,
      "addr": 146284568,
      "pc": 145825922,
      "lr": 145830279,
@@ -3215,13 +3053,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "37 addr=08B82018 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B82018 old=0000008F new=00000000"
+     "raw": "34 addr=08B82018 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B82018 old=0000008F new=00000000"
     },
     {
-     "order": 38,
+     "order": 35,
      "addr": 146284568,
      "pc": 145826142,
      "lr": 145830279,
@@ -3238,13 +3076,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "38 addr=08B82018 pc=08B1215E lr=08B13187 r0=00000086 r1=08B82018 old=0000008F new=00000000"
+     "raw": "35 addr=08B82018 pc=08B1215E lr=08B13187 r0=00000086 r1=08B82018 old=0000008F new=00000000"
     },
     {
-     "order": 39,
+     "order": 36,
      "addr": 146284569,
      "pc": 50357344,
      "lr": 145866561,
@@ -3262,13 +3100,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "39 addr=08B82019 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B82018 old=000000C8 new=00000000"
+     "raw": "36 addr=08B82019 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B82018 old=000000C8 new=00000000"
     },
     {
-     "order": 40,
+     "order": 37,
      "addr": 146284568,
      "pc": 50357348,
      "lr": 145866561,
@@ -3285,13 +3123,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "40 addr=08B82018 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B82018 old=0000008F new=00000000"
+     "raw": "37 addr=08B82018 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B82018 old=0000008F new=00000000"
     },
     {
-     "order": 41,
+     "order": 38,
      "addr": 146284570,
      "pc": 145825922,
      "lr": 145830279,
@@ -3309,13 +3147,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "41 addr=08B8201A pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8201A old=00000091 new=00000000"
+     "raw": "38 addr=08B8201A pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8201A old=00000091 new=00000000"
     },
     {
-     "order": 42,
+     "order": 39,
      "addr": 146284570,
      "pc": 145826142,
      "lr": 145830279,
@@ -3333,13 +3171,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "42 addr=08B8201A pc=08B1215E lr=08B13187 r0=00000088 r1=08B8201A old=00000091 new=00000000"
+     "raw": "39 addr=08B8201A pc=08B1215E lr=08B13187 r0=00000088 r1=08B8201A old=00000091 new=00000000"
     },
     {
-     "order": 43,
+     "order": 40,
      "addr": 146284571,
      "pc": 50357344,
      "lr": 145866561,
@@ -3357,13 +3195,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "43 addr=08B8201B pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8201A old=000000F4 new=00000000"
+     "raw": "40 addr=08B8201B pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8201A old=000000F4 new=00000000"
     },
     {
-     "order": 44,
+     "order": 41,
      "addr": 146284570,
      "pc": 50357348,
      "lr": 145866561,
@@ -3381,13 +3219,13 @@
       "address": "0x00B82018",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B82018",
-      "ko": "전투개시",
+      "ko": "전투 개시",
       "ja": "戦闘開始！"
      },
-     "raw": "44 addr=08B8201A pc=03006464 lr=08B1BF41 r0=0000F400 r1=08B8201A old=00000091 new=00000000"
+     "raw": "41 addr=08B8201A pc=03006464 lr=08B1BF41 r0=0000F400 r1=08B8201A old=00000091 new=00000000"
     },
     {
-     "order": 45,
+     "order": 42,
      "addr": 146284556,
      "pc": 145825922,
      "lr": 145830279,
@@ -3404,13 +3242,13 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "45 addr=08B8200C pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200C old=00000090 new=00000000"
+     "raw": "42 addr=08B8200C pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200C old=00000090 new=00000000"
     },
     {
-     "order": 46,
+     "order": 43,
      "addr": 146284556,
      "pc": 145826142,
      "lr": 145830279,
@@ -3427,19 +3265,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "46 addr=08B8200C pc=08B1215E lr=08B13187 r0=00000087 r1=08B8200C old=00000090 new=00000000"
+     "raw": "43 addr=08B8200C pc=08B1215E lr=08B13187 r0=00000087 r1=08B8200C old=00000090 new=00000000"
     },
     {
-     "order": 47,
+     "order": 44,
      "addr": 146284557,
      "pc": 50357344,
      "lr": 145866561,
      "r0": 12288,
      "r1": 146284556,
-     "old": 231,
+     "old": 220,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -3451,17 +3289,17 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "47 addr=08B8200D pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200C old=000000E7 new=00000000"
+     "raw": "44 addr=08B8200D pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200C old=000000DC new=00000000"
     },
     {
-     "order": 48,
+     "order": 45,
      "addr": 146284556,
      "pc": 50357348,
      "lr": 145866561,
-     "r0": 59136,
+     "r0": 56320,
      "r1": 146284556,
      "old": 144,
      "new": 0,
@@ -3474,19 +3312,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "48 addr=08B8200C pc=03006464 lr=08B1BF41 r0=0000E700 r1=08B8200C old=00000090 new=00000000"
+     "raw": "45 addr=08B8200C pc=03006464 lr=08B1BF41 r0=0000DC00 r1=08B8200C old=00000090 new=00000000"
     },
     {
-     "order": 49,
+     "order": 46,
      "addr": 146284558,
      "pc": 145825922,
      "lr": 145830279,
      "r0": 50335424,
      "r1": 146284558,
-     "old": 140,
+     "old": 129,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -3498,19 +3336,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "49 addr=08B8200E pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200E old=0000008C new=00000000"
+     "raw": "46 addr=08B8200E pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B8200E old=00000081 new=00000000"
     },
     {
-     "order": 50,
+     "order": 47,
      "addr": 146284558,
      "pc": 145826142,
      "lr": 145830279,
-     "r0": 131,
+     "r0": 120,
      "r1": 146284558,
-     "old": 140,
+     "old": 129,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -3522,19 +3360,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "50 addr=08B8200E pc=08B1215E lr=08B13187 r0=00000083 r1=08B8200E old=0000008C new=00000000"
+     "raw": "47 addr=08B8200E pc=08B1215E lr=08B13187 r0=00000078 r1=08B8200E old=00000081 new=00000000"
     },
     {
-     "order": 51,
+     "order": 48,
      "addr": 146284559,
      "pc": 50357344,
      "lr": 145866561,
      "r0": 12288,
      "r1": 146284558,
-     "old": 174,
+     "old": 64,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -3546,19 +3384,19 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "51 addr=08B8200F pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200E old=000000AE new=00000000"
+     "raw": "48 addr=08B8200F pc=03006460 lr=08B1BF41 r0=00003000 r1=08B8200E old=00000040 new=00000000"
     },
     {
-     "order": 52,
+     "order": 49,
      "addr": 146284558,
      "pc": 50357348,
      "lr": 145866561,
-     "r0": 44544,
+     "r0": 16384,
      "r1": 146284558,
-     "old": 140,
+     "old": 129,
      "new": 0,
      "source": {
       "kind": "import-addr-override",
@@ -3570,13 +3408,13 @@
       "address": "0x00B8200C",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B8200C",
-      "ko": "초반전",
+      "ko": "첫 전투",
       "ja": "序盤戦！"
      },
-     "raw": "52 addr=08B8200E pc=03006464 lr=08B1BF41 r0=0000AE00 r1=08B8200E old=0000008C new=00000000"
+     "raw": "49 addr=08B8200E pc=03006464 lr=08B1BF41 r0=00004000 r1=08B8200E old=00000081 new=00000000"
     },
     {
-     "order": 53,
+     "order": 50,
      "addr": 146284532,
      "pc": 145825922,
      "lr": 145830279,
@@ -3593,13 +3431,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "53 addr=08B81FF4 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF4 old=0000008F new=00000000"
+     "raw": "50 addr=08B81FF4 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF4 old=0000008F new=00000000"
     },
     {
-     "order": 54,
+     "order": 51,
      "addr": 146284532,
      "pc": 145826142,
      "lr": 145830279,
@@ -3616,13 +3454,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "54 addr=08B81FF4 pc=08B1215E lr=08B13187 r0=00000086 r1=08B81FF4 old=0000008F new=00000000"
+     "raw": "51 addr=08B81FF4 pc=08B1215E lr=08B13187 r0=00000086 r1=08B81FF4 old=0000008F new=00000000"
     },
     {
-     "order": 55,
+     "order": 52,
      "addr": 146284533,
      "pc": 50357344,
      "lr": 145866561,
@@ -3640,13 +3478,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "55 addr=08B81FF5 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF4 old=000000C8 new=00000000"
+     "raw": "52 addr=08B81FF5 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF4 old=000000C8 new=00000000"
     },
     {
-     "order": 56,
+     "order": 53,
      "addr": 146284532,
      "pc": 50357348,
      "lr": 145866561,
@@ -3663,13 +3501,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "56 addr=08B81FF4 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B81FF4 old=0000008F new=00000000"
+     "raw": "53 addr=08B81FF4 pc=03006464 lr=08B1BF41 r0=0000C800 r1=08B81FF4 old=0000008F new=00000000"
     },
     {
-     "order": 57,
+     "order": 54,
      "addr": 146284534,
      "pc": 145825922,
      "lr": 145830279,
@@ -3687,13 +3525,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "57 addr=08B81FF6 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF6 old=0000008D new=00000000"
+     "raw": "54 addr=08B81FF6 pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FF6 old=0000008D new=00000000"
     },
     {
-     "order": 58,
+     "order": 55,
      "addr": 146284534,
      "pc": 145826142,
      "lr": 145830279,
@@ -3711,13 +3549,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "58 addr=08B81FF6 pc=08B1215E lr=08B13187 r0=00000084 r1=08B81FF6 old=0000008D new=00000000"
+     "raw": "55 addr=08B81FF6 pc=08B1215E lr=08B13187 r0=00000084 r1=08B81FF6 old=0000008D new=00000000"
     },
     {
-     "order": 59,
+     "order": 56,
      "addr": 146284535,
      "pc": 50357344,
      "lr": 145866561,
@@ -3735,13 +3573,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "59 addr=08B81FF7 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF6 old=000000C2 new=00000000"
+     "raw": "56 addr=08B81FF7 pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FF6 old=000000C2 new=00000000"
     },
     {
-     "order": 60,
+     "order": 57,
      "addr": 146284534,
      "pc": 50357348,
      "lr": 145866561,
@@ -3759,13 +3597,13 @@
       "address": "0x00B81FF4",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FF4",
-      "ko": "전선기지확보",
+      "ko": "전선 기지 확보",
       "ja": "前線基地を確保せよ！"
      },
-     "raw": "60 addr=08B81FF6 pc=03006464 lr=08B1BF41 r0=0000C200 r1=08B81FF6 old=0000008D new=00000000"
+     "raw": "57 addr=08B81FF6 pc=03006464 lr=08B1BF41 r0=0000C200 r1=08B81FF6 old=0000008D new=00000000"
     },
     {
-     "order": 61,
+     "order": 58,
      "addr": 146284508,
      "pc": 145825922,
      "lr": 145830279,
@@ -3782,13 +3620,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "61 addr=08B81FDC pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDC old=00000088 new=00000000"
+     "raw": "58 addr=08B81FDC pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDC old=00000088 new=00000000"
     },
     {
-     "order": 62,
+     "order": 59,
      "addr": 146284508,
      "pc": 145826142,
      "lr": 145830279,
@@ -3805,13 +3643,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "62 addr=08B81FDC pc=08B1215E lr=08B13187 r0=0000007F r1=08B81FDC old=00000088 new=00000000"
+     "raw": "59 addr=08B81FDC pc=08B1215E lr=08B13187 r0=0000007F r1=08B81FDC old=00000088 new=00000000"
     },
     {
-     "order": 63,
+     "order": 60,
      "addr": 146284509,
      "pc": 50357344,
      "lr": 145866561,
@@ -3829,13 +3667,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "63 addr=08B81FDD pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDC old=00000066 new=00000000"
+     "raw": "60 addr=08B81FDD pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDC old=00000066 new=00000000"
     },
     {
-     "order": 64,
+     "order": 61,
      "addr": 146284508,
      "pc": 50357348,
      "lr": 145866561,
@@ -3852,13 +3690,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "64 addr=08B81FDC pc=03006464 lr=08B1BF41 r0=00006600 r1=08B81FDC old=00000088 new=00000000"
+     "raw": "61 addr=08B81FDC pc=03006464 lr=08B1BF41 r0=00006600 r1=08B81FDC old=00000088 new=00000000"
     },
     {
-     "order": 65,
+     "order": 62,
      "addr": 146284510,
      "pc": 145825922,
      "lr": 145830279,
@@ -3876,13 +3714,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "65 addr=08B81FDE pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDE old=0000008C new=00000000"
+     "raw": "62 addr=08B81FDE pc=08B12082 lr=08B13187 r0=03000EC0 r1=08B81FDE old=0000008C new=00000000"
     },
     {
-     "order": 66,
+     "order": 63,
      "addr": 146284510,
      "pc": 145826142,
      "lr": 145830279,
@@ -3900,13 +3738,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "66 addr=08B81FDE pc=08B1215E lr=08B13187 r0=00000083 r1=08B81FDE old=0000008C new=00000000"
+     "raw": "63 addr=08B81FDE pc=08B1215E lr=08B13187 r0=00000083 r1=08B81FDE old=0000008C new=00000000"
     },
     {
-     "order": 67,
+     "order": 64,
      "addr": 146284511,
      "pc": 50357344,
      "lr": 145866561,
@@ -3924,13 +3762,13 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "67 addr=08B81FDF pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDE old=0000006C new=00000000"
+     "raw": "64 addr=08B81FDF pc=03006460 lr=08B1BF41 r0=00003000 r1=08B81FDE old=0000006C new=00000000"
     },
     {
-     "order": 68,
+     "order": 65,
      "addr": 146284510,
      "pc": 50357348,
      "lr": 145866561,
@@ -3948,10 +3786,10 @@
       "address": "0x00B81FDC",
       "group_id": "b8_compact_display_table_all",
       "dialogue_group_id": "g_00B81FDC",
-      "ko": "고물전차출격",
+      "ko": "고물 전차 출격",
       "ja": "戦え　ポンコツ戦車！"
      },
-     "raw": "68 addr=08B81FDE pc=03006464 lr=08B1BF41 r0=00006C00 r1=08B81FDE old=0000008C new=00000000"
+     "raw": "65 addr=08B81FDE pc=03006464 lr=08B1BF41 r0=00006C00 r1=08B81FDE old=0000008C new=00000000"
     }
    ],
    "truncated_hits": 0

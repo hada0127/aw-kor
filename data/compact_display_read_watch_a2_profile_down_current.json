@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "a2_co_power_profile_display_overrides",
   "b84_compact_power_display_overrides"
@@ -20,8 +20,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 0,
     "addr": 144872876,
@@ -48,8 +48,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 1,
     "addr": 144872876,
@@ -76,8 +76,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 2,
     "addr": 144872876,
@@ -104,8 +104,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 3,
     "addr": 144872876,
@@ -132,8 +132,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 4,
     "addr": 144872877,
@@ -161,8 +161,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 5,
     "addr": 144872878,
@@ -190,8 +190,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 6,
     "addr": 144872879,
@@ -219,8 +219,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 7,
     "addr": 144872880,
@@ -248,8 +248,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 8,
     "addr": 144872876,
@@ -276,8 +276,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 9,
     "addr": 144872876,
@@ -304,8 +304,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 10,
     "addr": 144872876,
@@ -332,8 +332,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 11,
     "addr": 144872877,
@@ -361,8 +361,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 12,
     "addr": 144872878,
@@ -390,8 +390,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 13,
     "addr": 144872878,
@@ -419,8 +419,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 14,
     "addr": 144872878,
@@ -448,8 +448,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 15,
     "addr": 144872879,
@@ -477,8 +477,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 16,
     "addr": 144872880,
@@ -506,8 +506,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 17,
     "addr": 144872876,
@@ -534,8 +534,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 18,
     "addr": 144872877,
@@ -563,8 +563,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 19,
     "addr": 144872878,
@@ -592,8 +592,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 20,
     "addr": 144872879,
@@ -621,8 +621,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 21,
     "addr": 144872880,
@@ -650,8 +650,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 22,
     "addr": 144872876,
@@ -678,8 +678,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 23,
     "addr": 144872877,
@@ -707,8 +707,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 24,
     "addr": 144872878,
@@ -736,8 +736,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 25,
     "addr": 144872879,
@@ -765,8 +765,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 26,
     "addr": 144872880,
@@ -794,8 +794,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 27,
     "addr": 144872876,
@@ -822,8 +822,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 28,
     "addr": 144872877,
@@ -851,8 +851,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 29,
     "addr": 144872878,
@@ -880,8 +880,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 30,
     "addr": 144872879,
@@ -909,8 +909,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 31,
     "addr": 144872880,
@@ -938,8 +938,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 32,
     "addr": 144872880,
@@ -967,8 +967,8 @@
   {
    "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "case_type": "state",
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "hit": {
     "order": 33,
     "addr": 144872880,
@@ -1002,7 +1002,7 @@
    "mode": "savestate",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "state_frames": 20,
    "state_steps": [
@@ -1036,7 +1036,7 @@
      "response": "OK watchaddr 08B84E50 len=200 set=200"
     }
    ],
-   "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
    "summary": {
     "hit_count": 34,
     "direct_target_read_count": 34,

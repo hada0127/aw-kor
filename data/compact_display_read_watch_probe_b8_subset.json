@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "b8_compact_display_table_all"
  ],
@@ -31,7 +31,7 @@
    "name": "07_part2_main_menu",
    "mode": "fresh",
    "scene_id": null,
-   "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_07_part2_main_menu/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_07_part2_main_menu/watch.log",
    "watchpoint_caveat": null,
    "screen_steps": [],
    "watch_mode": "exact_targets",
@@ -120,7 +120,7 @@
      240
     ]
    ],
-   "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_07_part2_main_menu/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -137,7 +137,7 @@
    "name": "scene_86_common_compact_menu_tables",
    "mode": "savestate",
    "scene_id": "86_common_compact_menu_tables",
-   "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_86_common_compact_menu_tables/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_86_common_compact_menu_tables/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "screen_steps": [],
    "watch_mode": "exact_targets",
@@ -193,7 +193,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_86_common_compact_menu_tables/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_86_common_compact_menu_tables/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,
@@ -210,7 +210,7 @@
    "name": "scene_23a_part2_wars_shop",
    "mode": "savestate",
    "scene_id": "23a_part2_wars_shop",
-   "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_23a_part2_wars_shop/watch.log",
+   "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_23a_part2_wars_shop/watch.log",
    "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
    "screen_steps": [],
    "watch_mode": "exact_targets",
@@ -266,7 +266,7 @@
      40
     ]
    ],
-   "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_23a_part2_wars_shop/frame.png",
+   "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_23a_part2_wars_shop/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,

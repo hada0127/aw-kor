@@ -3011,3 +3011,15 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   영구 보존본은 `docs/screenshots/user_report_triage_2026-06-28/release_qa_report.json`.
 - **경계**: 이 항목은 사용자 제보 화면의 current 판정이다. E12 compact display matrix와 E16 hidden/player-count
   direct route 부채는 계속 TODO에 남긴다.
+
+## [2026-06-28] E12 read-watch current SHA 전량 재동기화 및 A2 direct read 1건 확보
+
+- **재동기화**: `data/compact_display_read_watch*.json` 19개를 current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`로 다시 실행했다.
+- **matrix 결과**: `data/compact_display_visual_matrix.json` 기준 read-watch probes current 19/stale 0,
+  cases 41, hits/direct reads 144. Positive control `0x00A01970`도 current SHA에서 8 hit다.
+- **신규 A2 read-watch provenance**: `data/compact_display_read_watch_a2_profile_down_current.json`에서
+  `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0` + `DOWN,DOWN` route가
+  A2 compact target `0x00A295AC`를 34회 읽는다. Matrix runtime/source 수치는 A2 1/36, B84 1/11, B8 13/459가 됐다.
+- **경계**: A2 1건은 runtime source provenance다. savestate watchpoint와 pixel-level visual layout proof는 별개이며,
+  나머지 A2 35개/B84 10개/B8 대부분은 계속 direct evidence가 필요하다.

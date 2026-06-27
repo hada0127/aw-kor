@@ -1,8 +1,8 @@
 {
  "tool": "tools/probe_compact_display_reads.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "434a738",
  "selected_groups": [
   "b8_compact_display_table_all"
  ],
@@ -28,7 +28,7 @@
    "name": "07_part2_main_menu",
    "mode": "fresh",
    "scene_id": null,
-   "watch_log": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/watch.log",
+   "watch_log": "temp/compact_display_read_watch_rule_settings_map_names_f95a_20260628/screen_07_part2_main_menu/watch.log",
    "watchpoint_caveat": null,
    "screen_steps": [
     [
@@ -184,7 +184,7 @@
      240
     ]
    ],
-   "frame": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/compact_display_read_watch_rule_settings_map_names_f95a_20260628/screen_07_part2_main_menu/frame.png",
    "summary": {
     "hit_count": 0,
     "direct_target_read_count": 0,

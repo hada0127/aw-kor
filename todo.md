@@ -680,6 +680,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `data/compact_display_visual_matrix.json` 기준 direct 수치는 A2 0/36, B84 1/11, B8 13/459이며
     accepted manual evidence는 13건 모두 Part1 작전실 B8 계열이다. `verify_dist_integrity.py`와
     `run_release_qa.py --editor --cdp --timeout 300`은 PASS. E12는 계속 미완료다.
+  - [x] 2026-06-28 E12 read-watch probe 전량 current SHA 재동기화:
+    `data/compact_display_read_watch*.json` 19개를 current SHA `f95a8573...`로 다시 실행했다.
+    matrix 기준 read-watch probes는 current 19/stale 0, cases 41, hits/direct reads 144다.
+    A2 CO profile state `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0` + `DOWN,DOWN`에서
+    `0x00A295AC` direct reads 34가 재현되어 A2 target runtime/source proof가 0/36 -> 1/36으로 올라갔다.
+    B84는 `0x00B84F04` 1/11, B8은 Part1 작전실 계열 13/459 유지다.
+    일반 read-watch positive control `0x00A01970`도 current SHA에서 8 hit를 유지한다.
+    나머지 action-menu/battle/shop/comm/rule-settings 후보 0-hit는 route/subset 음성일 뿐 전역 미사용 증명이 아니다.
   - [x] 2026-06-28 사용자 추가 스크린샷 current triage 재확인:
     `temp/user_added_screenshots_20260628` 및 `~/Downloads` manifest의 7장 contact를 current SHA
     `f95a8573...`와 다시 대조했다. 원본 제보의 Part1 작전실 title 깨짐, mode/single/link 대형 라벨 하단 침범,
@@ -694,14 +702,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     4주소 모두 null-control diff 0, mutation pixel diff 0이라 current route의 direct evidence로 승격하지 않았다.
     결과: `docs/screenshots/user_report_triage_2026-06-28/e12_b8_down16_negative_summary.json`.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    B8 작전명 13건과 B84 `0x00B84F04` 1건은 source가 current SHA에서 확정됐지만
-    A2는 direct 0, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
+    A2 `0x00A295AC` 1건, B8 작전명 13건, B84 `0x00B84F04` 1건은 source가 current SHA에서 확정됐지만
+    A2는 1/36, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
     B84 나머지 파워 발동 직전/직후, B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를
     추가 확보하는 것이다. agy/codex 리뷰 지적대로 일반 대사 `0xA01970` 양성대조와 별개인 compact-renderer 전용
-    positive control도 확보해야 한다. 단, Part1 작전실 B8 live-source read positive는 확보됐으므로 남은 핵심은
-    Part2 HUD/A2/B84 compact renderer 계열 양성대조다. 특히 A2/B84는 savestate frames-only 음성이나
+    positive control도 확보해야 한다. 단, Part1 작전실 B8 live-source read positive와 A2 CO profile direct read는
+    확보됐으므로 남은 핵심은 Part2 HUD/B84 잔여/다중 A2 compact renderer 계열 양성대조다. 특히 A2/B84는 savestate frames-only 음성이나
     representative screen current 캡처만으로 종결하지 않는다. fresh route, redraw가 보장되는 near-fresh route,
     target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA write chain 중 최소 1종 이상의 target-level
     양성 증거를 주소군별로 확보해야 한다.

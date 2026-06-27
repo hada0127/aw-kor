@@ -699,40 +699,21 @@
  "read_watch_probes": {
   "present": true,
   "probe_count": 19,
-  "current_probe_count": 1,
-  "stale_probe_count": 18,
-  "stale_paths": [
-   "data/compact_display_read_watch_a2_profile_down_current.json",
-   "data/compact_display_read_watch_action_menu_a30_b8_exact.json",
-   "data/compact_display_read_watch_action_menu_a30_b8_range.json",
-   "data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json",
-   "data/compact_display_read_watch_b83268_comm.json",
-   "data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json",
-   "data/compact_display_read_watch_b8_map_territory_current.json",
-   "data/compact_display_read_watch_b8_operation_positive_control.json",
-   "data/compact_display_read_watch_current_exact.json",
-   "data/compact_display_read_watch_probe.json",
-   "data/compact_display_read_watch_probe_a2_b84_profile_refresh_states.json",
-   "data/compact_display_read_watch_probe_a2_b84_profile_states.json",
-   "data/compact_display_read_watch_probe_b8.json",
-   "data/compact_display_read_watch_probe_b8_battle_range.json",
-   "data/compact_display_read_watch_probe_b8_battle_subset.json",
-   "data/compact_display_read_watch_probe_b8_shop_states.json",
-   "data/compact_display_read_watch_probe_b8_subset.json",
-   "data/compact_display_read_watch_rule_settings_map_names.json"
-  ],
-  "case_count": 1,
-  "hit_count": 1,
-  "direct_target_read_count": 1,
+  "current_probe_count": 19,
+  "stale_probe_count": 0,
+  "stale_paths": [],
+  "case_count": 41,
+  "hit_count": 144,
+  "direct_target_read_count": 144,
   "total_case_count": 41,
-  "total_hit_count": 147,
-  "total_direct_target_read_count": 147,
+  "total_hit_count": 144,
+  "total_direct_target_read_count": 144,
   "probes": [
    {
     "path": "data/compact_display_read_watch_a2_profile_down_current.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides"
@@ -805,16 +786,16 @@
         }
        ]
       },
-      "watch_log": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_profile_down_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_action_menu_a30_b8_exact.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -846,16 +827,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/e12_action_menu_a30_b8_exact_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
-      "frame": "temp/e12_action_menu_a30_b8_exact_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png"
+      "watch_log": "temp/e12_action_menu_a30_b8_exact_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
+      "frame": "temp/e12_action_menu_a30_b8_exact_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_action_menu_a30_b8_range.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -879,16 +860,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/e12_action_menu_a30_b8_range_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
-      "frame": "temp/e12_action_menu_a30_b8_range_current_20260627_resha/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png"
+      "watch_log": "temp/e12_action_menu_a30_b8_range_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/watch.log",
+      "frame": "temp/e12_action_menu_a30_b8_range_f95a_20260628/state_temp__first_battle_state31_action_a30__a30_action_menu.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -920,16 +901,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/e12_action_menu_from_after_a36_b8_exact_current_20260627_resha/state_temp__first_battle_state31_a36_probe__after_a36.ss0/watch.log",
-      "frame": "temp/e12_action_menu_from_after_a36_b8_exact_current_20260627_resha/state_temp__first_battle_state31_a36_probe__after_a36.ss0/frame.png"
+      "watch_log": "temp/e12_action_menu_from_after_a36_b8_exact_f95a_20260628/state_temp__first_battle_state31_a36_probe__after_a36.ss0/watch.log",
+      "frame": "temp/e12_action_menu_from_after_a36_b8_exact_f95a_20260628/state_temp__first_battle_state31_a36_probe__after_a36.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_b83268_comm.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -955,8 +936,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b83268_comm_current_20260627_resha/screen_scene_23b_part2_comm_multiplayer/watch.log",
-      "frame": "temp/compact_display_read_watch_b83268_comm_current_20260627_resha/screen_scene_23b_part2_comm_multiplayer/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b83268_comm_f95a_20260628/screen_scene_23b_part2_comm_multiplayer/watch.log",
+      "frame": "temp/compact_display_read_watch_b83268_comm_f95a_20260628/screen_scene_23b_part2_comm_multiplayer/frame.png"
      }
     ]
    },
@@ -1047,8 +1028,8 @@
    {
     "path": "data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1080,16 +1061,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_fresh_menu_sweep_subset_20260627_resha/screen_06_part2_title/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_fresh_menu_sweep_subset_20260627_resha/screen_06_part2_title/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_fresh_menu_sweep_f95a_20260628/screen_06_part2_title/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_fresh_menu_sweep_f95a_20260628/screen_06_part2_title/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_b8_map_territory_current.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1116,16 +1097,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_map_territory_current_20260627_resha/screen_10_part2_region_map_redstar/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_map_territory_current_20260627_resha/screen_10_part2_region_map_redstar/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_map_territory_f95a_20260628/screen_10_part2_region_map_redstar/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_map_territory_f95a_20260628/screen_10_part2_region_map_redstar/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_b8_operation_positive_control.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1136,8 +1117,8 @@
      "0x00B82018"
     ],
     "case_count": 1,
-    "hit_count": 69,
-    "direct_target_read_count": 69,
+    "hit_count": 66,
+    "direct_target_read_count": 66,
     "strict_note": "Read-watch hits prove runtime reads of compact source spans on that route. They are stronger than static xrefs but still not a replacement for final pixel-level visual confirmation. Savestate watchpoint misses can be false negatives.",
     "cases": [
      {
@@ -1147,11 +1128,11 @@
       "watch_mode": "exact_targets",
       "watchpoint_caveat": null,
       "summary": {
-       "hit_count": 69,
-       "direct_target_read_count": 69,
+       "hit_count": 66,
+       "direct_target_read_count": 66,
        "direct_target_count": 4,
        "by_group": {
-        "b8_compact_display_table_all": 69
+        "b8_compact_display_table_all": 66
        },
        "top_pcs": [
         {
@@ -1176,15 +1157,15 @@
         },
         {
          "pc": "0x0300660C",
-         "count": 7
+         "count": 6
         },
         {
          "pc": "0x0300660E",
-         "count": 7
+         "count": 6
         },
         {
          "pc": "0x08B12B14",
-         "count": 7
+         "count": 6
         },
         {
          "pc": "0x08B12A82",
@@ -1206,7 +1187,7 @@
         },
         {
          "target_start": "0x00B8200C",
-         "count": 18
+         "count": 15
         },
         {
          "target_start": "0x00B82018",
@@ -1214,16 +1195,16 @@
         }
        ]
       },
-      "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_operation_positive_control_20260627/screen_41_part1_operation_room/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_current_exact.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides",
@@ -1262,8 +1243,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_current_exact_20260628/screen_07_part2_main_menu/watch.log",
-      "frame": "temp/compact_display_read_watch_current_exact_20260628/screen_07_part2_main_menu/frame.png"
+      "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_07_part2_main_menu/watch.log",
+      "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_07_part2_main_menu/frame.png"
      },
      {
       "name": "30_battle_attack",
@@ -1279,8 +1260,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_current_exact_20260628/screen_30_battle_attack/watch.log",
-      "frame": "temp/compact_display_read_watch_current_exact_20260628/screen_30_battle_attack/frame.png"
+      "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_30_battle_attack/watch.log",
+      "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_30_battle_attack/frame.png"
      },
      {
       "name": "scene_87_common_rule_settings",
@@ -1296,8 +1277,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_current_exact_20260628/screen_scene_87_common_rule_settings/watch.log",
-      "frame": "temp/compact_display_read_watch_current_exact_20260628/screen_scene_87_common_rule_settings/frame.png"
+      "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_scene_87_common_rule_settings/watch.log",
+      "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_scene_87_common_rule_settings/frame.png"
      },
      {
       "name": "41_part1_operation_room",
@@ -1369,16 +1350,16 @@
         }
        ]
       },
-      "watch_log": "temp/compact_display_read_watch_current_exact_20260628/screen_41_part1_operation_room/watch.log",
-      "frame": "temp/compact_display_read_watch_current_exact_20260628/screen_41_part1_operation_room/frame.png"
+      "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+      "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides"
@@ -1403,8 +1384,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/screen_07_part2_main_menu/watch.log",
-      "frame": "temp/compact_display_read_watch_probe_20260627_resha/screen_07_part2_main_menu/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/screen_07_part2_main_menu/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/screen_07_part2_main_menu/frame.png"
      },
      {
       "name": "co_profile_maxg",
@@ -1420,8 +1401,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_maxg/watch.log",
-      "frame": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_maxg/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_maxg/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_maxg/frame.png"
      },
      {
       "name": "co_profile_domino",
@@ -1437,16 +1418,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_domino/watch.log",
-      "frame": "temp/compact_display_read_watch_probe_20260627_resha/freshrender_co_profile_domino/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_domino/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_f95a_20260628/freshrender_co_profile_domino/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_a2_b84_profile_refresh_states.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides"
@@ -1471,8 +1452,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/33381/state_011_SELECT.ss0",
@@ -1488,8 +1469,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5759/state_011_SELECT.ss0",
@@ -1505,8 +1486,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5760/state_011_SELECT.ss0",
@@ -1522,8 +1503,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5761/state_011_SELECT.ss0",
@@ -1539,16 +1520,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_refresh_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_refresh_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_a2_b84_profile_states.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides"
@@ -1573,8 +1554,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/33381/state_011_SELECT.ss0",
@@ -1590,8 +1571,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5759/state_011_SELECT.ss0",
@@ -1607,8 +1588,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5760/state_011_SELECT.ss0",
@@ -1624,8 +1605,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_011_SELECT.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5761/state_011_SELECT.ss0",
@@ -1641,16 +1622,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_a2_b84_profile_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_a2_b84_profile_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_011_SELECT.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_b8.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1674,8 +1655,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_20260627_resha/screen_scene_86_common_compact_menu_tables/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_20260627_resha/screen_scene_86_common_compact_menu_tables/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_b8_f95a_20260628/screen_scene_86_common_compact_menu_tables/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_b8_f95a_20260628/screen_scene_86_common_compact_menu_tables/frame.png"
      },
      {
       "name": "scene_23a_part2_wars_shop",
@@ -1691,16 +1672,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_20260627_resha/screen_scene_23a_part2_wars_shop/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_20260627_resha/screen_scene_23a_part2_wars_shop/frame.png"
+      "watch_log": "temp/compact_display_read_watch_probe_b8_f95a_20260628/screen_scene_23a_part2_wars_shop/watch.log",
+      "frame": "temp/compact_display_read_watch_probe_b8_f95a_20260628/screen_scene_23a_part2_wars_shop/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_b8_battle_range.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1724,16 +1705,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_battle_range_20260627_resha/screen_30_battle_attack/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_battle_range_20260627_resha/screen_30_battle_attack/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_battle_range_f95a_20260628/screen_30_battle_attack/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_battle_range_f95a_20260628/screen_30_battle_attack/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_b8_battle_subset.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1765,8 +1746,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_30_battle_attack/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_30_battle_attack/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_30_battle_attack/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_30_battle_attack/frame.png"
      },
      {
       "name": "scene_27_part2_battle_objlabels",
@@ -1782,8 +1763,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_scene_27_part2_battle_objlabels/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_scene_27_part2_battle_objlabels/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_scene_27_part2_battle_objlabels/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_scene_27_part2_battle_objlabels/frame.png"
      },
      {
       "name": "scene_26a_part2_battle_start_overlay_f060",
@@ -1799,16 +1780,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_scene_26a_part2_battle_start_overlay_f060/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_battle_subset_20260627_resha/screen_scene_26a_part2_battle_start_overlay_f060/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_scene_26a_part2_battle_start_overlay_f060/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_battle_subset_f95a_20260628/screen_scene_26a_part2_battle_start_overlay_f060/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_b8_shop_states.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1832,8 +1813,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33380__state_shop_enter.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/33381/state_shop_enter.ss0",
@@ -1849,8 +1830,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__33381__state_shop_enter.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5759/state_shop_enter.ss0",
@@ -1866,8 +1847,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5759__state_shop_enter.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5760/state_shop_enter.ss0",
@@ -1883,8 +1864,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5760__state_shop_enter.ss0/frame.png"
      },
      {
       "name": "temp/external_saves/profile_plus_aw2_zophar_matrix/5761/state_shop_enter.ss0",
@@ -1900,16 +1881,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_shop_states_20260627_resha/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_shop_states_f95a_20260628/state_temp__external_saves__profile_plus_aw2_zophar_matrix__5761__state_shop_enter.ss0/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_probe_b8_subset.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -1941,8 +1922,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_07_part2_main_menu/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_07_part2_main_menu/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_07_part2_main_menu/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_07_part2_main_menu/frame.png"
      },
      {
       "name": "scene_86_common_compact_menu_tables",
@@ -1958,8 +1939,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_86_common_compact_menu_tables/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_86_common_compact_menu_tables/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_86_common_compact_menu_tables/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_86_common_compact_menu_tables/frame.png"
      },
      {
       "name": "scene_23a_part2_wars_shop",
@@ -1975,16 +1956,16 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_23a_part2_wars_shop/watch.log",
-      "frame": "temp/compact_display_read_watch_b8_subset_20260627_resha/screen_scene_23a_part2_wars_shop/frame.png"
+      "watch_log": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_23a_part2_wars_shop/watch.log",
+      "frame": "temp/compact_display_read_watch_b8_subset_f95a_20260628/screen_scene_23a_part2_wars_shop/frame.png"
      }
     ]
    },
    {
     "path": "data/compact_display_read_watch_rule_settings_map_names.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "b8_compact_display_table_all"
     ],
@@ -2013,8 +1994,8 @@
        "top_pcs": [],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/watch.log",
-      "frame": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/frame.png"
+      "watch_log": "temp/compact_display_read_watch_rule_settings_map_names_f95a_20260628/screen_07_part2_main_menu/watch.log",
+      "frame": "temp/compact_display_read_watch_rule_settings_map_names_f95a_20260628/screen_07_part2_main_menu/frame.png"
      }
     ]
    }
@@ -2023,13 +2004,11 @@
  "read_watch_positive_controls": {
   "present": true,
   "probe_count": 1,
-  "current_probe_count": 0,
-  "stale_probe_count": 1,
-  "stale_paths": [
-   "data/compact_display_read_watch_positive_control_a01970.json"
-  ],
-  "case_count": 0,
-  "hit_count": 0,
+  "current_probe_count": 1,
+  "stale_probe_count": 0,
+  "stale_paths": [],
+  "case_count": 1,
+  "hit_count": 8,
   "direct_target_read_count": 0,
   "total_case_count": 1,
   "total_hit_count": 8,
@@ -2038,8 +2017,8 @@
    {
     "path": "data/compact_display_read_watch_positive_control_a01970.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "selected_groups": [
      "a2_co_power_profile_display_overrides",
      "b84_compact_power_display_overrides"
@@ -2085,8 +2064,8 @@
        ],
        "direct_targets": []
       },
-      "watch_log": "temp/compact_display_read_watch_positive_control_a01970_current_20260627_resha/screen_08_part2_prologue_map_text/watch.log",
-      "frame": "temp/compact_display_read_watch_positive_control_a01970_current_20260627_resha/screen_08_part2_prologue_map_text/frame.png"
+      "watch_log": "temp/compact_display_read_watch_positive_control_a01970_f95a_20260628/screen_08_part2_prologue_map_text/watch.log",
+      "frame": "temp/compact_display_read_watch_positive_control_a01970_f95a_20260628/screen_08_part2_prologue_map_text/frame.png"
      }
     ]
    }
@@ -2110,7 +2089,7 @@
     "current_screen_capture_assigned": 1,
     "container_only": 35,
     "no_scene": 0,
-    "direct_target_visual_evidence": 0,
+    "direct_target_visual_evidence": 1,
     "static_pointer_refs": 36,
     "static_external_pointer_refs": 36
    },
@@ -2300,9 +2279,486 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x08314336",
+       "lr": "0x08314F1B",
+       "r0": "0x00000085",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831BC90",
+       "lr": "0x0831BEAF",
+       "r0": "0x03002C90",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BCE4",
+       "lr": "0x0831BCE7",
+       "r0": "0x03002C90",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AD",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BCE4",
+       "lr": "0x0831BCE7",
+       "r0": "0x0000008E",
+       "r1": "0x08A295AD",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BCE4",
+       "lr": "0x0831BCE7",
+       "r0": "0x0000004D",
+       "r1": "0x08A295AE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BCE4",
+       "lr": "0x0831BCE7",
+       "r0": "0x0000008B",
+       "r1": "0x08A295AF",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BCE4",
+       "lr": "0x0831BCE7",
+       "r0": "0x000000B7",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831BCEC",
+       "lr": "0x0831BCE7",
+       "r0": "0x03002C90",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30404",
+       "lr": "0x0831BCE7",
+       "r0": "0x08F30401",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30284",
+       "lr": "0x0831BBED",
+       "r0": "0x08A295AC",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AD",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30286",
+       "lr": "0x0831BBED",
+       "r0": "0x08A295AC",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831BD1C",
+       "lr": "0x0831BBED",
+       "r0": "0x0831BD15",
+       "r1": "0x00999000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30404",
+       "lr": "0x0831BBED",
+       "r0": "0x08F30401",
+       "r1": "0x00999000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30284",
+       "lr": "0x0831BBED",
+       "r0": "0x08A295AE",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x08F30286",
+       "lr": "0x0831BBED",
+       "r0": "0x08A295AE",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831BD1C",
+       "lr": "0x0831BBED",
+       "r0": "0x0831BD15",
+       "r1": "0x90000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD25",
+       "r0": "0x08A295AC",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AD",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD25",
+       "r0": "0x0000008E",
+       "r1": "0x08A295AD",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD25",
+       "r0": "0x0000004D",
+       "r1": "0x08A295AE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD25",
+       "r0": "0x0000008B",
+       "r1": "0x08A295AF",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD25",
+       "r0": "0x000000B7",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD59",
+       "r0": "0x08A295AC",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AD",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD59",
+       "r0": "0x0000008E",
+       "r1": "0x08A295AD",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD59",
+       "r0": "0x0000004D",
+       "r1": "0x08A295AE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD59",
+       "r0": "0x0000008B",
+       "r1": "0x08A295AF",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BD59",
+       "r0": "0x000000B7",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x08A295AC",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AD",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008E",
+       "r1": "0x08A295AD",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AE",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000004D",
+       "r1": "0x08A295AE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008B",
+       "r1": "0x08A295AF",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x000000B7",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_down_current.json",
+       "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+       "case_type": "state",
+       "frame": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+       "watch_log": "temp/compact_display_read_watch_a2_profile_down_f95a_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+       "read_address": "0x08A295B0",
+       "target_start": "0x00A295AC",
+       "pc": "0x08314336",
+       "lr": "0x08314F1B",
+       "r0": "0xFFFFFFF7",
+       "r1": "0x08A295B0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -2313,7 +2769,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295C0",
@@ -8169,7 +8625,148 @@
      ],
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F80",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x00000068",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F80",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000A28F",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F80",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010D30",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F81",
+       "target_start": "0x00B81F80",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81F80",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F80",
+       "target_start": "0x00B81F80",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81F80",
+       "r1": "0x000000A9",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F82",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000006A",
+       "r1": "0x00000900",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F82",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000A992",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F82",
+       "target_start": "0x00B81F80",
+       "pc": "0x08B12B14",
+       "lr": "0x08B1BF0D",
+       "r0": "0x02010D32",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F83",
+       "target_start": "0x00B81F80",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81F82",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81F82",
+       "target_start": "0x00B81F80",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81F82",
+       "r1": "0x000000CC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [
       {
        "address": "0x00B81F80",
@@ -8226,7 +8823,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00B81F98",
@@ -8513,7 +9110,260 @@
      ],
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x00000044",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x00002020",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010D0C",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDD",
+       "target_start": "0x00B81FDC",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FDC",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FDC",
+       "r1": "0x00000066",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x00000046",
+       "r1": "0x00000900",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B1BF0D",
+       "r0": "0x00006688",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12B14",
+       "lr": "0x08B1BF0D",
+       "r0": "0x02010D0E",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDF",
+       "target_start": "0x00B81FDC",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FDE",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FDE",
+       "r1": "0x0000006C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FDC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x0000007F",
+       "r1": "0x08B81FDC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDD",
+       "target_start": "0x00B81FDC",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FDC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDC",
+       "target_start": "0x00B81FDC",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x00006600",
+       "r1": "0x08B81FDC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FDE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000083",
+       "r1": "0x08B81FDE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDF",
+       "target_start": "0x00B81FDC",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FDE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FDE",
+       "target_start": "0x00B81FDC",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x00006C00",
+       "r1": "0x08B81FDE",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [
       {
        "address": "0x00B81FDC",
@@ -8570,7 +9420,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00B81FF4",
@@ -8599,7 +9449,428 @@
      ],
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x00000038",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000DC90",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B12BC9",
+       "r0": "0x000E0000",
+       "r1": "0x0000C88F",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000DC90",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010D00",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF7",
+       "target_start": "0x00B81FF4",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FF6",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FF6",
+       "r1": "0x000000C2",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000086",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF5",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C800",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000084",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF7",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C200",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x00000038",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000DC90",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B12BC9",
+       "r0": "0x000E0000",
+       "r1": "0x0000C88F",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000DC90",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010D00",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF7",
+       "target_start": "0x00B81FF4",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FF6",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B81FF6",
+       "r1": "0x000000C2",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000086",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF5",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF4",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C800",
+       "r1": "0x08B81FF4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000084",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF7",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B81FF6",
+       "target_start": "0x00B81FF4",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C200",
+       "r1": "0x08B81FF6",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [
       {
        "address": "0x00B81FF4",
@@ -8656,7 +9927,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00B8200C",
@@ -8685,7 +9956,218 @@
      ],
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x00000036",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x00004F8E",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010CFE",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200D",
+       "target_start": "0x00B8200C",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8200C",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8200C",
+       "r1": "0x000000DC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200E",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x00000038",
+       "r1": "0x00000009",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200E",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000DC90",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B8200C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000087",
+       "r1": "0x08B8200C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200D",
+       "target_start": "0x00B8200C",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B8200C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200C",
+       "target_start": "0x00B8200C",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000DC00",
+       "r1": "0x08B8200C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200E",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B8200E",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200E",
+       "target_start": "0x00B8200C",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000078",
+       "r1": "0x08B8200E",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200F",
+       "target_start": "0x00B8200C",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B8200E",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8200E",
+       "target_start": "0x00B8200C",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x00004000",
+       "r1": "0x08B8200E",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [
       {
        "address": "0x00B8200C",
@@ -8742,7 +10224,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00B82018",
@@ -8771,7 +10253,512 @@
      ],
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x0000002C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000E48B",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010CF4",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82019",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B82018",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B82018",
+       "r1": "0x000000C8",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000002E",
+       "r1": "0x00000009",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000C88F",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B14",
+       "lr": "0x08B1BF0D",
+       "r0": "0x02010CF6",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201B",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8201A",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8201A",
+       "r1": "0x000000F4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000086",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82019",
+       "target_start": "0x00B82018",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C800",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000088",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201B",
+       "target_start": "0x00B82018",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_b8_operation_positive_control.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_b8_operation_positive_control_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000F400",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12A82",
+       "lr": "0x08B12BC9",
+       "r0": "0x00000000",
+       "r1": "0x0000002C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B12BC9",
+       "r0": "0x0000E48B",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B14",
+       "lr": "0x08B12BC9",
+       "r0": "0x02010CF4",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82019",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B82018",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B82018",
+       "r1": "0x000000C8",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B2E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000002E",
+       "r1": "0x00000009",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12ABC",
+       "lr": "0x08B1BF0D",
+       "r0": "0x0000C88F",
+       "r1": "0x02010AD4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12B14",
+       "lr": "0x08B1BF0D",
+       "r0": "0x02010CF6",
+       "r1": "0x02010ADA",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201B",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660C",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8201A",
+       "r1": "0x00000000",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x0300660E",
+       "lr": "0x08B1BF0D",
+       "r0": "0x08B8201A",
+       "r1": "0x000000F4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000086",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82019",
+       "target_start": "0x00B82018",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B82018",
+       "target_start": "0x00B82018",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000C800",
+       "r1": "0x08B82018",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B12082",
+       "lr": "0x08B13187",
+       "r0": "0x03000EC0",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x08B1215E",
+       "lr": "0x08B13187",
+       "r0": "0x00000088",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201B",
+       "target_start": "0x00B82018",
+       "pc": "0x03006460",
+       "lr": "0x08B1BF41",
+       "r0": "0x00003000",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_current_exact.json",
+       "case": "41_part1_operation_room",
+       "case_type": "screen_checkpoint",
+       "frame": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/frame.png",
+       "watch_log": "temp/compact_display_read_watch_current_exact_f95a_20260628/screen_41_part1_operation_room/watch.log",
+       "read_address": "0x08B8201A",
+       "target_start": "0x00B82018",
+       "pc": "0x03006464",
+       "lr": "0x08B1BF41",
+       "r0": "0x0000F400",
+       "r1": "0x08B8201A",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [
       {
        "address": "0x00B82018",
@@ -8828,7 +10815,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00B82024",
@@ -23091,6 +25078,6 @@
  "representative_contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/current_representative_contact.png",
  "limitations": [
   "current_screen_capture_assigned means the owning screen scene has a current capture, not that this exact target is visible.",
-  "direct_target_visual_evidence is a compatibility field for target-level proof. It may be set by renderer trace, read-watch direct hit, or manual mutation proof; mutation proof establishes live source provenance, not full visual-integrity coverage."
+  "direct_target_visual_evidence is a compatibility field for target-level runtime/source proof. It may be set by renderer trace, read-watch direct hit, or manual mutation proof; mutation proof establishes live source provenance, not full visual-integrity coverage."
  ]
 }

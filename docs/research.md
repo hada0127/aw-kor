@@ -2831,3 +2831,22 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   이 route의 최종 프레임은 해당 주소를 화면 source로 쓰지 않는 것으로 본다.
 - **해석 경계**: DOWN16 음성은 해당 route의 direct proof 부적합 판정이지, 네 주소의 전역 미사용 증명이 아니다.
   E12 추가 증거는 다른 작전실 state나 Part2 compact renderer route에서 target-level read/diff/VRAM chain을 따로 잡아야 한다.
+
+---
+## [2026-06-28] E12 read-watch current SHA 전량 재동기화
+
+- **현상**: 이전 matrix는 current ROM SHA가 `f95a8573...`인데도 read-watch probe 19개 중 18개가 stale SHA를
+  가리켜, read-watch evidence가 실제 current state를 충분히 뒷받침하지 못했다.
+- **조치**: `tools/probe_compact_display_reads.py`로 기존 19개 `data/compact_display_read_watch*.json`을 모두
+  current ROM 기준으로 재실행했다. `tools/build_compact_display_visual_matrix.py` 재생성 후 read-watch probes는
+  current 19/stale 0, cases 41, hits/direct reads 144가 됐다.
+- **A2 direct read**: `data/compact_display_read_watch_a2_profile_down_current.json`은
+  `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 `DOWN,DOWN` redraw를 유도할 때
+  A2 compact target `0x00A295AC`를 34회 읽는다. 관측 PC 상위는 `0x0838BD18` 15회,
+  `0x0838BCE4` 5회이며, A2 group의 target-level runtime provenance로 matrix에 붙는다.
+- **음성 current화**: action menu exact/range, after-a36, B8 comm label, Part2 title menu sweep,
+  map territory, rule-setting map names, B8 battle range/subset, B8 shop external states,
+  A2/B84 external profile states/freshrender 등은 current SHA에서 hit 0이다.
+- **경계**: 0-hit는 해당 route/subset의 음성 결과다. 특히 B8 Part2 HUD/상점/무기/데미지예측과 B84 나머지
+  파워명은 source-address/dead-copy 여부를 아직 전역 결론 낼 수 없다. A2 `0x00A295AC`도 read-watch provenance이지
+  36개 전수 visual-layout proof가 아니다.

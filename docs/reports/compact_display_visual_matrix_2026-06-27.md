@@ -8,9 +8,9 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Summary
 
-| Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Direct target proof |
+| Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Target runtime/source proof |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 0 |
+| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 1 |
 | B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 1 |
 | B8 compact display table bucket | 459 | 459 | 0 | 0 | 459 | 386 | 13 |
 
@@ -61,41 +61,40 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Read-Watch Probes
 
-- probes_present=True probes=19 current=1 stale=18 cases=1 hits=1 direct_reads=1
-- `data/compact_display_read_watch_a2_profile_down_current.json`: current=False groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=34 direct_reads=34
-- `data/compact_display_read_watch_action_menu_a30_b8_exact.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
-- `data/compact_display_read_watch_action_menu_a30_b8_range.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0
-- `data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
-- `data/compact_display_read_watch_b83268_comm.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=1
+- probes_present=True probes=19 current=19 stale=0 cases=41 hits=144 direct_reads=144
+- `data/compact_display_read_watch_a2_profile_down_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=34 direct_reads=34
+- `data/compact_display_read_watch_action_menu_a30_b8_exact.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
+- `data/compact_display_read_watch_action_menu_a30_b8_range.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0
+- `data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
+- `data/compact_display_read_watch_b83268_comm.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=1
 - `data/compact_display_read_watch_b84_power_title_20260628.json`: current=True groups=['b84_compact_power_display_overrides'] cases=1 hits=1 direct_reads=1 targets=1
-- `data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
-- `data/compact_display_read_watch_b8_map_territory_current.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=2
-- `data/compact_display_read_watch_b8_operation_positive_control.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=69 direct_reads=69 targets=4
-- `data/compact_display_read_watch_current_exact.json`: current=False groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides', 'b8_compact_display_table_all'] cases=4 hits=43 direct_reads=43 targets=12
-- `data/compact_display_read_watch_probe.json`: current=False groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=3 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_a2_b84_profile_refresh_states.json`: current=False groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=5 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_a2_b84_profile_states.json`: current=False groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=5 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_b8.json`: current=False groups=['b8_compact_display_table_all'] cases=2 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_b8_battle_range.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_b8_battle_subset.json`: current=False groups=['b8_compact_display_table_all'] cases=3 hits=0 direct_reads=0 targets=7
-- `data/compact_display_read_watch_probe_b8_shop_states.json`: current=False groups=['b8_compact_display_table_all'] cases=5 hits=0 direct_reads=0
-- `data/compact_display_read_watch_probe_b8_subset.json`: current=False groups=['b8_compact_display_table_all'] cases=3 hits=0 direct_reads=0 targets=7
-- `data/compact_display_read_watch_rule_settings_map_names.json`: current=False groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=4
-- stale probe files ignored in current summary: `data/compact_display_read_watch_a2_profile_down_current.json`, `data/compact_display_read_watch_action_menu_a30_b8_exact.json`, `data/compact_display_read_watch_action_menu_a30_b8_range.json`, `data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json`, `data/compact_display_read_watch_b83268_comm.json`, `data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json`, `data/compact_display_read_watch_b8_map_territory_current.json`, `data/compact_display_read_watch_b8_operation_positive_control.json`, `data/compact_display_read_watch_current_exact.json`, `data/compact_display_read_watch_probe.json`, `data/compact_display_read_watch_probe_a2_b84_profile_refresh_states.json`, `data/compact_display_read_watch_probe_a2_b84_profile_states.json`, `data/compact_display_read_watch_probe_b8.json`, `data/compact_display_read_watch_probe_b8_battle_range.json`, `data/compact_display_read_watch_probe_b8_battle_subset.json`, `data/compact_display_read_watch_probe_b8_shop_states.json`, `data/compact_display_read_watch_probe_b8_subset.json`, `data/compact_display_read_watch_rule_settings_map_names.json`
+- `data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
+- `data/compact_display_read_watch_b8_map_territory_current.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=2
+- `data/compact_display_read_watch_b8_operation_positive_control.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=66 direct_reads=66 targets=4
+- `data/compact_display_read_watch_current_exact.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides', 'b8_compact_display_table_all'] cases=4 hits=43 direct_reads=43 targets=12
+- `data/compact_display_read_watch_probe.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=3 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_a2_b84_profile_refresh_states.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=5 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_a2_b84_profile_states.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=5 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_b8.json`: current=True groups=['b8_compact_display_table_all'] cases=2 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_b8_battle_range.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_b8_battle_subset.json`: current=True groups=['b8_compact_display_table_all'] cases=3 hits=0 direct_reads=0 targets=7
+- `data/compact_display_read_watch_probe_b8_shop_states.json`: current=True groups=['b8_compact_display_table_all'] cases=5 hits=0 direct_reads=0
+- `data/compact_display_read_watch_probe_b8_subset.json`: current=True groups=['b8_compact_display_table_all'] cases=3 hits=0 direct_reads=0 targets=7
+- `data/compact_display_read_watch_rule_settings_map_names.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=4
 
 ## Read-Watch Positive Controls
 
-- controls_present=True probes=1 cases=0 hits=0 note=Positive controls are not E12 target evidence. They prove the same fresh-route ROM read-watch mechanism can hit a known visible text.
-- `data/compact_display_read_watch_positive_control_a01970.json`: current=False targets=['0x00A01970'] cases=1 hits=8
+- controls_present=True probes=1 cases=1 hits=8 note=Positive controls are not E12 target evidence. They prove the same fresh-route ROM read-watch mechanism can hit a known visible text.
+- `data/compact_display_read_watch_positive_control_a01970.json`: current=True targets=['0x00A01970'] cases=1 hits=8
 
 ## Remaining E12 Gap
 
-- Direct target proof is currently 14; this includes runtime/source provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
+- Target runtime/source proof count is currently 15; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
 - Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.
 - Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.
 - A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.
 - Current read-watch probes over the fresh main route, CO profile refresh, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates produced no A2/B84/Part2-B8-HUD target reads; these are route/subset negatives, not global non-use proof.
-- B8 now has 13 target proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and A2/B84 plus most B8 targets still lack target-level provenance.
+- B8 now has 13 target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and A2/B84 plus most B8 targets still lack target-level provenance.
 - The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven targets; additional A2/B84/B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.
 - B8/B84 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/CO/break labels.
 - A2 CO power names have static glyph-dictionary coverage and one current CO-profile representative screen, but not 36 per-power screen captures.

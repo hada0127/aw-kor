@@ -924,3 +924,13 @@ read-watch를 시도했다.
 - **시도**: `temp/review_prompt_user_screenshot_retriage_20260628.md`로 claude/agy에 좁은 리뷰를 요청했다.
 - **결과**: agy는 실질 리뷰를 반환했고, "not-reproduced"보다 기존 패치가 current fresh route에서 fixed 상태로
   작동함을 명시하라는 지적과 temp 요약 영구 보존 권고를 반영했다. claude는 120초 timeout으로 stdout/stderr 0바이트였다.
+
+## [2026-06-28] E12 current read-watch 0-hit route 재확인
+
+- **시도**: stale였던 E12 read-watch probe를 current SHA `f95a8573...`로 모두 재실행했다.
+- **음성 유지 route**: action-menu exact/range, `after_a36` action 후보, B8 `0xB83268` comm label,
+  Part2 title menu sweep subset, Part2 map territory, rule-settings map-name 후보,
+  B8 compact menu/war shop range, battle range/subset, external shop states,
+  A2/B84 external profile states/freshrender 후보는 current SHA에서도 hit 0이다.
+- **판정**: 이들은 route/subset 음성으로 유지한다. 전역 미사용 증명으로 해석하지 않으며, 실제 target-level provenance는
+  fresh route, redraw가 보장되는 near-fresh state, mutation diff, 또는 WRAM/VRAM/DMA chain으로 다시 잡아야 한다.
