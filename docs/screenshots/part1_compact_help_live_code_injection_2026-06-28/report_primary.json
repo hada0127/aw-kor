@@ -1,5 +1,5 @@
 {
-  "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
   "rows": [
     {
       "case_id": "player_count_codes",
@@ -15,7 +15,7 @@
         "temp/e16_live_code_injection_smoke_20260628/player_count_codes/after_up.png"
       ],
       "summary": {
-        "hit_count": 10251,
+        "hit_count": 8221,
         "direct_group_count": 3,
         "direct_target_count": 4,
         "direct_targets": [
@@ -52,20 +52,20 @@
           }
         ],
         "pointer_table_hits": 2,
-        "other_watch_range_hits": 10067
-      },
-      "mem_fields": {
-        "2c": 0,
-        "2d": 4,
-        "2e": 4,
-        "2f": 0
+        "other_watch_range_hits": 8037
       },
       "active": [
         16,
         17,
         13,
         13
-      ]
+      ],
+      "mem_fields": {
+        "2c": 0,
+        "2d": 4,
+        "2e": 4,
+        "2f": 0
+      }
     },
     {
       "case_id": "hidden_codes",
@@ -81,7 +81,7 @@
         "temp/e16_live_code_injection_smoke_20260628/hidden_codes/after_up.png"
       ],
       "summary": {
-        "hit_count": 10242,
+        "hit_count": 8212,
         "direct_group_count": 3,
         "direct_target_count": 6,
         "direct_targets": [
@@ -122,20 +122,20 @@
           }
         ],
         "pointer_table_hits": 2,
-        "other_watch_range_hits": 10038
-      },
-      "mem_fields": {
-        "2c": 0,
-        "2d": 4,
-        "2e": 4,
-        "2f": 0
+        "other_watch_range_hits": 8008
       },
       "active": [
         5,
         6,
         13,
         13
-      ]
+      ],
+      "mem_fields": {
+        "2c": 0,
+        "2d": 4,
+        "2e": 4,
+        "2f": 0
+      }
     },
     {
       "case_id": "code0_vs",
@@ -151,7 +151,7 @@
         "temp/e16_live_code_injection_smoke_20260628/code0_vs/after_up.png"
       ],
       "summary": {
-        "hit_count": 10242,
+        "hit_count": 8212,
         "direct_group_count": 2,
         "direct_target_count": 3,
         "direct_targets": [
@@ -179,65 +179,21 @@
           }
         ],
         "pointer_table_hits": 2,
-        "other_watch_range_hits": 10038
-      },
-      "mem_fields": {
-        "2c": 0,
-        "2d": 4,
-        "2e": 4,
-        "2f": 0
+        "other_watch_range_hits": 8008
       },
       "active": [
         0,
         0,
         13,
         13
-      ]
+      ],
+      "mem_fields": {
+        "2c": 0,
+        "2d": 4,
+        "2e": 4,
+        "2f": 0
+      }
     }
   ],
-  "contact": "temp/e16_live_code_injection_smoke_20260628/contact.png",
-  "carry_forward_applicability": {
-    "method": "pinned_range_sha256_match",
-    "capture_rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
-    "validated_current_rom_sha256": "8940784c33bf50081a1b143af34628c9f94ceebc721a7a331df9ba2df36251a9",
-    "validated_on": "2026-06-28",
-    "ranges": [
-      {
-        "name": "part1_help_text_and_pointer_table",
-        "start": "0x00DFA5E0",
-        "end": "0x00DFAB40",
-        "length": 1376,
-        "sha256": "41040410cb8c34f31e9af28fdad0cc44d3f9a888d794a00e6cdbf701969cb854"
-      },
-      {
-        "name": "part1_help_menu_lookup_builder",
-        "start": "0x00B4AE00",
-        "end": "0x00B4BD80",
-        "length": 3968,
-        "sha256": "e16c8b54d9c6e35d0d2be09b2bdfba8c23a9184c3b5a24d277d18a048a9f67c2"
-      },
-      {
-        "name": "part1_common_text_parser_render",
-        "start": "0x00B12070",
-        "end": "0x00B13220",
-        "length": 4528,
-        "sha256": "51af3758cc712d0a7b5c22ff80c96ada6e40b66dbed628eb367899ef09cb16eb"
-      },
-      {
-        "name": "part1_glyph_conversion_routine",
-        "start": "0x00EFE700",
-        "end": "0x00EFEA20",
-        "length": 800,
-        "sha256": "6393890acf01e0aa85e9b5f15703a21bd67b401289c34c11df6c67de346327d1"
-      },
-      {
-        "name": "part1_kanji_table",
-        "start": "0x00B80B7C",
-        "end": "0x00B8180C",
-        "length": 3216,
-        "sha256": "d0ea52ba5868507393b0912ccd5987d830cd3d7cc0737b1f6e3fb25bee2c36d1"
-      }
-    ],
-    "note": "Exact current-ROM recapture via RAM item-code injection is fragile; accept this report for a later ROM only when every pinned Part1 compact-help renderer/data range has the same SHA-256."
-  }
+  "contact": "docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_primary.png"
 }

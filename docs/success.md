@@ -2923,7 +2923,7 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **목적**: real gameplay route가 아직 없는 11개 도움말
   (`0xDFA64A/66B/83A/84D/872/885/8AA/8CB/8EA/90A/926`)에 대해, pointer-table을 바꾸지 않고
   실제 `item code -> 0x08DFAAB8 pointer lookup -> help renderer` 경로가 깨짐 없이 동작하는지 확인했다.
-- **방법**: current ROM SHA `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093`에서
+- **방법**: current ROM SHA `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
   fresh Part1 mode menu를 열고, live menu object의 `0x0200002D/2E/2F`와 `0x02000030...` item code만
   `0`, `5/6`, `16..19` 후보로 주입했다. 이후 실제 `DOWN/UP` cursor 이동으로 help redraw를 유도했다.
 - **결과**: code0은 `둘부터 넷까지 / 대전 가능`, code5/6은 `특별한 처음부터 / 숨겨진 모드`와
@@ -2932,7 +2932,8 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **증거/게이트**:
   `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_primary.png`,
   `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_player19.png`,
-  reports 2종. `tools/qa_part1_compact_help.py`는 live-code injection evidence 11개를 별도 hard gate로 검사한다.
+  reports 2종. reports는 current SHA 직접 캡처라 `tools/qa_part1_compact_help.py`의
+  `carry_forwarded_live_code_report_count=0`이다. 이 QA는 live-code injection evidence 11개를 별도 hard gate로 검사한다.
 - **경계**: 이는 pointer-table forced-render보다 강한 renderer/code-lookup smoke지만, real gameplay unlock/player-count
   route direct visual evidence는 아니다. E16 route debt 11개는 `todo.md`에 계속 남긴다.
 

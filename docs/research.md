@@ -2733,6 +2733,8 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `0x08B4AF08`의 실제 `code & 0x7F -> 0x08DFAAB8` lookup과 help renderer를 그대로 사용한다.
   결과 code0, code5/6, code16..19의 남은 11개 문구가 모두 read-watch와 최종 화면에서 정상 표시됐다.
   증거는 `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/`.
+  2026-06-28 후속 재실행으로 report 2종은 current SHA `f95a8573...` 직접 캡처가 됐고,
+  `qa_part1_compact_help.py`의 carry-forward 인정은 더 이상 필요하지 않다.
 - **경계**: live-code injection은 pointer-table forced-render보다 강한 smoke지만, 실제 게임 진행/해금 조건으로
   해당 item code가 active menu에 올라오는 route proof는 아니다. E16 direct debt는 code0 VS 헤더, code5/6 hidden
   campaign, code16..19 player-count 화면의 real route 확보까지 유지한다.

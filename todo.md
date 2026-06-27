@@ -842,6 +842,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     화면에서 깨짐/클리핑 없이 표시됐다. 증거:
     `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_primary.png`,
     `contact_player19.png`, reports 2종.
+    후속 재실행으로 reports 2종을 current SHA `f95a8573...` 직접 캡처로 갱신했고,
+    `qa_part1_compact_help.py`의 `carry_forwarded_live_code_report_count`는 2->0이 됐다.
     `tools/qa_part1_compact_help.py`는 direct visual 23/missing direct 11,
     synthetic render 11, **live-code injection 11**, render-missing 0을 hard gate로 검사한다.
   - [ ] 남은 direct visual route 확보:
