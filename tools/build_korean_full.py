@@ -27,6 +27,7 @@ TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 COMPREHENSIVE_TRANS = os.path.join(BASE, 'data', 'translation_comprehensive.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
 DGROUPS = os.path.join(BASE, 'data', 'dialogue_groups.json')
+DISPLAY_OVERRIDES = os.path.join(BASE, 'data', 'display_overrides.json')
 # T1: 한글 2350자(KS X 1001 완성형) 폰트 — 기존 1030과 byte-identical 호환(additive, tools/build_korean2350.py 생성).
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 GLYPH_BLOB_2350 = os.path.join(BASE, 'data', 'kor_glyphs_2350.bin')
@@ -96,7 +97,19 @@ def require_font(path, label):
 PAIR_RENDERER_REGIONS = [
     ('part2_map_mission_title_table', 0xA2D000, 0xA2D8B0),
 ]
-ZERO_FILL_REGIONS = PAIR_RENDERER_REGIONS
+COMPACT_GLYPH_DICTIONARY_REGIONS = [
+    ('part2_co_power_profile_dictionary', 0xA3B880, 0xA3B880 + 122),
+    ('part2_b8_compact_power_dictionary', 0xB842E8, 0xB842E8 + 84),
+]
+COMPACT_GLYPH_TARGET_REGIONS = [
+    ('part2_co_power_profile_names', 0xA2955C, 0xA29830),
+    ('part2_b8_compact_power_names', 0xB84E50, 0xB84F18),
+]
+ZERO_FILL_REGIONS = (
+    PAIR_RENDERER_REGIONS
+    + COMPACT_GLYPH_DICTIONARY_REGIONS
+    + COMPACT_GLYPH_TARGET_REGIONS
+)
 
 # 0x800000 위의 '텍스트로 오추출된' 중요 데이터 테이블 — 덮어쓰면 그리드/폰트/렌더 깨짐.
 # (extraction noise가 SJIS-유사 바이트의 데이터 테이블을 텍스트로 잡음)
@@ -543,24 +556,39 @@ ADDRESS_TEXT_OVERRIDES = {
     # parser. ASCII digits are unsafe there, and some Hangul reserved codes
     # collide with the original Part 1 glyph table. Keep these hints short and
     # limited to syllables verified in this renderer.
-    0xDFA64A: '대결',
-    0xDFA66B: ' 가능',
-    0xDFA6AA: '대결 법 가르 드려',
-    0xDFA6CD: '들러 봐!',
-    0xDFA752: '기기 대결',
-    0xDFA775: '대결 가능 모드',
-    0xDFA79A: '새로 대결 가능',
-    0xDFA7BE: '계속 대결 가능',
-    0xDFA8AA: '나만 대결 가능',
-    0xDFA8CB: '다른 사령관 상대',
-    0xDFA942: '대결 모드',
-    0xDFA95B: '고르기',
-    0xDFA972: '대결',
-    0xDFA989: '모두 대결',
-    0xDFA9AE: '동료 대결',
-    0xDFA9C7: '가능',
-    0xDFA9DA: '동료',
-    0xDFA9E9: '맵 보내기 받기',
+    0xDFA64A: '둘부터 넷까지',
+    0xDFA66B: '대전 가능',
+    0xDFA6AA: '전투 방법 알려 줄게',
+    0xDFA6CD: '와서 들어 봐',
+    0xDFA6E2: '워즈 코인으로',
+    0xDFA6FB: '물건 살 수 있어',
+    0xDFA71B: '님만의',
+    0xDFA72E: '지도를 만들 수 있어',
+    0xDFA752: '한 대로 넷까지',
+    0xDFA775: '대전 가능',
+    0xDFA79A: '처음부터 대전',
+    0xDFA7BE: '이어서 대전',
+    0xDFA7E2: '처음부터 캠페인',
+    0xDFA7FD: '시작해요',
+    0xDFA80E: '이어서 캠페인',
+    0xDFA829: '진행 가능',
+    0xDFA83A: '특별한 처음부터',
+    0xDFA84D: '숨겨진 모드',
+    0xDFA872: '특별 이어하기',
+    0xDFA885: '숨겨진 모드',
+    0xDFA8AA: '혼자서 대전',
+    0xDFA8CB: '사령관 상대',
+    0xDFA8EA: '둘이서 대전',
+    0xDFA90A: '셋이서 대전',
+    0xDFA926: '넷이서 대전',
+    0xDFA942: '통신 케이블로',
+    0xDFA95B: '대전하기',
+    0xDFA972: '카트리지 하나로',
+    0xDFA989: '모두와 대전',
+    0xDFA9AE: '친구와 연결해',
+    0xDFA9C7: '대전 가능',
+    0xDFA9DA: '친구와',
+    0xDFA9E9: '맵 교환 가능',
     # Part 1 operation room opening. These lines appear immediately after the
     # first name-confirm flow and are sensitive to long Korean fragments.
     0xDF5D62: '커서 조작부터',
@@ -1280,7 +1308,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF25FA: '수도 점령이나 적 전멸로 승리!',
     0xDF2DA6: '밝고 활기찬 소년.',
     0xDF73A5: '준비해 달랬어요.',
-    0xDFA829: '가능해.',
     0xDFC3CE: '뭐, 나도 젊었을 때는... 이런 얘긴',
     # Third level2/visual-width cleanup batch. These are remaining safe
     # campaign/help reductions that still preserve the local sentence meaning.
@@ -1806,7 +1833,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA34A3C: '본부 점령 또는 적 전멸로 승리.',
     0xA34FEC: '지도를 보낼 사람을 골라!',
     0xA350B4: '지도 수신 중, 잠시만 기다려!',
-    0xB81E50: '최강! 키쿠치요부대',
+    0xB81E50: '최강키쿠치요부대',
     0xB83CC0: '키쿠치요 특전부대 힘을 보여 주마!',
     0xB83D68: '누군진 몰라도 내게 싸움을 건 게',
     0xB83EB8: '이 정도면 됐나?',
@@ -1862,8 +1889,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF72B8: '여기 새로 등장하는 해상 유닛이야.',
     0xDF72E2: '이 두 유닛을 지키며 바다 건너편을',
     0xDF77DE: '더 자세히 알고 싶은 사람',
-    0xDFA68C: '전투 기록 보기 가능.',
-    0xDFA90A: '대결 가능',
+    0xDFA68C: '전투기록볼수있어',
     0xDFB439: '몇 번 가게에 오다 보면 언젠가',
     0xDFBAA6: '한 번 클리어론 아직 멀었어!',
     0xDFC01D: '유닛 이동력이 길다는 건 알았나?',
@@ -2038,26 +2064,44 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB839D0: '사령브레이크',
     0xB84A48: '아코디언　도로　지도',
     0xB84BA0: '지혜고리섬　지도',
-    0xB84E50: '메테오강타',
+    0xB84E50: '메테오',
     0xDEE9F3: '탄이 떨어지면',
     0xDEEBBE: '미사일 공격',
     # Additional mission/title rows found outside the protected compact tables.
+    0xB81D80: '최강라이벌',
+    0xB81D94: '검은숲결착',
     0xB81DB4: '두명의 료',
-    0xB81DF0: '모프 대장!',
-    0xB81E1C: '도미노 능력!',
-    0xB81ED0: '호이프 해군!',
-    0xB81EF4: '맥스 출격!',
-    0xB81F04: '하늘 용사!',
+    0xB81DD4: '거대한날개',
+    0xB81DE8: '해전',
+    0xB81DF0: '모프대장',
+    0xB81E08: '아스카목표',
+    0xB81E1C: '도미노능력',
+    0xB81E2C: '분단작전',
+    0xB81E38: '키쿠치요실수',
+    0xB81E64: '키쿠치요등장',
+    0xB81E78: '특수부대장도미노',
+    0xB81E98: '눈속전투',
+    0xB81EA8: '스나이퍼',
+    0xB81EB8: '호이프해군터보',
+    0xB81ED0: '호이프해군',
+    0xB81EE0: '맥스약점',
+    0xB81EF4: '맥스출격',
+    0xB81F04: '하늘용사',
+    0xB81F10: '건파이터',
     0xB81F40: '백은세계',
-    0xB81F4C: '바다　너머',
-    0xB81F70: '창공　제패!',
-    0xB81DE8: '해전!',
-    0xB81E2C: '분단 작전!',
-    0xB81F24: '개전!',
+    0xB81F4C: '바다너머',
+    0xB81F5C: '도그파이트',
+    0xB81F70: '창공제패',
+    0xB81F80: '하늘에서오는건',
+    0xB81F98: '드래곤플라이',
+    0xB81FAC: '지상최강중전차',
+    0xB81FC4: '적부대격파',
+    0xB81FDC: '고물전차출격',
+    0xB81F24: '개전',
     0xB81F2C: '과외수업',
-    0xB81F38: '결전!',
-    0xB8200C: '초반전!',
-    0xB82018: '전투 개시!',
+    0xB81F38: '결전',
+    0xB8200C: '초반전',
+    0xB82018: '전투개시',
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '너 이 게임 처음이니?',
@@ -2101,7 +2145,9 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF94D6: '여러 모드가 있어.',
     0xDF94FD: '먼저 한 대 대전,',
     0xDF9516: '게임보이 한 대로',
+    0xDF953B: '한대대전모드',
     0xDF9554: '친구와 연결해서',
+    0xDF9581: '통신모드',
     0xDF9594: '작전룸도 있어.',
     0xDF95B9: '작전룸.',
     0xDF95D2: '작전룸 마지막',
@@ -3330,11 +3376,6 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF599B: '승하차',
     0xDF59AD: '가능',
     0xDF5A15: '보충/보급 가능',
-    0xDFA6FB: '여러 쇼핑 가능',
-    0xDFA84D: '특별특별특별',
-    0xDFA872: '특별이어하기',
-    0xDFA885: '특별특별특별특별',
-    0xDFA926: '대결 가능',
     0xDFB4F2: '물건없어',
     0xDFB5E5: '날씨 좋은 날엔 장사 말고',
     0xDFB644: '방금 얘긴 없던 거',
@@ -3381,22 +3422,22 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 1 campaign/rules/help strings. These are fixed-width records; the
     # natural Korean translations were left as source text because they exceeded
     # the original slots.
-    0xA01970: '워즈월드의 대륙 하나,',
-    0xA01994: '매크로랜드.',
+    0xA01970: '워즈 월드의 대륙 하나,',
+    0xA01994: '매크로 랜드.',
     0xA019AB: '이 땅에,',
     0xA019BB: ' 침략자 블랙홀군의',
-    0xA019D4: '손이 뻗고 있었다',
+    0xA019D4: '손길이 뻗고 있었다',
     0xA019F8: '호크는 있나!',
     0xA01A0C: '여기에...',
     0xA01A1A: '헬보우즈 님.',
-    0xA01A2C: '매크로랜드 침공은,',
+    0xA01A2C: '매크로 랜드 침공은,',
     0xA01A46: '어찌 됐나?',
-    0xA01A5C: '각 쇼군은 모두',
-    0xA01A70: '공격 준비를 마쳤습니다.',
+    0xA01A5C: '각 사령관 모두,',
+    0xA01A70: '공격 준비를 끝낸 참입니다.',
     0xA01A94: '목적은,',
     0xA01A9D: '알고 있겠지?',
-    0xA01AB0: '매크로랜드를',
-    0xA01AC1: '워즈월드 안에서',
+    0xA01AB0: '매크로 랜드를',
+    0xA01AC1: '워즈 월드 안에서',
     0xA01ADE: '블랙홀군 거점으로...',
     0xA01B08: '음.',
     0xA01B0F: '예전에 ',
@@ -3954,7 +3995,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA28B64: '우린　최강　누구라도',
     0xA28E47: '파이프　따윈　한방',
     0xA2932E: '다음엔　반드시　이겨',
-    0xA295EC: '직선　폭격',
+    0xA295EC: '직격',
     0xA29840: '메테오강타',
     0xA29906: '표시안함',
     0xA29C06: '지형이지만 방어엔',
@@ -4412,8 +4453,6 @@ ADDRESS_TEXT_OVERRIDES.update({
     0x9EBF88: '레드스타 패배. 타군 항복도 패배. 정말? 종료 공격 합류 대기 시스템',
     0x9EC040: '대기공격합류항복종료닫기설정',
     0xA1EDE4: '물건과 죽을만큼',
-    0xA3B880: '하이퍼리페어라세드배트닝사발테크카스나프노우호와미챠쵸다마키심블로제이메오레자비_유헤브기가타코피프고네야',
-    0xB842E8: '하이퍼리페어라이트닝솔테크캐스냅노우화미찰료다마키심블로제이메오',
     0xD83138: '0123456789규칙정찰날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
     0xD75917: '비카가루진동',
     0xD8FFF9: '걸어오는 쪽이',
@@ -4542,6 +4581,32 @@ POST_TEXT_RESTORE = {
     0xDF8DCC: bytes.fromhex('6b0a0000'),
 }
 
+# These protected rows are not player-visible strings. 0x08380564 and
+# 0x08B3C184 use them as two-byte code dictionaries while rendering individual
+# CO power names, so static line-width QA and dialogue grouping must not treat
+# the concatenated glyph set as one display line.
+GLYPH_DICTIONARY_TEXT_ADDRS = {
+    0xA3B880,
+    0xB842E8,
+}
+COMPACT_GLYPH_DROP_CHARS = set(' \u3000!！?？.,。、・·…:;"\'()[]{}')
+COMPACT_GLYPH_DICTIONARY_SPECS = [
+    {
+        'label': 'part2_co_power_profile_dictionary',
+        'dict_addr': 0xA3B880,
+        'slot': 122,
+        'target_ranges': [(0xA2955C, 0xA29830)],
+        'expected_target_count': 36,
+    },
+    {
+        'label': 'part2_b8_compact_power_dictionary',
+        'dict_addr': 0xB842E8,
+        'slot': 84,
+        'target_ranges': [(0xB84E50, 0xB84F18)],
+        'expected_target_count': 11,
+    },
+]
+
 INTRO_DIRECT_TEXT = {
     # Early name-control intros are compact: text fragment, byte 0x69 for the
     # entered player name, then さん/さん！. Keep the prefix exactly 14 bytes.
@@ -4549,6 +4614,21 @@ INTRO_DIRECT_TEXT = {
     0xDF8E3E: ('반가워. ', 14),
     0xDF8E58: ('나는　캐서린。', 16),
 }
+
+PART2_PROLOGUE_INLINE_RENDERER_PATCHES = (
+    # This adjacent pointer pair corrupts the first line if only 0xA01A2C is
+    # relocated: the renderer reuses early line glyph slots for the following
+    # 0xA01A5C message. Keep both messages in-place as whole control spans.
+    (0xA01A2C, 0xA01A5C, '매크로　랜드　침공　작전은、\n어찌　되었나？',
+     'part2 prologue invasion report question'),
+    (0xA01A5C, 0xA01A94, '각　사령관　모두、\n공격　준비를　끝낸　참입니다。',
+     'part2 prologue commanders ready report'),
+)
+PART2_PROLOGUE_INLINE_POINTERS = (
+    (0xA357C0, 0x08A01A2C),
+    (0xA357C4, 0x08A01A5C),
+)
+PART2_PROLOGUE_REPOINT_SKIP_MESSAGES = {0xA01A2C, 0xA01A5C}
 
 RESTORE_SYMBOL_CODES = [
     0x8142,  # 。
@@ -4574,7 +4654,14 @@ NAME_GRID_RANGES = [
     (0xDF9F00, 0xDFA110),   # DF9F/DFA0 charset rows; keep all name-grid glyph data original
 ]
 
-TEXT_ALLOW_ADDRS = {0xDF8C02, 0xDF8C0E, 0xDF8C1A, 0xDF8DB2, 0xDF8DD2, 0xDF8DFA}
+TEXT_ALLOW_ADDRS = {
+    0xDF8C02,
+    0xDF8C0E,
+    0xDF8C1A,
+    0xDF8DB2,
+    0xDF8DD2,
+    0xDF8DFA,
+}
 
 
 def in_deny(a, end):
@@ -4833,6 +4920,7 @@ PART2_UI_KANJI_GLYPH_SUBS = {
     # Additional context-only placeholders for short kana UI tokens whose slots
     # must stay fixed-width in the protected Part 2 battle dictionaries.
     '白': '부', '上': '상', '無': '없', '有': '있', '員': '음',
+    '暗': '악',
     '甘': '캠', '別': '페', '土': '트', '楽': '라', '悪': '얼',
     '由': '유', '通': '통', '他': '터', '計': '계', '束': '속',
     '不': '불', '残': '참',
@@ -4960,8 +5048,8 @@ def patch_part2_ui_context_tokens(rom):
         ('うかぶ', '白上　'),  # 부상
         ('なし', '無員'),      # 없음
         ('あり', '有員'),      # 있음
-        ('ＢＧＭ有員', '員　有員　'),  # 음 있음
-        ('ＢＧＭ無員', '員　無員　'),  # 음 없음
+        ('ＢＧＭ有員', '員暗有員　'),  # 음악있음
+        ('ＢＧＭ無員', '員暗無員　'),  # 음악없음
         ('装備していません', '装備無員　　　　'),  # 장비없음
         ('キャンペーン', '甘別認　　　'),  # 캠페인
         ('トライアル', '土楽移悪　'),      # 트라이얼
@@ -5106,6 +5194,29 @@ def patch_part2_ui_context_tokens(rom):
             patched += 1
             pos = idx + len(blank_pad)
     return patched
+
+
+def patch_part1_single_map_unknown_label(rom, orig):
+    """Replace Part 1 locked/unknown map placeholders via a local compact hook.
+
+    The single-battle map list renderer does not accept the normal Korean
+    reserved-code text path or the kanji-table compact path. Keep three original
+    question-mark source codes so the renderer allocates glyph tiles, blank the
+    trailing three characters, and let PART1_SINGLE_MAP_LABEL_HOOK replace only
+    this source address with 미/공/개 pixels at runtime.
+    """
+    off = 0xDF8C2A
+    slot = 12
+    expected = b'\x81\x48' * 6
+    if orig[off:off + slot] != expected:
+        raise AssertionError(f'unexpected Part 1 map placeholder source at 0x{off:X}')
+
+    raw = b'\x81\x48' * 3 + b'\x81\x40' * 3
+    if len(raw) != slot:
+        raise AssertionError(f'Part 1 map placeholder replacement length {len(raw)} != {slot}')
+    rom[off:off + slot] = raw
+    WRITE_LOG.append([off, slot, slot, raw.hex(), None, '미공개', 0, 'part1-single-map-unknown-label'])
+    return 3
 
 
 def patch_part2_battle_obj_labels(rom):
@@ -5693,6 +5804,120 @@ def patch_part2_mode_menu_obj_labels(rom):
         patched += patch_lz(off, patches, label)
 
     return patched
+
+
+def patch_part2_sound_room_control_labels(rom):
+    """Replace Sound Room control OBJ labels stored in the 0x519B90 LZ77 block."""
+    from bdf import load_bdf, glyph_grid
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    off = 0x519B90
+    dec = lz77_decompress(rom, off)
+    if dec is None:
+        raise AssertionError(f'invalid Part 2 sound room control LZ77 block at 0x{off:X}')
+    data, consumed = dec
+    if len(data) != 0x840:
+        raise AssertionError(f'unexpected Sound Room control block size at 0x{off:X}: {len(data)}')
+    buf = bytearray(data)
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+
+    def text_metrics(text, spacing):
+        glyphs = []
+        total_w = 0
+        max_h = 0
+        for ch in text:
+            grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
+            glyphs.append((grid, w, h, xo, yo))
+            total_w += w + spacing
+            max_h = max(max_h, h + max(0, yo))
+        return glyphs, max(0, total_w - spacing), max_h
+
+    def paint_text(layer, text, box, fill_idx, outline_idx=15, spacing=1, align='center'):
+        glyphs, total_w, max_h = text_metrics(text, spacing)
+        if total_w > box[2] - box[0]:
+            glyphs, total_w, max_h = text_metrics(text, 0)
+        if total_w > box[2] - box[0]:
+            raise AssertionError(f'Sound Room label too wide: {text} width={total_w} box={box}')
+        if align == 'left':
+            x = box[0]
+        else:
+            x = box[0] + (box[2] - box[0] - total_w) // 2
+        y = box[1] + (box[3] - box[1] - max_h) // 2
+        px = layer.load()
+        cursor = x
+        for grid, w, h, xo, yo in glyphs:
+            points = []
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    dx = cursor + col + xo
+                    dy = y + row + yo
+                    points.append((dx, dy))
+            for dx, dy in points:
+                for ox, oy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                    tx, ty = dx + ox, dy + oy
+                    if 0 <= tx < layer.width and 0 <= ty < layer.height:
+                        px[tx, ty] = outline_idx
+            for dx, dy in points:
+                if 0 <= dx < layer.width and 0 <= dy < layer.height:
+                    px[dx, dy] = fill_idx
+            cursor += w + spacing
+
+    def rect_tiles(layer, x, y, width, height):
+        px = layer.load()
+        out = bytearray()
+        for ty in range(height // 8):
+            for tx in range(width // 8):
+                for row in range(8):
+                    for col_pair in range(4):
+                        lo = int(px[x + tx * 8 + col_pair * 2, y + ty * 8 + row]) & 0x0F
+                        hi = int(px[x + tx * 8 + col_pair * 2 + 1, y + ty * 8 + row]) & 0x0F
+                        out.append(lo | (hi << 4))
+        return bytes(out)
+
+    def put_tiles(tile_id, payload):
+        pos = tile_id * 32
+        buf[pos:pos + len(payload)] = payload
+
+    def control_label(text):
+        from PIL import Image
+        layer = Image.new('L', (32, 16), 0)
+        paint_text(layer, text, (1, 3, 31, 13), fill_idx=6, outline_idx=15, spacing=1)
+        return layer
+
+    def top_label(text):
+        from PIL import Image
+        layer = Image.new('L', (80, 16), 0)
+        # OAM places the final 16px chunk with an 8px screen gap; keep the Korean text
+        # in the first 64px so it cannot be split by that hardware layout.
+        paint_text(layer, text, (8, 3, 64, 13), fill_idx=1, outline_idx=15, spacing=1, align='left')
+        return layer
+
+    for tile_id, text in [
+        (0, '재생'),
+        (8, '정지'),
+        (16, '시작'),
+    ]:
+        put_tiles(tile_id, rect_tiles(control_label(text), 0, 0, 32, 16))
+
+    top = top_label('갤러리')
+    put_tiles(44, rect_tiles(top, 0, 0, 32, 16))
+    put_tiles(52, rect_tiles(top, 32, 0, 32, 16))
+    put_tiles(60, rect_tiles(top, 64, 0, 16, 16))
+
+    rec_label_layout(off, None, [
+        {'text': '재생', 'tile_ids': list(range(0, 8))},
+        {'text': '정지', 'tile_ids': list(range(8, 16))},
+        {'text': '시작', 'tile_ids': list(range(16, 24))},
+        {'text': '갤러리', 'tile_ids': list(range(44, 64))},
+    ])
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Sound Room control labels LZ77 overflow: {len(comp)} > {consumed}')
+    rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
+    return 4
 
 
 def patch_part2_link_mode_residual_labels(rom):
@@ -6870,7 +7095,7 @@ def patch_part2_mission_start_obj(rom):
     """Replace the Part 2 battle-start OBJ label sheet with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
-    from lz77_compress import lz77_compress
+    from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
     off = 0xC10B34
@@ -6923,7 +7148,7 @@ def patch_part2_mission_start_obj(rom):
                     else:
                         out[bi] |= value
 
-    comp = lz77_compress(bytes(out), vram_safe=True)
+    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'mission-start LZ77 overflow: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + bytes(consumed - len(comp))
@@ -7284,7 +7509,6 @@ def patch_part2_result_summary_obj(rom):
             for col in range(8):
                 value = tile[row * 4 + col // 2]
                 px[tx + col, ty + row] = (value >> 4) if col & 1 else (value & 0x0F)
-
     draw = ImageDraw.Draw(layer)
     title_font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
     label_font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
@@ -7312,10 +7536,11 @@ def patch_part2_result_summary_obj(rom):
     def draw_label(text, xy, box, max_size=11):
         draw.rectangle(box, fill=0)
         font, bbox = fit_font(text, label_font_path, max_size, box, stroke=1)
-        draw.text(xy, text, font=font, fill=1, stroke_width=1, stroke_fill=6)
+        draw.text(xy, text, font=font, fill=6, stroke_width=1, stroke_fill=1)
 
-    # The title is split into four tile groups by the original renderer. Redraw
-    # each syllable inside its source group so the existing tilemap can stay as-is.
+    # The title is split into four tile groups by the original renderer. Keep
+    # all other tiles in the 1024-tile sheet intact so the score digits and rank
+    # stamps remain available on alternate result pages.
     for text, box in [
         ('작', (0, 0, 56, 48)),
         ('전', (64, 0, 128, 48)),
@@ -7324,10 +7549,8 @@ def patch_part2_result_summary_obj(rom):
     ]:
         draw_centered(text, box, title_font_path, 30, fill=1, stroke_fill=14, shadow=None, stroke=1)
 
-    # These labels are stored as horizontal strips, then the tilemap positions
-    # each strip segment vertically on the result screen.
     draw.rectangle((48, 56, 236, 72), fill=0)
-    draw_centered('축하!', (64, 56, 160, 72), label_font_path, 13, fill=1, stroke_fill=6, shadow=None, stroke=1)
+    draw_centered('축하!', (64, 56, 160, 72), label_font_path, 13, fill=6, stroke_fill=1, shadow=None, stroke=1)
     draw.rectangle((0, 72, 236, 102), fill=0)
     draw_label('속도', (4, 76), (0, 72, 64, 90), max_size=10)
     draw_label('화력', (76, 76), (72, 72, 128, 90), max_size=10)
@@ -7356,6 +7579,15 @@ def patch_part2_result_summary_obj(rom):
                     out[bi] |= value << 4
                 else:
                     out[bi] |= value
+
+    rec_label_layout(off, 32, [
+        {'text': '작/전/성/공', 'tile_ids': list(range(0, 32)) + list(range(64, 96))},
+        {'text': '축하!/속도/화력/기술/합계/+전체',
+         'tile_ids': list(range(7 * 32 + 6, 7 * 32 + 30))
+                     + list(range(9 * 32, 9 * 32 + 27))
+                     + list(range(12 * 32, 12 * 32 + 25))
+                     + list(range(13 * 32, 13 * 32 + 16))},
+    ])
 
     comp = lz77_compress(bytes(out), vram_safe=True)
     if len(comp) > consumed:
@@ -8761,6 +8993,71 @@ def patch_part2_campaign_rule_value_labels(rom):
     return written
 
 
+# Part 1 싱글 대전 룰 원형 라벨/값 OBJ.
+# 2026-06-27 실기 경로 캡처에서 サクテキ/テンキ/収入/日数/ユウセイ/能力/アニメ 및
+# アリ/ランダム/ナシ/タイプA 잔존 확인. OAM tile trace상 아래 LZ77 블록의 tile index가
+# 화면 OBJ tile index와 직접 대응한다.
+PART1_RULE_CIRCLE_LZ77_OFF = 0x00C2C6EC
+PART1_RULE_CIRCLE_SIG = '131a4e7eac41a812'
+PART1_RULE_CIRCLE_LABELS = [
+    (80, '정찰'),
+    (88, '날씨'),
+    (96, '수입'),
+    (104, '일수'),
+    (112, '우세'),
+    (120, '능력'),
+    (290, '애니'),
+]
+PART1_RULE_CIRCLE_VALUES = [
+    (128, '있음'),
+    (136, '랜덤'),
+    (144, '눈'),
+    (152, '없음'),
+    (160, '맑음'),
+    (168, '있음'),
+    (386, '타입A'),
+    (390, '타입B'),
+    (394, '타입C'),
+]
+
+
+def patch_part1_rule_circle_labels(rom):
+    """Part1 싱글 대전 룰 원형 라벨/값을 한글 OBJ로 렌더한 뒤 LZ77 in-place 재압축."""
+    import hashlib
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
+
+    dec = lz77_decompress(rom, PART1_RULE_CIRCLE_LZ77_OFF)
+    if dec is None:
+        raise AssertionError(f'Part1 rule circle LZ77 decode failed at 0x{PART1_RULE_CIRCLE_LZ77_OFF:X}')
+    data, consumed = dec
+    sig = hashlib.sha256(data).hexdigest()[:16]
+    if sig != PART1_RULE_CIRCLE_SIG:
+        raise AssertionError(f'Part1 룰 원형 LZ77 시그니처 불일치({sig}) — 잘못된 base ROM?')
+
+    buf = bytearray(data)
+    for tile, ko in PART1_RULE_CIRCLE_LABELS:
+        off = tile * 32
+        label = _render_rule_label_obj(ko)
+        buf[off:off + len(label)] = label
+    for tile, ko in PART1_RULE_CIRCLE_VALUES:
+        off = tile * 32
+        value = _render_value_obj(ko, 4)
+        buf[off:off + len(value)] = value
+
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(f'Part1 룰 원형 LZ77 overflow: {len(comp)} > {consumed}')
+    rom[PART1_RULE_CIRCLE_LZ77_OFF:PART1_RULE_CIRCLE_LZ77_OFF + consumed] = comp + bytes(consumed - len(comp))
+    return {
+        'labels': len(PART1_RULE_CIRCLE_LABELS),
+        'values': len(PART1_RULE_CIRCLE_VALUES),
+        'compressed': len(comp),
+        'slot': consumed,
+    }
+
+
 def patch_mapname_fullwidth_ascii(rom, slots):
     """맵명 테이블(0xA2CBxx~0xA2CDxx)의 1바이트 ASCII(digit/letter)를 전각 SJIS로 변환.
     맵선택 리스트 렌더러(0x0831Bxxx)는 2바이트 코드만 처리 → 1바이트 ASCII는 정렬 붕괴('?').
@@ -9377,6 +9674,24 @@ def canonical_override_addr(value):
     return "0x%08X" % addr
 
 
+def load_display_overrides(path=DISPLAY_OVERRIDES):
+    """Display-only text for cramped renderers; source/B-team text stays intact."""
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"display override file missing: {path}")
+    raw = json.load(open(path, encoding='utf-8')) or {}
+    if not isinstance(raw, dict):
+        raise ValueError(f"display override file must be a JSON object: {path}")
+    out = {}
+    for key, value in raw.items():
+        if key == "_doc":
+            continue
+        addr_key = canonical_override_addr(key)
+        if not addr_key or not isinstance(value, str):
+            raise ValueError(f"invalid display override entry: {key!r}")
+        out[int(addr_key, 16)] = value.strip()
+    return out
+
+
 def encode_text(ko, syl_to_code, unmapped):
     ko = normalize_korean_terms(ko)
     out = bytearray()
@@ -9623,7 +9938,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xA2C2F4: '있음으로 하면 유닛 시야 밖이 안 보임',  # 의미 audit c12(codex)
     0xA2EB9E: '저런 녀석과 정면으로 싸워 이길 녀석은',  # 의미 audit c12
     0xA2FCC1: '「사국 통일」을 선택할 수 있게 된다!',  # 의미 audit c12
-    0xB81FF4: '전선기지 확보하라!',  # 의미 audit c12
+    0xB81FF4: '전선기지확보',  # Part1 작전명 compact title: punctuation renders as noise.
     0xB83F74: '이글! 너 적당히 좀 해!!!',  # 의미 audit c12
     0xB84930: '빅토리 라인의 지도',  # 의미 audit c12
     0xB84CB8: '쇼군 캐서린',  # 의미 audit c12
@@ -9662,13 +9977,12 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xA135E2: '영토가 엉망진창이 됐잖나.',  # 의미 audit distortion
     0xDFCA93: '능숙한 사령관이 다뤘을 때의 아스카는,',  # 의미 audit distortion
     0xE04FEE: '이 정도는, 조사해 두지 않으면',  # 의미 audit distortion
-    0xDF953B: '「1대 대전」.',
     0xA0306D: '보병은 이동력 3이지만',
     0xA03087: '수송차는 6이나 되니까',
     0xA2C748: '병종 또는 생산 거점이 1개 이상 필요합니다.',
     0xD8215C: '병종 또는 생산 거점이 1개 이상 필요합니다.',
     0xD8FEFE: '처음엔 모든 유닛 체력 10이야',
-    0xDF8F64: '「1대 대전」 모드,',
+    0xDF8F64: '한대대전모드',
     0xDF9328: '「모드 선택」에는 게임보이 1대로',
 })
 
@@ -9776,6 +10090,79 @@ def normalize_for_fit(ko):
     return normalized
 
 
+def compact_glyph_display_text(text):
+    """Text form consumed by compact glyph-dictionary renderers."""
+    normalized = normalize_for_fit(text or '')
+    return ''.join(ch for ch in normalized if ch not in COMPACT_GLYPH_DROP_CHARS)
+
+
+def _addr_in_ranges(addr, ranges):
+    return any(start <= addr < end for start, end in (ranges or []))
+
+
+def derive_compact_glyph_dictionary_texts(display_overrides, *, strict=True):
+    """Derive compact glyph dictionaries from the display names they render.
+
+    The renderer's dictionary is not a sentence. It is the ordered unique set of
+    two-byte Hangul codes used by each compact target label, so keep it tied to
+    data/display_overrides.json instead of hand-maintaining a second string.
+    """
+    derived = {}
+    for spec in COMPACT_GLYPH_DICTIONARY_SPECS:
+        target_addrs = sorted(
+            addr for addr in display_overrides
+            if _addr_in_ranges(addr, spec['target_ranges'])
+        )
+        if strict and len(target_addrs) != spec['expected_target_count']:
+            raise AssertionError(
+                f"{spec['label']} target count mismatch: "
+                f"expected {spec['expected_target_count']} got {len(target_addrs)}"
+            )
+        chars = []
+        seen = set()
+        for addr in target_addrs:
+            normalized = normalize_for_fit(display_overrides[addr])
+            compact = compact_glyph_display_text(display_overrides[addr])
+            if strict and not compact:
+                raise AssertionError(f"{spec['label']} empty compact target at 0x{addr:08X}")
+            if strict and normalized != compact:
+                raise AssertionError(
+                    f"{spec['label']} target contains compact-dropped chars at 0x{addr:08X}: "
+                    f"{display_overrides[addr]!r} -> {compact!r}"
+                )
+            for ch in compact:
+                if ch not in seen:
+                    seen.add(ch)
+                    chars.append(ch)
+        text = ''.join(chars)
+        if strict and not text:
+            raise AssertionError(f"{spec['label']} derived empty dictionary")
+        if strict:
+            bad_chars = [ch for ch in text if not ('가' <= ch <= '힣')]
+            if bad_chars:
+                raise AssertionError(
+                    f"{spec['label']} dictionary contains non-Hangul/single-byte chars: "
+                    f"{''.join(bad_chars)!r}"
+                )
+            encoded_len = len(text) * 2
+            if encoded_len > spec['slot']:
+                raise AssertionError(
+                    f"{spec['label']} dictionary overflow: {encoded_len} > {spec['slot']} "
+                    f"({len(text)} glyphs)"
+                )
+        derived[spec['dict_addr']] = text
+    return derived
+
+
+def refresh_compact_glyph_dictionary_overrides(display_overrides=None, *, strict=True):
+    """Update dictionary address overrides from display_overrides and return them."""
+    if display_overrides is None:
+        display_overrides = load_display_overrides()
+    derived = derive_compact_glyph_dictionary_texts(display_overrides, strict=strict)
+    ADDRESS_TEXT_OVERRIDES.update(derived)
+    return derived
+
+
 DIALOG_BAND = (0xA00000, 0xE10000)   # 대사 렌더러(0x8140 전각공백 렌더) 사용 영역. 밖(메뉴/UI)은 변환 금지.
 
 
@@ -9850,7 +10237,10 @@ def encode_full_fidelity(ko, syl_to_code, unmapped):
     ★2026-06-25 전각공백(0x8140) 사용: 대사 렌더러는 글리프 폭 단위 전진이라 반각공백(0x20)을
     스킵(화면 잼)하므로, 재배치(free space=폭 여유)는 반드시 전각으로 복원해 **화면에서 공백이 보이게** 한다.
     """
-    return encode_text(normalize_for_fit(ko).replace(' ', '　'), syl_to_code, unmapped)
+    # Repointed messages are free-space text, so use 2-byte punctuation where
+    # compact renderers can lose byte alignment on ASCII separators.
+    return encode_text(normalize_for_fit(ko).replace(' ', '　').replace(',', '、'),
+                       syl_to_code, unmapped)
 
 
 def write_slot_text(rom, a, slot, enc, ko, level, kind):
@@ -9859,6 +10249,34 @@ def write_slot_text(rom, a, slot, enc, ko, level, kind):
     rom[a:a + slot] = bytes([fill]) * slot
     rom[a:a + len(enc)] = enc
     WRITE_LOG.append([a, slot, len(enc), bytes(enc).hex(), fill, ko, level, kind])
+
+
+def patch_part2_prologue_inline_renderer_spans(rom, syl_to_code, unmapped):
+    """Keep the 0xA01A2C/0xA01A5C adjacent prologue messages in-place.
+
+    Repointing only the first message makes this renderer reuse early line glyph
+    slots from the following pointer entry. These two spans preserve the original
+    control skeleton while allowing full B-team wording on screen.
+    """
+    patched = 0
+    for ptr_off, target in PART2_PROLOGUE_INLINE_POINTERS:
+        struct.pack_into('<I', rom, ptr_off, target)
+    for start, end, text, label in PART2_PROLOGUE_INLINE_RENDERER_PATCHES:
+        first, second = text.split('\n', 1)
+        payload = (
+            encode_text(first, syl_to_code, unmapped)
+            + b'\x77\x72'
+            + encode_text(second, syl_to_code, unmapped)
+            + b'\x6b\x00\x00\x00'
+        )
+        slot = end - start
+        if len(payload) > slot:
+            raise AssertionError(f'{label} payload {len(payload)} > slot {slot}')
+        rom[start:end] = payload + b'\x00' * (slot - len(payload))
+        WRITE_LOG.append([start, slot, len(payload), payload.hex(), 0, text, 0,
+                          'part2-prologue-inline-renderer'])
+        patched += 1
+    return patched
 
 
 # v56 base has a Galmuri11 overlay hook for early dialogues. Keep the name-grid
@@ -9983,6 +10401,45 @@ PART1_DIALOG_RENDER_HOOK = bytes.fromhex(
     '4126b108'  # .word 0x08B12641 (render)
     '6d27b108'  # .word 0x08B1276D (복귀)
 )
+PART1_SINGLE_MAP_LABEL_HOOK_FILE = HOOK_FILE + 0x600
+PART1_SINGLE_MAP_LABEL_HOOK_RT = 0x08F30600
+PART1_SINGLE_MAP_LABEL_SITE = 0xB1319C       # compact path after 0x08B12074 parser, LR=0x08B13187
+PART1_SINGLE_MAP_LABEL_SITE_EXPECT = bytes.fromhex('381c211c524608f0c7fee6e7')
+PART1_SINGLE_MAP_LABEL_HOOK = bytes.fromhex(
+    # r2 still carries the current source pointer at hook entry. The original
+    # compact call then overwrites it with sl, so save r2 first, run the original
+    # 0x08B1BF34 renderer, and locally replace only 0x08DF8C2A/2C/2E.
+    'f0b4151c381c211c5246261c1f4b9e461f4b18471f48854206d00230854207d00230854208d02ee0'
+    '1b491c4a1c4b06e01c491d4a1d4b02e01d491e4a1e4b30881e4d1f4f384008433080301c4030'
+    '07881b4e37404e1c3743078049016d18194e5201b61808273068286004360435013ff9d1144e'
+    '5b01f61808273068286004360435013ff9d1f0bc0f480047'
+    '1506f308'  # .word 0x08F30615 (.after_original|1)
+    '35bfb108'  # .word 0x08B1BF35 (original compact render)
+    '2a8cdf08'  # .word 0x08DF8C2A (source start)
+    'e0030000'  # .word 0x000003E0 (미 tile id)
+    '76010000'  # .word 374 (미 top)
+    '5a010000'  # .word 346 (미 bottom)
+    'e2030000'  # .word 0x000003E2 (공 tile id)
+    '32000000'  # .word 50 (공 top)
+    '39000000'  # .word 57 (공 bottom)
+    'e4030000'  # .word 0x000003E4 (개 tile id)
+    '12000000'  # .word 18 (개 top)
+    '13000000'  # .word 19 (개 bottom)
+    '00000006'  # .word 0x06000000 (VRAM charblock)
+    '00fc0000'  # .word 0x0000FC00 (tilemap attribute mask)
+    '0000f008'  # .word 0x08F00000 (KOR_BASE_RT)
+    '7731b108'  # .word 0x08B13177 (loop return)
+)
+B84_POWER_GLYPH_HOOK_FILE = HOOK_FILE + 0x680
+B84_POWER_GLYPH_HOOK_RT = 0x08F30680
+B84_POWER_GLYPH_BLOCK_FILE = 0xF32000
+B84_POWER_GLYPH_BLOCK_RT = 0x08F32000
+B84_POWER_GLYPH_LZ77_OFF = 0xBC9D0C
+B84_POWER_GLYPH_COPY_SITE = 0xB3C1DE
+B84_POWER_GLYPH_COPY_SITE_RT = 0x08B3C1DE
+B84_POWER_GLYPH_COPY_EXPECT = bytes.fromhex('500800023818')
+B84_POWER_GLYPH_COPY_CONTINUE_RT = 0x08B3C212
+B84_POWER_GLYPH_COPY_FN_RT = 0x08B0FF70
 PART1_YESNO_HOOK_FILE = 0xF10000
 PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
@@ -10023,6 +10480,39 @@ def _thumb_bl(src_rt, dst_rt):
     hi = 0xF000 | ((off >> 12) & 0x7FF)
     lo = 0xF800 | ((off >> 1) & 0x7FF)
     return struct.pack('<HH', hi, lo)
+
+def _thumb_b(src_rt, dst_rt):
+    off = dst_rt - (src_rt + 4)
+    if off < -(1 << 12) or off >= (1 << 12) or (off & 1):
+        raise ValueError(f'Thumb B out of range: {src_rt:#x}->{dst_rt:#x}')
+    return struct.pack('<H', 0xE000 | ((off >> 1) & 0x7FF))
+
+def _b84_power_glyph_hook():
+    # Entry is the successful dictionary-match path in 0x08B3C184.
+    # Inputs: r2 = dictionary byte offset, r5 = 0x51A0+position*0x100.
+    # Original code copies 0x100 bytes from the decompressed Japanese glyph
+    # buffer to VRAM 0x060151A0+position*0x100. Replace that source with our ROM
+    # glyph table, but keep the original VRAM destination/position.
+    return bytes.fromhex(
+        '18b5'      # push {r3,r4,lr}
+        '0748'      # ldr r0,[pc,#0x1c]  ; 0x06010000
+        '4019'      # adds r0,r0,r5      ; dst
+        '0749'      # ldr r1,[pc,#0x1c]  ; B84_POWER_GLYPH_BLOCK_RT
+        '5408'      # lsrs r4,r2,#1
+        '2402'      # lsls r4,r4,#8
+        '0919'      # adds r1,r1,r4      ; src
+        '8022'      # movs r2,#0x80
+        '0b88'      # copy_loop: ldrh r3,[r1]
+        '0380'      # strh r3,[r0]
+        '0230'      # adds r0,#2
+        '0231'      # adds r1,#2
+        '013a'      # subs r2,#1
+        'f9d1'      # bne copy_loop
+        '18bd'      # pop {r3,r4,pc}
+        '00bf'      # align literal
+    ) + struct.pack('<I', 0x06010000) + struct.pack('<I', B84_POWER_GLYPH_BLOCK_RT)
+
+B84_POWER_GLYPH_HOOK = _b84_power_glyph_hook()
 
 def _part1_yesno_hook():
     # The name-confirm compact-choice renderer leaves only fragments of
@@ -10217,6 +10707,128 @@ def _grid_to_tiles(grid):
                 hi = grid[gy + r][gx + c * 2 + 1] & 0xF
                 out.append(lo | (hi << 4))
     return bytes(out)
+
+
+def _b84_power_title_glyph_block(ch):
+    """Render one 16x32 4bpp glyph for the AW1 CO-power title cut-in."""
+    from PIL import Image, ImageDraw, ImageFont
+
+    width, height, scale = 16, 32, 4
+    big_size = (width * scale, height * scale)
+    font_path = '/Library/Fonts/NanumGothicExtraBold.ttf'
+    fallback_path = '/Library/Fonts/NanumGothicBold.ttf'
+    if not os.path.exists(font_path):
+        font_path = fallback_path
+    probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
+    font = None
+    for size in range(25 * scale, 11 * scale, -2):
+        candidate = ImageFont.truetype(font_path, size)
+        bbox = probe.textbbox((0, 0), ch, font=candidate, stroke_width=scale)
+        if bbox and (bbox[2] - bbox[0]) <= 15 * scale and (bbox[3] - bbox[1]) <= 28 * scale:
+            font = candidate
+            break
+    if font is None:
+        font = ImageFont.truetype(font_path, 12 * scale)
+        bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
+    bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    x = (big_size[0] - tw) // 2 - bbox[0]
+    y = (big_size[1] - th) // 2 - bbox[1]
+
+    stroke = Image.new('L', big_size, 0)
+    fill = Image.new('L', big_size, 0)
+    shadow = Image.new('L', big_size, 0)
+    ImageDraw.Draw(shadow).text((x + 2 * scale, y + 2 * scale), ch, font=font, fill=255, stroke_width=scale)
+    ImageDraw.Draw(stroke).text((x, y), ch, font=font, fill=255, stroke_width=scale)
+    ImageDraw.Draw(fill).text((x, y), ch, font=font, fill=255)
+    stroke = stroke.resize((width, height), Image.Resampling.LANCZOS)
+    fill = fill.resize((width, height), Image.Resampling.LANCZOS)
+    shadow = shadow.resize((width, height), Image.Resampling.LANCZOS)
+
+    grid = [[0 for _ in range(width)] for _ in range(height)]
+    for py in range(height):
+        for px in range(width):
+            if shadow.getpixel((px, py)) >= 72:
+                grid[py][px] = 15
+    for py in range(height):
+        for px in range(width):
+            if stroke.getpixel((px, py)) >= 72:
+                grid[py][px] = 14
+    for py in range(height):
+        for px in range(width):
+            if fill.getpixel((px, py)) >= 96:
+                grid[py][px] = 7 if py < 14 else 2
+    return _grid_to_tiles(grid)
+
+
+def patch_b84_power_title_lz77_source(rom, display_overrides):
+    """Replace the AW1 CO-power source glyph sheet with Korean 16x32 glyphs."""
+    from lz77_scan import lz77_decompress
+    from lz77_compress import lz77_compress_optimal
+
+    dictionary = derive_compact_glyph_dictionary_texts(display_overrides, strict=True)[0xB842E8]
+    if not dictionary:
+        raise AssertionError('B84 power title glyph dictionary is empty')
+    dec = lz77_decompress(bytes(rom), B84_POWER_GLYPH_LZ77_OFF)
+    if dec is None:
+        raise AssertionError(f'invalid B84 power title LZ77 block at 0x{B84_POWER_GLYPH_LZ77_OFF:X}')
+    raw, consumed = dec
+    required = len(dictionary) * 0x100
+    if required > len(raw):
+        raise AssertionError(f'B84 power title glyph sheet too small: need {required}, got {len(raw)}')
+    buf = bytearray(raw)
+    for idx, ch in enumerate(dictionary):
+        buf[idx * 0x100:(idx + 1) * 0x100] = _b84_power_title_glyph_block(ch)
+    comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+    if len(comp) > consumed:
+        raise AssertionError(
+            f'B84 power title glyph LZ77 grew: {len(comp)} > {consumed} at 0x{B84_POWER_GLYPH_LZ77_OFF:X}'
+        )
+    roundtrip = lz77_decompress(comp, 0)
+    if roundtrip is None or roundtrip[0] != bytes(buf):
+        raise AssertionError('B84 power title glyph LZ77 roundtrip mismatch')
+    rom[B84_POWER_GLYPH_LZ77_OFF:B84_POWER_GLYPH_LZ77_OFF + consumed] = (
+        comp + b'\x00' * (consumed - len(comp))
+    )
+    return {
+        'glyphs': len(dictionary),
+        'raw_bytes': len(raw),
+        'compressed': len(comp),
+        'slot': consumed,
+        'lz77_off': '0x%X' % B84_POWER_GLYPH_LZ77_OFF,
+    }
+
+
+def patch_b84_power_title_glyphs(rom, display_overrides):
+    """Patch AW1 CO-power cut-in glyph source to use Korean title glyphs."""
+    dictionary = derive_compact_glyph_dictionary_texts(display_overrides, strict=True)[0xB842E8]
+    if not dictionary:
+        raise AssertionError('B84 power title glyph dictionary is empty')
+    blob = b''.join(_b84_power_title_glyph_block(ch) for ch in dictionary)
+    end = B84_POWER_GLYPH_BLOCK_FILE + len(blob)
+    if end > 0xF40000:
+        raise AssertionError(f'B84 power title glyph blob overlaps mission-title table: 0x{end:X}')
+    rom[B84_POWER_GLYPH_BLOCK_FILE:end] = blob
+    hook_end = B84_POWER_GLYPH_HOOK_FILE + len(B84_POWER_GLYPH_HOOK)
+    if hook_end > B84_POWER_GLYPH_BLOCK_FILE:
+        raise AssertionError('B84 power title hook overlaps glyph blob')
+    rom[B84_POWER_GLYPH_HOOK_FILE:hook_end] = B84_POWER_GLYPH_HOOK
+    if bytes(rom[B84_POWER_GLYPH_COPY_SITE:B84_POWER_GLYPH_COPY_SITE + len(B84_POWER_GLYPH_COPY_EXPECT)]) != B84_POWER_GLYPH_COPY_EXPECT:
+        raise AssertionError('unexpected B84 power glyph copy site bytes')
+    rom[B84_POWER_GLYPH_COPY_SITE:B84_POWER_GLYPH_COPY_SITE + 4] = _thumb_bl(
+        B84_POWER_GLYPH_COPY_SITE_RT, B84_POWER_GLYPH_HOOK_RT
+    )
+    rom[B84_POWER_GLYPH_COPY_SITE + 4:B84_POWER_GLYPH_COPY_SITE + 6] = _thumb_b(
+        B84_POWER_GLYPH_COPY_SITE_RT + 4, B84_POWER_GLYPH_COPY_CONTINUE_RT
+    )
+    return {
+        'glyphs': len(dictionary),
+        'bytes': len(blob),
+        'hook_bytes': len(B84_POWER_GLYPH_HOOK),
+        'blob_start': '0x%X' % B84_POWER_GLYPH_BLOCK_FILE,
+        'hook_start': '0x%X' % B84_POWER_GLYPH_HOOK_FILE,
+    }
 
 
 def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, report_path=None):
@@ -10494,6 +11106,13 @@ def main():
     rom[PART1_DIALOG_RENDER_HOOK_FILE:PART1_DIALOG_RENDER_HOOK_FILE + len(PART1_DIALOG_RENDER_HOOK)] = PART1_DIALOG_RENDER_HOOK
     assert bytes(rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8]) == PART1_DIALOG_RENDER_SITE_EXPECT
     rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8] = _abs_tramp(0, PART1_DIALOG_RENDER_HOOK_RT)
+    # Part1 single-map locked-map placeholder uses the compact 0x08B1319C render
+    # path instead of the normal dialogue render site above. Patch only that
+    # compact call; the hook itself gates on source pointer 0x08DF8C2A/2C/2E.
+    rom[PART1_SINGLE_MAP_LABEL_HOOK_FILE:PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(PART1_SINGLE_MAP_LABEL_HOOK)] = PART1_SINGLE_MAP_LABEL_HOOK
+    assert bytes(rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 12]) == PART1_SINGLE_MAP_LABEL_SITE_EXPECT
+    rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 8] = _abs_tramp(0, PART1_SINGLE_MAP_LABEL_HOOK_RT)
+    rom[PART1_SINGLE_MAP_LABEL_SITE + 8:PART1_SINGLE_MAP_LABEL_SITE + 12] = bytes.fromhex('c046c046')
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
     assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT
@@ -10521,6 +11140,17 @@ def main():
     report = []
     seen_import_addrs = set()
     written_addrs = set()
+    _display_ov = load_display_overrides()
+    refresh_compact_glyph_dictionary_overrides(_display_ov, strict=True)
+    st['b84_power_title_lz77_glyphs'] = patch_b84_power_title_lz77_source(rom, _display_ov)['glyphs']
+    # The 0x08B3C184 copy path is a shared compact renderer.  The LZ77 source
+    # replacement above is sufficient for the AW1 power-title glyph sheet; a
+    # copy-site hook here also intercepts unrelated compact menu strings.
+    st['b84_power_title_glyphs'] = {
+        'glyphs': st['b84_power_title_lz77_glyphs'],
+        'method': 'lz77_source_only',
+        'copy_site_hook': 'disabled_shared_renderer',
+    }
     with open(TRANS, newline='') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
@@ -10549,6 +11179,8 @@ def main():
             if not ko and not addr_override:
                 st['no_ko'] += 1; continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            if a in _display_ov:
+                ko = _display_ov[a]
             if ko.strip() in PLACEHOLDER_KO:
                 st['placeholder_skip'] += 1; continue   # 미해결 placeholder → 원본 바이트 보존
             pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
@@ -10582,6 +11214,8 @@ def main():
         deny = in_deny(a, a + slot)
         if deny:
             continue
+        if a in _display_ov:
+            ko = _display_ov[a]
         if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
             ko = normalize_pair_renderer_text(ko)
         enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
@@ -10611,6 +11245,8 @@ def main():
             ko = SOURCE_TEXT_OVERRIDES.get((row.get('text') or '').strip())
             if not ko:
                 continue
+            if a in _display_ov:
+                ko = _display_ov[a]
             if a < SAFE_MIN_ADDR or slot <= 0:
                 continue
             deny = in_deny(a, a + slot)
@@ -10664,6 +11300,8 @@ def main():
                     st['supp_deny'] += 1
                     continue
                 ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+                if a in _display_ov:
+                    ko = _display_ov[a]
                 if in_region(PAIR_RENDERER_REGIONS, a, a + slot):
                     ko = normalize_pair_renderer_text(ko)
                 enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
@@ -10748,9 +11386,12 @@ def main():
             continue
         if a < SAFE_MIN_ADDR:
             continue
-        if a in ADDRESS_TEXT_OVERRIDES:
+        display_override = a in _display_ov
+        if not display_override and a in ADDRESS_TEXT_OVERRIDES:
             st['dialogue_override_protected_skip'] += 1
             continue
+        if display_override:
+            ko = _display_ov[a]
         # 비-B팀 + override가 CSV의 **같은 번역**(공백·구두점 제거 시 일치)인데 공백을 줄인 잼본 → skip(CSV 공백본 유지)
         if a not in _bt_resolved:
             _ck = _csv_ko.get(a)
@@ -10780,12 +11421,14 @@ def main():
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['compact_ui_fallback_glyph'] = patch_compact_ui_fallback_glyph(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
+    st['part1_single_map_unknown_label'] = patch_part1_single_map_unknown_label(rom, orig)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_info_screen_obj_labels'] = patch_part2_info_screen_obj_labels(rom)
     st['part1_full_info_spec_obj_label'] = patch_part1_full_info_spec_obj_label(rom)
     st['part2_damage_forecast_label'] = patch_part2_damage_forecast_label_obj(rom)
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
+    st['part2_sound_room_control_labels'] = patch_part2_sound_room_control_labels(rom)
     st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
     st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
     st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
@@ -10831,6 +11474,7 @@ def main():
     st['part2_bg_mission_word'] = patch_part2_bg_mission_word(rom)
     st['part2_domino_co_name'] = patch_part2_domino_co_name_obj(rom)
     st['mapname_fullwidth_ascii'] = patch_mapname_fullwidth_ascii(rom, slots)
+    st['part1_rule_circle_labels'] = patch_part1_rule_circle_labels(rom)
     st['part2_campaign_rule_labels'] = patch_part2_campaign_rule_summary_labels(rom)
     st['part2_campaign_rule_values'] = patch_part2_campaign_rule_value_labels(rom)
     st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
@@ -13300,12 +13944,11 @@ def main():
     for faddr, fend, text, label in [
         (
             0xD81C24, 0xD81CFC,
-            '플레이 조건은 수도 2개 이상과 각 군의 병종 또는 생산 거점 필요. '
-            '작성 맵은 대전 또는 통신에서 사용 가능. 지형과 병종을 선택해 배치.',
+            '조건수도둘이상각군병종거점필요대전통신가능',
             'part2 map design help table row',
         ),
-        (0xD82124, 0xD82132, '플레이조건:', 'part2 map design condition header row'),
-        (0xD8218C, 0xD82196, '게임방법:', 'part2 map design howto header row'),
+        (0xD82124, 0xD82132, '플레이조건', 'part2 map design condition header row'),
+        (0xD8218C, 0xD82196, '게임방법', 'part2 map design howto header row'),
         (0xD82334, 0xD8233C, '평지', 'part2 map design plain row'),
         (0xD82340, 0xD82348, '산', 'part2 map design mountain row'),
         (0xD8234C, 0xD82354, '숲', 'part2 map design forest row'),
@@ -19009,6 +19652,15 @@ def main():
     WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
     WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
 
+    # This Hoip CO-help row originally starts the second line with runtime
+    # player-name control 0x69. Old savestates and some fresh-route probes can
+    # have an invalid name buffer here, which renders as a stray glyph before
+    # "님께". The visible Korean row is self-contained, so suppress the volatile
+    # control byte for deterministic screen/editor evidence.
+    assert rom[0xDF7481] == 0x69
+    rom[0xDF7481] = FILL_BYTE
+    WRITE_LOG.append([0xDF7481, 1, 1, bytes([FILL_BYTE]).hex(), None, 'suppress player-name control before Hoip CO help addressee', None, 'name-control-suppress'])
+
     st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code)
 
     # 스프라이트 편집기 픽셀 편집 최종 오버레이(라벨 자동그리기 이후 = 편집이 우선).
@@ -19074,9 +19726,15 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
+                display_ko = (_display_ov.get(a) or '').strip()
+                if display_ko:
+                    return display_ko
+                protected_ko = str(ADDRESS_TEXT_OVERRIDES.get(a) or '').strip()
+                if protected_ko:
+                    return protected_ko
                 ov = _rp_ov(a)
                 if a in _rp_bteam:
-                    return ov   # B팀: override 권위 — 치환 금지(렌더 텍스트 불변)
+                    return ov   # B팀: override 권위. 표시 전용 예외는 위에서만 화이트리스트 처리.
                 intended = (_rp_intended.get(a) or '').strip()
                 if not intended or not any('가' <= ch <= '힣' for ch in intended):
                     return ov
@@ -19248,6 +19906,7 @@ def main():
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
+                skip_messages=PART2_PROLOGUE_REPOINT_SKIP_MESSAGES,
                 min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid))
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
@@ -19263,6 +19922,9 @@ def main():
             json.dump(_rp_manifest, open(_rp_path, 'w'), ensure_ascii=False, indent=1)
         except Exception as _rp_err:
             raise AssertionError(f'dialogue repoint failed: {_rp_err}')
+
+    st['part2_prologue_inline_renderer_spans'] = patch_part2_prologue_inline_renderer_spans(
+        rom, syl_to_code, unmapped)
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
@@ -19327,7 +19989,7 @@ def main():
     print(f'→ OBJ 라벨 합성 스프라이트 {objl_path} ({len(objl_sprites)} sprites)')
 
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
-    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs', 'sprite_overrides', 'sprite_overrides_skipped', 'sprite_overrides_ignored']:
+    for k in ['rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part1_single_map_unknown_label', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part2_damage_forecast_label', 'part2_mode_menu_obj_labels', 'part2_sound_room_control_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part2_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part1_rule_circle_labels', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'part2_prologue_inline_renderer_spans', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs', 'b84_power_title_lz77_glyphs', 'b84_power_title_glyphs', 'sprite_overrides', 'sprite_overrides_skipped', 'sprite_overrides_ignored']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')

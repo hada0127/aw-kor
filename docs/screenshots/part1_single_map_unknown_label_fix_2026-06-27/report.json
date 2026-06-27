@@ -1,0 +1,24 @@
+{
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+  "df8c2a_bytes": "814881488148814081408140",
+  "hook_site_b1319c": "004800470106f308c046c046",
+  "hook_file_f30600_len": 204,
+  "frames": [
+    "00_mode_menu",
+    "01_single_selected",
+    "02_single_submenu",
+    "03_map_select",
+    "04_map_select_wait"
+  ],
+  "contact": "/Users/tarucy/project/aw-kor/docs/screenshots/part1_single_map_unknown_label_fix_2026-06-27/contact.png",
+  "crop": "/Users/tarucy/project/aw-kor/docs/screenshots/part1_single_map_unknown_label_fix_2026-06-27/map_unknown_label_crop_4x.png",
+  "crop_box_on_04_map_select_wait": [
+    0,
+    48,
+    104,
+    160
+  ],
+  "visible_text": "미공개",
+  "implementation": "source keeps three original 0x8148 question marks plus three 0x8140 fullwidth spaces; local compact renderer hook at 0x08B1319C/0x08F30600 gates on 0x08DF8C2A/2C/2E and copies 미/공/개 glyph tiles only for this label."
+}

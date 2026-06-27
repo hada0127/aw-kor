@@ -49,7 +49,7 @@ PART1_MENU_PRENAV = [
     "A",
     "START",
 ]
-PART1_MENU_ADVANCE_A_PRESSES = 17
+PART1_MENU_ADVANCE_A_PRESSES = 16
 
 
 def layer_bbox(layer: Image.Image) -> tuple[int, int, int, int]:
@@ -612,13 +612,12 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
             checked.append(f"screen:part1_menu_entry=external_state:{menu_state}")
         else:
             drive_part1_menu_from_coldboot(driver)
-            driver.shot("00_fresh_menu")
-            driver.cmd(f"savestate {menu / 'fresh_menu.ss0'}")
+            menu_img = driver.shot("00_fresh_menu")
             checked.append("screen:part1_menu_entry=fresh_coldboot")
-        driver.press("A", after=160)
-        driver.shot("01_operation")
-        driver.press("B", after=180)
-        menu_img = driver.shot("02_menu_after_operation_back")
+        entry_state = menu / "fresh_menu.ss0"
+        driver.cmd(f"savestate {entry_state}")
+        if menu_state is not None:
+            menu_img = driver.shot("00_loaded_stale_possible")
         # These labels are asset-checked for exact size. The screen check makes
         # sure the refreshed ROM path is being exercised and visible.
         for label, box in {
@@ -635,6 +634,8 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
             failures.append(f"mode help box has intrusive dark label pixels ({help_intrusive} > 60)")
         checked.append(f"screen:mode_help_intrusive_dark={help_intrusive}")
 
+        driver.loadstate(entry_state)
+        driver.frames(10)
         driver.press("DOWN", after=120)
         driver.shot("03_menu_single_selected")
         driver.press("A", after=180)
@@ -651,7 +652,9 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
         checked.append(f"screen:single_top_left:visible={single_visible}:edge={single_edge}")
         checked.append(f"screen:single_help_intrusive_dark={single_help_intrusive}")
 
-        driver.press("B", after=180)
+        driver.loadstate(entry_state)
+        driver.frames(10)
+        driver.press("DOWN", after=120)
         driver.press("DOWN", after=120)
         driver.shot("05_menu_link_selected")
         driver.press("A", after=180)

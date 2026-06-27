@@ -1,0 +1,152 @@
+{
+  "date": "2026-06-27",
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "c1d1b28909d318373a58603d08f2bdf55e9a774af960a8cbee61902a38957280",
+  "source_lz77_offset": "0x00C2C6EC",
+  "source_lz77_original_sha16": "131a4e7eac41a812",
+  "lz77_original_slot": 4792,
+  "lz77_patched_compressed": 3904,
+  "route": "loadtempsav temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/8495_front/game_wars_korean_full.sav; reset; drive_part1_menu_from_coldboot; DOWN x5, A, A, A, DOWN, A",
+  "vram_object_base": "0x10000",
+  "vram_checks": [
+    {
+      "kind": "label",
+      "tile": 80,
+      "text": "정찰",
+      "vram_offset": "0x10a00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 88,
+      "text": "날씨",
+      "vram_offset": "0x10b00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 96,
+      "text": "수입",
+      "vram_offset": "0x10c00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 104,
+      "text": "일수",
+      "vram_offset": "0x10d00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 112,
+      "text": "우세",
+      "vram_offset": "0x10e00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 120,
+      "text": "능력",
+      "vram_offset": "0x10f00",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "label",
+      "tile": 290,
+      "text": "애니",
+      "vram_offset": "0x12440",
+      "match": true,
+      "bytes": 256
+    },
+    {
+      "kind": "value",
+      "tile": 128,
+      "text": "있음",
+      "vram_offset": "0x11000",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 136,
+      "text": "랜덤",
+      "vram_offset": "0x11100",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 144,
+      "text": "눈",
+      "vram_offset": "0x11200",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 152,
+      "text": "없음",
+      "vram_offset": "0x11300",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 160,
+      "text": "맑음",
+      "vram_offset": "0x11400",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 168,
+      "text": "있음",
+      "vram_offset": "0x11500",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 386,
+      "text": "타입A",
+      "vram_offset": "0x13040",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 390,
+      "text": "타입B",
+      "vram_offset": "0x130c0",
+      "match": true,
+      "bytes": 128
+    },
+    {
+      "kind": "value",
+      "tile": 394,
+      "text": "타입C",
+      "vram_offset": "0x13140",
+      "match": true,
+      "bytes": 128
+    }
+  ],
+  "all_vram_checks_pass": true,
+  "evidence_sha256": {
+    "before_rule_circles.png": "53d25b917f521fb3adff6e21af8a930e6424b2aea970a1e9a4a17a386b3f90fe",
+    "before_rule_circles_4x.png": "72cbe7db95b638657cf3045555b5187f4cb84ba09d7e03a4b63d8437aeeea7a1",
+    "after_rule_circles.png": "96e75d4d0c25ac75f9559fb3e74ab58947a0e0c93cc28f3d4a49264faa3bed14",
+    "after_rule_circles_4x.png": "4922637d906182935ac1d04a85a18fd2a538c88dc0c2b53d91891363a5510d58",
+    "after_rule_circles_right.png": "b1d72c94f90db3f8d8d22f4cf0f687bed78a615251de911f538b6c2afc8c7aac",
+    "after_rule_circles_right_4x.png": "6ed679593e2e466c50477d57e27cd93c8a533dcbd3bddd1385fa7c02a6cea2e7",
+    "contact.png": "e741a44b8cc2e075e0a861cf375c55b7619d586c13202faae485f21e9f02478c",
+    "lz77_match_report.json": "d921e4d45e09a357fd4d359c78f5967dc7841b3490c9534efc9c652c0513f13e"
+  }
+}

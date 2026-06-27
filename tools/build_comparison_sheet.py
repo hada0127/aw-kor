@@ -31,7 +31,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from qa_visual_regions import MGBADriver, raw_to_png  # noqa: E402
+from qa_visual_regions import MGBADriver, drive_part1_menu_from_coldboot, raw_to_png  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "data" / "screen_checkpoints.json"
@@ -72,6 +72,8 @@ def run_nav(driver: MGBADriver, steps: list) -> None:
             driver.cmd(f"keys {int(step[1])}")
         elif op == "loadstate":
             driver.loadstate(_resolve(step[1]))
+        elif op == "part1_menu":
+            drive_part1_menu_from_coldboot(driver)
         else:
             raise ValueError(f"unknown nav op: {op!r}")
 

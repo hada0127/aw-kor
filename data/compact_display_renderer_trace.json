@@ -1,0 +1,1373 @@
+{
+ "tool": "tools/trace_compact_renderer.py",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+ "git_commit": "5276883",
+ "breakpoints": [
+  {
+   "addr": 137889124,
+   "label": "a2_compact_renderer",
+   "aliases": []
+  },
+  {
+   "addr": 137889448,
+   "label": "a2_compact_callsite_1",
+   "aliases": []
+  },
+  {
+   "addr": 137892500,
+   "label": "a2_compact_callsite_2",
+   "aliases": []
+  },
+  {
+   "addr": 145998212,
+   "label": "b842_compact_renderer",
+   "aliases": []
+  },
+  {
+   "addr": 145998544,
+   "label": "b84_pointer_table_user_candidate_1",
+   "aliases": []
+  },
+  {
+   "addr": 145998592,
+   "label": "b84_pointer_table_user_candidate_2",
+   "aliases": []
+  },
+  {
+   "addr": 145998624,
+   "label": "b84_pointer_table_user_candidate_3",
+   "aliases": []
+  },
+  {
+   "addr": 145999062,
+   "label": "b84_pointer_table_user_candidate_4",
+   "aliases": []
+  },
+  {
+   "addr": 145999184,
+   "label": "b84_pointer_table_user_candidate_5",
+   "aliases": []
+  },
+  {
+   "addr": 145999264,
+   "label": "b84_pointer_table_user_candidate_6",
+   "aliases": []
+  },
+  {
+   "addr": 145828482,
+   "label": "b8_operation_reader_observed_1",
+   "aliases": []
+  },
+  {
+   "addr": 145828540,
+   "label": "b8_operation_reader_observed_2",
+   "aliases": []
+  },
+  {
+   "addr": 145828628,
+   "label": "b8_operation_reader_observed_3",
+   "aliases": []
+  },
+  {
+   "addr": 50357772,
+   "label": "b8_operation_iwram_reader_observed_1",
+   "aliases": []
+  },
+  {
+   "addr": 50357774,
+   "label": "b8_operation_iwram_reader_observed_2",
+   "aliases": []
+  }
+ ],
+ "code_context_json": "data/compact_display_code_context.json",
+ "code_context_breakpoints_enabled": false,
+ "target_count": 495,
+ "case_count": 9,
+ "hit_count": 4,
+ "direct_target_hit_count": 0,
+ "direct_hits": [],
+ "cases": [
+  {
+   "case_type": "screen_checkpoint",
+   "name": "07_part2_main_menu",
+   "mode": "fresh",
+   "scene_id": null,
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "nav": [
+    [
+     "frames",
+     480
+    ],
+    [
+     "press",
+     "A",
+     200
+    ],
+    [
+     "press",
+     "START",
+     200
+    ],
+    [
+     "press",
+     "DOWN",
+     120
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "START",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_07_part2_main_menu/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "scene_23a_part2_wars_shop",
+   "mode": "savestate",
+   "scene_id": "23a_part2_wars_shop",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_23a_part2_wars_shop/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0",
+   "state_sha256": "7b05d78d8b1bf8e04734a861adbe00336c6a5f7ffa79d93863c93a85c237037e",
+   "refresh": [
+    [
+     "frames",
+     40
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_23a_part2_wars_shop/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "scene_86_common_compact_menu_tables",
+   "mode": "savestate",
+   "scene_id": "86_common_compact_menu_tables",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_86_common_compact_menu_tables/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0",
+   "state_sha256": "098cff9bf895da3c15d126543f5f4281b3d26a6f91041830c71ea4a8ea7ae57b",
+   "refresh": [
+    [
+     "frames",
+     1
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_86_common_compact_menu_tables/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "scene_87_common_rule_settings",
+   "mode": "fresh",
+   "scene_id": "87_common_rule_settings",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "nav": [
+    [
+     "frames",
+     480
+    ],
+    [
+     "press",
+     "A",
+     200
+    ],
+    [
+     "press",
+     "START",
+     200
+    ],
+    [
+     "press",
+     "DOWN",
+     120
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "START",
+     240
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "B",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "B",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "B",
+     60
+    ],
+    [
+     "press",
+     "UP",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "B",
+     60
+    ],
+    [
+     "press",
+     "START",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "B",
+     60
+    ],
+    [
+     "press",
+     "LEFT",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ],
+    [
+     "press",
+     "RIGHT",
+     60
+    ],
+    [
+     "press",
+     "A",
+     60
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_87_common_rule_settings/frame.png",
+   "hit_count": 4,
+   "direct_target_hits": [],
+   "hits": [
+    {
+     "order": 0,
+     "r0": 6,
+     "r1": 50348648,
+     "r2": 142692308,
+     "r3": 14,
+     "r4": 16,
+     "r5": 8,
+     "r6": 1,
+     "r7": 33717760,
+     "sp": 50363696,
+     "lr": 137477077,
+     "pc": 50357774,
+     "source": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x00000006"
+     },
+     "dict": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x03004268"
+     },
+     "register_matches": [],
+     "direct_register_hits": [],
+     "range_register_hits": [],
+     "raw": "0 BP r0=00000006 r1=03004268 r2=08814FD4 r3=0000000E r4=00000010 r5=00000008 r6=00000001 r7=02027E00 sp=03007D30 lr=0831BBD5 pc=0300660E"
+    },
+    {
+     "order": 1,
+     "r0": 7,
+     "r1": 50348648,
+     "r2": 142692308,
+     "r3": 14,
+     "r4": 16,
+     "r5": 8,
+     "r6": 1,
+     "r7": 33717760,
+     "sp": 50363696,
+     "lr": 137477077,
+     "pc": 50357776,
+     "source": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x00000007"
+     },
+     "dict": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x03004268"
+     },
+     "register_matches": [],
+     "direct_register_hits": [],
+     "range_register_hits": [],
+     "raw": "1 BP r0=00000007 r1=03004268 r2=08814FD4 r3=0000000E r4=00000010 r5=00000008 r6=00000001 r7=02027E00 sp=03007D30 lr=0831BBD5 pc=03006610"
+    },
+    {
+     "order": 2,
+     "r0": 7,
+     "r1": 50348648,
+     "r2": 142692308,
+     "r3": 14,
+     "r4": 16,
+     "r5": 8,
+     "r6": 14,
+     "r7": 33717760,
+     "sp": 50363696,
+     "lr": 137477077,
+     "pc": 50357774,
+     "source": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x00000007"
+     },
+     "dict": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x03004268"
+     },
+     "register_matches": [],
+     "direct_register_hits": [],
+     "range_register_hits": [],
+     "raw": "2 BP r0=00000007 r1=03004268 r2=08814FD4 r3=0000000E r4=00000010 r5=00000008 r6=0000000E r7=02027E00 sp=03007D30 lr=0831BBD5 pc=0300660E"
+    },
+    {
+     "order": 3,
+     "r0": 8,
+     "r1": 50348648,
+     "r2": 142692308,
+     "r3": 14,
+     "r4": 16,
+     "r5": 8,
+     "r6": 14,
+     "r7": 33717760,
+     "sp": 50363696,
+     "lr": 137477077,
+     "pc": 50357776,
+     "source": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x00000008"
+     },
+     "dict": {
+      "target_match": false,
+      "group_id": null,
+      "address": "0x03004268"
+     },
+     "register_matches": [],
+     "direct_register_hits": [],
+     "range_register_hits": [],
+     "raw": "3 BP r0=00000008 r1=03004268 r2=08814FD4 r3=0000000E r4=00000010 r5=00000008 r6=0000000E r7=02027E00 sp=03007D30 lr=0831BBD5 pc=03006610"
+    }
+   ],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "30_battle_attack",
+   "mode": "savestate",
+   "scene_id": null,
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_30_battle_attack/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
+   "state_sha256": "cc4ba76af66a2f53f1cc6cbd1095fef3048f31a4b6345d6cd87aed856fa84111",
+   "refresh": [
+    [
+     "frames",
+     30
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_30_battle_attack/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "scene_27_part2_battle_objlabels",
+   "mode": "savestate",
+   "scene_id": "27_part2_battle_objlabels",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_27_part2_battle_objlabels/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "state": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0",
+   "state_sha256": "3e9c08759c101e1c94debdd27a36957a25658088a1e963cb6f2784c6ae7cb861",
+   "refresh": [
+    [
+     "frames",
+     1
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_27_part2_battle_objlabels/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "screen_checkpoint",
+   "name": "scene_26a_part2_battle_start_overlay_f060",
+   "mode": "savestate",
+   "scene_id": "26a_part2_battle_start_overlays",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_26a_part2_battle_start_overlay_f060/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
+   "state_sha256": "0082e1b00a0172de64d8f12f97e1f623026c537370653d9698bedea9f15a1d23",
+   "refresh": [
+    [
+     "frames",
+     1
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/screen_scene_26a_part2_battle_start_overlay_f060/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "freshrender",
+   "name": "co_profile_maxg",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/freshrender_co_profile_maxg/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "refresh": [
+    [
+     "press",
+     "RIGHT",
+     50
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/freshrender_co_profile_maxg/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  },
+  {
+   "case_type": "freshrender",
+   "name": "co_profile_domino",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
+   "breakpoint_log": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/freshrender_co_profile_domino/breakpoints.log",
+   "breakpoints": [
+    {
+     "addr": 137889124,
+     "label": "a2_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08380564 ok=1"
+    },
+    {
+     "addr": 137889448,
+     "label": "a2_compact_callsite_1",
+     "aliases": [],
+     "response": "OK break 083806A8 ok=1"
+    },
+    {
+     "addr": 137892500,
+     "label": "a2_compact_callsite_2",
+     "aliases": [],
+     "response": "OK break 08381294 ok=1"
+    },
+    {
+     "addr": 145998212,
+     "label": "b842_compact_renderer",
+     "aliases": [],
+     "response": "OK break 08B3C184 ok=1"
+    },
+    {
+     "addr": 145998544,
+     "label": "b84_pointer_table_user_candidate_1",
+     "aliases": [],
+     "response": "OK break 08B3C2D0 ok=1"
+    },
+    {
+     "addr": 145998592,
+     "label": "b84_pointer_table_user_candidate_2",
+     "aliases": [],
+     "response": "OK break 08B3C300 ok=1"
+    },
+    {
+     "addr": 145998624,
+     "label": "b84_pointer_table_user_candidate_3",
+     "aliases": [],
+     "response": "OK break 08B3C320 ok=1"
+    },
+    {
+     "addr": 145999062,
+     "label": "b84_pointer_table_user_candidate_4",
+     "aliases": [],
+     "response": "OK break 08B3C4D6 ok=1"
+    },
+    {
+     "addr": 145999184,
+     "label": "b84_pointer_table_user_candidate_5",
+     "aliases": [],
+     "response": "OK break 08B3C550 ok=1"
+    },
+    {
+     "addr": 145999264,
+     "label": "b84_pointer_table_user_candidate_6",
+     "aliases": [],
+     "response": "OK break 08B3C5A0 ok=1"
+    },
+    {
+     "addr": 145828482,
+     "label": "b8_operation_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 08B12A82 ok=1"
+    },
+    {
+     "addr": 145828540,
+     "label": "b8_operation_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 08B12ABC ok=1"
+    },
+    {
+     "addr": 145828628,
+     "label": "b8_operation_reader_observed_3",
+     "aliases": [],
+     "response": "OK break 08B12B14 ok=1"
+    },
+    {
+     "addr": 50357772,
+     "label": "b8_operation_iwram_reader_observed_1",
+     "aliases": [],
+     "response": "OK break 0300660C ok=1"
+    },
+    {
+     "addr": 50357774,
+     "label": "b8_operation_iwram_reader_observed_2",
+     "aliases": [],
+     "response": "OK break 0300660E ok=1"
+    }
+   ],
+   "refresh": [
+    [
+     "press",
+     "RIGHT",
+     50
+    ],
+    [
+     "press",
+     "RIGHT",
+     50
+    ]
+   ],
+   "frame": "temp/compact_renderer_trace_current_no41_post_b84hook_20260628/freshrender_co_profile_domino/frame.png",
+   "hit_count": 0,
+   "direct_target_hits": [],
+   "hits": [],
+   "truncated_hits": 0
+  }
+ ],
+ "strict_note": "Only direct_target_hits count as E12 visual provenance. A zero-hit case is a route/function-candidate negative result, not proof that the table is globally unused. direct_target_hits require an exact compact target address in r0-r7; range_register_hits are investigation leads only."
+}

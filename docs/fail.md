@@ -4,6 +4,35 @@
 
 ---
 
+## [2026-06-28] E16 Part1 compact 도움말 top-mode BFS read-watch 390노드 음성
+
+- **시도**: fresh Part1 mode menu에서 시작해 `A/B/UP/DOWN/LEFT/RIGHT/L/R/SELECT/START` BFS를 깊이 8,
+  최대 650노드로 돌리되, 남은 help group(code0, code5/6, code16..19)의 ROM read만 watch했다.
+- **결과**: 390개 frame까지 진행했지만 `watch.log`는 0바이트였다. title/Part2 선택 흐름을 포함해 화면은 많이
+  확장됐지만 남은 Part1 compact help source는 전혀 읽히지 않았다.
+- **판정**: 입력 brute-force로는 unlock/player-count 분기 조건을 만들지 못한다. 이후 같은 top-level BFS를
+  반복하지 말고, `0x02000030` item-code writer RE 또는 real unlock/player-count state 확보로 전환한다.
+
+## [2026-06-28] E16 campaign hidden 후보 단순 branch 반복 음성
+
+- **시도**: AW1 external complete/hard save state(`2111_front`, `11186_front`, `8495_front`)에서 campaign submenu
+  진입(`UP,A`) 후 `LEFT/RIGHT/L/R/UP/DOWN/SELECT/START/A` 변형을 read-watch했다.
+- **결과**: 완료된 24개 branch에서 `0xDFA7E2/7FD/80E/829` normal campaign 도움말만 반복적으로 읽혔고,
+  hidden campaign 후보 `0xDFA83A/84D/872/885` read는 0건이었다. 나머지 긴 batch는 같은 패턴이라 중단했다.
+- **판정**: 해당 외부 save가 실제 GBWA1+2 hidden campaign flag를 세우지 못했거나, hidden campaign은 다른
+  mode/state bit를 요구한다. 같은 `UP,A` submenu branch 반복은 중단하고 menu code writer 분기 조건을 RE한다.
+
+## [2026-06-28] E16 title/Part2 화면의 RAM code0 후보는 stale/uninitialized 오탐
+
+- **시도**: Part1 menu object 후보 RAM을 BFS로 훑으면서 active code에 잔여 code가 보이는 state를 찾았다.
+- **결과**: 24건의 code0 후보가 나왔지만 공통 route는 `B B DOWN A/START` 계열이고, 화면은 Nintendo Presents/
+  title/Game Boy Wars Advance 2 선택 흐름이었다. `0x02000030` 부근 active 값은 `[0,0]`처럼 보였지만
+  Part1 compact help 화면이 아니며 target help read도 없었다.
+- **판정**: title/Part2 상태에서 남은 `0` 값은 menu object가 아니라 stale/uninitialized RAM 오탐이다.
+  direct visual evidence로 승격 금지.
+
+---
+
 ## [2026-06-26] D4 battle dialogue preview canvas 후보 실패(최종 표시 state 금지)
 
 - `31_battle_dialog`은 실제 전투 대사 화면이 아니다. 현재 캡처는 전투/정보 UI 화면이고 provenance도 구 SHA stale라
@@ -502,3 +531,367 @@ read-watch했다. 결과는 `data/d2_width_uncovered_watch_probe_20260626.json`�
 
 이 실패 경로로 D2를 닫지 않는다. 결론은 "기존 checkpoint 주변은 실제 노출 화면이 아니다"이며,
 다음 재시도는 맵 디자인 도움말 메뉴 직접 진입 state 또는 CO 파워 발동/상세 화면 state 확보가 먼저다.
+
+---
+## [2026-06-27] E12 compact renderer breakpoint trace 1차 — 대표 route hit 0
+
+`tools/trace_compact_renderer.py`로 현재 문서화된 compact renderer 후보 PC
+`0x08380564/0x083806A8/0x08381294/0x08B3C184`와, static xref로 찾은 B84 pointer-table user 후보
+`0x08B3C2D0/0x08B3C300/0x08B3C320/0x08B3C4D6/0x08B3C550/0x08B3C5A0`에 hardware break를 걸고,
+당시 SHA `11098045…`의 Part2 메인 메뉴, 워즈숍, compact 메뉴, 룰 설정,
+전투 공격/전투 OBJ 라벨/전투 시작 overlay, CO 프로필 maxg/domino refresh를 실행했다.
+
+- **결과**: 9 route 모두 breakpoint hit 0/direct target hit 0.
+  산출물은 `data/compact_display_renderer_trace.json`,
+  캡처/로그는 `temp/compact_renderer_trace_20260627/`.
+- **후속 재시도**: `tools/analyze_compact_display_code_context.py`의 code-context 후보까지 자동 포함해
+  break set을 50개로 늘렸지만, 같은 9 route에서 여전히 hit 0/direct 0.
+  캡처/로그는 `temp/compact_renderer_trace_code_context_20260627/`.
+- **보조 확인**: CO 프로필 refresh는 실제로 화면이 바뀌지만, 문서상 A2 목적지였던 `0x060160E0` write hit도 0.
+  넓은 VRAM 초반 write-watch에서는 `0x08313C4C`, `0x08F302DE..0x08F302F0` 계열 write PC가 잡혀
+  화면 갱신 자체는 일어남을 확인했다.
+- **실패 판정**: 이 route/PC 조합은 E12 direct evidence로 사용할 수 없다. 단, 이것만으로 B8/B84/A2 테이블이
+  전역 미사용이라고 결론내리면 안 된다. 다음 재시도는 corrected renderer PC 역추적 또는 실제 CO 파워 발동,
+  유닛 상세, 전투 데미지예측 state를 확보해 `r0`가 target 주소에 떨어지는지 확인해야 한다.
+
+## [2026-06-27] E12 compact read-watch 1차 — route/subset hit 0
+
+claude/agy 재리뷰 지적에 따라 `tools/probe_compact_display_reads.py`를 추가하고 source range/exact target
+read-watch를 시도했다.
+
+- **A2/B84 range**: fresh Part2 메인 메뉴 + CO profile maxg/domino refresh 3케이스 hit 0/direct read 0.
+  산출물 `data/compact_display_read_watch_probe.json`.
+- **B8 range**: compact 메뉴/워즈숍 savestate 2케이스 hit 0/direct read 0.
+  산출물 `data/compact_display_read_watch_probe_b8.json`.
+- **B8 exact subset**: `0xB81D40/0xB831BC/0xB8387C/0xB838BC/0xB839F0/0xB84CB8/0xB84F14`을
+  fresh Part2 메인 메뉴 + compact 메뉴/워즈숍 후보 3케이스에서 감시했지만 hit 0/direct read 0.
+  산출물 `data/compact_display_read_watch_probe_b8_subset.json`.
+- **B8 battle 후보**: 같은 exact subset을 전투 공격/OBJ 라벨/전투 시작 overlay 3케이스에서 감시했고,
+  전투 공격 1케이스는 B8 전체 range로도 감시했지만 모두 hit 0/direct read 0.
+  산출물 `data/compact_display_read_watch_probe_b8_battle_subset.json`,
+  `data/compact_display_read_watch_probe_b8_battle_range.json`.
+- **외부 상점/프로필 state 후보**: `profile_plus_aw2_zophar_matrix/*/state_shop_enter.ss0` 5개를 B8 range로,
+  `state_011_SELECT.ss0` 5개를 A2/B84 range 대기 및 RIGHT refresh로 감시했지만 모두 hit 0/direct read 0.
+  프레임 확인상 해당 후보들은 compact 파워명/상품목록이 아니라 상점 대화 화면이었다.
+- **후속 양성대조/추가 메뉴 sweep**: fresh `0x00A01970` 나레이션 exact watch는 59 hit가 나와 하니스
+  자체는 ROM read를 잡을 수 있음을 확인했다. 하지만 `0x00B83268` 통신 후보 exact watch와,
+  fresh `06_part2_title` + `part2_menu_sweep` 정책에서 B8 대표 7개
+  (`0xB81D40/0xB831BC/0xB83268/0xB8387C/0xB839F0/0xB84CB8/0xB84F14`) exact watch는
+  모두 hit 0/direct read 0. 산출물은
+  `data/compact_display_read_watch_positive_control_a01970.json`,
+  `data/compact_display_read_watch_b83268_comm.json`,
+  `data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json`.
+- **최신 SHA `a4e98a93…` 재시도**: current-exact 11케이스(A2/B84/B8 대표 27 target)와
+  B8 map-territory exact 1케이스(`0x00B84F5C/0x00B84F6C`, `10_part2_region_map_redstar`)도
+  hit 0/direct read 0이다. 같은 ROM에서 positive control `0x00A01970`은 hit 8이므로, 실패 원인은
+  하니스 전체 불능이 아니라 목표 화면/target 가정 문제로 본다.
+- **mutation source test 기각**: `10_part2_region_map_redstar`에 보이는 `레드스타` 라벨은
+  `0x00B84F5C`/`0x00B84F6C`를 `테스트`로 바꿔도, `0x00A35758`(`레드스타 영토`)를 바꿔도,
+  ROM 전체의 encoded `레드스타` 261건을 `테스트`로 바꿔도 픽셀 diff 0이었다.
+  따라서 이 화면의 지도 라벨은 B8/B84 텍스트 source 증거가 아니라 baked map graphic, VRAM cache,
+  또는 아직 분리하지 못한 다른 source로 취급한다.
+- **메뉴 라벨 mutation 기각**: `scene_86_common_compact_menu_tables`에서 `0x00B837A4`(`통신`)와
+  `0x00B84488`(`편집`)을 바꿔도 diff 0이었다. 해당 checkpoint는 savestate+1 frame이라 cache false-negative
+  가능성이 크다. 별도 fresh `07_part2_main_menu`에서도 ROM 전체 `상점` 6건 mutation diff 0이므로,
+  현재 보이는 메뉴 라벨을 E12 B8 target 직접 증거로 쓰지 않는다.
+- **전투 action menu 후보 기각**: `temp/first_battle_state31_action_a30/a30_action_menu.ss0`는 작은
+  `공격` action menu가 열린 실제 화면이지만 B8 exact 후보 7건
+  (`0xB82DEE/0xB82DF6/0xB82DFE/0xB82E28/0xB82E32/0xB82E3A/0xB82E42`) read-watch가 hit 0이었다.
+  메뉴가 열리기 전 `temp/first_battle_state31_a36_probe/after_a36.ss0`에서 watch를 먼저 설치하고
+  `A` 반복으로 같은 `공격` 메뉴까지 도달해도 hit 0/direct 0이었다.
+  산출물: `data/compact_display_read_watch_action_menu_a30_b8_exact.json`,
+  `data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json`.
+- **장시간 range watch 기각**: 최신 SHA에서 A2/B84/B8 whole-range를 fresh 대표 화면에 걸고 DOWN/RIGHT redraw를
+  유도하는 방식은 `07_part2_main_menu`도 끝내기 전에 3분 이상 정체되어 중단했다. 출력 JSON을 남기지 못했으므로
+  evidence가 아니라 “이 방식은 과도하게 느려 실전 조사에 부적합”한 실패 기록으로만 취급한다.
+- **state 후보 기각**: CO profile nav probe는 Domino/Max 프로필 설명 전환과 map 복귀만 확인됐고
+  CO power-name page로 들어가지 못했다. breakscan/profile/shop 후보 contact도 지도 라벨/상점 대화/메뉴 화면이라
+  A2/B84/B8 direct evidence에 부적합하다. 증거 contact:
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/co_profile_nav_probe_contact.png`,
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/candidate_state_triage_contact.png`.
+- **실패 판정**: 현재 route/subset은 direct evidence로 부적합하다. B8 전체 range fresh watch는
+  60초 이상 정체되어 중단했으므로 장시간 sweep 방식은 피하고, 다음에는 실제 파워 발동/유닛 상세/무기 상세/데미지예측
+  state를 확보해 좁은 exact watch 또는 corrected renderer breakpoint로 재시도한다.
+
+---
+## [2026-06-27] Part1 작전실 작전명 초기 수정 실패 — in-place override만으로는 부족
+
+- **실패한 접근**: `0xB81D80..0xB82018` 작전명 행의 `ADDRESS_TEXT_OVERRIDES`를 compact title로 줄인 뒤
+  재빌드했지만, fresh emulator 작전실 화면에서 `전선 기지를 확보하라`와 `적 부대를 해치워라`가 계속 표시됐다.
+- **기각 이유**: ROM 원주소 검색에서는 compact 문장이 들어갔지만, `temp/repoint_manifest.json`에
+  `0xB81FF4 -> 0xA5B248`, `0xB81FC4 -> 0xA5B264` 재배치가 남아 있었다. free-space payload는
+  `data/dialogue_overrides.json`의 legacy 긴 문장을 사용했으므로 원주소만 고치는 방식은 증상 제거가 불가능했다.
+- **교훈**: protected 표시 override가 있는 주소는 in-place 쓰기와 repoint payload 모두 같은 권위를 사용해야 한다.
+  이후 `_rp_dlg()` 우선순위를 display override → `ADDRESS_TEXT_OVERRIDES` → legacy dialogue override로 고쳐 닫았다.
+
+---
+## [2026-06-27] E12 A2 CO 프로필 설명 checkpoint는 power-name direct evidence가 아님
+
+- **실패한 접근**: `scene_30f2_part2_co_profile_story`에서 A2 compact power-name target
+  `0x00A295D8`(`강타`)를 temp ROM에서 `검증`으로 단일 mutation하고 같은 savestate checkpoint를 캡처했다.
+- **결과**: pixel diff 0, bbox 없음. temp 증거는
+  `temp/e12_a2_co_profile_mutation_probe_20260627_r2/summary.json` 및 contact
+  `temp/e12_a2_co_profile_mutation_probe_20260627_r2/contacts/a2_co_power_profile_display_overrides_00A295D8_mutation_contact.png`.
+- **기각 이유**: 이 savestate+1 frame checkpoint의 diff 0은 A2 power-name 직접 증거가 되지 않는다.
+  CO 설명/프로필 텍스트와 CO 전환은 보이지만, 해당 화면에 `강타` power-name이 실제로 표시되는지는
+  이 실험만으로 확정되지 않았다. 따라서 이 캡처를 A2 power-name 직접 증거로 다시 사용하지 말고,
+  필요하면 coldboot fresh power-name route에서 재검증한다.
+
+---
+## [2026-06-27] E12 B84 power/menu route probe — 55케이스 hit 0
+
+- **시도**: `scene_89_common_battle_system_results` 계열 state에서 B84 CO 파워명/전투 메뉴 route를 찾기 위해
+  `temp/e12_b84_power_menu_probe_20260627` 55케이스를 실행했다. 무 RAM 패치와 gauge/state variant를 섞고,
+  `b_start`, `b_select`, `up_a` 등 power/menu 진입 가능성이 있는 입력을 시도했다.
+- **감시 대상**: `0x08DF2B54` B84 power-name pointer table, `0x08B84E50` 계열 B84 body/read 후보,
+  `0x08B3C184`, `0x08B3C254`, `0x08B3C4D8` compact renderer 후보 break를 감시했다.
+- **결과**: read/break hit 0, direct evidence 0. contact sheet는 항복 확인창, 메뉴, 전투 대화 프레임을 포함했지만
+  B84 파워명 target이 실제 화면 source로 읽히는 증거는 없었다.
+- **부수 발견**: contact에서 별도 결함 `모드 선택으로 돌아갈까??????`를 발견했고, 이는
+  `0x00A34CE8/0x00DF2A64` 문구를 `모드 선택으로 돌아갈까요?`로 줄여 성공적으로 수정했다.
+- **실패 판정**: 이 probe는 B84 power-name direct evidence 확보 실패 기록이다. B84 target 전역 미사용 증명이 아니다.
+  다음에는 실제 CO 파워 발동 직전/직후 state, 파워명이 보이는 animation frame, 또는 corrected renderer PC에서
+  exact target read/WRAM-DMA write chain을 좁혀야 한다.
+
+---
+## [2026-06-27] E12 B8 작전실 DOWN 16 proof — 추가 행 diff 0
+
+- **시도**: `tools/prove_compact_display_mutation.py`로 `41_part1_operation_room` fresh route 뒤 DOWN 16회를 붙이고
+  `0x00B81F2C`(`과외수업`), `0x00B81F24`(`개전`), `0x00B81F10`(`건파이터`), `0x00B81F04`(`하늘용사`)를
+  단일 mutation했다. 경로 길이 문제는 이 과정에서 발견해 hash suffix로 수정했다.
+- **결과**: 4건 모두 pixel diff 0. base frame은 DOWN 13회와 같은 `도그파이트/바다너머/백은세계/결전` 화면에
+  머물러 있었다. 산출물은 `temp/e12_b8_operation_more_down16_probe_20260627/summary.json`.
+- **실패 판정**: 이 fresh route의 단순 DOWN 반복은 `결전` 아래 작전명으로 더 내려가지 못한다.
+  `과외수업` 이하를 증명하려면 다른 unlock/progress state, page 이동 입력, 또는 campaign progress가 더 열린 savestate가 필요하다.
+
+---
+## [2026-06-27] E12 current-SHA read-watch refresh — 비작전실 기존 route 45케이스 direct hit 0
+
+- **시도**: 최종 SHA `3e3bae33…` 기준으로 기존 `data/compact_display_read_watch*.json` 16개를 모두 재실행했다.
+  대상은 A2/B84 profile range, B8 action-menu exact/range, B8 menu/shop/battle/map/rule 후보 exact/range,
+  external profile/shop state, fresh menu sweep이다.
+- **결과**: E12 target probe 합계 45 cases, hit 0, direct target read 0.
+  반면 positive control `0x00A01970`은 같은 현재 ROM의 fresh prologue route에서 hit 8을 유지했다.
+  이 8-hit는 현재 단일 `08_part2_prologue_map_text` route 기준 baseline이며, 과거 59-hit 기록과 직접 비교하지 않는다.
+- **후속 보정**: 이후 `41_part1_operation_room` B8 작전명 4주소 read-watch는 69 hit/direct 69를 기록했다.
+  따라서 이 실패 항목은 B8 작전실을 제외한 기존 A2/B84/Part2-B8 후보 route의 0-hit로 한정한다.
+- **실패 판정**: 기존 route/subset으로는 A2/B84/B8 compact target의 direct provenance를 얻지 못한다.
+  이 0-hit는 전역 미사용 증명이 아니며, 다음 시도는 실제 파워명/유닛·무기 상세/데미지예측/통신 대기문이
+  표시되는 fresh 또는 near-fresh state를 먼저 확보한 뒤 exact watch/mutation/VRAM-DMA chain으로 좁혀야 한다.
+  일반 대사 `0xA01970` 양성대조는 read-watch 하니스 검증일 뿐 compact renderer 전용 양성대조가 아니므로,
+  이 route 세트를 다시 반복하는 대신 compact renderer가 반드시 실행되는 양성 route를 먼저 확보해야 한다.
+
+---
+## [2026-06-27] Part1 single-map unknown label 일반 한글/kanji 경로 실패
+
+- **시도**: `0x00DF8C2A`의 원본 `8148`×6 placeholder를 일반 예약 한글 코드로 인코딩한 `미공개`로 직접 교체했다.
+- **결과**: Part1 single-map list renderer에서 해당 행이 blank로 표시됐다. 이 주소의 renderer는 일반 대사/도움말용
+  예약 한글 코드 경로를 쓰지 않는다.
+- **시도**: compact kanji glyph 경로를 기대하고 `基工開`를 넣었다.
+- **결과**: 동일하게 blank가 됐다. 따라서 Part2 UI context token/kanji-table 우회도 이 리스트에는 맞지 않는다.
+- **시도**: `ヮ/ヵ/ヶ` 같은 작은 가나 후보를 placeholder source로 써서 glyph remap 가능성을 확인했다.
+- **결과**: 원하는 한글 표시로 안정화되지 않았다.
+- **채택하지 않은 이유**: 위 세 경로는 current mGBA 화면에서 `미공개`를 만들지 못한다.
+- **시도 후 폐기**: `ガギグ` source를 쓰고 `ガ/ギ/グ` glyph table entry를 name-grid blank slot의
+  `미/공/개` 글리프로 remap하는 우회는 화면상으로는 성공했지만, 전역 가나 표시 오염과 `ヒ/フ/ヘ`
+  슬롯 충돌 위험이 있어 claude/agy 리뷰 후 폐기했다.
+- **최종 대체**: `0x00DF8C2A` source는 `？` 3개+전각공백 3개로 유지하고, `0x08B1319C` compact call에
+  source pointer gate가 있는 국소 hook을 설치해 이 label에만 `미/공/개` private tile을 복사한다. 성공 증거는
+  `docs/screenshots/part1_single_map_unknown_label_fix_2026-06-27/contact.png`.
+
+---
+## [2026-06-27] Part1 unlocked mode carousel 격자 artifact — option label 자산 수정 실패
+
+- **시도**: AW1 8495-front unlocked route의 `DOWN` 1/3 화면에서 도움말 박스 뒤에 보이는 작은 격자성 블록을
+  `PART1_MODE_OPTION_BLOCKS`의 글자 침범으로 보고, `make_part1_option_block()`을 Galmuri regular/10px로 축소하는
+  temp 변경을 빌드해 확인했다.
+- **결과**: output SHA는 시험 중 `1882588d...`로 바뀌었지만, `temp/e16_unlocked_mode_option_shrink_after_20260627/contact.png`
+  기준 격자 ROI dark pixel 수와 bbox가 기존과 같았다. source 변경은 원복했고 output SHA는
+  `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093`로 복구했다.
+- **시도**: option text를 block 내부 y=-3으로 올린 temp ROM `temp/e16_shifted_option_test.gba`를 만들었다.
+  VRAM tile의 `트라` label bbox는 실제로 위로 이동했지만, 화면 crop의 격자성 블록은 유지됐다.
+- **시도**: `trial/campaign` option block의 왼쪽 64x32 half를 통째로 blank 처리한 temp ROM
+  `temp/e16_blankleft_option_test.gba`를 만들었다.
+- **결과**: `temp/e16_blankleft_option_compare_20260627/crops.png`에서 label 일부는 사라졌지만 격자성 블록은
+  그대로 남았다.
+- **시도**: option label palette index를 11/12/13으로 바꾼 temp ROM들을 만들었다
+  (`temp/e16_option_palette_tests_20260627/`).
+- **결과**: 최종 화면 ROI의 격자성 블록은 줄지 않았고, index 12/13은 오히려 dark/chroma 수치가 나빠졌다.
+- **시도**: `trial/campaign` option block 전체를 blank 처리한 temp ROM
+  `temp/e16_option_blank_tests_20260627/blank_trial_campaign.gba`를 만들었다.
+- **결과**: `temp/e16_blank_oam_match_20260627/` 기준 OAM idx30 tile504의 VRAM bytes는 실제로 0이 됐지만,
+  composited frame의 격자성 블록은 계속 남았다.
+- **기각 이유**: 이 artifact는 단순 option label glyph 위치/크기/왼쪽 half 문제가 아니다. 실제 source를 더 찾기 전
+  option label 축소, palette 변경, half/full blanking, 특정 좌표 raw tile 지우기 같은 패치는 취약한 화면별 hack이므로
+  채택하지 않는다. 다음 재시도는 원본 같은 route 비교와 레이어별 관측이 먼저다. 현재 확정된 것은
+  `OBJ idx30/tile504` option glyph 단독 원인 배제뿐이며, BG/tilemap 원인 단정은 아직 불가하다.
+
+---
+## [2026-06-27] E16 unlocked artifact 리뷰 CLI 시도 실패
+
+- **시도**: `temp/review_prompt_e16_unlocked_artifact.md`를 작성해 agy와 claude에 엄격 리뷰를 요청했다.
+- **결과**: 첫 백그라운드 호출은 agy/claude 모두 0바이트로 즉시 종료했다. 짧은 프롬프트 테스트는 정상이라 긴 프롬프트 전달 방식을
+  바꿔 재시도했다.
+- **결과**: agy foreground `--print-timeout 2m`는 `Error: timed out waiting for response`로 종료했다.
+  claude foreground는 90초 이상 무응답이어서 중단했고 `Execution error`만 반환했다.
+- **판정**: 이번 artifact 판단에는 실질 리뷰 결과를 얻지 못했다. 같은 긴 프롬프트/같은 CLI 방식 반복은 피하고,
+  재시도 시에는 근거 이미지를 줄이거나 질문을 OAM #30 provenance 하나로 좁혀야 한다.
+
+### 짧은 프롬프트 재시도
+- **시도**: `temp/review_prompt_e16_short.md`(605B)로 질문을 `OBJ idx30/tile504 배제 결론` 하나로 좁혀
+  agy/claude에 재리뷰를 요청했다.
+- **결과**: agy는 120초 timeout(`temp/agy_review_e16_short.md`), claude는 응답 성공
+  (`temp/claude_review_e16_short.md`).
+- **반영**: claude는 option label을 패치하지 않는 판단은 타당하지만, `BG/tilemap` 귀속은 양성 증거 없이 성급하다고
+  지적했다. 이에 `todo.md`, `docs/research.md`, `docs/fail.md`의 결론을
+  "`OBJ idx30/tile504` option glyph 단독 원인 배제, 실제 레이어/원인 미확정"으로 낮췄다.
+
+---
+## [2026-06-27] E16 remaining route negative probes
+
+- **대전 이어하기**: AW1 8495-front `DOWN×5,A` 대전 시작/이어하기 선택 화면에서
+  `RIGHT/LEFT/DOWN/UP` 및 조합을 캡처했지만 화면은 계속 `처음부터 대전`만 표시했다.
+  이 save에는 VS continue가 없어 `0xDFA7BE` direct evidence를 얻을 수 없다.
+  증거: `temp/e16_battle_continue_direction_probe_20260628/contact.png`.
+- **통신 1P~4P 화면**: AW1 8495-front `DOWN×6,A,item,A`의 케이블/1카드 계열 1P~4P 화면은
+  하단이 `통신 준비 중이야`로 고정되며 `0xDFA8AA/8CB/8EA/90A/926` player-count 도움말을 표시하지 않는다.
+  증거: `temp/e16_link_item_frames_2x_20260628.png`.
+- **대전 맵/룰 설정 화면**: AW1 8495-front `DOWN×5,A,A` 맵 선택에서 여러 맵/페이지를 고른 뒤 A,
+  그리고 `DOWN×5,A,A,A,A` 룰 설정 화면에서 방향키/버튼을 눌러도 player-count 도움말은 나오지 않았다.
+  증거: `temp/e16_battle_map_player_select_probe_20260628/contact.png`,
+  `temp/e16_battle_rule_player_probe_20260628/contact.png`.
+- **탐색 방식 실패**: `temp/e16_missing_route_bfs_20260628`처럼 sequence마다 새 mGBA를 띄우는 넓은 BFS는
+  너무 느려 중단했다. `temp/e16_missing_route_fast_20260628`처럼 한 세션에서 watch+loadstate를 반복하는 방식도
+  첫 progress 전 장시간 정체되어 중단했다. 다음 탐색은 주소 묶음별 짧은 route probe로 제한한다.
+
+---
+## [2026-06-28] E16 remaining route 추가 음성 probe 및 CLI 리뷰 한계
+
+- **사용자 추가 스크린샷 재확인**: `~/Downloads`, Desktop, Pictures의 최근 이미지를 다시 확인했지만
+  새로 분리할 스크린샷은 없었다. 확인된 7장은
+  `docs/screenshots/user_report_triage_2026-06-27/download_contact.png`와 같은 계열이며, current 증거에서는
+  작전실 작전명 깨짐, `single_map ??????`, Part1 메뉴 라벨/도움말 침범, Part1 룰 원형 일본어 잔존이
+  각각 기존 수정 증거로 닫혀 있다.
+- **hidden/campaign 후보 실패**: `temp/e16_hidden_campaign_state_frames_20260628.json`의 27개 기존 hidden/campaign
+  후보 state frames-only watch는 남은 target hit 0이었다. `2111/2113/2954/3285` 계열에서 `UP/SELECT/A`
+  조합을 더한 후보도 hidden target을 화면에 내지 못했다.
+- **전체 AW1 save top-level sweep 실패**: 변환된 AW1 save 8개
+  (`11186`, `2111`, `2112`, `2113`, `2807`, `2954`, `3441`, `8495`)를 tempsav로 로드해
+  current ROM top-level sweep을 실행했다. `temp/e16_aw1_all_saves_top_sweep_timeout_20260628.json` 기준
+  frames 120, missing hits 0, failures 0이며 contact는
+  `temp/e16_aw1_all_saves_top_sweep_timeout_20260628/contact.png`다.
+- **3285 state 기본 route 실패**: `temp/e16_gamefaqs_3285_menu_default_steps_20260628` probe는 장시간 실행으로
+  중단했고, partial 파싱 `temp/e16_gamefaqs_3285_menu_default_steps_20260628_partial.json` 기준
+  33 cases, missing hits 0이다.
+- **대전 continue 생성 실패**: `temp/e16_vs_continue_create_probe_20260628`에서 8495 save temp copy로
+  VS battle start를 시도했지만 save SHA가 전후 동일했다. 최종 캡처는 아직 `팀 설정`/`통신 준비 중이야`
+  화면이어서 실제 VS suspend/continue save를 만들지 못했다.
+  후속 정정: 이 실패는 `DOWN×5`로 통신 계열에 들어간 route 오류였다. current single battle은 `DOWN×1,A`이며,
+  전투 중 `SELECT -> A -> DOWN -> DOWN -> A -> A`로 suspend save를 만든 뒤 `0xDFA7BE` direct evidence를 확보했다.
+  성공 절차는 `docs/success.md`의 2026-06-28 `이어서 대전` 항목을 따른다.
+- **map/team/SELECT-LR 경로 실패**: `DOWN×5,A,A` 계열과 `SELECT/L/R/START/A` 조합 probe에서
+  `0xDFA7BE` read-hit가 반복됐지만 최종 contact
+  `temp/e16_team_setting_player_help_probe_20260628/contact.png` 및
+  `temp/e16_player_count_select_lr_probe_20260628/contact.png`에는 `이어서 대전`이 보이지 않았다.
+  따라서 read-hit만으로 direct visual evidence에 넣지 않는다. player-count
+  `0xDFA8AA/8CB/8EA/90A/926` hit는 0이다.
+- **CLI 리뷰**: agy는 잔여 route 후보로 실제 VS suspend/continue SRAM, hard/hidden campaign unlock save,
+  true player-count 선택 화면 또는 AW2 free battle route를 제안했다. claude CLI는 2분 이상 무응답 후
+  `Execution error`로 중단되어 실질 리뷰 결과를 얻지 못했다.
+- **판정**: 이번 음성 probe는 current route set의 실패 기록일 뿐 target 미사용 증명이 아니다.
+  다음 시도는 save/state 조건을 먼저 바꿔 실제 메뉴 item code가 잔여 target에 대응하는 화면을 만든 뒤
+  watch와 최종 프레임을 함께 묶어야 한다.
+
+## [2026-06-28] E16 broad savestate item-code scan false positive
+
+- **시도**: Part1/AW1/E16/menu/single/link/campaign/freebattle 이름이 걸리는 `temp/**/*.ss0` 8,085개를 current ROM으로
+  순차 로드하고 `0x02000000..0x020000FF`를 덤프해 Part1 compact menu object의 item code 배열
+  (`+0x30` 계열)에 잔여 code `5/6/16/17/18/19`가 있는지 찾았다.
+- **결과**: plausible active menu 후보 중 잔여 code는 없었다. 유일한 후보는
+  `temp/final_original_vs_final_20260615/original_menu.ss0`의 code17이었지만, active length `0x2D/0x2E=6/6`
+  뒤 7번째 tail 값이었다. current ROM에서 이 state를 직접 로드해 `DOWN/UP/A` read-watch를 붙여도
+  기존 visible 도움말(`0xDFA752/775/79A`, `0xDFA942/95B/972/989`, `0xDFA6AA/6CD/6E2/6FB`)만 읽혔고
+  잔여 `DFA8EA` 계열은 hit 0이었다.
+- **추가 실패**: `w8 0200002F 00` + `w8 02000030 <item_code>`로 RAM item code만 바꾸는 방식은
+  menu redraw가 발생하지 않아 help source read가 0이었다. renderer 검증은 temp ROM pointer-table mutation처럼
+  실제 redraw를 일으키는 방식으로 해야 한다.
+- **판정**: 기존 savestate 더미/tail 값만으로 direct route를 얻을 수 없다. 같은 방식의 광역 state scan을
+  반복하기보다 실제 VS suspend/continue SRAM, hard/hidden campaign unlock SRAM, 또는 player-count 화면을 여는
+  route를 새로 확보해야 한다.
+- **CLI 리뷰 재시도 실패**: `temp/review_prompt_e16_20260628.md`로 `claude -p`와
+  `agy --dangerously-skip-permissions -p`를 각각 180초 timeout wrapper에서 실행했지만 둘 다 stdout/stderr 0바이트로
+  timeout됐다. 따라서 이번 forced-render/savestate-scan 판단에는 외부 CLI의 실질 리뷰 결과가 없다.
+
+## [2026-06-28] E12 `scene_87_common_rule_settings` B8 map-name mutation direct proof 실패
+
+- **시도**: `scene_87_common_rule_settings` current fresh checkpoint에서 화면에 보이는 `소라 마메 섬` 계열을
+  B8 compact target `0x00B827AC`(`소라마메섬`)의 live source로 증명하려고,
+  `tools/prove_compact_display_mutation.py --checkpoint scene_87_common_rule_settings --target 0x00B827AC=검증마메섬`
+  를 실행했다.
+- **결과**: current ROM SHA `fb760c65...`에서 null-control diff 0, mutation diff도 0이었다.
+  contact는 `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B827AC_mutation_contact.png`
+  에 남아 있지만 direct evidence로 채택하지 않는다.
+- **판정**: 이 rule-settings 화면은 B8 `0xB827AC` row를 직접 읽어 표시하지 않는다. 기존 `소라?? 섬`
+  수정은 A2C/B8 표시 계층 차이를 분리한 display override로 닫혔고, E12 B8 provenance에는 사용할 수 없다.
+  이는 단일 current fresh route의 음성 결과이며, `0xB827AC`가 다른 화면에서 쓰이지 않는다는 전역 증명은 아니다.
+  다음 재시도는 A2C 계열 실제 source 또는 별도 renderer/read-watch 체인을 겨냥해야 한다.
+
+## [2026-06-28] B84 AW1 power title 중간 실패: VRAM hook literal 정렬 오류
+
+- **실패 증상**: `0x08B3C1DE` copy site에 후크를 붙인 뒤에도 AW1 CO 파워 컷인 제목이 대부분 비거나
+  한 글자 조각만 보였다.
+- **잘못된 가설**: 처음에는 32x16/16x32 타일 배치나 OBJ 팔레트 인덱스 문제로 보았지만,
+  실제 원인은 후크 literal pool 정렬이었다.
+- **원인 확정**: hook disasm에서 `ldr r0,[pc,#0x1c]`가 목표 literal `0x06010000`이 아니라
+  `0x0000BF00`을 읽었다. `00bf00bf` 두 NOP가 literal을 `0x08F306A2`로 밀어 4바이트 정렬이 깨졌다.
+- **해결**: NOP를 하나로 줄여 literal을 `0x08F306A0`에 맞췄다. 이후 `하이퍼수리` 정상 표시가 확인됐다.
+
+## [2026-06-28] B84 AW1 power title copy-site hook 회귀: 공용 compact renderer 훅 금지
+
+- **실패 증상**: literal 정렬을 고친 `0x08B3C1DE -> 0x08F30680` copy-site hook은 B84 컷인만 고치는 듯 보였지만,
+  이후 Part1 compact 도움말 live-code evidence 재생성, `qa_visual_regions.py`, `capture_scene_screenshots.py`의 fresh
+  route에서 invalid address loop(`7DC93Bxx` 계열)가 재현될 수 있었다.
+- **원인 확정**: `0x08B3C1DE`는 B84 전용 copy site가 아니라 `0x08B3C184` 공용 compact renderer 내부 경로다.
+  B84 파워명 외의 compact 메뉴 문자열도 이 renderer를 통과하므로, 이 지점에 원본 경로를 덮는 VRAM copy hook을
+  두면 unrelated source/register 상태까지 hook이 가로챈다.
+- **최종 대체**: copy-site hook을 비활성화하고 `0x08B3C1DE` bytes를 원본 prefix `500800023818`로 복원했다.
+  B84 컷인은 `0x00BC9D0C` LZ77 source glyph 교체만으로 유지한다. current SHA
+  `e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1`에서 B84 body reads 157/pointer reads 2와
+  `하이퍼수리` 화면 표시가 확인됐고, `qa_visual_regions.py`와 release QA가 PASS한다.
+- **다시 하지 말 것**: B84 전용 조건이 레지스터/소스 포인터로 엄격히 증명되지 않는 한
+  `0x08B3C184` 계열 공용 renderer copy site에 전역 hook을 붙이지 않는다. B84/B8/A2 추가 증거는
+  route-specific read-watch, mutation proof, WRAM/VRAM/DMA chain으로 좁힌 뒤 처리한다.
+
+## [2026-06-28] verify_dist_integrity current 실패: B84 수정 후 기존 증거/배포 manifest stale
+
+- **상태**: B84 수정 후 current output SHA는 `8940784c33bf50081a1b143af34628c9f94ceebc721a7a331df9ba2df36251a9`다.
+- **실패 원인**: 기존 `manifest.json`/`manifest_preview.json` 및 BPS/IPS 배포 패치가 이전 SHA
+  `fb760c65...` 기준이라 stale이다. compact visual matrix의 renderer trace/xref 일부와
+  Part1 compact help live-code injection report도 이전 SHA를 가리킨다.
+- **확인된 OK**: 산출물 3종 full/final/title_test 바이트 동일, B팀 drift, CSV 일본어 잔존,
+  text fit, override governance, repoint punctuation/integrity, CO glyph dictionary coverage는 OK로 지나갔다.
+- **판정**: B84 기능 수정 실패가 아니라 release/evidence 재동기화 미완료다.
+  배포 전 `prepare_patch_distribution` 및 stale evidence 재캡처/재분석을 다시 돌려야 한다.
+- **후속 해결**: copy-site hook 제거 후 current SHA `e1919e48...` 기준으로 B84 read-watch, B8 manual mutation
+  evidence 13건, compact matrix, scene residual, Part1 compact help evidence, dist BPS/IPS를 재동기화했다.
+  `verify_dist_integrity.py`와 `run_release_qa.py`가 PASS한다. 이 실패 항목은 stale evidence/manifest를 방치하면
+  배포 게이트가 실패한다는 기록으로 유지한다.
+
+## [2026-06-28] B84 power title 후속 CLI 리뷰 timeout
+
+- **시도**: `temp/review_prompt_b84_power_title_20260628.md`로 claude/agy에 B84 hook/LZ77/source evidence 리뷰를 요청했다.
+- **결과**: claude는 180초 timeout으로 stdout/stderr 실질 결과가 없었다. agy도 180초 timeout됐고 wrapper의
+  TimeoutExpired bytes 처리 오류로 substantive output이 없었다.
+- **기록**: `temp/claude_review_b84_power_title_20260628.md`,
+  `temp/agy_review_b84_power_title_20260628.md`.
+
+## [2026-06-28] B84 source-only/release sync 후속 CLI 리뷰 timeout
+
+- **시도**: copy-site hook 제거, B84 LZ77 source-only 최종 구현, current B8 manual mutation 13건 재생성,
+  `verify_dist_integrity.py`/`run_release_qa.py` PASS 이후
+  `temp/review_prompt_b84_source_only_release_20260628.md`로 claude/agy에 엄격 리뷰를 요청했다.
+- **결과**: claude와 agy 모두 240초 timeout, stdout/stderr 0바이트였다.
+- **기록**: `temp/claude_review_b84_source_only_release_20260628.md`,
+  `temp/agy_review_b84_source_only_release_20260628.md`.
+- **판정**: 실질 리뷰 결과가 없으므로 반영할 지적은 없다. 같은 긴 프롬프트 반복 대신, 다음 리뷰는
+  “B84 source-only 결론” 또는 “E12 stale evidence 정책”처럼 질문을 더 좁혀 요청한다.

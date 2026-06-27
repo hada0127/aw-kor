@@ -1,0 +1,53 @@
+{
+  "label": "part1_unlocked_shop_help_visual_source_evidence",
+  "rom_sha256": "dee641f76e9c450cbc7d73e8f1b4d7160faa432c2e4d85518f5b81ea94ea4484",
+  "source_report": "temp/part1_compact_help_read_watch_aw1_8495_shop_down8_20260627.json",
+  "tempsav": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/8495_front/game_wars_korean_full.sav",
+  "route": [
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120",
+    "press:DOWN:120"
+  ],
+  "final_frame": "docs/screenshots/part1_unlocked_menu_help_2026-06-27/shop_help.png",
+  "final_frame_sha256": "a050ad573dc9f14e1faf84c78fa848d1cde8f019c2d5d886168834646d8eb46e",
+  "contact": "docs/screenshots/part1_unlocked_menu_help_2026-06-27/shop_contact.png",
+  "contact_sha256": "5a90949053db041ee1ac0a70f879b6662e93c84a5b42e69350b2e3c1ecfdb336",
+  "help_crop_4x": "docs/screenshots/part1_unlocked_menu_help_2026-06-27/shop_help_4x.png",
+  "help_crop_4x_sha256": "c42459a4e9f0d7c53ab5ace3d01538e12eed8ff5563efffdb970a12aa3ff166d",
+  "final_visual_targets": [
+    "0x00DFA6E2",
+    "0x00DFA6FB"
+  ],
+  "final_visual_text": [
+    "워즈 코인으로",
+    "물건 살 수 있어"
+  ],
+  "raw_watch_caveat": "Raw watch direct_targets include intermediate menu selections traversed by the DOWNx8 route. Only final_visual_targets are promoted as direct visual evidence because the final frame/crop shows the shop help text.",
+  "raw_summary": {
+    "case_count": 1,
+    "hit_case_count": 1,
+    "direct_group_count": 8,
+    "direct_target_count": 14,
+    "direct_targets": [
+      "0x00DFA68C",
+      "0x00DFA6AA",
+      "0x00DFA6CD",
+      "0x00DFA6E2",
+      "0x00DFA6FB",
+      "0x00DFA71B",
+      "0x00DFA72E",
+      "0x00DFA752",
+      "0x00DFA775",
+      "0x00DFA79A",
+      "0x00DFA942",
+      "0x00DFA95B",
+      "0x00DFA972",
+      "0x00DFA989"
+    ]
+  }
+}

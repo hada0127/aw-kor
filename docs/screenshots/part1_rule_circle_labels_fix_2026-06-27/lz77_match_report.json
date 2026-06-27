@@ -1,0 +1,82 @@
+[
+  {
+    "query": "label_sakuteki",
+    "lz77_off": 12764908,
+    "inner": 2560,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "label_tenki",
+    "lz77_off": 12764908,
+    "inner": 2816,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "label_income",
+    "lz77_off": 12764908,
+    "inner": 3072,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "label_days",
+    "lz77_off": 12764908,
+    "inner": 3328,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "label_yusei",
+    "lz77_off": 12764908,
+    "inner": 3584,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "label_ability",
+    "lz77_off": 12764908,
+    "inner": 3840,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "value_ari",
+    "lz77_off": 12764908,
+    "inner": 4096,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "value_random",
+    "lz77_off": 12764908,
+    "inner": 4352,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "value_nashi",
+    "lz77_off": 12764908,
+    "inner": 4224,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  },
+  {
+    "query": "value_typea",
+    "lz77_off": 12764908,
+    "inner": 12352,
+    "usize": 12736,
+    "csize": 4792,
+    "sha": "131a4e7eac41"
+  }
+]

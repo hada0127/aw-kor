@@ -1,5 +1,5 @@
 {
-  "_doc": "전체 화면 비교 시트용 진행 체크포인트. tools/build_comparison_sheet.py가 사용. mode=fresh는 콜드부트+키네비(ground truth), mode=savestate는 세이브스테이트(빠르지만 정적 BG는 stale 가능). nav/refresh 스텝: [frames,n] / [press,KEY,after] / [keys,mask] / [loadstate,path].",
+  "_doc": "전체 화면 비교 시트용 진행 체크포인트. tools/build_comparison_sheet.py가 사용. mode=fresh는 콜드부트+키네비(ground truth), mode=savestate는 세이브스테이트(빠르지만 정적 BG는 stale 가능). nav/refresh 스텝: [frames,n] / [press,KEY,after] / [keys,mask] / [loadstate,path] / [part1_menu].",
   "checkpoints": [
     {
       "name": "01_coldboot_nintendo",
@@ -459,47 +459,183 @@
     },
     {
       "name": "40_part1_name_menu",
-      "mode": "savestate",
-      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
-          "frames",
-          30
+          "part1_menu"
         ]
       ],
-      "stale_bg": true,
-      "note": "Part1 이름입력 후 메뉴",
+      "grade": "ground_truth",
+      "note": "coldboot fresh nav: Part1 모드 선택 메뉴",
+      "scene_id": "11_part1_world_menu",
       "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
-      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "41_part1_operation_room",
-      "mode": "savestate",
-      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
           "frames",
-          10
+          480
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "START",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "START",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "START",
+          120
         ],
         [
           "press",
           "A",
           160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "press",
+          "A",
+          160
+        ],
+        [
+          "frames",
+          10
+        ],
+        [
+          "press",
+          "A",
+          200
         ]
       ],
-      "stale_bg": true,
-      "note": "Part1 작전실/작전 메뉴",
+      "grade": "ground_truth",
+      "note": "coldboot fresh nav: Part1 작전실/작전 메뉴",
+      "scene_id": "15_part1_operation_logos",
       "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
-      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "42_part1_single_battle",
-      "mode": "savestate",
-      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
-          "frames",
-          10
+          "part1_menu"
         ],
         [
           "press",
@@ -512,19 +648,18 @@
           180
         ]
       ],
-      "stale_bg": true,
-      "note": "Part1 싱글 배틀 하위 메뉴",
+      "grade": "ground_truth",
+      "note": "coldboot fresh nav: Part1 싱글 배틀 하위 메뉴",
+      "scene_id": "12_part1_single_submenus",
       "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
-      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "43_part1_link",
-      "mode": "savestate",
-      "state": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
-          "frames",
-          10
+          "part1_menu"
         ],
         [
           "press",
@@ -542,10 +677,11 @@
           180
         ]
       ],
-      "stale_bg": true,
-      "note": "Part1 통신 하위 메뉴",
+      "grade": "ground_truth",
+      "note": "coldboot fresh nav: Part1 통신 하위 메뉴",
+      "scene_id": "13_part1_link_submenus",
       "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
-      "provenance_path": "temp/part1_post_name_menu_branch_20260608/menu_base.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "scene_14_part1_name_input",
@@ -726,18 +862,28 @@
     {
       "name": "scene_19e7_part1_hoip_co_weather_help",
       "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0",
+      "state": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0",
       "refresh": [
         [
           "frames",
-          1
+          20
+        ],
+        [
+          "press",
+          "A",
+          80
+        ],
+        [
+          "press",
+          "A",
+          80
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "validated visual text: g_00DF7452 오늘은 작전 전에 휩 사령관에 대해; exact watch evidence: temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/watch.log",
+      "note": "fresh redraw from 2111_front route: A,A 재진입으로 0xDF7452/0xDF7482 현재 ROM 대사 렌더",
       "scene_id": "19e7_part1_hoip_co_weather_help",
       "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19e_hoip_co_explain_watch_v1/2111_front/after_route/hit.ss0"
+      "provenance_path": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0"
     },
     {
       "name": "scene_19e6_part1_unit_help_late",
@@ -774,18 +920,23 @@
     {
       "name": "scene_19f_part1_extra_story",
       "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0",
+      "state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0",
       "refresh": [
         [
           "frames",
-          1
+          20
+        ],
+        [
+          "press",
+          "A",
+          90
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "fresh sweep exact step: Part1 추가/더미 스토리 실제 대사창",
+      "note": "fresh redraw from step_016: A 재진입으로 0xDF9516/0xDF953B 현재 ROM 대사 렌더",
       "scene_id": "19f_part1_extra_story",
       "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_017.ss0"
+      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0"
     },
     {
       "name": "scene_20_part2_intro_newspaper",
@@ -842,11 +993,11 @@
       "refresh": [
         [
           "frames",
-          1
+          40
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면",
+      "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면(대사 타이핑 완료까지 40f)",
       "scene_id": "23a_part2_wars_shop",
       "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
       "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
@@ -870,18 +1021,39 @@
     {
       "name": "scene_23c_part2_sound_room",
       "mode": "savestate",
-      "state": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0",
+      "state": "temp/external_saves/loadtempsav_soundroom_matrix/33380/state_006.ss0",
       "refresh": [
         [
-          "frames",
-          1
+          "press",
+          "UP",
+          180
+        ],
+        [
+          "press",
+          "UP",
+          180
+        ],
+        [
+          "press",
+          "UP",
+          180
+        ],
+        [
+          "press",
+          "SELECT",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "verified loadtempsav route: 33380 complete save -> Part2 menu 자유전 -> UP×3 상점 -> SELECT gallery -> A, actual BGM track list",
+      "note": "fresh redraw from 33380 Part2 menu: 자유전 -> UP×3 상점 -> SELECT 갤러리 -> A, Sound Room track list",
       "scene_id": "23c_part2_sound_room",
       "capture_path": "temp/scene_screenshots/scene_23c_part2_sound_room_patched/frame.png",
-      "provenance_path": "temp/external_saves/menu_branch_scan_33380_long/UP_UP_UP_SELECT/after_A.ss0"
+      "provenance_path": "temp/external_saves/loadtempsav_soundroom_matrix/33380/state_006.ss0"
     },
     {
       "name": "scene_24_part2_campaign_map",
@@ -889,12 +1061,43 @@
       "state": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0",
       "refresh": [
         [
-          "frames",
-          1
+          "press",
+          "B",
+          120
+        ],
+        [
+          "press",
+          "B",
+          120
+        ],
+        [
+          "press",
+          "B",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "START",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "fresh sweep: Part2 캠페인/작전 선택 지도",
+      "note": "fresh redraw from state_020: Part2 캠페인 룰 요약 라벨/값 한글 재렌더",
       "scene_id": "24_part2_campaign_map",
       "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
       "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
@@ -1046,18 +1249,24 @@
     {
       "name": "scene_29_part2_result_summary",
       "mode": "savestate",
-      "state": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0",
+      "state": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_012.ss0",
       "refresh": [
         [
-          "frames",
-          1
+          "press",
+          "A",
+          120
+        ],
+        [
+          "press",
+          "A",
+          120
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "fresh battle clear route: 실제 작전 성공 S 랭크 결과 요약",
+      "note": "fresh redraw from pre-result state_012: A,A로 0x59DA5C 현재 ROM 결과 요약 라벨 렌더",
       "scene_id": "29_part2_result_summary",
       "capture_path": "temp/scene_screenshots/scene_29_part2_result_summary_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_016.ss0"
+      "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_012.ss0"
     },
     {
       "name": "scene_30a1_part2_redstar_story_early",
@@ -1381,19 +1590,143 @@
     },
     {
       "name": "scene_87_common_rule_settings",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
           "frames",
-          1
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "UP",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "START",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "LEFT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "RIGHT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
         ]
       ],
-      "grade": "fresh_savestate",
-      "note": "fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
+      "grade": "ground_truth",
+      "note": "coldboot fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
       "scene_id": "87_common_rule_settings",
       "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_017.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "scene_89_common_battle_system_results",
@@ -1401,12 +1734,22 @@
       "state": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0",
       "refresh": [
         [
+          "press",
+          "B",
+          80
+        ],
+        [
+          "press",
+          "A",
+          100
+        ],
+        [
           "frames",
-          1
+          20
         ]
       ],
       "grade": "fresh_savestate",
-      "note": "fresh battle-system scan: 전투 시스템 메뉴(항복/전체표시 포함)",
+      "note": "fresh battle-system scan: 전투 시스템 메뉴 재오픈 렌더(항복/BGM/애니메 포함)",
       "scene_id": "89_common_battle_system_results",
       "capture_path": "temp/scene_screenshots/scene_89_common_battle_system_results_patched/frame.png",
       "provenance_path": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0"

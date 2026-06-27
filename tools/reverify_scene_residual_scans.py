@@ -283,17 +283,21 @@ def format_ranges(items) -> list[str]:
 
 def sync_manifest_containers(manifest: dict, catalog: dict) -> None:
     entries = manifest.setdefault("containers", [])
-    seen = {entry.get("container_scene_id") for entry in entries}
+    by_id = {entry.get("container_scene_id"): entry for entry in entries}
+    seen = set(by_id)
     for scene in catalog.get("scenes", []):
         if scene.get("scene_role") != "container":
             continue
         sid = scene.get("id")
-        if not sid or sid in seen:
+        if not sid:
             continue
         dialogue_filter = scene.get("dialogue_filter") or {}
         ranges = format_ranges(dialogue_filter.get("addr_ranges") or [])
         if not ranges:
             raise ValueError(f"container scene has no dialogue addr_ranges: {sid}")
+        if sid in by_id:
+            by_id[sid]["container_ranges"] = ranges
+            continue
         entries.append({
             "container_scene_id": sid,
             "container_ranges": ranges,

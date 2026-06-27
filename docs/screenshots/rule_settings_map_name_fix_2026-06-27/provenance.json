@@ -1,0 +1,143 @@
+{
+  "name": "scene_87_common_rule_settings",
+  "scene_id": "87_common_rule_settings",
+  "side": "patched",
+  "mode": "fresh",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "e6ca1081a14a193bea40bc08114a3c8657b35f230cd89b4b2a94fa7d03bf8f60",
+  "git_commit": "5276883",
+  "harness": "/tmp/mgbah",
+  "grade": "ground_truth",
+  "note": "coldboot fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
+  "nav": [
+    [
+      "frames",
+      480
+    ],
+    [
+      "press",
+      "A",
+      200
+    ],
+    [
+      "press",
+      "START",
+      200
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "press",
+      "A",
+      240
+    ],
+    [
+      "press",
+      "START",
+      240
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "DOWN",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "B",
+      60
+    ],
+    [
+      "press",
+      "DOWN",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "B",
+      60
+    ],
+    [
+      "press",
+      "DOWN",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "B",
+      60
+    ],
+    [
+      "press",
+      "UP",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "B",
+      60
+    ],
+    [
+      "press",
+      "START",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "B",
+      60
+    ],
+    [
+      "press",
+      "LEFT",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ],
+    [
+      "press",
+      "RIGHT",
+      60
+    ],
+    [
+      "press",
+      "A",
+      60
+    ]
+  ]
+}

@@ -1,0 +1,265 @@
+{
+ "tool": "tools/probe_compact_display_reads.py",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+ "git_commit": "5276883",
+ "selected_groups": [
+  "a2_co_power_profile_display_overrides",
+  "b84_compact_power_display_overrides"
+ ],
+ "selected_target_addresses": [
+  "0x00A01970"
+ ],
+ "source_files": {
+  "display_overrides": "data/display_overrides.json",
+  "dialogue_groups": "data/dialogue_groups.json",
+  "renderer_trace": "data/compact_display_renderer_trace.json"
+ },
+ "case_count": 1,
+ "hit_count": 8,
+ "direct_target_read_count": 0,
+ "direct_hits": [],
+ "truncated_direct_hits": 0,
+ "cases": [
+  {
+   "case_type": "screen_checkpoint",
+   "name": "08_part2_prologue_map_text",
+   "mode": "fresh",
+   "scene_id": null,
+   "watch_log": "temp/compact_display_read_watch_positive_control_a01970_current_20260627_resha/screen_08_part2_prologue_map_text/watch.log",
+   "watchpoint_caveat": null,
+   "screen_steps": [],
+   "watch_mode": "exact_targets",
+   "watches": [
+    {
+     "offset": "0x00A01970",
+     "gba_start": "0x08A01970",
+     "size": 4,
+     "response": "OK watchaddr 08A01970 len=4 set=4"
+    }
+   ],
+   "nav": [
+    [
+     "frames",
+     480
+    ],
+    [
+     "press",
+     "A",
+     200
+    ],
+    [
+     "press",
+     "START",
+     200
+    ],
+    [
+     "press",
+     "DOWN",
+     120
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "START",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ]
+   ],
+   "frame": "temp/compact_display_read_watch_positive_control_a01970_current_20260627_resha/screen_08_part2_prologue_map_text/frame.png",
+   "summary": {
+    "hit_count": 8,
+    "direct_target_read_count": 0,
+    "direct_target_count": 0,
+    "by_group": {
+     "unknown": 8
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0831425A",
+      "count": 2
+     },
+     {
+      "pc": "0x08314336",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 2
+     }
+    ],
+    "direct_targets": []
+   },
+   "hits": [
+    {
+     "order": 0,
+     "addr": 144710000,
+     "pc": 137445978,
+     "lr": 137447667,
+     "r0": 50336880,
+     "r1": 144710000,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01970",
+      "read_offset": "0x00A01970",
+      "group_id": null
+     },
+     "raw": "0 addr=08A01970 pc=0831425A lr=083148F3 r0=03001470 r1=08A01970 old=0000008F new=00000000"
+    },
+    {
+     "order": 1,
+     "addr": 144710000,
+     "pc": 137446198,
+     "lr": 137447667,
+     "r0": 134,
+     "r1": 144710000,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01970",
+      "read_offset": "0x00A01970",
+      "group_id": null
+     },
+     "raw": "1 addr=08A01970 pc=08314336 lr=083148F3 r0=00000086 r1=08A01970 old=0000008F new=00000000"
+    },
+    {
+     "order": 2,
+     "addr": 144710000,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144710000,
+     "r1": 0,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01970",
+      "read_offset": "0x00A01970",
+      "group_id": null
+     },
+     "raw": "2 addr=08A01970 pc=08F30284 lr=0831BBED r0=08A01970 r1=00000000 old=0000008F new=00000000"
+    },
+    {
+     "order": 3,
+     "addr": 144710001,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144710000,
+     "r1": 0,
+     "old": 108,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01971",
+      "read_offset": "0x00A01971",
+      "group_id": null
+     },
+     "raw": "3 addr=08A01971 pc=08F30286 lr=0831BBED r0=08A01970 r1=00000000 old=0000006C new=00000000"
+    },
+    {
+     "order": 4,
+     "addr": 144710002,
+     "pc": 137445978,
+     "lr": 137447667,
+     "r0": 50336880,
+     "r1": 144710002,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01972",
+      "read_offset": "0x00A01972",
+      "group_id": null
+     },
+     "raw": "4 addr=08A01972 pc=0831425A lr=083148F3 r0=03001470 r1=08A01972 old=0000008F new=00000000"
+    },
+    {
+     "order": 5,
+     "addr": 144710002,
+     "pc": 137446198,
+     "lr": 137447667,
+     "r0": 134,
+     "r1": 144710002,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01972",
+      "read_offset": "0x00A01972",
+      "group_id": null
+     },
+     "raw": "5 addr=08A01972 pc=08314336 lr=083148F3 r0=00000086 r1=08A01972 old=0000008F new=00000000"
+    },
+    {
+     "order": 6,
+     "addr": 144710002,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144710002,
+     "r1": 0,
+     "old": 143,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01972",
+      "read_offset": "0x00A01972",
+      "group_id": null
+     },
+     "raw": "6 addr=08A01972 pc=08F30284 lr=0831BBED r0=08A01972 r1=00000000 old=0000008F new=00000000"
+    },
+    {
+     "order": 7,
+     "addr": 144710003,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144710002,
+     "r1": 0,
+     "old": 252,
+     "new": 0,
+     "source": {
+      "kind": "outside_groups",
+      "target_span_match": false,
+      "read_address": "0x08A01973",
+      "read_offset": "0x00A01973",
+      "group_id": null
+     },
+     "raw": "7 addr=08A01973 pc=08F30286 lr=0831BBED r0=08A01972 r1=00000000 old=000000FC new=00000000"
+    }
+   ],
+   "truncated_hits": 0
+  }
+ ],
+ "strict_note": "Read-watch hits prove runtime reads of compact source spans on that route. They are stronger than static xrefs but still not a replacement for final pixel-level visual confirmation. Savestate watchpoint misses can be false negatives."
+}

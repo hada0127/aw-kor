@@ -25,6 +25,8 @@ from build_korean_full import (
     SYLCODE,
     encode_fit,
     in_deny,
+    load_display_overrides,
+    refresh_compact_glyph_dictionary_overrides,
 )
 import text_metrics as TM
 
@@ -168,6 +170,8 @@ def main():
     slots, found_texts = load_found()
     found_rows = load_found_rows()
     direct_patches = load_direct_patch_texts()
+    display_overrides = load_display_overrides()
+    refresh_compact_glyph_dictionary_overrides(display_overrides, strict=True)
     import json
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
     written = overflow = wider = compact_shortened = deny = no_ko = code_region = no_slot = 0
@@ -224,6 +228,8 @@ def main():
                 no_ko += 1
                 continue
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            if a in display_overrides:
+                ko = display_overrides[a]
             slot_override = None
             if a in direct_patches:
                 end, ko = direct_patches[a]
@@ -236,6 +242,8 @@ def main():
             continue
         if in_deny(a, a + slots[a]):
             continue
+        if a in display_overrides:
+            ko = display_overrides[a]
         slot_override = None
         if a in direct_patches:
             end, ko = direct_patches[a]
@@ -259,6 +267,8 @@ def main():
                 continue
             if in_deny(a, a + slot):
                 continue
+            if a in display_overrides:
+                ko = display_overrides[a]
             slot_override = None
             if a in direct_patches:
                 end, ko = direct_patches[a]
@@ -289,6 +299,8 @@ def main():
                 if in_deny(a, a + slots[a]):
                     continue
                 ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+                if a in display_overrides:
+                    ko = display_overrides[a]
                 slot_override = None
                 if a in direct_patches:
                     end, ko = direct_patches[a]

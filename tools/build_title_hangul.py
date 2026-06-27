@@ -1280,8 +1280,22 @@ def make_part1_submenu_label_block(korean: str, max_size: int = 20) -> Image.Ima
         draw_centered_title_font_text(
             layer, label, (4, 3, 78, 29), min(max_size, 18), 2, 15, 7, target_min_w=target_w
         )
-    else:
-        draw_centered_block_text(layer, label, (6, 6, 78, 28), min(max_size, 15), 2, 15, 7)
+        return layer
+    draw = ImageDraw.Draw(layer)
+    font_path = BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
+    width_limit = 72 if len(label) >= 5 else 58
+    start_size = max(8, min(max_size, 12))
+    font = ImageFont.truetype(str(font_path), start_size)
+    for size in range(start_size, 7, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, label, font, 0)
+        if w <= width_limit and h <= 13:
+            break
+    box = draw.textbbox((0, 0), label, font=font, stroke_width=0)
+    w = box[2] - box[0]
+    x = (80 - w) // 2 - box[0]
+    y = 5 - box[1]
+    paint_index_text_aa(layer, (x, y), label, font, 2, 2, 0, aa_idx=2)
     return layer
 
 

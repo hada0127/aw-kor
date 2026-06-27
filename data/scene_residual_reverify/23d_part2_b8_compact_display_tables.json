@@ -1,0 +1,49 @@
+[
+ {
+  "label": "static_residual_reverify::23d_part2_b8_compact_display_tables",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00B81800:0x00B85000",
+    "extracted": {
+     "covered_count": 454,
+     "uncovered_count": 2,
+     "same_original_uncovered_count": 1,
+     "current_kind_counts": {
+      "same_original": 1,
+      "changed_hangul": 1
+     },
+     "residual_candidates": [],
+     "low_score_same_original": [
+      {
+       "offset": "0x00B81BE0",
+       "length": 10,
+       "chars": 5,
+       "score": 5,
+       "same_original": true,
+       "current_kind": "same_original",
+       "text": "豎戝贄趁踈"
+      }
+     ]
+    },
+    "raw_kana": {
+     "raw_kana_count": 0,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 454,
+  "extracted_uncovered_count": 2,
+  "same_original_uncovered_count": 1,
+  "raw_kana_count": 0,
+  "raw_kana_unexplained_count": 0,
+  "classification": "low_score_same_original_only",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

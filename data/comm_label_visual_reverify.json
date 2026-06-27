@@ -1,125 +1,147 @@
 [
- {
-  "label": "visual_reverify::88_common_comm_labels",
-  "method": "current_sha_visual_reverification",
-  "generated_on": "2026-06-26",
-  "rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-  "container_scene_id": "88_common_comm_labels",
-  "container_range": "0x00EE212C:0x00EE2848",
-  "target_raw_kana": {
-   "offset": "0x00EE22AC",
-   "text": "ソ",
-   "classification": "common comm numeric/control table single kana; same as original"
-  },
-  "static_residual_reverify": {
-   "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
-   "result_sha256": "fcaa4823ff024da6775c86ea6d047ccdd572e346d7bfe1fde20c3fa9cef4edbb",
-   "residual_count": 0,
-   "raw_kana_unexplained_count": 0
-  },
-  "historical_dynamic_scan": {
-   "result_path": "data/scene_residual_reverify/88_common_comm_labels_dynamic_scan_results.json",
-   "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
-   "case_count": 1967,
-   "state_count": 281,
-   "hit_count": 0,
-   "break_size_nonzero": 0,
-   "state_prefix_counts": {
-    "temp/scene_entrypoints/part1_menu_sweep": 119,
-    "temp/scene_entrypoints/part2_menu_focus_scan": 707,
-    "temp/scene_entrypoints/part2_menu_row_scan": 819,
-    "temp/scene_entrypoints/part2_menu_sweep": 322
-   },
-   "policies": [
-    "a128",
-    "down_a96",
-    "left_a96",
-    "right_a96",
-    "start_a96",
-    "up_a96",
-    "wait_a96"
-   ]
-  },
-  "current_sha_screenshots": [
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/23b_part2_comm_multiplayer.png",
-    "sha256": "86d811deebcb0ee2dc008ee7215be9aa1501f0775375d10bbba1f0dee666e93f",
-    "scene_id": "23b_part2_comm_multiplayer",
-    "grade": "fresh_savestate",
-    "evidence_role": "primary_current_sha",
-    "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean comm menu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/86_common_compact_menu_tables.png",
-    "sha256": "ec08df5411a02c45387f2e9c34061d1a67f41d1372e199af0085737fe503e19c",
-    "scene_id": "86_common_compact_menu_tables",
-    "grade": "fresh_savestate",
-    "evidence_role": "primary_current_sha",
-    "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean compact menu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/13_part1_link_submenus.png",
-    "sha256": "e6808eae4405ba6197f05e43c7ce6f8da0913f04bd70d2910c8c30835b405d5a",
-    "scene_id": "13_part1_link_submenus",
-    "grade": "stale_state",
-    "evidence_role": "supplementary_stale_state",
-    "note": "Part1 통신 하위 메뉴",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean link submenu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/11_part1_world_menu.png",
-    "sha256": "c4a1ebc0906a77186c05d099b773d1dc74935456886b693b9f7b3303d3a4d76e",
-    "scene_id": "11_part1_world_menu",
-    "grade": "stale_state",
-    "evidence_role": "supplementary_stale_state",
-    "note": "Part1 이름입력 후 메뉴",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean menu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/12_part1_single_submenus.png",
-    "sha256": "7484ac6acb5ca775bec5ea4c7c3f09162c36fb0496426d450e2d1038153fbb43",
-    "scene_id": "12_part1_single_submenus",
-    "grade": "stale_state",
-    "evidence_role": "supplementary_stale_state",
-    "note": "Part1 싱글 배틀 하위 메뉴",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean submenu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/23_part2_main_menu.png",
-    "sha256": "10910cc13a056b0710a61b2c2b04b38f9c22e9794d112fcd7ee3c9b42ee53522",
-    "scene_id": "23_part2_main_menu",
-    "grade": "ground_truth",
-    "evidence_role": "primary_current_sha",
-    "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean main menu labels rendered"
-   },
-   {
-    "path": "docs/screenshots/e8_comm_label_reverify_2026-06-26/23a_part2_wars_shop.png",
-    "sha256": "793e114d33c0945f119da93cd4665b7b8d00c7223e86a3f73c7da00b10bd45b0",
-    "scene_id": "23a_part2_wars_shop",
-    "grade": "fresh_savestate",
-    "evidence_role": "primary_current_sha",
-    "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면",
-    "provenance_rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
-    "visual_result": "no visible ソ; Korean shop/menu labels rendered"
-   }
-  ],
-  "excluded_stale_artifacts": [
-   {
-    "artifact": "scene_88_common_comm_labels_patched/frame.png",
-    "provenance_rom_sha256": "a27f083783d0e4887d2234365ad776913262111c8fb396e22276160d95eaf31e",
-    "reason": "container representative capture from older ROM SHA; not used as current evidence"
-   }
-  ],
-  "manual_visual_check": "Codex recaptured the listed screenshot checkpoints on ROM 8a34a570 on 2026-06-26 and refreshed their documented PNG SHA-256 values; primary captures were visually checked.",
-  "conclusion": "No visible ソ exposure was found in current-sha related menu captures; the raw kana remains a non-text control/numeric table observation."
- }
+  {
+    "label": "visual_reverify::88_common_comm_labels",
+    "method": "current_sha_visual_reverification",
+    "generated_on": "2026-06-28",
+    "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+    "container_scene_id": "88_common_comm_labels",
+    "container_range": "0x00EE212C:0x00EE2848",
+    "target_raw_kana": {
+      "offset": "0x00EE22AC",
+      "text": "ソ",
+      "classification": "common comm numeric/control table single kana; same as original"
+    },
+    "static_residual_reverify": {
+      "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
+      "result_sha256": "96988732a8af38d69959810b00bc769e01fb2a09fb43b136bc40d7717ccc1bdd",
+      "residual_count": 0,
+      "raw_kana_unexplained_count": 0
+    },
+    "historical_dynamic_scan": {
+      "result_path": "data/scene_residual_reverify/88_common_comm_labels_dynamic_scan_results.json",
+      "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
+      "case_count": 1967,
+      "state_count": 281,
+      "hit_count": 0,
+      "break_size_nonzero": 0,
+      "state_prefix_counts": {
+        "temp/scene_entrypoints/part1_menu_sweep": 119,
+        "temp/scene_entrypoints/part2_menu_focus_scan": 707,
+        "temp/scene_entrypoints/part2_menu_row_scan": 819,
+        "temp/scene_entrypoints/part2_menu_sweep": 322
+      },
+      "policies": [
+        "a128",
+        "down_a96",
+        "left_a96",
+        "right_a96",
+        "start_a96",
+        "up_a96",
+        "wait_a96"
+      ]
+    },
+    "current_sha_screenshots": [
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/11_part1_world_menu.png",
+        "scene_id": "11_part1_world_menu",
+        "sha256": "a38a30c7580a7c5258a3e14916e08968ff8478e4f52be82442db0e841a4c19cd",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "Part1 world/main menu fresh coldboot route",
+        "source_capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "a38a30c7580a7c5258a3e14916e08968ff8478e4f52be82442db0e841a4c19cd",
+        "source_provenance_path": "temp/scene_screenshots/40_part1_name_menu_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/12_part1_single_submenus.png",
+        "scene_id": "12_part1_single_submenus",
+        "sha256": "6aa1c781c1bb131259e8dc3ab633dc164d101dfcb310f1cac4da3659fefb74a2",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "Part1 single/map submenu fresh coldboot route",
+        "source_capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "6aa1c781c1bb131259e8dc3ab633dc164d101dfcb310f1cac4da3659fefb74a2",
+        "source_provenance_path": "temp/scene_screenshots/42_part1_single_battle_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/13_part1_link_submenus.png",
+        "scene_id": "13_part1_link_submenus",
+        "sha256": "21cc50f0d6baedc0bbbfac93f1687c570051607d714674e3546430e115af87ba",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "Part1 link submenu fresh coldboot route",
+        "source_capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "21cc50f0d6baedc0bbbfac93f1687c570051607d714674e3546430e115af87ba",
+        "source_provenance_path": "temp/scene_screenshots/43_part1_link_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/23_part2_main_menu.png",
+        "scene_id": "23_part2_main_menu",
+        "sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "Part2 main menu fresh checkpoint route",
+        "source_capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b",
+        "source_provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/23a_part2_wars_shop.png",
+        "scene_id": "23a_part2_wars_shop",
+        "sha256": "e6515cec97a8cb07cc17e062a52d82f51c7fd3556b02305708698de3c588b8db",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "Part2 shop fresh menu focus state",
+        "source_capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "e6515cec97a8cb07cc17e062a52d82f51c7fd3556b02305708698de3c588b8db",
+        "source_provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/23b_part2_comm_multiplayer.png",
+        "scene_id": "23b_part2_comm_multiplayer",
+        "sha256": "86d811deebcb0ee2dc008ee7215be9aa1501f0775375d10bbba1f0dee666e93f",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "Part2 communications/multiplayer fresh row state",
+        "source_capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "86d811deebcb0ee2dc008ee7215be9aa1501f0775375d10bbba1f0dee666e93f",
+        "source_provenance_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/provenance.json"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/86_common_compact_menu_tables.png",
+        "scene_id": "86_common_compact_menu_tables",
+        "sha256": "ec08df5411a02c45387f2e9c34061d1a67f41d1372e199af0085737fe503e19c",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "Common compact mode/shop/communication menu representative",
+        "source_capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
+        "provenance_rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered",
+        "source_capture_sha256": "ec08df5411a02c45387f2e9c34061d1a67f41d1372e199af0085737fe503e19c",
+        "source_provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json"
+      }
+    ],
+    "contact_sheet": {
+      "path": "docs/screenshots/e8_comm_label_reverify_2026-06-27/contact.png",
+      "sha256": "99a019e2aa53fccc66b1248b30ac092d5f0de359a6d3c73581ff801c945d00aa"
+    },
+    "scene_editor_artifacts": [
+      {
+        "artifact": "scene_88_common_comm_labels_patched/frame.png",
+        "role": "legacy/stale-prone bucket screenshot not used as primary evidence"
+      }
+    ]
+  }
 ]

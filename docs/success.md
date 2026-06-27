@@ -2253,3 +2253,724 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - `build_dialogue_map.py` 표시 우선순위를 보강해 final effective 기준 `dialogue_map` 보호주소 mismatch 0,
   `dialogue_groups` 보호주소 mismatch 0을 확인했다. `verify_dist_integrity.py`에 새 strict audit를 연결했고,
   `verify_dist_integrity.py` PASS로 배포 게이트에 편입됐다.
+
+---
+## [2026-06-26] Part2 상점 도움말 `?`/잘림 수정 및 visual QA route 보정
+
+- Part2 모드 메뉴 `상점` 도움말 `0x00A2C1B8`의 fresh 화면 `?` 깨짐과 우측 잘림을 수정했다.
+  B팀 `dialogue_overrides.json`/`bteam_baseline.json`은 변경하지 않고, 화면 전용 `data/display_overrides.json`에
+  `포인트로 쇼핑을 할 수 있습니다`를 추가했다.
+- 빌드, UI 에디터용 `dialogue_map/groups`, `qa_text_fit`, `qa_pixel_width`, `audit_address_text_overrides`가
+  표시 전용 계층을 같은 우선순위로 반영한다. `qa_bteam_drift.py`는 drift 0.
+- `qa_visual_regions.py`의 Part1 route도 A 17회 작전룸 진입 오판을 A 16회 모드 선택 기준점으로 보정했다.
+  현재 `visual_region_checks=39` PASS.
+- 현재 output/dist SHA는 `19a2ea7102df707194ec2993b48a0cd0e5fe029cba6443bd76dffa4392e8c00d`.
+  `verify_dist_integrity.py` PASS, `audit_scene_residual_scans.py --strict` case 16/hit 0/critical 0.
+  증거는 `docs/screenshots/part2_shop_help_fix_2026-06-26/`와
+  `docs/screenshots/part1_menu_label_shrink_2026-06-26/fresh_final_routes_contact.png`.
+- 같은 SHA에서 scene screenshot 70개를 fresh 재캡처해 stale entrypoint 76건을 닫았다.
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict` 모두 PASS.
+- :8782 UI 에디터 재검증도 현재 SHA로 갱신했다. Chrome CDP 전수 열람은 63 scene/107 sprite/failure 0,
+  `verify_scene_editor_apply_state.py`는 output SHA 일치와 apply_needed=false를 확인했다.
+  `verify_scene_editor_roundtrip.py`는 80 scene/10,336 dialogue group/1,990 sprite/17,975 editable member dry-run failure 0,
+  B팀 2,805 member confirm failure 0/skip 0, 실제 저장/복원 2건, direct script 확장-span 빌드 샘플 expected/actual byte 일치를 확인했다.
+
+---
+## [2026-06-26] D2 맵 디자인 도움말 ASCII 정렬 깨짐 수정
+
+- Part2 편집 → 맵 디자인 → SELECT → 도움말 → `플레이 조건` 화면에서 숫자/쉼표가 `????`로 깨지는 실제 화면을
+  fresh emulator route로 재현하고 수정했다.
+- 원인은 compact 도움말 renderer가 본문 ASCII 숫자/구분자에서 2바이트 소비 정렬을 잃는 경로였고,
+  `dialogue_overrides.json` 최종 overlay가 화면 전용 문구를 다시 덮어 안전문이 출하 ROM에 남지 않는 문제도 있었다.
+- `data/display_overrides.json`에 `0x00A2C720..0x00A2C868` 및 `0x00D82134..0x00D822AC` 맵 디자인 도움말 행의
+  화면 전용 안전문을 추가했다. 빌드 후단 dialogue overlay도 display override 주소를 덮지 못하게 보강했다.
+- D2 정적 후보였던 `0x00D81C24` 직접 도움말 행은 42셀 요약
+  `조건수도둘이상각군병종거점필요대전통신가능`으로 줄여 `qa_pixel_width.py` `>50` 후보에서 제거했다.
+- 최종 output/dist SHA는 `7bf452715d5dc9da63b58cb45eb4e23e45e785b5cb699714760a23411455a680`이다.
+  증거는 `docs/screenshots/d2_map_design_help_fix_2026-06-26/fresh_route_contact.png`,
+  `fresh_play_condition_help.png`, 보조 `cross_state_d821_contact.png`에 보존했다.
+- 검증: `build_korean_full.py`, `build_dialogue_map.py`, `build_dialogue_groups.py`, `qa_bteam_drift.py`,
+  `audit_address_text_overrides.py --strict`, `qa_text_fit.py`, `qa_pixel_width.py`, `qa_visual_regions.py`,
+  `reverify_scene_residual_scans.py --write`, `audit_scene_residual_scans.py --strict`,
+  `capture_scene_screenshots.py --force`, `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`,
+  `audit_scene_semantics.py --strict`, `verify_preview_canvases.py`, `audit_sprite_override_report.py --strict`,
+  `prepare_patch_distribution.py --date 2026-06-26`, `verify_dist_integrity.py` PASS.
+- 당시 남은 D2 범위는 `0x00A3B880/0x00B842E8` CO 파워명 실제 발동/상세 화면으로 보였다. 맵 디자인 도움말과
+  Part2 상점 도움말, Part1 작전룸/전투 튜토리얼 fresh 가비지는 닫았다. 이 CO 후보는 2026-06-27에
+  표시 문자열이 아니라 글리프 사전으로 정정되어 아래 항목에서 종결했다.
+
+---
+## [2026-06-27] D2 폭 후보 최종 종결: CO 파워명 글리프 사전 제외
+
+- `0x00A3B880/0x00B842E8`은 CO 파워명을 한 줄로 출력하는 문자열이 아니라 compact CO power-name renderer가
+  2바이트 코드쌍을 타일 인덱스로 바꾸기 위해 참조하는 글리프 사전임을 Thumb 디스어셈블로 확인했다.
+- `0x08380564`는 입력 파워명 문자열의 각 2바이트 코드를 `0x08A3B880` 사전에서 찾아 타일 데이터를 복사하고,
+  `0x08B3C184` 계열 루틴은 같은 방식으로 `0x08B842E8` 사전을 사용한다.
+- `tools/build_korean_full.py::GLYPH_DICTIONARY_TEXT_ADDRS`를 추가하고, `qa_pixel_width.py`가 해당 주소를
+  line-width 후보에서 제외하도록 했다. `build_dialogue_map.py`는 두 주소를 `is_noise=true` 감사 행으로만 남기며,
+  `dialogue_groups`와 `scene_catalog`에서는 제거했다.
+- 검증: `python3 tools/qa_pixel_width.py --top 40` 결과 `final encoded cells > 50` 후보는 11개에서 9개로 감소했다.
+  남은 9개는 이미 `docs/screenshots/d2_width_candidates_2026-06-26/` 캡처에서 항목 단위 렌더가 확인된
+  공통/compact UI 테이블이다. `data/dialogue_groups.json` 및 `data/scene_catalog.json`에는
+  `0x00A3B880/0x00B842E8` 배정이 없다.
+
+### codex 리뷰 보강 및 최종 게이트
+
+- codex 리뷰가 `0x00A3B880` 사전 문자열의 ASCII `_` 1바이트 삽입을 blocking으로 적발했다. 이 상태에서는
+  사전 payload가 105바이트 홀수 길이가 되어 `_` 뒤 2바이트 code-pair 경계가 깨질 수 있었다.
+- A3/B842 사전 문자열을 실제 compact 표시명 unique glyph set으로 재작성하고, `data/display_overrides.json`에
+  A2/B84 CO 파워명 compact 표시용 짧은 명칭을 추가했다. agy 리뷰 후 거친 축약어는 `재력`/`상혼`/`설백`
+  계열로 정리했다. 최종 ROM의 사전/대상 표시 바이트는
+  `tools/qa_glyph_dictionary_tables.py`가 coverage issue 0으로 검증한다.
+- `0xB81800..0xB85000` B8 compact 표시문 459개가 `region="font"`라는 이유로 UI 에디터 catalog에서 누락되던
+  문제도 함께 수정했다. 새 `23d_part2_b8_compact_display_tables` container scene에 배정되어
+  `scene_catalog` dialogue_unassigned 0을 유지한다. 짧은 CJK-only 라벨이 노이즈로 숨겨지던 휴리스틱도 보강해
+  `거점수입` 같은 실제 UI 라벨이 catalog에 남는다.
+- `verify_dist_integrity.py`에 `CO glyph dictionary coverage` 게이트를 추가했다. 2026-06-27 후속 보강으로
+  `tools/build_korean_full.py`는 `data/display_overrides.json`의 A2 36개/B84 11개 compact 표시명에서 ordered unique
+  glyph set을 산출해 `0xA3B880/0xB842E8` 사전 override를 자동 주입한다. 하드코딩 사전 문자열은 제거했고,
+  `audit_address_text_overrides.py`는 runtime-generated 주소 2개를 별도 집계한다. 최종 output/dist SHA는
+  `d1cebfde9764606dcc3b7b3017fcfc8c2cc0faf30afa4e69568b604f5ae12854`이며 full/final/title_test 및 BPS/IPS
+  적용 결과가 모두 동일 SHA로 PASS했다. 배포 게이트는 text fit, visual region, CO glyph dictionary coverage,
+  sprite override fit까지 포함한다. 신규 `qa_glyph_dictionary_tables.py`는 사전/대상 slot tail의 0 패딩과
+  ASCII space 잔존 금지도 검사한다.
+
+---
+## [2026-06-27] 추가 사용자 스크린샷 triage와 Part2 프롤로그 표기/B팀 정합 보강
+
+- 사용자가 추가로 찍은 Part2 프롤로그/메뉴 filmstrip을 현재 ROM에서 재현했다.
+  `상점` 도움말 `????????`는 D2 표시 override로 이미 닫힌 상태였고,
+  `temp/user_report_recheck_route2_final_20260627/filmstrip.png`에서 `포인트로 쇼핑을 할 수 있습니다`가 유지된다.
+- Part2 프롤로그 지도문 `워즈월드`/`매크로랜드` 붙임 표기를 `워즈 월드`/`매크로 랜드`로 정리하고,
+  `0xA019BB` 선두 공백은 `지금 침략자` 분리 표시를 위해 유지했다.
+- `0xA01A70`은 B팀 권위문 `공격 준비를 끝낸 참입니다.`로 복원했다. `qa_bteam_drift.py` drift 0,
+  `audit_address_text_overrides.py --strict`의 `dialogue_map`/`dialogue_groups` mismatch 0을 확인했다.
+- 최종 output/dist SHA는 `95bc24864399522047373d583e08b50eb99147d677524d4a974111fd6a4117fd`.
+  `verify_dist_integrity.py` PASS, BPS/IPS round-trip OK. scene screenshot 70개도 같은 SHA로 재캡처했고,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict`,
+  `audit_scene_residual_scans.py --strict`가 모두 PASS했다.
+- 남은 `0xA01A5C/0xA01A70` 보고문 중복 표시 문제는 통짜 span 패치가 다른 대사를 깨뜨려 적용하지 않았다.
+  `todo.md` E15에 `77 72` 제어 gap RE와 fresh/retrigger 검증 항목으로 남겼다.
+
+---
+## [2026-06-27] Part2 프롤로그 보고문 중복/잔상 수정 완료
+
+- **사용자 추가 스크린샷 triage**: 다운로드 폴더의 추가 캡처 7장을
+  `docs/screenshots/user_report_triage_2026-06-27/download_contact.png`로 보존했다. Part1 메뉴/통신 라벨 겹침은
+  기존 compact OBJ 수정 후 현재 fresh route에서 재현되지 않았고, `single_map`의 `??????`는 원본 `？` placeholder로
+  재확인했다. 실제 신규 결함은 Part2 프롤로그 보고문 중복 표시였다.
+- **원인**: `0xA01A5C/0xA01A70`은 `77 72` gap을 공유하는 연속 메시지이고, 첫 질문 `0xA01A2C`만 free-space로
+  repoint하면 포인터/바이트 정합과 별개로 프롤로그 renderer의 glyph/cache 상태가 뒤쪽 보고문과 섞였다.
+  `0xA357C0`을 원래 `0x08A01A2C`로 돌리면 질문 화면 오염이 사라지는 것으로 확인했다.
+- **수정**: `dialogue_repoint.repoint_messages()`에 forced skip을 추가해 `0xA01A2C/0xA01A5C`를 repoint에서 제외하고,
+  `build_korean_full.py`가 포인터 `0xA357C0/0xA357C4`를 in-place 주소로 고정한 뒤 span 2개를 직접 패치한다.
+  표시문은 `매크로 랜드 침공 작전은, / 어찌 되었나?`,
+  `각 사령관 모두, / 공격 준비를 끝낸 참입니다.`로 안정화했다.
+- **증거/검증**: 최종 output 3종 SHA는
+  `11098045c8ee5d167d5b27f00087d0ed38d04f16384b3dcc66ccca2ef800a9a1`로 동기화했다.
+  A-only/focus/wait-stability 캡처는 `docs/screenshots/part2_prologue_inline_renderer_fix_2026-06-27/`.
+  `qa_text_fit.py`, `qa_bteam_drift.py`, `qa_glyph_dictionary_tables.py`, `qa_visual_regions.py`,
+  placeholder/Japanese residual, `phase6_basic_test.py`, scene screenshot 재캡처 70개,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict`,
+  `reverify_scene_residual_scans.py --write --min-score 7`, `audit_scene_residual_scans.py --strict`,
+  `verify_preview_canvases.py`, `verify_scene_editor_apply_state.py`, `verify_scene_editor_roundtrip.py`,
+  `verify_scene_editor_cdp.py`가 모두 PASS했다. :8782 roundtrip은 18,668 editable member dry-run failure 0,
+  B팀 3,150 member confirm failure 0/skip 0, CDP는 63 scene/107 sprite failure 0.
+
+---
+## [2026-06-27] E12 compact 표시문 visual matrix 기반 구축
+
+- `tools/build_compact_display_visual_matrix.py`를 추가했다. 이 도구는 B8/CO compact 표시문에 대해
+  정적 바이트 검증, UI 에디터 노출, current-ROM 대표 화면 캡처, direct per-target visual evidence를 분리해
+  `data/compact_display_visual_matrix.json`과
+  `docs/reports/compact_display_visual_matrix_2026-06-27.md`로 기록한다.
+- 초기 SHA `11098045c8ee5d167d5b27f00087d0ed38d04f16384b3dcc66ccca2ef800a9a1` 기준:
+  A2 CO 파워명 36개는 editor 36/current screen 1/container-only 35/direct 0,
+  B84 파워명 11개는 editor 11/container-only 11/direct 0,
+  B8 compact table 459개는 editor 459/container-only 459/direct 0이다.
+- 대표 화면 contact는 `docs/screenshots/e12_compact_display_matrix_2026-06-27/current_representative_contact.png`.
+  `qa_glyph_dictionary_tables.py` issue 0, `audit_scene_catalog.py --strict` critical 0으로 기존 정적/scene 게이트와 충돌 없음.
+  agy 리뷰도 E12를 닫지 말고 B84 파워 발동 화면 → B8 유닛/무기/상점 HUD → A2 CO 프로필 다중 CO 순서로
+  direct visual evidence를 확장하라고 판정했다.
+- `tools/analyze_compact_display_xrefs.py`를 추가해 A2/B84/B8 compact target의 ROM 포인터 참조를 전수 집계했다.
+  현재 SHA 기준 A2 36/36, B84 11/11, B8 371/459 target에 pointer ref가 있고, external pointer ref는
+  A2 36, B84 11, B8 355 target이다. `0x08DF2B54` B84 파워명 포인터 테이블은 `0x08B3C318/0x08B3C540`
+  2차 참조까지 확인됐다. 결과는 `data/compact_display_xref_analysis.json` 및 matrix 보고서의
+  Static Pointer Xrefs 섹션에 반영했다.
+- `tools/trace_compact_renderer.py`는 Part2 메인 메뉴, 워즈숍, compact 메뉴, 룰 설정, 전투 공격/OBJ 라벨/시작 overlay,
+  CO 프로필 refresh 9경로에서 현재 후보 PC와 B84 pointer-table user 후보를 추적했지만 hit 0/direct 0이었다.
+  이 음성 결과는 `data/compact_display_renderer_trace.json`과 matrix 보고서에 남겼다.
+- claude/agy 재리뷰 후 `tools/probe_compact_display_reads.py`를 추가했다. A2/B84 range 3케이스,
+  B8 range 2케이스, B8 representative exact subset 3케이스 모두 hit 0/direct read 0이며,
+  결과는 `data/compact_display_read_watch_probe*.json`과 matrix 보고서 Read-Watch Probes 섹션에 남겼다.
+  이후 임의 savestate `--state/--state-step` 모드도 추가해 외부 상점/프로필 후보 state를 같은 형식으로 기록한다.
+- 위 보강은 검증 기반 확보 성공이지 E12 종결이 아니다. xref는 reachability 후보이고, renderer/read-watch hit 0 경로는
+  direct visual evidence로 쓸 수 없으므로 todo의 E12 항목은 미완료로 유지한다.
+
+---
+## [2026-06-27] Part1 작전실 작전명 깨짐/legacy repoint 수정 완료
+
+- **사용자 추가 스크린샷 후속 재현**: Part1 작전실/작전 메뉴를 current ROM coldboot route로 재현해
+  작전명 리스트의 긴 문장·구두점·`????`형 표시 문제를 확인했다. 최종 증거는
+  `docs/screenshots/part1_operation_room_title_fix_2026-06-27/contact.png`.
+- **수정**: `0xB81D80..0xB82018` Part1 작전명 행을 compact title로 정리했다.
+  `0xB81FC4/0xB81FF4`는 in-place override만으로는 닫히지 않아, repoint payload 생성 시
+  `ADDRESS_TEXT_OVERRIDES`/display override가 `dialogue_overrides.json`보다 우선하도록 `_rp_dlg()`를 보강했다.
+  이로써 stale free-space 문장 `전선 기지를 확보하라`/`적 부대를 해치워라`가 ROM에서 제거됐다.
+- **동기화/검증**: `build_dialogue_map.py`, `build_dialogue_groups.py`, `build_scene_catalog.py`,
+  `reverify_scene_residual_scans.py --write`, `prepare_patch_distribution.py --date 2026-06-27`를 재실행했다.
+  E8 통신 라벨 visual evidence도 현재 SHA로 재캡처했다.
+  최종 output/dist SHA는 `edff0a12871642fc1db7d08f57536fca667ed5e208ff085d2f6e3c5ead9a0c22`.
+  `audit_address_text_overrides.py --strict`, `qa_text_fit.py`, `qa_glyph_dictionary_tables.py`,
+  `audit_scene_catalog.py --strict`, `audit_scene_residual_scans.py --strict`, `qa_visual_regions.py`,
+  `verify_dist_integrity.py`, `git diff --check` PASS.
+
+---
+## [2026-06-27] E9 Part1 compact 도움말 refresh 완료
+
+- **수정**: Part1 compact 도움말 `0xDFA64A..0xDFA9E9`의 어색한 임시 축약을 안전한 짧은 한글 문구로 정리했다.
+  대표 변경은 후속 공백 복원까지 포함해 `전투 방법 알려 줄게`/`와서 들어 봐`,
+  `둘부터 넷까지`/`대전 가능`, `카트리지 하나로`/`모두와 대전`,
+  `친구와 연결해`/`맵 교환 가능`이다.
+  추가 감사에서 `0xDFA68C`도 `전투기록볼수있어`로 바꿔 compact 권역의 공백/마침표 리스크를 줄였다.
+- **증거**: mGBA fresh route로 mode/single/link와 작전룸 하위 메뉴 28프레임을 캡처했다.
+  `docs/screenshots/e9_part1_compact_help_refresh_2026-06-27/contact.png`.
+  E8 통신 라벨 visual evidence도 같은 ROM으로 재캡처/동기화했다.
+- **최종 SHA/검증**: output full/final/title_test 및 dist manifest의 patched ROM SHA는
+  후속 공백 복원 전 `d96a7e13db4ceed1694cad6a7f6d39334a97ff59a75c84dfddde261c4eb810e9`,
+  공백 복원 후 `b9eea881356404e4643fadd6ca4f6d9bb7dcc31a649c1a928a7777ff170418b7`.
+  `audit_address_text_overrides.py --strict`, `qa_text_fit.py`, `qa_glyph_dictionary_tables.py`,
+  `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict`, `audit_scene_residual_scans.py --strict`,
+  `qa_placeholder_residuals.py`, `qa_japanese_residuals.py --min-score 13`, `qa_repoint_integrity.py`,
+  `qa_visual_regions.py`, `phase6_basic_test.py`, `verify_dist_integrity.py`, `git diff --check` PASS.
+
+---
+## [2026-06-27] B2 CSV source hygiene 복구 완료
+
+- **완료 내용**: `data/translation_for_import.csv`의 CSV 손상 239행을 정리했다.
+  복구 전 상태는 `empty_len 36`, `bad_len 203`이었고, 복구 후 `qa_csv_integrity.py --fail-on-rom-japanese` 기준
+  손상행 0, ROM 일본어 잔존 0이다.
+- **방법**: `game_wars_found_texts.csv`의 원문/length와 `temp/integrity_map.json`의 실제 `ship_ko`를 우선 권위로 삼고,
+  현재 CSV의 안전한 한글 필드와 clean backup을 보조로 사용했다. 234행을 복구했고, 파싱 부산물 5행
+  (`0x00A23`, `0x00A2D`, `0x00A32`, `0x00D`, `0x00E0952`)은 found/integrity 근거가 없어 제거했다.
+- **불변성**: rebuild 후 `output/game_wars_korean_full.gba`, `game_wars_korean_final.gba`,
+  `game_wars_korean_title_test.gba`가 모두
+  `d96a7e13db4ceed1694cad6a7f6d39334a97ff59a75c84dfddde261c4eb810e9`로 byte-identical이다.
+- **검증**: `qa_csv_integrity.py --fail-on-rom-japanese`, `lint_translation.py --severity error`,
+  `qa_text_fit.py`, `audit_scene_catalog.py --strict`, `verify_dist_integrity.py` PASS.
+  agy 리뷰는 B2를 닫아도 된다고 판정했고, override shadow/통합 runner/repoint 영향 감사는 후속 TODO로 분리했다.
+
+---
+## [2026-06-27] B4 CSV/override shadow 감사 게이트 완료
+
+- **완료 내용**: `tools/audit_csv_override_shadow.py --strict`를 추가했다.
+  CSV와 최종 ROM 출력이 다를 때 address/source/text/display/dialogue/direct/repoint/write-kind 중 설명 가능한
+  권위가 있는지 집계하고, 설명 불가능한 output shadow만 hard fail한다.
+- **현재 결과**: CSV 17,758행, shadow/explained 11,595행,
+  unexplained output shadow 0, model/actual divergence 95건(정보성)이다.
+  리포트는 `temp/csv_override_shadow_audit.json`.
+- **배포 게이트**: `tools/verify_dist_integrity.py`에 `CSV override shadow --strict`를 연결했다.
+  전체 `verify_dist_integrity.py` PASS, output/dist SHA는
+  `d96a7e13db4ceed1694cad6a7f6d39334a97ff59a75c84dfddde261c4eb810e9` 유지.
+- **리뷰 상태**: B4용 Claude/agy 재시도는 timeout/비리뷰 출력으로 실질 결과가 없었다.
+  이 작업의 검증 근거는 로컬 strict gate와 배포 게이트 PASS다.
+
+---
+## [2026-06-27] E14 repoint punctuation 감사/수정 완료
+
+- **완료 내용**: `tools/audit_repoint_punctuation.py --strict`를 추가하고,
+  `tools/dialogue_repoint.py`의 repoint payload 후처리에서 전체 단일바이트 comma(0x2C)를
+  `、`(0x8141)로 변환하도록 수정했다. fixed line만이 아니라 같은 relocated message 안의 보존 라인까지 포함한다.
+- **검증 수치**: relocated message 2,084개, fixed line 2,417개.
+  수정 전 payload ASCII comma 1,323개 → 수정 후 0개, fullwidth comma 1,887개, payload issue 0.
+  `qa_repoint_integrity.py`는 2,084 재배치 문제 0 PASS.
+- **배포/증거 동기화**: 새 output/dist SHA는
+  `d8be8aaf9fd6ae82be9995b3aec6c0c717f735b20b407ac46573b56f758b2ba6`.
+  `prepare_patch_distribution.py --date 2026-06-27`로 BPS/IPS/manifest를 재생성했고,
+  E8 `88_common_comm_labels` visual evidence 7장과 contact sheet도 현재 SHA로 재캡처했다.
+- **최종 게이트**: `verify_dist_integrity.py`에 repoint punctuation/integrity 하위 게이트를 추가했다.
+  `verify_dist_integrity.py`, `audit_repoint_punctuation.py --strict`, `qa_repoint_integrity.py`,
+  `qa_csv_integrity.py --fail-on-rom-japanese`, `lint_translation.py --severity error`,
+  `audit_scene_residual_scans.py --strict`, `audit_scene_catalog.py --strict`, `audit_scene_semantics.py --strict` PASS.
+
+---
+## [2026-06-27] E11 통합 QA runner/CI 정리 완료
+
+- **완료 내용**: `tools/run_release_qa.py`를 추가해 release QA를 기본 static/local gate와 editor/CDP gate로 분리했다.
+  기본 profile은 py_compile, CSV/placeholder/Japanese/text-fit/repoint/override/scene/visual/dist integrity를 한 번에 실행한다.
+- **검증**: `python3 tools/run_release_qa.py` PASS. `python3 tools/run_release_qa.py --only-editor --editor --timeout 300`도
+  :8782 scene editor API 기준 PASS했다. 결과 리포트는 `temp/release_qa_report.json`.
+- **게이트 통합**: `verify_dist_integrity.py`에는 CSV override shadow, repoint punctuation, repoint integrity를 하위 게이트로
+  포함했다. Chrome CDP profile은 `--cdp` 옵션으로 남겼고, 이번 실행 시 9224 포트가 닫혀 있어 E11 완료 근거에는
+  포함하지 않았다.
+
+---
+## [2026-06-27] 룰 설정 화면 B8 맵명 `??` 깨짐 수정
+
+- **수정**: `87_common_rule_settings`에서 `소라?? 섬`/`타마?? 섬`으로 보이던 B팀 맵명 깨짐을 수정했다.
+  원인은 B8 compact map-name copy의 ASCII space 뒤 2바이트 한글을 이 renderer가 안전하게 처리하지 못하는 것이었다.
+- **경계**: B팀 권위문은 변경하지 않고 `data/display_overrides.json`에 화면 전용 붙임 표기
+  `마른잎섬`/`타마타마섬`/`소라마메섬`만 추가했다.
+  `scene_87_common_rule_settings` checkpoint도 coldboot fresh nav로 승격해 stale savestate RAM 캐시를 배제했다.
+- **증거**: `docs/screenshots/rule_settings_map_name_fix_2026-06-27/fresh_rule_settings.png`에서 `??` 없이 표시됨.
+- **산출/검증**: output full/final/title_test SHA
+  `e6ca1081a14a193bea40bc08114a3c8657b35f230cd89b4b2a94fa7d03bf8f60`.
+  BPS SHA `9f21e46c08dd9b75b6117d1edb8a5962f0c81e299c0626886167ada853a00340`,
+  IPS SHA `299369da1256191f62cd7411c3918cf498dfc2f733a6eab92588abbf87e45c17`.
+  `verify_dist_integrity.py`, `tools/run_release_qa.py`,
+  `tools/run_release_qa.py --only-editor --editor --timeout 300` PASS.
+
+---
+## [2026-06-27] E12 compact display matrix current SHA 동기화
+
+- `a4e98a93…` 기준 대표 scene 8개, static xref, renderer trace, code-context, current-exact read-watch,
+  B8 map-territory exact watch, positive control, `data/compact_display_visual_matrix.json`,
+  `docs/reports/compact_display_visual_matrix_2026-06-27.md`를 재생성했다.
+- 현재 matrix는 A2 editor 36/current capture 1/direct 0, B84 editor 11/direct 0, B8 editor 459/direct 1이다.
+  read-watch current-exact는 11케이스 hit 0/direct 0, B8 map-territory exact watch는 1케이스 hit 0/direct 0,
+  positive control `0x00A01970`은 hit 8이다.
+- 추가 triage contact도 보존했다:
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/co_profile_nav_probe_contact.png`,
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/candidate_state_triage_contact.png`.
+  전자는 CO profile state가 파워명 페이지로 들어가지 못함을, 후자는 후보 state가 지도/상점/메뉴 화면이라
+  E12 target direct evidence로 부적합함을 확인한 실패 증거다.
+- UI 에디터 API/CDP PASS는 최신 SHA 시점의 scene catalog/data binding 검증이다. B8 container scene 노출과
+  편집 가능성은 보장하지만, 실제 에뮬레이터 화면에서 A2/B84/B8 target이 렌더됐다는 증거로 사용하지 않는다.
+- 이 작업은 evidence 동기화 완료이지 E12 완료가 아니다. B8 작전명 1건을 제외한 A2/B84/대부분 B8 target의
+  직접 화면 증거가 없으므로 E12는 계속 미완료로 남긴다.
+
+---
+## [2026-06-27] E12 B8 Part1 작전명 target/source provenance 1건 확보
+
+- **증거 방식**: current ROM `a4e98a93…`에서 `0x00B81FF4`(`전선기지확보`, slot 20) 단일 주소만
+  temp ROM에서 `테스트확보`로 바꾸고, base/mutation 양쪽을 같은 `41_part1_operation_room` coldboot fresh route로 캡처했다.
+- **결과**: 픽셀 diff 209px, bbox `[9,75,56,86]`로 작전실 리스트의 해당 행만 `테스트확보`로 바뀌었다.
+  따라서 이 B8 compact table 주소는 live screen source이며 dead copy가 아니다. 단, 이 증거는 source provenance이지
+  B8 전체 또는 visual layout 전수 품질 보장이 아니다.
+- **산출물**: `data/compact_display_manual_visual_evidence.json`,
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_operation_title_b81ff4_mutation_contact.png`,
+  `temp/e12_b8_operation_mutation_evidence_20260627/evidence.json`.
+- **matrix/게이트 반영**: `tools/build_compact_display_visual_matrix.py`가 manual evidence를 current ROM SHA,
+  양수 픽셀 diff, contact sheet 존재, 그룹/주소 일치 조건으로 집계한다. 현 수치는 A2 direct 0, B84 direct 0,
+  B8 direct 1이다. `verify_dist_integrity.py`는 matrix SHA가 current output SHA와 다르거나 manual evidence가 stale/invalid면
+  실패하도록 보강했고, accepted evidence가 실제 matrix target row에 붙지 않으면 unmatched/attachment 게이트로 실패한다.
+
+---
+## [2026-06-27] compact CO 파워명 표시 whitelist/QA 게이트 보강
+
+- `data/compact_power_display_whitelist.json`을 추가해 A2/B84 compact 파워명 47건의 B팀/editor 풀네임과
+  실제 compact 표시명을 주소별로 고정했다.
+- `qa_glyph_dictionary_tables.py`는 whitelist 주소와 `data/display_overrides.json` target이 정확히 일치하는지,
+  whitelist `full_ko`가 `data/dialogue_overrides.json` 권위문과 일치하는지, compact target 인코딩이 원 slot을
+  넘지 않고 tail zero-fill을 지키는지 검사한다.
+- claude/agy 리뷰 후 `0x00A29618`의 풀네임 권위문(`와쇼이 페스타`)을 `dialogue_overrides.json`에 추가하고,
+  `ADDRESS_TEXT_OVERRIDES` 중복 compact target이 display override와 발산하면 fail하도록 보강했다.
+  whitelist `_doc`에는 표시 축약의 의미 적절성은 사람 리뷰 대상이며 이 QA가 자동 보장하지 않는다고 명시했다.
+- 검증: `python3 tools/qa_glyph_dictionary_tables.py` PASS.
+
+---
+## [2026-06-27] E12 B8 Part1 작전명 target/source provenance 4건으로 확대
+
+- `tools/prove_compact_display_mutation.py`를 추가해 compact target 단일 주소 mutation을 반복 가능한 증거 생성 절차로 만들었다.
+  도구는 temp ROM 작성, 같은 checkpoint base/mutation 캡처, diff mask, contact sheet, JSON evidence를 생성한다.
+- 기존 `0x00B81FF4`(`전선기지확보`→`테스트확보`, diff 209px)에 더해 같은 `41_part1_operation_room`
+  coldboot fresh route에서 3건을 추가 확인했다:
+  `0x00B82018` `전투개시`→`검증개시` diff 54px bbox `[10,43,24,54]`,
+  `0x00B8200C` `초반전`→`검증전` diff 64px bbox `[9,59,24,70]`,
+  `0x00B81FDC` `고물전차출격`→`검증출격` diff 215px bbox `[9,91,56,102]`.
+- 보존 contact:
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_operation_title_00B82018_mutation_contact.png`,
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_operation_title_00B8200C_mutation_contact.png`,
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_operation_title_00B81FDC_mutation_contact.png`.
+- `data/compact_display_manual_visual_evidence.json`와 matrix를 갱신했다. 이 시점의 matrix는 A2 direct 0, B84 direct 0,
+  B8 direct 4였으며, `verify_dist_integrity.py`는 manual current/accepted 4를 확인했다.
+  2026-06-27 agy 리뷰 지적 반영 후 accepted mutation evidence는 contact sheet SHA뿐 아니라 보존 diff mask,
+  diff mask SHA, diff mask non-black pixel count까지 matrix와 `verify_dist_integrity.py` 하드게이트에서 확인한다.
+  이 증거는 B8 작전실 작전명
+  4개가 live screen source임을 증명하지만, E12 전체 완료 근거는 아니다.
+
+---
+## [2026-06-27] E12 B8 Part1 작전명 스크롤 행 target/source provenance 8건으로 확대
+
+- `tools/prove_compact_display_mutation.py`에 `--append-nav-step`을 추가해 같은 fresh checkpoint 뒤에
+  DOWN 입력을 붙인 스크롤 위치도 반복 가능한 mutation proof로 캡처할 수 있게 했다. diff mask도
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/`에 자동 보존하고 SHA를 evidence에 기록한다.
+- `41_part1_operation_room` DOWN 4회 위치에서 `0x00B81FC4` `적부대격파`→`검증격파`
+  diff 167px/bbox `[10,75,48,86]`, `0x00B81FAC` `지상최강중전차`→`검증중전차`
+  diff 209px/bbox `[9,91,64,102]`를 확인했다.
+- DOWN 7회 위치에서 `0x00B81F98` `드래곤플라이`→`검증플라이`
+  diff 218px/bbox `[9,59,56,70]`, `0x00B81F70` `창공제패`→`검증제패`
+  diff 40px/bbox `[9,91,23,102]`를 확인했다.
+- `0x00B81F80` `하늘에서오는건` mutation은 selected row 설명/애니메이션 diff가 섞여 bbox가 커졌으므로
+  contact는 보존하되 accepted manual evidence에는 넣지 않았다.
+- 최신 matrix는 manual current/accepted 8, A2 direct 0, B84 direct 0, B8 direct 8이다.
+  `python3 tools/verify_dist_integrity.py` PASS.
+
+---
+## [2026-06-27] E12 B8 Part1 작전명 중반부 provenance 12건으로 확대
+
+- `tools/prove_compact_display_mutation.py`의 `--append-nav-step`이 많을 때 checkpoint 이름이 너무 길어지는 문제를
+  SHA1 10자리 suffix로 줄이도록 수정했다. DOWN 16회 이상 스크롤 proof에서 macOS path limit에 걸리던 문제를 해소했다.
+- `41_part1_operation_room` fresh route + DOWN 10회 위치에서 다음 3건이 행 단위 pixel diff만 만들었다:
+  `0x00B81F5C` `도그파이트`→`검증파이트` diff 70px/bbox `[9,59,24,70]`,
+  `0x00B81F4C` `바다너머`→`검증너머` diff 77px/bbox `[9,75,23,86]`,
+  `0x00B81F40` `백은세계`→`검증세계` diff 48px/bbox `[9,91,23,102]`.
+- 같은 route + DOWN 13회 위치에서 `0x00B81F38` `결전`→`검증` diff 58px/bbox `[9,91,24,102]`를 추가 확인했다.
+  durable contact/diff mask는 `docs/screenshots/e12_compact_display_matrix_2026-06-27/`에 보존했다.
+- `data/compact_display_manual_visual_evidence.json`와 matrix를 갱신했다. 최신 matrix는 manual current/accepted 12,
+  A2 direct 0, B84 direct 0, B8 direct 12/459다. `python3 tools/verify_dist_integrity.py` PASS.
+  기본 release QA도 `temp/release_qa_report_20260627_e12_b8_direct12.json` 기준 PASS.
+- 후속으로 `tools/prove_compact_display_mutation.py`에 same-ROM base repeat null-control과
+  `--expected-diff-box`를 추가했다. 12개 accepted proof를 모두 재생성했고, 각 proof는 null-control diff 0,
+  deterministic true, 작전실 리스트 예상 영역 `0,32,80,104` 안의 bbox true를 기록한다.
+  `tools/build_compact_display_visual_matrix.py`와 `tools/verify_dist_integrity.py`는 이 필드를 hard gate로 검사한다.
+  최종 기본 release QA는 `temp/release_qa_report_20260627_e12_null_control.json` 기준 PASS.
+- Claude/agy 리뷰 caveat: 이 12건은 B8 Part1 작전명 주소가 live screen source임을 증명하지만,
+  실제 ship text visual-fit 전수 품질, A2/B84, B8 나머지 447개, compact renderer 전용 positive control을 증명하지 않는다.
+  따라서 E12는 계속 미완료다.
+
+---
+## [2026-06-27] 사용자 추가 스크린샷 재검증 및 Part1 작전실 UI 에디터 캡처 fresh 전환
+
+- Downloads 사용자 스크린샷 7장을 `docs/screenshots/user_report_triage_2026-06-27/triage.md`로 이미지별 재분류했다.
+  Part1 메뉴/통신 라벨 덮침은 current fresh route에서 재현되지 않고, `single_map`의 `??????`는 원본 placeholder 판정 유지다.
+- 추가로 `41_part1_operation_room` scene editor screenshot이 current ROM SHA로 재캡처되어도
+  2026-06-08 savestate RAM 캐시 때문에 깨진 작전실 문자를 보여 주는 문제를 확인했다.
+- `data/screen_checkpoints.json`의 `41_part1_operation_room`을 coldboot fresh nav로 전환하고,
+  `data/scene_entrypoints.json`의 `15_part1_operation_logos` provenance를 `data/screen_checkpoints.json`으로 맞췄다.
+- 검증: `capture_scene_screenshots.py --force --checkpoint 41_part1_operation_room`,
+  `build_scene_catalog.py`, `audit_scene_entrypoints.py --strict` stale 0,
+  `audit_scene_catalog.py --strict` critical 0, `run_release_qa.py` PASS,
+  :8782 서버 기동 후 `run_release_qa.py --only-editor --editor --timeout 300` PASS.
+
+---
+## [2026-06-27] 추가 에뮬레이터 sweep: stale 캡처/결과 요약/Sound Room/BGM/Part1 대사 보정 완료
+
+- **사용자 추가 스크린샷 후속**: Downloads 7장 contact와 current scene contact sheet를 함께 재검토했다.
+  Part1 메뉴/통신 라벨 침범은 current fresh route에서 재현되지 않고, `single_map`의 `??????`는 원본 placeholder다.
+- **stale savestate 정리**:
+  `scene_19e7_part1_hoip_co_weather_help`는 이미 렌더된 구 VRAM 때문에 깨진 문장처럼 보였고, fresh 재진입
+  `part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0 + A,A`로 바꿔
+  `사령관님께 말할게요`를 current ROM에서 재렌더했다.
+  `scene_19f_part1_extra_story`도 `step_017.ss0` stale 텍스트를 버리고 `step_016.ss0 + A`로
+  `게임보이 한 대로 / 한대대전모드`를 재렌더한다.
+- **Part2 결과 요약**: `0x59DA5C` 결과 요약 LZ77 source는 sparse cell 진단만으로 blank output을 만들면
+  점수 숫자/랭크 stamp 타일을 잃는 구조다. 최종 `patch_part2_result_summary_obj()`는 원본 1024타일 full-sheet를
+  보존한 뒤 title/축하/속도/화력/기술/합계/+전체 영역만 지워 다시 그린다. `scene_29_part2_result_summary`
+  체크포인트도 stale `state_016`에서 pre-result `state_012 + A,A`로 교체했다.
+- **추가 화면 보정 확인**: Part2 Sound Room `갤러리/재생/정지/시작`, 전투 시스템 메뉴 `음악 있음`,
+  Hoip player-name control leak, Part1 `한대대전모드/통신모드` ASCII/digit artifact를 current ROM 기준으로 재확인했다.
+- **최종 SHA/검증**: output full/final/title_test 및 dist patched ROM SHA는
+  `a4e98a93daf1f545f6224814b0c55d8e981f98ec16ccc3872c2f30831ec0489e`.
+  `capture_scene_screenshots.py --force`, scene contact visual audit,
+  `reverify_scene_residual_scans.py --write --min-score 7`, `audit_scene_residual_scans.py --strict`,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`,
+  `verify_dist_integrity.py`, `tools/run_release_qa.py`,
+  `tools/run_release_qa.py --only-editor --editor --timeout 300`,
+  `tools/run_release_qa.py --only-editor --cdp --timeout 300` PASS.
+- **2026-06-27 Codex 재확인**: 사용자 contact 대상 4개 fresh checkpoint를 강제 재캡처해
+  Part1 메뉴/통신 라벨 침범과 작전실 title cache 깨짐이 current ROM에서 재현되지 않음을 확인했다.
+  `single_map`의 `??????`는 current output에서도 원본 `0x00DF8C2A` `8148`×6과 byte-identical이라,
+  `data/part1_single_map_question_watch_20260626.json`에 `current_byte_recheck`를 추가했다.
+  같은 상태에서 release QA, editor API, Chrome CDP, dist integrity를 재실행해 모두 PASS했다.
+
+---
+## [2026-06-27] 전투 항복 확인창 후행 `??????` 수정
+
+- **재현**: E12 B84 power-menu probe contact를 수동 확인하는 과정에서 전투 항복/모드 선택 복귀 확인창이
+  `모드 선택으로 돌아갈까??????`처럼 후행 fallback `?`를 표시하는 실제 current-ROM 결함을 발견했다.
+  수정 전/후 증거는 `docs/screenshots/battle_surrender_question_fix_2026-06-27/before_after_contact.png`.
+- **원인**: 해당 화면은 `0x00A34CE8`과 `0x00DF2A64`의 B팀 문장을 사용한다. 기존 권위문
+  `모드 선택으로 돌아갈게요.괜찮을까요?`는 fixed byte slot에는 들어가지만 이 확인창 renderer의 실제 표시 폭을 넘었고,
+  초과된 tail이 `?`로 그려졌다.
+- **수정**: 첫 임시안 `모드 선택으로 돌아갈까?`는 Claude/agy 리뷰에서 말투 손상으로 기각했다.
+  최종 문구는 존댓말을 유지한 `모드 선택으로 돌아갈까요?`이며, `data/dialogue_overrides.json`과
+  `data/bteam_baseline.json`의 두 주소를 의도적으로 함께 갱신했다.
+- **동기화/검증**: output 3종과 dist patched ROM의 최종 SHA는
+  `3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0`.
+  SHA 변경에 맞춰 E12 B8 accepted mutation evidence 8건, compact display matrix, E8 comm-label residual evidence,
+  `data/scene_residual_scans.json`, 배포 BPS/IPS를 재생성했다.
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300`,
+  `python3 tools/run_release_qa.py --only-editor --editor --timeout 300` PASS.
+
+---
+## [2026-06-27] E12 read-watch 및 UI 에디터 scene screenshot 최신 SHA 동기화
+
+- 최종 SHA `3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0` 기준
+  기존 `data/compact_display_read_watch*.json` 16개와 positive control 1개를 모두 재실행했고,
+  후속으로 `data/compact_display_read_watch_b8_operation_positive_control.json`을 추가했다.
+- 결과: read-watch 현재 집계는 probes 17/current 17/stale 0/cases 46/hits 69/direct 69다.
+  hit 69/direct 69는 `41_part1_operation_room` fresh route의 B8 작전명 4주소에서 나온다.
+  비작전실 A2/B84/Part2-B8 후보 45 cases는 hit 0/direct 0으로 유지됐다. 같은 하니스에서
+  positive control `0x00A01970`은 fresh prologue route hit 8로 유지되어 read-watch 자체는 정상임을 확인했다.
+- `tools/capture_scene_screenshots.py`로 stale scene screenshot 58개를 재캡처했다.
+  `tools/audit_scene_entrypoints.py --strict` 결과 audited capture 76, missing/stale 0, critical 0.
+- matrix 재생성 후 수치: A2 current screen capture 1/direct 0, B84 direct 0, B8 direct 12/459,
+  read-watch current probe 17/stale 0, positive control current 1.
+- codex/agy 리뷰 반영: codex가 `renderer_trace`/`code_context_analysis` stale SHA를 차단급으로 지적했다.
+  `analyze_compact_display_xrefs.py`, `analyze_compact_display_code_context.py`, `trace_compact_renderer.py`를 current SHA로
+  다시 실행했고, matrix/report가 renderer trace/code-context/xref의 `current_rom`과 `rom_sha256`을 표시하게 했다.
+  `verify_dist_integrity.py`도 이 dependency가 present인데 stale이면 hard fail한다.
+- Claude 리뷰 반영: B8 direct 12/459가 넓은 커버리지처럼 읽히지 않도록 matrix/report에
+  `accepted_by_group_scene`과 `accepted_by_checkpoint`를 추가했다. 현재 12건은 전부
+  `b8_compact_display_table_all::15_part1_operation_logos` / `41_part1_operation_room` 계열이다.
+  B8 operation read-watch positive도 같은 계열이므로 Part2 HUD/A2/B84 coverage로 확대하지 않는다.
+- 추가 trace 양성대조: B8 operation read-watch에서 관측된 reader PC
+  `0x08B12A82/0x08B12ABC/0x08B12B14/0x0300660C/0x0300660E`를 `trace_compact_renderer.py`에 추가했다.
+  current trace는 10 cases, breakpoint hit 1762, direct target register hit 0이다.
+  이는 trace 하니스가 Part1 B8 reader breakpoint를 잡는다는 양성대조이며, A2/B84/Part2-B8-HUD direct 증거는 아니다.
+- 검증: `python3 tools/build_compact_display_visual_matrix.py`,
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260627_e12_b8_operation_positive.json` PASS.
+  이 작업은 증거 freshness 보강이며 E12 완료는 아니다.
+
+---
+## [2026-06-27] 사용자 스크린샷 후속 Part1 메뉴 도움말 공백 복원 및 current SHA 재검증
+
+- **재확인**: 사용자 추가 스크린샷 7장과 current fresh capture를 다시 대조했다. Part1 메뉴/통신 대형 OBJ 라벨의
+  강한 도움말 침범과 작전실 title cache 깨짐은 기존 수정 뒤 재현되지 않았지만, 하단 도움말 문구가
+  `전투법알려줄게`/`와서들어봐`, `처음부터대전`, `친구와연결해`처럼 공백 없는 임시 표현으로 남아 있었다.
+- **수정**: `tools/build_korean_full.py`의 `ADDRESS_TEXT_OVERRIDES` `0xDFA64A..0xDFA9E9` Part1 compact 도움말을
+  `전투 방법 알려 줄게`/`와서 들어 봐`, `처음부터 대전`, `친구와 연결해`/`대전 가능`,
+  `카트리지 하나로` 등으로 정리했다. 모든 후보는 실제 `encode_fit()` 기준 level 0 slot-fit이었다.
+- **증거**: mGBA fresh route로 `40_part1_name_menu`, `41_part1_operation_room`,
+  `42_part1_single_battle`, `43_part1_link`를 재캡처했다.
+  보존 contact/crop은 `docs/screenshots/part1_menu_help_spacing_2026-06-27/contact.png`,
+  `docs/screenshots/part1_menu_help_spacing_2026-06-27/help_crops_4x.png`.
+  Claude/agy 리뷰 후 mode 9프레임, operation 8프레임, single 7프레임, link 6프레임의 current fresh route
+  full sweep도 추가 캡처했고, `docs/screenshots/part1_menu_help_spacing_2026-06-27/full_sweep_contact.png`에 보존했다.
+  `single_map`의 `??????`는 계속 원본 `8148` x 6 placeholder로 판정한다.
+- **동기화/검증**: output full/final/title_test 및 dist patched ROM SHA는
+  `b9eea881356404e4643fadd6ca4f6d9bb7dcc31a649c1a928a7777ff170418b7`.
+  `build_dialogue_map.py`, `build_dialogue_groups.py`, `build_scene_catalog.py`, scene capture,
+  E8 residual evidence, E12 matrix/manual mutation evidence, renderer trace/code context/xref, 배포 BPS/IPS를 current SHA로 갱신했다.
+  `qa_text_fit.py`, `qa_visual_regions.py`, `qa_bteam_drift.py`, `audit_address_text_overrides.py --strict`,
+  `audit_scene_entrypoints.py --strict`, `audit_scene_catalog.py --strict`,
+  `audit_scene_residual_scans.py --strict`, `verify_dist_integrity.py` PASS.
+  기본 release QA는 Chrome CDP 9224 미기동 때문에 마지막 `editor-cdp`만 실패했고,
+  Chrome CDP를 띄운 뒤 `run_release_qa.py --only-editor --cdp --timeout 300`는 PASS했다.
+- **E12 경계**: SHA 변경에 맞춰 manual evidence 12건을 모두 재생성했지만, 이는
+  Part1 작전명 `b8_compact_display_table_all::15_part1_operation_logos` source provenance일 뿐이다.
+  A2/B84 direct 0, B8 direct 12/459 상태는 변하지 않았으므로 E12는 계속 미완료다.
+- **남은 경계**: 이 성공 기록은 current fresh route에서 직접 들어간 mode/operation/single/link 도움말에 한정한다.
+  campaign/hidden/player-count처럼 진행도나 잠금 해제 조건이 필요한 Part1 도움말 일부와
+  Part1 도움말 전용 공백 폭 모델 보강은 `todo.md` E16에 남긴다.
+
+---
+## [2026-06-27] Part1 compact 도움말 전용 QA 게이트 추가
+
+- **배경**: Claude/agy 리뷰에서 generic `qa_pixel_width.py`의 전역 반각공백 4px 근사가
+  Part1 도움말 renderer의 실제 공백 advance를 보장하지 못한다고 지적했다.
+- **추가 도구**: `tools/qa_part1_compact_help.py`를 추가했다. 이 도구는 Part1 compact 도움말
+  `0xDFA64A..0xDFA9E9`의 `ADDRESS_TEXT_OVERRIDES` 34개를 전수 검사한다.
+  현재 output ROM prefix가 `encode_fit()` 결과와 일치하는지, tail padding이 `00/20`뿐인지,
+  active payload에 1바이트 printable이 없는지, 모든 row가 level 0인지, encoded width가 보수 상한
+  24 half-cell 이하인지 확인한다.
+  Claude 리뷰 후 한글 코드 lead max `0xE2` 가드, full-slot row 직후 제어바이트 확인,
+  `Counter()` 기반 unmapped 진단, current visual evidence metadata count 13 핀도 추가했다.
+- **게이트 통합**: `tools/verify_dist_integrity.py`와 `tools/run_release_qa.py`에 hard gate로 연결했다.
+  현재 `temp/part1_compact_help_qa.json` 결과는 target 34, issue 0,
+  current direct visual evidence metadata 13, missing direct visual evidence 21이다.
+- **검증**: `python3 tools/qa_part1_compact_help.py`,
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260627_part1_compact_help_gate_r2.json`
+  모두 PASS. direct visual evidence가 없는 21개는 `todo.md` E16에 계속 남긴다.
+
+---
+## [2026-06-27] Part1 잠금해제 메뉴 도움말 direct evidence 5건 및 submenu 라벨 저프로파일화
+
+- **수정/증거**: `tools/probe_part1_compact_help_reads.py`에 `--tempsav`와 `tempsav_part1_menu`
+  시작 모드를 추가했다. 외부 AW1 진행도 save를 `loadtempsav` 후 coldboot 메뉴로 진입시켜,
+  현재 ROM SHA `dee641f76e9c450cbc7d73e8f1b4d7160faa432c2e4d85518f5b81ea94ea4484`에서
+  `0x00DFA68C`, `0x00DFA71B`, `0x00DFA72E`, `0x00DFA6E2`, `0x00DFA6FB`가
+  실제 전적/맵 디자인/shop 도움말 화면의 source임을 read-watch로 확인했다.
+  shop은 AW1 8495-front tempsav에서 `DOWN` x8 후 최종 프레임이 `워즈 코인으로`/`물건 살 수 있어`를
+  보여 주는 route만 승격했고, raw watch의 중간 메뉴 hit는 direct evidence로 세지 않는다.
+- **보존 파일**: `docs/screenshots/part1_unlocked_menu_help_2026-06-27/contact.png`,
+  `battle_record_help_4x.png`, `map_design_help_4x.png`, `read_watch_report.json`,
+  `shop_contact.png`, `shop_help.png`, `shop_help_4x.png`, `shop_read_watch_report.json`.
+  `tools/qa_part1_compact_help.py`의 current direct visual evidence metadata는 13→18,
+  missing direct visual evidence는 21→16으로 줄었다.
+- **라벨 조정**: `tools/build_title_hangul.py`에서 `맵 디자인`/`맵 기록` 등 non-`싱글 대전`/`통신`
+  Part1 submenu 라벨을 저프로파일 렌더로 바꿔 도움말 영역 침범을 줄였다.
+  `싱글 대전`/`통신` 특수 라벨은 기존 큰 렌더를 유지해 visual region gate의 가시성 기준을 보존했다.
+- **검증/배포**: output full/final/title_test 및 dist patched ROM SHA는 모두
+  `dee641f76e9c450cbc7d73e8f1b4d7160faa432c2e4d85518f5b81ea94ea4484`.
+  `qa_visual_regions.py`, `qa_part1_compact_help.py`, `audit_scene_residual_scans.py --strict`,
+  `verify_dist_integrity.py`, `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260627_part1_shop_help_evidence.json`
+  모두 PASS. 진행도 조건이 더 필요한 나머지 16개 도움말은 `todo.md` E16에 계속 남긴다.
+- **리뷰**: agy 리뷰는 blocker/major 없음, 승인 가능으로 판정했다.
+  minor로 지적한 `probe_part1_compact_help_reads.py`의 기본 harness 경로는 `MGBA_HARNESS` 환경 변수를 우선하도록 보강했다.
+  Claude 리뷰는 300초 timeout으로 실질 결과를 얻지 못했다.
+
+---
+## [2026-06-27] Part1 싱글 대전 룰 원형 라벨/값 일본어 잔존 수정
+
+- **수정**: `tools/build_korean_full.py`에 `patch_part1_rule_circle_labels()`를 추가했다.
+  Part1 싱글 대전 룰 화면의 LZ77 OBJ block `0x00C2C6EC`에서 라벨 7개와 값 9개를 한글 OBJ로 렌더해
+  in-place 재압축한다. 원본 slot 4792B 대비 패치 압축 3904B로 overflow 없음.
+- **결과**: mGBA current route에서 `サクテキ/テンキ/収入/日数/ユウセイ/能力/アニメ`와
+  `アリ/ランダム/ナシ/タイプA` 잔존이 `정찰/날씨/수입/일수/우세/능력/애니`,
+  `있음/랜덤/없음/타입A` 등으로 교체됐다.
+  VRAM object 영역 16개 tile slot이 빌드 렌더 바이트와 일치한다.
+- **증거**: `docs/screenshots/part1_rule_circle_labels_fix_2026-06-27/before_rule_circles_4x.png`,
+  `after_rule_circles_4x.png`, `after_rule_circles_right_4x.png`, `verification.json`.
+- **동기화/검증**: output full/final/title_test 및 dist patched ROM SHA는
+  `c1d1b28909d318373a58603d08f2bdf55e9a774af960a8cbee61902a38957280`.
+  `verify_dist_integrity.py`, `run_release_qa.py --timeout 300`,
+  `run_release_qa.py --only-editor --editor --timeout 300`,
+  `run_release_qa.py --only-editor --cdp --timeout 300` PASS.
+  CDP 검증 전에는 SHA 변경으로 scene screenshot이 stale라 실패했으나,
+  `tools/capture_scene_screenshots.py --force` 후 `audit_scene_entrypoints.py --strict` missing/stale 0, critical 0,
+  Chrome CDP 63 scene/108 sprite failure 0으로 통과했다.
+- **E12 경계**: SHA 재동기화 과정에서 current `41_part1_operation_room` 기본 프레임의 manual mutation evidence는
+  positive 4건이고, DOWN 4/7/10/13 스크롤 route를 current SHA로 다시 캡처해 나머지 8건도 복구했다.
+  E12는 A2 direct 0, B84 direct 0, B8 direct 12/459로 계속 미완료다.
+
+---
+## [2026-06-27] Part1 single map `??????` placeholder를 `미공개`로 UX 수정
+
+- **수정**: 사용자 추가 스크린샷의 `single_map` 맵 리스트 `??????`는 원본 `0x00DF8C2A`
+  `8148`×6 placeholder였지만, 실제 화면에서는 깨진 텍스트처럼 보이므로 현재 ROM에서 `미공개`로 표시하도록 바꿨다.
+  일반 예약 한글 코드와 compact kanji 우회는 해당 리스트 renderer에서 blank였고, 전역 `ガ/ギ/グ` remap은
+  claude/agy 리뷰에서 다른 가나 표시와 `ヒ/フ/ヘ` 슬롯 충돌 위험이 확인되어 폐기했다.
+  최종 구현은 source bytes를 `814881488148814081408140`(`？` 3개+전각공백 3개)로 두고,
+  `0x08B1319C -> 0x08F30600` 국소 compact-renderer hook이 source pointer `0x08DF8C2A/2C/2E`에만
+  `미/공/개` private tile을 VRAM에 복사한다. `ガ/ギ/グ` table entry는 원본과 byte-identical이다.
+- **증거**: fresh mGBA route에서 `미공개` 표시를 확인했다.
+  `docs/screenshots/part1_single_map_unknown_label_fix_2026-06-27/contact.png`,
+  `map_unknown_label_crop_4x.png`, `report.json`에 보존했다.
+- **동기화/검증**: output full/final/title_test 및 dist patched ROM SHA는 모두
+  `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093`.
+  SHA 변경에 맞춰 scene screenshot 75개, E8 comm visual reverify, scene residual evidence,
+  E12 xref/code-context/renderer trace/manual mutation evidence 12건, compact visual matrix, 배포 BPS/IPS를 current SHA로 갱신했다.
+  `python3 tools/verify_dist_integrity.py` PASS,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260627_single_map_unknown_label_safe_hook.json` PASS.
+- **경계**: 이 작업은 single-map unknown label UX 수정이다.
+  E12 compact target 전수 provenance와 E16 잔여 Part1 도움말 direct route 16개는 계속 미완료로 남긴다.
+## [2026-06-27] Part1 unlocked mode 도움말 뒤 격자성 조각 원본 baseline 판정
+
+- **증상**: AW1 8495-front unlocked mode menu에서 하단 도움말 박스 왼쪽에 작은 검은/노랑/초록 격자성 조각이 보여
+  한글 option label 깨짐 후보로 조사했다.
+- **반증**: option label palette 11/12/13 변경, `trial/campaign` 왼쪽 half blank, `trial/campaign` 전체 blank temp ROM 모두
+  최종 composited frame의 격자성 조각을 없애지 못했다. 전체 blank ROM에서는 OAM idx30 tile504 VRAM bytes가 0이 됐으므로
+  `OBJ idx30/tile504` option glyph 단독 원인은 배제했다.
+- **원본 비교**: 원본 일본판 ROM의 같은 8495-front mode sweep에서도 동일 ROI에 같은 격자성 조각이 도움말 박스 뒤로 보였다.
+  증거: `docs/screenshots/part1_unlocked_original_baseline_2026-06-27/original_mode_sweep_contact.png`.
+- **판정**: 한글 패치 회귀가 아니라 원본 메뉴의 투명 도움말 뒤 배경/라벨 합성이다. 자산 패치 없음.
+
+## [2026-06-27] Part1 campaign compact 도움말 direct evidence 4건 추가
+
+- **route**: `2111_front/after_route.ss0`에서 `UP,A`는 `이어서 캠페인 / 진행 가능`,
+  `UP,A,DOWN` 또는 `UP,A,UP`은 `처음부터 캠페인 / 시작해요`를 표시한다.
+- **확인 주소**: `0xDFA80E`, `0xDFA829`, `0xDFA7E2`, `0xDFA7FD`.
+- **증거**: `docs/screenshots/part1_campaign_help_2026-06-27/contact.png`,
+  `docs/screenshots/part1_campaign_help_2026-06-27/help_crops_4x.png`,
+  read-watch reports 3종.
+- **QA 반영**: `tools/qa_part1_compact_help.py` current visual evidence count 18 -> 22,
+  missing direct visual evidence 16 -> 12.
+
+## [2026-06-28] 사용자 추가 스크린샷 current 재확인
+
+- **입력 확인**: `~/Downloads`, Desktop, Pictures의 최근 스크린샷을 재확인했다. 새로 분리할 이미지는
+  `docs/screenshots/user_report_triage_2026-06-27/download_contact.png`의 7장과 같은 계열이었다.
+- **current 판정**: current ROM 증거에서 사용자가 지적한 Part1 작전실 작전명 깨짐, `single_map ??????`,
+  Part1 메뉴/통신 라벨과 도움말 가독성, Part1 룰 원형 라벨 일본어 잔존은 각각 기존 수정 증거로 닫힌 상태다.
+  대표 증거는 `docs/screenshots/part1_operation_room_title_fix_2026-06-27/contact.png`,
+  `docs/screenshots/part1_single_map_unknown_label_fix_2026-06-27/contact.png`,
+  `docs/screenshots/part1_menu_help_spacing_2026-06-27/full_sweep_contact.png`,
+  `docs/screenshots/part1_rule_circle_labels_fix_2026-06-27/contact.png`다.
+- **남은 범위**: 이 재확인은 기존 신고 화면의 해결 판정이며, E16의 12개 미확보 compact 도움말 route는
+  `todo.md`에 계속 남긴다.
+
+## [2026-06-28] E16 Part1 compact 도움말 잔여 forced-render smoke
+
+- **목적**: direct route가 아직 없는 `0xDFA64A/66B/83A/84D/872/885/8AA/8CB/8EA/90A/926` 11개와
+  당시 direct route가 없던 `0xDFA7BE`까지 포함해, 총 12개가
+  실제 Part1 compact 도움말 renderer에서 깨지거나 잘리는지 확인했다. 이 검증은 route evidence가 아니라
+  renderer smoke evidence다.
+- **방법**: current ROM SHA `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093`의 temp 복사본에서
+  Part1 compact help pointer table `0x08DFAAB8` 중 visible menu item code
+  `10/13/20/14/21/22/23`의 pointer를 각 잔여 help pointer로 바꿨다. current Part1 mode-menu state를 로드한 뒤
+  실제 `DOWN/UP` 입력으로 menu redraw를 유도하고 mGBA frame + read-watch를 저장했다.
+- **결과**: 8개 item-code case(code0/5/6/9/16/17/18/19)에서 잔여 12개 문구가 모두 화면에 정상 표시됐다.
+  `둘부터 넷까지 / 대전 가능`, `특별한 처음부터 / 숨겨진 모드`, `특별 이어하기 / 숨겨진 모드`,
+  `이어서 대전`, `혼자서 대전 / 사령관 상대`, `둘이서 대전`, `셋이서 대전`, `넷이서 대전` 모두
+  깨짐/클리핑이 보이지 않는다.
+- **증거/게이트**: `docs/screenshots/part1_compact_help_forced_render_2026-06-28/contact.png`,
+  `docs/screenshots/part1_compact_help_forced_render_2026-06-28/report.json`.
+  이후 `0xDFA7BE`는 VS suspend route로 direct evidence가 확보되어 direct set으로 이동했다.
+
+## [2026-06-28] E16 `이어서 대전` direct visual evidence 확보
+
+- **정정**: 이전 VS continue 생성 실패는 `DOWN×5`로 통신 메뉴에 들어간 잘못된 route가 원인이었다.
+  current top-level 기준 single battle은 `DOWN×1,A`다.
+- **route**: fresh Part1 mode menu → `DOWN,A,A,A,A`로 싱글 대전 battle 시작 →
+  전투 중 `SELECT`로 명령 메뉴 열기 → `A,DOWN,DOWN,A`로 `현재 상황 저장할까요 / 예 아니` 표시 →
+  `A`로 `예` 저장 → SRAM dump → `loadtempsav+reset` → title/select에서 1편 진입 →
+  mode menu에서 `A`로 single submenu 진입.
+- **direct target**: 최종 single submenu frame은 `이어서 대전`을 표시하고, read-watch는
+  `0x00DFA7BE`를 잡는다. 같은 frame에서 read-ahead로 `0xDFA7E2/7FD`도 잡히지만, direct evidence로
+  승격한 것은 화면에 보이는 `0xDFA7BE`뿐이다.
+- **증거/게이트**: `docs/screenshots/part1_vs_continue_help_2026-06-28/contact.png`,
+  `docs/screenshots/part1_vs_continue_help_2026-06-28/read_watch_report.json`.
+  `tools/qa_part1_compact_help.py` 기준 direct visual 23, missing direct 11, synthetic render 11,
+  render-missing 0.
+
+## [2026-06-28] E16 Part1 compact 도움말 live-code injection smoke 보강
+
+- **목적**: real gameplay route가 아직 없는 11개 도움말
+  (`0xDFA64A/66B/83A/84D/872/885/8AA/8CB/8EA/90A/926`)에 대해, pointer-table을 바꾸지 않고
+  실제 `item code -> 0x08DFAAB8 pointer lookup -> help renderer` 경로가 깨짐 없이 동작하는지 확인했다.
+- **방법**: current ROM SHA `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093`에서
+  fresh Part1 mode menu를 열고, live menu object의 `0x0200002D/2E/2F`와 `0x02000030...` item code만
+  `0`, `5/6`, `16..19` 후보로 주입했다. 이후 실제 `DOWN/UP` cursor 이동으로 help redraw를 유도했다.
+- **결과**: code0은 `둘부터 넷까지 / 대전 가능`, code5/6은 `특별한 처음부터 / 숨겨진 모드`와
+  `특별 이어하기 / 숨겨진 모드`, code16..19는 `혼자서 대전 / 사령관 상대`,
+  `둘이서 대전`, `셋이서 대전`, `넷이서 대전`을 정상 표시했다.
+- **증거/게이트**:
+  `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_primary.png`,
+  `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_player19.png`,
+  reports 2종. `tools/qa_part1_compact_help.py`는 live-code injection evidence 11개를 별도 hard gate로 검사한다.
+- **경계**: 이는 pointer-table forced-render보다 강한 renderer/code-lookup smoke지만, real gameplay unlock/player-count
+  route direct visual evidence는 아니다. E16 route debt 11개는 `todo.md`에 계속 남긴다.
+
+## [2026-06-28] E12 B8 Part1 작전명 direct proof 13건으로 보강
+
+- **추가 증거**: `0x00B81F80`(`하늘에서오는건`)은 `41_part1_operation_room` DOWN 6 route에서
+  같은 7음절 길이의 `하늘에서검증건`으로 단일 mutation할 때 row-local diff만 발생했다.
+  null-control pixel diff 0, mutation diff 66px, bbox `[41,91,55,102]`, expected box `0,32,80,104` 내부 true다.
+- **재현 명령**:
+  `python3 tools/prove_compact_display_mutation.py --out temp/e12_mutation_b81f80_same_len_20260628 --checkpoint 41_part1_operation_room --append-nav-step press:DOWN:120 --append-nav-step press:DOWN:120 --append-nav-step press:DOWN:120 --append-nav-step press:DOWN:120 --append-nav-step press:DOWN:120 --append-nav-step press:DOWN:120 --expected-diff-box 0,32,80,104 --target 0x00B81F80=하늘에서검증건`
+- **증거 파일**:
+  `docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png`,
+  `..._00B81F80_diff_mask.png`.
+- **매트릭스 반영**: `data/compact_display_manual_visual_evidence.json`,
+  `data/compact_display_visual_matrix.json`,
+  `docs/reports/compact_display_visual_matrix_2026-06-27.md`를 갱신했다.
+  current manual evidence는 13/accepted 13, B8 direct proof는 13/459다.
+- **current read-watch 재동기화**: `data/compact_display_read_watch_current_exact.json`을 현재 ROM SHA
+  `fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093` 기준으로 재실행했다.
+  4개 route 중 `41_part1_operation_room`에서 B8 target reads 43건
+  (`0xB81F80/0xB81FF4/0xB82018`)을 확인했고, A2/B84/룰설정 후보는 hit 0이다.
+- **경계**: E12는 완료가 아니다. A2 direct 0, B84 direct 0, B8 direct 13/459이며,
+  Part2 HUD/A2/B84 compact renderer 계열 양성대조와 target-level visual proof가 계속 필요하다.
+
+## [2026-06-28] E12 B84 AW1 CO 파워명 `하이퍼수리` 컷인 source-only 수정
+
+- **수정 대상**: B84 compact CO power target `0x00B84F04` (`하이퍼수리`).
+- **최종 구현**: `tools/build_korean_full.py`가 B84 power-title 16x32 4bpp glyph를 만들고
+  `0x00BC9D0C` LZ77 source glyph만 교체한다. 처음 붙였던 `0x08B3C1DE -> 0x08F30680`
+  VRAM copy-site hook은 `0x08B3C184` 공용 compact renderer를 건드려 Part1 메뉴/scene capture 회귀를 만들 수 있어
+  비활성화했다. 현재 `0x08B3C1DE`는 원본 prefix `500800023818`로 복원되어 있다.
+- **증거**: current ROM SHA `e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1`에서
+  `docs/screenshots/b84_aw1_power_title_fix_2026-06-28/contact.png`,
+  `plus_180.png`, `title_best_crop_4x.png`, `summary.json`, `watch.log`를 재생성했다.
+  row 2 파워 발동 route의 최종 watch는 B84 body reads 157, pointer reads 2이며, 화면 crop은
+  `하이퍼수리`가 깨짐 없이 보인다.
+- **matrix/배포 반영**: `data/compact_display_read_watch_b84_power_title_20260628.json`는 current SHA와
+  source-only 방식을 기록한다. B8 manual mutation evidence도 current 13건으로 재생성되어 matrix는
+  A2 direct 0, B84 direct 1/11, B8 direct 13/459다.
+  `python3 tools/verify_dist_integrity.py`와 `python3 tools/run_release_qa.py`는 PASS.
+- **경계**: E12 전체 완료가 아니다. 이번 proof는 `0x00B84F04` 1건만 닫는다.

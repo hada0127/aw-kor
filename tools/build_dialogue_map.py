@@ -48,7 +48,27 @@ FOUND_CSV = os.path.join(REPO, "data", "game_wars_found_texts.csv")
 TRANS_CSV = os.path.join(REPO, "data", "translation_for_import.csv")
 INTEGRITY = os.path.join(REPO, "temp", "integrity_map.json")
 DIALOGUE_OVERRIDES = os.path.join(REPO, "data", "dialogue_overrides.json")
+DISPLAY_OVERRIDES = os.path.join(REPO, "data", "display_overrides.json")
 DEFAULT_OUT = os.path.join(REPO, "data", "dialogue_map.json")
+
+# Runtime glyph dictionaries for compact CO power-name renderers. They look
+# like one long Korean string after decoding, but are concatenated two-byte
+# code sets, not user-visible dialogue.
+GLYPH_DICTIONARY_TEXT_ADDRS = {0xA3B880, 0xB842E8}
+BUILD_AUTHORED_TEXT_KINDS = {
+    "command-label",
+    "dialogue-override",
+    "fixed_text",
+    "fixed_zero_text",
+    "import-addr-override",
+    "inline-direct",
+    "intro-direct",
+    "mapname-fullwidth-ascii",
+    "name-suffix",
+    "opt-label",
+    "raw_replace",
+    "unit-opt-label",
+}
 
 
 def norm_addr(a):
@@ -174,11 +194,39 @@ def has_hangul(text):
     return any("가" <= ch <= "힣" for ch in (text or ""))
 
 
+def is_build_authored_text(addr, kind, addr_overrides, direct_patches, dialogue_overrides, display_overrides):
+    """True for strings the build deliberately writes, even if the source is a short CJK label."""
+    if addr in addr_overrides or addr in direct_patches or addr in dialogue_overrides or addr in display_overrides:
+        return True
+    if not kind:
+        return False
+    return (
+        kind in BUILD_AUTHORED_TEXT_KINDS
+        or kind.startswith("script:")
+        or kind.startswith("repoint:")
+    )
+
+
 def load_dialogue_overrides():
     if not os.path.exists(DIALOGUE_OVERRIDES):
         return {}
     try:
         data = json.load(open(DIALOGUE_OVERRIDES, encoding="utf-8")) or {}
+    except Exception:
+        return {}
+    out = {}
+    for key, value in data.items():
+        v = norm_addr(key)
+        if v is not None:
+            out[v] = value or ""
+    return out
+
+
+def load_display_overrides():
+    if not os.path.exists(DISPLAY_OVERRIDES):
+        return {}
+    try:
+        data = json.load(open(DISPLAY_OVERRIDES, encoding="utf-8")) or {}
     except Exception:
         return {}
     out = {}
@@ -201,6 +249,8 @@ def load_build_text_overrides():
         if tools_dir not in sys.path:
             sys.path.insert(0, tools_dir)
         import build_korean_full as B  # noqa: WPS433
+        if hasattr(B, "refresh_compact_glyph_dictionary_overrides"):
+            B.refresh_compact_glyph_dictionary_overrides(B.load_display_overrides(), strict=True)
         addr_overrides = dict(B.ADDRESS_TEXT_OVERRIDES)
         slots = B.load_slots()
         for addr, text in list(addr_overrides.items()):
@@ -220,7 +270,7 @@ def load_direct_patch_texts():
         return {}
 
 
-def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides):
+def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides):
     """UI에 보여줄 현재 번역. 우선순위는 빌드 적용 순서와 맞춘다."""
     ko = csv_ko or ""
     protected_addr_override = addr in addr_overrides
@@ -240,6 +290,8 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
         ko = ship_ko
     if addr in dialogue_overrides and addr not in addr_overrides:
         ko = dialogue_overrides[addr] or ""
+    if addr in display_overrides:
+        ko = display_overrides[addr] or ""
     if protected_addr_override:
         # Protected rows skip editor overlays/display normalizers, but later
         # direct script patches still win because build_korean_full writes them
@@ -311,6 +363,7 @@ def main():
     addr_overrides, source_overrides, text_overrides = load_build_text_overrides()
     direct_patches = load_direct_patch_texts()
     dialogue_overrides = load_dialogue_overrides()
+    display_overrides = load_display_overrides()
 
     # 모든 주소의 합집합(found 가 superset 이지만 trans-only 10건 등 안전하게 합집합)
     all_addrs = sorted(set(found) | set(trans) | set(integrity))
@@ -336,16 +389,24 @@ def main():
         ship_ko = i_ent["ship_ko"] if i_ent else None
         ko = display_ko_for(
             addr, ja, t_ent["ko"] if t_ent else "", ship_ko,
-            addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides,
+            addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides,
         )
         slot = i_ent["slot"] if i_ent else None
         kind = i_ent["kind"] if i_ent else None
 
         region = region_of(addr)
-        noise = is_noise(ja)
-        # 원문(ja)이 비었더라도 실제 출하/번역 한국어가 있으면 노이즈가 아니다.
-        # (예: 원본 ROM 이 zero-fill 이던 UI 라벨을 한국어로 채운 fixed_zero_text 류)
-        if noise and not ja and (ship_ko or ko):
+        noise = is_noise(ja) or addr in GLYPH_DICTIONARY_TEXT_ADDRS
+        # 빌드가 직접 쓴 UI/스크립트 라벨은 원문이 짧은 한자-only여도 실제 표시 문자열이다.
+        # 추출 노이즈는 계속 숨기되, opt-label/fixed_zero/direct patch류가 editor에서 빠지지 않게 한다.
+        if (
+            noise
+            and addr not in GLYPH_DICTIONARY_TEXT_ADDRS
+            and (ship_ko or ko)
+            and is_build_authored_text(
+                addr, kind, addr_overrides, direct_patches,
+                dialogue_overrides, display_overrides,
+            )
+        ):
             noise = False
 
         region_counter[region] += 1
@@ -382,6 +443,8 @@ def main():
                               if have_integrity else None),
             "dialogue_overrides": (os.path.relpath(DIALOGUE_OVERRIDES, REPO)
                                    if os.path.exists(DIALOGUE_OVERRIDES) else None),
+            "display_overrides": (os.path.relpath(DISPLAY_OVERRIDES, REPO)
+                                  if os.path.exists(DISPLAY_OVERRIDES) else None),
             "build_text_overrides": "tools/build_korean_full.py",
             "direct_script_patches": "tools/qa_text_fit.py:load_direct_patch_texts",
         },
@@ -406,7 +469,8 @@ def main():
         },
         "noise_heuristic": (
             "가나(히라/가타) 없음 + 키릴/기타 스크립트 섞임, 또는 4자 이하 한자-only "
-            "행을 추출 노이즈로 추정. is_noise=true 행도 결과에 포함."
+            "행을 추출 노이즈로 추정. 단, 빌드가 직접 쓴 UI/스크립트 라벨은 실제 표시 문자열로 "
+            "보존한다. is_noise=true 행도 결과에 포함."
         ),
     }
 

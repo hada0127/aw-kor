@@ -1,0 +1,99 @@
+{
+  "tool": "temp/reverify_b84_aw1_power_title_current.py",
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
+  "state": "temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0",
+  "method": "B84 title OBJ source patched via LZ77 source only; shared compact renderer copy-site hook disabled",
+  "selected_groups": [
+    "b84_compact_power_display_overrides"
+  ],
+  "selected_target_addresses": [
+    "0x00B84F04"
+  ],
+  "target_text": "하이퍼수리",
+  "watch_responses": [
+    "OK watchaddr 08B84E50 len=208 set=208",
+    "OK watchaddr 08DF2B54 len=48 set=48"
+  ],
+  "watch": {
+    "line_count": 159,
+    "b84_reads": 157,
+    "pointer_reads": 2,
+    "pcs": {
+      "0x08B3C1CE": 107,
+      "0x08B3C1DA": 13,
+      "0x08B3C15A": 10,
+      "0x08B3C162": 10,
+      "0x08B3C16C": 10,
+      "0x08B3C21E": 5,
+      "0x08B3C14C": 1,
+      "0x08B3C1A8": 1,
+      "0x08B3C2D0": 1,
+      "0x08B3C526": 1
+    },
+    "addresses": {
+      "0x08B84F0A": 28,
+      "0x08B84F08": 27,
+      "0x08B84F06": 26,
+      "0x08B84F04": 24,
+      "0x08B84F0C": 21,
+      "0x08B84F07": 6,
+      "0x08B84F09": 6,
+      "0x08B84F0B": 6,
+      "0x08B84F05": 5,
+      "0x08B84F0D": 5,
+      "0x08B84F0E": 3,
+      "0x08DF2B58": 2
+    },
+    "first_lines": [
+      "0 addr=08DF2B58 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B58 r1=00000001 old=08B84F04 new=00000000",
+      "1 addr=08B84F04 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000092 new=00000000",
+      "2 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000092 new=00000000",
+      "3 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842EA old=00000092 new=00000000",
+      "4 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842EC old=00000092 new=00000000",
+      "5 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842EE old=00000092 new=00000000",
+      "6 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000092 r1=08B842F0 old=00000092 new=00000000",
+      "7 addr=08B84F05 pc=08B3C1DA lr=08B10021 r0=08B842F1 r1=00000092 old=000000A9 new=00000000",
+      "8 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008A r1=08B842F2 old=00000092 new=00000000",
+      "9 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008C r1=08B842F4 old=00000092 new=00000000",
+      "10 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B842F6 old=00000092 new=00000000",
+      "11 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B842F8 old=00000092 new=00000000",
+      "12 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842FA old=00000092 new=00000000",
+      "13 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=00000092 new=00000000",
+      "14 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=00000092 new=00000000",
+      "15 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=00000092 new=00000000",
+      "16 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=00000092 new=00000000",
+      "17 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B84304 old=00000092 new=00000000",
+      "18 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B84306 old=00000092 new=00000000",
+      "19 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008B r1=08B84308 old=00000092 new=00000000",
+      "20 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B8430A old=00000092 new=00000000",
+      "21 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008C r1=08B8430C old=00000092 new=00000000",
+      "22 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B8430E old=00000092 new=00000000",
+      "23 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000092 r1=08B84310 old=00000092 new=00000000"
+    ]
+  },
+  "shared_renderer_copy_site": {
+    "address": "0x08B3C1DE",
+    "current_bytes": "500800023818064aa9188022",
+    "expected_original_prefix": "500800023818",
+    "status": "restored_original_no_branch_to_free_space"
+  },
+  "unused_old_hook_space": {
+    "old_copy_site_target": "0x08F30680",
+    "current_bytes": "0435013ff9d1f0bc0f4800471506f308",
+    "old_hook_glyph_source": "0x08F32000",
+    "current_old_hook_glyph_source_bytes": "00000000000000000000000000000000"
+  },
+  "screenshots": {
+    "contact": "docs/screenshots/b84_aw1_power_title_fix_2026-06-28/contact.png",
+    "best": "docs/screenshots/b84_aw1_power_title_fix_2026-06-28/plus_180.png",
+    "title_best_crop_4x": "docs/screenshots/b84_aw1_power_title_fix_2026-06-28/title_best_crop_4x.png",
+    "watch_log": "docs/screenshots/b84_aw1_power_title_fix_2026-06-28/watch.log"
+  },
+  "sha256": {
+    "contact": "0eec0c8b2bdb89d4e712c9a588328a57a95d5a760010b46a79e66ee5cdc9e4db",
+    "best": "908c5c0dd905a8f6abc999f1ceab3c27a0faf68a6564d6aeadd2124af86c14f7",
+    "title_best_crop_4x": "cbf51df27c428848fdf9e891c727d3a313170e68131984758b5fff78fd69e724",
+    "watch_log": "a3aaaab9d1431e267ee69da09b571f252c2b27145f7b66b42ac4ae10926cd4ec"
+  }
+}

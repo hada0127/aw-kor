@@ -1,0 +1,151 @@
+{
+  "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+  "created_sav": "temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav",
+  "created_sav_sha256": "bf8d392cabc2ee68e9583f6179433d840a45fed290525dad971e798a1e8abbd7",
+  "loadtempsav_response": "OK loadtempsav /Users/tarucy/project/aw-kor/temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav ok=1",
+  "reset_response": "OK reset",
+  "rows": [
+    {
+      "case_id": "00_reset",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/00_reset.png",
+      "summary": {
+        "hit_count": 0,
+        "direct_group_count": 0,
+        "direct_target_count": 0,
+        "direct_targets": [],
+        "direct_groups": [],
+        "pointer_table_hits": 0,
+        "other_watch_range_hits": 0
+      },
+      "hit_raw_count": 0
+    },
+    {
+      "case_id": "01_title_a",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/01_title_a.png",
+      "summary": {
+        "hit_count": 0,
+        "direct_group_count": 0,
+        "direct_target_count": 0,
+        "direct_targets": [],
+        "direct_groups": [],
+        "pointer_table_hits": 0,
+        "other_watch_range_hits": 0
+      },
+      "hit_raw_count": 0
+    },
+    {
+      "case_id": "02_select_start",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/02_select_start.png",
+      "summary": {
+        "hit_count": 0,
+        "direct_group_count": 0,
+        "direct_target_count": 0,
+        "direct_targets": [],
+        "direct_groups": [],
+        "pointer_table_hits": 0,
+        "other_watch_range_hits": 0
+      },
+      "hit_raw_count": 0
+    },
+    {
+      "case_id": "03_part1_a",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/03_part1_a.png",
+      "summary": {
+        "hit_count": 0,
+        "direct_group_count": 0,
+        "direct_target_count": 0,
+        "direct_targets": [],
+        "direct_groups": [],
+        "pointer_table_hits": 0,
+        "other_watch_range_hits": 0
+      },
+      "hit_raw_count": 0
+    },
+    {
+      "case_id": "04_part1_title_start",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/04_part1_title_start.png",
+      "summary": {
+        "hit_count": 0,
+        "direct_group_count": 0,
+        "direct_target_count": 0,
+        "direct_targets": [],
+        "direct_groups": [],
+        "pointer_table_hits": 0,
+        "other_watch_range_hits": 0
+      },
+      "hit_raw_count": 0
+    },
+    {
+      "case_id": "05_mode_a",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/05_mode_a.png",
+      "summary": {
+        "hit_count": 5632,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA752",
+          "0x00DFA775",
+          "0x00DFA79A"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA752",
+            "hit_count": 133,
+            "target_addresses": [
+              "0x00DFA752",
+              "0x00DFA775"
+            ],
+            "assembled_ko": "한 대로 넷까지\n대전 가능"
+          },
+          {
+            "group_id": "g_00DFA79A",
+            "hit_count": 4,
+            "target_addresses": [
+              "0x00DFA79A"
+            ],
+            "assembled_ko": "처음부터 대전"
+          }
+        ],
+        "pointer_table_hits": 1,
+        "other_watch_range_hits": 5494
+      },
+      "hit_raw_count": 5632
+    },
+    {
+      "case_id": "06_single_continue_a",
+      "frame": "temp/e16_vs_continue_direct_evidence_20260628/06_single_continue_a.png",
+      "summary": {
+        "hit_count": 5292,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA7BE",
+          "0x00DFA7E2",
+          "0x00DFA7FD"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA7BE",
+            "hit_count": 61,
+            "target_addresses": [
+              "0x00DFA7BE"
+            ],
+            "assembled_ko": "이어서 대전"
+          },
+          {
+            "group_id": "g_00DFA7E2",
+            "hit_count": 6,
+            "target_addresses": [
+              "0x00DFA7E2",
+              "0x00DFA7FD"
+            ],
+            "assembled_ko": "처음부터 캠페인\n시작해요"
+          }
+        ],
+        "pointer_table_hits": 1,
+        "other_watch_range_hits": 5224
+      },
+      "hit_raw_count": 5292
+    }
+  ]
+}

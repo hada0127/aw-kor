@@ -39,6 +39,7 @@ sys.path.insert(0, os.path.join(BASE, 'tools'))
 from build_korean_full import (  # noqa: E402
     ADDRESS_TEXT_OVERRIDES,
     COMPREHENSIVE_TRANS,
+    GLYPH_DICTIONARY_TEXT_ADDRS,
     PLACEHOLDER_KO,
     SAFE_MIN_ADDR,
     SOURCE_TEXT_OVERRIDES,
@@ -46,6 +47,8 @@ from build_korean_full import (  # noqa: E402
     TEXT_OVERRIDES,
     encode_fit,
     in_deny,
+    load_display_overrides,
+    refresh_compact_glyph_dictionary_overrides,
 )
 import qa_text_fit as QTF  # noqa: E402
 
@@ -130,6 +133,8 @@ def main() -> None:
     scene_ranges = load_scene_ranges()
     found_rows = QTF.load_found_rows()
     direct_patches = QTF.load_direct_patch_texts()
+    display_overrides = load_display_overrides()
+    refresh_compact_glyph_dictionary_overrides(display_overrides, strict=True)
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
     overrides = json.load(open(OVERRIDES, encoding='utf-8')) if os.path.exists(OVERRIDES) else {}
     unmapped = collections.Counter()
@@ -176,6 +181,8 @@ def main() -> None:
             rows.append((addr_int, wk - wj, wj, wk, cells, level, hint, ja, ko))
 
     def submit(addr_int: int, ja: str, ko: str, slot_override: int | None = None):
+        if addr_int in GLYPH_DICTIONARY_TEXT_ADDRS:
+            return
         slot_for_filter = slot_override or slots.get(addr_int, 0)
         if addr_int < SAFE_MIN_ADDR or not slot_for_filter or slot_for_filter <= 0:
             return
@@ -214,6 +221,8 @@ def main() -> None:
             elif ja in SOURCE_TEXT_OVERRIDES and not any('가' <= ch <= '힣' for ch in ko):
                 ko = SOURCE_TEXT_OVERRIDES[ja]
             ko = ADDRESS_TEXT_OVERRIDES.get(a, TEXT_OVERRIDES.get(ko, ko))
+            if a in display_overrides:
+                ko = display_overrides[a]
             slot = slots.get(a, 0)
             ja, ko, slot_override = apply_direct_patch(a, ja, ko, slot)
             submit(a, ja, ko, slot_override=slot_override)
@@ -223,6 +232,8 @@ def main() -> None:
             continue
         slot = slots.get(a, 0)
         ja = found_texts.get(a, '')
+        if a in display_overrides:
+            ko = display_overrides[a]
         ja, ko, slot_override = apply_direct_patch(a, ja, ko, slot)
         submit(a, ja, ko, slot_override=slot_override)
 
@@ -239,6 +250,8 @@ def main() -> None:
             if not ko:
                 continue
             ja = row.get('text') or ''
+            if a in display_overrides:
+                ko = display_overrides[a]
             ja, ko, slot_override = apply_direct_patch(a, ja, ko, slot)
             submit(a, ja, ko, slot_override=slot_override)
 

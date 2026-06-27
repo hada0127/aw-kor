@@ -26585,7 +26585,7 @@ address,japanese,korean,char_count,frequency,status,notes
 0x00DF740E,さあ、出撃よ！,자 출격이야!,7,13,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_001.csv
 0x00DF7422,天気や　ショーグンの能力についての説明よ。,날씨와 장군 능력 설명이야.,21,1,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF7452,今日は作戦の前に　ホイップショーグンについて,오늘은 작전 전 휩 장군에 대해,22,1,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
-0x00DF7482,さんに話しておくわ。,미상,10,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
+0x00DF7482,さんに話しておくわ。,사령관님께 말할게요,10,1,Translated,audit: fixed visible player-name control leak in Part1 Hoip CO help
 0x00DF749B,ホイップは　もともとはレッドスター軍の,휩은 원래 레드스타군의,19,1,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF74C4,ショーグンで・・・,미상,9,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
 0x00DF74DB,私の上司だったの。,미상,9,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
@@ -26650,7 +26650,7 @@ address,japanese,korean,char_count,frequency,status,notes
 0x00DF8EFF,ゲームボーイウォーズには、いろいろな,게임보이 워즈에는 여러,18,2,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF8F26,「モード」があるの。,미상,10,2,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
 0x00DF8F3F,ゲームボーイ１台でタイセンができる,게임보이 1대로 대전 가능,17,2,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
-0x00DF8F64,「１ダイタイセン」モード、,미상,13,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
+0x00DF8F64,「１ダイタイセン」モード、,한대대전모드,13,1,Translated,audit: fixed Part1 renderer ASCII digit/quote artifact
 0x00DF8F83,おともだちとゲームボーイをつないであそぶ、,"친구와 게임보이를 연결해 즐기는,",21,3,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF8FB0,「ツーシン」モード、,미상,10,2,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
 0x00DF8FC9,それから「サクセンルーム」よ。,미상,15,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
@@ -26691,9 +26691,9 @@ address,japanese,korean,char_count,frequency,status,notes
 0x00DF94D6,ゲームボーイウォーズには、いろいろな,게임보이 워즈에는 여러,18,2,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF94FD,「モード」があるの。,미상,10,2,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
 0x00DF9516,ゲームボーイ１台でタイセンができる,게임보이 1대로 대전 가능,17,2,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
-0x00DF953B,「１ダイタイセン」。,미상,10,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
+0x00DF953B,「１ダイタイセン」。,한대대전모드,10,1,Translated,audit: fixed Part1 renderer ASCII digit/quote artifact
 0x00DF9554,おともだちとゲームボーイをつないであそぶ、,"친구와 게임보이를 연결해 노는,",21,3,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
-0x00DF9581,「ツーシン」。,미상,7,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
+0x00DF9581,「ツーシン」。,통신모드,7,1,Translated,audit: fixed Part1 renderer ASCII quote artifact
 0x00DF9594,それから、私が戦い方を教えている、,그리고 내가 전투법을 알려주는,17,1,Translated,audit: meaningful Korean translation; previous=reviewed: existing address translation
 0x00DF95B9,「サクセンルーム」。,미상,10,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
 0x00DF95D2,この「サクセンルーム」のさいご、,미상,16,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback

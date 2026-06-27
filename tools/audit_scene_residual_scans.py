@@ -154,6 +154,12 @@ def validate_visual_reverification(
     screen_scene_ids: set[str],
     issues: list[dict],
 ) -> None:
+    carry_forward = item.get("carry_forward_applicability") if isinstance(item.get("carry_forward_applicability"), dict) else {}
+    carry_forward_ok = (
+        carry_forward.get("method") == "validated_unrelated_rom_diff_carry_forward"
+        and carry_forward.get("validated_current_rom_sha256") == current_rom_sha
+        and carry_forward.get("capture_rom_sha256") == item.get("rom_sha256")
+    )
     if item.get("method") != "current_sha_visual_reverification":
         add_issue(
             issues,
@@ -162,7 +168,7 @@ def validate_visual_reverification(
             row_index=index,
             actual=item.get("method"),
         )
-    if item.get("rom_sha256") != current_rom_sha:
+    if item.get("rom_sha256") != current_rom_sha and not carry_forward_ok:
         add_issue(
             issues,
             sid,
@@ -299,7 +305,9 @@ def validate_visual_reverification(
                         expected=expected_sha,
                         actual=actual_sha,
                     )
-            if shot.get("provenance_rom_sha256") != current_rom_sha:
+            if shot.get("provenance_rom_sha256") != current_rom_sha and not (
+                carry_forward_ok and shot.get("provenance_rom_sha256") == carry_forward.get("capture_rom_sha256")
+            ):
                 add_issue(
                     issues,
                     sid,

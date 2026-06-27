@@ -83,6 +83,7 @@ CONTAINER_SCENE_REASONS = {
     "30e_part2_story_blackhole_late": "2편 블랙홀 후반 잔여 대사 bucket. 실제 화면은 30e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
     "30f_part2_story_final_and_co": "2편 최종전/CO 설명 잔여 대사 bucket. 실제 화면은 30f* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
     "30g_part2_story_green_earth_late": "2편 그린어스 후반 잔여 대사 bucket. 실제 화면은 30g* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+    "23d_part2_b8_compact_display_tables": "2편 B8 압축 표시문 bucket. 유닛/무기/상점/CO/브레이크 라벨은 여러 화면에서 참조되지만 이 주소 테이블 자체는 독립 프레임이 아니므로 UI 에디터용 container로 추적한다.",
     "88_common_comm_labels": "공통 통신 라벨 데이터 bucket. 독립 실화면 캡처 대상이 아니며, menu/focus residual scan은 scene_residual_scans 감사로 추적한다.",
     "89a_common_battle_surrender_confirm_common_copies": "항복 확인 공통 복제본 bucket. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
     "89b_common_battle_defeat_comm_messages_common_copies": "전투 패배/통신 오류 공통 복제본 bucket. 3P free-battle 항복 패배 실화면은 89b의 Part2 복제본(0xA34D18)을 읽으며, 이 공통 copy/통신 오류 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
@@ -190,7 +191,7 @@ def _member_addr_slot(member, guards):
         addr = int((member.get("address") or "0x0"), 16)
     except (ValueError, TypeError):
         addr = 0
-    slot = guards["slots"].get(addr)
+    slot = (guards.get("slots") or {}).get(addr)
     if not isinstance(slot, int) or slot <= 0:
         slot = member.get("slot") if isinstance(member.get("slot"), int) else 0
     return addr, slot
@@ -233,13 +234,36 @@ def _dialogue_matches(scene, region, addr, specific_only=None):
     return _in_ranges(addr, ranges) if ranges else True
 
 
+EDITOR_VISIBLE_FONT_DIALOGUE_RANGES = [
+    # 0xB8 high-byte region is mostly font/name-grid adjacent data, but this
+    # proven display span contains Part2 unit/weapon names, break quotes, shop
+    # unlock/map labels, CO names, CO power names, and army labels.
+    (0xB81800, 0xB85000),
+]
+GLYPH_DICTIONARY_TEXT_ADDRS = {
+    # Compact CO power renderers consume these rows as two-byte glyph dictionaries,
+    # not as display strings. build_dialogue_map excludes them; keep scene
+    # catalog/editor visibility in lockstep.
+    0xA3B880,
+    0xB842E8,
+}
+
+
+def _editor_visible_font_dialogue(addr):
+    if addr is None:
+        return False
+    if addr in GLYPH_DICTIONARY_TEXT_ADDRS:
+        return False
+    return any(start <= addr < end for start, end in EDITOR_VISIBLE_FONT_DIALOGUE_RANGES)
+
+
 def _review_only_dialogue(group, guards):
     """광역 scene으로 흘러가면 오해를 만드는 추출 노이즈/빌드 제외 후보."""
     members = group.get("members") or []
     if not members:
         return True
     region = group.get("region")
-    if region == "font":
+    if region == "font" and not _editor_visible_font_dialogue(_member_addr_slot(members[0], guards)[0]):
         return True
 
     statuses = [_member_build_status(m, guards) for m in members]
@@ -333,10 +357,10 @@ SCENES = [
          sprite_ids=["lz77_00C1A564", "lz77_00C1AC60"],
          sprite=[],
          dialogue=dict(regions=["ui", "other"], addr_ranges=[
-             [0x9292A8, 0x929920],  # 통신 플레이어/맵 송수신 UI
-             [0x961F30, 0x9625A8],
-             [0x99A7D4, 0x99AE50],
-             [0x9D3078, 0x9D36F0],
+             [0x9292A0, 0x929920],  # 통신 플레이어/맵 송수신 UI
+             [0x961F28, 0x9625A8],
+             [0x99A7CC, 0x99AE50],
+             [0x9D3070, 0x9D36F0],
              [0x805AE0, 0x805B04],  # 공통 복제본: 통신 대전 라벨
          ])),
     dict(id="14_part1_name_input", scope="part1", subtag="이름 입력",
@@ -381,6 +405,7 @@ SCENES = [
          title="1편 전투 N일째 배너", canvas=None, screenshot="30_battle_attack",
          sprite_ids=["lz77_00EE5E14"], sprite=[],
          dialogue=dict(regions=["part1"], addr_ranges=[
+             [0xD8C540, 0xD8C560],  # 전 보급 중 직접 패치 메시지
              [0xDF2932, 0xDF2D00],  # 저장/항복/전투 애니/생산 제한 UI
          ])),
     dict(id="19a_part1_tutorial_story", scope="part1", subtag="대사",
@@ -450,6 +475,11 @@ SCENES = [
          sprite=[], dialogue=dict(regions=["part2"], addr_ranges=[
              [0xA2D8B8, 0xA2FE70],  # 워즈 숍/해금/구매 메시지
          ])),
+    dict(id="23d_part2_b8_compact_display_tables", scope="part2", subtag="메뉴 선택",
+         title="2편 B8 압축 표시문(유닛·상점·CO·브레이크 라벨)", canvas=None, screenshot="07_part2_main_menu",
+         sprite=[], dialogue=dict(regions=["font"], addr_ranges=[
+             [0xB81800, 0xB85000],  # B8 표시 문자열 테이블: 유닛/상점/CO/브레이크 라벨
+         ])),
     dict(id="23b_part2_comm_multiplayer", scope="part2", subtag="메뉴 선택",
          title="2편 통신 메뉴/맵 교환", canvas=None, screenshot="07_part2_main_menu",
          sprite=[], dialogue=dict(regions=["part2"], addr_ranges=[
@@ -457,6 +487,7 @@ SCENES = [
          ])),
     dict(id="23c_part2_sound_room", scope="part2", subtag="메뉴 선택",
          title="2편 사운드룸 트랙 목록", canvas=None, screenshot="07_part2_main_menu",
+         sprite_ids=["lz77_00519B90"],
          sprite=[], dialogue=dict(regions=["part2"], addr_ranges=[
              [0xA352B4, 0xA35758],  # 사운드룸 트랙 목록
          ])),
@@ -495,7 +526,6 @@ SCENES = [
          dialogue=dict(regions=["part2"], addr_ranges=[
              [0xA30164, 0xA31444],  # 전투/브레이크/CO 대사
              [0xA34B6C, 0xA34F2C],  # 저장/항복/전투 옵션/맵 이름 UI
-             [0xA3B880, 0xA3B900],  # CO 파워명 압축 테이블
          ])),
     dict(id="27_part2_battle_objlabels", scope="part2", subtag="전투",
          title="2편 전투 OBJ 라벨(행동·유닛·지형·상태)", canvas=None, screenshot="31_battle_dialog",
@@ -880,7 +910,7 @@ def assign_dialogue(scenes, groups):
         except (ValueError, KeyError, TypeError):
             continue
         region = g.get("region")
-        if region == "font":
+        if region == "font" and not _editor_visible_font_dialogue(addr):
             continue
 
         if _review_only_dialogue(g, guards):
@@ -1048,7 +1078,17 @@ def main():
     game_scene_dl = sum(len(v) for v in dl_bucket.values())
     assigned_dl = game_scene_dl + len(dl_review)
     assigned_sp = sum(len(v) for v in sp_bucket.values())
-    total_dl_groups = sum(1 for g in groups if g.get("region") != "font" and g.get("members"))
+    total_dl_groups = sum(
+        1
+        for g in groups
+        if g.get("members")
+        and (
+            g.get("region") != "font"
+            or _editor_visible_font_dialogue(
+                _member_addr_slot((g.get("members") or [{}])[0], {})[0]
+            )
+        )
+    )
     catalog = {
         "version": 1,
         "_doc": "게임 흐름순 scene 카탈로그(통합 UI 에디터 정본). tools/build_scene_catalog.py 생성. "

@@ -1,0 +1,201 @@
+{
+ "tool": "tools/probe_compact_display_reads.py",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+ "git_commit": "5276883",
+ "selected_groups": [
+  "b8_compact_display_table_all"
+ ],
+ "selected_target_addresses": [
+  "0x00A2CC3C",
+  "0x00A2CC6C",
+  "0x00B8277C",
+  "0x00B827AC"
+ ],
+ "source_files": {
+  "display_overrides": "data/display_overrides.json",
+  "dialogue_groups": "data/dialogue_groups.json",
+  "renderer_trace": "data/compact_display_renderer_trace.json"
+ },
+ "case_count": 1,
+ "hit_count": 0,
+ "direct_target_read_count": 0,
+ "direct_hits": [],
+ "truncated_direct_hits": 0,
+ "cases": [
+  {
+   "case_type": "screen_checkpoint",
+   "name": "07_part2_main_menu",
+   "mode": "fresh",
+   "scene_id": null,
+   "watch_log": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/watch.log",
+   "watchpoint_caveat": null,
+   "screen_steps": [
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "DOWN",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "B",
+     160
+    ],
+    [
+     "press",
+     "DOWN",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "DOWN",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "B",
+     160
+    ],
+    [
+     "press",
+     "UP",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "START",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "B",
+     160
+    ],
+    [
+     "press",
+     "LEFT",
+     160
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "frames",
+     120
+    ]
+   ],
+   "watch_mode": "exact_targets",
+   "watches": [
+    {
+     "offset": "0x00A2CC3C",
+     "gba_start": "0x08A2CC3C",
+     "size": 4,
+     "response": "OK watchaddr 08A2CC3C len=4 set=4"
+    },
+    {
+     "offset": "0x00A2CC6C",
+     "gba_start": "0x08A2CC6C",
+     "size": 4,
+     "response": "OK watchaddr 08A2CC6C len=4 set=4"
+    },
+    {
+     "offset": "0x00B8277C",
+     "gba_start": "0x08B8277C",
+     "size": 4,
+     "response": "OK watchaddr 08B8277C len=4 set=4"
+    },
+    {
+     "offset": "0x00B827AC",
+     "gba_start": "0x08B827AC",
+     "size": 4,
+     "response": "OK watchaddr 08B827AC len=4 set=4"
+    }
+   ],
+   "nav": [
+    [
+     "frames",
+     480
+    ],
+    [
+     "press",
+     "A",
+     200
+    ],
+    [
+     "press",
+     "START",
+     200
+    ],
+    [
+     "press",
+     "DOWN",
+     120
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "START",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ],
+    [
+     "press",
+     "A",
+     240
+    ]
+   ],
+   "frame": "temp/compact_display_read_watch_rule_settings_map_names_20260627_resha/screen_07_part2_main_menu/frame.png",
+   "summary": {
+    "hit_count": 0,
+    "direct_target_read_count": 0,
+    "direct_target_count": 0,
+    "by_group": {},
+    "top_pcs": [],
+    "direct_targets": []
+   },
+   "hits": [],
+   "truncated_hits": 0
+  }
+ ],
+ "strict_note": "Read-watch hits prove runtime reads of compact source spans on that route. They are stronger than static xrefs but still not a replacement for final pixel-level visual confirmation. Savestate watchpoint misses can be false negatives."
+}

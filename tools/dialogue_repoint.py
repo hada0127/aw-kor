@@ -81,8 +81,8 @@ def _line_index(found_csv):
 
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
-                     extra_messages=None, min_level=6, max_cells=50, max_header_gap=16,
-                     align=4, log=None, valid_codes=None):
+                     extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
+                     max_header_gap=16, align=4, log=None, valid_codes=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(쪼롱이님 per-line 대사만 복원)**:
@@ -96,6 +96,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     stats = collections.Counter()
     manifest = []
     free = free_start
+    skip_messages = set(skip_messages or ())
 
     # 현재 여유공간이 정말 비어있는지(0xFF) 확인
     if any(b != 0xFF for b in rom[free_start:free_end]):
@@ -215,6 +216,10 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     _relocated_msgs = set()   # 다중포인터 메시지 중복 재배치 방지(1회 재배치 + 전 site 갱신)
     for ptr_off, msg, _tbl in sorted(table_entries, key=lambda e: (e[0], e[1], -1 if e[2] is None else e[2])):
         if msg in _relocated_msgs:
+            continue
+        if msg in skip_messages:
+            stats['skip_forced_message'] = stats.get('skip_forced_message', 0) + 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_forced'})
             continue
         lines = msg_lines.get(msg, [])
         if not lines:
@@ -354,10 +359,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             cur = a + L
         new_msg += rom[cur:me]                    # 종단 제어 보존
 
-        # ★2026-06-25 전각공백 변환: 대사 렌더러는 반각공백(0x20)을 글리프 폭 0으로 스킵(화면 잼)하므로,
-        # free space(폭 여유)인 재배치 블롭은 **content 사이 0x20을 전각(0x8140)으로** 바꿔 화면에 공백이
-        # 보이게 한다. 비-fixed 라인(클린소스 없는 잼)까지 정상화. (다음이 content가 아닌 0x20=trailing 패딩,
-        # 제어코드 앞 0x20은 미변환=무해 스킵.) 2바이트 코드 lead는 건너뛰어 코드 내부 0x20 오변환 방지.
+        # ★2026-06-25/27 free-space punctuation normalization:
+        # - 대사 렌더러는 반각공백(0x20)을 글리프 폭 0으로 스킵(화면 잼)하므로, content 사이 0x20은 전각(0x8140)으로
+        #   바꿔 화면에 공백이 보이게 한다. 비-fixed 라인(클린소스 없는 잼)까지 정상화.
+        # - 재배치 블롭 전체의 ASCII comma(0x2C)도 2바이트 `、`(0x8141)로 바꾼다. fixed line은
+        #   encode_full_fidelity()에서 이미 처리하지만, 같은 메시지의 보존 라인에 남은 comma도 같은 renderer를 타므로
+        #   byte alignment를 통일한다. 2바이트 코드 lead는 건너뛰어 코드 내부 바이트 오변환을 막는다.
         _conv = bytearray(); _i = 0
         while _i < len(new_msg):
             _b = new_msg[_i]
@@ -370,6 +377,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 else:
                     _conv += b'\x20'
                 _i += 1
+            elif _b == 0x2C:
+                _conv += b'\x81\x41'; _i += 1
             else:
                 _conv += bytes([_b]); _i += 1
         new_msg = _conv

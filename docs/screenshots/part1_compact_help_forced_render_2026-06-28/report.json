@@ -1,0 +1,311 @@
+{
+  "base_rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+  "method": "synthetic temp ROM: patch Part1 compact help pointer table visible codes 10/13/20/14/21/22/23 to target pointer, then trigger real menu redraw from current menu state; not direct route evidence",
+  "base_state": "temp/e16_menu_state_dump2_20260628/menu.ss0",
+  "rows": [
+    {
+      "case_id": "code00_vs_2to4",
+      "target_code": 0,
+      "patched_pointer": "0x08DFA648",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code00_vs_2to4/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code00_vs_2to4/watch.log",
+      "summary": {
+        "hit_count": 6821,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA64A",
+          "0x00DFA66B",
+          "0x00DFA68C"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA64A",
+            "hit_count": 194,
+            "target_addresses": [
+              "0x00DFA64A",
+              "0x00DFA66B"
+            ],
+            "assembled_ko": "둘부터 넷까지\n대전 가능"
+          },
+          {
+            "group_id": "g_00DFA683",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA68C"
+            ],
+            "assembled_ko": "씨의\n전투기록볼수있어"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6617
+      }
+    },
+    {
+      "case_id": "code05_hidden_new",
+      "target_code": 5,
+      "patched_pointer": "0x08DFA838",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code05_hidden_new/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code05_hidden_new/watch.log",
+      "summary": {
+        "hit_count": 6821,
+        "direct_group_count": 2,
+        "direct_target_count": 4,
+        "direct_targets": [
+          "0x00DFA83A",
+          "0x00DFA84D",
+          "0x00DFA872",
+          "0x00DFA885"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA83A",
+            "hit_count": 194,
+            "target_addresses": [
+              "0x00DFA83A",
+              "0x00DFA84D"
+            ],
+            "assembled_ko": "특별한 처음부터\n숨겨진 모드"
+          },
+          {
+            "group_id": "g_00DFA872",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA872",
+              "0x00DFA885"
+            ],
+            "assembled_ko": "특별 이어하기\n숨겨진 모드"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6617
+      }
+    },
+    {
+      "case_id": "code06_hidden_continue",
+      "target_code": 6,
+      "patched_pointer": "0x08DFA870",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code06_hidden_continue/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code06_hidden_continue/watch.log",
+      "summary": {
+        "hit_count": 6821,
+        "direct_group_count": 2,
+        "direct_target_count": 4,
+        "direct_targets": [
+          "0x00DFA872",
+          "0x00DFA885",
+          "0x00DFA8AA",
+          "0x00DFA8CB"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA872",
+            "hit_count": 194,
+            "target_addresses": [
+              "0x00DFA872",
+              "0x00DFA885"
+            ],
+            "assembled_ko": "특별 이어하기\n숨겨진 모드"
+          },
+          {
+            "group_id": "g_00DFA8AA",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA8AA",
+              "0x00DFA8CB"
+            ],
+            "assembled_ko": "혼자서 대전\n사령관 상대"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6617
+      }
+    },
+    {
+      "case_id": "code09_vs_continue",
+      "target_code": 9,
+      "patched_pointer": "0x08DFA7BC",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code09_vs_continue/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code09_vs_continue/watch.log",
+      "summary": {
+        "hit_count": 6827,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA7BE",
+          "0x00DFA7E2",
+          "0x00DFA7FD"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA7BE",
+            "hit_count": 122,
+            "target_addresses": [
+              "0x00DFA7BE"
+            ],
+            "assembled_ko": "이어서 대전"
+          },
+          {
+            "group_id": "g_00DFA7E2",
+            "hit_count": 12,
+            "target_addresses": [
+              "0x00DFA7E2",
+              "0x00DFA7FD"
+            ],
+            "assembled_ko": "처음부터 캠페인\n시작해요"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6691
+      }
+    },
+    {
+      "case_id": "code16_solo_vs",
+      "target_code": 16,
+      "patched_pointer": "0x08DFA8A8",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code16_solo_vs/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code16_solo_vs/watch.log",
+      "summary": {
+        "hit_count": 6861,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA8AA",
+          "0x00DFA8CB",
+          "0x00DFA8EA"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA8AA",
+            "hit_count": 234,
+            "target_addresses": [
+              "0x00DFA8AA",
+              "0x00DFA8CB"
+            ],
+            "assembled_ko": "혼자서 대전\n사령관 상대"
+          },
+          {
+            "group_id": "g_00DFA8EA",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA8EA"
+            ],
+            "assembled_ko": "둘이서 대전"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6617
+      }
+    },
+    {
+      "case_id": "code17_two_players",
+      "target_code": 17,
+      "patched_pointer": "0x08DFA8E8",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code17_two_players/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code17_two_players/watch.log",
+      "summary": {
+        "hit_count": 6815,
+        "direct_group_count": 2,
+        "direct_target_count": 2,
+        "direct_targets": [
+          "0x00DFA8EA",
+          "0x00DFA90A"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA8EA",
+            "hit_count": 114,
+            "target_addresses": [
+              "0x00DFA8EA"
+            ],
+            "assembled_ko": "둘이서 대전"
+          },
+          {
+            "group_id": "g_00DFA90A",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA90A"
+            ],
+            "assembled_ko": "셋이서 대전"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6691
+      }
+    },
+    {
+      "case_id": "code18_three_players",
+      "target_code": 18,
+      "patched_pointer": "0x08DFA908",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code18_three_players/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code18_three_players/watch.log",
+      "summary": {
+        "hit_count": 6799,
+        "direct_group_count": 2,
+        "direct_target_count": 2,
+        "direct_targets": [
+          "0x00DFA90A",
+          "0x00DFA926"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA90A",
+            "hit_count": 98,
+            "target_addresses": [
+              "0x00DFA90A"
+            ],
+            "assembled_ko": "셋이서 대전"
+          },
+          {
+            "group_id": "g_00DFA926",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA926"
+            ],
+            "assembled_ko": "넷이서 대전"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6691
+      }
+    },
+    {
+      "case_id": "code19_four_players",
+      "target_code": 19,
+      "patched_pointer": "0x08DFA924",
+      "frame": "temp/e16_synthetic_pointer_help_render_20260628/code19_four_players/frame.png",
+      "watch_log": "temp/e16_synthetic_pointer_help_render_20260628/code19_four_players/watch.log",
+      "summary": {
+        "hit_count": 6799,
+        "direct_group_count": 2,
+        "direct_target_count": 3,
+        "direct_targets": [
+          "0x00DFA926",
+          "0x00DFA942",
+          "0x00DFA95B"
+        ],
+        "direct_groups": [
+          {
+            "group_id": "g_00DFA926",
+            "hit_count": 98,
+            "target_addresses": [
+              "0x00DFA926"
+            ],
+            "assembled_ko": "넷이서 대전"
+          },
+          {
+            "group_id": "g_00DFA942",
+            "hit_count": 8,
+            "target_addresses": [
+              "0x00DFA942",
+              "0x00DFA95B"
+            ],
+            "assembled_ko": "통신 케이블로\n대전하기"
+          }
+        ],
+        "pointer_table_hits": 2,
+        "other_watch_range_hits": 6691
+      }
+    }
+  ]
+}

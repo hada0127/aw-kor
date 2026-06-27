@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30e_part2_story_blackhole_late",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "8a34a570c7429529cbe5a6afb906f62985a95ad576e81ceb3e45f469f18c4c6e",
+  "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
   "min_score": 7,
   "ranges": [
    {

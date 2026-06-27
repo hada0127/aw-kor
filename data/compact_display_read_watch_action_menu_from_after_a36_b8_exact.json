@@ -1,0 +1,109 @@
+{
+ "tool": "tools/probe_compact_display_reads.py",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "3e3bae3363ce429df76505d1413906f82203dfaaea35b4df3d610bbd80e902d0",
+ "git_commit": "5276883",
+ "selected_groups": [
+  "b8_compact_display_table_all"
+ ],
+ "selected_target_addresses": [
+  "0x00B82DEE",
+  "0x00B82DF6",
+  "0x00B82DFE",
+  "0x00B82E28",
+  "0x00B82E32",
+  "0x00B82E3A",
+  "0x00B82E42"
+ ],
+ "source_files": {
+  "display_overrides": "data/display_overrides.json",
+  "dialogue_groups": "data/dialogue_groups.json",
+  "renderer_trace": "data/compact_display_renderer_trace.json"
+ },
+ "case_count": 1,
+ "hit_count": 0,
+ "direct_target_read_count": 0,
+ "direct_hits": [],
+ "truncated_direct_hits": 0,
+ "cases": [
+  {
+   "case_type": "state",
+   "name": "temp/first_battle_state31_a36_probe/after_a36.ss0",
+   "mode": "savestate",
+   "state": "temp/first_battle_state31_a36_probe/after_a36.ss0",
+   "state_sha256": "0d79b549ad223dc3cad59f35337bda07c677acb349343316cb31dc0607144d22",
+   "watch_log": "temp/e12_action_menu_from_after_a36_b8_exact_current_20260627_resha/state_temp__first_battle_state31_a36_probe__after_a36.ss0/watch.log",
+   "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
+   "state_frames": 20,
+   "state_steps": [
+    [
+     "press",
+     "A",
+     120
+    ],
+    [
+     "press",
+     "A",
+     120
+    ]
+   ],
+   "watch_mode": "exact_targets",
+   "watches": [
+    {
+     "offset": "0x00B82DEE",
+     "gba_start": "0x08B82DEE",
+     "size": 4,
+     "response": "OK watchaddr 08B82DEE len=4 set=4"
+    },
+    {
+     "offset": "0x00B82DF6",
+     "gba_start": "0x08B82DF6",
+     "size": 4,
+     "response": "OK watchaddr 08B82DF6 len=4 set=4"
+    },
+    {
+     "offset": "0x00B82DFE",
+     "gba_start": "0x08B82DFE",
+     "size": 4,
+     "response": "OK watchaddr 08B82DFE len=4 set=4"
+    },
+    {
+     "offset": "0x00B82E28",
+     "gba_start": "0x08B82E28",
+     "size": 4,
+     "response": "OK watchaddr 08B82E28 len=4 set=4"
+    },
+    {
+     "offset": "0x00B82E32",
+     "gba_start": "0x08B82E32",
+     "size": 4,
+     "response": "OK watchaddr 08B82E32 len=4 set=4"
+    },
+    {
+     "offset": "0x00B82E3A",
+     "gba_start": "0x08B82E3A",
+     "size": 4,
+     "response": "OK watchaddr 08B82E3A len=4 set=4"
+    },
+    {
+     "offset": "0x00B82E42",
+     "gba_start": "0x08B82E42",
+     "size": 4,
+     "response": "OK watchaddr 08B82E42 len=4 set=4"
+    }
+   ],
+   "frame": "temp/e12_action_menu_from_after_a36_b8_exact_current_20260627_resha/state_temp__first_battle_state31_a36_probe__after_a36.ss0/frame.png",
+   "summary": {
+    "hit_count": 0,
+    "direct_target_read_count": 0,
+    "direct_target_count": 0,
+    "by_group": {},
+    "top_pcs": [],
+    "direct_targets": []
+   },
+   "hits": [],
+   "truncated_hits": 0
+  }
+ ],
+ "strict_note": "Read-watch hits prove runtime reads of compact source spans on that route. They are stronger than static xrefs but still not a replacement for final pixel-level visual confirmation. Savestate watchpoint misses can be false negatives."
+}

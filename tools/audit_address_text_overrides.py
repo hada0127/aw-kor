@@ -102,7 +102,18 @@ def load_build_overrides() -> dict[int, str]:
         sys.path.insert(0, tools)
     import build_korean_full as B  # noqa: WPS433
 
+    if hasattr(B, "refresh_compact_glyph_dictionary_overrides"):
+        B.refresh_compact_glyph_dictionary_overrides(B.load_display_overrides(), strict=True)
     return {int(k): str(v or "") for k, v in B.ADDRESS_TEXT_OVERRIDES.items()}
+
+
+def generated_override_addrs() -> set[int]:
+    tools = str(ROOT / "tools")
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import build_korean_full as B  # noqa: WPS433
+
+    return set(getattr(B, "GLYPH_DICTIONARY_TEXT_ADDRS", set()))
 
 
 def load_effective_protected_texts(raw: dict[int, str]) -> tuple[dict[int, str], dict[str, int]]:
@@ -120,6 +131,12 @@ def load_effective_protected_texts(raw: dict[int, str]) -> tuple[dict[int, str],
     import qa_text_fit  # noqa: WPS433
 
     effective = dict(raw)
+    display_overrides = B.load_display_overrides()
+    display_override_count = 0
+    for addr, text in list(effective.items()):
+        if addr in display_overrides:
+            effective[addr] = display_overrides[addr]
+            display_override_count += 1
     slots = B.load_slots()
     pair_normalized = 0
     for addr, text in list(effective.items()):
@@ -139,6 +156,7 @@ def load_effective_protected_texts(raw: dict[int, str]) -> tuple[dict[int, str],
             direct_divergent += 1
         effective[addr] = str(text or "")
     return effective, {
+        "display_override_count": display_override_count,
         "pair_normalized_count": pair_normalized,
         "direct_patch_collision_count": direct_collisions,
         "direct_patch_divergent_count": direct_divergent,
@@ -196,11 +214,14 @@ def build_report() -> dict[str, Any]:
         )
 
     runtime = load_build_overrides()
+    generated_addrs = generated_override_addrs()
     static_effective: dict[int, str] = {}
     for entry in entries:
         static_effective[entry["addr_int"]] = str(entry["value"] or "")
     static_mismatches = []
     for addr in sorted(set(runtime) | set(static_effective)):
+        if addr in generated_addrs and addr not in static_effective:
+            continue
         rv = runtime.get(addr)
         sv = static_effective.get(addr)
         if rv != sv:
@@ -301,6 +322,7 @@ def build_report() -> dict[str, Any]:
         "source_entry_count": len(entries),
         "raw_effective_count": len(runtime),
         "effective_count": len(protected),
+        "generated_runtime_address_count": len([addr for addr in generated_addrs if addr in runtime and addr not in static_effective]),
         **effective_stats,
         "duplicate_count": len(duplicates),
         "duplicates": duplicates[:120],
