@@ -1,0 +1,3631 @@
+{
+ "tool": "tools/probe_compact_display_reads.py",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "84e9f2f",
+ "selected_groups": [
+  "a2_co_power_profile_display_overrides",
+  "b84_compact_power_display_overrides"
+ ],
+ "selected_target_addresses": [],
+ "source_files": {
+  "display_overrides": "data/display_overrides.json",
+  "dialogue_groups": "data/dialogue_groups.json",
+  "renderer_trace": "data/compact_display_renderer_trace.json"
+ },
+ "case_count": 1,
+ "hit_count": 68,
+ "direct_target_read_count": 68,
+ "direct_hits": [
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 0,
+    "addr": 144872876,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "0 addr=08A295AC pc=0831425A lr=08314F1B r0=03001470 r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 1,
+    "addr": 144872876,
+    "pc": 137446198,
+    "lr": 137449243,
+    "r0": 133,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "1 addr=08A295AC pc=08314336 lr=08314F1B r0=00000085 r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 2,
+    "addr": 144872876,
+    "pc": 137477264,
+    "lr": 137477807,
+    "r0": 50343056,
+    "r1": 0,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "2 addr=08A295AC pc=0831BC90 lr=0831BEAF r0=03002C90 r1=00000000 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 3,
+    "addr": 144872876,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 50343056,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "3 addr=08A295AC pc=0838BCE4 lr=0831BCE7 r0=03002C90 r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 4,
+    "addr": 144872877,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 142,
+    "r1": 144872877,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AD",
+     "read_offset": "0x00A295AD",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "4 addr=08A295AD pc=0838BCE4 lr=0831BCE7 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 5,
+    "addr": 144872878,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 77,
+    "r1": 144872878,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "5 addr=08A295AE pc=0838BCE4 lr=0831BCE7 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 6,
+    "addr": 144872879,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 139,
+    "r1": 144872879,
+    "old": 183,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AF",
+     "read_offset": "0x00A295AF",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "6 addr=08A295AF pc=0838BCE4 lr=0831BCE7 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 7,
+    "addr": 144872880,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 183,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "7 addr=08A295B0 pc=0838BCE4 lr=0831BCE7 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 8,
+    "addr": 144872876,
+    "pc": 137477356,
+    "lr": 137477351,
+    "r0": 50343056,
+    "r1": 144872880,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "8 addr=08A295AC pc=0831BCEC lr=0831BCE7 r0=03002C90 r1=08A295B0 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 9,
+    "addr": 144872876,
+    "pc": 150144004,
+    "lr": 137477351,
+    "r0": 150144001,
+    "r1": 144872880,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "9 addr=08A295AC pc=08F30404 lr=0831BCE7 r0=08F30401 r1=08A295B0 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 10,
+    "addr": 144872876,
+    "pc": 150143620,
+    "lr": 137477101,
+    "r0": 144872876,
+    "r1": 0,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "10 addr=08A295AC pc=08F30284 lr=0831BBED r0=08A295AC r1=00000000 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 11,
+    "addr": 144872877,
+    "pc": 150143622,
+    "lr": 137477101,
+    "r0": 144872876,
+    "r1": 0,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AD",
+     "read_offset": "0x00A295AD",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "11 addr=08A295AD pc=08F30286 lr=0831BBED r0=08A295AC r1=00000000 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 12,
+    "addr": 144872878,
+    "pc": 137477404,
+    "lr": 137477101,
+    "r0": 137477397,
+    "r1": 10063872,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "12 addr=08A295AE pc=0831BD1C lr=0831BBED r0=0831BD15 r1=00999000 old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 13,
+    "addr": 144872878,
+    "pc": 150144004,
+    "lr": 137477101,
+    "r0": 150144001,
+    "r1": 10063872,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "13 addr=08A295AE pc=08F30404 lr=0831BBED r0=08F30401 r1=00999000 old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 14,
+    "addr": 144872878,
+    "pc": 150143620,
+    "lr": 137477101,
+    "r0": 144872878,
+    "r1": 0,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "14 addr=08A295AE pc=08F30284 lr=0831BBED r0=08A295AE r1=00000000 old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 15,
+    "addr": 144872879,
+    "pc": 150143622,
+    "lr": 137477101,
+    "r0": 144872878,
+    "r1": 0,
+    "old": 183,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AF",
+     "read_offset": "0x00A295AF",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "15 addr=08A295AF pc=08F30286 lr=0831BBED r0=08A295AE r1=00000000 old=000000B7 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 16,
+    "addr": 144872880,
+    "pc": 137477404,
+    "lr": 137477101,
+    "r0": 137477397,
+    "r1": 2415919104,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "16 addr=08A295B0 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=90000000 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 17,
+    "addr": 144872876,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 144872876,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "17 addr=08A295AC pc=0838BD18 lr=0831BD25 r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 18,
+    "addr": 144872877,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 142,
+    "r1": 144872877,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AD",
+     "read_offset": "0x00A295AD",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "18 addr=08A295AD pc=0838BD18 lr=0831BD25 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 19,
+    "addr": 144872878,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 77,
+    "r1": 144872878,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "19 addr=08A295AE pc=0838BD18 lr=0831BD25 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 20,
+    "addr": 144872879,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 139,
+    "r1": 144872879,
+    "old": 183,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AF",
+     "read_offset": "0x00A295AF",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "20 addr=08A295AF pc=0838BD18 lr=0831BD25 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 21,
+    "addr": 144872880,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 183,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "21 addr=08A295B0 pc=0838BD18 lr=0831BD25 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 22,
+    "addr": 144872876,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 144872876,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "22 addr=08A295AC pc=0838BD18 lr=0831BD59 r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 23,
+    "addr": 144872877,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 142,
+    "r1": 144872877,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AD",
+     "read_offset": "0x00A295AD",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "23 addr=08A295AD pc=0838BD18 lr=0831BD59 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 24,
+    "addr": 144872878,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 77,
+    "r1": 144872878,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "24 addr=08A295AE pc=0838BD18 lr=0831BD59 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 25,
+    "addr": 144872879,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 139,
+    "r1": 144872879,
+    "old": 183,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AF",
+     "read_offset": "0x00A295AF",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "25 addr=08A295AF pc=0838BD18 lr=0831BD59 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 26,
+    "addr": 144872880,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 183,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "26 addr=08A295B0 pc=0838BD18 lr=0831BD59 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 27,
+    "addr": 144872876,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 144872876,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "27 addr=08A295AC pc=0838BD18 lr=0831BEDD r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 28,
+    "addr": 144872877,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 142,
+    "r1": 144872877,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AD",
+     "read_offset": "0x00A295AD",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "28 addr=08A295AD pc=0838BD18 lr=0831BEDD r0=0000008E r1=08A295AD old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 29,
+    "addr": 144872878,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 77,
+    "r1": 144872878,
+    "old": 139,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AE",
+     "read_offset": "0x00A295AE",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "29 addr=08A295AE pc=0838BD18 lr=0831BEDD r0=0000004D r1=08A295AE old=0000008B new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 30,
+    "addr": 144872879,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 139,
+    "r1": 144872879,
+    "old": 183,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AF",
+     "read_offset": "0x00A295AF",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "30 addr=08A295AF pc=0838BD18 lr=0831BEDD r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 31,
+    "addr": 144872880,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 183,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "31 addr=08A295B0 pc=0838BD18 lr=0831BEDD r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 32,
+    "addr": 144872880,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "32 addr=08A295B0 pc=0831425A lr=08314F1B r0=03001470 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 33,
+    "addr": 144872880,
+    "pc": 137446198,
+    "lr": 137449243,
+    "r0": 4294967287,
+    "r1": 144872880,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295B0",
+     "read_offset": "0x00A295B0",
+     "target_start": "0x00A295AC",
+     "span_end": "0x00A295C0",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "33 addr=08A295B0 pc=08314336 lr=08314F1B r0=FFFFFFF7 r1=08A295B0 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 34,
+    "addr": 144872896,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "34 addr=08A295C0 pc=0831425A lr=08314F1B r0=03001470 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 35,
+    "addr": 144872896,
+    "pc": 137446198,
+    "lr": 137449243,
+    "r0": 128,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "35 addr=08A295C0 pc=08314336 lr=08314F1B r0=00000080 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 36,
+    "addr": 144872896,
+    "pc": 137477264,
+    "lr": 137477807,
+    "r0": 50343056,
+    "r1": 0,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "36 addr=08A295C0 pc=0831BC90 lr=0831BEAF r0=03002C90 r1=00000000 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 37,
+    "addr": 144872896,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 50343056,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "37 addr=08A295C0 pc=0838BCE4 lr=0831BCE7 r0=03002C90 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 38,
+    "addr": 144872897,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 137,
+    "r1": 144872897,
+    "old": 244,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C1",
+     "read_offset": "0x00A295C1",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "38 addr=08A295C1 pc=0838BCE4 lr=0831BCE7 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 39,
+    "addr": 144872898,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 244,
+    "r1": 144872898,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "39 addr=08A295C2 pc=0838BCE4 lr=0831BCE7 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 40,
+    "addr": 144872899,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 142,
+    "r1": 144872899,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C3",
+     "read_offset": "0x00A295C3",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "40 addr=08A295C3 pc=0838BCE4 lr=0831BCE7 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 41,
+    "addr": 144872900,
+    "pc": 137936100,
+    "lr": 137477351,
+    "r0": 77,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "41 addr=08A295C4 pc=0838BCE4 lr=0831BCE7 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 42,
+    "addr": 144872896,
+    "pc": 137477356,
+    "lr": 137477351,
+    "r0": 50343056,
+    "r1": 144872900,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "42 addr=08A295C0 pc=0831BCEC lr=0831BCE7 r0=03002C90 r1=08A295C4 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 43,
+    "addr": 144872896,
+    "pc": 150144004,
+    "lr": 137477351,
+    "r0": 150144001,
+    "r1": 144872900,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "43 addr=08A295C0 pc=08F30404 lr=0831BCE7 r0=08F30401 r1=08A295C4 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 44,
+    "addr": 144872896,
+    "pc": 150143620,
+    "lr": 137477101,
+    "r0": 144872896,
+    "r1": 0,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "44 addr=08A295C0 pc=08F30284 lr=0831BBED r0=08A295C0 r1=00000000 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 45,
+    "addr": 144872897,
+    "pc": 150143622,
+    "lr": 137477101,
+    "r0": 144872896,
+    "r1": 0,
+    "old": 244,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C1",
+     "read_offset": "0x00A295C1",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "45 addr=08A295C1 pc=08F30286 lr=0831BBED r0=08A295C0 r1=00000000 old=000000F4 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 46,
+    "addr": 144872898,
+    "pc": 137477404,
+    "lr": 137477101,
+    "r0": 137477397,
+    "r1": 2425356288,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "46 addr=08A295C2 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=90900000 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 47,
+    "addr": 144872898,
+    "pc": 150144004,
+    "lr": 137477101,
+    "r0": 150144001,
+    "r1": 2425356288,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "47 addr=08A295C2 pc=08F30404 lr=0831BBED r0=08F30401 r1=90900000 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 48,
+    "addr": 144872898,
+    "pc": 150143620,
+    "lr": 137477101,
+    "r0": 144872898,
+    "r1": 0,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "48 addr=08A295C2 pc=08F30284 lr=0831BBED r0=08A295C2 r1=00000000 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 49,
+    "addr": 144872899,
+    "pc": 150143622,
+    "lr": 137477101,
+    "r0": 144872898,
+    "r1": 0,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C3",
+     "read_offset": "0x00A295C3",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "49 addr=08A295C3 pc=08F30286 lr=0831BBED r0=08A295C2 r1=00000000 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 50,
+    "addr": 144872900,
+    "pc": 137477404,
+    "lr": 137477101,
+    "r0": 137477397,
+    "r1": 10063872,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "50 addr=08A295C4 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=00999000 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 51,
+    "addr": 144872896,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 144872896,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "51 addr=08A295C0 pc=0838BD18 lr=0831BD25 r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 52,
+    "addr": 144872897,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 137,
+    "r1": 144872897,
+    "old": 244,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C1",
+     "read_offset": "0x00A295C1",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "52 addr=08A295C1 pc=0838BD18 lr=0831BD25 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 53,
+    "addr": 144872898,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 244,
+    "r1": 144872898,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "53 addr=08A295C2 pc=0838BD18 lr=0831BD25 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 54,
+    "addr": 144872899,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 142,
+    "r1": 144872899,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C3",
+     "read_offset": "0x00A295C3",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "54 addr=08A295C3 pc=0838BD18 lr=0831BD25 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 55,
+    "addr": 144872900,
+    "pc": 137936152,
+    "lr": 137477413,
+    "r0": 77,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "55 addr=08A295C4 pc=0838BD18 lr=0831BD25 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 56,
+    "addr": 144872896,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 144872896,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "56 addr=08A295C0 pc=0838BD18 lr=0831BD59 r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 57,
+    "addr": 144872897,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 137,
+    "r1": 144872897,
+    "old": 244,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C1",
+     "read_offset": "0x00A295C1",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "57 addr=08A295C1 pc=0838BD18 lr=0831BD59 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 58,
+    "addr": 144872898,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 244,
+    "r1": 144872898,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "58 addr=08A295C2 pc=0838BD18 lr=0831BD59 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 59,
+    "addr": 144872899,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 142,
+    "r1": 144872899,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C3",
+     "read_offset": "0x00A295C3",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "59 addr=08A295C3 pc=0838BD18 lr=0831BD59 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 60,
+    "addr": 144872900,
+    "pc": 137936152,
+    "lr": 137477465,
+    "r0": 77,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "60 addr=08A295C4 pc=0838BD18 lr=0831BD59 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 61,
+    "addr": 144872896,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 144872896,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "61 addr=08A295C0 pc=0838BD18 lr=0831BEDD r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 62,
+    "addr": 144872897,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 137,
+    "r1": 144872897,
+    "old": 244,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C1",
+     "read_offset": "0x00A295C1",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "62 addr=08A295C1 pc=0838BD18 lr=0831BEDD r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 63,
+    "addr": 144872898,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 244,
+    "r1": 144872898,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C2",
+     "read_offset": "0x00A295C2",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "63 addr=08A295C2 pc=0838BD18 lr=0831BEDD r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 64,
+    "addr": 144872899,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 142,
+    "r1": 144872899,
+    "old": 77,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C3",
+     "read_offset": "0x00A295C3",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "64 addr=08A295C3 pc=0838BD18 lr=0831BEDD r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 65,
+    "addr": 144872900,
+    "pc": 137936152,
+    "lr": 137477853,
+    "r0": 77,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "65 addr=08A295C4 pc=0838BD18 lr=0831BEDD r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 66,
+    "addr": 144872900,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "66 addr=08A295C4 pc=0831425A lr=08314F1B r0=03001470 r1=08A295C4 old=00000000 new=00000000"
+   }
+  },
+  {
+   "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "case_type": "state",
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "hit": {
+    "order": 67,
+    "addr": 144872900,
+    "pc": 137446198,
+    "lr": 137449243,
+    "r0": 4294967287,
+    "r1": 144872900,
+    "old": 0,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C4",
+     "read_offset": "0x00A295C4",
+     "target_start": "0x00A295C0",
+     "span_end": "0x00A295D8",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "67 addr=08A295C4 pc=08314336 lr=08314F1B r0=FFFFFFF7 r1=08A295C4 old=00000000 new=00000000"
+   }
+  }
+ ],
+ "truncated_direct_hits": 0,
+ "cases": [
+  {
+   "case_type": "state",
+   "name": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "mode": "savestate",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
+   "watch_log": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
+   "watchpoint_caveat": "savestate watchpoints are useful leads but can false-negative; prefer fresh routes for closure",
+   "state_frames": 20,
+   "state_steps": [
+    [
+     "press",
+     "DOWN",
+     50
+    ],
+    [
+     "press",
+     "DOWN",
+     50
+    ],
+    [
+     "press",
+     "DOWN",
+     50
+    ]
+   ],
+   "watch_mode": "ranges",
+   "watches": [
+    {
+     "group_id": "a2_co_power_profile_display_overrides",
+     "start": "0x00A2955C",
+     "end": "0x00A29830",
+     "gba_start": "0x08A2955C",
+     "size": 724,
+     "response": "OK watchaddr 08A2955C len=724 set=724"
+    },
+    {
+     "group_id": "b84_compact_power_display_overrides",
+     "start": "0x00B84E50",
+     "end": "0x00B84F18",
+     "gba_start": "0x08B84E50",
+     "size": 200,
+     "response": "OK watchaddr 08B84E50 len=200 set=200"
+    }
+   ],
+   "frame": "temp/compact_display_read_watch_a2_profile_down3_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png",
+   "summary": {
+    "hit_count": 68,
+    "direct_target_read_count": 68,
+    "direct_target_count": 2,
+    "by_group": {
+     "a2_co_power_profile_display_overrides": 68
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0838BD18",
+      "count": 30
+     },
+     {
+      "pc": "0x0838BCE4",
+      "count": 10
+     },
+     {
+      "pc": "0x0831425A",
+      "count": 4
+     },
+     {
+      "pc": "0x08314336",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BD1C",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30404",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BC90",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BCEC",
+      "count": 2
+     }
+    ],
+    "direct_targets": [
+     {
+      "target_start": "0x00A295AC",
+      "count": 34
+     },
+     {
+      "target_start": "0x00A295C0",
+      "count": 34
+     }
+    ]
+   },
+   "hits": [
+    {
+     "order": 0,
+     "addr": 144872876,
+     "pc": 137445978,
+     "lr": 137449243,
+     "r0": 50336880,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "0 addr=08A295AC pc=0831425A lr=08314F1B r0=03001470 r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 1,
+     "addr": 144872876,
+     "pc": 137446198,
+     "lr": 137449243,
+     "r0": 133,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "1 addr=08A295AC pc=08314336 lr=08314F1B r0=00000085 r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 2,
+     "addr": 144872876,
+     "pc": 137477264,
+     "lr": 137477807,
+     "r0": 50343056,
+     "r1": 0,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "2 addr=08A295AC pc=0831BC90 lr=0831BEAF r0=03002C90 r1=00000000 old=0000008E new=00000000"
+    },
+    {
+     "order": 3,
+     "addr": 144872876,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 50343056,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "3 addr=08A295AC pc=0838BCE4 lr=0831BCE7 r0=03002C90 r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 4,
+     "addr": 144872877,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 142,
+     "r1": 144872877,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AD",
+      "read_offset": "0x00A295AD",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "4 addr=08A295AD pc=0838BCE4 lr=0831BCE7 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+    },
+    {
+     "order": 5,
+     "addr": 144872878,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 77,
+     "r1": 144872878,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "5 addr=08A295AE pc=0838BCE4 lr=0831BCE7 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+    },
+    {
+     "order": 6,
+     "addr": 144872879,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 139,
+     "r1": 144872879,
+     "old": 183,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AF",
+      "read_offset": "0x00A295AF",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "6 addr=08A295AF pc=0838BCE4 lr=0831BCE7 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+    },
+    {
+     "order": 7,
+     "addr": 144872880,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 183,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "7 addr=08A295B0 pc=0838BCE4 lr=0831BCE7 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 8,
+     "addr": 144872876,
+     "pc": 137477356,
+     "lr": 137477351,
+     "r0": 50343056,
+     "r1": 144872880,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "8 addr=08A295AC pc=0831BCEC lr=0831BCE7 r0=03002C90 r1=08A295B0 old=0000008E new=00000000"
+    },
+    {
+     "order": 9,
+     "addr": 144872876,
+     "pc": 150144004,
+     "lr": 137477351,
+     "r0": 150144001,
+     "r1": 144872880,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "9 addr=08A295AC pc=08F30404 lr=0831BCE7 r0=08F30401 r1=08A295B0 old=0000008E new=00000000"
+    },
+    {
+     "order": 10,
+     "addr": 144872876,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144872876,
+     "r1": 0,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "10 addr=08A295AC pc=08F30284 lr=0831BBED r0=08A295AC r1=00000000 old=0000008E new=00000000"
+    },
+    {
+     "order": 11,
+     "addr": 144872877,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144872876,
+     "r1": 0,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AD",
+      "read_offset": "0x00A295AD",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "11 addr=08A295AD pc=08F30286 lr=0831BBED r0=08A295AC r1=00000000 old=0000004D new=00000000"
+    },
+    {
+     "order": 12,
+     "addr": 144872878,
+     "pc": 137477404,
+     "lr": 137477101,
+     "r0": 137477397,
+     "r1": 10063872,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "12 addr=08A295AE pc=0831BD1C lr=0831BBED r0=0831BD15 r1=00999000 old=0000008B new=00000000"
+    },
+    {
+     "order": 13,
+     "addr": 144872878,
+     "pc": 150144004,
+     "lr": 137477101,
+     "r0": 150144001,
+     "r1": 10063872,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "13 addr=08A295AE pc=08F30404 lr=0831BBED r0=08F30401 r1=00999000 old=0000008B new=00000000"
+    },
+    {
+     "order": 14,
+     "addr": 144872878,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144872878,
+     "r1": 0,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "14 addr=08A295AE pc=08F30284 lr=0831BBED r0=08A295AE r1=00000000 old=0000008B new=00000000"
+    },
+    {
+     "order": 15,
+     "addr": 144872879,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144872878,
+     "r1": 0,
+     "old": 183,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AF",
+      "read_offset": "0x00A295AF",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "15 addr=08A295AF pc=08F30286 lr=0831BBED r0=08A295AE r1=00000000 old=000000B7 new=00000000"
+    },
+    {
+     "order": 16,
+     "addr": 144872880,
+     "pc": 137477404,
+     "lr": 137477101,
+     "r0": 137477397,
+     "r1": 2415919104,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "16 addr=08A295B0 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=90000000 old=00000000 new=00000000"
+    },
+    {
+     "order": 17,
+     "addr": 144872876,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 144872876,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "17 addr=08A295AC pc=0838BD18 lr=0831BD25 r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 18,
+     "addr": 144872877,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 142,
+     "r1": 144872877,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AD",
+      "read_offset": "0x00A295AD",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "18 addr=08A295AD pc=0838BD18 lr=0831BD25 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+    },
+    {
+     "order": 19,
+     "addr": 144872878,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 77,
+     "r1": 144872878,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "19 addr=08A295AE pc=0838BD18 lr=0831BD25 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+    },
+    {
+     "order": 20,
+     "addr": 144872879,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 139,
+     "r1": 144872879,
+     "old": 183,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AF",
+      "read_offset": "0x00A295AF",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "20 addr=08A295AF pc=0838BD18 lr=0831BD25 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+    },
+    {
+     "order": 21,
+     "addr": 144872880,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 183,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "21 addr=08A295B0 pc=0838BD18 lr=0831BD25 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 22,
+     "addr": 144872876,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 144872876,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "22 addr=08A295AC pc=0838BD18 lr=0831BD59 r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 23,
+     "addr": 144872877,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 142,
+     "r1": 144872877,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AD",
+      "read_offset": "0x00A295AD",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "23 addr=08A295AD pc=0838BD18 lr=0831BD59 r0=0000008E r1=08A295AD old=0000004D new=00000000"
+    },
+    {
+     "order": 24,
+     "addr": 144872878,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 77,
+     "r1": 144872878,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "24 addr=08A295AE pc=0838BD18 lr=0831BD59 r0=0000004D r1=08A295AE old=0000008B new=00000000"
+    },
+    {
+     "order": 25,
+     "addr": 144872879,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 139,
+     "r1": 144872879,
+     "old": 183,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AF",
+      "read_offset": "0x00A295AF",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "25 addr=08A295AF pc=0838BD18 lr=0831BD59 r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+    },
+    {
+     "order": 26,
+     "addr": 144872880,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 183,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "26 addr=08A295B0 pc=0838BD18 lr=0831BD59 r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 27,
+     "addr": 144872876,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 144872876,
+     "r1": 144872876,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AC",
+      "read_offset": "0x00A295AC",
+      "target_start": "0x00A295AC",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "27 addr=08A295AC pc=0838BD18 lr=0831BEDD r0=08A295AC r1=08A295AC old=0000008E new=00000000"
+    },
+    {
+     "order": 28,
+     "addr": 144872877,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 142,
+     "r1": 144872877,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AD",
+      "read_offset": "0x00A295AD",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "28 addr=08A295AD pc=0838BD18 lr=0831BEDD r0=0000008E r1=08A295AD old=0000004D new=00000000"
+    },
+    {
+     "order": 29,
+     "addr": 144872878,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 77,
+     "r1": 144872878,
+     "old": 139,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AE",
+      "read_offset": "0x00A295AE",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "29 addr=08A295AE pc=0838BD18 lr=0831BEDD r0=0000004D r1=08A295AE old=0000008B new=00000000"
+    },
+    {
+     "order": 30,
+     "addr": 144872879,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 139,
+     "r1": 144872879,
+     "old": 183,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295AF",
+      "read_offset": "0x00A295AF",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "30 addr=08A295AF pc=0838BD18 lr=0831BEDD r0=0000008B r1=08A295AF old=000000B7 new=00000000"
+    },
+    {
+     "order": 31,
+     "addr": 144872880,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 183,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "31 addr=08A295B0 pc=0838BD18 lr=0831BEDD r0=000000B7 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 32,
+     "addr": 144872880,
+     "pc": 137445978,
+     "lr": 137449243,
+     "r0": 50336880,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "32 addr=08A295B0 pc=0831425A lr=08314F1B r0=03001470 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 33,
+     "addr": 144872880,
+     "pc": 137446198,
+     "lr": 137449243,
+     "r0": 4294967287,
+     "r1": 144872880,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295B0",
+      "read_offset": "0x00A295B0",
+      "target_start": "0x00A295AC",
+      "span_end": "0x00A295C0",
+      "address": "0x00A295AC",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "승리",
+      "ja": "ウィニングマーチ"
+     },
+     "raw": "33 addr=08A295B0 pc=08314336 lr=08314F1B r0=FFFFFFF7 r1=08A295B0 old=00000000 new=00000000"
+    },
+    {
+     "order": 34,
+     "addr": 144872896,
+     "pc": 137445978,
+     "lr": 137449243,
+     "r0": 50336880,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "34 addr=08A295C0 pc=0831425A lr=08314F1B r0=03001470 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 35,
+     "addr": 144872896,
+     "pc": 137446198,
+     "lr": 137449243,
+     "r0": 128,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "35 addr=08A295C0 pc=08314336 lr=08314F1B r0=00000080 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 36,
+     "addr": 144872896,
+     "pc": 137477264,
+     "lr": 137477807,
+     "r0": 50343056,
+     "r1": 0,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "36 addr=08A295C0 pc=0831BC90 lr=0831BEAF r0=03002C90 r1=00000000 old=00000089 new=00000000"
+    },
+    {
+     "order": 37,
+     "addr": 144872896,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 50343056,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "37 addr=08A295C0 pc=0838BCE4 lr=0831BCE7 r0=03002C90 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 38,
+     "addr": 144872897,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 137,
+     "r1": 144872897,
+     "old": 244,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C1",
+      "read_offset": "0x00A295C1",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "38 addr=08A295C1 pc=0838BCE4 lr=0831BCE7 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+    },
+    {
+     "order": 39,
+     "addr": 144872898,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 244,
+     "r1": 144872898,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "39 addr=08A295C2 pc=0838BCE4 lr=0831BCE7 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+    },
+    {
+     "order": 40,
+     "addr": 144872899,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 142,
+     "r1": 144872899,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C3",
+      "read_offset": "0x00A295C3",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "40 addr=08A295C3 pc=0838BCE4 lr=0831BCE7 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+    },
+    {
+     "order": 41,
+     "addr": 144872900,
+     "pc": 137936100,
+     "lr": 137477351,
+     "r0": 77,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "41 addr=08A295C4 pc=0838BCE4 lr=0831BCE7 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+    },
+    {
+     "order": 42,
+     "addr": 144872896,
+     "pc": 137477356,
+     "lr": 137477351,
+     "r0": 50343056,
+     "r1": 144872900,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "42 addr=08A295C0 pc=0831BCEC lr=0831BCE7 r0=03002C90 r1=08A295C4 old=00000089 new=00000000"
+    },
+    {
+     "order": 43,
+     "addr": 144872896,
+     "pc": 150144004,
+     "lr": 137477351,
+     "r0": 150144001,
+     "r1": 144872900,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "43 addr=08A295C0 pc=08F30404 lr=0831BCE7 r0=08F30401 r1=08A295C4 old=00000089 new=00000000"
+    },
+    {
+     "order": 44,
+     "addr": 144872896,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144872896,
+     "r1": 0,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "44 addr=08A295C0 pc=08F30284 lr=0831BBED r0=08A295C0 r1=00000000 old=00000089 new=00000000"
+    },
+    {
+     "order": 45,
+     "addr": 144872897,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144872896,
+     "r1": 0,
+     "old": 244,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C1",
+      "read_offset": "0x00A295C1",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "45 addr=08A295C1 pc=08F30286 lr=0831BBED r0=08A295C0 r1=00000000 old=000000F4 new=00000000"
+    },
+    {
+     "order": 46,
+     "addr": 144872898,
+     "pc": 137477404,
+     "lr": 137477101,
+     "r0": 137477397,
+     "r1": 2425356288,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "46 addr=08A295C2 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=90900000 old=0000008E new=00000000"
+    },
+    {
+     "order": 47,
+     "addr": 144872898,
+     "pc": 150144004,
+     "lr": 137477101,
+     "r0": 150144001,
+     "r1": 2425356288,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "47 addr=08A295C2 pc=08F30404 lr=0831BBED r0=08F30401 r1=90900000 old=0000008E new=00000000"
+    },
+    {
+     "order": 48,
+     "addr": 144872898,
+     "pc": 150143620,
+     "lr": 137477101,
+     "r0": 144872898,
+     "r1": 0,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "48 addr=08A295C2 pc=08F30284 lr=0831BBED r0=08A295C2 r1=00000000 old=0000008E new=00000000"
+    },
+    {
+     "order": 49,
+     "addr": 144872899,
+     "pc": 150143622,
+     "lr": 137477101,
+     "r0": 144872898,
+     "r1": 0,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C3",
+      "read_offset": "0x00A295C3",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "49 addr=08A295C3 pc=08F30286 lr=0831BBED r0=08A295C2 r1=00000000 old=0000004D new=00000000"
+    },
+    {
+     "order": 50,
+     "addr": 144872900,
+     "pc": 137477404,
+     "lr": 137477101,
+     "r0": 137477397,
+     "r1": 10063872,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "50 addr=08A295C4 pc=0831BD1C lr=0831BBED r0=0831BD15 r1=00999000 old=00000000 new=00000000"
+    },
+    {
+     "order": 51,
+     "addr": 144872896,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 144872896,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "51 addr=08A295C0 pc=0838BD18 lr=0831BD25 r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 52,
+     "addr": 144872897,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 137,
+     "r1": 144872897,
+     "old": 244,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C1",
+      "read_offset": "0x00A295C1",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "52 addr=08A295C1 pc=0838BD18 lr=0831BD25 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+    },
+    {
+     "order": 53,
+     "addr": 144872898,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 244,
+     "r1": 144872898,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "53 addr=08A295C2 pc=0838BD18 lr=0831BD25 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+    },
+    {
+     "order": 54,
+     "addr": 144872899,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 142,
+     "r1": 144872899,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C3",
+      "read_offset": "0x00A295C3",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "54 addr=08A295C3 pc=0838BD18 lr=0831BD25 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+    },
+    {
+     "order": 55,
+     "addr": 144872900,
+     "pc": 137936152,
+     "lr": 137477413,
+     "r0": 77,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "55 addr=08A295C4 pc=0838BD18 lr=0831BD25 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+    },
+    {
+     "order": 56,
+     "addr": 144872896,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 144872896,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "56 addr=08A295C0 pc=0838BD18 lr=0831BD59 r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 57,
+     "addr": 144872897,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 137,
+     "r1": 144872897,
+     "old": 244,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C1",
+      "read_offset": "0x00A295C1",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "57 addr=08A295C1 pc=0838BD18 lr=0831BD59 r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+    },
+    {
+     "order": 58,
+     "addr": 144872898,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 244,
+     "r1": 144872898,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "58 addr=08A295C2 pc=0838BD18 lr=0831BD59 r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+    },
+    {
+     "order": 59,
+     "addr": 144872899,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 142,
+     "r1": 144872899,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C3",
+      "read_offset": "0x00A295C3",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "59 addr=08A295C3 pc=0838BD18 lr=0831BD59 r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+    },
+    {
+     "order": 60,
+     "addr": 144872900,
+     "pc": 137936152,
+     "lr": 137477465,
+     "r0": 77,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "60 addr=08A295C4 pc=0838BD18 lr=0831BD59 r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+    },
+    {
+     "order": 61,
+     "addr": 144872896,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 144872896,
+     "r1": 144872896,
+     "old": 137,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C0",
+      "read_offset": "0x00A295C0",
+      "target_start": "0x00A295C0",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "61 addr=08A295C0 pc=0838BD18 lr=0831BEDD r0=08A295C0 r1=08A295C0 old=00000089 new=00000000"
+    },
+    {
+     "order": 62,
+     "addr": 144872897,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 137,
+     "r1": 144872897,
+     "old": 244,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C1",
+      "read_offset": "0x00A295C1",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "62 addr=08A295C1 pc=0838BD18 lr=0831BEDD r0=00000089 r1=08A295C1 old=000000F4 new=00000000"
+    },
+    {
+     "order": 63,
+     "addr": 144872898,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 244,
+     "r1": 144872898,
+     "old": 142,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C2",
+      "read_offset": "0x00A295C2",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "63 addr=08A295C2 pc=0838BD18 lr=0831BEDD r0=000000F4 r1=08A295C2 old=0000008E new=00000000"
+    },
+    {
+     "order": 64,
+     "addr": 144872899,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 142,
+     "r1": 144872899,
+     "old": 77,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C3",
+      "read_offset": "0x00A295C3",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "64 addr=08A295C3 pc=0838BD18 lr=0831BEDD r0=0000008E r1=08A295C3 old=0000004D new=00000000"
+    },
+    {
+     "order": 65,
+     "addr": 144872900,
+     "pc": 137936152,
+     "lr": 137477853,
+     "r0": 77,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "65 addr=08A295C4 pc=0838BD18 lr=0831BEDD r0=0000004D r1=08A295C4 old=00000000 new=00000000"
+    },
+    {
+     "order": 66,
+     "addr": 144872900,
+     "pc": 137445978,
+     "lr": 137449243,
+     "r0": 50336880,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "66 addr=08A295C4 pc=0831425A lr=08314F1B r0=03001470 r1=08A295C4 old=00000000 new=00000000"
+    },
+    {
+     "order": 67,
+     "addr": 144872900,
+     "pc": 137446198,
+     "lr": 137449243,
+     "r0": 4294967287,
+     "r1": 144872900,
+     "old": 0,
+     "new": 0,
+     "source": {
+      "kind": "dialogue-override",
+      "target_span_match": true,
+      "read_address": "0x08A295C4",
+      "read_offset": "0x00A295C4",
+      "target_start": "0x00A295C0",
+      "span_end": "0x00A295D8",
+      "address": "0x00A295C0",
+      "group_id": "a2_co_power_profile_display_overrides",
+      "ko": "대승",
+      "ja": "ビクトリアスパレード"
+     },
+     "raw": "67 addr=08A295C4 pc=08314336 lr=08314F1B r0=FFFFFFF7 r1=08A295C4 old=00000000 new=00000000"
+    }
+   ],
+   "truncated_hits": 0
+  }
+ ],
+ "strict_note": "Read-watch hits prove runtime reads of compact source spans on that route. They are stronger than static xrefs but still not a replacement for final pixel-level visual confirmation. Savestate watchpoint misses can be false negatives."
+}

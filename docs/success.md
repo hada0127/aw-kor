@@ -3024,3 +3024,22 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   A2 compact target `0x00A295AC`를 34회 읽는다. Matrix runtime/source 수치는 A2 1/36, B84 1/11, B8 13/459가 됐다.
 - **경계**: A2 1건은 runtime source provenance다. savestate watchpoint와 pixel-level visual layout proof는 별개이며,
   나머지 A2 35개/B84 10개/B8 대부분은 계속 direct evidence가 필요하다.
+
+## [2026-06-28] E12 A2 CO 프로필 nav read-watch 3건으로 보강
+
+- **추가 증거**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 CO 프로필 파워 정보창을
+  재렌더하는 입력을 더 좁혔다. `DOWN,DOWN`은 기존 `0x00A295AC`(`승리`)를 읽고,
+  `DOWN,DOWN,DOWN`은 `0x00A295C0`(`대승`), `DOWN,DOWN,RIGHT`는
+  `0x00A295D8`(`강타`)을 각각 34회 직접 읽는다.
+- **증거 파일**:
+  `data/compact_display_read_watch_a2_profile_down3_current.json`,
+  `data/compact_display_read_watch_a2_profile_right_current.json`.
+  `tools/build_compact_display_visual_matrix.py` 재실행 후 E12 matrix는 read-watch probes
+  current 21/stale 0, cases 43, hits/direct reads 280이며, A2 target runtime/source proof는
+  3/36이 됐다.
+- **검증**: ROM은 변경하지 않았고 current SHA는
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292` 그대로다.
+  `python3 tools/verify_dist_integrity.py` PASS.
+- **경계**: 이번 증거는 A2 compact target 주소가 실제 CO 프로필 renderer에서 source로 읽힌다는
+  target-level runtime provenance다. savestate 기반 read-watch라 36개 파워명 전수 visual-layout proof는 아니며,
+  A2 나머지 33개/B84 10개/B8 대부분은 계속 E12에 남긴다.

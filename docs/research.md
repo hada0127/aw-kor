@@ -2852,3 +2852,28 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **경계**: 0-hit는 해당 route/subset의 음성 결과다. 특히 B8 Part2 HUD/상점/무기/데미지예측과 B84 나머지
   파워명은 source-address/dead-copy 여부를 아직 전역 결론 낼 수 없다. A2 `0x00A295AC`도 read-watch provenance이지
   36개 전수 visual-layout proof가 아니다.
+
+---
+## [2026-06-28] E12 A2 CO profile nav read-watch 확장
+
+- **상태/route**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`는 CO 프로필 파워 정보창으로
+  재진입 가능한 near-fresh state다. `DOWN,DOWN`은 기존 `0x00A295AC`(`승리`)를 읽고,
+  `DOWN,DOWN,DOWN`은 `0x00A295C0`(`대승`), `DOWN,DOWN,RIGHT`는
+  `0x00A295D8`(`강타`)을 추가로 읽는다.
+- **관측**: 두 신규 probe 모두 current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  A2 range watch hit 68/direct read 68을 기록했다. 각 probe의 신규 target은 34회 read이며,
+  상위 PC는 기존 A2 hit와 동일하게 `0x0838BD18`, `0x0838BCE4`,
+  `0x0831425A`, `0x08314336`, `0x0831BD1C`, `0x08F30284/286`, `0x08F30404`
+  계열이다.
+- **증거 파일**:
+  `data/compact_display_read_watch_a2_profile_down3_current.json`,
+  `data/compact_display_read_watch_a2_profile_right_current.json`.
+  matrix 재생성 결과 A2 target runtime/source proof는 1/36 -> 3/36,
+  전체 E12 target runtime/source proof count는 17이 됐다.
+- **음성 후보**: 같은 state의 no-step, `RIGHT` 단독, 주변 `state_023/026/027/028/039/040`
+  + `DOWN,DOWN,RIGHT,DOWN`은 A2/B84 target read 0이었다. 따라서 state_036 계열에서
+  안정적으로 얻은 양성 범위는 현재 `0xA295AC/0xA295C0/0xA295D8` 3개다.
+- **해석 경계**: 이 증거는 source-address/dead-copy 의심을 해당 3주소에 대해서만 반증한다.
+  B84 잔여 10개와 A2 잔여 33개, B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도
+  fresh route, target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA chain이 필요하다.

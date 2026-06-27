@@ -701,9 +701,18 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `tools/prove_compact_display_mutation.py --append-nav-step press:DOWN:120` x16으로 검증했다.
     4주소 모두 null-control diff 0, mutation pixel diff 0이라 current route의 direct evidence로 승격하지 않았다.
     결과: `docs/screenshots/user_report_triage_2026-06-28/e12_b8_down16_negative_summary.json`.
+  - [x] 2026-06-28 A2 CO 프로필 nav read-watch 2건 추가:
+    같은 current SHA `f95a8573...`의 `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서
+    `DOWN,DOWN,DOWN`이 `0x00A295C0`(`대승`), `DOWN,DOWN,RIGHT`가
+    `0x00A295D8`(`강타`)을 각각 34회 직접 읽는 것을 확인했다. 신규 영구 증거는
+    `data/compact_display_read_watch_a2_profile_down3_current.json`,
+    `data/compact_display_read_watch_a2_profile_right_current.json`이며,
+    matrix read-watch probes는 current 21/stale 0, cases 43, hits/direct reads 280으로 갱신됐다.
+    A2 target runtime/source proof는 1/36 -> 3/36이 됐다. 단, savestate 기반 read-watch라
+    per-power visual layout 전수 proof는 아니며, 나머지 33개 A2 파워명은 계속 별도 route/증거가 필요하다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 `0x00A295AC` 1건, B8 작전명 13건, B84 `0x00B84F04` 1건은 source가 current SHA에서 확정됐지만
-    A2는 1/36, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
+    A2 `0x00A295AC/0x00A295C0/0x00A295D8` 3건, B8 작전명 13건, B84 `0x00B84F04` 1건은
+    source가 current SHA에서 확정됐지만 A2는 3/36, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
     B84 나머지 파워 발동 직전/직후, B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를

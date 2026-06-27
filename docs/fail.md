@@ -4,6 +4,19 @@
 
 ---
 
+## [2026-06-28] E12 A2 profile nav 증거 보강 후 codex/claude 리뷰 timeout
+
+- **시도**: A2 CO profile read-watch 증거를 1/36 -> 3/36으로 보강한 뒤
+  `temp/review_prompt_e12_a2_nav_20260628.md`로 codex/agy/claude 엄격 리뷰를 병렬 요청했다.
+  agy는 실질 리뷰를 반환했고, hit/direct read 총합 280에는 다단계 route의 이전 redraw read
+  (`0xA295AC`)가 누적 포함된다는 caveat를 보고서에 넣으라는 지적을 반영했다.
+- **timeout**: codex는 180초 timeout(rc 124)으로 stdout 0바이트, stderr에는 대형 diff 출력만 남았다.
+  더 좁은 `temp/review_prompt_e12_a2_nav_codex_retry_20260628.md`로 120초 재시도했지만 다시 timeout(rc 124)됐다.
+  claude도 180초 timeout(rc 124)으로 stdout/stderr 0바이트였다.
+  agy 최종 재확인도 120초 timeout(rc 124)으로 "이전 find 명령 대기" 문구 외 리뷰 본문이 없었다.
+- **후속**: 반영 가능한 실질 리뷰는 첫 agy 결과뿐이었다. `tools/build_compact_display_visual_matrix.py`와
+  report에 event-count caveat를 추가했고, `py_compile`, `git diff --check`, `verify_dist_integrity.py` PASS 후 진행한다.
+
 ## [2026-06-28] Part1 작전실 제목 가독성 후속 claude/agy 리뷰 CLI timeout
 
 - **시도**: 사용자 추가 스크린샷 후속 수정 범위(Part1 B8 compact title 32개 가독성 개선,

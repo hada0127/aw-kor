@@ -789,6 +789,10 @@ def write_markdown(report: dict) -> None:
         f"cases={rw.get('case_count')} hits={rw.get('hit_count')} "
         f"direct_reads={rw.get('direct_target_read_count')}"
     )
+    lines.append(
+        "- hit/direct_read totals are event counts, not unique target counts; "
+        "multi-step probes can include reads from earlier redraws on the same route."
+    )
     for probe in rw.get("probes", []):
         targets = probe.get("selected_target_addresses") or []
         target_text = f" targets={len(targets)}" if targets else ""
