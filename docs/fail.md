@@ -4,6 +4,18 @@
 
 ---
 
+## [2026-06-28] Part1 작전실 제목 가독성 후속 claude/agy 리뷰 CLI timeout
+
+- **시도**: 사용자 추가 스크린샷 후속 수정 범위(Part1 B8 compact title 32개 가독성 개선,
+  `prove_compact_display_mutation.py` encode_fit 전환, E12/current SHA evidence/dist 재동기화)를
+  claude CLI와 agy CLI에 한국어 엄격 리뷰로 병렬 요청했다.
+- **명령**: `gtimeout 240 claude -p ...`, `gtimeout 240 agy -p ...`.
+- **결과**: 두 CLI 모두 240초 안에 리뷰 본문을 반환하지 못했다. claude는 출력 없이 rc 124,
+  agy는 `Error: timed out waiting for response` 후 rc 124.
+- **후속**: 차단 이슈로 채택할 리뷰 결과가 없어 자체 QA 기준으로 진행했다.
+  같은 변경 상태에서 `verify_dist_integrity.py`, `run_release_qa.py`,
+  `run_release_qa.py --editor --cdp --timeout 300`은 PASS.
+
 ## [2026-06-28] E16 Part1 compact 도움말 top-mode BFS read-watch 390노드 음성
 
 - **시도**: fresh Part1 mode menu에서 시작해 `A/B/UP/DOWN/LEFT/RIGHT/L/R/SELECT/START` BFS를 깊이 8,

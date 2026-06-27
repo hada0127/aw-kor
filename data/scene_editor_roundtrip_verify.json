@@ -1,8 +1,8 @@
 {
   "summary": {
-    "generated_on": "2026-06-27",
+    "generated_on": "2026-06-28",
     "server": "http://127.0.0.1:8782",
-    "rom_sha256": "c1d1b28909d318373a58603d08f2bdf55e9a774af960a8cbee61902a38957280",
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
     "scene_count": 81,
     "dialogue_group_count": 10859,
     "sprite_count": 1990,

@@ -324,6 +324,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `current_byte_recheck`로 보강했다. 같은 상태에서 `run_release_qa.py`,
     `run_release_qa.py --only-editor --editor --timeout 300`,
     `run_release_qa.py --only-editor --cdp --timeout 300`, `verify_dist_integrity.py`가 PASS.
+  - [x] 2026-06-28 사용자 추가 스크린샷 재확인 및 Part1 작전실 제목 가독성 보강:
+    `~/Downloads`의 사용자 7장 contact를 다시 대조했다. current fresh route에서 Part1 메뉴/통신 라벨 침범은
+    재현되지 않고, single-map unknown 표시는 이미 `미공개`로 보인다. 다만 Part1 작전실 compact title은
+    `전투개시`, `전선기지확보`, `키쿠치요실수`처럼 공백 없는 압축 제목이 실제 사용자 눈에는 깨진 제목처럼
+    보일 여지가 커서 `0xB81D80..0xB82018` 작전명 32개를 슬롯 내에서 자연스러운 짧은 제목으로 재정리했다
+    (`전투 개시`, `전선 기지 확보`, `키쿠치요 실수`, `고물 전차 출격`, `특수부대 도미노` 등).
+    `tools/prove_compact_display_mutation.py`도 build `encode_fit()`을 사용하도록 고쳐, 새 작전명 안의 공백이
+    compact renderer에서 실제 쓰는 전각 공백 바이트와 동일하게 검증되도록 했다. 증거:
+    `docs/screenshots/part1_operation_room_title_readability_2026-06-28/scene_contact.png`,
+    `fresh_routes_contact.png`, `single_map_left_crop_4x.png`.
+    최신 output/dist SHA `f95a8573…` 기준 `verify_dist_integrity.py`,
+    `run_release_qa.py --editor --cdp --timeout 300`,
+    `capture_scene_screenshots.py --force`, UI editor CDP 63 scene/108 sprite verification이 PASS.
   - [x] 2026-06-27 전투 항복/모드 선택 복귀 확인창 `??????` 수정:
     E12 B84 power-menu probe 중 `scene_89_common_battle_system_results` 계열에서
     `모드 선택으로 돌아갈까??????`가 current ROM에서도 재현됐다. 원인은 `0x00A34CE8`/`0x00DF2A64`
@@ -659,6 +672,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     Part1 compact help evidence carry-forward range hash, scene residual/visual evidence, manifest/BPS/IPS를 모두 재생성했다.
     `verify_dist_integrity.py` PASS, `run_release_qa.py` PASS. 배포 패치는
     `dist/game_wars_korean_full_2026-06-28.bps` / `.ips`다.
+  - [x] 2026-06-28 Part1 작전실 제목 가독성 수정 후 E12/current evidence 재동기화:
+    SHA 변경(`f95a8573…`)에 맞춰 B8 manual mutation evidence 13건, B84 `0x00B84F04` read-watch,
+    compact xref/code-context/renderer trace/matrix, scene screenshot 70개, scene residual evidence,
+    manifest/BPS/IPS를 current ROM 기준으로 재생성했다. `tools/prove_compact_display_mutation.py`는
+    `encode_fit()` 기반으로 바꿔 fullwidth space가 포함된 작전명도 base/mutation hex 검증과 정확히 일치한다.
+    `data/compact_display_visual_matrix.json` 기준 direct 수치는 A2 0/36, B84 1/11, B8 13/459이며
+    accepted manual evidence는 13건 모두 Part1 작전실 B8 계열이다. `verify_dist_integrity.py`와
+    `run_release_qa.py --editor --cdp --timeout 300`은 PASS. E12는 계속 미완료다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
     B8 작전명 13건과 B84 `0x00B84F04` 1건은 source가 current SHA에서 확정됐지만
     A2는 direct 0, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.

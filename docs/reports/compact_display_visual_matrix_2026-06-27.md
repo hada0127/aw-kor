@@ -1,6 +1,6 @@
 # Compact Display Visual Matrix
 
-- ROM SHA: `e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1`
+- ROM SHA: `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`
 - Contact sheet: `docs/screenshots/e12_compact_display_matrix_2026-06-27/current_representative_contact.png`
 
 This report separates static byte/editor coverage from target-level runtime/source proof.
@@ -10,7 +10,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 | Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Direct target proof |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| A2 CO power profile compact names | 36 | 36 | 1 | 0 | 35 | 36 | 0 |
+| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 0 |
 | B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 1 |
 | B8 compact display table bucket | 459 | 459 | 0 | 0 | 459 | 386 | 13 |
 
@@ -19,19 +19,19 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 - `23_part2_main_menu`: current=True path=`temp/scene_screenshots/07_part2_main_menu_patched/frame.png` reason=current
 - `23a_part2_wars_shop`: current=True path=`temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png` reason=current
 - `86_common_compact_menu_tables`: current=True path=`temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png` reason=current
-- `30f2_part2_co_profile_story`: current=False path=`temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png` reason=rom_sha_mismatch
-- `26_part2_battle_labels`: current=False path=`temp/scene_screenshots/30_battle_attack_patched/frame.png` reason=rom_sha_mismatch
-- `24a_part2_operation_select`: current=False path=`temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png` reason=rom_sha_mismatch
-- `85_ui_common`: current=False path=`temp/scene_screenshots/scene_85_ui_common_patched/frame.png` reason=rom_sha_mismatch
-- `87_common_rule_settings`: current=False path=`temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png` reason=rom_sha_mismatch
+- `30f2_part2_co_profile_story`: current=True path=`temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png` reason=current
+- `26_part2_battle_labels`: current=True path=`temp/scene_screenshots/30_battle_attack_patched/frame.png` reason=current
+- `24a_part2_operation_select`: current=True path=`temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png` reason=current
+- `85_ui_common`: current=True path=`temp/scene_screenshots/scene_85_ui_common_patched/frame.png` reason=current
+- `87_common_rule_settings`: current=True path=`temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png` reason=current
 
 ## Renderer Trace
 
-- trace_present=True current=True rom_sha=`e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1` cases=9 hits=4 direct=0 breakpoints=15 code_context=False path=`data/compact_display_renderer_trace.json`
+- trace_present=True current=True rom_sha=`f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292` cases=10 hits=1758 direct=0 breakpoints=55 code_context=True path=`data/compact_display_renderer_trace.json`
 
 ## Static Code Context
 
-- code_context_present=True current=True rom_sha=`e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1` path=`data/compact_display_code_context.json` literal_entries=523 breakpoint_candidates=24 function_candidates=18
+- code_context_present=True current=True rom_sha=`f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292` path=`data/compact_display_code_context.json` literal_entries=523 breakpoint_candidates=24 function_candidates=18
 
 ## Manual Visual Evidence
 
@@ -39,17 +39,17 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 - accepted_by_group_scene={'b8_compact_display_table_all::15_part1_operation_logos': 13}
 - accepted_by_checkpoint={'41_part1_operation_room': 4, '41_part1_operation_room_plus_10steps_288ebbc326': 3, '41_part1_operation_room_plus_13steps_eba0d9ed13': 1, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 2, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 1, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 2}
 - `0x00B81F38` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_13steps_eba0d9ed13 diff_pixels=58 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png`
-- `0x00B81F40` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=48 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png`
+- `0x00B81F40` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=67 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png`
 - `0x00B81F4C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=77 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png`
 - `0x00B81F5C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=70 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png`
-- `0x00B81F70` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=40 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png`
-- `0x00B81F80` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=66 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png`
-- `0x00B81F98` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=218 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png`
-- `0x00B81FAC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=209 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png`
-- `0x00B81FC4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=167 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png`
-- `0x00B81FDC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=215 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png`
-- `0x00B81FF4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=209 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_mutation_contact.png`
-- `0x00B8200C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=64 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png`
+- `0x00B81F70` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=43 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png`
+- `0x00B81F80` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=82 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png`
+- `0x00B81F98` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=246 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png`
+- `0x00B81FAC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=47 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png`
+- `0x00B81FC4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=267 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png`
+- `0x00B81FDC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=77 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png`
+- `0x00B81FF4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=49 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_mutation_contact.png`
+- `0x00B8200C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=66 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png`
 - `0x00B82018` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=54 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_mutation_contact.png`
 
 ## Static Pointer Xrefs

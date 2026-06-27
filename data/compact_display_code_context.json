@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "e1919e48b283026bbb353a1fb2bd623229fd1893f6dfe13c6029f778d8ed0ac1",
- "git_commit": "5276883",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "19905b1",
  "source": "data/compact_display_xref_analysis.json",
  "summary": {
   "literal_entry_count": 523,
@@ -4404,7 +4404,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B82018",
-   "target_text": "전투개시",
+   "target_text": "전투 개시",
    "ref_offset": "0x00D8A99C",
    "ref_address": "0x08D8A99C",
    "ref_kind": "target_pointer_ref",
@@ -4416,7 +4416,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B8200C",
-   "target_text": "초반전",
+   "target_text": "첫 전투",
    "ref_offset": "0x00D8A9D8",
    "ref_address": "0x08D8A9D8",
    "ref_kind": "target_pointer_ref",
@@ -4428,7 +4428,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81FF4",
-   "target_text": "전선기지확보",
+   "target_text": "전선 기지 확보",
    "ref_offset": "0x00D8AA14",
    "ref_address": "0x08D8AA14",
    "ref_kind": "target_pointer_ref",
@@ -4440,7 +4440,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81FDC",
-   "target_text": "고물전차출격",
+   "target_text": "고물 전차 출격",
    "ref_offset": "0x00D8AA50",
    "ref_address": "0x08D8AA50",
    "ref_kind": "target_pointer_ref",
@@ -4452,7 +4452,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81FC4",
-   "target_text": "적부대격파",
+   "target_text": "적 부대 격파",
    "ref_offset": "0x00D8AA8C",
    "ref_address": "0x08D8AA8C",
    "ref_kind": "target_pointer_ref",
@@ -4464,7 +4464,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81FAC",
-   "target_text": "지상최강중전차",
+   "target_text": "최강 중전차",
    "ref_offset": "0x00D8AAC8",
    "ref_address": "0x08D8AAC8",
    "ref_kind": "target_pointer_ref",
@@ -4476,7 +4476,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F98",
-   "target_text": "드래곤플라이",
+   "target_text": "드래곤 플라이",
    "ref_offset": "0x00D8AB04",
    "ref_address": "0x08D8AB04",
    "ref_kind": "target_pointer_ref",
@@ -4488,7 +4488,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F80",
-   "target_text": "하늘에서오는건",
+   "target_text": "하늘의 적",
    "ref_offset": "0x00D8AB40",
    "ref_address": "0x08D8AB40",
    "ref_kind": "target_pointer_ref",
@@ -4500,7 +4500,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F70",
-   "target_text": "창공제패",
+   "target_text": "대공 제압",
    "ref_offset": "0x00D8AB7C",
    "ref_address": "0x08D8AB7C",
    "ref_kind": "target_pointer_ref",
@@ -4512,7 +4512,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F5C",
-   "target_text": "도그파이트",
+   "target_text": "도그 파이트",
    "ref_offset": "0x00D8ABB8",
    "ref_address": "0x08D8ABB8",
    "ref_kind": "target_pointer_ref",
@@ -4524,7 +4524,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F4C",
-   "target_text": "바다너머",
+   "target_text": "바다 너머",
    "ref_offset": "0x00D8ABF4",
    "ref_address": "0x08D8ABF4",
    "ref_kind": "target_pointer_ref",
@@ -4536,7 +4536,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F40",
-   "target_text": "백은세계",
+   "target_text": "은빛 세계",
    "ref_offset": "0x00D8AC30",
    "ref_address": "0x08D8AC30",
    "ref_kind": "target_pointer_ref",
@@ -4584,7 +4584,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F10",
-   "target_text": "건파이터",
+   "target_text": "건 파이터",
    "ref_offset": "0x00D8AD20",
    "ref_address": "0x08D8AD20",
    "ref_kind": "target_pointer_ref",
@@ -4596,7 +4596,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81F04",
-   "target_text": "하늘용사",
+   "target_text": "하늘 용사",
    "ref_offset": "0x00D8AD5C",
    "ref_address": "0x08D8AD5C",
    "ref_kind": "target_pointer_ref",
@@ -4608,7 +4608,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EF4",
-   "target_text": "맥스출격",
+   "target_text": "맥스 출격",
    "ref_offset": "0x00D8AD98",
    "ref_address": "0x08D8AD98",
    "ref_kind": "target_pointer_ref",
@@ -4620,7 +4620,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EE0",
-   "target_text": "맥스약점",
+   "target_text": "맥스 약점",
    "ref_offset": "0x00D8ADD4",
    "ref_address": "0x08D8ADD4",
    "ref_kind": "target_pointer_ref",
@@ -4632,7 +4632,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81ED0",
-   "target_text": "호이프해군",
+   "target_text": "호이프 해군",
    "ref_offset": "0x00D8AE10",
    "ref_address": "0x08D8AE10",
    "ref_kind": "target_pointer_ref",
@@ -4644,7 +4644,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EB8",
-   "target_text": "호이프해군터보",
+   "target_text": "호이프 해군터보",
    "ref_offset": "0x00D8AE4C",
    "ref_address": "0x08D8AE4C",
    "ref_kind": "target_pointer_ref",
@@ -4656,7 +4656,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EF4",
-   "target_text": "맥스출격",
+   "target_text": "맥스 출격",
    "ref_offset": "0x00D8AE88",
    "ref_address": "0x08D8AE88",
    "ref_kind": "target_pointer_ref",
@@ -4680,7 +4680,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E98",
-   "target_text": "눈속전투",
+   "target_text": "설원 전투",
    "ref_offset": "0x00D8AF00",
    "ref_address": "0x08D8AF00",
    "ref_kind": "target_pointer_ref",
@@ -4692,7 +4692,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E8C",
-   "target_text": "세명의과거",
+   "target_text": "세명 과거",
    "ref_offset": "0x00D8AF3C",
    "ref_address": "0x08D8AF3C",
    "ref_kind": "target_pointer_ref",
@@ -4704,7 +4704,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E78",
-   "target_text": "특수부대장도미노",
+   "target_text": "특수부대 도미노",
    "ref_offset": "0x00D8AF78",
    "ref_address": "0x08D8AF78",
    "ref_kind": "target_pointer_ref",
@@ -4716,7 +4716,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E64",
-   "target_text": "키쿠치요등장",
+   "target_text": "키쿠치요 등장",
    "ref_offset": "0x00D8AFB4",
    "ref_address": "0x08D8AFB4",
    "ref_kind": "target_pointer_ref",
@@ -4728,7 +4728,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E50",
-   "target_text": "최강키쿠치요부대",
+   "target_text": "최강 키쿠치요부대",
    "ref_offset": "0x00D8AFF0",
    "ref_address": "0x08D8AFF0",
    "ref_kind": "target_pointer_ref",
@@ -4740,7 +4740,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E38",
-   "target_text": "키쿠치요실수",
+   "target_text": "키쿠치요 실수",
    "ref_offset": "0x00D8B02C",
    "ref_address": "0x08D8B02C",
    "ref_kind": "target_pointer_ref",
@@ -4752,7 +4752,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E2C",
-   "target_text": "분단작전",
+   "target_text": "분단 작전",
    "ref_offset": "0x00D8B068",
    "ref_address": "0x08D8B068",
    "ref_kind": "target_pointer_ref",
@@ -4764,7 +4764,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E1C",
-   "target_text": "도미노능력",
+   "target_text": "도미노 능력",
    "ref_offset": "0x00D8B0A4",
    "ref_address": "0x08D8B0A4",
    "ref_kind": "target_pointer_ref",
@@ -4776,7 +4776,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81E08",
-   "target_text": "아스카목표",
+   "target_text": "아스카 목표",
    "ref_offset": "0x00D8B0E0",
    "ref_address": "0x08D8B0E0",
    "ref_kind": "target_pointer_ref",
@@ -4788,7 +4788,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DF0",
-   "target_text": "모프대장",
+   "target_text": "캡틴 모프",
    "ref_offset": "0x00D8B11C",
    "ref_address": "0x08D8B11C",
    "ref_kind": "target_pointer_ref",
@@ -4800,7 +4800,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DF0",
-   "target_text": "모프대장",
+   "target_text": "캡틴 모프",
    "ref_offset": "0x00D8B158",
    "ref_address": "0x08D8B158",
    "ref_kind": "target_pointer_ref",
@@ -4812,7 +4812,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DF0",
-   "target_text": "모프대장",
+   "target_text": "캡틴 모프",
    "ref_offset": "0x00D8B194",
    "ref_address": "0x08D8B194",
    "ref_kind": "target_pointer_ref",
@@ -4860,7 +4860,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DD4",
-   "target_text": "거대한날개",
+   "target_text": "거대 날개",
    "ref_offset": "0x00D8B284",
    "ref_address": "0x08D8B284",
    "ref_kind": "target_pointer_ref",
@@ -4872,7 +4872,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DD4",
-   "target_text": "거대한날개",
+   "target_text": "거대 날개",
    "ref_offset": "0x00D8B2C0",
    "ref_address": "0x08D8B2C0",
    "ref_kind": "target_pointer_ref",
@@ -4884,7 +4884,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DD4",
-   "target_text": "거대한날개",
+   "target_text": "거대 날개",
    "ref_offset": "0x00D8B2FC",
    "ref_address": "0x08D8B2FC",
    "ref_kind": "target_pointer_ref",
@@ -4932,7 +4932,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81DB4",
-   "target_text": "두명의 료",
+   "target_text": "두 명의 료",
    "ref_offset": "0x00D8B3EC",
    "ref_address": "0x08D8B3EC",
    "ref_kind": "target_pointer_ref",
@@ -4944,7 +4944,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81D94",
-   "target_text": "검은숲결착",
+   "target_text": "칠흑숲 결전",
    "ref_offset": "0x00D8B464",
    "ref_address": "0x08D8B464",
    "ref_kind": "target_pointer_ref",
@@ -4956,7 +4956,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81D80",
-   "target_text": "최강라이벌",
+   "target_text": "최강 라이벌",
    "ref_offset": "0x00D8B4A0",
    "ref_address": "0x08D8B4A0",
    "ref_kind": "target_pointer_ref",

@@ -75,13 +75,15 @@ def load_build_module():
     return mod
 
 
-def encode_mutation(text: str) -> bytes:
+def encode_mutation(text: str, addr: int, slot: int) -> bytes:
     build = load_build_module()
     syl_to_code = {k: int(v, 16) for k, v in load_json(Path(build.SYLCODE)).items()}
     unmapped = Counter()
-    encoded = build.encode_text(text, syl_to_code, unmapped)
+    encoded, level = build.encode_fit(text, slot, syl_to_code, unmapped, addr)
     if unmapped:
         raise SystemExit(f"unmapped mutation chars for {text!r}: {dict(unmapped)}")
+    if encoded is None:
+        raise SystemExit(f"mutation text does not fit 0x{addr:08X}: {text!r} > slot {slot}")
     return encoded
 
 
@@ -365,8 +367,8 @@ def main() -> int:
         if slot <= 0:
             raise SystemExit(f"invalid slot for 0x{addr:08X}: {slot}")
         base_text = row.get("ship_ko") or row.get("ko") or ""
-        base_encoded = encode_mutation(base_text)
-        encoded = encode_mutation(mutation_text)
+        base_encoded = encode_mutation(base_text, addr, slot)
+        encoded = encode_mutation(mutation_text, addr, slot)
         tag = f"0x{addr:08X}_{safe_tag(mutation_text)}"
         work = out_dir / tag
         work.mkdir(parents=True, exist_ok=True)

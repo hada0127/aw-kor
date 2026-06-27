@@ -2789,3 +2789,26 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `qa_visual_regions.py`, `verify_dist_integrity.py`, `run_release_qa.py`도 PASS.
 - **범위**: 이 증거는 B84 11개 중 `0x00B84F04` 1건의 runtime source + visual proof다.
   나머지 B84 파워명 10개, A2 profile 파워명, B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도 증거가 필요하다.
+
+---
+## [2026-06-28] Part1 작전실 compact 제목 가독성 보강과 E12 freshness 재동기화
+
+- **사용자 스크린샷 재대조**: 최근 `~/Downloads` 7장 contact와 current fresh route를 다시 비교했다.
+  이전에 보이던 Part1 mode/single/link 라벨 덮침은 current ROM에서 재현되지 않았고,
+  single-map unknown은 `미공개`로 정상 표시된다. 남은 체감 문제는 작전실 compact title이
+  `전투개시`, `전선기지확보`, `키쿠치요실수`처럼 공백 없이 붙어 보여 깨진 제목처럼 보이는 점이었다.
+- **수정 범위**: `tools/build_korean_full.py`의 Part1 B8 작전명 override 32개를 슬롯 안에서 짧고 읽히는 제목으로
+  조정했다. 긴 제목은 피하고 fullwidth space까지 포함해 `전투 개시`, `전선 기지 확보`,
+  `고물 전차 출격`, `특수부대 도미노`, `은빛 세계`, `호이프 해군` 같은 형태로 맞췄다.
+- **검증 도구 주의**: `tools/prove_compact_display_mutation.py`는 기존 `encode_text()` 직접 호출 대신
+  build `encode_fit(text, slot, addr=...)`을 사용한다. Part1 compact title은 공백을 fullwidth `0x8140`으로
+  인코딩하고 slot별 폭/패딩 정책을 거치므로, mutation proof도 build와 같은 encoder를 써야
+  `old_hex`/`base_encoded_hex` 비교가 맞는다.
+- **current SHA 재동기화**: 새 output SHA는
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`다. 이 SHA 기준으로
+  B8 작전명 mutation evidence 13건, B84 `0x00B84F04` read-watch, xref/code-context/renderer trace,
+  scene screenshot 70개, scene residual evidence, BPS/IPS manifest를 모두 재생성했다.
+  `data/compact_display_visual_matrix.json`의 direct 수치는 A2 0/36, B84 1/11, B8 13/459다.
+- **경계**: 이번 변경은 사용자 화면 가독성 결함 수정과 evidence freshness 복구다.
+  B8 direct evidence는 여전히 Part1 작전실 편중이며, A2/B84 나머지와 Part2-B8 HUD/상점/무기/데미지예측 계열은
+  route-specific read-watch, mutation diff, 또는 WRAM/VRAM/DMA chain 증거가 필요하다.

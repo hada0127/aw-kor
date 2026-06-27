@@ -2974,3 +2974,23 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   A2 direct 0, B84 direct 1/11, B8 direct 13/459다.
   `python3 tools/verify_dist_integrity.py`와 `python3 tools/run_release_qa.py`는 PASS.
 - **경계**: E12 전체 완료가 아니다. 이번 proof는 `0x00B84F04` 1건만 닫는다.
+
+## [2026-06-28] 사용자 추가 스크린샷 후속 Part1 작전실 compact 제목 가독성 개선
+
+- **재확인**: `~/Downloads`의 사용자 7장 contact를 current ROM으로 다시 대조했다. Part1 mode/single/link
+  라벨 겹침은 current fresh route에서 재현되지 않고, single-map unknown 표시는 `미공개`로 보인다.
+- **수정**: Part1 작전실 compact title 32개를 슬롯 내에서 더 자연스러운 짧은 제목으로 재정리했다.
+  대표 변경은 `전투개시`→`전투 개시`, `전선기지확보`→`전선 기지 확보`,
+  `고물전차출격`→`고물 전차 출격`, `키쿠치요실수`→`키쿠치요 실수`,
+  `특수부대장도미노`→`특수부대 도미노`다.
+- **도구 보강**: `tools/prove_compact_display_mutation.py`가 build `encode_fit()`을 사용하게 하여,
+  fullwidth space가 들어간 compact title도 current ROM의 base/mutation hex와 같은 규칙으로 검증한다.
+- **증거**: `docs/screenshots/part1_operation_room_title_readability_2026-06-28/scene_contact.png`,
+  `fresh_routes_contact.png`, `single_map_left_crop_4x.png`.
+- **동기화/검증**: current output/dist SHA는
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`.
+  B8 manual mutation 13건, B84 `0x00B84F04` read-watch, E12 matrix, scene screenshot 70개,
+  residual evidence, manifest/BPS/IPS를 모두 current SHA로 갱신했다.
+  `python3 tools/verify_dist_integrity.py`와
+  `python3 tools/run_release_qa.py --editor --cdp --timeout 300`은 PASS.
+- **경계**: E12는 완료가 아니다. matrix direct 수치는 A2 0/36, B84 1/11, B8 13/459다.
