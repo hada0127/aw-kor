@@ -1041,3 +1041,23 @@ read-watch를 시도했다.
 - **판정**: 이 state와 단순 전환 입력은 위 B8 comm wait 후보의 source 증거가 아니다. 단, route/subset
   음성이므로 B8 comm wait 문자열의 전역 dead-copy 증명은 아니다. 다음에는 화면 전환 직전 write-chain,
   다른 통신 대기 state, 또는 대체 source positive ID를 우선한다.
+
+## [2026-06-28] E12 B8 작전실 추가 스크롤 및 전투 state broad scan 음성
+
+- **작전실 DOWN 재확인**: 기존 DOWN16 음성이 스크롤 카운트 오차인지 확인하려고
+  `41_part1_operation_room` fresh route 뒤 `DOWN` 14~18회에서
+  `0x00B81F2C`(`과외수업`), `0x00B81F24`(`개전`),
+  `0x00B81F10`(`건 파이터`), `0x00B81F04`(`하늘 용사`)을 각각 같은 슬롯 길이 mutation으로 바꿨다.
+  모든 카운트/주소 조합이 pixel diff 0이었다.
+- **작전실 UP 재확인**: 반대 방향 wrap/후반 미션 노출 가능성을 보려고 `UP` 1~6회에서
+  `0x00B82024`(`라스트 미션`), `0x00B82038`(`파라파라 제도`),
+  `0x00B8204C`(`비경의 숲`) mutation을 돌렸지만 모두 pixel diff 0이었다.
+- **broad state read-watch**: freebattle after-attack/endturn, first-battle unit/info, system surrender,
+  freebattle start, second-mission battle 계열 savestate 24개에 B8 whole range `0x00B81800..0x00B85000`
+  read-watch를 30프레임씩 걸었다. 결과 hit 0/direct 0이다.
+- **기록**: `temp/e12_b8_operation_scan_down*_20260628/summary.json`,
+  `temp/e12_b8_operation_scan_up*_20260628/summary.json`,
+  `temp/e12_b8_broad_state_scan_20260628.json`.
+- **판정**: 위 route들은 B8 direct evidence 후보에서 제외한다. 전역 dead-copy 증명은 아니며,
+  다음 B8 증거 확보는 같은 steady-state 반복이 아니라 scene-load 전환 순간 watch, 실제 target row가 노출되는
+  진행도 save, 대체 source positive ID, 또는 WRAM/VRAM write-chain으로 해야 한다.

@@ -752,6 +752,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     전투 데미지 예측/무기 상세/다른 Part2 HUD는 별도 positive source ID 또는 WRAM/VRAM write-chain이 필요하다.
     agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
     identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
+  - [x] 2026-06-28 B8 작전실 추가 스크롤/전투 state 후보 음성 범위 확정:
+    `41_part1_operation_room`에서 기존 DOWN16 음성이 단순 카운트 오류인지 확인하려고
+    `DOWN` 14~18회에서 `0x00B81F2C/1F24/1F10/1F04`
+    (`과외수업/개전/건 파이터/하늘 용사`) mutation을 다시 돌렸지만 모두 pixel diff 0이었다.
+    반대 방향 `UP` 1~6회에서 `0x00B82024/2038/204C`
+    (`라스트 미션/파라파라 제도/비경의 숲`) mutation도 모두 pixel diff 0이었다.
+    추가로 freebattle/first-battle/system/result/second-mission 계열 savestate 24개에 B8 whole-range read-watch를
+    30프레임씩 걸었지만 hit 0/direct 0이었다.
+    결과는 `temp/e12_b8_operation_scan_down*_20260628/summary.json`,
+    `temp/e12_b8_operation_scan_up*_20260628/summary.json`,
+    `temp/e12_b8_broad_state_scan_20260628.json`.
+    이들은 route/subset 음성이므로 E12 direct evidence로 승격하지 않는다. 다음 B8 작업은 같은 화면 반복보다
+    scene-load 전환 순간, target row를 실제로 노출하는 진행도 save, 또는 WRAM/VRAM write-chain으로 전환한다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
     A2 10건, B84 파워명 11건, B8 작전명 13건은 source가 current SHA에서 확정됐지만
     A2는 10/36, B8도 13/459로 전체 중 일부에 불과하다.
