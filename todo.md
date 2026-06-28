@@ -316,6 +316,16 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `capture_scene_screenshots.py --force`, contact sheet visual audit,
     `run_release_qa.py`, `run_release_qa.py --only-editor --editor`, `run_release_qa.py --only-editor --cdp`,
     `verify_dist_integrity.py`, scene/residual strict audit가 모두 PASS.
+  - [x] 2026-06-28 추가 스크린샷 후속: `scene_24_part2_campaign_map` UI 에디터 캡처가
+    current ROM SHA인데도 구 savestate VRAM을 끌고 와 A3 룰 다이아몬드 라벨이
+    `日数/攻め/収入/能力/アニメ`처럼 일본어로 보이는 오탐을 확인했다.
+    같은 입력을 current ROM 콜드부트 fresh route로 60스텝 재생하면 맵 목록 `소라 마메 섬`은 `??` 없이
+    표시되고 룰 라벨은 `정찰/날씨/수입/일수/우세/능력/애니`로 정상이다.
+    `data/screen_checkpoints.json`의 `scene_24_part2_campaign_map`,
+    `scene_24b_part2_strategic_map_mode4`를 savestate 기반에서 ground-truth fresh nav로 승격했고,
+    `tools/capture_scene_screenshots.py --checkpoint scene_24_part2_campaign_map --checkpoint scene_24b_part2_strategic_map_mode4 --force`
+    재캡처로 UI 에디터 preview도 정상화했다.
+    증거: `docs/screenshots/scene24_fresh_checkpoint_fix_2026-06-28/contact.png`.
   - [x] 2026-06-27 Codex 추가 재검증:
     사용자 contact 대상 `40_part1_name_menu/41_part1_operation_room/42_part1_single_battle/43_part1_link`를
     current SHA `a4e98a93…`에서 강제 재캡처해 메뉴 라벨 도움말 침범과 작전실 깨진 title cache가

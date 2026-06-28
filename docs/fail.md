@@ -1101,3 +1101,17 @@ read-watch를 시도했다.
 - **기록**: `temp/claude_review_e12_a2_coid_20260628.md`,
   `temp/claude_review_e12_a2_coid_20260628.err`,
   `temp/agy_review_e12_a2_coid_20260628.md`.
+
+## [2026-06-28] `scene_24` A3 룰 라벨 일본어 재출현을 ROM 회귀로 보는 판정
+
+- **시도/오판 위험**: `scene_24_part2_campaign_map`의 UI 에디터 캡처에서
+  `日数/攻め/収入/能力/アニメ`가 보여 A3 raw OBJ 패치가 회귀한 것처럼 보였다.
+- **반증**: current ROM raw 영역은 이미 한글 라벨/값 데이터로 패치되어 있고, 같은 입력을
+  coldboot fresh route로 재생하면 `정찰/날씨/수입/일수/우세/능력/애니`가 정상 표시된다.
+- **판정**: 문제는 ROM 패치가 아니라 stale savestate checkpoint였다. provenance의 ROM SHA가 current여도
+  savestate VRAM이 구 일본어 그래픽을 보존할 수 있으므로, 이 화면은 savestate 캡처만으로 결함 판정하지 않는다.
+- **재시도 금지**: `scene_24`/`scene_24b`의 일본어 룰 라벨을 근거로 `0x45D334..0x45DC74` raw OBJ를
+  다시 덮어쓰기 전에 반드시 `data/screen_checkpoints.json`의 fresh checkpoint 또는 coldboot 재생 캡처를 먼저 확인한다.
+  정식 증거는 `docs/screenshots/scene24_fresh_checkpoint_fix_2026-06-28/contact.png`.
+- **CLI 리뷰**: `agy`는 stale savestate 제거/커밋 가능 판정. `claude`는 180초 timeout(stdout/stderr 0B),
+  `codex`도 180초 timeout(stdout 0B, stderr는 하니스/도구 로그 위주로 실질 finding 없음).

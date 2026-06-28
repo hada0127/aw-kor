@@ -3053,3 +3053,23 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   12개 캡처 지점이 의도한 title/select/menu/battle/CO/unit 화면임을 보여 준다.
 - **해석 경계**: state 기반 PRAM 캡처는 현재 프로젝트 scene evidence의 팔레트 보강이다.
   route 숫자는 화면별 총 팔레트 수가 아니고 first-seen unique bank 수다.
+
+---
+## [2026-06-28] `scene_24` A3 룰 라벨 일본어 재출현은 stale savestate 캡처 오탐
+
+- **현상**: 최신 `output/game_wars_korean_full.gba` SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292` 기준
+  `temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png`가
+  `日数/攻め/収入/能力/アニメ` 같은 일본어 룰 다이아몬드 라벨을 다시 보여 줬다.
+- **원인 분리**: ROM raw 타일 영역 `0x45D334..0x45D934`와 값 영역 `0x45DA34..0x45DC74`는 이미
+  `patch_part2_campaign_rule_summary_labels()` / `patch_part2_campaign_rule_value_labels()` 적용 후 데이터로
+  바뀌어 있었다. 같은 route를 current ROM 콜드부트 fresh 입력으로 재생하면 맵 목록의 `소라 마메 섬`은
+  `??` 없이 표시되고, 룰 다이아몬드는 `정찰/날씨/수입/일수/우세/능력/애니`로 표시된다.
+- **결론**: A3 그래픽 패치 회귀가 아니라 `scene_24_part2_campaign_map`과
+  `scene_24b_part2_strategic_map_mode4`가 stale savestate 기반 checkpoint였던 것이 문제다.
+  provenance의 ROM SHA가 current여도 savestate 내부 VRAM은 구 그래픽을 보존할 수 있다.
+- **수정**: `data/screen_checkpoints.json`에서 두 checkpoint를 `mode=fresh`, `grade=ground_truth`로 바꾸고
+  Part2 자유전 맵 선택 -> 사령관 선택 -> 룰 요약까지 coldboot nav로 직접 진입하게 했다.
+  재캡처 명령은
+  `python3 tools/capture_scene_screenshots.py --checkpoint scene_24_part2_campaign_map --checkpoint scene_24b_part2_strategic_map_mode4 --force`.
+- **증거**: `docs/screenshots/scene24_fresh_checkpoint_fix_2026-06-28/contact.png`와 각 provenance JSON.

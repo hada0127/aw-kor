@@ -1057,66 +1057,303 @@
     },
     {
       "name": "scene_24_part2_campaign_map",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
-          "press",
-          "B",
-          120
-        ],
-        [
-          "press",
-          "B",
-          120
-        ],
-        [
-          "press",
-          "B",
-          120
+          "frames",
+          480
         ],
         [
           "press",
           "A",
-          120
-        ],
-        [
-          "press",
-          "A",
-          120
+          200
         ],
         [
           "press",
           "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
           120
         ],
         [
           "press",
           "A",
-          120
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "UP",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "START",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "LEFT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "RIGHT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
         ]
       ],
-      "grade": "fresh_savestate",
-      "note": "fresh redraw from state_020: Part2 캠페인 룰 요약 라벨/값 한글 재렌더",
+      "grade": "ground_truth",
+      "note": "coldboot fresh replay: Part2 자유전 맵 선택→사령관 선택→룰 요약 다이아몬드 라벨 한글 재렌더",
       "scene_id": "24_part2_campaign_map",
       "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "scene_24b_part2_strategic_map_mode4",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0",
-      "refresh": [
+      "mode": "fresh",
+      "nav": [
         [
           "frames",
-          1
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "DOWN",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "UP",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "START",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "B",
+          60
+        ],
+        [
+          "press",
+          "LEFT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "RIGHT",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
+        ],
+        [
+          "press",
+          "A",
+          60
         ]
       ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
+      "grade": "ground_truth",
+      "note": "coldboot fresh replay: Part2 자유전 맵 선택 후 사령관 선택 화면",
       "scene_id": "24b_part2_strategic_map_mode4",
       "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
+      "provenance_path": "data/screen_checkpoints.json"
     },
     {
       "name": "scene_25_part2_mission_titles",
