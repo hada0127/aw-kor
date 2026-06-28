@@ -379,7 +379,21 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     재캡처해 visible route의 공백 도움말 깨짐은 보이지 않음을 확인했다.
 - [ ] E3 잔여 미번역 triage(제어마커/slot overflow/no group 자동제외분 수동검수).
 - [ ] E4 표기흔들림 통일(국가명 붙임/띄움) + 구 apply_proper_nouns.py deprecate.
-- [ ] E5 VRAM 팔레트 캡처(0x05000000/0x05000200) 스프라이트 실색.
+- [x] E5 PRAM(팔레트 RAM) 대표 캡처(0x05000000/0x05000200) 스프라이트 에디터 실색 스타터셋 완료(2026-06-28).
+  `tools/capture_sprite_palettes.py`가 current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  `0x05000000..0x050003ff` 1024B(BG 0x05000000 + OBJ 0x05000200)를
+  title/part1_select/part2_title/part2_menu 4개 fresh route로 덤프한다.
+  `data/sprite_palettes.json`에 ROM SHA, route screenshot SHA, raw dump SHA/size,
+  전역 exact-match dedupe 후 72개 비자명 신규 뱅크(BG 50/OBJ 22)를 저장했고
+  스프라이트 에디터 `palette_library()`가 72/OBJ 22로 로드함을 확인했다.
+  증거: `docs/screenshots/sprite_palette_capture_2026-06-28/contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/summary.json`.
+- [ ] E5b 전투/CO 초상/유닛 화면 PRAM 팔레트 추가 캡처.
+  E5는 대표 title/select/menu 스타터셋이며, 전투 중 유닛 스프라이트·CO 초상처럼 별도 route에서 로드되는
+  OBJ 팔레트 전수 캡처는 아니다. 전투/CO 화면 진입 route를 확보해 같은 방식으로 `data/sprite_palettes.json`
+  또는 별도 팔레트 라이브러리에 추가한다.
 - [ ] E6 CSV 권위 단일화(inline 리터럴 → overrides.tsv 분리).
 - [ ] E7 캡처 지연 단축(슬롯 nav 단축 canvas + orig 캡처 영구 캐시).
 - [x] E8 `88_common_comm_labels` raw 단일 `ソ`(0x00EE22AC) 실제 UI 노출 재확인 완료(2026-06-26).

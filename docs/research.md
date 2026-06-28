@@ -2964,3 +2964,31 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **해석**: 이 byte는 current state의 A2 profile source selector로 볼 수 있다. 다만 강제 RAM patch이므로
   natural all-CO route가 아니며, 값->CO id의 완전한 게임 의미와 나머지 26개 target은 별도 route/selector
   조사가 필요하다.
+
+---
+## [2026-06-28] E5 PRAM representative palette capture provenance
+
+- **하드웨어 사실**: GBA 팔레트 RAM은 `0x05000000`부터 1024B이며, 앞 512B는 BG 16뱅크,
+  뒤 512B(`0x05000200`)는 OBJ 16뱅크다. 4bpp 스프라이트 타일 자체에는 색이 없으므로,
+  스프라이트 에디터의 실색 미리보기는 런타임 팔레트 캡처가 필요하다.
+- **캡처 방식**: `tools/capture_sprite_palettes.py`는 current
+  `output/game_wars_korean_full.gba` SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`를 mGBA harness로 실행하고
+  `title`, `part1_select`, `part2_title`, `part2_menu` fresh route에서
+  `dumpmem 5000000 1024`를 수행한다.
+- **raw dump SHA**:
+  `temp/pal_capture/title.pal` =
+  `acb1c721261bf4f468db5aec440f0214903e11487fb2d22201a460b70c549450`,
+  `part1_select.pal` =
+  `449a0ad70f2576ebcd4e9104379a3d3e8dddf4229e4b843f1e834e8de5ccf53a`,
+  `part2_title.pal` =
+  `38c37b548bd8335d85bf543db07b9a244603714d6100b61ff4c40f3e24672b5c`,
+  `part2_menu.pal` =
+  `d23bf51380be64028c3c3c980a10a7c152e924484d243b299d6e6652d7e3a2da`.
+- **라이브러리 결과**: `data/sprite_palettes.json`은 4개 dump에서 전역 exact-match 중복을 제거한 비자명
+  16색 신규 뱅크 72개를 보존한다. 분포는 BG 50, OBJ 22다. route별 수치는 화면 총량이 아니라
+  first-seen 신규 뱅크 수이며, title 21, part1_select 22, part2_title 2, part2_menu 27이다.
+- **에디터 연결**: `tools/sprite_editor/server.py`의 `palette_library()`와 `/api/palettes`는
+  이 JSON의 `palettes` 배열을 그대로 제공한다. 검증 시 library count 72, OBJ count 22를 확인했다.
+- **범위 경계**: 이것은 대표 title/select/menu 스타터셋이다. 전투 중 유닛, CO 초상, 특정 장면에서만 로드되는
+  OBJ 팔레트는 별도 route 캡처가 필요하므로 E5b TODO로 남겼다.

@@ -1,0 +1,62 @@
+{
+  "source": "data/sprite_palettes.json",
+  "source_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "harness": "/tmp/mgbah",
+  "capture": {
+    "address": "0x05000000",
+    "bytes": 1024,
+    "bg_palette_address": "0x05000000",
+    "obj_palette_address": "0x05000200",
+    "raw_dumps": [
+      {
+        "screen": "title",
+        "path": "temp/pal_capture/title.pal",
+        "size": 1024,
+        "sha256": "acb1c721261bf4f468db5aec440f0214903e11487fb2d22201a460b70c549450",
+        "screenshot": "temp/pal_capture/title_screen.png",
+        "screenshot_sha256": "ac136137b4147578b03a60fb3ffd65207061085612259a6bb4d2fa804106dfff"
+      },
+      {
+        "screen": "part1_select",
+        "path": "temp/pal_capture/part1_select.pal",
+        "size": 1024,
+        "sha256": "449a0ad70f2576ebcd4e9104379a3d3e8dddf4229e4b843f1e834e8de5ccf53a",
+        "screenshot": "temp/pal_capture/part1_select_screen.png",
+        "screenshot_sha256": "89b8dd68b27f7fe92cb28d01a219c338ac375fe83550f7439c8c8b9438ce1a77"
+      },
+      {
+        "screen": "part2_title",
+        "path": "temp/pal_capture/part2_title.pal",
+        "size": 1024,
+        "sha256": "38c37b548bd8335d85bf543db07b9a244603714d6100b61ff4c40f3e24672b5c",
+        "screenshot": "temp/pal_capture/part2_title_screen.png",
+        "screenshot_sha256": "5f6d8a6f21982f6e27dc64236a26ae2b4d45113703a87874681e0bcef563cd7d"
+      },
+      {
+        "screen": "part2_menu",
+        "path": "temp/pal_capture/part2_menu.pal",
+        "size": 1024,
+        "sha256": "d23bf51380be64028c3c3c980a10a7c152e924484d243b299d6e6652d7e3a2da",
+        "screenshot": "temp/pal_capture/part2_menu_screen.png",
+        "screenshot_sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b"
+      }
+    ]
+  },
+  "summary": {
+    "count_semantics": "global exact-match dedupe; route counts are first-seen new unique banks, not per-route total banks",
+    "unique_palettes": 72,
+    "unique_BG": 50,
+    "unique_OBJ": 22,
+    "first_seen_new_banks_by_route": {
+      "title": 21,
+      "part1_select": 22,
+      "part2_title": 2,
+      "part2_menu": 27
+    }
+  },
+  "contacts": {
+    "palette_swatch": "docs/screenshots/sprite_palette_capture_2026-06-28/contact.png",
+    "route_screens": "docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png"
+  },
+  "scope_note": "Representative title/select/menu PRAM starter set. In-battle unit and CO portrait palettes require follow-up route captures."
+}

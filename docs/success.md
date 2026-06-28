@@ -1045,7 +1045,7 @@ archive/malformed_address_rows.csv 보존.
 ### TZ — 전체 기능 점검 (진행)
 
 - [x] 전 QA 실행: 무결성 PASS, overflow0/no_ko0, 영어잔존0, ROM placeholder0, 부팅/체크섬 OK (output fa7b08df).
-- [x] 도구체인 4종 데이터 검증 + codex 리뷰(최대 누락=실화면 시각회귀 QA, VRAM 팔레트 먼저, 미번역 triage, 깨진주소 복구). agy는 긴 리뷰 프롬프트 반복 hang(unreliable) — 짧은 프롬프트만 가능.
+- [x] 도구체인 4종 데이터 검증 + codex 리뷰(최대 누락=실화면 시각회귀 QA, PRAM 팔레트 먼저, 미번역 triage, 깨진주소 복구). agy는 긴 리뷰 프롬프트 반복 hang(unreliable) — 짧은 프롬프트만 가능.
 - [x] **깨진 주소 복구**: `tools/fix_broken_addresses.py` — 드롭됐던 번역 7행 복구·출하(색적/미사일 섬 쟁탈전!/14일/상대 공격력 등), 중복106·junk93 정리, 3 슬롯-핏 override로 overflow 0 유지.
 
 
@@ -3094,3 +3094,23 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   A2 10/36, B84 11/11, B8 13/459다.
 - **경계**: B84 CO-id proof와 같은 RAM-field near-fresh proof다. 자연 진행 전수 route나
   36개 power-title visual-layout proof로 해석하지 않는다.
+
+## [2026-06-28] E5 PRAM 대표 팔레트 캡처 및 스프라이트 에디터 실색 스타터셋 확정
+
+- **캡처 범위**: current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  mGBA fresh route 4개(`title`, `part1_select`, `part2_title`, `part2_menu`)를 실행하고
+  팔레트 RAM `0x05000000..0x050003ff` 1024B를 덤프했다. 이 범위는 BG 팔레트
+  `0x05000000`과 OBJ 팔레트 `0x05000200`를 함께 포함한다.
+- **산출물**: `tools/capture_sprite_palettes.py`가
+  `data/sprite_palettes.json`을 재생성한다. JSON에는 ROM SHA, route screenshot SHA,
+  raw dump path/size/SHA, 전역 exact-match dedupe 후 72개 비자명 16색 신규 뱅크(BG 50/OBJ 22)가 들어간다.
+- **에디터 확인**: `tools/sprite_editor/server.py`의 `palette_library()`가
+  라이브러리를 72개/OBJ 22개로 로드했다. 따라서 스프라이트 에디터는 더 이상 grayscale 추정만이 아니라
+  현행 ROM 대표 화면에서 캡처한 실기 팔레트 후보를 제공한다.
+- **증거**: `docs/screenshots/sprite_palette_capture_2026-06-28/contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/summary.json`.
+- **경계**: E5는 대표 title/select/menu PRAM 스타터셋 캡처와 에디터 실색 후보 제공 완료다.
+  전투 중 유닛 스프라이트·CO 초상 팔레트 추가 캡처, LZ77 스프라이트 편집분 ROM 역기록,
+  E12/E16의 실화면 direct evidence는 별도 TODO로 남는다.
