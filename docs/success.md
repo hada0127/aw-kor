@@ -3112,5 +3112,19 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`,
   `docs/screenshots/sprite_palette_capture_2026-06-28/summary.json`.
 - **경계**: E5는 대표 title/select/menu PRAM 스타터셋 캡처와 에디터 실색 후보 제공 완료다.
-  전투 중 유닛 스프라이트·CO 초상 팔레트 추가 캡처, LZ77 스프라이트 편집분 ROM 역기록,
-  E12/E16의 실화면 direct evidence는 별도 TODO로 남는다.
+  당시 전투 중 유닛 스프라이트·CO 초상 팔레트는 E5b로 분리했고, 아래 E5b에서 대표 route를 보강했다.
+  LZ77 스프라이트 편집분 ROM 역기록과 E12/E16의 실화면 direct evidence는 별도 TODO로 남는다.
+
+## [2026-06-28] E5b 전투/CO/유닛 PRAM 팔레트 추가 캡처
+
+- **범위**: `tools/capture_sprite_palettes.py`에 current scene state 기반 route 8개를 추가했다:
+  `part1_battle_day1`, `part1_info_list`, `part1_unit_detail`, `part2_co_profile`,
+  `part2_unit_info`, `common_battle_system`, `aw1_power_menu`, `part2_battle_overlay`.
+- **provenance**: 각 route는 `data/sprite_palettes.json`에 source state path/SHA, route screenshot path/SHA,
+  raw PRAM dump path/SHA를 저장한다. route contact는
+  `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`다.
+- **결과**: 전역 exact-match dedupe 기준 팔레트 라이브러리는 72개(BG 50/OBJ 22)에서
+  176개(BG 92/OBJ 84)로 확대됐다. E5b scope 신규 뱅크는 104개이며, 그중 OBJ가 62개다.
+- **에디터 확인**: 스프라이트 에디터 `palette_library()`가 176개/OBJ 84개를 로드한다.
+- **경계**: route별 숫자는 화면별 총량이 아니라 first-seen unique bank 수다. 이번 작업은 전투/CO/유닛 대표 화면의
+  실색 후보를 넓힌 것이며, LZ77 스프라이트 편집분 ROM 역기록이나 E12/E16 direct visual evidence는 별도 TODO로 남는다.

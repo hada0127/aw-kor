@@ -2991,4 +2991,21 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **에디터 연결**: `tools/sprite_editor/server.py`의 `palette_library()`와 `/api/palettes`는
   이 JSON의 `palettes` 배열을 그대로 제공한다. 검증 시 library count 72, OBJ count 22를 확인했다.
 - **범위 경계**: 이것은 대표 title/select/menu 스타터셋이다. 전투 중 유닛, CO 초상, 특정 장면에서만 로드되는
-  OBJ 팔레트는 별도 route 캡처가 필요하므로 E5b TODO로 남겼다.
+  OBJ 팔레트는 별도 route 캡처가 필요하다고 보아 아래 E5b에서 후속 보강했다.
+
+---
+## [2026-06-28] E5b battle/CO/unit PRAM capture
+
+- **추가 route**: `tools/capture_sprite_palettes.py`가 fresh route 4개에 더해 current scene state 기반
+  8개 route를 캡처한다. 대상은 Part1 전투 배너/맵, Part1 부대 정보 리스트, Part1 유닛 상세,
+  Part2 CO 프로필, Part2 생산/유닛 정보, 공통 전투 시스템 메뉴, AW1 전투 중 CO 파워 메뉴,
+  Part2 전투 day overlay다.
+- **state provenance**: state 기반 route는 모두 `data/scene_entrypoints.json` 또는 기존 E12/B84 증거가 쓰던
+  current state를 재사용한다. JSON에는 `source_state_sha256`, `screenshot_sha256`, raw `.pal` SHA를 함께 기록한다.
+- **팔레트 결과**: 전역 exact-match dedupe 후 `data/sprite_palettes.json`은
+  unique 176개(BG 92, OBJ 84)를 보존한다. scope별 first-seen 신규 뱅크는 starter 72,
+  E5b battle/CO/unit 104이며, E5b의 OBJ 신규 뱅크는 62개다.
+- **화면 증거**: `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`는
+  12개 캡처 지점이 의도한 title/select/menu/battle/CO/unit 화면임을 보여 준다.
+- **해석 경계**: state 기반 PRAM 캡처는 현재 프로젝트 scene evidence의 팔레트 보강이다.
+  route 숫자는 화면별 총 팔레트 수가 아니고 first-seen unique bank 수다.

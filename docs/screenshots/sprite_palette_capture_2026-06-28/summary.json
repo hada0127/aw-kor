@@ -10,6 +10,9 @@
     "raw_dumps": [
       {
         "screen": "title",
+        "scope": "starter",
+        "note": "coldboot title",
+        "capture_mode": "fresh_nav",
         "path": "temp/pal_capture/title.pal",
         "size": 1024,
         "sha256": "acb1c721261bf4f468db5aec440f0214903e11487fb2d22201a460b70c549450",
@@ -18,6 +21,9 @@
       },
       {
         "screen": "part1_select",
+        "scope": "starter",
+        "note": "coldboot part select with Part1 highlighted",
+        "capture_mode": "fresh_nav",
         "path": "temp/pal_capture/part1_select.pal",
         "size": 1024,
         "sha256": "449a0ad70f2576ebcd4e9104379a3d3e8dddf4229e4b843f1e834e8de5ccf53a",
@@ -26,6 +32,9 @@
       },
       {
         "screen": "part2_title",
+        "scope": "starter",
+        "note": "coldboot Part2 title/splash",
+        "capture_mode": "fresh_nav",
         "path": "temp/pal_capture/part2_title.pal",
         "size": 1024,
         "sha256": "38c37b548bd8335d85bf543db07b9a244603714d6100b61ff4c40f3e24672b5c",
@@ -34,29 +43,148 @@
       },
       {
         "screen": "part2_menu",
+        "scope": "starter",
+        "note": "coldboot Part2 main menu with CO portrait",
+        "capture_mode": "fresh_nav",
         "path": "temp/pal_capture/part2_menu.pal",
         "size": 1024,
         "sha256": "d23bf51380be64028c3c3c980a10a7c152e924484d243b299d6e6652d7e3a2da",
         "screenshot": "temp/pal_capture/part2_menu_screen.png",
         "screenshot_sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b"
+      },
+      {
+        "screen": "part1_battle_day1",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 battle day banner/map sprites",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part1_battle_day1.pal",
+        "size": 1024,
+        "sha256": "e9fd69e45ca69845090ca8ae3eb2a884b838cd0448bb8081847b0e9ff390e1fa",
+        "screenshot": "temp/pal_capture/part1_battle_day1_screen.png",
+        "screenshot_sha256": "d82f08049dc0f034db4cbcd7374974791717ba433e70a7257b9ae32a8c0be1bc",
+        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
+        "source_state_sha256": "71073035636e80438a453091fd1fd2d5512d316f1e035a3750aa0224b767f4a3"
+      },
+      {
+        "screen": "part1_info_list",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 unit/army info list",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part1_info_list.pal",
+        "size": 1024,
+        "sha256": "535281f0a681f0dcdf5c3337ccd90b1229ebaf4eb98de3de7fbe552e0ac55aed",
+        "screenshot": "temp/pal_capture/part1_info_list_screen.png",
+        "screenshot_sha256": "d0721c88e94a4f8ee589664062542956e6c2fe93a5bf5c1a3c83cd59f77a8e8d",
+        "source_state": "temp/auto_battle_end/state_007.ss0",
+        "source_state_sha256": "aa7ecfbfc71f9e362d8ee32e45066fd2f87b6bc0d44aa1a96ab3ffd343b24147"
+      },
+      {
+        "screen": "part1_unit_detail",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 unit detail/help with unit sprite panel",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part1_unit_detail.pal",
+        "size": 1024,
+        "sha256": "54edbfef6b3cdb9df9bb631378245145189dc3285c49a8343046b4b68b2ce939",
+        "screenshot": "temp/pal_capture/part1_unit_detail_screen.png",
+        "screenshot_sha256": "cd13ade6f518076684604afdf2cc057edb13160294736d0fa67d2ee9cf73b0c8",
+        "source_state": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0",
+        "source_state_sha256": "48e955a350665c589b9073421e41d2f80e4fa88ceb43dfebafc1d9cd6b192f08"
+      },
+      {
+        "screen": "part2_co_profile",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 CO profile with portrait and power list",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part2_co_profile.pal",
+        "size": 1024,
+        "sha256": "a4c22f99f84d3472cf4645cd2b1988e30faad9c9446cdcc1218ed54c2553b26c",
+        "screenshot": "temp/pal_capture/part2_co_profile_screen.png",
+        "screenshot_sha256": "0ec3baa378010b173b8ff47ae9bbc40232400cd48ab7a03ece62a1aae350c7b0",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+        "source_state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410"
+      },
+      {
+        "screen": "part2_unit_info",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 production/unit info panel",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part2_unit_info.pal",
+        "size": 1024,
+        "sha256": "432c80ede887da0cf2490872c1e8a377501c251cdb111b31a49e70989bbd7df9",
+        "screenshot": "temp/pal_capture/part2_unit_info_screen.png",
+        "screenshot_sha256": "eab08ca5b3f555255d971700cccde4c7913bb734cd0fdd8af57b7e3a47f29f79",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_031.ss0",
+        "source_state_sha256": "0f55257694d6e092c020b0e6205662b33ee3ef46016e5128e535387092cf2fbc"
+      },
+      {
+        "screen": "common_battle_system",
+        "scope": "e5b_battle_co_unit",
+        "note": "Common battle system menu",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/common_battle_system.pal",
+        "size": 1024,
+        "sha256": "2bd6f14298c0b1cf338e1ac23e16c99bb24fe1fd990fbae816ed4063d44639cb",
+        "screenshot": "temp/pal_capture/common_battle_system_screen.png",
+        "screenshot_sha256": "cea5896477fce14a38e3c6b5d265425f87757e71f392672958dee737cd200a51",
+        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0",
+        "source_state_sha256": "666e3da9110f18c5a6f629057abc226f7554706b2ea4264410eb6ab2e533e2fe"
+      },
+      {
+        "screen": "aw1_power_menu",
+        "scope": "e5b_battle_co_unit",
+        "note": "AW1 in-battle CO power menu",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/aw1_power_menu.pal",
+        "size": 1024,
+        "sha256": "18b4660f63592ed5537a2a582a2dbd411c09b93042ac5b36b948d135a81c52c1",
+        "screenshot": "temp/pal_capture/aw1_power_menu_screen.png",
+        "screenshot_sha256": "dfa3586a37db2b3b73cd6500f7cb995013758e027f4b47cb0ca863161ae6766c",
+        "source_state": "temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0",
+        "source_state_sha256": "f07a459b3991ef9ab46bf8296add159e152e30e4917f3c7c66fb67eb47e18345"
+      },
+      {
+        "screen": "part2_battle_overlay",
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 battle day overlay/map sprites",
+        "capture_mode": "state",
+        "path": "temp/pal_capture/part2_battle_overlay.pal",
+        "size": 1024,
+        "sha256": "8dc0e1de8bd2abeb36e536b46a96708456c11d731ae3035e21312819e78c1e49",
+        "screenshot": "temp/pal_capture/part2_battle_overlay_screen.png",
+        "screenshot_sha256": "dac419f402e56716f525ebde9c6bd97211d909654c7a395c863236ad4dfe73cf",
+        "source_state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
+        "source_state_sha256": "0082e1b00a0172de64d8f12f97e1f623026c537370653d9698bedea9f15a1d23"
       }
     ]
   },
   "summary": {
     "count_semantics": "global exact-match dedupe; route counts are first-seen new unique banks, not per-route total banks",
-    "unique_palettes": 72,
-    "unique_BG": 50,
-    "unique_OBJ": 22,
+    "unique_palettes": 176,
+    "unique_BG": 92,
+    "unique_OBJ": 84,
     "first_seen_new_banks_by_route": {
       "title": 21,
       "part1_select": 22,
       "part2_title": 2,
-      "part2_menu": 27
+      "part2_menu": 27,
+      "part1_battle_day1": 31,
+      "part1_info_list": 6,
+      "part1_unit_detail": 28,
+      "part2_co_profile": 15,
+      "part2_unit_info": 5,
+      "common_battle_system": 2,
+      "aw1_power_menu": 10,
+      "part2_battle_overlay": 7
+    },
+    "first_seen_new_banks_by_scope": {
+      "e5b_battle_co_unit": 104,
+      "starter": 72
     }
   },
   "contacts": {
     "palette_swatch": "docs/screenshots/sprite_palette_capture_2026-06-28/contact.png",
     "route_screens": "docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png"
   },
-  "scope_note": "Representative title/select/menu PRAM starter set. In-battle unit and CO portrait palettes require follow-up route captures."
+  "scope_note": "Starter title/select/menu PRAM plus current-state battle/CO/unit PRAM captures. Counts are first-seen unique banks after global exact-match dedupe, not exhaustive per-screen totals."
 }

@@ -25,14 +25,78 @@ HARNESS = Path(os.environ.get("MGBAH", "/tmp/mgbah"))
 OUT = ROOT / "temp" / "pal_capture"
 LIB = ROOT / "data" / "sprite_palettes.json"
 
-# 대표 화면 fresh-boot 네비(palette RAM이 실시간 로드된 상태에서 덤프)
-SCREENS = {
-    "title": [["frames", 600]],
-    "part1_select": [["frames", 480], ["press", "A", 200], ["press", "START", 240], ["frames", 120]],
-    "part2_title": [["frames", 480], ["press", "A", 200], ["press", "START", 200],
-                    ["press", "DOWN", 120], ["press", "A", 240], ["frames", 120]],
-    "part2_menu": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120],
-                   ["press", "A", 240], ["press", "START", 240], ["press", "A", 240], ["press", "A", 240]],
+# 대표 화면 fresh-boot 네비(PRAM이 실시간 로드된 상태에서 덤프)
+FRESH_SCREENS = {
+    "title": {"nav": [["frames", 600]], "scope": "starter", "note": "coldboot title"},
+    "part1_select": {
+        "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 240], ["frames", 120]],
+        "scope": "starter",
+        "note": "coldboot part select with Part1 highlighted",
+    },
+    "part2_title": {
+        "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200],
+                ["press", "DOWN", 120], ["press", "A", 240], ["frames", 120]],
+        "scope": "starter",
+        "note": "coldboot Part2 title/splash",
+    },
+    "part2_menu": {
+        "nav": [["frames", 480], ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120],
+                ["press", "A", 240], ["press", "START", 240], ["press", "A", 240], ["press", "A", 240]],
+        "scope": "starter",
+        "note": "coldboot Part2 main menu with CO portrait",
+    },
+}
+
+# 깊은 전투/CO/유닛 화면은 이미 current scene evidence에서 쓰는 state를 로드해 PRAM만 보강한다.
+STATE_SCREENS = {
+    "part1_battle_day1": {
+        "state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 battle day banner/map sprites",
+    },
+    "part1_info_list": {
+        "state": "temp/auto_battle_end/state_007.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 unit/army info list",
+    },
+    "part1_unit_detail": {
+        "state": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part1 unit detail/help with unit sprite panel",
+    },
+    "part2_co_profile": {
+        "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 CO profile with portrait and power list",
+    },
+    "part2_unit_info": {
+        "state": "temp/scene_entrypoints/part2_menu_sweep/state_031.ss0",
+        "nav": [["press", "RIGHT", 120], ["press", "A", 240]],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 production/unit info panel",
+    },
+    "common_battle_system": {
+        "state": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Common battle system menu",
+    },
+    "aw1_power_menu": {
+        "state": "temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "AW1 in-battle CO power menu",
+    },
+    "part2_battle_overlay": {
+        "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
+        "nav": [],
+        "scope": "e5b_battle_co_unit",
+        "note": "Part2 battle day overlay/map sprites",
+    },
 }
 
 
@@ -48,16 +112,26 @@ def sha256(path):
     return h.hexdigest()
 
 
-def capture(tag, nav):
+def apply_nav(drv, nav):
+    for s in nav:
+        if s[0] == "frames":
+            drv.frames(int(s[1]))
+        elif s[0] == "press":
+            drv.press(s[1], 6, int(s[2]) if len(s) > 2 else 120)
+
+
+def capture(tag, spec, *, mode):
     OUT.mkdir(parents=True, exist_ok=True)
     drv = MGBADriver(ROM, OUT, HARNESS)
     try:
         drv.frames(1)
-        for s in nav:
-            if s[0] == "frames":
-                drv.frames(int(s[1]))
-            elif s[0] == "press":
-                drv.press(s[1], 6, int(s[2]) if len(s) > 2 else 120)
+        if mode == "state":
+            state = ROOT / spec["state"]
+            if not state.exists():
+                raise FileNotFoundError(state)
+            drv.loadstate(state)
+            drv.frames(30)
+        apply_nav(drv, spec["nav"])
         drv.shot(f"{tag}_screen")
         drv.cmd(f"dumpmem 5000000 1024 {OUT / (tag + '.pal')}")  # 0x400 = 512색 BGR555
     finally:
@@ -65,22 +139,36 @@ def capture(tag, nav):
 
 
 def main():
-    for tag, nav in SCREENS.items():
-        capture(tag, nav)
+    capture_specs = []
+    for tag, spec in FRESH_SCREENS.items():
+        capture_specs.append((tag, spec, "fresh_nav"))
+    for tag, spec in STATE_SCREENS.items():
+        capture_specs.append((tag, spec, "state"))
+
+    for tag, spec, mode in capture_specs:
+        capture(tag, spec, mode=mode)
         print("captured", tag)
     lib, seen, raw_dumps = [], set(), []
-    for tag in SCREENS:
+    for tag, spec, mode in capture_specs:
         path = OUT / (tag + ".pal")
         raw = path.read_bytes()
         screen_png = OUT / f"{tag}_screen.png"
-        raw_dumps.append({
+        rec = {
             "screen": tag,
+            "scope": spec["scope"],
+            "note": spec["note"],
+            "capture_mode": mode,
             "path": str(path.relative_to(ROOT)),
             "size": len(raw),
             "sha256": sha256(path),
             "screenshot": str(screen_png.relative_to(ROOT)) if screen_png.exists() else None,
             "screenshot_sha256": sha256(screen_png) if screen_png.exists() else None,
-        })
+        }
+        if mode == "state":
+            state = ROOT / spec["state"]
+            rec["source_state"] = str(state.relative_to(ROOT))
+            rec["source_state_sha256"] = sha256(state)
+        raw_dumps.append(rec)
         cols = [struct.unpack("<H", raw[i * 2:i * 2 + 2])[0] for i in range(512)]
         for region, base in (("BG", 0), ("OBJ", 256)):
             for b in range(16):
@@ -92,11 +180,18 @@ def main():
                 if key in seen:
                     continue
                 seen.add(key)
-                lib.append({"name": f"{tag}_{region}{b}", "screen": tag, "region": region, "bank": b, "colors": rgb})
+                lib.append({
+                    "name": f"{tag}_{region}{b}",
+                    "screen": tag,
+                    "scope": spec["scope"],
+                    "region": region,
+                    "bank": b,
+                    "colors": rgb,
+                })
     out = {
         "_doc": "실기 팔레트 RAM(PRAM) 0x05000000..0x050003ff(1024B, BG 0x05000000 + OBJ 0x05000200) "
-                "대표 화면 캡처에서 추출한 16색 뱅크. 스프라이트 에디터 색 지정용 스타터셋. "
-                "전투/CO 초상 팔레트는 별도 route 캡처가 필요하다. 재생성: tools/capture_sprite_palettes.py",
+                "대표 화면과 current state 기반 전투/CO/유닛 화면 캡처에서 추출한 16색 뱅크. "
+                "스프라이트 에디터 색 지정용. 재생성: tools/capture_sprite_palettes.py",
         "source_rom": str(ROM.relative_to(ROOT)),
         "source_rom_sha256": sha256(ROM),
         "harness": str(HARNESS),
@@ -112,7 +207,10 @@ def main():
             "unique_palettes": len(lib),
             "unique_BG": sum(1 for e in lib if e["region"] == "BG"),
             "unique_OBJ": sum(1 for e in lib if e["region"] == "OBJ"),
-            "first_seen_new_banks_by_route": {tag: sum(1 for e in lib if e["screen"] == tag) for tag in SCREENS},
+            "first_seen_new_banks_by_route": {tag: sum(1 for e in lib if e["screen"] == tag)
+                                                for tag, _spec, _mode in capture_specs},
+            "first_seen_new_banks_by_scope": {scope: sum(1 for e in lib if e["scope"] == scope)
+                                               for scope in sorted({spec["scope"] for _tag, spec, _mode in capture_specs})},
         },
         "palettes": lib,
     }

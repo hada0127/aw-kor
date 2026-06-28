@@ -390,10 +390,17 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   증거: `docs/screenshots/sprite_palette_capture_2026-06-28/contact.png`,
   `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`,
   `docs/screenshots/sprite_palette_capture_2026-06-28/summary.json`.
-- [ ] E5b 전투/CO 초상/유닛 화면 PRAM 팔레트 추가 캡처.
-  E5는 대표 title/select/menu 스타터셋이며, 전투 중 유닛 스프라이트·CO 초상처럼 별도 route에서 로드되는
-  OBJ 팔레트 전수 캡처는 아니다. 전투/CO 화면 진입 route를 확보해 같은 방식으로 `data/sprite_palettes.json`
-  또는 별도 팔레트 라이브러리에 추가한다.
+- [x] E5b 전투/CO 초상/유닛 화면 PRAM 팔레트 추가 캡처 완료(2026-06-28).
+  `tools/capture_sprite_palettes.py`에 current scene state 기반 8개 route를 추가했다:
+  `part1_battle_day1`, `part1_info_list`, `part1_unit_detail`, `part2_co_profile`,
+  `part2_unit_info`, `common_battle_system`, `aw1_power_menu`, `part2_battle_overlay`.
+  각 route는 source state SHA, route screenshot SHA, raw PRAM dump SHA를 `data/sprite_palettes.json`에 남긴다.
+  전역 exact-match dedupe 결과 팔레트 라이브러리는 72(BG50/OBJ22) -> 176(BG92/OBJ84)개로 확대됐고,
+  E5b scope에서 신규 104개(BG42/OBJ62)가 추가됐다. 증거:
+  `docs/screenshots/sprite_palette_capture_2026-06-28/contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/route_screens_contact.png`,
+  `docs/screenshots/sprite_palette_capture_2026-06-28/summary.json`.
+  단, 이 수치는 route별 전수 팔레트 총량이 아니라 first-seen unique bank 수다.
 - [ ] E6 CSV 권위 단일화(inline 리터럴 → overrides.tsv 분리).
 - [ ] E7 캡처 지연 단축(슬롯 nav 단축 canvas + orig 캡처 영구 캐시).
 - [x] E8 `88_common_comm_labels` raw 단일 `ソ`(0x00EE22AC) 실제 UI 노출 재확인 완료(2026-06-26).
