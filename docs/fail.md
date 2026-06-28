@@ -1219,3 +1219,15 @@ read-watch를 시도했다.
   overlap 가능성을 지적했다. 현재 B84 active path는 disabled지만 미래 회귀 위험이 있어 `0xF30780`으로 이동했다.
 - **claude 리뷰**: `claude --print`는 10분 이상 stdout/stderr 0B로 멈춰 종료했다. `agy` 리뷰는 위 B84 overlap과
   전체 scroll-edge 검증 잔여 리스크를 지적했고 반영했다.
+
+## [2026-06-28] 89a 항복 확인 선택지 final-state 캡처/긴 row 후보 폐기
+
+- **폐기한 증거 방식**: `scene_89a_common_battle_surrender_confirm`을 이미 항복 확인창이 렌더된
+  `temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0`에서 `frames:1`로 캡처하는 방식은
+  선택지 row를 current ROM에서 다시 생성하지 않는다. 이 방식은 `아▷오` 같은 선택지 row 결함을
+  stale VRAM/기존 렌더 상태로 놓칠 수 있으므로 89a의 신뢰 증거로 쓰지 않는다.
+- **폐기한 후보**: `예　　아니오`는 slot에는 들어가지만 no-option cursor가 `니`를 덮어 `아▷오`로 보인다.
+  leading-space 계열은 yes 위치 또는 cursor overlap 문제가 남았다.
+- **채택 기준**: 89a는 반드시
+  `temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`
+  로드 후 `A` 입력으로 fresh redraw한다. 선택지 row는 `0x00A34B6C = 예　아뇨`만 현재 안전 후보로 취급한다.

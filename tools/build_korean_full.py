@@ -19698,11 +19698,14 @@ def main():
         0x97B178,
         0x9B3A1C,
         0x9EC2C0,
-        0xA34B6C,
         0xD835BC,
         0xEFAE0C,
     ]:
         fixed_zero_text_patch(faddr, 16, '예　　아니오')
+    # The battle-surrender confirmation row is sampled by a compact renderer:
+    # the no-option cursor overlays the middle syllable of "아니오", producing
+    # "아▷오" on hardware output. Keep the right option to two syllables.
+    fixed_zero_text_patch(0xA34B6C, 16, '예　아뇨')
 
     # The post-battle save prompt draws two script rows in one box and samples a
     # compact choice row. Keep the prompt as one complete sentence. This UI path

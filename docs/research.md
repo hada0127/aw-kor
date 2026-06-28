@@ -2924,7 +2924,11 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA chain이 필요하다.
 
 ---
-## [2026-06-28] E12 B84 AW1 CO 파워명 11/11 selector/read-watch 확정
+## [2026-06-28] E12 B84 AW1 CO 파워명 11/11 selector/read-watch 확정(f95a SHA)
+
+> 2026-06-28 항복 선택지 수정 후 current SHA `05f22715...`에서는 이 B84 11/11 read-watch가
+> stale 증거로 제외된다. 최신 current matrix 수치는 아래 `05f227 SHA 실화면/evidence 재동기화`
+> 섹션의 A2 36/36, B84 0/11, B8 13/459를 기준으로 한다.
 
 - **selector 경로**: AW1 CO 파워 컷인 루틴 `0x08B3C254`는 object의 player index 1을 사용해
   `0x08D845A4 -> 0x0201AD38` player record base에서 `base + 0x68 + 0x1D = 0x0201ADBD`
@@ -2949,7 +2953,7 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `data/compact_display_read_watch_b84_power_titles_coid_current.json`,
   `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png`.
   contact sheet는 11개 컷인 제목이 모두 한글로 표시됨을 보인다.
-- **matrix 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후 read-watch probes는
+- **당시 matrix 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후 f95a 기준 read-watch probes는
   current 22/stale 0, cases 54, hits/direct reads 291이고, B84 target runtime/source proof는
   11/11이다. 전체 E12 target runtime/source proof count는 A2 3 + B84 11 + B8 13 = 27이다.
 - **해석 경계**: 이것은 natural route 전수 증명이 아니라 live RAM CO-id field를 바꾼 near-fresh proof다.
@@ -3205,3 +3209,48 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **해석 한계**: 180-step sweep의 대부분은 현재 진행도에서 원본 locked placeholder `???`가 반복되는 화면이다.
   따라서 이것은 map-list renderer hook의 scroll 안정성과 table/current-SHA 동기화 증거이지,
   156개 B8 맵명 row가 모두 natural visual route에서 노출됐다는 증거가 아니다.
+
+## [2026-06-28] 89a 항복 확인 선택지 `아▷오` 실화면 결함 원인/수정
+
+- **증상**: 70개 scene screenshot 전수 contact 확인 중
+  `scene_89a_common_battle_surrender_confirm` 하단 선택지가 `아▷오`처럼 깨져 보였다.
+  기존 캡처 provenance는 이미 렌더된 final state라 선택지 row를 새 ROM에서 다시 생성하지 못하는 stale 증거였다.
+- **실제 source/route**: 항복 확인 대사는 공통 `0xEFDAA0` 계열이 아니라 Part2 복제본
+  `0x00A34CB0`/`0x00A34CD1`과 선택지 `0x00A34B6C`를 사용한다.
+  재현은 `temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`
+  로드 후 `A` 입력으로 대사/선택지를 fresh redraw해야 한다.
+- **원인**: 선택지 row `예　　아니오`가 이 compact confirm renderer에서 no-option cursor 위치와 겹쳐
+  가운데 음절 `니`를 덮었다. 그래서 실제 hardware-style capture가 `아▷오`로 보였다.
+- **격리**: `0x00A34B6C`만 바꾼 temp ROM 후보를 같은 pre-state+A route에서 비교했다.
+  `예　아뇨`는 하단 row가 `아뇨▷`로 표시되어 글자 손상이 사라졌고,
+  leading-space/`예　　아니오` 계열은 cursor overlap 또는 yes 위치 손상이 남았다.
+- **수정**: `tools/build_korean_full.py`에서 `0x00A34B6C`를 generic `예　　아니오` 루프에서 제외하고,
+  전용 `fixed_zero_text_patch(0xA34B6C, 16, '예　아뇨')`를 적용했다.
+  `data/dialogue_overrides.json`과 `data/bteam_baseline.json`도 같은 권위문으로 동기화했다.
+- **checkpoint 수정**: `data/screen_checkpoints.json`/`data/scene_entrypoints.json`의 89a provenance를
+  final rendered state에서 pre-surrender menu state+A redraw로 교체했다.
+- **검증/증거**: 수정 전후 contact는
+  `docs/screenshots/surrender_yesno_fix_2026-06-28/before_after_contact.png`.
+  현재 output SHA는 `05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59`이고,
+  `scene_89a_common_battle_surrender_confirm` 재캡처는 `아뇨▷`로 표시된다.
+  70개 scene 전체 재캡처 contact는 `temp/visual_audit_20260628_scene_contact_current70_after_surrender_yesno_fix.png`.
+
+## [2026-06-28] 05f227 SHA 실화면/evidence 재동기화
+
+- 항복 선택지 수정으로 output/dist SHA가 `05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59`로 바뀌었다.
+- `tools/capture_scene_screenshots.py --force`로 scene 70개를 전부 재캡처했고,
+  `tools/audit_scene_catalog.py --strict`, `tools/reverify_scene_residual_scans.py --write`,
+  `tools/audit_scene_residual_scans.py --strict`를 통과했다.
+- E8 comm-label visual evidence를 `docs/screenshots/e8_comm_label_reverify_2026-06-28/`로 재캡처하고
+  `data/comm_label_visual_reverify.json` 및 `data/scene_residual_scans.json`을 current SHA로 동기화했다.
+- E12 compact evidence도 current SHA로 재동기화했다:
+  `data/compact_display_xref_analysis.json`, `data/compact_display_code_context.json`,
+  `data/compact_display_renderer_trace.json`, B8 manual mutation evidence 13건,
+  `data/compact_display_visual_matrix.json`, `docs/reports/compact_display_visual_matrix_2026-06-27.md`.
+  A2 CO profile read-watch는 current SHA에서 다시 생성해 A2 36/36을 회복했다.
+  B84 11/11 read-watch는 이전 SHA `f95a8573...` 증거라 현 matrix에서는 stale로 제외된다.
+  Matrix 수치는 A2 36/36, B84 0/11, B8 13/459이며 B8 13건은 계속 Part1 작전실 live-source provenance다.
+- E16 Part1 compact-help live-code injection reports 2종과 Part1 link/pass-and-play map-list 180-step sweep도
+  current SHA로 재생성했다. Link sweep은 180/180 unique, low-bright 0이다.
+- 최종 검증은 `python3 tools/verify_dist_integrity.py` PASS,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_surrender_yesno_fix_current.json` PASS.

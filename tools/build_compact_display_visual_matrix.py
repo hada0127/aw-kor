@@ -863,12 +863,12 @@ def write_markdown(report: dict) -> None:
         "- Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.",
         "- A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.",
         f"- A2 now has {direct_by_group.get('a2_co_power_profile_display_overrides', 0)} target runtime/source proof(s) from a selected-record CO-id RAM-field probe. This is synthetic source provenance, not natural all-CO route coverage or 36 per-power screen captures.",
-        f"- B84 now has {direct_by_group.get('b84_compact_power_display_overrides', 0)} target runtime/source proof(s) from the AW1 power-title CO-id selector route. This closes B84 target/source coverage, but the RAM-field route is still not a natural playthrough for every CO.",
+        f"- B84 now has {direct_by_group.get('b84_compact_power_display_overrides', 0)} target runtime/source proof(s) from current-ROM read-watch probes. Stale older B84 selector proofs are listed above but are not counted until regenerated for this ROM SHA.",
         f"- B8 now has {direct_by_group.get('b8_compact_display_table_all', 0)} target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and most B8 targets still lack target-level provenance.",
         "- Current read-watch probes over the fresh main route, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates still leave Part2-B8-HUD target reads unresolved; these are route/subset negatives, not global non-use proof.",
         "- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven B8 targets; additional B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.",
         "- B8 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/break labels.",
-        "- A2 CO power names now have 36/36 synthetic RAM-field source proof plus one current representative profile screen, but not natural-route 36 per-power screen captures.",
+        f"- A2 CO power names now have {direct_by_group.get('a2_co_power_profile_display_overrides', 0)}/36 synthetic RAM-field source proof plus one current representative profile screen, but not natural-route 36 per-power screen captures.",
         "",
     ])
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")

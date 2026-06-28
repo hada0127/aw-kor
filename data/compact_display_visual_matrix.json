@@ -1,17 +1,17 @@
 {
  "tool": "tools/build_compact_display_visual_matrix.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+ "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
  "glyph_dictionary_qa": {
   "path": "temp/glyph_dictionary_qa.json",
   "issue_count": 0,
-  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f"
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59"
  },
  "renderer_trace": {
   "path": "data/compact_display_renderer_trace.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
   "case_count": 10,
   "hit_count": 1758,
   "direct_target_hit_count": 0,
@@ -24,7 +24,7 @@
   "path": "data/compact_display_xref_analysis.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
   "groups": [
    {
     "id": "a2_co_power_profile_display_overrides",
@@ -73,7 +73,7 @@
   "path": "data/compact_display_code_context.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
   "literal_entry_count": 695,
   "derived_table_head_ref_count": 681,
   "breakpoint_candidate_count": 24,
@@ -88,7 +88,7 @@
  "manual_visual_evidence": {
   "path": "data/compact_display_manual_visual_evidence.json",
   "present": true,
-  "source_sha256": "c7ff95a9162b5b594f6805abf7a39b693c41691dc7ccded3ea26109131b6ef78",
+  "source_sha256": "98219035f79f1f6bee6d2189803c88821e75920336e527b2a9afd756f0340d10",
   "current_count": 13,
   "accepted_count": 13,
   "invalid_count": 0,
@@ -114,7 +114,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
     "scene_id": "15_part1_operation_logos",
     "base_text": "결전",
@@ -141,8 +141,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_20260628/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down13_20260628/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down13_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -159,7 +159,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "은빛 세계",
@@ -186,8 +186,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -204,7 +204,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "바다 너머",
@@ -231,8 +231,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -249,7 +249,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "도그 파이트",
@@ -276,8 +276,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -294,7 +294,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "대공 제압",
@@ -321,8 +321,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down7_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -339,7 +339,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "하늘의 적",
@@ -366,8 +366,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down6_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down6_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down6_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down6_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -384,7 +384,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "드래곤 플라이",
@@ -411,8 +411,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down7_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -429,7 +429,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "최강 중전차",
@@ -456,8 +456,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down4_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -474,7 +474,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "적 부대 격파",
@@ -501,8 +501,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_down4_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -519,7 +519,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "고물 전차 출격",
@@ -546,8 +546,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -564,7 +564,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전선 기지 확보",
@@ -591,8 +591,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -609,7 +609,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "첫 전투",
@@ -636,8 +636,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -654,7 +654,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전투 개시",
@@ -681,8 +681,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -700,10 +700,9 @@
  "read_watch_probes": {
   "present": true,
   "probe_count": 25,
-  "current_probe_count": 0,
-  "stale_probe_count": 25,
+  "current_probe_count": 1,
+  "stale_probe_count": 24,
   "stale_paths": [
-   "data/compact_display_read_watch_a2_profile_coid_current.json",
    "data/compact_display_read_watch_a2_profile_domino_max_current.json",
    "data/compact_display_read_watch_a2_profile_down3_current.json",
    "data/compact_display_read_watch_a2_profile_down_current.json",
@@ -729,9 +728,9 @@
    "data/compact_display_read_watch_probe_b8_subset.json",
    "data/compact_display_read_watch_rule_settings_map_names.json"
   ],
-  "case_count": 0,
-  "hit_count": 0,
-  "direct_target_read_count": 0,
+  "case_count": 18,
+  "hit_count": 967,
+  "direct_target_read_count": 967,
   "total_case_count": 86,
   "total_hit_count": 2080,
   "total_direct_target_read_count": 2080,
@@ -739,8 +738,8 @@
    {
     "path": "data/compact_display_read_watch_a2_profile_coid_current.json",
     "present": true,
-    "current_rom": false,
-    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+    "current_rom": true,
+    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
     "selected_groups": [
      "a2_co_power_profile_display_overrides"
     ],
@@ -5222,10 +5221,10 @@
     "expected_count_match": true,
     "editor_exposed": 36,
     "screen_scene_assigned": 1,
-    "current_screen_capture_assigned": 0,
+    "current_screen_capture_assigned": 1,
     "container_only": 35,
     "no_scene": 0,
-    "direct_target_visual_evidence": 0,
+    "direct_target_visual_evidence": 36,
     "static_pointer_refs": 36,
     "static_external_pointer_refs": 36
    },
@@ -5255,12 +5254,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co00_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co00_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co00_p2/watch.log",
+       "read_address": "0x08A2955F",
+       "target_start": "0x00A2955C",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008F",
+       "r1": "0x08A2955F",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A2955C",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co00_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5270,7 +5331,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29570",
@@ -5297,12 +5358,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co00_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co00_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co00_p2/watch.log",
+       "read_address": "0x08A29573",
+       "target_start": "0x00A29570",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A29573",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29570",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co00_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5312,7 +5435,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29588",
@@ -5339,12 +5462,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co01_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co01_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co01_p2/watch.log",
+       "read_address": "0x08A2958B",
+       "target_start": "0x00A29588",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008F",
+       "r1": "0x08A2958B",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29588",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co01_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5354,7 +5539,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29598",
@@ -5381,12 +5566,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co01_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co01_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co01_p2/watch.log",
+       "read_address": "0x08A2959B",
+       "target_start": "0x00A29598",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A2959B",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29598",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co01_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5396,7 +5643,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295AC",
@@ -5423,12 +5670,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co04_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co04_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co04_p2/watch.log",
+       "read_address": "0x08A295AF",
+       "target_start": "0x00A295AC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008B",
+       "r1": "0x08A295AF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A295AC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co04_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5438,7 +5747,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295C0",
@@ -5465,12 +5774,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co04_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co04_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co04_p2/watch.log",
+       "read_address": "0x08A295C3",
+       "target_start": "0x00A295C0",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008E",
+       "r1": "0x08A295C3",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A295C0",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co04_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5480,7 +5851,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295D8",
@@ -5507,12 +5878,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co02_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co02_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co02_p2/watch.log",
+       "read_address": "0x08A295DB",
+       "target_start": "0x00A295D8",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000091",
+       "r1": "0x08A295DB",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A295D8",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co02_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5522,7 +5955,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295EC",
@@ -5549,12 +5982,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co02_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co02_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co02_p2/watch.log",
+       "read_address": "0x08A295EF",
+       "target_start": "0x00A295EC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A295EF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A295EC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co02_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5564,7 +6059,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29600",
@@ -5591,12 +6086,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0F_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0F_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0F_p2/watch.log",
+       "read_address": "0x08A29603",
+       "target_start": "0x00A29600",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A29603",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29600",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0F_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5606,7 +6163,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29618",
@@ -5633,12 +6190,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0F_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0F_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0F_p2/watch.log",
+       "read_address": "0x08A2961B",
+       "target_start": "0x00A29618",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008F",
+       "r1": "0x08A2961B",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29618",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0F_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5648,7 +6267,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A2962C",
@@ -5675,12 +6294,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co10_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co10_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co10_p2/watch.log",
+       "read_address": "0x08A2962F",
+       "target_start": "0x00A2962C",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008A",
+       "r1": "0x08A2962F",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A2962C",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co10_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5690,7 +6371,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29640",
@@ -5717,12 +6398,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co10_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co10_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co10_p2/watch.log",
+       "read_address": "0x08A29643",
+       "target_start": "0x00A29640",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008B",
+       "r1": "0x08A29643",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29640",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co10_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5732,7 +6475,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29654",
@@ -5759,12 +6502,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co05_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co05_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co05_p2/watch.log",
+       "read_address": "0x08A29657",
+       "target_start": "0x00A29654",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A29657",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29654",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co05_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5774,7 +6579,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29668",
@@ -5801,12 +6606,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co05_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co05_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co05_p2/watch.log",
+       "read_address": "0x08A2966B",
+       "target_start": "0x00A29668",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008F",
+       "r1": "0x08A2966B",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29668",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co05_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5816,7 +6683,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29680",
@@ -5843,12 +6710,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co03_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co03_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co03_p2/watch.log",
+       "read_address": "0x08A29683",
+       "target_start": "0x00A29680",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008C",
+       "r1": "0x08A29683",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29680",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co03_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5858,7 +6787,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29690",
@@ -5885,12 +6814,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co03_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co03_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co03_p2/watch.log",
+       "read_address": "0x08A29693",
+       "target_start": "0x00A29690",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008D",
+       "r1": "0x08A29693",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29690",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co03_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5900,7 +6891,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296A4",
@@ -5927,12 +6918,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co06_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co06_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co06_p2/watch.log",
+       "read_address": "0x08A296A7",
+       "target_start": "0x00A296A4",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008A",
+       "r1": "0x08A296A7",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296A4",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co06_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5942,7 +6995,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296B8",
@@ -5969,12 +7022,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co06_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co06_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co06_p2/watch.log",
+       "read_address": "0x08A296BB",
+       "target_start": "0x00A296B8",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008D",
+       "r1": "0x08A296BB",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296B8",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co06_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -5984,7 +7099,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296C8",
@@ -6011,12 +7126,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co07_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co07_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co07_p2/watch.log",
+       "read_address": "0x08A296CB",
+       "target_start": "0x00A296C8",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008D",
+       "r1": "0x08A296CB",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296C8",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co07_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6026,7 +7203,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296D8",
@@ -6053,12 +7230,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co07_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co07_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co07_p2/watch.log",
+       "read_address": "0x08A296DB",
+       "target_start": "0x00A296D8",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A296DB",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296D8",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co07_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6068,7 +7307,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296EC",
@@ -6095,12 +7334,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co12_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co12_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co12_p2/watch.log",
+       "read_address": "0x08A296EE",
+       "target_start": "0x00A296EC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x000000E6",
+       "r1": "0x08A296EE",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296EC",
+        "hit_count": 22,
+        "core_render_pc_hit_count": 12,
+        "cases": [
+         "co12_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 9
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 3
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 2
+         },
+         {
+          "pc": "0x08314336",
+          "count": 2
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BCEC",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BD1C",
+          "count": 1
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6110,7 +7411,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A296FC",
@@ -6137,12 +7438,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co12_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co12_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co12_p2/watch.log",
+       "read_address": "0x08A296FF",
+       "target_start": "0x00A296FC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A296FF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A296FC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co12_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6152,7 +7515,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A2970C",
@@ -6179,12 +7542,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co08_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co08_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co08_p2/watch.log",
+       "read_address": "0x08A2970F",
+       "target_start": "0x00A2970C",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A2970F",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A2970C",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co08_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6194,7 +7619,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29724",
@@ -6221,12 +7646,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co08_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co08_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co08_p2/watch.log",
+       "read_address": "0x08A29727",
+       "target_start": "0x00A29724",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A29727",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29724",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co08_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6236,7 +7723,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A2973C",
@@ -6263,12 +7750,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co09_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co09_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co09_p2/watch.log",
+       "read_address": "0x08A2973F",
+       "target_start": "0x00A2973C",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A2973F",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A2973C",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co09_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6278,7 +7827,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29754",
@@ -6305,12 +7854,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co09_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co09_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co09_p2/watch.log",
+       "read_address": "0x08A29757",
+       "target_start": "0x00A29754",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A29757",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29754",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co09_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6320,7 +7931,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A2976C",
@@ -6347,12 +7958,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co11_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co11_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co11_p2/watch.log",
+       "read_address": "0x08A2976F",
+       "target_start": "0x00A2976C",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008F",
+       "r1": "0x08A2976F",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A2976C",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co11_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6362,7 +8035,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29780",
@@ -6389,12 +8062,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co11_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co11_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co11_p2/watch.log",
+       "read_address": "0x08A29783",
+       "target_start": "0x00A29780",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A29783",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29780",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co11_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6404,7 +8139,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29794",
@@ -6431,12 +8166,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0B_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0B_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0B_p2/watch.log",
+       "read_address": "0x08A29797",
+       "target_start": "0x00A29794",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008E",
+       "r1": "0x08A29797",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29794",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0B_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6446,7 +8243,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A297A8",
@@ -6473,12 +8270,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0B_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0B_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0B_p2/watch.log",
+       "read_address": "0x08A297AB",
+       "target_start": "0x00A297A8",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008D",
+       "r1": "0x08A297AB",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A297A8",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0B_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6488,7 +8347,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A297BC",
@@ -6515,12 +8374,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0C_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0C_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0C_p2/watch.log",
+       "read_address": "0x08A297BF",
+       "target_start": "0x00A297BC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008D",
+       "r1": "0x08A297BF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A297BC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0C_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6530,7 +8451,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A297D4",
@@ -6557,12 +8478,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0C_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0C_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0C_p2/watch.log",
+       "read_address": "0x08A297D7",
+       "target_start": "0x00A297D4",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000093",
+       "r1": "0x08A297D7",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A297D4",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0C_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6572,7 +8555,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A297EC",
@@ -6599,12 +8582,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0D_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0D_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0D_p2/watch.log",
+       "read_address": "0x08A297EF",
+       "target_start": "0x00A297EC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x0000008A",
+       "r1": "0x08A297EF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A297EC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0D_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6614,7 +8659,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A297FC",
@@ -6641,12 +8686,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0D_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0D_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0D_p2/watch.log",
+       "read_address": "0x08A297FF",
+       "target_start": "0x00A297FC",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000088",
+       "r1": "0x08A297FF",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A297FC",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0D_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6656,7 +8763,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29810",
@@ -6683,12 +8790,74 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0E_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0E_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0E_p2/watch.log",
+       "read_address": "0x08A29813",
+       "target_start": "0x00A29810",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A29813",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29810",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0E_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6698,7 +8867,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29824",
@@ -6710,7 +8879,7 @@
      "group_id": "g_00A29824",
      "editor_exposed": true,
      "screen_scene_assigned": true,
-     "current_screen_capture_assigned": false,
+     "current_screen_capture_assigned": true,
      "container_only": false,
      "scene_evidence": [
       {
@@ -6720,20 +8889,82 @@
        "screenshot_status": "capturable",
        "screenshot_grade": "fresh_savestate",
        "current_capture": {
-        "current": false,
+        "current": true,
         "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
         "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-        "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-        "reason": "rom_sha_mismatch"
+        "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+        "reason": "current"
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_coid_current.json",
+       "case": "co0E_p2",
+       "case_type": "state_ram_patch",
+       "frame": "temp/e12_a2_profile_coid_read_watch_current/co0E_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_coid_read_watch_current/co0E_p2/watch.log",
+       "read_address": "0x08A29827",
+       "target_start": "0x00A29824",
+       "pc": "0x0838BD18",
+       "lr": "0x0831BEDD",
+       "r0": "0x00000092",
+       "r1": "0x08A29827",
+       "proof_mode": "synthetic_ram_field_read_watch",
+       "synthetic_ram_field_source_proof": true,
+       "validation": {
+        "target_start": "0x00A29824",
+        "hit_count": 27,
+        "core_render_pc_hit_count": 16,
+        "cases": [
+         "co0E_p2"
+        ],
+        "top_pcs": [
+         {
+          "pc": "0x0838BD18",
+          "count": 12
+         },
+         {
+          "pc": "0x0838BCE4",
+          "count": 4
+         },
+         {
+          "pc": "0x08F30284",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30286",
+          "count": 2
+         },
+         {
+          "pc": "0x08F30404",
+          "count": 2
+         },
+         {
+          "pc": "0x0831425A",
+          "count": 1
+         },
+         {
+          "pc": "0x08314336",
+          "count": 1
+         },
+         {
+          "pc": "0x0831BC90",
+          "count": 1
+         }
+        ],
+        "passed": true
+       },
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime/source provenance, not visual layout QA by itself. This probe is synthetic RAM-field source proof, not natural route coverage."
+      }
+     ],
      "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
+     "runtime_source_proof_modes": [
+      "synthetic_ram_field_read_watch"
+     ],
+     "synthetic_runtime_source_proof": true,
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
       "external_pointer_ref_count": 1,
@@ -6743,7 +8974,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "screen_scene_stale_or_missing"
+     "evidence_level": "read_watch_direct"
     }
    ]
   },
@@ -11158,7 +13389,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
        "scene_id": "15_part1_operation_logos",
        "base_text": "결전",
@@ -11185,8 +13416,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_20260628/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down13_20260628/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down13_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11247,7 +13478,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "은빛 세계",
@@ -11274,8 +13505,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11336,7 +13567,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "바다 너머",
@@ -11363,8 +13594,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11425,7 +13656,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "도그 파이트",
@@ -11452,8 +13683,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down10_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down10_20260628/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down10_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11514,7 +13745,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "대공 제압",
@@ -11541,8 +13772,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down7_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11603,7 +13834,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "하늘의 적",
@@ -11630,8 +13861,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down6_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down6_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down6_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down6_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11692,7 +13923,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "드래곤 플라이",
@@ -11719,8 +13950,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down7_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down7_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down7_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11781,7 +14012,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "최강 중전차",
@@ -11808,8 +14039,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down4_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11870,7 +14101,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "적 부대 격파",
@@ -11897,8 +14128,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_down4_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_down4_20260628/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_down4_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11959,7 +14190,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "고물 전차 출격",
@@ -11986,8 +14217,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12048,7 +14279,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전선 기지 확보",
@@ -12075,8 +14306,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12137,7 +14368,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "첫 전투",
@@ -12164,8 +14395,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12226,7 +14457,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+       "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전투 개시",
@@ -12253,8 +14484,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_after_map_label_hook_default_20260628/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_mutation_current_base_20260628/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_mutation_current_base_20260628/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -27257,11 +29488,11 @@
     "sprite": 14
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27273,11 +29504,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27289,11 +29520,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27305,11 +29536,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27321,11 +29552,11 @@
     "sprite": 2
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/30_battle_attack_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27337,11 +29568,11 @@
     "sprite": 3
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27353,11 +29584,11 @@
     "sprite": 2
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_85_ui_common_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   },
   {
@@ -27369,11 +29600,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/provenance.json",
-    "provenance_rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+    "reason": "current"
    }
   }
  ],

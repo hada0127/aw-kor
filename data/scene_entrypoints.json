@@ -577,10 +577,10 @@
     "89a_common_battle_surrender_confirm": {
       "checkpoint": "scene_89a_common_battle_surrender_confirm",
       "screenshot": "scene_89a_common_battle_surrender_confirm",
-      "note": "fresh surrender scan: 항복 확인 대사 화면",
-      "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
+      "note": "fresh redraw from pre-surrender menu: A 입력으로 항복 확인 대사/선택지 재생성",
+      "source_state": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0",
       "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+      "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"
     },
     "89b_common_battle_defeat_comm_messages": {
       "checkpoint": "scene_89b_common_battle_defeat_comm_messages",

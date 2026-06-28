@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
- "git_commit": "0dc6015",
+ "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+ "git_commit": "9773948",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",

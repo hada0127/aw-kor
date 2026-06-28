@@ -17605,7 +17605,7 @@ address,japanese,korean,char_count,frequency,status,notes
 0x00A34B0F,敵全滅で勝利よ！がんばってね！,적 전멸로 승리! 힘내!,15,6,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_003.csv
 0x00A34B30,ついにここまで来たわね！,드디어 여기까지 왔네!,12,3,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_006.csv
 0x00A34B49,ねらうは、ファクトリーのみよ！,미상,15,1,Needs Translation,audit: placeholder/unknown; previous=reviewed: unreadable source fallback
-0x00A34B6C,　はい　　いいえ,예    아니오,8,7,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_002.csv
+0x00A34B6C,　はい　　いいえ,예　아뇨,8,7,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_002.csv
 0x00A34B82,現在の状況をセーブします。,현재 상태를 저장합니다.,13,3,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_006.csv
 0x00A34B9E,よろしいかしら？,괜찮을까?,8,4,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_005.csv
 0x00A34BB6,現在の状況をセーブします。,현재 상태를 저장합니다.,13,3,Translated,batch audit: reviewed batch translation; source=manual_translation_batch_006.csv

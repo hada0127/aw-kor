@@ -75,6 +75,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   최신 SHA `95bc2486…` 기준 route 캡처에서 진행 가능함을 확인했다. 단 `0xA01A5C/0xA01A70` 보고 문장은
   renderer가 `77 72` 제어 gap을 끼운 2조각을 같은 박스에 갱신하면서 `공격 준비`가 겹쳐 보이는 잔여가 있어
   E15에서 별도 해결했다. 최종 SHA `11098045…` 기준 A-only/focus/wait route 모두 정상 표시.
+- [x] **A8 89a 항복 확인 선택지 `아▷오` 실화면 결함 수정(2026-06-28)**:
+  70개 scene contact 수동 검토에서 `scene_89a_common_battle_surrender_confirm` 하단 선택지가 `아▷오`로
+  보이는 실제 결함을 발견했다. 원인은 `0x00A34B6C`의 `예　　아니오` row가 compact confirm renderer의
+  no-option cursor와 겹쳐 `니`를 덮는 것이었다. 해당 row를 `예　아뇨`로 줄이고 89a checkpoint를
+  final rendered state가 아니라 `state_008_sub_down_to_surrender.ss0` + `A` fresh redraw로 교체했다.
+  증거: `docs/screenshots/surrender_yesno_fix_2026-06-28/before_after_contact.png`.
+  최종 SHA `05f22715…` 기준 scene 70개 재캡처, `verify_dist_integrity.py`,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_surrender_yesno_fix_current.json` PASS.
 
 
 ## B. 데이터 무결성
@@ -773,17 +781,18 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     contact는 `docs/screenshots/e12_a2_profile_coid_read_watch_2026-06-28/contact.png`.
     matrix 기준 A2 target runtime/source proof는 10/36 -> 36/36이다.
     단, RAM-field near-fresh proof라 자연 all-CO route 전수나 최종 pixel-level visual QA를 대체하지 않는다.
-  - [x] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch + visual contact 확보:
+  - [ ] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch 재확보 필요:
+    이전 SHA `f95a8573...`에서는
     `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 같은 row 2 파워 발동 route를
-    쓰되, ROM/pointer table은 바꾸지 않고 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿨다.
-    `0x08B3C254 -> 0x08B1C194 -> 0x08DF2B54[index] -> 0x08B3C184` 경로가 B84 target 11개
-    (`기적/하이퍼수리/강타/설백/승리/저격/일도/탐색/번개강습/큰파도/메테오`)를 모두 직접 읽고,
-    contact sheet에서도 11개 컷인 제목이 한글로 정상 표시된다.
-    신규 영구 증거는 `data/compact_display_read_watch_b84_power_titles_coid_current.json` 및
+    쓰고, ROM/pointer table은 바꾸지 않은 채 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿔
+    `0x08B3C254 -> 0x08B1C194 -> 0x08DF2B54[index] -> 0x08B3C184` 경로의 B84 target 11개
+    (`기적/하이퍼수리/강타/설백/승리/저격/일도/탐색/번개강습/큰파도/메테오`) read-watch와
+    visual contact를 확보했다. 그러나 항복 선택지 수정 후 current SHA `05f22715...`에서는 해당 JSON/로그가
+    stale로 판정되므로 `data/compact_display_visual_matrix.json`에서 B84 proof는 0/11로 제외된다.
+    기존 stale 증거 경로는 `data/compact_display_read_watch_b84_power_titles_coid_current.json` 및
     `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png`다.
-    matrix read-watch probes는 current 22/stale 0, cases 54, hits/direct reads 291로 갱신됐고,
-    B84 target runtime/source proof는 1/11 -> 11/11이 됐다. 단, RAM-field near-fresh proof라
-    자연 진행 route 전수 증명은 아니며, E12 전체는 A2/B8 잔여 때문에 계속 미완료다.
+    다음 작업은 동일 all-coid proof를 current SHA로 재생성하거나, 별도 current route/mutation proof로
+    B84 11개 target source를 다시 닫는 것이다.
   - [x] 2026-06-28 B8 유닛/무기 duplicate의 Part2 생산/유닛 route source mismatch 확인:
     Part2 map state `temp/scene_entrypoints/part2_menu_sweep/state_031.ss0`에서 `RIGHT,A`/`DOWN,A`로
     생산/유닛 정보 화면을 띄웠을 때 B8 early unit/weapon 후보
@@ -881,16 +890,27 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     읽히지 않았다"는 route/subset 음성이다. 같은 세이브+작전실 스크롤 반복은 중단하고,
     다음 B8 작업은 Part2 HUD/무기/데미지예측, scene-load watchpoint, positive source ID,
     또는 WRAM/VRAM/DMA write-chain으로 전환한다.
+  - [x] 2026-06-28 항복 선택지 수정 후 E12/current evidence 재동기화:
+    SHA 변경(`05f22715…`)에 맞춰 `data/compact_display_xref_analysis.json`,
+    `data/compact_display_code_context.json`, `data/compact_display_renderer_trace.json`,
+    `data/compact_display_manual_visual_evidence.json`, `data/compact_display_visual_matrix.json`,
+    `docs/reports/compact_display_visual_matrix_2026-06-27.md`를 current ROM 기준으로 다시 만들었다.
+    B8 manual mutation evidence 13건은 모두 null-control deterministic true이고 accepted 13/current 13이다.
+    A2 CO profile read-watch는 current SHA로 재생성해 A2 36/36을 회복했지만, B84 11/11 read-watch는
+    이전 SHA `f95a8573...` 증거라 현 matrix에서는 stale로 제외된다. Matrix 수치는 A2 36/36,
+    B84 0/11, B8 13/459이며, 이 항목은 evidence freshness 복구이지 E12 완료 근거가 아니다.
+    `verify_dist_integrity.py`와 release QA가 PASS했다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 36/36과 B84 파워명 11/11은 synthetic/near-fresh RAM-field source proof로 current SHA에서 닫혔고,
+    A2 36/36은 synthetic RAM-field source proof로 current SHA에서 닫혔고,
     B8 작전명 13건도 live source가 확정됐지만 B8은 13/459로 전체 중 일부에 불과하다.
+    B84 11/11은 이전 SHA 증거를 현재 SHA로 재생성하거나, 별도 current route/mutation proof를 다시 확보해야 한다.
     B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를
     추가 확보하는 것이다. agy/codex 리뷰 지적대로 일반 대사 `0xA01970` 양성대조와 별개인 compact-renderer 전용
     positive control도 확보해야 한다. 단, Part1 작전실 B8 live-source read positive와 A2 CO profile direct read는
-    확보됐고 B84도 RAM-field near-fresh read-watch + visual contact로 11/11 target source가 닫혔으므로
-    남은 핵심은 Part2 HUD/B8 잔여와 compact renderer 계열 양성대조다. fresh route, redraw가 보장되는 near-fresh route,
+    확보됐으므로 남은 핵심은 B84 current 재증명, Part2 HUD/B8 잔여, compact renderer 계열 양성대조다.
+    fresh route, redraw가 보장되는 near-fresh route,
     target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA write chain 중 최소 1종 이상의 target-level
     양성 증거를 주소군별로 확보해야 한다.
 - [x] E13 compact glyph dictionary 자동 생성/거버넌스 완료(2026-06-27).
@@ -1026,6 +1046,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `qa_part1_compact_help.py`의 `carry_forwarded_live_code_report_count`는 2->0이 됐다.
     `tools/qa_part1_compact_help.py`는 direct visual 23/missing direct 11,
     synthetic render 11, **live-code injection 11**, render-missing 0을 hard gate로 검사한다.
+    2026-06-28 항복 선택지 수정 후 SHA `05f22715...` 기준으로 같은 reports 2종을 다시 생성했고,
+    `qa_part1_compact_help.py`는 issue 0으로 PASS했다.
   - [ ] 남은 direct visual route 확보:
     `0xDFA64A`, `0xDFA66B`, `0xDFA83A`, `0xDFA84D`, `0xDFA872`,
     `0xDFA885`, `0xDFA8AA`, `0xDFA8CB`, `0xDFA8EA`, `0xDFA90A`,
@@ -1058,6 +1080,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   자동 캡처했다. 결과 list crop unique 180/180, low-bright anomaly 0이며 contact sheet는
   `docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page1.png`~`page3.png`,
   10프레임 간격 full frame은 같은 디렉터리 `full_frame_every10.png`, report는 `report.json`이다.
+  2026-06-28 항복 선택지 수정 후 SHA `05f22715...`로 같은 sweep을 재생성했고,
+  `verify_dist_integrity.py`가 sweep SHA/180-step/unique/low-bright/docs 존재를 PASS했다.
   대부분 row는 현재 진행도에서 원본 locked placeholder `???`로 표시되므로, 이 증거는 scroll-edge/flicker 및
   hook/table current-SHA 안정성 검증이지 156개 B8 맵명 전부의 natural visual proof가 아니다.
   `verify_dist_integrity.py`에 Part1 map-label hook/table/sweep hard gate를 추가해 hook site,

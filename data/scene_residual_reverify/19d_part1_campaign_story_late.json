@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19d_part1_campaign_story_late",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
   "min_score": 7,
   "ranges": [
    {

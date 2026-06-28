@@ -3182,3 +3182,22 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   현재 결과는 `entries=720`, `b8_entries=717`, `table=0xF30800..0xF31E80`, `sweep_steps=180`.
 - **경계**: 현재 진행도 route의 대부분은 원본 locked placeholder `???`다. 이 sweep은 scroll-edge/flicker와
   hook/table 동기화 증거이며, 모든 B8 맵명이 자연 진행에서 노출됐다는 증거는 아니다.
+
+## [2026-06-28] 89a 항복 확인 선택지 깨짐 수정 및 current SHA release QA PASS
+
+- **실화면 결함 수정**: 70개 scene screenshot 전수 검토에서
+  `scene_89a_common_battle_surrender_confirm` 선택지가 `아▷오`로 깨지는 것을 발견했다.
+  실제 선택지 source는 `0x00A34B6C`이며, pre-surrender menu state에서 `A` 입력으로 fresh redraw해야 재현된다.
+- **수정 내용**: `0x00A34B6C` 선택지 row를 `예　　아니오`에서 `예　아뇨`로 줄여 no-option cursor가
+  `아니오` 가운데 음절을 덮는 문제를 제거했다. `tools/build_korean_full.py`,
+  `data/dialogue_overrides.json`, `data/bteam_baseline.json`을 동기화했다.
+- **증거**: 수정 전후 contact는
+  `docs/screenshots/surrender_yesno_fix_2026-06-28/before_after_contact.png`.
+  `data/screen_checkpoints.json`/`data/scene_entrypoints.json`의 89a checkpoint도 pre-state+A redraw로 교체해
+  stale final-state 캡처를 쓰지 않는다.
+- **재검증**: output 3종과 dist SHA는
+  `05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59`.
+  scene 70개 재캡처, scene catalog/residual audits, E8 visual reverify, E12 matrix/manual evidence,
+  E16 live-code reports, Part1 link-map 180-step sweep, BPS/IPS manifest를 모두 current SHA로 재동기화했다.
+- **최종 게이트**: `python3 tools/verify_dist_integrity.py` PASS,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_surrender_yesno_fix_current.json` PASS.

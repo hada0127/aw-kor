@@ -4957,12 +4957,12 @@
       "screenshot": {
         "checkpoint": "scene_24_part2_campaign_map",
         "url": "/scene_shots/scene_24_part2_campaign_map.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "fresh",
+        "grade": "ground_truth",
         "status": "capturable",
-        "note": "fresh redraw from state_020: Part2 캠페인 룰 요약 라벨/값 한글 재렌더",
+        "note": "coldboot fresh replay: Part2 자유전 맵 선택→사령관 선택→룰 요약 다이아몬드 라벨 한글 재렌더",
         "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -5121,12 +5121,12 @@
       "screenshot": {
         "checkpoint": "scene_24b_part2_strategic_map_mode4",
         "url": "/scene_shots/scene_24b_part2_strategic_map_mode4.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "fresh",
+        "grade": "ground_truth",
         "status": "capturable",
-        "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
+        "note": "coldboot fresh replay: Part2 자유전 맵 선택 후 사령관 선택 화면",
         "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": []
@@ -10317,9 +10317,9 @@
         "mode": "savestate",
         "grade": "fresh_savestate",
         "status": "capturable",
-        "note": "fresh surrender scan: 항복 확인 대사 화면",
+        "note": "fresh redraw from pre-surrender menu: A 입력으로 항복 확인 대사/선택지 재생성",
         "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+        "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"
       },
       "dialogue_filter": {
         "regions": [
@@ -10346,10 +10346,10 @@
       "entrypoint": {
         "checkpoint": "scene_89a_common_battle_surrender_confirm",
         "screenshot": "scene_89a_common_battle_surrender_confirm",
-        "note": "fresh surrender scan: 항복 확인 대사 화면",
-        "source_state": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0",
+        "note": "fresh redraw from pre-surrender menu: A 입력으로 항복 확인 대사/선택지 재생성",
+        "source_state": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0",
         "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/surrender_confirm_scan/state_002.ss0"
+        "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"
       }
     },
     {
