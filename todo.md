@@ -710,15 +710,27 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     matrix read-watch probes는 current 21/stale 0, cases 43, hits/direct reads 280으로 갱신됐다.
     A2 target runtime/source proof는 1/36 -> 3/36이 됐다. 단, savestate 기반 read-watch라
     per-power visual layout 전수 proof는 아니며, 나머지 33개 A2 파워명은 계속 별도 route/증거가 필요하다.
+  - [x] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch + visual contact 확보:
+    `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 같은 row 2 파워 발동 route를
+    쓰되, ROM/pointer table은 바꾸지 않고 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿨다.
+    `0x08B3C254 -> 0x08B1C194 -> 0x08DF2B54[index] -> 0x08B3C184` 경로가 B84 target 11개
+    (`기적/하이퍼수리/강타/설백/승리/저격/일도/탐색/번개강습/큰파도/메테오`)를 모두 직접 읽고,
+    contact sheet에서도 11개 컷인 제목이 한글로 정상 표시된다.
+    신규 영구 증거는 `data/compact_display_read_watch_b84_power_titles_coid_current.json` 및
+    `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png`다.
+    matrix read-watch probes는 current 22/stale 0, cases 54, hits/direct reads 291로 갱신됐고,
+    B84 target runtime/source proof는 1/11 -> 11/11이 됐다. 단, RAM-field near-fresh proof라
+    자연 진행 route 전수 증명은 아니며, E12 전체는 A2/B8 잔여 때문에 계속 미완료다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 `0x00A295AC/0x00A295C0/0x00A295D8` 3건, B8 작전명 13건, B84 `0x00B84F04` 1건은
-    source가 current SHA에서 확정됐지만 A2는 3/36, B84는 1/11, B8도 13/459로 전체 중 일부에 불과하다.
-    B84 나머지 파워 발동 직전/직후, B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
+    A2 `0x00A295AC/0x00A295C0/0x00A295D8` 3건, B84 파워명 11건, B8 작전명 13건은
+    source가 current SHA에서 확정됐지만 A2는 3/36, B8도 13/459로 전체 중 일부에 불과하다.
+    B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를
     추가 확보하는 것이다. agy/codex 리뷰 지적대로 일반 대사 `0xA01970` 양성대조와 별개인 compact-renderer 전용
     positive control도 확보해야 한다. 단, Part1 작전실 B8 live-source read positive와 A2 CO profile direct read는
-    확보됐으므로 남은 핵심은 Part2 HUD/B84 잔여/다중 A2 compact renderer 계열 양성대조다. 특히 A2/B84는 savestate frames-only 음성이나
+    확보됐고 B84는 RAM-field near-fresh read-watch + visual contact로 11/11 target source가 닫혔으므로
+    남은 핵심은 Part2 HUD/B8 잔여/다중 A2 compact renderer 계열 양성대조다. 특히 A2는 savestate frames-only 음성이나
     representative screen current 캡처만으로 종결하지 않는다. fresh route, redraw가 보장되는 near-fresh route,
     target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA write chain 중 최소 1종 이상의 target-level
     양성 증거를 주소군별로 확보해야 한다.

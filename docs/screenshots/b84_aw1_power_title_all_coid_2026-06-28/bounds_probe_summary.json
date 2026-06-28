@@ -1,0 +1,75 @@
+{
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "state": "temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0",
+  "ram_write": "0x0201ADBD",
+  "note": "0x0B aliases to slot 10 via 0x08B1C194. 0x0C/0x10/0xFF are invalid-id boundary probes and are not counted as B84 positive target evidence.",
+  "results": [
+    {
+      "co_id": "0x0B",
+      "write_response": "OK w8 1",
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
+      "line_count": 34,
+      "pointer_hits": [
+        {
+          "slot": 10,
+          "addr": "0x08DF2B7C",
+          "r1": "0x0B",
+          "old": "0x08B84E50",
+          "line": "0 addr=08DF2B7C pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B7C r1=0000000B old=08B84E50 new=00000000"
+        },
+        {
+          "slot": 11,
+          "addr": "0x08DF2B80",
+          "r1": "0x201AD38",
+          "old": "0x08B84E50",
+          "line": "14 addr=08DF2B80 pc=08B3C526 lr=08B14061 r0=08DF2B80 r1=0201AD38 old=08B84E50 new=00000000"
+        }
+      ],
+      "b84_read_count": 32,
+      "b84_first": "0x08B84E50",
+      "case_dir": "temp/b84_power_coid_bounds_probe_20260628/co_0B"
+    },
+    {
+      "co_id": "0x0C",
+      "write_response": "OK w8 1",
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
+      "line_count": 0,
+      "pointer_hits": [],
+      "b84_read_count": 0,
+      "b84_first": null,
+      "case_dir": "temp/b84_power_coid_bounds_probe_20260628/co_0C"
+    },
+    {
+      "co_id": "0x10",
+      "write_response": "OK w8 1",
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
+      "line_count": 0,
+      "pointer_hits": [],
+      "b84_read_count": 0,
+      "b84_first": null,
+      "case_dir": "temp/b84_power_coid_bounds_probe_20260628/co_10"
+    },
+    {
+      "co_id": "0xFF",
+      "write_response": "OK w8 1",
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
+      "line_count": 0,
+      "pointer_hits": [],
+      "b84_read_count": 0,
+      "b84_first": null,
+      "case_dir": "temp/b84_power_coid_bounds_probe_20260628/co_FF"
+    }
+  ]
+}

@@ -2789,8 +2789,9 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `docs/screenshots/b84_aw1_power_title_fix_2026-06-28/contact.png`와
   `title_best_crop_4x.png`는 `하이퍼수리`가 컷인에서 정상 표시됨을 보인다.
   `qa_visual_regions.py`, `verify_dist_integrity.py`, `run_release_qa.py`도 PASS.
-- **범위**: 이 증거는 B84 11개 중 `0x00B84F04` 1건의 runtime source + visual proof다.
-  나머지 B84 파워명 10개, A2 profile 파워명, B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도 증거가 필요하다.
+- **당시 범위**: 이 증거는 B84 11개 중 `0x00B84F04` 1건의 runtime source + visual proof였다.
+  나머지 B84 파워명 10개는 후속 CO-id selector proof로 닫혔고, A2 profile 파워명과
+  B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도 증거가 필요하다.
 
 ---
 ## [2026-06-28] Part1 작전실 compact 제목 가독성 보강과 E12 freshness 재동기화
@@ -2875,5 +2876,38 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   + `DOWN,DOWN,RIGHT,DOWN`은 A2/B84 target read 0이었다. 따라서 state_036 계열에서
   안정적으로 얻은 양성 범위는 현재 `0xA295AC/0xA295C0/0xA295D8` 3개다.
 - **해석 경계**: 이 증거는 source-address/dead-copy 의심을 해당 3주소에 대해서만 반증한다.
-  B84 잔여 10개와 A2 잔여 33개, B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도
-  fresh route, target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA chain이 필요하다.
+  A2 잔여 33개와 B8 Part2 HUD/상점/무기/데미지예측 계열은 계속 별도 fresh route,
+  target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA chain이 필요하다.
+
+---
+## [2026-06-28] E12 B84 AW1 CO 파워명 11/11 selector/read-watch 확정
+
+- **selector 경로**: AW1 CO 파워 컷인 루틴 `0x08B3C254`는 object의 player index 1을 사용해
+  `0x08D845A4 -> 0x0201AD38` player record base에서 `base + 0x68 + 0x1D = 0x0201ADBD`
+  CO id byte를 읽는다. 이 값은 `0x08B1C194`에서 B84 pointer-table index가 되고,
+  `0x08DF2B54 + index*4`가 target body pointer를 반환한다. 최종 문자열 렌더는 기존과 같은
+  `0x08B3C184` shared compact renderer다.
+- **실험 방식**: current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`를 로드하고,
+  ROM/pointer table은 변경하지 않았다. route 직전 live RAM `0x0201ADBD`만 `0x00..0x0A`로 바꾼 뒤
+  같은 `DOWN,DOWN,A` 파워 발동을 실행했다.
+- **관측**: slot 0..10이 각각
+  `0x00B84F14`(`기적`), `0x00B84F04`(`하이퍼수리`), `0x00B84EF0`(`강타`),
+  `0x00B84EE0`(`설백`), `0x00B84ECC`(`승리`), `0x00B84EB8`(`저격`),
+  `0x00B84EA4`(`일도`), `0x00B84E94`(`탐색`), `0x00B84E7C`(`번개강습`),
+  `0x00B84E64`(`큰파도`), `0x00B84E50`(`메테오`)를 직접 읽었다. `0x0B`는 slot 10과 같은
+  `메테오`로 clamp/alias된다.
+- **invalid-id boundary**: `0x08B1C194`는 `0x0B -> 0x0A` alias만 명시한다.
+  후속 짧은 probe에서 `0x0201ADBD=0x0C/0x10/0xFF`는 B84 pointer/body hit 0이었고,
+  positive evidence로 세지 않는다. 결과는 `bounds_probe_summary.json`과 `docs/fail.md`에 남겼다.
+- **증거 파일**:
+  `data/compact_display_read_watch_b84_power_titles_coid_current.json`,
+  `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png`.
+  contact sheet는 11개 컷인 제목이 모두 한글로 표시됨을 보인다.
+- **matrix 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후 read-watch probes는
+  current 22/stale 0, cases 54, hits/direct reads 291이고, B84 target runtime/source proof는
+  11/11이다. 전체 E12 target runtime/source proof count는 A2 3 + B84 11 + B8 13 = 27이다.
+- **해석 경계**: 이것은 natural route 전수 증명이 아니라 live RAM CO-id field를 바꾼 near-fresh proof다.
+  다만 ROM bytes, B84 pointer table, `0x08B3C184` renderer, source-only LZ77 glyph 수정은 모두 current ROM 그대로라,
+  B84 target body가 dead copy라는 의심은 11개 전부에 대해 반증한다. E12 전체는 A2/B8 잔여 때문에 미완료다.

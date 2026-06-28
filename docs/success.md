@@ -3042,4 +3042,24 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `python3 tools/verify_dist_integrity.py` PASS.
 - **경계**: 이번 증거는 A2 compact target 주소가 실제 CO 프로필 renderer에서 source로 읽힌다는
   target-level runtime provenance다. savestate 기반 read-watch라 36개 파워명 전수 visual-layout proof는 아니며,
-  A2 나머지 33개/B84 10개/B8 대부분은 계속 E12에 남긴다.
+  A2 나머지 33개/B8 대부분은 계속 E12에 남긴다.
+
+## [2026-06-28] E12 B84 AW1 CO 파워명 11/11 read-watch + visual contact 확보
+
+- **핵심 발견**: AW1 파워 컷인 루틴 `0x08B3C254`는 `0x08D845A4 -> 0x0201AD38` player record base,
+  player index 1, stride `0x68`, CO id offset `0x1D`를 거쳐 `0x0201ADBD`를 읽는다.
+  이 값이 `0x08B1C194`를 지나 `0x08DF2B54` B84 pointer-table slot을 고른다.
+- **증거 방식**: current ROM SHA `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  ROM/pointer table은 바꾸지 않고 live RAM `0x0201ADBD`만 `0x00..0x0A`로 바꾼 뒤,
+  같은 `rec1_meter_100k/menu_open.ss0` + `DOWN DOWN A` route를 실행했다.
+- **결과**: B84 target 11개(`기적`, `하이퍼수리`, `강타`, `설백`, `승리`, `저격`, `일도`, `탐색`,
+  `번개강습`, `큰파도`, `메테오`) 모두 `0x08B3C184` renderer read-watch와 visible 컷인 제목을 확보했다.
+- **증거 파일**:
+  `data/compact_display_read_watch_b84_power_titles_coid_current.json`,
+  `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png`.
+- **매트릭스 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후
+  B84 target runtime/source proof는 1/11 -> 11/11이다. 전체 E12 수치는 A2 3/36,
+  B84 11/11, B8 13/459다.
+- **경계**: RAM-field near-fresh proof이므로 자연 진행 route 전수 증명은 아니다. 하지만 current ROM의
+  B84 pointer table, target body, shared compact renderer, source-only LZ77 glyph 수정이 11개 slot 모두에서
+  동작한다는 target-level proof로 채택한다. E12 전체는 A2/B8 잔여 때문에 미완료다.

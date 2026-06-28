@@ -4,6 +4,21 @@
 
 ---
 
+## [2026-06-28] E12 B84 all-COID proof 후속 리뷰 timeout 및 invalid-id boundary
+
+- **시도**: B84 AW1 CO 파워명 11/11 read-watch + visual contact 증거를
+  `temp/review_prompt_b84_all_coid_20260628.md`로 codex/agy/claude에 엄격 리뷰 요청했다.
+- **리뷰 결과**: agy는 제한적 승인 가능하다고 보되, RAM-field near-fresh proof를 natural route 전수 증명으로
+  과장하지 말 것과 `0x0201ADBD` invalid CO id bounds를 보강하라고 지적했다.
+  codex는 180초 timeout(rc 124)이지만 중간 로그에 동일하게 “산식 근거는 충분, bounds 보강 필요” 취지의
+  부분 리뷰가 남았다. claude는 180초 timeout(rc 124), 출력 0바이트였다.
+- **bounds 보강**: `temp/b84_power_coid_bounds_probe_20260628`에서 `0x0201ADBD=0x0B/0x0C/0x10/0xFF`를
+  짧게 probe했다. `0x0B`는 `0x08B1C194`의 명시 alias에 따라 `메테오` slot으로 읽혔고,
+  `0x0C/0x10/0xFF`는 해당 activation window에서 B84 pointer/body hit 0이었다.
+- **판정**: B84 positive proof는 valid selector 값 `0x00..0x0A` 11건으로만 카운트한다.
+  invalid-id 동작은 target proof가 아니라 boundary note로 `docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/bounds_probe_summary.json`
+  및 `data/compact_display_read_watch_b84_power_titles_coid_current.json`에 연결했다.
+
 ## [2026-06-28] E12 A2 profile nav 증거 보강 후 codex/claude 리뷰 timeout
 
 - **시도**: A2 CO profile read-watch 증거를 1/36 -> 3/36으로 보강한 뒤

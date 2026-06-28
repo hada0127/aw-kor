@@ -11,7 +11,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 | Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Target runtime/source proof |
 |---|---:|---:|---:|---:|---:|---:|---:|
 | A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 3 |
-| B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 1 |
+| B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 11 |
 | B8 compact display table bucket | 459 | 459 | 0 | 0 | 459 | 386 | 13 |
 
 ## Current Representative Screens
@@ -61,7 +61,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Read-Watch Probes
 
-- probes_present=True probes=21 current=21 stale=0 cases=43 hits=280 direct_reads=280
+- probes_present=True probes=22 current=22 stale=0 cases=54 hits=291 direct_reads=291
 - hit/direct_read totals are event counts, not unique target counts; multi-step probes can include reads from earlier redraws on the same route.
 - `data/compact_display_read_watch_a2_profile_down3_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=68 direct_reads=68
 - `data/compact_display_read_watch_a2_profile_down_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=34 direct_reads=34
@@ -71,6 +71,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 - `data/compact_display_read_watch_action_menu_from_after_a36_b8_exact.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
 - `data/compact_display_read_watch_b83268_comm.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=1
 - `data/compact_display_read_watch_b84_power_title_20260628.json`: current=True groups=['b84_compact_power_display_overrides'] cases=1 hits=1 direct_reads=1 targets=1
+- `data/compact_display_read_watch_b84_power_titles_coid_current.json`: current=True groups=['b84_compact_power_display_overrides'] cases=11 hits=11 direct_reads=11 targets=11
 - `data/compact_display_read_watch_b8_fresh_menu_sweep_subset.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=7
 - `data/compact_display_read_watch_b8_map_territory_current.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=0 direct_reads=0 targets=2
 - `data/compact_display_read_watch_b8_operation_positive_control.json`: current=True groups=['b8_compact_display_table_all'] cases=1 hits=66 direct_reads=66 targets=4
@@ -92,13 +93,14 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Remaining E12 Gap
 
-- Target runtime/source proof count is currently 17; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
+- Target runtime/source proof count is currently 27; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
 - Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.
 - Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.
 - A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.
-- Current read-watch probes over the fresh main route, CO profile refresh, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates produced no A2/B84/Part2-B8-HUD target reads; these are route/subset negatives, not global non-use proof.
-- B8 now has 13 target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and A2/B84 plus most B8 targets still lack target-level provenance.
-- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven targets; additional A2/B84/B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.
-- B8/B84 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/CO/break labels.
+- B84 now has 11 target runtime/source proof(s) from the AW1 power-title CO-id selector route. This closes B84 target/source coverage, but the RAM-field route is still not a natural playthrough for every CO.
+- B8 now has 13 target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and most B8 targets still lack target-level provenance.
+- Current read-watch probes over the fresh main route, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates still leave Part2-B8-HUD target reads unresolved; these are route/subset negatives, not global non-use proof.
+- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven A2/B8 targets; additional A2/B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.
+- B8 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/break labels.
 - A2 CO power names have static glyph-dictionary coverage and one current CO-profile representative screen, but not 36 per-power screen captures.
 
