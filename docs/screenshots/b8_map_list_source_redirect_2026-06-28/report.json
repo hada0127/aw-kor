@@ -1,0 +1,70 @@
+{
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "state": "temp/scene_entrypoints/part2_menu_sweep/state_016.ss0",
+  "state_sha256": "374dda0b4ff83555eafeee58254ae4576f22234faac2d24adbb20d799909e4d8",
+  "reproducibility_note": "state and raw frames are temp-local; committed permanent evidence is this report plus the two contact sheets below.",
+  "permanent_evidence": [
+    "docs/screenshots/b8_map_list_source_redirect_2026-06-28/a2_live_source_contact.png",
+    "docs/screenshots/b8_map_list_source_redirect_2026-06-28/b8_duplicate_negative_contact.png"
+  ],
+  "nav": [
+    [
+      "press",
+      "A",
+      180
+    ]
+  ],
+  "base_frame": "temp/map_list_state016_source_proof_20260628/base/frame.png",
+  "base_repeat_frame": "temp/map_list_state016_source_proof_20260628/base_repeat/frame.png",
+  "null_control": {
+    "pixel_diff_count": 0,
+    "diff_bbox": null,
+    "mask": "temp/map_list_state016_source_proof_20260628/null_diff.png"
+  },
+  "proofs": [
+    {
+      "address": "0x00A2CC4C",
+      "base_text": "도넛 섬",
+      "mutation_text": "검증섬",
+      "slot": 12,
+      "old_hex": "8a5a896381408dc820202020",
+      "new_hex": "885690528dc8202020202020",
+      "encoded_hex": "885690528dc8",
+      "label": "a2_live_source",
+      "mutated_frame": "temp/map_list_state016_source_proof_20260628/a2_live_source/frame.png",
+      "diff": {
+        "pixel_diff_count": 10548,
+        "diff_bbox": [
+          1,
+          0,
+          240,
+          160
+        ],
+        "mask": "temp/map_list_state016_source_proof_20260628/diff_a2_live_source.png"
+      },
+      "contact": "temp/map_list_state016_source_proof_20260628/contact_a2_live_source.png",
+      "permanent_contact": "docs/screenshots/b8_map_list_source_redirect_2026-06-28/a2_live_source_contact.png",
+      "contact_sha256": "85537dec6492b9817418171fa3ae80ed8085598604c87e610a46a54a426997f3"
+    },
+    {
+      "address": "0x00B8279C",
+      "base_text": "도넛 섬",
+      "mutation_text": "검증섬",
+      "slot": 12,
+      "old_hex": "8a5a896381408dc820202020",
+      "new_hex": "885690528dc8202020202020",
+      "encoded_hex": "885690528dc8",
+      "label": "b8_duplicate_negative",
+      "mutated_frame": "temp/map_list_state016_source_proof_20260628/b8_duplicate_negative/frame.png",
+      "diff": {
+        "pixel_diff_count": 0,
+        "diff_bbox": null,
+        "mask": "temp/map_list_state016_source_proof_20260628/diff_b8_duplicate_negative.png"
+      },
+      "contact": "temp/map_list_state016_source_proof_20260628/contact_b8_duplicate_negative.png",
+      "permanent_contact": "docs/screenshots/b8_map_list_source_redirect_2026-06-28/b8_duplicate_negative_contact.png",
+      "contact_sha256": "f9df432e56e2a92c7907c167c092303370e86e3f6d12f9085e424ab740e1d05b"
+    }
+  ]
+}

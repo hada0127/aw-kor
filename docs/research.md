@@ -2271,6 +2271,23 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `verify_dist_integrity.py`, `run_release_qa.py`, `run_release_qa.py --only-editor --editor --timeout 300` PASS.
 
 ---
+## [2026-06-28] E12 Part2 맵 목록은 B8 map-name duplicate가 아니라 A2 source를 읽음
+
+- **route**: `temp/scene_entrypoints/part2_menu_sweep/state_016.ss0`을 current ROM
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`로 로드하고 `A`를 누르면
+  Part2 맵 목록이 열린다.
+- **positive source**: 화면에 보이는 `도넛 섬` 슬롯은 A2 copy `0x00A2CC4C`를 `검증섬`으로 바꾸면
+  pixel diff 10548이 발생하고 contact sheet에서 실제 라벨이 바뀐다. null-control base/base-repeat diff는 0이다.
+- **B8 negative**: 같은 encoded bytes를 가진 B8 duplicate `0x00B8279C`를 같은 텍스트로 바꿔도 pixel diff 0이다.
+  따라서 이 route의 visible map-list label은 B8 `0x00B8279C`가 아니라 A2 source에서 공급된다.
+- **증거**: `docs/screenshots/b8_map_list_source_redirect_2026-06-28/report.json`,
+  `a2_live_source_contact.png`, `b8_duplicate_negative_contact.png`.
+- **범위 경계**: target-level proof를 실행한 것은 `도넛 섬` 1건이다. `주먹밥 섬`/`곡옥 섬`도 A2/B8 duplicate
+  쌍이 있으나, 필요하면 각 슬롯별 mutation proof를 별도로 돌린다. 이 결과를 B8 map-name copy 전역 dead-copy
+  증명으로 격상하지 않는다. `state_016.ss0`와 원시 frame은 `temp/` 로컬 증거이며, 영구 보존 범위는
+  report와 contact sheet 2장이다.
+
+---
 ## [2026-06-27] E12 current SHA 재동기화와 read-watch 한계 재확인
 
 - **리뷰 결론 반영**: Claude/agy 모두 E12의 read-watch hit는 visual proof가 아니며, 0-hit도 DMA/WRAM 캐시/

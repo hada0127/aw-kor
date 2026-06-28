@@ -787,6 +787,15 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     전투 데미지 예측/무기 상세/다른 Part2 HUD는 별도 positive source ID 또는 WRAM/VRAM write-chain이 필요하다.
     agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
     identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
+  - [x] 2026-06-28 B8 map-name duplicate의 Part2 맵 목록 route source mismatch 확인:
+    `temp/scene_entrypoints/part2_menu_sweep/state_016.ss0`에서 `A`로 여는 Part2 맵 목록의 `도넛 섬`은
+    A2 copy `0x00A2CC4C`를 source로 쓴다. 같은 슬롯 mutation `도넛 섬 -> 검증섬`에서 null-control은
+    pixel diff 0, A2 `0x00A2CC4C` mutation은 diff 10548, B8 duplicate `0x00B8279C` mutation은 diff 0이었다.
+    영구 증거는 `docs/screenshots/b8_map_list_source_redirect_2026-06-28/report.json` 및 contact 2장.
+    `state_016.ss0`와 raw frame은 `temp/` 로컬 증거라 커밋만으로 재생성 가능한 완전 패키지는 아니다.
+    이 결과는 `0x00B8279C`의 해당 route 비소스 증거이며, B8 맵명 copy 전체의 전역 dead-copy 증명은 아니다.
+    같은 state+입력+B8 map-name mutation/read-watch 반복은 중단하고, `주먹밥 섬`/`곡옥 섬` 등은 필요할 때
+    A2 live source 확인 또는 별도 route에서 target-level proof를 먼저 확보한다.
   - [x] 2026-06-28 B8 작전실 추가 스크롤/전투 state 후보 음성 범위 확정:
     `41_part1_operation_room`에서 기존 DOWN16 음성이 단순 카운트 오류인지 확인하려고
     `DOWN` 14~18회에서 `0x00B81F2C/1F24/1F10/1F04`

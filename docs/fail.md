@@ -892,6 +892,31 @@ read-watch를 시도했다.
   이는 단일 current fresh route의 음성 결과이며, `0xB827AC`가 다른 화면에서 쓰이지 않는다는 전역 증명은 아니다.
   다음 재시도는 A2C 계열 실제 source 또는 별도 renderer/read-watch 체인을 겨냥해야 한다.
 
+## [2026-06-28] E12 Part2 맵 목록 `0x00B8279C` B8 duplicate mutation 실패
+
+- **시도**: `temp/scene_entrypoints/part2_menu_sweep/state_016.ss0`에서 `A`로 여는 Part2 맵 목록의
+  `도넛 섬`을 B8 map-name copy `0x00B8279C`의 live source로 증명하려고 같은 슬롯을 `검증섬`으로 바꿨다.
+- **양성 대조**: 같은 route와 같은 문자열에서 A2 copy `0x00A2CC4C`를 바꾸면 pixel diff 10548이 발생했고,
+  contact sheet에서 목록 라벨이 `검증섬`으로 바뀌었다. null-control은 diff 0이었다.
+- **음성 결과**: B8 `0x00B8279C`를 동일하게 바꿔도 pixel diff 0이었다. 증거는
+  `docs/screenshots/b8_map_list_source_redirect_2026-06-28/report.json`,
+  `a2_live_source_contact.png`, `b8_duplicate_negative_contact.png`.
+- **판정**: 이 route에서 보이는 `도넛 섬`은 B8 duplicate가 아니라 A2 source에서 온다.
+  `0x00B8279C`를 같은 state+입력으로 다시 mutation/read-watch하는 것은 중단한다. 단, 이는 route-local
+  음성 결과이며 B8 map-name copy 전체의 전역 dead-copy 증명은 아니다. `state_016.ss0`와 원시 frame은
+  `temp/` 로컬 증거이므로 커밋만으로 완전 재현 가능한 proof package라고 보지는 않는다.
+
+## [2026-06-28] E12 B8 맵 목록 source redirect CLI 리뷰 timeout
+
+- **시도**: `temp/review_prompt_b8_map_list_source_redirect_20260628.md`로 codex/agy/claude에
+  Part2 맵 목록 A2 양성/B8 음성 증거, 문서 표현 과장 여부, 커밋 가능 여부를 엄격 리뷰 요청했다.
+- **결과**: 세 CLI 모두 180초 timeout으로 정상 최종 리뷰를 반환하지 못했다.
+  agy stdout은 `Error: timed out waiting for response`, claude stdout/stderr는 0바이트였다.
+  codex stdout은 0바이트였고 stderr 내부 로그만 남았다.
+- **부분 반영**: codex stderr 로그 중 `state_016.ss0`와 raw frame이 `temp/` 로컬 증거라 커밋만으로
+  완전 재현 가능한 패키지는 아니라는 지적을 확인했다. 이에 report, `todo.md`, `docs/research.md`,
+  본 실패 기록에 영구 증거 범위가 report/contact 2장이라는 caveat를 추가했다.
+
 ## [2026-06-28] B84 AW1 power title 중간 실패: VRAM hook literal 정렬 오류
 
 - **실패 증상**: `0x08B3C1DE` copy site에 후크를 붙인 뒤에도 AW1 CO 파워 컷인 제목이 대부분 비거나
