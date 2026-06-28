@@ -810,6 +810,18 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     이미 실행됐을 가능성을 배제하지 못하므로 weak steady-state negative로만 본다.
     리뷰 결과 agy/claude는 커밋 차단 없음으로 봤고, claude가 지적한 per-case provenance와 weak steady-state
     한계 문구를 반영했다. codex 리뷰는 180초 timeout(stdout 0B, stderr 하니스 로그)으로 실질 finding이 없었다.
+  - [x] 2026-06-28 B8 룰 설정/파워 대사 후보 추가 route-negative:
+    fresh `scene_87_common_rule_settings`에서 B8 룰 라벨 후보
+    `0x00B839A8/39E0/39F0/39D0`(`거점수입/날씨/룰/사령브레이크`)를 단일 주소 mutation했지만,
+    null-control diff 0, mutation diff도 모두 0이었다. 또한 AW1 파워 메뉴 savestate
+    `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 `DOWN,DOWN,A` route를
+    재생하면 B84 양성대조 `0x00B84F04`는 exact read 157회지만, B8 파워 대사 후보
+    `0x00B83A3C/3A64/3A98/408C/4154`는 슬롯 전체 exact watch가 모두 hit 0이었다.
+    영구 slim 증거는 `docs/screenshots/e12_b8_additional_route_negatives_2026-06-28/report.json`.
+    단, B8 전체 range watch는 code/pointer 인접 read까지 target span으로 분류하는 노이즈가 475,509건 발생하므로
+    성공 증거로 쓰지 않고 exact target-slot watch만 유효하게 본다. 이 항목도 route-local 음성이며,
+    B8 룰/파워 대사의 전역 dead-copy 증명은 아니다. agy 리뷰는 커밋 차단 없음으로 봤고,
+    codex/claude는 180초 timeout으로 실질 finding이 없었다.
   - [x] 2026-06-28 B8 map-name duplicate의 Part2 맵 목록 route source mismatch 확인:
     `temp/scene_entrypoints/part2_menu_sweep/state_016.ss0`에서 `A`로 여는 Part2 맵 목록의 `도넛 섬`은
     A2 copy `0x00A2CC4C`를 source로 쓴다. 같은 슬롯 mutation `도넛 섬 -> 검증섬`에서 null-control은

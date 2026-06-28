@@ -1,0 +1,106 @@
+{
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "scope": "E12 B8 additional route-negative triage after D84830",
+  "rule_settings_mutation": {
+    "tool": "tools/prove_compact_display_mutation.py",
+    "checkpoint": "scene_87_common_rule_settings",
+    "checkpoint_mode": "fresh",
+    "checkpoint_grade": "ground_truth",
+    "raw_temp_summary": "temp/e12_b8_rule_settings_mutation_20260628/summary.json",
+    "null_control_pixel_diff_count": 0,
+    "targets": [
+      {
+        "address": "0x00B839A8",
+        "base_text": "거점수입",
+        "mutation_text": "검증수입",
+        "pixel_diff_count": 0,
+        "contact_sheet": "docs/screenshots/e12_b8_rule_settings_mutation_2026-06-28/b8_compact_display_table_all_00B839A8_mutation_contact.png",
+        "contact_sheet_sha256": "70aebf93dcaf11ba6d66c352e7bed3b29296741841440e8ed87fb29f75b51ad0"
+      },
+      {
+        "address": "0x00B839E0",
+        "base_text": "날씨",
+        "mutation_text": "검증",
+        "pixel_diff_count": 0,
+        "contact_sheet": "docs/screenshots/e12_b8_rule_settings_mutation_2026-06-28/b8_compact_display_table_all_00B839E0_mutation_contact.png",
+        "contact_sheet_sha256": "d000efb6e9b1da502685ca0da0e3bfc15ce307c0fdc798dcdd52d7b9982915cd"
+      },
+      {
+        "address": "0x00B839F0",
+        "base_text": "룰",
+        "mutation_text": "검증",
+        "pixel_diff_count": 0,
+        "contact_sheet": "docs/screenshots/e12_b8_rule_settings_mutation_2026-06-28/b8_compact_display_table_all_00B839F0_mutation_contact.png",
+        "contact_sheet_sha256": "105b8f594551f512b9e8314f78cfb2cc9372696923ef432290a326d5db0d169a"
+      },
+      {
+        "address": "0x00B839D0",
+        "base_text": "사령브레이크",
+        "mutation_text": "검증브레이크",
+        "pixel_diff_count": 0,
+        "contact_sheet": "docs/screenshots/e12_b8_rule_settings_mutation_2026-06-28/b8_compact_display_table_all_00B839D0_mutation_contact.png",
+        "contact_sheet_sha256": "861382f5bc97c0a77e0b93cd0c396c1db49c2ed00b08beb087d76797b18cfd47"
+      }
+    ],
+    "interpretation": "On the fresh rule-settings checkpoint, these four B8 compact rule-label rows are not live single-address screen sources. This is route-local negative evidence only."
+  },
+  "aw1_power_dialogue_exact_watch": {
+    "tool": "tools/probe_compact_display_reads.py",
+    "state": "temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0",
+    "route": "DOWN:80, DOWN:80, A:180 from the AW1 power menu-open savestate",
+    "raw_temp_reports": [
+      "temp/e12_b8_aw1_power_exact_B83A3C_20260628.json",
+      "temp/e12_b8_aw1_power_exact_B83A64_20260628.json",
+      "temp/e12_b8_aw1_power_exact_B83A98_20260628.json",
+      "temp/e12_b8_aw1_power_exact_B8408C_20260628.json",
+      "temp/e12_b8_aw1_power_exact_B84154_20260628.json"
+    ],
+    "targets": [
+      {
+        "address": "0x00B83A3C",
+        "base_text": "하늘이여!\u3000이 몸의 목소리를 듣거라!",
+        "exact_watch_size": 34,
+        "hit_count": 0
+      },
+      {
+        "address": "0x00B83A64",
+        "base_text": "여기까진 안 하려 했는데",
+        "exact_watch_size": 44,
+        "hit_count": 0
+      },
+      {
+        "address": "0x00B83A98",
+        "base_text": "이 몸의 2회 행동을,견뎌낼 수 있겠느냐!?",
+        "exact_watch_size": 40,
+        "hit_count": 0
+      },
+      {
+        "address": "0x00B8408C",
+        "base_text": "하이퍼 페어 시작…",
+        "exact_watch_size": 28,
+        "hit_count": 0
+      },
+      {
+        "address": "0x00B84154",
+        "base_text": "눈만 내리게 하면,이 몸의 세상이다!",
+        "exact_watch_size": 42,
+        "hit_count": 0
+      }
+    ],
+    "positive_control": {
+      "address": "0x00B84F04",
+      "base_text": "하이퍼수리",
+      "raw_temp_report": "temp/e12_b84_aw1_route_positive_recheck_20260628.json",
+      "exact_watch_size": 14,
+      "hit_count": 157,
+      "direct_target_read_count": 157
+    },
+    "interpretation": "The same AW1 activation route that strongly reads the B84 power-title target does not read these five B8 power-dialogue candidates. This separates the AW1 B84 title proof from B8 power-dialogue provenance; it is not an AW2/B8 power-dialogue dead-copy proof."
+  },
+  "range_watch_caveat": {
+    "raw_temp_report": "temp/e12_b8_aw1_power_route_full_range_watch_20260628.json",
+    "hit_count": 475509,
+    "why_not_success_evidence": "The whole B8 range watch is too broad and classifies code/pointer-adjacent reads as target spans. It is useful only as a warning to require exact target-slot watches for B8."
+  }
+}

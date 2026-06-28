@@ -3098,3 +3098,25 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `scene_24/24b` fresh visual proof나 B8 table dead-copy proof가 아니다.
   또한 `frames:1` savestate 케이스는 이미 state 캡처 전에 loader가 실행됐을 가능성을 배제하지 못하므로
   report에 `weak_steady_state_negative`로 구분해 둔다.
+
+---
+## [2026-06-28] E12 B8 rule-label / AW1 power-route 추가 음성
+
+- **fresh rule settings mutation**: current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  fresh/ground-truth `scene_87_common_rule_settings`를 기준으로 B8 compact rule-label 후보
+  `0x00B839A8`(`거점수입` -> `검증수입`), `0x00B839E0`(`날씨` -> `검증`),
+  `0x00B839F0`(`룰` -> `검증`), `0x00B839D0`(`사령브레이크` -> `검증브레이크`)를
+  단일 주소 mutation했다. null-control pixel diff는 0이고, 4개 mutation도 모두 pixel diff 0이다.
+- **AW1 power route exact watch**: B84 power-title proof와 같은
+  `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0` + `DOWN,DOWN,A` route에서
+  B8 power-dialogue 후보 `0x00B83A3C/3A64/3A98/408C/4154`를 각 슬롯 전체 exact watch했지만 모두 hit 0이었다.
+  같은 route의 positive control로 `0x00B84F04`(`하이퍼수리`)는 exact watch 157회 direct read를 기록했다.
+- **범위 watch 경계**: 같은 route에서 B8 전체 range watch를 걸면 475,509 hit가 발생하지만,
+  `0xB837A0` 같은 code/pointer-adjacent read가 `0x00B832A0` target span으로 분류되는 식의 노이즈가 크다.
+  따라서 B8은 range hit를 direct evidence로 세지 않고, target-slot exact watch 또는 mutation diff만 채택한다.
+- **증거**: `docs/screenshots/e12_b8_additional_route_negatives_2026-06-28/report.json` 및
+  `docs/screenshots/e12_b8_rule_settings_mutation_2026-06-28/`.
+- **해석**: 위 결과는 fresh rule-settings route와 AW1 B84 title route의 B8 후보 음성이다.
+  B8 rule/power strings의 전역 dead-copy 증명은 아니며, AW2 power-dialogue route나 별도 scene-load 순간은
+  여전히 별도 증거가 필요하다.

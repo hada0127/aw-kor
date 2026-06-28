@@ -1133,3 +1133,18 @@ read-watch를 시도했다.
 - **CLI 리뷰**: agy/claude는 커밋 차단 없음으로 판정했다. claude가 지적한 `frames:1` savestate 한계,
   per-case provenance 보존, 131 literal 수치의 근거 경계를 반영했다. codex는 180초 timeout(stdout 0B)으로
   실질 finding이 없었다.
+
+## [2026-06-28] E12 B8 rule-label / AW1 power-route 추가 음성
+
+- **fresh rule-settings mutation 0-diff**: `scene_87_common_rule_settings`에서
+  `0x00B839A8/39E0/39F0/39D0`(`거점수입/날씨/룰/사령브레이크`)를
+  `검증*` 문자열로 바꿔도 null-control diff 0, mutation diff 0이었다. 이 fresh rule-settings route는
+  해당 B8 rows의 source 증거가 아니다.
+- **AW1 power-route exact watch 0-hit**: B84 `0x00B84F04`가 157회 read되는 동일 AW1 `DOWN,DOWN,A`
+  파워 발동 route에서 B8 power-dialogue 후보 `0x00B83A3C/3A64/3A98/408C/4154`는 슬롯 전체 exact watch가
+  모두 hit 0이었다. 이 route는 B84 title proof이지 B8 power-dialogue proof가 아니다.
+- **range-watch 오해 금지**: B8 전체 range watch는 475,509 hit가 나오지만 code/pointer 인접 read를 target span으로
+  잘못 분류하는 노이즈가 크다. B8 성공 증거는 whole-range hit가 아니라 target-slot exact watch, mutation diff,
+  또는 WRAM/VRAM write-chain으로만 인정한다.
+- **증거**: `docs/screenshots/e12_b8_additional_route_negatives_2026-06-28/report.json`.
+- **CLI 리뷰**: agy는 커밋 차단 없음으로 판정했다. codex/claude는 180초 timeout(stdout 0B)으로 실질 finding이 없었다.
