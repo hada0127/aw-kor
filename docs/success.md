@@ -3155,3 +3155,30 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **에디터 확인**: 스프라이트 에디터 `palette_library()`가 176개/OBJ 84개를 로드한다.
 - **경계**: route별 숫자는 화면별 총량이 아니라 first-seen unique bank 수다. 이번 작업은 전투/CO/유닛 대표 화면의
   실색 후보를 넓힌 것이며, LZ77 스프라이트 편집분 ROM 역기록이나 E12/E16 direct visual evidence는 별도 TODO로 남는다.
+
+## [2026-06-28] Part1 통신/교대전 맵 선택 B8 맵명 표시 수정
+
+- **수정**: `tools/build_korean_full.py`에 `patch_part1_single_map_labels()`를 추가해 Part1 link/pass-and-play
+  `맵 선택` compact renderer에서 B8 map-label source pointer를 table-driven overlay한다.
+  placeholder `??????`도 같은 경로에서 `미공개`로 표시한다.
+- **안전장치**: live state `0x03000F20`만 patch하고 hidden state `0x03000F80`은 제외했다.
+  private tile base는 `0x3A8`, hook/table은 `0xF30600..0xF31E80`.
+  agy 리뷰가 잡은 inactive B84 hook slot overlap은 `0xF30780`으로 이동해 해소했다.
+- **실화면**: `temp/user_extra_link_map_select_final_20260628/map_list_labels_4x.png`에서
+  `한 쌍 산맥`, `숲의 오솔길`, `미공개`가 배경/스프라이트 깨짐 없이 출력된다.
+- **검증**: output 3종 SHA `d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f`,
+  `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_part1_link_map_label_hook.json` PASS.
+
+## [2026-06-28] Part1 통신/교대전 맵 선택 sweep + hard gate
+
+- **sweep**: current SHA `d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f`에서
+  coldboot -> Part1 -> 통신/교대전 -> 맵 선택 후 `DOWN` 180스텝을 캡처했다.
+  list crop unique 180/180, low-bright anomaly 0.
+- **증거**: `docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/report.json`,
+  `list_sweep_page1.png`~`list_sweep_page3.png`, `full_frame_every10.png`.
+- **게이트**: `verify_dist_integrity.py`가 Part1 map-label hook site, source-derived table 재생성 일치,
+  B84 inactive hook slot non-overlap, sweep SHA/step/contact 존재를 확인한다.
+  현재 결과는 `entries=720`, `b8_entries=717`, `table=0xF30800..0xF31E80`, `sweep_steps=180`.
+- **경계**: 현재 진행도 route의 대부분은 원본 locked placeholder `???`다. 이 sweep은 scroll-edge/flicker와
+  hook/table 동기화 증거이며, 모든 B8 맵명이 자연 진행에서 노출됐다는 증거는 아니다.

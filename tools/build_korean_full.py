@@ -5196,14 +5196,60 @@ def patch_part2_ui_context_tokens(rom):
     return patched
 
 
-def patch_part1_single_map_unknown_label(rom, orig):
-    """Replace Part 1 locked/unknown map placeholders via a local compact hook.
+def _part1_map_label_hook(table_end_rt):
+    hook = bytearray(PART1_MAP_LABEL_HOOK_TEMPLATE)
+    for old, new in [
+        (0x08F31000, PART1_MAP_LABEL_TABLE_RT),
+        (0x08F31010, table_end_rt),
+    ]:
+        raw = struct.pack('<I', old)
+        pos = hook.find(raw)
+        if pos < 0:
+            raise AssertionError(f'Part1 map-label hook literal 0x{old:08X} not found')
+        struct.pack_into('<I', hook, pos, new)
+    return bytes(hook)
 
-    The single-battle map list renderer does not accept the normal Korean
-    reserved-code text path or the kanji-table compact path. Keep three original
-    question-mark source codes so the renderer allocates glyph tiles, blank the
-    trailing three characters, and let PART1_SINGLE_MAP_LABEL_HOOK replace only
-    this source address with 미/공/개 pixels at runtime.
+
+def _part1_map_label_entries(rom, sylmap, syl_to_code):
+    code_to_syllable = {code: s for s, code in syl_to_code.items()}
+    entries = []
+
+    def add_entry(source_rt, ch):
+        if ch not in sylmap:
+            raise AssertionError(f'Part1 map-label glyph missing: {ch}')
+        top = int(sylmap[ch]['top'])
+        bot = int(sylmap[ch]['bot'])
+        entries.append((source_rt, top, bot))
+
+    for idx, ch in enumerate('미공개'):
+        add_entry(0x08DF8C2A + idx * 2, ch)
+
+    start, end = PART1_MAP_LABEL_SOURCE_RANGE
+    pos = start
+    while pos + 1 < end:
+        b0 = rom[pos]
+        if b0 == 0:
+            pos += 1
+            continue
+        if b0 == 0x20:
+            pos += 1
+            continue
+        code = (b0 << 8) | rom[pos + 1]
+        ch = code_to_syllable.get(code)
+        if ch is not None:
+            add_entry(0x08000000 + pos, ch)
+        pos += 2
+    return entries
+
+
+def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code):
+    """Replace Part 1 link-map Korean labels through a local compact hook.
+
+    The Part 1 link/single map list renderer does not accept the normal Korean
+    reserved-code text path. Keep the locked-map placeholder source as original
+    question marks/spaces, then install a source-pointer-gated hook that overlays
+    B8 map names and the placeholder with Korean glyph tiles at the current
+    tilemap cell.
     """
     off = 0xDF8C2A
     slot = 12
@@ -5216,7 +5262,43 @@ def patch_part1_single_map_unknown_label(rom, orig):
         raise AssertionError(f'Part 1 map placeholder replacement length {len(raw)} != {slot}')
     rom[off:off + slot] = raw
     WRITE_LOG.append([off, slot, slot, raw.hex(), None, '미공개', 0, 'part1-single-map-unknown-label'])
-    return 3
+
+    entries = _part1_map_label_entries(rom, sylmap, syl_to_code)
+    table = bytearray()
+    for source_rt, top, bot in entries:
+        table += struct.pack('<IHH', source_rt, top, bot)
+    table_end = PART1_MAP_LABEL_TABLE_FILE + len(table)
+    if table_end > B84_POWER_GLYPH_BLOCK_FILE:
+        raise AssertionError(
+            f'Part1 map-label table overlaps B84 glyph block: 0x{table_end:X} > 0x{B84_POWER_GLYPH_BLOCK_FILE:X}'
+        )
+    rom[PART1_MAP_LABEL_TABLE_FILE:table_end] = table
+    hook = _part1_map_label_hook(PART1_MAP_LABEL_TABLE_RT + len(table))
+    if PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(hook) > PART1_MAP_LABEL_TABLE_FILE:
+        raise AssertionError('Part1 map-label hook overlaps table')
+    rom[PART1_SINGLE_MAP_LABEL_HOOK_FILE:PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(hook)] = hook
+    if bytes(rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 12]) != PART1_SINGLE_MAP_LABEL_SITE_EXPECT:
+        raise AssertionError('unexpected Part1 map-label hook site bytes')
+    rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 8] = _abs_tramp(0, PART1_SINGLE_MAP_LABEL_HOOK_RT)
+    rom[PART1_SINGLE_MAP_LABEL_SITE + 8:PART1_SINGLE_MAP_LABEL_SITE + 12] = bytes.fromhex('c046c046')
+
+    os.makedirs(os.path.join(BASE, 'temp'), exist_ok=True)
+    with open(os.path.join(BASE, 'temp', 'part1_map_label_hook_table.json'), 'w', encoding='utf-8') as f:
+        json.dump({
+            'schema': 1,
+            'source_range': ['0x%08X' % PART1_MAP_LABEL_SOURCE_RANGE[0],
+                             '0x%08X' % PART1_MAP_LABEL_SOURCE_RANGE[1]],
+            'hook_file': '0x%X' % PART1_SINGLE_MAP_LABEL_HOOK_FILE,
+            'hook_bytes': len(hook),
+            'table_file': '0x%X' % PART1_MAP_LABEL_TABLE_FILE,
+            'table_bytes': len(table),
+            'entry_count': len(entries),
+            'placeholder_entries': 3,
+            'b8_entries': len(entries) - 3,
+            'table_end_file': '0x%X' % table_end,
+        }, f, ensure_ascii=False, indent=2)
+        f.write('\n')
+    return {'placeholder': 3, 'entries': len(entries), 'table_bytes': len(table)}
 
 
 def patch_part2_battle_obj_labels(rom):
@@ -10405,33 +10487,40 @@ PART1_SINGLE_MAP_LABEL_HOOK_FILE = HOOK_FILE + 0x600
 PART1_SINGLE_MAP_LABEL_HOOK_RT = 0x08F30600
 PART1_SINGLE_MAP_LABEL_SITE = 0xB1319C       # compact path after 0x08B12074 parser, LR=0x08B13187
 PART1_SINGLE_MAP_LABEL_SITE_EXPECT = bytes.fromhex('381c211c524608f0c7fee6e7')
-PART1_SINGLE_MAP_LABEL_HOOK = bytes.fromhex(
-    # r2 still carries the current source pointer at hook entry. The original
-    # compact call then overwrites it with sl, so save r2 first, run the original
-    # 0x08B1BF34 renderer, and locally replace only 0x08DF8C2A/2C/2E.
-    'f0b4151c381c211c5246261c1f4b9e461f4b18471f48854206d00230854207d00230854208d02ee0'
-    '1b491c4a1c4b06e01c491d4a1d4b02e01d491e4a1e4b30881e4d1f4f384008433080301c4030'
-    '07881b4e37404e1c3743078049016d18194e5201b61808273068286004360435013ff9d1144e'
-    '5b01f61808273068286004360435013ff9d1f0bc0f480047'
+PART1_MAP_LABEL_TABLE_FILE = HOOK_FILE + 0x800
+PART1_MAP_LABEL_TABLE_RT = 0x08F30800
+PART1_MAP_LABEL_SOURCE_RANGE = (0xB81CA0, 0xB82800)
+PART1_MAP_LABEL_HOOK_TEMPLATE = bytes.fromhex(
+    # r2 still carries the current source pointer at hook entry. Run the
+    # original compact renderer first, then overlay only B8 link-map labels and
+    # the locked-map placeholder through a source-pointer table. Only the live
+    # map-list state 0x03000F20 is overlaid; the alternate state draws hidden
+    # buffers with the same cell coordinates and would otherwise overwrite the
+    # shared glyph tiles. The private tile window is 0x3A8..0x3FB: page0 gets
+    # 6 rows x 6 visible Hangul cells, page1 only the colliding top row.
+    'f0b4151c261c381c211c5246354b9e46354b18473548874260d13548854202d33448854209d3'
+    '3448854206d00230854203d00230854200d050e0304c304fbc424cd22068854201d00834f8e'
+    '7a288e388311c49081f20014005293fd3053906293cd2301cc00907252840062836d2351ced'
+    '0a01273d40002d05d1c50040002d1a281c401803e0002828d1081c243040001c4909183088'
+    '1c4d284008433080301c403007882f400d1c01352f430780174d49016d18164e5201b61808'
+    '273068286004360435013ff9d1114e5b01f61808273068286004360435013ff9d1f0bc0d4'
+    '800470000'
     '1506f308'  # .word 0x08F30615 (.after_original|1)
     '35bfb108'  # .word 0x08B1BF35 (original compact render)
-    '2a8cdf08'  # .word 0x08DF8C2A (source start)
-    'e0030000'  # .word 0x000003E0 (미 tile id)
-    '76010000'  # .word 374 (미 top)
-    '5a010000'  # .word 346 (미 bottom)
-    'e2030000'  # .word 0x000003E2 (공 tile id)
-    '32000000'  # .word 50 (공 top)
-    '39000000'  # .word 57 (공 bottom)
-    'e4030000'  # .word 0x000003E4 (개 tile id)
-    '12000000'  # .word 18 (개 top)
-    '13000000'  # .word 19 (개 bottom)
-    '00000006'  # .word 0x06000000 (VRAM charblock)
+    '200f0003'  # .word 0x03000F20 (live map-list compact state)
+    'a01cb808'  # .word 0x08B81CA0 (B8 map-label source start)
+    '0028b808'  # .word 0x08B82800 (B8 map-label source end)
+    '2a8cdf08'  # .word 0x08DF8C2A (locked-map placeholder source)
+    '0010f308'  # .word table start, patched by _part1_map_label_hook()
+    '1010f308'  # .word table end, patched by _part1_map_label_hook()
+    'a8030000'  # .word 0x000003A8 (private tile base)
     '00fc0000'  # .word 0x0000FC00 (tilemap attribute mask)
+    '00000006'  # .word 0x06000000 (VRAM charblock)
     '0000f008'  # .word 0x08F00000 (KOR_BASE_RT)
     '7731b108'  # .word 0x08B13177 (loop return)
 )
-B84_POWER_GLYPH_HOOK_FILE = HOOK_FILE + 0x680
-B84_POWER_GLYPH_HOOK_RT = 0x08F30680
+B84_POWER_GLYPH_HOOK_FILE = HOOK_FILE + 0x780
+B84_POWER_GLYPH_HOOK_RT = 0x08F30780
 B84_POWER_GLYPH_BLOCK_FILE = 0xF32000
 B84_POWER_GLYPH_BLOCK_RT = 0x08F32000
 B84_POWER_GLYPH_LZ77_OFF = 0xBC9D0C
@@ -11106,13 +11195,8 @@ def main():
     rom[PART1_DIALOG_RENDER_HOOK_FILE:PART1_DIALOG_RENDER_HOOK_FILE + len(PART1_DIALOG_RENDER_HOOK)] = PART1_DIALOG_RENDER_HOOK
     assert bytes(rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8]) == PART1_DIALOG_RENDER_SITE_EXPECT
     rom[PART1_DIALOG_RENDER_SITE:PART1_DIALOG_RENDER_SITE + 8] = _abs_tramp(0, PART1_DIALOG_RENDER_HOOK_RT)
-    # Part1 single-map locked-map placeholder uses the compact 0x08B1319C render
-    # path instead of the normal dialogue render site above. Patch only that
-    # compact call; the hook itself gates on source pointer 0x08DF8C2A/2C/2E.
-    rom[PART1_SINGLE_MAP_LABEL_HOOK_FILE:PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(PART1_SINGLE_MAP_LABEL_HOOK)] = PART1_SINGLE_MAP_LABEL_HOOK
-    assert bytes(rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 12]) == PART1_SINGLE_MAP_LABEL_SITE_EXPECT
-    rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 8] = _abs_tramp(0, PART1_SINGLE_MAP_LABEL_HOOK_RT)
-    rom[PART1_SINGLE_MAP_LABEL_SITE + 8:PART1_SINGLE_MAP_LABEL_SITE + 12] = bytes.fromhex('c046c046')
+    # Part1 map-list labels are installed after text import/overrides, because
+    # the compact renderer hook table is derived from the final B8 source bytes.
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
     assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT
@@ -11421,7 +11505,7 @@ def main():
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['compact_ui_fallback_glyph'] = patch_compact_ui_fallback_glyph(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
-    st['part1_single_map_unknown_label'] = patch_part1_single_map_unknown_label(rom, orig)
+    st['part1_single_map_unknown_label'] = patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_info_screen_obj_labels'] = patch_part2_info_screen_obj_labels(rom)

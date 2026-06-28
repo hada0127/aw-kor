@@ -11,6 +11,7 @@ staleness를 명시한다. exit 0=PASS, 1=FAIL.
 import hashlib
 import json
 import os
+import struct
 import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +44,34 @@ PART2_RESULT_SUMMARY_DIRTY_BOXES = [
 ]
 COMPACT_DISPLAY_VISUAL_MATRIX = os.path.join(BASE, 'data', 'compact_display_visual_matrix.json')
 COMPACT_DISPLAY_MANUAL_VISUAL_EVIDENCE = os.path.join(BASE, 'data', 'compact_display_manual_visual_evidence.json')
+SYLLABLE_TO_CODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
+SYLLABLE_TO_GLYPH_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
+PART1_MAP_LABEL_SWEEP_REPORT = os.path.join(
+    BASE, 'docs', 'screenshots', 'part1_link_map_list_full_sweep_2026-06-28', 'report.json'
+)
+PART1_MAP_LABEL_SITE = 0x00B1319C
+PART1_MAP_LABEL_SITE_BYTES = bytes.fromhex('004800470106f308c046c046')
+PART1_MAP_LABEL_HOOK_FILE = 0x00F30600
+PART1_MAP_LABEL_TABLE_FILE = 0x00F30800
+PART1_MAP_LABEL_TABLE_RT = 0x08F30800
+PART1_MAP_LABEL_TABLE_LIMIT = 0x00F32000
+PART1_MAP_LABEL_SOURCE_RANGE = (0x00B81CA0, 0x00B82800)
+PART1_MAP_LABEL_PLACEHOLDER_RT = 0x08DF8C2A
+B84_POWER_GLYPH_HOOK_FILE = 0x00F30780
+SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
+    {
+        'label': 'scene_89 music menu source',
+        'addr': 0x00A536B6,
+        'expected_hex': '8f838ea081408fb38f8300',
+        'max_nul_terminated_len': 11,
+    },
+    {
+        'label': 'scene_89 anime menu source',
+        'addr': 0x00A536DE,
+        'expected_hex': '8eb789d48bed81404100',
+        'max_nul_terminated_len': 10,
+    },
+]
 
 
 def sha256(data):
@@ -220,6 +249,149 @@ def verify_compact_display_visual_matrix(current_sha):
     )
 
 
+def verify_scene89_system_menu_sources(current):
+    """Guard the route-local source proof for battle-system music/anime rows.
+
+    These payloads are copied into an adjacent IWRAM menu buffer:
+    music starts at 0x03002CCF and anime starts at 0x03002CDA. The music string
+    therefore has an 11-byte NUL-terminated hard limit on this route.
+    """
+    if current is None:
+        return False, 'current ROM unavailable'
+    details = []
+    for spec in SCENE89_SYSTEM_MENU_SOURCE_LIMITS:
+        addr = spec['addr']
+        expected = bytes.fromhex(spec['expected_hex'])
+        actual = current[addr:addr + len(expected)]
+        if actual != expected:
+            return False, (
+                f"{spec['label']} bytes changed at 0x{addr:08X}: "
+                f"expected={expected.hex()} actual={actual.hex()}"
+            )
+        max_len = spec['max_nul_terminated_len']
+        chunk = current[addr:addr + max_len]
+        nul = chunk.find(b'\x00')
+        if nul < 0:
+            return False, (
+                f"{spec['label']} has no NUL within {max_len} bytes at 0x{addr:08X}; "
+                'would overrun the scene_89 IWRAM menu buffer'
+            )
+        used = nul + 1
+        details.append(f"{spec['label']}@0x{addr:08X}={used}/{max_len}")
+    return True, ', '.join(details)
+
+
+def load_part1_map_label_expected_table(current):
+    code_map = json.load(open(SYLLABLE_TO_CODE_2350, encoding='utf-8'))
+    glyph_map = json.load(open(SYLLABLE_TO_GLYPH_2350, encoding='utf-8'))
+    glyph_map = glyph_map.get('map', glyph_map)
+    code_to_syllable = {}
+    for syllable, code in code_map.items():
+        try:
+            code_to_syllable[int(str(code), 0)] = syllable
+        except (TypeError, ValueError):
+            continue
+
+    entries = []
+
+    def add_entry(source_rt, syllable):
+        glyph = glyph_map.get(syllable)
+        if not glyph:
+            raise ValueError(f'missing glyph for Part1 map label syllable: {syllable}')
+        entries.append((source_rt, int(glyph['top']), int(glyph['bot'])))
+
+    for idx, syllable in enumerate('미공개'):
+        add_entry(PART1_MAP_LABEL_PLACEHOLDER_RT + idx * 2, syllable)
+
+    start, end = PART1_MAP_LABEL_SOURCE_RANGE
+    pos = start
+    while pos + 1 < end:
+        b0 = current[pos]
+        # Mirror build_korean_full.py exactly: this compact source range contains
+        # single-byte padding/space bytes interleaved with 2-byte Korean codes.
+        if b0 == 0 or b0 == 0x20:
+            pos += 1
+            continue
+        code = (b0 << 8) | current[pos + 1]
+        syllable = code_to_syllable.get(code)
+        if syllable is not None:
+            add_entry(0x08000000 + pos, syllable)
+        pos += 2
+
+    payload = bytearray()
+    for source_rt, top, bot in entries:
+        payload += struct.pack('<IHH', source_rt, top, bot)
+    return bytes(payload), entries
+
+
+def verify_part1_map_label_hook(current, current_sha):
+    if current is None:
+        return False, 'current ROM unavailable'
+    site = current[PART1_MAP_LABEL_SITE:PART1_MAP_LABEL_SITE + len(PART1_MAP_LABEL_SITE_BYTES)]
+    if site != PART1_MAP_LABEL_SITE_BYTES:
+        return False, (
+            f'hook site bytes changed at 0x{PART1_MAP_LABEL_SITE:08X}: '
+            f'expected={PART1_MAP_LABEL_SITE_BYTES.hex()} actual={site.hex()}'
+        )
+    if B84_POWER_GLYPH_HOOK_FILE < PART1_MAP_LABEL_HOOK_FILE + 280:
+        return False, 'Part1 map-label hook overlaps B84 power-title hook slot'
+
+    try:
+        expected_table, entries = load_part1_map_label_expected_table(current)
+    except Exception as e:
+        return False, f'expected table rebuild failed: {e}'
+    table_end = PART1_MAP_LABEL_TABLE_FILE + len(expected_table)
+    if table_end > PART1_MAP_LABEL_TABLE_LIMIT:
+        return False, (
+            f'table overflow: end=0x{table_end:08X} limit=0x{PART1_MAP_LABEL_TABLE_LIMIT:08X}'
+        )
+    actual_table = current[PART1_MAP_LABEL_TABLE_FILE:table_end]
+    if actual_table != expected_table:
+        return False, 'hook table does not match current B8 source bytes/glyph map'
+
+    hook = current[PART1_MAP_LABEL_HOOK_FILE:PART1_MAP_LABEL_TABLE_FILE]
+    table_start_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT)
+    table_end_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT + len(expected_table))
+    if table_start_lit not in hook:
+        return False, 'hook literal table start missing'
+    if table_end_lit not in hook:
+        return False, 'hook literal table end missing'
+    private_tile_lit = struct.pack('<I', 0x000003A8)
+    if private_tile_lit not in hook:
+        return False, 'hook private tile base literal 0x3A8 missing'
+
+    sweep_msg = 'sweep report not checked'
+    if not os.path.exists(PART1_MAP_LABEL_SWEEP_REPORT):
+        return False, f'sweep report missing: {PART1_MAP_LABEL_SWEEP_REPORT}'
+    try:
+        report = json.load(open(PART1_MAP_LABEL_SWEEP_REPORT, encoding='utf-8'))
+    except Exception as e:
+        return False, f'sweep report JSON load failed: {e}'
+    if report.get('rom_sha256') != current_sha or report.get('source_rom_sha256') != current_sha:
+        return False, (
+            'sweep report SHA stale: '
+            f"rom={report.get('rom_sha256')} source={report.get('source_rom_sha256')} output={current_sha}"
+        )
+    if int(report.get('step_count') or 0) < 180:
+        return False, f'sweep step_count too small: {report.get("step_count")}'
+    if report.get('unique_list_crop_count') != report.get('step_count'):
+        return False, (
+            'sweep crop uniqueness mismatch: '
+            f"unique={report.get('unique_list_crop_count')} steps={report.get('step_count')}"
+        )
+    if report.get('low_bright_steps'):
+        return False, f'sweep low-bright frames present: {report.get("low_bright_steps")}'
+    for label, rel in (report.get('docs') or {}).items():
+        if not os.path.exists(os.path.join(BASE, rel)):
+            return False, f'sweep artifact missing: {label} {rel}'
+    sweep_msg = f'sweep_steps={report.get("step_count")}, unique={report.get("unique_list_crop_count")}'
+
+    return True, (
+        f'entries={len(entries)}, b8_entries={len(entries) - 3}, '
+        f'table=0x{PART1_MAP_LABEL_TABLE_FILE:06X}..0x{table_end:06X}, {sweep_msg}'
+    )
+
+
 def main():
     ok = True
     print('=== 배포 무결성 게이트 (verify_dist_integrity) ===')
@@ -257,6 +429,16 @@ def main():
     matrix_ok, matrix_msg = verify_compact_display_visual_matrix(current_sha)
     print(f'[{ "OK" if matrix_ok else "FAIL"}] E12 compact visual matrix 동기화: {matrix_msg}')
     if not matrix_ok:
+        ok = False
+
+    scene89_ok, scene89_msg = verify_scene89_system_menu_sources(current_rom)
+    print(f'[{ "OK" if scene89_ok else "FAIL"}] E12 scene_89 system-menu source/IWRAM guard: {scene89_msg}')
+    if not scene89_ok:
+        ok = False
+
+    part1_map_ok, part1_map_msg = verify_part1_map_label_hook(current_rom, current_sha)
+    print(f'[{ "OK" if part1_map_ok else "FAIL"}] Part1 link map-label hook/table/sweep: {part1_map_msg}')
+    if not part1_map_ok:
         ok = False
 
     # 2) manifest별 3중(4중) 해시 일치

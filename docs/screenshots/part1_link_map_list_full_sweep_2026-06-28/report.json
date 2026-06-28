@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-06-28 16:40:49",
+  "rom": "temp/part1_link_map_list_full_sweep_20260628/current_isolated.gba",
+  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "source_rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+  "route": [
+    "part1_menu_from_coldboot",
+    "DOWN",
+    "A",
+    "DOWN",
+    "A",
+    "then DOWN after each screenshot"
+  ],
+  "step_count": 180,
+  "unique_list_crop_count": 180,
+  "duplicate_list_crop_count": 0,
+  "low_bright_threshold": 500,
+  "low_bright_steps": [],
+  "docs": {
+    "list_sweep_page1": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page1.png",
+    "list_sweep_page2": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page2.png",
+    "list_sweep_page3": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page3.png",
+    "full_frame_every10": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/full_frame_every10.png"
+  }
+}

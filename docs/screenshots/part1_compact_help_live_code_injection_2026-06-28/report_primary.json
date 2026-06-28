@@ -1,5 +1,5 @@
 {
-  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
   "rows": [
     {
       "case_id": "player_count_codes",
@@ -195,5 +195,5 @@
       }
     }
   ],
-  "contact": "docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/contact_primary.png"
+  "contact": "temp/e16_live_code_injection_smoke_20260628/contact.png"
 }

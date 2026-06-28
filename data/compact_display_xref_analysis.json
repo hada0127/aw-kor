@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
- "git_commit": "19905b1",
+ "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+ "git_commit": "0dc6015",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -997,14 +997,15 @@
    ],
    "summary": {
     "target_count": 459,
-    "with_pointer_refs": 402,
-    "with_external_pointer_refs": 386,
-    "with_second_level_refs": 7,
-    "pointer_ref_total": 463,
-    "external_pointer_ref_total": 446,
+    "with_pointer_refs": 406,
+    "with_external_pointer_refs": 390,
+    "with_second_level_refs": 8,
+    "pointer_ref_total": 634,
+    "external_pointer_ref_total": 617,
     "pointer_ref_buckets": {
      "part1_or_table": 291,
      "code_or_static": 6,
+     "0xF30000": 171,
      "b8_internal": 17,
      "part2_table": 149
     }
@@ -2162,16 +2163,21 @@
      "ko": "맵 타입 9",
      "ja": "マップタイプ９",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 3,
+     "external_pointer_ref_count": 3,
      "pointer_refs": [
-      "0x00D88CA0"
+      "0x00D88CA0",
+      "0x00F306F0",
+      "0x00F30818"
      ],
      "external_pointer_refs": [
-      "0x00D88CA0"
+      "0x00D88CA0",
+      "0x00F306F0",
+      "0x00F30818"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 2
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2183,16 +2189,19 @@
      "ko": "맵 타입 8",
      "ja": "マップタイプ８",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C9C"
+      "0x00D88C9C",
+      "0x00F30830"
      ],
      "external_pointer_refs": [
-      "0x00D88C9C"
+      "0x00D88C9C",
+      "0x00F30830"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2204,16 +2213,19 @@
      "ko": "디자인 맵",
      "ja": "デザインマップ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C98"
+      "0x00D88C98",
+      "0x00F30848"
      ],
      "external_pointer_refs": [
-      "0x00D88C98"
+      "0x00D88C98",
+      "0x00F30848"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2225,16 +2237,19 @@
      "ko": "트라이얼",
      "ja": "トライアル",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C94"
+      "0x00D88C94",
+      "0x00F30868"
      ],
      "external_pointer_refs": [
-      "0x00D88C94"
+      "0x00D88C94",
+      "0x00F30868"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2288,16 +2303,19 @@
      "ko": "초기 배치",
      "ja": "ショキハイチ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C88"
+      "0x00D88C88",
+      "0x00F30888"
      ],
      "external_pointer_refs": [
-      "0x00D88C88"
+      "0x00D88C88",
+      "0x00F30888"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2309,16 +2327,19 @@
      "ko": "대전",
      "ja": "タイセン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C84"
+      "0x00D88C84",
+      "0x00F308A8"
      ],
      "external_pointer_refs": [
-      "0x00D88C84"
+      "0x00D88C84",
+      "0x00F308A8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2330,16 +2351,19 @@
      "ko": "클래식",
      "ja": "クラッシック",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C80"
+      "0x00D88C80",
+      "0x00F308B8"
      ],
      "external_pointer_refs": [
-      "0x00D88C80"
+      "0x00D88C80",
+      "0x00F308B8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2351,16 +2375,19 @@
      "ko": "캠페인",
      "ja": "キャンペーン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C7C"
+      "0x00D88C7C",
+      "0x00F308D0"
      ],
      "external_pointer_refs": [
-      "0x00D88C7C"
+      "0x00D88C7C",
+      "0x00F308D0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2372,16 +2399,19 @@
      "ko": "튜토리얼",
      "ja": "チュートリアル",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88C78"
+      "0x00D88C78",
+      "0x00F308E8"
      ],
      "external_pointer_refs": [
-      "0x00D88C78"
+      "0x00D88C78",
+      "0x00F308E8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 1,
      "second_level_refs": [
@@ -2395,22 +2425,25 @@
      "ko": "에디트 3",
      "ja": "エディット３",
      "kind": "dialogue-override",
-     "pointer_ref_count": 4,
-     "external_pointer_ref_count": 4,
+     "pointer_ref_count": 5,
+     "external_pointer_ref_count": 5,
      "pointer_refs": [
       "0x00D8B554",
       "0x00D8B608",
       "0x00D8B6BC",
-      "0x00D8B770"
+      "0x00D8B770",
+      "0x00F30908"
      ],
      "external_pointer_refs": [
       "0x00D8B554",
       "0x00D8B608",
       "0x00D8B6BC",
-      "0x00D8B770"
+      "0x00D8B770",
+      "0x00F30908"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 4
+      "part1_or_table": 4,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2422,22 +2455,25 @@
      "ko": "에디트 2",
      "ja": "エディット２",
      "kind": "dialogue-override",
-     "pointer_ref_count": 4,
-     "external_pointer_ref_count": 4,
+     "pointer_ref_count": 5,
+     "external_pointer_ref_count": 5,
      "pointer_refs": [
       "0x00D8B518",
       "0x00D8B5CC",
       "0x00D8B680",
-      "0x00D8B734"
+      "0x00D8B734",
+      "0x00F30920"
      ],
      "external_pointer_refs": [
       "0x00D8B518",
       "0x00D8B5CC",
       "0x00D8B680",
-      "0x00D8B734"
+      "0x00D8B734",
+      "0x00F30920"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 4
+      "part1_or_table": 4,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2449,22 +2485,25 @@
      "ko": "에디트 1",
      "ja": "エディット１",
      "kind": "dialogue-override",
-     "pointer_ref_count": 4,
-     "external_pointer_ref_count": 4,
+     "pointer_ref_count": 5,
+     "external_pointer_ref_count": 5,
      "pointer_refs": [
       "0x00D8B4DC",
       "0x00D8B590",
       "0x00D8B644",
-      "0x00D8B6F8"
+      "0x00D8B6F8",
+      "0x00F30938"
      ],
      "external_pointer_refs": [
       "0x00D8B4DC",
       "0x00D8B590",
       "0x00D8B644",
-      "0x00D8B6F8"
+      "0x00D8B6F8",
+      "0x00F30938"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 4
+      "part1_or_table": 4,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2476,16 +2515,19 @@
      "ko": "최강 라이벌",
      "ja": "最強のライバル！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B4A0"
+      "0x00D8B4A0",
+      "0x00F30950"
      ],
      "external_pointer_refs": [
-      "0x00D8B4A0"
+      "0x00D8B4A0",
+      "0x00F30950"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2497,16 +2539,19 @@
      "ko": "칠흑숲 결전",
      "ja": "決着！シッコクノモリ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B464"
+      "0x00D8B464",
+      "0x00F30978"
      ],
      "external_pointer_refs": [
-      "0x00D8B464"
+      "0x00D8B464",
+      "0x00F30978"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2518,16 +2563,19 @@
      "ko": "두 명의 료",
      "ja": "２人のリョウ",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B3EC"
+      "0x00D8B3EC",
+      "0x00F309A0"
      ],
      "external_pointer_refs": [
-      "0x00D8B3EC"
+      "0x00D8B3EC",
+      "0x00F309A0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2539,20 +2587,23 @@
      "ko": "싸움 뒤편에서",
      "ja": "戦いのうしろで",
      "kind": "import-csv",
-     "pointer_ref_count": 3,
-     "external_pointer_ref_count": 3,
+     "pointer_ref_count": 4,
+     "external_pointer_ref_count": 4,
      "pointer_refs": [
       "0x00D8B338",
       "0x00D8B374",
-      "0x00D8B3B0"
+      "0x00D8B3B0",
+      "0x00F309C0"
      ],
      "external_pointer_refs": [
       "0x00D8B338",
       "0x00D8B374",
-      "0x00D8B3B0"
+      "0x00D8B3B0",
+      "0x00F309C0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 3
+      "part1_or_table": 3,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2564,20 +2615,23 @@
      "ko": "거대 날개",
      "ja": "おおいなるつばさ！",
      "kind": "import-csv",
-     "pointer_ref_count": 3,
-     "external_pointer_ref_count": 3,
+     "pointer_ref_count": 4,
+     "external_pointer_ref_count": 4,
      "pointer_refs": [
       "0x00D8B284",
       "0x00D8B2C0",
-      "0x00D8B2FC"
+      "0x00D8B2FC",
+      "0x00F309F0"
      ],
      "external_pointer_refs": [
       "0x00D8B284",
       "0x00D8B2C0",
-      "0x00D8B2FC"
+      "0x00D8B2FC",
+      "0x00F309F0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 3
+      "part1_or_table": 3,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2589,20 +2643,23 @@
      "ko": "해전",
      "ja": "海戦！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 3,
-     "external_pointer_ref_count": 3,
+     "pointer_ref_count": 4,
+     "external_pointer_ref_count": 4,
      "pointer_refs": [
       "0x00D8B1D0",
       "0x00D8B20C",
-      "0x00D8B248"
+      "0x00D8B248",
+      "0x00F30A10"
      ],
      "external_pointer_refs": [
       "0x00D8B1D0",
       "0x00D8B20C",
-      "0x00D8B248"
+      "0x00D8B248",
+      "0x00F30A10"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 3
+      "part1_or_table": 3,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2614,20 +2671,23 @@
      "ko": "캡틴 모프",
      "ja": "キャプテン・モップ！",
      "kind": "import-csv",
-     "pointer_ref_count": 3,
-     "external_pointer_ref_count": 3,
+     "pointer_ref_count": 4,
+     "external_pointer_ref_count": 4,
      "pointer_refs": [
       "0x00D8B11C",
       "0x00D8B158",
-      "0x00D8B194"
+      "0x00D8B194",
+      "0x00F30A20"
      ],
      "external_pointer_refs": [
       "0x00D8B11C",
       "0x00D8B158",
-      "0x00D8B194"
+      "0x00D8B194",
+      "0x00F30A20"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 3
+      "part1_or_table": 3,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2639,16 +2699,19 @@
      "ko": "아스카 목표",
      "ja": "アスカのねらい！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B0E0"
+      "0x00D8B0E0",
+      "0x00F30A40"
      ],
      "external_pointer_refs": [
-      "0x00D8B0E0"
+      "0x00D8B0E0",
+      "0x00F30A40"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2660,16 +2723,19 @@
      "ko": "도미노 능력",
      "ja": "ドミノの能力！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B0A4"
+      "0x00D8B0A4",
+      "0x00F30A68"
      ],
      "external_pointer_refs": [
-      "0x00D8B0A4"
+      "0x00D8B0A4",
+      "0x00F30A68"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2681,16 +2747,19 @@
      "ko": "분단 작전",
      "ja": "分断作戦！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B068"
+      "0x00D8B068",
+      "0x00F30A90"
      ],
      "external_pointer_refs": [
-      "0x00D8B068"
+      "0x00D8B068",
+      "0x00F30A90"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2702,16 +2771,19 @@
      "ko": "키쿠치요 실수",
      "ja": "キクチヨのまちがい？",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B02C"
+      "0x00D8B02C",
+      "0x00F30AB0"
      ],
      "external_pointer_refs": [
-      "0x00D8B02C"
+      "0x00D8B02C",
+      "0x00F30AB0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2723,16 +2795,19 @@
      "ko": "최강 키쿠치요부대",
      "ja": "最強！キクチヨ部隊",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AFF0"
+      "0x00D8AFF0",
+      "0x00F30AE0"
      ],
      "external_pointer_refs": [
-      "0x00D8AFF0"
+      "0x00D8AFF0",
+      "0x00F30AE0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2744,16 +2819,19 @@
      "ko": "키쿠치요 등장",
      "ja": "キクチヨけんざん！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AFB4"
+      "0x00D8AFB4",
+      "0x00F30B20"
      ],
      "external_pointer_refs": [
-      "0x00D8AFB4"
+      "0x00D8AFB4",
+      "0x00F30B20"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2765,16 +2843,19 @@
      "ko": "특수부대 도미노",
      "ja": "特殊部隊長ドミノ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AF78"
+      "0x00D8AF78",
+      "0x00F30B50"
      ],
      "external_pointer_refs": [
-      "0x00D8AF78"
+      "0x00D8AF78",
+      "0x00F30B50"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2786,16 +2867,19 @@
      "ko": "세명 과거",
      "ja": "３人の過去",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AF3C"
+      "0x00D8AF3C",
+      "0x00F30B88"
      ],
      "external_pointer_refs": [
-      "0x00D8AF3C"
+      "0x00D8AF3C",
+      "0x00F30B88"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2807,16 +2891,19 @@
      "ko": "설원 전투",
      "ja": "雪の中の戦い！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AF00"
+      "0x00D8AF00",
+      "0x00F30BA8"
      ],
      "external_pointer_refs": [
-      "0x00D8AF00"
+      "0x00D8AF00",
+      "0x00F30BA8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2828,16 +2915,19 @@
      "ko": "스나이퍼",
      "ja": "スナイパー！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AEC4"
+      "0x00D8AEC4",
+      "0x00F30BC8"
      ],
      "external_pointer_refs": [
-      "0x00D8AEC4"
+      "0x00D8AEC4",
+      "0x00F30BC8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2849,16 +2939,19 @@
      "ko": "호이프 해군터보",
      "ja": "ホイップ海軍ターボ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AE4C"
+      "0x00D8AE4C",
+      "0x00F30BE8"
      ],
      "external_pointer_refs": [
-      "0x00D8AE4C"
+      "0x00D8AE4C",
+      "0x00F30BE8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2870,16 +2963,19 @@
      "ko": "호이프 해군",
      "ja": "ホイップ海軍！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AE10"
+      "0x00D8AE10",
+      "0x00F30C20"
      ],
      "external_pointer_refs": [
-      "0x00D8AE10"
+      "0x00D8AE10",
+      "0x00F30C20"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2891,16 +2987,19 @@
      "ko": "맥스 약점",
      "ja": "マックスの弱点！？",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8ADD4"
+      "0x00D8ADD4",
+      "0x00F30C48"
      ],
      "external_pointer_refs": [
-      "0x00D8ADD4"
+      "0x00D8ADD4",
+      "0x00F30C48"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2912,18 +3011,21 @@
      "ko": "맥스 출격",
      "ja": "マックス出撃！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 2,
-     "external_pointer_ref_count": 2,
+     "pointer_ref_count": 3,
+     "external_pointer_ref_count": 3,
      "pointer_refs": [
       "0x00D8AD98",
-      "0x00D8AE88"
+      "0x00D8AE88",
+      "0x00F30C68"
      ],
      "external_pointer_refs": [
       "0x00D8AD98",
-      "0x00D8AE88"
+      "0x00D8AE88",
+      "0x00F30C68"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 2
+      "part1_or_table": 2,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2935,16 +3037,19 @@
      "ko": "하늘 용사",
      "ja": "空の勇者！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AD5C"
+      "0x00D8AD5C",
+      "0x00F30C88"
      ],
      "external_pointer_refs": [
-      "0x00D8AD5C"
+      "0x00D8AD5C",
+      "0x00F30C88"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2956,16 +3061,19 @@
      "ko": "건 파이터",
      "ja": "ガンファイター！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AD20"
+      "0x00D8AD20",
+      "0x00F30CA8"
      ],
      "external_pointer_refs": [
-      "0x00D8AD20"
+      "0x00D8AD20",
+      "0x00F30CA8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2977,16 +3085,19 @@
      "ko": "개전",
      "ja": "開戦！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8ACE4"
+      "0x00D8ACE4",
+      "0x00F30CC8"
      ],
      "external_pointer_refs": [
-      "0x00D8ACE4"
+      "0x00D8ACE4",
+      "0x00F30CC8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -2998,16 +3109,19 @@
      "ko": "과외수업",
      "ja": "課外授業",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8ACA8"
+      "0x00D8ACA8",
+      "0x00F30CD8"
      ],
      "external_pointer_refs": [
-      "0x00D8ACA8"
+      "0x00D8ACA8",
+      "0x00F30CD8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3019,16 +3133,19 @@
      "ko": "결전",
      "ja": "決戦！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AC6C"
+      "0x00D8AC6C",
+      "0x00F30CF8"
      ],
      "external_pointer_refs": [
-      "0x00D8AC6C"
+      "0x00D8AC6C",
+      "0x00F30CF8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3040,16 +3157,19 @@
      "ko": "은빛 세계",
      "ja": "白銀の世界",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AC30"
+      "0x00D8AC30",
+      "0x00F30D08"
      ],
      "external_pointer_refs": [
-      "0x00D8AC30"
+      "0x00D8AC30",
+      "0x00F30D08"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3061,16 +3181,19 @@
      "ko": "바다 너머",
      "ja": "海のむこうに",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8ABF4"
+      "0x00D8ABF4",
+      "0x00F30D28"
      ],
      "external_pointer_refs": [
-      "0x00D8ABF4"
+      "0x00D8ABF4",
+      "0x00F30D28"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3082,16 +3205,19 @@
      "ko": "도그 파이트",
      "ja": "ドッグファイト！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8ABB8"
+      "0x00D8ABB8",
+      "0x00F30D48"
      ],
      "external_pointer_refs": [
-      "0x00D8ABB8"
+      "0x00D8ABB8",
+      "0x00F30D48"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3103,16 +3229,19 @@
      "ko": "대공 제압",
      "ja": "大空を制せよ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AB7C"
+      "0x00D8AB7C",
+      "0x00F30D70"
      ],
      "external_pointer_refs": [
-      "0x00D8AB7C"
+      "0x00D8AB7C",
+      "0x00F30D70"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3124,16 +3253,19 @@
      "ko": "하늘의 적",
      "ja": "空から来るものは・・・",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AB40"
+      "0x00D8AB40",
+      "0x00F30D90"
      ],
      "external_pointer_refs": [
-      "0x00D8AB40"
+      "0x00D8AB40",
+      "0x00F30D90"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3145,16 +3277,19 @@
      "ko": "드래곤 플라이",
      "ja": "ドラゴンフライ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AB04"
+      "0x00D8AB04",
+      "0x00F30DB0"
      ],
      "external_pointer_refs": [
-      "0x00D8AB04"
+      "0x00D8AB04",
+      "0x00F30DB0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3166,16 +3301,19 @@
      "ko": "최강 중전차",
      "ja": "地上最強！重戦車！！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AAC8"
+      "0x00D8AAC8",
+      "0x00F30DE0"
      ],
      "external_pointer_refs": [
-      "0x00D8AAC8"
+      "0x00D8AAC8",
+      "0x00F30DE0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3187,16 +3325,19 @@
      "ko": "적 부대 격파",
      "ja": "敵部隊をやっつけろ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AA8C"
+      "0x00D8AA8C",
+      "0x00F30E08"
      ],
      "external_pointer_refs": [
-      "0x00D8AA8C"
+      "0x00D8AA8C",
+      "0x00F30E08"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3208,16 +3349,19 @@
      "ko": "고물 전차 출격",
      "ja": "戦え　ポンコツ戦車！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AA50"
+      "0x00D8AA50",
+      "0x00F30E30"
      ],
      "external_pointer_refs": [
-      "0x00D8AA50"
+      "0x00D8AA50",
+      "0x00F30E30"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3229,16 +3373,19 @@
      "ko": "전선 기지 확보",
      "ja": "前線基地を確保せよ！",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8AA14"
+      "0x00D8AA14",
+      "0x00F30E60"
      ],
      "external_pointer_refs": [
-      "0x00D8AA14"
+      "0x00D8AA14",
+      "0x00F30E60"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3250,16 +3397,19 @@
      "ko": "첫 전투",
      "ja": "序盤戦！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A9D8"
+      "0x00D8A9D8",
+      "0x00F30E90"
      ],
      "external_pointer_refs": [
-      "0x00D8A9D8"
+      "0x00D8A9D8",
+      "0x00F30E90"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3271,16 +3421,19 @@
      "ko": "전투 개시",
      "ja": "戦闘開始！",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A99C"
+      "0x00D8A99C",
+      "0x00F30EA8"
      ],
      "external_pointer_refs": [
-      "0x00D8A99C"
+      "0x00D8A99C",
+      "0x00F30EA8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3292,16 +3445,19 @@
      "ko": "라스트 미션",
      "ja": "ラストミッション",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A960"
+      "0x00D8A960",
+      "0x00F30EC8"
      ],
      "external_pointer_refs": [
-      "0x00D8A960"
+      "0x00D8A960",
+      "0x00F30EC8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3313,16 +3469,19 @@
      "ko": "파라파라 제도",
      "ja": "パラパラショトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A924"
+      "0x00D8A924",
+      "0x00F30EF0"
      ],
      "external_pointer_refs": [
-      "0x00D8A924"
+      "0x00D8A924",
+      "0x00F30EF0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3334,16 +3493,19 @@
      "ko": "비경의 숲",
      "ja": "ヒキョウノモリ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A8E8"
+      "0x00D8A8E8",
+      "0x00F30F20"
      ],
      "external_pointer_refs": [
-      "0x00D8A8E8"
+      "0x00D8A8E8",
+      "0x00F30F20"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3355,16 +3517,19 @@
      "ko": "주사위 랜드",
      "ja": "サイノメランド",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A8AC"
+      "0x00D8A8AC",
+      "0x00F30F40"
      ],
      "external_pointer_refs": [
-      "0x00D8A8AC"
+      "0x00D8A8AC",
+      "0x00F30F40"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3376,16 +3541,19 @@
      "ko": "뻐끔 랜드",
      "ja": "パックンランド",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A870"
+      "0x00D8A870",
+      "0x00F30F68"
      ],
      "external_pointer_refs": [
-      "0x00D8A870"
+      "0x00D8A870",
+      "0x00F30F68"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3397,16 +3565,19 @@
      "ko": "고양이의 낙원",
      "ja": "ネコノラクエン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A834"
+      "0x00D8A834",
+      "0x00F30F88"
      ],
      "external_pointer_refs": [
-      "0x00D8A834"
+      "0x00D8A834",
+      "0x00F30F88"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3418,16 +3589,19 @@
      "ko": "시가 산맥",
      "ja": "ハマキサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A7F8"
+      "0x00D8A7F8",
+      "0x00F30FB8"
      ],
      "external_pointer_refs": [
-      "0x00D8A7F8"
+      "0x00D8A7F8",
+      "0x00F30FB8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3439,16 +3613,19 @@
      "ko": "더블 서킷",
      "ja": "ダブルサーキット",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A7BC"
+      "0x00D8A7BC",
+      "0x00F30FD8"
      ],
      "external_pointer_refs": [
-      "0x00D8A7BC"
+      "0x00D8A7BC",
+      "0x00F30FD8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3460,16 +3637,19 @@
      "ko": "쌍떡잎 곶",
      "ja": "フタバミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A780"
+      "0x00D8A780",
+      "0x00F30FF8"
      ],
      "external_pointer_refs": [
-      "0x00D8A780"
+      "0x00D8A780",
+      "0x00F30FF8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3481,16 +3661,19 @@
      "ko": "마운틴 리버",
      "ja": "マウンテンリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A744"
+      "0x00D8A744",
+      "0x00F31018"
      ],
      "external_pointer_refs": [
-      "0x00D8A744"
+      "0x00D8A744",
+      "0x00F31018"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3502,11 +3685,17 @@
      "ko": "지혜의 고리 섬",
      "ja": "チエノワジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 0,
-     "external_pointer_ref_count": 0,
-     "pointer_refs": [],
-     "external_pointer_refs": [],
-     "pointer_ref_buckets": {},
+     "pointer_ref_count": 1,
+     "external_pointer_ref_count": 1,
+     "pointer_refs": [
+      "0x00F31040"
+     ],
+     "external_pointer_refs": [
+      "0x00F31040"
+     ],
+     "pointer_ref_buckets": {
+      "0xF30000": 1
+     },
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -3517,16 +3706,19 @@
      "ko": "알갱이 섬",
      "ja": "コツブジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A6CC"
+      "0x00D8A6CC",
+      "0x00F31070"
      ],
      "external_pointer_refs": [
-      "0x00D8A6CC"
+      "0x00D8A6CC",
+      "0x00F31070"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3538,16 +3730,19 @@
      "ko": "가위바위보 곶",
      "ja": "グーチョキミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A690"
+      "0x00D8A690",
+      "0x00F31090"
      ],
      "external_pointer_refs": [
-      "0x00D8A690"
+      "0x00D8A690",
+      "0x00F31090"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3559,16 +3754,19 @@
      "ko": "주먹 해협",
      "ja": "コブシカイキョウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A654"
+      "0x00D8A654",
+      "0x00F310C0"
      ],
      "external_pointer_refs": [
-      "0x00D8A654"
+      "0x00D8A654",
+      "0x00F310C0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3580,16 +3778,19 @@
      "ko": "다리 긴 섬",
      "ja": "アシナガジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A618"
+      "0x00D8A618",
+      "0x00F310E0"
      ],
      "external_pointer_refs": [
-      "0x00D8A618"
+      "0x00D8A618",
+      "0x00F310E0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3601,16 +3802,19 @@
      "ko": "삭스 섬",
      "ja": "ソックストウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A5DC"
+      "0x00D8A5DC",
+      "0x00F31100"
      ],
      "external_pointer_refs": [
-      "0x00D8A5DC"
+      "0x00D8A5DC",
+      "0x00F31100"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3622,16 +3826,19 @@
      "ko": "풋 하버",
      "ja": "フットハーバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A5A0"
+      "0x00D8A5A0",
+      "0x00F31118"
      ],
      "external_pointer_refs": [
-      "0x00D8A5A0"
+      "0x00D8A5A0",
+      "0x00F31118"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3643,16 +3850,19 @@
      "ko": "구불구불 섬",
      "ja": "クネクネジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A564"
+      "0x00D8A564",
+      "0x00F31130"
      ],
      "external_pointer_refs": [
-      "0x00D8A564"
+      "0x00D8A564",
+      "0x00F31130"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3664,16 +3874,19 @@
      "ko": "피노 섬",
      "ja": "ピーノシマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A528"
+      "0x00D8A528",
+      "0x00F31158"
      ],
      "external_pointer_refs": [
-      "0x00D8A528"
+      "0x00D8A528",
+      "0x00F31158"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3685,19 +3898,24 @@
      "ko": "스패너 섬",
      "ja": "スパナットウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A4EC"
+      "0x00D8A4EC",
+      "0x00F31170"
      ],
      "external_pointer_refs": [
-      "0x00D8A4EC"
+      "0x00D8A4EC",
+      "0x00F31170"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
-     "second_level_ref_count": 0,
-     "second_level_refs": []
+     "second_level_ref_count": 1,
+     "second_level_refs": [
+      "0x008E9067"
+     ]
     },
     {
      "address": "0x00B82178",
@@ -3706,16 +3924,19 @@
      "ko": "흐물흐물 섬",
      "ja": "デロリントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A4B0"
+      "0x00D8A4B0",
+      "0x00F31190"
      ],
      "external_pointer_refs": [
-      "0x00D8A4B0"
+      "0x00D8A4B0",
+      "0x00F31190"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3727,16 +3948,19 @@
      "ko": "남쪽의 낙원",
      "ja": "ミナミノラクエン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A474"
+      "0x00D8A474",
+      "0x00F311B8"
      ],
      "external_pointer_refs": [
-      "0x00D8A474"
+      "0x00D8A474",
+      "0x00F311B8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3748,16 +3972,19 @@
      "ko": "달마 산맥",
      "ja": "ダルマサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A438"
+      "0x00D8A438",
+      "0x00F311E0"
      ],
      "external_pointer_refs": [
-      "0x00D8A438"
+      "0x00D8A438",
+      "0x00F311E0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3769,16 +3996,19 @@
      "ko": "데굴데굴 철도",
      "ja": "コロコロテツドウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A3FC"
+      "0x00D8A3FC",
+      "0x00F31200"
      ],
      "external_pointer_refs": [
-      "0x00D8A3FC"
+      "0x00D8A3FC",
+      "0x00F31200"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3790,16 +4020,19 @@
      "ko": "거친 섬",
      "ja": "アラクレジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A3C0"
+      "0x00D8A3C0",
+      "0x00F31230"
      ],
      "external_pointer_refs": [
-      "0x00D8A3C0"
+      "0x00D8A3C0",
+      "0x00F31230"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3811,16 +4044,19 @@
      "ko": "엑스 섬",
      "ja": "エックストウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A384"
+      "0x00D8A384",
+      "0x00F31248"
      ],
      "external_pointer_refs": [
-      "0x00D8A384"
+      "0x00D8A384",
+      "0x00F31248"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3832,16 +4068,19 @@
      "ko": "비틀비틀 강",
      "ja": "ヨレヨレガワ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A348"
+      "0x00D8A348",
+      "0x00F31260"
      ],
      "external_pointer_refs": [
-      "0x00D8A348"
+      "0x00D8A348",
+      "0x00F31260"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3853,16 +4092,19 @@
      "ko": "달마 반도",
      "ja": "ダルマハントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A30C"
+      "0x00D8A30C",
+      "0x00F31288"
      ],
      "external_pointer_refs": [
-      "0x00D8A30C"
+      "0x00D8A30C",
+      "0x00F31288"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3874,16 +4116,19 @@
      "ko": "체인 운하",
      "ja": "チェーンウンガ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A2D0"
+      "0x00D8A2D0",
+      "0x00F312A8"
      ],
      "external_pointer_refs": [
-      "0x00D8A2D0"
+      "0x00D8A2D0",
+      "0x00F312A8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3895,16 +4140,19 @@
      "ko": "지렁이 제도",
      "ja": "ミミズショトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A294"
+      "0x00D8A294",
+      "0x00F312C8"
      ],
      "external_pointer_refs": [
-      "0x00D8A294"
+      "0x00D8A294",
+      "0x00F312C8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3916,16 +4164,19 @@
      "ko": "술병 곶",
      "ja": "トックリミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A258"
+      "0x00D8A258",
+      "0x00F312F0"
      ],
      "external_pointer_refs": [
-      "0x00D8A258"
+      "0x00D8A258",
+      "0x00F312F0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3937,16 +4188,19 @@
      "ko": "메이즈 리버",
      "ja": "メイズリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A21C"
+      "0x00D8A21C",
+      "0x00F31308"
      ],
      "external_pointer_refs": [
-      "0x00D8A21C"
+      "0x00D8A21C",
+      "0x00F31308"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3958,16 +4212,19 @@
      "ko": "워터 링",
      "ja": "ウォーターリング",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A1E0"
+      "0x00D8A1E0",
+      "0x00F31330"
      ],
      "external_pointer_refs": [
-      "0x00D8A1E0"
+      "0x00D8A1E0",
+      "0x00F31330"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -3979,16 +4236,19 @@
      "ko": "경단 섬",
      "ja": "オダンゴトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A1A4"
+      "0x00D8A1A4",
+      "0x00F31348"
      ],
      "external_pointer_refs": [
-      "0x00D8A1A4"
+      "0x00D8A1A4",
+      "0x00F31348"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4000,16 +4260,19 @@
      "ko": "플러스 리버",
      "ja": "プラスリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A168"
+      "0x00D8A168",
+      "0x00F31360"
      ],
      "external_pointer_refs": [
-      "0x00D8A168"
+      "0x00D8A168",
+      "0x00F31360"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4021,16 +4284,19 @@
      "ko": "빅 크로스",
      "ja": "ビッグクロス",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A12C"
+      "0x00D8A12C",
+      "0x00F31388"
      ],
      "external_pointer_refs": [
-      "0x00D8A12C"
+      "0x00D8A12C",
+      "0x00F31388"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4042,16 +4308,19 @@
      "ko": "피넛 섬",
      "ja": "ピーナツジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A0F0"
+      "0x00D8A0F0",
+      "0x00F313A8"
      ],
      "external_pointer_refs": [
-      "0x00D8A0F0"
+      "0x00D8A0F0",
+      "0x00F313A8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4063,16 +4332,19 @@
      "ko": "둘러싸인 섬",
      "ja": "カコマレトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A0B4"
+      "0x00D8A0B4",
+      "0x00F313C0"
      ],
      "external_pointer_refs": [
-      "0x00D8A0B4"
+      "0x00D8A0B4",
+      "0x00F313C0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4084,16 +4356,19 @@
      "ko": "워터 랜드",
      "ja": "ウォーターランド",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A078"
+      "0x00D8A078",
+      "0x00F313E8"
      ],
      "external_pointer_refs": [
-      "0x00D8A078"
+      "0x00D8A078",
+      "0x00F313E8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4105,16 +4380,19 @@
      "ko": "로켓 곶",
      "ja": "ロケットミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A03C"
+      "0x00D8A03C",
+      "0x00F31408"
      ],
      "external_pointer_refs": [
-      "0x00D8A03C"
+      "0x00D8A03C",
+      "0x00F31408"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4126,16 +4404,19 @@
      "ko": "스크랩 랜드",
      "ja": "スクラップランド",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8A000"
+      "0x00D8A000",
+      "0x00F31420"
      ],
      "external_pointer_refs": [
-      "0x00D8A000"
+      "0x00D8A000",
+      "0x00F31420"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4147,16 +4428,19 @@
      "ko": "원더 블루",
      "ja": "ワンダーブルー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89FC4"
+      "0x00D89FC4",
+      "0x00F31448"
      ],
      "external_pointer_refs": [
-      "0x00D89FC4"
+      "0x00D89FC4",
+      "0x00F31448"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4168,16 +4452,19 @@
      "ko": "고드름 반도",
      "ja": "ツララハントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89F88"
+      "0x00D89F88",
+      "0x00F31468"
      ],
      "external_pointer_refs": [
-      "0x00D89F88"
+      "0x00D89F88",
+      "0x00F31468"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4189,16 +4476,19 @@
      "ko": "거대한 흐름",
      "ja": "オオイナルナガレ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89F4C"
+      "0x00D89F4C",
+      "0x00F31490"
      ],
      "external_pointer_refs": [
-      "0x00D89F4C"
+      "0x00D89F4C",
+      "0x00F31490"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4210,16 +4500,19 @@
      "ko": "아틀라스 리버",
      "ja": "アトラスリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89F10"
+      "0x00D89F10",
+      "0x00F314B8"
      ],
      "external_pointer_refs": [
-      "0x00D89F10"
+      "0x00D89F10",
+      "0x00F314B8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4231,16 +4524,19 @@
      "ko": "외눈 운하",
      "ja": "ヒトツメウンガ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89ED4"
+      "0x00D89ED4",
+      "0x00F314E8"
      ],
      "external_pointer_refs": [
-      "0x00D89ED4"
+      "0x00D89ED4",
+      "0x00F314E8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4252,16 +4548,19 @@
      "ko": "텐구의 코",
      "ja": "テングノハナ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89E98"
+      "0x00D89E98",
+      "0x00F31508"
      ],
      "external_pointer_refs": [
-      "0x00D89E98"
+      "0x00D89E98",
+      "0x00F31508"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4273,16 +4572,19 @@
      "ko": "싹둑 곶",
      "ja": "チョッキンミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89E5C"
+      "0x00D89E5C",
+      "0x00F31528"
      ],
      "external_pointer_refs": [
-      "0x00D89E5C"
+      "0x00D89E5C",
+      "0x00F31528"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4294,16 +4596,19 @@
      "ko": "악마의 포구",
      "ja": "アクマノイリエ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89E20"
+      "0x00D89E20",
+      "0x00F31540"
      ],
      "external_pointer_refs": [
-      "0x00D89E20"
+      "0x00D89E20",
+      "0x00F31540"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4315,16 +4620,19 @@
      "ko": "글라스 고원",
      "ja": "グラスコウゲン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89DE4"
+      "0x00D89DE4",
+      "0x00F31568"
      ],
      "external_pointer_refs": [
-      "0x00D89DE4"
+      "0x00D89DE4",
+      "0x00F31568"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4336,16 +4644,19 @@
      "ko": "뿔뿔이 포구",
      "ja": "バラバライリエ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89DA8"
+      "0x00D89DA8",
+      "0x00F31590"
      ],
      "external_pointer_refs": [
-      "0x00D89DA8"
+      "0x00D89DA8",
+      "0x00F31590"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4357,16 +4668,19 @@
      "ko": "메이즈 산맥",
      "ja": "メイズサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89D6C"
+      "0x00D89D6C",
+      "0x00F315B8"
      ],
      "external_pointer_refs": [
-      "0x00D89D6C"
+      "0x00D89D6C",
+      "0x00F315B8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4378,16 +4692,19 @@
      "ko": "그랜드 링",
      "ja": "グランドリング",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89D30"
+      "0x00D89D30",
+      "0x00F315E0"
      ],
      "external_pointer_refs": [
-      "0x00D89D30"
+      "0x00D89D30",
+      "0x00F315E0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4399,16 +4716,19 @@
      "ko": "크로스 운하",
      "ja": "クロスウンガ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89CF4"
+      "0x00D89CF4",
+      "0x00F31600"
      ],
      "external_pointer_refs": [
-      "0x00D89CF4"
+      "0x00D89CF4",
+      "0x00F31600"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4420,16 +4740,19 @@
      "ko": "빅토리 라인",
      "ja": "ビクトリーライン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89CB8"
+      "0x00D89CB8",
+      "0x00F31628"
      ],
      "external_pointer_refs": [
-      "0x00D89CB8"
+      "0x00D89CB8",
+      "0x00F31628"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4441,16 +4764,19 @@
      "ko": "리버 시티",
      "ja": "リバーシティ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89C7C"
+      "0x00D89C7C",
+      "0x00F31650"
      ],
      "external_pointer_refs": [
-      "0x00D89C7C"
+      "0x00D89C7C",
+      "0x00F31650"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4462,16 +4788,19 @@
      "ko": "트라이 고원",
      "ja": "トライコウゲン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89C40"
+      "0x00D89C40",
+      "0x00F31670"
      ],
      "external_pointer_refs": [
-      "0x00D89C40"
+      "0x00D89C40",
+      "0x00F31670"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4483,16 +4812,19 @@
      "ko": "홀 포구",
      "ja": "ホールイリエ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89C04"
+      "0x00D89C04",
+      "0x00F31698"
      ],
      "external_pointer_refs": [
-      "0x00D89C04"
+      "0x00D89C04",
+      "0x00F31698"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4504,16 +4836,19 @@
      "ko": "클로버 섬",
      "ja": "クローバートウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89BC8"
+      "0x00D89BC8",
+      "0x00F316B0"
      ],
      "external_pointer_refs": [
-      "0x00D89BC8"
+      "0x00D89BC8",
+      "0x00F316B0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4525,16 +4860,19 @@
      "ko": "점점 제도",
      "ja": "テンテンショトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89B8C"
+      "0x00D89B8C",
+      "0x00F316D0"
      ],
      "external_pointer_refs": [
-      "0x00D89B8C"
+      "0x00D89B8C",
+      "0x00F316D0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4546,16 +4884,19 @@
      "ko": "주먹밥 반도",
      "ja": "オムスビハントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89B50"
+      "0x00D89B50",
+      "0x00F316F0"
      ],
      "external_pointer_refs": [
-      "0x00D89B50"
+      "0x00D89B50",
+      "0x00F316F0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4567,16 +4908,19 @@
      "ko": "배틀 큐브",
      "ja": "バトルキューブ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89B14"
+      "0x00D89B14",
+      "0x00F31718"
      ],
      "external_pointer_refs": [
-      "0x00D89B14"
+      "0x00D89B14",
+      "0x00F31718"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4588,16 +4932,19 @@
      "ko": "배고픈 숲",
      "ja": "ハラペコノモリ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89AD8"
+      "0x00D89AD8",
+      "0x00F31738"
      ],
      "external_pointer_refs": [
-      "0x00D89AD8"
+      "0x00D89AD8",
+      "0x00F31738"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4609,16 +4956,19 @@
      "ko": "메탈 파티",
      "ja": "メタルパーティー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89A9C"
+      "0x00D89A9C",
+      "0x00F31758"
      ],
      "external_pointer_refs": [
-      "0x00D89A9C"
+      "0x00D89A9C",
+      "0x00F31758"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4630,16 +4980,19 @@
      "ko": "블루 홀",
      "ja": "ブルーホール",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89A60"
+      "0x00D89A60",
+      "0x00F31778"
      ],
      "external_pointer_refs": [
-      "0x00D89A60"
+      "0x00D89A60",
+      "0x00F31778"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4651,16 +5004,19 @@
      "ko": "쪽지 곶",
      "ja": "タンザクミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89A24"
+      "0x00D89A24",
+      "0x00F31790"
      ],
      "external_pointer_refs": [
-      "0x00D89A24"
+      "0x00D89A24",
+      "0x00F31790"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4672,16 +5028,19 @@
      "ko": "델타 고원",
      "ja": "デルタコウゲン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D899E8"
+      "0x00D899E8",
+      "0x00F317A8"
      ],
      "external_pointer_refs": [
-      "0x00D899E8"
+      "0x00D899E8",
+      "0x00F317A8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4693,16 +5052,19 @@
      "ko": "만남의 숲",
      "ja": "デアイノモリ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D899AC"
+      "0x00D899AC",
+      "0x00F317C8"
      ],
      "external_pointer_refs": [
-      "0x00D899AC"
+      "0x00D899AC",
+      "0x00F317C8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4714,11 +5076,17 @@
      "ko": "손가락 끝 리버",
      "ja": "ユビサキリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 0,
-     "external_pointer_ref_count": 0,
-     "pointer_refs": [],
-     "external_pointer_refs": [],
-     "pointer_ref_buckets": {},
+     "pointer_ref_count": 1,
+     "external_pointer_ref_count": 1,
+     "pointer_refs": [
+      "0x00F317E8"
+     ],
+     "external_pointer_refs": [
+      "0x00F317E8"
+     ],
+     "pointer_ref_buckets": {
+      "0xF30000": 1
+     },
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -4729,16 +5097,19 @@
      "ko": "지그재그 로드",
      "ja": "ジグザグロード",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89934"
+      "0x00D89934",
+      "0x00F31818"
      ],
      "external_pointer_refs": [
-      "0x00D89934"
+      "0x00D89934",
+      "0x00F31818"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4750,16 +5121,19 @@
      "ko": "대도시 섬",
      "ja": "ダイトカイジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D898F8"
+      "0x00D898F8",
+      "0x00F31848"
      ],
      "external_pointer_refs": [
-      "0x00D898F8"
+      "0x00D898F8",
+      "0x00F31848"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4771,16 +5145,19 @@
      "ko": "후타마 리버",
      "ja": "フタマリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D898BC"
+      "0x00D898BC",
+      "0x00F31868"
      ],
      "external_pointer_refs": [
-      "0x00D898BC"
+      "0x00D898BC",
+      "0x00F31868"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4792,16 +5169,19 @@
      "ko": "렌치 섬",
      "ja": "レンチトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89880"
+      "0x00D89880",
+      "0x00F31890"
      ],
      "external_pointer_refs": [
-      "0x00D89880"
+      "0x00D89880",
+      "0x00F31890"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4813,11 +5193,17 @@
      "ko": "반달가슴곰 운하",
      "ja": "ツキノワウンガ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 0,
-     "external_pointer_ref_count": 0,
-     "pointer_refs": [],
-     "external_pointer_refs": [],
-     "pointer_ref_buckets": {},
+     "pointer_ref_count": 1,
+     "external_pointer_ref_count": 1,
+     "pointer_refs": [
+      "0x00F318A8"
+     ],
+     "external_pointer_refs": [
+      "0x00F318A8"
+     ],
+     "pointer_ref_buckets": {
+      "0xF30000": 1
+     },
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -4828,16 +5214,19 @@
      "ko": "라인 고원",
      "ja": "ラインコウゲン",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89808"
+      "0x00D89808",
+      "0x00F318E0"
      ],
      "external_pointer_refs": [
-      "0x00D89808"
+      "0x00D89808",
+      "0x00F318E0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4849,16 +5238,19 @@
      "ko": "남겨진 섬",
      "ja": "ノコサレジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D897CC"
+      "0x00D897CC",
+      "0x00F31900"
      ],
      "external_pointer_refs": [
-      "0x00D897CC"
+      "0x00D897CC",
+      "0x00F31900"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4870,16 +5262,19 @@
      "ko": "숲의 오솔길",
      "ja": "モリノホソミチ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89790"
+      "0x00D89790",
+      "0x00F31920"
      ],
      "external_pointer_refs": [
-      "0x00D89790"
+      "0x00D89790",
+      "0x00F31920"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4891,16 +5286,19 @@
      "ko": "한 쌍 산맥",
      "ja": "ツガイサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89754"
+      "0x00D89754",
+      "0x00F31948"
      ],
      "external_pointer_refs": [
-      "0x00D89754"
+      "0x00D89754",
+      "0x00F31948"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4912,16 +5310,19 @@
      "ko": "바둑판 제도",
      "ja": "ゴバンショトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89718"
+      "0x00D89718",
+      "0x00F31968"
      ],
      "external_pointer_refs": [
-      "0x00D89718"
+      "0x00D89718",
+      "0x00F31968"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4933,16 +5334,19 @@
      "ko": "부리 반도",
      "ja": "クチバシハントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D896DC"
+      "0x00D896DC",
+      "0x00F31990"
      ],
      "external_pointer_refs": [
-      "0x00D896DC"
+      "0x00D896DC",
+      "0x00F31990"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4954,16 +5358,19 @@
      "ko": "모자 곶",
      "ja": "ハットミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D896A0"
+      "0x00D896A0",
+      "0x00F319B0"
      ],
      "external_pointer_refs": [
-      "0x00D896A0"
+      "0x00D896A0",
+      "0x00F319B0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4975,16 +5382,19 @@
      "ko": "자이언트 댐",
      "ja": "ジャイアントダム",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89664"
+      "0x00D89664",
+      "0x00F319C8"
      ],
      "external_pointer_refs": [
-      "0x00D89664"
+      "0x00D89664",
+      "0x00F319C8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -4996,16 +5406,19 @@
      "ko": "안경 대교",
      "ja": "メガネオオハシ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89628"
+      "0x00D89628",
+      "0x00F319F0"
      ],
      "external_pointer_refs": [
-      "0x00D89628"
+      "0x00D89628",
+      "0x00F319F0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5017,16 +5430,19 @@
      "ko": "패밀리 곶",
      "ja": "ファミリーミサキ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D895EC"
+      "0x00D895EC",
+      "0x00F31A10"
      ],
      "external_pointer_refs": [
-      "0x00D895EC"
+      "0x00D895EC",
+      "0x00F31A10"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5038,16 +5454,19 @@
      "ko": "사다리 해협",
      "ja": "ハシゴカイキョウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D895B0"
+      "0x00D895B0",
+      "0x00F31A30"
      ],
      "external_pointer_refs": [
-      "0x00D895B0"
+      "0x00D895B0",
+      "0x00F31A30"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5059,16 +5478,19 @@
      "ko": "콩알 제도",
      "ja": "マメツブショトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89574"
+      "0x00D89574",
+      "0x00F31A58"
      ],
      "external_pointer_refs": [
-      "0x00D89574"
+      "0x00D89574",
+      "0x00F31A58"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5080,16 +5502,19 @@
      "ko": "아미타 대교",
      "ja": "アミダオオハシ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89538"
+      "0x00D89538",
+      "0x00F31A78"
      ],
      "external_pointer_refs": [
-      "0x00D89538"
+      "0x00D89538",
+      "0x00F31A78"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5101,16 +5526,19 @@
      "ko": "주름진 고속도로",
      "ja": "ジャバラコウソク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D894FC"
+      "0x00D894FC",
+      "0x00F31AA0"
      ],
      "external_pointer_refs": [
-      "0x00D894FC"
+      "0x00D894FC",
+      "0x00F31AA0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5122,16 +5550,19 @@
      "ko": "제로 섬",
      "ja": "ゼロノトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D894C0"
+      "0x00D894C0",
+      "0x00F31AD8"
      ],
      "external_pointer_refs": [
-      "0x00D894C0"
+      "0x00D894C0",
+      "0x00F31AD8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5143,16 +5574,19 @@
      "ko": "버섯 섬",
      "ja": "キノジトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89484"
+      "0x00D89484",
+      "0x00F31AF0"
      ],
      "external_pointer_refs": [
-      "0x00D89484"
+      "0x00D89484",
+      "0x00F31AF0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5164,16 +5598,19 @@
      "ko": "로드 시티",
      "ja": "ロードシティ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89448"
+      "0x00D89448",
+      "0x00F31B08"
      ],
      "external_pointer_refs": [
-      "0x00D89448"
+      "0x00D89448",
+      "0x00F31B08"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5185,16 +5622,19 @@
      "ko": "외딴 산맥",
      "ja": "ハナレサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8940C"
+      "0x00D8940C",
+      "0x00F31B28"
      ],
      "external_pointer_refs": [
-      "0x00D8940C"
+      "0x00D8940C",
+      "0x00F31B28"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5206,16 +5646,19 @@
      "ko": "불길 대교",
      "ja": "ヒノミチオオハシ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D893D0"
+      "0x00D893D0",
+      "0x00F31B48"
      ],
      "external_pointer_refs": [
-      "0x00D893D0"
+      "0x00D893D0",
+      "0x00F31B48"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5227,16 +5670,19 @@
      "ko": "뒤틀린 샘",
      "ja": "ネジクレノイズミ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89394"
+      "0x00D89394",
+      "0x00F31B68"
      ],
      "external_pointer_refs": [
-      "0x00D89394"
+      "0x00D89394",
+      "0x00F31B68"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5248,16 +5694,19 @@
      "ko": "칠석 섬",
      "ja": "タナバタジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89358"
+      "0x00D89358",
+      "0x00F31B88"
      ],
      "external_pointer_refs": [
-      "0x00D89358"
+      "0x00D89358",
+      "0x00F31B88"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5269,16 +5718,19 @@
      "ko": "비커 리버",
      "ja": "ビーカーリバー",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8931C"
+      "0x00D8931C",
+      "0x00F31BA0"
      ],
      "external_pointer_refs": [
-      "0x00D8931C"
+      "0x00D8931C",
+      "0x00F31BA0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5290,16 +5742,19 @@
      "ko": "토모에 운하",
      "ja": "トモエウンガ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D892E0"
+      "0x00D892E0",
+      "0x00F31BC0"
      ],
      "external_pointer_refs": [
-      "0x00D892E0"
+      "0x00D892E0",
+      "0x00F31BC0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5311,16 +5766,19 @@
      "ko": "마른잎섬",
      "ja": "カレハトウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D892A4"
+      "0x00D892A4",
+      "0x00F31BE8"
      ],
      "external_pointer_refs": [
-      "0x00D892A4"
+      "0x00D892A4",
+      "0x00F31BE8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5332,16 +5790,19 @@
      "ko": "라스트 드림",
      "ja": "ラストドリーム",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89268"
+      "0x00D89268",
+      "0x00F31C08"
      ],
      "external_pointer_refs": [
-      "0x00D89268"
+      "0x00D89268",
+      "0x00F31C08"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5353,16 +5814,19 @@
      "ko": "데빌러 섬",
      "ja": "デビラートウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8922C"
+      "0x00D8922C",
+      "0x00F31C30"
      ],
      "external_pointer_refs": [
-      "0x00D8922C"
+      "0x00D8922C",
+      "0x00F31C30"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5374,16 +5838,19 @@
      "ko": "쌍둥이 섬",
      "ja": "フタゴジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D891F0"
+      "0x00D891F0",
+      "0x00F31C50"
      ],
      "external_pointer_refs": [
-      "0x00D891F0"
+      "0x00D891F0",
+      "0x00F31C50"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5395,16 +5862,19 @@
      "ko": "주사위 섬",
      "ja": "サイコロジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D891B4"
+      "0x00D891B4",
+      "0x00F31C70"
      ],
      "external_pointer_refs": [
-      "0x00D891B4"
+      "0x00D891B4",
+      "0x00F31C70"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5416,16 +5886,19 @@
      "ko": "시가 섬",
      "ja": "ハマキジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89178"
+      "0x00D89178",
+      "0x00F31C90"
      ],
      "external_pointer_refs": [
-      "0x00D89178"
+      "0x00D89178",
+      "0x00F31C90"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5437,11 +5910,17 @@
      "ko": "반달가슴곰 섬",
      "ja": "ツキノワジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 0,
-     "external_pointer_ref_count": 0,
-     "pointer_refs": [],
-     "external_pointer_refs": [],
-     "pointer_ref_buckets": {},
+     "pointer_ref_count": 1,
+     "external_pointer_ref_count": 1,
+     "pointer_refs": [
+      "0x00F31CA8"
+     ],
+     "external_pointer_refs": [
+      "0x00F31CA8"
+     ],
+     "pointer_ref_buckets": {
+      "0xF30000": 1
+     },
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -5452,16 +5931,19 @@
      "ko": "노아 화산섬",
      "ja": "ノアカザントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89100"
+      "0x00D89100",
+      "0x00F31CD8"
      ],
      "external_pointer_refs": [
-      "0x00D89100"
+      "0x00D89100",
+      "0x00F31CD8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5473,16 +5955,19 @@
      "ko": "치리지리 강",
      "ja": "チリヂリガワ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D890C4"
+      "0x00D890C4",
+      "0x00F31D00"
      ],
      "external_pointer_refs": [
-      "0x00D890C4"
+      "0x00D890C4",
+      "0x00F31D00"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5494,16 +5979,19 @@
      "ko": "아라라 산맥",
      "ja": "アララサンミャク",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89088"
+      "0x00D89088",
+      "0x00F31D28"
      ],
      "external_pointer_refs": [
-      "0x00D89088"
+      "0x00D89088",
+      "0x00F31D28"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5515,16 +6003,19 @@
      "ko": "표 섬",
      "ja": "ペケジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8904C"
+      "0x00D8904C",
+      "0x00F31D50"
      ],
      "external_pointer_refs": [
-      "0x00D8904C"
+      "0x00D8904C",
+      "0x00F31D50"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5536,16 +6027,19 @@
      "ko": "귀면 반도",
      "ja": "キメンハントウ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D89010"
+      "0x00D89010",
+      "0x00F31D60"
      ],
      "external_pointer_refs": [
-      "0x00D89010"
+      "0x00D89010",
+      "0x00F31D60"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5557,16 +6051,19 @@
      "ko": "날개옷 섬",
      "ja": "ハゴロモジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88FD4"
+      "0x00D88FD4",
+      "0x00F31D80"
      ],
      "external_pointer_refs": [
-      "0x00D88FD4"
+      "0x00D88FD4",
+      "0x00F31D80"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5578,16 +6075,19 @@
      "ko": "곡옥 섬",
      "ja": "マガタマジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88F98"
+      "0x00D88F98",
+      "0x00F31DA0"
      ],
      "external_pointer_refs": [
-      "0x00D88F98"
+      "0x00D88F98",
+      "0x00F31DA0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5599,16 +6099,19 @@
      "ko": "타마타마섬",
      "ja": "タマタマジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88F5C"
+      "0x00D88F5C",
+      "0x00F31DB8"
      ],
      "external_pointer_refs": [
-      "0x00D88F5C"
+      "0x00D88F5C",
+      "0x00F31DB8"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5620,16 +6123,19 @@
      "ko": "주먹밥 섬",
      "ja": "オニギリジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88F20"
+      "0x00D88F20",
+      "0x00F31DE0"
      ],
      "external_pointer_refs": [
-      "0x00D88F20"
+      "0x00D88F20",
+      "0x00F31DE0"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5641,16 +6147,19 @@
      "ko": "도넛 섬",
      "ja": "ドーナツジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88EE4"
+      "0x00D88EE4",
+      "0x00F31E00"
      ],
      "external_pointer_refs": [
-      "0x00D88EE4"
+      "0x00D88EE4",
+      "0x00F31E00"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5662,16 +6171,19 @@
      "ko": "소라마메섬",
      "ja": "ソラマメジマ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D88EA8"
+      "0x00D88EA8",
+      "0x00F31E18"
      ],
      "external_pointer_refs": [
-      "0x00D88EA8"
+      "0x00D88EA8",
+      "0x00F31E18"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5683,16 +6195,19 @@
      "ko": "통신4",
      "ja": "つうしん４",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B7CC"
+      "0x00D8B7CC",
+      "0x00F31E40"
      ],
      "external_pointer_refs": [
-      "0x00D8B7CC"
+      "0x00D8B7CC",
+      "0x00F31E40"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5704,16 +6219,19 @@
      "ko": "통신3",
      "ja": "つうしん３",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B7C8"
+      "0x00D8B7C8",
+      "0x00F31E50"
      ],
      "external_pointer_refs": [
-      "0x00D8B7C8"
+      "0x00D8B7C8",
+      "0x00F31E50"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5725,16 +6243,19 @@
      "ko": "통신2",
      "ja": "つうしん２",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B7C4"
+      "0x00D8B7C4",
+      "0x00F31E60"
      ],
      "external_pointer_refs": [
-      "0x00D8B7C4"
+      "0x00D8B7C4",
+      "0x00F31E60"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5746,16 +6267,19 @@
      "ko": "통신1",
      "ja": "つうしん１",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B7C0"
+      "0x00D8B7C0",
+      "0x00F31E70"
      ],
      "external_pointer_refs": [
-      "0x00D8B7C0"
+      "0x00D8B7C0",
+      "0x00F31E70"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []
@@ -5767,16 +6291,19 @@
      "ko": "컴퓨터",
      "ja": "コンピュータ",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
+     "pointer_ref_count": 2,
+     "external_pointer_ref_count": 2,
      "pointer_refs": [
-      "0x00D8B7BC"
+      "0x00D8B7BC",
+      "0x00F306F4"
      ],
      "external_pointer_refs": [
-      "0x00D8B7BC"
+      "0x00D8B7BC",
+      "0x00F306F4"
      ],
      "pointer_ref_buckets": {
-      "part1_or_table": 1
+      "part1_or_table": 1,
+      "0xF30000": 1
      },
      "second_level_ref_count": 0,
      "second_level_refs": []

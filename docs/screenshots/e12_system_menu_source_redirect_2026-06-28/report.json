@@ -1,0 +1,184 @@
+{
+  "date": "2026-06-28",
+  "purpose": "E12 B8 battle-system menu duplicate source redirect check.",
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "checkpoint": "scene_89_common_battle_system_results",
+  "scene_id": "89_common_battle_system_results",
+  "screen": "common battle system menu with visible 처분/항복/음악 있음/애니메/나가기 labels",
+  "proven_visible_labels": [
+    "처분",
+    "항복",
+    "음악 있음",
+    "애니메",
+    "나가기"
+  ],
+  "visible_but_not_source_proven_here": [],
+  "source_state": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0",
+  "source_state_sha256": "0a03c7a8a6d40c8dd365afe945d0b1596ac495ffcd318819faf469f207d0295d",
+  "read_watch_report": "temp/e12_system_menu_source_compare_20260628.json",
+  "read_watch_log": "temp/e12_system_menu_source_compare_20260628/screen_scene_89_common_battle_system_results/watch.log",
+  "mutation_reports": [
+    "temp/e12_system_menu_source_redirect_mutation_20260628/summary.json",
+    "temp/e12_system_menu_source_redirect_mutation_more_20260628/summary.json",
+    "temp/e12_system_menu_music_anim_source_mutation_20260628/summary.json",
+    "temp/e12_system_menu_iwram_source_mutation_20260628/summary.json"
+  ],
+  "read_watch_summary": {
+    "watched_addresses_note": "Logical source candidates. The raw watch configuration uses exact spans, so 0x00A29922 is observed inside the 0x00A29916 span rather than as a separately listed watch command.",
+    "watched_addresses": [
+      "0x00A29916",
+      "0x00A29922",
+      "0x00A2992C",
+      "0x00A298C2",
+      "0x00A298D2",
+      "0x00B82D76",
+      "0x00B82D6A",
+      "0x00B82D58",
+      "0x00B82DC6",
+      "0x00B82DB6",
+      "0x00EFAAD4"
+    ],
+    "hit_count": 89,
+    "hit_offsets": {
+      "0x00A29916": 12,
+      "0x00A29922": 13,
+      "0x00A2992C": 16
+    },
+    "b8_duplicate_hits": 0,
+    "efa_table_hits": 0,
+    "top_pcs": [
+      "0x0838BCFA",
+      "0x0838BD18",
+      "0x08315230",
+      "0x08315216"
+    ]
+  },
+  "music_anim_negative_candidates": {
+    "read_watch_report": "temp/e12_system_menu_music_anim_readwatch_20260628.json",
+    "compact_placeholder_read_watch_report": "temp/e12_system_menu_compact_placeholder_readwatch_20260628.json",
+    "mutation_report": "temp/e12_system_menu_music_anim_source_mutation_20260628/summary.json",
+    "zero_diff_candidates": [
+      "0x00A298C2",
+      "0x00B82DC6",
+      "0x0080535C",
+      "0x0080537A",
+      "0x00D82AD0",
+      "0x00D82AEE"
+    ],
+    "interpretation": "The visible 음악 있음/애니메 rows are not sourced from the A2/B8 fixed rows or the two compact aggregate placeholder copies during this route."
+  },
+  "iwram_write_chain": {
+    "memory_dump_dir": "temp/e12_system_menu_memory_dump_20260628",
+    "write_watch_log": "temp/e12_system_menu_iwram_watch_20260628/iwram_write.log",
+    "menu_buffer": "0x03002C90..0x03002CEF",
+    "music_buffer_addr": "0x03002CCF",
+    "music_rom_source": "0x00A536B6",
+    "music_write_pc": "0x0838BCDE",
+    "music_source_read_r1": "0x08A536B6",
+    "anime_buffer_addr": "0x03002CDA",
+    "anime_rom_source": "0x00A536DE",
+    "anime_write_pc": "0x0838BCDE",
+    "anime_source_read_r1": "0x08A536DE",
+    "note": "The menu refresh copies the repoint payload text into IWRAM, then the screen renderer consumes that IWRAM menu buffer."
+  },
+  "iwram_buffer_limits": {
+    "guard": "tools/verify_dist_integrity.py::verify_scene89_system_menu_sources",
+    "music": {
+      "rom_source": "0x00A536B6",
+      "iwram_start": "0x03002CCF",
+      "next_iwram_row": "0x03002CDA",
+      "max_nul_terminated_bytes": 11,
+      "current_nul_terminated_bytes": 11
+    },
+    "anime": {
+      "rom_source": "0x00A536DE",
+      "iwram_start": "0x03002CDA",
+      "max_nul_terminated_bytes": 10,
+      "current_nul_terminated_bytes": 10
+    },
+    "note": "The current source strings exactly fill their route-local IWRAM menu buffers including NUL. verify_dist_integrity now fails if these proof-critical bytes change or the NUL terminator moves past the known limit."
+  },
+  "mutation_pairs": [
+    {
+      "visible_text": "처분",
+      "live_source": "0x00A29916",
+      "duplicate_b8": "0x00B82D76",
+      "live_source_pixel_diff": 52,
+      "duplicate_b8_pixel_diff": 0,
+      "live_source_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00A29916_mutation_contact.png",
+      "duplicate_b8_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00B82D76_mutation_contact.png"
+    },
+    {
+      "visible_text": "항복",
+      "live_source": "0x00A29922",
+      "duplicate_b8": "0x00B82D6A",
+      "live_source_pixel_diff": 59,
+      "duplicate_b8_pixel_diff": 0,
+      "live_source_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00A29922_mutation_contact.png",
+      "duplicate_b8_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00B82D6A_mutation_contact.png"
+    },
+    {
+      "visible_text": "나가기",
+      "live_source": "0x00A2992C",
+      "duplicate_b8": "0x00B82D58",
+      "live_source_pixel_diff": 97,
+      "duplicate_b8_pixel_diff": 0,
+      "live_source_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00A2992C_mutation_contact.png",
+      "duplicate_b8_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_source_redirect_00B82D58_mutation_contact.png"
+    },
+    {
+      "visible_text": "음악 있음",
+      "live_source": "0x00A536B6",
+      "source_chain": "ROM repoint payload 0x00A536B6 -> IWRAM menu buffer 0x03002CCF -> visible menu row",
+      "candidate_non_sources": [
+        "0x00A298C2",
+        "0x00B82DC6",
+        "0x0080537A",
+        "0x00D82AEE"
+      ],
+      "live_source_pixel_diff": 114,
+      "candidate_mutation_pixel_diff": 0,
+      "live_source_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_iwram_source_repoint_payload_00A536B6_mutation_contact.png"
+    },
+    {
+      "visible_text": "애니메",
+      "live_source": "0x00A536DE",
+      "source_chain": "ROM repoint payload 0x00A536DE -> IWRAM menu buffer 0x03002CDA -> visible menu row",
+      "candidate_non_sources": [
+        "0x0080535C",
+        "0x00D82AD0",
+        "0x00A298E2",
+        "0x00B82DAA"
+      ],
+      "live_source_pixel_diff": 130,
+      "candidate_mutation_pixel_diff": 0,
+      "live_source_contact": "docs/screenshots/e12_system_menu_source_redirect_2026-06-28/system_menu_iwram_source_repoint_payload_00A536DE_mutation_contact.png"
+    }
+  ],
+  "null_control": {
+    "pixel_diff_count": 0,
+    "deterministic": true
+  },
+  "interpretation": "On scene_89_common_battle_system_results, the visible battle-system labels 처분/항복/나가기 are sourced from A2 copies, not their B8 duplicates. The visible 음악 있음/애니메 rows are sourced from repoint payload rows at 0x00A536B6/0x00A536DE through an IWRAM menu buffer, not from the A2/B8 fixed rows or compact aggregate placeholders tested here. This is route-local source-redirect evidence and does not prove the whole B8 system/action label block is globally dead.",
+  "caveat": "Reproduction depends on the temp savestate, memory dumps, and raw watch logs listed above, while the durable evidence is this summary plus the contact/diff images. The proof is local to scene_89_common_battle_system_results and should not be generalized to other action-menu states without separate source-chain evidence. The music/anime source strings exactly fill adjacent IWRAM buffer limits; this is now guarded by verify_dist_integrity and must be re-proven if those source bytes move or change.",
+  "cli_review": {
+    "agy": {
+      "path": "temp/agy_review_e12_system_menu_source_redirect_20260628.md",
+      "result": "no blocker on the initial 처분/항복/나가기 proof; emphasized that 음악 있음/애니메 needed a separate source proof"
+    },
+    "claude": {
+      "path": "temp/claude_review_e12_system_menu_source_redirect_20260628.md",
+      "result": "no blocker; requested explicit caveats for unproven visible labels, logical watch-address list, and temp savestate dependency"
+    },
+    "agy_followup": {
+      "path": "temp/agy_review_e12_system_menu_music_anim_source_20260628.md",
+      "result": "conditional approval of the 0xA536B6/0xA536DE -> IWRAM source-chain; requested explicit adjacent-buffer limit documentation and a guard, both reflected here and in verify_dist_integrity"
+    },
+    "claude_followup": {
+      "path": "temp/claude_review_e12_system_menu_music_anim_source_20260628.md",
+      "result": "timeout rc=124 with 0-byte output"
+    }
+  },
+  "next_step": "Do not repeat the same scene_89 system-menu B8 duplicate or A2 fixed-row mutation/read-watch without a new differentiator. Continue B8 work with other battle/action states, scene-load watchpoints, or WRAM/VRAM write-chain evidence."
+}

@@ -1,0 +1,62 @@
+{
+  "date": "2026-06-28",
+  "purpose": "E12 B8 Part1 operation-room progress-save search for mission-title rows outside the 13 already proven on the fresh/current route.",
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "tool": "temp/probe_e12_aw1_save_operation_room_b8.py",
+  "full_temp_report": "temp/e12_aw1_save_operation_room_b8_unknown_full_20260628/report.json",
+  "temp_capture_dir": "temp/e12_aw1_save_operation_room_b8_unknown_full_20260628",
+  "save_source_dir": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5",
+  "route": "loadtempsav, reset, coldboot-drive to Part1 menu, enter operation room, install exact read watches, press DOWN through 20 scroll steps",
+  "target_range": [
+    "0x00B81D40",
+    "0x00B82118"
+  ],
+  "known_fresh_13_excluded": true,
+  "known_fresh_13_count": 13,
+  "watched_unknown_target_count": 43,
+  "positive_control": {
+    "report": "temp/e12_aw1_save_operation_room_b8_positive_control_4byte_20260628/report.json",
+    "case": "11186_back down=0",
+    "include_known_13": true,
+    "watch_size_bytes": 4,
+    "direct_target_count": 13,
+    "interpretation": "The same script and 4-byte exact watch setup detects the 13 known live operation-room B8 targets, so the unknown-only 0-hit run is not explained by a disabled watchpoint mechanism."
+  },
+  "case_count": 16,
+  "capture_count": 16,
+  "all_watch_logs_empty": true,
+  "hit_count": 0,
+  "direct_target_count": 0,
+  "new_beyond_fresh_known_13": [],
+  "tempsav_cases": [
+    "11186_back",
+    "11186_front",
+    "2111_back",
+    "2111_front",
+    "2112_back",
+    "2112_front",
+    "2113_back",
+    "2113_front",
+    "2807_back",
+    "2807_front",
+    "2954_back",
+    "2954_front",
+    "3441_back",
+    "3441_front",
+    "8495_back",
+    "8495_front"
+  ],
+  "interpretation": "Across the available AW1 external progress saves, this operation-room route did not read any B8 operation-title candidate outside the 13 already proven on the current fresh route. This is route/subset negative evidence only, not a global dead-copy proof for the remaining B8 table.",
+  "cli_review": {
+    "agy": {
+      "path": "temp/agy_review_e12_b8_aw1_progress_save_negative_20260628.md",
+      "result": "no blocker; warned that negative probes should carry a positive control, addressed here with temp/e12_aw1_save_operation_room_b8_positive_control_4byte_20260628/report.json"
+    },
+    "claude": {
+      "path": "temp/claude_review_e12_b8_aw1_progress_save_negative_20260628.md",
+      "result": "gtimeout 180 returned rc 124 with empty stdout/stderr"
+    }
+  },
+  "next_step": "Do not repeat the same AW1 progress-save operation-room DOWN-scroll probe without a new differentiator. Continue E12 with Part2 B8 HUD/weapon/damage routes, scene-load watchpoints, positive source identification, or WRAM/VRAM/DMA write-chain evidence."
+}

@@ -1,16 +1,16 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
- "git_commit": "19905b1",
+ "rom_sha256": "d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f",
+ "git_commit": "0dc6015",
  "source": "data/compact_display_xref_analysis.json",
  "summary": {
-  "literal_entry_count": 523,
-  "derived_table_head_ref_count": 509,
+  "literal_entry_count": 695,
+  "derived_table_head_ref_count": 681,
   "literal_entries_by_group": {
    "a2_co_power_profile_display_overrides": 36,
    "b84_compact_power_display_overrides": 14,
-   "b8_compact_display_table_all": 470,
+   "b8_compact_display_table_all": 642,
    "known_compact_dictionary_literals": 3
   },
   "literal_entries_with_loads_by_group": {
@@ -1351,6 +1351,18 @@
    "ref_kind": "target_pointer_ref",
    "word": "0x08B84E50",
    "word_rom_offset": "0x00B84E50",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82168",
+   "target_text": "스패너 섬",
+   "ref_offset": "0x008E9067",
+   "ref_address": "0x088E9067",
+   "ref_kind": "second_level_ref",
+   "word": "0x08F31170",
+   "word_rom_offset": "0x00F31170",
    "source_count": 1,
    "literal_loads": []
   },
@@ -7234,6 +7246,2058 @@
    "literal_loads": []
   },
   {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81CA0",
+   "target_text": "맵 타입 9",
+   "ref_offset": "0x00F306F0",
+   "ref_address": "0x08F306F0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81CA0",
+   "word_rom_offset": "0x00B81CA0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82800",
+   "target_text": "컴퓨터",
+   "ref_offset": "0x00F306F4",
+   "ref_address": "0x08F306F4",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82800",
+   "word_rom_offset": "0x00B82800",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81CA0",
+   "target_text": "맵 타입 9",
+   "ref_offset": "0x00F30818",
+   "ref_address": "0x08F30818",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81CA0",
+   "word_rom_offset": "0x00B81CA0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81CB0",
+   "target_text": "맵 타입 8",
+   "ref_offset": "0x00F30830",
+   "ref_address": "0x08F30830",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81CB0",
+   "word_rom_offset": "0x00B81CB0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81CC0",
+   "target_text": "디자인 맵",
+   "ref_offset": "0x00F30848",
+   "ref_address": "0x08F30848",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81CC0",
+   "word_rom_offset": "0x00B81CC0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81CD0",
+   "target_text": "트라이얼",
+   "ref_offset": "0x00F30868",
+   "ref_address": "0x08F30868",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81CD0",
+   "word_rom_offset": "0x00B81CD0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D00",
+   "target_text": "초기 배치",
+   "ref_offset": "0x00F30888",
+   "ref_address": "0x08F30888",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D00",
+   "word_rom_offset": "0x00B81D00",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D10",
+   "target_text": "대전",
+   "ref_offset": "0x00F308A8",
+   "ref_address": "0x08F308A8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D10",
+   "word_rom_offset": "0x00B81D10",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D20",
+   "target_text": "클래식",
+   "ref_offset": "0x00F308B8",
+   "ref_address": "0x08F308B8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D20",
+   "word_rom_offset": "0x00B81D20",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D30",
+   "target_text": "캠페인",
+   "ref_offset": "0x00F308D0",
+   "ref_address": "0x08F308D0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D30",
+   "word_rom_offset": "0x00B81D30",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D40",
+   "target_text": "튜토리얼",
+   "ref_offset": "0x00F308E8",
+   "ref_address": "0x08F308E8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D40",
+   "word_rom_offset": "0x00B81D40",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D50",
+   "target_text": "에디트 3",
+   "ref_offset": "0x00F30908",
+   "ref_address": "0x08F30908",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D50",
+   "word_rom_offset": "0x00B81D50",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D60",
+   "target_text": "에디트 2",
+   "ref_offset": "0x00F30920",
+   "ref_address": "0x08F30920",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D60",
+   "word_rom_offset": "0x00B81D60",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D70",
+   "target_text": "에디트 1",
+   "ref_offset": "0x00F30938",
+   "ref_address": "0x08F30938",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D70",
+   "word_rom_offset": "0x00B81D70",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D80",
+   "target_text": "최강 라이벌",
+   "ref_offset": "0x00F30950",
+   "ref_address": "0x08F30950",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D80",
+   "word_rom_offset": "0x00B81D80",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81D94",
+   "target_text": "칠흑숲 결전",
+   "ref_offset": "0x00F30978",
+   "ref_address": "0x08F30978",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81D94",
+   "word_rom_offset": "0x00B81D94",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81DB4",
+   "target_text": "두 명의 료",
+   "ref_offset": "0x00F309A0",
+   "ref_address": "0x08F309A0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81DB4",
+   "word_rom_offset": "0x00B81DB4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81DC4",
+   "target_text": "싸움 뒤편에서",
+   "ref_offset": "0x00F309C0",
+   "ref_address": "0x08F309C0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81DC4",
+   "word_rom_offset": "0x00B81DC4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81DD4",
+   "target_text": "거대 날개",
+   "ref_offset": "0x00F309F0",
+   "ref_address": "0x08F309F0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81DD4",
+   "word_rom_offset": "0x00B81DD4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81DE8",
+   "target_text": "해전",
+   "ref_offset": "0x00F30A10",
+   "ref_address": "0x08F30A10",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81DE8",
+   "word_rom_offset": "0x00B81DE8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81DF0",
+   "target_text": "캡틴 모프",
+   "ref_offset": "0x00F30A20",
+   "ref_address": "0x08F30A20",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81DF0",
+   "word_rom_offset": "0x00B81DF0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E08",
+   "target_text": "아스카 목표",
+   "ref_offset": "0x00F30A40",
+   "ref_address": "0x08F30A40",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E08",
+   "word_rom_offset": "0x00B81E08",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E1C",
+   "target_text": "도미노 능력",
+   "ref_offset": "0x00F30A68",
+   "ref_address": "0x08F30A68",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E1C",
+   "word_rom_offset": "0x00B81E1C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E2C",
+   "target_text": "분단 작전",
+   "ref_offset": "0x00F30A90",
+   "ref_address": "0x08F30A90",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E2C",
+   "word_rom_offset": "0x00B81E2C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E38",
+   "target_text": "키쿠치요 실수",
+   "ref_offset": "0x00F30AB0",
+   "ref_address": "0x08F30AB0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E38",
+   "word_rom_offset": "0x00B81E38",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E50",
+   "target_text": "최강 키쿠치요부대",
+   "ref_offset": "0x00F30AE0",
+   "ref_address": "0x08F30AE0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E50",
+   "word_rom_offset": "0x00B81E50",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E64",
+   "target_text": "키쿠치요 등장",
+   "ref_offset": "0x00F30B20",
+   "ref_address": "0x08F30B20",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E64",
+   "word_rom_offset": "0x00B81E64",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E78",
+   "target_text": "특수부대 도미노",
+   "ref_offset": "0x00F30B50",
+   "ref_address": "0x08F30B50",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E78",
+   "word_rom_offset": "0x00B81E78",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E8C",
+   "target_text": "세명 과거",
+   "ref_offset": "0x00F30B88",
+   "ref_address": "0x08F30B88",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E8C",
+   "word_rom_offset": "0x00B81E8C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81E98",
+   "target_text": "설원 전투",
+   "ref_offset": "0x00F30BA8",
+   "ref_address": "0x08F30BA8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81E98",
+   "word_rom_offset": "0x00B81E98",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81EA8",
+   "target_text": "스나이퍼",
+   "ref_offset": "0x00F30BC8",
+   "ref_address": "0x08F30BC8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81EA8",
+   "word_rom_offset": "0x00B81EA8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81EB8",
+   "target_text": "호이프 해군터보",
+   "ref_offset": "0x00F30BE8",
+   "ref_address": "0x08F30BE8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81EB8",
+   "word_rom_offset": "0x00B81EB8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81ED0",
+   "target_text": "호이프 해군",
+   "ref_offset": "0x00F30C20",
+   "ref_address": "0x08F30C20",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81ED0",
+   "word_rom_offset": "0x00B81ED0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81EE0",
+   "target_text": "맥스 약점",
+   "ref_offset": "0x00F30C48",
+   "ref_address": "0x08F30C48",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81EE0",
+   "word_rom_offset": "0x00B81EE0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81EF4",
+   "target_text": "맥스 출격",
+   "ref_offset": "0x00F30C68",
+   "ref_address": "0x08F30C68",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81EF4",
+   "word_rom_offset": "0x00B81EF4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F04",
+   "target_text": "하늘 용사",
+   "ref_offset": "0x00F30C88",
+   "ref_address": "0x08F30C88",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F04",
+   "word_rom_offset": "0x00B81F04",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F10",
+   "target_text": "건 파이터",
+   "ref_offset": "0x00F30CA8",
+   "ref_address": "0x08F30CA8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F10",
+   "word_rom_offset": "0x00B81F10",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F24",
+   "target_text": "개전",
+   "ref_offset": "0x00F30CC8",
+   "ref_address": "0x08F30CC8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F24",
+   "word_rom_offset": "0x00B81F24",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F2C",
+   "target_text": "과외수업",
+   "ref_offset": "0x00F30CD8",
+   "ref_address": "0x08F30CD8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F2C",
+   "word_rom_offset": "0x00B81F2C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F38",
+   "target_text": "결전",
+   "ref_offset": "0x00F30CF8",
+   "ref_address": "0x08F30CF8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F38",
+   "word_rom_offset": "0x00B81F38",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F40",
+   "target_text": "은빛 세계",
+   "ref_offset": "0x00F30D08",
+   "ref_address": "0x08F30D08",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F40",
+   "word_rom_offset": "0x00B81F40",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F4C",
+   "target_text": "바다 너머",
+   "ref_offset": "0x00F30D28",
+   "ref_address": "0x08F30D28",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F4C",
+   "word_rom_offset": "0x00B81F4C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F5C",
+   "target_text": "도그 파이트",
+   "ref_offset": "0x00F30D48",
+   "ref_address": "0x08F30D48",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F5C",
+   "word_rom_offset": "0x00B81F5C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F70",
+   "target_text": "대공 제압",
+   "ref_offset": "0x00F30D70",
+   "ref_address": "0x08F30D70",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F70",
+   "word_rom_offset": "0x00B81F70",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F80",
+   "target_text": "하늘의 적",
+   "ref_offset": "0x00F30D90",
+   "ref_address": "0x08F30D90",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F80",
+   "word_rom_offset": "0x00B81F80",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81F98",
+   "target_text": "드래곤 플라이",
+   "ref_offset": "0x00F30DB0",
+   "ref_address": "0x08F30DB0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81F98",
+   "word_rom_offset": "0x00B81F98",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81FAC",
+   "target_text": "최강 중전차",
+   "ref_offset": "0x00F30DE0",
+   "ref_address": "0x08F30DE0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81FAC",
+   "word_rom_offset": "0x00B81FAC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81FC4",
+   "target_text": "적 부대 격파",
+   "ref_offset": "0x00F30E08",
+   "ref_address": "0x08F30E08",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81FC4",
+   "word_rom_offset": "0x00B81FC4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81FDC",
+   "target_text": "고물 전차 출격",
+   "ref_offset": "0x00F30E30",
+   "ref_address": "0x08F30E30",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81FDC",
+   "word_rom_offset": "0x00B81FDC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B81FF4",
+   "target_text": "전선 기지 확보",
+   "ref_offset": "0x00F30E60",
+   "ref_address": "0x08F30E60",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B81FF4",
+   "word_rom_offset": "0x00B81FF4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8200C",
+   "target_text": "첫 전투",
+   "ref_offset": "0x00F30E90",
+   "ref_address": "0x08F30E90",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8200C",
+   "word_rom_offset": "0x00B8200C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82018",
+   "target_text": "전투 개시",
+   "ref_offset": "0x00F30EA8",
+   "ref_address": "0x08F30EA8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82018",
+   "word_rom_offset": "0x00B82018",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82024",
+   "target_text": "라스트 미션",
+   "ref_offset": "0x00F30EC8",
+   "ref_address": "0x08F30EC8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82024",
+   "word_rom_offset": "0x00B82024",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82038",
+   "target_text": "파라파라 제도",
+   "ref_offset": "0x00F30EF0",
+   "ref_address": "0x08F30EF0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82038",
+   "word_rom_offset": "0x00B82038",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8204C",
+   "target_text": "비경의 숲",
+   "ref_offset": "0x00F30F20",
+   "ref_address": "0x08F30F20",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8204C",
+   "word_rom_offset": "0x00B8204C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8205C",
+   "target_text": "주사위 랜드",
+   "ref_offset": "0x00F30F40",
+   "ref_address": "0x08F30F40",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8205C",
+   "word_rom_offset": "0x00B8205C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8206C",
+   "target_text": "뻐끔 랜드",
+   "ref_offset": "0x00F30F68",
+   "ref_address": "0x08F30F68",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8206C",
+   "word_rom_offset": "0x00B8206C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8207C",
+   "target_text": "고양이의 낙원",
+   "ref_offset": "0x00F30F88",
+   "ref_address": "0x08F30F88",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8207C",
+   "word_rom_offset": "0x00B8207C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8208C",
+   "target_text": "시가 산맥",
+   "ref_offset": "0x00F30FB8",
+   "ref_address": "0x08F30FB8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8208C",
+   "word_rom_offset": "0x00B8208C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820A0",
+   "target_text": "더블 서킷",
+   "ref_offset": "0x00F30FD8",
+   "ref_address": "0x08F30FD8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820A0",
+   "word_rom_offset": "0x00B820A0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820B4",
+   "target_text": "쌍떡잎 곶",
+   "ref_offset": "0x00F30FF8",
+   "ref_address": "0x08F30FF8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820B4",
+   "word_rom_offset": "0x00B820B4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820C4",
+   "target_text": "마운틴 리버",
+   "ref_offset": "0x00F31018",
+   "ref_address": "0x08F31018",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820C4",
+   "word_rom_offset": "0x00B820C4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820D8",
+   "target_text": "지혜의 고리 섬",
+   "ref_offset": "0x00F31040",
+   "ref_address": "0x08F31040",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820D8",
+   "word_rom_offset": "0x00B820D8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820E8",
+   "target_text": "알갱이 섬",
+   "ref_offset": "0x00F31070",
+   "ref_address": "0x08F31070",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820E8",
+   "word_rom_offset": "0x00B820E8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B820F4",
+   "target_text": "가위바위보 곶",
+   "ref_offset": "0x00F31090",
+   "ref_address": "0x08F31090",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B820F4",
+   "word_rom_offset": "0x00B820F4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82108",
+   "target_text": "주먹 해협",
+   "ref_offset": "0x00F310C0",
+   "ref_address": "0x08F310C0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82108",
+   "word_rom_offset": "0x00B82108",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8211C",
+   "target_text": "다리 긴 섬",
+   "ref_offset": "0x00F310E0",
+   "ref_address": "0x08F310E0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8211C",
+   "word_rom_offset": "0x00B8211C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8212C",
+   "target_text": "삭스 섬",
+   "ref_offset": "0x00F31100",
+   "ref_address": "0x08F31100",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8212C",
+   "word_rom_offset": "0x00B8212C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8213C",
+   "target_text": "풋 하버",
+   "ref_offset": "0x00F31118",
+   "ref_address": "0x08F31118",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8213C",
+   "word_rom_offset": "0x00B8213C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8214C",
+   "target_text": "구불구불 섬",
+   "ref_offset": "0x00F31130",
+   "ref_address": "0x08F31130",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8214C",
+   "word_rom_offset": "0x00B8214C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8215C",
+   "target_text": "피노 섬",
+   "ref_offset": "0x00F31158",
+   "ref_address": "0x08F31158",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8215C",
+   "word_rom_offset": "0x00B8215C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82168",
+   "target_text": "스패너 섬",
+   "ref_offset": "0x00F31170",
+   "ref_address": "0x08F31170",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82168",
+   "word_rom_offset": "0x00B82168",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82178",
+   "target_text": "흐물흐물 섬",
+   "ref_offset": "0x00F31190",
+   "ref_address": "0x08F31190",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82178",
+   "word_rom_offset": "0x00B82178",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82188",
+   "target_text": "남쪽의 낙원",
+   "ref_offset": "0x00F311B8",
+   "ref_address": "0x08F311B8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82188",
+   "word_rom_offset": "0x00B82188",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8219C",
+   "target_text": "달마 산맥",
+   "ref_offset": "0x00F311E0",
+   "ref_address": "0x08F311E0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8219C",
+   "word_rom_offset": "0x00B8219C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B821B0",
+   "target_text": "데굴데굴 철도",
+   "ref_offset": "0x00F31200",
+   "ref_address": "0x08F31200",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B821B0",
+   "word_rom_offset": "0x00B821B0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B821C4",
+   "target_text": "거친 섬",
+   "ref_offset": "0x00F31230",
+   "ref_address": "0x08F31230",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B821C4",
+   "word_rom_offset": "0x00B821C4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B821D4",
+   "target_text": "엑스 섬",
+   "ref_offset": "0x00F31248",
+   "ref_address": "0x08F31248",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B821D4",
+   "word_rom_offset": "0x00B821D4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B821E4",
+   "target_text": "비틀비틀 강",
+   "ref_offset": "0x00F31260",
+   "ref_address": "0x08F31260",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B821E4",
+   "word_rom_offset": "0x00B821E4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B821F4",
+   "target_text": "달마 반도",
+   "ref_offset": "0x00F31288",
+   "ref_address": "0x08F31288",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B821F4",
+   "word_rom_offset": "0x00B821F4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82204",
+   "target_text": "체인 운하",
+   "ref_offset": "0x00F312A8",
+   "ref_address": "0x08F312A8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82204",
+   "word_rom_offset": "0x00B82204",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82214",
+   "target_text": "지렁이 제도",
+   "ref_offset": "0x00F312C8",
+   "ref_address": "0x08F312C8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82214",
+   "word_rom_offset": "0x00B82214",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82224",
+   "target_text": "술병 곶",
+   "ref_offset": "0x00F312F0",
+   "ref_address": "0x08F312F0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82224",
+   "word_rom_offset": "0x00B82224",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82234",
+   "target_text": "메이즈 리버",
+   "ref_offset": "0x00F31308",
+   "ref_address": "0x08F31308",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82234",
+   "word_rom_offset": "0x00B82234",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82244",
+   "target_text": "워터 링",
+   "ref_offset": "0x00F31330",
+   "ref_address": "0x08F31330",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82244",
+   "word_rom_offset": "0x00B82244",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82258",
+   "target_text": "경단 섬",
+   "ref_offset": "0x00F31348",
+   "ref_address": "0x08F31348",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82258",
+   "word_rom_offset": "0x00B82258",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82268",
+   "target_text": "플러스 리버",
+   "ref_offset": "0x00F31360",
+   "ref_address": "0x08F31360",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82268",
+   "word_rom_offset": "0x00B82268",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82278",
+   "target_text": "빅 크로스",
+   "ref_offset": "0x00F31388",
+   "ref_address": "0x08F31388",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82278",
+   "word_rom_offset": "0x00B82278",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82288",
+   "target_text": "피넛 섬",
+   "ref_offset": "0x00F313A8",
+   "ref_address": "0x08F313A8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82288",
+   "word_rom_offset": "0x00B82288",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82298",
+   "target_text": "둘러싸인 섬",
+   "ref_offset": "0x00F313C0",
+   "ref_address": "0x08F313C0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82298",
+   "word_rom_offset": "0x00B82298",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B822A8",
+   "target_text": "워터 랜드",
+   "ref_offset": "0x00F313E8",
+   "ref_address": "0x08F313E8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B822A8",
+   "word_rom_offset": "0x00B822A8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B822BC",
+   "target_text": "로켓 곶",
+   "ref_offset": "0x00F31408",
+   "ref_address": "0x08F31408",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B822BC",
+   "word_rom_offset": "0x00B822BC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B822CC",
+   "target_text": "스크랩 랜드",
+   "ref_offset": "0x00F31420",
+   "ref_address": "0x08F31420",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B822CC",
+   "word_rom_offset": "0x00B822CC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B822E0",
+   "target_text": "원더 블루",
+   "ref_offset": "0x00F31448",
+   "ref_address": "0x08F31448",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B822E0",
+   "word_rom_offset": "0x00B822E0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B822F0",
+   "target_text": "고드름 반도",
+   "ref_offset": "0x00F31468",
+   "ref_address": "0x08F31468",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B822F0",
+   "word_rom_offset": "0x00B822F0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82300",
+   "target_text": "거대한 흐름",
+   "ref_offset": "0x00F31490",
+   "ref_address": "0x08F31490",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82300",
+   "word_rom_offset": "0x00B82300",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82314",
+   "target_text": "아틀라스 리버",
+   "ref_offset": "0x00F314B8",
+   "ref_address": "0x08F314B8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82314",
+   "word_rom_offset": "0x00B82314",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82324",
+   "target_text": "외눈 운하",
+   "ref_offset": "0x00F314E8",
+   "ref_address": "0x08F314E8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82324",
+   "word_rom_offset": "0x00B82324",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82334",
+   "target_text": "텐구의 코",
+   "ref_offset": "0x00F31508",
+   "ref_address": "0x08F31508",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82334",
+   "word_rom_offset": "0x00B82334",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82344",
+   "target_text": "싹둑 곶",
+   "ref_offset": "0x00F31528",
+   "ref_address": "0x08F31528",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82344",
+   "word_rom_offset": "0x00B82344",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82358",
+   "target_text": "악마의 포구",
+   "ref_offset": "0x00F31540",
+   "ref_address": "0x08F31540",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82358",
+   "word_rom_offset": "0x00B82358",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82368",
+   "target_text": "글라스 고원",
+   "ref_offset": "0x00F31568",
+   "ref_address": "0x08F31568",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82368",
+   "word_rom_offset": "0x00B82368",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82378",
+   "target_text": "뿔뿔이 포구",
+   "ref_offset": "0x00F31590",
+   "ref_address": "0x08F31590",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82378",
+   "word_rom_offset": "0x00B82378",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82388",
+   "target_text": "메이즈 산맥",
+   "ref_offset": "0x00F315B8",
+   "ref_address": "0x08F315B8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82388",
+   "word_rom_offset": "0x00B82388",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8239C",
+   "target_text": "그랜드 링",
+   "ref_offset": "0x00F315E0",
+   "ref_address": "0x08F315E0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8239C",
+   "word_rom_offset": "0x00B8239C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B823AC",
+   "target_text": "크로스 운하",
+   "ref_offset": "0x00F31600",
+   "ref_address": "0x08F31600",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B823AC",
+   "word_rom_offset": "0x00B823AC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B823BC",
+   "target_text": "빅토리 라인",
+   "ref_offset": "0x00F31628",
+   "ref_address": "0x08F31628",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B823BC",
+   "word_rom_offset": "0x00B823BC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B823D0",
+   "target_text": "리버 시티",
+   "ref_offset": "0x00F31650",
+   "ref_address": "0x08F31650",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B823D0",
+   "word_rom_offset": "0x00B823D0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B823E0",
+   "target_text": "트라이 고원",
+   "ref_offset": "0x00F31670",
+   "ref_address": "0x08F31670",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B823E0",
+   "word_rom_offset": "0x00B823E0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B823F0",
+   "target_text": "홀 포구",
+   "ref_offset": "0x00F31698",
+   "ref_address": "0x08F31698",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B823F0",
+   "word_rom_offset": "0x00B823F0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82400",
+   "target_text": "클로버 섬",
+   "ref_offset": "0x00F316B0",
+   "ref_address": "0x08F316B0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82400",
+   "word_rom_offset": "0x00B82400",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82410",
+   "target_text": "점점 제도",
+   "ref_offset": "0x00F316D0",
+   "ref_address": "0x08F316D0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82410",
+   "word_rom_offset": "0x00B82410",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82424",
+   "target_text": "주먹밥 반도",
+   "ref_offset": "0x00F316F0",
+   "ref_address": "0x08F316F0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82424",
+   "word_rom_offset": "0x00B82424",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82438",
+   "target_text": "배틀 큐브",
+   "ref_offset": "0x00F31718",
+   "ref_address": "0x08F31718",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82438",
+   "word_rom_offset": "0x00B82438",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82448",
+   "target_text": "배고픈 숲",
+   "ref_offset": "0x00F31738",
+   "ref_address": "0x08F31738",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82448",
+   "word_rom_offset": "0x00B82448",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82458",
+   "target_text": "메탈 파티",
+   "ref_offset": "0x00F31758",
+   "ref_address": "0x08F31758",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82458",
+   "word_rom_offset": "0x00B82458",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8246C",
+   "target_text": "블루 홀",
+   "ref_offset": "0x00F31778",
+   "ref_address": "0x08F31778",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8246C",
+   "word_rom_offset": "0x00B8246C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8247C",
+   "target_text": "쪽지 곶",
+   "ref_offset": "0x00F31790",
+   "ref_address": "0x08F31790",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8247C",
+   "word_rom_offset": "0x00B8247C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8248C",
+   "target_text": "델타 고원",
+   "ref_offset": "0x00F317A8",
+   "ref_address": "0x08F317A8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8248C",
+   "word_rom_offset": "0x00B8248C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8249C",
+   "target_text": "만남의 숲",
+   "ref_offset": "0x00F317C8",
+   "ref_address": "0x08F317C8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8249C",
+   "word_rom_offset": "0x00B8249C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824AC",
+   "target_text": "손가락 끝 리버",
+   "ref_offset": "0x00F317E8",
+   "ref_address": "0x08F317E8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824AC",
+   "word_rom_offset": "0x00B824AC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824BC",
+   "target_text": "지그재그 로드",
+   "ref_offset": "0x00F31818",
+   "ref_address": "0x08F31818",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824BC",
+   "word_rom_offset": "0x00B824BC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824CC",
+   "target_text": "대도시 섬",
+   "ref_offset": "0x00F31848",
+   "ref_address": "0x08F31848",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824CC",
+   "word_rom_offset": "0x00B824CC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824DC",
+   "target_text": "후타마 리버",
+   "ref_offset": "0x00F31868",
+   "ref_address": "0x08F31868",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824DC",
+   "word_rom_offset": "0x00B824DC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824EC",
+   "target_text": "렌치 섬",
+   "ref_offset": "0x00F31890",
+   "ref_address": "0x08F31890",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824EC",
+   "word_rom_offset": "0x00B824EC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B824F8",
+   "target_text": "반달가슴곰 운하",
+   "ref_offset": "0x00F318A8",
+   "ref_address": "0x08F318A8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B824F8",
+   "word_rom_offset": "0x00B824F8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82508",
+   "target_text": "라인 고원",
+   "ref_offset": "0x00F318E0",
+   "ref_address": "0x08F318E0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82508",
+   "word_rom_offset": "0x00B82508",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82518",
+   "target_text": "남겨진 섬",
+   "ref_offset": "0x00F31900",
+   "ref_address": "0x08F31900",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82518",
+   "word_rom_offset": "0x00B82518",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82528",
+   "target_text": "숲의 오솔길",
+   "ref_offset": "0x00F31920",
+   "ref_address": "0x08F31920",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82528",
+   "word_rom_offset": "0x00B82528",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82538",
+   "target_text": "한 쌍 산맥",
+   "ref_offset": "0x00F31948",
+   "ref_address": "0x08F31948",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82538",
+   "word_rom_offset": "0x00B82538",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8254C",
+   "target_text": "바둑판 제도",
+   "ref_offset": "0x00F31968",
+   "ref_address": "0x08F31968",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8254C",
+   "word_rom_offset": "0x00B8254C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8255C",
+   "target_text": "부리 반도",
+   "ref_offset": "0x00F31990",
+   "ref_address": "0x08F31990",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8255C",
+   "word_rom_offset": "0x00B8255C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82570",
+   "target_text": "모자 곶",
+   "ref_offset": "0x00F319B0",
+   "ref_address": "0x08F319B0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82570",
+   "word_rom_offset": "0x00B82570",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82584",
+   "target_text": "자이언트 댐",
+   "ref_offset": "0x00F319C8",
+   "ref_address": "0x08F319C8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82584",
+   "word_rom_offset": "0x00B82584",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82598",
+   "target_text": "안경 대교",
+   "ref_offset": "0x00F319F0",
+   "ref_address": "0x08F319F0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82598",
+   "word_rom_offset": "0x00B82598",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B825A8",
+   "target_text": "패밀리 곶",
+   "ref_offset": "0x00F31A10",
+   "ref_address": "0x08F31A10",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B825A8",
+   "word_rom_offset": "0x00B825A8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B825BC",
+   "target_text": "사다리 해협",
+   "ref_offset": "0x00F31A30",
+   "ref_address": "0x08F31A30",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B825BC",
+   "word_rom_offset": "0x00B825BC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B825D0",
+   "target_text": "콩알 제도",
+   "ref_offset": "0x00F31A58",
+   "ref_address": "0x08F31A58",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B825D0",
+   "word_rom_offset": "0x00B825D0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B825E4",
+   "target_text": "아미타 대교",
+   "ref_offset": "0x00F31A78",
+   "ref_address": "0x08F31A78",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B825E4",
+   "word_rom_offset": "0x00B825E4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B825F4",
+   "target_text": "주름진 고속도로",
+   "ref_offset": "0x00F31AA0",
+   "ref_address": "0x08F31AA0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B825F4",
+   "word_rom_offset": "0x00B825F4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82608",
+   "target_text": "제로 섬",
+   "ref_offset": "0x00F31AD8",
+   "ref_address": "0x08F31AD8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82608",
+   "word_rom_offset": "0x00B82608",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82614",
+   "target_text": "버섯 섬",
+   "ref_offset": "0x00F31AF0",
+   "ref_address": "0x08F31AF0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82614",
+   "word_rom_offset": "0x00B82614",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82628",
+   "target_text": "로드 시티",
+   "ref_offset": "0x00F31B08",
+   "ref_address": "0x08F31B08",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82628",
+   "word_rom_offset": "0x00B82628",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8263C",
+   "target_text": "외딴 산맥",
+   "ref_offset": "0x00F31B28",
+   "ref_address": "0x08F31B28",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8263C",
+   "word_rom_offset": "0x00B8263C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82650",
+   "target_text": "불길 대교",
+   "ref_offset": "0x00F31B48",
+   "ref_address": "0x08F31B48",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82650",
+   "word_rom_offset": "0x00B82650",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82664",
+   "target_text": "뒤틀린 샘",
+   "ref_offset": "0x00F31B68",
+   "ref_address": "0x08F31B68",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82664",
+   "word_rom_offset": "0x00B82664",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82678",
+   "target_text": "칠석 섬",
+   "ref_offset": "0x00F31B88",
+   "ref_address": "0x08F31B88",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82678",
+   "word_rom_offset": "0x00B82678",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82688",
+   "target_text": "비커 리버",
+   "ref_offset": "0x00F31BA0",
+   "ref_address": "0x08F31BA0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82688",
+   "word_rom_offset": "0x00B82688",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82698",
+   "target_text": "토모에 운하",
+   "ref_offset": "0x00F31BC0",
+   "ref_address": "0x08F31BC0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82698",
+   "word_rom_offset": "0x00B82698",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826A8",
+   "target_text": "마른잎섬",
+   "ref_offset": "0x00F31BE8",
+   "ref_address": "0x08F31BE8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826A8",
+   "word_rom_offset": "0x00B826A8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826B4",
+   "target_text": "라스트 드림",
+   "ref_offset": "0x00F31C08",
+   "ref_address": "0x08F31C08",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826B4",
+   "word_rom_offset": "0x00B826B4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826C4",
+   "target_text": "데빌러 섬",
+   "ref_offset": "0x00F31C30",
+   "ref_address": "0x08F31C30",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826C4",
+   "word_rom_offset": "0x00B826C4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826D4",
+   "target_text": "쌍둥이 섬",
+   "ref_offset": "0x00F31C50",
+   "ref_address": "0x08F31C50",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826D4",
+   "word_rom_offset": "0x00B826D4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826E0",
+   "target_text": "주사위 섬",
+   "ref_offset": "0x00F31C70",
+   "ref_address": "0x08F31C70",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826E0",
+   "word_rom_offset": "0x00B826E0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826F0",
+   "target_text": "시가 섬",
+   "ref_offset": "0x00F31C90",
+   "ref_address": "0x08F31C90",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826F0",
+   "word_rom_offset": "0x00B826F0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B826FC",
+   "target_text": "반달가슴곰 섬",
+   "ref_offset": "0x00F31CA8",
+   "ref_address": "0x08F31CA8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B826FC",
+   "word_rom_offset": "0x00B826FC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8270C",
+   "target_text": "노아 화산섬",
+   "ref_offset": "0x00F31CD8",
+   "ref_address": "0x08F31CD8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8270C",
+   "word_rom_offset": "0x00B8270C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8271C",
+   "target_text": "치리지리 강",
+   "ref_offset": "0x00F31D00",
+   "ref_address": "0x08F31D00",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8271C",
+   "word_rom_offset": "0x00B8271C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8272C",
+   "target_text": "아라라 산맥",
+   "ref_offset": "0x00F31D28",
+   "ref_address": "0x08F31D28",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8272C",
+   "word_rom_offset": "0x00B8272C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B82740",
+   "target_text": "표 섬",
+   "ref_offset": "0x00F31D50",
+   "ref_address": "0x08F31D50",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B82740",
+   "word_rom_offset": "0x00B82740",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8274C",
+   "target_text": "귀면 반도",
+   "ref_offset": "0x00F31D60",
+   "ref_address": "0x08F31D60",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8274C",
+   "word_rom_offset": "0x00B8274C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8275C",
+   "target_text": "날개옷 섬",
+   "ref_offset": "0x00F31D80",
+   "ref_address": "0x08F31D80",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8275C",
+   "word_rom_offset": "0x00B8275C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8276C",
+   "target_text": "곡옥 섬",
+   "ref_offset": "0x00F31DA0",
+   "ref_address": "0x08F31DA0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8276C",
+   "word_rom_offset": "0x00B8276C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8277C",
+   "target_text": "타마타마섬",
+   "ref_offset": "0x00F31DB8",
+   "ref_address": "0x08F31DB8",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8277C",
+   "word_rom_offset": "0x00B8277C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8278C",
+   "target_text": "주먹밥 섬",
+   "ref_offset": "0x00F31DE0",
+   "ref_address": "0x08F31DE0",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8278C",
+   "word_rom_offset": "0x00B8278C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B8279C",
+   "target_text": "도넛 섬",
+   "ref_offset": "0x00F31E00",
+   "ref_address": "0x08F31E00",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B8279C",
+   "word_rom_offset": "0x00B8279C",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B827AC",
+   "target_text": "소라마메섬",
+   "ref_offset": "0x00F31E18",
+   "ref_address": "0x08F31E18",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B827AC",
+   "word_rom_offset": "0x00B827AC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B827D0",
+   "target_text": "통신4",
+   "ref_offset": "0x00F31E40",
+   "ref_address": "0x08F31E40",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B827D0",
+   "word_rom_offset": "0x00B827D0",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B827DC",
+   "target_text": "통신3",
+   "ref_offset": "0x00F31E50",
+   "ref_address": "0x08F31E50",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B827DC",
+   "word_rom_offset": "0x00B827DC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B827E8",
+   "target_text": "통신2",
+   "ref_offset": "0x00F31E60",
+   "ref_address": "0x08F31E60",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B827E8",
+   "word_rom_offset": "0x00B827E8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "b8_compact_display_table_all",
+   "target_address": "0x00B827F4",
+   "target_text": "통신1",
+   "ref_offset": "0x00F31E70",
+   "ref_address": "0x08F31E70",
+   "ref_kind": "target_pointer_ref",
+   "word": "0x08B827F4",
+   "word_rom_offset": "0x00B827F4",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
    "group_id": "known_compact_dictionary_literals",
    "target_address": null,
    "target_text": "",
@@ -7367,6 +9431,19 @@
      "function_start_offset": "0x00381234"
     }
    ]
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08F31170",
+   "table_head_offset": "0x00F31170",
+   "ref_offset": "0x008E9067",
+   "ref_address": "0x088E9067",
+   "word": "0x08F31170",
+   "source_count": 1,
+   "literal_loads": []
   },
   {
    "group_id": "derived_table_head_refs",
@@ -9565,7 +11642,7 @@
    "ref_offset": "0x00D88C78",
    "ref_address": "0x08D88C78",
    "word": "0x08B81D40",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9578,7 +11655,7 @@
    "ref_offset": "0x00D88C7C",
    "ref_address": "0x08D88C7C",
    "word": "0x08B81D30",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9591,7 +11668,7 @@
    "ref_offset": "0x00D88C80",
    "ref_address": "0x08D88C80",
    "word": "0x08B81D20",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9604,7 +11681,7 @@
    "ref_offset": "0x00D88C84",
    "ref_address": "0x08D88C84",
    "word": "0x08B81D10",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9617,7 +11694,7 @@
    "ref_offset": "0x00D88C88",
    "ref_address": "0x08D88C88",
    "word": "0x08B81D00",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": [
     {
      "mode": "thumb",
@@ -9668,7 +11745,7 @@
    "ref_offset": "0x00D88C94",
    "ref_address": "0x08D88C94",
    "word": "0x08B81CD0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9681,7 +11758,7 @@
    "ref_offset": "0x00D88C98",
    "ref_address": "0x08D88C98",
    "word": "0x08B81CC0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9694,7 +11771,7 @@
    "ref_offset": "0x00D88C9C",
    "ref_address": "0x08D88C9C",
    "word": "0x08B81CB0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9707,7 +11784,7 @@
    "ref_offset": "0x00D88CA0",
    "ref_address": "0x08D88CA0",
    "word": "0x08B81CA0",
-   "source_count": 1,
+   "source_count": 3,
    "literal_loads": []
   },
   {
@@ -9720,7 +11797,7 @@
    "ref_offset": "0x00D88EA8",
    "ref_address": "0x08D88EA8",
    "word": "0x08B827AC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9733,7 +11810,7 @@
    "ref_offset": "0x00D88EE4",
    "ref_address": "0x08D88EE4",
    "word": "0x08B8279C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9746,7 +11823,7 @@
    "ref_offset": "0x00D88F20",
    "ref_address": "0x08D88F20",
    "word": "0x08B8278C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9759,7 +11836,7 @@
    "ref_offset": "0x00D88F5C",
    "ref_address": "0x08D88F5C",
    "word": "0x08B8277C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9772,7 +11849,7 @@
    "ref_offset": "0x00D88F98",
    "ref_address": "0x08D88F98",
    "word": "0x08B8276C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9785,7 +11862,7 @@
    "ref_offset": "0x00D88FD4",
    "ref_address": "0x08D88FD4",
    "word": "0x08B8275C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9798,7 +11875,7 @@
    "ref_offset": "0x00D89010",
    "ref_address": "0x08D89010",
    "word": "0x08B8274C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9811,7 +11888,7 @@
    "ref_offset": "0x00D8904C",
    "ref_address": "0x08D8904C",
    "word": "0x08B82740",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9824,7 +11901,7 @@
    "ref_offset": "0x00D89088",
    "ref_address": "0x08D89088",
    "word": "0x08B8272C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9837,7 +11914,7 @@
    "ref_offset": "0x00D890C4",
    "ref_address": "0x08D890C4",
    "word": "0x08B8271C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9850,7 +11927,7 @@
    "ref_offset": "0x00D89100",
    "ref_address": "0x08D89100",
    "word": "0x08B8270C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9863,7 +11940,7 @@
    "ref_offset": "0x00D89178",
    "ref_address": "0x08D89178",
    "word": "0x08B826F0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9876,7 +11953,7 @@
    "ref_offset": "0x00D891B4",
    "ref_address": "0x08D891B4",
    "word": "0x08B826E0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9889,7 +11966,7 @@
    "ref_offset": "0x00D891F0",
    "ref_address": "0x08D891F0",
    "word": "0x08B826D4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9902,7 +11979,7 @@
    "ref_offset": "0x00D8922C",
    "ref_address": "0x08D8922C",
    "word": "0x08B826C4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9915,7 +11992,7 @@
    "ref_offset": "0x00D89268",
    "ref_address": "0x08D89268",
    "word": "0x08B826B4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9928,7 +12005,7 @@
    "ref_offset": "0x00D892A4",
    "ref_address": "0x08D892A4",
    "word": "0x08B826A8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9941,7 +12018,7 @@
    "ref_offset": "0x00D892E0",
    "ref_address": "0x08D892E0",
    "word": "0x08B82698",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9954,7 +12031,7 @@
    "ref_offset": "0x00D8931C",
    "ref_address": "0x08D8931C",
    "word": "0x08B82688",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9967,7 +12044,7 @@
    "ref_offset": "0x00D89358",
    "ref_address": "0x08D89358",
    "word": "0x08B82678",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9980,7 +12057,7 @@
    "ref_offset": "0x00D89394",
    "ref_address": "0x08D89394",
    "word": "0x08B82664",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -9993,7 +12070,7 @@
    "ref_offset": "0x00D893D0",
    "ref_address": "0x08D893D0",
    "word": "0x08B82650",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10006,7 +12083,7 @@
    "ref_offset": "0x00D8940C",
    "ref_address": "0x08D8940C",
    "word": "0x08B8263C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10019,7 +12096,7 @@
    "ref_offset": "0x00D89448",
    "ref_address": "0x08D89448",
    "word": "0x08B82628",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10032,7 +12109,7 @@
    "ref_offset": "0x00D89484",
    "ref_address": "0x08D89484",
    "word": "0x08B82614",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10045,7 +12122,7 @@
    "ref_offset": "0x00D894C0",
    "ref_address": "0x08D894C0",
    "word": "0x08B82608",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10058,7 +12135,7 @@
    "ref_offset": "0x00D894FC",
    "ref_address": "0x08D894FC",
    "word": "0x08B825F4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10071,7 +12148,7 @@
    "ref_offset": "0x00D89538",
    "ref_address": "0x08D89538",
    "word": "0x08B825E4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10084,7 +12161,7 @@
    "ref_offset": "0x00D89574",
    "ref_address": "0x08D89574",
    "word": "0x08B825D0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10097,7 +12174,7 @@
    "ref_offset": "0x00D895B0",
    "ref_address": "0x08D895B0",
    "word": "0x08B825BC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10110,7 +12187,7 @@
    "ref_offset": "0x00D895EC",
    "ref_address": "0x08D895EC",
    "word": "0x08B825A8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10123,7 +12200,7 @@
    "ref_offset": "0x00D89628",
    "ref_address": "0x08D89628",
    "word": "0x08B82598",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10136,7 +12213,7 @@
    "ref_offset": "0x00D89664",
    "ref_address": "0x08D89664",
    "word": "0x08B82584",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10149,7 +12226,7 @@
    "ref_offset": "0x00D896A0",
    "ref_address": "0x08D896A0",
    "word": "0x08B82570",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10162,7 +12239,7 @@
    "ref_offset": "0x00D896DC",
    "ref_address": "0x08D896DC",
    "word": "0x08B8255C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10175,7 +12252,7 @@
    "ref_offset": "0x00D89718",
    "ref_address": "0x08D89718",
    "word": "0x08B8254C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10188,7 +12265,7 @@
    "ref_offset": "0x00D89754",
    "ref_address": "0x08D89754",
    "word": "0x08B82538",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10201,7 +12278,7 @@
    "ref_offset": "0x00D89790",
    "ref_address": "0x08D89790",
    "word": "0x08B82528",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10214,7 +12291,7 @@
    "ref_offset": "0x00D897CC",
    "ref_address": "0x08D897CC",
    "word": "0x08B82518",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10227,7 +12304,7 @@
    "ref_offset": "0x00D89808",
    "ref_address": "0x08D89808",
    "word": "0x08B82508",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10240,7 +12317,7 @@
    "ref_offset": "0x00D89880",
    "ref_address": "0x08D89880",
    "word": "0x08B824EC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10253,7 +12330,7 @@
    "ref_offset": "0x00D898BC",
    "ref_address": "0x08D898BC",
    "word": "0x08B824DC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10266,7 +12343,7 @@
    "ref_offset": "0x00D898F8",
    "ref_address": "0x08D898F8",
    "word": "0x08B824CC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10279,7 +12356,7 @@
    "ref_offset": "0x00D89934",
    "ref_address": "0x08D89934",
    "word": "0x08B824BC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10292,7 +12369,7 @@
    "ref_offset": "0x00D899AC",
    "ref_address": "0x08D899AC",
    "word": "0x08B8249C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10305,7 +12382,7 @@
    "ref_offset": "0x00D899E8",
    "ref_address": "0x08D899E8",
    "word": "0x08B8248C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10318,7 +12395,7 @@
    "ref_offset": "0x00D89A24",
    "ref_address": "0x08D89A24",
    "word": "0x08B8247C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10331,7 +12408,7 @@
    "ref_offset": "0x00D89A60",
    "ref_address": "0x08D89A60",
    "word": "0x08B8246C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10344,7 +12421,7 @@
    "ref_offset": "0x00D89A9C",
    "ref_address": "0x08D89A9C",
    "word": "0x08B82458",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10357,7 +12434,7 @@
    "ref_offset": "0x00D89AD8",
    "ref_address": "0x08D89AD8",
    "word": "0x08B82448",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10370,7 +12447,7 @@
    "ref_offset": "0x00D89B14",
    "ref_address": "0x08D89B14",
    "word": "0x08B82438",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10383,7 +12460,7 @@
    "ref_offset": "0x00D89B50",
    "ref_address": "0x08D89B50",
    "word": "0x08B82424",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10396,7 +12473,7 @@
    "ref_offset": "0x00D89B8C",
    "ref_address": "0x08D89B8C",
    "word": "0x08B82410",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10409,7 +12486,7 @@
    "ref_offset": "0x00D89BC8",
    "ref_address": "0x08D89BC8",
    "word": "0x08B82400",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10422,7 +12499,7 @@
    "ref_offset": "0x00D89C04",
    "ref_address": "0x08D89C04",
    "word": "0x08B823F0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10435,7 +12512,7 @@
    "ref_offset": "0x00D89C40",
    "ref_address": "0x08D89C40",
    "word": "0x08B823E0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10448,7 +12525,7 @@
    "ref_offset": "0x00D89C7C",
    "ref_address": "0x08D89C7C",
    "word": "0x08B823D0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10461,7 +12538,7 @@
    "ref_offset": "0x00D89CB8",
    "ref_address": "0x08D89CB8",
    "word": "0x08B823BC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10474,7 +12551,7 @@
    "ref_offset": "0x00D89CF4",
    "ref_address": "0x08D89CF4",
    "word": "0x08B823AC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10487,7 +12564,7 @@
    "ref_offset": "0x00D89D30",
    "ref_address": "0x08D89D30",
    "word": "0x08B8239C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10500,7 +12577,7 @@
    "ref_offset": "0x00D89D6C",
    "ref_address": "0x08D89D6C",
    "word": "0x08B82388",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10513,7 +12590,7 @@
    "ref_offset": "0x00D89DA8",
    "ref_address": "0x08D89DA8",
    "word": "0x08B82378",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10526,7 +12603,7 @@
    "ref_offset": "0x00D89DE4",
    "ref_address": "0x08D89DE4",
    "word": "0x08B82368",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10539,7 +12616,7 @@
    "ref_offset": "0x00D89E20",
    "ref_address": "0x08D89E20",
    "word": "0x08B82358",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10552,7 +12629,7 @@
    "ref_offset": "0x00D89E5C",
    "ref_address": "0x08D89E5C",
    "word": "0x08B82344",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10565,7 +12642,7 @@
    "ref_offset": "0x00D89E98",
    "ref_address": "0x08D89E98",
    "word": "0x08B82334",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10578,7 +12655,7 @@
    "ref_offset": "0x00D89ED4",
    "ref_address": "0x08D89ED4",
    "word": "0x08B82324",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10591,7 +12668,7 @@
    "ref_offset": "0x00D89F10",
    "ref_address": "0x08D89F10",
    "word": "0x08B82314",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10604,7 +12681,7 @@
    "ref_offset": "0x00D89F4C",
    "ref_address": "0x08D89F4C",
    "word": "0x08B82300",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10617,7 +12694,7 @@
    "ref_offset": "0x00D89F88",
    "ref_address": "0x08D89F88",
    "word": "0x08B822F0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10630,7 +12707,7 @@
    "ref_offset": "0x00D89FC4",
    "ref_address": "0x08D89FC4",
    "word": "0x08B822E0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10643,7 +12720,7 @@
    "ref_offset": "0x00D8A000",
    "ref_address": "0x08D8A000",
    "word": "0x08B822CC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10656,7 +12733,7 @@
    "ref_offset": "0x00D8A03C",
    "ref_address": "0x08D8A03C",
    "word": "0x08B822BC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10669,7 +12746,7 @@
    "ref_offset": "0x00D8A078",
    "ref_address": "0x08D8A078",
    "word": "0x08B822A8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10682,7 +12759,7 @@
    "ref_offset": "0x00D8A0B4",
    "ref_address": "0x08D8A0B4",
    "word": "0x08B82298",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10695,7 +12772,7 @@
    "ref_offset": "0x00D8A0F0",
    "ref_address": "0x08D8A0F0",
    "word": "0x08B82288",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10708,7 +12785,7 @@
    "ref_offset": "0x00D8A12C",
    "ref_address": "0x08D8A12C",
    "word": "0x08B82278",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10721,7 +12798,7 @@
    "ref_offset": "0x00D8A168",
    "ref_address": "0x08D8A168",
    "word": "0x08B82268",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10734,7 +12811,7 @@
    "ref_offset": "0x00D8A1A4",
    "ref_address": "0x08D8A1A4",
    "word": "0x08B82258",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10747,7 +12824,7 @@
    "ref_offset": "0x00D8A1E0",
    "ref_address": "0x08D8A1E0",
    "word": "0x08B82244",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10760,7 +12837,7 @@
    "ref_offset": "0x00D8A21C",
    "ref_address": "0x08D8A21C",
    "word": "0x08B82234",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10773,7 +12850,7 @@
    "ref_offset": "0x00D8A258",
    "ref_address": "0x08D8A258",
    "word": "0x08B82224",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10786,7 +12863,7 @@
    "ref_offset": "0x00D8A294",
    "ref_address": "0x08D8A294",
    "word": "0x08B82214",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10799,7 +12876,7 @@
    "ref_offset": "0x00D8A2D0",
    "ref_address": "0x08D8A2D0",
    "word": "0x08B82204",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10812,7 +12889,7 @@
    "ref_offset": "0x00D8A30C",
    "ref_address": "0x08D8A30C",
    "word": "0x08B821F4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10825,7 +12902,7 @@
    "ref_offset": "0x00D8A348",
    "ref_address": "0x08D8A348",
    "word": "0x08B821E4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10838,7 +12915,7 @@
    "ref_offset": "0x00D8A384",
    "ref_address": "0x08D8A384",
    "word": "0x08B821D4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10851,7 +12928,7 @@
    "ref_offset": "0x00D8A3C0",
    "ref_address": "0x08D8A3C0",
    "word": "0x08B821C4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10864,7 +12941,7 @@
    "ref_offset": "0x00D8A3FC",
    "ref_address": "0x08D8A3FC",
    "word": "0x08B821B0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10877,7 +12954,7 @@
    "ref_offset": "0x00D8A438",
    "ref_address": "0x08D8A438",
    "word": "0x08B8219C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10890,7 +12967,7 @@
    "ref_offset": "0x00D8A474",
    "ref_address": "0x08D8A474",
    "word": "0x08B82188",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10903,7 +12980,7 @@
    "ref_offset": "0x00D8A4B0",
    "ref_address": "0x08D8A4B0",
    "word": "0x08B82178",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10916,7 +12993,7 @@
    "ref_offset": "0x00D8A4EC",
    "ref_address": "0x08D8A4EC",
    "word": "0x08B82168",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10929,7 +13006,7 @@
    "ref_offset": "0x00D8A528",
    "ref_address": "0x08D8A528",
    "word": "0x08B8215C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10942,7 +13019,7 @@
    "ref_offset": "0x00D8A564",
    "ref_address": "0x08D8A564",
    "word": "0x08B8214C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10955,7 +13032,7 @@
    "ref_offset": "0x00D8A5A0",
    "ref_address": "0x08D8A5A0",
    "word": "0x08B8213C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10968,7 +13045,7 @@
    "ref_offset": "0x00D8A5DC",
    "ref_address": "0x08D8A5DC",
    "word": "0x08B8212C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10981,7 +13058,7 @@
    "ref_offset": "0x00D8A618",
    "ref_address": "0x08D8A618",
    "word": "0x08B8211C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -10994,7 +13071,7 @@
    "ref_offset": "0x00D8A654",
    "ref_address": "0x08D8A654",
    "word": "0x08B82108",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11007,7 +13084,7 @@
    "ref_offset": "0x00D8A690",
    "ref_address": "0x08D8A690",
    "word": "0x08B820F4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11020,7 +13097,7 @@
    "ref_offset": "0x00D8A6CC",
    "ref_address": "0x08D8A6CC",
    "word": "0x08B820E8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11033,7 +13110,7 @@
    "ref_offset": "0x00D8A744",
    "ref_address": "0x08D8A744",
    "word": "0x08B820C4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11046,7 +13123,7 @@
    "ref_offset": "0x00D8A780",
    "ref_address": "0x08D8A780",
    "word": "0x08B820B4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11059,7 +13136,7 @@
    "ref_offset": "0x00D8A7BC",
    "ref_address": "0x08D8A7BC",
    "word": "0x08B820A0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11072,7 +13149,7 @@
    "ref_offset": "0x00D8A7F8",
    "ref_address": "0x08D8A7F8",
    "word": "0x08B8208C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11085,7 +13162,7 @@
    "ref_offset": "0x00D8A834",
    "ref_address": "0x08D8A834",
    "word": "0x08B8207C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11098,7 +13175,7 @@
    "ref_offset": "0x00D8A870",
    "ref_address": "0x08D8A870",
    "word": "0x08B8206C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11111,7 +13188,7 @@
    "ref_offset": "0x00D8A8AC",
    "ref_address": "0x08D8A8AC",
    "word": "0x08B8205C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11124,7 +13201,7 @@
    "ref_offset": "0x00D8A8E8",
    "ref_address": "0x08D8A8E8",
    "word": "0x08B8204C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11137,7 +13214,7 @@
    "ref_offset": "0x00D8A924",
    "ref_address": "0x08D8A924",
    "word": "0x08B82038",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11150,7 +13227,7 @@
    "ref_offset": "0x00D8A960",
    "ref_address": "0x08D8A960",
    "word": "0x08B82024",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11163,7 +13240,7 @@
    "ref_offset": "0x00D8A99C",
    "ref_address": "0x08D8A99C",
    "word": "0x08B82018",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11176,7 +13253,7 @@
    "ref_offset": "0x00D8A9D8",
    "ref_address": "0x08D8A9D8",
    "word": "0x08B8200C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11189,7 +13266,7 @@
    "ref_offset": "0x00D8AA14",
    "ref_address": "0x08D8AA14",
    "word": "0x08B81FF4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11202,7 +13279,7 @@
    "ref_offset": "0x00D8AA50",
    "ref_address": "0x08D8AA50",
    "word": "0x08B81FDC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11215,7 +13292,7 @@
    "ref_offset": "0x00D8AA8C",
    "ref_address": "0x08D8AA8C",
    "word": "0x08B81FC4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11228,7 +13305,7 @@
    "ref_offset": "0x00D8AAC8",
    "ref_address": "0x08D8AAC8",
    "word": "0x08B81FAC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11241,7 +13318,7 @@
    "ref_offset": "0x00D8AB04",
    "ref_address": "0x08D8AB04",
    "word": "0x08B81F98",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11254,7 +13331,7 @@
    "ref_offset": "0x00D8AB40",
    "ref_address": "0x08D8AB40",
    "word": "0x08B81F80",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11267,7 +13344,7 @@
    "ref_offset": "0x00D8AB7C",
    "ref_address": "0x08D8AB7C",
    "word": "0x08B81F70",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11280,7 +13357,7 @@
    "ref_offset": "0x00D8ABB8",
    "ref_address": "0x08D8ABB8",
    "word": "0x08B81F5C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11293,7 +13370,7 @@
    "ref_offset": "0x00D8ABF4",
    "ref_address": "0x08D8ABF4",
    "word": "0x08B81F4C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11306,7 +13383,7 @@
    "ref_offset": "0x00D8AC30",
    "ref_address": "0x08D8AC30",
    "word": "0x08B81F40",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11319,7 +13396,7 @@
    "ref_offset": "0x00D8AC6C",
    "ref_address": "0x08D8AC6C",
    "word": "0x08B81F38",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11332,7 +13409,7 @@
    "ref_offset": "0x00D8ACA8",
    "ref_address": "0x08D8ACA8",
    "word": "0x08B81F2C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11345,7 +13422,7 @@
    "ref_offset": "0x00D8ACE4",
    "ref_address": "0x08D8ACE4",
    "word": "0x08B81F24",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11358,7 +13435,7 @@
    "ref_offset": "0x00D8AD20",
    "ref_address": "0x08D8AD20",
    "word": "0x08B81F10",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11371,7 +13448,7 @@
    "ref_offset": "0x00D8AD5C",
    "ref_address": "0x08D8AD5C",
    "word": "0x08B81F04",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11384,7 +13461,7 @@
    "ref_offset": "0x00D8AD98",
    "ref_address": "0x08D8AD98",
    "word": "0x08B81EF4",
-   "source_count": 2,
+   "source_count": 3,
    "literal_loads": []
   },
   {
@@ -11397,7 +13474,7 @@
    "ref_offset": "0x00D8ADD4",
    "ref_address": "0x08D8ADD4",
    "word": "0x08B81EE0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11410,7 +13487,7 @@
    "ref_offset": "0x00D8AE10",
    "ref_address": "0x08D8AE10",
    "word": "0x08B81ED0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11423,7 +13500,7 @@
    "ref_offset": "0x00D8AE4C",
    "ref_address": "0x08D8AE4C",
    "word": "0x08B81EB8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11436,7 +13513,7 @@
    "ref_offset": "0x00D8AE88",
    "ref_address": "0x08D8AE88",
    "word": "0x08B81EF4",
-   "source_count": 2,
+   "source_count": 3,
    "literal_loads": []
   },
   {
@@ -11449,7 +13526,7 @@
    "ref_offset": "0x00D8AEC4",
    "ref_address": "0x08D8AEC4",
    "word": "0x08B81EA8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11462,7 +13539,7 @@
    "ref_offset": "0x00D8AF00",
    "ref_address": "0x08D8AF00",
    "word": "0x08B81E98",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11475,7 +13552,7 @@
    "ref_offset": "0x00D8AF3C",
    "ref_address": "0x08D8AF3C",
    "word": "0x08B81E8C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11488,7 +13565,7 @@
    "ref_offset": "0x00D8AF78",
    "ref_address": "0x08D8AF78",
    "word": "0x08B81E78",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11501,7 +13578,7 @@
    "ref_offset": "0x00D8AFB4",
    "ref_address": "0x08D8AFB4",
    "word": "0x08B81E64",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11514,7 +13591,7 @@
    "ref_offset": "0x00D8AFF0",
    "ref_address": "0x08D8AFF0",
    "word": "0x08B81E50",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11527,7 +13604,7 @@
    "ref_offset": "0x00D8B02C",
    "ref_address": "0x08D8B02C",
    "word": "0x08B81E38",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11540,7 +13617,7 @@
    "ref_offset": "0x00D8B068",
    "ref_address": "0x08D8B068",
    "word": "0x08B81E2C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11553,7 +13630,7 @@
    "ref_offset": "0x00D8B0A4",
    "ref_address": "0x08D8B0A4",
    "word": "0x08B81E1C",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11566,7 +13643,7 @@
    "ref_offset": "0x00D8B0E0",
    "ref_address": "0x08D8B0E0",
    "word": "0x08B81E08",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11579,7 +13656,7 @@
    "ref_offset": "0x00D8B11C",
    "ref_address": "0x08D8B11C",
    "word": "0x08B81DF0",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11592,7 +13669,7 @@
    "ref_offset": "0x00D8B158",
    "ref_address": "0x08D8B158",
    "word": "0x08B81DF0",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11605,7 +13682,7 @@
    "ref_offset": "0x00D8B194",
    "ref_address": "0x08D8B194",
    "word": "0x08B81DF0",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11618,7 +13695,7 @@
    "ref_offset": "0x00D8B1D0",
    "ref_address": "0x08D8B1D0",
    "word": "0x08B81DE8",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11631,7 +13708,7 @@
    "ref_offset": "0x00D8B20C",
    "ref_address": "0x08D8B20C",
    "word": "0x08B81DE8",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11644,7 +13721,7 @@
    "ref_offset": "0x00D8B248",
    "ref_address": "0x08D8B248",
    "word": "0x08B81DE8",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11657,7 +13734,7 @@
    "ref_offset": "0x00D8B284",
    "ref_address": "0x08D8B284",
    "word": "0x08B81DD4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11670,7 +13747,7 @@
    "ref_offset": "0x00D8B2C0",
    "ref_address": "0x08D8B2C0",
    "word": "0x08B81DD4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11683,7 +13760,7 @@
    "ref_offset": "0x00D8B2FC",
    "ref_address": "0x08D8B2FC",
    "word": "0x08B81DD4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11696,7 +13773,7 @@
    "ref_offset": "0x00D8B338",
    "ref_address": "0x08D8B338",
    "word": "0x08B81DC4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11709,7 +13786,7 @@
    "ref_offset": "0x00D8B374",
    "ref_address": "0x08D8B374",
    "word": "0x08B81DC4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11722,7 +13799,7 @@
    "ref_offset": "0x00D8B3B0",
    "ref_address": "0x08D8B3B0",
    "word": "0x08B81DC4",
-   "source_count": 3,
+   "source_count": 4,
    "literal_loads": []
   },
   {
@@ -11735,7 +13812,7 @@
    "ref_offset": "0x00D8B3EC",
    "ref_address": "0x08D8B3EC",
    "word": "0x08B81DB4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11748,7 +13825,7 @@
    "ref_offset": "0x00D8B464",
    "ref_address": "0x08D8B464",
    "word": "0x08B81D94",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11761,7 +13838,7 @@
    "ref_offset": "0x00D8B4A0",
    "ref_address": "0x08D8B4A0",
    "word": "0x08B81D80",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11774,7 +13851,7 @@
    "ref_offset": "0x00D8B4DC",
    "ref_address": "0x08D8B4DC",
    "word": "0x08B81D70",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11787,7 +13864,7 @@
    "ref_offset": "0x00D8B518",
    "ref_address": "0x08D8B518",
    "word": "0x08B81D60",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11800,7 +13877,7 @@
    "ref_offset": "0x00D8B554",
    "ref_address": "0x08D8B554",
    "word": "0x08B81D50",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11813,7 +13890,7 @@
    "ref_offset": "0x00D8B590",
    "ref_address": "0x08D8B590",
    "word": "0x08B81D70",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11826,7 +13903,7 @@
    "ref_offset": "0x00D8B5CC",
    "ref_address": "0x08D8B5CC",
    "word": "0x08B81D60",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11839,7 +13916,7 @@
    "ref_offset": "0x00D8B608",
    "ref_address": "0x08D8B608",
    "word": "0x08B81D50",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11852,7 +13929,7 @@
    "ref_offset": "0x00D8B644",
    "ref_address": "0x08D8B644",
    "word": "0x08B81D70",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11865,7 +13942,7 @@
    "ref_offset": "0x00D8B680",
    "ref_address": "0x08D8B680",
    "word": "0x08B81D60",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11878,7 +13955,7 @@
    "ref_offset": "0x00D8B6BC",
    "ref_address": "0x08D8B6BC",
    "word": "0x08B81D50",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11891,7 +13968,7 @@
    "ref_offset": "0x00D8B6F8",
    "ref_address": "0x08D8B6F8",
    "word": "0x08B81D70",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11904,7 +13981,7 @@
    "ref_offset": "0x00D8B734",
    "ref_address": "0x08D8B734",
    "word": "0x08B81D60",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11917,7 +13994,7 @@
    "ref_offset": "0x00D8B770",
    "ref_address": "0x08D8B770",
    "word": "0x08B81D50",
-   "source_count": 4,
+   "source_count": 5,
    "literal_loads": []
   },
   {
@@ -11956,7 +14033,7 @@
    "ref_offset": "0x00D8B7BC",
    "ref_address": "0x08D8B7BC",
    "word": "0x08B82800",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11969,7 +14046,7 @@
    "ref_offset": "0x00D8B7C0",
    "ref_address": "0x08D8B7C0",
    "word": "0x08B827F4",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11982,7 +14059,7 @@
    "ref_offset": "0x00D8B7C4",
    "ref_address": "0x08D8B7C4",
    "word": "0x08B827E8",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -11995,7 +14072,7 @@
    "ref_offset": "0x00D8B7C8",
    "ref_address": "0x08D8B7C8",
    "word": "0x08B827DC",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -12008,7 +14085,7 @@
    "ref_offset": "0x00D8B7CC",
    "ref_address": "0x08D8B7CC",
    "word": "0x08B827D0",
-   "source_count": 1,
+   "source_count": 2,
    "literal_loads": []
   },
   {
@@ -14219,6 +16296,2229 @@
    "ref_address": "0x08DF2B98",
    "word": "0x08B84F28",
    "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81CA0",
+   "table_head_offset": "0x00B81CA0",
+   "ref_offset": "0x00F306F0",
+   "ref_address": "0x08F306F0",
+   "word": "0x08B81CA0",
+   "source_count": 3,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82800",
+   "table_head_offset": "0x00B82800",
+   "ref_offset": "0x00F306F4",
+   "ref_address": "0x08F306F4",
+   "word": "0x08B82800",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81CA0",
+   "table_head_offset": "0x00B81CA0",
+   "ref_offset": "0x00F30818",
+   "ref_address": "0x08F30818",
+   "word": "0x08B81CA0",
+   "source_count": 3,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81CB0",
+   "table_head_offset": "0x00B81CB0",
+   "ref_offset": "0x00F30830",
+   "ref_address": "0x08F30830",
+   "word": "0x08B81CB0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81CC0",
+   "table_head_offset": "0x00B81CC0",
+   "ref_offset": "0x00F30848",
+   "ref_address": "0x08F30848",
+   "word": "0x08B81CC0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81CD0",
+   "table_head_offset": "0x00B81CD0",
+   "ref_offset": "0x00F30868",
+   "ref_address": "0x08F30868",
+   "word": "0x08B81CD0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D00",
+   "table_head_offset": "0x00B81D00",
+   "ref_offset": "0x00F30888",
+   "ref_address": "0x08F30888",
+   "word": "0x08B81D00",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D10",
+   "table_head_offset": "0x00B81D10",
+   "ref_offset": "0x00F308A8",
+   "ref_address": "0x08F308A8",
+   "word": "0x08B81D10",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D20",
+   "table_head_offset": "0x00B81D20",
+   "ref_offset": "0x00F308B8",
+   "ref_address": "0x08F308B8",
+   "word": "0x08B81D20",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D30",
+   "table_head_offset": "0x00B81D30",
+   "ref_offset": "0x00F308D0",
+   "ref_address": "0x08F308D0",
+   "word": "0x08B81D30",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D40",
+   "table_head_offset": "0x00B81D40",
+   "ref_offset": "0x00F308E8",
+   "ref_address": "0x08F308E8",
+   "word": "0x08B81D40",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D50",
+   "table_head_offset": "0x00B81D50",
+   "ref_offset": "0x00F30908",
+   "ref_address": "0x08F30908",
+   "word": "0x08B81D50",
+   "source_count": 5,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D60",
+   "table_head_offset": "0x00B81D60",
+   "ref_offset": "0x00F30920",
+   "ref_address": "0x08F30920",
+   "word": "0x08B81D60",
+   "source_count": 5,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D70",
+   "table_head_offset": "0x00B81D70",
+   "ref_offset": "0x00F30938",
+   "ref_address": "0x08F30938",
+   "word": "0x08B81D70",
+   "source_count": 5,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D80",
+   "table_head_offset": "0x00B81D80",
+   "ref_offset": "0x00F30950",
+   "ref_address": "0x08F30950",
+   "word": "0x08B81D80",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81D94",
+   "table_head_offset": "0x00B81D94",
+   "ref_offset": "0x00F30978",
+   "ref_address": "0x08F30978",
+   "word": "0x08B81D94",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81DB4",
+   "table_head_offset": "0x00B81DB4",
+   "ref_offset": "0x00F309A0",
+   "ref_address": "0x08F309A0",
+   "word": "0x08B81DB4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81DC4",
+   "table_head_offset": "0x00B81DC4",
+   "ref_offset": "0x00F309C0",
+   "ref_address": "0x08F309C0",
+   "word": "0x08B81DC4",
+   "source_count": 4,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81DD4",
+   "table_head_offset": "0x00B81DD4",
+   "ref_offset": "0x00F309F0",
+   "ref_address": "0x08F309F0",
+   "word": "0x08B81DD4",
+   "source_count": 4,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81DE8",
+   "table_head_offset": "0x00B81DE8",
+   "ref_offset": "0x00F30A10",
+   "ref_address": "0x08F30A10",
+   "word": "0x08B81DE8",
+   "source_count": 4,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81DF0",
+   "table_head_offset": "0x00B81DF0",
+   "ref_offset": "0x00F30A20",
+   "ref_address": "0x08F30A20",
+   "word": "0x08B81DF0",
+   "source_count": 4,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E08",
+   "table_head_offset": "0x00B81E08",
+   "ref_offset": "0x00F30A40",
+   "ref_address": "0x08F30A40",
+   "word": "0x08B81E08",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E1C",
+   "table_head_offset": "0x00B81E1C",
+   "ref_offset": "0x00F30A68",
+   "ref_address": "0x08F30A68",
+   "word": "0x08B81E1C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E2C",
+   "table_head_offset": "0x00B81E2C",
+   "ref_offset": "0x00F30A90",
+   "ref_address": "0x08F30A90",
+   "word": "0x08B81E2C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E38",
+   "table_head_offset": "0x00B81E38",
+   "ref_offset": "0x00F30AB0",
+   "ref_address": "0x08F30AB0",
+   "word": "0x08B81E38",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E50",
+   "table_head_offset": "0x00B81E50",
+   "ref_offset": "0x00F30AE0",
+   "ref_address": "0x08F30AE0",
+   "word": "0x08B81E50",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E64",
+   "table_head_offset": "0x00B81E64",
+   "ref_offset": "0x00F30B20",
+   "ref_address": "0x08F30B20",
+   "word": "0x08B81E64",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E78",
+   "table_head_offset": "0x00B81E78",
+   "ref_offset": "0x00F30B50",
+   "ref_address": "0x08F30B50",
+   "word": "0x08B81E78",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E8C",
+   "table_head_offset": "0x00B81E8C",
+   "ref_offset": "0x00F30B88",
+   "ref_address": "0x08F30B88",
+   "word": "0x08B81E8C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81E98",
+   "table_head_offset": "0x00B81E98",
+   "ref_offset": "0x00F30BA8",
+   "ref_address": "0x08F30BA8",
+   "word": "0x08B81E98",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81EA8",
+   "table_head_offset": "0x00B81EA8",
+   "ref_offset": "0x00F30BC8",
+   "ref_address": "0x08F30BC8",
+   "word": "0x08B81EA8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81EB8",
+   "table_head_offset": "0x00B81EB8",
+   "ref_offset": "0x00F30BE8",
+   "ref_address": "0x08F30BE8",
+   "word": "0x08B81EB8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81ED0",
+   "table_head_offset": "0x00B81ED0",
+   "ref_offset": "0x00F30C20",
+   "ref_address": "0x08F30C20",
+   "word": "0x08B81ED0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81EE0",
+   "table_head_offset": "0x00B81EE0",
+   "ref_offset": "0x00F30C48",
+   "ref_address": "0x08F30C48",
+   "word": "0x08B81EE0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81EF4",
+   "table_head_offset": "0x00B81EF4",
+   "ref_offset": "0x00F30C68",
+   "ref_address": "0x08F30C68",
+   "word": "0x08B81EF4",
+   "source_count": 3,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F04",
+   "table_head_offset": "0x00B81F04",
+   "ref_offset": "0x00F30C88",
+   "ref_address": "0x08F30C88",
+   "word": "0x08B81F04",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F10",
+   "table_head_offset": "0x00B81F10",
+   "ref_offset": "0x00F30CA8",
+   "ref_address": "0x08F30CA8",
+   "word": "0x08B81F10",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F24",
+   "table_head_offset": "0x00B81F24",
+   "ref_offset": "0x00F30CC8",
+   "ref_address": "0x08F30CC8",
+   "word": "0x08B81F24",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F2C",
+   "table_head_offset": "0x00B81F2C",
+   "ref_offset": "0x00F30CD8",
+   "ref_address": "0x08F30CD8",
+   "word": "0x08B81F2C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F38",
+   "table_head_offset": "0x00B81F38",
+   "ref_offset": "0x00F30CF8",
+   "ref_address": "0x08F30CF8",
+   "word": "0x08B81F38",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F40",
+   "table_head_offset": "0x00B81F40",
+   "ref_offset": "0x00F30D08",
+   "ref_address": "0x08F30D08",
+   "word": "0x08B81F40",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F4C",
+   "table_head_offset": "0x00B81F4C",
+   "ref_offset": "0x00F30D28",
+   "ref_address": "0x08F30D28",
+   "word": "0x08B81F4C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F5C",
+   "table_head_offset": "0x00B81F5C",
+   "ref_offset": "0x00F30D48",
+   "ref_address": "0x08F30D48",
+   "word": "0x08B81F5C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F70",
+   "table_head_offset": "0x00B81F70",
+   "ref_offset": "0x00F30D70",
+   "ref_address": "0x08F30D70",
+   "word": "0x08B81F70",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F80",
+   "table_head_offset": "0x00B81F80",
+   "ref_offset": "0x00F30D90",
+   "ref_address": "0x08F30D90",
+   "word": "0x08B81F80",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81F98",
+   "table_head_offset": "0x00B81F98",
+   "ref_offset": "0x00F30DB0",
+   "ref_address": "0x08F30DB0",
+   "word": "0x08B81F98",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81FAC",
+   "table_head_offset": "0x00B81FAC",
+   "ref_offset": "0x00F30DE0",
+   "ref_address": "0x08F30DE0",
+   "word": "0x08B81FAC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81FC4",
+   "table_head_offset": "0x00B81FC4",
+   "ref_offset": "0x00F30E08",
+   "ref_address": "0x08F30E08",
+   "word": "0x08B81FC4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81FDC",
+   "table_head_offset": "0x00B81FDC",
+   "ref_offset": "0x00F30E30",
+   "ref_address": "0x08F30E30",
+   "word": "0x08B81FDC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B81FF4",
+   "table_head_offset": "0x00B81FF4",
+   "ref_offset": "0x00F30E60",
+   "ref_address": "0x08F30E60",
+   "word": "0x08B81FF4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8200C",
+   "table_head_offset": "0x00B8200C",
+   "ref_offset": "0x00F30E90",
+   "ref_address": "0x08F30E90",
+   "word": "0x08B8200C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82018",
+   "table_head_offset": "0x00B82018",
+   "ref_offset": "0x00F30EA8",
+   "ref_address": "0x08F30EA8",
+   "word": "0x08B82018",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82024",
+   "table_head_offset": "0x00B82024",
+   "ref_offset": "0x00F30EC8",
+   "ref_address": "0x08F30EC8",
+   "word": "0x08B82024",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82038",
+   "table_head_offset": "0x00B82038",
+   "ref_offset": "0x00F30EF0",
+   "ref_address": "0x08F30EF0",
+   "word": "0x08B82038",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8204C",
+   "table_head_offset": "0x00B8204C",
+   "ref_offset": "0x00F30F20",
+   "ref_address": "0x08F30F20",
+   "word": "0x08B8204C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8205C",
+   "table_head_offset": "0x00B8205C",
+   "ref_offset": "0x00F30F40",
+   "ref_address": "0x08F30F40",
+   "word": "0x08B8205C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8206C",
+   "table_head_offset": "0x00B8206C",
+   "ref_offset": "0x00F30F68",
+   "ref_address": "0x08F30F68",
+   "word": "0x08B8206C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8207C",
+   "table_head_offset": "0x00B8207C",
+   "ref_offset": "0x00F30F88",
+   "ref_address": "0x08F30F88",
+   "word": "0x08B8207C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8208C",
+   "table_head_offset": "0x00B8208C",
+   "ref_offset": "0x00F30FB8",
+   "ref_address": "0x08F30FB8",
+   "word": "0x08B8208C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820A0",
+   "table_head_offset": "0x00B820A0",
+   "ref_offset": "0x00F30FD8",
+   "ref_address": "0x08F30FD8",
+   "word": "0x08B820A0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820B4",
+   "table_head_offset": "0x00B820B4",
+   "ref_offset": "0x00F30FF8",
+   "ref_address": "0x08F30FF8",
+   "word": "0x08B820B4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820C4",
+   "table_head_offset": "0x00B820C4",
+   "ref_offset": "0x00F31018",
+   "ref_address": "0x08F31018",
+   "word": "0x08B820C4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820D8",
+   "table_head_offset": "0x00B820D8",
+   "ref_offset": "0x00F31040",
+   "ref_address": "0x08F31040",
+   "word": "0x08B820D8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820E8",
+   "table_head_offset": "0x00B820E8",
+   "ref_offset": "0x00F31070",
+   "ref_address": "0x08F31070",
+   "word": "0x08B820E8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B820F4",
+   "table_head_offset": "0x00B820F4",
+   "ref_offset": "0x00F31090",
+   "ref_address": "0x08F31090",
+   "word": "0x08B820F4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82108",
+   "table_head_offset": "0x00B82108",
+   "ref_offset": "0x00F310C0",
+   "ref_address": "0x08F310C0",
+   "word": "0x08B82108",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8211C",
+   "table_head_offset": "0x00B8211C",
+   "ref_offset": "0x00F310E0",
+   "ref_address": "0x08F310E0",
+   "word": "0x08B8211C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8212C",
+   "table_head_offset": "0x00B8212C",
+   "ref_offset": "0x00F31100",
+   "ref_address": "0x08F31100",
+   "word": "0x08B8212C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8213C",
+   "table_head_offset": "0x00B8213C",
+   "ref_offset": "0x00F31118",
+   "ref_address": "0x08F31118",
+   "word": "0x08B8213C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8214C",
+   "table_head_offset": "0x00B8214C",
+   "ref_offset": "0x00F31130",
+   "ref_address": "0x08F31130",
+   "word": "0x08B8214C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8215C",
+   "table_head_offset": "0x00B8215C",
+   "ref_offset": "0x00F31158",
+   "ref_address": "0x08F31158",
+   "word": "0x08B8215C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82168",
+   "table_head_offset": "0x00B82168",
+   "ref_offset": "0x00F31170",
+   "ref_address": "0x08F31170",
+   "word": "0x08B82168",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82178",
+   "table_head_offset": "0x00B82178",
+   "ref_offset": "0x00F31190",
+   "ref_address": "0x08F31190",
+   "word": "0x08B82178",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82188",
+   "table_head_offset": "0x00B82188",
+   "ref_offset": "0x00F311B8",
+   "ref_address": "0x08F311B8",
+   "word": "0x08B82188",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8219C",
+   "table_head_offset": "0x00B8219C",
+   "ref_offset": "0x00F311E0",
+   "ref_address": "0x08F311E0",
+   "word": "0x08B8219C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B821B0",
+   "table_head_offset": "0x00B821B0",
+   "ref_offset": "0x00F31200",
+   "ref_address": "0x08F31200",
+   "word": "0x08B821B0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B821C4",
+   "table_head_offset": "0x00B821C4",
+   "ref_offset": "0x00F31230",
+   "ref_address": "0x08F31230",
+   "word": "0x08B821C4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B821D4",
+   "table_head_offset": "0x00B821D4",
+   "ref_offset": "0x00F31248",
+   "ref_address": "0x08F31248",
+   "word": "0x08B821D4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B821E4",
+   "table_head_offset": "0x00B821E4",
+   "ref_offset": "0x00F31260",
+   "ref_address": "0x08F31260",
+   "word": "0x08B821E4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B821F4",
+   "table_head_offset": "0x00B821F4",
+   "ref_offset": "0x00F31288",
+   "ref_address": "0x08F31288",
+   "word": "0x08B821F4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82204",
+   "table_head_offset": "0x00B82204",
+   "ref_offset": "0x00F312A8",
+   "ref_address": "0x08F312A8",
+   "word": "0x08B82204",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82214",
+   "table_head_offset": "0x00B82214",
+   "ref_offset": "0x00F312C8",
+   "ref_address": "0x08F312C8",
+   "word": "0x08B82214",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82224",
+   "table_head_offset": "0x00B82224",
+   "ref_offset": "0x00F312F0",
+   "ref_address": "0x08F312F0",
+   "word": "0x08B82224",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82234",
+   "table_head_offset": "0x00B82234",
+   "ref_offset": "0x00F31308",
+   "ref_address": "0x08F31308",
+   "word": "0x08B82234",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82244",
+   "table_head_offset": "0x00B82244",
+   "ref_offset": "0x00F31330",
+   "ref_address": "0x08F31330",
+   "word": "0x08B82244",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82258",
+   "table_head_offset": "0x00B82258",
+   "ref_offset": "0x00F31348",
+   "ref_address": "0x08F31348",
+   "word": "0x08B82258",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82268",
+   "table_head_offset": "0x00B82268",
+   "ref_offset": "0x00F31360",
+   "ref_address": "0x08F31360",
+   "word": "0x08B82268",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82278",
+   "table_head_offset": "0x00B82278",
+   "ref_offset": "0x00F31388",
+   "ref_address": "0x08F31388",
+   "word": "0x08B82278",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82288",
+   "table_head_offset": "0x00B82288",
+   "ref_offset": "0x00F313A8",
+   "ref_address": "0x08F313A8",
+   "word": "0x08B82288",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82298",
+   "table_head_offset": "0x00B82298",
+   "ref_offset": "0x00F313C0",
+   "ref_address": "0x08F313C0",
+   "word": "0x08B82298",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B822A8",
+   "table_head_offset": "0x00B822A8",
+   "ref_offset": "0x00F313E8",
+   "ref_address": "0x08F313E8",
+   "word": "0x08B822A8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B822BC",
+   "table_head_offset": "0x00B822BC",
+   "ref_offset": "0x00F31408",
+   "ref_address": "0x08F31408",
+   "word": "0x08B822BC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B822CC",
+   "table_head_offset": "0x00B822CC",
+   "ref_offset": "0x00F31420",
+   "ref_address": "0x08F31420",
+   "word": "0x08B822CC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B822E0",
+   "table_head_offset": "0x00B822E0",
+   "ref_offset": "0x00F31448",
+   "ref_address": "0x08F31448",
+   "word": "0x08B822E0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B822F0",
+   "table_head_offset": "0x00B822F0",
+   "ref_offset": "0x00F31468",
+   "ref_address": "0x08F31468",
+   "word": "0x08B822F0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82300",
+   "table_head_offset": "0x00B82300",
+   "ref_offset": "0x00F31490",
+   "ref_address": "0x08F31490",
+   "word": "0x08B82300",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82314",
+   "table_head_offset": "0x00B82314",
+   "ref_offset": "0x00F314B8",
+   "ref_address": "0x08F314B8",
+   "word": "0x08B82314",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82324",
+   "table_head_offset": "0x00B82324",
+   "ref_offset": "0x00F314E8",
+   "ref_address": "0x08F314E8",
+   "word": "0x08B82324",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82334",
+   "table_head_offset": "0x00B82334",
+   "ref_offset": "0x00F31508",
+   "ref_address": "0x08F31508",
+   "word": "0x08B82334",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82344",
+   "table_head_offset": "0x00B82344",
+   "ref_offset": "0x00F31528",
+   "ref_address": "0x08F31528",
+   "word": "0x08B82344",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82358",
+   "table_head_offset": "0x00B82358",
+   "ref_offset": "0x00F31540",
+   "ref_address": "0x08F31540",
+   "word": "0x08B82358",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82368",
+   "table_head_offset": "0x00B82368",
+   "ref_offset": "0x00F31568",
+   "ref_address": "0x08F31568",
+   "word": "0x08B82368",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82378",
+   "table_head_offset": "0x00B82378",
+   "ref_offset": "0x00F31590",
+   "ref_address": "0x08F31590",
+   "word": "0x08B82378",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82388",
+   "table_head_offset": "0x00B82388",
+   "ref_offset": "0x00F315B8",
+   "ref_address": "0x08F315B8",
+   "word": "0x08B82388",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8239C",
+   "table_head_offset": "0x00B8239C",
+   "ref_offset": "0x00F315E0",
+   "ref_address": "0x08F315E0",
+   "word": "0x08B8239C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B823AC",
+   "table_head_offset": "0x00B823AC",
+   "ref_offset": "0x00F31600",
+   "ref_address": "0x08F31600",
+   "word": "0x08B823AC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B823BC",
+   "table_head_offset": "0x00B823BC",
+   "ref_offset": "0x00F31628",
+   "ref_address": "0x08F31628",
+   "word": "0x08B823BC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B823D0",
+   "table_head_offset": "0x00B823D0",
+   "ref_offset": "0x00F31650",
+   "ref_address": "0x08F31650",
+   "word": "0x08B823D0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B823E0",
+   "table_head_offset": "0x00B823E0",
+   "ref_offset": "0x00F31670",
+   "ref_address": "0x08F31670",
+   "word": "0x08B823E0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B823F0",
+   "table_head_offset": "0x00B823F0",
+   "ref_offset": "0x00F31698",
+   "ref_address": "0x08F31698",
+   "word": "0x08B823F0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82400",
+   "table_head_offset": "0x00B82400",
+   "ref_offset": "0x00F316B0",
+   "ref_address": "0x08F316B0",
+   "word": "0x08B82400",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82410",
+   "table_head_offset": "0x00B82410",
+   "ref_offset": "0x00F316D0",
+   "ref_address": "0x08F316D0",
+   "word": "0x08B82410",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82424",
+   "table_head_offset": "0x00B82424",
+   "ref_offset": "0x00F316F0",
+   "ref_address": "0x08F316F0",
+   "word": "0x08B82424",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82438",
+   "table_head_offset": "0x00B82438",
+   "ref_offset": "0x00F31718",
+   "ref_address": "0x08F31718",
+   "word": "0x08B82438",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82448",
+   "table_head_offset": "0x00B82448",
+   "ref_offset": "0x00F31738",
+   "ref_address": "0x08F31738",
+   "word": "0x08B82448",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82458",
+   "table_head_offset": "0x00B82458",
+   "ref_offset": "0x00F31758",
+   "ref_address": "0x08F31758",
+   "word": "0x08B82458",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8246C",
+   "table_head_offset": "0x00B8246C",
+   "ref_offset": "0x00F31778",
+   "ref_address": "0x08F31778",
+   "word": "0x08B8246C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8247C",
+   "table_head_offset": "0x00B8247C",
+   "ref_offset": "0x00F31790",
+   "ref_address": "0x08F31790",
+   "word": "0x08B8247C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8248C",
+   "table_head_offset": "0x00B8248C",
+   "ref_offset": "0x00F317A8",
+   "ref_address": "0x08F317A8",
+   "word": "0x08B8248C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8249C",
+   "table_head_offset": "0x00B8249C",
+   "ref_offset": "0x00F317C8",
+   "ref_address": "0x08F317C8",
+   "word": "0x08B8249C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824AC",
+   "table_head_offset": "0x00B824AC",
+   "ref_offset": "0x00F317E8",
+   "ref_address": "0x08F317E8",
+   "word": "0x08B824AC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824BC",
+   "table_head_offset": "0x00B824BC",
+   "ref_offset": "0x00F31818",
+   "ref_address": "0x08F31818",
+   "word": "0x08B824BC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824CC",
+   "table_head_offset": "0x00B824CC",
+   "ref_offset": "0x00F31848",
+   "ref_address": "0x08F31848",
+   "word": "0x08B824CC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824DC",
+   "table_head_offset": "0x00B824DC",
+   "ref_offset": "0x00F31868",
+   "ref_address": "0x08F31868",
+   "word": "0x08B824DC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824EC",
+   "table_head_offset": "0x00B824EC",
+   "ref_offset": "0x00F31890",
+   "ref_address": "0x08F31890",
+   "word": "0x08B824EC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B824F8",
+   "table_head_offset": "0x00B824F8",
+   "ref_offset": "0x00F318A8",
+   "ref_address": "0x08F318A8",
+   "word": "0x08B824F8",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82508",
+   "table_head_offset": "0x00B82508",
+   "ref_offset": "0x00F318E0",
+   "ref_address": "0x08F318E0",
+   "word": "0x08B82508",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82518",
+   "table_head_offset": "0x00B82518",
+   "ref_offset": "0x00F31900",
+   "ref_address": "0x08F31900",
+   "word": "0x08B82518",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82528",
+   "table_head_offset": "0x00B82528",
+   "ref_offset": "0x00F31920",
+   "ref_address": "0x08F31920",
+   "word": "0x08B82528",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82538",
+   "table_head_offset": "0x00B82538",
+   "ref_offset": "0x00F31948",
+   "ref_address": "0x08F31948",
+   "word": "0x08B82538",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8254C",
+   "table_head_offset": "0x00B8254C",
+   "ref_offset": "0x00F31968",
+   "ref_address": "0x08F31968",
+   "word": "0x08B8254C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8255C",
+   "table_head_offset": "0x00B8255C",
+   "ref_offset": "0x00F31990",
+   "ref_address": "0x08F31990",
+   "word": "0x08B8255C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82570",
+   "table_head_offset": "0x00B82570",
+   "ref_offset": "0x00F319B0",
+   "ref_address": "0x08F319B0",
+   "word": "0x08B82570",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82584",
+   "table_head_offset": "0x00B82584",
+   "ref_offset": "0x00F319C8",
+   "ref_address": "0x08F319C8",
+   "word": "0x08B82584",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82598",
+   "table_head_offset": "0x00B82598",
+   "ref_offset": "0x00F319F0",
+   "ref_address": "0x08F319F0",
+   "word": "0x08B82598",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B825A8",
+   "table_head_offset": "0x00B825A8",
+   "ref_offset": "0x00F31A10",
+   "ref_address": "0x08F31A10",
+   "word": "0x08B825A8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B825BC",
+   "table_head_offset": "0x00B825BC",
+   "ref_offset": "0x00F31A30",
+   "ref_address": "0x08F31A30",
+   "word": "0x08B825BC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B825D0",
+   "table_head_offset": "0x00B825D0",
+   "ref_offset": "0x00F31A58",
+   "ref_address": "0x08F31A58",
+   "word": "0x08B825D0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B825E4",
+   "table_head_offset": "0x00B825E4",
+   "ref_offset": "0x00F31A78",
+   "ref_address": "0x08F31A78",
+   "word": "0x08B825E4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B825F4",
+   "table_head_offset": "0x00B825F4",
+   "ref_offset": "0x00F31AA0",
+   "ref_address": "0x08F31AA0",
+   "word": "0x08B825F4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82608",
+   "table_head_offset": "0x00B82608",
+   "ref_offset": "0x00F31AD8",
+   "ref_address": "0x08F31AD8",
+   "word": "0x08B82608",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82614",
+   "table_head_offset": "0x00B82614",
+   "ref_offset": "0x00F31AF0",
+   "ref_address": "0x08F31AF0",
+   "word": "0x08B82614",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82628",
+   "table_head_offset": "0x00B82628",
+   "ref_offset": "0x00F31B08",
+   "ref_address": "0x08F31B08",
+   "word": "0x08B82628",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8263C",
+   "table_head_offset": "0x00B8263C",
+   "ref_offset": "0x00F31B28",
+   "ref_address": "0x08F31B28",
+   "word": "0x08B8263C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82650",
+   "table_head_offset": "0x00B82650",
+   "ref_offset": "0x00F31B48",
+   "ref_address": "0x08F31B48",
+   "word": "0x08B82650",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82664",
+   "table_head_offset": "0x00B82664",
+   "ref_offset": "0x00F31B68",
+   "ref_address": "0x08F31B68",
+   "word": "0x08B82664",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82678",
+   "table_head_offset": "0x00B82678",
+   "ref_offset": "0x00F31B88",
+   "ref_address": "0x08F31B88",
+   "word": "0x08B82678",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82688",
+   "table_head_offset": "0x00B82688",
+   "ref_offset": "0x00F31BA0",
+   "ref_address": "0x08F31BA0",
+   "word": "0x08B82688",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82698",
+   "table_head_offset": "0x00B82698",
+   "ref_offset": "0x00F31BC0",
+   "ref_address": "0x08F31BC0",
+   "word": "0x08B82698",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826A8",
+   "table_head_offset": "0x00B826A8",
+   "ref_offset": "0x00F31BE8",
+   "ref_address": "0x08F31BE8",
+   "word": "0x08B826A8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826B4",
+   "table_head_offset": "0x00B826B4",
+   "ref_offset": "0x00F31C08",
+   "ref_address": "0x08F31C08",
+   "word": "0x08B826B4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826C4",
+   "table_head_offset": "0x00B826C4",
+   "ref_offset": "0x00F31C30",
+   "ref_address": "0x08F31C30",
+   "word": "0x08B826C4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826D4",
+   "table_head_offset": "0x00B826D4",
+   "ref_offset": "0x00F31C50",
+   "ref_address": "0x08F31C50",
+   "word": "0x08B826D4",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826E0",
+   "table_head_offset": "0x00B826E0",
+   "ref_offset": "0x00F31C70",
+   "ref_address": "0x08F31C70",
+   "word": "0x08B826E0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826F0",
+   "table_head_offset": "0x00B826F0",
+   "ref_offset": "0x00F31C90",
+   "ref_address": "0x08F31C90",
+   "word": "0x08B826F0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B826FC",
+   "table_head_offset": "0x00B826FC",
+   "ref_offset": "0x00F31CA8",
+   "ref_address": "0x08F31CA8",
+   "word": "0x08B826FC",
+   "source_count": 1,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8270C",
+   "table_head_offset": "0x00B8270C",
+   "ref_offset": "0x00F31CD8",
+   "ref_address": "0x08F31CD8",
+   "word": "0x08B8270C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8271C",
+   "table_head_offset": "0x00B8271C",
+   "ref_offset": "0x00F31D00",
+   "ref_address": "0x08F31D00",
+   "word": "0x08B8271C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8272C",
+   "table_head_offset": "0x00B8272C",
+   "ref_offset": "0x00F31D28",
+   "ref_address": "0x08F31D28",
+   "word": "0x08B8272C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B82740",
+   "table_head_offset": "0x00B82740",
+   "ref_offset": "0x00F31D50",
+   "ref_address": "0x08F31D50",
+   "word": "0x08B82740",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8274C",
+   "table_head_offset": "0x00B8274C",
+   "ref_offset": "0x00F31D60",
+   "ref_address": "0x08F31D60",
+   "word": "0x08B8274C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8275C",
+   "table_head_offset": "0x00B8275C",
+   "ref_offset": "0x00F31D80",
+   "ref_address": "0x08F31D80",
+   "word": "0x08B8275C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8276C",
+   "table_head_offset": "0x00B8276C",
+   "ref_offset": "0x00F31DA0",
+   "ref_address": "0x08F31DA0",
+   "word": "0x08B8276C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8277C",
+   "table_head_offset": "0x00B8277C",
+   "ref_offset": "0x00F31DB8",
+   "ref_address": "0x08F31DB8",
+   "word": "0x08B8277C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8278C",
+   "table_head_offset": "0x00B8278C",
+   "ref_offset": "0x00F31DE0",
+   "ref_address": "0x08F31DE0",
+   "word": "0x08B8278C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B8279C",
+   "table_head_offset": "0x00B8279C",
+   "ref_offset": "0x00F31E00",
+   "ref_address": "0x08F31E00",
+   "word": "0x08B8279C",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B827AC",
+   "table_head_offset": "0x00B827AC",
+   "ref_offset": "0x00F31E18",
+   "ref_address": "0x08F31E18",
+   "word": "0x08B827AC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B827D0",
+   "table_head_offset": "0x00B827D0",
+   "ref_offset": "0x00F31E40",
+   "ref_address": "0x08F31E40",
+   "word": "0x08B827D0",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B827DC",
+   "table_head_offset": "0x00B827DC",
+   "ref_offset": "0x00F31E50",
+   "ref_address": "0x08F31E50",
+   "word": "0x08B827DC",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B827E8",
+   "table_head_offset": "0x00B827E8",
+   "ref_offset": "0x00F31E60",
+   "ref_address": "0x08F31E60",
+   "word": "0x08B827E8",
+   "source_count": 2,
+   "literal_loads": []
+  },
+  {
+   "group_id": "derived_table_head_refs",
+   "target_address": null,
+   "target_text": "",
+   "ref_kind": "derived_table_head_ref",
+   "table_head_value": "0x08B827F4",
+   "table_head_offset": "0x00B827F4",
+   "ref_offset": "0x00F31E70",
+   "ref_address": "0x08F31E70",
+   "word": "0x08B827F4",
+   "source_count": 2,
    "literal_loads": []
   }
  ],

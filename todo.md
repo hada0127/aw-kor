@@ -831,6 +831,26 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     이 결과는 `0x00B8279C`의 해당 route 비소스 증거이며, B8 맵명 copy 전체의 전역 dead-copy 증명은 아니다.
     같은 state+입력+B8 map-name mutation/read-watch 반복은 중단하고, `주먹밥 섬`/`곡옥 섬` 등은 필요할 때
     A2 live source 확인 또는 별도 route에서 target-level proof를 먼저 확보한다.
+  - [x] 2026-06-28 B8 전투 시스템 메뉴 duplicate의 A2 source redirect 확인:
+    `scene_89_common_battle_system_results`에서 보이는 `처분/항복/나가기`는 B8 duplicate
+    `0x00B82D76/2D6A/2D58`가 아니라 A2 copy `0x00A29916/9922/992C`를 source로 쓴다.
+    exact read-watch는 A2 row만 89회 읽었고 B8/EFA 후보는 0-hit였다.
+    같은 화면 mutation proof에서 A2 `처분/항복/나가기 -> 검증`은 각각 pixel diff 52/59/97을 냈지만,
+    대응 B8 duplicate mutation은 모두 pixel diff 0이었다. null-control diff도 0.
+    영구 report/contact는 `docs/screenshots/e12_system_menu_source_redirect_2026-06-28/report.json`.
+    후속으로 같은 화면의 `음악 있음/애니메`도 닫았다. A2/B8 fixed row
+    `0x00A298C2/0x00B82DC6` 및 compact aggregate placeholder
+    `0x0080535C/537A`, `0x00D82AD0/2AEE` mutation은 모두 diff 0이었고,
+    IWRAM write-watch에서 메뉴 버퍼 `0x03002CCF/2CDA`가 ROM repoint payload
+    `0x00A536B6/0x00A536DE`에서 복사됨을 확인했다. 해당 source mutation은 각각
+    pixel diff 114/130. `음악 있음`은 IWRAM 다음 행까지 NUL 포함 11바이트로 꽉 차고,
+    `애니메 A`도 10바이트로 꽉 차므로 `verify_dist_integrity.py`에
+    `scene_89 system-menu source/IWRAM guard`를 추가해 source byte 변경/NUL 초과를 hard fail로 막았다.
+    이는 route-local source redirect 증거이며 B8 시스템/액션 라벨 전체의 전역 dead-copy 판정은 아니다.
+    agy/claude 1차 리뷰는 blocker 없음으로 봤고, follow-up agy는 source-chain 조건부 승인과
+    인접 버퍼 한계 가드를 요구해 반영했다. follow-up claude는 180초 timeout(0바이트 출력).
+    같은 `scene_89` 시스템 메뉴에서 위 B8 duplicate/A2 fixed row를 반복 mutation/read-watch하지 말고,
+    남은 B8 작업은 다른 action/battle state, scene-load watchpoint, 또는 WRAM/VRAM write-chain으로 이어간다.
   - [x] 2026-06-28 B8 작전실 추가 스크롤/전투 state 후보 음성 범위 확정:
     `41_part1_operation_room`에서 기존 DOWN16 음성이 단순 카운트 오류인지 확인하려고
     `DOWN` 14~18회에서 `0x00B81F2C/1F24/1F10/1F04`
@@ -844,6 +864,23 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `temp/e12_b8_broad_state_scan_20260628.json`.
     이들은 route/subset 음성이므로 E12 direct evidence로 승격하지 않는다. 다음 B8 작업은 같은 화면 반복보다
     scene-load 전환 순간, target row를 실제로 노출하는 진행도 save, 또는 WRAM/VRAM write-chain으로 전환한다.
+  - [x] 2026-06-28 B8 작전실 AW1 진행 세이브 16개 unknown 후보 음성 확정:
+    `temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/*/game_wars_korean_full.sav` 16개를
+    `loadtempsav+reset`으로 로드한 뒤 Part1 작전실에 fresh 진입하고 `DOWN` 20회까지 스크롤했다.
+    기존 current fresh route에서 이미 증명된 13개 작전명은 watch에서 제외하고,
+    `0x00B81D40..0x00B82118` 작전/맵명 후보 중 나머지 43개만 4바이트 exact read-watch했다.
+    결과는 case 16, capture 16, watch log 전부 0줄, direct target 0이다.
+    영구 slim report는
+    `docs/screenshots/e12_b8_aw1_progress_save_negative_2026-06-28/report.json`,
+    raw report/frames는 `temp/e12_aw1_save_operation_room_b8_unknown_full_20260628/`이다.
+    `agy` 리뷰가 지적한 0-hit probe 양성대조 우려는 같은 스크립트/4바이트 watch에
+    `--include-known-13 --limit 1 --scroll 0`을 적용한
+    `temp/e12_aw1_save_operation_room_b8_positive_control_4byte_20260628/report.json`으로 보강했다
+    (기존 13개 direct target 모두 검출). `claude`는 180초 timeout(stdout/stderr 0B)이었다.
+    이 결과는 "사용 가능한 AW1 진행 세이브의 작전실 DOWN-scroll route에서는 새 B8 작전명 후보가
+    읽히지 않았다"는 route/subset 음성이다. 같은 세이브+작전실 스크롤 반복은 중단하고,
+    다음 B8 작업은 Part2 HUD/무기/데미지예측, scene-load watchpoint, positive source ID,
+    또는 WRAM/VRAM/DMA write-chain으로 전환한다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
     A2 36/36과 B84 파워명 11/11은 synthetic/near-fresh RAM-field source proof로 current SHA에서 닫혔고,
     B8 작전명 13건도 live source가 확정됐지만 B8은 13/459로 전체 중 일부에 불과하다.
@@ -1006,6 +1043,29 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `0xDFA64A..0xDFA885` 중 미노출 문구를 fresh capture로 묶는다.
   `0xDFAxxx` 도움말이 0x20 공백을 안전하게 렌더하지 못하는 다른 renderer에서도 공유되는지 xref/read-watch로 확인한다.
   `single_map`의 `??????` UX 항목은 2026-06-27 전역 가나 remap 없는 국소 hook 방식의 `미공개` 표시로 닫았다.
+
+- [x] 2026-06-28 사용자 추가 스크린샷: Part1 통신/교대전 `맵 선택` B8 맵명 깨짐 수정:
+  실제 신고 화면은 player-count가 아니라 link/pass-and-play map list였다. `patch_part1_single_map_labels()`로
+  Part1 compact renderer의 source pointer를 table lookup해 B8 map-label range와 `0x08DF8C2A` placeholder만
+  한글 private tile overlay한다. current SHA `d48ba36c...`에서 `한 쌍 산맥`, `숲의 오솔길`, `미공개`가
+  정상 출력된다. 증거: `temp/user_extra_link_map_select_final_20260628/contact_map_only.png`,
+  `temp/user_extra_link_map_select_final_20260628/map_list_labels_4x.png`.
+  agy 리뷰가 잡은 inactive B84 hook slot overlap은 `0xF30780`으로 이동해 해소했다.
+  검증: `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_part1_link_map_label_hook.json` PASS.
+- [x] Part1 link/pass-and-play map list 전체 sweep(2026-06-28):
+  current SHA `d48ba36c...` 기준 coldboot -> Part1 -> 통신/교대전 -> 맵 선택 route에서 `DOWN` 180스텝을
+  자동 캡처했다. 결과 list crop unique 180/180, low-bright anomaly 0이며 contact sheet는
+  `docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page1.png`~`page3.png`,
+  10프레임 간격 full frame은 같은 디렉터리 `full_frame_every10.png`, report는 `report.json`이다.
+  대부분 row는 현재 진행도에서 원본 locked placeholder `???`로 표시되므로, 이 증거는 scroll-edge/flicker 및
+  hook/table current-SHA 안정성 검증이지 156개 B8 맵명 전부의 natural visual proof가 아니다.
+  `verify_dist_integrity.py`에 Part1 map-label hook/table/sweep hard gate를 추가해 hook site,
+  table 재생성 일치(720 entries/B8 717 glyph-source entries), B84 inactive hook slot non-overlap,
+  sweep SHA/step/contact 존재를 배포 게이트로 묶었다. `verify_dist_integrity.py` PASS.
+  agy 리뷰는 blocker 없음, source scan의 1바이트 padding/space skip 주석 보강 권고를 냈고 반영했다.
+  전체 ROM SHA에 sweep을 묶는 fragility 지적은 stale visual evidence 방지 목적이라 유지한다.
+  codex 리뷰는 180초 timeout(rc=124, stdout 0B)으로 실질 finding 없음.
 
 ## F. 하드웨어 (사용자/물리 필요)
 - [ ] F1 실기(real GBA) 검증 — 플래시카트 부팅·주요화면. **자율 불가(하드웨어 필요)**.

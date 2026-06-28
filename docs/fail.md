@@ -917,6 +917,38 @@ read-watch를 시도했다.
   완전 재현 가능한 패키지는 아니라는 지적을 확인했다. 이에 report, `todo.md`, `docs/research.md`,
   본 실패 기록에 영구 증거 범위가 report/contact 2장이라는 caveat를 추가했다.
 
+## [2026-06-28] E12 전투 시스템 메뉴 B8 duplicate/fixed-row source redirect
+
+- **시도**: `scene_89_common_battle_system_results`의 실제 전투 시스템 메뉴에서 보이는
+  `처분/항복/나가기`가 B8 duplicate `0x00B82D76/2D6A/2D58`를 읽는지 확인했다.
+- **read-watch 결과**: exact watch 대상은 A2 `0x00A29916/9922/992C`, B8 `0x00B82D76/2D6A/2D58`,
+  관련 B8 음악 row와 `0x00EFAAD4`였다. 실행 중 읽힌 것은 A2 row뿐이며 총 89 hit,
+  B8/EFA 후보는 hit 0이었다. raw report는 `temp/e12_system_menu_source_compare_20260628.json`.
+- **mutation 대조**: A2 `처분/항복/나가기 -> 검증`은 각각 pixel diff 52/59/97을 냈지만,
+  같은 텍스트의 B8 duplicate mutation은 모두 pixel diff 0이었다. null-control diff도 0.
+  증거는 `docs/screenshots/e12_system_menu_source_redirect_2026-06-28/report.json` 및 contact 6장.
+- **음악/애니메 후보 기각**: 같은 화면의 `음악 있음/애니메`에 대해 A2/B8 fixed row
+  `0x00A298C2/0x00B82DC6` 및 compact aggregate placeholder `0x0080535C/537A`,
+  `0x00D82AD0/2AEE`를 read-watch/mutation했지만 모두 0-hit 또는 pixel diff 0이었다.
+  이 후보들은 이 route의 visible source가 아니다.
+- **후속 확정**: 표시 직후 IWRAM dump에서 메뉴 버퍼 `0x03002CCF/2CDA`를 찾았고,
+  write-watch로 `pc=0x0838BCDE`, `r1=0x08A536B6/0x08A536DE` 복사를 확인했다.
+  ROM repoint payload `0x00A536B6/0x00A536DE -> 검증` raw mutation은 각각 pixel diff 114/130을 냈다.
+- **버퍼 가드**: `음악 있음`은 `0x03002CCF..0x03002CD9` 11바이트(NUL 포함)를 정확히 채우며,
+  바로 다음 행 `애니메`가 `0x03002CDA`에서 시작한다. follow-up agy 리뷰가 이 인접 버퍼 한계를 지적해,
+  `tools/verify_dist_integrity.py`에 `scene_89 system-menu source/IWRAM guard`를 추가했다.
+  현재 gate는 `0x00A536B6=11/11`, `0x00A536DE=10/10`으로 PASS하며, source byte 변경이나 NUL 초과 시 fail한다.
+- **판정**: 이 route의 visible system-menu label source는 A2 copy다. B8 `0x00B82D76/2D6A/2D58`는
+  이 화면의 source 증거가 아니며, `음악 있음/애니메` source도 A2/B8 fixed row가 아니라
+  repoint payload → IWRAM menu buffer 경로다. 같은 scene_89 시스템 메뉴에서 동일 B8 duplicate/A2 fixed-row
+  mutation/read-watch를 반복하지 않는다.
+- **경계**: 이는 route-local source redirect 증거다. B8 system/action label block 전체나 다른 action-menu state의
+  전역 dead-copy 증명은 아니다. 다른 state는 별도 write-chain이나 mutation proof가 필요하다.
+- **CLI 리뷰**: agy/claude 모두 blocker 없음. 둘 다 proof 범위를 `처분/항복/나가기` 3개로 한정하고
+  temp savestate/raw watch log 의존 caveat를 report에 명시하라고 지적했으며, 이후 `음악 있음/애니메`
+  follow-up proof로 report를 갱신했다. follow-up agy는 source-chain 조건부 승인과 인접 버퍼 한계 가드를
+  요구했고 반영했다. follow-up claude는 180초 timeout으로 0바이트 출력.
+
 ## [2026-06-28] B84 AW1 power title 중간 실패: VRAM hook literal 정렬 오류
 
 - **실패 증상**: `0x08B3C1DE` copy site에 후크를 붙인 뒤에도 AW1 CO 파워 컷인 제목이 대부분 비거나
@@ -1092,6 +1124,29 @@ read-watch를 시도했다.
   다음 B8 증거 확보는 같은 steady-state 반복이 아니라 scene-load 전환 순간 watch, 실제 target row가 노출되는
   진행도 save, 대체 source positive ID, 또는 WRAM/VRAM write-chain으로 해야 한다.
 
+## [2026-06-28] E12 B8 AW1 진행 세이브 작전실 unknown 후보 0-hit
+
+- **시도**: `temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/*/game_wars_korean_full.sav`
+  16개를 `loadtempsav+reset`으로 로드한 뒤 Part1 메뉴를 coldboot route로 재진입하고 작전실에서
+  `DOWN` 20회까지 스크롤했다.
+- **감시 범위**: `0x00B81D40..0x00B82118`의 Part1 작전/맵명 후보 중 current fresh route에서
+  이미 증명된 13개(`0x00B81F38..0x00B82018`의 실제 작전실 13행)는 제외했다.
+  나머지 43개 후보만 4바이트 exact read-watch해 인접 슬롯 overlap 오탐을 피했다.
+- **결과**: 16 case/16 capture 모두 watch log 0줄, hit 0/direct target 0이다.
+  영구 slim report는
+  `docs/screenshots/e12_b8_aw1_progress_save_negative_2026-06-28/report.json`,
+  raw report와 frame은 `temp/e12_aw1_save_operation_room_b8_unknown_full_20260628/`에 있다.
+- **양성대조/리뷰**: 같은 스크립트/4바이트 exact watch에 `--include-known-13 --limit 1 --scroll 0`을 붙인
+  positive control은 기존 13개 작전실 B8 target을 모두 direct read로 검출했다
+  (`temp/e12_aw1_save_operation_room_b8_positive_control_4byte_20260628/report.json`).
+  `agy` 리뷰는 blocker 없음, 0-hit probe의 positive control 필요성을 지적했고 위 대조군으로 보강했다.
+  `claude`는 `gtimeout 180`에서 rc 124, stdout/stderr 0바이트였다.
+- **판정**: 사용 가능한 AW1 진행 세이브의 작전실 DOWN-scroll route는 기존 13개 외 B8 작전/맵명 후보의
+  source 증거가 아니다. 이 역시 route/subset 음성이지 B8 잔여 43개의 전역 dead-copy 증명은 아니다.
+- **재시도 금지**: 새 진행 세이브, 다른 메뉴 branch, scene-load 순간 watchpoint, pointer/body mutation,
+  대체 source positive ID, WRAM/VRAM/DMA write-chain 같은 differentiator 없이 같은 16개 save+작전실 DOWN-scroll
+  exact watch를 반복하지 않는다.
+
 ## [2026-06-28] E12 A2 co_id proof Claude 리뷰 timeout
 
 - **시도**: `temp/review_prompt_e12_a2_coid_20260628.md`로 A2 selected-record `co_id` source proof 36/36,
@@ -1148,3 +1203,19 @@ read-watch를 시도했다.
   또는 WRAM/VRAM write-chain으로만 인정한다.
 - **증거**: `docs/screenshots/e12_b8_additional_route_negatives_2026-06-28/report.json`.
 - **CLI 리뷰**: agy는 커밋 차단 없음으로 판정했다. codex/claude는 180초 timeout(stdout 0B)으로 실질 finding이 없었다.
+
+## [2026-06-28] Part1 link 맵 선택 map-label hook 실패 후보
+
+- **0x300 private tile window**: B8 map-label overlay 자체는 보였지만 배경 타일이 심하게 깨졌다.
+  Part1 compact renderer 주변에서 이미 쓰는 tile window와 충돌한 것으로 보고 폐기했다.
+- **0x3A0 + 양쪽 state overlay**: hidden/alternate state `0x03000F80` draw가 live state와 같은 cell 좌표를 사용해
+  shared private tile을 덮어썼고, 첫 행이 `치맥`처럼 잘못 보였다.
+- **0x340 paged base**: page 분리는 됐지만 배경 corruption이 재발했다.
+- **state80-only**: 실제 visible list는 `0x03000F20`라 화면이 여전히 `???`/원본 fallback 상태였다.
+- **state20-only + page collision**: hidden state는 빠졌지만 page1 source가 page0 tile과 충돌해 첫 행이 오염됐다.
+- **literal-pool padding 누락**: 훅 template에서 literal pool 앞 2바이트 alignment가 빠져 278B가 되었고,
+  PC-relative literal load가 어긋나 mGBA route가 hang됐다. 최종 template은 `800470000` 패딩 포함 280B다.
+- **B84 inactive hook overlap**: agy 리뷰가 Part1 map hook `0xF30600..0xF30718`과 B84 inactive hook slot `0xF30700`
+  overlap 가능성을 지적했다. 현재 B84 active path는 disabled지만 미래 회귀 위험이 있어 `0xF30780`으로 이동했다.
+- **claude 리뷰**: `claude --print`는 10분 이상 stdout/stderr 0B로 멈춰 종료했다. `agy` 리뷰는 위 B84 overlap과
+  전체 scroll-edge 검증 잔여 리스크를 지적했고 반영했다.

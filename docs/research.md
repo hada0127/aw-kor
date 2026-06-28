@@ -2976,6 +2976,53 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   pointer-ref disasm, pointer/body mutation, 또는 WRAM/VRAM write-chain으로 별도 확인해야 한다.
 
 ---
+## [2026-06-28] E12 전투 시스템 메뉴 source: A2 copy + repoint payload/IWRAM buffer
+
+- **화면/route**: `scene_89_common_battle_system_results` checkpoint는 실제 전투 시스템 메뉴를 다시 열며
+  화면에는 `처분/항복/음악 있음/애니메/나가기`가 보인다.
+- **read-watch**: A2 `0x00A29916/9922/992C`, B8 duplicate `0x00B82D76/2D6A/2D58`,
+  관련 B8 음악 row, `0x00EFAAD4`를 exact watch했다. 실행 중 읽힌 것은 A2 row뿐이며
+  hit는 총 89회다. 주요 시작주소 hit는 `0x00A29916` 12회, `0x00A29922` 13회,
+  `0x00A2992C` 16회이고, B8/EFA 후보는 hit 0이다.
+- **mutation proof**: A2 `처분/항복/나가기`를 `검증`으로 바꾸면 각각 pixel diff 52/59/97이 발생했다.
+  같은 텍스트의 B8 duplicate `0x00B82D76/2D6A/2D58` mutation은 모두 pixel diff 0이었다.
+  null-control도 diff 0이다.
+- **음악/애니메 fixed-row/compact 후보 기각**: A2/B8 fixed row
+  `0x00A298C2/0x00B82DC6`와 compact aggregate placeholder
+  `0x0080535C/537A`, `0x00D82AD0/2AEE`는 read-watch 0-hit 또는 mutation diff 0이었다.
+  즉 이 route의 `음악 있음/애니메` visible source가 아니다.
+- **음악/애니메 source-chain 확정**: 표시 직후 memory dump에서 IWRAM 메뉴 버퍼
+  `0x03002C90..0x03002CEF`를 찾았다. `음악 있음`은 `0x03002CCF`,
+  `애니메 A`는 `0x03002CDA`에 있었다. write-watch 결과 `pc=0x0838BCDE`가
+  `r1=0x08A536B6`에서 `0x03002CCF`로 `음악　있음`을, `r1=0x08A536DE`에서
+  `0x03002CDA`로 `애니메　A`를 복사한다. raw mutation `0x00A536B6 -> 검증`은
+  pixel diff 114(bbox `[185,51,224,62]`), `0x00A536DE -> 검증`은 pixel diff 130
+  (bbox `[185,67,208,78]`)을 냈다. 따라서 visible `음악 있음/애니메` source는
+  repoint payload → IWRAM menu buffer 경로다.
+- **IWRAM adjacent buffer hard-limit**: `음악 있음`은 `0x03002CCF..0x03002CD9` 11바이트
+  (NUL 포함)를 정확히 채우고, 다음 행 `애니메`는 `0x03002CDA`에서 시작한다.
+  `애니메 A`도 현재 10바이트(NUL 포함)를 채운다. follow-up agy 리뷰가 이 한계를 지적해
+  `tools/verify_dist_integrity.py::verify_scene89_system_menu_sources`를 추가했다.
+  이 게이트는 `0x00A536B6`/`0x00A536DE` proof-critical bytes와 NUL 위치를 확인하며,
+  현재 `11/11`, `10/10`으로 PASS한다. source payload가 이동하거나 문구를 바꾸면 이 proof와
+  guard를 함께 갱신해야 한다.
+- **증거**: `docs/screenshots/e12_system_menu_source_redirect_2026-06-28/report.json`,
+  `temp/e12_system_menu_source_compare_20260628.json`,
+  `temp/e12_system_menu_source_redirect_mutation_20260628/summary.json`,
+  `temp/e12_system_menu_source_redirect_mutation_more_20260628/summary.json`,
+  `temp/e12_system_menu_music_anim_source_mutation_20260628/summary.json`,
+  `temp/e12_system_menu_iwram_source_mutation_20260628/summary.json`,
+  `temp/e12_system_menu_iwram_watch_20260628/iwram_write.log`.
+- **해석**: 이 route의 visible battle-system menu label source는 A2 copy다. B8 `0x00B82D76/2D6A/2D58`는
+  이 화면의 source 증거가 아니며, `음악 있음/애니메`도 A2/B8 fixed row가 아니라 repoint payload/IWRAM buffer에서
+  온다. 같은 scene_89 시스템 메뉴에서 동일 B8 duplicate/A2 fixed-row 후보를 반복 probe하지 않는다.
+  단, 이는 route-local source redirect 증거이므로 B8 system/action label block 전체의 전역 dead-copy 증명은 아니다.
+  agy/claude 리뷰 모두 blocker는 없었고, 이 범위 제한과 temp savestate/raw watch log 의존 caveat를 report에 명시하라고
+  지적해 반영했다. 이후 `음악 있음/애니메` follow-up proof로 report를 갱신했다.
+  follow-up agy는 source-chain 조건부 승인과 인접 버퍼 한계 가드를 요구해 반영했다.
+  follow-up claude는 180초 timeout으로 0바이트 출력.
+
+---
 ## [2026-06-28] E12 A2 `state_036` CO 프로필은 도미노/맥스 pair source proof까지만 유효
 
 - **입력 의미 재분류**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 `RIGHT`는 전역 CO list를
@@ -3120,3 +3167,41 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **해석**: 위 결과는 fresh rule-settings route와 AW1 B84 title route의 B8 후보 음성이다.
   B8 rule/power strings의 전역 dead-copy 증명은 아니며, AW2 power-dialogue route나 별도 scene-load 순간은
   여전히 별도 증거가 필요하다.
+
+## [2026-06-28] Part1 link/pass-and-play 맵 선택 B8 map-label compact renderer hook
+
+- **증상**: 사용자가 추가로 캡처한 1편 통신/교대전 `맵 선택` 화면에서 B8 맵명이 실제 목록 행에 표시되지 않고,
+  `미공개`/빈 행처럼 보였다. 같은 route 원본은 일본어 맵명과 `??????` placeholder를 표시한다.
+- **route**: coldboot -> Part1 menu -> `DOWN,A,DOWN,A`로 통신/교대전 맵 선택. 재현/검증 산출물은
+  `temp/user_extra_link_map_select_final_20260628/contact_map_only.png`,
+  `temp/user_extra_link_map_select_final_20260628/map_list_labels_4x.png`.
+- **원인**: 해당 목록은 일반 한글 예약코드 렌더러가 아니라 Part1 compact map-list renderer를 탄다.
+  read-watch와 breakpoint에서 `0x08B82538`, `0x08B82528`, `0x08B81D00`, placeholder `0x08DF8C2A`가
+  source로 읽히고, hookable compact path는 `0x08B1319C -> 0x08F30600`로 확인됐다.
+- **fix**: `tools/build_korean_full.py`의 `patch_part1_single_map_labels()`가 원본 compact renderer를 먼저 실행한 뒤,
+  hook entry의 source pointer `r2`를 table lookup해 B8 map-label range `0xB81CA0..0xB82800`와
+  locked placeholder만 private Hangul glyph tile로 overlay한다. live state `0x03000F20`만 허용해 hidden buffer
+  `0x03000F80`이 같은 cell 좌표로 private tiles를 덮는 문제를 피한다.
+- **layout**: hook `0xF30600..0xF30718` 280B, table `0xF30800..0xF31E80` 720 entries.
+  private tile base는 `0x3A8`. agy 리뷰에서 inactive B84 hook slot `0xF30700`과 24B overlap 가능성을 지적해,
+  현재 상수는 `0xF30780..0xF307A8`로 옮겼다. B84 active path는 계속 LZ77 source-only라 output ROM SHA는 unchanged.
+- **시각 결과**: current ROM SHA `d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f`에서
+  default/down/down/up 캡처 모두 `한 쌍 산맥`, `숲의 오솔길`, `미공개`가 깨짐 없이 출력된다.
+- **검증**: `verify_dist_integrity.py` PASS, `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_part1_link_map_label_hook.json` PASS,
+  `git diff --check` PASS. E12 matrix/xref/code-context/trace/manual visual evidence, Part1 compact-help live-code evidence,
+  scene residual/E8 visual evidence, dist BPS/IPS/manifest도 current SHA로 재동기화했다.
+- **경계**: 현재 증거는 신고 화면과 인접 scroll 4프레임 중심이다. 전체 156개 B8 map row와 긴 맵명의 scroll-edge
+  clipping/flicker는 별도 전수 sweep으로 남긴다.
+
+### Follow-up sweep/gate
+
+- **sweep**: current SHA `d48ba36c4db44589f05a8868ea26bdcc4e66023eb0931cf54c3ecd5d9aea0e7f`에서
+  같은 route 진입 후 `DOWN` 180스텝을 캡처했다. list crop은 180/180 unique이고 low-bright anomaly는 0이다.
+  증거는 `docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/report.json` 및 contact sheet 4개다.
+- **게이트**: `tools/verify_dist_integrity.py::verify_part1_map_label_hook`가 output ROM에서
+  `0x00B1319C` hook trampoline, hook literal table start/end, private tile base `0x3A8`,
+  B84 inactive hook slot non-overlap, `0x00B81CA0..0x00B82800` source-derived table payload 일치를 검증한다.
+  현재 table은 `0xF30800..0xF31E80`, 720 entries(placeholder 3 + B8 glyph-source 717)다.
+- **해석 한계**: 180-step sweep의 대부분은 현재 진행도에서 원본 locked placeholder `???`가 반복되는 화면이다.
+  따라서 이것은 map-list renderer hook의 scroll 안정성과 table/current-SHA 동기화 증거이지,
+  156개 B8 맵명 row가 모두 natural visual route에서 노출됐다는 증거가 아니다.
