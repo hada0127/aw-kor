@@ -721,6 +721,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     matrix read-watch probes는 current 22/stale 0, cases 54, hits/direct reads 291로 갱신됐고,
     B84 target runtime/source proof는 1/11 -> 11/11이 됐다. 단, RAM-field near-fresh proof라
     자연 진행 route 전수 증명은 아니며, E12 전체는 A2/B8 잔여 때문에 계속 미완료다.
+  - [x] 2026-06-28 B8 유닛/무기 duplicate의 Part2 생산/유닛 route source mismatch 확인:
+    Part2 map state `temp/scene_entrypoints/part2_menu_sweep/state_031.ss0`에서 `RIGHT,A`/`DOWN,A`로
+    생산/유닛 정보 화면을 띄웠을 때 B8 early unit/weapon 후보
+    `0x00B81840/1854/1874/1970/1988/1A40/1A60/1A6C/1AC0/1ACC/1AD8/1B04/1B14`는
+    hit 0/direct 0이었다. 같은 route에 A2 unit source 후보를 걸면 493 hit가 발생했고,
+    `0x00A29390`(`보병`) 75회, `0x00A293A8`(`중전차`) 58회,
+    `0x00A293B0`(`경전차`) 48회, `0x00A2939C`(`신형전차`) 19회가 실제로 읽혔다.
+    raw evidence는 `data/e12_a2_unit_info_source_redirect_current.json`.
+    따라서 이 생산/유닛 route에서 보이는 유닛 라벨은 B8 duplicate가 아니라 A2 source를 쓰는 것으로 보고,
+    동일 state+입력+B8 exact watch 반복은 중단한다. 단, B8 early unit/weapon 후보의 전역 dead-copy 증명은 아니므로
+    전투 데미지 예측/무기 상세/다른 Part2 HUD는 별도 positive source ID 또는 WRAM/VRAM write-chain이 필요하다.
+    agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
+    identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
     A2 `0x00A295AC/0x00A295C0/0x00A295D8` 3건, B84 파워명 11건, B8 작전명 13건은
     source가 current SHA에서 확정됐지만 A2는 3/36, B8도 13/459로 전체 중 일부에 불과하다.

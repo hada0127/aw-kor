@@ -1,0 +1,112 @@
+{
+  "tool": "manual_summary_from_tools/probe_compact_display_reads.py",
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "git_commit": "89a95e3",
+  "purpose": "E12 B8 early unit/weapon duplicate source-mismatch proof for the Part2 production/unit info route.",
+  "state": "temp/scene_entrypoints/part2_menu_sweep/state_031.ss0",
+  "route": [
+    "press:RIGHT:80",
+    "press:A:160"
+  ],
+  "raw_temp_json": "temp/e12_a2_unit_info_right_current.json",
+  "b8_negative_reference": {
+    "temp_jsons": [
+      "temp/e12_b8_unit_info_right_down_current.json",
+      "temp/e12_b8_unit_info_down_current.json"
+    ],
+    "watched_offsets": [
+      "0x00B81840",
+      "0x00B81854",
+      "0x00B81874",
+      "0x00B81970",
+      "0x00B81988",
+      "0x00B81A40",
+      "0x00B81A60",
+      "0x00B81A6C",
+      "0x00B81AC0",
+      "0x00B81ACC",
+      "0x00B81AD8",
+      "0x00B81B04",
+      "0x00B81B14"
+    ],
+    "hit_count": 0,
+    "direct_target_read_count": 0
+  },
+  "a2_positive_watch": {
+    "selected_target_addresses": [
+      "0x00A29390",
+      "0x00A2939C",
+      "0x00A293A8",
+      "0x00A293B0",
+      "0x00A293B8",
+      "0x00A293C0",
+      "0x00A293E8",
+      "0x00A293F8",
+      "0x00A29414",
+      "0x00A29438",
+      "0x00A29458",
+      "0x00A29464",
+      "0x00A294E4"
+    ],
+    "hit_count": 493,
+    "counts_by_target_span": {
+      "0x00A29390": {
+        "text": "보병",
+        "read_count": 75
+      },
+      "0x00A293A8": {
+        "text": "중전차",
+        "read_count": 58
+      },
+      "0x00A293B0": {
+        "text": "경전차",
+        "read_count": 48
+      },
+      "0x00A2939C": {
+        "text": "신형전차",
+        "read_count": 19
+      }
+    },
+    "top_pcs": [
+      {
+        "pc": "0x0838BD18",
+        "count": 80
+      },
+      {
+        "pc": "0x0838BCE4",
+        "count": 32
+      },
+      {
+        "pc": "0x08F30404",
+        "count": 17
+      },
+      {
+        "pc": "0x0831BD1C",
+        "count": 17
+      },
+      {
+        "pc": "0x08F30284",
+        "count": 11
+      },
+      {
+        "pc": "0x08F30286",
+        "count": 11
+      },
+      {
+        "pc": "0x0838BCFA",
+        "count": 10
+      },
+      {
+        "pc": "0x0831425A",
+        "count": 7
+      },
+      {
+        "pc": "0x08314336",
+        "count": 7
+      }
+    ]
+  },
+  "interpretation": "The visible Part2 production/unit info route reads A2 unit-label sources, while the B8 early unit/weapon duplicate targets remain 0-hit on the same route. Treat this route as an A2-source redirect, not B8 live-source proof.",
+  "scope_limit": "This is not a global dead-copy proof for the B8 early unit/weapon targets. Other routes still require positive source ID, pointer/body mutation, pointer-ref disassembly, or WRAM/VRAM write-chain evidence."
+}

@@ -962,3 +962,40 @@ read-watch를 시도했다.
   A2/B84 external profile states/freshrender 후보는 current SHA에서도 hit 0이다.
 - **판정**: 이들은 route/subset 음성으로 유지한다. 전역 미사용 증명으로 해석하지 않으며, 실제 target-level provenance는
   fresh route, redraw가 보장되는 near-fresh state, mutation diff, 또는 WRAM/VRAM/DMA chain으로 다시 잡아야 한다.
+
+## [2026-06-28] E12 B8 유닛/무기 duplicate route 음성 및 A2 source redirect 확인
+
+- **시도**: Part2 map state `temp/scene_entrypoints/part2_menu_sweep/state_031.ss0`에서
+  `RIGHT,A`/`DOWN,A`로 생산/유닛 정보 화면을 띄우고 B8 early unit/weapon 후보
+  `0x00B81840/1854/1874/1970/1988/1A40/1A60/1A6C/1AC0/1ACC/1AD8/1B04/1B14`
+  exact read-watch를 걸었다. 같은 화면은 `보병/정찰차/경전차/중전차/신형전차` 등이 실제로 보이는 화면이다.
+- **B8 결과**: 위 B8 후보들은 current route에서 hit 0/direct 0이다. Part1 unit detail state
+  `temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0`에서도 `0x00B81B14` 등 B8 후보는
+  hit 0/direct 0이었다.
+- **mutation 음성**: `scene_16_part1_info_screen`에서 `0x00B81B14`(`장비 없음`)만 `검증 없음`으로 바꾼
+  `tools/prove_compact_display_mutation.py` 실험은 null-control diff 0, mutation pixel diff 0이었다.
+  temp summary는 `temp/e12_b8_part1_info_b81b14_mutation_20260628/summary.json`이다. 이 0-diff 결과는
+  route 음성이므로 success-tier screenshot으로 승격하지 않는다.
+- **대체 source 양성**: 같은 Part2 생산/유닛 route에 A2 unit source 후보
+  `0x00A29390/939C/93A8/93B0/93B8/93C0/93E8/93F8/9414/9438/9458/9464/94E4`
+  exact watch를 걸자 493 hit가 발생했다. target span 기준으로 `0x00A29390`(`보병`) 75회,
+  `0x00A293A8`(`중전차`) 58회, `0x00A293B0`(`경전차`) 48회,
+  `0x00A2939C`(`신형전차`) 19회가 읽혔다. raw evidence는
+  `data/e12_a2_unit_info_source_redirect_current.json`에 보존했다.
+- **판정**: 이 화면 계열에서 B8 early unit/weapon duplicate를 source로 보지 않는다. 현재 보이는 생산/유닛
+  정보 화면은 A2 source를 읽는 redirect proof가 있으므로, 동일 state+입력+B8 exact watch 반복은 중단한다.
+  단, 이는 B8 early unit/weapon의 전역 dead-copy 증명이 아니다. 전역 dead로 격상하려면 pointer-ref disasm,
+  pointer poisoning/body mutation의 화면 무변화, 또는 WRAM/VRAM write-chain으로 실제 대체 source를 더 넓게 확정해야 한다.
+
+## [2026-06-28] E12 B8 route/dead-copy 후속 CLI 리뷰
+
+- **시도**: `temp/review_prompt_e12_b8_route_deadcopy_20260628.md`로 agy/claude/codex에 B8 비작전실 0-hit,
+  dead-copy 판단 기준, 다음 route 우선순위를 좁혀 엄격 리뷰를 요청했다.
+- **결과**: agy와 claude는 실질 리뷰를 반환했다. codex는 180초 timeout(rc 124)으로 최종 리뷰 본문이 없고
+  stderr에는 도구 실행 로그만 남았다.
+- **반영한 지적**: 두 리뷰 모두 static editor 노출 459건을 live source로 과장하지 말 것,
+  0-hit route 반복보다 positive source identification/WRAM·VRAM write-chain을 우선할 것,
+  `0xB81B14` 0-diff 이미지는 success-tier evidence로 커밋하지 말 것을 지적했다.
+- **다음 기준**: 이미 0-hit가 난 생산/유닛/시스템/에디트 steady-state route는 새 differentiator
+  (scene-load 전환 순간 watch, 다른 sub-panel 도달, pointer/body mutation, 대체 source positive ID)가 없으면
+  반복하지 않는다. 다음 probe 우선순위는 전투 데미지 예측/무기 상세의 write-chain 또는 positive source ID다.

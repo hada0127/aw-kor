@@ -2911,3 +2911,22 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
 - **해석 경계**: 이것은 natural route 전수 증명이 아니라 live RAM CO-id field를 바꾼 near-fresh proof다.
   다만 ROM bytes, B84 pointer table, `0x08B3C184` renderer, source-only LZ77 glyph 수정은 모두 current ROM 그대로라,
   B84 target body가 dead copy라는 의심은 11개 전부에 대해 반증한다. E12 전체는 A2/B8 잔여 때문에 미완료다.
+
+---
+## [2026-06-28] E12 Part2 생산/유닛 정보 화면은 B8 duplicate가 아니라 A2 source를 읽음
+
+- **화면/route**: `temp/scene_entrypoints/part2_menu_sweep/state_031.ss0`에서 `RIGHT,A`로 생산/유닛 정보
+  화면을 열면 `보병/정찰차/경전차/중전차/신형전차` 등이 보인다.
+- **B8 음성**: 같은 route에서 B8 early unit/weapon 후보
+  `0x00B81840/1854/1874/1970/1988/1A40/1A60/1A6C/1AC0/1ACC/1AD8/1B04/1B14`
+  exact watch는 hit 0/direct 0이었다.
+- **A2 양성**: 같은 route에서 A2 unit source 후보를 watch하면 493 hit가 발생한다. 주요 hit는
+  `0x00A29390`(`보병`) 75회, `0x00A293A8`(`중전차`) 58회,
+  `0x00A293B0`(`경전차`) 48회, `0x00A2939C`(`신형전차`) 19회다.
+  상위 PC는 `0x0838BD18`, `0x0838BCE4`, `0x08F30404`, `0x0831BD1C`,
+  `0x0838BCFA`, `0x08F30284/0x08F30286`, `0x0831425A`, `0x08314336` 계열이다.
+  raw evidence는 `data/e12_a2_unit_info_source_redirect_current.json`.
+- **해석**: 이 Part2 생산/유닛 정보 route의 visible unit labels는 B8 duplicate body가 아니라 A2 source에서
+  공급된다. 따라서 이 route에 대한 B8 0-hit는 하니스 실패가 아니라 source mismatch로 해석할 수 있다.
+  단, 이 사실은 B8 early unit/weapon 후보의 전역 dead-copy 증명이 아니며, 다른 화면에서 B8을 읽을 가능성은
+  pointer-ref disasm, pointer/body mutation, 또는 WRAM/VRAM write-chain으로 별도 확인해야 한다.
