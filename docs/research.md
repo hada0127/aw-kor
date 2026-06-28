@@ -2358,6 +2358,33 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   DOWN 13회 위치의 `0x00B81F38`(`결전`→`검증`, diff 58px/bbox `[9,91,24,102]`)가 행 단위로 바뀌었다.
   DOWN 16회에서 `0x00B81F2C/24/10/04`는 diff 0이라 해당 route의 direct evidence로 채택하지 않았다.
   최신 matrix는 manual current/accepted 12, direct 수치 A2 0, B84 0, B8 12/459다.
+
+---
+## [2026-06-28] E12 A2 CO 프로필 power-name selected-record co_id 경로
+
+- **문제**: `0x0200D63E` RAM selector scan은 A2 target 10/36까지만 닿았다. 전체 `0x00..0x1F` 값을 훑어도
+  같은 target들이 alias되어 나머지 26개 source proof가 생기지 않았다.
+- **정적/동적 RE**: `0x08385E30` 렌더러를 disassemble하고 `0x08385E9E`에 breakpoint를 걸었다.
+  current `state_036.ss0`에서 hit 시점 레지스터는 selected record `r0=0x020231B0`,
+  selected record index `r1=1`, record table `r4=0x02023174`, CO data table `r3=0x089FC418`,
+  text pointer table `r5=0x08A357B4`였다.
+- **선택식**: power row 1은 `*(0x089FC418 + co_id*260 + 0x7c)`,
+  power row 2는 `*(0x089FC418 + co_id*260 + 0xc0)`에서 pointer-table index를 읽는다.
+  `co_id`는 selected record byte `0x020231B0 + 0x1d = 0x020231CD`다.
+- **CO id 매핑**: `co_id=0x00..09,0B..12`가 A2 compact target 36개를 2개씩 커버한다.
+  `0x0A`는 이 target set에 대응하지 않아 proof set에서 제외했다.
+- **증거 도구**: `tools/probe_a2_profile_coid_power_reads.py`는 매 실행마다 breakpoint로 selected record를
+  재확인한 뒤, 그 실행에서 계산된 live `co_id` byte를 바꾸고 A2 profile power rows를 redraw한다.
+  `0x020231CD`는 현 `state_036.ss0`에서 도출된 주소일 뿐 고정 RAM ABI로 취급하지 않는다.
+  watch는 36개 target start exact 4바이트만 걸고, target당 최소 8 hit와 core string-loop PC
+  (`0x0838BD18`, `0x0838BCE4`) 최소 4 hit를 통과한 대표 direct hit 36개를 저장한다.
+- **결과**: current ROM SHA `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  `data/compact_display_read_watch_a2_profile_coid_current.json`의 `missing_direct_targets=[]`,
+  `direct_target_count=36`이다. contact는
+  `docs/screenshots/e12_a2_profile_coid_read_watch_2026-06-28/contact.png`.
+- **해석**: 이는 natural all-CO route가 아니라 synthetic RAM-field near-fresh source proof다. 그래도 current renderer,
+  current pointer table, current target strings가 36개 모두 실제 A2 profile render path에서 읽힌다는 점은
+  `0x0200D63E` scan 한계를 넘는 target-level provenance로 채택한다.
 - **2026-06-27 proof hardening**: Claude/agy 리뷰에서 mutation proof의 false-positive 가능성(cursor/animation diff)과
   bbox 인과 약점을 지적했다. `tools/prove_compact_display_mutation.py`에 같은 ROM/같은 checkpoint를 한 번 더 캡처하는
   null-control을 추가했고, 작전실 proof에는 expected diff box `0,32,80,104`를 지정했다. 12개 accepted proof 모두

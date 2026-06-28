@@ -3095,6 +3095,33 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **경계**: B84 CO-id proof와 같은 RAM-field near-fresh proof다. 자연 진행 전수 route나
   36개 power-title visual-layout proof로 해석하지 않는다.
 
+## [2026-06-28] E12 A2 CO 프로필 selected-record co_id synthetic source proof 36/36 확보
+
+- **renderer RE**: `0x08385E30`는 A2 CO profile power-name renderer다.
+  breakpoint `0x08385E9E`에서 현 `state_036.ss0`의 selected record는 `0x020231B0`,
+  patch 대상 `co_id` byte는 `0x020231CD`임을 확인했다. 이 주소는 고정 주소가 아니라
+  현 state에서 `record_table + selected_record*60 + 0x1d`로 계산된 live field이며,
+  probe는 매 실행 breakpoint로 이를 재확인한다.
+- **선택식**: `record=*(0x08814FD0)+object[0x66]*60`,
+  `co_id=record[0x1d]`,
+  `index1/2=*(0x089FC418+co_id*260+0x7c/0xc0)`,
+  `text=*(0x08A357B4+index*4)`.
+- **증거 방식**: `tools/probe_a2_profile_coid_power_reads.py`를 추가했다.
+  ROM/pointer table은 바꾸지 않고 live RAM `0x020231CD`만
+  `0x00..09,0B..12`로 바꾼 뒤 같은 A2 프로필 power row redraw를 실행했다.
+- **결과**: current ROM SHA `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  A2 compact power-name target 36개가 모두 반복 read 및 core string-loop PC hit 검증을 통과했다.
+  신규 영구 증거는 `data/compact_display_read_watch_a2_profile_coid_current.json`,
+  contact는 `docs/screenshots/e12_a2_profile_coid_read_watch_2026-06-28/contact.png`다.
+- **matrix 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후 전체 E12 수치는
+  A2 36/36, B84 11/11, B8 13/459다.
+- **리뷰 반영**: agy 리뷰가 natural visual proof로 오해될 위험, state-local RAM 주소 fragility,
+  대표 hit 1건 오탐 가능성을 지적했다. 이에 JSON/report에 `proof_mode=synthetic_ram_field_read_watch`를 추가하고,
+  target당 최소 8 read 및 core string-loop PC 최소 4 hit validation을 통과해야 대표 direct hit로 내보내도록 보강했다.
+  문서도 `0x020231CD`가 현 state에서 breakpoint로 재도출해야 하는 live address임을 명시했다.
+- **경계**: synthetic RAM-field near-fresh source proof다. 자연 all-CO route 전수나 최종 pixel-level visual QA를
+  대체하지 않으며, E12 전체는 B8 잔여 때문에 미완료다.
+
 ## [2026-06-28] E5 PRAM 대표 팔레트 캡처 및 스프라이트 에디터 실색 스타터셋 확정
 
 - **캡처 범위**: current ROM SHA

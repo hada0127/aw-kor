@@ -1029,6 +1029,11 @@ read-watch를 시도했다.
 - **기록**: 영구 slim evidence는
   `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json`, 전체 임시 scan은
   `temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/summary.json`.
+- **후속 해결**: 이 한계는 `0x0200D63E`가 selected record index/alias 성격이라 생긴 것이었다.
+  후속 RE에서 실제 power-name 선택 byte가 selected record의 `co_id`임을 확인했다.
+  현 `state_036.ss0`에서는 `0x020231B0 + 0x1d = 0x020231CD`지만, 이는 breakpoint로 재도출해야 하는 state-local live address다.
+  `tools/probe_a2_profile_coid_power_reads.py`가 A2 target 36/36 direct read proof를 확보했다.
+  따라서 이 항목은 `0x0200D63E` scan 자체의 한계 기록으로만 유지한다.
 
 ## [2026-06-28] E12 B8 comm wait `state_011` 단순 입력 0-hit
 
@@ -1061,3 +1066,13 @@ read-watch를 시도했다.
 - **판정**: 위 route들은 B8 direct evidence 후보에서 제외한다. 전역 dead-copy 증명은 아니며,
   다음 B8 증거 확보는 같은 steady-state 반복이 아니라 scene-load 전환 순간 watch, 실제 target row가 노출되는
   진행도 save, 대체 source positive ID, 또는 WRAM/VRAM write-chain으로 해야 한다.
+
+## [2026-06-28] E12 A2 co_id proof Claude 리뷰 timeout
+
+- **시도**: `temp/review_prompt_e12_a2_coid_20260628.md`로 A2 selected-record `co_id` source proof 36/36,
+  matrix 표현, RAM 주소 fragility, representative hit 방식에 대해 claude/agy 엄격 리뷰를 요청했다.
+- **결과**: agy는 실질 리뷰를 반환했고 지적을 반영했다. Claude는 `gtimeout 180 claude -p ...`에서
+  rc 124 timeout, stdout/stderr 0바이트였다.
+- **기록**: `temp/claude_review_e12_a2_coid_20260628.md`,
+  `temp/claude_review_e12_a2_coid_20260628.err`,
+  `temp/agy_review_e12_a2_coid_20260628.md`.

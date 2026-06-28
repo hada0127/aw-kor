@@ -219,6 +219,15 @@ def target_row(addr: int, group_id: str, line_by_addr: dict[int, dict], group_by
     manual_visual_evidence = manual_visual_by_group_addr.get((group_id, addr), [])
     static_xref = xref_by_group_addr.get((group_id, addr), {})
     direct_evidence = bool(trace_evidence or read_watch_evidence or manual_visual_evidence)
+    proof_modes = sorted({
+        evidence.get("proof_mode")
+        for evidence in read_watch_evidence
+        if evidence.get("proof_mode")
+    })
+    synthetic_runtime_source = any(
+        evidence.get("synthetic_ram_field_source_proof")
+        for evidence in read_watch_evidence
+    )
     return {
         "address": key,
         "ja": line.get("ja") or "",
@@ -236,6 +245,8 @@ def target_row(addr: int, group_id: str, line_by_addr: dict[int, dict], group_by
         "renderer_trace_evidence": trace_evidence,
         "read_watch_evidence": read_watch_evidence,
         "manual_visual_evidence": manual_visual_evidence,
+        "runtime_source_proof_modes": proof_modes,
+        "synthetic_runtime_source_proof": synthetic_runtime_source,
         "static_pointer_xrefs": {
             "pointer_ref_count": static_xref.get("pointer_ref_count", 0),
             "external_pointer_ref_count": static_xref.get("external_pointer_ref_count", 0),
@@ -382,6 +393,8 @@ def read_watch_summary(paths: list[Path], rom_sha: str | None = None) -> dict:
             "hit_count": doc.get("hit_count", 0),
             "direct_target_read_count": doc.get("direct_target_read_count", 0),
             "strict_note": doc.get("strict_note"),
+            "proof_mode": doc.get("proof_mode"),
+            "synthetic_ram_field_source_proof": bool(doc.get("synthetic_ram_field_source_proof")),
             "cases": [
                 {
                     "name": case.get("name"),
@@ -469,6 +482,8 @@ def read_watch_by_group_addr(summary: dict, rom_sha: str) -> dict[tuple[str, int
         doc = load(raw_path)
         if doc.get("rom_sha256") != rom_sha:
             continue
+        proof_mode = doc.get("proof_mode")
+        synthetic_ram_field = bool(doc.get("synthetic_ram_field_source_proof"))
         for row in doc.get("direct_hits", []):
             hit = row.get("hit") or {}
             source = hit.get("source") or {}
@@ -488,7 +503,18 @@ def read_watch_by_group_addr(summary: dict, rom_sha: str) -> dict[tuple[str, int
                 "lr": f"0x{hit.get('lr', 0):08X}" if isinstance(hit.get("lr"), int) else hit.get("lr"),
                 "r0": f"0x{hit.get('r0', 0):08X}" if isinstance(hit.get("r0"), int) else hit.get("r0"),
                 "r1": f"0x{hit.get('r1', 0):08X}" if isinstance(hit.get("r1"), int) else hit.get("r1"),
-                "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself.",
+                "proof_mode": proof_mode,
+                "synthetic_ram_field_source_proof": synthetic_ram_field,
+                "validation": row.get("validation"),
+                "note": (
+                    "Read-watch direct hit proves this target span was read on this route; "
+                    "it is runtime/source provenance, not visual layout QA by itself."
+                    + (
+                        " This probe is synthetic RAM-field source proof, not natural route coverage."
+                        if synthetic_ram_field else
+                        ""
+                    )
+                ),
             })
     return out
 
@@ -796,10 +822,11 @@ def write_markdown(report: dict) -> None:
     for probe in rw.get("probes", []):
         targets = probe.get("selected_target_addresses") or []
         target_text = f" targets={len(targets)}" if targets else ""
+        mode_text = f" proof_mode={probe.get('proof_mode')}" if probe.get("proof_mode") else ""
         lines.append(
             f"- `{probe.get('path')}`: current={probe.get('current_rom')} groups={probe.get('selected_groups')} "
             f"cases={probe.get('case_count')} hits={probe.get('hit_count')} "
-            f"direct_reads={probe.get('direct_target_read_count')}{target_text}"
+            f"direct_reads={probe.get('direct_target_read_count')}{target_text}{mode_text}"
         )
     if rw.get("stale_paths"):
         lines.append(f"- stale probe files ignored in current summary: {', '.join(f'`{p}`' for p in rw['stale_paths'])}")
@@ -835,12 +862,13 @@ def write_markdown(report: dict) -> None:
         "- Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.",
         "- Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.",
         "- A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.",
+        f"- A2 now has {direct_by_group.get('a2_co_power_profile_display_overrides', 0)} target runtime/source proof(s) from a selected-record CO-id RAM-field probe. This is synthetic source provenance, not natural all-CO route coverage or 36 per-power screen captures.",
         f"- B84 now has {direct_by_group.get('b84_compact_power_display_overrides', 0)} target runtime/source proof(s) from the AW1 power-title CO-id selector route. This closes B84 target/source coverage, but the RAM-field route is still not a natural playthrough for every CO.",
         f"- B8 now has {direct_by_group.get('b8_compact_display_table_all', 0)} target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and most B8 targets still lack target-level provenance.",
         "- Current read-watch probes over the fresh main route, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates still leave Part2-B8-HUD target reads unresolved; these are route/subset negatives, not global non-use proof.",
-        "- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven A2/B8 targets; additional A2/B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.",
+        "- The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven B8 targets; additional B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.",
         "- B8 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/break labels.",
-        "- A2 CO power names have static glyph-dictionary coverage and one current CO-profile representative screen, but not 36 per-power screen captures.",
+        "- A2 CO power names now have 36/36 synthetic RAM-field source proof plus one current representative profile screen, but not natural-route 36 per-power screen captures.",
         "",
     ])
     OUT_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")

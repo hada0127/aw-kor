@@ -749,6 +749,20 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     신규 영구 증거는 `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json` 및
     `docs/screenshots/e12_a2_profile_selector_0200d63e_2026-06-28/contact.png`.
     단, B84와 같은 RAM-field near-fresh proof이며 자연 all-CO route/36개 visual-layout 전수 증명은 아니다.
+  - [x] 2026-06-28 A2 CO 프로필 selected-record `co_id` synthetic source proof로 36/36 확대:
+    `0x08385E30` A2 프로필 렌더러를 RE해 power-name 선택식
+    `record=*(0x08814FD0)+object[0x66]*60`, `co_id=record[0x1d]`,
+    `index1/2=*(0x089FC418+co_id*260+0x7c/0xc0)`,
+    `text=*(0x08A357B4+index*4)`를 확인했다. 현 `state_036.ss0`에서 breakpoint
+    `0x08385E9E`는 selected record `0x020231B0`, patch field `0x020231CD`를 가리킨다.
+    이 주소는 고정 RAM ABI가 아니라 probe가 매 실행 breakpoint로 재확인하는 state-local live field다.
+    `tools/probe_a2_profile_coid_power_reads.py`를 추가해 이 live `co_id`를
+    `0x00..09,0B..12`로 바꾼 뒤 같은 프로필 power row redraw를 실행했고,
+    A2 compact target 36개 모두 current ROM에서 반복 read 및 core string-loop PC hit를 확보했다.
+    신규 영구 증거는 `data/compact_display_read_watch_a2_profile_coid_current.json`,
+    contact는 `docs/screenshots/e12_a2_profile_coid_read_watch_2026-06-28/contact.png`.
+    matrix 기준 A2 target runtime/source proof는 10/36 -> 36/36이다.
+    단, RAM-field near-fresh proof라 자연 all-CO route 전수나 최종 pixel-level visual QA를 대체하지 않는다.
   - [x] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch + visual contact 확보:
     `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 같은 row 2 파워 발동 route를
     쓰되, ROM/pointer table은 바꾸지 않고 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿨다.
@@ -787,16 +801,15 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     이들은 route/subset 음성이므로 E12 direct evidence로 승격하지 않는다. 다음 B8 작업은 같은 화면 반복보다
     scene-load 전환 순간, target row를 실제로 노출하는 진행도 save, 또는 WRAM/VRAM write-chain으로 전환한다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 10건, B84 파워명 11건, B8 작전명 13건은 source가 current SHA에서 확정됐지만
-    A2는 10/36, B8도 13/459로 전체 중 일부에 불과하다.
-    B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
+    A2 36/36과 B84 파워명 11/11은 synthetic/near-fresh RAM-field source proof로 current SHA에서 닫혔고,
+    B8 작전명 13건도 live source가 확정됐지만 B8은 13/459로 전체 중 일부에 불과하다.
+    B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를
     추가 확보하는 것이다. agy/codex 리뷰 지적대로 일반 대사 `0xA01970` 양성대조와 별개인 compact-renderer 전용
     positive control도 확보해야 한다. 단, Part1 작전실 B8 live-source read positive와 A2 CO profile direct read는
-    확보됐고 B84는 RAM-field near-fresh read-watch + visual contact로 11/11 target source가 닫혔으므로
-    남은 핵심은 Part2 HUD/B8 잔여/다중 A2 compact renderer 계열 양성대조다. 특히 A2는 savestate frames-only 음성이나
-    representative screen current 캡처만으로 종결하지 않는다. fresh route, redraw가 보장되는 near-fresh route,
+    확보됐고 B84도 RAM-field near-fresh read-watch + visual contact로 11/11 target source가 닫혔으므로
+    남은 핵심은 Part2 HUD/B8 잔여와 compact renderer 계열 양성대조다. fresh route, redraw가 보장되는 near-fresh route,
     target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA write chain 중 최소 1종 이상의 target-level
     양성 증거를 주소군별로 확보해야 한다.
 - [x] E13 compact glyph dictionary 자동 생성/거버넌스 완료(2026-06-27).
