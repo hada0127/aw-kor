@@ -2947,3 +2947,20 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   matrix 재생성 결과 A2 target runtime/source proof는 4/36이다.
 - **해석 경계**: 36개 all-CO coverage로 격상하지 않는다. 이 state는 A2 source-address/dead-copy 의심을
   도미노/맥스 4주소에 대해서만 반증한다. 나머지 A2 32개는 다른 route 또는 write-chain 증거가 필요하다.
+
+---
+## [2026-06-28] E12 A2 profile selector RAM byte `0x0200D63E`
+
+- **후보 추출**: `state_036.ss0`에서 base/right/right-right EWRAM/IWRAM dump를 비교했다.
+  `0x0200D63E`는 `0x01 -> 0x02 -> 0x01`로 되돌아와, `RIGHT` 토글과 같은 주기로 움직이는
+  profile selector 후보로 잡혔다.
+- **값별 source mapping**: redraw 전에 `0x0200D63E`를 바꾸고 A2 range read-watch를 걸었다.
+  `0x00`은 `기적/별꿈`, `0x01`은 `승리/대승`, `0x02`는 `강타/직격`,
+  `0x03`은 `하이퍼수리/강화`, `0x0C`는 `흑파도/흑폭풍` target을 읽는다.
+  그 외 다수 값은 `기적/별꿈`으로 alias되고 일부 값은 hit 0이다.
+- **증거**: 전체 scan은 `temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/summary.json`,
+  영구 slim evidence는 `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json`,
+  contact는 `docs/screenshots/e12_a2_profile_selector_0200d63e_2026-06-28/contact.png`.
+- **해석**: 이 byte는 current state의 A2 profile source selector로 볼 수 있다. 다만 강제 RAM patch이므로
+  natural all-CO route가 아니며, 값->CO id의 완전한 게임 의미와 나머지 26개 target은 별도 route/selector
+  조사가 필요하다.

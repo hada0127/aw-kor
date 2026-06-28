@@ -3079,3 +3079,18 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   A2 4/36, B84 11/11, B8 13/459다.
 - **경계**: 도미노/맥스 2CO source proof일 뿐 all-CO route나 36개 visual-layout proof가 아니다.
   A2 나머지 32개와 B8 대부분은 계속 E12 미완료로 남긴다.
+
+## [2026-06-28] E12 A2 profile selector RAM-field proof 10/36 확보
+
+- **selector 근거**: `state_036.ss0`에서 RAM dump를 비교하면 `RIGHT`/`RIGHT`에 따라
+  `0x0200D63E`가 `0x01 -> 0x02 -> 0x01`로 되돌아온다. 이 byte를 redraw 직전에 바꾸면
+  CO profile power-name source target이 바뀐다.
+- **확보 target**: 값 `0x00/01/02/03/0C`와 power row 1/2 조합에서 A2 compact target 10개가 직접 읽혔다:
+  `기적`, `별꿈`, `하이퍼수리`, `강화`, `승리`, `대승`, `강타`, `직격`, `흑파도`, `흑폭풍`.
+- **증거 파일**:
+  `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json`,
+  `docs/screenshots/e12_a2_profile_selector_0200d63e_2026-06-28/contact.png`.
+- **matrix 반영**: A2 target runtime/source proof는 10/36이 됐다. 전체 E12 수치는
+  A2 10/36, B84 11/11, B8 13/459다.
+- **경계**: B84 CO-id proof와 같은 RAM-field near-fresh proof다. 자연 진행 전수 route나
+  36개 power-title visual-layout proof로 해석하지 않는다.

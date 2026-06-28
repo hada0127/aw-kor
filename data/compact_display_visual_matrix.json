@@ -698,16 +698,16 @@
  },
  "read_watch_probes": {
   "present": true,
-  "probe_count": 23,
-  "current_probe_count": 23,
+  "probe_count": 24,
+  "current_probe_count": 24,
   "stale_probe_count": 0,
   "stale_paths": [],
-  "case_count": 58,
-  "hit_count": 495,
-  "direct_target_read_count": 495,
-  "total_case_count": 58,
-  "total_hit_count": 495,
-  "total_direct_target_read_count": 495,
+  "case_count": 68,
+  "hit_count": 1113,
+  "direct_target_read_count": 1113,
+  "total_case_count": 68,
+  "total_hit_count": 1113,
+  "total_direct_target_read_count": 1113,
   "probes": [
    {
     "path": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
@@ -1248,6 +1248,692 @@
       },
       "watch_log": "temp/compact_display_read_watch_a2_profile_right_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/watch.log",
       "frame": "temp/compact_display_read_watch_a2_profile_right_current_20260628/state_temp__scene_entrypoints__part2_menu_sweep__state_036.ss0/frame.png"
+     }
+    ]
+   },
+   {
+    "path": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+    "present": true,
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+    "selected_groups": [
+     "a2_co_power_profile_display_overrides"
+    ],
+    "selected_target_addresses": [],
+    "case_count": 10,
+    "hit_count": 618,
+    "direct_target_read_count": 618,
+    "strict_note": "A2 CO profile RAM-field selector proof. This confirms current ROM reads 10 A2 compact power-name targets when the observed profile selector byte 0x0200D63E is patched before redraw. It is not natural all-CO route coverage and does not prove all 36 visual layouts.",
+    "cases": [
+     {
+      "name": "v00_p1",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 34,
+       "direct_target_read_count": 34,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 34
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 15
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A2955C",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p1/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p1/frame.png"
+     },
+     {
+      "name": "v00_p2",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 68,
+       "direct_target_read_count": 68,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 68
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 30
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 10
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A2955C",
+         "count": 34
+        },
+        {
+         "target_start": "0x00A29570",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p2/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p2/frame.png"
+     },
+     {
+      "name": "v01_p1",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 34,
+       "direct_target_read_count": 34,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 34
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 15
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295AC",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p1/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p1/frame.png"
+     },
+     {
+      "name": "v01_p2",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 68,
+       "direct_target_read_count": 68,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 68
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 30
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 10
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295AC",
+         "count": 34
+        },
+        {
+         "target_start": "0x00A295C0",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p2/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p2/frame.png"
+     },
+     {
+      "name": "v02_p1",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 34,
+       "direct_target_read_count": 34,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 34
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 15
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295D8",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p1/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p1/frame.png"
+     },
+     {
+      "name": "v02_p2",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 68,
+       "direct_target_read_count": 68,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 68
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 30
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 10
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295D8",
+         "count": 34
+        },
+        {
+         "target_start": "0x00A295EC",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p2/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p2/frame.png"
+     },
+     {
+      "name": "v03_p1",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 70,
+       "direct_target_read_count": 70,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 70
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 33
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 11
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 5
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 5
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 5
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A29588",
+         "count": 70
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p1/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p1/frame.png"
+     },
+     {
+      "name": "v03_p2",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 104,
+       "direct_target_read_count": 104,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 104
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 48
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 16
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 7
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 7
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 7
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 7
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A29588",
+         "count": 70
+        },
+        {
+         "target_start": "0x00A29598",
+         "count": 34
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p2/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p2/frame.png"
+     },
+     {
+      "name": "v0C_p1",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 46,
+       "direct_target_read_count": 46,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 46
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 21
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 7
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 3
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 3
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 3
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 3
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A29810",
+         "count": 46
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p1/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p1/frame.png"
+     },
+     {
+      "name": "v0C_p2",
+      "case_type": "state_ram_patch",
+      "mode": "a2_profile_0200d63e_selector_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "RAM-field selector proof: 0x0200D63E was observed as 0x01->0x02->0x01 across RIGHT/RIGHT and is patched before redraw. This is target source provenance, not natural all-CO route coverage or full visual QA.",
+      "summary": {
+       "hit_count": 92,
+       "direct_target_read_count": 92,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 92
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 42
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 14
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 6
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 6
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 6
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 6
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A29810",
+         "count": 46
+        },
+        {
+         "target_start": "0x00A29824",
+         "count": 46
+        }
+       ]
+      },
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p2/watch.log",
+      "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p2/frame.png"
      }
     ]
    },
@@ -3163,7 +3849,7 @@
     "current_screen_capture_assigned": 1,
     "container_only": 35,
     "no_scene": 0,
-    "direct_target_visual_evidence": 4,
+    "direct_target_visual_evidence": 10,
     "static_pointer_refs": 36,
     "static_external_pointer_refs": 36
    },
@@ -3193,9 +3879,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v00_p1",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p1/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p1/watch.log",
+       "read_address": "0x08A2955C",
+       "target_start": "0x00A2955C",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A2955C",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -3206,7 +3907,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29570",
@@ -3233,9 +3934,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v00_p2",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p2/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v00_p2/watch.log",
+       "read_address": "0x08A29570",
+       "target_start": "0x00A29570",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A29570",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -3246,7 +3962,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29588",
@@ -3273,9 +3989,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v03_p1",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p1/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p1/watch.log",
+       "read_address": "0x08A29588",
+       "target_start": "0x00A29588",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A29588",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -3286,7 +4017,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29598",
@@ -3313,9 +4044,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v03_p2",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p2/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v03_p2/watch.log",
+       "read_address": "0x08A29598",
+       "target_start": "0x00A29598",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A29598",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -3326,7 +4072,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A295AC",
@@ -4797,6 +5543,20 @@
        "r0": "0xFFFFFFF7",
        "r1": "0x08A295B0",
        "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v01_p1",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p1/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p1/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
       }
      ],
      "manual_visual_evidence": [],
@@ -5327,6 +6087,20 @@
        "lr": "0x08314F1B",
        "r0": "0xFFFFFFF7",
        "r1": "0x08A295C4",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v01_p2",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p2/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v01_p2/watch.log",
+       "read_address": "0x08A295C0",
+       "target_start": "0x00A295C0",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295C0",
        "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
       }
      ],
@@ -5859,6 +6633,20 @@
        "r0": "0xFFFFFFF7",
        "r1": "0x08A295DC",
        "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v02_p1",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p1/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p1/watch.log",
+       "read_address": "0x08A295D8",
+       "target_start": "0x00A295D8",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295D8",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
       }
      ],
      "manual_visual_evidence": [],
@@ -5907,6 +6695,20 @@
        "case_type": "state",
        "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/frame.png",
        "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/watch.log",
+       "read_address": "0x08A295EC",
+       "target_start": "0x00A295EC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295EC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v02_p2",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p2/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v02_p2/watch.log",
        "read_address": "0x08A295EC",
        "target_start": "0x00A295EC",
        "pc": "0x0831425A",
@@ -6993,9 +7795,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v0C_p1",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p1/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p1/watch.log",
+       "read_address": "0x08A29810",
+       "target_start": "0x00A29810",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A29810",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -7006,7 +7823,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29824",
@@ -7036,9 +7853,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json",
+       "case": "v0C_p2",
+       "case_type": "state_ram_patch",
+       "frame": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p2/frame.png",
+       "watch_log": "/Users/tarucy/project/aw-kor/temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/v0C_p2/watch.log",
+       "read_address": "0x08A29824",
+       "target_start": "0x00A29824",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A29824",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -7049,7 +7881,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "current_screen_scene"
+     "evidence_level": "read_watch_direct"
     }
    ]
   },

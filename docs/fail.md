@@ -1015,3 +1015,29 @@ read-watch를 시도했다.
 - **다음 기준**: 이미 0-hit가 난 생산/유닛/시스템/에디트 steady-state route는 새 differentiator
   (scene-load 전환 순간 watch, 다른 sub-panel 도달, pointer/body mutation, 대체 source positive ID)가 없으면
   반복하지 않는다. 다음 probe 우선순위는 전투 데미지 예측/무기 상세의 write-chain 또는 positive source ID다.
+
+## [2026-06-28] E12 A2 profile selector scan 한계
+
+- **시도**: `state_036.ss0`의 RAM diff에서 `RIGHT`/`RIGHT` 전환과 함께
+  `0x0200D63E`가 `0x01 -> 0x02 -> 0x01`로 움직이는 것을 잡고, redraw 직전에 이 byte를
+  `0x00..0x1F`로 바꿔 A2 CO profile power-name read-watch를 돌렸다.
+- **성공 범위**: 값 `0x00/01/02/03/0C`와 power row 1/2 조합으로 10개 target
+  (`0x00A2955C/70/88/98/AC/C0/D8/EC/9810/9824`)은 current ROM source read가 확인됐다.
+- **실패/한계**: 여러 값이 `기적/별꿈`으로 alias되고 일부 값은 hit 0이었다. 따라서 이 scan은
+  RAM-field selector source proof 10/36일 뿐, 자연 all-CO route나 A2 36개 visual-layout proof가 아니다.
+  나머지 26개는 별도 selector 의미 해석, 다른 state, 또는 WRAM/VRAM write-chain 증거가 필요하다.
+- **기록**: 영구 slim evidence는
+  `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json`, 전체 임시 scan은
+  `temp/e12_a2_profile_ram_selector_0200d63e_values_20260628/summary.json`.
+
+## [2026-06-28] E12 B8 comm wait `state_011` 단순 입력 0-hit
+
+- **시도**: `scene_23b_part2_comm_multiplayer` 계열 microprobe contact를 기준으로 B8 comm wait 후보
+  `0x00B83268/322C/3160/2F7C/306C/310C`를 exact read-watch했다.
+  입력은 `A`, `B`, `A,B`, `B,A`, `LEFT,B`, `RIGHT,B`, `DOWN,B` 7케이스다.
+- **결과**: 모든 케이스 hit 0/direct 0이다. 결과 파일은
+  `temp/e12_b8_comm_wait_state011_*_20260628.json`, contact는
+  `temp/e12_comm_menu_state011_microprobe_20260628/contact.png`.
+- **판정**: 이 state와 단순 전환 입력은 위 B8 comm wait 후보의 source 증거가 아니다. 단, route/subset
+  음성이므로 B8 comm wait 문자열의 전역 dead-copy 증명은 아니다. 다음에는 화면 전환 직전 write-chain,
+  다른 통신 대기 state, 또는 대체 source positive ID를 우선한다.

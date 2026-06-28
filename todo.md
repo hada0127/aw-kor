@@ -719,6 +719,15 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     `data/compact_display_read_watch_a2_profile_domino_max_current.json` 및
     `docs/screenshots/e12_a2_profile_domino_max_2026-06-28/contact.png`.
     matrix는 A2 target runtime/source proof 4/36으로 갱신됐다. 나머지 32개는 계속 별도 route가 필요하다.
+  - [x] 2026-06-28 A2 CO 프로필 RAM selector `0x0200D63E` proof로 10/36 확대:
+    `state_036.ss0`에서 RAM diff를 뜨면 `RIGHT`/`RIGHT` 전환에 따라 `0x0200D63E`가 `0x01 -> 0x02 -> 0x01`로
+    되돌아와 profile selector 후보로 잡힌다. 이 byte를 redraw 직전에 `0x00/01/02/03/0C`로 바꾸고
+    `DOWN,DOWN`/`DOWN,DOWN,DOWN`을 실행하면 A2 compact target
+    `0x00A2955C/70/88/98/AC/C0/D8/EC/9810/9824`
+    (`기적/별꿈/하이퍼수리/강화/승리/대승/강타/직격/흑파도/흑폭풍`) 10개가 직접 읽힌다.
+    신규 영구 증거는 `data/compact_display_read_watch_a2_profile_selector_0200d63e_current.json` 및
+    `docs/screenshots/e12_a2_profile_selector_0200d63e_2026-06-28/contact.png`.
+    단, B84와 같은 RAM-field near-fresh proof이며 자연 all-CO route/36개 visual-layout 전수 증명은 아니다.
   - [x] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch + visual contact 확보:
     `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 같은 row 2 파워 발동 route를
     쓰되, ROM/pointer table은 바꾸지 않고 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿨다.
@@ -744,8 +753,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
     identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 `0x00A295AC/0x00A295C0/0x00A295D8/0x00A295EC` 4건, B84 파워명 11건, B8 작전명 13건은
-    source가 current SHA에서 확정됐지만 A2는 4/36, B8도 13/459로 전체 중 일부에 불과하다.
+    A2 10건, B84 파워명 11건, B8 작전명 13건은 source가 current SHA에서 확정됐지만
+    A2는 10/36, B8도 13/459로 전체 중 일부에 불과하다.
     B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를
