@@ -797,6 +797,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     전투 데미지 예측/무기 상세/다른 Part2 HUD는 별도 positive source ID 또는 WRAM/VRAM write-chain이 필요하다.
     agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
     identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
+  - [x] 2026-06-28 B8 `0x08D84830` unit/weapon table-head loader 후보 route-negative 기록:
+    B8 unit/weapon 포인터 테이블 head `0x08D84830`에 대해 raw probe가 보존한 table-head LDR breakpoint
+    99개를 `scene_19e1/19e6/18/30/27/26a/85/89/23a/24/24b/41` 등 unit/battle/shop/map 후보
+    13개 화면에 걸었지만 전부 hit 0이었다. 영구 slim 증거는
+    `docs/screenshots/e12_b8_d84830_table_head_negative_2026-06-28/report.json`.
+    이 결과는 캡처된 실행 구간에서 `0x08D84830` loader PC가 실행되지 않았다는 route/subset 음성일 뿐,
+    B8 unit/weapon 테이블 전체의 전역 dead-copy 증명이 아니다. 같은 화면에서 같은 table-head breakpoint 반복은
+    중단하고, 다음 증거는 scene-load 전환 순간이나 WRAM/VRAM write-chain, 또는 실제 target row가 보이는 새 state에서 확보한다.
+    raw probe는 `scene_24/24b` fresh checkpoint 승격 전 기록을 포함하므로 fresh visual proof가 아니라
+    triage용 음성 범위 기록으로만 취급한다. 특히 `frames:1` savestate 케이스는 state 캡처 전에 loader가
+    이미 실행됐을 가능성을 배제하지 못하므로 weak steady-state negative로만 본다.
+    리뷰 결과 agy/claude는 커밋 차단 없음으로 봤고, claude가 지적한 per-case provenance와 weak steady-state
+    한계 문구를 반영했다. codex 리뷰는 180초 timeout(stdout 0B, stderr 하니스 로그)으로 실질 finding이 없었다.
   - [x] 2026-06-28 B8 map-name duplicate의 Part2 맵 목록 route source mismatch 확인:
     `temp/scene_entrypoints/part2_menu_sweep/state_016.ss0`에서 `A`로 여는 Part2 맵 목록의 `도넛 섬`은
     A2 copy `0x00A2CC4C`를 source로 쓴다. 같은 슬롯 mutation `도넛 섬 -> 검증섬`에서 null-control은

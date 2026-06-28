@@ -1115,3 +1115,21 @@ read-watch를 시도했다.
   정식 증거는 `docs/screenshots/scene24_fresh_checkpoint_fix_2026-06-28/contact.png`.
 - **CLI 리뷰**: `agy`는 stale savestate 제거/커밋 가능 판정. `claude`는 180초 timeout(stdout/stderr 0B),
   `codex`도 180초 timeout(stdout 0B, stderr는 하니스/도구 로그 위주로 실질 finding 없음).
+
+## [2026-06-28] E12 B8 `0x08D84830` table-head steady-state breakpoint 0-hit
+
+- **시도**: B8 unit/weapon rows의 source를 찾기 위해 `0x08D84830` table-head literal loader 99개에
+  exec breakpoint를 걸고, unit detail/battle/attack/object-label/day-overlay/system/shop/map/operation-room
+  후보 13개 checkpoint를 실행했다.
+- **결과**: 전 케이스 hit 0이다. 증거는
+  `docs/screenshots/e12_b8_d84830_table_head_negative_2026-06-28/report.json`.
+- **판정**: 캡처된 실행 구간에서는 `0x08D84830` loader PC가 실행되지 않았다. 단, B8 unit/weapon table의
+  전역 dead-copy 증명이 아니고, 특히 `frames:1` savestate 케이스는 state 캡처 전 loader 실행 가능성을
+  배제하지 못하므로 success 증거로 승격하지 않는다.
+- **재시도 금지**: 새 화면 진입점, scene-load 순간 breakpoint, 실제 target row 노출 state, 또는 WRAM/VRAM write-chain
+  없이 같은 13개 화면에서 같은 table-head loader breakpoint를 반복하지 않는다.
+- **주의**: raw probe의 `scene_24/24b` 케이스는 fresh checkpoint 승격 전 candidate route다. 이 기록은
+  반복 방지용 0-hit triage이며, fresh visual proof나 전역 dead-copy 판정으로 사용하지 않는다.
+- **CLI 리뷰**: agy/claude는 커밋 차단 없음으로 판정했다. claude가 지적한 `frames:1` savestate 한계,
+  per-case provenance 보존, 131 literal 수치의 근거 경계를 반영했다. codex는 180초 timeout(stdout 0B)으로
+  실질 finding이 없었다.

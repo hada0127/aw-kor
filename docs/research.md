@@ -3073,3 +3073,28 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   재캡처 명령은
   `python3 tools/capture_scene_screenshots.py --checkpoint scene_24_part2_campaign_map --checkpoint scene_24b_part2_strategic_map_mode4 --force`.
 - **증거**: `docs/screenshots/scene24_fresh_checkpoint_fix_2026-06-28/contact.png`와 각 provenance JSON.
+
+---
+## [2026-06-28] E12 B8 `0x08D84830` unit/weapon table-head loader route-negative
+
+- **대상**: B8 unit/weapon 후보 rows(`0x00B818xx`, `0x00B81Axx`, `0x00B81Bxx`)는
+  static xref상 `0x08D84830` table-head 계열과 연결된다.
+- **probe**: current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`에서
+  `0x08D84830` table-head를 로드하는 durable LDR breakpoint PC 99개를 raw probe에 보존했다.
+  probe session상 131 literal occurrence에서 99개 breakpoint로 줄였지만, 영구 근거로 삼는 수치는
+  raw report가 보존한 breakpoint 99개다.
+  이를 unit detail, battle, attack, Part2 object labels, day overlay, common UI/system, shop, map/CO-select,
+  Part1 operation-room 후보 13개 checkpoint에 걸었다.
+- **결과**: 13개 케이스 모두 hit 0이다. slim report는
+  `docs/screenshots/e12_b8_d84830_table_head_negative_2026-06-28/report.json`,
+  raw temp report는 `temp/e12_b8_d84830_table_head_bp_probe_20260628/report.json`.
+- **해석**: 이 결과는 캡처된 실행 구간에서 `0x08D84830` table-head loader PC가 실행되지 않았다는
+  route/subset negative다. B8 unit/weapon table의 전역 dead-copy 증명은 아니며, E12 direct evidence 수에도
+  포함하지 않는다. 다음 B8 unit/weapon 조사는 같은 화면 반복이 아니라 scene-load 전환 순간, 실제 target row가
+  화면에 뜨는 진행도 state, 대체 A2/B84 source positive ID, 또는 WRAM/VRAM/DMA write-chain으로 좁힌다.
+- **주의**: raw probe에는 `scene_24/24b`가 fresh checkpoint로 승격되기 전의 candidate route가 포함된다.
+  따라서 이 항목은 current ROM에서 같은 breakpoint 묶음이 해당 후보 route에서 0-hit였다는 triage 기록이지,
+  `scene_24/24b` fresh visual proof나 B8 table dead-copy proof가 아니다.
+  또한 `frames:1` savestate 케이스는 이미 state 캡처 전에 loader가 실행됐을 가능성을 배제하지 못하므로
+  report에 `weak_steady_state_negative`로 구분해 둔다.

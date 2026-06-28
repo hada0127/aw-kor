@@ -1,0 +1,118 @@
+{
+  "rom": "output/game_wars_korean_full.gba",
+  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "table_head": "0x08D84830",
+  "meaning": "B8 unit/weapon pointer table head candidate used by refs around B818xx/B81Axx/B81Bxx",
+  "method": "breakpoints on 99 durable table-head literal-loader PCs from the raw probe, then run likely unit/battle/shop/map checkpoints",
+  "literal_count_note": "The probe session noted 131 literal occurrences before reducing to 99 LDR breakpoint PCs, but the durable raw report preserves the 99 breakpoint PCs as the supported count.",
+  "checkpoint_caveat": "Mixed current-ROM candidate checkpoint routes. scene_24/scene_24b cases came from the pre-fresh-checkpoint raw probe, so this report is a route-negative triage artifact, not fresh visual proof.",
+  "breakpoint_count": 99,
+  "cases": [
+    {
+      "name": "scene_19e1_part1_unit_info_detail_help",
+      "mode": "savestate",
+      "state_sha256": "48e955a350665c589b9073421e41d2f80e4fa88ceb43dfebafc1d9cd6b192f08",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_19e6_part1_unit_help_late",
+      "mode": "savestate",
+      "state_sha256": "d84912a1b6faf6a38c80f218095b3b4e8ab022fa5e9777daacfc74601f85c849",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_19e6_part1_unit_help_late_b",
+      "mode": "savestate",
+      "state_sha256": "4e4b1997c87d120ca6e36ccfed9d540ed3445c79ceb1da073306eae2f6c5fbad",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_18_part1_battle",
+      "mode": "savestate",
+      "state_sha256": "71073035636e80438a453091fd1fd2d5512d316f1e035a3750aa0224b767f4a3",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "30_battle_attack",
+      "mode": "savestate",
+      "state_sha256": "cc4ba76af66a2f53f1cc6cbd1095fef3048f31a4b6345d6cd87aed856fa84111",
+      "refresh_summary": "frames:30",
+      "evidence_strength": "steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_27_part2_battle_objlabels",
+      "mode": "savestate",
+      "state_sha256": "3e9c08759c101e1c94debdd27a36957a25658088a1e963cb6f2784c6ae7cb861",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_26a_part2_battle_start_overlay_f060",
+      "mode": "savestate",
+      "state_sha256": "0082e1b00a0172de64d8f12f97e1f623026c537370653d9698bedea9f15a1d23",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_85_ui_common",
+      "mode": "savestate",
+      "state_sha256": "666e3da9110f18c5a6f629057abc226f7554706b2ea4264410eb6ab2e533e2fe",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_89_common_battle_system_results",
+      "mode": "savestate",
+      "state_sha256": "0a03c7a8a6d40c8dd365afe945d0b1596ac495ffcd318819faf469f207d0295d",
+      "refresh_summary": "B:80,A:100,frames:20",
+      "evidence_strength": "savestate_transition_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_23a_part2_wars_shop",
+      "mode": "savestate",
+      "state_sha256": "7b05d78d8b1bf8e04734a861adbe00336c6a5f7ffa79d93863c93a85c237037e",
+      "refresh_summary": "frames:40",
+      "evidence_strength": "steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_24_part2_campaign_map",
+      "mode": "savestate",
+      "state_sha256": "57ee028a3d43d459bd69daa248d203354006530ed31f6e7ee95087ab4b3bc7f4",
+      "refresh_summary": "B:120,B:120,B:120,A:120,A:120,START:120,A:120",
+      "evidence_strength": "pre_fresh_checkpoint_savestate_transition_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "scene_24b_part2_strategic_map_mode4",
+      "mode": "savestate",
+      "state_sha256": "c7e2e7ff28ad45fb920b9f003dba21f02716b9e29e13a68651a51e4e4ceeb5c7",
+      "refresh_summary": "frames:1",
+      "evidence_strength": "pre_fresh_checkpoint_weak_steady_state_negative",
+      "hit_count": 0
+    },
+    {
+      "name": "41_part1_operation_room",
+      "mode": "fresh",
+      "refresh_summary": "coldboot nav to operation room",
+      "evidence_strength": "fresh_route_negative",
+      "hit_count": 0
+    }
+  ],
+  "all_hit_counts": [0],
+  "raw_temp_report": "temp/e12_b8_d84830_table_head_bp_probe_20260628/report.json",
+  "interpretation": "Route/subset negative only. The captured execution windows did not hit the 0x08D84830 table-head loader PCs, so repeat probing the same windows is low value. Weak steady-state savestate cases, especially frames:1 cases, do not exclude a loader that executed before state capture. This is not global dead-copy proof for the B8 unit/weapon table."
+}
