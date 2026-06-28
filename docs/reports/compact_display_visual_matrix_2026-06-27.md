@@ -10,7 +10,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 | Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Target runtime/source proof |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 3 |
+| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 4 |
 | B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 11 |
 | B8 compact display table bucket | 459 | 459 | 0 | 0 | 459 | 386 | 13 |
 
@@ -61,8 +61,9 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Read-Watch Probes
 
-- probes_present=True probes=22 current=22 stale=0 cases=54 hits=291 direct_reads=291
+- probes_present=True probes=23 current=23 stale=0 cases=58 hits=495 direct_reads=495
 - hit/direct_read totals are event counts, not unique target counts; multi-step probes can include reads from earlier redraws on the same route.
+- `data/compact_display_read_watch_a2_profile_domino_max_current.json`: current=True groups=['a2_co_power_profile_display_overrides'] cases=4 hits=204 direct_reads=204
 - `data/compact_display_read_watch_a2_profile_down3_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=68 direct_reads=68
 - `data/compact_display_read_watch_a2_profile_down_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=34 direct_reads=34
 - `data/compact_display_read_watch_a2_profile_right_current.json`: current=True groups=['a2_co_power_profile_display_overrides', 'b84_compact_power_display_overrides'] cases=1 hits=68 direct_reads=68
@@ -93,7 +94,7 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Remaining E12 Gap
 
-- Target runtime/source proof count is currently 27; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
+- Target runtime/source proof count is currently 28; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
 - Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.
 - Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.
 - A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.

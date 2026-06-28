@@ -2930,3 +2930,20 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   공급된다. 따라서 이 route에 대한 B8 0-hit는 하니스 실패가 아니라 source mismatch로 해석할 수 있다.
   단, 이 사실은 B8 early unit/weapon 후보의 전역 dead-copy 증명이 아니며, 다른 화면에서 B8을 읽을 가능성은
   pointer-ref disasm, pointer/body mutation, 또는 WRAM/VRAM write-chain으로 별도 확인해야 한다.
+
+---
+## [2026-06-28] E12 A2 `state_036` CO 프로필은 도미노/맥스 pair source proof까지만 유효
+
+- **입력 의미 재분류**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 `RIGHT`는 전역 CO list를
+  한 칸 넘기는 입력이 아니라 현재 캠페인 profile pair의 도미노/맥스 토글로 동작한다.
+  `RIGHT` 0..17회 반복 contact는 두 화면만 번갈아 보였다.
+- **확정 source**: 이 state에서 대표 4케이스만 뽑으면 A2 compact target
+  `0x00A295AC`(`승리`), `0x00A295C0`(`대승`), `0x00A295D8`(`강타`),
+  `0x00A295EC`(`직격`)을 직접 읽는다. 상위 PC 계열은 기존 A2 profile hits와 같은
+  `0x0838BD18`, `0x0838BCE4`, `0x0831425A`, `0x08314336`, `0x0831BD1C`,
+  `0x08F30284/286`, `0x08F30404`다.
+- **증거/집계**: slim 영구 증거는 `data/compact_display_read_watch_a2_profile_domino_max_current.json`,
+  전체 반복 contact는 `docs/screenshots/e12_a2_profile_domino_max_2026-06-28/contact.png`.
+  matrix 재생성 결과 A2 target runtime/source proof는 4/36이다.
+- **해석 경계**: 36개 all-CO coverage로 격상하지 않는다. 이 state는 A2 source-address/dead-copy 의심을
+  도미노/맥스 4주소에 대해서만 반증한다. 나머지 A2 32개는 다른 route 또는 write-chain 증거가 필요하다.

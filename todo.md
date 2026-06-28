@@ -710,6 +710,15 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     matrix read-watch probes는 current 21/stale 0, cases 43, hits/direct reads 280으로 갱신됐다.
     A2 target runtime/source proof는 1/36 -> 3/36이 됐다. 단, savestate 기반 read-watch라
     per-power visual layout 전수 proof는 아니며, 나머지 33개 A2 파워명은 계속 별도 route/증거가 필요하다.
+  - [x] 2026-06-28 A2 CO 프로필 도미노/맥스 pair read-watch 4번째 target 확보:
+    같은 `state_036.ss0`에서 `RIGHT` 반복으로 전 CO를 순회하려던 probe는 contact sheet상 도미노/맥스 두 CO만
+    번갈아 보여 all-CO route로는 실패했다. 그러나 대표 4케이스(`DOWN,DOWN`, `DOWN,DOWN,DOWN`,
+    `RIGHT,DOWN,DOWN`, `RIGHT,DOWN,DOWN,DOWN`)는 current SHA에서
+    `0x00A295AC`(`승리`), `0x00A295C0`(`대승`), `0x00A295D8`(`강타`),
+    `0x00A295EC`(`직격`)을 직접 읽는다. 영구 증거는
+    `data/compact_display_read_watch_a2_profile_domino_max_current.json` 및
+    `docs/screenshots/e12_a2_profile_domino_max_2026-06-28/contact.png`.
+    matrix는 A2 target runtime/source proof 4/36으로 갱신됐다. 나머지 32개는 계속 별도 route가 필요하다.
   - [x] 2026-06-28 B84 AW1 CO 파워명 11/11 current read-watch + visual contact 확보:
     `temp/b84_aw1_power_select_probe_20260628/rec1_meter_100k/menu_open.ss0`에서 같은 row 2 파워 발동 route를
     쓰되, ROM/pointer table은 바꾸지 않고 live RAM의 rec1 CO id byte `0x0201ADBD`만 `0x00..0x0A`로 바꿨다.
@@ -735,8 +744,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
     agy/claude 리뷰도 B8 459 editor 노출을 live source로 과장하지 말고, 0-hit 반복보다 positive source
     identification과 write-chain을 우선하라고 지적했다. codex 리뷰는 180초 timeout으로 최종 본문이 없었다.
   - [ ] 2026-06-27 다음 실제 증거 확보:
-    A2 `0x00A295AC/0x00A295C0/0x00A295D8` 3건, B84 파워명 11건, B8 작전명 13건은
-    source가 current SHA에서 확정됐지만 A2는 3/36, B8도 13/459로 전체 중 일부에 불과하다.
+    A2 `0x00A295AC/0x00A295C0/0x00A295D8/0x00A295EC` 4건, B84 파워명 11건, B8 작전명 13건은
+    source가 current SHA에서 확정됐지만 A2는 4/36, B8도 13/459로 전체 중 일부에 불과하다.
     B8 유닛 상세/무기 상세/전투 데미지예측/실제 통신 대기문, A2 CO 프로필 다중 CO처럼
     target read가 강제되는 fresh 또는 near-fresh state를 확보한다. 목표는 `r0..r7` exact target address,
     source read hit, mutation diff, 또는 WRAM/VRAM/DMA write chain으로 "해당 override 주소 → 화면 타일" provenance를

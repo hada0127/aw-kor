@@ -1,0 +1,500 @@
+{
+ "tool": "custom e12_a2_profile_domino_max_probe using probe_compact_display_reads primitives",
+ "rom": "output/game_wars_korean_full.gba",
+ "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+ "git_commit": "6690a88",
+ "selected_groups": [
+  "a2_co_power_profile_display_overrides"
+ ],
+ "selected_target_addresses": [],
+ "case_count": 4,
+ "hit_count": 204,
+ "direct_target_read_count": 204,
+ "summary": {
+  "hit_count": 204,
+  "direct_target_read_count": 204,
+  "direct_target_count": 4,
+  "direct_targets": [
+   {
+    "target_start": "0x00A295AC",
+    "count": 68
+   },
+   {
+    "target_start": "0x00A295C0",
+    "count": 34
+   },
+   {
+    "target_start": "0x00A295D8",
+    "count": 68
+   },
+   {
+    "target_start": "0x00A295EC",
+    "count": 34
+   }
+  ]
+ },
+ "strict_note": "A2 CO profile near-fresh read-watch for the Domino/Max campaign profile pair only. The discarded full repeat probe showed RIGHT toggles these two COs instead of traversing all COs, so this is 4 target source proof, not all-CO coverage or visual-layout QA.",
+ "contact_sheet": "docs/screenshots/e12_a2_profile_domino_max_2026-06-28/contact.png",
+ "full_repeat_probe": "temp/e12_a2_profile_all_co_probe_20260628/report.json",
+ "full_repeat_contact": "temp/e12_a2_profile_all_co_probe_20260628/contact.png",
+ "cases": [
+  {
+   "name": "co00_p1",
+   "case_type": "state",
+   "mode": "a2_profile_domino_max_power_rows",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_steps": [
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ]
+   ],
+   "watch_mode": "ranges",
+   "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/watch.log",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/frame.png",
+   "summary": {
+    "hit_count": 34,
+    "direct_target_read_count": 34,
+    "direct_target_count": 1,
+    "by_group": {
+     "a2_co_power_profile_display_overrides": 34
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0838BD18",
+      "count": 15
+     },
+     {
+      "pc": "0x0838BCE4",
+      "count": 5
+     },
+     {
+      "pc": "0x0831425A",
+      "count": 2
+     },
+     {
+      "pc": "0x08314336",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BD1C",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30404",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BC90",
+      "count": 1
+     },
+     {
+      "pc": "0x0831BCEC",
+      "count": 1
+     }
+    ],
+    "direct_targets": [
+     {
+      "target_start": "0x00A295AC",
+      "count": 34
+     }
+    ],
+    "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+   }
+  },
+  {
+   "name": "co00_p2",
+   "case_type": "state",
+   "mode": "a2_profile_domino_max_power_rows",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_steps": [
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ]
+   ],
+   "watch_mode": "ranges",
+   "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/watch.log",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/frame.png",
+   "summary": {
+    "hit_count": 68,
+    "direct_target_read_count": 68,
+    "direct_target_count": 2,
+    "by_group": {
+     "a2_co_power_profile_display_overrides": 68
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0838BD18",
+      "count": 30
+     },
+     {
+      "pc": "0x0838BCE4",
+      "count": 10
+     },
+     {
+      "pc": "0x0831425A",
+      "count": 4
+     },
+     {
+      "pc": "0x08314336",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BD1C",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30404",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BC90",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BCEC",
+      "count": 2
+     }
+    ],
+    "direct_targets": [
+     {
+      "target_start": "0x00A295AC",
+      "count": 34
+     },
+     {
+      "target_start": "0x00A295C0",
+      "count": 34
+     }
+    ],
+    "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+   }
+  },
+  {
+   "name": "co01_p1",
+   "case_type": "state",
+   "mode": "a2_profile_domino_max_power_rows",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_steps": [
+    [
+     "press",
+     "RIGHT",
+     40
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ]
+   ],
+   "watch_mode": "ranges",
+   "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/watch.log",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/frame.png",
+   "summary": {
+    "hit_count": 34,
+    "direct_target_read_count": 34,
+    "direct_target_count": 1,
+    "by_group": {
+     "a2_co_power_profile_display_overrides": 34
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0838BD18",
+      "count": 15
+     },
+     {
+      "pc": "0x0838BCE4",
+      "count": 5
+     },
+     {
+      "pc": "0x0831425A",
+      "count": 2
+     },
+     {
+      "pc": "0x08314336",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BD1C",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 2
+     },
+     {
+      "pc": "0x08F30404",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BC90",
+      "count": 1
+     },
+     {
+      "pc": "0x0831BCEC",
+      "count": 1
+     }
+    ],
+    "direct_targets": [
+     {
+      "target_start": "0x00A295D8",
+      "count": 34
+     }
+    ],
+    "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+   }
+  },
+  {
+   "name": "co01_p2",
+   "case_type": "state",
+   "mode": "a2_profile_domino_max_power_rows",
+   "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
+   "state_steps": [
+    [
+     "press",
+     "RIGHT",
+     40
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ],
+    [
+     "press",
+     "DOWN",
+     60
+    ]
+   ],
+   "watch_mode": "ranges",
+   "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/watch.log",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/frame.png",
+   "summary": {
+    "hit_count": 68,
+    "direct_target_read_count": 68,
+    "direct_target_count": 2,
+    "by_group": {
+     "a2_co_power_profile_display_overrides": 68
+    },
+    "top_pcs": [
+     {
+      "pc": "0x0838BD18",
+      "count": 30
+     },
+     {
+      "pc": "0x0838BCE4",
+      "count": 10
+     },
+     {
+      "pc": "0x0831425A",
+      "count": 4
+     },
+     {
+      "pc": "0x08314336",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BD1C",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30284",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30286",
+      "count": 4
+     },
+     {
+      "pc": "0x08F30404",
+      "count": 4
+     },
+     {
+      "pc": "0x0831BC90",
+      "count": 2
+     },
+     {
+      "pc": "0x0831BCEC",
+      "count": 2
+     }
+    ],
+    "direct_targets": [
+     {
+      "target_start": "0x00A295D8",
+      "count": 34
+     },
+     {
+      "target_start": "0x00A295EC",
+      "count": 34
+     }
+    ],
+    "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+   }
+  }
+ ],
+ "direct_hits": [
+  {
+   "case": "co00_p1",
+   "case_type": "state",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/frame.png",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/watch.log",
+   "hit": {
+    "order": 0,
+    "addr": 144872876,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872876,
+    "old": 142,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295AC",
+     "read_offset": "0x00A295AC",
+     "target_start": "0x00A295AC",
+     "address": "0x00A295AC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "승리",
+     "ja": "ウィニングマーチ"
+    },
+    "raw": "0 addr=08A295AC pc=0831425A lr=08314F1B r0=03001470 r1=08A295AC old=0000008E new=00000000"
+   }
+  },
+  {
+   "case": "co00_p2",
+   "case_type": "state",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/frame.png",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/watch.log",
+   "hit": {
+    "order": 34,
+    "addr": 144872896,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872896,
+    "old": 137,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295C0",
+     "read_offset": "0x00A295C0",
+     "target_start": "0x00A295C0",
+     "address": "0x00A295C0",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "대승",
+     "ja": "ビクトリアスパレード"
+    },
+    "raw": "34 addr=08A295C0 pc=0831425A lr=08314F1B r0=03001470 r1=08A295C0 old=00000089 new=00000000"
+   }
+  },
+  {
+   "case": "co01_p1",
+   "case_type": "state",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/frame.png",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/watch.log",
+   "hit": {
+    "order": 0,
+    "addr": 144872920,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872920,
+    "old": 136,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295D8",
+     "read_offset": "0x00A295D8",
+     "target_start": "0x00A295D8",
+     "address": "0x00A295D8",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "강타",
+     "ja": "マキシマムブロウ"
+    },
+    "raw": "0 addr=08A295D8 pc=0831425A lr=08314F1B r0=03001470 r1=08A295D8 old=00000088 new=00000000"
+   }
+  },
+  {
+   "case": "co01_p2",
+   "case_type": "state",
+   "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/frame.png",
+   "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/watch.log",
+   "hit": {
+    "order": 34,
+    "addr": 144872940,
+    "pc": 137445978,
+    "lr": 137449243,
+    "r0": 50336880,
+    "r1": 144872940,
+    "old": 144,
+    "new": 0,
+    "source": {
+     "kind": "dialogue-override",
+     "target_span_match": true,
+     "read_address": "0x08A295EC",
+     "read_offset": "0x00A295EC",
+     "target_start": "0x00A295EC",
+     "address": "0x00A295EC",
+     "group_id": "a2_co_power_profile_display_overrides",
+     "ko": "직격",
+     "ja": "ストレートブラスト"
+    },
+    "raw": "34 addr=08A295EC pc=0831425A lr=08314F1B r0=03001470 r1=08A295EC old=00000090 new=00000000"
+   }
+  }
+ ]
+}

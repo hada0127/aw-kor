@@ -698,17 +698,305 @@
  },
  "read_watch_probes": {
   "present": true,
-  "probe_count": 22,
-  "current_probe_count": 22,
+  "probe_count": 23,
+  "current_probe_count": 23,
   "stale_probe_count": 0,
   "stale_paths": [],
-  "case_count": 54,
-  "hit_count": 291,
-  "direct_target_read_count": 291,
-  "total_case_count": 54,
-  "total_hit_count": 291,
-  "total_direct_target_read_count": 291,
+  "case_count": 58,
+  "hit_count": 495,
+  "direct_target_read_count": 495,
+  "total_case_count": 58,
+  "total_hit_count": 495,
+  "total_direct_target_read_count": 495,
   "probes": [
+   {
+    "path": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
+    "present": true,
+    "current_rom": true,
+    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+    "selected_groups": [
+     "a2_co_power_profile_display_overrides"
+    ],
+    "selected_target_addresses": [],
+    "case_count": 4,
+    "hit_count": 204,
+    "direct_target_read_count": 204,
+    "strict_note": "A2 CO profile near-fresh read-watch for the Domino/Max campaign profile pair only. The discarded full repeat probe showed RIGHT toggles these two COs instead of traversing all COs, so this is 4 target source proof, not all-CO coverage or visual-layout QA.",
+    "cases": [
+     {
+      "name": "co00_p1",
+      "case_type": "state",
+      "mode": "a2_profile_domino_max_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+      "summary": {
+       "hit_count": 34,
+       "direct_target_read_count": 34,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 34
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 15
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295AC",
+         "count": 34
+        }
+       ],
+       "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+      },
+      "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/watch.log",
+      "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/frame.png"
+     },
+     {
+      "name": "co00_p2",
+      "case_type": "state",
+      "mode": "a2_profile_domino_max_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+      "summary": {
+       "hit_count": 68,
+       "direct_target_read_count": 68,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 68
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 30
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 10
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295AC",
+         "count": 34
+        },
+        {
+         "target_start": "0x00A295C0",
+         "count": 34
+        }
+       ],
+       "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+      },
+      "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/watch.log",
+      "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/frame.png"
+     },
+     {
+      "name": "co01_p1",
+      "case_type": "state",
+      "mode": "a2_profile_domino_max_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+      "summary": {
+       "hit_count": 34,
+       "direct_target_read_count": 34,
+       "direct_target_count": 1,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 34
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 15
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 5
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 2
+        },
+        {
+         "pc": "0x08314336",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 2
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 1
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 1
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295D8",
+         "count": 34
+        }
+       ],
+       "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+      },
+      "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/watch.log",
+      "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/frame.png"
+     },
+     {
+      "name": "co01_p2",
+      "case_type": "state",
+      "mode": "a2_profile_domino_max_power_rows",
+      "watch_mode": "ranges",
+      "watchpoint_caveat": "state_036 near-fresh CO profile; RIGHT toggles Domino/Max only. Runtime source proof, not all-CO or natural-route coverage.",
+      "summary": {
+       "hit_count": 68,
+       "direct_target_read_count": 68,
+       "direct_target_count": 2,
+       "by_group": {
+        "a2_co_power_profile_display_overrides": 68
+       },
+       "top_pcs": [
+        {
+         "pc": "0x0838BD18",
+         "count": 30
+        },
+        {
+         "pc": "0x0838BCE4",
+         "count": 10
+        },
+        {
+         "pc": "0x0831425A",
+         "count": 4
+        },
+        {
+         "pc": "0x08314336",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BD1C",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30284",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30286",
+         "count": 4
+        },
+        {
+         "pc": "0x08F30404",
+         "count": 4
+        },
+        {
+         "pc": "0x0831BC90",
+         "count": 2
+        },
+        {
+         "pc": "0x0831BCEC",
+         "count": 2
+        }
+       ],
+       "direct_targets": [
+        {
+         "target_start": "0x00A295D8",
+         "count": 34
+        },
+        {
+         "target_start": "0x00A295EC",
+         "count": 34
+        }
+       ],
+       "route_scope": "Domino/Max only; repeated RIGHT did not traverse all COs"
+      },
+      "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/watch.log",
+      "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/frame.png"
+     }
+    ]
+   },
    {
     "path": "data/compact_display_read_watch_a2_profile_down3_current.json",
     "present": true,
@@ -2875,7 +3163,7 @@
     "current_screen_capture_assigned": 1,
     "container_only": 35,
     "no_scene": 0,
-    "direct_target_visual_evidence": 3,
+    "direct_target_visual_evidence": 4,
     "static_pointer_refs": 36,
     "static_external_pointer_refs": 36
    },
@@ -3068,6 +3356,20 @@
      "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
+       "case": "co00_p1",
+       "case_type": "state",
+       "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/frame.png",
+       "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p1/watch.log",
+       "read_address": "0x08A295AC",
+       "target_start": "0x00A295AC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295AC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
       {
        "probe": "data/compact_display_read_watch_a2_profile_down3_current.json",
        "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
@@ -4538,6 +4840,20 @@
      "renderer_trace_evidence": [],
      "read_watch_evidence": [
       {
+       "probe": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
+       "case": "co00_p2",
+       "case_type": "state",
+       "frame": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co00_p2/watch.log",
+       "read_address": "0x08A295C0",
+       "target_start": "0x00A295C0",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295C0",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
        "probe": "data/compact_display_read_watch_a2_profile_down3_current.json",
        "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
        "case_type": "state",
@@ -5055,6 +5371,20 @@
      "renderer_trace_evidence": [],
      "read_watch_evidence": [
       {
+       "probe": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
+       "case": "co01_p1",
+       "case_type": "state",
+       "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/frame.png",
+       "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p1/watch.log",
+       "read_address": "0x08A295D8",
+       "target_start": "0x00A295D8",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295D8",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      },
+      {
        "probe": "data/compact_display_read_watch_a2_profile_right_current.json",
        "case": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
        "case_type": "state",
@@ -5568,9 +5898,24 @@
        }
       }
      ],
-     "direct_target_visual_evidence": false,
+     "direct_target_visual_evidence": true,
      "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
+     "read_watch_evidence": [
+      {
+       "probe": "data/compact_display_read_watch_a2_profile_domino_max_current.json",
+       "case": "co01_p2",
+       "case_type": "state",
+       "frame": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/frame.png",
+       "watch_log": "temp/e12_a2_profile_all_co_probe_20260628/co01_p2/watch.log",
+       "read_address": "0x08A295EC",
+       "target_start": "0x00A295EC",
+       "pc": "0x0831425A",
+       "lr": "0x08314F1B",
+       "r0": "0x03001470",
+       "r1": "0x08A295EC",
+       "note": "Read-watch direct hit proves this target span was read on this route; it is runtime provenance, not visual layout QA by itself."
+      }
+     ],
      "manual_visual_evidence": [],
      "static_pointer_xrefs": {
       "pointer_ref_count": 1,
@@ -5581,7 +5926,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "container_only"
+     "evidence_level": "read_watch_direct"
     },
     {
      "address": "0x00A29600",

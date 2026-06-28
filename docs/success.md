@@ -3063,3 +3063,19 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - **경계**: RAM-field near-fresh proof이므로 자연 진행 route 전수 증명은 아니다. 하지만 current ROM의
   B84 pointer table, target body, shared compact renderer, source-only LZ77 glyph 수정이 11개 slot 모두에서
   동작한다는 target-level proof로 채택한다. E12 전체는 A2/B8 잔여 때문에 미완료다.
+
+## [2026-06-28] E12 A2 CO 프로필 도미노/맥스 4개 파워명 read-watch 확보
+
+- **범위**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`는 전 CO 도감이 아니라
+  캠페인 CO 프로필의 도미노/맥스 pair 화면이다. `RIGHT`는 두 CO만 토글한다.
+- **양성 증거**: 대표 4케이스에서 current ROM SHA
+  `f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292`가 A2 compact target
+  `0x00A295AC`(`승리`), `0x00A295C0`(`대승`), `0x00A295D8`(`강타`),
+  `0x00A295EC`(`직격`)을 직접 읽는다.
+- **증거 파일**:
+  `data/compact_display_read_watch_a2_profile_domino_max_current.json`,
+  `docs/screenshots/e12_a2_profile_domino_max_2026-06-28/contact.png`.
+- **matrix 반영**: `tools/build_compact_display_visual_matrix.py` 재실행 후 전체 E12 수치는
+  A2 4/36, B84 11/11, B8 13/459다.
+- **경계**: 도미노/맥스 2CO source proof일 뿐 all-CO route나 36개 visual-layout proof가 아니다.
+  A2 나머지 32개와 B8 대부분은 계속 E12 미완료로 남긴다.

@@ -4,6 +4,22 @@
 
 ---
 
+## [2026-06-28] E12 A2 `state_036` RIGHT 반복 all-CO route 실패
+
+- **시도**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 `RIGHT`를 0..17회 누른 뒤
+  `DOWN,DOWN`/`DOWN,DOWN,DOWN`으로 파워명 2행을 읽으면 A2 18 CO x 2 power = 36개를 순회할 것으로
+  가정하고 read-watch/contact probe를 실행했다.
+- **결과**: probe 자체는 current SHA `f95a8573...`에서 direct read 1836건을 만들었지만,
+  unique target은 `0x00A295AC/0x00A295C0/0x00A295D8/0x00A295EC` 4개뿐이었다.
+  contact sheet도 도미노/맥스 두 프로필만 반복해 보여 `RIGHT` 반복이 전 CO 순회 입력이 아님을 확인했다.
+- **판정**: 이 산출물은 all-CO proof로 쓰지 않는다. 영구 evidence는 대표 4케이스만 slim 처리해
+  `data/compact_display_read_watch_a2_profile_domino_max_current.json`에 넣고, matrix에는 A2 4/36으로만 반영했다.
+  전체 반복 산출물은 `temp/e12_a2_profile_all_co_probe_20260628/`에 남긴다.
+- **후속 기준**: 나머지 A2 32개는 전역 CO 도감/선택 화면, 다른 캠페인 CO profile state,
+  target mutation diff, direct read-watch, 또는 WRAM/VRAM/DMA chain 중 새 differentiator가 있는 route에서만 재시도한다.
+
+---
+
 ## [2026-06-28] E12 B84 all-COID proof 후속 리뷰 timeout 및 invalid-id boundary
 
 - **시도**: B84 AW1 CO 파워명 11/11 read-watch + visual contact 증거를
