@@ -58,7 +58,7 @@ OUTPUT_VARIANTS = {
 }
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
-REVIEW_ONLY_SCENE_IDS = {"98_extraction_noise_review"}
+REVIEW_ONLY_SCENE_IDS = {"98_extraction_noise_review", "99_unassigned_review"}
 AUTH_COOKIE = "aw_scene_editor_auth"
 AUTH_PASSWORD = os.environ.get("SCENE_EDITOR_PASSWORD") or ""
 AUTH_TOKEN = secrets.token_urlsafe(32)
@@ -239,7 +239,8 @@ def scene_extra_shots_info(sc):
 def public_scene(sc):
     out = {k: sc[k] for k in ("id", "order", "scope", "subtag", "title",
                               "scene_role", "capture_required",
-                              "canvas", "canvas_status", "counts") if k in sc}
+                              "canvas", "canvas_status", "counts",
+                              "review_status") if k in sc}
     counts = dict(out.get("counts") or {})
     refs = related_dialogue_scene_ids(sc)
     if refs:
@@ -326,6 +327,17 @@ def is_address_text_override(address):
     return addr in address_text_overrides()
 
 
+def is_direct_script_address(address):
+    key = canon_addr(address)
+    if not key:
+        return False
+    for group in group_index().values():
+        for member in group.get("members", []):
+            if canon_addr(member.get("address")) == key and str(member.get("kind") or "").startswith("script:"):
+                return True
+    return False
+
+
 def effective_member_ko(member, dialogue_overrides):
     addr = member.get("address")
     if is_address_text_override(addr):
@@ -337,6 +349,74 @@ def effective_member_ko(member, dialogue_overrides):
             return address_text_overrides().get(addr_int, member.get("ko") or "")
         return member.get("ko") or ""
     return dialogue_overrides.get(addr, member.get("ko") or "")
+
+
+KANA_TEXT_RE = re.compile(r"[ぁ-ゖァ-ヺー]")
+CJK_TEXT_RE = re.compile(r"[一-龯㐀-䶿]")
+SYMBOL_TABLE_RE = re.compile(r"^[０-９0-9Ａ-Ｚａ-ｚA-Za-z＄￥％／・？!！〜～ー―－＋±＝・\s　]+$")
+DIGIT_RE = re.compile(r"[０-９0-9]")
+ALPHA_RE = re.compile(r"[Ａ-Ｚａ-ｚA-Za-z]")
+SYMBOL_RE = re.compile(r"[＄￥％／・？!！〜～ー―－＋±＝・]")
+FULLWIDTH_ALPHA_TABLE_ROWS = {
+    "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮ",
+    "ＯＰＱＲＳＴＵＶＷＸＹＺ",
+    "ａｂｃｄｅｆｇｈｉｊｋｌｍｎ",
+    "ｏｐｑｒｓｔｕｖｗｘｙｚ",
+}
+
+
+def likely_non_dialogue_blank_source(text: str) -> bool:
+    """Best-effort label for symbol/table rows that should not say '(미번역)'."""
+    compact = "".join(ch for ch in (text or "").strip() if ch not in " \t\r\n　")
+    if not compact:
+        return True
+    if compact in FULLWIDTH_ALPHA_TABLE_ROWS:
+        return True
+    if SYMBOL_TABLE_RE.fullmatch(compact):
+        # Do not hide a blank short English UI label such as OK/START as
+        # symbol data.  A symbol-table label needs digits or a symbol-heavy mix.
+        if DIGIT_RE.search(compact):
+            return True
+        alpha = len(ALPHA_RE.findall(compact))
+        symbols = len(SYMBOL_RE.findall(compact))
+        if symbols >= max(2, alpha):
+            return True
+        return False
+    return False
+
+
+def member_blank_status(member, ko, budget, review_only_scene=False):
+    """Explain blank KO values so the UI does not mislabel intentional blanks."""
+    if (ko or "").strip():
+        return None
+    kind = str(member.get("kind") or "")
+    if review_only_scene:
+        return {
+            "kind": "excluded",
+            "label": "제외 후보",
+            "reason": "실제 화면 대사로 연결하지 않는 저신뢰 추출 후보입니다.",
+        }
+    if budget.get("protected_address_text"):
+        return {
+            "kind": "intentional_blank",
+            "label": "보호 공백",
+            "reason": "원문 조각을 의도적으로 비우는 보호 행입니다. 편집하면 다음 빌드에서 address_text_overrides.tsv 및 dialogue_overrides.json에 반영됩니다.",
+        }
+    if kind.startswith("script:"):
+        return {
+            "kind": "script_blank",
+            "label": "스크립트 공백",
+            "reason": "직접 스크립트 패치가 원문 조각을 비우는 행입니다. 편집하면 다음 빌드에서 dialogue_overrides.json에 반영됩니다.",
+        }
+    if budget.get("reason"):
+        return None
+    if likely_non_dialogue_blank_source(member.get("ja") or ""):
+        return {
+            "kind": "symbol_table",
+            "label": "기호 데이터",
+            "reason": "대사 문장이 아닌 숫자·기호·테이블성 추출 행입니다.",
+        }
+    return None
 
 
 def address_text_overrides():
@@ -759,8 +839,10 @@ def scene_items(scene, want="all"):
                 if is_address_text_override(m.get("address")):
                     budget["protected_address_text"] = True
                     budget["protected_warn"] = "보호 문구 — 저장 시 address_text_overrides.tsv에 반영됩니다"
+                blank_status = member_blank_status(m, ko, budget, review_only_scene)
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
-                                "kind": m.get("kind"), "budget": budget})
+                                "ship_ko": m.get("ship_ko"), "kind": m.get("kind"),
+                                "blank_status": blank_status, "budget": budget})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
                           "flagged": g.get("flagged"), "assembled_ja": g.get("assembled_ja"),
                           "segments": g.get("segments"), "members": members,
@@ -1212,6 +1294,7 @@ class Handler(BaseHTTPRequestHandler):
         if addr_int < SAFE_MIN_ADDR:
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
         protected_address_text = is_address_text_override(addr)
+        protected_direct_script = protected_address_text and is_direct_script_address(addr)
         # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
         kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
         if kind == "deny":
@@ -1243,10 +1326,20 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
                     "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot,
                     "protected_address_text": protected_address_text,
-                    "storage": "address_text_overrides.tsv" if protected_address_text else "dialogue_overrides.json"}
+                    "protected_direct_script": protected_direct_script,
+                    "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
+                                if protected_address_text else "dialogue_overrides.json")}
         with _LOCK:
             if protected_address_text:
                 save_address_text_override(addr, ko)
+                ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
+                if ov.get(addr) != ko:
+                    # Keep a mirror override instead of deleting an existing
+                    # dialogue override.  Direct script rows need the mirror for
+                    # build pickup, and non-direct protected rows avoid silent
+                    # data loss while staying value-synced with the TSV authority.
+                    ov[addr] = ko
+                    DE.save_json(DE.OVERRIDES_PATH, ov)
             else:
                 ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
                 ov[addr] = ko
@@ -1256,7 +1349,9 @@ class Handler(BaseHTTPRequestHandler):
         return {"ok": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
                 "raw_len": fit["raw_len"], "fit_level": fit["fit_level"],
                 "protected_address_text": protected_address_text,
-                "storage": "address_text_overrides.tsv" if protected_address_text else "dialogue_overrides.json"}
+                "protected_direct_script": protected_direct_script,
+                "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
+                            if protected_address_text else "dialogue_overrides.json")}
 
     def _edit_dict(self, body):
         """통일 사전 CRUD(add/edit/delete) — proper_nouns.json. DE 로직 재사용(Phase 4 잔여)."""

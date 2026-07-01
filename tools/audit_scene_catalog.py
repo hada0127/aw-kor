@@ -37,6 +37,8 @@ def is_review_scene(scene: dict) -> bool:
         scene.get("id") in {"98_extraction_noise_review", "99_unassigned_review"}
         or scene.get("scope") == "review"
         or scene.get("scene_role") == "container"
+        or scene.get("scene_role") == "excluded"
+        or scene.get("scene_role") == "review_pending"
     )
 
 
@@ -203,6 +205,8 @@ def main() -> None:
             container_contract_issues.append({**row, "issue": "container 제외 사유가 비어 있음"})
 
     dialogue_unassigned = int(coverage.get("dialogue_unassigned") or 0)
+    pending_review_total = int(coverage.get("review_pending_total") or 0)
+    sprite_text_candidate = int(coverage.get("sprites_unassigned_text_candidate") or 0)
     unassigned_review_scene = scene_by_id.get("99_unassigned_review") or {}
     unassigned_review_dialogue = len(unassigned_review_scene.get("dialogue_ids") or [])
     unassigned_dialogue_issue = []
@@ -211,6 +215,14 @@ def main() -> None:
             "coverage_dialogue_unassigned": dialogue_unassigned,
             "review_scene_dialogue": unassigned_review_dialogue,
             "issue": "실제 scene/review 사유에 수렴하지 않은 대사가 남음",
+        })
+    if pending_review_total or sprite_text_candidate:
+        unassigned_dialogue_issue.append({
+            "coverage_dialogue_unassigned": dialogue_unassigned,
+            "review_scene_dialogue": unassigned_review_dialogue,
+            "pending_review_total": pending_review_total,
+            "sprite_text_candidate": sprite_text_candidate,
+            "issue": "UI 에디터 검토 필요 항목이 0이 아님",
         })
 
     screenshot_issues = []
@@ -296,6 +308,7 @@ def main() -> None:
         "checkpoint_count": len(checkpoints),
         "checkpoint_modes": dict(checkpoint_modes),
         "coverage": coverage,
+        "review_pending_total": pending_review_total,
         "critical_count": critical_count,
         "warning_count": len(screenshot_issues) + len(broad_dialogue) + len(reused_screenshots) + len(container_rows),
     }
@@ -318,6 +331,7 @@ def main() -> None:
         f"{summary['coverage'].get('dialogue_unassigned')} "
         f"(accounted {summary['coverage'].get('dialogue_assigned')}/"
         f"{summary['coverage'].get('dialogue_groups_total')})",
+        f"- pending review: {summary['review_pending_total']}",
         f"- critical: {summary['critical_count']}",
         f"- warnings: {summary['warning_count']}",
         "",

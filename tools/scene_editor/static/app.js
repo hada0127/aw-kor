@@ -140,12 +140,33 @@ const esc = s => (s || "").replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", 
 const RENDER_LIMIT = 300;  // 한 scene 펼침 시 그리는 항목 상한(대형 scene jank 방지 — M2/M5)
 const SCOPE_KO = { all: "공통", shared_select: "선택", part1: "1편", part2: "2편" };
 
+function memberKoText(m) {
+  const ko = (m && m.ko) || "";
+  if (ko) return ko;
+  const bs = m && m.blank_status;
+  return bs && bs.label ? `(${bs.label})` : "(미번역)";
+}
+
+function memberKoBadges(m) {
+  const out = [];
+  if (m && m.blank_status && m.blank_status.label) {
+    out.push(`<span class="badge">${esc(m.blank_status.label)}</span>`);
+  }
+  if (m && m.budget && m.budget.protected_address_text) {
+    out.push(`<span class="badge">보호문구</span>`);
+  }
+  return out.join("");
+}
+
 function shotUrl(shot) {
   return shot && shot.exists && shot.url ? `${shot.url}?t=${shot.mtime || 0}` : "";
 }
 function sceneShotThumb(shot) {
   if (shot && shot.status === "container") {
-    return `<span class="scene-shot missing container" title="잔여 대사 컨테이너"></span>`;
+    return `<span class="scene-shot missing container" title="검증완료 주소묶음"></span>`;
+  }
+  if (shot && shot.status === "excluded") {
+    return `<span class="scene-shot missing container" title="검증완료 제외 항목"></span>`;
   }
   const url = shotUrl(shot);
   if (!url) return `<span class="scene-shot missing" title="실화면 캡처 없음"></span>`;
@@ -157,8 +178,12 @@ function sceneShotCard(shot) {
   const meta = shot && shot.checkpoint ? `${shot.checkpoint} · ${shot.grade || ""}` : "스크린샷 없음";
   const preview = S.items && S.items.canvas_status === "ready" ? "대사 프리뷰 지원" : "정적 캡처";
   if (shot && shot.status === "container") {
-    const note = shot.note || "고유 실화면 캡처가 없는 잔여 대사 bucket입니다.";
-    return `<div class="scene-proof missing container"><div><strong>잔여 대사 컨테이너 · 고유 실화면 없음</strong><span>${esc(note)}</span></div></div>`;
+    const note = shot.note || "독립 프레임이 아닌 검증완료 주소묶음입니다.";
+    return `<div class="scene-proof missing container"><div><strong>검증완료 주소묶음 · residual hit 0</strong><span>${esc(note)}</span></div></div>`;
+  }
+  if (shot && shot.status === "excluded") {
+    const note = shot.note || "실제 화면 텍스트/스프라이트 검토 대상이 아닌 제외 완료 항목입니다.";
+    return `<div class="scene-proof missing container"><div><strong>제외 완료 · 검토 필요 0</strong><span>${esc(note)}</span></div></div>`;
   }
   if (!url) return `<div class="scene-proof missing"><div><strong>실화면 캡처 없음</strong><span>${esc(meta)}</span></div></div>`;
   // stale(빌드 ROM과 불일치) 경고 — codex major
@@ -204,10 +229,16 @@ function showSceneOverview() {
 function sceneCountText(s) {
   const c = s.counts || {};
   if (s.id === "99_unassigned_review" && (c.sprite_scan_lz77 || c.sprite_font || c.sprite_text_candidate)) {
-    return `대${c.dialogue || 0}·텍${c.sprite_text_candidate || 0}·그래픽${c.sprite_scan_lz77 || 0}`;
+    const pending = c.pending_review || ((c.dialogue || 0) + (c.sprite_text_candidate || 0));
+    return pending
+      ? `검토필요${pending}·텍${c.sprite_text_candidate || 0}·그래픽${c.sprite_scan_lz77 || 0}`
+      : `검토필요0·제외그래픽${c.excluded_scan_lz77 || c.sprite_scan_lz77 || 0}·폰트${c.excluded_font || c.sprite_font || 0}`;
+  }
+  if (s.id === "98_extraction_noise_review") {
+    return `제외대${c.excluded_low_confidence_dialogue || c.dialogue || 0}`;
   }
   const rel = c.related_dialogue ? `·관련대${c.related_dialogue}` : "";
-  const role = s.scene_role === "container" ? "·잔여" : "";
+  const role = s.scene_role === "container" ? "·검증" : "";
   return `대${c.dialogue || 0}${rel}·스${c.sprite || 0}${role}`;
 }
 
@@ -216,6 +247,9 @@ function isReviewScene(s) {
 }
 function isContainerScene(s) {
   return s && s.scene_role === "container";
+}
+function isExcludedScene(s) {
+  return s && s.scene_role === "excluded";
 }
 
 // ── 좌측 LNB: 게임순 scene 목록(아코디언) ─────────────────────────────────
@@ -230,20 +264,22 @@ async function loadScenes() {
   // scope/검색으로 목록 갱신 시 우측 에디터도 초기화(stale 편집 상태 방지 — agy major)
   $("#editor").innerHTML = `<div class="empty">왼쪽에서 화면을 펼쳐 편집할 항목(대사·스프라이트)을 선택하세요.</div>`;
   const c = d.coverage || {};
-  const missingText = (c.dialogue_unassigned || 0) + (c.sprites_unassigned_text_candidate || 0);
-  const missingFont = c.sprites_unassigned_font || 0;
-  const missingGraphic = c.sprites_unassigned_scan_lz77 || 0;
+  const pendingReview = c.review_pending_total || ((c.dialogue_unassigned || 0) + (c.sprites_unassigned_text_candidate || 0));
+  const excludedFont = c.sprites_excluded_font || c.sprites_unassigned_font || 0;
+  const excludedGraphic = c.sprites_excluded_scan_lz77 || c.sprites_unassigned_scan_lz77 || 0;
+  const excludedDialogue = c.dialogue_excluded_low_confidence || c.dialogue_review_only || 0;
   $("#coverage").textContent =
     `scene ${d.scenes.length} · 대사그룹 ${c.dialogue_assigned}/${c.dialogue_groups_total} · ` +
-    `텍스트 스프 ${c.sprites_assigned} · 미배정 텍${missingText}·폰트${missingFont}·그래픽${missingGraphic}`;
+    `텍스트 스프 ${c.sprites_assigned} · 검토필요 ${pendingReview} · 제외 대${excludedDialogue}·폰트${excludedFont}·그래픽${excludedGraphic}`;
   const box = $("#scenelist"); box.innerHTML = "";
   if (!d.scenes.length) { box.innerHTML = `<div class="empty">검색 결과가 없습니다.</div>`; return; }
   for (const s of d.scenes) {
     const row = document.createElement("div");
-    row.className = "scene-row" + (isReviewScene(s) ? " review" : "") + (isContainerScene(s) ? " container" : "");
+    row.className = "scene-row" + (isReviewScene(s) ? " review" : "") + ((isContainerScene(s) || isExcludedScene(s)) ? " container" : "");
     row.dataset.sceneId = s.id;
     const cv = s.canvas_status === "ready" ? " · preview" : "";
-    const role = isContainerScene(s) ? ` <span class="chip container">잔여</span>` : "";
+    const role = isContainerScene(s) ? ` <span class="chip container">검증</span>`
+      : (isExcludedScene(s) ? ` <span class="chip container">제외</span>` : "");
     row.innerHTML =
       `<div class="scene-head">
          <span class="tw">▶</span>
@@ -326,7 +362,7 @@ function renderSceneItems(box) {
     const shown = Math.min(D.length, limit);
     for (let i = 0; i < shown; i++) {
       const g = D[i];
-      const ko = g.members.map(m => m.ko).join(" ");
+      const ko = g.members.map(memberKoText).join(" ");
       const over = g.members.some(m => !m.budget.estimated && m.budget.fits === false);
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "d"; el.dataset.i = i;
       el.innerHTML = `<span class="ja">${esc(g.assembled_ja || "")}</span>
@@ -430,16 +466,20 @@ function selectDialogue(i, el) {
     if (!ed) {
       html += `<div class="frag readonly" data-addr="${m.address}" data-mi="${mi}">
         <div class="fja">원문: ${esc(m.ja || "")} <span class="ja">@${m.address}</span></div>
-        <div class="ko">${esc(m.ko || "(미번역)")}</div>
+        <div class="ko">${esc(memberKoText(m))}${memberKoBadges(m)}</div>
         <div class="fragfoot"><span class="est">🔒 편집 불가 — ${esc(m.budget.reason || "빌드 미적용")}</span></div></div>`;
       return;
     }
     const bteamBadge = m.budget.bteam
       ? `<div class="bteamwarn" title="${esc(m.budget.bteam_warn || "짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요")}">⚠ 짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요</div>`
       : "";
+    const protectedWarn = (m.blank_status || m.budget.protected_address_text)
+      ? `<div class="protectwarn" title="${esc((m.blank_status && m.blank_status.reason) || m.budget.protected_warn || "")}">${esc((m.blank_status && m.blank_status.label) || "보호문구")} · ${esc((m.blank_status && m.blank_status.reason) || m.budget.protected_warn || "")}</div>`
+      : "";
     html += `<div class="frag${m.budget.bteam ? " bteam" : ""}" data-addr="${m.address}" data-mi="${mi}">
       <div class="fja">원문: ${esc(m.ja || "")} <span class="ja">@${m.address}</span></div>
       ${bteamBadge}
+      ${protectedWarn}
       <div class="lines"></div>
       <div class="fragfoot">
         <button class="addline" type="button">+ 줄</button>

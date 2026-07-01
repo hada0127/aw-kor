@@ -1,7 +1,12 @@
 {
   "summary": {
     "generated_on": "2026-07-01",
-    "server": "http://127.0.0.1:8787",
+    "server": "http://127.0.0.1:8793",
+    "auth_status": {
+      "ok": true,
+      "auth_required": true,
+      "authenticated": true
+    },
     "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
     "scene_count": 81,
     "dialogue_group_count": 10859,
@@ -11,13 +16,17 @@
     "current_dry_run_failures": 0,
     "bteam_confirm_failures": 0,
     "bteam_confirm_skips": 0,
+    "unlabelled_blank_members": 0,
+    "unprotected_all_blank_groups": 0,
     "actual_sample_count": 0,
     "actual_samples": [],
     "direct_script_build_sample": null,
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 46.38
+    "elapsed_sec": 163.63
   },
   "failures": [],
   "bteam_confirm_failures": [],
-  "bteam_confirm_skips": []
+  "bteam_confirm_skips": [],
+  "unlabelled_blank_members": [],
+  "unprotected_all_blank_groups": []
 }

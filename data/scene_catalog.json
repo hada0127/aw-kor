@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "_doc": "게임 흐름순 scene 카탈로그(통합 UI 에디터 정본). tools/build_scene_catalog.py 생성. 수동보정 data/scene_catalog_overrides.json. 미배정은 99_unassigned_review로 100% 수렴.",
+  "_doc": "게임 흐름순 scene 카탈로그(통합 UI 에디터 정본). tools/build_scene_catalog.py 생성. 수동보정 data/scene_catalog_overrides.json. 실제 검토 필요 항목과 검증 완료 제외 항목을 분리한다.",
   "generated_from": {
     "checkpoints": "data/screen_checkpoints.json",
     "entrypoints": "data/scene_entrypoints.json",
@@ -20,10 +20,14 @@
     "sprites_unassigned_scan_lz77": 1881,
     "sprites_unassigned_text_candidate": 0,
     "sprites_unassigned_font": 1,
+    "sprites_excluded_scan_lz77": 1881,
+    "sprites_excluded_font": 1,
+    "review_pending_total": 0,
+    "dialogue_excluded_low_confidence": 3387,
     "dialogue_groups_total": 9579,
-    "dialogue_game_scene_assigned": 6200,
+    "dialogue_game_scene_assigned": 6192,
     "dialogue_assigned": 9579,
-    "dialogue_review_only": 3379,
+    "dialogue_review_only": 3387,
     "dialogue_unassigned": 0
   },
   "scenes": [
@@ -1399,7 +1403,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "1편 튜토리얼/초반 스토리 잔여 대사 bucket. 실제 화면은 19a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "1편 튜토리얼/초반 스토리 주소묶음. 실제 화면은 19a* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -1738,7 +1742,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "1편 레드스타 캠페인 잔여 대사 bucket. 실제 화면은 19b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "1편 레드스타 캠페인 주소묶음. 실제 화면은 19b* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -2275,7 +2279,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "1편 중반 캠페인 잔여 대사 bucket. 실제 화면은 19c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "1편 중반 캠페인 주소묶음. 실제 화면은 19c* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -2601,7 +2605,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "1편 후반 캠페인 잔여 대사 bucket. 별도 화면 hit는 현재 없으며, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "1편 후반 캠페인 주소묶음. 현재 별도 화면 hit가 없고 residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -3417,7 +3421,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "1편 유닛/작전 설명 잔여 대사 bucket. 실제 화면은 19e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "1편 유닛/작전 설명 주소묶음. 실제 화면은 19e* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -4278,7 +4282,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 B8 압축 표시문 bucket. 유닛/무기/상점/CO/브레이크 라벨은 여러 화면에서 참조되지만 이 주소 테이블 자체는 독립 프레임이 아니므로 UI 에디터용 container로 추적한다.",
+        "note": "2편 B8 압축 표시문 주소묶음. 유닛/무기/상점/CO/브레이크 라벨은 여러 화면에서 참조되지만 이 주소 테이블 자체는 독립 프레임이 아니며 현재 residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -6024,7 +6028,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 레드스타 초반 잔여 대사 bucket. 실제 화면은 30a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 레드스타 초반 주소묶음. 실제 화면은 30a* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -6314,7 +6318,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 블루문/초중반 잔여 대사 bucket. 실제 화면은 30b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 블루문/초중반 주소묶음. 실제 화면은 30b* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -6801,7 +6805,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 옐로코멧/중반 잔여 대사 bucket. 실제 화면은 30c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 옐로코멧/중반 주소묶음. 실제 화면은 30c* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -7444,7 +7448,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 그린어스 전반 잔여 대사 bucket. 실제 화면은 30d* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 그린어스 전반 주소묶음. 실제 화면은 30d* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -7976,7 +7980,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 그린어스 후반 잔여 대사 bucket. 실제 화면은 30g* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 그린어스 후반 주소묶음. 실제 화면은 30g* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -8503,7 +8507,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 블랙홀 후반 잔여 대사 bucket. 실제 화면은 30e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 블랙홀 후반 주소묶음. 실제 화면은 30e* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -9064,7 +9068,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "2편 최종전/CO 설명 잔여 대사 bucket. 실제 화면은 30f* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
+        "note": "2편 최종전/CO 설명 주소묶음. 실제 화면은 30f* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -9903,8 +9907,6 @@
         ]
       },
       "dialogue_ids": [
-        "g_00942020",
-        "g_009420EF",
         "g_0094298C",
         "g_00942A38",
         "g_00942A44",
@@ -9918,8 +9920,6 @@
         "g_009452D9",
         "g_009455D5",
         "g_009455EC",
-        "g_0097A4D4",
-        "g_0097A5A3",
         "g_0097AE40",
         "g_0097AEEC",
         "g_0097AEF8",
@@ -9934,8 +9934,6 @@
         "g_0097DDF1",
         "g_0097DE08",
         "g_009B1FF9",
-        "g_009B2D78",
-        "g_009B2E47",
         "g_009B36E4",
         "g_009B3790",
         "g_009B379C",
@@ -9949,8 +9947,6 @@
         "g_009B6399",
         "g_009B6695",
         "g_009B66AC",
-        "g_009EB61C",
-        "g_009EB6EB",
         "g_009EBF88",
         "g_009EC034",
         "g_009EC040",
@@ -9970,7 +9966,7 @@
         "lz77_00C1BAA0"
       ],
       "counts": {
-        "dialogue": 61,
+        "dialogue": 53,
         "sprite": 2
       },
       "entrypoint": {
@@ -10172,7 +10168,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "공통 통신 라벨 데이터 bucket. 독립 실화면 캡처 대상이 아니며, menu/focus residual scan은 scene_residual_scans 감사로 추적한다.",
+        "note": "공통 통신 라벨 데이터 주소묶음. 독립 실화면 캡처 대상이 아니며, 현재 menu/focus residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -10370,7 +10366,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "항복 확인 공통 복제본 bucket. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
+        "note": "항복 확인 공통 복제본 주소묶음. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 현재 residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -10473,7 +10469,7 @@
         "mode": null,
         "grade": "not_a_scene",
         "status": "container",
-        "note": "전투 패배/통신 오류 공통 복제본 bucket. 3P free-battle 항복 패배 실화면은 89b의 Part2 복제본(0xA34D18)을 읽으며, 이 공통 copy/통신 오류 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
+        "note": "전투 패배/통신 오류 공통 복제본 주소묶음. 3P free-battle 항복 패배 실화면은 89b의 Part2 복제본(0xA34D18)을 읽으며, 이 공통/통신 오류 copy는 현재 residual scan hit 0이다.",
         "capture_path": null,
         "provenance_path": null
       },
@@ -10514,8 +10510,10 @@
       "id": "98_extraction_noise_review",
       "order": 9980,
       "scope": "review",
-      "subtag": "검토",
-      "title": "저신뢰 추출 후보/빌드 제외 대사(장면 연결 제외)",
+      "subtag": "제외완료",
+      "title": "저신뢰 추출 제외 완료(실대사 아님)",
+      "scene_role": "excluded",
+      "review_status": "resolved_excluded",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
@@ -10525,8 +10523,8 @@
         "url": null,
         "mode": null,
         "grade": "not_a_scene",
-        "status": "not_a_scene",
-        "note": "코드/그래픽/보호 테이블/저신뢰 데이터 대역에서 잡힌 문자열 후보. 실제 화면 대사로 연결하지 않음."
+        "status": "excluded",
+        "note": "검증 완료: 코드/그래픽/보호 테이블/저신뢰 데이터 대역에서 잡힌 문자열 후보이며 실제 화면 대사로 연결하지 않는다."
       },
       "dialogue_filter": {},
       "sprite_filter": {},
@@ -12614,7 +12612,9 @@
         "g_00941C24",
         "g_00941C31",
         "g_00941D5C",
+        "g_00942020",
         "g_009420A2",
+        "g_009420EF",
         "g_00942204",
         "g_009422C9",
         "g_009422D9",
@@ -12664,7 +12664,9 @@
         "g_0097A0D8",
         "g_0097A0E5",
         "g_0097A210",
+        "g_0097A4D4",
         "g_0097A556",
+        "g_0097A5A3",
         "g_0097A6B8",
         "g_0097A77D",
         "g_0097A78D",
@@ -12713,7 +12715,9 @@
         "g_009B297C",
         "g_009B2989",
         "g_009B2AB4",
+        "g_009B2D78",
         "g_009B2DFA",
+        "g_009B2E47",
         "g_009B2F5C",
         "g_009B3021",
         "g_009B3031",
@@ -12763,7 +12767,9 @@
         "g_009EB220",
         "g_009EB22D",
         "g_009EB358",
+        "g_009EB61C",
         "g_009EB69E",
+        "g_009EB6EB",
         "g_009EB800",
         "g_009EB8C5",
         "g_009EB8D5",
@@ -13913,16 +13919,20 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3379,
-        "sprite": 0
+        "dialogue": 3387,
+        "sprite": 0,
+        "excluded_low_confidence_dialogue": 3387,
+        "pending_review": 0
       }
     },
     {
       "id": "99_unassigned_review",
       "order": 9990,
       "scope": "all",
-      "subtag": "미배정",
-      "title": "미배정(검토 필요) — 규칙 미매칭",
+      "subtag": "제외완료",
+      "title": "비텍스트/폰트 제외 완료 — 미배정 텍스트 0",
+      "scene_role": "excluded",
+      "review_status": "resolved_excluded",
       "canvas": null,
       "canvas_status": "none",
       "checkpoint": null,
@@ -13932,8 +13942,8 @@
         "url": null,
         "mode": null,
         "grade": "not_a_scene",
-        "status": "not_a_scene",
-        "note": "미배정 검토 bucket"
+        "status": "excluded",
+        "note": "검증 완료: 미배정 텍스트 후보 0. 남은 항목은 비텍스트 scan_lz77 그래픽 또는 font 블록이라 장면 편집 대상이 아니다."
       },
       "dialogue_filter": {},
       "sprite_filter": {},
@@ -15827,7 +15837,10 @@
         "sprite": 1882,
         "sprite_text_candidate": 0,
         "sprite_scan_lz77": 1881,
-        "sprite_font": 1
+        "sprite_font": 1,
+        "pending_review": 0,
+        "excluded_scan_lz77": 1881,
+        "excluded_font": 1
       }
     }
   ]

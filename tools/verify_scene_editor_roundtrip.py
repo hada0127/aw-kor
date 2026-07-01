@@ -43,6 +43,7 @@ BUILD_SAMPLE_REPORT = ROOT / "temp" / "scene_editor_roundtrip_encode_report.csv"
 INTEGRITY_MAP = ROOT / "temp" / "integrity_map.json"
 SPRITE_BUILD_LAYOUTS = ROOT / "data" / "sprite_build_layouts.json"
 OBJLABEL_SPRITES = ROOT / "data" / "objlabel_sprites.json"
+CLASSIFIED_BLANK_STATUSES = {"symbol_table", "script_blank", "excluded", "intentional_blank"}
 
 sys.path.insert(0, str(ROOT / "tools"))
 import build_korean_full as B  # noqa: E402
@@ -311,14 +312,28 @@ def main() -> int:
     args = ap.parse_args()
 
     started = time.time()
+    preflight_failures: list[dict] = []
     if args.password:
         login(args.server, args.password)
+    auth_status = http_json(args.server, "/api/auth/status")
+    if args.password and not auth_status.get("auth_required"):
+        preflight_failures.append({
+            "error": "password was provided but the scene editor reports auth_required=false",
+            "auth_status": auth_status,
+        })
+    if args.password and not auth_status.get("authenticated"):
+        preflight_failures.append({
+            "error": "password login did not leave the scene editor authenticated",
+            "auth_status": auth_status,
+        })
     scenes_payload = http_json(args.server, "/api/scenes")
     scenes = scenes_payload.get("scenes") or []
     records: list[dict] = []
-    failures: list[dict] = []
+    failures: list[dict] = list(preflight_failures)
     bteam_confirm_failures: list[dict] = []
     bteam_skips: list[dict] = []
+    unlabelled_blank_members: list[dict] = []
+    unprotected_all_blank_groups: list[dict] = []
 
     scene_count = 0
     dialogue_group_count = 0
@@ -338,8 +353,42 @@ def main() -> int:
         dialogue_group_count += len(dialogue)
         sprite_count += len(sprites)
         for gi, group in enumerate(dialogue):
+            group_members = group.get("members") or []
+            if (
+                (scene.get("scene_role") or "screen") == "screen"
+                and group_members
+                and all(not (m.get("ko") or "").strip() for m in group_members)
+            ):
+                statuses = [(m.get("blank_status") or {}).get("kind") for m in group_members]
+                has_protected = any((m.get("budget") or {}).get("protected_address_text") for m in group_members)
+                all_classified_blank = all(status in CLASSIFIED_BLANK_STATUSES for status in statuses)
+                if not has_protected and not all_classified_blank:
+                    unprotected_all_blank_groups.append({
+                        "scene_id": sid,
+                        "group_index": gi,
+                        "group_id": group.get("group_id"),
+                        "assembled_ja": group.get("assembled_ja"),
+                        "statuses": statuses,
+                        "addresses": [m.get("address") for m in group_members],
+                        "kinds": [m.get("kind") for m in group_members],
+                    })
             for mi, member in enumerate(group.get("members") or []):
                 budget = member.get("budget") or {}
+                if (
+                    (scene.get("scene_role") or "screen") == "screen"
+                    and not (member.get("ko") or "").strip()
+                    and not member.get("blank_status")
+                ):
+                    unlabelled_blank_members.append({
+                        "scene_id": sid,
+                        "group_index": gi,
+                        "member_index": mi,
+                        "address": member.get("address"),
+                        "ja": member.get("ja"),
+                        "kind": member.get("kind"),
+                        "editable": bool(budget.get("editable")),
+                        "reason": budget.get("reason"),
+                    })
                 if not budget.get("editable"):
                     continue
                 editable_count += 1
@@ -488,10 +537,23 @@ def main() -> int:
 
     if not restored_after_samples:
         failures.append({"error": "sample backup restore did not return files to pre-run hashes"})
+    if unlabelled_blank_members:
+        failures.append({
+            "error": "screen scene has untranslated blank KO without blank_status; translate it or classify it explicitly",
+            "count": len(unlabelled_blank_members),
+            "sample": unlabelled_blank_members[:20],
+        })
+    if unprotected_all_blank_groups:
+        failures.append({
+            "error": "screen scene has an all-blank dialogue group without protected/symbol-table evidence",
+            "count": len(unprotected_all_blank_groups),
+            "sample": unprotected_all_blank_groups[:20],
+        })
 
     summary = {
         "generated_on": date.today().isoformat(),
         "server": args.server,
+        "auth_status": auth_status,
         "rom_sha256": sha256(OUTPUT_ROM) if OUTPUT_ROM.exists() else None,
         "scene_count": scene_count,
         "dialogue_group_count": dialogue_group_count,
@@ -501,6 +563,8 @@ def main() -> int:
         "current_dry_run_failures": current_dry_run_failure_count,
         "bteam_confirm_failures": len(bteam_confirm_failures),
         "bteam_confirm_skips": len(bteam_skips),
+        "unlabelled_blank_members": len(unlabelled_blank_members),
+        "unprotected_all_blank_groups": len(unprotected_all_blank_groups),
         "actual_sample_count": len(actual_samples),
         "actual_samples": actual_samples,
         "direct_script_build_sample": build_sample,
@@ -512,6 +576,8 @@ def main() -> int:
         "failures": failures[:50],
         "bteam_confirm_failures": bteam_confirm_failures[:50],
         "bteam_confirm_skips": bteam_skips[:50],
+        "unlabelled_blank_members": unlabelled_blank_members[:50],
+        "unprotected_all_blank_groups": unprotected_all_blank_groups[:50],
     }
     out_path = args.out if args.out.is_absolute() else ROOT / args.out
     out_path.parent.mkdir(parents=True, exist_ok=True)

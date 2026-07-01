@@ -105,6 +105,8 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .frag.bteam { border-color: #8d6a27; box-shadow: inset 3px 0 0 var(--warn); }
 .bteamwarn { color: var(--warn); background: #2b2415; border: 1px solid #8d6a27; border-radius: 6px;
   padding: 4px 8px; font-size: 11px; margin: 4px 0 8px; }
+.protectwarn { color: #9ec4ff; background: #172233; border: 1px solid #31527c; border-radius: 6px;
+  padding: 4px 8px; font-size: 11px; margin: 4px 0 8px; }
 .frag.readonly .ko { font-size: 13px; }
 .frag .fja { color: var(--dim); font-size: 12px; margin-bottom: 6px; word-break: break-all; }
 .lineinput { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }

@@ -11,12 +11,15 @@ This is intentionally a CDP/browser test, not a data-only audit:
 from __future__ import annotations
 
 import asyncio
+import argparse
 import base64
 import json
 import math
+import os
 import re
 import sys
 import time
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -26,8 +29,10 @@ import websockets
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "temp" / "browser_verify"
 REPORT_PATH = OUT / "all_scene_editor_verify.json"
-CDP_LIST = "http://127.0.0.1:9224/json/list"
-URL = "http://127.0.0.1:8782/?verify=all-scene-editor-%d" % int(time.time())
+CDP_LIST = os.environ.get("SCENE_EDITOR_CDP_LIST", "http://127.0.0.1:9224/json/list")
+BASE_URL = os.environ.get("SCENE_EDITOR_URL", "http://127.0.0.1:8782").rstrip("/")
+URL = "%s/?verify=all-scene-editor-%d" % (BASE_URL, int(time.time()))
+TARGET_NETLOC = urllib.parse.urlparse(BASE_URL).netloc
 
 CAPTURE_SCENES = {
     "00_coldboot_nintendo",
@@ -69,12 +74,12 @@ class CDP:
 def first_page_ws() -> str:
     targets = json.load(urllib.request.urlopen(CDP_LIST, timeout=5))
     for t in targets:
-        if t.get("type") == "page" and "127.0.0.1:8782" in (t.get("url") or ""):
+        if t.get("type") == "page" and TARGET_NETLOC in (t.get("url") or ""):
             return t["webSocketDebuggerUrl"]
     for t in targets:
         if t.get("type") == "page":
             return t["webSocketDebuggerUrl"]
-    raise SystemExit("no Chrome page target on 127.0.0.1:9224")
+    raise SystemExit("no Chrome page target on %s" % CDP_LIST)
 
 
 async def eval_expr(cdp: CDP, expression: str, await_promise: bool = True, timeout_s: int = 30):
@@ -105,6 +110,53 @@ async def wait_ready(cdp: CDP):
             return
         await asyncio.sleep(0.1)
     raise TimeoutError("scene editor did not become ready")
+
+
+async def wait_document(cdp: CDP):
+    for _ in range(120):
+        ok = await eval_expr(cdp, "document.readyState !== 'loading'", False)
+        if ok:
+            return
+        await asyncio.sleep(0.1)
+    raise TimeoutError("document did not finish loading")
+
+
+async def login_if_needed(cdp: CDP, password: str):
+    if not password:
+        return
+    await wait_document(cdp)
+    ok = await eval_expr(
+        cdp,
+        """
+        (async (password) => {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({password})
+          });
+          if (!res.ok) return {ok:false, status:res.status, text:(await res.text()).slice(0,200)};
+          const data = await res.json();
+          return {ok: !!data.ok, status: res.status};
+        })(%s)
+        """ % json.dumps(password),
+    )
+    if not ok or not ok.get("ok"):
+        raise RuntimeError("scene editor login failed: %r" % (ok,))
+    await cdp.call("Page.navigate", {"url": URL})
+
+
+async def browser_auth_status(cdp: CDP) -> dict:
+    return await eval_expr(
+        cdp,
+        """
+        (async () => {
+          const res = await fetch('/api/auth/status', {credentials: 'same-origin'});
+          if (!res.ok) return {ok:false, status:res.status, text:(await res.text()).slice(0,200)};
+          return await res.json();
+        })()
+        """,
+    )
 
 
 def safe_name(text: str) -> str:
@@ -324,6 +376,20 @@ async def verify_collapse_clears_editor(cdp: CDP, scene_id: str, sprite_id: str)
 
 
 async def main():
+    global OUT, REPORT_PATH, CDP_LIST, BASE_URL, URL, TARGET_NETLOC
+    parser = argparse.ArgumentParser(description="Verify scene editor scenes/sprites through Chrome CDP")
+    parser.add_argument("--url", default=BASE_URL, help="scene editor URL, e.g. http://127.0.0.1:8793")
+    parser.add_argument("--cdp-list", default=CDP_LIST, help="Chrome CDP /json/list URL")
+    parser.add_argument("--password", default=os.environ.get("SCENE_EDITOR_PASSWORD", ""), help="scene editor password")
+    parser.add_argument("--out-dir", default=str(OUT), help="output directory for report/screenshots")
+    args = parser.parse_args()
+    OUT = Path(args.out_dir)
+    REPORT_PATH = OUT / "all_scene_editor_verify.json"
+    CDP_LIST = args.cdp_list
+    BASE_URL = args.url.rstrip("/")
+    URL = "%s/?verify=all-scene-editor-%d" % (BASE_URL, int(time.time()))
+    TARGET_NETLOC = urllib.parse.urlparse(BASE_URL).netloc
+
     OUT.mkdir(parents=True, exist_ok=True)
     async with websockets.connect(first_page_ws(), max_size=64 * 1024 * 1024) as ws:
         cdp = CDP(ws)
@@ -335,6 +401,13 @@ async def main():
         )
         await cdp.call("Network.setCacheDisabled", {"cacheDisabled": True})
         await cdp.call("Page.navigate", {"url": URL})
+        await login_if_needed(cdp, args.password)
+        await wait_document(cdp)
+        auth_status = await browser_auth_status(cdp)
+        if args.password and not auth_status.get("auth_required"):
+            raise RuntimeError("password was provided but auth_required=false: %r" % (auth_status,))
+        if auth_status.get("auth_required") and not auth_status.get("authenticated"):
+            raise RuntimeError("scene editor is not authenticated: %r" % (auth_status,))
         await wait_ready(cdp)
         scenes = await app_scene_ids(cdp)
         game_scenes = [
@@ -352,6 +425,7 @@ async def main():
             "review_scenes": review_scenes,
             "scenes": [],
             "failures": [],
+            "auth_status": auth_status,
         }
         state_dom = await eval_expr(
             cdp,

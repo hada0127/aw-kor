@@ -43,6 +43,8 @@ def is_game_scene(scene: dict) -> bool:
         scene.get("id") not in REVIEW_IDS
         and scene.get("scope") != "review"
         and scene.get("scene_role") != "container"
+        and scene.get("scene_role") != "excluded"
+        and scene.get("scene_role") != "review_pending"
     )
 
 

@@ -15,7 +15,8 @@
 설계(3자 합의, todo.md):
   - SCENES = 게임 흐름순 큐레이션 정의(아래). 자동 배정은 "후보"이며 수동 보정은
     data/scene_catalog_overrides.json(include/exclude id 목록)으로 덮어쓴다.
-  - 미배정 스프라이트/대사는 숨기지 않고 `99_unassigned_review`로 100% 수렴 → 누락 0 검증.
+  - 실제 검토가 필요한 미배정 텍스트 후보와 비텍스트/폰트 제외 완료 대상을 분리한다.
+    제외 완료 대상도 증거 카운트로 남기되, UI에서 "검토 필요"로 보이지 않게 한다.
   - scope: all(필터용)/shared_select/part1/part2. order=정의 순.
   - 배정 규칙: 스프라이트=source_contains 첫 매칭 scene. 대사=region∈scene.regions AND
     (addr_ranges 없으면 전체, 있으면 주소 포함) 첫 매칭. noise 제외.
@@ -66,27 +67,58 @@ LOW_CONFIDENCE_OTHER_REVIEW_RANGES = [
     ("post_campaign_false_text_e8", 0xE77000, 0xE8BF00),
     ("pre_result_false_text_ef", 0xEF9200, 0xEFA300),
 ]
+LOW_CONFIDENCE_UI_REVIEW_RANGES = [
+    # UI region false positives that are repeated mirrored symbol/table banks.
+    # These rows have no KO text and are not actual menu labels; keep them out
+    # of game scenes without restoring the old broad "short blank UI" rule.
+    ("ui_symbol_bank_93c", 0x93C8D7, 0x93DA14),
+    ("ui_symbol_bank_940", 0x940C62, 0x941D5E),
+    ("ui_symbol_bank_94f", 0x94FE33, 0x94FE35),
+    ("ui_symbol_bank_974", 0x974D8B, 0x975EC8),
+    ("ui_symbol_bank_979", 0x979116, 0x9795EA),
+    ("ui_symbol_bank_988", 0x9886D7, 0x9886D9),
+    ("ui_symbol_bank_9ad", 0x9AD62F, 0x9AE76C),
+    ("ui_symbol_bank_9b1", 0x9B19BA, 0x9B1E8E),
+    ("ui_symbol_bank_9c0", 0x9C0F7B, 0x9C0F7D),
+    ("ui_symbol_bank_9e5", 0x9E5ED3, 0x9E7010),
+    ("ui_symbol_bank_9ea", 0x9EA25E, 0x9EA732),
+    ("ui_link_false_text_9293", 0x929300, 0x929310),
+    ("ui_link_false_text_961f", 0x961F88, 0x961F98),
+    ("ui_link_false_text_99a8", 0x99A82C, 0x99A83C),
+    ("ui_link_false_text_9d30", 0x9D30D0, 0x9D30E0),
+    ("ui_common_false_table_9420", 0x942000, 0x942130),
+    ("ui_common_false_table_9422", 0x942200, 0x942610),
+    ("ui_common_false_table_9797", 0x979780, 0x97A220),
+    ("ui_common_false_table_97a4", 0x97A4C0, 0x97A5C0),
+    ("ui_common_false_table_97a6", 0x97A6B0, 0x97AAA0),
+    ("ui_common_false_table_9b20", 0x9B2020, 0x9B2AC0),
+    ("ui_common_false_table_9b2d", 0x9B2D60, 0x9B2E60),
+    ("ui_common_false_table_9b2f", 0x9B2F50, 0x9B3340),
+    ("ui_common_false_table_9ea8", 0x9EA8C0, 0x9EB360),
+    ("ui_common_false_table_9eb6", 0x9EB600, 0x9EB700),
+    ("ui_common_false_table_9eb8", 0x9EB7F0, 0x9EBC00),
+]
 
 # These scene IDs are address buckets, not independently reproducible screens.
 # Their dialogue remains editable, but the editor/audits must not attach a
 # child scene's screenshot to them as if it were a unique game frame.
 CONTAINER_SCENE_REASONS = {
-    "19a_part1_tutorial_story": "1편 튜토리얼/초반 스토리 잔여 대사 bucket. 실제 화면은 19a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "19b_part1_campaign_story_redstar": "1편 레드스타 캠페인 잔여 대사 bucket. 실제 화면은 19b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "19c_part1_campaign_story_mid": "1편 중반 캠페인 잔여 대사 bucket. 실제 화면은 19c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "19d_part1_campaign_story_late": "1편 후반 캠페인 잔여 대사 bucket. 별도 화면 hit는 현재 없으며, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "19e_part1_unit_story_help": "1편 유닛/작전 설명 잔여 대사 bucket. 실제 화면은 19e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30a_part2_story_opening_redstar": "2편 레드스타 초반 잔여 대사 bucket. 실제 화면은 30a* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30b_part2_story_bluemoon": "2편 블루문/초중반 잔여 대사 bucket. 실제 화면은 30b* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30c_part2_story_yellow_comet": "2편 옐로코멧/중반 잔여 대사 bucket. 실제 화면은 30c* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30d_part2_story_green_earth": "2편 그린어스 전반 잔여 대사 bucket. 실제 화면은 30d* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30e_part2_story_blackhole_late": "2편 블랙홀 후반 잔여 대사 bucket. 실제 화면은 30e* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30f_part2_story_final_and_co": "2편 최종전/CO 설명 잔여 대사 bucket. 실제 화면은 30f* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "30g_part2_story_green_earth_late": "2편 그린어스 후반 잔여 대사 bucket. 실제 화면은 30g* split scene으로 캡처하고, parent residual은 scene_residual_scans 감사로 추적한다.",
-    "23d_part2_b8_compact_display_tables": "2편 B8 압축 표시문 bucket. 유닛/무기/상점/CO/브레이크 라벨은 여러 화면에서 참조되지만 이 주소 테이블 자체는 독립 프레임이 아니므로 UI 에디터용 container로 추적한다.",
-    "88_common_comm_labels": "공통 통신 라벨 데이터 bucket. 독립 실화면 캡처 대상이 아니며, menu/focus residual scan은 scene_residual_scans 감사로 추적한다.",
-    "89a_common_battle_surrender_confirm_common_copies": "항복 확인 공통 복제본 bucket. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
-    "89b_common_battle_defeat_comm_messages_common_copies": "전투 패배/통신 오류 공통 복제본 bucket. 3P free-battle 항복 패배 실화면은 89b의 Part2 복제본(0xA34D18)을 읽으며, 이 공통 copy/통신 오류 copy는 별도 활성화 화면을 확보할 때까지 preview-ready scene과 섞지 않는다.",
+    "19a_part1_tutorial_story": "1편 튜토리얼/초반 스토리 주소묶음. 실제 화면은 19a* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "19b_part1_campaign_story_redstar": "1편 레드스타 캠페인 주소묶음. 실제 화면은 19b* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "19c_part1_campaign_story_mid": "1편 중반 캠페인 주소묶음. 실제 화면은 19c* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "19d_part1_campaign_story_late": "1편 후반 캠페인 주소묶음. 현재 별도 화면 hit가 없고 residual scan hit 0이다.",
+    "19e_part1_unit_story_help": "1편 유닛/작전 설명 주소묶음. 실제 화면은 19e* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30a_part2_story_opening_redstar": "2편 레드스타 초반 주소묶음. 실제 화면은 30a* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30b_part2_story_bluemoon": "2편 블루문/초중반 주소묶음. 실제 화면은 30b* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30c_part2_story_yellow_comet": "2편 옐로코멧/중반 주소묶음. 실제 화면은 30c* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30d_part2_story_green_earth": "2편 그린어스 전반 주소묶음. 실제 화면은 30d* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30e_part2_story_blackhole_late": "2편 블랙홀 후반 주소묶음. 실제 화면은 30e* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30f_part2_story_final_and_co": "2편 최종전/CO 설명 주소묶음. 실제 화면은 30f* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "30g_part2_story_green_earth_late": "2편 그린어스 후반 주소묶음. 실제 화면은 30g* split scene으로 캡처했고, 현재 parent residual scan hit 0이다.",
+    "23d_part2_b8_compact_display_tables": "2편 B8 압축 표시문 주소묶음. 유닛/무기/상점/CO/브레이크 라벨은 여러 화면에서 참조되지만 이 주소 테이블 자체는 독립 프레임이 아니며 현재 residual scan hit 0이다.",
+    "88_common_comm_labels": "공통 통신 라벨 데이터 주소묶음. 독립 실화면 캡처 대상이 아니며, 현재 menu/focus residual scan hit 0이다.",
+    "89a_common_battle_surrender_confirm_common_copies": "항복 확인 공통 복제본 주소묶음. 3P free-battle 실화면은 89a의 Part2 복제본(0xA34CB0)을 읽으며, 이 공통 copy는 현재 residual scan hit 0이다.",
+    "89b_common_battle_defeat_comm_messages_common_copies": "전투 패배/통신 오류 공통 복제본 주소묶음. 3P free-battle 항복 패배 실화면은 89b의 Part2 복제본(0xA34D18)을 읽으며, 이 공통/통신 오류 copy는 현재 residual scan hit 0이다.",
 }
 
 # scene의 checkpoint(게임순 진입용) → preview canvas 키 매핑은 레지스트리(data/preview_canvases.json)의
@@ -221,6 +253,13 @@ def _low_confidence_other_review_reason(addr):
     return None
 
 
+def _low_confidence_ui_review_reason(addr):
+    for name, lo, hi in LOW_CONFIDENCE_UI_REVIEW_RANGES:
+        if lo <= addr < hi:
+            return name
+    return None
+
+
 def _dialogue_matches(scene, region, addr, specific_only=None):
     dl = scene.get("dialogue", {})
     regs = dl.get("regions", [])
@@ -283,6 +322,9 @@ def _review_only_dialogue(group, guards):
     if not ja:
         return True
 
+    if region == "ui" and not ko and _low_confidence_ui_review_reason(addr):
+        return True
+
     placeholder_ko = any(marker in ko for marker in PLACEHOLDER_KO_MARKERS)
     mojibake = _mojibake_score(ja)
     has_kana = _has_kana(ja)
@@ -294,7 +336,9 @@ def _review_only_dialogue(group, guards):
         return True
     if not has_kana and mojibake >= 1 and not has_hangul:
         return True
-    if region in {"other", "ui"} and not ko and (len(ja) <= 8 or mojibake):
+    if region == "other" and not ko and (len(ja) <= 8 or mojibake):
+        return True
+    if region == "ui" and not ko and mojibake:
         return True
     if region in {"other", "ui"} and ko == ja and not has_hangul and (not has_kana or mojibake):
         return True
@@ -1042,15 +1086,19 @@ def main():
 
     out_scenes.append({
         "id": NOISE_REVIEW_SCENE_ID, "order": 9980, "scope": "review",
-        "subtag": "검토", "title": "저신뢰 추출 후보/빌드 제외 대사(장면 연결 제외)",
+        "subtag": "제외완료", "title": "저신뢰 추출 제외 완료(실대사 아님)",
+        "scene_role": "excluded",
+        "review_status": "resolved_excluded",
         "canvas": None, "canvas_status": "none",
         "checkpoint": None, "checkpoint_exists": False,
         "screenshot": {"checkpoint": None, "url": None, "mode": None, "grade": "not_a_scene",
-                       "status": "not_a_scene",
-                       "note": "코드/그래픽/보호 테이블/저신뢰 데이터 대역에서 잡힌 문자열 후보. 실제 화면 대사로 연결하지 않음."},
+                       "status": "excluded",
+                       "note": "검증 완료: 코드/그래픽/보호 테이블/저신뢰 데이터 대역에서 잡힌 문자열 후보이며 실제 화면 대사로 연결하지 않는다."},
         "dialogue_filter": {}, "sprite_filter": {},
         "dialogue_ids": dl_review, "sprite_ids": [],
-        "counts": {"dialogue": len(dl_review), "sprite": 0},
+        "counts": {"dialogue": len(dl_review), "sprite": 0,
+                   "excluded_low_confidence_dialogue": len(dl_review),
+                   "pending_review": 0},
     })
 
     # 미배정 review scene(누락 0 보증)
@@ -1058,18 +1106,28 @@ def main():
     review_scan = sum(1 for sid in sp_un if _is_unassigned_graphic(sprites_by_id.get(sid, {})))
     review_font = sum(1 for sid in sp_un if sprites_by_id.get(sid, {}).get("type") == "font")
     review_text_candidate = max(0, len(sp_un) - review_scan - review_font)
+    pending_review = len(dl_un) + review_text_candidate
     out_scenes.append({
         "id": "99_unassigned_review", "order": 9990, "scope": "all",
-        "subtag": "미배정", "title": "미배정(검토 필요) — 규칙 미매칭",
+        "subtag": "제외완료" if pending_review == 0 else "검토필요",
+        "title": ("비텍스트/폰트 제외 완료 — 미배정 텍스트 0"
+                  if pending_review == 0 else "미배정 검토 필요 — 텍스트 후보 있음"),
+        "scene_role": "excluded" if pending_review == 0 else "review_pending",
+        "review_status": "resolved_excluded" if pending_review == 0 else "pending",
         "canvas": None, "canvas_status": "none",
         "checkpoint": None, "checkpoint_exists": False,
         "screenshot": {"checkpoint": None, "url": None, "mode": None, "grade": "not_a_scene",
-                       "status": "not_a_scene", "note": "미배정 검토 bucket"},
+                       "status": "excluded" if pending_review == 0 else "review_pending",
+                       "note": ("검증 완료: 미배정 텍스트 후보 0. 남은 항목은 비텍스트 scan_lz77 그래픽 또는 font 블록이라 장면 편집 대상이 아니다."
+                                if pending_review == 0 else "미배정 텍스트 후보가 남아 있어 검토 필요.")},
         "dialogue_filter": {}, "sprite_filter": {},
         "dialogue_ids": dl_un, "sprite_ids": sp_un,
         "counts": {"dialogue": len(dl_un), "sprite": len(sp_un),
                    "sprite_text_candidate": review_text_candidate,
-                   "sprite_scan_lz77": review_scan, "sprite_font": review_font},
+                   "sprite_scan_lz77": review_scan, "sprite_font": review_font,
+                   "pending_review": pending_review,
+                   "excluded_scan_lz77": review_scan,
+                   "excluded_font": review_font},
     })
 
     # 비텍스트 스캔 스프라이트는 review 안에서 별도 표시용 카운트
@@ -1092,7 +1150,7 @@ def main():
     catalog = {
         "version": 1,
         "_doc": "게임 흐름순 scene 카탈로그(통합 UI 에디터 정본). tools/build_scene_catalog.py 생성. "
-                "수동보정 data/scene_catalog_overrides.json. 미배정은 99_unassigned_review로 100% 수렴.",
+                "수동보정 data/scene_catalog_overrides.json. 실제 검토 필요 항목과 검증 완료 제외 항목을 분리한다.",
         "generated_from": {"checkpoints": str(CHK.relative_to(ROOT)),
                             "entrypoints": str(ENTRYPOINTS.relative_to(ROOT)),
                             "sprites": str(SPR.relative_to(ROOT)),
@@ -1103,6 +1161,10 @@ def main():
             "sprites_unassigned": len(sp_un), "sprites_unassigned_scan_lz77": scan_un,
             "sprites_unassigned_text_candidate": review_text_candidate,
             "sprites_unassigned_font": review_font,
+            "sprites_excluded_scan_lz77": review_scan,
+            "sprites_excluded_font": review_font,
+            "review_pending_total": len(dl_un) + review_text_candidate,
+            "dialogue_excluded_low_confidence": len(dl_review),
             "dialogue_groups_total": total_dl_groups,
             "dialogue_game_scene_assigned": game_scene_dl,
             "dialogue_assigned": assigned_dl,
@@ -1113,8 +1175,8 @@ def main():
     OUT.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print(f"scene_catalog.json 생성: {len(out_scenes)} scenes → {OUT}")
-    print(f"  스프라이트: {assigned_sp}/{len(sprites)} 배정, 미배정 {len(sp_un)}(scan_lz77 {scan_un})")
-    print(f"  대사그룹:   {assigned_dl}/{total_dl_groups} 배정, 미배정 {len(dl_un)}")
+    print(f"  스프라이트: {assigned_sp}/{len(sprites)} 배정, 검토필요 {review_text_candidate}, 제외 scan_lz77 {scan_un}/font {review_font}")
+    print(f"  대사그룹:   {assigned_dl}/{total_dl_groups} 배정, 미배정 {len(dl_un)}, 저신뢰 제외 {len(dl_review)}")
     print("  scene별 count(게임순):")
     for sc in out_scenes:
         print(f"    {sc['id']:28s} [{sc['scope']:13s}|{sc['subtag']:8s}] "
