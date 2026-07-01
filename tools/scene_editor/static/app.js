@@ -711,7 +711,8 @@ const SP = {
   zoom: 3, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
   os: null, bgUrl: "", bgImg: null, bgReady: false, showBg: true,
   previewContrast: false,
-  painting: false, paintKey: "", activePaletteKey: null
+  painting: false, paintKey: "", activePaletteKey: null,
+  undoStack: [], strokeBefore: null, strokeChanged: false
 };
 async function selectSprite(i, el) {
   markSel(el);
@@ -732,6 +733,7 @@ async function selectSprite(i, el) {
   SP.origGrid = orig && orig.ok ? orig.indices : d.indices;
   SP.origPal = orig && orig.ok ? orig.palette : d.palette;
   SP.activePaletteKey = null;
+  resetSpriteUndo();
   SP.mode = SP.hasOnscreen ? "onscreen" : "tile";
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = spritePrefersContextBackground(sp);
   SP.previewContrast = spriteDefaultContrastPreview();
@@ -761,8 +763,9 @@ async function selectSprite(i, el) {
     <div class="sphint" id="sphint"></div>
     <div class="btnrow">
       <button id="spZoomOut">−</button><button id="spZoomIn">+</button>
+      <button id="spUndo">그리기 되돌리기</button>
       <button id="spSave">저장</button>
-      <button id="spRevert">되돌리기</button>
+      <button id="spRevert">저장본 원복</button>
       <button id="spCompare">원본↔적용 비교</button>
     </div>`;
   renderSwatches();
@@ -779,15 +782,18 @@ async function selectSprite(i, el) {
   await setSpriteMode(SP.mode);
   $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(1, SP.zoom - 1); drawCurrentSprite(); };
   $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(12, SP.zoom + 1); drawCurrentSprite(); };
+  $("#spUndo").onclick = undoSpriteDraw;
   $("#spSave").onclick = saveSprite;
   $("#spRevert").onclick = revertSprite;
   $("#spCompare").onclick = compareSprite;
+  updateSpriteUndoButton();
 }
 
 function renderReadonlySprite(sp, d) {
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.type = d.type; SP.grid = [];
   SP.mode = "readonly"; SP.hasOnscreen = false; SP.os = null; SP.activePaletteKey = null;
   SP.previewContrast = false;
+  resetSpriteUndo();
   SP.origGrid = null; SP.origCols = null; SP.origPal = null; SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
   const stamp = Date.now();
@@ -873,6 +879,45 @@ function renderSwatches() {
     box.appendChild(sw);
   });
 }
+function cloneSpriteGrid(grid) {
+  return grid ? grid.map(row => Array.isArray(row) ? row.slice() : []) : null;
+}
+function resetSpriteUndo() {
+  SP.undoStack = [];
+  SP.strokeBefore = null;
+  SP.strokeChanged = false;
+  updateSpriteUndoButton();
+}
+function updateSpriteUndoButton() {
+  const btn = $("#spUndo");
+  if (btn) btn.disabled = !SP.undoStack.length;
+}
+function beginSpriteStroke() {
+  if (!SP.grid) return;
+  SP.strokeBefore = cloneSpriteGrid(SP.grid);
+  SP.strokeChanged = false;
+}
+function markSpriteStrokeChanged() {
+  SP.strokeChanged = true;
+}
+function finishSpriteStroke() {
+  if (SP.strokeBefore && SP.strokeChanged) {
+    SP.undoStack.push(SP.strokeBefore);
+    if (SP.undoStack.length > 80) SP.undoStack.shift();
+  }
+  SP.strokeBefore = null;
+  SP.strokeChanged = false;
+  updateSpriteUndoButton();
+}
+function undoSpriteDraw() {
+  const prev = SP.undoStack.pop();
+  if (!prev) return;
+  SP.grid = cloneSpriteGrid(prev);
+  SP.painting = false;
+  SP.paintKey = "";
+  drawCurrentSprite();
+  updateSpriteUndoButton();
+}
 function currentPalette() {
   if (SP.mode === "onscreen" && SP.os && SP.os.palettes && SP.activePaletteKey) {
     return SP.os.palettes[SP.activePaletteKey] || SP.pal;
@@ -919,13 +964,20 @@ function drawSprite() {
     const r = cv.getBoundingClientRect();
     const x = Math.floor((e.clientX - r.left) / z), y = Math.floor((e.clientY - r.top) / z);
     if (x < 0 || y < 0 || x >= SP.w || y >= SP.h) return;
-    setSheetPixel(x, y, SP.sel);
+    if (!setSheetPixel(x, y, SP.sel)) return;
+    markSpriteStrokeChanged();
     const c = displayColorForIndex(SP.sel, SP.pal[SP.sel] || [0, 0, 0]);
     ctx.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
     const o2 = SP._off.getContext("2d");
     o2.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; o2.fillRect(x, y, 1, 1);
   };
-  cv.onmousedown = e => { painting = true; paint(e); window.addEventListener("mouseup", () => (painting = false), { once: true }); };
+  cv.onmousedown = e => {
+    if (e.button !== 0) return;
+    beginSpriteStroke();
+    painting = true;
+    paint(e);
+    window.addEventListener("mouseup", () => { painting = false; finishSpriteStroke(); }, { once: true });
+  };
   cv.onmousemove = e => { if (painting) paint(e); };
 }
 
@@ -954,7 +1006,9 @@ function sheetPixelFromGrid(grid, cols, tile, px, py) {
 }
 function setSheetPixel(x, y, idx) {
   if (!SP.grid[y] || x < 0 || x >= SP.grid[y].length) return false;
-  SP.grid[y][x] = idx & 15;
+  const next = idx & 15;
+  if ((SP.grid[y][x] & 15) === next) return false;
+  SP.grid[y][x] = next;
   return true;
 }
 function setTilePixel(tile, px, py, idx) {
@@ -1138,10 +1192,18 @@ function drawOnscreenSprite() {
     const key = `${hit.tile}:${hit.px}:${hit.py}`;
     if (key === SP.paintKey) return;
     SP.paintKey = key;
-    setTilePixel(hit.tile, hit.px, hit.py, SP.sel);
+    if (!setTilePixel(hit.tile, hit.px, hit.py, SP.sel)) return;
+    markSpriteStrokeChanged();
     drawOnscreenSprite();
   };
-  cv.onmousedown = e => { SP.painting = true; SP.paintKey = ""; paint(e); window.addEventListener("mouseup", () => (SP.painting = false), { once: true }); };
+  cv.onmousedown = e => {
+    if (e.button !== 0) return;
+    beginSpriteStroke();
+    SP.painting = true;
+    SP.paintKey = "";
+    paint(e);
+    window.addEventListener("mouseup", () => { SP.painting = false; finishSpriteStroke(); }, { once: true });
+  };
   cv.onmousemove = e => { if (SP.painting) paint(e); };
 }
 
@@ -1217,15 +1279,50 @@ async function saveSprite() {
   return true;
 }
 async function revertSprite() {
+  const keep = {
+    mode: SP.mode,
+    zoom: SP.zoom,
+    osZoom: SP.osZoom,
+    showBg: SP.showBg,
+    previewContrast: SP.previewContrast,
+    activePaletteKey: SP.activePaletteKey,
+    os: SP.os,
+  };
   const r = await api("/api/sprite/revert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id }) });
   if (!r.ok) { toast("되돌리기 실패: " + (r.error || ""), true); return; }
+  const [d, orig] = await Promise.all([
+    api(`/api/sprite/tile?id=${encodeURIComponent(SP.id)}`),
+    api(`/api/sprite/tile?id=${encodeURIComponent(SP.id)}&which=orig`),
+  ]);
+  if (!d.ok) { toast("되돌린 뒤 디코드 실패: " + (d.error || ""), true); return; }
+  SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
+  SP.pal = d.palette; SP.type = d.type; SP.hasOnscreen = !!d.has_onscreen;
+  SP.origW = orig && orig.ok ? orig.width : d.width;
+  SP.origH = orig && orig.ok ? orig.height : d.height;
+  SP.origCols = orig && orig.ok ? orig.tile_cols : d.tile_cols;
+  SP.origGrid = orig && orig.ok ? orig.indices : d.indices;
+  SP.origPal = orig && orig.ok ? orig.palette : d.palette;
+  SP.mode = keep.mode === "onscreen" && SP.hasOnscreen ? "onscreen" : "tile";
+  SP.zoom = keep.zoom;
+  SP.osZoom = keep.osZoom;
+  SP.showBg = keep.showBg;
+  SP.previewContrast = keep.previewContrast;
+  SP.activePaletteKey = keep.activePaletteKey;
+  SP.os = SP.mode === "onscreen" ? keep.os : null;
+  resetSpriteUndo();
+  renderSwatches();
+  updateSpriteDimsMeta();
+  drawCurrentSprite();
   toast("되돌림");
   const fresh = await api(`/api/scene/items?id=${encodeURIComponent(S.scene)}&type=all`);
-  if (fresh && fresh.dialogue) S.items = fresh;
-  refreshSceneItems();  // 새 데이터로 재렌더 + 선택 복원
+  if (fresh && fresh.dialogue) {
+    S.items = fresh;
+    if (S.item && Array.isArray(fresh.sprites)) S.item.sp = fresh.sprites[S.item.i] || S.item.sp;
+  }
+  refreshSceneItems();
   const box = openItemsBox();
   const row = box && box.querySelector(`.row[data-kind="s"][data-i="${S.item.i}"]`);
-  if (row) selectSprite(S.item.i, row);
+  if (row) row.classList.add("sel");
   refreshState();
 }
 async function compareSprite() {
@@ -1263,6 +1360,15 @@ $("#modalClose").onclick = closeModal;
 // M4(css_dom minor): 오버레이 클릭 / Escape 로 닫기
 $("#modal").onclick = (e) => { if (e.target.id === "modal") closeModal(); };
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#modal").hidden) closeModal(); });
+document.addEventListener("keydown", (e) => {
+  const tag = (e.target && e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || e.target?.isContentEditable) return;
+  if ((e.metaKey || e.ctrlKey) && !e.shiftKey && e.key.toLowerCase() === "z" && S.item?.kind === "sprite") {
+    if (!SP.undoStack.length) return;
+    e.preventDefault();
+    undoSpriteDraw();
+  }
+});
 $("#modalApply").onclick = async () => {
   // 적용 = (현재 편집 저장) → 전체 빌드. 저장 실패(false/undefined 모두)면 빌드 안 함(M1/M7/m13).
   $("#modalApply").disabled = true;  // 연타 방지

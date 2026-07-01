@@ -120,6 +120,9 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 
 /* sprite editor */
 #spwrap canvas, #sporigwrap canvas { image-rendering: pixelated; background: #11141a; border: 1px solid var(--line); border-radius: 6px; }
+#spwrap canvas {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 17 17'%3E%3Cpath d='M8 0v17M0 8h17' stroke='white' stroke-width='1'/%3E%3Cpath d='M8 0v17M0 8h17' stroke='black' stroke-width='3' opacity='.55'/%3E%3Cpath d='M8 0v17M0 8h17' stroke='white' stroke-width='1'/%3E%3Crect x='6.5' y='6.5' width='4' height='4' fill='none' stroke='white'/%3E%3Crect x='7.5' y='7.5' width='2' height='2' fill='none' stroke='black'/%3E%3C/svg%3E") 8 8, crosshair;
+}
 .sprite-workbench { display: grid; grid-template-columns: minmax(180px, max-content) minmax(180px, max-content);
   gap: 14px; align-items: start; overflow-x: auto; padding-bottom: 4px; }
 .sprite-pane { margin: 0; min-width: 0; }
