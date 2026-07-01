@@ -1,5 +1,5 @@
 {
- "_doc": "B팀(쪼롱이) 권위 적용 주소 baseline. qa_bteam_drift.py가 dialogue_overrides가 이 값에서 벗어났는지(우발적 변형) 검출. 의도적 변경 시에만 이 파일을 재생성한다.",
+ "_doc": "B팀(짜옹이) 권위 적용 주소 baseline. qa_bteam_drift.py가 dialogue_overrides가 이 값에서 벗어났는지(우발적 변형) 검출. 의도적 변경 시에만 이 파일을 재생성한다.",
  "source": "temp/bteam/import_authoritative.json (applied candidates)",
  "count": 3340,
  "overrides": {

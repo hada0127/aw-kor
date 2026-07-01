@@ -155,7 +155,7 @@ def _is_aux_attach(before):
 
 
 def _jam_grade(addr, intended, shipped=""):
-    """단어붙음 등급: 'bteam'(쪼롱이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 보조용언 붙임=한국어 허용),
+    """단어붙음 등급: 'bteam'(짜옹이 권위=WONTFIX), 'acceptable'(비B팀 단일공백 보조용언 붙임=한국어 허용),
     'real'(비B팀 명사구/다중공백/긴문장/구두점변형=진짜 결함). agy·codex 리뷰 반영."""
     if addr in _BTEAM:
         return "bteam"

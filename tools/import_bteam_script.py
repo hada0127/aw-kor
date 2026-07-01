@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""B팀/쪼롱이님 script.txt를 우리 주소체계로 대조·부분 병합한다.
+"""B팀/짜옹이님 script.txt를 우리 주소체계로 대조·부분 병합한다.
 
 병합 원칙(MERGE_PLAN_BTEAM_2026-06-16):
   - B ROM/코드테이블은 직접 병합하지 않는다.

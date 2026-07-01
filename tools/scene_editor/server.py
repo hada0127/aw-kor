@@ -31,10 +31,14 @@ API(요약)
 from __future__ import annotations
 import argparse
 import collections
+import csv
+import hmac
 import hashlib
 import importlib.util
 import json
+import os
 import re
+import secrets
 import sys
 import threading
 import time
@@ -47,15 +51,17 @@ STATIC = Path(__file__).resolve().parent / "static"
 CATALOG = ROOT / "data" / "scene_catalog.json"
 DGROUPS = ROOT / "data" / "dialogue_groups.json"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
+ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
 OUTPUT_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUTPUT_VARIANTS = {
     "full": OUTPUT_ROM,
-    "final": ROOT / "output" / "game_wars_korean_final.gba",
-    "title_test": ROOT / "output" / "game_wars_korean_title_test.gba",
 }
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
 REVIEW_ONLY_SCENE_IDS = {"98_extraction_noise_review"}
+AUTH_COOKIE = "aw_scene_editor_auth"
+AUTH_PASSWORD = os.environ.get("SCENE_EDITOR_PASSWORD") or ""
+AUTH_TOKEN = secrets.token_urlsafe(32)
 
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8",
@@ -294,8 +300,8 @@ def build_slots():
 
 
 def bteam_addresses():
-    """B팀(쪼롱이) 권위 적용 주소 집합(정규화 0x%08X). 편집 시 경고 플래그용.
-    쪼롱이 본인 편집은 허용하되, 우발적 변형은 qa_bteam_drift.py 게이트가 별도 차단."""
+    """B팀(짜옹이) 권위 적용 주소 집합(정규화 0x%08X). 편집 시 경고 플래그용.
+    짜옹이 본인 편집은 허용하되, 우발적 변형은 qa_bteam_drift.py 게이트가 별도 차단."""
     if "bteam_addrs" not in _CACHE:
         try:
             data = json.loads((ROOT / "data" / "bteam_addresses.json").read_text(encoding="utf-8"))
@@ -313,19 +319,105 @@ def is_bteam(address):
 
 
 def is_address_text_override(address):
-    if not B:
-        return False
     try:
-        return int(str(address), 16) in B.ADDRESS_TEXT_OVERRIDES
+        addr = int(str(address), 16)
     except (ValueError, TypeError):
         return False
+    return addr in address_text_overrides()
 
 
 def effective_member_ko(member, dialogue_overrides):
     addr = member.get("address")
     if is_address_text_override(addr):
+        try:
+            addr_int = int(str(addr), 16)
+        except (ValueError, TypeError):
+            addr_int = None
+        if addr_int is not None:
+            return address_text_overrides().get(addr_int, member.get("ko") or "")
         return member.get("ko") or ""
     return dialogue_overrides.get(addr, member.get("ko") or "")
+
+
+def address_text_overrides():
+    """Live ADDRESS_TEXT_OVERRIDES authority.
+
+    build_korean_full imports data/address_text_overrides.tsv once, but the
+    editor can update that TSV while the server process stays alive.  Keep a
+    small mtime cache here so protected text rows display and validate against
+    the same file that the next build subprocess will consume.
+    """
+    if ADDRESS_TEXT_OVERRIDES_TSV.exists():
+        st = ADDRESS_TEXT_OVERRIDES_TSV.stat()
+        key = (st.st_mtime_ns, st.st_size)
+        if _CACHE.get("address_text_overrides_key") != key:
+            rows = {}
+            with ADDRESS_TEXT_OVERRIDES_TSV.open(encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f, delimiter="\t")
+                if reader.fieldnames != ["address", "text"]:
+                    raise ValueError(f"{ADDRESS_TEXT_OVERRIDES_TSV}: expected TSV header address<TAB>text")
+                for row in reader:
+                    raw_addr = (row.get("address") or "").strip()
+                    if not raw_addr:
+                        continue
+                    rows[int(raw_addr, 16)] = "" if row.get("text") is None else str(row.get("text"))
+            _CACHE["address_text_overrides_key"] = key
+            _CACHE["address_text_overrides"] = rows
+        return _CACHE.get("address_text_overrides", {})
+    if "address_text_overrides_fallback" not in _CACHE:
+        _CACHE["address_text_overrides_fallback"] = {
+            int(k): str(v or "") for k, v in getattr(B, "ADDRESS_TEXT_OVERRIDES", {}).items()
+        }
+    return _CACHE["address_text_overrides_fallback"]
+
+
+def save_address_text_override(addr: str, ko: str) -> None:
+    """Persist a protected address edit to the TSV build authority."""
+    addr_int = int(addr, 16)
+    rows = dict(address_text_overrides())
+    if addr_int not in rows:
+        raise ValueError(f"{addr}: ADDRESS_TEXT_OVERRIDES row not found")
+    rows[addr_int] = ko
+    ADDRESS_TEXT_OVERRIDES_TSV.parent.mkdir(parents=True, exist_ok=True)
+    with ADDRESS_TEXT_OVERRIDES_TSV.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["address", "text"], delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for key in sorted(rows):
+            writer.writerow({"address": "0x%08X" % key, "text": rows[key]})
+    _CACHE.pop("address_text_overrides_key", None)
+    _CACHE.pop("address_text_overrides", None)
+
+
+def sync_dialogue_display_data(addr: str, ko: str) -> None:
+    """Keep editor-facing generated data aligned with the build authority."""
+    data = DE.load_json(DE.DIALOGUE_PATH, {"lines": []})
+    for ln in data.get("lines", []):
+        if canon_addr(ln.get("address")) == addr:
+            ln["ko"] = ko
+            if "ship_ko" in ln:
+                ln["ship_ko"] = ko
+    DE.save_json(DE.DIALOGUE_PATH, data)
+
+    groups = load_json(DGROUPS, {"groups": []})
+    for group in groups.get("groups", []):
+        for member in group.get("members", []):
+            if canon_addr(member.get("address")) == addr:
+                member["ko"] = ko
+                if "ship_ko" in member:
+                    member["ship_ko"] = ko
+    DGROUPS.write_text(json.dumps(groups, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    _CACHE.pop("groups", None)
+    _CACHE.pop("addr_slot", None)
+
+
+def bteam_baseline_for(addr: str):
+    if is_address_text_override(addr):
+        return address_text_overrides().get(int(addr, 16))
+    try:
+        base = DE.load_json(ROOT / "data" / "bteam_baseline.json", {}) or {}
+        return (base.get("overrides") or {}).get("0x%08X" % int(addr, 16))
+    except Exception:
+        return None
 
 
 def canon_addr(address):
@@ -455,6 +547,15 @@ _BUILD_LOCK = threading.Lock()
 BUILD_FRESHNESS_MARGIN_NS = 1_000_000_000
 
 
+class EditorHTTPServer(ThreadingHTTPServer):
+    # The in-app browser/VS Code can leave several pending localhost connects on
+    # the default :8782 port.  The stdlib default backlog is small enough for
+    # those pending SYNs to starve new verifier/API clients.
+    request_queue_size = 128
+    daemon_threads = True
+    allow_reuse_address = True
+
+
 def _run_build():
     # M6: _BUILD_LOCK은 상태 변경에만(짧게). subprocess(최대 1200s)는 락 밖에서 실행 →
     # 빌드 중에도 /api/state·/api/build(거부) 등이 응답함. status='building'은 start_build가 이미 설정.
@@ -578,6 +679,7 @@ def dirty_state():
     개수도 함께 반환(전체 override 규모 표시용)."""
     dov = load_json(DE.OVERRIDES_PATH, {}) or {}
     sov = load_json(SE.OVERRIDES_PATH, {}) or {}
+    aov = address_text_overrides()
     rom_st = OUTPUT_ROM.stat() if OUTPUT_ROM.exists() else None
     rom_m = rom_st.st_mtime if rom_st else 0
     rom_m_ns = rom_st.st_mtime_ns if rom_st else 0
@@ -587,17 +689,24 @@ def dirty_state():
 
     d_dirty = newer(DE.OVERRIDES_PATH)
     s_dirty = newer(SE.OVERRIDES_PATH)
+    a_dirty = newer(ADDRESS_TEXT_OVERRIDES_TSV)
     newest_override_m_ns = max(
-        [Path(p).stat().st_mtime_ns for p in (DE.OVERRIDES_PATH, SE.OVERRIDES_PATH) if Path(p).exists()] or [0]
+        [
+            Path(p).stat().st_mtime_ns
+            for p in (DE.OVERRIDES_PATH, SE.OVERRIDES_PATH, ADDRESS_TEXT_OVERRIDES_TSV)
+            if Path(p).exists()
+        ] or [0]
     )
     return {"dialogue_overrides": len(dov) if d_dirty else 0,
             "sprite_overrides": len(sov) if s_dirty else 0,
+            "address_text_overrides": len(aov) if a_dirty else 0,
             "dialogue_total": len(dov), "sprite_total": len(sov),
+            "address_text_total": len(aov),
             "rom_mtime": rom_m, "rom_mtime_ns": rom_m_ns,
             "newest_override_mtime": newest_override_m_ns / 1_000_000_000 if newest_override_m_ns else 0,
             "newest_override_mtime_ns": newest_override_m_ns,
-            "dirty": bool(d_dirty or s_dirty),
-            "apply_needed": bool(d_dirty or s_dirty)}
+            "dirty": bool(d_dirty or s_dirty or a_dirty),
+            "apply_needed": bool(d_dirty or s_dirty or a_dirty)}
 
 
 # ── scene 항목 조회 ──────────────────────────────────────────────────────
@@ -646,10 +755,10 @@ def scene_items(scene, want="all"):
                     budget["reason"] = "저신뢰 추출 후보 검토 bucket — 현재 값이 빌드 렌더러에서 보존되지 않음"
                 budget["bteam"] = is_bteam(m.get("address"))
                 if budget["bteam"]:
-                    budget["bteam_warn"] = "쪼롱이님(B팀) 권위 번역 — 신중히 편집(우발 변형은 qa_bteam_drift 게이트가 차단)"
+                    budget["bteam_warn"] = "짜옹이님(B팀) 권위 번역 — 신중히 편집(우발 변형은 qa_bteam_drift 게이트가 차단)"
                 if is_address_text_override(m.get("address")):
-                    budget["editable"] = False
-                    budget["reason"] = "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용"
+                    budget["protected_address_text"] = True
+                    budget["protected_warn"] = "보호 문구 — 저장 시 address_text_overrides.tsv에 반영됩니다"
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
                                 "kind": m.get("kind"), "budget": budget})
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
@@ -691,10 +800,12 @@ def filter_scenes(scope, tag, q):
 
 
 class Handler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
     def log_message(self, *a):
         pass
 
-    def _send(self, code, body, ctype="application/json; charset=utf-8"):
+    def _send(self, code, body, ctype="application/json; charset=utf-8", headers=None):
         if isinstance(body, (dict, list)):
             body = json.dumps(body, ensure_ascii=False).encode("utf-8")
         elif isinstance(body, str):
@@ -702,12 +813,60 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
+        if headers:
+            for key, value in headers:
+                self.send_header(key, value)
         self.end_headers()
         self.wfile.write(body)
 
     def _body(self):
         n = int(self.headers.get("Content-Length", 0))
         return json.loads(self.rfile.read(n) or b"{}") if n else {}
+
+    def _auth_enabled(self):
+        return bool(AUTH_PASSWORD)
+
+    def _auth_cookie_value(self):
+        raw = self.headers.get("Cookie") or ""
+        for part in raw.split(";"):
+            if "=" not in part:
+                continue
+            key, value = part.strip().split("=", 1)
+            if key == AUTH_COOKIE:
+                return value
+        return ""
+
+    def _authenticated(self):
+        if not self._auth_enabled():
+            return True
+        return hmac.compare_digest(self._auth_cookie_value(), AUTH_TOKEN)
+
+    def _require_auth(self):
+        if self._authenticated():
+            return True
+        self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 필요합니다"})
+        return False
+
+    def _login(self, body):
+        if not self._auth_enabled():
+            return self._send(200, {"ok": True, "auth_required": False, "authenticated": True})
+        password = str(body.get("password") or "")
+        if not hmac.compare_digest(password, AUTH_PASSWORD):
+            return self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 틀렸습니다"})
+        cookie = f"{AUTH_COOKIE}={AUTH_TOKEN}; Path=/; HttpOnly; SameSite=Strict; Max-Age=604800"
+        return self._send(
+            200,
+            {"ok": True, "auth_required": True, "authenticated": True},
+            headers=[("Set-Cookie", cookie)],
+        )
+
+    def _logout(self):
+        cookie = f"{AUTH_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+        return self._send(
+            200,
+            {"ok": True, "auth_required": self._auth_enabled(), "authenticated": False},
+            headers=[("Set-Cookie", cookie)],
+        )
 
     # ── GET ──
     def do_GET(self):
@@ -718,6 +877,14 @@ class Handler(BaseHTTPRequestHandler):
             return self._static("index.html")
         if p.startswith("/static/"):
             return self._static(p[len("/static/"):])
+        if p == "/api/auth/status":
+            return self._send(200, {
+                "ok": True,
+                "auth_required": self._auth_enabled(),
+                "authenticated": self._authenticated(),
+            })
+        if not self._require_auth():
+            return
         if p.startswith("/scene_shots/"):
             return self._serve_scene_shot(urllib.parse.unquote(p[len("/scene_shots/"):]))
         if p == "/api/state":
@@ -788,7 +955,13 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(403, {"error": "forbidden"})
         if not path.exists() or not path.is_file():
             return self._send(404, {"error": "missing " + rel})
-        self._send(200, path.read_bytes(), MIME.get(path.suffix, "application/octet-stream"))
+        data = path.read_bytes()
+        self.send_response(200)
+        self.send_header("Content-Type", MIME.get(path.suffix, "application/octet-stream"))
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
 
     def _serve_preview(self, name):
         pdir = DE.PREVIEW_DIR
@@ -980,11 +1153,10 @@ class Handler(BaseHTTPRequestHandler):
         path = OUTPUT_VARIANTS[variant]
         if not path.exists():
             return self._send(404, {"error": f"output ROM 없음({variant}) — 먼저 빌드하세요"})
-        # 배포 불변식: full/final/title_test 3종은 항상 byte-identical이어야 한다.
-        # 한 variant라도 어긋나면 사용자가 어느 파일을 받든 배포 상태가 불명확하므로 전부 차단한다.
+        # 배포 불변식: canonical full ROM 하나만 다운로드한다.
         sync = output_sync_state()
         if not sync.get("ok"):
-            return self._send(409, {"error": "output ROM SHA 불일치 — 먼저 적용(빌드)을 다시 실행하세요",
+            return self._send(409, {"error": "output ROM 없음 또는 이전 빌드 산출물 — 먼저 적용(빌드)을 다시 실행하세요",
                                     "output_sync": sync})
         data = path.read_bytes()
         self.send_response(200)
@@ -1002,6 +1174,12 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as e:
             return self._send(400, {"error": "bad json: %r" % e})
         p = u.path
+        if p == "/api/login":
+            return self._login(body)
+        if p == "/api/logout":
+            return self._logout()
+        if not self._require_auth():
+            return
         if p == "/api/dialogue/line":
             return self._send(200, self._save_line(body))
         if p == "/api/dialogue/preview":
@@ -1033,8 +1211,7 @@ class Handler(BaseHTTPRequestHandler):
         addr_int = int(addr, 16)
         if addr_int < SAFE_MIN_ADDR:
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
-        if is_address_text_override(addr):
-            return {"ok": False, "error": "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용, 편집 불가"}
+        protected_address_text = is_address_text_override(addr)
         # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
         kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
         if kind == "deny":
@@ -1045,17 +1222,13 @@ class Handler(BaseHTTPRequestHandler):
         bad = unsupported_syllables(ko)
         if bad:
             return {"ok": False, "error": "폰트 미수록 음절(인게임 ‘?’): " + "".join(bad), "unsupported": bad}
-        # B팀(쪼롱이) 권위 주소 save-time 보호(쪼롱이 본인 편집은 허용하되 우발 변형 차단).
+        # B팀(짜옹이) 권위 주소 save-time 보호(짜옹이 본인 편집은 허용하되 우발 변형 차단).
         # confirm_bteam=True 명시 전에는 차단 + baseline 대비 무엇이 바뀌는지 알린다.
         if is_bteam(addr) and not body.get("confirm_bteam"):
-            try:
-                _base = DE.load_json(ROOT / "data" / "bteam_baseline.json", {}) or {}
-                _want = (_base.get("overrides") or {}).get("0x%08X" % int(addr, 16))
-            except Exception:
-                _want = None
+            _want = bteam_baseline_for(addr)
             if _want is None or _want != ko:
                 return {"ok": False, "bteam_confirm_required": True,
-                        "error": "쪼롱이님(B팀) 권위 번역 주소입니다. 변경하려면 confirm_bteam=true로 재전송하세요.",
+                        "error": "짜옹이님(B팀) 권위 번역 주소입니다. 변경하려면 confirm_bteam=true로 재전송하세요.",
                         "bteam_baseline": _want}
         slot = member_slot(addr)
         fit = build_fit_budget(ko, slot)
@@ -1068,19 +1241,22 @@ class Handler(BaseHTTPRequestHandler):
                     "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}
         if body.get("dry_run"):
             return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
-                    "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot}
+                    "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot,
+                    "protected_address_text": protected_address_text,
+                    "storage": "address_text_overrides.tsv" if protected_address_text else "dialogue_overrides.json"}
         with _LOCK:
-            ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
-            ov[addr] = ko
-            DE.save_json(DE.OVERRIDES_PATH, ov)
-            # dialogue_map.json의 ko도 동기(편집 표시 일관)
-            data = DE.load_json(DE.DIALOGUE_PATH, {"lines": []})
-            for ln in data.get("lines", []):
-                if canon_addr(ln.get("address")) == addr:
-                    ln["ko"] = ko
-            DE.save_json(DE.DIALOGUE_PATH, data)
+            if protected_address_text:
+                save_address_text_override(addr, ko)
+            else:
+                ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
+                ov[addr] = ko
+                DE.save_json(DE.OVERRIDES_PATH, ov)
+            # dialogue_map/dialogue_groups의 ko도 동기(편집 표시·governance 일관)
+            sync_dialogue_display_data(addr, ko)
         return {"ok": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
-                "raw_len": fit["raw_len"], "fit_level": fit["fit_level"]}
+                "raw_len": fit["raw_len"], "fit_level": fit["fit_level"],
+                "protected_address_text": protected_address_text,
+                "storage": "address_text_overrides.tsv" if protected_address_text else "dialogue_overrides.json"}
 
     def _edit_dict(self, body):
         """통일 사전 CRUD(add/edit/delete) — proper_nouns.json. DE 로직 재사용(Phase 4 잔여)."""
@@ -1214,13 +1390,19 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    global AUTH_PASSWORD
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8782)
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--password", default=None,
+                    help="웹 UI 비밀번호. 생략 시 SCENE_EDITOR_PASSWORD를 사용하고, 둘 다 없으면 인증 비활성")
     args = ap.parse_args()
-    srv = ThreadingHTTPServer((args.host, args.port), Handler)
+    if args.password is not None:
+        AUTH_PASSWORD = args.password
+    srv = EditorHTTPServer((args.host, args.port), Handler)
     cov = catalog().get("coverage", {})
     print(f"통합 scene 에디터: http://{args.host}:{args.port}  (Ctrl+C 종료)")
+    print("  auth: " + ("enabled" if AUTH_PASSWORD else "disabled"))
     print(f"  scenes: {len(catalog().get('scenes', []))}  "
           f"대사배정 {cov.get('dialogue_assigned')}  스프배정 {cov.get('sprites_assigned')}")
     try:

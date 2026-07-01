@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
- "git_commit": "9773948",
+ "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+ "git_commit": "db4b9ae",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -10479,7 +10479,7 @@
      "address": "0x00B84C4C",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B84C4C",
-     "ko": "쇼군 모프",
+     "ko": "사령관 모프",
      "ja": "ショーグン　モップ",
      "kind": "import-csv",
      "pointer_ref_count": 1,
@@ -10584,7 +10584,7 @@
      "address": "0x00B84CB8",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B84CB8",
-     "ko": "쇼군 캐서린",
+     "ko": "사령관 캐서린",
      "ja": "ショーグン　キャサリン",
      "kind": "import-csv",
      "pointer_ref_count": 1,

@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
- "git_commit": "9773948",
+ "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+ "git_commit": "db4b9ae",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -376,7 +376,7 @@
  "code_context_breakpoints_enabled": true,
  "target_count": 495,
  "case_count": 10,
- "hit_count": 1758,
+ "hit_count": 1762,
  "direct_target_hit_count": 0,
  "direct_hits": [],
  "cases": [
@@ -384,7 +384,7 @@
    "case_type": "screen_checkpoint",
    "name": "07_part2_main_menu",
    "mode": "fresh",
-   "scene_id": null,
+   "scene_id": "23_part2_main_menu",
    "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
@@ -2429,7 +2429,7 @@
    "case_type": "screen_checkpoint",
    "name": "30_battle_attack",
    "mode": "savestate",
-   "scene_id": null,
+   "scene_id": "26_part2_battle_labels",
    "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_30_battle_attack/breakpoints.log",
    "breakpoints": [
     {
@@ -4338,7 +4338,7 @@
     ]
    ],
    "frame": "temp/compact_renderer_trace_20260627/screen_41_part1_operation_room/frame.png",
-   "hit_count": 1754,
+   "hit_count": 1758,
    "direct_target_hits": [],
    "hits": [
     {
@@ -9942,7 +9942,7 @@
      "raw": "199 BP r0=00008983 r1=00000100 r2=00008A83 r3=00000030 r4=08BE71DE r5=000001FE r6=02010ADA r7=00000001 sp=03007AFC lr=08B1BF0D pc=08B12ABE"
     }
    ],
-   "truncated_hits": 1554
+   "truncated_hits": 1558
   },
   {
    "case_type": "freshrender",

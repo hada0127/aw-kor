@@ -2,12 +2,14 @@
 // AW 통합 화면(scene) 에디터 프런트엔드 (vanilla JS)
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+let _stateTimer = null;
 // 네트워크/HTTP 오류를 일관된 {ok:false,error} 또는 throw로(미처리 rejection 방지 — m2)
 const api = async (p, opt) => {
-  const res = await fetch(p, opt);
+  const res = await fetch(p, { credentials: "same-origin", ...(opt || {}) });
   if (!res.ok) {
     let body = {};
     try { body = await res.json(); } catch (e) { }
+    if (res.status === 401 && body.auth_required) showAuthGate(body.error || "");
     return { ok: false, error: body.error || `HTTP ${res.status}`, _status: res.status };
   }
   return res.json();
@@ -50,6 +52,56 @@ function toast(msg, bad) {
   toast._t = setTimeout(() => (t.hidden = true), 2600);
 }
 
+function showAuthGate(message) {
+  const gate = $("#authGate");
+  if (!gate) return;
+  gate.hidden = false;
+  $("#authError").textContent = message || "";
+  setTimeout(() => $("#authPassword").focus(), 20);
+}
+
+function hideAuthGate() {
+  const gate = $("#authGate");
+  if (!gate) return;
+  gate.hidden = true;
+  $("#authPassword").value = "";
+  $("#authError").textContent = "";
+}
+
+async function login(password) {
+  const r = await api("/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password }),
+  });
+  if (!r.ok) {
+    $("#authError").textContent = r.error || "로그인 실패";
+    return false;
+  }
+  hideAuthGate();
+  startAppData();
+  return true;
+}
+
+function startAppData() {
+  loadSupported();
+  loadScenes();
+  refreshState();
+  if (!_stateTimer) _stateTimer = setInterval(refreshState, 8000);
+}
+
+async function startApp() {
+  let auth = { ok: true, auth_required: false, authenticated: true };
+  try { auth = await api("/api/auth/status"); }
+  catch (e) { auth = { ok: false, error: "" + e }; }
+  if (auth.auth_required && !auth.authenticated) {
+    showAuthGate();
+    return;
+  }
+  hideAuthGate();
+  startAppData();
+}
+
 // ── GNB / 상태 ──────────────────────────────────────────────────────────
 async function refreshState() {
   try {
@@ -59,12 +111,12 @@ async function refreshState() {
     const rom = st.rom.exists ? `ROM ${romSha} · ${(st.rom.size / 1048576).toFixed(0)}MB` : "ROM 없음";
     // dirty=빌드 후 override 파일이 더 새것(미빌드 변경 있음). 숫자는 누적 override 총량(델타 아님).
     const isDirty = st.dirty.dirty || st.apply_needed;
-    const totalOv = (st.dirty.dialogue_total || 0) + (st.dirty.sprite_total || 0);
+    const totalOv = (st.dirty.dialogue_total || 0) + (st.dirty.sprite_total || 0) + (st.dirty.address_text_total || 0);
     S.dirty = isDirty ? totalOv : 0;
     S.applyNeeded = !!isDirty;
     S.outputSyncOk = outputSync.ok !== false;
     const dirty = isDirty
-      ? `<span class="warn">· 적용 필요(override ${totalOv}건)</span>`
+      ? `<span class="warn">· 적용 필요(편집 데이터 ${totalOv}건)</span>`
       : (S.outputSyncOk ? `<span class="ok">· 적용됨</span>` : `<span class="bad">· 출력 확인 필요</span>`);
     const sync = outputSync.ok === false
       ? `<span class="bad">· output SHA 불일치</span>`
@@ -260,8 +312,9 @@ function renderSceneItems(box) {
       const sp = SPR[i];
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "s"; el.dataset.i = i;
       const rawUrl = `/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched`;
-      const thumbUrl = sp.has_onscreen ? `/api/sprite/onscreen?id=${encodeURIComponent(sp.id)}` : rawUrl;
-      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="${thumbUrl}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${rawUrl}'}else if(!this.dataset.o){this.dataset.o=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
+      const tileThumb = spritePrefersTileThumbnail(sp);
+      const thumbUrl = tileThumb || !sp.has_onscreen ? rawUrl : `/api/sprite/onscreen?id=${encodeURIComponent(sp.id)}`;
+      el.innerHTML = `<img class="thumb ${tileThumb ? "tilethumb" : ""}" loading="lazy" decoding="async" src="${thumbUrl}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${rawUrl}'}else if(!this.dataset.o){this.dataset.o=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
         <span class="ko">${esc(sp.desc)}${sp.has_onscreen ? `<span class="badge">출력배치</span>` : ""}</span>`;
       el.onclick = () => selectSprite(i, el);
       frag.appendChild(el);
@@ -308,6 +361,62 @@ function refreshSceneItems() {
   }
 }
 
+function isTitleCopyrightSprite(sp) {
+  const src = String((sp && sp.source) || "").toUpperCase();
+  const desc = String((sp && sp.desc) || "");
+  const id = String((sp && sp.id) || "").toLowerCase();
+  return src.includes("TITLE_COPYRIGHT")
+    || desc.includes("카피라이트")
+    || desc.includes("©")
+    || id === "lz77_000228ac"
+    || id === "lz77_0003895c"
+    || id === "lz77_0052f974"
+    || id === "lz77_00c43fb8";
+}
+
+function spritePrefersTileThumbnail(sp) {
+  return isTitleCopyrightSprite(sp);
+}
+
+function spritePrefersContextBackground(sp) {
+  return isTitleCopyrightSprite(sp);
+}
+
+function currentSpritePrefersContextBackground() {
+  return spritePrefersContextBackground(S.item && S.item.sp);
+}
+
+function spritePrefersContrastPreview(sp) {
+  return isTitleCopyrightSprite(sp);
+}
+
+function currentSpritePrefersContrastPreview() {
+  return spritePrefersContrastPreview(S.item && S.item.sp);
+}
+
+function contrastPreviewColor(idx, actual) {
+  const fixed = {
+    1: [255, 218, 64],
+    13: [72, 210, 255],
+    15: [255, 86, 126],
+  };
+  if (fixed[idx]) return fixed[idx];
+  const base = actual || [230, 230, 230];
+  const shade = 48 + ((idx * 37) % 160);
+  return [
+    Math.max(32, Math.min(255, 255 - shade + Math.floor(base[0] / 8))),
+    Math.max(32, Math.min(255, 80 + ((idx * 53) % 160))),
+    Math.max(32, Math.min(255, 120 + ((idx * 29) % 136))),
+  ];
+}
+
+function displayColorForIndex(idx, actual) {
+  if (SP.previewContrast && currentSpritePrefersContrastPreview() && idx !== 0) {
+    return contrastPreviewColor(idx & 15, actual);
+  }
+  return actual || [0, 0, 0];
+}
+
 // ── 대사 편집(요구7: 줄당 바이트 예산 + 멀티라인) ─────────────────────────
 function selectDialogue(i, el) {
   markSel(el);
@@ -327,7 +436,7 @@ function selectDialogue(i, el) {
       return;
     }
     const bteamBadge = m.budget.bteam
-      ? `<div class="bteamwarn" title="${esc(m.budget.bteam_warn || "쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요")}">⚠ 쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요</div>`
+      ? `<div class="bteamwarn" title="${esc(m.budget.bteam_warn || "짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요")}">⚠ 짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요</div>`
       : "";
     html += `<div class="frag${m.budget.bteam ? " bteam" : ""}" data-addr="${m.address}" data-mi="${mi}">
       <div class="fja">원문: ${esc(m.ja || "")} <span class="ja">@${m.address}</span></div>
@@ -434,7 +543,7 @@ async function saveDialogue() {
     if (!r.ok && r.bteam_confirm_required) {
       const base = r.bteam_baseline || "(baseline 없음)";
       const ok = confirm(
-        "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n\n" +
+        "⚠ 짜옹이님(B팀) 권위 번역 주소입니다.\n\n" +
         "기준(baseline):\n  " + base + "\n\n" +
         "변경(제안):\n  " + w.ko + "\n\n" +
         "정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
@@ -531,6 +640,7 @@ const SP = {
   origW: 0, origH: 0, origCols: 0, origGrid: null, origPal: null,
   zoom: 3, osZoom: 3, type: null, mode: "tile", hasOnscreen: false,
   os: null, bgUrl: "", bgImg: null, bgReady: false, showBg: true,
+  previewContrast: false,
   painting: false, paintKey: "", activePaletteKey: null
 };
 async function selectSprite(i, el) {
@@ -553,7 +663,8 @@ async function selectSprite(i, el) {
   SP.origPal = orig && orig.ok ? orig.palette : d.palette;
   SP.activePaletteKey = null;
   SP.mode = SP.hasOnscreen ? "onscreen" : "tile";
-  SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = false;
+  SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = spritePrefersContextBackground(sp);
+  SP.previewContrast = spritePrefersContrastPreview(sp);
   SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
   const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 출력 크기";
@@ -564,6 +675,7 @@ async function selectSprite(i, el) {
     <div class="sprite-mode">
       <span class="mode-label">${layoutLabel}</span>
       ${SP.hasOnscreen ? `<label class="bgcheck"><input id="spBg" type="checkbox">배경</label>` : ""}
+      ${spritePrefersContrastPreview(sp) ? `<label class="bgcheck"><input id="spContrast" type="checkbox">고대비</label>` : ""}
     </div>
     <div class="sprite-workbench">
       <figure class="sprite-pane">
@@ -585,7 +697,15 @@ async function selectSprite(i, el) {
     </div>`;
   renderSwatches();
   const bg = $("#spBg");
-  if (bg) bg.onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
+  if (bg) {
+    bg.checked = SP.showBg;
+    bg.onchange = e => { SP.showBg = e.target.checked; drawCurrentSprite(); };
+  }
+  const contrast = $("#spContrast");
+  if (contrast) {
+    contrast.checked = SP.previewContrast;
+    contrast.onchange = e => { SP.previewContrast = e.target.checked; renderSwatches(); drawCurrentSprite(); };
+  }
   await setSpriteMode(SP.mode);
   $("#spZoomOut").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.max(1, SP.osZoom - 1); else SP.zoom = Math.max(1, SP.zoom - 1); drawCurrentSprite(); };
   $("#spZoomIn").onclick = () => { if (SP.mode === "onscreen") SP.osZoom = Math.min(8, SP.osZoom + 1); else SP.zoom = Math.min(12, SP.zoom + 1); drawCurrentSprite(); };
@@ -597,6 +717,7 @@ async function selectSprite(i, el) {
 function renderReadonlySprite(sp, d) {
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.type = d.type; SP.grid = [];
   SP.mode = "readonly"; SP.hasOnscreen = false; SP.os = null; SP.activePaletteKey = null;
+  SP.previewContrast = false;
   SP.origGrid = null; SP.origCols = null; SP.origPal = null; SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
   const stamp = Date.now();
@@ -649,7 +770,12 @@ async function setSpriteMode(mode) {
       SP.activePaletteKey = null;
       const editorW = Math.max(420, ($("#editor") && $("#editor").clientWidth) || 900);
       const paneTarget = Math.max(180, Math.min(560, Math.floor((editorW - 60) / 2)));
-      SP.osZoom = Math.max(1, Math.min(3, Math.floor(paneTarget / Math.max(1, Number(os.w) || SP.w || 1))));
+      const nativeH = Math.max(1, Number(os.h) || SP.h || 1);
+      const fitZoom = Math.max(1, Math.min(3, Math.floor(paneTarget / Math.max(1, Number(os.w) || SP.w || 1))));
+      const tinyZoom = nativeH <= 16 || isTitleCopyrightSprite(S.item && S.item.sp)
+        ? Math.min(8, Math.max(4, Math.ceil(96 / nativeH)))
+        : fitZoom;
+      SP.osZoom = Math.max(fitZoom, tinyZoom);
       if (os.build && !os.screen) {
         SP.showBg = false;
         const bg = $("#spBg");
@@ -668,8 +794,11 @@ function renderSwatches() {
   pal.forEach((c, i) => {
     const sw = document.createElement("div");
     sw.className = "sw" + (i === SP.sel ? " sel" : "");
-    sw.style.background = `rgb(${c[0]},${c[1]},${c[2]})`;
-    sw.title = "색 " + i;
+    const dc = displayColorForIndex(i, c);
+    sw.style.background = `rgb(${dc[0]},${dc[1]},${dc[2]})`;
+    sw.title = SP.previewContrast && currentSpritePrefersContrastPreview()
+      ? `색 ${i} · 실제 rgb(${c[0]},${c[1]},${c[2]})`
+      : "색 " + i;
     sw.onclick = () => { SP.sel = i; renderSwatches(); };
     box.appendChild(sw);
   });
@@ -705,7 +834,7 @@ function drawSprite() {
   for (let y = 0; y < SP.h; y++) for (let x = 0; x < SP.w; x++) {
     const idx = SP.grid[y][x] & 15;
     if (idx === 0) continue;
-    const c = SP.pal[idx] || [0, 0, 0];
+    const c = displayColorForIndex(idx, SP.pal[idx] || [0, 0, 0]);
     const o = (y * SP.w + x) * 4;
     img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
   }
@@ -721,7 +850,7 @@ function drawSprite() {
     const x = Math.floor((e.clientX - r.left) / z), y = Math.floor((e.clientY - r.top) / z);
     if (x < 0 || y < 0 || x >= SP.w || y >= SP.h) return;
     setSheetPixel(x, y, SP.sel);
-    const c = SP.pal[SP.sel];
+    const c = displayColorForIndex(SP.sel, SP.pal[SP.sel] || [0, 0, 0]);
     ctx.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; ctx.fillRect(x * z, y * z, z, z);
     const o2 = SP._off.getContext("2d");
     o2.fillStyle = SP.sel === 0 ? "#08090c" : `rgb(${c[0]},${c[1]},${c[2]})`; o2.fillRect(x, y, 1, 1);
@@ -774,7 +903,7 @@ function drawNativeGrid(ctx, grid, pal, w, h) {
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     const idx = (grid[y] && grid[y][x]) ? (grid[y][x] & 15) : 0;
     if (idx === 0) continue;
-    const c = paletteColor(pal, idx);
+    const c = displayColorForIndex(idx, paletteColor(pal, idx));
     const o = (y * w + x) * 4;
     img.data[o] = c[0]; img.data[o + 1] = c[1]; img.data[o + 2] = c[2]; img.data[o + 3] = 255;
   }
@@ -792,8 +921,15 @@ function drawReferenceSprite(box = null) {
   off.width = Math.max(1, nativeW); off.height = Math.max(1, nativeH);
   const ctx = off.getContext("2d");
   ctx.imageSmoothingEnabled = false;
-  ctx.fillStyle = "#08090c";
-  ctx.fillRect(0, 0, off.width, off.height);
+  if (onscreen && SP.showBg && SP.bgReady && SP.bgImg) {
+    ctx.globalAlpha = currentSpritePrefersContextBackground() ? 0.8 : 0.45;
+    drawSceneBgCrop(ctx, view.x, view.y, nativeW, nativeH);
+    ctx.globalAlpha = 1;
+    if (!currentSpritePrefersContextBackground()) maskOamBounds(ctx, view.x, view.y);
+  } else {
+    ctx.fillStyle = "#08090c";
+    ctx.fillRect(0, 0, off.width, off.height);
+  }
   if (onscreen) drawOamCellsFor(ctx, view.x, view.y, SP.origGrid, SP.origCols || SP.cols, SP.origPal || SP.pal);
   else drawNativeGrid(ctx, SP.origGrid, SP.origPal || SP.pal, off.width, off.height);
   cv.width = off.width * z; cv.height = off.height * z;
@@ -903,10 +1039,10 @@ function drawOnscreenSprite() {
   const ctx = off.getContext("2d");
   ctx.imageSmoothingEnabled = false;
   if (SP.showBg && SP.bgReady && SP.bgImg) {
-    ctx.globalAlpha = 0.45;
+    ctx.globalAlpha = currentSpritePrefersContextBackground() ? 0.8 : 0.45;
     drawSceneBgCrop(ctx, originX, originY, nativeW, nativeH);
     ctx.globalAlpha = 1;
-    maskOamBounds(ctx, originX, originY);
+    if (!currentSpritePrefersContextBackground()) maskOamBounds(ctx, originX, originY);
   } else {
     ctx.fillStyle = "#08090c";
     ctx.fillRect(0, 0, nativeW, nativeH);
@@ -965,7 +1101,7 @@ function drawOamCellsFor(ctx, originX, originY, grid, cols, fallbackPal) {
         const idx = sheetPixelFromGrid(grid, cols || SP.cols, tile, px, py) & 15;
         if (idx === 0) continue;
         const pal = paletteForCell(cell, fallbackPal);
-        const c = pal[idx] || [0, 0, 0];
+        const c = displayColorForIndex(idx, pal[idx] || [0, 0, 0]);
         ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
         ctx.fillRect(dx0 + xx, dy0 + yy, 1, 1);
       }
@@ -1142,5 +1278,13 @@ $("#dadd").onclick = async () => {
 };
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#dictModal").hidden) $("#dictModal").hidden = true; });
 
+$("#authBox").onsubmit = async (e) => {
+  e.preventDefault();
+  const pw = $("#authPassword").value;
+  $("#authLogin").disabled = true;
+  try { await login(pw); }
+  finally { $("#authLogin").disabled = false; }
+};
+
 // 시작
-loadSupported(); loadScenes(); refreshState(); setInterval(refreshState, 8000);
+startApp();

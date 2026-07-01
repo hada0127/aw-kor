@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import csv
 import json
 import sys
 from collections import defaultdict
@@ -27,6 +28,7 @@ BUILD = ROOT / "tools" / "build_korean_full.py"
 DIALOGUE_OVERRIDES = ROOT / "data" / "dialogue_overrides.json"
 DIALOGUE_MAP = ROOT / "data" / "dialogue_map.json"
 DIALOGUE_GROUPS = ROOT / "data" / "dialogue_groups.json"
+ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
 DEFAULT_REPORT = ROOT / "temp" / "address_text_overrides_audit.json"
 
 
@@ -170,6 +172,32 @@ def load_json(path: Path, default: Any) -> Any:
         return default
 
 
+def load_tsv_entries(path: Path) -> tuple[dict[int, str], list[str]]:
+    if not path.exists():
+        return {}, [f"missing TSV authority: {path.relative_to(ROOT)}"]
+    errors: list[str] = []
+    rows: dict[int, str] = {}
+    with path.open(encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f, delimiter="\t")
+        if reader.fieldnames != ["address", "text"]:
+            return {}, [f"{path.relative_to(ROOT)}: expected header address<TAB>text"]
+        for line_no, row in enumerate(reader, start=2):
+            raw_addr = (row.get("address") or "").strip()
+            if not raw_addr:
+                errors.append(f"{path.relative_to(ROOT)}:{line_no}: empty address")
+                continue
+            try:
+                addr = int(raw_addr, 16)
+            except ValueError:
+                errors.append(f"{path.relative_to(ROOT)}:{line_no}: bad address {raw_addr!r}")
+                continue
+            if addr in rows:
+                errors.append(f"{path.relative_to(ROOT)}:{line_no}: duplicate 0x{addr:08X}")
+                continue
+            rows[addr] = str(row.get("text") or "")
+    return rows, errors
+
+
 def load_required_json(path: Path) -> tuple[Any, str | None]:
     if not path.exists():
         return None, f"missing required generated data: {path.relative_to(ROOT)}"
@@ -230,6 +258,36 @@ def build_report() -> dict[str, Any]:
                     "address": "0x%08X" % addr,
                     "runtime": short(rv),
                     "static_last": short(sv),
+                }
+            )
+
+    source_forbidden_terms = ("쇼군", "휘프")
+    source_forbidden = []
+    for entry in entries:
+        value = str(entry["value"] or "")
+        terms = [term for term in source_forbidden_terms if term in value]
+        if terms:
+            source_forbidden.append(
+                {
+                    "address": entry["address"],
+                    "lineno": entry["lineno"],
+                    "terms": terms,
+                    "value": short(value),
+                }
+            )
+
+    tsv_entries, tsv_errors = load_tsv_entries(ADDRESS_TEXT_OVERRIDES_TSV)
+    runtime_static_only = {addr: text for addr, text in runtime.items() if addr not in generated_addrs}
+    tsv_mismatches = []
+    for addr in sorted(set(tsv_entries) | set(runtime_static_only)):
+        tv = tsv_entries.get(addr)
+        rv = runtime_static_only.get(addr)
+        if tv != rv:
+            tsv_mismatches.append(
+                {
+                    "address": "0x%08X" % addr,
+                    "tsv": short(tv),
+                    "runtime": short(rv),
                 }
             )
 
@@ -326,6 +384,14 @@ def build_report() -> dict[str, Any]:
         **effective_stats,
         "duplicate_count": len(duplicates),
         "duplicates": duplicates[:120],
+        "source_forbidden_term_count": len(source_forbidden),
+        "source_forbidden_terms": source_forbidden[:120],
+        "tsv_authority": str(ADDRESS_TEXT_OVERRIDES_TSV.relative_to(ROOT)),
+        "tsv_entry_count": len(tsv_entries),
+        "tsv_error_count": len(tsv_errors),
+        "tsv_errors": tsv_errors[:120],
+        "tsv_runtime_mismatch_count": len(tsv_mismatches),
+        "tsv_runtime_mismatches": tsv_mismatches[:120],
         "runtime_static_mismatch_count": len(static_mismatches),
         "runtime_static_mismatches": static_mismatches[:120],
         "required_data_errors": required_errors,
@@ -356,6 +422,13 @@ def main() -> int:
     print("ADDRESS_TEXT_OVERRIDES audit")
     print(f"- source entries: {report['source_entry_count']} effective: {report['effective_count']}")
     print(f"- duplicate source keys: {report['duplicate_count']}")
+    print(f"- source forbidden terms: {report['source_forbidden_term_count']}")
+    print(
+        "- TSV authority: "
+        f"{report['tsv_authority']} entries {report['tsv_entry_count']}, "
+        f"errors {report['tsv_error_count']}, "
+        f"runtime mismatches {report['tsv_runtime_mismatch_count']}"
+    )
     print(f"- runtime/static mismatches: {report['runtime_static_mismatch_count']}")
     print(
         "- final effective transforms: "
@@ -382,6 +455,9 @@ def main() -> int:
 
     hard_fail = (
         report["duplicate_count"] > 0
+        or report["source_forbidden_term_count"] > 0
+        or report["tsv_error_count"] > 0
+        or report["tsv_runtime_mismatch_count"] > 0
         or report["runtime_static_mismatch_count"] > 0
         or bool(report["required_data_errors"])
         or report["dialogue_map_mismatch_count"] > 0

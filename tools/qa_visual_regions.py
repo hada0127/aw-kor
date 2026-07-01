@@ -123,24 +123,56 @@ def assert_title_style_palette(label: str, layer: Image.Image) -> str:
     return f"values={sorted(values)}:style_pixels={style_pixels}"
 
 
-def assert_compact_option_palette(label: str, layer: Image.Image) -> str:
+def assert_part1_menu_logo_palette(label: str, layer: Image.Image) -> str:
     counts: dict[int, int] = {}
     for value in layer.getdata():
         if value:
             counts[int(value)] = counts.get(int(value), 0) + 1
     values = set(counts)
-    missing = sorted({2} - values)
+    missing = sorted({9, 10, 14} - values)
     if missing:
-        raise AssertionError(f"{label}: missing compact fill index {missing}, values={sorted(values)}")
-    extra = sorted(values - {2})
+        raise AssertionError(f"{label}: missing Part1 logo shadow/outline indices {missing}, values={sorted(values)}")
+    extra = sorted(values - {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14})
     if extra:
-        raise AssertionError(f"{label}: unexpected high-profile option palette indices {extra}, values={sorted(values)}")
+        raise AssertionError(f"{label}: unexpected Part1 logo palette indices {extra}, values={sorted(values)}")
+    if 15 in values:
+        raise AssertionError(f"{label}: index 15 makes Part1 labels render as black blocks on menu palettes")
+    gradient_pixels = sum(counts.get(idx, 0) for idx in range(1, 8))
+    if gradient_pixels < 30:
+        raise AssertionError(f"{label}: too few route-colored gradient pixels ({gradient_pixels} < 30)")
+    if counts.get(10, 0) < 90 or counts.get(14, 0) < 120:
+        raise AssertionError(f"{label}: outline/body too weak, counts={counts}")
     pixels = sum(counts.values())
-    if pixels < 35:
-        raise AssertionError(f"{label}: too few compact label pixels ({pixels} < 35)")
-    if counts.get(15, 0) > 0:
-        raise AssertionError(f"{label}: outline pixels remain in compact option label, counts={counts}")
-    return f"values={sorted(values)}:pixels={pixels}:edge={counts.get(15, 0)}"
+    if pixels < 300:
+        raise AssertionError(f"{label}: too few Part1 logo pixels ({pixels} < 300)")
+    return f"values={sorted(values)}:pixels={pixels}"
+
+
+def assert_part1_option_logo_palette(label: str, layer: Image.Image) -> str:
+    counts: dict[int, int] = {}
+    for value in layer.getdata():
+        if value:
+            counts[int(value)] = counts.get(int(value), 0) + 1
+    values = set(counts)
+    missing = sorted({1, 9, 10, 14} - values)
+    if missing:
+        raise AssertionError(f"{label}: missing Part1 option logo indices {missing}, values={sorted(values)}")
+    extra = sorted(values - {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14})
+    if extra:
+        raise AssertionError(f"{label}: unexpected Part1 option palette indices {extra}, values={sorted(values)}")
+    if 15 in values:
+        raise AssertionError(f"{label}: index 15 is not used by original Part1 option gradients")
+    pixels = sum(counts.values())
+    if pixels < 110:
+        raise AssertionError(f"{label}: too few Part1 option logo pixels ({pixels} < 110)")
+    gradient_pixels = sum(counts.get(idx, 0) for idx in (1, 2, 3, 4, 5, 6))
+    if gradient_pixels < 80:
+        raise AssertionError(f"{label}: original-gradient body pixels too few ({gradient_pixels} < 80)")
+    if not ({5, 6} & values):
+        raise AssertionError(f"{label}: missing original-gradient edge color 5/6, values={sorted(values)}")
+    if counts.get(9, 0) < 20 or counts.get(10, 0) < 40 or counts.get(14, 0) < 40:
+        raise AssertionError(f"{label}: original-style shadow/outline too weak, counts={counts}")
+    return f"values={sorted(values)}:pixels={pixels}:gradient={gradient_pixels}"
 
 
 def assert_select_logo_style(
@@ -263,9 +295,9 @@ def run_asset_checks() -> list[str]:
     except AssertionError as exc:
         failures.append(str(exc))
 
-    # Part1 option labels scroll behind the translucent help box. Check every
-    # option block, including long communication labels, so the replacement
-    # cannot regress back to oversized/shadow-heavy graphics.
+    # Part1 option labels are the large carousel sprites, not the small top-left
+    # title labels. Keep them high-profile like the original while bounding the
+    # box so they cannot spill outside the 128x32 OBJ block.
     for name, _off, text, max_size in th.PART1_MODE_OPTION_BLOCKS:
         try:
             layer = th.make_part1_option_block(text, max_size)
@@ -273,32 +305,29 @@ def run_asset_checks() -> list[str]:
             assert_bbox(
                 f"part1 option {name}",
                 bbox,
-                min_w=18,
-                min_h=8,
-                max_w=96,
-                max_h=16,
-                x0_min=10,
-                y0_min=4,
-                x1_max=118,
-                y1_max=24,
+                min_w=24,
+                min_h=12,
+                max_w=124,
+                max_h=31,
+                x0_min=0,
+                y0_min=0,
+                x1_max=128,
+                y1_max=32,
             )
-            style = assert_compact_option_palette(f"part1 option {name}", layer)
+            style = assert_part1_option_logo_palette(f"part1 option {name}", layer)
             display_text = th.part1_option_display_text(text)
             checked.append(f"asset:part1_option:{name}:{display_text}:{bbox}:{style}")
         except AssertionError as exc:
             failures.append(str(exc))
 
-    submenu_targets = {"single_battle", "connect", "single_card", "multi_card", "cable_battle"}
     for name, _off, text, max_size in th.PART1_SUBMENU_LOGO_BLOCKS:
-        if name not in submenu_targets:
-            continue
         layer = th.make_part1_submenu_label_block(text, max_size)
         try:
             bbox = assert_layer_not_blank(f"part1 submenu {name}", layer)
             assert_bbox(
                 f"part1 submenu {name}",
                 bbox,
-                min_w={"single_battle": 68, "connect": 44}.get(name, 18),
+                min_w={"single_battle": 56, "connect": 26}.get(name, 18),
                 min_h=8,
                 x0_min=4,
                 y0_min=4,
@@ -308,9 +337,7 @@ def run_asset_checks() -> list[str]:
             nonzero = sum(1 for value in layer.getdata() if value)
             if nonzero < 45:
                 raise AssertionError(f"part1 submenu {name}: too few label pixels ({nonzero} < 45)")
-            style = ""
-            if name in {"single_battle", "connect"}:
-                style = ":" + assert_title_style_palette(f"part1 submenu {name}", layer)
+            style = ":" + assert_part1_menu_logo_palette(f"part1 submenu {name}", layer)
             checked.append(f"asset:part1_submenu:{name}:{bbox}:pixels={nonzero}{style}")
         except AssertionError as exc:
             failures.append(str(exc))
@@ -462,6 +489,32 @@ def count_intrusive_help_pixels(image: Image.Image, box: tuple[int, int, int, in
     return count
 
 
+def assert_part1_help_box_readable(
+    label: str,
+    image: Image.Image,
+    box: tuple[int, int, int, int],
+    *,
+    max_logo_overlap_dark: int,
+    min_bright_text_pixels: int,
+) -> str:
+    # The original Part 1 carousel lets large option logos pass behind the
+    # translucent help box. Treat that overlap as normal, but keep a hard guard
+    # against black-block corruption or missing help text.
+    logo_overlap_dark = count_intrusive_help_pixels(image, box)
+    bright_text_pixels = count_bright_pixels(image, box)
+    if logo_overlap_dark > max_logo_overlap_dark:
+        raise AssertionError(
+            f"{label} help box dark logo/garbage pixels too high "
+            f"({logo_overlap_dark} > {max_logo_overlap_dark})"
+        )
+    if bright_text_pixels < min_bright_text_pixels:
+        raise AssertionError(
+            f"{label} help text missing/unreadable: bright pixels "
+            f"{bright_text_pixels} < {min_bright_text_pixels}"
+        )
+    return f"help_logo_overlap_dark={logo_overlap_dark}:help_bright_text={bright_text_pixels}"
+
+
 def count_bright_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int:
     crop = image.crop(box).convert("RGB")
     count = 0
@@ -525,6 +578,30 @@ def count_clipped_logo_text_pixels(image: Image.Image, box: tuple[int, int, int,
         is_red = r > 170 and g < 120 and b < 120
         if is_pink or is_cyan or is_green or is_red:
             count += 1
+    return count
+
+
+def count_clean_top_left_label_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int:
+    """Count white label pixels that are adjacent to a dark outline pixel."""
+    crop = image.crop(box).convert("RGB")
+    px = crop.load()
+    count = 0
+    for y in range(crop.height):
+        for x in range(crop.width):
+            r, g, b = px[x, y]
+            if min(r, g, b) <= 185:
+                continue
+            has_dark_neighbor = False
+            for yy in range(max(0, y - 1), min(crop.height, y + 2)):
+                for xx in range(max(0, x - 1), min(crop.width, x + 2)):
+                    rr, gg, bb = px[xx, yy]
+                    if max(rr, gg, bb) < 115:
+                        has_dark_neighbor = True
+                        break
+                if has_dark_neighbor:
+                    break
+            if has_dark_neighbor:
+                count += 1
     return count
 
 
@@ -627,12 +704,19 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
         }.items():
             light = count_light_pixels(menu_img, box)
             if light < 80:
-                failures.append(f"{label}: too few visible compact label pixels ({light})")
+                failures.append(f"{label}: too few visible option logo pixels ({light})")
             checked.append(f"screen:{label}:light_pixels={light}")
-        help_intrusive = count_intrusive_help_pixels(menu_img, (8, 108, 140, 154))
-        if help_intrusive > 60:
-            failures.append(f"mode help box has intrusive dark label pixels ({help_intrusive} > 60)")
-        checked.append(f"screen:mode_help_intrusive_dark={help_intrusive}")
+        try:
+            mode_help = assert_part1_help_box_readable(
+                "mode",
+                menu_img,
+                (8, 108, 140, 154),
+                max_logo_overlap_dark=650,
+                min_bright_text_pixels=320,
+            )
+            checked.append(f"screen:mode_{mode_help}")
+        except AssertionError as exc:
+            failures.append(str(exc))
 
         driver.loadstate(entry_state)
         driver.frames(10)
@@ -641,16 +725,23 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
         driver.press("A", after=180)
         single = driver.shot("04_single_screen")
         single_edge = count_top_left_label_edge_pixels(single)
-        single_visible = count_clipped_logo_text_pixels(single, (6, 4, 78, 30))
+        single_visible = count_clean_top_left_label_pixels(single, (6, 4, 78, 30))
         if single_edge > 24:
             failures.append(f"single battle top-left clipped logo text: edge colored pixels {single_edge} > 24")
-        if single_visible < 35:
-            failures.append(f"single battle top-left label missing/unreadable: visible label pixels {single_visible} < 35")
-        single_help_intrusive = count_intrusive_help_pixels(single, (8, 108, 150, 154))
-        if single_help_intrusive > 60:
-            failures.append(f"single battle help box has intrusive dark label pixels ({single_help_intrusive} > 60)")
+        if single_visible < 120:
+            failures.append(f"single battle top-left label missing/unreadable: clean label pixels {single_visible} < 120")
+        try:
+            single_help = assert_part1_help_box_readable(
+                "single battle",
+                single,
+                (8, 108, 150, 154),
+                max_logo_overlap_dark=650,
+                min_bright_text_pixels=150,
+            )
+            checked.append(f"screen:single_{single_help}")
+        except AssertionError as exc:
+            failures.append(str(exc))
         checked.append(f"screen:single_top_left:visible={single_visible}:edge={single_edge}")
-        checked.append(f"screen:single_help_intrusive_dark={single_help_intrusive}")
 
         driver.loadstate(entry_state)
         driver.frames(10)
@@ -660,16 +751,23 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
         driver.press("A", after=180)
         link = driver.shot("06_link_screen")
         link_edge = count_top_left_label_edge_pixels(link)
-        link_visible = count_clipped_logo_text_pixels(link, (6, 4, 78, 30))
+        link_visible = count_clean_top_left_label_pixels(link, (6, 4, 78, 30))
         if link_edge > 24:
             failures.append(f"connect top-left clipped logo text: edge colored pixels {link_edge} > 24")
-        if link_visible < 35:
-            failures.append(f"connect top-left label missing/unreadable: visible label pixels {link_visible} < 35")
-        link_help_intrusive = count_intrusive_help_pixels(link, (8, 108, 150, 154))
-        if link_help_intrusive > 60:
-            failures.append(f"connect help box has intrusive dark label pixels ({link_help_intrusive} > 60)")
+        if link_visible < 100:
+            failures.append(f"connect top-left label missing/unreadable: clean label pixels {link_visible} < 100")
+        try:
+            link_help = assert_part1_help_box_readable(
+                "connect",
+                link,
+                (8, 108, 150, 154),
+                max_logo_overlap_dark=950,
+                min_bright_text_pixels=150,
+            )
+            checked.append(f"screen:connect_{link_help}")
+        except AssertionError as exc:
+            failures.append(str(exc))
         checked.append(f"screen:connect_top_left:visible={link_visible}:edge={link_edge}")
-        checked.append(f"screen:connect_help_intrusive_dark={link_help_intrusive}")
     finally:
         driver.close()
 
@@ -734,7 +832,7 @@ def run_title_entry_checks(rom: Path, out_dir: Path, harness: Path) -> list[str]
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_final.gba"))
+    parser.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_full.gba"))
     parser.add_argument("--out", default=str(ROOT / "temp/qa_visual_regions_20260615"))
     parser.add_argument("--harness", default="/tmp/mgbah")
     parser.add_argument(

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""QA: 대사(dialogue_overrides=쪼롱이님/B팀) 단어붙음/축약 추적 + repoint 해소 효과.
+"""QA: 대사(dialogue_overrides=짜옹이님/B팀) 단어붙음/축약 추적 + repoint 해소 효과.
 
 기존 qa_text_fit는 dialogue_overrides를 walk에서 누락해 단어붙음 504건을 못 봤다(사각지대).
 이 도구는 dialogue_overrides의 모든 라인에 대해 in-place fit level을 계산하고,

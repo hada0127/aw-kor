@@ -2,7 +2,7 @@
 
 > 대상: 본 프로젝트(일본판 1+2 합본 한글, `output/game_wars_korean_full.gba`)
 > vs 외부 배포 USA 독립판 한글패치 AW1 v0.38 / AW2 v0.31(다운로드).
-> 방법: claude 주도 + codex·agy **적대적 엄격 리뷰**. 절대제약: 쪼롱이님/B팀 번역 불변.
+> 방법: claude 주도 + codex·agy **적대적 엄격 리뷰**. 절대제약: 짜옹이님/B팀 번역 불변.
 > ROM: 세션 종료 SHA **a582a7cb**(시작 08d50127 → B팀 복원 반영).
 
 ## 1. 이번 세션 핵심 성과 (검증됨)
@@ -34,7 +34,7 @@
 - **MED ③ 영어 sprite UI**(PRESS A/ENEMY/R.MAP/SELECT/GALLERY/START): 그래픽 스프라이트. 외부판도 동류 영문 유지 → 동급. sprite editor로 추가 가능(선택).
 - **OPEN ④ 24_part2_campaign_map 룰 라벨 일본어**: 라벨(収入/日数/能力)은 우리 데이터에 번역됨(수입/일수/능력) → savestate **stale-BG 의심**이나 codex는 실잔존 주장. → fresh-boot 재캡처로 확정 필요(추적).
 - **LOW ⑤ part1 캠페인 단어붙음**(0x19 커맨드스트림): 부분해소·잔여 117 추적 중.
-- **데이터 ⑥ CSV 손상**: `qa_csv_integrity.py` 기준 239행(length만 손상 다수 무해), 그 중 **109행이 진짜 ROM 위험**(korean이 일본어/빈칸/주소혼입+override無). 행별 맥락(쪼롱이 인접) 필요 → 신중 추적(일괄수정 금지).
+- **데이터 ⑥ CSV 손상**: `qa_csv_integrity.py` 기준 239행(length만 손상 다수 무해), 그 중 **109행이 진짜 ROM 위험**(korean이 일본어/빈칸/주소혼입+override無). 행별 맥락(짜옹이 인접) 필요 → 신중 추적(일괄수정 금지).
 
 ## 4. codex·agy 적대적 우열 판정 (수렴)
 
@@ -46,7 +46,7 @@
 1. ~~B팀 권위문 복원~~ ✅ 완료(이번 세션).
 2. CO/인물 이름 테이블 RE → per-CO OBJ blank+본문이관 확장(이름 라벨 일본어 0).
 3. 컴팩트 렌더러 글리프뱅크에 마/메 공급 → 맵 '??' 제거 후 87/컴팩트 UI 재캡처.
-4. CSV 109행 ROM 위험분 행별 검수·복구(쪼롱이 인접 보호) + `qa_csv_integrity --fail-on-rom-affecting` 게이트화.
+4. CSV 109행 ROM 위험분 행별 검수·복구(짜옹이 인접 보호) + `qa_csv_integrity --fail-on-rom-affecting` 게이트화.
 5. container residual scan을 현재 SHA로 재생성 → `audit_scene_residual_scans --strict` PASS.
 6. 24 rule-label fresh-boot 재캡처로 stale-BG vs 실잔존 확정.
 7. 실기(real GBA) 검증.
@@ -58,7 +58,7 @@
 - **B팀 보호 3+층**: ①권위문 복원 ②`qa_bteam_drift.py`(3340주소 baseline, drift 0) ③:8782·:8780 `_save_line` save-time 차단(confirm_bteam)
   ④`--accept`=AW_BTEAM_ACCEPT=1 ⑤`verify_dist_integrity` 게이트 연동. → 0xDF5E식 우발 변형 5중 차단.
 - **B1 CSV 손상 = ROM 결함 0 확정**: `qa_csv_integrity.py` ROM-디코드 권위화. 손상 239행이나 출하 ROM 일본어 텍스트 잔존 0.
-- **C 편집 커버리지**: 실대사 99.0% 편집가능(차단 200=정당), 스프라이트 1979 전부 도달·편집. 쪼롱이 요구 충족.
+- **C 편집 커버리지**: 실대사 99.0% 편집가능(차단 200=정당), 스프라이트 1979 전부 도달·편집. 짜옹이 요구 충족.
 - **A1 de-risk**: `korean_glyphs_8px.json`(8px 한글, agy 발견)으로 96×8 이름 OBJ 직접 렌더 가능. CO 테이블 0x081BE68/stride0x44/19 OBJ 식별.
 
 ### codex·agy 2차 verdict (수렴)

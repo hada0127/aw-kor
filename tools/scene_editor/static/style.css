@@ -72,6 +72,7 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .row .badge { font-size: 9px; color: var(--accent); margin-left: 5px; }
 .row .over { color: var(--bad); }
 .row img.thumb { image-rendering: pixelated; background: #222; border: 1px solid var(--line); vertical-align: middle; margin-right: 6px; max-height: 28px; max-width: 120px; }
+.row img.thumb.tilethumb { max-height: 40px; max-width: 96px; }
 .row.more { text-align: center; color: var(--accent); }
 .row.kindsep { color: var(--dim); font-size: 10px; background: #15171d; cursor: default; text-transform: uppercase; letter-spacing: .05em; }
 .scene-proof { display: flex; gap: 9px; align-items: center; padding: 8px 12px 8px 28px;
@@ -171,3 +172,14 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
   background: #222a38; border: 1px solid var(--accent); border-radius: 9px;
   padding: 10px 18px; z-index: 30; box-shadow: 0 6px 24px rgba(0,0,0,.4); }
 #toast.bad { border-color: var(--bad); }
+
+/* auth */
+#authGate { position: fixed; inset: 0; background: rgba(5, 7, 11, .86); display: flex;
+  align-items: center; justify-content: center; z-index: 50; }
+#authBox { width: min(360px, calc(100vw - 32px)); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: 20px; box-shadow: 0 16px 56px rgba(0,0,0,.45); display: grid; gap: 10px; }
+#authBox strong { font-size: 16px; }
+#authBox span { color: var(--dim); font-size: 12px; }
+#authBox input { width: 100%; }
+#authBox button { background: var(--accent); color: #07101f; border-color: var(--accent); font-weight: 700; }
+#authError { min-height: 18px; color: var(--bad); font-size: 12px; }

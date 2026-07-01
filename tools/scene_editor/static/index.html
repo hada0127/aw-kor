@@ -37,6 +37,17 @@
   </section>
 </main>
 
+<!-- 비밀번호 로그인 -->
+<div id="authGate" hidden>
+  <form id="authBox">
+    <strong>AW 통합 화면 에디터</strong>
+    <span>비밀번호를 입력하세요.</span>
+    <input id="authPassword" type="password" autocomplete="current-password" placeholder="비밀번호">
+    <button id="authLogin" type="submit">들어가기</button>
+    <div id="authError"></div>
+  </form>
+</div>
+
 <!-- 미리보기/비교 모달 -->
 <div id="modal" hidden>
   <div class="modalbox">

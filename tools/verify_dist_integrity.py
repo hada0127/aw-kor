@@ -3,7 +3,7 @@
 
 검증: manifest.patched_rom.sha256 == sha256(output/game_wars_korean_full.gba)
       == sha256(원본 ROM에 dist BPS 적용) == sha256(원본 ROM에 dist IPS 적용)
-추가: full/final/title_test 3종 산출물이 바이트 동일한지.
+추가: legacy final/title_test ROM 산출물이 다시 생기지 않았는지.
 
 배포 전(Phase F) 이 게이트가 PASS여야 한다. 현재는 출하 ROM과 dist가 어긋나면 FAIL로
 staleness를 명시한다. exit 0=PASS, 1=FAIL.
@@ -22,11 +22,11 @@ from lz77_scan import lz77_decompress   # noqa: E402
 from PIL import Image                   # noqa: E402
 
 ORIGINAL = os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
-OUTPUTS = {
-    'full': os.path.join(BASE, 'output', 'game_wars_korean_full.gba'),
-    'final': os.path.join(BASE, 'output', 'game_wars_korean_final.gba'),
-    'title_test': os.path.join(BASE, 'output', 'game_wars_korean_title_test.gba'),
-}
+OUTPUT_ROM = os.path.join(BASE, 'output', 'game_wars_korean_full.gba')
+LEGACY_OUTPUTS = [
+    os.path.join(BASE, 'output', 'game_wars_korean_final.gba'),
+    os.path.join(BASE, 'output', 'game_wars_korean_title_test.gba'),
+]
 MANIFESTS = [
     os.path.join(BASE, 'dist', 'manifest.json'),
     os.path.join(BASE, 'dist', 'manifest_preview.json'),
@@ -44,6 +44,7 @@ PART2_RESULT_SUMMARY_DIRTY_BOXES = [
 ]
 COMPACT_DISPLAY_VISUAL_MATRIX = os.path.join(BASE, 'data', 'compact_display_visual_matrix.json')
 COMPACT_DISPLAY_MANUAL_VISUAL_EVIDENCE = os.path.join(BASE, 'data', 'compact_display_manual_visual_evidence.json')
+REPOINT_MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 SYLLABLE_TO_CODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 SYLLABLE_TO_GLYPH_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 PART1_MAP_LABEL_SWEEP_REPORT = os.path.join(
@@ -61,13 +62,13 @@ B84_POWER_GLYPH_HOOK_FILE = 0x00F30780
 SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
     {
         'label': 'scene_89 music menu source',
-        'addr': 0x00A536B6,
+        'source_addr': 0x00A298C2,
         'expected_hex': '8f838ea081408fb38f8300',
         'max_nul_terminated_len': 11,
     },
     {
         'label': 'scene_89 anime menu source',
-        'addr': 0x00A536DE,
+        'source_addr': 0x00A298E2,
         'expected_hex': '8eb789d48bed81404100',
         'max_nul_terminated_len': 10,
     },
@@ -92,6 +93,43 @@ def parse_addr(value):
         return int(str(value), 0)
     except ValueError:
         return None
+
+
+def load_repoint_manifest():
+    if not os.path.exists(REPOINT_MANIFEST):
+        return []
+    try:
+        data = json.load(open(REPOINT_MANIFEST, encoding='utf-8'))
+    except Exception:
+        return []
+    return data if isinstance(data, list) else []
+
+
+def resolve_repoint_source_addr(source_addr, current):
+    """Map an original in-message line address to its current relocated payload.
+
+    Repoint free-space addresses are allocation-order dependent, so hardcoding
+    the old 0xA536xx proof address makes this guard stale after unrelated text
+    changes.  The stable fact is the original source line address plus its
+    offset inside the relocated message.
+    """
+    for item in load_repoint_manifest():
+        if not isinstance(item, dict) or item.get('status') != 'relocated':
+            continue
+        msg = parse_addr(item.get('msg'))
+        new_addr = parse_addr(item.get('new_addr'))
+        old_len = parse_addr(item.get('old_len'))
+        new_len = parse_addr(item.get('new_len'))
+        if msg is None or new_addr is None or old_len is None or new_len is None:
+            continue
+        if msg <= source_addr < msg + old_len:
+            relocated = new_addr + (source_addr - msg)
+            if relocated < new_addr or relocated >= new_addr + new_len:
+                return None, f'relocated source outside message: original=0x{source_addr:08X}'
+            return relocated, None
+    if current is not None and 0 <= source_addr < len(current):
+        return source_addr, None
+    return None, f'source address not found in repoint manifest: 0x{source_addr:08X}'
 
 
 def part2_result_summary_dirty_tile(tile_id):
@@ -260,12 +298,15 @@ def verify_scene89_system_menu_sources(current):
         return False, 'current ROM unavailable'
     details = []
     for spec in SCENE89_SYSTEM_MENU_SOURCE_LIMITS:
-        addr = spec['addr']
+        source_addr = spec['source_addr']
+        addr, error = resolve_repoint_source_addr(source_addr, current)
+        if error:
+            return False, f"{spec['label']} {error}"
         expected = bytes.fromhex(spec['expected_hex'])
         actual = current[addr:addr + len(expected)]
         if actual != expected:
             return False, (
-                f"{spec['label']} bytes changed at 0x{addr:08X}: "
+                f"{spec['label']} bytes changed at original=0x{source_addr:08X} current=0x{addr:08X}: "
                 f"expected={expected.hex()} actual={actual.hex()}"
             )
         max_len = spec['max_nul_terminated_len']
@@ -273,11 +314,12 @@ def verify_scene89_system_menu_sources(current):
         nul = chunk.find(b'\x00')
         if nul < 0:
             return False, (
-                f"{spec['label']} has no NUL within {max_len} bytes at 0x{addr:08X}; "
+                f"{spec['label']} has no NUL within {max_len} bytes "
+                f"at original=0x{source_addr:08X} current=0x{addr:08X}; "
                 'would overrun the scene_89 IWRAM menu buffer'
             )
         used = nul + 1
-        details.append(f"{spec['label']}@0x{addr:08X}={used}/{max_len}")
+        details.append(f"{spec['label']} 0x{source_addr:08X}->0x{addr:08X}={used}/{max_len}")
     return True, ', '.join(details)
 
 
@@ -396,29 +438,27 @@ def main():
     ok = True
     print('=== 배포 무결성 게이트 (verify_dist_integrity) ===')
 
-    # 1) 산출물 3종 동일성
-    out_sha = {}
-    for name, path in OUTPUTS.items():
-        if not os.path.exists(path):
-            print(f'[WARN] 산출물 없음: {path}')
-            continue
-        out_sha[name] = sha256(read(path))
-    if out_sha:
-        uniq = set(out_sha.values())
-        print(f'산출물 SHA: ' + ', '.join(f'{k}={v[:8]}' for k, v in out_sha.items()))
-        if len(uniq) != 1:
-            print('[FAIL] full/final/title_test SHA 불일치')
-            ok = False
-        else:
-            print('[OK] 산출물 3종 바이트 동일')
-    current_sha = out_sha.get('full')
+    # 1) 단일 산출물 + legacy ROM 부재
+    if not os.path.exists(OUTPUT_ROM):
+        print(f'[FAIL] 산출물 없음: {OUTPUT_ROM}')
+        current_sha = None
+        ok = False
+    else:
+        current_sha = sha256(read(OUTPUT_ROM))
+        print(f'산출물 SHA: full={current_sha[:8]}')
+    legacy_existing = [path for path in LEGACY_OUTPUTS if os.path.exists(path)]
+    if legacy_existing:
+        print('[FAIL] legacy ROM 산출물이 남아 있음: ' + ', '.join(legacy_existing))
+        ok = False
+    else:
+        print('[OK] 단일 ROM 산출물만 존재')
 
     if not os.path.exists(ORIGINAL):
         print(f'[WARN] 원본 ROM 없음(round-trip 생략): {ORIGINAL}')
         original = None
     else:
         original = read(ORIGINAL)
-    current_rom = read(OUTPUTS['full']) if os.path.exists(OUTPUTS['full']) else None
+    current_rom = read(OUTPUT_ROM) if os.path.exists(OUTPUT_ROM) else None
 
     if original is not None and current_rom is not None:
         result_ok, result_msg = verify_part2_result_summary_preservation(original, current_rom)
@@ -481,7 +521,7 @@ def main():
             if not match:
                 ok = False
 
-    # B팀(쪼롱이) 권위문 drift + CSV 손상 ROM 일본어 잔존 + scene container residual 증거를
+    # B팀(짜옹이) 권위문 drift + CSV 손상 ROM 일본어 잔존 + scene container residual 증거를
     # 배포 전 하드게이트로 묶는다(codex/agy/claude 리뷰).
     import subprocess
     here = os.path.dirname(os.path.abspath(__file__))
@@ -495,6 +535,9 @@ def main():
                                ('repoint integrity', 'qa_repoint_integrity.py', []),
                                ('CO glyph dictionary coverage', 'qa_glyph_dictionary_tables.py', []),
                                ('Part1 compact help', 'qa_part1_compact_help.py', []),
+                               ('Part1 operation dialogue', 'qa_part1_operation_dialogue.py', []),
+                               ('Part1 dialogue punctuation', 'qa_part1_dialogue_punctuation.py', []),
+                               ('transient overlays', 'qa_transient_overlays.py', []),
                                ('scene container residual', 'audit_scene_residual_scans.py', ['--strict']),
                                ('visual region', 'qa_visual_regions.py', []),
                                ('sprite override fit', 'audit_sprite_override_report.py', ['--strict'])]:

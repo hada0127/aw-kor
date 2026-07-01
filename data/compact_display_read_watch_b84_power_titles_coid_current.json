@@ -1,7 +1,7 @@
 {
-  "tool": "manual_b84_aw1_power_title_coid_variant_verify",
+  "tool": "temp/reverify_b84_aw1_power_titles_all_coid_current.py",
   "rom": "output/game_wars_korean_full.gba",
-  "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+  "rom_sha256": "0cd856c8c52f7bf79ef1399aaff7ba0b3a2af39d8cf9f25f11c5bb5d51787281",
   "selected_groups": [
     "b84_compact_power_display_overrides"
   ],
@@ -22,6 +22,8 @@
   "hit_count": 11,
   "direct_target_read_count": 11,
   "strict_note": "Current ROM B84 AW1 CO power title proof for all 11 target addresses. Each case writes only the live RAM CO-id byte 0x0201ADBD before the same DOWN DOWN A activation route; ROM bytes, pointer table, and renderer are unchanged. This proves target/source reads and visible title rendering for every B84 slot, but it is not a full natural-route playthrough for every CO.",
+  "proof_mode": "emulator_read_watch_current_rom_live_ram_coid_variant",
+  "synthetic_ram_field_source_proof": true,
   "ram_field": {
     "address": "0x0201ADBD",
     "base": "0x0201AD38",
@@ -41,14 +43,19 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x00",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84F14",
       "target_text": "기적",
       "pointer_line": "0 addr=08DF2B54 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B54 r1=00000000 old=08B84F14 new=00000000",
       "summary": {
         "line_count": 77,
-        "b84_reads": 72,
+        "b84_reads": 75,
         "pointer_reads": 2,
         "pcs": {
           "0x08B3C1CE": 51,
@@ -57,10 +64,10 @@
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84F16": 30,
@@ -86,7 +93,15 @@
           "12 addr=08B84F15 pc=08B3C1DA lr=08B10021 r0=08B842F9 r1=00000088 old=0000008F new=00000000",
           "13 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842FA old=00000088 new=00000000",
           "14 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=00000088 new=00000000",
-          "15 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=00000088 new=00000000"
+          "15 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=00000088 new=00000000",
+          "16 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=00000088 new=00000000",
+          "17 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=00000088 new=00000000",
+          "18 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B84304 old=00000088 new=00000000",
+          "19 addr=08B84F15 pc=08B3C1DA lr=08B10021 r0=08B84305 r1=00000088 old=0000008F new=00000000",
+          "20 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B84306 old=00000088 new=00000000",
+          "21 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008B r1=08B84308 old=00000088 new=00000000",
+          "22 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B8430A old=00000088 new=00000000",
+          "23 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=0000008C r1=08B8430C old=00000088 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_00_00B84F14.watch.log",
@@ -102,8 +117,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x01",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84F04",
       "target_text": "하이퍼수리",
       "pointer_line": "0 addr=08DF2B58 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B58 r1=00000001 old=08B84F04 new=00000000",
@@ -118,10 +138,10 @@
           "0x08B3C162": 10,
           "0x08B3C16C": 10,
           "0x08B3C21E": 5,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84F0A": 28,
@@ -153,7 +173,15 @@
           "12 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842FA old=00000092 new=00000000",
           "13 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=00000092 new=00000000",
           "14 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=00000092 new=00000000",
-          "15 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=00000092 new=00000000"
+          "15 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=00000092 new=00000000",
+          "16 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=00000092 new=00000000",
+          "17 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B84304 old=00000092 new=00000000",
+          "18 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B84306 old=00000092 new=00000000",
+          "19 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008B r1=08B84308 old=00000092 new=00000000",
+          "20 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B8430A old=00000092 new=00000000",
+          "21 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=0000008C r1=08B8430C old=00000092 new=00000000",
+          "22 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B8430E old=00000092 new=00000000",
+          "23 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000092 r1=08B84310 old=00000092 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_01_00B84F04.watch.log",
@@ -169,8 +197,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x02",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84EF0",
       "target_text": "강타",
       "pointer_line": "0 addr=08DF2B5C pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B5C r1=00000002 old=08B84EF0 new=00000000",
@@ -185,10 +218,10 @@
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84EF2": 24,
@@ -214,7 +247,15 @@
           "12 addr=08B84EF1 pc=08B3C1DA lr=08B10021 r0=08B842F9 r1=00000088 old=00000049 new=00000000",
           "13 addr=08B84EF2 pc=08B3C21E lr=08B0FF93 r0=08B84EF2 r1=00000002 old=00000091 new=00000000",
           "14 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=00000091 new=00000000",
-          "15 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=00000091 new=00000000"
+          "15 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=00000091 new=00000000",
+          "16 addr=08B84EF3 pc=08B3C1DA lr=08B0FF93 r0=08B842EB r1=00000091 old=000000C2 new=00000000",
+          "17 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=00000091 new=00000000",
+          "18 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=00000091 new=00000000",
+          "19 addr=08B84EF3 pc=08B3C1DA lr=08B0FF93 r0=08B842EF r1=00000091 old=000000C2 new=00000000",
+          "20 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=00000091 new=00000000",
+          "21 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=0000008A r1=08B842F2 old=00000091 new=00000000",
+          "22 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=0000008C r1=08B842F4 old=00000091 new=00000000",
+          "23 addr=08B84EF2 pc=08B3C1CE lr=08B0FF93 r0=00000088 r1=08B842F6 old=00000091 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_02_00B84EF0.watch.log",
@@ -230,8 +271,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x03",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84EE0",
       "target_text": "설백",
       "pointer_line": "0 addr=08DF2B60 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B60 r1=00000003 old=08B84EE0 new=00000000",
@@ -241,15 +287,15 @@
         "pointer_reads": 2,
         "pcs": {
           "0x08B3C1CE": 37,
-          "0x08B3C1DA": 4,
           "0x08B3C15A": 4,
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
+          "0x08B3C1DA": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84EE2": 23,
@@ -275,7 +321,15 @@
           "12 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=0000008D new=00000000",
           "13 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=0000008D new=00000000",
           "14 addr=08B84EE1 pc=08B3C1DA lr=08B10021 r0=08B842FF r1=0000008D old=000000C6 new=00000000",
-          "15 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=0000008D new=00000000"
+          "15 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=0000008D new=00000000",
+          "16 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=0000008D new=00000000",
+          "17 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B84304 old=0000008D new=00000000",
+          "18 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B84306 old=0000008D new=00000000",
+          "19 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008B r1=08B84308 old=0000008D new=00000000",
+          "20 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B8430A old=0000008D new=00000000",
+          "21 addr=08B84EE1 pc=08B3C1DA lr=08B10021 r0=08B8430B r1=0000008D old=000000C6 new=00000000",
+          "22 addr=08B84EE2 pc=08B3C21E lr=08B0FF93 r0=08B84EE2 r1=00000002 old=0000008C new=00000000",
+          "23 addr=08B84EE2 pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=0000008C new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_03_00B84EE0.watch.log",
@@ -291,8 +345,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x04",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84ECC",
       "target_text": "승리",
       "pointer_line": "0 addr=08DF2B64 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B64 r1=00000004 old=08B84ECC new=00000000",
@@ -307,10 +366,10 @@
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84ECE": 21,
@@ -336,7 +395,15 @@
           "12 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842FA old=0000008E new=00000000",
           "13 addr=08B84ECD pc=08B3C1DA lr=08B10021 r0=08B842FB r1=0000008E old=0000004D new=00000000",
           "14 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=0000008E new=00000000",
-          "15 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=0000008E new=00000000"
+          "15 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=0000008E new=00000000",
+          "16 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=0000008E new=00000000",
+          "17 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=0000008E new=00000000",
+          "18 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B84304 old=0000008E new=00000000",
+          "19 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B84306 old=0000008E new=00000000",
+          "20 addr=08B84ECD pc=08B3C1DA lr=08B10021 r0=08B84307 r1=0000008E old=0000004D new=00000000",
+          "21 addr=08B84ECE pc=08B3C21E lr=08B0FF93 r0=08B84ECE r1=00000002 old=0000008B new=00000000",
+          "22 addr=08B84ECE pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=0000008B new=00000000",
+          "23 addr=08B84ECF pc=08B3C1DA lr=08B0FF93 r0=08B842E9 r1=0000008B old=000000B7 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_04_00B84ECC.watch.log",
@@ -352,8 +419,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x05",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84EB8",
       "target_text": "저격",
       "pointer_line": "0 addr=08DF2B68 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B68 r1=00000005 old=08B84EB8 new=00000000",
@@ -368,10 +440,10 @@
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84EBA": 19,
@@ -397,7 +469,15 @@
           "12 addr=08B84EB8 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=0000008F new=00000000",
           "13 addr=08B84EB8 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=0000008F new=00000000",
           "14 addr=08B84EB8 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=0000008F new=00000000",
-          "15 addr=08B84EB9 pc=08B3C1DA lr=08B10021 r0=08B84301 r1=0000008F old=000000C6 new=00000000"
+          "15 addr=08B84EB9 pc=08B3C1DA lr=08B10021 r0=08B84301 r1=0000008F old=000000C6 new=00000000",
+          "16 addr=08B84EB8 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84302 old=0000008F new=00000000",
+          "17 addr=08B84EB9 pc=08B3C1DA lr=08B10021 r0=08B84303 r1=0000008F old=000000C6 new=00000000",
+          "18 addr=08B84EBA pc=08B3C21E lr=08B0FF93 r0=08B84EBA r1=00000002 old=00000088 new=00000000",
+          "19 addr=08B84EBA pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=00000088 new=00000000",
+          "20 addr=08B84EBA pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=00000088 new=00000000",
+          "21 addr=08B84EBA pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=00000088 new=00000000",
+          "22 addr=08B84EBA pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=00000088 new=00000000",
+          "23 addr=08B84EBA pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=00000088 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_05_00B84EB8.watch.log",
@@ -413,8 +493,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x06",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84EA4",
       "target_text": "일도",
       "pointer_line": "0 addr=08DF2B6C pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B6C r1=00000006 old=08B84EA4 new=00000000",
@@ -429,10 +514,10 @@
           "0x08B3C16C": 4,
           "0x08B3C1DA": 2,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84EA4": 16,
@@ -458,7 +543,15 @@
           "12 addr=08B84EA4 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=0000008F new=00000000",
           "13 addr=08B84EA4 pc=08B3C1CE lr=08B10021 r0=0000008D r1=08B842FE old=0000008F new=00000000",
           "14 addr=08B84EA4 pc=08B3C1CE lr=08B10021 r0=0000008F r1=08B84300 old=0000008F new=00000000",
-          "15 addr=08B84EA5 pc=08B3C1DA lr=08B10021 r0=08B84301 r1=0000008F old=000000A8 new=00000000"
+          "15 addr=08B84EA5 pc=08B3C1DA lr=08B10021 r0=08B84301 r1=0000008F old=000000A8 new=00000000",
+          "16 addr=08B84EA6 pc=08B3C21E lr=08B0FF93 r0=08B84EA6 r1=00000002 old=0000008A new=00000000",
+          "17 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=0000008A new=00000000",
+          "18 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=0000008A new=00000000",
+          "19 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=0000008A new=00000000",
+          "20 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=0000008A new=00000000",
+          "21 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=0000008A new=00000000",
+          "22 addr=08B84EA6 pc=08B3C1CE lr=08B0FF93 r0=0000008A r1=08B842F2 old=0000008A new=00000000",
+          "23 addr=08B84EA7 pc=08B3C1DA lr=08B0FF93 r0=08B842F3 r1=0000008A old=0000005A new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_06_00B84EA4.watch.log",
@@ -474,8 +567,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x07",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84E94",
       "target_text": "탐색",
       "pointer_line": "0 addr=08DF2B70 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B70 r1=00000007 old=08B84E94 new=00000000",
@@ -485,15 +583,15 @@
         "pointer_reads": 2,
         "pcs": {
           "0x08B3C1CE": 23,
-          "0x08B3C1DA": 4,
           "0x08B3C15A": 4,
           "0x08B3C162": 4,
           "0x08B3C16C": 4,
+          "0x08B3C1DA": 4,
           "0x08B3C21E": 2,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84E96": 16,
@@ -519,7 +617,15 @@
           "12 addr=08B84E94 pc=08B3C1CE lr=08B10021 r0=00000088 r1=08B842F8 old=00000091 new=00000000",
           "13 addr=08B84E94 pc=08B3C1CE lr=08B10021 r0=0000008E r1=08B842FA old=00000091 new=00000000",
           "14 addr=08B84E94 pc=08B3C1CE lr=08B10021 r0=00000091 r1=08B842FC old=00000091 new=00000000",
-          "15 addr=08B84E95 pc=08B3C1DA lr=08B10021 r0=08B842FD r1=00000091 old=000000C7 new=00000000"
+          "15 addr=08B84E95 pc=08B3C1DA lr=08B10021 r0=08B842FD r1=00000091 old=000000C7 new=00000000",
+          "16 addr=08B84E96 pc=08B3C21E lr=08B0FF93 r0=08B84E96 r1=00000002 old=0000008D new=00000000",
+          "17 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=00000100 r1=08B842E8 old=0000008D new=00000000",
+          "18 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=0000008D new=00000000",
+          "19 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=0000008D new=00000000",
+          "20 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=0000008D new=00000000",
+          "21 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=0000008D new=00000000",
+          "22 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=0000008A r1=08B842F2 old=0000008D new=00000000",
+          "23 addr=08B84E96 pc=08B3C1CE lr=08B0FF93 r0=0000008C r1=08B842F4 old=0000008D new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_07_00B84E94.watch.log",
@@ -535,8 +641,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x08",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84E7C",
       "target_text": "번개강습",
       "pointer_line": "0 addr=08DF2B74 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B74 r1=00000008 old=08B84E7C new=00000000",
@@ -551,10 +662,10 @@
           "0x08B3C16C": 8,
           "0x08B3C1DA": 6,
           "0x08B3C21E": 4,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84E82": 14,
@@ -584,7 +695,15 @@
           "12 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=00000088 new=00000000",
           "13 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=00000088 new=00000000",
           "14 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=00000088 new=00000000",
-          "15 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=00000088 new=00000000"
+          "15 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=00000088 new=00000000",
+          "16 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=0000008A r1=08B842F2 old=00000088 new=00000000",
+          "17 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=0000008C r1=08B842F4 old=00000088 new=00000000",
+          "18 addr=08B84E7E pc=08B3C1CE lr=08B0FF93 r0=00000088 r1=08B842F6 old=00000088 new=00000000",
+          "19 addr=08B84E7F pc=08B3C1DA lr=08B0FF93 r0=08B842F7 r1=00000088 old=0000004E new=00000000",
+          "20 addr=08B84E80 pc=08B3C21E lr=08B0FF93 r0=08B84E80 r1=00000004 old=00000088 new=00000000",
+          "21 addr=08B84E80 pc=08B3C1CE lr=08B0FF93 r0=00000200 r1=08B842E8 old=00000088 new=00000000",
+          "22 addr=08B84E80 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=00000088 new=00000000",
+          "23 addr=08B84E80 pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=00000088 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_08_00B84E7C.watch.log",
@@ -600,8 +719,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x09",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84E64",
       "target_text": "큰파도",
       "pointer_line": "0 addr=08DF2B78 pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B78 r1=00000009 old=08B84E64 new=00000000",
@@ -616,10 +740,10 @@
           "0x08B3C16C": 6,
           "0x08B3C1DA": 4,
           "0x08B3C21E": 3,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84E68": 10,
@@ -647,7 +771,15 @@
           "12 addr=08B84E66 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=00000092 new=00000000",
           "13 addr=08B84E66 pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=00000092 new=00000000",
           "14 addr=08B84E67 pc=08B3C1DA lr=08B0FF93 r0=08B842F1 r1=00000092 old=00000059 new=00000000",
-          "15 addr=08B84E68 pc=08B3C21E lr=08B0FF93 r0=08B84E68 r1=00000004 old=0000008A new=00000000"
+          "15 addr=08B84E68 pc=08B3C21E lr=08B0FF93 r0=08B84E68 r1=00000004 old=0000008A new=00000000",
+          "16 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=00000200 r1=08B842E8 old=0000008A new=00000000",
+          "17 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EA old=0000008A new=00000000",
+          "18 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=0000008E r1=08B842EC old=0000008A new=00000000",
+          "19 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=00000091 r1=08B842EE old=0000008A new=00000000",
+          "20 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=00000092 r1=08B842F0 old=0000008A new=00000000",
+          "21 addr=08B84E68 pc=08B3C1CE lr=08B0FF93 r0=0000008A r1=08B842F2 old=0000008A new=00000000",
+          "22 addr=08B84E69 pc=08B3C1DA lr=08B0FF93 r0=08B842F3 r1=0000008A old=0000005A new=00000000",
+          "23 addr=08B84E6A pc=08B3C21E lr=08B0FF93 r0=08B84E6A r1=00000006 old=00000000 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_09_00B84E64.watch.log",
@@ -663,8 +795,13 @@
       "ram_write": {
         "address": "0x0201ADBD",
         "value": "0x0A",
-        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine"
+        "field": "AW1 rec1/player-index-1 CO id used by 0x08B3C254 power-title routine",
+        "response": "OK w8 1"
       },
+      "watch_responses": [
+        "OK watchaddr 08B84E50 len=208 set=208",
+        "OK watchaddr 08DF2B54 len=48 set=48"
+      ],
       "target_start": "0x00B84E50",
       "target_text": "메테오",
       "pointer_line": "0 addr=08DF2B7C pc=08B3C2D0 lr=08B3C2C7 r0=08DF2B7C r1=0000000A old=08B84E50 new=00000000",
@@ -673,16 +810,16 @@
         "b84_reads": 32,
         "pointer_reads": 2,
         "pcs": {
-          "0x08B3C1CE": 6,
           "0x08B3C15A": 6,
           "0x08B3C162": 6,
           "0x08B3C16C": 6,
+          "0x08B3C1CE": 6,
           "0x08B3C1DA": 3,
           "0x08B3C21E": 3,
-          "0x08B3C2D0": 1,
+          "0x08B3C14C": 1,
           "0x08B3C1A8": 1,
-          "0x08B3C526": 1,
-          "0x08B3C14C": 1
+          "0x08B3C2D0": 1,
+          "0x08B3C526": 1
         },
         "addresses": {
           "0x08B84E54": 7,
@@ -710,7 +847,15 @@
           "12 addr=08B84E55 pc=08B3C1DA lr=08B0FF93 r0=08B842ED r1=0000008E old=000000F8 new=00000000",
           "13 addr=08B84E56 pc=08B3C21E lr=08B0FF93 r0=08B84E56 r1=00000006 old=00000000 new=00000000",
           "14 addr=08DF2B7C pc=08B3C526 lr=08B14061 r0=08DF2B7C r1=0201AD38 old=08B84E50 new=00000000",
-          "15 addr=08B84E50 pc=08B3C14C lr=08B140CF r0=03000F20 r1=08B3C145 old=0000008B new=00000000"
+          "15 addr=08B84E50 pc=08B3C14C lr=08B140CF r0=03000F20 r1=08B3C145 old=0000008B new=00000000",
+          "16 addr=08B84E50 pc=08B3C15A lr=08B140CF r0=0000008B r1=03000F46 old=0000008B new=00000000",
+          "17 addr=08B84E51 pc=08B3C162 lr=08B140CF r0=0000008B r1=00000001 old=000000ED new=00000000",
+          "18 addr=08B84E51 pc=08B3C16C lr=08B140CF r0=08B84E51 r1=01000000 old=000000ED new=00000000",
+          "19 addr=08B84E51 pc=08B3C15A lr=08B140CF r0=000000ED r1=03000F47 old=000000ED new=00000000",
+          "20 addr=08B84E52 pc=08B3C162 lr=08B140CF r0=000000ED r1=00000002 old=00000091 new=00000000",
+          "21 addr=08B84E52 pc=08B3C16C lr=08B140CF r0=08B84E52 r1=02000000 old=00000091 new=00000000",
+          "22 addr=08B84E52 pc=08B3C15A lr=08B140CF r0=00000091 r1=03000F48 old=00000091 new=00000000",
+          "23 addr=08B84E53 pc=08B3C162 lr=08B140CF r0=00000091 r1=00000003 old=000000E1 new=00000000"
         ]
       },
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_0A_00B84E50.watch.log",
@@ -724,10 +869,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_00_00B84F14.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_00_00B84F14.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84F14",
@@ -741,7 +886,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84F14 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000088 new=00000000"
+      "representative_watch_line": "1 addr=08B84F14 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000088 new=00000000"
     },
     {
       "case": "aw1_power_title_coid_01_00B84F04",
@@ -749,10 +894,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_01_00B84F04.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_01_00B84F04.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84F04",
@@ -766,7 +911,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84F04 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000092 new=00000000"
+      "representative_watch_line": "1 addr=08B84F04 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000092 new=00000000"
     },
     {
       "case": "aw1_power_title_coid_02_00B84EF0",
@@ -774,10 +919,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_02_00B84EF0.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_02_00B84EF0.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84EF0",
@@ -791,7 +936,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84EF0 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000088 new=00000000"
+      "representative_watch_line": "1 addr=08B84EF0 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000088 new=00000000"
     },
     {
       "case": "aw1_power_title_coid_03_00B84EE0",
@@ -799,10 +944,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_03_00B84EE0.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_03_00B84EE0.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84EE0",
@@ -816,7 +961,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84EE0 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008D new=00000000"
+      "representative_watch_line": "1 addr=08B84EE0 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008D new=00000000"
     },
     {
       "case": "aw1_power_title_coid_04_00B84ECC",
@@ -824,10 +969,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_04_00B84ECC.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_04_00B84ECC.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84ECC",
@@ -841,7 +986,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84ECC pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008E new=00000000"
+      "representative_watch_line": "1 addr=08B84ECC pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008E new=00000000"
     },
     {
       "case": "aw1_power_title_coid_05_00B84EB8",
@@ -849,10 +994,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_05_00B84EB8.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_05_00B84EB8.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84EB8",
@@ -866,7 +1011,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84EB8 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008F new=00000000"
+      "representative_watch_line": "1 addr=08B84EB8 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008F new=00000000"
     },
     {
       "case": "aw1_power_title_coid_06_00B84EA4",
@@ -874,10 +1019,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_06_00B84EA4.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_06_00B84EA4.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84EA4",
@@ -891,7 +1036,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84EA4 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008F new=00000000"
+      "representative_watch_line": "1 addr=08B84EA4 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008F new=00000000"
     },
     {
       "case": "aw1_power_title_coid_07_00B84E94",
@@ -899,10 +1044,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_07_00B84E94.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_07_00B84E94.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84E94",
@@ -916,7 +1061,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84E94 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000091 new=00000000"
+      "representative_watch_line": "1 addr=08B84E94 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000091 new=00000000"
     },
     {
       "case": "aw1_power_title_coid_08_00B84E7C",
@@ -924,10 +1069,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_08_00B84E7C.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_08_00B84E7C.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84E7C",
@@ -941,7 +1086,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84E7C pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008C new=00000000"
+      "representative_watch_line": "1 addr=08B84E7C pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008C new=00000000"
     },
     {
       "case": "aw1_power_title_coid_09_00B84E64",
@@ -949,10 +1094,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_09_00B84E64.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_09_00B84E64.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84E64",
@@ -966,7 +1111,7 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84E64 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=00000091 new=00000000"
+      "representative_watch_line": "1 addr=08B84E64 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=00000091 new=00000000"
     },
     {
       "case": "aw1_power_title_coid_0A_00B84E50",
@@ -974,10 +1119,10 @@
       "frame": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_0A_00B84E50.png",
       "watch_log": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/aw1_power_title_coid_0A_00B84E50.watch.log",
       "hit": {
-        "pc": "0x08B3C1CE",
+        "pc": "0x08B3C1A8",
         "lr": "0x08B10021",
-        "r0": "0x00000000",
-        "r1": "0x08B842E8",
+        "r0": "0x08B3C1A1",
+        "r1": "0x00000000",
         "source": {
           "group_id": "b84_compact_power_display_overrides",
           "target_start": "0x00B84E50",
@@ -991,50 +1136,42 @@
           "method": "current_rom_live_ram_coid_variant"
         }
       },
-      "representative_watch_line": "2 addr=08B84E50 pc=08B3C1CE lr=08B10021 r0=00000000 r1=08B842E8 old=0000008B new=00000000"
+      "representative_watch_line": "1 addr=08B84E50 pc=08B3C1A8 lr=08B10021 r0=08B3C1A1 r1=00000000 old=0000008B new=00000000"
     }
   ],
   "screenshots": {
     "contact": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact.png",
-    "contact_with_duplicate_0b": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/contact_with_duplicate_0b.png",
     "directory": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28"
   },
   "sha256": {
-    "aw1_power_title_coid_00_00B84F14.png": "0f2564df0f7dce27e62362051512aedb3693652749be7d0026e3332862559042",
+    "contact": "2c99fc19580bf89b18c1aa1f38c3453773162eddd4a4acba1d73e595aff71a4b",
+    "aw1_power_title_coid_00_00B84F14.png": "0740c608c505b50153ba34e46015fd9bb54d012b718c870faf32d1f28e5ade8d",
+    "aw1_power_title_coid_01_00B84F04.png": "908c5c0dd905a8f6abc999f1ceab3c27a0faf68a6564d6aeadd2124af86c14f7",
+    "aw1_power_title_coid_02_00B84EF0.png": "ce5c224fff7e447c9208271f154e055251f1bbe97ab8c4f228cb1d1a53a95543",
+    "aw1_power_title_coid_03_00B84EE0.png": "31d29f3cb214e5c172cf751b3bb9fb86a077065ced636d8125133869aefde2ac",
+    "aw1_power_title_coid_04_00B84ECC.png": "36eca0443224aaa5733618e9bab738a40c4ab0cc834766f80e3a259be80de65c",
+    "aw1_power_title_coid_05_00B84EB8.png": "1594842f6ff5cd19bbc654750eece15f3c522705b1579e9e033bb062f59516a3",
+    "aw1_power_title_coid_06_00B84EA4.png": "2d1fafdd48ef9c9b5e06925c75b504f4572747673fd8af6551f439075169e2c1",
+    "aw1_power_title_coid_07_00B84E94.png": "d6d629b6375e0b28bd8ece490a0b42658b4a7340f31eef664d22eb5e284072c6",
+    "aw1_power_title_coid_08_00B84E7C.png": "080be34de1540ccf7eef738832eade826522107ae468e083da6d3f425b422861",
+    "aw1_power_title_coid_09_00B84E64.png": "2f4b366629e4959e2e9ab3fc1fa5d6da011ddac0b18684495bb4c98367c4a3ee",
+    "aw1_power_title_coid_0A_00B84E50.png": "e0d4d2dfb29b396b65c7f2ca22a6abf3a41addd895502dbd83c49bfea2dc12fe",
     "aw1_power_title_coid_00_00B84F14.watch.log": "5ab6cab72fe9ba564736fe9debe4180b88ad9dad4e15d1bae48c924133ecd05a",
-    "aw1_power_title_coid_01_00B84F04.png": "b719e10d8349afc1d387300f038470f259f22bc000b61ea95c4a9430a7aaf2c6",
     "aw1_power_title_coid_01_00B84F04.watch.log": "a3aaaab9d1431e267ee69da09b571f252c2b27145f7b66b42ac4ae10926cd4ec",
-    "aw1_power_title_coid_02_00B84EF0.png": "792fc2d374313336619233bac4502e70d8f71140d17eecfce76613d754e0c654",
     "aw1_power_title_coid_02_00B84EF0.watch.log": "167961977dcf6b1223683589ae9d2f0fce3e6d270da5a3dd780cfb7309e73d29",
-    "aw1_power_title_coid_03_00B84EE0.png": "a5105232ca809b889967cf7e20ff0acb828b14f55ad9869c2c3c29bfcd0e35d3",
     "aw1_power_title_coid_03_00B84EE0.watch.log": "431fd5cd9da546d88746b9f56d479a96eeac799a165cab4af9a0d851a188f413",
-    "aw1_power_title_coid_04_00B84ECC.png": "9295233b33afca088061ed4ec71095c284860487c44ee2cc72b8de5976e39e89",
     "aw1_power_title_coid_04_00B84ECC.watch.log": "cb043a9598c075082cc4fc509c14361768a8339535f13851fa911d27ea036a91",
-    "aw1_power_title_coid_05_00B84EB8.png": "ed199af9fca5c5b9dd84163fcce76401d13bbb8009ad419bbd79ea4e98d253e4",
     "aw1_power_title_coid_05_00B84EB8.watch.log": "183b78415bff79e8bb3ccb35d53f136469c6a9b2df6cafe14bffed265de410b8",
-    "aw1_power_title_coid_06_00B84EA4.png": "6ca3a62c7d42d244ebee3fdf79c112ef39621816272c19276fd6f773be62ad0d",
     "aw1_power_title_coid_06_00B84EA4.watch.log": "9c314c5a02601566b19466ddffe87a8d9fe6e6078fc802e9af19cc231e2906fd",
-    "aw1_power_title_coid_07_00B84E94.png": "172e8d237bdf52dfa2eb0588f3c8911b378caf8a470ea38fbbd9e2ea9afd8e96",
     "aw1_power_title_coid_07_00B84E94.watch.log": "1b094ff5f5dffd028994dc3fa92af06989915e0e9d6f7ff163b7403044ea8a48",
-    "aw1_power_title_coid_08_00B84E7C.png": "56ccb90009549abaeb0ffada6d2a5d079e786e0a4a2d6e16640e0a12fd6294bd",
     "aw1_power_title_coid_08_00B84E7C.watch.log": "cbff10ab191b0c5eed19a3180cfb9c117df9ac1223fb099b3079ba17ecbfb887",
-    "aw1_power_title_coid_09_00B84E64.png": "15ddd55304cfb1249f073756efce3d727a849d68d49cb77e94f5c504d5144030",
     "aw1_power_title_coid_09_00B84E64.watch.log": "4635cb15d9f43e5730ec64cce38579b14dbd356f2638b1e516bb018402e51ace",
-    "aw1_power_title_coid_0A_00B84E50.png": "ff71a31893db43ea14070da8bb29708044e1b695b4cffce8079b9a52b0525c4b",
-    "aw1_power_title_coid_0A_00B84E50.watch.log": "ef82b3b5739a6ccc68e63b4fbcf8319a96682dddcddef3bb0adb04045f07a969",
-    "contact.png": "8a843385674c76b41e480de53e66c4fd7061b1c835659835518c573d8a11756b",
-    "contact_with_duplicate_0b.png": "4597174965b2459f2b17bbddd4b47066b6e5703e703b82288d64eec62cb5ed5d"
+    "aw1_power_title_coid_0A_00B84E50.watch.log": "ef82b3b5739a6ccc68e63b4fbcf8319a96682dddcddef3bb0adb04045f07a969"
   },
   "shared_renderer_copy_site": {
     "address": "0x08B3C1DE",
     "current_bytes": "500800023818064aa9188022",
     "expected_original_prefix": "500800023818",
     "status": "restored_original_no_branch_to_free_space"
-  },
-  "invalid_id_boundary_probe": {
-    "summary": "docs/screenshots/b84_aw1_power_title_all_coid_2026-06-28/bounds_probe_summary.json",
-    "summary_sha256": "48aa95336c80effc26acd71805cb7e3c8d95d19baeb22317c0de03d6652ac4d3",
-    "result": "0x0B aliases to 메테오; 0x0C/0x10/0xFF produced no B84 pointer/body hit in the short activation probe and are not counted as positive B84 target evidence.",
-    "reason_not_counted": "Only valid CO-id selector values 0x00..0x0A are counted for B84 11 target proof; invalid-id behavior is a boundary note, not target evidence."
   }
 }

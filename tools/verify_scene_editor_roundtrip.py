@@ -21,14 +21,15 @@ from __future__ import annotations
 import argparse
 import collections
 import hashlib
+import http.client
 import json
+import os
 import shutil
 import subprocess
 import sys
 import time
 import urllib.error
 import urllib.parse
-import urllib.request
 from datetime import date
 from pathlib import Path
 
@@ -48,6 +49,10 @@ import build_korean_full as B  # noqa: E402
 import text_metrics as TM  # noqa: E402
 
 
+_HTTP_CLIENTS: dict[str, tuple[urllib.parse.ParseResult, http.client.HTTPConnection]] = {}
+_AUTH_COOKIE = ""
+
+
 def sha256(path: Path) -> str:
     h = hashlib.sha256()
     with path.open("rb") as f:
@@ -56,20 +61,81 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _http_connection(base_url: str) -> tuple[urllib.parse.ParseResult, http.client.HTTPConnection]:
+    key = base_url.rstrip("/")
+    rec = _HTTP_CLIENTS.get(key)
+    if rec is not None:
+        return rec
+    parsed = urllib.parse.urlparse(key)
+    if parsed.scheme != "http" or not parsed.hostname:
+        raise ValueError("only http://host[:port] scene editor URLs are supported")
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port or 80, timeout=30)
+    rec = (parsed, conn)
+    _HTTP_CLIENTS[key] = rec
+    return rec
+
+
+def _close_http_connection(base_url: str) -> None:
+    rec = _HTTP_CLIENTS.pop(base_url.rstrip("/"), None)
+    if rec is not None:
+        rec[1].close()
+
+
 def http_json(base_url: str, path: str, payload: dict | None = None) -> dict:
-    url = base_url.rstrip("/") + path
-    if payload is None:
-        with urllib.request.urlopen(url, timeout=30) as res:
-            return json.loads(res.read().decode("utf-8"))
+    body = None
+    headers = {"Accept": "application/json", "Connection": "keep-alive"}
+    if _AUTH_COOKIE:
+        headers["Cookie"] = _AUTH_COOKIE
+    method = "GET"
+    if payload is not None:
+        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        headers["Content-Type"] = "application/json; charset=utf-8"
+        method = "POST"
+    last_exc = None
+    for attempt in range(2):
+        _parsed, conn = _http_connection(base_url)
+        try:
+            conn.request(method, path, body=body, headers=headers)
+            res = conn.getresponse()
+            data = res.read()
+            if res.status < 200 or res.status >= 300:
+                raise RuntimeError(f"HTTP {res.status} {res.reason}: {data[:300]!r}")
+            return json.loads(data.decode("utf-8"))
+        except Exception as exc:
+            last_exc = exc
+            _close_http_connection(base_url)
+            if attempt == 0:
+                time.sleep(0.05)
+                continue
+            raise
+    raise AssertionError(f"unreachable http_json failure: {last_exc!r}")
+
+
+def login(base_url: str, password: str) -> None:
+    global _AUTH_COOKIE
+    payload = {"password": password}
     body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    req = urllib.request.Request(
-        url,
-        data=body,
-        headers={"Content-Type": "application/json; charset=utf-8"},
-        method="POST",
+    _parsed, conn = _http_connection(base_url)
+    conn.request(
+        "POST",
+        "/api/login",
+        body=body,
+        headers={
+            "Accept": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "Connection": "keep-alive",
+        },
     )
-    with urllib.request.urlopen(req, timeout=30) as res:
-        return json.loads(res.read().decode("utf-8"))
+    res = conn.getresponse()
+    data = res.read()
+    if res.status < 200 or res.status >= 300:
+        raise RuntimeError(f"login failed HTTP {res.status} {res.reason}: {data[:300]!r}")
+    cookie = res.getheader("Set-Cookie") or ""
+    if cookie:
+        _AUTH_COOKIE = cookie.split(";", 1)[0]
+    reply = json.loads(data.decode("utf-8"))
+    if not reply.get("ok"):
+        raise RuntimeError(f"login response was not ok: {reply}")
 
 
 def scene_items(base_url: str, scene_id: str) -> dict:
@@ -236,12 +302,17 @@ def build_direct_script_sample(sample: dict) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--server", default="http://127.0.0.1:8782")
-    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT,
+                    help="report path; relative paths are resolved from the project root")
     ap.add_argument("--no-actual-sample", action="store_true")
     ap.add_argument("--no-build-sample", action="store_true")
+    ap.add_argument("--password", default=os.environ.get("SCENE_EDITOR_PASSWORD"),
+                    help="scene editor password; defaults to SCENE_EDITOR_PASSWORD")
     args = ap.parse_args()
 
     started = time.time()
+    if args.password:
+        login(args.server, args.password)
     scenes_payload = http_json(args.server, "/api/scenes")
     scenes = scenes_payload.get("scenes") or []
     records: list[dict] = []
@@ -442,11 +513,16 @@ def main() -> int:
         "bteam_confirm_failures": bteam_confirm_failures[:50],
         "bteam_confirm_skips": bteam_skips[:50],
     }
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    out_path = args.out if args.out.is_absolute() else ROOT / args.out
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        display_out = out_path.relative_to(ROOT)
+    except ValueError:
+        display_out = out_path
 
     print(json.dumps(summary, ensure_ascii=False))
-    print(f"wrote {args.out.relative_to(ROOT)}")
+    print(f"wrote {display_out}")
     return 1 if failures or bteam_confirm_failures else 0
 
 

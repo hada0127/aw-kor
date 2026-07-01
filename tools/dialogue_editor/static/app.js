@@ -44,12 +44,12 @@ function groupCard(g) {
       const m = memById[s.address]; if (!m) continue;
       jaWrap.append(el("span", { className: "jfrag", textContent: m.ja || "" }));
       const ta = el("input", { className: "kfrag" + (m.bteam ? " bteam" : ""), value: m.ko || "" });
-      if (m.bteam) ta.title = "⚠ 쪼롱이님(B팀) 권위 번역 — 저장 시 확인 필요";
+      if (m.bteam) ta.title = "⚠ 짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요";
       const cnt = el("span", { className: "bcnt" });
       const upd = () => { const b = byteLen(ta.value); cnt.textContent = `${b}/${m.slot ?? "?"}`; cnt.classList.toggle("over", m.slot && b > m.slot); };
       ta.oninput = upd; upd();
       const cell = el("span", { className: "kcell" }, ta, cnt);
-      if (m.bteam) cell.append(el("span", { className: "bteambadge", textContent: "⚠B팀", title: "쪼롱이님(B팀) 권위 번역" }));
+      if (m.bteam) cell.append(el("span", { className: "bteambadge", textContent: "⚠B팀", title: "짜옹이님(B팀) 권위 번역" }));
       koWrap.append(cell);
       inputs.push({ m, ta });
     } else if (s.kind === "var") {
@@ -84,13 +84,13 @@ async function jget(u) { return (await fetch(u)).json(); }
 async function jpost(u, b) {
   return (await fetch(u, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(b) })).json();
 }
-// C5: 쪼롱이님(B팀) 권위 번역 — 서버가 confirm 요구 시 명시 승인 후 재전송.
+// C5: 짜옹이님(B팀) 권위 번역 — 서버가 confirm 요구 시 명시 승인 후 재전송.
 async function saveLineConfirm(payload) {
   let r = await jpost("/api/line", payload);
   if (!r.ok && r.bteam_confirm_required) {
     const base = r.bteam_baseline || "(baseline 없음)";
     const ok = confirm(
-      "⚠ 쪼롱이님(B팀) 권위 번역 주소입니다.\n\n기준(baseline):\n  " + base +
+      "⚠ 짜옹이님(B팀) 권위 번역 주소입니다.\n\n기준(baseline):\n  " + base +
       "\n\n변경(제안):\n  " + payload.ko +
       "\n\n정말 변경하시겠습니까?\n(우발 변형은 qa_bteam_drift 게이트가 빌드/배포에서 차단합니다.)"
     );

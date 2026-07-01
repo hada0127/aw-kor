@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
- "git_commit": "9773948",
+ "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+ "git_commit": "db4b9ae",
  "source": "data/compact_display_xref_analysis.json",
  "summary": {
   "literal_entry_count": 695,
@@ -406,7 +406,7 @@
       "ref_offset": "0x00B3F8C4",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -430,7 +430,7 @@
       "ref_offset": "0x00B3F988",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -454,7 +454,7 @@
       "ref_offset": "0x00B3F9C4",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -478,7 +478,7 @@
       "ref_offset": "0x00B3FA04",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -502,7 +502,7 @@
       "ref_offset": "0x00B3FA60",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -550,7 +550,7 @@
       "ref_offset": "0x00B4D5C8",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -574,7 +574,7 @@
       "ref_offset": "0x00B4E194",
       "ref_kind": "second_level_ref",
       "target_address": "0x00B84CB8",
-      "target_text": "쇼군 캐서린",
+      "target_text": "사령관 캐서린",
       "word": "0x08DF06B0"
      },
      {
@@ -1680,7 +1680,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B3F8C4",
    "ref_address": "0x08B3F8C4",
    "ref_kind": "second_level_ref",
@@ -1704,7 +1704,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B3F988",
    "ref_address": "0x08B3F988",
    "ref_kind": "second_level_ref",
@@ -1728,7 +1728,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B3F9C4",
    "ref_address": "0x08B3F9C4",
    "ref_kind": "second_level_ref",
@@ -1752,7 +1752,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B3FA04",
    "ref_address": "0x08B3FA04",
    "ref_kind": "second_level_ref",
@@ -1776,7 +1776,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B3FA60",
    "ref_address": "0x08B3FA60",
    "ref_kind": "second_level_ref",
@@ -1824,7 +1824,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4D5C8",
    "ref_address": "0x08B4D5C8",
    "ref_kind": "second_level_ref",
@@ -1848,7 +1848,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4D904",
    "ref_address": "0x08B4D904",
    "ref_kind": "second_level_ref",
@@ -1860,7 +1860,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4E194",
    "ref_address": "0x08B4E194",
    "ref_kind": "second_level_ref",
@@ -1884,7 +1884,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4E22C",
    "ref_address": "0x08B4E22C",
    "ref_kind": "second_level_ref",
@@ -1896,7 +1896,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4E2C4",
    "ref_address": "0x08B4E2C4",
    "ref_kind": "second_level_ref",
@@ -1908,7 +1908,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00B4E388",
    "ref_address": "0x08B4E388",
    "ref_kind": "second_level_ref",
@@ -6192,7 +6192,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84CB8",
-   "target_text": "쇼군 캐서린",
+   "target_text": "사령관 캐서린",
    "ref_offset": "0x00DF06B0",
    "ref_address": "0x08DF06B0",
    "ref_kind": "target_pointer_ref",
@@ -6252,7 +6252,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B84C4C",
-   "target_text": "쇼군 모프",
+   "target_text": "사령관 모프",
    "ref_offset": "0x00DF0728",
    "ref_address": "0x08DF0728",
    "ref_kind": "target_pointer_ref",

@@ -1,59 +1,21 @@
 {
   "summary": {
-    "generated_on": "2026-06-28",
-    "server": "http://127.0.0.1:8782",
-    "rom_sha256": "f95a857354a84119452b69bdabb371c6f390e0ecd4faf13bc56d5208ec1bb292",
+    "generated_on": "2026-07-01",
+    "server": "http://127.0.0.1:8787",
+    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
     "scene_count": 81,
     "dialogue_group_count": 10859,
     "sprite_count": 1990,
-    "editable_member_count": 18641,
-    "bteam_editable_member_count": 3128,
+    "editable_member_count": 24247,
+    "bteam_editable_member_count": 3659,
     "current_dry_run_failures": 0,
     "bteam_confirm_failures": 0,
     "bteam_confirm_skips": 0,
-    "actual_sample_count": 2,
-    "actual_samples": [
-      {
-        "address": "0x00DFA5E6",
-        "scene_id": "11_part1_world_menu",
-        "bteam": false,
-        "save_alt_ok": true,
-        "restore_ok": true,
-        "alt": "가",
-        "original": "자"
-      },
-      {
-        "address": "0x00DFA616",
-        "scene_id": "11_part1_world_menu",
-        "bteam": true,
-        "save_alt_ok": true,
-        "restore_ok": true,
-        "alt": "가수를 겨뤄보세요!",
-        "original": "점수를 겨뤄보세요!"
-      }
-    ],
-    "direct_script_build_sample": {
-      "address": "0x00D8FD26",
-      "scene_id": "19a1_part1_tutorial_opening",
-      "kind": "script:attack confirm button row",
-      "build_slot": 44,
-      "direct_span_expanded": true,
-      "alt": "가가가가가가가가가가가가가가가가가가가가가가가가",
-      "original": "그러니까 여기서 눌러 줘. ",
-      "save_alt_ok": true,
-      "restore_ok": true,
-      "build_verify": {
-        "ok": true,
-        "rom": "temp/scene_editor_roundtrip_direct_script.gba",
-        "address": "0x00D8FD26",
-        "slot": 52,
-        "expected_hex": "88408840884088408840884088408840884088408840884088408840884088408840884088408840884088408840884020202020",
-        "actual_hex": "88408840884088408840884088408840884088408840884088408840884088408840884088408840884088408840884020202020",
-        "build_output_tail": "failure_overlay: 2\n  part2_result_congratulations: 1\n  part2_air_mission_title: 1\n  part2_air_supremacy_title: 1\n  part2_level_label: 4\n  part2_check_label: 10\n  part2_companion_hud: 1\n  part2_day_hud: 8\n  part2_funds_hud: 32\n  residual_ascii_labels: 66\n  common_battle_ascii_labels: 294\n  battle_defense_label_tiles: 10\n  backup_utility_tables: 0\n  part2_domino_co_name: 19\n  part1_rule_circle_labels: {'labels': 7, 'values': 9, 'compressed': 3904, 'slot': 4792}\n  part2_campaign_header: 48\n  part2_redstar_region: 48\n  part2_prologue_logo: 24\n  part2_prologue_inline_renderer_spans: 2\n  world_map_label_tiles: 150\n  title_hangul_assets: 48\n  name_honorifics: 1\n  pair_title_glyphs: 250\n  b84_power_title_lz77_glyphs: 26\n  b84_power_title_glyphs: {'glyphs': 26, 'method': 'lz77_source_only', 'copy_site_hook': 'disabled_shared_renderer'}\n  sprite_overrides: 0\n  sprite_overrides_skipped: 0\n  sprite_overrides_ignored: 0\n  unmapped chars (129): {'劔': 102, '吠': 13, '勦': 10, '蕗': 10, '凉': 9, '劵': 6, 'ッ': 6, 'ク': 5, 'イ': 5, '瘁': 5}\n  punct_strip_fallback(level>=6): 368\n→ temp/scene_editor_roundtrip_direct_script.gba (16MB, chk recomputed), overflow 리포트 temp/scene_editor_roundtrip_encode_report.csv\n"
-      }
-    },
+    "actual_sample_count": 0,
+    "actual_samples": [],
+    "direct_script_build_sample": null,
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 238.72
+    "elapsed_sec": 46.38
   },
   "failures": [],
   "bteam_confirm_failures": [],

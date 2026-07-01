@@ -359,6 +359,12 @@ PART1_OPTION_128X32_OFFSETS = {
     0x00C051DC, 0x00C05658, 0x00C05994, 0x00C05D78,
     0x00C06218, 0x00C0668C, 0x00C06B78,
 }
+PART1_FALLBACK_PALETTE_HINTS = {
+    # Representative current-ROM captures for Part1 option/menu-label blocks
+    # whose clean build layout is better than the raw captured OAM bbox.
+    0x00C0668C: ("temp/cap_battle/scr_005.pal", 256, 8),  # 멀티카드 통신
+    0x00C1AC60: ("temp/cap_part1/scr_009.pal", 256, 4),   # 접속
+}
 
 PART1_MISSION_128X32_OFFSETS = {0x00C18738}
 PART1_CATHERINE_96X8_OFFSETS = {0x00C102A8}
@@ -490,6 +496,32 @@ def _layout_cells_from_specs(specs, palbase=256):
     ]
 
 
+def part1_palette_hint(sp, off, default=None):
+    """Reuse captured Part1 OBJ palette banks while keeping clean build geometry."""
+    captured = load_layouts().get("layouts", {}).get(sp.get("id"), {})
+    if captured.get("pal_file"):
+        for cell in captured.get("cells") or []:
+            if int(cell.get("tw", 1)) * int(cell.get("th", 1)) <= 1:
+                continue
+            palbase = int(cell.get("palbase", 256))
+            bank = int(cell.get("bank", 0))
+            return captured["pal_file"], palbase, bank
+    if off in PART1_FALLBACK_PALETTE_HINTS:
+        return PART1_FALLBACK_PALETTE_HINTS[off]
+    return default
+
+
+def apply_part1_palette_hint(sp, off, cells, default=None):
+    hint = part1_palette_hint(sp, off, default)
+    if not hint:
+        return cells, None
+    pal_file, palbase, bank = hint
+    for cell in cells:
+        cell["palbase"] = palbase
+        cell["bank"] = bank
+    return cells, pal_file
+
+
 def part1_tiled_layer_layout(sp, off):
     """1편 타이틀 라벨 LZ77은 화면 레이어와 저장 타일 순서가 다르다.
     편집면은 빌드 인코더(part1_logo_layer_to_tiles/option_layer_to_tiles)의 역배치로 제공한다."""
@@ -508,22 +540,32 @@ def part1_tiled_layer_layout(sp, off):
             "fallback": "part1_title_text_prompt",
         }
     if off in PART1_LOGO_80X32_OFFSETS:
+        cells = [
+            {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+            {"x": 64, "y": 0, "tw": 2, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
+        ]
+        cells, pal_file = apply_part1_palette_hint(
+            sp, off, cells, ("temp/cap_battle/scr_005.pal", 256, 4)
+        )
         return {
-            "cells": [
-                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
-                {"x": 64, "y": 0, "tw": 2, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
-            ],
+            "cells": cells,
             "x0": 0, "y0": 0, "w": 80, "h": 32, "obj1d": 1,
-            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_80x32",
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "pal_file": pal_file, "fallback": "part1_80x32",
         }
     if off in PART1_OPTION_128X32_OFFSETS:
+        cells = [
+            {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
+            {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
+        ]
+        cells, pal_file = apply_part1_palette_hint(
+            sp, off, cells, ("temp/cap_battle/scr_005.pal", 256, 8)
+        )
         return {
-            "cells": [
-                {"x": 0, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 0, "bank": 0, "palbase": 0},
-                {"x": 64, "y": 0, "tw": 8, "th": 4, "fh": 0, "fv": 0, "tile_off": 32, "bank": 0, "palbase": 0},
-            ],
+            "cells": cells,
             "x0": 0, "y0": 0, "w": 128, "h": 32, "obj1d": 1,
-            "tile_cols": sp.get("tile_cols"), "build": True, "fallback": "part1_128x32",
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "pal_file": pal_file, "fallback": "part1_128x32",
         }
     if off in PART1_MISSION_128X32_OFFSETS:
         return {

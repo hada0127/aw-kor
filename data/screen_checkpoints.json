@@ -3,6 +3,7 @@
   "checkpoints": [
     {
       "name": "01_coldboot_nintendo",
+      "scene_id": "00_coldboot_nintendo",
       "mode": "fresh",
       "nav": [
         [
@@ -16,6 +17,7 @@
     },
     {
       "name": "02_common_title",
+      "scene_id": "01_common_title",
       "mode": "fresh",
       "nav": [
         [
@@ -29,6 +31,7 @@
     },
     {
       "name": "03_select_part1",
+      "scene_id": "02_select_part1",
       "mode": "fresh",
       "nav": [
         [
@@ -52,6 +55,7 @@
     },
     {
       "name": "04_part1_title",
+      "scene_id": "10_part1_title",
       "mode": "fresh",
       "nav": [
         [
@@ -85,6 +89,7 @@
     },
     {
       "name": "05_select_part2",
+      "scene_id": "03_select_part2",
       "mode": "fresh",
       "nav": [
         [
@@ -113,6 +118,7 @@
     },
     {
       "name": "06_part2_title",
+      "scene_id": "22_part2_title",
       "mode": "fresh",
       "nav": [
         [
@@ -151,6 +157,7 @@
     },
     {
       "name": "07_part2_main_menu",
+      "scene_id": "23_part2_main_menu",
       "mode": "fresh",
       "nav": [
         [
@@ -199,6 +206,7 @@
     },
     {
       "name": "08_part2_prologue_map_text",
+      "scene_id": "21a_part2_prologue_story",
       "mode": "fresh",
       "nav": [
         [
@@ -315,6 +323,7 @@
     },
     {
       "name": "10_part2_region_map_redstar",
+      "scene_id": "24a_part2_operation_select",
       "mode": "fresh",
       "nav": [
         [
@@ -399,6 +408,7 @@
     },
     {
       "name": "30_battle_attack",
+      "scene_id": "26_part2_battle_labels",
       "mode": "savestate",
       "state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
       "refresh": [

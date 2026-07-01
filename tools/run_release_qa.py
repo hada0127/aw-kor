@@ -31,7 +31,11 @@ BASE_GATES: list[tuple[str, list[str]]] = [
     ("repoint-integrity", cmd("tools/qa_repoint_integrity.py")),
     ("glyph-dictionary", cmd("tools/qa_glyph_dictionary_tables.py")),
     ("part1-compact-help", cmd("tools/qa_part1_compact_help.py")),
+    ("part1-operation-dialogue", cmd("tools/qa_part1_operation_dialogue.py")),
+    ("part1-dialogue-punctuation", cmd("tools/qa_part1_dialogue_punctuation.py")),
+    ("transient-overlays", cmd("tools/qa_transient_overlays.py")),
     ("scene-catalog", cmd("tools/audit_scene_catalog.py", "--strict")),
+    ("scene-screenshot-sanity", cmd("tools/qa_scene_screenshot_sanity.py")),
     ("scene-semantics", cmd("tools/audit_scene_semantics.py", "--strict")),
     ("scene-residuals", cmd("tools/audit_scene_residual_scans.py", "--strict")),
     ("visual-regions", cmd("tools/qa_visual_regions.py")),
@@ -46,13 +50,28 @@ PY_COMPILE_FILES = [
     "tools/audit_csv_override_shadow.py",
     "tools/audit_repoint_punctuation.py",
     "tools/qa_part1_compact_help.py",
+    "tools/qa_part1_operation_dialogue.py",
+    "tools/qa_part1_dialogue_punctuation.py",
+    "tools/qa_transient_overlays.py",
+    "tools/qa_scene_screenshot_sanity.py",
     "tools/run_release_qa.py",
 ]
 
-EDITOR_GATES: list[tuple[str, list[str]]] = [
-    ("editor-apply-state", cmd("tools/verify_scene_editor_apply_state.py")),
-    ("editor-roundtrip-dry", cmd("tools/verify_scene_editor_roundtrip.py", "--no-actual-sample", "--no-build-sample")),
-]
+def editor_gates(server: str, password: str | None = None) -> list[tuple[str, list[str]]]:
+    password_args = ["--password", password] if password else []
+    return [
+        ("editor-apply-state", cmd("tools/verify_scene_editor_apply_state.py", "--server", server, *password_args)),
+        (
+            "editor-roundtrip-dry",
+            cmd(
+                "tools/verify_scene_editor_roundtrip.py",
+                "--server", server,
+                "--no-actual-sample",
+                "--no-build-sample",
+                *password_args,
+            ),
+        ),
+    ]
 
 CDP_GATES: list[tuple[str, list[str]]] = [
     ("editor-cdp", cmd("tools/verify_scene_editor_cdp.py")),
@@ -101,7 +120,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--build", action="store_true", help="run build_korean_full.py before QA")
     parser.add_argument("--dist-date", help="run prepare_patch_distribution.py --date DATE before QA")
-    parser.add_argument("--editor", action="store_true", help="include :8782 editor API gates")
+    parser.add_argument("--editor", action="store_true", help="include editor API gates")
+    parser.add_argument("--editor-server", default="http://127.0.0.1:8782",
+                        help="scene editor base URL for --editor gates")
+    parser.add_argument("--editor-password", default=None,
+                        help="scene editor password for authenticated --editor gates")
     parser.add_argument("--cdp", action="store_true", help="include Chrome CDP browser gate")
     parser.add_argument("--only-editor", action="store_true", help="run only editor/CDP gates")
     parser.add_argument("--timeout", type=int, default=300, help="per-command timeout seconds")
@@ -117,7 +140,7 @@ def main() -> int:
         gates.append(("py-compile", [sys.executable, "-m", "py_compile", *PY_COMPILE_FILES]))
         gates.extend(BASE_GATES)
     if args.editor:
-        gates.extend(EDITOR_GATES)
+        gates.extend(editor_gates(args.editor_server, args.editor_password))
     if args.cdp:
         gates.extend(CDP_GATES)
 
@@ -128,6 +151,8 @@ def main() -> int:
         "build": args.build,
         "dist_date": args.dist_date,
         "editor": args.editor,
+        "editor_server": args.editor_server,
+        "editor_password_supplied": bool(args.editor_password),
         "cdp": args.cdp,
         "only_editor": args.only_editor,
         "failed_count": len(failed),

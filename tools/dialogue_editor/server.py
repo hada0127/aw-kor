@@ -87,7 +87,7 @@ _BTEAM_CACHE = None
 
 
 def is_bteam(address):
-    """주소가 쪼롱이님(B팀) 권위 주소인가(사전 경고 배지용). resolved 3340 집합."""
+    """주소가 짜옹이님(B팀) 권위 주소인가(사전 경고 배지용). resolved 3340 집합."""
     global _BTEAM_CACHE
     if _BTEAM_CACHE is None:
         _BTEAM_CACHE = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
@@ -360,7 +360,7 @@ class Handler(BaseHTTPRequestHandler):
             if hit is None:
                 key = addr or ("id %r" % lid)
                 return {"ok": False, "error": "%s 없음" % key}
-            # B팀(쪼롱이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
+            # B팀(짜옹이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
             addr = canon_addr(hit.get("address"))
             if is_address_text_override(addr):
                 return {"ok": False, "error": "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용, 편집 불가"}
@@ -371,7 +371,7 @@ class Handler(BaseHTTPRequestHandler):
                         _base = (load_json(ROOT / "data" / "bteam_baseline.json", {}).get("overrides") or {}
                                  ).get("0x%08X" % int(addr, 16))
                         return {"ok": False, "bteam_confirm_required": True,
-                                "error": "쪼롱이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요.",
+                                "error": "짜옹이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요.",
                                 "bteam_baseline": _base}
                 except (ValueError, TypeError):
                     pass

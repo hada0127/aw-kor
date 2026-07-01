@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""대사 메시지 재배치(repoint) 엔진 — 쪼롱이님 문구 불변, 단어붙음/축약 해소.
+"""대사 메시지 재배치(repoint) 엔진 — 짜옹이님 문구 불변, 단어붙음/축약 해소.
 
 배경(2026-06-23 RE):
 - Part2 캠페인 대사는 **메시지 포인터 테이블**(0x08A357B4, 3315엔트리, 단조 증가)로 참조된다.
   메시지 중간으로 들어오는 포인터는 없다(순차 읽기). 각 메시지는 라인(0x0A/제어로 구분) +
   종단 제어(예 6B 00..)로 구성.
 - 빌드는 한글을 **원본 슬롯에 in-place**로 쓴다. 슬롯이 빠듯하면 encode_fit이 공백/부호를 제거
-  (단어붙음 level>=10). 504행(거의 전부 쪼롱이님 대사)이 이렇게 열화된다.
+  (단어붙음 level>=10). 504행(거의 전부 짜옹이님 대사)이 이렇게 열화된다.
 - 바로 뒤 0x00A3CF14~0x00B00000(799KB)이 미사용(0xFF) 여유공간.
 
 해결(외부 서양판과 동일 기법): 열화가 생기는 메시지를 **스켈레톤(제어코드) 보존 재구성**해
-여유공간에 전체로 기록하고, 테이블 포인터만 갱신한다. 라인 텍스트는 쪼롱이님 원문을
+여유공간에 전체로 기록하고, 테이블 포인터만 갱신한다. 라인 텍스트는 짜옹이님 원문을
 **완전 충실(level0)** 인코딩 → 단어붙음/축약 없음. 제어 바이트는 한 바이트도 안 바뀐다.
 
 안전장치:
@@ -22,6 +22,36 @@
 import struct, json, os, collections
 
 GBA = 0x08000000
+PART1_DIALOG_LO = 0xD80000
+PART1_DIALOG_HI = 0xE10000
+PART1_DIALOG_ASCII_PUNCT = {
+    0x21: b'\x81\x49',  # !
+    0x22: b'\x81\x68',  # "
+    0x23: b'\x81\x94',  # #
+    0x24: b'\x81\x90',  # $
+    0x25: b'\x81\x93',  # %
+    0x26: b'\x81\x95',  # &
+    0x27: b'\x81\x68',  # ' -> ” (0x8166 is blank in this font)
+    0x28: b'\x81\x69',  # (
+    0x29: b'\x81\x6A',  # )
+    0x2A: b'\x81\x7B',  # * -> + (0x8196 is blank in this font)
+    0x2B: b'\x81\x7B',  # +
+    0x2C: b'\x81\x41',  # ,
+    0x2D: b'\x81\x5C',  # -
+    0x2E: b'\x81\x42',  # . -> 。 (0x8144 is blank in this font)
+    0x2F: b'\x81\x5E',  # /
+    0x3A: b'\x81\x47',  # : -> ； (0x8146 is blank in this font)
+    0x3B: b'\x81\x47',  # ;
+    0x3D: b'\x81\x5C',  # = -> ― (0x8181 is blank in this font)
+    0x3F: b'\x81\x48',  # ?
+    0x40: b'\x81\x94',  # @ -> # (0x8197 is blank in this font)
+    0x5B: b'\x81\x69',  # [ -> （
+    0x5C: b'\x81\x5F',  # backslash
+    0x5D: b'\x81\x6A',  # ] -> ）
+    0x7B: b'\x81\x69',  # { -> （
+    0x7D: b'\x81\x6A',  # } -> ）
+    0x7E: b'\x81\x60',  # ~
+}
 
 
 def _read_table(orig, tbl_off):
@@ -85,8 +115,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      max_header_gap=16, align=4, log=None, valid_codes=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
-    **안전 설계(쪼롱이님 per-line 대사만 복원)**:
-    - 고칠 라인 = `fixable(a)`(=dialogue_overrides에 있는 쪼롱이님 라인) AND
+    **안전 설계(짜옹이님 per-line 대사만 복원)**:
+    - 고칠 라인 = `fixable(a)`(=dialogue_overrides에 있는 짜옹이님 라인) AND
       `fit_level_dlg(a) >= min_level`(in-place에서 축약/단어붙음됨).
     - 그 외 모든 라인(미열화 / CSV 병합 라인 등)은 **현재 빌드 바이트(rom)를 그대로 보존**
       → 중복/오정렬/회귀 없음.
@@ -240,7 +270,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         if lines[0][0] - msg > max_header_gap:
             stats['skip_struct_header'] += 1
             continue
-        # 고칠 라인(쪼롱이님 per-line 대사 + in-place 열화) 존재?
+        # 고칠 라인(짜옹이님 per-line 대사 + in-place 열화) 존재?
         # 폭 가드: 단어붙음은 공백을 지워 폭을 줄였을 수 있다. un-jam(공백 복원) 후 시각 폭이
         # 박스 한계(max_cells, 원본 대사 최대폭 50 관측)를 넘으면 잘림 위험 → 그 라인은 수정 제외
         # (in-place 단어붙음 유지가 폭 안전). repoint가 새 잘림을 만들지 않게 한다.
@@ -346,14 +376,14 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_decompose'})
             continue
 
-        # 재구성: 고칠 쪼롱이님 라인만 완전충실 한글로 교체, 나머지는 현재 빌드 바이트(rom) 보존.
+        # 재구성: 고칠 짜옹이님 라인만 완전충실 한글로 교체, 나머지는 현재 빌드 바이트(rom) 보존.
         # 제어 gap도 현재 빌드(rom) 그대로(=orig와 동일, 빌드가 슬롯 외엔 안 씀).
         new_msg = bytearray()
         cur = msg
         for a, L in lines:
             new_msg += rom[cur:a]                 # control gap (현 빌드 보존)
             if a in fix_addrs:
-                new_msg += fixed_bytes(a)         # 쪼롱이님 원문 완전충실(단어붙음 해소)
+                new_msg += fixed_bytes(a)         # 짜옹이님 원문 완전충실(단어붙음 해소)
             else:
                 new_msg += rom[a:a + L]           # 미열화/CSV 라인은 현재 바이트 그대로
             cur = a + L
@@ -362,10 +392,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # ★2026-06-25/27 free-space punctuation normalization:
         # - 대사 렌더러는 반각공백(0x20)을 글리프 폭 0으로 스킵(화면 잼)하므로, content 사이 0x20은 전각(0x8140)으로
         #   바꿔 화면에 공백이 보이게 한다. 비-fixed 라인(클린소스 없는 잼)까지 정상화.
-        # - 재배치 블롭 전체의 ASCII comma(0x2C)도 2바이트 `、`(0x8141)로 바꾼다. fixed line은
-        #   encode_full_fidelity()에서 이미 처리하지만, 같은 메시지의 보존 라인에 남은 comma도 같은 renderer를 타므로
-        #   byte alignment를 통일한다. 2바이트 코드 lead는 건너뛰어 코드 내부 바이트 오변환을 막는다.
+        # - Part1 재배치 블롭 전체의 ASCII punctuation도 2바이트 SJIS로 바꾼다. fixed line은
+        #   encode_full_fidelity()에서 이미 처리하지만, 같은 메시지의 보존 라인에 남은 punctuation도 같은
+        #   renderer를 타므로 byte alignment를 통일한다. 2바이트 코드 lead는 건너뛰어 코드 내부 바이트
+        #   오변환을 막는다.
         _conv = bytearray(); _i = 0
+        _part1_msg = PART1_DIALOG_LO <= msg < PART1_DIALOG_HI
         while _i < len(new_msg):
             _b = new_msg[_i]
             if 0x81 <= _b <= 0xE2 and _i + 1 < len(new_msg):
@@ -377,6 +409,11 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 else:
                     _conv += b'\x20'
                 _i += 1
+            elif _part1_msg and _b == 0x2E and new_msg[_i:_i + 3] == b'...':
+                _conv += b'\x81\x45' * 3
+                _i += 3
+            elif _part1_msg and _b in PART1_DIALOG_ASCII_PUNCT:
+                _conv += PART1_DIALOG_ASCII_PUNCT[_b]; _i += 1
             elif _b == 0x2C:
                 _conv += b'\x81\x41'; _i += 1
             else:

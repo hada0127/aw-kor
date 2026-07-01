@@ -427,7 +427,7 @@
   영역별(미션별?) 포인터 구조를 먼저 RE해야 한다. dialogue_repoint 엔진은 `table_offsets`만 추가하면
   되지만, 그 전에 각 영역의 테이블 위치·단조성·중간참조 여부를 검증해야 안전.
 - **참고**: 일부 0xA0xxxx override는 소스 자체가 선-단어붙음(예 0xA01ED0 '기지를공격하라')이라
-  repoint해도 완전 해소 안 됨 → 데이터(쪼롱이님 문구) 측 교정 영역(자동 수정 금지).
+  repoint해도 완전 해소 안 됨 → 데이터(짜옹이님 문구) 측 교정 영역(자동 수정 금지).
 
 ## [2026-06-23 續] Part1 대사 repoint — struct 테이블 함정 (decompose 불충분)
 
@@ -458,7 +458,7 @@
 - **다시 시도할 때**: ① mgbah를 loadstate 후 watchpoint가 살아나도록 고치거나(mGBA fast-path 무효화 +
   debugger 재설치 — 깊은 작업), ② **fresh-boot 네비**로 Part1 대사 도달 후 watchpoint(이 경로는 작동),
   ③ mGBA **Lua 스크립팅** 메모리 콜백(C 디버거와 별개 경로), ④ static 콜체인 디스어셈블 완주.
-  어느 경우든 **실기/플레이테스트로 실제 대사 렌더 확인** 후에만 Part1 repoint 적용(쪼롱이님 캠페인 손상 방지).
+  어느 경우든 **실기/플레이테스트로 실제 대사 렌더 확인** 후에만 Part1 repoint 적용(짜옹이님 캠페인 손상 방지).
 
 - **static 추적 최종 결론**: 텍스트 ptr는 렌더러 함수들(`0x8B12910`→`0x8B12984`)의 인자로 위에서
   내려오며, caller가 참조하는 `0x08D826E4`는 **텍스트 커맨드 인터프리터의 핸들러 테이블**
@@ -467,7 +467,7 @@
   안 된다. 대사 선택은 게임 이벤트/스크립트 시스템(렌더러에서 5~10단계+ 위)에서 ID로 이뤄진다.
 - **종합**: Part1 대사 repoint는 ① 하네스 디버거 loadstate 미발화 수정 또는 fresh-boot 네비로
   런타임 트레이싱, ② 커맨드-스트림/이벤트 시스템 RE, ③ 실기 플레이테스트가 모두 필요한 다세션 작업.
-  현 시점 안전 적용 불가 → **Part2 214라인 해소로 마감, Part1은 미적용 유지**(게임/쪼롱이님 캠페인 보호).
+  현 시점 안전 적용 불가 → **Part2 214라인 해소로 마감, Part1은 미적용 유지**(게임/짜옹이님 캠페인 보호).
 
 ## [2026-06-23 續3] Part1 런타임 트레이싱 — 하네스 디버거 근본 한계 확정(옵션1·2 모두 시도)
 
@@ -526,8 +526,8 @@ loadstate가 메모리 shim을 제거해 미발화(breakpoint는 shim 무관이�
   OBJ blank+본문이관 처리됨. 타 CO는 per-character 테이블 RE 필요 → 무위험 즉시수정 불가, 추적.
 - **맵 선택 섬 이름 '??'**(87, 마=8BC3/메=8BED): ROM 인코딩은 정확(∈2350)인데 컴팩트 렌더러가 fallback
   0x8148='?'로 렌더 → 맵선택 컴팩트 글리프뱅크에 해당 음절 미주입. 글리프뱅크 주입점 RE 필요, 추적.
-- **CSV 109행 ROM 위험분 일괄수정 금지**: korean이 일본어/빈칸인 행 다수가 part1_campaign/part_dialogue(쪼롱이
-  인접)라 행별 맥락검수 없이 일괄 번역하면 쪼롱이 보호 위반/오역 위험. `qa_csv_integrity.py`로 추적, 신중 복구.
+- **CSV 109행 ROM 위험분 일괄수정 금지**: korean이 일본어/빈칸인 행 다수가 part1_campaign/part_dialogue(짜옹이
+  인접)라 행별 맥락검수 없이 일괄 번역하면 짜옹이 보호 위반/오역 위험. `qa_csv_integrity.py`로 추적, 신중 복구.
 
 ---
 ## [2026-06-25] 대사 렌더러 0x20-advance hook — off-by-one 회귀 (revert)
@@ -1231,3 +1231,27 @@ read-watch를 시도했다.
 - **채택 기준**: 89a는 반드시
   `temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`
   로드 후 `A` 입력으로 fresh redraw한다. 선택지 row는 `0x00A34B6C = 예　아뇨`만 현재 안전 후보로 취급한다.
+
+## [2026-06-29] 0cd856 current 잔여 동기화 strict review timeout
+
+- **시도**: `temp/review_prompt_0cd856_residuals_20260629.md`로 codex/agy에게
+  current SHA `0cd856c8…` 잔여 해소, E12/E16 경계 문구, 배포/QA 재검증 누락 여부를 엄격 리뷰 요청했다.
+- **결과**: codex는 300초 제한에서 rc 124 timeout. stdout 0B, stderr에는 자체 skill read와 파일 탐색 로그만 남고
+  실질 finding은 없었다. agy도 300초 제한에서 rc 124 timeout이며 stdout은
+  `Error: timed out waiting for response`, stderr 0B였다.
+- **기록**:
+  `temp/codex_review_0cd856_residuals_20260629.md`,
+  `temp/codex_review_0cd856_residuals_20260629.err`,
+  `temp/agy_review_0cd856_residuals_20260629.md`,
+  `temp/agy_review_0cd856_residuals_20260629.err`.
+- **판정**: 리뷰 도구 실패 기록일 뿐 결함 없음 판정이 아니다. 이 timeout을 근거로 E12/E16/F1을 완료 처리하지 않는다.
+
+## [2026-06-29] E12/E16 natural direct-route 추가 확보 한계
+
+- **E12 B8 잔여**: 현 state/save corpus에서는 B8 459개 중 Part1 작전실 13건 외의 natural target-level direct proof를
+  추가 확보하지 못했다. Part2 unit/system/map 후보는 A2/repoint source redirect가 확인됐고, B8 duplicate mutation/read-watch는
+  route-local 0-diff/0-hit였다. 같은 state에서 B8 exact watch/mutation을 반복하는 것은 새 정보를 만들지 않는다.
+- **E16 Part1 compact help 잔여 11개**: 8,085개 `.ss0` menu-code scan과 unlocked/campaign/link/player-count 후보 probe에서
+  code 0/5/6/16..19 활성 화면을 찾지 못했다. live-code injection은 renderer 안전성 증거지만 natural route direct evidence는 아니다.
+- **필요 외부 상태**: 두 항목 모두 추가 natural proof를 얻으려면 hard/hidden campaign unlock, true player-count 화면,
+  더 진행된 AW1/AW2 save, 또는 실기/에뮬 수동 진행 state가 필요하다. 현 환경에서 자동 반복만으로 닫을 수 있는 결함 경로는 더 남아 있지 않다.

@@ -1271,7 +1271,7 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
 ## 2026-06-23: Part2 캠페인 대사 메시지 포인터 테이블 RE + 단어붙음 repoint 해소
 
 > 외부 서양판 한글패치(락이다님, GPT 기반 영어베이스)와 완성도 비교 중 발견. **qa_text_fit가
-> dialogue_overrides(쪼롱이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 확인.
+> dialogue_overrides(짜옹이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 확인.
 
 ### 발견된 사실 (재현 가능)
 - **Part2 메시지 포인터 테이블 = `0x08A357B4` ~ `0x08A38B80`** (3,315 엔트리, 4바이트 LE 포인터,
@@ -1283,13 +1283,13 @@ status_terrain 블록 stray write(x=4)가 compact_terrain 루프(x=8)에 덮어�
 - found_texts의 라인 span이 메시지를 (라인 + 제어 gap)으로 **무손실 정확 분해**됨(171/171 ok, 후 190/190).
 
 ### 단어붙음의 두 출처 (중요)
-1. **dialogue_overrides(쪼롱이님)**: 소스에 공백 온전 → 빌드 encode_fit이 슬롯-fit으로 공백 제거
+1. **dialogue_overrides(짜옹이님)**: 소스에 공백 온전 → 빌드 encode_fit이 슬롯-fit으로 공백 제거
    (level≥10). **repoint로 정확 복원 가능(안전).**
 2. **translation_for_import.csv 병합 항목**(미션 목표 등): 여러 시각줄을 한 슬롯에 병합·선-단어붙음
    저장. per-line 재배치 시 중복 노출 → **건드리면 안 됨(가드로 skip).**
 
 ### 해결 (`tools/dialogue_repoint.py`, build_korean_full.py "2.9" 블록)
-- 메시지를 0xA3D000~에 전체 재배치, **슬롯-fit으로 열화된 쪼롱이님 라인만** `encode_full_fidelity`
+- 메시지를 0xA3D000~에 전체 재배치, **슬롯-fit으로 열화된 짜옹이님 라인만** `encode_full_fidelity`
   (반각공백 완전충실)로 복원, 포인터 갱신. 비대상 라인·제어 스켈레톤·구주소는 byte-identical.
 - 안전 가드 4중: ①포인터 ROM 내 정확히 1개(테이블) ②(라인+gap) 정확분해 ③메시지 내 라인 간
   텍스트 중첩(병합 override) 없음 ④여유공간 내 비중첩.
@@ -1319,7 +1319,7 @@ Part1 repoint는 0건(빌드 미적용).
 
 **다음 경로(후속)**: 런타임 트레이싱 — mgba 헤드리스로 Part1 대사 1개를 화면에 띄우고 렌더러의
 포인터 로드(PC/주소)를 watch해 **진짜 대사 테이블 위치를 역추적**. 그 테이블을 확보한 뒤에야
-`table_offsets`에 추가 가능. 실기/플레이테스트 동반 권장(쪼롱이님 캠페인 대사 손상 방지).
+`table_offsets`에 추가 가능. 실기/플레이테스트 동반 권장(짜옹이님 캠페인 대사 손상 방지).
 
 ### 2026-06-23 (續3): Part1 대사 = 커맨드 스트림(opcode 0x19) — 런타임 트레이싱으로 RE + repoint 완료
 
@@ -3254,3 +3254,139 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   current SHA로 재생성했다. Link sweep은 180/180 unique, low-bright 0이다.
 - 최종 검증은 `python3 tools/verify_dist_integrity.py` PASS,
   `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_surrender_yesno_fix_current.json` PASS.
+
+## [2026-06-29] 0cd856 SHA 의미/용어 수정 후 evidence 재동기화와 실화면 sweep
+
+- **SHA 변경 원인**: `0x00A1B015` override가 원문 숫자 의미를 잃어
+  `귀찮게시리.뭐라고 물어봤는데?`로 들어가 있던 것을 `「30일이면 가능한가?」라고.`로 바로잡았다.
+  또한 proper-noun dict를 적용해 CSV source의 `쇼군` 잔재 3행을 `사령관`으로 정리했다.
+- **현재 ROM/배포 SHA**: `output/game_wars_korean_full.gba`,
+  `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba`,
+  `dist/game_wars_korean_full_2026-06-28.bps`, `.ips`, manifest가 모두
+  `0cd856c8c52f7bf79ef1399aaff7ba0b3a2af39d8cf9f25f11c5bb5d51787281` 기준으로 동기화됐다.
+- **잔여 번역/용어 gate**: `qa_meaning_from_rom.py --show 30`의 number error는 0이고,
+  `qa_terms_from_rom.py` hard issue 0, `apply_proper_nouns_dict.py` dry-run 변경 0이다.
+  `qa_japanese_residuals.py --min-score 13 --limit 20`의 유일 후보는 `0x80089B` font/dead-table kana noise이며,
+  `qa_placeholder_residuals.py` ROM placeholder hit 0, `qa_csv_integrity.py` real ROM Japanese residual 0,
+  `lint_translation.py --severity error --hide-noise --limit 40` issue 0이다.
+- **E12 compact evidence current화**:
+  `data/compact_display_xref_analysis.json`, `data/compact_display_code_context.json`,
+  `data/compact_display_renderer_trace.json`, `data/compact_display_manual_visual_evidence.json`,
+  `data/compact_display_read_watch_a2_profile_coid_current.json`,
+  `data/compact_display_read_watch_b84_power_titles_coid_current.json`,
+  `data/compact_display_visual_matrix.json`을 current ROM 기준으로 재생성했다.
+  Matrix 결과는 A2 CO power-name 36/36 source proof, B84 AW1 power-title 11/11 source proof,
+  B8 compact table 13/459 direct target evidence다. B84 proof는 `0x0201ADBD` live CO-id byte만 바꾸는
+  near-fresh read-watch이며 case 11/hit 11/direct read 11이다. B8 13건은 Part1 작전실 mutation proof로,
+  B8 전체 visual coverage가 아니다.
+- **E16 Part1 compact help current화**:
+  `docs/screenshots/part1_compact_help_live_code_injection_2026-06-28/report_primary.json`와
+  `report_player19.json`을 `0cd856c8…`로 재생성했다. `qa_part1_compact_help.py`는 issue 0,
+  direct visual 23, missing direct 11, synthetic render 11, live-code injection 11, carry-forward 0이다.
+  live-code injection은 실제 `code -> 0x08DFAAB8 pointer lookup -> help renderer` 경로 smoke지만,
+  hidden/player-count 계열 11개 자연 route 증거를 대체하지 않는다.
+- **Scene residual/E8/Part1 link map sweep**:
+  `reverify_scene_residual_scans.py --write`로 17 case/hit 0을 current SHA로 갱신했고,
+  E8 comm-label 7장 contact와 `data/comm_label_visual_reverify.json`도 재동기화했다.
+  Part1 link/pass-and-play map-list sweep은 step 180, list crop unique 180, low-bright anomaly 0이며,
+  대부분 행의 `???`는 현재 진행도 locked placeholder다.
+- **실화면 QA**: `tools/capture_scene_screenshots.py --force`로 70 scene을 다시 캡처했다.
+  `audit_scene_entrypoints.py --strict` missing/stale 0,
+  `audit_scene_catalog.py --strict` critical 0,
+  `audit_scene_semantics.py --strict` critical/major 0,
+  `audit_scene_residual_scans.py --strict` critical 0이다.
+  `temp/scene_screen_review_20260629/page_1.png`~`page_5.png`, E8 contact,
+  Part1 link-map sweep contact를 수동 검토했으며 새 blank/타일깨짐/일본어 화면은 발견하지 못했다.
+- **Editor/release QA**:
+  `run_release_qa.py --timeout 300 --report temp/release_qa_base_current_20260629.json`은 18/18 gate PASS,
+  `run_release_qa.py --only-editor --editor --cdp --timeout 300 --report temp/release_qa_editor_cdp_current_20260629.json`
+  은 3/3 gate PASS다. Full `verify_scene_editor_roundtrip.py`도 current SHA로 재실행해
+  81 scene/10,859 dialogue group/1,990 sprite/18,641 editable member dry-run failure 0,
+  B팀 confirm failure 0, 실제 저장/복원 sample 2, direct-script build sample OK를 기록했다.
+- **당시 경계(아래 최종 종료 전)**: 이 시점에는 E12 B8 13/459와 E16 natural direct route 11개를
+  완료로 주장하지 않았다. F1 실기 검증은 물리 GBA/플래시카트가 필요해 이 환경에서 자율 완료할 수 없다.
+
+## [2026-06-29] 주소 고정 override TSV 권위와 final 화면 QA 판정
+
+- `data/address_text_overrides.tsv`는 현재 `ADDRESS_TEXT_OVERRIDES`의 외부 빌드 권위다.
+  `tools/build_korean_full.py`는 파일이 있으면 인라인 fallback dict를 clear한 뒤 TSV를 로드한다.
+  compact glyph dictionary 2주소(`0xA3B880`, `0xB842E8`)는 TSV에 두지 않고
+  `display_overrides.json`에서 런타임 파생한다.
+- `tools/audit_address_text_overrides.py --strict`의 hard invariant:
+  TSV header/중복/파싱 오류 0, TSV↔runtime static mismatch 0, 인라인 fallback↔runtime mismatch 0,
+  source dict 금지 용어(`쇼군`, `휘프`) 0, `dialogue_map`/`dialogue_groups` protected row mismatch 0.
+  현 current report는 `temp/address_text_overrides_audit.json`.
+- `tools/build_comparison_sheet.py` 원본 캡처 캐시는 original ROM SHA + checkpoint name/mode/nav/refresh/
+  orig_state/state SHA를 key로 `temp/orig_capture_cache/<key>/frame.png`와 `provenance.json`을 저장한다.
+  패치 side는 항상 새로 렌더한다. current fresh comparison 재실행에서 original side 17/17 cache hit.
+- E12 종료 판정은 "B8 459개 전부 natural direct proof"가 아니다. A2 36/36, B84 11/11은 source proof로 닫고,
+  B8은 Part1 작전실 13건 + Part2 unit/system/map source redirect + route-local negative + current visual sweep 기준
+  화면 결함 없음으로 닫는다. 추가 natural proof는 새 진행도 save/실기 state가 필요하다.
+- E16 종료 판정은 남은 11개 natural route 미확보를 live-code injection과 8,085 state menu-code scan으로 대체한
+  자율 종료다. 실제 `code -> 0x08DFAAB8 pointer lookup -> help renderer` 경로는 깨짐/클리핑 없이 통과했지만,
+  hidden/player-count natural screen 직접 증거는 새 save 없이는 더 확보할 수 없다.
+
+## [2026-06-29] 사용자 제보 1편 메뉴 라벨 변형/작전룸 대사 bitmap 깨짐 원인
+
+- **Part1 menu label root cause**: 1편 `모드 선택`/`싱글 대전`/`작전룸` 상단 라벨은 기능상 메뉴 UI인데,
+  이전 구현은 제목/로고용 `draw_centered_title_font_text` 경로를 사용했다. 이 경로는 OkDanDan 글꼴,
+  outline/gradient/shadow 중심이라 작은 top-left menu label에서는 원본 UI와 다르게 두껍고 지저분한 sprite처럼 보였다.
+  해결은 title-logo 스타일을 더 다듬는 것이 아니라 메뉴 라벨 전용 Galmuri clean renderer를 분리하는 것이다.
+- **Part1 menu label fix**: `tools/build_title_hangul.py::draw_part1_clean_menu_label`은
+  fill=15, outline=10, antialias=14만 사용해 라벨 레이어를 만든다.
+  `make_part1_label_block`, `make_part1_submenu_label_block`, `make_part1_mode_block`은 모두 이 renderer를 사용한다.
+  compression fit은 operation 352/660, map 360/662, shop 382/758, hard_shop 346/698,
+  campaign 315/774, mode 387/630, rule 380/730, team 358/716,
+  submenu single_battle 402/641, connect 295/529 등으로 원본 슬롯 안에 들어간다.
+- **Visual gate change**: `tools/qa_visual_regions.py`는 Part1 submenu asset을
+  clean menu palette `{10,14,15}`로 검사한다. 화면 쪽은 기존 logo-style clipped text counter 대신
+  clean top-left label counter를 사용한다. 현 결과:
+  `screen:single_top_left:visible=395:edge=0`,
+  `screen:connect_top_left:visible=206:edge=0`.
+- **Operation-room text root cause**: 제보 대사는 `data/dialogue_groups.json`의
+  `g_00DF68F6` pair다. `0x00DF691D` 기존 문장은 encoded_len=34, slot=34, fit_level=1로 tail padding margin이 0이었고,
+  ASCII punctuation도 포함했다. 이 route는 줄 끝 bitmap 깨짐을 재현했으므로, slot을 꽉 채우는 fit-level1 번역은
+  안전하지 않다.
+- **Operation-room text fix**: `0x00DF68F6`은 `실력을 시험해 봐`,
+  `0x00DF691D`는 `내가 가르친 것 기억해`로 고정했다.
+  `data/address_text_overrides.tsv`와 `tools/build_korean_full.py` fallback dict가 같은 값을 갖고,
+  `tools/build_dialogue_map.py`/`tools/build_dialogue_groups.py` 재생성 후 protected row drift는 없다.
+- **Operation-room hard gate**: `tools/qa_part1_operation_dialogue.py`는 두 주소에 대해
+  address override 존재, source ASCII punctuation 없음, `encode_fit` level0, encoded length cap,
+  half-cell width cap, active ROM printable ASCII 없음, encoded length < slot, tail padding 0x00/0x20을 검사한다.
+  이 gate는 `tools/run_release_qa.py`와 `tools/verify_dist_integrity.py`에 연결됐다.
+- **Full-screen sanity gate**: `tools/qa_scene_screenshot_sanity.py`는
+  `temp/scene_screenshots/manifest.json`의 current capture만 검사한다. 과거 보조 캡처가 섞여 stale false-positive를
+  만들지 않도록 manifest 기반으로 frame set을 제한한다. 검사 항목은 current ROM provenance, 240x160 size,
+  near-blank, unique color/tile count, mostly-dark anomaly다. `01_coldboot_nintendo`,
+  `scene_20_part2_intro_newspaper`, `scene_20a_part2_menu_newspaper_bg`는 known low-information transition/logo
+  observation으로만 기록한다.
+- **Current evidence**: latest output SHA는
+  `f19bac0b0fec24a0e2442df361f2697f1899456c0b52bf1f54eb01142bfa7c9e`.
+  `capture_scene_screenshots.py --all-checkpoints --force`는 75/75 captured, skipped 0.
+  `audit_scene_entrypoints.py --strict` critical 0,
+  `audit_scene_catalog.py --strict` critical 0,
+  `qa_scene_screenshot_sanity.py` issue 0,
+  `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260629_user_sprite_dialogue_fix_with_sanity.json`
+  PASS.
+
+## [2026-06-30] Part1 메뉴 로고 black-block 재발 원인
+
+- 2026-06-29의 clean renderer는 제목용 두꺼운 sprite 느낌은 줄였지만, Part1 menu OBJ palette에서
+  index 15를 본문 fill로 사용했다. Part1 `모드 선택`/`싱글 대전`/`작전룸` 화면은 screen-local palette를
+  쓰며, 이 palette에서 index 15는 거의 검정/갈색이다. 따라서 한글 본문이 깨진 검은 블록처럼 보였다.
+- 원본 Part1 logo LZ77 blocks를 역변환해 index 사용을 확인했다. 원본은 index 15를 쓰지 않고,
+  `1..7`을 화면별 route-color gradient, `9`를 shadow, `10`을 white outline, `14`를 dark body/outline으로
+  쓴다. 이번 fix는 `draw_part1_clean_menu_label`을 이 index set으로 제한한다.
+- `tools/qa_visual_regions.py`는 모든 Part1 submenu logo asset에 대해 index 15 존재를 hard fail한다.
+  또한 `{9,10,14}` 존재, gradient pixel 수, outline/body pixel 수를 검사해 같은 회귀가 asset 단계에서
+  걸리도록 했다. `맵 디자인`은 같은 스타일을 18px로 그리면 LZ77 495/448B로 실패하므로 max size 15,
+  441/448B로 고정했다.
+- current SHA `9291f37604a6954774d60fa16fa60d01708d8dec0374e1a2afa377285b6f445e`에서
+  `40_part1_name_menu`, `42_part1_single_battle`, `41_part1_operation_room`을 실제 mGBA로 재캡처했다.
+  세 프레임 모두 top-left label이 원본 계열 색상/white outline으로 보이고, black-block sprite는 재현되지 않는다.
+- 전체 검증: `capture_scene_screenshots.py --all-checkpoints --force` 75/75,
+  `qa_scene_screenshot_sanity.py` issue 0, scene entry/catalog/semantic/residual strict audits critical 0,
+  `qa_visual_regions.py` PASS, `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260630_part1_logo_fix.json` PASS.

@@ -16,8 +16,6 @@ from make_ips import apply_ips, make_ips
 BASE = Path(__file__).resolve().parents[1]
 SOURCE_ROM = BASE / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'
 TARGET_ROM = BASE / 'output' / 'game_wars_korean_full.gba'
-FINAL_ROM = BASE / 'output' / 'game_wars_korean_final.gba'
-TITLE_TEST_ROM = BASE / 'output' / 'game_wars_korean_title_test.gba'
 DIST = BASE / 'dist'
 
 
@@ -54,7 +52,7 @@ for compatibility, but BPS is preferred because it records source/target CRCs.
 
 - BPS round-trip: original ROM + BPS == latest Korean ROM
 - IPS round-trip: original ROM + IPS == latest Korean ROM
-- `full`, `final`, and `title_test` output ROMs have identical SHA-256
+- Only the canonical `output/game_wars_korean_full.gba` ROM is produced
 """,
         encoding='utf-8',
     )
@@ -93,14 +91,8 @@ def main():
 
     source = SOURCE_ROM.read_bytes()
     target = TARGET_ROM.read_bytes()
-    final = FINAL_ROM.read_bytes()
-    title_test = TITLE_TEST_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
-    final_info = digest(final)
-    title_test_info = digest(title_test)
-    if not (target_info['sha256'] == final_info['sha256'] == title_test_info['sha256']):
-        raise SystemExit('output ROM SHA-256 mismatch: full/final/title_test differ')
 
     bps = make_bps(source, target)
     ips = make_ips(source, target)
@@ -128,10 +120,10 @@ def main():
             'name': TARGET_ROM.name,
             **target_info,
         },
-        'synced_outputs': {
-            'game_wars_korean_full.gba': target_info['sha256'],
-            'game_wars_korean_final.gba': final_info['sha256'],
-            'game_wars_korean_title_test.gba': title_test_info['sha256'],
+        'output_rom': {
+            'canonical': TARGET_ROM.name,
+            'sha256': target_info['sha256'],
+            'legacy_variants': [],
         },
         'bps_patch': {
             'file': bps_path.name,
@@ -147,7 +139,7 @@ def main():
         'validation': {
             'bps_round_trip': True,
             'ips_round_trip': True,
-            'output_roms_identical': True,
+            'single_output_rom': True,
         },
     }
     for path in (DIST / 'manifest.json', DIST / 'manifest_preview.json'):

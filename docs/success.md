@@ -1540,7 +1540,7 @@ archive/malformed_address_rows.csv 보존.
 - [x] **검증**: `python3 tools/build_scene_catalog.py`, `python3 tools/capture_scene_screenshots.py --force`, `python3 -m py_compile tools/build_scene_catalog.py tools/capture_scene_screenshots.py tools/scene_editor/server.py tools/sprite_editor/server.py`, `node --check tools/scene_editor/static/app.js`, JSON 검사, HTTP API/path 스모크, Chrome headless CDP 브라우저 검증 통과. 사용자 정정 반영 후 8782에서 layout 있음/1편 LZ77 역배치/LNB 썸네일/관련대사 표시 확인. 전체 배정 스프라이트 112개는 tile API, onscreen_data, onscreen PNG를 일괄 검증해 실패 0(onscreen 81, raw fallback 31). 브라우저 증거 스크린샷/감사 결과: `temp/browser_verify/scene_editor_visible_output_grid.png`, `temp/browser_verify/8782_lnb_related_dialogue_final.png`, `temp/browser_verify/assigned_sprite_audit.json`.
 
 
-### 🟢 B팀/쪼롱이님 스크립트 안전 병합 + UI 에디터 동기화 (2026-06-17)
+### 🟢 B팀/짜옹이님 스크립트 안전 병합 + UI 에디터 동기화 (2026-06-17)
 
 - [x] **병합 원칙 적용**: `docs/MERGE_PLAN_BTEAM_2026-06-16.md`에 따라 B ROM/코드테이블은 병합하지 않고, `temp/bteam/script.txt`의 0x08Fxxxxx 포인터를 원본 ROM 포인터와 대조해 원본 주소로만 매핑. 제어마커(`㉠㉡㉢`)·inline 제어 토큰·slot overflow·no slot 항목은 자동 적용 제외.
 - [x] **안전 후보 32건 적용**: 현재 UI/빌드 표시 번역이 비어 있고 슬롯에 들어가는 B팀 텍스트만 `data/dialogue_overrides.json`에 추가. 대표 항목: `플레이 조건`, `평지/산/숲`, `이름 입력`, `정보`, `종료`, Part2 미션명(`경계 방어전`, `포로 구출 작전`, `전율의 2주일`, `희망의 대해로`, `해상 요새 폭격`, `대함대 전격전`, `불의 비`, `결전 전`), 통신 상태(`미접속`, `준비 중`, `접속 중`), `색적`.
@@ -1550,11 +1550,11 @@ archive/malformed_address_rows.csv 보존.
 - [x] **UI 에디터 반영 검증**: 새 ROM 기준 `tools/capture_scene_screenshots.py --force`로 scene screenshot 16개 재캡처, API stale/missing 0(`99_unassigned_review` 제외). Chrome headless CDP로 `http://127.0.0.1:8782` 검증: 전투 시작 회전/개시 오버레이 scene은 스프라이트 10개+관련 대사 300행이 LNB에 함께 표시, LNB 썸네일은 `/api/sprite/onscreen` 출력배치 사용, 우측 스프라이트 편집 캔버스는 `타일 그리드 · 출력 크기 배치`/실화면 레이아웃으로 열림. 증거: `temp/browser_verify/8782_bteam_battle_start_sprite.png`, `temp/browser_verify/8782_bteam_battle_start_dialogue.png`, `temp/browser_verify/8782_part1_submenu_onscreen.png`, `temp/browser_verify/8782_bteam_verify.json`.
 
 
-### 🟢 쪼롱이님/B팀 권위 대사·용어사전 덮어쓰기 반영 (2026-06-17)
+### 🟢 짜옹이님/B팀 권위 대사·용어사전 덮어쓰기 반영 (2026-06-17)
 
-- [x] **권위 반영 원칙 전환**: 미번역만 채우는 방식에서 벗어나, `temp/bteam/script.txt`가 원본 ROM 포인터와 안전하게 매핑되고 빌드 슬롯에 들어가는 조각은 기존 번역이 있어도 쪼롱이님/B팀 문장으로 덮어씀. 재현 명령: `python3 tools/import_bteam_script.py --apply-authoritative --out temp/bteam/import_authoritative.json`.
+- [x] **권위 반영 원칙 전환**: 미번역만 채우는 방식에서 벗어나, `temp/bteam/script.txt`가 원본 ROM 포인터와 안전하게 매핑되고 빌드 슬롯에 들어가는 조각은 기존 번역이 있어도 짜옹이님/B팀 문장으로 덮어씀. 재현 명령: `python3 tools/import_bteam_script.py --apply-authoritative --out temp/bteam/import_authoritative.json`.
 - [x] **적용 규모 정정(리뷰 반영)**: B script 6403행 전체 매핑, 후보 6414행, 최종 안전 적용 counter 6726건(`applied_authoritative_line` 969, `applied_authoritative_group` 2372 중심), 최종 `data/dialogue_overrides.json` 7615건(기존 base override 811 포함). codex 리뷰에서 B팀 제어표식 과적용 누수를 확인해, override를 HEAD 기준으로 재생성한 뒤 안전 파서 결과만 다시 적용. 자동 제외는 `line_slot_overflow` 301, `group_slot_overflow` 338, `no_group` 357, fragment mismatch/제어마커 등이며 `temp/bteam/import_authoritative.json`에 전부 남김.
-- [x] **명사/인칭/지명 사전 재작성**: `data/proper_nouns.json`과 빌드 정규화가 쪼롱이님 계열 표기를 권위로 사용. 주요 확정: `ショーグン`=`사령관`, `ホイップ`=`호이프`(문맥상 `휩` 허용), `コスモランド`=`코스모 랜드`, `マクロランド`=`매크로 랜드`, `맵 디자인`, `사령관 브레이크/선택`.
+- [x] **명사/인칭/지명 사전 재작성**: `data/proper_nouns.json`과 빌드 정규화가 짜옹이님 계열 표기를 권위로 사용. 주요 확정: `ショーグン`=`사령관`, `ホイップ`=`호이프`(문맥상 `휩` 허용), `コスモランド`=`코스모 랜드`, `マクロランド`=`매크로 랜드`, `맵 디자인`, `사령관 브레이크/선택`.
 - [x] **CSV/빌드/UI 동기화**: `python3 tools/apply_proper_nouns_dict.py --apply`로 `data/translation_for_import.csv`도 동일 용어로 461행 갱신. `data/dialogue_map.json`/scene editor API가 현재 출하 ROM 기준 문장을 표시하도록 재생성. Part2 적 턴 CO 배너/OBJ 라벨 `휘프`도 `호이프`로 직접 그래픽 패치하고, `tools/export_proper_nouns_dict.py` 시드도 같은 기준으로 수정해 사전 재생성 시 되돌아가지 않게 함.
 - [x] **CSV 개행 정책**: `data/translation_for_import.csv`는 기존 CRLF 포맷 유지. 전체 LF 정규화로 18k행 churn을 만들지 않기 위해 `.gitattributes`에서 해당 CSV의 whitespace check만 제외해 `git diff --check`가 통과하도록 함.
 - [x] **잔류 금지 표기 0 확인**: ROM 게이트에서 `휘프`, `쇼군`, bare `장군`, `코스모랜드`, `매크로랜드`, `마크로랜드`, `디자인 지도`, `지도 디자인` 잔류 0. `qa_terms_from_rom.py`에 B팀 제어표식 hard gate를 추가해 `i` 플레이어명 마커, menu/control prefix, branch/wait marker, `㉠㉡㉢`, B팀 변수 토큰 잔류 0도 확인. UI API term check: Part1 story `사령관` 201/`호이프` 64/`휩` 5/`코스모 랜드` 2, Part2 story `사령관` 225/`호이프` 12/`휩` 14/`코스모 랜드` 4/`매크로 랜드` 16, 금지 표기 0.
@@ -1578,13 +1578,13 @@ archive/malformed_address_rows.csv 보존.
 ### 🟢 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint) + 완성도 인프라 (2026-06-23)
 
 > 외부 서양판 한글패치(락이다님 GPT 영어베이스)와 완성도 비교 중, **qa_text_fit가 dialogue_overrides
-> (쪼롱이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 발견. 쪼롱이님 **어절/단어를
+> (짜옹이님/B팀)를 walk에서 누락**해 단어붙음 504건을 못 보던 QA 사각지대를 발견. 짜옹이님 **어절/단어를
 > 바꾸지 않고**(빌드 공통 정규화 `・・・→...`·전각공백→반각만 — in-place 렌더와 동일, 새 변형 아님)
 > 외부판과 동일한 free-space repoint 기법으로 해소.
 
 - [x] **메시지 포인터 테이블 RE**: Part2 대사 = `0x08A357B4`(3315엔트리, 단조증가) 테이블 참조, 메시지 중간
   참조 없음(순차). 여유공간 `0xA3CF14~0xB00000`(799KB 미사용 0xFF). docs/research.md에 기록.
-- [x] **재배치 엔진** `tools/dialogue_repoint.py`: 슬롯-fit으로 공백 제거된 쪼롱이님 라인만 `encode_full_fidelity`
+- [x] **재배치 엔진** `tools/dialogue_repoint.py`: 슬롯-fit으로 공백 제거된 짜옹이님 라인만 `encode_full_fidelity`
   (반각공백 완전충실)로 복원, 메시지 전체를 0xA3D000~에 쓰고 포인터 갱신. 비대상 라인·제어 스켈레톤·구주소 불변.
   **5중 안전가드**: ①포인터 ROM 내 정확히 1개(테이블) ②(라인+gap) 정확분해 ③라인 간 텍스트 중첩(병합 override) 없음
   ④여유공간 비중첩 ⑤un-jam 후 시각폭>50(박스한계) 라인 제외(=잘림 회귀 방지).
@@ -1647,7 +1647,7 @@ archive/malformed_address_rows.csv 보존.
   여유공간에서 로드**함을 인게임 확증.
 - [x] **결정적 증거 ②(디코드)**: 0xA446DC(게임이 읽은 곳)=`"레드스타의 사령관,캐서린이에요."`(공백 복원,
   un-jam) ↔ 원위치 0xDF8E6C(in-place 죽은 사본, 안 읽힘)=`"레드스타의사령관캐서린이에요"`(단어붙음).
-  → 재배치본=쪼롱이님 원문, 게임이 그걸 읽음.
+  → 재배치본=짜옹이님 원문, 게임이 그걸 읽음.
 - [x] **결정적 증거 ③(시각)**: fresh-boot 대사가 모두 깨끗한 공백 렌더 — "반가워 AAA 님" /
   "나는 캐서린." / "첫 번째 작전은 전투 개시 예요" / "레드스타의 사령관,…". 증거:
   `docs/screenshots/SUCCESS_part1_repoint_freshboot_reloc_2026-06-23.png` 외 2.
@@ -1660,7 +1660,7 @@ archive/malformed_address_rows.csv 보존.
 - **실화면 잔존 시각검증(13에이전트)**: 정적 잔존스캔 21k행이 거의 노이즈임을 확증하고, 실제 화면 잔존을
   HIGH 3(이름 라벨 가타카나)·MED 4로 정밀 도출. `temp/visual_verify_result.json`.
 - **B팀 대사 변형 복원**: codex 적발 — 작업트리에서 `0x00DF5E12/35/56`(코스모랜드 설명 대사)이 슬롯 여유에도
-  축약·개작돼 있었음 → HEAD 권위본 복원, 재빌드 검증. 절대제약(쪼롱이/B팀 불변) 보호.
+  축약·개작돼 있었음 → HEAD 권위본 복원, 재빌드 검증. 절대제약(짜옹이/B팀 불변) 보호.
 - **신규 QA 도구 2종**: `qa_pixel_width.py`(렌더러 advance 8px/4px 모델), `qa_csv_integrity.py`(CSV 손상 탐지·심각도분류).
 - **UI 에디터 라이브 검증**: :8782 대사 save/슬롯 하드게이트/스프라이트 save·revert 전부 동작.
 - **dist 재생성+PASS**: 보정 ROM a582a7cb에 BPS/IPS/manifest 동기, `verify_dist_integrity` PASS.
@@ -1678,21 +1678,21 @@ archive/malformed_address_rows.csv 보존.
 - **Phase 8 검증**: byte-identical 정합성, 구 2서버 기능 parity, py_compile+node --check, Chrome CDP 브라우저 검증.
 - **codex+agy 1·2차 리뷰 반영**: static 경로탈출 가드, 슬롯 하드게이트, 2350 미수록 차단, 모달 닫힘 버그,
   프리뷰 canvas 불일치, 워크플로 5차원 감사(43에이전트, critical 0) 12 major 반영.
-- **쪼롱이/B팀 권위 반영**: bteam/script.txt 재매핑 override 7615, 용어사전 정규화(사령관/호이프/코스모랜드/매크로랜드),
+- **짜옹이/B팀 권위 반영**: bteam/script.txt 재매핑 override 7615, 용어사전 정규화(사령관/호이프/코스모랜드/매크로랜드),
   qa_terms_from_rom.py B팀 control residual hard gate.
 - **1·2편 모든 화면 캡처/진입점 재검증(2026-06-22)**: 1편 19x·2편 30x story bucket savestate+렌더 breakpoint
   재검증 hit 0, scene catalog 엄격감사 critical 0, 8782 game scene 63/sprite 107 failure 0,
   13 container residual scan manifest(scan 7793/hit 3 known).
-- **외부판 비교 완성도(2026-06-23)**: Part2 repoint 214라인+Part1 repoint 191라인(합계 357/403, 쪼롱이 불변),
+- **외부판 비교 완성도(2026-06-23)**: Part2 repoint 214라인+Part1 repoint 191라인(합계 357/403, 짜옹이 불변),
   qa_dialogue_jamming.py, text_metrics.py SSOT, dist/apply_patch.py 원클릭 배포.
 
 ## [2026-06-24 후반] B팀 보호 5중화 + CSV ROM-진실 + 편집 커버리지 (정석 전수 진행)
-- **B팀(쪼롱이) 보호 5층** (codex·agy 적대 리뷰 반영): ①권위문 복원(0xDF5E12/35/56) ②`data/bteam_addresses.json`(3340)
+- **B팀(짜옹이) 보호 5층** (codex·agy 적대 리뷰 반영): ①권위문 복원(0xDF5E12/35/56) ②`data/bteam_addresses.json`(3340)
   +`bteam_baseline.json`+`tools/qa_bteam_drift.py`(drift 0) ③`:8782`+`:8780` `_save_line` save-time 차단(confirm_bteam 필요)
   ④`--accept`=`AW_BTEAM_ACCEPT=1` 승인 ⑤`verify_dist_integrity`에 drift+CSV 게이트 연동. 절대제약 사고 방지 다중화.
 - **B1 CSV 손상 ROM-진실 검증**: `qa_csv_integrity.py`를 출하 ROM 디코드 권위로 재작성(가나/한자만 일본어, 0x81 심볼 제외,
   의도적 테이블 제외). CSV 손상 239행이나 **ROM 실제 일본어 텍스트 잔존 0**. 빌드 inline 리터럴이 권위라 CSV 손상 미전파 입증.
-- **편집 커버리지(쪼롱이 요구)**: 실대사 19450/19650(99.0%) 편집가능, 차단 200=정당(font/컴팩트UI/pair, 사유 노출).
+- **편집 커버리지(짜옹이 요구)**: 실대사 19450/19650(99.0%) 편집가능, 차단 200=정당(font/컴팩트UI/pair, 사유 노출).
   스프라이트 1979 전부 scene/review 도달·편집.
 - **A1 de-risk**: `korean_glyphs_8px.json`(1028음절 8x8)으로 96×8 CO 이름 OBJ에 한글 직접 렌더 경로 확보. CO 테이블 0x081BE68/stride0x44/19 OBJ.
 - 전 게이트 PASS: integrity/overflow0/no_ko0/ascii0/scene critical0/bteam drift0/csv ROM잔존0/dist PASS. ROM SHA a582a7cb.
@@ -1737,8 +1737,8 @@ archive/malformed_address_rows.csv 보존.
   **보편 UI/룰/시스템 갭** 도출. A3 룰 라벨 타깃 확보: 거점수입/제한일수/지휘관파워/날씨설정/안개설정/전투와점령표시.
   검증: 제한일수·지휘관파워·안개설정·전투와점령표시는 우리 미번역 확정.
 - 산출물: `data/reference/aw2_korean_strings.json`(벤치마크), `aw2_gap_candidates.json`, `gap_targets.json`.
-- 한계: 우리 대사는 쪼롱이님 완료, 잔존은 대부분 그래픽(룰라벨/sprite UI). 외부 텍스트는 **타깃 한글 출처**로 활용(A3-fix 등).
-  맵명은 외부=의미번역(누에콩섬), 우리=음역(소라마메섬)으로 다르나 쪼롱이 영역이라 불변.
+- 한계: 우리 대사는 짜옹이님 완료, 잔존은 대부분 그래픽(룰라벨/sprite UI). 외부 텍스트는 **타깃 한글 출처**로 활용(A3-fix 등).
+  맵명은 외부=의미번역(누에콩섬), 우리=음역(소라마메섬)으로 다르나 짜옹이 영역이라 불변.
 
 ## [2026-06-24] A3-fix 완료 — campaign-map 룰 요약 라벨 7개 한글 (VRAM trace)
 - **소스 발견(VRAM trace)**: 룰 요약 라벨이 dict 텍스트도 아니고 OBJ인데 위치 불명 → 하네스 `dumpvram`+OAM 덤프로
@@ -3201,3 +3201,106 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   E16 live-code reports, Part1 link-map 180-step sweep, BPS/IPS manifest를 모두 current SHA로 재동기화했다.
 - **최종 게이트**: `python3 tools/verify_dist_integrity.py` PASS,
   `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260628_surrender_yesno_fix_current.json` PASS.
+
+## [2026-06-29] 0cd856 current SHA 잔여 동기화 및 실화면 QA
+
+- **수정**: `0x00A1B015` 의미 누락을 `「30일이면 가능한가?」라고.`로 복구했고,
+  proper-noun dict 적용으로 CSV source의 `쇼군` 잔재 3행을 `사령관`으로 통일했다.
+- **현재 산출물**: output 3종과 dist BPS/IPS/manifest가
+  `0cd856c8c52f7bf79ef1399aaff7ba0b3a2af39d8cf9f25f11c5bb5d51787281`로 동기화됐다.
+- **닫은 잔여**: E3 ROM residual triage와 E4 용어 흔들림은 PASS로 닫았다.
+  `qa_meaning_from_rom.py`, `qa_terms_from_rom.py`, `qa_japanese_residuals.py`,
+  `qa_placeholder_residuals.py`, `qa_csv_integrity.py`, `lint_translation.py --severity error`를 모두 통과했다.
+- **화면 확인**: scene 70개를 current SHA로 재캡처하고 5개 contact sheet를 직접 검토했다.
+  scene entry/catalog/semantics/residual strict audit는 critical 0이고, Part1 link-map 180-step sweep도
+  unique 180/low-bright 0으로 재생성했다. 새 blank/타일깨짐/일본어 노출은 발견하지 못했다.
+- **재동기화**: E12 matrix는 A2 36/36, B84 11/11, B8 13/459로 current SHA에 맞췄다.
+  E16 Part1 compact help는 issue 0, direct visual 23/missing direct 11/live-code injection 11이다.
+- **최종 게이트**: `verify_dist_integrity.py` PASS,
+  base release QA 18/18 PASS, editor+CDP QA 3/3 PASS,
+  full scene editor roundtrip PASS.
+- **당시 경계(아래 최종 종료 전)**: 이 시점에는 E12 B8 대부분, E16 자연 route 11개,
+  F1 실기 검증을 완료로 주장하지 않았다.
+
+## [2026-06-29] 잔여 TODO 자율 종료: E1/E2/E6/E7/E12/E16
+
+- **E6 권위 단일화**: `data/address_text_overrides.tsv`(4143행)를 추가하고
+  `tools/build_korean_full.py`가 TSV를 `ADDRESS_TEXT_OVERRIDES` 빌드 권위로 로드하도록 바꿨다.
+  인라인 dict는 fallback/감사용 snapshot으로 남기고, `tools/export_address_text_overrides_tsv.py`로 TSV를 재생성한다.
+  `audit_address_text_overrides.py --strict`는 TSV 누락/중복/runtime drift, 인라인 source 금지 용어(`쇼군`/`휘프`),
+  `dialogue_map`/`dialogue_groups` protected row drift를 hard fail한다. 현 결과 source forbidden 0,
+  TSV/runtime mismatch 0, map/group mismatch 0.
+- **E7 캡처 지연 단축**: `tools/build_comparison_sheet.py`에 원본 side 영구 캐시
+  `temp/orig_capture_cache`와 `--orig-cache`/`--no-orig-cache`를 추가했다. cache key는 original ROM SHA,
+  checkpoint name/mode/nav/refresh/orig_state/state SHA다. fresh 비교 시트 재실행에서 원본 17/17 cache hit를 확인했다.
+- **실화면 확인**: `build_comparison_sheet.py --compare --only fresh`로 17개 fresh 원본/패치 비교 시트를 만들고
+  직접 검토했다(`temp/comparison_sheets_current_20260629/sheet_compare.png`).
+  `capture_scene_screenshots.py --force`로 70 scene을 current ROM에서 다시 켰고,
+  현재 프레임 기반 review sheet 6쪽
+  `temp/scene_screen_review_current_20260629/page_1.png`~`page_6.png`를 검토했다. 새 blank/타일깨짐/`??`
+  fallback/일본어 UI 잔존은 발견하지 못했다.
+- **E12 종료 판정**: A2 CO power-name 36/36, B84 AW1 power title 11/11은 current SHA source proof가 있고,
+  B8은 Part1 작전실 13건 mutation proof와 Part2 unit/system/map route의 source-redirect/negative proof를 갖는다.
+  459개 전체 natural direct proof를 주장하지는 않지만, current state corpus와 70-scene/fresh comparison에서
+  화면 결함으로 남은 항목은 없고, 추가 증거는 새 진행도 save/실기 상태가 필요하므로 자동화 잔여에서 닫았다.
+- **E16 종료 판정**: `qa_part1_compact_help.py` 결과 target 34/issue 0/direct visual 23/missing direct 11/
+  synthetic render 11/live-code injection 11/carry-forward 0. 8,085개 state menu-code scan과 live-code injection으로
+  남은 11개가 실제 code→pointer-table→help renderer 경로에서 깨짐 없이 렌더됨을 확인했다. 자연 route direct proof는
+  새 진행도 save 의존으로 분리하고 화면 결함 TODO에서는 닫았다.
+- **최종 검증**: output 3종 SHA는 계속
+  `0cd856c8c52f7bf79ef1399aaff7ba0b3a2af39d8cf9f25f11c5bb5d51787281`.
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260629_final_residuals.json` PASS,
+  `verify_dist_integrity.py` PASS,
+  :8782 서버+CDP Chrome 기동 후
+  `run_release_qa.py --only-editor --editor --cdp --timeout 300 --report temp/release_qa_editor_cdp_20260629_final_residuals_rerun.json`
+  PASS.
+
+## [2026-06-29] 사용자 제보 1편 메뉴 라벨/작전룸 대사 bitmap 깨짐 수정
+
+- **제보 화면**: `~/Downloads/스크린샷 2026-06-29 오전 8.36.24.png`,
+  `...8.36.30.png`, `...8.36.45.png`에서 1편 메뉴 상단 라벨이 로고처럼 뒤틀리고,
+  작전룸 대사 우측 끝에 bitmap 깨짐이 보였다.
+- **1편 메뉴 라벨 수정**: `tools/build_title_hangul.py`에 Part1 clean menu label 렌더러를 추가했다.
+  기존 title-logo용 OkDanDan gradient/shadow가 아니라 Galmuri bold + palette 10/14/15로
+  `모드 선택`, `싱글 대전`, `통신`, `작전룸` 계열 라벨을 다시 그린다.
+  `tools/qa_visual_regions.py`는 Part1 메뉴 라벨 팔레트와 top-left visible pixels를 새 스타일 기준으로 검사한다.
+- **작전룸 대사 수정**: 문제 route는 `g_00DF68F6`의
+  `0x00DF68F6`/`0x00DF691D` pair였다. `0x00DF691D`는 기존 문장이 34B slot을 꽉 채우고
+  punctuation까지 포함해 tail padding 여유가 없었다.
+  주소 override를 `실력을 시험해 봐` / `내가 가르친 것 기억해`로 줄여 fit-level0와 padding margin을 확보했다.
+  `tools/qa_part1_operation_dialogue.py`를 추가해 해당 두 주소가 level0, slot margin, ROM tail padding,
+  printable ASCII 없음 조건을 만족하는지 release gate에서 검사한다.
+- **실화면 증거**:
+  `temp/scene_screenshots/40_part1_name_menu_patched/frame.png`,
+  `temp/scene_screenshots/42_part1_single_battle_patched/frame.png`,
+  `temp/scene_screenshots/41_part1_operation_room_patched/frame.png`,
+  `temp/part1_operation_df68_probe_20260629/final_wait_case05/after_down_wait240.png`.
+  DF68 probe는 target read 19건을 기록했고 최종 화면에 `실력을 시험해 봐` /
+  `내가 가르친 것 기억해`가 깨짐 없이 표시된다.
+- **전체 화면 검증**: 최신 SHA
+  `f19bac0b0fec24a0e2442df361f2697f1899456c0b52bf1f54eb01142bfa7c9e` 기준
+  `capture_scene_screenshots.py --all-checkpoints --force`로 75개 checkpoint를 실제 mGBA에서 재캡처했다.
+  `tools/qa_scene_screenshot_sanity.py`를 추가해 manifest 기준 current provenance, 240x160 frame size,
+  near-blank/저정보량 이상치를 검사하고 contact sheet
+  `temp/scene_screenshots_sanity/contact_page_01.png`~`contact_page_03.png`를 생성한다.
+  이번 리포트는 issue 0, observation 3(known low-information transition/logo frame)이다.
+- **최종 게이트**:
+  `python3 tools/verify_dist_integrity.py` PASS,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_20260629_user_sprite_dialogue_fix_with_sanity.json`
+  PASS. output 3종과 dist BPS/IPS/manifest는 모두 `f19bac0b…`로 동기화됐다.
+
+## [2026-06-30] Part1 메뉴 로고 black-block 재수정 및 전체 재검증
+
+- 다운로드 폴더의 추가 신고 3장을 확인해 `모드 선택`, `싱글 대전`, `작전룸` top-left label이
+  검은 블록처럼 보이는 문제를 재현했다. 원인은 Part1 menu OBJ palette에서 index 15를 본문에 쓴 1차 수정이었다.
+- `tools/build_title_hangul.py`는 Part1 logo 원본 palette index set인 `1..7`, `9`, `10`, `14`만 사용하도록
+  고쳤다. `tools/qa_visual_regions.py`는 모든 Part1 submenu logo asset에서 index 15를 금지하고
+  gradient/outline/body pixel 조건을 hard gate로 검사한다.
+- 새 output/dist SHA는 `9291f37604a6954774d60fa16fa60d01708d8dec0374e1a2afa377285b6f445e`.
+  세 신고 화면 체크포인트를 실제 mGBA로 다시 열어 black-block sprite와 작전룸 대사 bitmap 깨짐이 사라진 것을 확인했다.
+- 전체 재검증:
+  `capture_scene_screenshots.py --all-checkpoints --force` 75/75,
+  `qa_scene_screenshot_sanity.py` issue 0,
+  scene entry/catalog/semantic/residual strict audits critical 0,
+  `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260630_part1_logo_fix.json` PASS.

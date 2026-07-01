@@ -77,7 +77,7 @@ import_placeholder_warnings=0
 === 결과: FAIL (jammed 433 / abbrev 74 / grammar 17 / double 0) ===
 ```
 - **단어붙음 발견 규모**: 슬롯 부족으로 공백이 잘려 붙은 라인이 다수. 후보 워크리스트는 두 덤프로 정리됨:
-  - `temp/compare/jammed.json` — **430 라인**(전부 `enc>slot`, 출처: 쪼롱이 번역 429 + import 1).
+  - `temp/compare/jammed.json` — **430 라인**(전부 `enc>slot`, 출처: 짜옹이 번역 429 + import 1).
   - `temp/jammed_refit.json` — **293 라인**(재핏 대상, 슬롯·max_kchars 포함).
   - (※ 본문 task가 언급한 "504건" 규모와 맞물리는 발견 집합. 실측 게이트 기준 현 출하 ROM JAMMED는 **433건**.)
 

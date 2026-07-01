@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -37,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "data" / "screen_checkpoints.json"
 DEFAULT_PATCHED = ROOT / "output" / "game_wars_korean_full.gba"
 DEFAULT_ORIGINAL = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
+DEFAULT_ORIG_CACHE = ROOT / "temp" / "orig_capture_cache"
 GBA_W, GBA_H = 240, 160
 
 _FONT_CACHE: dict[int, ImageFont.FreeTypeFont] = {}
@@ -100,7 +102,55 @@ def _git_commit() -> str:
         return "unknown"
 
 
-def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str) -> Image.Image:
+def _capture_cache_key(rom: Path, checkpoint: dict, side: str) -> str:
+    payload: dict = {
+        "version": 1,
+        "side": side,
+        "name": checkpoint["name"],
+        "mode": checkpoint["mode"],
+        "rom_sha256": _sha256(rom),
+        "nav": checkpoint.get("nav"),
+        "refresh": checkpoint.get("refresh"),
+        "orig_state": checkpoint.get("orig_state"),
+        "state": checkpoint.get("state") if side == "patched" else checkpoint.get("orig_state"),
+    }
+    state_ref = payload.get("state")
+    if state_ref:
+        state_path = _resolve(str(state_ref))
+        payload["state_sha256"] = _sha256(state_path)
+    blob = json.dumps(payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()[:24]
+
+
+def _copy_cached_capture(cache_entry: Path, shot_dir: Path) -> Image.Image | None:
+    frame = cache_entry / "frame.png"
+    prov = cache_entry / "provenance.json"
+    if not frame.exists() or not prov.exists():
+        return None
+    shutil.copy2(frame, shot_dir / "frame.png")
+    shutil.copy2(prov, shot_dir / "provenance.json")
+    return Image.open(frame).copy()
+
+
+def _store_cached_capture(cache_entry: Path, shot_dir: Path) -> None:
+    frame = shot_dir / "frame.png"
+    prov = shot_dir / "provenance.json"
+    if not frame.exists() or not prov.exists():
+        return
+    cache_entry.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(frame, cache_entry / "frame.png")
+    shutil.copy2(prov, cache_entry / "provenance.json")
+
+
+def capture(
+    rom: Path,
+    checkpoint: dict,
+    out_dir: Path,
+    harness: Path,
+    side: str,
+    *,
+    orig_cache: Path | None = None,
+) -> Image.Image:
     """단일 체크포인트의 단일 ROM 화면을 캡처 + provenance sidecar 기록.
 
     codex 리뷰 수정: savestate orig_state fallback 금지(없으면 명시 에러).
@@ -110,6 +160,13 @@ def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str
     name = checkpoint["name"]
     shot_dir = out_dir / f"{name}_{side}"
     shot_dir.mkdir(parents=True, exist_ok=True)
+    cache_entry: Path | None = None
+    if side == "orig" and orig_cache is not None:
+        cache_entry = orig_cache / _capture_cache_key(rom, checkpoint, side)
+        cached = _copy_cached_capture(cache_entry, shot_dir)
+        if cached is not None:
+            print(f"  [orig-cache hit] {name}")
+            return cached
     prov: dict = {
         "name": name,
         "scene_id": checkpoint.get("scene_id"),
@@ -147,6 +204,8 @@ def capture(rom: Path, checkpoint: dict, out_dir: Path, harness: Path, side: str
         (shot_dir / "provenance.json").write_text(
             json.dumps(prov, ensure_ascii=False, indent=2), encoding="utf-8"
         )
+        if cache_entry is not None:
+            _store_cached_capture(cache_entry, shot_dir)
         return img
     finally:
         driver.close()
@@ -193,6 +252,10 @@ def main() -> None:
                     help="savestate(stale-BG) 체크포인트 포함(기본은 fresh ground truth만)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "comparison_sheets"))
     ap.add_argument("--harness", default="/tmp/mgbah")
+    ap.add_argument("--orig-cache", default=str(DEFAULT_ORIG_CACHE),
+                    help="--compare 원본 캡처 캐시 디렉터리")
+    ap.add_argument("--no-orig-cache", action="store_true",
+                    help="원본 캡처 캐시 사용 안 함")
     ap.add_argument("--cols", type=int, default=0, help="0=자동")
     args = ap.parse_args()
 
@@ -211,6 +274,7 @@ def main() -> None:
     harness = Path(args.harness)
     patched = Path(args.rom)
     original = Path(args.original)
+    orig_cache = None if args.no_orig_cache else Path(args.orig_cache)
 
     panels: list[Image.Image] = []
     for ck in checkpoints:
@@ -221,7 +285,7 @@ def main() -> None:
         patched_img = capture(patched, ck, out_dir, harness, "patched")
         if args.compare:
             if ck["mode"] == "fresh" or ck.get("orig_state"):
-                orig_img = capture(original, ck, out_dir, harness, "orig")
+                orig_img = capture(original, ck, out_dir, harness, "orig", orig_cache=orig_cache)
                 pair = Image.new("RGB", (GBA_W * 2 + 4, GBA_H), (60, 60, 60))
                 pair.paste(orig_img, (0, 0))
                 pair.paste(patched_img, (GBA_W + 4, 0))

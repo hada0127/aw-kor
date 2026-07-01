@@ -3,8 +3,8 @@
  "proof_mode": "synthetic_ram_field_read_watch",
  "synthetic_ram_field_source_proof": true,
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
- "git_commit": "9773948",
+ "rom_sha256": "0cd856c8c52f7bf79ef1399aaff7ba0b3a2af39d8cf9f25f11c5bb5d51787281",
+ "git_commit": "db4b9ae",
  "selected_groups": [
   "a2_co_power_profile_display_overrides"
  ],

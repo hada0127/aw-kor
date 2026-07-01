@@ -39,7 +39,7 @@ PART1_RULE_SELECT_LZ77_OFF = 0x00C19D14
 PART1_TEAM_SETTING_LZ77_OFF = 0x00C19FF0
 PART1_SUBMENU_LOGO_BLOCKS = [
     ("campaign", 0x00C1A2BC, "캠페인", 20),
-    ("map_design", 0x00C1A81C, "맵 디자인", 18),
+    ("map_design", 0x00C1A81C, "맵 디자인", 15),
     ("single_battle", 0x00C1A9DC, "싱글 대전", 17),
     ("connect", 0x00C1AC60, "통신", 20),
     ("map_record", 0x00C1AE74, "맵 기록", 18),
@@ -671,7 +671,7 @@ def make_part2_index_layer() -> Image.Image:
         body_stops=(5, 4, 6, 7, 8),
         body_aa_idx=9,
     )
-    draw_boxed_start_index(layer, "시작하기!", (68, 100, 172, 116))
+    draw_part2_start_index(layer, "시작하기!", (90, 100, 150, 116))
     return layer
 
 
@@ -685,6 +685,25 @@ def draw_boxed_start_index(layer: Image.Image, text: str, box: tuple[int, int, i
     draw.rectangle(box, fill=12)
     draw.rectangle(box, outline=14, width=2)
     draw_blocky_prompt_index(layer, text, box, fill_idx=1, stroke_idx=14, aa_idx=10)
+
+
+def draw_part2_start_index(layer: Image.Image, text: str, box: tuple[int, int, int, int]) -> None:
+    text_layer = Image.new("L", layer.size, 0)
+    draw_blocky_prompt_index(text_layer, text, box, fill_idx=1, stroke_idx=14, aa_idx=10)
+    text_bbox = text_layer.getbbox()
+    if text_bbox is None:
+        return
+    x0, y0, x1, y1 = text_bbox
+    draw = ImageDraw.Draw(layer)
+    # Part 2's original PRESS START uses letter outlines, not a hard box border.
+    draw.rectangle((x0 - 1, y0 - 1, x1, y1), fill=12)
+    src = text_layer.load()
+    dst = layer.load()
+    for yy in range(max(0, y0 - 1), min(layer.height, y1 + 1)):
+        for xx in range(max(0, x0 - 1), min(layer.width, x1 + 1)):
+            value = src[xx, yy]
+            if value:
+                dst[xx, yy] = value
 
 
 def draw_blocky_prompt_index(
@@ -1111,6 +1130,49 @@ def draw_centered_title_font_text(
     layer.paste(patch, (x, bbox[1]))
 
 
+def draw_part1_clean_menu_label(
+    layer: Image.Image,
+    text: str,
+    box: tuple[int, int, int, int],
+    max_size: int,
+) -> None:
+    """Draw Part 1 menu labels with the original logo palette indices.
+
+    These OBJ blocks use screen-local palettes.  Index 15 maps to near-black on
+    the Part1 menu routes, so using it for Hangul bodies makes the label look
+    like a corrupted sprite.  The original Japanese logo blocks use indices
+    1..7 for the route-colored gradient, 9 for the brown shadow, 10 for white
+    outline, and 14 for the dark body/outline.  Keep to that set.
+    """
+    draw = ImageDraw.Draw(layer)
+    font_path = FONT_PATH if FONT_PATH.exists() else (BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH)
+    for size in range(max_size, 9, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, text, font, 2)
+        if w <= box[2] - box[0] and h <= box[3] - box[1]:
+            break
+    text_box = draw.textbbox((0, 0), text, font=font, stroke_width=2)
+    w = text_box[2] - text_box[0]
+    h = text_box[3] - text_box[1]
+    x = (box[0] + box[2] - w) // 2 - text_box[0]
+    y = (box[1] + box[3] - h) // 2 - text_box[1] - 1
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x + 2, y + 2), 2), 9, 80)
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), 2), 10, 64)
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), 1), 14, 96)
+    body = text_mask_layer(layer.size, text, font, (x, y), 0)
+    body_box = draw.textbbox((x, y), text, font=font, stroke_width=0)
+    paste_vertical_text_gradient(
+        layer,
+        body,
+        (body_box[1], body_box[3]),
+        center_idx=14,
+        top_indices=(1, 2, 3),
+        bottom_indices=(4, 5, 6, 7),
+        aa_idx=14,
+        center_band=0.10,
+    )
+
+
 def draw_centered_bdf_text(layer: Image.Image, text: str, fill_idx: int, spacing: int = 1) -> None:
     font, _ = load_bdf(str(SMALL_BDF_FONT_PATH))
     glyphs = []
@@ -1231,6 +1293,97 @@ def paste_ordered_text_gradient(
                 lp[xx, yy] = aa_idx
 
 
+def part1_option_gradient_index(y: int) -> int:
+    """Original Part 1 option logo body gradient by absolute row."""
+    if y <= 7:
+        return 6
+    if y <= 9:
+        return 5
+    if y <= 11:
+        return 4
+    if y <= 13:
+        return 3
+    if y == 14:
+        return 2
+    if y <= 16:
+        return 1
+    if y == 17:
+        return 2
+    if y <= 19:
+        return 3
+    if y <= 21:
+        return 4
+    if y <= 23:
+        return 5
+    return 6
+
+
+def paste_part1_option_body_gradient(layer: Image.Image, body: Image.Image, *, aa_idx: int = 7) -> None:
+    bp = body.load()
+    lp = layer.load()
+    for yy in range(layer.height):
+        fill = part1_option_gradient_index(yy)
+        for xx in range(layer.width):
+            alpha = bp[xx, yy]
+            if alpha >= 96:
+                lp[xx, yy] = fill
+            elif alpha >= 24 and lp[xx, yy] == 0:
+                lp[xx, yy] = aa_idx
+
+
+def draw_part1_option_logo_text(
+    layer: Image.Image,
+    text: str,
+    box: tuple[int, int, int, int],
+    max_size: int,
+    *,
+    stroke_width: int = 2,
+    target_min_w: int | None = None,
+    width_limit: int | None = None,
+) -> None:
+    """Draw Part 1 carousel option text with the original option palette.
+
+    The Japanese option blocks use no index 15. Their body gradient walks down
+    through 6,5,4,3,2,1 then back through 2,3,4,5,6, while 9/10/14 carry the
+    shadow and outlines. Keeping this exact index family lets the runtime OBJ
+    palettes reproduce the original green/red/cyan gradients.
+    """
+    draw = ImageDraw.Draw(layer)
+    font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
+    max_w = width_limit if width_limit is not None else box[2] - box[0]
+    max_h = box[3] - box[1]
+    for size in range(max_size, 7, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, text, font, stroke_width)
+        if w <= max_w and h <= max_h:
+            break
+    text_box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke_width)
+    w = text_box[2] - text_box[0]
+    h = text_box[3] - text_box[1]
+    x = (box[0] + box[2] - w) // 2 - text_box[0]
+    y = (box[1] + box[3] - h) // 2 - text_box[1] - 1
+
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x + 2, y + 2), stroke_width), 9, 48)
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), stroke_width), 10, 48)
+    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), max(1, stroke_width - 1)), 14, 48)
+    body = text_mask_layer(layer.size, text, font, (x, y), 0)
+    paste_part1_option_body_gradient(layer, body, aa_idx=7)
+
+    if target_min_w is None:
+        return
+    bbox_now = layer.getbbox()
+    if bbox_now is None:
+        return
+    current_w = bbox_now[2] - bbox_now[0]
+    target_w = min(target_min_w, box[2] - box[0])
+    if current_w >= target_w:
+        return
+    patch = layer.crop(bbox_now).resize((target_w, bbox_now[3] - bbox_now[1]), Image.Resampling.NEAREST)
+    draw.rectangle((bbox_now[0], bbox_now[1], bbox_now[2] - 1, bbox_now[3] - 1), fill=0)
+    x = (box[0] + box[2] - target_w) // 2
+    layer.paste(patch, (x, bbox_now[1]))
+
+
 def strengthen_operation_room_rieul(layer: Image.Image) -> None:
     px = layer.load()
     body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 10}
@@ -1241,15 +1394,15 @@ def strengthen_operation_room_rieul(layer: Image.Image) -> None:
 
 
 def strengthen_first_tong_tieut(layer: Image.Image) -> None:
-    """Extend the right edge of the first '통' top strokes by two pixels."""
+    """Extend the right edge of the first '통' top strokes."""
     bbox = layer.getbbox()
     if bbox is None:
         return
     x0, y0, x1, y1 = bbox
     px = layer.load()
     mid = x0 + max(1, (x1 - x0) // 2)
-    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-    for y in range(y0, min(y1, y0 + 10)):
+    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14}
+    for y in range(y0, min(y1, y0 + 11)):
         xs = [x for x in range(x0, mid) if px[x, y] in body_indices]
         if len(xs) < 4:
             continue
@@ -1258,14 +1411,14 @@ def strengthen_first_tong_tieut(layer: Image.Image) -> None:
         if right - left < 5:
             continue
         value = px[right, y] if px[right, y] else 14
-        for x in (right + 1, right + 2):
-            if x < mid + 2 and px[x, y] == 0:
+        for x in (right + 1, right + 2, right + 3):
+            if x < mid + 3 and px[x, y] == 0:
                 px[x, y] = value
 
 
 def make_part1_label_block(korean: str, _english: str, max_size: int = 20) -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
-    draw_centered_title_font_text(layer, korean, (4, 3, 78, 29), min(max_size, 18), 2, 15, 7)
+    draw_part1_clean_menu_label(layer, korean, (2, 1, 78, 31), min(max_size, 18))
     return layer
 
 
@@ -1275,27 +1428,7 @@ def make_part1_submenu_label_block(korean: str, max_size: int = 20) -> Image.Ima
         "멀티카드 통신": "멀티 통신",
         "플레이어 랭크": "랭크",
     }.get(korean, korean)
-    if label in {"싱글 대전", "통신"}:
-        target_w = 72 if label == "싱글 대전" else 48
-        draw_centered_title_font_text(
-            layer, label, (4, 3, 78, 29), min(max_size, 18), 2, 15, 7, target_min_w=target_w
-        )
-        return layer
-    draw = ImageDraw.Draw(layer)
-    font_path = BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
-    width_limit = 72 if len(label) >= 5 else 58
-    start_size = max(8, min(max_size, 12))
-    font = ImageFont.truetype(str(font_path), start_size)
-    for size in range(start_size, 7, -1):
-        font = ImageFont.truetype(str(font_path), size)
-        w, h = text_bbox(draw, label, font, 0)
-        if w <= width_limit and h <= 13:
-            break
-    box = draw.textbbox((0, 0), label, font=font, stroke_width=0)
-    w = box[2] - box[0]
-    x = (80 - w) // 2 - box[0]
-    y = 5 - box[1]
-    paint_index_text_aa(layer, (x, y), label, font, 2, 2, 0, aa_idx=2)
+    draw_part1_clean_menu_label(layer, label, (2, 1, 78, 31), min(max_size, 18))
     return layer
 
 
@@ -1306,29 +1439,7 @@ def make_part1_operation_block() -> Image.Image:
 
 def make_part1_mode_block() -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
-    draw = ImageDraw.Draw(layer)
-    text = "모드 선택"
-    font = ImageFont.truetype(str(FONT_PATH), 19)
-    box = draw.textbbox((0, 0), text, font=font, stroke_width=2)
-    w = box[2] - box[0]
-    h = box[3] - box[1]
-    x = (80 - w) // 2 - box[0]
-    y = (32 - h) // 2 - box[1] - 1
-    glyph_y = (max(0, y + box[1]), min(31, y + box[3]))
-    paste_mask_index(layer, text_mask_layer((80, 32), text, font, (x + 2, y + 2), 2), 15, 32)
-    paste_mask_index(layer, text_mask_layer((80, 32), text, font, (x + 1, y + 1), 2), 9, 48)
-    paste_mask_index(layer, text_mask_layer((80, 32), text, font, (x, y), 2), 10, 48)
-    paste_mask_index(layer, text_mask_layer((80, 32), text, font, (x, y), 1), 14, 32)
-    body = text_mask_layer((80, 32), text, font, (x, y), 0)
-    paste_vertical_text_gradient(
-        layer,
-        body,
-        glyph_y,
-        center_idx=10,
-        top_indices=(1, 2, 3),
-        bottom_indices=(4, 5, 6, 7),
-        center_band=0.16,
-    )
+    draw_part1_clean_menu_label(layer, "모드 선택", (2, 1, 78, 31), 18)
     return layer
 
 
@@ -1339,26 +1450,30 @@ def part1_option_display_text(text: str) -> str:
 def make_part1_option_block(text: str, max_size: int) -> Image.Image:
     layer = Image.new("L", (128, 32), 0)
     label = part1_option_display_text(text)
-    draw = ImageDraw.Draw(layer)
-    font_path = BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
-    width_limit = 78 if len(label) >= 5 else 62
-    start_size = max(8, min(max_size, 12))
-    font = ImageFont.truetype(str(font_path), start_size)
-    for size in range(start_size, 7, -1):
-        font = ImageFont.truetype(str(font_path), size)
-        w, h = text_bbox(draw, label, font, 0)
-        if w <= width_limit and h <= 13:
-            break
-
-    box = draw.textbbox((0, 0), label, font=font, stroke_width=0)
-    w = box[2] - box[0]
-    x = (128 - w) // 2 - box[0]
-    y = 5 - box[1]
-    # These OBJ labels scroll behind the translucent Part1 help box. Keep them
-    # low-profile: no drop shadow or outline. The original menu scrolls option
-    # OBJs behind the translucent help box, so extra edge pixels hurt the help
-    # text more than they improve the off-center carousel labels.
-    paint_index_text_aa(layer, (x, y), label, font, 2, 2, 0, aa_idx=2)
+    if label in {"작전룸", "통신", "대전"}:
+        target_w = {"작전룸": 78, "통신": 62, "대전": 60}[label]
+        draw_part1_option_logo_text(
+            layer,
+            label,
+            (8, 0, 120, 31),
+            min(max_size, 25),
+            stroke_width=2,
+            target_min_w=target_w,
+        )
+    else:
+        width_limit = 108 if len(label) >= 6 else 92
+        draw_part1_option_logo_text(
+            layer,
+            label,
+            (8, 0, 120, 31),
+            min(max_size, 25),
+            stroke_width=2,
+            width_limit=width_limit,
+        )
+    if label == "작전룸":
+        strengthen_operation_room_rieul(layer)
+    if label == "통신":
+        strengthen_first_tong_tieut(layer)
     return layer
 
 
@@ -1465,8 +1580,8 @@ def patch_part1_option_block(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="output/game_wars_korean_final.gba")
-    parser.add_argument("--output", default="output/game_wars_korean_title_test.gba")
+    parser.add_argument("--input", default="output/game_wars_korean_full.gba")
+    parser.add_argument("--output", default="output/game_wars_korean_full.gba")
     parser.add_argument("--preview", default="docs/title_hangul/drafts/title_obj_okdandan_insert_layer_3x.png")
     parser.add_argument("--select-preview", default="docs/title_hangul/drafts/select_obj_okdandan_insert_layer_3x.png")
     parser.add_argument("--part1-preview", default="docs/title_hangul/drafts/part1_title_okdandan_insert_layer_3x.png")
