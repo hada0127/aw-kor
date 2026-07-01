@@ -373,6 +373,10 @@ PART1_BATTLE_DAY_BANNER_OFFSETS = {0x00EE5E14}
 PART1_CHECK_LABEL_OFFSETS = {0x00BA4490}
 COMMON_NINTENDO_PRESENTS_BG_OFFSETS = {0x00021CE8}
 COMMON_SELECT_OBJ_OFFSETS = {0x00024A34}
+# Mirrors build_title_hangul.TITLE_COPYRIGHT_LZ77_OFFS.  The builder packs a
+# single 160x16 layer as five 32x16 chunks, so the editor must not reuse the
+# wider captured OAM bbox from the original English copyright sprites.
+TITLE_COPYRIGHT_OFFSETS = {0x000228AC, 0x0003895C, 0x0052F974, 0x00C43FB8}
 
 PART1_TITLE_TEXT_SPECS = (
     (16, 12, 8, 4, 0x118, 1),
@@ -870,6 +874,18 @@ def part2_tiled_layer_layout(sp, off):
 
 
 def tiled_layer_layout(sp, off):
+    if off in TITLE_COPYRIGHT_OFFSETS:
+        cells = []
+        for sprite in range(5):
+            cells.append({"x": 40 + sprite * 32, "y": 140, "tw": 4, "th": 2,
+                          "fh": 0, "fv": 0, "tile_off": sprite * 8,
+                          "bank": 0, "palbase": 0})
+        return {
+            "cells": cells,
+            "x0": 40, "y0": 140, "w": 160, "h": 16, "obj1d": 1,
+            "tile_cols": sp.get("tile_cols"), "build": True, "screen": "obj",
+            "fallback": "title_copyright_160x16_layer",
+        }
     if off in COMMON_NINTENDO_PRESENTS_BG_OFFSETS:
         return {
             "cells": [
@@ -1076,11 +1092,21 @@ def _objlabel_pal():
     return p
 
 
+def _title_copyright_pal():
+    p = [list(c) for c in ES.GRAYSCALE]
+    p[1] = [49, 66, 82]       # fill: dark blue-gray, sampled from current title captures
+    p[13] = [140, 148, 148]   # antialias/shadow
+    p[15] = [255, 255, 255]   # stroke
+    return p
+
+
 def default_palette_for(sp):
     """source 화면 추정 → 그 화면의 실기 OBJ 팔레트(첫 뱅크)를 기본값으로. 없으면 grayscale.
     (정확한 뱅크는 사용자가 팔레트 드롭다운으로 선택; OAM 정보 없이 자동은 화면까지만 추정)"""
     if "objlabel" in (sp.get("source") or "").lower() or sp.get("type") == "synthetic":
         return _objlabel_pal()
+    if "copyright" in (sp.get("source") or "").lower():
+        return _title_copyright_pal()
     lib = palette_library()
     if not lib:
         return [list(c) for c in ES.GRAYSCALE]

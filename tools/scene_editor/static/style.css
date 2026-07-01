@@ -72,7 +72,6 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .row .badge { font-size: 9px; color: var(--accent); margin-left: 5px; }
 .row .over { color: var(--bad); }
 .row img.thumb { image-rendering: pixelated; background: #222; border: 1px solid var(--line); vertical-align: middle; margin-right: 6px; max-height: 28px; max-width: 120px; }
-.row img.thumb.tilethumb { max-height: 40px; max-width: 96px; }
 .row.more { text-align: center; color: var(--accent); }
 .row.kindsep { color: var(--dim); font-size: 10px; background: #15171d; cursor: default; text-transform: uppercase; letter-spacing: .05em; }
 .scene-proof { display: flex; gap: 9px; align-items: center; padding: 8px 12px 8px 28px;

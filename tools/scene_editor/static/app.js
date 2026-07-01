@@ -312,9 +312,8 @@ function renderSceneItems(box) {
       const sp = SPR[i];
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "s"; el.dataset.i = i;
       const rawUrl = `/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=patched`;
-      const tileThumb = spritePrefersTileThumbnail(sp);
-      const thumbUrl = tileThumb || !sp.has_onscreen ? rawUrl : `/api/sprite/onscreen?id=${encodeURIComponent(sp.id)}`;
-      el.innerHTML = `<img class="thumb ${tileThumb ? "tilethumb" : ""}" loading="lazy" decoding="async" src="${thumbUrl}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${rawUrl}'}else if(!this.dataset.o){this.dataset.o=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
+      const thumbUrl = !sp.has_onscreen ? rawUrl : `/api/sprite/onscreen?id=${encodeURIComponent(sp.id)}`;
+      el.innerHTML = `<img class="thumb" loading="lazy" decoding="async" src="${thumbUrl}" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='${rawUrl}'}else if(!this.dataset.o){this.dataset.o=1;this.src='/api/sprite/render?id=${encodeURIComponent(sp.id)}&which=orig'}else{this.style.display='none'}">
         <span class="ko">${esc(sp.desc)}${sp.has_onscreen ? `<span class="badge">출력배치</span>` : ""}</span>`;
       el.onclick = () => selectSprite(i, el);
       frag.appendChild(el);
@@ -374,10 +373,6 @@ function isTitleCopyrightSprite(sp) {
     || id === "lz77_00c43fb8";
 }
 
-function spritePrefersTileThumbnail(sp) {
-  return isTitleCopyrightSprite(sp);
-}
-
 function spritePrefersContextBackground(sp) {
   return isTitleCopyrightSprite(sp);
 }
@@ -386,12 +381,16 @@ function currentSpritePrefersContextBackground() {
   return spritePrefersContextBackground(S.item && S.item.sp);
 }
 
-function spritePrefersContrastPreview(sp) {
-  return isTitleCopyrightSprite(sp);
+function spriteDefaultContrastPreview() {
+  return false;
 }
 
-function currentSpritePrefersContrastPreview() {
-  return spritePrefersContrastPreview(S.item && S.item.sp);
+function currentSpriteSupportsContrastPreview() {
+  return spriteSupportsContrastPreview(S.item && S.item.sp);
+}
+
+function spriteSupportsContrastPreview(sp) {
+  return isTitleCopyrightSprite(sp);
 }
 
 function contrastPreviewColor(idx, actual) {
@@ -411,7 +410,7 @@ function contrastPreviewColor(idx, actual) {
 }
 
 function displayColorForIndex(idx, actual) {
-  if (SP.previewContrast && currentSpritePrefersContrastPreview() && idx !== 0) {
+  if (SP.previewContrast && currentSpriteSupportsContrastPreview() && idx !== 0) {
     return contrastPreviewColor(idx & 15, actual);
   }
   return actual || [0, 0, 0];
@@ -664,7 +663,7 @@ async function selectSprite(i, el) {
   SP.activePaletteKey = null;
   SP.mode = SP.hasOnscreen ? "onscreen" : "tile";
   SP.bgUrl = shotUrl(S.items && S.items.screenshot); SP.showBg = spritePrefersContextBackground(sp);
-  SP.previewContrast = spritePrefersContrastPreview(sp);
+  SP.previewContrast = spriteDefaultContrastPreview();
   SP.bgImg = null; SP.bgReady = false;
   const ed = $("#editor");
   const layoutLabel = SP.hasOnscreen ? "타일 그리드 · 출력 크기 배치" : "타일 그리드 · 출력 크기";
@@ -675,7 +674,7 @@ async function selectSprite(i, el) {
     <div class="sprite-mode">
       <span class="mode-label">${layoutLabel}</span>
       ${SP.hasOnscreen ? `<label class="bgcheck"><input id="spBg" type="checkbox">배경</label>` : ""}
-      ${spritePrefersContrastPreview(sp) ? `<label class="bgcheck"><input id="spContrast" type="checkbox">고대비</label>` : ""}
+      ${spriteSupportsContrastPreview(sp) ? `<label class="bgcheck"><input id="spContrast" type="checkbox">고대비</label>` : ""}
     </div>
     <div class="sprite-workbench">
       <figure class="sprite-pane">
@@ -796,7 +795,7 @@ function renderSwatches() {
     sw.className = "sw" + (i === SP.sel ? " sel" : "");
     const dc = displayColorForIndex(i, c);
     sw.style.background = `rgb(${dc[0]},${dc[1]},${dc[2]})`;
-    sw.title = SP.previewContrast && currentSpritePrefersContrastPreview()
+    sw.title = SP.previewContrast && currentSpriteSupportsContrastPreview()
       ? `색 ${i} · 실제 rgb(${c[0]},${c[1]},${c[2]})`
       : "색 " + i;
     sw.onclick = () => { SP.sel = i; renderSwatches(); };
