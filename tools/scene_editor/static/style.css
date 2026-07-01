@@ -155,16 +155,25 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 /* 사전 모달 */
 #dictModal { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex;
   align-items: center; justify-content: center; z-index: 20; }
-.dictbox { width: 720px; max-width: 92vw; max-height: 86vh; display: flex; flex-direction: column; }
+.dictbox { width: 980px; max-width: 94vw; max-height: 86vh; display: flex; flex-direction: column; }
 .dictadd { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
 .dictadd input { flex: 1; min-width: 90px; }
 #dictlist { overflow-y: auto; flex: 1; }
-.dterm { display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 13px; }
-.dterm .dcat { color: var(--dim); font-size: 11px; min-width: 64px; }
-.dterm .dja { min-width: 90px; color: var(--ink); }
-.dterm input { flex: 1; }
+.dterm { display: grid; grid-template-columns: 90px minmax(130px, 1.1fr) minmax(130px, 1fr) minmax(130px, 1fr) 74px auto auto; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.dterm .dcat { color: var(--dim); font-size: 11px; min-width: 0; overflow-wrap: anywhere; }
+.dterm .dsource { color: var(--ink); overflow-wrap: anywhere; }
+.dterm .dstatus { color: var(--dim); font-size: 11px; white-space: nowrap; }
+.dterm .dnote { grid-column: 2 / -1; color: var(--dim); font-size: 11px; overflow-wrap: anywhere; }
+.dterm.readonly { opacity: .78; }
+.dterm.missing .dstatus { color: var(--bad); font-weight: 700; }
+.dterm input { width: 100%; min-width: 0; }
 .dterm button { padding: 3px 8px; font-size: 12px; }
 .dterm .del { color: var(--bad); border-color: var(--bad); }
+
+@media (max-width: 760px) {
+  .dterm { grid-template-columns: 70px 1fr; align-items: stretch; }
+  .dterm input, .dterm .dstatus, .dterm button, .dterm .dnote { grid-column: 2; }
+}
 
 /* toast */
 #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);

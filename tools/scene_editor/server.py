@@ -919,7 +919,7 @@ class Handler(BaseHTTPRequestHandler):
                                     "extra_screenshots": scene_extra_shots_info(sc),
                                     "dialogue": d, "sprites": s})
         if p == "/api/dict":
-            return self._send(200, load_json(DE.DICT_PATH, {}))
+            return self._send(200, DE.dict_response())
         if p == "/api/syllables":
             # JS 즉시 검증용: 폰트 수록 음절 목록(2350). 미수록 입력 차단에 사용.
             return self._send(200, {"syllables": list(syl_codes().keys())})
@@ -1260,39 +1260,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _edit_dict(self, body):
         """통일 사전 CRUD(add/edit/delete) — proper_nouns.json. DE 로직 재사용(Phase 4 잔여)."""
-        action = body.get("action")
-        cat = body.get("category")
-        ja = (body.get("ja") or "").strip()
-        with _LOCK:
-            pn = DE.load_json(DE.DICT_PATH, {})
-            if cat not in pn or not isinstance(pn.get(cat), list):
-                if action == "add" and cat:
-                    pn[cat] = []
-                else:
-                    return {"ok": False, "error": "category %r 없음" % cat}
-            lst = pn[cat]
-            if action == "add":
-                if not ja:
-                    return {"ok": False, "error": "ja 필요"}
-                if any((e.get("ja") or "") == ja for e in lst):
-                    return {"ok": False, "error": "이미 존재: %s" % ja}
-                lst.append({"ja": ja, "ko": body.get("ko", ""), "edit": body.get("edit", "")})
-            elif action == "edit":
-                e = next((e for e in lst if (e.get("ja") or "") == ja), None)
-                if not e:
-                    return {"ok": False, "error": "없음: %s" % ja}
-                if "ko" in body:
-                    e["ko"] = body["ko"]
-                if "edit" in body:
-                    e["edit"] = body["edit"]
-            elif action == "delete":
-                pn[cat] = [e for e in lst if (e.get("ja") or "") != ja]
-            else:
-                return {"ok": False, "error": "unknown action"}
-            if isinstance(pn.get("counts"), dict):
-                pn["counts"] = {k: len(v) for k, v in pn.items() if isinstance(v, list)}
-            DE.save_json(DE.DICT_PATH, pn)
-        return {"ok": True}
+        return DE.edit_dict_payload(body)
 
     def _dialogue_preview(self, body):
         if DE.preview_capture is None:

@@ -28,9 +28,13 @@ td .miss { color:#c33; font-size:11px; display:block; margin-top:3px; }
 .dictadd { display:flex; gap:4px; margin-bottom:8px; flex-wrap:wrap; }
 .dictadd input { flex:1; min-width:70px; padding:4px; border:1px solid #ccd; border-radius:4px; }
 .dcat { margin: 10px 0 4px; font-weight:bold; color:#467; }
-.dentry { display:flex; gap:4px; align-items:center; padding:2px 0; border-bottom:1px dotted #eee; }
-.dentry .ja { width: 90px; color:#555; }
-.dentry input { flex:1; padding:2px 4px; border:1px solid #ddd; border-radius:3px; }
+.dentry { display:grid; grid-template-columns: 82px 1fr 1fr auto auto auto; gap:4px; align-items:center; padding:4px 0; border-bottom:1px dotted #eee; }
+.dentry .source { color:#555; overflow-wrap:anywhere; }
+.dentry .status { font-size:10px; color:#778; white-space:nowrap; }
+.dentry .note { grid-column: 2 / -1; color:#778; font-size:11px; overflow-wrap:anywhere; }
+.dentry.readonly { opacity:.72; }
+.dentry.missing .status { color:#c33; font-weight:700; }
+.dentry input { min-width:0; padding:2px 4px; border:1px solid #ddd; border-radius:3px; }
 .dentry button { padding:2px 5px; border:1px solid #ccc; background:#fafafa; border-radius:3px; cursor:pointer; }
 .chk { padding:6px; border-bottom:1px solid #eee; }
 .chk b { color:#c33; }

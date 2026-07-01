@@ -607,17 +607,48 @@ async function previewDialogue() {
   $("#modalApply").disabled = false;
 }
 
+function dictCategories(d) {
+  return Object.entries(d || {}).filter(([, v]) => Array.isArray(v));
+}
+function dictSource(e) {
+  return (e._source || e.ja || e.ja_note || e.term || "").trim();
+}
+function dictCurrent(e) {
+  return (e._current || e.current || e.ko || "").trim();
+}
+function dictCanonical(e) {
+  return (e._canonical || e.edit || e.ko || e.chosen_ko || e.term || "").trim();
+}
+function dictStatus(e) {
+  return e._status || (dictCanonical(e) ? "확정" : "미확정");
+}
+function dictExpectedTerms(cat, e) {
+  const base = cat === "common_terms"
+    ? dictCanonical(e).split("/").map(s => s.trim()).filter(Boolean)
+    : [dictCanonical(e)];
+  const allowed = e.allowed_ko || e.allowed || {};
+  if (Array.isArray(allowed)) base.push(...allowed.map(String));
+  else if (allowed && typeof allowed === "object") base.push(...Object.keys(allowed));
+  return [...new Set(base.map(s => s.trim()).filter(Boolean))];
+}
+
 async function checkDict() {
   const w = $("#dictwarn"); w.textContent = "검사 중…";
   if (!S.dict) S.dict = await api("/api/dict");
   const g = S.item.g; const issues = [];
-  const cats = Object.entries(S.dict).filter(([k, v]) => Array.isArray(v));
+  const cats = dictCategories(S.dict);
+  const primarySources = new Set();
+  for (const [cat, list] of cats) if (cat !== "common_terms") {
+    for (const e of list) if (!e._readonly && dictSource(e)) primarySources.add(dictSource(e));
+  }
   for (const m of g.members) {
     const ko = fragTextFor(m.address);
     for (const [cat, list] of cats) for (const e of list) {
-      const eja = (e.ja || "").trim(), eko = ((e.edit || "").trim() || (e.ko || "").trim());
-      if (eja && eko && (m.ja || "").includes(eja) && !ko.includes(eko))
-        issues.push(`${eja}→${eko}(${cat})`);
+      if (e._readonly) continue;
+      const eja = dictSource(e), expected = dictExpectedTerms(cat, e);
+      if (cat === "common_terms" && primarySources.has(eja)) continue;
+      if (eja && expected.length && (m.ja || "").includes(eja) && !expected.some(term => ko.includes(term)))
+        issues.push(`${eja}→${expected.join("/")}(${cat})`);
     }
   }
   w.textContent = issues.length ? "사전 불일치: " + [...new Set(issues)].join(", ") : "사전 일치 ✓";
@@ -1235,7 +1266,7 @@ async function openDict() {
   const d = await api("/api/dict");
   if (!d || d.ok === false) return toast("사전 로드 실패", true);
   S.dict = d;
-  const cats = Object.entries(d).filter(([k, v]) => Array.isArray(v));
+  const cats = dictCategories(d);
   $("#dcat").innerHTML = cats.map(([k]) => `<option value="${esc(k)}">${esc(k)}</option>`).join("");
   const total = cats.reduce((n, [, v]) => n + v.length, 0);
   $("#dictInfo").textContent = `${cats.length}개 카테고리 · ${total}개 용어`;
@@ -1246,32 +1277,40 @@ async function openDict() {
   $("#dictModal").hidden = false;
 }
 function dictRow(cat, e) {
-  const row = document.createElement("div"); row.className = "dterm";
+  const row = document.createElement("div");
+  row.className = "dterm" + (e._readonly ? " readonly" : "") + (!dictCanonical(e) ? " missing" : "");
   const c = document.createElement("span"); c.className = "dcat"; c.textContent = cat;
-  const ja = document.createElement("span"); ja.className = "dja"; ja.textContent = e.ja || "";
-  const ko = document.createElement("input"); ko.value = e.ko || ""; ko.placeholder = "번역";
-  const ed = document.createElement("input"); ed.value = e.edit || ""; ed.placeholder = "확정표기";
+  const src = document.createElement("span"); src.className = "dsource"; src.textContent = dictSource(e) || "원문 없음";
+  const cur = document.createElement("input"); cur.value = dictCurrent(e); cur.placeholder = "현재/관측 표기";
+  const ed = document.createElement("input"); ed.value = dictCanonical(e); ed.placeholder = "확정 표기";
+  const st = document.createElement("span"); st.className = "dstatus"; st.textContent = dictStatus(e);
+  const note = document.createElement("span"); note.className = "dnote"; note.textContent = e._note || "";
   const save = document.createElement("button"); save.textContent = "저장";
   const del = document.createElement("button"); del.className = "del"; del.textContent = "삭제";
+  if (e._readonly) {
+    cur.disabled = ed.disabled = save.disabled = del.disabled = true;
+    save.title = del.title = "자동 검토 결과라 직접 편집하지 않습니다";
+  }
   save.onclick = async () => {
-    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "edit", category: cat, ja: e.ja, ko: ko.value, edit: ed.value }) });
-    toast(r.ok ? `사전 저장: ${e.ja}` : "실패: " + (r.error || ""), !r.ok);
+    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "edit", category: cat, key: e._key, source: dictSource(e), current: cur.value, canonical: ed.value }) });
+    toast(r.ok ? `사전 저장: ${dictSource(e)}` : "실패: " + (r.error || ""), !r.ok);
+    if (r.ok) openDict();
   };
   del.onclick = async () => {
-    if (!confirm(`사전에서 삭제: ${e.ja}?`)) return;
-    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", category: cat, ja: e.ja }) });
+    if (!confirm(`사전에서 삭제: ${dictSource(e)}?`)) return;
+    const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", category: cat, key: e._key, source: dictSource(e) }) });
     if (r.ok) { toast("삭제됨"); openDict(); } else toast("실패: " + (r.error || ""), true);
   };
-  row.append(c, ja, ko, ed, save, del);
+  row.append(c, src, cur, ed, st, save, del, note);
   return row;
 }
 $("#dictBtn").onclick = openDict;
 $("#dictClose").onclick = () => ($("#dictModal").hidden = true);
 $("#dictModal").onclick = (e) => { if (e.target.id === "dictModal") $("#dictModal").hidden = true; };
 $("#dadd").onclick = async () => {
-  const cat = $("#dcat").value, ja = $("#dja").value.trim();
-  if (!ja) return toast("원문(JA) 입력", true);
-  const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", category: cat, ja, ko: $("#dko").value, edit: $("#dedit").value }) });
+  const cat = $("#dcat").value, source = $("#dja").value.trim();
+  if (!source) return toast("원문/출처 입력", true);
+  const r = await api("/api/dict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "add", category: cat, source, current: $("#dko").value, canonical: $("#dedit").value }) });
   if (r.ok) { toast("추가됨"); $("#dja").value = $("#dko").value = $("#dedit").value = ""; openDict(); }
   else toast("실패: " + (r.error || ""), true);
 };

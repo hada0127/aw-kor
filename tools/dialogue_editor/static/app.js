@@ -168,9 +168,25 @@ function showMiss(span, tr, issues) {
   } else { span.textContent = ""; tr.classList.remove("mismatch"); }
 }
 
+function dictCategories(d) {
+  return Object.keys(d || {}).filter(k => Array.isArray(d[k]));
+}
+function dictSource(e) {
+  return (e._source || e.ja || e.ja_note || e.term || "").trim();
+}
+function dictCurrent(e) {
+  return (e._current || e.current || e.ko || "").trim();
+}
+function dictCanonical(e) {
+  return (e._canonical || e.edit || e.ko || e.chosen_ko || e.term || "").trim();
+}
+function dictStatus(e) {
+  return e._status || (dictCanonical(e) ? "확정" : "미확정");
+}
+
 async function loadDict() {
   state.dict = await jget("/api/dict");
-  const cats = Object.keys(state.dict).filter(k => Array.isArray(state.dict[k]));
+  const cats = dictCategories(state.dict);
   const dcat = $("#dcat"); dcat.textContent = "";
   for (const c of cats) dcat.append(el("option", { value: c, textContent: c }));
   const box = $("#dictlist"); box.textContent = "";
@@ -180,20 +196,33 @@ async function loadDict() {
   }
 }
 function dentry(cat, e) {
-  const ko = el("input", { value: e.edit || e.ko || "" });
+  const current = el("input", { value: dictCurrent(e), placeholder: "현재" });
+  const canonical = el("input", { value: dictCanonical(e), placeholder: "확정" });
   const save = el("button", { textContent: "✓", title: "수정" });
   const del = el("button", { textContent: "✕", title: "삭제" });
+  const row = el("div", { className: "dentry" + (e._readonly ? " readonly" : "") + (!dictCanonical(e) ? " missing" : "") },
+    el("span", { className: "source", textContent: dictSource(e) || "원문 없음" }),
+    current,
+    canonical,
+    el("span", { className: "status", textContent: dictStatus(e) }),
+    save,
+    del);
+  if (e._note) row.append(el("span", { className: "note", textContent: e._note }));
+  if (e._readonly) {
+    current.disabled = canonical.disabled = save.disabled = del.disabled = true;
+    save.title = del.title = "자동 검토 결과라 직접 편집하지 않습니다";
+  }
   save.onclick = async () => {
-    const r = await jpost("/api/dict", { action: "edit", category: cat, ja: e.ja, edit: ko.value });
-    setStatus(r.ok ? `사전 수정: ${e.ja}` : "오류: " + r.error);
+    const r = await jpost("/api/dict", { action: "edit", category: cat, key: e._key, source: dictSource(e), current: current.value, canonical: canonical.value });
+    setStatus(r.ok ? `사전 수정: ${dictSource(e)}` : "오류: " + r.error);
     if (r.ok) loadDict();
   };
   del.onclick = async () => {
-    if (!confirm(`삭제: ${e.ja}?`)) return;
-    const r = await jpost("/api/dict", { action: "delete", category: cat, ja: e.ja });
+    if (!confirm(`삭제: ${dictSource(e)}?`)) return;
+    const r = await jpost("/api/dict", { action: "delete", category: cat, key: e._key, source: dictSource(e) });
     if (r.ok) loadDict();
   };
-  return el("div", { className: "dentry" }, el("span", { className: "ja", textContent: e.ja }), ko, save, del);
+  return row;
 }
 
 async function checkAll() {
@@ -232,8 +261,8 @@ function wire() {
   $("#checkAll").onclick = checkAll;
   for (const b of document.querySelectorAll(".tabs button")) b.onclick = () => switchTab(b.dataset.tab);
   $("#dadd").onclick = async () => {
-    const r = await jpost("/api/dict", { action: "add", category: $("#dcat").value, ja: $("#dja").value, ko: $("#dko").value });
-    if (r.ok) { $("#dja").value = $("#dko").value = ""; loadDict(); setStatus("사전 추가됨"); }
+    const r = await jpost("/api/dict", { action: "add", category: $("#dcat").value, source: $("#dja").value, current: $("#dko").value, canonical: $("#dedit").value });
+    if (r.ok) { $("#dja").value = $("#dko").value = $("#dedit").value = ""; loadDict(); setStatus("사전 추가됨"); }
     else setStatus("오류: " + r.error);
   };
   $("#capClose").onclick = () => { $("#capModal").hidden = true; };

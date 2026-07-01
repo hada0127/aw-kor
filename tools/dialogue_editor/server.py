@@ -18,9 +18,9 @@ muramasa-kor tools/ui_editor 패턴 참조. aw-kor 대사 원문(JA)→한글(KO
 
 API
   GET  /api/dialogue?region=&q=&filter=        대사 목록(필터)
-  GET  /api/dict                               통일 사전
+  GET  /api/dict                               통일 사전(정규화 필드 포함)
   POST /api/line     {id, ko}                  대사 ko 저장
-  POST /api/dict     {action, category, ja, ko, edit}  사전 CRUD
+  POST /api/dict     {action, category, key/source/current/canonical}  사전 CRUD
   POST /api/check    {id} | {ja, ko}           한 대사의 사전 일치 검사
   GET  /api/check_all                          전체 대사 사전 불일치 목록
 """
@@ -104,15 +104,238 @@ def dict_categories(d):
     return [k for k, v in d.items() if isinstance(v, list)]
 
 
-def dict_entries(d):
+DICT_EDITABLE_CATEGORIES = {
+    "characters",
+    "nations",
+    "places",
+    "discovered_candidates",
+    "common_terms",
+}
+DICT_READONLY_CATEGORIES = {"issues"}
+
+
+def dict_entries(d, *, include_readonly=False):
     """(category, entry) 평탄화."""
     for cat in dict_categories(d):
+        if not include_readonly and cat in DICT_READONLY_CATEGORIES:
+            continue
         for e in d[cat]:
             yield cat, e
 
 
-def effective_ko(entry):
-    return (entry.get("edit") or "").strip() or (entry.get("ko") or "").strip()
+def _norm(s):
+    return (s or "").strip()
+
+
+def dict_entry_key(category, entry):
+    if category == "common_terms":
+        return _norm(entry.get("ja_note")) or _norm(entry.get("term"))
+    if category == "issues":
+        return "\x1f".join([_norm(entry.get("ja")), _norm(entry.get("chosen_ko"))])
+    return _norm(entry.get("ja"))
+
+
+def dict_entry_source(category, entry):
+    if category == "common_terms":
+        return _norm(entry.get("ja_note")) or _norm(entry.get("term"))
+    return _norm(entry.get("ja")) or _norm(entry.get("ja_note")) or _norm(entry.get("term"))
+
+
+def dict_entry_current(category, entry):
+    if category == "common_terms":
+        return _norm(entry.get("current"))
+    if category == "issues":
+        other = entry.get("other_ko") or {}
+        if isinstance(other, dict):
+            return "/".join(str(k) for k in other if _norm(k))
+        return ""
+    return _norm(entry.get("ko")) or _norm(entry.get("current"))
+
+
+def effective_ko(entry, category=None):
+    if category == "common_terms":
+        return _norm(entry.get("edit")) or _norm(entry.get("term")) or _norm(entry.get("ko"))
+    if category == "issues":
+        return _norm(entry.get("edit")) or _norm(entry.get("chosen_ko")) or _norm(entry.get("ko"))
+    return _norm(entry.get("edit")) or _norm(entry.get("ko")) or _norm(entry.get("chosen_ko"))
+
+
+def dict_entry_expected_terms(category, entry):
+    canonical = effective_ko(entry, category)
+    terms = [t.strip() for t in canonical.split("/") if t.strip()] if category == "common_terms" else [canonical]
+    allowed = entry.get("allowed") or entry.get("allowed_ko") or {}
+    if isinstance(allowed, dict):
+        terms.extend(_norm(k) for k in allowed)
+    elif isinstance(allowed, list):
+        terms.extend(_norm(v) for v in allowed)
+    out = []
+    for term in terms:
+        if term and term not in out:
+            out.append(term)
+    return out
+
+
+def dict_entry_note(category, entry):
+    parts = []
+    for field in ("note", "hint"):
+        value = _norm(entry.get(field))
+        if value:
+            parts.append(value)
+    variants = entry.get("variants") or entry.get("other_ko") or {}
+    if isinstance(variants, dict) and variants:
+        parts.append("관측: " + ", ".join(f"{k}({v})" for k, v in variants.items()))
+    allowed = entry.get("allowed") or entry.get("allowed_ko") or {}
+    if isinstance(allowed, dict) and allowed:
+        parts.append("허용: " + ", ".join(f"{k}({v})" for k, v in allowed.items()))
+    elif isinstance(allowed, list) and allowed:
+        parts.append("허용: " + ", ".join(str(v) for v in allowed))
+    return " · ".join(parts)
+
+
+def normalized_dict_entry(category, entry):
+    out = dict(entry)
+    source = dict_entry_source(category, entry)
+    current = dict_entry_current(category, entry)
+    canonical = effective_ko(entry, category)
+    readonly = category in DICT_READONLY_CATEGORIES
+    if readonly:
+        status = "검토 이슈"
+    elif not source:
+        status = "원문 없음"
+    elif not canonical:
+        status = "미확정"
+    elif _norm(entry.get("edit")):
+        status = "수동 확정"
+    elif category == "common_terms":
+        status = "치환 규칙"
+    else:
+        status = "기본 확정"
+    out.update({
+        "_key": dict_entry_key(category, entry),
+        "_source": source,
+        "_current": current,
+        "_canonical": canonical,
+        "_status": status,
+        "_note": dict_entry_note(category, entry),
+        "_readonly": readonly,
+    })
+    return out
+
+
+def normalize_dict_payload(pn):
+    out = {}
+    for key, value in (pn or {}).items():
+        if isinstance(value, list):
+            out[key] = [normalized_dict_entry(key, e) for e in value if isinstance(e, dict)]
+        else:
+            out[key] = value
+    out["_schema"] = {
+        "source": "원문/출처(JA)",
+        "current": "현재/관측 표기 또는 치환 대상",
+        "canonical": "확정 표기(KO) - UI에서 편집하는 단일 최종값",
+        "readonly_categories": sorted(DICT_READONLY_CATEGORIES),
+    }
+    return out
+
+
+def dict_response(pn=None):
+    return normalize_dict_payload(pn if pn is not None else load_json(DICT_PATH, {}))
+
+
+def _find_dict_entry(entries, category, body):
+    key = _norm(body.get("key") or body.get("_key"))
+    if key:
+        hit = next((e for e in entries if dict_entry_key(category, e) == key), None)
+        if hit:
+            return hit
+    source = _norm(body.get("source") or body.get("ja"))
+    if category == "common_terms":
+        return next((e for e in entries
+                     if _norm(e.get("ja_note")) == source), None)
+    if category == "issues":
+        canonical = _norm(body.get("canonical") or body.get("chosen_ko") or body.get("edit"))
+        return next((e for e in entries
+                     if _norm(e.get("ja")) == source and (
+                         not canonical or effective_ko(e, category) == canonical)), None)
+    return next((e for e in entries if _norm(e.get("ja")) == source), None)
+
+
+def _make_dict_entry(category, body):
+    source = _norm(body.get("source") or body.get("ja"))
+    current = _norm(body.get("current") if "current" in body else body.get("ko"))
+    canonical = _norm(body.get("canonical") if "canonical" in body else body.get("edit"))
+    if not source:
+        return None, "원문/출처 필요"
+    if category in DICT_READONLY_CATEGORIES:
+        return None, "%s 카테고리는 자동 검토 결과라 직접 추가할 수 없습니다" % category
+    if category == "common_terms":
+        if not canonical:
+            return None, "common_terms에는 확정 표기 필요"
+        label = canonical or current or source
+        return {"term": label, "ja_note": source, "current": current, "edit": canonical}, None
+    base_ko = current or canonical
+    if not base_ko:
+        return None, "현재/확정 표기 필요"
+    entry = {"ja": source, "ko": base_ko, "edit": ""}
+    if canonical and canonical != base_ko:
+        entry["edit"] = canonical
+    return entry, None
+
+
+def edit_dict_payload(body):
+    action = body.get("action")
+    cat = body.get("category")
+    with _LOCK:
+        pn = load_json(DICT_PATH, {})
+        if cat not in DICT_EDITABLE_CATEGORIES and cat not in DICT_READONLY_CATEGORIES:
+            return {"ok": False, "error": "category %r 편집 불가" % cat}
+        if cat in DICT_READONLY_CATEGORIES and action != "delete":
+            return {"ok": False, "error": "%s 카테고리는 자동 검토 결과라 직접 편집할 수 없습니다" % cat}
+        if cat not in pn or not isinstance(pn.get(cat), list):
+            if action == "add" and cat in DICT_EDITABLE_CATEGORIES:
+                pn[cat] = []
+            else:
+                return {"ok": False, "error": "category %r 없음" % cat}
+        lst = pn[cat]
+        if action == "add":
+            entry, error = _make_dict_entry(cat, body)
+            if error:
+                return {"ok": False, "error": error}
+            if any(dict_entry_key(cat, e) == dict_entry_key(cat, entry) for e in lst):
+                return {"ok": False, "error": "이미 존재: %s" % dict_entry_source(cat, entry)}
+            lst.append(entry)
+        elif action == "edit":
+            e = _find_dict_entry(lst, cat, body)
+            if not e:
+                return {"ok": False, "error": "항목 없음"}
+            if cat == "common_terms":
+                if "source" in body or "ja" in body:
+                    e["ja_note"] = _norm(body.get("source") or body.get("ja"))
+                if "current" in body or "ko" in body:
+                    e["current"] = _norm(body.get("current") if "current" in body else body.get("ko"))
+                if "canonical" in body or "edit" in body:
+                    e["edit"] = _norm(body.get("canonical") if "canonical" in body else body.get("edit"))
+            else:
+                if "source" in body or "ja" in body:
+                    e["ja"] = _norm(body.get("source") or body.get("ja"))
+                if "current" in body or "ko" in body:
+                    e["ko"] = _norm(body.get("current") if "current" in body else body.get("ko"))
+                if "canonical" in body or "edit" in body:
+                    canonical = _norm(body.get("canonical") if "canonical" in body else body.get("edit"))
+                    e["edit"] = "" if canonical == _norm(e.get("ko")) else canonical
+        elif action == "delete":
+            e = _find_dict_entry(lst, cat, body)
+            if not e:
+                return {"ok": False, "error": "항목 없음"}
+            if cat in DICT_READONLY_CATEGORIES:
+                return {"ok": False, "error": "%s 카테고리는 자동 검토 결과라 삭제할 수 없습니다" % cat}
+            pn[cat] = [x for x in lst if x is not e]
+        else:
+            return {"ok": False, "error": "unknown action"}
+        if isinstance(pn.get("counts"), dict):
+            pn["counts"] = {k: len(v) for k, v in pn.items() if isinstance(v, list)}
+        save_json(DICT_PATH, pn)
+    return {"ok": True, "dict": dict_response(pn)}
 
 
 def is_address_text_override(address):
@@ -136,13 +359,20 @@ def check_line(line, pn):
     ja = line.get("ja") or ""
     ko = line.get("ko") or ""
     issues = []
+    primary_sources = {
+        dict_entry_source(cat, e)
+        for cat, e in dict_entries(pn)
+        if cat != "common_terms" and dict_entry_source(cat, e)
+    }
     for cat, e in dict_entries(pn):
-        eja = (e.get("ja") or "").strip()
-        eko = effective_ko(e)
-        if not eja or not eko:
+        eja = dict_entry_source(cat, e)
+        if cat == "common_terms" and eja in primary_sources:
             continue
-        if eja in ja and eko not in ko:
-            issues.append({"category": cat, "ja": eja, "expected_ko": eko})
+        expected_terms = dict_entry_expected_terms(cat, e)
+        if not eja or not expected_terms:
+            continue
+        if eja in ja and not any(term in ko for term in expected_terms):
+            issues.append({"category": cat, "ja": eja, "expected_ko": "/".join(expected_terms)})
     return issues
 
 
@@ -176,7 +406,7 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/api/dialogue":
             return self._send(200, self._dialogue(q))
         if u.path == "/api/dict":
-            return self._send(200, load_json(DICT_PATH, {}))
+            return self._send(200, dict_response())
         if u.path == "/api/check_all":
             return self._send(200, self._check_all())
         if u.path.startswith("/preview/"):
@@ -388,37 +618,7 @@ class Handler(BaseHTTPRequestHandler):
         return {"ok": True, "id": lid, "ko": ko, "check": check_line(hit, load_json(DICT_PATH, {}))}
 
     def _edit_dict(self, body):
-        action = body.get("action")
-        cat = body.get("category")
-        ja = (body.get("ja") or "").strip()
-        with _LOCK:
-            pn = load_json(DICT_PATH, {})
-            if cat not in pn or not isinstance(pn.get(cat), list):
-                if action == "add" and cat:
-                    pn[cat] = []
-                else:
-                    return {"ok": False, "error": "category %r 없음" % cat}
-            lst = pn[cat]
-            if action == "add":
-                if any((e.get("ja") or "") == ja for e in lst):
-                    return {"ok": False, "error": "이미 존재: %s" % ja}
-                lst.append({"ja": ja, "ko": body.get("ko", ""), "edit": body.get("edit", "")})
-            elif action == "edit":
-                e = next((e for e in lst if (e.get("ja") or "") == ja), None)
-                if not e:
-                    return {"ok": False, "error": "없음: %s" % ja}
-                if "ko" in body:
-                    e["ko"] = body["ko"]
-                if "edit" in body:
-                    e["edit"] = body["edit"]
-            elif action == "delete":
-                pn[cat] = [e for e in lst if (e.get("ja") or "") != ja]
-            else:
-                return {"ok": False, "error": "unknown action"}
-            if isinstance(pn.get("counts"), dict):
-                pn["counts"] = {k: len(v) for k, v in pn.items() if isinstance(v, list)}
-            save_json(DICT_PATH, pn)
-        return {"ok": True}
+        return edit_dict_payload(body)
 
     def _check_one(self, body):
         if "id" in body:
