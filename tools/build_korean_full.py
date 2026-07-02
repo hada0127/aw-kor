@@ -4821,8 +4821,11 @@ NAME_GRID_MIRROR_SLOTS = {
     't': [(332, 256)], 'u': [(333, 257)], 'v': [(334, 259)],
     'w': [(344, 258)], 'x': [(345, 260)], 'y': [(346, 261)],
 }
-# 영문 그리드 미사용 셀(좌영역 Z 뒤 ヒフヘホ) top 슬롯 → 블랭크.
-NAME_GRID_BLANK_TOPSLOTS = [170, 171, 172, 173]
+# 좌영역 Z 뒤 원본 ハ행 잔여 셀. A-Z 영문 그리드에서는 미사용이었지만,
+# 한글 음가 그리드는 ハヒフヘホ 5칸을 모두 표시해야 선택/미리보기가 맞다.
+NAME_GRID_EXTRA_LABEL_SLOTS = {
+    '히': (170, 186), '후': (171, 187), '헤': (172, 188), '호': (173, 189),
+}
 
 NAME_GRID_ROW_LAYOUTS = {
     # Live row strings drawn by 0x08B48910..0x08B48960 via 0x08B1311C.
@@ -4855,15 +4858,13 @@ def patch_name_grid(rom):
     """이름 입력 그리드를 한글 음가 + 숫자 표기로 교체.
 
     ① base8 가나 슬롯 테이블 패치(KANA_REMAP): q-y top·p bottom 을 fresh 슬롯으로 → 26자 전부 고유.
-    ② NAME_GRID_SLOTS 슬롯에 한글 음가/숫자 글리프 주입(하단정렬). 미사용 셀 블랭크.
+    ② NAME_GRID_SLOTS 슬롯에 한글 음가/숫자 글리프 주입(8px top tile 내부 맞춤). 미사용 셀 블랭크.
     ③ live 행 문자열(0x08DF8C38 계열)을 패치하되, 선택 로직과 맞는 원본 중간 갭은 유지.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import load_bdf, glyph_grid
     FONT_BASE = 0x08B974D0
     BLANK = bytes(32)
-    CELL_BASE = 11  # Galmuri7 글리프를 살짝 위로 올려 하단 행/버튼 겹침을 피한다.
-
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
     # ① base8 가나 테이블 패치
@@ -4877,13 +4878,13 @@ def patch_name_grid(rom):
         off = (FONT_BASE + slot * 32) - 0x08000000
         rom[off:off + 32] = data
 
-    def render_grid_char(label, top_pad):
-        if ord(label) not in font:
+    def render_grid_char(label):
+        if not label or ord(label) not in font:
             return BLANK, BLANK
-        grid, w, h, xo, _yo = glyph_grid(font[ord(label)])
-        x_offset = 0 if w >= 7 else 1
+        grid, w, h, xo, yo = glyph_grid(font[ord(label)])
+        x_offset = max(0, min(8 - w, (8 - w) // 2 - xo))
+        y_offset = max(0, min(8 - h, (8 - h + 1) // 2 - yo))
         top = bytearray(32)
-        bot = bytearray(32)
 
         def setpix(tile, row, col, val=9):
             if not (0 <= row < 8 and 0 <= col < 8):
@@ -4895,22 +4896,19 @@ def patch_name_grid(rom):
                 tile[bi] = (tile[bi] & 0x0F) | (val << 4)
 
         for r in range(h):
-            cell_row = top_pad + r
+            cell_row = y_offset + r + yo
             for c in range(w):
                 cell_col = x_offset + c + xo
                 if grid[r][c]:
-                    if cell_row < 8:
-                        setpix(top, cell_row, cell_col)
-                    else:
-                        setpix(bot, cell_row - 8, cell_col)
-        return bytes(top), bytes(bot)
+                    if not (0 <= cell_row < 8 and 0 <= cell_col < 8):
+                        raise AssertionError(f'name grid glyph clips: {label!r} row={cell_row} col={cell_col}')
+                    setpix(top, cell_row, cell_col)
+        return bytes(top), BLANK
 
     def inject(ch):
         top_slot, bot_slot = NAME_GRID_SLOTS[ch]
         label = NAME_GRID_LABELS.get(ch, ch)
-        h = glyph_grid(font[ord(label)])[2] if ord(label) in font else 11
-        top_pad = max(0, CELL_BASE - h)
-        top, bot = render_grid_char(label, top_pad)
+        top, bot = render_grid_char(label)
         write_slot(top_slot, top)
         write_slot(bot_slot, bot)
 
@@ -4918,14 +4916,13 @@ def patch_name_grid(rom):
         inject(ch)
         for top_slot, bot_slot in NAME_GRID_MIRROR_SLOTS.get(ch, []):
             label = NAME_GRID_LABELS.get(ch, ch)
-            h = glyph_grid(font[ord(label)])[2] if ord(label) in font else 11
-            top_pad = max(0, CELL_BASE - h)
-            top, bot = render_grid_char(label, top_pad)
+            top, bot = render_grid_char(label)
             write_slot(top_slot, top)
             write_slot(bot_slot, bot)
-    for top_slot in NAME_GRID_BLANK_TOPSLOTS:   # 미사용 좌영역 셀 비움
-        write_slot(top_slot, BLANK)
-        write_slot(top_slot + 16, BLANK)
+    for label, (top_slot, bot_slot) in NAME_GRID_EXTRA_LABEL_SLOTS.items():
+        top, bot = render_grid_char(label)
+        write_slot(top_slot, top)
+        write_slot(bot_slot, bot)
 
     for addr, codes in NAME_GRID_ROW_LAYOUTS.items():
         new = _name_grid_row_bytes(codes)
@@ -20273,6 +20270,11 @@ def main():
 
     st['part2_prologue_inline_renderer_spans'] = patch_part2_prologue_inline_renderer_spans(
         rom, syl_to_code, unmapped)
+
+    # Several late glyph/symbol recovery passes can touch the low font slots
+    # shared with the Part 1 name grid. Re-apply the name grid as the final
+    # authority so small-kana/long-mark bottom halves cannot leak back in.
+    patch_name_grid(rom)
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF

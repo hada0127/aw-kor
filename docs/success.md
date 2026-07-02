@@ -3313,21 +3313,33 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `AssertionError`로 즉시 실패시켜 반각 fallback이 조용히 재발하지 않게 했다.
 - **이름 입력 그리드**: 영문 A-Z/a-z 표시를 Galmuri7 기반 한글 음가(아/이/우/...)와 숫자로 바꿨다.
   `ㅡ`를 포함해 필요한 Galmuri7 글리프가 모두 존재함을 확인했고, scene_14 fresh 비교 시트에서 하단 버튼과
-  치명적 겹침 없이 렌더되는 것을 확인했다. 실제 저장 데이터는 기존 카타카나 선택 바이트 그대로라,
-  이름 echo 경로가 있으면 후속 확인이 필요하다.
+  치명적 겹침 없이 렌더되는 것을 확인했다. 하단 작은가나/장음 영역은 보이지 않는 선택 셀을 만들지 않도록
+  `아/이/우/에/오`, `쓰/야/유/요/ㅡ`를 표시하고 live row code도 원본 선택 코드로 유지했다.
+  ハ행 잔여 슬롯에도 `히/후/헤/호`를 주입해 6행이 `하히후헤호`로 완결되게 했다.
+  실제 입력 모드는 `A`(빈 이름 프롬프트) → `A`(프롬프트 닫기)
+  → `A`(첫 글자 선택) 순서로 진입하며, `temp/name_selection_true_input2_20260702/true_input_cases_sheet.png`
+  에서 `아/카/하/히/마`가, `temp/name_selection_final6_20260702/selection_cases_sheet.png`에서
+  숫자와 작은가나/장음 셀까지 상단 이름 박스에 출력됨을 확인했다.
+  작은가나 `0x83xx`는 symbol table이 아니라 `KANA_TBL` 경로만 패치한다. 잘못된 symbol-table remap은
+  뒤쪽 가나 table을 침범할 수 있어 제거했고, 최종 빌드에서 `0xB80A7C` 계열은 원래 blank slot 95,
+  이름 그리드 하단/mirror 슬롯 252-261/306/348-357은 all-zero임을 재확인했다.
 - **fresh 증거 전환**: `scene_14_part1_name_input`, `scene_18_part1_battle`,
   `scene_19a1_part1_tutorial_opening`을 stale savestate 대신 coldboot fresh replay로 전환했다.
+  `scene_18_part1_battle`은 타이밍 프로브상 f030부터 전체 배너가 보이고 f060은 이탈하므로, 캡처 nav를
+  `part1_main_sweep 43` 뒤 `frames 33`으로 고정했다.
   `build_scene_catalog.py`는 fresh checkpoint의 entrypoint도 `screen_checkpoints.json` 권위 note/capture/provenance로
   재구성해 screenshot과 entrypoint가 서로 모순되지 않게 했다.
 - **UI 에디터 ROM 다운로드 정합성**: 기본 빌드가 `output/game_wars_korean_full.gba`,
   `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba` 3종을 같은 바이트로 동기화한다.
   scene editor `/api/download/gba?variant=full|final|title_test`와 `/api/state.output_sync`도 세 variant를 검사한다.
 - **검증**: 최종 ROM 3종 SHA는 모두
-  `e0cfe2363564ad234d61b4e7895ad6ebd0d5396ddf6e9f079ed78470a6ef931f`.
+  `10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5`.
   `build_korean_full.py` overflow 0/no_ko 0, `qa_integrity_map.py --byte-only` 바이트 불일치 0,
   `phase6_basic_test.py` PASS, `qa_text_fit.py` overflow 0/no_ko 0, `audit_address_text_overrides.py` OK,
   `qa_terms_from_rom.py` PASS, `qa_spacing_from_rom.py` jammed real 0,
   `qa_scene_screenshot_sanity.py` issue 0, scene catalog/entrypoint/semantic strict audits critical 0.
-  원본/패치 비교 시트:
-  `temp/original_vs_current_fresh_20260702/final_equivalent_fresh_original_vs_patched.png`,
-  `temp/original_vs_current_fresh_20260702/final_issue_focus_original_reference_vs_current.png`.
+  UI 에디터 `verify_scene_editor_apply_state.py`와 `verify_scene_editor_roundtrip.py`는 8794 서버/비밀번호 인증 기준 PASS.
+  `verify_scene_editor_cdp.py`도 로그인 후 63개 scene/108개 sprite 순회 및 다운로드 버튼 상태 검증 failure 0.
+  최신 검수 시트:
+  `temp/name_battle_fix_review_20260702/name_battle_fix_review_latest.png`,
+  `temp/name_selection_final6_20260702/selection_cases_sheet.png`.
