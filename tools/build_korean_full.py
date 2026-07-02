@@ -2780,8 +2780,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD8F762: '이동 후엔 메뉴가 나와',
     0xD8F78F: '여기서 ',
     0xD8F798: '대기',
-    0xD8F7A7: '를 골라 줘',
-    0xD8F7BE: '',
+    0xD8F7A7: '를 고르면 이동 끝',
+    0xD8F7BE: '이동 끝이야 결정 버튼으로 골라 줘요',
     0xD8F7EE: '색이 달라졌어',
     0xD8F811: '이 유닛은 이제',
     0xD8F838: '행동 끝',
@@ -6729,7 +6729,7 @@ def patch_part1_battle_day_banner(rom):
             buf[start:start + 32] = chunk[tile * 32:(tile + 1) * 32]
 
     phrase_chunks = chunk_bytes_from_layer(draw_gold_text('작전개시', 128, 32, 32, 2, -1))
-    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1, -8))
+    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1, -4))
 
     # The same day banner is present both as runtime LZ77 OBJ data and as raw
     # 32x32 tile chunks used during the battle-start animation.
@@ -17602,7 +17602,7 @@ def main():
         (0xDA413B, 0xDA4167, '지금까지 수업을 들었다면 알겠지만', 'previous lessons reminder row'),
         (0xDA416A, 0xDA418A, '보병만 행동했었어', 'infantry only so far row'),
         (0xDA4190, 0xDA41B8, '이제부터는 여러 유닛을 써서', 'use various units lead row'),
-        (0xDA41BB, 0xDA41C5, '싸울 거야', 'use various units row'),
+        (0xDA41BB, 0xDA41C5, '싸울　거야', 'use various units row'),
         (0xDA41DB, 0xDA41F9, '워즈 사관학교에 어서 와', 'wars academy welcome row'),
         (0xDA41FD, 0xDA4225, '내가 이 학교의 교장 얀 델타다', 'yan delta principal row'),
         (0xDA422C, 0xDA4258, '본교는 이 게임이 처음인 사람이 어떻게', 'academy purpose lead row'),
