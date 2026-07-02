@@ -110,6 +110,19 @@ def bbox(pixels: list[list[int]]) -> list[int] | None:
     return [min(xs), min(ys), max(xs) + 1, max(ys) + 1]
 
 
+def column_runs(pixels: list[list[int]]) -> list[list[int]]:
+    cols = [any(row[x] for row in pixels) for x in range(len(pixels[0]))]
+    runs: list[list[int]] = []
+    start: int | None = None
+    for idx, used in enumerate(cols + [False]):
+        if used and start is None:
+            start = idx
+        elif not used and start is not None:
+            runs.append([start, idx])
+            start = None
+    return runs
+
+
 def main() -> int:
     sys.path.insert(0, str(ROOT / "tools"))
     from lz77_scan import lz77_decompress  # noqa: WPS433
@@ -189,10 +202,17 @@ def main() -> int:
             data, consumed = dec
             day_pixels = assemble_day_label(data)
             day_bbox = bbox(day_pixels)
+            day_runs = column_runs(day_pixels)
+            inner_gaps = [
+                day_runs[idx + 1][0] - day_runs[idx][1]
+                for idx in range(len(day_runs) - 1)
+            ]
             day_label = {
                 "addr": f"0x{PART1_DAY_BANNER_LZ77:08X}",
                 "consumed": consumed,
                 "bbox": day_bbox,
+                "column_runs": day_runs,
+                "max_inner_gap": max(inner_gaps) if inner_gaps else 0,
             }
             if day_bbox is None:
                 issues.append({"type": "blank_part1_day_label"})
@@ -201,6 +221,12 @@ def main() -> int:
                     "type": "part1_day_label_shifted_right",
                     "bbox": day_bbox,
                     "max_left": 6,
+                })
+            elif day_label["max_inner_gap"] < 3:
+                issues.append({
+                    "type": "part1_day_label_char_gap_too_small",
+                    "column_runs": day_runs,
+                    "min_gap": 3,
                 })
 
     report = {

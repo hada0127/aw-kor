@@ -6707,30 +6707,58 @@ def patch_part1_battle_day_banner(rom):
                 return font, box
         return font, box
 
-    def draw_gold_text(text, width, height, max_size, stroke=2, y_adjust=0, x_adjust=0):
+    def draw_gold_text(text, width, height, max_size, stroke=2, y_adjust=0, x_adjust=0, char_gap=None):
         scale = 3
         layer = Image.new('L', (width, height), 0)
-        font, box = font_for(text, max_size, width, height, stroke)
-        x = (width - (box[2] - box[0])) // 2 - box[0] + x_adjust
-        y = (height - (box[3] - box[1])) // 2 - box[1] + y_adjust
+        if char_gap is None:
+            font, box = font_for(text, max_size, width, height, stroke)
+            boxes = [box]
+            text_width = box[2] - box[0]
+            text_height = box[3] - box[1]
+            x = (width - text_width) // 2 - box[0] + x_adjust
+            y = (height - text_height) // 2 - box[1] + y_adjust
+            origins = [(x, y)]
+        else:
+            font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+            probe = Image.new('L', (width, height), 0)
+            draw = ImageDraw.Draw(probe)
+            for size in range(max_size, 11, -1):
+                font = ImageFont.truetype(font_path, size)
+                boxes = [draw.textbbox((0, 0), ch, font=font, stroke_width=stroke) for ch in text]
+                text_width = sum(b[2] - b[0] for b in boxes) + char_gap * (len(text) - 1)
+                text_height = max(b[3] - b[1] for b in boxes)
+                if text_width <= width - 4 and text_height <= height - 2:
+                    break
+            x = (width - text_width) // 2 + x_adjust
+            y = (height - text_height) // 2 + y_adjust
+            origins = []
+            cursor = x
+            for box in boxes:
+                origins.append((cursor - box[0], y - box[1]))
+                cursor += (box[2] - box[0]) + char_gap
 
         big_size = (width * scale, height * scale)
         big_font = ImageFont.truetype(font.path, font.size * scale)
-        sx, sy = x * scale, y * scale
         sw = stroke * scale
 
         shadow = Image.new('L', big_size, 0)
-        ImageDraw.Draw(shadow).text(
-            (sx + 2 * scale, sy + 2 * scale), text, font=big_font,
-            fill=255, stroke_width=sw, stroke_fill=255,
-        )
         outline = Image.new('L', big_size, 0)
-        ImageDraw.Draw(outline).text(
-            (sx, sy), text, font=big_font,
-            fill=255, stroke_width=sw, stroke_fill=255,
-        )
         body = Image.new('L', big_size, 0)
-        ImageDraw.Draw(body).text((sx, sy), text, font=big_font, fill=255)
+        shadow_draw = ImageDraw.Draw(shadow)
+        outline_draw = ImageDraw.Draw(outline)
+        body_draw = ImageDraw.Draw(body)
+        draw_items = [(text, origins[0])] if char_gap is None else list(zip(text, origins))
+        for ch, (x0, y0) in draw_items:
+            sx, sy = x0 * scale, y0 * scale
+            shadow_draw.text(
+                (sx + 2 * scale, sy + 2 * scale), ch, font=big_font,
+                fill=255, stroke_width=sw, stroke_fill=255,
+            )
+            outline_draw.text(
+                (sx, sy), ch, font=big_font,
+                fill=255, stroke_width=sw, stroke_fill=255,
+            )
+            body_draw.text((sx, sy), ch, font=big_font, fill=255)
 
         shadow = shadow.resize((width, height), Image.Resampling.LANCZOS)
         outline = outline.resize((width, height), Image.Resampling.LANCZOS)
@@ -6781,7 +6809,7 @@ def patch_part1_battle_day_banner(rom):
             buf[start:start + 32] = chunk[tile * 32:(tile + 1) * 32]
 
     phrase_chunks = chunk_bytes_from_layer(draw_gold_text('작전개시', 128, 32, 32, 2, -1))
-    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1, -4))
+    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1, -4, char_gap=4))
 
     # The same day banner is present both as runtime LZ77 OBJ data and as raw
     # 32x32 tile chunks used during the battle-start animation.

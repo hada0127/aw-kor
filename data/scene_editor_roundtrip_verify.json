@@ -1,13 +1,13 @@
 {
   "summary": {
-    "generated_on": "2026-07-02",
+    "generated_on": "2026-07-03",
     "server": "http://127.0.0.1:8794",
     "auth_status": {
       "ok": true,
       "auth_required": true,
       "authenticated": true
     },
-    "rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "rom_sha256": "ef4cc0200a211a93d87bd49a855ee15f7464ed207229a416991eae8466a3fa24",
     "scene_count": 81,
     "dialogue_group_count": 10997,
     "sprite_count": 1990,
@@ -60,7 +60,7 @@
       }
     },
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 369.79
+    "elapsed_sec": 358.08
   },
   "failures": [],
   "bteam_confirm_failures": [],
