@@ -174,9 +174,8 @@ SHORTEN = [
 
 TERM_NORMALIZATION = [
     # --- B팀/짜옹이님 명칭 권위 반영 (2026-06-17) ---
-    # B팀 script는 ショーグン을 "사령관"으로, ホイップ 기본 표기를 "호이프"로,
-    # 일부 대사의 호칭을 "휩"으로 쓴다. 기존 "쇼군/휘프" 정규화가
-    # B팀 문장을 다시 우리식으로 되돌리지 않게 한다.
+    # B팀 script는 ショーグン을 "사령관"으로, ホイップ을 "호이프" 단일 표기로 쓴다.
+    # 짜옹이님 최종 검수 전 UI/ROM 양쪽의 휩/휘프 잔류를 막는다.
     ('쇼군브레이크', '사령관 브레이크'),
     ('쇼군 브레이크', '사령관 브레이크'),
     ('장군브레이크', '사령관 브레이크'),
@@ -189,11 +188,16 @@ TERM_NORMALIZATION = [
     ('휘프 장군', '호이프 사령관'),
     ('호이프 쇼군', '호이프 사령관'),
     ('호이프 장군', '호이프 사령관'),
-    ('휩 쇼군', '휩 사령관'),
-    ('휩 장군', '휩 사령관'),
+    ('휩 쇼군', '호이프 사령관'),
+    ('휩 장군', '호이프 사령관'),
+    ('휩 사령관', '호이프 사령관'),
     ('휘프이', '호이프가'), ('휘프을', '호이프를'), ('휘프은', '호이프는'),
     ('휘프과', '호이프와'), ('휘프으로', '호이프로'), ('휘프아', '호이프야'),
     ('휘프', '호이프'),
+    ('휩이', '호이프가'), ('휩을', '호이프를'), ('휩은', '호이프는'),
+    ('휩과', '호이프와'), ('휩으로', '호이프로'), ('휩아', '호이프야'),
+    ('휩님', '호이프님'), ('휩 씨', '호이프 씨'), ('휩 나리', '호이프 나리'),
+    ('휩', '호이프'),
     # リョウ=료 (료우 → 료)
     ('료우', '료'),
     # B팀 지명 표기: コスモランド/マクロランド는 띄어쓴다.
@@ -611,7 +615,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF5EE8: '늘 싸움만 하고 있어.',
     0xDF5F0E: '최근엔 큰 전투도 없었지만',
     0xDF5F5A: '아, 미안해.',
-    0xDF5F73: '블루문 군 휩 장군이',
+    0xDF5F73: '블루문 군의 호이프 사령관이',
     0xDF5FBA: '그 탓에 아라라 지방도',
     0xDF5FE7: '블루문 군 지배하에 들어갔어.',
     0xDF6016: '사령관 후보생인　',
@@ -2088,7 +2092,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB81E78: '특수부대 도미노',
     0xB81E98: '설원 전투',
     0xB81EA8: '스나이퍼',
-    0xB81EB8: '호이프 해군터보',
+    0xB81EB8: '호이프 해군 터보',
     0xB81ED0: '호이프 해군',
     0xB81EE0: '맥스 약점',
     0xB81EF4: '맥스 출격',
@@ -2125,7 +2129,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF908B: '전투법 알려 줄게.',
     0xDF90A7: '작전룸에 가면',
     0xDF90CE: '위부터 작전 골라줘.',
-    0xDF90F6: '첫 작전은 전투개시야!',
+    0xDF90F6: '첫 작전은 전투 개시야!',
     0xDF911F: '그럼 시작할게.',
     0xDF9149: '게임보이 워즈에서는',
     0xDF9174: '내가 작전룸에서',
@@ -2144,7 +2148,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF93CA: '그리고 작전룸이 있어.',
     0xDF93F3: '작전룸에 들어가면',
     0xDF941A: '위부터 작전을 골라.',
-    0xDF9446: '첫 작전은 전투개시야!',
+    0xDF9446: '첫 작전은 전투 개시야!',
     0xDF946F: '그럼 힘내!',
     0xDF948E: '간단히 설명할게.',
     0xDF94BB: '게임보이 워즈에는',
@@ -2167,9 +2171,9 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 2 first battle intro. The stock CSV strings fit by dropping spaces
     # or using cramped wording, which is visibly noisy in the battle text box.
     0xA02628: '후,',
-    0xA0262F: '큰 부대는 막았지만',
-    0xA02654: '블랙홀은',
-    0xA0266B: '위험해.',
+    0xA0262F: '큰 부대는 막아냈지만',
+    0xA02654: '블랙홀 군은',
+    0xA0266B: '성가신 상대야.',
     0xA026F7: '다친 데 없나',
     0xA02713: '료',
     0xA0271E: '갑자기 불러 ',
@@ -2743,7 +2747,7 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 2 tutorial battle fragments. These slots are short and run inside
     # scripted battle text; leaving them as Japanese falls through the remapped
     # name-grid kana glyphs and produces garbage on screen.
-    0xD8F33D: '그래서 휩도 병력이 적어',
+    0xD8F33D: '그래서 호이프도 병력이 적어',
     0xD8F377: '너에게는',
     0xD8F393: '2부대가',
     0xD8F3DE: '파란색은 적군 유닛',
@@ -2807,7 +2811,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD8FB15: '나타났다고',
     0xD8FB2A: '으음 어쩔 수 없군',
     0xD8FB41: '배치한 부대로 쓰러뜨려라',
-    0xD8FB6E: '휩 장군에게 들킨 것 같네',
+    0xD8FB6E: '호이프 사령관에게 들킨 것 같네',
     0xD8FBA5: '이 오고 있어',
     0xD8FBBE: '하지만 괜찮아',
     0xD8FBD7: '침착하게 행동하자',
@@ -4833,7 +4837,7 @@ def patch_name_grid(rom):
     from bdf import load_bdf, glyph_grid
     FONT_BASE = 0x08B974D0
     BLANK = bytes(32)
-    CELL_BASE = 14  # 글리프 바닥(마지막 행)을 셀 row 13에 맞춤 → 하단정렬
+    CELL_BASE = 12  # 글리프 바닥을 셀 안쪽으로 올려 이름 선택 화면 하단 잘림을 피한다.
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
@@ -5456,7 +5460,7 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
-        write_tiles(off, render_tiles(text, 32, x=x, y=4, shadow=None, font_obj=unit_font))
+        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=unit_font))
 
     compact_unit_labels = [
         (0x466568, '보병'),
@@ -5481,7 +5485,7 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in compact_unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
-        write_tiles(off, render_tiles(text, 32, x=x, y=4, shadow=None, font_obj=unit_font))
+        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=unit_font))
 
     # Enemy-turn CO banner name. This is stored as raw 32x8 OBJ tiles, not as
     # SJIS text, so the protected text-table replacement does not reach it.
@@ -7214,6 +7218,16 @@ def patch_part2_mission_start_obj(rom):
     pixels = [[0] * width for _ in range(height)]
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.bdf'))
 
+    def scaled_width(text, scale=2):
+        total = 0
+        for ch in text:
+            if ord(ch) not in font:
+                total += 4 * scale
+                continue
+            _grid, w, _h, _xo, _yo = glyph_grid(font[ord(ch)])
+            total += (w + 1) * scale if ch != '!' else 4 * scale
+        return max(0, total)
+
     def draw_scaled(text, x, y, scale=2, ink=10, shadow=14):
         cursor = x
         for ch in text:
@@ -7238,7 +7252,8 @@ def patch_part2_mission_start_obj(rom):
     # The original block packs several Japanese labels. On the battle-start
     # screen the unused labels can bleed in around the main banner, so clear the
     # sheet and redraw only the active battle-start text.
-    draw_scaled('전투개시!', 14, 4)
+    banner_text = '전투 개시!'
+    draw_scaled(banner_text, max(0, (width - scaled_width(banner_text)) // 2), 4)
 
     out = bytearray(len(tile_data))
     # The banner is displayed as two 64x32 OBJs: tile 0x00 for the left half
@@ -8358,7 +8373,7 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
         (0x492878, 0x08, '치요'),
         (0x492880, 0x08, '빌리'),
         (0x492888, 0x08, '도미노'),
-        (0x492890, 0x08, '휩'),
+        (0x492890, 0x08, '호이프'),
         (0x492898, 0x04, '맥'),
         (0x49289C, 0x04, '료'),
         (0x4928A0, 0x04, '캐'),
@@ -13457,8 +13472,8 @@ def main():
         (0xA18C7E, 0xA18C84, '어디,', 'part2 let me see row'),
         (0xA18CC0, 0xA18CE0, '우리 옐로코멧 차례인가...', 'part2 yellow comet turn row'),
         (0xA18D60, 0xA18D68, '이겼다!', 'part2 won row'),
-        (0xA18DA0, 0xA18DB0, '휩님...', 'part2 whip sir ellipsis row'),
-        (0xA18E4A, 0xA18E58, '휩님은,', 'part2 whip sir topic row'),
+        (0xA18DA0, 0xA18DB0, '호이프님...', 'part2 whip sir ellipsis row'),
+        (0xA18E4A, 0xA18E58, '호이프님은,', 'part2 whip sir topic row'),
         (0xA18F57, 0xA18F67, '이완 도망가자.', 'part2 ivan run row'),
         (0xA18F97, 0xA18FAB, '그리고 료...', 'part2 and ryo row'),
         (0xA18FDC, 0xA18FEC, '맥스...', 'part2 max ellipsis row'),
@@ -14234,11 +14249,11 @@ def main():
         (0xE00166, 0xE0016C, '호오?', 'campaign short hmm row'),
         (0xE00218, 0xE00224, '...어라?', 'campaign short huh row'),
         (0xE009C9, 0xE009D3, '뭐됐다.', 'campaign never mind row'),
-        (0xE02056, 0xE02076, '휩 해군 터보라...', 'campaign whip navy turbo row'),
+        (0xE02056, 0xE02076, '호이프 해군 터보라...', 'campaign whip navy turbo row'),
         (0xE020E8, 0xE02102, '이긴다!!!!!!', 'campaign win shout row'),
         (0xE02894, 0xE028A2, '의 부대가...', 'campaign force suffix row'),
         (0xE03111, 0xE0312B, '거기서 기다려라!', 'campaign wait there row'),
-        (0xE03134, 0xE03154, '휩인가... 눈까지', 'campaign whip snow row'),
+        (0xE03134, 0xE03154, '호이프인가... 눈까지', 'campaign whip snow row'),
         (0xE03986, 0xE03992, '빌리...', 'campaign billy ellipsis row'),
         (0xE03F3A, 0xE03F42, '그리고', 'campaign then row'),
         (0xE04063, 0xE0406F, '특기야.', 'campaign specialty row'),
@@ -15664,7 +15679,7 @@ def main():
         (0xD973BA, 0xD973C4, '그럼 ', 'unload bazooka intro row'),
         (0xD973CA, 0xD973D8, '을 내릴게', 'unload bazooka row'),
         (0xD973E3, 0xD973EB, '해 줘', 'unload command row'),
-        (0xD97402, 0xD97412, '을내릴수없어', 'cannot unload row'),
+        (0xD97402, 0xD97412, '못 내려.', 'cannot unload row'),
         (0xD97415, 0xD9741B, '여긴', 'unload choose lead row'),
         (0xD97421, 0xD9742D, '를 골라 줘', 'unload choose row'),
         (0xD97432, 0xD97442, '지금은 여기만 ', 'only unload here lead row'),
@@ -17220,7 +17235,7 @@ def main():
         (0xDA17D4, 0xDA17DA, '이제', 'now end turn lead row'),
         (0xDA17DB, 0xDA17E5, '턴 종료', 'now end turn label row'),
         (0xDA17EC, 0xDA180C, '...하기 전에 할 일이 있어', 'before end turn row'),
-        (0xDA1813, 0xDA181D, '그건「', 'income lesson command lead row'),
+        (0xDA1813, 0xDA181D, '그건 「', 'income lesson command lead row'),
         (0xDA1823, 0xDA1829, '」야', 'income lesson command tail row'),
         (0xDA1830, 0xDA1858, '아군 점령 거점 수에 따라 돈을', 'income per base lead row'),
         (0xDA185C, 0xDA1868, '매 턴 받아', 'income every turn row'),
@@ -17273,7 +17288,7 @@ def main():
         (0xDA1CB2, 0xDA1CD4, '승리하려면 매우 중요해', 'capture income importance row'),
         (0xDA1CDB, 0xDA1D07, '자 이번엔 이 유닛을 움직여 보자', 'move next unit row'),
         (0xDA1D0F, 0xDA1D23, '자 여기서 문제야', 'capture quiz lead row'),
-        (0xDA1D2B, 0xDA1D39, '이동범위안', 'move range quiz row'),
+        (0xDA1D2B, 0xDA1D39, '이동 범위 안', 'move range quiz row'),
         (0xDA1D3F, 0xDA1D4D, '가능한 곳에', 'capturable places row'),
         (0xDA1D4E, 0xDA1D56, '적군도시', 'enemy city label row'),
         (0xDA1D5E, 0xDA1D66, '중립도시', 'neutral city quiz label row'),
@@ -17347,7 +17362,7 @@ def main():
         (0xDA24DB, 0xDA24E7, '지금은 여기', 'attack wrong place here row'),
         (0xDA24E8, 0xDA24F0, '결정', 'attack wrong place a row'),
         (0xDA24F1, 0xDA2509, '을 눌러 줄래', 'attack wrong place press row'),
-        (0xDA250F, 0xDA251B, '메뉴에「', 'attack menu lead row'),
+        (0xDA250F, 0xDA251B, '메뉴에 「', 'attack menu lead row'),
         (0xDA2521, 0xDA2533, '」가 나오지?', 'attack menu shown row'),
         (0xDA2537, 0xDA2549, '그걸 골라 봐', 'attack menu choose row'),
         (0xDA254F, 0xDA257B, '이 커서는 공격할 상대를 고르는 커서야', 'attack target cursor row'),
@@ -17604,7 +17619,7 @@ def main():
         (0xDC2937, 0xDC2945, '님, 료!', 'campaign call name ryo row'),
         (0xDC2948, 0xDC2952, '들려?', 'campaign call hear row'),
         (0xDC295A, 0xDC2966, '캐서린?', 'campaign catherine question row'),
-        (0xDC2969, 0xDC298B, '...이건...무전기?', 'campaign transceiver question row'),
+        (0xDC2969, 0xDC298B, '...이건 무전기?', 'campaign transceiver question row'),
         (0xDC2992, 0xDC29BC, '그래 전할 게 있을 땐 앞으로도', 'campaign transceiver lead row'),
         (0xDC29BF, 0xDC29E5, '무전기로 연락할게', 'campaign transceiver row'),
         (0xDC29EA, 0xDC2A12, '그건 그렇고 료에겐 첫', 'ryo first battle lead row'),
@@ -17929,7 +17944,7 @@ def main():
         (0xDC4E49, 0xDC4E5F, '후후후...', 'whip navy laugh row'),
         (0xDC4E64, 0xDC4E7E, '하-하하하...!', 'whip navy big laugh row'),
         (0xDC4E83, 0xDC4E89, '보라!', 'whip navy behold row'),
-        (0xDC4E8C, 0xDC4EA4, '이「호이프해군」을!', 'whip navy name row'),
+        (0xDC4E8C, 0xDC4EA4, '이 「호이프 해군」을!', 'whip navy name row'),
         (0xDC4EA9, 0xDC4ED3, '지난 실패를 살려 이번엔 전함 외의', 'whip navy lesson lead row'),
         (0xDC4ED6, 0xDC4EFC, '해상 유닛도 다양하게 갖췄다!', 'whip navy varied units row'),
         (0xDC4F02, 0xDC4F22, '...저기요 호이프 나리', 'whip aide sir row'),
@@ -17960,13 +17975,13 @@ def main():
         (0xDC520B, 0xDC522D, '그럼 살짝 뒤를 따라가 볼까', 'billy follow after row'),
         (0xDC5230, 0xDC523E, '해야겠군', 'billy follow row'),
         (0xDC5246, 0xDC5252, '뭐라고?!', 'whip turbo shock row'),
-        (0xDC5257, 0xDC527B, '자랑스런「호이프해군」을', 'whip navy pride lead row'),
+        (0xDC5257, 0xDC527B, '자랑스런 「호이프 해군」을', 'whip navy pride lead row'),
         (0xDC527E, 0xDC5296, '전멸시키다니?!', 'whip navy annihilated row'),
         (0xDC529B, 0xDC52A9, '이 이놈들!', 'whip curses row'),
         (0xDC52AE, 0xDC52CC, '다음엔 안 봐준다!', 'whip no mercy row'),
-        (0xDC52D1, 0xDC52E9, '「호이프해군터보」를', 'whip navy turbo lead row'),
+        (0xDC52D1, 0xDC52E9, '「호이프 해군 터보」를', 'whip navy turbo lead row'),
         (0xDC52EC, 0xDC52FC, '보여주마!', 'whip navy turbo row'),
-        (0xDC5302, 0xDC532A, '자랑할 만큼「호이프해군」은', 'whip navy strong lead row'),
+        (0xDC5302, 0xDC532A, '자랑할 만큼 「호이프 해군」은', 'whip navy strong lead row'),
         (0xDC532D, 0xDC5335, '강적이야', 'whip navy strong row'),
         (0xDC533A, 0xDC5358, '정면으로 맞붙으면 말이지', 'whip navy head on row'),
         (0xDC535D, 0xDC537D, '여긴 전군을 맵 위쪽으로', 'move to map top lead row'),
@@ -17974,7 +17989,7 @@ def main():
         (0xDC5393, 0xDC539F, '위쪽이라면', 'top side lead row'),
         (0xDC53A5, 0xDC53BD, '의 공격도 닿지 않아!', 'top side safe row'),
         (0xDC53C2, 0xDC53D0, '거기서 수도를', 'from there capital lead row'),
-        (0xDC53D6, 0xDC53F0, '하러 가면「호이프해군」', 'capture without navy lead row'),
+        (0xDC53D6, 0xDC53F0, '하러 가면 「호이프 해군」', 'capture without navy lead row'),
         (0xDC53F3, 0xDC5415, '상대 안 하고 이길 수 있어!', 'capture without navy row'),
         (0xDC541A, 0xDC542E, '다음엔 힘내!', 'whip navy turbo next cheer row'),
         (0xDC5436, 0xDC5440, '이런 이런', 'snow dialogue sigh row'),
@@ -18107,7 +18122,7 @@ def main():
         (0xDC631C, 0xDC632C, '물러나겠어', 'billy retreat row'),
         (0xDC6331, 0xDC633B, '그럼!', 'billy bye row'),
         (0xDC6342, 0xDC6354, '기 기다려! 빌리!', 'max wait billy row'),
-        (0xDC6359, 0xDC6371, '...가 버렸나', 'max billy left row'),
+        (0xDC6359, 0xDC6371, '...가 버렸나.', 'max billy left row'),
         (0xDC6376, 0xDC6388, '왜 저 녀석이???', 'max why billy row'),
         (0xDC638E, 0xDC63AE, '빌리는 숲속 같은 곳에 유닛을', 'billy hides units lead row'),
         (0xDC63B1, 0xDC63C1, '숨겨 두고 있어', 'billy hides units row'),
@@ -18131,7 +18146,7 @@ def main():
         (0xDC6604, 0xDC6620, '평소와 조금 다른 점을', 'different from usual lead row'),
         (0xDC6623, 0xDC6633, '조심해야 해!', 'different from usual row'),
         (0xDC663A, 0xDC665A, '오 공장도 준비됐구나!', 'factory prepared row'),
-        (0xDC665F, 0xDC667B, '알았어 그럼 가자!', 'understood lets go row'),
+        (0xDC665F, 0xDC667B, '알았어. 그럼 가자!', 'understood lets go row'),
         (0xDC6682, 0xDC66A6, '저 아저씨는 좀 어려워...', 'snow old man hard row'),
         (0xDC66AE, 0xDC66BA, '왜?', 'why snow row'),
         (0xDC66C2, 0xDC66EC, '왜냐니... 눈이나 내리잖아?', 'snow falls row'),
@@ -18273,7 +18288,7 @@ def main():
         (0xDC76F6, 0xDC770A, '그럼 이만!', 'eagle farewell row'),
         (0xDC7712, 0xDC7724, '기 기다려!', 'domino wait row'),
         (0xDC7729, 0xDC773F, '보낸다곤 아무도...', 'domino did not let go row'),
-        (0xDC7744, 0xDC775A, '...가 버렸나', 'domino he left row'),
+        (0xDC7744, 0xDC775A, '...가 버렸나.', 'domino he left row'),
         (0xDC7762, 0xDC777E, '꽤 괜찮은 녀석이네', 'domino decent guy row'),
         (0xDC7786, 0xDC77A6, '이 이 내가 또 졌다고???', 'eagle lost again repeat row'),
         (0xDC77AE, 0xDC77C6, '뭐 이 정도야!', 'domino easy row'),
@@ -18313,7 +18328,7 @@ def main():
         (0xDC7BDB, 0xDC7C01, '싸울 것을 고글에 맹세하지', 'eagle vow commander row'),
         (0xDC7C06, 0xDC7C1A, '그럼 이만!', 'eagle farewell repeat row'),
         (0xDC7C22, 0xDC7C4A, '기 기다려! 보낸다곤 아무도...', 'domino wait no release row'),
-        (0xDC7C4D, 0xDC7C63, '...가 버렸나', 'domino left repeat row'),
+        (0xDC7C4D, 0xDC7C63, '...가 버렸나.', 'domino left repeat row'),
         (0xDC7C6A, 0xDC7C86, '꽤 괜찮은 녀석이네', 'domino decent repeat row'),
         (0xDC7C8E, 0xDC7CAE, '이 이 내가 또 졌다고???', 'eagle lost third row'),
         (0xDC7CB6, 0xDC7CD0, '그래서는 아직 멀었어!', 'domino still not enough repeat row'),
@@ -18336,7 +18351,7 @@ def main():
         (0xDC7EBF, 0xDC7EE5, '싸울 것을 고글에 맹세하지', 'eagle vow third row'),
         (0xDC7EEA, 0xDC7EFE, '그럼 이만!', 'eagle farewell third row'),
         (0xDC7F06, 0xDC7F2E, '기 기다려! 보낸다곤 아무도...', 'domino wait third row'),
-        (0xDC7F31, 0xDC7F47, '...가 버렸나', 'domino left third row'),
+        (0xDC7F31, 0xDC7F47, '...가 버렸나.', 'domino left third row'),
         (0xDC7F4E, 0xDC7F6A, '꽤 괜찮은 녀석이네', 'domino decent third row'),
         (0xDC7F72, 0xDC7F9C, '적이 사령관 브레이크를 쓰기 전에', 'enemy co break before row'),
         (0xDC7F9F, 0xDC7FCB, '적 주력을 쓰러뜨릴 수 있느냐가 승부야', 'defeat enemy main force row'),
@@ -18659,7 +18674,7 @@ def main():
         (0xDCA5A9, 0xDCA5B9, '그럼 또 봐', 'asuka see you row'),
         (0xDCA5BE, 0xDCA5CE, '기 기다...', 'domino wait broken row'),
         (0xDCA5D4, 0xDCA5E8, '라고 해도 없네', 'asuka gone row'),
-        (0xDCA5ED, 0xDCA5FF, '아 아스카...', 'domino asuka row'),
+        (0xDCA5ED, 0xDCA5FF, '아, 아스카...', 'domino asuka row'),
         (0xDCA602, 0xDCA61E, '나중에 두고 봐!', 'domino remember later row'),
         (0xDCA626, 0xDCA64C, '먼저 16거점을 점령당했어...', 'lost sixteen bases row'),
         (0xDCA652, 0xDCA67C, '처음부터 레드스타 군 편인 도시가 7개', 'seven allied cities row'),
@@ -19708,7 +19723,7 @@ def main():
         (0xDD17B2, 0xDD17CC, '오! 잘 알고 있네!', 'mopp agrees row'),
         (0xDD17D1, 0xDD17F7, '다음엔 어딘가 지도에서 만나자!', 'meet on map row'),
         (0xDD17FA, 0xDD180E, '그럼 또 보자!', 'see you again row'),
-        (0xDD1816, 0xDD1828, '이긴...건가?', 'victory question repeat row'),
+        (0xDD1816, 0xDD1828, '이긴 건가?', 'victory question repeat row'),
         (0xDD182E, 0xDD1848, '이번에야말로 이겼어!', 'victory at last repeat row'),
         (0xDD184E, 0xDD186A, '이걸로... 헬보우즈 군도', 'hellbowz army fleeing repeat lead row'),
         (0xDD186D, 0xDD1881, '도망가겠지...', 'hellbowz army fleeing repeat row'),

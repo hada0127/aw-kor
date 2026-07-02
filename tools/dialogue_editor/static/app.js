@@ -192,8 +192,18 @@ async function loadDict() {
   const box = $("#dictlist"); box.textContent = "";
   for (const c of cats) {
     box.append(el("div", { className: "dcat", textContent: `${c} (${state.dict[c].length})` }));
+    box.append(dhead());
     for (const e of state.dict[c]) box.append(dentry(c, e));
   }
+}
+function dhead() {
+  return el("div", { className: "dentry dhead" },
+    el("span", { textContent: "원문/출처" }),
+    el("span", { textContent: "현재/관측" }),
+    el("span", { textContent: "확정 표기" }),
+    el("span", { textContent: "상태" }),
+    el("span", { textContent: "저장" }),
+    el("span", { textContent: "삭제" }));
 }
 function dentry(cat, e) {
   const current = el("input", { value: dictCurrent(e), placeholder: "현재" });

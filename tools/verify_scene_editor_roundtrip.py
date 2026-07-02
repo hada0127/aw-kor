@@ -44,6 +44,7 @@ INTEGRITY_MAP = ROOT / "temp" / "integrity_map.json"
 SPRITE_BUILD_LAYOUTS = ROOT / "data" / "sprite_build_layouts.json"
 OBJLABEL_SPRITES = ROOT / "data" / "objlabel_sprites.json"
 CLASSIFIED_BLANK_STATUSES = {"symbol_table", "script_blank", "excluded", "intentional_blank"}
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
 
 sys.path.insert(0, str(ROOT / "tools"))
 import build_korean_full as B  # noqa: E402
@@ -52,6 +53,15 @@ import text_metrics as TM  # noqa: E402
 
 _HTTP_CLIENTS: dict[str, tuple[urllib.parse.ParseResult, http.client.HTTPConnection]] = {}
 _AUTH_COOKIE = ""
+
+
+def default_editor_password() -> str:
+    value = os.environ.get("SCENE_EDITOR_PASSWORD") or os.environ.get("AW_EDITOR_PASSWORD")
+    if value:
+        return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    return ""
 
 
 def sha256(path: Path) -> str:
@@ -307,8 +317,8 @@ def main() -> int:
                     help="report path; relative paths are resolved from the project root")
     ap.add_argument("--no-actual-sample", action="store_true")
     ap.add_argument("--no-build-sample", action="store_true")
-    ap.add_argument("--password", default=os.environ.get("SCENE_EDITOR_PASSWORD"),
-                    help="scene editor password; defaults to SCENE_EDITOR_PASSWORD")
+    ap.add_argument("--password", default=default_editor_password(),
+                    help="scene editor password; defaults to SCENE_EDITOR_PASSWORD/AW_EDITOR_PASSWORD/temp/editor_password.txt")
     args = ap.parse_args()
 
     started = time.time()

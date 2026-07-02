@@ -5,28 +5,28 @@
     "nations": 5,
     "places": 4,
     "discovered_candidates": 1,
-    "common_terms": 8,
-    "issues": 6
+    "common_terms": 52,
+    "issues": 4
   },
   "characters": [
     {
       "ja": "リョウ",
       "ko": "료",
-      "freq": 298,
+      "freq": 297,
       "note": "CO / 플레이어",
       "variants": {
-        "료우": 72,
-        "료": 186
+        "료": 187,
+        "료우": 71
       },
       "edit": ""
     },
     {
       "ja": "キャサリン",
       "ko": "캐서린",
-      "freq": 226,
+      "freq": 228,
       "note": "CO",
       "variants": {
-        "캐서린": 107
+        "캐서린": 109
       },
       "edit": ""
     },
@@ -46,7 +46,7 @@
       "freq": 185,
       "note": "CO",
       "variants": {
-        "도미노": 86
+        "도미노": 85
       },
       "edit": ""
     },
@@ -73,17 +73,12 @@
     {
       "ja": "ホイップ",
       "ko": "호이프",
-      "freq": 229,
-      "note": "CO. B팀 기준 기본 표기는 호이프, 문맥상 일부 호칭은 휩 허용",
+      "freq": 228,
+      "note": "CO. B팀 기준 호이프 단일 표기",
       "variants": {
-        "호이프": 11,
-        "휩": 39,
-        "휘프": 61
+        "호이프": 110
       },
-      "allowed": [
-        "휩"
-      ],
-      "edit": ""
+      "edit": "호이프"
     },
     {
       "ja": "アスカ",
@@ -108,7 +103,7 @@
     {
       "ja": "ボテト",
       "ko": "보테토",
-      "freq": 10,
+      "freq": 11,
       "note": "캐릭터",
       "variants": {
         "보테토": 4
@@ -118,7 +113,7 @@
     {
       "ja": "グルモ",
       "ko": "구루모",
-      "freq": 10,
+      "freq": 11,
       "note": "캐릭터",
       "variants": {
         "구루모": 3
@@ -128,7 +123,7 @@
     {
       "ja": "ヘズ",
       "ko": "헤즈",
-      "freq": 10,
+      "freq": 11,
       "note": "캐릭터",
       "variants": {
         "헤즈": 4
@@ -140,21 +135,21 @@
     {
       "ja": "レッドスター",
       "ko": "레드스타",
-      "freq": 372,
+      "freq": 374,
       "note": "국가",
       "variants": {
-        "레드 스타": 22,
-        "레드스타": 158
+        "레드 스타": 21,
+        "레드스타": 162
       },
       "edit": ""
     },
     {
       "ja": "ブルームーン",
       "ko": "블루문",
-      "freq": 173,
+      "freq": 172,
       "note": "국가",
       "variants": {
-        "블루문": 90
+        "블루문": 91
       },
       "edit": ""
     },
@@ -172,11 +167,11 @@
     {
       "ja": "イエローコメット",
       "ko": "옐로코멧",
-      "freq": 144,
+      "freq": 142,
       "note": "국가",
       "variants": {
-        "옐로 코멧": 51,
-        "옐로코멧": 39
+        "옐로 코멧": 49,
+        "옐로코멧": 40
       },
       "edit": ""
     },
@@ -196,10 +191,9 @@
       "ja": "コスモランド",
       "ko": "코스모 랜드",
       "freq": 12,
-      "note": "지명(B팀 띄어쓰기)",
+      "note": "지명",
       "variants": {
-        "코스모 랜드": 6,
-        "코스모랜드": 6
+        "코스모 랜드": 6
       },
       "edit": ""
     },
@@ -207,11 +201,9 @@
       "ja": "マクロランド",
       "ko": "매크로 랜드",
       "freq": 32,
-      "note": "지명(B팀 띄어쓰기)",
+      "note": "지명",
       "variants": {
-        "매크로 랜드": 16,
-        "매크로랜드": 9,
-        "마크로랜드": 4
+        "매크로 랜드": 16
       },
       "edit": ""
     },
@@ -241,7 +233,7 @@
       "ja": "ショーグン",
       "ko": "사령관",
       "freq": 5,
-      "note": "B팀 기준 common CO title",
+      "note": "auto-discovered",
       "edit": ""
     }
   ],
@@ -267,7 +259,7 @@
     {
       "term": "호이프",
       "ja_note": "ホイップ",
-      "current": "휘프",
+      "current": "호이프",
       "edit": "호이프"
     },
     {
@@ -293,6 +285,270 @@
       "ja_note": "ブレイク",
       "current": "브레이크",
       "edit": ""
+    },
+    {
+      "term": "쇼군브레이크 -> 사령관 브레이크",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 브레이크",
+      "edit": ""
+    },
+    {
+      "term": "쇼군 브레이크 -> 사령관 브레이크",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 브레이크",
+      "edit": ""
+    },
+    {
+      "term": "장군브레이크 -> 사령관 브레이크",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 브레이크",
+      "edit": ""
+    },
+    {
+      "term": "장군 브레이크 -> 사령관 브레이크",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 브레이크",
+      "edit": ""
+    },
+    {
+      "term": "쇼군선택 -> 사령관 선택",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 선택",
+      "edit": ""
+    },
+    {
+      "term": "쇼군 선택 -> 사령관 선택",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 선택",
+      "edit": ""
+    },
+    {
+      "term": "장군선택 -> 사령관 선택",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 선택",
+      "edit": ""
+    },
+    {
+      "term": "장군 선택 -> 사령관 선택",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "사령관 선택",
+      "edit": ""
+    },
+    {
+      "term": "휘프 쇼군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "휘프 장군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "호이프 쇼군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "호이프 장군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "휩 쇼군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "휩 장군 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "휩 사령관 -> 호이프 사령관",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 사령관",
+      "edit": ""
+    },
+    {
+      "term": "휘프이 -> 호이프가",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프가",
+      "edit": ""
+    },
+    {
+      "term": "휘프을 -> 호이프를",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프를",
+      "edit": ""
+    },
+    {
+      "term": "휘프은 -> 호이프는",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프는",
+      "edit": ""
+    },
+    {
+      "term": "휘프과 -> 호이프와",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프와",
+      "edit": ""
+    },
+    {
+      "term": "휘프으로 -> 호이프로",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프로",
+      "edit": ""
+    },
+    {
+      "term": "휘프아 -> 호이프야",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프야",
+      "edit": ""
+    },
+    {
+      "term": "휘프 -> 호이프",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프",
+      "edit": ""
+    },
+    {
+      "term": "휩이 -> 호이프가",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프가",
+      "edit": ""
+    },
+    {
+      "term": "휩을 -> 호이프를",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프를",
+      "edit": ""
+    },
+    {
+      "term": "휩은 -> 호이프는",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프는",
+      "edit": ""
+    },
+    {
+      "term": "휩과 -> 호이프와",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프와",
+      "edit": ""
+    },
+    {
+      "term": "휩으로 -> 호이프로",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프로",
+      "edit": ""
+    },
+    {
+      "term": "휩아 -> 호이프야",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프야",
+      "edit": ""
+    },
+    {
+      "term": "휩님 -> 호이프님",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프님",
+      "edit": ""
+    },
+    {
+      "term": "휩 씨 -> 호이프 씨",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 씨",
+      "edit": ""
+    },
+    {
+      "term": "휩 나리 -> 호이프 나리",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프 나리",
+      "edit": ""
+    },
+    {
+      "term": "휩 -> 호이프",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "호이프",
+      "edit": ""
+    },
+    {
+      "term": "료우 -> 료",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "료",
+      "edit": ""
+    },
+    {
+      "term": "코스모랜드 -> 코스모 랜드",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "코스모 랜드",
+      "edit": ""
+    },
+    {
+      "term": "매크로랜드 -> 매크로 랜드",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "매크로 랜드",
+      "edit": ""
+    },
+    {
+      "term": "마크로랜드 -> 매크로 랜드",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "매크로 랜드",
+      "edit": ""
+    },
+    {
+      "term": "마크로 랜드 -> 매크로 랜드",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "매크로 랜드",
+      "edit": ""
+    },
+    {
+      "term": "디자인 지도 -> 디자인 맵",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "디자인 맵",
+      "edit": ""
+    },
+    {
+      "term": "지도 디자인 -> 맵 디자인",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "맵 디자인",
+      "edit": ""
+    },
+    {
+      "term": "레드 스타 -> 레드스타",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "레드스타",
+      "edit": ""
+    },
+    {
+      "term": "그린 어스 -> 그린어스",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "그린어스",
+      "edit": ""
+    },
+    {
+      "term": "옐로 코멧 -> 옐로코멧",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "옐로코멧",
+      "edit": ""
+    },
+    {
+      "term": "블루 문 -> 블루문",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "블루문",
+      "edit": ""
+    },
+    {
+      "term": "블랙 홀 -> 블랙홀",
+      "ja_note": "(build TERM_NORMALIZATION)",
+      "current": "블랙홀",
+      "edit": ""
     }
   ],
   "issues": [
@@ -300,26 +556,15 @@
       "ja": "リョウ",
       "chosen_ko": "료",
       "other_ko": {
-        "료우": 72
+        "료우": 71
       },
       "hint": "대사 내 표기 흔들림 — apply 로 통일 검토"
-    },
-    {
-      "ja": "ホイップ",
-      "chosen_ko": "호이프",
-      "other_ko": {
-        "휘프": 61
-      },
-      "allowed_ko": {
-        "휩": "B팀 문맥상 호칭 허용"
-      },
-      "hint": "B팀 기준 재작성: 기본 호이프, 문맥상 휩 허용, 휘프 금지"
     },
     {
       "ja": "レッドスター",
       "chosen_ko": "레드스타",
       "other_ko": {
-        "레드 스타": 22
+        "레드 스타": 21
       },
       "hint": "대사 내 표기 흔들림 — apply 로 통일 검토"
     },
@@ -335,19 +580,9 @@
       "ja": "イエローコメット",
       "chosen_ko": "옐로코멧",
       "other_ko": {
-        "옐로 코멧": 51
+        "옐로 코멧": 49
       },
       "hint": "대사 내 표기 흔들림 — apply 로 통일 검토"
-    },
-    {
-      "ja": "マクロランド",
-      "chosen_ko": "매크로 랜드",
-      "other_ko": {
-        "매크로랜드": 9,
-        "마크로 랜드": 4,
-        "마크로랜드": 4
-      },
-      "hint": "B팀 기준 띄어쓰기"
     }
   ]
 }

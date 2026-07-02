@@ -50,6 +50,7 @@ PART1_MENU_PRENAV = [
     "START",
 ]
 PART1_MENU_ADVANCE_A_PRESSES = 16
+START_PROMPT_CROP = (56, 96, 184, 124)
 
 
 def layer_bbox(layer: Image.Image) -> tuple[int, int, int, int]:
@@ -241,11 +242,31 @@ def assert_tm_pattern(label: str, layer: Image.Image, crop_box: tuple[int, int, 
     return f"bbox={(gx0, gy0, gx1, gy1)}:counts={counts}"
 
 
+def assert_start_prompt_matches_part2(label: str, layer: Image.Image, reference_layer: Image.Image) -> str:
+    crop = layer.crop(START_PROMPT_CROP)
+    reference = reference_layer.crop(START_PROMPT_CROP)
+    bbox = crop.getbbox()
+    ref_bbox = reference.getbbox()
+    if bbox is None:
+        raise AssertionError(f"{label}: missing start prompt pixels")
+    if crop.tobytes() != reference.tobytes():
+        raise AssertionError(f"{label}: start prompt differs from Part2, bbox={bbox}, ref_bbox={ref_bbox}")
+    x0, y0, x1, y1 = bbox
+    gx0, gy0, gx1, gy1 = x0 + START_PROMPT_CROP[0], y0 + START_PROMPT_CROP[1], x1 + START_PROMPT_CROP[0], y1 + START_PROMPT_CROP[1]
+    counts: dict[int, int] = {}
+    for value in crop.getdata():
+        if value:
+            counts[int(value)] = counts.get(int(value), 0) + 1
+    return f"bbox={(gx0, gy0, gx1, gy1)}:counts={counts}"
+
+
 def run_asset_checks() -> list[str]:
     checked: list[str] = []
     failures: list[str] = []
     try:
+        title_layer = th.make_title_index_layer()
         select_layer = th.make_select_index_layer()
+        part2_layer = th.make_part2_index_layer()
         top = assert_select_logo_style(
             "select top Korean logo",
             select_layer,
@@ -273,9 +294,10 @@ def run_asset_checks() -> list[str]:
         )
         top_tm = assert_tm_pattern("select top TM", th.make_select_top_tm_overlay_layer(), (201, 26, 219, 38))
         part1_tm = assert_tm_pattern("part1 title TM", th.make_part1_tm_overlay_layer(), (210, 33, 229, 45))
+        title_start = assert_start_prompt_matches_part2("1+2 title start prompt", title_layer, part2_layer)
         part2_title = assert_select_logo_style(
             "part2 title Korean logo",
-            th.make_part2_index_layer(),
+            part2_layer,
             (0, 16, 220, 64),
             body_indices={4, 5, 6, 7, 8},
             outer_idx=1,
@@ -291,6 +313,7 @@ def run_asset_checks() -> list[str]:
         checked.append(f"asset:select_bottom_logo:{bottom}")
         checked.append(f"asset:select_top_tm:{top_tm}")
         checked.append(f"asset:part1_title_tm:{part1_tm}")
+        checked.append(f"asset:title_start_matches_part2:{title_start}")
         checked.append(f"asset:part2_title_logo:{part2_title}")
     except AssertionError as exc:
         failures.append(str(exc))

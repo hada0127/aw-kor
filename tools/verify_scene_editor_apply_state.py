@@ -20,9 +20,19 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OVERRIDES = ROOT / "data" / "dialogue_overrides.json"
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
 
 _HTTP_CLIENTS: dict[str, tuple[urllib.parse.ParseResult, http.client.HTTPConnection]] = {}
 _AUTH_COOKIE = ""
+
+
+def default_editor_password() -> str:
+    value = os.environ.get("SCENE_EDITOR_PASSWORD") or os.environ.get("AW_EDITOR_PASSWORD")
+    if value:
+        return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    return ""
 
 
 def _http_connection(base_url: str) -> tuple[urllib.parse.ParseResult, http.client.HTTPConnection]:
@@ -121,8 +131,8 @@ def require(cond: bool, message: str) -> None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--server", default="http://127.0.0.1:8782")
-    ap.add_argument("--password", default=os.environ.get("SCENE_EDITOR_PASSWORD"),
-                    help="scene editor password; defaults to SCENE_EDITOR_PASSWORD")
+    ap.add_argument("--password", default=default_editor_password(),
+                    help="scene editor password; defaults to SCENE_EDITOR_PASSWORD/AW_EDITOR_PASSWORD/temp/editor_password.txt")
     args = ap.parse_args()
 
     if args.password:

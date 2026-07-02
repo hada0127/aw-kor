@@ -196,6 +196,7 @@ PART2_PROMPT_SPRITES = (
     (23, 120, 100, 32, 16, 0x180, 3),
     (24, 152, 100, 32, 16, 0x188, 3),
 )
+PART2_STYLE_START_BOX = (90, 100, 150, 116)
 
 PART2_ATTRACT_RESIDUAL_SPRITES = (
     (25, 186, 50, 16, 8, 0x190, 1),
@@ -607,7 +608,7 @@ def paint_index_text_crisp(
 def make_title_index_layer() -> Image.Image:
     layer = Image.new("L", (240, 160), 0)
     draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 26, 190, 30, 25, 1, 11, 4, 4, aa_idx=10, stroke=1)
-    draw_boxed_start_index(layer, "시작하기!", (68, 100, 172, 116))
+    draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
 
 
@@ -671,7 +672,7 @@ def make_part2_index_layer() -> Image.Image:
         body_stops=(5, 4, 6, 7, 8),
         body_aa_idx=9,
     )
-    draw_part2_start_index(layer, "시작하기!", (90, 100, 150, 116))
+    draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
 
 
@@ -681,7 +682,7 @@ def draw_prompt_index(layer: Image.Image, text: str, box: tuple[int, int, int, i
 
 def draw_boxed_start_index(layer: Image.Image, text: str, box: tuple[int, int, int, int]) -> None:
     draw = ImageDraw.Draw(layer)
-    # 1+2 title and Part 2 title: pale fill, blue border, white text with blue edge.
+    # Legacy boxed prompt: pale fill, blue border, white text with blue edge.
     draw.rectangle(box, fill=12)
     draw.rectangle(box, outline=14, width=2)
     draw_blocky_prompt_index(layer, text, box, fill_idx=1, stroke_idx=14, aa_idx=10)

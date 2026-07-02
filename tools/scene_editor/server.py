@@ -59,8 +59,24 @@ OUTPUT_VARIANTS = {
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
 REVIEW_ONLY_SCENE_IDS = {"98_extraction_noise_review", "99_unassigned_review"}
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
+
+
+def resolve_editor_password(*env_names):
+    for name in env_names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    password = secrets.token_urlsafe(12)
+    EDITOR_PASSWORD_FILE.parent.mkdir(parents=True, exist_ok=True)
+    EDITOR_PASSWORD_FILE.write_text(password + "\n", encoding="utf-8")
+    return password
+
+
 AUTH_COOKIE = "aw_scene_editor_auth"
-AUTH_PASSWORD = os.environ.get("SCENE_EDITOR_PASSWORD") or ""
+AUTH_PASSWORD = resolve_editor_password("SCENE_EDITOR_PASSWORD", "AW_EDITOR_PASSWORD")
 AUTH_TOKEN = secrets.token_urlsafe(32)
 
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
@@ -453,6 +469,8 @@ def address_text_overrides():
 
 def save_address_text_override(addr: str, ko: str) -> None:
     """Persist a protected address edit to the TSV build authority."""
+    if "\t" in ko or "\n" in ko or "\r" in ko:
+        raise ValueError("보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다")
     addr_int = int(addr, 16)
     rows = dict(address_text_overrides())
     if addr_int not in rows:
@@ -1246,7 +1264,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Disposition", f'attachment; filename="{path.name}"')
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
-        self.wfile.write(data)
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            return
 
     # ── POST ──
     def do_POST(self):
@@ -1295,6 +1316,8 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
         protected_address_text = is_address_text_override(addr)
         protected_direct_script = protected_address_text and is_direct_script_address(addr)
+        if protected_address_text and any(ch in ko for ch in ("\t", "\n", "\r")):
+            return {"ok": False, "error": "보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다"}
         # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
         kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
         if kind == "deny":
@@ -1331,7 +1354,10 @@ class Handler(BaseHTTPRequestHandler):
                                 if protected_address_text else "dialogue_overrides.json")}
         with _LOCK:
             if protected_address_text:
-                save_address_text_override(addr, ko)
+                try:
+                    save_address_text_override(addr, ko)
+                except ValueError as exc:
+                    return {"ok": False, "error": str(exc)}
                 ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
                 if ov.get(addr) != ko:
                     # Keep a mirror override instead of deleting an existing
@@ -1458,9 +1484,13 @@ def main():
     ap.add_argument("--port", type=int, default=8782)
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--password", default=None,
-                    help="웹 UI 비밀번호. 생략 시 SCENE_EDITOR_PASSWORD를 사용하고, 둘 다 없으면 인증 비활성")
+                    help="웹 UI 비밀번호. 생략 시 SCENE_EDITOR_PASSWORD/AW_EDITOR_PASSWORD/default를 사용")
+    ap.add_argument("--no-password", action="store_true",
+                    help="로컬 자동화 전용: 비밀번호 인증 비활성")
     args = ap.parse_args()
-    if args.password is not None:
+    if args.no_password:
+        AUTH_PASSWORD = ""
+    elif args.password is not None:
         AUTH_PASSWORD = args.password
     srv = EditorHTTPServer((args.host, args.port), Handler)
     cov = catalog().get("coverage", {})

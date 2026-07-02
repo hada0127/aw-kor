@@ -165,6 +165,8 @@ main { display: flex; align-items: stretch; height: calc(100vh - 53px); }
 .dictadd input { flex: 1; min-width: 90px; }
 #dictlist { overflow-y: auto; flex: 1; }
 .dterm { display: grid; grid-template-columns: 90px minmax(130px, 1.1fr) minmax(130px, 1fr) minmax(130px, 1fr) 74px auto auto; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.dterm.dhead { position: sticky; top: 0; z-index: 1; background: var(--panel);
+  color: var(--dim); font-weight: 700; font-size: 11px; border-bottom-color: var(--accent); }
 .dterm .dcat { color: var(--dim); font-size: 11px; min-width: 0; overflow-wrap: anywhere; }
 .dterm .dsource { color: var(--ink); overflow-wrap: anywhere; }
 .dterm .dstatus { color: var(--dim); font-size: 11px; white-space: nowrap; }

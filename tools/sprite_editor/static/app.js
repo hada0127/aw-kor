@@ -9,7 +9,11 @@ const URLP = new URLSearchParams(location.search);
 const SECTION = URLP.get("section") || "all";
 const EMBED = URLP.get("embed") === "1";
 if (EMBED) document.documentElement.classList.add("embed");
-const S = { id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12, dirty: false, painting: false, section: SECTION, osmode: false, os: null, cols: 1 };
+const S = {
+  id: null, w: 0, h: 0, indices: null, palette: null, sel: 1, zoom: 12,
+  dirty: false, painting: false, section: SECTION, osmode: false, os: null, cols: 1,
+  undoStack: [], strokeBefore: null, strokeChanged: false, paintKey: ""
+};
 
 async function loadList() {
   const p = new URLSearchParams({ type: $("#type").value, q: $("#q").value,
@@ -40,6 +44,7 @@ async function selectSprite(id) {
   S.palette = (t.palette || []).map(c => c.slice(0, 3));
   while (S.palette.length < 16) S.palette.push([0, 0, 0]);
   S.dirty = false; S.os = null; S.osmode = false;
+  resetUndo();
   $("#info").textContent = `${t.desc || id} · ${t.type} ${t.width}×${t.height} · ${t.offset || ""} ${t.edited ? "(편집본)" : ""}`;
   $("#save").disabled = true; $("#revert").disabled = !t.edited;
   $("#compare").disabled = false;
@@ -134,6 +139,53 @@ function setTilePixel(T, rx, ry, v) {
   const gx = (T % S.cols) * 8 + rx, gy = Math.floor(T / S.cols) * 8 + ry;
   if (S.indices[gy] && S.indices[gy][gx] !== undefined) S.indices[gy][gx] = v;
 }
+function cloneIndices() {
+  return S.indices ? S.indices.map(row => Array.isArray(row) ? row.slice() : []) : null;
+}
+function resetUndo() {
+  S.undoStack = [];
+  S.strokeBefore = null;
+  S.strokeChanged = false;
+  S.paintKey = "";
+  updateUndoButton();
+}
+function updateUndoButton() {
+  const btn = $("#undo");
+  if (btn) btn.disabled = !S.undoStack.length;
+}
+function beginStroke() {
+  if (!S.indices) return;
+  S.strokeBefore = cloneIndices();
+  S.strokeChanged = false;
+  S.paintKey = "";
+}
+function markStrokeChanged() {
+  S.strokeChanged = true;
+}
+function finishStroke() {
+  if (S.strokeBefore && S.strokeChanged) {
+    S.undoStack.push(S.strokeBefore);
+    if (S.undoStack.length > 80) S.undoStack.shift();
+  }
+  S.strokeBefore = null;
+  S.strokeChanged = false;
+  S.paintKey = "";
+  updateUndoButton();
+}
+function undoDraw() {
+  const prev = S.undoStack.pop();
+  if (!prev) return;
+  S.indices = cloneGrid(prev);
+  S.painting = false;
+  S.paintKey = "";
+  S.dirty = true;
+  $("#save").disabled = false;
+  draw();
+  updateUndoButton();
+}
+function cloneGrid(grid) {
+  return grid ? grid.map(row => Array.isArray(row) ? row.slice() : []) : null;
+}
 function drawOnscreen() {
   const o = S.os, z = S.zoom, cv = $("#cv");
   cv.width = o.w * z; cv.height = o.h * z;
@@ -166,8 +218,12 @@ function paintOnscreenAt(ev) {
     const tx = c.fh ? c.tw - 1 - txs : txs, ty = c.fv ? c.th - 1 - tys : tys;
     const rx = c.fh ? 7 - xx : xx, ry = c.fv ? 7 - yy : yy;
     const T = c.tile_off + (o.obj1d ? ty * c.tw + tx : ty * 32 + tx);
+    const key = `${T}:${rx}:${ry}`;
+    if (key === S.paintKey) return;
+    S.paintKey = key;
     if (tilePixel(T, rx, ry) === S.sel) return;
     setTilePixel(T, rx, ry, S.sel); S.dirty = true; $("#save").disabled = false;
+    markStrokeChanged();
     drawOnscreen();
     return;
   }
@@ -192,8 +248,12 @@ function paintAt(ev) {
   const cv = $("#cv"), r = cv.getBoundingClientRect();
   const x = Math.floor((ev.clientX - r.left) / S.zoom), y = Math.floor((ev.clientY - r.top) / S.zoom);
   if (x < 0 || y < 0 || x >= S.w || y >= S.h) return;
+  const key = `${x}:${y}`;
+  if (key === S.paintKey) return;
+  S.paintKey = key;
   if (S.indices[y][x] === S.sel) return;
   S.indices[y][x] = S.sel; S.dirty = true; $("#save").disabled = false;
+  markStrokeChanged();
   const g = cv.getContext("2d"); g.fillStyle = rgb(S.palette[S.sel]); g.fillRect(x * S.zoom, y * S.zoom, S.zoom, S.zoom);
 }
 
@@ -206,9 +266,25 @@ function wire() {
   $("#mode-screen").onclick = () => { setMode("screen"); refreshOnscreen(false); };
   $("#mode-tile").onclick = () => { setMode("tile"); refreshOnscreen(!!S.os); };
   const cv = $("#cv");
-  cv.onmousedown = (e) => { S.painting = true; paintAt(e); };
+  cv.onmousedown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    beginStroke();
+    S.painting = true;
+    paintAt(e);
+    window.addEventListener("mouseup", () => { S.painting = false; finishStroke(); }, { once: true });
+  };
   cv.onmousemove = (e) => { if (S.painting) paintAt(e); };
-  window.addEventListener("mouseup", () => S.painting = false);
+  $("#undo").onclick = undoDraw;
+  document.addEventListener("keydown", (e) => {
+    const tag = (e.target && e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || e.target?.isContentEditable) return;
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z") {
+      if (!S.undoStack.length) return;
+      e.preventDefault();
+      undoDraw();
+    }
+  });
   $("#save").onclick = async () => {
     if (!S.id) return;
     const r = await jpost("/api/save", { id: S.id, indices: S.indices, palette: S.palette });
@@ -217,7 +293,7 @@ function wire() {
   };
   $("#revert").onclick = async () => {
     if (!S.id || !confirm("편집을 되돌릴까요?")) return;
-    await jpost("/api/revert", { id: S.id }); selectSprite(S.id); loadList();
+    await jpost("/api/revert", { id: S.id }); resetUndo(); selectSprite(S.id); loadList();
   };
   $("#applybuild").onclick = async () => {
     if (!confirm("저장된 모든 편집을 재빌드로 ROM에 반영합니다(수십 초 소요). 진행할까요?")) return;

@@ -1417,10 +1417,21 @@ async function openDict() {
   const total = cats.reduce((n, [, v]) => n + v.length, 0);
   $("#dictInfo").textContent = `${cats.length}개 카테고리 · ${total}개 용어`;
   const box = $("#dictlist"); box.innerHTML = "";
+  box.appendChild(dictHeader());
   const frag = document.createDocumentFragment();
   for (const [cat, list] of cats) for (const e of list) frag.appendChild(dictRow(cat, e));
   box.appendChild(frag);
   $("#dictModal").hidden = false;
+}
+function dictHeader() {
+  const row = document.createElement("div");
+  row.className = "dterm dhead";
+  for (const text of ["카테고리", "원문/출처", "현재/관측", "확정 표기", "상태", "저장", "삭제"]) {
+    const span = document.createElement("span");
+    span.textContent = text;
+    row.appendChild(span);
+  }
+  return row;
 }
 function dictRow(cat, e) {
   const row = document.createElement("div");

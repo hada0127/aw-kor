@@ -5275,7 +5275,10 @@
         ],
         "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlays_patched/frame.png",
         "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
-      }
+      },
+      "related_dialogue_scene_ids": [
+        "30a1_part2_redstar_story_early"
+      ]
     },
     {
       "id": "26_part2_battle_labels",

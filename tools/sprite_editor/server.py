@@ -22,7 +22,11 @@ API
 """
 import argparse
 import base64
+import hmac
+import html
 import json
+import os
+import secrets
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -34,6 +38,25 @@ INDEX_PATH = ROOT / "data" / "sprites_index.json"
 ORIG_PNG_DIR = ROOT / "temp" / "sprites_png"
 EDIT_DIR = ROOT / "data" / "sprite_edits"
 OVERRIDES_PATH = ROOT / "data" / "sprites_overrides.json"
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
+
+
+def resolve_editor_password(*env_names):
+    for name in env_names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    password = secrets.token_urlsafe(12)
+    EDITOR_PASSWORD_FILE.parent.mkdir(parents=True, exist_ok=True)
+    EDITOR_PASSWORD_FILE.write_text(password + "\n", encoding="utf-8")
+    return password
+
+
+AUTH_COOKIE = "aw_sprite_editor_auth"
+AUTH_PASSWORD = resolve_editor_password("SPRITE_EDITOR_PASSWORD", "AW_EDITOR_PASSWORD")
+AUTH_TOKEN = secrets.token_urlsafe(32)
 
 SELECT_OBJ_ID = "lz77_00024A34"
 SELECT_TOP_TITLE_ID = SELECT_OBJ_ID + "#select_top_title"
@@ -1241,7 +1264,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
 
-    def _send(self, code, body, ctype="application/json; charset=utf-8"):
+    def _send(self, code, body, ctype="application/json; charset=utf-8", headers=None):
         if isinstance(body, (dict, list)):
             body = json.dumps(body, ensure_ascii=False).encode("utf-8")
         elif isinstance(body, str):
@@ -1249,16 +1272,101 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
+        if headers:
+            for key, value in headers:
+                self.send_header(key, value)
         self.end_headers()
         self.wfile.write(body)
 
-    def _body(self):
+    def _raw_body(self):
         n = int(self.headers.get("Content-Length", 0))
-        return json.loads(self.rfile.read(n) or b"{}") if n else {}
+        return self.rfile.read(n) if n else b""
+
+    def _body(self):
+        raw = self._raw_body()
+        return json.loads(raw or b"{}") if raw else {}
+
+    def _auth_cookie_value(self):
+        raw = self.headers.get("Cookie") or ""
+        for part in raw.split(";"):
+            if "=" not in part:
+                continue
+            key, value = part.strip().split("=", 1)
+            if key == AUTH_COOKIE:
+                return value
+        return ""
+
+    def _authenticated(self):
+        if not AUTH_PASSWORD:
+            return True
+        return hmac.compare_digest(self._auth_cookie_value(), AUTH_TOKEN)
+
+    def _require_auth(self, path):
+        if self._authenticated() or path in ("/login", "/api/auth/status"):
+            return True
+        if path.startswith("/api/"):
+            self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 필요합니다"})
+        else:
+            self._send(200, self._login_page(), "text/html; charset=utf-8")
+        return False
+
+    def _login_page(self, error=""):
+        err = html.escape(error or "")
+        return f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AW 스프라이트 에디터 로그인</title>
+<style>
+*{{box-sizing:border-box}} body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#10131a;color:#e8edf5;font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}}
+form{{width:min(360px,calc(100vw - 32px));display:grid;gap:10px;background:#181d27;border:1px solid #2b3342;border-radius:10px;padding:20px;box-shadow:0 16px 54px rgba(0,0,0,.45)}}
+strong{{font-size:16px}} span{{color:#9aa7b8;font-size:12px}} input,button{{font:inherit;border-radius:7px;padding:8px 10px}}
+input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{background:#5b9dff;color:#06101e;border:1px solid #5b9dff;font-weight:700;cursor:pointer}}
+.err{{min-height:18px;color:#ef6b6b;font-size:12px}}
+</style></head><body>
+<form method="post" action="/login">
+  <strong>AW 스프라이트 픽셀 에디터</strong>
+  <span>비밀번호를 입력하세요.</span>
+  <input name="password" type="password" autocomplete="current-password" autofocus>
+  <button type="submit">들어가기</button>
+  <div class="err">{err}</div>
+</form></body></html>"""
+
+    def _login(self):
+        raw = self._raw_body()
+        ctype = self.headers.get("Content-Type", "")
+        if "application/json" in ctype:
+            try:
+                data = json.loads(raw or b"{}")
+            except Exception:
+                data = {}
+            password = str(data.get("password") or "")
+        else:
+            data = urllib.parse.parse_qs(raw.decode("utf-8", "replace"))
+            password = data.get("password", [""])[0]
+        if AUTH_PASSWORD and not hmac.compare_digest(password, AUTH_PASSWORD):
+            if "application/json" in ctype:
+                return self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 틀렸습니다"})
+            return self._send(401, self._login_page("비밀번호가 틀렸습니다"), "text/html; charset=utf-8")
+        cookie = f"{AUTH_COOKIE}={AUTH_TOKEN}; Path=/; HttpOnly; SameSite=Strict; Max-Age=604800"
+        if "application/json" in ctype:
+            return self._send(200, {"ok": True, "authenticated": True}, headers=[("Set-Cookie", cookie)])
+        return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/")])
+
+    def _logout(self):
+        cookie = f"{AUTH_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+        return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/login")])
 
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(u.query)
+        if u.path == "/login":
+            return self._send(200, self._login_page(), "text/html; charset=utf-8")
+        if u.path == "/logout":
+            return self._logout()
+        if u.path == "/api/auth/status":
+            return self._send(200, {"ok": True, "auth_required": bool(AUTH_PASSWORD),
+                                    "authenticated": self._authenticated()})
+        if not self._require_auth(u.path):
+            return
         if u.path in ("/", "/index.html"):
             return self._static("index.html")
         if u.path.startswith("/static/"):
@@ -1450,6 +1558,12 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)
+        if u.path == "/login":
+            return self._login()
+        if u.path == "/logout":
+            return self._logout()
+        if not self._require_auth(u.path):
+            return
         try:
             body = self._body()
         except Exception as e:
@@ -1553,12 +1667,22 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    global AUTH_PASSWORD
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8781)
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--password", default=None,
+                    help="웹 UI 비밀번호. 생략 시 SPRITE_EDITOR_PASSWORD/AW_EDITOR_PASSWORD/default를 사용")
+    ap.add_argument("--no-password", action="store_true",
+                    help="로컬 자동화 전용: 비밀번호 인증 비활성")
     args = ap.parse_args()
+    if args.no_password:
+        AUTH_PASSWORD = ""
+    elif args.password is not None:
+        AUTH_PASSWORD = args.password
     srv = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"스프라이트 픽셀 에디터: http://{args.host}:{args.port}  (Ctrl+C 종료)")
+    print("  auth: " + ("enabled" if AUTH_PASSWORD else "disabled"))
     print(f"  index: {INDEX_PATH}  edits: {EDIT_DIR}")
     try:
         srv.serve_forever()

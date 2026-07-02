@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19b_part1_campaign_story_redstar",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+  "rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
   "min_score": 7,
   "ranges": [
    {

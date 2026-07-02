@@ -28,11 +28,21 @@ import websockets
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "temp" / "browser_verify"
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
 REPORT_PATH = OUT / "all_scene_editor_verify.json"
 CDP_LIST = os.environ.get("SCENE_EDITOR_CDP_LIST", "http://127.0.0.1:9224/json/list")
 BASE_URL = os.environ.get("SCENE_EDITOR_URL", "http://127.0.0.1:8782").rstrip("/")
 URL = "%s/?verify=all-scene-editor-%d" % (BASE_URL, int(time.time()))
 TARGET_NETLOC = urllib.parse.urlparse(BASE_URL).netloc
+
+
+def default_editor_password() -> str:
+    value = os.environ.get("SCENE_EDITOR_PASSWORD") or os.environ.get("AW_EDITOR_PASSWORD")
+    if value:
+        return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    return ""
 
 CAPTURE_SCENES = {
     "00_coldboot_nintendo",
@@ -380,7 +390,8 @@ async def main():
     parser = argparse.ArgumentParser(description="Verify scene editor scenes/sprites through Chrome CDP")
     parser.add_argument("--url", default=BASE_URL, help="scene editor URL, e.g. http://127.0.0.1:8793")
     parser.add_argument("--cdp-list", default=CDP_LIST, help="Chrome CDP /json/list URL")
-    parser.add_argument("--password", default=os.environ.get("SCENE_EDITOR_PASSWORD", ""), help="scene editor password")
+    parser.add_argument("--password", default=default_editor_password(),
+                        help="scene editor password")
     parser.add_argument("--out-dir", default=str(OUT), help="output directory for report/screenshots")
     args = parser.parse_args()
     OUT = Path(args.out_dir)

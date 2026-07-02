@@ -25,7 +25,13 @@ API
   GET  /api/check_all                          전체 대사 사전 불일치 목록
 """
 import argparse
+import collections
+import csv
+import hmac
+import html
 import json
+import os
+import secrets
 import sys
 import threading
 import urllib.parse
@@ -38,7 +44,31 @@ DIALOGUE_PATH = ROOT / "data" / "dialogue_map.json"
 DICT_PATH = ROOT / "data" / "proper_nouns.json"
 OVERRIDES_PATH = ROOT / "data" / "dialogue_overrides.json"
 GROUPS_PATH = ROOT / "data" / "dialogue_groups.json"
+ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
+SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
+EDITOR_PASSWORD_FILE = ROOT / "temp" / "editor_password.txt"
+
+
+def resolve_editor_password(*env_names):
+    for name in env_names:
+        value = os.environ.get(name)
+        if value:
+            return value
+    if EDITOR_PASSWORD_FILE.exists():
+        return EDITOR_PASSWORD_FILE.read_text(encoding="utf-8").strip()
+    password = secrets.token_urlsafe(12)
+    EDITOR_PASSWORD_FILE.parent.mkdir(parents=True, exist_ok=True)
+    EDITOR_PASSWORD_FILE.write_text(password + "\n", encoding="utf-8")
+    return password
+
+
+AUTH_COOKIE = "aw_dialogue_editor_auth"
+AUTH_PASSWORD = resolve_editor_password("DIALOGUE_EDITOR_PASSWORD", "AW_EDITOR_PASSWORD")
+AUTH_TOKEN = secrets.token_urlsafe(32)
 _GROUPS_CACHE = None
+_SYL_CACHE = None
+_SYL_INT_CACHE = None
+_BUILD_SLOTS_CACHE = None
 
 
 def load_groups():
@@ -58,6 +88,10 @@ try:
     import build_korean_full as B
 except Exception:
     B = None
+try:
+    import text_metrics as TM
+except Exception:
+    TM = None
 
 _LOCK = threading.Lock()
 _PREVIEW_LOCK = threading.Lock()  # mgbah 캡처 직렬화(하네스 로그/리소스 공유)
@@ -129,7 +163,11 @@ def _norm(s):
 
 def dict_entry_key(category, entry):
     if category == "common_terms":
-        return _norm(entry.get("ja_note")) or _norm(entry.get("term"))
+        note = _norm(entry.get("ja_note"))
+        term = _norm(entry.get("term"))
+        if note == "(build TERM_NORMALIZATION)" and term:
+            return "\x1f".join([note, term])
+        return note or term
     if category == "issues":
         return "\x1f".join([_norm(entry.get("ja")), _norm(entry.get("chosen_ko"))])
     return _norm(entry.get("ja"))
@@ -137,7 +175,11 @@ def dict_entry_key(category, entry):
 
 def dict_entry_source(category, entry):
     if category == "common_terms":
-        return _norm(entry.get("ja_note")) or _norm(entry.get("term"))
+        note = _norm(entry.get("ja_note"))
+        term = _norm(entry.get("term"))
+        if note == "(build TERM_NORMALIZATION)" and "->" in term:
+            return term.split("->", 1)[0].strip()
+        return note or term
     return _norm(entry.get("ja")) or _norm(entry.get("ja_note")) or _norm(entry.get("term"))
 
 
@@ -154,7 +196,8 @@ def dict_entry_current(category, entry):
 
 def effective_ko(entry, category=None):
     if category == "common_terms":
-        return _norm(entry.get("edit")) or _norm(entry.get("term")) or _norm(entry.get("ko"))
+        return (_norm(entry.get("edit")) or _norm(entry.get("ko")) or
+                _norm(entry.get("current")) or _norm(entry.get("term")))
     if category == "issues":
         return _norm(entry.get("edit")) or _norm(entry.get("chosen_ko")) or _norm(entry.get("ko"))
     return _norm(entry.get("edit")) or _norm(entry.get("ko")) or _norm(entry.get("chosen_ko"))
@@ -177,6 +220,10 @@ def dict_entry_expected_terms(category, entry):
 
 def dict_entry_note(category, entry):
     parts = []
+    if category == "common_terms":
+        term = _norm(entry.get("term"))
+        if "->" in term:
+            parts.append("치환 규칙: " + term)
     for field in ("note", "hint"):
         value = _norm(entry.get(field))
         if value:
@@ -339,12 +386,8 @@ def edit_dict_payload(body):
 
 
 def is_address_text_override(address):
-    if not B:
-        return False
-    try:
-        return int(str(address), 16) in B.ADDRESS_TEXT_OVERRIDES
-    except (ValueError, TypeError):
-        return False
+    addr = canon_addr(address)
+    return bool(addr and addr in address_text_overrides())
 
 
 def canon_addr(address):
@@ -352,6 +395,131 @@ def canon_addr(address):
         return "0x%08X" % int(str(address or "").strip(), 16)
     except (ValueError, TypeError):
         return None
+
+
+def address_text_overrides():
+    rows = {}
+    if ADDRESS_TEXT_OVERRIDES_TSV.exists():
+        with ADDRESS_TEXT_OVERRIDES_TSV.open(encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            if reader.fieldnames != ["address", "text"]:
+                raise ValueError(f"{ADDRESS_TEXT_OVERRIDES_TSV}: expected TSV header address<TAB>text")
+            for row in reader:
+                addr = canon_addr(row.get("address"))
+                if addr:
+                    rows[addr] = "" if row.get("text") is None else str(row.get("text"))
+    elif B:
+        rows = {"0x%08X" % int(k): str(v or "") for k, v in getattr(B, "ADDRESS_TEXT_OVERRIDES", {}).items()}
+    return rows
+
+
+def save_address_text_override(addr, ko):
+    if "\t" in ko or "\n" in ko or "\r" in ko:
+        raise ValueError("보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다")
+    rows = address_text_overrides()
+    if addr not in rows:
+        return False
+    rows[addr] = ko
+    ADDRESS_TEXT_OVERRIDES_TSV.parent.mkdir(parents=True, exist_ok=True)
+    with ADDRESS_TEXT_OVERRIDES_TSV.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["address", "text"], delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        for key in sorted(rows, key=lambda x: int(x, 16)):
+            writer.writerow({"address": key, "text": rows[key]})
+    return True
+
+
+def sync_dialogue_display_data(addr, ko):
+    data = load_json(DIALOGUE_PATH, {"lines": []})
+    for ln in data.get("lines", []):
+        if canon_addr(ln.get("address")) == addr:
+            ln["ko"] = ko
+            if "ship_ko" in ln:
+                ln["ship_ko"] = ko
+    save_json(DIALOGUE_PATH, data)
+
+    groups = load_json(GROUPS_PATH, {"groups": []})
+    for group in groups.get("groups", []):
+        for member in group.get("members", []):
+            if canon_addr(member.get("address")) == addr:
+                member["ko"] = ko
+                if "ship_ko" in member:
+                    member["ship_ko"] = ko
+    save_json(GROUPS_PATH, groups)
+    global _GROUPS_CACHE
+    _GROUPS_CACHE = None
+
+
+def syl_codes():
+    global _SYL_CACHE
+    if _SYL_CACHE is None:
+        _SYL_CACHE = load_json(SYLCODE, {}) or {}
+    return _SYL_CACHE
+
+
+def syl_to_code_ints():
+    global _SYL_INT_CACHE
+    if _SYL_INT_CACHE is None:
+        _SYL_INT_CACHE = {
+            s: int(c, 16) if isinstance(c, str) else int(c)
+            for s, c in syl_codes().items()
+        }
+    return _SYL_INT_CACHE
+
+
+def build_slots():
+    global _BUILD_SLOTS_CACHE
+    if _BUILD_SLOTS_CACHE is None:
+        _BUILD_SLOTS_CACHE = B.load_slots() if B else {}
+    return _BUILD_SLOTS_CACHE
+
+
+def member_slot(address):
+    addr = canon_addr(address)
+    if not addr:
+        return None
+    if B:
+        try:
+            b_slot = build_slots().get(int(addr, 16))
+            if isinstance(b_slot, int) and b_slot > 0:
+                return b_slot
+        except (ValueError, TypeError):
+            pass
+    for group in load_groups().get("groups", []):
+        for member in group.get("members", []):
+            if canon_addr(member.get("address")) == addr and isinstance(member.get("slot"), int):
+                return member.get("slot")
+    data = load_json(DIALOGUE_PATH, {"lines": []})
+    hit = next((ln for ln in data.get("lines", []) if canon_addr(ln.get("address")) == addr), None)
+    slot = hit.get("slot") if hit else None
+    return slot if isinstance(slot, int) and slot > 0 else None
+
+
+def validate_build_fit(text, slot):
+    raw = TM.encoded_len(text or "") if TM else len(text or "")
+    if not isinstance(slot, int) or slot <= 0:
+        return {"ok": True, "raw_len": raw, "encoded_len": raw, "fit_level": None, "slot": slot}
+    if not B:
+        return {"ok": raw <= slot, "raw_len": raw, "encoded_len": raw, "fit_level": None, "slot": slot,
+                "error": None if raw <= slot else "슬롯 초과 %dB>%dB" % (raw, slot)}
+    dropped = collections.Counter()
+    try:
+        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped)
+    except KeyError as exc:
+        return {"ok": False, "raw_len": raw, "encoded_len": raw, "fit_level": 99, "slot": slot,
+                "unsupported": [exc.args[0]], "error": "폰트 미수록 음절"}
+    if dropped:
+        return {"ok": False, "raw_len": raw, "encoded_len": len(raw_enc), "fit_level": 99, "slot": slot,
+                "unsupported": [ch for ch, _n in dropped.most_common()], "error": "렌더 불가 문자"}
+    if not raw_enc and (text or "").strip():
+        return {"ok": False, "raw_len": raw, "encoded_len": 0, "fit_level": 99, "slot": slot,
+                "unsupported": [], "error": "빌드 인코딩 결과가 비어 있음"}
+    enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter())
+    if enc is None:
+        return {"ok": False, "raw_len": raw, "encoded_len": raw, "fit_level": 99, "slot": slot,
+                "error": "슬롯 초과 %dB>%dB" % (raw, slot)}
+    return {"ok": len(enc) <= slot, "raw_len": raw, "encoded_len": len(enc),
+            "fit_level": level, "slot": slot}
 
 
 def check_line(line, pn):
@@ -380,7 +548,7 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
 
-    def _send(self, code, body, ctype="application/json; charset=utf-8"):
+    def _send(self, code, body, ctype="application/json; charset=utf-8", headers=None):
         if isinstance(body, (dict, list)):
             body = json.dumps(body, ensure_ascii=False).encode("utf-8")
         elif isinstance(body, str):
@@ -388,17 +556,102 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
+        if headers:
+            for key, value in headers:
+                self.send_header(key, value)
         self.end_headers()
         self.wfile.write(body)
 
-    def _body(self):
+    def _raw_body(self):
         n = int(self.headers.get("Content-Length", 0))
-        return json.loads(self.rfile.read(n) or b"{}") if n else {}
+        return self.rfile.read(n) if n else b""
+
+    def _body(self):
+        raw = self._raw_body()
+        return json.loads(raw or b"{}") if raw else {}
+
+    def _auth_cookie_value(self):
+        raw = self.headers.get("Cookie") or ""
+        for part in raw.split(";"):
+            if "=" not in part:
+                continue
+            key, value = part.strip().split("=", 1)
+            if key == AUTH_COOKIE:
+                return value
+        return ""
+
+    def _authenticated(self):
+        if not AUTH_PASSWORD:
+            return True
+        return hmac.compare_digest(self._auth_cookie_value(), AUTH_TOKEN)
+
+    def _require_auth(self, path):
+        if self._authenticated() or path in ("/login", "/api/auth/status"):
+            return True
+        if path.startswith("/api/"):
+            self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 필요합니다"})
+        else:
+            self._send(200, self._login_page(), "text/html; charset=utf-8")
+        return False
+
+    def _login_page(self, error=""):
+        err = html.escape(error or "")
+        return f"""<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AW 대사 에디터 로그인</title>
+<style>
+*{{box-sizing:border-box}} body{{margin:0;min-height:100vh;display:grid;place-items:center;background:#10131a;color:#e8edf5;font:14px/1.5 -apple-system,"Apple SD Gothic Neo",sans-serif}}
+form{{width:min(360px,calc(100vw - 32px));display:grid;gap:10px;background:#181d27;border:1px solid #2b3342;border-radius:10px;padding:20px;box-shadow:0 16px 54px rgba(0,0,0,.45)}}
+strong{{font-size:16px}} span{{color:#9aa7b8;font-size:12px}} input,button{{font:inherit;border-radius:7px;padding:8px 10px}}
+input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{background:#5b9dff;color:#06101e;border:1px solid #5b9dff;font-weight:700;cursor:pointer}}
+.err{{min-height:18px;color:#ef6b6b;font-size:12px}}
+</style></head><body>
+<form method="post" action="/login">
+  <strong>AW 대사 편집기</strong>
+  <span>비밀번호를 입력하세요.</span>
+  <input name="password" type="password" autocomplete="current-password" autofocus>
+  <button type="submit">들어가기</button>
+  <div class="err">{err}</div>
+</form></body></html>"""
+
+    def _login(self):
+        raw = self._raw_body()
+        ctype = self.headers.get("Content-Type", "")
+        if "application/json" in ctype:
+            try:
+                data = json.loads(raw or b"{}")
+            except Exception:
+                data = {}
+            password = str(data.get("password") or "")
+        else:
+            data = urllib.parse.parse_qs(raw.decode("utf-8", "replace"))
+            password = data.get("password", [""])[0]
+        if AUTH_PASSWORD and not hmac.compare_digest(password, AUTH_PASSWORD):
+            if "application/json" in ctype:
+                return self._send(401, {"ok": False, "auth_required": True, "error": "비밀번호가 틀렸습니다"})
+            return self._send(401, self._login_page("비밀번호가 틀렸습니다"), "text/html; charset=utf-8")
+        cookie = f"{AUTH_COOKIE}={AUTH_TOKEN}; Path=/; HttpOnly; SameSite=Strict; Max-Age=604800"
+        if "application/json" in ctype:
+            return self._send(200, {"ok": True, "authenticated": True}, headers=[("Set-Cookie", cookie)])
+        return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/")])
+
+    def _logout(self):
+        cookie = f"{AUTH_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+        return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/login")])
 
     # ---- GET ----
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(u.query)
+        if u.path == "/login":
+            return self._send(200, self._login_page(), "text/html; charset=utf-8")
+        if u.path == "/logout":
+            return self._logout()
+        if u.path == "/api/auth/status":
+            return self._send(200, {"ok": True, "auth_required": bool(AUTH_PASSWORD),
+                                    "authenticated": self._authenticated()})
+        if not self._require_auth(u.path):
+            return
         if u.path == "/" or u.path == "/index.html":
             return self._serve_static("index.html")
         if u.path.startswith("/static/"):
@@ -425,6 +678,7 @@ class Handler(BaseHTTPRequestHandler):
         SEC2REG = {"common": "other", "part1": "part1", "part2": "part2"}
         want_reg = SEC2REG.get(section)
         ov = load_json(OVERRIDES_PATH, {}) or {}
+        protected_rows = address_text_overrides()
         dialogue_lines = load_json(DIALOGUE_PATH, {"lines": []}).get("lines", [])
         by_addr = {
             canon_addr(ln.get("address")): ln
@@ -450,7 +704,8 @@ class Handler(BaseHTTPRequestHandler):
                         "ship_ko": canonical.get("ship_ko", member.get("ship_ko")),
                     })
                 base_ko = canonical.get("ko", m.get("ko") or "")
-                ko = base_ko if is_address_text_override(addr) else ov.get(addr, base_ko)
+                protected = protected_rows.get(addr)
+                ko = protected if protected is not None else ov.get(addr, base_ko)
                 members.append({**member, "address": addr, "ko": ko, "bteam": is_bteam(addr)})
             if qstr and qstr not in (g.get("assembled_ja") or "") and \
                all(qstr not in (m.get("ko") or "") for m in members):
@@ -482,11 +737,13 @@ class Handler(BaseHTTPRequestHandler):
         data = load_json(DIALOGUE_PATH, {"lines": []})
         lines = data.get("lines", [])
         _ov = load_json(OVERRIDES_PATH, {}) or {}  # 편집/채움 번역을 즉시 반영(line view)
-        if _ov:
-            for ln in lines:
-                a = ln.get("address")
-                if a in _ov and _ov[a] and not is_address_text_override(a):
-                    ln["ko"] = _ov[a]
+        protected_rows = address_text_overrides()
+        for ln in lines:
+            a = canon_addr(ln.get("address"))
+            if a in protected_rows:
+                ln["ko"] = protected_rows[a]
+            elif _ov and a in _ov and _ov[a]:
+                ln["ko"] = _ov[a]
         region = (q.get("region", [""])[0] or "").strip()
         # 허브 섹션(공통/1편/2편)→region 매핑
         section = (q.get("section", [""])[0] or "").strip()
@@ -539,6 +796,12 @@ class Handler(BaseHTTPRequestHandler):
     # ---- POST ----
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)
+        if u.path == "/login":
+            return self._login()
+        if u.path == "/logout":
+            return self._logout()
+        if not self._require_auth(u.path):
+            return
         try:
             body = self._body()
         except Exception as e:
@@ -592,8 +855,9 @@ class Handler(BaseHTTPRequestHandler):
                 return {"ok": False, "error": "%s 없음" % key}
             # B팀(짜옹이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
             addr = canon_addr(hit.get("address"))
-            if is_address_text_override(addr):
-                return {"ok": False, "error": "빌드 안전 ADDRESS_TEXT_OVERRIDES 보호 주소 — 편집기 override 미적용, 편집 불가"}
+            protected_address_text = is_address_text_override(addr)
+            if protected_address_text and any(ch in ko for ch in ("\t", "\n", "\r")):
+                return {"ok": False, "error": "보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다"}
             if addr and not body.get("confirm_bteam"):
                 try:
                     _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
@@ -606,16 +870,44 @@ class Handler(BaseHTTPRequestHandler):
                 except (ValueError, TypeError):
                     pass
             check_target = {**hit, "ko": ko}
+            slot = member_slot(addr) or hit.get("slot")
+            fit = validate_build_fit(ko, slot)
+            if not fit.get("ok"):
+                return {"ok": False, "error": fit.get("error") or "빌드 fit 검증 실패",
+                        "unsupported": fit.get("unsupported"), "raw_len": fit.get("raw_len"),
+                        "encoded_len": fit.get("encoded_len"), "slot": fit.get("slot")}
             if body.get("dry_run"):
                 return {"ok": True, "dry_run": True, "id": hit.get("id"), "address": addr,
-                        "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {}))}
+                        "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {})),
+                        "raw_len": fit.get("raw_len"), "encoded_len": fit.get("encoded_len"),
+                        "fit_level": fit.get("fit_level"), "slot": fit.get("slot"),
+                        "protected_address_text": protected_address_text,
+                        "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
+                                    if protected_address_text else "dialogue_overrides.json")}
             hit["ko"] = ko   # 검사 통과 후에만 변형
-            save_json(DIALOGUE_PATH, data)
             ov = load_json(OVERRIDES_PATH, {})
             if addr:
+                if protected_address_text:
+                    try:
+                        saved_protected = save_address_text_override(addr, ko)
+                    except ValueError as exc:
+                        return {"ok": False, "error": str(exc)}
+                    if not saved_protected:
+                        return {"ok": False, "error": "ADDRESS_TEXT_OVERRIDES 행 없음: " + addr}
                 ov[addr] = ko
                 save_json(OVERRIDES_PATH, ov)
-        return {"ok": True, "id": lid, "ko": ko, "check": check_line(hit, load_json(DICT_PATH, {}))}
+                if protected_address_text:
+                    sync_dialogue_display_data(addr, ko)
+                else:
+                    save_json(DIALOGUE_PATH, data)
+            else:
+                save_json(DIALOGUE_PATH, data)
+        return {"ok": True, "id": lid, "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {})),
+                "raw_len": fit.get("raw_len"), "encoded_len": fit.get("encoded_len"),
+                "fit_level": fit.get("fit_level"), "slot": fit.get("slot"),
+                "protected_address_text": protected_address_text,
+                "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
+                            if protected_address_text else "dialogue_overrides.json")}
 
     def _edit_dict(self, body):
         return edit_dict_payload(body)
@@ -632,12 +924,22 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    global AUTH_PASSWORD
     ap = argparse.ArgumentParser()
     ap.add_argument("--port", type=int, default=8780)
     ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--password", default=None,
+                    help="웹 UI 비밀번호. 생략 시 DIALOGUE_EDITOR_PASSWORD/AW_EDITOR_PASSWORD/default를 사용")
+    ap.add_argument("--no-password", action="store_true",
+                    help="로컬 자동화 전용: 비밀번호 인증 비활성")
     args = ap.parse_args()
+    if args.no_password:
+        AUTH_PASSWORD = ""
+    elif args.password is not None:
+        AUTH_PASSWORD = args.password
     srv = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"대사 편집기: http://{args.host}:{args.port}  (Ctrl+C 종료)")
+    print("  auth: " + ("enabled" if AUTH_PASSWORD else "disabled"))
     print(f"  dialogue: {DIALOGUE_PATH}  dict: {DICT_PATH}")
     try:
         srv.serve_forever()
