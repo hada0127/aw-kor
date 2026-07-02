@@ -1255,3 +1255,18 @@ read-watch를 시도했다.
   code 0/5/6/16..19 활성 화면을 찾지 못했다. live-code injection은 renderer 안전성 증거지만 natural route direct evidence는 아니다.
 - **필요 외부 상태**: 두 항목 모두 추가 natural proof를 얻으려면 hard/hidden campaign unlock, true player-count 화면,
   더 진행된 AW1/AW2 save, 또는 실기/에뮬 수동 진행 state가 필요하다. 현 환경에서 자동 반복만으로 닫을 수 있는 결함 경로는 더 남아 있지 않다.
+
+## [2026-07-02] e0cfe236 빌드 후 전체 배포 게이트는 아직 stale 증거 때문에 실패
+
+- **시도**: Part1 튜토리얼 line-end/이름 그리드/fresh 캡처 수정 후
+  `python3 tools/verify_dist_integrity.py`를 실행했다.
+- **확인된 OK**: output `full/final/title_test` 3종 SHA는 모두
+  `e0cfe2363564ad234d61b4e7895ad6ebd0d5396ddf6e9f079ed78470a6ef931f`로 바이트 동일했고,
+  Part2 결과 요약 보존, scene_89 source guard, 주요 ROM QA 하위 게이트 일부는 통과했다.
+- **실패 원인**: `dist/manifest*.json`과 BPS/IPS는 이전 SHA
+  `652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced` 기준이라 stale이고,
+  `data/compact_display_visual_matrix.json`, Part1 compact help live-code injection reports,
+  scene residual scan evidence도 current SHA로 재생성되지 않았다.
+- **판정**: 이번 작업의 UI 에디터 다운로드/ROM 빌드 정합성은 통과했지만, 배포 패치 출하는 아직 금지한다.
+  Phase F에서 `build_compact_display_visual_matrix.py`, compact help 증거, `reverify_scene_residual_scans.py --write`,
+  `prepare_patch_distribution.py`를 current SHA 기준으로 다시 실행한 뒤 `verify_dist_integrity.py`를 재통과시켜야 한다.

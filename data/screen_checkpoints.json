@@ -695,19 +695,18 @@
     },
     {
       "name": "scene_14_part1_name_input",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part1 이름 입력 그리드",
+      "mode": "fresh",
+      "grade": "ground_truth",
+      "note": "coldboot fresh replay: Part1 이름 입력 그리드(세이브스테이트 VRAM 미사용)",
       "scene_id": "14_part1_name_input",
       "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
+      "provenance_path": "data/screen_checkpoints.json",
+      "nav": [
+        [
+          "part1_main_sweep",
+          3
+        ]
+      ]
     },
     {
       "name": "scene_16_part1_info_screen",
@@ -743,35 +742,37 @@
     },
     {
       "name": "scene_18_part1_battle",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part1 전투 1일째 배너",
+      "mode": "fresh",
+      "grade": "ground_truth",
+      "note": "coldboot fresh replay: Part1 전투 1일째 배너(세이브스테이트 VRAM 미사용)",
       "scene_id": "18_part1_battle",
       "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
+      "provenance_path": "data/screen_checkpoints.json",
+      "nav": [
+        [
+          "part1_main_sweep",
+          43
+        ]
+      ]
     },
     {
       "name": "scene_19a1_part1_tutorial_opening",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
+      "mode": "fresh",
+      "grade": "ground_truth",
+      "note": "coldboot fresh replay: Part1 튜토리얼 초반 대사(타이핑 완료 대기, 세이브스테이트 VRAM 미사용)",
       "scene_id": "19a1_part1_tutorial_opening",
       "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
+      "provenance_path": "data/screen_checkpoints.json",
+      "nav": [
+        [
+          "part1_main_sweep",
+          44
+        ],
+        [
+          "frames",
+          120
+        ]
+      ]
     },
     {
       "name": "scene_19a2_part1_heavy_tank_advice_story",

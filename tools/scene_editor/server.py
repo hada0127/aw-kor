@@ -26,7 +26,7 @@ API(요약)
   POST /api/sprite/save / revert / setpalette   픽셀 편집(sprites_overrides)
   POST /api/build                          전체 재빌드 job 시작(비동기)
   GET  /api/jobs?id=                        빌드 job 상태 polling
-  GET  /api/download/gba?variant=full       현재 ROM 다운로드
+  GET  /api/download/gba?variant=full|final|title_test  현재 ROM 다운로드
 """
 from __future__ import annotations
 import argparse
@@ -55,6 +55,8 @@ ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
 OUTPUT_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUTPUT_VARIANTS = {
     "full": OUTPUT_ROM,
+    "final": ROOT / "output" / "game_wars_korean_final.gba",
+    "title_test": ROOT / "output" / "game_wars_korean_title_test.gba",
 }
 SCENE_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 LEGACY_SCENE_SHOT_DIR = ROOT / "temp" / "comparison_sheets_v2"
@@ -1253,7 +1255,7 @@ class Handler(BaseHTTPRequestHandler):
         path = OUTPUT_VARIANTS[variant]
         if not path.exists():
             return self._send(404, {"error": f"output ROM 없음({variant}) — 먼저 빌드하세요"})
-        # 배포 불변식: canonical full ROM 하나만 다운로드한다.
+        # 배포 불변식: full/final/title_test가 같은 SHA일 때만 다운로드한다.
         sync = output_sync_state()
         if not sync.get("ok"):
             return self._send(409, {"error": "output ROM 없음 또는 이전 빌드 산출물 — 먼저 적용(빌드)을 다시 실행하세요",

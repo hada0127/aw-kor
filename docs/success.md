@@ -3304,3 +3304,30 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   scene entry/catalog/semantic/residual strict audits critical 0,
   `verify_dist_integrity.py` PASS,
   `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260630_part1_logo_fix.json` PASS.
+
+## [2026-07-02] Part1 튜토리얼 line-end/이름 그리드/fresh 캡처 정합 보강
+
+- **D8F7A7/D8F7BE 이동 후 메뉴 대사 수정**: `를 고르면 이동` / `끝이야 결정 버튼으로 골라 줘요`로
+  슬롯 경계 중복(`이동 끝` + `이동 끝이야`)을 제거했다. 두 주소는 `FULLWIDTH_PAD_ADDRS`로 지정해 tail
+  padding을 반각 `0x20` 대신 전각 공백 `0x8140`으로 채운다. 홀수 enc/slack 및 overflow는
+  `AssertionError`로 즉시 실패시켜 반각 fallback이 조용히 재발하지 않게 했다.
+- **이름 입력 그리드**: 영문 A-Z/a-z 표시를 Galmuri7 기반 한글 음가(아/이/우/...)와 숫자로 바꿨다.
+  `ㅡ`를 포함해 필요한 Galmuri7 글리프가 모두 존재함을 확인했고, scene_14 fresh 비교 시트에서 하단 버튼과
+  치명적 겹침 없이 렌더되는 것을 확인했다. 실제 저장 데이터는 기존 카타카나 선택 바이트 그대로라,
+  이름 echo 경로가 있으면 후속 확인이 필요하다.
+- **fresh 증거 전환**: `scene_14_part1_name_input`, `scene_18_part1_battle`,
+  `scene_19a1_part1_tutorial_opening`을 stale savestate 대신 coldboot fresh replay로 전환했다.
+  `build_scene_catalog.py`는 fresh checkpoint의 entrypoint도 `screen_checkpoints.json` 권위 note/capture/provenance로
+  재구성해 screenshot과 entrypoint가 서로 모순되지 않게 했다.
+- **UI 에디터 ROM 다운로드 정합성**: 기본 빌드가 `output/game_wars_korean_full.gba`,
+  `output/game_wars_korean_final.gba`, `output/game_wars_korean_title_test.gba` 3종을 같은 바이트로 동기화한다.
+  scene editor `/api/download/gba?variant=full|final|title_test`와 `/api/state.output_sync`도 세 variant를 검사한다.
+- **검증**: 최종 ROM 3종 SHA는 모두
+  `e0cfe2363564ad234d61b4e7895ad6ebd0d5396ddf6e9f079ed78470a6ef931f`.
+  `build_korean_full.py` overflow 0/no_ko 0, `qa_integrity_map.py --byte-only` 바이트 불일치 0,
+  `phase6_basic_test.py` PASS, `qa_text_fit.py` overflow 0/no_ko 0, `audit_address_text_overrides.py` OK,
+  `qa_terms_from_rom.py` PASS, `qa_spacing_from_rom.py` jammed real 0,
+  `qa_scene_screenshot_sanity.py` issue 0, scene catalog/entrypoint/semantic strict audits critical 0.
+  원본/패치 비교 시트:
+  `temp/original_vs_current_fresh_20260702/final_equivalent_fresh_original_vs_patched.png`,
+  `temp/original_vs_current_fresh_20260702/final_issue_focus_original_reference_vs_current.png`.

@@ -40,6 +40,11 @@ DEFAULT_PATCHED = ROOT / "output" / "game_wars_korean_full.gba"
 DEFAULT_ORIGINAL = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
 DEFAULT_ORIG_CACHE = ROOT / "temp" / "orig_capture_cache"
 GBA_W, GBA_H = 240, 160
+PART1_MAIN_SWEEP_PRENAV = ["A", "START", "A", "START"]
+PART1_MAIN_SWEEP_POLICY = [
+    "A", "A", "RIGHT", "A", "A", "DOWN", "A", "A", "START", "A",
+    "A", "LEFT", "A", "A", "UP", "A", "A", "START", "A", "B",
+]
 
 _FONT_CACHE: dict[int, ImageFont.FreeTypeFont] = {}
 _FONT_PATHS = [
@@ -59,6 +64,19 @@ def label_font(size: int) -> ImageFont.ImageFont:
     return ImageFont.load_default()
 
 
+def drive_part1_main_sweep(driver: MGBADriver, target_step: int, per_step_frames: int = 60) -> None:
+    """Replay the documented Part 1 main sweep route to a specific policy step.
+
+    This replaces stale savestates for high-risk editor screenshots while
+    keeping screen_checkpoints.json readable.
+    """
+    driver.frames(480)
+    for key in PART1_MAIN_SWEEP_PRENAV:
+        driver.press(key)
+    for step_idx in range(target_step + 1):
+        driver.press(PART1_MAIN_SWEEP_POLICY[step_idx % len(PART1_MAIN_SWEEP_POLICY)], after=per_step_frames)
+
+
 def run_nav(driver: MGBADriver, steps: list) -> None:
     """매니페스트 nav/refresh 스텝을 순서대로 실행."""
     for step in steps:
@@ -76,6 +94,10 @@ def run_nav(driver: MGBADriver, steps: list) -> None:
             driver.loadstate(_resolve(step[1]))
         elif op == "part1_menu":
             drive_part1_menu_from_coldboot(driver)
+        elif op == "part1_main_sweep":
+            target_step = int(step[1])
+            per_step_frames = int(step[2]) if len(step) > 2 else 60
+            drive_part1_main_sweep(driver, target_step, per_step_frames)
         else:
             raise ValueError(f"unknown nav op: {op!r}")
 

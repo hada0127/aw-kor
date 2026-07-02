@@ -3,7 +3,7 @@
 
 검증: manifest.patched_rom.sha256 == sha256(output/game_wars_korean_full.gba)
       == sha256(원본 ROM에 dist BPS 적용) == sha256(원본 ROM에 dist IPS 적용)
-추가: legacy final/title_test ROM 산출물이 다시 생기지 않았는지.
+추가: full/final/title_test ROM 산출물이 모두 같은 SHA인지 확인.
 
 배포 전(Phase F) 이 게이트가 PASS여야 한다. 현재는 출하 ROM과 dist가 어긋나면 FAIL로
 staleness를 명시한다. exit 0=PASS, 1=FAIL.
@@ -438,7 +438,7 @@ def main():
     ok = True
     print('=== 배포 무결성 게이트 (verify_dist_integrity) ===')
 
-    # 1) 단일 산출물 + legacy ROM 부재
+    # 1) 산출물 3종 SHA 동기화
     if not os.path.exists(OUTPUT_ROM):
         print(f'[FAIL] 산출물 없음: {OUTPUT_ROM}')
         current_sha = None
@@ -446,12 +446,23 @@ def main():
     else:
         current_sha = sha256(read(OUTPUT_ROM))
         print(f'산출물 SHA: full={current_sha[:8]}')
-    legacy_existing = [path for path in LEGACY_OUTPUTS if os.path.exists(path)]
-    if legacy_existing:
-        print('[FAIL] legacy ROM 산출물이 남아 있음: ' + ', '.join(legacy_existing))
-        ok = False
-    else:
-        print('[OK] 단일 ROM 산출물만 존재')
+    variant_shas = {}
+    if current_sha:
+        variant_shas['full'] = current_sha
+    for path in LEGACY_OUTPUTS:
+        name = os.path.basename(path).replace('game_wars_korean_', '').replace('.gba', '')
+        if not os.path.exists(path):
+            print(f'[FAIL] 산출물 없음: {path}')
+            ok = False
+            continue
+        peer_sha = sha256(read(path))
+        variant_shas[name] = peer_sha
+        print(f'산출물 SHA: {name}={peer_sha[:8]}')
+        if current_sha and peer_sha != current_sha:
+            print(f'[FAIL] {name} SHA != full')
+            ok = False
+    if current_sha and len(variant_shas) == 3 and all(v == current_sha for v in variant_shas.values()):
+        print('[OK] 산출물 3종 바이트 동일')
 
     if not os.path.exists(ORIGINAL):
         print(f'[WARN] 원본 ROM 없음(round-trip 생략): {ORIGINAL}')

@@ -73,7 +73,7 @@
       "entrypoint": {
         "checkpoint": "01_coldboot_nintendo",
         "screenshot": "01_coldboot_nintendo",
-        "note": "기존 fresh 콜드부트 닌텐도 제공 화면",
+        "note": "콜드부트 닌텐도 제공",
         "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -125,7 +125,7 @@
       "entrypoint": {
         "checkpoint": "02_common_title",
         "screenshot": "02_common_title",
-        "note": "기존 fresh 공통 타이틀 시작 화면",
+        "note": "공통 타이틀 시작하기",
         "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -170,7 +170,7 @@
       "entrypoint": {
         "checkpoint": "03_select_part1",
         "screenshot": "03_select_part1",
-        "note": "기존 fresh 1+2 선택 화면: 1편 선택",
+        "note": "1/2 선택(Part1)",
         "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -215,7 +215,7 @@
       "entrypoint": {
         "checkpoint": "05_select_part2",
         "screenshot": "05_select_part2",
-        "note": "기존 fresh 1+2 선택 화면: 2편 선택",
+        "note": "1/2 선택(Part2)",
         "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -262,7 +262,7 @@
       "entrypoint": {
         "checkpoint": "04_part1_title",
         "screenshot": "04_part1_title",
-        "note": "기존 fresh 1편 타이틀",
+        "note": "Part1 타이틀",
         "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -742,12 +742,12 @@
       "screenshot": {
         "checkpoint": "scene_14_part1_name_input",
         "url": "/scene_shots/scene_14_part1_name_input.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "fresh",
+        "grade": "ground_truth",
         "status": "capturable",
-        "note": "fresh sweep: Part1 이름 입력 그리드",
+        "note": "coldboot fresh replay: Part1 이름 입력 그리드(세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -818,10 +818,9 @@
       "entrypoint": {
         "checkpoint": "scene_14_part1_name_input",
         "screenshot": "scene_14_part1_name_input",
-        "note": "fresh sweep: Part1 이름 입력 그리드",
-        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0",
+        "note": "coldboot fresh replay: Part1 이름 입력 그리드(세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_003.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -1099,12 +1098,12 @@
       "screenshot": {
         "checkpoint": "scene_18_part1_battle",
         "url": "/scene_shots/scene_18_part1_battle.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "fresh",
+        "grade": "ground_truth",
         "status": "capturable",
-        "note": "fresh sweep: Part1 전투 1일째 배너",
+        "note": "coldboot fresh replay: Part1 전투 1일째 배너(세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -1167,10 +1166,9 @@
       "entrypoint": {
         "checkpoint": "scene_18_part1_battle",
         "screenshot": "scene_18_part1_battle",
-        "note": "fresh sweep: Part1 전투 1일째 배너",
-        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0",
+        "note": "coldboot fresh replay: Part1 전투 1일째 배너(세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_014.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -1188,12 +1186,12 @@
       "screenshot": {
         "checkpoint": "scene_19a1_part1_tutorial_opening",
         "url": "/scene_shots/scene_19a1_part1_tutorial_opening.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "fresh",
+        "grade": "ground_truth",
         "status": "capturable",
-        "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
+        "note": "coldboot fresh replay: Part1 튜토리얼 초반 대사(타이핑 완료 대기, 세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -1313,10 +1311,9 @@
       "entrypoint": {
         "checkpoint": "scene_19a1_part1_tutorial_opening",
         "screenshot": "scene_19a1_part1_tutorial_opening",
-        "note": "verified visual text: g_00D8F30E 튜토리얼 초반 대사",
-        "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0",
+        "note": "coldboot fresh replay: Part1 튜토리얼 초반 대사(타이핑 완료 대기, 세이브스테이트 VRAM 미사용)",
         "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_015.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -3828,7 +3825,7 @@
       "entrypoint": {
         "checkpoint": "08_part2_prologue_map_text",
         "screenshot": "08_part2_prologue_map_text",
-        "note": "기존 fresh Part2 프롤로그 지도 대사",
+        "note": "Part2 프롤로그 지도/나레이션",
         "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -3885,7 +3882,7 @@
       "entrypoint": {
         "checkpoint": "06_part2_title",
         "screenshot": "06_part2_title",
-        "note": "기존 fresh 2편 타이틀",
+        "note": "Part2 타이틀",
         "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -4121,7 +4118,7 @@
       "entrypoint": {
         "checkpoint": "07_part2_main_menu",
         "screenshot": "07_part2_main_menu",
-        "note": "기존 fresh Part2 메인 메뉴",
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)",
         "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -5007,10 +5004,9 @@
       "entrypoint": {
         "checkpoint": "scene_24_part2_campaign_map",
         "screenshot": "scene_24_part2_campaign_map",
-        "note": "fresh redraw from state_020: Part2 캠페인 룰 요약 라벨/값 한글 재렌더",
-        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0",
+        "note": "coldboot fresh replay: Part2 자유전 맵 선택→사령관 선택→룰 요약 다이아몬드 라벨 한글 재렌더",
         "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_020.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       }
     },
     {
@@ -5105,7 +5101,7 @@
       "entrypoint": {
         "checkpoint": "10_part2_region_map_redstar",
         "screenshot": "10_part2_region_map_redstar",
-        "note": "기존 fresh Part2 레드스타 지역 지도",
+        "note": "Part2 레드스타 지역 지도/작전 진입",
         "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
         "provenance_path": "data/screen_checkpoints.json"
       }
@@ -5150,10 +5146,9 @@
       "entrypoint": {
         "checkpoint": "scene_24b_part2_strategic_map_mode4",
         "screenshot": "scene_24b_part2_strategic_map_mode4",
-        "note": "fresh sweep: Part2 전략 지도/Mode4 라벨",
-        "source_state": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0",
+        "note": "coldboot fresh replay: Part2 자유전 맵 선택 후 사령관 선택 화면",
         "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_019.ss0"
+        "provenance_path": "data/screen_checkpoints.json"
       },
       "related_dialogue_scene_ids": [
         "21a_part2_prologue_story",

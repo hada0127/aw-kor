@@ -1079,8 +1079,17 @@ def main():
             "sprite_ids": sp_bucket[sc["id"]],
             "counts": {"dialogue": len(dl_bucket[sc["id"]]), "sprite": len(sp_bucket[sc["id"]])},
         }
-        if entrypoint and not is_container:
-            out_scene["entrypoint"] = entrypoint
+        if not is_container and (entrypoint or (shot and shot.get("mode") == "fresh")):
+            out_entrypoint = dict(entrypoint)
+            if shot and shot.get("mode") == "fresh":
+                out_entrypoint = {
+                    "checkpoint": shot_checkpoint,
+                    "screenshot": shot_checkpoint,
+                    "note": shot.get("note", ""),
+                    "capture_path": shot.get("capture_path") or checkpoint_capture_path(shot_checkpoint),
+                    "provenance_path": shot.get("provenance_path") or _rel(CHK),
+                }
+            out_scene["entrypoint"] = out_entrypoint
         if sc.get("related_dialogue_scene_ids"):
             out_scene["related_dialogue_scene_ids"] = sc["related_dialogue_scene_ids"]
         out_scenes.append(out_scene)

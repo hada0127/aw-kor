@@ -61,6 +61,23 @@ def decode_enc(enc, code2syl):
     return ''.join(out)
 
 
+def fill_pattern(fill):
+    """WRITE_LOG fill 값을 바이트 패턴으로 변환한다.
+
+    기존 fill은 0x20/0x00 같은 단일 바이트였지만, 일부 대사 슬롯은
+    전각 공백 0x8140을 반복 패딩으로 사용한다.
+    """
+    if fill is None:
+        return None
+    if isinstance(fill, list):
+        return bytes(int(v) & 0xFF for v in fill)
+    fill = int(fill)
+    if 0 <= fill <= 0xFF:
+        return bytes([fill])
+    width = max(1, (fill.bit_length() + 7) // 8)
+    return fill.to_bytes(width, 'big')
+
+
 def canon_punct(s):
     """문장부호를 ASCII 등가로 정규화한 멀티셋(소실 비교용)."""
     s = s.replace('…', '...').replace('。', '.').replace('、', ',')
@@ -75,6 +92,7 @@ def main():
     ap.add_argument('--rom', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
     ap.add_argument('--map', default=os.path.join(BASE, 'temp', 'integrity_map.json'))
     ap.add_argument('--show', type=int, default=12, help='소실 샘플 표시 개수')
+    ap.add_argument('--byte-only', action='store_true', help='WRITE_LOG↔ROM 바이트 무결성만 검사')
     args = ap.parse_args()
 
     if not os.path.exists(args.map):
@@ -90,8 +108,9 @@ def main():
     for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
         enc = bytes.fromhex(enc_hex)
         if fill is not None:
-            for k in range(slot):
-                expected[addr + k] = fill
+            pattern = fill_pattern(fill)
+            for k in range(len(enc), slot):
+                expected[addr + k] = pattern[(k - len(enc)) % len(pattern)]
         for k in range(len(enc)):
             expected[addr + k] = enc[k]
     mism = []
@@ -108,6 +127,10 @@ def main():
         print('  불일치 상위 페이지(0x__xxx):', ', '.join(f'0x{p:X}xxx={n}' for p, n in groups.most_common(8)))
         for a, e, r in mism[:args.show]:
             print(f'  0x{a:08X}: 기대 {e} != ROM {r}')
+    if args.byte_only:
+        print('\n=== 결과: ' + ('PASS' if ok else 'FAIL')
+              + f' / 바이트{"OK" if not mism else f"불일치{len(mism)}"} ===')
+        return 0 if ok else 1
 
     # --- 2) 문장부호 소실 (import 경로) ---
     import_entries = [e for e in wl if str(e[7]).startswith('import')]

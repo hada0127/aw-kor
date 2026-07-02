@@ -35,6 +35,10 @@ GLYPH_BLOB_2350 = os.path.join(BASE, 'data', 'kor_glyphs_2350.bin')
 SYLMAP_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 SAFE_MIN_ADDR = 0x800000
 FILL_BYTE = 0x20  # 슬롯 빈 공간 패딩(공백). 0x00은 메시지 조기종료 버그.
+# These adjacent Part 1 tutorial slots render their padding before a preserved
+# control gap. Use visible-width blank cells instead of halfwidth 0x20 so a short
+# Korean split does not leave line-end garbage glyphs.
+FULLWIDTH_PAD_ADDRS = {0xD8F7A7, 0xD8F7BE}
 CANONICAL_OUTPUT = os.path.join(BASE, 'output', 'game_wars_korean_full.gba')
 LEGACY_OUTPUTS = (
     os.path.join(BASE, 'output', 'game_wars_korean_final.gba'),
@@ -2780,8 +2784,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xD8F762: '이동 후엔 메뉴가 나와',
     0xD8F78F: '여기서 ',
     0xD8F798: '대기',
-    0xD8F7A7: '를 고르면 이동 끝',
-    0xD8F7BE: '이동 끝이야 결정 버튼으로 골라 줘요',
+    0xD8F7A7: '를 고르면 이동',
+    0xD8F7BE: '끝이야 결정 버튼으로 골라 줘요',
     0xD8F7EE: '색이 달라졌어',
     0xD8F811: '이 유닛은 이제',
     0xD8F838: '행동 끝',
@@ -4787,9 +4791,31 @@ NAME_GRID_SLOTS = {
     '0': (291, 307), '1': (292, 308), '2': (293, 309), '3': (294, 310), '4': (295, 311),
     '5': (296, 312), '6': (297, 313), '7': (298, 314), '8': (299, 315), '9': (300, 316),
 }
+
+# Display glyphs for the original kana cells. The selectable SJIS row data stays
+# byte-identical to the original layout, but the visible glyphs use one-cell
+# Korean readings so the name input screen no longer depends on fragile 4px
+# lowercase Latin glyphs.
+NAME_GRID_LABELS = {
+    # ア イ ウ エ オ / カ行 / サ行 / タ行 / ナ行 / ハ行
+    'A': '아', 'B': '이', 'C': '우', 'D': '에', 'E': '오',
+    'F': '카', 'G': '키', 'H': '쿠', 'I': '케', 'J': '코',
+    'K': '사', 'L': '시', 'M': '스', 'N': '세', 'O': '소',
+    'P': '타', 'Q': '치', 'R': '쓰', 'S': '테', 'T': '토',
+    'U': '나', 'V': '니', 'W': '누', 'X': '네', 'Y': '노',
+    'Z': '하',
+    # ヒ フ ヘ ホ are unused cells after Z in the current layout.
+    # マ行 / ヤ行 / ラ行 / ワヲン / small kana / long mark
+    'a': '마', 'b': '미', 'c': '무', 'd': '메', 'e': '모',
+    'f': '야', 'g': '유', 'h': '요',
+    'i': '라', 'j': '리', 'k': '루', 'l': '레', 'm': '로',
+    'n': '와', 'o': '오', 'p': '응',
+    'q': '아', 'r': '이', 's': '우', 't': '에', 'u': '오',
+    'v': '쓰', 'w': '야', 'x': '유', 'y': '요', 'z': 'ㅡ',
+}
 # Some name renderers bypass the remapped kana table and keep using the original
-# small-kana bottom slots. Mirror the same Latin glyphs there so grid, preview,
-# and later player-name insertion agree.
+# small-kana bottom slots. Mirror the same Korean reading glyphs there so grid,
+# preview, and later player-name insertion agree.
 NAME_GRID_MIRROR_SLOTS = {
     'q': [(328, 252)], 'r': [(329, 253)], 's': [(330, 254)],
     't': [(332, 256)], 'u': [(333, 257)], 'v': [(334, 259)],
@@ -4826,18 +4852,17 @@ def _name_grid_row_bytes(codes):
 
 
 def patch_name_grid(rom):
-    """이름 입력 그리드를 영문 3구역(좌 A-Z / 중 a-z / 우 0-9)으로 교체.
+    """이름 입력 그리드를 한글 음가 + 숫자 표기로 교체.
 
     ① base8 가나 슬롯 테이블 패치(KANA_REMAP): q-y top·p bottom 을 fresh 슬롯으로 → 26자 전부 고유.
-    ② NAME_GRID_SLOTS 슬롯에 영문 글리프 주입(하단정렬). 미사용 셀 블랭크.
+    ② NAME_GRID_SLOTS 슬롯에 한글 음가/숫자 글리프 주입(하단정렬). 미사용 셀 블랭크.
     ③ live 행 문자열(0x08DF8C38 계열)을 패치하되, 선택 로직과 맞는 원본 중간 갭은 유지.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from render_galmuri_8x16 import render_char
     from bdf import load_bdf, glyph_grid
     FONT_BASE = 0x08B974D0
     BLANK = bytes(32)
-    CELL_BASE = 12  # 글리프 바닥을 셀 안쪽으로 올려 이름 선택 화면 하단 잘림을 피한다.
+    CELL_BASE = 11  # Galmuri7 글리프를 살짝 위로 올려 하단 행/버튼 겹침을 피한다.
 
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
 
@@ -4852,20 +4877,50 @@ def patch_name_grid(rom):
         off = (FONT_BASE + slot * 32) - 0x08000000
         rom[off:off + 32] = data
 
+    def render_grid_char(label, top_pad):
+        if ord(label) not in font:
+            return BLANK, BLANK
+        grid, w, h, xo, _yo = glyph_grid(font[ord(label)])
+        x_offset = 0 if w >= 7 else 1
+        top = bytearray(32)
+        bot = bytearray(32)
+
+        def setpix(tile, row, col, val=9):
+            if not (0 <= row < 8 and 0 <= col < 8):
+                return
+            bi = row * 4 + col // 2
+            if col % 2 == 0:
+                tile[bi] = (tile[bi] & 0xF0) | val
+            else:
+                tile[bi] = (tile[bi] & 0x0F) | (val << 4)
+
+        for r in range(h):
+            cell_row = top_pad + r
+            for c in range(w):
+                cell_col = x_offset + c + xo
+                if grid[r][c]:
+                    if cell_row < 8:
+                        setpix(top, cell_row, cell_col)
+                    else:
+                        setpix(bot, cell_row - 8, cell_col)
+        return bytes(top), bytes(bot)
+
     def inject(ch):
         top_slot, bot_slot = NAME_GRID_SLOTS[ch]
-        h = glyph_grid(font[ord(ch)])[2] if ord(ch) in font else 11
+        label = NAME_GRID_LABELS.get(ch, ch)
+        h = glyph_grid(font[ord(label)])[2] if ord(label) in font else 11
         top_pad = max(0, CELL_BASE - h)
-        top, bot = render_char(ch, top_pad=top_pad)
+        top, bot = render_grid_char(label, top_pad)
         write_slot(top_slot, top)
         write_slot(bot_slot, bot)
 
     for ch in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789":
         inject(ch)
         for top_slot, bot_slot in NAME_GRID_MIRROR_SLOTS.get(ch, []):
-            h = glyph_grid(font[ord(ch)])[2] if ord(ch) in font else 11
+            label = NAME_GRID_LABELS.get(ch, ch)
+            h = glyph_grid(font[ord(label)])[2] if ord(label) in font else 11
             top_pad = max(0, CELL_BASE - h)
-            top, bot = render_char(ch, top_pad=top_pad)
+            top, bot = render_grid_char(label, top_pad)
             write_slot(top_slot, top)
             write_slot(bot_slot, bot)
     for top_slot in NAME_GRID_BLANK_TOPSLOTS:   # 미사용 좌영역 셀 비움
@@ -10514,6 +10569,17 @@ def encode_full_fidelity(ko, syl_to_code, unmapped):
 def write_slot_text(rom, a, slot, enc, ko, level, kind):
     """슬롯에 인코딩 텍스트 기록 + 무결성맵 로깅. 출력 바이트는 기존과 동일."""
     fill = 0 if in_region(ZERO_FILL_REGIONS, a, a + slot) else FILL_BYTE
+    if a in FULLWIDTH_PAD_ADDRS and fill == FILL_BYTE:
+        if len(enc) % 2:
+            raise AssertionError(f'fullwidth padding requires even encoded length at 0x{a:08X}: {len(enc)}')
+        pad_len = slot - len(enc)
+        if pad_len < 0:
+            raise AssertionError(f'fullwidth padding slot overflow at 0x{a:08X}: enc={len(enc)} slot={slot}')
+        if pad_len >= 0 and pad_len % 2 != 0:
+            raise AssertionError(f'fullwidth padding requires even slack at 0x{a:08X}: {pad_len}')
+        rom[a:a + slot] = enc + (b'\x81\x40' * (pad_len // 2))
+        WRITE_LOG.append([a, slot, len(enc), bytes(enc).hex(), 0x8140, ko, level, kind])
+        return
     rom[a:a + slot] = bytes([fill]) * slot
     rom[a:a + len(enc)] = enc
     WRITE_LOG.append([a, slot, len(enc), bytes(enc).hex(), fill, ko, level, kind])
@@ -11282,7 +11348,7 @@ def main():
     ap.add_argument('--base', default=P.ROM,
                     help='base ROM. 기본=원본 ROM. v56_polished는 전투 튜토리얼 진입 후 충돌하는 구버전 베이스라 명시 지정할 때만 사용.')
     ap.add_argument('--no-sync-outputs', action='store_true',
-                    help='호환용 no-op. 빌드는 항상 단일 ROM(output/game_wars_korean_full.gba)만 생성합니다.')
+                    help='기본 원본→full 빌드에서 final/title_test 동기화를 생략합니다(디버그용).')
     ap.add_argument('--no-repoint-dialogue', action='store_true',
                     help='짜옹이님 대사 단어붙음 해소용 메시지 재배치(repoint)를 끕니다(디버그용).')
     args = ap.parse_args()
@@ -20213,14 +20279,15 @@ def main():
     assert len(rom) == 0x1000000
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     open(args.out, 'wb').write(rom)
-    removed_legacy_outputs = []
+    synced_legacy_outputs = []
     default_out = CANONICAL_OUTPUT
     default_base = os.path.abspath(P.ROM)
-    if os.path.abspath(args.out) == os.path.abspath(default_out) and os.path.abspath(args.base) == default_base:
+    if (not args.no_sync_outputs
+            and os.path.abspath(args.out) == os.path.abspath(default_out)
+            and os.path.abspath(args.base) == default_base):
         for peer in LEGACY_OUTPUTS:
-            if os.path.exists(peer):
-                os.remove(peer)
-                removed_legacy_outputs.append(peer)
+            open(peer, 'wb').write(rom)
+            synced_legacy_outputs.append(peer)
 
     report_dir = os.path.dirname(args.report)
     if report_dir:
@@ -20271,8 +20338,8 @@ def main():
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
     print(f'  punct_strip_fallback(level>=6): {sum(st[f"level{i}"] for i in range(6, 12))}')
     print(f'→ {args.out} (16MB, chk recomputed), overflow 리포트 {args.report}')
-    for peer in removed_legacy_outputs:
-        print(f'→ removed legacy output {peer}')
+    for peer in synced_legacy_outputs:
+        print(f'→ synced legacy output {peer}')
 
 
 if __name__ == '__main__':
