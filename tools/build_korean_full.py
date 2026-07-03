@@ -6809,7 +6809,7 @@ def patch_part1_battle_day_banner(rom):
             buf[start:start + 32] = chunk[tile * 32:(tile + 1) * 32]
 
     phrase_chunks = chunk_bytes_from_layer(draw_gold_text('작전개시', 128, 32, 32, 2, -1))
-    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 30, 2, -1, -4, char_gap=4))
+    day_chunks = chunk_bytes_from_layer(draw_gold_text('일째', 64, 32, 24, 2, -1, 4, char_gap=8))
 
     # The same day banner is present both as runtime LZ77 OBJ data and as raw
     # 32x32 tile chunks used during the battle-start animation.

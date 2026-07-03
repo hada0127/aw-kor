@@ -216,17 +216,23 @@ def main() -> int:
             }
             if day_bbox is None:
                 issues.append({"type": "blank_part1_day_label"})
-            elif day_bbox[0] > 6:
+            elif day_bbox[0] < 6:
+                issues.append({
+                    "type": "part1_day_label_too_close_to_digit",
+                    "bbox": day_bbox,
+                    "min_left": 6,
+                })
+            elif day_bbox[0] > 10:
                 issues.append({
                     "type": "part1_day_label_shifted_right",
                     "bbox": day_bbox,
-                    "max_left": 6,
+                    "max_left": 10,
                 })
-            elif day_label["max_inner_gap"] < 3:
+            elif day_label["max_inner_gap"] < 8:
                 issues.append({
                     "type": "part1_day_label_char_gap_too_small",
                     "column_runs": day_runs,
-                    "min_gap": 3,
+                    "min_gap": 8,
                 })
 
     report = {

@@ -3344,16 +3344,18 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `temp/name_battle_fix_review_20260702/name_battle_fix_review_latest.png`,
   `temp/name_selection_final6_20260702/selection_cases_sheet.png`.
 
-## [2026-07-03] Part1 전투개시 `일째` 글자 겹침 수정
+## [2026-07-03] Part1 전투개시 `1일째` 글자 겹침 재수정
 
 - `1일째 / 작전개시` 배너에서 `일`과 `째`가 한 덩어리로 붙어 보이는 문제를 재현했다.
-  원인은 `일째`를 한 문자열로 OkDanDan 렌더링하면서 외곽선/그림자 픽셀이 서로 맞닿은 것이다.
-- `patch_part1_battle_day_banner()`의 `일째` 레이어만 문자 단위로 배치하고 `char_gap=4`를 적용했다.
-  `작전개시`와 숫자 `1` 자산은 건드리지 않는다.
+  1차 `char_gap=4` 보정 후에도 실제 화면에서 숫자 `1`과 `일`, `일`과 `째`가 모두 빽빽해 보여
+  `일째` 레이어를 더 작게 그리고 오른쪽으로 이동했다.
+- `patch_part1_battle_day_banner()`의 `일째` 레이어만 문자 단위로 배치하고
+  `max_size=24`, `x_adjust=4`, `char_gap=8`을 적용했다. `작전개시`와 숫자 `1` 자산은 건드리지 않는다.
 - `tools/qa_transient_overlays.py`는 Part1 day label의 column run을 검사한다. 새 빌드의 `일째`는
-  `[[0, 23], [27, 58]]`, `max_inner_gap=4`로 분리되어 있으며, 3px 미만이면 hard fail한다.
+  `bbox=[8, 3, 64, 29]`, `column_runs=[[8, 30], [38, 64]]`, `max_inner_gap=8`로 분리되어 있다.
+  왼쪽 여백 6px 미만 또는 내부 간격 8px 미만이면 hard fail한다.
 - 새 output 3종 SHA는 모두
-  `ef4cc0200a211a93d87bd49a855ee15f7464ed207229a416991eae8466a3fa24`.
+  `7f573b5bdbdd9c48894f29fbb3b1de286589293e886e6b5751a9852282f174f7`.
   `capture_scene_screenshots.py --scene-id 18_part1_battle --force`로 fresh 캡처를 갱신했고,
   `qa_transient_overlays.py`, `qa_scene_screenshot_sanity.py`, `phase6_basic_test.py`,
   `qa_visual_regions.py --asset-only`, `py_compile`, `git diff --check`를 통과했다.

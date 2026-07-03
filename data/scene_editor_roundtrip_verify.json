@@ -7,7 +7,7 @@
       "auth_required": true,
       "authenticated": true
     },
-    "rom_sha256": "ef4cc0200a211a93d87bd49a855ee15f7464ed207229a416991eae8466a3fa24",
+    "rom_sha256": "7f573b5bdbdd9c48894f29fbb3b1de286589293e886e6b5751a9852282f174f7",
     "scene_count": 81,
     "dialogue_group_count": 10997,
     "sprite_count": 1990,
@@ -60,7 +60,7 @@
       }
     },
     "dialogue_files_clean_after": true,
-    "elapsed_sec": 358.08
+    "elapsed_sec": 359.4
   },
   "failures": [],
   "bteam_confirm_failures": [],
