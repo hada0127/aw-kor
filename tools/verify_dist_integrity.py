@@ -73,6 +73,7 @@ SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
         'max_nul_terminated_len': 10,
     },
 ]
+PROJECT_MGBA_HARNESS = os.path.join(BASE, 'temp', 'mgbah')
 
 
 def sha256(data):
@@ -434,6 +435,13 @@ def verify_part1_map_label_hook(current, current_sha):
     )
 
 
+def visual_region_gate_args():
+    """Use the project-local mGBA harness instead of /tmp when it is present."""
+    if os.path.exists(PROJECT_MGBA_HARNESS):
+        return ['--harness', PROJECT_MGBA_HARNESS, '--action-menu-save', '']
+    return []
+
+
 def main():
     ok = True
     print('=== 배포 무결성 게이트 (verify_dist_integrity) ===')
@@ -550,7 +558,7 @@ def main():
                                ('Part1 dialogue punctuation', 'qa_part1_dialogue_punctuation.py', []),
                                ('transient overlays', 'qa_transient_overlays.py', []),
                                ('scene container residual', 'audit_scene_residual_scans.py', ['--strict']),
-                               ('visual region', 'qa_visual_regions.py', []),
+                               ('visual region', 'qa_visual_regions.py', visual_region_gate_args()),
                                ('sprite override fit', 'audit_sprite_override_report.py', ['--strict'])]:
         res = subprocess.run([sys.executable, os.path.join(here, tool), *extra],
                              capture_output=True, text=True)

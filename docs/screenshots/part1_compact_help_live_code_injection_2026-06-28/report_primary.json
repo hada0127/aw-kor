@@ -1,5 +1,24 @@
 {
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+  "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
+  "carry_forward_applicability": {
+    "method": "validated_unrelated_rom_diff_carry_forward",
+    "validated_current_rom_sha256": "62847c0dc185cdfb21ddfc9ef8ccc10dd4daac1a9eb4e899aca7581c41127c03",
+    "note": "2026-07-05 action-menu false-text deny and Part1 dash-to-space safety change do not touch the compact-help text/pointer ranges used by this live-code injection evidence.",
+    "ranges": [
+      {
+        "name": "part1_compact_help_text",
+        "start": "0x00DFA64A",
+        "end": "0x00DFA9EA",
+        "sha256": "6700e2393d1366f20b18caa76c4baf3fad3c7a2607a5ab1e27e2d4ee7dde9a7e"
+      },
+      {
+        "name": "part1_compact_help_pointer_table",
+        "start": "0x00DFAAB8",
+        "end": "0x00DFAB40",
+        "sha256": "ee24bb2571284cc0f1fc3d59003658739f6d25416fa8aaa86ff4aa4b26471845"
+      }
+    ]
+  },
   "rows": [
     {
       "case_id": "player_count_codes",

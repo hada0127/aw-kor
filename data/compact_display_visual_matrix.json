@@ -1,17 +1,17 @@
 {
  "tool": "tools/build_compact_display_visual_matrix.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+ "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
  "glyph_dictionary_qa": {
   "path": "temp/glyph_dictionary_qa.json",
   "issue_count": 0,
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced"
+  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646"
  },
  "renderer_trace": {
   "path": "data/compact_display_renderer_trace.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
   "case_count": 10,
   "hit_count": 1762,
   "direct_target_hit_count": 0,
@@ -24,7 +24,7 @@
   "path": "data/compact_display_xref_analysis.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
   "groups": [
    {
     "id": "a2_co_power_profile_display_overrides",
@@ -73,7 +73,7 @@
   "path": "data/compact_display_code_context.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
   "literal_entry_count": 695,
   "derived_table_head_ref_count": 681,
   "breakpoint_candidate_count": 24,
@@ -88,7 +88,7 @@
  "manual_visual_evidence": {
   "path": "data/compact_display_manual_visual_evidence.json",
   "present": true,
-  "source_sha256": "494bb587d2805de0d971dc0dbff94cba5bcd02c1b0d0a1e60c80c7236bf42884",
+  "source_sha256": "49773628808af846fd5c5b1e2cc35d62183a11b8d5e511ac591e0b00dfcb2154",
   "current_count": 13,
   "accepted_count": 13,
   "invalid_count": 0,
@@ -110,416 +110,11 @@
   },
   "entries": [
    {
-    "address": "0x00B81F38",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "결전",
-    "mutation_text": "검증",
-    "slot": 6,
-    "encoded_hex": "88569052",
-    "base_encoded_hex": "88608fc8",
-    "old_hex": "88608fc82020",
-    "new_hex": "885690522020",
-    "contact_sheet_sha256": "daa89101d83ee592decac343757b15ee987b5eb0ffff0b2e68e8e7777535bdb7",
-    "pixel_diff_count": 58,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down13/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_diff_mask.png",
-    "diff_mask_sha256": "2636769427848d3dea04714c0f6c34053fcfaf666e4abcf00c953e6a6120d031",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F40",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "은빛 세계",
-    "mutation_text": "검증 세계",
-    "slot": 10,
-    "encoded_hex": "8856905281408dcf8865",
-    "base_encoded_hex": "8f7e8d6d81408dcf8865",
-    "old_hex": "8f7e8d6d81408dcf8865",
-    "new_hex": "8856905281408dcf8865",
-    "contact_sheet_sha256": "05361e5f2dd5c44dc663a4588542f51a1e4b296ad94d33fb6d6a9bbc70da0a89",
-    "pixel_diff_count": 67,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_diff_mask.png",
-    "diff_mask_sha256": "0452eff567f5f1f8bd225155d182390c4deb29ca063b77f757477c4ab4a8141b",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F40 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F4C",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "바다 너머",
-    "mutation_text": "검증 너머",
-    "slot": 12,
-    "encoded_hex": "885690528140895c8be3",
-    "base_encoded_hex": "8ca689e28140895c8be3",
-    "old_hex": "8ca689e28140895c8be32020",
-    "new_hex": "885690528140895c8be32020",
-    "contact_sheet_sha256": "1bea389a30e780980385e700e19d7c99e20226e08dbfa7a36874e1f3f475f98f",
-    "pixel_diff_count": 77,
-    "diff_bbox": [
-     9,
-     75,
-     23,
-     86
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_diff_mask.png",
-    "diff_mask_sha256": "ef7c7c26bf462135fea5ac4647f2e9b3fd8c4fa2830c2362b4734f089de302b8",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F5C",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "도그 파이트",
-    "mutation_text": "검증 파이트",
-    "slot": 16,
-    "encoded_hex": "88569052814092598fa291f9",
-    "base_encoded_hex": "8a5a8887814092598fa291f9",
-    "old_hex": "8a5a8887814092598fa291f920202020",
-    "new_hex": "88569052814092598fa291f920202020",
-    "contact_sheet_sha256": "268031330049a0f24a2d80f56470fc874c55b9ac3942488a9d7aed8e46312fcb",
-    "pixel_diff_count": 70,
-    "diff_bbox": [
-     9,
-     59,
-     24,
-     70
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_diff_mask.png",
-    "diff_mask_sha256": "f4f4fa1abb566ef64f0189d74c97872d3c01cbc4a52db883eb6977140fbec5d1",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F70",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "대공 제압",
-    "mutation_text": "검증 제압",
-    "slot": 14,
-    "encoded_hex": "8856905281408fd48eae",
-    "base_encoded_hex": "89f4886d81408fd48eae",
-    "old_hex": "89f4886d81408fd48eae20202020",
-    "new_hex": "8856905281408fd48eae20202020",
-    "contact_sheet_sha256": "bb55cc4aaee699946e6c220866f41987b1828604a82e191d460c686633b89afb",
-    "pixel_diff_count": 43,
-    "diff_bbox": [
-     9,
-     91,
-     23,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_diff_mask.png",
-    "diff_mask_sha256": "6a6c260160b1cfdb234ba6b944c8daa7804ee319ff2ba648d8e2e85b5b69fa13",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F70 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F98",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "드래곤 플라이",
-    "mutation_text": "검증 플라이",
-    "slot": 16,
-    "encoded_hex": "88569052814092a08adf8fa2",
-    "base_encoded_hex": "8a7c8aec8868814092a08adf8fa2",
-    "old_hex": "8a7c8aec8868814092a08adf8fa22020",
-    "new_hex": "88569052814092a08adf8fa220202020",
-    "contact_sheet_sha256": "05fe171d2d57504a01fa4f3ef133b53a827efb59b7f538799ad724867e118270",
-    "pixel_diff_count": 246,
-    "diff_bbox": [
-     9,
-     59,
-     64,
-     70
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_diff_mask.png",
-    "diff_mask_sha256": "f414ec8b77332349f3a55be4ac149346e25425cf370a3ca6ca9e63eb5152194f",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F80",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "하늘의 적",
-    "mutation_text": "검증의 적",
-    "slot": 22,
-    "encoded_hex": "885690528fa181408fc7",
-    "base_encoded_hex": "92a989cc8fa181408fc7",
-    "old_hex": "92a989cc8fa181408fc7202020202020202020202020",
-    "new_hex": "885690528fa181408fc7202020202020202020202020",
-    "contact_sheet_sha256": "2eb35c98d3dc6b6663db5269fc43aaea4aca5424d35aee48c4655a76891df5c2",
-    "pixel_diff_count": 82,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down6/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_diff_mask.png",
-    "diff_mask_sha256": "2761d970ad037ee3352b8593a1e76d87cef403d5e327ae6051258fa5ebb250b3",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F80 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81FAC",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "최강 중전차",
-    "mutation_text": "검증 중전차",
-    "slot": 20,
-    "encoded_hex": "8856905281408fef8fc890b4",
-    "base_encoded_hex": "90eb884981408fef8fc890b4",
-    "old_hex": "90eb884981408fef8fc890b42020202020202020",
-    "new_hex": "8856905281408fef8fc890b42020202020202020",
-    "contact_sheet_sha256": "53ff708eae77c882870b5ca26ac92dbd87f49e585e65d250d591a003a3eb4f20",
-    "pixel_diff_count": 47,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_diff_mask.png",
-    "diff_mask_sha256": "89496ff251ed49575720c8be215ed7d264a0c85bfb2b4808e01818716806dc3b",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81FAC produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81FC4",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "적 부대 격파",
-    "mutation_text": "검증 부대 격파",
-    "slot": 20,
-    "encoded_hex": "8856905281408d5689f48140885e9259",
-    "base_encoded_hex": "8fc781408d5689f48140885e9259",
-    "old_hex": "8fc781408d5689f48140885e9259202020202020",
-    "new_hex": "8856905281408d5689f48140885e925920202020",
-    "contact_sheet_sha256": "5b3ecc305de2bf71385231829e27ed53641f2aee1a835c29e7c70683546b31f6",
-    "pixel_diff_count": 267,
-    "diff_bbox": [
-     10,
-     75,
-     72,
-     86
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_diff_mask.png",
-    "diff_mask_sha256": "a6e41155dd06169aac5707a65616397b0cc235b146137c41b154019af451b0ab",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81FC4 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
     "address": "0x00B81FDC",
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "고물 전차 출격",
@@ -546,8 +141,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -564,7 +159,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전선 기지 확보",
@@ -591,8 +186,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -609,7 +204,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "첫 전투",
@@ -636,8 +231,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -654,7 +249,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전투 개시",
@@ -681,8 +276,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -691,6 +286,411 @@
     "diff_mask_sha256": "f03e5b1c8f7750af7adda934c765f8510dc7b1e6561ac285ad42247db5bd34cc",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_mutation_contact.png",
     "note": "Single-address mutation at 0x00B82018 produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81FAC",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "최강 중전차",
+    "mutation_text": "검증 중전차",
+    "slot": 20,
+    "encoded_hex": "8856905281408fef8fc890b4",
+    "base_encoded_hex": "90eb884981408fef8fc890b4",
+    "old_hex": "90eb884981408fef8fc890b42020202020202020",
+    "new_hex": "8856905281408fef8fc890b42020202020202020",
+    "contact_sheet_sha256": "53ff708eae77c882870b5ca26ac92dbd87f49e585e65d250d591a003a3eb4f20",
+    "pixel_diff_count": 47,
+    "diff_bbox": [
+     9,
+     91,
+     24,
+     102
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_diff_mask.png",
+    "diff_mask_sha256": "89496ff251ed49575720c8be215ed7d264a0c85bfb2b4808e01818716806dc3b",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81FAC produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81FC4",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "적 부대 격파",
+    "mutation_text": "검증 부대 격파",
+    "slot": 20,
+    "encoded_hex": "8856905281408d5689f48140885e9259",
+    "base_encoded_hex": "8fc781408d5689f48140885e9259",
+    "old_hex": "8fc781408d5689f48140885e9259202020202020",
+    "new_hex": "8856905281408d5689f48140885e925920202020",
+    "contact_sheet_sha256": "5b3ecc305de2bf71385231829e27ed53641f2aee1a835c29e7c70683546b31f6",
+    "pixel_diff_count": 267,
+    "diff_bbox": [
+     10,
+     75,
+     72,
+     86
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_diff_mask.png",
+    "diff_mask_sha256": "a6e41155dd06169aac5707a65616397b0cc235b146137c41b154019af451b0ab",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81FC4 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F80",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "하늘의 적",
+    "mutation_text": "검증의 적",
+    "slot": 22,
+    "encoded_hex": "885690528fa181408fc7",
+    "base_encoded_hex": "92a989cc8fa181408fc7",
+    "old_hex": "92a989cc8fa181408fc7202020202020202020202020",
+    "new_hex": "885690528fa181408fc7202020202020202020202020",
+    "contact_sheet_sha256": "2eb35c98d3dc6b6663db5269fc43aaea4aca5424d35aee48c4655a76891df5c2",
+    "pixel_diff_count": 82,
+    "diff_bbox": [
+     9,
+     91,
+     24,
+     102
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_diff_mask.png",
+    "diff_mask_sha256": "2761d970ad037ee3352b8593a1e76d87cef403d5e327ae6051258fa5ebb250b3",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F80 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F70",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "대공 제압",
+    "mutation_text": "검증 제압",
+    "slot": 14,
+    "encoded_hex": "8856905281408fd48eae",
+    "base_encoded_hex": "89f4886d81408fd48eae",
+    "old_hex": "89f4886d81408fd48eae20202020",
+    "new_hex": "8856905281408fd48eae20202020",
+    "contact_sheet_sha256": "bb55cc4aaee699946e6c220866f41987b1828604a82e191d460c686633b89afb",
+    "pixel_diff_count": 43,
+    "diff_bbox": [
+     9,
+     91,
+     23,
+     102
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_diff_mask.png",
+    "diff_mask_sha256": "6a6c260160b1cfdb234ba6b944c8daa7804ee319ff2ba648d8e2e85b5b69fa13",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F70 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F98",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "드래곤 플라이",
+    "mutation_text": "검증 플라이",
+    "slot": 16,
+    "encoded_hex": "88569052814092a08adf8fa2",
+    "base_encoded_hex": "8a7c8aec8868814092a08adf8fa2",
+    "old_hex": "8a7c8aec8868814092a08adf8fa22020",
+    "new_hex": "88569052814092a08adf8fa220202020",
+    "contact_sheet_sha256": "05fe171d2d57504a01fa4f3ef133b53a827efb59b7f538799ad724867e118270",
+    "pixel_diff_count": 246,
+    "diff_bbox": [
+     9,
+     59,
+     64,
+     70
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_diff_mask.png",
+    "diff_mask_sha256": "f414ec8b77332349f3a55be4ac149346e25425cf370a3ca6ca9e63eb5152194f",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F40",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "은빛 세계",
+    "mutation_text": "검증 세계",
+    "slot": 10,
+    "encoded_hex": "8856905281408dcf8865",
+    "base_encoded_hex": "8f7e8d6d81408dcf8865",
+    "old_hex": "8f7e8d6d81408dcf8865",
+    "new_hex": "8856905281408dcf8865",
+    "contact_sheet_sha256": "05361e5f2dd5c44dc663a4588542f51a1e4b296ad94d33fb6d6a9bbc70da0a89",
+    "pixel_diff_count": 67,
+    "diff_bbox": [
+     9,
+     91,
+     24,
+     102
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_diff_mask.png",
+    "diff_mask_sha256": "0452eff567f5f1f8bd225155d182390c4deb29ca063b77f757477c4ab4a8141b",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F40 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F4C",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "바다 너머",
+    "mutation_text": "검증 너머",
+    "slot": 12,
+    "encoded_hex": "885690528140895c8be3",
+    "base_encoded_hex": "8ca689e28140895c8be3",
+    "old_hex": "8ca689e28140895c8be32020",
+    "new_hex": "885690528140895c8be32020",
+    "contact_sheet_sha256": "1bea389a30e780980385e700e19d7c99e20226e08dbfa7a36874e1f3f475f98f",
+    "pixel_diff_count": 77,
+    "diff_bbox": [
+     9,
+     75,
+     23,
+     86
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_diff_mask.png",
+    "diff_mask_sha256": "ef7c7c26bf462135fea5ac4647f2e9b3fd8c4fa2830c2362b4734f089de302b8",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F5C",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "도그 파이트",
+    "mutation_text": "검증 파이트",
+    "slot": 16,
+    "encoded_hex": "88569052814092598fa291f9",
+    "base_encoded_hex": "8a5a8887814092598fa291f9",
+    "old_hex": "8a5a8887814092598fa291f920202020",
+    "new_hex": "88569052814092598fa291f920202020",
+    "contact_sheet_sha256": "268031330049a0f24a2d80f56470fc874c55b9ac3942488a9d7aed8e46312fcb",
+    "pixel_diff_count": 70,
+    "diff_bbox": [
+     9,
+     59,
+     24,
+     70
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_diff_mask.png",
+    "diff_mask_sha256": "f4f4fa1abb566ef64f0189d74c97872d3c01cbc4a52db883eb6977140fbec5d1",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
+    "accepted": true,
+    "validation_errors": []
+   },
+   {
+    "address": "0x00B81F38",
+    "group": "b8_compact_display_table_all",
+    "type": "single_address_mutation_pixel_diff",
+    "current_rom": true,
+    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
+    "scene_id": "15_part1_operation_logos",
+    "base_text": "결전",
+    "mutation_text": "검증",
+    "slot": 6,
+    "encoded_hex": "88569052",
+    "base_encoded_hex": "88608fc8",
+    "old_hex": "88608fc82020",
+    "new_hex": "885690522020",
+    "contact_sheet_sha256": "daa89101d83ee592decac343757b15ee987b5eb0ffff0b2e68e8e7777535bdb7",
+    "pixel_diff_count": 58,
+    "diff_bbox": [
+     9,
+     91,
+     24,
+     102
+    ],
+    "expected_diff_box": [
+     0,
+     32,
+     80,
+     104
+    ],
+    "diff_bbox_within_expected_box": true,
+    "null_control": {
+     "enabled": true,
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_diff_mask.png",
+     "pixel_diff_count": 0,
+     "diff_bbox": null,
+     "deterministic": true
+    },
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_diff_mask.png",
+    "diff_mask_sha256": "2636769427848d3dea04714c0f6c34053fcfaf666e4abcf00c953e6a6120d031",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png",
+    "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
    }
@@ -6811,7 +6811,7 @@
         "current": false,
         "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
         "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-        "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+        "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
         "reason": "rom_sha_mismatch"
        }
       }
@@ -10870,7 +10870,7 @@
     {
      "address": "0x00B81EB8",
      "ja": "ホイップ海軍ターボ！",
-     "ko": "호이프 해군터보",
+     "ko": "호이프 해군 터보",
      "kind": "import-csv",
      "region": "font",
      "slot": 20,
@@ -11246,7 +11246,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
        "scene_id": "15_part1_operation_logos",
        "base_text": "결전",
@@ -11273,8 +11273,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down13/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11335,7 +11335,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "은빛 세계",
@@ -11362,8 +11362,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11424,7 +11424,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "바다 너머",
@@ -11451,8 +11451,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11513,7 +11513,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "도그 파이트",
@@ -11540,8 +11540,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11602,7 +11602,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "대공 제압",
@@ -11629,8 +11629,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11691,7 +11691,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "하늘의 적",
@@ -11718,8 +11718,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down6/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11780,7 +11780,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "드래곤 플라이",
@@ -11807,8 +11807,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down7/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11869,7 +11869,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "최강 중전차",
@@ -11896,8 +11896,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11958,7 +11958,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "적 부대 격파",
@@ -11985,8 +11985,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_down4/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12047,7 +12047,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "고물 전차 출격",
@@ -12074,8 +12074,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12136,7 +12136,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전선 기지 확보",
@@ -12163,8 +12163,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12225,7 +12225,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "첫 전투",
@@ -12252,8 +12252,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12314,7 +12314,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전투 개시",
@@ -12341,8 +12341,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260701_refresh_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -27345,11 +27345,11 @@
     "sprite": 14
    },
    "capture": {
-    "current": true,
+    "current": false,
     "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
-    "provenance_rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "reason": "current"
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "reason": "rom_sha_mismatch"
    }
   },
   {
@@ -27361,11 +27361,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": true,
+    "current": false,
     "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
-    "provenance_rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "reason": "current"
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "reason": "rom_sha_mismatch"
    }
   },
   {
@@ -27377,11 +27377,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": true,
+    "current": false,
     "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
-    "provenance_rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
-    "reason": "current"
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "reason": "rom_sha_mismatch"
    }
   },
   {
@@ -27396,7 +27396,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-    "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27412,7 +27412,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/30_battle_attack_patched/provenance.json",
-    "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27428,7 +27428,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/provenance.json",
-    "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27437,14 +27437,14 @@
    "present": true,
    "title": "공통 UI 라벨/대사",
    "counts": {
-    "dialogue": 61,
+    "dialogue": 53,
     "sprite": 2
    },
    "capture": {
     "current": false,
     "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_85_ui_common_patched/provenance.json",
-    "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27460,7 +27460,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/provenance.json",
-    "provenance_rom_sha256": "1d64801a2b3fc3287f4652729697ef3c4f3f929eb33a0d123ae3e2cdbbb48b81",
+    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
     "reason": "rom_sha_mismatch"
    }
   }

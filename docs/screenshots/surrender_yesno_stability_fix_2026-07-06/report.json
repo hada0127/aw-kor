@@ -1,0 +1,55 @@
+{
+  "subjects": {
+    "reference_original_row": {
+      "diffs": [
+        {
+          "against": "post_a_f090.png",
+          "frame": "post_a_f120.png",
+          "diff_pixels": 27
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "post_a_f160.png",
+          "diff_pixels": 39
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "right12.png",
+          "diff_pixels": 27
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "right30.png",
+          "diff_pixels": 27
+        }
+      ]
+    },
+    "patched_fixed": {
+      "diffs": [
+        {
+          "against": "post_a_f090.png",
+          "frame": "post_a_f120.png",
+          "diff_pixels": 27
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "post_a_f160.png",
+          "diff_pixels": 39
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "right12.png",
+          "diff_pixels": 27
+        },
+        {
+          "against": "post_a_f090.png",
+          "frame": "right30.png",
+          "diff_pixels": 27
+        }
+      ]
+    }
+  },
+  "state": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0",
+  "reference_rom": "temp/surrender_yesno_probe/final_compare/reference_original_yesno_row.gba",
+  "patched_rom": "output/game_wars_korean_full.gba"
+}

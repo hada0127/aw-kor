@@ -1,6 +1,6 @@
 {
   "name": "Game Boy Wars Advance 1+2 — 한글화",
-  "date": "2026-07-01",
+  "date": "2026-07-06",
   "status": "automated QA pass — patch-only distribution; real-hardware sign-off pending",
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "1d88ef66",
-    "sha1": "084a44db5e5b886c4c4e035c6e92feef9cb193e3",
-    "sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced"
+    "crc32": "47288010",
+    "sha1": "4c746d02ba8f578b06e90e7500b5d3fe2470436f",
+    "sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646"
   },
   "output_rom": {
     "canonical": "game_wars_korean_full.gba",
-    "sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
+    "sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
     "legacy_variants": []
   },
   "bps_patch": {
-    "file": "game_wars_korean_full_2026-07-01.bps",
-    "size": 999483,
+    "file": "game_wars_korean_full_2026-07-06.bps",
+    "size": 997971,
     "crc32": "2144df1c",
-    "sha1": "d3a38f99c966c719c1cfab163d8834e2c087d007",
-    "sha256": "d5dcd6736d062a3459aa726b75610fe725a7f3f21796e12045afd16da0300ff0",
+    "sha1": "51cba30513f09a624e50b9c950e1caf712677773",
+    "sha256": "d09356422f46bf34504cf9e428b10134817bef3b1af53b5c980fb927998350c1",
     "round_trip": "OK"
   },
   "ips_patch": {
-    "file": "game_wars_korean_full_2026-07-01.ips",
-    "size": 1143958,
-    "crc32": "f511f339",
-    "sha1": "bb550a0b702ab780cde16a1a5d2f183578857a9c",
-    "sha256": "3bf322d1fa292ff5dacae5b303eb1881d73130d6170335c112a9207ae4663e0a",
+    "file": "game_wars_korean_full_2026-07-06.ips",
+    "size": 1142046,
+    "crc32": "6d3ec54f",
+    "sha1": "0527702cdc7d65376bdccd533c714990097769c2",
+    "sha256": "4e7c9046729b18fd049d6efc39db688ff712c5f7ba42b1a5c091d3bc3711cd2a",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

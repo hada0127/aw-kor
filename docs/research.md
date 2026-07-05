@@ -3390,3 +3390,118 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   `qa_scene_screenshot_sanity.py` issue 0, scene entry/catalog/semantic/residual strict audits critical 0,
   `qa_visual_regions.py` PASS, `verify_dist_integrity.py` PASS,
   `run_release_qa.py --timeout 300 --report temp/release_qa_report_20260630_part1_logo_fix.json` PASS.
+
+## [2026-07-05] Part1 전투 액션 메뉴 BG 깨짐 원인
+
+- 인게임 전투 액션 메뉴에서 `보급/대기` 창 배경이 깨진 원인은 액션 메뉴 라벨 raw tile 자체가 아니라
+  `data/translation_for_import.csv`의 오검출 행 `0x00B7F89B`
+  (`ァケアゲィゲイイヂヂゥ` -> `아케아게이게이이지지우`)이 Part1 액션 메뉴 window/pattern 데이터를
+  텍스트로 덮은 것이었다.
+- 해당 주소는 `build_scene_catalog.py`에서 이미 `save_or_binary_false_text_bx`
+  (`0xB7F800..0xB7F900`)로 분류되어 있었지만, 실제 `build_korean_full.py::DENY_REGIONS`에는 없었다.
+  그 결과 빌드 산출물에서 `0xB7F89B..0xB7F8B1`가 원본과 달라졌고, 런타임 리더
+  `0x08B19D58/0x08B19DB4/0x08B19E60` 경로가 깨진 BG2 메뉴 프레임을 만들었다.
+- `tools/build_korean_full.py`는 `build_scene_catalog.py`의 low-confidence false-text range 33개를
+  `DENY_REGIONS`에 반영한다. 범위는 code/data false positive, unmapped graphic/binary false text,
+  Part1 pre-dialogue false text, E8 post-campaign false text, UI symbol/common false table 전부다.
+  CSV import가 이 범위에 쓰지 않게 하는 것이 목적이며, 별도 그래픽 합성 패치는 건드리지 않는다.
+- 재빌드 후 감사 결과 `temp/false_text_deny_audit_20260705.json` 기준 33개 범위의 CSV 116행은 전부 deny,
+  open row 0, 해당 범위의 원본 대비 diff 0이다. 특히 `0xB7F800..0xB7F900` 및
+  `0xB7F89B..0xB7F8B1`은 원본과 완전 동일하다.
+- 인게임 증거는 `temp/action_menu_fix_verify_20260705/ingame_action_menu_original_before_fixed.png`.
+  같은 저장 파일/입력 경로로 원본, 수정 전 깨진 ROM, 수정 후 ROM을 비교했고 수정 후 메뉴 프레임 깨짐은 재현되지 않는다.
+- 배포 게이트 재동기화 중 Part1 대사 payload에 남은 `0x815C` long-mark 계열도 별도 안전화했다.
+  이 SJIS 문장부호 슬롯은 Part1 이름 그리드 장음(`ㅡ`)용 글리프 슬롯과 충돌하므로, Part1 대사에서
+  ASCII `-`/`=`는 전각 공백으로 정규화한다. 최종 ROM SHA는
+  `62847c0dc185cdfb21ddfc9ef8ccc10dd4daac1a9eb4e899aca7581c41127c03`이며
+  `qa_part1_dialogue_punctuation.py`와 `verify_dist_integrity.py`가 PASS했다.
+
+## [2026-07-05] Part1 전투 액션 메뉴 아이콘 겹침/라벨 blank 원인
+
+- 1차 BG 깨짐 수정 뒤에도 사용자 제보처럼 실제 인게임 액션 메뉴에서 아이콘과 한글 라벨이 겹치거나,
+  raw 아이콘 소스를 보존하면 라벨이 blank가 되는 별도 문제가 남아 있었다.
+- `patch_part2_action_menu_icon_labels()`가 덮던 `0xBEC5DC`, `0xBE79BC` 계열은 라벨 타일이 아니라
+  액션 메뉴 아이콘 source tile이다. 이 주소에 한글 bitmap을 직접 그리면 아이콘을 파괴하고 라벨이
+  아이콘 위로 겹친다. 해당 raw tile 패치는 no-op으로 유지한다.
+- no-op만 적용한 ROM은 아이콘은 원본으로 돌아왔지만 final BG0 tilemap의 라벨 위치가 전부
+  blank tile `0x0164`가 되었다. 원본/정상 경로는 VRAM tilemap `0x70AE/0x70B0`,
+  `0x70EE/0x70F0`, `0x712E/0x7130`, `0x716E/0x7170`에
+  `8008/800A/8009/800B/808C/808E/808D/808F`를 쓴다.
+  한글 glyph-cache tile 자체는 이미 존재했으므로 문제는 glyph 생성이 아니라 최종 tilemap overwrite였다.
+- 수정은 raw icon source가 아니라 `0x08B19804`의 BG0 tilemap DMA 직전 경로를 후킹한다.
+  hook body는 `0xF3F000`/runtime `0x08F3F000`에 두고, entry에서 action menu source buffer의
+  아이콘 tile pattern `A1AD/A1AE/A1AF/A1B0/A16D/A16E/A16F/A170`를 확인한다.
+  이 exact pattern이 모두 맞을 때만 `공격/대기` 라벨 tilemap entries를 복구한 뒤 원본 DMA copy로 복귀한다.
+  초기 실험 주소 `0xF50000`은 mission-title glyph blob 영역에 덮여 0으로 지워졌으므로 폐기했다.
+- `tools/qa_visual_regions.py`는 이제 action-menu icon source range 7개가 원본과 byte-identical인지,
+  실제 mGBA action menu VRAM tilemap 16개 entries가 기대값인지,
+  화면의 `공격/대기` 라벨 near-black pixel이 충분한지 함께 검사한다.
+- 인게임 비교 증거:
+  `temp/action_menu_icon_fix_verify_20260705/ingame_action_menu_original_vs_broken_vs_fixed.png`.
+  오른쪽 current ROM은 아이콘 source가 원본처럼 유지되고 `공격/대기` 라벨이 아이콘과 겹치지 않는다.
+- 최종 output 3종 SHA는
+  `c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72`.
+  `verify_dist_integrity.py`와
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_action_menu_overlay_20260705.json`가 PASS했다.
+
+## [2026-07-06] 89a 항복 확인 예/아니오 선택지 커서 셀 RE
+
+- 증상: `scene_89a_common_battle_surrender_confirm`에서 확인창이 생성된 뒤 선택지가
+  `아뇨▷`처럼 먼저 보이고, LEFT/RIGHT 입력 후에는 `▷아뇨`로 재배치되어 순간 흔들림처럼 보였다.
+  기존 `0x00A34B6C = 예　아뇨`는 글자 수만 줄인 임시안이라 원본 커서 셀 배치를 보존하지 못했다.
+- 원본 row는 `0x00A34B6C = 8140 82CD82A2 8140 8140 82A282A282A6`,
+  즉 `　はい　　いいえ` 16B 정확 길이다. OAM dump는 선택 전/후 동일했고, 후보 문자열별 화면 스윕은
+  leading space와 no-option 앞 gap을 없기 쉬운 장식 공백이 아니라 커서 위치에 영향을 주는 셀로 취급해야
+  함을 보여준다. 아직 renderer 내부 샘플링 루틴까지 단정한 것은 아니며, 현재 결론은 화면/VRAM 관찰에
+  근거한 layout 가설이다.
+- 후보 스윕 결과 `　예　　　아니오`가 16B 정확 길이로 들어가며, 생성 직후 no 선택
+  `예　▷아니오`, LEFT 후 `▷예　아니오`, RIGHT 후 `예　▷아니오`가 유지된다.
+  `예　아뇨`, `　예　　아뇨`, `　예　　아니오` 등은 no-option 첫 글자 덮힘 또는 위치 drift가 남았다.
+- 검증 방식: `temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0`
+  로드 후 `A` 입력으로 확인창을 새로 생성하고, `post_a_f000..f160`, `LEFT/RIGHT/UP/DOWN+12/30f`를
+  캡처한다. 순간 흔들림 확인용 시트는
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet_early_frames.png`이고,
+  안정 구간 원본-row 참조 시트는
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet.png`다.
+- 리뷰 재확인: `0x00A34CB0`은 이 화면의 대사 본문(`降伏すると...`) 복제본이며 선택지 row가 아니다.
+  원본 `　はい　　いいえ` row copy는 여러 일반 confirm UI에도 존재하지만, 이번 실화면에서 읽힌
+  선택지 source는 `0x00A34B6C`라서 일반 confirm row 일괄 변경은 하지 않았다.
+- `tools/qa_transient_overlays.py`는 이제 `0x00A34B6C`가 `　예　　　아니오`
+  (`81408eec8140814081408e9b89d48ef8`)와 정확히 일치하는지 검사한다.
+
+## [2026-07-06] 다른 예/아니오 확인창 스윕과 1편 이름 확인 RIGHT 커서 수정
+
+- **대량 재현/캡처**: 최종 SHA
+  `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`에서
+  4개 확인창을 다시 캡처했다. 시트는
+  `docs/screenshots/yesno_sweep_2026-07-06/yesno_final_screen_sheet_after_fix.png`,
+  하단 crop은 `yesno_final_bottom_crops_after_fix.png`, 생성 직후 프레임 crop은
+  `yesno_final_early_frame_crops_after_fix.png`다.
+- **검수 화면/주소**:
+  1편 이름 확인은 coldboot fresh route에서 원본/최종을 비교했고
+  `D8273C` 4회, `D835BC` 4회 read hit가 났다. 전투 메뉴 항복 확인,
+  전투 메뉴 모드 복귀 확인, 89a 항복 확인 pre-state는 모두 `A34B6C`를 읽었다
+  (`23/23/21` hit). 일반 confirm row copy들은 이번 natural route에서 활성 hit가 없었다.
+- **추가 결함**: 이름 확인 화면에서 현재 row `D835BC = 　　예　　아니`는 초기/LEFT의
+  `▷예 아니오`는 보였지만 RIGHT 후 커서가 사라졌다. 후보 스윕
+  `docs/screenshots/yesno_sweep_2026-07-06/name_d835bc_candidate_sheet.png`에서
+  단순 row 교체는 후속 글자 누출 또는 yes 위치 손상을 만들었다.
+- **원인**: `PART1_YESNO_HOOK`는 BG tilemap x8..x13에 `예 blank 아니오 blank`를
+  매 프레임 재작성한다. VRAM diff 결과 초기에는 cursor tile `A1BA/A1BB`가 x7에 있고,
+  RIGHT 후 x7은 blank가 되지만 x9에 cursor가 생기지 않았다. 즉 원본 cursor routine이
+  no cursor를 만들지 못한 상태에서 overlay가 선택지만 유지해 cursor가 안 보였다.
+- **수정**: hook의 마지막 pop을 `0x08F10154` helper로 분기시켰다. helper는 x7에
+  `A1BA`가 없으면 x9 top/bottom에 `A1BA/A1BB`를 써서 `예▷아니오`를 복구하고,
+  x7에 cursor가 있으면 그대로 pop한다. 후보 검증 시트는
+  `docs/screenshots/yesno_sweep_2026-07-06/name_cond_cursor_candidate_sheet.png`다.
+- **최종 판정**: 이름 확인 fresh 원본/최종 비교
+  `name_confirm_fresh_original_vs_final_after_fix.png`에서 `▷예 아니오`,
+  `예▷아니오`, 다시 LEFT 후 `▷예 아니오`가 모두 글자 가림 없이 유지된다.
+  전투 계열 3개도 초기/LEFT/RIGHT에서 커서가 글자를 가리지 않고 흔들림이 없다.
+  세부 표는 `docs/screenshots/yesno_sweep_2026-07-06/review.md`,
+  JSON 증거는 `report_after_fix.json`.
+- **게이트**: `build_korean_full.py`, `qa_transient_overlays.py`, `py_compile`,
+  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `git diff --check` 통과.
+  후속으로 compact visual matrix/manual evidence, Part1 link sweep, scene residual evidence,
+  2026-07-06 BPS/IPS/manifest를 current SHA에 맞춰 재생성했다. `verify_dist_integrity.py` PASS,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json` PASS.

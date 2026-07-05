@@ -3361,3 +3361,100 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `qa_visual_regions.py --asset-only`, `py_compile`, `git diff --check`를 통과했다.
   UI 에디터 `verify_scene_editor_apply_state.py`와 `verify_scene_editor_roundtrip.py`도
   8794 서버/비밀번호 인증 기준 새 SHA로 PASS.
+
+## [2026-07-05] Part1 전투 액션 메뉴 BG 깨짐 수정 및 오검출 범위 전수 차단
+
+- 사용자 제보 화면을 실제 mGBA 인게임 루트로 재현했다. 수정 전 KR ROM은 액션 메뉴 창의 BG/window tile이
+  크게 깨졌고, 원본 JP는 정상 프레임이었다.
+- 원인 `0x00B7F89B` false text row 및 같은 계열 `build_scene_catalog.py` low-confidence false-text range
+  33개를 `tools/build_korean_full.py::DENY_REGIONS`에 추가했다. 새 빌드 통계는 text writes 33429,
+  deny/data-skip 192, overflow 0, no_ko 0이다.
+- 전수 감사 `temp/false_text_deny_audit_20260705.json`:
+  false-text range 33개, CSV 행 116개, denied 116, open 0, range diff 0.
+  별도 확인에서 `0xB7F800..0xB7F900`, `0x800000..0x800900`,
+  `0x89BB00..0x8ABE20`, `0xBF2800..0xBF2840`, `0xD64000..0xD7D000`,
+  `0xE77000..0xE8BF00` 모두 원본 대비 diff 0이다.
+- 인게임 비교 시트:
+  `temp/action_menu_fix_verify_20260705/ingame_action_menu_original_before_fixed.png`.
+  원본 JP, 수정 전 KR, 수정 후 KR을 같은 저장 파일/입력 경로로 캡처했고 수정 후 메뉴 프레임/배경 깨짐은 사라졌다.
+- 후속 배포 게이트 재동기화 중 Part1 대사 문장부호 게이트가 잡은 `0x815C` 잔존도 함께 닫았다.
+  Part1 대사에서 ASCII `-`/`=`는 name-grid 장음 슬롯(`ㅡ`)과 겹치는 SJIS long-mark 계열 대신
+  전각 공백으로 안전화했고, `qa_part1_dialogue_punctuation.py` issue 0을 확인했다.
+- 최종 output 3종 SHA는 모두
+  `62847c0dc185cdfb21ddfc9ef8ccc10dd4daac1a9eb4e899aca7581c41127c03`.
+  `prepare_patch_distribution.py --date 2026-07-05`로 BPS/IPS/manifest를 같은 SHA에 맞춰 재생성했다.
+  통과: `qa_text_fit.py`, `qa_placeholder_residuals.py`(ROM hit 0), `qa_japanese_residuals.py`,
+  `phase6_basic_test.py output/game_wars_korean_full.gba`,
+  `qa_visual_regions.py --rom output/game_wars_korean_full.gba`,
+  `qa_part1_dialogue_punctuation.py`, `audit_scene_residual_scans.py --strict`,
+  `qa_part1_compact_help.py`, `verify_dist_integrity.py`.
+
+## [2026-07-05] Part1 전투 액션 메뉴 아이콘/라벨 overlay 수정 완료
+
+- `patch_part2_action_menu_icon_labels()`의 raw icon source 덮어쓰기 방식은 완전히 no-op 처리했다.
+  액션 메뉴 아이콘 source range 7개는 원본 ROM과 byte-identical로 보존된다.
+- 라벨 blank 회귀는 `0x08B19804` tilemap DMA 직전 content-gated hook으로 수정했다.
+  hook body는 `0xF3F000`에 배치하며, 원본 공격/대기 icon tile pattern이 맞는 메뉴에서만
+  `공격/대기` label tilemap entries를 `8008/800A/8009/800B/808C/808E/808D/808F`로 복구한다.
+- 실제 비교 시트:
+  `temp/action_menu_icon_fix_verify_20260705/ingame_action_menu_original_vs_broken_vs_fixed.png`.
+  current ROM 패널에서 `공격/대기`가 아이콘과 겹치지 않고 출력된다.
+- `tools/qa_visual_regions.py`에 인게임 action menu 검사 추가:
+  icon source preservation, VRAM tilemap 16-entry exact match, label near-black pixels
+  `attack_black=72`, `wait_black=96`.
+- 최종 output 3종 SHA:
+  `c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72`.
+  `prepare_patch_distribution.py --date 2026-07-05`로 BPS/IPS/manifest 재생성, round-trip OK.
+  `verify_dist_integrity.py` PASS, `run_release_qa.py --timeout 300 --report temp/release_qa_report_action_menu_overlay_20260705.json` PASS.
+
+## [2026-07-06] 89a 항복 확인 예/아니오 선택지 흔들림/커서 겹침 수정
+
+- `0x00A34B6C` 항복 확인 선택지 row를 `예　아뇨`에서 원본 커서 셀 구조를 보존한
+  `　예　　　아니오`로 변경했다. 이 문자열은 16B 정확 길이라 원본 `　はい　　いいえ` 슬롯에
+  NUL/후속 데이터 침범 없이 들어간다.
+- 수정 전 스윕은 확인창 생성 뒤 `아뇨▷`, 방향키 입력 뒤 `▷ 아뇨`로 바뀌어 순간 위치 변경이 보였다.
+  수정 후 스윕은 생성 직후 `post_a_f000..f160`과 LEFT/RIGHT/UP/DOWN 후 12/30f 모두 커서가 글자 앞에 놓인다.
+- 비교 시트:
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet_early_frames.png`.
+  안정 구간 원본-row 참조 시트:
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet.png`.
+  수정 전 스윕:
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/before_current_sweep.png`.
+  수정 후 스윕:
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/after_fixed_sweep.png`.
+- 새 output 3종 SHA는 모두
+  `d91091854a0fc0bbe9dd46d7eb9afbd4648ef36475e40d90b4315bca47df21dd`.
+  통과: `build_korean_full.py`, `qa_transient_overlays.py`, `qa_text_fit.py`,
+  `qa_placeholder_residuals.py`, `qa_japanese_residuals.py --min-score 13`,
+  `phase6_basic_test.py output/game_wars_korean_full.gba`,
+  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `py_compile`.
+
+## [2026-07-06] 예/아니오 확인창 추가 스윕과 이름 확인 RIGHT 커서 수정 완료
+
+- 추가 검수 화면 4개를 새 SHA
+  `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`에서 재캡처했다:
+  1편 이름 확인, 전투 메뉴 항복 확인, 전투 메뉴 모드 복귀 확인, 89a 항복 확인 pre-state.
+- 1편 이름 확인은 원본/최종 fresh 비교
+  `docs/screenshots/yesno_sweep_2026-07-06/name_confirm_fresh_original_vs_final_after_fix.png`에서
+  `▷예 아니오`, `예▷아니오`, 다시 LEFT 후 `▷예 아니오`가 모두 글자 가림 없이 유지된다.
+- 전투 계열 3개는 `docs/screenshots/yesno_sweep_2026-07-06/yesno_final_screen_sheet_after_fix.png`와
+  `yesno_final_bottom_crops_after_fix.png`에서 초기/LEFT/RIGHT 모두 흔들림 없음.
+- read-watch 결과: 이름 확인 `D8273C` 4회/`D835BC` 4회, 전투 계열 `A34B6C` 23/23/21회.
+  상세 표는 `docs/screenshots/yesno_sweep_2026-07-06/review.md`.
+- 통과: `build_korean_full.py`, `qa_transient_overlays.py`, `py_compile`,
+  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `git diff --check`.
+
+## [2026-07-06] 예/아니오 수정 후 배포/evidence 재동기화 완료
+
+- 최종 output 3종 SHA는 모두
+  `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`.
+- compact display 증거를 current SHA로 재생성했다. manual visual evidence는 13건 모두 current/accepted이고,
+  matrix는 `manual_current=13`, `manual_accepted=13`, B8 direct visual evidence 13을 기록한다.
+- Part1 link map-list full sweep을 같은 SHA로 재실행했다. 180 step, unique crop 180, low-bright anomaly 0.
+  scene residual/E8 visual evidence도 current SHA 기준으로 재검증했고 critical 0이다.
+- `prepare_patch_distribution.py --date 2026-07-06`로
+  `dist/game_wars_korean_full_2026-07-06.bps`와 `.ips`를 생성했고, manifest/preview와 patch round-trip SHA가
+  모두 `83ae254b...`로 일치한다.
+- 최종 통과:
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json`.

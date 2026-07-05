@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
- "git_commit": "db4b9ae",
+ "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+ "git_commit": "0850e0c",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -385,13 +385,13 @@
    "name": "07_part2_main_menu",
    "mode": "fresh",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -399,13 +399,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -414,73 +414,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -488,7 +488,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -496,7 +496,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -504,7 +504,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -512,7 +512,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -522,7 +522,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -530,7 +530,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -538,7 +538,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -546,7 +546,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -554,7 +554,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -565,7 +565,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -573,7 +573,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -581,7 +581,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -589,7 +589,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -599,7 +599,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -607,7 +607,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -615,7 +615,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -623,7 +623,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -631,7 +631,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -639,7 +639,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -647,7 +647,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -655,7 +655,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -663,7 +663,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -671,7 +671,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -679,7 +679,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -687,7 +687,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -695,7 +695,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -703,7 +703,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -711,7 +711,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -719,7 +719,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -727,7 +727,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -735,7 +735,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -743,7 +743,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -751,7 +751,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -759,7 +759,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -767,7 +767,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -775,7 +775,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -783,7 +783,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -791,7 +791,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -799,7 +799,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -807,7 +807,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "nav": [
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,13 +862,13 @@
    "name": "scene_23a_part2_wars_shop",
    "mode": "savestate",
    "scene_id": "23a_part2_wars_shop",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_23a_part2_wars_shop/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_23a_part2_wars_shop/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -876,13 +876,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -891,73 +891,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -965,7 +965,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -973,7 +973,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -981,7 +981,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -989,7 +989,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -999,7 +999,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -1007,7 +1007,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -1015,7 +1015,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -1023,7 +1023,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -1031,7 +1031,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -1042,7 +1042,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -1050,7 +1050,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -1058,7 +1058,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -1066,7 +1066,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -1076,7 +1076,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -1084,7 +1084,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -1092,7 +1092,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -1100,7 +1100,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -1108,7 +1108,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -1116,7 +1116,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -1124,7 +1124,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -1132,7 +1132,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -1140,7 +1140,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -1148,7 +1148,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -1156,7 +1156,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -1164,7 +1164,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -1172,7 +1172,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -1180,7 +1180,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -1188,7 +1188,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -1196,7 +1196,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -1204,7 +1204,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -1212,7 +1212,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -1220,7 +1220,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -1228,7 +1228,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -1236,7 +1236,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -1244,7 +1244,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -1252,7 +1252,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -1260,7 +1260,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -1268,7 +1268,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -1276,7 +1276,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -1284,7 +1284,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0",
@@ -1295,7 +1295,7 @@
      40
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_scene_23a_part2_wars_shop/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_23a_part2_wars_shop/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -1306,13 +1306,13 @@
    "name": "scene_86_common_compact_menu_tables",
    "mode": "savestate",
    "scene_id": "86_common_compact_menu_tables",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_86_common_compact_menu_tables/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_86_common_compact_menu_tables/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -1320,13 +1320,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -1335,73 +1335,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -1409,7 +1409,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -1417,7 +1417,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -1425,7 +1425,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -1433,7 +1433,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -1443,7 +1443,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -1451,7 +1451,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -1459,7 +1459,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -1467,7 +1467,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -1475,7 +1475,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -1486,7 +1486,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -1494,7 +1494,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -1502,7 +1502,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -1510,7 +1510,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -1520,7 +1520,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -1528,7 +1528,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -1536,7 +1536,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -1544,7 +1544,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -1552,7 +1552,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -1560,7 +1560,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -1568,7 +1568,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -1576,7 +1576,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -1584,7 +1584,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -1592,7 +1592,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -1600,7 +1600,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -1608,7 +1608,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -1616,7 +1616,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -1624,7 +1624,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -1632,7 +1632,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -1640,7 +1640,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -1648,7 +1648,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -1656,7 +1656,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -1664,7 +1664,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -1672,7 +1672,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -1680,7 +1680,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -1688,7 +1688,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -1696,7 +1696,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -1704,7 +1704,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -1712,7 +1712,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -1720,7 +1720,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -1728,7 +1728,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0",
@@ -1739,7 +1739,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_scene_86_common_compact_menu_tables/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_86_common_compact_menu_tables/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -1750,13 +1750,13 @@
    "name": "scene_87_common_rule_settings",
    "mode": "fresh",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -1764,13 +1764,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -1779,73 +1779,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -1853,7 +1853,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -1861,7 +1861,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -1869,7 +1869,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -1877,7 +1877,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -1887,7 +1887,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -1895,7 +1895,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -1903,7 +1903,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -1911,7 +1911,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -1919,7 +1919,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -1930,7 +1930,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -1938,7 +1938,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -1946,7 +1946,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -1954,7 +1954,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -1964,7 +1964,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -1972,7 +1972,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -1980,7 +1980,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -1988,7 +1988,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -1996,7 +1996,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -2004,7 +2004,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -2012,7 +2012,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -2020,7 +2020,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -2028,7 +2028,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -2036,7 +2036,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -2044,7 +2044,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -2052,7 +2052,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -2060,7 +2060,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -2068,7 +2068,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -2076,7 +2076,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -2084,7 +2084,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -2092,7 +2092,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -2100,7 +2100,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -2108,7 +2108,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -2116,7 +2116,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -2124,7 +2124,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -2132,7 +2132,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -2140,7 +2140,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -2148,7 +2148,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -2156,7 +2156,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -2164,7 +2164,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -2172,7 +2172,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "nav": [
@@ -2306,7 +2306,7 @@
      60
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -2430,13 +2430,13 @@
    "name": "30_battle_attack",
    "mode": "savestate",
    "scene_id": "26_part2_battle_labels",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_30_battle_attack/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_30_battle_attack/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -2444,13 +2444,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -2459,73 +2459,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -2533,7 +2533,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -2541,7 +2541,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -2549,7 +2549,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -2557,7 +2557,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -2567,7 +2567,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -2575,7 +2575,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -2583,7 +2583,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -2591,7 +2591,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -2599,7 +2599,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -2610,7 +2610,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -2618,7 +2618,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -2626,7 +2626,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -2634,7 +2634,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -2644,7 +2644,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -2652,7 +2652,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -2660,7 +2660,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -2668,7 +2668,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -2676,7 +2676,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -2684,7 +2684,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -2692,7 +2692,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -2700,7 +2700,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -2708,7 +2708,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -2716,7 +2716,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -2724,7 +2724,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -2732,7 +2732,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -2740,7 +2740,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -2748,7 +2748,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -2756,7 +2756,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -2764,7 +2764,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -2772,7 +2772,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -2780,7 +2780,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -2788,7 +2788,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -2796,7 +2796,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -2804,7 +2804,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -2812,7 +2812,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -2820,7 +2820,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -2828,7 +2828,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -2836,7 +2836,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -2844,7 +2844,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -2852,7 +2852,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
@@ -2863,7 +2863,7 @@
      30
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_30_battle_attack/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_30_battle_attack/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -2874,13 +2874,13 @@
    "name": "scene_27_part2_battle_objlabels",
    "mode": "savestate",
    "scene_id": "27_part2_battle_objlabels",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_27_part2_battle_objlabels/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_27_part2_battle_objlabels/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -2888,13 +2888,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -2903,73 +2903,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -2977,7 +2977,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -2985,7 +2985,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -2993,7 +2993,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -3001,7 +3001,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -3011,7 +3011,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -3019,7 +3019,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -3027,7 +3027,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -3035,7 +3035,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -3043,7 +3043,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -3054,7 +3054,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -3062,7 +3062,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -3070,7 +3070,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -3078,7 +3078,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -3088,7 +3088,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -3096,7 +3096,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -3104,7 +3104,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -3112,7 +3112,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -3120,7 +3120,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -3128,7 +3128,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -3136,7 +3136,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -3144,7 +3144,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -3152,7 +3152,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -3160,7 +3160,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -3168,7 +3168,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -3176,7 +3176,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -3184,7 +3184,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -3192,7 +3192,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -3200,7 +3200,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -3208,7 +3208,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -3216,7 +3216,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -3224,7 +3224,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -3232,7 +3232,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -3240,7 +3240,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -3248,7 +3248,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -3256,7 +3256,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -3264,7 +3264,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -3272,7 +3272,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -3280,7 +3280,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -3288,7 +3288,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -3296,7 +3296,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "state": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0",
@@ -3307,7 +3307,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_scene_27_part2_battle_objlabels/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_27_part2_battle_objlabels/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -3318,13 +3318,13 @@
    "name": "scene_26a_part2_battle_start_overlay_f060",
    "mode": "savestate",
    "scene_id": "26a_part2_battle_start_overlays",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_26a_part2_battle_start_overlay_f060/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_26a_part2_battle_start_overlay_f060/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -3332,13 +3332,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -3347,73 +3347,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -3421,7 +3421,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -3429,7 +3429,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -3437,7 +3437,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -3445,7 +3445,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -3455,7 +3455,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -3463,7 +3463,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -3471,7 +3471,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -3479,7 +3479,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -3487,7 +3487,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -3498,7 +3498,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -3506,7 +3506,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -3514,7 +3514,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -3522,7 +3522,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -3532,7 +3532,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -3540,7 +3540,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -3548,7 +3548,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -3556,7 +3556,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -3564,7 +3564,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -3572,7 +3572,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -3580,7 +3580,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -3588,7 +3588,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -3596,7 +3596,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -3604,7 +3604,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -3612,7 +3612,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -3620,7 +3620,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -3628,7 +3628,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -3636,7 +3636,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -3644,7 +3644,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -3652,7 +3652,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -3660,7 +3660,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -3668,7 +3668,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -3676,7 +3676,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -3684,7 +3684,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -3692,7 +3692,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -3700,7 +3700,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -3708,7 +3708,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -3716,7 +3716,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -3724,7 +3724,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -3732,7 +3732,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -3740,7 +3740,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
@@ -3751,7 +3751,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_scene_26a_part2_battle_start_overlay_f060/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_26a_part2_battle_start_overlay_f060/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -3762,13 +3762,13 @@
    "name": "41_part1_operation_room",
    "mode": "fresh",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -3776,13 +3776,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -3791,73 +3791,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -3865,7 +3865,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -3873,7 +3873,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -3881,7 +3881,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -3889,7 +3889,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -3899,7 +3899,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -3907,7 +3907,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -3915,7 +3915,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -3923,7 +3923,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -3931,7 +3931,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -3942,7 +3942,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -3950,7 +3950,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -3958,7 +3958,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -3966,7 +3966,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -3976,7 +3976,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -3984,7 +3984,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -3992,7 +3992,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -4000,7 +4000,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -4008,7 +4008,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -4016,7 +4016,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -4024,7 +4024,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -4032,7 +4032,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -4040,7 +4040,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -4048,7 +4048,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -4056,7 +4056,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -4064,7 +4064,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -4072,7 +4072,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -4080,7 +4080,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -4088,7 +4088,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -4096,7 +4096,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -4104,7 +4104,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -4112,7 +4112,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -4120,7 +4120,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -4128,7 +4128,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -4136,7 +4136,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -4144,7 +4144,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -4152,7 +4152,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -4160,7 +4160,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -4168,7 +4168,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -4176,7 +4176,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -4184,7 +4184,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "nav": [
@@ -4337,7 +4337,7 @@
      200
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/screen_41_part1_operation_room/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_41_part1_operation_room/frame.png",
    "hit_count": 1758,
    "direct_target_hits": [],
    "hits": [
@@ -9949,13 +9949,13 @@
    "name": "co_profile_maxg",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/freshrender_co_profile_maxg/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_maxg/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -9963,13 +9963,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -9978,73 +9978,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -10052,7 +10052,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -10060,7 +10060,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -10068,7 +10068,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -10076,7 +10076,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -10086,7 +10086,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -10094,7 +10094,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -10102,7 +10102,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -10110,7 +10110,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -10118,7 +10118,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -10129,7 +10129,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -10137,7 +10137,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -10145,7 +10145,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -10153,7 +10153,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -10163,7 +10163,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -10171,7 +10171,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -10179,7 +10179,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -10187,7 +10187,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -10195,7 +10195,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -10203,7 +10203,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -10211,7 +10211,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -10219,7 +10219,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -10227,7 +10227,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -10235,7 +10235,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -10243,7 +10243,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -10251,7 +10251,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -10259,7 +10259,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -10267,7 +10267,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -10275,7 +10275,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -10283,7 +10283,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -10291,7 +10291,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -10299,7 +10299,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -10307,7 +10307,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -10315,7 +10315,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -10323,7 +10323,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -10331,7 +10331,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -10339,7 +10339,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -10347,7 +10347,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -10355,7 +10355,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -10363,7 +10363,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -10371,7 +10371,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "refresh": [
@@ -10381,7 +10381,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/freshrender_co_profile_maxg/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_maxg/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -10392,13 +10392,13 @@
    "name": "co_profile_domino",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "breakpoint_log": "temp/compact_renderer_trace_20260627/freshrender_co_profile_domino/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_domino/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
      "label": "a2_compact_renderer",
      "aliases": [],
-     "response": "OK break 08380564 ok=1"
+     "response": "OK break 08380564 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889448,
@@ -10406,13 +10406,13 @@
      "aliases": [
       "code_context_fn_083806A8"
      ],
-     "response": "OK break 083806A8 ok=1"
+     "response": "OK break 083806A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892500,
      "label": "a2_compact_callsite_2",
      "aliases": [],
-     "response": "OK break 08381294 ok=1"
+     "response": "OK break 08381294 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998212,
@@ -10421,73 +10421,73 @@
       "code_context_fn_08B3C184",
       "code_context_fn_08B3C184"
      ],
-     "response": "OK break 08B3C184 ok=1"
+     "response": "OK break 08B3C184 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998544,
      "label": "b84_pointer_table_user_candidate_1",
      "aliases": [],
-     "response": "OK break 08B3C2D0 ok=1"
+     "response": "OK break 08B3C2D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998592,
      "label": "b84_pointer_table_user_candidate_2",
      "aliases": [],
-     "response": "OK break 08B3C300 ok=1"
+     "response": "OK break 08B3C300 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998624,
      "label": "b84_pointer_table_user_candidate_3",
      "aliases": [],
-     "response": "OK break 08B3C320 ok=1"
+     "response": "OK break 08B3C320 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999062,
      "label": "b84_pointer_table_user_candidate_4",
      "aliases": [],
-     "response": "OK break 08B3C4D6 ok=1"
+     "response": "OK break 08B3C4D6 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999184,
      "label": "b84_pointer_table_user_candidate_5",
      "aliases": [],
-     "response": "OK break 08B3C550 ok=1"
+     "response": "OK break 08B3C550 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999264,
      "label": "b84_pointer_table_user_candidate_6",
      "aliases": [],
-     "response": "OK break 08B3C5A0 ok=1"
+     "response": "OK break 08B3C5A0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828482,
      "label": "b8_operation_reader_observed_1",
      "aliases": [],
-     "response": "OK break 08B12A82 ok=1"
+     "response": "OK break 08B12A82 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828540,
      "label": "b8_operation_reader_observed_2",
      "aliases": [],
-     "response": "OK break 08B12ABC ok=1"
+     "response": "OK break 08B12ABC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145828628,
      "label": "b8_operation_reader_observed_3",
      "aliases": [],
-     "response": "OK break 08B12B14 ok=1"
+     "response": "OK break 08B12B14 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357772,
      "label": "b8_operation_iwram_reader_observed_1",
      "aliases": [],
-     "response": "OK break 0300660C ok=1"
+     "response": "OK break 0300660C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 50357774,
      "label": "b8_operation_iwram_reader_observed_2",
      "aliases": [],
-     "response": "OK break 0300660E ok=1"
+     "response": "OK break 0300660E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137889488,
@@ -10495,7 +10495,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083806D0 ok=1"
+     "response": "OK break 083806D0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892536,
@@ -10503,7 +10503,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 083812B8 ok=1"
+     "response": "OK break 083812B8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 137892404,
@@ -10511,7 +10511,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08381234 ok=1"
+     "response": "OK break 08381234 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883246,
@@ -10519,7 +10519,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2006E ok=1"
+     "response": "OK break 08B2006E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883168,
@@ -10529,7 +10529,7 @@
      "aliases": [
       "code_context_fn_08B20020"
      ],
-     "response": "OK break 08B20020 ok=1"
+     "response": "OK break 08B20020 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145883260,
@@ -10537,7 +10537,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B2007C ok=1"
+     "response": "OK break 08B2007C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965840,
@@ -10545,7 +10545,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B34310 ok=1"
+     "response": "OK break 08B34310 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145965736,
@@ -10553,7 +10553,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B342A8 ok=1"
+     "response": "OK break 08B342A8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993048,
@@ -10561,7 +10561,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD58 ok=1"
+     "response": "OK break 08B3AD58 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145992928,
@@ -10572,7 +10572,7 @@
       "code_context_fn_08B3ACE0",
       "code_context_fn_08B3ACE0"
      ],
-     "response": "OK break 08B3ACE0 ok=1"
+     "response": "OK break 08B3ACE0 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993102,
@@ -10580,7 +10580,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AD8E ok=1"
+     "response": "OK break 08B3AD8E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993162,
@@ -10588,7 +10588,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3ADCA ok=1"
+     "response": "OK break 08B3ADCA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993266,
@@ -10596,7 +10596,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE32 ok=1"
+     "response": "OK break 08B3AE32 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993212,
@@ -10606,7 +10606,7 @@
      "aliases": [
       "code_context_fn_08B3ADFC"
      ],
-     "response": "OK break 08B3ADFC ok=1"
+     "response": "OK break 08B3ADFC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993302,
@@ -10614,7 +10614,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AE56 ok=1"
+     "response": "OK break 08B3AE56 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993798,
@@ -10622,7 +10622,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3B046 ok=1"
+     "response": "OK break 08B3B046 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145993556,
@@ -10630,7 +10630,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3AF54 ok=1"
+     "response": "OK break 08B3AF54 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998250,
@@ -10638,7 +10638,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1AA ok=1"
+     "response": "OK break 08B3C1AA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998270,
@@ -10646,7 +10646,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3C1BE ok=1"
+     "response": "OK break 08B3C1BE ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998522,
@@ -10654,7 +10654,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C2BA ok=1"
+     "response": "OK break 08B3C2BA ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145998420,
@@ -10662,7 +10662,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C254 ok=1"
+     "response": "OK break 08B3C254 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999116,
@@ -10670,7 +10670,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C50C ok=1"
+     "response": "OK break 08B3C50C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 145999064,
@@ -10678,7 +10678,7 @@
      "source": "compact_display_code_context",
      "source_count": 3,
      "aliases": [],
-     "response": "OK break 08B3C4D8 ok=1"
+     "response": "OK break 08B3C4D8 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012272,
@@ -10686,7 +10686,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F870 ok=1"
+     "response": "OK break 08B3F870 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012168,
@@ -10694,7 +10694,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F808 ok=1"
+     "response": "OK break 08B3F808 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012446,
@@ -10702,7 +10702,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F91E ok=1"
+     "response": "OK break 08B3F91E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012412,
@@ -10710,7 +10710,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F8FC ok=1"
+     "response": "OK break 08B3F8FC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012558,
@@ -10718,7 +10718,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98E ok=1"
+     "response": "OK break 08B3F98E ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012556,
@@ -10726,7 +10726,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F98C ok=1"
+     "response": "OK break 08B3F98C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012642,
@@ -10734,7 +10734,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9E2 ok=1"
+     "response": "OK break 08B3F9E2 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012636,
@@ -10742,7 +10742,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3F9DC ok=1"
+     "response": "OK break 08B3F9DC ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012684,
@@ -10750,7 +10750,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA0C ok=1"
+     "response": "OK break 08B3FA0C ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146012680,
@@ -10758,7 +10758,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B3FA08 ok=1"
+     "response": "OK break 08B3FA08 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029650,
@@ -10766,7 +10766,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C52 ok=1"
+     "response": "OK break 08B43C52 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146029608,
@@ -10774,7 +10774,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B43C28 ok=1"
+     "response": "OK break 08B43C28 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068840,
@@ -10782,7 +10782,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D568 ok=1"
+     "response": "OK break 08B4D568 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146068804,
@@ -10790,7 +10790,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4D544 ok=1"
+     "response": "OK break 08B4D544 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071908,
@@ -10798,7 +10798,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E164 ok=1"
+     "response": "OK break 08B4E164 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 146071556,
@@ -10806,7 +10806,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08B4E004 ok=1"
+     "response": "OK break 08B4E004 ok=1 hasBreakpoints=1"
     },
     {
      "addr": 148409396,
@@ -10814,7 +10814,7 @@
      "source": "compact_display_code_context",
      "source_count": 2,
      "aliases": [],
-     "response": "OK break 08D88C34 ok=1"
+     "response": "OK break 08D88C34 ok=1 hasBreakpoints=1"
     }
    ],
    "refresh": [
@@ -10829,7 +10829,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260627/freshrender_co_profile_domino/frame.png",
+   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_domino/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],

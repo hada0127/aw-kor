@@ -1,0 +1,167 @@
+{
+  "state": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0",
+  "base_rom_sha256": "d91091854a0fc0bbe9dd46d7eb9afbd4648ef36475e40d90b4315bca47df21dd",
+  "variants": {
+    "before_old_row": "temp/surrender_yesno_probe/early_frame_compare/before_old_row.gba",
+    "reference_original_row": "temp/surrender_yesno_probe/early_frame_compare/reference_original_row.gba",
+    "patched_fixed": "temp/surrender_yesno_probe/early_frame_compare/patched_fixed.gba"
+  },
+  "row_addr": "0x00A34B6C",
+  "row_len": 16,
+  "crop_box": [
+    80,
+    124,
+    240,
+    160
+  ],
+  "frames": [
+    "post_a_f000",
+    "post_a_f004",
+    "post_a_f008",
+    "post_a_f010",
+    "post_a_f012",
+    "post_a_f020",
+    "post_a_f040",
+    "post_a_f060",
+    "post_a_f090",
+    "post_a_f120",
+    "post_a_f160",
+    "left12",
+    "right12",
+    "right30"
+  ],
+  "choice_crop_metrics": {
+    "before_old_row": [
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f120",
+        "choice_crop_diff_pixels": 27
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f160",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right30",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left12",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left30",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "up12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "down12",
+        "choice_crop_diff_pixels": 0
+      }
+    ],
+    "reference_original_row": [
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f120",
+        "choice_crop_diff_pixels": 27
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f160",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right30",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left12",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left30",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "up12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "down12",
+        "choice_crop_diff_pixels": 0
+      }
+    ],
+    "patched_fixed": [
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f120",
+        "choice_crop_diff_pixels": 27
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "post_a_f160",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "right30",
+        "choice_crop_diff_pixels": 39
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left12",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "left30",
+        "choice_crop_diff_pixels": 60
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "up12",
+        "choice_crop_diff_pixels": 0
+      },
+      {
+        "against": "post_a_f090",
+        "frame": "down12",
+        "choice_crop_diff_pixels": 0
+      }
+    ]
+  },
+  "sheets": {
+    "early_comparison": "docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet_early_frames.png",
+    "before_old_row": "docs/screenshots/surrender_yesno_stability_fix_2026-07-06/before_old_row_early_sweep.png",
+    "reference_original_row": "docs/screenshots/surrender_yesno_stability_fix_2026-07-06/reference_original_row_early_sweep.png",
+    "patched_fixed": "docs/screenshots/surrender_yesno_stability_fix_2026-07-06/patched_fixed_early_sweep.png"
+  }
+}

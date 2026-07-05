@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-07-06 06:31:31 +0900",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "cases": [
+    {
+      "id": "part1_name_confirm",
+      "title": "1편 이름 확인",
+      "note": "coldboot fresh route + OK",
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/part1_name_confirm",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/part1_name_confirm/yesno.watch.log",
+      "watch_hit_lines": 49,
+      "watch_hit_counts": {
+        "battle_A34B6C_row": 0,
+        "name_D8273C_short": 4,
+        "name_D835BC_row": 4
+      }
+    },
+    {
+      "id": "battle_surrender_from_menu",
+      "title": "전투 메뉴 항복 확인",
+      "note": "system menu DOWN,A",
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_surrender_from_menu",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_surrender_from_menu/yesno.watch.log",
+      "watch_hit_lines": 111,
+      "watch_hit_counts": {
+        "battle_A34B6C_row": 23,
+        "name_D8273C_short": 0,
+        "name_D835BC_row": 0
+      }
+    },
+    {
+      "id": "battle_mode_return_confirm",
+      "title": "전투 메뉴 모드 복귀 확인",
+      "note": "system menu DOWNx4,A",
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_mode_return_confirm",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_mode_return_confirm/yesno.watch.log",
+      "watch_hit_lines": 111,
+      "watch_hit_counts": {
+        "battle_A34B6C_row": 23,
+        "name_D8273C_short": 0,
+        "name_D835BC_row": 0
+      }
+    },
+    {
+      "id": "battle_surrender_direct",
+      "title": "89a 항복 확인 pre-state",
+      "note": "pre-surrender state, A redraw",
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_surrender_direct",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/final_after_fix_capture/battle_surrender_direct/yesno.watch.log",
+      "watch_hit_lines": 109,
+      "watch_hit_counts": {
+        "battle_A34B6C_row": 21,
+        "name_D8273C_short": 0,
+        "name_D835BC_row": 0
+      }
+    }
+  ],
+  "watch_targets": [
+    {
+      "offset": "0x00A34B6C",
+      "gba": "0x08A34B6C",
+      "label": "battle_A34B6C_row",
+      "size": 16
+    },
+    {
+      "offset": "0x00D8273C",
+      "gba": "0x08D8273C",
+      "label": "name_D8273C_short",
+      "size": 8
+    },
+    {
+      "offset": "0x00D835BC",
+      "gba": "0x08D835BC",
+      "label": "name_D835BC_row",
+      "size": 16
+    }
+  ],
+  "sheets": {
+    "final_screen": "/Users/tarucy/project/aw-kor/docs/screenshots/yesno_sweep_2026-07-06/yesno_final_screen_sheet_after_fix.png",
+    "final_bottom_crops": "/Users/tarucy/project/aw-kor/docs/screenshots/yesno_sweep_2026-07-06/yesno_final_bottom_crops_after_fix.png",
+    "final_early_crops": "/Users/tarucy/project/aw-kor/docs/screenshots/yesno_sweep_2026-07-06/yesno_final_early_frame_crops_after_fix.png",
+    "name_fresh_compare": "/Users/tarucy/project/aw-kor/docs/screenshots/yesno_sweep_2026-07-06/name_confirm_fresh_original_vs_final_after_fix.png"
+  }
+}

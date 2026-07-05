@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
- "git_commit": "db4b9ae",
+ "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+ "git_commit": "0850e0c",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -2936,7 +2936,7 @@
      "address": "0x00B81EB8",
      "group_id": "b8_compact_display_table_all",
      "dialogue_group_id": "g_00B81EB8",
-     "ko": "호이프 해군터보",
+     "ko": "호이프 해군 터보",
      "ja": "ホイップ海軍ターボ！",
      "kind": "import-csv",
      "pointer_ref_count": 2,

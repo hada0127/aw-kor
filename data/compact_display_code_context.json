@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced",
- "git_commit": "db4b9ae",
+ "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+ "git_commit": "0850e0c",
  "source": "data/compact_display_xref_analysis.json",
  "summary": {
   "literal_entry_count": 695,
@@ -4656,7 +4656,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EB8",
-   "target_text": "호이프 해군터보",
+   "target_text": "호이프 해군 터보",
    "ref_offset": "0x00D8AE4C",
    "ref_address": "0x08D8AE4C",
    "ref_kind": "target_pointer_ref",
@@ -7620,7 +7620,7 @@
   {
    "group_id": "b8_compact_display_table_all",
    "target_address": "0x00B81EB8",
-   "target_text": "호이프 해군터보",
+   "target_text": "호이프 해군 터보",
    "ref_offset": "0x00F30BE8",
    "ref_address": "0x08F30BE8",
    "ref_kind": "target_pointer_ref",

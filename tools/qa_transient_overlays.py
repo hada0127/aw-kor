@@ -22,6 +22,16 @@ KANJI_TABLE = 0xB80B7C
 KANJI_TABLE_END = 0xB8180C
 FONT_BASE = 0xB974D0
 PART1_DAY_BANNER_LZ77 = 0xEE5E14
+SURRENDER_YESNO_ROW = 0xA34B6C
+SURRENDER_YESNO_LEN = 16
+SURRENDER_YESNO_TEXT = "　예　　　아니오"
+PART1_YESNO_HOOK_FILE = 0xF10000
+PART1_YESNO_CURSOR_BRANCH_OFF = 0x98
+PART1_YESNO_CURSOR_FIX_OFF = 0x154
+PART1_YESNO_CURSOR_BRANCH = bytes.fromhex("5ce0")
+PART1_YESNO_CURSOR_FIX = bytes.fromhex(
+    "04480188044a914203d082800348044a8280ffbd"
+) + struct.pack("<I", 0x060060CE) + struct.pack("<I", 0x0000A1BA) + struct.pack("<I", 0x0600610E) + struct.pack("<I", 0x0000A1BB)
 
 RAW_TITLE_PATTERNS = {
     "part1 opening battle title": "序盤戦".encode("shift_jis"),
@@ -42,6 +52,38 @@ REQUIRED_KANJI_SUBS = {
 
 def read(path: Path) -> bytes:
     return path.read_bytes()
+
+
+def load_syllable_codes() -> dict[str, int]:
+    path = ROOT / "data" / "syllable_to_code_2350.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    raw = data.get("map", data)
+    out: dict[str, int] = {}
+    for key, value in raw.items():
+        if not isinstance(key, str) or len(key) != 1:
+            continue
+        if isinstance(value, str):
+            out[key] = int(value, 16)
+        else:
+            out[key] = int(value)
+    return out
+
+
+def encode_korean_ui(text: str, syllable_codes: dict[str, int]) -> bytes:
+    out = bytearray()
+    for ch in text:
+        if "가" <= ch <= "힣":
+            code = syllable_codes[ch]
+            out += bytes([code >> 8, code & 0xFF])
+        elif ch == "　":
+            out += b"\x81\x40"
+        elif ch == " ":
+            out += b"\x20"
+        elif 0x20 <= ord(ch) <= 0x7E:
+            out.append(ord(ch))
+        else:
+            out += ch.encode("shift_jis")
+    return bytes(out)
 
 
 def sjis_code(ch: str) -> int:
@@ -134,6 +176,33 @@ def main() -> int:
         issues.append({"type": "missing_rom", "path": str(ROM.relative_to(ROOT))})
     if not original:
         issues.append({"type": "missing_original", "path": str(ORIGINAL.relative_to(ROOT))})
+
+    surrender_yesno = {"addr": f"0x{SURRENDER_YESNO_ROW:08X}", "expected_text": SURRENDER_YESNO_TEXT}
+    if rom:
+        expected = encode_korean_ui(SURRENDER_YESNO_TEXT, load_syllable_codes())
+        current = rom[SURRENDER_YESNO_ROW:SURRENDER_YESNO_ROW + SURRENDER_YESNO_LEN]
+        surrender_yesno.update({
+            "expected_hex": expected.hex(),
+            "current_hex": current.hex(),
+            "expected_len": len(expected),
+            "slot_len": SURRENDER_YESNO_LEN,
+            "matches": current == expected,
+        })
+        if len(expected) != SURRENDER_YESNO_LEN:
+            issues.append({
+                "type": "surrender_yesno_expected_not_slot_exact",
+                "addr": f"0x{SURRENDER_YESNO_ROW:08X}",
+                "expected_len": len(expected),
+                "slot_len": SURRENDER_YESNO_LEN,
+            })
+        elif current != expected:
+            issues.append({
+                "type": "surrender_yesno_cursor_spacing_regression",
+                "addr": f"0x{SURRENDER_YESNO_ROW:08X}",
+                "expected_text": SURRENDER_YESNO_TEXT,
+                "expected_hex": expected.hex(),
+                "current_hex": current.hex(),
+            })
 
     title_source_status = []
     if rom:
@@ -235,6 +304,32 @@ def main() -> int:
                     "min_gap": 8,
                 })
 
+    part1_yesno_cursor_fix = {}
+    if rom:
+        branch = rom[
+            PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_BRANCH_OFF:
+            PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_BRANCH_OFF + len(PART1_YESNO_CURSOR_BRANCH)
+        ]
+        helper = rom[
+            PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_FIX_OFF:
+            PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_FIX_OFF + len(PART1_YESNO_CURSOR_FIX)
+        ]
+        part1_yesno_cursor_fix = {
+            "branch_file_offset": f"0x{PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_BRANCH_OFF:08X}",
+            "helper_file_offset": f"0x{PART1_YESNO_HOOK_FILE + PART1_YESNO_CURSOR_FIX_OFF:08X}",
+            "branch_matches": branch == PART1_YESNO_CURSOR_BRANCH,
+            "helper_matches": helper == PART1_YESNO_CURSOR_FIX,
+            "expected_branch_hex": PART1_YESNO_CURSOR_BRANCH.hex(),
+            "current_branch_hex": branch.hex(),
+            "expected_helper_hex": PART1_YESNO_CURSOR_FIX.hex(),
+            "current_helper_hex": helper.hex(),
+        }
+        if branch != PART1_YESNO_CURSOR_BRANCH or helper != PART1_YESNO_CURSOR_FIX:
+            issues.append({
+                "type": "part1_name_yesno_cursor_fix_missing",
+                **part1_yesno_cursor_fix,
+            })
+
     report = {
         "rom": str(ROM.relative_to(ROOT)),
         "issue_count": len(issues),
@@ -243,6 +338,8 @@ def main() -> int:
         "raw_pattern_hits": raw_pattern_hits,
         "required_kanji_subs": glyph_status,
         "part1_day_label": day_label,
+        "surrender_yesno": surrender_yesno,
+        "part1_yesno_cursor_fix": part1_yesno_cursor_fix,
     }
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

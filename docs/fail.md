@@ -1263,10 +1263,90 @@ read-watch를 시도했다.
 - **확인된 OK**: output `full/final/title_test` 3종 SHA는 모두
   `e0cfe2363564ad234d61b4e7895ad6ebd0d5396ddf6e9f079ed78470a6ef931f`로 바이트 동일했고,
   Part2 결과 요약 보존, scene_89 source guard, 주요 ROM QA 하위 게이트 일부는 통과했다.
-- **실패 원인**: `dist/manifest*.json`과 BPS/IPS는 이전 SHA
-  `652372cd7fdc6161e81c6e1b0c8e9418b468486576ce33dee72f6c073dd55ced` 기준이라 stale이고,
+- **실패 원인**: `dist/manifest*.json`과 BPS/IPS는 이전 SHA `506a06a8...` 기준이라 stale이고,
   `data/compact_display_visual_matrix.json`, Part1 compact help live-code injection reports,
   scene residual scan evidence도 current SHA로 재생성되지 않았다.
 - **판정**: 이번 작업의 UI 에디터 다운로드/ROM 빌드 정합성은 통과했지만, 배포 패치 출하는 아직 금지한다.
   Phase F에서 `build_compact_display_visual_matrix.py`, compact help 증거, `reverify_scene_residual_scans.py --write`,
   `prepare_patch_distribution.py`를 current SHA 기준으로 다시 실행한 뒤 `verify_dist_integrity.py`를 재통과시켜야 한다.
+- **후속 상태**: 2026-07-05 최종 SHA `62847c0d...`에서 compact/evidence/dist를 재동기화했고
+  `verify_dist_integrity.py` PASS로 이 배포 stale 실패는 닫혔다.
+
+## [2026-07-05] 액션 메뉴 깨짐: sheet/타일 단독 검증 실패와 배포 증거 재동기화 필요
+
+- **실패한 판단**: 액션 메뉴 라벨 sheet와 raw tile만 비교하면 `보급/대기` 한글 타일 자체는 그럴듯하게 보였지만,
+  실제 인게임 BG2 window/pattern 테이블이 깨지는 문제를 놓쳤다. 이 화면은 반드시 mGBA 인게임 루트로 캡처해야 한다.
+- **원인 오판 후보 폐기**: `patch_part2_action_menu_icon_labels` raw tile 복원이나 명령 문자열 폭 보존만으로는
+  깨진 메뉴 배경이 고쳐지지 않았다. `0xB7F800..0xB7F900` 원본 복원이 배경 깨짐을 제거했으므로,
+  원인은 `0x00B7F89B` false text import였다.
+- **전수 검사 보강**: `build_scene_catalog.py`가 low-confidence false-text로 분리한 33개 범위가
+  build deny에 빠져 있으면 같은 문제가 반복될 수 있다. 2026-07-05 수정은 이 범위 전체를
+  `DENY_REGIONS`에 반영했고, `temp/false_text_deny_audit_20260705.json`으로 open row 0/diff 0을 확인했다.
+- **배포 stale 상태도 별도 실패로 확인**: 중간 output SHA `506a06a8...`에서는
+  `dist/manifest*.json`, BPS/IPS, compact visual matrix, compact help live-code injection report,
+  Part1 link sweep report, scene residual scan evidence가 이전 SHA라 `verify_dist_integrity.py`가 실패했다.
+  후속으로 compact/evidence/dist를 current SHA에 맞춰 재생성했고 최종 SHA
+  `62847c0dc185cdfb21ddfc9ef8ccc10dd4daac1a9eb4e899aca7581c41127c03` 기준
+  `verify_dist_integrity.py`는 PASS다.
+- **리뷰 도구 한계**: `temp/action_menu_false_text_review_prompt_20260705.md`로 codex/agy 리뷰를 요청했지만
+  codex는 stdout 0B 상태로 장시간 대기해 중단했고, agy는 `timeout waiting for response`로 종료했다.
+  로그는 `temp/codex_action_menu_false_text_review_20260705.*`,
+  `temp/agy_action_menu_false_text_review_20260705.*`에 있다. 실질 finding 없음으로 간주하지 않는다.
+
+## [2026-07-05] 액션 메뉴 아이콘 겹침: raw icon patch/no-op만으로는 부족
+
+- **실패한 접근**: `patch_part2_action_menu_icon_labels()`가 `0xBEC5DC`, `0xBE79BC` 계열 raw tiles에
+  한글 `보급/대기`류 bitmap을 직접 쓴 것은 잘못이었다. 해당 범위는 label source가 아니라 icon source라서
+  실제 메뉴에서 아이콘과 글자가 겹치고, reused icon variant에는 잘못된 라벨이 붙을 수 있다.
+- **중간 실패**: raw icon patch를 no-op으로 바꾸자 아이콘 겹침은 사라졌지만, 인게임 2항목 메뉴의 라벨 tilemap이
+  전부 blank `0x0164`로 남아 `공격/대기`가 비었다. 즉 "아이콘 원본 보존"만으로는 화면 정상 출력이 아니다.
+- **공간 선택 실수**: 실험 hook을 `0xF50000`에 둔 버전은 site trampoline은 적용됐지만, mission-title glyph blob이
+  뒤에서 이 영역을 blank data로 덮어 hook body가 0으로 사라졌다. 최종 hook space는 `0xF3F000`으로 옮겼고
+  `MISSION_TITLE_TABLE_FILE` 이전 범위 가드를 추가했다.
+- **교훈**: 이 화면은 raw sheet/tile 비교가 아니라 실제 mGBA 화면 + VRAM tilemap dump까지 봐야 한다.
+  최종 `qa_visual_regions.py`는 icon source byte 보존, action menu tilemap exact entries, 화면 픽셀을 모두 검사한다.
+
+## [2026-07-06] 89a 선택지 수정 후 전체 배포 게이트 stale 실패(후속 닫힘)
+
+- **시도**: 89a 항복 확인 예/아니오 선택지 수정 후 `python3 tools/verify_dist_integrity.py`를 실행했다.
+- **확인된 OK**: output `full/final/title_test` 3종 SHA는 모두
+  `d91091854a0fc0bbe9dd46d7eb9afbd4648ef36475e40d90b4315bca47df21dd`로 바이트 동일했다.
+  Part2 결과 요약 보존, scene_89 source guard, B팀 drift, CSV ROM 일본어 잔존, text fit,
+  override/repoint/glyph/Part1 대사/`qa_transient_overlays.py` 하위 게이트는 통과했다.
+- **실패 원인**: `dist/manifest*.json`과 2026-07-05 BPS/IPS는 이전 SHA
+  `c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72` 기준이라 stale이다.
+  `data/compact_display_visual_matrix.json`, Part1 link map-list sweep report,
+  scene residual scan evidence도 새 SHA로 재생성되지 않았다.
+- **하네스 주의**: `verify_dist_integrity.py`가 호출하는 `qa_visual_regions.py`는 기본 `/tmp/mgbah`를 찾는다.
+  현재 작업은 프로젝트 규칙상 `temp/mgbah`를 빌드해 사용했으며, 직접 실행
+  `python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`는 PASS했다.
+  action/full battle menu 보조 체크는 현 `temp/mgbah`에 `loadtempsav` 명령이 없어 별도 하네스 보강 전까지
+  직접 PASS 대상에서 제외했다.
+- **리뷰 반영**: codex/agy 리뷰에서 초기 프레임 증거가 부족하다는 지적을 받아
+  `comparison_sheet_early_frames.png`와 `early_frame_report.json`을 추가 생성했다. agy가 지적한
+  `0x00A34CB0` 선택지 copy 누락은 원본 bytes 재확인 결과 대사 본문 주소라 오탐으로 분류했다.
+- **판정**: 이 시점의 89a 화면 수정은 별도 스윕과 정적 QA로 닫혔지만, 배포 패치 출하는 금지했다.
+  이후 1편 이름 확인 RIGHT 커서 보정까지 반영한 새 SHA `83ae254b...`에서 dist/evidence를 재생성해
+  아래 항목에서 이 stale 배포 실패를 최종적으로 닫았다.
+
+## [2026-07-06] 추가 예/아니오 스윕 후 전체 배포 게이트 stale 실패(후속 닫힘)
+
+- **시도**: 1편 이름 확인 RIGHT 커서 보정 및 추가 예/아니오 화면 스윕 후
+  `python3 tools/verify_dist_integrity.py`를 실행했다.
+- **확인된 OK**: output `full/final/title_test` 3종 SHA는 모두
+  `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`로 바이트 동일했다.
+  `qa_transient_overlays.py`는 issue 0이고, 직접 실행한
+  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`는 PASS했다.
+- **실패 원인**: `dist/manifest*.json`과 2026-07-05 BPS/IPS는 이전 SHA
+  `c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72` 기준이라 stale이다.
+  `data/compact_display_visual_matrix.json`, Part1 link map-list sweep report,
+  scene residual scan evidence도 current SHA로 재생성되지 않았다.
+- **하네스 주의**: `verify_dist_integrity.py` 내부 visual-region 호출은 기본 `/tmp/mgbah`를 찾기 때문에
+  현재 `temp/mgbah` 환경에서는 추가로 실패 로그를 낸다. 화면 검증은 위 직접 명령으로 대체 확인했다.
+- **후속 조치**: compact xref/code-context/renderer trace/manual visual evidence, Part1 link map-list sweep,
+  scene residual/E8 visual evidence, 2026-07-06 BPS/IPS/manifest를 `83ae254b...` 기준으로 재생성했다.
+  `verify_dist_integrity.py`가 `manual_current=13/manual_accepted=13`, Part1 sweep `180/180`, BPS/IPS
+  round-trip OK를 확인했고 PASS했다.
+- **최종 판정**: `qa_scene_screenshot_sanity.py` stale provenance를 current SHA로 재캡처한 뒤
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json`
+  PASS. 이 stale 배포 실패는 닫혔고, 현재 배포 패치 출하 금지는 해제됐다.

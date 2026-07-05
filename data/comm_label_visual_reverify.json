@@ -2,9 +2,15 @@
   {
     "label": "visual_reverify::88_common_comm_labels",
     "method": "current_sha_visual_reverification",
-    "generated_on": "2026-07-02",
-    "rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+    "generated_on": "2026-07-06",
+    "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
     "container_scene_id": "88_common_comm_labels",
+    "carry_forward_applicability": {
+      "method": "validated_unrelated_rom_diff_carry_forward",
+      "capture_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
+      "validated_current_rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+      "reason": "2026-07-06 yes/no cursor helper is isolated to the Part1 name-confirm BG tilemap path and does not touch the E8 comm-label screenshot routes; static residual reverify was rerun on the current ROM."
+    },
     "container_range": "0x00EE212C:0x00EE2848",
     "target_raw_kana": {
       "offset": "0x00EE22AC",
@@ -13,7 +19,7 @@
     },
     "static_residual_reverify": {
       "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
-      "result_sha256": "30b400bf9ec6b69b4c8f52cc56694a78e14eeb33f994831c353388971c471d63",
+      "result_sha256": "01cbd93cd9391093da82959e28503a6a1d2ef82f20cb075b9128baf69b2066de",
       "residual_count": 0,
       "raw_kana_unexplained_count": 0
     },
@@ -49,7 +55,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part1 world/main menu fresh coldboot route",
         "source_capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "277478befc2efe75e89088e297120ccaf1beb7becb2366c705ab8c34a9a6e7eb",
         "source_provenance_path": "temp/scene_screenshots/40_part1_name_menu_patched/provenance.json"
@@ -62,7 +68,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part1 single/map submenu fresh coldboot route",
         "source_capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "9393d65d4853ebf8fccb11a279638e35bed5dffb03a2ff0fd1b7b37e716be606",
         "source_provenance_path": "temp/scene_screenshots/42_part1_single_battle_patched/provenance.json"
@@ -75,7 +81,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part1 link submenu fresh coldboot route",
         "source_capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "bb14de3124fff047fc0e5ae5f04747703d53df2342b075ad3130ff018ec30f1a",
         "source_provenance_path": "temp/scene_screenshots/43_part1_link_patched/provenance.json"
@@ -88,7 +94,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part2 main menu fresh coldboot route",
         "source_capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b",
         "source_provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json"
@@ -101,7 +107,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part2 Wars shop fresh savestate redraw",
         "source_capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "e6515cec97a8cb07cc17e062a52d82f51c7fd3556b02305708698de3c588b8db",
         "source_provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json"
@@ -114,7 +120,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Part2 communication/multiplayer submenu fresh savestate redraw",
         "source_capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "86d811deebcb0ee2dc008ee7215be9aa1501f0775375d10bbba1f0dee666e93f",
         "source_provenance_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/provenance.json"
@@ -127,7 +133,7 @@
         "evidence_role": "primary_current_sha",
         "note": "Common compact menu table representative fresh savestate redraw",
         "source_capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
-        "provenance_rom_sha256": "6dc3f12e72b8680cd36382d839fca9709f5b95af043565ab32117eef2d1f3df2",
+        "provenance_rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
         "visual_result": "no visible ソ; Korean menu/communication labels rendered",
         "source_capture_sha256": "ec08df5411a02c45387f2e9c34061d1a67f41d1372e199af0085737fe503e19c",
         "source_provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json"
@@ -143,6 +149,6 @@
         "role": "legacy/stale-prone bucket screenshot not used as primary evidence"
       }
     ],
-    "note": "2026-07-02 current SHA visual reverify recaptured for E8 comm-label evidence"
+    "note": "2026-07-06 current SHA visual evidence carry-forward validated after yes/no cursor fix"
   }
 ]

@@ -51,6 +51,58 @@ PART1_MENU_PRENAV = [
 ]
 PART1_MENU_ADVANCE_A_PRESSES = 16
 START_PROMPT_CROP = (56, 96, 184, 124)
+ACTION_MENU_TEMPSAV = ROOT / "temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav"
+ACTION_MENU_TILEMAP_EXPECTED = {
+    0x70AA: 0xA1AD,
+    0x70AC: 0xA1AE,
+    0x70AE: 0x8008,
+    0x70B0: 0x800A,
+    0x70EA: 0xA1AF,
+    0x70EC: 0xA1B0,
+    0x70EE: 0x8009,
+    0x70F0: 0x800B,
+    0x712A: 0xA16D,
+    0x712C: 0xA16E,
+    0x712E: 0x808C,
+    0x7130: 0x808E,
+    0x716A: 0xA16F,
+    0x716C: 0xA170,
+    0x716E: 0x808D,
+    0x7170: 0x808F,
+}
+ACTION_MENU_ATTACK_LABEL_BOX = (185, 24, 205, 41)
+ACTION_MENU_WAIT_LABEL_BOX = (185, 40, 206, 57)
+FULL_BATTLE_MENU_TILEMAP_EXPECTED = {
+    0x70AE: 0x81A0,
+    0x70B0: 0x81A2,
+    0x70EE: 0x81A1,
+    0x70F0: 0x81A3,
+    0x712E: 0x81A4,
+    0x7130: 0x81A6,
+    0x716E: 0x81A5,
+    0x7170: 0x81A7,
+    0x71AE: 0x81A8,
+    0x71B0: 0x81AA,
+    0x71EE: 0x81A9,
+    0x71F0: 0x81AB,
+    0x722E: 0x81AC,
+    0x7230: 0x81AE,
+    0x7232: 0x81B0,
+    0x726E: 0x81AD,
+    0x7270: 0x81AF,
+    0x7272: 0x81B1,
+    0x72AE: 0x81B2,
+    0x72B0: 0x81B4,
+    0x72EE: 0x81B3,
+    0x72F0: 0x81B5,
+}
+FULL_BATTLE_MENU_LABEL_BOXES = {
+    "info": ((184, 16, 224, 34), 60),
+    "operation": ((184, 32, 224, 50), 60),
+    "save": ((184, 48, 224, 66), 60),
+    "system": ((184, 64, 232, 82), 80),
+    "end": ((184, 80, 224, 98), 60),
+}
 
 
 def layer_bbox(layer: Image.Image) -> tuple[int, int, int, int]:
@@ -503,6 +555,15 @@ def count_dark_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int
     return count
 
 
+def count_near_black_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int:
+    crop = image.crop(box).convert("RGB")
+    count = 0
+    for r, g, b in crop.getdata():
+        if max(r, g, b) < 55:
+            count += 1
+    return count
+
+
 def count_intrusive_help_pixels(image: Image.Image, box: tuple[int, int, int, int]) -> int:
     crop = image.crop(box).convert("RGB")
     count = 0
@@ -638,11 +699,151 @@ def count_top_left_label_edge_pixels(image: Image.Image) -> int:
     return sum(count_clipped_logo_text_pixels(image, box) for box in boxes)
 
 
-def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Path | None) -> list[str]:
+ACTION_MENU_ICON_SOURCE_RANGES = [
+    (0xBE793C, 0xBE793C + 64, "attack icon"),
+    (0xBE79BC, 0xBE79BC + 64, "wait icon"),
+    (0xBE7F3C, 0xBE7F3C + 64, "unit icon"),
+    (0xBE7D3C, 0xBE7D3C + 64, "save icon"),
+    (0xBE7DBC, 0xBE7DBC + 64, "settings icon"),
+    (0xBE803C, 0xBE803C + 64, "end icon"),
+    (0xBEC5DC, 0xBEC5DC + 64, "supply/attack variant icon"),
+]
+
+
+def assert_action_menu_icon_sources_preserved(rom: Path) -> list[str]:
+    current = rom.read_bytes()
+    original = (ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba").read_bytes()
+    checked: list[str] = []
+    failures: list[str] = []
+    for start, end, label in ACTION_MENU_ICON_SOURCE_RANGES:
+        if current[start:end] != original[start:end]:
+            diff_count = sum(a != b for a, b in zip(current[start:end], original[start:end]))
+            failures.append(f"{label} source changed at 0x{start:06X}..0x{end:06X}: diff={diff_count}")
+        else:
+            checked.append(f"rom:action_menu_icon_preserved:{label}:0x{start:06X}..0x{end:06X}")
+    if failures:
+        raise AssertionError("action menu icon source failures:\n" + "\n".join(f"- {failure}" for failure in failures))
+    return checked
+
+
+def assert_part1_action_menu_labels(
+    rom: Path,
+    out_dir: Path,
+    harness: Path,
+    tempsav: Path | None,
+) -> list[str]:
+    if tempsav is None:
+        return ["screen:part1_action_menu=skipped_no_tempsav_arg"]
+    if not tempsav.exists():
+        return [f"screen:part1_action_menu=skipped_missing_tempsav:{tempsav}"]
+
+    action_dir = out_dir / "part1_action_menu"
+    action_dir.mkdir(parents=True, exist_ok=True)
+    checked: list[str] = []
+    failures: list[str] = []
+    driver = MGBADriver(rom, action_dir, harness)
+    try:
+        response = driver.cmd(f"loadtempsav {tempsav}")
+        if not response.endswith("ok=1"):
+            raise AssertionError(response)
+        drive_part1_menu_from_coldboot(driver)
+        action_img = driver.shot("00_action_menu")
+        dump_path = action_dir / "vram.bin"
+        dump_response = driver.cmd(f"dumpvram {dump_path}")
+        if not (dump_response.endswith("ok=1") or dump_response.startswith("OK dumpvram")):
+            raise AssertionError(dump_response)
+    finally:
+        driver.close()
+
+    vram = dump_path.read_bytes()
+    for off, expected in ACTION_MENU_TILEMAP_EXPECTED.items():
+        actual = struct.unpack_from("<H", vram, off)[0]
+        if actual != expected:
+            failures.append(f"action menu tilemap 0x{off:04X}: got 0x{actual:04X}, expected 0x{expected:04X}")
+
+    attack_black = count_near_black_pixels(action_img, ACTION_MENU_ATTACK_LABEL_BOX)
+    wait_black = count_near_black_pixels(action_img, ACTION_MENU_WAIT_LABEL_BOX)
+    if attack_black < 50:
+        failures.append(f"action menu attack label missing/blank: near-black pixels {attack_black} < 50")
+    if wait_black < 75:
+        failures.append(f"action menu wait label missing/blank: near-black pixels {wait_black} < 75")
+
+    checked.append(
+        "screen:part1_action_menu:"
+        f"attack_black={attack_black}:wait_black={wait_black}:"
+        f"tilemap_entries={len(ACTION_MENU_TILEMAP_EXPECTED)}"
+    )
+    if failures:
+        raise AssertionError("part1 action menu failures:\n" + "\n".join(f"- {failure}" for failure in failures))
+    return checked
+
+
+def assert_part1_full_battle_menu_labels(
+    rom: Path,
+    out_dir: Path,
+    harness: Path,
+    tempsav: Path | None,
+) -> list[str]:
+    if tempsav is None:
+        return ["screen:part1_full_battle_menu=skipped_no_tempsav_arg"]
+    if not tempsav.exists():
+        return [f"screen:part1_full_battle_menu=skipped_missing_tempsav:{tempsav}"]
+
+    full_dir = out_dir / "part1_full_battle_menu"
+    full_dir.mkdir(parents=True, exist_ok=True)
+    checked: list[str] = []
+    failures: list[str] = []
+    driver = MGBADriver(rom, full_dir, harness)
+    try:
+        response = driver.cmd(f"loadtempsav {tempsav}")
+        if not response.endswith("ok=1"):
+            raise AssertionError(response)
+        drive_part1_menu_from_coldboot(driver)
+        for key in ("B", "B", "DOWN", "A"):
+            driver.press(key, after=120)
+        full_img = driver.shot("00_full_menu")
+        dump_path = full_dir / "vram.bin"
+        dump_response = driver.cmd(f"dumpvram {dump_path}")
+        if not (dump_response.endswith("ok=1") or dump_response.startswith("OK dumpvram")):
+            raise AssertionError(dump_response)
+    finally:
+        driver.close()
+
+    vram = dump_path.read_bytes()
+    for off, expected in FULL_BATTLE_MENU_TILEMAP_EXPECTED.items():
+        actual = struct.unpack_from("<H", vram, off)[0]
+        if actual != expected:
+            failures.append(f"full battle menu tilemap 0x{off:04X}: got 0x{actual:04X}, expected 0x{expected:04X}")
+
+    row_counts: list[str] = []
+    for label, (box, minimum) in FULL_BATTLE_MENU_LABEL_BOXES.items():
+        black = count_near_black_pixels(full_img, box)
+        row_counts.append(f"{label}_black={black}")
+        if black < minimum:
+            failures.append(f"full battle menu {label} label missing/blank: near-black pixels {black} < {minimum}")
+
+    checked.append(
+        "screen:part1_full_battle_menu:"
+        + ":".join(row_counts)
+        + f":tilemap_entries={len(FULL_BATTLE_MENU_TILEMAP_EXPECTED)}"
+    )
+    if failures:
+        raise AssertionError("part1 full battle menu failures:\n" + "\n".join(f"- {failure}" for failure in failures))
+    return checked
+
+
+def run_emulator_checks(
+    rom: Path,
+    out_dir: Path,
+    harness: Path,
+    menu_state: Path | None,
+    action_menu_save: Path | None,
+) -> list[str]:
     checked: list[str] = []
     failures: list[str] = []
     if not harness.exists():
         raise AssertionError(f"missing mGBA harness: {harness}")
+    checked.extend(assert_action_menu_icon_sources_preserved(rom))
 
     cold = out_dir / "cold"
     cold.mkdir(parents=True, exist_ok=True)
@@ -794,6 +995,15 @@ def run_emulator_checks(rom: Path, out_dir: Path, harness: Path, menu_state: Pat
     finally:
         driver.close()
 
+    try:
+        checked.extend(assert_part1_action_menu_labels(rom, out_dir, harness, action_menu_save))
+    except AssertionError as exc:
+        failures.append(str(exc))
+    try:
+        checked.extend(assert_part1_full_battle_menu_labels(rom, out_dir, harness, action_menu_save))
+    except AssertionError as exc:
+        failures.append(str(exc))
+
     if failures:
         raise AssertionError("visual region failures:\n" + "\n".join(f"- {failure}" for failure in failures))
 
@@ -863,6 +1073,11 @@ def main() -> None:
         default="",
         help="Optional debug-only Part1 menu savestate. Default uses a coldboot fresh route.",
     )
+    parser.add_argument(
+        "--action-menu-save",
+        default=str(ACTION_MENU_TEMPSAV),
+        help="Temporary save used to reach the Part1 in-battle action menu. Empty string skips this check.",
+    )
     parser.add_argument("--asset-only", action="store_true")
     args = parser.parse_args()
 
@@ -878,7 +1093,10 @@ def main() -> None:
     if not args.asset_only:
         try:
             menu_state = Path(args.menu_state) if args.menu_state else None
-            checked.extend(run_emulator_checks(Path(args.rom), out_dir, Path(args.harness), menu_state))
+            action_menu_save = Path(args.action_menu_save) if args.action_menu_save else None
+            checked.extend(
+                run_emulator_checks(Path(args.rom), out_dir, Path(args.harness), menu_state, action_menu_save)
+            )
         except AssertionError as exc:
             failures.append(str(exc))
         try:

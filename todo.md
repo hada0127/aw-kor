@@ -16,6 +16,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 ## A. 실화면 잔존 결함 0 (최우선 — codex+agy가 보는 화면). **codex·agy 공통: 아직 실잔존(미닫힘)**
 > 2026-06-24 후반 codex·agy 적대 재리뷰: A1/A2/A3는 현재 캡처에 실제로 보이는 결함이며, stale-BG는
 > **fresh-boot 재캡처로 입증 전 "오탐"으로 닫지 말 것**(savestate VRAM stale 가능성은 증거 아님).
+- [x] **2026-07-06 사용자 추가 요청: 다른 예/아니오 확인창 대량 검수 + 이름 확인 RIGHT 커서 수정**:
+  1편 이름 확인, 전투 메뉴 항복 확인, 전투 메뉴 모드 복귀 확인, 89a 항복 확인 pre-state를 새 SHA
+  `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`에서 재캡처했다.
+  이름 확인은 `D835BC` row와 `PART1_YESNO_HOOK`의 per-frame overlay가 RIGHT cursor를 x9에 복구하지 않아
+  커서가 사라지는 결함을 발견했고, hook helper로 x7 yes cursor 부재 시 x9에 `A1BA/A1BB`를 복구하게 수정했다.
+  비교/검수 시트:
+  `docs/screenshots/yesno_sweep_2026-07-06/name_confirm_fresh_original_vs_final_after_fix.png`,
+  `docs/screenshots/yesno_sweep_2026-07-06/yesno_final_screen_sheet_after_fix.png`,
+  `docs/screenshots/yesno_sweep_2026-07-06/yesno_final_bottom_crops_after_fix.png`,
+  `docs/screenshots/yesno_sweep_2026-07-06/review.md`.
+  통과: build, `qa_transient_overlays.py`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `git diff --check`.
+  후속으로 compact visual matrix/manual evidence, Part1 link sweep, scene residual evidence, 2026-07-06 BPS/IPS/manifest를
+  같은 SHA로 재동기화했다. `verify_dist_integrity.py` PASS, `run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json` PASS.
 - [x] **A1 CO 프로필 이름 OBJ 19개 한글 렌더 완료**(2026-06-24): OBJ는 96×8이 아니라 **48×16 col-major(8×16 글리프)**
   → 11px galmuri 직접 렌더(render_galmuri_8x16, ink=15). `patch_part2_domino_co_name_obj` 전면 교체:
   캐서린/도미노/맥스/호이프/빌리/키쿠치요/아스카/이글/모프/헬보우즈/콩/캣/스네이크/호크/하치/이반/한나/야마모토.
@@ -1253,6 +1266,50 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   전체 에디터 회귀 검증은
   `run_release_qa.py --only-editor --editor --cdp --timeout 300 --report temp/release_qa_editor_cdp_20260630_white_sprite_fix.json`
   PASS. ROM SHA는 에디터 표시 수정이라 변경 없음.
+
+- [x] 2026-07-05 사용자 제보: Part1 전투 액션 메뉴 `보급/대기` 등 인게임 창 배경 깨짐 수정:
+  원인은 실제 텍스트가 아닌 `0x00B7F89B` false text row가 `0xB7F800..0xB7F900` 액션 메뉴
+  window/pattern 데이터를 덮은 것이었다. `tools/build_korean_full.py::DENY_REGIONS`에
+  `build_scene_catalog.py`의 low-confidence false-text range 33개를 반영해 같은 계열 오검출 CSV 116행을
+  전부 import 차단했다. `temp/false_text_deny_audit_20260705.json` 기준 denied 116/open 0/range diff 0.
+  실제 mGBA 비교 시트는
+  `temp/action_menu_fix_verify_20260705/ingame_action_menu_original_before_fixed.png`.
+  최종 output 3종 SHA는 `62847c0dc185cdfb21ddfc9ef8ccc10dd4daac1a9eb4e899aca7581c41127c03`.
+  배포 패치는 `dist/game_wars_korean_full_2026-07-05.bps`/`.ips`로 재생성했다.
+  후속 게이트에서 발견된 Part1 대사 `0x815C` long-mark 계열 잔존도 `-`/`=` 전각 공백 안전화로 닫았다.
+  통과: `qa_text_fit.py`, `qa_placeholder_residuals.py`, `qa_japanese_residuals.py`,
+  `phase6_basic_test.py output/game_wars_korean_full.gba`,
+  `qa_visual_regions.py --rom output/game_wars_korean_full.gba`,
+  `qa_part1_dialogue_punctuation.py`, `audit_scene_residual_scans.py --strict`,
+  `qa_part1_compact_help.py`, `verify_dist_integrity.py`.
+
+- [x] 2026-07-05 사용자 재제보: Part1 전투 액션 메뉴 아이콘/라벨 겹침 및 blank 수정:
+  `patch_part2_action_menu_icon_labels()`의 raw icon source 덮어쓰기를 no-op으로 유지하고,
+  `0x08B19804` BG0 tilemap DMA 직전 content-gated hook을 `0xF3F000`에 설치했다.
+  아이콘 pattern이 원본 공격/대기 2항목 메뉴와 일치할 때만 `공격/대기` label tilemap entries를 복구한다.
+  인게임 비교 시트는
+  `temp/action_menu_icon_fix_verify_20260705/ingame_action_menu_original_vs_broken_vs_fixed.png`.
+  `tools/qa_visual_regions.py`에 icon source byte 보존, action-menu VRAM tilemap 16-entry exact match,
+  label pixel 검사를 추가했다. 최종 output 3종 SHA는
+  `c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72`.
+  통과: `qa_visual_regions.py --rom output/game_wars_korean_full.gba --out temp/qa_visual_action_menu_overlay_20260705 --harness /tmp/mgbah`,
+  `verify_dist_integrity.py`,
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_action_menu_overlay_20260705.json`.
+
+- [x] 2026-07-06 사용자 제보: 89a 항복 확인 예/아니오 선택지 순간 흔들림/커서 겹침 수정:
+  원본 `0x00A34B6C = 　はい　　いいえ`는 leading/gap 빈칸을 커서 셀로 샘플링하는 compact row였는데,
+  기존 `예　아뇨`가 이 셀을 없애 생성 직후 `아뇨▷`, 선택 후 `▷ 아뇨`로 위치가 바뀌었다.
+  row를 16B 정확 길이 `　예　　　아니오`로 교체해 생성 직후 `post_a_f000..f160`과
+  LEFT/RIGHT/UP/DOWN 후 12/30f 모두
+  커서가 글자 앞에 고정되게 했다. 비교 시트:
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet_early_frames.png`,
+  `docs/screenshots/surrender_yesno_stability_fix_2026-07-06/comparison_sheet.png`.
+  `tools/qa_transient_overlays.py`에 `0xA34B6C` exact-byte 회귀 체크를 추가했다.
+  최종 output 3종 SHA는 `d91091854a0fc0bbe9dd46d7eb9afbd4648ef36475e40d90b4315bca47df21dd`.
+  통과: build, `qa_transient_overlays.py`, `qa_text_fit.py`, placeholder/Japanese residuals,
+  `phase6_basic_test.py`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`.
+  전체 `verify_dist_integrity.py`는 dist/compact matrix/Part1 link/scene residual evidence가 이전 SHA라 실패했고,
+  배포 재생성 작업으로 분리했다(`docs/fail.md`).
 
 - [x] 2026-07-01 사용자 추가 스크린샷: Part1 대사 `자, 출격이야!`/`본대는 따로 있으니까,` 우측 bitmap 깨짐 전수 수정:
   원인은 1편 대사 렌더러에서 단독 ASCII 문장부호(`!`, `,`, `.`, `?` 등)가 일부 줄 끝에서 bitmap fragment처럼

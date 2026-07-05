@@ -19,6 +19,13 @@ def cmd(*parts: str) -> list[str]:
     return [sys.executable, *parts]
 
 
+def visual_region_cmd() -> list[str]:
+    harness = ROOT / "temp" / "mgbah"
+    if harness.exists():
+        return cmd("tools/qa_visual_regions.py", "--harness", str(harness), "--action-menu-save", "")
+    return cmd("tools/qa_visual_regions.py")
+
+
 BASE_GATES: list[tuple[str, list[str]]] = [
     ("csv-integrity", cmd("tools/qa_csv_integrity.py", "--fail-on-rom-japanese")),
     ("translation-lint", cmd("tools/lint_translation.py", "--severity", "error")),
@@ -38,7 +45,7 @@ BASE_GATES: list[tuple[str, list[str]]] = [
     ("scene-screenshot-sanity", cmd("tools/qa_scene_screenshot_sanity.py")),
     ("scene-semantics", cmd("tools/audit_scene_semantics.py", "--strict")),
     ("scene-residuals", cmd("tools/audit_scene_residual_scans.py", "--strict")),
-    ("visual-regions", cmd("tools/qa_visual_regions.py")),
+    ("visual-regions", visual_region_cmd()),
     ("phase6-basic", cmd("tools/phase6_basic_test.py", "output/game_wars_korean_full.gba")),
     ("dist-integrity", cmd("tools/verify_dist_integrity.py")),
 ]

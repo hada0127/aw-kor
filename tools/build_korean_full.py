@@ -129,6 +129,42 @@ DENY_REGIONS = [
     ('part1_backup_utility', 0x391670, 0x391790),
     ('part2_backup_utility', 0xB84410, 0xB84510),
     ('part2_save_seed_name', 0xB7F7D4, 0xB7F7E0),
+    # build_scene_catalog low-confidence false-text ranges. These are data,
+    # symbol banks, or graphics that only decode as SJIS by accident; importing
+    # CSV rows here corrupts UI/window data (0xB7F89B broke the battle action menu).
+    ('low_code_data_sjis_false_positive', 0x800000, 0x800900),
+    ('unmapped_graphic_false_text_89xx', 0x89BB00, 0x8ABE20),
+    ('save_or_binary_false_text_bx', 0xB7F800, 0xB7F900),
+    ('unmapped_binary_false_text_bf', 0xBF2800, 0xBF2840),
+    ('part1_pre_dialogue_false_text', 0xD64000, 0xD7D000),
+    ('post_campaign_false_text_e8', 0xE77000, 0xE8BF00),
+    ('pre_result_false_text_ef', 0xEF9200, 0xEFA300),
+    ('ui_symbol_bank_93c', 0x93C8D7, 0x93DA14),
+    ('ui_symbol_bank_940', 0x940C62, 0x941D5E),
+    ('ui_symbol_bank_94f', 0x94FE33, 0x94FE35),
+    ('ui_symbol_bank_974', 0x974D8B, 0x975EC8),
+    ('ui_symbol_bank_979', 0x979116, 0x9795EA),
+    ('ui_symbol_bank_988', 0x9886D7, 0x9886D9),
+    ('ui_symbol_bank_9ad', 0x9AD62F, 0x9AE76C),
+    ('ui_symbol_bank_9b1', 0x9B19BA, 0x9B1E8E),
+    ('ui_symbol_bank_9c0', 0x9C0F7B, 0x9C0F7D),
+    ('ui_symbol_bank_9e5', 0x9E5ED3, 0x9E7010),
+    ('ui_symbol_bank_9ea', 0x9EA25E, 0x9EA732),
+    ('ui_link_false_text_9293', 0x929300, 0x929310),
+    ('ui_link_false_text_961f', 0x961F88, 0x961F98),
+    ('ui_link_false_text_99a8', 0x99A82C, 0x99A83C),
+    ('ui_link_false_text_9d30', 0x9D30D0, 0x9D30E0),
+    ('ui_common_false_table_9420', 0x942000, 0x942130),
+    ('ui_common_false_table_9422', 0x942200, 0x942610),
+    ('ui_common_false_table_9797', 0x979780, 0x97A220),
+    ('ui_common_false_table_97a4', 0x97A4C0, 0x97A5C0),
+    ('ui_common_false_table_97a6', 0x97A6B0, 0x97AAA0),
+    ('ui_common_false_table_9b20', 0x9B2020, 0x9B2AC0),
+    ('ui_common_false_table_9b2d', 0x9B2D60, 0x9B2E60),
+    ('ui_common_false_table_9b2f', 0x9B2F50, 0x9B3340),
+    ('ui_common_false_table_9ea8', 0x9EA8C0, 0x9EB360),
+    ('ui_common_false_table_9eb6', 0x9EB600, 0x9EB700),
+    ('ui_common_false_table_9eb8', 0x9EB7F0, 0x9EBC00),
     ('sjis_slot_table', 0xBE717A, 0xBE717A + 5498 * 2),   # 그리드/UI SJIS→슬롯 테이블 (cell_slots 의존)
     ('font_region',     0xB974D0, 0xBAF338),              # FONT_BASE 글리프
     ('baseptr_tables',  0xB80270, 0xB80B7C),              # 가나/기호 인덱스 테이블
@@ -7214,72 +7250,16 @@ def patch_part2_command_menu_co_icon(rom):
 
 
 def patch_part2_action_menu_icon_labels(rom):
-    """Replace Part 2 action-menu attack/wait icons with readable Korean cues."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from bdf import load_bdf, glyph_grid
+    """Keep the old raw icon-tile workaround disabled.
 
-    # These labels share tile pages with neighboring icon art. Only the top 8px
-    # row is replaced; clearing the lower row corrupts adjacent battle sprites.
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
-
-    def render_strip(text):
-        width, height = 16, 8
-        pixels = [[0] * width for _ in range(height)]
-        glyphs = []
-        total_w = 0
-        max_h = 0
-        for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
-            glyphs.append((grid, w, h, xo))
-            total_w += w
-            max_h = max(max_h, h)
-        total_w += max(0, len(glyphs) - 1)
-        x = max(0, (width - total_w) // 2)
-        y = max(0, (height - max_h) // 2)
-        for grid, w, h, xo in glyphs:
-            for row in range(h):
-                for col in range(w):
-                    if not grid[row][col]:
-                        continue
-                    px = x + col + xo
-                    py = y + row
-                    if 0 <= px < width and 0 <= py < height:
-                        pixels[py][px] = 5
-            x += w + 1
-
-        tiles = []
-        for tx in range(2):
-            tile = bytearray(32)
-            for row in range(8):
-                for col in range(8):
-                    value = pixels[row][tx * 8 + col] & 0x0F
-                    bi = row * 4 + col // 2
-                    if col & 1:
-                        tile[bi] |= value << 4
-                    else:
-                        tile[bi] |= value
-            tiles.append(bytes(tile))
-        return tiles
-
-    patched = 0
-    menu_labels = [
-        (0xBE793C, '공격'),
-        (0xBE79BC, '대기'),
-        (0xBE7F3C, '부대'),
-        (0xBE7D3C, '저장'),
-        (0xBE7DBC, '설정'),
-        (0xBE803C, '종료'),
-        (0xBEC5DC, '보급'),
-    ]
-    for start, text in menu_labels:
-        for idx, tile in enumerate(render_strip(text)):
-            off = start + idx * 32
-            rom[off:off + 32] = tile
-            patched += 1
-    rec_objlabel('objlabel_p2_action_menu', 'part2_objlabel/action_menu',
-                 '2편 행동메뉴 아이콘(공격/대기/부대/저장/설정/종료/보급)',
-                 [{'text': t, 'off': o, 'tw': 2, 'th': 1} for o, t in menu_labels])
-    return patched
+    The addresses previously patched here are not label tiles. In the live
+    BG0 action menu, 0xBEC5DC and 0xBE79BC are icon sources, while the text
+    labels are rendered through the compact UI dictionary/font path. Drawing
+    Hangul into these raw icon sources makes labels overlap icons and can even
+    assign the wrong label to a reused icon variant. The action-menu labels are
+    restored by the content-gated tilemap overlay hook installed in main().
+    """
+    return 0
 
 
 def patch_part2_mission_start_obj(rom):
@@ -10230,7 +10210,7 @@ if _EXTERNAL_ADDRESS_TEXT_OVERRIDES is not None:
 PUNCT_DROP = ',.!?:;()[]{}"\''
 
 # 공백 collapse 예외: 메뉴가 글리프 위치를 샘플링하는 예/아니오 트릭 슬롯(이중공백 의도적).
-WS_COLLAPSE_EXEMPT = {'　예　오', '예  아니오'}
+WS_COLLAPSE_EXEMPT = {'　예　오', '예  아니오', '　예　　　아니오'}
 
 
 def _shorten(s):
@@ -10421,12 +10401,15 @@ PART1_DIALOG_ASCII_PUNCT = {
     ord('}'): '）'.encode('shift_jis'),
     ord('"'): '”'.encode('shift_jis'),
     ord("'"): '”'.encode('shift_jis'),
-    ord('-'): '―'.encode('shift_jis'),
+    # 0x815B/0x815C share font slots with the Part1 name-grid long-mark cell,
+    # which must display Hangul "ㅡ". Do not require those dash glyph slots in
+    # Part1 dialogue; use a visible-safe spacing fallback instead.
+    ord('-'): '　'.encode('shift_jis'),
     ord('/'): '／'.encode('shift_jis'),
     ord('\\'): '＼'.encode('shift_jis'),
     ord('+'): '＋'.encode('shift_jis'),
     ord('*'): '＋'.encode('shift_jis'),
-    ord('='): '―'.encode('shift_jis'),
+    ord('='): '　'.encode('shift_jis'),
     ord('#'): '＃'.encode('shift_jis'),
     ord('%'): '％'.encode('shift_jis'),
     ord('&'): '＆'.encode('shift_jis'),
@@ -10888,6 +10871,9 @@ def _part1_yesno_hook():
     # fresh redraw. Both paths share the same overlay routine:
     #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
     #   - rewrite the visible tilemap row at x8 as "예 아니오"
+    #   - if the original cursor routine cleared the yes cursor at x7, restore
+    #     the no cursor at x9 so RIGHT selection is visible instead of being
+    #     hidden between the rewritten Korean cells.
     b = bytearray(bytes.fromhex(
         'ffb5'
         '18f360de'  # bl original compact-choice update (patched below)
@@ -10906,6 +10892,25 @@ def _part1_yesno_hook():
         'd06000061061000664010000e3800000e5800000e7800000e9800000'
     ))
     b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
+
+    cursor_fix_off = 0x154
+    cursor_fix_rt = PART1_YESNO_HOOK_RT + cursor_fix_off
+    b[0x98:0x9A] = _thumb_b(PART1_YESNO_HOOK_RT + 0x98, cursor_fix_rt)
+    cursor_fix = bytes.fromhex(
+        '0448'      # ldr r0, =0x060060CE ; top yes-cursor cell x7
+        '0188'      # ldrh r1, [r0]
+        '044a'      # ldr r2, =0xA1BA ; cursor top tile
+        '9142'      # cmp r1, r2
+        '03d0'      # beq done_pop ; yes is selected, keep x9 blank
+        '8280'      # strh r2, [r0,#4] ; no-cursor top cell x9
+        '0348'      # ldr r0, =0x0600610E ; bottom yes-cursor cell x7
+        '044a'      # ldr r2, =0xA1BB ; cursor bottom tile
+        '8280'      # strh r2, [r0,#4] ; no-cursor bottom cell x9
+        'ffbd'      # done_pop: pop {r0-r7,pc}
+    ) + struct.pack('<I', 0x060060CE) + struct.pack('<I', 0x0000A1BA) + struct.pack('<I', 0x0600610E) + struct.pack('<I', 0x0000A1BB)
+    assert len(cursor_fix) == 36
+    assert all(value == 0 for value in b[cursor_fix_off:cursor_fix_off + len(cursor_fix)])
+    b[cursor_fix_off:cursor_fix_off + len(cursor_fix)] = cursor_fix
     return bytes(b)
 
 PART1_YESNO_HOOK = _part1_yesno_hook()
@@ -11055,6 +11060,68 @@ PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a28')
 PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a28')
 PART2_SPACE_A2CC_SITE = 0x31BCFC   # MAP SELECT 리스트 렌더러 루프 top
 PART2_SPACE_A2CC_EXPECT = bytes.fromhex('d620800040440188')
+
+PART2_ACTION_MENU_TILEMAP_HOOK_FILE = 0xF3F000
+PART2_ACTION_MENU_TILEMAP_HOOK_RT = 0x08F3F000
+PART2_ACTION_MENU_TILEMAP_SITE = 0xB19804
+PART2_ACTION_MENU_TILEMAP_SITE_EXPECT = bytes.fromhex('4146086808498022')
+PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_FILE = 0xF3F300
+PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_RT = 0x08F3F300
+PART1_FULL_BATTLE_MENU_TILEMAP_SITE = 0xB125E8
+PART1_FULL_BATTLE_MENU_TILEMAP_SITE_EXPECT = bytes.fromhex('0880291c32310878')
+
+
+def _part2_action_menu_tilemap_hook():
+    # 2편 전투 액션 메뉴는 최종 BG0 tilemap DMA 직전 IWRAM 버퍼에
+    # 아이콘 타일은 남아 있지만 라벨 타일만 blank(0x164)로 되돌아가는
+    # 경로가 있다. 원본과 같은 2항목 공격/대기 아이콘 배열일 때만
+    # 라벨 엔트리(공격=008/00A/009/00B, 대기=08C/08E/08D/08F)를 복구한다.
+    b = bytearray(bytes.fromhex(
+        'ffb544462468aa25231c5b1918882a49884244d158882949884240d1'
+        'ea25231c5b1918882649884239d158882549884235d195256d00231c'
+        '5b191888224988422dd158882149884229d1b5256d00231c5b191888'
+        '1e49884221d158881d4988421dd1ae25231c5b191b4a1a80'
+        '1b4a5a80ee25231c5b191a4a1a801a4a5a8097256d00231c5b19184a'
+        '1a80184a5a80b7256d00231c5b19164a1a80164a5a80ffbc08bc41'
+        '460868144980221201134b144ca646184713480047ada10000aea10000'
+        'afa10000b0a100006da100006ea100006fa1000070a10000088000000a800000'
+        '098000000b8000008c8000008e8000008d8000008f80000000700006'
+        '7501b108b40000001398b108'
+    ))
+    struct.pack_into('<I', b, 0x100, PART2_ACTION_MENU_TILEMAP_HOOK_RT + 0xB5)
+    return bytes(b)
+
+
+PART2_ACTION_MENU_TILEMAP_HOOK = _part2_action_menu_tilemap_hook()
+
+
+def _part1_full_battle_menu_tilemap_hook():
+    # 1편 전투 지도 풀 메뉴(정보/작전/저장/시스템/종료)는 2항목 액션 메뉴와
+    # 다른 행별 아이콘 작성 루틴을 탄다. 원본 루틴이 각 행의 우하단 아이콘을
+    # 쓸 때 같은 행의 한글 라벨 타일맵을 채우고, 필요한 22개 한글 glyph 타일을
+    # BG tile 0x1A0..0x1B5에 복사한다.
+    return bytes.fromhex(
+        '0880ffb50c1c2088654a90420cd0654a904218d0644a904224d0644a904230d0'
+        '634a904240d05be031a6042700f04bf83e25631b5f4a1a805f4a5a805f4a6280'
+        '5f4aa2804ce032a6042700f03cf83e25631b5c4a1a805c4a5a805c4a62805c4a'
+        'a2803de032a6042700f02df83e25631b584a1a80584a5a80584a6280584aa280'
+        '2ee033a6062700f01ef83e25631b554a1a80554a5a80554a9a80554a6280554a'
+        'a280554ae2801be035a6042700f00bf83e25631b514a1a80514a5a80514a6280'
+        '514aa2800ce0306871680836082203680b6004300431013af9d1013ff3d17047'
+        'ffbc08bc291c32310878484b1847c046204cf00800340006e002f00820340006'
+        '2031f008403400064017f00860340006e04af008803400068035f008a0340006'
+        '204cf008c0340006c037f008e0340006004cf008003500066037f00820350006'
+        'e04af008403500064036f00860350006403cf008803500066037f008a0350006'
+        'a039f008c0350006203cf008e0350006c059f008003600064014f00820360006'
+        '404df008403600062007f008603600062026f008803600066027f008a0360006'
+        '90a1000080a1000084a1000088a1000094a10000a0810000a2810000a1810000'
+        'a3810000a4810000a6810000a5810000a7810000a8810000aa810000a9810000'
+        'ab810000ac810000ae810000b0810000ad810000af810000b1810000b2810000'
+        'b4810000b3810000b5810000f125b108'
+    )
+
+
+PART1_FULL_BATTLE_MENU_TILEMAP_HOOK = _part1_full_battle_menu_tilemap_hook()
 
 
 def _grid_to_tiles(grid):
@@ -11404,6 +11471,20 @@ def main():
     rom[PART2_HOOK_A3_SPACE_FILE:PART2_HOOK_A3_SPACE_FILE + len(PART2_HOOK_A3_SPACE)] = PART2_HOOK_A3_SPACE
     rom[PART2_HOOK_SPACE_313_FILE:PART2_HOOK_SPACE_313_FILE + len(PART2_HOOK_SPACE_313)] = PART2_HOOK_SPACE_313
     rom[PART2_HOOK_SPACE_B11_FILE:PART2_HOOK_SPACE_B11_FILE + len(PART2_HOOK_SPACE_B11)] = PART2_HOOK_SPACE_B11
+    if PART2_ACTION_MENU_TILEMAP_HOOK_FILE + len(PART2_ACTION_MENU_TILEMAP_HOOK) > MISSION_TITLE_TABLE_FILE:
+        raise AssertionError('part2 action-menu tilemap hook overlaps mission-title table')
+    if PART2_ACTION_MENU_TILEMAP_HOOK_FILE + len(PART2_ACTION_MENU_TILEMAP_HOOK) > PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_FILE:
+        raise AssertionError('part2 action-menu tilemap hook overlaps part1 full-battle-menu hook')
+    if PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_FILE + len(PART1_FULL_BATTLE_MENU_TILEMAP_HOOK) > MISSION_TITLE_TABLE_FILE:
+        raise AssertionError('part1 full-battle-menu tilemap hook overlaps mission-title table')
+    rom[
+        PART2_ACTION_MENU_TILEMAP_HOOK_FILE:
+        PART2_ACTION_MENU_TILEMAP_HOOK_FILE + len(PART2_ACTION_MENU_TILEMAP_HOOK)
+    ] = PART2_ACTION_MENU_TILEMAP_HOOK
+    rom[
+        PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_FILE:
+        PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_FILE + len(PART1_FULL_BATTLE_MENU_TILEMAP_HOOK)
+    ] = PART1_FULL_BATTLE_MENU_TILEMAP_HOOK
     rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
     rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
@@ -11465,6 +11546,18 @@ def main():
     rom[PART2_HOOK_SPACE_A2CC_FILE:PART2_HOOK_SPACE_A2CC_FILE + len(PART2_HOOK_SPACE_A2CC)] = PART2_HOOK_SPACE_A2CC
     assert bytes(rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8]) == PART2_SPACE_A2CC_EXPECT
     rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_A2CC_RT)
+    assert bytes(
+        rom[PART2_ACTION_MENU_TILEMAP_SITE:PART2_ACTION_MENU_TILEMAP_SITE + 8]
+    ) == PART2_ACTION_MENU_TILEMAP_SITE_EXPECT
+    rom[PART2_ACTION_MENU_TILEMAP_SITE:PART2_ACTION_MENU_TILEMAP_SITE + 8] = _abs_tramp(
+        0, PART2_ACTION_MENU_TILEMAP_HOOK_RT
+    )
+    assert bytes(
+        rom[PART1_FULL_BATTLE_MENU_TILEMAP_SITE:PART1_FULL_BATTLE_MENU_TILEMAP_SITE + 8]
+    ) == PART1_FULL_BATTLE_MENU_TILEMAP_SITE_EXPECT
+    rom[PART1_FULL_BATTLE_MENU_TILEMAP_SITE:PART1_FULL_BATTLE_MENU_TILEMAP_SITE + 8] = _abs_tramp(
+        2, PART1_FULL_BATTLE_MENU_TILEMAP_HOOK_RT
+    )
     # Part1 대사 0x20 렌더 hook (2개): table 패치 + 4정렬 render site 트램폴린
     rom[PART1_DIALOG_SPACE_HOOK_FILE:PART1_DIALOG_SPACE_HOOK_FILE + len(PART1_DIALOG_SPACE_HOOK)] = PART1_DIALOG_SPACE_HOOK
     assert struct.unpack_from('<I', rom, PART1_DIALOG_SPACE_TABLE_ENTRY)[0] == 0x08B12144
@@ -19988,10 +20081,11 @@ def main():
         0xEFAE0C,
     ]:
         fixed_zero_text_patch(faddr, 16, '예　　아니오')
-    # The battle-surrender confirmation row is sampled by a compact renderer:
-    # the no-option cursor overlays the middle syllable of "아니오", producing
-    # "아▷오" on hardware output. Keep the right option to two syllables.
-    fixed_zero_text_patch(0xA34B6C, 16, '예　아뇨')
+    # The battle-surrender confirmation row is sampled by a compact renderer
+    # with two cursor cells, matching the original "　はい　　いいえ" layout.
+    # Preserve the leading/gap cells so the initial no cursor and later left/
+    # right cursor redraw use the same positions without covering glyphs.
+    fixed_zero_text_patch(0xA34B6C, 16, '　예　　　아니오')
 
     # The post-battle save prompt draws two script rows in one box and samples a
     # compact choice row. Keep the prompt as one complete sentence. This UI path

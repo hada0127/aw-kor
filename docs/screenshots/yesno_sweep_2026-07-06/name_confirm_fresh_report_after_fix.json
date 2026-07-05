@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-07-06 06:30:01 +0900",
+  "original_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+  "patched_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "sides": {
+    "orig": {
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/name_fresh_orig_final_after_fix/orig",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/name_fresh_orig_final_after_fix/orig/name.watch.log",
+      "hit_lines": 32,
+      "d8273c_hits": 0,
+      "d835bc_hits": 4
+    },
+    "final": {
+      "capture_dir": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/name_fresh_orig_final_after_fix/final",
+      "watch_log": "/Users/tarucy/project/aw-kor/temp/yesno_sweep_20260706/name_fresh_orig_final_after_fix/final/name.watch.log",
+      "hit_lines": 30,
+      "d8273c_hits": 0,
+      "d835bc_hits": 4
+    }
+  },
+  "sheet": "/Users/tarucy/project/aw-kor/docs/screenshots/yesno_sweep_2026-07-06/name_confirm_fresh_original_vs_final_after_fix.png"
+}
