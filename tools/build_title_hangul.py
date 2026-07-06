@@ -51,14 +51,14 @@ PART1_SUBMENU_LOGO_BLOCKS = [
 ]
 PART1_MODE_OPTION_BLOCKS = [
     ("campaign", 0x00C0310C, "캠페인", 30),
-    ("trial", 0x00C03510, "트라이얼", 24),
+    ("trial", 0x00C03510, "트라이얼", 25),
     ("record", 0x00C03880, "기록", 28),
     ("operation_room", 0x00C03AF0, "작전룸", 28),
     ("wars_shop", 0x00C03F68, "상점", 28),
     ("map_design", 0x00C043E0, "맵 디자인", 30),
     ("single_battle", 0x00C0489C, "대전", 30),
-    ("new_game", 0x00C04D48, "처음부터", 30),
-    ("continue", 0x00C051DC, "계속하기", 30),
+    ("new_game", 0x00C04D48, "처음부터", 26),
+    ("continue", 0x00C051DC, "계속하기", 26),
     ("link", 0x00C05658, "통신", 28),
     ("map_record", 0x00C05994, "맵 기록", 28),
     ("player_rank", 0x00C05D78, "플레이어 랭크", 22),
@@ -66,6 +66,7 @@ PART1_MODE_OPTION_BLOCKS = [
     ("multi_card", 0x00C0668C, "멀티카드 통신", 24),
     ("map_trade", 0x00C06B78, "맵 교환", 26),
 ]
+PART1_OPTION_EXACT_SIZE_LABELS = {"트라이얼", "처음부터", "계속하기"}
 PART1_LOGO_BLOCK_CAPACITY = {
     PART1_OPERATION_LOGO_LZ77_OFF: 660,
     PART1_MAP_SELECT_LZ77_OFF: 662,
@@ -1379,10 +1380,37 @@ def draw_part1_option_logo_text(
     target_w = min(target_min_w, box[2] - box[0])
     if current_w >= target_w:
         return
-    patch = layer.crop(bbox_now).resize((target_w, bbox_now[3] - bbox_now[1]), Image.Resampling.NEAREST)
+    patch = smooth_scale_index_patch(layer.crop(bbox_now), target_w)
     draw.rectangle((bbox_now[0], bbox_now[1], bbox_now[2] - 1, bbox_now[3] - 1), fill=0)
     x = (box[0] + box[2] - target_w) // 2
     layer.paste(patch, (x, bbox_now[1]))
+
+
+INDEX_SCALE_LAYER_ORDER = (9, 10, 14, 7, 6, 5, 4, 3, 2, 1, 8, 11, 12, 13, 15)
+
+
+def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
+    """Horizontally expand a 4bpp index patch without smearing palette indices."""
+    if patch.width == target_w:
+        return patch.copy()
+    out = Image.new("L", (target_w, patch.height), 0)
+    op = out.load()
+    # Back-to-front compositing: weak antialias pixels only fill empty space,
+    # while strong body pixels can replace outline/shadow in the glyph interior.
+    for idx in INDEX_SCALE_LAYER_ORDER:
+        mask = patch.point(lambda p, idx=idx: 255 if p == idx else 0, "L")
+        if mask.getbbox() is None:
+            continue
+        mask = mask.resize((target_w, patch.height), Image.Resampling.LANCZOS)
+        mp = mask.load()
+        for yy in range(patch.height):
+            for xx in range(target_w):
+                alpha = mp[xx, yy]
+                if alpha >= 96:
+                    op[xx, yy] = idx
+                elif alpha >= 32 and op[xx, yy] == 0:
+                    op[xx, yy] = idx
+    return out
 
 
 def strengthen_operation_room_rieul(layer: Image.Image) -> None:
@@ -1448,6 +1476,13 @@ def part1_option_display_text(text: str) -> str:
     return text
 
 
+def part1_option_render_size(label: str, max_size: int) -> int:
+    # These labels were cramped at the shared cap; their table max is the tuned value.
+    if label in PART1_OPTION_EXACT_SIZE_LABELS:
+        return max_size
+    return min(max_size, 25)
+
+
 def make_part1_option_block(text: str, max_size: int) -> Image.Image:
     layer = Image.new("L", (128, 32), 0)
     label = part1_option_display_text(text)
@@ -1467,7 +1502,7 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
             layer,
             label,
             (8, 0, 120, 31),
-            min(max_size, 25),
+            part1_option_render_size(label, max_size),
             stroke_width=2,
             width_limit=width_limit,
         )

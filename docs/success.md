@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-07-06 — Part1 모드 선택 옵션 라벨 가독성 개선
+
+**결과**: 1편 본편 진입 후 모드 선택/하위 메뉴의 스프라이트 스타일은 유지하면서 `ㄹ`, `ㅌ` 계열 획이
+덜 뭉개지도록 보정했다. 전후 비교시트는
+`docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_focus.png`와
+`docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_screen_compare.png`다.
+
+**구현**: `tools/build_title_hangul.py`의 Part1 option 라벨 가로 보정에서 indexed patch를 NEAREST로
+직접 늘리던 방식을 제거하고, 팔레트 인덱스별 mask를 LANCZOS로 늘린 뒤 강한 body 픽셀 우선으로 합성했다.
+`트라이얼/처음부터/계속하기`의 튜닝 크기는 `PART1_MODE_OPTION_BLOCKS`에 명시했고, 새 자동 렌더 결과를
+가리던 `lz77_00C05658`(`통신`) override는 `data/sprites_overrides.json`에서 제거했다. 남은
+`lz77_00C03880`(`기록`) override는 기존 픽셀 보정으로 유지한다.
+
+**검증**: 최종 output 3종 SHA-256은 모두
+`99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149`.
+`py_compile`, `build_korean_full.py`, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`,
+`qa_text_fit.py`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`,
+`qa_scene_screenshot_sanity.py`, `git diff --check` 통과. `qa_visual_regions.py`는 팔레트/경계/픽셀수 회귀
+게이트이며, ㄹ/ㅌ 가독성 개선 판단은 위 비교시트 수동 확인을 기준으로 남겼다.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

@@ -1,0 +1,27 @@
+{
+  "name": "42_part1_single_battle",
+  "scene_id": "12_part1_single_submenus",
+  "side": "patched",
+  "mode": "fresh",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "git_commit": "52522ab",
+  "harness": "/Users/tarucy/project/aw-kor/temp/mgbah",
+  "grade": "ground_truth",
+  "note": "coldboot fresh nav: Part1 싱글 배틀 하위 메뉴",
+  "nav": [
+    [
+      "part1_menu"
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "press",
+      "A",
+      180
+    ]
+  ]
+}

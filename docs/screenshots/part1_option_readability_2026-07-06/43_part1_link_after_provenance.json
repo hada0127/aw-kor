@@ -1,0 +1,32 @@
+{
+  "name": "43_part1_link",
+  "scene_id": "13_part1_link_submenus",
+  "side": "patched",
+  "mode": "fresh",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149",
+  "git_commit": "3655117",
+  "harness": "temp/mgbah",
+  "grade": "ground_truth",
+  "note": "coldboot fresh nav: Part1 통신 하위 메뉴",
+  "nav": [
+    [
+      "part1_menu"
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "press",
+      "A",
+      180
+    ]
+  ]
+}

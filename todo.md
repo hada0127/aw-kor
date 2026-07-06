@@ -16,6 +16,21 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 ## A. 실화면 잔존 결함 0 (최우선 — codex+agy가 보는 화면). **codex·agy 공통: 아직 실잔존(미닫힘)**
 > 2026-06-24 후반 codex·agy 적대 재리뷰: A1/A2/A3는 현재 캡처에 실제로 보이는 결함이며, stale-BG는
 > **fresh-boot 재캡처로 입증 전 "오탐"으로 닫지 말 것**(savestate VRAM stale 가능성은 증거 아님).
+- [x] **2026-07-06 사용자 추가 요청: 1편 본편 진입 후 모드 선택 스프라이트 ㄹ/ㅌ 가독성 개선**:
+  기존 스타일은 유지하되 짧은 옵션 라벨을 가로 보정할 때 indexed 이미지를 NEAREST로 직접 늘리던 경로를
+  4bpp 인덱스별 mask resize+합성 방식으로 교체했다. 이에 따라 `트라이얼`, `작전룸`, `통신`, `대전`,
+  `처음부터`, `계속하기`의 ㄹ/ㅌ 내부 획이 덜 뭉개지게 보정됐다. 새 자동 렌더 결과를 가리던
+  `통신` sprite override(`lz77_00C05658`)는 제거했고, 기존 `기록` 픽셀 보정 override 1건만 유지한다.
+  비교시트:
+  `docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_focus.png`,
+  `docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_screen_compare.png`,
+  보고서:
+  `docs/screenshots/part1_option_readability_2026-07-06/report.json`.
+  최종 output 3종 SHA는
+  `99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149`.
+  통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
+  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`, `git diff --check`.
+  단, `qa_visual_regions.py`는 팔레트/경계/픽셀수 회귀 게이트이고 ㄹ/ㅌ 가독성 개선 판단은 비교시트 수동 확인 기준이다.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror

@@ -1,0 +1,91 @@
+{
+  "sheet": "docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_before_after.png",
+  "sheet_sha256": "002850408ec7bbbc252f5071e4f7f96c17b38868db4646f8d01096559f2254d0",
+  "focus_sheet": "docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_focus.png",
+  "focus_sha256": "9fd5b018dbd17df43a4f0c2815e8add2b3fe2ac21deb2fee83f009224c6fa70d",
+  "screen_sheet": "docs/screenshots/part1_option_readability_2026-07-06/part1_option_readability_screen_compare.png",
+  "screen_sheet_sha256": "11653c0b28c800affc3de431840234a94bf17ae267fe2661138841cc10cebe15",
+  "items": [
+    {
+      "sid": "lz77_00C0310C",
+      "label": "캠페인"
+    },
+    {
+      "sid": "lz77_00C03510",
+      "label": "트라이얼"
+    },
+    {
+      "sid": "lz77_00C03880",
+      "label": "기록"
+    },
+    {
+      "sid": "lz77_00C03AF0",
+      "label": "작전룸"
+    },
+    {
+      "sid": "lz77_00C03F68",
+      "label": "상점"
+    },
+    {
+      "sid": "lz77_00C043E0",
+      "label": "맵 디자인"
+    },
+    {
+      "sid": "lz77_00C0489C",
+      "label": "대전"
+    },
+    {
+      "sid": "lz77_00C04D48",
+      "label": "처음부터"
+    },
+    {
+      "sid": "lz77_00C051DC",
+      "label": "계속하기"
+    },
+    {
+      "sid": "lz77_00C05658",
+      "label": "통신"
+    },
+    {
+      "sid": "lz77_00C05994",
+      "label": "맵 기록"
+    },
+    {
+      "sid": "lz77_00C05D78",
+      "label": "플레이어 랭크"
+    },
+    {
+      "sid": "lz77_00C06218",
+      "label": "1카드 통신"
+    },
+    {
+      "sid": "lz77_00C0668C",
+      "label": "멀티카드 통신"
+    },
+    {
+      "sid": "lz77_00C06B78",
+      "label": "맵 교환"
+    }
+  ],
+  "patched_rom_sha256": "99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149",
+  "before_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "after_rom_sha256": "99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149",
+  "before_screen_frames": [
+    "docs/screenshots/part1_option_readability_2026-07-06/40_part1_name_menu_before.png",
+    "docs/screenshots/part1_option_readability_2026-07-06/42_part1_single_battle_before.png",
+    "docs/screenshots/part1_option_readability_2026-07-06/43_part1_link_before.png"
+  ],
+  "after_screen_frames": [
+    "docs/screenshots/part1_option_readability_2026-07-06/40_part1_name_menu_after.png",
+    "docs/screenshots/part1_option_readability_2026-07-06/42_part1_single_battle_after.png",
+    "docs/screenshots/part1_option_readability_2026-07-06/43_part1_link_after.png"
+  ],
+  "notes": [
+    "before 화면은 기존 temp/scene_screenshots fresh ground-truth 캡처를 보존한 것임",
+    "after 화면은 현재 output/game_wars_korean_full.gba SHA 기준 fresh recapture",
+    "15개 Part1 option asset은 qa_visual_regions asset check에서 bbox/palette/pixel count 확인됨",
+    "qa_visual_regions는 팔레트/경계/픽셀수 회귀 게이트이며 ㄹ/ㅌ 가독성 판단은 focus/screen 비교시트 수동 확인 기준",
+    "43_part1_link 화면은 통신 하위 메뉴 주변 회귀 확인용이며, mode option 통신 변경은 asset/focus 비교시트에서 확인",
+    "lz77_00C05658 통신 override는 새 자동 렌더 경로를 가리지 않도록 제거했으며, lz77_00C03880 기록 override는 기존 픽셀 보정으로 유지"
+  ]
+}
