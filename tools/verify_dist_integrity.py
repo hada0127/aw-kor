@@ -417,17 +417,50 @@ def verify_part1_map_label_hook(current, current_sha):
         )
     if int(report.get('step_count') or 0) < 180:
         return False, f'sweep step_count too small: {report.get("step_count")}'
-    if report.get('unique_list_crop_count') != report.get('step_count'):
+    step_count = int(report.get('step_count') or 0)
+    metrics = report.get('metrics') or []
+    if len(metrics) != step_count:
+        return False, f'sweep metrics length mismatch: metrics={len(metrics)} steps={step_count}'
+    crop_hashes = []
+    for idx, row in enumerate(metrics):
+        if not isinstance(row, dict):
+            return False, f'sweep metric row is not object at index {idx}'
+        if row.get('step') != idx:
+            return False, f'sweep metric step mismatch at index {idx}: {row.get("step")}'
+        crop_hash = row.get('crop_sha256')
+        if not isinstance(crop_hash, str) or len(crop_hash) != 64:
+            return False, f'sweep metric crop_sha256 invalid at step {idx}: {crop_hash}'
+        crop_hashes.append(crop_hash)
+    unique_metric_count = len(set(crop_hashes))
+    if report.get('unique_list_crop_count') != step_count:
         return False, (
             'sweep crop uniqueness mismatch: '
             f"unique={report.get('unique_list_crop_count')} steps={report.get('step_count')}"
         )
+    if unique_metric_count != step_count:
+        return False, (
+            'sweep metric hash uniqueness mismatch: '
+            f'unique={unique_metric_count} steps={step_count}'
+        )
+    if report.get('duplicate_list_crop_count') != step_count - unique_metric_count:
+        return False, (
+            'sweep duplicate count mismatch: '
+            f"report={report.get('duplicate_list_crop_count')} computed={step_count - unique_metric_count}"
+        )
     if report.get('low_bright_steps'):
         return False, f'sweep low-bright frames present: {report.get("low_bright_steps")}'
+    doc_hashes = report.get('docs_sha256') or {}
     for label, rel in (report.get('docs') or {}).items():
-        if not os.path.exists(os.path.join(BASE, rel)):
+        path = os.path.join(BASE, rel)
+        if not os.path.exists(path):
             return False, f'sweep artifact missing: {label} {rel}'
-    sweep_msg = f'sweep_steps={report.get("step_count")}, unique={report.get("unique_list_crop_count")}'
+        expected_hash = doc_hashes.get(label)
+        if not expected_hash:
+            return False, f'sweep artifact hash missing: {label} {rel}'
+        actual_hash = sha256(read(path))
+        if actual_hash != expected_hash:
+            return False, f'sweep artifact hash mismatch: {label} {rel}'
+    sweep_msg = f'sweep_steps={step_count}, frame_crop_unique={unique_metric_count}'
 
     return True, (
         f'entries={len(entries)}, b8_entries={len(entries) - 3}, '

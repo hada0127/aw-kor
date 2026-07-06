@@ -3505,3 +3505,44 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   후속으로 compact visual matrix/manual evidence, Part1 link sweep, scene residual evidence,
   2026-07-06 BPS/IPS/manifest를 current SHA에 맞춰 재생성했다. `verify_dist_integrity.py` PASS,
   `run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json` PASS.
+
+## [2026-07-06] Part1 이름 선택 후 이름+호칭 suffix 공백 RE
+
+- **증상**: 1편 이름 선택 후 첫 인사 대사에서 원본은 같은 route 기준 `はじめまして アさん`처럼 이름과 `さん`이 붙지만,
+  한국어 ROM은 선택 이름 뒤 suffix가 `　님`이면 `반가워. 아아  님`처럼 좌우 공백이 과하게 보였다.
+- **주소/바이트**: post-name greeting 본문은 `0x00DF5D9A = 반가워. `이고, 화면에서 확인한 이름 뒤 suffix는
+  `0x00DF5DA9` 및 직접 mirror `0x00DF8E4D`에 들어간다. codex 리뷰로 확인한 `<0x69>さん` 전역 치환
+  suffix 후보는 `0xDF1F62/0xDF1FA2/0xDF230A/0xDF2390/0xDF26F2/0xDF2786/0xDF5DA9/0xDF8E4D` 총 8곳이다.
+  최종 안전값은 `님` 뒤를 ASCII space로 padding한 `89da20202020`이다. 전각 leading space를 제거해도
+  다음 텍스트와 겹치지 않는다.
+- **검증 루트**: `tools/capture_part1_name_spacing.py`가 원본/최종을 coldboot부터 같은 입력으로 캡처한다.
+  비교 대상은 name grid preview, name confirm, post-name greeting, Catherine intro, Red Star intro 5장면이다.
+  시트 `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`에서
+  최종 post-name greeting은 `반가워. 아아님`으로 표시된다. 이 route의 원본 generated name은 1 kana,
+  한글 패치 generated name은 2 syllable이므로 report는 이를 same-route suffix-spacing 비교로 명시한다.
+- **QA hardening**: `tools/qa_transient_overlays.py`는 위 suffix 후보 8곳이
+  정확히 `89da20202020`인지 검사한다. 보고서
+  `docs/screenshots/part1_name_spacing_2026-07-06/report.json`의 suffix slot 8건은 모두 `matches=true`,
+  issue_count 0이다. 또한 `0x69 8140 89da` bad leading-space 패턴과 raw `0x69 さん` 패턴을
+  ROM 전체에서 검색해 hit 0이 아니면 fail한다. suffix-only 중간 SHA `cb78c7bc...` 기준 `verify_dist_integrity.py`와
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_part1_name_spacing_20260706.json`도 PASS했다.
+
+## [2026-07-06] Part1 name grid 글리프와 런타임 이름 출력 폰트 공유 RE
+
+- **추가 증상**: suffix 공백을 제거한 뒤에도 이름 출력 글자 자체가 일반 대사보다 작고 얇게 보였다.
+  원인은 post-name greeting 렌더러가 별도 이름용 폰트를 쓰는 것이 아니라, 이름 입력 grid에서 선택된
+  가나/한글 슬롯을 런타임 player-name control 출력에 재사용하기 때문이다.
+- **기존 구현 문제**: `patch_name_grid()`는 `FONT_BASE=0x08B974D0`의 가나 슬롯을 Galmuri7 BDF로
+  8px top tile에만 렌더하고 bottom tile은 blank로 뒀다. 이름 입력 화면에서는 칸 안에 들어가지만,
+  이후 일반 대사 박스 안에서 `<player name>`으로 출력될 때는 8x16 일반 대사 글리프보다 작게 보인다.
+- **수정한 RE 결론**: name grid의 한글 label 중 `data/syllable_to_glyph_2350.json`에 존재하는 음절은
+  `data/kor_glyphs_2350.bin`의 일반 대사 top/bot 8x8 tile bytes를 그대로 복사해야 한다.
+  이렇게 하면 입력 grid에서 선택된 코드가 이후 대사 렌더러에 들어가도 일반 대사와 같은 자형/크기로 출력된다.
+  숫자는 이미 원본 전각 숫자 슬롯이 일반 대사 glyph 역할을 하므로 덮어쓰지 않고 보존한다.
+  음절맵에 없는 특수 표시(`ㅡ` 등)는 Galmuri7을 쓰더라도 8x16 중앙 정렬로 렌더해 top-only 크기 차이를 없앤다.
+- **검증**: `tools/qa_transient_overlays.py`가 `NAME_GRID_SLOTS`, `NAME_GRID_MIRROR_SLOTS`,
+  `NAME_GRID_EXTRA_LABEL_SLOTS`의 한글 tile 128개를 일반 대사 glyph blob과 byte-identical인지 검사한다.
+  숫자 20개 tile도 원본 digit tile과 byte-identical인지 검사하고, `ㅡ` fallback은 bottom tile pixel을 확인한다.
+  최종 SHA `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`에서 mismatch 0이며,
+  `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`의 greeting 화면은
+  `반가워. 아아님`을 일반 대사와 같은 크기로 보여준다.

@@ -16,6 +16,30 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 ## A. 실화면 잔존 결함 0 (최우선 — codex+agy가 보는 화면). **codex·agy 공통: 아직 실잔존(미닫힘)**
 > 2026-06-24 후반 codex·agy 적대 재리뷰: A1/A2/A3는 현재 캡처에 실제로 보이는 결함이며, stale-BG는
 > **fresh-boot 재캡처로 입증 전 "오탐"으로 닫지 말 것**(savestate VRAM stale 가능성은 증거 아님).
+- [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
+  1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
+  원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror
+  `0x00DF8E4D`를 `님`+space padding(`89da20202020`)으로 맞춰 `반가워. 아아님`이 붙어 출력되게 수정했다.
+  추가 사용자 지적대로 이름 출력 글자 크기가 일반 대사보다 작아 보이는 원인은 1편 name grid용 가나 슬롯을
+  Galmuri7 8px top-only 글리프로 덮은 데 있었다. `patch_name_grid()`가 한글 음절 label은
+  `data/kor_glyphs_2350.bin`의 일반 대사 top/bot tile bytes를 그대로 복사하게 바꿔,
+  이름 그리드 선택 글자와 이후 `<player name>` 출력이 일반 대사 폰트 크기/자형을 공유하게 했다.
+  리뷰 보강으로 숫자 0-9는 원본 전각 숫자 top/bot tile을 보존하고, `ㅡ` fallback은 8x16 중앙 정렬로 바꿨다.
+  리뷰 보강으로 `<0x69>さん` 전역 치환 suffix 후보 8곳
+  (`0xDF1F62/0xDF1FA2/0xDF230A/0xDF2390/0xDF26F2/0xDF2786/0xDF5DA9/0xDF8E4D`)을
+  같은 바이트로 전수 검사하고, `0x69 8140 89da` bad leading-space 및 raw `0x69 さん` 패턴 잔존도 검사한다.
+  또한 `qa_transient_overlays.py`가 name grid 한글 tile 128개를 일반 대사 glyph blob과 byte-identical인지,
+  숫자 20개 tile이 원본 digit tile과 일치하는지, `ㅡ` fallback이 top-only가 아닌지 검사한다.
+  원본/최종 비교시트:
+  `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`,
+  보고서:
+  `docs/screenshots/part1_name_spacing_2026-07-06/report.json`.
+  최종 output 3종 SHA는
+  `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`.
+  통과: build, `capture_part1_name_spacing.py`, `qa_transient_overlays.py`, `qa_text_fit.py`,
+  `phase6_basic_test.py`, `verify_dist_integrity.py`(Part1 link sweep 180 full-frame crop hash unique),
+  `run_release_qa.py --timeout 300 --report temp/release_qa_report_part1_name_dialogue_font_20260706_final.json`,
+  `git diff --check`.
 - [x] **2026-07-06 사용자 추가 요청: 다른 예/아니오 확인창 대량 검수 + 이름 확인 RIGHT 커서 수정**:
   1편 이름 확인, 전투 메뉴 항복 확인, 전투 메뉴 모드 복귀 확인, 89a 항복 확인 pre-state를 새 SHA
   `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`에서 재캡처했다.

@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
- "git_commit": "0850e0c",
+ "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+ "git_commit": "52522ab",
  "source": "data/compact_display_xref_analysis.json",
  "summary": {
   "literal_entry_count": 695,

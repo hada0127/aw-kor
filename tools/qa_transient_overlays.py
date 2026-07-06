@@ -25,6 +25,18 @@ PART1_DAY_BANNER_LZ77 = 0xEE5E14
 SURRENDER_YESNO_ROW = 0xA34B6C
 SURRENDER_YESNO_LEN = 16
 SURRENDER_YESNO_TEXT = "　예　　　아니오"
+PART1_NAME_SUFFIX_SLOTS = {
+    0xDF1F62: "part1 name-control suffix copy 1",
+    0xDF1FA2: "part1 name-control suffix copy 2",
+    0xDF230A: "part1 name-control suffix copy 3",
+    0xDF2390: "part1 name-control suffix copy 4",
+    0xDF26F2: "part1 name-control suffix copy 5",
+    0xDF2786: "part1 name-control suffix copy 6",
+    0xDF5DA9: "part1 operation-room name suffix",
+    0xDF8E4D: "part1 post-name greeting suffix",
+}
+PART1_NAME_SUFFIX_TEXT = "님"
+PART1_RAW_NAME_CONTROL_SAN = bytes.fromhex("6982b382f1")
 PART1_YESNO_HOOK_FILE = 0xF10000
 PART1_YESNO_CURSOR_BRANCH_OFF = 0x98
 PART1_YESNO_CURSOR_FIX_OFF = 0x154
@@ -111,6 +123,21 @@ def glyph_bytes(rom: bytes, slots: tuple[int, int]) -> bytes:
     return bytes(out)
 
 
+def font_tile_bytes(rom: bytes, slot: int) -> bytes:
+    off = FONT_BASE + slot * 32
+    return rom[off:off + 32]
+
+
+def glyph_pair_bbox(rom: bytes, slots: tuple[int, int]) -> list[int] | None:
+    pixels = tile_to_pixels(font_tile_bytes(rom, slots[0]))
+    pixels += tile_to_pixels(font_tile_bytes(rom, slots[1]))
+    return bbox(pixels)
+
+
+def tile_nonzero(tile: bytes) -> int:
+    return sum(1 for b in tile if b)
+
+
 def tile_to_pixels(tile: bytes) -> list[list[int]]:
     rows: list[list[int]] = []
     for y in range(8):
@@ -167,6 +194,7 @@ def column_runs(pixels: list[list[int]]) -> list[list[int]]:
 
 def main() -> int:
     sys.path.insert(0, str(ROOT / "tools"))
+    import build_korean_full as build  # noqa: WPS433
     from lz77_scan import lz77_decompress  # noqa: WPS433
 
     issues: list[dict[str, Any]] = []
@@ -203,6 +231,151 @@ def main() -> int:
                 "expected_hex": expected.hex(),
                 "current_hex": current.hex(),
             })
+
+    name_suffix_status = []
+    name_suffix_pattern_status = {}
+    name_grid_dialogue_font_status = {}
+    if rom:
+        suffix_encoded = encode_korean_ui(PART1_NAME_SUFFIX_TEXT, load_syllable_codes())
+        suffix_expected = suffix_encoded + b"\x20" * 4
+        for addr, label in PART1_NAME_SUFFIX_SLOTS.items():
+            current = rom[addr:addr + 6]
+            row = {
+                "addr": f"0x{addr:08X}",
+                "label": label,
+                "expected_text": PART1_NAME_SUFFIX_TEXT,
+                "expected_hex": suffix_expected.hex(),
+                "current_hex": current.hex(),
+                "matches": current == suffix_expected,
+            }
+            name_suffix_status.append(row)
+            if current != suffix_expected:
+                issues.append({
+                    "type": "part1_name_suffix_spacing_regression",
+                    **row,
+                })
+        bad_leading_space = b"\x69\x81\x40" + suffix_encoded
+        bad_hits = []
+        pos = 0
+        while True:
+            pos = rom.find(bad_leading_space, pos)
+            if pos < 0:
+                break
+            bad_hits.append(pos)
+            pos += 1
+        raw_hits = []
+        pos = 0
+        while True:
+            pos = rom.find(PART1_RAW_NAME_CONTROL_SAN, pos)
+            if pos < 0:
+                break
+            raw_hits.append(pos)
+            pos += 1
+        name_suffix_pattern_status = {
+            "bad_leading_space_pattern_hex": bad_leading_space.hex(),
+            "bad_leading_space_hits": [f"0x{x:08X}" for x in bad_hits],
+            "raw_name_control_san_pattern_hex": PART1_RAW_NAME_CONTROL_SAN.hex(),
+            "raw_name_control_san_hits": [f"0x{x:08X}" for x in raw_hits],
+        }
+        if bad_hits:
+            issues.append({
+                "type": "part1_name_suffix_bad_leading_space_pattern",
+                "pattern_hex": bad_leading_space.hex(),
+                "hits": [f"0x{x:08X}" for x in bad_hits],
+            })
+        if raw_hits:
+            issues.append({
+                "type": "raw_part1_name_control_san_pattern",
+                "pattern_hex": PART1_RAW_NAME_CONTROL_SAN.hex(),
+                "hits": [f"0x{x:08X}" for x in raw_hits],
+            })
+
+        dialogue_glyphs = json.loads(Path(build.SYLMAP_2350).read_text(encoding="utf-8"))["map"]
+        dialogue_blob = read(Path(build.GLYPH_BLOB_2350))
+
+        def dialogue_tile(slot: int) -> bytes:
+            start = slot * 32
+            return dialogue_blob[start:start + 32]
+
+        checks = []
+        digit_checks = []
+        fallback_checks = []
+
+        def add_grid_check(label: str, slots: tuple[int, int], source: str) -> None:
+            if label not in dialogue_glyphs:
+                if label.isdigit() and original:
+                    for half, font_slot in (("top", slots[0]), ("bot", slots[1])):
+                        current = font_tile_bytes(rom, font_slot)
+                        expected = font_tile_bytes(original, font_slot)
+                        row = {
+                            "label": label,
+                            "source": source,
+                            "half": half,
+                            "font_slot": font_slot,
+                            "matches_original_dialogue_digit": current == expected,
+                        }
+                        digit_checks.append(row)
+                        if current != expected:
+                            issues.append({
+                                "type": "part1_name_grid_digit_not_original_dialogue_font",
+                                **row,
+                            })
+                    return
+                if label:
+                    top = font_tile_bytes(rom, slots[0])
+                    bot = font_tile_bytes(rom, slots[1])
+                    row = {
+                        "label": label,
+                        "source": source,
+                        "slots": list(slots),
+                        "bbox_8x16": glyph_pair_bbox(rom, slots),
+                        "top_nonzero": tile_nonzero(top),
+                        "bot_nonzero": tile_nonzero(bot),
+                        "has_bottom_pixels": tile_nonzero(bot) > 0,
+                    }
+                    fallback_checks.append(row)
+                    if not row["has_bottom_pixels"]:
+                        issues.append({
+                            "type": "part1_name_grid_fallback_top_only",
+                            **row,
+                        })
+                return
+            glyph = dialogue_glyphs[label]
+            for half, font_slot, glyph_slot in (
+                ("top", slots[0], int(glyph["top"])),
+                ("bot", slots[1], int(glyph["bot"])),
+            ):
+                current = font_tile_bytes(rom, font_slot)
+                expected = dialogue_tile(glyph_slot)
+                row = {
+                    "label": label,
+                    "source": source,
+                    "half": half,
+                    "font_slot": font_slot,
+                    "dialogue_glyph_slot": glyph_slot,
+                    "matches": current == expected,
+                }
+                checks.append(row)
+                if current != expected:
+                    issues.append({
+                        "type": "part1_name_grid_not_dialogue_font",
+                        **row,
+                    })
+
+        for ch, slots in build.NAME_GRID_SLOTS.items():
+            add_grid_check(build.NAME_GRID_LABELS.get(ch, ch), slots, f"NAME_GRID_SLOTS[{ch!r}]")
+            for mirror_slots in build.NAME_GRID_MIRROR_SLOTS.get(ch, []):
+                add_grid_check(build.NAME_GRID_LABELS.get(ch, ch), mirror_slots, f"NAME_GRID_MIRROR_SLOTS[{ch!r}]")
+        for label, slots in build.NAME_GRID_EXTRA_LABEL_SLOTS.items():
+            add_grid_check(label, slots, f"NAME_GRID_EXTRA_LABEL_SLOTS[{label!r}]")
+        name_grid_dialogue_font_status = {
+            "checked_tiles": len(checks),
+            "mismatches": [row for row in checks if not row["matches"]],
+            "digit_original_tiles": len(digit_checks),
+            "digit_mismatches": [row for row in digit_checks if not row["matches_original_dialogue_digit"]],
+            "fallback_16px_checks": fallback_checks,
+            "fallback_top_only": [row for row in fallback_checks if not row["has_bottom_pixels"]],
+        }
 
     title_source_status = []
     if rom:
@@ -339,6 +512,9 @@ def main() -> int:
         "required_kanji_subs": glyph_status,
         "part1_day_label": day_label,
         "surrender_yesno": surrender_yesno,
+        "part1_name_suffixes": name_suffix_status,
+        "part1_name_suffix_patterns": name_suffix_pattern_status,
+        "part1_name_grid_dialogue_font": name_grid_dialogue_font_status,
         "part1_yesno_cursor_fix": part1_yesno_cursor_fix,
     }
     REPORT.parent.mkdir(parents=True, exist_ok=True)

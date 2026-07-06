@@ -1,0 +1,101 @@
+{
+  "original_rom": "original/Game Boy Wars Advance 1+2 (Japan).gba",
+  "original_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+  "final_rom": "output/game_wars_korean_full.gba",
+  "final_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "route": "coldboot -> Part1 new game -> accept generated/default name -> A",
+  "comparison_note": "This is a same-route suffix-spacing comparison. The original route yields a one-kana generated name, while the patched route yields a two-syllable Hangul generated name; the sheet is used to verify that the honorific attaches without a visible leading gap.",
+  "shots": {
+    "original": {
+      "00_name_grid_preview": "docs/screenshots/part1_name_spacing_2026-07-06/original/00_name_grid_preview.png",
+      "01_name_confirm": "docs/screenshots/part1_name_spacing_2026-07-06/original/01_name_confirm.png",
+      "02_post_name_greeting": "docs/screenshots/part1_name_spacing_2026-07-06/original/02_post_name_greeting.png",
+      "03_catherine_intro": "docs/screenshots/part1_name_spacing_2026-07-06/original/03_catherine_intro.png",
+      "04_redstar_intro": "docs/screenshots/part1_name_spacing_2026-07-06/original/04_redstar_intro.png"
+    },
+    "final": {
+      "00_name_grid_preview": "docs/screenshots/part1_name_spacing_2026-07-06/final/00_name_grid_preview.png",
+      "01_name_confirm": "docs/screenshots/part1_name_spacing_2026-07-06/final/01_name_confirm.png",
+      "02_post_name_greeting": "docs/screenshots/part1_name_spacing_2026-07-06/final/02_post_name_greeting.png",
+      "03_catherine_intro": "docs/screenshots/part1_name_spacing_2026-07-06/final/03_catherine_intro.png",
+      "04_redstar_intro": "docs/screenshots/part1_name_spacing_2026-07-06/final/04_redstar_intro.png"
+    }
+  },
+  "temp_shots": {
+    "original": {
+      "00_name_grid_preview": "temp/part1_name_spacing_20260706/original/00_name_grid_preview.png",
+      "01_name_confirm": "temp/part1_name_spacing_20260706/original/01_name_confirm.png",
+      "02_post_name_greeting": "temp/part1_name_spacing_20260706/original/02_post_name_greeting.png",
+      "03_catherine_intro": "temp/part1_name_spacing_20260706/original/03_catherine_intro.png",
+      "04_redstar_intro": "temp/part1_name_spacing_20260706/original/04_redstar_intro.png"
+    },
+    "final": {
+      "00_name_grid_preview": "temp/part1_name_spacing_20260706/final/00_name_grid_preview.png",
+      "01_name_confirm": "temp/part1_name_spacing_20260706/final/01_name_confirm.png",
+      "02_post_name_greeting": "temp/part1_name_spacing_20260706/final/02_post_name_greeting.png",
+      "03_catherine_intro": "temp/part1_name_spacing_20260706/final/03_catherine_intro.png",
+      "04_redstar_intro": "temp/part1_name_spacing_20260706/final/04_redstar_intro.png"
+    }
+  },
+  "sheet": "docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png",
+  "suffix_slots": [
+    {
+      "addr": "0x00DF1F62",
+      "label": "name_control_suffix_copy_1",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF1FA2",
+      "label": "name_control_suffix_copy_2",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF230A",
+      "label": "name_control_suffix_copy_3",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF2390",
+      "label": "name_control_suffix_copy_4",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF26F2",
+      "label": "name_control_suffix_copy_5",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF2786",
+      "label": "name_control_suffix_copy_6",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF5DA9",
+      "label": "operation_room_suffix",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    },
+    {
+      "addr": "0x00DF8E4D",
+      "label": "post_name_greeting_suffix",
+      "expected_hex": "89da20202020",
+      "current_hex": "89da20202020",
+      "matches": true
+    }
+  ],
+  "visual_review_note": "The sheet is the visual spacing evidence; issue_count only gates suffix bytes.",
+  "issue_count": 0
+}

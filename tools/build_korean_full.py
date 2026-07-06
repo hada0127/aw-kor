@@ -645,7 +645,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF5D81: '방법도 설명이야',
     0xDF5D9A: '반가워. ',
     0xDF5DB4: '코스모랜드에 어서 와',
-    0xDF5DA9: '　님',
+    0xDF5DA9: '님',
     0xDF5DD2: '나는 레드스타국의 사령관',
     0xDF5E12: '코스모랜드 설명을',
     0xDF5E35: '해 줄게.',
@@ -4894,7 +4894,9 @@ def patch_name_grid(rom):
     """이름 입력 그리드를 한글 음가 + 숫자 표기로 교체.
 
     ① base8 가나 슬롯 테이블 패치(KANA_REMAP): q-y top·p bottom 을 fresh 슬롯으로 → 26자 전부 고유.
-    ② NAME_GRID_SLOTS 슬롯에 한글 음가/숫자 글리프 주입(8px top tile 내부 맞춤). 미사용 셀 블랭크.
+    ② NAME_GRID_SLOTS 슬롯에 한글 음가/숫자 글리프 주입. 한글 음절은 일반 대사 KOR_BASE glyph와
+      같은 top/bot tile bytes를 복사해 이름 출력과 대사 출력의 자형/크기를 맞춘다.
+      숫자는 원본 전각 숫자 top/bot tile을 보존하고, 일반 음절맵에 없는 특수 표시는 8x16 중앙 정렬 fallback을 쓴다.
     ③ live 행 문자열(0x08DF8C38 계열)을 패치하되, 선택 로직과 맞는 원본 중간 갭은 유지.
     """
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -4902,6 +4904,13 @@ def patch_name_grid(rom):
     FONT_BASE = 0x08B974D0
     BLANK = bytes(32)
     font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    dialogue_glyphs = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']
+    dialogue_blob = open(GLYPH_BLOB_2350, 'rb').read()
+    original_digit_tiles = {}
+    for ch in '0123456789':
+        for slot in NAME_GRID_SLOTS[ch]:
+            off = (FONT_BASE + slot * 32) - 0x08000000
+            original_digit_tiles[slot] = bytes(rom[off:off + 32])
 
     # ① base8 가나 테이블 패치
     for sjis, remaps in KANA_REMAP.items():
@@ -4914,18 +4923,27 @@ def patch_name_grid(rom):
         off = (FONT_BASE + slot * 32) - 0x08000000
         rom[off:off + 32] = data
 
+    def dialogue_tile(slot):
+        start = slot * 32
+        return dialogue_blob[start:start + 32]
+
     def render_grid_char(label):
+        if label in dialogue_glyphs:
+            glyph = dialogue_glyphs[label]
+            return dialogue_tile(glyph['top']), dialogue_tile(glyph['bot'])
         if not label or ord(label) not in font:
             return BLANK, BLANK
         grid, w, h, xo, yo = glyph_grid(font[ord(label)])
         x_offset = max(0, min(8 - w, (8 - w) // 2 - xo))
-        y_offset = max(0, min(8 - h, (8 - h + 1) // 2 - yo))
+        y_offset = max(0, min(16 - h, (16 - h + 1) // 2 - yo))
         top = bytearray(32)
+        bot = bytearray(32)
 
-        def setpix(tile, row, col, val=9):
-            if not (0 <= row < 8 and 0 <= col < 8):
+        def setpix(row, col, val=9):
+            if not (0 <= row < 16 and 0 <= col < 8):
                 return
-            bi = row * 4 + col // 2
+            tile = top if row < 8 else bot
+            bi = (row % 8) * 4 + col // 2
             if col % 2 == 0:
                 tile[bi] = (tile[bi] & 0xF0) | val
             else:
@@ -4936,13 +4954,17 @@ def patch_name_grid(rom):
             for c in range(w):
                 cell_col = x_offset + c + xo
                 if grid[r][c]:
-                    if not (0 <= cell_row < 8 and 0 <= cell_col < 8):
+                    if not (0 <= cell_row < 16 and 0 <= cell_col < 8):
                         raise AssertionError(f'name grid glyph clips: {label!r} row={cell_row} col={cell_col}')
-                    setpix(top, cell_row, cell_col)
-        return bytes(top), BLANK
+                    setpix(cell_row, cell_col)
+        return bytes(top), bytes(bot)
 
     def inject(ch):
         top_slot, bot_slot = NAME_GRID_SLOTS[ch]
+        if ch.isdigit():
+            write_slot(top_slot, original_digit_tiles[top_slot])
+            write_slot(bot_slot, original_digit_tiles[bot_slot])
+            return
         label = NAME_GRID_LABELS.get(ch, ch)
         top, bot = render_grid_char(label)
         write_slot(top_slot, top)
@@ -11456,7 +11478,9 @@ def main():
         # remains the base for this build.
         rom[V56_OVERLAY_ADDR_TABLE:V56_OVERLAY_ADDR_TABLE + V56_OVERLAY_ADDR_TABLE_LEN] = b'\xFF' * V56_OVERLAY_ADDR_TABLE_LEN
 
-    # === ASM hook 방식: repoint/폰트복사 없음. 원본 FONT_BASE 보존(그리드+대화 가나/한자). ===
+    # === ASM hook 방식: 본문 한글은 KOR_BASE hook/table로 렌더한다. ===
+    # FONT_BASE는 원본 가나/숫자/한자 기반을 유지하되, 마지막 단계에서 Part1 name grid용
+    # 선택 슬롯만 한글 음가/대사용 digit tile로 재패치한다.
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(GLYPH_BLOB_2350, 'rb').read()   # T1: 2350자 글리프(기존 prefix-identical)
     rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
@@ -20109,15 +20133,14 @@ def main():
     rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
     WRITE_LOG.append([0xD8273C, 8, len(yesno_name_confirm), bytes(yesno_name_confirm).hex(), None, '예오아니', None, 'yesno-name'])
 
-    # These suffixes follow the runtime player-name control byte. The compact
-    # Part 1 dialogue path gives ASCII space almost no advance, so use a full
-    # width space and verify the name-confirm route by screen capture.
-    suffix = encode_text('　님', syl_to_code, unmapped)
+    # These suffixes follow the runtime player-name control byte.  The original
+    # has no visual gap between the entered name and さん, so keep 님 attached.
+    suffix = encode_text('님', syl_to_code, unmapped)
     _suffix_pad = suffix + bytes([FILL_BYTE]) * (6 - len(suffix))
     rom[0xDF5DA9:0xDF5DA9 + 6] = _suffix_pad
     rom[0xDF8E4D:0xDF8E4D + 6] = _suffix_pad
-    WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
-    WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '　님', None, 'name-suffix'])
+    WRITE_LOG.append([0xDF5DA9, 6, len(_suffix_pad), _suffix_pad.hex(), None, '님', None, 'name-suffix'])
+    WRITE_LOG.append([0xDF8E4D, 6, len(_suffix_pad), _suffix_pad.hex(), None, '님', None, 'name-suffix'])
 
     # This Hoip CO-help row originally starts the second line with runtime
     # player-name control 0x69. Old savestates and some fresh-route probes can

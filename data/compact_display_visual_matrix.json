@@ -1,19 +1,19 @@
 {
  "tool": "tools/build_compact_display_visual_matrix.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+ "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
  "glyph_dictionary_qa": {
   "path": "temp/glyph_dictionary_qa.json",
   "issue_count": 0,
-  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646"
+  "rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c"
  },
  "renderer_trace": {
   "path": "data/compact_display_renderer_trace.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
   "case_count": 10,
-  "hit_count": 1762,
+  "hit_count": 1760,
   "direct_target_hit_count": 0,
   "breakpoint_count": 55,
   "code_context_breakpoints_enabled": true,
@@ -24,7 +24,7 @@
   "path": "data/compact_display_xref_analysis.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
   "groups": [
    {
     "id": "a2_co_power_profile_display_overrides",
@@ -73,7 +73,7 @@
   "path": "data/compact_display_code_context.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
   "literal_entry_count": 695,
   "derived_table_head_ref_count": 681,
   "breakpoint_candidate_count": 24,
@@ -88,7 +88,7 @@
  "manual_visual_evidence": {
   "path": "data/compact_display_manual_visual_evidence.json",
   "present": true,
-  "source_sha256": "49773628808af846fd5c5b1e2cc35d62183a11b8d5e511ac591e0b00dfcb2154",
+  "source_sha256": "15afb5352d24913e94993b84752bc885fa45f69731063eb799c658373b1a3969",
   "current_count": 13,
   "accepted_count": 13,
   "invalid_count": 0,
@@ -114,7 +114,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "고물 전차 출격",
@@ -141,8 +141,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -159,7 +159,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전선 기지 확보",
@@ -186,8 +186,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -204,7 +204,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "첫 전투",
@@ -231,8 +231,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -249,7 +249,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "전투 개시",
@@ -276,8 +276,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -294,7 +294,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "최강 중전차",
@@ -321,8 +321,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -339,7 +339,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "적 부대 격파",
@@ -366,8 +366,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -384,7 +384,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "하늘의 적",
@@ -411,8 +411,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -429,7 +429,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "대공 제압",
@@ -456,8 +456,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -474,7 +474,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "드래곤 플라이",
@@ -501,8 +501,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -519,7 +519,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "은빛 세계",
@@ -546,8 +546,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -564,7 +564,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "바다 너머",
@@ -591,8 +591,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -609,7 +609,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "도그 파이트",
@@ -636,8 +636,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -654,7 +654,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
     "scene_id": "15_part1_operation_logos",
     "base_text": "결전",
@@ -681,8 +681,8 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
@@ -11246,7 +11246,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
        "scene_id": "15_part1_operation_logos",
        "base_text": "결전",
@@ -11273,8 +11273,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11335,7 +11335,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "은빛 세계",
@@ -11362,8 +11362,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11424,7 +11424,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "바다 너머",
@@ -11451,8 +11451,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11513,7 +11513,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "도그 파이트",
@@ -11540,8 +11540,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11602,7 +11602,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "대공 제압",
@@ -11629,8 +11629,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11691,7 +11691,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "하늘의 적",
@@ -11718,8 +11718,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11780,7 +11780,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "드래곤 플라이",
@@ -11807,8 +11807,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11869,7 +11869,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "최강 중전차",
@@ -11896,8 +11896,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -11958,7 +11958,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "적 부대 격파",
@@ -11985,8 +11985,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12047,7 +12047,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "고물 전차 출격",
@@ -12074,8 +12074,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12136,7 +12136,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전선 기지 확보",
@@ -12163,8 +12163,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12225,7 +12225,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "첫 전투",
@@ -12252,8 +12252,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -12314,7 +12314,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "전투 개시",
@@ -12341,8 +12341,8 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
@@ -27348,7 +27348,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27364,7 +27364,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
     "reason": "rom_sha_mismatch"
    }
   },
@@ -27380,7 +27380,7 @@
     "current": false,
     "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
+    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
     "reason": "rom_sha_mismatch"
    }
   },

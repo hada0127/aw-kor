@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
- "git_commit": "0850e0c",
+ "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+ "git_commit": "52522ab",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -376,7 +376,7 @@
  "code_context_breakpoints_enabled": true,
  "target_count": 495,
  "case_count": 10,
- "hit_count": 1762,
+ "hit_count": 1760,
  "direct_target_hit_count": 0,
  "direct_hits": [],
  "cases": [
@@ -385,7 +385,7 @@
    "name": "07_part2_main_menu",
    "mode": "fresh",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,7 +862,7 @@
    "name": "scene_23a_part2_wars_shop",
    "mode": "savestate",
    "scene_id": "23a_part2_wars_shop",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_23a_part2_wars_shop/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_23a_part2_wars_shop/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1295,7 +1295,7 @@
      40
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_23a_part2_wars_shop/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_scene_23a_part2_wars_shop/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -1306,7 +1306,7 @@
    "name": "scene_86_common_compact_menu_tables",
    "mode": "savestate",
    "scene_id": "86_common_compact_menu_tables",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_86_common_compact_menu_tables/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_86_common_compact_menu_tables/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1739,7 +1739,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_86_common_compact_menu_tables/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_scene_86_common_compact_menu_tables/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -1750,7 +1750,7 @@
    "name": "scene_87_common_rule_settings",
    "mode": "fresh",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2306,7 +2306,7 @@
      60
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -2430,7 +2430,7 @@
    "name": "30_battle_attack",
    "mode": "savestate",
    "scene_id": "26_part2_battle_labels",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_30_battle_attack/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_30_battle_attack/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2863,7 +2863,7 @@
      30
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_30_battle_attack/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_30_battle_attack/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -2874,7 +2874,7 @@
    "name": "scene_27_part2_battle_objlabels",
    "mode": "savestate",
    "scene_id": "27_part2_battle_objlabels",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_27_part2_battle_objlabels/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_27_part2_battle_objlabels/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -3307,7 +3307,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_27_part2_battle_objlabels/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_scene_27_part2_battle_objlabels/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -3318,7 +3318,7 @@
    "name": "scene_26a_part2_battle_start_overlay_f060",
    "mode": "savestate",
    "scene_id": "26a_part2_battle_start_overlays",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_26a_part2_battle_start_overlay_f060/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_scene_26a_part2_battle_start_overlay_f060/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -3751,7 +3751,7 @@
      1
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_scene_26a_part2_battle_start_overlay_f060/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/screen_scene_26a_part2_battle_start_overlay_f060/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -3762,7 +3762,7 @@
    "name": "41_part1_operation_room",
    "mode": "fresh",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -4337,8 +4337,8 @@
      200
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/screen_41_part1_operation_room/frame.png",
-   "hit_count": 1758,
+   "frame": "temp/compact_renderer_trace_20260627/screen_41_part1_operation_room/frame.png",
+   "hit_count": 1756,
    "direct_target_hits": [],
    "hits": [
     {
@@ -9942,14 +9942,14 @@
      "raw": "199 BP r0=00008983 r1=00000100 r2=00008A83 r3=00000030 r4=08BE71DE r5=000001FE r6=02010ADA r7=00000001 sp=03007AFC lr=08B1BF0D pc=08B12ABE"
     }
    ],
-   "truncated_hits": 1558
+   "truncated_hits": 1556
   },
   {
    "case_type": "freshrender",
    "name": "co_profile_maxg",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_maxg/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/freshrender_co_profile_maxg/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -10381,7 +10381,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_maxg/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/freshrender_co_profile_maxg/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -10392,7 +10392,7 @@
    "name": "co_profile_domino",
    "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
    "state_sha256": "74c2d368ded81f4db071ea2c9a9dbfa5dc3252aa77a0de7333e0ce20f31ce410",
-   "breakpoint_log": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_domino/breakpoints.log",
+   "breakpoint_log": "temp/compact_renderer_trace_20260627/freshrender_co_profile_domino/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -10829,7 +10829,7 @@
      50
     ]
    ],
-   "frame": "temp/compact_renderer_trace_20260706_yesno_fix/freshrender_co_profile_domino/frame.png",
+   "frame": "temp/compact_renderer_trace_20260627/freshrender_co_profile_domino/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],

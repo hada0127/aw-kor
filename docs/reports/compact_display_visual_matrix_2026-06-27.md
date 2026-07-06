@@ -1,6 +1,6 @@
 # Compact Display Visual Matrix
 
-- ROM SHA: `83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646`
+- ROM SHA: `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`
 - Contact sheet: `docs/screenshots/e12_compact_display_matrix_2026-06-27/current_representative_contact.png`
 
 This report separates static byte/editor coverage from target-level runtime/source proof.
@@ -27,11 +27,11 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Renderer Trace
 
-- trace_present=True current=True rom_sha=`83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646` cases=10 hits=1762 direct=0 breakpoints=55 code_context=True path=`data/compact_display_renderer_trace.json`
+- trace_present=True current=True rom_sha=`59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62` cases=10 hits=1760 direct=0 breakpoints=55 code_context=True path=`data/compact_display_renderer_trace.json`
 
 ## Static Code Context
 
-- code_context_present=True current=True rom_sha=`83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646` path=`data/compact_display_code_context.json` literal_entries=695 breakpoint_candidates=24 function_candidates=18
+- code_context_present=True current=True rom_sha=`59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62` path=`data/compact_display_code_context.json` literal_entries=695 breakpoint_candidates=24 function_candidates=18
 
 ## Manual Visual Evidence
 

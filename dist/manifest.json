@@ -12,29 +12,29 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "47288010",
-    "sha1": "4c746d02ba8f578b06e90e7500b5d3fe2470436f",
-    "sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646"
+    "crc32": "1587fd4f",
+    "sha1": "477f3b43615ad25405dd9acc2ec27c03afbe57b7",
+    "sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62"
   },
   "output_rom": {
     "canonical": "game_wars_korean_full.gba",
-    "sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+    "sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
     "legacy_variants": []
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-07-06.bps",
-    "size": 997971,
+    "size": 997381,
     "crc32": "2144df1c",
-    "sha1": "51cba30513f09a624e50b9c950e1caf712677773",
-    "sha256": "d09356422f46bf34504cf9e428b10134817bef3b1af53b5c980fb927998350c1",
+    "sha1": "48fc8f21ef10b04ae2680b6c93f5a4bc5748a5e6",
+    "sha256": "678afcc0e4128718e141c57a50f830647e0994545b9d7ceb6f1fc2ce44e323ea",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-07-06.ips",
-    "size": 1142046,
-    "crc32": "6d3ec54f",
-    "sha1": "0527702cdc7d65376bdccd533c714990097769c2",
-    "sha256": "4e7c9046729b18fd049d6efc39db688ff712c5f7ba42b1a5c091d3bc3711cd2a",
+    "size": 1140651,
+    "crc32": "70fdede4",
+    "sha1": "0694bce200eb68007594cf1f32ffd0ea20874314",
+    "sha256": "9b5f7511d98014c6739b45322fb2186e9ea3e3ba8a19e3e80a62402ecdf04a29",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },

@@ -3458,3 +3458,63 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
 - 최종 통과:
   `python3 tools/verify_dist_integrity.py`,
   `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_yesno_dist_sync_20260706_after_scene.json`.
+
+## [2026-07-06] Part1 이름 선택 후 인사 대사 suffix 공백 수정 완료
+
+- 사용자 제보 route를 원본과 같은 순서로 캡처했다:
+  coldboot -> Part1 new game -> generated/default name 확인 -> A.
+  수정 전 후보 확인에서 이름 뒤 suffix가 `　님`이면 `아아  님`처럼 벌어지고, suffix를 `님`으로 줄이면
+  원본 `アさん`처럼 이름과 호칭이 붙는 것을 확인했다. 이 비교는 같은 route의 suffix-spacing 증거이며,
+  원본 generated name은 1 kana, 한글 패치 generated name은 2 syllable이라는 차이를 report에 명시했다.
+- `0x00DF5DA9` override와 직접 suffix mirror `0x00DF8E4D`를 모두 `님`+space padding으로 맞췄다.
+  codex 리뷰 지적에 따라 `<0x69>さん` 전역 치환 suffix 후보 8곳
+  (`0xDF1F62/0xDF1FA2/0xDF230A/0xDF2390/0xDF26F2/0xDF2786/0xDF5DA9/0xDF8E4D`)을
+  QA 대상으로 확장했고, 최종 슬롯 바이트는 모두 `89da20202020`이다. 추가로
+  `0x69 8140 89da` bad leading-space 패턴과 raw `0x69 さん` 패턴 잔존을 hard fail로 검사한다.
+- 재현 도구 `tools/capture_part1_name_spacing.py`를 추가했다. 원본/최종 비교시트는
+  `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`,
+  JSON 보고서는 `docs/screenshots/part1_name_spacing_2026-07-06/report.json`이다.
+  개별 프레임도 `docs/screenshots/part1_name_spacing_2026-07-06/original/`와 `final/`에 보존한다.
+  문제 장면은 최종 ROM에서 `반가워. 아아님`으로 붙어 나오며 겹침은 없다.
+- suffix-only 중간 output 3종 SHA는 모두
+  `cb78c7bc2d0013c44c37f4d3a0cf51302c4308bd5fc2f23e6b6cedff5ecc959b`.
+  이후 일반 대사 폰트 정렬 및 digit/fallback 보강으로 현재 배포 SHA는 `59c99084...` 계열로 갱신됐다.
+- 통과: `python3 tools/build_korean_full.py`, `python3 tools/capture_part1_name_spacing.py`,
+  `python3 tools/qa_transient_overlays.py`, `python3 tools/qa_text_fit.py`,
+  `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`,
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_part1_name_spacing_20260706.json`,
+  `git diff --check`.
+
+## [2026-07-06] Part1 이름 출력 일반 대사 폰트 정렬 완료
+
+- 추가 사용자 지적: 이름 선택 뒤 출력되는 이름 글자 크기가 일반 대사와 다르게 작아 보였다.
+  원인은 `patch_name_grid()`가 name grid용 가나 슬롯을 Galmuri7 8px top tile로 직접 렌더하고,
+  bottom tile을 비워 두는 방식이었다. 이 슬롯은 이름 입력 화면뿐 아니라 이후 `<player name>` 출력에도
+  그대로 쓰이므로, 선택 이름만 일반 대사보다 작은 자형으로 보였다.
+- 수정: name grid 한글 음절 label은 `data/syllable_to_glyph_2350.json`과
+  `data/kor_glyphs_2350.bin`의 일반 대사 top/bot tile bytes를 그대로 복사하게 했다.
+  리뷰 보강으로 숫자 `0`~`9`는 원본 전각 숫자 top/bot tile을 보존하고, 일반 음절맵에 없는
+  `ㅡ`는 8px top-only가 아니라 8x16 중앙 정렬 fallback으로 바꿨다.
+- `tools/qa_transient_overlays.py`에 `part1_name_grid_dialogue_font` 검사를 추가했다.
+  name grid 본 슬롯, mirror 슬롯, extra label 슬롯의 한글 tile 128개가 일반 대사 glyph blob과
+  byte-identical인지 확인하며 mismatch 0이다. 숫자 20개 tile은 원본 digit tile과 일치하고,
+  `ㅡ` fallback은 bottom tile pixel을 가져 top-only 회귀가 아니다. suffix 8슬롯 공백 검사와
+  raw `0x69 さん` 잔존 검사도 유지된다.
+- 비교시트/보고서:
+  `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`,
+  `docs/screenshots/part1_name_spacing_2026-07-06/report.json`.
+  최종 post-name greeting은 `반가워. 아아님`으로 붙고, 이름 글자도 일반 대사 자형/크기와 맞는다.
+- 최종 output 3종 SHA는 모두
+  `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`.
+  2026-07-06 BPS/IPS/manifest도 같은 SHA로 재생성했고 patch round-trip이 일치한다.
+- stale evidence를 새 SHA에 맞춰 재동기화했다:
+  E12 compact manual visual evidence 13건 current/accepted,
+  Part1 link map-list full sweep 180 step full-frame crop hash unique 180 및 PNG artifact SHA 재검산,
+  scene residual/E8 COMM visual evidence critical 0.
+- 통과: `python3 tools/build_korean_full.py`, `python3 tools/capture_part1_name_spacing.py`,
+  `python3 tools/qa_transient_overlays.py`, `python3 tools/qa_text_fit.py`,
+  `python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba`,
+  `python3 tools/verify_dist_integrity.py`,
+  `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_part1_name_dialogue_font_20260706_final.json`,
+  `git diff --check`.

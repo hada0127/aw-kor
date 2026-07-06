@@ -1,8 +1,8 @@
 {
-  "created_at": "2026-07-06 08:06:48",
-  "rom": "temp/part1_link_map_list_full_sweep_20260628/current_isolated.gba",
-  "rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
-  "source_rom_sha256": "83ae254bf25fc938bb5dd7825955637ebbce2c7370c0d615c89cebf65b2ba646",
+  "created_at": "2026-07-06 12:44:02",
+  "rom": "temp/part1_link_map_list_full_sweep_20260706/current_isolated.gba",
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "source_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
   "route": [
     "part1_menu_from_coldboot",
     "DOWN",
@@ -14,6 +14,13 @@
   "step_count": 180,
   "unique_list_crop_count": 180,
   "duplicate_list_crop_count": 0,
+  "list_crop_box": [
+    0,
+    0,
+    240,
+    160
+  ],
+  "list_crop_note": "The crop is the full visible frame; uniqueness proves 180 captured frame/crop states, not 180 distinct map-label strings.",
   "low_bright_threshold": 500,
   "low_bright_steps": [],
   "docs": {
@@ -22,1265 +29,1271 @@
     "list_sweep_page3": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/list_sweep_page3.png",
     "full_frame_every10": "docs/screenshots/part1_link_map_list_full_sweep_2026-06-28/full_frame_every10.png"
   },
+  "docs_sha256": {
+    "list_sweep_page1": "966f57aaccfbc9c263c77b21e80eed0c963f7db230924e5daa73445ee0e0de06",
+    "list_sweep_page2": "d9d371367f94852f5da1b050c58faf9cc5a821e5888de58c31ce62d819ec3efe",
+    "list_sweep_page3": "1c046256d82c839f0f9563365e901626b48442264d58ebe3f5bb22c19942eba6",
+    "full_frame_every10": "30fd368852d8ce080134cef65c8a6ee9f76fb82cf713f7f7a82378a54a832fa5"
+  },
   "metrics": [
     {
-      "bright_pixels": 23496,
-      "yellowish_pixels": 9,
-      "dark_pixels": 810,
-      "crop_sha256": "417d1de50dfe61d2947bb73d26f7f2999ed0a589f914d2e5dbd4a0ed4b9f4bc7",
+      "bright_pixels": 23685,
+      "yellowish_pixels": 1137,
+      "dark_pixels": 579,
+      "crop_sha256": "2d9a46c3423e840200eb4fabb9f5b0bab8b4c0e3e8bc29761e20e99e8672e55d",
       "step": 0
     },
     {
-      "bright_pixels": 23482,
-      "yellowish_pixels": 9,
-      "dark_pixels": 833,
-      "crop_sha256": "4eb1f36549baeea77d94268db2818062dcb40b34b3eb585c8eee096816b280d1",
+      "bright_pixels": 23143,
+      "yellowish_pixels": 1013,
+      "dark_pixels": 816,
+      "crop_sha256": "f55fdd380c9ed0d243d57179f8327016852c699acd3df4015d598416423db262",
       "step": 1
     },
     {
-      "bright_pixels": 25302,
+      "bright_pixels": 25697,
       "yellowish_pixels": 9,
       "dark_pixels": 476,
-      "crop_sha256": "a2be03d75c326725f540d562f0d49712210063c26e1ccdad83173bd2e1e349e5",
+      "crop_sha256": "2b1478a210e550c44a4c2e51104f7e523aef4760a8d605fb50a338b9c22add1d",
       "step": 2
     },
     {
-      "bright_pixels": 25308,
+      "bright_pixels": 25835,
       "yellowish_pixels": 9,
-      "dark_pixels": 256,
-      "crop_sha256": "63e5e070c30c1a34d5c06631b1b31ecd0c4f742a35fb2015543ca6a60676eee3",
+      "dark_pixels": 127,
+      "crop_sha256": "f24f257a611b4967806f0cbade7396280f2cfd529021234030de730fa6ed7895",
       "step": 3
     },
     {
-      "bright_pixels": 22030,
-      "yellowish_pixels": 9,
-      "dark_pixels": 237,
-      "crop_sha256": "e97801877dbcc9870c7daa8051952476e6a50429d73034eac638b3f3ee8f4617",
+      "bright_pixels": 22035,
+      "yellowish_pixels": 1135,
+      "dark_pixels": 471,
+      "crop_sha256": "6ec3fb062c3e1cab1231d13f29b33e5682f30a3a5abfa8d6e4acfdd76316bb19",
       "step": 4
     },
     {
-      "bright_pixels": 24469,
+      "bright_pixels": 25304,
       "yellowish_pixels": 18,
-      "dark_pixels": 377,
-      "crop_sha256": "8edd410afe8e59b4e0afccbacad18ad19b8e993aa698620f9b33bcdb347d144f",
+      "dark_pixels": 780,
+      "crop_sha256": "6f9f843a023a19f237a19889c4e565962b9f2023653e7874e77a32fb05afcf5d",
       "step": 5
     },
     {
-      "bright_pixels": 24526,
+      "bright_pixels": 25436,
       "yellowish_pixels": 18,
-      "dark_pixels": 649,
-      "crop_sha256": "8a8cc6f4b6d6c07f25b98a82f37a354db8068b33eee6e6671a6840f7a7f80395",
+      "dark_pixels": 629,
+      "crop_sha256": "20fe5729e01d3bbf996b13a0a57d571c50c0a341518d0056ba80aed767dd22f6",
       "step": 6
     },
     {
-      "bright_pixels": 22733,
-      "yellowish_pixels": 18,
-      "dark_pixels": 943,
-      "crop_sha256": "a54d116bbc081c8ed56e8e5226340b88c17beeb06b515a29620653574910e800",
+      "bright_pixels": 22858,
+      "yellowish_pixels": 266,
+      "dark_pixels": 279,
+      "crop_sha256": "d3322f0d65aaf1325dbc00dd1e7e2afc89487baee38c2707807137bae23fe031",
       "step": 7
     },
     {
-      "bright_pixels": 25217,
+      "bright_pixels": 25243,
       "yellowish_pixels": 18,
-      "dark_pixels": 629,
-      "crop_sha256": "9d0f416fcc276bf06136cad527f15af6e6d97da473dbc300d19951a7fa8b1e3d",
+      "dark_pixels": 257,
+      "crop_sha256": "fa9a947effc1b0f7f410014599d92708d43d0ac2a4bba8125b14f70109e0c03c",
       "step": 8
     },
     {
-      "bright_pixels": 25527,
+      "bright_pixels": 25451,
       "yellowish_pixels": 18,
-      "dark_pixels": 384,
-      "crop_sha256": "fb8fb8ecbad945bf7eb69cb75f30447cfd1e01c8c75ab36432d680df463a783a",
+      "dark_pixels": 777,
+      "crop_sha256": "937029b8107d089e5c6fc2c03cb7e57f4cc55b3dec731e6929b108e0592a29b8",
       "step": 9
     },
     {
-      "bright_pixels": 25279,
+      "bright_pixels": 24947,
       "yellowish_pixels": 18,
-      "dark_pixels": 143,
-      "crop_sha256": "1a18060f65d9ea712a09505f9b63fea92e296f3de04c2f2213ed7dcc80148cb4",
+      "dark_pixels": 757,
+      "crop_sha256": "4f80f6badf468aec7cc07b1525f47b694d2dff05583fa18f4d27a142d05ead9f",
       "step": 10
     },
     {
-      "bright_pixels": 22782,
-      "yellowish_pixels": 18,
-      "dark_pixels": 263,
-      "crop_sha256": "7b7b2c23f9e12b7491e2bb5c3c6549568169f8b1e1b5424313682893d1632328",
+      "bright_pixels": 22645,
+      "yellowish_pixels": 1480,
+      "dark_pixels": 417,
+      "crop_sha256": "124da84d4453511f816d64535bbf3e7355cfc492643bd1579e496b1599b4e713",
       "step": 11
     },
     {
-      "bright_pixels": 24994,
+      "bright_pixels": 25372,
       "yellowish_pixels": 18,
-      "dark_pixels": 521,
-      "crop_sha256": "96c6d3f9816e983f84c8de17fdec7bdef3f9def7242172a85a53f54fd3a49d97",
+      "dark_pixels": 143,
+      "crop_sha256": "32e846a86a664231353d9dcd595f59fbabe776d4321ea0bec38a56fcb72fe6fe",
       "step": 12
     },
     {
-      "bright_pixels": 24937,
+      "bright_pixels": 25000,
       "yellowish_pixels": 18,
-      "dark_pixels": 777,
-      "crop_sha256": "4da188262209d16f6b81043196259120b2055736992d5159e4d08c3df79c4a90",
+      "dark_pixels": 649,
+      "crop_sha256": "1b50db1cfb4976c4b63f2e98f25409822175ae7a5ff1bbcc722b0188e81276f1",
       "step": 13
     },
     {
-      "bright_pixels": 22594,
-      "yellowish_pixels": 40,
+      "bright_pixels": 22668,
+      "yellowish_pixels": 1512,
       "dark_pixels": 959,
-      "crop_sha256": "decbb8fcd0faf6a7574fddb3468b9d01690f2ead91616a45c0ffe1d11f6da3a1",
+      "crop_sha256": "a2a37071a1d4bae3b391c7738901c457bce4a6dbadeb6df380a90a18b50aca93",
       "step": 14
     },
     {
-      "bright_pixels": 24460,
+      "bright_pixels": 25267,
       "yellowish_pixels": 9,
-      "dark_pixels": 613,
-      "crop_sha256": "f0b8dcf2518a6fb1f0343b4e31c943866737e04d3ed140b017df80a78a71d427",
+      "dark_pixels": 368,
+      "crop_sha256": "292edabcda54db36434f751ccfa75ceacafbda91ae873107caaa6ac7019059fe",
       "step": 15
     },
     {
-      "bright_pixels": 24419,
+      "bright_pixels": 25090,
       "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "2dcadef25725f44ffb3b9aaab88f1fa6386f9587ececa76d3c878c2fb2503703",
+      "dark_pixels": 127,
+      "crop_sha256": "3efbbe1eed92f1b4159fa30761dbc7cc7282b79e87a067128a462f8ce4588f1f",
       "step": 16
     },
     {
-      "bright_pixels": 24782,
+      "bright_pixels": 24917,
       "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "7e31d6be383136de4e7ab509f0e7057a6e62a501e2c910517dbba4345971c250",
+      "dark_pixels": 489,
+      "crop_sha256": "49fee52e9b1a3112ce3da97c1b45f332a6ee2fe504ca136f7b85b628305b7735",
       "step": 17
     },
     {
-      "bright_pixels": 25161,
+      "bright_pixels": 25475,
       "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "0ae7718579e0567ccbfd4e946096f407c2402443f1294c55bccfb5731876ee80",
+      "dark_pixels": 720,
+      "crop_sha256": "41ac6e3d707edc52c656ce569b2338ee2d20bdd5dbff8dd27660254f6133efff",
       "step": 18
     },
     {
-      "bright_pixels": 25543,
+      "bright_pixels": 25071,
       "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "6b23558bde12d1bc556766324a1b539d1ba583f5184ca2416bc8d53ae37829e5",
+      "dark_pixels": 455,
+      "crop_sha256": "29c509427c60143cd5d1bd75588df28600196b4b43c4b78903c3cb0fea586cde",
       "step": 19
     },
     {
-      "bright_pixels": 25284,
+      "bright_pixels": 24791,
       "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "db40af906f1525332d5a0a0e6715107e123b45b5fb2743d9887b9b4217fab3a0",
+      "dark_pixels": 127,
+      "crop_sha256": "fdf3eea38a608cf6fd24fbad01ae4aaba949a6e64cd820af77f9d0d42f2bb3b2",
       "step": 20
     },
     {
-      "bright_pixels": 25240,
+      "bright_pixels": 25515,
       "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "610ad88cf952a9148775c75bceabf7f56f8a03435dc7e3aa9652b20c09efbb3d",
+      "dark_pixels": 351,
+      "crop_sha256": "248a09de9fe160b6740a083ba8a2a0c2d39d8fff17168aeca549a349732d2b69",
       "step": 21
     },
     {
-      "bright_pixels": 24822,
+      "bright_pixels": 25100,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "3b5255d8dcb49a0add26afdff887ce8e807197f84a1053b272b954e910a4be17",
+      "step": 22
+    },
+    {
+      "bright_pixels": 24656,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "85819acc1b3daabf8930f073502bf5d0044e0e248e7f22405d4fdf5012bab438",
+      "step": 23
+    },
+    {
+      "bright_pixels": 25513,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "0044046ed5f6e4902bebc9f39286cbb069c76a4a114b8120fd617954805fa88c",
+      "step": 24
+    },
+    {
+      "bright_pixels": 25233,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "8a88ca3c6b755016c31c19be5738511ed9f0913e5266023e579f75d8e9947656",
+      "step": 25
+    },
+    {
+      "bright_pixels": 24623,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "2f4d07b24b1f5dec5034310f9d91ae63c88900d86349d7844dde55fcfce0c930",
+      "step": 26
+    },
+    {
+      "bright_pixels": 25741,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "415a75b03c1dc7a9e5c0b2e76ce46620ed0c2cc876487e113919e560e63e3af3",
+      "step": 27
+    },
+    {
+      "bright_pixels": 25248,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "3e5cc71fc40f65902537ae2a9e278809f0a042675832489727ca33cdfe79e43d",
+      "step": 28
+    },
+    {
+      "bright_pixels": 24508,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "5aba711ffeb9fc40724cefb2e1da8845a46afe07777f2c48c62b7eda93013892",
+      "step": 29
+    },
+    {
+      "bright_pixels": 25690,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "2a94e5b7501e1a56312662cbc9ce0e69c8a93697933b4efc52793956a3131ec6",
+      "step": 30
+    },
+    {
+      "bright_pixels": 25249,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "4cf5f850da877cd25244f6a7a72c01d38cb7577e340392bacee5f52920374156",
+      "step": 31
+    },
+    {
+      "bright_pixels": 24424,
       "yellowish_pixels": 9,
       "dark_pixels": 455,
-      "crop_sha256": "4a9bb932219880b5075dca31b94290fad645c247898d289f55a8af10230b5137",
-      "step": 22
+      "crop_sha256": "97aa763c521751b676df8a98209e279a4f9893e5f3f0da8eb5c9f8fee2d9f799",
+      "step": 32
+    },
+    {
+      "bright_pixels": 25672,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "9dea2c74867ef6641f20e975fb2c69735a5601095ae0877b0b2e5c3a26d2e688",
+      "step": 33
+    },
+    {
+      "bright_pixels": 25320,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "1a6cff3a039a9fc1152c3fb4781598fb921e49d45926ac4bd425cdc497bf1d8e",
+      "step": 34
+    },
+    {
+      "bright_pixels": 24557,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "bbd42d29d86df50622ec6e118a86e75bd8162e33ac6a412e11822a387c48ce2a",
+      "step": 35
+    },
+    {
+      "bright_pixels": 25545,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "fd566809c040886c766c64cd0d9d7049c102b7de811705b7ac96cb5ad1c139f4",
+      "step": 36
+    },
+    {
+      "bright_pixels": 25429,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "f63144252d8178518590132a4dc8a6aa24333d0f070c4fa1518ac0685d035140",
+      "step": 37
+    },
+    {
+      "bright_pixels": 24662,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "f2d8a48aadda43491648e3e01444bdf0a3666e56c65bc1a01e6629052b447002",
+      "step": 38
+    },
+    {
+      "bright_pixels": 25315,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "0e4fe82121c02de9a36577f8629f90bb51e194a288f29ebc1672454191f6a7aa",
+      "step": 39
+    },
+    {
+      "bright_pixels": 25412,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "2b99bf9bd321096fb809493dc0dd3e3bcecfbf1ed2256dc5ada4372e79f1401f",
+      "step": 40
+    },
+    {
+      "bright_pixels": 24660,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "0a1576e7fa6e502049b8fbdbde23b0abcf3e44981615b52212594cf76e207c32",
+      "step": 41
+    },
+    {
+      "bright_pixels": 25295,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "e8e0a9f43d11adaa0b7b3ec075fbb226d5e687e49c2747dfa4ed44100138ac11",
+      "step": 42
+    },
+    {
+      "bright_pixels": 25420,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "52c447d3522647798d7d7d9947525dd1243b886060c040be016d53589a560b3e",
+      "step": 43
+    },
+    {
+      "bright_pixels": 24888,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "27d55fa561a996dbdc7a7bcba98d35e8e5fea4dd532895ed91b75bc2195c487b",
+      "step": 44
+    },
+    {
+      "bright_pixels": 25123,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "4a65ba06d8e29b34b3cae48932f89d7019f7c8c33e31ba34b43060a318983863",
+      "step": 45
+    },
+    {
+      "bright_pixels": 25365,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "16b4fbd9d773a7778eb0b93748e224b841bec13cc926972c8eb2f3f0c9e9d823",
+      "step": 46
+    },
+    {
+      "bright_pixels": 24946,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "3e5ba9611f338f60d95b197b012e4c4448b4b5b148b32c104c273cff9274852b",
+      "step": 47
+    },
+    {
+      "bright_pixels": 25065,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "d886982333797d0e92735c1722478c29ce598d57f419c3b1a98c954bcb90ed5f",
+      "step": 48
+    },
+    {
+      "bright_pixels": 25205,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "dbcbbfe20549e3bdfe0b2de91067fa5c872f5001885c8b652af88333f5543244",
+      "step": 49
+    },
+    {
+      "bright_pixels": 24994,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "c6a519bf16de6b906ba5d838dbda19a164526b52d08fed60fff1ef767a0235ad",
+      "step": 50
+    },
+    {
+      "bright_pixels": 24954,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "2fa3cb37a4552d03f75bf3a34b770957a413c4b95d16b02332683ccbe36e31c8",
+      "step": 51
+    },
+    {
+      "bright_pixels": 25380,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "38801eeb5c9eb978a0f3cf70402d4b4ece0adb23c22797645a7b2f1c9f23e5d8",
+      "step": 52
+    },
+    {
+      "bright_pixels": 25099,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "d9124d752be8cafc8ca39af4e3f045f658b29a77b40faed475133102a3ff4b99",
+      "step": 53
     },
     {
       "bright_pixels": 24817,
       "yellowish_pixels": 9,
       "dark_pixels": 244,
-      "crop_sha256": "63c18dae35cfaea6987b4f3b5732f0b2fe86a5711abfe4493b76719236b43bd7",
-      "step": 23
-    },
-    {
-      "bright_pixels": 24816,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "88fafa1ed3c9bf31abd2a370404c6bb3959772baac41edc5082f229ecb77e762",
-      "step": 24
-    },
-    {
-      "bright_pixels": 24462,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "3bb55eb83a92ec00064c67d7f0f5551e17d466117977f5d91d435016fcc22487",
-      "step": 25
-    },
-    {
-      "bright_pixels": 24500,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "ea4f2874e75da99d661c9b5a2eb3195094e2b4121f3145d7a58f6c80805e9077",
-      "step": 26
-    },
-    {
-      "bright_pixels": 24757,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "db10782cc8b8c54ce5d3ae3f82461bacd84a1279266b144eb9e84a303a26089d",
-      "step": 27
-    },
-    {
-      "bright_pixels": 25120,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "6423df750698e62a18d4f2a720e4f940a83447f45f026e30a58695f4ec9b39f6",
-      "step": 28
-    },
-    {
-      "bright_pixels": 25459,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "646a98bff58ee873c8ef18395b81ce5aee7b73d4afc5be8896fdc61c5a097581",
-      "step": 29
-    },
-    {
-      "bright_pixels": 25298,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "54015ef635d655b9d4d4bac4329b747f903efdf155c154d2bb5e543c56fbeb51",
-      "step": 30
-    },
-    {
-      "bright_pixels": 25232,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "84878ecaee672005238d55fe50cc03809f806e59100adfcb08487df522722aff",
-      "step": 31
-    },
-    {
-      "bright_pixels": 24896,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "546fa10562177e963ad1988b34863d53bd06fa81b4e36c1f8c791be84966514a",
-      "step": 32
-    },
-    {
-      "bright_pixels": 24868,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "3aa5e4e3b822c05e36a723f9edf4eb3ffb0ce6c6eda579431f76e84c8b4963ce",
-      "step": 33
-    },
-    {
-      "bright_pixels": 24799,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "2c7126886199898eea0fbc178dc8d4ff1ce63e73c8a263ecb3afb8cae87e82a7",
-      "step": 34
-    },
-    {
-      "bright_pixels": 24465,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "c20a197710f8f9040dc22ddc73c44b19f508fadf5b40487735f0123b12c28e13",
-      "step": 35
-    },
-    {
-      "bright_pixels": 24433,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "63539182ad952c521b629d6bf3fa763b9a8e4e4b5103f700ee86d29c4f4ef099",
-      "step": 36
-    },
-    {
-      "bright_pixels": 24747,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "58ea8db4d09852f12362ce7377cffb62455e1b812161c14a25dc11f67ecc44c7",
-      "step": 37
-    },
-    {
-      "bright_pixels": 25095,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "7271113521a559c65173a3f6042b87570a13b1140d743e9e8b9320afa37d67e6",
-      "step": 38
-    },
-    {
-      "bright_pixels": 25523,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "377f921b55aa6d63d457b2408979e5a893ff810160a0462ced3c92031d2dfba2",
-      "step": 39
-    },
-    {
-      "bright_pixels": 25309,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "9b0b742544671d2a4e31528305c4b93aee8ba8fa8af22b40033be83d33784ada",
-      "step": 40
-    },
-    {
-      "bright_pixels": 25242,
-      "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "11307ab11c41925dbcdec81aeca1f255e5cdec97f6cc1d016d31a66f26a26e99",
-      "step": 41
-    },
-    {
-      "bright_pixels": 24812,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "c1df881c01ab5a04156632f03fc1e606b7919e53748172db645c6720118f4e3e",
-      "step": 42
-    },
-    {
-      "bright_pixels": 24780,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "9cf24df3db97ed9669b2c352968ea93cc4102e00229dc8d55f1ff06ec9db9729",
-      "step": 43
-    },
-    {
-      "bright_pixels": 24790,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "df50b2e02673bc0f84139e23ff15334b4e5c6a470fd1c3a85e957b6175092634",
-      "step": 44
-    },
-    {
-      "bright_pixels": 24467,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "3ba0651fd5fcaa859c39fa06322d64cc34ec306f066fe934fd355e269e10ecb9",
-      "step": 45
-    },
-    {
-      "bright_pixels": 24532,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "b93c460a70580db9d32c1f36dd9b9c2449af40a6d2274c6db411abfefce82648",
-      "step": 46
-    },
-    {
-      "bright_pixels": 24732,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "7c43f979815f0605d1ee93e1de50668de13df90b256db220116ff98c1aacded5",
-      "step": 47
-    },
-    {
-      "bright_pixels": 25067,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "75833fa1b8cb5d68448fdafd9be9906851cab5e91adca1b2775ea0e4aae75dfa",
-      "step": 48
-    },
-    {
-      "bright_pixels": 25426,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "61a379a9a2f340a9c0f8b3c3b793c1eec9fbfe8b7bc953d795bedefdb0254821",
-      "step": 49
-    },
-    {
-      "bright_pixels": 25321,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "6694ce19bbd5fb409ea8c17b2f6fd494d160e85e63fb0ac779e296d6f2d7ac20",
-      "step": 50
-    },
-    {
-      "bright_pixels": 25244,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "f776cd278156a89948f3ef78d0ea9bd5f15b93775de11d98b68140e531bd0188",
-      "step": 51
-    },
-    {
-      "bright_pixels": 24900,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "f34cdf7a6b8d70ace17ca20a270499af21546fc37fc591ab0b165c886090c6cf",
-      "step": 52
-    },
-    {
-      "bright_pixels": 24852,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "561c8836fcee47169937089097829554daa9cef93d642211c6b7a1f0687a8a26",
-      "step": 53
-    },
-    {
-      "bright_pixels": 24799,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "1dd1e6cbe361fbfff04ce06c230b06d01ec5a8afcf500cfa8b702722ae67e23b",
+      "crop_sha256": "ea6475121b65d04a13c0213705c20d000bcd40db2ab9dece9b7e3781e46ff8ad",
       "step": 54
     },
     {
-      "bright_pixels": 24481,
+      "bright_pixels": 25500,
       "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "1c262ca34577c8d464db4964df85f399bc2aff32d48ed45bf2252dd736aed4dd",
+      "dark_pixels": 241,
+      "crop_sha256": "b3484f176a1bcb3c16d87c78c3ea1a4c7d9a18dd9476b6c137bb5a26b27f8363",
       "step": 55
     },
     {
-      "bright_pixels": 24441,
+      "bright_pixels": 25134,
       "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "61370ee8d0ef2c790f590ecd3785f9713c913a5d639421255b3b849c7fd15213",
+      "dark_pixels": 606,
+      "crop_sha256": "b6c1668d5a7b0a75735da175c570cef3340c14c1ead174bb2b363c477530b506",
       "step": 56
     },
     {
-      "bright_pixels": 24715,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "7457202781dde91d6be6519802f6d1b024852e89d77d449ffc4c20a477bf69e0",
-      "step": 57
-    },
-    {
-      "bright_pixels": 25055,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "573c61f539d46539aa2cddc611dc02940acce34e108d895d04e720d1d02e1580",
-      "step": 58
-    },
-    {
-      "bright_pixels": 25511,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "03844e0a39f5ff81eacb9787f6a985c535f17b51a755fb9762167d41d379b67b",
-      "step": 59
-    },
-    {
-      "bright_pixels": 25334,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "1dbb22fb645829b33f6b0831d8f5761ac13e7f50b9dafee90b970b591ffcac3d",
-      "step": 60
-    },
-    {
-      "bright_pixels": 25241,
+      "bright_pixels": 24777,
       "yellowish_pixels": 9,
       "dark_pixels": 695,
-      "crop_sha256": "3ce60469de9a56476137c59af4003432577fef185154c9710ed529547f75f03c",
-      "step": 61
-    },
-    {
-      "bright_pixels": 24823,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "f48914018f3938e372e6984b9c91a4aa1bdbdd169d8f0df2c338447cadae5c64",
-      "step": 62
-    },
-    {
-      "bright_pixels": 24771,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "528b567d67426bbb8baae99ff67aef954e27b86a5a15f316df537f79a522d1d8",
-      "step": 63
-    },
-    {
-      "bright_pixels": 24807,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "57a2cdc762d54920300343146b53d490d291e0aa8e0e45d325f1aff8041fc949",
-      "step": 64
-    },
-    {
-      "bright_pixels": 24512,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "cc2524d683363185546c3b7d17921354a76d8105e517f02a6bd145ba91bbeb28",
-      "step": 65
-    },
-    {
-      "bright_pixels": 24510,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "69552584d4b8987448468018fbbb265259923ae49507777ead5249a057d13e98",
-      "step": 66
-    },
-    {
-      "bright_pixels": 24695,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "9e7ca33b97cb970c1ab70a3e2903875c6a780a55d99d097ba4db985115b89810",
-      "step": 67
-    },
-    {
-      "bright_pixels": 25053,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "a8f7e4ccc366a2f18581dd61ea90c24e26e8d01ee6574a64c84b6270aae2477d",
-      "step": 68
+      "crop_sha256": "3b16f35628a9aecc67ca057572ab334d5c0d4a7081ff0af6a7467859dd1088b8",
+      "step": 57
     },
     {
       "bright_pixels": 25424,
       "yellowish_pixels": 9,
       "dark_pixels": 350,
-      "crop_sha256": "f5ad2f6b44a6f2611144a7ed6bff35d51aa3469ee0c545ba1aa7fa97f36314e6",
-      "step": 69
+      "crop_sha256": "7d212809db130b26e88b0471ce39931358f02a70e6bf118e6dd56a9997415883",
+      "step": 58
     },
     {
-      "bright_pixels": 25348,
+      "bright_pixels": 25112,
       "yellowish_pixels": 9,
       "dark_pixels": 127,
-      "crop_sha256": "51ee5ccc2d34f7ec207a38e5e9d6e513581dd732d93840b56f0c21f286c96c4a",
-      "step": 70
+      "crop_sha256": "73ad4a9a0c8d6bd3cb6d2cd2377fa2ab8f96b1873015625799847302db8acd14",
+      "step": 59
     },
     {
-      "bright_pixels": 25242,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "ac3cde0572b319e89cb2b8d8a5c07b98689c70180bbb497f832e6b6e872a3d25",
-      "step": 71
-    },
-    {
-      "bright_pixels": 24935,
+      "bright_pixels": 24650,
       "yellowish_pixels": 9,
       "dark_pixels": 489,
-      "crop_sha256": "7ede531a4f3b8a8ff51a58fc1ddb1299187b63e8b7ae5df847441b2f29b2a81e",
-      "step": 72
+      "crop_sha256": "1fac0836947eb8a1fbcac5147aea2770949053650cfea2bcdb845d4ae5bedbc2",
+      "step": 60
     },
     {
-      "bright_pixels": 24853,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "3b5255d8dcb49a0add26afdff887ce8e807197f84a1053b272b954e910a4be17",
-      "step": 73
-    },
-    {
-      "bright_pixels": 24815,
+      "bright_pixels": 25616,
       "yellowish_pixels": 9,
       "dark_pixels": 716,
-      "crop_sha256": "b377efcca9dc2b43ce5d2e4f081ec3d1ac9f6696663644ff818abc00b4c9ea07",
-      "step": 74
+      "crop_sha256": "5e1818802f3ea2798a2d57c04d114995b28ae38a408b64c1f17773e83f4da8d5",
+      "step": 61
+    },
+    {
+      "bright_pixels": 25189,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "0cf8fcd84d0e6370df49bfe4529689e5631b204b0db2e26dc2729f7bf98b41f2",
+      "step": 62
+    },
+    {
+      "bright_pixels": 24614,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "0a599605d603dca99abbcf2e160dd74a9105e99f5b91838d0f09c0747958e5cf",
+      "step": 63
+    },
+    {
+      "bright_pixels": 25742,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "4bcecb1582d1d60d16f1b90fda0fdcfa72326fa6dff1fc1bb9305e325bf95455",
+      "step": 64
+    },
+    {
+      "bright_pixels": 25333,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "1482dc1baf3dfe34ee77cf43eaa87766a36e62d4e9e75248e787bf2d1b145db9",
+      "step": 65
+    },
+    {
+      "bright_pixels": 24490,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "7f23659ce63ce689397836a62435263d74b52016254327c749d5a6e8e626b18e",
+      "step": 66
+    },
+    {
+      "bright_pixels": 25674,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "97ff75705cae0b4c63581c240025067e0f6b3b44feaf13dd7c32b11ac1f6237c",
+      "step": 67
+    },
+    {
+      "bright_pixels": 25252,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "8c5beca8f0b38fc3931733065f42c4b936346258626c6396ee6eae97c9de8f9b",
+      "step": 68
     },
     {
       "bright_pixels": 24521,
       "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "b73e8bcd5ee626d86f2911675abb9c4cb9cee49c7195654c8587e425b17fae2b",
-      "step": 75
+      "dark_pixels": 729,
+      "crop_sha256": "c693ba9e0cfd1d4a066ed20ef94ebe993bef45254009273e3cd37d5d57c39167",
+      "step": 69
     },
     {
-      "bright_pixels": 24423,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "f8c3e8a49cfc5dd4b6c2839309ff148b0a2f81c9f54b9034fbbc50b33c4a714f",
-      "step": 76
-    },
-    {
-      "bright_pixels": 24696,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "b48a3f9b4c6e1185afb95995d2de9c7b34d9f6e6cd83419833f9df66c92b1c02",
-      "step": 77
-    },
-    {
-      "bright_pixels": 25063,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "0097573f0f992d1674d5be5bee98753d672a001446a6e640c7c5cb85749eaefe",
-      "step": 78
-    },
-    {
-      "bright_pixels": 25494,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "a28c014eb00121999c59591004ef100e240e61fd55eaf2fa5a646b1826c2baf6",
-      "step": 79
-    },
-    {
-      "bright_pixels": 25365,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "7e3d687566e63f8ac17d4746f5b1b5c85375aff6a56f9d6f4d798f9d1923c1a8",
-      "step": 80
-    },
-    {
-      "bright_pixels": 25260,
+      "bright_pixels": 25666,
       "yellowish_pixels": 9,
       "dark_pixels": 695,
-      "crop_sha256": "b131945ca6d08a833cd5b807a46b084d8621b8a744737f4a197ef3136b16e1bf",
-      "step": 81
-    },
-    {
-      "bright_pixels": 24874,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "1c8e91f9822b497639ca871939352160228d17e7bd90088354613b0ed53e3528",
-      "step": 82
-    },
-    {
-      "bright_pixels": 24780,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "f4491a55e64e8515b8cf1a9be86c2cab6d14b68f345c8885fe69e574a05eada2",
-      "step": 83
-    },
-    {
-      "bright_pixels": 24828,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "cf47e3bc346c0de8d2af24917efd67e8be093a54a9a45488c2d462ec6a5cf3a8",
-      "step": 84
-    },
-    {
-      "bright_pixels": 24536,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "03ea72a37ac06e7fb293e2224d652039eb7d0d9e36d9b854bb5d5b408ed084a8",
-      "step": 85
-    },
-    {
-      "bright_pixels": 24506,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "a92495546b8bd914ba7c4c27dd09c845634c48e0169d773229b3094f9b4eda44",
-      "step": 86
-    },
-    {
-      "bright_pixels": 24708,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "1b651c83f1a0f4919ff4aa72538dc129ccaf9f41d53e64f25699469d89a6d10f",
-      "step": 87
-    },
-    {
-      "bright_pixels": 25046,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "7186b9cae89693f89873b306198fbbd79516a577813811bac27fc39894ce5583",
-      "step": 88
-    },
-    {
-      "bright_pixels": 25391,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "b6fee934c4eb79d12b9edbbd0f5bddb451a27d3e899b601f5fe895fc4778dbfc",
-      "step": 89
-    },
-    {
-      "bright_pixels": 25385,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "0e6fbc5c7e0ad547bb1e540d81ae33bb40fc6694336819d264da68a0f74a94ad",
-      "step": 90
-    },
-    {
-      "bright_pixels": 25264,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "4de6fdff7b77e954fd1db571d462ec61d9cd92795ac2e2e909bb457aec6eac63",
-      "step": 91
-    },
-    {
-      "bright_pixels": 24967,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "ac4c0b3ceebf850e59b445fba120c7be00dd88353d9a646d51af7261217803d7",
-      "step": 92
-    },
-    {
-      "bright_pixels": 24878,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "6943af408bdac824e8a0a544d7aec4e216cf8f1fa704c6c24424911f1ece4cfe",
-      "step": 93
-    },
-    {
-      "bright_pixels": 24833,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "c852c9a4a94b17758eef5061b9c2ae723502e844ea73a927ce07e7761272bbe4",
-      "step": 94
-    },
-    {
-      "bright_pixels": 24550,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "8a0a054a2e5fd846ef1ebfe5b0b047d9a2a7048e6be23a3aa9860984a7990e25",
-      "step": 95
-    },
-    {
-      "bright_pixels": 24416,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "b0901cc62cf26b9201b178872099f266ce06670b4f3a09e7a7f28625e18db911",
-      "step": 96
-    },
-    {
-      "bright_pixels": 24737,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "6df83055f7cc7a68cb37a8b9b6a094c107575b671f31f478a728b15108b79722",
-      "step": 97
-    },
-    {
-      "bright_pixels": 25035,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "94a551342984ae513394b7d9daf7c6d9c914e8f3b633d1ff2c1c1d8cdc0b60c7",
-      "step": 98
-    },
-    {
-      "bright_pixels": 25453,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "2170f257d160c523942a86853176357e0c8da431c20d451dac7d9afeb2ed84fb",
-      "step": 99
-    },
-    {
-      "bright_pixels": 25393,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "d003a46cfca7ea07df2da83dd337b94da95b803b6ba3daa2066fad670e5dde15",
-      "step": 100
-    },
-    {
-      "bright_pixels": 25263,
-      "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "3860ca6275f39a472ebcd325fd309c9ed8c29b13bf913dc2c89d1addbc9afdcb",
-      "step": 101
-    },
-    {
-      "bright_pixels": 24897,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "3cdbb3db3ac3e0869ab938260db28e6a6fed06dc97c072d9cd6d8a9cda626f90",
-      "step": 102
-    },
-    {
-      "bright_pixels": 24823,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "b20f8bf412a03c4e2120a064081f17cc7411d8b75ee9639b1f3a91f4be942d6d",
-      "step": 103
-    },
-    {
-      "bright_pixels": 24837,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "ccf11e0b23b43e62285e180f0bce8eadeaa46bb85fee231ade05f6ca406fcd1c",
-      "step": 104
-    },
-    {
-      "bright_pixels": 24552,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "de531de2f5cba0d667fd73ef5746bdf9598a42bbcb9cdf2c8fc0b298f9393b71",
-      "step": 105
-    },
-    {
-      "bright_pixels": 24500,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "cca85cb50d8e2b42935e1a746a4d617305ceee1e3e5b839ace9b315006c06db6",
-      "step": 106
-    },
-    {
-      "bright_pixels": 24730,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "e6b1e9f7b37e7222083942be94864be4e430d5b103ba1895db277027f4d7791d",
-      "step": 107
-    },
-    {
-      "bright_pixels": 25038,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "fb0a98a14aba055411194ea1037ae42ac732df8f75345673795d0adb16e5d14c",
-      "step": 108
-    },
-    {
-      "bright_pixels": 25366,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "ea92a7ddad74419714ad4ca71bf15e03eeae91eb5d9656f2637c5ee19f8f9538",
-      "step": 109
-    },
-    {
-      "bright_pixels": 25384,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "6a4f71beeb368de3a2902fc4bf71fdf4b66183de9e03bc10d36a7f5d9d0e50e5",
-      "step": 110
-    },
-    {
-      "bright_pixels": 25265,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "e95a25df0b0b4abfc3f81e46667b1f7865a717ab6a909dae50c40061eb769e39",
-      "step": 111
-    },
-    {
-      "bright_pixels": 24998,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "0267167cd732a0e71757c83ede2029af41ba7e40341623c64f997671d8d39224",
-      "step": 112
-    },
-    {
-      "bright_pixels": 24924,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "d47dccd5c07d8d3ae54d5117a6d29c61d7e9636b3f06ec36140ea0ac7c643f26",
-      "step": 113
-    },
-    {
-      "bright_pixels": 24833,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "70c5add6001462de2a14670c76ffc83ab93e0ea7e5db0e544eb8ae79f5d56e61",
-      "step": 114
-    },
-    {
-      "bright_pixels": 24549,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "0ab5ba1d46d6f12a91b9e18b83b8a9dd7152c10415b6e507c46b8ec216f11878",
-      "step": 115
-    },
-    {
-      "bright_pixels": 24403,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "bde4cace1805b7dee61d2bdae265f1cb162dbbed609be4a4d2db50c636a7beba",
-      "step": 116
-    },
-    {
-      "bright_pixels": 24710,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "862fc99a75befb4cf18f94dd675a1b52857d9adfd718b0599184763f7be5f152",
-      "step": 117
-    },
-    {
-      "bright_pixels": 25042,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "32c2a8a286db806fd2f73ef2db9e067ce2eef8f6d38f9f6b4843195ffbb17148",
-      "step": 118
-    },
-    {
-      "bright_pixels": 25455,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "1f9420a27a8b3df6834e6b5ab34683dfeb19019eac4d980e4ff9cfb462b256aa",
-      "step": 119
-    },
-    {
-      "bright_pixels": 25376,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "8dcf5ae309c7c845fbdef5ce418a3bbc9adfc548fd428c70fc4dcaaf18fd49f0",
-      "step": 120
-    },
-    {
-      "bright_pixels": 25262,
-      "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "4563b84fde6ef92e63d9440848835c7e446dcca72be563b4291c4ffd9c05bea6",
-      "step": 121
-    },
-    {
-      "bright_pixels": 24939,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "d76625c3f4c0ebba2b1afdceb2e89a57b9ae25fa6e19ab4950303e0af261896f",
-      "step": 122
-    },
-    {
-      "bright_pixels": 24853,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "cecc0626da441bbede6b1ea700c7f5f5c9a5d068420849c97fe514b0368f8a81",
-      "step": 123
-    },
-    {
-      "bright_pixels": 24850,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "5785d5c807f3068d6140ee2efdd4c03f41b7ef6fe79d83c09a4cd7da17bd27f0",
-      "step": 124
-    },
-    {
-      "bright_pixels": 24553,
-      "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "067d6e44f63a3d8cf848fd5d9304771a7ad854248f8cef07295679bd634aaa9d",
-      "step": 125
-    },
-    {
-      "bright_pixels": 24469,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "0e16a7135503fb8061aae464cc7285941a1fdf0f799de01becc97abdbef9d071",
-      "step": 126
-    },
-    {
-      "bright_pixels": 24693,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "6af0c7750015bee145ebf679610a5b7b6781cfa3d98f6ba703b29c639f6346ab",
-      "step": 127
-    },
-    {
-      "bright_pixels": 25043,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "3629b5884d16be3f00f56dc77d6f2ed1e168d5c8a84e376ae2f18f714bcac265",
-      "step": 128
-    },
-    {
-      "bright_pixels": 25369,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "6ffc40a219607b84459bdf590ea20ae303a557ad7c8d48ff70a9d1c6ab7fdabe",
-      "step": 129
-    },
-    {
-      "bright_pixels": 25367,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "5c0f437f40cd3988da26f01387a0a3b74fcbe3ac00f89526050fcb2d63514657",
-      "step": 130
-    },
-    {
-      "bright_pixels": 25256,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "a70db7bd20fcb6f3e4402de23f101f6dbf18819835ede6820236030c7417aa8b",
-      "step": 131
-    },
-    {
-      "bright_pixels": 25044,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "af4b4f1cd04216677f141b6fb9a0cb2d39e3ddb466e6566d41b30f5acfa202e7",
-      "step": 132
-    },
-    {
-      "bright_pixels": 24939,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "47b5865a146e40dd2ad45aab7786f9eef0b436edf0d80930b3504e1901d852e8",
-      "step": 133
-    },
-    {
-      "bright_pixels": 24861,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "1ab343cb7cfee1b1b7ab214d1dd83d9acb07907a92adf37faf46c153613f4e3b",
-      "step": 134
-    },
-    {
-      "bright_pixels": 24567,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "3b33ec8bdf65096af6c4282fa15c40241bc815af8fb0ef210ec5de8aa582a98c",
-      "step": 135
-    },
-    {
-      "bright_pixels": 24376,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "2fcc7eca8cf8882ea6e8d1fbb32b4ee899e44795407cb15dcacf4e2ef58f7216",
-      "step": 136
-    },
-    {
-      "bright_pixels": 24684,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "cb83906f8dfea0c8216d6e9c0c56edda7094add8fdbb7008265b37f4cf613446",
-      "step": 137
-    },
-    {
-      "bright_pixels": 25035,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "be0a13a47077ecda8b3ee645967e2ed7c88c40c634b4a299b09c77c4bea3b2eb",
-      "step": 138
-    },
-    {
-      "bright_pixels": 25443,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "e993c6186621ecadafa5c6a0307ff58d80034621f374afe4507ffaf304cd447e",
-      "step": 139
-    },
-    {
-      "bright_pixels": 25364,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "1958bb2f92fa8d73db8ba303f8360f3439256f8c23b5725806c15e700c4d7b90",
-      "step": 140
+      "crop_sha256": "764a6c4b781a9b0910b85eb1a8f6627f4dd155fa5f3ccef4a59fce4aecbb8a06",
+      "step": 70
     },
     {
       "bright_pixels": 25246,
       "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "79f880be0a0d033a476c48ada79182416c61747de35670dcf3eca5ad2d0e8cff",
-      "step": 141
-    },
-    {
-      "bright_pixels": 24981,
-      "yellowish_pixels": 9,
-      "dark_pixels": 455,
-      "crop_sha256": "7a291757757edbfbc2bad40e8eee3168cb40fbcb62fd4040ec41271e21bea06f",
-      "step": 142
-    },
-    {
-      "bright_pixels": 24882,
-      "yellowish_pixels": 9,
       "dark_pixels": 244,
-      "crop_sha256": "9829a17b42a02930752abdb752c191a3fbb30e8c59f5ffb452b21497b9c6f867",
-      "step": 143
+      "crop_sha256": "d45ab509b8136338b57322b0270d517d78db8f49b81f6dda983c6083590ae502",
+      "step": 71
     },
     {
-      "bright_pixels": 24866,
+      "bright_pixels": 24563,
       "yellowish_pixels": 9,
       "dark_pixels": 127,
-      "crop_sha256": "fd9ca0b48b1f4a6c7c06a606e0cec8677b0280e490f8152606eec4ab1a3db43d",
-      "step": 144
+      "crop_sha256": "df6c8c1586419b921e35b7c51b87ac8a1782b17d283c2c5b2181bae924d7f514",
+      "step": 72
+    },
+    {
+      "bright_pixels": 25520,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "acda22d9d47b85b9310047d17c55fa5cfeaa871dd38c406151e9a26bc75427a7",
+      "step": 73
+    },
+    {
+      "bright_pixels": 25416,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "32302d76e5f8d0a5359d1fe9c38e9f2b5279f1cbe9cadac310105ced46436154",
+      "step": 74
     },
     {
       "bright_pixels": 24579,
       "yellowish_pixels": 9,
-      "dark_pixels": 351,
-      "crop_sha256": "e6428b847178a980b30b542e2fa0e3600b9567d5a09b40ce55c714c78e335419",
-      "step": 145
-    },
-    {
-      "bright_pixels": 24439,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "c85fbdde3b3f5c4867345e407d22230047dca844a93f0ea95a4dac726a218d9c",
-      "step": 146
-    },
-    {
-      "bright_pixels": 24671,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "2196f0a22d530418d9ffdf8a6e5835b2f6830b490b79b0c3107499317d18642a",
-      "step": 147
-    },
-    {
-      "bright_pixels": 25014,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "6144e61011db5e18d6c83e55d72324c7c6b31c757492f33aa90051e66646f626",
-      "step": 148
-    },
-    {
-      "bright_pixels": 25366,
-      "yellowish_pixels": 9,
       "dark_pixels": 350,
-      "crop_sha256": "fb44bc4c9e4e9922ce330ecceb80e99318e6d537c86b2ca8fc9ec6534c881323",
-      "step": 149
+      "crop_sha256": "362c1f174dfc521ec5190f7e4abac1fafc9a59f03367980a094b1935fe405f91",
+      "step": 75
     },
     {
-      "bright_pixels": 25351,
+      "bright_pixels": 25301,
       "yellowish_pixels": 9,
       "dark_pixels": 127,
-      "crop_sha256": "7a8ad9734b1b1001a67e0bf9ff69802ee3d7d0b667281847c083ee4b79baf956",
-      "step": 150
+      "crop_sha256": "739cf02a7d244377d4179beeeb216786a4b1e01a2a9944f44059398ad3f9e5d9",
+      "step": 76
     },
     {
-      "bright_pixels": 25234,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "597799a54726abcbf6083f6201dae2199b3c7fea65598aa46d19782d74deb356",
-      "step": 151
-    },
-    {
-      "bright_pixels": 25091,
+      "bright_pixels": 25429,
       "yellowish_pixels": 9,
       "dark_pixels": 489,
-      "crop_sha256": "f23ff54cbfa392c7caacdb7130ab033628c3e82ab5f31000a91e3be1446ac1ab",
-      "step": 152
+      "crop_sha256": "83ee7fd7fbfde36fc79d98605709d55888e666cd346d82e5db2dfc7c05c1cf34",
+      "step": 77
     },
     {
-      "bright_pixels": 24995,
-      "yellowish_pixels": 9,
-      "dark_pixels": 729,
-      "crop_sha256": "5dc047a5ca9d8eef94802c31c391b9a780ff866019442007bd99b28cadec834b",
-      "step": 153
-    },
-    {
-      "bright_pixels": 24848,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "884f2a2cb7c934c787406e21507e735f50de34871b263d89206941c4ff69b4a7",
-      "step": 154
-    },
-    {
-      "bright_pixels": 24600,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "c55a0187dbdf3bd4825605758f97bb200aa49f1446fb7304683cb6060c9063ea",
-      "step": 155
-    },
-    {
-      "bright_pixels": 24344,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "28c4cd36d8e3a9c6556742b3828d014e91c723e6f516e37968b3e70365c769a7",
-      "step": 156
-    },
-    {
-      "bright_pixels": 24663,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "6ad5eb575e0e76392189bf11359f259ccfc0a32ad68750d1eec2f1978c8b7135",
-      "step": 157
-    },
-    {
-      "bright_pixels": 24999,
-      "yellowish_pixels": 9,
-      "dark_pixels": 241,
-      "crop_sha256": "e0fd7f0db8c8c1dd43c2eef62de9844ba85361eca07caa24436667717a72017e",
-      "step": 158
-    },
-    {
-      "bright_pixels": 25437,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "19c1704f65a435477906292f70f2c53dee20f8bf26bf41d8b1ef3fe44c1396f8",
-      "step": 159
-    },
-    {
-      "bright_pixels": 25341,
+      "bright_pixels": 24758,
       "yellowish_pixels": 9,
       "dark_pixels": 720,
-      "crop_sha256": "d36bf9e995d38256f14c6f56a1cee4e4212d90966334771809484c30dc122795",
-      "step": 160
+      "crop_sha256": "a0c53f0f5f9b3033f6504d69ac4080b7fa3168d40118029dcb67a874c2e1e87a",
+      "step": 78
     },
     {
-      "bright_pixels": 25224,
-      "yellowish_pixels": 9,
-      "dark_pixels": 695,
-      "crop_sha256": "17808ff60d35389fb73afd27eda7f6e74722ae216cdde50af6d782698f61a386",
-      "step": 161
-    },
-    {
-      "bright_pixels": 25037,
+      "bright_pixels": 25212,
       "yellowish_pixels": 9,
       "dark_pixels": 455,
-      "crop_sha256": "0261d1abe23e2be5859a123ef6ba362a4c656953652b761ac5d7eae579df2fb3",
-      "step": 162
+      "crop_sha256": "a9b28cf65190ba5855a6f583cdd7d72cd7c11d147489f9b87f3fca60518aa67a",
+      "step": 79
     },
     {
-      "bright_pixels": 24940,
-      "yellowish_pixels": 9,
-      "dark_pixels": 244,
-      "crop_sha256": "047e03f1f9f657a3ef9ef739bc69eed47cf17e3df3a8580393afe837a70ddf0d",
-      "step": 163
-    },
-    {
-      "bright_pixels": 24852,
+      "bright_pixels": 25410,
       "yellowish_pixels": 9,
       "dark_pixels": 127,
-      "crop_sha256": "45cdbdd4eea3f705da475980850d8964dfcab3d1c7e14729f99bd65c349411d9",
-      "step": 164
+      "crop_sha256": "d923b568e23237e693ee9fe64b8a3a23436b6b80deb2b450ce8de6728c3a70b0",
+      "step": 80
     },
     {
-      "bright_pixels": 24620,
+      "bright_pixels": 24913,
       "yellowish_pixels": 9,
       "dark_pixels": 351,
-      "crop_sha256": "50343ec719ea6eb647d247472e8050e12d5035ce78006c579e00be8e12195f15",
-      "step": 165
+      "crop_sha256": "29ab686c52100b3e4a867c630b52d0934cfcc34bb97eda8d8b2a6ac7f268387c",
+      "step": 81
     },
     {
-      "bright_pixels": 24414,
-      "yellowish_pixels": 9,
-      "dark_pixels": 606,
-      "crop_sha256": "ef1625c4213a1f4cf4466bb81e37eda98f9616dcaba8642048af5e5744f6db3d",
-      "step": 166
-    },
-    {
-      "bright_pixels": 24648,
-      "yellowish_pixels": 9,
-      "dark_pixels": 720,
-      "crop_sha256": "8982d3cd8b603f1146a3ed51977b0073afe564bb452e185881a52470dd16c01e",
-      "step": 167
-    },
-    {
-      "bright_pixels": 24979,
-      "yellowish_pixels": 9,
-      "dark_pixels": 578,
-      "crop_sha256": "41e04be0f302f7c8051a5df232949ac3d6a07db5cd25631ac1930a24a6c9bac6",
-      "step": 168
-    },
-    {
-      "bright_pixels": 25347,
-      "yellowish_pixels": 9,
-      "dark_pixels": 350,
-      "crop_sha256": "affff0e03512e52d49210ed756525bce520ac8784168ba598fda7c7e6e030132",
-      "step": 169
-    },
-    {
-      "bright_pixels": 25347,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "33d5b6d18d67d5536cf9a359a9f9ecef2dfa3b09d27e00455622d4cc4e62bfcd",
-      "step": 170
-    },
-    {
-      "bright_pixels": 25222,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "4f3d907ada958311c1af3c9f43c54b932cd313c7c7b66fd44f13eea2b6bbd0eb",
-      "step": 171
-    },
-    {
-      "bright_pixels": 25136,
-      "yellowish_pixels": 9,
-      "dark_pixels": 489,
-      "crop_sha256": "f5c48b1de5bf7a2a6142e8013fbda75b497903e76c60b8a9b74a3b7d34472bd3",
-      "step": 172
-    },
-    {
-      "bright_pixels": 25043,
+      "bright_pixels": 25176,
       "yellowish_pixels": 9,
       "dark_pixels": 729,
-      "crop_sha256": "5098b3e25b9e5915111c8f28a436473e5c83940f5cf245e1eb566582d52161d5",
-      "step": 173
+      "crop_sha256": "a00f1824bddf2e454dbc161a9c826b73c43168feb82cf3c4e10355bbd354ebed",
+      "step": 82
     },
     {
-      "bright_pixels": 24862,
-      "yellowish_pixels": 9,
-      "dark_pixels": 716,
-      "crop_sha256": "d9db6d4fbf9c216de5d42630f7cdfcf2d00329aa47fe5dd23d25a38d3177c682",
-      "step": 174
-    },
-    {
-      "bright_pixels": 24639,
+      "bright_pixels": 25354,
       "yellowish_pixels": 9,
       "dark_pixels": 578,
-      "crop_sha256": "6dcdb7b8688457293a5049dee4d1df094d4d2dc67107204cd4839aeaeb148fe5",
-      "step": 175
+      "crop_sha256": "5918e7a43722f93112b28e6cc924c6855fe4ecc47ae114449848859d2b2f7529",
+      "step": 83
     },
     {
-      "bright_pixels": 24333,
+      "bright_pixels": 24870,
       "yellowish_pixels": 9,
       "dark_pixels": 244,
-      "crop_sha256": "1fa4e696c904ada847d6a75ed2c504c8e2082ce7e7450bbfa5e787dbdaaf3e79",
-      "step": 176
+      "crop_sha256": "30308ee48d15ea2d2beb59a20281af5e914d99175685ef3d7f5d9cc159cd9722",
+      "step": 84
     },
     {
-      "bright_pixels": 24625,
-      "yellowish_pixels": 9,
-      "dark_pixels": 127,
-      "crop_sha256": "86d4cbb47754eff82081501427f9ac814f3a6208313bb1291f6cd8c86e880341",
-      "step": 177
-    },
-    {
-      "bright_pixels": 24961,
+      "bright_pixels": 25065,
       "yellowish_pixels": 9,
       "dark_pixels": 241,
-      "crop_sha256": "6999dcfd4e8ba9d20598428699b26f05b0ea58c0ffa26dc2e5d634af55ea5f65",
-      "step": 178
+      "crop_sha256": "306736f19d75805f5efad0545e7af88d133ee4058f246f3322a1256505718e99",
+      "step": 85
     },
     {
-      "bright_pixels": 25414,
+      "bright_pixels": 25267,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "02f4cf15f9d8d42e907a4843cef47248b3136ca50fc9bdd099e3059c980e253f",
+      "step": 86
+    },
+    {
+      "bright_pixels": 24988,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "c09ef668dcad99a3f65e497e537cec0fe9e345b8b97cbdc486ae77ae054f27ae",
+      "step": 87
+    },
+    {
+      "bright_pixels": 24870,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "6f9329b1b9838bc9ceac02e81b52d12618392993c4c9d6dfec99c6f12f7d65c9",
+      "step": 88
+    },
+    {
+      "bright_pixels": 25399,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "ad657a3151dc22d621d292bdcb76f923d5cb59921c76ee8e22e98023929904fd",
+      "step": 89
+    },
+    {
+      "bright_pixels": 25114,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "f2c053cf8188394215fcaa527681779d91e828c7cce341cf4f69e1c3e8ec968a",
+      "step": 90
+    },
+    {
+      "bright_pixels": 24881,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "b3104ac899ac667a42c755842a414eecbddeb53ffa90e29b42ea714f19291eed",
+      "step": 91
+    },
+    {
+      "bright_pixels": 25439,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "6de0cce85c390167d26a6edad9e9a63f898e2282cbbfbad70e6a2dcb71d0fe2b",
+      "step": 92
+    },
+    {
+      "bright_pixels": 25115,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "ebfa072fede10e405127137c5ad01324dd64b99b5eabdf0ab0060fd22a249ab8",
+      "step": 93
+    },
+    {
+      "bright_pixels": 24768,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "2d7bb874f3fba377abec5dd67a7d92c9f02b65a3a8bece6f4a6893a6ba9e9c19",
+      "step": 94
+    },
+    {
+      "bright_pixels": 25497,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "6e1d18c976a281045c3d222649b35837a026ffe63cb8df5d5075b042a495b53b",
+      "step": 95
+    },
+    {
+      "bright_pixels": 25126,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "917f66d957731ad64231a3552e359ebf482e32e7e3f81e87d4faf6659a072339",
+      "step": 96
+    },
+    {
+      "bright_pixels": 24654,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "d10f44521c3b433e7ff97051bcb04422e5f68d3d14eb9b25ebe93dc2f6333aea",
+      "step": 97
+    },
+    {
+      "bright_pixels": 25645,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "f2d133dacf11b0c99602a04639e27f40792f03e99487fda1bbf45c835dc2c826",
+      "step": 98
+    },
+    {
+      "bright_pixels": 25306,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "f14eb58ab59231792c37be00f154843e5ebf9502576bb89ceac06d06d60a532d",
+      "step": 99
+    },
+    {
+      "bright_pixels": 24605,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "a758429ca0a50bc93bc223257c2810979fca36230397b58fb9797131c81fd14a",
+      "step": 100
+    },
+    {
+      "bright_pixels": 25647,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "7f5986f8aa16a4fb9165eacd1cde53a1b7609a4435ec3ff2c4ce717175368484",
+      "step": 101
+    },
+    {
+      "bright_pixels": 25306,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "9cfafd4024f149ac7eda4ea11d0570c60715618760fe45aa9dbb9c6041c992b7",
+      "step": 102
+    },
+    {
+      "bright_pixels": 24480,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "f524d21e2b135818d5d80bbf6441c6fb2484c15312075b20a03f8d306a66013f",
+      "step": 103
+    },
+    {
+      "bright_pixels": 25670,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "1cb9ae7a1977f8bb1e842c603e75353bb430ba9de1b34aeab62ef3f94bc0bd88",
+      "step": 104
+    },
+    {
+      "bright_pixels": 25181,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "fc141cccfc7788e1170f00078203c4b7d4dd5ebac7bf0be7b1e4759801b81ee4",
+      "step": 105
+    },
+    {
+      "bright_pixels": 24524,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "d8fb1cc2fd61fe7de725c3e9c0bdcc2d5836258d485d215af405f8bc8b9c6a47",
+      "step": 106
+    },
+    {
+      "bright_pixels": 25655,
       "yellowish_pixels": 9,
       "dark_pixels": 489,
       "crop_sha256": "f9791f403937ee2d73eff80e39f47f9686dffca761a0827451559eb9f18dcb1a",
+      "step": 107
+    },
+    {
+      "bright_pixels": 25346,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "9bfc73ee6e3db33edada1025ea1d48b8e28ee46f07dcedab17b242068fdb5311",
+      "step": 108
+    },
+    {
+      "bright_pixels": 24498,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "26f66e4065385ce9ce052a12ad880b0470d70b7885163fa3b3e9c12763e19b69",
+      "step": 109
+    },
+    {
+      "bright_pixels": 25489,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "d9895b8f4921309518b3a390c420703c1a36b3c0082b21d17d9bb24228f478a7",
+      "step": 110
+    },
+    {
+      "bright_pixels": 25410,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "2387112f3223558b1c4bfd83331f00e02614436740aceaf2c14c4fce06b1eade",
+      "step": 111
+    },
+    {
+      "bright_pixels": 24660,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "131bf8701fd92569d54faa938d46cf7f057545e850ff6ee3e6859d362a1b6cab",
+      "step": 112
+    },
+    {
+      "bright_pixels": 25301,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "72bd02d5d7812fa82252087ccd448ca699b1d8470fcc3dfe0cb85020a45e1a00",
+      "step": 113
+    },
+    {
+      "bright_pixels": 25337,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "7ff5dc6bf25e1ab09af56932fe270c66b2344cda8ad0fc13ffa579203282e2ca",
+      "step": 114
+    },
+    {
+      "bright_pixels": 24788,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "a1b2a76014eaaef912a3f79db089c9ee09f049d7bed814c0a67c2df4d78adaed",
+      "step": 115
+    },
+    {
+      "bright_pixels": 25289,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "138e3a48e2004fcd4d5a3ac33591a942a702a4290d0e6aee8e6b93d22ed9fad2",
+      "step": 116
+    },
+    {
+      "bright_pixels": 25403,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "6ef289fac3689495703752ad6d46ed6da2cfc314f8770f4ab0094a0ba72a4bb0",
+      "step": 117
+    },
+    {
+      "bright_pixels": 24846,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "664441955cc0251002f3ecda9c2d5647c8143652aacd1b83fe88a7442e2442c9",
+      "step": 118
+    },
+    {
+      "bright_pixels": 25154,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "9d0e624622cd7f5dd34a43cc720fb7ad0a1bf0a945a3a43c6d52768b12672ba6",
+      "step": 119
+    },
+    {
+      "bright_pixels": 25342,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "af7011989f5492f72bfc9e718279167064480f3f9aee8dcd12b27e7ebee15416",
+      "step": 120
+    },
+    {
+      "bright_pixels": 24965,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "1a86937fa4843e7f9e9f73d89154b16d67532aca0635c2f7d7da5a5b540b8aa0",
+      "step": 121
+    },
+    {
+      "bright_pixels": 24950,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "9a1b0c3e8affe1fda9e878fcf46a5828325e44d095f2d3b043da4c5b4d146950",
+      "step": 122
+    },
+    {
+      "bright_pixels": 25272,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "5fc211fd1a48214c65ca153c88de8c4db6938e9f12ec6bebca4d98928819a4d5",
+      "step": 123
+    },
+    {
+      "bright_pixels": 24987,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "7366525a405d5d94832eaf754469441201018c2ae0a70ceb63d1e49f3987bc77",
+      "step": 124
+    },
+    {
+      "bright_pixels": 24953,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "17bccb0a0320fbd71fe6724953270b8f7c654c75045c4bb323d284a8d39a6e23",
+      "step": 125
+    },
+    {
+      "bright_pixels": 25417,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "a630354ef074865312b8a94ebca87550bfff4deb08f5794b7ebae45308fe4cfd",
+      "step": 126
+    },
+    {
+      "bright_pixels": 25133,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "c4113add5371ac810ba700b6f1e832e73e4d2890cf0f2165d66e83a768f41b6d",
+      "step": 127
+    },
+    {
+      "bright_pixels": 24869,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "b484342bd2c4d4eb0f0520e7da822838da459504c891143532ccdb0130de50b0",
+      "step": 128
+    },
+    {
+      "bright_pixels": 25530,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "d6f64906c7a7abff889bb6508fec78ce048eb5cbfba0703535f74b30dd3c0f3a",
+      "step": 129
+    },
+    {
+      "bright_pixels": 25101,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "11b54bbe3d1632d1c7c01e77e0e642371b523d07725f1a581c07a7fc06cb5472",
+      "step": 130
+    },
+    {
+      "bright_pixels": 24673,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "0d79c1a677bf7f82b5ddac94e61b40946dd85b1e434baf253e908df462ab3fb7",
+      "step": 131
+    },
+    {
+      "bright_pixels": 25507,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "0be63b71fdbde062d282d0b489bafefd2f6cba807229ecee3ad5af1db3de3a27",
+      "step": 132
+    },
+    {
+      "bright_pixels": 25153,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "47c7b60e54a0b03a86e1af3db2fa5e9a8c6726fd5905a793caf89bdd1b69ab37",
+      "step": 133
+    },
+    {
+      "bright_pixels": 24668,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "5baf256950ee3dd024355e4ec79ebc7c85849d0371a48724a82ec744f1735026",
+      "step": 134
+    },
+    {
+      "bright_pixels": 25595,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "7bcef3a34d77fab5c24345dd7332c14f94abbe1b689dab5eb1194d56a8f553fd",
+      "step": 135
+    },
+    {
+      "bright_pixels": 25339,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "4f9a72f86b95b854213ad46aa59693b74021d39813de57d6d4cea121b3ea861f",
+      "step": 136
+    },
+    {
+      "bright_pixels": 24584,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "783efdf19177b7872eacbf4090f21e88f822fabe3404b4e419ca1605a8d68c6c",
+      "step": 137
+    },
+    {
+      "bright_pixels": 25714,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "3ce97880a72a554187f0bdff852af53be0eeb5c0667b33e33f2038872d01f428",
+      "step": 138
+    },
+    {
+      "bright_pixels": 25226,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "f58ec0de2ba01ac9dec86e1ad28eacb841e73a4229aa7c7e7ce74c83271322f3",
+      "step": 139
+    },
+    {
+      "bright_pixels": 24475,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "ee22475a371e4bd34dabbea63c6bd77b93f3c7e77fae951919c11e080eae40c9",
+      "step": 140
+    },
+    {
+      "bright_pixels": 25680,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "7bb37fe2f85c9f211cc6e9a2e07b3b2c324394fa21a8770cbfd1ba8611fba970",
+      "step": 141
+    },
+    {
+      "bright_pixels": 25270,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "8903ac2bcf92cc2322b8416a4155bae76af094d3b8757566449de08dc89fbdf1",
+      "step": 142
+    },
+    {
+      "bright_pixels": 24530,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "a83128d72ad0753a7034a0e9f5a508c1413710eeb5d2af8b5a7f1f6b1f4f23f4",
+      "step": 143
+    },
+    {
+      "bright_pixels": 25560,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "bb445ac30d29ba5c90bb6dc49d58e689051d950a14e856dcced58971d27d111c",
+      "step": 144
+    },
+    {
+      "bright_pixels": 25365,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "ded9b755f14006807c9cd106d719674a6d375c8bac8402f0990c6147b28dbcdb",
+      "step": 145
+    },
+    {
+      "bright_pixels": 24614,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "2706a23190dad9ff05b6f61d596fd75d105f86bf15932579df8e4124bcfb2d3a",
+      "step": 146
+    },
+    {
+      "bright_pixels": 25441,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "988204655ed531edb5eaa153943a43653ae69195af493baf68fad1c0d0b4e401",
+      "step": 147
+    },
+    {
+      "bright_pixels": 25315,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "6fdbf1d3137db118c44db2f892aee69e8db5f81f88ca83c36fb97463ba4b88f4",
+      "step": 148
+    },
+    {
+      "bright_pixels": 24670,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "9f59786cb71ae567b3f7e54b8c78c3a3f6330e4d50d3a6d7af5cda36e7772308",
+      "step": 149
+    },
+    {
+      "bright_pixels": 25310,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "c7d743409433d74248e7641b159c5655d0095dd2a98effe86c2a89043547cd5e",
+      "step": 150
+    },
+    {
+      "bright_pixels": 25413,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "64b2602e8effeaf4f2ccd26dfee3d1a9c19ba053c88d61b08cd4697df3aa241b",
+      "step": 151
+    },
+    {
+      "bright_pixels": 24735,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "aeb7b0e025206c611c2cd5310d2461c6d9dddb0e8a2adee20d23b47fa25fe29c",
+      "step": 152
+    },
+    {
+      "bright_pixels": 25275,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "cf2ff1213b5d741c68a380e1d7062849e8f3d73ea1cd19bab67c9ece2d6173c0",
+      "step": 153
+    },
+    {
+      "bright_pixels": 25405,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "a573c3ad09a8ac687d214a7255750fa31c4f93999d3d9be6525a45fb9e22ff89",
+      "step": 154
+    },
+    {
+      "bright_pixels": 24936,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "e032b353cee7f71dcb3c276c271d4577b0970a5edd92d5748ddd5034246d0ae9",
+      "step": 155
+    },
+    {
+      "bright_pixels": 25126,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "bafc786754e05d1856f11d15bcfc9401993bfabb4f36b2e589ce6954ce83fb50",
+      "step": 156
+    },
+    {
+      "bright_pixels": 25330,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "7c002d04ac38bb3a7f5df78b3711dc5945f083aa09c97a3ad445351a4fdb225d",
+      "step": 157
+    },
+    {
+      "bright_pixels": 24971,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "1f82e09f8a828fff2096b9dff212fb8c644810caaf5a869f418fdc40d1809d6b",
+      "step": 158
+    },
+    {
+      "bright_pixels": 25010,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "4edefd10283959a8d64ba7ee390269c26d27b2bd3ca78518f676fdeb8deeb614",
+      "step": 159
+    },
+    {
+      "bright_pixels": 25289,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "45b9ac8d87eaf94f3abe3d90df9ad669be284fd1e566260999e49a88f2929b9e",
+      "step": 160
+    },
+    {
+      "bright_pixels": 24922,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "50ba198d3202c4bde3a2097f7e8a5c8b63bf9f112df2d3e1e4a63d15025f6415",
+      "step": 161
+    },
+    {
+      "bright_pixels": 24974,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "ecf8d6179eff33a571e7256fadf1cd9ef67ae0c2e1cc2cd545ebe15c224602b6",
+      "step": 162
+    },
+    {
+      "bright_pixels": 25426,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "be2c79df1ab966720f5dadf96dfe79e591e80321072d98faedcafa34415a9cdf",
+      "step": 163
+    },
+    {
+      "bright_pixels": 25147,
+      "yellowish_pixels": 9,
+      "dark_pixels": 716,
+      "crop_sha256": "d7eec23a1789b372cba168251d7db507b00300c84d9551f8554e13115b4abec9",
+      "step": 164
+    },
+    {
+      "bright_pixels": 24767,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "e3c1fb94d92f204c6d5ea12a0d53f04948b5b888f4a3426f8dbbed0c2f252b00",
+      "step": 165
+    },
+    {
+      "bright_pixels": 25525,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "bf55cec8566bf7f4fdb1d2cc5c06e6211ef32f251ce5bb2c3e74a81647aa4ed9",
+      "step": 166
+    },
+    {
+      "bright_pixels": 25101,
+      "yellowish_pixels": 9,
+      "dark_pixels": 489,
+      "crop_sha256": "2715341b9a7692912c75121e15f63f8ecfef475e5f7ca5d462cf4972a0ff8cba",
+      "step": 167
+    },
+    {
+      "bright_pixels": 24740,
+      "yellowish_pixels": 9,
+      "dark_pixels": 720,
+      "crop_sha256": "ead397124becf77747234a77b28fb0156457fb650ec91a920a8f50dc43dc430e",
+      "step": 168
+    },
+    {
+      "bright_pixels": 25438,
+      "yellowish_pixels": 9,
+      "dark_pixels": 455,
+      "crop_sha256": "6cd8b353ec37c0de122bf42769fb6374ff6c8d8306324230115002d8bf6e13e4",
+      "step": 169
+    },
+    {
+      "bright_pixels": 25181,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "78dc2191f70822209c388ce5f48a4619571f0df865a3ca3e9fd6ce536ab0d9ba",
+      "step": 170
+    },
+    {
+      "bright_pixels": 24654,
+      "yellowish_pixels": 9,
+      "dark_pixels": 351,
+      "crop_sha256": "ff6e78901603907fd5c3e0a00dba567a7a4ab19509d3447f464f6ea8ce288c82",
+      "step": 171
+    },
+    {
+      "bright_pixels": 25696,
+      "yellowish_pixels": 9,
+      "dark_pixels": 729,
+      "crop_sha256": "90352ac4cad8eb84f56f05c31b9a797561f2c03e90fcc02caf33dd270db0b656",
+      "step": 172
+    },
+    {
+      "bright_pixels": 25337,
+      "yellowish_pixels": 9,
+      "dark_pixels": 578,
+      "crop_sha256": "16696ddfbefcc7323c3d7b158271db7b24925bea38fb92ef3c84376a2c62f5fd",
+      "step": 173
+    },
+    {
+      "bright_pixels": 24485,
+      "yellowish_pixels": 9,
+      "dark_pixels": 244,
+      "crop_sha256": "0262206c63d9cf7d62d684fa87abb4d194e11d7b9bd05a599f179ab4f02fa2bd",
+      "step": 174
+    },
+    {
+      "bright_pixels": 25721,
+      "yellowish_pixels": 9,
+      "dark_pixels": 241,
+      "crop_sha256": "dcf3ed2729970849dc40078c276ad4c379aa7fd3d208e305828eed608c7fc07a",
+      "step": 175
+    },
+    {
+      "bright_pixels": 25278,
+      "yellowish_pixels": 9,
+      "dark_pixels": 606,
+      "crop_sha256": "93f4140dd3e39bcf9aff7c1cda2f558c42edf58679b706abac144b536dcc414b",
+      "step": 176
+    },
+    {
+      "bright_pixels": 24476,
+      "yellowish_pixels": 9,
+      "dark_pixels": 695,
+      "crop_sha256": "69440d3e9dfcd65612cd4db0946d50e6244e9363ce5fc008c056fe17cfc13d94",
+      "step": 177
+    },
+    {
+      "bright_pixels": 25597,
+      "yellowish_pixels": 9,
+      "dark_pixels": 350,
+      "crop_sha256": "6ffc40a219607b84459bdf590ea20ae303a557ad7c8d48ff70a9d1c6ab7fdabe",
+      "step": 178
+    },
+    {
+      "bright_pixels": 25297,
+      "yellowish_pixels": 9,
+      "dark_pixels": 127,
+      "crop_sha256": "66b749c592d8f7e5e3207d9a84ab891ce20fd86702830e574bb45fae5e11201b",
       "step": 179
     }
   ]
