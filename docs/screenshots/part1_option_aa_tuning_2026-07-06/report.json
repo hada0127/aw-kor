@@ -1,0 +1,85 @@
+{
+  "focus_sheet": "docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_focus.png",
+  "focus_sha256": "6b162b43e5631eee549d34f8ecbd5d37f43d85a72330654bffbba131f941de9e",
+  "screen_sheet": "docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_screen_compare.png",
+  "screen_sheet_sha256": "ffff581422a9a2840f8d78cc5aef02984a5f99c8663ff9ca352a6b347387a92f",
+  "before_rom_sha256": "99ecb93b3eef1e269fa04496b3459f90317412aa9230bbdea333ab14ba1a6149",
+  "after_rom_sha256": "1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695",
+  "after_output_sha256": {
+    "output/game_wars_korean_full.gba": "1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695",
+    "output/game_wars_korean_final.gba": "1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695",
+    "output/game_wars_korean_title_test.gba": "1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695"
+  },
+  "changed_asset_pixels": {
+    "작전룸": 32,
+    "통신": 27
+  },
+  "guarded_asset_adjustments": {
+    "작전룸": {
+      "target": "마지막 음절 초성 ㄹ 내부 획",
+      "expected_bbox": [25, 1, 103, 29],
+      "aa_indices": [14, 7],
+      "changed_pixels": 32,
+      "bbox_mismatch_behavior": "skip"
+    },
+    "통신": {
+      "target": "첫 음절 초성 ㅌ 상단 획",
+      "expected_bbox": [33, 1, 95, 29],
+      "aa_indices": [14, 7],
+      "changed_pixels": 27,
+      "bbox_mismatch_behavior": "skip"
+    }
+  },
+  "target_labels": [
+    "작전룸",
+    "통신"
+  ],
+  "before_screen": "docs/screenshots/part1_option_aa_tuning_2026-07-06/40_part1_name_menu_before.png",
+  "after_screen": "docs/screenshots/part1_option_aa_tuning_2026-07-06/40_part1_name_menu_after.png",
+  "verification": [
+    {
+      "command": "python3 -m py_compile tools/build_title_hangul.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/build_korean_full.py",
+      "result": "pass",
+      "evidence": "sprite_overrides: 1 applied, 0 skipped; output 3종 SHA 동일"
+    },
+    {
+      "command": "python3 tools/audit_sprite_override_report.py --strict",
+      "result": "pass",
+      "evidence": "critical_count=0"
+    },
+    {
+      "command": "python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_text_fit.py",
+      "result": "pass",
+      "evidence": "overflow=0, no_ko=0"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''",
+      "result": "pass",
+      "evidence": "visual_region_checks=54; 작전룸 bbox=(25,1,103,29), 통신 bbox=(33,1,95,29), values include 7/14"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_aa_after_screens/manifest.json --shot-dir temp/part1_option_aa_after_screens --out temp/part1_option_aa_after_screens/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    },
+    {
+      "command": "python3 -m json.tool docs/screenshots/part1_option_aa_tuning_2026-07-06/report.json && git diff --check",
+      "result": "pass"
+    }
+  ],
+  "notes": [
+    "작전룸 ㄹ과 통신 ㅌ 내부 획만 bbox 기준 AA 보강으로 수정",
+    "예상 bbox가 달라지면 국소 픽셀 보정은 skip되어 다른 폰트/렌더를 오염시키지 않음",
+    "focus sheet는 직전 커밋 렌더와 현재 렌더를 동일 팔레트로 확대 비교",
+    "screen sheet는 fresh coldboot route 40_part1_name_menu 전후 비교",
+    "qa_visual_regions는 팔레트/경계/픽셀수 회귀 게이트이며, 가독성 판단은 비교시트 수동 확인 기준"
+  ]
+}

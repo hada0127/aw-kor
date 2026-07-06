@@ -24,6 +24,17 @@
 `qa_scene_screenshot_sanity.py`, `git diff --check` 통과. `qa_visual_regions.py`는 팔레트/경계/픽셀수 회귀
 게이트이며, ㄹ/ㅌ 가독성 개선 판단은 위 비교시트 수동 확인을 기준으로 남겼다.
 
+**추가 보정(2026-07-06)**: 사용자 재지적에 따라 `작전룸`의 마지막 음절 `ㄹ`과 `통신`의 첫 글자 `ㅌ`만
+bbox 기준으로 국소 AA 보강했다. 단색 덮어쓰기 대신 index 14 중심선과 index 7 어깨 픽셀을 섞어 원본식
+안티앨리어싱 느낌을 유지했다. 보정은 예상 bbox(`작전룸` `(25, 1, 103, 29)`, `통신` `(33, 1, 95, 29)`)
+일치 시에만 적용하고, 폰트/렌더 drift 시 skip한다. 변경 픽셀은 `작전룸` 32px, `통신` 27px. 비교시트:
+`docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_focus.png`,
+`docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_screen_compare.png`.
+최종 output 3종 SHA-256은
+`1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695`.
+통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`, `git diff --check`.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

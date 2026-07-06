@@ -31,6 +31,16 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
   `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`, `git diff --check`.
   단, `qa_visual_regions.py`는 팔레트/경계/픽셀수 회귀 게이트이고 ㄹ/ㅌ 가독성 개선 판단은 비교시트 수동 확인 기준이다.
+  추가 재지적에 따라 `작전룸` 마지막 음절 `ㄹ`과 `통신` 첫 글자 `ㅌ`에만 index 14 중심선 + index 7
+  AA 어깨 픽셀을 더해 원본식 안티앨리어싱 느낌으로 보강했다. 예상 bbox(`작전룸` `(25, 1, 103, 29)`,
+  `통신` `(33, 1, 95, 29)`)가 바뀌면 보정은 skip한다. 변경 픽셀은 각각 32px/27px.
+  추가 비교시트:
+  `docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_focus.png`,
+  `docs/screenshots/part1_option_aa_tuning_2026-07-06/part1_option_aa_screen_compare.png`,
+  보고서:
+  `docs/screenshots/part1_option_aa_tuning_2026-07-06/report.json`.
+  추가 보정 후 output 3종 SHA는
+  `1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695`.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror

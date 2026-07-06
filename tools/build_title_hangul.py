@@ -1414,18 +1414,31 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
 
 
 def strengthen_operation_room_rieul(layer: Image.Image) -> None:
+    bbox = layer.getbbox()
+    if bbox != (25, 1, 103, 29):
+        return
+    x0, y0, x1, _y1 = bbox
     px = layer.load()
-    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 10}
-    for y, x0, x1 in ((8, 79, 87), (10, 82, 91)):
-        for x in range(x0, x1):
+    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 10, 14}
+    # The last syllable's initial ㄹ collapses into a cyan block after width
+    # scaling. Add original-style inner dark strokes with AA shoulders instead
+    # of a hard single-color overwrite. These post-scale nudges are valid only
+    # for the current OkDanDan render bbox; bbox drift skips the adjustment.
+    strokes = (
+        (x1 - 24, x1 - 8, y0 + 7, 14),
+        (x1 - 22, x1 - 6, y0 + 8, 7),
+        (x1 - 19, x1 - 5, y0 + 11, 14),
+    )
+    for sx0, sx1, y, value in strokes:
+        for x in range(max(x0, sx0), min(x1, sx1)):
             if px[x, y] in body_indices:
-                px[x, y] = 14
+                px[x, y] = value
 
 
 def strengthen_first_tong_tieut(layer: Image.Image) -> None:
-    """Extend the right edge of the first '통' top strokes."""
+    """Clarify the first '통' top ㅌ strokes with anti-aliased notches."""
     bbox = layer.getbbox()
-    if bbox is None:
+    if bbox != (33, 1, 95, 29):
         return
     x0, y0, x1, y1 = bbox
     px = layer.load()
@@ -1442,6 +1455,15 @@ def strengthen_first_tong_tieut(layer: Image.Image) -> None:
         value = px[right, y] if px[right, y] else 14
         for x in (right + 1, right + 2, right + 3):
             if x < mid + 3 and px[x, y] == 0:
+                px[x, y] = value
+    strokes = (
+        (x0 + 12, x0 + 25, y0 + 6, 14),
+        (x0 + 14, x0 + 27, y0 + 8, 7),
+        (x0 + 18, x0 + 29, y0 + 10, 14),
+    )
+    for sx0, sx1, y, value in strokes:
+        for x in range(max(x0, sx0), min(x1, sx1)):
+            if px[x, y] in body_indices:
                 px[x, y] = value
 
 
