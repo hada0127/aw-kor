@@ -1,0 +1,144 @@
+{
+  "focus_sheet": "docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_focus.png",
+  "focus_sha256": "109c25da0d74d376bdd84626887576ba7360f9df584b6cc2511f3ff8972bd7fc",
+  "screen_sheet": "docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_screen_compare.png",
+  "screen_sheet_sha256": "61d07cab063cc11ee95341ad34c07f3ce7fe26484a6718696b3bdbb77091e727",
+  "before_renderer_commit": "7f34453",
+  "before_rom_sha256": "1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695",
+  "before_screen_source_note": "screen before is reused from part1_option_aa_tuning_2026-07-06 and its provenance records the dirty-tree capture used for the previous pixel-AA commit",
+  "after_rom_sha256": "c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0",
+  "after_output_sha256": {
+    "output/game_wars_korean_full.gba": "c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0",
+    "output/game_wars_korean_final.gba": "c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0",
+    "output/game_wars_korean_title_test.gba": "c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0"
+  },
+  "changed_asset_pixels_vs_before": {
+    "작전룸": 383,
+    "통신": 215,
+    "대전": 0
+  },
+  "target_labels": [
+    "작전룸",
+    "통신"
+  ],
+  "unchanged_control_labels": [
+    "대전"
+  ],
+  "after_palette_indices": {
+    "작전룸": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      14
+    ],
+    "통신": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      14
+    ],
+    "대전": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      14
+    ]
+  },
+  "before_screen": "docs/screenshots/part1_option_supersample_2026-07-06/40_part1_name_menu_before_pixel_aa.png",
+  "after_screen": "docs/screenshots/part1_option_supersample_2026-07-06/40_part1_name_menu_after_supersample.png",
+  "before_screen_sha256": "e22ad4b0fda4bb10822b46dd233667ea51c11a326e929421c51a2d8c11599a9e",
+  "after_screen_sha256": "de596ee144f657d0c1db434b2437fd319cba5ad61ff114aec524b91b21f4c673",
+  "link_selected_screen": "docs/screenshots/part1_option_supersample_2026-07-06/43_part1_link_after_supersample.png",
+  "link_selected_screen_sha256": "bb14de3124fff047fc0e5ae5f04747703d53df2342b075ad3130ff018ec30f1a",
+  "link_selected_note": "43_part1_link current-shot: 통신 진입/선택 상태 보조 확인",
+  "method": {
+    "targeted_supersample_labels": [
+      "작전룸",
+      "통신"
+    ],
+    "unchanged_legacy_width_labels": [
+      "대전"
+    ],
+    "supersample_scale": 4,
+    "source": "shadow/outer/inner/body alpha masks",
+    "resize": "mask-space LANCZOS retarget before final 128x32 downsample",
+    "palette_cleanup": "final quantize to Part1 option indices 9/10/14/1..6 with transparent 0; no manual ㄹ/ㅌ pixel strokes",
+    "rejected_experiment": "allowing index 7 over inner outline reintroduced horizontal line artifacts in focus sheet, so it was not kept"
+  },
+  "verification": [
+    {
+      "command": "python3 -m py_compile tools/build_title_hangul.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/build_korean_full.py",
+      "result": "pass",
+      "evidence": "sprite_overrides: 1 applied, 0 skipped; output 3종 SHA 동일"
+    },
+    {
+      "command": "python3 tools/audit_sprite_override_report.py --strict",
+      "result": "pass",
+      "evidence": "critical_count=0"
+    },
+    {
+      "command": "python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_text_fit.py",
+      "result": "pass",
+      "evidence": "overflow=0, no_ko=0"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''",
+      "result": "pass",
+      "evidence": "visual_region_checks=54"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/capture_scene_screenshots.py --checkpoint 40_part1_name_menu --out temp/part1_option_supersample_after_screens --harness temp/mgbah --force",
+      "result": "pass",
+      "evidence": "captured=1"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_supersample_after_screens/manifest.json --shot-dir temp/part1_option_supersample_after_screens --out temp/part1_option_supersample_after_screens/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/capture_scene_screenshots.py --checkpoint 43_part1_link --out temp/part1_option_supersample_link_screen --harness temp/mgbah --force",
+      "result": "pass",
+      "evidence": "captured=1"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_supersample_link_screen/manifest.json --shot-dir temp/part1_option_supersample_link_screen --out temp/part1_option_supersample_link_screen/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    }
+  ],
+  "review_followup": [
+    "codex/agy flagged 대전 as an out-of-scope regression; fixed by routing supersample only for 작전룸/통신. 대전 changed pixels now 0.",
+    "codex flagged provenance ambiguity; current-shot provenance now records dirty-tree capture note and report separates before_renderer_commit from before_screen_source_note.",
+    "line naturalness remains HITL visual judgment; automated gates cover palette/bbox/pixel-count/screenshot sanity, not aesthetic final approval."
+  ],
+  "notes": [
+    "사용자 제안대로 큰 alpha mask에서 생성/폭 보정 후 축소하고 최종 팔레트 인덱스로 재양자화했다.",
+    "이전 ㄹ/ㅌ 수동 픽셀 stroke 보정은 제거했다.",
+    "대상 외 대전은 기존 렌더와 byte-identical asset으로 되돌렸다.",
+    "qa_visual_regions는 팔레트/경계/픽셀수 회귀 게이트이며, 획 자연스러움 판단은 비교시트 수동 확인 기준이다."
+  ]
+}

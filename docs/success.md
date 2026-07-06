@@ -35,6 +35,18 @@ bbox 기준으로 국소 AA 보강했다. 단색 덮어쓰기 대신 index 14 �
 통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`, `git diff --check`.
 
+**재작업(2026-07-06)**: 위 국소 픽셀 보정은 라인이 어색하다는 사용자 피드백에 따라 제거했다. `작전룸`/`통신`
+등 폭 보정이 필요한 Part1 옵션 라벨은 4x alpha mask에서 shadow/outline/body를 생성하고, mask-space
+LANCZOS로 목표 폭 보정 후 최종 128x32에 축소해 Part1 옵션 팔레트 인덱스(`9/10/14/1..6`, transparent 0)로
+재양자화한다. 비교시트:
+`docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_focus.png`,
+`docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_screen_compare.png`.
+리뷰에서 지적된 대상 외 변경은 `대전`을 기존 렌더와 0px 차이로 되돌려 닫았다. `43_part1_link`
+current-shot도 같은 폴더에 보조 증거로 저장했다. 최종 output 3종 SHA-256은
+`c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0`.
+통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

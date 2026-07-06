@@ -1333,6 +1333,115 @@ def paste_part1_option_body_gradient(layer: Image.Image, body: Image.Image, *, a
                 lp[xx, yy] = aa_idx
 
 
+PART1_OPTION_SUPERSAMPLE = 4
+
+
+def part1_option_mask_bbox(masks: tuple[Image.Image, ...]) -> tuple[int, int, int, int] | None:
+    boxes = [bbox for mask in masks if (bbox := mask.getbbox()) is not None]
+    if not boxes:
+        return None
+    return (
+        min(box[0] for box in boxes),
+        min(box[1] for box in boxes),
+        max(box[2] for box in boxes),
+        max(box[3] for box in boxes),
+    )
+
+
+def retarget_part1_option_masks(
+    masks: tuple[Image.Image, ...],
+    box: tuple[int, int, int, int],
+    target_w: int,
+    scale: int,
+) -> tuple[Image.Image, ...]:
+    bbox = part1_option_mask_bbox(masks)
+    if bbox is None:
+        return masks
+    target_w = min(target_w, box[2] - box[0])
+    target_w_hi = target_w * scale
+    if bbox[2] - bbox[0] >= target_w_hi:
+        return masks
+    target_x_hi = ((box[0] + box[2]) * scale - target_w_hi) // 2
+    out: list[Image.Image] = []
+    for mask in masks:
+        resized = mask.crop(bbox).resize((target_w_hi, bbox[3] - bbox[1]), Image.Resampling.LANCZOS)
+        placed = Image.new("L", mask.size, 0)
+        placed.paste(resized, (target_x_hi, bbox[1]))
+        out.append(placed)
+    return tuple(out)
+
+
+def paste_part1_option_masks(
+    layer: Image.Image,
+    shadow: Image.Image,
+    outer: Image.Image,
+    inner: Image.Image,
+    body: Image.Image,
+) -> None:
+    sp = shadow.load()
+    op = outer.load()
+    ip = inner.load()
+    bp = body.load()
+    lp = layer.load()
+    for yy in range(layer.height):
+        fill = part1_option_gradient_index(yy)
+        for xx in range(layer.width):
+            if sp[xx, yy] >= 48:
+                lp[xx, yy] = 9
+            if op[xx, yy] >= 48:
+                lp[xx, yy] = 10
+            if ip[xx, yy] >= 48:
+                lp[xx, yy] = 14
+            alpha = bp[xx, yy]
+            if alpha >= 96:
+                lp[xx, yy] = fill
+            elif alpha >= 24 and lp[xx, yy] == 0:
+                lp[xx, yy] = 7
+
+
+def draw_part1_option_logo_text_supersampled(
+    layer: Image.Image,
+    text: str,
+    box: tuple[int, int, int, int],
+    max_size: int,
+    *,
+    stroke_width: int,
+    target_min_w: int,
+    width_limit: int | None = None,
+) -> None:
+    """Render wide Part 1 option labels as supersampled masks, then quantize."""
+    draw = ImageDraw.Draw(layer)
+    font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
+    max_w = width_limit if width_limit is not None else box[2] - box[0]
+    max_h = box[3] - box[1]
+    selected_size = 8
+    for size in range(max_size, 7, -1):
+        font = ImageFont.truetype(str(font_path), size)
+        w, h = text_bbox(draw, text, font, stroke_width)
+        if w <= max_w and h <= max_h:
+            selected_size = size
+            break
+
+    scale = PART1_OPTION_SUPERSAMPLE
+    hi_size = (layer.width * scale, layer.height * scale)
+    hi_font = ImageFont.truetype(str(font_path), selected_size * scale)
+    hi_draw = ImageDraw.Draw(Image.new("L", hi_size, 0))
+    hi_stroke = stroke_width * scale
+    hi_text_box = hi_draw.textbbox((0, 0), text, font=hi_font, stroke_width=hi_stroke)
+    hi_w = hi_text_box[2] - hi_text_box[0]
+    hi_h = hi_text_box[3] - hi_text_box[1]
+    hi_x = ((box[0] + box[2]) * scale - hi_w) // 2 - hi_text_box[0]
+    hi_y = ((box[1] + box[3]) * scale - hi_h) // 2 - hi_text_box[1] - scale
+
+    shadow = text_mask_layer(hi_size, text, hi_font, (hi_x + 2 * scale, hi_y + 2 * scale), hi_stroke)
+    outer = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), hi_stroke)
+    inner = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), max(1, hi_stroke - scale))
+    body = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), 0)
+    masks = retarget_part1_option_masks((shadow, outer, inner, body), box, target_min_w, scale)
+    shadow, outer, inner, body = (mask.resize(layer.size, Image.Resampling.LANCZOS) for mask in masks)
+    paste_part1_option_masks(layer, shadow, outer, inner, body)
+
+
 def draw_part1_option_logo_text(
     layer: Image.Image,
     text: str,
@@ -1342,6 +1451,7 @@ def draw_part1_option_logo_text(
     stroke_width: int = 2,
     target_min_w: int | None = None,
     width_limit: int | None = None,
+    supersample_target: bool = False,
 ) -> None:
     """Draw Part 1 carousel option text with the original option palette.
 
@@ -1350,6 +1460,18 @@ def draw_part1_option_logo_text(
     shadow and outlines. Keeping this exact index family lets the runtime OBJ
     palettes reproduce the original green/red/cyan gradients.
     """
+    if target_min_w is not None and supersample_target:
+        draw_part1_option_logo_text_supersampled(
+            layer,
+            text,
+            box,
+            max_size,
+            stroke_width=stroke_width,
+            target_min_w=target_min_w,
+            width_limit=width_limit,
+        )
+        return
+
     draw = ImageDraw.Draw(layer)
     font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
     max_w = width_limit if width_limit is not None else box[2] - box[0]
@@ -1395,8 +1517,6 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
         return patch.copy()
     out = Image.new("L", (target_w, patch.height), 0)
     op = out.load()
-    # Back-to-front compositing: weak antialias pixels only fill empty space,
-    # while strong body pixels can replace outline/shadow in the glyph interior.
     for idx in INDEX_SCALE_LAYER_ORDER:
         mask = patch.point(lambda p, idx=idx: 255 if p == idx else 0, "L")
         if mask.getbbox() is None:
@@ -1411,60 +1531,6 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
                 elif alpha >= 32 and op[xx, yy] == 0:
                     op[xx, yy] = idx
     return out
-
-
-def strengthen_operation_room_rieul(layer: Image.Image) -> None:
-    bbox = layer.getbbox()
-    if bbox != (25, 1, 103, 29):
-        return
-    x0, y0, x1, _y1 = bbox
-    px = layer.load()
-    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 10, 14}
-    # The last syllable's initial ㄹ collapses into a cyan block after width
-    # scaling. Add original-style inner dark strokes with AA shoulders instead
-    # of a hard single-color overwrite. These post-scale nudges are valid only
-    # for the current OkDanDan render bbox; bbox drift skips the adjustment.
-    strokes = (
-        (x1 - 24, x1 - 8, y0 + 7, 14),
-        (x1 - 22, x1 - 6, y0 + 8, 7),
-        (x1 - 19, x1 - 5, y0 + 11, 14),
-    )
-    for sx0, sx1, y, value in strokes:
-        for x in range(max(x0, sx0), min(x1, sx1)):
-            if px[x, y] in body_indices:
-                px[x, y] = value
-
-
-def strengthen_first_tong_tieut(layer: Image.Image) -> None:
-    """Clarify the first '통' top ㅌ strokes with anti-aliased notches."""
-    bbox = layer.getbbox()
-    if bbox != (33, 1, 95, 29):
-        return
-    x0, y0, x1, y1 = bbox
-    px = layer.load()
-    mid = x0 + max(1, (x1 - x0) // 2)
-    body_indices = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14}
-    for y in range(y0, min(y1, y0 + 11)):
-        xs = [x for x in range(x0, mid) if px[x, y] in body_indices]
-        if len(xs) < 4:
-            continue
-        left = min(xs)
-        right = max(xs)
-        if right - left < 5:
-            continue
-        value = px[right, y] if px[right, y] else 14
-        for x in (right + 1, right + 2, right + 3):
-            if x < mid + 3 and px[x, y] == 0:
-                px[x, y] = value
-    strokes = (
-        (x0 + 12, x0 + 25, y0 + 6, 14),
-        (x0 + 14, x0 + 27, y0 + 8, 7),
-        (x0 + 18, x0 + 29, y0 + 10, 14),
-    )
-    for sx0, sx1, y, value in strokes:
-        for x in range(max(x0, sx0), min(x1, sx1)):
-            if px[x, y] in body_indices:
-                px[x, y] = value
 
 
 def make_part1_label_block(korean: str, _english: str, max_size: int = 20) -> Image.Image:
@@ -1517,6 +1583,7 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
             min(max_size, 25),
             stroke_width=2,
             target_min_w=target_w,
+            supersample_target=label in {"작전룸", "통신"},
         )
     else:
         width_limit = 108 if len(label) >= 6 else 92
@@ -1528,10 +1595,6 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
             stroke_width=2,
             width_limit=width_limit,
         )
-    if label == "작전룸":
-        strengthen_operation_room_rieul(layer)
-    if label == "통신":
-        strengthen_first_tong_tieut(layer)
     return layer
 
 

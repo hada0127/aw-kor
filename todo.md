@@ -41,6 +41,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `docs/screenshots/part1_option_aa_tuning_2026-07-06/report.json`.
   추가 보정 후 output 3종 SHA는
   `1b95b0a54b2340333041118146b38aa51dcfb5ce917ee5de77b513f782f0a695`.
+  라인이 어색하다는 후속 피드백으로 위 국소 픽셀 보정은 제거하고, 4x alpha mask에서 생성/폭 보정 후
+  128x32로 축소해 Part1 옵션 팔레트 인덱스로 재양자화하는 방식으로 교체했다. 비교시트:
+  `docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_focus.png`,
+  `docs/screenshots/part1_option_supersample_2026-07-06/part1_option_supersample_screen_compare.png`,
+  보조 화면 `docs/screenshots/part1_option_supersample_2026-07-06/43_part1_link_after_supersample.png`,
+  보고서 `docs/screenshots/part1_option_supersample_2026-07-06/report.json`.
+  리뷰에서 지적된 대상 외 `대전` 변경은 기존 렌더와 0px 차이로 되돌렸다. 재작업 후 output 3종 SHA는
+  `c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0`.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror
