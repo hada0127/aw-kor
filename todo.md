@@ -54,6 +54,20 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   128x32/4bpp 양자화 품질이 불안정해 직접 삽입하지 않는다. 증거:
   `docs/screenshots/part1_option_imagegen_probe_2026-07-07/imagegen_quant_compare.png`,
   실패 기록: `docs/fail.md`.
+  최종적으로 baseline supersample 위에 `작전룸` 마지막 음절 `ㄹ` 11px, `통신` 첫 음절 `ㅌ` 13px만
+  index 14 micro stroke로 보강했다. bbox가 예상값과 다르면 skip하며 `대전`은 0px diff다. 비교시트:
+  `docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_focus.png`,
+  `docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_screen_compare.png`,
+  통신 선택 화면:
+  `docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes.png`,
+  보고서:
+  `docs/screenshots/part1_option_micro_strokes_2026-07-07/report.json`.
+  최종 output 3종 SHA는
+  `c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911`.
+  통과: build, py_compile, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
+  `qa_visual_regions.py --asset-only`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`,
+  `qa_scene_screenshot_sanity.py`.
+  `qa_visual_regions.py`는 `작전룸`/`통신`/`대전` layer SHA-256도 검사한다.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror

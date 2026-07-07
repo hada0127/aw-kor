@@ -10,6 +10,7 @@ savestates can carry stale VRAM/text cache and must not be the main gate.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import struct
 import subprocess
@@ -51,6 +52,13 @@ PART1_MENU_PRENAV = [
 ]
 PART1_MENU_ADVANCE_A_PRESSES = 16
 START_PROMPT_CROP = (56, 96, 184, 124)
+PART1_OPTION_LAYER_SHA256 = {
+    # Regression guard for the 2026-07-07 micro ㄹ/ㅌ stroke tuning.
+    # These hashes are over the 128x32 indexed layer bytes, before LZ77 packing.
+    "operation_room": "2fd69486cda9e1b29035d6357fc93434827f6d44b416e24e5e1b5afbbafa6789",
+    "link": "af4396623b3fce1c7c9c9169aa6ee151a84828caf22aad0349c58e2cf761ec3a",
+    "single_battle": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+}
 ACTION_MENU_TEMPSAV = ROOT / "temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav"
 ACTION_MENU_TILEMAP_EXPECTED = {
     0x70AA: 0xA1AD,
@@ -390,6 +398,14 @@ def run_asset_checks() -> list[str]:
                 y1_max=32,
             )
             style = assert_part1_option_logo_palette(f"part1 option {name}", layer)
+            golden_sha = PART1_OPTION_LAYER_SHA256.get(name)
+            if golden_sha is not None:
+                actual_sha = hashlib.sha256(layer.tobytes()).hexdigest()
+                if actual_sha != golden_sha:
+                    raise AssertionError(
+                        f"part1 option {name}: layer hash changed {actual_sha} != {golden_sha}"
+                    )
+                style += f":sha256={actual_sha}"
             display_text = th.part1_option_display_text(text)
             checked.append(f"asset:part1_option:{name}:{display_text}:{bbox}:{style}")
         except AssertionError as exc:

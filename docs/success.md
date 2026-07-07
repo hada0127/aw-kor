@@ -47,6 +47,24 @@ current-shot도 같은 폴더에 보조 증거로 저장했다. 최종 output 3�
 통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
 
+**최종 micro 보강(2026-07-07)**: custom glyph/imagegen 직접 삽입 실패 후, baseline supersample 결과를 유지하고
+문제 자모만 최소 보정했다. `작전룸`은 마지막 음절 `룸`의 초성 `ㄹ` 내부 stroke 11px,
+`통신`은 첫 음절 `통`의 초성 `ㅌ` 내부 stroke 13px만 index 14로 바꾼다. bbox가 각각
+`작전룸=(25,1,103,29)`, `통신=(33,1,95,30)`과 다르면 skip한다. `대전`은 0px diff다.
+비교시트:
+`docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_focus.png`,
+`docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_screen_compare.png`.
+통신 선택 직접 화면:
+`docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes.png`.
+보고서:
+`docs/screenshots/part1_option_micro_strokes_2026-07-07/report.json`.
+최종 output 3종 SHA-256은
+`c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911`.
+통과: build, `py_compile`, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`,
+`qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+`qa_visual_regions.py`는 `작전룸`/`통신`/`대전` 128x32 layer SHA-256도 검사해 micro stroke 누락을 잡는다.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

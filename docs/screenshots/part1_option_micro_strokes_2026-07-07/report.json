@@ -1,0 +1,253 @@
+{
+  "date": "2026-07-07",
+  "method": "baseline supersample plus guarded micro strokes only on ㄹ/ㅌ",
+  "labels": {
+    "operation_room": {
+      "text": "작전룸",
+      "before_bbox": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "after_bbox": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "changed_pixels": 11,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "before_layer_sha256": "29d6d0b78d981ff8607ad07268cd846bfc40583561e611e7f77bc4a56012e90e",
+      "after_layer_sha256": "2fd69486cda9e1b29035d6357fc93434827f6d44b416e24e5e1b5afbbafa6789"
+    },
+    "link": {
+      "text": "통신",
+      "before_bbox": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "after_bbox": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "changed_pixels": 13,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "before_layer_sha256": "7bc7065f9a29a517b6b4fec5f82a274b6f33cfc673d675ba33261f392e18efba",
+      "after_layer_sha256": "af4396623b3fce1c7c9c9169aa6ee151a84828caf22aad0349c58e2cf761ec3a"
+    },
+    "single_battle_control": {
+      "text": "대전",
+      "before_bbox": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "after_bbox": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "changed_pixels": 0,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "before_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+      "after_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae"
+    }
+  },
+  "focus_sheet": "docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_focus.png",
+  "focus_sha256": "99f8274046bcceb3f242baa3a09a3ac3c3315661475ca69bc77b32049edce4da",
+  "baseline_reference": "HEAD before this change, commit 0ba5ce7 supersample renderer",
+  "output_sha256": "c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911",
+  "screen_compare_sheet": "docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_screen_compare.png",
+  "screen_compare_sha256": "35865f46bc8aa6412022b7bcd0fcd39c05d1eb8578867485bb7ab0c1fd8c78af",
+  "current_screens": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_after_micro_strokes.png",
+    "43_part1_link": "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_after_micro_strokes.png",
+    "custom_part1_link_option_selected": "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes.png"
+  },
+  "screen_sanity_reports": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_sanity.json",
+    "43_part1_link": "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_sanity.json",
+    "custom_part1_link_option_selected": "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_sanity.json"
+  },
+  "verification": [
+    {
+      "command": "python3 -m py_compile tools/build_title_hangul.py tools/qa_visual_regions.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_visual_regions.py --asset-only",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/build_korean_full.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_text_fit.py",
+      "result": "pass",
+      "evidence": "overflow=0, no_ko=0"
+    },
+    {
+      "command": "python3 tools/audit_sprite_override_report.py --strict",
+      "result": "pass",
+      "evidence": "critical_count=0"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''",
+      "result": "pass",
+      "evidence": "visual_region_checks=54"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_micro_strokes_40_screen/manifest.json --shot-dir temp/part1_option_micro_strokes_40_screen --out temp/part1_option_micro_strokes_40_screen/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_micro_strokes_43_screen/manifest.json --shot-dir temp/part1_option_micro_strokes_43_screen --out temp/part1_option_micro_strokes_43_screen/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_micro_strokes_link_option_screen/manifest.json --shot-dir temp/part1_option_micro_strokes_link_option_screen --out temp/part1_option_micro_strokes_link_option_screen/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    },
+    {
+      "command": "git diff --cached --check",
+      "result": "pass"
+    }
+  ],
+  "artifact_sha256": {
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_after_micro_strokes.png": "6d0d167f450cc38b4a66e34a8f60fb207261a7a82db30b720cae8672e5721c9b",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_after_micro_strokes_provenance.json": "ec394cf7f305cde048b061e745e311980327a7befebc9c4afc5376dfd63360e7",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_sanity.json": "955987e549785ec0389976f32fd942efb610923b455c2cedfe4931dcec98ed6b",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_after_micro_strokes.png": "bb14de3124fff047fc0e5ae5f04747703d53df2342b075ad3130ff018ec30f1a",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_after_micro_strokes_provenance.json": "4616fe1640fa29dd636c7ea799673fb589782af6084f3e0be9b9a97a4b6b6146",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_sanity.json": "3cdc1ad289cd044bbe53e84ed090762b401c9a12bd3e861a84e7a8f88e923efd",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes.png": "911c39ac43250752c9bf66697fd0b378175620c4d2a33d2b203d7da48ae00f76",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes_provenance.json": "3520a670ac4d31704599030aefde85920355bee7f9b389dafd19402ab223683f",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_sanity.json": "8d35c4b8876a8b75687fc9ee04173fe3e498031520e66473ae0b8d4d05073537",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/link_after_layer.png": "090de5f3efbe47ccfc34f67785e4d13e9d865cd9a12e05f73a2f209888dcff6e",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/link_before_layer.png": "1f546b023a154f5f1cecd5d5385bfce68909003e6cb20850eaf4d6842017974e",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/operation_room_after_layer.png": "fc5030b83be10c64396af7bab32f5331fa55cb224edfc1be975575d5a9a702c9",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/operation_room_before_layer.png": "ddb6b127f5fee2175d7bcd8f9e62923d58b11eb1955704bbb36adffd6cb9bfee",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_focus.png": "99f8274046bcceb3f242baa3a09a3ac3c3315661475ca69bc77b32049edce4da",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/part1_option_micro_strokes_screen_compare.png": "35865f46bc8aa6412022b7bcd0fcd39c05d1eb8578867485bb7ab0c1fd8c78af",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/single_battle_control_after_layer.png": "64e44b186cc896a1736774e8bcc6069bacfcd5afda27bf9a436bb7cc55770370",
+    "docs/screenshots/part1_option_micro_strokes_2026-07-07/single_battle_control_before_layer.png": "64e44b186cc896a1736774e8bcc6069bacfcd5afda27bf9a436bb7cc55770370"
+  },
+  "current": {
+    "source_worktree_base_commit": "0ba5ce7",
+    "source_state": "dirty working tree with staged micro-strokes diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+    "output_sha256": "c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911"
+  },
+  "provenance": {
+    "40_part1_name_menu": {
+      "path": "docs/screenshots/part1_option_micro_strokes_2026-07-07/40_part1_name_menu_after_micro_strokes_provenance.json",
+      "sha256": "ec394cf7f305cde048b061e745e311980327a7befebc9c4afc5376dfd63360e7",
+      "rom_sha256": "c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911",
+      "git_commit_recorded_by_capture": "0ba5ce7",
+      "source_worktree_base_commit": "0ba5ce7",
+      "source_state": "dirty working tree with staged micro-strokes diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+      "harness": "temp/mgbah"
+    },
+    "43_part1_link": {
+      "path": "docs/screenshots/part1_option_micro_strokes_2026-07-07/43_part1_link_after_micro_strokes_provenance.json",
+      "sha256": "4616fe1640fa29dd636c7ea799673fb589782af6084f3e0be9b9a97a4b6b6146",
+      "rom_sha256": "c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911",
+      "git_commit_recorded_by_capture": "0ba5ce7",
+      "source_worktree_base_commit": "0ba5ce7",
+      "source_state": "dirty working tree with staged micro-strokes diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+      "harness": "temp/mgbah"
+    },
+    "custom_part1_link_option_selected": {
+      "path": "docs/screenshots/part1_option_micro_strokes_2026-07-07/custom_part1_link_option_selected_after_micro_strokes_provenance.json",
+      "sha256": "3520a670ac4d31704599030aefde85920355bee7f9b389dafd19402ab223683f",
+      "rom_sha256": "c1071682b3c71504b772a0e86a404250e7b4ed38cd45e9df3f3d776f23b90911",
+      "git_commit_recorded_by_capture": "0ba5ce7",
+      "source_worktree_base_commit": "0ba5ce7",
+      "source_state": "dirty working tree with staged micro-strokes diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+      "harness": "temp/mgbah"
+    }
+  },
+  "golden_regression_guards": {
+    "qa": "tools/qa_visual_regions.py checks layer SHA-256 for operation_room/link/single_battle",
+    "operation_room_layer_sha256": "2fd69486cda9e1b29035d6357fc93434827f6d44b416e24e5e1b5afbbafa6789",
+    "link_layer_sha256": "af4396623b3fce1c7c9c9169aa6ee151a84828caf22aad0349c58e2cf761ec3a",
+    "single_battle_control_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae"
+  }
+}

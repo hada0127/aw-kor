@@ -1533,6 +1533,30 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
     return out
 
 
+PART1_OPTION_MICRO_STROKES = {
+    "작전룸": {
+        "expected_bbox": (25, 1, 103, 29),
+        "strokes": ((83, 98, 8, 14),),
+    },
+    "통신": {
+        "expected_bbox": (33, 1, 95, 30),
+        "strokes": ((41, 57, 8, 14),),
+    },
+}
+
+
+def apply_part1_option_micro_strokes(layer: Image.Image, label: str) -> None:
+    spec = PART1_OPTION_MICRO_STROKES.get(label)
+    if spec is None or layer.getbbox() != spec["expected_bbox"]:
+        return
+    px = layer.load()
+    body_indices = {1, 2, 3, 4, 5, 6, 7}
+    for x0, x1, y, value in spec["strokes"]:
+        for x in range(x0, x1):
+            if px[x, y] in body_indices:
+                px[x, y] = value
+
+
 def make_part1_label_block(korean: str, _english: str, max_size: int = 20) -> Image.Image:
     layer = Image.new("L", (80, 32), 0)
     draw_part1_clean_menu_label(layer, korean, (2, 1, 78, 31), min(max_size, 18))
@@ -1585,6 +1609,7 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
             target_min_w=target_w,
             supersample_target=label in {"작전룸", "통신"},
         )
+        apply_part1_option_micro_strokes(layer, label)
     else:
         width_limit = 108 if len(label) >= 6 else 92
         draw_part1_option_logo_text(

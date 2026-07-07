@@ -10,6 +10,16 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
 - `codex_research.md`: 기술 도구 및 개발 방법론
 - `gemini_research.md`: 종합 가이드 및 체크리스트
 
+## [2026-07-07] Part1 옵션 로고 `ㄹ`/`ㅌ` micro stroke 결론
+
+- custom glyph 방식은 `통`/`룸` 글자 전체를 새 pixel logo처럼 만들어 기존 baseline supersample의 균형을 깨뜨렸다.
+  imagegen은 large-shape reference로는 쓸 수 있지만, `작전룸`의 `전` 자모 정확도가 흔들리고 128x32/4bpp
+  양자화 시 원본풍 획 균형이 무너져 직접 삽입하지 않는다.
+- 채택한 최종 방식은 baseline supersample 결과를 그대로 둔 뒤, bbox guard가 맞을 때만 내부 body 픽셀 일부를
+  index 14 stroke로 바꾸는 것이다. `작전룸`은 마지막 음절 `룸`의 초성 `ㄹ` 내부 11px,
+  `통신`은 첫 음절 `통`의 초성 `ㅌ` 내부 13px만 바꾼다. `대전` control label은 0px diff로 유지한다.
+- 증거와 수치는 `docs/screenshots/part1_option_micro_strokes_2026-07-07/report.json`이 정본이다.
+
 ## [2026-06-07] Low-address UI `未設定` 문자열
 
 - `0x005A3768`의 `未設定`은 `SAFE_MIN_ADDR=0x800000` 아래라 일반 CSV import pass에서
