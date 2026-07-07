@@ -4,6 +4,20 @@
 
 ---
 
+## [2026-07-07] Part1 옵션 `통`/`룸` custom pixel glyph 및 imagegen 직접 삽입 실패
+
+- **실패한 custom glyph**: commit `59fcb89`에서 `통신`의 `통`, `작전룸`의 `룸`만 4x rect/ellipse mask로
+  직접 합성했지만, 실제 비교 결과 글자가 라벨 전체 균형에서 튀고 더 깨져 보였다. 사용자 피드백 기준으로
+  이 접근은 실패다. 후속 commit에서 해당 custom glyph 함수와 증거 폴더를 되돌렸다.
+- **imagegen 실험**: decorated reference, `통신` 단독 white mask, `작전룸` 단독 white mask를 생성했다.
+  `통신` 단독은 형태 참고가 가능했지만, `작전룸`은 `전`이 `저`처럼 흔들렸고, decorated reference를
+  128x32/4bpp Part1 팔레트로 강제 양자화하면 원본 로고 스타일과 획 균형이 무너졌다.
+- **증거**:
+  `docs/screenshots/part1_option_imagegen_probe_2026-07-07/imagegen_quant_compare.png`,
+  `docs/screenshots/part1_option_imagegen_probe_2026-07-07/report.json`.
+- **판정**: 이미지젠 결과를 최종 ROM 그래픽으로 직접 삽입하지 않는다. 이후 시도는 결정론적 픽셀 편집,
+  deterministic font/mask 튜닝, 또는 `통신`/`작전룸`의 문구·레이아웃 변경안으로 진행한다.
+
 ## [2026-06-28] E12 A2 `state_036` RIGHT 반복 all-CO route 실패
 
 - **시도**: `temp/scene_entrypoints/part2_menu_sweep/state_036.ss0`에서 `RIGHT`를 0..17회 누른 뒤

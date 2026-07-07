@@ -1,0 +1,29 @@
+{
+  "date": "2026-07-07",
+  "purpose": "Probe whether image generation can replace the Part1 mode option logo glyphs for 통신 and 작전룸.",
+  "input_issue": "The 59fcb89 custom pixel glyphs made 통 and 룸 larger and more broken than the prior supersample renderer.",
+  "generated_assets": {
+    "style_reference_mockup": {
+      "path": "docs/screenshots/part1_option_imagegen_probe_2026-07-07/style_reference_mockup.png",
+      "sha256": "7080594e46c999e0c2348d93076415cf7838f1c5e720099640640bc2e4596db0",
+      "prompt_summary": "Decorated pixel-art mockup for exact labels 작전룸 and 통신."
+    },
+    "tong_mask_reference": {
+      "path": "docs/screenshots/part1_option_imagegen_probe_2026-07-07/tong_mask_reference.png",
+      "sha256": "a355feb6e45bbbcb858ddad76a86f4ce5e300fb4787c6af2b9b4c01930e07f84",
+      "prompt_summary": "Plain white-on-black mask reference for exact word 통신."
+    },
+    "operation_room_mask_bad_reference": {
+      "path": "docs/screenshots/part1_option_imagegen_probe_2026-07-07/operation_room_mask_bad_reference.png",
+      "sha256": "1904a285ecabfa38f4fc7be5f6196333f69084708cf7f4d817ffaac54fa8c2d2",
+      "prompt_summary": "Plain white-on-black mask reference requested as 작전룸; output visually deforms 전 toward 저."
+    },
+    "imagegen_quant_compare": {
+      "path": "docs/screenshots/part1_option_imagegen_probe_2026-07-07/imagegen_quant_compare.png",
+      "sha256": "2457fbf9cdf5bc5d492dbff3cf07b0fac8ff41c8a9595d4b4625e179081d8574",
+      "description": "Compares prior supersample, failed custom glyphs, and imagegen-derived 4bpp quantized candidates."
+    }
+  },
+  "result": "Rejected for production insertion. Imagegen can suggest large shapes, but it is not reliable enough for exact Hangul text at this size. Direct quantization also changes the logo style and introduces glyph deformation.",
+  "follow_up": "Revert the failed custom glyph patch and return to the prior supersample renderer. Any next attempt should be deterministic pixel editing or a wording/layout change, not direct imagegen insertion."
+}

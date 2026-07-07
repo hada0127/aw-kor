@@ -1334,7 +1334,6 @@ def paste_part1_option_body_gradient(layer: Image.Image, body: Image.Image, *, a
 
 
 PART1_OPTION_SUPERSAMPLE = 4
-PART1_OPTION_CUSTOM_GLYPH_SCALE = 4
 
 
 def part1_option_mask_bbox(masks: tuple[Image.Image, ...]) -> tuple[int, int, int, int] | None:
@@ -1398,85 +1397,6 @@ def paste_part1_option_masks(
                 lp[xx, yy] = fill
             elif alpha >= 24 and lp[xx, yy] == 0:
                 lp[xx, yy] = 7
-
-
-def part1_option_supersampled_rect_mask(
-    size: tuple[int, int],
-    rects: tuple[tuple[int, int, int, int], ...],
-) -> Image.Image:
-    """Draw half-open rects at 4x, then shrink to keep original-style AA edges."""
-    scale = PART1_OPTION_CUSTOM_GLYPH_SCALE
-    mask = Image.new("L", (size[0] * scale, size[1] * scale), 0)
-    draw = ImageDraw.Draw(mask)
-    for x0, y0, x1, y1 in rects:
-        draw.rectangle((x0 * scale, y0 * scale, x1 * scale - 1, y1 * scale - 1), fill=255)
-    return mask.resize(size, Image.Resampling.LANCZOS)
-
-
-def part1_option_supersampled_ellipse_ring_mask(
-    size: tuple[int, int],
-    outer: tuple[int, int, int, int],
-    inner: tuple[int, int, int, int],
-) -> Image.Image:
-    scale = PART1_OPTION_CUSTOM_GLYPH_SCALE
-    mask = Image.new("L", (size[0] * scale, size[1] * scale), 0)
-    draw = ImageDraw.Draw(mask)
-    ox0, oy0, ox1, oy1 = outer
-    ix0, iy0, ix1, iy1 = inner
-    draw.ellipse((ox0 * scale, oy0 * scale, ox1 * scale - 1, oy1 * scale - 1), fill=255)
-    draw.ellipse((ix0 * scale, iy0 * scale, ix1 * scale - 1, iy1 * scale - 1), fill=0)
-    return mask.resize(size, Image.Resampling.LANCZOS)
-
-
-def part1_option_tong_body_mask() -> Image.Image:
-    """Custom compact logo body for '통'; keeps the leading ㅌ legible at 32px."""
-    w, h = 25, 29
-    top = part1_option_supersampled_rect_mask(
-        (w, h),
-        (
-            (3, 2, w - 3, 7),
-            (3, 2, 8, 15),
-            (8, 9, w - 4, 12),
-            (3, 14, w - 3, 18),
-            (5, 18, w - 2, 21),
-            (w // 2, 16, w // 2 + 4, 24),
-        ),
-    )
-    final_ieung = part1_option_supersampled_ellipse_ring_mask((w, h), (6, 21, 23, 30), (10, 24, 19, 28))
-    return ImageChops.lighter(top, final_ieung)
-
-
-def part1_option_room_body_mask() -> Image.Image:
-    """Custom compact logo body for '룸'; keeps the top ㄹ path distinct."""
-    w, h = 25, 29
-    body = part1_option_supersampled_rect_mask(
-        (w, h),
-        (
-            (3, 1, w - 3, 6),
-            (w - 8, 4, w - 3, 13),
-            (8, 10, w - 3, 14),
-            (3, 13, 9, 21),
-            (3, 19, w - 3, 23),
-            (w // 2, 20, w // 2 + 5, 26),
-            (7, 24, w - 5, 29),
-            (7, 22, 12, 29),
-            (w - 10, 22, w - 5, 29),
-        ),
-    )
-    hole = part1_option_supersampled_rect_mask((w, h), ((12, 25, w - 10, 28),))
-    return ImageChops.subtract(body, hole)
-
-
-def paste_part1_option_custom_glyph(layer: Image.Image, body: Image.Image, xy: tuple[int, int]) -> None:
-    """Composite a hand-tuned body mask back into the Part 1 option palette."""
-    x0, y0 = xy
-    placed = Image.new("L", layer.size, 0)
-    placed.paste(body, xy)
-    shadow = Image.new("L", layer.size, 0)
-    shadow.paste(body.filter(ImageFilter.MaxFilter(5)), (x0 + 2, y0 + 2))
-    outer = placed.filter(ImageFilter.MaxFilter(5))
-    inner = placed.filter(ImageFilter.MaxFilter(3))
-    paste_part1_option_masks(layer, shadow, outer, inner, placed)
 
 
 def draw_part1_option_logo_text_supersampled(
@@ -1651,49 +1571,19 @@ def part1_option_render_size(label: str, max_size: int) -> int:
     return min(max_size, 25)
 
 
-def make_part1_operation_room_option_block(max_size: int) -> Image.Image:
-    layer = Image.new("L", (128, 32), 0)
-    draw_part1_option_logo_text(
-        layer,
-        "작전",
-        (12, 0, 76, 31),
-        min(max_size, 25),
-        stroke_width=2,
-        width_limit=64,
-    )
-    paste_part1_option_custom_glyph(layer, part1_option_room_body_mask(), (77, 0))
-    return layer
-
-
-def make_part1_link_option_block(max_size: int) -> Image.Image:
-    layer = Image.new("L", (128, 32), 0)
-    paste_part1_option_custom_glyph(layer, part1_option_tong_body_mask(), (34, 1))
-    draw_part1_option_logo_text(
-        layer,
-        "신",
-        (60, 0, 101, 31),
-        min(max_size, 25),
-        stroke_width=2,
-        width_limit=41,
-    )
-    return layer
-
-
 def make_part1_option_block(text: str, max_size: int) -> Image.Image:
     layer = Image.new("L", (128, 32), 0)
     label = part1_option_display_text(text)
-    if label == "작전룸":
-        return make_part1_operation_room_option_block(max_size)
-    if label == "통신":
-        return make_part1_link_option_block(max_size)
-    if label == "대전":
+    if label in {"작전룸", "통신", "대전"}:
+        target_w = {"작전룸": 78, "통신": 62, "대전": 60}[label]
         draw_part1_option_logo_text(
             layer,
             label,
             (8, 0, 120, 31),
             min(max_size, 25),
             stroke_width=2,
-            target_min_w=60,
+            target_min_w=target_w,
+            supersample_target=label in {"작전룸", "통신"},
         )
     else:
         width_limit = 108 if len(label) >= 6 else 92

@@ -47,24 +47,6 @@ current-shot도 같은 폴더에 보조 증거로 저장했다. 최종 output 3�
 통과: build, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
 
-**2차 재작업(2026-07-07)**: 폰트 supersample만으로는 `통신`의 `ㅌ`과 `작전룸`의 `ㄹ` 획 구조가 계속
-작게 뭉개져, 두 문제 음절만 직접 pixel-logo 마스크로 분리했다. `통`/`룸` body를 4x rect/ellipse mask로
-그린 뒤 LANCZOS 축소하고, 기존 Part1 옵션 팔레트 합성 함수로 shadow=9, outer=10, inner=14,
-body gradient=1..6에 재양자화한다. 나머지 음절은 기존 렌더러를 유지하고, `대전`은 이전 렌더와 0px diff다.
-`qa_visual_regions.py`는 `대전` layer SHA-256을 golden으로 검사해 이 control label의 우발 변경을 막는다.
-비교시트:
-`docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_focus.png`,
-`docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_screen_compare.png`.
-직접 확인 화면:
-`docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph.png`.
-보고서:
-`docs/screenshots/part1_option_custom_glyph_2026-07-07/report.json`.
-최종 output 3종 SHA-256은
-`cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99`.
-통과: `build_korean_full.py`, `py_compile`, `audit_sprite_override_report.py --strict`,
-`phase6_basic_test.py`, `qa_text_fit.py`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`,
-`qa_scene_screenshot_sanity.py`.
-
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

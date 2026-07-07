@@ -10,18 +10,6 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
 - `codex_research.md`: 기술 도구 및 개발 방법론
 - `gemini_research.md`: 종합 가이드 및 체크리스트
 
-## [2026-07-07] Part1 옵션 로고 `통`/`룸` 가독성 결론
-
-- 대상 화면의 Part1 option logo는 원본 일본어 대비 한글 음절 획 수가 많고, 특히 `통`의 `ㅌ+ㅗ+ㅇ`,
-  `룸`의 `ㄹ+ㅜ+ㅁ`은 128x32 OBJ 안에서 기존 OkDanDan 렌더를 폭 보정하면 내부 획이 뭉개진다.
-- 시도한 경로: 국소 AA 픽셀 보강, 4x alpha mask supersample, 폭 확대, split syllable, Galmuri/Changwon
-  대체 폰트, `작전실`/`교신` 등 wording 대안. 폰트 대체와 wording은 가독성은 오르지만 기존 logo style 또는
-  의미가 바뀌고, 일반 supersample은 `ㅌ`/`ㄹ` 구조 자체를 충분히 분리하지 못했다.
-- 채택: `통`/`룸` 두 문제 음절만 4x custom rect/ellipse mask로 그리고 LANCZOS 축소 후 기존 Part1 option
-  palette index(`shadow=9`, `outer=10`, `inner=14`, `body=1..6`)로 재양자화한다. 나머지 음절과 라벨은
-  기존 렌더러를 유지한다. 결과 증거는
-  `docs/screenshots/part1_option_custom_glyph_2026-07-07/`에 보존한다.
-
 ## [2026-06-07] Low-address UI `未設定` 문자열
 
 - `0x005A3768`의 `未設定`은 `SAFE_MIN_ADDR=0x800000` 아래라 일반 CSV import pass에서

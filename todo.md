@@ -49,22 +49,11 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   보고서 `docs/screenshots/part1_option_supersample_2026-07-06/report.json`.
   리뷰에서 지적된 대상 외 `대전` 변경은 기존 렌더와 0px 차이로 되돌렸다. 재작업 후 output 3종 SHA는
   `c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0`.
-  후속 리서치/사용자 승인에 따라 폰트 렌더 보정 대신 `통`/`룸` 두 문제 음절만 custom 4x pixel-logo
-  마스크로 직접 합성했다. `통`은 `ㅌ`을 사각 획으로 분리하고 받침 `ㅇ`은 ellipse ring으로 유지,
-  `룸`은 상단 `ㄹ` 경로를 별도 zigzag로 고정했다. 두 글리프 모두 기존 Part1 option 팔레트
-  `9/10/14/1..6`에 재양자화하며, `대전`은 이전 렌더와 0px diff다.
-  `qa_visual_regions.py`는 `대전` layer SHA-256을 golden으로 검사해 control label 변경을 막는다.
-  비교시트:
-  `docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_focus.png`,
-  `docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_screen_compare.png`,
-  직접 확인 화면:
-  `docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph.png`,
-  보고서:
-  `docs/screenshots/part1_option_custom_glyph_2026-07-07/report.json`.
-  최종 output 3종 SHA는
-  `cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99`.
-  통과: build, py_compile, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`, `qa_text_fit.py`,
-  `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+  2026-07-07에 `통`/`룸`만 custom pixel glyph로 직접 합성한 시도는 사용자 확인 결과 오히려 더 깨져
+  후속 commit에서 되돌렸다. imagegen도 decorated reference와 white-mask를 시험했지만 `작전룸` 글자 정확도와
+  128x32/4bpp 양자화 품질이 불안정해 직접 삽입하지 않는다. 증거:
+  `docs/screenshots/part1_option_imagegen_probe_2026-07-07/imagegen_quant_compare.png`,
+  실패 기록: `docs/fail.md`.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror
