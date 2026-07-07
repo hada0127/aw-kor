@@ -17,10 +17,11 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
   양자화 시 원본풍 획 균형이 무너져 직접 삽입하지 않는다.
 - 채택한 방식은 baseline supersample 결과를 그대로 둔 뒤, bbox guard가 맞을 때만 내부 body 픽셀 일부를
   index 14 stroke로 바꾸는 것이다. 첫 micro는 `작전룸` 11px/`통신` 13px였고, 사용자 후속 확인 뒤
-  `ㅌ` 중간획과 `ㄹ` 꺾임을 더 보이게 하는 detail micro로 갔다. 이후 `룸`의 아래 내부획이 왼쪽 끝까지
-  닿아 `ㄹ`로 덜 보인다는 지적에 따라 해당 획 시작점만 `x=83`에서 `x=88`로 당겼다. 최종 lower trim은
-  baseline 대비 `작전룸` 18px, `통신` 28px만 바꾸고, `대전` control label은 0px diff로 유지한다.
-- 증거와 수치는 `docs/screenshots/part1_option_room_lower_trim_2026-07-07/report.json`이 정본이다.
+  `ㅌ` 중간획과 `ㄹ` 꺾임을 더 보이게 하는 detail micro로 갔다. 이후 `룸`의 아래 내부획 시작점을
+  `x=83`에서 `x=88`로 당겼지만, 실제 보이는 밝은 아랫줄은 `y=13..16` 몸통 픽셀 쪽이었다. 최종 lower
+  notch는 이 구간의 왼쪽 body 14px(`x=82..87`)를 index 14로 어둡게 바꿔 왼쪽 연장을 끊는다.
+  baseline 대비 `작전룸` 32px, `통신` 28px만 바꾸고, `대전` control label은 0px diff로 유지한다.
+- 증거와 수치는 `docs/screenshots/part1_option_room_lower_notch_2026-07-07/report.json`이 정본이다.
 
 ## [2026-06-07] Low-address UI `未設定` 문자열
 

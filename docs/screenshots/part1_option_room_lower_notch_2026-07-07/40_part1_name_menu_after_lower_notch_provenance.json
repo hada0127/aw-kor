@@ -1,0 +1,20 @@
+{
+  "name": "40_part1_name_menu",
+  "scene_id": "11_part1_world_menu",
+  "side": "patched",
+  "mode": "fresh",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d",
+  "git_commit": "7560252",
+  "harness": "temp/mgbah",
+  "grade": "ground_truth",
+  "note": "coldboot fresh nav: Part1 모드 선택 메뉴",
+  "nav": [
+    [
+      "part1_menu"
+    ]
+  ],
+  "source_worktree_base_commit": "7560252",
+  "source_state": "dirty working tree with operation-room lower-line notch diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+  "source_note": "capture tool git_commit records the base checkout; this evidence was captured from a dirty pre-commit build identified by rom_sha256"
+}

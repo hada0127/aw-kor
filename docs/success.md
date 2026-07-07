@@ -95,6 +95,21 @@ baseline 대비 18px, 직전 detail 대비 5px 변경이고, `통신`/`대전`�
 `qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
 
+**`룸` lower visible row notch(2026-07-07)**: lower trim 이후에도 `룸`의 밝은 아랫줄이 왼쪽까지 이어져
+보인다는 사용자 재지적에 따라, 실제 화면에서 보이던 `y=13..16`, `x=82..87`의 밝은 body 픽셀 14px를
+index 14로 어둡게 바꿔 왼쪽 연장을 끊었다. `작전룸`은 baseline 대비 32px, 직전 lower trim 대비
+14px 변경이고, `통신`/`대전`은 직전 lower trim과 byte-identical이다. 비교시트:
+`docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_focus.png`,
+`docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_lower_notch_crop.png`,
+`docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_screen_compare.png`.
+보고서:
+`docs/screenshots/part1_option_room_lower_notch_2026-07-07/report.json`.
+최종 output 3종 SHA-256은
+`d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d`.
+통과: build, `py_compile`, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`,
+`qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

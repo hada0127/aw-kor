@@ -1,0 +1,221 @@
+{
+  "date": "2026-07-07",
+  "method": "operation_room visible lower ㄹ row notch; link/detail unchanged",
+  "labels": {
+    "operation_room": {
+      "text": "작전룸",
+      "bbox_baseline": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "bbox_previous_lower_trim": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "bbox_notched": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "changed_vs_baseline": 32,
+      "changed_vs_previous_lower_trim": 14,
+      "baseline_layer_sha256": "29d6d0b78d981ff8607ad07268cd846bfc40583561e611e7f77bc4a56012e90e",
+      "previous_lower_trim_layer_sha256": "8977ca3c310842d595945cb49ba78da5bbf582991558c50290ccb8d262d0efbe",
+      "notched_layer_sha256": "590fb9ac4e45ef8e2e61b67a1592af76348a6dedce35bb7b09254b7af8c7999d",
+      "palette_indices_notched": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "artifacts": {
+        "baseline_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_baseline_layer.png",
+        "previous_lower_trim_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_previous_lower_trim_layer.png",
+        "notched_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_notched_layer.png"
+      }
+    },
+    "link": {
+      "text": "통신",
+      "bbox_baseline": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "bbox_previous_lower_trim": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "bbox_notched": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "changed_vs_baseline": 28,
+      "changed_vs_previous_lower_trim": 0,
+      "baseline_layer_sha256": "7bc7065f9a29a517b6b4fec5f82a274b6f33cfc673d675ba33261f392e18efba",
+      "previous_lower_trim_layer_sha256": "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
+      "notched_layer_sha256": "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
+      "palette_indices_notched": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "artifacts": {
+        "baseline_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_baseline_layer.png",
+        "previous_lower_trim_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_previous_lower_trim_layer.png",
+        "notched_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_notched_layer.png"
+      }
+    },
+    "single_battle_control": {
+      "text": "대전",
+      "bbox_baseline": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "bbox_previous_lower_trim": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "bbox_notched": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "changed_vs_baseline": 0,
+      "changed_vs_previous_lower_trim": 0,
+      "baseline_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+      "previous_lower_trim_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+      "notched_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+      "palette_indices_notched": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "artifacts": {
+        "baseline_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_baseline_layer.png",
+        "previous_lower_trim_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_previous_lower_trim_layer.png",
+        "notched_layer": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_notched_layer.png"
+      }
+    }
+  },
+  "focus_sheet": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_focus.png",
+  "focus_sha256": "11f6d7edd65fecae940697120a7361c4f4b12a3769f50d3b768a2ee073cf0f0a",
+  "operation_room_crop_sheet": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_lower_notch_crop.png",
+  "operation_room_crop_sha256": "41ba1c2bf8c78ff3b1d58593286778b991666c0c18a6efba9fd56f3958f27104",
+  "baseline_reference": "baseline supersample from 0ba5ce7; previous lower trim from 7560252",
+  "output_sha256": "d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d",
+  "screen_compare_sheet": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_screen_compare.png",
+  "screen_compare_sha256": "404636e70305106f24a37ab84a62a119d89be3a2611688b3d9a63c8e4af22965",
+  "current_screens": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_after_lower_notch.png"
+  },
+  "screen_sanity_reports": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_sanity.json"
+  },
+  "verification": [
+    {
+      "command": "python3 -m py_compile tools/build_title_hangul.py tools/qa_visual_regions.py",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_visual_regions.py --asset-only",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/build_korean_full.py",
+      "result": "pass"
+    },
+    {
+      "command": "shasum -a 256 output/game_wars_korean_full.gba output/game_wars_korean_final.gba output/game_wars_korean_title_test.gba",
+      "result": "pass",
+      "evidence": "d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d"
+    },
+    {
+      "command": "python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba",
+      "result": "pass"
+    },
+    {
+      "command": "python3 tools/qa_text_fit.py",
+      "result": "pass",
+      "evidence": "overflow=0, no_ko=0"
+    },
+    {
+      "command": "python3 tools/audit_sprite_override_report.py --strict",
+      "result": "pass",
+      "evidence": "critical_count=0"
+    },
+    {
+      "command": "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''",
+      "result": "pass",
+      "evidence": "visual_region_checks=54"
+    },
+    {
+      "command": "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_room_lower_notch_40_screen/manifest.json --shot-dir temp/part1_option_room_lower_notch_40_screen --out temp/part1_option_room_lower_notch_40_screen/sanity",
+      "result": "pass",
+      "evidence": "issue_count=0"
+    }
+  ],
+  "current": {
+    "source_worktree_base_commit": "7560252",
+    "source_state": "dirty working tree with operation-room lower-line notch diff before commit; use rom_sha256/output_sha256 as built-ROM identity",
+    "output_sha256": "d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d"
+  },
+  "provenance": {
+    "40_part1_name_menu": {
+      "path": "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_after_lower_notch_provenance.json",
+      "sha256": "d5daa8cd00bb9edc3eddde4bc9118769a9cbe3e7b6ab999d74a2ce036d09c1b6",
+      "rom_sha256": "d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d",
+      "git_commit_recorded_by_capture": "7560252",
+      "source_worktree_base_commit": "7560252",
+      "source_state": "dirty working tree with operation-room lower-line notch diff before commit; use rom_sha256/output_sha256 as built-ROM identity"
+    }
+  },
+  "artifact_sha256": {
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_after_lower_notch.png": "0a04801f9f67836b76d4f6f56d310b4f22a31cc072301e80387791fb338d56b6",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_after_lower_notch_provenance.json": "d5daa8cd00bb9edc3eddde4bc9118769a9cbe3e7b6ab999d74a2ce036d09c1b6",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/40_part1_name_menu_sanity.json": "bfd8f3576c6757a3b312b8abc1b3df3408256e0155fd483e7e9abb662f4d14d6",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_baseline_layer.png": "1f546b023a154f5f1cecd5d5385bfce68909003e6cb20850eaf4d6842017974e",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_notched_layer.png": "3ef9cd13613fca8629a736791da8cb634196610721617bea9d89775ff13aaee8",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/link_previous_lower_trim_layer.png": "3ef9cd13613fca8629a736791da8cb634196610721617bea9d89775ff13aaee8",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_baseline_layer.png": "ddb6b127f5fee2175d7bcd8f9e62923d58b11eb1955704bbb36adffd6cb9bfee",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_lower_notch_crop.png": "41ba1c2bf8c78ff3b1d58593286778b991666c0c18a6efba9fd56f3958f27104",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_notched_layer.png": "bb89554dea1fe6ec324c5e79d7840e35a7268af7a57ba9b2629f258d9fa9c4cc",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_previous_lower_trim_layer.png": "4841b0fcef8d4fc51f2524c8f9a034a5bd8d198ced6e10ab8dd1ccd366305290",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_focus.png": "11f6d7edd65fecae940697120a7361c4f4b12a3769f50d3b768a2ee073cf0f0a",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_screen_compare.png": "404636e70305106f24a37ab84a62a119d89be3a2611688b3d9a63c8e4af22965",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_baseline_layer.png": "64e44b186cc896a1736774e8bcc6069bacfcd5afda27bf9a436bb7cc55770370",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_notched_layer.png": "64e44b186cc896a1736774e8bcc6069bacfcd5afda27bf9a436bb7cc55770370",
+    "docs/screenshots/part1_option_room_lower_notch_2026-07-07/single_battle_control_previous_lower_trim_layer.png": "64e44b186cc896a1736774e8bcc6069bacfcd5afda27bf9a436bb7cc55770370"
+  }
+}

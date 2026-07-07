@@ -88,6 +88,16 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `docs/screenshots/part1_option_room_lower_trim_2026-07-07/report.json`.
   lower trim 후 output 3종 SHA는
   `62ac88791a72f5795263ef0c237419321edcc5dfb27ec6a8117264d47a894a49`.
+  재지적에서 실제로 보이는 밝은 아랫줄은 `y=13..16` 몸통 픽셀 쪽이었음을 확인하고, `x=82..87`의
+  밝은 body 14px를 index 14로 어둡게 바꿔 왼쪽 연장을 끊었다. `작전룸`은 baseline 대비 32px,
+  직전 lower trim 대비 14px 변경이고 `통신`/`대전`은 byte-identical이다. 비교시트:
+  `docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_focus.png`,
+  `docs/screenshots/part1_option_room_lower_notch_2026-07-07/operation_room_lower_notch_crop.png`,
+  `docs/screenshots/part1_option_room_lower_notch_2026-07-07/part1_option_room_lower_notch_screen_compare.png`,
+  보고서:
+  `docs/screenshots/part1_option_room_lower_notch_2026-07-07/report.json`.
+  lower notch 후 output 3종 SHA는
+  `d013548261af9945e3fc4ffc2b929336c39b2d74f6a83ea0b58a89d369f6e05d`.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror
