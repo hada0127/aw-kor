@@ -1536,11 +1536,21 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
 PART1_OPTION_MICRO_STROKES = {
     "작전룸": {
         "expected_bbox": (25, 1, 103, 29),
-        "strokes": ((83, 98, 8, 14),),
+        "strokes": (
+            (83, 98, 8, 14),
+            (97, 99, 9, 14),
+            (97, 99, 10, 14),
+            (83, 99, 11, 14),
+        ),
     },
     "통신": {
         "expected_bbox": (33, 1, 95, 30),
-        "strokes": ((41, 57, 8, 14),),
+        "strokes": (
+            (56, 58, 7, 14),
+            (41, 57, 8, 14),
+            (56, 58, 9, 14),
+            (40, 58, 10, 14),
+        ),
     },
 }
 

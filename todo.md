@@ -68,6 +68,16 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   `qa_visual_regions.py --asset-only`, `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`,
   `qa_scene_screenshot_sanity.py`.
   `qa_visual_regions.py`는 `작전룸`/`통신`/`대전` layer SHA-256도 검사한다.
+  후속 피드백으로 같은 방향을 유지하되 `ㅌ`/`ㄹ` 내부 획을 더 구체화했다. baseline supersample 대비
+  `작전룸` 23px, `통신` 28px 변경이고, 직전 micro 대비 추가 변경은 12px/15px다. bbox/팔레트는 유지,
+  `대전`은 0px diff다. 비교시트:
+  `docs/screenshots/part1_option_micro_detail_2026-07-07/part1_option_micro_detail_focus.png`,
+  `docs/screenshots/part1_option_micro_detail_2026-07-07/part1_option_micro_detail_screen_compare.png`,
+  보고서:
+  `docs/screenshots/part1_option_micro_detail_2026-07-07/report.json`.
+  detail 보강 후 output 3종 SHA는
+  `a577af35cd79d159d08410a6a6fea2478099981f6121127fdb07a2283f82d4f8`.
+  `qa_visual_regions.py` layer SHA guard도 새 detail 산출물 기준으로 갱신했다.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror

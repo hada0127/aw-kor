@@ -15,10 +15,11 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
 - custom glyph 방식은 `통`/`룸` 글자 전체를 새 pixel logo처럼 만들어 기존 baseline supersample의 균형을 깨뜨렸다.
   imagegen은 large-shape reference로는 쓸 수 있지만, `작전룸`의 `전` 자모 정확도가 흔들리고 128x32/4bpp
   양자화 시 원본풍 획 균형이 무너져 직접 삽입하지 않는다.
-- 채택한 최종 방식은 baseline supersample 결과를 그대로 둔 뒤, bbox guard가 맞을 때만 내부 body 픽셀 일부를
-  index 14 stroke로 바꾸는 것이다. `작전룸`은 마지막 음절 `룸`의 초성 `ㄹ` 내부 11px,
-  `통신`은 첫 음절 `통`의 초성 `ㅌ` 내부 13px만 바꾼다. `대전` control label은 0px diff로 유지한다.
-- 증거와 수치는 `docs/screenshots/part1_option_micro_strokes_2026-07-07/report.json`이 정본이다.
+- 채택한 방식은 baseline supersample 결과를 그대로 둔 뒤, bbox guard가 맞을 때만 내부 body 픽셀 일부를
+  index 14 stroke로 바꾸는 것이다. 첫 micro는 `작전룸` 11px/`통신` 13px였고, 사용자 후속 확인 뒤
+  `ㅌ` 중간획과 `ㄹ` 꺾임을 더 보이게 하는 detail micro로 확정했다. 최종 detail은 baseline 대비
+  `작전룸` 23px, `통신` 28px만 바꾸고, `대전` control label은 0px diff로 유지한다.
+- 증거와 수치는 `docs/screenshots/part1_option_micro_detail_2026-07-07/report.json`이 정본이다.
 
 ## [2026-06-07] Low-address UI `未設定` 문자열
 
