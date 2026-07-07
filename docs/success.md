@@ -80,6 +80,21 @@ current-shot도 같은 폴더에 보조 증거로 저장했다. 최종 output 3�
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
 `qa_visual_regions.py`의 layer SHA-256 guard도 새 detail 산출물 기준으로 갱신했다.
 
+**`룸` lower stroke trim(2026-07-07)**: 사용자 확인에서 `룸`의 아래 내부획이 왼쪽 끝까지 이어져
+`ㄹ`로 덜 보인다는 지적이 있어, 해당 획의 시작점만 `x=83`에서 `x=88`로 당겼다. `작전룸`은
+baseline 대비 18px, 직전 detail 대비 5px 변경이고, `통신`/`대전`은 직전 detail과 byte-identical이다.
+비교시트:
+`docs/screenshots/part1_option_room_lower_trim_2026-07-07/part1_option_room_lower_trim_focus.png`,
+`docs/screenshots/part1_option_room_lower_trim_2026-07-07/operation_room_lower_trim_crop.png`,
+`docs/screenshots/part1_option_room_lower_trim_2026-07-07/part1_option_room_lower_trim_screen_compare.png`.
+보고서:
+`docs/screenshots/part1_option_room_lower_trim_2026-07-07/report.json`.
+최종 output 3종 SHA-256은
+`62ac88791a72f5795263ef0c237419321edcc5dfb27ec6a8117264d47a894a49`.
+통과: build, `py_compile`, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`,
+`qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.

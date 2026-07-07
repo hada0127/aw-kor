@@ -1,0 +1,38 @@
+{
+  "rom_sha256": "62ac88791a72f5795263ef0c237419321edcc5dfb27ec6a8117264d47a894a49",
+  "manifest": "temp/part1_option_room_lower_trim_40_screen/manifest.json",
+  "manifest_frame_count": 1,
+  "checked_frame_count": 1,
+  "skipped": [],
+  "issue_count": 0,
+  "issues": [],
+  "observations": [],
+  "summary": {
+    "min_unique_colors": 102,
+    "min_unique_tiles": 472,
+    "max_dark_ratio": 0.0,
+    "max_black_ratio": 0.0,
+    "median_unique_tiles": 472
+  },
+  "contact_sheets": [
+    "temp/part1_option_room_lower_trim_40_screen/sanity/contact_page_01.png"
+  ],
+  "frames": [
+    {
+      "checkpoint": "40_part1_name_menu",
+      "frame": "temp/part1_option_room_lower_trim_40_screen/40_part1_name_menu_patched/frame.png",
+      "provenance": "temp/part1_option_room_lower_trim_40_screen/40_part1_name_menu_patched/provenance.json",
+      "provenance_rom_sha256": "62ac88791a72f5795263ef0c237419321edcc5dfb27ec6a8117264d47a894a49",
+      "size": [
+        240,
+        160
+      ],
+      "unique_colors": 102,
+      "unique_tiles": 472,
+      "black_ratio": 0.0,
+      "dark_ratio": 0.0,
+      "bright_ratio": 0.5841,
+      "sha256": "f98affd5825fab81b1aac8e17b535bf9bc2b2267f9a9b3284ff2a2091950589b"
+    }
+  ]
+}

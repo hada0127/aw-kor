@@ -55,7 +55,7 @@ START_PROMPT_CROP = (56, 96, 184, 124)
 PART1_OPTION_LAYER_SHA256 = {
     # Regression guard for the 2026-07-07 micro ㄹ/ㅌ stroke tuning.
     # These hashes are over the 128x32 indexed layer bytes, before LZ77 packing.
-    "operation_room": "5015b563dae3da0ba35e51dab6b2ae7efcca7514596afd7945043a5b181ba25a",
+    "operation_room": "8977ca3c310842d595945cb49ba78da5bbf582991558c50290ccb8d262d0efbe",
     "link": "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
     "single_battle": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
 }

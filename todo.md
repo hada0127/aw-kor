@@ -78,6 +78,16 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
   detail 보강 후 output 3종 SHA는
   `a577af35cd79d159d08410a6a6fea2478099981f6121127fdb07a2283f82d4f8`.
   `qa_visual_regions.py` layer SHA guard도 새 detail 산출물 기준으로 갱신했다.
+  마지막으로 `룸` 아래 내부획이 왼쪽 끝까지 이어져 `ㄹ`로 덜 보인다는 사용자 지적에 따라 해당 획 시작점만
+  `x=83`에서 `x=88`로 당겼다. `작전룸`은 baseline 대비 18px, 직전 detail 대비 5px 변경이고
+  `통신`/`대전`은 직전 detail과 byte-identical이다. 비교시트:
+  `docs/screenshots/part1_option_room_lower_trim_2026-07-07/part1_option_room_lower_trim_focus.png`,
+  `docs/screenshots/part1_option_room_lower_trim_2026-07-07/operation_room_lower_trim_crop.png`,
+  `docs/screenshots/part1_option_room_lower_trim_2026-07-07/part1_option_room_lower_trim_screen_compare.png`,
+  보고서:
+  `docs/screenshots/part1_option_room_lower_trim_2026-07-07/report.json`.
+  lower trim 후 output 3종 SHA는
+  `62ac88791a72f5795263ef0c237419321edcc5dfb27ec6a8117264d47a894a49`.
 - [x] **2026-07-06 사용자 추가 요청: 1편 이름 선택 후 이름 좌우 공백 + 일반 대사 폰트 정렬 수정**:
   1편 이름 선택 뒤 인사 대사에서 선택 이름과 `님` 사이가 `아아  님`처럼 벌어지는 결함을
   원본 같은 route의 `アさん`과 비교했다. 화면에서 확인된 `0x00DF5DA9`와 직접 suffix mirror
