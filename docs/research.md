@@ -19,9 +19,12 @@ Game Boy Advance(GBA) 게임 "Game Wars" 1+2 일본어판의 전체 한글화 �
   index 14 stroke로 바꾸는 것이다. 첫 micro는 `작전룸` 11px/`통신` 13px였고, 사용자 후속 확인 뒤
   `ㅌ` 중간획과 `ㄹ` 꺾임을 더 보이게 하는 detail micro로 갔다. 이후 `룸`의 아래 내부획 시작점을
   `x=83`에서 `x=88`로 당겼지만, 실제 보이는 밝은 아랫줄은 `y=13..16` 몸통 픽셀 쪽이었다. 최종 lower
-  notch는 이 구간의 왼쪽 body 14px(`x=82..87`)를 index 14로 어둡게 바꿔 왼쪽 연장을 끊는다.
-  baseline 대비 `작전룸` 32px, `통신` 28px만 바꾸고, `대전` control label은 0px diff로 유지한다.
-- 증거와 수치는 `docs/screenshots/part1_option_room_lower_notch_2026-07-07/report.json`이 정본이다.
+  notch 시도는 이 구간의 왼쪽 body 14px(`x=82..87`)를 index 14로 어둡게 바꿨지만, UI 에디터 캡처에서
+  `룸`이 깨진 글자처럼 보였다.
+- 최종 결론은 notch를 검게 파내지 않고 `x=82..87`, `y=13..14`만 index 5 녹색 AA로 낮추는 것이다.
+  이전 4줄 dark notch 대비 14px, lower trim 대비 12px, baseline 대비 `작전룸` 30px만 바꾸며,
+  `통신`과 `대전` control label은 byte-identical로 유지한다.
+- 증거와 수치는 `docs/screenshots/part1_option_room_notch_repair_2026-07-07/report.json`이 정본이다.
 
 ## [2026-06-07] Low-address UI `未設定` 문자열
 

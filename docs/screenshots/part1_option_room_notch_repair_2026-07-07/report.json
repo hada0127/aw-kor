@@ -1,0 +1,39 @@
+{
+  "purpose": "Repair user-reported broken-looking 작전룸 after the broad 4-row lower notch.",
+  "operation_room": {
+    "fixed_sha256": "5e648ed9e36344d99a91687692c8a57802665c24da84b5bd13d354d0f2247764",
+    "previous_4row_notch_sha256": "590fb9ac4e45ef8e2e61b67a1592af76348a6dedce35bb7b09254b7af8c7999d",
+    "baseline_sha256": "29d6d0b78d981ff8607ad07268cd846bfc40583561e611e7f77bc4a56012e90e",
+    "lower_trim_sha256": "8977ca3c310842d595945cb49ba78da5bbf582991558c50290ccb8d262d0efbe",
+    "fixed_bbox": [
+      25,
+      1,
+      103,
+      29
+    ],
+    "diff_vs_previous_4row_notch": 14,
+    "diff_vs_lower_trim": 12,
+    "diff_vs_baseline": 30,
+    "change": "Kept the lower-left adjustment at x=82..87, y=13..14 but changed it from index 14 dark notch to index 5 green AA."
+  },
+  "controls": {
+    "link_sha256": "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
+    "single_battle_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae"
+  },
+  "output_sha256": "96ce381e7ccaace29967a92b061dad66be95cb2ea44d2d1a8fcb7249f9eb2bf1",
+  "verification": [
+    "python3 -m py_compile tools/build_title_hangul.py tools/qa_visual_regions.py",
+    "python3 tools/qa_visual_regions.py --asset-only",
+    "python3 tools/build_korean_full.py",
+    "python3 tools/phase6_basic_test.py output/game_wars_korean_full.gba",
+    "python3 tools/qa_text_fit.py",
+    "python3 tools/audit_sprite_override_report.py --strict",
+    "DYLD_LIBRARY_PATH=/opt/homebrew/lib python3 tools/qa_visual_regions.py --harness temp/mgbah --action-menu-save ''",
+    "python3 tools/qa_scene_screenshot_sanity.py --manifest temp/part1_option_room_notch_repair_v5_40_screen/manifest.json --shot-dir temp/part1_option_room_notch_repair_v5_40_screen --out temp/part1_option_room_notch_repair_v5_40_screen/sanity"
+  ],
+  "evidence": [
+    "docs/screenshots/part1_option_room_notch_repair_2026-07-07/operation_room_notch_repair_crop.png",
+    "docs/screenshots/part1_option_room_notch_repair_2026-07-07/part1_option_room_notch_repair_focus.png",
+    "docs/screenshots/part1_option_room_notch_repair_2026-07-07/40_part1_name_menu_after_repair.png"
+  ]
+}

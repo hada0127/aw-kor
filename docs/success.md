@@ -110,6 +110,23 @@ index 14로 어둡게 바꿔 왼쪽 연장을 끊었다. `작전룸`은 baseline
 `qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
 `qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
 
+**`룸` notch AA repair(2026-07-07)**: UI 에디터 캡처에서 위 4줄 dark notch가 `작전룸`의 `룸`을
+깨진 글자처럼 보이게 만든다는 사용자 확인이 있었다. 최종 방식은 같은 위치의 보정을 유지하되
+`x=82..87`, `y=13..14`만 index 5 녹색 AA로 낮추고, `y=15..16`은 더 이상 건드리지 않는다.
+이전 4줄 dark notch 대비 14px, lower trim 대비 12px, baseline 대비 30px 변경이며,
+`통신`/`대전`은 byte-identical이다. 비교시트:
+`docs/screenshots/part1_option_room_notch_repair_2026-07-07/operation_room_notch_repair_crop.png`,
+`docs/screenshots/part1_option_room_notch_repair_2026-07-07/part1_option_room_notch_repair_focus.png`.
+실화면 캡처:
+`docs/screenshots/part1_option_room_notch_repair_2026-07-07/40_part1_name_menu_after_repair.png`.
+보고서:
+`docs/screenshots/part1_option_room_notch_repair_2026-07-07/report.json`.
+최종 output 3종 SHA-256은
+`96ce381e7ccaace29967a92b061dad66be95cb2ea44d2d1a8fcb7249f9eb2bf1`.
+통과: build, `py_compile`, `audit_sprite_override_report.py --strict`, `phase6_basic_test.py`,
+`qa_text_fit.py`, `qa_visual_regions.py --asset-only`,
+`qa_visual_regions.py --harness temp/mgbah --action-menu-save ''`, `qa_scene_screenshot_sanity.py`.
+
 ## 화면(scene) 기반 통합 UI 에디터 — Phase 0~3 (2026-06-17)
 
 기존 분리 편집기(대사 :8780 / 스프라이트 :8781)를 게임 흐름(scene) 기반 단일 통합 편집기로 재설계.
