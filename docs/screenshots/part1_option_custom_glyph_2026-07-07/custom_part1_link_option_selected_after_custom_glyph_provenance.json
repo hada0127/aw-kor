@@ -1,0 +1,31 @@
+{
+  "name": "custom_part1_link_option_selected",
+  "scene_id": "11_part1_world_menu",
+  "side": "patched",
+  "mode": "fresh",
+  "rom": "/Users/tarucy/project/aw-kor/output/game_wars_korean_full.gba",
+  "rom_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+  "git_commit": "ac076b2",
+  "harness": "temp/mgbah",
+  "grade": "ad_hoc_visual",
+  "note": "Part1 mode menu with link option selected; evidence for custom 통 glyph",
+  "nav": [
+    [
+      "part1_menu"
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "press",
+      "DOWN",
+      120
+    ],
+    [
+      "frames",
+      20
+    ]
+  ]
+}

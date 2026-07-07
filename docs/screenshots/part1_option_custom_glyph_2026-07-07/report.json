@@ -1,0 +1,194 @@
+{
+  "date": "2026-07-07",
+  "method": "custom 4x supersampled masks for only 통 and 룸, quantized into Part1 option palette",
+  "previous_reference": "baseline renderer commit ac076b22da237b08a33f1505c82115b62d26811e (fix: Part1 옵션 라벨 supersample 렌더링)",
+  "labels": {
+    "operation_room": {
+      "text": "작전룸",
+      "before_bbox": [
+        25,
+        1,
+        103,
+        29
+      ],
+      "after_bbox": [
+        22,
+        0,
+        103,
+        31
+      ],
+      "changed_pixels": 1532,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ]
+    },
+    "link": {
+      "text": "통신",
+      "before_bbox": [
+        33,
+        1,
+        95,
+        30
+      ],
+      "after_bbox": [
+        35,
+        1,
+        92,
+        32
+      ],
+      "changed_pixels": 1004,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ]
+    },
+    "single_battle_control": {
+      "text": "대전",
+      "before_bbox": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "after_bbox": [
+        34,
+        3,
+        94,
+        28
+      ],
+      "changed_pixels": 0,
+      "before_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ],
+      "after_palette_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        14
+      ]
+    }
+  },
+  "focus_sheet": "docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_focus.png",
+  "output_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+  "screen_compare_sheet": "docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_screen_compare.png",
+  "current_screens": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_after_custom_glyph.png",
+    "43_part1_link": "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_after_custom_glyph.png",
+    "custom_part1_link_option_selected": "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph.png"
+  },
+  "screen_sanity_reports": {
+    "40_part1_name_menu": "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_sanity.json",
+    "43_part1_link": "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_sanity.json",
+    "custom_part1_link_option_selected": "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_sanity.json"
+  },
+  "provenance": {
+    "40_part1_name_menu": {
+      "path": "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_after_custom_glyph_provenance.json",
+      "sha256": "319e402f3f921d4b89e463e4954bd577cfae599a76203924be0cde98d71d5763",
+      "rom_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+      "git_commit_recorded_by_capture": "ac076b2",
+      "harness": "temp/mgbah"
+    },
+    "43_part1_link": {
+      "path": "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_after_custom_glyph_provenance.json",
+      "sha256": "b6585bb2c20c7b96abcf83b9e6e0dea6d11adf12effa734bdd7b361ed6d25525",
+      "rom_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+      "git_commit_recorded_by_capture": "ac076b2",
+      "harness": "temp/mgbah"
+    },
+    "custom_part1_link_option_selected": {
+      "path": "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph_provenance.json",
+      "sha256": "a602b9110cd48a5c0bbda49fbbe5870b71ea250b22d4da4e0990a60c31449f17",
+      "rom_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+      "git_commit_recorded_by_capture": "ac076b2",
+      "harness": "temp/mgbah"
+    }
+  },
+  "ad_hoc_checkpoint": "temp/part1_option_custom_glyph_checkpoints.json",
+  "baseline": {
+    "renderer_commit": "ac076b22da237b08a33f1505c82115b62d26811e",
+    "output_sha256": "c58c86ff660564fad92975393738dfefe325a13a4cd6dcd506b344b92d369bd0"
+  },
+  "current": {
+    "worktree_base_commit": "ac076b22da237b08a33f1505c82115b62d26811e",
+    "output_sha256": "cf5c932a713b8e94c060ac577cb521173330cc80a37d4089048889e0483f0a99",
+    "provenance_note": "Screenshots were captured from a dirty working tree based on ac076b2 before this change was committed. The capture tool records the base git_commit; use rom_sha256/output_sha256 as the built-ROM identity."
+  },
+  "comparison_generation": {
+    "baseline_source": "git show ac076b22da237b08a33f1505c82115b62d26811e:tools/build_title_hangul.py",
+    "current_source": "working tree tools/build_title_hangul.py",
+    "function": "make_part1_option_block(text, max_size)",
+    "labels": [
+      "작전룸",
+      "통신",
+      "대전"
+    ]
+  },
+  "golden_regression_guards": {
+    "single_battle_control_layer_sha256": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+    "qa": "tools/qa_visual_regions.py checks this hash for PART1_MODE_OPTION_BLOCKS single_battle / 대전"
+  },
+  "artifact_sha256": {
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_focus.png": "796f19ef9b1b45774dbd580022cc157e788a1d75cc0f948b138a2e7638e2fdb8",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/part1_option_custom_glyph_screen_compare.png": "7df4df729dba6b2cea87eb7f54c654de086b3aac07d85ba96ac5498d81a077a7",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_after_custom_glyph.png": "2027b3134979a7191cf31cbdc05f9e3a0d8e364227c45aab945c50b90dbb7b45",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_after_custom_glyph.png": "bb14de3124fff047fc0e5ae5f04747703d53df2342b075ad3130ff018ec30f1a",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph.png": "89c1c341d753a0a78c464a67b480ba001c26649bf61a7fef157eaa217d6e6fd7",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_after_custom_glyph_provenance.json": "319e402f3f921d4b89e463e4954bd577cfae599a76203924be0cde98d71d5763",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_after_custom_glyph_provenance.json": "b6585bb2c20c7b96abcf83b9e6e0dea6d11adf12effa734bdd7b361ed6d25525",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_after_custom_glyph_provenance.json": "a602b9110cd48a5c0bbda49fbbe5870b71ea250b22d4da4e0990a60c31449f17",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/40_part1_name_menu_sanity.json": "93797b419f02d939fc5732da188561b50965eddc0124ce5409216a7b0494e75b",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/43_part1_link_sanity.json": "5c7278fa70389fd11020c61ea7ebcc0702c1d529c394e4b4ada925300dfcc9fb",
+    "docs/screenshots/part1_option_custom_glyph_2026-07-07/custom_part1_link_option_selected_sanity.json": "122e84ec2bc5cc77500a9153ddc54e73fd0ef195495229bc83f6c92caeb635d3"
+  }
+}
