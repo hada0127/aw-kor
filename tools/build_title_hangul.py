@@ -10,16 +10,20 @@ recompresses it in place.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import struct
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from lz77_compress import lz77_compress
+from lz77_compress import lz77_compress, lz77_compress_optimal
 from lz77_scan import lz77_decompress
 from bdf import glyph_grid, load_bdf
+from sprite_text_aa import compose_part1_text
+from sprite_relocations import RELOCATIONS, write_relocated_sprite
 
 
 TITLE_OBJ_LZ77_OFF = 0x00022B2C
@@ -39,19 +43,19 @@ PART1_RULE_SELECT_LZ77_OFF = 0x00C19D14
 PART1_TEAM_SETTING_LZ77_OFF = 0x00C19FF0
 PART1_SUBMENU_LOGO_BLOCKS = [
     ("campaign", 0x00C1A2BC, "캠페인", 20),
-    ("map_design", 0x00C1A81C, "맵 디자인", 15),
-    ("single_battle", 0x00C1A9DC, "싱글 대전", 17),
+    ("record", 0x00C1A81C, "기록", 18),
+    ("single_battle", 0x00C1A9DC, "싱글 대전", 15),
     ("connect", 0x00C1AC60, "통신", 20),
     ("map_record", 0x00C1AE74, "맵 기록", 18),
     ("player_rank", 0x00C1B0E4, "플레이어 랭크", 15),
-    ("single_card", 0x00C1B3A8, "1카드 통신", 14),
-    ("multi_card", 0x00C1B610, "멀티카드 통신", 12),
+    ("campaign_short", 0x00C1B3A8, "캠페인", 18),
+    ("trial", 0x00C1B610, "트라이얼", 18),
     ("cable_battle", 0x00C1A564, "케이블 대전", 16),
     ("map_trade", 0x00C1B830, "맵 교환", 18),
 ]
 PART1_MODE_OPTION_BLOCKS = [
     ("campaign", 0x00C0310C, "캠페인", 30),
-    ("trial", 0x00C03510, "트라이얼", 25),
+    ("trial", 0x00C03510, "트라이얼", 23),
     ("record", 0x00C03880, "기록", 28),
     ("operation_room", 0x00C03AF0, "작전룸", 28),
     ("wars_shop", 0x00C03F68, "상점", 28),
@@ -97,6 +101,7 @@ PART1_MODE_OPTION_BLOCK_CAPACITY = {
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
+MENU_FONT_PATH = Path.home() / "Library/Fonts/NotoSansKR-Black.otf"
 SMALL_BDF_FONT_PATH = Path("reference/fonts/Galmuri7.bdf")
 
 # Runtime OAM layout captured on the title screen. Lower OAM index draws above
@@ -1140,39 +1145,31 @@ def draw_part1_clean_menu_label(
 ) -> None:
     """Draw Part 1 menu labels with the original logo palette indices.
 
-    These OBJ blocks use screen-local palettes.  Index 15 maps to near-black on
-    the Part1 menu routes, so using it for Hangul bodies makes the label look
-    like a corrupted sprite.  The original Japanese logo blocks use indices
-    1..7 for the route-colored gradient, 9 for the brown shadow, 10 for white
-    outline, and 14 for the dark body/outline.  Keep to that set.
+    Small headers have a white upper body, a 1..7 lower gradient, a dark
+    contour (14), and a one-pixel cast shadow (9). Unlike the large carousel
+    options, they do not have a white envelope outside the shadow.
     """
     draw = ImageDraw.Draw(layer)
-    font_path = FONT_PATH if FONT_PATH.exists() else (BODY_BOLD_FONT_PATH if BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH)
+    font_path = MENU_FONT_PATH
     for size in range(max_size, 9, -1):
         font = ImageFont.truetype(str(font_path), size)
-        w, h = text_bbox(draw, text, font, 2)
+        w, h = text_bbox(draw, text, font, 1)
         if w <= box[2] - box[0] and h <= box[3] - box[1]:
             break
-    text_box = draw.textbbox((0, 0), text, font=font, stroke_width=2)
+    else:
+        raise ValueError(f'header text does not fit: {text!r} in {box}')
+    text_box = draw.textbbox((0, 0), text, font=font, stroke_width=1)
     w = text_box[2] - text_box[0]
     h = text_box[3] - text_box[1]
     x = (box[0] + box[2] - w) // 2 - text_box[0]
     y = (box[1] + box[3] - h) // 2 - text_box[1] - 1
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x + 2, y + 2), 2), 9, 80)
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), 2), 10, 64)
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), 1), 14, 96)
+    inner = text_mask_layer(layer.size, text, font, (x, y), 1)
     body = text_mask_layer(layer.size, text, font, (x, y), 0)
     body_box = draw.textbbox((x, y), text, font=font, stroke_width=0)
-    paste_vertical_text_gradient(
-        layer,
-        body,
-        (body_box[1], body_box[3]),
-        center_idx=14,
-        top_indices=(1, 2, 3),
-        bottom_indices=(4, 5, 6, 7),
-        aa_idx=14,
-        center_band=0.10,
-    )
+    gradient_start = body_box[3] - 7
+    colors = [10 if y < gradient_start else min(7, y - gradient_start + 1)
+              for y in range(layer.height)]
+    compose_part1_text(layer, inner, body, colors, compact=True)
 
 
 def draw_centered_bdf_text(layer: Image.Image, text: str, fill_idx: int, spacing: int = 1) -> None:
@@ -1373,30 +1370,11 @@ def retarget_part1_option_masks(
 
 def paste_part1_option_masks(
     layer: Image.Image,
-    shadow: Image.Image,
-    outer: Image.Image,
     inner: Image.Image,
     body: Image.Image,
 ) -> None:
-    sp = shadow.load()
-    op = outer.load()
-    ip = inner.load()
-    bp = body.load()
-    lp = layer.load()
-    for yy in range(layer.height):
-        fill = part1_option_gradient_index(yy)
-        for xx in range(layer.width):
-            if sp[xx, yy] >= 48:
-                lp[xx, yy] = 9
-            if op[xx, yy] >= 48:
-                lp[xx, yy] = 10
-            if ip[xx, yy] >= 48:
-                lp[xx, yy] = 14
-            alpha = bp[xx, yy]
-            if alpha >= 96:
-                lp[xx, yy] = fill
-            elif alpha >= 24 and lp[xx, yy] == 0:
-                lp[xx, yy] = 7
+    compose_part1_text(layer, inner, body,
+                      [part1_option_gradient_index(y) for y in range(layer.height)])
 
 
 def draw_part1_option_logo_text_supersampled(
@@ -1411,7 +1389,7 @@ def draw_part1_option_logo_text_supersampled(
 ) -> None:
     """Render wide Part 1 option labels as supersampled masks, then quantize."""
     draw = ImageDraw.Draw(layer)
-    font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
+    font_path = MENU_FONT_PATH
     max_w = width_limit if width_limit is not None else box[2] - box[0]
     max_h = box[3] - box[1]
     selected_size = 8
@@ -1439,7 +1417,7 @@ def draw_part1_option_logo_text_supersampled(
     body = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), 0)
     masks = retarget_part1_option_masks((shadow, outer, inner, body), box, target_min_w, scale)
     shadow, outer, inner, body = (mask.resize(layer.size, Image.Resampling.LANCZOS) for mask in masks)
-    paste_part1_option_masks(layer, shadow, outer, inner, body)
+    paste_part1_option_masks(layer, inner, body)
 
 
 def draw_part1_option_logo_text(
@@ -1460,20 +1438,20 @@ def draw_part1_option_logo_text(
     shadow and outlines. Keeping this exact index family lets the runtime OBJ
     palettes reproduce the original green/red/cyan gradients.
     """
-    if target_min_w is not None and supersample_target:
+    if supersample_target:
         draw_part1_option_logo_text_supersampled(
             layer,
             text,
             box,
             max_size,
             stroke_width=stroke_width,
-            target_min_w=target_min_w,
+            target_min_w=target_min_w or 0,
             width_limit=width_limit,
         )
         return
 
     draw = ImageDraw.Draw(layer)
-    font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
+    font_path = MENU_FONT_PATH
     max_w = width_limit if width_limit is not None else box[2] - box[0]
     max_h = box[3] - box[1]
     for size in range(max_size, 7, -1):
@@ -1487,11 +1465,9 @@ def draw_part1_option_logo_text(
     x = (box[0] + box[2] - w) // 2 - text_box[0]
     y = (box[1] + box[3] - h) // 2 - text_box[1] - 1
 
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x + 2, y + 2), stroke_width), 9, 48)
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), stroke_width), 10, 48)
-    paste_mask_index(layer, text_mask_layer(layer.size, text, font, (x, y), max(1, stroke_width - 1)), 14, 48)
+    inner = text_mask_layer(layer.size, text, font, (x, y), max(1, stroke_width - 1))
     body = text_mask_layer(layer.size, text, font, (x, y), 0)
-    paste_part1_option_body_gradient(layer, body, aa_idx=7)
+    paste_part1_option_masks(layer, inner, body)
 
     if target_min_w is None:
         return
@@ -1533,56 +1509,99 @@ def smooth_scale_index_patch(patch: Image.Image, target_w: int) -> Image.Image:
     return out
 
 
-PART1_OPTION_MICRO_STROKES = {
-    "작전룸": {
-        "expected_bbox": (25, 1, 103, 29),
-        "strokes": (
-            (83, 98, 8, 14),
-            (97, 99, 9, 14),
-            (97, 99, 10, 14),
-            (88, 99, 11, 14),
-            (82, 88, 13, 5),
-            (82, 88, 14, 5),
-        ),
-    },
-    "통신": {
-        "expected_bbox": (33, 1, 95, 30),
-        "strokes": (
-            (56, 58, 7, 14),
-            (41, 57, 8, 14),
-            (56, 58, 9, 14),
-            (40, 58, 10, 14),
-        ),
-    },
-}
-
-
-def apply_part1_option_micro_strokes(layer: Image.Image, label: str) -> None:
-    spec = PART1_OPTION_MICRO_STROKES.get(label)
-    if spec is None or layer.getbbox() != spec["expected_bbox"]:
-        return
-    px = layer.load()
-    body_indices = {1, 2, 3, 4, 5, 6, 7}
-    for x0, x1, y, value in spec["strokes"]:
-        for x in range(x0, x1):
-            if px[x, y] in body_indices:
-                px[x, y] = value
-
-
 def make_part1_label_block(korean: str, _english: str, max_size: int = 20) -> Image.Image:
-    layer = Image.new("L", (80, 32), 0)
-    draw_part1_clean_menu_label(layer, korean, (2, 1, 78, 31), min(max_size, 18))
+    offsets = {'OPERATION': PART1_OPERATION_LOGO_LZ77_OFF, 'MAP SELECT': PART1_MAP_SELECT_LZ77_OFF,
+               'SHOP SELECT': PART1_SHOP_SELECT_LZ77_OFF, 'HARD SHOP': PART1_HARD_SHOP_LZ77_OFF,
+               'CAMPAIGN': PART1_CAMPAIGN_LZ77_OFF, 'MODE SELECT': PART1_MODE_SELECT_LZ77_OFF,
+               'RULE SELECT': PART1_RULE_SELECT_LZ77_OFF, 'TEAM SETTING': PART1_TEAM_SETTING_LZ77_OFF}
+    return make_part1_header_with_footer(offsets[_english], korean, max_size)
+
+
+@lru_cache(maxsize=18)
+def _original_part1_header(offset):
+    source = Path(__file__).resolve().parents[1] / 'original/Game Boy Wars Advance 1+2 (Japan).gba'
+    rom = source.read_bytes()
+    if hashlib.sha256(rom).hexdigest() != 'a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c':
+        raise ValueError('English footer source is not the verified original ROM')
+    raw, _ = lz77_decompress(rom, offset)
+    layer = Image.new('L', (80, 32), 0)
+    for tile in range(40):
+        x, y = ((tile % 8) * 8, (tile // 8) * 8) if tile < 32 else (64 + (tile % 2) * 8, ((tile - 32) // 2) * 8)
+        for pixel in range(64):
+            value = raw[tile * 32 + pixel // 2] >> (4 * (pixel % 2)) & 15
+            layer.putpixel((x + pixel % 8, y + pixel // 8), value)
+    if part1_logo_layer_to_tiles(layer) != raw:
+        raise AssertionError('original header tile round trip differs')
     return layer
 
 
-def make_part1_submenu_label_block(korean: str, max_size: int = 20) -> Image.Image:
-    layer = Image.new("L", (80, 32), 0)
-    label = {
-        "멀티카드 통신": "멀티 통신",
-        "플레이어 랭크": "랭크",
-    }.get(korean, korean)
-    draw_part1_clean_menu_label(layer, label, (2, 1, 78, 31), min(max_size, 18))
+def original_part1_header(offset):
+    return _original_part1_header(offset).copy()
+
+
+def part1_footer_y(offset):
+    # Verified against the original ROM: CONNECT also uses the short layout.
+    return 19 if offset in (0xC1A81C, 0xC1AC60, 0xC1B3A8, 0xC1B610) else 24
+
+
+def make_part1_header_with_footer(offset, korean, max_size):
+    original = original_part1_header(offset)
+    footer_y = part1_footer_y(offset)
+    layer = Image.new('L', original.size, 0)
+    draw_part1_clean_menu_label(layer, korean, (2, 1, 78, footer_y - 1), min(max_size, 22))
+    if layer.crop((0, footer_y, 80, 32)).getbbox():
+        raise ValueError(f'Korean header overlaps protected English at {offset:#x}')
+    footer = original_part1_footer(offset)
+    body_box, footer_box = layer.getbbox(), footer.getbbox()
+    shift = round((footer_box[0] + footer_box[2] - body_box[0] - body_box[2]) / 2)
+    shift = max(1 - body_box[0], min(79 - body_box[2], shift))
+    aligned = Image.new('L', layer.size, 0)
+    aligned.paste(layer, (shift, 0))
+    layer = aligned
+    layer.paste(footer.crop((0, footer_y, 80, 32)), (0, footer_y))
     return layer
+
+
+def original_part1_footer(offset):
+    original = original_part1_header(offset)
+    footer_y = part1_footer_y(offset)
+    # Japanese title shadows overlap the English top border in the tall logos.
+    # English bounds come from its lower six rows, never from that shared row.
+    xs = [x for y in range(footer_y + 1, 32) for x in range(80)
+          if original.getpixel((x, y)) not in (0, 9)]
+    if not xs:
+        raise AssertionError('original English footer is missing')
+    footer = Image.new('L', original.size, 0)
+    for y in range(footer_y, 32):
+        for x in range(min(xs), max(xs) + 1):
+            value = original.getpixel((x, y))
+            if value != 9:
+                footer.putpixel((x, y), value)
+    # Restore the English top border where a Japanese cast shadow covered it.
+    x = min(xs)
+    while x <= max(xs):
+        if original.getpixel((x, footer_y)) != 9:
+            x += 1
+            continue
+        end = x
+        while end <= max(xs) and original.getpixel((end, footer_y)) == 9:
+            end += 1
+        if (x > min(xs) and end <= max(xs)
+                and original.getpixel((x - 1, footer_y)) == 14
+                and original.getpixel((end, footer_y)) == 14):
+            for column in range(x, end):
+                footer.putpixel((column, footer_y), 14)
+        x = end
+    return footer
+
+
+def make_part1_submenu_label_block(korean: str, max_size: int = 20, *, offset=None) -> Image.Image:
+    if offset is None:
+        matches = [row[1] for row in PART1_SUBMENU_LOGO_BLOCKS if row[2] == korean]
+        if len(matches) != 1:
+            raise ValueError(f'explicit source offset required for header {korean}')
+        offset = matches[0]
+    return make_part1_header_with_footer(offset, korean, max_size)
 
 
 def make_part1_operation_block() -> Image.Image:
@@ -1591,9 +1610,7 @@ def make_part1_operation_block() -> Image.Image:
 
 
 def make_part1_mode_block() -> Image.Image:
-    layer = Image.new("L", (80, 32), 0)
-    draw_part1_clean_menu_label(layer, "모드 선택", (2, 1, 78, 31), 18)
-    return layer
+    return make_part1_label_block('모드 선택', 'MODE SELECT', 18)
 
 
 def part1_option_display_text(text: str) -> str:
@@ -1619,9 +1636,8 @@ def make_part1_option_block(text: str, max_size: int) -> Image.Image:
             min(max_size, 25),
             stroke_width=2,
             target_min_w=target_w,
-            supersample_target=label in {"작전룸", "통신"},
+            supersample_target=True,
         )
-        apply_part1_option_micro_strokes(layer, label)
     else:
         width_limit = 108 if len(label) >= 6 else 92
         draw_part1_option_logo_text(
@@ -1664,6 +1680,10 @@ def patch_lz77_whole_block(
     comp = lz77_compress(new_data, vram_safe=True)
     limit = capacity or consumed
     if len(comp) > limit:
+        comp = lz77_compress_optimal(new_data, vram_safe=True)
+    if off in RELOCATIONS and len(comp) > limit:
+        return write_relocated_sprite(rom, off, comp)
+    if len(comp) > limit:
         raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {limit}")
     rom[off : off + limit] = comp + b"\x00" * (limit - len(comp))
     return len(comp), limit
@@ -1691,7 +1711,7 @@ def patch_part1_mission_block(rom: bytearray) -> tuple[int, int]:
 def patch_part1_submenu_logo_blocks(rom: bytearray) -> list[tuple[str, int, int]]:
     results = []
     for label, off, text, max_size in PART1_SUBMENU_LOGO_BLOCKS:
-        layer = make_part1_submenu_label_block(text, max_size)
+        layer = make_part1_submenu_label_block(text, max_size, offset=off)
         comp_size, consumed_size = patch_lz77_whole_block(rom, off, layer, f"part1 submenu logo {label}")
         results.append((label, comp_size, consumed_size))
     return results
@@ -1730,6 +1750,8 @@ def patch_part1_option_block(
         raise RuntimeError(f"{label} tile data size mismatch: {len(new_data)} != {len(old_data)}")
     comp = lz77_compress(new_data, vram_safe=True)
     limit = capacity or consumed
+    if len(comp) > limit:
+        comp = lz77_compress_optimal(new_data, vram_safe=True)
     if len(comp) > limit:
         raise RuntimeError(f"compressed {label} block grew: {len(comp)} > {limit}")
     rom[off : off + limit] = comp + b"\x00" * (limit - len(comp))
@@ -1875,7 +1897,7 @@ def main() -> None:
             f"docs/title_hangul/drafts/{safe_label}_insert_layer_3x.png"
         )
     for label, _off, text, max_size in PART1_SUBMENU_LOGO_BLOCKS:
-        layer = make_part1_submenu_label_block(text, max_size)
+        layer = make_part1_submenu_label_block(text, max_size, offset=_off)
         layer.convert("RGB").resize((240, 96), Image.Resampling.NEAREST).save(
             f"docs/title_hangul/drafts/part1_submenu_{label}_insert_layer_3x.png"
         )

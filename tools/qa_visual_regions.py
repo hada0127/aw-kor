@@ -55,9 +55,9 @@ START_PROMPT_CROP = (56, 96, 184, 124)
 PART1_OPTION_LAYER_SHA256 = {
     # Regression guard for the 2026-07-07 micro ㄹ/ㅌ stroke tuning.
     # These hashes are over the 128x32 indexed layer bytes, before LZ77 packing.
-    "operation_room": "5e648ed9e36344d99a91687692c8a57802665c24da84b5bd13d354d0f2247764",
-    "link": "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
-    "single_battle": "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+    "operation_room": "f5aa38a3c109022b0805ed5f61a7fc3bb6d2f947120754856569fe63d0728faf",
+    "link": "7393c8f1368a7f8d171567767f478feac7b33e7452b6a11adcb62072b689405a",
+    "single_battle": "ff0519cf9bea957d92dbb5270718cc5f2091811d563b7f99d8a36efec7cf30f0",
 }
 ACTION_MENU_TEMPSAV = ROOT / "temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav"
 ACTION_MENU_TILEMAP_EXPECTED = {
@@ -412,7 +412,7 @@ def run_asset_checks() -> list[str]:
             failures.append(str(exc))
 
     for name, _off, text, max_size in th.PART1_SUBMENU_LOGO_BLOCKS:
-        layer = th.make_part1_submenu_label_block(text, max_size)
+        layer = th.make_part1_submenu_label_block(text, max_size, offset=_off)
         try:
             bbox = assert_layer_not_blank(f"part1 submenu {name}", layer)
             assert_bbox(
@@ -420,11 +420,15 @@ def run_asset_checks() -> list[str]:
                 bbox,
                 min_w={"single_battle": 56, "connect": 26}.get(name, 18),
                 min_h=8,
-                x0_min=4,
-                y0_min=4,
-                x1_max=78,
-                y1_max=30,
+                x0_min=0,
+                y0_min=0,
+                x1_max=80,
+                y1_max=32,
             )
+            footer = th.original_part1_footer(_off)
+            footer_y = th.part1_footer_y(_off)
+            if layer.crop((0, footer_y, 80, 32)).tobytes() != footer.crop((0, footer_y, 80, 32)).tobytes():
+                raise AssertionError(f'part1 submenu {name}: original English footer changed')
             nonzero = sum(1 for value in layer.getdata() if value)
             if nonzero < 45:
                 raise AssertionError(f"part1 submenu {name}: too few label pixels ({nonzero} < 45)")
@@ -706,11 +710,13 @@ def count_clean_top_left_label_pixels(image: Image.Image, box: tuple[int, int, i
 
 
 def count_top_left_label_edge_pixels(image: Image.Image) -> int:
+    # OAM 24/25 cover exactly 80x32. Outside that rectangle the moving
+    # carousel is legitimate content, not a clipped header.
     boxes = (
-        (0, 0, 4, 36),
-        (0, 0, 86, 4),
-        (80, 0, 86, 36),
-        (0, 31, 86, 36),
+        (0, 0, 4, 32),
+        (0, 0, 80, 4),
+        (78, 0, 80, 32),
+        (0, 31, 80, 32),
     )
     return sum(count_clipped_logo_text_pixels(image, box) for box in boxes)
 

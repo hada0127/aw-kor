@@ -21,6 +21,7 @@ import argparse, collections, csv, hashlib, json, os, re, struct, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_poc as P
+from sprite_relocations import RELOCATIONS, SPRITE_STORAGE_START, resolve_sprite_offset
 
 BASE = P.BASE
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
@@ -11421,6 +11422,12 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
                 from lz77_compress import lz77_compress_optimal
                 comp = lz77_compress_optimal(tiles, vram_safe=True)
                 cap = sp.get('comp_size') or 0
+                if off in RELOCATIONS:
+                    source_off = off
+                    off = resolve_sprite_offset(rom, source_off)
+                    if off == RELOCATIONS[source_off]['destination']:
+                        cap = RELOCATIONS[source_off]['capacity']
+                    rec_report.update({'source_offset': hex(source_off), 'offset': hex(off)})
                 rec_report.update({'compressed_size': len(comp), 'comp_size': cap})
                 if not cap or len(comp) > cap:
                     why = 'lz77 재압축 %dB > comp_size %dB' % (len(comp), cap)
@@ -20159,6 +20166,10 @@ def main():
     st['sprite_overrides'] = _sprite_override_result['applied']
     st['sprite_overrides_skipped'] = _sprite_override_result['skipped']
     st['sprite_overrides_ignored'] = _sprite_override_result.get('ignored', 0)
+    _relocated_sprite_final_writes = {}
+    for _spec in RELOCATIONS.values():
+        for _start, _size in ((_spec['pointer'], 4), (_spec['destination'], _spec['capacity'])):
+            _relocated_sprite_final_writes[_start] = bytes(rom[_start:_start + _size])
 
     # 2.9) 짜옹이님 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint)
     # Part2 메시지 포인터 테이블(0x08A357B4)이 가리키는 대사를 여유공간(0xA3D000~)으로 재배치하고
@@ -20395,7 +20406,7 @@ def main():
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
-                extra_messages=_rp_extra, free_start=0xA3D000, free_end=0xB00000,
+                extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
                 skip_messages=PART2_PROLOGUE_REPOINT_SKIP_MESSAGES,
                 min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid))
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
@@ -20422,6 +20433,9 @@ def main():
     patch_name_grid(rom)
 
     # 3) 검증 + 저장 (헤더 무변경이면 0xBD 유효, base가 v56여도 재계산해 설정)
+    for _start, _expected in _relocated_sprite_final_writes.items():
+        if bytes(rom[_start:_start + len(_expected)]) != _expected:
+            raise AssertionError(f'late writer overwrote relocated sprite at {_start:#x}')
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     os.makedirs(os.path.dirname(args.out), exist_ok=True)

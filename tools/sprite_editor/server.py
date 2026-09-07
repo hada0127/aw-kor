@@ -224,6 +224,8 @@ def decode_from_rom(rom, sp):
         grid, w, h = ES.tiles_to_indices(tile_data, cols)
         return grid, w, h, cols
     if typ == "lz77":
+        from sprite_relocations import resolve_sprite_offset
+        off = resolve_sprite_offset(rom, off)
         res = ES.lz77_decompress(rom, off)
         if not res:
             return None

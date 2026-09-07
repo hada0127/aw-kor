@@ -1,0 +1,2802 @@
+{
+  "inputs": [
+    {
+      "path": "/Users/tarucy/project/aw-kor/original/Game Boy Wars Advance 1+2 (Japan).gba",
+      "sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c"
+    },
+    {
+      "path": "temp/sprite_before.gba",
+      "sha256": "f746d73109ee59890fffec3ec016e5fcb38695a95170ab2907d213bba70efb13"
+    },
+    {
+      "path": "temp/sprite_candidate_full.gba",
+      "sha256": "2f415af43ffe3c704cc95edc74836191eac61a161c729bceb22d8364fa4d07ed"
+    }
+  ],
+  "containers": [
+    {
+      "text": "캠페인",
+      "offset": "0xc0310c",
+      "width": 128,
+      "changed_pixels": 203,
+      "compressed_bytes": [
+        1028,
+        707,
+        800
+      ],
+      "original_capacity": 1028,
+      "final_capacity": 1028,
+      "final_offset": "0xc0310c",
+      "index_counts_after": {
+        "0": 2802,
+        "1": 23,
+        "2": 34,
+        "3": 76,
+        "4": 114,
+        "5": 95,
+        "6": 108,
+        "7": 9,
+        "8": 3,
+        "9": 184,
+        "10": 252,
+        "11": 6,
+        "12": 97,
+        "14": 293
+      },
+      "layer_sha256": [
+        "4597d13a865845835f827b09bcab8ddafa0b61c25053363efe168823d9374331",
+        "1762b6f9358e57a720728f1a8cac55bcb3743af0be60c4710fcdd1608945116e",
+        "54a31c713c2c0137c1440c38fb4ef018a05d28d6f648555cb5cb46c42e927bea"
+      ],
+      "bounds": [
+        [
+          6,
+          2,
+          121,
+          30
+        ],
+        [
+          32,
+          2,
+          98,
+          28
+        ],
+        [
+          32,
+          2,
+          98,
+          28
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "트라이얼",
+      "offset": "0xc03510",
+      "width": 128,
+      "changed_pixels": 257,
+      "compressed_bytes": [
+        878,
+        779,
+        873
+      ],
+      "original_capacity": 878,
+      "final_capacity": 878,
+      "final_offset": "0xc03510",
+      "index_counts_after": {
+        "0": 2678,
+        "1": 43,
+        "2": 40,
+        "3": 100,
+        "4": 103,
+        "5": 127,
+        "6": 82,
+        "7": 8,
+        "8": 13,
+        "9": 207,
+        "10": 264,
+        "11": 5,
+        "12": 111,
+        "14": 315
+      },
+      "layer_sha256": [
+        "36c9160176579d0f0214f85beddead14646686760aaf65f721883ab7e56c2d36",
+        "5e4125107bb484ba02ad98fd7c21ac84fece477f391e47d0641cbdd65516b892",
+        "08f53aedb2322dcf1576afaa4e8613c53fac50fa92631cb7a2886ca2f4745be7"
+      ],
+      "bounds": [
+        [
+          16,
+          2,
+          110,
+          30
+        ],
+        [
+          27,
+          2,
+          102,
+          29
+        ],
+        [
+          27,
+          2,
+          102,
+          29
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "기록",
+      "offset": "0xc03880",
+      "width": 128,
+      "changed_pixels": 0,
+      "compressed_bytes": [
+        622,
+        525,
+        525
+      ],
+      "original_capacity": 622,
+      "final_capacity": 622,
+      "final_offset": "0xc03880",
+      "index_counts_after": {
+        "0": 3426,
+        "1": 34,
+        "2": 23,
+        "3": 48,
+        "4": 48,
+        "5": 24,
+        "6": 33,
+        "8": 3,
+        "9": 99,
+        "10": 147,
+        "14": 211
+      },
+      "layer_sha256": [
+        "714a10ff25193c8f14be02735f5541c8a389e402402cabee2023cd8916fce7a2",
+        "3f5ea6afb66f6d5f6b2450e19aa36d473d71f02f5a363fc3372a50c8a1ec8045",
+        "3f5ea6afb66f6d5f6b2450e19aa36d473d71f02f5a363fc3372a50c8a1ec8045"
+      ],
+      "bounds": [
+        [
+          30,
+          2,
+          98,
+          30
+        ],
+        [
+          46,
+          1,
+          83,
+          29
+        ],
+        [
+          46,
+          1,
+          83,
+          29
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "작전룸",
+      "offset": "0xc03af0",
+      "width": 128,
+      "changed_pixels": 0,
+      "compressed_bytes": [
+        1144,
+        766,
+        766
+      ],
+      "original_capacity": 1144,
+      "final_capacity": 1144,
+      "final_offset": "0xc03af0",
+      "index_counts_after": {
+        "0": 2441,
+        "1": 16,
+        "2": 39,
+        "3": 142,
+        "4": 124,
+        "5": 113,
+        "6": 91,
+        "9": 217,
+        "10": 350,
+        "14": 563
+      },
+      "layer_sha256": [
+        "01a0d048917a65f9d69e65bfbf436aa3a37be06921611675679a8cc2a09c9351",
+        "6de4c071d5a7aab3bd8a3ef2d91de75ddeee68987bf82c64938a599ebc828f94",
+        "6de4c071d5a7aab3bd8a3ef2d91de75ddeee68987bf82c64938a599ebc828f94"
+      ],
+      "bounds": [
+        [
+          5,
+          2,
+          121,
+          30
+        ],
+        [
+          25,
+          1,
+          103,
+          29
+        ],
+        [
+          25,
+          1,
+          103,
+          29
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "main_0",
+          "source": "0xc03af0",
+          "oam": [
+            26,
+            27
+          ],
+          "banks": [
+            6
+          ],
+          "nonblank_tiles": 38,
+          "matched_nonblank_tiles": 38,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_1",
+          "source": "0xc03af0",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 38,
+          "matched_nonblank_tiles": 38,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_2",
+          "source": "0xc03af0",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 38,
+          "matched_nonblank_tiles": 38,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "상점",
+      "offset": "0xc03f68",
+      "width": 128,
+      "changed_pixels": 151,
+      "compressed_bytes": [
+        1141,
+        621,
+        687
+      ],
+      "original_capacity": 1141,
+      "final_capacity": 1141,
+      "final_offset": "0xc03f68",
+      "index_counts_after": {
+        "0": 3188,
+        "1": 14,
+        "2": 20,
+        "3": 41,
+        "4": 89,
+        "5": 74,
+        "6": 56,
+        "7": 10,
+        "8": 4,
+        "9": 137,
+        "10": 189,
+        "11": 5,
+        "12": 78,
+        "14": 191
+      },
+      "layer_sha256": [
+        "b208c9bd92ce851d4233778e52bd90079df7589f80cfdc5fe50299854036ced7",
+        "9a12421be759d76a1d846d7b0722a2a024c6475d75010d6fcf9c10801bee5a2a",
+        "a446b0af8931d70314e2fd23f0981ff01092d2edfac47d72181809bcd7b55858"
+      ],
+      "bounds": [
+        [
+          7,
+          2,
+          120,
+          30
+        ],
+        [
+          43,
+          2,
+          87,
+          28
+        ],
+        [
+          43,
+          2,
+          87,
+          28
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "맵 디자인",
+      "offset": "0xc043e0",
+      "width": 128,
+      "changed_pixels": 227,
+      "compressed_bytes": [
+        1210,
+        827,
+        939
+      ],
+      "original_capacity": 1210,
+      "final_capacity": 1210,
+      "final_offset": "0xc043e0",
+      "index_counts_after": {
+        "0": 2482,
+        "1": 25,
+        "2": 40,
+        "3": 106,
+        "4": 113,
+        "5": 118,
+        "6": 104,
+        "7": 7,
+        "8": 5,
+        "9": 253,
+        "10": 351,
+        "11": 8,
+        "12": 118,
+        "14": 366
+      },
+      "layer_sha256": [
+        "e648db6e9b2b39a584638ae9e340f7dc30b9b36f42eb7a54f4ea08c43287c21e",
+        "b0b53b6a4effae90bb6f54c6d6cf17aa4df1de7e5f502e397b4f9a034ae61433",
+        "e2f8b6efebd652f6561c0675b624a34b5b688f4bd6e7b2d9cadb6428025e6d7a"
+      ],
+      "bounds": [
+        [
+          0,
+          1,
+          128,
+          30
+        ],
+        [
+          19,
+          2,
+          110,
+          28
+        ],
+        [
+          19,
+          2,
+          110,
+          28
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "대전",
+      "offset": "0xc0489c",
+      "width": 128,
+      "changed_pixels": 293,
+      "compressed_bytes": [
+        1194,
+        610,
+        704
+      ],
+      "original_capacity": 1194,
+      "final_capacity": 1194,
+      "final_offset": "0xc0489c",
+      "index_counts_after": {
+        "0": 2980,
+        "1": 34,
+        "2": 25,
+        "3": 69,
+        "4": 89,
+        "5": 67,
+        "6": 33,
+        "7": 11,
+        "8": 4,
+        "9": 178,
+        "10": 232,
+        "11": 9,
+        "12": 117,
+        "14": 248
+      },
+      "layer_sha256": [
+        "7b714392fdaa279661e7769fb2377d1868d493a323751adb9d68029c54417e00",
+        "f88efeabe0040d024ec541ac112276eb109606f6ba57d9e7e288be634ca536ae",
+        "26c6f087119a0f0e085f08300226331d5e6da5a9e27553529e07d60868103a95"
+      ],
+      "bounds": [
+        [
+          3,
+          2,
+          125,
+          31
+        ],
+        [
+          34,
+          3,
+          94,
+          28
+        ],
+        [
+          34,
+          3,
+          94,
+          28
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "main_0",
+          "source": "0xc0489c",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 28,
+          "matched_nonblank_tiles": 28,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_1",
+          "source": "0xc0489c",
+          "oam": [
+            28,
+            29
+          ],
+          "banks": [
+            7
+          ],
+          "nonblank_tiles": 28,
+          "matched_nonblank_tiles": 28,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_2",
+          "source": "0xc0489c",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 28,
+          "matched_nonblank_tiles": 28,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "처음부터",
+      "offset": "0xc04d48",
+      "width": 128,
+      "changed_pixels": 219,
+      "compressed_bytes": [
+        1169,
+        797,
+        878
+      ],
+      "original_capacity": 1169,
+      "final_capacity": 1169,
+      "final_offset": "0xc04d48",
+      "index_counts_after": {
+        "0": 2674,
+        "1": 48,
+        "2": 71,
+        "3": 108,
+        "4": 114,
+        "5": 106,
+        "6": 62,
+        "7": 6,
+        "8": 3,
+        "9": 194,
+        "10": 286,
+        "11": 9,
+        "12": 89,
+        "14": 326
+      },
+      "layer_sha256": [
+        "8f0952979d46ff6a898173ea53a073c4fccea0ad8c7ca9fed8ec85891ea46e86",
+        "d110c8deace7b88eb85fb0531d6ef608e2d1cdae91eb30585c1261c3bd2c9a9b",
+        "901bd94fea499018e1ab81680e1d9fbc37cf07877b0a316f696f7e1111506f76"
+      ],
+      "bounds": [
+        [
+          6,
+          2,
+          120,
+          30
+        ],
+        [
+          27,
+          2,
+          103,
+          29
+        ],
+        [
+          27,
+          2,
+          103,
+          29
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_1_item_0",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            28,
+            29,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            7,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_1",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "banks": [
+            6,
+            7,
+            8
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_2",
+          "source": "0xc04d48",
+          "oam": [
+            28,
+            29,
+            30,
+            31,
+            32,
+            33
+          ],
+          "banks": [
+            7,
+            8,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_3",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            30,
+            31,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            8,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_4",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            28,
+            29,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            7,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_5",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+          ],
+          "banks": [
+            6,
+            7,
+            8
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_6",
+          "source": "0xc04d48",
+          "oam": [
+            28,
+            29,
+            30,
+            31,
+            32,
+            33
+          ],
+          "banks": [
+            7,
+            8,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_7",
+          "source": "0xc04d48",
+          "oam": [
+            26,
+            27,
+            30,
+            31,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            8,
+            9
+          ],
+          "nonblank_tiles": 34,
+          "matched_nonblank_tiles": 34,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "계속하기",
+      "offset": "0xc051dc",
+      "width": 128,
+      "changed_pixels": 205,
+      "compressed_bytes": [
+        1145,
+        745,
+        847
+      ],
+      "original_capacity": 1145,
+      "final_capacity": 1145,
+      "final_offset": "0xc051dc",
+      "index_counts_after": {
+        "0": 2756,
+        "1": 64,
+        "2": 61,
+        "3": 100,
+        "4": 114,
+        "5": 86,
+        "6": 35,
+        "8": 1,
+        "9": 191,
+        "10": 281,
+        "11": 3,
+        "12": 94,
+        "14": 310
+      },
+      "layer_sha256": [
+        "c9909d06389bc5bdc9bc737073bfc62935f5a42f95e253e66fc34d0f8acb8343",
+        "724573d2ace1759f7de00b0e3c9c5f9c7912858df0b787d77eb47e200d0d0521",
+        "c1d6e286f4b1b86e82fef786c0081adec3ccd4cbe5639da4538bda68623a5506"
+      ],
+      "bounds": [
+        [
+          11,
+          2,
+          115,
+          30
+        ],
+        [
+          25,
+          2,
+          104,
+          29
+        ],
+        [
+          25,
+          2,
+          104,
+          29
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "통신",
+      "offset": "0xc05658",
+      "width": 128,
+      "changed_pixels": 205,
+      "compressed_bytes": [
+        828,
+        656,
+        755
+      ],
+      "original_capacity": 828,
+      "final_capacity": 828,
+      "final_offset": "0xc05658",
+      "index_counts_after": {
+        "0": 2721,
+        "1": 26,
+        "2": 29,
+        "3": 64,
+        "4": 87,
+        "5": 110,
+        "6": 83,
+        "7": 7,
+        "8": 11,
+        "9": 232,
+        "10": 291,
+        "11": 6,
+        "12": 112,
+        "14": 317
+      },
+      "layer_sha256": [
+        "e001900f8138cafa09408536c1d209c88786ca05b7a31f2e7b472ff4efb71b51",
+        "99c6b72c3707f71991bc9b1d149ed555bf32396a219ca4baf74f326e6dcb6221",
+        "5cad678fbd6d817084e3736ae6fc390fcfacbde3b7aafdf78d134d3a01e55e41"
+      ],
+      "bounds": [
+        [
+          28,
+          3,
+          99,
+          30
+        ],
+        [
+          33,
+          1,
+          95,
+          30
+        ],
+        [
+          33,
+          1,
+          95,
+          30
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "main_0",
+          "source": "0xc05658",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 32,
+          "matched_nonblank_tiles": 32,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_1",
+          "source": "0xc05658",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 32,
+          "matched_nonblank_tiles": 32,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_2",
+          "source": "0xc05658",
+          "oam": [
+            30,
+            31
+          ],
+          "banks": [
+            8
+          ],
+          "nonblank_tiles": 32,
+          "matched_nonblank_tiles": 32,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "맵 기록",
+      "offset": "0xc05994",
+      "width": 128,
+      "changed_pixels": 181,
+      "compressed_bytes": [
+        996,
+        690,
+        779
+      ],
+      "original_capacity": 996,
+      "final_capacity": 996,
+      "final_offset": "0xc05994",
+      "index_counts_after": {
+        "0": 2869,
+        "1": 40,
+        "2": 35,
+        "3": 67,
+        "4": 94,
+        "5": 92,
+        "6": 84,
+        "7": 12,
+        "8": 4,
+        "9": 183,
+        "10": 243,
+        "11": 5,
+        "12": 73,
+        "14": 295
+      },
+      "layer_sha256": [
+        "ba11ff00b0acbbfa240a42d76333c2298e45941e6f914c2281cb9308c8c0d455",
+        "2b990b7d894ab2f70dd0867acceac9e87d8a31a1d7ce9e61a369c349eb9ef063",
+        "2e9a437b5bcf9b718343333bd3ffed72282e98fce10698d5b9931612686ae2b1"
+      ],
+      "bounds": [
+        [
+          7,
+          2,
+          125,
+          30
+        ],
+        [
+          31,
+          1,
+          98,
+          30
+        ],
+        [
+          31,
+          1,
+          98,
+          30
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "플레이어 랭크",
+      "offset": "0xc05d78",
+      "width": 128,
+      "changed_pixels": 344,
+      "compressed_bytes": [
+        1183,
+        901,
+        1033
+      ],
+      "original_capacity": 1183,
+      "final_capacity": 1183,
+      "final_offset": "0xc05d78",
+      "index_counts_after": {
+        "0": 2275,
+        "1": 55,
+        "2": 56,
+        "3": 158,
+        "4": 154,
+        "5": 155,
+        "6": 76,
+        "7": 2,
+        "9": 262,
+        "10": 348,
+        "11": 8,
+        "12": 125,
+        "14": 422
+      },
+      "layer_sha256": [
+        "5f124d0bb90c612ebff1c29b7c51f2f876d8e5cdae709585b683d12ddddef60c",
+        "cacff2d7b8ab540dbf1f342ad09401c7b1d9e80cd865dde1c154187cd67eafb6",
+        "02a4cecb6441d0d32b851b1be3f643ca0b7a7b531e97dd959fe1978d870c580e"
+      ],
+      "bounds": [
+        [
+          0,
+          2,
+          128,
+          30
+        ],
+        [
+          11,
+          3,
+          118,
+          28
+        ],
+        [
+          11,
+          3,
+          118,
+          28
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "1카드 통신",
+      "offset": "0xc06218",
+      "width": 128,
+      "changed_pixels": 239,
+      "compressed_bytes": [
+        1140,
+        872,
+        973
+      ],
+      "original_capacity": 1140,
+      "final_capacity": 1140,
+      "final_offset": "0xc06218",
+      "index_counts_after": {
+        "0": 2471,
+        "1": 53,
+        "2": 56,
+        "3": 91,
+        "4": 128,
+        "5": 108,
+        "6": 74,
+        "7": 4,
+        "8": 7,
+        "9": 261,
+        "10": 373,
+        "11": 5,
+        "12": 120,
+        "14": 345
+      },
+      "layer_sha256": [
+        "c0523e5e192f7360117e2be18bb143cf26c674fc16443da1c638896208e18171",
+        "a7e1a7a53dd37ce045db4bdaab8d0a9dc075fe874859a167627f2cc7ad8b2664",
+        "42ecadaf631fa0ee1b8038e8a2b877d1a6fd5f61340412d604bc094c150a1ae8"
+      ],
+      "bounds": [
+        [
+          5,
+          2,
+          118,
+          29
+        ],
+        [
+          19,
+          1,
+          110,
+          29
+        ],
+        [
+          19,
+          1,
+          110,
+          29
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_2_item_0",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_1",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29
+          ],
+          "banks": [
+            7
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_2",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_3",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_4",
+          "source": "0xc06218",
+          "oam": [
+            34,
+            35
+          ],
+          "banks": [
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_5",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_6",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29,
+            34,
+            35
+          ],
+          "banks": [
+            7,
+            10
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_7",
+          "source": "0xc06218",
+          "oam": [
+            28,
+            29
+          ],
+          "banks": [
+            7
+          ],
+          "nonblank_tiles": 45,
+          "matched_nonblank_tiles": 45,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "멀티카드 통신",
+      "offset": "0xc0668c",
+      "width": 128,
+      "changed_pixels": 325,
+      "compressed_bytes": [
+        1260,
+        914,
+        1075
+      ],
+      "original_capacity": 1260,
+      "final_capacity": 1260,
+      "final_offset": "0xc0668c",
+      "index_counts_after": {
+        "0": 2131,
+        "1": 33,
+        "2": 79,
+        "3": 134,
+        "4": 153,
+        "5": 131,
+        "6": 97,
+        "7": 13,
+        "8": 4,
+        "9": 287,
+        "10": 421,
+        "11": 8,
+        "12": 160,
+        "14": 445
+      },
+      "layer_sha256": [
+        "89a2072c125c756f5feafdc2ee02ac0ef3844aab888425a3c82e1682a7b82b5b",
+        "591e460b7386fca0f1ac2c5ece878eb40944b524c81693ba4d60f2b864502dc2",
+        "bd5aef5e87a62ad648fdab442531dab116d11b7ea8ec9dc088fcaf53d82a181f"
+      ],
+      "bounds": [
+        [
+          0,
+          2,
+          128,
+          29
+        ],
+        [
+          11,
+          1,
+          119,
+          29
+        ],
+        [
+          11,
+          1,
+          119,
+          29
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_2_item_0",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27
+          ],
+          "banks": [
+            6
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_1",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_2",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_3",
+          "source": "0xc0668c",
+          "oam": [
+            32,
+            33
+          ],
+          "banks": [
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_4",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_5",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_6",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27
+          ],
+          "banks": [
+            6
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_7",
+          "source": "0xc0668c",
+          "oam": [
+            26,
+            27,
+            32,
+            33
+          ],
+          "banks": [
+            6,
+            9
+          ],
+          "nonblank_tiles": 52,
+          "matched_nonblank_tiles": 52,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "맵 교환",
+      "offset": "0xc06b78",
+      "width": 128,
+      "changed_pixels": 205,
+      "compressed_bytes": [
+        994,
+        744,
+        832
+      ],
+      "original_capacity": 994,
+      "final_capacity": 994,
+      "final_offset": "0xc06b78",
+      "index_counts_after": {
+        "0": 2755,
+        "1": 32,
+        "2": 25,
+        "3": 63,
+        "4": 97,
+        "5": 125,
+        "6": 88,
+        "7": 6,
+        "8": 3,
+        "9": 202,
+        "10": 275,
+        "11": 6,
+        "12": 97,
+        "14": 322
+      },
+      "layer_sha256": [
+        "a7a35e9fed765785d58e7eff89212defd64caf4e6f91c608386ecc2fb7e3d6f0",
+        "544fbb7ee68cbbaee314e5955b231234c6f062413fadcb22e0761a5fc52ad753",
+        "7bcd087585642a8111a38495c165398d50a4dbff18355bcc615b7a634bca3173"
+      ],
+      "bounds": [
+        [
+          5,
+          2,
+          123,
+          30
+        ],
+        [
+          30,
+          1,
+          100,
+          30
+        ],
+        [
+          30,
+          1,
+          100,
+          30
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_2_item_0",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_1",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_2",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31
+          ],
+          "banks": [
+            8
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_3",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_4",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_5",
+          "source": "0xc06b78",
+          "oam": [
+            36,
+            37
+          ],
+          "banks": [
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_6",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_7",
+          "source": "0xc06b78",
+          "oam": [
+            30,
+            31,
+            36,
+            37
+          ],
+          "banks": [
+            8,
+            11
+          ],
+          "nonblank_tiles": 36,
+          "matched_nonblank_tiles": 36,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "작전룸",
+      "offset": "0xc18cb4",
+      "width": 80,
+      "changed_pixels": 84,
+      "compressed_bytes": [
+        660,
+        447,
+        497
+      ],
+      "original_capacity": 660,
+      "final_capacity": 660,
+      "final_offset": "0xc18cb4",
+      "index_counts_after": {
+        "0": 1803,
+        "1": 10,
+        "2": 52,
+        "3": 58,
+        "5": 29,
+        "6": 27,
+        "7": 7,
+        "8": 44,
+        "9": 108,
+        "10": 181,
+        "14": 241
+      },
+      "layer_sha256": [
+        "33dea6beff3f027dabe709d6a3d25a6ba21eb91b0eda260ad9ee7f6b447d651c",
+        "7ba8be130de6e85baa84a1b257887d4f82a26c0c00b384439dcfc0d136050c46",
+        "584ff652ce3bfba548c6c541e35a60e51920bbbe8c63fae14921cd774dc8ba57"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          62,
+          31
+        ],
+        [
+          18,
+          4,
+          63,
+          26
+        ],
+        [
+          18,
+          4,
+          63,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "맵 선택",
+      "offset": "0xc18f48",
+      "width": 80,
+      "changed_pixels": 99,
+      "compressed_bytes": [
+        662,
+        440,
+        488
+      ],
+      "original_capacity": 662,
+      "final_capacity": 662,
+      "final_offset": "0xc18f48",
+      "index_counts_after": {
+        "0": 1711,
+        "1": 32,
+        "2": 69,
+        "3": 46,
+        "5": 24,
+        "6": 24,
+        "7": 8,
+        "8": 53,
+        "9": 142,
+        "10": 185,
+        "14": 266
+      },
+      "layer_sha256": [
+        "4e686c43e3b62e3c90c629c7480b125620bf725c1bcdef7080c3c0668540f60d",
+        "f7fbfeed0490b219f96aa08633ce74f0c93a3ed9346345b7254b148adf729349",
+        "900103a5c70b06849f444ba9b6173a36fd3c304f1fa05fff0eb7bcb93282047b"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          56,
+          31
+        ],
+        [
+          14,
+          6,
+          68,
+          26
+        ],
+        [
+          14,
+          6,
+          68,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "숍 선택",
+      "offset": "0xc191e0",
+      "width": 80,
+      "changed_pixels": 119,
+      "compressed_bytes": [
+        758,
+        438,
+        488
+      ],
+      "original_capacity": 758,
+      "final_capacity": 758,
+      "final_offset": "0xc191e0",
+      "index_counts_after": {
+        "0": 1772,
+        "1": 4,
+        "2": 39,
+        "3": 82,
+        "5": 24,
+        "6": 24,
+        "7": 7,
+        "8": 54,
+        "9": 134,
+        "10": 177,
+        "14": 243
+      },
+      "layer_sha256": [
+        "1c351bd4d0f61ec8da5fb6f97fb4301652c2e635db651f9502e21e79ddbed50b",
+        "92490d8c06f42ee5525351873683dc50b2d442c5cda919f65dbacc173b24870b",
+        "a422eadf4ae4867d3277b7fe05ccbed0001eca0f5ffc16c9626cde74b2d6c29c"
+      ],
+      "bounds": [
+        [
+          2,
+          0,
+          75,
+          31
+        ],
+        [
+          17,
+          5,
+          66,
+          27
+        ],
+        [
+          17,
+          5,
+          66,
+          27
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "하드 숍",
+      "offset": "0xc194d8",
+      "width": 80,
+      "changed_pixels": 105,
+      "compressed_bytes": [
+        698,
+        416,
+        462
+      ],
+      "original_capacity": 698,
+      "final_capacity": 698,
+      "final_offset": "0xc194d8",
+      "index_counts_after": {
+        "0": 1884,
+        "1": 4,
+        "2": 23,
+        "3": 58,
+        "5": 29,
+        "6": 10,
+        "7": 7,
+        "8": 57,
+        "9": 122,
+        "10": 170,
+        "14": 196
+      },
+      "layer_sha256": [
+        "cc1b516043f8443f9669914f3a22cb5521e0b8007ea228794592e249581f575a",
+        "ed7c842005cceab7a4fdc70b3d12e837648ce6e8ab25932a57305578379eb831",
+        "62ea096dc6b31af8239b57615569355db89ab2c781215c041f1abc3136ede3bf"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          56,
+          31
+        ],
+        [
+          18,
+          5,
+          63,
+          27
+        ],
+        [
+          18,
+          5,
+          63,
+          27
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "캠페인",
+      "offset": "0xc19794",
+      "width": 80,
+      "changed_pixels": 117,
+      "compressed_bytes": [
+        774,
+        442,
+        488
+      ],
+      "original_capacity": 774,
+      "final_capacity": 774,
+      "final_offset": "0xc19794",
+      "index_counts_after": {
+        "0": 1790,
+        "1": 20,
+        "2": 39,
+        "3": 85,
+        "5": 17,
+        "6": 24,
+        "7": 1,
+        "8": 60,
+        "9": 116,
+        "10": 170,
+        "14": 238
+      },
+      "layer_sha256": [
+        "500a5a3a6f19cdfdf9317e10eedf6e8c3a42f258264bb820064eb07dbb9ead55",
+        "96f46fe893bab6e4ba246f202b62cbb3eb9225cc8e8616a6ea3457d43324421b",
+        "a98e16b065f77cfb6ea91c87046a50f8f8251236ef186138cb8b884d024b951b"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          77,
+          31
+        ],
+        [
+          17,
+          6,
+          65,
+          26
+        ],
+        [
+          17,
+          6,
+          65,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "모드 선택",
+      "offset": "0xc19a9c",
+      "width": 80,
+      "changed_pixels": 117,
+      "compressed_bytes": [
+        630,
+        486,
+        532
+      ],
+      "original_capacity": 630,
+      "final_capacity": 630,
+      "final_offset": "0xc19a9c",
+      "index_counts_after": {
+        "0": 1644,
+        "1": 27,
+        "2": 41,
+        "3": 75,
+        "5": 26,
+        "6": 34,
+        "8": 63,
+        "9": 150,
+        "10": 212,
+        "14": 288
+      },
+      "layer_sha256": [
+        "a11561c629deec42efcf63bf3ffc3d77b9183090b1911ce150be155379a6085b",
+        "f135509b28f8277ecf742b6fbedf1845b92b6b9eaa442c62d29d1926a1771ebf",
+        "6da79cced010122ea61fb4712f1d93a41972a637faec829acb8cd062797aa0ea"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          62,
+          31
+        ],
+        [
+          12,
+          6,
+          71,
+          25
+        ],
+        [
+          12,
+          6,
+          71,
+          25
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "main_0",
+          "source": "0xc19a9c",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 30,
+          "matched_nonblank_tiles": 30,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_1",
+          "source": "0xc19a9c",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 30,
+          "matched_nonblank_tiles": 30,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "main_2",
+          "source": "0xc19a9c",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 30,
+          "matched_nonblank_tiles": 30,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "룰 선택",
+      "offset": "0xc19d14",
+      "width": 80,
+      "changed_pixels": 108,
+      "compressed_bytes": [
+        730,
+        464,
+        510
+      ],
+      "original_capacity": 730,
+      "final_capacity": 730,
+      "final_offset": "0xc19d14",
+      "index_counts_after": {
+        "0": 1753,
+        "1": 15,
+        "2": 52,
+        "3": 56,
+        "5": 38,
+        "6": 11,
+        "7": 7,
+        "8": 67,
+        "9": 138,
+        "10": 181,
+        "14": 242
+      },
+      "layer_sha256": [
+        "f91a04f02622bd0f5f5dc54e7e39682b5e0a5d1867b776e88f8b4708aeae13aa",
+        "1462aa2c299d58b7acc27c05ba69de10080aa7a1b1fe0c85f679320672421366",
+        "e09eb4dd37e6977ec0d24401367a3a6c556f9fa847d47927325f9015f5a113c4"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          77,
+          31
+        ],
+        [
+          17,
+          4,
+          66,
+          27
+        ],
+        [
+          17,
+          4,
+          66,
+          27
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "팀 설정",
+      "offset": "0xc19ff0",
+      "width": 80,
+      "changed_pixels": 92,
+      "compressed_bytes": [
+        716,
+        478,
+        519
+      ],
+      "original_capacity": 716,
+      "final_capacity": 716,
+      "final_offset": "0xc19ff0",
+      "index_counts_after": {
+        "0": 1740,
+        "1": 36,
+        "2": 41,
+        "3": 65,
+        "5": 26,
+        "6": 22,
+        "7": 3,
+        "8": 49,
+        "9": 144,
+        "10": 190,
+        "14": 244
+      },
+      "layer_sha256": [
+        "d5eb4202cda198db156bf3a6b66895c30eb0b47aa039994820491bc034157c01",
+        "56b480e656f46c6f690fe2e86f85b8ef270f07aae36c369e6f4e32b8c7e690cd",
+        "2aa0f7b635576be72f2404a785b51b3d4ff37d42ef468846860710bf775d7d2b"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          77,
+          31
+        ],
+        [
+          16,
+          5,
+          65,
+          26
+        ],
+        [
+          16,
+          5,
+          65,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "캠페인",
+      "offset": "0xc1a2bc",
+      "width": 80,
+      "changed_pixels": 117,
+      "compressed_bytes": [
+        679,
+        442,
+        488
+      ],
+      "original_capacity": 679,
+      "final_capacity": 679,
+      "final_offset": "0xc1a2bc",
+      "index_counts_after": {
+        "0": 1790,
+        "1": 20,
+        "2": 39,
+        "3": 85,
+        "5": 17,
+        "6": 24,
+        "7": 1,
+        "8": 60,
+        "9": 116,
+        "10": 170,
+        "14": 238
+      },
+      "layer_sha256": [
+        "678af36e69c1c9f646fafe1594960a01402a3f08de39f28f26382be1a881f151",
+        "96f46fe893bab6e4ba246f202b62cbb3eb9225cc8e8616a6ea3457d43324421b",
+        "a98e16b065f77cfb6ea91c87046a50f8f8251236ef186138cb8b884d024b951b"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          64,
+          31
+        ],
+        [
+          17,
+          6,
+          65,
+          26
+        ],
+        [
+          17,
+          6,
+          65,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "맵 디자인",
+      "offset": "0xc1a81c",
+      "width": 80,
+      "changed_pixels": 118,
+      "compressed_bytes": [
+        448,
+        441,
+        501
+      ],
+      "original_capacity": 448,
+      "final_capacity": 4096,
+      "final_offset": "0xaff000",
+      "index_counts_after": {
+        "0": 1784,
+        "1": 16,
+        "2": 36,
+        "3": 52,
+        "5": 6,
+        "6": 16,
+        "7": 5,
+        "8": 66,
+        "9": 147,
+        "10": 190,
+        "14": 242
+      },
+      "layer_sha256": [
+        "7d628592d50fe9791d8b1a19f4727f8733efafb914b199008d4f8ab9186fe227",
+        "d9c070d5e6b73b977f41f8a9a9d847c07140d3887dfa7afd96f41df3263187a8",
+        "1191eb88d60dbf9b85bd8b3a93e5842d1037cddc43ccde0267848a8d7d8357f9"
+      ],
+      "bounds": [
+        [
+          10,
+          4,
+          54,
+          26
+        ],
+        [
+          11,
+          7,
+          69,
+          25
+        ],
+        [
+          11,
+          7,
+          69,
+          25
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "싱글 대전",
+      "offset": "0xc1a9dc",
+      "width": 80,
+      "changed_pixels": 130,
+      "compressed_bytes": [
+        641,
+        494,
+        552
+      ],
+      "original_capacity": 641,
+      "final_capacity": 641,
+      "final_offset": "0xc1a9dc",
+      "index_counts_after": {
+        "0": 1670,
+        "1": 21,
+        "2": 34,
+        "3": 72,
+        "5": 25,
+        "6": 17,
+        "8": 75,
+        "9": 140,
+        "10": 223,
+        "14": 283
+      },
+      "layer_sha256": [
+        "a05f1ce970c56fcd75ddce8b74f9d1cabc07dcf3b17ae2783067f40014d0163d",
+        "fbb5ff1e15b2a6533986f5c083e7d8212b34262d2b7f4791dd62a6921cf4eb24",
+        "a5b89e664db5213822068e551ef9f60a60bb4b1a19f6b4213b77bca3937d02e7"
+      ],
+      "bounds": [
+        [
+          0,
+          1,
+          64,
+          31
+        ],
+        [
+          12,
+          5,
+          70,
+          26
+        ],
+        [
+          12,
+          5,
+          70,
+          26
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_1_item_0",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_1",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_2",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_3",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_4",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_5",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_6",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_1_item_7",
+          "source": "0xc1a9dc",
+          "oam": [
+            24,
+            25
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 26,
+          "matched_nonblank_tiles": 26,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "통신",
+      "offset": "0xc1ac60",
+      "width": 80,
+      "changed_pixels": 64,
+      "compressed_bytes": [
+        529,
+        366,
+        394
+      ],
+      "original_capacity": 529,
+      "final_capacity": 529,
+      "final_offset": "0xc1ac60",
+      "index_counts_after": {
+        "0": 2071,
+        "1": 12,
+        "2": 23,
+        "3": 35,
+        "5": 6,
+        "6": 17,
+        "7": 10,
+        "8": 37,
+        "9": 77,
+        "10": 128,
+        "14": 144
+      },
+      "layer_sha256": [
+        "3b8e47fdbe0a54fbd51ddd8fd189a25e6ba55cd9bd407aa64084aca30ecf9efe",
+        "778aec827af616a052528e8774d6340e3e44f84cade6b9a44a9cf8d70f510417",
+        "38ec555c5cd9151b9a0bd55a6ea82a09c0fe285b69cb9d70166884a6a4736f6a"
+      ],
+      "bounds": [
+        [
+          5,
+          3,
+          59,
+          26
+        ],
+        [
+          27,
+          5,
+          54,
+          27
+        ],
+        [
+          27,
+          5,
+          54,
+          27
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "branch_2_item_0",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_1",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_2",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_3",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_4",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_5",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_6",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        },
+        {
+          "capture": "branch_2_item_7",
+          "source": "0xc1ac60",
+          "oam": [
+            24
+          ],
+          "banks": [
+            4
+          ],
+          "nonblank_tiles": 15,
+          "matched_nonblank_tiles": 15,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "맵 기록",
+      "offset": "0xc1ae74",
+      "width": 80,
+      "changed_pixels": 102,
+      "compressed_bytes": [
+        622,
+        425,
+        474
+      ],
+      "original_capacity": 622,
+      "final_capacity": 622,
+      "final_offset": "0xc1ae74",
+      "index_counts_after": {
+        "0": 1820,
+        "1": 18,
+        "2": 53,
+        "3": 52,
+        "5": 24,
+        "6": 12,
+        "7": 8,
+        "8": 66,
+        "9": 126,
+        "10": 162,
+        "14": 219
+      },
+      "layer_sha256": [
+        "bf2b7c3d3ec728767e170c16dc0061a12ed6d2e199829bf7f9f9de0fdcbf5a99",
+        "96b0df4359f2509a1c6b3aa25044a80933f7cb249b0326045ab867fbe7063265",
+        "ab20878d187041fd275e1bc26b58e5328a3858d107b96d2d9b2e5e2d41f3d7e0"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          60,
+          31
+        ],
+        [
+          17,
+          4,
+          66,
+          26
+        ],
+        [
+          17,
+          4,
+          66,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "플레이어 랭크",
+      "offset": "0xc1b0e4",
+      "width": 80,
+      "changed_pixels": 45,
+      "compressed_bytes": [
+        706,
+        317,
+        346
+      ],
+      "original_capacity": 706,
+      "final_capacity": 706,
+      "final_offset": "0xc1b0e4",
+      "index_counts_after": {
+        "0": 2186,
+        "1": 10,
+        "2": 19,
+        "3": 20,
+        "5": 9,
+        "6": 13,
+        "8": 25,
+        "9": 59,
+        "10": 94,
+        "14": 125
+      },
+      "layer_sha256": [
+        "fc953bb4f682959787515df961e5362326a19bc9133d52cbffec460963e5582b",
+        "e5cac4a6ce09e236e0a930ee8ce196da64f0a63392cf9aadc1a1567952a650a0",
+        "f04d9b0446ab5d8d8f557e8fb96c95f71e446f3ccc19d39b971d526a25409700"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          64,
+          31
+        ],
+        [
+          27,
+          7,
+          54,
+          24
+        ],
+        [
+          27,
+          7,
+          54,
+          24
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "1카드 통신",
+      "offset": "0xc1b3a8",
+      "width": 80,
+      "changed_pixels": 99,
+      "compressed_bytes": [
+        613,
+        430,
+        496
+      ],
+      "original_capacity": 613,
+      "final_capacity": 613,
+      "final_offset": "0xc1b3a8",
+      "index_counts_after": {
+        "0": 1847,
+        "1": 16,
+        "2": 31,
+        "3": 45,
+        "5": 9,
+        "6": 18,
+        "8": 54,
+        "9": 125,
+        "10": 194,
+        "14": 221
+      },
+      "layer_sha256": [
+        "8531254daffb98b6167f8eeadcb7c23a3a3990b096af4a5c1966433ac1aa6481",
+        "690e10642f072aed2c3d9ae7afc732c9639ef1a5c32b44a2702668e7ee421786",
+        "39897428610652bd01bee14909ee0e3e9f283bc5df71e80f50dc214ef314069d"
+      ],
+      "bounds": [
+        [
+          2,
+          4,
+          61,
+          26
+        ],
+        [
+          15,
+          6,
+          68,
+          24
+        ],
+        [
+          15,
+          6,
+          68,
+          24
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "멀티카드 통신",
+      "offset": "0xc1b610",
+      "width": 80,
+      "changed_pixels": 88,
+      "compressed_bytes": [
+        544,
+        397,
+        456
+      ],
+      "original_capacity": 544,
+      "final_capacity": 544,
+      "final_offset": "0xc1b610",
+      "index_counts_after": {
+        "0": 1988,
+        "1": 4,
+        "2": 20,
+        "3": 39,
+        "5": 7,
+        "6": 12,
+        "7": 4,
+        "8": 49,
+        "9": 106,
+        "10": 147,
+        "14": 184
+      },
+      "layer_sha256": [
+        "fc3a9d7eb8912d21c89bf2d86cb6e997bdedc34aa6bc97e3b9dc89ec4ff5fd7e",
+        "3b489361248cd9e9a3bfa0d45aa5524a616b57046e2f927dd0f4ca199585e9dd",
+        "0ff4911ea18e7403277ce342cf4c7955b2d0edb96ceab6d6672c5bcfe067f4eb"
+      ],
+      "bounds": [
+        [
+          2,
+          4,
+          60,
+          26
+        ],
+        [
+          19,
+          7,
+          62,
+          25
+        ],
+        [
+          19,
+          7,
+          62,
+          25
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "케이블 대전",
+      "offset": "0xc1a564",
+      "width": 80,
+      "changed_pixels": 165,
+      "compressed_bytes": [
+        681,
+        486,
+        578
+      ],
+      "original_capacity": 681,
+      "final_capacity": 681,
+      "final_offset": "0xc1a564",
+      "index_counts_after": {
+        "0": 1601,
+        "1": 16,
+        "2": 42,
+        "3": 103,
+        "5": 17,
+        "6": 10,
+        "8": 83,
+        "9": 157,
+        "10": 222,
+        "14": 309
+      },
+      "layer_sha256": [
+        "a3b17c736df200552d953687ea6c0fedcd5e29e86167c1b1827727e9ac27d1c9",
+        "59f44d9ee6fb39775195086d05aadb64d32621aa208b48af046ae34b4e656de6",
+        "2668cc8f736ddafa92287121e6232401e79356fa0264c5ba6fea8046329060f7"
+      ],
+      "bounds": [
+        [
+          1,
+          1,
+          64,
+          31
+        ],
+        [
+          7,
+          5,
+          76,
+          26
+        ],
+        [
+          7,
+          5,
+          76,
+          26
+        ]
+      ],
+      "runtime_observations": []
+    },
+    {
+      "text": "맵 교환",
+      "offset": "0xc1b830",
+      "width": 80,
+      "changed_pixels": 99,
+      "compressed_bytes": [
+        624,
+        435,
+        482
+      ],
+      "original_capacity": 624,
+      "final_capacity": 624,
+      "final_offset": "0xc1b830",
+      "index_counts_after": {
+        "0": 1750,
+        "1": 8,
+        "2": 43,
+        "3": 60,
+        "5": 28,
+        "6": 29,
+        "7": 8,
+        "8": 55,
+        "9": 138,
+        "10": 190,
+        "14": 251
+      },
+      "layer_sha256": [
+        "b35d71939b6376fa81d90143c6616f2684ed24d9af7ae6d8258ed305d17c3812",
+        "f7af60aeff5244350eefffe2fc9ff47d4e39a27cf12539b81c58f9aba1e959e0",
+        "838001e900793c4af502227c1ab82f26c67a4b2ac8af3207ea311b191dfe0dc7"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          62,
+          31
+        ],
+        [
+          16,
+          4,
+          66,
+          27
+        ],
+        [
+          16,
+          4,
+          66,
+          27
+        ]
+      ],
+      "runtime_observations": []
+    }
+  ],
+  "changed_containers": 31,
+  "palette_capture_sha256": "bb7ba6e21980f34d12077f92d57ebb014b91841abecbf9d689469c68450d0d9c",
+  "outside_declared_sprite_writes": 0,
+  "runtime_capture_count": 27,
+  "runtime_observed_containers": 10,
+  "runtime_unobserved_containers": [
+    "0xc0310c",
+    "0xc03510",
+    "0xc03880",
+    "0xc03f68",
+    "0xc043e0",
+    "0xc051dc",
+    "0xc05994",
+    "0xc05d78",
+    "0xc18cb4",
+    "0xc18f48",
+    "0xc191e0",
+    "0xc194d8",
+    "0xc19794",
+    "0xc19d14",
+    "0xc19ff0",
+    "0xc1a2bc",
+    "0xc1a81c",
+    "0xc1ae74",
+    "0xc1b0e4",
+    "0xc1b3a8",
+    "0xc1b610",
+    "0xc1a564",
+    "0xc1b830"
+  ],
+  "sheets": [
+    "sprites_01.png",
+    "sprites_02.png",
+    "sprites_03.png",
+    "sprites_04.png",
+    "sprites_05.png",
+    "palette_variants_01.png",
+    "palette_variants_02.png",
+    "palette_variants_03.png",
+    "palette_variants_04.png",
+    "ingame_01.png",
+    "ingame_02.png",
+    "ingame_03.png",
+    "ingame_04.png",
+    "ingame_05.png",
+    "ingame_06.png",
+    "ingame_07.png"
+  ]
+}
