@@ -1,0 +1,158 @@
+{
+  "inputs": [
+    {
+      "path": "/Users/tarucy/project/aw-kor/original/Game Boy Wars Advance 1+2 (Japan).gba",
+      "sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c"
+    },
+    {
+      "path": "temp/room_before.gba",
+      "sha256": "55db31de82aa6774884bd07e255539451a1cf538ef5eb6c396b7da20c1825ea0"
+    },
+    {
+      "path": "temp/sprite_candidate.gba",
+      "sha256": "909828af725a38d1a267fbeaa13d9bd9e80879d889549cff7d205dc6dc18fc23"
+    }
+  ],
+  "containers": [
+    {
+      "text": "작전룸",
+      "offset": "0xc03af0",
+      "width": 128,
+      "changed_pixels": 126,
+      "compressed_bytes": [
+        1144,
+        833,
+        816
+      ],
+      "original_capacity": 1144,
+      "final_capacity": 1144,
+      "final_offset": "0xc03af0",
+      "index_counts_after": {
+        "0": 2169,
+        "1": 70,
+        "2": 40,
+        "3": 145,
+        "4": 159,
+        "5": 159,
+        "6": 291,
+        "7": 6,
+        "8": 16,
+        "9": 136,
+        "10": 318,
+        "14": 587
+      },
+      "layer_sha256": [
+        "01a0d048917a65f9d69e65bfbf436aa3a37be06921611675679a8cc2a09c9351",
+        "f5aa38a3c109022b0805ed5f61a7fc3bb6d2f947120754856569fe63d0728faf",
+        "abdbf7f99b216057553f13276dca238fbb35e3f67d03d7a6f4e65c3d56fd87b7"
+      ],
+      "bounds": [
+        [
+          5,
+          2,
+          121,
+          30
+        ],
+        [
+          25,
+          0,
+          102,
+          29
+        ],
+        [
+          25,
+          0,
+          102,
+          29
+        ]
+      ],
+      "runtime_observations": [
+        {
+          "capture": "main_0",
+          "source": "0xc03af0",
+          "oam": [
+            26,
+            27
+          ],
+          "banks": [
+            6
+          ],
+          "nonblank_tiles": 38,
+          "matched_nonblank_tiles": 38,
+          "all_nonblank_tiles_resident_in_visible_objects": true
+        }
+      ]
+    },
+    {
+      "text": "작전룸",
+      "offset": "0xc18cb4",
+      "width": 80,
+      "changed_pixels": 130,
+      "compressed_bytes": [
+        660,
+        615,
+        607
+      ],
+      "original_capacity": 660,
+      "final_capacity": 660,
+      "final_offset": "0xc18cb4",
+      "index_counts_after": {
+        "0": 1154,
+        "1": 17,
+        "2": 27,
+        "3": 18,
+        "4": 10,
+        "5": 28,
+        "6": 28,
+        "7": 3,
+        "8": 43,
+        "9": 117,
+        "10": 468,
+        "12": 85,
+        "14": 562
+      },
+      "layer_sha256": [
+        "33dea6beff3f027dabe709d6a3d25a6ba21eb91b0eda260ad9ee7f6b447d651c",
+        "241600e6d0495318a67e01be5873fcd9e0106fa1854f18bbea605af68d866e7c",
+        "0ad9202d24291669182a9004c91a3ce268fb9e3951a94de6689813ed3152f162"
+      ],
+      "bounds": [
+        [
+          2,
+          1,
+          62,
+          31
+        ],
+        [
+          4,
+          0,
+          61,
+          31
+        ],
+        [
+          4,
+          0,
+          61,
+          31
+        ]
+      ],
+      "runtime_observations": []
+    }
+  ],
+  "changed_containers": 2,
+  "palette_capture_sha256": "bb7ba6e21980f34d12077f92d57ebb014b91841abecbf9d689469c68450d0d9c",
+  "outside_declared_sprite_writes": 0,
+  "runtime_capture_count": 2,
+  "runtime_observed_containers": 1,
+  "runtime_unobserved_containers": [
+    "0xc18cb4"
+  ],
+  "active_relocations": [],
+  "menu_font_sha256": "88ea5f1d54b29c49d36d8465b09181a1bdd8983877c4d781f0cd025b739cd5be",
+  "room_font_sha256": "7deb7d6a71b3230a8a505d2cfaa484baacb953c79ca5b28dcc78db8077774c0d",
+  "sheets": [
+    "sprites_01.png",
+    "palette_variants_01.png",
+    "ingame_01.png"
+  ]
+}

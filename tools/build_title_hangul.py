@@ -102,6 +102,7 @@ FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
 MENU_FONT_PATH = Path.home() / "Library/Fonts/NotoSansKR-Black.otf"
+ROOM_FONT_PATH = Path.home() / "Library/Fonts/NotoSansKR-Bold.otf"
 SMALL_BDF_FONT_PATH = Path("reference/fonts/Galmuri7.bdf")
 
 # Runtime OAM layout captured on the title screen. Lower OAM index draws above
@@ -1163,8 +1164,8 @@ def draw_part1_clean_menu_label(
     h = text_box[3] - text_box[1]
     x = (box[0] + box[2] - w) // 2 - text_box[0]
     y = (box[1] + box[3] - h) // 2 - text_box[1] - 1
-    inner = text_mask_layer(layer.size, text, font, (x, y), 1)
-    body = text_mask_layer(layer.size, text, font, (x, y), 0)
+    inner = part1_menu_text_mask(layer.size, text, font, (x, y), 1)
+    body = part1_menu_text_mask(layer.size, text, font, (x, y), 0)
     body_box = draw.textbbox((x, y), text, font=font, stroke_width=0)
     gradient_start = body_box[3] - 7
     colors = [10 if y < gradient_start else min(7, y - gradient_start + 1)
@@ -1216,6 +1217,20 @@ def text_mask_layer(
     mask = Image.new("L", size, 0)
     md = ImageDraw.Draw(mask)
     md.text(xy, text, font=font, fill=255, stroke_width=stroke, stroke_fill=255)
+    return mask
+
+
+def part1_menu_text_mask(size, text, font, xy, stroke):
+    """Open the room glyph counters without moving the preceding label."""
+    if text != '작전룸':
+        return text_mask_layer(size, text, font, xy, stroke)
+    room_font = ImageFont.truetype(str(ROOM_FONT_PATH), font.size)
+    if font.getlength('룸') != room_font.getlength('룸'):
+        raise ValueError('room glyph hint must preserve the original advance')
+    mask = text_mask_layer(size, '작전', font, xy, stroke)
+    draw = ImageDraw.Draw(mask)
+    draw.text((xy[0] + font.getlength('작전'), xy[1]), '룸', font=room_font,
+              fill=255, stroke_width=stroke, stroke_fill=255)
     return mask
 
 
@@ -1411,10 +1426,11 @@ def draw_part1_option_logo_text_supersampled(
     hi_x = ((box[0] + box[2]) * scale - hi_w) // 2 - hi_text_box[0]
     hi_y = ((box[1] + box[3]) * scale - hi_h) // 2 - hi_text_box[1] - scale
 
+    # Black shadow/outer masks retain the layout bbox; only inner/body are composited.
     shadow = text_mask_layer(hi_size, text, hi_font, (hi_x + 2 * scale, hi_y + 2 * scale), hi_stroke)
     outer = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), hi_stroke)
-    inner = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), max(1, hi_stroke - scale))
-    body = text_mask_layer(hi_size, text, hi_font, (hi_x, hi_y), 0)
+    inner = part1_menu_text_mask(hi_size, text, hi_font, (hi_x, hi_y), max(1, hi_stroke - scale))
+    body = part1_menu_text_mask(hi_size, text, hi_font, (hi_x, hi_y), 0)
     masks = retarget_part1_option_masks((shadow, outer, inner, body), box, target_min_w, scale)
     shadow, outer, inner, body = (mask.resize(layer.size, Image.Resampling.LANCZOS) for mask in masks)
     paste_part1_option_masks(layer, inner, body)

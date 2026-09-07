@@ -76,6 +76,9 @@ def main():
     parser.add_argument('--after', type=Path, required=True)
     parser.add_argument('--captures', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--offset', type=lambda value: int(value, 0), action='append',
+                        help='Limit comparison and allowed ROM writes to these source offsets')
+    parser.add_argument('--state', action='append', help='Show only these captured states')
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     paths = [ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba', args.before, args.after]
@@ -98,6 +101,12 @@ def main():
                 rom, (directory / f'{name}.oam').read_bytes(),
                 (directory / f'{name}.obj').read_bytes(),
                 int.from_bytes((directory / f'{name}.dispcnt').read_bytes(), 'little'))
+    if args.state:
+        for manifest in manifests:
+            available = {state['name'] for state in manifest['states']}
+            if not set(args.state) <= available:
+                raise ValueError('requested capture state is missing')
+            manifest['states'] = [state for state in manifest['states'] if state['name'] in args.state]
 
     palettes = (captures[0] / 'main_0.pal').read_bytes()
     labels = [
@@ -109,6 +118,10 @@ def main():
     specs = [(text, off, 128) for _, off, text, _ in th.PART1_MODE_OPTION_BLOCKS]
     specs += [(text, off, 80) for text, off in labels]
     specs += [(text, off, 80) for _, off, text, _ in th.PART1_SUBMENU_LOGO_BLOCKS]
+    if args.offset:
+        if not set(args.offset) <= {off for _, off, _ in specs}:
+            raise ValueError('requested sprite offset is unknown')
+        specs = [spec for spec in specs if spec[1] in args.offset]
     report, asset_rows, variant_rows, allowed = [], [], [], []
     for text, offset, width in specs:
         decoded = [decode(rom, offset, width) for rom in roms]
@@ -180,6 +193,7 @@ def main():
               'active_relocations': [hex(off) for off in RELOCATIONS
                                      if resolve_sprite_offset(roms[2], off) != off],
               'menu_font_sha256': hashlib.sha256(th.MENU_FONT_PATH.read_bytes()).hexdigest(),
+              'room_font_sha256': hashlib.sha256(th.ROOM_FONT_PATH.read_bytes()).hexdigest(),
               'sheets': sheets}
     (args.out / 'report.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
     markup = '<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width">'

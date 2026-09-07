@@ -14,6 +14,9 @@ RE 사실=`docs/research.md`. 막힘/완료 시 codex+agy 엄격 리뷰(`temp/re
 > 비교 기준/근거: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`.
 
 ## A. 실화면 잔존 결함 0 (최우선 — codex+agy가 보는 화면). **codex·agy 공통: 아직 실잔존(미닫힘)**
+- [x] **2026-09-07 룸 재지적 후속 수정**: 큰 옵션/작은 제목에서 룸만 동일 계열 Bold로 변경,
+  ㄹ/ㅁ 내부 간격 확보. 작전/색상/위치/OPERATION 불변. 2개 슬롯 외 ROM 차이 0.
+  비교 `docs/screenshots/room_readability_2026-09-07/index.html`, 검증 `docs/reports/ROOM_READABILITY_2026-09-07.md`.
 - [x] **2026-09-07 후속 피드백: 1편 메뉴 33개 원본 그림자/영어/획 재작업**:
   큰 메뉴는 흰 테두리가 어두운 윤곽과 우하단 그림자를 함께 감싸도록 수정.
   작은 제목은 흰 상단 본체→1..7 하단 그라데이션, 14 윤곽, 9 그림자로 분리하고 영어 줄 복원.
