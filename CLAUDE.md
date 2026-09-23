@@ -8,12 +8,14 @@
 
 ---
 
-## 현재 상태 (2026-05-27)
+## 단계별 기록 (2026-05-27 기준·후속 추가 포함)
+
+> 최신 진행·미해결 오류는 `todo.md`를 따른다. 아래의 완료 표시는 개별 기능의 구현·검증 기록이며, 두 편 엔딩 도달·전 장면 검수·배포 승인을 뜻하지 않는다.
 
 | 항목 | 상태 |
 |------|------|
 | 텍스트 번역 | ✅ 사실상 완료 — `data/translation_for_import.csv`에 한글 18,262행. QA(lint) error 0. 용어 5종 통일. |
-| 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 풀게임 경로 입증. |
+| 대화 렌더 메커니즘 | ✅ **완전 RE + 인게임 PoC 3건 검증**(FONT_BASE 주입 / 멀티음절 / **예약코드→테이블→한글**). 해당 대화 출력 경로 입증. |
 | 한글 폰트 풀빌드 | ✅ **완료** — `tools/build_korean_full.py`(base=**원본 ROM**, 기본값 `P.ROM`; `output/v56_polished.gba`는 부재/구버전이라 `--base`로만 지정) → `output/game_wars_korean_full.gba`. 음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩. **2026-06-16: 폰트 1030→2350자(KS X 1001 완성형) additive 확장** (`data/syllable_to_code_2350.json`/`kor_glyphs_2350.bin`/`syllable_to_glyph_2350.json`, `tools/build_korean2350.py`). 기존 byte-identical 호환. |
 | 한글화 도구체인 (2026-06-16, muramasa-kor 참조) | ✅ **통일사전** `data/proper_nouns.json`(`tools/export/apply_proper_nouns_dict.py`, 카테고리형 정본 — 구 generic `export/apply_proper_nouns.py`는 deprecated→`proper_nouns_inconsistencies.json`). **대사맵** `data/dialogue_map.json`(`tools/build_dialogue_map.py`). **대사 편집기** `tools/dialogue_editor/server.py`(:8780, JA→KO+사전 CRUD+사전검사). **스프라이트 픽셀에디터** `tools/sprite_editor/server.py`(:8781, 4bpp 인덱스+팔레트 페인트). **스프라이트 인덱스** `tools/export_sprites.py`→`data/sprites_index.json`. ✅ PRAM 팔레트 캡처 완료(2026-06-28, 대표 title/select/menu + 전투/CO/유닛 current-state route, `data/sprite_palettes.json` 176 unique/BG92/OBJ84 + route/state/raw dump SHA). ⚠ 잔여: 실화면 시각회귀 QA, LZ77 ROM 역기록, 미번역 1097종 triage. |
 | 1편 이름 그리드 | ✅ **완료** — 좌 A-Z / 중 a-z(빈칸 없음, 대문자와 매칭) / 우 0-9(기호행 제거). 선택·미리보기 정상. 실배치 ROM 0x08DF8C38 계열 패치. |
@@ -41,6 +43,18 @@
 
 ## 번역 작업 방식
 
+### 토큰·컴퓨터 자원 절약 원칙 (2026-09-23 사용자 지시)
+
+- **검증된 구조를 먼저 재사용한다.** 폰트 코드→글리프, 제어문자, 포인터, 압축·팔레트·스프라이트 배치와 소비 렌더러를 기존 코드·RE 기록에서 확인한다. 새 사실은 근거 ROM SHA/주소/재현 명령과 함께 기록하며, 이미 확정한 구조를 매번 AI로 재분석하지 않는다.
+- **반복 작업은 로컬 도구로 처리한다.** 글리프 생성·굵기/자간/AA 비교, 인코딩·문자 누락·행폭·슬롯·제어 바이트 검사, 추출/재삽입, 빌드, 입력 재생, 해시·화면 차이 수집을 결정적인 스크립트로 수행한다. 기존 도구를 먼저 찾고 확장하며, AI는 새로운 원인 분석·번역 의미·시각 판단에 집중한다.
+- **표시 경로별 제약을 구분한다.** 1·2편 대화/메뉴/시스템 문구의 슬롯 크기, 줄·페이지 폭, 확장·재배치 가능 여부를 각각 확인한다. 다른 렌더러의 규칙을 복사하거나 폭에 맞추려고 의미를 삭제하지 않는다. 인코딩/배치 실패는 빌드 오류로 남긴다.
+- **번역 데이터와 도구를 분리한다.** 원문·주소·제어 토큰을 보존한 CSV/JSON/TSV를 기존 빌드로 반영한다. 저비용 번역 모델은 명시적으로 선택된 경우 초안에 활용하되, 모델 변경·번역 API 호출을 자동 추가하지 않는다. 기존 번역 및 B팀 보호 범위를 유지한다. 자동 검사는 의미·말투 검수와 실화면 확인을 대체하지 않는다.
+- **필요한 문맥과 결과만 읽는다.** `rg`로 주소/함수/실패 항목을 찾은 뒤 해당 범위만 읽는다. 큰 로그·ROM 덤프·전체 번역표를 대화에 반복 출력하지 않는다. 상세 증거는 파일에 남기고 변경점·실패 요약·재현 명령을 공유한다. 동일 입력/도구/ROM SHA의 검증 결과는 재사용하되 변경된 소비 경로의 검증은 다시 수행한다.
+- **저부하 병렬 실행을 기본으로 한다.** 파일 소유권을 나눠 충돌을 피한다. 전체 ROM 빌드와 대량 재생/영상 변환은 한 번에 하나씩, 정상 플레이 하네스는 편당 하나·최대 둘로 제한한다. 별도 진단 하네스가 필요하면 해당 플레이를 멈춘 상태에서 짧게 실행한다. 무거운 작업은 가능하면 `nice -n 15`로 실행하고 메모리·CPU·디스크 여유를 확인한다. 입력 없는 에뮬레이터는 정지시키고 무한 폴링/동일 리뷰 재호출을 피한다.
+- **절약과 완료 판정을 분리한다.** 정상 입력 플레이·전 프레임 증거·ROM 식별·회귀 검사·필수 적대 리뷰를 생략하지 않는다. 캡처/정적 QA 통과를 전 장면 육안 검수나 엔딩 도달로 집계하지 않는다. 사용자 개입 없이 계속하라는 현재 요청에 따라 이미 승인된 수정·검증은 자율 진행한다.
+
+참고: 사용자가 제공한 시놀부의 「AI를 활용한 한글화 작업을 할 때 토큰을 절약하는 방법입니다」(2026-09-22). 특정 플랫폼의 구조는 그대로 적용하지 않고 이 프로젝트의 GBA 검증 사실을 따른다.
+
 - **원칙(문서화된 방법)**: `python tools/phase4_codex_translate.py` (Codex CLI 배치 번역).
 - **현실/대체**: codex가 rate-limit이거나 macOS에서 codex 경로가 안 맞을 때는 **Claude가 직접 3개 에이전트 병렬로 번역**한다. 파이프라인:
   ```bash
@@ -56,7 +70,8 @@
 python3 tools/build_korean_full.py   # ★현재 메인 빌드: base=원본 ROM(기본) → output/game_wars_korean_full.gba  (v56_polished는 부재/구버전, --base로만 사용)
                                      #   (음절 글리프 주입 + 한자테이블 확장 + 예약코드 인코딩 + 1편 그리드 + 2편 hook + 체크섬)
 # (구식: execute_phase5_4/5.py — 이제 build_korean_full.py로 통합)
-# 헤드리스 검증: /tmp/mgbah (tools/mgba_harness.c, loadstate 지원). 네비 스크립트는 temp/nav_*.py.
+# 헤드리스 검증: tools/mgba_harness.c를 temp/ 아래에 빌드한다. 네비 스크립트도 temp/에 둔다.
+# ROM 교체 시에는 정상 게임 저장을 cold boot로 읽고 save SHA를 검증한다. 다른 ROM의 savestate를 재사용하지 않는다.
 # 에뮬레이터 실행(검증):
 DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/mgba -3 output/game_wars_korean_final.gba
 ```
@@ -227,6 +242,6 @@ aw-kor/
 ---
 
 ## 환경 메모
-- 에뮬레이터: `mgba 0.10.5` (brew, `/opt/homebrew/bin/mgba`, `libmgba.dylib`, 헤더 `/opt/homebrew/include/mgba`). 합성 키 입력은 게임에 전달 안 되므로 자동 진행은 **mGBA Lua 스크립팅** 사용.
+- 에뮬레이터: `mgba 0.10.5` (brew, `/opt/homebrew/bin/mgba`, `libmgba.dylib`, 헤더 `/opt/homebrew/include/mgba`). 자동 진행은 `tools/mgba_harness.c`의 정상 키 입력 경로를 사용하고 입력·프레임·ROM SHA를 기록한다.
 - 이미지/글리프: `PIL`. 시스템 한글 폰트: `/Library/Fonts/NanumGothic.ttf` 등.
 - 글리프→GBA 타일 변환 후보: Optiroc **SuperFamiconv**.
