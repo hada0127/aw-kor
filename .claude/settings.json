@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"[codex+agy 리뷰 규칙] 작업/RE 완료 또는 막힘 시, commit 전에 codex와 agy(Antigravity, 구 gemini 중단) 엄격 리뷰 필수. 실행: codex --dangerously-bypass-approvals-and-sandbox exec \\\"PROMPT\\\" < /dev/null  |  agy --dangerously-skip-permissions -p \\\"PROMPT\\\"\"}'"
+            "command": "echo '{\"systemMessage\":\"[Codex+Claude 리뷰 규칙] 작업/RE 완료 또는 막힘 시 commit 전에 상대 CLI로 엄격한 읽기 전용 리뷰를 수행하고 타당한 지적을 수정한다. 사용자 지시로 agy 사용 의무는 폐기됐다.\"}'"
           }
         ]
       }

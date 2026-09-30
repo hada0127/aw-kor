@@ -198,21 +198,15 @@ aw-kor/
 
 > **하나의 의미 있는 작업(검증된 ROM 빌드, 새 hook 작동, 영문 변환 완료, RE 발견 등)이 완료되면 다음을 항상 수행한다.**
 
-### 0. codex + agy 엄격 리뷰 (필수 — 작업 완료 또는 막힘 시 항상)
-> 사용자 지시(2026-05-25): **작업 도중 막히거나 작업을 마칠 때는 항상 codex와 agy에게 엄격한
-> 리뷰를 받는다.** commit 전에 수행. `.claude/settings.json`의 Stop 훅이 매 턴 리마인드한다.
-> ⚠ **gemini CLI는 2026-06-16 서비스 중단 → Antigravity CLI(`agy`)로 대체** (사용자 지시). "agy"=Antigravity.
+### 0. Codex + Claude 엄격 리뷰 (필수 — 작업 완료 또는 막힘 시 항상)
+> 2026-09-30 사용자 갱신: agy는 사용하지 않는다. 기존 agy 리뷰 의무는 폐기하고 Codex + Claude 리뷰를 사용한다.
 
-- **언제**: ① 의미 있는 작업 완료 직전(commit 전), ② 진행 중 막혔을 때(접근법 검증), ③ 중요한 RE 결론·설계 결정 직후.
-- **어떻게** (둘 다, 가능한 한 엄격하게 — "비판적으로 검토하고 결함·누락·대안을 지적하라"는 톤):
-  ```bash
-  # 프롬프트를 파일로 작성 후 (temp/review_prompt.md 등)
-  /opt/homebrew/bin/codex --dangerously-bypass-approvals-and-sandbox exec "$(cat temp/review_prompt.md)" < /dev/null > temp/codex_review.md 2>/dev/null
-  # agy(Antigravity): 프롬프트는 -p, 도구 자동승인 --dangerously-skip-permissions
-  agy --dangerously-skip-permissions -p "$(cat temp/review_prompt.md)" > temp/agy_review.md 2>/dev/null
-  ```
-  - 둘 다 느릴 수 있으니 `run_in_background`로 병렬 실행 후 결과 종합.
-  - 두 의견의 **수렴/상충**을 정리하고, 타당한 지적은 반영, 반영 안 한 건 사유 명시.
+- 의미 있는 작업 완료 직전, 막힘, 중요한 RE 결론 직후에 엄격히 검토한다.
+- Codex 작업은 로그인된 Claude CLI에 읽기 전용 적대 검토를 요청한다. Claude 작업은 Codex에 요청한다.
+- 리뷰는 버그·회귀·UX·보안·테스트 누락·배포 위험·경계 조건을 다룬다. 타당한 지적을 수정하고 필요한 검증 및 후속 리뷰를 수행한다.
+- Claude는 일반 로그인 설정을 사용한다. `--bare`는 OAuth 로그인을 사용하지 않으므로 로그인 확인이나 리뷰에 쓰지 않는다.
+- 리뷰 CLI가 실제로 사용 불가능하면 오류 증거를 기록하고 같은 항목을 자체 검토하며 외부 리뷰 통과로 집계하지 않는다.
+- 프롬프트와 리뷰 결과는 `temp/`에 보존한다. 과거 리뷰 기록은 당시 이력으로 유지한다.
 
 ### 1. 문서 업데이트 (4개 핵심 문서)
 | 문서 | 언제 업데이트 | 무엇을 추가 |
