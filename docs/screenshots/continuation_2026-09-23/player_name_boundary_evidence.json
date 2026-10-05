@@ -1,0 +1,16 @@
+{
+  "frame": 30619,
+  "old": "output/qa/part1_2026-09-23/day7_candidate_cold_live/0162_A_0030619.png",
+  "new": "output/qa/part1_2026-09-23/round2_name_boundary_replay/0162_A_0030619.png",
+  "diff_bbox": [
+    129,
+    123,
+    187,
+    134
+  ],
+  "same_normal_save": "temp/part1_2026-09-23/day7_save/game_save.json",
+  "input_prefix": 162,
+  "candidate_sha256": "5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5",
+  "emulator_exit_code": 0,
+  "scope": "Observed name boundary after loss/retry intro, not campaign completion"
+}

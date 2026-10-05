@@ -1,3 +1,5 @@
+/* View switching must override explicit flex/table display rules. */
+[hidden] { display: none !important; }
 * { box-sizing: border-box; }
 body { margin: 0; font: 13px/1.5 -apple-system, "Apple SD Gothic Neo", sans-serif; color: #222; }
 header { position: sticky; top: 0; z-index: 5; display: flex; gap: 8px; align-items: center;

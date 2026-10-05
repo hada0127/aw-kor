@@ -466,7 +466,8 @@ def main() -> int:
     if not args.no_actual_sample:
         normal, bteam, script = choose_actual_samples(records)
         (ROOT / "temp").mkdir(parents=True, exist_ok=True)
-        backup_targets = [OVERRIDES, DIALOGUE_MAP]
+        backup_targets = [OVERRIDES, DIALOGUE_MAP, ROOT / "data/dialogue_groups.json",
+                          ROOT / "data/address_text_overrides.tsv", ROOT / "data/editor_override_intents.json"]
         for optional in [SPRITE_BUILD_LAYOUTS, OBJLABEL_SPRITES]:
             if optional.exists():
                 backup_targets.append(optional)

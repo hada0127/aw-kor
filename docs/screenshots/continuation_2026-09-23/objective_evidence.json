@@ -1,0 +1,49 @@
+{
+  "normal_cartridge_cold_boot": true,
+  "rom_sha256": "5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5",
+  "seed_sha256": "2f13157d40bdb3c381a941e13a8d72cf959e095be9f226ab540858d04c740529",
+  "boot_actions": [
+    [
+      "NONE",
+      1380
+    ],
+    [
+      "START",
+      180
+    ],
+    [
+      "DOWN",
+      120
+    ],
+    [
+      "A",
+      1260
+    ],
+    [
+      "START",
+      360
+    ],
+    [
+      "START",
+      180
+    ],
+    [
+      "A",
+      1200
+    ],
+    [
+      "A",
+      1200
+    ]
+  ],
+  "menu_actions": [
+    "A",
+    "DOWN",
+    "A",
+    "DOWN",
+    "A",
+    "NONE480",
+    "A600"
+  ],
+  "scope": "M5 objective text cold validation"
+}

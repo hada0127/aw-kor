@@ -132,6 +132,11 @@ def load_effective_protected_texts(raw: dict[int, str]) -> tuple[dict[int, str],
     import build_korean_full as B  # noqa: WPS433
     import qa_text_fit  # noqa: WPS433
 
+    # build_report passes a snapshot of the active builder dictionary. The
+    # resolver below reads that dictionary too: reject stale/foreign snapshots.
+    if any(addr not in B.ADDRESS_TEXT_OVERRIDES or text != str(B.ADDRESS_TEXT_OVERRIDES[addr] or '')
+           for addr, text in raw.items()):
+        raise ValueError('protected text snapshot differs from active builder authority')
     effective = dict(raw)
     display_overrides = B.load_display_overrides()
     display_override_count = 0
@@ -150,9 +155,18 @@ def load_effective_protected_texts(raw: dict[int, str]) -> tuple[dict[int, str],
             effective[addr] = normalized
     direct_collisions = 0
     direct_divergent = 0
-    for addr, (_end, text) in qa_text_fit.load_direct_patch_texts().items():
+    _, script_members = B.load_direct_script_metadata()
+    dialogue_overrides = B.load_dialogue_overrides(DIALOGUE_OVERRIDES)
+    # Actual call provenance, not declaration membership, selects the policy.
+    # Fixed labels and the independent prologue writer retain their own path.
+    for addr, (end, text, writer) in qa_text_fit.load_direct_patch_texts(include_writer=True).items():
         if addr not in effective:
             continue
+        if writer == 'patch_script_row':
+            selected = B.direct_script_override_text(addr, end, script_members,
+                                                     dialogue_overrides)
+            if selected is not None:  # An explicit empty string is a clear.
+                text = selected
         direct_collisions += 1
         if effective[addr] != str(text or ""):
             direct_divergent += 1

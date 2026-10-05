@@ -1,0 +1,49 @@
+# 후속 적대 리뷰: 새 근거 기준
+
+새로 제출된 두 JSON만 봤고 아무것도 실행하지 않았습니다. 0824 endpoint RGB, framecounter 160255, 원래 mGBA SHA는 JSON이 아니라 사용자께서 전달한 설명입니다. 저는 그 값을 직접 대조하지 못했습니다.
+
+## 결론
+**이번 범위(native frame capture / SRAM export 재개)에는 blocker가 없습니다.** 재개를 허용해도 됩니다. 녹화/GIF, 링크 덮어쓰기 방지, 재현성 문제는 blocker가 아니라 범위 밖 제약으로 분리해서 명시하면 됩니다.
+
+## 이전 조건부 항목별 해소 여부
+| 이전 지적 | 새 근거 | 판정 |
+|---|---|---|
+| 3번: otool 의존 그래프 | 7개 링크 각각의 `dependency_graph`와 libmgba 그래프가 있습니다. 링크된 8.1.1 dylib들은 서로를 8.1.1 Cellar 또는 `/opt/homebrew/opt/ffmpeg/lib` 경로로 참조합니다. | 해소 |
+| 2번: 실제 로드 이미지 | `loaded_codec_images` 7개가 모두 8.1.1과 x265 4.2 Cellar 경로이고, `no_ffmpeg9_codec_images: true`입니다. | 해소 |
+| 5번: ROM 프레임 해시 | 같은 ROM과 0823 상태에서 A hold 6프레임 후 release 300프레임(306프레임)을 3회 재생했습니다. 3회 모두 `exit_code 0`, `match true`, `framecounter_match true`이고 RGB sha가 동일합니다. | 해소 |
+| 링크 readlink | 7개 모두 `actual_readlink`가 `target`과 일치합니다. | 해소 |
+| mGBA 변경 전 SHA | 캡처 체크포인트에 기록된 값을 인용했다는 설명입니다. 이 JSON에는 없습니다. | 아래 주의 참고 |
+| 덮어쓰기 방지 | 작업 스크립트의 사전 `exists`/`is_symlink` 검사라는 설명뿐이고, 증거 파일은 없습니다. | 미해소, blocker 아님 |
+| 녹화/GIF, brew cleanup | `scope` 필드에 그대로 명시돼 있습니다. | 미해소, 명시 유지가 맞음 |
+
+## 새 근거의 약점
+이 항목들은 모두 blocker가 아니라 정확한 서술을 위한 것입니다.
+
+1. **"FFmpeg 9 없음"은 로드된 코덱 이미지 7개에 한정된 주장입니다.**
+   - `loaded_codec_images`에는 프로세스 PID(50412) 한 개만 있습니다. 재생 3회를 포함한 전체 실행에서 로드 이미지를 수집했다는 근거는 없습니다.
+   - `no_ffmpeg9_codec_images`는 불리언 결론값입니다. 목록에서 FFmpeg 9가 없다는 것은 읽을 수 있지만, 이 필드만으로 전 실행을 보증하지는 않습니다.
+   - 이번 범위가 native framebuffer라는 점을 고려하면 충분합니다.
+
+2. **libmgba가 링크하는 FFmpeg 버전과 실제 로드된 버전이 다릅니다.**
+   - libmgba는 avcodec 62.11.100, avutil 60.8.100 기준으로 빌드됐습니다.
+   - 로드된 것은 62.28.101, 60.26.101입니다. 같은 soname 안에서 더 새로운 minor 버전입니다.
+   - 같은 soname에서 버전이 올라간 것이라 ABI 호환 범위로 볼 수 있습니다. 다만 "동일 빌드"가 아니라 "호환 minor 업그레이드로 동작"이라고 써야 합니다.
+
+3. **재현성 증거의 강도는 "같은 환경에서 3회 동일"입니다.**
+   - 세 행의 `command`는 출력 파일명(`compat_replay_N.raw`)만 다릅니다. 결정론적 에뮬레이터라면 3회 동일은 기대되는 결과입니다.
+   - 기대 해시는 0824 원래 환경의 endpoint RGB입니다. 원래 환경(다른 링크 구성)과 호환 링크 환경의 출력이 같다는 것이 핵심 근거이고, 이 교차 비교는 타당합니다.
+   - `rgb_sha256`은 JSON에 있고, 설명에 따르면 원래 환경과 일치합니다. 단일 endpoint 프레임 해시 하나만 비교했으므로, 306프레임 전체가 동일하다는 주장은 못 합니다.
+   - 위 이유로 "endpoint 프레임과 framecounter가 일치한다"까지만 주장해야 합니다.
+
+4. **mGBA SHA가 같은 JSON 안에 없습니다.** 체크포인트 파일의 기록값(`c5a8a94f…b4ad`)을 인용한 것이라, 현재 바이너리의 해시를 이번 세션에서 다시 계산한 증거가 첨부돼 있지 않습니다. native capture 범위에서는 경미합니다. 다만 "바이너리 불변"이라고 쓰려면 현재 해시를 같은 JSON에 넣어 대조하는 것이 깔끔합니다.
+
+5. **SRAM export는 이번 replay로 직접 검증되지 않았습니다.** 재생은 `shot`과 `framecounter`만 사용했고 SRAM 덤프 명령은 없습니다. SRAM export 경로를 재개 범위에 넣는다면 첫 실행에서 덤프 결과를 기존 값과 대조하는 절차를 넣으세요. 이것도 blocker는 아닙니다. SRAM은 링크된 FFmpeg 경로와 무관한 코어 기능이기 때문입니다.
+
+## blocker / 비blocker 구분
+- **blocker 없음:** frame capture(native framebuffer)와 SRAM export 재개.
+- **재개 시 유지할 문구:**
+  - 녹화/GIF 경로는 미검증입니다.
+  - 링크 덮어쓰기 방지는 스크립트 검사 설명에만 근거하며 첨부 증거가 없습니다.
+  - `brew cleanup`/`upgrade`로 8.1.1/x265 4.2 keg가 제거되면 같은 로드 실패가 재발할 수 있습니다.
+  - endpoint 프레임 하나와 framecounter로 검증했습니다.
+- **녹화/GIF 사용 전 필수 조건(이번 범위 밖):** 해당 경로 스모크 테스트, 링크 제거 및 복구 절차 문서화, `brew cleanup` 전 keg 보존 조치.

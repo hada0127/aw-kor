@@ -73,7 +73,7 @@
      ]
     },
     {
-     "text": "해",
+     "text": "호수",
      "offset": "0xB93FD0",
      "offset_int": 12140496,
      "tw": 3,
@@ -208,7 +208,7 @@
      ]
     },
     {
-     "text": "호수",
+     "text": "해",
      "offset": "0xB94690",
      "offset_int": 12142224,
      "tw": 3,
@@ -402,7 +402,7 @@
      ]
     },
     {
-     "text": "항구",
+     "text": "호수",
      "offset": "0x465568",
      "offset_int": 4609384,
      "tw": 4,
@@ -436,7 +436,7 @@
      ]
     },
     {
-     "text": "여울",
+     "text": "항구",
      "offset": "0x465768",
      "offset_int": 4609896,
      "tw": 4,
@@ -470,7 +470,7 @@
      ]
     },
     {
-     "text": "암초",
+     "text": "여울",
      "offset": "0x465968",
      "offset_int": 4610408,
      "tw": 4,
@@ -538,7 +538,7 @@
      ]
     },
     {
-     "text": "연구소",
+     "text": "암초",
      "offset": "0x465D68",
      "offset_int": 4611432,
      "tw": 4,
@@ -555,7 +555,7 @@
      ]
     },
     {
-     "text": "캐논",
+     "text": "연구소",
      "offset": "0x465E68",
      "offset_int": 4611688,
      "tw": 4,
@@ -572,7 +572,7 @@
      ]
     },
     {
-     "text": "화산",
+     "text": "캐논",
      "offset": "0x465F68",
      "offset_int": 4611944,
      "tw": 4,
@@ -589,7 +589,7 @@
      ]
     },
     {
-     "text": "레이저",
+     "text": "화산",
      "offset": "0x466068",
      "offset_int": 4612200,
      "tw": 4,
@@ -623,7 +623,7 @@
      ]
     },
     {
-     "text": "마그마",
+     "text": "팩토리",
      "offset": "0x466268",
      "offset_int": 4612712,
      "tw": 4,
@@ -640,7 +640,7 @@
      ]
     },
     {
-     "text": "레이저",
+     "text": "A레이저",
      "offset": "0x466368",
      "offset_int": 4612968,
      "tw": 4,
@@ -1061,7 +1061,7 @@
      ]
     },
     {
-     "text": "대공전차",
+     "text": "신형전차",
      "offset": "0x466868",
      "offset_int": 4614248,
      "tw": 4,
@@ -1163,7 +1163,7 @@
      ]
     },
     {
-     "text": "신형전차",
+     "text": "대공전차",
      "offset": "0x466E68",
      "offset_int": 4615784,
      "tw": 4,
@@ -1231,7 +1231,7 @@
      ]
     },
     {
-     "text": "수송헬기",
+     "text": "전투헬기",
      "offset": "0x467268",
      "offset_int": 4616808,
      "tw": 4,
@@ -1248,7 +1248,7 @@
      ]
     },
     {
-     "text": "전투헬기",
+     "text": "수송헬기",
      "offset": "0x467368",
      "offset_int": 4617064,
      "tw": 4,
@@ -1484,6 +1484,1124 @@
       1,
       2,
       3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_purchase_captions",
+   "offset": "0x454B94",
+   "offset_int": 4541332,
+   "type": "synthetic",
+   "source": "part2_objlabel/purchase_captions",
+   "desc": "2편 구매 정보카드 이동·시야·유닛 분류",
+   "n_tiles": 168,
+   "size": 5376,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "시야",
+     "offset": "0x454B94",
+     "offset_int": 4541332,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x454C94",
+     "offset_int": 4541588,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x454D94",
+     "offset_int": 4541844,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x454E94",
+     "offset_int": 4542100,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x454F94",
+     "offset_int": 4542356,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x455094",
+     "offset_int": 4542612,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x455194",
+     "offset_int": 4542868,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x455294",
+     "offset_int": 4543124,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "이동",
+     "offset": "0x455394",
+     "offset_int": 4543380,
+     "tw": 4,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "text": "보병",
+     "offset": "0x45B134",
+     "offset_int": 4567348,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "text": "차량",
+     "offset": "0x45B334",
+     "offset_int": 4567860,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "text": "헬기",
+     "offset": "0x45B534",
+     "offset_int": 4568372,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "text": "비행기",
+     "offset": "0x45B734",
+     "offset_int": 4568884,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "text": "함선",
+     "offset": "0x45B934",
+     "offset_int": 4569396,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    },
+    {
+     "text": "잠수함",
+     "offset": "0x45BB34",
+     "offset_int": 4569908,
+     "tw": 4,
+     "th": 4,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_terrain_movement",
+   "offset": "0xFFC800",
+   "offset_int": 16762880,
+   "type": "synthetic",
+   "source": "part2_objlabel/terrain_movement",
+   "desc": "2편 지형 정보 이동 유형",
+   "n_tiles": 70,
+   "size": 2240,
+   "tile_cols": 5,
+   "labels": [
+    {
+     "text": "전차 / 타이어 / 보병 / 바주카 / 수송선 / 함선 / 비행",
+     "offset": "0xFFC800",
+     "offset_int": 16762880,
+     "tw": 5,
+     "th": 14,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      56,
+      4,
+      5,
+      6,
+      7,
+      57,
+      8,
+      9,
+      10,
+      11,
+      58,
+      12,
+      13,
+      14,
+      15,
+      59,
+      16,
+      17,
+      18,
+      19,
+      60,
+      20,
+      21,
+      22,
+      23,
+      61,
+      24,
+      25,
+      26,
+      27,
+      62,
+      28,
+      29,
+      30,
+      31,
+      63,
+      32,
+      33,
+      34,
+      35,
+      64,
+      36,
+      37,
+      38,
+      39,
+      65,
+      40,
+      41,
+      42,
+      43,
+      66,
+      44,
+      45,
+      46,
+      47,
+      67,
+      48,
+      49,
+      50,
+      51,
+      68,
+      52,
+      53,
+      54,
+      55,
+      69
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_result_scores",
+   "offset": "0xBEAF5C",
+   "offset_int": 12496732,
+   "type": "synthetic",
+   "source": "part1_objlabel/result_scores",
+   "desc": "1편 결과 점수 항목(속도/화력/기술)",
+   "n_tiles": 13,
+   "size": 416,
+   "tile_cols": 5,
+   "labels": [
+    {
+     "text": "속도",
+     "offset": "0xBEAF5C",
+     "offset_int": 12496732,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "화력",
+     "offset": "0xBEAFDC",
+     "offset_int": 12496860,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "기술",
+     "offset": "0xBEB05C",
+     "offset_int": 12496988,
+     "tw": 5,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3,
+      4
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_result_rank_word",
+   "offset": "0xBEB0FC",
+   "offset_int": 12497148,
+   "type": "synthetic",
+   "source": "part1_objlabel/result_rank_word",
+   "desc": "1편 결과 배지 랭크",
+   "n_tiles": 3,
+   "size": 96,
+   "tile_cols": 3,
+   "labels": [
+    {
+     "text": "랭크",
+     "offset": "0xBEB0FC",
+     "offset_int": 12497148,
+     "tw": 3,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_hoip",
+   "offset": "0xBF2D4C",
+   "offset_int": 12528972,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_hoip",
+   "desc": "1편 사령관 이름 호이프",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "호이프",
+     "offset": "0xBF2D4C",
+     "offset_int": 12528972,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_ryo",
+   "offset": "0xBF2C4C",
+   "offset_int": 12528716,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_ryo",
+   "desc": "1편 사령관 이름 료",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "료",
+     "offset": "0xBF2C4C",
+     "offset_int": 12528716,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_max",
+   "offset": "0xBF2CCC",
+   "offset_int": 12528844,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_max",
+   "desc": "1편 사령관 이름 맥스",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "맥스",
+     "offset": "0xBF2CCC",
+     "offset_int": 12528844,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_domino",
+   "offset": "0xBF2DCC",
+   "offset_int": 12529100,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_domino",
+   "desc": "1편 사령관 이름 도미노",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "도미노",
+     "offset": "0xBF2DCC",
+     "offset_int": 12529100,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_billy",
+   "offset": "0xBF2E4C",
+   "offset_int": 12529228,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_billy",
+   "desc": "1편 사령관 이름 빌리",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "빌리",
+     "offset": "0xBF2E4C",
+     "offset_int": 12529228,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_ryo",
+   "offset": "0xBD0130",
+   "offset_int": 12386608,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_ryo",
+   "desc": "1편 사령관 이름 료",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "료",
+     "offset": "0xBD0130",
+     "offset_int": 12386608,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_max",
+   "offset": "0xBD01B0",
+   "offset_int": 12386736,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_max",
+   "desc": "1편 사령관 이름 맥스",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "맥스",
+     "offset": "0xBD01B0",
+     "offset_int": 12386736,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_catherine",
+   "offset": "0xBF2BCC",
+   "offset_int": 12528588,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_catherine",
+   "desc": "1편 사령관 이름 캐서린",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "캐서린",
+     "offset": "0xBF2BCC",
+     "offset_int": 12528588,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_kikuchiyo",
+   "offset": "0xBF2ECC",
+   "offset_int": 12529356,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_kikuchiyo",
+   "desc": "1편 사령관 이름 키쿠치요",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "키쿠치요",
+     "offset": "0xBF2ECC",
+     "offset_int": 12529356,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_asuka",
+   "offset": "0xBF2F4C",
+   "offset_int": 12529484,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_asuka",
+   "desc": "1편 사령관 이름 아스카",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "아스카",
+     "offset": "0xBF2F4C",
+     "offset_int": 12529484,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_eagle",
+   "offset": "0xBF2FCC",
+   "offset_int": 12529612,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_eagle",
+   "desc": "1편 사령관 이름 이글",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "이글",
+     "offset": "0xBF2FCC",
+     "offset_int": 12529612,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_mop",
+   "offset": "0xBF304C",
+   "offset_int": 12529740,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_mop",
+   "desc": "1편 사령관 이름 모프",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "모프",
+     "offset": "0xBF304C",
+     "offset_int": 12529740,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_sturm",
+   "offset": "0xBF30CC",
+   "offset_int": 12529868,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_sturm",
+   "desc": "1편 사령관 이름 헬보우즈",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "헬보우즈",
+     "offset": "0xBF30CC",
+     "offset_int": 12529868,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_campaign_sturm_alt",
+   "offset": "0xBF314C",
+   "offset_int": 12529996,
+   "type": "synthetic",
+   "source": "part1_objlabel/campaign_sturm_alt",
+   "desc": "1편 사령관 이름 헬보우즈",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "헬보우즈",
+     "offset": "0xBF314C",
+     "offset_int": 12529996,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_domino",
+   "offset": "0xBD02B0",
+   "offset_int": 12386992,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_domino",
+   "desc": "1편 사령관 이름 도미노",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "도미노",
+     "offset": "0xBD02B0",
+     "offset_int": 12386992,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_billy",
+   "offset": "0xBD0330",
+   "offset_int": 12387120,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_billy",
+   "desc": "1편 사령관 이름 빌리",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "빌리",
+     "offset": "0xBD0330",
+     "offset_int": 12387120,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_kikuchiyo",
+   "offset": "0xBD03B0",
+   "offset_int": 12387248,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_kikuchiyo",
+   "desc": "1편 사령관 이름 키쿠치요",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "키쿠치요",
+     "offset": "0xBD03B0",
+     "offset_int": 12387248,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_asuka",
+   "offset": "0xBD0430",
+   "offset_int": 12387376,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_asuka",
+   "desc": "1편 사령관 이름 아스카",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "아스카",
+     "offset": "0xBD0430",
+     "offset_int": 12387376,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_eagle",
+   "offset": "0xBD04B0",
+   "offset_int": 12387504,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_eagle",
+   "desc": "1편 사령관 이름 이글",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "이글",
+     "offset": "0xBD04B0",
+     "offset_int": 12387504,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_mop",
+   "offset": "0xBD0530",
+   "offset_int": 12387632,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_mop",
+   "desc": "1편 사령관 이름 모프",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "모프",
+     "offset": "0xBD0530",
+     "offset_int": 12387632,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_battle_sturm",
+   "offset": "0xBD05B0",
+   "offset_int": 12387760,
+   "type": "synthetic",
+   "source": "part1_objlabel/battle_sturm",
+   "desc": "1편 사령관 이름 헬보우즈",
+   "n_tiles": 4,
+   "size": 128,
+   "tile_cols": 4,
+   "labels": [
+    {
+     "text": "헬보우즈",
+     "offset": "0xBD05B0",
+     "offset_int": 12387760,
+     "tw": 4,
+     "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p2_remaining_days",
+   "offset": "0x483D14",
+   "offset_int": 4734228,
+   "type": "synthetic",
+   "source": "part2_objlabel/remaining_days",
+   "desc": "2편 남은 날짜 표시",
+   "n_tiles": 3,
+   "size": 96,
+   "tile_cols": 2,
+   "labels": [
+    {
+     "text": "남은",
+     "offset": "0x483D14",
+     "offset_int": 4734228,
+     "tw": 2,
+     "th": 1,
+     "perm": [
+      0,
+      1
+     ]
+    },
+    {
+     "text": "일",
+     "offset": "0x483D54",
+     "offset_int": 4734292,
+     "tw": 1,
+     "th": 1,
+     "perm": [
+      0
      ]
     }
    ],

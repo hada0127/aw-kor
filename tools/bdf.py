@@ -2,19 +2,20 @@
 def load_bdf(path):
     glyphs={}; cur=None; bitmap=False; rows=[]
     fbb=None
-    for line in open(path,encoding='latin-1'):
-        p=line.split()
-        if not p: continue
-        if p[0]=='FONTBOUNDINGBOX': fbb=list(map(int,p[1:5]))
-        elif p[0]=='STARTCHAR': cur={'name':p[1]}
-        elif p[0]=='ENCODING' and cur is not None: cur['enc']=int(p[1])
-        elif p[0]=='BBX' and cur is not None: cur['bbx']=list(map(int,p[1:5]))
-        elif p[0]=='BITMAP': bitmap=True; rows=[]
-        elif p[0]=='ENDCHAR':
-            bitmap=False; cur['rows']=rows
-            if 'enc' in cur: glyphs[cur['enc']]=cur
-            cur=None
-        elif bitmap and cur is not None: rows.append(p[0])
+    with open(path, encoding='latin-1') as stream:
+        for line in stream:
+            p=line.split()
+            if not p: continue
+            if p[0]=='FONTBOUNDINGBOX': fbb=list(map(int,p[1:5]))
+            elif p[0]=='STARTCHAR': cur={'name':p[1]}
+            elif p[0]=='ENCODING' and cur is not None: cur['enc']=int(p[1])
+            elif p[0]=='BBX' and cur is not None: cur['bbx']=list(map(int,p[1:5]))
+            elif p[0]=='BITMAP': bitmap=True; rows=[]
+            elif p[0]=='ENDCHAR':
+                bitmap=False; cur['rows']=rows
+                if 'enc' in cur: glyphs[cur['enc']]=cur
+                cur=None
+            elif bitmap and cur is not None: rows.append(p[0])
     return glyphs,fbb
 def glyph_grid(g):
     w,h,xo,yo=g['bbx']

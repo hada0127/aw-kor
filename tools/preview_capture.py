@@ -3,7 +3,7 @@
 
 canvas-hijack 방식: 빠르게 도달 가능한 화면(canvas)의 텍스트 슬롯을 임의 문자열로 덮어쓴
 ROM 복사본을 만들고, mgbah 헤드리스로 그 화면까지 네비게이션해 실제 렌더 픽셀을 PNG로 캡처한다.
-풀 게임 진행 없이 임의 라인을 "실제 적용된 모습"으로 보여 준다(검증: 2026-06-16, research.md).
+대표 화면에서 글꼴을 확인하는 진단용 미리보기다. 원래 장면의 배치나 최종 빌드 인코딩을 보장하지 않는다.
 
 - 원본(ja): 원본 일본판 ROM 복사본의 canvas 슬롯에 JA(SJIS)를 써서 캡처(원본 폰트 글리프).
 - 적용(ko): 패치 ROM 복사본의 canvas 슬롯에 KO(예약코드)를 써서 캡처(주입된 galmuri 글리프).
@@ -16,10 +16,13 @@ CLI:
 """
 from __future__ import annotations
 import argparse
+import collections
+import struct
 import hashlib
 import json
 import shutil
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,9 +31,8 @@ sys.path.insert(0, str(ROOT / "tools"))
 ORIG_ROM = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
 PATCHED_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
-HARNESS = Path("/tmp/mgbah")
+HARNESS = ROOT / "temp" / "mgbah"
 CACHE = ROOT / "temp" / "preview_cache"
-REPOINT_MANIFEST = ROOT / "temp" / "repoint_manifest.json"
 
 # ── Canvas 레지스트리 ──────────────────────────────────────────────────────
 # 각 canvas: 빠르게 도달 가능한 화면 + 그 화면이 표시하는 텍스트 슬롯.
@@ -62,19 +64,16 @@ _REGISTRY = ROOT / "data" / "preview_canvases.json"
 def _load_registry():
     if not _REGISTRY.exists():
         return
-    try:
-        data = json.loads(_REGISTRY.read_text(encoding="utf-8"))
-    except Exception:
-        return
+    data = json.loads(_REGISTRY.read_text(encoding="utf-8"))
     for key, cv in (data.get("canvases") or {}).items():
         cv = dict(cv)
+        if "slot" not in cv and "repoint_fixed" in cv:
+            cv["slot"] = cv["repoint_fixed"]
         if isinstance(cv.get("slot"), str):
-            try:
-                cv["slot"] = int(cv["slot"], 16)
-            except ValueError:
-                continue
-        if "slot" in cv and "len" in cv and "nav" in cv:
-            CANVASES[key] = cv
+            cv["slot"] = int(cv["slot"], 16)
+        if not all(field in cv for field in ("slot", "len", "nav")):
+            raise ValueError(f"incomplete preview canvas: {key}")
+        CANVASES[key] = cv
 
 
 _load_registry()
@@ -87,89 +86,76 @@ def _parse_int(value):
         return None
 
 
-def _resolve_slot(cv: dict) -> int:
-    fallback = _parse_int(cv.get("slot"))
-    source_fixed = _parse_int(cv.get("repoint_fixed"))
-    if source_fixed is None or not REPOINT_MANIFEST.exists():
-        if fallback is None:
+def _resolve_slot(cv: dict, rom: bytes | None = None) -> int:
+    fixed = _parse_int(cv.get("repoint_fixed"))
+    message = _parse_int(cv.get("repoint_msg"))
+    if fixed is None:
+        fixed = _parse_int(cv.get("slot"))
+        if fixed is None:
             raise ValueError("canvas slot is missing")
-        return fallback
-    source_msg = _parse_int(cv.get("repoint_msg"))
-    try:
-        rows = json.loads(REPOINT_MANIFEST.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        if fallback is None:
-            raise
-        return fallback
-    for row in rows if isinstance(rows, list) else []:
-        if row.get("status") != "relocated":
-            continue
-        fixed = {_parse_int(v) for v in (row.get("fixed") or [])}
-        if source_fixed not in fixed:
-            continue
-        msg = _parse_int(row.get("msg"))
-        new_addr = _parse_int(row.get("new_addr"))
-        if source_msg is not None and msg != source_msg:
-            continue
-        old_base = source_msg if source_msg is not None else msg
-        if msg is None or new_addr is None or old_base is None:
-            continue
-        delta = source_fixed - old_base
-        if delta < 0 or delta >= int(row.get("new_len") or 0):
-            continue
-        return new_addr + delta
-    if fallback is None:
-        raise ValueError("canvas slot could not be resolved")
-    return fallback
+        message = fixed
+    if rom is None or message is None or fixed < message:
+        raise ValueError("repoint canvas requires the actual ROM and source message")
+    original = ORIG_ROM.read_bytes()
+    needle = struct.pack('<I', 0x08000000 + message)
+    references = []
+    pos = 0
+    while True:
+        pos = original.find(needle, pos)
+        if pos < 0:
+            break
+        references.append(pos)
+        pos += 1
+    targets = {struct.unpack_from('<I', rom, off)[0] - 0x08000000 for off in references}
+    if len(targets) != 1:
+        raise ValueError("canvas message has missing or conflicting live pointers")
+    target = targets.pop()
+    delta = fixed - message
+    if not 0 <= target < len(rom) or rom[target:target + delta] != original[message:fixed]:
+        raise ValueError("canvas message prefix changed")
+    slot = target + delta
+    size = int(cv["len"])
+    expected_tail = bytes.fromhex(cv.get("expected_tail_hex", ""))
+    if expected_tail and rom[slot + size:slot + size + len(expected_tail)] != expected_tail:
+        raise ValueError("canvas text boundary changed; refusing to overwrite control bytes")
+    return slot
 
 
 def _syl_to_code():
-    return {s: int(c, 0) for s, c in json.loads(SYLCODE.read_text(encoding="utf-8")).items()}
+    codes = {s: int(c, 0) for s, c in json.loads(SYLCODE.read_text(encoding="utf-8")).items()}
+    if any(not (0x81 <= code >> 8 <= 0x9f or 0xe0 <= code >> 8 <= 0xef)
+           for code in codes.values()):
+        raise ValueError("preview dictionary contains an invalid two-byte lead")
+    return codes
 
 
 def encode_payload(text: str, lang: str, slot_len: int,
-                   add_terminator: bool = True, pad_byte: int = 0x00) -> tuple[bytes, bool]:
-    """text를 canvas 슬롯 바이트로 인코딩.
-
-    기본은 기존 NUL 종료 슬롯(0x00 종료 + 패딩). 일부 command stream은 뒤따르는
-    0x6B/0x0A 같은 제어코드를 보존해야 하므로 add_terminator=False로 고정 span만 채운다.
-    """
-    out = bytearray()
+                   add_terminator: bool = True, pad_byte: int = 0x00,
+                   address: int | None = None) -> tuple[bytes, bool]:
+    """Encode diagnostic text and truncate only at complete character boundaries."""
+    if slot_len <= 0 or not 0 <= pad_byte <= 255:
+        raise ValueError("invalid canvas size or padding")
     if lang == "ko":
-        s2c = _syl_to_code()
-        for ch in text:
-            if ch in s2c:
-                c = s2c[ch]; out += bytes([c >> 8, c & 0xFF])
-            elif ch == "　":
-                out += b"\x81\x40"
-            elif ch == " ":
-                out += b"\x20"
-            elif 0x20 <= ord(ch) <= 0x7E:
-                out += bytes([ord(ch)])
-            else:
-                # 2350 밖 음절/기호 → ? (인게임도 동일하게 깨지므로 프리뷰가 충실히 노출)
-                out += b"\x81\x48"
-    else:  # ja
-        for ch in text:
-            if ch == " ":
-                out += b"\x20"
-            else:
-                try:
-                    out += ch.encode("shift_jis")
-                except Exception:
-                    out += b"\x81\x48"
-    if add_terminator:
-        truncated = len(out) + 1 > slot_len
-        if truncated:
-            # 슬롯 한계까지 자른다(2바이트 코드 경계 보존은 호출측 책임 — 여기선 단순 컷)
-            out = out[: slot_len - 1]
-        out += b"\x00"
+        import build_korean_full as build
+        dropped = collections.Counter()
+        out = build.encode_text(text, _syl_to_code(), dropped, address)
+        if dropped:
+            raise ValueError("렌더 불가 문자: " + ''.join(dropped))
+        out = build._fw_before_ascii(out, slot_len - int(add_terminator), address)
+    elif lang == "ja":
+        out = text.encode('shift_jis')
     else:
-        truncated = len(out) > slot_len
-        if truncated:
-            out = out[:slot_len]
-    out += bytes([pad_byte & 0xFF]) * (slot_len - len(out))
-    return bytes(out[:slot_len]), truncated
+        raise ValueError("unknown language")
+    capacity = slot_len - int(add_terminator)
+    cursor = 0
+    while cursor < len(out):
+        width = 2 if 0x81 <= out[cursor] <= 0x9f or 0xe0 <= out[cursor] <= 0xef else 1
+        if cursor + width > capacity:
+            break
+        cursor += width
+    truncated = cursor < len(out)
+    payload = bytes(out[:cursor]) + (b'\0' if add_terminator else b'')
+    return payload + bytes([pad_byte]) * (slot_len - len(payload)), truncated
 
 
 def _nav(drv, nav):
@@ -185,6 +171,8 @@ def _nav(drv, nav):
             drv.frames(20)
         elif step[0] == "keys":
             drv.cmd(f"keys {int(step[1])}"); drv.frames(6); drv.cmd("keys 0"); drv.frames(60)
+        else:
+            raise ValueError(f"unknown preview navigation step: {step!r}")
 
 
 def _frame_list(sweep: dict) -> list[int]:
@@ -268,63 +256,90 @@ def capture(text: str, lang: str = "ko", canvas: str = "part2_menu",
     if canvas not in CANVASES:
         raise ValueError(f"unknown canvas {canvas!r}; have {list(CANVASES)}")
     cv = CANVASES[canvas]
-    slot = _resolve_slot(cv)
     if base_rom is None:
         base_rom = ORIG_ROM if lang == "ja" else PATCHED_ROM
     base_rom = Path(base_rom)
+    source_bytes = base_rom.read_bytes()
+    slot = _resolve_slot(cv, source_bytes)
+    if slot < 0 or slot + cv["len"] > len(source_bytes):
+        raise ValueError("canvas is outside ROM")
     terminator = (cv.get("terminator") or "nul").lower()
     pad_raw = cv.get("pad", "0x00")
     pad_byte = int(pad_raw, 0) if isinstance(pad_raw, str) else int(pad_raw)
     payload, truncated = encode_payload(
         text, lang, cv["len"],
         add_terminator=(terminator != "none"),
-        pad_byte=pad_byte,
+        pad_byte=pad_byte, address=_parse_int(cv.get("repoint_fixed")) or _parse_int(cv.get("slot")),
     )
     CACHE.mkdir(parents=True, exist_ok=True)
     # 캐시 키에 canvas 정의(slot/len/nav)와 base_rom 식별(크기+mtime)을 포함 — nav/슬롯/ROM이
     # 바뀌면 캐시 무효화(codex 지적: 기존 key는 base_rom.name+text뿐이라 stale 재사용 위험).
-    try:
-        st = base_rom.stat(); rom_id = f"{st.st_size}:{int(st.st_mtime)}"
-    except OSError:
-        rom_id = base_rom.name
+    rom_id = hashlib.sha256(source_bytes).hexdigest()
+    encoder_id = hashlib.sha256(Path(__file__).read_bytes() +
+                                (ROOT / 'tools/build_korean_full.py').read_bytes() +
+                                SYLCODE.read_bytes() + HARNESS.read_bytes()).hexdigest()
+    state_hashes = {}
+    for step in cv.get("nav", []):
+        if step[0] == "loadstate":
+            state = Path(step[1])
+            if not state.is_absolute():
+                state = ROOT / state
+            state_hashes[str(state)] = hashlib.sha256(state.read_bytes()).hexdigest()
     cv_sig = json.dumps({"slot": slot, "configured_slot": cv.get("slot"), "len": cv.get("len"),
                          "terminator": terminator, "pad": pad_byte,
-                         "nav": cv.get("nav"), "sweep": cv.get("sweep")},
+                         "nav": cv.get("nav"), "state_hashes": state_hashes, "sweep": cv.get("sweep")},
                         ensure_ascii=False, sort_keys=True)
-    key = hashlib.sha1(f"{canvas}|{lang}|{rom_id}|{cv_sig}|{text}".encode("utf-8")).hexdigest()[:16]
-    png = CACHE / (out_name or f"{canvas}_{lang}_{key}.png")
+    key = hashlib.sha1(f"{canvas}|{lang}|{rom_id}|{encoder_id}|{cv_sig}|{text}".encode("utf-8")).hexdigest()[:16]
+    if out_name and Path(out_name).name != out_name:
+        raise ValueError("out_name must be a filename inside the preview cache")
+    # A caller-supplied label must not erase the content identity. Distinct
+    # requests publish distinct files even when they share the same label.
+    png = CACHE / (f"{Path(out_name).stem}_{key}.png" if out_name else f"{canvas}_{lang}_{key}.png")
     meta_path = png.with_suffix(".json")
-    if use_cache and png.exists():
+    if use_cache and png.exists() and meta_path.exists():
         meta = {}
         if meta_path.exists():
             try:
                 meta = json.loads(meta_path.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
                 meta = {}
-        return {"png": str(png), "truncated": truncated, "cached": True, **meta}
+        if meta.get("cache_key") == key:
+            return {"png": str(png), "truncated": truncated, "cached": True, **meta}
 
     from qa_visual_regions import MGBADriver  # noqa: E402
-    work = CACHE / f"_rom_{key}.gba"
-    shutil.copyfile(base_rom, work)
-    b = bytearray(work.read_bytes())
-    b[slot: slot + cv["len"]] = payload
-    work.write_bytes(b)
-    drv = MGBADriver(work, CACHE, HARNESS)
+    from editor_storage import atomic_write_bytes, save_json
+    # Different editor processes may request the same text simultaneously.
+    # Each emulator owns its ROM, raw frames and log; publish only complete PNGs.
+    run = Path(tempfile.mkdtemp(prefix=f"run_{key}_", dir=CACHE))
+    work = run / "preview.gba"
+    captured = run / png.name
+    drv = None
     meta = {}
     try:
+        b = bytearray(source_bytes)
+        b[slot: slot + cv["len"]] = payload
+        work.write_bytes(b)
+        drv = MGBADriver(work, run, HARNESS)
         _nav(drv, cv["nav"])
         if cv.get("sweep"):
-            meta = _capture_sweep(drv, png, cv["sweep"])
+            meta = _capture_sweep(drv, captured, cv["sweep"])
+            if cv["sweep"].get("keep_all"):
+                for candidate in meta["sweep"]["candidates"]:
+                    name = f"{png.stem}_f{candidate['frame']:04d}.png"
+                    atomic_write_bytes(CACHE / name, (run / name).read_bytes())
+                    candidate["png"] = str(CACHE / name)
         else:
-            drv.shot(png.stem)
+            drv.shot(captured.stem)
+        meta["cache_key"] = key
+        atomic_write_bytes(png, captured.read_bytes())
+        save_json(meta_path, meta)
     finally:
-        drv.close()
-    try:
-        work.unlink()
-    except OSError:
-        pass
-    if meta:
-        meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        try:
+            if drv is not None:
+                drv.close()
+        finally:
+            shutil.rmtree(run)
+
     return {"png": str(png), "truncated": truncated, "cached": False, **meta}
 
 

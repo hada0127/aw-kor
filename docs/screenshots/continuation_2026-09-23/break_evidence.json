@@ -1,0 +1,17 @@
+{
+  "rom_sha256": "5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5",
+  "save_receipt": "temp/full_audit_2026-09-15/part2_pause_naval_day1_save/game_save.json",
+  "save_sha256": "c8cabbe3487ea9cd540255683c2404be80d0a1a94974a148a86254a3d2f6f73b",
+  "routes": [
+    {
+      "run": "output/qa/part2_2026-09-23/naval_resume",
+      "segments": 77
+    },
+    {
+      "run": "output/qa/part2_2026-09-23/naval_worker_resume",
+      "segments": 58
+    }
+  ],
+  "normal_save_cold_boot": true,
+  "scope": "targeted actual text re-render; not full-frame QA or ending evidence"
+}

@@ -66,7 +66,7 @@ def verify_canvas(name: str, cv: dict) -> dict:
             min_score = int(cv["sweep"].get("min_score", 1))
             if int(sweep.get("selected_score") or 0) < min_score:
                 raise AssertionError(f"{name}: sweep score below min: {sweep}")
-    box = (cv.get("sweep") or {}).get("score_box") or [0, 0, 240, 160]
+    box = cv.get("verify_box") or (cv.get("sweep") or {}).get("score_box") or [0, 0, 240, 160]
     diff = pixel_diff(images[0], images[1], box)
     if diff < int(cv.get("min_payload_diff", 20)):
         raise AssertionError(f"{name}: payload did not visibly affect capture (diff={diff}, box={box})")

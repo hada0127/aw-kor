@@ -1,0 +1,41 @@
+{
+  "rom_sha256": "f58729d79ba9fc398efe6cb9bc23609662d1571b6f5ae1f850ba7f31756e6ce8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part1_2026-09-23/day13_round2_save/game_save.json",
+  "save_sha256": "8cab9e375b5fb99c9744d4cc1c27f191d9b7c78f46ca922ddd98dcec2481e162",
+  "actions": 19,
+  "final_frame_counter": "OK framecounter 5917",
+  "screens": [
+    {
+      "segment": 14,
+      "png": "014_A.png",
+      "png_sha256": "bdcb1ddf80bd37d42f5d3f635a6a3bc3d47e9ef5ce5b982c190f495c5a6571f6"
+    },
+    {
+      "segment": 15,
+      "png": "015_DOWN.png",
+      "png_sha256": "9d7ec9fab598d548925a7a281dc979ef83301309070704df90730ef1b6304e42"
+    },
+    {
+      "segment": 16,
+      "png": "016_DOWN.png",
+      "png_sha256": "ce7db9c912f9eaceb793bce0d328ae72318d4d679bd1c98ae69e341a613d6bad"
+    },
+    {
+      "segment": 17,
+      "png": "017_DOWN.png",
+      "png_sha256": "4634dc6b365055caca455b2ce7d7b2e0b742fdec627e6b96a3dde74b1a9898a3"
+    },
+    {
+      "segment": 18,
+      "png": "018_DOWN.png",
+      "png_sha256": "e21b2282de0df24148c75f72f725b27708580871ad06ec93eee94cd09744fa9c"
+    },
+    {
+      "segment": 19,
+      "png": "019_B.png",
+      "png_sha256": "c7bf2a5e4fc1be2937b2bca2dbb47f397c3e8d04c706bfe45c988c6e75851f55"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

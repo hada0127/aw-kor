@@ -3,6 +3,7 @@
 
 import argparse
 import json
+import re
 import sys
 import zlib
 from datetime import datetime
@@ -11,6 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from make_bps import apply_bps, make_bps
 from make_ips import apply_ips, make_ips
+from localization_evidence import snapshot_inputs, verify_prepackage_report
 
 
 BASE = Path(__file__).resolve().parents[1]
@@ -71,10 +73,10 @@ Generated from the current `output/game_wars_korean_full.gba` build.
 - BPS patch: `{patch_stem}.bps`
 - IPS patch: `{patch_stem}.ips`
 
-This build has passed the current automated QA gate: text fit, Japanese
-residual, placeholder residual, ROM integrity, scene residual, sprite override,
-and BPS/IPS round-trip verification. Real-hardware sign-off is still tracked
-separately in `todo.md`.
+The hash-bound prepackage QA checks listed in manifest.validation.qa_evidence
+passed for this artifact. BPS/IPS round trips were checked during packaging.
+These checks do not establish full-campaign, character-voice, or real-hardware
+approval; those scopes remain tracked separately in `todo.md`.
 """,
         encoding='utf-8',
     )
@@ -84,10 +86,20 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--date', default=datetime.now().strftime('%Y-%m-%d'))
     parser.add_argument('--stem', default=None)
+    parser.add_argument('--qa-report', type=Path, default=BASE / 'temp/release_prepackage_qa.json')
     args = parser.parse_args()
 
-    DIST.mkdir(exist_ok=True)
     stem = args.stem or f'game_wars_korean_full_{args.date}'
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*', stem):
+        parser.error('Patch stem must be a plain filename')
+
+    from run_release_qa import REQUIRED_PREPACKAGE_GATES
+    try:
+        qa_report = json.loads(args.qa_report.read_text())
+        qa_evidence = verify_prepackage_report(qa_report, TARGET_ROM, SOURCE_ROM,
+                                               REQUIRED_PREPACKAGE_GATES, snapshot_inputs())
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        raise SystemExit(f'Packaging refused before writing artifacts: {error}')
 
     source = SOURCE_ROM.read_bytes()
     target = TARGET_ROM.read_bytes()
@@ -101,6 +113,13 @@ def main():
     if apply_ips(source, ips) != target:
         raise SystemExit('IPS round-trip failed')
 
+    # Recheck after patch generation, before any distribution writes.
+    verify_prepackage_report(qa_report, TARGET_ROM, SOURCE_ROM,
+                             REQUIRED_PREPACKAGE_GATES, snapshot_inputs())
+    if digest(SOURCE_ROM.read_bytes()) != source_info or digest(TARGET_ROM.read_bytes()) != target_info:
+        raise SystemExit('ROM changed during patch generation')
+    DIST.mkdir(exist_ok=True)
+
     bps_path = DIST / f'{stem}.bps'
     ips_path = DIST / f'{stem}.ips'
     bps_path.write_bytes(bps)
@@ -111,7 +130,7 @@ def main():
     manifest = {
         'name': 'Game Boy Wars Advance 1+2 — 한글화',
         'date': args.date,
-        'status': 'automated QA pass — patch-only distribution; real-hardware sign-off pending',
+        'status': 'hash-bound prepackage QA pass; full runtime/voice/hardware approval not implied',
         'source_rom': {
             'name': SOURCE_ROM.name,
             **source_info,
@@ -137,6 +156,7 @@ def main():
             'note': 'BPS is preferred because it records source and target CRCs.',
         },
         'validation': {
+            'qa_evidence': qa_evidence,
             'bps_round_trip': True,
             'ips_round_trip': True,
             'single_output_rom': True,

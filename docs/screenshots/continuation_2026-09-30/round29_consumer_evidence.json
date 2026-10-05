@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+  "records": [
+    {
+      "source": "0x00A0AB20",
+      "pointer": "0x00A35E28",
+      "target": "0x00A4327C",
+      "payload_sha256": "854220cf6d9ab550e3aed1f3554323be3a1cbb44a87a283bcecf2b2279d3e1d6",
+      "consumer": "part2_31424c_script",
+      "kind": "current-relocated-native-read-v1",
+      "trace_rom": "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/candidate.gba",
+      "trace_rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+      "trace": "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/money_repro/reads.log",
+      "trace_sha256": "9a88576f72d5911160a90f83d1c8628c5c5a19e60eae1b2dcd3f8baeb8565610"
+    },
+    {
+      "source": "0x00A1F9D8",
+      "pointer": "0x00A37178",
+      "target": "0x00A4F034",
+      "payload_sha256": "dc974221d22fc29f15db7a0e3e89bb411c99d205dbc4d1e79b483d1ef0a40f66",
+      "consumer": "part2_31424c_script",
+      "kind": "current-relocated-native-read-v1",
+      "trace_rom": "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/candidate.gba",
+      "trace_rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+      "trace": "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/runtime/reads.log",
+      "trace_sha256": "fb581ad7d556e476813fd5f2b36c706d623389eba73d61aa629a80c709b6417c"
+    }
+  ]
+}

@@ -1,3 +1,11 @@
+## 2026-09-23 추가 소비 경로 확인 (대사 후보 검증·기록 화면 수정 진행 중)
+
+- 잔여 lossless 8행을 별도 조사했다. 7행의 원본 메시지 시작(`DA17A0`, `DA32E8`, `DA4090`, `DEEE4C`, `DEF518`, `DF60D8`, `DF77A0`)과 이후 16바이트에는 ROM 전체에서 절대 포인터가 발견되지 않았다. 이것만으로 미사용이라고 단정하지 않는다. `DCE8F0`의 4개 포인터 바이트 중 `DE4324`는 실제 `0x19` 명령 뒤이며, 나머지 `1202F0/6A3A68/CFDAD0`는 주변까지 동일한 큰 데이터 블록 안에 있다. 음성 샘플 헤더·voice pointer로 보이는 구조도 찾았지만 소비 경로 확인 전 오탐으로 제외하지 않는다. 근거: `temp/part2_2026-09-23/lossless_remaining_analysis.json`, `pointer_collision_wave_hypothesis.json`.
+- 2편 지도 메뉴 승리 조건은 `A3408C..A34B6C`의 별도 42개 대화다. 포인터 `A38938..A389DC`, 다음 `A389E0→A34B6C`는 예/아니오 UI다. 원본과 후보 `a290f200…113a6`를 동일 일반 저장으로 cold boot하여 `PC=03006082, LR=0831BBED`에서 같은 A3 글리프 소비 경로를 확인했다. 원본 첫 숫자는 `8256`(전각 7), 후보는 `37 8F A8…`를 2바이트씩 읽어 이후 한글 정렬까지 깨졌다. 이 구간만 대화 인코딩 범위에 포함하며 앞뒤 고정 UI는 제외한다. 증거: `temp/part2_2026-09-23/goal_consumer_{original,candidate}/`.
+- 원본 A3 native glyph table(root pointer `52F960`)에는 `8175/8176`(「」)가 있고 `8165/8166/8167/8168/8177/8178`은 없다. 대화의 인용부호 보존을 특정 재현 주소 허용목록에서 소비 렌더러 범위로 바꾸며, 방향성이 있는 부호를 native pair로 인코딩한다. ASCII 따옴표를 열림/닫힘으로 추정하지 않는다.
+- 2편 compact/status 지형 39개를 원본 이미지와 대조해 주소별 번역 오배정을 확인했다. `465968`은 浅瀬(여울), `465768`은 港(항구), `465568`은 湖(호수). compact 후반 岩礁/研究所/キャノン/火山/ファクトリ 및 status 湖/海도 정정 대상이다. 원본/후보 atlas: `temp/part2_2026-09-23/terrain_full_atlas/`. 이 목록은 이미지 판독 근거이며 모든 지형의 실플레이 경로 확인을 뜻하지 않는다.
+- 1편 기록 화면도 `B1319C` 맵 라벨 소비자를 쓰지만 활성 상태는 `03001220`, 스크롤 시 `03001280`이다. 기존 single 선택은 `03000F20`, 숨김은 `03000F80`. 기존 gate 확장만으로는 기록 8행 ring 스크롤이 복원되지 않아 추가 할당/회귀 검증 중이다. 미검증 시제품을 통합하지 않는다.
+
 # GBA 한글화 프로젝트 - 종합 연구 자료
 
 ## 1. 프로젝트 개요
@@ -1101,7 +1109,7 @@ GBWars 1+2 컴필레이션은 **게임별 독립 텍스트 렌더 시스템**. 1
 - **픽셀 실측**(`07_part2_main_menu` `캠페인을 처음부터 플레이합니다` 하단 텍스트, y148~158, 흰픽셀 열 분석): 단어 간 gap = **9px (= 1칸 8px + 1)**. `?` 수정만 적용된 ROM과 codex 전각공백 hook 적용 ROM의 gap이 `[59,9,9,54]`로 **완전 동일** → hook은 no-op.
 - 따라서 codex가 추가한 `PART2_HOOK_A3_ZENKAKU_SPACE`(0x08314332 trampoline)는 효과 0이고 비정렬 파서 패치 crash 표면만 늘려 **revert**했다. 출하 ROM은 `?` 테이블-end 수정만 유지(SHA `6a14a710...`).
 - **교훈**: 띄어쓰기 폭 결함은 **확대 육안이 아니라 흰픽셀 열 gap 픽셀 실측**으로 판정한다. 렌더러 간 폭 일치 확인도 동일 방식.
-- (참고 RE, 유효) A3 파서 `0x0831424C`: 첫 바이트 `0x09..0x33`만 1차 jump-table(`0x08314270`)로. `0x20`=엔트리 `0x0831431C`(기존 hook 1칸). `0x8140`의 `0x81`은 `0x08314332: cmp r0,#0x77; bhi 0x083147F4`로 일반 2바이트 문자 경로. 단, 그 경로의 실제 advance는 1칸(실측 9px)이라 별도 수정 불요.
+- (참고 RE, 유효) A3 파서 `0x0831424C`: 첫 바이트 `0x09..0x33`만 1차 jump-table(`0x08314270`)로. `0x20`=엔트리 `0x0831431C`(기존 hook 1칸). `0x8140`의 `0x81`은 `0x08314332: ldrb r0,[r6]; 0x08314334: cmp r0,#0x77; 0x08314336: bls 0x0831433A; 0x08314338: b 0x083147F4`(2026-09-30 실제 opcode 대조로 주소를 세분화)로 일반 2바이트 문자 경로. 단, 그 경로의 실제 advance는 1칸(실측 9px)이라 별도 수정 불요.
 
 ## 2026-06-16 — 자동진행 fresh-boot로 발견: 영어 잔존 BG 2종 (실잔존, stale 아님)
 
@@ -3562,3 +3570,182 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   최종 SHA `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`에서 mismatch 0이며,
   `docs/screenshots/part1_name_spacing_2026-07-06/original_vs_final_name_spacing.png`의 greeting 화면은
   `반가워. 아아님`을 일반 대사와 같은 크기로 보여준다.
+
+## [2026-09-15] 튜토리얼 연속 입력 검수: 대사 제어 충돌·merged span·메뉴 사전
+
+- 기준 ROM `909828af…fc23`, 원본에서 시작한 정상 입력 40,536프레임. `output/qa/part1_2026-09-15/`의 ledger/PNG/FFV1에 보존. 최초 튜토리얼 3일째에서 중단했으며 엔딩 검증이 아니다.
+- `D90854` 메시지는 기준 ROM에서 `A59F88`로 재배치돼 있었다(포인터 `DA72D0`). 원본의 `Ａ/Ｂ`(`8260/8261`)가 ASCII `41/42`로 바뀌어 있었다. 1편 파서 `B1215C`의 `<=77` 명령 분기와 충돌한다. A/B만 텍스트 토큰에서 전각화한 분리 ROM으로 기준 상태 39,150부터 동일 입력을 재생했을 때 40,536에서 지도 오염이 없어졌다. coldboot 동일 입력의 수정 후보에서도 재현되지 않았다.
+- `D8FFE3:D9001B`의 완성문장에 `D8FFF9`, `D9000C`의 옛 조각이 연결됐다. 재배치도 FOUND의 부모 16바이트 경계를 사용해 현재의 56바이트 문장을 재분해했다. 최종 script writer의 범위와 텍스트를 재배치에 전달하며, 후속 writer/부분 중첩이 불명확하면 메시지를 제외한다. 제외된 원본 자식 주소도 중간 포인터 검색 집합에 남겨야 한다.
+- 메뉴 `B82DEE`(대기)를 읽는 경로: `B1999E/B199CA` → `B12082/B1215E` → `0300643C`(ROM 소스 `A3C624`). `03006444` 진입에서 `r2=1`(bank 1). `03006496`은 EWRAM 캐시의 코드와 현재 글자를 비교한다.
+- 캐시 기준 `02010AD4`: 각 bank의 코드 목록은 `base+6+bank*510`; 타일 기준값은 `base+0x60C+bank*2`. 기존 bank 1은 92종, 타일 시작 `0x1C`였다. 원본 문자열 `D82A1C`(234바이트)의 포인터는 `B12EE4`. 중복 글자를 로더가 제거하므로 원본 순서를 유지하고 새 한글 코드만 뒤에 추가해야 기존 인덱스가 유지된다.
+- 명령 한글 18종을 추가한 시험에서는 110종이 로드됐고 ‘대기’ 한 줄 및 ‘공격/대기’ 두 줄이 정상 표시됐다. bank당 255 halfword 공간보다 VRAM의 blank tile `0x164` 경계가 더 작다. 빌드에 두 상한을 검사한다.
+- 기존 `B19804` fixed-position overlay는 특정 좌표/두 항목 배열만 감지하고 `0x8008/0x808C` 등을 강제로 썼다. 현재 캐시에서 `0x808C`는 ‘대기’가 아니라 ‘탑재’로 보이는 분리 시험도 확인했다. 올바른 해결은 실제 메뉴 사전 등록이며 raw 아이콘 덮어쓰기가 아니다.
+
+- 후속 엄격 리뷰: `dialogue_repoint.py`가 재조립한 메시지 전체에 구두점 변환을 적용하면 제어 피연산자도 바뀔 수 있다. 텍스트 span별 정규화로 제한하고, 각 gap의 원본/재조립 바이트 동등성을 검사한다. 변형된 gap은 ROM/포인터 쓰기 전에 `skip_control_changed` 처리. 합성 `33 2C … 30 21 … 6B 00` 회귀 테스트로 피연산자 보존 확인.
+
+### 2026-09-15 추가 실행 검증: 2편 모드 설명·지도 편집 메뉴
+
+- 원본 `A37EB8..A37EF4`의 16개 포인터는 `A2C040..A2C2C4` 모드 설명을 가리킨다. 통신 `A2C25C`의 ASCII `/`, 트라이얼 `A2C144`의 ASCII `,` 뒤에서 실제 스크롤 설명이 연속 `?`로 깨졌다. 같은 번역을 2바이트 `815E`/`8141`로 기록한 진단 ROM에서는 정상 표시됐다. 새 전체 빌드 `f9ed1e17ec74dc866c7f3a337fa7fdfbc842f85028b24710d1000449a8128ecc`와 직전 `3a385b...`의 차이는 해당 두 문구 내부 38바이트뿐이다. 근거: `temp/full_audit_2026-09-15/mode_fix_build_evidence/rom_diff.json`, `part2_mode_punctuation/mode_3.png`, `mode_5.png`.
+- 지도 편집 SELECT 메뉴와 파일 하위 메뉴의 원본 문자열 `A2CA38/44/50/60/70/7C/88/98`은 모두 `81408140`으로 시작한다. 이 두 전각 칸은 고정 아이콘 자리다. 번역문에서 여백을 제거하면 첫 글자가 아이콘에 가려진다. 주소별 인코더에서 prefix 4바이트를 따로 보존하고, 전체 슬롯 예산에 포함해야 한다. 원본/패치/진단 비교: `part2_editor_original/00_select.png`, `part2_editor_options/00_select.png`, `part2_editor_prefix/00_select.png`, `part2_editor_file/00_select.png`.
+- 이 2편 지도 편집 진입에서는 `B12BDC` breakpoint hit가 0이었다. 따라서 외형이 비슷하다는 이유로 1편 `D83278` 글리프 사전 문제와 동일시하지 않는다. 원본 `D83254`는 `B13100→B12BDC→B12A58` 글리프 등록용 사전이며 자연어 문장이 아니다. 등록 순서·은행별 시작 타일은 뒤 은행 배치에도 영향을 주므로 사전에 한글을 단순 추가하는 방법의 안전성을 가정하지 않는다.
+
+### 2026-09-15 결과 점수 라벨 raw atlas 소유권 검증
+- 1편 첫 임무 정상 입력 승리 화면의 스피드/파워/테크닉 잔존을 확인. OAM tile 781/785/789..793이 원본 ROM BEAF5C/BEAFDC/BEB05C와 바이트 일치.
+- B304B2~B304D2: BE743C + D8D504의 8B 엔트리 tile_index*32를 소스로 width*height*32바이트 복사. 압축 literal이 아님. 엔트리 84/85/86은 473×4×1, 477×4×1, 481×5×1; 엔트리87 시작 BEB0FC. 세 owned span은 총416B.
+- 세 자산만 Galmuri7로 속도/화력/기술 렌더, 원본 source SHA와 엔트리84..87 metadata를 빌드에서 검증. UI 합성자산 objlabel_p1_result_scores로 등록.
+- 수정 전체빌드 SHA606fda80c98817b2487f1f4e3a4b215048dcfab8b1f08a20fd142c873cceaa76. cold boot 정상입력45985프레임 재생; 45501/45743/45985 화면의 차이는 (17,61,53,85)에만 있으며 다른 모든 픽셀 동일. 전체 게임/다른 결과 화면 검증 완료를 뜻하지 않음.
+
+## 2026-09-15 후속: 병종 테이블·UI 일괄 저장·2번째 임무 안내
+
+- 원본 포인터 표 A37A9C 이후와 실제 생산 화면을 대조해 잘못된 override 6개를 수정했다: A29390 바주카병, A293D0 로켓포, A29408 전투헬기, A29440 기관총, A294D4 대공기관총, A29508 레드스타. CSV에는 맞는 번역이 있었으나 dialogue override가 다른 항목명으로 덮었다. B팀 baseline도 이 6개만 원본 의미로 맞췄고, 기존 다른 사용자 변경은 유지했다.
+- 전체 빌드 `editor_all_unit_fixed_candidate.gba` SHA-256 `bd123a08870e53d94790c1f256e15487c152a6c01d4f44a63d94154b282a9695`. 슬롯 잔여는 실제 producer와 동일한 0x20 패딩. 쓰기 무결성 388,821바이트 불일치 0. 실제 생산 메뉴에서 바주카병·로켓포·대공기관총을 확인했다. 비행장/국가명 전체 실화면 검증을 대신하는 주장은 아니다.
+- CE도 `/api/dialogue/lines`로 13개 조각을 단일 트랜잭션에 저장한다. 실제 브라우저 1회 batch POST, saved=13, pageerror=0. DE/CE의 TSV authority는 동일한 엄격 파서를 쓰고 inode/size/mtime 캐시를 사용한다. 불변 snapshot을 저장 시 복사하며, 잘못된 행은 파일을 바꾸지 않고 HTTP500에 행 번호를 표시한다.
+- 격리 clone의 3,387그룹 장면 3.419초, 94그룹 장면 0.496초, scene 목록 0.063초. malformed TSV 응답/복구 후 HTTP200까지 검증. B팀 no-op은 현재 유효 텍스트와 비교하고, 확인창 기준은 별도 baseline으로 유지한다.
+- Part2 menu preview는 원본/패치 양쪽 A2C098+36의 NUL 4바이트를 확인하고 36바이트만 쓴다. 다른 두 입력의 실제 ROI 차이 316픽셀, 잘림 없음.
+- 1편 수정 ROM의 cold replay 1..50,451프레임 연속성 및 고유 PNG 18,816개 RGB 해시를 검증했다. 2번째 임무 입력도 계속 기록 중이다.
+- 2번째 임무 선택 안내 5구간은 제어 명령을 유지하며 전각 경계 공백·조사·A 버튼 안내를 복원했다. cold 입력 재생의 51,661/52,277/52,519 프레임은 대사 영역만 달라졌고, 55,465 프레임은 기존과 완전히 동일했다. 표시 유닛 선택 실패는 검사자의 커서 행 판독 실수였으며 정상 위치에서 게임이 진행됨을 확인했다. 원본 ROM에 수정판 입력을 그대로 재생하면 대사 페이지 수 차이로 첫 임무부터 진행이 달라져 해당 비교는 동일 장면 검증 증거로 사용하지 않는다.
+
+
+## 2026-09-21 2편 숫자 확장과 A250EC 슬롯
+
+기존 진단의 A0306D/A03087 보병·수송차 설명에서 ASCII 0x33/0x36은 명령으로 해석되어 숫자 누락·물음표를 만들었다. 최종 전체 후보 SHA `12f65b06…6dfe3b`의 콜드 73382프레임에서 전각 3/6 정상 표기를 확인했다. 추가로 원본 A250EC:A250F6은 `93f191ce88ea82c882e7` (`二対一なら`, 10B), 다음 A250F6의 0x72는 유지해야 한다. 기존 검토 번역 `2대1이라면`은 전각 숫자 인코딩 시 12B로 어떤 fit 후보도 들어가지 않아 원문으로 남았었다. script owner로 10B 원본 경계를 등록하고 guarded repoint 후 A52030 메시지에 `825189f482508fa28adf8bf5`가 존재함을 확인했다. 포인터/종단/제어 검사는 기존 repointer가 수행하며, 이 문구의 실제 플레이 도달은 아직 미검증이다. [보고서](reports/PART2_NUMERIC_FIX_2026-09-21.md).
+
+
+## 2026-09-22: 1편 전투 메뉴 사전과 대사/아이콘 VRAM 충돌
+- 정상저장 콜드 재생으로 System BGM/항복/나가기 결함 재현. 원본/진단 VRAM·EWRAM: `temp/full_audit_2026-09-15/part1_system_{original,dictionary}_dump/`. bank1 코드 목록은 `02010AD4+6+510`, 시작 tile1C. 기존 본문 사전92코드, 행동메뉴18추가=110코드(tile1C..F7). System 추가130코드에서는 114번째 이후 tile100..11F가 최종 안내 대사 그럼 힘내요! 당신에게... 글리프로 바뀜. 따라서 기존 blank tile164 상한은 충분하지 않으며 persistent 메뉴사전 상한은 (100h−1Ch)/2=114글자. 실제관측에 근거한 경계이지 하드웨어 전체VRAM상한이 아니다.
+- 기존full-menu overlay는 glyph22개를tile1A0..1B5에 업로드. System 원본음표tilemap은 A1B1/A1B2(위),A1B3/A1B4(아래)라 충돌한다. overlay만제거하면음표는복원되나위사전확장꼬리의문자깨짐은남음.
+- 채택후보는 기존 관리UI별칭의 한글 글리프bitmap을검증하고31메뉴에해당코드를사용한다. 부족13글자 가/군/규/만/브/아/안/정/체/칙/투/표/함만추가, 총105(tile1C..ED). 원본92코드순서/글리프정의는변경하지않고 full-menu overlay설치를제거했다. 음악항목공백은8140한셀,icon/control/C1/C2는owned operand밖에보존. 진단콜드 메뉴정상, 원본음표·항복깃발16×16crop은픽셀동일. 생산후보/추가메뉴QA는후속보고서참조.
+
+### 2026-09-22 2편 동적 임무 번호/제목 실화면 복원
+
+- 원본 일반 저장 콜드 입력: `max_intro_original/page_17.png` = MISSION 3 / 戦いの幕開け. 기존 후보 `menu_font_held_input_live` segment19 = 고정 미션1, 제목 누락.
+- ROM5A38D4 LZ77 원본2176B(68타일), 소비630B. 256px폭 타일시트의 x0..95는 MISSION, 이후0..9숫자. 수정소유 타일은0..11/32..43(24개)뿐이며 나머지44개는 원본byte동일. ASCII B84446의 MISSION은 글꼴조회키라 공백화하면 안 된다. 한글미션부분만그린후압축510B로원본슬롯내보존.
+- 기존 `_mission_title_hangul_glyph`는 모든한글을512B zero로출력해제목을삭제했다. 원래private32x32OBJ/팔레트6(본체),10(그림자)로Galmuri11 2배22px한글복원, advance24/공백12. 원본private표와2350예약코드교집합0확인. 최종writer후숫자font·lookup키·private표/글리프/advance검증. 새ASM/VRAM할당없음.
+- 생산 SHA `0e613510b7ba58e32c96d3a5794e3087725a8fababb25221701f61fd3eb8357d`: 71tests/17,902payload/1,943repoint/67관측문장통과. 일반저장콜드 `mission_titles_production_cold/segment_019.png`에서미션3/싸움의개막표시, 문장17/26/28/36/37/44공백·복원도확인.
+- 한계: 기존private필요코드수집은추출slot전체를훑어비정상pair29개도blank등록한다. 이번에새fallback을추가하지않았지만, 전체실제consumer분모/다른미도달제목의검증은잔여다. 이한계를전체제목무결성통과로확대하지않는다. 수송헬기3문장추가후보는재빌드중.
+
+
+### 2026-09-22 플레이 검수: 계급 카드와 캠페인 VS 이름
+- 훈련 완료 카드의 브론즈/래트는 BF13F4/BF1660 LZ77 32×16 OBJ. 원본 압축 소비 길이 108/66바이트 내부에 66/65바이트로 주입; DFA360/DFA378 참조 유지. 정상 저장 cold replay 149/151 프레임 한글 확인.
+- 캠페인 최초 상대 호이프 VS 이름은 BF2BCC raw bank의 ID3, BF2D4C 128바이트(32×8). B4E7AC 접근자는 uint8 ID를 7비트 shift해 더함. B4E7B8/B6DABC literal 참조. 실제 BIOS 복사 감시 및 VRAM tile 79..7C와 원본 일치 확인. 다른 이름 슬롯은 아직 미검수.
+
+- 지도 료: 같은 BF2BCC bank ID1=BF2C4C, 32×8 OAM tile6D/팔레트11, VRAM128B 원본 일치. 전투 료: BD0130 raw128B, OAM tile32/팔레트1, VRAM128B 원본 일치. 후자는 지도bank와 별도이며 흰1/그림자4/검정15, 지도 이름은 흰1/그림자3/검정5.
+
+
+### 2026-09-22 2편 A3 대시가 물음표로 나오는 원인
+- 정상 저장 cold MISSION4 13프레임, 콩그 반복/준비됐어 장음이 물음표로 표시. payload A0A80B/A0A833는 815C였다.
+- 원본 A3C7EC literal→52F960→807780 bucket table. low byte-40 index의 연결목록에서 +4 high byte 검색. A3C820 miss fallback은 r4=81,r0=48.
+- 815B node809CD0, 8148 node808578, 8160 node80A348 존재. 815C bucket에는 83/8F/90/94 등만 있으며 high81 없음. P1 B8027C symbol table에서는815B/815C/8160 모두290/306이므로 P1 glyph 복원만 검사한 기존 QA가 P2 miss를 놓쳤다.
+- native 815B를 P2 story 개별문자에서만 선택하도록 공유 정규화; 재배치가 원본 msg주소를 전달하도록 연결. 원본 글꼴/bank/hook 변경 없음. 단위74시험 통과 후 실제 cold 재검증 중.
+
+## 2026-09-22 블랙 캐논 피해 표시 원본 비교
+- MISSION4 DAY11에서 HP50/탄약3 전차의 예측0%, 포병28%→22%를 원본 일반 저장 cold 재생1..810으로 비교. 원본에서도 동일한 지도/유닛 배치와 피해 수치 재현. `cannon_damage_original_cold/segment_810.png`, `evidence.json`. 이 현상은 패치 결함 아님. 내부 피해 공식은 여기서 추정하지 않음.
+
+### 2026-09-22 첫 캠페인 승리와 코인 설명 수정
+- 1편 `campaign_day4_cold_live` segment820에서 첫 캠페인 DAY14 전멸 승리, 835 결과 B, 836 브론즈 래트/코인8, 843 일반 저장 완료. 엔딩은 아직 미도달.
+- segment837에서 “워즈 숍” 다음 조사 “에서” 누락 관측. DFAED6/DFAF03을 “「워즈 코인」은 「워즈 숍」에서” / “쓸 수 있는 돈이야！”로 복원. 첫 행34B, 둘째22B는 원본18B 슬롯을 침범하지 않고 기존 필수 재배치로 전체메시지 DFAE9C→A77ED4(292→298B) 이동. 원본/새 제어열 동일.
+- 후보 SHA `2bdc0c3cc34c54d1f9631ee2baa3163eeb38414f61e00b9e1b4eb12c0739ca70`: 89행 full-fidelity, 74 tests, integrity17902/repoint1949/91fidelity/13controls PASS. 정상DAY4저장 cold replay1..839, 835..839 실화면 정상. Claude 후속 결론 확정결함 없음. 증거 `temp/full_audit_2026-09-15/coin_explanation_verification.json`, `coin_explanation_byte_proof.json`, `coin_explanation_result_cold/`.
+- 2편 M4는 segment1017 DAY15 중전차로 블랙 캐논 파괴 후 승리대사 진입. segment1022에서 “몇 번몇 번을,”/“와도내가” 중복·경계오류 발견하여 후속 수정중. 아직 결과/저장 검수중이며 엔딩 미도달.
+
+### 2026-09-22 M4 승리 대사 3조각 복원
+- 원본 A0BC9C「何度、」(6B)/pause77/A0BCA3「来たって」(8B)/newline72/A0BCAC「ぼくがいる限りムダだぞ！」(24B)/wait6B. 기존 override가 「몇 번을,」/「와도내가…」로 한 조각씩 밀려 앞 수기행 「몇 번」과 중복.
+- 사용자 플레이중 오류수정 지시에 따라 각각 「몇 번이나　」/「와도」/「내가 있는 한 헛수고라고！」. A0BCA3 Bteam 기준과override도 같은키만 명시적 수정. 42개 기존drift는 전후동일이며 release PASS 아님.
+- 후보9fd030506a3e7a2e1ef7c6e3373e12ba2a16277708a059beb649f0970d986871, 92guarded/74tests/integrity17902/repoint1949/91fidelity/13controls PASS. A0BC9C메시지→A43F54(44→54B), control[77,72,6B]동일. 정상Max완료저장cold1..1024, 1022중복소실/공백/줄바꿈 정상, 1017/1021/1023/1024전후화면확인. Claude확정결함없음, 요청한소스치환/바이트/런타임검증완료. `temp/full_audit_2026-09-15/cannon_victory_verification.json`.
+- 1편 다음도입 오른쪽빌리 이름표 일본어ビリー 관측. bankBF2BCC slot5 BF2E4C raw128B가 해당그림임을 원본decode로확인. 기존이름표모듈에slot5추가후빌드/리뷰중.
+
+### 2026-09-22 빌리 캠페인 이름표 복원
+- 최초관측 `campaign_first_cleared_cold_live` 7..23 오른쪽초상하단ビリー. 원본BF2BCC bank slot5 BF2E4C128B SHA a81b739bb903b4dc8a4a44c7c148b8e1eb69bcd9ac4c2629ed07b30a9d557386(64자,실측일치). 기존 part1_campaign_co_labels.LABELS에빌리추가, 동일32×8 Galmuri7/팔레트1,3,5/포인터·접근기가드·최종freeze유지.
+- 후보882bc231c057d75887dcef2bdfcc9d89bd0147d6bf1497054c496f91ef4e6bc9. 이름표4tests/92textguards/integrity17902/repoint1949/91fidelity/13controls PASS. 정상첫캠페인완료저장cold7/8/13/15에서빌리표시정상. Claude Opus 확정결함없음; 전투진입화면추가확인은진행중. `temp/full_audit_2026-09-15/campaign_billy_verification.json`.
+
+### 2026-09-22 1편 공장 안내 호칭 경계
+- 둘째전투 도입27 `아님료` 관측. DC33AF..DC33BD 원문さん、リョウ！/앞69이름삽입/뒤720A09. legacyTSV님료가쉼표를소실시킴. 실제operand를「님, 료！」로복원해플레이어아+님, 료！로표시. Bteam동일키baseline/override도실제fragment와일치시킴.
+- 후보239ef4a3e34c578d4218ca397120cc2334f59606420c046b8aa209ca76856b35,93guarded/74tests/integrity17902/repoint1949/91fidelity/13controls PASS. 10B≤14B,앞69/뒤720A09원본동일. 첫캠페인완료일반저장cold26..30 시각검수PASS, 빌리이름표도26정상. ClaudeOpus최종제품리뷰확정결함없음. `temp/full_audit_2026-09-15/factory_call_verification.json`.
+
+### 2026-09-22 미션5 긴 제목 잘림 — 조사중
+`cannon_cleared_cold_live`34/frame12726 및전프레임sheet에서 해상 도시를 노려라！(11code) 정지상태왼쪽잘림. 실제문자열A2D5A0→A56A98(repoint), 원본자리축약본아닌activepayload분석필수. Sharedglyphloader37C4E4 callsites36B63C(mapadvance사용),37C7EE(titleadvance미사용). 제목정지37CF0C/0E/10는remaining*24,37CF12anchor224,37CF14subx. 정착애니37CEAC/AE/B0도동일,37CEB2anchor224. 11code→start224-264=-40. 공백advance12를줄여도이renderer엔효과없음. 제목전용동적stride/폭맞춘glyphloader검토중; 아직수정코드없음. `temp/full_audit_2026-09-15/mission_title_fit_design_prompt.txt` 사실/설계질문.
+
+### 2026-09-22 긴 제목 fit 시제품
+신규 tools/part2_mission_title_fit.py 및 ASM은 제목 호출부37C7E4와 배치37CEAC/37CF0C만 분리한다. 9코드 이하 원본24px/원본로더, 10·11코드20px/19px이내 잉크. F66000:F70000 원본SHA가드, 훅opcode가드, 130개 활성제목 중 긴3개·23코드. 11초과 빌드실패. 정상M4완료저장 cold probe34 제목전체/35다음대사 확인, 짧은M4 cold22/23/24 이전후 픽셀동일. 전체빌드/리뷰 아직 진행 중. fit은 메시지 재배치 이후 활성포인터를 분석해야 함(최초통합 freeze충돌로입증).
+
+### 2026-09-22 P2 인용부호 A3 fallback
+관측main79/81/85의?는comprehensive「」→normalizeASCIIquote→8168 경로. A3linkedtable8168없음,8175=80C040/8176=80C160존재. 관측3행normalization선택만보존하여다른행불변. A093EC→A42174(246B),A09508→A422A0(374B),nativeptrA35D24/A35D2C전수추적갱신·old참조0. naval_quote_diff_proof.json,naval_quote_review_closure.json.
+
+
+### 2026-09-22 남은 일수 HUD 조사와 중간 정리
+2편 M5 DAY1 `naval_day1_cold_live`8에서 일본어「あと7日」확인. prefix OBJ tile0x42(16×8), suffix0x44(8×8), 숫자는별도0x3D7. 원본483D14..483D74의96B만교체. 소스SHA9440da5bd729e5413733f13d902300ea11e194f4f07230f18c4f6cc99a0488fd, nativecopy343DCE 바이트094809496022cef748f8, pointer343DF4=08483D14/dest343DF8=06010840. BL은343DD4에서8311E68. Galmuri7「남은」「일」, 숫자그대로. 원본prefix15열은투명이며숫자와겹침. Claude최초지적에따라prefix/suffix외곽선독립클리핑,15열투명보존, suffix1px우측정렬, BBX7px baseline0가드. 4tests PASS. `remaining_days_guarded_probe_cold` 정상일반저장부팅8과hud_left 육안확인. 전체빌드/최종검증은인계기록참조.
+Claude의팔레트집합동일요구는원본안티앨리어싱14/8 때문에부적합. 원본ink y1..6,한글y0..6으로하단일치. 추가prefix외곽선/테스트보강제안은남아있으며전체출하승인으로집계하지않음.
+
+
+## 2026-09-23 lossless 잔여7 소비 경로 조사
+
+원본/round8 상세정보 소비 코드 7구간 불변. native 08B3D314..324 및 08B3D658..67A는 08DEF690 기반 18×16 절대 포인터 표를 사용한다. DEEE61 포함 DEEE4C 잠수함 시야 문구와 DEF533 포함 DEF518 보조포 문구는 이 정상 상세 경로에서 선택되지 않는다. 실제 잠수함 시야는 DEFAD8→DEF1A0→round8 A750C4, 헬기 보조포는 DEF9C4→DEE7D0→A75D5C이다. DEF518은 DEE7D0의 prefix만 같고 후자에는 추가 2줄이 있으므로 전체동일로 보지 않는다.
+
+DA187B/DA32EB/DA40BF 수업군 및 DF6118/DF77A2 출격 대체군의 상위 소비는 아직 미확정. 미사용으로 판정하거나 lossless7을 통과시키지 않았다. 보고/주소표/디스어셈블리/정상 UI probe계획: temp/sprite_2026-09-23/lossless_remaining/{REPORT.md,inventory.json,proof.json,consumer_disassembly.txt}. 이번 조사는 읽기 전용 정적 조사이며 해당 상세 항목의 신규 실화면 검증을 주장하지 않는다.
+
+### 같은 날 상위 소비 경로 추가 확인
+
+DF60D8/DF77A0은 훈련 지도 선택의 index0/12 소개와 인접한다. 실제 14×2 preview/소개 표 DF7888/DF78C0 및 native B47E14/B47E68을 확인했고, opcode19는 절대문구(current+4)를 읽은 뒤 명령+16으로, opcode4는 task.active=0으로 끝난다. 해당 소개는 각각 DF6014/DF7660 뒤 종료하여 대상 행을 순차 읽지 않는다. 실제 과외수업은 DBFC74→D9E900→opcode27/DBFDB4의10이벤트 표를 통해 55개 메시지(D9E900..DA0A34)를 선택하며, 미충족 두탭 수업군 DA0A70..DA4480은 여기서 선택하지 않는다. 별도 강의 메뉴/전역미사용은 미확정이다. 신규 native9구간 원본/round8 동일. temp/sprite_2026-09-23/lossless_remaining/UPPER_PATHS.md와 보조 산출물 참조.
+
+## 2026-09-23 2편 스크립트 소비 경로 구분
+
+`0831424C` 파서의 jump table에서 `57/77→08314656`, `4B/6B→083145BE`, `20/09/0A→0831431C`다. 57/77은 포인터를1byte 소비하고 같은 줄에서 대기한다. descriptor08804F58의 callback08314005는 job countdown만 다루며 종료 callback/부모전달은 해당 job에서 비활성이다. 4B/6B는 행·열을 초기값으로 복원한다. 20/09/0A는 위치 이동 없이 소비한다. 72는 행+2/열초기값 복원, 30..33은 스타일 값 변경이다. 별도313/B11 타일맵 hook의20은8px 이동하므로 규칙을 섞지 않는다.
+
+A357B4 테이블과 A3 글리프 함수는 여러 UI가 공유하므로 주소 범위나 glyph breakpoint만으로 각 메시지의31424C 소비를 확정하지 않는다. 기존 round5 READ의 PC0831425A/08314336, LR083148F3로 A01D24 한 메시지만 현재 포인터·payload·native code SHA에 연결했다. 새 `tools/part2_native_controls.py`는 이 fingerprint와 메시지별 증거를 분리해 검사한다. 조사 원문·디스어셈블·SHA는 `temp/part1_2026-09-23/static_audit/part2_native_controls/README.md`에 있다. 다른 메시지·최종 glyph·창폭은 별도 검증 대상이다.
+
+### 2026-09-23 지형 메뉴 BG 후보 영역 수명 관측 (생산 패치 아님)
+
+동일 round12 초기 ROM `5b5727cb83e8d80fea2ddfb67c0305bbac5ad7329aa9e5b3f6dc787b4e6ea69e`의 정상 cold에서 만든 map_cold.ss0를 같은 ROM에만 읽어 진단했다. coast 커서까지 RIGHT/UP4 정상입력 후 R→DOWN→UP→B→R, 각2hold+63release. 26개 snapshot에 BG512/원본source/BG0 shadow/PRAM/OAM/IO/VRAM, exit+1/+2/+3 프레임 포함. 실제PNG에서 비용6종↔지형설명/종료/재진입을 root 확인했다. 새 ROM이나 본선 진행 증거가 아니다.
+
+`06006800..06006A00`의512B는 진입 전부터 모든 관측시점에 `0201DB40` source와 동일한0이었다(SHA256 `076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560`). 전체범위 watch 쓰기0,318A5C breakpoint0,사진06014A00/02 양성쓰기4. BGpalette10과OBJpalette6은 메뉴에서동일하며지도에서는다르다. 주요7시점 BG0..3 모두켜짐; BGxCNT=0E00/1E02/0F09/1F0B,해당전체tilemap에6800..6A00참조0. 다른맵/날씨/전체호출의전역빈공간을증명한것은아니다.
+
+증거 `temp/part2_2026-09-23/round13/terrain_bg_transitions_native_retry/`,특히`evidence.json`,`all_bg_reference_scan.json`,`writes.log`. 최초`terrain_bg_transitions_native/`는키값문자열을잘못작성하여의도된전환을실행하지않은무효시도이므로제외했다. 현재시제품은원래숫자를옮긴후BG셀에꼬리를합성하는설계를엄격리뷰중이며,메모리복원/전역xref/쓰기범위/128프레임안정성검증전에는생산통합하지않는다.
+
+## 2026-09-23 2편 지형 이동유형: 40px OBJ/BG 합성과 수명
+
+원본SHA a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c. 정식구현 `tools/part2_terrain_movement_labels.py`, ASM `tools/asm/part2_terrain_movement_labels.s`, 회귀 `tools/test_part2_terrain_movement_labels.py`. round14 전체빌드SHA 83305154eefa6ed82e4046cbb827ad33252d2bd35805b51947e0eede5bff3be2, 빌드receiptSHA 0c0e1c93e0f2c984f3f256524ae62957c732b4441f516fe39848bf41d81ec709.
+
+- Native ID28/29/30/31/32/33/34 = 전차/타이어/보병/바주카/수송선/함선/비행. 원본32×16의아이콘을보존하면서Galmuri7을40px로표시한다. ROM 원본자산454494..454B94는변경하지않고native로더후해당OBJ VRAM7body를256B씩교체한다. 추가OAM0.
+- ROM예약FFC000..FFD100: Thumb code460B, atlasFFC800..FFD0C0=2240B(7body1792+7tail448). trampoline3474F6(init)/3472B8(draw)/34769A(frame), 좌표83E081와비용83E06C, 부모callback83E0B8의합계8write. 골든ASM/code/atlas, 전체원본SHA, source/native/cave/최종writer검사로보호한다.
+- BG0 shadow0201BB40에8×16tail을추가. tileA340..A34D→VRAM06006800..69C0, BGpal10과OBJpal6일치관측. 좌열OBJx8/우열56,반대창+128, tailx40/88, 비용x48/96. 7종조합의셀범위모델검사포함.
+- VRAM06006800..69FF 512B는native초기화3196D2..DE가literal31970C→08814FC0→0201DB40에서311C7C동기copy하는기존영역. 실패한old4678은347700조기종료에서이glyph를먼저복원해 Bhold1/held2의남은hardware타일맵이빈glyph를읽었다. shadow는이미clear되어도VRAM7000 hardware타일맵/OAM은남아있음을확인했다.
+- 현재는347700/destructor3476AC/nativeBGshadowclear를보존한다. 부모83E090의83E0B0 wait1 뒤83E0B8 callback만latebridge로연결하여source512B동기복원후원래3476F4를실행한다. 별도83E0D8 sharedcallback은원본그대로다. 새proc/scratch/stack셀보존/전역hook없음.
+- 정상SRAM/cold 같은7502frame의시제품8330과native기준fd0b2794를대조했다. 바다3/해안6/반대쪽평지5라벨로7종union확인,128idle×3/DownUp/정확한원복통과. 63개전환표본0pixel회귀/0미판정. 기존old4678에는같은검사가6FAIL, native자기대조63PASS. 새Bhold1/held2에는hardwaretail6/12/10셀과glyph가남고after1에tail0+source정확복원이함께관측됐다. source512B SHA076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560 불변.
+- 전체생산빌드8330이실제검증시제품과16MiB전체byte동일임을확인했다. 254수정행/제어42목표/18094활성·1996재배치payload/121strict제목검사도통과했다. 범위한계: 항구7종동시/날씨/모든맵/R닫기직접재현/CPU명령내VBlank순서/전구간엔딩은미검증. 전환63표본을모든프레임전수검수로확대하지않는다.
+
+영구화증거: `docs/screenshots/continuation_2026-09-23/terrain_lifetime_timing.json`, 같은경로 `terrain_lifetime_coast_B_held2.png`, `terrain_lifetime_opposite_panel_B_held2.png`, `terrain_lifetime_opposite_panel_exit_after1.png`. 빌드재현은 `python3 tools/build_korean_full.py --out temp/terrain_candidate.gba --no-sync-outputs`, 국소시험은 `python3 -m unittest discover -s tools -p test_part2_terrain_movement_labels.py`. 실화면상세캡처/비교도구는현재local temp/sprite_2026-09-23/part2_purchase/movement_addendum/아래보존되어있으며그폴더없이새경로재현을이미자동화했다고주장하지않는다.
+
+후속 편집기 검증은 `python3 -m unittest discover -s tools -p test_part2_terrain_editor.py`로 수행한다. 새 지형 자산의 구ROM 생성fallback/부분설치거부/사용자편집보존/원본비교와두편집기의compare경로를보호한다. `decode_from_rom`에서빈예약영역을원본그림으로오인하지않고native7개몸통+빈꼬리를합성한다. 실제패치비교는기능이설치된ROM에서만제공하며생성fallback을실제패치화면으로표시하지않는다.
+
+참조inventory의범위한계: canonical08 ROM포인터와구현된Thumb/ARM branch·wordLDR·ADR 패턴검사이며모든ARM메모리명령이나0A/0C mirror의미해석을보장하지않는다. 원본에서mirror대상rawpointer와소유span경계의추가PC-word-overlap은0hit였다. 신규ARM LDRB/LDRH/LDRSB 또는mirror경로를추가한다면해당소비자검사를따로확장해야한다. 현재고정native소비자들은원본span불변검사로보호된다.
+
+## 2026-09-30 — 옐로 코멧 대사 실제 overflow와 native 소비자
+
+- 2편 메시지 source A1F944, native pointer A37170, round23 target A4EFB4/new_len116. 실플레이 frame59088 `output/qa/part2_2026-09-30/m8_victory_live/0046_A_0059088.png`에서 첫 줄 넘침을 관찰했다. A1F96C/A1F97B는 77 같은 행 연결이고, A1F99B 앞에는 원본 77 72 줄바꿈이 있다. 개별 조각 폭만으로 실제 합산 행을 승인하면 안 된다.
+- 동일 ROM/frame58486 상태의 진단 재생에서 target+40부터76B READ를 감시했다. `temp/continuation_2026-09-30/yellow_comet_overflow/native_probe/reads.log`: pc0831425A/08314336, lr083148F3을 확인했다. 이 소비 증거를 다른 메시지 전체로 일반화하지 않는다.
+- 수정은 native 제어 바이트를 옮기지 않고 A1F97B/A1F99B의 한국어 문장 조각을 기존 줄바꿈 앞뒤로 재분배한다. 전체 문장/어휘/부정/호격 유지와 최종 재배치 및 픽셀 검증이 필요하다.
+
+- A1F9D8(pointerA37178) 인접 대사 page1 line1도48half-cell로 끝느낌표잘림을 확인했다(`round28/yellow_next_pages/page_4.png`). A1FA14는 TSV·인라인dict·script owner가dialogueoverride보다우선하는22B numeric operand다. 재분배할때세authority를같이갱신해야하며 기존numeric_repoint가원문slot을보존하고완전한owner문구를재배치한다. 새finalguard `tools/part2_dialogue_layout_contracts.py`는 관측한두메시지의원본payloadhash/pointer, 실제재배치, 두수정행/제어순서/waitprefix를검증하고실패시ROM저장전에중단한다. 첫페이지번역과전체화면검수는이guard의범위밖이다.
+
+## 2026-09-30 현재 재배치 메시지의 native READ 결합
+
+`current-relocated-native-read-v1`은 정확한 현재 ROM SHA, 원본 native table source, 현재 포인터·재배치 target, QA에서 확정한 bound_bytes, 전체 payload SHA와 trace를 결합한다. 역사적 재배치 trace는 수락하지 않는다. A0AB20/A1F9D8 두 메시지에 적용하여 소비자2/2276만 확인하며 픽셀 폭·전체 소비·미방문 화면은 승인하지 않는다. 원문은 docs/reports/CONTINUATION_2026-09-30.md 및 temp/continuation_2026-09-30/round29/current_native_audit/summary.json.
+
+watchpoint trace에는 READ/WRITE 표식이 없으며 로컬 생성 기록의 ROM 결합은 독립 서명된 증거가 아니다. 이번 두 진단의 watchaddr 입력은 r 모드이고 `mgba_harness.c`가 WATCHPOINT_READ로 지정한다. 더하여 허용 PC0831425A/08314336은 Thumb 실행 PC+4이며 실제 instr314256=`7808`(LDRB r0,[r1]),314332=`7830`(LDRB r0,[r6])이다. 두 명령은 이미 NativeProfile의 해시 지역에 포함되어 있어 같은 검증된 기계명령에서 WRITE가 발생하는 경로가 아니다. 한 줄의 bounded READ는 해당 parser 소비자 경로의 관측만 의미하며 메시지 전 바이트 소비를 보증하지 않는다. 다른 writer 겹침 검사는 QA의 validated relocation inventory/전체 빌드 무결성에 남긴다.
+
+
+### 2026-10-01 정상 플레이 잔류: 1편 아이언/스틸 랭크, 전장 맥스 이름
+
+- 기준 라이브 ROM SHA `9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863`; 원본 SHA `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c`.
+- `measured_live_tty/2604_A_0563901.png`의 `アイアン 레드`와 `3164_A_0632229.png`의 `スチール 레드`: 원본 BF1460/BF14C4 LZ77 256B 자산. 각 기록 ss0의 PNG gbAs를 zlib 해제한 공개 VRAM offset14720에서 원본 디코드와 byte-identical 일치. 포인터는 DFA364/DFA368, 다음 할당은 BF14C4/BF152C.
+- `part1_rank_labels.LABELS` 기존 규칙을 재사용해 아이언/스틸 추가. 압축 결과는 각각 74/97B, 61/102B(원본 소비량); 다음 에셋/정렬 패딩 사용 없이 32×16 native glyph, ink10 유지.
+- `2635_B_0570027.png`의 `マックス`: campaign bank BF2BCC와 별개인 battle HUD BD01B0 128B. 기록 공개 VRAM offset11640에서 원본과 일치. OAM20 attrs4015/40C6/1032, tile50, palette1. 원본 잉크1=7FFF, 음영7=358C, 외곽15=0000. 기존 료의 음영4=4A74를 복사하면 색이 달라지므로 맥스는7 보존.
+- `part1_campaign_co_labels.LABELS`에 battle_max 추가, 32×8 Galmuri7/원본 팔레트/가운데 정렬의 기존 렌더 사용. 폰트 변경 없음.
+- 재현: `python3 temp/continuation_2026-10-01/rank_fix/verify_sources.py`. 공개 화면 자산만 읽으며 새 에뮬·군대 RAM 접근 없음.
+- 검증: 관련 기존8tests 통과; rank drift 검사를 모든 label의 source/pointer/nextpointer로 확장. 후보 실화면 검증은 아직 하지 않았고 라이브/배포 ROM에 적용하지 않았다. 격리 빌드 및 Claude 검토 결과는 같은 폴더에 보존.
+
+
+### 2026-10-01 화산 대사 두 곳 의미 회귀 검사
+
+A1D444(원본92B, pointerA36EF8)의自分のための話か는‘자신을 위한 얘기인가.’로목적의미를보존한다. A1D4BC(원본80B,pointerA36F00)의 마지막 대사 A1D4E2는앞조건‘내작전에참견하고싶다면,우선은’과결합한상대명령이므로‘주어진전력으로승리해보여라.’로고쳤다. tools/part2_volcano_context.py에서원문SHA·native pointer·최종합성문구·제어/대기경계를검사한다. 실제소비자/픽셀검증은아직없다. 후보36ed101b…f73ef, 증거temp/continuation_2026-10-01/volcano_context/.
+
+P1 M9 보급팝업의ホキュウ잔류: 5821_NONE_0914907.ss0 공개VRAM0x10000+397*32의1024B가원본BD0F90과유일하게일치한다. OAM16 attrs4338/fe48/318d,64x32/4bpp/1D/affine matrix31 identity(256,0,0,256), palette3. 원본asset SHA466d77039a491789a742bcf8e1e349f16cf86ced31bd89ebf9515c362440d755. 수정전공개표시자산추적이며ROM패치/수정화면확인은아직아니다.

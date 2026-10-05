@@ -1,0 +1,23 @@
+{
+  "rom_sha256": "56314113bf297eaf6b3416fe56958ad9e58fbea7731e38611e1a35c4e6a6be9f",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part1_2026-09-23/day18_round2_save/game_save.json",
+  "save_sha256": "9016db605bee7bdced3edf767ab0c08cc6499e7ea2ccd819e07b300a412e3e86",
+  "actions": 9,
+  "final_frame_counter": "OK framecounter 5097",
+  "screens": [
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_LEFT.png",
+      "png_sha256": "f4537c1503fbcd8096a853a7500f244f7fe39cf15a03825c8b718e9ca28e64bf"
+    },
+    {
+      "replay_segment": 9,
+      "source_segment": 9,
+      "png": "009_source9_R.png",
+      "png_sha256": "f4d7212d952396128bd177cea6d9ded96c81ddf31a7b16126a22a28b60ad6a1f"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

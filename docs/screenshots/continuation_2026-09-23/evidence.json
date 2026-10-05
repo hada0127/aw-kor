@@ -1,0 +1,86 @@
+{
+  "baseline_rom_sha256": "17dff0c0af7a91afcefdfe80b1bf7f4e88f0ef12da2e1b6560eaf9d591d0e0e9",
+  "run": "output/qa/part2_2026-09-23/naval_resume",
+  "reviewed_segments": [
+    8,
+    10,
+    14,
+    21,
+    23,
+    26,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    56
+  ],
+  "full_frame_visual_review": "not claimed",
+  "findings": [
+    {
+      "id": "rocket_boundary",
+      "source": "output/qa/part2_2026-09-22/naval_day1_cold_live/0084_A_0017346.png",
+      "address": "0xA0907B",
+      "issue": "공격 범위3-5 경계공백 누락",
+      "state": "fixed; exact candidate bytes and normal-save cold screen verified"
+    },
+    {
+      "id": "fuel_boundary",
+      "segment": 40,
+      "addresses": [
+        "0xA09D26",
+        "0xA09D30"
+      ],
+      "issue": "연료를2소모해 경계공백 누락",
+      "state": "fixed; exact candidate bytes and normal-save cold screen verified"
+    },
+    {
+      "id": "fuel_depleted",
+      "segment": 41,
+      "address": "0xA09D3D",
+      "issue": "연료0이면침몰해 조사/띄어쓰기 누락",
+      "state": "fixed; exact candidate bytes and normal-save cold screen verified"
+    },
+    {
+      "id": "resupply_alternative",
+      "segment": 42,
+      "address": "0xA09D8A",
+      "issue": "항구에서 대기 또는 수송차 인접이라는 대안 연결어 누락",
+      "state": "fixed; exact candidate bytes and normal-save cold screen verified"
+    }
+  ],
+  "candidate_rom_sha256": "a290f200d6ec915ed06857c02c77dd75dfff31e109b20111afea3700fb7113a6",
+  "candidate_product_stage": "development_candidate",
+  "candidate_source_receipt": "temp/part2_2026-09-23/combined_candidate.gba.build.json",
+  "runtime_evidence": [
+    "temp/part2_2026-09-23/cold_rocket/evidence.json",
+    "temp/part2_2026-09-23/cold_fuel/evidence.json",
+    "temp/part2_2026-09-23/days_cold/evidence.json"
+  ],
+  "screenshots": {
+    "fuel_depleted_after.png": "13880c113d3de66a76071e2d385af235d25077484c77c158aca2da55a14f6378",
+    "remaining_days_left.png": "63b1b8003924fbcd345745d85044677ba727e92e355051bec7a4454fb4f6bacb",
+    "menu_original_vs_restored.png": "8ab03654dabdbbfaccdd917bfcc9501ac177e7fa68a68dec5e39ac5063e42c5c",
+    "rocket_range_after.png": "826d85a2104c28c96567c5bb9078320792c3b46dfab42354e13e9c9e048afe83",
+    "fuel_daily_after.png": "9a7f84b8b75d2cd32da6db0e90d2cbfc75f0fe85d2067192f840e679d576780d",
+    "fuel_resupply_after.png": "16505a6b54351b19419bf5598330a42066ebe13c6292095b932e6f03242e7951",
+    "remaining_days_right.png": "072b19464e1461965bed9f5202fba1bc72cfeae47a6c6ed19ab95e8f6c2df362"
+  },
+  "notes": [
+    "cold_rocket/hud_left.png remained on dialogue; NOT counted as left HUD evidence. Replaced by independent days_cold/hud_left.png.",
+    "All-frame capture exists for original live routes; targeted candidate probes captured declared screens only.",
+    "Both endings not yet reached; no full visual-review or distribution approval."
+  ]
+}

@@ -19,6 +19,7 @@
 """
 import json
 import os
+import build_korean_full as B
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROM = os.path.join(BASE, "original", "Game Boy Wars Advance 1+2 (Japan).gba")
@@ -56,7 +57,7 @@ def decode_gap(rom, start, end):
     while i < end and i < len(rom):
         b = rom[i]
         if b == 0x00:
-            segs.append({"kind": "end", "raw": "00"}); i += 1; continue
+            segs.append({"kind": "end", "address": f'0x{i:08X}', "raw": "00"}); i += 1; continue
         if b in (0x32, 0x33) and i + 1 < end:
             # 변수삽입: 0x33 <SJIS literal...> 0x30
             j = i + 1
@@ -68,14 +69,28 @@ def decode_gap(rom, start, end):
                 default = bytes(lit).decode("shift_jis", "replace")
             except Exception:
                 default = bytes(lit).hex()
-            segs.append({"kind": "var", "raw": rom[i:j + 1].hex(), "default": default})
+            segs.append({"kind": "var", "address": f'0x{i:08X}', "raw": rom[i:j + 1].hex(), "default": default})
             i = j + 1; continue
         if b == 0x0A:
-            segs.append({"kind": "newline", "raw": "0a"}); i += 1; continue
+            segs.append({"kind": "newline", "address": f'0x{i:08X}', "raw": "0a"}); i += 1; continue
         if b in (0x09, 0x6B, 0x72, 0x77, 0x57, 0x69):
-            segs.append({"kind": "ctrl", "raw": "%02x" % b}); i += 1; continue
+            segs.append({"kind": "ctrl", "address": f'0x{i:08X}', "raw": "%02x" % b}); i += 1; continue
         i += 1  # 기타(조각 텍스트 잔여 등) 무시
     return segs
+
+
+def korean_segments(segments, members):
+    present = {addr_int(m['address']) for m in members}
+    owners = {start: end for start, end in {**B.WHOLE_SCRIPT_ROWS, **B.STRUCTURED_SCRIPT_ROWS}.items()
+              if start in present}
+    result = []
+    for segment in segments:
+        address = addr_int(segment['address']) if segment.get('address') else None
+        owner = next((start for start, end in owners.items()
+                      if address is not None and start <= address < end), None)
+        if owner is None or (segment['kind'] == 'frag' and address == owner):
+            result.append(segment)
+    return result
 
 
 def main():
@@ -85,7 +100,8 @@ def main():
     force_split = set(over.get("split_before", []))   # 이 주소 앞에서 강제 분리
     force_join = set(over.get("join_before", []))      # 이 주소 앞 강제 결합
 
-    reals = [l for l in dm["lines"] if not l.get("is_noise") and (l.get("ja") or "").strip()]
+    reals = [l for l in dm["lines"] if not l.get("is_noise") and
+             ((l.get("ja") or "").strip() or addr_int(l['address']) in B.STRUCTURED_SCRIPT_ROWS)]
     reals.sort(key=lambda l: addr_int(l["address"]))
 
     groups = []
@@ -131,7 +147,7 @@ def main():
         def assemble(field):
             parts = []
             mi = 0
-            for s in g["segments"]:
+            for s in (korean_segments(g['segments'], g['members']) if field == 'ko' else g['segments']):
                 if s["kind"] == "frag":
                     m = next((m for m in g["members"] if m["address"] == s["address"]), None)
                     parts.append((m.get(field) or "") if m else "")
@@ -146,6 +162,7 @@ def main():
             "flagged": n >= FLAG_SIZE,
             "members": g["members"],
             "segments": g["segments"],
+            "ko_segments": korean_segments(g['segments'], g['members']),
             "assembled_ja": assemble("ja"),
             "assembled_ko": assemble("ko"),
         })

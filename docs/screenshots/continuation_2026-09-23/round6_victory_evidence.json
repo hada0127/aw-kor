@@ -1,0 +1,57 @@
+{
+  "rom_sha256": "cbc796e8d774ed0bcf23d2610c732a6efe84349dc6d842d388057d633a2b36e8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part1_2026-09-23/day21_prefinish_round4_save/game_save.json",
+  "completed_route_actions": 88,
+  "screens": [
+    {
+      "png": "038_source375_A.png",
+      "sha256": "e1547e441d9a00e70784e697fcd30263ed79d288e9e6d18286a1e107bc4340e2"
+    },
+    {
+      "png": "042_source379_A.png",
+      "sha256": "291ad286db88da85c032c8a08664a3e84cbf92fd2bd08cd10cd8081e9665b6c4"
+    },
+    {
+      "png": "049_source386_A.png",
+      "sha256": "3177bdd03921d68811c762700f3a5f9c9c2edfeaad11f7539bd001997486dbeb"
+    },
+    {
+      "png": "052_source389_A.png",
+      "sha256": "4ab2bb953eae1b649bff4bf78e5a934d8bf44569122bba1cd803ec36739daed0"
+    },
+    {
+      "png": "053_source390_A.png",
+      "sha256": "1bfe4b41388a274537b1fc96731b5c56eb67da23dfe5ff7fcf3840ceff105a88"
+    },
+    {
+      "png": "062_source399_A.png",
+      "sha256": "266b5c5fbf7208f8c04e79df891f95aba9dbe40ceb8eee73698997d045f27b5c"
+    },
+    {
+      "png": "074_source411_R.png",
+      "sha256": "717c3dfcdb585395ca19433096f6c420e1d5223075e9940aeb6b5ecce45a574b"
+    },
+    {
+      "png": "080_source417_R.png",
+      "sha256": "2ea7d6950051de2dbab39be07d36b13a6cf86de3403454d53ef33572d5cae759"
+    },
+    {
+      "png": "084_source421_R.png",
+      "sha256": "2e565cbe47384046298b81956f7aea9db0640400b3a69d6f111e46e04decc770"
+    },
+    {
+      "png": "088_source425_R.png",
+      "sha256": "11caf22de110a365811efe7d6821fba803a274795a1b73417c801c83361baa14"
+    }
+  ],
+  "visual_reviewed_sources": [
+    411,
+    417,
+    421,
+    425
+  ],
+  "fighter_probe": "NOT_REACHED: script used wrong type21; actual fighters type16; no screen claim",
+  "scope": "Four info screens verified; fighter not verified; all-frame/ending not claimed",
+  "process_exit": 1
+}

@@ -1,0 +1,169 @@
+{
+  "rom_sha256": "8a9dfa35e8eada035f9abe103459e5b77a4cb39594010e1cdd6b81990346bf41",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m6_victory_save/game_save.json",
+  "save_sha256": "6986323c3d7b88c3a6b60b330bcf8fbf11192ee768398230da2af9d225a0c223",
+  "actions": 48,
+  "final_frame_counter": "OK framecounter 29258",
+  "screens": [
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_A.png",
+      "png_sha256": "a1bd1ea6489e40767acb13270c927fb3cb8bd75ad4b99284122dcd321f5cafd3",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0008_A_0006012.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 11,
+      "source_segment": 93,
+      "png": "011_source93_A.png",
+      "png_sha256": "46976cf0e02f467ac13aaa4725108caa001fca7f7ce8d67cddba0f42fd80f0fc",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0093_A_0038506.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        138
+      ]
+    },
+    {
+      "replay_segment": 12,
+      "source_segment": 94,
+      "png": "012_source94_A.png",
+      "png_sha256": "7467cb0c8359014a075056f55e71051ef5c09eb076930200e7d55b0e5e05dc97",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0094_A_0039108.png",
+      "changed_bbox": [
+        65,
+        56,
+        110,
+        134
+      ]
+    },
+    {
+      "replay_segment": 23,
+      "source_segment": 105,
+      "png": "023_source105_A.png",
+      "png_sha256": "f8d39f37b02d6cef396231a71b6f5a04ee4d74fe6e5bddd0a055854aab694d23",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0105_A_0045728.png",
+      "changed_bbox": [
+        105,
+        54,
+        239,
+        135
+      ],
+      "visual_review": {
+        "passed": true,
+        "note": "하지만 괜찮아? 이 임무는 도미노의・・・ 전체 표시/우측 잘림 없음"
+      },
+      "permanent_png": "round8_lab_023_source105_A.png"
+    },
+    {
+      "replay_segment": 26,
+      "source_segment": 108,
+      "png": "026_source108_A.png",
+      "png_sha256": "d0621a2d5274e3a274942417d0e2bfbee1be8a7055f185024cad850dafe43ad2",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0108_A_0047534.png",
+      "changed_bbox": [
+        3,
+        69,
+        175,
+        152
+      ]
+    },
+    {
+      "replay_segment": 29,
+      "source_segment": 111,
+      "png": "029_source111_A.png",
+      "png_sha256": "e1d5ef536211ede3b93216c1225db042451e22a30b1ea6f5fcd9e95bbdccee42",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0111_A_0049340.png",
+      "changed_bbox": [
+        73,
+        54,
+        172,
+        150
+      ]
+    },
+    {
+      "replay_segment": 30,
+      "source_segment": 112,
+      "png": "030_source112_A.png",
+      "png_sha256": "6473b4df0e0509895c451270d8adb4eca2ab3ea306a97052a8c2e645b72cdd68",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0112_A_0049942.png",
+      "changed_bbox": [
+        73,
+        54,
+        172,
+        134
+      ]
+    },
+    {
+      "replay_segment": 37,
+      "source_segment": 119,
+      "png": "037_source119_A.png",
+      "png_sha256": "064d4337af570374781700dc1a111a49f95aa1486bcac3dc7227d031a3777779",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0119_A_0054156.png",
+      "changed_bbox": [
+        3,
+        11,
+        151,
+        157
+      ]
+    },
+    {
+      "replay_segment": 38,
+      "source_segment": 120,
+      "png": "038_source120_A.png",
+      "png_sha256": "7c62b39a888cade1cf3c832c75b7851f669b2b0cf66e954fe178c2af3033d6c1",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0120_A_0054758.png",
+      "changed_bbox": [
+        3,
+        11,
+        176,
+        157
+      ]
+    },
+    {
+      "replay_segment": 43,
+      "source_segment": 125,
+      "png": "043_source125_A.png",
+      "png_sha256": "e5fadb1f6dabdabf9e541e084de5dc8820878315119cbea4e05e25c0df5609d8",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0125_A_0057768.png",
+      "changed_bbox": [
+        3,
+        27,
+        215,
+        160
+      ],
+      "visual_review": {
+        "passed": true,
+        "note": "그럭저럭 싸우니, 편리한 유닛이야! 전체 표시"
+      },
+      "permanent_png": "round8_lab_043_source125_A.png"
+    },
+    {
+      "replay_segment": 48,
+      "source_segment": 130,
+      "png": "048_source130_A.png",
+      "png_sha256": "c38c7c0e2ebd9f446b64b1874af1f271e51296bfe225bd802552914ace043c40",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0130_A_0060778.png",
+      "changed_bbox": [
+        3,
+        27,
+        239,
+        152
+      ],
+      "visual_review": {
+        "passed": true,
+        "note": "옆에 오지 않는 한, 발견될 일은 없어. 경계 공백/전체 표시"
+      },
+      "permanent_png": "round8_lab_048_source130_A.png"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

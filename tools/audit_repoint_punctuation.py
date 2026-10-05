@@ -216,8 +216,8 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true")
     args = parser.parse_args()
 
-    report = build_report(Path(args.rom))
-    report_path = Path(args.report)
+    report = build_report(Path(args.rom).resolve())
+    report_path = Path(args.report).resolve()
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
@@ -228,7 +228,7 @@ def main() -> int:
     print(f"- payload totals: {report['payload_totals']}")
     print(f"- payload issue count: {report['payload_issue_count']}")
     print(f"- source counts: {report['source_counts']}")
-    print(f"- report: {report_path.relative_to(ROOT)}")
+    print(f"- report: {report_path}")
 
     if args.strict and report["payload_issue_count"] > 0:
         print("[FAIL] Repoint punctuation audit", file=sys.stderr)

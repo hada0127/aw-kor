@@ -1,0 +1,83 @@
+{
+  "rom_sha256": "09d05990d171709e86f913690b05ecad15f550bd7f944402f2126466ca3c058b",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m7_day2_save/game_save.json",
+  "save_sha256": "f7368561a4f4145dfd99f5c8a0893c062264af988488176ddf43a46014f936c8",
+  "actions": 185,
+  "final_frame_counter": "OK framecounter 48439",
+  "screens": [
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_A.png",
+      "png_sha256": "fad28663c411d142b21627ca265583d7e7add4756c837624b8ab8c36a6e1c660",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0008_A_0006012.png",
+      "changed_bbox": null
+    },
+    {
+      "replay_segment": 161,
+      "source_segment": 161,
+      "png": "161_source161_A.png",
+      "png_sha256": "2b214b2502e3c7bbd0ac4ac5c8200ff579da0f77dbf968ca788eaf89b670da29",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0161_A_0033712.png",
+      "changed_bbox": null
+    },
+    {
+      "replay_segment": 177,
+      "source_segment": 177,
+      "png": "177_source177_A.png",
+      "png_sha256": "02c894265ef6a2e4a3388814012a5d557a82c1bf0c7a32bef6ee7d3afbfe2e68",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0177_A_0043024.png",
+      "changed_bbox": [
+        121,
+        123,
+        168,
+        134
+      ],
+      "permanent_png": "round11_m7_177_source177_A.png"
+    },
+    {
+      "replay_segment": 184,
+      "source_segment": 184,
+      "png": "184_source184_A.png",
+      "png_sha256": "7447bf1af9352327538d2e3cd3b0feedba086569d5908c272771080897aea9bf",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0184_A_0047838.png",
+      "changed_bbox": [
+        40,
+        67,
+        64,
+        78
+      ],
+      "permanent_png": "round11_m7_184_source184_A.png",
+      "visual_delta_assertion": "Only broken title glyph rectangle x40..63/y67..77 changed; scores, portraits and rest of result screen pixel-identical"
+    },
+    {
+      "replay_segment": 185,
+      "source_segment": 185,
+      "png": "185_source185_NONE.png",
+      "png_sha256": "549b5cecdf8a476b6ca14f6452743c935c68cd11eb7f51f98bf55923500aef85",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0185_NONE_0048438.png",
+      "changed_bbox": [
+        40,
+        67,
+        64,
+        78
+      ],
+      "permanent_png": "round11_m7_185_source185_NONE.png",
+      "visual_delta_assertion": "Only broken title glyph rectangle x40..63/y67..77 changed; scores, portraits and rest of result screen pixel-identical"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence",
+  "visual_review": {
+    "reviewed_source_segments": [
+      177,
+      184,
+      185
+    ],
+    "observations": [
+      "도미노의 정보에도 전체 표시",
+      "M7 결과 제목 내일로 7일간 표시; ?? 사라짐"
+    ],
+    "scope": "targeted screenshots only; no ending/all-frame claim"
+  }
+}

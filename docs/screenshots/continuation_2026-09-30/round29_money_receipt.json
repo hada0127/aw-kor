@@ -1,0 +1,366 @@
+{
+  "kind": "normal cartridge seed cold diagnostic input replay; no emulator state loading",
+  "rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+  "save_sha256": "db2d579bcf433ee7950227bd07e7509ae7c2e8f35bee18b328a25ee6c5e72f2e",
+  "source_rom_sha256": "38304726c39e0d2a034ce52568b0588e4f39c9a275f8d8fbd33f497a85f85288",
+  "seed_receipt_sha256": "5e68f857d449a4af85e516b7c1d1740092db126561fcba34e64f41272ee143c3",
+  "seed_validation_scope": "receipt, source checkpoint/state/ROM hashes and storage type; historical entire frame chain not reverified for this short diagnostic",
+  "input_log_sha256": "84ea166aba727f8edf48603b82a2f697fe1bd8097b74ba5e52fb5e23566a81da",
+  "inputs": [
+    {
+      "segment": 1,
+      "key": "NONE",
+      "hold_frames": 0,
+      "release_frames": 1380
+    },
+    {
+      "segment": 2,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 180
+    },
+    {
+      "segment": 3,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 120
+    },
+    {
+      "segment": 4,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 1260
+    },
+    {
+      "segment": 5,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 360
+    },
+    {
+      "segment": 6,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 180
+    },
+    {
+      "segment": 7,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120
+    },
+    {
+      "segment": 8,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 9,
+      "key": "RIGHT",
+      "hold_frames": 12,
+      "release_frames": 180
+    },
+    {
+      "segment": 10,
+      "key": "LEFT",
+      "hold_frames": 12,
+      "release_frames": 180
+    },
+    {
+      "segment": 11,
+      "key": "LEFT",
+      "hold_frames": 4,
+      "release_frames": 120
+    },
+    {
+      "segment": 12,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 300
+    },
+    {
+      "segment": 13,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 14,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 15,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 16,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 17,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 18,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 19,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 20,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 21,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 22,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 23,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 24,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 25,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 26,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 27,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 28,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 29,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 30,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 31,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 32,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 33,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 34,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 35,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 36,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 37,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 38,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 39,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 40,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 41,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 42,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 43,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 44,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 45,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 46,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 47,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 48,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 49,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 50,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 51,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 52,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    },
+    {
+      "segment": 53,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 600
+    }
+  ],
+  "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+  "emulator_exit_code": 0,
+  "core_frame": 29706,
+  "watch_reply": "OK watchaddr 08A4327C len=52 set=52",
+  "trace_sha256": "9a88576f72d5911160a90f83d1c8628c5c5a19e60eae1b2dcd3f8baeb8565610",
+  "images": {
+    "segment_53.png": "bc18031a8843dba0008e8b7cb4950650f30c90f82dcb8e932f8e813b77735b36",
+    "segment_52.png": "bf5f8b7f42168941e0d88017802c8a268dfbe52ed34ea82215985b6406509762",
+    "segment_50.png": "0bec3e52da5603748b3c4d9d9b52c015660d61d9ff0904420ee2b7475f216771",
+    "segment_51.png": "8edfa4bb8cc75ca28135b2bb175896c4ef0effd15f11cf81eee4555b15995865",
+    "segment_48.png": "c7702b07e488dca8f5b3bfd6e8f48c4f6b97d71c8fa720270fe2669a6f797299",
+    "segment_49.png": "f50f90d5abecac5639a6eddafd7d77f0d2580231c5f91ab358cc15e220b82c37"
+  },
+  "normal_play_or_ending_claim": false,
+  "visual_review": {
+    "reviewer": "Codex",
+    "source": "0xA0AB20",
+    "verdict": "전체 군자금 설명과 종결점이 화면 내 표시됨; 다음 대사 정상. 폭44 필터 후보이나 이 화면에서 실제 잘림 미발견.",
+    "dark_text_extent_x": [
+      57,
+      235
+    ],
+    "old_vs_new_rgb_differing_channel_bytes": 0,
+    "scope": "현재 native 경로의 단일 화면·단일 스타일만 확인; 다른 소비자와 전 장면의 폭 승인 아님"
+  },
+  "native_reads": {
+    "count": 149,
+    "unique_addresses": 49,
+    "pc_values": [
+      "08314020",
+      "08314232",
+      "0831425A",
+      "08314336",
+      "08F30284",
+      "08F30286"
+    ]
+  }
+}

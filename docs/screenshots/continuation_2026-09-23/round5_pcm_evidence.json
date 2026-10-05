@@ -1,0 +1,59 @@
+{
+  "rom_sha256": "56314113bf297eaf6b3416fe56958ad9e58fbea7731e38611e1a35c4e6a6be9f",
+  "entry": {
+    "msg": "0xDCE8F0",
+    "status": "relocated",
+    "ptr_off": "0xDE4324",
+    "new_addr": "0xA72480",
+    "old_len": 128,
+    "new_len": 134,
+    "lines": 4,
+    "fixed": [
+      "0xDCE8F2"
+    ],
+    "pointer_classification": {
+      "kind": "verified_pcm_collision",
+      "status": "classified",
+      "excluded_sites": [
+        "0x1202F0",
+        "0x6A3A68",
+        "0xCFDAD0"
+      ],
+      "source_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+      "sample_sha256": "79b1b026ac4ba24bd2ab8e6a5316cc7e3ea5a5c183bd05ac8795ddb557a4ad90"
+    }
+  },
+  "restored_payload_bytes": 38,
+  "samples": [
+    {
+      "site": "0x1202f0",
+      "start": "0x11f480",
+      "end": "0x1224d1",
+      "sha256": "79b1b026ac4ba24bd2ab8e6a5316cc7e3ea5a5c183bd05ac8795ddb557a4ad90"
+    },
+    {
+      "site": "0x6a3a68",
+      "start": "0x6a2bf8",
+      "end": "0x6a5c49",
+      "sha256": "79b1b026ac4ba24bd2ab8e6a5316cc7e3ea5a5c183bd05ac8795ddb557a4ad90"
+    },
+    {
+      "site": "0xcfdad0",
+      "start": "0xcfcc60",
+      "end": "0xcffcb1",
+      "sha256": "79b1b026ac4ba24bd2ab8e6a5316cc7e3ea5a5c183bd05ac8795ddb557a4ad90"
+    }
+  ],
+  "native_drivers_unchanged": true,
+  "siblings_controls_unchanged": true,
+  "remaining_unfulfilled": [
+    "0x00DA187B",
+    "0x00DA32EB",
+    "0x00DA40BF",
+    "0x00DEEE61",
+    "0x00DEF533",
+    "0x00DF6118",
+    "0x00DF77A2"
+  ],
+  "runtime_song_claim": false
+}

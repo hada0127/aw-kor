@@ -27,12 +27,15 @@ import html
 import json
 import os
 import secrets
+import sys
 import threading
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+from editor_storage import EDITOR_LOCK, atomic_write_text, save_json as atomic_save_json, editor_request
 STATIC = Path(__file__).resolve().parent / "static"
 INDEX_PATH = ROOT / "data" / "sprites_index.json"
 ORIG_PNG_DIR = ROOT / "temp" / "sprites_png"
@@ -76,7 +79,7 @@ SELECT_VIRTUAL_SPRITES = {
     },
 }
 
-_LOCK = threading.Lock()
+_LOCK = EDITOR_LOCK
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
         ".css": "text/css; charset=utf-8", ".png": "image/png", ".json": "application/json; charset=utf-8"}
 
@@ -87,7 +90,7 @@ def load_json(path, default=None):
 
 
 def save_json(path, data):
-    Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_save_json(path, data)
 
 
 OBJLABEL_PATH = ROOT / "data" / "objlabel_sprites.json"
@@ -97,9 +100,16 @@ _OBJLABELS = None
 def load_objlabel_sprites():
     """빌드가 방출한 OBJ 직접기록 라벨군 합성 스프라이트(흩어진 4bpp 타일). type='synthetic'."""
     global _OBJLABELS
-    if _OBJLABELS is None:
-        _OBJLABELS = (load_json(OBJLABEL_PATH, {}) or {}).get("sprites", []) or []
-    return _OBJLABELS
+    try:
+        stat = OBJLABEL_PATH.stat()
+        key = (stat.st_ino, stat.st_size, stat.st_mtime_ns)
+    except FileNotFoundError:
+        key = None
+    snapshot = _OBJLABELS
+    if snapshot is None or snapshot[0] != key:
+        snapshot = (key, (load_json(OBJLABEL_PATH, {}) or {}).get("sprites", []) or [])
+        _OBJLABELS = snapshot
+    return snapshot[1]
 
 
 def sprite_list():
@@ -151,6 +161,8 @@ PATCHED_ROM_PATH = ROOT / "output" / "game_wars_korean_full.gba"
 CMP_DIR = ROOT / "temp" / "sprite_cmp"
 _ROM = None
 _PATCHED = None
+_PATCHED_KEY = None
+_PATCHED_LOCK = threading.Lock()
 MODE4_STRATEGIC_MAP_OFFSETS = {0x00C2FD70, 0x00C30EE8}
 MODE4_STRATEGIC_MAP_PALETTE_OFF = 0x00C2FC90
 MODE4_STRATEGIC_MAP_W = 240
@@ -164,10 +176,22 @@ def rom_bytes():
 
 
 def patched_bytes():
-    global _PATCHED
-    if _PATCHED is None:
-        _PATCHED = PATCHED_ROM_PATH.read_bytes() if PATCHED_ROM_PATH.exists() else b""
-    return _PATCHED
+    global _PATCHED, _PATCHED_KEY
+    # The builder publishes ROMs with replace; retain one opened inode while
+    # reading so an external rebuild cannot pair old bytes with a new key.
+    with _PATCHED_LOCK:
+        try:
+            stream = PATCHED_ROM_PATH.open("rb")
+        except FileNotFoundError:
+            _PATCHED, _PATCHED_KEY = b"", None
+            return _PATCHED
+        with stream:
+            st = os.fstat(stream.fileno())
+            key = (st.st_ino, st.st_size, st.st_mtime_ns, st.st_ctime_ns)
+            if _PATCHED is None or _PATCHED_KEY != key:
+                _PATCHED = stream.read()
+                _PATCHED_KEY = key
+        return _PATCHED
 
 
 def sprite_by_id(sid):
@@ -240,19 +264,133 @@ def decode_from_rom(rom, sp):
     return grid, w, h, cols
 
 
+def _terrain_movement_indices(sp, current, *, allow_generated=True):
+    """Bind the new private atlas to its generator, never to an old ROM's zeros."""
+    import hashlib
+    import part2_terrain_movement_labels as terrain
+    original = rom_bytes()
+    if hashlib.sha256(original).hexdigest() != terrain.ORIGINAL_SHA:
+        return None
+    labels = sp.get("labels") or []
+    expected = terrain.editor_labels()[0]
+    if (sp.get("type") != "synthetic" or sp.get("tile_cols") != 5
+            or len(labels) != 1):
+        return None
+    label = labels[0]
+    if (sprite_offset_int(label) != expected['off']
+            or any(label.get(k) != expected[k] for k in ('tw', 'th', 'perm'))):
+        return None
+    if not current:
+        # Native seven 32x16 bodies, followed by seven empty 8x16 tails.
+        atlas = original[0x454494:0x454494 + 7 * 256] + bytes(7 * 64)
+    else:
+        try:
+            writes = terrain.expected_writes(original)
+        except (ValueError, OSError):
+            return None
+        rom = patched_bytes() or original
+        fixed = [(address, data) for address, data in writes if address != terrain.ATLAS]
+        if len(rom) != len(original):
+            return None
+        if all(rom[a:a + len(data)] == data for a, data in fixed):
+            # An installed atlas may contain intentional user artwork.
+            atlas = rom[terrain.ATLAS:terrain.ATLAS + 2240]
+        elif (all(rom[a:a + len(data)] == original[a:a + len(data)] for a, data in fixed)
+              and rom[terrain.CAVE:terrain.CAVE + terrain.CAPACITY]
+              == original[terrain.CAVE:terrain.CAVE + terrain.CAPACITY]):
+            if not allow_generated:
+                return None
+            atlas = dict(writes)[terrain.ATLAS]
+        else:
+            # Partial/foreign installation: existing endpoints report decode failure.
+            return None
+    visual = b''.join(atlas[i * 32:i * 32 + 32] for i in expected['perm'])
+    grid, width, height = ES.tiles_to_indices(visual, 5)
+    return grid, width, height, 5
+
+
 def decode_indices(sp):
     """원본 ROM에서 디코드. 비교/검증에서 원본 기준이 필요할 때만 쓴다.
 
     합성(synthetic) 스프라이트도 원본 ROM의 같은 직접 오프셋에서 조립할 수
     있으므로 좌측 비교 패널에서는 원본 바이트를 그대로 보여준다.
     """
+    if sp.get("id") == "objlabel_p2_terrain_movement":
+        return _terrain_movement_indices(sp, False)
     return decode_from_rom(rom_bytes(), sp)
 
 
 def decode_current_indices(sp):
     """편집기 기본값: 최종 빌드 ROM 우선, 없을 때만 원본 ROM fallback."""
+    if sp.get("id") == "objlabel_p2_terrain_movement":
+        return _terrain_movement_indices(sp, True)
     rom = patched_bytes() or rom_bytes()
     return decode_from_rom(rom, sp)
+
+
+def decode_patched_indices(sp):
+    """Actual installed build only; generated editor defaults are not comparisons."""
+    rom = patched_bytes()
+    if not rom:
+        return None
+    if sp.get("id") == "objlabel_p2_terrain_movement":
+        return _terrain_movement_indices(sp, True, allow_generated=False)
+    return decode_from_rom(rom, sp)
+
+
+
+def _power_title_context():
+    import build_korean_full as build
+    names = build.load_display_overrides()
+    codes = {ch: int(code, 16) for ch, code in
+             json.loads(Path(build.SYLCODE).read_text(encoding="utf-8")).items()}
+    return names, codes
+
+
+def is_power_title_sprite(sp):
+    from part2_power_title_glyphs import ASSET_ID
+    return override_id(sp) == ASSET_ID
+
+
+def power_title_edit_view(sp, record):
+    """One shared snapshot/binding gate for both sprite-editing interfaces."""
+    import part2_power_title_glyphs as titles
+    rom = patched_bytes()
+    if not rom:
+        raise ValueError("최신 한글 빌드가 없습니다. 빌드 후 기술명 그림을 다시 열어 주세요.")
+    names, codes = _power_title_context()
+    try:
+        binding, raw = titles.editor_view(rom, rom_bytes(), names, codes, record)
+    except AssertionError as exc:
+        raise ValueError("현재 기술명 설정과 빌드가 다릅니다. 기존 편집은 보존했습니다. 빌드 후 다시 열어 주세요.") from exc
+    grid, width, height = ES.tiles_to_indices(raw, 32)
+    return {"ok": True, "indices": grid, "width": width, "height": height,
+            "tile_cols": 32, "edited": bool(record and record.get("indices")),
+            titles.BINDING_KEY: binding}, rom
+
+
+def power_title_save_context(sp, body, record):
+    if not is_power_title_sprite(sp):
+        return {}, None
+    from part2_power_title_glyphs import BINDING_KEY
+    view, snapshot = power_title_edit_view(sp, record)
+    if body.get(BINDING_KEY) != view[BINDING_KEY]:
+        raise ValueError("화면을 연 뒤 기술명 설정이 바뀌었습니다. 저장하지 않았으며 기존 편집은 보존했습니다. 최신 화면을 다시 열어 주세요.")
+    return {BINDING_KEY: view[BINDING_KEY]}, snapshot
+
+
+def confirm_power_title_save_context(metadata):
+    """Compression can take time; check the current mapping again before I/O."""
+    if not metadata:
+        return
+    import part2_power_title_glyphs as titles
+    names, codes = _power_title_context()
+    try:
+        current = titles.dictionary_binding(patched_bytes(), names, codes)
+    except AssertionError as exc:
+        raise ValueError("저장 중 기술명 설정이 바뀌었습니다. 기존 편집은 보존했습니다. 최신 화면을 다시 열어 주세요.") from exc
+    if metadata.get(titles.BINDING_KEY) != current:
+        raise ValueError("저장 중 기술명 설정이 바뀌었습니다. 기존 편집은 보존했습니다. 최신 화면을 다시 열어 주세요.")
 
 
 def render_compare_png(sid, which):
@@ -273,10 +411,7 @@ def render_compare_png(sid, which):
         else:
             return None
     if grid is None:
-        rom = patched_bytes() if which == "patched" else rom_bytes()
-        if not rom:
-            return None
-        dec = decode_from_rom(rom, sp)
+        dec = decode_patched_indices(sp) if which == "patched" else decode_indices(sp)
         if dec is None:
             return None
         grid, w, h, _ = dec
@@ -339,20 +474,41 @@ def render_mode4_bitmap_png(sid, which):
     return out.read_bytes()
 
 
-def encode_indices(grid, w, h):
-    """index grid(h×w, 0..15) → 4bpp 타일 바이트(8×8 타일, cols=w//8)."""
-    cols = w // 8
-    rows = h // 8
-    out = bytearray()
-    for t in range(cols * rows):
-        gx = (t % cols) * 8
-        gy = (t // cols) * 8
-        for row in range(8):
-            for c2 in range(4):
-                lo = grid[gy + row][gx + c2 * 2] & 0xF
-                hi = grid[gy + row][gx + c2 * 2 + 1] & 0xF
-                out.append(lo | (hi << 4))
-    return bytes(out)
+from sprite_codec import encode_indices
+
+
+def validate_palette(palette):
+    if (not isinstance(palette, list) or len(palette) != 16 or
+            any(not isinstance(c, list) or len(c) != 3 or
+                any(type(v) is not int or not 0 <= v <= 255 for v in c)
+                for c in palette)):
+        raise ValueError("팔레트는 16색, 각 색은 0~255 RGB 정수 3개여야 합니다")
+
+
+def validate_sprite_edit(sp, indices, palette, *, rom_snapshot=None):
+    if palette is not None:
+        validate_palette(palette)
+    if not isinstance(indices, list) or not indices or not isinstance(indices[0], list):
+        raise ValueError("indices(2D 0..15) 필요")
+    h, w = len(indices), len(indices[0])
+    enc = encode_indices(indices, w, h)
+    decoded = decode_from_rom(rom_snapshot, sp) if rom_snapshot is not None else decode_current_indices(sp)
+    if decoded is None:
+        raise ValueError("현재 ROM에서 편집 대상 타일을 확인할 수 없습니다")
+    if (w, h) != tuple(decoded[1:3]):
+        raise ValueError("현재 ROM 타일 크기와 다릅니다: %d×%d 필요" % tuple(decoded[1:3]))
+    if sp.get("type") == "lz77":
+        from lz77_compress import lz77_compress_optimal
+        from sprite_relocations import RELOCATIONS, resolve_sprite_offset
+        off = sprite_offset_int(sp)
+        cap = sp.get("comp_size") or 0
+        relocation = RELOCATIONS.get(off)
+        if relocation and resolve_sprite_offset(rom_snapshot if rom_snapshot is not None else patched_bytes() or rom_bytes(), off) == relocation['destination']:
+            cap = relocation['capacity']
+        compressed = lz77_compress_optimal(enc, vram_safe=True)
+        if len(compressed) > cap:
+            raise ValueError("재압축 크기 %dB가 ROM 할당 %dB를 초과합니다" % (len(compressed), cap))
+    return enc, w, h
 
 
 PALLIB_PATH = ROOT / "data" / "sprite_palettes.json"
@@ -494,7 +650,10 @@ PART2_BATTLE_START_SMALL_OFFSETS = {
     0x0092EB5C, 0x009677E4, 0x009A0088, 0x009D892C,
 }
 PART2_CHECK_LABEL_OFFSETS = {0x0045FCC8}
-PART2_DAMAGE_FORECAST_OFFSETS = {0x00BD4FBC}
+# 0xBD4FBC is the Part 1 damage bubble (pointer 0x08B3972C, Part 1 code); the Part 2
+# bubble is 0x4827C0 (pointer 0x083376B0).  Both are 32x32 OBJs (tiles 22.. / 20..).
+PART1_DAMAGE_FORECAST_OFFSETS = {0x00BD4FBC}
+PART2_DAMAGE_LABEL_OFFSETS = {0x004827C0}
 PART2_RESULT_SUCCESS_OVERLAY_OFFSETS = {
     0x00930520, 0x009691A8, 0x009A1A4C, 0x009DA2F0, 0x00EE8A64,
 }
@@ -554,6 +713,16 @@ def apply_part1_palette_hint(sp, off, cells, default=None):
 def part1_tiled_layer_layout(sp, off):
     """1편 타이틀 라벨 LZ77은 화면 레이어와 저장 타일 순서가 다르다.
     편집면은 빌드 인코더(part1_logo_layer_to_tiles/option_layer_to_tiles)의 역배치로 제공한다."""
+    if off in (0xC15A68, 0xC15C5C):
+        cells = _layout_cells_from_specs(((0, 0, 8, 4, 0, 6), (64, 0, 8, 4, 32, 6)))
+        palette = ("temp/continuation_2026-10-02/p1_m19_title/native.pal" if off == 0xC15A68
+                   else "temp/continuation_2026-10-03/p1_m20_title/native.pal")
+        # This observed consumer always uses OBJ bank6; unrelated cached hints
+        # must not overwrite it. Missing capture uses the existing generic palette.
+        pal_file = palette if (ROOT / palette).is_file() else None
+        return {"cells": cells, "x0": 0, "y0": 0, "w": 128, "h": 32,
+                "obj1d": 1, "tile_cols": sp.get("tile_cols"), "build": True,
+                "screen": "obj", "pal_file": pal_file, "fallback": "part1_m19_title" if off == 0xC15A68 else "part1_m20_title"}
     if off in PART1_TITLE_OBJ_OFFSETS:
         captured = load_layouts().get("layouts", {}).get(sp.get("id"), {})
         pal_file = "temp/screen_state/part1_title.pal"
@@ -830,15 +999,17 @@ def part2_tiled_layer_layout(sp, off):
             "tile_cols": sp.get("tile_cols"), "build": True,
             "fallback": "part2_check_label_40x16",
         }
-    if off in PART2_DAMAGE_FORECAST_OFFSETS:
+    if off in PART1_DAMAGE_FORECAST_OFFSETS or off in PART2_DAMAGE_LABEL_OFFSETS:
+        part1 = off in PART1_DAMAGE_FORECAST_OFFSETS
         return {
             "cells": [
                 {"x": 0, "y": 0, "tw": 4, "th": 4, "fh": 0, "fv": 0,
-                 "tile_off": 22, "bank": 0, "palbase": 0},
+                 "tile_off": 22 if part1 else 20, "bank": 0, "palbase": 0},
             ],
             "x0": 0, "y0": 0, "w": 32, "h": 32, "obj1d": 1,
             "tile_cols": sp.get("tile_cols"), "build": True,
-            "fallback": "part2_damage_forecast_bubble_32x32",
+            "fallback": ("part1_damage_forecast_bubble_32x32" if part1
+                         else "part2_damage_label_bubble_32x32"),
         }
     if off in PART2_RESULT_SUCCESS_OVERLAY_OFFSETS or off in PART2_RESULT_FAILURE_OVERLAY_OFFSETS:
         return {
@@ -1037,7 +1208,7 @@ def current_tiles(sp):
     if rec and rec.get("indices"):
         grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
         return encode_indices(grid, w, h)
-    dec = decode_from_rom(patched_bytes() or rom_bytes(), sp)
+    dec = decode_current_indices(sp)
     if dec is None:
         return b""
     grid, w, h, _ = dec
@@ -1182,7 +1353,7 @@ PART2_PATCH_KO = {
     "mission_number_obj": "미션 번호", "lets_go_obj": "‘출격’ 라벨", "check_label_obj": "체크 라벨",
     "splash_logo_bg": "2편 스플래시 로고", "prologue_logo_obj": "프롤로그 로고",
     "mission_start_obj": "전투개시 배너", "air_mission_title_obj": "에어 미션 타이틀",
-    "air_supremacy_title_obj": "제공권 타이틀", "damage_forecast_label_obj": "데미지 예측 라벨",
+    "air_supremacy_title_obj": "제공권 타이틀", "damage_forecast_label_obj": "1편 데미지 예측 라벨", "damage_label_obj": "2편 데미지 예측 라벨",
     "menu_newspaper_bg": "메뉴 신문 배경(텍스트 포함)", "intro_campaign_residual_graphics": "인트로 캠페인 잔여 그래픽",
     "operation_select_country_bg": "작전 선택 국가 배경",
     "strategic_map_mode4_labels": "전략지도 Mode4 지명 라벨",
@@ -1357,6 +1528,7 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         cookie = f"{AUTH_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
         return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/login")])
 
+    @editor_request
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(u.query)
@@ -1466,8 +1638,8 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         sp = sprite_by_id(sid)
         if sp is None:
             return {"ok": False, "error": "id 없음: %s" % sid}
-        o = decode_from_rom(rom_bytes(), sp)
-        p = decode_from_rom(patched_bytes(), sp) if patched_bytes() else None
+        o = decode_indices(sp)
+        p = decode_patched_indices(sp)
         changed = (o and p and o[0] != p[0])
         ov = load_json(OVERRIDES_PATH, {}) or {}
         has_edit = override_id(sp) in ov and bool(ov[override_id(sp)].get("indices"))
@@ -1477,11 +1649,13 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 "patched_url": ("/api/render?id=%s&which=patched" % urllib.parse.quote(sid)) if p else None,
                 "edit_url": ("/api/render?id=%s&which=edit" % urllib.parse.quote(sid)) if has_edit else None,
                 "build_changed": bool(changed), "has_edit": has_edit,
-                "note": "스프라이트는 타일+팔레트에서 1:1 표시 → 이 디코드 렌더가 인게임 픽셀과 동일(에뮬 불필요)."}
+                "note": "ROM 타일을 선택한 팔레트로 디코드한 비교입니다. 실제 화면의 배치·팔레트·겹침은 게임 실행으로 확인해야 합니다."}
 
     def _static(self, rel):
-        path = (STATIC / rel)
-        if not path.exists():
+        path = (STATIC / rel).resolve()
+        if not path.is_relative_to(STATIC.resolve()):
+            return self._send(403, {"error": "forbidden"})
+        if not path.is_file():
             return self._send(404, {"error": "missing " + rel})
         self._send(200, path.read_bytes(), MIME.get(path.suffix, "application/octet-stream"))
 
@@ -1543,6 +1717,14 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                     "type": sp.get("type"), "palette": default_palette_for(sp), "indices": grid,
                     "edited": False, "offset": sp.get("offset"), "source": sp.get("source"),
                     "desc": desc, "has_onscreen": has_os, "which": "orig"}
+        if is_power_title_sprite(sp):
+            try:
+                view, _snapshot = power_title_edit_view(sp, rec)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                return {"ok": False, "error": str(exc)}
+            return {"id": sid, "type": sp.get("type"), "palette": palette_for(sp),
+                    "offset": sp.get("offset"), "source": sp.get("source"),
+                    "desc": desc, "has_onscreen": has_os, **view}
         if rec and rec.get("indices"):
             grid = rec["indices"]
             h = len(grid); w = len(grid[0]) if grid else 0
@@ -1558,6 +1740,7 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 "type": sp.get("type"), "palette": palette_for(sp), "indices": grid,
                 "edited": False, "offset": sp.get("offset"), "source": sp.get("source"), "desc": desc, "has_onscreen": has_os}
 
+    @editor_request
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)
         if u.path == "/login":
@@ -1584,13 +1767,11 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         """편집(sprites_overrides.json)을 ROM에 반영 = build_korean_full.py 전체 재빌드
         (overrides가 라벨 자동그리기 뒤 최종 오버레이로 적용). 완료 후 패치 ROM 캐시 무효화."""
         import subprocess
-        global _PATCHED
         try:
             proc = subprocess.run([_sys.executable, str(ROOT / "tools" / "build_korean_full.py")],
                                   capture_output=True, text=True, cwd=str(ROOT), timeout=900)
         except Exception as e:
             return {"ok": False, "error": "빌드 실행 실패: %r" % e}
-        _PATCHED = None  # 재빌드 ROM 재로딩
         applied = ""
         for line in (proc.stdout or "").splitlines():
             if "스프라이트 편집 적용" in line:
@@ -1606,8 +1787,10 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         sp = sprite_by_id(sid)
         if sp is None:
             return {"ok": False, "error": "id 없음: %s" % sid}
-        if not palette or not isinstance(palette, list):
-            return {"ok": False, "error": "palette(16×[r,g,b]) 필요"}
+        try:
+            validate_palette(palette)
+        except ValueError as exc:
+            return {"ok": False, "error": str(exc)}
         key = override_id(sp)
         with _LOCK:
             ov = load_json(OVERRIDES_PATH, {}) or {}
@@ -1618,31 +1801,32 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         return {"ok": True, "id": sid, "base_id": key}
 
     def _save(self, body):
-        sid = body.get("id")
-        indices = body.get("indices")
-        palette = body.get("palette")
-        sp = sprite_by_id(sid)
-        if sp is None:
-            return {"ok": False, "error": "id 없음: %s" % sid}
-        if not indices or not isinstance(indices, list) or not indices[0]:
-            return {"ok": False, "error": "indices(2D 0..15) 필요"}
-        h = len(indices)
-        w = len(indices[0])
-        try:
-            enc = encode_indices(indices, w, h)
-        except Exception as e:
-            return {"ok": False, "error": "encode: %r" % e}
-        if sp.get("type") == "lz77":
-            fits = (len(enc) == sp.get("size"))  # 타일수 동일해야 함(압축적합은 apply에서)
-        else:
-            fits = (len(enc) <= (sp.get("size") or len(enc)))
-        key = override_id(sp)
         with _LOCK:
+            sid = body.get("id")
+            indices = body.get("indices")
+            palette = body.get("palette")
+            sp = sprite_by_id(sid)
+            if sp is None:
+                return {"ok": False, "error": "id 없음: %s" % sid}
+            key = override_id(sp)
             ov = load_json(OVERRIDES_PATH, {}) or {}
+            try:
+                binding_meta, snapshot = power_title_save_context(sp, body, ov.get(key))
+                if snapshot is None:
+                    enc, w, h = validate_sprite_edit(sp, indices, palette)
+                else:
+                    enc, w, h = validate_sprite_edit(sp, indices, palette, rom_snapshot=snapshot)
+                confirm_power_title_save_context(binding_meta)
+            except (ValueError, TypeError, KeyError, OSError) as exc:
+                return {"ok": False, "error": str(exc)}
+            if sp.get("type") == "lz77":
+                fits = (len(enc) == sp.get("size"))  # 타일수 동일해야 함(압축적합은 apply에서)
+            else:
+                fits = (len(enc) <= (sp.get("size") or len(enc)))
             ov[key] = {"offset": sp.get("offset"), "type": sp.get("type"),
                        "width": w, "height": h, "indices": indices, "palette": palette,
                        "raw_len": len(enc), "orig_size": sp.get("size"),
-                       "comp_size": sp.get("comp_size"), "fits_raw": fits}
+                       "comp_size": sp.get("comp_size"), "fits_raw": fits, **binding_meta}
             save_json(OVERRIDES_PATH, ov)
             try:
                 EDIT_DIR.mkdir(parents=True, exist_ok=True)
@@ -1650,16 +1834,21 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 ES.render_png(indices, w, h, pal, str(EDIT_DIR / f"{key}.png"), scale=2)
             except Exception:
                 pass
-        return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"),
-                "fits_raw": fits,
-                "note": "편집 저장됨(overrides). '적용'(/api/build)으로 재빌드하면 ROM에 반영 — "
-                        "synthetic은 perm 역변환, lz77은 재압축≤comp_size, raw는 size 이내(타입 %s)." % sp.get("type")}
+            return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"),
+                    "fits_raw": fits,
+                    "note": "편집 저장됨(overrides). '적용'(/api/build)으로 재빌드하면 ROM에 반영 — "
+                            "synthetic은 perm 역변환, lz77은 재압축≤comp_size, raw는 size 이내(타입 %s)." % sp.get("type")}
 
     def _revert(self, body):
         sid = body.get("id")
-        key = override_id(sid)
+        sp = sprite_by_id(sid)
+        if sp is None:
+            return {"ok": False, "error": "id 없음: %s" % sid}
+        key = override_id(sp)
+        ep = (EDIT_DIR / f"{key}.png").resolve()
+        if not ep.is_relative_to(EDIT_DIR.resolve()):
+            return {"ok": False, "error": "잘못된 편집 파일 경로"}
         with _LOCK:
-            ep = EDIT_DIR / f"{key}.png"
             if ep.exists():
                 ep.unlink()
             ov = load_json(OVERRIDES_PATH, {})

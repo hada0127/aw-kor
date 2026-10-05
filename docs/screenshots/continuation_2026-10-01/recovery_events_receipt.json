@@ -1,0 +1,65 @@
+{
+  "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+  "observations": [
+    {
+      "part": 1,
+      "frame": 63385,
+      "ledger": "output/qa/part1_2026-10-01/round32_recovery/frames.jsonl",
+      "image": "docs/screenshots/continuation_2026-10-01/part1_transport_loss.png",
+      "rgb_sha256": "f1050da8d36e12c6245e0be3713212cbbb3db14d4fab172665fd3a07724c923c"
+    },
+    {
+      "part": 1,
+      "frame": 63685,
+      "ledger": "output/qa/part1_2026-10-01/round32_recovery/frames.jsonl",
+      "image": "docs/screenshots/continuation_2026-10-01/part1_enemy_lightning.png",
+      "rgb_sha256": "f1d5ed4e2491e149da0a33f959fc8b22bdd9402f569f543f829336bb4351be16"
+    },
+    {
+      "part": 2,
+      "frame": 52923,
+      "ledger": "output/qa/part2_2026-10-01/round32_recovery/frames.jsonl",
+      "image": "docs/screenshots/continuation_2026-10-01/part2_hq_capture_start.png",
+      "rgb_sha256": "61fe7a1c27c0b85659abec1d1bd1a5f724116829ea05e5101c4264ee02c43dd9"
+    },
+    {
+      "part": 2,
+      "frame": 53073,
+      "ledger": "output/qa/part2_2026-10-01/round32_recovery/frames.jsonl",
+      "image": "docs/screenshots/continuation_2026-10-01/part2_hq_capture_flag.png",
+      "rgb_sha256": "94d89e15124dce48e6036ab0db65b638c70c37d4158f5de103d29b6ab148c2a9"
+    },
+    {
+      "part": 2,
+      "frame": 53323,
+      "ledger": "output/qa/part2_2026-10-01/round32_recovery/frames.jsonl",
+      "image": "docs/screenshots/continuation_2026-10-01/part2_defeat_dialogue.png",
+      "rgb_sha256": "e5ae999aa9a868623f05b65be725170eb5b3f63c429c33b00250346f5be76d43"
+    },
+    {
+      "part": 2,
+      "frame": 55408,
+      "image": "docs/screenshots/continuation_2026-10-01/teacher_A21840_normal_loss_route.png",
+      "checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/0174_A_0055408.checkpoint.json",
+      "scope": "normal loss route; no victory claim"
+    },
+    {
+      "part": 2,
+      "frame": 55594,
+      "image": "docs/screenshots/continuation_2026-10-01/teacher_A21840_normal_followpage.png",
+      "checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/0175_A_0055594.checkpoint.json",
+      "scope": "normal loss route; no victory claim"
+    },
+    {
+      "part": 2,
+      "frame": 55780,
+      "image": "docs/screenshots/continuation_2026-10-01/teacher_A21840_normal_followup.png",
+      "checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/0176_A_0055780.checkpoint.json",
+      "scope": "normal loss route; no victory claim"
+    }
+  ],
+  "part2_defeat_source": "A21808 負けてしもうたか",
+  "part2_loss_cause": "native HQ capture animation followed by defeat dialogue",
+  "part1_transport_loss": "native explosion observed; attacker type not identified solely from these samples",
+  "endings_verified": false
+}

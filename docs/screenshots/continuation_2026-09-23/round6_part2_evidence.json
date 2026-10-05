@@ -1,0 +1,94 @@
+{
+  "rom_sha256": "cbc796e8d774ed0bcf23d2610c732a6efe84349dc6d842d388057d633a2b36e8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m6_day1_save/game_save.json",
+  "save_sha256": "1d1e0935ac8a6808a67dfc0d8d84681bbb3656ca43ce1552ed480025aea4381a",
+  "actions": 101,
+  "final_frame_counter": "OK framecounter 22798",
+  "screens": [
+    {
+      "replay_segment": 35,
+      "source_segment": 35,
+      "png": "035_source35_A.png",
+      "png_sha256": "9c09f1d5adc4712ec4121e3f37b1b4e267ddb81f9d61e0c589337ff5961a55a9",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0035_A_0009026.png",
+      "changed_bbox": [
+        34,
+        104,
+        49,
+        111
+      ]
+    },
+    {
+      "replay_segment": 49,
+      "source_segment": 49,
+      "png": "049_source49_A.png",
+      "png_sha256": "3aebb498af547af544f1439743d202384e5f5d3970c148317d69ffe4790cf57f",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0049_A_0009934.png",
+      "changed_bbox": [
+        73,
+        123,
+        191,
+        134
+      ]
+    },
+    {
+      "replay_segment": 61,
+      "source_segment": 61,
+      "png": "061_source61_A.png",
+      "png_sha256": "6a59f401e327cf7df1bb9e0f12c057f58e571479cc294648a30a5a5382967aad",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0061_A_0013398.png",
+      "changed_bbox": [
+        34,
+        100,
+        49,
+        107
+      ]
+    },
+    {
+      "replay_segment": 76,
+      "source_segment": 76,
+      "png": "076_source76_A.png",
+      "png_sha256": "d79f03a612a33fb8ecae4d0e932ec4f4d87f6651d7c06d34517b36d94b01690f",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0076_A_0014988.png",
+      "changed_bbox": [
+        73,
+        11,
+        160,
+        22
+      ]
+    },
+    {
+      "replay_segment": 99,
+      "source_segment": 99,
+      "png": "099_source99_A.png",
+      "png_sha256": "365321dd9bf21fe875dc8f9b6445a3c90062298888fdc04d27fb2cfbe9761a68",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0099_A_0021594.png",
+      "changed_bbox": [
+        65,
+        123,
+        176,
+        134
+      ]
+    },
+    {
+      "replay_segment": 101,
+      "source_segment": 101,
+      "png": "101_source101_A.png",
+      "png_sha256": "38d84c3ff35bc5396ffb4fa9b4711a9091b4e49eda8ab63aba22978fbbfd609f",
+      "before": "output/qa/part2_2026-09-23/round4_m6_live/0101_A_0022798.png",
+      "changed_bbox": [
+        65,
+        123,
+        192,
+        134
+      ]
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence",
+  "visual_reviewed_sources": [
+    49,
+    76,
+    99
+  ]
+}

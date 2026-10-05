@@ -1,0 +1,236 @@
+{
+  "source": {
+    "revision": "6fc6085b03bc5193fdbde25963f478f5ea84f5ac",
+    "working_tree": true,
+    "rom_sha256": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "sources": {
+      "tools/build_korean_full.py": "03fdbe523dcad15074537ead6f5240491ffbe41fb22fad3fea6556c4713d42aa",
+      "tools/dialogue_repoint.py": "c6fe4984cc129539d2be48131be410da22d34f749cda61f45d8cf7990b901b75",
+      "tools/playthrough_capture.py": "a88d425d099e382016a905b4e2afa12bb11b4afe3173e63bc1b371fa778fd19c",
+      "tools/mgba_harness.c": "6374c3aed4ff8b0971b74cf6a18873556ca1bd35fec1c88d659f8f2f3ae8c492",
+      "tools/test_dialogue_script_safety.py": "287ac56b592e90ff64424dfbacdbb11e6b13eeaffc548a55fe3ed7d967fab015",
+      "data/address_text_overrides.tsv": "9f696d97deab38edb691058c62bee0c03d0da59222dbd4f08c3365614a5c1158",
+      "data/dialogue_overrides.json": "8bb6c519c14179bc8e46776d251c21ec245d457a293a6edf27d2c4dbe133e97a",
+      "data/translation_for_import.csv": "c3d095301599992b7b2cf58886c611f1992e41bc177c496704301b398502dfdd"
+    }
+  },
+  "checks": {
+    "rom_sha256": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "revision": "6fc6085b03bc5193fdbde25963f478f5ea84f5ac",
+    "working_tree": true,
+    "device": "macOS arm64; mGBA 0.10.5 headless for replay (basic is static preflight)",
+    "checks": {
+      "unit": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tools",
+          "-p",
+          "test_dialogue_script_safety.py"
+        ],
+        "exit_code": 0,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_unit.log"
+      },
+      "integrity": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "tools/qa_integrity_map.py",
+          "--rom",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba",
+          "--map",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_integrity_map.json",
+          "--byte-only"
+        ],
+        "exit_code": 0,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_integrity.log"
+      },
+      "integrity_full": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "tools/qa_integrity_map.py",
+          "--rom",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba",
+          "--map",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_integrity_map.json"
+        ],
+        "exit_code": 1,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_integrity_full.log"
+      },
+      "basic": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "tools/phase6_basic_test.py",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba"
+        ],
+        "exit_code": 0,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_basic.log"
+      },
+      "visual_assets": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "tools/qa_visual_regions.py",
+          "--rom",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba",
+          "--out",
+          "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_visual",
+          "--asset-only"
+        ],
+        "exit_code": 0,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_visual_assets.log"
+      },
+      "text_fit": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "tools/qa_text_fit.py"
+        ],
+        "exit_code": 0,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_text_fit.log"
+      },
+      "punctuation": {
+        "command": [
+          "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+          "-c",
+          "import sys;sys.path.insert(0,'tools');import qa_part1_dialogue_punctuation as q;from pathlib import Path;q.ROM=Path('/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba');q.REPORT=Path('/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_punctuation.json');raise SystemExit(q.main())"
+        ],
+        "exit_code": 1,
+        "log": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_punctuation.log"
+      }
+    }
+  },
+  "part1_replay": {
+    "rom_sha256": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "harness_sha256": "75333a0d14e64f759a92fe6f99129e502c5d701967c9d3a69346f2783f6eb6fa",
+    "exit_code": 0,
+    "end_core_frame": 40536,
+    "screenshots": [
+      13640,
+      17422,
+      17892,
+      26270,
+      26982,
+      29700,
+      30184,
+      30668,
+      30910,
+      31152,
+      36922,
+      39150,
+      39720,
+      39740,
+      40052,
+      40294,
+      40536
+    ],
+    "input_rows": 40536,
+    "boot": "cold",
+    "savestate_resume": false
+  },
+  "part2_replay": {
+    "rom_sha256": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "harness_sha256": "75333a0d14e64f759a92fe6f99129e502c5d701967c9d3a69346f2783f6eb6fa",
+    "exit_code": 0,
+    "end_core_frame": 7186,
+    "screenshots": [
+      1692,
+      5264,
+      6760,
+      7186
+    ],
+    "input_rows": 7186,
+    "boot": "cold",
+    "savestate_resume": false
+  },
+  "dictionary": {
+    "rom_sha256": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "revision": "6fc6085b03bc5193fdbde25963f478f5ea84f5ac",
+    "working_tree": true,
+    "device": "mGBA 0.10.5 headless on macOS arm64",
+    "rom_path": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/control_safe_candidate.gba",
+    "state_path": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_replay/17892.ss0",
+    "before_dump": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/cache.bin",
+    "after_dump": "/Users/tarucy/project/aw-kor/temp/part1_playthrough_2026-09-15/final_cache.bin",
+    "exit_code": 0,
+    "physical_rom_entries": 135,
+    "unique_entries": 110,
+    "live_equals_rom_dedup": true,
+    "bank2_unchanged": true,
+    "bank1_bytes_with_terminator": 222,
+    "bank_capacity": 510,
+    "tile_base": "0x1c"
+  },
+  "repoint_safety": {
+    "old_unique": {
+      "skip_forced": 18,
+      "relocated": 1779,
+      "skip_no_terminator": 1,
+      "skip_merged": 3,
+      "skip_decompose": 2,
+      "skip_ptr": 1
+    },
+    "new_unique": {
+      "skip_forced": 18,
+      "relocated": 1443,
+      "skip_control_changed": 323,
+      "skip_no_terminator": 1,
+      "skip_merged": 3,
+      "skip_normalized_wide": 6,
+      "skip_impure_span": 7,
+      "skip_decompose": 2,
+      "skip_ptr": 1
+    },
+    "previously_relocated_now_skipped": {
+      "skip_control_changed": 323,
+      "skip_normalized_wide": 6,
+      "skip_impure_span": 7
+    }
+  },
+  "recorder": {
+    "resume_pixel_match_frames": 20,
+    "stale_shot_rejected": true,
+    "buffered_response_rejected": true,
+    "exit_code": 0
+  },
+  "outputs": {
+    "output/game_wars_korean_full.gba": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "output/game_wars_korean_final.gba": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47",
+    "output/game_wars_korean_title_test.gba": "3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47"
+  },
+  "artifact_root": "output/qa/part1_2026-09-15/regression_final",
+  "device": "macOS arm64 / mGBA 0.10.5 headless",
+  "visual_review": "17 Part1 and 4 Part2 selected screenshots; not all frames or whole game",
+  "screenshots": {
+    "docs/screenshots/part1_playthrough_2026-09-15/button_korean.png": "f05254c328bef362f41e83ce74afd3b609c54b741eb00c4a1c44cbd447ce36dc",
+    "docs/screenshots/part1_playthrough_2026-09-15/button_original.png": "5a9d3571de04514d102513fd5be9b51b0a6e316a6550ec6ab633507d91c17eda",
+    "docs/screenshots/part1_playthrough_2026-09-15/dialogue_overflow.png": "8cd84c0605b9c1da9f6f5e93d1b1be169f56ed4fc2bca71aae02e6ed3d3d87c2",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_13640.png": "18583caddc5f0613d48b3cec95bf2ee4b15448af5b602158e87c967179592259",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_17422.png": "134dbc9fb98ad2c37d726d37fa9c5af8dfb8d30853878b503e2cfc530007f3e1",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_17892.png": "48159852de95d785bf3dd2865d953aad367a2d131beaf2a9e95366bc54c576b8",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_26270.png": "6a4b5681135586f8be918d99ea5cd1e028885603b0b6e88296ee45ded05c3173",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_26982.png": "64988bd5b2ff83d67a2ce6f057525e4ccd18157bb8fcaa4858bfdb17913f3064",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_29700.png": "287895f486a1eb3ab109142b4d932c6f868bd24ca27848854f0fc6de1a185e53",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_30184.png": "1a622e26db8d7158e40152805779cce751533ddb03debdeedc5ff142d5a2290e",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_30668.png": "7a2f319971a186d1325c6218a084d0205752f3f5ef458074997674f914898aad",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_30910.png": "e86d571a981be12cb8f1dd4a5f7dd4210c7e0057d2056e4cdc77c3fbdcf7992a",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_31152.png": "c62e9152e28f8a299b21877bb8f885de18e3eca5f82b0b37ee84921195bb1c1b",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_36922.png": "7d88828ec05e266eb39bbfeff5d869d2cab743172d4fbbfec0da2d04bedc5ab3",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_39150.png": "d3cac6dd7f3d8e3c4a34b5603bc33c246278e7c43f509f036e1a3b70f5ee38bc",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_39720.png": "eeb22173ce882706eb0c0140b8aeb6093915c908587e15981dfc5c2105d96be2",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_39740.png": "2fa46196f20a5bb428d81e56bceef846ec843438ef4c28e4962dd9ccc27f2617",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_40052.png": "de8491fe43ab279591c692aee410d8f087a2e3a11f7ea22997ba0546a7856b9e",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_40294.png": "f4e4694a0b63943becb8b253f9e336f374bfa69b8873d1d7e428dd68e67d5cc8",
+    "docs/screenshots/part1_playthrough_2026-09-15/fixed_40536.png": "a82c7c91fd1315b89f89ca426e1a2a36bc767679822d286958559bee304829e5",
+    "docs/screenshots/part1_playthrough_2026-09-15/map_corruption.png": "6a5f95499c76b01530b6d9a73dd163b83eabe530f07f642bf78358c44bf61994",
+    "docs/screenshots/part1_playthrough_2026-09-15/map_corruption_next_page.png": "4bc89e037331dcc2a0417058a15a6310db4e8c7120499a08aa0b58ddc7c513ed",
+    "docs/screenshots/part1_playthrough_2026-09-15/original_vs_korean.png": "e0fa205a245980ef09741ac9086d9ae59ec74443891c30a8d0a2fb958cbd2110",
+    "docs/screenshots/part1_playthrough_2026-09-15/part2_1692.png": "ce93e7d93f4ef388d8937d44b6faf8d110be03790add50b30e3ccfce2c27664a",
+    "docs/screenshots/part1_playthrough_2026-09-15/part2_5264.png": "4eb7265ae8d5772eb31278d35eeece1a7aace50668e4f93dc4f93440c37fc31d",
+    "docs/screenshots/part1_playthrough_2026-09-15/part2_6760.png": "d9c4913b4817a6d5286bcb99398d3bcea0e4b4ce5e3d1dd8ac831fbab806e67b",
+    "docs/screenshots/part1_playthrough_2026-09-15/part2_7186.png": "5f7eca3cd368345e72c7daf6717739acc59fc538c845cecbc19b434dbef0fd91",
+    "docs/screenshots/part1_playthrough_2026-09-15/spacing_korean.png": "36ec71117fa64358bf525d11e455483b97470f9ab65f738e8905f03f0bfbf28a",
+    "docs/screenshots/part1_playthrough_2026-09-15/wait_korean.png": "0fadc2483f66e4e2064718abc5bf34d4818683b205b14e6f267623d52de0b8d2",
+    "docs/screenshots/part1_playthrough_2026-09-15/wait_original.png": "7c5a28b827146278da5501a48d50a494aa31f1455d5aa67de60261d3efe45c96"
+  }
+}

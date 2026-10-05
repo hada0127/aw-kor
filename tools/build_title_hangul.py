@@ -41,6 +41,16 @@ PART1_CAMPAIGN_LZ77_OFF = 0x00C19794
 PART1_MODE_SELECT_LZ77_OFF = 0x00C19A9C
 PART1_RULE_SELECT_LZ77_OFF = 0x00C19D14
 PART1_TEAM_SETTING_LZ77_OFF = 0x00C19FF0
+PART1_MAIN_HEADER_BLOCKS = [
+    ('part1 operation logo', PART1_OPERATION_LOGO_LZ77_OFF, '작전룸', 20),
+    ('part1 map select logo', PART1_MAP_SELECT_LZ77_OFF, '맵 선택', 20),
+    ('part1 shop select logo', PART1_SHOP_SELECT_LZ77_OFF, '숍 선택', 20),
+    ('part1 hard shop logo', PART1_HARD_SHOP_LZ77_OFF, '하드 숍', 18),
+    ('part1 campaign logo', PART1_CAMPAIGN_LZ77_OFF, '캠페인', 20),
+    ('part1 mode select logo', PART1_MODE_SELECT_LZ77_OFF, '모드 선택', 18),
+    ('part1 rule select logo', PART1_RULE_SELECT_LZ77_OFF, '룰 선택', 20),
+    ('part1 team setting logo', PART1_TEAM_SETTING_LZ77_OFF, '팀 설정', 20),
+]
 PART1_SUBMENU_LOGO_BLOCKS = [
     ("campaign", 0x00C1A2BC, "캠페인", 20),
     ("record", 0x00C1A81C, "기록", 18),
@@ -101,9 +111,18 @@ PART1_MODE_OPTION_BLOCK_CAPACITY = {
 FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
-MENU_FONT_PATH = Path.home() / "Library/Fonts/NotoSansKR-Black.otf"
-ROOM_FONT_PATH = Path.home() / "Library/Fonts/NotoSansKR-Bold.otf"
+# Restore the rounded July lettering while retaining the September coverage,
+# palette, contour, cast-shadow and protected English-footer composition.
+MENU_FONT_PATH = FONT_PATH
+MENU_FONT_SHA256 = '3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472'
 SMALL_BDF_FONT_PATH = Path("reference/fonts/Galmuri7.bdf")
+
+
+@lru_cache(maxsize=1)
+def verify_menu_font():
+    """Reject a different external font instead of silently changing the build."""
+    if hashlib.sha256(MENU_FONT_PATH.read_bytes()).hexdigest() != MENU_FONT_SHA256:
+        raise ValueError('Menu font differs from the verified OkDanDan source')
 
 # Runtime OAM layout captured on the title screen. Lower OAM index draws above
 # higher index for same priority, so these are the Japanese logo text overlays.
@@ -1221,17 +1240,8 @@ def text_mask_layer(
 
 
 def part1_menu_text_mask(size, text, font, xy, stroke):
-    """Open the room glyph counters without moving the preceding label."""
-    if text != '작전룸':
-        return text_mask_layer(size, text, font, xy, stroke)
-    room_font = ImageFont.truetype(str(ROOM_FONT_PATH), font.size)
-    if font.getlength('룸') != room_font.getlength('룸'):
-        raise ValueError('room glyph hint must preserve the original advance')
-    mask = text_mask_layer(size, '작전', font, xy, stroke)
-    draw = ImageDraw.Draw(mask)
-    draw.text((xy[0] + font.getlength('작전'), xy[1]), '룸', font=room_font,
-              fill=255, stroke_width=stroke, stroke_fill=255)
-    return mask
+    """Use one typeface; Noto's per-room weight hint does not fit OkDanDan."""
+    return text_mask_layer(size, text, font, xy, stroke)
 
 
 def paste_vertical_text_gradient(
@@ -1561,6 +1571,7 @@ def part1_footer_y(offset):
 
 
 def make_part1_header_with_footer(offset, korean, max_size):
+    verify_menu_font()
     original = original_part1_header(offset)
     footer_y = part1_footer_y(offset)
     layer = Image.new('L', original.size, 0)
@@ -1641,6 +1652,7 @@ def part1_option_render_size(label: str, max_size: int) -> int:
 
 
 def make_part1_option_block(text: str, max_size: int) -> Image.Image:
+    verify_menu_font()
     layer = Image.new("L", (128, 32), 0)
     label = part1_option_display_text(text)
     if label in {"작전룸", "통신", "대전"}:
@@ -1850,16 +1862,8 @@ def main() -> None:
         part2_consumed - len(part2_comp)
     )
 
-    p1_label_blocks = [
-        ("part1 operation logo", PART1_OPERATION_LOGO_LZ77_OFF, make_part1_operation_block()),
-        ("part1 map select logo", PART1_MAP_SELECT_LZ77_OFF, make_part1_label_block("맵 선택", "MAP SELECT", 20)),
-        ("part1 shop select logo", PART1_SHOP_SELECT_LZ77_OFF, make_part1_label_block("숍 선택", "SHOP SELECT", 20)),
-        ("part1 hard shop logo", PART1_HARD_SHOP_LZ77_OFF, make_part1_label_block("하드 숍", "HARD SHOP", 18)),
-        ("part1 campaign logo", PART1_CAMPAIGN_LZ77_OFF, make_part1_label_block("캠페인", "CAMPAIGN", 20)),
-        ("part1 mode select logo", PART1_MODE_SELECT_LZ77_OFF, make_part1_mode_block()),
-        ("part1 rule select logo", PART1_RULE_SELECT_LZ77_OFF, make_part1_label_block("룰 선택", "RULE SELECT", 20)),
-        ("part1 team setting logo", PART1_TEAM_SETTING_LZ77_OFF, make_part1_label_block("팀 설정", "TEAM SETTING", 20)),
-    ]
+    p1_label_blocks = [(label, offset, make_part1_header_with_footer(offset, text, size))
+                       for label, offset, text, size in PART1_MAIN_HEADER_BLOCKS]
     p1_option_blocks = [
         (name, off, make_part1_option_block(text, max_size))
         for name, off, text, max_size in PART1_MODE_OPTION_BLOCKS

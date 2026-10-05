@@ -24,10 +24,12 @@ API
   POST /api/check    {id} | {ja, ko}           한 대사의 사전 일치 검사
   GET  /api/check_all                          전체 대사 사전 불일치 목록
 """
+from types import MappingProxyType
 import argparse
 import collections
 import csv
 import hmac
+import io
 import html
 import json
 import os
@@ -39,10 +41,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+from editor_storage import EDITOR_LOCK, atomic_write_text, atomic_write_group, save_json as atomic_save_json, editor_request
 STATIC = Path(__file__).resolve().parent / "static"
 DIALOGUE_PATH = ROOT / "data" / "dialogue_map.json"
 DICT_PATH = ROOT / "data" / "proper_nouns.json"
 OVERRIDES_PATH = ROOT / "data" / "dialogue_overrides.json"
+EDITOR_INTENTS_PATH = ROOT / "data" / "editor_override_intents.json"
 GROUPS_PATH = ROOT / "data" / "dialogue_groups.json"
 ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
 SYLCODE = ROOT / "data" / "syllable_to_code_2350.json"
@@ -66,17 +71,54 @@ AUTH_COOKIE = "aw_dialogue_editor_auth"
 AUTH_PASSWORD = resolve_editor_password("DIALOGUE_EDITOR_PASSWORD", "AW_EDITOR_PASSWORD")
 AUTH_TOKEN = secrets.token_urlsafe(32)
 _GROUPS_CACHE = None
+_FALLBACK_SLOTS_CACHE = None
 _SYL_CACHE = None
 _SYL_INT_CACHE = None
 _BUILD_SLOTS_CACHE = None
+_DIRECT_SLOTS_CACHE = None
+_ADDRESS_TEXT_CACHE = None
+_DISPLAY_TEXT_CACHE = None
+_KNOWN_FRAGMENT_CACHE = None
+
+
+def file_stamp(path):
+    try:
+        st = Path(path).stat()
+        return (st.st_ino, st.st_size, st.st_mtime_ns)
+    except FileNotFoundError:
+        return None
 
 
 def load_groups():
-    """조립 그룹(대사 조각→인게임 메시지). 1회 로드 캐시(재생성: tools/build_dialogue_groups.py)."""
+    """Refresh when another editor replaces the generated group file."""
     global _GROUPS_CACHE
-    if _GROUPS_CACHE is None:
-        _GROUPS_CACHE = load_json(GROUPS_PATH, {"groups": []})
-    return _GROUPS_CACHE
+    stamp = file_stamp(GROUPS_PATH)
+    snapshot = _GROUPS_CACHE
+    if snapshot is None or stamp != snapshot[0]:
+        groups = load_json(GROUPS_PATH, {"groups": []})
+        snapshot = (stamp, groups)
+        _GROUPS_CACHE = snapshot
+    return snapshot[1]
+
+
+def fallback_slots():
+    global _FALLBACK_SLOTS_CACHE
+    key = (file_stamp(GROUPS_PATH), file_stamp(DIALOGUE_PATH))
+    if _FALLBACK_SLOTS_CACHE is None or _FALLBACK_SLOTS_CACHE[0] != key:
+        slots = {}
+        for group in load_groups().get("groups", []):
+            for member in group.get("members", []):
+                address = canon_addr(member.get("address"))
+                slot = member.get("slot")
+                if address and isinstance(slot, int) and slot > 0:
+                    slots.setdefault(address, slot)
+        for line in load_json(DIALOGUE_PATH, {"lines": []}).get("lines", []):
+            address = canon_addr(line.get("address"))
+            slot = line.get("slot")
+            if address and isinstance(slot, int) and slot > 0:
+                slots.setdefault(address, slot)
+        _FALLBACK_SLOTS_CACHE = (key, slots)
+    return _FALLBACK_SLOTS_CACHE[1]
 
 sys.path.insert(0, str(ROOT / "tools"))
 try:
@@ -86,14 +128,14 @@ except Exception as _e:  # PIL/하네스 부재 시 미리보기 비활성
     _PREVIEW_ERR = repr(_e)
 try:
     import build_korean_full as B
-except Exception:
-    B = None
+except Exception as exc:
+    raise RuntimeError("dialogue editor requires build_korean_full for safe save gates") from exc
 try:
     import text_metrics as TM
 except Exception:
     TM = None
 
-_LOCK = threading.Lock()
+_LOCK = EDITOR_LOCK
 _PREVIEW_LOCK = threading.Lock()  # mgbah 캡처 직렬화(하네스 로그/리소스 공유)
 PREVIEW_DIR = ROOT / "temp" / "preview_cache"
 MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; charset=utf-8",
@@ -102,7 +144,10 @@ MIME = {".html": "text/html; charset=utf-8", ".js": "application/javascript; cha
 
 
 def pick_canvas(line):
-    """대사 라인의 region/kind → 실캡처 canvas 선택. (현재 part2_menu 단일; 확장 예정)"""
+    """Choose a diagnostic canvas; this does not prove the source renderer."""
+    addr = canon_addr(line.get("address"))
+    if line.get("region") == "part1" or (addr and 0xD80000 <= int(addr, 16) < 0xE10000):
+        return "part1_welcome"
     return "part2_menu"
 
 
@@ -114,7 +159,7 @@ def load_json(path, default=None):
 
 
 def save_json(path, data):
-    Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    atomic_save_json(path, data)
 
 
 _BTEAM_CACHE = None
@@ -397,57 +442,103 @@ def canon_addr(address):
         return None
 
 
+def address_text_snapshot(path):
+    """Cache a validated immutable authority; external replace changes the key."""
+    global _ADDRESS_TEXT_CACHE
+    key = (str(Path(path).resolve()), file_stamp(path))
+    snapshot = _ADDRESS_TEXT_CACHE
+    if snapshot is None or snapshot[0] != key:
+        rows = B.load_address_text_overrides_tsv(path)
+        rows = dict(B.ADDRESS_TEXT_OVERRIDES if rows is None else rows)
+        snapshot = (key, MappingProxyType(rows), MappingProxyType({
+            "0x%08X" % int(k): str(v or "") for k, v in rows.items()}))
+        _ADDRESS_TEXT_CACHE = snapshot
+    return snapshot
+
+
 def address_text_overrides():
-    rows = {}
-    if ADDRESS_TEXT_OVERRIDES_TSV.exists():
-        with ADDRESS_TEXT_OVERRIDES_TSV.open(encoding="utf-8", newline="") as f:
-            reader = csv.DictReader(f, delimiter="\t")
-            if reader.fieldnames != ["address", "text"]:
-                raise ValueError(f"{ADDRESS_TEXT_OVERRIDES_TSV}: expected TSV header address<TAB>text")
-            for row in reader:
-                addr = canon_addr(row.get("address"))
-                if addr:
-                    rows[addr] = "" if row.get("text") is None else str(row.get("text"))
-    elif B:
-        rows = {"0x%08X" % int(k): str(v or "") for k, v in getattr(B, "ADDRESS_TEXT_OVERRIDES", {}).items()}
-    return rows
+    return address_text_snapshot(ADDRESS_TEXT_OVERRIDES_TSV)[2]
 
 
-def save_address_text_override(addr, ko):
-    if "\t" in ko or "\n" in ko or "\r" in ko:
-        raise ValueError("보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다")
-    rows = address_text_overrides()
-    if addr not in rows:
-        return False
-    rows[addr] = ko
-    ADDRESS_TEXT_OVERRIDES_TSV.parent.mkdir(parents=True, exist_ok=True)
-    with ADDRESS_TEXT_OVERRIDES_TSV.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["address", "text"], delimiter="\t", lineterminator="\n")
-        writer.writeheader()
-        for key in sorted(rows, key=lambda x: int(x, 16)):
-            writer.writerow({"address": key, "text": rows[key]})
-    return True
+def display_text_overrides():
+    global _DISPLAY_TEXT_CACHE
+    path = ROOT / "data" / "display_overrides.json"
+    key = (str(path.resolve()), file_stamp(path))
+    snapshot = _DISPLAY_TEXT_CACHE
+    if snapshot is None or snapshot[0] != key:
+        rows = B.load_display_overrides(path)
+        snapshot = (key, MappingProxyType({"0x%08X" % k: v for k, v in rows.items()}))
+        _DISPLAY_TEXT_CACHE = snapshot
+    return snapshot[1]
 
 
-def sync_dialogue_display_data(addr, ko):
-    data = load_json(DIALOGUE_PATH, {"lines": []})
-    for ln in data.get("lines", []):
-        if canon_addr(ln.get("address")) == addr:
-            ln["ko"] = ko
-            if "ship_ko" in ln:
-                ln["ship_ko"] = ko
-    save_json(DIALOGUE_PATH, data)
+DISPLAY_READONLY_REASON = "전용 표시 문구가 적용된 항목입니다. 일반 대사 편집으로 변경할 수 없습니다"
+STRUCTURED_READONLY_REASON = "명령어 강조가 포함된 복합 대사입니다. 일반 조각 편집은 지원하지 않습니다"
+KNOWN_FRAGMENT_READONLY_REASON = "제어 코드 사이의 짧은 고정 문구입니다. 일반 대사 편집으로 변경할 수 없습니다"
 
-    groups = load_json(GROUPS_PATH, {"groups": []})
-    for group in groups.get("groups", []):
-        for member in group.get("members", []):
-            if canon_addr(member.get("address")) == addr:
-                member["ko"] = ko
-                if "ship_ko" in member:
-                    member["ship_ko"] = ko
-    save_json(GROUPS_PATH, groups)
-    global _GROUPS_CACHE
-    _GROUPS_CACHE = None
+
+def known_fragment_addresses():
+    global _KNOWN_FRAGMENT_CACHE
+    key = (str(DIALOGUE_PATH), file_stamp(DIALOGUE_PATH))
+    if _KNOWN_FRAGMENT_CACHE is None or _KNOWN_FRAGMENT_CACHE[0] != key:
+        rows = load_json(DIALOGUE_PATH, {}).get('lines', [])
+        _KNOWN_FRAGMENT_CACHE = (key, frozenset(canon_addr(row.get('address')) for row in rows
+                                               if row.get('kind') == 'known-story-fragment'))
+    return _KNOWN_FRAGMENT_CACHE[1]
+
+
+def text_edit_readonly_reason(address, *, fixed_fragments=None, display=None):
+    if fixed_fragments is None:
+        fixed_fragments = known_fragment_addresses()
+    if display is None:
+        display = display_text_overrides()
+    if canon_addr(address) in fixed_fragments:
+        return KNOWN_FRAGMENT_READONLY_REASON
+    if canon_addr(address) in display:
+        return DISPLAY_READONLY_REASON
+    canonical = canon_addr(address)
+    if canonical and B.structured_script_owner(int(canonical, 16)) is not None:
+        return STRUCTURED_READONLY_REASON
+    return None
+
+
+def edit_authority_error(address, ko):
+    if not isinstance(ko, str):
+        return "대사는 문자열이어야 합니다"
+    readonly = text_edit_readonly_reason(address)
+    if readonly:
+        return readonly
+    if not ko.strip() and not is_address_text_override(address):
+        return "이 항목은 빈 문구로 저장할 수 없습니다. 내용을 입력하세요"
+    return None
+
+
+def current_ko(address, member=None, snapshot=None):
+    addr = canon_addr(address)
+    display = display_text_overrides()
+    if addr in display and addr not in known_fragment_addresses():
+        return display[addr]
+    if addr and (int(addr, 16) in B.STRUCTURED_SCRIPT_ROWS or addr in known_fragment_addresses()):
+        if member is None:
+            member = (snapshot["by_addr"].get(addr, {}) if snapshot is not None else
+                      next((row for row in load_json(DIALOGUE_PATH, {"lines": []}).get("lines", [])
+                            if canon_addr(row.get("address")) == addr), {}))
+        return member.get("ko") or ""
+    protected = address_text_overrides()
+    if addr in protected:
+        return protected[addr]
+    overrides = snapshot["overrides"] if snapshot is not None else B.load_dialogue_overrides(OVERRIDES_PATH)
+    if addr in overrides:
+        return overrides[addr]
+    if member is None and snapshot is not None:
+        member = snapshot["by_addr"].get(addr, {})
+    if member is None:
+        member = next((row for row in load_json(DIALOGUE_PATH, {"lines": []}).get("lines", [])
+                       if canon_addr(row.get("address")) == addr), {})
+    return member.get("ko") or ""
+
+
+
 
 
 def syl_codes():
@@ -474,52 +565,73 @@ def build_slots():
     return _BUILD_SLOTS_CACHE
 
 
-def member_slot(address):
+def direct_slots():
+    global _DIRECT_SLOTS_CACHE
+    stamp = file_stamp(GROUPS_PATH)
+    if _DIRECT_SLOTS_CACHE is None or _DIRECT_SLOTS_CACHE[0] != stamp:
+        _DIRECT_SLOTS_CACHE = (stamp, B.load_direct_script_slots() if B else {})
+    return _DIRECT_SLOTS_CACHE[1]
+
+
+def member_slot(address, *, direct=None, build=None, fallback=None):
     addr = canon_addr(address)
     if not addr:
         return None
-    if B:
-        try:
-            b_slot = build_slots().get(int(addr, 16))
-            if isinstance(b_slot, int) and b_slot > 0:
-                return b_slot
-        except (ValueError, TypeError):
-            pass
-    for group in load_groups().get("groups", []):
-        for member in group.get("members", []):
-            if canon_addr(member.get("address")) == addr and isinstance(member.get("slot"), int):
-                return member.get("slot")
-    data = load_json(DIALOGUE_PATH, {"lines": []})
-    hit = next((ln for ln in data.get("lines", []) if canon_addr(ln.get("address")) == addr), None)
-    slot = hit.get("slot") if hit else None
-    return slot if isinstance(slot, int) and slot > 0 else None
+    ai = int(addr, 16)
+    if ai in B.WHOLE_SCRIPT_ROWS:
+        return B.WHOLE_SCRIPT_ROWS[ai] - ai
+    slot = (direct if direct is not None else direct_slots()).get(ai) or \
+           (build if build is not None else build_slots()).get(ai)
+    if isinstance(slot, int) and slot > 0:
+        return slot
+    return (fallback if fallback is not None else fallback_slots()).get(addr)
 
 
-def validate_build_fit(text, slot):
+def protected_render_region(address, slot):
+    if not isinstance(slot, int) or slot <= 0:
+        return None
+    end = address + slot
+    denied = B.in_deny(address, end)
+    if denied:
+        return str(denied)
+    for name, lo, hi in B.DENY_REGIONS + B.PAIR_RENDERER_REGIONS:
+        if address < hi and end > lo:
+            return name
+    return None
+
+
+def validate_build_fit(text, slot, address=None):
+    ai = int(address, 16) if address else None
     raw = TM.encoded_len(text or "") if TM else len(text or "")
     if not isinstance(slot, int) or slot <= 0:
         return {"ok": True, "raw_len": raw, "encoded_len": raw, "fit_level": None, "slot": slot}
     if not B:
         return {"ok": raw <= slot, "raw_len": raw, "encoded_len": raw, "fit_level": None, "slot": slot,
-                "error": None if raw <= slot else "슬롯 초과 %dB>%dB" % (raw, slot)}
+                "error": None if raw <= slot else "%dB 슬롯에 넣을 수 없습니다(원문 인코딩 %dB)" % (slot, raw)}
     dropped = collections.Counter()
     try:
-        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped)
+        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped, ai)
     except KeyError as exc:
         return {"ok": False, "raw_len": raw, "encoded_len": raw, "fit_level": 99, "slot": slot,
                 "unsupported": [exc.args[0]], "error": "폰트 미수록 음절"}
+    raw = len(raw_enc)
     if dropped:
         return {"ok": False, "raw_len": raw, "encoded_len": len(raw_enc), "fit_level": 99, "slot": slot,
                 "unsupported": [ch for ch, _n in dropped.most_common()], "error": "렌더 불가 문자"}
     if not raw_enc and (text or "").strip():
         return {"ok": False, "raw_len": raw, "encoded_len": 0, "fit_level": 99, "slot": slot,
                 "unsupported": [], "error": "빌드 인코딩 결과가 비어 있음"}
-    enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter())
+    try:
+        enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter(), ai)
+    except B.UnsupportedDialogueQuoteError:
+        return {"ok": False, "raw_len": raw, "encoded_len": raw, "fit_level": 99, "slot": slot,
+                "error": "이 대화창에서는 「 」 인용부호를 사용해 주세요."}
     if enc is None:
         return {"ok": False, "raw_len": raw, "encoded_len": raw, "fit_level": 99, "slot": slot,
-                "error": "슬롯 초과 %dB>%dB" % (raw, slot)}
+                "error": "%dB 슬롯에 넣을 수 없습니다(원문 인코딩 %dB)" % (slot, raw)}
     return {"ok": len(enc) <= slot, "raw_len": raw, "encoded_len": len(enc),
-            "fit_level": level, "slot": slot}
+            "fit_level": level, "slot": slot,
+            "warning": B.dialogue_fit_warning(text or "", enc, syl_to_code_ints(), ai)}
 
 
 def check_line(line, pn):
@@ -640,6 +752,7 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         return self._send(303, "", headers=[("Set-Cookie", cookie), ("Location", "/login")])
 
     # ---- GET ----
+    @editor_request
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(u.query)
@@ -677,8 +790,11 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         only_multi = (q.get("multi", [""])[0] or "") == "1"
         SEC2REG = {"common": "other", "part1": "part1", "part2": "part2"}
         want_reg = SEC2REG.get(section)
-        ov = load_json(OVERRIDES_PATH, {}) or {}
+        ov = B.load_dialogue_overrides(OVERRIDES_PATH) or {}
         protected_rows = address_text_overrides()
+        display_rows = display_text_overrides()
+        fixed_fragments = known_fragment_addresses()
+        slot_snapshot = {"direct": direct_slots(), "build": build_slots(), "fallback": fallback_slots()}
         dialogue_lines = load_json(DIALOGUE_PATH, {"lines": []}).get("lines", [])
         by_addr = {
             canon_addr(ln.get("address")): ln
@@ -705,14 +821,29 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                     })
                 base_ko = canonical.get("ko", m.get("ko") or "")
                 protected = protected_rows.get(addr)
-                ko = protected if protected is not None else ov.get(addr, base_ko)
-                members.append({**member, "address": addr, "ko": ko, "bteam": is_bteam(addr)})
+                ko = display_rows.get(addr, protected if protected is not None else ov.get(addr, base_ko))
+                canonical_addr = canon_addr(addr)
+                ai = int(canonical_addr, 16) if canonical_addr else 0
+                if addr in fixed_fragments:
+                    ko = base_ko
+                elif ai in B.STRUCTURED_SCRIPT_ROWS:
+                    ko = display_rows.get(addr, base_ko)
+                owner = B.script_row_owner(ai) if B else ai
+                slot = member_slot(canonical_addr, **slot_snapshot)
+                readonly = text_edit_readonly_reason(addr, fixed_fragments=fixed_fragments, display=display_rows)
+                members.append({**member, "address": addr, "ko": ko, "bteam": is_bteam(addr),
+                                "slot": slot, "reason": readonly or "",
+                                "editable": not readonly and owner == ai and ai >= 0x800000 and bool(slot) and not B.is_glyph_dictionary_address(ai) and not protected_render_region(ai, slot),
+                                "source_role": "glyph_dictionary" if B and B.is_glyph_dictionary_address(ai) else "text",
+                                "layout_prefix_bytes": len(B.PART2_EDITOR_ICON_PREFIX) if B and ai in B.PART2_EDITOR_ICON_LABEL_SLOTS else 0,
+                                "owner_address": "0x%08X" % owner})
             if qstr and qstr not in (g.get("assembled_ja") or "") and \
                all(qstr not in (m.get("ko") or "") for m in members):
                 continue
             out.append({"group_id": g.get("group_id"), "region": g.get("region"),
                         "size": g.get("size"), "flagged": g.get("flagged"),
                         "assembled_ja": g.get("assembled_ja"), "segments": g.get("segments"),
+                        "ko_segments": g.get("ko_segments"),
                         "members": members})
         return {"meta": gd.get("meta", {}), "count": len(out),
                 "total": len(groups), "lines": out[:1500]}
@@ -726,9 +857,9 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
 
     def _serve_static(self, rel):
         path = (STATIC / rel).resolve()
-        if STATIC not in path.parents and path != STATIC / rel:
+        if not path.is_relative_to(STATIC.resolve()):
             return self._send(403, {"error": "forbidden"})
-        if not path.exists():
+        if not path.is_file():
             return self._send(404, {"error": "missing " + rel})
         ctype = MIME.get(path.suffix, "application/octet-stream")
         self._send(200, path.read_bytes(), ctype)
@@ -736,14 +867,28 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
     def _dialogue(self, q):
         data = load_json(DIALOGUE_PATH, {"lines": []})
         lines = data.get("lines", [])
-        _ov = load_json(OVERRIDES_PATH, {}) or {}  # 편집/채움 번역을 즉시 반영(line view)
+        _ov = B.load_dialogue_overrides(OVERRIDES_PATH) or {}  # 편집/채움 번역을 즉시 반영(line view)
         protected_rows = address_text_overrides()
+        fixed_fragments = known_fragment_addresses()
+        display_rows = display_text_overrides()
         for ln in lines:
             a = canon_addr(ln.get("address"))
-            if a in protected_rows:
+            if a in fixed_fragments:
+                ln["editable"] = False
+                ln["reason"] = KNOWN_FRAGMENT_READONLY_REASON
+            elif a in display_rows:
+                ln["ko"] = display_rows[a]
+                ln["editable"] = False
+                ln["reason"] = DISPLAY_READONLY_REASON
+            elif a and int(a, 16) in B.STRUCTURED_SCRIPT_ROWS:
+                pass  # Keep the generated complete authored row, not its legacy TSV fragment.
+            elif a in protected_rows:
                 ln["ko"] = protected_rows[a]
             elif _ov and a in _ov and _ov[a]:
                 ln["ko"] = _ov[a]
+            if a and B.structured_script_owner(int(a, 16)) is not None:
+                ln["editable"] = False
+                ln["reason"] = STRUCTURED_READONLY_REASON
         region = (q.get("region", [""])[0] or "").strip()
         # 허브 섹션(공통/1편/2편)→region 매핑
         section = (q.get("section", [""])[0] or "").strip()
@@ -794,6 +939,7 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
         return {"count": len(res), "mismatches": res[:1000]}
 
     # ---- POST ----
+    @editor_request
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)
         if u.path == "/login":
@@ -808,6 +954,8 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
             return self._send(400, {"error": "bad json: %r" % e})
         if u.path == "/api/line":
             return self._send(200, self._save_line(body))
+        if u.path == "/api/lines":
+            return self._send(200, self._save_lines(body))
         if u.path == "/api/dict":
             return self._send(200, self._edit_dict(body))
         if u.path == "/api/check":
@@ -840,14 +988,91 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 "orig": {"url": url(res["orig"]["png"]), "truncated": res["orig"]["truncated"], "text": ja},
                 "applied": {"url": url(res["applied"]["png"]), "truncated": res["applied"]["truncated"], "text": ko}}
 
-    def _save_line(self, body):
+    def _save_lines(self, body):
+        """Validate every fragment under one lock before publishing a group."""
+        lines = body.get("lines")
+        if not isinstance(lines, list) or not lines or len(lines) > 256:
+            return {"ok": False, "error": "1~256개 대사 조각이 필요합니다"}
+        with _LOCK:
+            data = load_json(DIALOGUE_PATH, {"lines": []})
+            overrides = B.load_dialogue_overrides(OVERRIDES_PATH)
+            snapshot = {"data": data, "overrides": overrides,
+                        "by_addr": {canon_addr(row.get("address")): row for row in data.get("lines", [])}}
+            checked = []
+            for index, line in enumerate(lines):
+                if not isinstance(line, dict):
+                    return {"ok": False, "error": "대사 조각 형식 오류", "index": index}
+                result = self._save_line({**line, "dry_run": True}, snapshot=snapshot)
+                if not result.get("ok"):
+                    return {**result, "index": index, "saved": 0}
+                checked.append(result)
+            warnings = [{"address": row["address"], "warning": row["warning"]}
+                        for row in checked if row.get("warning")]
+            changes = {row["address"]: row["ko"] for row in checked}
+            if len(changes) != len(checked):
+                return {"ok": False, "error": "중복 주소가 있습니다", "saved": 0}
+            intents = B.load_editor_override_intents(EDITOR_INTENTS_PATH)
+            protected = dict(address_text_overrides())
+            requested = changes
+            confirm_requested = {checked[i]["address"] for i, line in enumerate(lines) if line.get("confirm_current") is True}
+            # Unchanged TSV display values must never replace distinct source prose.
+            changes = {addr: ko for addr, ko in requested.items()
+                       if current_ko(addr, snapshot=snapshot) != ko
+                       or (addr in confirm_requested and addr not in protected and not is_bteam(addr)
+                           and overrides.get(addr) != ko)}
+            confirmed = {addr: ko for addr, ko in requested.items()
+                         if addr in confirm_requested and addr not in changes
+                         and ((not is_bteam(addr) and addr not in protected)
+                              or (addr in protected and protected[addr] == ko and overrides.get(addr) == ko))
+                         and intents.get(addr) != B.editor_text_digest(ko)}
+            unchanged = len(checked) - len(changes) - len(confirmed)
+            if not changes and not confirmed:
+                return {"ok": True, "saved": 0, "confirmed": 0, "unchanged": unchanged, "warnings": warnings}
+            for addr, ko in confirmed.items():
+                intents[addr] = B.editor_text_digest(ko)
+            if not changes:
+                atomic_write_group({EDITOR_INTENTS_PATH: (json.dumps(intents, sort_keys=True, indent=2) + "\n").encode()})
+                return {"ok": True, "saved": 0, "confirmed": len(confirmed), "unchanged": unchanged, "warnings": warnings}
+            groups = load_json(GROUPS_PATH, {"groups": []})
+            touched_protected = changes.keys() & protected.keys()
+            for addr, ko in changes.items():
+                overrides[addr] = ko
+                intents[addr] = B.editor_text_digest(ko)
+                if addr in protected:
+                    protected[addr] = ko
+            for row in data.get("lines", []):
+                addr = canon_addr(row.get("address"))
+                if addr in changes:
+                    row["ko"] = changes[addr]
+            for group in groups.get("groups", []):
+                for row in group.get("members", []):
+                    addr = canon_addr(row.get("address"))
+                    if addr in changes:
+                        row["ko"] = changes[addr]
+            writes = {EDITOR_INTENTS_PATH: (json.dumps(intents, sort_keys=True, indent=2) + "\n").encode(),
+                      OVERRIDES_PATH: (json.dumps(overrides, ensure_ascii=False, indent=2) + "\n").encode(),
+                      DIALOGUE_PATH: (json.dumps(data, ensure_ascii=False, indent=2) + "\n").encode(),
+                      GROUPS_PATH: (json.dumps(groups, ensure_ascii=False, indent=1) + "\n").encode()}
+            if touched_protected:
+                stream = io.StringIO(newline="")
+                writer = csv.DictWriter(stream, fieldnames=["address", "text"], delimiter="\t", lineterminator="\n")
+                writer.writeheader()
+                for addr in sorted(protected, key=lambda value: int(value, 16)):
+                    writer.writerow({"address": addr, "text": protected[addr]})
+                writes[ADDRESS_TEXT_OVERRIDES_TSV] = stream.getvalue().encode()
+            atomic_write_group(writes)
+            global _GROUPS_CACHE
+            _GROUPS_CACHE = None
+            return {"ok": True, "saved": len(changes), "confirmed": len(confirmed), "unchanged": unchanged, "warnings": warnings}
+
+    def _save_line(self, body, *, snapshot=None):
         lid = body.get("id")
         ko = body.get("ko", "")
         with _LOCK:
-            data = load_json(DIALOGUE_PATH, {"lines": []})
+            data = snapshot["data"] if snapshot is not None else load_json(DIALOGUE_PATH, {"lines": []})
             addr = canon_addr(body.get("address"))
             if addr:
-                hit = next((ln for ln in data.get("lines", []) if canon_addr(ln.get("address")) == addr), None)
+                hit = snapshot["by_addr"].get(addr) if snapshot is not None else next((ln for ln in data.get("lines", []) if canon_addr(ln.get("address")) == addr), None)
             else:
                 hit = next((ln for ln in data.get("lines", []) if ln.get("id") == lid), None)
             if hit is None:
@@ -855,23 +1080,35 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 return {"ok": False, "error": "%s 없음" % key}
             # B팀(짜옹이) 권위 주소 save-time 보호 — 변형(ln["ko"]=ko) **전에** 검사(codex 순서지적 반영).
             addr = canon_addr(hit.get("address"))
+            authority_error = edit_authority_error(addr, ko)
+            if authority_error:
+                return {"ok": False, "error": authority_error}
+            if B and addr and B.is_glyph_dictionary_address(int(addr, 16)):
+                return {"ok": False, "error": "글리프 등록용 사전입니다. 일반 대사로 편집할 수 없습니다"}
+            owner = B.script_row_owner(int(addr, 16)) if B and addr else None
+            if owner is not None and owner != int(addr, 16):
+                return {"ok": False, "owner_address": "0x%08X" % owner,
+                        "error": "합쳐진 문장입니다. 0x%08X에서 전체 문장을 편집하세요" % owner}
             protected_address_text = is_address_text_override(addr)
             if protected_address_text and any(ch in ko for ch in ("\t", "\n", "\r")):
                 return {"ok": False, "error": "보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다"}
             if addr and not body.get("confirm_bteam"):
-                try:
-                    _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
-                    if ("0x%08X" % int(addr, 16)) in _bt:
-                        _base = (load_json(ROOT / "data" / "bteam_baseline.json", {}).get("overrides") or {}
-                                 ).get("0x%08X" % int(addr, 16))
+                _bt = set(load_json(ROOT / "data" / "bteam_addresses.json", {}).get("addresses", []))
+                if ("0x%08X" % int(addr, 16)) in _bt:
+                    _base = (load_json(ROOT / "data" / "bteam_baseline.json", {}).get("overrides") or {}
+                             ).get("0x%08X" % int(addr, 16))
+                    if current_ko(addr, hit, snapshot=snapshot) != ko:
                         return {"ok": False, "bteam_confirm_required": True,
                                 "error": "짜옹이님(B팀) 권위 주소. confirm_bteam=true로 재전송하세요.",
                                 "bteam_baseline": _base}
-                except (ValueError, TypeError):
-                    pass
             check_target = {**hit, "ko": ko}
-            slot = member_slot(addr) or hit.get("slot")
-            fit = validate_build_fit(ko, slot)
+            slot = member_slot(addr)
+            if not addr or int(addr, 16) < 0x800000 or not isinstance(slot, int) or slot <= 0:
+                return {"ok": False, "error": "등록된 빌드 슬롯이 없는 주소입니다"}
+            protected_region = protected_render_region(int(addr, 16), slot)
+            if protected_region:
+                return {"ok": False, "error": "특수 렌더/보호 영역 — 일반 대사 편집 불가: " + protected_region}
+            fit = validate_build_fit(ko, slot, addr)
             if not fit.get("ok"):
                 return {"ok": False, "error": fit.get("error") or "빌드 fit 검증 실패",
                         "unsupported": fit.get("unsupported"), "raw_len": fit.get("raw_len"),
@@ -880,31 +1117,17 @@ input{{background:#0d1016;color:#e8edf5;border:1px solid #303848}} button{{backg
                 return {"ok": True, "dry_run": True, "id": hit.get("id"), "address": addr,
                         "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {})),
                         "raw_len": fit.get("raw_len"), "encoded_len": fit.get("encoded_len"),
-                        "fit_level": fit.get("fit_level"), "slot": fit.get("slot"),
+                        "fit_level": fit.get("fit_level"), "warning": fit.get("warning"), "slot": fit.get("slot"),
                         "protected_address_text": protected_address_text,
                         "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
                                     if protected_address_text else "dialogue_overrides.json")}
-            hit["ko"] = ko   # 검사 통과 후에만 변형
-            ov = load_json(OVERRIDES_PATH, {})
-            if addr:
-                if protected_address_text:
-                    try:
-                        saved_protected = save_address_text_override(addr, ko)
-                    except ValueError as exc:
-                        return {"ok": False, "error": str(exc)}
-                    if not saved_protected:
-                        return {"ok": False, "error": "ADDRESS_TEXT_OVERRIDES 행 없음: " + addr}
-                ov[addr] = ko
-                save_json(OVERRIDES_PATH, ov)
-                if protected_address_text:
-                    sync_dialogue_display_data(addr, ko)
-                else:
-                    save_json(DIALOGUE_PATH, data)
-            else:
-                save_json(DIALOGUE_PATH, data)
-        return {"ok": True, "id": lid, "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {})),
+            saved = self._save_lines({"lines": [body]})
+            if not saved.get("ok"):
+                return saved
+
+        return {"ok": True, "saved": saved["saved"], "confirmed": saved["confirmed"], "unchanged": saved["unchanged"], "id": lid, "ko": ko, "check": check_line(check_target, load_json(DICT_PATH, {})),
                 "raw_len": fit.get("raw_len"), "encoded_len": fit.get("encoded_len"),
-                "fit_level": fit.get("fit_level"), "slot": fit.get("slot"),
+                "fit_level": fit.get("fit_level"), "warning": fit.get("warning"), "slot": fit.get("slot"),
                 "protected_address_text": protected_address_text,
                 "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
                             if protected_address_text else "dialogue_overrides.json")}

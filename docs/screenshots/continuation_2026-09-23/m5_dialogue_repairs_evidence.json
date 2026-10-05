@@ -1,0 +1,47 @@
+{
+  "rom_sha256": "f58729d79ba9fc398efe6cb9bc23609662d1571b6f5ae1f850ba7f31756e6ce8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/day3_worker_save/game_save.json",
+  "save_sha256": "2f13157d40bdb3c381a941e13a8d72cf959e095be9f226ab540858d04c740529",
+  "actions": 119,
+  "final_frame_counter": "OK framecounter 29248",
+  "screens": [
+    {
+      "segment": 96,
+      "png": "096_NONE.png",
+      "png_sha256": "1b662794f01877b3a51fade104bb3158999906de511bb86b0fc63748c701165b",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0096_NONE_0019322.png",
+      "changed_bbox": [
+        65,
+        11,
+        72,
+        22
+      ]
+    },
+    {
+      "segment": 113,
+      "png": "113_A.png",
+      "png_sha256": "f33ad45a8ca1e91375670607458da1e08b89e176bc798ae0973f3123dec8b282",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0113_A_0025636.png",
+      "changed_bbox": [
+        121,
+        123,
+        175,
+        136
+      ]
+    },
+    {
+      "segment": 119,
+      "png": "119_A.png",
+      "png_sha256": "7b41debe59f3c62a439407dd8966107c46b8834856d18cc06dfbb69b20b94bbe",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0119_A_0029248.png",
+      "changed_bbox": [
+        65,
+        123,
+        184,
+        134
+      ]
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

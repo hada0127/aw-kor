@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import os
 import struct
 import subprocess
@@ -24,6 +25,34 @@ import build_title_hangul as th
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def battle_label_codes(rom: bytes, address: int, text: str) -> list[bytes]:
+    """Check meaning independently of whether a menu uses compact aliases."""
+    from build_korean_full import PART2_UI_KANJI_GLYPH_SUBS
+    hangul = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())
+    reverse = {int(code, 16).to_bytes(2, 'big'): ch for ch, code in hangul.items()}
+    reverse.update({jp.encode('shift_jis'): ko for jp, ko in PART2_UI_KANJI_GLYPH_SUBS.items()})
+    reverse[b'\x81\x40'] = ' '
+    codes = [rom[address + i * 2:address + i * 2 + 2] for i in range(len(text))]
+    actual = ''.join(reverse.get(code, '?') for code in codes)
+    if actual != text:
+        raise AssertionError(f'battle label at 0x{address:X}: {actual!r} != {text!r}')
+    return codes
+
+
+def battle_dictionary_codes(rom: bytes) -> list[bytes]:
+    address = struct.unpack_from('<I', rom, 0xB12EE4)[0] - 0x08000000
+    result = []
+    for offset in range(address, address + 768, 2):
+        code = rom[offset:offset + 2]
+        if code == b'\0\0':
+            if 0x1C + 2 * len(result) > 0x100:
+                raise AssertionError('battle dictionary overlaps dialogue VRAM')
+            return result
+        if code not in result:
+            result.append(code)
+    raise AssertionError('unterminated battle glyph dictionary')
 KEYS = {
     "A": 1,
     "B": 2,
@@ -53,12 +82,17 @@ PART1_MENU_PRENAV = [
 PART1_MENU_ADVANCE_A_PRESSES = 16
 START_PROMPT_CROP = (56, 96, 184, 124)
 PART1_OPTION_LAYER_SHA256 = {
-    # Regression guard for the 2026-07-07 micro ㄹ/ㅌ stroke tuning.
+    # 2026-09-23 OkDanDan restoration with September AA/shadow composition.
+    # Candidate a290f200: actual ROM tiles and cold-menu captures verified.
     # These hashes are over the 128x32 indexed layer bytes, before LZ77 packing.
-    "operation_room": "abdbf7f99b216057553f13276dca238fbb35e3f67d03d7a6f4e65c3d56fd87b7",
-    "link": "7393c8f1368a7f8d171567767f478feac7b33e7452b6a11adcb62072b689405a",
-    "single_battle": "ff0519cf9bea957d92dbb5270718cc5f2091811d563b7f99d8a36efec7cf30f0",
+    "operation_room": "2c859b05237c4d400db550661b16fb84a08fb3ad53f8e465222887b38af56104",
+    "link": "4495683f9b61dfb257c83ba7a4de4bb0f0d3fe084c425f39c581c18f5f29e7ed",
+    "single_battle": "2f0bec0c9c452c60e8a02d34dc7690ee5001daa14780f9b6b0a6ea316a78cb8a",
 }
+# The short 기록 header keeps its original footer and has 27 colored pixels
+# with the approved OkDanDan face (previous Noto: 53). Cold saved-game menu
+# observation at C1A81C confirmed both Korean syllables and RECORD are intact.
+PART1_SUBMENU_GRADIENT_MIN_PIXELS = {'record': 27}
 ACTION_MENU_TEMPSAV = ROOT / "temp/e16_vs_suspend_save_create_correct_route_20260628/created.sav"
 ACTION_MENU_TILEMAP_EXPECTED = {
     0x70AA: 0xA1AD,
@@ -80,30 +114,6 @@ ACTION_MENU_TILEMAP_EXPECTED = {
 }
 ACTION_MENU_ATTACK_LABEL_BOX = (185, 24, 205, 41)
 ACTION_MENU_WAIT_LABEL_BOX = (185, 40, 206, 57)
-FULL_BATTLE_MENU_TILEMAP_EXPECTED = {
-    0x70AE: 0x81A0,
-    0x70B0: 0x81A2,
-    0x70EE: 0x81A1,
-    0x70F0: 0x81A3,
-    0x712E: 0x81A4,
-    0x7130: 0x81A6,
-    0x716E: 0x81A5,
-    0x7170: 0x81A7,
-    0x71AE: 0x81A8,
-    0x71B0: 0x81AA,
-    0x71EE: 0x81A9,
-    0x71F0: 0x81AB,
-    0x722E: 0x81AC,
-    0x7230: 0x81AE,
-    0x7232: 0x81B0,
-    0x726E: 0x81AD,
-    0x7270: 0x81AF,
-    0x7272: 0x81B1,
-    0x72AE: 0x81B2,
-    0x72B0: 0x81B4,
-    0x72EE: 0x81B3,
-    0x72F0: 0x81B5,
-}
 FULL_BATTLE_MENU_LABEL_BOXES = {
     "info": ((184, 16, 224, 34), 60),
     "operation": ((184, 32, 224, 50), 60),
@@ -184,7 +194,7 @@ def assert_title_style_palette(label: str, layer: Image.Image) -> str:
     return f"values={sorted(values)}:style_pixels={style_pixels}"
 
 
-def assert_part1_menu_logo_palette(label: str, layer: Image.Image) -> str:
+def assert_part1_menu_logo_palette(label: str, layer: Image.Image, *, min_gradient_pixels: int = 30) -> str:
     counts: dict[int, int] = {}
     for value in layer.getdata():
         if value:
@@ -199,8 +209,8 @@ def assert_part1_menu_logo_palette(label: str, layer: Image.Image) -> str:
     if 15 in values:
         raise AssertionError(f"{label}: index 15 makes Part1 labels render as black blocks on menu palettes")
     gradient_pixels = sum(counts.get(idx, 0) for idx in range(1, 8))
-    if gradient_pixels < 30:
-        raise AssertionError(f"{label}: too few route-colored gradient pixels ({gradient_pixels} < 30)")
+    if gradient_pixels < min_gradient_pixels:
+        raise AssertionError(f"{label}: too few route-colored gradient pixels ({gradient_pixels} < {min_gradient_pixels})")
     if counts.get(10, 0) < 90 or counts.get(14, 0) < 120:
         raise AssertionError(f"{label}: outline/body too weak, counts={counts}")
     pixels = sum(counts.values())
@@ -432,7 +442,9 @@ def run_asset_checks() -> list[str]:
             nonzero = sum(1 for value in layer.getdata() if value)
             if nonzero < 45:
                 raise AssertionError(f"part1 submenu {name}: too few label pixels ({nonzero} < 45)")
-            style = ":" + assert_part1_menu_logo_palette(f"part1 submenu {name}", layer)
+            style = ":" + assert_part1_menu_logo_palette(
+                f"part1 submenu {name}", layer,
+                min_gradient_pixels=PART1_SUBMENU_GRADIENT_MIN_PIXELS.get(name, 30))
             checked.append(f"asset:part1_submenu:{name}:{bbox}:pixels={nonzero}{style}")
         except AssertionError as exc:
             failures.append(str(exc))
@@ -778,7 +790,22 @@ def assert_part1_action_menu_labels(
         driver.close()
 
     vram = dump_path.read_bytes()
-    for off, expected in ACTION_MENU_TILEMAP_EXPECTED.items():
+    # Labels come from the live dictionary, whose indices depend on its
+    # contents. Checking July's fixed overlay indices accepted wrong words.
+    current = rom.read_bytes()
+    codes = battle_dictionary_codes(current)
+    expected_tiles = dict(ACTION_MENU_TILEMAP_EXPECTED)
+    for source, top, bottom, label in ((0xB82E42, 0x70AE, 0x70EE, '공격'),
+                                       (0xB82DEE, 0x712E, 0x716E, '대기')):
+        battle_label_codes(current, source, label)
+        for char in range(2):
+            code = current[source + 2 * char:source + 2 * char + 2]
+            if code not in codes:
+                raise AssertionError(f'action label code absent from dictionary: {code.hex()}')
+            tile = 0x8000 | (0x1C + 2 * codes.index(code))
+            expected_tiles[top + 2 * char] = tile
+            expected_tiles[bottom + 2 * char] = tile + 1
+    for off, expected in expected_tiles.items():
         actual = struct.unpack_from("<H", vram, off)[0]
         if actual != expected:
             failures.append(f"action menu tilemap 0x{off:04X}: got 0x{actual:04X}, expected 0x{expected:04X}")
@@ -832,7 +859,20 @@ def assert_part1_full_battle_menu_labels(
         driver.close()
 
     vram = dump_path.read_bytes()
-    for off, expected in FULL_BATTLE_MENU_TILEMAP_EXPECTED.items():
+    current = rom.read_bytes()
+    codes = battle_dictionary_codes(current)
+    expected_tiles = {}
+    for row, (address, text) in enumerate(((0xB82D36, '정보'), (0xB82D1A, '작전'),
+                                         (0xB82D02, '저장'), (0xB82CF6, '시스템'),
+                                         (0xB82CEE, '종료'))):
+        for column, code in enumerate(battle_label_codes(current, address, text)):
+            if code not in codes:
+                raise AssertionError(f'full-menu code absent from dictionary: {code.hex()}')
+            tile = 0x8000 | (0x1C + 2 * codes.index(code))
+            top = 0x70AE + row * 0x80 + column * 2
+            expected_tiles[top] = tile
+            expected_tiles[top + 0x40] = tile + 1
+    for off, expected in expected_tiles.items():
         actual = struct.unpack_from("<H", vram, off)[0]
         if actual != expected:
             failures.append(f"full battle menu tilemap 0x{off:04X}: got 0x{actual:04X}, expected 0x{expected:04X}")
@@ -847,7 +887,7 @@ def assert_part1_full_battle_menu_labels(
     checked.append(
         "screen:part1_full_battle_menu:"
         + ":".join(row_counts)
-        + f":tilemap_entries={len(FULL_BATTLE_MENU_TILEMAP_EXPECTED)}"
+        + f":tilemap_entries={len(expected_tiles)}"
     )
     if failures:
         raise AssertionError("part1 full battle menu failures:\n" + "\n".join(f"- {failure}" for failure in failures))
@@ -1089,7 +1129,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_full.gba"))
     parser.add_argument("--out", default=str(ROOT / "temp/qa_visual_regions_20260615"))
-    parser.add_argument("--harness", default="/tmp/mgbah")
+    parser.add_argument("--harness", default=str(ROOT / "temp/mgbah"))
     parser.add_argument(
         "--menu-state",
         default="",

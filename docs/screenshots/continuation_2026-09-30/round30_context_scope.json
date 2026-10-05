@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "rom_sha256": "6ae2bcd25905b0aff48f1f657231da44db868bcc4cc60b55fdf1ef9a60039bd6",
+  "changed_messages": [
+    "0xa199b0"
+  ],
+  "other_payloads_unchanged": 2250,
+  "outside_changes": 0,
+  "context": {
+    "source": "0x00A199B0",
+    "target": "0x00A4BB50",
+    "payload_sha256": "cd3ab66b40a94fb0c497a694f35d487bfb8475c3f2c1451935ef00a559ce204e",
+    "native_consumer_verified": false,
+    "pixels_verified": false,
+    "scope": "source text/control regression under 31424c interpretation; native consumer unverified; pixels unverified"
+  },
+  "layout_contracts": [
+    {
+      "source": "0x00A1F944",
+      "target": "0x00A4EFB4",
+      "payload_sha256": "110b5f6b8e89672bd0a7f5c800be91af59aacfa9b24eea0eab356c0bc2d2bd88",
+      "row_half_cells": [
+        32,
+        36
+      ]
+    },
+    {
+      "source": "0x00A1F9D8",
+      "target": "0x00A4F034",
+      "payload_sha256": "dc974221d22fc29f15db7a0e3e89bb411c99d205dbc4d1e79b483d1ef0a40f66",
+      "row_half_cells": [
+        36,
+        34
+      ]
+    }
+  ],
+  "scope": "Source-bound context/control regression only; native A199B0 pixels unverified"
+}

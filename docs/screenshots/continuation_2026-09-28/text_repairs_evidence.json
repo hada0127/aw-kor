@@ -1,0 +1,18 @@
+{
+  "rom_sha256": "51b10dcf48204be4762c3c262c6a9de0de87fb014d7e0043742e7db02fff7d98",
+  "scenes": [
+    {
+      "source": "output/qa/part2_2026-09-28/round18_m8_intro_probe/0016_A_0010000.png",
+      "preserved": "docs/screenshots/continuation_2026-09-28/p2_m8_intro_period.png",
+      "address": "A0D370",
+      "sha256": "009b45a4db94bbe954f78e69b9ebdae156b1501e311dc0ef3f5e89fe575c06fe"
+    },
+    {
+      "source": "output/qa/part2_2026-09-28/round18_m8_live/0056_A_0014574.png",
+      "preserved": "docs/screenshots/continuation_2026-09-28/p2_m8_factory_period.png",
+      "address": "A0D9F0",
+      "sha256": "428853f1fae2df0cccff4380bb0b215a95645fecae84cfa3726e7388132aba03"
+    }
+  ],
+  "scope": "Two target screens visually checked; not all captured frames or endings."
+}

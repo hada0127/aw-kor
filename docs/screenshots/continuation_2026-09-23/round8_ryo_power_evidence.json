@@ -1,0 +1,9 @@
+{
+  "rom_sha256": "8a9dfa35e8eada035f9abe103459e5b77a4cb39594010e1cdd6b81990346bf41",
+  "frame": 22900,
+  "source_png": "output/qa/part2_2026-09-23/round8_m7_live/frames/9201b66f55a968d39741d6087cfac353fab2a2f03f27f501b42f10d401375689.png",
+  "png_sha256": "7f76c030ab574a3f3acb5413ade9da881985803725c707a350091d87f2242e7d",
+  "normal_gameplay": "round8_m7_live DAY3 power; normal save cold origin",
+  "visual_review": "하이퍼수리 전체 기술명 확인; 22931은 애니메이션 이동 중 경계에 닿은 순간으로 결함으로 집계하지 않음",
+  "scope": "one observed power-title frame; not all-frame/ending approval"
+}

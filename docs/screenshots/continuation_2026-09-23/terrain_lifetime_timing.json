@@ -1,0 +1,86 @@
+[
+  {
+    "tag": "sea_B_hold1",
+    "frame": 6218,
+    "hardware_tail_cells": 6,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "sea_B_held2",
+    "frame": 6219,
+    "hardware_tail_cells": 6,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "sea_exit_after1",
+    "frame": 6220,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "sea_exit_after2",
+    "frame": 6221,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "coast_B_hold1",
+    "frame": 6816,
+    "hardware_tail_cells": 12,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "coast_B_held2",
+    "frame": 6817,
+    "hardware_tail_cells": 12,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "coast_exit_after1",
+    "frame": 6818,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "coast_exit_after2",
+    "frame": 6819,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "opposite_panel_B_hold1",
+    "frame": 7438,
+    "hardware_tail_cells": 10,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "opposite_panel_B_held2",
+    "frame": 7439,
+    "hardware_tail_cells": 10,
+    "glyph_restored_to_source": false,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "opposite_panel_exit_after1",
+    "frame": 7440,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  },
+  {
+    "tag": "opposite_panel_exit_after2",
+    "frame": 7441,
+    "hardware_tail_cells": 0,
+    "glyph_restored_to_source": true,
+    "source_sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560"
+  }
+]

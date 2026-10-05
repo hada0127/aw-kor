@@ -20,6 +20,8 @@
 - 여유공간 범위 초과/현재 비어있지 않으면 중단.
 """
 import struct, json, os, collections
+from dialogue_regions import needs_safe_dialogue_punctuation, renderer_safe_symbol
+from pcm_pointer_collisions import classify_pointer_sites
 
 GBA = 0x08000000
 PART1_DIALOG_LO = 0xD80000
@@ -52,6 +54,56 @@ PART1_DIALOG_ASCII_PUNCT = {
     0x7D: b'\x81\x6A',  # } -> ）
     0x7E: b'\x81\x60',  # ~
 }
+
+
+def is_sjis_lead(value):
+    return 0x81 <= value <= 0x9F or 0xE0 <= value <= 0xEF
+
+
+def has_independently_referenced_overlap(message, lines, texts, targets):
+    return any(i != j and len(texts[j]) >= 4 and texts[j] in texts[i]
+               and lines[j][0] != message and lines[j][0] in targets
+               for i in range(len(texts)) for j in range(len(texts)))
+
+
+def text_segment_cells(payload):
+    """Half-cell width of encoded text; trailing 0x20 padding has no ink."""
+    width = 0
+    i = 0
+    while i < len(payload):
+        if is_sjis_lead(payload[i]) and i + 1 < len(payload):
+            width += 2
+            i += 2
+        else:
+            width += int(payload[i] != 0x20)
+            i += 1
+    return width
+
+
+def normalize_text_segment(payload, part1, address=None):
+    """Normalize a proven text span; callers must never pass control gaps."""
+    _conv = bytearray(); _i = 0
+    while _i < len(payload):
+        _b = payload[_i]
+        if is_sjis_lead(_b) and _i + 1 < len(payload):
+            _conv += renderer_safe_symbol(payload[_i:_i + 2], address); _i += 2
+        elif _b == 0x20:
+            _nx = payload[_i + 1] if _i + 1 < len(payload) else 0
+            if is_sjis_lead(_nx) or 0x21 <= _nx <= 0x7E:   # 다음이 content → interior space
+                _conv += b'\x81\x40'
+            else:
+                _conv += b'\x20'
+            _i += 1
+        elif part1 and _b == 0x2E and payload[_i:_i + 3] == b'...':
+            _conv += b'\x81\x45' * 3
+            _i += 3
+        elif part1 and _b in PART1_DIALOG_ASCII_PUNCT:
+            _conv += renderer_safe_symbol(PART1_DIALOG_ASCII_PUNCT[_b], address); _i += 1
+        elif _b == 0x2C:
+            _conv += b'\x81\x41'; _i += 1
+        else:
+            _conv += bytes([_b]); _i += 1
+    return bytes(_conv)
 
 
 def _read_table(orig, tbl_off):
@@ -109,10 +161,75 @@ def _line_index(found_csv):
     return idx
 
 
+def apply_script_span_ownership(line_index, writes, rom):
+    """Use final script-row writers; reject ambiguous partial overlaps.
+
+    A superseded original fragment may extend into trailing padding, but never
+    into another glyph or command. The caller excludes conflicting messages
+    from relocation instead of cutting their current payload at old boundaries.
+    """
+    rows = dict(line_index)
+    owners = {}
+    conflicts = set()
+    import bisect
+    final = {}
+    ranges = []
+    for order, entry in enumerate(writes):
+        if len(entry) >= 2 and isinstance(entry[0], int) and isinstance(entry[1], int) and entry[1] > 0:
+            ranges.append((entry[0], entry[0] + entry[1], order))
+        if len(entry) >= 8 and str(entry[7]).startswith('script:'):
+            final[entry[0]] = (order, entry)
+    ranges.sort()
+    starts = [r[0] for r in ranges]
+    max_ends = []
+    for _, end, _ in ranges:
+        max_ends.append(max(end, max_ends[-1] if max_ends else end))
+    for start, (order, entry) in sorted(final.items()):
+        size, text = entry[1], entry[5]
+        end = start + size
+        other = bisect.bisect_left(starts, end) - 1
+        superseded = False
+        while other >= 0 and max_ends[other] > start:
+            _, other_end, other_order = ranges[other]
+            if other_end > start and other_order > order:
+                superseded = True
+                break
+            other -= 1
+        if superseded:
+            conflicts.add(start)
+            continue
+        payload = bytes.fromhex(entry[3])
+        fill = entry[4]
+        if not isinstance(fill, int) or not 0 <= fill <= 255 or len(payload) > size:
+            conflicts.add(start)
+            continue
+        expected = payload + bytes([fill]) * (size - len(payload))
+        if bytes(rom[start:end]) != expected:
+            conflicts.add(start)
+            continue
+        overlap = [(a, length) for a, (length, _) in rows.items()
+                   if a < end and start < a + length]
+        unsafe = False
+        for a, length in overlap:
+            if a < start or (a + length > end and
+                            any(c != 0x20 for c in rom[end:a + length])):
+                conflicts.update((start, a))
+                unsafe = True
+        if unsafe:
+            continue
+        for a, _ in overlap:
+            rows.pop(a)
+            owners.pop(a, None)
+        rows[start] = (size, text)
+        owners[start] = (size, text)
+    return rows, owners, conflicts
+
+
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
                      extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
-                     max_header_gap=16, align=4, log=None, valid_codes=None):
+                     max_header_gap=16, align=4, log=None, valid_codes=None,
+                     original_line_starts=None, line_layouts=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -123,6 +240,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     - 메시지는 (라인 span + 제어 gap)으로 원본과 정확 분해될 때만, 그리고 고칠 라인이
       ≥1개일 때만 재배치한다. 포인터는 ROM 내 정확히 1개(테이블)일 때만.
     """
+    line_layouts = line_layouts or {}
     stats = collections.Counter()
     manifest = []
     free = free_start
@@ -192,8 +310,9 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     for ms in msg_lines:
         msg_lines[ms].sort()
 
-    # 포인터 인덱스: msg_addr -> ROM 내 4바이트 정렬 포인터 위치 목록.
-    # Part1 extra_messages는 0x19 스캔으로 위치를 이미 알므로 그걸 쓴다(우연매치 회피 + 빠름).
+    # 전역 정렬 hit를 모두 유지. 대상 ROM 소비 경로로 증명된 PCM 3건만
+    # 원본/현재 코드·데이터 가드 아래 분류하며 새 미인식 hit는 기존 가드로 보낸다.
+    pcm_classifications = {}
     def ptr_sites(msg_addr):
         needle = struct.pack('<I', GBA + msg_addr)
         sites = []
@@ -205,14 +324,9 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             if i % 4 == 0:
                 sites.append(i)
             pos = i + 1
-        if msg_addr in extra_messages:
-            # ROM 전체에서 찾은 실제 포인터들이 0x19 스캔된 오프셋의 부분집합인지 확인.
-            # 만약 다른 곳에서도 이 주소를 참조한다면 다중 참조가 있는 것이므로
-            # sites 전체를 반환하여 len(sites) != 1 가드에 걸려 안전하게 skip되도록 함.
-            expected = set(extra_messages[msg_addr])
-            found = set(sites)
-            if not found.issubset(expected):
-                return sites
+        sites, evidence = classify_pointer_sites(msg_addr, sites, orig, rom)
+        if evidence is not None:
+            pcm_classifications[msg_addr] = evidence
         return sites
 
     table_off_set = set()
@@ -230,23 +344,22 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     import array as _arr
     _w = _arr.array('I')
     _w.frombytes(orig[:(len(orig) // 4) * 4])
-    entry_targets = set(line_index) | set(all_targets)
+    entry_targets = set(line_index) | set(all_targets) | set(original_line_starts or ())
     referenced_targets = set()
     for _i, _v in enumerate(_w):
         if 0x08A00000 <= _v < 0x08E10000:
             _tgt = _v - GBA
             if _tgt not in entry_targets:
                 continue
-            _o = _i * 4
-            if 0xA00000 <= _o < 0xE10000:
-                referenced_targets.add(_tgt)
+            referenced_targets.add(_tgt)
     _sorted_ref = sorted(referenced_targets)
 
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
-    _relocated_msgs = set()   # 다중포인터 메시지 중복 재배치 방지(1회 재배치 + 전 site 갱신)
+    _relocated_msgs = set()   # Process each message once, including skipped messages.
     for ptr_off, msg, _tbl in sorted(table_entries, key=lambda e: (e[0], e[1], -1 if e[2] is None else e[2])):
         if msg in _relocated_msgs:
             continue
+        _relocated_msgs.add(msg)
         if msg in skip_messages:
             stats['skip_forced_message'] = stats.get('skip_forced_message', 0) + 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_forced'})
@@ -278,7 +391,15 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         skipped_wide = 0
         for a, L in lines:
             if fixable(a) and fit_level_dlg(a) >= min_level:
-                if cell_width(a) > max_cells:
+                layout = line_layouts.get(a)
+                if layout is not None:
+                    if (len(layout) != 2 or any(not part or any(b < 0x20 for b in part) for part in layout)
+                            or b'\x81\x40'.join(layout) != fixed_bytes(a)):
+                        raise ValueError('Explicit line layout must preserve exact full text')
+                    width = max(text_segment_cells(normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg)) for part in layout)
+                else:
+                    width = cell_width(a)
+                if width > max_cells:
                     skipped_wide += 1
                     continue
                 fix_addrs.add(a)
@@ -294,10 +415,10 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 i = 0
                 while i < len(seg) - 1:
                     b = seg[i]
-                    if 0x81 <= b <= 0xE2:
+                    if is_sjis_lead(b):
                         i += 2
                         continue
-                    if b == 0x20 and (0x81 <= seg[i + 1] <= 0xE2 or 0x21 <= seg[i + 1] <= 0x7E):
+                    if b == 0x20 and (is_sjis_lead(seg[i + 1]) or 0x21 <= seg[i + 1] <= 0x7E):
                         _has_jam = True
                         break
                     i += 1
@@ -323,15 +444,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # 병합-중복노출 위험 → skip. jj가 이 메시지 내부 sub-line일 뿐(별도 포인터 0)이면 메시지 단위로 함께
         # 이동해 L1+L2 구조가 그대로 보존되므로 안전(미션목표 "...공격하라!"+"공격하라!" 류 4건 재배치 가능).
         sorted_t_set = set(sorted_t)
-        merged = False
-        for ii in range(len(eff)):
-            for jj in range(len(eff)):
-                if (ii != jj and len(eff[jj]) >= 4 and eff[jj] in eff[ii]
-                        and lines[jj][0] in sorted_t_set):
-                    merged = True
-                    break
-            if merged:
-                break
+        merged = has_independently_referenced_overlap(msg, lines, eff, sorted_t_set)
         if merged:
             stats['skip_merged_fragment'] += 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_merged'})
@@ -376,49 +489,42 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_decompose'})
             continue
 
-        # 재구성: 고칠 짜옹이님 라인만 완전충실 한글로 교체, 나머지는 현재 빌드 바이트(rom) 보존.
-        # 제어 gap도 현재 빌드(rom) 그대로(=orig와 동일, 빌드가 슬롯 외엔 안 씀).
+        # Normalize each text span independently. Control gaps must match the
+        # original and are copied verbatim; punctuation-like operands are data.
         new_msg = bytearray()
+        controls = []
+        text_failure = None
         cur = msg
         for a, L in lines:
-            new_msg += rom[cur:a]                 # control gap (현 빌드 보존)
-            if a in fix_addrs:
-                new_msg += fixed_bytes(a)         # 짜옹이님 원문 완전충실(단어붙음 해소)
-            else:
-                new_msg += rom[a:a + L]           # 미열화/CSV 라인은 현재 바이트 그대로
+            gap = bytes(rom[cur:a])
+            controls.append((len(new_msg), gap, bytes(orig[cur:a])))
+            new_msg += gap
+            payload = fixed_bytes(a) if a in fix_addrs else bytes(rom[a:a + L])
+            # Control bytes inside an alleged text span mean its boundaries
+            # are unproven. Preserve the in-place message rather than guessing.
+            if any(b < 0x20 for b in payload):
+                text_failure = 'skip_impure_span'
+                break
+            parts = line_layouts.get(a, (payload,)) if a in fix_addrs else (payload,)
+            normalized_parts = [normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg) for part in parts]
+            normalized = b'\x72\x0a\x09'.join(normalized_parts)
+            if any(text_segment_cells(part) > max_cells for part in normalized_parts):
+                text_failure = 'skip_normalized_wide'
+                break
+            new_msg += normalized
             cur = a + L
-        new_msg += rom[cur:me]                    # 종단 제어 보존
-
-        # ★2026-06-25/27 free-space punctuation normalization:
-        # - 대사 렌더러는 반각공백(0x20)을 글리프 폭 0으로 스킵(화면 잼)하므로, content 사이 0x20은 전각(0x8140)으로
-        #   바꿔 화면에 공백이 보이게 한다. 비-fixed 라인(클린소스 없는 잼)까지 정상화.
-        # - Part1 재배치 블롭 전체의 ASCII punctuation도 2바이트 SJIS로 바꾼다. fixed line은
-        #   encode_full_fidelity()에서 이미 처리하지만, 같은 메시지의 보존 라인에 남은 punctuation도 같은
-        #   renderer를 타므로 byte alignment를 통일한다. 2바이트 코드 lead는 건너뛰어 코드 내부 바이트
-        #   오변환을 막는다.
-        _conv = bytearray(); _i = 0
-        _part1_msg = PART1_DIALOG_LO <= msg < PART1_DIALOG_HI
-        while _i < len(new_msg):
-            _b = new_msg[_i]
-            if 0x81 <= _b <= 0xE2 and _i + 1 < len(new_msg):
-                _conv += new_msg[_i:_i + 2]; _i += 2
-            elif _b == 0x20:
-                _nx = new_msg[_i + 1] if _i + 1 < len(new_msg) else 0
-                if 0x81 <= _nx <= 0xE2 or 0x21 <= _nx <= 0x7E:   # 다음이 content → interior space
-                    _conv += b'\x81\x40'
-                else:
-                    _conv += b'\x20'
-                _i += 1
-            elif _part1_msg and _b == 0x2E and new_msg[_i:_i + 3] == b'...':
-                _conv += b'\x81\x45' * 3
-                _i += 3
-            elif _part1_msg and _b in PART1_DIALOG_ASCII_PUNCT:
-                _conv += PART1_DIALOG_ASCII_PUNCT[_b]; _i += 1
-            elif _b == 0x2C:
-                _conv += b'\x81\x41'; _i += 1
-            else:
-                _conv += bytes([_b]); _i += 1
-        new_msg = _conv
+        if text_failure:
+            stats[text_failure] = stats.get(text_failure, 0) + 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': text_failure})
+            continue
+        gap = bytes(rom[cur:me])
+        controls.append((len(new_msg), gap, bytes(orig[cur:me])))
+        new_msg += gap
+        if any(gap != original or bytes(new_msg[pos:pos + len(gap)]) != original
+               for pos, gap, original in controls):
+            stats['skip_control_changed'] = stats.get('skip_control_changed', 0) + 1
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_control_changed'})
+            continue
 
         # ★stray-code 안전게이트(2026-06-25): new_msg의 **모든 2바이트 코드가 렌더 가능**(예약 한글 / 한자테이블 /
         # 전각공백 0x8140 / 전각 기호·영숫자 0x81-0x82)한지 전수 검증. 다른 writer의 slot 경계가 코드를 분할해
@@ -457,8 +563,6 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_no_terminator'})
             continue
 
-        # 제어 바이트 보존 검증(라인 외 전부 동일)
-        # (분해가 검증됐고 gap은 orig 복사이므로 자명하지만 명시 확인)
         nlen = len(new_msg)
         if free + nlen > free_end:
             raise AssertionError('repoint free-space exhausted')
@@ -482,6 +586,14 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             'fixed': sorted(f'0x{a:06X}' for a in fix_addrs),
         })
 
+    for record in manifest:
+        evidence = pcm_classifications.get(int(record['msg'], 16))
+        if evidence is not None:
+            record['pointer_classification'] = evidence
+    for evidence in pcm_classifications.values():
+        stats['pcm_collision_sites_excluded'] += len(evidence['excluded_sites'])
+        if evidence['status'] == 'guard_rejected':
+            stats['pcm_collision_guard_rejected'] += 1
     stats['free_used'] = free - free_start
     stats['free_avail'] = free_end - free_start
     return manifest, dict(stats)

@@ -1,0 +1,566 @@
+{
+  "scope": "normal gameplay; no mission victory or ending; no new ROM/code edits",
+  "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+  "parts": {
+    "1": {
+      "latest_action": {
+        "segment": 1332,
+        "start_core_frame": 252827,
+        "end_core_frame": 253132,
+        "status": "captured",
+        "checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-10-01/round32_recovery/1332_A_0253132.checkpoint.json",
+        "png": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-10-01/round32_recovery/1332_A_0253132.png",
+        "sheet": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-10-01/round32_recovery/1332_A_0253132_sheet.png",
+        "free_gib": 26.55,
+        "visual_review": "pending"
+      },
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 253132,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1332_A_0253132.ss0",
+        "state_sha256": "229e694b60154bba3def85db680de26b7d2ee562ee0bf684fc3be0ab345fdadf",
+        "ledger_sha256": "ee04fe1809afa378ce77feea44fbf568cac6f0b0ccfda0c85324d1603ecff8ca",
+        "ledger_bytes": 47394952
+      },
+      "checkpoint_sha256": "b627f4dae1f87e4c2e677e5ceba06aa13e3c45e40f92b5b5fb663426a60c3156",
+      "own_units_only": {
+        "frame": 253132,
+        "configured_session_id": 7600,
+        "read_only_recorded_state": true,
+        "emulator_started": false,
+        "units": [
+          {
+            "army": 0,
+            "slot": 0,
+            "type": 2,
+            "state": 0,
+            "x": 0,
+            "y": 8,
+            "hp": 100,
+            "fuel": 70
+          },
+          {
+            "army": 0,
+            "slot": 1,
+            "type": 2,
+            "state": 0,
+            "x": 1,
+            "y": 8,
+            "hp": 100,
+            "fuel": 70
+          },
+          {
+            "army": 0,
+            "slot": 2,
+            "type": 3,
+            "state": 0,
+            "x": 11,
+            "y": 11,
+            "hp": 63,
+            "fuel": 40
+          },
+          {
+            "army": 0,
+            "slot": 3,
+            "type": 1,
+            "state": 1,
+            "x": 3,
+            "y": 11,
+            "hp": 100,
+            "fuel": 99
+          },
+          {
+            "army": 0,
+            "slot": 4,
+            "type": 10,
+            "state": 1,
+            "x": 8,
+            "y": 12,
+            "hp": 100,
+            "fuel": 44
+          },
+          {
+            "army": 0,
+            "slot": 5,
+            "type": 3,
+            "state": 1,
+            "x": 8,
+            "y": 13,
+            "hp": 100,
+            "fuel": 42
+          },
+          {
+            "army": 0,
+            "slot": 7,
+            "type": 15,
+            "state": 0,
+            "x": 4,
+            "y": 12,
+            "hp": 100,
+            "fuel": 45
+          }
+        ]
+      }
+    },
+    "2": {
+      "latest_action": {
+        "segment": 1333,
+        "start_core_frame": 255186,
+        "end_core_frame": 255371,
+        "status": "captured",
+        "checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/1333_A_0255371.checkpoint.json",
+        "png": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/1333_A_0255371.png",
+        "sheet": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-10-01/round32_recovery/1333_A_0255371_sheet.png",
+        "free_gib": 26.73,
+        "visual_review": "pending"
+      },
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 255371,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1333_A_0255371.ss0",
+        "state_sha256": "c4d2b5d071c386fd05e20f4653126a51e90e63509a487450695f52fe61b679d6",
+        "ledger_sha256": "5ae2df11b1368ac3465818cef2696240e5509a056353d49afb03cdc3826a35e8",
+        "ledger_bytes": 46558408
+      },
+      "checkpoint_sha256": "e21452122b5ab940e8cdbcfea137a7bcd033746a459305452da7a6abcbb2dfe7",
+      "own_units_only": {
+        "frame": 255371,
+        "configured_session_id": 22480,
+        "read_only_recorded_state": true,
+        "emulator_started": false,
+        "units": [
+          {
+            "army": 0,
+            "slot": 0,
+            "type": 1,
+            "state": 0,
+            "x": 8,
+            "y": 13,
+            "hp": 100,
+            "fuel": 99
+          },
+          {
+            "army": 0,
+            "slot": 1,
+            "type": 1,
+            "state": 0,
+            "x": 10,
+            "y": 14,
+            "hp": 100,
+            "fuel": 99
+          },
+          {
+            "army": 0,
+            "slot": 4,
+            "type": 19,
+            "state": 1,
+            "x": 3,
+            "y": 5,
+            "hp": 76,
+            "fuel": 58
+          },
+          {
+            "army": 0,
+            "slot": 5,
+            "type": 1,
+            "state": 1,
+            "x": 5,
+            "y": 8,
+            "hp": 43,
+            "fuel": 92
+          },
+          {
+            "army": 0,
+            "slot": 6,
+            "type": 19,
+            "state": 1,
+            "x": 4,
+            "y": 7,
+            "hp": 100,
+            "fuel": 64
+          },
+          {
+            "army": 0,
+            "slot": 7,
+            "type": 5,
+            "state": 0,
+            "x": 10,
+            "y": 13,
+            "hp": 100,
+            "fuel": 70
+          },
+          {
+            "army": 0,
+            "slot": 8,
+            "type": 5,
+            "state": 1,
+            "x": 9,
+            "y": 3,
+            "hp": 77,
+            "fuel": 59
+          },
+          {
+            "army": 0,
+            "slot": 9,
+            "type": 19,
+            "state": 1,
+            "x": 9,
+            "y": 4,
+            "hp": 98,
+            "fuel": 91
+          },
+          {
+            "army": 0,
+            "slot": 10,
+            "type": 19,
+            "state": 1,
+            "x": 4,
+            "y": 5,
+            "hp": 100,
+            "fuel": 95
+          },
+          {
+            "army": 0,
+            "slot": 11,
+            "type": 1,
+            "state": 1,
+            "x": 7,
+            "y": 7,
+            "hp": 100,
+            "fuel": 96
+          }
+        ]
+      }
+    }
+  },
+  "public_events": [
+    {
+      "part": 1,
+      "segment": 1044,
+      "core_frame": 198076,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1044_R_0198076.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1044_R_0198076.png",
+      "png_sha256": "d4d6b8bbaa96624ad2a6cce35c0154ac96b10b9a864ed39d13b574017a418676",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 198076,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1044_R_0198076.ss0",
+        "state_sha256": "ade5b41338c1a782cc71eb2ba6811543d3613f0de06551b02530b4746cb1a77d",
+        "ledger_sha256": "62e694b5199e965f6fc4dbb3b657c748cdab4ba1da6ee4ae5563b9ceced45642",
+        "ledger_bytes": 36161848
+      }
+    },
+    {
+      "part": 1,
+      "segment": 1051,
+      "core_frame": 199098,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1051_A_0199098.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1051_A_0199098.png",
+      "png_sha256": "393c949ff7c4a8c67e467a8347c01be27eb366e4cc94e7719f1422c8a35417c2",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 199098,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1051_A_0199098.ss0",
+        "state_sha256": "3145f0160f38525a8996b5710ad9dbd532fad0d6307dddfb2bc1824988a5c984",
+        "ledger_sha256": "5a117d4f6b3479f72a2101b30213f89c55dfd17402847c3a949892c47b2d7360",
+        "ledger_bytes": 36370384
+      }
+    },
+    {
+      "part": 1,
+      "segment": 1310,
+      "core_frame": 248552,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1310_A_0248552.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1310_A_0248552.png",
+      "png_sha256": "735a266df5eae66285b009279f0d0a3d2c1b01759fa71228766c12e425ee0b5f",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 248552,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1310_A_0248552.ss0",
+        "state_sha256": "2c2e960848483f44ed86bcca84b7d0157da5896d967f837cd09dbee39dc1f89d",
+        "ledger_sha256": "a40eff855757e85f86e6d1ea36206df590ff87268b887a844673c7c8bbb28a79",
+        "ledger_bytes": 46460548
+      }
+    },
+    {
+      "part": 1,
+      "segment": 1320,
+      "core_frame": 250746,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1320_A_0250746.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1320_A_0250746.png",
+      "png_sha256": "d21f06af7cdf9c6ac19e1ad9153424e92797498d71be539820f4c56d34256d44",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 250746,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1320_A_0250746.ss0",
+        "state_sha256": "27e70b888d42bef10c564253b30fc9ac30c2e452371fa441ea7d82044b6ef38a",
+        "ledger_sha256": "b54ce751f342e982c75261340e4f7ef3aa4d332dfc7e9dcdd4d0f4af4c1f86cf",
+        "ledger_bytes": 46908160
+      }
+    },
+    {
+      "part": 1,
+      "segment": 1322,
+      "core_frame": 251952,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1322_NONE_0251952.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1322_NONE_0251952.png",
+      "png_sha256": "a034a589756dff93d02989533c4966cb91de215e9de160baca9292cecfb990e0",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 251952,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1322_NONE_0251952.ss0",
+        "state_sha256": "f4c070e8659ee18fef9850edca500b7ba17812ffff9c562a9018ca336955cb43",
+        "ledger_sha256": "d7a22314bde09b87d98daafa6b63855c3f69c567d1150dabddedbfc99405f9d0",
+        "ledger_bytes": 47154184
+      }
+    },
+    {
+      "part": 1,
+      "segment": 1332,
+      "core_frame": 253132,
+      "source_png": "output/qa/part1_2026-10-01/round32_recovery/1332_A_0253132.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part1_1332_A_0253132.png",
+      "png_sha256": "b274dc940500ed5b4134ce053727326c89b94b5facef351e35f073cc6ccfc8c1",
+      "checkpoint": {
+        "baseline_sha256": "2edb5971bb86c13763e5f453c790ebd004e8f5f0e72062fc25a81658af4d0437",
+        "core_frame": 253132,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1332_A_0253132.ss0",
+        "state_sha256": "229e694b60154bba3def85db680de26b7d2ee562ee0bf684fc3be0ab345fdadf",
+        "ledger_sha256": "ee04fe1809afa378ce77feea44fbf568cac6f0b0ccfda0c85324d1603ecff8ca",
+        "ledger_bytes": 47394952
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1088,
+      "core_frame": 214723,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1088_R_0214723.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1088_R_0214723.png",
+      "png_sha256": "d8831b5e26f876dc9375d0d98ea8446c9efdbcd0504882c29c624f5bef3b1c55",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 214723,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1088_R_0214723.ss0",
+        "state_sha256": "b489dfe51e593755f8acbd8c0f9fcbf26c06a36ed379cf8956166f80ee714e87",
+        "ledger_sha256": "9fdcde490247ddca8b7d484788cf5b450cbe7acac9ebc4afce09216ba84b6665",
+        "ledger_bytes": 38264806
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1093,
+      "core_frame": 215353,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1093_R_0215353.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1093_R_0215353.png",
+      "png_sha256": "20e55a3f962b46a6f04486fbd1c2f4933bcab527c0fc51320eb9a2c1268f4d14",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 215353,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1093_R_0215353.ss0",
+        "state_sha256": "9e47f8c9496f238271e4307aa73f7fb9c1a256c0b98f2d03988bcda28d7b938f",
+        "ledger_sha256": "95645724a9453cae428408674ba0a99e4551184d0ebd0c22a81625556416100f",
+        "ledger_bytes": 38393356
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1241,
+      "core_frame": 243725,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1241_NONE_0243725.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1241_NONE_0243725.png",
+      "png_sha256": "389f52c21e04c68b6a31d611ffa62cb95c49e6dd0eb38d0fb4c861708f81f0cc",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 243725,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1241_NONE_0243725.ss0",
+        "state_sha256": "b649f3cbfd3bf50ff555fba8367e4cc0a1b0e74ace6977670178bdbfab7bc406",
+        "ledger_sha256": "0d5eec40b5632beade034aa6e59702613e196e315bd63583d313bc2dac7d0077",
+        "ledger_bytes": 44182174
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1267,
+      "core_frame": 246561,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1267_A_0246561.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1267_A_0246561.png",
+      "png_sha256": "6abfbe2b490a36edd67669df7aa6a5d22779a187030b84e925bd525f63ee9583",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 246561,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1267_A_0246561.ss0",
+        "state_sha256": "72781ebd87c44b0cca90aa2aee49a3c405ddc90f074c9ecc50d1bdebe12afc3f",
+        "ledger_sha256": "9ead6f69908032ba79ba2c6c0b9e5196ae2b6636cb7746880ef1ff423488f664",
+        "ledger_bytes": 44760844
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1279,
+      "core_frame": 248927,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1279_A_0248927.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1279_A_0248927.png",
+      "png_sha256": "996538ce4ca60562bbd270f1947802e4336364d1f43d56a626c6c1524c236735",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 248927,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1279_A_0248927.ss0",
+        "state_sha256": "c23dbb366fcbedc506ac3782503900a80aaabb9af54292e778d0bf39842ee1c1",
+        "ledger_sha256": "273f3b3b31d8a85ebfb1f987fa00155a2e9dfee7c726e601e9008fea9e2922a7",
+        "ledger_bytes": 45243556
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1333,
+      "core_frame": 255371,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1333_A_0255371.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1333_A_0255371.png",
+      "png_sha256": "b0b7623964c8e53bcac932f75592f84a2ceea8e9860a7f4a1b6b14102baf3776",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 255371,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1333_A_0255371.ss0",
+        "state_sha256": "c4d2b5d071c386fd05e20f4653126a51e90e63509a487450695f52fe61b679d6",
+        "ledger_sha256": "5ae2df11b1368ac3465818cef2696240e5509a056353d49afb03cdc3826a35e8",
+        "ledger_bytes": 46558408
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1269,
+      "core_frame": 247767,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1269_NONE_0247767.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1269_NONE_0247767.png",
+      "png_sha256": "408bb621dfd0a2d521dacb8b69cf23531da5f80ba1c11bc0265703fc3e0fd0aa",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 247767,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1269_NONE_0247767.ss0",
+        "state_sha256": "4098e762498ba6531d8d440b58bb94d878751ca0d6b74fbbf8d3128295d700aa",
+        "ledger_sha256": "e29b8bcf9abdd437b5bdef3915f052ef49aca46e94517e6f3ac568732dfd8d80",
+        "ledger_bytes": 45006868
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1369,
+      "core_frame": 263435,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1369_NONE_0263435.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1369_NONE_0263435.png",
+      "png_sha256": "0b521b569dd8c1340f5bdf627fdb47b50fbac692435b89ac69e330979c5bcc6f",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 263435,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1369_NONE_0263435.ss0",
+        "state_sha256": "e50793a3183062b5d9dc78379f5cd365f58f6bf822a3f29c39a13851e5fa2d45",
+        "ledger_sha256": "d97fede37a7b86d83d2b1232d4b5951989b35e519ec2ba3b589acac0aa635ba3",
+        "ledger_bytes": 48203764
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1428,
+      "core_frame": 269809,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1428_R_0269809.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1428_R_0269809.png",
+      "png_sha256": "47470f6692fdc0c2e45f055cd7122b249652e1a2f9acabe4f7952a2911a23a25",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 269809,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1428_R_0269809.ss0",
+        "state_sha256": "478e9b56fa3731ff5ef900356727ca3857a885a6fff232674f70302d10a1dfbe",
+        "ledger_sha256": "4403665fef72e3d7ea03be10afd4ffe35308f004a77253f6dc04295d3d86d6d6",
+        "ledger_bytes": 49504378
+      }
+    },
+    {
+      "part": 2,
+      "segment": 1434,
+      "core_frame": 270525,
+      "source_png": "output/qa/part2_2026-10-01/round32_recovery/1434_R_0270525.png",
+      "evidence_png": "docs/screenshots/continuation_2026-10-01/part2_1434_R_0270525.png",
+      "png_sha256": "1cbfe472f493e4a097d229dfd9d2ba272a6fea7f2644f45a7adf4bf5077d4d99",
+      "checkpoint": {
+        "baseline_sha256": "809be8bfdf8dd51e4b4bdfaf51a7ec0d930730d3067d4ec64d3f7fefa3f8f611",
+        "core_frame": 270525,
+        "rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+        "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+        "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+        "state": "1434_R_0270525.ss0",
+        "state_sha256": "a7ea7d2031b8d6b6cdc67f346d8044423610c30372185efbd2027aef5e336ec7",
+        "ledger_sha256": "4716d9fe21be07a10844ccc0107909b95fc9e02aa26b99e769e8ba395ed6e36c",
+        "ledger_bytes": 49650484
+      }
+    }
+  ],
+  "unit_type_mapping": {
+    "1": "Infantry",
+    "2": "Mech",
+    "3": "Medium Tank",
+    "5": "Light Tank",
+    "10": "Artillery",
+    "14": "Anti-Air",
+    "15": "Missile",
+    "19": "Battle Copter",
+    "20": "Transport Copter"
+  },
+  "own_state_check_scope": "Recorded own-army coordinates/HP checked by read-only units.py; native visual_review fields remain pending and do not mean all frames visually reviewed.",
+  "forecast_damage_percent": {
+    "part1_1310": 48,
+    "part1_1320": 59,
+    "part2_1267": 46,
+    "part2_1279": 20
+  }
+}

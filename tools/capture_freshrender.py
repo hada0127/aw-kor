@@ -31,7 +31,7 @@ from qa_visual_regions import MGBADriver  # noqa: E402
 
 MANIFEST = ROOT / "data" / "freshrender_checkpoints.json"
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
-HARNESS = Path("/tmp/mgbah")
+HARNESS = ROOT / "temp" / "mgbah"
 OUT = ROOT / "temp" / "freshrender"
 
 

@@ -1,0 +1,31 @@
+{
+  "rom_sha256": "67a324e2684ce1e5822d77535e22fdcbfbdbfa77d477e5d7d6e91eed3265e96f",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m6_day1_save/game_save.json",
+  "save_sha256": "1d1e0935ac8a6808a67dfc0d8d84681bbb3656ca43ce1552ed480025aea4381a",
+  "source": "output/qa/part2_2026-09-23/round4_m6_live",
+  "input_actions": 162,
+  "screens": [
+    {
+      "core_frame": 40319,
+      "png": "title_frame_40319.png",
+      "sha256": "42d33892e160aa007cccfa890cde2bd70c30c29c3f416d5c0662e214fdffd9f3"
+    },
+    {
+      "core_frame": 40385,
+      "png": "title_frame_40385.png",
+      "sha256": "82d7acdb9b489ac1f6f385fa5c827e1daa0c1d714d7965b13c7c4fd2101aa30d"
+    },
+    {
+      "core_frame": 40451,
+      "png": "title_frame_40451.png",
+      "sha256": "6c0a1de30fedfe31b5f3f9eef6dbd98a6c3c7b4039fe424dea9221207a1d1a6a"
+    }
+  ],
+  "final_frame_counter": "OK framecounter 41321",
+  "scope": "Native power title targeted capture only; no all-frame or ending claim",
+  "visual_reviewed_frames": [
+    40385
+  ],
+  "displayed_korean_title": "강타"
+}

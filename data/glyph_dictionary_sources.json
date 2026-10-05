@@ -1,0 +1,274 @@
+{
+  "_doc": "원문처럼 보이지만 글리프 등록에 쓰이는 코드 사전. 일반 대사 번역·자유 편집 대상이 아님. B12BDC/B12A58 호출의 원본 ROM literal 참조와 NUL 경계를 검증한다. pointer_offsets는 확인된 참조이며 전체 포인터의 완전한 목록을 주장하지 않는다.",
+  "original_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+  "sources": [
+    {
+      "address": "0x00A3B880",
+      "length": 122,
+      "pointer_offsets": [],
+      "role": "glyph_dictionary",
+      "consumer": "0x08380564"
+    },
+    {
+      "address": "0x00B842E8",
+      "length": 84,
+      "pointer_offsets": [],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B3C184"
+    },
+    {
+      "address": "0x00D8273C",
+      "length": 8,
+      "pointer_offsets": [
+        "0x00B12CC8",
+        "0x00B12D0C",
+        "0x00B12D3C",
+        "0x00B12D6C",
+        "0x00B12D9C",
+        "0x00B12DFC",
+        "0x00B12E24",
+        "0x00B12E5C",
+        "0x00B12E9C",
+        "0x00B12EDC",
+        "0x00B12F1C",
+        "0x00B12F5C",
+        "0x00B12F90",
+        "0x00B12FC0",
+        "0x00B12FF0",
+        "0x00B13020",
+        "0x00B13050",
+        "0x00B13090",
+        "0x00B130C0",
+        "0x00B130E0"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82748",
+      "length": 102,
+      "pointer_offsets": [
+        "0x00B12D40"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D827B0",
+      "length": 28,
+      "pointer_offsets": [
+        "0x00B12E00"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82878",
+      "length": 252,
+      "pointer_offsets": [
+        "0x00B12D70"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82978",
+      "length": 30,
+      "pointer_offsets": [
+        "0x00B12DA0"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82A1C",
+      "length": 234,
+      "pointer_offsets": [
+        "0x00B12EE4"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82B08",
+      "length": 20,
+      "pointer_offsets": [
+        "0x00B12EE0"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82B20",
+      "length": 120,
+      "pointer_offsets": [
+        "0x00B12E64"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82B9C",
+      "length": 20,
+      "pointer_offsets": [
+        "0x00B12E60"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82BB4",
+      "length": 180,
+      "pointer_offsets": [
+        "0x00B12EA4"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82C6C",
+      "length": 20,
+      "pointer_offsets": [
+        "0x00B12EA0"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82C84",
+      "length": 168,
+      "pointer_offsets": [
+        "0x00B12F24"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82D30",
+      "length": 20,
+      "pointer_offsets": [
+        "0x00B12F20"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82D48",
+      "length": 208,
+      "pointer_offsets": [
+        "0x00B12F60"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82E1C",
+      "length": 134,
+      "pointer_offsets": [
+        "0x00B12F64"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82EA4",
+      "length": 136,
+      "pointer_offsets": [
+        "0x00B12F94"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D82F30",
+      "length": 236,
+      "pointer_offsets": [
+        "0x00B12FC4"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83020",
+      "length": 108,
+      "pointer_offsets": [
+        "0x00B12FF4"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83090",
+      "length": 62,
+      "pointer_offsets": [
+        "0x00B13024"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D830D0",
+      "length": 76,
+      "pointer_offsets": [
+        "0x00B13054"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83120",
+      "length": 22,
+      "pointer_offsets": [
+        "0x00B130C4"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83138",
+      "length": 94,
+      "pointer_offsets": [
+        "0x00B13094"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83198",
+      "length": 186,
+      "pointer_offsets": [
+        "0x00B130FC"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83254",
+      "length": 32,
+      "pointer_offsets": [
+        "0x00B13118"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D83278",
+      "length": 80,
+      "pointer_offsets": [
+        "0x00B12CD0"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    },
+    {
+      "address": "0x00D832CC",
+      "length": 6,
+      "pointer_offsets": [
+        "0x00B12CCC",
+        "0x00B12D10"
+      ],
+      "role": "glyph_dictionary",
+      "consumer": "0x08B12BDC → 0x08B12A58"
+    }
+  ]
+}

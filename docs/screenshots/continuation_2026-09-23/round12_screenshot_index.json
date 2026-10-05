@@ -1,0 +1,31 @@
+{
+  "rom_sha256": "a73f32b993cca220b89e774d4339de2667cb4f68108f29aea4302fbdcdd5c223",
+  "screenshots": [
+    {
+      "source": "temp/part2_2026-09-23/round12/runtime_p1_bazooka_retry/source325_after120.png",
+      "copy": "docs/screenshots/continuation_2026-09-23/round12_p1_wait.png",
+      "sha256": "c98989a3c0485af141e24699ba5b493e8ad9e9ed8620556984131d79d5f3838c"
+    },
+    {
+      "source": "temp/part2_2026-09-23/round12/runtime_p1_bazooka_retry/source345_after240.png",
+      "copy": "docs/screenshots/continuation_2026-09-23/round12_p1_bazooka_warning.png",
+      "sha256": "70b42a9a58fd0a6cb574ff4a711d3e50b925949c247f2671bc089411a247a64a"
+    },
+    {
+      "source": "temp/part2_2026-09-23/round12/runtime_p1_bazooka_retry/source359_after240.png",
+      "copy": "docs/screenshots/continuation_2026-09-23/round12_p1_mountain_before_round13.png",
+      "sha256": "b79772c70b7fa1afb26aa10636ca0872c8f124a43f902eff898a9801c438a1da"
+    },
+    {
+      "source": "temp/part2_2026-09-23/round12/runtime_p1_bazooka_retry/source365_after240.png",
+      "copy": "docs/screenshots/continuation_2026-09-23/round12_p1_bazooka_numbers.png",
+      "sha256": "672d07f9fbeeca4af1d062d62a3715077bdc9350824dc7f1c60d310252aac105"
+    },
+    {
+      "source": "temp/part2_2026-09-23/round12/runtime_m8_purchase/061_source240_A.png",
+      "copy": "docs/screenshots/continuation_2026-09-23/round12_p2_purchase.png",
+      "sha256": "b0e65889e6871490a7e5a5d038e84a18564f4d578cb4f9b75fa8e8904e175389"
+    }
+  ],
+  "scope": "normal-save cold, targeted scenes only; full message-control gate failed four other/current messages, endings not reached"
+}

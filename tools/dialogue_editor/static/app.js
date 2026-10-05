@@ -14,7 +14,7 @@ if (EMBED) document.documentElement.classList.add("embed");
 
 function byteLen(s) {
   let n = 0;
-  for (const c of s) { const o = c.codePointAt(0); n += ((o >= 0xAC00 && o <= 0xD7A3) || c === "　") ? 2 : 1; }
+  for (const c of s) { const o = c.codePointAt(0); n += o <= 0x7f ? 1 : 2; }
   return n;
 }
 function reload() { return state.view === "group" ? loadGroups() : loadDialogue(); }
@@ -40,40 +40,66 @@ function groupCard(g) {
   const koWrap = el("div", { className: "gko" });
   const inputs = [];
   for (const s of g.segments) {
+    const showKo = !g.ko_segments || g.ko_segments.some(k => k.kind === s.kind && k.address === s.address);
     if (s.kind === "frag") {
       const m = memById[s.address]; if (!m) continue;
       jaWrap.append(el("span", { className: "jfrag", textContent: m.ja || "" }));
+      if (!showKo) continue;
       const ta = el("input", { className: "kfrag" + (m.bteam ? " bteam" : ""), value: m.ko || "" });
-      if (m.bteam) ta.title = "⚠ 짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요";
+      ta.disabled = m.editable === false;
+      if (ta.disabled) ta.title = m.reason || (m.owner_address !== m.address
+        ? `합쳐진 문장: ${m.owner_address}에서 전체 문장을 편집하세요`
+        : "빌드에 적용할 수 없는 추출 항목입니다");
+      if (m.bteam && !ta.disabled) ta.title = "⚠ 짜옹이님(B팀) 권위 번역 — 저장 시 확인 필요";
       const cnt = el("span", { className: "bcnt" });
-      const upd = () => { const b = byteLen(ta.value); cnt.textContent = `${b}/${m.slot ?? "?"}`; cnt.classList.toggle("over", m.slot && b > m.slot); };
+      const upd = () => { const b = byteLen(ta.value) + (m.layout_prefix_bytes || 0); cnt.textContent = `약 ${b}/${m.slot ?? "?"}B (저장 시 검증)`; cnt.classList.toggle("over", m.slot && b > m.slot); };
       ta.oninput = upd; upd();
       const cell = el("span", { className: "kcell" }, ta, cnt);
       if (m.bteam) cell.append(el("span", { className: "bteambadge", textContent: "⚠B팀", title: "짜옹이님(B팀) 권위 번역" }));
       koWrap.append(cell);
-      inputs.push({ m, ta });
+      if (!ta.disabled) inputs.push({ m, ta });
     } else if (s.kind === "var") {
       jaWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
-      koWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
-    } else if (s.kind === "newline") { jaWrap.append(el("br")); koWrap.append(el("br")); }
+      if (showKo) koWrap.append(el("span", { className: "chip", textContent: "⟦" + (s.default || "var") + "⟧" }));
+    } else if (s.kind === "newline") { jaWrap.append(el("br")); if (showKo) koWrap.append(el("br")); }
   }
+  const applyCurrent = el("input", { type: "checkbox", className: "apply-current" });
+  const applyLabel = el("label", { title: "수정하지 않은 조각도 모두 포함합니다. 자동 공백 보정 대신 표시된 문구 그대로 적용합니다" }, applyCurrent, document.createTextNode(`${inputs.length}개 조각 모두 그대로 적용`));
   const save = el("button", { className: "gsave", textContent: "저장" });
+  save.disabled = inputs.length === 0;
   save.onclick = async () => {
-    let ok = 0, fail = 0, cancelled = false;
-    for (const { m, ta } of inputs) {
-      const r = await saveLineConfirm({ id: m.id, address: m.address, ko: ta.value });
-      if (r.ok) { ok++; continue; }
-      if (r.cancelled) { cancelled = true; break; }   // B팀 취소 → 그룹 저장 중단(나머지 조각 프롬프트 안 함)
-      fail++;
-    }
-    setStatus(cancelled
-      ? `${g.group_id} 저장 ${ok}/${inputs.length} — B팀 취소로 중단(나머지 미저장)`
-      : `${g.group_id} 저장 ${ok}/${inputs.length}${fail ? ` (실패 ${fail})` : ""}`);
+      const lines = [];
+      const warnings = new Set();
+    save.disabled = true;
+    try {
+      const pending = inputs.filter(({ m, ta }) => applyCurrent.checked || ta.value !== (m.ko || ""));
+      if (!pending.length) { setStatus("변경 사항 없음"); return; }
+      for (const { m, ta } of pending) {
+        const payload = { id: m.id, address: m.address, ko: ta.value, dry_run: true };
+        const r = await saveLineConfirm(payload);
+        if (!r.ok) {
+          setStatus(`${g.group_id} 저장 안 됨 — ${r.cancelled ? "취소" : r.error || "검증 실패"}`);
+          return;
+        }
+        if (r.warning) warnings.add(`${m.address}: ${r.warning}`);
+        lines.push({ ...payload, dry_run: false, confirm_bteam: Boolean(r.bteam_confirmed), confirm_current: applyCurrent.checked });
+      }
+      const r = await jpost("/api/lines", { lines });
+      if (r.ok) for (const item of r.warnings || []) warnings.add(`${item.address}: ${item.warning}`);
+      if (r.ok) for (const line of lines) {
+        const entry = inputs.find(({ m }) => m.address === line.address);
+        if (entry) entry.m.ko = line.ko;
+      }
+      setStatus(r.ok ? `${g.group_id}: ${r.saved}개 수정, ${r.confirmed || 0}개 문구 확정, ${r.unchanged}개 변경 없음${warnings.size ? ' · ' + [...warnings].join(' ') : ''}`
+        : `${g.group_id} 저장 안 됨 — ${r.error || "검증 실패"}`);
+    } catch (e) {
+      setStatus(`${g.group_id} 저장 오류 — ${e.message}`);
+    } finally { save.disabled = inputs.length === 0; }
   };
-  const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처(첫 조각)" });
-  cap.onclick = () => { const m = g.members[0]; previewLine({ id: m.id, region: g.region }, m.ko, cap); };
+  const cap = el("button", { className: "cap", textContent: "🎮", title: "대표 화면 글꼴 미리보기(첫 조각)" });
+  cap.onclick = () => { const first = g.members[0]; const live = inputs.find(x => x.m.address === first?.address); const m = live ? live.m : first; if (m) previewLine({ id: m.id, region: g.region }, live ? live.ta.value : m.ko, cap); };
   const hd = el("div", { className: "ghd" }, el("b", { textContent: g.group_id }),
-    el("span", { className: "gmeta", textContent: `${g.region} · ${g.size}조각` }), save, cap);
+    el("span", { className: "gmeta", textContent: `${g.region} · ${g.size}조각` }), save, cap, applyLabel);
   if (g.flagged) hd.append(el("span", { className: "gflag", textContent: "⚠검토" }));
   return el("div", { className: "gcard" + (g.flagged ? " flagged" : "") }, hd,
     el("div", { className: "glbl", textContent: "원문(JA)" }), jaWrap,
@@ -96,6 +122,7 @@ async function saveLineConfirm(payload) {
     );
     if (!ok) return { ok: false, cancelled: true };
     r = await jpost("/api/line", { ...payload, confirm_bteam: true });
+    if (r.ok) r.bteam_confirmed = true;
   }
   return r;
 }
@@ -116,16 +143,22 @@ async function loadDialogue() {
 
 function rowFor(ln) {
   const ta = el("textarea", { value: ln.ko || "" });
+  ta.disabled = ln.editable === false;
+  if (ta.disabled) ta.title = ln.reason || "편집할 수 없는 항목입니다";
   const miss = el("span", { className: "miss" });
+  const applyCurrent = el("input", { type: "checkbox", disabled: ta.disabled });
+  const applyLabel = el("label", { title: "기존 문구도 자동 공백 보정 대신 현재 표시된 그대로 적용합니다" }, applyCurrent, document.createTextNode("현재 문구 그대로 적용"));
   const save = el("button", { className: "save", textContent: "저장" });
+  save.disabled = ta.disabled;
   save.onclick = async () => {
-    const r = await saveLineConfirm({ id: ln.id, address: ln.address, ko: ta.value });
-    if (r.ok) { setStatus(`저장됨 #${ln.id}`); showMiss(miss, tr, r.check); }
+    if (save.disabled) return;
+    const r = await saveLineConfirm({ id: ln.id, address: ln.address, ko: ta.value, confirm_current: applyCurrent.checked });
+    if (r.ok) { setStatus((r.saved || r.confirmed ? `문구 저장·확정 #${ln.id}` : "변경 사항 없음") + (r.warning ? ' · ' + r.warning : '')); showMiss(miss, tr, r.check); }
     else if (r.cancelled) setStatus("B팀 번역 저장 취소");
     else setStatus("오류: " + r.error);
   };
   ta.onkeydown = (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") save.onclick(); };
-  const cap = el("button", { className: "cap", textContent: "🎮", title: "원본↔적용 실캡처" });
+  const cap = el("button", { className: "cap", textContent: "🎮", title: "대표 화면 글꼴 미리보기" });
   cap.onclick = () => previewLine(ln, ta.value, cap);
   const tr = el("tr", {},
     el("td", { textContent: ln.id }),
@@ -133,7 +166,7 @@ function rowFor(ln) {
     el("td", { textContent: ln.region || "" }),
     el("td", { className: "ja", textContent: ln.ja || "" }),
     el("td", { className: "ko" }, ta, miss),
-    el("td", {}, save, cap));
+    el("td", {}, save, cap, applyLabel));
   if (ln.is_noise) tr.className = "noise";
   return tr;
 }
@@ -154,8 +187,8 @@ async function previewLine(ln, koLive, btn) {
     $("#capInfo").textContent = `#${ln.id} · ${r.region || ln.region || ""} · canvas=${r.canvas}`;
     const trunc = (r.orig.truncated || r.applied.truncated);
     $("#capNote").textContent = trunc
-      ? "⚠ 이 canvas 슬롯 길이를 초과해 텍스트가 잘렸습니다(긴 대사용 dialog-box canvas는 추가 예정)."
-      : "실기 헤드리스 캡처(가짜 합성 아님). 좌=원본 일본판, 우=적용 한글.";
+      ? "대표 화면 글꼴 미리보기입니다. ⚠ 미리보기 슬롯을 초과한 부분은 잘렸습니다. 원래 장면의 배치·줄바꿈·최종 적용 결과는 게임에서 확인하세요."
+      : "대표 화면에 문구를 넣은 에뮬레이터 미리보기입니다. 원래 장면의 배치·줄바꿈·최종 적용 결과는 게임에서 확인해야 합니다.";
     $("#capModal").hidden = false;
     setStatus(`#${ln.id} 캡처 완료`);
   } catch (e) { setStatus("캡처 실패: " + e); }

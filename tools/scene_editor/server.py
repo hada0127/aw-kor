@@ -33,6 +33,7 @@ import argparse
 import collections
 import csv
 import hmac
+import io
 import hashlib
 import importlib.util
 import json
@@ -47,6 +48,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools"))
+from editor_storage import EDITOR_LOCK, atomic_write_text, save_json as atomic_save_json, editor_request
 STATIC = Path(__file__).resolve().parent / "static"
 CATALOG = ROOT / "data" / "scene_catalog.json"
 DGROUPS = ROOT / "data" / "dialogue_groups.json"
@@ -106,7 +109,7 @@ try:
 except Exception as exc:
     raise RuntimeError("scene editor requires build_korean_full/text_metrics for safe save gates") from exc
 
-_LOCK = threading.Lock()
+_LOCK = EDITOR_LOCK
 _PREVIEW_LOCK = threading.Lock()
 SAFE_CHECKPOINT_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 
@@ -120,21 +123,31 @@ def load_json(p, default=None):
 
 
 def catalog():
-    return load_json(CATALOG, {"scenes": [], "coverage": {}})
+    key = DE.file_stamp(CATALOG)
+    snapshot = _CACHE.get("catalog")
+    if snapshot is None or snapshot[0] != key:
+        snapshot = (key, load_json(CATALOG, {"scenes": [], "coverage": {}}))
+        _CACHE["catalog"] = snapshot
+    return snapshot[1]
 
 
 def group_index():
-    if "groups" not in _CACHE:
+    key = DE.file_stamp(DGROUPS)
+    snapshot = _CACHE.get("groups")
+    if snapshot is None or snapshot[0] != key:
         gd = load_json(DGROUPS, {"groups": []})
-        _CACHE["groups"] = {g.get("group_id"): g for g in gd.get("groups", [])}
-    return _CACHE["groups"]
+        snapshot = (key, {g.get("group_id"): g for g in gd.get("groups", [])})
+        _CACHE["groups"] = snapshot
+    return snapshot[1]
 
 
 def sprite_index():
-    # SE.sprite_list()는 index + objlabel 합성. id→sprite.
-    if "sprites" not in _CACHE:
-        _CACHE["sprites"] = {s.get("id"): s for s in SE.sprite_list()}
-    return _CACHE["sprites"]
+    key = (DE.file_stamp(SE.INDEX_PATH), DE.file_stamp(SE.OBJLABEL_PATH))
+    snapshot = _CACHE.get("sprites")
+    if snapshot is None or snapshot[0] != key:
+        snapshot = (key, {s.get("id"): s for s in SE.sprite_list()})
+        _CACHE["sprites"] = snapshot
+    return snapshot[1]
 
 
 def syl_codes():
@@ -281,8 +294,9 @@ def encoded_len(text: str) -> int:
     return TM.encoded_len(text)
 
 
-def build_fit_budget(text: str, slot):
+def build_fit_budget(text: str, slot, address=None):
     """빌드 encode_fit 기준 길이. UI 표시/저장 게이트가 출하 빌드와 어긋나지 않게 한다."""
+    ai = int(address, 16) if address else None
     raw = encoded_len(text or "")
     if not isinstance(slot, int) or slot <= 0:
         return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": True}
@@ -290,10 +304,11 @@ def build_fit_budget(text: str, slot):
         return {"raw_len": raw, "encoded_len": raw, "fit_level": None, "fits": raw <= slot}
     dropped = collections.Counter()
     try:
-        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped)
+        raw_enc = B.encode_text(text or "", syl_to_code_ints(), dropped, ai)
     except KeyError as exc:
         return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False,
                 "unsupported": [exc.args[0]], "error": "폰트 미수록 음절"}
+    raw = len(raw_enc)
     if dropped:
         return {"raw_len": raw, "encoded_len": len(raw_enc), "fit_level": 99, "fits": False,
                 "unsupported": [ch for ch, _n in dropped.most_common()],
@@ -301,10 +316,15 @@ def build_fit_budget(text: str, slot):
     if not raw_enc and (text or "").strip():
         return {"raw_len": raw, "encoded_len": 0, "fit_level": 99, "fits": False,
                 "unsupported": [], "error": "빌드 인코딩 결과가 비어 있음"}
-    enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter())
+    try:
+        enc, level = B.encode_fit(text or "", slot, syl_to_code_ints(), collections.Counter(), ai)
+    except B.UnsupportedDialogueQuoteError:
+        return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False,
+                "error": "이 대화창에서는 「 」 인용부호를 사용해 주세요."}
     if enc is None:
         return {"raw_len": raw, "encoded_len": raw, "fit_level": 99, "fits": False}
-    return {"raw_len": raw, "encoded_len": len(enc), "fit_level": level, "fits": len(enc) <= slot}
+    return {"raw_len": raw, "encoded_len": len(enc), "fit_level": level, "fits": len(enc) <= slot,
+            "warning": B.dialogue_fit_warning(text or "", enc, syl_to_code_ints(), ai)}
 
 
 SAFE_MIN_ADDR = 0x800000  # build_korean_full: 이 미만(코드영역)은 override skip
@@ -357,7 +377,13 @@ def is_direct_script_address(address):
 
 
 def effective_member_ko(member, dialogue_overrides):
-    addr = member.get("address")
+    addr = canon_addr(member.get("address"))
+    if addr in DE.known_fragment_addresses():
+        return member.get("ko") or ""
+    if addr in DE.display_text_overrides():
+        return DE.display_text_overrides()[addr]
+    if addr and int(addr, 16) in B.STRUCTURED_SCRIPT_ROWS:
+        return member.get("ko") or ""
     if is_address_text_override(addr):
         try:
             addr_int = int(str(addr), 16)
@@ -438,86 +464,15 @@ def member_blank_status(member, ko, budget, review_only_scene=False):
 
 
 def address_text_overrides():
-    """Live ADDRESS_TEXT_OVERRIDES authority.
-
-    build_korean_full imports data/address_text_overrides.tsv once, but the
-    editor can update that TSV while the server process stays alive.  Keep a
-    small mtime cache here so protected text rows display and validate against
-    the same file that the next build subprocess will consume.
-    """
-    if ADDRESS_TEXT_OVERRIDES_TSV.exists():
-        st = ADDRESS_TEXT_OVERRIDES_TSV.stat()
-        key = (st.st_mtime_ns, st.st_size)
-        if _CACHE.get("address_text_overrides_key") != key:
-            rows = {}
-            with ADDRESS_TEXT_OVERRIDES_TSV.open(encoding="utf-8", newline="") as f:
-                reader = csv.DictReader(f, delimiter="\t")
-                if reader.fieldnames != ["address", "text"]:
-                    raise ValueError(f"{ADDRESS_TEXT_OVERRIDES_TSV}: expected TSV header address<TAB>text")
-                for row in reader:
-                    raw_addr = (row.get("address") or "").strip()
-                    if not raw_addr:
-                        continue
-                    rows[int(raw_addr, 16)] = "" if row.get("text") is None else str(row.get("text"))
-            _CACHE["address_text_overrides_key"] = key
-            _CACHE["address_text_overrides"] = rows
-        return _CACHE.get("address_text_overrides", {})
-    if "address_text_overrides_fallback" not in _CACHE:
-        _CACHE["address_text_overrides_fallback"] = {
-            int(k): str(v or "") for k, v in getattr(B, "ADDRESS_TEXT_OVERRIDES", {}).items()
-        }
-    return _CACHE["address_text_overrides_fallback"]
+    """Read the build authority without accepting malformed or duplicate rows."""
+    return DE.address_text_snapshot(ADDRESS_TEXT_OVERRIDES_TSV)[1]
 
 
-def save_address_text_override(addr: str, ko: str) -> None:
-    """Persist a protected address edit to the TSV build authority."""
-    if "\t" in ko or "\n" in ko or "\r" in ko:
-        raise ValueError("보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다")
-    addr_int = int(addr, 16)
-    rows = dict(address_text_overrides())
-    if addr_int not in rows:
-        raise ValueError(f"{addr}: ADDRESS_TEXT_OVERRIDES row not found")
-    rows[addr_int] = ko
-    ADDRESS_TEXT_OVERRIDES_TSV.parent.mkdir(parents=True, exist_ok=True)
-    with ADDRESS_TEXT_OVERRIDES_TSV.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["address", "text"], delimiter="\t", lineterminator="\n")
-        writer.writeheader()
-        for key in sorted(rows):
-            writer.writerow({"address": "0x%08X" % key, "text": rows[key]})
-    _CACHE.pop("address_text_overrides_key", None)
-    _CACHE.pop("address_text_overrides", None)
-
-
-def sync_dialogue_display_data(addr: str, ko: str) -> None:
-    """Keep editor-facing generated data aligned with the build authority."""
-    data = DE.load_json(DE.DIALOGUE_PATH, {"lines": []})
-    for ln in data.get("lines", []):
-        if canon_addr(ln.get("address")) == addr:
-            ln["ko"] = ko
-            if "ship_ko" in ln:
-                ln["ship_ko"] = ko
-    DE.save_json(DE.DIALOGUE_PATH, data)
-
-    groups = load_json(DGROUPS, {"groups": []})
-    for group in groups.get("groups", []):
-        for member in group.get("members", []):
-            if canon_addr(member.get("address")) == addr:
-                member["ko"] = ko
-                if "ship_ko" in member:
-                    member["ship_ko"] = ko
-    DGROUPS.write_text(json.dumps(groups, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    _CACHE.pop("groups", None)
-    _CACHE.pop("addr_slot", None)
 
 
 def bteam_baseline_for(addr: str):
-    if is_address_text_override(addr):
-        return address_text_overrides().get(int(addr, 16))
-    try:
-        base = DE.load_json(ROOT / "data" / "bteam_baseline.json", {}) or {}
-        return (base.get("overrides") or {}).get("0x%08X" % int(addr, 16))
-    except Exception:
-        return None
+    base = DE.load_json(ROOT / "data" / "bteam_baseline.json", {}) or {}
+    return (base.get("overrides") or {}).get("0x%08X" % int(addr, 16))
 
 
 def canon_addr(address):
@@ -566,24 +521,9 @@ def line_budget(member):
         addr_int = int((member.get("address") or "0x0"), 16)
     except (ValueError, TypeError):
         addr_int = 0
-    # 슬롯 권위: 빌드 found length > dialogue_groups slot. min으로 안전.
-    g_slot = member.get("slot")
-    b_slot = build_slots().get(addr_int)
-    if str(member.get("kind") or "").startswith("script:") and isinstance(g_slot, int) and g_slot > 0:
-        # Direct script patches write the explicit [start,end) span in build_korean_full.py.
-        # found_texts often contains only the first source fragment, so using b_slot would
-        # falsely expose the current shipped text as over budget.
-        slot = g_slot
-        est = False
-    elif isinstance(b_slot, int) and b_slot > 0:
-        slot = min(b_slot, g_slot) if isinstance(g_slot, int) and g_slot > 0 else b_slot
-        est = False
-    elif isinstance(g_slot, int) and g_slot > 0:
-        slot = g_slot
-        est = False
-    else:
-        slot = len((member.get("ja") or "")) * 2
-        est = True
+    authoritative = member_slot("0x%08X" % addr_int)
+    est = not isinstance(authoritative, int) or authoritative <= 0
+    slot = len((member.get("ja") or "")) * 2 if est else authoritative
     kind, region = deny_pair_status(addr_int, slot)
     editable = (not est) and slot > 0 and addr_int >= SAFE_MIN_ADDR and kind != "deny" and kind != "pair"
     reason = ""
@@ -598,38 +538,31 @@ def line_budget(member):
             reason = "코드영역 주소(<0x800000, 빌드 skip)"
         elif slot <= 0:
             reason = "슬롯 0"
-    return {"slot": slot, "max_syllables": slot // 2, "estimated": est,
+    owner = B.script_row_owner(addr_int)
+    if owner != addr_int:
+        editable = False
+        reason = "합쳐진 문장: 0x%08X에서 전체 문장을 편집하세요" % owner
+    if B.is_glyph_dictionary_address(addr_int):
+        editable = False
+        reason = "글리프 등록용 사전 — 일반 대사 편집 불가"
+    if canon_addr(member.get("address")) in DE.display_text_overrides():
+        editable = False
+        reason = DE.DISPLAY_READONLY_REASON
+    if B.structured_script_owner(addr_int) is not None:
+        editable = False
+        reason = DE.STRUCTURED_READONLY_REASON
+    if canon_addr(member.get("address")) in DE.known_fragment_addresses():
+        editable = False
+        reason = DE.KNOWN_FRAGMENT_READONLY_REASON
+    reserved = len(B.PART2_EDITOR_ICON_PREFIX) if addr_int in B.PART2_EDITOR_ICON_LABEL_SLOTS else 0
+    return {"slot": slot, "content_slot": max(0, slot - reserved), "reserved_bytes": reserved,
+            "max_syllables": max(0, slot - reserved) // 2, "estimated": est,
             "editable": editable, "reason": reason}
 
 
 def member_slot(address):
-    """주소 → 빌드 권위 슬롯 길이. found length 우선, 없으면 dialogue_groups slot."""
-    try:
-        ai = int(address, 16)
-    except (ValueError, TypeError):
-        return None
-    key = "0x%08X" % ai
-    if "addr_slot" not in _CACHE:
-        idx = {}
-        for g in group_index().values():
-            for m in g.get("members", []):
-                a = m.get("address"); s = m.get("slot")
-                if a is not None and isinstance(s, int):
-                    k = canon_addr(a)
-                    if not k:
-                        continue
-                    rec = idx.setdefault(k, {"slot": s, "script_slot": None})
-                    rec["slot"] = max(rec["slot"], s)
-                    if str(m.get("kind") or "").startswith("script:"):
-                        rec["script_slot"] = max(rec["script_slot"] or 0, s)
-        _CACHE["addr_slot"] = idx
-    rec = _CACHE["addr_slot"].get(key) or {}
-    if rec.get("script_slot"):
-        return rec["script_slot"]
-    b = build_slots().get(ai)
-    if isinstance(b, int) and b > 0:
-        return b
-    return rec.get("slot")
+    """Both editors use the same build/direct-script slot authority."""
+    return DE.member_slot(address)
 
 
 def unsupported_syllables(text):
@@ -689,7 +622,6 @@ def _run_build():
             _BUILD.update(status="fail", finished=int(time.time()), error=repr(e), output_verify=None)
     finally:
         # ROM/레이아웃/대사 캐시 무효화(stale 방지)
-        SE._PATCHED = None
         SE._OBJLABELS = None
         SE._BUILD_LAYOUTS = None
         SE._LAYOUTS = None
@@ -777,7 +709,7 @@ def rom_state():
 def dirty_state():
     """미빌드 편집 여부 = override 파일 mtime > ROM mtime일 때만 dirty(빌드 후 깨끗).
     개수도 함께 반환(전체 override 규모 표시용)."""
-    dov = load_json(DE.OVERRIDES_PATH, {}) or {}
+    dov = B.load_dialogue_overrides(DE.OVERRIDES_PATH) or {}
     sov = load_json(SE.OVERRIDES_PATH, {}) or {}
     aov = address_text_overrides()
     rom_st = OUTPUT_ROM.stat() if OUTPUT_ROM.exists() else None
@@ -824,7 +756,7 @@ def related_dialogue_scene_ids(scene):
 def scene_items(scene, want="all"):
     gi = group_index()
     si = sprite_index()
-    dov = load_json(DE.OVERRIDES_PATH, {}) or {}
+    dov = B.load_dialogue_overrides(DE.OVERRIDES_PATH) or {}
     out_d, out_s = [], []
     review_only_scene = scene.get("id") in REVIEW_ONLY_SCENE_IDS
     if want in ("all", "dialogue"):
@@ -849,7 +781,7 @@ def scene_items(scene, want="all"):
             for m in g.get("members", []):
                 ko = effective_member_ko(m, dov)
                 budget = line_budget(m)
-                budget.update(build_fit_budget(ko, budget.get("slot")))
+                budget.update(build_fit_budget(ko, budget.get("slot"), m.get("address")))
                 if review_only_scene and (budget.get("unsupported") is not None or budget.get("error")):
                     budget["editable"] = False
                     budget["reason"] = "저신뢰 추출 후보 검토 bucket — 현재 값이 빌드 렌더러에서 보존되지 않음"
@@ -863,6 +795,12 @@ def scene_items(scene, want="all"):
                 members.append({"address": m.get("address"), "ja": m.get("ja"), "ko": ko,
                                 "ship_ko": m.get("ship_ko"), "kind": m.get("kind"),
                                 "blank_status": blank_status, "budget": budget})
+            present = {int(m['address'], 16) for m in members}
+            for member in members:
+                address = int(member['address'], 16)
+                owner = B.script_row_owner(address)
+                member['included_in_owner'] = ('0x%08X' % owner
+                                               if owner != address and owner in present else None)
             out_d.append({"group_id": gid, "region": g.get("region"), "size": g.get("size"),
                           "flagged": g.get("flagged"), "assembled_ja": g.get("assembled_ja"),
                           "segments": g.get("segments"), "members": members,
@@ -971,6 +909,7 @@ class Handler(BaseHTTPRequestHandler):
         )
 
     # ── GET ──
+    @editor_request
     def do_GET(self):
         u = urllib.parse.urlparse(self.path)
         q = urllib.parse.parse_qs(u.query)
@@ -1137,6 +1076,14 @@ class Handler(BaseHTTPRequestHandler):
                     "type": sp.get("type"), "palette": SE.default_palette_for(sp), "indices": grid,
                     "edited": False, "offset": sp.get("offset"), "source": sp.get("source"),
                     "desc": desc, "has_onscreen": has_os, "which": "orig"}
+        if SE.is_power_title_sprite(sp):
+            try:
+                view, _snapshot = SE.power_title_edit_view(sp, rec)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                return {"ok": False, "error": str(exc)}
+            return {"id": sid, "type": sp.get("type"), "palette": SE.palette_for(sp),
+                    "offset": sp.get("offset"), "source": sp.get("source"),
+                    "desc": desc, "has_onscreen": has_os, **view}
         if rec and rec.get("indices"):
             grid = rec["indices"]; h = len(grid); w = len(grid[0]) if grid else 0
             return {"ok": True, "id": sid, "width": w, "height": h, "tile_cols": w // 8,
@@ -1158,8 +1105,8 @@ class Handler(BaseHTTPRequestHandler):
             pat = SE.decode_mode4_bitmap(SE.patched_bytes(), sp) if SE.patched_bytes() else None
             changed = bool(o and pat and o[0] != pat[0])
         else:
-            o = SE.decode_from_rom(SE.rom_bytes(), sp)
-            pat = SE.decode_from_rom(SE.patched_bytes(), sp) if SE.patched_bytes() else None
+            o = SE.decode_indices(sp)
+            pat = SE.decode_patched_indices(sp)
             changed = (o and pat and o[0] != pat[0])
         ov = load_json(SE.OVERRIDES_PATH, {}) or {}
         key = SE.override_id(sp)
@@ -1272,6 +1219,7 @@ class Handler(BaseHTTPRequestHandler):
             return
 
     # ── POST ──
+    @editor_request
     def do_POST(self):
         u = urllib.parse.urlparse(self.path)
         try:
@@ -1285,6 +1233,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._logout()
         if not self._require_auth():
             return
+        if p == "/api/dialogue/lines":
+            return self._send(200, DE.Handler._save_lines(self, body))
         if p == "/api/dialogue/line":
             return self._send(200, self._save_line(body))
         if p == "/api/dialogue/preview":
@@ -1303,83 +1253,79 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, start_build())
         return self._send(404, {"error": "not found"})
 
-    def _save_line(self, body):
+    def _save_line(self, body, *, snapshot=None):
         """대사 ko 저장(주소 기준 override). 그룹 멤버(조각)별 독립 슬롯."""
-        addr = body.get("address")
-        ko = body.get("ko", "")
-        addr = canon_addr(addr)
-        if not addr:
-            return {"ok": False, "error": "address 필요"}
-        if is_building():
-            return {"ok": False, "error": "빌드 중 — 완료 후 저장하세요"}
-        # 빌드 미적용(코드영역/슬롯미상) 조각 차단 — 편집해도 ROM 미반영
-        addr_int = int(addr, 16)
-        if addr_int < SAFE_MIN_ADDR:
-            return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
-        protected_address_text = is_address_text_override(addr)
-        protected_direct_script = protected_address_text and is_direct_script_address(addr)
-        if protected_address_text and any(ch in ko for ch in ("\t", "\n", "\r")):
-            return {"ok": False, "error": "보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다"}
-        # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
-        kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
-        if kind == "deny":
-            return {"ok": False, "error": "빌드 deny 영역(%s) — 편집 불가(손상 방지)" % region}
-        if kind == "pair":
-            return {"ok": False, "error": "pair 렌더러 영역(%s) — 특수 처리 필요, 편집 불가" % region}
-        # 서버측 하드게이트(클라 우회/오차 방어): 슬롯 초과·미수록 음절 차단
-        bad = unsupported_syllables(ko)
-        if bad:
-            return {"ok": False, "error": "폰트 미수록 음절(인게임 ‘?’): " + "".join(bad), "unsupported": bad}
-        # B팀(짜옹이) 권위 주소 save-time 보호(짜옹이 본인 편집은 허용하되 우발 변형 차단).
-        # confirm_bteam=True 명시 전에는 차단 + baseline 대비 무엇이 바뀌는지 알린다.
-        if is_bteam(addr) and not body.get("confirm_bteam"):
-            _want = bteam_baseline_for(addr)
-            if _want is None or _want != ko:
-                return {"ok": False, "bteam_confirm_required": True,
-                        "error": "짜옹이님(B팀) 권위 번역 주소입니다. 변경하려면 confirm_bteam=true로 재전송하세요.",
-                        "bteam_baseline": _want}
-        slot = member_slot(addr)
-        fit = build_fit_budget(ko, slot)
-        if fit.get("unsupported") is not None:
-            return {"ok": False, "error": fit.get("error") or "렌더 불가 문자",
-                    "unsupported": fit.get("unsupported"), "encoded_len": fit["encoded_len"],
-                    "raw_len": fit["raw_len"], "slot": slot}
-        if isinstance(slot, int) and not fit["fits"]:
-            return {"ok": False, "error": "슬롯 초과 %dB>%dB" % (fit["raw_len"], slot), "over": True,
-                    "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}
-        if body.get("dry_run"):
-            return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
-                    "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "slot": slot,
+        with _LOCK:
+            addr = body.get("address")
+            ko = body.get("ko", "")
+            addr = canon_addr(addr)
+            if not addr:
+                return {"ok": False, "error": "address 필요"}
+            authority_error = DE.edit_authority_error(addr, ko)
+            if authority_error:
+                return {"ok": False, "error": authority_error}
+            if is_building():
+                return {"ok": False, "error": "빌드 중 — 완료 후 저장하세요"}
+            # 빌드 미적용(코드영역/슬롯미상) 조각 차단 — 편집해도 ROM 미반영
+            addr_int = int(addr, 16)
+            if B.is_glyph_dictionary_address(addr_int):
+                return {"ok": False, "error": "글리프 등록용 사전입니다. 일반 대사로 편집할 수 없습니다"}
+            owner = B.script_row_owner(addr_int)
+            if owner != addr_int:
+                return {"ok": False, "owner_address": "0x%08X" % owner,
+                        "error": "합쳐진 문장입니다. 0x%08X에서 전체 문장을 편집하세요" % owner}
+            if addr_int < SAFE_MIN_ADDR:
+                return {"ok": False, "error": "코드영역 주소(<0x800000) — 빌드 미적용, 편집 불가"}
+            protected_address_text = is_address_text_override(addr)
+            protected_direct_script = protected_address_text and is_direct_script_address(addr)
+            if protected_address_text and any(ch in ko for ch in ("\t", "\n", "\r")):
+                return {"ok": False, "error": "보호 문구 TSV 저장값에는 탭/개행을 넣을 수 없습니다"}
+            # DENY/PAIR 영역 차단(덮으면 그래픽/렌더 손상 — M10)
+            kind, region = deny_pair_status(addr_int, member_slot(addr) or 1)
+            if kind == "deny":
+                return {"ok": False, "error": "빌드 deny 영역(%s) — 편집 불가(손상 방지)" % region}
+            if kind == "pair":
+                return {"ok": False, "error": "pair 렌더러 영역(%s) — 특수 처리 필요, 편집 불가" % region}
+            # 서버측 하드게이트(클라 우회/오차 방어): 슬롯 초과·미수록 음절 차단
+            bad = unsupported_syllables(ko)
+            if bad:
+                return {"ok": False, "error": "폰트 미수록 음절(인게임 ‘?’): " + "".join(bad), "unsupported": bad}
+            # B팀(짜옹이) 권위 주소 save-time 보호(짜옹이 본인 편집은 허용하되 우발 변형 차단).
+            # confirm_bteam=True 명시 전에는 차단 + baseline 대비 무엇이 바뀌는지 알린다.
+            if is_bteam(addr) and not body.get("confirm_bteam"):
+                _want = bteam_baseline_for(addr)
+                if DE.current_ko(addr, snapshot=snapshot) != ko:
+                    return {"ok": False, "bteam_confirm_required": True,
+                            "error": "짜옹이님(B팀) 권위 번역 주소입니다. 변경하려면 confirm_bteam=true로 재전송하세요.",
+                            "bteam_baseline": _want}
+            slot = member_slot(addr)
+            if not isinstance(slot, int) or slot <= 0:
+                return {"ok": False, "error": "등록된 빌드 슬롯이 없는 주소입니다"}
+            fit = build_fit_budget(ko, slot, addr)
+            if fit.get("unsupported") is not None:
+                return {"ok": False, "error": fit.get("error") or "렌더 불가 문자",
+                        "unsupported": fit.get("unsupported"), "encoded_len": fit["encoded_len"],
+                        "raw_len": fit["raw_len"], "slot": slot}
+            if isinstance(slot, int) and not fit["fits"]:
+                return {"ok": False, "error": "%dB 슬롯에 넣을 수 없습니다(원문 인코딩 %dB)" % (slot, fit["raw_len"]), "over": True,
+                        "encoded_len": fit["encoded_len"], "raw_len": fit["raw_len"], "slot": slot}
+            if body.get("dry_run"):
+                return {"ok": True, "dry_run": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
+                        "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "warning": fit.get("warning"), "slot": slot,
+                        "protected_address_text": protected_address_text,
+                        "protected_direct_script": protected_direct_script,
+                        "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
+                                    if protected_address_text else "dialogue_overrides.json")}
+            saved = DE.Handler._save_lines(self, {"lines": [{**body, "address": addr}]})
+            if not saved.get("ok"):
+                return saved
+            return {"ok": True, "saved": saved["saved"], "confirmed": saved["confirmed"], "unchanged": saved["unchanged"],
+                    "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
+                    "raw_len": fit["raw_len"], "fit_level": fit["fit_level"], "warning": fit.get("warning"),
                     "protected_address_text": protected_address_text,
                     "protected_direct_script": protected_direct_script,
                     "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
                                 if protected_address_text else "dialogue_overrides.json")}
-        with _LOCK:
-            if protected_address_text:
-                try:
-                    save_address_text_override(addr, ko)
-                except ValueError as exc:
-                    return {"ok": False, "error": str(exc)}
-                ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
-                if ov.get(addr) != ko:
-                    # Keep a mirror override instead of deleting an existing
-                    # dialogue override.  Direct script rows need the mirror for
-                    # build pickup, and non-direct protected rows avoid silent
-                    # data loss while staying value-synced with the TSV authority.
-                    ov[addr] = ko
-                    DE.save_json(DE.OVERRIDES_PATH, ov)
-            else:
-                ov = canonical_override_map(DE.load_json(DE.OVERRIDES_PATH, {}) or {})
-                ov[addr] = ko
-                DE.save_json(DE.OVERRIDES_PATH, ov)
-            # dialogue_map/dialogue_groups의 ko도 동기(편집 표시·governance 일관)
-            sync_dialogue_display_data(addr, ko)
-        return {"ok": True, "address": addr, "ko": ko, "encoded_len": fit["encoded_len"],
-                "raw_len": fit["raw_len"], "fit_level": fit["fit_level"],
-                "protected_address_text": protected_address_text,
-                "protected_direct_script": protected_direct_script,
-                "storage": ("address_text_overrides.tsv+dialogue_overrides.json"
-                            if protected_address_text else "dialogue_overrides.json")}
 
     def _edit_dict(self, body):
         """통일 사전 CRUD(add/edit/delete) — proper_nouns.json. DE 로직 재사용(Phase 4 잔여)."""
@@ -1411,36 +1357,31 @@ class Handler(BaseHTTPRequestHandler):
                             "text": ko, "sweep": res["applied"].get("sweep")}}
 
     def _sprite_save(self, body):
-        sid = body.get("id")
-        indices = body.get("indices")
-        palette = body.get("palette")
-        sp = SE.sprite_by_id(sid)
-        if sp is None:
-            return {"ok": False, "error": "id 없음: %s" % sid}
-        if not indices or not isinstance(indices, list) or not indices[0]:
-            return {"ok": False, "error": "indices(2D 0..15) 필요"}
-        h = len(indices); w = len(indices[0])
-        # 차원 검증(m8): 8의 배수 + 모든 행 길이 일치(빈/비정형 인코딩 차단)
-        if w == 0 or h == 0 or w % 8 or h % 8:
-            return {"ok": False, "error": "indices 차원 오류(8의 배수 필요): %d×%d" % (w, h)}
-        if any(len(row) != w for row in indices):
-            return {"ok": False, "error": "indices 행 길이 불일치"}
-        try:
-            enc = SE.encode_indices(indices, w, h)
-        except Exception as e:
-            return {"ok": False, "error": "encode: %r" % e}
-        if not enc:
-            return {"ok": False, "error": "인코딩 결과 0바이트"}
-        if sp.get("type") == "lz77":
-            fits = (len(enc) == sp.get("size"))
-        else:
-            fits = (len(enc) <= (sp.get("size") or len(enc)))
-        key = SE.override_id(sp)
         with _LOCK:
+            sid = body.get("id")
+            indices = body.get("indices")
+            palette = body.get("palette")
+            sp = SE.sprite_by_id(sid)
+            if sp is None:
+                return {"ok": False, "error": "id 없음: %s" % sid}
+            key = SE.override_id(sp)
             ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}
+            try:
+                binding_meta, snapshot = SE.power_title_save_context(sp, body, ov.get(key))
+                if snapshot is None:
+                    enc, w, h = SE.validate_sprite_edit(sp, indices, palette)
+                else:
+                    enc, w, h = SE.validate_sprite_edit(sp, indices, palette, rom_snapshot=snapshot)
+                SE.confirm_power_title_save_context(binding_meta)
+            except (ValueError, TypeError, KeyError, OSError) as exc:
+                return {"ok": False, "error": str(exc)}
+            if sp.get("type") == "lz77":
+                fits = (len(enc) == sp.get("size"))
+            else:
+                fits = (len(enc) <= (sp.get("size") or len(enc)))
             ov[key] = {"offset": sp.get("offset"), "type": sp.get("type"), "width": w, "height": h,
                        "indices": indices, "palette": palette, "raw_len": len(enc),
-                       "orig_size": sp.get("size"), "comp_size": sp.get("comp_size"), "fits_raw": fits}
+                       "orig_size": sp.get("size"), "comp_size": sp.get("comp_size"), "fits_raw": fits, **binding_meta}
             SE.save_json(SE.OVERRIDES_PATH, ov)
             try:
                 SE.EDIT_DIR.mkdir(parents=True, exist_ok=True)
@@ -1448,13 +1389,18 @@ class Handler(BaseHTTPRequestHandler):
                 SE.ES.render_png(indices, w, h, pal, str(SE.EDIT_DIR / f"{key}.png"), scale=2)
             except Exception:
                 pass
-        return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"), "fits_raw": fits}
+            return {"ok": True, "id": sid, "base_id": key, "raw_len": len(enc), "orig_size": sp.get("size"), "fits_raw": fits}
 
     def _sprite_revert(self, body):
         sid = body.get("id")
-        key = SE.override_id(sid)
+        sp = SE.sprite_by_id(sid)
+        if sp is None:
+            return {"ok": False, "error": "id 없음: %s" % sid}
+        key = SE.override_id(sp)
+        ep = (SE.EDIT_DIR / f"{key}.png").resolve()
+        if not ep.is_relative_to(SE.EDIT_DIR.resolve()):
+            return {"ok": False, "error": "잘못된 편집 파일 경로"}
         with _LOCK:
-            ep = SE.EDIT_DIR / f"{key}.png"
             if ep.exists():
                 ep.unlink()
             ov = SE.load_json(SE.OVERRIDES_PATH, {})
@@ -1468,8 +1414,10 @@ class Handler(BaseHTTPRequestHandler):
         sp = SE.sprite_by_id(sid)
         if sp is None:
             return {"ok": False, "error": "id 없음: %s" % sid}
-        if not palette or not isinstance(palette, list):
-            return {"ok": False, "error": "palette(16×[r,g,b]) 필요"}
+        try:
+            SE.validate_palette(palette)
+        except ValueError as exc:
+            return {"ok": False, "error": str(exc)}
         key = SE.override_id(sp)
         with _LOCK:
             ov = SE.load_json(SE.OVERRIDES_PATH, {}) or {}

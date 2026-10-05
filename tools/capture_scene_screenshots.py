@@ -27,7 +27,7 @@ CATALOG = ROOT / "data" / "scene_catalog.json"
 CHECKPOINTS = ROOT / "data" / "screen_checkpoints.json"
 PATCHED_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUT_DIR = ROOT / "temp" / "scene_screenshots"
-HARNESS = Path(os.environ.get("MGBA_HARNESS", "/tmp/mgbah"))
+HARNESS = Path(os.environ.get("MGBA_HARNESS", str(ROOT / "temp" / "mgbah")))
 
 
 def _load(path: Path) -> dict:

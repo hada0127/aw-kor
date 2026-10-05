@@ -362,7 +362,7 @@ function renderSceneItems(box) {
     const shown = Math.min(D.length, limit);
     for (let i = 0; i < shown; i++) {
       const g = D[i];
-      const ko = g.members.map(memberKoText).join(" ");
+      const ko = g.members.filter(m => !m.included_in_owner).map(memberKoText).join(" ");
       const over = g.members.some(m => !m.budget.estimated && m.budget.fits === false);
       const el = document.createElement("div"); el.className = "row"; el.dataset.kind = "d"; el.dataset.i = i;
       el.innerHTML = `<span class="ja">${esc(g.assembled_ja || "")}</span>
@@ -466,7 +466,7 @@ function selectDialogue(i, el) {
     if (!ed) {
       html += `<div class="frag readonly" data-addr="${m.address}" data-mi="${mi}">
         <div class="fja">원문: ${esc(m.ja || "")} <span class="ja">@${m.address}</span></div>
-        <div class="ko">${esc(memberKoText(m))}${memberKoBadges(m)}</div>
+        <div class="ko">${m.included_in_owner ? `위 문장(${esc(m.included_in_owner)})에 포함` : esc(memberKoText(m)) + memberKoBadges(m)}</div>
         <div class="fragfoot"><span class="est">🔒 편집 불가 — ${esc(m.budget.reason || "빌드 미적용")}</span></div></div>`;
       return;
     }
@@ -490,6 +490,7 @@ function selectDialogue(i, el) {
   html += `<div class="dictwarn" id="dictwarn"></div>
     <div class="btnrow">
       <button id="dSave">저장</button>
+      <label title="수정하지 않은 조각도 모두 포함합니다. 자동 공백 보정 대신 표시된 문구 그대로 적용합니다"><input id="dApplyCurrent" type="checkbox">이 대사의 모든 조각 그대로 적용</label>
       <button id="dPreview" ${S.items.canvas_status === "ready" ? "" : "disabled title='이 화면은 실캡처 미지원'"}>미리보기(원본↔편집)</button>
       <button id="dCheck">사전 검사</button>
     </div>`;
@@ -541,7 +542,7 @@ function bindFrag(fr, m) {
 function fragText(fr) { return $$(".lineinput input", fr).map(i => i.value).join("\n"); }
 function updateFragBudget(fr, m) {
   const slot = m.budget.slot;
-  let total = 0, badAll = [];
+  let total = m.budget.reserved_bytes || 0, badAll = [];
   $$(".lineinput", fr).forEach(row => {
     const inp = row.querySelector("input"); const b = row.querySelector(".budget");
     const ln = encLen(inp.value); total += ln;
@@ -555,10 +556,11 @@ function updateFragBudget(fr, m) {
   const tb = fr.querySelector("[data-total]");
   const buildLen = Number.isFinite(m.budget.encoded_len) ? m.budget.encoded_len : null;
   const over = !m.budget.estimated && total > slot;
-  let txt = `합계 ${total}/${slot}B`;
+  let txt = `입력 추정 ${total}/${slot}B · 저장 시 빌드 인코딩 검증`;
   if (buildLen !== null && buildLen !== total) txt += ` (초기 빌드 fit ${buildLen}B, L${m.budget.fit_level})`;
   else txt += ` (≤${m.budget.max_syllables}자)`;
   if (badAll.length) txt += ` · 미수록 ${[...new Set(badAll)].join("")}`;
+  if (m.budget.warning) txt += ` · 초기 문구: ${m.budget.warning}`;
   tb.textContent = txt;
   tb.className = "budget" + (over || badAll.length ? " over" : (total > slot * 0.85 ? " warn" : ""));
   fr._over = over; fr._bad = [...new Set(badAll)];
@@ -568,13 +570,19 @@ function updateFragBudget(fr, m) {
 async function saveDialogue() {
   const g = S.item.g;
   let anyBad = [];
+  const warnings = new Set();
   const writes = [];
   $$("#editor .frag:not(.readonly)").forEach((fr) => {
     const member = g.members[+fr.dataset.mi];
+    if (!$("#dApplyCurrent").checked && fragText(fr) === (member.ko || "")) return;
     if (fr._bad && fr._bad.length) anyBad = anyBad.concat(fr._bad);
     writes.push({ address: member.address, ko: fragText(fr), member });
   });
-  if (!writes.length) { toast("편집 가능한 조각이 없습니다", true); return false; }
+  if (!writes.length) {
+    const editable = $$("#editor .frag:not(.readonly)").length > 0;
+    toast(editable ? "변경 사항 없음" : "편집 가능한 조각이 없습니다", !editable);
+    return editable;
+  }
   if (anyBad.length) { toast("폰트 미수록 음절 — 저장 불가: " + [...new Set(anyBad)].join(""), true); return false; }
   for (const w of writes) {
     const prePayload = { address: w.address, ko: w.ko, dry_run: true };
@@ -599,28 +607,17 @@ async function saveDialogue() {
       toast("저장 전 검증 실패: " + (r.error || ""), true);
       return false;
     }
+    if (r.warning) warnings.add(`${w.address}: ${r.warning}`);
   }
-  let saved = 0;
-  for (const w of writes) {
-    const payload = { address: w.address, ko: w.ko };
-    if (w.confirm_bteam) payload.confirm_bteam = true;
-    let r = await api("/api/dialogue/line", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    // C5: 사전검증 이후에도 서버가 confirm을 요구하면 상태가 바뀐 것이라 저장을 중단한다.
-    if (!r.ok && r.bteam_confirm_required) {
-      if (saved > 0) { refreshState(); refreshSceneItems(); }
-      toast("B팀 확인 상태가 바뀌었습니다 — 새로고침 후 다시 저장하세요", true);
-      return false;
-    }
-    if (!r.ok) {
-      // 부분 저장(M3): 이미 기록된 조각을 화면에 반영하고 사실을 알림
-      if (saved > 0) { refreshState(); refreshSceneItems(); toast(`일부만 저장(${saved}/${writes.length}) — 나머지 거부: ${r.error || ""}`, true); }
-      else toast("저장 실패: " + (r.error || ""), true);
-      return false;
-    }
-    const m = g.members.find(x => x.address === w.address); if (m) m.ko = w.ko;
-    saved++;
+  const lines = writes.map(({ address, ko, confirm_bteam }) => ({ address, ko, confirm_bteam, confirm_current: $("#dApplyCurrent").checked }));
+  const r = await api("/api/dialogue/lines", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ lines }) });
+  if (!r.ok) {
+    toast("저장 실패 — 저장된 조각 없음: " + (r.error || ""), true);
+    return false;
   }
-  toast("저장됨(빌드 전까지 미반영)"); refreshState(); refreshSceneItems();
+  for (const w of writes) w.member.ko = w.ko;
+  for (const item of r.warnings || []) warnings.add(`${item.address}: ${item.warning}`);
+  toast((r.saved || r.confirmed ? `${r.saved}개 수정, ${r.confirmed || 0}개 문구 확정, ${r.unchanged}개 변경 없음(빌드 전까지 미반영)` : "변경 사항 없음") + (warnings.size ? ' · ' + [...warnings].join(' ') : '')); refreshState(); refreshSceneItems();
   return true;
 }
 
@@ -636,14 +633,14 @@ async function previewDialogue() {
     return m.ko || "";
   }).join(" ").replace(/\n/g, " ");
   S.applyAction = saveDialogue;  // 모달 '적용' = 현재 편집 저장 후 빌드
-  openModal("미리보기 — 원본 ↔ 편집(실캡처)", `<div class="note">캡처 중… (헤드리스 mGBA, 수십 초 소요)</div>`);
+  openModal("대표 화면 글꼴 미리보기 — 원문 ↔ 편집", `<div class="note">캡처 중… (헤드리스 mGBA, 수십 초 소요)</div>`);
   $("#modalApply").disabled = true;
   const r = await api("/api/dialogue/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ja, ko, canvas: S.items.canvas }) });
   if (!r.ok) { $("#modalGrid").innerHTML = `<div class="note bad">${esc(r.error || "캡처 실패")}</div>`; return; }
   $("#modalGrid").innerHTML =
     `<figure><figcaption>원본 (일본판)</figcaption><img src="${r.orig.url}?t=${Date.now()}"><div class="note">${esc(r.orig.text)}</div></figure>
      <figure><figcaption>편집 (한글)</figcaption><img src="${r.applied.url}?t=${Date.now()}"><div class="note">${esc(r.applied.text)}${r.applied.truncated ? " ⚠잘림" : ""}</div></figure>`;
-  $("#modalNote").textContent = "‘적용(빌드)’을 누르면 저장된 편집이 ROM에 반영됩니다.";
+  $("#modalNote").textContent = "대표 화면에 문구를 넣은 에뮬레이터 미리보기입니다. 원래 장면의 배치·줄바꿈은 빌드 후 게임에서 확인하세요. 적용(빌드)은 현재 편집을 저장하고 빌드합니다.";
   $("#modalApply").disabled = false;
 }
 
@@ -725,6 +722,7 @@ async function selectSprite(i, el) {
   if (myReq !== S._reqSeq) return;  // 더 최신 선택이 있으면 폐기
   if (!d.ok) { $("#editor").innerHTML = `<div class="empty">디코드 실패: ${esc(d.error || "")}</div>`; return; }
   if (d.readonly) { renderReadonlySprite(sp, d); return; }
+  SP.powerTitleBinding = d.power_title_binding || null;
   SP.id = sp.id; SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
   SP.pal = d.palette; SP.type = d.type; SP.sel = 1; SP.os = null; SP.hasOnscreen = !!d.has_onscreen;
   SP.origW = orig && orig.ok ? orig.width : d.width;
@@ -1272,7 +1270,7 @@ function onscreenTargetAtPhase(sx, sy, allowTransparent) {
   return null;
 }
 async function saveSprite() {
-  const r = await api("/api/sprite/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id, indices: SP.grid, palette: SP.pal }) });
+  const r = await api("/api/sprite/save", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: SP.id, indices: SP.grid, palette: SP.pal, power_title_binding: SP.powerTitleBinding }) });
   if (!r.ok) { toast("저장 실패: " + (r.error || ""), true); return false; }  // M8: 실패 시 false
   toast(`저장됨 (raw ${r.raw_len}B, fit=${r.fits_raw})${r.fits_raw === false ? " ⚠빌드서 누락 가능" : ""}`, r.fits_raw === false);
   refreshState();
@@ -1295,6 +1293,7 @@ async function revertSprite() {
     api(`/api/sprite/tile?id=${encodeURIComponent(SP.id)}&which=orig`),
   ]);
   if (!d.ok) { toast("되돌린 뒤 디코드 실패: " + (d.error || ""), true); return; }
+  SP.powerTitleBinding = d.power_title_binding || null;
   SP.w = d.width; SP.h = d.height; SP.cols = d.tile_cols; SP.grid = d.indices;
   SP.pal = d.palette; SP.type = d.type; SP.hasOnscreen = !!d.has_onscreen;
   SP.origW = orig && orig.ok ? orig.width : d.width;

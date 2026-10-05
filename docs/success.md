@@ -1,3 +1,76 @@
+## 2026-09-23 round11 정적 검사와 정상저장 짧은 재현
+
+후보 SHA `09d05990d171709e86f913690b05ecad15f550bd7f944402f2126466ca3c058b`. 11개 개별 대사, 121개 캠페인 제목의 fullwidth 숫자/영문·부호 및 긴 제목 재배치, CO 선택 두 번째 이름 `료`를 반영했다. 원본 native180맵→179제목 포인터 중121만 strict 소비자 범위이며 나머지58은 상위 소비자 미확정으로 남겼다.
+
+204개 필수 대사의 전체payload/원본제어, 소개84조각, PCM 원본 바이트, receipt/input 안정성, 무결성·재배치·부호 검사 통과. 정상 M7 DAY2 저장에서 결과까지185입력, 정상 M7 승리 저장에서 M8 설명까지37입력으로 짧게 재현했다. 결과의 일수 글자 영역 외 픽셀은 이전 round8과 같고, M8 료·도미노·맥스 이름 및 수정 대사의 표본 화면을 확인했다. 영구 증거는 `docs/screenshots/continuation_2026-09-23/round11_m7_evidence.json`와 `round11_m8_evidence.json`에 있다. 전체 프레임 육안검수·양편 엔딩·배포 통과를 뜻하지 않는다.
+
+Claude 후속 지적 중 A12FD4의 다음줄 `물자` 중복은 round12 수정에 포함했다. 58개 일반 제목은 현재 모두8pair 이하지만 미래10+ 제목의 빈 압축글리프를 차단하는 추가 guard를 round12에서 검증 중이다. 편집기 TSV 권위가 stale dialogue JSON으로 되돌아간다는 지적은 실제 API 대조에서 재현되지 않았다. agy는 앞서 OAuth 불가가 확인되어 재호출하지 않았다.
+
+## 2026-09-23 round10: M7 예측형·암초 문장과 편집기 조각 복구
+
+후보 SHA `dab1b8169aec69fc6ea281c2d70c37d5fe433ae1bc43d2a4a4802a30701c25da`. round9와16MiB 전체 동일하며 새 생성맵/시험/도구 입력을 반영한 build receipt로 검증했다. 필수193문구·84소개행·바이트·부호·PCM 검사 통과, 대사92/관측12/새원문5+기존편집기38시험 PASS. Claude 생산4행 및 생성기 후속 검토에서 차단결함 없음.
+
+- Catherine→Ryo ‘익혀 갈게.’를 ‘익혀 갈 거야.’로 고치고, 조각이 붙은 ‘그건, 이건암초요.’를 ‘그건, 이 암초야.’로 복구했다. 강조4B·77경계·6B종료 유지. 정상 M7 DAY1 저장 cold 149입력27,574프레임 source292/295 실화면 전체 표시. `screenshots/continuation_2026-09-23/round9_lab_evidence.json` 참조.
+- 기존 짧은 고정조각을 일반 script writer로 옮겼을 때 생성맵 원문이 비어 그룹에서 빠지는 결함도 수정했다. canonical plain span·정확한slot·bounds·완결된SJIS만 복구하고 기존원문/사용자번역을 유지한다. 실제 생성맵의13개 원문 복구, current_ko/단일행/그룹의5문구 일치와4개 편집가능·강조고정 상태 확인.
+- 본선 round8에서 하이퍼수리 기술명 전체 표시도 새로 확인했다. `screenshots/continuation_2026-09-23/round8_ryo_power_evidence.json` 참조. 22931 프레임 왼쪽 접촉은 애니메이션 이동 중이었고 22900에는 이름 전체가 들어온다.
+- M7은 DAY7 정상 연구소 점령 성공. 승리 대사/다음 임무 검수 계속, 1편은 셋째 전투 진행 중이다. 다음 대사 의미 후보는 후속 수정에 분리하며 양편 엔딩·전 화면·실기·배포 완료로 집계하지 않는다.
+
+## 2026-09-23 round8: 합성줄·필살기 글꼴·편집기 사전 결합 검증
+
+후보 SHA `8a9dfa35e8eada035f9abe103459e5b77a4cb39594010e1cdd6b81990346bf41`. 필수189문구/42소개84행/receipt/바이트·재배치·부호 검사 PASS. 대사92·관측9·의도복구1(6상황), 스프라이트·편집기67 Python/10 JS 시험 및 실제 편집기 저장→빌드 적용 E2E PASS.
+
+- M7 질문·정찰차 설명·숲 인접 조건의 조각을 합친 전체줄을 검증했다. 정상 저장 cold 29,258프레임의 source105/125/130에서 잘림 없이 전부 표시된다. `screenshots/continuation_2026-09-23/round8_lab_evidence.json` 참조.
+- 소개3개의 첫 줄 중복 술어는 원문의 둘째 줄에 그대로 두고 첫 줄만 원문 구조로 복원했다. B팀 정본은 보존하며 주소·source/display 완전일치 예외와 실제 owner를 필수로 한다.
+- 2편 필살기 강타·대분쇄는 이전 계열 OkDanDan과 윤곽/자간으로 생성하고 round7 실화면 검증했다. round8의 전체 atlas/사전/36명은 round7과 byte-identical이다. 사전/이름 결합 digest를 두 편집기의 load/save와 빌드에 연결해 오래된 픽셀 편집의 오적용을 차단한다. 실제 사용자 편집은 보존한다.
+- 보호 TSV와 dialogue가 이미 같은 문구일 때 명시 확인으로 누락된 의도 기록만 복구할 수 있다. 보호 표시와 원문이 다르면 덮어쓰지 않는다.
+- Claude 확정 코드 차단 결함 없음. 실제 빌드·행폭 조건을 위 증거로 해소했고, 낮은 테스트 보강은 round9에 이어 처리한다. 양편 본선은 정상 카트리지 저장 cold 전환하여 실제 상태 일치를 확인했다. 엔딩·전 화면·실기 검증과 배포는 미완료다.
+
+## 2026-09-23 round6: 소개 끝부호와 유닛 설명 실화면 수정
+
+후보 `cbc796e8d774ed0bcf23d2610c732a6efe84349dc6d842d388057d633a2b36e8`. 빌드·receipt·대사91/개별원문6 시험·필수172문구 전체 payload/다음제어·42목표 포인터/제어·PCM 불변검사 통과. 정상 카트리지 저장 cold boot로 M6소개 `육상부대는 격파 가능할까!?`의 끝부호 표시, 1편 전투헬기/수송헬기/대공/미사일의 조사·공백·문장수정 실제 확인. 소개42개는 native A3 대화 경로이며 별도 strict-pair 메뉴영역과 분리했다.
+
+한계: 소개84행 전체비교 중 A0236D 느낌표누락1개는 남아 round7 수정대상. 전투기 설명 진단은 type21 오인으로 대상도달실패(실제16), 4종검증과 분리. `round6_victory_evidence.json`의 exit1/부분검증을 보존했다. 모든 프레임 육안검수·양편엔딩·출시완료를 뜻하지 않는다. 실제 증거: [M6끝부호](screenshots/continuation_2026-09-23/mission6_native_punctuation_after.png), [수송헬기](screenshots/continuation_2026-09-23/transport_copter_reflow_after.png), [대공](screenshots/continuation_2026-09-23/anti_air_particle_after.png), [미사일](screenshots/continuation_2026-09-23/missile_spacing_particle_after.png).
+
+## 2026-09-23 관측 문구·유닛명·PCM 엄격 분류 통합 (round5)
+
+- 후보 `temp/part2_2026-09-23/round5/candidate.gba`, SHA-256 `56314113bf297eaf6b3416fe56958ad9e58fbea7731e38611e1a35c4e6a6be9f`. 빌드/receipt exit0, 관측130행 full payload·경계 및42목표 pointer/control PASS, 수정 소속61메시지 control 일치. 대사91/PCM8(변조53지점)/유닛라벨5시험 PASS. 부호17991활성+1975재배치 payload issue0.
+- 정상 DAY21 저장 cold62입력27759frames에서 둘째 승리대사 이름 경계·`얼마 안 됐지?`와 셋째 도입 `아 사령관님, 료!` 확인. 정상 DAY18 저장 cold9입력5097frames에서 경전차 설명 `가격도 싸고, 이동력이 / 좋아서 다루기 쉽다.` 확인. 그림과 출처는 `screenshots/continuation_2026-09-23/round5_{victory,tank}_evidence.json` 참조. 구매메뉴 R 시도는 실제 정보창에 도달하지 않았으므로 별도 실패 시도로 남겼다.
+- 2편 compact19+status18 원본 atlas/lookup을 대조해4개 매핑(신형↔대공전차, 전투↔수송헬기)을 기존 생성자에서 교정했다. 4slot내138B만 변경, 다른33라벨 불변. 정상 M6 DAY1 저장 cold101입력22798frames로 대공전차·전투헬기 표시 및 출격/로켓/적턴 경계 확인. source/최초 생성물 검증을 빌드에 연결했으며 사용자 editor overlay는 계속 허용한다.
+- 원본 음원 PCM의 우연한 포인터 모양3개는 song209→voice107→wave→signed-byte mixer 소비 경로와 원본/현재 전체 데이터·driver SHA를 검증할 때만 제외한다. DCE8F0 실제 텍스트 포인터 DE4324만 재배치하고 정본38B(중점3개)를 복원했다. 3sample/3native driver·나머지 메시지/제어 불변. 실제 song209 재생 검증을 주장하지 않는다. lossless 미처리는7행 남는다.
+- M6소개 주어 `육상부대는` 및 첫 `콩 님,` cold표시는 확인했다. 다만 끝ASCII`!?`는 기존 후보와 이번 후보 모두에서 보이지 않아 렌더러 제외구간 분류를 다시 조사한다. 소개문 전체 부호까지 통과한 것으로 집계하지 않는다.
+- Claude가 지적한 DC39E8 의문부호를 복원했다. DED20D/선행공백의 선택 경로 의심은 실제 direct owner·필수재배치·최종130payload와 cold화면으로 확인했다. B팀 공백 보정1행의 소유권이 사라질 때 fallback이 생길 수 있다는 추가 방어는 후속 보강 대상으로 남긴다. PCM/유닛명 자체 리뷰는 차단 코드 결함 없음. canonical ROM/BPS 교체와 배포 완료 선언은 하지 않았다.
+
+## 2026-09-23 구매 카드·M5 대사·로켓 정보 통합 검증 (후보 f58729d7)
+
+- `temp/part2_2026-09-23/round4/candidate.gba`, SHA-256 `f58729d79ba9fc398efe6cb9bc23609662d1571b6f5ae1f850ba7f31756e6ce8`. 전체 빌드 exit0·receipt 확인, 바이트392599B 불일치0, 대사116행 payload 및 신규 control 경계·목표42개·수정 메시지 제어 보존, 재배치2241건 문제0, 부호17991 활성+1971 재배치 payload 문제0.
+- 구매 정보의 원본 압축 자산BD1AF0 내 일본어9개를 기존 작은 정보 글꼴 Galmuri7로 수정했다. 그림/원래 팔레트/테두리를 유지하고 원본1900B 슬롯에1825B로 삽입(75B 여유). Claude에서 발견한 ‘보’의 y_offset도 반영했다. 원본 소스/폰트 SHA·용량·VRAM-safe 압축·roundtrip을 검증하고, 편집기 적용 직전 기본 결과를 검사한 뒤 허용된 실제 사용자 편집 결과를 최종 검사한다. 관련6시험 PASS.
+- 개별 관측 대사: A09E10은 B팀 정본 이름 ‘콩의 부대는,’ 복구, A0A109는 Nell→도미노 직접 요청 ‘끌어내 줘.’ 복구, A0A1AB는 ‘콩의 부대도, ’로 이름·쉼표·연결 공백 복구. 각 원문과 소유권을 따로 확인했으며 일괄 번역 변경이 아니다.
+- 1편 로켓 정보 DEDABA/DEDAC8의 빈2B를 실제8140 공백으로 사용해 ‘육해에 공격 가능’ 표시를 복구했다. 강조용33/30과 줄바꿈72를 그대로 유지한다. 대사 회귀86시험 PASS.
+- 최종 후보 정상 저장 cold: 로켓 정보5097프레임·구매카드5917프레임·2편 M5의119입력29248프레임. 수정3대사의 변화는 해당 문구 영역에만 있고, 이름 행의 다음 구절 간격은 기존과 같다. [로켓 정보](screenshots/continuation_2026-09-23/rocket_info_spaces_after.png), [구매 카드](screenshots/continuation_2026-09-23/purchase_unit_badges_after.png), 같은 폴더 `m5_dialogue_repairs_evidence.json` 참조. 이는 표적 실화면 검증이며 미방문 캠페인의 전 프레임 육안 승인이 아니다.
+- 별도 카드 시제품에서는63쌍 화면/OAM/PRAM 및9라벨 모두 관측했고, 최종 기준선 보정3쌍에서도 대상 ‘보’ 이외 변경0을 확인했다. 상세 `temp/sprite_2026-09-23/purchase_labels/REPORT.md`.
+- Claude 통합 정적 리뷰에서 확정 코드 차단 결함 없음. 후속 확인 항목은 실제 화면·소스·시험으로 확인했으며 `round4/review_disposition.json`에 범위별 근거를 남겼다. 다음 미션에서 발견한 이름/주체 표현, lossless 보류8행, 양편 엔딩은 미완료다. canonical ROM/BPS는 교체하지 않았다.
+
+## 2026-09-23 기록 맵명 복원 통합 검증 (후보 93f95c35)
+
+- 전체 빌드 후보 `temp/part2_2026-09-23/round3/candidate.gba`, SHA-256 `93f95c356c85442a897c32d5a80b9dcc4366d2d704e1e52f799e0e5f6f2331b0`. 이전 `5886d445`와 비교해 기록 hook 소유 범위 내부141B만 변경, 외부 차이0. 빌드 exit0·최종 hook 검증 PASS.
+- 정상 저장 clone의 cold boot로 기록59/단독35/통신37, 총131개 입력 후 화면 비교. 기록 목록 외부 픽셀 변화0, 단독/통신 화면 전체 변화0. [기록 초기 화면](screenshots/continuation_2026-09-23/record_names_after.png), [스크롤 화면](screenshots/continuation_2026-09-23/record_names_scroll_after.png), `record_cold_evidence.json` 참조.
+- 통합 ROM의49프레임에서1983회 writer·54개 글리프 슬롯·8개 ring 행을 확인했다. EWRAM1088B(top ring 및 최하단 bottom 포함)와 VRAM3584B 일치. `record_glyph_evidence.json`, 상세 재현/범위는 `temp/sprite_2026-09-23/record_fix/ROUND3_VERIFIED.md` 참조.
+- 원본 BG 타일맵을 침범하던 이전 할당안을 폐기하고, 실제 참조가 없는 private 타일280..2EF에 기록용7글자×8행을 분리했다. 기존 단독/통신 경로는 기존 타일 할당을 유지한다. 원본 hook·배치 공간·최종 쓰기를 검증하며 잘못된 입력에는 변경 전 실패한다.
+- 바이트 무결성390699B 불일치0, 대사111행·목표42개 pointer/control 검증, 재배치2241 메시지 문제0, 부호17991 활성+1971 재배치 payload 문제0. 대사82/편집기38/기록5/day9/font migration5 시험 통과. 편집기 인용부호 오류 안내와 plain operand 경계 가드도 이번 소스 receipt에 포함됐다.
+- Claude의 기록 후속 리뷰에서 코드 차단 결함은 해소됐고, 요청된 통합 런타임 검증까지 완료했다. 공통 변경 후속 리뷰의 편집기 안내 문구 의심은 실제 메시지 단언 시험으로 확인했고, hook/재배치 충돌 의심은 비중첩 주소·최종 검증·ROM diff로 확인했다. agy는 OAuth 인증 실패로 리뷰 불가였다.
+- 이 완료 범위는 기록 표시와 위 검증 항목이다. 양편 캠페인 엔딩, 미관측 메뉴5개, 전체 지형 소비 경로, lossless 보류8행은 남아 있고 배포 후보로 선언하지 않는다.
+
+## 2026-09-23 대사·지형 후보 5886d445 검증 (엔딩·배포 완료 아님)
+
+- 개발 후보 `temp/part2_2026-09-23/round2/candidate.gba`, SHA-256 `5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5`. canonical ROM/BPS는 교체하지 않았다.
+- 2편 승리 조건의 숫자·부호를 동일 A3 렌더러에 맞춰 인코딩했고, 정상 DAY3 저장으로 cold boot한 M5 조건 두 화면이 읽히는 것을 확인했다. [조건 화면](screenshots/continuation_2026-09-23/objective_2_after.png), 같은 폴더 `objective_evidence.json` 참조.
+- 같은 후보의 정상 저장 cold 입력 재생으로 브레이크 안내 문법·인용부호와 1편 이름 삽입 앞 공백도 실제 확인했다. `docs/screenshots/continuation_2026-09-23/{break_native_quotes_after,break_gauge_grammar_after,player_name_boundary_after}.png` 및 대응 evidence JSON 참조.
+- 빌드 exit0. 수정행111 payload 및 신규7행의 다음 제어 바이트 일치, 목표42개 포인터/제어 skeleton 일치, 모든 수정행 소속 메시지 control skeleton 일치. 이 비교는 전체 재배치 메시지의 전수 control 비교가 아니다.
+- 바이트 무결성390545B 불일치0, 재배치2241 메시지 문제0, 부호 검사17991 활성 payload+1971 재배치 payload issue0. 초기 overflow 보고9행(일반8+보충1)은 모두 최종 재배치 메시지에 포함됐다. 별도 lossless 미처리8행은 그대로 남아 있어 완료 처리하지 않았다.
+- 원본 지형 이미지39개와 주소 대응을 확인해 11개 라벨을 정정했다. 직전 a290 후보에 해당 변경만 적용한 clone에서는 1023B 변경이 11개 허용 자산 내부로 한정되고 외부 변경0이었다. 정상 저장 cold M5 `(13,5)` HUD `암초→여울` 표시를 확인했다. 다른 지형의 실제 소비 경로 검증은 아직 전부 끝나지 않았다.
+- Claude 후속 리뷰의 유효 지적(비재배치 목표 포인터 검사, 인용부호 입력의 편집기 오류 처리, text operand 경계 가드)을 보강 중이다. 최신 코드 시험은 대사82/편집기38/day9/font migration5 통과. 편집기 예외 처리 및 경계 가드 후속 소스는 다음 후보 receipt로 재확인한다.
+- 1편 DAY7 실패는 원본에도 동일하게 발생하는 수도 점령 패배였으며 제어 흐름 회귀가 아니다. 수도 방어 재도전으로 DAY8 일반 저장을 확보했다. 두 편 엔딩은 미도달, 기록 맵 이름 스크롤 복원은 별도 진행 중이다.
+
 # Success Log — 작동 검증된 방법·산출물
 
 > 사용자가 향후 참조하기 위한 **실제로 작동한 방법 모음**. 모순·실패 사유는 [fail.md](fail.md) 참조.
@@ -3661,3 +3734,110 @@ C6/E8의 미완 증거를 닫았다. 단, 이 증거는 "에디터 저장 게이
   `python3 tools/verify_dist_integrity.py`,
   `python3 tools/run_release_qa.py --timeout 300 --report temp/release_qa_report_part1_name_dialogue_font_20260706_final.json`,
   `git diff --check`.
+
+
+## 2026-09-15 — 첫 튜토리얼 문자 명령 충돌·중복 문장·행동 메뉴 수정
+
+사용자 요청으로 첫 임무 3일째에서 플레이를 중단한 뒤 수정했다. 1편 텍스트 인코더의 영숫자 전각화로 A/B·숫자가 제어 명령으로 오인되는 경로를 막았다. 합친 문장은 부모 완성문장과 실제 writer 범위를 사용하며, 재배치의 정규화는 텍스트 span에만 적용한다. 제어 gap 보존·실제 폭·중간 참조 검사를 추가했다. 메뉴 전용 사전에 최종 한글 명령 코드를 등록해 고정 좌표 오버레이를 제거했다.
+
+최종 SHA256 `3a385b04c889a6071cd93758848db205829a1e282ea128d3d93f4587fa05db47`, full/final/title_test 동일. mGBA 0.10.5 headless에서 콜드부트→기록된 정상 입력 40,536프레임 재생, 표본 17곳의 관측 결함 해소 확인(종료 0). 2편은 7,186프레임의 생산/다음 턴/대기 메뉴 회귀만 확인. 사전은 ROM 135개→실제 캐시 110개, bank 2 불변. 20 tests, 바이트 무결성 388,821바이트 불일치 0, 자산 31개, 슬롯 overflow 0 통과.
+
+전체 부호 QA는 FAIL이고 물결표 글리프 기존 문제도 남아 있다. 336개 안전상 재배치 제외 메시지와 이후 임무·실기·전수 검수는 완료가 아니다. 배포 패치를 갱신하지 않았다. Claude/Codex/agy 엄격 리뷰 및 실패 주입 검증 결과, 정확한 재현 명령·증거·한계는 [보고서](reports/PART1_PLAYTHROUGH_QA_2026-09-15.md)와 [검수 절차](PLAYTHROUGH_QA_PROTOCOL.md)에 기록했다.
+
+### 2026-09-15 — 에디터 저장·빌드 연결 및 연속 재생 추가 검증
+
+- 격리한 복제 프로젝트에서 브라우저로 대사 1개와 스프라이트 1픽셀을 저장하고 전체 빌드했다. ROM 3종 SHA가 일치하며, 최종 ROM의 인코딩 바이트와 디코드 픽셀이 저장값과 일치한다. 대사는 콜드부트 후 30,910프레임 재생으로 게임 화면에서도 확인했다. 증거: `temp/full_audit_2026-09-15/editor_built_roundtrip.json`, `ui_dialogue_roundtrip.json`, `ui_sprite_roundtrip.json`, `temp/part1_playthrough_2026-09-15/editor_built_replay/30910.png`.
+- 수정 후 실제 브라우저 요청: 빌드 잠금 중 스프라이트 조회 HTTP 200/0.074초, 대사 저장 HTTP 503/3.020초, JavaScript 오류 0. `temp/full_audit_2026-09-15/ui_lock_regression.json`.
+- 스프라이트 1,986개는 4bpp 디코드와 재인코드 검사를 통과했다. 별도 8bpp Mode4 2개는 읽기 전용 전용 경로로 디코드했다. 이는 실제 화면 전체 배치 검증과 구별한다. `temp/full_audit_2026-09-15/sprite_decode_audit.json`.
+- 1편 수정 ROM으로 처음부터 40,536프레임을 연속 기록했고 기존 검토 기준 화면 17개와 픽셀이 일치한다. 이후 플레이는 `output/qa/part1_2026-09-15/run04_continue`에서 이어진다. 1편/2편 완주 판정은 아니다. `temp/full_audit_2026-09-15/repaired_full_replay_verification.json`.
+
+### 2026-09-15 UI 저장 및 결과 라벨 후속 검증
+- 대사/scene/sprite 편집기 공통 process lock·원자적 파일 게시. 그룹은 전 조각 검증 후 게시하며 미리 준비한 rollback inode로 저장 실패 복구. 단일 대사 저장도 같은 경로. 슬롯 권위를 공유하고 merged 자식·글리프 사전·보호 렌더 영역의 일반 저장 차단.
+- 최신 코드 자동 검사45개 통과(원본 및 빌드 ROM 보유 환경), 격리 복제본에서도45개 통과. 둘째 게시부터 지속 오류 주입시 그룹 파일 모두 기존 내용 복구. 미리보기 고정이름 캐시 stale·잘못된 nav 무시·keep_all 유실 검사 통과.
+- UI 실브라우저: 빌드 잠금 중 읽기200/0.061초, 저장503/3.015초, 페이지 오류0. 수정 전후 승리 화면 및 2편 통신/트라이얼/편집 메뉴 실제 캡처는 docs/screenshots/editor_audit_2026-09-15/.
+- 최신 전체 후보 SHA606fda80…ceaa76는 별도 cold replay 검증본과 완전히 동일. 기대388821B 불일치0, 기존 자산31개 회귀 통과. 1편 첫 임무 승리·저장·다음 임무 설명 도달. 전체 완주 검수는 계속 진행 중.
+
+
+## 2026-09-21 2편 영숫자 슬롯 초과 후속
+
+`part2_alnum` 중단을 원문 staging과 필수 guarded repoint로 해소했다. A0564C/A0ABDC/A0B6C8/A250EC의 번역·숫자·공백 전체를 재배치된 최종 payload에서 확인했다. 최종 SHA `12f65b063d2edf06347255625505c1a79d142dbba8ed30c0d943e27d966dfe3b`. 52개 시험·바이트/부호/글리프/제어 QA PASS, 콜드 기록 입력 재생 1편 134320/2편 81446프레임 정상 종료. 2편 이동력 3/6 실화면 복구 확인. 전체 캠페인·전 프레임 육안 검수 완료는 아니다. 재현/증거/리뷰: [보고서](reports/PART2_NUMERIC_FIX_2026-09-21.md).
+
+
+### 2026-09-22 엔딩까지 진행 중: 관측된 계급/사령관 이름/설명문 수정
+- 1편 훈련 완료 계급 카드 브론즈 래트: native LZ77 두 슬롯만 변경, 기존 소비 길이 내부 압축, 참조 유지. 정상 저장 cold 재생 rank_labels_production_cold 149/151 화면 확인.
+- 1편 최초 캠페인 지도 호이프/료, 전투 DAY HUD 료: native 32×8 raw 3슬롯만 변경, 원본 해시/지도 접근자/참조 보호와 후속 덮어쓰기 검증. campaign_co_names 751ea7d4 cold 8/17/18 확인.
+- 1편 승리 조건 설명의 오른쪽 잘림: 이기기 동사를 다음 원본 줄로 옮겨 전체 의미와 글꼴 유지. campaign_intro_layout 1c6d53eb cold 35/43(다섯 항목 메뉴) 확인, 83개 수정행/71대사 시험/8라벨 시험 및 제어·충실도 통과.
+- 2편 미션3 DAY6 승리, S300/총900, 일반 저장 export 후 751ea7d4 후보로 새로 실행. 자주포 설명 4피연산자 수정은 기존 저장 cold 399/401/402/405/407 확인.
+- 위 내용은 관측 범위 수정 검증이며 양편 캠페인/엔딩 전체 완료가 아니다. 기존 output 3종과 배포 패치는 유지.
+
+
+### 2026-09-22 2편 미션4 장음 표시 및 대사 연결 수정
+- native A3 글꼴에 없는815C를 P2 story 원본주소의 개별 문자에서815B로 정규화. 빌드/재배치 양쪽 공통, P1/UI/명령 스트림 변경 없음. 74테스트,17902payload,1949repoint,86수정행,91충실도,13프롤로그 제어 PASS.
+- 최종ROM용 문장부호 QA에 P2 unsupported815C 탐지 추가. 기존처럼 P1 symbol table만 보아 P2 fallback을 놓치는 문제 보완.
+- part2_native_dash SHA756be84d9b33898faed0c78573ee2cf4e29bcb88c91368806e2c81576c422897: 일반 미션3 완료 저장에서 새로 실행한 cold13/16 검토, 준비됐어 장음 및 실험대 약속 문장 전체 표시 정상. Claude 최종리뷰 추가 확정결함 없음. 이후 본편 전구간/엔딩은 계속 미완료.
+
+## 2026-09-22 블랙 캐논 설명 경계 공백
+- MISSION4 실제 segment140에서 `저건블랙 캐논이라는` 붙음을 확대 확인. A0B61F를 `저건　`으로 수정, 원본 0x77 제어 보존. B팀 소유 아님.
+- candidate SHA256 `4f2ca50871785038f6f5c528b62323f96c903dc4a1f59ed864f2dccedd1e472d`: 87개 수정행, 74개 대사 안전 테스트, 무결성 17902/repoint1949, fidelity91/control13 PASS. 일반 저장 cold 재생 `cannon_boundary_production_cold` segment140에서 공백 및 후속 문장 정상. Claude 읽기전용 리뷰의 화면 검증 요구도 충족. 엔딩 검수는 계속 진행 중.
+
+### 2026-09-22 첫 캠페인 승리와 코인 설명 수정
+- 1편 `campaign_day4_cold_live` segment820에서 첫 캠페인 DAY14 전멸 승리, 835 결과 B, 836 브론즈 래트/코인8, 843 일반 저장 완료. 엔딩은 아직 미도달.
+- segment837에서 “워즈 숍” 다음 조사 “에서” 누락 관측. DFAED6/DFAF03을 “「워즈 코인」은 「워즈 숍」에서” / “쓸 수 있는 돈이야！”로 복원. 첫 행34B, 둘째22B는 원본18B 슬롯을 침범하지 않고 기존 필수 재배치로 전체메시지 DFAE9C→A77ED4(292→298B) 이동. 원본/새 제어열 동일.
+- 후보 SHA `2bdc0c3cc34c54d1f9631ee2baa3163eeb38414f61e00b9e1b4eb12c0739ca70`: 89행 full-fidelity, 74 tests, integrity17902/repoint1949/91fidelity/13controls PASS. 정상DAY4저장 cold replay1..839, 835..839 실화면 정상. Claude 후속 결론 확정결함 없음. 증거 `temp/full_audit_2026-09-15/coin_explanation_verification.json`, `coin_explanation_byte_proof.json`, `coin_explanation_result_cold/`.
+- 2편 M4는 segment1017 DAY15 중전차로 블랙 캐논 파괴 후 승리대사 진입. segment1022에서 “몇 번몇 번을,”/“와도내가” 중복·경계오류 발견하여 후속 수정중. 아직 결과/저장 검수중이며 엔딩 미도달.
+
+### 2026-09-22 M4 승리 대사 3조각 복원
+- 원본 A0BC9C「何度、」(6B)/pause77/A0BCA3「来たって」(8B)/newline72/A0BCAC「ぼくがいる限りムダだぞ！」(24B)/wait6B. 기존 override가 「몇 번을,」/「와도내가…」로 한 조각씩 밀려 앞 수기행 「몇 번」과 중복.
+- 사용자 플레이중 오류수정 지시에 따라 각각 「몇 번이나　」/「와도」/「내가 있는 한 헛수고라고！」. A0BCA3 Bteam 기준과override도 같은키만 명시적 수정. 42개 기존drift는 전후동일이며 release PASS 아님.
+- 후보9fd030506a3e7a2e1ef7c6e3373e12ba2a16277708a059beb649f0970d986871, 92guarded/74tests/integrity17902/repoint1949/91fidelity/13controls PASS. A0BC9C메시지→A43F54(44→54B), control[77,72,6B]동일. 정상Max완료저장cold1..1024, 1022중복소실/공백/줄바꿈 정상, 1017/1021/1023/1024전후화면확인. Claude확정결함없음, 요청한소스치환/바이트/런타임검증완료. `temp/full_audit_2026-09-15/cannon_victory_verification.json`.
+- 1편 다음도입 오른쪽빌리 이름표 일본어ビリー 관측. bankBF2BCC slot5 BF2E4C raw128B가 해당그림임을 원본decode로확인. 기존이름표모듈에slot5추가후빌드/리뷰중.
+
+### 2026-09-22 빌리 캠페인 이름표 복원
+- 최초관측 `campaign_first_cleared_cold_live` 7..23 오른쪽초상하단ビリー. 원본BF2BCC bank slot5 BF2E4C128B SHA a81b739bb903b4dc8a4a44c7c148b8e1eb69bcd9ac4c2629ed07b30a9d557386(64자,실측일치). 기존 part1_campaign_co_labels.LABELS에빌리추가, 동일32×8 Galmuri7/팔레트1,3,5/포인터·접근기가드·최종freeze유지.
+- 후보882bc231c057d75887dcef2bdfcc9d89bd0147d6bf1497054c496f91ef4e6bc9. 이름표4tests/92textguards/integrity17902/repoint1949/91fidelity/13controls PASS. 정상첫캠페인완료저장cold7/8/13/15에서빌리표시정상. Claude Opus 확정결함없음; 전투진입화면추가확인은진행중. `temp/full_audit_2026-09-15/campaign_billy_verification.json`.
+
+### 2026-09-22 1편 공장 안내 호칭 경계
+- 둘째전투 도입27 `아님료` 관측. DC33AF..DC33BD 원문さん、リョウ！/앞69이름삽입/뒤720A09. legacyTSV님료가쉼표를소실시킴. 실제operand를「님, 료！」로복원해플레이어아+님, 료！로표시. Bteam동일키baseline/override도실제fragment와일치시킴.
+- 후보239ef4a3e34c578d4218ca397120cc2334f59606420c046b8aa209ca76856b35,93guarded/74tests/integrity17902/repoint1949/91fidelity/13controls PASS. 10B≤14B,앞69/뒤720A09원본동일. 첫캠페인완료일반저장cold26..30 시각검수PASS, 빌리이름표도26정상. ClaudeOpus최종제품리뷰확정결함없음. `temp/full_audit_2026-09-15/factory_call_verification.json`.
+
+### 2026-09-22 미션5 제목 잘림 수정 검증
+후보78c6ddc4a5dbea6b7faa40ea7cac29eb959fe044cfaed9f9169938a765576fb7. 실제지도descriptor179제목(긴3개) 검증, 제목전용20px배치/19px잉크, 짧은제목24pxnative유지. 정상M4완료저장 cold34/35 긴제목·전환확인, M4짧은22/23/24픽셀동일,23glyph전후육안비교,clang재조립196B동일,7tests/93수정행/무결성PASS. 최초시제품과최종guarded빌드ROM전체동일. Claude실제유효지적(범위·경계·시험)반영, ABI원본전체검토후가짜5번째인자/+4C접근/부가효과지적철회,남은유효지적없음. 근거 temp/full_audit_2026-09-15/mission_title_fit_verification.json 및 title_abi_review.jsonl. 엔딩검수와실기/배포완료를뜻하지않음.
+
+### 2026-09-22 해상 미션 잠항·부상 인용문 복원
+후보17dff0c0af7a91afcefdfe80b1bf7f4e88f0ef12da2e1b6560eaf9d591d0e0e9. A094B9/A09516/A0962E cornerquote는관측3행만native8175/8176보존, A09521하면+공백/A0961D위험해지면+공백/A09639으로부상시켜서,를수리. 6source+2재배치msg안290B만변경,원본controls동일/구포인터잔존0. 75safety+최종AST/negative개별1,99guarded,모든개별무결성게이트PASS. 정상M4완료save cold79/81/85육안정상,중복키정리후최종전체빌드ROM동일. Claude최종확정결함없음,요청포인터추적검증완료. naval_quote_verification.json. 양편엔딩/전체글리프범위완료아님.
+
+
+### 2026-09-22 중간 저장 및 일수 HUD 후보 검증
+두 메인 플레이 일반 저장 출처검증/정상종료 완료. 일수 HUD 후보73e6de3c는4tests/99행/무결성검사통과,원본96B라벨범위내81B만변경,일반저장cold시제품과전체빌드동일. 이것은중간기술검증이며,리뷰잔여/엔딩/배포완료아님. docs/reports/SESSION_HANDOFF_2026-09-22.md 참조.
+
+
+## 2026-09-28 — M8 문장부호·띄어쓰기 4행 복원 (정적 검증)
+
+A0D370/A0D9F0 `그래.` 및 A0DEF9 `어이,`를 원문6B 슬롯에 주소 한정 복원하고, A0DF00 `얘긴 아직 안 끝났어!`24B를 필수 메시지 재배치 경로로 반영했다. 원본18B와 뒤77 72를 임시 소스에 보존하며, 재배치 실패 시 빌드가 실패한다. 공통 짧은 사전은 불변.
+
+최종 `temp/part2_2026-09-28/round18/candidate.gba` SHA256 `51b10dcf48204be4762c3c262c6a9de0de87fb014d7e0043742e7db02fff7d98`. 17+92관련시험/258보정행 전체payload와경계/원문제어/metadata4행/API/Claude후속 읽기검토 통과. `compare_scope.py`는 변경3메시지 전체와 다른2248재배치payload불변, native다중참조source동일성, pool잔여FF와 소유밖차이0을 확인했다. 재현: `python3 temp/part2_2026-09-28/round18/qa.py` (프로젝트루트, 해당receipt의생산입력 고정 필요). 실제새화면3장면·두편엔딩·배포완료는 이 결과의 범위가 아니다. 상세 `docs/reports/EFFICIENT_AUDIT_2026-09-28.md`.
+
+## 2026-09-30 — 두 편 native 폭탄 표기와 2편 생산 메뉴
+
+- round27 후보 SHA `b96c9a7d3d8d5be7e160bb554007084b02a890f6af03030108afd18de3d9c711`: round23 대비 A294C4/B81924의 글자 8B만 변경. 두 native 포인터와 NUL 유지, 무결성·재배치·문장부호·개발 QA 통과. 전체 배포 통과를 의미하지 않는다.
+- 2편 정상 DAY8 SRAM cold boot 후 비행장 생산 메뉴에서 폭격기 무기명 `폭탄`을 실제 확인했다. 증거 `temp/continuation_2026-09-30/round27_airport_purchase/plane_1.png`; 인접 전투기·전투헬기·수송헬기 화면도 함께 보존. 에뮬레이터 상태의 ROM 간 이관은 사용하지 않았다. 1편 같은 native 수정의 실화면은 아직 미검증이다.
+- 일반 OAuth Claude 읽기 전용 후속 리뷰 완료. 키 preflight/영속 JEV 예약/SRAM 출처 및 저장 타입 검사에 대한 유효 지적 수정 후 확정 blocker 없음. 게임 자동 입력의 합법성 검증 및 양편 엔딩은 아직 완료되지 않았다.
+
+- 추가 round28 `6ae381d5…`: A1F944 문장 재분배 최종 ROM에서 두 행32/36 half-cell, 원본 모든77/72/6b/00 순서 유지, 첫페이지40B 무변경, 다른2250재배치payload무변경을 확인했다. `yellow_runtime/fixed_page.png` 및 `next_page.png` 진단 fresh-render에서 두 행과 다음 메시지 전환을 확인했다. 원본 상태의 폰트bank F00000~ROM끝과 한자table영역B80B7C~B81800은 대상과 동일. 파서읽기는 고유주소51개에대한90이벤트다. 다른문장/픽셀/엔딩/릴리스승인으로 일반화하지 않는다.
+
+## 2026-09-30 round29 두 대사 넘침 검증
+
+A1F944/A1F9D8 문구 재분배의 전체 빌드·개발 QA와 수정 페이지·다음 대사 진단 화면 확인을 마쳤다. 최종 SHA `7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4`; 계약 회귀7개/native7개/Claude 후속 새 확정 blocker 없음. 1편 정상 SRAM 콜드 부팅의 자금37200과 아군 HP·위치·APC 수송 상태 일치 확인. 이 결과는 해당 오류와 저장 호환 범위이며 두 편 엔딩이나 배포 승인이 아니다. 상세 [검증 기록](reports/CONTINUATION_2026-09-30.md).
+
+- 2026-10-01: P1 M8 정상재도전DAY16 수도점령/B 확인(5610/frame886245), M9 DAY5까지계속진행. 화산대사A1D45A 목적의미와A1D4E2 명령주체복구후후보36ed101b…f73ef 빌드/문맥게이트/새6+기존8tests/Claude후속리뷰통과. 실화면/엔딩완료를뜻하지않음.
+
+
+### 2026-10-02 보급 말풍선 실제 플레이 확인
+
+P1 M16 Andy 재시도 DAY5 도시 로켓포 보급에서 한글 `보급!` 확인. ab9627170a9fb76de9ee15789565171d2531bbad3d8530923a90b1199a611ef4, m16_palette_resume/1648_NONE_0199490.png(frame199490). root와플레이담당이독립열람했고 해당화면잘림/일본어없음. temp/continuation_2026-10-02/supply_popup_native_evidence.json에이미지SHA기록. 다른소비자전체검증완료를뜻하지않는다.
+
+
+## 2026-10-06 패턴 일괄 수정 (후보 ea4cc3220f7eacd215b130c18d04f7692f8e67c1dc3c91454902743521807e05)
+- 재현: `nice -n 15 python3 tools/build_korean_full.py` (base 원본 ROM). 증거/노트 `temp/claude_2026-10-06/candidate4/notes.txt`, 정적 스윕 `temp/claude_2026-10-06/sweep_*/findings.json`.
+- 신규 모듈: `tools/part1_mission_titles.py`, `part1_campaign_co_name_lz77.py`, `part1_continue_button.py`, `part1_compact_ui_strings.py`, `part1_unit_list_compact_labels.py`, `part1_factory_tooltip_label.py`, `part1_campaign_co_labels.py`(확장), `part1_rank_labels.py`(확장) + 테스트.
+- 실화면: 정상 SRAM 이관 cold boot `output/qa/part1_2026-10-06/m20_cand_ea4c` 상황 화면 3페이지 탭 정상(이전 후보 d186ee14에서 「존전군상」 회귀 → 공통 사전 prefix 정렬로 해결).

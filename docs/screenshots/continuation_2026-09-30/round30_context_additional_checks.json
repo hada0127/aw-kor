@@ -1,0 +1,12 @@
+{
+  "original_pointer_sites": [
+    "0xa36b44"
+  ],
+  "current_native_pointer": "50bba408",
+  "end_offset": 128,
+  "alignment_zero_bytes_after_end": 3,
+  "new_len": 132,
+  "padding20_count": 10,
+  "original_CA_slot_preserved": true,
+  "scope": "Padding is retained by the existing writer; rendering advance remains unverified for this message"
+}

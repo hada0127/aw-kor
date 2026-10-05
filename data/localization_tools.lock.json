@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "hanpatch": {
+    "url": "https://github.com/yazzang-homelab/hanpatch.git",
+    "revision": "14d6405e94882da37ff777d50474bc06830b001b",
+    "use": "design reference: hash-bound manifests and separate QA stages; 3DS adapter not used"
+  },
+  "hancharacter": {
+    "url": "https://github.com/yazzang-homelab/hancharacter.git",
+    "revision": "c423131d9ae80f9466fb0f8c1bdfe5e78f4ab362",
+    "checkout": "temp/localization-tools/hancharacter",
+    "use": "read-only manifest join and marker probes; no automatic translation or unproven GBA voice gate"
+  }
+}

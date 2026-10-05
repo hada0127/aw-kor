@@ -2,13 +2,13 @@
 """Session 3 QA: 예약코드 인코딩의 byte budget + 시각폭(박스) 적합성 리포트.
 
 - byte budget: encoded_len(한글2B/ASCII1B/전각2B) vs 슬롯길이(found_texts 권위).
-  초과 행은 빌드에서 skip(원문 유지)되므로, 그 목록을 보고 번역 축약 대상 선정.
+  초과 행은 빌드에서 skip(원문 유지)되므로, 슬롯 확장·재배치 검토 대상을 확인.
 - 시각폭: 한글 라인이 원본 일본어 라인보다 시각적으로 넓은지(전각2/ASCII1 근사).
   바이트 예산을 지키면 전각↔전각은 폭도 충족되나, ASCII→전각(숫자/메뉴) 행은 예외.
 
 사용: python tools/qa_text_fit.py
 """
-import ast, collections, csv, os, sys
+import argparse, ast, collections, csv, os, sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
@@ -81,11 +81,35 @@ def source_text_for_span(start, end, found_rows, fallback):
     return ''.join(parts) if parts else fallback
 
 
-def load_direct_patch_texts():
-    """Extract literal direct script and fixed-width label patches."""
+def load_direct_patch_texts(*, include_writer=False):
+    """Extract literals; optionally append the actual writer provenance.
+
+    Default (end, text) values remain compatible with existing callers.
+    Unknown tuple contexts stay 'literal', never guessed to use script policy.
+    """
     path = os.path.join(BASE, 'tools', 'build_korean_full.py')
-    tree = ast.parse(open(path, encoding='utf-8').read())
+    with open(path, encoding='utf-8') as stream:
+        tree = ast.parse(stream.read())
     patches = []
+    parents = {child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)}
+
+    def tuple_writer(node):
+        container = parents.get(node)
+        loop = parents.get(container)
+        if not (isinstance(container, ast.List) and isinstance(loop, ast.For)
+                and loop.iter is container and isinstance(loop.target, ast.Tuple)
+                and len(loop.target.elts) >= 2):
+            return 'literal'
+        names = [getattr(n, 'id', None) for n in loop.target.elts[:2]]
+        if not all(names):
+            return 'literal'
+        for statement in loop.body:
+            for call in ast.walk(statement):
+                if (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)
+                        and call.func.id == 'patch_script_row' and len(call.args) >= 2
+                        and [getattr(n, 'id', None) for n in call.args[:2]] == names):
+                    return 'patch_script_row'
+        return 'literal'
 
     def has_hangul(text):
         return any('가' <= ch <= '힣' for ch in text)
@@ -93,6 +117,13 @@ def load_direct_patch_texts():
     def const_text(node):
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             return node.value
+        if isinstance(node, ast.Constant) and isinstance(node.value, bytes):
+            # These bytes only wrap authored unit/command labels; they are not
+            # visible ASCII digits. Unknown binary payloads remain unsupported.
+            return '' if all(byte in (0x30, 0x32, 0x33) for byte in node.value) else None
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            left, right = const_text(node.left), const_text(node.right)
+            return left + right if left is not None and right is not None else None
         if (
             isinstance(node, ast.Call)
             and isinstance(node.func, ast.Name)
@@ -104,9 +135,9 @@ def load_direct_patch_texts():
             return node.args[0].value
         return None
 
-    def add_patch(start, end, text, lineno):
+    def add_patch(start, end, text, lineno, writer='literal'):
         if isinstance(start, int) and isinstance(end, int) and end > start and text and has_hangul(text):
-            patches.append((lineno, start, end, text))
+            patches.append((lineno, start, end, text, writer))
 
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign) and any(
@@ -124,7 +155,7 @@ def load_direct_patch_texts():
                 ):
                     continue
                 text = const_text(value.elts[0])
-                add_patch(key.value, key.value + value.elts[1].value, text, node.lineno)
+                add_patch(key.value, key.value + value.elts[1].value, text, node.lineno, 'INTRO_DIRECT_TEXT')
         elif isinstance(node, ast.Tuple) and len(node.elts) >= 3:
             start, end, text_node = node.elts[:3]
             text = const_text(text_node)
@@ -136,7 +167,7 @@ def load_direct_patch_texts():
             ):
                 continue
             if len(node.elts) >= 4 and end.value > start.value:
-                add_patch(start.value, end.value, text, node.lineno)
+                add_patch(start.value, end.value, text, node.lineno, tuple_writer(node))
             elif 0 < end.value <= 0x1000:
                 add_patch(start.value, start.value + end.value, text, node.lineno)
         elif isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
@@ -149,7 +180,7 @@ def load_direct_patch_texts():
                     and isinstance(slot_len, ast.Constant)
                     and isinstance(slot_len.value, int)
                 ):
-                    add_patch(start.value, start.value + slot_len.value, text, node.lineno)
+                    add_patch(start.value, start.value + slot_len.value, text, node.lineno, node.func.id)
             elif node.func.id == 'patch_script_row' and len(node.args) >= 3:
                 start, end = node.args[:2]
                 text = const_text(node.args[2])
@@ -159,32 +190,69 @@ def load_direct_patch_texts():
                     and isinstance(end, ast.Constant)
                     and isinstance(end.value, int)
                 ):
-                    add_patch(start.value, end.value, text, node.lineno)
+                    add_patch(start.value, end.value, text, node.lineno, 'patch_script_row')
+    # Source-bound help modules own late patch_script_row writes. Resolve only
+    # these explicit imports and their actual source_text loop, never arbitrary
+    # module code or unrelated tuples that merely resemble address rows.
+    from part1_ship_help import ROWS as ship_rows
+    from part1_submarine_help import ROWS as submarine_rows
+    external_rows = {'SHIP_HELP_ROWS': ('part1_ship_help', ship_rows),
+                     'SUBMARINE_HELP_ROWS': ('part1_submarine_help', submarine_rows)}
+    seen_external = set()
+    for node in ast.walk(tree):
+        if not (isinstance(node, ast.For) and isinstance(node.iter, ast.Name)
+                and node.iter.id in external_rows):
+            continue
+        if node.iter.id in seen_external:
+            raise ValueError('Duplicate external help writer loop')
+        seen_external.add(node.iter.id)
+        module, rows = external_rows[node.iter.id]
+        imported = any(isinstance(n, ast.ImportFrom) and n.module == module
+                       and any(a.name == 'ROWS' and a.asname == node.iter.id for a in n.names)
+                       for n in tree.body)
+        if not imported or not isinstance(node.target, ast.Tuple) or len(node.target.elts) != 3:
+            raise ValueError('Unsupported external help row binding')
+        names = [getattr(n, 'id', None) for n in node.target.elts]
+        calls = [n for statement in node.body for n in ast.walk(statement)
+                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                 and n.func.id == 'patch_script_row']
+        if (not all(names) or len(calls) != 1 or len(calls[0].args) < 2
+                or [getattr(n, 'id', None) for n in calls[0].args[:2]] != names[:2]
+                or not any(k.arg == 'source_text' and isinstance(k.value, ast.Name)
+                           and k.value.id == names[2] for k in calls[0].keywords)):
+            raise ValueError('Unsupported external help writer')
+        for start, end, text in rows:
+            add_patch(start, end, text, calls[0].lineno, 'patch_script_row')
+    if seen_external != set(external_rows):
+        raise ValueError('Missing external help writer loop')
     direct = {}
-    for _lineno, start, end, text in sorted(patches):
-        direct[start] = (end, text)
+    for _lineno, start, end, text, writer in sorted(patches):
+        direct[start] = (end, text, writer) if include_writer else (end, text)
     return direct
 
 
-def main():
+def main(argv=None):
+    argparse.ArgumentParser(description=__doc__,
+                            formatter_class=argparse.RawDescriptionHelpFormatter).parse_args(argv)
     slots, found_texts = load_found()
     found_rows = load_found_rows()
     direct_patches = load_direct_patch_texts()
     display_overrides = load_display_overrides()
     refresh_compact_glyph_dictionary_overrides(display_overrides, strict=True)
     import json
-    syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
-    written = overflow = wider = compact_shortened = deny = no_ko = code_region = no_slot = 0
+    with open(SYLCODE, encoding='utf-8') as stream:
+        syl_to_code = {s: int(c, 16) for s, c in json.load(stream).items()}
+    written = overflow = wider = layout_fallback = deny = no_ko = code_region = no_slot = 0
     intentional_blank = 0
-    # Phase B: encode_fit이 level 6~11(부호 제거 폴백)을 반환할 수 있음.
-    levels = {k: 0 for k in range(12)}
+    # 현재 encode_fit 후보는 0~12. 이후 추가된 레벨도 누락 없이 집계한다.
+    levels = collections.Counter({k: 0 for k in range(13)})
     unmapped = collections.Counter()
     seen_import_addrs = set()
     written_addrs = set()
 
     def check_text(a, ko, ja, slot_override=None):
-        nonlocal written, overflow, wider, compact_shortened
-        enc, level = encode_fit(ko, slot_override or slots[a], syl_to_code, unmapped)
+        nonlocal written, overflow, wider, layout_fallback
+        enc, level = encode_fit(ko, slot_override or slots[a], syl_to_code, unmapped, a)
         if enc is None:
             overflow += 1
             return
@@ -192,12 +260,12 @@ def main():
         written_addrs.add(a)
         levels[level] += 1
         if level >= 6:
-            # 부호 보존 후보가 모두 슬롯 초과 → ASCII 문장부호 제거 폴백 사용(가독성 손실).
-            compact_shortened += 1
+            # 반각공백/공백 제거 등 레이아웃 손실이 있는 폴백 후보.
+            layout_fallback += 1
         if TM.visual_cells(ko) > TM.visual_cells(ja):
             wider += 1
 
-    with open(TRANS, newline='') as f:
+    with open(TRANS, newline='', encoding='utf-8') as f:
         for row in csv.DictReader(f):
             ko = (row.get('korean') or '').strip()
             ja = (row.get('japanese') or '').strip()
@@ -322,7 +390,7 @@ def main():
 
     print(f'written(한글 인코딩): {written}')
     print('fit levels: ' + ', '.join(f'level{k}={levels[k]}' for k in sorted(levels)))
-    print(f'compact-shortened fallback: {compact_shortened}')
+    print(f'layout-loss fallback(level>=6, 재배치 검토): {layout_fallback}')
     print(f'overflow(슬롯초과 skip→원문): {overflow}')
     print(f'no_ko: {no_ko}, intentional_blank_override: {intentional_blank}, code_region: {code_region}, no_slot: {no_slot}, deny/data-skip: {deny}')
     print(f'visual-wider than JA: {wider} ({100*wider/max(written,1):.1f}%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)')

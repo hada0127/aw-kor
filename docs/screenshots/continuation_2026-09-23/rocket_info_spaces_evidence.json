@@ -1,0 +1,16 @@
+{
+  "rom_sha256": "f58729d79ba9fc398efe6cb9bc23609662d1571b6f5ae1f850ba7f31756e6ce8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part1_2026-09-23/day16_round2_save/game_save.json",
+  "save_sha256": "abf5dc5d1f8104832ac1b175ba415dc35b2e9842247bdcc234b931282e64e584",
+  "actions": 9,
+  "final_frame_counter": "OK framecounter 5097",
+  "screens": [
+    {
+      "segment": 9,
+      "png": "009_R.png",
+      "png_sha256": "c72f9ad3cb64c561b05a4b2628a3e7bbf64149faccf68b9945e7983575da60c4"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

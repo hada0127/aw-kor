@@ -1,0 +1,31 @@
+{
+  "rom_sha256": "67a324e2684ce1e5822d77535e22fdcbfbdbfa77d477e5d7d6e91eed3265e96f",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m6_day2_save/game_save.json",
+  "save_sha256": "1a245182df4d5210cacb47f512829da79bea1c11787de944fb3b62375a5f7d38",
+  "source": "output/qa/part2_2026-09-23/round5_m6_live",
+  "input_actions": 12,
+  "screens": [
+    {
+      "core_frame": 7659,
+      "png": "title_frame_7659.png",
+      "sha256": "c9196ccec94770ee45390a48f9bfa415fcc61d87c99d664f369f9a4d457ecc49"
+    },
+    {
+      "core_frame": 7725,
+      "png": "title_frame_7725.png",
+      "sha256": "de40daf4b58c778e3c604a41f4d1f5fadea7ec02eb6d9f2fd904ba493387fc38"
+    },
+    {
+      "core_frame": 7791,
+      "png": "title_frame_7791.png",
+      "sha256": "945e6f7dd5c6237a38a22e948c20580330b110b198511e01797e1ba1dc852d24"
+    }
+  ],
+  "final_frame_counter": "OK framecounter 8661",
+  "scope": "Native power title targeted capture only; no all-frame or ending claim",
+  "visual_reviewed_frames": [
+    7725
+  ],
+  "displayed_korean_title": "대분쇄"
+}

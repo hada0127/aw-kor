@@ -11,6 +11,9 @@
 //   regs             print r0-r15
 //   savestate FILE   save mGBA state (.ss0-compatible)
 //   quit
+// Match the installed library's conditional mCore layout (notably debugger
+// members before savedataClone). Omitting these flags calls the wrong vtable slot.
+#include <mgba/flags.h>
 #include <mgba/core/core.h>
 #include <mgba/core/config.h>
 #include <mgba/core/log.h>
@@ -75,6 +78,14 @@ int main(int argc, char** argv){
     vbuf = malloc(VW*VH*sizeof(color_t));
     core->setVideoBuffer(core, vbuf, VW);
     core->loadROM(core, vf);
+    if(argc > 3){
+        struct VFile* save = VFileOpen(argv[3], O_RDWR);
+        if(!save || !core->loadSave(core, save)){
+            if(save) save->close(save);
+            fprintf(stderr, "cannot load game save\n");
+            return 1;
+        }
+    }
     core->reset(core);
     fprintf(stderr,"READY w=%u h=%u sizeof(color_t)=%lu\n", VW, VH, sizeof(color_t));
     fflush(stderr);
@@ -90,6 +101,8 @@ int main(int argc, char** argv){
                 else core->runFrame(core);
             }
             printf("OK frames %d\n", n);
+        } else if(!strcmp(cmd,"framecounter")){
+            printf("OK framecounter %u\n", core->frameCounter(core));
         } else if(!strcmp(cmd,"keys")){
             uint32_t m = (uint32_t)strtoul(strtok(NULL," \t\r\n"),NULL,0);
             core->setKeys(core, m);
@@ -221,6 +234,17 @@ int main(int argc, char** argv){
             }
             s_dbg.state=DEBUGGER_RUNNING;
             printf("OK watchaddr %08X len=%u set=%d\n", addr, len, ok);
+        } else if(!strcmp(cmd,"dumpsave")){
+            // Export cartridge save bytes without advancing or changing gameplay.
+            char* fn = strtok(NULL," \t\r\n");
+            void* data = NULL;
+            size_t size = core->savedataClone(core, &data);
+            struct VFile* save = fn && size && data
+                ? VFileOpen(fn, O_CREAT | O_EXCL | O_WRONLY) : NULL;
+            bool ok = save && save->write(save, data, size) == (ssize_t)size;
+            if(save) ok = save->close(save) && ok;
+            free(data);
+            printf("%s dumpsave size=%zu\n", ok ? "OK" : "ERR", size);
         } else if(!strcmp(cmd,"loadstate")){
             // loadstate FILE : load mGBA save state (.ss0, PNG-wrapped). 화면 도달 가속용.
             char* fn=strtok(NULL," \t\r\n");

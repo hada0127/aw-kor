@@ -22,7 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
-HARNESS = Path("/tmp/mgbah")
+HARNESS = ROOT / "temp" / "mgbah"
 STATE_DIR = ROOT / "temp" / "screen_state"
 
 # 텍스트 스프라이트가 등장하는 화면 + fresh-boot 네비.

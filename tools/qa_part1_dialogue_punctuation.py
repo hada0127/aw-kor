@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Gate Part 1 dialogue payloads against ASCII punctuation bitmap garbage.
+"""Gate Part 1 dialogue and Part 2 story payloads against unsafe punctuation.
 
 The Part 1 dialogue renderer can treat standalone ASCII punctuation bytes as
 stray bitmap fragments.  The safe path is two-byte SJIS punctuation, so shipped
-Part 1 dialogue payloads must not contain standalone ASCII punctuation in their
+These dialogue payloads must not contain standalone ASCII punctuation in their
 active text bytes.
 """
 from __future__ import annotations
@@ -13,6 +13,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 from typing import Any
+from dialogue_regions import PART1_DIALOG_RANGES, PART2_STORY_RANGES, is_part1_dialog_address, is_part2_story_address, needs_safe_dialogue_punctuation
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
@@ -62,7 +63,41 @@ INVISIBLE_PUNCT_CODES = {
 
 
 def in_part1_dialog(addr: int) -> bool:
-    return PART1_DIALOG_LO <= addr < PART1_DIALOG_HI
+    return is_part1_dialog_address(addr)
+
+
+def active_text_payloads(integrity, rom):
+    """Scan only surviving text tokens, never a stale row's shifted SJIS tail."""
+    owners = {}
+    for index, entry in enumerate(integrity):
+        if not isinstance(entry, list) or len(entry) < 8:
+            continue
+        addr, slot, length = map(int, entry[:3])
+        for pos in range(addr, addr + (slot if entry[4] is not None else length)):
+            owners[pos] = index
+    for index, entry in enumerate(integrity):
+        if not isinstance(entry, list) or len(entry) < 8 or not needs_safe_dialogue_punctuation(entry[0]):
+            continue
+        addr, length = int(entry[0]), int(entry[2])
+        encoded = bytes.fromhex(str(entry[3] or ''))[:length]
+        offset = 0
+        run_start = 0
+        payload = bytearray()
+        while offset < len(encoded):
+            size = 2 if 0x81 <= encoded[offset] <= 0xE2 and offset + 1 < len(encoded) else 1
+            live = [owners.get(addr + pos) == index for pos in range(offset, offset + size)]
+            if any(live) and not all(live):
+                raise ValueError(f'Partially overwritten text token at 0x{addr + offset:08X}')
+            if all(live):
+                if not payload:
+                    run_start = addr + offset
+                payload.extend(rom[addr + offset:addr + offset + size] if rom else encoded[offset:offset + size])
+            elif payload:
+                yield entry, run_start, bytes(payload)
+                payload.clear()
+            offset += size
+        if payload:
+            yield entry, run_start, bytes(payload)
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -88,14 +123,14 @@ def scan_standalone_punct(payload: bytes, *, stop_at_nul: bool = False) -> Count
     return counts
 
 
-def scan_sjis_punct(payload: bytes) -> Counter[int]:
+def scan_sjis_punct(payload: bytes, *, extra_codes=()) -> Counter[int]:
     counts: Counter[int] = Counter()
     i = 0
     while i < len(payload):
         b = payload[i]
         if 0x81 <= b <= 0xE2 and i + 1 < len(payload):
             code = (b << 8) | payload[i + 1]
-            if code in VISIBLE_PUNCT_CODES or code in INVISIBLE_PUNCT_CODES:
+            if code in VISIBLE_PUNCT_CODES or code in INVISIBLE_PUNCT_CODES or code in extra_codes:
                 counts[code] += 1
             i += 2
             continue
@@ -105,6 +140,17 @@ def scan_sjis_punct(payload: bytes) -> Counter[int]:
 
 def symbol_table_index(sjis: int) -> int:
     return (((sjis + 0xFFFF7EC0) & 0xFFF8) << 1) + (sjis & 7)
+
+
+
+def scan_missing_renderer_symbols(payload: bytes, address: int) -> Counter[str]:
+    """Symbols absent from P2 A3's linked glyph table display question marks."""
+    if not is_part2_story_address(address):
+        return Counter()
+    missing = (0x815C, 0x8165, 0x8166, 0x8167, 0x8168, 0x8177, 0x8178)
+    counts = scan_sjis_punct(payload, extra_codes=missing)
+    return Counter({f'P2_missing_0x{code:04X}': counts[code]
+                    for code in missing if counts[code]})
 
 
 def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
@@ -175,22 +221,21 @@ def main() -> int:
 
     checked_integrity = 0
     sjis_totals: Counter[int] = Counter()
-    for entry in integrity:
+    for entry, addr, payload in active_text_payloads(integrity, rom):
         if not isinstance(entry, list) or len(entry) < 8:
             continue
         try:
-            addr = int(entry[0])
             enc_len = int(entry[2])
         except (TypeError, ValueError):
             continue
-        if not in_part1_dialog(addr) or enc_len <= 0:
+        if not needs_safe_dialogue_punctuation(addr) or enc_len <= 0:
             continue
         enc_hex = str(entry[3] or "")
         if not enc_hex:
             continue
         checked_integrity += 1
-        payload = rom[addr:addr + enc_len] if rom else bytes.fromhex(enc_hex)[:enc_len]
         counts = scan_standalone_punct(payload)
+        counts.update(scan_missing_renderer_symbols(payload, addr))
         sjis_totals.update(scan_sjis_punct(payload))
         if counts:
             totals.update(counts)
@@ -220,11 +265,12 @@ def main() -> int:
             new_len = int(item.get("new_len", 0))
         except (KeyError, TypeError, ValueError):
             continue
-        if not in_part1_dialog(msg) or new_len <= 0 or not rom:
+        if not needs_safe_dialogue_punctuation(msg) or new_len <= 0 or not rom:
             continue
         checked_repoint += 1
         payload = rom[new_addr:new_addr + new_len]
         counts = scan_standalone_punct(payload, stop_at_nul=False)
+        counts.update(scan_missing_renderer_symbols(payload, msg))
         sjis_totals.update(scan_sjis_punct(payload))
         if counts:
             totals.update(counts)
@@ -256,6 +302,8 @@ def main() -> int:
     report = {
         "rom": str(ROM.relative_to(ROOT)),
         "part1_dialog_range": [f"0x{PART1_DIALOG_LO:08X}", f"0x{PART1_DIALOG_HI:08X}"],
+        "part1_dialog_ranges": [[f"0x{start:08X}", f"0x{end:08X}"] for start, end in PART1_DIALOG_RANGES],
+        "part2_story_ranges": [[f"0x{start:08X}", f"0x{end:08X}"] for start, end in PART2_STORY_RANGES],
         "checked_integrity_payloads": checked_integrity,
         "checked_repoint_payloads": checked_repoint,
         "unsafe_punctuation": "".join(chr(b) for b in sorted(UNSAFE_PUNCT)),

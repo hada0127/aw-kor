@@ -6,6 +6,11 @@
         "lz77_00024A34#select_top_title",
         "lz77_00024A34#select_bottom_title"
       ]
+    },
+    "27_part2_battle_objlabels": {
+      "add": [
+        "objlabel_p2_terrain_movement"
+      ]
     }
   },
   "dialogue": {

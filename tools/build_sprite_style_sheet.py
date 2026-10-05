@@ -109,12 +109,7 @@ def main():
             manifest['states'] = [state for state in manifest['states'] if state['name'] in args.state]
 
     palettes = (captures[0] / 'main_0.pal').read_bytes()
-    labels = [
-        ('작전룸', th.PART1_OPERATION_LOGO_LZ77_OFF), ('맵 선택', th.PART1_MAP_SELECT_LZ77_OFF),
-        ('숍 선택', th.PART1_SHOP_SELECT_LZ77_OFF), ('하드 숍', th.PART1_HARD_SHOP_LZ77_OFF),
-        ('캠페인', th.PART1_CAMPAIGN_LZ77_OFF), ('모드 선택', th.PART1_MODE_SELECT_LZ77_OFF),
-        ('룰 선택', th.PART1_RULE_SELECT_LZ77_OFF), ('팀 설정', th.PART1_TEAM_SETTING_LZ77_OFF),
-    ]
+    labels = [(text, offset) for _, offset, text, _ in th.PART1_MAIN_HEADER_BLOCKS]
     specs = [(text, off, 128) for _, off, text, _ in th.PART1_MODE_OPTION_BLOCKS]
     specs += [(text, off, 80) for text, off in labels]
     specs += [(text, off, 80) for _, off, text, _ in th.PART1_SUBMENU_LOGO_BLOCKS]
@@ -193,7 +188,6 @@ def main():
               'active_relocations': [hex(off) for off in RELOCATIONS
                                      if resolve_sprite_offset(roms[2], off) != off],
               'menu_font_sha256': hashlib.sha256(th.MENU_FONT_PATH.read_bytes()).hexdigest(),
-              'room_font_sha256': hashlib.sha256(th.ROOM_FONT_PATH.read_bytes()).hexdigest(),
               'sheets': sheets}
     (args.out / 'report.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
     markup = '<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width">'

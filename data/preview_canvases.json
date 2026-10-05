@@ -3,40 +3,117 @@
   "canvases": {
     "part2_menu": {
       "slot": "0x00A2C098",
-      "len": 32,
+      "len": 36,
       "render": "a3",
       "checkpoint": "07_part2_main_menu",
       "nav": [
-        ["frames", 480],
-        ["press", "A", 200], ["press", "START", 200], ["press", "DOWN", 120],
-        ["press", "A", 240], ["press", "START", 240], ["press", "A", 240], ["press", "A", 240]
+        [
+          "frames",
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ]
       ],
-      "note": "2편 메인 메뉴 캠페인 설명(A3 글리프캐시 렌더러). 짧은 시스템/메뉴 문구용(≤16자). [검증됨]"
+      "note": "2편 메인 메뉴 캠페인 설명(A3 글리프캐시 렌더러). 짧은 시스템/메뉴 문구용(≤18자). [검증됨]",
+      "verify_box": [
+        0,
+        144,
+        240,
+        160
+      ],
+      "expected_tail_hex": "00000000"
     },
     "part1_welcome": {
-      "slot": "0x00A7AA56",
+      "slot": "0x00DF8E16",
       "repoint_msg": "0x00DF8E14",
       "repoint_fixed": "0x00DF8E16",
-      "len": 37,
+      "expected_tail_hex": "6b0a",
+      "len": 32,
       "terminator": "none",
       "pad": "0x20",
       "render": "dialog",
       "checkpoint": "scene_19a1_part1_tutorial_opening",
       "nav": [
-        ["frames", 480],
-        ["press", "A", 200],
-        ["press", "START", 200],
-        ["press", "A", 240],
-        ["press", "START", 240],
-        ["press", "A", 0]
+        [
+          "frames",
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          0
+        ]
       ],
       "sweep": {
-        "frames": [108, 120, 132, 144],
-        "score_box": [20, 124, 220, 148],
+        "frames": [
+          108,
+          120,
+          132,
+          144
+        ],
+        "score_box": [
+          20,
+          124,
+          220,
+          148
+        ],
         "threshold": 1200,
         "min_score": 250
       },
-      "note": "1편 튜토리얼 첫 welcome 대사창(per-char dialog 렌더러). temp/repoint_manifest.json의 0xDF8E14->new_addr와 fixed 0xDF8E16 delta로 현재 표시 command-stream span을 계산한다(현재 fallback 0xA7AA56, 37B). 뒤따르는 0x6B/0x0A 제어코드는 보존한다. 컷신 자동진행으로 고정 프레임 캡처가 불안정하므로 frame-sweep으로 대사창 프레임을 선택한다. [검증됨]"
+      "note": "1편 튜토리얼 첫 welcome 대사창(per-char dialog 렌더러). 원본의 0xDF8E14 메시지 포인터 위치를 찾아 대상 ROM의 실제 포인터와 +2 delta로 현재 텍스트 span을 계산한다(원본 0xDF8E16, 32B). 뒤따르는 0x6B/0x0A 제어코드는 보존한다. 컷신 자동진행으로 고정 프레임 캡처가 불안정하므로 frame-sweep으로 대사창 프레임을 선택한다. [검증됨]"
     },
     "battle_surrender_confirm": {
       "slot": "0x00A34CB0",
@@ -46,17 +123,156 @@
       "render": "dialog",
       "checkpoint": "scene_89a_common_battle_surrender_confirm",
       "nav": [
-        ["loadstate", "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"],
-        ["press", "A", 20]
+        [
+          "frames",
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "B",
+          160
+        ],
+        [
+          "press",
+          "DOWN",
+          160
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          500
+        ],
+        [
+          "press",
+          "RIGHT",
+          120
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          20
+        ]
       ],
       "sweep": {
-        "frames": [72, 96, 120, 144, 168],
-        "score_box": [20, 112, 224, 150],
+        "frames": [
+          72,
+          96,
+          120,
+          144,
+          168
+        ],
+        "score_box": [
+          20,
+          112,
+          224,
+          150
+        ],
         "threshold": 1200,
         "min_score": 250
       },
       "min_payload_diff": 20,
-      "note": "공통 전투 항복 확인 대사창(per-char dialog 렌더러). 3P free-battle 항복 메뉴 직전 state에서 A로 확인창을 재생성한다. 이 화면의 런타임 소스는 공통 0xEFDAA0이 아니라 Part2 복제본 0xA34CB0/0xA34CD1이며, canvas는 첫 줄 0xA34CB0 32B span만 hijack한다. 2026-06-26 pair scan에서 0xA34CB0만 payload diff 614px, 0xEFDAA0 등 다른 복제본은 diff 0. verify_preview_canvases canvas diff 302px. [검증됨]"
+      "note": "3인용 자유전 첫 지도에 콜드부트 정상 입력으로 진입. 시스템→항복 경로에서 해당 대사를 새로 렌더한다. 임시 savestate 불필요. 서로 다른 한글 payload의 화면 차이302px 검증(2026-09-15).",
+      "expected_tail_hex": "72"
     },
     "battle_defeat_message": {
       "slot": "0x00A34D18",
@@ -66,17 +282,166 @@
       "render": "dialog",
       "checkpoint": "scene_89b_common_battle_defeat_comm_messages",
       "nav": [
-        ["loadstate", "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_010_confirm_left_yes.ss0"],
-        ["press", "A", 0]
+        [
+          "frames",
+          480
+        ],
+        [
+          "press",
+          "A",
+          200
+        ],
+        [
+          "press",
+          "START",
+          200
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "START",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "A",
+          240
+        ],
+        [
+          "press",
+          "B",
+          160
+        ],
+        [
+          "press",
+          "DOWN",
+          160
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "RIGHT",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "A",
+          500
+        ],
+        [
+          "press",
+          "RIGHT",
+          120
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "DOWN",
+          120
+        ],
+        [
+          "press",
+          "A",
+          180
+        ],
+        [
+          "press",
+          "LEFT",
+          100
+        ],
+        [
+          "press",
+          "A",
+          0
+        ]
       ],
       "sweep": {
-        "frames": [32, 48, 64, 80, 96],
-        "score_box": [20, 112, 224, 150],
+        "frames": [
+          32,
+          48,
+          64,
+          80,
+          96
+        ],
+        "score_box": [
+          20,
+          112,
+          224,
+          150
+        ],
         "threshold": 1200,
         "min_score": 250
       },
       "min_payload_diff": 20,
-      "note": "공통 전투 패배 메시지 대사창(per-char dialog 렌더러). 3P free-battle 항복 확인에서 '예' 선택 직전 state를 로드한 뒤 A로 패배 메시지를 재생성한다. 이 화면의 런타임 소스는 공통 0xEFD8A4가 아니라 Part2 복제본 0xA34D18이며, canvas는 레드스타 패배 첫 줄 0xA34D18 32B span만 hijack한다. 2026-06-26 state scan에서 state_010_confirm_left_yes+A는 payload diff 288px, state_011_confirm_yes는 diff 0. verify_preview_canvases canvas diff 302px. [검증됨]"
+      "note": "3인용 자유전 첫 지도에 콜드부트 정상 입력으로 진입. 시스템→항복 경로에서 해당 대사를 새로 렌더한다. 임시 savestate 불필요. 서로 다른 한글 payload의 화면 차이302px 검증(2026-09-15).",
+      "expected_tail_hex": "7777"
     }
   },
   "_experimental_part1": {

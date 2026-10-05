@@ -1,0 +1,1452 @@
+{
+  "status": "complete_visual_review_pending",
+  "scope": "source129 A-button instruction; other captured scenes are context only",
+  "rom": "/Users/tarucy/project/aw-kor/temp/part2_2026-09-23/round13/candidate.gba",
+  "rom_sha256": "fd0b27949308a2293b81bbdba58f284400582e5c89647d8fafafa5a31a91c9b2",
+  "build_receipt_sha256": "4dd8798d3c2abdc23453a647224a8074513cfd4a138dbe447a34eb3045dd4441",
+  "route_sha256": "c77840faf171ab48e36a08be8263ffa8d013cc90548c63dcbd523e05ab1c725d",
+  "inputs_sha256": "c3cdfff2851c2a6c8ff98fa796f5b03226d66d9c12b949cc5e37792e12eb8ba6",
+  "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+  "source_range": [
+    1,
+    129
+  ],
+  "fresh_boot": true,
+  "cartridge_save_import": false,
+  "savestate_import": false,
+  "executed": [
+    {
+      "segment": 1,
+      "start_core_frame": 1,
+      "key": "NONE",
+      "hold_frames": 0,
+      "release_frames": 1380,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/initial.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 2,
+      "start_core_frame": 1381,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0001_NONE_0001380.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 3,
+      "start_core_frame": 1563,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 1200,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0002_START_0001562.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 4,
+      "start_core_frame": 2765,
+      "key": "NONE",
+      "hold_frames": 0,
+      "release_frames": 900,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0003_A_0002764.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 5,
+      "start_core_frame": 3665,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0004_NONE_0003664.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 6,
+      "start_core_frame": 3907,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0005_START_0003906.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 7,
+      "start_core_frame": 4089,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0006_A_0004088.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 8,
+      "start_core_frame": 4271,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0007_A_0004270.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 9,
+      "start_core_frame": 4333,
+      "key": "START",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0008_A_0004332.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 10,
+      "start_core_frame": 4455,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0009_START_0004454.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 11,
+      "start_core_frame": 4697,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0010_A_0004696.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 12,
+      "start_core_frame": 4879,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0011_A_0004878.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 13,
+      "start_core_frame": 5061,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0012_A_0005060.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 14,
+      "start_core_frame": 5303,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0013_A_0005302.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 15,
+      "start_core_frame": 5545,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0014_A_0005544.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 16,
+      "start_core_frame": 5787,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0015_A_0005786.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 17,
+      "start_core_frame": 6029,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0016_A_0006028.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 18,
+      "start_core_frame": 6271,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0017_A_0006270.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 19,
+      "start_core_frame": 6513,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0018_A_0006512.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 20,
+      "start_core_frame": 6755,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0019_A_0006754.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 21,
+      "start_core_frame": 6997,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0020_A_0006996.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 22,
+      "start_core_frame": 7239,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0021_A_0007238.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 23,
+      "start_core_frame": 7481,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0022_A_0007480.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 24,
+      "start_core_frame": 7723,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0023_A_0007722.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 25,
+      "start_core_frame": 7965,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 300,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0024_A_0007964.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 26,
+      "start_core_frame": 8267,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0025_A_0008266.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 27,
+      "start_core_frame": 8509,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0026_A_0008508.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 28,
+      "start_core_frame": 8751,
+      "key": "NONE",
+      "hold_frames": 0,
+      "release_frames": 600,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0027_A_0008750.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 29,
+      "start_core_frame": 9351,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0028_NONE_0009350.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 30,
+      "start_core_frame": 9593,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0029_A_0009592.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 31,
+      "start_core_frame": 9835,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0030_A_0009834.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 32,
+      "start_core_frame": 10077,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0031_A_0010076.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 33,
+      "start_core_frame": 10319,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0032_A_0010318.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 34,
+      "start_core_frame": 10561,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0033_A_0010560.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 35,
+      "start_core_frame": 10803,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0034_A_0010802.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 36,
+      "start_core_frame": 11045,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0035_A_0011044.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 37,
+      "start_core_frame": 11287,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0036_A_0011286.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 38,
+      "start_core_frame": 11529,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0037_A_0011528.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 39,
+      "start_core_frame": 11771,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0038_A_0011770.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 40,
+      "start_core_frame": 12013,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0039_A_0012012.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 41,
+      "start_core_frame": 12255,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 300,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0040_A_0012254.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 42,
+      "start_core_frame": 12557,
+      "key": "NONE",
+      "hold_frames": 0,
+      "release_frames": 600,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0041_A_0012556.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 43,
+      "start_core_frame": 13157,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0042_NONE_0013156.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 44,
+      "start_core_frame": 13399,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0043_A_0013398.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 45,
+      "start_core_frame": 13641,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0044_A_0013640.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 46,
+      "start_core_frame": 13883,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0045_A_0013882.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 47,
+      "start_core_frame": 14125,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0046_A_0014124.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 48,
+      "start_core_frame": 14367,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0047_A_0014366.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 49,
+      "start_core_frame": 14609,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0048_A_0014608.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 50,
+      "start_core_frame": 14851,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0049_A_0014850.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 51,
+      "start_core_frame": 15093,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0050_A_0015092.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 52,
+      "start_core_frame": 15335,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0051_A_0015334.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 53,
+      "start_core_frame": 15577,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0052_A_0015576.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 54,
+      "start_core_frame": 15699,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0053_A_0015698.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 55,
+      "start_core_frame": 15721,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0054_LEFT_0015720.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 56,
+      "start_core_frame": 15743,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0055_LEFT_0015742.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 57,
+      "start_core_frame": 15765,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0056_LEFT_0015764.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 58,
+      "start_core_frame": 15787,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0057_LEFT_0015786.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 59,
+      "start_core_frame": 15849,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0058_DOWN_0015848.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 60,
+      "start_core_frame": 16091,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0059_A_0016090.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 61,
+      "start_core_frame": 16333,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0060_A_0016332.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 62,
+      "start_core_frame": 16575,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0061_A_0016574.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 63,
+      "start_core_frame": 16817,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0062_A_0016816.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 64,
+      "start_core_frame": 17059,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0063_A_0017058.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 65,
+      "start_core_frame": 17301,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0064_A_0017300.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 66,
+      "start_core_frame": 17423,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0065_A_0017422.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 67,
+      "start_core_frame": 17545,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0066_A_0017544.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 68,
+      "start_core_frame": 17567,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0067_RIGHT_0017566.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 69,
+      "start_core_frame": 17589,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0068_RIGHT_0017588.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 70,
+      "start_core_frame": 17651,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0069_RIGHT_0017650.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 71,
+      "start_core_frame": 17893,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0070_A_0017892.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 72,
+      "start_core_frame": 18135,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0071_A_0018134.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 73,
+      "start_core_frame": 18377,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0072_A_0018376.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 74,
+      "start_core_frame": 18619,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0073_A_0018618.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 75,
+      "start_core_frame": 18861,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0074_A_0018860.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 76,
+      "start_core_frame": 19103,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0075_A_0019102.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 77,
+      "start_core_frame": 19345,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0076_A_0019344.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 78,
+      "start_core_frame": 19587,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0077_A_0019586.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 79,
+      "start_core_frame": 19609,
+      "key": "UP",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0078_LEFT_0019608.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 80,
+      "start_core_frame": 19631,
+      "key": "UP",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0079_UP_0019630.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 81,
+      "start_core_frame": 19693,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0080_UP_0019692.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 82,
+      "start_core_frame": 19815,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0081_A_0019814.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 83,
+      "start_core_frame": 19837,
+      "key": "UP",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0082_LEFT_0019836.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 84,
+      "start_core_frame": 19859,
+      "key": "UP",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0083_UP_0019858.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 85,
+      "start_core_frame": 19921,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0084_UP_0019920.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 86,
+      "start_core_frame": 20043,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0085_A_0020042.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 87,
+      "start_core_frame": 20065,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0086_RIGHT_0020064.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 88,
+      "start_core_frame": 20087,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0087_RIGHT_0020086.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 89,
+      "start_core_frame": 20149,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0088_RIGHT_0020148.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 90,
+      "start_core_frame": 20331,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0089_A_0020330.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 91,
+      "start_core_frame": 20573,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0090_A_0020572.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 92,
+      "start_core_frame": 20815,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0091_A_0020814.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 93,
+      "start_core_frame": 21057,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0092_A_0021056.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 94,
+      "start_core_frame": 21299,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0093_A_0021298.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 95,
+      "start_core_frame": 21421,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0094_A_0021420.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 96,
+      "start_core_frame": 21483,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0095_RIGHT_0021482.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 97,
+      "start_core_frame": 21665,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0096_A_0021664.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 98,
+      "start_core_frame": 21727,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0097_RIGHT_0021726.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 99,
+      "start_core_frame": 21909,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0098_A_0021908.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 100,
+      "start_core_frame": 21971,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 180,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0099_RIGHT_0021970.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 101,
+      "start_core_frame": 22153,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0100_A_0022152.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 102,
+      "start_core_frame": 22175,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0101_DOWN_0022174.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 103,
+      "start_core_frame": 22197,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0102_DOWN_0022196.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 104,
+      "start_core_frame": 22259,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 900,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0103_DOWN_0022258.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 105,
+      "start_core_frame": 23161,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0104_A_0023160.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 106,
+      "start_core_frame": 23403,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0105_A_0023402.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 107,
+      "start_core_frame": 23645,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0106_A_0023644.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 108,
+      "start_core_frame": 23887,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 900,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0107_A_0023886.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 109,
+      "start_core_frame": 24789,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0108_A_0024788.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 110,
+      "start_core_frame": 25031,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0109_A_0025030.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 111,
+      "start_core_frame": 25273,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0110_A_0025272.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 112,
+      "start_core_frame": 25515,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0111_A_0025514.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 113,
+      "start_core_frame": 25757,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0112_A_0025756.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 114,
+      "start_core_frame": 25879,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0113_A_0025878.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 115,
+      "start_core_frame": 25901,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0114_LEFT_0025900.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 116,
+      "start_core_frame": 25923,
+      "key": "LEFT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0115_LEFT_0025922.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 117,
+      "start_core_frame": 25945,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0116_LEFT_0025944.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 118,
+      "start_core_frame": 25967,
+      "key": "DOWN",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0117_DOWN_0025966.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 119,
+      "start_core_frame": 26029,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0118_DOWN_0026028.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 120,
+      "start_core_frame": 26271,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0119_A_0026270.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 121,
+      "start_core_frame": 26513,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0120_A_0026512.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 122,
+      "start_core_frame": 26635,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0121_A_0026634.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 123,
+      "start_core_frame": 26657,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 20,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0122_RIGHT_0026656.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 124,
+      "start_core_frame": 26679,
+      "key": "RIGHT",
+      "hold_frames": 2,
+      "release_frames": 60,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0123_RIGHT_0026678.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 125,
+      "start_core_frame": 26741,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0124_RIGHT_0026740.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 126,
+      "start_core_frame": 26983,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0125_A_0026982.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 127,
+      "start_core_frame": 27225,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 120,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0126_A_0027224.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 128,
+      "start_core_frame": 27347,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0127_A_0027346.checkpoint.json",
+      "status": "started"
+    },
+    {
+      "segment": 129,
+      "start_core_frame": 27589,
+      "key": "A",
+      "hold_frames": 2,
+      "release_frames": 240,
+      "prior_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0128_A_0027588.checkpoint.json",
+      "status": "started"
+    }
+  ],
+  "screens": [
+    {
+      "segment": 1,
+      "phase": "end",
+      "frame": 1380,
+      "png": "source001_end.png",
+      "png_sha256": "f92ad91f99aa7db84d5a1f7d5137f63323e794b1223b86a7ee362e10524c7181",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0001_NONE_0001380.ss0",
+      "reference_sha256": "a1e0a4adeedcfcfc33fc5264199275ccd75800f7bdaf763dd167b57bdb566460"
+    },
+    {
+      "segment": 2,
+      "phase": "end",
+      "frame": 1562,
+      "png": "source002_end.png",
+      "png_sha256": "de21f42702e3d315bc33bb27f55537ad48aef84f2905c88467c0c8178dc8c8cc",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0002_START_0001562.ss0",
+      "reference_sha256": "40e3088effc6003d8c894d4d9cf72b4d023ca0f219e7ae7530413108adae4327"
+    },
+    {
+      "segment": 3,
+      "phase": "end",
+      "frame": 2764,
+      "png": "source003_end.png",
+      "png_sha256": "34ee7323dd689118f0f6d6ad4874a6f4c6b726855aa8543433ed3ed0ead5d3cb",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0003_A_0002764.ss0",
+      "reference_sha256": "dcc893d144dc874c37b31974040e8b017adf54abf1fda4b170cd94f4fa49cd02"
+    },
+    {
+      "segment": 4,
+      "phase": "end",
+      "frame": 3664,
+      "png": "source004_end.png",
+      "png_sha256": "084dea43a1b58d427209fcf27af300945dfe02dc8cfac822fc278e21c2198ee1",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0004_NONE_0003664.ss0",
+      "reference_sha256": "daec62ac4ef101fbe2eb09b8b72b221b0d4a720db4052472d4b2816f271c0109"
+    },
+    {
+      "segment": 5,
+      "phase": "end",
+      "frame": 3906,
+      "png": "source005_end.png",
+      "png_sha256": "bcbea28d54e57ae376d72c9f3024e889558f9d88640c0fddc675d1cc66b98129",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0005_START_0003906.ss0",
+      "reference_sha256": "b13e856c1e17ad91acba0f6198f52ed1e2d15c7aa8549052339b2af661939177"
+    },
+    {
+      "segment": 6,
+      "phase": "end",
+      "frame": 4088,
+      "png": "source006_end.png",
+      "png_sha256": "1997bddc59ff4ab050082039f5f393ef78cfc88be35e1a0d527f1b71afa6d4e8",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0006_A_0004088.ss0",
+      "reference_sha256": "cd4b95cc621188e0acd140e15604ff7a2160de7f1fb576d508728577282b8caf"
+    },
+    {
+      "segment": 7,
+      "phase": "end",
+      "frame": 4270,
+      "png": "source007_end.png",
+      "png_sha256": "67deb6551fc41aaca78123a4051723d3c4a4bed864b31b149610d1c46dd909a3",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0007_A_0004270.ss0",
+      "reference_sha256": "fce1f6c269d54308cf7788eabd460cd827e7eb4423dd6366b586ab1a18879b2c"
+    },
+    {
+      "segment": 8,
+      "phase": "end",
+      "frame": 4332,
+      "png": "source008_end.png",
+      "png_sha256": "5b070918201e48128d7e94eaa222e582145254697aedcb6f194ff784e6a53fdb",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0008_A_0004332.ss0",
+      "reference_sha256": "e339f50288df8bf7dcff641788470cffbf5537342e01f00cd2ab0f85f914b72e"
+    },
+    {
+      "segment": 9,
+      "phase": "end",
+      "frame": 4454,
+      "png": "source009_end.png",
+      "png_sha256": "effd225038c82618fd12458cb1f16473b89c1e5054ea1fd66bc376d6fb477a68",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0009_START_0004454.ss0",
+      "reference_sha256": "22d858757e4cb9b5bb8450bed7d8dea3578fb516aee980613a0478b68141dd83"
+    },
+    {
+      "segment": 10,
+      "phase": "end",
+      "frame": 4696,
+      "png": "source010_end.png",
+      "png_sha256": "6f2e7709f14702d215ab5477abe6c8eae9d79d42b655b236cc5cb50746a05203",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0010_A_0004696.ss0",
+      "reference_sha256": "ff2c4a0661e44703b49174ae27b9c0c58699fdcffefd3b781bcd2d07e324dd79"
+    },
+    {
+      "segment": 119,
+      "phase": "after60",
+      "frame": 26090,
+      "png": "source119_after60.png",
+      "png_sha256": "97775ac14f29c1d54ace87f03c36cd44011505cc28ff1abb77c75a592aaccf16",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0119_A_0026270.ss0",
+      "reference_sha256": "1a11219d02d55d00494629c08f17c521e780670ca24eab644722ca33c9a3d70e"
+    },
+    {
+      "segment": 119,
+      "phase": "after120",
+      "frame": 26150,
+      "png": "source119_after120.png",
+      "png_sha256": "f857fa75fd64608786748884b547f4cea81c3dbb24dcd56817b64fee3c74ab9e",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0119_A_0026270.ss0",
+      "reference_sha256": "1a11219d02d55d00494629c08f17c521e780670ca24eab644722ca33c9a3d70e"
+    },
+    {
+      "segment": 119,
+      "phase": "after240",
+      "frame": 26270,
+      "png": "source119_after240.png",
+      "png_sha256": "6a4b5681135586f8be918d99ea5cd1e028885603b0b6e88296ee45ded05c3173",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0119_A_0026270.ss0",
+      "reference_sha256": "1a11219d02d55d00494629c08f17c521e780670ca24eab644722ca33c9a3d70e"
+    },
+    {
+      "segment": 120,
+      "phase": "after60",
+      "frame": 26332,
+      "png": "source120_after60.png",
+      "png_sha256": "9461e00b6f69b22e32af7bff7689c129e0308303f9abe2ba63fff3695e0052cb",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0120_A_0026512.ss0",
+      "reference_sha256": "3d4ecb0c4ab14d176d8b08a47b89f710c706aa02908358126c6531bdca7ef683"
+    },
+    {
+      "segment": 120,
+      "phase": "after120",
+      "frame": 26392,
+      "png": "source120_after120.png",
+      "png_sha256": "0824e79d342be62ec651eaf4e62b381d413606a974830a0bf1755dff46350875",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0120_A_0026512.ss0",
+      "reference_sha256": "3d4ecb0c4ab14d176d8b08a47b89f710c706aa02908358126c6531bdca7ef683"
+    },
+    {
+      "segment": 120,
+      "phase": "after240",
+      "frame": 26512,
+      "png": "source120_after240.png",
+      "png_sha256": "9d45d4d0bbbfe146f98ea97ee927c225391b6cedbc1696b160b861c10b7b3239",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0120_A_0026512.ss0",
+      "reference_sha256": "3d4ecb0c4ab14d176d8b08a47b89f710c706aa02908358126c6531bdca7ef683"
+    },
+    {
+      "segment": 125,
+      "phase": "after60",
+      "frame": 26802,
+      "png": "source125_after60.png",
+      "png_sha256": "82388f4e33d681fb3deef3c4c0cdb603d7482e0e0b6fab493c46da65aaa05ecd",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0125_A_0026982.ss0",
+      "reference_sha256": "d7dd5b8d1204043466638c0d039ed50bad9080e71981e042c6cf1e8689e1a9b4"
+    },
+    {
+      "segment": 125,
+      "phase": "after120",
+      "frame": 26862,
+      "png": "source125_after120.png",
+      "png_sha256": "026d25a74ea84b57806584c797c7eda17d6ab387dd924b58c52036bb29c15afc",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0125_A_0026982.ss0",
+      "reference_sha256": "d7dd5b8d1204043466638c0d039ed50bad9080e71981e042c6cf1e8689e1a9b4"
+    },
+    {
+      "segment": 125,
+      "phase": "after240",
+      "frame": 26982,
+      "png": "source125_after240.png",
+      "png_sha256": "4aa5c3f72c3e9c788ed6e9aa932687c527ff71b33d5c08c5b62472cb08760cbb",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0125_A_0026982.ss0",
+      "reference_sha256": "d7dd5b8d1204043466638c0d039ed50bad9080e71981e042c6cf1e8689e1a9b4"
+    },
+    {
+      "segment": 126,
+      "phase": "after60",
+      "frame": 27044,
+      "png": "source126_after60.png",
+      "png_sha256": "5db3c0ff2234e7cef93af965cc650b7c4e46448565afcb14c943845b214f4854",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0126_A_0027224.ss0",
+      "reference_sha256": "b3fe964639148f7a1f5875b5e8c9b504c98a779e10a8040f5507915b12147bd0"
+    },
+    {
+      "segment": 126,
+      "phase": "after120",
+      "frame": 27104,
+      "png": "source126_after120.png",
+      "png_sha256": "0a4dc98fae07d3e84e3f791996c8f94e6f7053c4f2e4c33a4f89469b1b82f100",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0126_A_0027224.ss0",
+      "reference_sha256": "b3fe964639148f7a1f5875b5e8c9b504c98a779e10a8040f5507915b12147bd0"
+    },
+    {
+      "segment": 126,
+      "phase": "after240",
+      "frame": 27224,
+      "png": "source126_after240.png",
+      "png_sha256": "d1b43138dc678b7ad4143a21c5641527c8781418c8b268a52b395d7a3a6a0a43",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0126_A_0027224.ss0",
+      "reference_sha256": "b3fe964639148f7a1f5875b5e8c9b504c98a779e10a8040f5507915b12147bd0"
+    },
+    {
+      "segment": 128,
+      "phase": "after60",
+      "frame": 27408,
+      "png": "source128_after60.png",
+      "png_sha256": "950f9423c79c2aef163df4667e27ce3cb87aed90518955220826b1d8d039eaf7",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0128_A_0027588.ss0",
+      "reference_sha256": "5dc4fb20ce522c3652d78351a905f126d671fc37ab1b7990e0db3ae244acdb42"
+    },
+    {
+      "segment": 128,
+      "phase": "after120",
+      "frame": 27468,
+      "png": "source128_after120.png",
+      "png_sha256": "dd7d9edb972efdbcd756e4da5d9710cc58c5d07713e4fa33197cb7c9356a7d20",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0128_A_0027588.ss0",
+      "reference_sha256": "5dc4fb20ce522c3652d78351a905f126d671fc37ab1b7990e0db3ae244acdb42"
+    },
+    {
+      "segment": 128,
+      "phase": "after240",
+      "frame": 27588,
+      "png": "source128_after240.png",
+      "png_sha256": "561da53e6641c571b24c31e7a6b554b624e277eb78af5074b79ff8be9c73a45a",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0128_A_0027588.ss0",
+      "reference_sha256": "5dc4fb20ce522c3652d78351a905f126d671fc37ab1b7990e0db3ae244acdb42"
+    },
+    {
+      "segment": 129,
+      "phase": "after60",
+      "frame": 27650,
+      "png": "source129_after60.png",
+      "png_sha256": "5590d13618369e8cbe3aa71b52bfbfc02ebb1eb9496180588b87d2a510c078b6",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0129_A_0027830.ss0",
+      "reference_sha256": "8de45bb8610989d581385ec42428d78c9abe9e4ed300a70e1e1786a301d50a03"
+    },
+    {
+      "segment": 129,
+      "phase": "after120",
+      "frame": 27710,
+      "png": "source129_after120.png",
+      "png_sha256": "234bfc57affcb1144490099d703d71439a6dbf8ab9cb14eceb8c28dc9ae1815f",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0129_A_0027830.ss0",
+      "reference_sha256": "8de45bb8610989d581385ec42428d78c9abe9e4ed300a70e1e1786a301d50a03"
+    },
+    {
+      "segment": 129,
+      "phase": "after240",
+      "frame": 27830,
+      "png": "source129_after240.png",
+      "png_sha256": "d22d666e2a80678e5873676c17b710c97393acb2dd151cdb38e5e1257c8ec528",
+      "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0129_A_0027830.ss0",
+      "reference_sha256": "8de45bb8610989d581385ec42428d78c9abe9e4ed300a70e1e1786a301d50a03"
+    }
+  ],
+  "screen_review": {
+    "reviewer": "root",
+    "method": "view_image source129_after240.png",
+    "result": "지금 공격할 상대는 하나뿐 / A 버튼으로 전투 시작해! 전체 표시; punctuation visible",
+    "scope": "targeted normal fresh boot, not ending"
+  },
+  "boot_visual_review": {
+    "segment": 10,
+    "phase": "end",
+    "frame": 4696,
+    "png": "source010_end.png",
+    "png_sha256": "6f2e7709f14702d215ab5477abe6c8eae9d79d42b655b236cc5cb50746a05203",
+    "reference_state": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-09-21/run11_result_prologue/0010_A_0004696.ss0",
+    "reference_sha256": "ff2c4a0661e44703b49174ae27b9c0c58699fdcffefd3b781bcd2d07e324dd79"
+  },
+  "final_frame": 27830,
+  "harness_exit_code": 0,
+  "rom_unchanged": true
+}

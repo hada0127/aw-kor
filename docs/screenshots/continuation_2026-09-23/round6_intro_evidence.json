@@ -1,0 +1,110 @@
+{
+  "rom_sha256": "cbc796e8d774ed0bcf23d2610c732a6efe84349dc6d842d388057d633a2b36e8",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m5_victory_save/game_save.json",
+  "save_sha256": "795c683df0c0aefc4a46b5e354c86911b9d626acb14b109e567f82af0c3c2665",
+  "actions": 14,
+  "final_frame_counter": "OK framecounter 8380",
+  "screens": [
+    {
+      "replay_segment": 7,
+      "source_segment": 7,
+      "png": "007_source7_A.png",
+      "png_sha256": "c97609fb4c38b6f6bf6d513c1c249b27d307e1438d25834041411c8412b5b912",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0007_A_0004810.png",
+      "changed_bbox": null
+    },
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_A.png",
+      "png_sha256": "e0d0fd5d5397f9be8f61659a5724f8b3f4b6243746068142f2b1c9681715b584",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0008_A_0006012.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 9,
+      "source_segment": 127,
+      "png": "009_source127_RIGHT.png",
+      "png_sha256": "fe473968f0bea043fee65dfc655245b9d5ee3b241353727c0fe516592ee40506",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0127_RIGHT_0033952.png",
+      "changed_bbox": [
+        80,
+        83,
+        123,
+        105
+      ]
+    },
+    {
+      "replay_segment": 10,
+      "source_segment": 128,
+      "png": "010_source128_A.png",
+      "png_sha256": "0cef5667a650d349b7ab0d017192fa81f4a088fceb758e3d85c37a622e85e231",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0128_A_0034554.png",
+      "changed_bbox": [
+        80,
+        83,
+        122,
+        106
+      ]
+    },
+    {
+      "replay_segment": 11,
+      "source_segment": 129,
+      "png": "011_source129_LEFT.png",
+      "png_sha256": "146f0ec0017757f88aeb1af05bf220f955243725fab250afbcd690e46deca2c5",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0129_LEFT_0034740.png",
+      "changed_bbox": [
+        81,
+        83,
+        102,
+        92
+      ]
+    },
+    {
+      "replay_segment": 12,
+      "source_segment": 130,
+      "png": "012_source130_DOWN.png",
+      "png_sha256": "70634b8d93ee9dc6935761f3fa1c645f9394f8d82c15627f93dfdf2c497a382b",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0130_DOWN_0034924.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 13,
+      "source_segment": 131,
+      "png": "013_source131_A.png",
+      "png_sha256": "944e404d12dfe83ee38bda91b32a38ac1bf45198d57f9d7a606acb181cd15208",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0131_A_0035526.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        138
+      ]
+    },
+    {
+      "replay_segment": 14,
+      "source_segment": 132,
+      "png": "014_source132_A.png",
+      "png_sha256": "d117a4dd407ddffd66bbcfd56fed41c7175bdd4025ad68294dc695d5b9abf99c",
+      "before": "output/qa/part2_2026-09-23/round2_retry_live/0132_A_0036128.png",
+      "changed_bbox": [
+        65,
+        93,
+        143,
+        152
+      ]
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

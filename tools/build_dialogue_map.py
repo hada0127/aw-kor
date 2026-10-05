@@ -54,7 +54,7 @@ DEFAULT_OUT = os.path.join(REPO, "data", "dialogue_map.json")
 # Runtime glyph dictionaries for compact CO power-name renderers. They look
 # like one long Korean string after decoding, but are concatenated two-byte
 # code sets, not user-visible dialogue.
-GLYPH_DICTIONARY_TEXT_ADDRS = {0xA3B880, 0xB842E8}
+from glyph_dictionary_sources import is_glyph_dictionary_address
 BUILD_AUTHORED_TEXT_KINDS = {
     "command-label",
     "dialogue-override",
@@ -67,6 +67,7 @@ BUILD_AUTHORED_TEXT_KINDS = {
     "name-suffix",
     "opt-label",
     "raw_replace",
+    "known-story-fragment",
     "unit-opt-label",
 }
 
@@ -270,8 +271,43 @@ def load_direct_patch_texts():
         return {}
 
 
-def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides):
+def plain_script_source_text(original, addr, slot, kind):
+    """Recover only a complete, declared SJIS literal from the original ROM.
+
+    Integrity addresses alone are not source authority: relocated strings and
+    arbitrary script writers must not turn binary bytes into editor dialogue.
+    Single-byte bytes are deliberately excluded here because this engine uses
+    printable ASCII (including 0x77) as controls inside its Japanese scripts.
+    """
+    import build_korean_full as B
+    if not isinstance(kind, str) or not kind.startswith('script:'):
+        return ''
+    if type(addr) is not int or type(slot) is not int:
+        return ''
+    end = B.SCRIPT_PLAIN_OPERAND_SPANS.get(addr)
+    if (end is None or slot <= 0 or end - addr != slot
+            or not 0 <= addr < end <= len(original)):
+        return ''
+    raw = original[addr:end]
+    cursor = 0
+    while cursor < len(raw):
+        lead = raw[cursor]
+        if not (0x81 <= lead <= 0x9F or 0xE0 <= lead <= 0xFC):
+            return ''
+        if cursor + 1 >= len(raw):
+            return ''
+        cursor += 2
+    try:
+        return raw.decode('shift_jis')
+    except UnicodeDecodeError:
+        return ''
+
+
+def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides, *, kind=None):
     """UI에 보여줄 현재 번역. 우선순위는 빌드 적용 순서와 맞춘다."""
+    if kind == 'known-story-fragment':
+        # These final fixed writers do not consume generic editor overrides.
+        return ship_ko or ""
     ko = csv_ko or ""
     protected_addr_override = addr in addr_overrides
     if protected_addr_override:
@@ -282,7 +318,13 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
         if ko in text_overrides:
             ko = text_overrides[ko] or ""
     direct_hit = addr in direct_patches
-    if direct_hit:
+    source_owned = False
+    if protected_addr_override and str(kind or '').startswith('script:'):
+        import build_korean_full as B
+        source_owned = addr in B.WHOLE_SCRIPT_ROWS or addr in B.SCRIPT_PLAIN_OPERAND_SPANS
+    # Legacy fragments cannot replace an authored row containing command
+    # operands. Only declared complete text owners take TSV precedence.
+    if direct_hit and not source_owned:
         ko = direct_patches[addr] or ""
     if not ko and ship_ko and addr not in addr_overrides and not direct_hit:
         # integrity_map은 실제 빌드 산출에서 역추출한 문자열이다. CSV/inline 경로에
@@ -293,9 +335,7 @@ def display_ko_for(addr, ja, csv_ko, ship_ko, addr_overrides, source_overrides, 
     if addr in display_overrides:
         ko = display_overrides[addr] or ""
     if protected_addr_override:
-        # Protected rows skip editor overlays/display normalizers, but later
-        # direct script patches still win because build_korean_full writes them
-        # after the import/override pass.
+        # Protected source text bypasses editor overlays/display normalizers.
         return ko
     if ko:
         try:
@@ -347,6 +387,7 @@ def main():
 
     # 3) integrity map (선택)
     integrity = {}
+    original = None
     have_integrity = os.path.exists(args.integrity)
     if have_integrity:
         with open(args.integrity, encoding="utf-8") as f:
@@ -364,6 +405,22 @@ def main():
     direct_patches = load_direct_patch_texts()
     dialogue_overrides = load_dialogue_overrides()
     display_overrides = load_display_overrides()
+
+    # A previous build can still describe a merged row that has since been
+    # split around native controls. The declared direct operands own today's
+    # editor boundaries; preserve shipped metadata only when its span agrees.
+    import build_korean_full as B
+    for addr, end in B.SCRIPT_PLAIN_OPERAND_SPANS.items():
+        if addr not in direct_patches:
+            continue
+        previous = integrity.get(addr, {})
+        if previous.get('kind') == 'known-story-fragment':
+            continue  # A fixed writer must not become an editable operand.
+        integrity[addr] = {
+            'slot': end - addr,
+            'ship_ko': previous.get('ship_ko') if previous.get('slot') == end - addr else None,
+            'kind': 'script:declared operand',
+        }
 
     # 모든 주소의 합집합(found 가 superset 이지만 trans-only 10건 등 안전하게 합집합)
     all_addrs = sorted(set(found) | set(trans) | set(integrity))
@@ -387,20 +444,34 @@ def main():
             ja = t_ent["ja"]
 
         ship_ko = i_ent["ship_ko"] if i_ent else None
+        kind = i_ent["kind"] if i_ent else None
+        if kind == 'known-story-fragment':
+            if original is None:
+                with open(os.path.join(REPO, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba'), 'rb') as f:
+                    original = f.read()
+            ja = original[addr:addr + i_ent['slot']].decode('shift_jis')
+        elif not ja and isinstance(kind, str) and kind.startswith('script:'):
+            if original is None:
+                with open(os.path.join(REPO, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba'), 'rb') as f:
+                    original = f.read()
+            ja = plain_script_source_text(original, addr, i_ent['slot'], kind)
         ko = display_ko_for(
             addr, ja, t_ent["ko"] if t_ent else "", ship_ko,
             addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides,
+            kind=kind,
         )
         slot = i_ent["slot"] if i_ent else None
         kind = i_ent["kind"] if i_ent else None
 
         region = region_of(addr)
-        noise = is_noise(ja) or addr in GLYPH_DICTIONARY_TEXT_ADDRS
+        noise = is_noise(ja) or is_glyph_dictionary_address(addr)
+        if kind == 'known-story-fragment':
+            noise = False
         # 빌드가 직접 쓴 UI/스크립트 라벨은 원문이 짧은 한자-only여도 실제 표시 문자열이다.
         # 추출 노이즈는 계속 숨기되, opt-label/fixed_zero/direct patch류가 editor에서 빠지지 않게 한다.
         if (
             noise
-            and addr not in GLYPH_DICTIONARY_TEXT_ADDRS
+            and not is_glyph_dictionary_address(addr)
             and (ship_ko or ko)
             and is_build_authored_text(
                 addr, kind, addr_overrides, direct_patches,
@@ -430,6 +501,7 @@ def main():
             "kind": kind,
             "region": region,
             "is_noise": noise,
+            "source_role": "glyph_dictionary" if is_glyph_dictionary_address(addr) else "text",
         })
 
     meta = {

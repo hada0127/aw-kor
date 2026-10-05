@@ -1,0 +1,30 @@
+{
+  "source_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0823_A_0159949.checkpoint.json",
+  "target_endpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0824_A_0160255.png",
+  "rows": [
+    {
+      "exit_code": 0,
+      "rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "expected_rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "match": true,
+      "framecounter_match": true,
+      "command": "loadstate /Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0823_A_0159949.ss0\nkeys 1\nframes 6\nkeys 0\nframes 300\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/compat_replay_0.raw\nframecounter\nquit\n"
+    },
+    {
+      "exit_code": 0,
+      "rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "expected_rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "match": true,
+      "framecounter_match": true,
+      "command": "loadstate /Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0823_A_0159949.ss0\nkeys 1\nframes 6\nkeys 0\nframes 300\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/compat_replay_1.raw\nframecounter\nquit\n"
+    },
+    {
+      "exit_code": 0,
+      "rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "expected_rgb_sha256": "9d4a41532947bccbff54fc3d52b1937eb9136db873bafa6387f07af01ce43379",
+      "match": true,
+      "framecounter_match": true,
+      "command": "loadstate /Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0823_A_0159949.ss0\nkeys 1\nframes 6\nkeys 0\nframes 300\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/compat_replay_2.raw\nframecounter\nquit\n"
+    }
+  ]
+}

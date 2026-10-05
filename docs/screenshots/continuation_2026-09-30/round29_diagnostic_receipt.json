@@ -1,0 +1,75 @@
+{
+  "kind": "diagnostic refresh rendering only",
+  "normal_play_or_ending_claim": false,
+  "rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+  "source_rom_sha256": "18a1b5b5911cea317db15f1da1e498307cbe58dc17cc513f572b93effb209610",
+  "state_sha256": "20fe715908aea02d911abc6b2f7dfc8c8feaad5f7aa45c25ed90d090edf3eee2",
+  "harness_sha256": "6662511515652a6e40dfdfbdf77de55aed88f2797b4a86c93ed953a6d8ae5092",
+  "font_and_first_page_compatibility_verified": true,
+  "inputs": [
+    {
+      "key": "A",
+      "hold": 6,
+      "after": 600
+    },
+    {
+      "key": "A",
+      "hold": 6,
+      "after": 600
+    },
+    {
+      "key": "A",
+      "hold": 6,
+      "after": 600
+    },
+    {
+      "key": "A",
+      "hold": 6,
+      "after": 600
+    },
+    {
+      "key": "A",
+      "hold": 6,
+      "after": 600
+    }
+  ],
+  "emulator_exit_code": 0,
+  "images": {
+    "page_2.png": "27d7a29ee1e37c317757e9efcdecc2499e62a51ad372143e63cab067c2612b4b",
+    "page_3.png": "60adf5c54fa0b804877d5a075c6c720797662c8b1811e2543692d5da81028454",
+    "page_1.png": "bd95f44b739941944d64aa72e463c4a0d3e3a024e847056942d86e6f283298d9",
+    "page_4.png": "1bbbb51d7ae7a5c8263513823afcdd4553959230aec49d240226756869fb2b13",
+    "page_5.png": "891de9a7cbf6beaf0f9bc1bd50232f0441ce8c0f762057585ba4b73f5783fb6f"
+  },
+  "watch_reply": "OK watchaddr 08A4F070 len=80 set=80",
+  "trace_sha256": "fb581ad7d556e476813fd5f2b36c706d623389eba73d61aa629a80c709b6417c",
+  "visual_review": {
+    "reviewer": "Codex",
+    "basis": "PNG visual inspection at native 240x160",
+    "page_1": {
+      "message_source": "0xA1F944",
+      "verdict": "수정 두 행 문구가 모두 박스 안에 표시됨"
+    },
+    "page_4": {
+      "message_source": "0xA1F9D8",
+      "verdict": "수정 두 행과 마지막 느낌표가 모두 박스 안에 표시됨"
+    },
+    "page_5": {
+      "verdict": "다음 메시지 정상 렌더"
+    },
+    "scope": "진단 fresh-render만 검증; 다른 장면·정상 재개·엔딩 승인 아님"
+  },
+  "native_reads": {
+    "count": 231,
+    "unique_addresses": 76,
+    "pc_values": [
+      "08314020",
+      "08314232",
+      "0831425A",
+      "08314336",
+      "08F30284",
+      "08F30286"
+    ],
+    "watched_range": "08A4F070..08A4F0BF; diagnostic read trace only"
+  }
+}

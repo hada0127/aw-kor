@@ -1,0 +1,96 @@
+{
+  "native_pointer_count": 3315,
+  "messages": 2276,
+  "physical_rows": 6086,
+  "contexts": {
+    "prologue": 13,
+    "intro": 42,
+    "story_layout_unverified": 2179,
+    "objective": 42
+  },
+  "unknown_control_counts": {
+    "57": 1885,
+    "4b": 1
+  },
+  "unknown_messages": 766,
+  "unverified_spacing_bytes": 4903,
+  "unverified_spacing_messages": 1038,
+  "trailing_padding_bytes": 13353,
+  "verified_nonadvancing_padding_bytes": 6,
+  "native_consumer_verified_messages": 2,
+  "consumer_unverified_messages": 2274,
+  "layout_evidence_messages": 0,
+  "capacity_verified_messages": 0,
+  "png_only_messages": 0,
+  "native_profile": {
+    "consumer": "part2_31424c_script",
+    "rom_sha256": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+    "regions": {
+      "dispatch_first": "737b10e7f6b19d82274432e67449519794e63d0c19c02d794ff3d119c0458243",
+      "table_first": "2eb551ce8f586149cf5c545b61c3e49ac4a47d2095c8b112ff7b1621d29553ee",
+      "consume_and_style": "d269b22cf97f38b66279ad83a60253cf4bb3d82fbcda2697c833e01a225d91a2",
+      "dispatch_second": "35db3466c574c65e2b774d5532368990849138e44cb83275955a2449e74e2835",
+      "table_second": "dfd76941d2fddde41d6372db235cc43221007e13d109d5594bf4d177b75a4f17",
+      "page": "b56ce1e6e3c0a2936fb18c38cf7bc55a8a2d064422d0c2de4e4ff37b712ffd04",
+      "wait": "8f981bd0e57a6e096aec9c79b240a0ed7efaac064ab3d78d75decbf3b98fc5af",
+      "handled_return": "e7da4693f984d3895702159205088b9dabea57020082cf82cc40dcf7de4f9cae",
+      "parser_call": "3501dd6049773d5decec5ef654565206c8d3b2e4fd26674e66ee98612eb7b7cf",
+      "glyph_call": "8f93e4ff1340242a263886e79f094057740da96a7b20607b5992e924914ba435",
+      "message_init": "c1b6ee6fa1ba2e752c1124b928501bcfe8d1e4dfe8b112ad2a54fbb7f419ecb7",
+      "wait_job_descriptor": "d40c0c5026cbd44ecec1584bbd38f1189ad97f7766445d7d164187d2be898323",
+      "wait_callback": "acd69b5ca132b31770639a2ef3d4a63706f75ba298aef64ce16f4cb353ee9b6d",
+      "job_init": "b8a858169234b44f0f09ddfe21cd4e1575310cc88019af1ce5ae749f15b468e9",
+      "job_start": "37b88d6822b4d0b811ae9d481689f7b4bc69e0421487ccf792341316808c5d5c",
+      "job_alloc_and_end": "883b97bc0527353f5c010b9ec51822c8bbd858a07b40940dbb42fe14bcfe7557",
+      "job_dispatch": "2dec084cae29294e2c136d6cbcd0263ea3cb3fca15606e612eee68d0c8de7958",
+      "job_delay_and_callback_ops": "083f5247e340fd1c4bb18be48a553461175471daeee101a92a2375682283ae8b",
+      "job_end_op": "6991db16978388f8f87d9b9270e5143b858618095bc981d9aa9883da5c555fb2",
+      "job_op_table": "534f6b68449443abcdab796297f197c7a93b93df6f997e29234d1106e7f1ef59",
+      "newline": "e99c0b9a9e9304621b39842a11a35e5c88bec49b938be080e1ec92e1813b8fbb"
+    },
+    "connections": {
+      "a3_glyph_trampoline": "de24a9960f799c6bfbe64f9337e781b9ddfa49475b19ec86e385fd4ed581c585",
+      "a3_glyph_hook": "ed6ef6982d315dcc00fe0c628d6f700c48718c9953665dd8963ed3a0d5c2fddf"
+    }
+  },
+  "consumer_evidence_inputs": {
+    "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/candidate.gba": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+    "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/money_repro/reads.log": "9a88576f72d5911160a90f83d1c8628c5c5a19e60eae1b2dcd3f8baeb8565610",
+    "/Users/tarucy/project/aw-kor/temp/continuation_2026-09-30/round29/runtime/reads.log": "fb581ad7d556e476813fd5f2b36c706d623389eba73d61aa629a80c709b6417c"
+  },
+  "invalid_pair_tokens": 0,
+  "decode_unmapped_pair_counts": {},
+  "final_glyph_bytes_checked": false,
+  "layout_unverified_messages": 2276,
+  "structural_errors": 0,
+  "width_candidates": 8,
+  "known_control_width_candidates": 1,
+  "confirmed_portrait_width_candidates": 0,
+  "native_map_descriptors": 180,
+  "native_title_pointers": 179,
+  "native_strict_title_pointers": 121,
+  "native_title_unverified_pointers": 58,
+  "all_table_strict_title_entries": 130,
+  "active_title_pair_errors": 0,
+  "inactive_title_pair_errors": 1,
+  "coverage_status": "incomplete: pixel layout, unknown commands and other UI consumers need separate evidence",
+  "scope_limits": [
+    "44 requires both revision-bound portrait PNG and per-message verified native consumer evidence",
+    "relocation overlap checks cover manifest records and original occupied bytes; other writers require build-integrity QA",
+    "historical trace/ROM pairing is declared local provenance, not an independently attested trace header",
+    "source ranges and A3 glyph-entry traces do not establish a command consumer",
+    "57/4b/09/0a/styles/20 are verified only for bound 31424c-script messages; other consumers stay unknown",
+    "unverified interior20 advance blocks the affected row verdict",
+    "width is a conditional screen-size filter, not a pixel clipping verdict",
+    "OBJ/menu assets and translation meaning are outside this audit",
+    "syntactically valid/decoded SJIS does not prove a registered or visible final ROM glyph; glyph bytes are unverified"
+  ],
+  "inputs": {
+    "original/Game Boy Wars Advance 1+2 (Japan).gba": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+    "temp/continuation_2026-09-30/round29/candidate.gba": "7b1523370485bdd21ac99e625f6879b7d397e330e23afba4f6fc8270946dcfe4",
+    "temp/continuation_2026-09-30/round29/repoint_manifest.json": "76f0b97ad69806c078944226744c47e0bdc19da1c6a0eaade6c56a5738ba82c1",
+    "temp/continuation_2026-09-30/round29/candidate.gba.build.json": "371a220954391996235553ce64144b17cd22f0ed62a7bcc8de92e3e373604159",
+    "/Users/tarucy/project/aw-kor/data/syllable_to_code_2350.json": "7f4f32022d8af640cb628b418769dbf3e70e964a0740ba4b32c6ff017e26548f",
+    "temp/continuation_2026-09-30/round29/current_consumer_evidence.json": "58e160d8dcc5369ef1803f556c93085b6b64e93f2040470462bab078a9a649e5"
+  }
+}

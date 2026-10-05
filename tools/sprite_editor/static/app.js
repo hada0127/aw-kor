@@ -40,6 +40,7 @@ function card(s) {
 async function selectSprite(id) {
   const t = await jget(`/api/tile?id=${encodeURIComponent(id)}`);
   if (!t.ok) { setStatus("오류: " + t.error); return; }
+  S.powerTitleBinding = t.power_title_binding || null;
   S.id = id; S.w = t.width; S.h = t.height; S.indices = t.indices; S.cols = t.tile_cols || (t.width / 8);
   S.palette = (t.palette || []).map(c => c.slice(0, 3));
   while (S.palette.length < 16) S.palette.push([0, 0, 0]);
@@ -109,7 +110,7 @@ function applyPalette(name) {
   while (S.palette.length < 16) S.palette.push([0, 0, 0]);
   drawPalette(); draw();
   $("#palfix").disabled = false;
-  setStatus("팔레트 적용: " + name + " (고정하려면 ‘고정’)");
+  setStatus("미리보기 팔레트: " + name + " (고정하려면 ‘고정’)");
 }
 function rgb(c) { return `rgb(${c[0]},${c[1]},${c[2]})`; }
 function drawPalette() {
@@ -287,7 +288,7 @@ function wire() {
   });
   $("#save").onclick = async () => {
     if (!S.id) return;
-    const r = await jpost("/api/save", { id: S.id, indices: S.indices, palette: S.palette });
+    const r = await jpost("/api/save", { id: S.id, indices: S.indices, palette: S.palette, power_title_binding: S.powerTitleBinding });
     if (r.ok) { setStatus(`저장됨 ${S.id} (raw ${r.raw_len}B / 원본 ${r.orig_size}B, fits=${r.fits_raw})`); S.dirty = false; $("#save").disabled = true; $("#revert").disabled = false; loadList(); refreshOnscreen(!$("#onscreenwrap").hidden); }
     else setStatus("오류: " + r.error);
   };
@@ -312,7 +313,7 @@ function wire() {
   $("#palfix").onclick = async () => {
     if (!S.id || !S.palette) return;
     const r = await jpost("/api/setpalette", { id: S.id, palette: S.palette });
-    setStatus(r.ok ? `팔레트 고정 저장: ${S.id}` : "오류: " + r.error);
+    setStatus(r.ok ? `미리보기 팔레트 저장(ROM 색상 변경 없음): ${S.id}` : "오류: " + r.error);
     if (r.ok) loadList();
   };
 }

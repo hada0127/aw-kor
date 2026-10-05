@@ -1,0 +1,164 @@
+{
+  "rom_sha256": "dab1b8169aec69fc6ea281c2d70c37d5fe433ae1bc43d2a4a4802a30701c25da",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m7_day1_save/game_save.json",
+  "save_sha256": "6a13b53b9761ef826c8454616216bcc1bd68d80dbab28379a3c2d9bc893e7eb3",
+  "actions": 149,
+  "final_frame_counter": "OK framecounter 27574",
+  "screens": [
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_A.png",
+      "png_sha256": "038cb358222cec530168604bb7ebc18a426177a773b66ddd0701aa0c83bc23a3",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0008_A_0006012.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 9,
+      "source_segment": 156,
+      "png": "009_source156_A.png",
+      "png_sha256": "376723ddfc760cc01dfd28d4a8ebe75a2d29036c303e4054e04023fdbb4c1613",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0156_A_0068590.png",
+      "changed_bbox": [
+        17,
+        17,
+        174,
+        160
+      ]
+    },
+    {
+      "replay_segment": 13,
+      "source_segment": 160,
+      "png": "013_source160_A.png",
+      "png_sha256": "4ac2da6eddaa2d94abe3ad567b96889f8b0564f478e1361063af0db1e3186aaa",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0160_A_0069398.png",
+      "changed_bbox": [
+        80,
+        54,
+        175,
+        152
+      ]
+    },
+    {
+      "replay_segment": 23,
+      "source_segment": 170,
+      "png": "023_source170_DOWN.png",
+      "png_sha256": "c6913b3c7977654269ca25fc5c0c92f73ce78bda89f8e26386d682f63e548c3c",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0170_DOWN_0069898.png",
+      "changed_bbox": [
+        3,
+        54,
+        174,
+        160
+      ]
+    },
+    {
+      "replay_segment": 133,
+      "source_segment": 280,
+      "png": "133_source280_A.png",
+      "png_sha256": "8483657a31ee7c549f1bd49bb9c7c26293386b62e4329ba9af8d1ee16060cc8d",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0280_A_0079158.png",
+      "changed_bbox": [
+        17,
+        17,
+        191,
+        160
+      ]
+    },
+    {
+      "replay_segment": 144,
+      "source_segment": 291,
+      "png": "144_source291_A.png",
+      "png_sha256": "228740eec313dbcc508e24ca2a679a70a4929adb9448c49247fa6031559015b0",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0291_A_0087020.png",
+      "changed_bbox": [
+        4,
+        32,
+        175,
+        152
+      ]
+    },
+    {
+      "replay_segment": 145,
+      "source_segment": 292,
+      "png": "145_source292_A.png",
+      "png_sha256": "380a214203b1250d72ee5d9c5b9c3af76df621df9b563394f308a28dba0cd953",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0292_A_0087622.png",
+      "changed_bbox": [
+        4,
+        32,
+        199,
+        151
+      ],
+      "visual_review": {
+        "passed": true,
+        "note": "Catherine→Ryo 문맥의 예측형 익혀 갈 거야. 전체 표시, 끝부호 정상"
+      },
+      "permanent_png": "round9_lab_145_source292_A.png"
+    },
+    {
+      "replay_segment": 146,
+      "source_segment": 293,
+      "png": "146_source293_A.png",
+      "png_sha256": "5f5b974981dcfbeb492e2dca04d5fcf2b4641257de6f166f51f131fbc3bdafec",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0293_A_0088224.png",
+      "changed_bbox": [
+        4,
+        32,
+        175,
+        151
+      ]
+    },
+    {
+      "replay_segment": 147,
+      "source_segment": 294,
+      "png": "147_source294_A.png",
+      "png_sha256": "fa12c5226aa2f39aac7660e0ffab1203532ae72c0c41d15e815c6018714943a3",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0294_A_0088826.png",
+      "changed_bbox": [
+        8,
+        32,
+        220,
+        151
+      ]
+    },
+    {
+      "replay_segment": 148,
+      "source_segment": 295,
+      "png": "148_source295_A.png",
+      "png_sha256": "d4139918303196c8e404a3edbb3f8da60ad35eb62b8398712878bb7690e622f6",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0295_A_0089428.png",
+      "changed_bbox": [
+        8,
+        32,
+        172,
+        136
+      ],
+      "visual_review": {
+        "passed": true,
+        "note": "그건, 이 암초야. 경계 공백 및 강조 암초 유지, 전체 표시"
+      },
+      "permanent_png": "round9_lab_148_source295_A.png"
+    },
+    {
+      "replay_segment": 149,
+      "source_segment": 296,
+      "png": "149_source296_A.png",
+      "png_sha256": "56c254d84addfdee6feb67f016c97ba5fe27a0086242457b45c070149612f90b",
+      "before": "output/qa/part2_2026-09-23/round5_m6_live/0296_A_0090030.png",
+      "changed_bbox": [
+        32,
+        31,
+        172,
+        152
+      ]
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

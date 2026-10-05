@@ -1,0 +1,150 @@
+{
+  "rom_sha256": "09d05990d171709e86f913690b05ecad15f550bd7f944402f2126466ca3c058b",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part2_2026-09-23/m7_victory_save/game_save.json",
+  "save_sha256": "a74dcbae9daaa98095630110e1067054e5642f480d70045d1408d42f7fd69aef",
+  "actions": 37,
+  "final_frame_counter": "OK framecounter 23241",
+  "screens": [
+    {
+      "replay_segment": 8,
+      "source_segment": 8,
+      "png": "008_source8_A.png",
+      "png_sha256": "05317c811c4e1588b4efce21674458dfc0ef0476f95c467611aff75334e25cff",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0008_A_0006012.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 12,
+      "source_segment": 191,
+      "png": "012_source191_A.png",
+      "png_sha256": "a2aa6445a0b294e6184b51902f14659640c627cd5e3927c763551f008b764688",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0191_A_0051822.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        138
+      ]
+    },
+    {
+      "replay_segment": 13,
+      "source_segment": 192,
+      "png": "013_source192_A.png",
+      "png_sha256": "48c11864be165708132115f6b875b1b7a29b87cd6b3c098ac7e438abbee161a1",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0192_A_0052424.png",
+      "changed_bbox": [
+        118,
+        75,
+        183,
+        152
+      ]
+    },
+    {
+      "replay_segment": 17,
+      "source_segment": 196,
+      "png": "017_source196_A.png",
+      "png_sha256": "95b50286dd8f3860fb7b17c28deba775043738b2bc34f95d3ace13e65c399eeb",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0196_A_0054832.png",
+      "changed_bbox": [
+        89,
+        75,
+        159,
+        152
+      ],
+      "permanent_png": "round11_m8_017_source196_A.png"
+    },
+    {
+      "replay_segment": 26,
+      "source_segment": 205,
+      "png": "026_source205_NONE.png",
+      "png_sha256": "d56e929115414784ee3bdc2c1b947e9dc7c6a76acd691c459110da3847e91a52",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0205_NONE_0060248.png",
+      "changed_bbox": [
+        44,
+        5,
+        195,
+        118
+      ],
+      "permanent_png": "round11_m8_026_source205_NONE.png"
+    },
+    {
+      "replay_segment": 27,
+      "source_segment": 206,
+      "png": "027_source206_RIGHT.png",
+      "png_sha256": "5bd536abf8db45146d5238e954d0b16fe5e6ccfab5e48827a3a76638d2bd7776",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0206_RIGHT_0060850.png",
+      "changed_bbox": [
+        179,
+        5,
+        195,
+        32
+      ],
+      "permanent_png": "round11_m8_027_source206_RIGHT.png"
+    },
+    {
+      "replay_segment": 28,
+      "source_segment": 207,
+      "png": "028_source207_RIGHT.png",
+      "png_sha256": "8c2eb141e92ccbdf562112d46fa64035d7884683581ee8cd06d5284bb2ce268a",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0207_RIGHT_0061452.png",
+      "changed_bbox": [
+        179,
+        5,
+        195,
+        24
+      ],
+      "permanent_png": "round11_m8_028_source207_RIGHT.png"
+    },
+    {
+      "replay_segment": 29,
+      "source_segment": 208,
+      "png": "029_source208_RIGHT.png",
+      "png_sha256": "0c27cf2bc9dd59b8fa7291f85d5dc3b034270933d68331442c5f2b72955564a6",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0208_RIGHT_0062054.png",
+      "changed_bbox": [
+        44,
+        5,
+        195,
+        118
+      ],
+      "permanent_png": "round11_m8_029_source208_RIGHT.png"
+    },
+    {
+      "replay_segment": 37,
+      "source_segment": 216,
+      "png": "037_source216_A.png",
+      "png_sha256": "1461abb16234cdc41ceeedba46a30d1b2391dcd93ae1063fd3e27d07304bf16e",
+      "before": "output/qa/part2_2026-09-23/round8_m7_live/0216_A_0067470.png",
+      "changed_bbox": [
+        57,
+        85,
+        238,
+        152
+      ],
+      "permanent_png": "round11_m8_037_source216_A.png"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence",
+  "visual_review": {
+    "reviewed_source_segments": [
+      196,
+      205,
+      206,
+      207,
+      208,
+      216
+    ],
+    "observations": [
+      "스네이크가 침공하는 관형절 표시",
+      "료 초상 선택 이름 료; 도미노/맥스 유지",
+      "조사해 보고 / 뭔가 알게 되는 대로 보고할게 연결 표시"
+    ],
+    "scope": "targeted screenshots only; no ending or all-frame claim"
+  }
+}

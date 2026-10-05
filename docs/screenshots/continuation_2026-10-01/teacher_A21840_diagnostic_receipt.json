@@ -1,0 +1,30 @@
+{
+  "scope": "Cross-ROM diagnostic only. Old 0397 pre-message state loaded into round32; next message fetched by ordinary A input. No pointer/memory edits. Not normal campaign or ending evidence.",
+  "candidate_rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+  "source_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0397_NONE_0086161.checkpoint.json",
+  "source_state_sha256": "6f1dc029fe401f8fc33875ed8227de2650a54b4095d077b0851580511a3eb87b",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "exit_code": 0,
+  "commands": "loadstate /Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0397_NONE_0086161.ss0\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/before.raw\nkeys 1\nframes 6\nkeys 0\nframes 180\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/after.raw\nframecounter\nquit\n",
+  "images": {
+    "before": {
+      "rgb_sha256": "cd406bd52ca7697d9a1c9ad0ea42a4fcaf5efd92db394bb1a5862e1d450e79e3",
+      "png": "/Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/before.png"
+    },
+    "after": {
+      "rgb_sha256": "67cd94e85781dfccf85e00b8794c78d022425809c7bfead8adfa6226164f66f5",
+      "png": "/Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/after.png"
+    }
+  },
+  "pixels_reviewed": true,
+  "pixel_scope": "First page displays \uadf8\ub807\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4, \uc120\uc0dd\ub2d8! without clipping; remainder/duplicate not yet reviewed",
+  "watch_commands": "loadstate /Users/tarucy/project/aw-kor/output/qa/part2_2026-09-30/yellow_route_fast2/0397_NONE_0086161.ss0\nwatchaddr 08A37310 4 r /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/native_reads.log\nwatchaddr 08A3731C 4 r KEEP\nwatchaddr 08A506BC 35 r KEEP\nwatchaddr 08A507E0 35 r KEEP\nkeys 1\nframes 6\nkeys 0\nframes 180\nshot /Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/traced_after.raw\nframecounter\nquit\n",
+  "watch_log": "/Users/tarucy/project/aw-kor/temp/continuation_2026-10-01/teacher_runtime/native_reads.log",
+  "watched_rgb_matches_uninstrumented": true,
+  "message_source": "0xA21840",
+  "native_pointer": "0xA37310",
+  "relocated_payload": "0xA506BC",
+  "native_read_trace_sha256": "329354c7794a8040998b648ead2b93196517e47c1eb4e75ae74793b23b726b00",
+  "duplicate_message_A21990_verified": false,
+  "consumer_scope": "Native pointer fetch and first-page payload reads observed. Cross-ROM diagnostic; first-page pixels only. No normal campaign proof."
+}

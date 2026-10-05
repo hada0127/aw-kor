@@ -1,0 +1,40 @@
+{
+  "changes": "Seven previously absent compatibility names only; no overwritten files or mGBA changes",
+  "links": [
+    {
+      "link": "/opt/homebrew/lib/libavcodec.62.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libavcodec.62.28.101.dylib",
+      "sha256": "4c9559b86969c977b7ad6fa3f38a371ccbf21b598dddfe12053b5cfaf474bbee"
+    },
+    {
+      "link": "/opt/homebrew/lib/libavfilter.11.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libavfilter.11.14.101.dylib",
+      "sha256": "98ea6c05afc96c6e0501760e8f055847dfef95780ddbe48ff8ea93331de8fdc7"
+    },
+    {
+      "link": "/opt/homebrew/lib/libavformat.62.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libavformat.62.12.101.dylib",
+      "sha256": "a9a87703ad7a2a8eff89dc2a3546e17e31f55ffbc043abbf53b1e9b4576a2db4"
+    },
+    {
+      "link": "/opt/homebrew/lib/libavutil.60.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libavutil.60.26.101.dylib",
+      "sha256": "72c0ec205a1065326387ee67adc2848ae368ffd4e2d7b6151fd1db24f026aac6"
+    },
+    {
+      "link": "/opt/homebrew/lib/libswscale.9.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libswscale.9.5.101.dylib",
+      "sha256": "eae94acc0ff09ccfa863c1882d193e9fc26c85064bf255af68916a0986c25981"
+    },
+    {
+      "link": "/opt/homebrew/lib/libswresample.6.dylib",
+      "target": "/opt/homebrew/Cellar/ffmpeg/8.1.1/lib/libswresample.6.3.101.dylib",
+      "sha256": "79956dc9b522f344a170aedd12668d389ec711bb230da0e12a10066dfc9ab323"
+    },
+    {
+      "link": "/opt/homebrew/lib/libx265.216.dylib",
+      "target": "/opt/homebrew/Cellar/x265/4.2/lib/libx265.216.dylib",
+      "sha256": "8a60e5b0fd09bf40e18f3bf0260072bf016289bd857fe4bd96e4495394b74719"
+    }
+  ]
+}

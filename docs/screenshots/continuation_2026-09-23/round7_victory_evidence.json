@@ -1,0 +1,265 @@
+{
+  "rom_sha256": "67a324e2684ce1e5822d77535e22fdcbfbdbfa77d477e5d7d6e91eed3265e96f",
+  "normal_save_cold_boot": true,
+  "save_receipt": "temp/part1_2026-09-23/day21_prefinish_round4_save/game_save.json",
+  "save_sha256": "0826919f319ceb2fbae1ab094f80de232446ba4cca2a725ad35215ffc5c4b8d7",
+  "actions": 88,
+  "final_frame_counter": "OK framecounter 34457",
+  "screens": [
+    {
+      "replay_segment": 38,
+      "source_segment": 375,
+      "png": "038_source375_A.png",
+      "png_sha256": "e1547e441d9a00e70784e697fcd30263ed79d288e9e6d18286a1e107bc4340e2",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0375_A_0046561.png",
+      "changed_bbox": [
+        0,
+        101,
+        240,
+        151
+      ]
+    },
+    {
+      "replay_segment": 42,
+      "source_segment": 379,
+      "png": "042_source379_A.png",
+      "png_sha256": "291ad286db88da85c032c8a08664a3e84cbf92fd2bd08cd10cd8081e9665b6c4",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0379_A_0048969.png",
+      "changed_bbox": [
+        0,
+        101,
+        240,
+        152
+      ]
+    },
+    {
+      "replay_segment": 49,
+      "source_segment": 386,
+      "png": "049_source386_A.png",
+      "png_sha256": "3177bdd03921d68811c762700f3a5f9c9c2edfeaad11f7539bd001997486dbeb",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0386_A_0053183.png",
+      "changed_bbox": [
+        0,
+        101,
+        240,
+        152
+      ]
+    },
+    {
+      "replay_segment": 52,
+      "source_segment": 389,
+      "png": "052_source389_A.png",
+      "png_sha256": "4ab2bb953eae1b649bff4bf78e5a934d8bf44569122bba1cd803ec36739daed0",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0389_A_0055589.png",
+      "changed_bbox": null
+    },
+    {
+      "replay_segment": 53,
+      "source_segment": 390,
+      "png": "053_source390_A.png",
+      "png_sha256": "1bfe4b41388a274537b1fc96731b5c56eb67da23dfe5ff7fcf3840ceff105a88",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0390_A_0056191.png",
+      "changed_bbox": null
+    },
+    {
+      "replay_segment": 62,
+      "source_segment": 399,
+      "png": "062_source399_A.png",
+      "png_sha256": "266b5c5fbf7208f8c04e79df891f95aba9dbe40ceb8eee73698997d045f27b5c",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0399_A_0061607.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        151
+      ]
+    },
+    {
+      "replay_segment": 74,
+      "source_segment": 411,
+      "png": "074_source411_R.png",
+      "png_sha256": "717c3dfcdb585395ca19433096f6c420e1d5223075e9940aeb6b5ecce45a574b",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0411_R_0066111.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 80,
+      "source_segment": 417,
+      "png": "080_source417_R.png",
+      "png_sha256": "2ea7d6950051de2dbab39be07d36b13a6cf86de3403454d53ef33572d5cae759",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0417_R_0066523.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 84,
+      "source_segment": 421,
+      "png": "084_source421_R.png",
+      "png_sha256": "2e565cbe47384046298b81956f7aea9db0640400b3a69d6f111e46e04decc770",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0421_R_0066851.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "replay_segment": 88,
+      "source_segment": 425,
+      "png": "088_source425_R.png",
+      "png_sha256": "11caf22de110a365811efe7d6821fba803a274795a1b73417c801c83361baa14",
+      "before": "output/qa/part1_2026-09-23/day18_round4_cold_live/0425_R_0067179.png",
+      "changed_bbox": [
+        0,
+        0,
+        240,
+        160
+      ]
+    },
+    {
+      "png": "fighter_after.png",
+      "fighter": {
+        "army": 1,
+        "slot": 3,
+        "x": 13,
+        "y": 3,
+        "hp": 100
+      },
+      "initial_cursor": [
+        16,
+        192,
+        1,
+        12
+      ],
+      "inputs": [
+        {
+          "key": "B",
+          "hold_frames": 2,
+          "release_frames": 120
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "RIGHT",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "UP",
+          "hold_frames": 2,
+          "release_frames": 40
+        },
+        {
+          "key": "R",
+          "hold_frames": 2,
+          "release_frames": 120
+        }
+      ],
+      "png_sha256": "23286284d754681fabb3d265919c457072a632121dcf1a65045c778d29fcd505"
+    }
+  ],
+  "scope": "targeted actual rendering verification; not all-frame visual approval or ending evidence"
+}

@@ -279,19 +279,13 @@ EDITOR_VISIBLE_FONT_DIALOGUE_RANGES = [
     # unlock/map labels, CO names, CO power names, and army labels.
     (0xB81800, 0xB85000),
 ]
-GLYPH_DICTIONARY_TEXT_ADDRS = {
-    # Compact CO power renderers consume these rows as two-byte glyph dictionaries,
-    # not as display strings. build_dialogue_map excludes them; keep scene
-    # catalog/editor visibility in lockstep.
-    0xA3B880,
-    0xB842E8,
-}
+from glyph_dictionary_sources import is_glyph_dictionary_address
 
 
 def _editor_visible_font_dialogue(addr):
     if addr is None:
         return False
-    if addr in GLYPH_DICTIONARY_TEXT_ADDRS:
+    if is_glyph_dictionary_address(addr):
         return False
     return any(start <= addr < end for start, end in EDITOR_VISIBLE_FONT_DIALOGUE_RANGES)
 
@@ -300,6 +294,8 @@ def _review_only_dialogue(group, guards):
     """광역 scene으로 흘러가면 오해를 만드는 추출 노이즈/빌드 제외 후보."""
     members = group.get("members") or []
     if not members:
+        return True
+    if all(is_glyph_dictionary_address(_member_addr_slot(m, guards)[0]) for m in members):
         return True
     region = group.get("region")
     if region == "font" and not _editor_visible_font_dialogue(_member_addr_slot(members[0], guards)[0]):
@@ -446,8 +442,9 @@ SCENES = [
              [0x805104, 0x805204],  # 공통 복제본: 1편 미션명 테이블
          ])),
     dict(id="18_part1_battle", scope="part1", subtag="전투",
-         title="1편 전투 N일째 배너", canvas=None, screenshot="30_battle_attack",
-         sprite_ids=["lz77_00EE5E14"], sprite=[],
+         title="1편 전투 N일째 배너·데미지 예측 라벨", canvas=None, screenshot="30_battle_attack",
+         # 0xBD4FBC: Part 1 damage bubble (only pointer 0x08B3972C is Part 1 code).
+         sprite_ids=["lz77_00EE5E14", "lz77_00BD4FBC"], sprite=[],
          dialogue=dict(regions=["part1"], addr_ranges=[
              [0xD8C540, 0xD8C560],  # 전 보급 중 직접 패치 메시지
              [0xDF2932, 0xDF2D00],  # 저장/항복/전투 애니/생산 제한 UI
@@ -566,19 +563,20 @@ SCENES = [
          related_dialogue_scene_ids=["30a1_part2_redstar_story_early"]),
     dict(id="26_part2_battle_labels", scope="part2", subtag="전투",
          title="2편 전투 라벨(체크·데미지 예측)", canvas="30_battle_attack",
-         sprite_ids=["lz77_0045FCC8", "lz77_00BD4FBC"],
+         # 0x4827C0: Part 2 damage bubble (pointer 0x083376B0, Part 2 code).
+         sprite_ids=["lz77_0045FCC8", "lz77_004827C0"],
          sprite=[],
          dialogue=dict(regions=["part2"], addr_ranges=[
              [0xA30164, 0xA31444],  # 전투/브레이크/CO 대사
              [0xA34B6C, 0xA34F2C],  # 저장/항복/전투 옵션/맵 이름 UI
          ])),
     dict(id="27_part2_battle_objlabels", scope="part2", subtag="전투",
-         title="2편 전투 OBJ 라벨(행동·유닛·지형·상태)", canvas=None, screenshot="31_battle_dialog",
+         title="2편 전투 OBJ 라벨(유닛·지형·상태·구매)", canvas=None, screenshot="31_battle_dialog",
          sprite_ids=["objlabel_p2_terrain_status", "objlabel_p2_terrain_compact",
                      "objlabel_p2_unit_status", "objlabel_p2_unit_compact",
                      "objlabel_p2_co_banner", "objlabel_p2_status_header",
-                     "objlabel_p2_info_screen", "objlabel_p2_action_menu"],
-         sprite=[],
+                     "objlabel_p2_info_screen"],
+         sprite=["part2_objlabel/purchase_captions"],
          dialogue=dict(regions=["part2"], addr_ranges=[
              [0xA31444, 0xA34080],  # 유닛/무기/지형 상세 설명
          ])),

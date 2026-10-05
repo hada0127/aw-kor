@@ -1,0 +1,2 @@
+# Optional CA bundle for python.org Python on macOS; TLS verification stays enabled.
+certifi>=2024.2.2

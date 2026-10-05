@@ -1,0 +1,49 @@
+{
+  "method": "Sequential levels 1/3/6; 30 repetitions per native 240x160 RGB endpoint. Timed PNG save to BytesIO + decode + exact RGB equality; source decoding excluded. One batch; no variance or full-run speed claim.",
+  "machine": "arm64",
+  "python": "3.12.4",
+  "pillow": "10.4.0",
+  "measurements": [
+    {
+      "level": 1,
+      "samples": 17,
+      "repetitions": 30,
+      "seconds": 10.141861748998053,
+      "bytes": 10843770
+    },
+    {
+      "level": 3,
+      "samples": 17,
+      "repetitions": 30,
+      "seconds": 11.602935706847347,
+      "bytes": 10075140
+    },
+    {
+      "level": 6,
+      "samples": 17,
+      "repetitions": 30,
+      "seconds": 20.506832622922957,
+      "bytes": 9044370
+    }
+  ],
+  "samples": {
+    "output/qa/part2_2026-09-30/yellow_route_cold/0009_A_0006013.png": "4b2e2feecdb11e5ec5ab460a6bfe6b9bf5330b3d973fb72a5dfc2d35a99eac06",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0008_A_0004811.png": "c97609fb4c38b6f6bf6d513c1c249b27d307e1438d25834041411c8412b5b912",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0025_A_0013005.png": "23e2b564b61ea78abd4401050c6ddb24faea7f4059f6e1824fba1e64f94c8bc1",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0017_A_0009989.png": "09a47bfdb99c087b850b9c78cd4a5cda9cd17a0a435d973ac89e366b78698b83",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0019_A_0011193.png": "cfb794e164c3314ca9a25be6d923021b36078414189fdb88443c6a2bfc9c059a",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0020_A_0011795.png": "b758c831ab2e5f4308fa7a4ea405183e93079765c829b9f8b1cadd752e9b9bd4",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0013_A_0007581.png": "a50ea6fe94dab45935c8252939e8e1690c8a9b62d72a1d849645b061612a4c86",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0022_A_0012279.png": "efb33fa5b7b6e8e749fec672243bc34071e7ac5a42cbdf3782c91df61034301d",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0030_A_0014215.png": "f3e3caf0a819bbcd5b864e7c5b1d0a02a0e386506ad7bc456594c8f65d621b8d",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0015_A_0008785.png": "014eb096200293740903804edd92d5634a7c4a23a06530fe46e99b852e70adbb",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0018_A_0010591.png": "ad1e3ad3d5dfe658748d222afc2b7b4f6c10af1bd56c203b67efaec8b9efeb29",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0024_A_0012763.png": "1f3bf3d90f9d250f8ce9d87f7287bd457632aac23caf64de5bc0343bb16afd05",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0031_A_0014457.png": "49f006e0dc6e245b30d4513e9d484d73de7ac81133528c594c19d2cd028ca815",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0029_A_0013973.png": "17915613867e0f5e9a92cdb5f38b75ec3637b297f7d0e539596041354151a0df",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0021_A_0012037.png": "3276a66e0d85ef52887fb3eb4caebb140442f091f2220bf69ee6111ebfbbddbe",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0010_A_0006195.png": "3e0f842130801b29717dc9bf277b003a7e37dd82c376df9968edfe35e4446889",
+    "output/qa/part2_2026-09-30/yellow_route_cold/0027_A_0013489.png": "de4c05f2e03a70e37b2201708e53a9b6582076a4c3ec73f9a573582194f57ba7"
+  },
+  "selection_reason": "Level3 trades about 11% more PNG bytes for observed 43% lower encode+decode time vs6; level1 consumes about8% more bytes than3. Reserve15GiB still applies."
+}
