@@ -23,6 +23,7 @@ from PIL import Image, ImageDraw
 from PIL import __version__ as pillow_version
 import frame_png
 from frame_png import encode_frame_png
+from emu_platform import LIBMGBA, harness_env
 
 KEYS = {'A': 1, 'B': 2, 'SELECT': 4, 'START': 8, 'RIGHT': 16, 'LEFT': 32,
         'UP': 64, 'DOWN': 128, 'R': 256, 'L': 512, 'NONE': 0}
@@ -328,7 +329,7 @@ class Recorder:
             if sha(self.out / 'baseline.gba') != self.rom_sha:
                 raise RuntimeError('ROM copy hash mismatch')
             self.harness_sha = sha(args.harness)
-            self.lib_sha = sha(Path('/opt/homebrew/lib/libmgba.dylib').resolve())
+            self.lib_sha = sha(LIBMGBA.resolve())
             seed = None
             game_save = args.game_save
             if game_save:
@@ -336,11 +337,25 @@ class Recorder:
                     raise ValueError('Game-save boot and emulator-state resume are mutually exclusive')
                 from game_save_evidence import verify_receipt, ANCHORED_KIND
                 migration_source = getattr(args, 'game_save_source_rom_sha256', None)
+                emulator_port = None
+                expected_harness, expected_lib = self.harness_sha, self.lib_sha
+                if getattr(args, 'game_save_emulator_port', False):
+                    # Explicit opt-in: carry anchored cartridge bytes to a different harness/libmgba
+                    # build (e.g. macOS -> Linux). Only the receipt's own recorded identity is
+                    # accepted, and the cold boot below must still load the exact save bytes.
+                    declared = json.loads(Path(game_save).read_text(encoding='utf-8'))
+                    if declared.get('kind') != ANCHORED_KIND:
+                        raise ValueError('Emulator port is only supported for anchored game-save receipts')
+                    expected_harness, expected_lib = declared.get('harness_sha256'), declared.get('libmgba_sha256')
+                    if expected_harness == self.harness_sha and expected_lib == self.lib_sha:
+                        raise ValueError('Emulator port requested but harness and library already match the receipt')
+                    emulator_port = {'source_harness_sha256': expected_harness,
+                                     'source_libmgba_sha256': expected_lib}
                 # An anchored receipt is a self-contained chain root: no source run is opened.
                 saved, receipt = verify_receipt(game_save, expected_rom_sha256=self.rom_sha,
                                                 migration_source_sha256=migration_source, frame_cache=frame_verification_cache,
-                                                expected_harness_sha256=self.harness_sha,
-                                                expected_libmgba_sha256=self.lib_sha)
+                                                expected_harness_sha256=expected_harness,
+                                                expected_libmgba_sha256=expected_lib)
                 if migration_source is not None:
                     from game_save_evidence import verify_migration_storage
                     if receipt['kind'] == ANCHORED_KIND:
@@ -349,7 +364,7 @@ class Recorder:
                     else:
                         verify_migration_storage(Path(receipt['source_checkpoint']).parent / 'baseline.gba',
                                                  self.out / 'baseline.gba', saved.stat().st_size)
-                if receipt['libmgba_sha256'] != self.lib_sha:
+                if receipt['libmgba_sha256'] != expected_lib:
                     raise ValueError('Game-save origin uses a different emulator library')
                 shutil.copyfile(saved, self.out / 'game.sav')
                 shutil.copyfile(game_save, self.out / 'game_save.json')
@@ -360,6 +375,8 @@ class Recorder:
                 if migration_source is not None:
                     seed['migration'] = {'source_rom_sha256': migration_source,
                                          'target_rom_sha256': self.rom_sha}
+                if emulator_port is not None:
+                    seed['emulator_port'] = emulator_port
                 if any(sha(self.out / name) != seed['save_sha256']
                        for name in ('game.sav', 'working_game.sav')):
                     raise ValueError('Game-save seed copy mismatch')
@@ -374,8 +391,7 @@ class Recorder:
                     raise RuntimeError('Invalid parent state path')
                 if sha(state) != parent['state_sha256']:
                     raise RuntimeError('Resume state hash mismatch')
-            env = {k: v for k, v in os.environ.items() if not k.startswith("DYLD_")}
-            env['DYLD_LIBRARY_PATH'] = '/opt/homebrew/lib'
+            env = harness_env()
             log_path = self.out / 'emulator.log'
             if getattr(args, 'gzip_emulator_log', False):
                 from emulator_log_archive import LogArchive
@@ -830,6 +846,9 @@ def main():
     parser.add_argument('--export-game-save-out', type=Path, help='New evidence directory required with --export-game-save')
     start.add_argument('--game-save', type=Path, help='Verified game_save_evidence.py receipt; cold boot with cartridge save. An anchored receipt (--anchored export) starts a new chain root that never re-verifies the source run')
     parser.add_argument('--game-save-source-rom-sha256', help='Explicit source SHA-256 for normal SRAM migration to a compatible patch ROM; never migrates emulator states')
+    parser.add_argument('--game-save-emulator-port', action='store_true',
+                        help='Explicit opt-in: boot an anchored game-save with a different harness/libmgba build '
+                             '(e.g. macOS to Linux); records both identities in baseline initial_game_save.emulator_port')
     parser.add_argument('--min-free-gib', type=float, default=10)
     parser.add_argument('--timeout', type=float, default=10)
     parser.add_argument('--gzip-emulator-log', action='store_true',
@@ -847,6 +866,8 @@ def main():
         parser.error('--cache-resume-frames requires --resume')
     if args.game_save_source_rom_sha256 and not (args.game_save or args.export_game_save):
         parser.error('--game-save-source-rom-sha256 requires --game-save')
+    if args.game_save_emulator_port and not args.game_save:
+        parser.error('--game-save-emulator-port requires --game-save')
     if args.min_free_gib < 1 or args.timeout <= 0:
         parser.error('Reserve must be >= 1 GiB and timeout positive')
     # The existing harness protocol splits paths at whitespace.

@@ -104,7 +104,7 @@ class CacheTests(unittest.TestCase):
   args=SimpleNamespace(out=self.root/'cold',rom=self.root/'baseline.gba',harness=harness,resume=None,game_save=receipt,min_free_gib=1,timeout=1,png_compress_level=3)
   original=P.sha
   def digest(path):
-   return 'b'*64 if 'libmgba' in Path(path).name and Path(path).suffix=='.dylib' else original(path)
+   return 'b'*64 if Path(path).resolve()==P.LIBMGBA.resolve() else original(path)
   with patch.object(P,'sha',side_effect=digest),patch.object(P.subprocess,'Popen',side_effect=RuntimeError('native launch intentionally blocked')) as launch,patch('builtins.print'):
    with self.assertRaisesRegex(RuntimeError,'intentionally blocked'):P.Recorder(args,frame_verification_cache=c)
   launch.assert_called_once();self.assertEqual((c.decodes,c.hits),(1,1))
@@ -126,7 +126,7 @@ class CacheTests(unittest.TestCase):
   args=SimpleNamespace(out=self.root/'resume',rom=self.root/'baseline.gba',harness=harness,resume=self.cp_path,game_save=None,min_free_gib=1,timeout=1,png_compress_level=3)
   original=P.sha
   def digest(path):
-   return 'b'*64 if 'libmgba' in Path(path).name and Path(path).suffix=='.dylib' else original(path)
+   return 'b'*64 if Path(path).resolve()==P.LIBMGBA.resolve() else original(path)
   with patch.object(P,'sha',side_effect=digest),patch.object(P.subprocess,'Popen',side_effect=RuntimeError('native launch intentionally blocked')) as launch,patch('builtins.print'):
    with self.assertRaisesRegex(RuntimeError,'intentionally blocked'):P.Recorder(args,frame_verification_cache=c)
   launch.assert_called_once();self.assertEqual((c.decodes,c.hits),(1,1))

@@ -36,9 +36,9 @@ ROOT = Path(__file__).resolve().parents[1]
 class ConsumerProofTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        library = Path('/opt/homebrew/lib/libmgba.dylib').resolve()
+        library = G.LIBMGBA.resolve()
         if not library.is_file():
-            raise RuntimeError('Consumer export fixture requires this project macOS libmgba installation')
+            raise RuntimeError('Consumer export fixture requires this project libmgba installation')
         cls.lib_sha = P.sha(library)
         print(json.dumps({'consumer_test_module': str(Path(P.__file__).resolve()), 'module_sha256': P.sha(Path(P.__file__))}), flush=True)
 

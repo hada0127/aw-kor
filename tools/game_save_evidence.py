@@ -19,6 +19,7 @@ import shutil
 import subprocess
 
 from playthrough_capture import sha, save_json, verify_parent
+from emu_platform import LIBMGBA, harness_env
 
 
 VALID_SAVE_SIZES = {512, 8192, 32768, 65536, 131072}
@@ -29,7 +30,6 @@ STORAGE_PATTERN = rb'(FLASH1M|FLASH512|FLASH|SRAM_F|SRAM|EEPROM)_V[0-9]{3}'
 STORAGE_CAPACITIES = {b'FLASH1M': {131072}, b'FLASH512': {65536}, b'FLASH': {65536},
                       b'SRAM': {32768}, b'SRAM_F': {32768}, b'EEPROM': {512, 8192}}
 SOURCE_CHAIN_MODES = {'full-frame-chain', 'checkpoint-binaries-only'}
-LIBMGBA = Path('/opt/homebrew/lib/libmgba.dylib')
 
 
 def rom_storage_types(rom):
@@ -153,11 +153,23 @@ def verify_recorded_seed(root, baseline):
         raise ValueError('Unknown recorded game-save receipt')
     if receipt['save_sha256'] != seed['save_sha256']:
         raise ValueError('Recorded game-save receipt mismatch')
+    port = seed.get('emulator_port')
+    expected_harness, expected_lib = baseline.get('harness_sha256'), baseline.get('libmgba_sha256')
+    if port is not None:
+        # Explicit --game-save-emulator-port run: the receipt keeps its source identity.
+        if (receipt['kind'] != ANCHORED_KIND or not isinstance(port, dict)
+                or set(port) != {'source_harness_sha256', 'source_libmgba_sha256'}
+                or port['source_harness_sha256'] != receipt.get('harness_sha256')
+                or port['source_libmgba_sha256'] != receipt.get('libmgba_sha256')
+                or (port['source_harness_sha256'] == expected_harness
+                    and port['source_libmgba_sha256'] == expected_lib)):
+            raise ValueError('Recorded game-save emulator port is malformed or mismatched')
+        expected_harness, expected_lib = port['source_harness_sha256'], port['source_libmgba_sha256']
     if receipt['kind'] == ANCHORED_KIND:
         # The anchored receipt is this run's chain root: check only local copies.
         verify_anchored_record(receipt, contained_file(root, seed['save']),
-                               expected_harness_sha256=baseline.get('harness_sha256'),
-                               expected_libmgba_sha256=baseline.get('libmgba_sha256'))
+                               expected_harness_sha256=expected_harness,
+                               expected_libmgba_sha256=expected_lib)
     target = baseline.get('rom_sha256')
     if target and receipt['rom_sha256'] != target:
         # Older captures predate explicit migration metadata; preserve their
@@ -188,8 +200,7 @@ def dump_checkpoint_save(checkpoint_path, checkpoint, harness, out):
     shutil.copyfile(state, out / 'source.ss0')
     if sha(out / 'source.gba') != checkpoint['rom_sha256'] or sha(out / 'source.ss0') != checkpoint['state_sha256']:
         raise ValueError('Export source copy mismatch')
-    env = {k: v for k, v in os.environ.items() if not k.startswith("DYLD_")}
-    env['DYLD_LIBRARY_PATH'] = '/opt/homebrew/lib'
+    env = harness_env()
     command = f'loadstate {out / "source.ss0"}\nframecounter\ndumpsave {out / "game.sav"}\nframecounter\nquit\n'
     result = subprocess.run([str(harness.resolve()), str(out / 'source.gba'), str(out / 'emulator.log')],
                             input=command, text=True, capture_output=True, timeout=30, env=env)

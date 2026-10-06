@@ -307,6 +307,33 @@ class AnchoredGameSaveTests(unittest.TestCase):
                 self.assertRaisesRegex(ValueError, 'harness mismatch'), patch('builtins.print'):
             P.Recorder(self.args(out=self.root / 'bad_harness', harness=other, game_save=receipt))
 
+    def test_explicit_emulator_port_boots_anchor_on_other_harness_and_resumes(self):
+        receipt = self.anchor()
+        shutil.rmtree(self.source)
+        other = self.root / 'other_harness'
+        other.write_text(FAKE_HARNESS + '# ported build\n')
+        other.chmod(0o755)
+        # Same harness: an explicit port claim is refused (nothing to port).
+        with patch.object(P.subprocess, 'Popen', side_effect=AssertionError('must fail before launch')), \
+                self.assertRaisesRegex(ValueError, 'already match'), patch('builtins.print'):
+            P.Recorder(self.args(out=self.root / 'noop_port', game_save=receipt, game_save_emulator_port=True))
+        run1 = self.record(out=self.root / 'port1', harness=other, game_save=receipt,
+                           game_save_emulator_port=True, actions=[2])
+        baseline = json.loads((run1 / 'baseline.json').read_text())
+        record = json.loads(receipt.read_text())
+        self.assertEqual(baseline['harness_sha256'], sha(other))
+        self.assertEqual(baseline['initial_game_save']['emulator_port'],
+                         {'source_harness_sha256': record['harness_sha256'],
+                          'source_libmgba_sha256': record['libmgba_sha256']})
+        run2 = self.record(out=self.root / 'port2', harness=other, resume=run1 / 'resume.checkpoint.json', actions=[1])
+        cp2 = run2 / 'resume.checkpoint.json'
+        P.verify_parent(cp2, json.loads(cp2.read_text()))
+        # A tampered port declaration no longer matches the receipt.
+        seed = baseline['initial_game_save']
+        for bad in ({**seed['emulator_port'], 'source_harness_sha256': 'e' * 64}, {'x': 1}):
+            with self.subTest(bad=bad), self.assertRaisesRegex(ValueError, 'emulator port'):
+                verify_recorded_seed(run1, {**baseline, 'initial_game_save': {**seed, 'emulator_port': bad}})
+
     def test_anchored_migration_uses_recorded_storage_type(self):
         receipt = self.anchor()
         shutil.rmtree(self.source)
