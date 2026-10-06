@@ -20,7 +20,7 @@
 - 여유공간 범위 초과/현재 비어있지 않으면 중단.
 """
 import struct, json, os, collections
-from dialogue_regions import needs_safe_dialogue_punctuation, renderer_safe_symbol
+from dialogue_regions import is_part2_story_address, needs_safe_dialogue_punctuation, renderer_safe_symbol
 from pcm_pointer_collisions import classify_pointer_sites
 
 GBA = 0x08000000
@@ -104,6 +104,223 @@ def normalize_text_segment(payload, part1, address=None):
         else:
             _conv += bytes([_b]); _i += 1
     return bytes(_conv)
+
+
+# ---------------------------------------------------------------------------
+# Fragment seams (2026-10-07). Part 2 story messages join translated fragments
+# with the same-row wait control 0x77 ('w'). Japanese needs no space there; the
+# Korean fragments do, but the halfwidth 0x20 slot padding before 'w' is not
+# rendered (몸에{20}{20}w혹시 -> "몸에혹시"). A seam is
+#   [Hangul or ！/？ pair][0x20 * n][0x77 * m >= 1][Hangul pair]
+# and is fixed by emitting a fullwidth space 0x8140 right after the last glyph.
+# 、。・ are excluded: their fullwidth cells already carry blank space and the
+# project style writes no space after them.
+SEAM_WAIT = 0x77
+SEAM_ROW_CONTINUE = frozenset((0x20, 0x57, 0x77))
+SEAM_PREV_PUNCT = frozenset((0x8148, 0x8149))
+PORTRAIT_ROW_HALF_CELLS = 44   # verified A3 portrait capacity (qa_part2_physical_rows)
+
+
+def _tokens(data):
+    """(offset, length) tokens; SJIS lead + trail is one token."""
+    out = []
+    i = 0
+    while i < len(data):
+        if is_sjis_lead(data[i]) and i + 1 < len(data):
+            out.append((i, 2))
+            i += 2
+        else:
+            out.append((i, 1))
+            i += 1
+    return out
+
+
+def row_half_cells(data, pos):
+    """Half-cell width of the row containing byte offset pos.
+
+    Rows continue across 0x20 padding and the 0x57/0x77 waits; every other
+    single byte (newline 72, page 6B, operands, NUL) ends the row. Unknown
+    same-row controls would make this an underestimate, so callers treat it
+    as a lower bound and report it, never as a pixel verdict.
+    """
+    toks = _tokens(data)
+    idx = next((k for k, (o, n) in enumerate(toks) if o <= pos < o + n), len(toks) - 1)
+
+    def breaks(tok):
+        o, n = tok
+        return n == 1 and data[o] not in SEAM_ROW_CONTINUE and not (0x21 <= data[o] <= 0x2F)
+
+    lo = idx
+    while lo > 0 and not breaks(toks[lo - 1]):
+        lo -= 1
+    hi = idx
+    while hi + 1 < len(toks) and not breaks(toks[hi + 1]):
+        hi += 1
+    width = 0
+    for o, n in toks[lo:hi + 1]:
+        if n == 2:
+            width += 2
+        elif data[o] not in SEAM_ROW_CONTINUE and 0x21 <= data[o] <= 0x7E:
+            width += 1
+    return width
+
+
+# The same 0x77 also splits a word from its particle around tutorial keywords
+# (主砲の弾wやw燃料wが -> 탄약w과w연료w가, 搭載wして -> 탑승w시켜). Those seams
+# must stay joined. The Korean side decides: a next word that is a particle or
+# copula ending is bound. Next words starting with 하/해/한/할/... are verbs that
+# may attach to a noun (직접공격w하는) or stand alone (좋아！w해 볼게); for them
+# the Japanese source decides (word char before the wait, particle/auxiliary
+# after it). After ！/？ nothing is bound.
+KO_BOUND_WORDS = frozenset(
+    '과 와 을 를 은 는 의 에 로 으로 에서 에게 한테 께 이야 야 라는 이라는 이라고 라고 '
+    '이란 란 시켜 시키고 시킬 시킨 시켰 가 도 만 이랑 랑 까지 부터 처럼 보다 이나 서 요 '
+    '이에요 예요 이다 입니다'.split())
+KO_VERB_HEADS = ('하', '해', '한', '할', '했', '합', '함', '시키', '시켜')
+JP_BOUND_HEADS = ('が', 'を', 'は', 'の', 'に', 'で', 'と', 'や', 'へ', 'も', 'から', 'まで',
+                  'より', 'して', 'させ', 'する', 'した', 'され', 'しな', 'だ', 'です', 'じゃ',
+                  'って', 'という')
+
+
+def _is_word_char(ch):
+    return ('\u4e00' <= ch <= '\u9fff' or '\u30a0' <= ch <= '\u30ff'
+            or ch in '」』）')
+
+
+def _decode_sjis_text(raw):
+    """Text of a raw original span; controls/padding become separators."""
+    out = []
+    i = 0
+    while i < len(raw):
+        if is_sjis_lead(raw[i]) and i + 1 < len(raw):
+            try:
+                out.append(raw[i:i + 2].decode('shift_jis'))
+            except UnicodeDecodeError:
+                out.append('\x00')
+            i += 2
+        else:
+            out.append('\x00')
+            i += 1
+    return ''.join(out)
+
+
+def seam_is_bound(seam, jp_prev, jp_next):
+    """True when the seam joins a word to its particle/ending (keep no space).
+
+    None means the decision needed the Japanese source and it was unavailable.
+    """
+    if seam['prev_punct']:
+        return False
+    word = seam['next_word']
+    if word in KO_BOUND_WORDS:
+        return True
+    if not word.startswith(KO_VERB_HEADS):
+        return False
+    if jp_prev is None or jp_next is None:
+        return None
+    prev = jp_prev.rstrip('\x00')
+    nxt = jp_next.lstrip('\x00')
+    return bool(prev and nxt and _is_word_char(prev[-1]) and nxt.startswith(JP_BOUND_HEADS))
+
+
+def find_seams(data, hangul):
+    """Raw scan of one message payload for fragment seams (see above).
+
+    hangul maps reserved Hangul code -> syllable.
+    """
+    seams = []
+    toks = _tokens(data)
+    for k, (o, n) in enumerate(toks):
+        if n != 2:
+            continue
+        code = (data[o] << 8) | data[o + 1]
+        if code not in hangul and code not in SEAM_PREV_PUNCT:
+            continue
+        j = o + 2
+        pads = 0
+        while j < len(data) and data[j] == 0x20:
+            pads += 1
+            j += 1
+        waits = 0
+        while j < len(data) and data[j] == SEAM_WAIT:
+            waits += 1
+            j += 1
+        if not waits or j + 1 >= len(data) or not is_sjis_lead(data[j]):
+            continue
+        if ((data[j] << 8) | data[j + 1]) not in hangul:
+            continue
+        word = []
+        w = j
+        while w + 1 < len(data) and ((data[w] << 8) | data[w + 1]) in hangul:
+            word.append(hangul[(data[w] << 8) | data[w + 1]])
+            w += 2
+        seams.append({'glyph_end': o + 2, 'pads': pads, 'waits': waits, 'next': j,
+                      'prev_punct': code in SEAM_PREV_PUNCT,
+                      'next_word': ''.join(word), 'row_half_cells': row_half_cells(data, o)})
+    return seams
+
+
+def _controls(data):
+    return [(o, data[o]) for o, n in _tokens(data) if n == 1 and data[o] != 0x20]
+
+
+def source_context(original, current, seam):
+    """Japanese text around the matching control run of the original message.
+
+    Controls are preserved byte-for-byte by every writer, so the k-th control
+    of the current payload is the k-th control of the original. Returns
+    (jp_prev, jp_next) or (None, None) when the control sequences differ.
+    """
+    cur_ctrl = _controls(current)
+    org_ctrl = _controls(original)
+    if [b for _, b in cur_ctrl] != [b for _, b in org_ctrl]:
+        return None, None
+    first_wait = seam['next'] - seam['waits']
+    k = next((i for i, (o, _) in enumerate(cur_ctrl) if o == first_wait), None)
+    if k is None:
+        return None, None
+    start = org_ctrl[k][0]
+    end = org_ctrl[k + seam['waits'] - 1][0] + 1
+    prev_ctrl = org_ctrl[k - 1][0] + 1 if k > 0 else 0
+    next_ctrl = org_ctrl[k + seam['waits']][0] if k + seam['waits'] < len(org_ctrl) else len(original)
+    return _decode_sjis_text(original[prev_ctrl:start]), _decode_sjis_text(original[end:next_ctrl])
+
+
+def apply_seam_spaces(pieces, hangul, max_row=PORTRAIT_ROW_HALF_CELLS, report=None):
+    """Fix seams across ['text', bytes, original] / ['gap', bytes, original] pieces.
+
+    Only text pieces change: trailing 0x20 padding is replaced by one 0x8140.
+    Control gaps are never touched. Returns (fixed, skipped_wide).
+    """
+    fixed = skipped = 0
+    for i in range(len(pieces) - 2):
+        if pieces[i][0] != 'text' or pieces[i + 1][0] != 'gap' or pieces[i + 2][0] != 'text':
+            continue
+        prev, gap, nxt = pieces[i][1], pieces[i + 1][1], pieces[i + 2][1]
+        if not gap or any(b != SEAM_WAIT for b in gap):
+            continue
+        probe = prev + gap + nxt
+        seam = [s for s in find_seams(probe, hangul) if s['next'] == len(prev) + len(gap)]
+        if not seam:
+            continue
+        stripped = prev.rstrip(b' ')
+        if seam[0]['glyph_end'] != len(stripped):
+            continue
+        jp_prev = _decode_sjis_text(pieces[i][2]) if len(pieces[i]) > 2 else None
+        jp_next = _decode_sjis_text(pieces[i + 2][2]) if len(pieces[i + 2]) > 2 else None
+        bound = seam_is_bound(seam[0], jp_prev, jp_next)
+        if bound is not False:
+            if report is not None:
+                report.append({'kind': 'bound' if bound else 'unaligned', 'next_word': seam[0]['next_word']})
+            continue
+        head = b''.join(p[1] for p in pieces[:i])
+        joined = head + stripped + b'\x81\x40' + gap + b''.join(p[1] for p in pieces[i + 2:])
+        if row_half_cells(joined, len(head) + len(stripped) - 1) > max_row:
+            skipped += 1
+            continue
+        pieces[i][1] = stripped + b'\x81\x40'
+        fixed += 1
+    return fixed, skipped
 
 
 def _read_table(orig, tbl_off):
@@ -229,7 +446,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
                      extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
-                     original_line_starts=None, line_layouts=None):
+                     original_line_starts=None, line_layouts=None, seam_codes=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -424,6 +641,19 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                     i += 1
                 if _has_jam:
                     break
+            if not _has_jam and seam_codes is not None and is_part2_story_address(msg):
+                # Seams with fewer than two padding bytes cannot take an in-place
+                # 0x8140; relocation inserts it (see apply_seam_spaces).
+                _end = msg
+                while _end < len(rom) and rom[_end] != 0:
+                    _end += 1
+                _cur = bytes(rom[msg:_end])
+                _org_end = orig.find(b'\x00', msg)
+                _org = bytes(orig[msg:_org_end if _org_end >= 0 else msg])
+                if any(seam['pads'] < 2 and seam_is_bound(seam, *source_context(_org, _cur, seam)) is False
+                       for seam in find_seams(_cur, seam_codes)):
+                    _has_jam = True
+                    stats['relocate_seam'] = stats.get('relocate_seam', 0) + 1
             if not _has_jam:
                 continue
             stats['relocate_renderjam'] = stats.get('relocate_renderjam', 0) + 1
@@ -491,14 +721,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
 
         # Normalize each text span independently. Control gaps must match the
         # original and are copied verbatim; punctuation-like operands are data.
-        new_msg = bytearray()
-        controls = []
+        pieces = []
         text_failure = None
         cur = msg
         for a, L in lines:
             gap = bytes(rom[cur:a])
-            controls.append((len(new_msg), gap, bytes(orig[cur:a])))
-            new_msg += gap
+            pieces.append(['gap', gap, bytes(orig[cur:a])])
             payload = fixed_bytes(a) if a in fix_addrs else bytes(rom[a:a + L])
             # Control bytes inside an alleged text span mean its boundaries
             # are unproven. Preserve the in-place message rather than guessing.
@@ -511,15 +739,23 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             if any(text_segment_cells(part) > max_cells for part in normalized_parts):
                 text_failure = 'skip_normalized_wide'
                 break
-            new_msg += normalized
+            pieces.append(['text', normalized, bytes(orig[a:a + L])])
             cur = a + L
         if text_failure:
             stats[text_failure] = stats.get(text_failure, 0) + 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': text_failure})
             continue
         gap = bytes(rom[cur:me])
-        controls.append((len(new_msg), gap, bytes(orig[cur:me])))
-        new_msg += gap
+        pieces.append(['gap', gap, bytes(orig[cur:me])])
+        seams_fixed = seams_wide = 0
+        if seam_codes is not None and is_part2_story_address(msg):
+            seams_fixed, seams_wide = apply_seam_spaces(pieces, seam_codes)
+        new_msg = bytearray()
+        controls = []
+        for piece in pieces:
+            if piece[0] == 'gap':
+                controls.append((len(new_msg), piece[1], piece[2]))
+            new_msg += piece[1]
         if any(gap != original or bytes(new_msg[pos:pos + len(gap)]) != original
                for pos, gap, original in controls):
             stats['skip_control_changed'] = stats.get('skip_control_changed', 0) + 1
@@ -578,12 +814,15 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             stats['relocated_multi'] = stats.get('relocated_multi', 0) + 1
         _relocated_msgs.add(msg)
         stats['relocated'] += 1
+        stats['seam_spaces'] += seams_fixed
+        stats['seam_skip_wide'] += seams_wide
         stats['lines_fixed'] += len(fix_addrs)
         manifest.append({
             'msg': f'0x{msg:06X}', 'status': 'relocated',
             'ptr_off': f'0x{ptr_off:06X}', 'new_addr': f'0x{new_addr:06X}',
             'old_len': me - msg, 'new_len': nlen, 'lines': len(lines),
             'fixed': sorted(f'0x{a:06X}' for a in fix_addrs),
+            **({'seam_spaces': seams_fixed} if seams_fixed else {}),
         })
 
     for record in manifest:

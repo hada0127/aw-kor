@@ -3089,7 +3089,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDD03A7: '사령관이란　자',
     0xDD0528: '걸리는　일도　있었으니까',
     0xDD054A: '뭐가　걸려',
-    0xDD07E1: '내가　써도　돼',
+    0xDD07E1: '내가　써도　돼?',
     0xDD09BA: '꼭　지켜　보이겠어',
     0xDD0B82: '꼭　이길　수　있어',
     0xDD1D5C: '다음엔　안　진다',
@@ -4041,7 +4041,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA20633: '무리하면 피해가 늘어',
     0xA207DD: '8개　전부　부숴',
     0xA2090C: '나라　힘을　모아',
-    0xA20949: '떨어뜨릴 수 있는 게 아냐',
+    0xA20949: '함락될 곳이 아니에요.',
     0xA20B09: '키쿠치요님께　전하겠습니다',
     0xA20CD9: '어리광은 안 통해',
     0xA20E9A: '정찰차　전선에　보내',
@@ -4066,14 +4066,14 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA21A56: '먼저 가운데',
     0xA21A63: '공항 옆 공장 점령이 제일이야',
     0xA21AAA: '반드시 이길 수 있어',
-    0xA21B7A: '어찌쓰나',
+    0xA21B7A: '어떻게 쓰지?',
     0xA21C7E: '보병 부대는 어찌 됐나',
     0xA21BCC: '적국 도시를 공격합니다',
     0xA21D1C: '적을 끌어들이는 미끼입니다',
     0xA21D3B: '빨리 점령당하면 곤란해',
     0xA21DB1: '우리 마을',
-    0xA21E2E: '그냥　둘순없다',
-    0xA21E4B: '저 마을',
+    0xA21E2E: '내버려 둘 수는 없다.',
+    0xA21E4B: '저 마을은',
     0xA22004: '적　함정　조사할게',
     0xA2214C: '유리하게 싸워',
     0xA22108: '시제품이라 항상 쓸 수는 없어',
@@ -5940,13 +5940,17 @@ def patch_part1_full_info_spec_obj_label(rom):
             f'unexpected Part 1 full-info SPEC payload at 0x{off:X}: {actual_hash}'
         )
     buf[:len(payload)] = payload
+    # Same block: production-menu info panel labels ガス/サクテキ/イドウ x8.
+    import part1_production_info_labels as production_labels
+    extra_layout = production_labels.patch(buf, font)
     # WYSIWYG: '정보'는 32x8 OBJ 라벨(render_32x8_obj_label) = 타일 0..3.
-    rec_label_layout(off, None, [{'text': '정보', 'tile_ids': [0, 1, 2, 3]}])
+    rec_label_layout(off, None, [{'text': '정보', 'tile_ids': [0, 1, 2, 3]}]
+                     + [{'text': e['text'], 'tile_ids': e['tile_ids']} for e in extra_layout])
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
     if len(comp) > consumed:
         raise AssertionError(f'Part 1 full-info SPEC LZ77 block grew: {len(comp)} > {consumed}')
     rom[off:off + consumed] = comp + b'\x00' * (consumed - len(comp))
-    return 1
+    return 1 + len(extra_layout)
 
 
 def patch_part1_damage_forecast_label_obj(rom):
@@ -11678,6 +11682,56 @@ def is_verified_bteam_script_repair(address, source, display):
 def is_verified_bteam_spacing_repair(address, source, display):
     """Only individually verified whitespace changes; words stay immutable."""
     return BTEAM_SCRIPT_SPACING_REPAIRS.get(address) == (source, display)
+
+
+def apply_inplace_part2_seam_spaces(rom, orig, hangul, table=0xA357B4, count=3315):
+    """Fullwidth space at fragment seams of non-relocated Part 2 story messages.
+
+    Relocated messages get the same fix inside repoint (apply_seam_spaces).
+    Here only seams with >= 2 bytes of 0x20 padding are rewritten in place
+    (0x20 0x20 -> 0x81 0x40, same length, inside the line's own slot). Seams
+    that join a word to its particle (seam_is_bound) are left as they are.
+    Shorter padding needs relocation and is reported as unfixed.
+    """
+    from dialogue_repoint import find_seams, seam_is_bound, source_context, PORTRAIT_ROW_HALF_CELLS
+    report = {'fixed': 0, 'unfixed': 0, 'bound': 0, 'unaligned': 0,
+              'fixed_at': [], 'unfixed_at': [], 'bound_at': []}
+    seen = set()
+    for index in range(count):
+        ptr = table + index * 4
+        target = struct.unpack_from('<I', orig, ptr)[0] - 0x08000000
+        if target in seen or not is_part2_story_address(target):
+            continue
+        seen.add(target)
+        if struct.unpack_from('<I', rom, ptr)[0] - 0x08000000 != target:
+            continue  # relocated: handled by repoint
+        end = rom.find(b'\x00', target)
+        org_end = orig.find(b'\x00', target)
+        current = bytes(rom[target:end])
+        source = bytes(orig[target:org_end])
+        for seam in find_seams(current, hangul):
+            at = target + seam['glyph_end']
+            bound = seam_is_bound(seam, *source_context(source, current, seam))
+            if bound is None:
+                report['unaligned'] += 1
+                continue
+            if bound:
+                report['bound'] += 1
+                report['bound_at'].append({'at': f'0x{at:08X}', 'next_word': seam['next_word']})
+                continue
+            if seam['pads'] >= 2 and seam['row_half_cells'] + 2 <= PORTRAIT_ROW_HALF_CELLS:
+                if bytes(rom[at:at + 2]) != b'  ':
+                    raise AssertionError(f'seam padding changed: 0x{at:08X}')
+                rom[at:at + 2] = b'\x81\x40'
+                WRITE_LOG.append([at, 2, 2, '8140', None, None, None, 'part2-seam-space'])
+                report['fixed'] += 1
+                report['fixed_at'].append(f'0x{at:08X}')
+            else:
+                report['unfixed'] += 1
+                report['unfixed_at'].append({'at': f'0x{at:08X}', 'msg': f'0x{target:08X}',
+                                             'pads': seam['pads'], 'row_half_cells': seam['row_half_cells'],
+                                             'next_word': seam['next_word']})
+    return report
 
 
 def verify_required_script_repoints(required, completed):
@@ -21693,7 +21747,7 @@ def main():
         (0xDD076A, 0xDD0792, '그린어스 일이 정리됐거든.', 'green earth done row'),
         (0xDD0795, 0xDD07B5, '그리고 이 부대를 전하러 왔어.', 'brought army row'),
         (0xDD07BA, 0xDD07DC, '이건...그린어스 부대?', 'green earth troops question row'),
-        (0xDD07E1, 0xDD07F3, '내가　써도　돼', 'can i use row'),
+        (0xDD07E1, 0xDD07F3, '내가　써도　돼?', 'can i use row'),
         (0xDD07FA, 0xDD0804, '물론!', 'mopp of course row'),
         (0xDD0807, 0xDD082D, '널 위해 갖춰 둔 거니까!', 'prepared for you row'),
         (0xDD0832, 0xDD083A, '좋아!', 'domino good row'),
@@ -22481,7 +22535,8 @@ def main():
                 original_line_starts=_rp_original_starts, line_layouts=_explicit_line_layouts,
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
                 skip_messages=set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES,
-                min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid))
+                min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid),
+                seam_codes={code: syl for syl, code in syl_to_code.items()})
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             _rp_fixed_addresses = {int(a, 16) for m in _rp_manifest
                                    if m.get('status') == 'relocated' for a in m.get('fixed', [])}
@@ -22520,6 +22575,14 @@ def main():
 
     verify_required_script_repoints(required_script_repoints, completed_script_repoints)
     verify_part2_campaign_header_keys(rom)
+
+    _seam = apply_inplace_part2_seam_spaces(rom, orig, {code: syl for syl, code in syl_to_code.items()})
+    st['part2_seam_spaces_inplace'] = _seam['fixed']
+    st['part2_seam_spaces_unfixed'] = _seam['unfixed']
+    with open(os.path.join(BASE, 'temp', 'part2_seam_spaces.json'), 'w', encoding='utf-8') as stream:
+        json.dump(_seam, stream, indent=1)
+    print(f"→ 2편 조각 이음매 공백: 제자리 {_seam['fixed']}건, 미해결 {_seam['unfixed']}건 "
+          f"(재배치 반영분은 repoint seam_spaces)")
 
     st['part2_prologue_inline_renderer_spans'] = patch_part2_prologue_inline_renderer_spans(
         rom, syl_to_code, unmapped)

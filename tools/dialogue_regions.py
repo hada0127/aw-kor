@@ -28,10 +28,24 @@ PART2_OBJECTIVE_DIALOGUE_RANGE = (0xA3408C, 0xA34B6C)
 # message, not the surrounding unit UI/table. Lossless repoint is required
 # because the last 22-byte slot needs 24 bytes with both punctuation marks.
 PART2_ARTILLERY_HELP_RANGE = (0xA32278, 0xA322BA)
+# CO victory/power quotes: table entries A384CC..A386DC point to A2FE70..
+# A313FC (all NUL terminated); A386E0 points to A31444, the first unit-help
+# message (2/3/0 operand controls), which stays outside. Playthrough frames on
+# e4963765 (Snake A30E40, Asuka A308B0) show ASCII '...' vanishing and the
+# following Hangul turning into '?' glyphs in this consumer, as in the
+# prologue. Shop/unlock messages before A2FE70 are not covered (no evidence).
+PART2_CO_QUOTE_RANGE = (0xA2FE70, 0xA31444)
+# Yes/no system prompts A389E4..A38A04 -> A34B80..A34CE8 (save, delete,
+# surrender, mode select). A34B6C is the strict pair yes/no UI and stays out;
+# A34D18 starts the defeat banners (not observed). e4963765 frame 3978 shows
+# the ASCII '.'/'?' in the save prompt rendering as nothing.
+PART2_SYSTEM_PROMPT_RANGE = (0xA34B80, 0xA34D18)
 PART2_STORY_RANGES = (PART2_PROLOGUE_RANGE, PART2_MISSION_BLURB_RANGE,
                       (0xA024A0, 0xA29388),
                       PART2_ARTILLERY_HELP_RANGE,
-                      PART2_OBJECTIVE_DIALOGUE_RANGE)
+                      PART2_OBJECTIVE_DIALOGUE_RANGE,
+                      PART2_CO_QUOTE_RANGE,
+                      PART2_SYSTEM_PROMPT_RANGE)
 
 
 def is_part2_story_address(address):

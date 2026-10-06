@@ -1463,3 +1463,8 @@ P2 DAY44 relay386/387의 긴 입력 묶음 뒤 BC 수도 이동·Md 생산·Mech
 ### 2026-10-02 M16 Andy 재시도2 DAY8 간접 사격 실패
 
 m16_palette_resume 1821/frame215660 패배, 실제 전투 frame214500 전함→미사일 HP0 확인. 미사일이 DAY8 (11,1)에서(7,1)로서진하며 새시야에전함이보였으나 공격범위안에서턴을종료했다. root의최대거리후퇴지시도육상추격만고려한잘못된계획이었다. 다음정상재시도는 검증된초반입력만날짜별상태대조하여재사용하고 DAY7이후전함실제위치/사거리와전차방벽을동시에확인한다. Claude독립검토 temp/continuation_2026-10-01/m16_tactics_claude_review.txt의유지안은참고하되 물가접촉만으로발사가능하다는부정확한설명은배제했다. native범위표시가판단기준이다.
+
+
+### 2026-10-07 Linux PC에서 정식 전체 빌드 불가
+
+`tools/build_korean_full.py`는 macOS 폰트(`~/Library/Fonts/OkDanDan-Bold.otf` SHA 3b48adae…, `/System/Library/Fonts/AppleSDGothicNeo.ttc`, `/Library/Fonts/NanumGothic{ExtraBold,Bold}.ttf`)를 요구하며 nyarch-pc에는 없다. 대체 폰트로 돌리면 그래픽 자산 70175B가 달라진다(HEAD 스텁 빌드 vs e4963765). 대체 폰트 빌드를 출하/후보로 쓰지 않는다. 이번에는 같은 스텁으로 HEAD(A)·변경(B)을 빌드해 A≠B 바이트만 e4963765에 덮어썼고, A≠B 위치에서 A=e4963765(충돌 0)·폰트 영역과 겹침 0을 확인했다(`temp/claude_2026-10-07/build/overlay.py`). 정식 SHA 재현은 Mac 빌드로 해야 한다.

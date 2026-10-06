@@ -172,7 +172,9 @@ class ScriptSafetyTests(unittest.TestCase):
         self.assertEqual(struct.unpack_from('<I', original, 0xA389E0)[0] - 0x08000000, hi)
         for address in (lo, 0xA34183, hi - 1):
             self.assertTrue(is_part2_story_address(address))
-        for address in (lo - 1, hi, 0xA34B80):
+        # A34B6C (yes/no pair UI) stays outside. A34B80.. is the save/delete
+        # prompt block, covered since 2026-10-07 by PART2_SYSTEM_PROMPT_RANGE.
+        for address in (lo - 1, hi):
             self.assertFalse(is_part2_story_address(address))
         codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
         text = builder.ADDRESS_TEXT_OVERRIDES[0xA34183]

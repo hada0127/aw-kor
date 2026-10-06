@@ -3749,3 +3749,12 @@ watchpoint trace에는 READ/WRITE 표식이 없으며 로컬 생성 기록의 RO
 A1D444(원본92B, pointerA36EF8)의自分のための話か는‘자신을 위한 얘기인가.’로목적의미를보존한다. A1D4BC(원본80B,pointerA36F00)의 마지막 대사 A1D4E2는앞조건‘내작전에참견하고싶다면,우선은’과결합한상대명령이므로‘주어진전력으로승리해보여라.’로고쳤다. tools/part2_volcano_context.py에서원문SHA·native pointer·최종합성문구·제어/대기경계를검사한다. 실제소비자/픽셀검증은아직없다. 후보36ed101b…f73ef, 증거temp/continuation_2026-10-01/volcano_context/.
 
 P1 M9 보급팝업의ホキュウ잔류: 5821_NONE_0914907.ss0 공개VRAM0x10000+397*32의1024B가원본BD0F90과유일하게일치한다. OAM16 attrs4338/fe48/318d,64x32/4bpp/1D/affine matrix31 identity(256,0,0,256), palette3. 원본asset SHA466d77039a491789a742bcf8e1e349f16cf86ced31bd89ebf9515c362440d755. 수정전공개표시자산추적이며ROM패치/수정화면확인은아직아니다.
+
+
+### 2026-10-07 2편 CO 대사·시스템 확인창 범위와 조각 이음매
+
+- CO 승리/파워 대사: 메시지 테이블 A384CC..A386DC → A2FE70..A313FC(전부 NUL 종단). A386E0 → A31444부터 유닛 도움말(2/3/0 피연산 제어)이라 제외. e4963765 실화면(Snake A30E40, Asuka A308B0)에서 ASCII `...` 미표시 + 뒤 한글 `?` 깨짐 → `PART2_CO_QUOTE_RANGE`.
+- 시스템 확인창: A389E4..A38A04 → A34B80..A34CE8(저장/삭제/항복/모드 선택). A34B6C(예/아니오 pair UI)·A34D18(패배 배너, 미관측) 제외 → `PART2_SYSTEM_PROMPT_RANGE`. e4963765 frame 3978 저장 확인창에서 ASCII `.`/`?` 미표시.
+- 범위 밖 잔존(근거 없음, 미수정): 상점/해금 메시지 A2D8B8..A2FE58의 ASCII `!?.,`, CO 정보 A2AC.. 의 ASCII `.`(예: `1.5배가 된다.`), 패배 배너 `!!`.
+- 조각 이음매: 2편 대사는 번역 조각을 같은 줄 대기 제어 0x77(`w`)로 잇는다. 앞 조각 슬롯 패딩 0x20은 렌더되지 않아 `몸에{20}{20}w혹시`가 붙어 보인다. 같은 0x77이 튜토리얼 키워드 앞뒤(主砲の弾wやw燃料wが → 탄약w과w연료w가)에도 쓰여, 다음 한국어 단어가 조사/어미면 결합으로 본다(`dialogue_repoint.KO_BOUND_WORDS`, 하/해/한… 시작은 원문 일본어로 판정). 패딩≥2면 제자리 0x2020→0x8140, 아니면 재배치에서 0x8140 삽입, 행 폭 44 half-cell 초과는 건너뜀.
+- 정적 검사: `python3 tools/qa_part2_render_residuals.py --rom <ROM>` (e4963765: ASCII 부호 CO 99·시스템 8 메시지, 미렌더 이음매 261 / 32d1c43b: 0·0, 4).
