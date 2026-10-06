@@ -22742,6 +22742,9 @@ def main():
     for _start, _expected in _relocated_sprite_final_writes.items():
         if bytes(rom[_start:_start + len(_expected)]) != _expected:
             raise AssertionError(f'late writer overwrote relocated sprite at {_start:#x}')
+    # After every writer (incl. sprite overrides): frozen production info labels.
+    from part1_production_info_labels import verify_final_rom as verify_production_info_final
+    st['part1_production_info_final'] = verify_production_info_final(rom)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     stable_build_inputs(build_inputs_before, snapshot_inputs())

@@ -207,3 +207,26 @@ def patch(buf, font):
             {'text': '색적', 'tile_ids': [14, 15, 16, 17]},
             {'text': '이동', 'tile_ids': [MOVE_FIRST + 8 * k + 4 + i for k in range(MOVE_COUNT) for i in range(4)],
              'variants': move_report}]
+
+
+def verify_final_rom(rom, approval=None, offset=0xBC7C00):
+    """Final-output gate after every writer (sprite overrides included).
+
+    Decompresses the production info block from the finished ROM and requires
+    the frozen fuel/scout label tiles and all 8 approved movement sprites.
+    """
+    from lz77_scan import lz77_decompress
+    from sprite_relocations import resolve_sprite_offset
+    approval = load_approval() if approval is None else approval
+    decoded = lz77_decompress(rom, resolve_sprite_offset(rom, offset))
+    if decoded is None or len(decoded[0]) != 82 * TILE:
+        raise AssertionError('final production info block 0xBC7C00 is not the expected LZ77 asset')
+    data = decoded[0]
+    hashes = region_hashes(data)
+    if hashes['fuel'] != approval['final_fuel_sha256'] or hashes['scout'] != approval['final_scout_sha256']:
+        raise AssertionError('final ROM fuel/scout labels differ from the approved output (0xBC7C00)')
+    for entry in approval['variants']:
+        if _sprite_sha(data, entry['first_tile']) != entry['result_sha256']:
+            raise AssertionError(f"final ROM movement variant {entry['variant']} differs from the approved "
+                                 'exception (0xBC7C00, later writer or sprite override?)')
+    return len(approval['variants'])

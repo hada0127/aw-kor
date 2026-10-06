@@ -781,5 +781,8 @@
    ],
    "result_sha256": "7175b151542db8d7f6b9e614dd5b4d963f4716aa4923fb74b9806a8b687cc8a9"
   }
- ]
+ ],
+ "final_fuel_sha256": "e1d5732bc0fc08838625494103e3d18db2c0334c182b1af96617cc00c05778d5",
+ "final_scout_sha256": "df88cfbb15f4e0cb62a95eb0273f4e55665ccc3f92bae47803d329f2899070bb",
+ "final_note": "final ROM check after all writers (incl. sprite overrides): decompressed 0xBC7C00 must match these and every variant result_sha256"
 }

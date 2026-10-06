@@ -244,6 +244,46 @@ class LabelAndTextTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'approved exception'):
             labels.check_move_approval(report, approval)
 
+    def test_final_gate_catches_sprite_override_of_movement_label(self):
+        import tempfile
+        from lz77_scan import lz77_decompress
+        import part1_production_info_labels as labels
+        candidate = Path(builder.BASE, 'output', 'game_wars_korean_candidate_effc6ee8.gba')
+        if not candidate.exists():
+            self.skipTest('candidate ROM not present')
+        rom = bytearray(candidate.read_bytes())
+        self.assertEqual(labels.verify_final_rom(rom), 8)
+        data, _ = lz77_decompress(rom, 0xBC7C00)
+        slot = lz77_decompress(ORIG.read_bytes(), 0xBC7C00)[1]   # native slot capacity (1366)
+        # Editor-style override (2 tiles wide grid, 1D tile order) changing one
+        # icon pixel of movement variant 2 outside every approved mask.
+        n = len(data) // 32
+        grid = [[0] * 16 for _ in range(n // 2 * 8)]
+        for t in range(n):
+            for y in range(8):
+                for x in range(8):
+                    b = data[t * 32 + y * 4 + x // 2]
+                    grid[(t // 2) * 8 + y][(t % 2) * 8 + x] = (b >> 4) if x & 1 else b & 15
+        first = labels.MOVE_FIRST + 8 * 2
+        tile = first + 1                              # top row, second tile: icon area
+        gy, gx = (tile // 2) * 8 + 2, (tile % 2) * 8 + 3
+        grid[gy][gx] = 1 if grid[gy][gx] != 1 else 2
+        scratch = Path(builder.BASE, 'temp')
+        scratch.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as tmp:
+            ov = Path(tmp, 'ov.json')
+            idx = Path(tmp, 'idx.json')
+            ov.write_text(json.dumps({'lz77_00BC7C00': {'indices': grid}}))
+            idx.write_text(json.dumps({'sprites': [{'id': 'lz77_00BC7C00', 'offset': '0x00BC7C00',
+                                                    'offset_int': 0xBC7C00, 'type': 'lz77',
+                                                    'size': len(data), 'comp_size': slot}]}))
+            result = builder.apply_sprite_overrides(rom, objl_specs=[], ov_path=str(ov), idx_path=str(idx),
+                                                    report_path=str(Path(tmp, 'report.json')))
+        self.assertEqual(result['applied'], 1)
+        self.assertNotEqual(bytes(rom), candidate.read_bytes())
+        with self.assertRaisesRegex(AssertionError, 'movement variant 2'):
+            labels.verify_final_rom(rom)
+
     def test_part1_can_i_use_keeps_question_mark(self):
         self.assertTrue(builder.ADDRESS_TEXT_OVERRIDES[0xDD07E1].endswith('?'))
 
