@@ -18,7 +18,7 @@ import re
 import shutil
 import subprocess
 
-from playthrough_capture import sha, save_json, verify_parent
+from playthrough_capture import sha, save_json, verify_parent, checkpoint_cheat_tainted
 from emu_platform import LIBMGBA, harness_env
 
 
@@ -75,6 +75,15 @@ def verify_anchored_record(record, saved, *, expected_harness_sha256, expected_l
             or not isinstance(record.get('save_storage'), list) or len(record['save_storage']) != 1
             or record['save_storage'][0] not in {k.decode() for k in STORAGE_CAPACITIES}):
         raise ValueError('Anchored game-save receipt is malformed')
+    if 'cheat_tainted' in record and record['cheat_tainted'] is not True:
+        raise ValueError('Anchored game-save cheat flag is malformed')
+    source = Path(record['source_checkpoint'])
+    try:
+        source_ok = source.is_file() and sha(source) == record['source_checkpoint_sha256']
+    except OSError:
+        source_ok = False
+    if source_ok and checkpoint_cheat_tainted(json.loads(source.read_text())) and record.get('cheat_tainted') is not True:
+        raise ValueError('Cheat taint dropped from anchored game save')
     if not is_sha256(expected_harness_sha256) or not is_sha256(expected_libmgba_sha256):
         raise ValueError('Anchored game-save verification requires harness and emulator library hashes')
     if record['harness_sha256'] != expected_harness_sha256:
@@ -126,6 +135,10 @@ def verify_receipt(path, *, verify_frames=True, expected_rom_sha256=None,
     for key in ('rom_sha256', 'libmgba_sha256', 'core_frame', 'state_sha256'):
         if checkpoint[key] != record[key]:
             raise ValueError(f'Game-save origin mismatch: {key}')
+    if 'cheat_tainted' in record and record['cheat_tainted'] is not True:
+        raise ValueError('Game-save cheat flag is malformed')
+    if checkpoint_cheat_tainted(checkpoint) and record.get('cheat_tainted') is not True:
+        raise ValueError('Cheat taint dropped from game save')
     if record['source_harness_sha256'] != checkpoint['harness_sha256']:
         raise ValueError('Game-save source harness mismatch')
     state = contained_file(cp.parent, checkpoint['state'])
@@ -226,6 +239,8 @@ def export(checkpoint_path, harness, out, *, frame_cache=None, announce=True):
                    source_checkpoint_sha256=sha(checkpoint_path),
                    source_harness_sha256=checkpoint['harness_sha256'], export_harness_sha256=sha(harness),
                    evidence_scope='Cartridge bytes at source frame, possibly from an earlier in-game save. Game acceptance and saved progress require observed in-game Continue; no scene or ending approval')
+    if checkpoint_cheat_tainted(checkpoint):
+        receipt['cheat_tainted'] = True
     save_json(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', verify_frames=False)
     if announce:
@@ -279,6 +294,8 @@ def export_anchored(checkpoint_path, harness, out, *, reason, verify_source_fram
                'created_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
                'reason': reason.strip(),
                'evidence_scope': 'Chain root after the 2026-10-06 evidence-chain cut. Source checkpoint fields are informational and never re-verified. Cartridge bytes only; game acceptance requires observed in-game Continue; no scene or ending approval'}
+    if checkpoint_cheat_tainted(checkpoint):
+        receipt['cheat_tainted'] = True
     save_json(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', expected_rom_sha256=checkpoint['rom_sha256'],
                    expected_harness_sha256=harness_sha, expected_libmgba_sha256=checkpoint['libmgba_sha256'])

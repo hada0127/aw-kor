@@ -29,6 +29,37 @@ KEYS = {'A': 1, 'B': 2, 'SELECT': 4, 'START': 8, 'RIGHT': 16, 'LEFT': 32,
         'UP': 64, 'DOWN': 128, 'R': 256, 'L': 512, 'NONE': 0}
 ROOT = Path(__file__).resolve().parents[1]
 
+# 2026-10-07 test-only progression aid (CLAUDE.md user decision). Any RAM write marks the run
+# and every descendant (resume, exported game save, runs booted from it) as cheat-tainted.
+CHEAT_REGIONS = ((0x02000000, 0x02040000), (0x03000000, 0x03008000))  # EWRAM, IWRAM only
+CHEAT_MAX_BYTES = 64
+
+
+def parse_cheat_write(op, addr, hexdata):
+    """Validate one RAM write. Returns a canonical dict or raises ValueError."""
+    if op not in ('w8', 'w16'):
+        raise ValueError('Cheat op must be w8 or w16')
+    if not isinstance(addr, str) or re.fullmatch(r'(0x)?[0-9a-fA-F]{1,8}', addr) is None:
+        raise ValueError('Cheat address must be hex')
+    if not isinstance(hexdata, str) or re.fullmatch(r'[0-9a-fA-F]+', hexdata) is None:
+        raise ValueError('Cheat data must be hex bytes')
+    unit = 2 if op == 'w8' else 4
+    if len(hexdata) % unit:
+        raise ValueError('Cheat data length does not match the write width')
+    start = int(addr, 16)
+    size = len(hexdata) // 2
+    if size < 1 or size > CHEAT_MAX_BYTES:
+        raise ValueError('Cheat write size out of range')
+    if op == 'w16' and start % 2:
+        raise ValueError('w16 cheat address must be halfword aligned')
+    if not any(lo <= start and start + size <= hi for lo, hi in CHEAT_REGIONS):
+        raise ValueError('Cheat writes are limited to EWRAM/IWRAM')
+    return {'op': op, 'addr': f'{start:08X}', 'hex': hexdata.upper()}
+
+
+def checkpoint_cheat_tainted(checkpoint):
+    return checkpoint.get('cheat_tainted') is True
+
 
 def default_hold(key):
     return 0 if key == 'NONE' else 2
@@ -237,6 +268,7 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
     for key in ('rom_sha256', 'harness_sha256', 'libmgba_sha256'):
         if key in baseline and baseline[key] != checkpoint.get(key):
             raise RuntimeError(f'Parent baseline identity mismatch: {key}')
+    parent = None
     if baseline.get('parent_checkpoint'):
         parent_path = Path(baseline['parent_checkpoint']).resolve()
         if not parent_path.is_file() or sha(parent_path) != baseline.get('parent_checkpoint_sha256'):
@@ -251,6 +283,19 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
     if baseline.get('initial_game_save'):
         from game_save_evidence import verify_recorded_seed
         verify_recorded_seed(root, baseline)
+    inherited = baseline.get('cheat_inherited')
+    if inherited not in (None, True):
+        raise RuntimeError('Malformed cheat inheritance flag')
+    if baseline.get('parent_checkpoint') and checkpoint_cheat_tainted(parent) and inherited is not True:
+        raise RuntimeError('Cheat taint dropped from a cheat-tainted parent')
+    if baseline.get('initial_game_save'):
+        seed_receipt = json.loads((root / baseline['initial_game_save']['receipt']).read_text())
+        if seed_receipt.get('cheat_tainted') is True and inherited is not True:
+            raise RuntimeError('Cheat taint dropped from a cheat-tainted game save')
+    if 'cheat_tainted' in checkpoint and checkpoint['cheat_tainted'] is not True:
+        raise RuntimeError('Malformed cheat taint flag')
+    if inherited is True and not checkpoint_cheat_tainted(checkpoint):
+        raise RuntimeError('Cheat-inherited run checkpoint lost its taint')
     ledger = root / 'frames.jsonl'
     if not 0 <= checkpoint['ledger_bytes'] <= ledger.stat().st_size:
         raise RuntimeError('Parent ledger prefix missing or incomplete')
@@ -272,6 +317,15 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
         if transport_proof_rgb is not None and frame == ((baseline['initial_core_frame'] + 1) & 0xffffffff):
             if row.get('rgb_sha256') != transport_proof_rgb or row.get('image') != 'frames/' + transport_proof_rgb + '.png':
                 raise RuntimeError('Frame transport proof does not match first ledger frame')
+        if 'cheat' in row:
+            writes = row['cheat']
+            if not isinstance(writes, list) or not writes:
+                raise RuntimeError('Malformed cheat ledger row')
+            for write in writes:
+                if not isinstance(write, dict) or parse_cheat_write(write.get('op'), write.get('addr'), write.get('hex')) != write:
+                    raise RuntimeError('Malformed cheat ledger row')
+            if not checkpoint_cheat_tainted(checkpoint):
+                raise RuntimeError('Cheat ledger rows require a cheat-tainted checkpoint')
         image_path = (root / row['image']).resolve()
         if not image_path.is_relative_to(root):
             raise RuntimeError('Parent image path escapes run')
@@ -314,6 +368,10 @@ class Recorder:
         self.last_checkpoint = None
         self.last_jev_report = None
         self.jev_requests = set()
+        self.cheat_tainted = False
+        self.cheat_inherited = False
+        self.freezes = {}
+        self.pending_cheats = []
         self.seen = set()
         self.pending_png = []
         self.protocol_failed = False
@@ -380,6 +438,8 @@ class Recorder:
                 if any(sha(self.out / name) != seed['save_sha256']
                        for name in ('game.sav', 'working_game.sav')):
                     raise ValueError('Game-save seed copy mismatch')
+                if receipt.get('cheat_tainted') is True:
+                    self.cheat_inherited = True
             parent = None
             if args.resume:
                 parent = json.loads(args.resume.read_text(encoding='utf-8'))
@@ -391,6 +451,8 @@ class Recorder:
                     raise RuntimeError('Invalid parent state path')
                 if sha(state) != parent['state_sha256']:
                     raise RuntimeError('Resume state hash mismatch')
+                if checkpoint_cheat_tainted(parent):
+                    self.cheat_inherited = True
             env = harness_env()
             log_path = self.out / 'emulator.log'
             if getattr(args, 'gzip_emulator_log', False):
@@ -450,6 +512,9 @@ class Recorder:
                                             'receipt':'emulator.log.archive.json'}
             if seed:
                 metadata['initial_game_save'] = seed
+            if self.cheat_inherited:
+                metadata['cheat_inherited'] = True
+                self.cheat_tainted = True
             save_json(self.out / 'baseline.json', metadata)
             self.checkpoint('initial')
             # Record one neutral frame so every session has an exact image hash
@@ -536,13 +601,30 @@ class Recorder:
                     'ledger_bytes': ledger_bytes}
         if getattr(self, 'frame_transport_proof_sha', None):
             metadata['frame_transport_verification_sha256'] = self.frame_transport_proof_sha
+        if getattr(self, 'cheat_tainted', False):
+            metadata['cheat_tainted'] = True
         target = self.out / (tag + '.checkpoint.json')
         save_json(target, metadata)
         self.last_checkpoint = str(target)
         return target
 
+    def apply_cheats(self):
+        """Write queued one-shot and frozen values just before the next emulated frame."""
+        writes = list(getattr(self, 'pending_cheats', [])) + list(getattr(self, 'freezes', {}).values())
+        for write in writes:
+            reply = self.cmd(f"{write['op']} {write['addr']} {write['hex']}")
+            unit = 1 if write['op'] == 'w8' else 2
+            if reply.split()[:3] != ['OK', write['op'], str(len(write['hex']) // 2 // unit)]:
+                self.protocol_failed = True
+                raise RuntimeError(('Cheat write not fully applied', write, reply))
+        if writes:
+            self.cheat_tainted = True
+        self.pending_cheats = []
+        return writes
+
     def capture(self, key):
         self.check_disk()
+        cheats = self.apply_cheats()
         self.cmd('frames 1')
         expected = (self.counter + 1) & 0xffffffff
         self.counter = self.read_counter()
@@ -602,8 +684,10 @@ class Recorder:
                     raise RuntimeError('PNG roundtrip mismatch')
             self.seen.add(digest)
             self.pending_png.append(path)
-        self.ledger.write(json.dumps({'core_frame': self.counter, 'keys': key, 'image': rel,
-                                     'rgb_sha256': digest}) + '\n')
+        row = {'core_frame': self.counter, 'keys': key, 'image': rel, 'rgb_sha256': digest}
+        if cheats:
+            row['cheat'] = cheats
+        self.ledger.write(json.dumps(row) + '\n')
         self.committed = self.counter
         return im
 
@@ -645,6 +729,39 @@ class Recorder:
                   'free_gib': round(shutil.disk_usage(self.out).free / 1024**3, 2), 'visual_review': 'pending'}
         self.actions.write(json.dumps(result) + '\n')
         print(json.dumps(result), flush=True)
+
+    def cheat_command(self, tokens):
+        """cheat w8|w16 ADDR HEX (next frame only) | freeze w8|w16 ADDR HEX | unfreeze ADDR|all | cheats"""
+        verb = tokens[0]
+        if verb == 'cheats':
+            return {'freezes': list(self.freezes.values()), 'pending': list(self.pending_cheats),
+                    'cheat_tainted': self.cheat_tainted}
+        if verb == 'unfreeze':
+            if len(tokens) != 2:
+                raise ValueError('Use unfreeze ADDR|all')
+            if tokens[1] == 'all':
+                removed = list(self.freezes)
+                self.freezes.clear()
+            else:
+                key = f'{int(tokens[1], 16):08X}' if re.fullmatch(r'(0x)?[0-9a-fA-F]{1,8}', tokens[1]) else None
+                if key not in self.freezes:
+                    raise ValueError('No freeze at that address')
+                del self.freezes[key]
+                removed = [key]
+            event = {'cheat_event': 'unfreeze', 'addrs': removed}
+        else:
+            if len(tokens) != 4:
+                raise ValueError('Use cheat|freeze w8|w16 ADDR HEX')
+            write = parse_cheat_write(tokens[1], tokens[2], tokens[3])
+            if verb == 'freeze':
+                self.freezes[write['addr']] = write
+            else:
+                self.pending_cheats.append(write)
+            event = {'cheat_event': verb, 'write': write}
+        event['next_core_frame'] = (self.counter + 1) & 0xffffffff
+        self.actions.write(json.dumps(event) + '\n')
+        self.actions.flush(); os.fsync(self.actions.fileno())
+        return event
 
     def jev_choice(self, candidate_path):
         """Ask JEV to select among checkpoint-bound candidates; execute only a bounded local macro."""
@@ -826,6 +943,8 @@ class Recorder:
                   'last_observed_core_frame': self.counter, 'committed_core_frame': self.committed,
                   'last_good_checkpoint': self.last_checkpoint, 'cleanup_errors': cleanup_errors,
                   'emulator_exit_code': self.proc.returncode if self.proc else None}
+        if getattr(self, 'cheat_tainted', False):
+            result['cheat_tainted'] = True
         try:
             save_json(self.out / 'exit.json', result)
         finally:
@@ -903,6 +1022,12 @@ def main():
             if tokens[0] == 'note':
                 recorder.actions.write(json.dumps({'note': ' '.join(tokens[1:]), 'core_frame': recorder.counter}, ensure_ascii=False) + '\n')
                 print('NOTED', flush=True)
+                continue
+            if tokens[0] in ('cheat', 'freeze', 'unfreeze', 'cheats'):
+                try:
+                    print(json.dumps(recorder.cheat_command(tokens)), flush=True)
+                except ValueError as exc:
+                    print(json.dumps({'input_error': str(exc)}), flush=True)
                 continue
             if tokens[0] == 'jev':
                 from jev_game_choice import JevError

@@ -56,7 +56,11 @@ def export_inputs(run):
         raise ValueError('A game-save boot cannot be exported as an empty-save cold route')
     if baseline['initial_core_frame'] != 0 or baseline.get('parent_checkpoint'):
         raise ValueError('Export requires a cold-boot run, not a resumed suffix')
+    if baseline.get('cheat_inherited'):
+        raise ValueError('A cheat-tainted run cannot be exported as a normal route')
     closed = json.loads((run / 'exit.json').read_text())
+    if closed.get('cheat_tainted'):
+        raise ValueError('A cheat-tainted run cannot be exported as a normal route')
     if closed['status'] != 'closed' or closed['emulator_exit_code'] != 0:
         raise ValueError('Export requires a successfully closed capture')
     commands = []
