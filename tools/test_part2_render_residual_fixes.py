@@ -12,7 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_full as builder
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_SYSTEM_PROMPT_RANGE,
                               is_part2_story_address)
-from dialogue_repoint import apply_seam_spaces, find_seams, seam_is_bound, source_context
+from dialogue_repoint import (apply_seam_spaces, find_seams, inplace_seam_spaces, seam_is_bound,
+                              source_context)
 
 ORIG = Path(builder.P.ROM)
 
@@ -74,7 +75,8 @@ class SeamTests(unittest.TestCase):
         self.assertEqual(len(seams), 1)
         self.assertEqual(seams[0]['pads'], 2)
         self.assertEqual(seams[0]['next_word'], '혹시')
-        self.assertIs(seam_is_bound(seams[0], None, None), False)
+        self.assertIsNone(seam_is_bound(seams[0], None, None))   # needs source
+        self.assertIs(seam_is_bound(seams[0], 'お前の身に', 'もしものこと'), False)
 
     def test_particle_seam_is_bound(self):
         data = enc('탄약') + b'w' + enc('과')
@@ -87,6 +89,38 @@ class SeamTests(unittest.TestCase):
         self.assertIsNone(seam_is_bound(seam, None, None))
         self.assertTrue(seam_is_bound(seam, '直接攻撃', 'するユニット'))
         self.assertFalse(seam_is_bound(seam, 'よし！', 'やってみる'))
+
+    def test_negative_fixtures_never_insert(self):
+        cases = [
+            (enc('연료') + b'w' + enc('이'), None, None),                 # subject particle
+            (enc('연료') + b'w' + enc('가없다'), '燃料', 'がなくなる'),   # unspaced particle run
+            (enc('점령') + b'w' + enc('명령이'), '「占領」', 'というコマンド'),
+            (enc('탄약') + b'w' + enc('과'), '主砲の弾', 'や'),
+            (enc('보병') + b'w' + enc('나'), '歩兵', 'か'),
+            (enc('혹시') + b'w' + enc('몰라'), None, None),               # no source: keep
+        ]
+        for data, jp_prev, jp_next in cases:
+            seam = find_seams(data, self.hangul)[0]
+            self.assertIsNot(seam_is_bound(seam, jp_prev, jp_next), False, data)
+        for word in ('이', '가', '은', '는', '을', '를', '의', '에', '로', '와', '과', '도', '만', '이야', '이다'):
+            seam = find_seams(enc('연료') + b'w' + enc(word), self.hangul)[0]
+            self.assertTrue(seam_is_bound(seam, None, None), word)
+
+    def test_dot_before_wait_is_not_a_word_char(self):
+        seam = find_seams(enc('군은') + b'w' + enc('성가신'), self.hangul)[0]
+        self.assertFalse(seam_is_bound(seam, '軍・・・', 'やっかいな'))
+
+    def test_inplace_row_budget_is_shared(self):
+        jp = ('一' * 5 + '、').encode('shift_jis')
+        source = jp + b'w' + jp + b'w' + jp
+        # 3 x 7 glyphs + 2 seams: 42 half-cells before, room for one space only
+        part = enc('가' * 7)
+        current = part + b'  w' + part + b'  w' + part
+        self.assertEqual(len(find_seams(current, self.hangul)), 2)
+        new, records = inplace_seam_spaces(current, source, self.hangul)
+        self.assertEqual([r['action'] for r in records], ['inserted', 'row_full'])
+        self.assertEqual(new.count(b'\x81\x40'), 1)
+        self.assertEqual(len(new), len(current))
 
     def test_after_exclamation_never_bound(self):
         data = enc('좋아') + b'\x81\x49w' + enc('해')
@@ -109,7 +143,7 @@ class SeamTests(unittest.TestCase):
 
     def test_apply_respects_row_capacity(self):
         long = enc('가' * 21)
-        pieces = [['text', long, b''], ['gap', b'w', b'w'], ['text', enc('나'), b'']]
+        pieces = [['text', long, b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
         self.assertEqual(apply_seam_spaces(pieces, self.hangul), (0, 1))
 
 
@@ -128,14 +162,20 @@ class LabelAndTextTests(unittest.TestCase):
         self.assertEqual([e['text'] for e in layout], ['연료', '색적', '이동'])
         after = labels.region_hashes(buf)
         self.assertTrue(all(before[k] != after[k] for k in before))
-        # Top tile rows of the movement icons keep their pixels except the
-        # one-pixel outline row above the plate.
+        # Every pixel of all 8 movement sprites outside the approved box is unchanged.
         for k in range(labels.MOVE_COUNT):
             first = labels.MOVE_FIRST + 8 * k
-            for y in range(7):
+            for y in range(16):
                 for x in range(32):
+                    if labels._in_box(x, y):
+                        continue
                     t, px, py = labels._sprite_px(buf, first, 4, x, y)
-                    self.assertEqual(labels._get(buf, t, px, py), labels._get(data, t, px, py))
+                    self.assertEqual(labels._get(buf, t, px, py), labels._get(data, t, px, py), (k, x, y))
+        # Tiles outside the three label ranges are untouched.
+        touched = {8, 9, 14, 15, 16, 17} | set(range(labels.MOVE_FIRST, labels.MOVE_FIRST + 64))
+        for t in range(82):
+            if t not in touched:
+                self.assertEqual(buf[t * 32:(t + 1) * 32], data[t * 32:(t + 1) * 32], t)
         self.assertLessEqual(len(lz77_compress_optimal(bytes(buf), vram_safe=True)), consumed)
         with self.assertRaises(AssertionError):
             labels.patch(buf, font)   # already patched: source hash guard

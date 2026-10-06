@@ -11689,13 +11689,11 @@ def apply_inplace_part2_seam_spaces(rom, orig, hangul, table=0xA357B4, count=331
 
     Relocated messages get the same fix inside repoint (apply_seam_spaces).
     Here only seams with >= 2 bytes of 0x20 padding are rewritten in place
-    (0x20 0x20 -> 0x81 0x40, same length, inside the line's own slot). Seams
-    that join a word to its particle (seam_is_bound) are left as they are.
-    Shorter padding needs relocation and is reported as unfixed.
+    (0x20 0x20 -> 0x81 0x40, same length, inside the line's own slot); the row
+    budget is recomputed after every insertion (inplace_seam_spaces).
     """
-    from dialogue_repoint import find_seams, seam_is_bound, source_context, PORTRAIT_ROW_HALF_CELLS
-    report = {'fixed': 0, 'unfixed': 0, 'bound': 0, 'unaligned': 0,
-              'fixed_at': [], 'unfixed_at': [], 'bound_at': []}
+    from dialogue_repoint import inplace_seam_spaces
+    report = {'fixed': 0, 'unfixed': 0, 'bound': 0, 'unaligned': 0, 'records': []}
     seen = set()
     for index in range(count):
         ptr = table + index * 4
@@ -11706,31 +11704,19 @@ def apply_inplace_part2_seam_spaces(rom, orig, hangul, table=0xA357B4, count=331
         if struct.unpack_from('<I', rom, ptr)[0] - 0x08000000 != target:
             continue  # relocated: handled by repoint
         end = rom.find(b'\x00', target)
-        org_end = orig.find(b'\x00', target)
         current = bytes(rom[target:end])
-        source = bytes(orig[target:org_end])
-        for seam in find_seams(current, hangul):
-            at = target + seam['glyph_end']
-            bound = seam_is_bound(seam, *source_context(source, current, seam))
-            if bound is None:
-                report['unaligned'] += 1
-                continue
-            if bound:
-                report['bound'] += 1
-                report['bound_at'].append({'at': f'0x{at:08X}', 'next_word': seam['next_word']})
-                continue
-            if seam['pads'] >= 2 and seam['row_half_cells'] + 2 <= PORTRAIT_ROW_HALF_CELLS:
-                if bytes(rom[at:at + 2]) != b'  ':
-                    raise AssertionError(f'seam padding changed: 0x{at:08X}')
-                rom[at:at + 2] = b'\x81\x40'
+        new, records = inplace_seam_spaces(current, bytes(orig[target:orig.find(b'\x00', target)]), hangul)
+        for record in records:
+            at = target + record['glyph_end']
+            if record['action'] == 'inserted':
                 WRITE_LOG.append([at, 2, 2, '8140', None, None, None, 'part2-seam-space'])
                 report['fixed'] += 1
-                report['fixed_at'].append(f'0x{at:08X}')
+            elif record['action'] in ('bound', 'unaligned'):
+                report[record['action']] += 1
             else:
                 report['unfixed'] += 1
-                report['unfixed_at'].append({'at': f'0x{at:08X}', 'msg': f'0x{target:08X}',
-                                             'pads': seam['pads'], 'row_half_cells': seam['row_half_cells'],
-                                             'next_word': seam['next_word']})
+            report['records'].append({'msg': f'0x{target:08X}', 'at': f'0x{at:08X}', **record})
+        rom[target:end] = new
     return report
 
 

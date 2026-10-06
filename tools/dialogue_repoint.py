@@ -167,23 +167,31 @@ def row_half_cells(data, pos):
 
 # The same 0x77 also splits a word from its particle around tutorial keywords
 # (主砲の弾wやw燃料wが -> 탄약w과w연료w가, 搭載wして -> 탑승w시켜). Those seams
-# must stay joined. The Korean side decides: a next word that is a particle or
-# copula ending is bound. Next words starting with 하/해/한/할/... are verbs that
-# may attach to a noun (직접공격w하는) or stand alone (좋아！w해 볼게); for them
-# the Japanese source decides (word char before the wait, particle/auxiliary
-# after it). After ！/？ nothing is bound.
+# must stay joined. A space is inserted only when every check agrees:
+#   1. After ！/？ a seam is never bound.
+#   2. A next Hangul run that is exactly a particle/ending (KO_BOUND_WORDS) is
+#      bound, even where it could also be a word (이 = this): kept as is.
+#   3. The Japanese source must be aligned; otherwise the seam is left as is.
+#   4. Japanese word char (kanji/katakana/」) before the wait and a particle or
+#      auxiliary right after it (燃料wが, 「占領」wという) means bound. This also
+#      covers unspaced runs such as 연료w가없다 and restructured Korean, which
+#      then stays joined (unfixed, never wrongly spaced).
+# The next Hangul run is compared whole; a run that merely starts with a
+# particle syllable (이번, 가볍게) is decided by rule 4.
 KO_BOUND_WORDS = frozenset(
-    '과 와 을 를 은 는 의 에 로 으로 에서 에게 한테 께 이야 야 라는 이라는 이라고 라고 '
-    '이란 란 시켜 시키고 시킬 시킨 시켰 가 도 만 이랑 랑 까지 부터 처럼 보다 이나 서 요 '
-    '이에요 예요 이다 입니다'.split())
-KO_VERB_HEADS = ('하', '해', '한', '할', '했', '합', '함', '시키', '시켜')
+    '이 가 은 는 을 를 의 에 로 으로 와 과 도 만 께 께서 에서 에게 한테 에서는 에는 에도 '
+    '으로는 로는 와는 과는 이나 나 이랑 랑 까지 부터 처럼 보다 마저 조차 밖에 '
+    '이야 야 이다 이고 이며 이지 이죠 이요 이에요 예요 입니다 이었다 였다 '
+    '라는 이라는 이라고 라고 이란 란 서 요 '
+    '시켜 시키고 시킬 시킨 시켰'.split())
 JP_BOUND_HEADS = ('が', 'を', 'は', 'の', 'に', 'で', 'と', 'や', 'へ', 'も', 'から', 'まで',
                   'より', 'して', 'させ', 'する', 'した', 'され', 'しな', 'だ', 'です', 'じゃ',
-                  'って', 'という')
+                  'って', 'という', 'とか', 'なら')
 
 
 def _is_word_char(ch):
-    return ('\u4e00' <= ch <= '\u9fff' or '\u30a0' <= ch <= '\u30ff'
+    """Kanji, katakana (incl. ー, not the ・ dot) or a closing bracket."""
+    return ('\u4e00' <= ch <= '\u9fff' or ('\u30a0' <= ch <= '\u30ff' and ch != '\u30fb')
             or ch in '」』）')
 
 
@@ -205,22 +213,53 @@ def _decode_sjis_text(raw):
 
 
 def seam_is_bound(seam, jp_prev, jp_next):
-    """True when the seam joins a word to its particle/ending (keep no space).
-
-    None means the decision needed the Japanese source and it was unavailable.
-    """
+    """True: keep joined. False: insert a space. None: source unaligned, keep."""
     if seam['prev_punct']:
         return False
-    word = seam['next_word']
-    if word in KO_BOUND_WORDS:
+    if seam['next_word'] in KO_BOUND_WORDS:
         return True
-    if not word.startswith(KO_VERB_HEADS):
-        return False
     if jp_prev is None or jp_next is None:
         return None
     prev = jp_prev.rstrip('\x00')
     nxt = jp_next.lstrip('\x00')
     return bool(prev and nxt and _is_word_char(prev[-1]) and nxt.startswith(JP_BOUND_HEADS))
+
+
+def inplace_seam_spaces(current, source, hangul, max_row=PORTRAIT_ROW_HALF_CELLS):
+    """In-place seam fix for one non-relocated message payload.
+
+    Only padding 0x20 0x20 directly after the last glyph becomes 0x8140 (same
+    length). The row width is recomputed on the updated payload before every
+    insertion, so several seams in one row share the row budget.
+    Returns (new_payload, records); each record has 'action' in
+    inserted / bound / unaligned / needs_relocation / row_full.
+    """
+    data = bytearray(current)
+    records = []
+    for seam in find_seams(bytes(current), hangul):
+        jp = source_context(source, bytes(current), seam)
+        bound = seam_is_bound(seam, *jp)
+        record = {'glyph_end': seam['glyph_end'], 'pads': seam['pads'], 'next_word': seam['next_word'],
+                  'jp_prev': jp[0], 'jp_next': jp[1]}
+        if bound is None:
+            record['action'] = 'unaligned'
+        elif bound:
+            record['action'] = 'bound'
+        elif seam['pads'] < 2:
+            record['action'] = 'needs_relocation'
+        else:
+            at = seam['glyph_end']
+            width = row_half_cells(bytes(data), at - 1)
+            if width + 2 > max_row:
+                record['action'] = 'row_full'
+            else:
+                if bytes(data[at:at + 2]) != b'  ':
+                    raise AssertionError('seam padding changed')
+                data[at:at + 2] = b'\x81\x40'
+                record['action'] = 'inserted'
+            record['row_half_cells'] = width
+        records.append(record)
+    return bytes(data), records
 
 
 def find_seams(data, hangul):
@@ -310,8 +349,6 @@ def apply_seam_spaces(pieces, hangul, max_row=PORTRAIT_ROW_HALF_CELLS, report=No
         jp_next = _decode_sjis_text(pieces[i + 2][2]) if len(pieces[i + 2]) > 2 else None
         bound = seam_is_bound(seam[0], jp_prev, jp_next)
         if bound is not False:
-            if report is not None:
-                report.append({'kind': 'bound' if bound else 'unaligned', 'next_word': seam[0]['next_word']})
             continue
         head = b''.join(p[1] for p in pieces[:i])
         joined = head + stripped + b'\x81\x40' + gap + b''.join(p[1] for p in pieces[i + 2:])

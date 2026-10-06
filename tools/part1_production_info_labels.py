@@ -71,6 +71,17 @@ def _boxed_label(buf, first, wtiles, text, font, box_x0, box_x1, rows=(1, 8), gl
         _put(buf, t, px, py, 1)
 
 
+# Approved edit box inside every 32x16 movement sprite: the old イドウ plate
+# spans x 6..25, rows 8..15; the new 이동 plate x 8..23 rows 8..15 plus a
+# one-pixel outline on row 7. Nothing outside this box may change.
+MOVE_LABEL_BOX = (5, 7, 27, 16)   # x0, y0, x1 (excl), y1 (excl)
+
+
+def _in_box(x, y):
+    x0, y0, x1, y1 = MOVE_LABEL_BOX
+    return x0 <= x < x1 and y0 <= y < y1
+
+
 def _move_labels(buf, font, text='이동'):
     starts = [MOVE_FIRST + 8 * k for k in range(MOVE_COUNT)]
     common = []
@@ -95,6 +106,9 @@ def _move_labels(buf, font, text='이동'):
     if any(y >= 15 for _, y in white):
         raise AssertionError('이동 glyph overflows the plate')
     outline = {(x + dx, y - 1) for x, y in white if y == top for dx in (-1, 0, 1)}
+    before = bytes(buf)
+    if any(not _in_box(x, y) for x, y in set(common) | plate | outline):
+        raise AssertionError('movement label edit leaves the approved box')
     for s in starts:
         for x, y in common:
             t, px, py = _sprite_px(buf, s, 4, x, y)
@@ -105,7 +119,22 @@ def _move_labels(buf, font, text='이동'):
         for x, y in white:
             t, px, py = _sprite_px(buf, s, 4, x, y)
             _put(buf, t, px, py, 1)
-    return len(common)
+    covered = {}
+    for k, s in enumerate(starts):
+        changed_outside = 0
+        covered[k] = 0
+        for y in range(16):
+            for x in range(32):
+                t, px, py = _sprite_px(buf, s, 4, x, y)
+                if _get(buf, t, px, py) == _get(before, t, px, py):
+                    continue
+                if not _in_box(x, y):
+                    changed_outside += 1
+                elif (x, y) not in common:
+                    covered[k] += 1   # variant-specific icon pixel under the new plate
+        if changed_outside:
+            raise AssertionError(f'movement variant {k} changed outside the approved box')
+    return len(common), covered
 
 
 def region_hashes(buf):
@@ -126,8 +155,8 @@ def patch(buf, font):
             raise AssertionError(f'unexpected production info {key} tiles: {actual[key]}')
     _boxed_label(buf, FUEL_TILES[0], FUEL_TILES[1], '연료', font, 0, 16, rows=(0, 8))
     _boxed_label(buf, SCOUT_TILES[0], SCOUT_TILES[1], '색적', font, 4, 28)
-    mask = _move_labels(buf, font)
+    mask, covered = _move_labels(buf, font)
     return [{'text': '연료', 'tile_ids': [8, 9]},
             {'text': '색적', 'tile_ids': [14, 15, 16, 17]},
             {'text': '이동', 'tile_ids': [MOVE_FIRST + 8 * k + 4 + i for k in range(MOVE_COUNT) for i in range(4)],
-             'mask_pixels': mask}]
+             'mask_pixels': mask, 'variant_pixels_covered': covered}]

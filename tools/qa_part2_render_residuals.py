@@ -13,7 +13,8 @@ pointer in the scanned ROM, so relocated copies are what is checked. Scope is
 the original target being inside dialogue_regions.PART2_STORY_RANGES.
 Static bytes only: this does not prove pixels on screen.
 
-Exit 1 if ASCII punctuation remains in the CO quote or system prompt ranges.
+Exit 1 if ASCII punctuation remains in the CO quote or system prompt ranges
+(with --fail-on-seams also when aligned, unbound seams remain unspaced).
 """
 import argparse
 import json
@@ -24,7 +25,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_STORY_RANGES,
                               PART2_SYSTEM_PROMPT_RANGE, is_part2_story_address)
-from dialogue_repoint import _tokens, find_seams, seam_is_bound, source_context
+from dialogue_repoint import _controls, _tokens, find_seams, seam_is_bound, source_context
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ORIGINAL = os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
@@ -84,10 +85,65 @@ def scan(rom, orig, hangul):
     return out
 
 
+def _decode(raw, hangul):
+    out = []
+    for o, n in _tokens(raw):
+        if n == 2:
+            code = (raw[o] << 8) | raw[o + 1]
+            out.append('□' if code == 0x8140 else hangul.get(code) or raw[o:o + 2].decode('shift_jis', 'replace'))
+        else:
+            b = raw[o]
+            out.append('{20}' if b == 0x20 else chr(b) if 0x21 <= b <= 0x7E else '{%02x}' % b)
+    return ''.join(out)
+
+
+def seam_review(old_rom, rom, orig, hangul):
+    """Every seam of the old ROM and what the new ROM did with it."""
+    rows = []
+    seen = set()
+    for i in range(COUNT):
+        ptr = TABLE + 4 * i
+        src = struct.unpack_from('<I', orig, ptr)[0] - 0x08000000
+        if src in seen or not is_part2_story_address(src):
+            continue
+        seen.add(src)
+        def payload(r):
+            cur = struct.unpack_from('<I', r, ptr)[0] - 0x08000000
+            return cur, r[cur:r.find(b'\x00', cur)]
+        old_at, old = payload(old_rom)
+        new_at, new = payload(rom)
+        source = orig[src:orig.find(b'\x00', src)]
+        old_ctrl, new_ctrl = _controls(old), _controls(new)
+        for seam in find_seams(old, hangul):
+            jp = source_context(source, old, seam)
+            bound = seam_is_bound(seam, *jp)
+            first_wait = seam['next'] - seam['waits']
+            k = next((j for j, (o, _) in enumerate(old_ctrl) if o == first_wait), None)
+            after, spaced = '', None
+            if k is not None and len(new_ctrl) == len(old_ctrl):
+                pos = new_ctrl[k][0]
+                head = new[:pos].rstrip(b' ')
+                spaced = head.endswith(b'\x81\x40')
+                after = _decode(new[max(0, pos - 16):pos + 12], hangul)
+            before = _decode(old[max(0, first_wait - 16):first_wait + 12], hangul)
+            action = ('inserted' if spaced else
+                      'kept_bound' if bound else
+                      'kept_unaligned' if bound is None else 'NOT_FIXED')
+            rows.append([f'0x{src:08X}', f'0x{old_at + seam["glyph_end"]:08X}', f'0x{new_at:08X}', action,
+                         seam['next_word'], before, after,
+                         (jp[0] or '').replace('\x00', '|')[-8:], (jp[1] or '').replace('\x00', '|')[:8],
+                         str(seam['pads'])])
+    return rows
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--rom', default=os.path.join(BASE, 'output', 'game_wars_korean_full.gba'))
     ap.add_argument('--json', help='write details here')
+    ap.add_argument('--compare-rom', help='older ROM: write a per-seam review TSV against it')
+    ap.add_argument('--seam-tsv', help='output TSV for --compare-rom')
+    ap.add_argument('--fail-on-seams', action='store_true',
+                    help='also fail when unrendered, unbound seams remain')
     args = ap.parse_args()
     rom = open(args.rom, 'rb').read()
     orig = open(ORIGINAL, 'rb').read()
@@ -101,7 +157,17 @@ def main():
     print(f"unrendered fragment seams by region: {result['seams']} (total {result['seam_total']}, "
           f"of which source-unaligned {result.get('unaligned_seams', 0)}); "
           f"particle-bound seams left joined: {result.get('bound_seams', 0)}")
+    if args.compare_rom:
+        rows = seam_review(open(args.compare_rom, 'rb').read(), rom, orig, hangul)
+        with open(args.seam_tsv, 'w', encoding='utf-8') as f:
+            f.write('msg\told_seam_at\tnew_msg_at\taction\tnext_word\tbefore\tafter\tjp_prev\tjp_next\tpads\n')
+            for row in rows:
+                f.write('\t'.join(row) + '\n')
+        from collections import Counter
+        print('seam review:', dict(Counter(r[3] for r in rows)), '->', args.seam_tsv)
     bad = result['ascii_punct'].get('co_quote', 0) + result['ascii_punct'].get('system_prompt', 0)
+    if args.fail_on_seams:
+        bad += result['seam_total'] - result.get('unaligned_seams', 0)
     print('RESULT:', 'FAIL' if bad else 'PASS', '(CO quote / system prompt ASCII punctuation)')
     return 1 if bad else 0
 
