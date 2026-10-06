@@ -1,0 +1,322 @@
+msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reason
+0x00A01AB0	0	랜드를	워즈	매크로 랜드를‖w워즈 월드 안	매크로 랜드를␣w워즈 월드 안	マクロランドを、	このウォーズワールドにおける	space	separate words; Korean spacing
+0x00A024A0	0	어이	왜	어이‖w왜 레드스타군	어이␣w왜 레드스타군	おい、	なんでレッドスター軍を	space	separate words; Korean spacing
+0x00A02628	3	군은	성가신	w/블랙홀 군은‖w성가신 상대야	w/블랙홀 군은␣w성가신 상대야	ブラックホール軍・・・	やっかいな相手だわ。	space	separate words; Korean spacing
+0x00A02684	0	！	적의	사령！‖w적의 남은 부	사령！␣w적의 남은 부	司令！	　敵の残りの部隊を確認しました！	space	after ！/？, next phrase
+0x00A02788	3	힘을	보여	{40}。ww/내 힘을‖w보여 주려고 	{40}。ww/내 힘을␣w보여 주려고 	ぼくの力を	見せてやろうと思ったのに。	space	separate words; Korean spacing
+0x00A027C4	2	당신은	메카에	{d4}야。/당신은‖w메카에 관해서	{d4}야。/당신은␣w메카에 관해서	あなたは	メカに関しては天才だけど、	space	separate words; Korean spacing
+0x00A028B8	2	적군은	오른쪽	ww/적군은‖w오른쪽 위 검	ww/적군은␣w오른쪽 위 검	敵軍は、	右上にいる黒いユニットよ。	space	separate words; Korean spacing
+0x00A02908	0	목표는	적	이번 목표는‖w적 본부 점령	이번 목표는␣w적 본부 점령	ここでの私達の目的は、	敵の本部を占領するか	space	separate words; Korean spacing
+0x00A02908	1	전멸	이	또는 적 전멸‖w이 땅을 되찾	또는 적 전멸␣w이 땅을 되찾	敵を全滅させて、	この土地を取り戻すこと。	space	이 = demonstrative (이 땅을), new phrase
+0x00A0299C	0	！	바로	좋아！‖ww바로 출발하자	좋아！␣ww바로 출발하자	よし！	すぐ出発するぞ！	space	after ！/？, next phrase
+0x00A029B8	0	마	서둘러	서두르지 마‖ww서둘러 가도	서두르지 마␣ww서둘러 가도	そうあわてないで。	あせって進んでも、	space	separate words; Korean spacing
+0x00A029B8	3	전에	우선	/전투 전에‖w우선 기본적인	/전투 전에␣w우선 기본적인	戦いの前に、	まずは基本的な動かし方を	space	separate words; Korean spacing
+0x00A02A48	0	먼저	유닛에	먼저‖w유닛에 명령하	먼저␣w유닛에 명령하	まず、	ユニットに命令するには、	space	separate words; Korean spacing
+0x00A02A48	2	이	커서를	려면w/이‖w커서를 써w{8d}	려면w/이␣w커서를 써w{8d}	この	「カーソル」	space	separate words; Korean spacing
+0x00A02A48	3	써	봐	/이w커서를 써‖w봐/십{8f}	/이w커서를 써␣w봐/십{8f}	「カーソル」	を使うの。	space	separate words; Korean spacing
+0x00A02A48	6	그럼	유닛에	{5f}해ww/그럼‖w유닛에 명령을	{5f}해ww/그럼␣w유닛에 명령을	じゃあ、	ユニットに命令を与えてみましょう。	space	separate words; Korean spacing
+0x00A02B08	0	선택한	종료는	선택한‖w종료는ww	선택한␣w종료는ww	今選んだ	「終了」	space	separate words; Korean spacing
+0x00A02B08	4	고르면	아군	{ba}/이걸 고르면‖w아군 행동이 	{ba}/이걸 고르면␣w아군 행동이 	これを選ぶと、	自軍の全行動が終わり、	space	separate words; Korean spacing
+0x00A02BD4	0	보병이야	전투력은	보병이야‖ww전투력은 낮지	보병이야␣ww전투력은 낮지	それは歩兵よ。	戦闘力は低いけれど、	space	separate words; Korean spacing
+0x00A02C54	1	또는	본부	적 전멸 또는‖w본부 점령이야	적 전멸 또는␣w본부 점령이야	敵を全滅させるか、	本部を占領することだ！	space	separate words; Korean spacing
+0x00A02C8C	1	뿐이야	물론	/뿐이야‖ww물론w보{8d}	/뿐이야␣ww물론w보{8d}	だけなの。	もちろん、	space	separate words; Korean spacing
+0x00A02C8C	3	물론	보병도	이야ww물론‖w보병도 포함돼	이야ww물론␣w보병도 포함돼	もちろん、	歩兵もその中に入るわ。	space	separate words; Korean spacing
+0x00A02D4C	1	점령은	적군	驕{49}/점령은‖w적군 중립 거	驕{49}/점령은␣w적군 중립 거	占領できるのは、	敵軍や中立の拠点だけよ。	space	separate words; Korean spacing
+0x00A02D4C	4	있어	거기로	w/할 수 있어‖w거기로 가면	w/할 수 있어␣w거기로 가면	そこへ行ったら、	歩兵を上に移動させてみて。	space	separate words; Korean spacing
+0x00A02D4C	6	점령	명령이	/w점령‖w명령이 나와	/w점령␣w명령이 나와	「占領」	というコマンドが出るはずよ！	space	separate words; Korean spacing
+0x00A02DE8	0	그럼	다음은	그럼‖w다음은 유닛을	그럼␣w다음은 유닛을	さあ、	次はユニットを動かしましょう。	space	separate words; Korean spacing
+0x00A02DE8	7	땐	대기를	 일 없을 땐‖w대기를w골라	 일 없을 땐␣w대기를w골라	何もすることがない時は	「待機」	space	separate words; Korean spacing
+0x00A02DE8	8	대기를	골라	{be}w대기를‖w골라/	{be}w대기를␣w골라/	「待機」	を選んでね。	space	separate words; Korean spacing
+0x00A02F00	1	보병을	탑승	송차는 보병을‖w탑승w시켜 나{8b}	송차는 보병을␣w탑승w시켜 나{8b}	輸送車は歩兵系を	搭載	space	separate words; Korean spacing
+0x00A02F00	2	탑승	시켜	{c8} 보병을w탑승‖w시켜 나르고/{8e}	{c8} 보병을w탑승w시켜 나르고/{8e}	搭載	して運んだり	join	particle/ending attaches to the previous word
+0x00A02F88	1	탑승	명령이	w/탑승‖w명령이 나와	w/탑승␣w명령이 나와	「搭載」	というコマンドが出るはずよ。	space	separate words; Korean spacing
+0x00A02F88	2	유닛은	하차	탑승한 유닛은‖w하차w명령{8f}	탑승한 유닛은␣w하차w명령{8f}	搭載したユニットは、	「降車」	space	separate words; Korean spacing
+0x00A02F88	3	하차	명령으로	{de}은w하차‖w명령으로/내{8b}	{de}은w하차␣w명령으로/내{8b}	「降車」	コマンドで	space	separate words; Korean spacing
+0x00A02F88	4	운반하면	느린	렇게 운반하면‖w느린 보병도	렇게 운반하면␣w느린 보병도	こうして運んでいけば、	足のおそい歩兵を	space	separate words; Korean spacing
+0x00A03064	0	그런가	보병은	그런가‖w보병은 이동력	그런가␣w보병은 이동력	そうか、	歩兵の移動力は３だけど、	space	separate words; Korean spacing
+0x00A03064	2	되니까	좋아	６이나 되니까‖w좋아！w해 볼{88}	６이나 되니까␣w좋아！w해 볼{88}	輸送車は６もあるから・・・	よし！	space	separate words; Korean spacing
+0x00A03064	3	！	해	{62}니까w좋아！‖w해 볼게！/	{62}니까w좋아！␣w해 볼게！/	よし！	やってみる！	space	after ！/？, next phrase
+0x00A03154	0	마	빠질	엔 내리지 마‖w빠질 수 있어	엔 내리지 마␣w빠질 수 있어	歩兵を海に降ろしたら、	おぼれてしまうかも	space	separate words; Korean spacing
+0x00A031CC	2	탄약	과	w탄약‖w과w연료w가 줄	w탄약w과w연료w가 줄	主砲の弾	や	join	particle/ending attaches to the previous word
+0x00A031CC	3	과	연료	w탄약w과‖w연료w가 줄어	w탄약w과␣w연료w가 줄어	や	燃料	space	separate words; Korean spacing
+0x00A031CC	4	연료	가	약w과w연료‖w가 줄어	약w과w연료w가 줄어	燃料	が減っていくの。	join	particle/ending attaches to the previous word
+0x00A031CC	5	약해	연료	/약해‖w연료 없으면 	/약해␣w연료 없으면 	なるし、	燃料がなくなると動けなくなるわ。	space	separate words; Korean spacing
+0x00A031CC	6	수송차는	보급	/수송차는‖w보급w으로w	/수송차는␣w보급w으로w	輸送車は	「補給」	space	separate words; Korean spacing
+0x00A031CC	7	보급	으로	/수송차는w보급‖w으로w 주변에{81}	/수송차는w보급w으로w 주변에{81}	「補給」	で、	join	particle/ending attaches to the previous word
+0x00A031CC	10	땐	보급	w/급할 땐‖w보급w보급{81}	w/급할 땐␣w보급w보급{81}	急ぐ時は	「補給」	space	separate words; Korean spacing
+0x00A031CC	11	보급	보급	급할 땐w보급‖w보급 명령을 	급할 땐w보급␣w보급 명령을 	「補給」	コマンドを使うといいわ！	space	separate words (source repeats 보급: translation issue, not spacing)
+0x00A0331C	2	유닛이네	알았다	주는 유닛이네‖ww알았다！/	주는 유닛이네␣ww알았다！/	助けるユニットなんだな。	わかったぞ！	space	separate words; Korean spacing
+0x00A0336C	0	자	다음은	자‖w다음은 유닛을	자␣w다음은 유닛을	さあ、	次はユニットを動かしましょう。	space	separate words; Korean spacing
+0x00A0336C	3	그건	이동	지w/그건‖w이동 가능 범	지w/그건␣w이동 가능 범	それが、	移動できるはんいよ。	space	separate words; Korean spacing
+0x00A0336C	7	땐	대기	 게 없을 땐‖w대기w골라{81}	 게 없을 땐␣w대기w골라{81}	何もすることがない時は	「待機」	space	separate words; Korean spacing
+0x00A0336C	8	대기	골라	{40}땐w대기‖w골라 줘/	{40}땐w대기␣w골라 줘/	「待機」	を選んでね。	space	separate words; Korean spacing
+0x00A03434	2	각각	이동	유닛에는 각각‖w이동 타입	유닛에는 각각␣w이동 타입	ユニットにはそれぞれ	「移動タイプ」	space	separate words; Korean spacing
+0x00A03434	3	타입	있어서	w이동 타입‖w있어서、w/지	w이동 타입␣w있어서、w/지	「移動タイプ」	があって、	space	separate words; Korean spacing
+0x00A03434	6	전차형	이야	{c2}입은 w전차형‖w이야。ww/전차{81}	{c2}입은 w전차형w이야。ww/전차{81}	「戦車」	よ。	join	particle/ending attaches to the previous word
+0x00A03434	10	확인은	유닛	 타입 확인은‖w유닛 위에서	 타입 확인은␣w유닛 위에서	移動タイプを知りたい時は、	ユニットの上で	space	separate words; Korean spacing
+0x00A03434	11	키	눌러	{d3}서/정보 키‖ww눌러 봐	{d3}서/정보 키␣ww눌러 봐	Ｒを押してみて。	情報が表示されるわ。	space	separate words; Korean spacing
+0x00A03600	1	종료	로	때는、w/종료‖w로 아군 행동	때는、w/종료w로 아군 행동	「終了」	で自軍の行動を終わらせましょう。	join	particle/ending attaches to the previous word
+0x00A03600	3	있는	종료	 아래에 있는‖w종료w을 {88}	 아래에 있는␣w종료w을 {88}	その一番下にある	「終了」	space	separate words; Korean spacing
+0x00A03600	4	종료	을	��{d3} 있는w종료‖w을 고르면、w/	��{d3} 있는w종료w을 고르면、w/	「終了」	を選べば、	join	object particle attaches (source has 을 for 를: translation issue, not spacing)
+0x00A03734	0	저기	캐서린	저기‖w캐서린、w/	저기␣w캐서린、w/	なあ、	キャサリン、	space	separate words; Korean spacing
+0x00A03768	0	그래	게다가	그래‖ww게다가、w헬보{8f}	그래␣ww게다가、w헬보{8f}	ええ。	しかも、	space	separate words; Korean spacing
+0x00A03834	0	기세야	믿고	좋은 기세야‖ww믿고 있을게	좋은 기세야␣ww믿고 있을게	その意気よ！	頼りにしてるわ。	space	separate words; Korean spacing
+0x00A03854	2	직접공격	하는	은、w/직접공격‖w하는 유닛이야	은、w/직접공격w하는 유닛이야	直接攻撃	するユニットなの。	join	noun+하다 verb 직접공격하는
+0x00A03900	0	！	말이	그래！‖ww말이 빠르네。	그래！␣ww말이 빠르네。	そう！	話が早いわ。	space	after ！/？, next phrase
+0x00A03B90	3	상태창	이라고	/이건 w상태창‖w이라고 해/하	/이건 w상태창w이라고 해/하	「カーソルウィンドウ」	と言うの。	join	particle/ending attaches to the previous word
+0x00A03C9C	0	보병이	점령	네 보병이‖w점령 시작했어	네 보병이␣w점령 시작했어	あなたの歩兵部隊が、	占領を始めたわ。	space	separate words; Korean spacing
+0x00A03CEC	0	숫자는	거점	빡이는 숫자는‖w거점 내구력이	빡이는 숫자는␣w거점 내구력이	その中で点滅している数字は、	拠点の耐久力よ。	space	separate words; Korean spacing
+0x00A03CEC	3	줄면	거점이	이게 다 줄면‖w거점이 아군 	이게 다 줄면␣w거점이 아군 	これが０になれば、	拠点は自軍のものになるわ。	space	separate words; Korean spacing
+0x00A03CEC	4	보병은	한	 １０ 보병은‖w한 번에 내구	 １０ 보병은␣w한 번에 내구	ＨＰ１０の歩兵は、	１回の占領で耐久力を	space	separate words; Korean spacing
+0x00A03CEC	5	보병은	이틀이면	 않은 보병은‖w이틀이면	 않은 보병은␣w이틀이면	傷ついていない歩兵なら、	２日で占領して	space	separate words; Korean spacing
+0x00A03CEC	6	돌아가니까	조심해	로 돌아가니까‖w조심해/	로 돌아가니까␣w조심해/	耐久力が元に戻ってしまうから、	気をつけて！	space	separate words; Korean spacing
+0x00A03E24	1	보병은	꼭	령 중 보병은‖w꼭 지킬 거야	령 중 보병은␣w꼭 지킬 거야	占領中の歩兵は、	しっかり守るぞ！	space	separate words; Korean spacing
+0x00A03E54	0	때까지	매일	 끝날 때까지‖w매일w점령w	 끝날 때까지␣w매일w점령w	占領し終わるまでは、	毎日	space	separate words; Korean spacing
+0x00A03E54	1	매일	점령	{bd}까지w매일‖w점령w을/실	{bd}까지w매일␣w점령w을/실	毎日	「占領」	space	separate words; Korean spacing
+0x00A03E54	2	점령	을	w매일w점령‖w을/실행 잊지{81}	w매일w점령w을/실행 잊지{81}	「占領」	を	join	particle/ending attaches to the previous word
+0x00A03EC8	0	！	잘해	료！‖w잘해 줬어	료！␣w잘해 줬어	リョウ！	よくやってくれたわね。	space	after ！/？, next phrase
+0x00A03EC8	3	이제	이	ww/이제‖w이 땅은 해방	ww/이제␣w이 땅은 해방	これで	この土地は解放できたわ！	space	이 = demonstrative (이 땅은), after adverb 이제
+0x00A03F40	2	이제부터	싫어도	럭。ww이제부터‖w싫어도/적과{8f}	럭。ww이제부터␣w싫어도/적과{8f}	これから	イヤでも	space	separate words; Korean spacing
+0x00A03FB8	0	！	뭐	료！‖w뭐 하는 거야	료！␣w뭐 하는 거야	リョウ！	　なにをしているの！	space	after ！/？, next phrase
+0x00A03FFC	2	여러	한	{54}w・・・w/여러‖w한 번 시험해	{54}w・・・w/여러␣w한 번 시험해	色々、	試してみようかと・・・	space	separate words; Korean spacing
+0x00A04028	0	거짓말	뭔가	거짓말‖ww뭔가 흠집을 	거짓말␣ww뭔가 흠집을 	うそね。	なにかアラさがしをしてたでしょ！	space	separate words; Korean spacing
+0x00A04028	4	건	시간도	ww/그런 건‖w시간도 물자도	ww/그런 건␣w시간도 물자도	そういう事は	時間も物資もムダだからやめて。	space	separate words; Korean spacing
+0x00A04028	8	더	처음부터	、w/한 번 더‖w처음부터 다시	、w/한 번 더␣w처음부터 다시	もう一度、	最初からやり直せるわ。	space	separate words; Korean spacing
+0x00A0413C	6	뒤	이쪽에서	가까이 온 뒤‖w이쪽에서 공격	가까이 온 뒤␣w이쪽에서 공격	敵に近よらせてから、	こちらから攻撃・・・	space	separate words; Korean spacing
+0x00A04334	0	맞아	국토	맞아‖w국토 깊숙이 	맞아␣w국토 깊숙이 	そうね、	国土に深く入りこまれては	space	separate words; Korean spacing
+0x00A044F4	0	？	적	뭐？‖w적 도시인가ww	뭐？␣w적 도시인가ww	なに・・・	敵の都市か。	space	after ！/？, next phrase
+0x00A04AD0	2	그건	앞으로의	{48}서・・・/그건‖w앞으로의 과제	{48}서・・・/그건␣w앞으로의 과제	それが、	これからの課題です。	space	separate words; Korean spacing
+0x00A04BF8	0	！	믿고	그거야！‖w믿고 있을게。	그거야！␣w믿고 있을게。	その意気よ！	頼りにしてるわ。	space	after ！/？, next phrase
+0x00A04BF8	3	지금	네가	{65}속할게/지금‖w네가 점령 시	{65}속할게/지금␣w네가 점령 시	今、	あなたが占領を始めた	space	separate words; Korean spacing
+0x00A04C64	2	한다	그게	{40}역할을/한다‖ww그게 뭔지 알	{40}역할을/한다␣ww그게 뭔지 알	するわ。	それが何かわかる？	space	separate words; Korean spacing
+0x00A04D3C	0	！	역시	맞아！‖w역시 도미노네	맞아！␣w역시 도미노네	そうよ！	さすがはドミノね！	space	after ！/？, next phrase
+0x00A04D3C	2	시작	에	w/매일 시작‖w에 돈을 받아	w/매일 시작w에 돈을 받아	毎日の始め	にお金がもらえるわ。	join	particle/ending attaches to the previous word
+0x00A04D3C	3	있으면	그	거점이 있으면‖w그 돈으로/유{89}	거점이 있으면␣w그 돈으로/유{89}	生産できる拠点があれば、	そのお金で	space	separate words; Korean spacing
+0x00A04D3C	7	늘면	손해는	{41}w도시가 늘면‖w손해는 없으니	{41}w도시가 늘면␣w손해는 없으니	自軍都市がふえて、	損な事は無いから、	space	separate words; Korean spacing
+0x00A04FB4	0	！	그러면	그래！‖w그러면、w{8d}	그래！␣w그러면、w{8d}	そうね！	そうすれば、	space	after ！/？, next phrase
+0x00A04FB4	4	공격	을	이동 후 공격‖w을 할 수 없	이동 후 공격w을 할 수 없	移動後の攻撃	ができないの。	join	particle/ending attaches to the previous word
+0x00A050B4	7	칸	이야	w２에서 ３w칸‖ww이야w/정보	w２에서 ３w칸ww이야w/정보	よ。	これは、	join	particle/ending attaches to the previous word
+0x00A05388	4	위에	서	나 본부 위에‖w서/대기시켜 {8a}	나 본부 위에w서/대기시켜 {8a}	自軍都市か本部の上	で	join	particle/ending attaches to the previous word
+0x00A05388	5	회복	동시에	체력 ２ 회복‖w동시에/탄약 {8e}	체력 ２ 회복␣w동시에/탄약 {8e}	次の日の始めにＨＰは２回復するし、	同時に	space	separate words; Korean spacing
+0x00A05558	3	점령	을	/이어서 w점령‖w을 실행해 봐	/이어서 w점령w을 실행해 봐	「占領」	を実行してね。	join	particle/ending attaches to the previous word
+0x00A05610	5	회복하면	유닛의	체력 회복하면‖w유닛의/값{8e}	체력 회복하면␣w유닛의/값{8e}	拠点でＨＰの回復をすると、	ユニットの	space	separate words; Korean spacing
+0x00A05768	2	！	무슨	{41}w끈질기네！‖w무슨 목적으로	{41}w끈질기네！␣w무슨 목적으로	しつこいわよ！	何の目的で・・・！	space	after ！/？, next phrase
+0x00A059E8	2	！	힘내	길 수 있어！‖w힘내！	길 수 있어！␣w힘내！	まちがいなく勝てるわ！	がんばってね！	space	after ！/？, next phrase
+0x00A05D54	0	미안	미안해	미안‖w미안해。ww/{88}	미안␣w미안해。ww/{88}	す、	すまねえ。	space	separate words; Korean spacing
+0x00A060BC	0	！	간접	그래！‖w간접 공격 따	그래！␣w간접 공격 따	おうよ！	　間接なんか、	space	after ！/？, next phrase
+0x00A061AC	1	바주카병	을	{43}과 w바주카병‖w을 탑재해서、	{43}과 w바주카병w을 탑재해서、	バズーカ兵	を搭載して、	join	particle/ending attaches to the previous word
+0x00A06998	1	합류	을	��{be}에서 w합류‖w을 골라줘。/{8c}	��{be}에서 w합류w을 골라줘。/{8c}	「合流」	を選んでね。	join	particle/ending attaches to the previous word
+0x00A06BFC	1	잠깐	이	뭐、w잠깐‖w이 자식！w/	뭐、w잠깐␣w이 자식！w/	まて、	このやろう！	space	이 = demonstrative (이 자식), after interjection 잠깐
+0x00A06BFC	4	젠장	놓쳤나	w/・・・w젠장‖w놓쳤나。/	w/・・・w젠장␣w놓쳤나。/	ちっ、	逃がしたか。	space	separate words; Korean spacing
+0x00A06C78	1	뒤에는	포인트와	 성공 뒤에는‖w포인트와 랭크	 성공 뒤에는␣w포인트와 랭크	作戦成功させた後に、	ポイントとランクが	space	separate words; Korean spacing
+0x00A06C78	2	포인트는	하치	/그 포인트는‖w하치 상점에서	/그 포인트는␣w하치 상점에서	あのポイントは、	そのままハチさんのショップで	space	separate words; Korean spacing
+0x00A06D98	1	먼저	스피드	/먼저‖w스피드w{89}	/먼저␣w스피드w{89}	まず	「スピード」	space	separate words; Korean spacing
+0x00A06D98	2	스피드	는	/먼저w스피드‖w는/작전 성{88}	/먼저w스피드w는/작전 성{88}	「スピード」	は、	join	particle/ending attaches to the previous word
+0x00A06D98	3	파워	는	{ba}。/파워‖w는w/한 번에	{ba}。/파워w는w/한 번에	「パワー」	は、	join	particle/ending attaches to the previous word
+0x00A06D98	5	테크닉	는	/테크닉‖w는/아군이 {89}	/테크닉w는/아군이 {89}	「テクニック」	は、	join	particle/ending attaches to the previous word
+0x00A06D98	6	을	각각	{b3}지 않은지/을‖w각각 체크해。	{b3}지 않은지/을␣w각각 체크해。	を、	それぞれチェックしているの。	space	separate words; Korean spacing
+0x00A06D98	10	보다가	무리하면	점수만 보다가‖w무리하면 안 	점수만 보다가␣w무리하면 안 	点数を気にして、	無理をしちゃダメよ。	space	separate words; Korean spacing
+0x00A06EF0	1	없어도	난	인트가 없어도‖w난 전력으로！	인트가 없어도␣w난 전력으로！	だがポイントが無くても、	オレは全開だ！	space	separate words; Korean spacing
+0x00A06F38	0	！	져	젠장！‖w져 버렸나・・	젠장！␣w져 버렸나・・	くそっ！	負けてしまったか・・・	space	after ！/？, next phrase
+0x00A06F74	3	다음엔	같은	ww/다음엔‖w같은 잘못을 	ww/다음엔w같은 잘못을 	次に、	同じ過ちをくり返さなければいいのよ。	defer	space needed (다음엔 같은) but the row is already 44 half-cells; needs relayout
+0x00A07194	1	！	캐서린	담엔 안 져！‖w캐서린、w{90}	담엔 안 져！␣w캐서린、w{90}	次は負けん！	キャサリン、	space	after ！/？, next phrase
+0x00A0768C	1	확인해	야	 Ｂ로 확인해‖w야。/	 Ｂ로 확인해w야。/	攻撃範囲が知りたい時はＢを押す、	だ。	join	particle/ending attaches to the previous word
+0x00A076C4	0	！	좀	그래！‖w좀 걱정했었지	그래！␣w좀 걱정했었지	そうね！	ちょっと心配だったけど、	space	after ！/？, next phrase
+0x00A0770C	0	！	확실히	닥쳐！‖w확실히/멀쩡{93}	닥쳐！␣w확실히/멀쩡{93}	ぬかせ！	きっちり	space	after ！/？, next phrase
+0x00A0770C	1	자	가볍게	{46}내 주마。/자‖w가볍게 돌파한	{46}내 주마。/자␣w가볍게 돌파한	さあ、	軽く突破するぜ！	space	separate words; Korean spacing
+0x00A079C4	0	오	괜찮다	오‖w괜찮다！/	오␣w괜찮다！/	おう！	大丈夫だぜ！	space	separate words; Korean spacing
+0x00A07E84	0	？	응	응？‖w응？w・・・{8c}	응？␣w응？w・・・{8c}	ん？	・・・	space	after ！/？, next phrase
+0x00A0815C	0	？	아직	응！？‖w아직、w여유가{81}	응！？␣w아직、w여유가{81}	ん！？	まだ、	space	after ！/？, next phrase
+0x00A08388	0	！	맥스	고마워！‖w맥스！w/근	고마워！␣w맥스！w/근	ありがとう！	マックス！	space	after ！/？, next phrase
+0x00A085DC	0	！	맥스	도미노！‖w맥스！w/다	도미노！␣w맥스！w/다	ドミノ！	マックス！	space	after ！/？, next phrase
+0x00A0897C	5	육상부대는	다가올	쪽 육상부대는‖w다가올 때까지	쪽 육상부대는␣w다가올 때까지	上の陸上部隊は、	近づいてくるまで	space	separate words; Korean spacing
+0x00A08C6C	1	！	정답	、w/안 해요！‖w정답！/	、w/안 해요！␣w정답！/	しませーん！	正解！	space	after ！/？, next phrase
+0x00A08CF4	2	아주	머니	{a7}을래？/아주‖w머니ww야！	{a7}을래？/아주w머니ww야！	オ・	バ・	join	wordplay 아주w머니ww야 = 아주머니야 spelled with pauses (JP オ・バ・)
+0x00A08EB8	0	！	적	네！‖w적 본부 점령	네！␣w적 본부 점령	はい！	　敵本部占領をねらうなら	space	after ！/？, next phrase
+0x00A09034	4	라고	꽤	 w３ー５w라고‖w꽤 넓어。	 w３ー５w라고␣w꽤 넓어。	と、	かなり広いわ。	space	separate words; Korean spacing
+0x00A09188	0	나가면	호위함	바다에 나가면‖w호위함・・・/	바다에 나가면␣w호위함・・・/	かといって海に出れば、	護衛艦・・・	space	separate words; Korean spacing
+0x00A09334	0	공격	간접공격	 바다도 공격‖w간접공격 유닛	 바다도 공격␣w간접공격 유닛	陸と海に攻撃できる上、	間接攻撃ユニットの中で	space	separate words; Korean spacing
+0x00A09508	10	항구	는	시켜서、w/항구‖w는 없으니、w{8d}	시켜서、w/항구w는 없으니、w{8d}	港・・・	は無いから、	join	particle/ending attaches to the previous word
+0x00A09BD4	7	지도는	어떻게든	{42}/이 지도는‖w어떻게든	{42}/이 지도는␣w어떻게든	このマップは、	なんとしてでも	space	separate words; Korean spacing
+0x00A09EC0	1	지금	찬	{40} 있어。/지금‖w찬 만큼은、	{40} 있어。/지금␣w찬 만큼은、	今、	たまった分は、	space	separate words; Korean spacing
+0x00A0A064	1	！	당신의	노！w/축하해！‖w당신의 승리야	노！w/축하해！␣w당신의 승리야	おめでとう！	あなたの勝ちね。	space	after ！/？, next phrase
+0x00A0A0B8	0	자	기운	자‖w기운 넘치는 	자␣w기운 넘치는 	さあ、	元気なキャットちゃんに	space	separate words; Korean spacing
+0x00A0A0B8	2	！	끌어내	/도미노！‖w끌어내 줘。	/도미노！␣w끌어내 줘。	ドミノ！	引きずり出してあげて。	space	after ！/？, next phrase
+0x00A0A124	1	는	네	아、w는‖w네！/	아、w는␣w네！/	は、	はい！	space	separate words; Korean spacing
+0x00A0A77C	2	어이	료	{f1} 몰라。/어이‖w료/너、	{f1} 몰라。/어이␣w료/너、	おい、	リョウ	space	separate words; Korean spacing
+0x00A0A7D4	0	봐	맥스	{49}/두고 봐‖w맥스。ww간	{49}/두고 봐␣w맥스。ww간	見てろ、	マックス。	space	separate words; Korean spacing
+0x00A0A9AC	0	？	이	응？‖w이 지도는	응？␣w이 지도는	ん？	　このマップは	space	after 응？; 이 = demonstrative (이 지도는)
+0x00A0ABF4	0	！	도시	그렇구나！‖w도시 공장 점	그렇구나！␣w도시 공장 점	なるほど！	都市や工場を占領するたびに	space	after ！/？, next phrase
+0x00A0AF40	0	！	맥스	좋아！‖w맥스、 두고 	좋아！␣w맥스、 두고 	よし！	マックスみてろ！	space	after ！/？, next phrase
+0x00A0B124	3	싸워	편리한	그럭저럭 싸워‖w편리한 유닛이	그럭저럭 싸워␣w편리한 유닛이	そこそこ戦えるから、	便利なユニットよ！	space	separate words; Korean spacing
+0x00A0B1D0	0	지금	생산한	지금‖w생산한 건/{89}	지금␣w생산한 건/{89}	今、	生産したのは	space	separate words; Korean spacing
+0x00A0B34C	0	지금	생산한	지금‖w생산한 건 대	지금␣w생산한 건 대	今、	生産したのは対空ミサイルよ。	space	separate words; Korean spacing
+0x00A0B3D0	0	지금	생산한	지금‖w생산한 건/{8e}	지금␣w생산한 건/{8e}	今、	生産したのは	space	separate words; Korean spacing
+0x00A0B518	0	？	쓸	어떠냐？‖w쓸 수 있겠나	어떠냐？␣w쓸 수 있겠나	どうだ？	　使えるか？	space	after ！/？, next phrase
+0x00A0B584	1	그런가	뭐	メ{45}・・w그런가‖w뭐 됐어/직접{81}	メ{45}・・w그런가␣w뭐 됐어/직접{81}	そうか、	まあいい	space	separate words; Korean spacing
+0x00A0B5B8	1	！	꺄핫	일이 기대돼！‖w꺄핫！/	일이 기대돼！␣w꺄핫！/	明日が楽しみね！	キャハッ！	space	after ！/？, next phrase
+0x00A0B5F4	2	캐논	라는	{54} w블랙 캐논‖w라는/이름{8f}	{54} w블랙 캐논w라는/이름{8f}	「ブラックキャノン」	とかいう	join	particle/ending attaches to the previous word
+0x00A0B5F4	6	지금	시제품	{53}、w아직 지금‖w시제품 같아서	{53}、w아직 지금␣w시제품 같아서	まだ今は、	試作品らしくて、	space	separate words; Korean spacing
+0x00A0B5F4	9	번	밖에	/w２일에 １번‖w밖에 공격 못	/w２일에 １번w밖에 공격 못	２日に１回	しか攻撃できないみたい。	join	particle/ending attaches to the previous word
+0x00A0B5F4	10	안에	강한	{52}。/범위 안에‖w강한 유닛 １	{52}。/범위 안에␣w강한 유닛 １	範囲内にいる、	強いユニット１部隊を	space	separate words; Korean spacing
+0x00A0B780	2	！	꺄하하	w/공격 개시！‖w꺄하하！/	w/공격 개시！␣w꺄하하！/	攻撃開始！	　キャハハ！	space	after ！/？, next phrase
+0x00A0B7F8	0	？	아직	뭐！？‖w아직、w여유{88}	뭐！？␣w아직、w여유{88}	え！？	　まだ、	space	after ！/？, next phrase
+0x00A0B82C	1	지금	모인	{40} 있어。/지금‖w모인 분은、 	{40} 있어。/지금␣w모인 분은、 	今、	たまった分は、普通のブレイクよ。	space	separate words; Korean spacing
+0x00A0B994	0	오오	내	오오‖w내 실력의	오오␣w내 실력의	おお！	　ぼくのウデの	space	separate words; Korean spacing
+0x00A0B9BC	1	！	정신	{45}・・！/전군！‖w정신 바짝 차	{45}・・！/전군！␣w정신 바짝 차	全軍！	気ィひきしめていけ！	space	after ！/？, next phrase
+0x00A0BA38	0	！	간다	오오옷！‖w간다！w/먹	오오옷！␣w간다！w/먹	オオオッ！	　いくぞ！	space	after ！/？, next phrase
+0x00A0BA88	0	！	과연	해냈다！‖w과연 캐서린이	해냈다！␣w과연 캐서린이	やった！	　さすがはキャサリン！	space	after ！/？, next phrase
+0x00A0BBA4	0	！	맡겨둬	오우！‖w맡겨둬！	오우！␣w맡겨둬！	おう！	　まかしとけ！	space	after ！/？, next phrase
+0x00A0BCE8	0	！	어떠냐	맥스！‖w어떠냐！w/제대	맥스！␣w어떠냐！w/제대	マックス！	どうだ！	space	after ！/？, next phrase
+0x00A0BD88	0	？	아아	응？‖w아아、w이건{81}	응？␣w아아、w이건{81}	ん？	　ああ、	space	after ！/？, next phrase
+0x00A0BF10	4	않아	이번	이 닿지 않아‖w이번 전투로 	이 닿지 않아␣w이번 전투로 	砲撃が届かない事は、	この戦いでわかったわ。	space	separate words; Korean spacing
+0x00A0BF10	8	맥스에게	본때를	{c3}！/맥스에게‖w본때를 보이려	{c3}！/맥스에게␣w본때를 보이려	マックスを、	見かえすためにも	space	separate words; Korean spacing
+0x00A0C12C	0	！	진격	캐서린！‖w진격 준비 완	캐서린！␣w진격 준비 완	キャサリン！	　進撃準備できたぞ！	space	after ！/？, next phrase
+0x00A0C410	0	어이	그	젠장！/어이‖w그 데이터 지	젠장！/어이␣w그 데이터 지	おい、	例のデータを消去するまで	space	separate words; Korean spacing
+0x00A0C4A8	1	시야	가	{c8} 각각 w시야‖w가 있어서/범{8f}	{c8} 각각 w시야w가 있어서/범{8f}	視界	があって	join	particle/ending attaches to the previous word
+0x00A0C5FC	0	！	정찰차는	그래！‖w정찰차는 시야	그래！␣w정찰차는 시야	そう！	偵察車は視界が５もあるの。	space	after ！/？, next phrase
+0x00A0C7B4	3	조우	요	{a7}는 게、w조우‖w요。/조우라는{81}	{a7}는 게、w조우w요。/조우라는{81}	「そうぐう」	よ。	join	particle/ending attaches to the previous word
+0x00A0CA9C	1	！	조심해서	？w/알았어！‖w조심해서 진군	？w/알았어！␣w조심해서 진군	わかった！	　気をつけて進軍する！	space	after ！/？, next phrase
+0x00A0CA9C	2	！	고마워	竅{49}/도미노！‖w고마워！/	竅{49}/도미노！␣w고마워！/	ドミノ！	ありがとう！	space	after ！/？, next phrase
+0x00A0CC58	2	암초	야	、 w이 w암초‖w야。/만약、w적	、 w이 w암초w야。/만약、w적	岩礁	よ。	join	particle/ending attaches to the previous word
+0x00A0D0B4	0	！	바비큐	신난다！‖w바비큐 하자！	신난다！␣w바비큐 하자！	やった！	　バーベキューしよう！	space	after ！/？, next phrase
+0x00A0D0FC	0	지도는	놔둬도	이 지도는‖w놔둬도	이 지도는␣w놔둬도	このマップは、	ほうっておいても	space	separate words; Korean spacing
+0x00A0D0FC	4	올리거나	정찰차를	산에 올리거나‖w정찰차를 전선	산에 올리거나w정찰차를 전선	歩兵を山に登らせたり、	偵察車を前線に出して、	defer	space needed (올리거나 정찰차를) but the row is already 44 half-cells; needs relayout
+0x00A0D0FC	6	공격	라는	확인 후 공격‖w라는 것이/필{8e}	확인 후 공격w라는 것이/필{8e}	敵の位置を確認してから攻撃、	というのが	join	particle/ending attaches to the previous word
+0x00A0D894	0	！	모두가	괜찮아！‖w모두가 있으면	괜찮아！␣w모두가 있으면	大丈夫！	　みんながいれば	space	after ！/？, next phrase
+0x00A0D9B0	0	？	그럼	뭐라고！？‖w그럼、w/어	뭐라고！？␣w그럼、w/어	なんだって！？	　じゃあ、	space	after ！/？, next phrase
+0x00A135C8	0	바보놈	예전	바보놈‖w예전 놈들에게	바보놈␣w예전 놈들에게	バカモノ！	　以前やつらに	space	separate words; Korean spacing
+0x00A1369C	0	줄어들어	바보놈	줄어들어‖w바보놈/네{89}	줄어들어␣w바보놈/네{89}	へるわ、	バカモノ！	space	separate words; Korean spacing
+0x00A137BC	0	는	네	는‖w네！/	는␣w네！/	は、	はい！	space	separate words; Korean spacing
+0x00A13820	0	는	네	는‖w네！ww/마음{81}	는␣w네！ww/마음{81}	は、	はい！	space	separate words; Korean spacing
+0x00A13BA0	1	모두	놀라게	보고w/모두‖w놀라게 될 것	보고w/모두␣w놀라게 될 것	みな、	おどろくことじゃろう。	space	separate words; Korean spacing
+0x00A13D14	3	네놈이	이런	搶{a2}냐ww/네놈이‖w이런 짓을・・	搶{a2}냐ww/네놈이␣w이런 짓을・・	貴様が、	こんなマネを・・・	space	separate words; Korean spacing
+0x00A13D44	0	？	뭐가	어？‖w뭐가？ww/{8e}	어？␣w뭐가？ww/{8e}	へ？	　なにが？	space	after ！/？, next phrase
+0x00A13D44	3	여기	여긴	{40}？ww/여기‖w여긴 내 놀이	{40}？ww/여기␣w여긴 내 놀이	ここ、	あたしのあそび場だよ。	space	separate words; Korean spacing
+0x00A13DA4	5	？	캬하하	수 있을까〜？‖w캬하하・・・	수 있을까〜？␣w캬하하・・・	見つけられるかな〜？	キャハハ・・・	space	after ！/？, next phrase
+0x00A13EC8	2	뭐냐	이건	응？ww/뭐냐‖w이건？/	응？ww/뭐냐␣w이건？/	何じゃ、	これは？	space	separate words; Korean spacing
+0x00A13F9C	0	！	마음에	흥！‖w마음에 안 드	흥！␣w마음에 안 드	ふん！	　気にくわん話じゃな。	space	after ！/？, next phrase
+0x00A14304	0	！	네놈	시끄러워！‖w네놈 도움은 	시끄러워！␣w네놈 도움은 	うるさい！	貴様の助けなどいらぬわ。	space	after ！/？, next phrase
+0x00A1438C	4	테니	조심하십시오	꼴을 볼 테니‖w조심하십시오。	꼴을 볼 테니␣w조심하십시오。	いたい目にあうんで、	気をつけてくださいよ。	space	separate words; Korean spacing
+0x00A144A4	0	！	네놈	시끄러워！‖w네놈 도움은 	시끄러워！␣w네놈 도움은 	うるさい！	貴様の助けなどいらぬわ。	space	after ！/？, next phrase
+0x00A146C0	3	갑자기	진지한	{48}ww/갑자기‖w진지한 표정이	{48}ww/갑자기␣w진지한 표정이	急に、	まじめな表情をしおって	space	separate words; Korean spacing
+0x00A149E4	0	어차피	블루문	어차피‖w블루문 따위	어차피␣w블루문 따위	どの道、	ブルームーンなど	space	separate words; Korean spacing
+0x00A14A48	3	영토니	아무래도	나라니 영토니‖w아무래도 상관	나라니 영토니␣w아무래도 상관	国だの領地だのは、	どうだっていいんだ。	space	separate words; Korean spacing
+0x00A14B60	0	멸한	뭐라고	마을을 멸한‖w뭐라고ww/당신	마을을 멸한␣w뭐라고ww/당신	町を滅ぼした、	だと？	space	separate words; Korean spacing
+0x00A14B60	3	당신	아까	w뭐라고ww/당신‖w아까 그렇게 	w뭐라고ww/당신␣w아까 그렇게 	あんた、	さっきそう言ったな。	space	separate words; Korean spacing
+0x00A14B60	7	넌	내	/스네이크ww/넌‖w내 적이다。/	/스네이크ww/넌␣w내 적이다。/	お前は、	おれの敵だ。	space	separate words; Korean spacing
+0x00A14DB0	0	바보놈	이상한	바보놈‖w이상한 데서	바보놈␣w이상한 데서	バカモノ！	　変なところで	space	separate words; Korean spacing
+0x00A15014	0	？	저	에・・・에！？‖w저、ww/나、w	에・・・에！？␣w저、ww/나、w	え・・・	え！？	space	after ！/？, next phrase
+0x00A150D0	2	！	저놈이	{5a}。/바주카병！‖w저놈이 중전차	{5a}。/바주카병！␣w저놈이 중전차	バズーカ兵！	あいつが重戦車隊に気を取られて	space	after ！/？, next phrase
+0x00A15240	0	！	우리	뭐라고！‖ww우리 북방에	뭐라고！␣ww우리 북방에	なんじゃと！	　わが国の北方に	space	after ！/？, next phrase
+0x00A1534C	0	으음	어쩌면	으음‖w어쩌면 좋을까	으음␣w어쩌면 좋을까	うーむ、	どうしたものか。	space	separate words; Korean spacing
+0x00A15604	1	봐	꼬마야	한번 힘내 봐‖w꼬마야。/	한번 힘내 봐␣w꼬마야。/	せいぜいガンバんな、	ぼうや。	space	separate words; Korean spacing
+0x00A1563C	1	서	하지만	어、w서‖w하지만、w/그러	어、w서␣w하지만、w/그러	で、	ですが、	space	separate words; Korean spacing
+0x00A15670	4	좋지만	적당히	의욕은 좋지만‖w적당히 해。	의욕은 좋지만␣w적당히 해。	気負うのは悪くないが、	ほどほどにな。	space	separate words; Korean spacing
+0x00A156F4	0	는	넵	는‖w넵！ww/감{8d}	는␣w넵！ww/감{8d}	は、	はいっ！	space	separate words; Korean spacing
+0x00A157BC	0	！	그	에ー！‖w그、꼬맹이？	에ー！␣w그、꼬맹이？	えーっ！	　あの、子どもぉ？	space	after ！/？, next phrase
+0x00A15D78	1	그런가	레이저	竅{45}・・/그런가‖w레이저 사거리	竅{45}・・/그런가␣w레이저 사거리	そうか、	レーザーの射程上に	space	separate words; Korean spacing
+0x00A15D78	2	위해서라도	힘내야	분 위해서라도‖w힘내야 해！	분 위해서라도␣w힘내야 해！	お２人のためにも、	がんばらないと！	space	separate words; Korean spacing
+0x00A15F68	1	무섭게	이거다	말하기 무섭게‖w이거다。ww/곤{8a}	말하기 무섭게␣w이거다。ww/곤{8a}	言ってるそばから、	これだ。	space	separate words; Korean spacing
+0x00A1604C	0	흠	네놈은	흠‖w네놈은 레드스	흠␣w네놈은 레드스	むっ、	貴様はレッドスター軍の	space	separate words; Korean spacing
+0x00A160CC	3	않아도	아군은	빌리지 않아도‖w아군은・・・	빌리지 않아도␣w아군은・・・	他国の力など、かりずとも、	わが軍は・・・	space	separate words; Korean spacing
+0x00A16114	1	방에	블루문의	{63}다！/한 방에‖w블루문의	{63}다！/한 방에␣w블루문의	一発で、	ブルームーンの	space	separate words; Korean spacing
+0x00A1639C	2	으으윽	파이프가	{c5}・・・/으으윽‖w파이프가 막아	{c5}・・・/으으윽␣w파이프가 막아	うぬぬ、	パイプがジャマで	space	separate words; Korean spacing
+0x00A1654C	0	！	다들	우리 차례다！‖w다들 가자！	우리 차례다！␣w다들 가자！	ぼくらの番だ！	みんな行くぞ！	space	after ！/？, next phrase
+0x00A16980	0	！	다음엔	응！‖w다음엔 꼭 활	응！␣w다음엔 꼭 활	うん！	次こそはかつやくしてみせるぞ！	space	after ！/？, next phrase
+0x00A16B84	1	！	나도	{5b}아、w힘내자！‖w나도、/{8f}	{5b}아、w힘내자！␣w나도、/{8f}	よーし、	がんばるぞ！	space	after ！/？, next phrase
+0x00A16BEC	0	는	네	는‖w네？/	는␣w네？/	は、	はい？	space	separate words; Korean spacing
+0x00A16C2C	0	？	가	엣！？‖ww가、w갑자기{81}	엣！？␣ww가、w갑자기{81}	えっ！？	　い、	space	after ！？; 가 starts a stammered word (가、갑자기)
+0x00A16D54	2	미안	곧	{7c}・・・ww/미안‖w곧 원군 온다	{7c}・・・ww/미안␣w곧 원군 온다	す、	すぐに援軍が来る！	space	separate words; Korean spacing
+0x00A171DC	0	자	전원	자‖w전원、w/계속 	자␣w전원、w/계속 	さあ、	総員、	space	separate words; Korean spacing
+0x00A176CC	0	！	기대되네	헤에！‖ww기대되네ー！/	헤에！␣ww기대되네ー！/	へえ！	　楽しみー！	space	after ！/？, next phrase
+0x00A178D4	0	자알	기억해	흐응/자알‖w기억해 두겠어	흐응/자알␣w기억해 두겠어	よーく、	おぼえとくわ。	space	separate words; Korean spacing
+0x00A178D4	1	다음은	이렇게는	{54}。/다음은‖w이렇게는 안 	{54}。/다음은␣w이렇게는 안 	次は、	こうはいかないよ！	space	separate words; Korean spacing
+0x00A17B00	0	씨	저기	빌리 씨‖w저기・・・w타{8f}	빌리 씨␣w저기・・・w타{8f}	ビリーさん、	あの・・・	space	separate words; Korean spacing
+0x00A17BD0	0	아니	이반	아니‖w이반。ww고마	아니␣w이반。ww고마	いいや、	イワン。	space	separate words; Korean spacing
+0x00A17F00	0	종료시	토모니	오늘 종료시‖w토모니/연구소{8b}	오늘 종료시␣w토모니/연구소{8b}	本日終了ト、	トモニ	space	separate words; Korean spacing
+0x00A181D4	2	서	괜찮겠지	寤{40} 볼까。/서‖w괜찮겠지？	寤{40} 볼까。/서␣w괜찮겠지？	で、	いいんでしょ？	space	separate words; Korean spacing
+0x00A18280	0	？	어느새	어라？‖ww어느새	어라？␣ww어느새	あら？	　いつのまにか	space	after ！/？, next phrase
+0x00A18398	0	！	내가	캬하！‖w내가 발명한 	캬하！␣w내가 발명한 	キャハ！	あたしの発明したキャットプレートは	space	after ！/？, next phrase
+0x00A18504	2	？	빌리	 끝났느냐！？‖w빌리！/	 끝났느냐！？␣w빌리！/	準備は整ったのか！？	　ビリー！	space	after ！/？, next phrase
+0x00A18634	0	！	네놈이라는	빌리！‖ww네놈이라는 자	빌리！␣ww네놈이라는 자	ビリー！	　貴様というやつは・・・	space	after ！/？, next phrase
+0x00A18728	4	오히려	이쪽에서	{40}부족ww/오히려‖w이쪽에서 도움	{40}부족ww/오히려␣w이쪽에서 도움	むしろ、	こちらから助力をねがいたい。	space	separate words; Korean spacing
+0x00A18898	0	！	타국에	좋아！‖w타국에 뒤처지	좋아！␣w타국에 뒤처지	よし！	　他国におくれをとらぬよう、	space	after ！/？, next phrase
+0x00A18958	0	？	아아	응？‖ww아아、w/그러	응？␣ww아아、w/그러	ん？	　ああ、	space	after ！/？, next phrase
+0x00A18958	3	그러면	출격할	아、w/그러면‖w출격할 가능성	아、w/그러면␣w출격할 가능성	そうすりゃ、	出撃する可能性がへるだろ？	space	separate words; Korean spacing
+0x00A18994	0	응	그런	응‖w그런 이유로！	응␣w그런 이유로！	ええ！　	そんな理由！？	space	separate words; Korean spacing
+0x00A18C18	0	지도는	공항이	이 지도는‖w공항이 핵심이	이 지도는␣w공항이 핵심이	このマップは、	空港がポイントね・・・	space	separate words; Korean spacing
+0x00A18D38	0	！	캣	아！‖w캣 님！	아！␣w캣 님！	あ！	　キャット様！	space	after ！/？, next phrase
+0x00A18D60	0	！	캣	아！‖w캣 님！	아！␣w캣 님！	勝った！	　わが軍の勝利じゃ！	space	after ！/？, next phrase
+0x00A18E30	1	님은	훌륭한	/호이프 님은‖w훌륭한 사령관	/호이프 님은␣w훌륭한 사령관	ホイップ様は、	すばらしいショーグンです！	space	separate words; Korean spacing
+0x00A18F50	0	어이	이반	어이‖w이반 도망간다	어이␣w이반 도망간다	おい、	イワン逃げるぜ。	space	separate words; Korean spacing
+0x00A190F0	1	씨	기다려	{b2}、w빌리 씨‖w기다려 주세요	{b2}、w빌리 씨␣w기다려 주세요	ビリーさん、	待ってください！	space	separate words; Korean spacing
+0x00A193D0	2	！	게이트를	{5a}구나。/그래！‖w게이트를 막아	{5a}구나。/그래！␣w게이트를 막아	そうじゃ！	ゲートを塞いでしまうというのは	space	after ！/？, next phrase
+0x00A194EC	0	우군에게는	곧장	부 우군에게는‖w곧장 왼쪽의/{88}	부 우군에게는␣w곧장 왼쪽의/{88}	よそからの友軍には、	まっすぐ左の	space	separate words; Korean spacing
+0x00A194EC	1	그러면	잘	{c5}까요。/그러면‖w잘 되면/{92}	{c5}까요。/그러면␣w잘 되면/{92}	そうすりゃ、	うまくいけば	space	separate words; Korean spacing
+0x00A1962C	1	！	나의	{40}가자！/이반！‖w나의 훌륭한 	{40}가자！/이반！␣w나의 훌륭한 	イワン！	わがはいのすばらしい作戦を	space	after ！/？, next phrase
+0x00A19678	0	는	네	는‖w네！/	는␣w네！/	は、	はい！	space	separate words; Korean spacing
+0x00A1F790	3	라니	그럴	��{d3}・・・/라니‖w그럴 때가 아	��{d3}・・・/라니␣w그럴 때가 아	って、	それどころじゃないわ！	space	separate words; Korean spacing
+0x00A1FAD8	1	！	뭔가	/아스카？/무！‖ww뭔가w/수	/아스카？/무！␣ww뭔가w/수	む！	　なにやら	space	after ！/？, next phrase
+0x00A1FBA8	1	아니나	어쩔	취향은 아니나‖w어쩔 수 없나	취향은 아니나␣w어쩔 수 없나	好みではないが、	やむをえぬか。	space	separate words; Korean spacing
+0x00A1FC4C	6	기지를	빼앗기고	미사일 기지를‖w빼앗기고 말 	미사일 기지를␣w빼앗기고 말 	ミサイル基地を	うばわれてしまう！	space	separate words; Korean spacing
+0x00A1FD04	0	서	하지만	서‖w하지만・・・/{8b}	서␣w하지만・・・/{8b}	で、	でも・・・	space	separate words; Korean spacing
+0x00A1FD90	3	보병	나	署{54}는、w/w보병‖w나w바주카병w	署{54}는、w/w보병w나w바주카병w	歩兵	か	join	particle/ending attaches to the previous word
+0x00A1FD90	4	나	바주카병	는、w/w보병w나‖w바주카병w에{8d}	는、w/w보병w나␣w바주카병w에{8d}	か	バズーカ兵	space	separate words; Korean spacing
+0x00A1FD90	5	바주카병	에서	병w나w바주카병‖w에서 사용 가	병w나w바주카병w에서 사용 가	バズーカ兵	で使用可能よ。	join	particle/ending attaches to the previous word
+0x00A1FF50	0	자	쉴	자‖w쉴 틈은 없다	자␣w쉴 틈은 없다	さあ、	休んでいるヒマはないぞ。	space	separate words; Korean spacing
+0x00A1FFF4	2	막아	적이	{bb}/다리 막아‖w적이 들어오지	{bb}/다리 막아␣w적이 들어오지	橋を塞いで、	敵が入ってこられないように	space	separate words; Korean spacing
+0x00A1FFF4	3	하면	분명	{5f}하도록/하면‖w분명 이겨	{5f}하도록/하면␣w분명 이겨	すれば、	きっと勝てるわ！	space	separate words; Korean spacing
+0x00A2014C	3	하면	분명	{5f}하도록/하면‖w분명 이겨	{5f}하도록/하면␣w분명 이겨	すれば、	きっと勝てるわ！	space	separate words; Korean spacing
+0x00A20330	0	！	괜찮으냐	아스카！‖w괜찮으냐！？/	아스카！␣w괜찮으냐！？/	アスカ！	　無事か！？	space	after ！/？, next phrase
+0x00A20358	0	？	피가	피！？‖w피가 나고 있	피！？␣w피가 나고 있	血！？	　血が出ておるではないか！	space	after ！/？, next phrase
+0x00A203F8	2	몸에	혹시	도w/네 몸에‖w혹시 일이 생	도w/네 몸에␣w혹시 일이 생	お前の身に	もしものことがおきたら・・・	space	separate words; Korean spacing
+0x00A20478	0	！	저도	정말！‖ww저도、w/	정말！␣ww저도、w/	もう！	　私だって、	space	after ！/？, next phrase
+0x00A20500	0	！	기다려	！‖w기다려！ww/{8e}	！␣w기다려！ww/{8e}	！	　待って！	space	after ！/？, next phrase
+0x00A20B4C	6	번	물러나도록	기는、w/한 번‖w물러나도록 할	기는、w/한 번␣w물러나도록 할	一度、	退くとしましょうか。	space	separate words; Korean spacing
+0x00A20E30	3	보내	적	 전선에 보내‖w적 위치를/파{8e}	 전선에 보내␣w적 위치를/파{8e}	偵察車などを前線に出し、	敵の位置を	space	separate words; Korean spacing
+0x00A20F64	1	전부	우리	{a9}령관。/전부‖w우리 팩토리로	{a9}령관。/전부␣w우리 팩토리로	すべて、	われわれのファクトリーへ	space	separate words; Korean spacing
+0x00A21184	3	공군으로	어떻게든	w/내 공군으로‖w어떻게든 되겠	w/내 공군으로␣w어떻게든 되겠	わしの空軍で	なんとかなるじゃろう。	space	separate words; Korean spacing
+0x00A212E0	6	넘으면	남은	１０을 넘으면‖w남은 체력은	１０을 넘으면␣w남은 체력은	ＨＰが１０をこえた場合、	あまったＨＰは	space	separate words; Korean spacing
+0x00A213D0	2	그런	푼돈이	얘기죠？w/그런‖w푼돈이 승패를	얘기죠？w/그런␣w푼돈이 승패를	そんな、	はした金が勝敗を左右するとでも？	space	separate words; Korean spacing
+0x00A215A0	0	！	해냈어	선생！‖w해냈어。ww	선생！␣w해냈어。ww	先生！	　やったわ。	space	after ！/？, next phrase
+0x00A21C98	2	마을에서	조금	� ww/마을에서‖w조금 멀어。	� ww/마을에서␣w조금 멀어。	町から、	ちょっと遠い。	space	separate words; Korean spacing
+0x00A21CD8	0	그래	그거면	그래‖w그거면 됩니다	그래␣w그거면 됩니다	ええ。	それでいいのです。	space	separate words; Korean spacing
+0x00A21CD8	6	곤란해	크크크	당하면 곤란해‖ww크크크・・・/	당하면 곤란해␣ww크크크・・・/	早く町を占領されても困る。	ククク・・・	space	separate words; Korean spacing
+0x00A21D84	0	？	아스카	왜 막지？‖w아스카。/블{8a}	왜 막지？␣w아스카。/블{8a}	なぜとめる？	　アスカ。	space	after ！/？, next phrase
+0x00A22570	0	지금	북쪽	{67}관！/지금‖w북쪽 산속에w{8d}	{67}관！/지금␣w북쪽 산속에w{8d}	今、	北の山中に、	space	separate words; Korean spacing
+0x00A22570	1	산속에	블랙홀군의	仇북쪽 산속에‖w블랙홀군의	仇북쪽 산속에␣w블랙홀군의	北の山中に、	ブラックホール軍の	space	separate words; Korean spacing
+0x00A225F4	0	기다려	아빠	기다려‖w아빠。ww거	기다려␣w아빠。ww거	待って、	お父さん。	space	separate words; Korean spacing
+0x00A229CC	0	하지만	아스카	하지만‖w아스카。/어딘{88}	하지만␣w아스카。/어딘{88}	しかしの、	アスカ。	space	separate words; Korean spacing
+0x00A22A9C	1	간다	아스카	{40}듣는군！/간다‖w아스카。ww/다{8f}	{40}듣는군！/간다␣w아스카。ww/다{8f}	行くぞ、	アスカ。	space	separate words; Korean spacing
+0x00A22D1C	0	글쎄	자	・・・글쎄‖w자w/그건 어	・・・글쎄␣w자w/그건 어	・・・	さあ	space	separate words; Korean spacing
+0x00A22EB0	2	도착하면	당신의	{56}에/도착하면‖w당신의 승리야	{56}에/도착하면␣w당신의 승리야	たどりつけば、	あなたの勝ちよ。	space	separate words; Korean spacing
+0x00A22FFC	4	전쟁은	당신의	{c8}구나。/전쟁은‖w당신의w/장난	{c8}구나。/전쟁은␣w당신의w/장난	戦争は、	あなたの	space	separate words; Korean spacing
+0x00A23064	3	같잖아	사실은	{42}/너도 같잖아‖w사실은/그렇{88}	{42}/너도 같잖아␣w사실은/그렇{88}	あんただって、	ホントは	space	separate words; Korean spacing
+0x00A23254	5	그래	그렇게	{40}않겠어。/그래‖w그렇게 되면 	{40}않겠어。/그래␣w그렇게 되면 	そう・・・	なってはいけないの。	space	separate words; Korean spacing
+0x00A23310	5	살리려면	먼저정찰차나	력을 살리려면‖w먼저정찰차나/{8c}	력을 살리려면␣w먼저정찰차나/{8c}	私の能力を生かすためには、	まず偵察車や	space	separate words; Korean spacing
+0x00A23484	0	흐음	한	흐음‖w한 번 더 놀	흐음␣w한 번 더 놀	へー、	もっかいあそんでくれるの？	space	separate words; Korean spacing
+0x00A2350C	1	병력은	거의	저들의 병력은‖w거의 제로인 	저들의 병력은␣w거의 제로인 	連中の兵力は、	ゼロに近くなったらしい。	space	separate words; Korean spacing
+0x00A237A4	0	！	스네이크잖아	！‖w스네이크잖아！	！␣w스네이크잖아！	！	　スネークじゃない！	space	after ！/？, next phrase
+0x00A238AC	3	어차피	이미	{a9}지만、w어차피‖w이미 늦었습니	{a9}지만、w어차피␣w이미 늦었습니	どの道、	手おくれですよ。	space	separate words; Korean spacing
+0x00A238AC	7	동시에	모든	早{45}・・/동시에‖w모든 공격을 	早{45}・・/동시에␣w모든 공격을 	同時に、	あらゆる攻撃をよせつけない	space	separate words; Korean spacing
+0x00A238AC	9	내가	본부	{7e} 없다。/내가‖w본부 점령 전	{7e} 없다。/내가␣w본부 점령 전	私が、	本部を占領するまで	space	separate words; Korean spacing
+0x00A238AC	10	있어라	킥킥	보고만 있어라‖ww킥킥/	보고만 있어라␣ww킥킥/	そこで指をくわえて見てなさい。	クックッ	space	separate words; Korean spacing
+0x00A23A18	4	걸	그래서	승자 되는 걸‖w그래서/손가락{81}	승자 되는 걸␣w그래서/손가락{81}	私が勝者となるのを、	そこで	space	separate words; Korean spacing
+0x00A23AD0	0	！	들어	선생！‖ww들어 봐。/스{89}	선생！␣ww들어 봐。/스{89}	先生！	　聞いて。	space	after ！/？, next phrase
+0x00A23AD0	4	이음새	집중	파이프 이음새‖w집중 공격으로	파이프 이음새␣w집중 공격으로	パイプのつぎ目	なら、集中攻撃で	space	separate words; Korean spacing
+0x00A23FD0	0	호오	설마	호오‖w설마 다시 저	호오␣w설마 다시 저	ほう、	まさかもう一度私と戦うおつもりですか？	space	separate words; Korean spacing
+0x00A23FD0	2	지금	패배한	이세요？w/지금‖w패배한 지 얼	이세요？w/지금␣w패배한 지 얼	今、	敗北したばかりだというのに？	space	separate words; Korean spacing
+0x00A245F4	1	！	이걸	{c6}계도네！/응！‖w이걸 이용하면	{c6}계도네！/응！␣w이걸 이용하면	うん！	　これを利用すれば	space	after ！/？, next phrase
+0x00A24958	3	아니라	공중	육지뿐 아니라‖w공중 방어도	육지뿐 아니라␣w공중 방어도	できれば陸だけでなく、	空からの守りも	space	separate words; Korean spacing
+0x00A24C04	2	？	스네이크	미는 알겠지？‖ww스네이크/	미는 알겠지？␣ww스네이크/	その意味はわかるな？	　スネーク	space	after ！/？, next phrase
+0x00A24C48	1	지금	여기서	이、w지금‖w여기서 이기면	이、w지금␣w여기서 이기면	今、	ここで勝てば・・・	space	separate words; Korean spacing
+0x00A24C48	3	이기면	문제없어	 싸움 이기면‖w문제없어！/{88}	 싸움 이기면␣w문제없어！/{88}	この戦いに勝てば、	問題はない！	space	separate words; Korean spacing
+0x00A24CB0	1	이기면	적을	 전투 이기면‖w적을 몰아내	 전투 이기면␣w적을 몰아내	この戦いに勝てば、	敵を追い出せるわ。	space	separate words; Korean spacing
+0x00A25128	0	자	우리	자‖w우리 차례네。	자␣w우리 차례네。	さあ、	私達の番ね。	space	separate words; Korean spacing
+0x00A25128	3	！	출격이야	{68}네。ww/모두！‖w출격이야/	{68}네。ww/모두！␣w출격이야/	みんな！	出撃よ！	space	after ！/？, next phrase
+0x00A25154	0	！	우리	가라！‖w우리 블루문 	가라！␣w우리 블루문 	ゆけ！	わがブルームーン軍の力を	space	after ！/？, next phrase
+0x00A25188	1	서	날씨	{c8}히・・・。/서‖w날씨 탓입니다	{c8}히・・・。/서␣w날씨 탓입니다	て、	天気のせいです！	space	separate words; Korean spacing
+0x00A251E8	2	！	선생	！w/아버지！‖w선생！/우리{8f}	！w/아버지！␣w선생！/우리{8f}	お父さん！	　先生！	space	after ！/？, next phrase
+0x00A25408	1	특히	호크라	{de}납니다/특히‖w호크라 불리는	{de}납니다/특히␣w호크라 불리는	特に　	ホークと呼ばれる	space	separate words; Korean spacing
+0x00A258AC	4	막고	내게	서 적을 막고‖w내게 맡겨줘	서 적을 막고␣w내게 맡겨줘	陸で敵を食い止め、	その間に空港を	space	separate words; Korean spacing

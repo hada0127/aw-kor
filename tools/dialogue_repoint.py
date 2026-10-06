@@ -165,34 +165,24 @@ def row_half_cells(data, pos):
     return width
 
 
-# The same 0x77 also splits a word from its particle around tutorial keywords
-# (主砲の弾wやw燃料wが -> 탄약w과w연료w가, 搭載wして -> 탑승w시켜). Those seams
-# must stay joined. A space is inserted only when every check agrees:
-#   1. After ！/？ a seam is never bound.
-#   2. A next Hangul run that is exactly a particle/ending (KO_BOUND_WORDS) is
-#      bound, even where it could also be a word (이 = this): kept as is.
-#   3. The Japanese source must be aligned; otherwise the seam is left as is.
-#   4. Japanese word char (kanji/katakana/」) before the wait and a particle or
-#      auxiliary right after it (燃料wが, 「占領」wという) means bound. This also
-#      covers unspaced runs such as 연료w가없다 and restructured Korean, which
-#      then stays joined (unfixed, never wrongly spaced).
-# The next Hangul run is compared whole; a run that merely starts with a
-# particle syllable (이번, 가볍게) is decided by rule 4.
-KO_BOUND_WORDS = frozenset(
-    '이 가 은 는 을 를 의 에 로 으로 와 과 도 만 께 께서 에서 에게 한테 에서는 에는 에도 '
-    '으로는 로는 와는 과는 이나 나 이랑 랑 까지 부터 처럼 보다 마저 조차 밖에 '
-    '이야 야 이다 이고 이며 이지 이죠 이요 이에요 예요 입니다 이었다 였다 '
-    '라는 이라는 이라고 라고 이란 란 서 요 '
-    '시켜 시키고 시킬 시킨 시켰'.split())
-JP_BOUND_HEADS = ('が', 'を', 'は', 'の', 'に', 'で', 'と', 'や', 'へ', 'も', 'から', 'まで',
-                  'より', 'して', 'させ', 'する', 'した', 'され', 'しな', 'だ', 'です', 'じゃ',
-                  'って', 'という', 'とか', 'なら')
+# Same 0x77 also joins a word to its particle around tutorial keywords
+# (主砲の弾wやw燃料wが -> 탄약w과w연료w가) and Korean fragments are often
+# restructured, so no rule decides spacing. Every seam candidate is listed in
+# the reviewed table data/part2_seam_decisions.tsv, keyed by the original
+# message address and the ordinal of its first wait byte (0x77 tokens are
+# control bytes that every writer preserves):
+#   space - insert 0x8140 (in place when padding >= 2, otherwise relocation)
+#   join  - correct Korean without a space (particle, ending, compound)
+#   defer - needs a space but cannot be applied safely (reason required)
+# Missing, stale or mismatching table rows fail the build.
+SEAM_DECISIONS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                              'data', 'part2_seam_decisions.tsv')
+SEAM_COLUMNS = ['msg', 'wait_ordinal', 'prev_word', 'next_word', 'before', 'after', 'jp_prev',
+                'jp_next', 'decision', 'reason']
 
 
-def _is_word_char(ch):
-    """Kanji, katakana (incl. ー, not the ・ dot) or a closing bracket."""
-    return ('\u4e00' <= ch <= '\u9fff' or ('\u30a0' <= ch <= '\u30ff' and ch != '\u30fb')
-            or ch in '」』）')
+class SeamDecisionError(AssertionError):
+    pass
 
 
 def _decode_sjis_text(raw):
@@ -212,64 +202,62 @@ def _decode_sjis_text(raw):
     return ''.join(out)
 
 
-def seam_is_bound(seam, jp_prev, jp_next):
-    """True: keep joined. False: insert a space. None: source unaligned, keep."""
-    if seam['prev_punct']:
-        return False
-    if seam['next_word'] in KO_BOUND_WORDS:
-        return True
-    if jp_prev is None or jp_next is None:
-        return None
-    prev = jp_prev.rstrip('\x00')
-    nxt = jp_next.lstrip('\x00')
-    return bool(prev and nxt and _is_word_char(prev[-1]) and nxt.startswith(JP_BOUND_HEADS))
+def load_seam_decisions(path=SEAM_DECISIONS):
+    import csv
+    table = {}
+    with open(path, encoding='utf-8', newline='') as stream:
+        reader = csv.DictReader(stream, delimiter='\t')
+        if reader.fieldnames != SEAM_COLUMNS:
+            raise SeamDecisionError(f'{path}: unexpected header {reader.fieldnames}')
+        for line, row in enumerate(reader, start=2):
+            key = (int(row['msg'], 16), int(row['wait_ordinal']))
+            if key in table:
+                raise SeamDecisionError(f'{path}:{line}: duplicate seam {row["msg"]}/{row["wait_ordinal"]}')
+            if row['decision'] not in ('space', 'join', 'defer'):
+                raise SeamDecisionError(f'{path}:{line}: bad decision {row["decision"]!r}')
+            if not row['reason'].strip():
+                raise SeamDecisionError(f'{path}:{line}: reason required')
+            table[key] = row
+    return table
 
 
-def inplace_seam_spaces(current, source, hangul, max_row=PORTRAIT_ROW_HALF_CELLS):
-    """In-place seam fix for one non-relocated message payload.
+def jp_context(original, wait_ordinal):
+    """Japanese text around the wait_ordinal-th 0x77 run of the original message."""
+    toks = _tokens(original)
+    waits = [o for o, n in toks if n == 1 and original[o] == SEAM_WAIT]
+    if wait_ordinal >= len(waits):
+        return None, None
+    start = waits[wait_ordinal]
+    end = start
+    while end < len(original) and original[end] == SEAM_WAIT:
+        end += 1
+    return _decode_sjis_text(original[:start]).split('\x00')[-1], _decode_sjis_text(original[end:]).split('\x00')[0]
 
-    Only padding 0x20 0x20 directly after the last glyph becomes 0x8140 (same
-    length). The row width is recomputed on the updated payload before every
-    insertion, so several seams in one row share the row budget.
-    Returns (new_payload, records); each record has 'action' in
-    inserted / bound / unaligned / needs_relocation / row_full.
-    """
-    data = bytearray(current)
-    records = []
-    for seam in find_seams(bytes(current), hangul):
-        jp = source_context(source, bytes(current), seam)
-        bound = seam_is_bound(seam, *jp)
-        record = {'glyph_end': seam['glyph_end'], 'pads': seam['pads'], 'next_word': seam['next_word'],
-                  'jp_prev': jp[0], 'jp_next': jp[1]}
-        if bound is None:
-            record['action'] = 'unaligned'
-        elif bound:
-            record['action'] = 'bound'
-        elif seam['pads'] < 2:
-            record['action'] = 'needs_relocation'
-        else:
-            at = seam['glyph_end']
-            width = row_half_cells(bytes(data), at - 1)
-            if width + 2 > max_row:
-                record['action'] = 'row_full'
-            else:
-                if bytes(data[at:at + 2]) != b'  ':
-                    raise AssertionError('seam padding changed')
-                data[at:at + 2] = b'\x81\x40'
-                record['action'] = 'inserted'
-            record['row_half_cells'] = width
-        records.append(record)
-    return bytes(data), records
+
+def _wait_ordinal(data, pos):
+    return sum(1 for o, n in _tokens(data[:pos]) if n == 1 and data[o] == SEAM_WAIT)
+
+
+def _prev_word(data, end, hangul):
+    word = []
+    i = end
+    while i >= 2 and ((data[i - 2] << 8) | data[i - 1]) in hangul:
+        word.insert(0, hangul[(data[i - 2] << 8) | data[i - 1]])
+        i -= 2
+    if not word and end >= 2:
+        return data[end - 2:end].decode('shift_jis', 'replace')
+    return ''.join(word)
 
 
 def find_seams(data, hangul):
     """Raw scan of one message payload for fragment seams (see above).
 
-    hangul maps reserved Hangul code -> syllable.
+    hangul maps reserved Hangul code -> syllable. Token-aligned: the previous
+    glyph may sit in a control gap (message-leading ！w).
     """
     seams = []
     toks = _tokens(data)
-    for k, (o, n) in enumerate(toks):
+    for o, n in toks:
         if n != 2:
             continue
         code = (data[o] << 8) | data[o + 1]
@@ -295,69 +283,113 @@ def find_seams(data, hangul):
             w += 2
         seams.append({'glyph_end': o + 2, 'pads': pads, 'waits': waits, 'next': j,
                       'prev_punct': code in SEAM_PREV_PUNCT,
+                      'wait_ordinal': _wait_ordinal(data, j - waits),
+                      'prev_word': _prev_word(data, o + 2, hangul),
                       'next_word': ''.join(word), 'row_half_cells': row_half_cells(data, o)})
     return seams
 
 
-def _controls(data):
-    return [(o, data[o]) for o, n in _tokens(data) if n == 1 and data[o] != 0x20]
+def seam_decision(table, msg, seam):
+    """Reviewed decision for one seam; missing or drifted rows fail."""
+    row = table.get((msg, seam['wait_ordinal']))
+    where = f'0x{msg:08X}/w{seam["wait_ordinal"]} {seam["prev_word"]}|{seam["next_word"]}'
+    if row is None:
+        raise SeamDecisionError(f'seam missing from data/part2_seam_decisions.tsv: {where}')
+    if row['prev_word'] != seam['prev_word'] or row['next_word'] != seam['next_word']:
+        raise SeamDecisionError(f'seam text changed since review: {where} '
+                                f'(table {row["prev_word"]}|{row["next_word"]})')
+    row['_seen'] = True
+    return row['decision']
 
 
-def source_context(original, current, seam):
-    """Japanese text around the matching control run of the original message.
+def unseen_seam_decisions(table):
+    """Table rows that no build pass visited (stale review rows)."""
+    return sorted(k for k, row in table.items() if not row.get('_seen'))
 
-    Controls are preserved byte-for-byte by every writer, so the k-th control
-    of the current payload is the k-th control of the original. Returns
-    (jp_prev, jp_next) or (None, None) when the control sequences differ.
+
+def inplace_seam_spaces(current, msg, table, hangul, max_row=PORTRAIT_ROW_HALF_CELLS):
+    """Apply table decisions to one non-relocated message payload.
+
+    Only padding 0x20 0x20 after the last glyph becomes 0x8140 (same length);
+    the row width is recomputed after every insertion. A 'space' that cannot
+    be applied here is returned as needs_relocation / row_full.
     """
-    cur_ctrl = _controls(current)
-    org_ctrl = _controls(original)
-    if [b for _, b in cur_ctrl] != [b for _, b in org_ctrl]:
-        return None, None
-    first_wait = seam['next'] - seam['waits']
-    k = next((i for i, (o, _) in enumerate(cur_ctrl) if o == first_wait), None)
-    if k is None:
-        return None, None
-    start = org_ctrl[k][0]
-    end = org_ctrl[k + seam['waits'] - 1][0] + 1
-    prev_ctrl = org_ctrl[k - 1][0] + 1 if k > 0 else 0
-    next_ctrl = org_ctrl[k + seam['waits']][0] if k + seam['waits'] < len(org_ctrl) else len(original)
-    return _decode_sjis_text(original[prev_ctrl:start]), _decode_sjis_text(original[end:next_ctrl])
+    data = bytearray(current)
+    records = []
+    for seam in find_seams(bytes(current), hangul):
+        decision = seam_decision(table, msg, seam)
+        record = {'glyph_end': seam['glyph_end'], 'wait_ordinal': seam['wait_ordinal'],
+                  'pads': seam['pads'], 'prev_word': seam['prev_word'],
+                  'next_word': seam['next_word'], 'decision': decision}
+        if decision != 'space':
+            record['action'] = decision
+        elif seam['pads'] < 2:
+            record['action'] = 'needs_relocation'
+        else:
+            at = seam['glyph_end']
+            width = row_half_cells(bytes(data), at - 1)
+            record['row_half_cells'] = width
+            if width + 2 > max_row:
+                record['action'] = 'row_full'
+            else:
+                if bytes(data[at:at + 2]) != b'  ':
+                    raise AssertionError('seam padding changed')
+                data[at:at + 2] = b'\x81\x40'
+                record['action'] = 'inserted'
+        records.append(record)
+    return bytes(data), records
 
 
-def apply_seam_spaces(pieces, hangul, max_row=PORTRAIT_ROW_HALF_CELLS, report=None):
-    """Fix seams across ['text', bytes, original] / ['gap', bytes, original] pieces.
+def apply_seam_spaces(pieces, msg, table, hangul, max_row=PORTRAIT_ROW_HALF_CELLS):
+    """Apply table decisions across ['text', bytes, original] / ['gap', ...] pieces.
 
-    Only text pieces change: trailing 0x20 padding is replaced by one 0x8140.
-    Control gaps are never touched. Returns (fixed, skipped_wide).
+    Two shapes: text + 'w'-gap + text (trailing padding of the first text
+    becomes one 0x8140) and a gap ending in [glyph][w...] + text (message-
+    leading ！w: 0x8140 is prepended to the text). Control gaps never change.
+    Returns (fixed, records); a 'space' that would overflow the row raises.
     """
-    fixed = skipped = 0
-    for i in range(len(pieces) - 2):
-        if pieces[i][0] != 'text' or pieces[i + 1][0] != 'gap' or pieces[i + 2][0] != 'text':
+    fixed = 0
+    records = []
+    for i in range(len(pieces) - 1):
+        if pieces[i][0] != 'gap' or pieces[i + 1][0] != 'text':
             continue
-        prev, gap, nxt = pieces[i][1], pieces[i + 1][1], pieces[i + 2][1]
-        if not gap or any(b != SEAM_WAIT for b in gap):
+        gap, nxt = pieces[i][1], pieces[i + 1][1]
+        if not gap or gap[-1] != SEAM_WAIT:
             continue
-        probe = prev + gap + nxt
-        seam = [s for s in find_seams(probe, hangul) if s['next'] == len(prev) + len(gap)]
+        prev_is_text = i > 0 and pieces[i - 1][0] == 'text' and all(b == SEAM_WAIT for b in gap)
+        head = b''.join(p[1] for p in pieces[:i])
+        joined = head + gap + nxt
+        seam = [s for s in find_seams(joined + b'', hangul) if s['next'] == len(head) + len(gap)]
         if not seam:
             continue
-        stripped = prev.rstrip(b' ')
-        if seam[0]['glyph_end'] != len(stripped):
+        seam = seam[0]
+        decision = seam_decision(table, msg, seam)
+        records.append({'wait_ordinal': seam['wait_ordinal'], 'decision': decision,
+                        'prev_word': seam['prev_word'], 'next_word': seam['next_word']})
+        if decision != 'space':
             continue
-        jp_prev = _decode_sjis_text(pieces[i][2]) if len(pieces[i]) > 2 else None
-        jp_next = _decode_sjis_text(pieces[i + 2][2]) if len(pieces[i + 2]) > 2 else None
-        bound = seam_is_bound(seam[0], jp_prev, jp_next)
-        if bound is not False:
-            continue
-        head = b''.join(p[1] for p in pieces[:i])
-        joined = head + stripped + b'\x81\x40' + gap + b''.join(p[1] for p in pieces[i + 2:])
-        if row_half_cells(joined, len(head) + len(stripped) - 1) > max_row:
-            skipped += 1
-            continue
-        pieces[i][1] = stripped + b'\x81\x40'
+        if prev_is_text:
+            prev = pieces[i - 1][1]
+            stripped = prev.rstrip(b' ')
+            if len(head) - len(prev) + len(stripped) != seam['glyph_end']:
+                raise SeamDecisionError(f'unsupported seam shape at 0x{msg:08X}/w{seam["wait_ordinal"]}')
+            before = b''.join(p[1] for p in pieces[:i - 1])
+            candidate = before + stripped + b'\x81\x40' + gap + b''.join(p[1] for p in pieces[i + 1:])
+            width = row_half_cells(candidate, len(before) + len(stripped) - 1)
+            new_piece, index = stripped + b'\x81\x40', i - 1
+        else:
+            if seam['glyph_end'] + seam['pads'] + seam['waits'] != len(head) + len(gap) or seam['pads']:
+                raise SeamDecisionError(f'unsupported seam shape at 0x{msg:08X}/w{seam["wait_ordinal"]}')
+            candidate = head + gap + b'\x81\x40' + b''.join(p[1] for p in pieces[i + 1:])
+            width = row_half_cells(candidate, len(head) + len(gap))
+            new_piece, index = b'\x81\x40' + nxt, i + 1
+        if width > max_row:
+            raise SeamDecisionError(f'seam space overflows row ({width} > {max_row}) at '
+                                    f'0x{msg:08X}/w{seam["wait_ordinal"]}; decide defer')
+        pieces[index][1] = new_piece
+        records[-1]['action'] = 'inserted'
         fixed += 1
-    return fixed, skipped
+    return fixed, records
 
 
 def _read_table(orig, tbl_off):
@@ -483,7 +515,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
                      extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
-                     original_line_starts=None, line_layouts=None, seam_codes=None):
+                     original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -679,16 +711,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 if _has_jam:
                     break
             if not _has_jam and seam_codes is not None and is_part2_story_address(msg):
-                # Seams with fewer than two padding bytes cannot take an in-place
-                # 0x8140; relocation inserts it (see apply_seam_spaces).
+                # A 'space' decision without two padding bytes needs relocation.
                 _end = msg
                 while _end < len(rom) and rom[_end] != 0:
                     _end += 1
-                _cur = bytes(rom[msg:_end])
-                _org_end = orig.find(b'\x00', msg)
-                _org = bytes(orig[msg:_org_end if _org_end >= 0 else msg])
-                if any(seam['pads'] < 2 and seam_is_bound(seam, *source_context(_org, _cur, seam)) is False
-                       for seam in find_seams(_cur, seam_codes)):
+                if any(seam['pads'] < 2 and seam_decision(seam_table, msg, seam) == 'space'
+                       for seam in find_seams(bytes(rom[msg:_end]), seam_codes)):
                     _has_jam = True
                     stats['relocate_seam'] = stats.get('relocate_seam', 0) + 1
             if not _has_jam:
@@ -784,9 +812,9 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             continue
         gap = bytes(rom[cur:me])
         pieces.append(['gap', gap, bytes(orig[cur:me])])
-        seams_fixed = seams_wide = 0
+        seams_fixed = 0
         if seam_codes is not None and is_part2_story_address(msg):
-            seams_fixed, seams_wide = apply_seam_spaces(pieces, seam_codes)
+            seams_fixed, _seam_records = apply_seam_spaces(pieces, msg, seam_table, seam_codes)
         new_msg = bytearray()
         controls = []
         for piece in pieces:
@@ -852,7 +880,6 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         _relocated_msgs.add(msg)
         stats['relocated'] += 1
         stats['seam_spaces'] += seams_fixed
-        stats['seam_skip_wide'] += seams_wide
         stats['lines_fixed'] += len(fix_addrs)
         manifest.append({
             'msg': f'0x{msg:06X}', 'status': 'relocated',

@@ -5,8 +5,8 @@
    message payload. In the A3 dialogue consumer it renders as nothing and can
    corrupt following Hangul (Snake A30E40 「큭큭큭 ???」).
 2. Fragment seams: [Hangul/！？][0x20*n][0x77+][Hangul] with no rendered space
-   (몸에{20}{20}w혹시 -> "몸에혹시"). See dialogue_repoint.find_seams. Seams that
-   join a word to its particle (탄약w과) are counted separately, not as defects.
+   (몸에{20}{20}w혹시 -> "몸에혹시"). See dialogue_repoint.find_seams. Every seam is
+   judged by the reviewed table data/part2_seam_decisions.tsv (space/join/defer).
 
 Messages are reached through the native table 0xA357B4 (3315 entries) via the
 pointer in the scanned ROM, so relocated copies are what is checked. Scope is
@@ -14,7 +14,8 @@ the original target being inside dialogue_regions.PART2_STORY_RANGES.
 Static bytes only: this does not prove pixels on screen.
 
 Exit 1 if ASCII punctuation remains in the CO quote or system prompt ranges
-(with --fail-on-seams also when aligned, unbound seams remain unspaced).
+(with --fail-on-seams also when a seam is missing from
+data/part2_seam_decisions.tsv or a 'space' decision is not applied).
 """
 import argparse
 import json
@@ -25,7 +26,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_STORY_RANGES,
                               PART2_SYSTEM_PROMPT_RANGE, is_part2_story_address)
-from dialogue_repoint import _controls, _tokens, find_seams, seam_is_bound, source_context
+from dialogue_repoint import _tokens, find_seams, jp_context, load_seam_decisions
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ORIGINAL = os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
@@ -45,8 +46,10 @@ def region_name(addr):
     return 'story_other'
 
 
-def scan(rom, orig, hangul):
-    out = {'messages': 0, 'ascii_punct': {}, 'seams': {}, 'details': []}
+def scan(rom, orig, hangul, table):
+    """Unspaced seams are checked against data/part2_seam_decisions.tsv:
+    join/defer rows are expected to stay unspaced; space/MISSING are defects."""
+    out = {'messages': 0, 'ascii_punct': {}, 'seams': {}, 'seam_decisions': {}, 'details': []}
     seen = set()
     for i in range(COUNT):
         ptr = TABLE + 4 * i
@@ -60,17 +63,16 @@ def scan(rom, orig, hangul):
         region = region_name(src)
         out['messages'] += 1
         punct = [payload[o] for o, n in _tokens(payload) if n == 1 and is_ascii_punct(payload[o])]
-        org_end = orig.find(b'\x00', src)
-        source = orig[src:org_end]
         seams = []
         for seam in find_seams(payload, hangul):
-            bound = seam_is_bound(seam, *source_context(source, payload, seam))
-            if bound:
-                out['bound_seams'] = out.get('bound_seams', 0) + 1
-                continue
-            if bound is None:
-                out['unaligned_seams'] = out.get('unaligned_seams', 0) + 1
-            seams.append(seam)
+            row = table.get((src, seam['wait_ordinal']))
+            if row is None or (row['prev_word'], row['next_word']) != (seam['prev_word'], seam['next_word']):
+                seam['decision'] = 'MISSING'
+            else:
+                seam['decision'] = row['decision']
+            out['seam_decisions'][seam['decision']] = out['seam_decisions'].get(seam['decision'], 0) + 1
+            if seam['decision'] in ('space', 'MISSING'):
+                seams.append(seam)
         if punct:
             out['ascii_punct'][region] = out['ascii_punct'].get(region, 0) + 1
         if seams:
@@ -78,8 +80,9 @@ def scan(rom, orig, hangul):
         if punct or seams:
             out['details'].append({'msg': f'0x{src:08X}', 'at': f'0x{cur:08X}', 'region': region,
                                    'ascii_punct': bytes(punct).decode('ascii'),
-                                   'seams': [{'at': f'0x{cur + s["glyph_end"]:08X}', 'pads': s['pads'],
-                                              'row_half_cells': s['row_half_cells']} for s in seams]})
+                                   'seams': [{'at': f'0x{cur + s["glyph_end"]:08X}', 'wait_ordinal': s['wait_ordinal'],
+                                              'decision': s['decision'], 'prev_word': s['prev_word'],
+                                              'next_word': s['next_word']} for s in seams]})
     out['ascii_punct_messages'] = sum(out['ascii_punct'].values())
     out['seam_total'] = sum(out['seams'].values())
     return out
@@ -97,8 +100,8 @@ def _decode(raw, hangul):
     return ''.join(out)
 
 
-def seam_review(old_rom, rom, orig, hangul):
-    """Every seam of the old ROM and what the new ROM did with it."""
+def seam_review(old_rom, rom, orig, hangul, table):
+    """Every seam of the old ROM, its table decision and the new ROM result."""
     rows = []
     seen = set()
     for i in range(COUNT):
@@ -110,29 +113,20 @@ def seam_review(old_rom, rom, orig, hangul):
         def payload(r):
             cur = struct.unpack_from('<I', r, ptr)[0] - 0x08000000
             return cur, r[cur:r.find(b'\x00', cur)]
-        old_at, old = payload(old_rom)
-        new_at, new = payload(rom)
+        _, old = payload(old_rom)
+        _, new = payload(rom)
+        remaining = {s['wait_ordinal'] for s in find_seams(new, hangul)}
         source = orig[src:orig.find(b'\x00', src)]
-        old_ctrl, new_ctrl = _controls(old), _controls(new)
         for seam in find_seams(old, hangul):
-            jp = source_context(source, old, seam)
-            bound = seam_is_bound(seam, *jp)
-            first_wait = seam['next'] - seam['waits']
-            k = next((j for j, (o, _) in enumerate(old_ctrl) if o == first_wait), None)
-            after, spaced = '', None
-            if k is not None and len(new_ctrl) == len(old_ctrl):
-                pos = new_ctrl[k][0]
-                head = new[:pos].rstrip(b' ')
-                spaced = head.endswith(b'\x81\x40')
-                after = _decode(new[max(0, pos - 16):pos + 12], hangul)
-            before = _decode(old[max(0, first_wait - 16):first_wait + 12], hangul)
-            action = ('inserted' if spaced else
-                      'kept_bound' if bound else
-                      'kept_unaligned' if bound is None else 'NOT_FIXED')
-            rows.append([f'0x{src:08X}', f'0x{old_at + seam["glyph_end"]:08X}', f'0x{new_at:08X}', action,
-                         seam['next_word'], before, after,
-                         (jp[0] or '').replace('\x00', '|')[-8:], (jp[1] or '').replace('\x00', '|')[:8],
-                         str(seam['pads'])])
+            row = table.get((src, seam['wait_ordinal']), {})
+            jp = jp_context(source, seam['wait_ordinal'])
+            spaced = seam['wait_ordinal'] not in remaining
+            waits = [o for o, n in _tokens(new) if n == 1 and new[o] == 0x77]
+            pos = waits[seam['wait_ordinal']] if seam['wait_ordinal'] < len(waits) else 0
+            rows.append([f'0x{src:08X}', str(seam['wait_ordinal']), row.get('decision', 'MISSING'),
+                         'spaced' if spaced else 'unspaced', seam['prev_word'], seam['next_word'],
+                         _decode(old[max(0, seam['glyph_end'] - 14):seam['next'] + 12], hangul),
+                         _decode(new[max(0, pos - 16):pos + 14], hangul), jp[0] or '', jp[1] or ''])
     return rows
 
 
@@ -143,32 +137,33 @@ def main():
     ap.add_argument('--compare-rom', help='older ROM: write a per-seam review TSV against it')
     ap.add_argument('--seam-tsv', help='output TSV for --compare-rom')
     ap.add_argument('--fail-on-seams', action='store_true',
-                    help='also fail when unrendered, unbound seams remain')
+                    help='also fail on seams missing from the decision table or space rows left unspaced')
     args = ap.parse_args()
     rom = open(args.rom, 'rb').read()
     orig = open(ORIGINAL, 'rb').read()
     hangul = {int(v, 16): k for k, v in json.load(open(SYLCODE, encoding='utf-8')).items()}
-    result = scan(rom, orig, hangul)
+    table = load_seam_decisions()
+    result = scan(rom, orig, hangul, table)
     if args.json:
         with open(args.json, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=1)
     print(f"messages={result['messages']} ranges={[(hex(a), hex(b)) for a, b in PART2_STORY_RANGES]}")
     print(f"ascii_punct messages by region: {result['ascii_punct']}")
-    print(f"unrendered fragment seams by region: {result['seams']} (total {result['seam_total']}, "
-          f"of which source-unaligned {result.get('unaligned_seams', 0)}); "
-          f"particle-bound seams left joined: {result.get('bound_seams', 0)}")
+    print(f"unspaced seams by table decision: {result['seam_decisions']}; "
+          f"defects (space not applied or MISSING from table): {result['seam_total']}")
     if args.compare_rom:
-        rows = seam_review(open(args.compare_rom, 'rb').read(), rom, orig, hangul)
+        rows = seam_review(open(args.compare_rom, 'rb').read(), rom, orig, hangul, table)
         with open(args.seam_tsv, 'w', encoding='utf-8') as f:
-            f.write('msg\told_seam_at\tnew_msg_at\taction\tnext_word\tbefore\tafter\tjp_prev\tjp_next\tpads\n')
+            f.write('msg\twait_ordinal\tdecision\tresult\tprev_word\tnext_word\tbefore\tafter\tjp_prev\tjp_next\n')
             for row in rows:
                 f.write('\t'.join(row) + '\n')
         from collections import Counter
-        print('seam review:', dict(Counter(r[3] for r in rows)), '->', args.seam_tsv)
+        print('seam review:', dict(Counter((r[2], r[3]) for r in rows)), '->', args.seam_tsv)
     bad = result['ascii_punct'].get('co_quote', 0) + result['ascii_punct'].get('system_prompt', 0)
     if args.fail_on_seams:
-        bad += result['seam_total'] - result.get('unaligned_seams', 0)
-    print('RESULT:', 'FAIL' if bad else 'PASS', '(CO quote / system prompt ASCII punctuation)')
+        bad += result['seam_total']
+    print('RESULT:', 'FAIL' if bad else 'PASS',
+          '(CO quote / system prompt ASCII punctuation' + (' + seam table)' if args.fail_on_seams else ')'))
     return 1 if bad else 0
 
 

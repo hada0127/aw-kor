@@ -5943,6 +5943,11 @@ def patch_part1_full_info_spec_obj_label(rom):
     # Same block: production-menu info panel labels ガス/サクテキ/イドウ x8.
     import part1_production_info_labels as production_labels
     extra_layout = production_labels.patch(buf, font)
+    move_report = extra_layout[-1]['variants']
+    with open(os.path.join(BASE, 'temp', 'part1_production_info_labels.json'), 'w', encoding='utf-8') as stream:
+        json.dump(move_report, stream, indent=1)
+    print('→ 1편 생산 정보 이동 라벨: ' + ', '.join(
+        f"v{r['variant']} 변경{r['changed']}/아이콘가림{r['icon_pixels_covered']}" for r in move_report))
     # WYSIWYG: '정보'는 32x8 OBJ 라벨(render_32x8_obj_label) = 타일 0..3.
     rec_label_layout(off, None, [{'text': '정보', 'tile_ids': [0, 1, 2, 3]}]
                      + [{'text': e['text'], 'tile_ids': e['tile_ids']} for e in extra_layout])
@@ -11684,39 +11689,56 @@ def is_verified_bteam_spacing_repair(address, source, display):
     return BTEAM_SCRIPT_SPACING_REPAIRS.get(address) == (source, display)
 
 
-def apply_inplace_part2_seam_spaces(rom, orig, hangul, table=0xA357B4, count=3315):
-    """Fullwidth space at fragment seams of non-relocated Part 2 story messages.
+def apply_inplace_part2_seam_spaces(rom, orig, table, hangul, tbl=0xA357B4, count=3315):
+    """Apply the reviewed seam table (data/part2_seam_decisions.tsv) in place.
 
-    Relocated messages get the same fix inside repoint (apply_seam_spaces).
-    Here only seams with >= 2 bytes of 0x20 padding are rewritten in place
-    (0x20 0x20 -> 0x81 0x40, same length, inside the line's own slot); the row
-    budget is recomputed after every insertion (inplace_seam_spaces).
+    Relocated messages were handled inside repoint (apply_seam_spaces). Here
+    'space' rows with >= 2 padding bytes become 0x8140 in place (row width
+    rechecked per insertion). Afterwards the final ROM is rescanned: every
+    remaining unspaced seam must be a 'join' or 'defer' row, every table row
+    must have been visited, otherwise the build fails.
     """
-    from dialogue_repoint import inplace_seam_spaces
-    report = {'fixed': 0, 'unfixed': 0, 'bound': 0, 'unaligned': 0, 'records': []}
+    from dialogue_repoint import (SeamDecisionError, find_seams, inplace_seam_spaces,
+                                  seam_decision, unseen_seam_decisions)
+    report = {'fixed': 0, 'unfixed': 0, 'records': []}
+    targets = []
     seen = set()
     for index in range(count):
-        ptr = table + index * 4
+        ptr = tbl + index * 4
         target = struct.unpack_from('<I', orig, ptr)[0] - 0x08000000
         if target in seen or not is_part2_story_address(target):
             continue
         seen.add(target)
+        targets.append((ptr, target))
+    for ptr, target in targets:
         if struct.unpack_from('<I', rom, ptr)[0] - 0x08000000 != target:
             continue  # relocated: handled by repoint
         end = rom.find(b'\x00', target)
-        current = bytes(rom[target:end])
-        new, records = inplace_seam_spaces(current, bytes(orig[target:orig.find(b'\x00', target)]), hangul)
+        new, records = inplace_seam_spaces(bytes(rom[target:end]), target, table, hangul)
         for record in records:
             at = target + record['glyph_end']
             if record['action'] == 'inserted':
                 WRITE_LOG.append([at, 2, 2, '8140', None, None, None, 'part2-seam-space'])
                 report['fixed'] += 1
-            elif record['action'] in ('bound', 'unaligned'):
-                report[record['action']] += 1
-            else:
+            elif record['action'] in ('needs_relocation', 'row_full'):
                 report['unfixed'] += 1
             report['records'].append({'msg': f'0x{target:08X}', 'at': f'0x{at:08X}', **record})
         rom[target:end] = new
+    final = {'join': 0, 'defer': 0}
+    wrong = []
+    for ptr, target in targets:
+        cur = struct.unpack_from('<I', rom, ptr)[0] - 0x08000000
+        for seam in find_seams(bytes(rom[cur:rom.find(b'\x00', cur)]), hangul):
+            decision = seam_decision(table, target, seam)
+            if decision == 'space':
+                wrong.append(f'0x{target:08X}/w{seam["wait_ordinal"]} {seam["prev_word"]}|{seam["next_word"]}')
+            else:
+                final[decision] += 1
+    stale = unseen_seam_decisions(table)
+    if wrong or stale:
+        raise SeamDecisionError(f'seam table not applied: space left unspaced {wrong[:10]}, '
+                                f'stale rows {[(hex(m), w) for m, w in stale[:10]]}')
+    report['final_join'], report['final_defer'] = final['join'], final['defer']
     return report
 
 
@@ -22204,6 +22226,8 @@ def main():
     # 라인·구주소는 불변(회귀 0). 외부 서양판이 쓴 free-space repoint와 동일 기법. (RE: docs/research.md)
     completed_script_repoints = set()
     _rp_manifest = []
+    from dialogue_repoint import load_seam_decisions
+    _seam_table = load_seam_decisions()
     if not getattr(args, 'no_repoint_dialogue', False):
         try:
             from dialogue_repoint import repoint_messages, _line_index as _repoint_line_index
@@ -22522,7 +22546,7 @@ def main():
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
                 skip_messages=set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES,
                 min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid),
-                seam_codes={code: syl for syl, code in syl_to_code.items()})
+                seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             _rp_fixed_addresses = {int(a, 16) for m in _rp_manifest
                                    if m.get('status') == 'relocated' for a in m.get('fixed', [])}
@@ -22562,13 +22586,13 @@ def main():
     verify_required_script_repoints(required_script_repoints, completed_script_repoints)
     verify_part2_campaign_header_keys(rom)
 
-    _seam = apply_inplace_part2_seam_spaces(rom, orig, {code: syl for syl, code in syl_to_code.items()})
+    _seam = apply_inplace_part2_seam_spaces(rom, orig, _seam_table, {code: syl for syl, code in syl_to_code.items()})
     st['part2_seam_spaces_inplace'] = _seam['fixed']
     st['part2_seam_spaces_unfixed'] = _seam['unfixed']
     with open(os.path.join(BASE, 'temp', 'part2_seam_spaces.json'), 'w', encoding='utf-8') as stream:
         json.dump(_seam, stream, indent=1)
-    print(f"→ 2편 조각 이음매 공백: 제자리 {_seam['fixed']}건, 미해결 {_seam['unfixed']}건 "
-          f"(재배치 반영분은 repoint seam_spaces)")
+    print(f"→ 2편 조각 이음매 공백(검수표): 제자리 {_seam['fixed']}건, 최종 미적용 space 0, "
+          f"join {_seam['final_join']}건, defer {_seam['final_defer']}건")
 
     st['part2_prologue_inline_renderer_spans'] = patch_part2_prologue_inline_renderer_spans(
         rom, syl_to_code, unmapped)

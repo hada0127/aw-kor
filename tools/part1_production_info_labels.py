@@ -6,8 +6,9 @@ The block decompresses to 82 4bpp tiles (1D OBJ mapping, 2624 bytes):
   tiles 14-17  32x8  サクテキ     -> 색적
   tiles 18-81  8 x 32x16 movement-type icons; bottom row carries イドウ -> 이동
 Terms follow the established UI/dialogue wording (이동, 색적 = サクテキ, 연료 = 燃料/ガス).
-Only label pixels are rewritten. The イドウ pixels are the ones identical in
-all 8 icon variants (bottom 8 rows); icon pixels differ per variant and stay.
+Only label pixels are rewritten. イドウ is replaced by white 이동 with a 1px
+dark outline (original kana style, no plate); per variant only the literal
+OLD_LABEL pixels and the new glyph/outline may change, checked pixel by pixel.
 """
 import hashlib
 
@@ -71,70 +72,80 @@ def _boxed_label(buf, first, wtiles, text, font, box_x0, box_x1, rows=(1, 8), gl
         _put(buf, t, px, py, 1)
 
 
-# Approved edit box inside every 32x16 movement sprite: the old イドウ plate
-# spans x 6..25, rows 8..15; the new 이동 plate x 8..23 rows 8..15 plus a
-# one-pixel outline on row 7. Nothing outside this box may change.
-MOVE_LABEL_BOX = (5, 7, 27, 16)   # x0, y0, x1 (excl), y1 (excl)
+# Original イドウ lettering shared by all 8 movement sprites (rows 8..15 of the
+# 32x16 OBJ): '1'/'2'/'3' glyph ink, 'f' its dark outline, '.' not lettering.
+# patch() checks every variant against this literal before touching it.
+OLD_LABEL_ROWS = {
+    8:  '...............fffff............',
+    9:  '..........ffffff1f1f.fff........',
+    10: '.......fff311f1f1f1fff1fff......',
+    11: '.......f1113ff1fffff11111f......',
+    12: '.......fff1f.f1112ff1fff1f......',
+    13: '.........f1f.f1fffffffff1f......',
+    14: '.........f1f.f1f....f1113f......',
+    15: '.........fff.fff....fffff.......',
+}
+OLD_LABEL = {(x, y): int(ch, 16) for y, row in OLD_LABEL_ROWS.items()
+             for x, ch in enumerate(row) if ch != '.'}
+MOVE_GLYPH_TOP = 8          # new glyph rows 8..14, outline rows 7..15
 
 
-def _in_box(x, y):
-    x0, y0, x1, y1 = MOVE_LABEL_BOX
-    return x0 <= x < x1 and y0 <= y < y1
+def move_label_pixels(font, text='이동'):
+    """(glyph, outline) pixel sets of the new label, centred like the old one."""
+    cells, width = _glyph_cells(font, text)
+    x0 = 16 - width // 2
+    glyph = {(x0 + cx, MOVE_GLYPH_TOP + cy) for cx, cy in cells}
+    outline = {(x + dx, y + dy) for x, y in glyph for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+               if (x + dx, y + dy) not in glyph}
+    if any(not (0 <= x < 32 and 0 <= y < 16) for x, y in glyph | outline):
+        raise AssertionError('이동 label leaves the 32x16 sprite')
+    return glyph, outline
 
 
 def _move_labels(buf, font, text='이동'):
+    """White 이동 with a 1px dark outline, no plate (original kana style).
+
+    Per variant only OLD_LABEL pixels (cleared to transparent unless reused)
+    and the new glyph/outline pixels may change; anything else that differs
+    from the source variant fails the build.
+    """
     starts = [MOVE_FIRST + 8 * k for k in range(MOVE_COUNT)]
-    common = []
-    for y in range(8, 16):
-        for x in range(32):
-            vals = set()
-            for s in starts:
-                t, px, py = _sprite_px(buf, s, 4, x, y)
-                vals.add(_get(buf, t, px, py))
-            if len(vals) == 1 and vals != {0}:
-                common.append((x, y))
-    if len(common) < 60:
-        raise AssertionError(f'イドウ label mask too small: {len(common)}')
-    cells, width = _glyph_cells(font, text)
-    x0 = 16 - width // 2
-    top = 8
-    plate = set()
-    for y in range(top, 16):
-        for x in range(x0 - 1, x0 + width + 1):
-            plate.add((x, y))
-    white = {(x0 + cx, top + cy) for cx, cy in cells}
-    if any(y >= 15 for _, y in white):
-        raise AssertionError('이동 glyph overflows the plate')
-    outline = {(x + dx, y - 1) for x, y in white if y == top for dx in (-1, 0, 1)}
     before = bytes(buf)
-    if any(not _in_box(x, y) for x, y in set(common) | plate | outline):
-        raise AssertionError('movement label edit leaves the approved box')
-    for s in starts:
-        for x, y in common:
+    for k, s in enumerate(starts):
+        for (x, y), value in OLD_LABEL.items():
+            t, px, py = _sprite_px(buf, s, 4, x, y)
+            if _get(buf, t, px, py) != value:
+                raise AssertionError(f'movement variant {k}: lettering pixel {x},{y} is not the source イドウ')
+    glyph, outline = move_label_pixels(font, text)
+    allowed = set(OLD_LABEL) | glyph | outline
+    report = []
+    for k, s in enumerate(starts):
+        for x, y in OLD_LABEL:
             t, px, py = _sprite_px(buf, s, 4, x, y)
             _put(buf, t, px, py, 0)
-        for x, y in plate | outline:
+        for x, y in outline:
             t, px, py = _sprite_px(buf, s, 4, x, y)
             _put(buf, t, px, py, 0xF)
-        for x, y in white:
+        for x, y in glyph:
             t, px, py = _sprite_px(buf, s, 4, x, y)
             _put(buf, t, px, py, 1)
-    covered = {}
-    for k, s in enumerate(starts):
-        changed_outside = 0
-        covered[k] = 0
+        changed = cleared = icon_covered = 0
         for y in range(16):
             for x in range(32):
                 t, px, py = _sprite_px(buf, s, 4, x, y)
-                if _get(buf, t, px, py) == _get(before, t, px, py):
+                old, new = _get(before, t, px, py), _get(buf, t, px, py)
+                if old == new:
                     continue
-                if not _in_box(x, y):
-                    changed_outside += 1
-                elif (x, y) not in common:
-                    covered[k] += 1   # variant-specific icon pixel under the new plate
-        if changed_outside:
-            raise AssertionError(f'movement variant {k} changed outside the approved box')
-    return len(common), covered
+                if (x, y) not in allowed:
+                    raise AssertionError(f'movement variant {k} changed pixel {x},{y} outside the label')
+                changed += 1
+                if (x, y) in OLD_LABEL and (x, y) not in glyph | outline:
+                    cleared += 1
+                elif (x, y) not in OLD_LABEL and old != 0:
+                    icon_covered += 1
+        report.append({'variant': k, 'changed': changed, 'old_label_cleared': cleared,
+                       'icon_pixels_covered': icon_covered})
+    return report
 
 
 def region_hashes(buf):
@@ -155,8 +166,8 @@ def patch(buf, font):
             raise AssertionError(f'unexpected production info {key} tiles: {actual[key]}')
     _boxed_label(buf, FUEL_TILES[0], FUEL_TILES[1], '연료', font, 0, 16, rows=(0, 8))
     _boxed_label(buf, SCOUT_TILES[0], SCOUT_TILES[1], '색적', font, 4, 28)
-    mask, covered = _move_labels(buf, font)
+    move_report = _move_labels(buf, font)
     return [{'text': '연료', 'tile_ids': [8, 9]},
             {'text': '색적', 'tile_ids': [14, 15, 16, 17]},
             {'text': '이동', 'tile_ids': [MOVE_FIRST + 8 * k + 4 + i for k in range(MOVE_COUNT) for i in range(4)],
-             'mask_pixels': mask, 'variant_pixels_covered': covered}]
+             'variants': move_report}]

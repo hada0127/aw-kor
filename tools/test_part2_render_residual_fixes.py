@@ -12,8 +12,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_full as builder
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_SYSTEM_PROMPT_RANGE,
                               is_part2_story_address)
-from dialogue_repoint import (apply_seam_spaces, find_seams, inplace_seam_spaces, seam_is_bound,
-                              source_context)
+from dialogue_repoint import (SeamDecisionError, apply_seam_spaces, find_seams, inplace_seam_spaces,
+                              load_seam_decisions, seam_decision, unseen_seam_decisions)
 
 ORIG = Path(builder.P.ROM)
 
@@ -65,86 +65,91 @@ class RangeTests(unittest.TestCase):
         self.assertTrue(prompt.endswith(b'\x81\x48'))
 
 
+def table_for(msg, seams, decision='space'):
+    return {(msg, seam['wait_ordinal']): {'prev_word': seam['prev_word'], 'next_word': seam['next_word'],
+                                          'decision': decision, 'reason': 'test'} for seam in seams}
+
+
 class SeamTests(unittest.TestCase):
     def setUp(self):
         self.hangul = {code: syl for syl, code in codes().items()}
 
-    def test_padded_seam_is_found_and_not_bound(self):
-        data = enc('몸에') + b'  w' + enc('혹시')
-        seams = find_seams(data, self.hangul)
+    def test_padded_seam_is_found(self):
+        seams = find_seams(enc('몸에') + b'  w' + enc('혹시'), self.hangul)
         self.assertEqual(len(seams), 1)
-        self.assertEqual(seams[0]['pads'], 2)
-        self.assertEqual(seams[0]['next_word'], '혹시')
-        self.assertIsNone(seam_is_bound(seams[0], None, None))   # needs source
-        self.assertIs(seam_is_bound(seams[0], 'お前の身に', 'もしものこと'), False)
+        self.assertEqual((seams[0]['pads'], seams[0]['prev_word'], seams[0]['next_word'],
+                          seams[0]['wait_ordinal']), (2, '몸에', '혹시', 0))
 
-    def test_particle_seam_is_bound(self):
-        data = enc('탄약') + b'w' + enc('과')
-        seam = find_seams(data, self.hangul)[0]
-        self.assertTrue(seam_is_bound(seam, None, None))
+    def test_reviewed_table_covers_cited_regressions(self):
+        table = load_seam_decisions()
+        self.assertEqual(len(table), 321)
+        by_words = {}
+        for row in table.values():
+            by_words.setdefault((row['prev_word'], row['next_word']), set()).add(row['decision'])
+        self.assertEqual(by_words[('이제', '이')], {'space'})        # 이제 이 땅은
+        self.assertEqual(by_words[('잠깐', '이')], {'space'})        # 잠깐 이 자식
+        self.assertEqual(by_words[('대기를', '골라')], {'space'})    # 대기를 골라
+        self.assertEqual(by_words[('탄약', '과')], {'join'})         # 탄약과
+        self.assertEqual(by_words[('연료', '가')], {'join'})
+        self.assertTrue(all(row['reason'].strip() for row in table.values()))
+        self.assertEqual({row['decision'] for row in table.values()}, {'space', 'join', 'defer'})
 
-    def test_verb_seam_uses_japanese_source(self):
-        data = enc('직접공격') + b'w' + enc('하는')
-        seam = find_seams(data, self.hangul)[0]
-        self.assertIsNone(seam_is_bound(seam, None, None))
-        self.assertTrue(seam_is_bound(seam, '直接攻撃', 'するユニット'))
-        self.assertFalse(seam_is_bound(seam, 'よし！', 'やってみる'))
+    def test_missing_or_drifted_row_fails(self):
+        seam = find_seams(enc('몸에') + b'  w' + enc('혹시'), self.hangul)[0]
+        with self.assertRaises(SeamDecisionError):
+            seam_decision({}, 0xA00000, seam)
+        table = table_for(0xA00000, [seam])
+        table[(0xA00000, 0)]['next_word'] = '만약'
+        with self.assertRaises(SeamDecisionError):
+            seam_decision(table, 0xA00000, seam)
 
-    def test_negative_fixtures_never_insert(self):
-        cases = [
-            (enc('연료') + b'w' + enc('이'), None, None),                 # subject particle
-            (enc('연료') + b'w' + enc('가없다'), '燃料', 'がなくなる'),   # unspaced particle run
-            (enc('점령') + b'w' + enc('명령이'), '「占領」', 'というコマンド'),
-            (enc('탄약') + b'w' + enc('과'), '主砲の弾', 'や'),
-            (enc('보병') + b'w' + enc('나'), '歩兵', 'か'),
-            (enc('혹시') + b'w' + enc('몰라'), None, None),               # no source: keep
-        ]
-        for data, jp_prev, jp_next in cases:
-            seam = find_seams(data, self.hangul)[0]
-            self.assertIsNot(seam_is_bound(seam, jp_prev, jp_next), False, data)
-        for word in ('이', '가', '은', '는', '을', '를', '의', '에', '로', '와', '과', '도', '만', '이야', '이다'):
-            seam = find_seams(enc('연료') + b'w' + enc(word), self.hangul)[0]
-            self.assertTrue(seam_is_bound(seam, None, None), word)
+    def test_unvisited_rows_are_reported(self):
+        seam = find_seams(enc('몸에') + b'  w' + enc('혹시'), self.hangul)[0]
+        table = table_for(0xA00000, [seam])
+        self.assertEqual(unseen_seam_decisions(table), [(0xA00000, 0)])
+        seam_decision(table, 0xA00000, seam)
+        self.assertEqual(unseen_seam_decisions(table), [])
 
-    def test_dot_before_wait_is_not_a_word_char(self):
-        seam = find_seams(enc('군은') + b'w' + enc('성가신'), self.hangul)[0]
-        self.assertFalse(seam_is_bound(seam, '軍・・・', 'やっかいな'))
-
-    def test_inplace_row_budget_is_shared(self):
-        jp = ('一' * 5 + '、').encode('shift_jis')
-        source = jp + b'w' + jp + b'w' + jp
-        # 3 x 7 glyphs + 2 seams: 42 half-cells before, room for one space only
+    def test_inplace_applies_only_table_and_shares_row_budget(self):
         part = enc('가' * 7)
         current = part + b'  w' + part + b'  w' + part
-        self.assertEqual(len(find_seams(current, self.hangul)), 2)
-        new, records = inplace_seam_spaces(current, source, self.hangul)
+        seams = find_seams(current, self.hangul)
+        table = table_for(0xA00000, seams)
+        new, records = inplace_seam_spaces(current, 0xA00000, table, self.hangul)
         self.assertEqual([r['action'] for r in records], ['inserted', 'row_full'])
         self.assertEqual(new.count(b'\x81\x40'), 1)
         self.assertEqual(len(new), len(current))
-
-    def test_after_exclamation_never_bound(self):
-        data = enc('좋아') + b'\x81\x49w' + enc('해')
-        seam = find_seams(data, self.hangul)[0]
-        self.assertFalse(seam_is_bound(seam, '', 'して'))
-
-    def test_source_context_aligns_controls(self):
-        original = 'お前の身に'.encode('shift_jis') + b'w' + 'もしもの'.encode('shift_jis')
-        current = enc('몸에') + b'  w' + enc('혹시')
-        seam = find_seams(current, self.hangul)[0]
-        self.assertEqual(source_context(original, current, seam), ('お前の身に', 'もしもの'))
+        join = table_for(0xA00000, seams, 'join')
+        same, records = inplace_seam_spaces(current, 0xA00000, join, self.hangul)
+        self.assertEqual(same, current)
+        self.assertEqual([r['action'] for r in records], ['join', 'join'])
 
     def test_apply_inserts_fullwidth_space_without_touching_controls(self):
         pieces = [['gap', b'r', b'r'], ['text', enc('마을에서'), b''], ['gap', b'w', b'w'],
                   ['text', enc('조금'), b''], ['gap', b'k\x00', b'k\x00']]
-        fixed, wide = apply_seam_spaces(pieces, self.hangul)
-        self.assertEqual((fixed, wide), (1, 0))
+        seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
+        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+        self.assertEqual(fixed, 1)
         self.assertEqual(pieces[1][1], enc('마을에서') + b'\x81\x40')
         self.assertEqual([p[1] for p in pieces if p[0] == 'gap'], [b'r', b'w', b'k\x00'])
 
-    def test_apply_respects_row_capacity(self):
-        long = enc('가' * 21)
-        pieces = [['text', long, b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
-        self.assertEqual(apply_seam_spaces(pieces, self.hangul), (0, 1))
+    def test_apply_message_leading_exclamation(self):
+        pieces = [['gap', b'\x81\x49w', b'\x81\x49w'], ['text', enc('기다려'), b''], ['gap', b'\x00', b'\x00']]
+        seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
+        self.assertEqual(seams[0]['prev_word'], '！')
+        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+        self.assertEqual(fixed, 1)
+        self.assertEqual(pieces[1][1], b'\x81\x40' + enc('기다려'))
+        self.assertEqual(pieces[0][1], b'\x81\x49w')
+
+    def test_apply_space_that_overflows_the_row_fails(self):
+        pieces = [['text', enc('가' * 21), b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
+        seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
+        with self.assertRaises(SeamDecisionError):
+            apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+        pieces = [['text', enc('가' * 21), b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
+        self.assertEqual(apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams, 'defer'),
+                                           self.hangul)[0], 0)
 
 
 class LabelAndTextTests(unittest.TestCase):
@@ -162,15 +167,24 @@ class LabelAndTextTests(unittest.TestCase):
         self.assertEqual([e['text'] for e in layout], ['연료', '색적', '이동'])
         after = labels.region_hashes(buf)
         self.assertTrue(all(before[k] != after[k] for k in before))
-        # Every pixel of all 8 movement sprites outside the approved box is unchanged.
+        # Per variant only the old lettering and the new glyph/outline change.
+        glyph, outline = labels.move_label_pixels(font)
+        allowed = set(labels.OLD_LABEL) | glyph | outline
         for k in range(labels.MOVE_COUNT):
             first = labels.MOVE_FIRST + 8 * k
             for y in range(16):
                 for x in range(32):
-                    if labels._in_box(x, y):
-                        continue
                     t, px, py = labels._sprite_px(buf, first, 4, x, y)
-                    self.assertEqual(labels._get(buf, t, px, py), labels._get(data, t, px, py), (k, x, y))
+                    new, old = labels._get(buf, t, px, py), labels._get(data, t, px, py)
+                    if (x, y) not in allowed:
+                        self.assertEqual(new, old, (k, x, y))
+                    elif (x, y) in glyph:
+                        self.assertEqual(new, 1)
+                    elif (x, y) in outline:
+                        self.assertEqual(new, 0xF)
+                    else:
+                        self.assertEqual(new, 0)   # old lettering cleared, no plate
+        self.assertEqual(len(layout[2]['variants']), 8)
         # Tiles outside the three label ranges are untouched.
         touched = {8, 9, 14, 15, 16, 17} | set(range(labels.MOVE_FIRST, labels.MOVE_FIRST + 64))
         for t in range(82):
