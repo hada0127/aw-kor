@@ -1,0 +1,68 @@
+import unittest
+from pathlib import Path
+
+import item7_design_map_panel as m
+
+
+class Item7Tests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        root = Path(__file__).resolve().parent.parent
+        cls.original = (root / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+
+    def regions(self):
+        rom = bytearray(self.original)
+        count = m.patch(rom, self.original)
+        return rom, count
+
+    def test_patch_changes_only_owned_bytes_and_is_idempotent(self):
+        rom, count = self.regions()
+        self.assertGreater(count, 0)
+        regions = m.capture(rom, self.original)
+        m.verify(rom, regions)
+        self.assertTrue(m.generated_matches(rom, self.original))
+        outside = bytearray(rom)
+        for address, raw in regions:
+            outside[address:address + len(raw)] = self.original[address:address + len(raw)]
+        self.assertEqual(outside, self.original)
+        self.assertNotEqual(bytes(rom), self.original)
+        again = bytearray(rom)
+        m.patch(again, self.original)
+        self.assertEqual(again, rom)
+
+    def test_late_writer_detected(self):
+        rom, _ = self.regions()
+        regions = m.capture(rom, self.original)
+        address, raw = regions[0]
+        rom[address + len(raw) // 2] ^= 0x11
+        with self.assertRaises(AssertionError):
+            m.verify(rom, regions)
+
+    def test_earlier_writer_conflict_rejected(self):
+        rom, _ = self.regions()
+        address = m.capture(rom, self.original)[0][0]
+        conflicted = bytearray(self.original)
+        conflicted[address + 8] ^= 0x22
+        with self.assertRaises(AssertionError):
+            m.patch(conflicted, self.original)
+
+    def test_source_drift_fails_closed(self):
+        rom, _ = self.regions()
+        address = m.capture(rom, self.original)[-1][0]
+        original = bytearray(self.original)
+        original[address + 1] ^= 0x01
+        with self.assertRaises(Exception):
+            m.patch(bytearray(original), bytes(original))
+
+
+class DesignMapGeometryTests(unittest.TestCase):
+    def test_corners_kept_and_text_inside(self):
+        original = (Path(__file__).resolve().parent.parent / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+        from lz77_scan import lz77_decompress
+        old = lz77_decompress(original, 0x5BB8B0)[0]
+        new = m.decoded_replacement(original)
+        for y in list(range(8)) + list(range(56, 64)):
+            for x in range(80):
+                self.assertEqual(m.get(old, x, y), m.get(new, x, y))
+        colors = {m.get(new, x, y) for y in range(8, 56) for x in range(80)}
+        self.assertEqual(colors, {m.BG, m.INK, m.SHADOW})

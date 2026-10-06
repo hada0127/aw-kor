@@ -105,9 +105,10 @@ class RankLabelsTests(unittest.TestCase):
             if i + 1 < len(ranks.LABELS):
                 self.assertEqual(spec[2], ranks.LABELS[i + 1][0])
         self.assertEqual([s[4] for s in ranks.LABELS[7:]],
-                         ['치킨', '래빗', '캣', '도그', '몽키', '시프', '가젤', '호스', '울프',
-                          '불', '팬서', '베어', '타이거', '라이온', '드래곤'])
-        self.assertTrue(all(s[5] == 3 for s in ranks.LABELS[6:]))
+                         ['치킨', '래빗', '캣', '도그', '몽키', '양', '가젤', '호스', '울프',
+                          '황소', '팬서', '베어', '타이거', '라이온', '드래곤'])
+        # 황소 sits 1px right (x=4) to fit its 81-byte allocation.
+        self.assertEqual([s[5] for s in ranks.LABELS[6:]], [3] * 10 + [4] + [3] * 5)
         last = ranks.LABELS[-1]
         self.assertEqual(struct.unpack_from('<I', self.original, ranks.TABLE_END)[0], ranks.TABLE_END_WORD)
         _, capacity = ranks.original_label(self.original, last)

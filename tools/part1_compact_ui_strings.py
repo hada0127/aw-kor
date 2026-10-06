@@ -120,16 +120,27 @@ STRINGS = (
     # screen (append 0xB8322C at 0xB342EA is its only bank)
     (0xB831BC, 6, None, '미접속', (0xB130E0,), (0xB8319C,), None),
     (0xB831C4, 6, None, '준비중', (0xB130E0,), (0xB8319C,), None),
-    (0xB831CC, 10, None, '준비중', (0xB130E0,), (0xB8319C,), None),
+    # 0xB831CC is the 接続エラー entry of table 0xB831E0 (未接続/準備中/接続エラー/接続中/接続中);
+    # the B-team 준비 중 that sat here is relocated to its owner 0xB831C4 (candidate5).
+    (0xB831CC, 10, None, '접속오류', (0xB130E0,), (0xB8319C,), None),
     (0xB831D8, 6, None, '접속중', (0xB130E0,), (0xB8319C,), None),
     (0xB83254, 16, '전송　중입니다。', '전송중입니다。', (), (0xB8322C,), None),
     (0xB83268, 24, '잠시　기다려　주십시오。', '잠시기다려주십시오。', (), (0xB8322C,), None),
 )
 
+# The link-status rows are drawn through the pointer table 0xB831E0 (5 entries).  The
+# dialogue repoint may move a row (B-team 준비 중 at 0xB831C4 is relocated losslessly), so
+# verify() also decodes what each table pointer actually points to.
+LINK_STATUS_POINTERS = (
+    (0xB831E0, '미접속'), (0xB831E4, '준비중'), (0xB831E8, '접속오류'),
+    (0xB831EC, '접속중'), (0xB831F0, '접속중'),
+)
+LINK_STATUS_GROUP, LINK_STATUS_APPENDS = 0xB130E0, (0xB8319C,)
+
 # Preload pair lists (append sources).  None spec = restore original bytes.
 APPENDS = (
     (0xBE701C, 18, None),                     # 拠点全滅ふさんか？ (native, keeps ？ preloaded)
-    (0xB8319C, 22, '미접속준비중　에러'),    # pairs only; 에러 for the 接続エラー row
+    (0xB8319C, 22, '미접속준비중　오류'),    # pairs only; 오류 for the 接続エラー row (접속 오류)
     (0xB8322C, 36, '전송중입니다。잠시기려주십오　'),
 )
 
@@ -368,6 +379,21 @@ def verify(rom, original, syl_to_code, subs, render_char, *, written_only=False)
                           and any(c not in loaded_codes(rom, g, appends) for c in visible))
         report.append((address, expected, shown, sorted(hex(g) if g else '-' for g in check), advisory))
     verify_page_persistence(rom, original, syl_to_code, subs, render_char, slots, code_to_syllable)
+    if not written_only:
+        for pointer, expected in LINK_STATUS_POINTERS:
+            target = struct.unpack_from('<I', rom, pointer)[0] - 0x08000000
+            if not 0 <= target < len(rom):
+                raise AssertionError(f'link status pointer 0x{pointer:X} is not a ROM pointer')
+            codes = _codes(_cstr(rom, target, 16))
+            shown = ''.join(decode_cell(rom, original, code, subs, render_char, code_to_syllable, slots)
+                            for code in codes)
+            if shown != expected:
+                raise AssertionError(f'link status row 0x{pointer:X} -> 0x{target:X} shows {shown!r}, expected {expected!r}')
+            loaded = loaded_codes(rom, LINK_STATUS_GROUP, LINK_STATUS_APPENDS)
+            missing = [c.hex() for c in codes
+                       if decode_cell(rom, original, c, subs, render_char, code_to_syllable, slots) and c not in loaded]
+            if missing:
+                raise AssertionError(f'link status row 0x{pointer:X}: codes {missing} are not preloaded')
     for address, before, after in DICTIONARY_EDITS:
         new = encode_spec(after, syl_to_code)
         for target in (address, address - MIRROR_DELTA):

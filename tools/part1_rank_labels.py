@@ -26,6 +26,8 @@ LABELS = (
      'bd006c29bd7a95381956eed5b91a5f4efd2736213e286e532159c6f02c554516', '래트', 3),
     # 2026-10-06: remaining animal ranks (table entries 7..21), same x offset as 래트.
     # Loanword transliteration like 래트; 캣/도그/드래곤 follow existing project text.
+    # fixG: シープ/ブル use Korean 양/황소 (시프 reads unnaturally, 불 reads as 'fire').
+    # 황소 at x=3 compresses to 82 > 81 bytes; x=4 (76 bytes) shifts it 1px.
     (0xBF16A4, 0xDFA37C, 0xBF16F8,
      '9547df73294ade0e04179128660e792df68550e42d26871cf0080edad7351cfb', '치킨', 3),
     (0xBF16F8, 0xDFA380, 0xBF1754,
@@ -37,7 +39,7 @@ LABELS = (
     (0xBF1808, 0xDFA38C, 0xBF1864,
      '41d7a485012dff3a19782c6fc258cf4fa837821f336ba3e22e3892bb2eb3ddbd', '몽키', 3),
     (0xBF1864, 0xDFA390, 0xBF18B8,
-     'cfd678c896dc9cd72c9941b2c70c3bc35ac50c8d17be2c244457302fe65e90d1', '시프', 3),
+     'cfd678c896dc9cd72c9941b2c70c3bc35ac50c8d17be2c244457302fe65e90d1', '양', 3),
     (0xBF18B8, 0xDFA394, 0xBF1924,
      'c0917eae28099826c426fa8232ef958a2cedf7ea7a1b17c7bf5cf0a51c624b7b', '가젤', 3),
     (0xBF1924, 0xDFA398, 0xBF197C,
@@ -45,7 +47,7 @@ LABELS = (
     (0xBF197C, 0xDFA39C, 0xBF19D8,
      'f1156b2ef878b14898ac3c6029302e249dc6e9acefadb1018127dfb1965af79b', '울프', 3),
     (0xBF19D8, 0xDFA3A0, 0xBF1A2C,
-     'd06ce88b608f22fd1277d1f85b43abd3b6e34ec3e5e07f2eb7bcfd880167241a', '불', 3),
+     'd06ce88b608f22fd1277d1f85b43abd3b6e34ec3e5e07f2eb7bcfd880167241a', '황소', 4),
     (0xBF1A2C, 0xDFA3A4, 0xBF1A94,
      '97dc2a4e9fd425a7152974df28c48cfade11f9c58db74184b3eb856fb9009dff', '팬서', 3),
     (0xBF1A94, 0xDFA3A8, 0xBF1AE4,

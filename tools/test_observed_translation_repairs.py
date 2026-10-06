@@ -536,7 +536,8 @@ class ObservedTranslationRepairs(unittest.TestCase):
         dialogue = json.loads((Path(builder.BASE) / 'data/dialogue_overrides.json').read_text())
         baseline = json.loads((Path(builder.BASE) / 'data/bteam_baseline.json').read_text())['overrides']
         intents = builder.load_editor_override_intents(Path(builder.BASE) / 'data/editor_override_intents.json')
-        self.assertEqual(set(builder.BTEAM_SCRIPT_SPACING_REPAIRS), {0xDC3C63,0xDEDFB6,0xDEE15E})
+        # 0xDEECDE: ship help 해상유닛 -> 해상 유닛 (whitespace only; integrity map 'script:ship help complete context').
+        self.assertEqual(set(builder.BTEAM_SCRIPT_SPACING_REPAIRS), {0xDC3C63,0xDEDFB6,0xDEE15E,0xDEECDE})
         for address, (source, display) in builder.BTEAM_SCRIPT_SPACING_REPAIRS.items():
             key = f'0x{address:08X}'
             edited = dialogue.get(key)

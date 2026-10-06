@@ -60,7 +60,7 @@ class CompactUiStringTests(unittest.TestCase):
             for code in M._codes(M.encode_spec(spec, self.syl)):
                 self.assertIn(code, transfer, hex(address))
         status = set(M._codes(M.encode_spec(dict((a, s) for a, _, s in M.APPENDS)[0xB8319C], self.syl)))
-        for word in ('미접속', '준비중', '접속중', '에러'):
+        for word in ('미접속', '준비중', '접속중', '오류'):
             for code in M._codes(M.encode_spec(word, self.syl)):
                 self.assertIn(code, status, word)
 
@@ -148,6 +148,12 @@ class CompactUiStringTests(unittest.TestCase):
         rom = Path(os.environ['COMPACT_UI_ROM']).read_bytes()
         report = M.verify(rom, self.original, self.syl, builder.PART2_UI_KANJI_GLYPH_SUBS, render_char)
         self.assertEqual(len(report), len(M.STRINGS))
+        # The link-status table pointers are followed (a repointed row is still checked):
+        # pointing the 接続エラー row at the 準備中 text must fail.
+        broken = bytearray(rom)
+        broken[0xB831E8:0xB831EC] = rom[0xB831E4:0xB831E8]
+        with self.assertRaises(AssertionError):
+            M.verify(bytes(broken), self.original, self.syl, builder.PART2_UI_KANJI_GLYPH_SUBS, render_char)
 
 
 class EncodeFitVisibleGuardTests(unittest.TestCase):

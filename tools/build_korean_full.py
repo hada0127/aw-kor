@@ -6501,6 +6501,9 @@ def patch_part2_link_mode_residual_labels(rom):
 
 def patch_part2_menu_newspaper_bg(rom):
     """Replace the Part 2 mode-menu newspaper collage with non-Latin BG art."""
+    # The sheet is shared by 11 loaders.  Ten draw it through the collage tilemap 0x5B58E0 and get this
+    # art; the WAR IS OVER newspaper (tilemap 0x509D6C) is repointed to an original copy by
+    # part2_war_over_newspaper_sheet (candidate6).
     from PIL import Image, ImageDraw, ImageFont
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
@@ -13516,6 +13519,48 @@ def main():
     # Editor geometry uses the two native cells in part1_tiled_layer_layout.
     import part1_supply_popup as supply_popup
     st['part1_supply_popup'] = supply_popup.patch(rom, orig)
+    # fixG graphic text modules (2026-10-06, temp/claude_2026-10-06/fixG/notes.txt).
+    import part1_campaign_clear_banner as clear_banner
+    st['part1_campaign_clear_banner'] = clear_banner.patch(rom, orig)
+    import move_type_captions as move_captions
+    st['move_type_captions'] = move_captions.patch(rom, orig)
+    import part1_obj_header_labels as header_labels
+    st['part1_obj_header_labels'] = header_labels.patch(rom, orig)
+    import link_error_bitmaps as link_error
+    st['link_error_bitmaps'] = link_error.patch(rom, orig)
+    import item7_part1_co_profile_labels as i7_co_profile
+    st['item7_co_profile_labels'] = i7_co_profile.patch(rom, orig)
+    import item7_part2_editor_labels as i7_p2_editor
+    st['item7_part2_editor_labels'] = i7_p2_editor.patch(rom, orig)
+    import item7_design_map_panel as i7_design_map
+    st['item7_design_map_panel'] = i7_design_map.patch(rom, orig)
+    import item7_multiboot_factory_tooltip as i7_mb_tooltip
+    st['item7_multiboot_factory_tooltip'] = i7_mb_tooltip.patch(rom, orig)
+    # fixH graphic text modules (2026-10-06, temp/claude_2026-10-06/fixH/notes.txt).
+    import part1_map_result_banners as map_result
+    st['part1_map_result_banners'] = map_result.patch(rom, orig)
+    import part1_versus_settle_banner as settle_banner
+    st['part1_versus_settle_banner'] = settle_banner.patch(rom, orig)
+    import part1_rank_card_label as rank_card_tag
+    st['part1_rank_card_label'] = rank_card_tag.patch(rom, orig)
+    import part1_atlas_chip_labels as atlas_chips
+    st['part1_atlas_chip_labels'] = atlas_chips.patch(rom, orig)
+    import part2_army_name_labels as p2_army_names
+    st['part2_army_name_labels'] = p2_army_names.patch(rom, orig)
+    import part2_campaign_rank_labels as p2_camp_rank
+    st['part2_campaign_rank_labels'] = p2_camp_rank.patch(rom, orig)
+    import part2_shogun_select_label as p2_shogun_sel
+    st['part2_shogun_select_label'] = p2_shogun_sel.patch(rom, orig)
+    import part2_special_break_banner as p2_spbreak
+    st['part2_special_break_banner'] = p2_spbreak.patch(rom, orig)
+    import part2_war_over_headline as p2_warover
+    st['part2_war_over_headline'] = p2_warover.patch(rom, orig)
+    import part2_attack_range_legend as p2_atk_legend
+    st['part2_attack_range_legend'] = p2_atk_legend.patch(rom, orig)
+    # candidate6: the WAR IS OVER newspaper (literal 0x36BE98) reads its own original copy of the
+    # shared sheet 0x5B5D10; the Korean menu collage stays for the 10 collage-tilemap loaders.
+    import part2_war_over_newspaper_sheet as p2_wo_sheet
+    st['part2_war_over_newspaper_sheet'] = p2_wo_sheet.patch(rom, orig)
     for _source, _, _, _, _text, _ in rank_labels:
         rec_label_layout(_source, 4, [{'text': _text, 'tile_ids': list(range(8))}])
     st['part2_air_mission_title'] = patch_part2_air_mission_title_obj(rom)
@@ -13546,6 +13591,10 @@ def main():
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
     st['world_map_label_tiles'] = patch_world_map_label_tiles(rom)
     st['title_hangul_assets'] = patch_title_hangul_assets(rom)
+    # fixG: Catherine CO name plate 0xC102A8. Runs after the legacy build_title_hangul 96x8
+    # block written by patch_title_hangul_assets (part1_catherine_name accepts that block as input).
+    import part1_catherine_name as catherine_name
+    st['part1_catherine_name'] = catherine_name.patch(rom, orig)
 
     # 2편 프롤로그 낱 한자 정리: 추출이 놓친 제어바이트(0x77) 사이 프래그먼트 "今、"(0xA019B6, 슬롯 밖 갭)
     #   → 한글 "지금"(예약코드)로 직접 덮어씀. (CSV 라인이 아니라 ROM 갭이라 여기서 패치.)
@@ -22034,6 +22083,41 @@ def main():
     st['part1_campaign_co_name_lz77_editor_pixels_changed'] = not co_name_lz77.generated_matches(rom)
     _continue_button_final_regions = continue_button.capture(rom, orig)
     st['part1_continue_button_editor_pixels_changed'] = not continue_button.generated_matches(rom, orig)
+    _catherine_name_final_regions = catherine_name.capture(rom, orig)
+    st['part1_catherine_name_editor_pixels_changed'] = not catherine_name.generated_matches(rom)
+    _clear_banner_final_regions = clear_banner.capture(rom, orig)
+    st['part1_campaign_clear_banner_editor_pixels_changed'] = not clear_banner.generated_matches(rom, orig)
+    _move_captions_final_regions = move_captions.capture(rom, orig)
+    st['move_type_captions_editor_pixels_changed'] = not move_captions.generated_matches(rom, orig)
+    _header_labels_final_regions = header_labels.capture(rom, orig)
+    st['part1_obj_header_labels_editor_pixels_changed'] = not header_labels.generated_matches(rom, orig)
+    _link_error_final_regions = link_error.capture(rom, orig)
+    st['link_error_bitmaps_editor_pixels_changed'] = not link_error.generated_matches(rom)
+    _i7_co_profile_regions = i7_co_profile.capture(rom, orig)
+    _i7_p2_editor_regions = i7_p2_editor.capture(rom, orig)
+    _i7_design_map_regions = i7_design_map.capture(rom, orig)
+    _i7_mb_tooltip_regions = i7_mb_tooltip.capture(rom, orig)
+    _map_result_final_regions = map_result.capture(rom, orig)
+    st['part1_map_result_banners_editor_pixels_changed'] = not map_result.generated_matches(rom, orig)
+    _settle_banner_final_regions = settle_banner.capture(rom, orig)
+    st['part1_versus_settle_banner_editor_pixels_changed'] = not settle_banner.generated_matches(rom, orig)
+    _rank_card_tag_final_regions = rank_card_tag.capture(rom, orig)
+    st['part1_rank_card_label_editor_pixels_changed'] = not rank_card_tag.generated_matches(rom, orig)
+    _atlas_chips_final_regions = atlas_chips.capture(rom, orig)
+    st['part1_atlas_chip_labels_editor_pixels_changed'] = not atlas_chips.generated_matches(rom, orig)
+    _p2_army_names_final_regions = p2_army_names.capture(rom, orig)
+    st['part2_army_name_labels_editor_pixels_changed'] = not p2_army_names.generated_matches(rom, orig)
+    _p2_camp_rank_final_regions = p2_camp_rank.capture(rom, orig)
+    st['part2_campaign_rank_labels_editor_pixels_changed'] = not p2_camp_rank.generated_matches(rom, orig)
+    _p2_shogun_sel_final_regions = p2_shogun_sel.capture(rom, orig)
+    st['part2_shogun_select_label_editor_pixels_changed'] = not p2_shogun_sel.generated_matches(rom, orig)
+    _p2_spbreak_final_regions = p2_spbreak.capture(rom, orig)
+    st['part2_special_break_banner_editor_pixels_changed'] = not p2_spbreak.generated_matches(rom, orig)
+    _p2_warover_final_regions = p2_warover.capture(rom, orig)
+    st['part2_war_over_headline_editor_pixels_changed'] = not p2_warover.generated_matches(rom, orig)
+    _p2_atk_legend_final_regions = p2_atk_legend.capture(rom, orig)
+    st['part2_attack_range_legend_editor_pixels_changed'] = not p2_atk_legend.generated_matches(rom, orig)
+    _p2_wo_sheet_final_regions = p2_wo_sheet.capture(rom, orig)
     from part1_result_rank_word import capture as capture_result_rank_word, verify as verify_result_rank_word
     _result_rank_word_final = capture_result_rank_word(rom)
     _campaign_co_final_regions = campaign_co_labels.capture_regions(rom, orig)
@@ -22504,6 +22588,26 @@ def main():
     mission_titles.verify(rom, _mission_titles_final_regions)
     co_name_lz77.verify(rom, _co_name_lz77_final_regions)
     continue_button.verify(rom, _continue_button_final_regions)
+    catherine_name.verify(rom, _catherine_name_final_regions)
+    clear_banner.verify(rom, _clear_banner_final_regions)
+    move_captions.verify(rom, _move_captions_final_regions)
+    header_labels.verify(rom, _header_labels_final_regions)
+    link_error.verify(rom, _link_error_final_regions)
+    i7_co_profile.verify(rom, _i7_co_profile_regions)
+    i7_p2_editor.verify(rom, _i7_p2_editor_regions)
+    i7_design_map.verify(rom, _i7_design_map_regions)
+    i7_mb_tooltip.verify(rom, _i7_mb_tooltip_regions)
+    map_result.verify(rom, _map_result_final_regions)
+    settle_banner.verify(rom, _settle_banner_final_regions)
+    rank_card_tag.verify(rom, _rank_card_tag_final_regions)
+    atlas_chips.verify(rom, _atlas_chips_final_regions)
+    p2_army_names.verify(rom, _p2_army_names_final_regions)
+    p2_camp_rank.verify(rom, _p2_camp_rank_final_regions)
+    p2_shogun_sel.verify(rom, _p2_shogun_sel_final_regions)
+    p2_spbreak.verify(rom, _p2_spbreak_final_regions)
+    p2_warover.verify(rom, _p2_warover_final_regions)
+    p2_atk_legend.verify(rom, _p2_atk_legend_final_regions)
+    p2_wo_sheet.verify(rom, _p2_wo_sheet_final_regions)
     verify_result_rank_word(rom, _result_rank_word_final)
     campaign_co_labels.verify_regions(rom, _campaign_co_final_regions)
     factory_tooltip.verify_regions(rom, _factory_tooltip_final_regions)
