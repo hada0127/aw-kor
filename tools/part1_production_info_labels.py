@@ -11,6 +11,11 @@ dark outline (original kana style, no plate); per variant only the literal
 OLD_LABEL pixels and the new glyph/outline may change, checked pixel by pixel.
 """
 import hashlib
+import json
+import os
+
+APPROVAL = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                        'data', 'part1_move_label_exception_masks.json')
 
 TILE = 32
 FUEL_TILES = (8, 2)          # first tile, width in tiles (16x8)
@@ -102,7 +107,16 @@ def move_label_pixels(font, text='이동'):
     return glyph, outline
 
 
-def _move_labels(buf, font, text='이동'):
+def load_approval(path=APPROVAL):
+    with open(path, encoding='utf-8') as stream:
+        return json.load(stream)
+
+
+def _sprite_sha(buf, first):
+    return hashlib.sha256(bytes(buf[first * TILE:(first + 8) * TILE])).hexdigest()
+
+
+def render_move_labels(buf, font, text='이동'):
     """White 이동 with a 1px dark outline, no plate (original kana style).
 
     Per variant only OLD_LABEL pixels (cleared to transparent unless reused)
@@ -130,6 +144,7 @@ def _move_labels(buf, font, text='이동'):
             t, px, py = _sprite_px(buf, s, 4, x, y)
             _put(buf, t, px, py, 1)
         changed = cleared = icon_covered = 0
+        covered = []
         for y in range(16):
             for x in range(32):
                 t, px, py = _sprite_px(buf, s, 4, x, y)
@@ -143,8 +158,29 @@ def _move_labels(buf, font, text='이동'):
                     cleared += 1
                 elif (x, y) not in OLD_LABEL and old != 0:
                     icon_covered += 1
-        report.append({'variant': k, 'changed': changed, 'old_label_cleared': cleared,
-                       'icon_pixels_covered': icon_covered})
+                    covered.append([x, y])
+        report.append({'variant': k, 'first_tile': s, 'changed': changed, 'old_label_cleared': cleared,
+                       'icon_pixels_covered': icon_covered, 'covered_icon_pixels': covered,
+                       'result_sha256': _sprite_sha(buf, s)})
+    return report
+
+
+def check_move_approval(report, approval):
+    """Covering icon pixels is an approved exception only for the frozen set."""
+    frozen = {v['variant']: v for v in approval['variants']}
+    for entry in report:
+        want = frozen.get(entry['variant'])
+        if (want is None or want['covered_icon_pixels'] != entry['covered_icon_pixels']
+                or want['result_sha256'] != entry['result_sha256']):
+            raise AssertionError(f"movement variant {entry['variant']} differs from the approved exception "
+                                 f"(data/part1_move_label_exception_masks.json)")
+    if set(frozen) != {entry['variant'] for entry in report}:
+        raise AssertionError('approved exception variants do not match the rendered set')
+
+
+def _move_labels(buf, font, text='이동', approval=None):
+    report = render_move_labels(buf, font, text)
+    check_move_approval(report, load_approval() if approval is None else approval)
     return report
 
 

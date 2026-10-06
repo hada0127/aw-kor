@@ -11714,7 +11714,8 @@ def apply_inplace_part2_seam_spaces(rom, orig, table, hangul, tbl=0xA357B4, coun
         if struct.unpack_from('<I', rom, ptr)[0] - 0x08000000 != target:
             continue  # relocated: handled by repoint
         end = rom.find(b'\x00', target)
-        new, records = inplace_seam_spaces(bytes(rom[target:end]), target, table, hangul)
+        source = bytes(orig[target:orig.find(b'\x00', target)])
+        new, records = inplace_seam_spaces(bytes(rom[target:end]), target, table, hangul, source)
         for record in records:
             at = target + record['glyph_end']
             if record['action'] == 'inserted':
@@ -11728,8 +11729,9 @@ def apply_inplace_part2_seam_spaces(rom, orig, table, hangul, tbl=0xA357B4, coun
     wrong = []
     for ptr, target in targets:
         cur = struct.unpack_from('<I', rom, ptr)[0] - 0x08000000
+        source = bytes(orig[target:orig.find(b'\x00', target)])
         for seam in find_seams(bytes(rom[cur:rom.find(b'\x00', cur)]), hangul):
-            decision = seam_decision(table, target, seam)
+            decision = seam_decision(table, target, seam, source)
             if decision == 'space':
                 wrong.append(f'0x{target:08X}/w{seam["wait_ordinal"]} {seam["prev_word"]}|{seam["next_word"]}')
             else:

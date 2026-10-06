@@ -13,7 +13,8 @@ import build_korean_full as builder
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_SYSTEM_PROMPT_RANGE,
                               is_part2_story_address)
 from dialogue_repoint import (SeamDecisionError, apply_seam_spaces, find_seams, inplace_seam_spaces,
-                              load_seam_decisions, seam_decision, unseen_seam_decisions)
+                              jp_context, load_seam_decisions, seam_after, seam_decision,
+                              unseen_seam_decisions)
 
 ORIG = Path(builder.P.ROM)
 
@@ -65,9 +66,15 @@ class RangeTests(unittest.TestCase):
         self.assertTrue(prompt.endswith(b'\x81\x48'))
 
 
-def table_for(msg, seams, decision='space'):
-    return {(msg, seam['wait_ordinal']): {'prev_word': seam['prev_word'], 'next_word': seam['next_word'],
-                                          'decision': decision, 'reason': 'test'} for seam in seams}
+def table_for(msg, seams, decision='space', source=b''):
+    table = {}
+    for seam in seams:
+        jp_prev, jp_next = jp_context(source, seam['wait_ordinal'])
+        table[(msg, seam['wait_ordinal'])] = {
+            'prev_word': seam['prev_word'], 'next_word': seam['next_word'], 'before': seam['context'],
+            'after': seam_after(seam['context'], decision), 'jp_prev': jp_prev or '', 'jp_next': jp_next or '',
+            'decision': decision, 'reason': 'test'}
+    return table
 
 
 class SeamTests(unittest.TestCase):
@@ -97,17 +104,35 @@ class SeamTests(unittest.TestCase):
     def test_missing_or_drifted_row_fails(self):
         seam = find_seams(enc('몸에') + b'  w' + enc('혹시'), self.hangul)[0]
         with self.assertRaises(SeamDecisionError):
-            seam_decision({}, 0xA00000, seam)
+            seam_decision({}, 0xA00000, seam, b'')
         table = table_for(0xA00000, [seam])
         table[(0xA00000, 0)]['next_word'] = '만약'
         with self.assertRaises(SeamDecisionError):
-            seam_decision(table, 0xA00000, seam)
+            seam_decision(table, 0xA00000, seam, b'')
+
+    def test_context_drift_invalidates_row(self):
+        source = 'これで'.encode('shift_jis') + b'w' + 'この土地は'.encode('shift_jis')
+        reviewed = enc('이제') + b'  w' + enc('이') + b'\x81\x40' + enc('땅은')
+        table = table_for(0xA00000, find_seams(reviewed, self.hangul), source=source)
+        self.assertEqual(seam_decision(table, 0xA00000, find_seams(reviewed, self.hangul)[0], source), 'space')
+        # Same adjacent words, different role of 이 (이 -> particle): the row is stale.
+        drifted = enc('이제') + b'  w' + enc('이') + b'\x81\x40' + enc('끝이다')
+        with self.assertRaisesRegex(SeamDecisionError, 'context changed'):
+            seam_decision(table, 0xA00000, find_seams(drifted, self.hangul)[0], source)
+        # Japanese source drift also invalidates it.
+        other = 'これで'.encode('shift_jis') + b'w' + 'あの町は'.encode('shift_jis')
+        with self.assertRaisesRegex(SeamDecisionError, 'context changed'):
+            seam_decision(table, 0xA00000, find_seams(reviewed, self.hangul)[0], other)
+        # A tampered after-text is rejected too.
+        table[(0xA00000, 0)]['after'] = table[(0xA00000, 0)]['before']
+        with self.assertRaisesRegex(SeamDecisionError, 'after-text'):
+            seam_decision(table, 0xA00000, find_seams(reviewed, self.hangul)[0], source)
 
     def test_unvisited_rows_are_reported(self):
         seam = find_seams(enc('몸에') + b'  w' + enc('혹시'), self.hangul)[0]
         table = table_for(0xA00000, [seam])
         self.assertEqual(unseen_seam_decisions(table), [(0xA00000, 0)])
-        seam_decision(table, 0xA00000, seam)
+        seam_decision(table, 0xA00000, seam, b'')
         self.assertEqual(unseen_seam_decisions(table), [])
 
     def test_inplace_applies_only_table_and_shares_row_budget(self):
@@ -115,12 +140,12 @@ class SeamTests(unittest.TestCase):
         current = part + b'  w' + part + b'  w' + part
         seams = find_seams(current, self.hangul)
         table = table_for(0xA00000, seams)
-        new, records = inplace_seam_spaces(current, 0xA00000, table, self.hangul)
+        new, records = inplace_seam_spaces(current, 0xA00000, table, self.hangul, b'')
         self.assertEqual([r['action'] for r in records], ['inserted', 'row_full'])
         self.assertEqual(new.count(b'\x81\x40'), 1)
         self.assertEqual(len(new), len(current))
         join = table_for(0xA00000, seams, 'join')
-        same, records = inplace_seam_spaces(current, 0xA00000, join, self.hangul)
+        same, records = inplace_seam_spaces(current, 0xA00000, join, self.hangul, b'')
         self.assertEqual(same, current)
         self.assertEqual([r['action'] for r in records], ['join', 'join'])
 
@@ -128,7 +153,7 @@ class SeamTests(unittest.TestCase):
         pieces = [['gap', b'r', b'r'], ['text', enc('마을에서'), b''], ['gap', b'w', b'w'],
                   ['text', enc('조금'), b''], ['gap', b'k\x00', b'k\x00']]
         seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
-        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul, b'')
         self.assertEqual(fixed, 1)
         self.assertEqual(pieces[1][1], enc('마을에서') + b'\x81\x40')
         self.assertEqual([p[1] for p in pieces if p[0] == 'gap'], [b'r', b'w', b'k\x00'])
@@ -137,7 +162,7 @@ class SeamTests(unittest.TestCase):
         pieces = [['gap', b'\x81\x49w', b'\x81\x49w'], ['text', enc('기다려'), b''], ['gap', b'\x00', b'\x00']]
         seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
         self.assertEqual(seams[0]['prev_word'], '！')
-        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+        fixed, _ = apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul, b'')
         self.assertEqual(fixed, 1)
         self.assertEqual(pieces[1][1], b'\x81\x40' + enc('기다려'))
         self.assertEqual(pieces[0][1], b'\x81\x49w')
@@ -146,10 +171,10 @@ class SeamTests(unittest.TestCase):
         pieces = [['text', enc('가' * 21), b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
         seams = find_seams(b''.join(p[1] for p in pieces), self.hangul)
         with self.assertRaises(SeamDecisionError):
-            apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul)
+            apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams), self.hangul, b'')
         pieces = [['text', enc('가' * 21), b''], ['gap', b'w', b'w'], ['text', enc('다음'), b'']]
         self.assertEqual(apply_seam_spaces(pieces, 0xA00000, table_for(0xA00000, seams, 'defer'),
-                                           self.hangul)[0], 0)
+                                           self.hangul, b'')[0], 0)
 
 
 class LabelAndTextTests(unittest.TestCase):
@@ -193,6 +218,31 @@ class LabelAndTextTests(unittest.TestCase):
         self.assertLessEqual(len(lz77_compress_optimal(bytes(buf), vram_safe=True)), consumed)
         with self.assertRaises(AssertionError):
             labels.patch(buf, font)   # already patched: source hash guard
+
+    def test_movement_label_approval_rejects_extra_icon_overwrite(self):
+        from bdf import load_bdf
+        from lz77_scan import lz77_decompress
+        import part1_production_info_labels as labels
+        data, _ = lz77_decompress(ORIG.read_bytes(), 0xBC7C00)
+        font, _ = load_bdf(os.path.join(builder.BASE, 'reference/fonts/Galmuri7.bdf'))
+        approval = labels.load_approval()
+        self.assertIn('approved by coordinator 2026-10-07', approval['note'])
+        clean = bytearray(data)
+        labels.check_move_approval(labels.render_move_labels(clean, font), approval)
+        # An icon pixel under the new glyph that the approval does not list.
+        glyph, outline = labels.move_label_pixels(font)
+        first = labels.MOVE_FIRST
+        spot = next((x, y) for x, y in sorted(glyph | outline) if (x, y) not in labels.OLD_LABEL
+                    and labels._get(data, *labels._sprite_px(data, first, 4, x, y)) == 0)
+        tampered = bytearray(data)
+        labels._put(tampered, *labels._sprite_px(tampered, first, 4, *spot), 5)
+        with self.assertRaisesRegex(AssertionError, 'approved exception'):
+            labels.check_move_approval(labels.render_move_labels(tampered, font), approval)
+        # Changed output bytes with the same covered set also fail.
+        report = labels.render_move_labels(bytearray(data), font)
+        report[3]['result_sha256'] = '0' * 64
+        with self.assertRaisesRegex(AssertionError, 'approved exception'):
+            labels.check_move_approval(report, approval)
 
     def test_part1_can_i_use_keeps_question_mark(self):
         self.assertTrue(builder.ADDRESS_TEXT_OVERRIDES[0xDD07E1].endswith('?'))

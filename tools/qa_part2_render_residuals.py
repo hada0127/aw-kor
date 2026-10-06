@@ -26,7 +26,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_STORY_RANGES,
                               PART2_SYSTEM_PROMPT_RANGE, is_part2_story_address)
-from dialogue_repoint import _tokens, find_seams, jp_context, load_seam_decisions
+from dialogue_repoint import SeamDecisionError, _tokens, find_seams, jp_context, load_seam_decisions, seam_decision
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ORIGINAL = os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
@@ -64,12 +64,12 @@ def scan(rom, orig, hangul, table):
         out['messages'] += 1
         punct = [payload[o] for o, n in _tokens(payload) if n == 1 and is_ascii_punct(payload[o])]
         seams = []
+        source = orig[src:orig.find(b'\x00', src)]
         for seam in find_seams(payload, hangul):
-            row = table.get((src, seam['wait_ordinal']))
-            if row is None or (row['prev_word'], row['next_word']) != (seam['prev_word'], seam['next_word']):
-                seam['decision'] = 'MISSING'
-            else:
-                seam['decision'] = row['decision']
+            try:
+                seam['decision'] = seam_decision(table, src, seam, source)
+            except SeamDecisionError:
+                seam['decision'] = 'MISSING'   # absent or context drifted since review
             out['seam_decisions'][seam['decision']] = out['seam_decisions'].get(seam['decision'], 0) + 1
             if seam['decision'] in ('space', 'MISSING'):
                 seams.append(seam)
