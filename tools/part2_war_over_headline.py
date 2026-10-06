@@ -1,4 +1,4 @@
-"""Part 2 newspaper headline "WAR IS OVER!" (BG) -> 전쟁 / 은 / 끝났다!.
+"""Part 2 newspaper headline "WAR IS OVER!" (BG) -> 전쟁은 / 끝났다!.
 
 Static RE (original ROM, 2026-10-06 fixH):
 - Loader 0x0836BD56..0x0836BE00 decompresses 0x5B5D10 (shared newspaper
@@ -14,8 +14,11 @@ Static RE (original ROM, 2026-10-06 fixH):
   referenced exactly once, unflipped.  Ink = index 14 with 7/9/11 AA, paper =
   the 8x8 pattern of tile 232 (indices 3/5/6).
 
-Korean headline (WAR / IS / OVER! line structure kept): 전쟁 / 은 / 끝났다!
-("the war is over").  No translation row exists for this English-only
+Korean headline, two lines: 전쟁은 on the WAR band (rows 4-6) and 끝났다! on
+the OVER! band (rows 11-13); the IS cells (rows 7-10) become plain paper
+("the war is over"; candidate7 review6 #1: 은 alone on a line read badly).
+A two-line layout cannot use one band taller than the native 24 px lines, so
+the glyph size is unchanged.  No translation row exists for this English-only
 graphic; 끝났- follows the ending/clear dialogue usage (e.g. 0x00A17950
 なんとか終わったぜ -> 어떻게든 끝났어).  Glyphs: Galmuri11-Bold at its native
 12 px scaled 2x (pixel crisp), ink 14 on the original tile-232 paper pattern,
@@ -46,7 +49,7 @@ TILE0 = 608                                  # VRAM tile of decoded tile 0
 RECT_COL, RECT_ROW, RECT_W, RECT_H = 15, 4, 12, 10
 INK = 14
 # (text, rect y of the line top, line height, first col, last col exclusive) in map cells
-LINES = (('전쟁', 0, 24, 16, 26), ('은', 24, 32, 19, 23), ('끝났다!', 56, 24, 15, 27))
+LINES = (('전쟁은', 0, 24, 16, 26), ('끝났다!', 56, 24, 15, 27))
 FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 GAP = 2
 

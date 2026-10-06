@@ -30,7 +30,13 @@ class AtlasChipLabelTests(unittest.TestCase):
                 self.assertTrue(values <= {0, m.WHITE, m.BLACK}, number)
             else:
                 old = m._decode(self.original[address:address + w * h * 32], w, h)
-                self.assertEqual(new[:7], old[:7], number)   # icon picture kept
+                # art rows 2..8 moved up one row (row 1 was uniform background); frame kept
+                self.assertEqual([r[1:14] for r in new[1:8]], [r[1:14] for r in old[2:9]], number)
+                self.assertEqual(new[0], old[0], number)
+                self.assertEqual(new[14:], old[14:], number)
+                self.assertEqual([(r[0], r[14]) for r in new], [(r[0], r[14]) for r in old], number)
+                band = [r[1:14] for r in new[8:14]]
+                self.assertTrue({v for r in band for v in r} == {m.BLACK, m.WHITE}, number)
             outside[address:address + w * h * 32] = self.original[address:address + w * h * 32]
         self.assertEqual(outside, self.original)
         regions = m.capture(rom, self.original)
@@ -42,6 +48,21 @@ class AtlasChipLabelTests(unittest.TestCase):
         rom[m.ENTRIES[2][1] + 40] ^= 1
         with self.assertRaises(AssertionError):
             m.verify(rom, regions)
+
+    def test_labels_review6(self):
+        labels = {e[7]: e[5] for e in m.ENTRIES}
+        self.assertEqual((labels['Day'], labels['Com'], labels['Play'], labels['CP']), ('날짜', '컴', '유저', '컴'))
+        # 16px chips keep a 1px gap between the two syllables (자금 = 15px with gap 1)
+        for text in ('수입', '자금'):
+            ink, width = m._ink7(text)
+            self.assertLessEqual(width, 15, text)
+            px = m._chip(16, text)
+            cols = [x for x in range(16) if any(px[y][x] == m.BLACK for y in range(4, 11))]
+            gaps = [x for x in range(cols[0], cols[-1] + 1) if x not in cols]
+            self.assertTrue(gaps, text)
+        for glyph in m.ICON_GLYPHS.values():
+            self.assertEqual(len(glyph), m.ICON_BAND[1] - m.ICON_BAND[0])
+            self.assertEqual(len({len(r) for r in glyph}), 1)
 
     def test_conflicts_rejected(self):
         rom = bytearray(self.original)

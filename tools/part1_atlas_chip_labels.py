@@ -19,13 +19,21 @@ Korean (style: yellow chip, black frame, black Galmuri7 text; 16px chips have
 no room for side frames, so only top/bottom frame lines are drawn):
   In 수입 (収入 -> 수입: 0x00A04D13, 0x00A0AB50)
   G  자금 (Part 2 battle HUD funds G -> 자금: build patch_part2_battle_funds_hud_label)
-  Day 일차 (day counter label; '3일째' style needs the number first, so the label form 일차 is used)
+  Day 날짜 (day counter label; the chip sits left of the day number,
+  e.g. BATTLE INFO 'Day ... 3' in battleinfo_crop, so a label noun is needed:
+  '일차 3' reads backwards, 날짜 3 reads as a label + value; candidate7)
   Point 포인트 (0x00A06CB5 ポイントとランクが -> 포인트와 랭크가)
   ポイント 포인트 (white Galmuri7 + black shadow, same as the 랭크 strip
   part1_result_rank_word.py next to it)
-  Com 컴, Play 사람 (icon text strip, white on black), CP 컴 (badge in the
-  1P..4P style: white body, black outline; 1P..4P stay as player-number
-  badges).
+  Com 컴, Play 유저 (icon text strip, white on black; human vs computer
+  controller.  Native text is 4-5 px in rows 9..13 under the art (rows 2..8).
+  Galmuri7 Hangul is 7 px, so (candidate7, review6 #2): the art rows 2..8 move
+  up one row into the uniform background row 1, the frame (row 0/14, col
+  0/14) stays, and a 6-row black band rows 8..13 x1..13 holds 6-row glyphs
+  cut from Galmuri7 (one spare row dropped).  No art pixel is covered.
+  인간 needs 14 px > 13 px, so 유저.)  CP 컴 (badge in the 1P..4P style:
+  white body, black outline; 1P..4P stay as player-number badges; CP and
+  Com are both the computer player, so both read 컴).
 On-screen result unverified (static renders only).
 """
 import hashlib
@@ -41,11 +49,11 @@ WHITE, GREY, BLACK, YELLOW = 1, 3, 5, 6
 ENTRIES = (
     (48, 0xBE8FBC, 2, 2, '2817f03f7acca5287c5380471f87754921494be4ee098253cdb3ebc1ccde0fe4', '수입', 'chip', 'In'),
     (49, 0xBE903C, 2, 2, '80bd328b486dba85ee2d002c7cdbc4d7a17501c35ee57dd0ba515db3c4ada5de', '자금', 'chip', 'G'),
-    (50, 0xBE90BC, 4, 2, '859419075098014d8c886a6e87be620adde2fc230e3b4bed86224a3e88e5c262', '일차', 'chip', 'Day'),
+    (50, 0xBE90BC, 4, 2, '859419075098014d8c886a6e87be620adde2fc230e3b4bed86224a3e88e5c262', '날짜', 'chip', 'Day'),
     (51, 0xBE91BC, 4, 2, '15e7f3b43a9bc3287a4fc04a63ce91b9ab281175f7ae50e85f1951c31424873d', '포인트', 'chip', 'Point'),
     (88, 0xBEB17C, 4, 1, '58778d5cd451cbc498ebb078996d118e9c56c53c33250ef085405ce25b21c566', '포인트', 'strip', 'ポイント'),
     (102, 0xBEB9BC, 2, 2, '1aefd1f6f667265682ce969486dd94e4f741d672f54c385f828d2ffb28919de8', '컴', 'icon', 'Com'),
-    (103, 0xBEBA3C, 2, 2, 'ba06e49c5b2b0456df9d306154ea4159bf4b0929e1a5b85a3461cdee0c5f4f58', '사람', 'icon', 'Play'),
+    (103, 0xBEBA3C, 2, 2, 'ba06e49c5b2b0456df9d306154ea4159bf4b0929e1a5b85a3461cdee0c5f4f58', '유저', 'icon', 'Play'),
     (104, 0xBEBABC, 2, 2, '525e6af42086d6afd2da523d6285960a5bc0614ee075f24e2721a60ed7fe29c7', '컴', 'badge', 'CP'),
 )
 TABLE = 0xD8D504
@@ -88,9 +96,9 @@ def _chip(width, text):
     px = [[0] * width for _ in range(16)]
     narrow = width == 16
     ink, text_w = _ink7(text)
-    if narrow and text_w > width - 2:
-        ink, text_w = _ink7(text, gap=0)   # 16px chip: 2 syllables need 14px
-    if narrow and text_w > width - 2:
+    if narrow and text_w > width - 1:
+        ink, text_w = _ink7(text, gap=0)   # 16px chip: no side frame, 15px text keeps the 1px gap
+    if narrow and text_w > width - 1:
         raise AssertionError(f'chip label too wide: {text}')
     x0, x1 = (0, width - 1) if narrow else ((width - text_w - 6) // 2, (width - text_w - 6) // 2 + text_w + 5)
     if not narrow and (x0 < 0 or x1 > width - 2):
@@ -127,19 +135,44 @@ def _strip(width, text):
     return px
 
 
+# 6-row icon glyphs cut from Galmuri7 (7 rows): 컴 drops the ㅋ tail row 3,
+# 유 drops the blank row 3 and the ㅠ bar ends (7 -> 5 px), 저 drops the ㅓ tail row 6.
+ICON_GLYPHS = {
+    '컴': ('####.#', '.#####', '..#..#', '.#####', '.#...#', '.#####'),
+    '유': ('.###.', '#...#', '.###.', '#####', '.#.#.', '.#.#.'),
+    '저': ('###..#', '.#...#', '.#.###', '#.#..#', '#.#..#', '#.#..#'),
+}
+ICON_BAND = (8, 14)          # rows of the black text band (exclusive end)
+ICON_X = (1, 14)             # inside the frame columns 0 and 14
+
+
+def _icon_ink(text, gap=1):
+    ink, cursor = [], 0
+    for i, char in enumerate(text):
+        rows = ICON_GLYPHS[char]
+        ink += [(cursor + x, y) for y, row in enumerate(rows) for x, c in enumerate(row) if c == '#']
+        cursor += len(rows[0]) + (gap if i + 1 < len(text) else 0)
+    return ink, cursor
+
+
 def _icon(native, text):
-    """Replace the 5px text strip under the icon with a black band, white Galmuri7 (rows 7..13)."""
+    """Art rows 2..8 up one row, black band rows 8..13 with white 6-row text."""
     px = [row[:] for row in native]
-    ink, text_w = _ink7(text)
-    x0, x1 = 0, 14
-    if text_w > x1 - x0 + 1:
+    x0, x1 = ICON_X
+    background = native[1][x0:x1]
+    if len(set(background)) != 1:
+        raise AssertionError(f'icon row 1 not uniform background: {text}')
+    for y in range(1, ICON_BAND[0]):
+        px[y][x0:x1] = native[y + 1][x0:x1]
+    ink, text_w = _icon_ink(text)
+    if text_w > x1 - x0:
         raise AssertionError(f'icon label too wide: {text}')
-    for y in range(7, 14):
-        for x in range(x0, x1 + 1):
+    for y in range(*ICON_BAND):
+        for x in range(x0, x1):
             px[y][x] = BLACK
-    left = x0 + (x1 - x0 + 1 - text_w) // 2
+    left = x0 + (x1 - x0 - text_w) // 2
     for x, y in ink:
-        px[7 + y][left + x] = WHITE
+        px[ICON_BAND[0] + y][left + x] = WHITE
     return px
 
 

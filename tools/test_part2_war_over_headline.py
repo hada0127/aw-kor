@@ -49,6 +49,15 @@ class WarOverHeadlineTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             m.verify(rom, regions)
 
+    def test_two_line_layout(self):
+        self.assertEqual([line[0] for line in m.LINES], ['전쟁은', '끝났다!'])
+        _, entries = m.source_guard(self.original)
+        cells = m.headline_cells(entries)
+        rows = {y // 8 for _, y in m.ink_points()}
+        self.assertEqual(rows & set(range(3, 7)), set())    # IS rows 7..10 left as paper
+        self.assertTrue(rows & {0, 1, 2} and rows & {7, 8, 9})
+        self.assertTrue(all((x // 8, y // 8) in cells for x, y in m.ink_points()))
+
     def test_conflicts_rejected(self):
         rom = bytearray(self.original)
         rom[m.SOURCE + 20] ^= 1
