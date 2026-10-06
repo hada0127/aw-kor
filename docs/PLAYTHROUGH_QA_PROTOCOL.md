@@ -166,3 +166,5 @@ ROM/하네스/libmgba 해시가 바뀌면 재개를 거부한다. 수집기 소�
 
 ### Anchor receipts (git-pinned)
 - 2026-10-06 `output/qa/part1_2026-10-06/anchor_m20_day16/game_save.json` sha256 `d3ca0c1447f29779311044c305332cd056317fc106f2f636c371e6a5ca87a02d` (Part 1 M20 DAY16, ROM e4963765…, save f5a21846…).
+- 2026-10-06 `output/qa/part1_2026-10-06/anchor_m20_day1/game_save.json` sha256 `b5045dc9590db42a3006854bcab31b82a8b963de3334e438bc04f206668376d2` (Part 1 M20 DAY1 Max, ROM e4963765…).
+- 2026-10-06 `output/qa/part2_2026-10-06/anchor_m10_day6/game_save.json` sha256 `b08be2ebf0b1c85d9526bc4b8fc03d2a8f9a27b94b8ac9546256754c765f8747` (Part 2 M10 checkpoint SRAM, ROM 9c925cad…; in-game save content may predate DAY6).
