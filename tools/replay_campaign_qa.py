@@ -19,7 +19,34 @@ import subprocess
 import sys
 import time
 
-from playthrough_capture import KEYS, ROOT, default_hold, parse_action, validate_action, save_json, sha, verify_parent
+from playthrough_capture import (KEYS, ROOT, default_hold, parse_action, validate_action, save_json, sha,
+                                 verify_parent, checkpoint_cheat_tainted, run_cheat_evidence)
+
+
+def cheat_classification(run, checkpoint=None, *, strict=True):
+    """Cheat classification from the run's own records, not exit.json alone.
+
+    Evidence: verified checkpoint flag, ledger cheat rows, baseline inheritance,
+    actions cheat events/dispatches, the sticky marker and the exit flag. strict
+    also counts an unreadable ledger/baseline as tainted (used after verify_run).
+    """
+    run = Path(run)
+    evidence = run_cheat_evidence(run)
+    if checkpoint is not None:
+        evidence['checkpoint_flag'] = checkpoint_cheat_tainted(checkpoint)
+    try:
+        exit_flag = json.loads((run / 'exit.json').read_text()).get('cheat_tainted') is True
+    except (OSError, ValueError):
+        exit_flag = None
+    evidence.pop('ledger_verified', None)
+    tainted = any(v is True for v in evidence.values()) or exit_flag is True
+    if strict:
+        # The ledger and baseline are authoritative; unreadable means not normal play.
+        tainted = tainted or evidence['ledger_rows'] is None or evidence['baseline_inherited'] is None
+    return {'cheat_tainted': tainted, 'normal_play': not tainted,
+            'classification': 'cheat_tainted_not_normal_play' if tainted else 'normal_play',
+            'exit_flag': exit_flag, 'exit_flag_consistent': exit_flag is tainted,
+            'evidence': evidence}
 
 
 class UsageParser(argparse.ArgumentParser):
@@ -59,7 +86,8 @@ def export_inputs(run):
     if baseline.get('cheat_inherited'):
         raise ValueError('A cheat-tainted run cannot be exported as a normal route')
     closed = json.loads((run / 'exit.json').read_text())
-    if closed.get('cheat_tainted'):
+    # Not exit.json alone: ledger rows, actions, marker and baseline count too.
+    if closed.get('cheat_tainted') or cheat_classification(run, strict=False)['cheat_tainted']:
         raise ValueError('A cheat-tainted run cannot be exported as a normal route')
     if closed['status'] != 'closed' or closed['emulator_exit_code'] != 0:
         raise ValueError('Export requires a successfully closed capture')
@@ -122,7 +150,8 @@ def verify_run(run):
         count += 1
     if not count:
         raise ValueError('Empty capture cannot establish a replay result')
-    return {'frames': count, 'unique_pngs': len(seen), 'baseline': baseline}
+    return {'frames': count, 'unique_pngs': len(seen), 'baseline': baseline,
+            'cheat': cheat_classification(run, checkpoint)}
 
 
 def compare_ledgers(left, right):
@@ -167,7 +196,14 @@ def compare_runs(reference, candidate):
     result = compare_ledgers(reference / 'frames.jsonl', candidate / 'frames.jsonl')
     result.update(reference=str(reference.resolve()), candidate=str(candidate.resolve()),
                   reference_rom_sha256=old['baseline']['rom_sha256'],
-                  candidate_rom_sha256=new['baseline']['rom_sha256'])
+                  candidate_rom_sha256=new['baseline']['rom_sha256'],
+                  reference_cheat=old['cheat'], candidate_cheat=new['cheat'])
+    tainted = old['cheat']['cheat_tainted'] or new['cheat']['cheat_tainted']
+    result['normal_play_evidence'] = not tainted
+    if tainted:
+        # Excluded from normal-play evidence: the status itself says so.
+        result['pixel_status'] = result['status']
+        result['status'] = 'cheat_tainted_' + result['status']
     return result
 
 
@@ -180,6 +216,8 @@ def run_replays(args):
                 'inputs_sha256': hashlib.sha256(route.encode()).hexdigest()}
     if args.reference:
         verified = verify_run(args.reference)
+        if verified['cheat']['cheat_tainted']:
+            raise ValueError('A cheat-tainted reference cannot anchor a normal replay')
         if export_inputs(args.reference) != route:
             raise ValueError('Reference route differs from requested inputs')
         for key in ('harness_sha256', 'libmgba_sha256'):
@@ -282,7 +320,8 @@ def main():
     run.add_argument('--run-timeout-seconds', type=float, default=21600)
     args = parser.parse_args()
     if args.operation == 'export':
-        verify_run(args.run)
+        if verify_run(args.run)['cheat']['cheat_tainted']:
+            raise SystemExit('A cheat-tainted or provenance-unverifiable run cannot be exported as a normal route')
         text = export_inputs(args.run)
         with args.out.open('x') as stream:
             stream.write(text)

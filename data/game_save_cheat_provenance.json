@@ -1,0 +1,194 @@
+{
+ "note": "Reviewed cheat provenance for game-save receipts whose source checkpoint is not available on this PC and that carry no cheat flag. Every listed receipt was booted by a run whose baseline.json predates the test-only cheat tooling (commit 4fe9e18, 2026-10-07T08:32+09:00), or is one of the 2026-10-06 anchored chain roots documented in docs/PLAYTHROUGH_QA_PROTOCOL.md; recorders of that time had no RAM-write path. Unlisted receipts without verifiable provenance are treated as cheat-tainted.",
+ "generated": "2026-10-07 by Claude code worker (baseline mtime < cheat commit time); keyed by receipt SHA-256; only receipts whose source checkpoint is unavailable here",
+ "receipts": {
+  "1747cd8d91c40bb85b90d6b7f81b324251df93f896dd8e8774e84954da93e44c": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-01/round32_cold"
+  },
+  "1f52d9ada6ab7b0d6feb284055537c8a6c87890185285cfdc706ed3a07635ef6": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-06/m20_cand_ea4c"
+  },
+  "203c6588c9fe3daada2e4868e1015868eb4aa3f18b030243c27dc052c636132d": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round5_m6_live"
+  },
+  "21559df0df66e795706d1e6862da871d9393ef4b45462a61325fda22170bebcf": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-22/naval_day1_cold_live"
+  },
+  "2707e00c2d8a5e6668ac0dd6c1e0fe1a94e3fa9b9fb9ee1d0b88ca4cc2d3bc85": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/second_day3_cold_live"
+  },
+  "2eb23983d273a4ade5229e41c87629a2394eb4e08b6e624365d3521f0c09e3ef": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/day18_round4_cold_live"
+  },
+  "37d808787ddf5b18621c0924bc34fd29a606301319ebf5fa502a79e603d686af": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-02/m16_candidate_sram"
+  },
+  "3d0b92e74c7e7961fa2f5553933d885ef98617863fa0ab020e0734d702863b07": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-21/worldmap_keys_cold_live, output/qa/part2_2026-09-21/worldmap_keys_saved_continue, output/qa/part2_2026-09-22/artillery_cold_live, output/qa/part2_2026-09-22/region_alignment_cold_live, output/qa/part2_2026-09-22/terrain_guard_cold_live, output/qa/part2_2026-09-22/worldmap_"
+  },
+  "3f2b1ddc8ab08b261d22bb45e92682476989593b12b4fd73318324cc909b8f12": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-06/m20_cand8c10"
+  },
+  "4072c9e9ef0fab07c4d9d5a80ab2c602a2fc44bd87248929c3a3c2e521938889": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round8_m7_live"
+  },
+  "425e39d2c2d2c6255ce671b2415405199b78fb3f081267c1be1a962011b3cd61": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-22/cannon_cleared_cold_live"
+  },
+  "42f29958d73acf1b73b86b00433cc32890ec0b54a9a17b90d9ab52c828a6dc53": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round13_m8_cold_live, output/qa/part2_2026-09-28/round16_m8_live, output/qa/part2_2026-09-28/round16_m8_live2, output/qa/part2_2026-09-28/round18_m8_live, output/qa/part2_2026-09-28/round19_m8_retry"
+  },
+  "44ac86913e05fd6d9ed785b4f6879ac96b4e6a428ebcf56f69c3017f5db309e0": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/campaign_first_cleared_cold_live"
+  },
+  "558fe76587f3897763f17abf82ca44567f14f5714005e273112cb3f6ba088253": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-28/mission3_day36_round19_cold_live"
+  },
+  "5e68f857d449a4af85e516b7c1d1740092db126561fcba34e64f41272ee143c3": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-22/max_cleared_cold_live"
+  },
+  "5eff29cf00f02365c78bc9f8b3ddda71c4559fa7519c79aa98a3928804e0f851": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/campaign_cold_live"
+  },
+  "63f3b65bd5438b3e2e53c62adc1ed6d235971a58c113f75e6c8fd74d913e266a": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/campaign_second_day1_cold_live"
+  },
+  "6db0a9f8fb9a36d7657d1646560ef0e646dce6bda50b5132d323c27bc2381cf0": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-anchored-v1); temp/anchored_smoke_2026-10-06/anchor/game_save.json, temp/anchored_smoke_2026-10-06/run1"
+  },
+  "6ed9b7eddd4270221e54cd8d12d70a25c2cfb5032336e74891a5a088254c42f1": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round2_live"
+  },
+  "705d4909c09862d43bab130a9d28386d9c2aa9b3713a09089be86ca138be1e46": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-10-01/round32_cold"
+  },
+  "70978dfe35a90bc0058c0931be30429071e77f0c2eaf90a0aecafec579c9f787": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/day4_cold_live"
+  },
+  "7b8822ddde7ff17a2635c5425faedce290ccdc5b2c92bc0b8e778d9edfdce9c7": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); temp/full_audit_2026-09-15/game_save_recorder_smoke"
+  },
+  "7ff2114d8530160ef9625c5f8e47cf93b4f15958963760bcdb91594cf552fcc8": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/artillery_cold_live, output/qa/part1_2026-09-22/menu_font_owned_cold_live, output/qa/part1_2026-09-22/region_alignment_cold_repair, output/qa/part1_2026-09-22/terrain_guard_cold_live"
+  },
+  "98cad20770fffe8f7ab9ef73c6755ddb89d039e1d03d251ac275da734d203aed": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-06/m20_cand_e496"
+  },
+  "99d55e606ac0c5dfb7de10986cef77e19dc75f731e574638da8a3d1d696bb023": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-22/campaign_day4_cold_live"
+  },
+  "9e231464a1a6655c6f35125d6fec232830ff7c6e7919cca4b2ac2ee0882e2d1a": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-10-06/m20_cand_430c"
+  },
+  "9ee3c459c03b227126050d0b25f095de4916e5b2110acf6c21ab8b873d7295a3": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-28/mission3_day31_cold_live"
+  },
+  "a4608bbc90cc8bf9f1bae4bc21d6e6f107a11f54bfd972f4da7c935f422f4e33": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/day7_candidate_cold_live, output/qa/part1_2026-09-23/day7_defense_retry, output/qa/part1_2026-09-23/day7_original_replay, output/qa/part1_2026-09-23/round2_name_boundary_replay"
+  },
+  "a9c878a0de331b4393a30ca5607045a67baaa4329f2d9ae06ed45932b4675372": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-28/round23_m8_retry"
+  },
+  "ab4ba00e314491a09238562c79ced40e3735914c623f09ca10c652d61b1fe91b": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-22/menu_font_owned_cold_live"
+  },
+  "abd288fc24dc61c2a9da2ce4c7ecd8e0f334db2def167dad0af05736661d5494": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-21/original_day5_save_reference"
+  },
+  "abf77901583cdc8ad36676f1b3e7e89a3b8cf5ccf19fbd52ad5aca11c5164397": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round4_m6_live"
+  },
+  "b08be2ebf0b1c85d9526bc4b8fc03d2a8f9a27b94b8ac9546256754c765f8747": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-anchored-v1); output/qa/part2_2026-10-06/anchor_m10_day6/game_save.json, output/qa/part2_2026-10-07/m10_linux/run01"
+  },
+  "b4e711f1c70c45d429f753596e3821c6f8e8613478d140f1b36295585dcf41d8": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/round2_retry_live"
+  },
+  "b5045dc9590db42a3006854bcab31b82a8b963de3334e438bc04f206668376d2": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-anchored-v1); output/qa/part1_2026-10-06/anchor_m20_day1/game_save.json, output/qa/part1_2026-10-06/m20_day1_run, output/qa/part1_2026-10-07/m20_linux, temp/linux_port_smoke/run1"
+  },
+  "b7235cd54601e6119573785dd97e67fdc5364bf50b3ee04b72733d2de8191a75": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-30/yellow_route_cold"
+  },
+  "c583e66dc98b54d717b8ffe913c5cf3ee83c66f56ae8128d99fba3447a07dfbf": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-28/mission3_day48_round23_cold_live"
+  },
+  "c5afa57630e8f9b2c083dca646631b85b26c9106da005255c8526b9b437f230e": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/day8_round2_cold_live"
+  },
+  "d3ca0c1447f29779311044c305332cd056317fc106f2f636c371e6a5ca87a02d": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-anchored-v1); output/qa/part1_2026-10-06/anchor_m20_day16/game_save.json, output/qa/part1_2026-10-06/m20_anchor_run"
+  },
+  "eac82ef1eff787bf1828593096b5e969bec805885e918e137a3deefc767113fa": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/mission3_day16_round8_cold_live"
+  },
+  "ec46f19bd037340877a66b2b039df9638583f4010b72a9c3ac88b017acb0717c": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/mission3_day30_round13_cold_live, output/qa/part1_2026-09-23/mission3_day30_round14_cold_live"
+  },
+  "ecc168c0e9b95efbcac37649db8e2fe718994aa0b1c3a9cf3fc5147281ab5964": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-21/original_day5_saved_yes, output/qa/part2_2026-09-21/result_guard_cold_live, output/qa/part2_2026-09-21/result_layout_cold_live, output/qa/part2_2026-09-21/result_tiles_cold_live, output/qa/part2_2026-09-21/tutorial_save_day5_live"
+  },
+  "ef80a88269ba01af91a495c1c8bf08e2afce2f7aa7bb72bfbbdaaa859ec1b6fd": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-28/round18_m8_intro_probe"
+  },
+  "f027f623824f0943fe6aecff39036e54d0ca24887dd88b1d100e66fea6f2bf4a": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-23/naval_resume"
+  },
+  "f9611800670acc0db86ccf703731f58e0cd48620dba932a72fa053a9c05ff2e0": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-30/round29_day51_cold"
+  },
+  "f9bb387697046ef2cfcc45975a7e7fe043a3431474732b4e0838c579d54a8c14": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part2_2026-09-30/round27_bomber_cold"
+  },
+  "fa1feaac3c171e4a45a16fea9234d01b57475c1716e359434d03358c892e2bc9": {
+   "cheat_tainted": false,
+   "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/jev_gameplay_2026-09-30, output/qa/jev_gameplay_2026-09-30_round2"
+  }
+ }
+}

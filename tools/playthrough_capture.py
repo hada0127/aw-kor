@@ -33,6 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # and every descendant (resume, exported game save, runs booted from it) as cheat-tainted.
 CHEAT_REGIONS = ((0x02000000, 0x02040000), (0x03000000, 0x03008000))  # EWRAM, IWRAM only
 CHEAT_MAX_BYTES = 64
+CHEAT_MARKER = 'cheat_taint.json'   # sticky marker written before the first RAM write is dispatched
 
 
 def parse_cheat_write(op, addr, hexdata):
@@ -59,6 +60,62 @@ def parse_cheat_write(op, addr, hexdata):
 
 def checkpoint_cheat_tainted(checkpoint):
     return checkpoint.get('cheat_tainted') is True
+
+
+def run_cheat_evidence(root, checkpoint=None):
+    """Cheat evidence recorded inside one run directory, independent of exit.json.
+
+    Without a checkpoint the whole run is classified (any cheat anywhere counts).
+    With a checkpoint only evidence at or before its frame counts: ledger rows in
+    the committed prefix, the sticky marker's first dispatch frame and recorded
+    dispatch rows. 'ledger_verified' tells whether that prefix matches the
+    checkpoint digest. None values mean the evidence could not be read.
+    """
+    root = Path(root)
+    limit = checkpoint.get('core_frame') if checkpoint is not None else None
+    evidence = {'baseline_inherited': False, 'ledger_rows': False, 'actions_events': False,
+                'taint_marker': False, 'checkpoint_flag': False, 'ledger_verified': False}
+    try:
+        baseline = json.loads((root / 'baseline.json').read_text(encoding='utf-8'))
+        evidence['baseline_inherited'] = baseline.get('cheat_inherited') is True
+    except (OSError, ValueError):
+        evidence['baseline_inherited'] = None
+    try:
+        data = (root / 'frames.jsonl').read_bytes()
+        if checkpoint is not None:
+            size = checkpoint.get('ledger_bytes')
+            evidence['ledger_verified'] = (type(size) is int and 0 <= size <= len(data)
+                                           and hashlib.sha256(data[:size]).hexdigest() == checkpoint.get('ledger_sha256'))
+            data = data[:size] if type(size) is int and size >= 0 else data
+        evidence['ledger_rows'] = b'"cheat"' in data
+    except OSError:
+        evidence['ledger_rows'] = None
+    try:
+        for line in (root / 'actions.jsonl').read_text(encoding='utf-8').splitlines():
+            if '"cheat_dispatch"' not in line and '"cheat_event"' not in line:
+                continue
+            row = json.loads(line)
+            if limit is None:
+                evidence['actions_events'] = True
+            elif 'cheat_dispatch' in row and type(row.get('core_frame')) is int and row['core_frame'] <= limit:
+                evidence['actions_events'] = True
+    except (OSError, ValueError):
+        evidence['actions_events'] = None
+    marker = root / CHEAT_MARKER
+    if marker.exists():
+        try:
+            first = json.loads(marker.read_text()).get('first_dispatch_core_frame')
+            evidence['taint_marker'] = limit is None or type(first) is not int or first <= limit
+        except (OSError, ValueError):
+            evidence['taint_marker'] = None
+    if checkpoint is not None:
+        evidence['checkpoint_flag'] = checkpoint_cheat_tainted(checkpoint)
+    return evidence
+
+
+def evidence_tainted(evidence):
+    """Conservative: any positive or unreadable cheat evidence counts as tainted."""
+    return any(value is True or value is None for key, value in evidence.items() if key != 'ledger_verified')
 
 
 def default_hold(key):
@@ -289,11 +346,25 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
     if baseline.get('parent_checkpoint') and checkpoint_cheat_tainted(parent) and inherited is not True:
         raise RuntimeError('Cheat taint dropped from a cheat-tainted parent')
     if baseline.get('initial_game_save'):
-        seed_receipt = json.loads((root / baseline['initial_game_save']['receipt']).read_text())
-        if seed_receipt.get('cheat_tainted') is True and inherited is not True:
-            raise RuntimeError('Cheat taint dropped from a cheat-tainted game save')
+        from game_save_evidence import receipt_cheat_status
+        seed = baseline['initial_game_save']
+        seed_receipt = json.loads((root / seed['receipt']).read_text())
+        try:
+            provenance = receipt_cheat_status(seed_receipt, seed['receipt_sha256'])
+        except ValueError as exc:
+            raise RuntimeError(str(exc)) from None
+        if provenance['tainted'] and inherited is not True:
+            raise RuntimeError('Cheat taint dropped from a cheat-tainted or unverifiable game save')
     if 'cheat_tainted' in checkpoint and checkpoint['cheat_tainted'] is not True:
         raise RuntimeError('Malformed cheat taint flag')
+    marker_path = root / CHEAT_MARKER
+    if marker_path.exists():
+        marker = json.loads(marker_path.read_text())
+        first = marker.get('first_dispatch_core_frame')
+        if marker.get('cheat_tainted') is not True or type(first) is not int:
+            raise RuntimeError('Malformed cheat taint marker')
+        if checkpoint['core_frame'] >= first and not checkpoint_cheat_tainted(checkpoint):
+            raise RuntimeError('Checkpoint after a dispatched cheat lost its taint')
     if inherited is True and not checkpoint_cheat_tainted(checkpoint):
         raise RuntimeError('Cheat-inherited run checkpoint lost its taint')
     ledger = root / 'frames.jsonl'
@@ -372,6 +443,7 @@ class Recorder:
         self.cheat_inherited = False
         self.freezes = {}
         self.pending_cheats = []
+        self.cheat_partial = None
         self.seen = set()
         self.pending_png = []
         self.protocol_failed = False
@@ -438,7 +510,11 @@ class Recorder:
                 if any(sha(self.out / name) != seed['save_sha256']
                        for name in ('game.sav', 'working_game.sav')):
                     raise ValueError('Game-save seed copy mismatch')
-                if receipt.get('cheat_tainted') is True:
+                from game_save_evidence import receipt_cheat_status
+                provenance = receipt_cheat_status(receipt, sha(game_save))
+                seed['cheat_provenance'] = provenance['basis']
+                if provenance['tainted']:
+                    # Recorded or unverifiable cheat provenance: never normal play.
                     self.cheat_inherited = True
             parent = None
             if args.resume:
@@ -608,17 +684,45 @@ class Recorder:
         self.last_checkpoint = str(target)
         return target
 
+    def persist_cheat_taint(self, writes):
+        """Make the taint durable before any RAM write reaches the emulator."""
+        self.cheat_tainted = True
+        marker = self.out / CHEAT_MARKER
+        if not marker.exists():
+            save_json(marker, {'cheat_tainted': True, 'first_dispatch_core_frame': (self.counter + 1) & 0xffffffff,
+                               'note': 'Written before the first RAM write was dispatched; sticky for this run'})
+        self.actions.write(json.dumps({'cheat_dispatch': 'started', 'core_frame': (self.counter + 1) & 0xffffffff,
+                                       'writes': writes}) + '\n')
+        self.actions.flush(); os.fsync(self.actions.fileno())
+
     def apply_cheats(self):
-        """Write queued one-shot and frozen values just before the next emulated frame."""
+        """Write queued one-shot and frozen values just before the next emulated frame.
+
+        The taint is persisted before dispatch. If a write fails or times out, every
+        write from that one on is recorded as uncertain (the harness changes RAM
+        before replying), and the run's exit metadata carries the partial state.
+        """
         writes = list(getattr(self, 'pending_cheats', [])) + list(getattr(self, 'freezes', {}).values())
-        for write in writes:
-            reply = self.cmd(f"{write['op']} {write['addr']} {write['hex']}")
-            unit = 1 if write['op'] == 'w8' else 2
-            if reply.split()[:3] != ['OK', write['op'], str(len(write['hex']) // 2 // unit)]:
-                self.protocol_failed = True
-                raise RuntimeError(('Cheat write not fully applied', write, reply))
         if writes:
-            self.cheat_tainted = True
+            self.persist_cheat_taint(writes)
+        acknowledged = []
+        for index, write in enumerate(writes):
+            try:
+                reply = self.cmd(f"{write['op']} {write['addr']} {write['hex']}")
+                unit = 1 if write['op'] == 'w8' else 2
+                if reply.split()[:3] != ['OK', write['op'], str(len(write['hex']) // 2 // unit)]:
+                    self.protocol_failed = True
+                    raise RuntimeError(('Cheat write not fully applied', write, reply))
+            except BaseException as exc:
+                self.cheat_partial = {'core_frame': (self.counter + 1) & 0xffffffff,
+                                      'acknowledged': acknowledged, 'uncertain': writes[index:],
+                                      'error': f'{type(exc).__name__}: {exc}'}
+                try:
+                    self.actions.write(json.dumps({'cheat_dispatch': 'failed', **self.cheat_partial}) + '\n')
+                    self.actions.flush(); os.fsync(self.actions.fileno())
+                finally:
+                    raise
+            acknowledged.append(write)
         self.pending_cheats = []
         return writes
 
@@ -716,6 +820,7 @@ class Recorder:
         tag = f'{self.segment:04d}_{key}_{self.counter:07d}'
         png = self.out / (tag + '.png'); im.save(png, compress_level=self.png_compress_level)
         checkpoint = self.checkpoint(tag)
+        tainted = getattr(self, 'cheat_tainted', False)
         sheet_path = None
         if make_sheet:
             sheet = Image.new('RGB', (960, ((len(samples) + 3) // 4) * 180), (32, 32, 32))
@@ -723,10 +828,17 @@ class Recorder:
             for i, (frame, shot) in enumerate(samples):
                 x, y = i % 4 * 240, i // 4 * 180
                 sheet.paste(shot, (x, y + 20)); draw.text((x + 3, y + 3), str(frame), fill='white')
+                if tainted:
+                    draw.rectangle((x + 150, y + 1, x + 237, y + 18), fill=(200, 0, 0))
+                    draw.text((x + 154, y + 3), 'CHEAT TAINT', fill='white')
             sheet_path = self.out / (tag + '_sheet.png'); sheet.save(sheet_path, compress_level=self.png_compress_level)
         result = {'segment': self.segment, 'start_core_frame': first, 'end_core_frame': self.committed,
                   'status': 'captured', 'checkpoint': str(checkpoint), 'png': str(png), 'sheet': str(sheet_path) if sheet_path is not None else None,
                   'free_gib': round(shutil.disk_usage(self.out).free / 1024**3, 2), 'visual_review': 'pending'}
+        if tainted:
+            # Same 'captured' status for route tooling; the classification marks it non-normal.
+            result['cheat_tainted'] = True
+            result['classification'] = 'cheat_tainted_not_normal_play'
         self.actions.write(json.dumps(result) + '\n')
         print(json.dumps(result), flush=True)
 
@@ -943,8 +1055,10 @@ class Recorder:
                   'last_observed_core_frame': self.counter, 'committed_core_frame': self.committed,
                   'last_good_checkpoint': self.last_checkpoint, 'cleanup_errors': cleanup_errors,
                   'emulator_exit_code': self.proc.returncode if self.proc else None}
-        if getattr(self, 'cheat_tainted', False):
+        if getattr(self, 'cheat_tainted', False) or (self.out / CHEAT_MARKER).exists():
             result['cheat_tainted'] = True
+        if getattr(self, 'cheat_partial', None):
+            result['cheat_partial_application'] = self.cheat_partial
         try:
             save_json(self.out / 'exit.json', result)
         finally:

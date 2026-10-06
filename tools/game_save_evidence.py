@@ -18,7 +18,8 @@ import re
 import shutil
 import subprocess
 
-from playthrough_capture import sha, save_json, verify_parent, checkpoint_cheat_tainted
+from playthrough_capture import (ROOT, sha, save_json, verify_parent, checkpoint_cheat_tainted,
+                                 run_cheat_evidence, evidence_tainted)
 from emu_platform import LIBMGBA, harness_env
 
 
@@ -30,6 +31,77 @@ STORAGE_PATTERN = rb'(FLASH1M|FLASH512|FLASH|SRAM_F|SRAM|EEPROM)_V[0-9]{3}'
 STORAGE_CAPACITIES = {b'FLASH1M': {131072}, b'FLASH512': {65536}, b'FLASH': {65536},
                       b'SRAM': {32768}, b'SRAM_F': {32768}, b'EEPROM': {512, 8192}}
 SOURCE_CHAIN_MODES = {'full-frame-chain', 'checkpoint-binaries-only'}
+# How an exporter established the source's cheat state (2026-10-07). An explicit
+# cheat_tainted=false is accepted only with one of these; anything else that cannot
+# be checked against an available source counts as cheat-tainted (fail closed).
+CHEAT_PROVENANCE_MODES = {'full-frame-chain', 'checkpoint-ledger-scan'}
+CHEAT_REGISTRY = ROOT / 'data' / 'game_save_cheat_provenance.json'
+
+
+def load_cheat_registry(path=None):
+    try:
+        data = json.loads(Path(path or CHEAT_REGISTRY).read_text(encoding='utf-8'))
+    except FileNotFoundError:
+        return {}
+    entries = data.get('receipts')
+    if not isinstance(entries, dict):
+        raise ValueError('Game-save cheat provenance registry is malformed')
+    for key, entry in entries.items():
+        if (not is_sha256(key) or not isinstance(entry, dict) or type(entry.get('cheat_tainted')) is not bool
+                or not isinstance(entry.get('basis'), str) or not entry['basis'].strip()):
+            raise ValueError('Game-save cheat provenance registry entry is malformed')
+    return entries
+
+
+def source_cheat_state(checkpoint_path, checkpoint):
+    """Cheat state of a source checkpoint from its own run directory.
+
+    True/False when the run's ledger prefix verifies; None when it cannot be checked.
+    Raises when recorded evidence shows cheats but the checkpoint lost its flag.
+    """
+    evidence = run_cheat_evidence(Path(checkpoint_path).parent, checkpoint)
+    positive = any(evidence[k] is True for k in ('baseline_inherited', 'ledger_rows', 'actions_events',
+                                                 'taint_marker'))
+    if positive and not evidence['checkpoint_flag']:
+        raise ValueError('Cheat taint dropped from source checkpoint')
+    if evidence['checkpoint_flag'] or positive:
+        return True
+    if not evidence['ledger_verified'] or evidence_tainted(evidence):
+        return None
+    return False
+
+
+def receipt_cheat_status(record, receipt_sha256):
+    """Cheat provenance of a game-save receipt: {'tainted': bool, 'basis': str}.
+
+    Order: explicit receipt flag; available source checkpoint (must agree);
+    exporter-attested explicit false; reviewed registry by receipt SHA-256;
+    otherwise unverifiable, which counts as tainted.
+    """
+    flag = record.get('cheat_tainted')
+    if 'cheat_tainted' in record and type(flag) is not bool:
+        raise ValueError('Game-save cheat flag is malformed')
+    if flag is False and record.get('cheat_provenance') not in CHEAT_PROVENANCE_MODES:
+        raise ValueError('Game-save cheat flag false without exporter provenance')
+    source_state = None
+    source = Path(record['source_checkpoint']) if isinstance(record.get('source_checkpoint'), str) else None
+    try:
+        if source is not None and source.is_file() and sha(source) == record.get('source_checkpoint_sha256'):
+            source_state = source_cheat_state(source, json.loads(source.read_text()))
+    except OSError:
+        source_state = None
+    if source_state is True and flag is not True:
+        raise ValueError('Cheat taint dropped from game save')
+    if flag is True:
+        return {'tainted': True, 'basis': 'receipt-flag'}
+    if source_state is False:
+        return {'tainted': False, 'basis': 'source-checkpoint-ledger'}
+    if flag is False:
+        return {'tainted': False, 'basis': 'receipt-exporter-' + record['cheat_provenance']}
+    entry = load_cheat_registry().get(receipt_sha256)
+    if entry is not None:
+        return {'tainted': entry['cheat_tainted'], 'basis': 'registry'}
+    return {'tainted': True, 'basis': 'unverifiable'}
 
 
 def rom_storage_types(rom):
@@ -75,15 +147,8 @@ def verify_anchored_record(record, saved, *, expected_harness_sha256, expected_l
             or not isinstance(record.get('save_storage'), list) or len(record['save_storage']) != 1
             or record['save_storage'][0] not in {k.decode() for k in STORAGE_CAPACITIES}):
         raise ValueError('Anchored game-save receipt is malformed')
-    if 'cheat_tainted' in record and record['cheat_tainted'] is not True:
+    if 'cheat_tainted' in record and type(record['cheat_tainted']) is not bool:
         raise ValueError('Anchored game-save cheat flag is malformed')
-    source = Path(record['source_checkpoint'])
-    try:
-        source_ok = source.is_file() and sha(source) == record['source_checkpoint_sha256']
-    except OSError:
-        source_ok = False
-    if source_ok and checkpoint_cheat_tainted(json.loads(source.read_text())) and record.get('cheat_tainted') is not True:
-        raise ValueError('Cheat taint dropped from anchored game save')
     if not is_sha256(expected_harness_sha256) or not is_sha256(expected_libmgba_sha256):
         raise ValueError('Anchored game-save verification requires harness and emulator library hashes')
     if record['harness_sha256'] != expected_harness_sha256:
@@ -123,6 +188,7 @@ def verify_receipt(path, *, verify_frames=True, expected_rom_sha256=None,
         # Evidence-chain cut: verify_frames/frame_cache intentionally unused.
         verify_anchored_record(record, saved, expected_harness_sha256=expected_harness_sha256,
                                expected_libmgba_sha256=expected_libmgba_sha256)
+        receipt_cheat_status(record, sha(path))   # raises on dropped/malformed provenance
         return saved, record
     if saved.stat().st_size not in VALID_SAVE_SIZES or sha(saved) != record['save_sha256']:
         raise ValueError('Game-save bytes do not match receipt')
@@ -135,10 +201,7 @@ def verify_receipt(path, *, verify_frames=True, expected_rom_sha256=None,
     for key in ('rom_sha256', 'libmgba_sha256', 'core_frame', 'state_sha256'):
         if checkpoint[key] != record[key]:
             raise ValueError(f'Game-save origin mismatch: {key}')
-    if 'cheat_tainted' in record and record['cheat_tainted'] is not True:
-        raise ValueError('Game-save cheat flag is malformed')
-    if checkpoint_cheat_tainted(checkpoint) and record.get('cheat_tainted') is not True:
-        raise ValueError('Cheat taint dropped from game save')
+    receipt_cheat_status(record, sha(path))   # raises on dropped/malformed provenance
     if record['source_harness_sha256'] != checkpoint['harness_sha256']:
         raise ValueError('Game-save source harness mismatch')
     state = contained_file(cp.parent, checkpoint['state'])
@@ -183,6 +246,8 @@ def verify_recorded_seed(root, baseline):
         verify_anchored_record(receipt, contained_file(root, seed['save']),
                                expected_harness_sha256=expected_harness,
                                expected_libmgba_sha256=expected_lib)
+    # Raises on malformed/dropped flags; verify_parent enforces inheritance of the result.
+    status = receipt_cheat_status(receipt, seed['receipt_sha256'])
     target = baseline.get('rom_sha256')
     if target and receipt['rom_sha256'] != target:
         # Older captures predate explicit migration metadata; preserve their
@@ -193,6 +258,7 @@ def verify_recorded_seed(root, baseline):
             raise ValueError('Recorded game-save migration is missing or mismatched')
     elif seed.get('migration') is not None:
         raise ValueError('Unexpected recorded game-save migration')
+    return status
 
 
 def dump_checkpoint_save(checkpoint_path, checkpoint, harness, out):
@@ -239,8 +305,9 @@ def export(checkpoint_path, harness, out, *, frame_cache=None, announce=True):
                    source_checkpoint_sha256=sha(checkpoint_path),
                    source_harness_sha256=checkpoint['harness_sha256'], export_harness_sha256=sha(harness),
                    evidence_scope='Cartridge bytes at source frame, possibly from an earlier in-game save. Game acceptance and saved progress require observed in-game Continue; no scene or ending approval')
-    if checkpoint_cheat_tainted(checkpoint):
-        receipt['cheat_tainted'] = True
+    # verify_parent above checked the full chain, so the checkpoint flag is authoritative.
+    receipt['cheat_tainted'] = checkpoint_cheat_tainted(checkpoint)
+    receipt['cheat_provenance'] = 'full-frame-chain'
     save_json(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', verify_frames=False)
     if announce:
@@ -260,6 +327,13 @@ def verify_checkpoint_binaries(checkpoint_path, checkpoint):
     for key in ('rom_sha256', 'harness_sha256', 'libmgba_sha256'):
         if baseline.get(key) != checkpoint.get(key):
             raise ValueError(f'Source checkpoint identity mismatch: {key}')
+    inherited = baseline.get('cheat_inherited')
+    if inherited not in (None, True) or ('cheat_tainted' in checkpoint and checkpoint['cheat_tainted'] is not True):
+        raise ValueError('Source checkpoint cheat flags are malformed')
+    if inherited is True and not checkpoint_cheat_tainted(checkpoint):
+        raise ValueError('Cheat-inherited source checkpoint lost its taint')
+    # True/False when the ledger prefix verifies; None (unverifiable) otherwise.
+    return source_cheat_state(checkpoint_path, checkpoint)
 
 
 def export_anchored(checkpoint_path, harness, out, *, reason, verify_source_frames=True,
@@ -278,8 +352,12 @@ def export_anchored(checkpoint_path, harness, out, *, reason, verify_source_fram
         raise ValueError('Anchored export must use the checkpoint harness')
     if verify_source_frames:
         verify_parent(checkpoint_path, checkpoint, frame_cache=frame_cache)
+        cheat_state, cheat_provenance = checkpoint_cheat_tainted(checkpoint), 'full-frame-chain'
     else:
-        verify_checkpoint_binaries(checkpoint_path, checkpoint)
+        cheat_state = verify_checkpoint_binaries(checkpoint_path, checkpoint)
+        cheat_provenance = 'checkpoint-ledger-scan' if cheat_state is not None else 'unverifiable-source-ledger'
+        if cheat_state is None:
+            cheat_state = True   # fail closed: frames/ledger unavailable, never normal play
     storage = rom_storage_types(checkpoint_path.parent / 'baseline.gba')
     if len(storage) != 1:
         raise ValueError('Source ROM save storage type is missing or ambiguous')
@@ -294,8 +372,8 @@ def export_anchored(checkpoint_path, harness, out, *, reason, verify_source_fram
                'created_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
                'reason': reason.strip(),
                'evidence_scope': 'Chain root after the 2026-10-06 evidence-chain cut. Source checkpoint fields are informational and never re-verified. Cartridge bytes only; game acceptance requires observed in-game Continue; no scene or ending approval'}
-    if checkpoint_cheat_tainted(checkpoint):
-        receipt['cheat_tainted'] = True
+    receipt['cheat_tainted'] = bool(cheat_state)
+    receipt['cheat_provenance'] = cheat_provenance
     save_json(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', expected_rom_sha256=checkpoint['rom_sha256'],
                    expected_harness_sha256=harness_sha, expected_libmgba_sha256=checkpoint['libmgba_sha256'])
