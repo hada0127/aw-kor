@@ -67,6 +67,9 @@ class CheatTests(unittest.TestCase):
         self.harness = self.root / 'fake_harness'
         self.harness.write_text(FAKE)
         self.harness.chmod(0o755)
+        attest = patch.object(G, 'ATTESTATION_LOG', self.root / 'attestations.jsonl')
+        attest.start()
+        self.addCleanup(attest.stop)
 
     def args(self, **kw):
         base = dict(out=self.root / 'run1', rom=self.rom, harness=self.harness, resume=None, game_save=None, min_free_gib=1,
@@ -234,7 +237,13 @@ class CheatTests(unittest.TestCase):
         record = json.loads(receipt.read_text())
         self.assertIs(record['cheat_tainted'], False)
         shutil.rmtree(run1)
-        self.assertFalse(G.receipt_cheat_status(record, P.sha(receipt))['tainted'])
+        self.assertEqual(G.receipt_cheat_status(record, P.sha(receipt)),
+                         {'tainted': False, 'basis': 'export-attestation'})
+        # Any change to the attested receipt breaks the digest binding.
+        mutated = dict(record, reason='edited later')
+        receipt.write_text(json.dumps(mutated))
+        self.assertEqual(G.receipt_cheat_status(mutated, P.sha(receipt))['tainted'], True)
+        receipt.write_text(json.dumps(record))
         # A legacy-style receipt (no flag, source gone) is clean only via the reviewed registry.
         del record['cheat_tainted'], record['cheat_provenance']
         receipt.write_text(json.dumps(record))
@@ -243,6 +252,12 @@ class CheatTests(unittest.TestCase):
         registry.write_text(json.dumps({'receipts': {P.sha(receipt): {'cheat_tainted': False, 'basis': 'test'}}}))
         with patch.object(G, 'CHEAT_REGISTRY', registry):
             self.assertEqual(G.receipt_cheat_status(record, P.sha(receipt)), {'tainted': False, 'basis': 'registry'})
+            # Mutating a whitelisted receipt (even only the flag) leaves the registry.
+            for change in ({'cheat_tainted': False, 'cheat_provenance': 'full-frame-chain'}, {'reason': 'x'}):
+                mutated = dict(record, **change)
+                receipt.write_text(json.dumps(mutated))
+                self.assertTrue(G.receipt_cheat_status(mutated, P.sha(receipt))['tainted'], change)
+            receipt.write_text(json.dumps(record))
         # An explicit false without exporter provenance is malformed.
         record['cheat_tainted'] = False
         with self.assertRaisesRegex(ValueError, 'without exporter provenance'):
@@ -359,6 +374,53 @@ class CheatTests(unittest.TestCase):
         with Image.open(captured[-2]['sheet']) as sheet:
             self.assertNotIn((200, 0, 0), sheet.convert('RGB').getdata())
 
+
+    def test_forged_clean_flag_on_unavailable_source_is_tainted(self):
+        run1, receipt = self.tainted_anchor('forge')
+        shutil.rmtree(run1)
+        record = json.loads(receipt.read_text())
+        record['cheat_tainted'] = False                      # provenance field kept: full-frame-chain
+        receipt.write_text(json.dumps(record))
+        self.assertEqual(G.receipt_cheat_status(record, P.sha(receipt)),
+                         {'tainted': True, 'basis': 'unverifiable'})
+        run, result = self.record([('act', 1)], out=self.root / 'forged_boot', game_save=receipt)
+        self.assertTrue(json.loads((run / 'baseline.json').read_text())['cheat_inherited'])
+        self.assertTrue(result['cheat_tainted'])
+
+    def strip_inheritance(self, run):
+        base_path = run / 'baseline.json'
+        baseline = json.loads(base_path.read_text())
+        baseline.pop('cheat_inherited', None)
+        base_path.write_text(json.dumps(baseline))
+        for cp_path in run.glob('*.checkpoint.json'):
+            cp = json.loads(cp_path.read_text())
+            cp.pop('cheat_tainted', None)
+            cp['baseline_sha256'] = P.sha(base_path)
+            cp_path.write_text(json.dumps(cp))
+
+    def test_skip_source_check_follows_parent_ancestry(self):
+        run1, _ = self.record([('cmd', 'cheat w8 02000000 01'), ('act', 1)], out=self.root / 'anc_parent')
+        run2, _ = self.record([('act', 2)], out=self.root / 'anc_child', resume=run1 / 'resume.checkpoint.json')
+        self.assertNotIn('cheat', (run2 / 'frames.jsonl').read_text())   # no local writes
+        self.strip_inheritance(run2)
+        with patch('builtins.print'), self.assertRaisesRegex(ValueError, 'Cheat taint dropped'):
+            G.export_anchored(run2 / 'resume.checkpoint.json', self.harness, self.root / 'anc1', reason='x',
+                              verify_source_frames=False)
+        # Ancestor gone: unresolved ancestry is never clean.
+        shutil.rmtree(run1)
+        with patch('builtins.print'):
+            receipt = G.export_anchored(run2 / 'resume.checkpoint.json', self.harness, self.root / 'anc2',
+                                        reason='x', verify_source_frames=False)
+        record = json.loads(receipt.read_text())
+        self.assertEqual((record['cheat_tainted'], record['cheat_provenance']), (True, 'unverifiable-source-ledger'))
+
+    def test_skip_source_check_follows_game_save_ancestry(self):
+        _, anchor = self.tainted_anchor('seed')
+        run2, _ = self.record([('act', 2)], out=self.root / 'seeded', game_save=anchor)
+        self.strip_inheritance(run2)
+        with patch('builtins.print'), self.assertRaisesRegex(ValueError, 'Cheat taint dropped'):
+            G.export_anchored(run2 / 'resume.checkpoint.json', self.harness, self.root / 'seed_out', reason='x',
+                              verify_source_frames=False)
 
 
 if __name__ == '__main__':

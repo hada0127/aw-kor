@@ -36,6 +36,8 @@ SOURCE_CHAIN_MODES = {'full-frame-chain', 'checkpoint-binaries-only'}
 # be checked against an available source counts as cheat-tainted (fail closed).
 CHEAT_PROVENANCE_MODES = {'full-frame-chain', 'checkpoint-ledger-scan'}
 CHEAT_REGISTRY = ROOT / 'data' / 'game_save_cheat_provenance.json'
+# Local append-only log of receipt digests written by this tool at export time.
+ATTESTATION_LOG = ROOT / 'output' / 'qa' / 'game_save_attestations.jsonl'
 
 
 def load_cheat_registry(path=None):
@@ -53,30 +55,102 @@ def load_cheat_registry(path=None):
     return entries
 
 
-def source_cheat_state(checkpoint_path, checkpoint):
-    """Cheat state of a source checkpoint from its own run directory.
+def source_cheat_state(checkpoint_path, checkpoint, _depth=0):
+    """Cheat state of a source checkpoint from its run directory and ancestry metadata.
 
-    True/False when the run's ledger prefix verifies; None when it cannot be checked.
+    Local evidence: checkpoint flag, baseline inheritance, ledger prefix rows,
+    the sticky marker and dispatch rows. Ancestry (no frame images needed): the
+    parent checkpoint (recursively) and the initial game-save receipt.
+    True: tainted. False: verified clean. None: something could not be resolved.
     Raises when recorded evidence shows cheats but the checkpoint lost its flag.
     """
-    evidence = run_cheat_evidence(Path(checkpoint_path).parent, checkpoint)
+    if _depth > 128:
+        return None
+    checkpoint_path = Path(checkpoint_path)
+    root = checkpoint_path.parent
+    evidence = run_cheat_evidence(root, checkpoint)
     positive = any(evidence[k] is True for k in ('baseline_inherited', 'ledger_rows', 'actions_events',
                                                  'taint_marker'))
-    if positive and not evidence['checkpoint_flag']:
+    unresolved = (not evidence['ledger_verified']
+                  or (evidence_tainted(evidence) and not positive and not evidence['checkpoint_flag']))
+    ancestor = False
+    try:
+        baseline = json.loads((root / 'baseline.json').read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        baseline = None
+        unresolved = True
+    if baseline is not None and baseline.get('parent_checkpoint'):
+        parent_path = Path(baseline['parent_checkpoint'])
+        try:
+            ok = parent_path.is_file() and sha(parent_path) == baseline.get('parent_checkpoint_sha256')
+        except OSError:
+            ok = False
+        state = source_cheat_state(parent_path, json.loads(parent_path.read_text()), _depth + 1) if ok else None
+        if state is None:
+            unresolved = True
+        elif state:
+            ancestor = True
+    if baseline is not None and baseline.get('initial_game_save'):
+        seed = baseline['initial_game_save']
+        receipt_path = root / seed.get('receipt', 'game_save.json')
+        try:
+            ok = receipt_path.is_file() and sha(receipt_path) == seed.get('receipt_sha256')
+        except OSError:
+            ok = False
+        if not ok:
+            unresolved = True
+        elif receipt_cheat_status(json.loads(receipt_path.read_text()), seed['receipt_sha256'],
+                                  _depth=_depth + 1)['tainted']:
+            ancestor = True
+    if (positive or ancestor) and not evidence['checkpoint_flag']:
         raise ValueError('Cheat taint dropped from source checkpoint')
-    if evidence['checkpoint_flag'] or positive:
+    if evidence['checkpoint_flag'] or positive or ancestor:
         return True
-    if not evidence['ledger_verified'] or evidence_tainted(evidence):
-        return None
-    return False
+    return None if unresolved else False
 
 
-def receipt_cheat_status(record, receipt_sha256):
+def attestation_log():
+    return Path(ATTESTATION_LOG)
+
+
+def record_attestation(receipt_path, record):
+    """Append the exported receipt digest to the local append-only attestation log."""
+    log = attestation_log()
+    log.parent.mkdir(parents=True, exist_ok=True)
+    row = {'receipt_sha256': sha(receipt_path), 'kind': record['kind'],
+           'cheat_tainted': record['cheat_tainted'], 'cheat_provenance': record['cheat_provenance'],
+           'source_checkpoint_sha256': record.get('source_checkpoint_sha256'),
+           'recorded_at': datetime.now(timezone.utc).isoformat(timespec='seconds')}
+    with log.open('a', encoding='utf-8') as stream:
+        stream.write(json.dumps(row, sort_keys=True) + '\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def attested_clean(receipt_sha256):
+    """True only if this exact receipt digest was attested clean at export time."""
+    try:
+        lines = attestation_log().read_text(encoding='utf-8').splitlines()
+    except FileNotFoundError:
+        return False
+    rows = []
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(row, dict) and row.get('receipt_sha256') == receipt_sha256:
+            rows.append(row)
+    return bool(rows) and all(row.get('cheat_tainted') is False for row in rows)
+
+
+def receipt_cheat_status(record, receipt_sha256, *, _depth=0):
     """Cheat provenance of a game-save receipt: {'tainted': bool, 'basis': str}.
 
-    Order: explicit receipt flag; available source checkpoint (must agree);
-    exporter-attested explicit false; reviewed registry by receipt SHA-256;
-    otherwise unverifiable, which counts as tainted.
+    Order: receipt flag true; available source checkpoint with resolvable
+    ancestry (must agree with the flag); otherwise an explicit or implied clean
+    state is accepted only for this exact receipt digest via the reviewed
+    registry or the export-time attestation log. Everything else is tainted.
     """
     flag = record.get('cheat_tainted')
     if 'cheat_tainted' in record and type(flag) is not bool:
@@ -87,7 +161,7 @@ def receipt_cheat_status(record, receipt_sha256):
     source = Path(record['source_checkpoint']) if isinstance(record.get('source_checkpoint'), str) else None
     try:
         if source is not None and source.is_file() and sha(source) == record.get('source_checkpoint_sha256'):
-            source_state = source_cheat_state(source, json.loads(source.read_text()))
+            source_state = source_cheat_state(source, json.loads(source.read_text()), _depth)
     except OSError:
         source_state = None
     if source_state is True and flag is not True:
@@ -96,11 +170,11 @@ def receipt_cheat_status(record, receipt_sha256):
         return {'tainted': True, 'basis': 'receipt-flag'}
     if source_state is False:
         return {'tainted': False, 'basis': 'source-checkpoint-ledger'}
-    if flag is False:
-        return {'tainted': False, 'basis': 'receipt-exporter-' + record['cheat_provenance']}
     entry = load_cheat_registry().get(receipt_sha256)
     if entry is not None:
         return {'tainted': entry['cheat_tainted'], 'basis': 'registry'}
+    if flag is False and attested_clean(receipt_sha256):
+        return {'tainted': False, 'basis': 'export-attestation'}
     return {'tainted': True, 'basis': 'unverifiable'}
 
 
@@ -309,6 +383,7 @@ def export(checkpoint_path, harness, out, *, frame_cache=None, announce=True):
     receipt['cheat_tainted'] = checkpoint_cheat_tainted(checkpoint)
     receipt['cheat_provenance'] = 'full-frame-chain'
     save_json(out / 'game_save.json', receipt)
+    record_attestation(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', verify_frames=False)
     if announce:
         print(out / 'game_save.json')
@@ -375,6 +450,7 @@ def export_anchored(checkpoint_path, harness, out, *, reason, verify_source_fram
     receipt['cheat_tainted'] = bool(cheat_state)
     receipt['cheat_provenance'] = cheat_provenance
     save_json(out / 'game_save.json', receipt)
+    record_attestation(out / 'game_save.json', receipt)
     verify_receipt(out / 'game_save.json', expected_rom_sha256=checkpoint['rom_sha256'],
                    expected_harness_sha256=harness_sha, expected_libmgba_sha256=checkpoint['libmgba_sha256'])
     if announce:
