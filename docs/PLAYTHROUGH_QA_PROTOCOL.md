@@ -153,3 +153,16 @@ ROM/하네스/libmgba 해시가 바뀌면 재개를 거부한다. 수집기 소�
 ### 2026-10-02 사용자 지시: 중복 캡처 보관량 관리
 
 문제 없는 캡처를 정리하면서 임무를 계속한다. 종료 run의 contact sheet는 원본 frames로 전체 RGB를 재구성하여 일치함을 확인한 경우 복원 영수증을 남기고 정리할 수 있다. 도구는 `tools/prune_capture_sheets.py`; `--restore receipts.jsonl`은 동일 RGB 복원용이며 PNG 파일 바이트 동일성은 보장하지 않는다. docs·root 진행문서·temp 리뷰 등 명시 참조, 첫/끝20개 시트는 유지한다. 개별 endpoint/오류·비교·승리 증거/모든 원본frames/원장/체크포인트/저장은 유지한다. 삭제는 시각 검수 완료를 뜻하지 않고 `visual_review: pending`을 유지한다. 새 시트 비생성 옵션도 원본 전 프레임 캡처를 생략하는 의미가 아니다.
+
+### 2026-10-06 사용자 결정: 증거 체인 절단(anchored 정상 저장)
+
+`output/qa`의 전 프레임 증거(~65GB) 체인을 끊고 핵심 기록만 남기기로 했다. 닫힌 옛 run의 대량 frames는 이후 삭제될 수 있으므로, 새 실행은 조상 프레임 재검증에 의존하지 않는다.
+
+- 내보내기: `python3 tools/game_save_evidence.py --anchored --reason "<사유>" --checkpoint <run>/<tag>.checkpoint.json --harness <mgbah> --out <새 디렉터리>` → `<새 디렉터리>/game_save.json` (kind `cartridge-save-anchored-v1`). 기본은 내보낼 때 원본 체인 전체를 검증한다. frames가 이미 정리된 run은 `--skip-source-frame-check`로 체크포인트 ROM/상태/baseline/하네스/libmgba만 검증하며, 이 사실을 receipt의 `source_chain_verification`에 남긴다. 하네스는 원본 체크포인트와 같은 SHA여야 한다.
+- 새 실행: `python3 tools/playthrough_capture.py --rom <ROM> --harness <같은 mgbah> --out <새 run> --game-save <새 디렉터리>/game_save.json`. 콜드부트 frame0에서 저장 바이트를 대조하고 새 체인 루트가 된다. 이 run의 `--resume`은 이 run의 로컬 저장/receipt 사본까지만 검증하며 원본 run을 열지 않는다. 호환 ROM 이관은 기존 `--game-save-source-rom-sha256`을 사용하고, 저장 형식은 receipt에 기록된 `save_storage`와 대조한다.
+- 검증 범위: receipt 필드, 저장 크기/SHA/균일값 아님, 대상 ROM SHA(또는 선언한 이관 원본 SHA), 하네스·libmgba SHA. `source_checkpoint`·`source_core_frame` 등은 참고 정보이며 재검증하지 않는다. 즉 anchored 이전 구간의 프레임 증거는 이 receipt로 대신하지 않는다.
+- 기존 `cartridge-save-from-recorded-checkpoint-v1` receipt와 `--export-game-save`는 동작이 바뀌지 않으며 계속 원본 체인을 검증한다.
+
+
+### Anchor receipts (git-pinned)
+- 2026-10-06 `output/qa/part1_2026-10-06/anchor_m20_day16/game_save.json` sha256 `d3ca0c1447f29779311044c305332cd056317fc106f2f636c371e6a5ca87a02d` (Part 1 M20 DAY16, ROM e4963765…, save f5a21846…).

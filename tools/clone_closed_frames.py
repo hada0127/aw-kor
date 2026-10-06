@@ -184,6 +184,7 @@ def rom_guard(raw,expected):
  with original.open('rb') as f:header=f.read(0xc0)
  if len(header)!=0xc0 or raw[4:0xa0]!=header[4:0xa0] or raw[0xac:0xb2]!=header[0xac:0xb2]:raise ValueError('GBA logo/game identity differs')
  if raw[0xb2]!=0x96 or ((-sum(raw[0xa0:0xbd])-0x19)&255)!=raw[0xbd]:raise ValueError('Invalid GBA header checksum')
+ANCHORED_KIND='cartridge-save-anchored-v1' # game_save_evidence.ANCHORED_KIND
 def recorder_roots():
  result=subprocess.run(['/bin/ps','-axo','args='],capture_output=True,text=True)
  if result.returncode or result.stderr:raise ValueError('Cannot inventory active recorders')
@@ -212,7 +213,9 @@ def recorder_roots():
   if save:
    receipt=save # production CLI accepts the receipt itself
    if not receipt.exists():raise ValueError('Cannot resolve active game-save receipt')
-   cp=json.loads(receipt.read_text())['source_checkpoint'];roots.add(Path(cp).absolute().parent)
+   r=json.loads(receipt.read_text())
+   # Anchored receipts are self-contained chain roots; their source run may be deleted.
+   if r.get('kind')!=ANCHORED_KIND:roots.add(Path(r['source_checkpoint']).absolute().parent)
  return roots,starting
 
 def excluded_rom_runs(roots):
@@ -248,8 +251,8 @@ def excluded_rom_runs(roots):
   if save:
    receipt=Path(save['receipt'])
    if not receipt.is_absolute():receipt=run/receipt
-   r=json.loads(receipt.read_text());cp=r['source_checkpoint']
-   pending.append(Path(cp).absolute().parent)
+   r=json.loads(receipt.read_text())
+   if r.get('kind')!=ANCHORED_KIND:pending.append(Path(r['source_checkpoint']).absolute().parent)
  return excluded
 
 def execute_rom(source_run,target_run,work,apply,exclude_runs,near_rom=False):

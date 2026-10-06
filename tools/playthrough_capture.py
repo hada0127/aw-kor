@@ -334,14 +334,21 @@ class Recorder:
             if game_save:
                 if args.resume:
                     raise ValueError('Game-save boot and emulator-state resume are mutually exclusive')
-                from game_save_evidence import verify_receipt
+                from game_save_evidence import verify_receipt, ANCHORED_KIND
                 migration_source = getattr(args, 'game_save_source_rom_sha256', None)
+                # An anchored receipt is a self-contained chain root: no source run is opened.
                 saved, receipt = verify_receipt(game_save, expected_rom_sha256=self.rom_sha,
-                                                migration_source_sha256=migration_source, frame_cache=frame_verification_cache)
+                                                migration_source_sha256=migration_source, frame_cache=frame_verification_cache,
+                                                expected_harness_sha256=self.harness_sha,
+                                                expected_libmgba_sha256=self.lib_sha)
                 if migration_source is not None:
                     from game_save_evidence import verify_migration_storage
-                    verify_migration_storage(Path(receipt['source_checkpoint']).parent / 'baseline.gba',
-                                             self.out / 'baseline.gba', saved.stat().st_size)
+                    if receipt['kind'] == ANCHORED_KIND:
+                        verify_migration_storage(None, self.out / 'baseline.gba', saved.stat().st_size,
+                                                 source_types={t.encode() for t in receipt['save_storage']})
+                    else:
+                        verify_migration_storage(Path(receipt['source_checkpoint']).parent / 'baseline.gba',
+                                                 self.out / 'baseline.gba', saved.stat().st_size)
                 if receipt['libmgba_sha256'] != self.lib_sha:
                     raise ValueError('Game-save origin uses a different emulator library')
                 shutil.copyfile(saved, self.out / 'game.sav')
@@ -821,7 +828,7 @@ def main():
                         help='With --resume, reuse bounded process-local RGB proofs; still read and hash every PNG')
     start.add_argument('--export-game-save', type=Path, help='Opt-in same-process verified SRAM export then cold boot; recheck PNG bytes while reusing bounded RGB proofs')
     parser.add_argument('--export-game-save-out', type=Path, help='New evidence directory required with --export-game-save')
-    start.add_argument('--game-save', type=Path, help='Verified game_save_evidence.py receipt; cold boot with cartridge save')
+    start.add_argument('--game-save', type=Path, help='Verified game_save_evidence.py receipt; cold boot with cartridge save. An anchored receipt (--anchored export) starts a new chain root that never re-verifies the source run')
     parser.add_argument('--game-save-source-rom-sha256', help='Explicit source SHA-256 for normal SRAM migration to a compatible patch ROM; never migrates emulator states')
     parser.add_argument('--min-free-gib', type=float, default=10)
     parser.add_argument('--timeout', type=float, default=10)

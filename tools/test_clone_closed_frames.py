@@ -265,6 +265,26 @@ class RomCloneTests(unittest.TestCase):
   (live/'baseline.json').write_text(json.dumps({'initial_game_save':{'receipt':'game_save.json'}}))
   (live/'game_save.json').write_text(json.dumps({'source_checkpoint':str(b/'resume.checkpoint.json')}))
   with patch.object(M.C,'ROOT',self.root):self.assertIn(b,M.excluded_rom_runs([live]))
+ def test_anchored_game_save_does_not_follow_deleted_source(self):
+  a,b,raw,sha=self.rom_runs();live=self.root/'output/qa/live';live.mkdir(exist_ok=True)
+  (live/'baseline.json').write_text(json.dumps({'initial_game_save':{'receipt':'game_save.json'}}))
+  for source in (self.root/'output/qa/deleted_source/resume.checkpoint.json',Path('/nonexistent/outside/cp.json')):
+   (live/'game_save.json').write_text(json.dumps({'kind':'cartridge-save-anchored-v1','source_checkpoint':str(source)}))
+   with patch.object(M.C,'ROOT',self.root):result=M.excluded_rom_runs([live])
+   self.assertIn(live,result);self.assertNotIn(source.parent,result)
+  # Legacy receipts still follow (and fail closed on) a deleted source run.
+  (live/'game_save.json').write_text(json.dumps({'source_checkpoint':str(self.root/'output/qa/deleted_source/cp.json')}))
+  with patch.object(M.C,'ROOT',self.root):
+   with self.assertRaisesRegex(ValueError,'no recorder evidence'):M.excluded_rom_runs([live])
+ def test_recorder_anchored_game_save_argument_skips_source(self):
+  self.recorder_patch.stop();receipt=self.root/'anchor.json';output=M.C.ROOT/'output/qa/starting'
+  response=subprocess.CompletedProcess([],0,f'/usr/bin/python3 tools/playthrough_capture.py --out {output} --game-save {receipt}\n','')
+  for kind,expected in (('cartridge-save-anchored-v1',False),(None,True)):
+   record={'source_checkpoint':'/gone/source/cp.json'}
+   if kind:record['kind']=kind
+   receipt.write_text(json.dumps(record))
+   with patch.object(M.subprocess,'run',return_value=response):roots,_=M.recorder_roots()
+   self.assertEqual(Path('/gone/source') in roots,expected);self.assertIn(output,roots)
 
 class NearRomTests(unittest.TestCase):
  setUp=RomCloneTests.setUp
