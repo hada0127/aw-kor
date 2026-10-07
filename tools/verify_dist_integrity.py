@@ -577,7 +577,7 @@ def main():
     # 배포 전 하드게이트로 묶는다(codex/agy/claude 리뷰).
     import subprocess
     here = os.path.dirname(os.path.abspath(__file__))
-    for label, tool, extra in [('B팀 drift', 'qa_bteam_drift.py', []),
+    for label, tool, extra in [('B팀 drift', 'qa_bteam_drift.py', ['--rom', OUTPUT_ROM]),
                                ('CSV ROM 일본어 잔존', 'qa_csv_integrity.py', ['--fail-on-rom-japanese']),
                                ('text fit', 'qa_text_fit.py', []),
                                ('ADDRESS_TEXT_OVERRIDES governance',

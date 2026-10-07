@@ -858,7 +858,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             if any(text_segment_cells(part) > max_cells for part in normalized_parts):
                 text_failure = 'skip_normalized_wide'
                 break
-            pieces.append(['text', normalized, bytes(orig[a:a + L])])
+            pieces.append(['text', normalized, bytes(orig[a:a + L]), a])
             cur = a + L
         if text_failure:
             stats[text_failure] = stats.get(text_failure, 0) + 1
@@ -872,9 +872,12 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 pieces, msg, seam_table, seam_codes, bytes(orig[msg:orig.find(b'\x00', msg)]))
         new_msg = bytearray()
         controls = []
+        line_spans = {}
         for piece in pieces:
             if piece[0] == 'gap':
                 controls.append((len(new_msg), piece[1], piece[2]))
+            else:
+                line_spans[f'0x{piece[3]:06X}'] = [len(new_msg), len(piece[1])]
             new_msg += piece[1]
         if any(gap != original or bytes(new_msg[pos:pos + len(gap)]) != original
                for pos, gap, original in controls):
@@ -941,6 +944,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             'ptr_off': f'0x{ptr_off:06X}', 'new_addr': f'0x{new_addr:06X}',
             'old_len': me - msg, 'new_len': nlen, 'lines': len(lines),
             'fixed': sorted(f'0x{a:06X}' for a in fix_addrs),
+            'line_spans': line_spans,
+            'ptr_sites': [f'0x{s:06X}' for s in sites],
             **({'seam_spaces': seams_fixed} if seams_fixed else {}),
         })
 

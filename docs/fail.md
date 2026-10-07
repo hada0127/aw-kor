@@ -1483,3 +1483,18 @@ proved on the actual consumer. Static row width is not screen verification.
 Shortening translated wording could free two half-cells, but the assigned fix
 is relocation with a verified line wrap; that wording change needs separate
 translation review and is outside this patch.
+
+## 2026-10-07 B-team final-ROM drift gate remains red
+
+The final-ROM gate added to `tools/qa_bteam_drift.py` checks 3,340 protected
+addresses against `data/bteam_baseline.json`, follows the build's per-line
+repoint spans, and reports 649 mismatches on candidate
+`93759193a6606ef1da857400497e9c1890081b2d303281776557fc2daaa510e5`.
+The complete address/baseline/ROM/cause list is
+`temp/claude_2026-10-07/build/bteam_rom_mismatches13.json` (generated evidence,
+not a release artifact). The known `0xA307AC` wording drift is resolved and
+`0xA307C6` renders the chosen second line from its repointed message. The
+other reported rows were not auto-edited: they include later CSV/TSV/script
+writers and baseline rows that span multiple displayed lines. A green overlay,
+phase6, byte-integrity, or seam check does not clear this B-team gate. No
+emulator or real-hardware check was run for this candidate.
