@@ -3788,3 +3788,31 @@ SPECIAL BREAK banner graphic is documented in
 established for the observed small HUD BREAK/SPECIAL, preview ENEMY/R:MAP/
 A:START, or WIN!/LOSE art. Their exact original-screen status remains
 (unverified); no graphic was changed in this work.
+
+## 2026-10-07 Part 1 information panels (static repair)
+
+- Production weapon headings are pixels in LZ77 assets `0xBA34D0` and
+  `0xEE436C` (both decompress to `0xA00` bytes). The old builder changed
+  palette indices 4–7 to backing index 3 in atlas x86–125, including the
+  native `主砲` and `副砲` strokes. The new writer redraws pale index-4
+  `주포`/`부포` in the same two 14-pixel-high bands, preserving all pixels
+  outside x86–125/y0–31. Pixel previews:
+  `temp/claude_2026-10-07/fix3/weapon_headings_a.png` and `_b.png`.
+- `SPEC` uses tiles 0–3 of LZ77 `0xBC7C00`. Terrain `INFO`/`COST` use
+  raw OBJ tiles `0xBE9A5C`/`0xBE989C`. The former Korean 7-row glyphs began
+  in row 1, while the native letters occupy rows 2–6. The replacement uses
+  rows 2–6; see `temp/claude_2026-10-07/fix3/tabs_asset_before_after.png`.
+- The Part 1 terrain popup port title is the `0A 09 港 0A 00 00 00`
+  record at `0xD85AF4`. Its two spare bytes permit `0A 09 항구 0A 00`
+  without moving the next record. The non-income fallback is the four-byte
+  ASCII `--\0\0` at `0xB82AE8`. Its original pointer at `0xB28AFC`
+  now targets the guarded free span `0xF3E000` containing terminated
+  `81 5B 81 5B 00 00` (`ーー`), using the restored long-mark symbol glyph.
+  An exact 16 MiB scan found one `E8 2A B8 08` pointer in the original
+  (`0xB28AFC`) and none in candidate `e780ea2b`; indirect computed references
+  and runtime SJIS consumption remain (unverified).
+
+Candidate `output/game_wars_korean_candidate_e780ea2b.gba` is a differential
+overlay on `a8911b93`; `overlay_check.py` reports PASS and 2,996 changed
+bytes outside the font-stub spans. Static tests pass. Actual popup pixels and
+the full-font macOS build remain (unverified).

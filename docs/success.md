@@ -3873,3 +3873,15 @@ that already measured 46–48 half-cells remain unchanged. Their actual
 screen capacity is (unverified).
 This is static/build evidence only. Exact rendered pixels and Mac real-font
 equivalence are (unverified).
+
+### 2026-10-07 Part 1 info-panel static repair
+
+The `e780ea2b…55c50` overlay candidate restores pale `주포`/`부포` asset
+pixels, moves the `정보`/`비용` tab ink into the native visible rows, writes
+terminated `ーー` at a repointed plain/forest income fallback, and fits `항구`
+into the port title record. `overlay_check.py` PASS (2,996 A/B bytes, no font-span overlap),
+new final-ROM regression tests 3/3 PASS, Phase 6 preflight PASS, B-build
+integrity map 408,620/408,620 bytes, and Part 2 residual/seam QA PASS.
+`qa_bteam_drift.py` still reports the prior 30 drifts and exits 1. Asset
+previews are in `temp/claude_2026-10-07/fix3/`. Actual screen rendering and
+Mac real-font equivalence remain (unverified).

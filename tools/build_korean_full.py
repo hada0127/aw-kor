@@ -5851,7 +5851,7 @@ def patch_part2_status_header_labels(rom):
     return patched
 
 
-def render_32x8_obj_label(font, text, shadow=False):
+def render_32x8_obj_label(font, text, shadow=False, compact=False):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from bdf import glyph_grid
 
@@ -5868,7 +5868,10 @@ def render_32x8_obj_label(font, text, shadow=False):
                 if not grid[row][col]:
                     continue
                 px = cursor + col + xo
-                py = 1 + row
+                # Part 1 tabs begin above the visible playfield.  The native
+                # lettering occupies rows 2..6; placing seven ink rows from
+                # row 1 loses the first row at the screen edge.
+                py = 2 + (row * 5 // 7) if compact else 1 + row
                 if shadow and 0 <= px + 1 < 24 and 0 <= py + 1 < 8:
                     pixels[py + 1][px + 1] = 3
                 if 0 <= px < 24 and 0 <= py < 8:
@@ -5905,8 +5908,8 @@ def patch_part2_info_screen_obj_labels(rom):
     # Unit information page top label ("SPEC").
     encode_32x8_label(0xBE945C, '정보')
     # Terrain information page labels ("INFO", "COST").
-    encode_32x8_label(0xBE9A5C, '정보')
-    encode_32x8_label(0xBE989C, '비용')
+    rom[0xBE9A5C:0xBE9ADC] = render_32x8_obj_label(font, '정보', compact=True)
+    rom[0xBE989C:0xBE991C] = render_32x8_obj_label(font, '비용', compact=True)
     # Terrain comment popup label ("COMMENT"), split as 32x8 + 16x8 OBJ.
     encode_32x8_label(0xBE9BDC, '설명')
     rom[0xBE9C5C:0xBE9C5C + 64] = bytes(64)
@@ -5932,7 +5935,7 @@ def patch_part1_full_info_spec_obj_label(rom):
         raise AssertionError(f'invalid Part 1 full-info SPEC LZ77 block at 0x{off:X}')
     data, consumed = dec
     buf = bytearray(data)
-    payload = render_32x8_obj_label(font, '정보')
+    payload = render_32x8_obj_label(font, '정보', compact=True)
     if len(buf) < len(payload):
         raise AssertionError(f'Part 1 full-info SPEC LZ77 block too small at 0x{off:X}')
     expected_hash = '11c8965b23359f6bdaf18bfcc88a1d269852d29626530ed62cdfee06ea4256da'
@@ -7231,9 +7234,12 @@ def patch_part1_info_screen_bg_labels(rom):
 
 
 def patch_part1_compact_info_weapon_labels(rom):
-    """Remove Part 1 compact unit-info Japanese vertical weapon labels."""
+    """Replace the pale 主砲/副砲 captions without touching the panel art."""
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
+    from bdf import load_bdf, glyph_grid
+
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))
 
     patched = 0
 
@@ -7256,11 +7262,24 @@ def patch_part1_compact_info_weapon_labels(rom):
                     value = data[base + row * 4 + col // 2]
                     pixels[y + row][x + col] = (value & 0x0F) if col % 2 == 0 else (value >> 4)
 
-        # Remove the orange Japanese weapon-label strokes, keeping the panel backing.
-        for y in range(height):
+        # The two original 14px-high words occupy x86..125, y1..14 and
+        # y17..30. Rows 32..39 contain panel art and must remain untouched.
+        for y in range(32):
             for x in range(86, 126):
                 if pixels[y][x] in (4, 5, 6, 7):
                     pixels[y][x] = 3
+
+        for text, top in (('주포', 1), ('부포', 17)):
+            for char_index, char in enumerate(text):
+                grid, w, h, xo, yo = glyph_grid(font[ord(char)])
+                for dy in range(14):
+                    sy = dy * 11 // 14 - yo
+                    if not 0 <= sy < h:
+                        continue
+                    for dx in range(14):
+                        sx = dx * w // 14 - xo
+                        if 0 <= sx < w and grid[sy][sx]:
+                            pixels[top + dy][91 + char_index * 16 + dx] = 4
 
         out = bytearray(len(data))
         for tile_idx in range(len(data) // 32):
@@ -22085,6 +22104,36 @@ def main():
         (0xB82E26, 6, '대점령'),
     ]:
         fixed_zero_text_patch(faddr, slot_len, text)
+
+    # The Part 1 terrain popup has a one-kanji port record with two unused
+    # bytes before the next record. Use that room for both Korean syllables.
+    if bytes(orig[0xD85AF4:0xD85AFC]) != b'\x0a\x09\x8d\x60\x0a\x00\x00\x00':
+        raise AssertionError('unexpected Part 1 port terrain title source')
+    port_title = encode_text('항구', syl_to_code, unmapped, 0xD85AF6)
+    if len(port_title) != 4 or bytes(rom[0xD85AF6:0xD85AFC]) != bytes(orig[0xD85AF6:0xD85AFC]):
+        raise AssertionError('Part 1 port terrain title changed before final patch')
+    rom[0xD85AF6:0xD85AFC] = port_title + b'\x0a\x00'
+    WRITE_LOG.append([0xD85AF6, 6, 6, bytes(rom[0xD85AF6:0xD85AFC]).hex(),
+                      None, '항구', None, 'part1-terrain-port-title'])
+
+    # Plain/forest income uses the native ASCII "--" fallback. Preserve its
+    # NUL-terminated source and repoint the one known consumer to a terminated
+    # SJIS long-mark string. The Latin glyph path is blank in this build.
+    if bytes(orig[0xB82AE8:0xB82AEC]) != b'--\x00\x00':
+        raise AssertionError('unexpected Part 1 income fallback source')
+    if bytes(rom[0xB82AE8:0xB82AEC]) != b'--\x00\x00':
+        raise AssertionError('Part 1 income fallback changed before final patch')
+    income_pointer, income_repoint = 0xB28AFC, 0xF3E000
+    if struct.unpack_from('<I', orig, income_pointer)[0] != 0x08B82AE8:
+        raise AssertionError('unexpected Part 1 income fallback pointer')
+    if bytes(orig[income_repoint:income_repoint + 6]) != bytes(6) or bytes(rom[income_repoint:income_repoint + 6]) != bytes(6):
+        raise AssertionError('Part 1 income fallback destination is occupied')
+    rom[income_repoint:income_repoint + 6] = b'\x81\x5b\x81\x5b\x00\x00'
+    struct.pack_into('<I', rom, income_pointer, 0x08000000 + income_repoint)
+    WRITE_LOG.append([income_repoint, 6, 6, '815b815b0000', None, 'ーー', None,
+                      'part1-terrain-income-fallback'])
+    WRITE_LOG.append([income_pointer, 4, 4, bytes(rom[income_pointer:income_pointer + 4]).hex(),
+                      None, 'income fallback pointer', None, 'part1-terrain-income-fallback-pointer'])
 
     # Normal confirm-choice rows have enough room for "예　　아니오" but should
     # not retain ASCII space padding after the Korean text; some UI paths render
