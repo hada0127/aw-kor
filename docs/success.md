@@ -3900,3 +3900,8 @@ passes, byte integrity checks 405,100 bytes with zero mismatches, and the Part 2
 residual/seam gate passes. `qa_text_fit.py --rom ... --map-rom ...` reports
 0/484 protected final-ROM rows without Hangul. This is static evidence only;
 screen rendering and real-font equivalence are (unverified).
+### 2026-10-07 B팀 복원 ROM 바이트 게이트 보강
+
+`tools/build_korean_full.py`가 최종 ROM의 보호 484행을 2350 한글 예약코드·허용 SJIS 문장부호·제어 바이트로 검사한다. 6개 내부 중첩 고정 문구 기록을 제거해 `0x9298A4`, `0x96253C`, `0x99ADE0`, `0x9D3684`, `0xA34F98`, `0xEE27E0` 문장 끝의 깨진 바이트/종단을 복구했다. 복원 100행 제자리, 200행 재배치, 184행 한국어 잔여이며 잔여 원문 일치 검사가 통과했다. `0xD9009E` 잔여는 66 half-cells로 44 한도를 넘는 명시 목록이다.
+
+Linux 대체 폰트 빌드 `temp/claude_2026-10-07/build/candidate_restore14_stub.gba`와 오버레이 후보 `output/game_wars_korean_candidate_bteam_restore_bytes_v7.gba`(SHA-256 `2c582c27b7a06efd5b4f177068b62dbe81316a443c9854492a30e96af4658d53`): 오버레이 추적 검사 PASS, stub 바이트 무결성 405100바이트 불일치 0, Phase 6 pre-flight PASS, Part 2 seam PASS, 보호 행 언어 카운터 0/484, 집중 테스트 21건 PASS. 실폰트 빌드 및 실화면은 미검증이다.

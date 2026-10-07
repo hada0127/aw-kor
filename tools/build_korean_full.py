@@ -12158,6 +12158,98 @@ if not BTEAM_PREVIOUS_KOREAN_TEXT.keys() <= BTEAM_RESTORE_BASELINE_ROWS:
     raise AssertionError('B-team previous-Korean fallback includes an unapproved address')
 
 
+BTEAM_COMPACT_VERIFIED_ROWS = frozenset({
+    # part1_compact_ui_strings.verify: exact strings, loaded codes, rendered glyphs.
+    0xB81874, 0xB81B04, 0xB81B14, 0xDF8BBA, 0xDF8BC6, 0xDF8C1A,
+    # verify_part1_battle_menu_labels: exact compact dictionary and glyphs.
+    0xB82D36, 0xB82D6A, 0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
+})
+BTEAM_LISTED_WIDE_RESIDUALS = {0xD9009E: 66}
+LINK_WELCOME_SENTENCES = frozenset({
+    0x9298A4, 0x96253C, 0x99ADE0, 0x9D3684, 0xA34F98, 0xEE27E0,
+})
+
+
+def verify_link_welcome_sentences(rom, last_writes):
+    """Catch late writes inside the six complete link-wait sentences."""
+    for address in sorted(LINK_WELCOME_SENTENCES):
+        row = last_writes.get(address)
+        if row is None or row[7] != 'import-csv':
+            raise AssertionError(f'link welcome sentence writer changed at 0x{address:08X}')
+        encoded = bytes.fromhex(row[3])
+        slot = int(row[1])
+        if (not encoded or slot != 46 or row[4] != 0x20
+                or bytes(rom[address:address + slot + 2]) !=
+                encoded + b'\x20' * (slot - len(encoded)) + b'\x00\x00'):
+            raise AssertionError(f'link welcome sentence overwritten at 0x{address:08X}')
+
+
+def validate_bteam_payload(payload, code2syl, address, *, compact=False,
+                           compact_expected=None):
+    """Validate final text bytes, before a lossy display decoder can hide damage."""
+    from dialogue_repoint import text_segment_cells
+    widths = [text_segment_cells(piece.rstrip(b'\x00'))
+              for piece in payload.split(b'\x72\x0a\x09')]
+    if not widths or (max(widths) > 44 and
+                      BTEAM_LISTED_WIDE_RESIDUALS.get(address) != max(widths)):
+        raise AssertionError(f'0x{address:08X}: B-team row exceeds 44 half-cells: {widths}')
+    if compact:
+        if address not in BTEAM_COMPACT_VERIFIED_ROWS:
+            raise AssertionError(f'Unreviewed compact B-team row 0x{address:08X}')
+        if compact_expected is None or payload != compact_expected:
+            raise AssertionError(f'0x{address:08X}: compact final bytes differ from verified writer')
+        return  # Both compact verifiers run before this final-ROM pass.
+    i = 0
+    while i < len(payload):
+        b = payload[i]
+        if payload[i:i + 3] == b'\x72\x0a\x09':
+            i += 3
+            continue
+        if b == 0 and not any(payload[i:]):
+            break  # terminal NUL padding only
+        if b in range(0x81, 0xA0) or b in range(0xE0, 0xF0):
+            if i + 1 >= len(payload):
+                raise AssertionError(f'0x{address:08X}: incomplete SJIS token at +{i}')
+            pair = payload[i:i + 2]
+            code = int.from_bytes(pair, 'big')
+            if code not in code2syl:
+                try:
+                    ch = pair.decode('shift_jis')
+                except UnicodeDecodeError as exc:
+                    raise AssertionError(f'0x{address:08X}: invalid SJIS {pair.hex()} at +{i}') from exc
+                if any('\u3040' <= c <= '\u30ff' and c not in '・ー' or '\uff61' <= c <= '\uff9f'
+                       or '\u3400' <= c <= '\u9fff' for c in ch):
+                    raise AssertionError(f'0x{address:08X}: ordinary SJIS kana/kanji {pair.hex()} at +{i}')
+                if not all(c in '・ー　' or '\uff01' <= c <= '\uff5e'
+                           or unicodedata.category(c)[0] in 'PS' for c in ch):
+                    raise AssertionError(f'0x{address:08X}: unsupported SJIS glyph {pair.hex()} at +{i}')
+            i += 2
+            continue
+        if b == 0x20:
+            if address not in {0xB8301C, 0xB83044, 0xB830AC} and any(
+                    x not in (0, 0x20) for x in payload[i + 1:]):
+                raise AssertionError(f'0x{address:08X}: interior halfwidth space at +{i}')
+            i += 1
+            continue
+        if 0x30 <= b <= 0x39 or b == 0x2D:
+            i += 1
+            continue
+        raise AssertionError(f'0x{address:08X}: invalid text byte {b:02x} at +{i}')
+
+
+def bteam_retained_equal(expected, actual, address, *, compact=False):
+    """Compare displayed wording, accepting only renderer punctuation equivalents."""
+    if compact:
+        return address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A} and actual == expected + '倶倶'
+    fold = str.maketrans({'、': ',', '。': '.', '！': '!', '？': '?',
+                          '”': '"', '“': '"'})
+    def norm(value):
+        return value.translate(fold).replace('・・・', '...')
+    if address not in {0xB8301C, 0xB83044, 0xB830AC}:
+        expected = expected.replace(' ', '　')
+    return norm(expected) == norm(actual)
+
+
 def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
     """슬롯에 맞도록 단계적 압축 인코딩.
 
@@ -22357,12 +22449,10 @@ def main():
         (0xB830AC, 24, '보낼 맵을 골라 줘!!'),
         (0xB830C8, 34, '맵을 보낼 수 있는 사람이 아무도 없어!!'),
         (0xB8319C, 22, '미접속 준비 중'),
-        (0x9298BC, 22, '시작을 눌러'),
-        (0x962554, 22, '시작을 눌러'),
-        (0x99ADF8, 22, '시작을 눌러'),
-        (0x9D369C, 22, '시작을 눌러'),
-        (0xA34FB0, 22, '시작을 눌러'),
-        (0xEE27F8, 22, '시작을 눌러'),
+        # The six `시작을 눌러` addresses are +24 inside their respective
+        # complete sentences (37-39 encoded bytes) at 0x9298A4, 0x96253C, 0x99ADE0,
+        # 0x9D3684, 0xA34F98, and 0xEE27E0. None has a direct ROM pointer;
+        # writing them truncates the sentence's final glyphs and terminator.
         (0x962714, 12, '시작'),
         (0x99AFB8, 12, '시작'),
         (0x9D385C, 12, '시작'),
@@ -23171,6 +23261,7 @@ def main():
     # source-data checks and repoint status alone cannot detect that regression.
     from qa_bteam_drift import check_rom as _check_bteam_rom, BASELINE as _bteam_baseline_path
     from dialogue_repoint import text_segment_cells as _text_segment_cells
+    from qa_integrity_map import load_syl as _load_bteam_codes
     with open(args.out, 'rb') as _stream:
         if hashlib.sha256(_stream.read()).digest() != hashlib.sha256(rom).digest():
             raise AssertionError('B-team final-ROM check input differs from in-memory ROM')
@@ -23190,9 +23281,9 @@ def main():
             '\u3040' <= ch <= '\u309f' or '\u30a0' <= ch <= '\u30fa'
             or '\uff65' <= ch <= '\uff9f' for ch in _text)
         _kanji = any('\u3400' <= ch <= '\u9fff' for ch in _text)
-        _legacy_compact_padding = _address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A}
+        _legacy_compact_padding = _address in BTEAM_COMPACT_VERIFIED_ROWS
         if ((_baseline_has_hangul and not any('가' <= ch <= '힣' for ch in _text))
-                or _text.startswith('<')
+                or _text.startswith('<') or '▯' in _text
                 or _japanese_letters or (_kanji and not _legacy_compact_padding)):
             _non_korean.append((_key, _text))
     if _non_korean:
@@ -23203,21 +23294,31 @@ def main():
             for _key, _span in _message.get('line_spans', {}).items():
                 _relocated_rows[int(_key, 16)] = (_message, _span)
     _last_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    verify_link_welcome_sentences(rom, _last_writes)
     _wide_restored = []
     _restored_relocated = 0
-    for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS - _restoration_issues.keys()):
+    _code2syl = _load_bteam_codes()
+    for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS):
+        _compact = _address in BTEAM_COMPACT_VERIFIED_ROWS
         if _address in _relocated_rows:
             _message, (_off, _length) = _relocated_rows[_address]
             _pos = int(_message['new_addr'], 16) + _off
             _payload = bytes(rom[_pos:_pos + _length])
-            _restored_relocated += 1
+            if _address not in _restoration_issues:
+                _restored_relocated += 1
         else:
             _row = _last_writes.get(_address)
             if _row is None:
                 raise AssertionError(f'B-team restoration has no final text write: 0x{_address:08X}')
             _payload = bytes(rom[_address:_address + len(bytes.fromhex(_row[3]))])
-        _widths = [_text_segment_cells(piece) for piece in _payload.split(b'\x72\x0a\x09')]
-        if not _widths or max(_widths) > 44:
+            if _compact and _row[7] not in {'part1-compact-ui', 'part1-battle-menu-font'}:
+                raise AssertionError(f'B-team compact writer changed: 0x{_address:08X}')
+        validate_bteam_payload(_payload, _code2syl, _address, compact=_compact,
+                               compact_expected=bytes.fromhex(_row[3]) if _compact
+                               and _address not in _relocated_rows else None)
+        _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
+        if not _widths or (max(_widths) > 44 and
+                           BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
             _wide_restored.append((f'0x{_address:08X}', _widths))
     if _wide_restored:
         raise AssertionError(f'B-team restored rows exceed 44 half-cells: {_wide_restored[:20]}')
@@ -23226,11 +23327,20 @@ def main():
         'expected_baseline': _bteam_baseline['overrides'][f'0x{address:08X}'],
         'kept_text': issue['rom_text'],
         'reason': issue['cause'],
+        'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
     if set(_restoration_issues) != set(BTEAM_PREVIOUS_KOREAN_TEXT):
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(set(BTEAM_PREVIOUS_KOREAN_TEXT) - set(_restoration_issues))[:10]}, '
                              f'residual-only={sorted(set(_restoration_issues) - set(BTEAM_PREVIOUS_KOREAN_TEXT))[:10]}')
+    if not BTEAM_LISTED_WIDE_RESIDUALS.keys() <= _restoration_issues.keys():
+        raise AssertionError('Listed wide B-team row is not a residual')
+    _wrong_residual = [(f'0x{a:08X}', BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'])
+                       for a, issue in sorted(_restoration_issues.items())
+                       if not bteam_retained_equal(BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'], a,
+                                                   compact=a in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A})]
+    if _wrong_residual:
+        raise AssertionError(f'B-team residual differs from retained Korean: {_wrong_residual[:20]}')
     with open(os.path.join(BASE, 'temp', 'bteam_restore_residuals.json'), 'w', encoding='utf-8') as _stream:
         json.dump(_residual_report, _stream, ensure_ascii=False, indent=2)
     st['bteam_restored_in_place'] = len(BTEAM_RESTORE_BASELINE_ROWS) - len(_restoration_issues) - _restored_relocated

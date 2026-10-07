@@ -18,6 +18,7 @@ SAFE_MIN_ADDR = 0x800000
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from build_korean_full import (
     ADDRESS_TEXT_OVERRIDES,
+    BTEAM_PREVIOUS_KOREAN_TEXT,
     BTEAM_RESTORE_BASELINE_ROWS,
     COMPREHENSIVE_TRANS,
     SOURCE_TEXT_OVERRIDES,
@@ -30,6 +31,14 @@ from build_korean_full import (
     refresh_compact_glyph_dictionary_overrides,
 )
 import text_metrics as TM
+
+
+def is_korean_display_row(value):
+    return (any('가' <= ch <= '힣' for ch in value)
+            and '▯' not in value
+            and not any('\u3040' <= ch <= '\u30ff' and ch not in '・ー'
+                        or '\uff61' <= ch <= '\uff9f'
+                        or '\u3400' <= ch <= '\u9fff' for ch in value))
 
 
 def load_found():
@@ -408,9 +417,14 @@ def main(argv=None):
         issues = {int(item['address'], 16): item for item in check_rom(
             baseline, args.rom, args.map, args.manifest, args.map_rom)
             if int(item['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
+        from build_korean_full import bteam_retained_equal
         non_korean = [address for address in sorted(BTEAM_RESTORE_BASELINE_ROWS)
                       if address in issues and
-                      not any('가' <= ch <= '힣' for ch in issues[address]['rom_text'])]
+                      not (is_korean_display_row(issues[address]['rom_text']) or
+                           (address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A} and
+                            bteam_retained_equal(BTEAM_PREVIOUS_KOREAN_TEXT[address],
+                                                 issues[address]['rom_text'], address,
+                                                 compact=True)))]
         print(f'final-ROM protected non-Korean: {len(non_korean)}/{len(BTEAM_RESTORE_BASELINE_ROWS)} '
               f'({", ".join(f"0x{a:08X}" for a in non_korean[:20])})')
 
