@@ -1468,3 +1468,18 @@ m16_palette_resume 1821/frame215660 패배, 실제 전투 frame214500 전함→�
 ### 2026-10-07 Linux PC에서 정식 전체 빌드 불가
 
 `tools/build_korean_full.py`는 macOS 폰트(`~/Library/Fonts/OkDanDan-Bold.otf` SHA 3b48adae…, `/System/Library/Fonts/AppleSDGothicNeo.ttc`, `/Library/Fonts/NanumGothic{ExtraBold,Bold}.ttf`)를 요구하며 nyarch-pc에는 없다. 대체 폰트로 돌리면 그래픽 자산 70175B가 달라진다(HEAD 스텁 빌드 vs e4963765). 대체 폰트 빌드를 출하/후보로 쓰지 않는다. 이번에는 같은 스텁으로 HEAD(A)·변경(B)을 빌드해 A≠B 바이트만 e4963765에 덮어썼고, A≠B 위치에서 A=e4963765(충돌 0)·폰트 영역과 겹침 0을 확인했다(`temp/claude_2026-10-07/build/overlay.py`). 정식 SHA 재현은 Mac 빌드로 해야 한다. 2차(40c284ac)는 `AW_TRACE_OUT` 쓰기 추적으로 A≠e4963765 70175B가 전부 폰트 사용 패치 호출의 쓰기 구간 안이고, 원본 대비 미추적 쓰기 0, A/B 폰트 쓰기 구간 동일, A≠B 바이트가 폰트 구간 밖임을 확인했다(`temp/claude_2026-10-07/build/overlay_check.py`). 이 PC에서 정식 폰트 확보 불가: AppleSDGothicNeo는 Apple 전용, OkDanDan은 reference/·AUR에 없고 SHA 일치 배포처 미확인, NanumGothic은 공식 저장소에 없고 sudo 암호 필요.
+## 2026-10-07 Part 2 seam rows at portrait width (still deferred)
+
+The reviewed seams `0xA06F74/w3` (`다음엔|같은`) and `0xA0D0FC/w4`
+(`올리거나|정찰차를`) already occupy 44 half-cells in their portrait rows.
+`apply_seam_spaces` adds a two-half-cell 0x8140 and rejects 46 > 44;
+`inplace_seam_spaces` has the same guard. The existing explicit `line_layouts`
+path can insert a 0x72 row break *inside one text fragment*, but both seams
+are on an already occupied two-row page. Moving the following words to a
+third row would change page layout without a verified portrait capacity or
+control-flow proof. The 0x77 wait and 0x6B page gaps are preserved by the
+repoint contract. Keep both `defer` decisions until a safe page relayout is
+proved on the actual consumer. Static row width is not screen verification.
+Shortening translated wording could free two half-cells, but the assigned fix
+is relocation with a verified line wrap; that wording change needs separate
+translation review and is outside this patch.

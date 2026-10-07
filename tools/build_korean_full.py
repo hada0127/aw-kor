@@ -11783,6 +11783,15 @@ def _part1_dialog_safe_punct(enc, slot, addr=None):
             out += b'\x81\x45' * 3
             i += 3
             continue
+        if (c == 0x2E and i >= 2 and i + 2 < len(b)
+                and b[i - 2] == b[i + 1] == 0x82
+                and 0x4F <= b[i - 1] <= 0x58
+                and 0x4F <= b[i + 2] <= 0x58):
+            # The original CO descriptions spell decimal values with 0x8145
+            # (１・５). A sentence-ending 0x8142 here would change the value.
+            out += b'\x81\x45'
+            i += 1
+            continue
         repl = PART1_DIALOG_ASCII_PUNCT.get(c)
         out += renderer_safe_symbol(repl, addr) if repl else bytes([c])
         i += 1
@@ -11819,6 +11828,12 @@ def _dialogue_fullwidth_punct_text(text):
             i += 3
             continue
         ch = text[i]
+        if (ch == '.' and i and i + 1 < len(text)
+                and text[i - 1] in '0123456789０１２３４５６７８９'
+                and text[i + 1] in '0123456789０１２３４５６７８９'):
+            out.append('・')
+            i += 1
+            continue
         out.append(PART1_DIALOG_ASCII_PUNCT_TEXT.get(ch, ch))
         i += 1
     return ''.join(out)

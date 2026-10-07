@@ -10,11 +10,12 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_korean_full as builder
-from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_SYSTEM_PROMPT_RANGE,
+from dialogue_regions import (PART2_CO_INFO_RANGE, PART2_CO_QUOTE_RANGE, PART2_DEFEAT_RANGE,
+                              PART2_SHOP_UNLOCK_RANGE, PART2_SYSTEM_PROMPT_RANGE,
                               is_part2_story_address)
 from dialogue_repoint import (SeamDecisionError, apply_seam_spaces, find_seams, inplace_seam_spaces,
                               jp_context, load_seam_decisions, seam_after, seam_decision,
-                              unseen_seam_decisions)
+                              text_segment_cells, unseen_seam_decisions)
 
 ORIG = Path(builder.P.ROM)
 
@@ -41,10 +42,10 @@ class RangeTests(unittest.TestCase):
         self.assertEqual(original[hi - 1], 0)
         for address in (0xA30E40, 0xA308B0, 0xA313FC):
             self.assertTrue(is_part2_story_address(address))
-        for address in (0xA2FE58, 0xA31444, 0xA31500):
+        for address in (0xA31444, 0xA31500):
             self.assertFalse(is_part2_story_address(address))
 
-    def test_system_prompt_range_excludes_pair_ui_and_banners(self):
+    def test_system_prompt_range_excludes_pair_ui_and_separates_banners(self):
         original = ORIG.read_bytes()
         targets = [struct.unpack_from('<I', original, o)[0] - 0x08000000
                    for o in range(0xA389E0, 0xA38A0C, 4)]
@@ -54,7 +55,24 @@ class RangeTests(unittest.TestCase):
         self.assertFalse(is_part2_story_address(0xA34B6C))
         self.assertTrue(is_part2_story_address(0xA34BD2))
         self.assertTrue(is_part2_story_address(0xA34CE8))
-        self.assertFalse(is_part2_story_address(0xA34D18))
+        self.assertEqual(PART2_DEFEAT_RANGE, (0xA34D18, 0xA34DD8))
+        self.assertTrue(is_part2_story_address(0xA34D18))
+        self.assertFalse(is_part2_story_address(0xA34DD8))
+
+    def test_shop_and_defeat_ranges_end_at_text_group_boundaries(self):
+        original = ORIG.read_bytes()
+        for index, expected in ((2421, PART2_CO_INFO_RANGE[0]),
+                                (2497, PART2_CO_INFO_RANGE[1]),
+                                (2800, PART2_SHOP_UNLOCK_RANGE[0]),
+                                (2886, PART2_SHOP_UNLOCK_RANGE[1]),
+                                (3221, PART2_DEFEAT_RANGE[0]),
+                                (3226, PART2_DEFEAT_RANGE[1])):
+            address = struct.unpack_from('<I', original, 0xA357B4 + 4 * index)[0] - 0x08000000
+            self.assertEqual(address, expected)
+        for address in (0xA2A33C, 0xA2ACD1, 0xA2D8B8, 0xA2FE58, 0xA34D18, 0xA34DB0):
+            self.assertTrue(is_part2_story_address(address))
+        for address in (0xA2A320, 0xA2C040, 0xA2D8B0, 0xA34DD8):
+            self.assertFalse(is_part2_story_address(address))
 
     def test_co_quote_ellipsis_and_prompt_question_are_fullwidth(self):
         table = codes()
@@ -64,6 +82,33 @@ class RangeTests(unittest.TestCase):
         self.assertNotIn(b'.', snake)
         prompt, _ = builder.encode_fit('덮어쓸까요?', 16, table, collections.Counter(), 0xA34BD2)
         self.assertTrue(prompt.endswith(b'\x81\x48'))
+
+    def test_co_decimal_separator_preserves_value(self):
+        table = codes()
+        address = 0xA2ACD1
+        full = builder.encode_full_fidelity('1.5배가 된다.', table, collections.Counter(), address)
+        self.assertIn('１・５'.encode('shift_jis'), full)
+        self.assertNotIn('１。５'.encode('shift_jis'), full)
+        compact = builder.encode_text('1.5배가 된다.', table, collections.Counter(), address)
+        safe = builder._part1_dialog_safe_punct(compact, 99, address)
+        self.assertIn('１・５'.encode('shift_jis'), safe)
+
+    def test_shop_quote_restores_native_direction(self):
+        import csv
+        with (Path(builder.BASE) / 'data/translation_for_import.csv').open(encoding='utf-8') as stream:
+            row = next(r for r in csv.reader(stream) if r and r[0] == '0x00A2D8C5')
+        self.assertEqual(row[2], '여기는 「워즈 숍」')
+        encoded = builder.encode_full_fidelity(row[2], codes(), collections.Counter(), 0xA2D8C5)
+        self.assertIn('「'.encode('shift_jis'), encoded)
+        self.assertIn('」'.encode('shift_jis'), encoded)
+
+    def test_shop_break_question_fits_native_row(self):
+        import csv
+        with (Path(builder.BASE) / 'data/translation_for_import.csv').open(encoding='utf-8') as stream:
+            row = next(r for r in csv.reader(stream) if r and r[0] == '0x00A2DE85')
+        self.assertEqual(row[2], '「사령관 브레이크」는 잘 다루고 있나?')
+        encoded = builder.encode_full_fidelity(row[2], codes(), collections.Counter(), 0xA2DE85)
+        self.assertLessEqual(text_segment_cells(encoded), 44)
 
 
 def table_for(msg, seams, decision='space', source=b''):

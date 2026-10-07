@@ -28,6 +28,14 @@ PART2_OBJECTIVE_DIALOGUE_RANGE = (0xA3408C, 0xA34B6C)
 # message, not the surrounding unit UI/table. Lossless repoint is required
 # because the last 22-byte slot needs 24 bytes with both punctuation marks.
 PART2_ARTILLERY_HELP_RANGE = (0xA32278, 0xA322BA)
+# CO biography and power descriptions are one contiguous 0xA357B4 table group
+# (entries 2421..2496).  The text uses 0x72 row controls, unlike the preceding
+# compact option labels; entry 2497 starts mode-selection help text.
+PART2_CO_INFO_RANGE = (0xA2A33C, 0xA2C040)
+# Shop speech and unlock announcements are the next contiguous native message
+# table group (entries 2800..2885).  Its payloads use the same 0x6B page and
+# 0x72 line controls as the CO quotes; stop before the CO table group begins.
+PART2_SHOP_UNLOCK_RANGE = (0xA2D8B8, 0xA2FE70)
 # CO victory/power quotes: table entries A384CC..A386DC point to A2FE70..
 # A313FC (all NUL terminated); A386E0 points to A31444, the first unit-help
 # message (2/3/0 operand controls), which stays outside. Playthrough frames on
@@ -40,12 +48,19 @@ PART2_CO_QUOTE_RANGE = (0xA2FE70, 0xA31444)
 # A34D18 starts the defeat banners (not observed). e4963765 frame 3978 shows
 # the ASCII '.'/'?' in the save prompt rendering as nothing.
 PART2_SYSTEM_PROMPT_RANGE = (0xA34B80, 0xA34D18)
+# Five defeat messages immediately follow the prompts (entries 3221..3225).
+# They are NUL-terminated text ending in 0x77 wait controls.  A34DD8 starts
+# battle animation settings; it is outside this text-only group.
+PART2_DEFEAT_RANGE = (0xA34D18, 0xA34DD8)
 PART2_STORY_RANGES = (PART2_PROLOGUE_RANGE, PART2_MISSION_BLURB_RANGE,
                       (0xA024A0, 0xA29388),
                       PART2_ARTILLERY_HELP_RANGE,
+                      PART2_CO_INFO_RANGE,
                       PART2_OBJECTIVE_DIALOGUE_RANGE,
+                      PART2_SHOP_UNLOCK_RANGE,
                       PART2_CO_QUOTE_RANGE,
-                      PART2_SYSTEM_PROMPT_RANGE)
+                      PART2_SYSTEM_PROMPT_RANGE,
+                      PART2_DEFEAT_RANGE)
 
 
 def is_part2_story_address(address):

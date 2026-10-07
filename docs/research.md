@@ -3759,3 +3759,32 @@ P1 M9 보급팝업의ホキュウ잔류: 5821_NONE_0914907.ss0 공개VRAM0x10000
 - 조각 이음매: 2편 대사는 번역 조각을 같은 줄 대기 제어 0x77(`w`)로 잇는다. 앞 조각 슬롯 패딩 0x20은 렌더되지 않아 `몸에{20}{20}w혹시`가 붙어 보인다. 같은 0x77이 튜토리얼 키워드 앞뒤(主砲の弾wやw燃料wが → 탄약w과w연료w가)와 재구성된 번역에도 쓰여 규칙으로 판정할 수 없다(조사 `이`/지시어 `이` 등). 모든 후보를 (원본 메시지 주소, 0x77 순번)으로 키잉한 검수표 `data/part2_seam_decisions.tsv`(space/join/defer, 사유 필수)로 결정한다. space는 패딩≥2면 제자리 0x2020→0x8140(삽입마다 행 폭 재계산), 아니면 재배치에서 0x8140 삽입(메시지 첫머리 `！w` 는 다음 조각 앞에 삽입), 44 half-cell 초과 space는 빌드 실패(→defer).
 - 정적 검사: `python3 tools/qa_part2_render_residuals.py --rom <ROM>` (e4963765: ASCII 부호 CO 99·시스템 8, 미적용 space 288 / effc6ee8: 0·0, 0; join 31·defer 2 유지). `--fail-on-seams`는 검수표 대조, `--compare-rom OLD --seam-tsv OUT`은 이음매별 결정·결과·원문 검토표.
 - 2026-10-07 추가: 검수표 행은 앞뒤 단어뿐 아니라 정규화된 행 문맥(`before`, 공백 제거·‖=이음매, `after`는 결정에서 파생)과 같은 대기의 원문 일본어(`jp_prev`/`jp_next`)에 묶인다. 하나라도 바뀌면 빌드·QA가 그 행을 무효로 본다. 1편 이동 라벨이 가리는 아이콘 픽셀(변형별 19/21/25/28/28/31/22/4)과 결과 스프라이트 SHA는 `data/part1_move_label_exception_masks.json`에 동결(총괄 2026-10-07 육안 승인); 다르면 빌드 실패.
+## 2026-10-07 Part 2 residual punctuation group boundaries (static)
+
+The native `0xA357B4` pointer table groups CO biographies/power descriptions at
+entries 2421..2496 (`0xA2A33C..0xA2C03F`), shop/unlock speech at 2800..2885
+(`0xA2D8B8..0xA2FE6F`), and defeat lines at 3221..3225
+(`0xA34D18..0xA34DD7`). Their originals contain text with `0x72` row,
+`0x6B` page, or `0x77` wait controls. Adjacent entry 2420 is a compact
+colour-selection UI label, 2497 starts mode help, 2886 starts CO quotes,
+and 3226 starts animation settings; those boundaries are excluded. The
+`1.5배가 된다.` line at `0xA2ACD1` belongs to message `0xA2AC90` (entry 2448).
+The pre-change candidate had ASCII punctuation in 50 CO-info, 73 shop/unlock,
+and 5 defeat messages. These bytes are payload-only scan results, not proof
+of the exact runtime renderer. The same A3 text-control grammar motivates
+fullwidth punctuation conversion; screen pixels still need checking.
+The final B-build `qa_part2_physical_rows` receipt-bound audit found zero
+structural errors, but no consumer or capacity evidence for any of the 2,586
+scoped messages. It found 15 conditional width candidates. In the shop
+group, the newly introduced 46-half-cell row at `0xA2DE6C` was reduced to
+42 by shortening the nonprotected `0xA2DE85` translation without changing
+its meaning. Six other shop rows measured 46–48 both before and after;
+their actual visual fit remains (unverified).
+
+The original ROM contains literal `BREAK` at `0x391958` and `0xB84E08`, but
+those string tables are changed in the Korean candidate. A separate original
+SPECIAL BREAK banner graphic is documented in
+`tools/part2_special_break_banner.py`. No source-address-to-screen mapping was
+established for the observed small HUD BREAK/SPECIAL, preview ENEMY/R:MAP/
+A:START, or WIN!/LOSE art. Their exact original-screen status remains
+(unverified); no graphic was changed in this work.

@@ -3841,3 +3841,35 @@ P1 M16 Andy 재시도 DAY5 도시 로켓포 보급에서 한글 `보급!` 확인
 - 재현: `nice -n 15 python3 tools/build_korean_full.py` (base 원본 ROM). 증거/노트 `temp/claude_2026-10-06/candidate4/notes.txt`, 정적 스윕 `temp/claude_2026-10-06/sweep_*/findings.json`.
 - 신규 모듈: `tools/part1_mission_titles.py`, `part1_campaign_co_name_lz77.py`, `part1_continue_button.py`, `part1_compact_ui_strings.py`, `part1_unit_list_compact_labels.py`, `part1_factory_tooltip_label.py`, `part1_campaign_co_labels.py`(확장), `part1_rank_labels.py`(확장) + 테스트.
 - 실화면: 정상 SRAM 이관 cold boot `output/qa/part1_2026-10-06/m20_cand_ea4c` 상황 화면 3페이지 탭 정상(이전 후보 d186ee14에서 「존전군상」 회귀 → 공통 사전 prefix 정렬로 해결).
+## 2026-10-07 Part 2 residual punctuation static build
+
+`tools/dialogue_regions.py` limits the new safe-punctuation conversion to
+three contiguous text groups in the native `0xA357B4` pointer table:
+CO profile descriptions (2421..2496), shop/unlock speech (2800..2885), and
+defeat text (3221..3225). Adjacent compact UI and animation-setting entries
+stay outside. The shop quote at `0xA2D8C5` now uses the source's directional
+`「」`; the `0xA2ACD1` decimal `1.5` is encoded as the original `１・５`
+glyph sequence. The separately protected `0xA2BC3C` display override says
+`1점5` and is unchanged here.
+
+The previous candidate `5bb5c941…` had 50/73/5 ASCII-punctuation messages
+in the three groups. On the traced Linux font-stub B build, the same scan
+reported `{}` and zero unreviewed or unapplied seams (`join` 31, `defer` 2).
+`python3 tools/qa_part2_render_residuals.py --rom temp/B2.gba --fail-on-seams`,
+`python3 tools/phase6_basic_test.py temp/B2.gba`, and
+`python3 tools/qa_integrity_map.py --rom temp/B2.gba --map temp/integrity_map.json --byte-only`
+passed. The A/B overlay against candidate `5bb5c941…` passed traced write
+attribution (`A!=B` 160029 bytes; conflicts 0, untraced changes 0, font span
+overlap 0) and produced
+`output/game_wars_korean_candidate_a8911b93.gba`, SHA-256
+`a8911b93a58eee96262b07a805a58871324ff837fd01b0beaaeeed956130e4d3`.
+The first overlay (`6f635f33…`) was superseded after strict review found
+one newly overwide shop line. Its nonprotected wording now uses `잘 다루고`
+instead of `제대로 다루고`: the row measures 42 rather than 46 half-cells.
+`qa_part2_physical_rows.py` on the final B build reports 0 structural errors
+and 15 conditional width candidates (16 in the superseded build). A direct
+old-candidate/B comparison found no newly overwide shop row; six shop rows
+that already measured 46–48 half-cells remain unchanged. Their actual
+screen capacity is (unverified).
+This is static/build evidence only. Exact rendered pixels and Mac real-font
+equivalence are (unverified).

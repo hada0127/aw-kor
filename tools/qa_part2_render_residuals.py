@@ -2,8 +2,9 @@
 """Static scan of Part 2 story messages for two render defects (2026-10-07).
 
 1. ASCII punctuation (0x21-0x2F, 0x3A-0x40, 0x5B-0x60, 0x7B-0x7E) left in a
-   message payload. In the A3 dialogue consumer it renders as nothing and can
-   corrupt following Hangul (Snake A30E40 「큭큭큭 ???」).
+   message payload. This is observed in the A3 CO-quote and system-prompt
+   consumers (Snake A30E40 「큭큭큭 ???」); the additional text groups share the
+   native pointer table/control grammar and still need screen confirmation.
 2. Fragment seams: [Hangul/！？][0x20*n][0x77+][Hangul] with no rendered space
    (몸에{20}{20}w혹시 -> "몸에혹시"). See dialogue_repoint.find_seams. Every seam is
    judged by the reviewed table data/part2_seam_decisions.tsv (space/join/defer).
@@ -13,7 +14,8 @@ pointer in the scanned ROM, so relocated copies are what is checked. Scope is
 the original target being inside dialogue_regions.PART2_STORY_RANGES.
 Static bytes only: this does not prove pixels on screen.
 
-Exit 1 if ASCII punctuation remains in the CO quote or system prompt ranges
+Exit 1 if ASCII punctuation remains in the dialogue groups with established
+native message controls (CO info, shop/unlock, CO quote, system prompt, defeat)
 (with --fail-on-seams also when a seam is missing from
 data/part2_seam_decisions.tsv or a 'space' decision is not applied).
 """
@@ -24,7 +26,8 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from dialogue_regions import (PART2_CO_QUOTE_RANGE, PART2_STORY_RANGES,
+from dialogue_regions import (PART2_CO_INFO_RANGE, PART2_CO_QUOTE_RANGE, PART2_DEFEAT_RANGE,
+                              PART2_SHOP_UNLOCK_RANGE, PART2_STORY_RANGES,
                               PART2_SYSTEM_PROMPT_RANGE, is_part2_story_address)
 from dialogue_repoint import SeamDecisionError, _tokens, find_seams, jp_context, load_seam_decisions, seam_decision
 
@@ -39,10 +42,16 @@ def is_ascii_punct(b):
 
 
 def region_name(addr):
+    if PART2_CO_INFO_RANGE[0] <= addr < PART2_CO_INFO_RANGE[1]:
+        return 'co_info'
+    if PART2_SHOP_UNLOCK_RANGE[0] <= addr < PART2_SHOP_UNLOCK_RANGE[1]:
+        return 'shop_unlock'
     if PART2_CO_QUOTE_RANGE[0] <= addr < PART2_CO_QUOTE_RANGE[1]:
         return 'co_quote'
     if PART2_SYSTEM_PROMPT_RANGE[0] <= addr < PART2_SYSTEM_PROMPT_RANGE[1]:
         return 'system_prompt'
+    if PART2_DEFEAT_RANGE[0] <= addr < PART2_DEFEAT_RANGE[1]:
+        return 'defeat'
     return 'story_other'
 
 
@@ -159,11 +168,13 @@ def main():
                 f.write('\t'.join(row) + '\n')
         from collections import Counter
         print('seam review:', dict(Counter((r[2], r[3]) for r in rows)), '->', args.seam_tsv)
-    bad = result['ascii_punct'].get('co_quote', 0) + result['ascii_punct'].get('system_prompt', 0)
+    bad = sum(result['ascii_punct'].get(region, 0) for region in
+              ('co_info', 'shop_unlock', 'co_quote', 'system_prompt', 'defeat'))
     if args.fail_on_seams:
         bad += result['seam_total']
     print('RESULT:', 'FAIL' if bad else 'PASS',
-          '(CO quote / system prompt ASCII punctuation' + (' + seam table)' if args.fail_on_seams else ')'))
+          '(CO info / shop/unlock / CO quote / system prompt / defeat ASCII punctuation'
+          + (' + seam table)' if args.fail_on_seams else ')'))
     return 1 if bad else 0
 
 
