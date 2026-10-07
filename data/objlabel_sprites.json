@@ -8,8 +8,8 @@
    "type": "synthetic",
    "source": "part2_objlabel/terrain_status",
    "desc": "2편 상태팝업 지형명",
-   "n_tiles": 94,
-   "size": 3008,
+   "n_tiles": 90,
+   "size": 2880,
    "tile_cols": 3,
    "labels": [
     {
@@ -235,19 +235,6 @@
       2,
       3,
       5
-     ]
-    },
-    {
-     "text": "육",
-     "offset": "0xB93BD0",
-     "offset_int": 12139472,
-     "tw": 2,
-     "th": 2,
-     "perm": [
-      0,
-      1,
-      2,
-      3
      ]
     }
    ],
@@ -1353,6 +1340,47 @@
      "offset_int": 12386864,
      "tw": 4,
      "th": 1,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    }
+   ],
+   "curated": true,
+   "palette_guess": "part2"
+  },
+  {
+   "id": "objlabel_p1_terrain_hud",
+   "offset": "0xB93BD0",
+   "offset_int": 12139472,
+   "type": "synthetic",
+   "source": "part1_objlabel/terrain_hud",
+   "desc": "1편 지형 HUD 방어/내구 라벨",
+   "n_tiles": 8,
+   "size": 256,
+   "tile_cols": 2,
+   "labels": [
+    {
+     "text": "방",
+     "offset": "0xB93BD0",
+     "offset_int": 12139472,
+     "tw": 2,
+     "th": 2,
+     "perm": [
+      0,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "text": "내",
+     "offset": "0xB93C50",
+     "offset_int": 12139600,
+     "tw": 2,
+     "th": 2,
      "perm": [
       0,
       1,

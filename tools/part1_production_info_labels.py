@@ -2,8 +2,8 @@
 
 The block decompresses to 82 4bpp tiles (1D OBJ mapping, 2624 bytes):
   tiles 0-3    32x8  SPEC        -> 정보 (patched by build_korean_full)
-  tiles 8-9    16x8  ガス         -> 연료
-  tiles 14-17  32x8  サクテキ     -> 색적
+  tiles 8-9    16x8  ガス         -> 연료  (white + outline 5, no box, like the native strip)
+  tiles 14-17  32x8  サクテキ     -> 색적  (same)
   tiles 18-81  8 x 32x16 movement-type icons; bottom row carries イドウ -> 이동
 Terms follow the established UI/dialogue wording (이동, 색적 = サクテキ, 연료 = 燃料/ガス).
 Only label pixels are rewritten. イドウ is replaced by white 이동 with a 1px
@@ -61,20 +61,28 @@ def _glyph_cells(font, text, gap=1):
     return cells, cursor - gap
 
 
-def _boxed_label(buf, first, wtiles, text, font, box_x0, box_x1, rows=(1, 8), glyph_top=1):
-    """Solid box (color 5) + white text (color 1), same style as SPEC->정보."""
+def _outlined_label(buf, first, wtiles, text, font, clear_rows, glyph_top=1, outline_value=5):
+    """White text (1) with a 1px outline, no box: the native ガス/サクテキ style.
+
+    The native strips are 8 rows; Galmuri7 glyphs are 7 rows, so with the glyph
+    on rows 1..7 the outline below row 7 is clipped. clear_rows are the rows of
+    the old lettering that are cleared first (row 0 of the 32x8 strip keeps its
+    native pixels except where the new outline lands).
+    """
     cells, width = _glyph_cells(font, text)
-    x0 = box_x0 + ((box_x1 - box_x0) - width) // 2
-    for y in range(rows[0], rows[1]):
+    x0 = (wtiles * 8 - width) // 2
+    glyph = {(x0 + cx, glyph_top + cy) for cx, cy in cells}
+    outline = {(x + dx, y + dy) for x, y in glyph for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+               if (x + dx, y + dy) not in glyph and 0 <= y + dy < 8}
+    if any(not (0 <= x < wtiles * 8) for x, _ in glyph | outline):
+        raise AssertionError(f'label {text!r} does not fit its strip')
+    for y in range(*clear_rows):
         for x in range(wtiles * 8):
             t, px, py = _sprite_px(buf, first, wtiles, x, y)
-            _put(buf, t, px, py, 5 if box_x0 <= x < box_x1 else 0)
-    for cx, cy in cells:
-        x, y = x0 + cx, glyph_top + cy
-        if not (box_x0 <= x < box_x1 and rows[0] <= y < rows[1]):
-            raise AssertionError(f'label {text!r} does not fit its box')
+            _put(buf, t, px, py, 0)
+    for (x, y), value in [(p, outline_value) for p in outline] + [(p, 1) for p in glyph]:
         t, px, py = _sprite_px(buf, first, wtiles, x, y)
-        _put(buf, t, px, py, 1)
+        _put(buf, t, px, py, value)
 
 
 # Original イドウ lettering shared by all 8 movement sprites (rows 8..15 of the
@@ -200,8 +208,8 @@ def patch(buf, font):
     for key, expected in SOURCE_HASHES.items():
         if expected is not None and actual[key] != expected:
             raise AssertionError(f'unexpected production info {key} tiles: {actual[key]}')
-    _boxed_label(buf, FUEL_TILES[0], FUEL_TILES[1], '연료', font, 0, 16, rows=(0, 8))
-    _boxed_label(buf, SCOUT_TILES[0], SCOUT_TILES[1], '색적', font, 4, 28)
+    _outlined_label(buf, FUEL_TILES[0], FUEL_TILES[1], '연료', font, clear_rows=(0, 8))
+    _outlined_label(buf, SCOUT_TILES[0], SCOUT_TILES[1], '색적', font, clear_rows=(1, 8))
     move_report = _move_labels(buf, font)
     return [{'text': '연료', 'tile_ids': [8, 9]},
             {'text': '색적', 'tile_ids': [14, 15, 16, 17]},

@@ -5676,9 +5676,12 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in status_terrain_labels:
         x = max(0, (24 - len(text) * 8) // 2)
-        terrain = render_tiles(text, 24, x=x, y=2)
+        # y=1 keeps the glyph+shadow inside rows 1..12 like the native kanji;
+        # y=2 let the bottom (e.g. 공장's final ㅇ) reach row 13 over the HUD icon.
+        terrain = render_tiles(text, 24, x=x, y=1)
         write_tiles(off, [terrain[i] for i in (0, 1, 3, 4, 2, 5)])
-    write_tiles(0xB93BD0, render_tiles('육', 16, x=4, y=2))
+    # 0xB93BD0/0xB93C50 are the Part 1 terrain HUD stat labels 防/耐 (not a land
+    # label): drawn by part1_terrain_hud_labels as 방/내 in the outlined style.
     write_tiles(0x465468, render_tiles('수도', 32, x=4, y=2))
 
     # The small cursor popup in Part 2 uses an older uncompressed 32x16 OBJ
@@ -5770,8 +5773,7 @@ def patch_part2_battle_obj_labels(rom):
 
     # WYSIWYG 합성 스프라이트 기록(흩어진 OBJ 라벨군 → 편집기). 출력 바이트 무영향(기록만).
     rec_objlabel('objlabel_p2_terrain_status', 'part2_objlabel/terrain_status', '2편 상태팝업 지형명',
-                 [{'text': t, 'off': o, 'tw': 3, 'th': 2, 'perm': [0, 1, 4, 2, 3, 5]} for o, t in status_terrain_labels]
-                 + [{'text': '육', 'off': 0xB93BD0, 'tw': 2, 'th': 2}])
+                 [{'text': t, 'off': o, 'tw': 3, 'th': 2, 'perm': [0, 1, 4, 2, 3, 5]} for o, t in status_terrain_labels])
     rec_objlabel('objlabel_p2_terrain_compact', 'part2_objlabel/terrain_compact', '2편 커서팝업 지형명',
                  [{'text': t, 'off': o, 'tw': 4, 'th': 2} for o, t in compact_terrain_labels])
     rec_objlabel('objlabel_p2_unit_status', 'part2_objlabel/unit_status', '2편 상태팝업 유닛명',
@@ -10459,6 +10461,7 @@ SCRIPT_OPERAND_SPANS = {
 # Repairs observed during the ending playthrough must never use fit/strip fallbacks.
 # Includes the source-reviewed A199CA context repair; its pixels remain unverified.
 PLAYTHROUGH_REPAIR_ROWS = frozenset({
+    0xDD0BCB,   # Part 1 final Hellbowz defeat line; relocated two-row layout (part1_hellbowz_ending)
     0xA199CA,
     0xA1D45A, 0xA1D4E2,
     0xA21840, 0xA2185B, 0xA21990, 0xA219AB,
@@ -13493,6 +13496,12 @@ def main():
     import part2_compact_unit_labels as p2_unit_labels
     p2_unit_labels.validate_source(orig, rom)
     st['part2_obj_labels'] = patch_part2_battle_obj_labels(rom)
+    import part1_terrain_hud_labels
+    st['part1_terrain_hud_labels'] = part1_terrain_hud_labels.patch(rom, orig)
+    rec_objlabel('objlabel_p1_terrain_hud', 'part1_objlabel/terrain_hud', '1편 지형 HUD 방어/내구 라벨',
+                 [{'text': t, 'off': o, 'tw': 2, 'th': 2} for o, t, _ in part1_terrain_hud_labels.LABELS])
+    import part1_record_screen
+    st['part1_record_screen_tiles'] = part1_record_screen.patch(rom, orig)
     p2_unit_labels.verify_generated(rom)
     st['part2_status_header_labels'] = patch_part2_status_header_labels(rom)
     st['part2_info_screen_obj_labels'] = patch_part2_info_screen_obj_labels(rom)
@@ -22540,6 +22549,11 @@ def main():
             if _explicit_line_layouts.keys() & _m19_layout.keys():
                 raise AssertionError('Explicit dialogue layout ownership collision')
             _explicit_line_layouts.update(_m19_layout)
+            import part1_hellbowz_ending as hellbowz_ending
+            _hellbowz_layout = hellbowz_ending.layout(orig, _m19_encode)
+            if _explicit_line_layouts.keys() & _hellbowz_layout.keys():
+                raise AssertionError('Explicit dialogue layout ownership collision')
+            _explicit_line_layouts.update(_hellbowz_layout)
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
@@ -22715,6 +22729,7 @@ def main():
     from red_unit_intro import verify as verify_red_unit_intro
     st['red_unit_intro_contract'] = verify_red_unit_intro(rom, orig, lambda text, address: encode_required_full_fidelity(text, syl_to_code, unmapped, address))
     st['part1_m19_dialogue_contract'] = m19_dialogue.verify(rom, orig, _m19_expected_payload, _m19_encode)
+    st['part1_hellbowz_ending_contract'] = hellbowz_ending.verify(rom, orig, _m19_encode)
     from protected_help_apology import verify as verify_protected_help_apology
     st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address))
     from map_design_intro import verify as verify_map_design_intro
