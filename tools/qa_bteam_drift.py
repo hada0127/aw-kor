@@ -72,8 +72,8 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'd84f1d18a819dccf6050db25b569f91e582e9af959d39ea1dae36e89de076165'
-ROUND2_ACTIVE_PINS_DIGEST = '661d2d0dd777a6aac93c9d9ba3fa3202dfe9c5752be1f60e0c5e1f80ba9c5ccb'
+ROUND2_RESIDUAL_DIGEST = 'a095daf765cabafd4756ff459d3cda7fab4d05d8ac879f6ba9bb8baeec6fa120'
+ROUND2_ACTIVE_PINS_DIGEST = 'e702c6c8e0b7fdeee466401555352ddd74d8fbaa3e5b39c18bf4555739bf0a25'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -154,6 +154,31 @@ def verify_compact_font(rom: bytes, glyphs: dict[str, str]) -> None:
             raise ValueError(f'compact glyph tile mismatch in inspected ROM: {jp}->{ko}')
 
 
+# Round-2 residual restorations (2026-10-07). These consumers are not the
+# Part 1/Part 2 dialogue writers, but every one displayed the original Japanese
+# with SJIS fullwidth punctuation, digits and 「」 (checked byte-by-byte in the
+# original ROM: ！？、。ー２ and 　). Restoring the protected Korean words with
+# those same glyph codes is consumer-safe without guessing how ASCII renders:
+#   Part 1 mission titles 0xB81D80..0xB82018 (original e.g. 決着！シッコクノモリ！),
+#   Part 2 map-editor/link messages 0xA2C6xx..0xA350B4,
+#   Part 1 link and CO-quote texts 0xB8301C..0xB84298.
+ROUND2_ORIGINAL_GLYPH_ROWS = frozenset(int(x, 16) for x in '''
+B81D80 B81D94 B81DD4 B81DF0 B81E08 B81E1C B81E38 B81E50 B81E64 B81E78
+B81E98 B81EA8 B81EB8 B81ED0 B81EE0 B81EF4 B81F04 B81F10 B81F5C B81F70
+B81F98 B81FAC B81FC4 B81FDC B81FF4
+A2C644 A2C720 A2C784 A2C7B4 A2C828 A2C848 A2C868 A2C898 A2C950 A2C9B4
+A2CA10 A2CABC A34F98 A34FEC A350B4
+B8301C B83044 B83130 B83CC0 B83DB0 B83EB8 B83F74 B84298
+'''.split())
+ORIGINAL_GLYPH_PUNCTUATION = str.maketrans({'!': '！', '?': '？', ',': '、', '.': '。', '-': 'ー'})
+
+
+def original_glyph_encoding(value: str) -> str:
+    """Expected-side form for ROUND2_ORIGINAL_GLYPH_ROWS (words and order unchanged)."""
+    value = value.replace('...', '・・・').replace(' ', '　').translate(ORIGINAL_GLYPH_PUNCTUATION)
+    return ''.join(chr(ord(ch) + 0xFEE0) if ch.isascii() and ch.isalnum() else ch for ch in value)
+
+
 def display_equivalent(value: str, address: int, *, actual: bool = False) -> str:
     """Predict only documented writer glyph substitutions on baseline text.
 
@@ -162,6 +187,8 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
     """
     if actual:
         return value
+    if address in ROUND2_ORIGINAL_GLYPH_ROWS:
+        return original_glyph_encoding(value)
     dialogue = is_part2_story_address(address) or is_part1_dialog_address(address)
     if dialogue:
         # The dialogue writer promotes authored ASCII to visible SJIS glyphs.
@@ -524,7 +551,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 177 or len(listed) != len(rows):
+    if len(rows) != 122 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:

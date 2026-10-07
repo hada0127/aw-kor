@@ -115,7 +115,7 @@ STRINGS = (
     (0xB81988, 10, '射甲砲', '발칸포', (UNIT_INFO,), (), None),
     (0xB81B04, 10, '魯傑兎', '기관총', (UNIT_INFO,), (), None),
     (0xB81874, 14, '対空魯傑兎', '대공기관총', (UNIT_INFO,), (), None),
-    (0xB81B14, 16, '装備無員', '장비없음', (UNIT_INFO,), (), None),
+    (0xB81B14, 16, '箕装備', '미장비', (UNIT_INFO,), (), None),
     # C7 link status (append 0xB8319C at 0xB32D10, katakana bank) and transfer
     # screen (append 0xB8322C at 0xB342EA is its only bank)
     (0xB831BC, 6, None, '미접속', (0xB130E0,), (0xB8319C,), None),

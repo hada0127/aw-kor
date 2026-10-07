@@ -44,7 +44,7 @@ STUB="$ROOT/tools/linux_fontstub"
 ORIGINAL="$ROOT/original/Game Boy Wars Advance 1+2 (Japan).gba"
 [ -f "$ORIGINAL" ] || { echo "original ROM missing: $ORIGINAL" >&2; exit 2; }
 [ -f "$REFERENCE" ] || { echo "reference ROM missing: $REFERENCE" >&2; exit 2; }
-if pgrep -f "build_korean_full.py" >/dev/null; then
+if pgrep -f '^python3?[^ ]* [^ ]*(build_korean_full|fontstub_build)\.py' >/dev/null; then
   echo "another build_korean_full.py is running; builds are serialized" >&2; exit 3
 fi
 COMMIT=$(git rev-parse "$BASE_REF")

@@ -11986,13 +11986,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'd84f1d18a819dccf6050db25b569f91e582e9af959d39ea1dae36e89de076165':
+        if hashlib.sha256(stream.read()).hexdigest() != 'a095daf765cabafd4756ff459d3cda7fab4d05d8ac879f6ba9bb8baeec6fa120':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 177 or len(result) != len(rows) or
+    if (len(rows) != 122 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
@@ -13023,13 +13023,13 @@ PART1_BATTLE_MENU_LABELS = (
     (0xB82CEE, '終了', '종료'), (0xB82CF6, 'システム', '시스템'),
     (0xB82D02, 'セーブ', '저장'), (0xB82D0E, 'ブレイク', '브레이크'),
     (0xB82D1A, '作戦', '작전'), (0xB82D22, '部隊', '부대'),
-    (0xB82D2A, 'ルール', '규칙'), (0xB82D36, 'ショーグン', '정보'),
+    (0xB82D2A, 'ルール', '룰'), (0xB82D36, 'ショーグン', '사령관'),
     (0xB82D46, '状況', '상황'), (0xB82D4E, '勝利条件', '승리조건'),
-    (0xB82D58, 'マップをぬける', '나가기'), (0xB82D6A, '降伏する', '항복'),
-    (0xB82D76, '処分する', '처분'), (0xB82D82, 'アニメなし', '표시 안함'),
+    (0xB82D58, 'マップをぬける', '나가기'), (0xB82D6A, '降伏する', '항복한다'),
+    (0xB82D76, '処分する', '처분'), (0xB82D82, 'アニメなし', '애니메 무'),
     (0xB82D92, 'アニメＣ', '아군만'), (0xB82D9E, 'アニメＢ', '전투만'),
-    (0xB82DAA, 'アニメＡ', '전체표시'), (0xB82DB6, 'ＢＧＭなし', '음악 없음'),
-    (0xB82DC6, 'ＢＧＭあり', '음악 있음'), (0xB82DD6, 'うかぶ', '부상'),
+    (0xB82DAA, 'アニメＡ', '전체표시'), (0xB82DB6, 'ＢＧＭなし', '배경음 무'),
+    (0xB82DC6, 'ＢＧＭあり', '배경음 유'), (0xB82DD6, 'うかぶ', '부상'),
     (0xB82DE2, 'もぐる', '잠수'), (0xB82DEE, '待機', '대기'),
     (0xB82DF6, '補給', '보급'), (0xB82DFE, '合流', '합류'),
     (0xB82E06, '降車', '하차'), (0xB82E12, '降車', '하차'),
