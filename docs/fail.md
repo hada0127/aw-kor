@@ -1498,3 +1498,36 @@ other reported rows were not auto-edited: they include later CSV/TSV/script
 writers and baseline rows that span multiple displayed lines. A green overlay,
 phase6, byte-integrity, or seam check does not clear this B-team gate. No
 emulator or real-hardware check was run for this candidate.
+
+## 2026-10-07 B-team restoration candidate remains blocked
+
+The Fable/Astra `RESTORE_BASELINE` set has 484 addresses. Source writers now
+agree with `data/bteam_baseline.json`, but candidate
+`output/game_wars_korean_candidate_7f196536.gba`
+(SHA-256 `7f196536c8ea473d864cbefc830f90f596df86098655614fdcc49ebddeeb7437`)
+restores only 320 rows under the final-ROM gate: 124 in place and 196 through
+repointing. The remaining 164 addresses, expected text, observed ROM text,
+writer source, fit estimate, and gate cause are in
+`temp/claude_2026-10-07/build/bteam_restore_residuals_final.tsv`.
+Of those, 37 have a relocated row that still differs, 16 have no final text
+write evidence, and 111 have another final-writer mismatch. Six of the 164
+decode to the same display string but the strict gate still rejects them;
+they need byte/renderer review before being treated as passes.
+
+Two compact UI strings (`0xB830C8`, `0xB82D92`) exceed fixed slots without a
+verified pointer relocation path. Three fragments (`0xA03734`, `0xA03C9C`,
+`0xA229CC`) retain their earlier text because restoring them invalidates the
+reviewed `data/part2_seam_decisions.tsv` entries; that table needs its own
+review before these can change. The guarded script repointer did not confirm
+`0xD910C6`, `0xDCB1BE`, or `0xDCE89A`. Build records these eight immediate
+residuals in `temp/bteam_restore_residuals.json`; the final-ROM list above is
+the complete blocker list.
+
+The traced Linux overlay, Phase 6 preflight, B-build byte integrity,
+`qa_part2_render_residuals --fail-on-seams`, and
+`qa_part2_physical_rows` structural audit pass. The physical audit explicitly
+reports zero verified consumer message layouts, so it is not visual proof.
+`qa_text_fit.py` reports 272 slot overflows; the final-ROM B-team gate reports
+268 mismatches across 3,340 protected rows (164 RESTORE_BASELINE, 77 new strict,
+25 deferred, 2 alignment). No emulator or hardware check ran for this candidate.
+Do not publish this ROM as a completed B-team restoration.

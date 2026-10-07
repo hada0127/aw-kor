@@ -1614,3 +1614,10 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
   `qa_text_fit.py`, `audit_scene_catalog.py --strict`, `verify_dist_integrity.py` PASS.
 - 남은 부채: CSV와 스크립트 override의 권위 shadow 감사는 B4/E11/E14로 분리한다.
 > **2026-10-07 Part 2 residual render candidate `a8911b93…0e4d3` (static QA only):** CO info (`0xA2A33C..A2C040`), shop/unlock (`0xA2D8B8..A2FE70`), and defeat text (`0xA34D18..A34DD8`) now use the dialogue punctuation safeguard; the shop quotation at `0xA2D8C5` restores its source directional quotes and the `0xA2ACD1` decimal `1.5` is encoded as source-style `１・５` (protected `0xA2BC3C` still says `1점5`). ASCII punctuation in these added groups: 128 message hits before, 0 after. `qa_part2_render_residuals --fail-on-seams`, phase6, B-build byte integrity, traced overlay check PASS. Strict review found and fixed one newly 46-half-cell shop row (now 42); six pre-existing shop rows of 46–48 remain with screen capacity unverified. Two 44-half-cell `defer` seams remain; the existing two-row page cannot be safely rewrapped through the current repointer without a new control/layout proof. Preview/HUD/result English artwork's exact original-screen status and all changed screen pixels are (unverified). Linux font-stub differential overlay is for screen QA only; Mac real-font build comparison is required before release. B-team drift gate remains the pre-existing 30 drifts.
+
+> **2026-10-07 B-team restoration still blocked:** candidate `7f196536…ddeeb7437`
+> restores 320/484 approved rows (124 in place, 196 relocated); 164 address-level
+> residuals are listed in `temp/claude_2026-10-07/build/bteam_restore_residuals_final.tsv`.
+> Resolve fixed UI relocation, guarded script failures, seam decision review, and
+> all final-ROM writer mismatches, then rebuild and rerun the B-team gate. The
+> candidate is static QA evidence only; do not count it as release ready.
