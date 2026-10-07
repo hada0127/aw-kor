@@ -18,6 +18,7 @@ SAFE_MIN_ADDR = 0x800000
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from build_korean_full import (
     ADDRESS_TEXT_OVERRIDES,
+    BTEAM_RESTORE_BASELINE_ROWS,
     COMPREHENSIVE_TRANS,
     SOURCE_TEXT_OVERRIDES,
     TEXT_OVERRIDES,
@@ -232,8 +233,13 @@ def load_direct_patch_texts(*, include_writer=False):
 
 
 def main(argv=None):
-    argparse.ArgumentParser(description=__doc__,
-                            formatter_class=argparse.RawDescriptionHelpFormatter).parse_args(argv)
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('--rom', help='final ROM to count protected rows with non-Korean output')
+    parser.add_argument('--map', default=os.path.join(BASE, 'temp', 'integrity_map.json'))
+    parser.add_argument('--manifest', default=os.path.join(BASE, 'temp', 'repoint_manifest.json'))
+    parser.add_argument('--map-rom', help='builder ROM for an overlaid final ROM')
+    args = parser.parse_args(argv)
     slots, found_texts = load_found()
     found_rows = load_found_rows()
     direct_patches = load_direct_patch_texts()
@@ -394,6 +400,19 @@ def main(argv=None):
     print(f'overflow(슬롯초과 skip→원문): {overflow}')
     print(f'no_ko: {no_ko}, intentional_blank_override: {intentional_blank}, code_region: {code_region}, no_slot: {no_slot}, deny/data-skip: {deny}')
     print(f'visual-wider than JA: {wider} ({100*wider/max(written,1):.1f}%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)')
+    if args.rom:
+        import json
+        from qa_bteam_drift import BASELINE, check_rom
+        with open(BASELINE, encoding='utf-8') as stream:
+            baseline = json.load(stream)
+        issues = {int(item['address'], 16): item for item in check_rom(
+            baseline, args.rom, args.map, args.manifest, args.map_rom)
+            if int(item['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
+        non_korean = [address for address in sorted(BTEAM_RESTORE_BASELINE_ROWS)
+                      if address in issues and
+                      not any('가' <= ch <= '힣' for ch in issues[address]['rom_text'])]
+        print(f'final-ROM protected non-Korean: {len(non_korean)}/{len(BTEAM_RESTORE_BASELINE_ROWS)} '
+              f'({", ".join(f"0x{a:08X}" for a in non_korean[:20])})')
 
 
 if __name__ == '__main__':

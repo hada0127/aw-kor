@@ -1621,3 +1621,14 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
 > Resolve fixed UI relocation, guarded script failures, seam decision review, and
 > all final-ROM writer mismatches, then rebuild and rerun the B-team gate. The
 > candidate is static QA evidence only; do not count it as release ready.
+
+> **2026-10-07 B-team restoration safety follow-up (static QA):** candidate
+> `5c73bee7…8fbf373` restores 300/484 rows (100 in place, 200 relocated).
+> The other 184 retain Korean wording from candidate `93759193…aa510e5` and
+> are recorded with expected/kept text and causes in `temp/bteam_restore_residuals.json`.
+> Final-ROM protected non-Korean rows fell from 19 in `7f196536…eb7437`
+> (3 decoded Japanese plus 16 source-SJIS slots lacking write evidence) to 0.
+> No restored row exceeds 44 half-cells. Overlay, Phase 6, byte integrity and
+> Part 2 seam gates pass. The B-team ROM gate still fails: 288 mismatches
+> (263 actionable, 25 deferred), including the 184 Korean residuals. Resolve
+> those before any release claim; screen and real-font behavior are (unverified).

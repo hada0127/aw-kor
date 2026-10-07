@@ -1531,3 +1531,16 @@ reports zero verified consumer message layouts, so it is not visual proof.
 268 mismatches across 3,340 protected rows (164 RESTORE_BASELINE, 77 new strict,
 25 deferred, 2 alignment). No emulator or hardware check ran for this candidate.
 Do not publish this ROM as a completed B-team restoration.
+
+### 2026-10-07 B-team restoration follow-up remains open
+
+The prior `7f196536…eb7437` candidate had 19 protected rows with no Korean
+output: three decoded Japanese rows (`0xD910C6`, `0xDCB1BE`, `0xDCE89A`) and
+16 rows whose final bytes were source Japanese despite no final write evidence.
+The safety candidate `5c73bee7…8fbf373` reduces that count to zero, but the
+ROM drift gate still exits 1 with 288 mismatches: 263 actionable and 25
+deferred. The 184 `RESTORE_BASELINE` mismatches retain Korean and are listed
+with expected text, kept text, and cause in `temp/bteam_restore_residuals.json`.
+The previous candidate's `0xA34F98` row already contains undecodable glyphs;
+its final bytes are unchanged in this follow-up. Do not treat 0/484 non-Korean
+as proof of correct glyphs, meaning, layout, or complete baseline restoration.

@@ -567,6 +567,7 @@ def apply_script_span_ownership(line_index, writes, rom):
 def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_text,
                      cell_width, slots, line_index, table_offsets, free_start, free_end,
                      extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
+                     max_cells_for_address=None,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
                      original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
@@ -738,7 +739,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                     width = max(text_segment_cells(normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg)) for part in layout)
                 else:
                     width = cell_width(a)
-                if width > max_cells:
+                if width > (max_cells_for_address(a) if max_cells_for_address else max_cells):
                     skipped_wide += 1
                     continue
                 fix_addrs.add(a)
@@ -855,7 +856,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             parts = line_layouts.get(a, (payload,)) if a in fix_addrs else (payload,)
             normalized_parts = [normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg) for part in parts]
             normalized = b'\x72\x0a\x09'.join(normalized_parts)
-            if any(text_segment_cells(part) > max_cells for part in normalized_parts):
+            limit = max_cells_for_address(a) if max_cells_for_address else max_cells
+            if any(text_segment_cells(part) > limit for part in normalized_parts):
                 text_failure = 'skip_normalized_wide'
                 break
             pieces.append(['text', normalized, bytes(orig[a:a + L]), a])

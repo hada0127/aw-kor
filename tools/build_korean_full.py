@@ -11965,6 +11965,199 @@ BTEAM_RESTORE_BASELINE_ROWS = frozenset({
     0x00EC312E, 0x00EC3162, 0x00EC3192, 0x00EC3246,
 })
 
+# Korean fallback from candidate 93759193 (commit 9b58175). Entries with
+# compact-glyph placeholders use the prior writer's Korean source instead of
+# undecodable display tokens. Each address remains a RESTORE_BASELINE residual.
+BTEAM_PREVIOUS_KOREAN_TEXT = {
+    0x00a2c040: '스토리를　즐기며　플레이하는　모드',
+    0x00a35258: '친구와　케이블　대전　가능',
+    0x00df1eee: '수도　점령／적　전멸　승리',
+    0x00df207a: '승리　조건은　수도　점령　또는　적　전멸！',
+    0x00df21ae: '수도　점령이나　적　전멸로　승리！',
+    0x00df228e: '먼저　많이　점령한　쪽　승리',
+    0x00df239e: '먼저　많이　점령한　쪽이　승리！',
+    0x00df25fa: '수도　점령이나　적　전멸로　승리！',
+    0x00df26fe: '수도　점령／적　전멸　승리',
+    0x00df2806: '수도　점령이나　적　전멸로　승리！',
+    0x00df28c2: '수도　점령　또는　적　전멸로　승리！',
+    0x00e0f6e2: '작전밖에　모르는　계집애가。',
+    0x00d9444e: '매일　２ＨＰ씩　보충돼도　지금의',
+    0x00d94552: '그래！　여기　커서를　맞춰　이동이야！',
+    0x00d965de: '하지만　전투는　정면만이　아니야',
+    0x00d9edb6: '예를　들어　커서를　이렇게',
+    0x00dcc63a: '바다에서　이길　사람은　드물어',
+    0x00dcd9da: '바다에서　이길　사람은　드물어',
+    0x00dcfa8e: '이　싸움　뒤의　적이　얼마나　강한지도',
+    0x00dd010a: '이　녀석이　모든　것을　조종하고　있었군',
+    0x00a03734: '저기',
+    0x00a03c9c: '네\u3000보병이',
+    0x00a229cc: '하지만',
+    0x00a2955c: '기적',
+    0x00a29570: '별꿈',
+    0x00a29588: '하이퍼수리',
+    0x00a29598: '강화',
+    0x00a295ac: '승리',
+    0x00a295c0: '대승',
+    0x00a295d8: '강타',
+    0x00a295ec: '직격',
+    0x00a29600: '상혼',
+    0x00a2962c: '골드',
+    0x00a29640: '재력',
+    0x00a29654: '저격',
+    0x00a29668: '원저격',
+    0x00a29680: '설백',
+    0x00a29690: '눈보라',
+    0x00a296a4: '일도',
+    0x00a296b8: '배수',
+    0x00a296c8: '탐색',
+    0x00a296d8: '반격',
+    0x00a296ec: '혼',
+    0x00a296fc: '돌격',
+    0x00a2970c: '번개돌진',
+    0x00a29724: '번개강습',
+    0x00a2973c: '큰파도',
+    0x00a29754: '큰폭풍',
+    0x00a2976c: '충전',
+    0x00a29780: '대폭발',
+    0x00a29794: '화염',
+    0x00a297a8: '대분쇄',
+    0x00a297bc: '전술',
+    0x00a297d4: '지휘',
+    0x00a297ec: '측돌파',
+    0x00a297fc: '측기습',
+    0x00a29810: '흑파도',
+    0x00a29824: '흑폭풍',
+    0x00a29906: '표시안함',
+    0x00a2992c: '나가기',
+    0x00a29a34: '미사일기지',
+    0x00a29a70: '레이저포',
+    0x00a29a94: '헬레이저',
+    0x00a2bc3c: '현재\u3000군자금\u3000１점５배로',
+    0x00a2c0c0: '설정을\u3000정해\u3000친구나\u3000컴퓨터와\u3000대전합니다',
+    0x00a2c1b8: '포인트로\u3000쇼핑을\u3000할\u3000수\u3000있습니다',
+    0x00a2c1e8: '지도\u3000제작과\u3000사령관\u3000색상\u3000설정\u3000가능',
+    0x00a2c25c: '친구와\u3000연결해\u3000대전／지도\u3000교환\u3000가능',
+    0x00a2c2f4: '있음으로\u3000하면\u3000유닛\u3000시야\u3000밖이\u3000안\u3000보임',
+    0x00a2c378: '지정일\u3000끝나면\u3000거점\u3000수로\u3000승부',
+    0x00a2c3a8: '지정\u3000거점\u3000보유\u3000시\u3000우세\u3000승리',
+    0x00a2c484: '같은\u3000팀\u3000선택\u3000시\u3000동맹국\u3000설정',
+    0x00a2c644: '만드는\u3000법은\u3000"도움말"에\u3000있습니다.',
+    0x00a2c720: '본부가\u3000둘\u3000이상이고\u3000각\u3000군에',
+    0x00a2c748: '병종\u3000또는\u3000생산\u3000거점\u3000하나\u3000이상\u3000필요',
+    0x00a2c784: '작성한\u3000맵은\u3000프리\u3000배틀\u3000또는',
+    0x00a2c7b4: '통신으로\u3000플레이할\u3000수\u3000있습니다',
+    0x00a2c7dc: '선택\u3000중인\u3000지형\u3000병종을\u3000배치합니다',
+    0x00a2c804: '커서\u3000위치의\u3000지형\u3000병종을\u3000선택합니다',
+    0x00a2c828: '병종\u3000선택\u3000윈도우를\u3000엽니다',
+    0x00a2c848: '지형\u3000선택\u3000윈도우를\u3000엽니다',
+    0x00a2c868: '미니맵을\u3000표시합니다',
+    0x00a2c898: '데이터가\u3000없습니다',
+    0x00a2c950: '바다로\u3000전부\u3000칠하시겠습니까？',
+    0x00a2c9b4: '숲으로\u3000전부\u3000채우시겠습니까？',
+    0x00a2ca10: '저장\u3000안\u3000함\u3000종료할까요',
+    0x00a2cabc: '연타를\u3000무척\u3000좋아하나\u3000보네.',
+    0x00a2d5c8: '내일로\u3000７일간',
+    0x00a2d650: '내일향한\u3000７일',
+    0x00a2d684: '전차대\u3000격파',
+    0x00a2d6ac: '검은\u3000악마를\u3000막아！',
+    0x00a2d6f0: '푸른달\u3000영원히',
+    0x00a34f98: '친구들이 모이면 시작 버튼 눌러줘!',
+    0x00a34fec: '지도를\u3000보낼\u3000사람을\u3000골라!',
+    0x00a350b4: '지도\u3000수신\u3000중,\u3000잠시만\u3000기다려!',
+    0x00a35228: '하나의\u3000카트리지로\u3000대전\u3000가능',
+    0x00a35280: '친구와\u3000케이블로\u3000맵\u3000교환\u3000가능',
+    0x00b81874: '대공기관총',
+    0x00b818b4: '2-6거리',
+    0x00b819b8: '3-5거리',
+    0x00b819dc: '2-3거리',
+    0x00b81b04: '기관총',
+    0x00b81b14: '장비없음',
+    0x00b81d80: '최강\u3000라이벌',
+    0x00b81d94: '칠흑숲\u3000결전',
+    0x00b81dd4: '거대\u3000날개',
+    0x00b81df0: '캡틴\u3000모프',
+    0x00b81e08: '아스카\u3000목표',
+    0x00b81e1c: '도미노\u3000능력',
+    0x00b81e2c: '분단\u3000작전',
+    0x00b81e38: '키쿠치요\u3000실수',
+    0x00b81e50: '최강\u3000키쿠치요부대',
+    0x00b81e64: '키쿠치요\u3000등장',
+    0x00b81e78: '특수부대\u3000도미노',
+    0x00b81e98: '설원\u3000전투',
+    0x00b81ea8: '스나이퍼',
+    0x00b81eb8: '호이프\u3000해군\u3000터보',
+    0x00b81ed0: '호이프\u3000해군',
+    0x00b81ee0: '맥스\u3000약점',
+    0x00b81ef4: '맥스\u3000출격',
+    0x00b81f04: '하늘\u3000용사',
+    0x00b81f10: '건\u3000파이터',
+    0x00b81f5c: '도그\u3000파이트',
+    0x00b81f70: '대공\u3000제압',
+    0x00b81f98: '드래곤\u3000플라이',
+    0x00b81fac: '최강\u3000중전차',
+    0x00b81fc4: '적\u3000부대\u3000격파',
+    0x00b81fdc: '고물\u3000전차\u3000출격',
+    0x00b81ff4: '전선\u3000기지\u3000확보',
+    0x00b82018: '전투\u3000개시',
+    0x00b826a8: '마른잎섬',
+    0x00b8277c: '타마타마섬',
+    0x00b827ac: '소라마메섬',
+    0x00b82d2a: '규칙',
+    0x00b82d36: '정보',
+    0x00b82d6a: '항복',
+    0x00b82d82: '표시\u3000안함',
+    0x00b82d92: '아군만',
+    0x00b82d9e: '전투만',
+    0x00b82daa: '전체표시',
+    0x00b82db6: '음악\u3000없음',
+    0x00b82dc6: '음악\u3000있음',
+    0x00b82fac: '저장\u3000중\u3000전원\u3000끄지\u3000마',
+    0x00b8301c: '지도를 수신 중 잠시 기다려',
+    0x00b83044: '지도를 전송 중 잠시 기다려',
+    0x00b830ac: '보낼 지도를 골라',
+    0x00b830c8: '지도\u3000보낼\u3000상대없어',
+    0x00b83130: '친구들이\u3000모이면\u3000시작\u3000버튼\u3000눌러줘!',
+    0x00b8322c: '전송중입니다。잠시기려주십오',
+    0x00b839b4: '매턴수입',
+    0x00b839f0: '규칙',
+    0x00b83a64: '여기까진\u3000안\u3000하려\u3000했는데',
+    0x00b83cc0: '키쿠치요\u3000특전부대\u3000힘을\u3000보여\u3000주마!',
+    0x00b83db0: '도미노\u3000능력,\u3000유닛\u3000위치는...',
+    0x00b83eb8: '이\u3000정도면\u3000됐나?',
+    0x00b83f74: '이글!\u3000너\u3000적당히\u3000좀\u3000해!!!',
+    0x00b83fa8: '시간\u3000맞췄네,\u3000다행이다\u3000다행이야.',
+    0x00b84298: '최강\u3000힘을\u3000받아라!',
+    0x00d82134: '수도가\u3000둘\u3000이상이고\u3000각\u3000군에',
+    0x00d8215c: '병종\u3000또는\u3000생산\u3000거점\u3000하나\u3000이상\u3000필요',
+    0x00d82198: '작성한\u3000맵은\u3000한대\u3000대전\u3000또는',
+    0x00d821c8: '통신으로\u3000플레이할\u3000수\u3000있습니다',
+    0x00d821f0: '선택\u3000중인\u3000지형\u3000병종을\u3000배치합니다',
+    0x00d82218: '커서\u3000위치의\u3000지형\u3000병종을\u3000선택합니다',
+    0x00d8223c: '병종\u3000선택\u3000윈도우를\u3000엽니다',
+    0x00d8225c: '지형\u3000선택\u3000윈도우를\u3000엽니다',
+    0x00d8227c: '미니맵을\u3000표시합니다',
+    0x00d822ac: '데이터가\u3000없습니다',
+    0x00d9009e: '이\u3000적\u3000유닛은、이제\u3000한\u3000번\u3000정도\u3000공격을하면、해치울\u3000수\u3000있어。',
+    0x00d910c6: '여기\u3000안\u3000가면공격공격을\u3000할\u3000수\u3000없어요。',
+    0x00dcb1be: '바다에선\u3000적수가\u3000드물대',
+    0x00dce89a: '그렇게생각하면료가했다고는생각하기힘들군。',
+    0x00deecde: '해상\u3000유닛。지상\u3000유닛을',
+    0x00df20ba: '수도\u3000점령／적\u3000전멸\u3000승리',
+    0x00df8bba: '부대',
+    0x00df8bc6: '불참',
+    0x00df8c1a: '부대상황',
+    0x00dfa6e2: '워즈\u3000코인으로',
+    0x00e10d7a: '아주\u3000쉬웠어！',
+    0x00ec30a2: '있음이면\u3000유닛\u3000시야밖\u3000안보임',
+    0x00ec312e: '지정일\u3000끝나면\u3000거점\u3000수로\u3000승부',
+    0x00ec3162: '지정거점\u3000보유시\u3000우세승리',
+    0x00ec3192: '있음이면\u3000사령관\u3000능력\u3000활성',
+    0x00ec3246: '같은\u3000깃발이면\u3000같은\u3000팀',
+}
+if not BTEAM_PREVIOUS_KOREAN_TEXT.keys() <= BTEAM_RESTORE_BASELINE_ROWS:
+    raise AssertionError('B-team previous-Korean fallback includes an unapproved address')
+
+
 def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
     """슬롯에 맞도록 단계적 압축 인코딩.
 
@@ -11975,6 +12168,8 @@ def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
     부호가 슬롯을 넘기면 기존 동작과 동일하게 제거하므로 overflow/일본어 폴백은 늘지 않는다.
     ★반각(level 6~9) 선택 시 ASCII 앞 0x20을 전각공백으로 후처리(_fw_before_ascii) — render hook 사각 보완.
     """
+    if addr in BTEAM_PREVIOUS_KOREAN_TEXT:
+        ko = BTEAM_PREVIOUS_KOREAN_TEXT[addr]
     if addr in BTEAM_RESTORE_BASELINE_ROWS:
         exact = encode_required_full_fidelity(ko, syl_to_code, unmapped, addr)
         return (exact, 0) if len(exact) <= slot else (None, 99)
@@ -14628,6 +14823,7 @@ def main():
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: {_reason}; retained {_fallback!r}')
 
     def fixed_zero_text_patch(faddr, slot_len, text):
+        text = BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr, text)
         if faddr in (0xA294C4, 0xB81924):
             pointer = 0xA37B10 if faddr == 0xA294C4 else 0xD850FC
             expected_pointer = (0x08000000 + faddr).to_bytes(4, 'little')
@@ -14716,10 +14912,14 @@ def main():
     required_script_repoints = {0xA322A4, red_intro_address, m19_dialogue_address}
 
     def patch_script_row(faddr, fend, payload, label, *, source_text=None):
+        if faddr in BTEAM_PREVIOUS_KOREAN_TEXT:
+            source_text = BTEAM_PREVIOUS_KOREAN_TEXT[faddr]
+            payload = encode_required_full_fidelity(source_text, syl_to_code, unmapped, faddr)
         validate_script_message_span(orig, faddr, fend)
         slot_len = fend - faddr
         text_for_log = None
-        ov = direct_script_override_text(faddr, fend, direct_script_members, _dlg_ov)
+        ov = (BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr)
+              or direct_script_override_text(faddr, fend, direct_script_members, _dlg_ov))
         if in_region(PAIR_RENDERER_REGIONS, faddr, fend):
             exact_text = ov if ov is not None else source_text
             if exact_text is None:
@@ -22454,6 +22654,8 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
+                if a in BTEAM_PREVIOUS_KOREAN_TEXT:
+                    return BTEAM_PREVIOUS_KOREAN_TEXT[a]
                 if a in BTEAM_SCRIPT_SPACING_REPAIRS or a in BTEAM_SCRIPT_LAYOUT_REPAIRS:
                     owner = _rp_script_owners.get(a)
                     explicit_text = _dlg_ov.get(f'0x{a:08X}')
@@ -22721,7 +22923,9 @@ def main():
                 original_line_starts=_rp_original_starts, line_layouts=_explicit_line_layouts,
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
                 skip_messages=set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES,
-                min_level=1, max_cells=50, valid_codes=frozenset(_rp_valid),
+                min_level=1, max_cells=50,
+                max_cells_for_address=lambda a: 44 if a in BTEAM_RESTORE_BASELINE_ROWS else 50,
+                valid_codes=frozenset(_rp_valid),
                 seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             _rp_fixed_addresses = {int(a, 16) for m in _rp_manifest
@@ -22768,18 +22972,7 @@ def main():
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: guarded script relocation not confirmed')
     for _address in sorted(BTEAM_SEAM_RESIDUAL_TEXT):
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
-    _bteam_residuals = [
-        {'address': f'0x{a:08X}', 'reason': reason, 'retained': prior}
-        for a, (prior, reason) in sorted(bteam_fixed_ui_residuals.items())
-    ] + [{'address': f'0x{a:08X}', 'reason': 'guarded script relocation not confirmed'}
-         for a in bteam_script_residuals] + [
-             {'address': f'0x{a:08X}', 'reason': 'reviewed seam decision would be stale', 'retained': text}
-             for a, text in sorted(BTEAM_SEAM_RESIDUAL_TEXT.items())
-         ]
-    with open(os.path.join(BASE, 'temp', 'bteam_restore_residuals.json'), 'w', encoding='utf-8') as stream:
-        json.dump(_bteam_residuals, stream, ensure_ascii=False, indent=2)
-    verify_required_script_repoints(required_script_repoints - BTEAM_RESTORE_BASELINE_ROWS,
-                                    completed_script_repoints)
+    verify_required_script_repoints(required_script_repoints, completed_script_repoints)
     verify_part2_campaign_header_keys(rom)
 
     _seam = apply_inplace_part2_seam_spaces(rom, orig, _seam_table, {code: syl for syl, code in syl_to_code.items()})
@@ -22972,6 +23165,80 @@ def main():
     with open(intg_path, 'w', encoding='utf-8') as f:
         json.dump(WRITE_LOG, f, ensure_ascii=False)
     print(f'→ 무결성맵 {intg_path} ({len(WRITE_LOG)} text writes)')
+
+    # Inspect the final ROM through the same relocation-aware decoder as the
+    # B-team gate. A skipped overflow may leave source SJIS at the old slot;
+    # source-data checks and repoint status alone cannot detect that regression.
+    from qa_bteam_drift import check_rom as _check_bteam_rom, BASELINE as _bteam_baseline_path
+    from dialogue_repoint import text_segment_cells as _text_segment_cells
+    with open(args.out, 'rb') as _stream:
+        if hashlib.sha256(_stream.read()).digest() != hashlib.sha256(rom).digest():
+            raise AssertionError('B-team final-ROM check input differs from in-memory ROM')
+    with open(_bteam_baseline_path, encoding='utf-8') as _stream:
+        _bteam_baseline = json.load(_stream)
+    _bteam_issues = _check_bteam_rom(_bteam_baseline, args.out, intg_path,
+                                    os.path.join(BASE, 'temp', 'repoint_manifest.json'))
+    _restoration_issues = {int(issue['address'], 16): issue for issue in _bteam_issues
+                           if int(issue['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
+    _non_korean = []
+    for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS):
+        _key = f'0x{_address:08X}'
+        _text = (_restoration_issues[_address]['rom_text'] if _address in _restoration_issues
+                 else _bteam_baseline['overrides'][_key])
+        _baseline_has_hangul = any('가' <= ch <= '힣' for ch in _bteam_baseline['overrides'][_key])
+        _japanese_letters = any(
+            '\u3040' <= ch <= '\u309f' or '\u30a0' <= ch <= '\u30fa'
+            or '\uff65' <= ch <= '\uff9f' for ch in _text)
+        _kanji = any('\u3400' <= ch <= '\u9fff' for ch in _text)
+        _legacy_compact_padding = _address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A}
+        if ((_baseline_has_hangul and not any('가' <= ch <= '힣' for ch in _text))
+                or _text.startswith('<')
+                or _japanese_letters or (_kanji and not _legacy_compact_padding)):
+            _non_korean.append((_key, _text))
+    if _non_korean:
+        raise AssertionError(f'B-team restoration has non-Korean final ROM rows: {_non_korean[:20]}')
+    _relocated_rows = {}
+    for _message in _rp_manifest:
+        if _message.get('status') == 'relocated':
+            for _key, _span in _message.get('line_spans', {}).items():
+                _relocated_rows[int(_key, 16)] = (_message, _span)
+    _last_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    _wide_restored = []
+    _restored_relocated = 0
+    for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS - _restoration_issues.keys()):
+        if _address in _relocated_rows:
+            _message, (_off, _length) = _relocated_rows[_address]
+            _pos = int(_message['new_addr'], 16) + _off
+            _payload = bytes(rom[_pos:_pos + _length])
+            _restored_relocated += 1
+        else:
+            _row = _last_writes.get(_address)
+            if _row is None:
+                raise AssertionError(f'B-team restoration has no final text write: 0x{_address:08X}')
+            _payload = bytes(rom[_address:_address + len(bytes.fromhex(_row[3]))])
+        _widths = [_text_segment_cells(piece) for piece in _payload.split(b'\x72\x0a\x09')]
+        if not _widths or max(_widths) > 44:
+            _wide_restored.append((f'0x{_address:08X}', _widths))
+    if _wide_restored:
+        raise AssertionError(f'B-team restored rows exceed 44 half-cells: {_wide_restored[:20]}')
+    _residual_report = [{
+        'address': f'0x{address:08X}',
+        'expected_baseline': _bteam_baseline['overrides'][f'0x{address:08X}'],
+        'kept_text': issue['rom_text'],
+        'reason': issue['cause'],
+    } for address, issue in sorted(_restoration_issues.items())]
+    if set(_restoration_issues) != set(BTEAM_PREVIOUS_KOREAN_TEXT):
+        raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
+                             f'map-only={sorted(set(BTEAM_PREVIOUS_KOREAN_TEXT) - set(_restoration_issues))[:10]}, '
+                             f'residual-only={sorted(set(_restoration_issues) - set(BTEAM_PREVIOUS_KOREAN_TEXT))[:10]}')
+    with open(os.path.join(BASE, 'temp', 'bteam_restore_residuals.json'), 'w', encoding='utf-8') as _stream:
+        json.dump(_residual_report, _stream, ensure_ascii=False, indent=2)
+    st['bteam_restored_in_place'] = len(BTEAM_RESTORE_BASELINE_ROWS) - len(_restoration_issues) - _restored_relocated
+    st['bteam_restored_relocated'] = _restored_relocated
+    st['bteam_residual_korean'] = len(_restoration_issues)
+    print(f"→ B-team restoration: in-place {st['bteam_restored_in_place']}, "
+          f"relocated {st['bteam_restored_relocated']}, "
+          f"residual kept-Korean {st['bteam_residual_korean']}")
 
     # 스프라이트 WYSIWYG: 빌드가 기록한 라벨 타일스트립 레이아웃(블록오프셋→라벨) 덤프
     sbl_path = os.path.join(BASE, 'data', 'sprite_build_layouts.json')

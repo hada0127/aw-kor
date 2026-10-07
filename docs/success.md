@@ -3885,3 +3885,18 @@ integrity map 408,620/408,620 bytes, and Part 2 residual/seam QA PASS.
 `qa_bteam_drift.py` still reports the prior 30 drifts and exits 1. Asset
 previews are in `temp/claude_2026-10-07/fix3/`. Actual screen rendering and
 Mac real-font equivalence remain (unverified).
+
+### 2026-10-07 B-team Japanese-fallback prevention (static)
+
+The builder now keeps prior Korean output for 184 unfulfilled restoration rows,
+requires all script relocations, checks the final ROM through the B-team decoder,
+and rejects restored lines above 44 half-cells. The Linux font-stub overlay
+`output/game_wars_korean_candidate_bteam_restore_safe.gba` has SHA-256
+`5c73bee74628ea71e8cda979b8b57329760c8114483d39dcef6e5e7788fbf373`.
+It restores 100 rows in place and 200 by relocation; 184 remain Korean residuals.
+The three reviewed regressions at `0xD910C6`, `0xDCB1BE`, and `0xDCE89A`
+decode as Korean again. `overlay_check_restore5.json` reports `PASS`, Phase 6
+passes, byte integrity checks 405,100 bytes with zero mismatches, and the Part 2
+residual/seam gate passes. `qa_text_fit.py --rom ... --map-rom ...` reports
+0/484 protected final-ROM rows without Hangul. This is static evidence only;
+screen rendering and real-font equivalence are (unverified).
