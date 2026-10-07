@@ -1,6 +1,10 @@
 {
  "_doc": "B팀(짜옹이) 권위 적용 주소 baseline. qa_bteam_drift.py가 dialogue_overrides가 이 값에서 벗어났는지(우발적 변형) 검출. 의도적 변경 시에만 이 파일을 재생성한다.",
  "source": "temp/bteam/import_authoritative.json (applied candidates)",
+ "_alignment_notes": {
+  "0x00A19324": "2026-10-07 consensus: baseline text belongs to preceding A19300/A1930F fragments; this JP slot means ぼくが勝利できたのは. Re-keyed the B-team string to first preceding fragment 0x00A19300; the two-fragment ROM wording still needs restoration. See temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.",
+  "0x00A1B3EC": "2026-10-07 consensus: baseline text belongs to preceding A1B3C8 fragment; this JP slot means どうもこうもないじゃない！. Re-keyed the B-team string to preceding fragment 0x00A1B3C8; its ROM wording still needs restoration. See temp/claude_2026-10-07/plan/bteam_final_decisions.tsv."
+ },
  "_relocation_notes": {
   "0x00A2A2D4": "2026-10-06 sweep F6: B-team 군자금 was keyed one table entry late at 0x00A2A2DC; relocated to its owner (軍資金). Text unchanged.",
   "0x00A2A2F8": "2026-10-06 sweep F6: B-team 탄수 was keyed at 0x00A2A300 (CO-select prompt); relocated to its owner (弾数). Text unchanged.",
@@ -456,13 +460,13 @@
   "0x00A19018": "맥스・・・.또,",
   "0x00A19068": "아아,",
   "0x00A1928C": "나의 승리다!",
-  "0x00A19324": "이걸로 좀조용해지겠지.",
+  "0x00A19300": "이걸로 좀조용해지겠지.",
   "0x00A19370": "악은 반드시멸망한다는 걸 알아라!",
   "0x00A1A0EC": "우리들의 부대는누구에게도 지지 않아.",
   "0x00A1AFC4": "그전에,",
   "0x00A1AFFC": "에-,",
   "0x00A1B194": "네,",
-  "0x00A1B3EC": "어떡할까요?",
+  "0x00A1B3C8": "어떡할까요?",
   "0x00A1B469": "그건 안 돼.",
   "0x00A1B4EC": "캣 님.17일까지,",
   "0x00A1B5F0": "왁,",

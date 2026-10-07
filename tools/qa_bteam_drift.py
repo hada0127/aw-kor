@@ -18,15 +18,17 @@
 from __future__ import annotations
 
 import argparse
+import ast
+import csv
 import hashlib
 import json
 import os
+import struct
 import sys
-import unicodedata
 from pathlib import Path
 
 from qa_integrity_map import decode_enc, fill_pattern, load_syl
-from dialogue_regions import is_part2_story_address
+from dialogue_regions import is_part1_dialog_address, is_part2_story_address
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OVERRIDES = os.path.join(BASE, 'data', 'dialogue_overrides.json')
@@ -48,7 +50,144 @@ def load_overrides() -> dict:
 # SHA-256 of every baseline entry that is NOT a user-approved exception
 # (sorted JSON). Hand edits or a broad --accept change it and fail the gate;
 # changing B-team wording needs a reviewed code change of this pin.
-PINNED_CORE_DIGEST = '302714f230a55428cf80434a58b223e8742ea0be9e79c6f962025d4afe0c482c'
+# The 2026-10-07 consensus re-keys two misaligned entries only; see
+# temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
+PINNED_CORE_DIGEST = '902a7394955376af68c1eea20c0d0da7278b42f2a8c58f5f287889ab5a727110'
+ALIGNMENT_RESTORE_ADDRESSES = frozenset({0x00A19300, 0x00A1B3C8})
+ALIGNMENT_COMPOSITE_NEXT = {0x00A19300: 0x00A1930F}
+ALIGNMENT_LEGACY_KEYS = {
+    '0x00A19300': '0x00A19324',
+    '0x00A1B3C8': '0x00A1B3EC',
+}
+
+# Consensus: temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
+DEFERRED_ADDRESSES = frozenset(int(x, 16) for x in '''
+A01ED0 A0A9B1 A1AFFC A1B194 A1B81C A1BAD4 A29840 A29A2C
+A29A54 A29A84 A2A2F8 A34B6C B82D58 B84E50 B84E64 B84E7C
+B84E94 B84EA4 B84EB8 B84ECC B84EE0 B84EF0 B84F04 B84F14 DC4F02
+'''.split())
+COMPACT_GLYPH_ADDRESSES = frozenset(int(x, 16) for x in '''
+B818D0 B818F4 B81900 B81970 B81988 B81994 B819C4 B819E8
+B81AC0 B81ACC B82CF6 B82D02 B82D0E B82D76 B82DD6 B82DE2
+B84F28 B84F38 B84F4C B84F5C B84F6C
+'''.split())
+# Newly exposed by preserving punctuation and authored spaces. These were not
+# among the 649 consensus rows and need separate review, not silent clearance.
+NEW_STRICT_ADDRESSES = frozenset(int(x, 16) for x in '''
+A021A0 A02450 A03F0C A15D3C A2C144 A2C5F0 A2C704 A2C8B0
+A2C8C4 A2C970 A2C994 A2CA38 A2CA44 A2CA60 A2CA70 A2CA88
+A2CBFC A2CC0C A2D55C A2D58C A2D5A0 A2D61C A2D698 A2D6C0
+A2D704 A2D7A4 A2D7FC A2D828 A2D838 A2D848 A2D889 A309AC
+A30C88 A30E40 A33C3C A33D1C A34F5C A34FC8 A3500C A3506C
+A351A4 B8306C B830EC B8310C B83188 B8319C B83254 B83268
+B83870 B8387C B838A4 B838B0 B838BC B83A3C B83A98 B83AC8
+B83D10 B83DE0 B84128 B84238 D9159E DC3B0E DC495E DC4B2A
+DC51AE DC5812 DC5D12 DC7006 DC9662 DCB0BA DCBD36 DD1476
+DF3AC3 DF3AD2 E062DE E064B2 E0F7EE
+'''.split())
+
+
+def compact_glyph_map() -> dict[str, str]:
+    """Read the actual compact FONT_BASE substitution table from the builder.
+
+    Keep this tied to the writer's literal map, and fail closed if it becomes
+    computed or disappears. The same source drives patch_part2_ui_kanji_glyphs.
+    """
+    source = Path(BASE, 'tools', 'build_korean_full.py').read_text(encoding='utf-8')
+    for node in ast.parse(source).body:
+        if isinstance(node, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == 'PART2_UI_KANJI_GLYPH_SUBS'
+                for t in node.targets):
+            result = ast.literal_eval(node.value)
+            if not isinstance(result, dict) or not result:
+                break
+            return result
+    raise ValueError('compact UI glyph substitution table unavailable')
+
+
+def decode_compact(enc: bytes, code2syl: dict, glyphs: dict[str, str]) -> str:
+    """Decode bytes through the compact renderer's substituted glyphs."""
+    # The compact writer owns fixed-size rows and terminates glyph text with
+    # zero bytes; these are not displayed glyphs. Embedded zeros remain errors.
+    ordinary = decode_enc(enc.rstrip(b'\x00'), code2syl)
+    return ''.join(glyphs.get(ch, ch) for ch in ordinary)
+
+
+def verify_compact_font(rom: bytes, glyphs: dict[str, str]) -> None:
+    """Prove that this ROM, not just builder source, carries the substitute tiles."""
+    from build_korean_poc import FONT_FILE, KTAB_FILE, KTAB_END_FILE, ROM
+    from render_galmuri_8x16 import render_char
+    original = Path(ROM).read_bytes()
+    slots = {}
+    for pos in range(KTAB_FILE, KTAB_END_FILE, 6):
+        try:
+            jp = original[pos:pos + 2].decode('shift_jis')
+        except UnicodeDecodeError:
+            continue
+        slots[jp] = struct.unpack_from('<HH', original, pos + 2)
+    for jp, ko in glyphs.items():
+        if jp not in slots:
+            raise ValueError(f'compact glyph has no original font slot: {jp}')
+        top, bottom = slots[jp]
+        actual = (rom[FONT_FILE + top * 32:FONT_FILE + (top + 1) * 32],
+                  rom[FONT_FILE + bottom * 32:FONT_FILE + (bottom + 1) * 32])
+        if actual != tuple(render_char(ko)):
+            raise ValueError(f'compact glyph tile mismatch in inspected ROM: {jp}->{ko}')
+
+
+def display_equivalent(value: str, address: int, *, actual: bool = False) -> str:
+    """Predict only documented writer glyph substitutions on baseline text.
+
+    The ROM side stays literal: a halfwidth space or punctuation byte in a
+    dialogue renderer must not pass as its visible fullwidth counterpart.
+    """
+    if actual:
+        return value
+    dialogue = is_part2_story_address(address) or is_part1_dialog_address(address)
+    if dialogue:
+        # The dialogue writer promotes authored ASCII to visible SJIS glyphs.
+        # Preserve the number and position of punctuation and spaces.
+        value = value.replace('...', '・・・').replace(' ', '　')
+        value = ''.join(chr(ord(ch) + 0xFEE0) if ch.isascii() and ch.isalnum()
+                        else ch for ch in value)
+    else:
+        value = value.replace(' ', '　')
+    punctuation = {}
+    if is_part1_dialog_address(address):
+        punctuation.update({'!': '！', '?': '？', ',': '、', '.': '。',
+                            '-': '―', '「': '”', '」': '”'})
+    elif is_part2_story_address(address):
+        punctuation.update({'!': '！', '?': '？', ',': '、', '.': '。', '-': 'ー'})
+    return value.translate(str.maketrans(punctuation))
+
+
+def reviewed_seam_variants(value: str, msg: int, rows: dict) -> set[str]:
+    """Expected side only: add a reviewed seam space; never remove one."""
+    variants = {value}
+    for prev, next_ in rows.get(msg, ()):
+        joined = prev + next_
+        spaced = prev + '　' + next_
+        variants |= {v.replace(joined, spaced, 1) for v in variants if joined in v}
+    return variants
+
+
+def load_reviewed_seams() -> dict[int, list[tuple[str, str]]]:
+    path = Path(BASE, 'data', 'part2_seam_decisions.tsv')
+    rows = {}
+    with path.open(encoding='utf-8', newline='') as stream:
+        for row in csv.DictReader(stream, delimiter='\t'):
+            if row['decision'] == 'space':
+                rows.setdefault(int(row['msg'], 16), []).append(
+                    (row['prev_word'], row['next_word']))
+    return rows
+
+
+def matches_alignment_composite(wanted: str, first: str, second: str,
+                                gap: bytes, address: int) -> bool:
+    """Only the consensus A19300/A1930F pair may cross its native 0x72 row break."""
+    return (address in ALIGNMENT_COMPOSITE_NEXT and gap == b'\x72' and
+            bool(first) and bool(second) and
+            wanted == display_equivalent(first + second, address, actual=True))
 
 
 # User-approved B-team wording exceptions, exact (address, from, to). The
@@ -86,7 +225,11 @@ def exception_errors(base: dict, overrides: dict) -> list:
 def check(base: dict, overrides: dict, pinned: str = None) -> dict:
     expected = base.get('overrides', {})
     drift = [(a, w, overrides[a]) for a, w in expected.items() if a in overrides and overrides[a] != w]
-    missing = [(a, w) for a, w in expected.items() if a not in overrides]
+    # The two consensus re-keys precede the other worker's override migration.
+    # Accept only their exact legacy text in the source-data gate; the final
+    # ROM gate still protects the corrected source addresses and fails today.
+    missing = [(a, w) for a, w in expected.items()
+               if a not in overrides and overrides.get(ALIGNMENT_LEGACY_KEYS.get(a)) != w]
     errors = exception_errors(base, overrides)
     pinned = PINNED_CORE_DIGEST if pinned is None else pinned
     if core_digest(base) != pinned:
@@ -153,30 +296,28 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                        for m in manifest if m.get('status') == 'relocated')
     starts = [x[0] for x in relocated]
     codes = load_syl()
-    def display_equivalent(value: str, address: int) -> str:
-        # Normalize only display-equivalent variants emitted by the writer.
-        part2 = is_part2_story_address(address)
-        value = unicodedata.normalize('NFKC', value)
-        if part2:
-            value = (value.replace('“', '「').replace('”', '」')
-                     .replace('『', '「').replace('』', '」'))
-        for run in ('・・・', '···', '・・', '··', '・·', '·・'):
-            value = value.replace(run, '...')
-        value = value.translate(str.maketrans(
-            {'、': ',', '。': '.', '〜': '~', '・': ' ', '·': ' ',
-             '‘': "'", '’': "'"}))
-        value = ''.join(ch for ch in value if ch not in '[]{};▼')
-        if not part2:
-            value = value.translate(str.maketrans({'「': '"', '」': '"', '『': '"', '』': '"',
-                                                   '“': '"', '”': '"'}))
-        return ' '.join(value.split())
+    compact = compact_glyph_map()
+    compact_writers = {'part1-unit-compact-name', 'part1-compact-ui',
+                       'part1-battle-menu-font'}
+    if (set(protected_addrs) & COMPACT_GLYPH_ADDRESSES or
+            any(row[3] and row[7] in compact_writers and int(row[0]) in protected_addrs
+                for row in writes)):
+        verify_compact_font(rom, compact)
+    seams = load_reviewed_seams()
+    def decode(payload: bytes, address: int, writer: str = '') -> str:
+        if address in COMPACT_GLYPH_ADDRESSES and writer not in compact_writers:
+            raise ValueError(f'0x{address:08X}: compact renderer writer evidence changed: {writer!r}')
+        if writer in compact_writers:
+            return decode_compact(payload, codes, compact)
+        return decode_enc(payload, codes)
 
     issues = []
     for key, baseline in base['overrides'].items():
         addr = int(key, 16)
         i = bisect.bisect_right(starts, addr) - 1
         relocation = relocated[i] if i >= 0 and addr < relocated[i][1] else None
-        row = covering.get(addr) or by_addr.get(addr)
+        # Exact writer wins over an earlier padded slot that happens to cover it.
+        row = by_addr.get(addr) or covering.get(addr)
         if relocation:
             m = relocation[2]
             target = int(m['new_addr'], 16)
@@ -201,32 +342,39 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                 cause = 'repoint line mapping missing'
             else:
                 off, length = span
-                if off < 0 or length < 0 or off + length > int(m['new_len']):
+                if off < 0 or length <= 0 or off + length > int(m['new_len']):
                     actual = '<invalid relocated line span>'
                     cause = 'repoint line mapping invalid'
                 else:
                     payload = rom[target + off:target + off + length]
                     # A wrapped row may contain this verified internal control.
-                    actual = decode_enc(payload.replace(b'\x72\x0a\x09', b'\x81\x40'), codes).rstrip(' \u3000')
+                    actual = decode(payload.replace(b'\x72\x0a\x09', b'\x81\x40'), addr).rstrip(' \u3000')
                     cause = 'relocated row differs from protected baseline'
             wanted = display_equivalent(baseline, addr)
-            matched = wanted == display_equivalent(actual, addr)
+            matched = wanted == display_equivalent(actual, addr, actual=True)
+            if not matched and payload is not None and is_part2_story_address(addr):
+                message = int(m['msg'], 16)
+                matched = display_equivalent(actual, addr, actual=True) in reviewed_seam_variants(wanted, message, seams)
             if not matched and payload is not None:
                 # The explicit wrap replaced an authored space; some older
                 # baselines had no space at that point. Keep both readings.
-                no_wrap_space = decode_enc(payload.replace(b'\x72\x0a\x09', b''), codes)
-                matched = wanted == display_equivalent(no_wrap_space, addr)
-            if not matched and payload is not None:
+                no_wrap_space = decode(payload.replace(b'\x72\x0a\x09', b''), addr)
+                matched = wanted == display_equivalent(no_wrap_space, addr, actual=True)
+            if not matched and payload is not None and actual:
                 # A few authority rows cover consecutive physical rows.
                 ordered = sorted(m['line_spans'].items(), key=lambda entry: entry[1][0])
                 idx = next((n for n, (key2, _) in enumerate(ordered)
                             if int(key2, 16) == addr), -1)
                 if idx >= 0:
                     parts = [actual]
+                    prior_end = ordered[idx][1][0] + ordered[idx][1][1]
                     for _next_key, (next_off, next_len) in ordered[idx + 1:idx + 3]:
-                        parts.append(decode_enc(rom[target + next_off:target + next_off + next_len], codes))
-                        if wanted in (display_equivalent(''.join(parts), addr),
-                                      display_equivalent(' '.join(parts), addr)):
+                        if next_len <= 0 or next_off != prior_end:
+                            break
+                        parts.append(decode(rom[target + next_off:target + next_off + next_len], addr))
+                        prior_end = next_off + next_len
+                        if wanted in (display_equivalent(''.join(parts), addr, actual=True),
+                                      display_equivalent('　'.join(parts), addr, actual=True)):
                             actual = ' | '.join(parts)
                             matched = True
                             break
@@ -235,25 +383,25 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             enc_end = row_start + int(row[2])
             if map_rom_path and rom[addr:row_start + int(row[1])] != map_rom[addr:row_start + int(row[1])]:
                 raise ValueError(f'{key}: overlay changed protected in-place slot')
-            actual = decode_enc(rom[addr:max(addr, enc_end)], codes).rstrip(' \u3000')
+            actual = decode(rom[addr:max(addr, enc_end)], addr, row[7]).rstrip(' \u3000')
             if row[7] == 'part2-prologue-inline-renderer':
                 # The writer owns a whole multi-line script at this address;
                 # the B-team authority applies to its first displayed row.
                 payload = rom[addr:enc_end].split(b'\x77\x72', 1)[0]
-                actual = decode_enc(payload, codes).rstrip(' \u3000')
-            matched = display_equivalent(actual, addr) == display_equivalent(baseline, addr)
-            if not matched and row_start == addr and display_equivalent(baseline, addr).startswith(display_equivalent(actual, addr)):
-                end = row_start + int(row[1])
-                next_rows = [candidate for candidate in writes
-                             if candidate[3] and end <= int(candidate[0]) <= end + 4]
-                if next_rows:
-                    following = min(next_rows, key=lambda candidate: int(candidate[0]))
-                    next_addr = int(following[0])
-                    next_text = decode_enc(rom[next_addr:next_addr + int(following[2])], codes)
-                    if display_equivalent(baseline, addr) in (
-                            display_equivalent(actual + next_text, addr),
-                            display_equivalent(actual + ' ' + next_text, addr)):
-                        matched = True
+                actual = decode(payload, addr, row[7]).rstrip(' \u3000')
+            matched = display_equivalent(actual, addr, actual=True) == display_equivalent(baseline, addr)
+            if not matched and addr in seams and is_part2_story_address(addr):
+                matched = display_equivalent(actual, addr, actual=True) in reviewed_seam_variants(
+                    display_equivalent(baseline, addr), addr, seams)
+            if not matched and addr in ALIGNMENT_COMPOSITE_NEXT and row_start == addr:
+                next_addr = ALIGNMENT_COMPOSITE_NEXT[addr]
+                next_row = by_addr.get(next_addr)
+                if next_row and int(next_row[0]) == next_addr and next_addr >= enc_end:
+                    next_text = decode(rom[next_addr:next_addr + int(next_row[2])],
+                                       next_addr, next_row[7]).rstrip(' \u3000')
+                    matched = matches_alignment_composite(
+                        display_equivalent(baseline, addr), actual, next_text,
+                        rom[enc_end:next_addr], addr)
             cause = (f'final in-place writer {row[7]} level={row[6]}'
                      f' at 0x{row_start:08X}; source={row[5]!r}')
         else:
@@ -262,9 +410,16 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             actual = '<no text write in integrity map>'
             matched = False
             cause = 'protected address has no final text write evidence'
+        if addr in DEFERRED_ADDRESSES:
+            matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
         if not matched:
             issues.append({'address': key, 'baseline': baseline, 'rom_text': actual,
-                           'cause': cause})
+                           'cause': cause,
+                           'decision': 'DEFER' if addr in DEFERRED_ADDRESSES else
+                                       'FIX_GATE_BLOCKED' if addr in COMPACT_GLYPH_ADDRESSES else
+                                       'ALIGNMENT_RESTORE' if addr in ALIGNMENT_RESTORE_ADDRESSES else
+                                       'NEW_STRICT_MISMATCH' if addr in NEW_STRICT_ADDRESSES else
+                                       'RESTORE_BASELINE'})
     return issues
 
 
@@ -300,6 +455,13 @@ def main() -> None:
         return
 
     base = json.load(open(BASELINE, encoding='utf-8'))
+    absent = (DEFERRED_ADDRESSES | COMPACT_GLYPH_ADDRESSES |
+              NEW_STRICT_ADDRESSES | ALIGNMENT_RESTORE_ADDRESSES) - {
+        int(key, 16) for key in base['overrides']}
+    if absent:
+        print('[HARD-FAIL] reviewed gate addresses missing from baseline: ' +
+              ', '.join(f'0x{addr:08X}' for addr in sorted(absent)), file=sys.stderr)
+        sys.exit(1)
     result = check(base, ovn)
     drift, missing = result['drift'], result['missing']
     for error in result['errors']:
@@ -315,9 +477,13 @@ def main() -> None:
             sys.exit(1)
         if args.json:
             Path(args.json).write_text(json.dumps(issues, ensure_ascii=False, indent=2), encoding='utf-8')
-        print(f'B팀 최종 ROM 검사: {len(expected)}개, mismatch {len(issues)}개')
+        deferred = [x for x in issues if x['decision'] == 'DEFER']
+        actionable = [x for x in issues if x['decision'] != 'DEFER']
+        print(f'B팀 최종 ROM 검사: {len(expected)}개, mismatch {len(issues)}개 '
+              f'(actionable {len(actionable)}, deferred {len(deferred)})')
+        print('  [DEFERRED] ' + ', '.join(x['address'] for x in deferred))
         for issue in issues:
-            print(f"  [ROM-DRIFT] {issue['address']} baseline={issue['baseline']!r} "
+            print(f"  [ROM-DRIFT:{issue['decision']}] {issue['address']} baseline={issue['baseline']!r} "
                   f"ROM={issue['rom_text']!r} cause={issue['cause']}")
         if issues:
             sys.exit(1)
