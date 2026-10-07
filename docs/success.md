@@ -3918,3 +3918,30 @@ Linux 대체 폰트 빌드 `temp/claude_2026-10-07/build/candidate_restore14_stu
 무결성맵 406,220바이트 불일치 0, Part 2 이음매 결함 0,
 B팀 집중 테스트 15건 PASS. Linux 대체 폰트 빌드와 정적 검사 증거이며
 실폰트 동등성과 실제 화면은 (unverified).
+
+## [2026-10-07] Linux font-stub overlay build (screen-QA candidates only)
+
+nyarch-pc has none of the macOS fonts the full build needs (OkDanDan, AppleSDGothicNeo,
+NanumGothic), so `tools/build_korean_full.py` stops with "OkDanDan missing". Use:
+
+```bash
+tools/linux_overlay_build.sh                       # A = 1761a95, reference = candidate e4963765
+tools/linux_overlay_build.sh --name my_tag         # -> output/game_wars_korean_candidate_my_tag.gba
+tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/linux_overlay/run_*/
+```
+
+- A = stub build of the base commit whose real-font build is the reference ROM (default
+  1761a95 ↔ `output/game_wars_korean_candidate_e4963765.gba`), cached in
+  `temp/linux_overlay/A_<commit>_<stub8>/`; B = stub build of the working tree. Both use
+  `tools/linux_fontstub/fontstub_build.py` (missing fonts → Galmuri11-Bold, font hash guards
+  relaxed) with write tracing (`AW_TRACE_OUT`).
+- `tools/linux_fontstub/overlay_check.py` must PASS (A≠reference only inside font-using
+  writer spans, no untraced writes, identical font spans in A/B, no A≠B byte in a font span);
+  then `overlay.py` writes reference + (A≠B bytes). The script refuses to overwrite a
+  different published candidate and refuses to run while another build is running.
+- Gates that take a build map use B's artifacts: `temp/integrity_map.json`,
+  `temp/repoint_manifest.json` and `temp/linux_overlay/run_*/build_B.gba`; font-region bytes of
+  the candidate intentionally differ from B (they come from the real-font reference).
+- Verified: from HEAD 9c2a9fc the script reproduced `game_wars_korean_candidate_bteam_round2_v10.gba`
+  byte-identically (SHA-256 `904505fc…b7e259`); A was byte-identical to the earlier
+  hand-built A. Release still requires a Mac real-font rebuild byte-compared to the candidate.
