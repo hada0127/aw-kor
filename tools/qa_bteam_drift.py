@@ -63,6 +63,11 @@ def main() -> None:
 
     base = json.load(open(BASELINE, encoding='utf-8'))
     expected = base.get('overrides', {})
+    # Individually user-approved B-team wording changes must match the baseline.
+    for addr, exc in base.get('_user_approved_exceptions', {}).items():
+        if expected.get(addr) != exc.get('to') or not exc.get('approved'):
+            print(f'[HARD-FAIL] user-approved exception {addr} does not match the baseline', file=sys.stderr)
+            sys.exit(1)
     drift = []
     missing = []
     for addr, want in expected.items():

@@ -248,7 +248,7 @@ class LabelAndTextTests(unittest.TestCase):
         import tempfile
         from lz77_scan import lz77_decompress
         import part1_production_info_labels as labels
-        candidate = Path(builder.BASE, 'output', 'game_wars_korean_candidate_1cd5ce55.gba')
+        candidate = Path(builder.BASE, 'output', 'game_wars_korean_candidate_5bb5c941.gba')
         if not candidate.exists():
             self.skipTest('candidate ROM not present')
         rom = bytearray(candidate.read_bytes())

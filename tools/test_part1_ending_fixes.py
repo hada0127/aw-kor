@@ -97,5 +97,20 @@ class HellbowzTests(unittest.TestCase):
             hellbowz.source_guard(bytes(bad))
 
 
+class ApprovedBteamExceptionTests(unittest.TestCase):
+    def test_dd0d1a_user_approved_exception_is_consistent(self):
+        base = json.loads(Path(builder.BASE, 'data', 'bteam_baseline.json').read_text(encoding='utf-8'))
+        overrides = json.loads(Path(builder.BASE, 'data', 'dialogue_overrides.json').read_text(encoding='utf-8'))
+        exc = base['_user_approved_exceptions']['0x00DD0D1A']
+        self.assertEqual(exc['to'], '뭐, 자네치고는 잘했군.')
+        self.assertIn('제안대로', exc['approved'])
+        self.assertEqual(base['overrides']['0x00DD0D1A'], exc['to'])
+        self.assertEqual(overrides['0x00DD0D1A'], exc['to'])
+        bteam = json.loads(Path(builder.BASE, 'data', 'bteam_addresses.json').read_text())
+        self.assertIn('0x00DD0D1A', json.dumps(bteam))          # still a protected address
+        # The only approved exception: every other baseline value is unchanged wording.
+        self.assertEqual(set(base['_user_approved_exceptions']), {'0x00DD0D1A'})
+
+
 if __name__ == '__main__':
     unittest.main()
