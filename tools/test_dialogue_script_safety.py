@@ -1048,6 +1048,8 @@ class ScriptSafetyTests(unittest.TestCase):
                      '_rp_strip_sp': lambda text: text.replace(' ', '').replace('　', ''),
                      '_dlg_ov': {'0x00A07528': edited}, '_editor_intents': {},
                      'editor_text_digest': builder.editor_text_digest,
+                     'BTEAM_PREVIOUS_KOREAN_TEXT': builder.BTEAM_PREVIOUS_KOREAN_TEXT,
+                     'BTEAM_RESTORE_BASELINE_ROWS': builder.BTEAM_RESTORE_BASELINE_ROWS,
                      'BTEAM_SCRIPT_SPACING_REPAIRS': builder.BTEAM_SCRIPT_SPACING_REPAIRS,
                      'BTEAM_SCRIPT_LAYOUT_REPAIRS': builder.BTEAM_SCRIPT_LAYOUT_REPAIRS,
                      'is_verified_bteam_script_repair': builder.is_verified_bteam_script_repair}
@@ -1064,6 +1066,54 @@ class ScriptSafetyTests(unittest.TestCase):
         namespace['_editor_intents']['0x00A07528'] = builder.editor_text_digest('이　')
         self.assertEqual(choose(address), '이　')
 
+    def test_repoint_retained_korean_precedes_other_text_sources(self):
+        source = Path(builder.__file__).read_text()
+        node = next(n for n in ast.walk(ast.parse(source)) if isinstance(n, ast.FunctionDef) and n.name == '_rp_dlg')
+        address = 0xD9444E
+        retained = builder.BTEAM_PREVIOUS_KOREAN_TEXT[address]
+        self.assertIn(address, builder.BTEAM_RESTORE_BASELINE_ROWS)
+        self.assertNotIn(address, builder.BTEAM_SCRIPT_SPACING_REPAIRS)
+        namespace = {**vars(builder), '_rp_script_owners': {address: (1, '다른 문장')},
+                     '_display_ov': {address: '표시 문장'},
+                     'ADDRESS_TEXT_OVERRIDES': {address: '보호 문장'},
+                     '_rp_bteam': {address}, '_rp_ov': lambda a: '원래 문장',
+                     '_dlg_ov': {f'0x{address:08X}': '편집 문장'},
+                     '_editor_intents': {f'0x{address:08X}': builder.editor_text_digest('편집 문장')},
+                     '_rp_intended': {address: '의도 문장'}}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), '<actual repoint selector>', 'exec'), namespace)
+        self.assertEqual(namespace['_rp_dlg'](address), retained)
+
+        spacing_address = 0xDEECDE
+        self.assertIn(spacing_address, builder.BTEAM_PREVIOUS_KOREAN_TEXT)
+        self.assertIn(spacing_address, builder.BTEAM_SCRIPT_SPACING_REPAIRS)
+        repaired = builder.BTEAM_SCRIPT_SPACING_REPAIRS[spacing_address][1]
+        namespace['_rp_script_owners'][spacing_address] = (2, repaired)
+        namespace['_rp_ov'] = lambda a: builder.BTEAM_SCRIPT_SPACING_REPAIRS[spacing_address][0]
+        self.assertEqual(namespace['_rp_dlg'](spacing_address), repaired)
+        namespace['_rp_script_owners'].pop(spacing_address)
+        with self.assertRaisesRegex(AssertionError, 'owner missing or changed'):
+            namespace['_rp_dlg'](spacing_address)
+
+    def test_repoint_restored_owner_rejects_unreviewed_text(self):
+        source = Path(builder.__file__).read_text()
+        node = next(n for n in ast.walk(ast.parse(source)) if isinstance(n, ast.FunctionDef) and n.name == '_rp_dlg')
+        address = 0xDC3C63
+        baseline = builder.BTEAM_SCRIPT_SPACING_REPAIRS[address][0]
+        self.assertIn(address, builder.BTEAM_RESTORE_BASELINE_ROWS)
+        overrides = {address: baseline}
+        namespace = {**vars(builder), '_rp_script_owners': {address: (1, baseline)},
+                     '_rp_bteam': {address}, '_rp_ov': lambda a: overrides[a],
+                     '_dlg_ov': {}, '_editor_intents': {}}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), '<actual repoint selector>', 'exec'), namespace)
+        self.assertEqual(namespace['_rp_dlg'](address), baseline)
+        namespace['_rp_script_owners'][address] = (1, '검토하지 않은 문장')
+        with self.assertRaisesRegex(AssertionError, 'owner missing or changed'):
+            namespace['_rp_dlg'](address)
+        namespace['_rp_script_owners'][address] = (1, baseline)
+        overrides[address] = '바뀐 원문'
+        with self.assertRaisesRegex(AssertionError, 'owner missing or changed'):
+            namespace['_rp_dlg'](address)
+
     def test_bteam_name_boundary_exception_cannot_change_words_or_other_rows(self):
         source = Path(builder.__file__).read_text()
         node = next(n for n in ast.walk(ast.parse(source)) if isinstance(n, ast.FunctionDef) and n.name == '_rp_dlg')
@@ -1074,6 +1124,8 @@ class ScriptSafetyTests(unittest.TestCase):
                      '_rp_bteam': {address}, '_rp_ov': lambda a: authoritative,
                      '_dlg_ov': {}, '_editor_intents': {}, 'editor_text_digest': builder.editor_text_digest,
                      'is_verified_bteam_spacing_repair': builder.is_verified_bteam_spacing_repair,
+                     'BTEAM_PREVIOUS_KOREAN_TEXT': builder.BTEAM_PREVIOUS_KOREAN_TEXT,
+                     'BTEAM_RESTORE_BASELINE_ROWS': builder.BTEAM_RESTORE_BASELINE_ROWS,
                      'BTEAM_SCRIPT_SPACING_REPAIRS': builder.BTEAM_SCRIPT_SPACING_REPAIRS,
                      'BTEAM_SCRIPT_LAYOUT_REPAIRS': builder.BTEAM_SCRIPT_LAYOUT_REPAIRS,
                      'is_verified_bteam_script_repair': builder.is_verified_bteam_script_repair}

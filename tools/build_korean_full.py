@@ -22745,15 +22745,8 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
-                # The isolated AST selector tests omit module globals. In a
-                # real build, missing B-team maps must still fail immediately.
-                module_globals = globals()
-                previous_korean = (BTEAM_PREVIOUS_KOREAN_TEXT
-                                   if '__name__' in module_globals else {})
-                restore_rows = (BTEAM_RESTORE_BASELINE_ROWS
-                                if '__name__' in module_globals else ())
-                if a in previous_korean and a not in BTEAM_SCRIPT_SPACING_REPAIRS:
-                    return previous_korean[a]
+                if a in BTEAM_PREVIOUS_KOREAN_TEXT and a not in BTEAM_SCRIPT_SPACING_REPAIRS:
+                    return BTEAM_PREVIOUS_KOREAN_TEXT[a]
                 if a in BTEAM_SCRIPT_SPACING_REPAIRS or a in BTEAM_SCRIPT_LAYOUT_REPAIRS:
                     owner = _rp_script_owners.get(a)
                     explicit_text = _dlg_ov.get(f'0x{a:08X}')
@@ -22763,7 +22756,7 @@ def main():
                             and explicit_text is not None
                             and _editor_intents.get(f'0x{a:08X}') == editor_text_digest(explicit_text)):
                         return explicit_text
-                    restored_owner = (a in restore_rows and owner is not None
+                    restored_owner = (a in BTEAM_RESTORE_BASELINE_ROWS and owner is not None
                                       and _rp_ov(a) == owner[1])
                     if owner is None or not (restored_owner or is_verified_bteam_script_repair(a, _rp_ov(a), owner[1])):
                         raise AssertionError(f'verified B-team spacing owner missing or changed: {a:08X}')
