@@ -8,6 +8,7 @@ from unittest import mock
 
 from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             display_equivalent, round2_width_equivalent,
+                            classify_round2_issues,
                             reviewed_seam_variants,
                             matches_alignment_composite, matches_reviewed_bteam_spacing,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
@@ -98,6 +99,58 @@ class RomDriftTest(unittest.TestCase):
         self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타진군！', address))
         self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타　진군', address))
         self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타　진군！', address + 1))
+        self.assertFalse(round2_width_equivalent('이 몸의 2회 행동을,견뎌낼 수 있겠느냐!?',
+                         '이 몸의 2회 행동을、견뎌낼 수 있겠느냐！？', 0xB83A98))
+
+    def test_round2_classification_rejects_structural_issues(self):
+        fixture = ROOT / 'output/game_wars_korean_candidate_bteam_round2_v10.gba'
+        manifest_file = ROOT / 'temp/repoint_manifest.json'
+        if not fixture.exists() or not manifest_file.exists():
+            self.skipTest('round-2 ROM fixture unavailable')
+        base = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        original = fixture.read_bytes()
+        manifest = json.loads(manifest_file.read_text())
+        addr = 0xDD010A
+        message = next(m for m in manifest if m.get('status') == 'relocated'
+                       and f'0x{addr:06X}' in m.get('line_spans', {}))
+        issue = {'address': f'0x{addr:08X}', 'cause': 'relocated row differs from protected baseline'}
+        deferred = [{'address': f'0x{address:08X}', 'cause': 'reviewed deferral'}
+                    for address in DEFERRED_ADDRESSES]
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            rom_path = Path(tmp) / 'rom.gba'
+            map_path = Path(tmp) / 'manifest.json'
+            rom_path.write_bytes(original)
+            map_path.write_text(json.dumps(manifest))
+            listed, _, unlisted = classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+            self.assertEqual(len(listed), 1)
+            self.assertEqual(unlisted, [])
+            for cause in ('repoint pointer mismatch', 'repoint line mapping missing',
+                          'repoint line mapping invalid'):
+                _, _, unlisted = classify_round2_issues(
+                    [dict(issue, cause=cause)] + deferred, base, str(rom_path), str(map_path))
+                self.assertEqual(len(unlisted), 1)
+            del message['line_spans'][f'0x{addr:06X}']
+            map_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, 'mapping or byte pin missing'):
+                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+            message['line_spans'][f'0x{addr:06X}'] = [2, 40]
+            target = int(message['new_addr'], 16)
+            changed = bytearray(original)
+            changed[target + 2] ^= 1
+            rom_path.write_bytes(changed)
+            map_path.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError, 'message bytes or span changed'):
+                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+            changed = bytearray(original)
+            changed[target + int(message['new_len']) - 1] ^= 1
+            rom_path.write_bytes(changed)
+            with self.assertRaisesRegex(ValueError, 'message bytes or span changed'):
+                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+            changed = bytearray(original)
+            changed[int(message['ptr_sites'][0], 16)] ^= 1
+            rom_path.write_bytes(changed)
+            with self.assertRaisesRegex(ValueError, 'pointer changed'):
+                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
 
     def test_reviewed_seam_only(self):
         rows = {0xA00000: [('몸에', '혹시')]}

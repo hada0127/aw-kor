@@ -73,6 +73,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
 ROUND2_RESIDUAL_DIGEST = 'd84f1d18a819dccf6050db25b569f91e582e9af959d39ea1dae36e89de076165'
+ROUND2_ACTIVE_PINS_DIGEST = '661d2d0dd777a6aac93c9d9ba3fa3202dfe9c5752be1f60e0c5e1f80ba9c5ccb'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -193,7 +194,10 @@ def round2_width_equivalent(baseline: str, actual: str, address: int) -> bool:
         value = value.translate(aliases)
         return ''.join(chr(ord(ch) + 0xFEE0) if ch.isascii() and ch.isalnum()
                        else ch for ch in value)
-    return canonical(baseline) == canonical(actual)
+    expected = baseline.translate(aliases)
+    if is_part1_dialog_address(address) or is_part2_story_address(address):
+        return canonical(baseline) == actual
+    return actual in {expected, canonical(baseline)}
 
 
 ROUND2_PREFIX_GLYPH_ROWS = {0xA2CA88: 2, 0xB83870: 3,
@@ -522,19 +526,45 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     listed = {int(row['address'], 16): row for row in rows}
     if len(rows) != 177 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
+    pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
+    if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:
+        raise ValueError('B-team active residual pin digest changed')
+    pins = {int(key, 16): value for key, value in json.loads(
+        pins_path.read_text(encoding='utf-8')).items()}
     rom = Path(rom_path).read_bytes()
     manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
     spans = {}
+    messages = {}
     for message in manifest:
         if message.get('status') == 'relocated':
             for key, (offset, length) in message.get('line_spans', {}).items():
-                spans[int(key, 16)] = (int(message['new_addr'], 16) + offset, length)
+                address = int(key, 16)
+                if address in spans:
+                    raise ValueError(f'0x{address:08X}: duplicate relocated line mapping')
+                spans[address] = (int(message['new_addr'], 16) + offset, length)
+                messages[address] = message
     for addr, row in listed.items():
         key = f'0x{addr:08X}'
         payload = bytes.fromhex(row['payload_hex'])
         if (key not in base['overrides'] or row['expected_baseline'] != base['overrides'][key]
                 or not row['reason'] or not payload or rom[addr:addr + len(payload)] != payload):
             raise ValueError(f'{key}: listed residual metadata or source bytes changed')
+        message = messages.get(addr)
+        pinned_message = pins.get(addr)
+        if bool(message) != bool(pinned_message):
+            raise ValueError(f'{key}: active residual mapping or byte pin missing')
+        if message:
+            target = int(message['new_addr'], 16)
+            length = int(message['new_len'])
+            off, span_length = message['line_spans'][f'0x{addr:06X}']
+            if (off < 0 or span_length <= 0 or off + span_length > length
+                    or len(bytes.fromhex(pinned_message)) != length
+                    or rom[target:target + length].hex() != pinned_message):
+                raise ValueError(f'{key}: active residual message bytes or span changed')
+            sites = message.get('ptr_sites') or []
+            if not sites or any(int.from_bytes(rom[int(site, 16):int(site, 16) + 4],
+                                               'little') != 0x08000000 + target for site in sites):
+                raise ValueError(f'{key}: active residual pointer changed')
         if row['active_payload_hex']:
             if addr not in spans or not row['active_text']:
                 raise ValueError(f'{key}: active residual has no relocated line')
@@ -553,9 +583,18 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     expected_residuals, deferred, unlisted = [], [], []
     for issue in issues:
         addr = int(issue['address'], 16)
-        if addr in DEFERRED_ADDRESSES:
+        structural = issue['cause'] in {'repoint pointer mismatch',
+                                        'repoint line mapping missing',
+                                        'repoint line mapping invalid',
+                                        'protected address has no final text write evidence'}
+        if structural:
+            unlisted.append(issue)
+        elif addr in DEFERRED_ADDRESSES:
             deferred.append(issue)
-        elif addr in listed:
+        elif addr in listed and issue['cause'] in {
+                'relocated row differs from protected baseline'}:
+            expected_residuals.append(issue)
+        elif addr in listed and issue['cause'].startswith('final in-place writer '):
             expected_residuals.append(issue)
         else:
             unlisted.append(issue)
