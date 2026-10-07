@@ -116,7 +116,7 @@ STRINGS = (
     (0xB81B04, 10, '魯傑兎', '기관총', (UNIT_INFO,), (), None),
     (0xB81874, 14, '対空魯傑兎', '대공기관총', (UNIT_INFO,), (), None),
     (0xB81B14, 16, '装備無員', '장비없음', (UNIT_INFO,), (), None),
-    # C7 link status (append 0xB8319C at 0xB32D12, katakana bank) and transfer
+    # C7 link status (append 0xB8319C at 0xB32D10, katakana bank) and transfer
     # screen (append 0xB8322C at 0xB342EA is its only bank)
     (0xB831BC, 6, None, '미접속', (0xB130E0,), (0xB8319C,), None),
     (0xB831C4, 6, None, '준비중', (0xB130E0,), (0xB8319C,), None),
@@ -141,7 +141,8 @@ LINK_STATUS_GROUP, LINK_STATUS_APPENDS = 0xB130E0, (0xB8319C,)
 APPENDS = (
     (0xBE701C, 18, None),                     # 拠点全滅ふさんか？ (native, keeps ？ preloaded)
     (0xB8319C, 22, '미접속준비중　오류'),    # pairs only; 오류 for the 接続エラー row (접속 오류)
-    (0xB8322C, 36, '전송중입니다。잠시기려주십오　'),
+    # Glyph preload, not displayed prose. Keep one space code and add 중 for B83254.
+    (0xB8322C, 36, '전송중입니다　잠시기다려　주십시오。'),
 )
 
 # Dictionary pad/cell edits: (address, before spec, after spec); mirrored to 0x805xxx.
@@ -223,6 +224,8 @@ def loaded_codes(rom, group, appends=()):
         for bank in group_banks(rom, group):
             codes |= dictionary_codes(rom, bank)
     for address in appends:
+        if address == 0xB8319C and struct.unpack_from('<I', rom, 0xB32E14)[0] != 0x08B8319C:
+            raise AssertionError('link-status glyph preload pointer moved away from B8319C')
         codes |= set(_codes(_cstr(rom, address, 64)))
     return codes
 

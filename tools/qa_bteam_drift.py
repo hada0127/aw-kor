@@ -69,12 +69,18 @@ ALIGNMENT_LEGACY_KEYS = {
     '0x00A1B3C8': '0x00A1B3EC',
 }
 
-# Consensus: temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
-DEFERRED_ADDRESSES = frozenset(int(x, 16) for x in '''
-A01ED0 A0A9B1 A1AFFC A1B194 A1B81C A1BAD4 A29840 A29A2C
-A29A54 A29A84 A2A2F8 A34B6C B82D58 B84E50 B84E64 B84E7C
-B84E94 B84EA4 B84EB8 B84ECC B84EE0 B84EF0 B84F04 B84F14 DC4F02
-'''.split())
+# Exact round-2 deferrals; previously deferred addresses with a reviewed
+# restore decision must no longer be forced to fail after restoration.
+ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
+with ROUND2_MANIFEST.open('rb') as _stream:
+    if hashlib.sha256(_stream.read()).hexdigest() != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
+        raise ValueError('B-team round-2 decision manifest digest changed')
+with ROUND2_MANIFEST.open(encoding='utf-8', newline='') as _stream:
+    _round2_rows = list(csv.DictReader(_stream, delimiter='\t'))
+DEFERRED_ADDRESSES = frozenset(int(row['address'], 16) for row in _round2_rows
+                                if row['decision'] == 'DEFER')
+if len(_round2_rows) != 287 or len(DEFERRED_ADDRESSES) != 11:
+    raise ValueError('B-team round-2 deferral count changed')
 COMPACT_GLYPH_ADDRESSES = frozenset(int(x, 16) for x in '''
 B818D0 B818F4 B81900 B81970 B81988 B81994 B819C4 B819E8
 B81AC0 B81ACC B82CF6 B82D02 B82D0E B82D76 B82DD6 B82DE2
@@ -161,6 +167,10 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
                         else ch for ch in value)
     else:
         value = value.replace(' ', '　')
+    # This 36-byte Part 1 link preload now carries the complete protected
+    # wording.  Its compact consumer uses the SJIS fullwidth period glyph.
+    if address in {0xB8322C, 0xB83254}:
+        value = value.replace('.', '。')
     punctuation = {}
     if is_part1_dialog_address(address):
         punctuation.update({'!': '！', '?': '？', ',': '、', '.': '。',
@@ -315,7 +325,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     codes = load_syl()
     compact = compact_glyph_map()
     compact_writers = {'part1-unit-compact-name', 'part1-compact-ui',
-                       'part1-battle-menu-font'}
+                       'part1-battle-menu-font', 'bteam-round2-compact-residual'}
     if (set(protected_addrs) & COMPACT_GLYPH_ADDRESSES or
             any(row[3] and row[7] in compact_writers and int(row[0]) in protected_addrs
                 for row in writes)):

@@ -11927,7 +11927,7 @@ BTEAM_RESTORE_BASELINE_ROWS = frozenset({
     0x00B81FC4, 0x00B81FDC, 0x00B81FF4, 0x00B82018, 0x00B826A8, 0x00B8277C, 0x00B827AC, 0x00B827D0,
     0x00B827DC, 0x00B827E8, 0x00B827F4, 0x00B828E4, 0x00B82D2A, 0x00B82D36, 0x00B82D6A, 0x00B82D82,
     0x00B82D92, 0x00B82D9E, 0x00B82DAA, 0x00B82DB6, 0x00B82DC6, 0x00B82FAC, 0x00B8301C, 0x00B83044,
-    0x00B830AC, 0x00B830C8, 0x00B83130, 0x00B8322C, 0x00B83830, 0x00B839B4, 0x00B839F0, 0x00B83A64,
+    0x00B830AC, 0x00B830C8, 0x00B83130, 0x00B8319C, 0x00B8322C, 0x00B83830, 0x00B839B4, 0x00B839F0, 0x00B83A64,
     0x00B83CC0, 0x00B83DB0, 0x00B83EB8, 0x00B83F74, 0x00B83FA8, 0x00B84298, 0x00B848BC, 0x00B84A48,
     0x00B84BA0, 0x00B84BB4, 0x00D82134, 0x00D8215C, 0x00D82198, 0x00D821C8, 0x00D821F0, 0x00D82218,
     0x00D8223C, 0x00D8225C, 0x00D8227C, 0x00D822AC, 0x00D82364, 0x00D823C8, 0x00D82424, 0x00D824B0,
@@ -11959,6 +11959,88 @@ BTEAM_RESTORE_BASELINE_ROWS = frozenset({
     0x00E0EFD2, 0x00E0F63E, 0x00E0F68A, 0x00E0F6E2, 0x00E0F772, 0x00E0FF0C, 0x00E10D7A, 0x00EC30A2,
     0x00EC312E, 0x00EC3162, 0x00EC3192, 0x00EC3246,
 })
+
+# The reviewed round-2 decisions are address-specific.  Keep the earlier
+# retained-Korean payloads only for rows that were not approved for restoration
+# or relocation; the baseline/override remains the source of protected words.
+def load_bteam_round2_decisions():
+    path = os.path.join(BASE, 'data', 'bteam_round2_decisions.tsv')
+    with open(path, 'rb') as stream:
+        manifest_digest = hashlib.sha256(stream.read()).hexdigest()
+    if manifest_digest != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
+        raise AssertionError('B-team round-2 decision manifest digest changed')
+    with open(path, newline='', encoding='utf-8') as stream:
+        rows = list(csv.DictReader(stream, delimiter='\t'))
+    decisions = {int(row['address'], 16): row['decision'] for row in rows}
+    if len(rows) != 287 or len(decisions) != len(rows) or collections.Counter(decisions.values()) != {
+            'RESTORE_BASELINE': 152, 'RELOCATE': 70, 'FIX_GATE': 54, 'DEFER': 11}:
+        raise AssertionError('B-team round-2 decision manifest changed')
+    return decisions
+
+
+BTEAM_ROUND2_DECISIONS = load_bteam_round2_decisions()
+BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
+                                 if d in {'RESTORE_BASELINE', 'RELOCATE'})
+
+
+def load_bteam_round2_residuals():
+    path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
+    with open(path, 'rb') as stream:
+        if hashlib.sha256(stream.read()).hexdigest() != '4ca06918f977d9a09d3fa87bad6e23c2e123ae697eb9c4a9c2cb12e0b45d178e':
+            raise AssertionError('B-team round-2 residual manifest digest changed')
+    with open(path, newline='', encoding='utf-8') as stream:
+        rows = list(csv.DictReader(stream, delimiter='\t'))
+    result = {int(row['address'], 16): row for row in rows}
+    if len(rows) != 171 or len(result) != len(rows) or not set(result) <= BTEAM_RESTORE_BASELINE_ROWS:
+        raise AssertionError('B-team round-2 residual address list changed')
+    with open(os.path.join(BASE, 'data', 'bteam_baseline.json'), encoding='utf-8') as stream:
+        baseline = json.load(stream)['overrides']
+    with open(os.path.join(BASE, 'data', 'game_wars_found_texts.csv'), newline='', encoding='utf-8') as stream:
+        slots = {int(row['address'], 16): int(row['length']) for row in csv.DictReader(stream)
+                 if row['address'].startswith('0x') and row['length'].isdigit()}
+    from qa_integrity_map import decode_enc, load_syl
+    from qa_bteam_drift import COMPACT_GLYPH_ADDRESSES, decode_compact, compact_glyph_map
+    compact_residuals = COMPACT_GLYPH_ADDRESSES | {
+        0xB81874, 0xB81B04, 0xB81B14, 0xB82D36, 0xB82D6A,
+        0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
+        0xDF8BBA, 0xDF8BC6, 0xDF8C1A,
+    }
+    codes = load_syl()
+    glyphs = compact_glyph_map()
+    for address, row in result.items():
+        key = f'0x{address:08X}'
+        if (row['expected_baseline'] != baseline[key] or not row['reason']
+                or not any('가' <= ch <= '힣' for ch in row['kept_text'])):
+            raise AssertionError(f'B-team round-2 residual metadata invalid: {key}')
+        payload = bytes.fromhex(row['payload_hex'])
+        decoded = (decode_compact(payload.rstrip(b' \x00'), codes, glyphs)
+                   if address in compact_residuals
+                   else decode_enc(payload.rstrip(b' \x00'), codes))
+        if address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A}:
+            if not decoded.endswith('倶倶'):
+                raise AssertionError(f'B-team compact PAD changed: {key}')
+            decoded = decoded[:-2]
+        if address in {0xB839B4, 0xB839F0}:
+            decoded = decoded.rstrip('　 ')
+        if len(payload) != slots.get(address) or decoded != row['kept_text']:
+            raise AssertionError(f'B-team round-2 residual payload invalid: {key}')
+        if bool(row['active_text']) != bool(row['active_payload_hex']):
+            raise AssertionError(f'B-team active residual metadata incomplete: {key}')
+        if row['active_text']:
+            active = bytes.fromhex(row['active_payload_hex'])
+            if (decode_enc(active, codes) != row['active_text']
+                    or not any('가' <= ch <= '힣' for ch in row['active_text'])):
+                raise AssertionError(f'B-team active residual payload invalid: {key}')
+        if row['active_follow_hex']:
+            if address != 0xA2BC3C or decode_enc(bytes.fromhex(row['active_follow_hex']), codes) != '늘린다。':
+                raise AssertionError(f'B-team follow-up script span invalid: {key}')
+    return result
+
+
+BTEAM_ROUND2_RESIDUALS = load_bteam_round2_residuals()
+BTEAM_D910C6_COMPOSITE = bytes.fromhex(
+    '8ed8888f81408ea2814088408bf58140886d885e8f818140'
+    '92b081408def81408ecd8ec38f5a81422020')
 
 # Korean fallback from candidate 93759193 (commit 9b58175). Entries with
 # compact-glyph placeholders use the prior writer's Korean source instead of
@@ -12149,6 +12231,8 @@ BTEAM_PREVIOUS_KOREAN_TEXT = {
     0x00ec3192: '있음이면\u3000사령관\u3000능력\u3000활성',
     0x00ec3246: '같은\u3000깃발이면\u3000같은\u3000팀',
 }
+BTEAM_PREVIOUS_KOREAN_TEXT = {address: text for address, text in BTEAM_PREVIOUS_KOREAN_TEXT.items()
+                              if address not in BTEAM_ROUND2_RESTORE}
 if not BTEAM_PREVIOUS_KOREAN_TEXT.keys() <= BTEAM_RESTORE_BASELINE_ROWS:
     raise AssertionError('B-team previous-Korean fallback includes an unapproved address')
 
@@ -12169,7 +12253,11 @@ def verify_link_welcome_sentences(rom, last_writes):
     """Catch late writes inside the six complete link-wait sentences."""
     for address in sorted(LINK_WELCOME_SENTENCES):
         row = last_writes.get(address)
-        if row is None or row[7] != 'import-csv':
+        # A34F98 has an identical dialogue override after the CSV writer.
+        # The byte and slot check below still protects the complete sentence.
+        if row is None or row[7] != 'import-csv' and not (
+                address == 0xA34F98 and row[7] in {'dialogue-override',
+                                                    'bteam-round2-residual'}):
             raise AssertionError(f'link welcome sentence writer changed at 0x{address:08X}')
         encoded = bytes.fromhex(row[3])
         slot = int(row[1])
@@ -13449,7 +13537,8 @@ BTEAM_SEAM_RESIDUAL_TEXT = {
     0xA03C9C: '네 보병이',
     0xA229CC: '하지만',
 }
-ADDRESS_TEXT_OVERRIDES.update(BTEAM_SEAM_RESIDUAL_TEXT)
+ADDRESS_TEXT_OVERRIDES.update({address: text for address, text in BTEAM_SEAM_RESIDUAL_TEXT.items()
+                               if address not in BTEAM_ROUND2_RESTORE})
 
 
 def main():
@@ -13849,7 +13938,8 @@ def main():
         if a < SAFE_MIN_ADDR:
             continue
         display_override = a in _display_ov
-        if not display_override and a in ADDRESS_TEXT_OVERRIDES:
+        if (not display_override and a in ADDRESS_TEXT_OVERRIDES
+                and a not in BTEAM_ROUND2_RESTORE):
             st['dialogue_override_protected_skip'] += 1
             continue
         if display_override:
@@ -14911,6 +15001,8 @@ def main():
 
     def fixed_zero_text_patch(faddr, slot_len, text):
         text = BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr, text)
+        if faddr in BTEAM_ROUND2_RESTORE:
+            text = _dlg_ov[f'0x{faddr:08X}']
         if faddr in (0xA294C4, 0xB81924):
             pointer = 0xA37B10 if faddr == 0xA294C4 else 0xD850FC
             expected_pointer = (0x08000000 + faddr).to_bytes(4, 'little')
@@ -15013,6 +15105,13 @@ def main():
         text_for_log = None
         ov = ((source_text if reviewed_spacing else BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr))
               or direct_script_override_text(faddr, fend, direct_script_members, _dlg_ov))
+        if (faddr in BTEAM_ROUND2_RESTORE
+                and len(direct_script_members.get(faddr) or ()) <= 1):
+            ov = _dlg_ov[f'0x{faddr:08X}']
+        if faddr == 0xD910C6 and ov == '여기로 이동하지 않으면':
+            # The following script operand draws 공격 before the next text
+            # fragment.  This boundary needs a visible space in the row.
+            ov += '　'
         if in_region(PAIR_RENDERER_REGIONS, faddr, fend):
             exact_text = ov if ov is not None else source_text
             if exact_text is None:
@@ -22686,6 +22785,12 @@ def main():
     _rp_manifest = []
     from dialogue_repoint import load_seam_decisions
     _seam_table = load_seam_decisions()
+    # These old seam records describe shortened round-1 fragments.  The
+    # round-2 authority restores the complete source rows, so a surviving
+    # unspaced seam must still fail the final scan without stale records.
+    for _address in (0xA03734, 0xA03C9C, 0xA229CC):
+        if _address in BTEAM_ROUND2_RESTORE:
+            _seam_table.pop((_address, 0))
     if not getattr(args, 'no_repoint_dialogue', False):
         try:
             from dialogue_repoint import repoint_messages, _line_index as _repoint_line_index
@@ -23013,7 +23118,8 @@ def main():
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 original_line_starts=_rp_original_starts, line_layouts=_explicit_line_layouts,
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
-                skip_messages=set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES,
+                skip_messages=(set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages
+                               | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES | {0xB8319C}),
                 min_level=1, max_cells=50,
                 max_cells_for_address=lambda a: 44 if a in BTEAM_RESTORE_BASELINE_ROWS else 50,
                 valid_codes=frozenset(_rp_valid),
@@ -23059,11 +23165,150 @@ def main():
     # script relocations still fail the build when missing.
     bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints)
                                     & BTEAM_RESTORE_BASELINE_ROWS)
-    for _address in bteam_script_residuals:
-        print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: guarded script relocation not confirmed')
-    for _address in sorted(BTEAM_SEAM_RESIDUAL_TEXT):
+    _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
+                                 if entry['reason'].startswith('Script text relocation unproven')
+                                 or a == 0xD910C6}
+    if set(bteam_script_residuals) != _allowed_script_residuals:
+        raise AssertionError('unlisted or stale B-team script relocation residual: '
+                             f'{sorted(set(bteam_script_residuals) ^ _allowed_script_residuals)}')
+    # The listed slots retain the exact Korean bytes from the prior candidate.
+    # Each is an explicit unresolved exception, never an implicit shortening.
+    for _address, _entry in sorted(BTEAM_ROUND2_RESIDUALS.items()):
+        _payload = bytes.fromhex(_entry['payload_hex'])
+        rom[_address:_address + len(_payload)] = _payload
+        _encoded = _payload.rstrip(b' \x00')
+        _tail = _payload[len(_encoded):]
+        _fill = _tail[0] if _tail and len(set(_tail)) == 1 else None
+        if _tail and _fill is None:
+            _encoded = _payload
+        _writer = ('bteam-round2-compact-residual'
+                   if _address in BTEAM_COMPACT_VERIFIED_ROWS and _address < 0xD80000
+                   else 'bteam-round2-residual')
+        WRITE_LOG.append([_address, len(_payload), len(_encoded),
+                          _encoded.hex(), _fill,
+                          _entry['kept_text'], None, _writer])
+        print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: {_entry["reason"]}')
+    # The D910C6 source row is only the first 20 bytes of a 42-byte script
+    # sentence. A later oversized writer leaves Japanese in the continuation.
+    # Restore the exact prior candidate sentence without crossing its 0x6B
+    # command byte, and retain the row-level map entry for the protected source.
+    _d910_entry = BTEAM_ROUND2_RESIDUALS[0xD910C6]
+    _d910_source = bytes.fromhex(_d910_entry['payload_hex'])
+    if (len(BTEAM_D910C6_COMPOSITE) != 42
+            or not BTEAM_D910C6_COMPOSITE.startswith(_d910_source)
+            or rom[0xD910F0] != 0x6B):
+        raise AssertionError('D910C6 composite boundary or retained Korean changed')
+    rom[0xD910C6:0xD910F0] = BTEAM_D910C6_COMPOSITE
+    WRITE_LOG.append([0xD910C6, 42, 42, BTEAM_D910C6_COMPOSITE.hex(), None,
+                      'retained Korean script sentence', None, 'bteam-round2-script-composite'])
+    WRITE_LOG.append([0xD910C6, len(_d910_source), len(_d910_source),
+                      _d910_source.hex(), None, _d910_entry['kept_text'], None,
+                      'bteam-round2-residual'])
+    # DD010A has an active relocated consumer. The old source slot alone is
+    # dead for this message; restore the proven earlier Korean bytes there too.
+    _dd_entry = BTEAM_ROUND2_RESIDUALS[0xDD010A]
+    _dd_repoint = [m for m in _rp_manifest if m.get('status') == 'relocated'
+                   and m.get('msg') == '0xDD0108']
+    if len(_dd_repoint) != 1 or _dd_repoint[0]['line_spans'].get('0xDD010A') != [2, 40]:
+        raise AssertionError('DD010A relocated consumer layout changed')
+    _dd_target = int(_dd_repoint[0]['new_addr'], 16) + 2
+    _dd_payload = bytes.fromhex(_dd_entry['payload_hex'])
+    if len(_dd_payload) != 40:
+        raise AssertionError('DD010A Korean fallback no longer fits relocated span')
+    rom[_dd_target:_dd_target + 40] = _dd_payload
+    WRITE_LOG.append([_dd_target, 40, 40, _dd_payload.hex(), None,
+                      _dd_entry['kept_text'], None, 'bteam-round2-relocated-korean'])
+    # Restore complete protected wording where a final in-place text writer
+    # proves ownership and the renderer's encoded form fits its native slot.
+    from qa_bteam_drift import display_equivalent as _bteam_display_equivalent
+    with open(os.path.join(BASE, 'data', 'bteam_baseline.json'), encoding='utf-8') as _stream:
+        _round2_baseline = json.load(_stream)['overrides']
+    _round2_final_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    _round2_relocated = {int(key, 16) for message in _rp_manifest
+                         if message.get('status') == 'relocated'
+                         for key in message.get('line_spans', {})}
+    for _address in sorted(BTEAM_ROUND2_RESTORE - set(BTEAM_ROUND2_RESIDUALS)
+                           - _round2_relocated):
+        if _address in LINK_WELCOME_SENTENCES or 0xA2955C <= _address < 0xA29830:
+            continue  # Part 2 power-title artwork has its own accepted snapshot.
+        _row = _round2_final_writes.get(_address)
+        if _row is None or _row[7] not in {'dialogue-override', 'fixed_zero_text'}:
+            continue
+        _text = _bteam_display_equivalent(_round2_baseline[f'0x{_address:08X}'], _address)
+        _encoded = bytes(encode_text(_text, syl_to_code, unmapped, _address))
+        _slot = int(_row[1])
+        if len(_encoded) > _slot or (_row[7] == 'fixed_zero_text' and len(_encoded) == _slot):
+            continue
+        _fill = 0 if _row[7] == 'fixed_zero_text' else _row[4]
+        if _fill not in (0, 0x20):
+            raise AssertionError(f'round-2 direct writer fill changed: 0x{_address:08X}')
+        rom[_address:_address + _slot] = _encoded + bytes([_fill]) * (_slot - len(_encoded))
+        WRITE_LOG.append([_address, _slot, len(_encoded), _encoded.hex(), _fill,
+                          _text, None, 'bteam-round2-baseline'])
+    from part2_mission_title_fit import is_pair_title as _is_round2_pair_title
+    for _message in _rp_manifest:
+        if _message.get('status') != 'relocated':
+            continue
+        _target = int(_message['new_addr'], 16)
+        for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
+            _address = int(_key, 16)
+            if _address not in BTEAM_ROUND2_RESTORE or _address in BTEAM_ROUND2_RESIDUALS:
+                continue
+            if _is_round2_pair_title(_address):
+                continue  # Title glyph supply is checked by its own patch below.
+            _text = _bteam_display_equivalent(_round2_baseline[f'0x{_address:08X}'], _address)
+            _encoded = bytes(encode_text(_text, syl_to_code, unmapped, _address))
+            if len(_encoded) > _span_len:
+                continue
+            _pos = _target + _off
+            _payload = _encoded + b' ' * (_span_len - len(_encoded))
+            rom[_pos:_pos + _span_len] = _payload
+            WRITE_LOG.append([_pos, _span_len, _span_len, _payload.hex(), None,
+                              _text, None, 'bteam-round2-relocated-baseline'])
+    # A listed relocation residual keeps the prior Korean at the active span,
+    # not merely in the now-dead source slot.
+    for _message in _rp_manifest:
+        if _message.get('status') != 'relocated':
+            continue
+        _target = int(_message['new_addr'], 16)
+        for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
+            _address = int(_key, 16)
+            if _address not in BTEAM_ROUND2_RESIDUALS or _address == 0xDD010A:
+                continue
+            _entry = BTEAM_ROUND2_RESIDUALS[_address]
+            _raw = bytes.fromhex(_entry['active_payload_hex'] or _entry['payload_hex']).rstrip(b' \x00')
+            if len(_raw) > _span_len:
+                raise AssertionError(f'round-2 Korean residual overflows active span: 0x{_address:08X}')
+            _slack = _span_len - len(_raw)
+            if _is_round2_pair_title(_address):
+                if len(_message['line_spans']) != 1:
+                    raise AssertionError(f'pair title gained another line: 0x{_address:08X}')
+                _padding = b'\x00' * _slack
+                _message['line_spans'][_key][1] = len(_raw)
+            else:
+                _padding = b' ' * _slack
+            _payload = _raw + _padding
+            _pos = _target + _off
+            rom[_pos:_pos + _span_len] = _payload
+            WRITE_LOG.append([_pos, _span_len, _span_len, _payload.hex(), None,
+                              _entry['active_text'] or _entry['kept_text'], None,
+                              'bteam-round2-relocated-residual'])
+            if _entry['active_follow_hex']:
+                _follow = _message['line_spans'].get('0xA2BC57')
+                _follow_bytes = bytes.fromhex(_entry['active_follow_hex'])
+                if _address != 0xA2BC3C or _follow != [37, len(_follow_bytes)]:
+                    raise AssertionError('A2BC3C split baseline layout changed')
+                _follow_pos = _target + _follow[0]
+                rom[_follow_pos:_follow_pos + len(_follow_bytes)] = _follow_bytes
+                WRITE_LOG.append([_follow_pos, len(_follow_bytes), len(_follow_bytes),
+                                  _follow_bytes.hex(), None, '늘린다。', None,
+                                  'bteam-round2-relocated-follow'])
+    with open(os.path.join(BASE, 'temp', 'repoint_manifest.json'), 'w', encoding='utf-8') as _stream:
+        json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
+    for _address in sorted(set(BTEAM_SEAM_RESIDUAL_TEXT) - BTEAM_ROUND2_RESTORE):
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
-    verify_required_script_repoints(required_script_repoints, completed_script_repoints)
+    verify_required_script_repoints(required_script_repoints - _allowed_script_residuals,
+                                    completed_script_repoints)
     verify_part2_campaign_header_keys(rom)
 
     _seam = apply_inplace_part2_seam_spaces(rom, orig, _seam_table, {code: syl for syl, code in syl_to_code.items()})
@@ -23296,7 +23541,7 @@ def main():
                  else _bteam_baseline['overrides'][_key])
         _baseline_has_hangul = any('가' <= ch <= '힣' for ch in _bteam_baseline['overrides'][_key])
         _japanese_letters = any(
-            '\u3040' <= ch <= '\u309f' or '\u30a0' <= ch <= '\u30fa'
+            '\u3040' <= ch <= '\u309f' or ('\u30a0' <= ch <= '\u30fa' and ch not in '・ー')
             or '\uff65' <= ch <= '\uff9f' for ch in _text)
         _kanji = any('\u3400' <= ch <= '\u9fff' for ch in _text)
         _legacy_compact_padding = _address in BTEAM_COMPACT_VERIFIED_ROWS
@@ -23312,6 +23557,8 @@ def main():
             for _key, _span in _message.get('line_spans', {}).items():
                 _relocated_rows[int(_key, 16)] = (_message, _span)
     _last_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    if bytes(rom[0xD910C6:0xD910F0]) != BTEAM_D910C6_COMPOSITE:
+        raise AssertionError('D910C6 Korean script continuation was overwritten')
     verify_link_welcome_sentences(rom, _last_writes)
     _wide_restored = []
     _restored_relocated = 0
@@ -23329,11 +23576,13 @@ def main():
             if _row is None:
                 raise AssertionError(f'B-team restoration has no final text write: 0x{_address:08X}')
             _payload = bytes(rom[_address:_address + len(bytes.fromhex(_row[3]))])
-            if _compact and _row[7] not in {'part1-compact-ui', 'part1-battle-menu-font'}:
+            if _compact and _row[7] not in {'part1-compact-ui', 'part1-battle-menu-font',
+                                            'bteam-round2-compact-residual'}:
                 raise AssertionError(f'B-team compact writer changed: 0x{_address:08X}')
-        validate_bteam_payload(_payload, _code2syl, _address, compact=_compact,
-                               compact_expected=bytes.fromhex(_row[3]) if _compact
-                               and _address not in _relocated_rows else None)
+        if _address not in BTEAM_ROUND2_RESIDUALS:
+            validate_bteam_payload(_payload, _code2syl, _address, compact=_compact,
+                                   compact_expected=bytes.fromhex(_row[3]) if _compact
+                                   and _address not in _relocated_rows else None)
         _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
         if not _widths or (max(_widths) > 44 and
                            BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
@@ -23347,7 +23596,8 @@ def main():
         'reason': issue['cause'],
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
-    _expected_residuals = set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations
+    _expected_residuals = ((set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations)
+                           | set(BTEAM_ROUND2_RESIDUALS))
     if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '
@@ -23356,10 +23606,47 @@ def main():
         raise AssertionError('Listed wide B-team row is not a residual')
     _wrong_residual = [(f'0x{a:08X}', BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'])
                        for a, issue in sorted(_restoration_issues.items())
+                       if a in BTEAM_PREVIOUS_KOREAN_TEXT and a not in BTEAM_ROUND2_RESIDUALS
                        if not bteam_retained_equal(BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'], a,
                                                    compact=a in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A})]
     if _wrong_residual:
         raise AssertionError(f'B-team residual differs from retained Korean: {_wrong_residual[:20]}')
+    for _address, _entry in BTEAM_ROUND2_RESIDUALS.items():
+        _payload = bytes.fromhex(_entry['payload_hex'])
+        _issue = _restoration_issues.get(_address)
+        if (bytes(rom[_address:_address + len(_payload)]) != _payload
+                or (_issue is not None and not bteam_retained_equal(
+                    _entry['active_text'] or _entry['kept_text'], _issue['rom_text'], _address,
+                    compact=_address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A}))):
+            raise AssertionError(f'B-team listed residual changed: 0x{_address:08X}')
+        if _entry['active_text']:
+            if _address not in _relocated_rows:
+                raise AssertionError(f'B-team active residual lost relocation: 0x{_address:08X}')
+            _message, (_off, _length) = _relocated_rows[_address]
+            _raw = bytes.fromhex(_entry['active_payload_hex'])
+            _slack = _length - len(_raw)
+            if _slack < 0:
+                raise AssertionError(f'B-team active residual span shrank: 0x{_address:08X}')
+            _padding = b' ' * _slack
+            _pos = int(_message['new_addr'], 16) + _off
+            if bytes(rom[_pos:_pos + _length]) != _raw + _padding:
+                raise AssertionError(f'B-team active residual bytes changed: 0x{_address:08X}')
+            if _is_round2_pair_title(_address) and rom[_pos + len(_raw)] != 0:
+                raise AssertionError(f'B-team pair title lost terminator: 0x{_address:08X}')
+            if _entry['active_follow_hex']:
+                _follow_off, _follow_len = _message['line_spans']['0xA2BC57']
+                _follow = bytes.fromhex(_entry['active_follow_hex'])
+                if (_follow_len != len(_follow) or bytes(rom[int(_message['new_addr'], 16)
+                        + _follow_off:int(_message['new_addr'], 16) + _follow_off
+                        + _follow_len]) != _follow):
+                    raise AssertionError('A2BC3C complete baseline continuation changed')
+        elif _is_round2_pair_title(_address) and _address in _relocated_rows:
+            _message, (_off, _length) = _relocated_rows[_address]
+            _raw = bytes.fromhex(_entry['payload_hex']).rstrip(b' \x00')
+            _pos = int(_message['new_addr'], 16) + _off
+            if (_length != len(_raw) or bytes(rom[_pos:_pos + _length]) != _raw
+                    or rom[_pos + _length] != 0):
+                raise AssertionError(f'B-team pair title residual bytes changed: 0x{_address:08X}')
     with open(os.path.join(BASE, 'temp', 'bteam_restore_residuals.json'), 'w', encoding='utf-8') as _stream:
         json.dump(_residual_report, _stream, ensure_ascii=False, indent=2)
     st['bteam_restored_in_place'] = len(BTEAM_RESTORE_BASELINE_ROWS) - len(_restoration_issues) - _restored_relocated

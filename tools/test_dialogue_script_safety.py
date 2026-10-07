@@ -1069,7 +1069,9 @@ class ScriptSafetyTests(unittest.TestCase):
     def test_repoint_retained_korean_precedes_other_text_sources(self):
         source = Path(builder.__file__).read_text()
         node = next(n for n in ast.walk(ast.parse(source)) if isinstance(n, ast.FunctionDef) and n.name == '_rp_dlg')
-        address = 0xD9444E
+        # Round 2 restores 0xD9444E; this reviewed width residual still
+        # exercises the legacy retained-Korean precedence.
+        address = 0xD9009E
         retained = builder.BTEAM_PREVIOUS_KOREAN_TEXT[address]
         self.assertIn(address, builder.BTEAM_RESTORE_BASELINE_ROWS)
         self.assertNotIn(address, builder.BTEAM_SCRIPT_SPACING_REPAIRS)

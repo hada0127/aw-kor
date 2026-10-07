@@ -39,7 +39,7 @@ class RomDriftTest(unittest.TestCase):
         addresses = {int(x, 16) for x in baseline['overrides']}
         self.assertTrue(DEFERRED_ADDRESSES | COMPACT_GLYPH_ADDRESSES |
                         NEW_STRICT_ADDRESSES <= addresses)
-        self.assertEqual(len(DEFERRED_ADDRESSES), 25)
+        self.assertEqual(len(DEFERRED_ADDRESSES), 11)
         self.assertEqual(len(COMPACT_GLYPH_ADDRESSES), 21)
         self.assertEqual(core_digest(baseline), PINNED_CORE_DIGEST)
         self.assertNotIn('0x00A19324', baseline['overrides'])

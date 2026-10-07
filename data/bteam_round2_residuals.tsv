@@ -1,0 +1,172 @@
+address	expected_baseline	kept_text	reason	payload_hex	active_text	active_payload_hex	active_follow_hex
+0x00A2955C	미라클 찬스	기적	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	888f8fc7000000000000000000000000			
+0x00A29570	레드스타 드림	별꿈	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8cfc88c500000000000000000000000000000000			
+0x00A29588	하이퍼 리페어	하이퍼수리	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	92a98fa292678def8bb700000000			
+0x00A29598	하이 업그레이드	강화	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	884992ec0000000000000000000000000000			
+0x00A295AC	위닝 마치	승리	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8e4d8bb7000000000000000000000000			
+0x00A295C0	빅토리어스 퍼레이드	대승	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	89f48e4d00000000000000000000000000000000			
+0x00A295D8	맥시멈 블로우	강타	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	884991c2000000000000000000000000			
+0x00A295EC	스트레이트 블래스트	직격	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	9057885e0000000000000000000000000000			
+0x00A29600	장사 스피릿	상혼	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8db392e600000000000000000000000000000000			
+0x00A2962C	골드 러시	골드	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	886a8a7c000000000000000000000000			
+0x00A29640	파워 오브 머니	재력	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8fc48b5d000000000000000000000000			
+0x00A29654	테크니컬 스나이프	저격	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8fc6885e0000000000000000000000000000			
+0x00A29668	월드 와이드 스나이프	원저격	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8f6d8fc6885e00000000000000000000000000000000			
+0x00A29680	스노우 화이트	설백	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8dc68ccd00000000000000000000			
+0x00A29690	블리자드 블로우	눈보라	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	89b18d468adf00000000000000000000			
+0x00A296A4	일도양단	일도	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8fa88a5a0000000000000000000000000000			
+0x00A296B8	배수진	배수	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8ccc8def00000000000000000000			
+0x00A296C8	원더 서치	탐색	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	91c78db500000000000000000000			
+0x00A296D8	카운터 브레이크	반격	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8cae885e0000000000000000000000000000			
+0x00A296EC	야마토 다마시	혼	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	92e6000000000000000000000000			
+0x00A296FC	사무라이 다이브	돌격	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8a5d885e00000000000000000000			
+0x00A2970C	라이트닝 드라이브	번개돌진	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8cdd884e8a5d9059000000000000000000000000			
+0x00A29724	라이트닝 어설트	번개강습	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8cdd884e88498e4b000000000000000000000000			
+0x00A2973C	자이언트 웨이브	큰파도	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	91b392598a5a0000000000000000000000000000			
+0x00A29754	자이언트 스톰	큰폭풍	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	91b3927892840000000000000000000000000000			
+0x00A2976C	슈퍼 차지	충전	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	91438fc8000000000000000000000000			
+0x00A29780	빅뱅 차지	대폭발	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	89f492788cb6000000000000000000000000			
+0x00A29794	버닝 블로우	화염	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	92ec8edf000000000000000000000000			
+0x00A297A8	기간트 브레이크	대분쇄	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	89f48d598de800000000000000000000			
+0x00A297BC	하이퍼 택틱스	전술	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8fc88df400000000000000000000000000000000			
+0x00A297D4	하이 그레이드 커맨드	지휘	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	9054934b00000000000000000000000000000000			
+0x00A297EC	사이드 스루	측돌파	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	914d8a5d9259000000000000			
+0x00A297FC	사이드 와인더	측기습	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	914d888f8e4b00000000000000000000			
+0x00A29810	블랙 웨이브	흑파도	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	935592598a5a00000000000000000000			
+0x00A29824	블랙 스톰	흑폭풍	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	93559278928400000000000000000000			
+0x00A29906	애니메 무	표시안함	R1: full baseline occupies entire NUL-terminated fixed slot; prior candidate Korean retained	927a8e4f8ea292b30000			
+0x00A29A34	미사일 기지	미사일기지	R1: full-width baseline leaves no NUL terminator in fixed slot; retain prior candidate Korean bytes	8c7a8da98fa8888f90540000			
+0x00A29A70	레이저 포	레이저포	R1: full-width baseline leaves no NUL terminator in fixed slot; retain prior candidate Korean bytes	8b598fa28fc692760000			
+0x00A2BC3C	현재의 군자금을 1.5배로늘린다.	현재　군자금　１점５배로	R1: prior Korean source; complete baseline split across two script rows with fullwidth decimal glyph, no single-row proof	92d38fc48140887b8fb7888b814082508fcc82548ccc8b692020	현재의　군자금을　１．５배로	92d38fc48fa18140887b8fb7888b8f8181408250814482548ccc8b69	89cc8bb989e28142
+0x00A2C040	스토리를 즐기면서 플레이할 수 있는 모드입니다	스토리를　즐기며　플레이하는　모드	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	8e4791eb8bb78ba681409043888f8bf4814092a08b598fa292a989c881408bfc8a7c202020202020202020202020			
+0x00A2C0C0	자유롭게 설정을 정해,친구와 컴퓨터와 대전합니다	설정을　정해　친구나　컴퓨터와　대전합니다	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	8dc68fd18f8181408fd192bb8140915a887988e981409178928791da8f4c814089f48fc892b489d489e2202020202020			
+0x00A2C1B8	획득한 포인트로,여러 가지 쇼핑을 할 수 있습니다	포인트로　쇼핑을　할　수　있습니다	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	92768fa591f98b6981408dea92a88f81814092b081408def81408fb38e4b89d489e2202020202020202020202020			
+0x00A2C1E8	맵을 만들거나,사령관의 컬러를 설정할 수 있습니다	지도　제작과　사령관　색상　설정　가능	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	90548a5a81408fd48fb8886f81408da98b67887081408db58db381408dc68fd18140884089d2202020202020202020202020			
+0x00A2C25C	친구와 연결해서,대전이나 맵 교환을 할 수 있습니다	친구와　연결해　대전／지도　교환　가능	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	915a88798f4c81408eda886092bb814089f48fc8815e90548a5a8140887892ee8140884089d220202020202020202020			
+0x00A2C2F4	있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다	있음으로　하면　유닛　시야　밖이　안　보임	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	8fb38f838f7c8b69814092a98bf581408f7889de81408e4f8eba81408cad8fa281408ea281408d468faf20202020			
+0x00A2C378	지정일이 종료되면 소유 거점 수로 결판을 냅니다	지정일　끝나면　거점　수로　승부	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	90548fd18fa8814088e288e98bf5814088528fcc81408def8b6981408e4d8d562020202020202020202020202020			
+0x00A2C3A8	지정 거점 수를 소유한 시점에서 우세 승리가 됩니다	지정　거점　보유　시　우세　승리	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	90548fd1814088528fcc81408d468f7881408e4f81408f5f8dcf81408e4d8bb7202020202020202020202020			
+0x00A2C484	같은 팀을 선택하면 동맹국을 설정할 수 있습니다	같은　팀　선택　시　동맹국　설정	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	884b8f7e8140925781408dc291d781408e4f81408a5f8bdc887a81408dc68fd1202020202020202020202020			
+0x00A2C644	만드는 방법은 「도움말」에 적혀 있어요.	"만드는　법은　""도움말""에　있습니다."	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	8bc58a7c89c881408cee8f7e8140228a5a8f678bca228ed381408fb38e4b89d489e22e20	만드는　법은　”도움말”에　있습니다。	8bc58a7c89c881408cee8f7e814081688a5a8f678bca81688ed381408fb38e4b89d489e28142	
+0x00A2C720	본부가 2개 이상이고,각 군에	본부가　둘　이상이고　각　군에	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8d498d56884081408a6f81408fa28db38fa28866814088418140887b8ed32020202020202020			
+0x00A2C748	병종 또는 생산 거점이 1개 이상 필요합니다.	병종　또는　생산　거점　하나　이상　필요	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8d438fe081408aca89c881408dbc8dac814088528fcc814092a988e981408fa28db3814092a58f5a20202020			
+0x00A2C784	작성한 맵은,프리 배틀 또는,	작성한　맵은　프리　배틀　또는	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fb88dce92af81408bd98f7e8140929e8bb781408ccc924d81408aca89c82020202020202020202020202020			
+0x00A2C7B4	통신으로 플레이할 수 있습니다.	통신으로　플레이할　수　있습니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	91ef8e548f7c8b69814092a08b598fa292b081408def81408fb38e4b89d489e2202020202020			
+0x00A2C7DC	선택 중인 지형,병종을 배치합니다.	선택　중인　지형　병종을　배치합니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8dc291d781408fef8fa58140905492dc81408d438fe08f8181408ccc915492b489d489e2			
+0x00A2C804	커서 위치의 지형,병종을 선택합니다.	커서　위치의　지형　병종을　선택함	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	91738dbf81408f7491548fa18140905492dc81408d438fe08f8181408dc291d792b3	커서　위치의　지형　병종을　선택합니다	91738dbf81408f7491548fa18140905492dc81408d438fe08f8181408dc291d792b489d489e2	
+0x00A2C828	병종 선택 윈도우를 엽니다.	병종　선택　윈도우를　엽니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8d438fe081408dc291d781408f758a5a8f5f8ba681408ee089d489e22020			
+0x00A2C848	지형 선택 윈도우를 엽니다.	지형　선택　윈도우를　엽니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	905492dc81408dc291d781408f758a5a8f5f8ba681408ee089d489e22020			
+0x00A2C868	미니맵을 표시합니다.	미니맵을　표시합니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8c7a89d48bd98f818140927a8e4f92b489d489e220202020			
+0x00A2C898	데이터가 없습니다.	데이터가　없습니다	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8a538fa291da884081408ecd8e4b89d489e22020			
+0x00A2C950	바다로 전체를 채우시겠습니까?	바다로　전부　칠하시겠습니까	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	8ca689e28b6981408fc88d568140915b92a98e4f885c8e4b89d48895	바다로　전부　칠하시겠습니까？	8ca689e28b6981408fc88d568140915b92a98e4f885c8e4b89d488958148	
+0x00A2C9B4	숲으로 전체를 채우시겠습니까?	숲으로　전부　채우시겠습니까	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	8dfa8f7c8b6981408fc88d56814090c48f5f8e4f885c8e4b89d48895	숲으로　전부　채우시겠습니까？	8dfa8f7c8b6981408fc88d56814090c48f5f8e4f885c8e4b89d488958148	
+0x00A2CA10	저장하지 않았는데 종료하시겠습니까?	저장　안　함　종료할까요	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fc68fc281408ea2814092b381408fe08b7392b088958f5a20202020202020202020			
+0x00A2CABC	연타하는 걸 정말 좋아하는구나.	연타를　무척　좋아하나　보네。	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8eda91c28ba681408c6590cd81408fe28e9b92a988e981408d46896c81422020			
+0x00A2D5C8	내일로의 7일간	내일로　７일간	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	894e8fa88b69814082568fa88842			
+0x00A2D650	내일로의 7일간	내일향한　７일	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	894e8fa892c592af814082568fa8			
+0x00A2D684	전차대를 격파하라!	전차대　격파	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	8fc890b489f48140885e9259000000000000			
+0x00A2D6AC	검은 악마를 막아라!	검은　악마를　막아	R2: prior candidate source was Japanese; exact earlier Korean slot bytes retained because full baseline needs unsafe title/relocation change; active relocated text pinned from v8 pointer target	88568f7e81408ea08bc38ba681408bc48e9b	검은　악마를　막아！	88568f7e81408ea08bc38ba681408bc48e9b8149	
+0x00A2D6F0	푸른 달이여,영원히	푸른달　영원히	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	927b8ba589e781408ee98f6d93630000			
+0x00A34F98	친구가 모이면,스타트를 눌러 줘!!	친구들이　모이면　시작　버튼　눌러줘！	R1: link sentence has exact prior Korean bytes but fullwidth punctuation is not accepted by the strict baseline gate; guarded 46-byte slot retained	915a88798a9c8fa281408bfc8fa28bf581408e4f8fb881408cdc9247814089b28b488ff181492020202020202020			
+0x00A34FEC	맵을 보낼 사람을 골라 줘!!	지도를　보낼　사람을　골라！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90548a5a8ba681408d46895081408da98ae48f818140886a8adf8149			
+0x00A350B4	맵을 수신 중이야,잠시 기다려 줘!!	지도　수신　중、　잠시만　기다려！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90548a5a81408def8e5481408fef814181408fbd8e4f8bc58140888f89e28b5c814920202020			
+0x00A35228	하나의 카트리지로,모두와 대전할 수 있습니다	하나의　카트리지로　대전　가능	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	92a988e98fa18140916391f98bb790548b69814089f48fc88140884089d22020202020202020202020202020			
+0x00A35258	친구와 케이블로 연결해서 대전할 수 있습니다	친구와　케이블　대전　가능	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	915a88798f4c8140917a8fa28d64814089f48fc88140884089d220202020202020202020			
+0x00A35280	친구와 케이블을 연결해서 맵 교환을 할 수 있습니다	친구와　케이블로　맵　교환　가능	Part 2 menu/help text exceeds its original slot; no proven relocation or final text write	915a88798f4c8140917a8fa28d648b6981408bd98140887892ee8140884089d220202020202020202020202020202020			
+0x00B81874	대공 머신건	대공기관총	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	91ce8bf398448c86936500000000			
+0x00B818B4	2～6거리	2-6거리	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	322d3688528bb7202020			
+0x00B819B8	3～5거리	3-5거리	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	332d3588528bb7202020			
+0x00B819DC	2～3거리	2-3거리	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	322d3388528bb7202020			
+0x00B81B04	머신건	기관총	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	98448c86936500000000			
+0x00B81B14	미장비	장비없음	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	919594f596b388f50000000000000000			
+0x00B81D80	최강의 라이벌!	최강　라이벌	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90eb884981408adf8fa28cde20202020			
+0x00B81D94	결판! 칠흑의 숲!	칠흑숲　결전	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	915b93558dfa814088608fc820202020202020202020			
+0x00B81DD4	거대한 날개!	거대　날개	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	885289f4814088f3884e2020202020202020			
+0x00B81DF0	캡틴 모프!	캡틴　모프	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	9fc1925581408bfc929e20202020202020202020			
+0x00B81E08	아스카의 노림수!	아스카　목표	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8e9b8e47916381408c4e927a20202020			
+0x00B81E1C	도미노의 능력!	도미노　능력	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8a5a8c7a897d814089d28b5d2020			
+0x00B81E2C	분단 작전!	분단　작전	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8d5989e581408fb88fc8			
+0x00B81E38	키쿠치요의 실수?	키쿠치요　실수	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	91b891a391548f5a81408e558def202020202020			
+0x00B81E50	최강! 키쿠치요 부대	최강　키쿠치요부대	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90eb8849814091b891a391548f5a8d5689f4			
+0x00B81E64	키쿠치요 등장!	키쿠치요　등장	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	91b891a391548f5a81408aa58fc220202020			
+0x00B81E78	특수 부대장 도미노!	특수부대　도미노	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	91fb8def8d5689f481408a5a8c7a897d2020			
+0x00B81E98	눈 속의 싸움!	설원　전투	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8dc68f6d81408fc891f420202020			
+0x00B81EA8	스나이퍼!	스나이퍼	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8e4788e98fa2926720202020			
+0x00B81EB8	호이프 해군 터보!	호이프　해군　터보	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	92e28fa2929e814092bb887b814091da8d462020			
+0x00B81ED0	호이프 해군!	호이프　해군	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	92e28fa2929e814092bb887b2020			
+0x00B81EE0	맥스의 약점!?	맥스　약점	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8bd68e4781408ebb8fcc2020202020202020			
+0x00B81EF4	맥스 출격!	맥스　출격	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8bd68e47814090f8885e20202020			
+0x00B81F04	하늘의 용사!	하늘　용사	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	92a989cc81408f5e8da9			
+0x00B81F10	건 파이터!	건　파이터	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8854814092598fa291da202020202020			
+0x00B81F5C	도그 파이트!	도그　파이트	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8a5a8887814092598fa291f920202020			
+0x00B81F70	대공을 제압하라!	대공　제압	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	89f4886d81408fd48eae20202020			
+0x00B81F98	드래곤플라이!	드래곤　플라이	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8a7c8aec8868814092a08adf8fa22020			
+0x00B81FAC	지상 최강! 중전차!!	최강　중전차	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90eb884981408fef8fc890b42020202020202020			
+0x00B81FC4	적 부대를 해치워라!	적　부대　격파	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fc781408d5689f48140885e9259202020202020			
+0x00B81FDC	싸워라　고물 전차!	고물　전차　출격	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	88668c6c81408fc890b4814090f8885e20202020			
+0x00B81FF4	전선 기지를 확보하라!	전선　기지　확보	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fc88dc28140888f9054814092ed8d4620202020			
+0x00B82018	전투 개시!	전투　개시	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8fc891f48140884e8e4f			
+0x00B826A8	마른 잎 섬	마른잎섬	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8bc38ba58fb68dc82020			
+0x00B8277C	타마 타마 섬	타마타마섬	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	91c28bc391c28bc38dc82020			
+0x00B827AC	소라 마메 섬	소라마메섬	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8ddf8adf8bc38bed8dc82020			
+0x00B82D2A	룰	규칙	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	888591560000			
+0x00B82D36	사령관	정보	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	8fd195e2000000000000			
+0x00B82D6A	항복한다	항복	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	966b959c00000000			
+0x00B82D82	애니메 무	표시　안함	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	927a8e6e81408ea292b3			
+0x00B82D92	애니메 Ｃ	아군만	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8e9b887b8bc50000			
+0x00B82D9E	애니메 B	전투만	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	90ed91f48bc50000			
+0x00B82DAA	애니메 A	전체표시	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	90ed90e2927a8e6e			
+0x00B82DB6	배경음 무	음악　없음	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	88f588c3814096b388f5			
+0x00B82DC6	배경음 유	음악　있음	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	88f588c38140974c88f5			
+0x00B82FAC	맵을 저장 중이야,전원을 끄지 말아 줘!!	저장　중　전원　끄지　마	Part 1 link/battle text exceeds its original slot; no proven relocation or final text write	8fc68fc281408fef81408fc88f6d814088d2905481408bc32020202020202020202020202020202020202020			
+0x00B8301C	맵을 수신 중이야,잠시 기다려 줘!!	지도를 수신 중 잠시 기다려	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90548a5a8ba6208def8e54208fef208fbd8e4f20888f89e28b5c000000000000000000000000			
+0x00B83044	맵을 송신 중이야,잠시 기다려 줘!!	지도를 전송 중 잠시 기다려	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90548a5a8ba6208fc88de6208fef208fbd8e4f20888f89e28b5c000000000000000000000000			
+0x00B830AC	보낼 맵을 골라 줘!!	보낼 지도를 골라	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8d4689502090548a5a8ba620886a8adf0000000000000000			
+0x00B830C8	맵을 보낼 수 있는 사람이 아무도 없어!!	지도　보낼　상대없어	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	90548a5a81408d46895081408db389f48ecd8ec30000000000000000000000000000			
+0x00B83130	친구가 모이면,스타트를 눌러 줘!!	친구들이　모이면　시작　버튼　눌러줘！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	915a88798a9c8fa281408bfc8fa28bf581408e4f8fb881408cdc9247814089b28b488ff181492020202020202020			
+0x00B8319C	부-!?・미접속 준비 중	미접속준비중　오류	R1: nontext compact glyph preload; native pointer 0xB32E14 must stay at B8319C for link-status consumer	8c7a8fce8de18fec8d658fef81408ef88b8300000000			
+0x00B8322C	전송입니다 잠시 기다려 주십시오.	전송중입니다　잠시기다려　주십시오。	R1: this 36-byte object is a glyph preload list, not displayed prose; 중 is required by the visible B83254 sentence	8fc88de68fef8fb189d489e281408fbd8e4f888f89e28b5c81408fe98e588e4f8ef88142			
+0x00B839B4	매 턴 수입	매턴수입	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8bd491dc8def8fb181408140			
+0x00B839F0	룰	규칙	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	888591568140			
+0x00B83A64	이런 이런,여기까지는 하고 싶지 않았는데 말이야!	여기까진　안　하려　했는데	Part 1 link/battle text exceeds its original slot; no proven relocation or final text write	8ed8888f8895905981408ea2814092a98b5c814092c289c88a53202020202020202020202020202020202020			
+0x00B83CC0	키쿠치요 특전 부대의 진짜 힘,보여주마!	키쿠치요　특전부대　힘을　보여　주마！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	91b891a391548f5a814091fb8fc88d5689f4814093698f8181408d468ed881408fe98bc38149202020202020			
+0x00B83DB0	도미노의 능력,유닛의 장소는・・・하고.	도미노　능력、　유닛　위치는・・・	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8a5a8c7a897d814089d28b5d814181408f7889de81408f74915489c8814581458145202020202020			
+0x00B83EB8	이 정도려나-?	이　정도면　됐나？	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fa281408fd18a5a8bf581408a6188e98148			
+0x00B83F74	이글!당신 적당히 좀 해!!!	이글！　너　적당히　좀　해！！！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fa2888a81498140895c81408fc789eb936381408fde814092bb814981498149202020202020202020202020			
+0x00B83FA8	어떻게든 늦지 않았네-,다행이다 다행이야.	시간　맞췄네、　다행이다　다행이야。	Part 1 link/battle text exceeds its original slot; no proven relocation or final text write	8e4f884281408bd19146896c8141814089e292c48fa289e2814089e292c48fa28eba8142202020202020			
+0x00B84298	나의 최강의 힘,받아 보아라!	최강　힘을　받아라！	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	90eb8849814093698f8181408cb58e9b8adf8149202020202020			
+0x00D8215C	병종 또는 생산 거점이 1개 이상 필요합니다.	병종　또는　생산　거점　하나　이상　필요	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8d438fe081408aca89c881408dbc8dac814088528fcc814092a988e981408fa28db3814092a58f5a20202020			
+0x00D821F0	선택 중인 지형,병종을 배치합니다.	선택　중인　지형　병종을　배치합니다	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8dc291d781408fef8fa58140905492dc81408d438fe08f8181408ccc915492b489d489e2			
+0x00D82218	커서 위치의 지형,병종을 선택합니다.	커서　위치의　지형　병종을　선택함	R2: prior candidate source was Japanese; exact earlier Korean slot bytes retained because full baseline needs unsafe title/relocation change; active relocated text pinned from v8 pointer target	91738dbf81408f7491548fa18140905492dc81408d438fe08f8181408dc291d792b3	커서　위치의　지형　병종을　선택합니다	91738dbf81408f7491548fa18140905492dc81408d438fe08f8181408dc291d792b489d489e2	
+0x00D9009E	이 적 유닛은,이제 한 번 정도 공격을	이　적　유닛은、이제　한　번　정	R1: source row is a Korean fragment continued by the following script bytes; full baseline has no proven single-slot write or relocation	8fa281408fc781408f7889de8f7e81418fa28fd4814092af81408cdd81408fd1			
+0x00D910C6	여기로 이동하지 않으면	여기　안　가면　공격	R2: prior candidate Korean had duplicated 공격 and rebuilt tail exposed Japanese; corrected complete Korean composite in 42-byte script slot	8ed8888f81408ea2814088408bf58140886d885e			
+0x00D9444E	매일 2HP씩 보충하고 있다고는 해도,지금	매일　２ＨＰ씩　보충돼도　지금의	Script text relocation unproven; retain exact prior Korean slot bytes	8bd48fa8814082518267826f8e7b81408d4691438a608a5a81409054888b8fa12020202020202020			
+0x00D94552	그래요!　여기에 커서를 맞춰서 이동이에요!	그래！　여기　커서를　맞춰　이동이야！	Script text relocation unproven; retain exact prior Korean slot bytes	88878aec814981408ed8888f814091738dbf8ba681408bd1914581408fa28a5f8fa28eba81492020			
+0x00D965DE	하지만,전투는 정면승부만 있는 게 아니에요.	하지만　전투는　정면만이　아니야	Script text relocation unproven; retain exact prior Korean slot bytes	92a990548bc581408fc891f489c881408fd18bf58bc58fa281408e9b89d48eba20202020			
+0x00D9EDB6	예를 들어,커서를 이렇게 움직이는 거예요!	예를　들어　커서를　이렇게	Script text relocation unproven; retain exact prior Korean slot bytes	8eec8ba681408a9c8ec3814091738dbf8ba681408fa28b58885a2020202020202020			
+0x00DCB1BE	바다에서 이길 수 있는 사람은,거의 없다는 이야기야.	바다에선　적수가　드물대	Script text relocation unproven; retain exact prior Korean slot bytes	8ca689e28ed38dc281408fc78def884081408a7c8c6c89f4202020202020202020202020202020202020			
+0x00DCC63A	바다에서　이길 수 있는 사람은　거의 없다는	바다에서　이길　사람은　드물어	Script text relocation unproven; retain exact prior Korean slot bytes	8ca689e28ed38dbf81408fa2889181408da98ae48f7e81408a7c8c6c8ec32020			
+0x00DCD9DA	바다에서　이길 수 있는 사람은　거의 없다는	바다에서　이길　사람은　드물어	Script text relocation unproven; retain exact prior Korean slot bytes	8ca689e28ed38dbf81408fa2889181408da98ae48f7e81408a7c8c6c8ec32020			
+0x00DCE89A	그렇게 생각하면　료가 했다고는 생각하기 힘들군.	그렇게생각하면료가했다고는생각하기힘들군。	Script text relocation unproven; retain exact prior Korean slot bytes	88878b58885a8dbc884192a98bf58b73884092c289e2886689c88dbc884192a9888f93698a9c887b81422020			
+0x00DCFA8E	이 싸움의 뒤에 있는 자가　얼마나 강적일지도	이　싸움　뒤의　적이　얼마나　강한지도	Script text relocation unproven; retain exact prior Korean slot bytes	8fa281408e5b8f6781408a7a8fa181408fc78fa281408ec78bc388e98140884992af90548a5a20202020			
+0x00DD010A	이 녀석이 모든 것을,조종하고 있었던 거로군!	이　녀석이　모든　것을　조종하고　있었군	Script text relocation unproven; retain exact prior Korean slot bytes	8fa2814089708dc08fa281408bfc8a7e814088588f8181408fd98fe092a9886681408fb38ecf887b			
+0x00DF1EEE	여기는,수도 점령,혹은 적 전멸로 승리예요!	수도　점령／적　전멸　승리	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b67815e8fc781408fc88bf781408e4d8bb720202020202020202020202020202020			
+0x00DF207A	승리조건은,수도 점령,혹은 적 전멸이에요!	승리　조건은　수도　점령　또는　적　전멸	R2: prior candidate was Japanese; restored exact Korean slot bytes from output/game_wars_korean_full.gba	8e4d8bb781408fd988548f7e81408def8a5a81408fcc8b6781408aca89c881408fc781408fc88bf7			
+0x00DF20BA	수도 점령,적 전멸 어느 쪽으로든 이길 수 있어요!	수도　점령／적　전멸　승리	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b67815e8fc781408fc88bf781408e4d8bb7202020202020202020202020			
+0x00DF21AE	수도 점령이나 적 전멸로,이길 수 있어요!	수도　점령이나　적　전멸로　승리！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b678fa288e981408fc781408fc88bf78b6981408e4d8bb78149202020202020			
+0x00DF228E	여기는,먼저 많이 점령하는 쪽이 승리예요!	먼저　많이　점령한　쪽　승리	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8be68fc681408bc78fa281408fcc8b6792af8140907a81408e4d8bb720202020202020202020202020202020			
+0x00DF239E	여기는,먼저 많이 점령하는 쪽이 승리예요!	먼저　많이　점령한　쪽이　승리！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8be68fc681408bc78fa281408fcc8b6792af8140907a8fa281408e4d8bb78149202020202020202020202020			
+0x00DF25FA	수도 점령이나 적 전멸로 이길 수 있어요!	수도　점령이나　적　전멸로　승리！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b678fa288e981408fc781408fc88bf78b6981408e4d8bb7814920202020			
+0x00DF26FE	수도 점령이나,적 전멸로 이길 수 있어요!	수도　점령／적　전멸　승리	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b67815e8fc781408fc88bf781408e4d8bb72020202020202020202020202020			
+0x00DF2806	수도 점령이나,적 전멸로 이길 수 있어요!	수도　점령이나　적　전멸로　승리！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b678fa288e981408fc781408fc88bf78b6981408e4d8bb78149202020202020			
+0x00DF28C2	여기는,수도 점령,혹은 적 전멸로 승리예요!	수도　점령　또는　적　전멸로　승리！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8def8a5a81408fcc8b6781408aca89c881408fc781408fc88bf78b6981408e4d8bb78149202020202020			
+0x00DF8BBA	유닛	부대	R1: verified compact renderer treats trailing 倶倶 codes as blank PAD; retain prior candidate visible Korean and exact bytes	959491e08be48be4			
+0x00DF8BC6	불참가	불참	R1: verified compact renderer treats trailing 倶倶 codes as blank PAD; retain prior candidate visible Korean and exact bytes	95738e638be48be4			
+0x00DF8C1A	유닛상황	부대상황	R1: verified compact renderer treats trailing 倶倶 codes as blank PAD; retain prior candidate visible Korean and exact bytes	959491e08ff38bb58be48be4			
+0x00E0F6E2	작전을 짜는 것밖에 재주가 없는　계집애가.	작전밖에　모르는　계집애가。	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8fb88fc88cad8ed381408bfc8ba389c881408865905e8eb788408142202020202020202020202020			
+0x00E10D7A	식은 죽 먹기지!	아주　쉬웠어！	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8e9b8fe981408dfc8f718ec381492020			
+0x00EC30A2	있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다	있음이면　유닛　시야밖　안보임	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8fb38f838fa28bf581408f7889de81408e4f8eba8cad81408ea28d468faf20202020202020202020202020202020			
+0x00EC312E	지정일이 종료되면 소유 거점 수로 결판을 냅니다	지정일　끝나면　거점　수로　승부	R1: prior candidate has valid Korean; no proven final text write or safe relocation	90548fd18fa8814088e288e98bf5814088528fcc81408def8b6981408e4d8d562020202020202020202020202020			
+0x00EC3162	지정 거점 수를 소유한 시점에서 우세 승리가 됩니다	지정거점　보유시　우세승리	R1: prior candidate has valid Korean; no proven final text write or safe relocation	90548fd188528fcc81408d468f788e4f81408f5f8dcf8e4d8bb7202020202020202020202020202020202020			
+0x00EC3192	있음으로 하면 사령관 능력이 유효해집니다	있음이면　사령관　능력　활성	R1: prior candidate has valid Korean; no proven final text write or safe relocation	8fb38f838fa28bf581408da98b678870814089d28b5d814092f48dce2020202020202020202020202020			
+0x00EC3246	같은 깃발을 가지는 것으로 팀을 설정할 수 있습니다	같은　깃발이면　같은　팀	R1: prior candidate has valid Korean; no proven final text write or safe relocation	884b8f7e814088938cb68fa28bf58140884b8f7e8140925720202020202020202020202020202020			
