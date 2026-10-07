@@ -22550,6 +22550,8 @@ def main():
                 raise AssertionError('Explicit dialogue layout ownership collision')
             _explicit_line_layouts.update(_m19_layout)
             import part1_hellbowz_ending as hellbowz_ending
+            _hellbowz_expected_payload = hellbowz_ending.expected_before_repoint(
+                rom, orig, _m19_encode, fixed=lambda address: _rp_fixed_bytes(address) if _rp_fixable(address) else None)
             _hellbowz_layout = hellbowz_ending.layout(orig, _m19_encode)
             if _explicit_line_layouts.keys() & _hellbowz_layout.keys():
                 raise AssertionError('Explicit dialogue layout ownership collision')
@@ -22729,7 +22731,7 @@ def main():
     from red_unit_intro import verify as verify_red_unit_intro
     st['red_unit_intro_contract'] = verify_red_unit_intro(rom, orig, lambda text, address: encode_required_full_fidelity(text, syl_to_code, unmapped, address))
     st['part1_m19_dialogue_contract'] = m19_dialogue.verify(rom, orig, _m19_expected_payload, _m19_encode)
-    st['part1_hellbowz_ending_contract'] = hellbowz_ending.verify(rom, orig, _m19_encode)
+    st['part1_hellbowz_ending_contract'] = hellbowz_ending.verify(rom, orig, _hellbowz_expected_payload, _m19_encode)
     from protected_help_apology import verify as verify_protected_help_apology
     st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address))
     from map_design_intro import verify as verify_map_design_intro

@@ -98,18 +98,79 @@ class HellbowzTests(unittest.TestCase):
 
 
 class ApprovedBteamExceptionTests(unittest.TestCase):
+    def setUp(self):
+        import qa_bteam_drift as drift
+        self.drift = drift
+        self.base = json.loads(Path(builder.BASE, 'data', 'bteam_baseline.json').read_text(encoding='utf-8'))
+        self.overrides = drift.load_overrides()
+
     def test_dd0d1a_user_approved_exception_is_consistent(self):
-        base = json.loads(Path(builder.BASE, 'data', 'bteam_baseline.json').read_text(encoding='utf-8'))
-        overrides = json.loads(Path(builder.BASE, 'data', 'dialogue_overrides.json').read_text(encoding='utf-8'))
-        exc = base['_user_approved_exceptions']['0x00DD0D1A']
-        self.assertEqual(exc['to'], '뭐, 자네치고는 잘했군.')
+        exc = self.base['_user_approved_exceptions']['0x00DD0D1A']
+        self.assertEqual((exc['from'], exc['to']), self.drift.APPROVED_EXCEPTIONS['0x00DD0D1A'])
         self.assertIn('제안대로', exc['approved'])
-        self.assertEqual(base['overrides']['0x00DD0D1A'], exc['to'])
-        self.assertEqual(overrides['0x00DD0D1A'], exc['to'])
+        self.assertEqual(self.overrides['0x00DD0D1A'], exc['to'])
         bteam = json.loads(Path(builder.BASE, 'data', 'bteam_addresses.json').read_text())
         self.assertIn('0x00DD0D1A', json.dumps(bteam))          # still a protected address
-        # The only approved exception: every other baseline value is unchanged wording.
-        self.assertEqual(set(base['_user_approved_exceptions']), {'0x00DD0D1A'})
+        self.assertEqual(self.drift.check(self.base, self.overrides)['errors'], [])
+
+    def test_unrelated_baseline_change_alongside_exception_fails(self):
+        import copy
+        base = copy.deepcopy(self.base)
+        other = next(a for a in base['overrides'] if a != '0x00DD0D1A')
+        base['overrides'][other] += ' (edited)'
+        errors = self.drift.check(base, self.overrides)['errors']
+        self.assertTrue(any('core digest' in e for e in errors), errors)
+
+    def test_exception_tuple_cannot_be_widened_or_edited(self):
+        import copy
+        for mutate in (lambda b: b['_user_approved_exceptions']['0x00DD0D1A'].update(to='다른 문구'),
+                       lambda b: b['_user_approved_exceptions'].update({'0x00DD0B32': {
+                           'from': 'x', 'to': 'y', 'approved': 'no'}})):
+            base = copy.deepcopy(self.base)
+            mutate(base)
+            self.assertTrue(self.drift.check(base, self.overrides)['errors'])
+        overrides = dict(self.overrides, **{'0x00DD0D1A': '다른 문구'})
+        self.assertTrue(self.drift.check(self.base, overrides)['errors'])
+
+    def test_accept_refuses_changes_outside_the_exception(self):
+        other = next(a for a in self.base['overrides'] if a != '0x00DD0D1A')
+        overrides = dict(self.overrides, **{other: self.overrides.get(other, '') + ' (edited)'})
+        with self.assertRaisesRegex(ValueError, 'outside the approved exceptions'):
+            self.drift.accept(self.base, overrides)
+        widened = self.drift.accept(self.base, overrides, allow_bteam_changes=True)
+        # Even with the explicit flag the pinned digest keeps the gate failing until reviewed.
+        self.assertTrue(self.drift.check(widened, overrides)['errors'])
+
+
+class HellbowzVerifyTests(unittest.TestCase):
+    def setUp(self):
+        candidate = Path(builder.BASE, 'output', 'game_wars_korean_candidate_5bb5c941.gba')
+        if not candidate.exists():
+            self.skipTest('candidate ROM not present')
+        self.rom = bytearray(candidate.read_bytes())
+        codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
+        self.encode = lambda text, address: builder.encode_required_full_fidelity(
+            text, codes, collections.Counter(), address)
+        target = struct.unpack_from('<I', self.rom, hellbowz.POINTER)[0] - 0x08000000
+        self.target = target
+        payload = bytes(self.rom[target:self.rom.index(b'\0', target) + 1])
+        # Contract taken from the candidate itself (rows as relocated, NUL gap).
+        self.expected = (('row', (payload[:-1],)), ('gap', b'\0'))
+
+    def test_candidate_passes_and_mutations_fail(self):
+        self.assertEqual(hellbowz.verify(self.rom, ORIG, self.expected, self.encode)['status'], 'PASS')
+        mutations = {
+            'opcode': lambda r: r.__setitem__(hellbowz.POINTER - 4, 0x18),
+            'unaligned': lambda r: struct.pack_into('<I', r, hellbowz.POINTER, 0x08000000 + self.target + 2),
+            'original': lambda r: struct.pack_into('<I', r, hellbowz.POINTER, 0x08000000 + hellbowz.START),
+            'out_of_bounds': lambda r: struct.pack_into('<I', r, hellbowz.POINTER, 0x08000000 + 0xA00000),
+            'neighbor_text': lambda r: r.__setitem__(self.target + 4, r[self.target + 4] ^ 1),
+        }
+        for name, mutate in mutations.items():
+            rom = bytearray(self.rom)
+            mutate(rom)
+            with self.subTest(name), self.assertRaises(ValueError):
+                hellbowz.verify(rom, ORIG, self.expected, self.encode)
 
 
 if __name__ == '__main__':

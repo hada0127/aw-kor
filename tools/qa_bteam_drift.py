@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -39,10 +40,79 @@ def load_overrides() -> dict:
     return {norm(k): v for k, v in ov.items()}
 
 
+# SHA-256 of every baseline entry that is NOT a user-approved exception
+# (sorted JSON). Hand edits or a broad --accept change it and fail the gate;
+# changing B-team wording needs a reviewed code change of this pin.
+PINNED_CORE_DIGEST = '302714f230a55428cf80434a58b223e8742ea0be9e79c6f962025d4afe0c482c'
+
+
+# User-approved B-team wording exceptions, exact (address, from, to). The
+# baseline's _user_approved_exceptions must equal this table; adding or editing
+# one is a reviewed code change. 0xDD0D1A: じょうでき=上出来, user 「제안대로」 2026-10-07.
+APPROVED_EXCEPTIONS = {
+    '0x00DD0D1A': ('뭐,자네치고는,상등품이군.', '뭐, 자네치고는 잘했군.'),
+}
+
+
+def core_digest(base: dict) -> str:
+    exceptions = base.get('_user_approved_exceptions', {})
+    core = {k: v for k, v in base.get('overrides', {}).items() if k not in exceptions}
+    return hashlib.sha256(json.dumps(core, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+
+
+def exception_errors(base: dict, overrides: dict) -> list:
+    """Each exception is valid only for its exact (address, from, to) tuple."""
+    errors = []
+    recorded = base.get('_user_approved_exceptions', {})
+    if {a: (e.get('from'), e.get('to')) for a, e in recorded.items() if isinstance(e, dict)} != APPROVED_EXCEPTIONS:
+        errors.append('baseline exceptions differ from the approved (address, from, to) table')
+    for addr, exc in recorded.items():
+        if (not isinstance(exc, dict) or not exc.get('approved') or not exc.get('from')
+                or not exc.get('to') or exc['from'] == exc['to']):
+            errors.append(f'{addr}: malformed user-approved exception')
+            continue
+        if base.get('overrides', {}).get(addr) != exc['to']:
+            errors.append(f'{addr}: baseline differs from the approved exception text')
+        if overrides.get(addr) != exc['to']:
+            errors.append(f'{addr}: override differs from the approved exception text')
+    return errors
+
+
+def check(base: dict, overrides: dict, pinned: str = None) -> dict:
+    expected = base.get('overrides', {})
+    drift = [(a, w, overrides[a]) for a, w in expected.items() if a in overrides and overrides[a] != w]
+    missing = [(a, w) for a, w in expected.items() if a not in overrides]
+    errors = exception_errors(base, overrides)
+    pinned = PINNED_CORE_DIGEST if pinned is None else pinned
+    if core_digest(base) != pinned:
+        errors.append('baseline entries outside the approved exceptions changed (core digest mismatch)')
+    return {'drift': drift, 'missing': missing, 'errors': errors}
+
+
+def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pinned: str = None) -> dict:
+    """New baseline from current overrides. Refuses to widen beyond the exceptions."""
+    new = dict(base)
+    new['overrides'] = {a: overrides[a] for a in base.get('overrides', {}) if a in overrides}
+    new['count'] = len(new['overrides'])
+    if exception_errors(new, overrides):
+        raise ValueError('approved exceptions do not match the current overrides')
+    pinned = PINNED_CORE_DIGEST if pinned is None else pinned
+    if core_digest(new) != pinned and not allow_bteam_changes:
+        changed = sorted(a for a, v in new['overrides'].items()
+                         if a not in base.get('_user_approved_exceptions', {})
+                         and base['overrides'].get(a) != v)
+        raise ValueError('--accept would change B-team entries outside the approved exceptions: '
+                         + ', '.join(changed[:10]) + (' ...' if len(changed) > 10 else '')
+                         + ' (needs --allow-bteam-changes and a new PINNED_CORE_DIGEST)')
+    return new
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument('--accept', action='store_true',
-                    help='현재 override로 baseline 갱신(의도적 B팀 변경 확정)')
+                    help='현재 override로 baseline 갱신(승인된 예외 범위만; 그 밖의 변경은 거부)')
+    ap.add_argument('--allow-bteam-changes', action='store_true',
+                    help='--accept와 함께: 예외 밖 B팀 문구 변경까지 확정(별도 승인 필요, PINNED_CORE_DIGEST도 갱신해야 게이트 통과)')
     args = ap.parse_args()
 
     ovn = load_overrides()
@@ -54,29 +124,23 @@ def main() -> None:
                   '  AW_BTEAM_ACCEPT=1 python3 tools/qa_bteam_drift.py --accept 로 재실행하라.', file=sys.stderr)
             sys.exit(2)
         base = json.load(open(BASELINE, encoding='utf-8'))
-        addrs = list(base.get('overrides', {}))
-        base['overrides'] = {a: ovn[a] for a in addrs if a in ovn}
-        base['count'] = len(base['overrides'])
+        try:
+            base = accept(base, ovn, allow_bteam_changes=args.allow_bteam_changes)
+        except ValueError as exc:
+            print('거부: ' + str(exc), file=sys.stderr)
+            sys.exit(2)
         json.dump(base, open(BASELINE, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-        print(f'baseline 갱신: {base["count"]}개 B팀 주소를 현재 override로 확정')
+        print(f'baseline 갱신: {base["count"]}개 B팀 주소를 현재 override로 확정 (core digest {core_digest(base)})')
         return
 
     base = json.load(open(BASELINE, encoding='utf-8'))
+    result = check(base, ovn)
+    drift, missing = result['drift'], result['missing']
+    for error in result['errors']:
+        print(f'[HARD-FAIL] {error}', file=sys.stderr)
+    if result['errors']:
+        sys.exit(1)
     expected = base.get('overrides', {})
-    # Individually user-approved B-team wording changes must match the baseline.
-    for addr, exc in base.get('_user_approved_exceptions', {}).items():
-        if expected.get(addr) != exc.get('to') or not exc.get('approved'):
-            print(f'[HARD-FAIL] user-approved exception {addr} does not match the baseline', file=sys.stderr)
-            sys.exit(1)
-    drift = []
-    missing = []
-    for addr, want in expected.items():
-        cur = ovn.get(addr)
-        if cur is None:
-            missing.append((addr, want))
-        elif cur != want:
-            drift.append((addr, want, cur))
-
     print(f'B팀 보호 주소: {len(expected)}')
     print(f'DRIFT(우발적 변형 의심): {len(drift)}  / MISSING(override 삭제됨): {len(missing)}')
     for addr, want, cur in drift[:40]:
