@@ -1,4 +1,5 @@
 address	expected_baseline	kept_text	reason	payload_hex	active_text	active_payload_hex	active_follow_hex
+0x00A19300	이걸로 좀조용해지겠지.	이걸로　조금은	R1: composite continuation differs; original ownership and full restoration are unproved	8fa288558b6981408fd9888b8f7e
 0x00A2955C	미라클 찬스	기적	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	888f8fc7000000000000000000000000			
 0x00A29570	레드스타 드림	별꿈	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	8cfc88c500000000000000000000000000000000			
 0x00A29588	하이퍼 리페어	하이퍼수리	R1: power-title name asset is snapshot-guarded; retain prior candidate Korean bytes	92a98fa292678def8bb700000000			
@@ -61,6 +62,10 @@ address	expected_baseline	kept_text	reason	payload_hex	active_text	active_payloa
 0x00A2C950	바다로 전체를 채우시겠습니까?	바다로　전부　칠하시겠습니까	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	8ca689e28b6981408fc88d568140915b92a98e4f885c8e4b89d48895	바다로　전부　칠하시겠습니까？	8ca689e28b6981408fc88d568140915b92a98e4f885c8e4b89d488958148	
 0x00A2C9B4	숲으로 전체를 채우시겠습니까?	숲으로　전부　채우시겠습니까	R2: prior candidate source was Japanese; earlier Korean retained, ASCII punctuation consumer proof absent; active relocated text pinned from v8 pointer target	8dfa8f7c8b6981408fc88d56814090c48f5f8e4f885c8e4b89d48895	숲으로　전부　채우시겠습니까？	8dfa8f7c8b6981408fc88d56814090c48f5f8e4f885c8e4b89d488958148	
 0x00A2CA10	저장하지 않았는데 종료하시겠습니까?	저장　안　함　종료할까요	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8fc68fc281408ea2814092b381408fe08b7392b088958f5a20202020202020202020			
+0x00A2CA38	로드	　　로드	R1: leading menu cells may be icon alignment; removing them lacks display proof	814081408b698a7c2020
+0x00A2CA44	세이브	　　세이브	R1: leading menu cells may be icon alignment; removing them lacks display proof	814081408dcf8fa28d63
+0x00A2CA60	파일	　　파일	R1: leading menu cells may be icon alignment; removing them lacks display proof	8140814092598fa820202020
+0x00A2CA70	도움말	　　도움말	R1: leading menu cells may be icon alignment; removing them lacks display proof	814081408a5a8f678bca
 0x00A2CABC	연타하는 걸 정말 좋아하는구나.	연타를　무척　좋아하나　보네。	R1: exact prior Korean retained; baseline ASCII punctuation lacks proven renderer-safe byte encoding	8eda91c28ba681408c6590cd81408fe28e9b92a988e981408d46896c81422020			
 0x00A2D5C8	내일로의 7일간	내일로　７일간	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	894e8fa88b69814082568fa88842			
 0x00A2D650	내일로의 7일간	내일향한　７일	R1: mission-title glyph consumer rejects unverified baseline glyphs; retain prior candidate Korean bytes	894e8fa892c592af814082568fa8			
@@ -111,6 +116,7 @@ address	expected_baseline	kept_text	reason	payload_hex	active_text	active_payloa
 0x00B827AC	소라 마메 섬	소라마메섬	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8ddf8adf8bc38bed8dc82020			
 0x00B82D2A	룰	규칙	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	888591560000			
 0x00B82D36	사령관	정보	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	8fd195e2000000000000			
+0x00B82D58	모드 선택	나가기	R1: compact menu action differs from baseline; consumer action is unverified	89c2884098440000000000000000
 0x00B82D6A	항복한다	항복	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	966b959c00000000			
 0x00B82D82	애니메 무	표시　안함	R1: compact-font consumer; raw source codes display Korean through verified substituted glyphs, baseline write is not proven safe	927a8e6e81408ea292b3			
 0x00B82D92	애니메 Ｃ	아군만	R1: full baseline exceeds native slot or consumer-specific writer proof is absent; retain prior candidate Korean bytes	8e9b887b8bc50000			

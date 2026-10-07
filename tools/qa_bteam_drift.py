@@ -72,6 +72,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
+ROUND2_RESIDUAL_DIGEST = 'd84f1d18a819dccf6050db25b569f91e582e9af959d39ea1dae36e89de076165'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -79,6 +80,8 @@ with ROUND2_MANIFEST.open(encoding='utf-8', newline='') as _stream:
     _round2_rows = list(csv.DictReader(_stream, delimiter='\t'))
 DEFERRED_ADDRESSES = frozenset(int(row['address'], 16) for row in _round2_rows
                                 if row['decision'] == 'DEFER')
+FIX_GATE_ADDRESSES = frozenset(int(row['address'], 16) for row in _round2_rows
+                              if row['decision'] == 'FIX_GATE')
 if len(_round2_rows) != 287 or len(DEFERRED_ADDRESSES) != 11:
     raise ValueError('B-team round-2 deferral count changed')
 COMPACT_GLYPH_ADDRESSES = frozenset(int(x, 16) for x in '''
@@ -178,6 +181,51 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
     elif is_part2_story_address(address):
         punctuation.update({'!': '！', '?': '？', ',': '、', '.': '。', '-': 'ー'})
     return value.translate(str.maketrans(punctuation))
+
+
+def round2_width_equivalent(baseline: str, actual: str, address: int) -> bool:
+    """Accept only reviewed FIX_GATE glyph aliases, with every character retained."""
+    if address not in FIX_GATE_ADDRESSES:
+        return False
+    aliases = str.maketrans({' ': '　', '!': '！', '?': '？', ',': '、',
+                             '.': '。', '～': '〜', '-': 'ー', '―': 'ー'})
+    def canonical(value: str) -> str:
+        value = value.translate(aliases)
+        return ''.join(chr(ord(ch) + 0xFEE0) if ch.isascii() and ch.isalnum()
+                       else ch for ch in value)
+    return canonical(baseline) == canonical(actual)
+
+
+ROUND2_PREFIX_GLYPH_ROWS = {0xA2CA88: 2, 0xB83870: 3,
+                            0xB8387C: 3, 0xB838A4: 4,
+                            0xB838B0: 4, 0xB838BC: 3}
+ROUND2_OBJECTIVE_ROWS = {
+    0xA01ED0: ('산을 넘어,캣의 연구 기지를공격하라!', '산을　넘어、　캣의　연구　기지를', '공격하라！'),
+    0xA021A0: ('캣에게 빼앗긴 국토를되찾아라!', '캣에게　빼앗긴　국토를', '되찾아라！'),
+    0xA02450: ('블랙홀 군의 본거지를쳐라!', '블랙홀　군의　본거지를', '쳐라！'),
+}
+
+
+def round2_objective_equivalent(rom: bytes, baseline: str, actual: str,
+                                address: int, row_start: int) -> bool:
+    """Check both displayed rows of three reviewed objective sentences."""
+    if address not in ROUND2_OBJECTIVE_ROWS or address not in FIX_GATE_ADDRESSES:
+        return False
+    # The first row is already decoded by check_rom. The predicate must be in
+    # the immediately following physical row, after exactly one 0x72 break.
+    lead_end = rom.find(b'\x72', row_start + 20, row_start + 48)
+    if lead_end < 0:
+        return False
+    tail_end = rom.find(b'\x00', lead_end + 1, lead_end + 40)
+    if tail_end < 0:
+        return False
+    tail_raw = rom[lead_end + 1:tail_end].rstrip(b' ')
+    if not tail_raw or b'\x72' in tail_raw:
+        return False
+    tail = decode_enc(tail_raw, load_syl())
+    expected_baseline, expected_first, expected_tail = ROUND2_OBJECTIVE_ROWS[address]
+    return (baseline == expected_baseline and actual == expected_first
+            and tail == expected_tail)
 
 
 def reviewed_seam_variants(value: str, msg: int, rows: dict) -> set[str]:
@@ -341,6 +389,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     issues = []
     for key, baseline in base['overrides'].items():
         addr = int(key, 16)
+        objective_start = None
         i = bisect.bisect_right(starts, addr) - 1
         relocation = relocated[i] if i >= 0 and addr < relocated[i][1] else None
         # Exact writer wins over an earlier padded slot that happens to cover it.
@@ -374,6 +423,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                     cause = 'repoint line mapping invalid'
                 else:
                     payload = rom[target + off:target + off + length]
+                    objective_start = target + off
                     # A wrapped row may contain this verified internal control.
                     actual = decode(payload.replace(b'\x72\x0a\x09', b'\x81\x40'), addr).rstrip(' \u3000')
                     cause = 'relocated row differs from protected baseline'
@@ -407,10 +457,13 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                             break
         elif row:
             row_start = int(row[0])
+            objective_start = addr
             enc_end = row_start + int(row[2])
             if map_rom_path and rom[addr:row_start + int(row[1])] != map_rom[addr:row_start + int(row[1])]:
                 raise ValueError(f'{key}: overlay changed protected in-place slot')
-            actual = decode(rom[addr:max(addr, enc_end)], addr, row[7]).rstrip(' \u3000')
+            actual = decode(rom[addr:max(addr, enc_end)], addr, row[7])
+            if addr != 0xD9159E:
+                actual = actual.rstrip(' \u3000')
             if row[7] == 'part2-prologue-inline-renderer':
                 # The writer owns a whole multi-line script at this address;
                 # the B-team authority applies to its first displayed row.
@@ -439,6 +492,12 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             cause = 'protected address has no final text write evidence'
         if not matched:
             matched = matches_reviewed_bteam_spacing(addr, baseline, actual)
+        if not matched:
+            matched = round2_width_equivalent(baseline, actual, addr)
+        if not matched and addr in ROUND2_PREFIX_GLYPH_ROWS and addr in FIX_GATE_ADDRESSES:
+            matched = actual == '　' * ROUND2_PREFIX_GLYPH_ROWS[addr] + display_equivalent(baseline, addr)
+        if not matched and objective_start is not None:
+            matched = round2_objective_equivalent(rom, baseline, actual, addr, objective_start)
         if addr in DEFERRED_ADDRESSES:
             matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
         if not matched:
@@ -450,6 +509,59 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                                        'NEW_STRICT_MISMATCH' if addr in NEW_STRICT_ADDRESSES else
                                        'RESTORE_BASELINE'})
     return issues
+
+
+def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
+                           manifest_path: str) -> tuple[list[dict], list[dict], list[dict]]:
+    """Count only byte-pinned listed residuals and exact reviewed deferrals as expected."""
+    path = Path(BASE, 'data', 'bteam_round2_residuals.tsv')
+    if hashlib.sha256(path.read_bytes()).hexdigest() != ROUND2_RESIDUAL_DIGEST:
+        raise ValueError('B-team residual manifest digest changed')
+    with path.open(encoding='utf-8', newline='') as stream:
+        rows = list(csv.DictReader(stream, delimiter='\t'))
+    listed = {int(row['address'], 16): row for row in rows}
+    if len(rows) != 177 or len(listed) != len(rows):
+        raise ValueError('B-team residual list count or addresses changed')
+    rom = Path(rom_path).read_bytes()
+    manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
+    spans = {}
+    for message in manifest:
+        if message.get('status') == 'relocated':
+            for key, (offset, length) in message.get('line_spans', {}).items():
+                spans[int(key, 16)] = (int(message['new_addr'], 16) + offset, length)
+    for addr, row in listed.items():
+        key = f'0x{addr:08X}'
+        payload = bytes.fromhex(row['payload_hex'])
+        if (key not in base['overrides'] or row['expected_baseline'] != base['overrides'][key]
+                or not row['reason'] or not payload or rom[addr:addr + len(payload)] != payload):
+            raise ValueError(f'{key}: listed residual metadata or source bytes changed')
+        if row['active_payload_hex']:
+            if addr not in spans or not row['active_text']:
+                raise ValueError(f'{key}: active residual has no relocated line')
+            pos, length = spans[addr]
+            active = bytes.fromhex(row['active_payload_hex'])
+            pair_title = 0xA2D55C <= addr <= 0xA2D8A8
+            padding = (b'\x00' if pair_title else b' ') * (length - len(active))
+            if len(active) > length or rom[pos:pos + length] != active + padding:
+                raise ValueError(f'{key}: active residual bytes changed')
+            if row['active_follow_hex']:
+                follow = spans.get(0xA2BC57)
+                expected_follow = bytes.fromhex(row['active_follow_hex'])
+                if addr != 0xA2BC3C or follow is None or follow[1] != len(expected_follow) or \
+                        rom[follow[0]:follow[0] + follow[1]] != expected_follow:
+                    raise ValueError(f'{key}: residual continuation bytes changed')
+    expected_residuals, deferred, unlisted = [], [], []
+    for issue in issues:
+        addr = int(issue['address'], 16)
+        if addr in DEFERRED_ADDRESSES:
+            deferred.append(issue)
+        elif addr in listed:
+            expected_residuals.append(issue)
+        else:
+            unlisted.append(issue)
+    if {int(x['address'], 16) for x in deferred} != DEFERRED_ADDRESSES:
+        raise ValueError('B-team deferred issue set changed')
+    return expected_residuals, deferred, unlisted
 
 
 def main() -> None:
@@ -506,15 +618,20 @@ def main() -> None:
             sys.exit(1)
         if args.json:
             Path(args.json).write_text(json.dumps(issues, ensure_ascii=False, indent=2), encoding='utf-8')
-        deferred = [x for x in issues if x['decision'] == 'DEFER']
-        actionable = [x for x in issues if x['decision'] != 'DEFER']
+        try:
+            residuals, deferred, unlisted = classify_round2_issues(
+                issues, base, args.rom, args.repoint_manifest)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            print(f'[HARD-FAIL] ROM residual classification error: {exc}', file=sys.stderr)
+            sys.exit(1)
         print(f'B팀 최종 ROM 검사: {len(expected)}개, mismatch {len(issues)}개 '
-              f'(actionable {len(actionable)}, deferred {len(deferred)})')
+              f'(listed residual {len(residuals)}, deferred {len(deferred)}, '
+              f'unlisted {len(unlisted)})')
         print('  [DEFERRED] ' + ', '.join(x['address'] for x in deferred))
-        for issue in issues:
+        for issue in unlisted:
             print(f"  [ROM-DRIFT:{issue['decision']}] {issue['address']} baseline={issue['baseline']!r} "
                   f"ROM={issue['rom_text']!r} cause={issue['cause']}")
-        if issues:
+        if unlisted:
             sys.exit(1)
     print(f'B팀 보호 주소: {len(expected)}')
     print(f'DRIFT(우발적 변형 의심): {len(drift)}  / MISSING(override 삭제됨): {len(missing)}')

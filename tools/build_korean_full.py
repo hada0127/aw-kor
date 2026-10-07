@@ -11986,12 +11986,15 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != '4ca06918f977d9a09d3fa87bad6e23c2e123ae697eb9c4a9c2cb12e0b45d178e':
+        if hashlib.sha256(stream.read()).hexdigest() != 'd84f1d18a819dccf6050db25b569f91e582e9af959d39ea1dae36e89de076165':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 171 or len(result) != len(rows) or not set(result) <= BTEAM_RESTORE_BASELINE_ROWS:
+    extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
+    if (len(rows) != 177 or len(result) != len(rows) or
+            not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
+            not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
     with open(os.path.join(BASE, 'data', 'bteam_baseline.json'), encoding='utf-8') as stream:
         baseline = json.load(stream)['overrides']
@@ -12002,7 +12005,7 @@ def load_bteam_round2_residuals():
     from qa_bteam_drift import COMPACT_GLYPH_ADDRESSES, decode_compact, compact_glyph_map
     compact_residuals = COMPACT_GLYPH_ADDRESSES | {
         0xB81874, 0xB81B04, 0xB81B14, 0xB82D36, 0xB82D6A,
-        0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
+        0xB82D58, 0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
         0xDF8BBA, 0xDF8BC6, 0xDF8C1A,
     }
     codes = load_syl()
@@ -12241,7 +12244,7 @@ BTEAM_COMPACT_VERIFIED_ROWS = frozenset({
     # part1_compact_ui_strings.verify: exact strings, loaded codes, rendered glyphs.
     0xB81874, 0xB81B04, 0xB81B14, 0xDF8BBA, 0xDF8BC6, 0xDF8C1A,
     # verify_part1_battle_menu_labels: exact compact dictionary and glyphs.
-    0xB82D36, 0xB82D6A, 0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
+    0xB82D36, 0xB82D58, 0xB82D6A, 0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
 })
 BTEAM_LISTED_WIDE_RESIDUALS = {0xD9009E: 66}
 LINK_WELCOME_SENTENCES = frozenset({
@@ -23224,6 +23227,20 @@ def main():
     with open(os.path.join(BASE, 'data', 'bteam_baseline.json'), encoding='utf-8') as _stream:
         _round2_baseline = json.load(_stream)['overrides']
     _round2_final_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    # This Korean slot was already present in the final ROM but an earlier
+    # writer omitted it from the integrity map. Pin the exact owner bytes.
+    _ammo_addr = 0xA2A2F8
+    _ammo = bytes(encode_text('탄수', syl_to_code, unmapped, _ammo_addr))
+    if len(_ammo) != 4 or bytes(rom[_ammo_addr:_ammo_addr + 8]) != _ammo + b'\x00' * 4:
+        raise AssertionError('B-team ammo-count owner bytes changed')
+    WRITE_LOG.append([_ammo_addr, 8, 4, _ammo.hex(), 0, '탄수', None,
+                      'bteam-round2-existing-korean'])
+    _round2_final_writes[_ammo_addr] = WRITE_LOG[-1]
+    _round2_script_punctuation = {
+        0xDC3B0E, 0xDC495E, 0xDC4B2A, 0xDC51AE, 0xDC5812,
+        0xDC5D12, 0xDC7006, 0xDC9662, 0xDCB0BA, 0xDD1476,
+        0xE062DE, 0xE064B2, 0xE0F7EE,
+    }
     _round2_relocated = {int(key, 16) for message in _rp_manifest
                          if message.get('status') == 'relocated'
                          for key in message.get('line_spans', {})}
@@ -23232,7 +23249,13 @@ def main():
         if _address in LINK_WELCOME_SENTENCES or 0xA2955C <= _address < 0xA29830:
             continue  # Part 2 power-title artwork has its own accepted snapshot.
         _row = _round2_final_writes.get(_address)
-        if _row is None or _row[7] not in {'dialogue-override', 'fixed_zero_text'}:
+        _direct_owner = (_row is not None and
+                         (_row[7] in {'dialogue-override', 'fixed_zero_text'} or
+                          (_address == 0xA1B3C8 and _row[7] == 'import-csv') or
+                          (_address in _round2_script_punctuation and
+                           _row[7].startswith('script:') and
+                           _row[5] == _round2_baseline[f'0x{_address:08X}'])))
+        if not _direct_owner:
             continue
         _text = _bteam_display_equivalent(_round2_baseline[f'0x{_address:08X}'], _address)
         _encoded = bytes(encode_text(_text, syl_to_code, unmapped, _address))
@@ -23597,7 +23620,7 @@ def main():
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
     _expected_residuals = ((set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations)
-                           | set(BTEAM_ROUND2_RESIDUALS))
+                           | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS))
     if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '

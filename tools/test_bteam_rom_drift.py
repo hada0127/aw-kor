@@ -7,7 +7,8 @@ from pathlib import Path
 from unittest import mock
 
 from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
-                            display_equivalent, reviewed_seam_variants,
+                            display_equivalent, round2_width_equivalent,
+                            reviewed_seam_variants,
                             matches_alignment_composite, matches_reviewed_bteam_spacing,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
                             NEW_STRICT_ADDRESSES, PINNED_CORE_DIGEST, core_digest)
@@ -90,6 +91,13 @@ class RomDriftTest(unittest.TestCase):
                             display_equivalent('AB', address))
         self.assertNotEqual(display_equivalent('・・・・', address),
                             display_equivalent('・・・', address, actual=True))
+
+    def test_round2_width_alias_is_address_bound_and_keeps_every_character(self):
+        address = 0xA2D55C
+        self.assertTrue(round2_width_equivalent('레드스타 진군!', '레드스타　진군！', address))
+        self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타진군！', address))
+        self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타　진군', address))
+        self.assertFalse(round2_width_equivalent('레드스타 진군!', '레드스타　진군！', address + 1))
 
     def test_reviewed_seam_only(self):
         rows = {0xA00000: [('몸에', '혹시')]}
