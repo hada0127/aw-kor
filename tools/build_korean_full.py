@@ -3420,7 +3420,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDEE87E: '이동력이 지형에 따라',
     0xDEE15E: '공중유닛.공중유닛에',
     0xA07B26: '알았습니다만',
-    0xDC3C63: '사령관님,료!',
+    0xDC3C63: ' 사령관님, 료!',
     0xDC3935: '그리고... ',
     0xDC3944: ' 사령,',
     0xDC39E8: '얼마 안 됐지?',
@@ -11684,12 +11684,7 @@ def _is_part1_dialog_addr(addr):
     return is_part1_dialog_address(addr)
 
 
-BTEAM_SCRIPT_SPACING_REPAIRS = {
-    0xDEECDE: ('해상유닛.지상 유닛을', '해상 유닛.지상 유닛을'),
-    0xDC3C63: ('사령관님,료!', ' 사령관님, 료!'),
-    0xDEDFB6: ('공중유닛에 강한,', '공중 유닛에 강한,'),
-    0xDEE15E: ('공중유닛.공중유닛에', '공중 유닛. 공중 유닛에'),
-}
+from qa_bteam_drift import BTEAM_SCRIPT_SPACING_REPAIRS
 
 
 # Individually compared Japanese row boundaries: the predicate belongs to the
@@ -13445,8 +13440,8 @@ from part1_submarine_help import ROWS as SUBMARINE_HELP_ROWS
 ADDRESS_TEXT_OVERRIDES.update({a:text for a,e,text in SUBMARINE_HELP_ROWS})
 SCRIPT_PLAIN_OPERAND_SPANS.update({a:e for a,e,text in SUBMARINE_HELP_ROWS})
 PLAYTHROUGH_REPAIR_ROWS = PLAYTHROUGH_REPAIR_ROWS | frozenset(a for a,e,text in SUBMARINE_HELP_ROWS)
-# Final B-team restoration rows require lossless script relocation on overflow.
-PLAYTHROUGH_REPAIR_ROWS = PLAYTHROUGH_REPAIR_ROWS | BTEAM_RESTORE_BASELINE_ROWS
+# Keep the restoration set separate: PLAYTHROUGH_REPAIR_ROWS names authored
+# direct patches, whose source tuples are audited by the playthrough test.
 # Existing reviewed seam decisions are keyed to these earlier source fragments.
 # Preserve them as explicit residuals until the seam table is reviewed.
 BTEAM_SEAM_RESIDUAL_TEXT = {
@@ -15004,13 +14999,19 @@ def main():
     required_script_repoints = {0xA322A4, red_intro_address, m19_dialogue_address}
 
     def patch_script_row(faddr, fend, payload, label, *, source_text=None):
-        if faddr in BTEAM_PREVIOUS_KOREAN_TEXT:
-            source_text = BTEAM_PREVIOUS_KOREAN_TEXT[faddr]
+        reviewed_spacing = (faddr in BTEAM_SCRIPT_SPACING_REPAIRS
+                            and source_text == BTEAM_SCRIPT_SPACING_REPAIRS[faddr][1])
+        if (faddr in BTEAM_PREVIOUS_KOREAN_TEXT
+                and faddr in BTEAM_SCRIPT_SPACING_REPAIRS and not reviewed_spacing):
+            raise AssertionError(f'reviewed B-team spacing source missing or changed: {faddr:08X}')
+        if reviewed_spacing or faddr in BTEAM_PREVIOUS_KOREAN_TEXT:
+            if not reviewed_spacing:
+                source_text = BTEAM_PREVIOUS_KOREAN_TEXT[faddr]
             payload = encode_required_full_fidelity(source_text, syl_to_code, unmapped, faddr)
         validate_script_message_span(orig, faddr, fend)
         slot_len = fend - faddr
         text_for_log = None
-        ov = (BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr)
+        ov = ((source_text if reviewed_spacing else BTEAM_PREVIOUS_KOREAN_TEXT.get(faddr))
               or direct_script_override_text(faddr, fend, direct_script_members, _dlg_ov))
         if in_region(PAIR_RENDERER_REGIONS, faddr, fend):
             exact_text = ov if ov is not None else source_text
@@ -15021,7 +15022,7 @@ def main():
                 payload = bytes(orig[faddr:fend])
                 required_script_repoints.add(faddr)
             text_for_log = exact_text
-        elif faddr in PLAYTHROUGH_REPAIR_ROWS:
+        elif faddr in PLAYTHROUGH_REPAIR_ROWS or faddr in BTEAM_RESTORE_BASELINE_ROWS:
             exact_text = ov if ov is not None else source_text
             if exact_text is None:
                 raise AssertionError(f'playthrough repair missing source text: {faddr:08X}')
@@ -20376,7 +20377,7 @@ def main():
         (0xDC3C04, 0xDC3C18, '다음엔 힘내!', 'billy rematch cheer row'),
         (0xDC3C22, 0xDC3C42, '캐서린은 이런 곳엔 적이', 'green earth surprise lead row'),
         (0xDC3C45, 0xDC3C5B, '없다고 했잖아?!', 'green earth surprise row'),
-        (0xDC3C63, 0xDC3C71, '사령관님,료!', 'green earth call row'),
+        (0xDC3C63, 0xDC3C71, ' 사령관님, 료!', 'green earth call row'),
         (0xDC3C74, 0xDC3C7E, '들려?', 'green earth hear row'),
         (0xDC3C86, 0xDC3C92, '캐서린!', 'green earth catherine row'),
         (0xDC3C95, 0xDC3C9B, '적이!', 'green earth enemy row'),
@@ -22744,8 +22745,15 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
-                if a in BTEAM_PREVIOUS_KOREAN_TEXT:
-                    return BTEAM_PREVIOUS_KOREAN_TEXT[a]
+                # The isolated AST selector tests omit module globals. In a
+                # real build, missing B-team maps must still fail immediately.
+                module_globals = globals()
+                previous_korean = (BTEAM_PREVIOUS_KOREAN_TEXT
+                                   if '__name__' in module_globals else {})
+                restore_rows = (BTEAM_RESTORE_BASELINE_ROWS
+                                if '__name__' in module_globals else ())
+                if a in previous_korean and a not in BTEAM_SCRIPT_SPACING_REPAIRS:
+                    return previous_korean[a]
                 if a in BTEAM_SCRIPT_SPACING_REPAIRS or a in BTEAM_SCRIPT_LAYOUT_REPAIRS:
                     owner = _rp_script_owners.get(a)
                     explicit_text = _dlg_ov.get(f'0x{a:08X}')
@@ -22755,7 +22763,7 @@ def main():
                             and explicit_text is not None
                             and _editor_intents.get(f'0x{a:08X}') == editor_text_digest(explicit_text)):
                         return explicit_text
-                    restored_owner = (a in BTEAM_RESTORE_BASELINE_ROWS and owner is not None
+                    restored_owner = (a in restore_rows and owner is not None
                                       and _rp_ov(a) == owner[1])
                     if owner is None or not (restored_owner or is_verified_bteam_script_repair(a, _rp_ov(a), owner[1])):
                         raise AssertionError(f'verified B-team spacing owner missing or changed: {a:08X}')
@@ -23271,6 +23279,23 @@ def main():
                                     os.path.join(BASE, 'temp', 'repoint_manifest.json'))
     _restoration_issues = {int(issue['address'], 16): issue for issue in _bteam_issues
                            if int(issue['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
+    # A reviewed name-boundary spacing exception is a restored display row,
+    # not a retained previous-Korean residual. Verify its rendered equivalent
+    # before removing it from the residual accounting.
+    _reviewed_restorations = {
+        _address for _address, (_source, _display) in BTEAM_SCRIPT_SPACING_REPAIRS.items()
+        if (_address in BTEAM_RESTORE_BASELINE_ROWS
+            and _address not in _restoration_issues
+            and _bteam_baseline['overrides'][f'0x{_address:08X}'] == _source)
+    }
+    for _address, (_source, _display) in BTEAM_SCRIPT_SPACING_REPAIRS.items():
+        _issue = _restoration_issues.get(_address)
+        if (_issue is not None
+                and is_verified_bteam_spacing_repair(
+                    _address, _bteam_baseline['overrides'][f'0x{_address:08X}'], _display)
+                and bteam_retained_equal(_display, _issue['rom_text'], _address)):
+            del _restoration_issues[_address]
+            _reviewed_restorations.add(_address)
     _non_korean = []
     for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS):
         _key = f'0x{_address:08X}'
@@ -23329,10 +23354,11 @@ def main():
         'reason': issue['cause'],
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
-    if set(_restoration_issues) != set(BTEAM_PREVIOUS_KOREAN_TEXT):
+    _expected_residuals = set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations
+    if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
-                             f'map-only={sorted(set(BTEAM_PREVIOUS_KOREAN_TEXT) - set(_restoration_issues))[:10]}, '
-                             f'residual-only={sorted(set(_restoration_issues) - set(BTEAM_PREVIOUS_KOREAN_TEXT))[:10]}')
+                             f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '
+                             f'residual-only={sorted(set(_restoration_issues) - _expected_residuals)[:10]}')
     if not BTEAM_LISTED_WIDE_RESIDUALS.keys() <= _restoration_issues.keys():
         raise AssertionError('Listed wide B-team row is not a residual')
     _wrong_residual = [(f'0x{a:08X}', BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'])

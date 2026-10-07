@@ -34,6 +34,15 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OVERRIDES = os.path.join(BASE, 'data', 'dialogue_overrides.json')
 BASELINE = os.path.join(BASE, 'data', 'bteam_baseline.json')
 
+# Exact B-team source/display exceptions reviewed at script row boundaries.
+# Shared with the writer so the final-ROM gate cannot drift from its policy.
+BTEAM_SCRIPT_SPACING_REPAIRS = {
+    0xDEECDE: ('해상유닛.지상 유닛을', '해상 유닛.지상 유닛을'),
+    0xDC3C63: ('사령관님,료!', ' 사령관님, 료!'),
+    0xDEDFB6: ('공중유닛에 강한,', '공중 유닛에 강한,'),
+    0xDEE15E: ('공중유닛.공중유닛에', '공중 유닛. 공중 유닛에'),
+}
+
 
 def norm(a: str) -> str:
     try:
@@ -169,6 +178,14 @@ def reviewed_seam_variants(value: str, msg: int, rows: dict) -> set[str]:
         spaced = prev + '　' + next_
         variants |= {v.replace(joined, spaced, 1) for v in variants if joined in v}
     return variants
+
+
+def matches_reviewed_bteam_spacing(address: int, baseline: str, actual: str) -> bool:
+    """Accept only an individually reviewed whitespace repair at its source row."""
+    repair = BTEAM_SCRIPT_SPACING_REPAIRS.get(address)
+    return (repair is not None and baseline == repair[0]
+            and display_equivalent(actual, address, actual=True)
+            == display_equivalent(repair[1], address))
 
 
 def load_reviewed_seams() -> dict[int, list[tuple[str, str]]]:
@@ -410,6 +427,8 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             actual = '<no text write in integrity map>'
             matched = False
             cause = 'protected address has no final text write evidence'
+        if not matched:
+            matched = matches_reviewed_bteam_spacing(addr, baseline, actual)
         if addr in DEFERRED_ADDRESSES:
             matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
         if not matched:

@@ -8,7 +8,7 @@ from unittest import mock
 
 from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             display_equivalent, reviewed_seam_variants,
-                            matches_alignment_composite,
+                            matches_alignment_composite, matches_reviewed_bteam_spacing,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
                             NEW_STRICT_ADDRESSES, PINNED_CORE_DIGEST, core_digest)
 
@@ -20,6 +20,20 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_name_boundary_spacing_exception_is_exact_and_address_bound(self):
+        self.assertTrue(matches_reviewed_bteam_spacing(
+            0xDC3C63, '사령관님,료!', '　사령관님、　료！'))
+        self.assertFalse(matches_reviewed_bteam_spacing(
+            0xDC3C64, '사령관님,료!', '　사령관님、　료！'))
+        self.assertFalse(matches_reviewed_bteam_spacing(
+            0xDC3C63, '사령관님,료!', '　사령관님、　맥스！'))
+        self.assertFalse(matches_reviewed_bteam_spacing(
+            0xDC3C63, '사령관님,료!', '사령관님、　료！'))
+        self.assertTrue(matches_reviewed_bteam_spacing(
+            0xDEECDE, '해상유닛.지상 유닛을', '해상　유닛。지상　유닛을'))
+        self.assertFalse(matches_reviewed_bteam_spacing(
+            0xDEECDE, '해상유닛.지상 유닛을', '해상　유닛。공중　유닛을'))
+
     def test_consensus_sets_and_baseline_pin(self):
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
         addresses = {int(x, 16) for x in baseline['overrides']}
