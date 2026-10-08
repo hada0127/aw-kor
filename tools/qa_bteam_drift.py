@@ -72,7 +72,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'a095daf765cabafd4756ff459d3cda7fab4d05d8ac879f6ba9bb8baeec6fa120'
+ROUND2_RESIDUAL_DIGEST = '3b9963e028f7f7499aa9402a057e30092487516a26932e4ac9df5c9eb37e889f'
 ROUND2_ACTIVE_PINS_DIGEST = 'e702c6c8e0b7fdeee466401555352ddd74d8fbaa3e5b39c18bf4555739bf0a25'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
@@ -542,6 +542,28 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     return issues
 
 
+STRUCTURAL_ROUND2_CAUSES = frozenset({
+    'repoint pointer mismatch', 'repoint line mapping missing',
+    'repoint line mapping invalid', 'protected address has no final text write evidence',
+})
+
+
+def is_structural_round2_issue(issue: dict) -> bool:
+    return issue['cause'] in STRUCTURAL_ROUND2_CAUSES
+
+
+def round2_issue_bucket(issue: dict, listed: set[int]) -> str:
+    addr = int(issue['address'], 16)
+    if is_structural_round2_issue(issue):
+        return 'unlisted'
+    if addr in DEFERRED_ADDRESSES:
+        return 'deferred'
+    if addr in listed and (issue['cause'] == 'relocated row differs from protected baseline'
+                           or issue['cause'].startswith('final in-place writer ')):
+        return 'residual'
+    return 'unlisted'
+
+
 def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
                            manifest_path: str) -> tuple[list[dict], list[dict], list[dict]]:
     """Count only byte-pinned listed residuals and exact reviewed deferrals as expected."""
@@ -551,7 +573,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 122 or len(listed) != len(rows):
+    if len(rows) != 120 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:
@@ -608,20 +630,12 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
                         rom[follow[0]:follow[0] + follow[1]] != expected_follow:
                     raise ValueError(f'{key}: residual continuation bytes changed')
     expected_residuals, deferred, unlisted = [], [], []
+    listed_addresses = set(listed)
     for issue in issues:
-        addr = int(issue['address'], 16)
-        structural = issue['cause'] in {'repoint pointer mismatch',
-                                        'repoint line mapping missing',
-                                        'repoint line mapping invalid',
-                                        'protected address has no final text write evidence'}
-        if structural:
-            unlisted.append(issue)
-        elif addr in DEFERRED_ADDRESSES:
+        bucket = round2_issue_bucket(issue, listed_addresses)
+        if bucket == 'deferred':
             deferred.append(issue)
-        elif addr in listed and issue['cause'] in {
-                'relocated row differs from protected baseline'}:
-            expected_residuals.append(issue)
-        elif addr in listed and issue['cause'].startswith('final in-place writer '):
+        elif bucket == 'residual':
             expected_residuals.append(issue)
         else:
             unlisted.append(issue)

@@ -73,7 +73,7 @@ STRINGS = (
     (0xDF8B7A, 4, None, '수입', (STATUS, TERRAIN), (0xBE701C,), None),   # terrain screen bank has reserved 수입
     (0xDF8B82, 4, '全滅', '전멸', (STATUS, RESULT), (0xBE701C,), '全滅'),
     (0xDF8BA2, 6, '軍資金', '군자금', (STATUS,), (0xBE701C,), '軍資金'),
-    (0xDF8BC6, 8, '不残倶倶', '불참', (STATUS,), (0xBE701C,), None),
+    (0xDF8BC6, 8, '不残가', '불참가', (STATUS,), (0xBE701C,), None),   # 가 preloaded by the 0xBE701C append (か cell)
     (0xDF8BD2, 8, '中立拠点', '중립거점', (STATUS,), (0xBE701C,), '中立拠点'),
     (0xDF8B5A, 2, None, '？', (STATUS,), (0xBE701C,), None),
     # fn 0xB41720 (bank group not traced: check every candidate group)
@@ -101,7 +101,7 @@ STRINGS = (
     (0xBE7128, 2, '材', '材', (UNIT_LIST,), (), None),
     (0xBE712C, 2, None, '｜', (UNIT_LIST,), (), None),
     # C3 rule settings list (group 0xB13090, table 0xB838C8)
-    (0xB839F0, 6, '규칙　', '규칙', (RULES,), (), None),
+    (0xB839F0, 6, '룰　　', '룰', (RULES,), (), None),   # 룰 preloaded via the rules dictionary 0xD83138
     (0xB839C4, 8, '초기수입', '초기수입', (RULES,), (), None),
     (0xB839B4, 12, '매턴수입　　', '매턴수입', (RULES,), (), None),
     # C6 compact unit-info weapon fields (group 0xB12EDC, record +8/+0x10)
@@ -139,7 +139,9 @@ LINK_STATUS_GROUP, LINK_STATUS_APPENDS = 0xB130E0, (0xB8319C,)
 
 # Preload pair lists (append sources).  None spec = restore original bytes.
 APPENDS = (
-    (0xBE701C, 18, None),                     # 拠点全滅ふさんか？ (native, keeps ？ preloaded)
+    # Native 拠点全滅ふさんか？ preloaded the kana of the old ふさんか label. Its か cell
+    # now preloads the reserved 가 for 불참가 (same pair count/positions, ？ kept).
+    (0xBE701C, 18, '拠点全滅ふさん가？'),
     (0xB8319C, 22, '미접속준비중　오류'),    # pairs only; 오류 for the 接続エラー row (접속 오류)
     # Glyph preload, not displayed prose. Keep one space code and add 중 for B83254.
     (0xB8322C, 36, '전송중입니다　잠시기다려　주십시오。'),

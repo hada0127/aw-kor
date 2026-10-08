@@ -4626,7 +4626,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0x9EBF88: '레드스타 패배. 타군 항복도 패배. 정말? 종료 공격 합류 대기 시스템',
     0x9EC040: '대기공격합류항복종료닫기설정',
     0xA1EDE4: '물건과 죽을만큼',
-    0xD83138: '0123456789규칙정찰날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
+    0xD83138: '0123456789룰칙정찰날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
     0xD75917: '비카가루진동',
     0xD8FFF9: '걸어오는 쪽이',
     0xD90250: 'B 버튼으로 메뉴를 닫을 수 있어.',
@@ -11986,13 +11986,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'a095daf765cabafd4756ff459d3cda7fab4d05d8ac879f6ba9bb8baeec6fa120':
+        if hashlib.sha256(stream.read()).hexdigest() != '3b9963e028f7f7499aa9402a057e30092487516a26932e4ac9df5c9eb37e889f':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 122 or len(result) != len(rows) or
+    if (len(rows) != 120 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')

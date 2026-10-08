@@ -44,13 +44,17 @@ STUB="$ROOT/tools/linux_fontstub"
 ORIGINAL="$ROOT/original/Game Boy Wars Advance 1+2 (Japan).gba"
 [ -f "$ORIGINAL" ] || { echo "original ROM missing: $ORIGINAL" >&2; exit 2; }
 [ -f "$REFERENCE" ] || { echo "reference ROM missing: $REFERENCE" >&2; exit 2; }
-if pgrep -f '^python3?[^ ]* [^ ]*(build_korean_full|fontstub_build)\.py' >/dev/null; then
-  echo "another build_korean_full.py is running; builds are serialized" >&2; exit 3
-fi
 COMMIT=$(git rev-parse "$BASE_REF")
 STUB_SHA=$(cat "$STUB/fontstub_build.py" | sha256sum | cut -c1-8)
 mkdir -p "$WORK"
 WORK=$(cd "$WORK" && pwd)
+# Serialize all invocations in this repository, regardless of --work. Hold the
+# descriptor until the candidate and its matching map/manifest are published.
+exec 9>"$ROOT/temp/linux_overlay_build.lock"
+flock -n 9 || { echo "another Linux overlay build is running" >&2; exit 3; }
+if pgrep -f '^python3?[^ ]* [^ ]*(build_korean_full|fontstub_build)\.py' >/dev/null; then
+  echo "another build_korean_full.py is running; builds are serialized" >&2; exit 3
+fi
 A_DIR="$WORK/A_${COMMIT:0:12}_$STUB_SHA"
 
 # Gitignored build inputs that a clean worktree lacks.
@@ -72,8 +76,7 @@ if [ ! -f "$A_DIR/build_A.gba" ] || [ ! -f "$A_DIR/trace_A.json" ]; then
   git worktree remove --force "$WT"
 fi
 
-RUN="$WORK/run_$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$RUN"
+RUN=$(mktemp -d "$WORK/run_$(date +%Y%m%d_%H%M%S)_XXXXXXXX")
 echo "== building B from working tree ($(git rev-parse --short HEAD)$(git diff --quiet || echo ' + local changes'))"
 AW_TRACE_OUT="$RUN/trace_B.json" nice -n 15 python3 "$STUB/fontstub_build.py" "$ROOT" \
     --out "$RUN/build_B.gba" --no-sync-outputs > "$RUN/build_B.log" 2>&1 \

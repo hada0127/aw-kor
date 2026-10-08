@@ -31,7 +31,7 @@ class OriginalGlyphConsumerTests(unittest.TestCase):
         restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {0xB81B14}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 122)
+        self.assertEqual(len(RESIDUALS), 120)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.
@@ -75,6 +75,21 @@ class CompactConsumerTests(unittest.TestCase):
         row = next(r for r in compact.STRINGS if r[0] == 0xB81B14)
         self.assertEqual((row[2], row[3]), ('箕装備', '미장비'))
         self.assertEqual(BASE['0x00B81B14'], '미장비')
+
+    def test_status_and_rules_compact_rows(self):
+        import build_korean_full as builder
+        import part1_compact_ui_strings as compact
+        strings = {r[0]: r for r in compact.STRINGS}
+        appends = {a: spec for a, _, spec in compact.APPENDS}
+        # 불참가: 가 comes from the 0xBE701C append whose か cell it replaces.
+        self.assertEqual(strings[0xDF8BC6][2:4], ('不残가', '불참가'))
+        self.assertEqual(appends[0xBE701C], '拠点全滅ふさん가？')
+        self.assertEqual(len(compact.encode_spec(appends[0xBE701C], {'가': 0x8840})), 18)
+        # 룰: the rules dictionary 0xD83138 preloads 룰 where it preloaded 규.
+        self.assertEqual(strings[0xB839F0][2:4], ('룰　　', '룰'))
+        self.assertTrue(builder.ADDRESS_TEXT_OVERRIDES[0xD83138].startswith('0123456789룰칙'))
+        self.assertNotIn(0xDF8BC6, RESIDUALS)
+        self.assertNotIn(0xB839F0, RESIDUALS)
 
 
 if __name__ == '__main__':

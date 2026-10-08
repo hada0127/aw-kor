@@ -3,9 +3,11 @@
 import json
 import tempfile
 import unittest
+import sys
 from pathlib import Path
 from unittest import mock
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             display_equivalent, round2_width_equivalent,
                             classify_round2_issues,
@@ -13,6 +15,7 @@ from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             matches_alignment_composite, matches_reviewed_bteam_spacing,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
                             NEW_STRICT_ADDRESSES, PINNED_CORE_DIGEST, core_digest)
+from qa_bteam_drift import round2_issue_bucket
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,54 +106,98 @@ class RomDriftTest(unittest.TestCase):
                          '이 몸의 2회 행동을、견뎌낼 수 있겠느냐！？', 0xB83A98))
 
     def test_round2_classification_rejects_structural_issues(self):
-        fixture = ROOT / 'output/game_wars_korean_candidate_bteam_round2_v10.gba'
-        manifest_file = ROOT / 'temp/repoint_manifest.json'
-        if not fixture.exists() or not manifest_file.exists():
-            self.skipTest('round-2 ROM fixture unavailable')
-        base = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
-        original = fixture.read_bytes()
-        manifest = json.loads(manifest_file.read_text())
-        addr = 0xDD010A
-        message = next(m for m in manifest if m.get('status') == 'relocated'
-                       and f'0x{addr:06X}' in m.get('line_spans', {}))
-        issue = {'address': f'0x{addr:08X}', 'cause': 'relocated row differs from protected baseline'}
+        address = 0xDD010A
+        listed = {address}
+        for cause in ('repoint pointer mismatch', 'repoint line mapping missing',
+                      'repoint line mapping invalid',
+                      'protected address has no final text write evidence'):
+            self.assertEqual(round2_issue_bucket(
+                {'address': f'0x{address:08X}', 'cause': cause}, listed), 'unlisted')
+        self.assertEqual(round2_issue_bucket(
+            {'address': f'0x{address:08X}',
+             'cause': 'relocated row differs from protected baseline'}, listed), 'residual')
+        self.assertEqual(round2_issue_bucket(
+            {'address': f'0x{address:08X}', 'cause': 'final in-place writer differs'},
+            listed), 'residual')
+        self.assertEqual(round2_issue_bucket(
+            {'address': '0x00000001', 'cause': 'relocated row differs from protected baseline'},
+            listed), 'unlisted')
+
+    def round2_fixture(self):
+        """Self-contained ROM + manifest: listed residual bytes in place and every
+        active pin relocated into free space with a pointer and line spans."""
+        import csv
+        original = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+        rom = bytearray(original)
+        rows = {int(r['address'], 16): r for r in csv.DictReader(
+            (ROOT / 'data/bteam_round2_residuals.tsv').open(encoding='utf-8'), delimiter='\t')}
+        for address, row in rows.items():
+            payload = bytes.fromhex(row['payload_hex'])
+            rom[address:address + len(payload)] = payload
+        pins = json.loads((ROOT / 'data/bteam_round2_active_pins.json').read_text(encoding='utf-8'))
+        manifest = []
+        for index, (key, hexdata) in enumerate(sorted(pins.items())):
+            address = int(key, 16)
+            data = bytes.fromhex(hexdata)
+            target, site = 0xA3D000 + index * 0x100, 0xA3F000 + index * 4
+            self.assertTrue(all(b == 0xFF for b in original[target:target + len(data)]))
+            rom[target:target + len(data)] = data
+            rom[site:site + 4] = (0x08000000 + target).to_bytes(4, 'little')
+            active = rows[address].get('active_payload_hex')
+            spans = {f'0x{address:06X}': [data.index(bytes.fromhex(active)), len(bytes.fromhex(active))]
+                     if active else [0, 1]}
+            follow = rows[address].get('active_follow_hex')
+            if follow:
+                spans['0xA2BC57'] = [data.index(bytes.fromhex(follow)), len(bytes.fromhex(follow))]
+            manifest.append({'msg': f'0x{address:06X}', 'status': 'relocated', 'new_addr': f'0x{target:06X}',
+                             'new_len': len(data), 'line_spans': spans, 'ptr_sites': [hex(site)]})
+        return rom, manifest
+
+    def test_round2_byte_pointer_mapping_mutations(self):
+        base = json.loads((ROOT / 'data/bteam_baseline.json').read_text(encoding='utf-8'))
+        rom, manifest = self.round2_fixture()
         deferred = [{'address': f'0x{address:08X}', 'cause': 'reviewed deferral'}
                     for address in DEFERRED_ADDRESSES]
+        addr = 0xDD010A
+        issue = {'address': f'0x{addr:08X}', 'cause': 'relocated row differs from protected baseline'}
+        message = next(m for m in manifest if f'0x{addr:06X}' in m['line_spans'])
+        target = int(message['new_addr'], 16)
         with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
-            rom_path = Path(tmp) / 'rom.gba'
-            map_path = Path(tmp) / 'manifest.json'
-            rom_path.write_bytes(original)
-            map_path.write_text(json.dumps(manifest))
-            listed, _, unlisted = classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
-            self.assertEqual(len(listed), 1)
-            self.assertEqual(unlisted, [])
+            rom_path, map_path = Path(tmp) / 'rom.gba', Path(tmp) / 'manifest.json'
+
+            def classify(data, mapping):
+                rom_path.write_bytes(bytes(data))
+                map_path.write_text(json.dumps(mapping))
+                return classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+
+            listed, _, unlisted = classify(rom, manifest)
+            self.assertEqual((len(listed), unlisted), (1, []))
             for cause in ('repoint pointer mismatch', 'repoint line mapping missing',
                           'repoint line mapping invalid'):
-                _, _, unlisted = classify_round2_issues(
-                    [dict(issue, cause=cause)] + deferred, base, str(rom_path), str(map_path))
-                self.assertEqual(len(unlisted), 1)
-            del message['line_spans'][f'0x{addr:06X}']
-            map_path.write_text(json.dumps(manifest))
+                rom_path.write_bytes(bytes(rom)); map_path.write_text(json.dumps(manifest))
+                _, _, unlisted = classify_round2_issues([dict(issue, cause=cause)] + deferred, base,
+                                                        str(rom_path), str(map_path))
+                self.assertEqual(len(unlisted), 1, cause)
+            missing = json.loads(json.dumps(manifest))
+            del next(m for m in missing if m['msg'] == message['msg'])['line_spans'][f'0x{addr:06X}']
             with self.assertRaisesRegex(ValueError, 'mapping or byte pin missing'):
-                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
-            message['line_spans'][f'0x{addr:06X}'] = [2, 40]
-            target = int(message['new_addr'], 16)
-            changed = bytearray(original)
-            changed[target + 2] ^= 1
-            rom_path.write_bytes(changed)
-            map_path.write_text(json.dumps(manifest))
-            with self.assertRaisesRegex(ValueError, 'message bytes or span changed'):
-                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
-            changed = bytearray(original)
-            changed[target + int(message['new_len']) - 1] ^= 1
-            rom_path.write_bytes(changed)
-            with self.assertRaisesRegex(ValueError, 'message bytes or span changed'):
-                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
-            changed = bytearray(original)
-            changed[int(message['ptr_sites'][0], 16)] ^= 1
-            rom_path.write_bytes(changed)
-            with self.assertRaisesRegex(ValueError, 'pointer changed'):
-                classify_round2_issues([issue] + deferred, base, str(rom_path), str(map_path))
+                classify(rom, missing)
+            for position, pattern in ((target + 2, 'message bytes or span changed'),
+                                      (target + message['new_len'] - 1, 'message bytes or span changed'),
+                                      (int(message['ptr_sites'][0], 16), 'pointer changed'),
+                                      (addr, 'listed residual metadata or source bytes changed')):
+                changed = bytearray(rom)
+                changed[position] ^= 1
+                with self.assertRaisesRegex(ValueError, pattern):
+                    classify(changed, manifest)
+            # Active line bytes and the A2BC3C continuation are pinned too.
+            for key, pattern in (('0x00D82218', 'message bytes or span changed'),
+                                 ('0x00A2BC3C', 'message bytes or span changed')):
+                pinned = next(m for m in manifest if m['msg'] == f'0x{int(key, 16):06X}')
+                changed = bytearray(rom)
+                changed[int(pinned['new_addr'], 16)] ^= 1
+                with self.assertRaisesRegex(ValueError, pattern):
+                    classify(changed, manifest)
 
     def test_reviewed_seam_only(self):
         rows = {0xA00000: [('몸에', '혹시')]}
