@@ -25,7 +25,11 @@ Style = M19/M20: OkDanDan-Bold (2026-10-08 font rule: large titles use
 OkDanDan; the earlier Galmuri7 2x / Galmuri11 tiers were replaced), ink 10,
 lower-right shadow 13, 3x3 outline 15.  layout() picks the largest size whose
 ink fits the canvas; render() steps the size down further only when the sheet
-would not recompress into its original allocation.  Every sheet is
+would not recompress into its original allocation, and at <= 16 px (small
+text, 2026-10-08 decision) uses the earlier Galmuri7 2x / Galmuri11 layout.
+patch() refuses ink cut at the canvas edge, and glyphs crossing the 64/128 OBJ
+edges are accepted only because the native sheets of this consumer prove the
+cells are drawn edge to edge (check_cells).  Every sheet is
 recompressed with the project's optimal VRAM-safe LZ77 encoder inside its
 original compressed allocation; pointers never move.
 """
@@ -35,6 +39,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import aw_fonts
+from bdf import load_bdf, glyph_grid
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -155,7 +160,89 @@ def source_guard(original):
             raise AssertionError('Part 1 mission title skipped sheet left the table')
 
 
-MAX_SIZE, MIN_SIZE = 20, 9  # 20px ~= the native 21-row Japanese title ink
+MAX_SIZE = 20  # 20px ~= the native 21-row Japanese title ink
+MIN_SIZE = aw_fonts.GALMURI_MAX_SIZE + 1   # below this the title is small text -> Galmuri
+
+
+@lru_cache(maxsize=None)
+def _font(name):
+    font, _ = load_bdf(str(ROOT / 'reference/fonts' / name))
+    return font
+
+
+def _hangul(char):
+    return 0xAC00 <= ord(char) <= 0xD7A3
+
+
+def _ink_g7x2(text, fixed):
+    """M19/M20 style: Galmuri7 at integer 2x, glyph top at y=8."""
+    font, ink, cursor = _font('Galmuri7.bdf'), set(), 0
+    for char in text:
+        if char in SPACES:
+            cursor += 8 if fixed else 6
+            continue
+        grid, width, height, xoffset, yoffset = glyph_grid(font[ord(char)])
+        top = 7 - height - yoffset
+        if not (1 <= width <= 7 and xoffset >= 0 and 0 <= top and top + height <= 8):
+            raise AssertionError(f'Part 1 mission title Galmuri7 cell/baseline changed: {char}')
+        for y in range(height):
+            for x in range(width):
+                if grid[y][x]:
+                    for dy in (0, 1):
+                        for dx in (0, 1):
+                            ink.add((cursor + 2 * (x + xoffset) + dx, 8 + 2 * (top + y) + dy))
+        if fixed and _hangul(char):
+            cursor += 16
+        else:
+            cursor += 2 * (xoffset + width) + 2
+    return ink
+
+
+def _ink_g11(text):
+    """Fallback for long titles: Galmuri11 at 1x, glyph top at y=10."""
+    font, ink, cursor = _font('Galmuri11.bdf'), set(), 0
+    for char in text:
+        if char in SPACES:
+            cursor += 4
+            continue
+        grid, width, height, xoffset, yoffset = glyph_grid(font[ord(char)])
+        top = 11 - height - yoffset
+        if not (1 <= width <= 12 and xoffset >= 0 and 0 <= top and top + height <= 12):
+            raise AssertionError(f'Part 1 mission title Galmuri11 cell/baseline changed: {char}')
+        for y in range(height):
+            for x in range(width):
+                if grid[y][x]:
+                    ink.add((cursor + x + xoffset, 10 + top + y))
+        cursor += xoffset + width + 2
+    return ink
+
+
+def layout_galmuri(text, width):
+    """Galmuri fallback (2026-10-08: titles whose OkDanDan size would be <= 16 px
+    are small text). Return (tier, ink set) centred in a width x 32 canvas.
+
+    Tier order: 'g7x2' (exact M19 advance), 'g7x2_tight' (proportional 2x
+    advance), 'g11' (Galmuri11 1x).  Ink must stay within x 1..width-2 and
+    y 1..30 so the outline/shadow never leave the native cells.
+    """
+    for tier, ink in (('g7x2', lambda: _ink_g7x2(text, True)),
+                      ('g7x2_tight', lambda: _ink_g7x2(text, False)),
+                      ('g11', lambda: _ink_g11(text))):
+        ink = ink()
+        if not ink:
+            raise AssertionError('Part 1 mission title has no ink')
+        x0 = min(x for x, _ in ink)
+        x1 = max(x for x, _ in ink)
+        span = x1 - x0 + 1
+        if span <= width - 2:
+            shift = (width - span) // 2 - x0
+            placed = {(x + shift, y) for x, y in ink}
+            if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in placed):
+                raise AssertionError('Part 1 mission title exceeds native OBJ cells')
+            return tier, placed
+    raise AssertionError(f'Part 1 mission title does not fit {width}px: {text}')
+
+
 
 
 def _ink_okdandan(text, width, size):
@@ -184,7 +271,8 @@ def layout(text, width, max_size=MAX_SIZE):
 
 
 def _pixels(text, width, max_size=MAX_SIZE):
-    _, ink = layout(text, width, max_size)
+    """max_size None = the Galmuri fallback layout."""
+    _, ink = layout_galmuri(text, width) if max_size is None else layout(text, width, max_size)
     pixels = [[0] * width for _ in range(32)]
     for x, y in ink:
         for dy in (-1, 0, 1):
@@ -229,14 +317,15 @@ def _sheets(text, width, max_size):
 
 @lru_cache(maxsize=None)
 def chosen_size(owner):
-    """Largest OkDanDan size whose sheet(s) also fit the compressed allocation(s)."""
+    """Largest OkDanDan size (> 16 px) whose sheet(s) also fit the compressed
+    allocation(s); None when only the Galmuri small-text layout fits."""
     text, width = _text(owner), 160 if owner == EXTENSION_OWNER else 128
     tier, _ = layout(text, width)
-    for size in range(int(tier[len('okdandan'):]), MIN_SIZE - 1, -1):
+    for size in [*range(int(tier[len('okdandan'):]), MIN_SIZE - 1, -1), None]:
         sheets = _sheets(text, width, size)
         if all(len(lz77_compress_optimal(raw, vram_safe=True)) <=
                _capacity(owner if key is None else key) for key, raw in sheets.items()):
-            return size
+            return size   # None: Galmuri fallback
     raise AssertionError(f'Part 1 mission title compressed allocation overflow {owner:06X}')
 
 
@@ -268,8 +357,47 @@ def compressed(source, capacity):
     return stream
 
 
+def _canvas(raw_main, raw_ext=None):
+    """Composed display canvas: two 64x32 OBJs (+ the 32x32 extension cell)."""
+    rows = aw_fonts.obj_canvas(raw_main, 2, 8, 4)
+    if raw_ext is not None:
+        ext = aw_fonts.obj_canvas(raw_ext, 1, 4, 4)
+        rows = [a + b for a, b in zip(rows, ext)]
+    return rows
+
+
+@lru_cache(maxsize=1)
+def _contiguity(original):
+    """Static proof that this consumer draws its OBJ cells edge to edge: native
+    Japanese glyphs continue across x=64 (most sheets) and x=128 (せ split
+    between 0xC1100C and its extension 0xC12E40, see the module docstring)."""
+    native = {source: lz77_decompress(original, source)[0] for source, *_ in _all_blocks()}
+    at64 = sum(1 for source, raw in native.items() if source != EXTENSION[0]
+               and aw_fonts.straddling_rows(_canvas(raw), 64))
+    at128 = aw_fonts.straddling_rows(_canvas(native[EXTENSION_OWNER], native[EXTENSION[0]]), 128)
+    return at64, at128
+
+
+def check_cells(original, source=None):
+    """No glyph ink is cut: inside the canvas, and across the 64/128 OBJ edges
+    only because the native art of this consumer proves contiguous display."""
+    at64, at128 = _contiguity(bytes(original))
+    if not at64 or not at128:
+        raise AssertionError('Part 1 mission title OBJ contiguity proof missing')
+    for owner, *_ in TITLES:
+        if source is not None and owner != source:
+            continue
+        if owner == EXTENSION_OWNER:
+            canvas, bounds = _canvas(render(owner), render(EXTENSION[0])), (64, 128)
+        else:
+            canvas, bounds = _canvas(render(owner)), (64,)
+        aw_fonts.check_cells(canvas, bounds, f'Part 1 mission title {owner:06X}', native=True)
+    return at64, at128
+
+
 def patch(rom, original):
     source_guard(original)
+    check_cells(original)
     plan = []
     for source, following, capacity, size, _, indices in _all_blocks():
         if (_pointer_bytes(rom, indices) != _pointer_bytes(original, indices)

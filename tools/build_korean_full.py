@@ -6248,6 +6248,10 @@ def patch_part2_mode_menu_obj_labels(rom):
         (0x5B8B20, '사운드룸', 'sound room logo'),
     ]:
         logo = make_big_logo(text)
+        # The boxed native logo spans both 64x32 OBJs (contiguous display).
+        native = aw_fonts.obj_canvas(lz77_decompress(rom, off)[0], 2, 8, 4)
+        aw_fonts.check_cells([[logo.getpixel((x, y)) for x in range(128)] for y in range(32)], (64,),
+                             label, native=native, edges=False)
         patched += patch_lz(off, [
             (0x000, rect_tiles(logo, 0, 0, 64, 32)),
             (0x400, rect_tiles(logo, 64, 0, 64, 32)),
@@ -6488,6 +6492,9 @@ def patch_part2_link_mode_residual_labels(rom):
     for main_size in range(25, 11, -1):
         buf = bytearray(source_buf)
         main = make_main('멀티팩', main_size)
+        aw_fonts.check_cells([[main.getpixel((x, y)) for x in range(128)] for y in range(32)], (64,),
+                             'Part 2 link-mode logo', edges=False,
+                             native=aw_fonts.obj_canvas(source_buf[0x0800:0x1000], 2, 8, 4))
         patches = [
             (0x1800, rect_tiles(top, 0, 0, 32, 16)),
             (0x1900, rect_tiles(top, 32, 0, 32, 16)),
@@ -6882,20 +6889,20 @@ def patch_part2_splash_logo_bg(rom):
     data, consumed = dec
     buf = bytearray(data)
     layer = Image.new('L', (176, 32), 1)
-    # Game logo lettering: OkDanDan (2026-10-08 font rule; was Galmuri11-Bold).
-    font_path = aw_fonts.okdandan_path()
+    font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
+
+    def text_bbox(draw, text, font):
+        box = draw.textbbox((0, 0), text, font=font)
+        return box[2] - box[0], box[3] - box[1]
 
     def paint_line(text, y, max_size):
         draw = ImageDraw.Draw(layer)
         for size in range(max_size, 8, -1):
             font = ImageFont.truetype(font_path, size)
-            box = draw.textbbox((0, 0), text, font=font)
-            w, h = box[2] - box[0], box[3] - box[1]
+            w, h = text_bbox(draw, text, font)
             if w <= 166 and h <= 13:
                 break
-        # Ink box (not the font origin) is centred in the 166x13 line band.
-        x = (176 - w) // 2 - box[0]
-        y = y + (13 - h) // 2 - box[1]
+        x = (176 - w) // 2
         mask = Image.new('L', layer.size, 0)
         md = ImageDraw.Draw(mask)
         md.text((x, y), text, font=font, fill=255)
@@ -7586,10 +7593,12 @@ def patch_part2_mission_start_obj(rom):
     # The original block packs several Japanese labels. On the battle-start
     # screen the unused labels can bleed in around the main banner, so clear the
     # sheet and redraw only the active battle-start text.
-    banner_text = '전투 개시!'
     # Large banner: OkDanDan (2026-10-08 font rule; was Galmuri11-Condensed x2).
-    # Same ink 10 + drop shadow 14 as the Galmuri version, 1px shadow at +1,+1.
-    aw_fonts.draw_okdandan(pixels, banner_text, (2, 3, 126, 29), 26, ink=10, shadow=14)
+    # Same ink 10 + drop shadow 14 (+1,+1); one word per 64x32 OBJ cell so no
+    # glyph crosses the cell edge.
+    aw_fonts.draw_okdandan_words(pixels, (('전투', (2, 2, 62, 30)), ('개시!', (66, 2, 126, 30))), 26,
+                                 ink=10, shadow=14)
+    aw_fonts.check_cells(pixels, (64,), 'Part 2 battle start banner')
 
     out = bytearray(len(tile_data))
     # The banner is displayed as two 64x32 OBJs: tile 0x00 for the left half
@@ -7647,6 +7656,34 @@ def patch_part2_operation_prompt_labels(rom):
                         pixels[py][px] = fill
             cursor += w + spacing
 
+    def draw_scaled_text(pixels, text, x, y, scale=2, fill=6, shadow=15, spacing=1):
+        height = len(pixels)
+        width = len(pixels[0])
+        cursor = x
+        for ch in text:
+            grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = cursor + (col + xo) * scale + sx + 1
+                            py = y + row * scale + sy + 1
+                            if 0 <= px < width and 0 <= py < height and pixels[py][px] == 0:
+                                pixels[py][px] = shadow
+            for row in range(h):
+                for col in range(w):
+                    if not grid[row][col]:
+                        continue
+                    for sy in range(scale):
+                        for sx in range(scale):
+                            px = cursor + (col + xo) * scale + sx
+                            py = y + row * scale + sy
+                            if 0 <= px < width and 0 <= py < height:
+                                pixels[py][px] = fill
+            cursor += (w + spacing) * scale
+
     def chunk(pixels, x0, y0, tiles_w):
         out = bytearray()
         for tx in range(tiles_w):
@@ -7669,13 +7706,12 @@ def patch_part2_operation_prompt_labels(rom):
     record = make_pixels(64, 8)
     draw_text(record, '기록', 0, 0, 12)
     ok = make_pixels(32, 16)
-    # Enlarged prompt labels: OkDanDan (2026-10-08 font rule; were Galmuri7 x2).
-    aw_fonts.draw_okdandan(ok, '확인', (1, 0, 31, 16), 16, ink=6, shadow=15)
+    draw_scaled_text(ok, '확인', 2, 1, 2, 6, 15)
     stock = make_pixels(48, 16)
     for y in range(2, 14):
         for x in range(0, 48):
             stock[y][x] = 15
-    aw_fonts.draw_okdandan(stock, '재고', (6, 0, 42, 16), 16, ink=1, shadow=15)
+    draw_scaled_text(stock, '재고', 8, 1, 2, 1, 15)
 
     chunks = {
         0x456614: chunk(ok, 0, 0, 4) + chunk(ok, 0, 8, 4),
@@ -7834,15 +7870,31 @@ PART2_MISSION_WORD_TILES = tuple(range(12)) + tuple(range(32, 44))
 
 def part2_mission_font_data(original):
     """Localize only MISSION's 96x16 cells; 0..9 keep their native glyphs."""
+    from bdf import load_bdf, glyph_grid
     from lz77_scan import lz77_decompress
     dec = lz77_decompress(original, PART2_MISSION_FONT_FILE)
     if dec is None or len(dec[0]) != 68 * 32:
         raise AssertionError('unexpected original mission label/digit font')
     source, consumed = dec
-    # Large MISSION word: OkDanDan (2026-10-08 font rule; was Galmuri7 x2).
-    # Right-aligned like the native word, ink 6 with drop shadow 10, inside x<95, y<16.
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    grids = [glyph_grid(font[ord(ch)]) for ch in '미션']
+    width = sum((g[1] + 1) * 2 for g in grids) - 2
+    cursor = 96 - width - 4
     pixels = [[0] * 96 for _ in range(16)]
-    aw_fonts.draw_okdandan(pixels, '미션', (40, 0, 94, 16), 16, ink=6, shadow=10, align='right')
+    for grid, w, h, xo, _ in grids:
+        for y in range(h):
+            for x in range(w):
+                if not grid[y][x]:
+                    continue
+                for sy in range(2):
+                    for sx in range(2):
+                        px, py = cursor + (x + xo) * 2 + sx, 1 + y * 2 + sy
+                        if not (0 <= px < 95 and 0 <= py < 15):
+                            raise AssertionError('mission label glyph exceeds its owned cells')
+                        if not pixels[py + 1][px + 1]:
+                            pixels[py + 1][px + 1] = 10
+                        pixels[py][px] = 6
+        cursor += (w + 1) * 2
     result = bytearray(source)
     for tile in PART2_MISSION_WORD_TILES:
         result[tile * 32:(tile + 1) * 32] = bytes(32)
@@ -8201,7 +8253,24 @@ def patch_part2_result_congratulations_obj(rom):
     # tiles 64..95: four 32x16 sprites for the small top title at y=3
     big = Image.new('P', (128, 32), 0)
     small = Image.new('P', (128, 16), 0)
-    draw_centered(big, '작전 성공', 23, fill=1, stroke_fill=15, shadow=11, stroke=1)
+    # The four 32x32 OBJs of the big title never share a glyph in the native art
+    # (no contiguity proof): one syllable per cell at one size on one line.
+    title_chars = '작전성공'
+    probe = ImageDraw.Draw(Image.new('L', (1, 1)))
+    for size in range(23, 7, -1):
+        font = ImageFont.truetype(font_path, size)
+        top, bottom = aw_fonts.okdandan_line(size, title_chars)
+        boxes = [probe.textbbox((0, 0), ch, font=font, stroke_width=1) for ch in title_chars]
+        if all(b[2] - b[0] + 2 <= 30 for b in boxes) and bottom - top + 2 + 2 <= 30:
+            break
+    draw = ImageDraw.Draw(big)
+    for cell, (ch, b) in enumerate(zip(title_chars, boxes)):
+        x = cell * 32 + (32 - (b[2] - b[0] + 2)) // 2 - b[0]
+        y = (32 - (bottom - top + 4)) // 2 - top + 1
+        draw.text((x + 2, y + 2), ch, font=font, fill=11, stroke_width=1, stroke_fill=15)
+        draw.text((x, y), ch, font=font, fill=1, stroke_width=1, stroke_fill=15)
+    big_grid = [[big.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
+    aw_fonts.check_cells(big_grid, (32, 64, 96), 'Part 2 result success title')
     # Small top line: Galmuri (2026-10-08 font rule; was OkDanDan). The large
     # 작전 성공 title above stays OkDanDan.
     draw_centered(small, '축하합니다!', 14, fill=1, stroke_fill=9, shadow=11, stroke=1,
@@ -8257,16 +8326,20 @@ def patch_part2_air_mission_title_obj(rom):
 
     canvas = Image.new('P', (128, 32), 0)
     text = '하늘의 적'
-    for size in range(18, 8, -1):
+    # Sized like the other mission-start titles of this consumer (native ink is
+    # ~21 rows); the old 18 px cap left it at the 16 px small-text line.
+    for size in range(22, 8, -1):
         font = ImageFont.truetype(font_path, size)
         probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
         bbox = probe.textbbox((0, 0), text, font=font, stroke_width=1)
-        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 24:
+        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 28:
             break
+    if size <= aw_fonts.GALMURI_MAX_SIZE:
+        raise AssertionError('Part 2 air mission title fell to small-text size')
     tw = bbox[2] - bbox[0]
     th = bbox[3] - bbox[1]
     x = (128 - tw) // 2 - bbox[0]
-    y = (32 - th) // 2 - bbox[1] + 2
+    y = (32 - th) // 2 - bbox[1]
 
     stroke_mask = Image.new('L', (128, 32), 0)
     fill_mask = Image.new('L', (128, 32), 0)
@@ -8282,6 +8355,8 @@ def patch_part2_air_mission_title_obj(rom):
             if fill_px[xx, yy]:
                 dst[xx, yy] = 10
 
+    grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
+    aw_fonts.check_cells(grid, (64,), 'Part 2 air mission title', native=aw_fonts.obj_canvas(data, 2, 8, 4))
     out = bytearray(len(data))
     px = canvas.load()
     for sprite in range(2):
@@ -8322,40 +8397,14 @@ def patch_part2_air_supremacy_title_obj(rom):
     if len(data) != 64 * 32:
         raise AssertionError(f'unexpected Part 2 air supremacy title size at 0x{off:X}: {len(data)}')
 
-    text = '하늘 제패!'
     # 2026-10-08 font rule: large title -> OkDanDan (was AppleSDGothicNeo index 6).
-    font_path = aw_fonts.okdandan_path()
-
-    def load_title_font(size):
-        return ImageFont.truetype(font_path, size)
-
-    probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
-    for size in range(24, 11, -1):
-        font = load_title_font(size)
-        bbox = probe.textbbox((0, 0), text, font=font, stroke_width=1)
-        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 26:
-            break
-
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    x = (128 - tw) // 2 - bbox[0]
-    y = (32 - th) // 2 - bbox[1] + 1
-
-    stroke_mask = Image.new('L', (128, 32), 0)
-    fill_mask = Image.new('L', (128, 32), 0)
-    ImageDraw.Draw(stroke_mask).text((x, y), text, font=font, fill=255, stroke_width=1, stroke_fill=255)
-    ImageDraw.Draw(fill_mask).text((x, y), text, font=font, fill=255)
-
+    # One word per 64x32 OBJ cell so no glyph crosses the cell edge.
+    grid = [[0] * 128 for _ in range(32)]
+    aw_fonts.draw_okdandan_words(grid, (('하늘', (2, 2, 62, 30)), ('제패!', (66, 2, 126, 30))), 26,
+                                 ink=10, outline=14, fill_threshold=190, outline_threshold=70)
+    aw_fonts.check_cells(grid, (64,), 'Part 2 air supremacy title')
     canvas = Image.new('P', (128, 32), 0)
-    dst = canvas.load()
-    stroke_px = stroke_mask.load()
-    fill_px = fill_mask.load()
-    for yy in range(32):
-        for xx in range(128):
-            if stroke_px[xx, yy] >= 70:
-                dst[xx, yy] = 14
-            if fill_px[xx, yy] >= 190:
-                dst[xx, yy] = 10
+    canvas.putdata([v for row in grid for v in row])
 
     out = bytearray(len(data))
     px = canvas.load()
@@ -9625,6 +9674,12 @@ def patch_part2_campaign_header_obj(rom):
         0x230: 0x0400,
         0x238: 0x0A00,
     }
+    # No glyph ink may fall where only the transparent shared chunk (OBJ 0x208 /
+    # 0x220) or nothing is drawn: every ink column needs a visible window.
+    visible = {x for base, x0 in sprite_x.items() if base in source_chunks for x in range(x0, x0 + 16)}
+    cut = sorted({x for row in pixels for x, v in enumerate(row) if v and x not in visible})
+    if cut or any(pixels[0]) or any(pixels[-1]):
+        raise AssertionError(f'campaign header glyph ink outside its OBJ windows: {cut[:8]}')
     off = 0x541BB8
     dec = lz77_decompress(rom, off)
     if dec is None:
@@ -9654,17 +9709,35 @@ def patch_part2_campaign_header_obj(rom):
 def patch_part2_redstar_region_obj(rom):
     """Replace the Part 2 campaign-map REDSTAR OBJ label with Korean art."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
     width, height = 96, 32
     pixels = [[0] * width for _ in range(height)]
 
-    # Large region name: OkDanDan (2026-10-08 font rule; was Galmuri7 x2).
-    # Same call as part2_army_name_labels (other region names share this layout).
-    from part2_army_name_labels import REGION_LINE_CHARS
-    aw_fonts.draw_okdandan(pixels, '레드스타', (6, 0, 90, 16), 20, ink=4, shadow=7,
-                           shadow_offset=((1, 1), (1, 0)), valign='line', line_chars=REGION_LINE_CHARS)
+    cursor = 13
+    y0 = 0
+    scale = 2
+    for ch in '레드스타':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px0 = cursor + (col + xo) * scale
+                py0 = y0 + row * scale
+                for sy in range(scale):
+                    for sx in range(scale):
+                        px = px0 + sx
+                        py = py0 + sy
+                        for dx, dy in ((1, 1), (1, 0)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = 7
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 4
+        cursor += (w + 1) * scale
 
     out = bytearray(48 * 32)
     # The source block is streamed into three 32x32 square OBJs at tile IDs
@@ -9701,15 +9774,36 @@ def patch_part2_redstar_region_obj(rom):
 def patch_part2_prologue_logo_obj(rom):
     """Replace the Part 2 prologue OBJ logo with Korean text."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from bdf import load_bdf, glyph_grid
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
     width, height = 96, 16
     pixels = [[0] * width for _ in range(height)]
 
-    # Large logo: OkDanDan (2026-10-08 font rule; was Galmuri7 x2).
-    aw_fonts.draw_okdandan(pixels, '프롤로그', (4, 0, 92, 16), 16, ink=11, shadow=7,
-                           shadow_offset=((1, 1), (1, 0), (0, 1)))
+    cursor = 6
+    y0 = 1
+    scale_x = 2
+    scale_y = 2
+    for ch in '프롤로그':
+        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+        for row in range(h):
+            for col in range(w):
+                if not grid[row][col]:
+                    continue
+                px0 = cursor + (col + xo) * scale_x
+                py0 = y0 + row * scale_y
+                for sy in range(scale_y):
+                    for sx in range(scale_x):
+                        px = px0 + sx
+                        py = py0 + sy
+                        for dx, dy in ((1, 1), (1, 0), (0, 1)):
+                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                                pixels[py + dy][px + dx] = 7
+                        if 0 <= px < width and 0 <= py < height:
+                            pixels[py][px] = 11
+        cursor += (w + 1) * scale_x
 
     off = 0x5BBB3C
     dec = lz77_decompress(rom, off)
@@ -9812,8 +9906,7 @@ def patch_world_map_label_tiles(rom):
 
     def put_world_map_title(buf, data):
         pixels = blank_pixels(data, 48, 32)
-        # Large map title: OkDanDan (2026-10-08 font rule; was Galmuri7 x2).
-        aw_fonts.draw_okdandan(pixels, '월드맵', (0, 8, 48, 24), 16, ink=12, shadow=13)
+        draw_text(pixels, '월드맵', 0, y=8, scale=2, ink=12, shadow=13)
         raw = pack_tiles(pixels)
         for ty, row_ids in enumerate((range(0x26B, 0x271), range(0x277, 0x27D), range(0x284, 0x28A), range(0x293, 0x299))):
             for tx, tile_id in enumerate(row_ids):
@@ -13092,15 +13185,16 @@ def _b84_power_title_glyph_block(ch):
     for size in range(25 * scale, 11 * scale, -2):
         candidate = ImageFont.truetype(font_path, size)
         bbox = probe.textbbox((0, 0), ch, font=candidate, stroke_width=scale)
-        if bbox and (bbox[2] - bbox[0]) <= 15 * scale and (bbox[3] - bbox[1]) <= 28 * scale:
+        # Glyph + outline + the 2px drop shadow stay inside x 1..14, y 1..30.
+        if bbox and (bbox[2] - bbox[0]) + 2 * scale <= 14 * scale and (bbox[3] - bbox[1]) + 2 * scale <= 28 * scale:
             font = candidate
             break
     if font is None:
         font = ImageFont.truetype(font_path, 12 * scale)
         bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
     bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
+    tw = bbox[2] - bbox[0] + 2 * scale
+    th = bbox[3] - bbox[1] + 2 * scale
     x = (big_size[0] - tw) // 2 - bbox[0]
     y = (big_size[1] - th) // 2 - bbox[1]
 
@@ -13127,6 +13221,7 @@ def _b84_power_title_glyph_block(ch):
         for px in range(width):
             if fill.getpixel((px, py)) >= 96:
                 grid[py][px] = 7 if py < 14 else 2
+    aw_fonts.check_cells(grid, (), f'Part 1 power title glyph {ch}')
     return _grid_to_tiles(grid)
 
 

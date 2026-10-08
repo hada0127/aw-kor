@@ -3945,3 +3945,12 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - Verified: from HEAD 9c2a9fc the script reproduced `game_wars_korean_candidate_bteam_round2_v10.gba`
   byte-identically (SHA-256 `904505fc…b7e259`); A was byte-identical to the earlier
   hand-built A. Release still requires a Mac real-font rebuild byte-compared to the candidate.
+
+
+## 2026-10-08 폰트 규칙(OkDanDan/Galmuri) Linux 실폰트 빌드
+
+- `tools/aw_fonts.py`: OkDanDan-Bold 위치 = `AW_FONT_DIR` > macOS `~/Library/Fonts` > Linux `~/aw-fonts`, SHA-256 `3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472` 불일치·부재 시 실패. `GALMURI_MAX_SIZE = 16`(16px 이하 = 작은 글자 → Galmuri).
+- 재현: `nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_candidate_fonts_v14.gba --no-sync-outputs` → SHA-256 `3c5a55e50320f6b9b77d180bc162f146a7e9f477dc57774c179321fef428100c`. 폰트 스텁/오버레이 불필요.
+- 검증: `qa_bteam_drift.py --rom V --map-rom V --map temp/integrity_map.json --repoint-manifest temp/repoint_manifest.json`(3340, listed 116, deferred 11, unlisted 0), `qa_integrity_map.py --byte-only`, `qa_part2_render_residuals.py --fail-on-seams`, `phase6_basic_test.py`, `qa_obj_title_cells.py --rom V` PASS. 전체 단위 테스트 957개 중 기준 커밋 대비 신규 실패 없음(`test_room_readability` 2개는 Noto 시절 기대값이라 원래 실패, Linux 기준 커밋에서는 폰트 부재 ERROR로 가려져 있었음).
+- 비교 시트(v12 overlay / v13 / v14): `temp/claude_2026-10-08/fonts_v2/` (`temp/claude_2026-10-08/fonts/make_sheets.py`).
+- 실화면·실기 미검증.

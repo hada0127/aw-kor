@@ -20,6 +20,9 @@ GALMURI11_CONDENSED = GALMURI_DIR / 'Galmuri11-Condensed.ttf'
 # Official okticon OkDanDan-Bold.otf; the Linux ~/aw-fonts copy (2026-10-08)
 # has this SHA-256, the same value the Mac builds pinned.
 OKDANDAN_SHA256 = '3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472'
+# 2026-10-08 user decision: drawn text whose line (font size) is <= 16 px is
+# small text and uses Galmuri; OkDanDan only above that.
+GALMURI_MAX_SIZE = 16
 
 
 def font_dir():
@@ -259,3 +262,57 @@ def okdandan_glyph(char, size, size_y=None, threshold=128, chars=None):
     x0 = min(x for x, _ in ink)
     x1 = max(x for x, _ in ink)
     return frozenset((x - x0, y) for x, y in ink), x1 - x0 + 1, image.height
+
+
+def draw_okdandan_words(pixels, items, max_size, min_size=6, **kwargs):
+    """Draw several words, each inside its own OBJ cell box, at one common size
+    and on one common line, so no glyph straddles a cell edge.
+    items = [(text, (x0, y0, x1, y1)), ...]. Returns the size."""
+    chars = ''.join(text for text, _ in items)
+    kwargs = dict(kwargs, valign='line', line_chars=chars)
+    height, width = len(pixels), len(pixels[0])
+    for size in range(max_size, min_size - 1, -1):
+        scratch = [[0] * width for _ in range(height)]
+        try:
+            for text, box in items:
+                draw_okdandan(scratch, text, box, size, min_size=size, **kwargs)
+        except AssertionError:
+            continue
+        for text, box in items:
+            draw_okdandan(pixels, text, box, size, min_size=size, **kwargs)
+        return size
+    raise AssertionError(f'OkDanDan cannot fit {chars!r} in its cells')
+
+
+def obj_canvas(data, cells, cell_w, cell_h, first=0):
+    """Compose 1D-mapped OBJ cells (cell_w x cell_h tiles each) side by side."""
+    width, height = cells * cell_w * 8, cell_h * 8
+    out = [[0] * width for _ in range(height)]
+    for cell in range(cells):
+        for t in range(cell_w * cell_h):
+            base = (first + cell * cell_w * cell_h + t) * 32
+            for y in range(8):
+                for x in range(8):
+                    value = (data[base + y * 4 + x // 2] >> (4 * (x % 2))) & 15 if base + 32 <= len(data) else 0
+                    out[(t // cell_w) * 8 + y][cell * cell_w * 8 + (t % cell_w) * 8 + x] = value
+    return out
+
+
+def straddling_rows(pixels, boundary):
+    """Rows whose ink continues across column `boundary` (between two OBJ cells)."""
+    return sum(1 for row in pixels if row[boundary - 1] and row[boundary])
+
+
+def check_cells(pixels, boundaries, label, native=None, edges=True):
+    """Fail if ink is cut at the canvas edge (edges=True; boxed logos whose
+    frame is meant to touch the edge pass edges=False), or straddles an internal
+    OBJ cell boundary that the native art never straddles (no proof the cells
+    are drawn contiguously). `native` is the original art on the same canvas,
+    or True when contiguity was proven elsewhere (e.g. another sheet of the same
+    consumer)."""
+    if edges and (any(pixels[0]) or any(pixels[-1]) or any(row[0] or row[-1] for row in pixels)):
+        raise AssertionError(f'{label}: ink touches the canvas edge (would be cut)')
+    for b in boundaries:
+        proven = native is True or (native and straddling_rows(native, b))
+        if straddling_rows(pixels, b) and not proven:
+            raise AssertionError(f'{label}: glyph straddles OBJ cell edge x={b} without native contiguity')

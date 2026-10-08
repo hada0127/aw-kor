@@ -1193,6 +1193,19 @@ def draw_part1_clean_menu_label(
             break
     else:
         raise ValueError(f'header text does not fit: {text!r} in {box}')
+    if size <= aw_fonts.GALMURI_MAX_SIZE:
+        # 2026-10-08 decision: a header this small is small text -> Galmuri at its
+        # native 12 px (Bold, else Condensed), same palette composition. Keep it in
+        # the first 64x32 OBJ cell (x < 64) so no glyph crosses into the 16x32 cell.
+        cell_box = (box[0], box[1], min(box[2], 62), box[3])
+        for path in (BODY_BOLD_FONT_PATH, BODY_FONT_PATH):
+            font = ImageFont.truetype(str(path), 12)
+            w, h = text_bbox(draw, text, font, 1)
+            if w <= cell_box[2] - cell_box[0] and h <= cell_box[3] - cell_box[1]:
+                box = cell_box
+                break
+        else:
+            raise ValueError(f'header text does not fit in Galmuri: {text!r} in {box}')
     text_box = draw.textbbox((0, 0), text, font=font, stroke_width=1)
     w = text_box[2] - text_box[0]
     h = text_box[3] - text_box[1]

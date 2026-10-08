@@ -1544,3 +1544,11 @@ with expected text, kept text, and cause in `temp/bteam_restore_residuals.json`.
 The previous candidate's `0xA34F98` row already contains undecodable glyphs;
 its final bytes are unchanged in this follow-up. Do not treat 0/484 non-Korean
 as proof of correct glyphs, meaning, layout, or complete baseline restoration.
+
+
+### 2026-10-08 v13 폰트 변환에서 되돌린 것
+
+- 16px 이하 줄(지역명 레드스타·블루문·그린어스·옐로코멧, 월드맵, 미션, 확인/재고, 프롤로그, 스플래시 로고 두 줄)을 OkDanDan으로 그리면 글자가 뭉개지고 작아졌다(미션 14→약 9줄). 사용자 결정으로 Galmuri로 되돌렸다. OkDanDan은 글자마다 높이가 달라(예: 22px에서 페 15x10, 캠 15x15) 같은 크기라도 16px 칸에서는 실제 글자가 더 작다.
+- 1편 미션 제목 `하늘의 용사!`(0xC133DC)는 506B 압축 용량 때문에 OkDanDan 15px까지 줄어 Galmuri 레이아웃으로 되돌렸다.
+- 하늘 제패!/전투 개시!(2x64x32 OBJ)의 v13 시트에서 칸 사이 2px 틈 때문에 제·개가 잘린 것처럼 보였다. 원본 일본어도 x=64를 넘으므로(14/19행) 실제로는 붙어 그려질 가능성이 높지만, 단어 단위로 칸마다 배치해 경계 통과를 없앴다. 원본이 경계를 넘지 않는 작전 성공(4x32x32)은 한 칸 한 글자로 바꿨다.
+- 2026-10-07 「Linux PC에서 정식 전체 빌드 불가」는 해소됐다: OkDanDan을 `~/aw-fonts`에 두고 Apple/Nanum/Noto는 더 이상 ROM 픽셀에 쓰지 않는다. Mac 바이트 대조 요건은 폐기(사용자 결정).

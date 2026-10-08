@@ -3823,3 +3823,12 @@ the full-font macOS build remain (unverified).
 - Comparison now preserves the number and position of punctuation and authored spaces. It predicts the documented dialogue writer conversions on baseline text (visible fullwidth spaces, alphanumerics and punctuation, and renderer-safe dash); actual ROM glyphs are compared literally. Reviewed Part 2 seam spaces are considered only at the keyed message in `data/part2_seam_decisions.tsv` and only in the approved direction. All 25 DEFER rows remain failures and appear separately in the gate summary.
 - Static candidate `93759193a6606ef1da857400497e9c1890081b2d303281776557fc2daaa510e5` (`temp/claude_2026-10-07/build/candidate13_overlay.gba`) with B13 integrity map, B13 base ROM, and repoint manifest: 3340 protected rows; 588 mismatches = 484 RESTORE_BASELINE + 25 DEFER + 77 NEW_STRICT_MISMATCH + 2 ALIGNMENT_RESTORE; FIX_GATE residual 0. The 77 newly exposed rows were absent from the 649-row consensus because the previous gate discarded spaces or punctuation. They need separate review; no decision was inferred for them. No build or emulator was run for this gate change.
 - 2026-10-07 B팀 복원 최종 바이트 조사: 6개 문장 시작 `0x9298A4`, `0x96253C`, `0x99ADE0`, `0x9D3684`, `0xA34F98`, `0xEE27E0`의 내부 +24 주소에 후행 `fixed_zero_text`가 22바이트를 다시 써 문장 끝을 잘라 `▯▯▯`로 만들었다. 6개 내부 주소의 원본 ROM 직접 포인터는 각 0건이다. 중첩 기록을 제거한 후보에서는 각 주소의 마지막 import writer payload와 ROM 바이트가 일치한다(순서대로 37, 37, 39, 37, 38, 37바이트). `0x99ADE0`은 기존 문구의 `버튼을`, `0xA34F98`은 B팀 보존 문구의 전각 느낌표를 유지한다. `0xD9009E` 보존 대사는 최종 바이트 기준 66 half-cells로 44 한도를 초과하는 명시 잔여다. 정적 검사는 화면 표시를 증명하지 않는다.
+
+
+## 2026-10-08 OBJ 칸 경계와 OkDanDan 렌더링 사실
+
+- 1편 미션 시작 제목 소비자(0xE12BF4 표, M19/M20 포함): 원본 2x64x32 시트 33개가 x=64에서 잉크가 이어지고, 0xC1100C+0xC12E40(せ 분할)은 x=128에서 15행 이어진다 → 칸이 붙어 그려진다는 정적 근거(`part1_mission_titles._contiguity`).
+- 2편 결과 큰 제목 0xBFB45C(4x32x32)는 원본이 칸 경계를 한 번도 넘지 않는다(근거 없음) → 한 칸 한 글자.
+- 1편 80x32 헤더(64x32 + 16x32, `part1_logo_layer_to_tiles`): 서브메뉴 10개는 원본이 x=64를 넘지 않는다. 메인 헤더 일부(숍 선택 14행, 캠페인 20행 등)는 넘는다.
+- 같은 OkDanDan(SHA 동일)이라도 Linux(Pillow 12.3, FreeType 2.14.3, raqm 사용)와 Mac 레퍼런스의 바이트가 타이틀·선택 로고, 가자!, 작전성공/실패 오버레이, 1편 메뉴 로고·헤더에서 다르다. `layout_engine=BASIC`이면 일부는 같아지고 나머지는 래스터라이저 차이로 남는다. Linux 빌드가 새 기준이다.
+- 검사 도구: `tools/qa_obj_title_cells.py --rom ROM` (캔버스 가장자리 잘림 + 근거 없는 칸 경계 통과 + 글자별 칸 테두리 + 2편 미션 글리프 advance).

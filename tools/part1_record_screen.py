@@ -9,7 +9,7 @@ Title glyph masks are a reviewed data asset (data/part1_record_title_glyphs.json
 generated from OkDanDan-Bold (2026-10-08 font rule: large text = OkDanDan; the
 earlier Noto Sans CJK KR Black masks were replaced) with generate_title_masks();
 the build never needs the font. Outline index 14 and the vertical fill bands
-follow the original 戰 column profile. Small glyphs reuse the project's
+follow the original 戰 profile, stretched over the glyphs' own ink rows. Small glyphs reuse the project's
 2350-syllable glyph blob (ink 9 -> 10), so '14日' shares the new '일'.
 """
 import hashlib
@@ -65,15 +65,36 @@ def generate_title_masks(font_path=None, out=TITLE_GLYPHS, box=28):
     return data
 
 
+# The original 戰/績 ink spans rows 1..30 and BANDS is that absolute profile.
+NATIVE_INK_ROWS = (1, 30)
+
+
+def ink_rows(masks):
+    """Common (top, bottom) ink rows of all title glyphs."""
+    ys = [y for rows in masks.values() for y, row in enumerate(rows) if '#' in row]
+    return min(ys), max(ys)
+
+
+def band_value(y, rows):
+    """Fill index of row y: the native band profile stretched over the glyphs' own
+    ink rows, so every band of the gradient stays visible (the OkDanDan glyphs
+    are shorter than 戰 and have empty rows between their jamo)."""
+    top, bottom = rows
+    lo, hi = NATIVE_INK_ROWS
+    native = lo + (y - top) * (hi - lo) / max(1, bottom - top)
+    return next(v for a, b, v in BANDS if a <= round(native) < b) if 0 <= round(native) < 32 else BANDS[-1][2]
+
+
 def render_title(buf, ch, first, masks):
     rows = masks[ch]
+    extent = ink_rows(masks)
     glyph = {(x, y) for y, row in enumerate(rows) for x, c in enumerate(row) if c == '#'}
     outline = {(x + dx, y + dy) for x, y in glyph for dx in (-1, 0, 1) for dy in (-1, 0, 1)
                if 0 <= x + dx < 32 and 0 <= y + dy < 32 and (x + dx, y + dy) not in glyph}
     if any(x in (0, 31) or y in (0, 31) for x, y in glyph):
         raise AssertionError(f'record title glyph {ch} touches the cell edge')
     for y in range(32):
-        fill = next(v for lo, hi, v in BANDS if lo <= y < hi)
+        fill = band_value(y, extent)
         for x in range(32):
             t = first + (y // 8) * 4 + x // 8
             value = fill if (x, y) in glyph else OUTLINE if (x, y) in outline else 0

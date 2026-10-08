@@ -47,6 +47,30 @@ class FontRuleTests(unittest.TestCase):
                     offenders.append(f'{path.name}:{number}: {line.strip()}')
         self.assertEqual(offenders, [])
 
+    def test_cell_check_rejects_cut_and_unproven_straddle(self):
+        grid = [[0] * 16 for _ in range(8)]
+        grid[3][7] = grid[3][8] = 1          # one glyph across the x=8 OBJ edge
+        with self.assertRaisesRegex(AssertionError, 'straddles'):
+            aw_fonts.check_cells(grid, (8,), 't')
+        native = [[0] * 16 for _ in range(8)]
+        with self.assertRaisesRegex(AssertionError, 'straddles'):
+            aw_fonts.check_cells(grid, (8,), 't', native=native)
+        native[5][7] = native[5][8] = 2      # native art proves edge-to-edge cells
+        aw_fonts.check_cells(grid, (8,), 't', native=native)
+        aw_fonts.check_cells(grid, (8,), 't', native=True)
+        grid[0][2] = 1                       # ink on the canvas border would be cut
+        with self.assertRaisesRegex(AssertionError, 'canvas edge'):
+            aw_fonts.check_cells(grid, (8,), 't', native=True)
+        aw_fonts.check_cells(grid, (8,), 't', native=True, edges=False)
+
+    @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
+    def test_word_cells_never_straddle(self):
+        grid = [[0] * 128 for _ in range(32)]
+        size = aw_fonts.draw_okdandan_words(grid, (('전투', (2, 2, 62, 30)), ('개시!', (66, 2, 126, 30))),
+                                            26, ink=10, shadow=14)
+        self.assertGreater(size, aw_fonts.GALMURI_MAX_SIZE)
+        aw_fonts.check_cells(grid, (64,), 'words')
+
     @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
     def test_line_keeps_one_baseline(self):
         chars = '캠페인'

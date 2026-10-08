@@ -66,8 +66,11 @@ class MissionTitleTests(unittest.TestCase):
         self.assertTrue(all(t.startswith('okdandan') for t in tiers.values()))
         self.assertEqual(tiers[0xC1689C], 'okdandan20')
         self.assertEqual(tiers[0xC13EE0], 'okdandan20')
-        # Capacity may step a size down, never below the readable floor.
-        self.assertGreaterEqual(min(m.chosen_size(row[0]) for row in m.TITLES), 15)
+        # Capacity may step a size down; at <= 16 px a title is small text and
+        # falls back to the Galmuri layout (2026-10-08 decision).
+        sizes = {row[0]: m.chosen_size(row[0]) for row in m.TITLES}
+        self.assertTrue(all(v is None or v > 16 for v in sizes.values()))
+        self.assertIsNone(sizes[0xC133DC])   # 하늘의 용사! (506-byte allocation)
 
     def test_texts_match_bteam_baseline(self):
         import json

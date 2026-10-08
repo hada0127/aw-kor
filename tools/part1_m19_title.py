@@ -76,6 +76,11 @@ def patch(rom, original):
             or bytes(rom[SOURCE:FOLLOWING]) != original[SOURCE:FOLLOWING]):
         raise AssertionError('Part 1 M19 title source already modified by another writer')
     raw = render()
+    # Same mission-start consumer as part1_mission_titles: its native sheets
+    # prove the two 64x32 OBJs are drawn edge to edge.
+    import part1_mission_titles
+    part1_mission_titles.check_cells(original, source=-1)
+    aw_fonts.check_cells(aw_fonts.obj_canvas(raw, 2, 8, 4), (64,), 'Part 1 M19 title', native=True)
     compressed = lz77_compress_optimal(raw, vram_safe=True)
     if len(compressed) > CAPACITY:
         raise AssertionError('Part 1 M19 title compressed allocation overflow')
