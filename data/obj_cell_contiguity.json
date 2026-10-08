@@ -1,0 +1,97 @@
+{
+ "_doc": "Screen proofs that a multi-OBJ title sheet is drawn with its cells edge to edge (tools/qa_screen_obj_contiguity.py). aw_fonts.check_cells accepts glyphs crossing these assets' internal cell edges only with an entry here or native-art evidence. Each entry: frame PNG + its SHA-256, the ROM the frame was captured from, cell geometry and the located cell positions.",
+ "assets": {
+  "0x00BFB45C": {
+   "label": "Part 1 mission result 작전 성공 (big title, 4 x 32x32 OBJ)",
+   "cells": 4,
+   "cell_w": 4,
+   "cell_h": 4,
+   "first": 0,
+   "frame": "output/qa/screenqa_2026-10-07/p1_m21_victory_cheat/0153_A_0026513.png",
+   "frame_sha256": "cc8fd5acfd5f02a016b2f6906e5789a4900a3d7a5d722079a4b56e7d4d50155e",
+   "rom_sha256": "5bb5c94164b6e1a1612cb7f721f406cca9a1d2380229da9454ecb1de21e99b08",
+   "found": [
+    [
+     8,
+     22
+    ],
+    [
+     40,
+     22
+    ],
+    [
+     72,
+     22
+    ],
+    [
+     104,
+     22
+    ]
+   ],
+   "note": "mGBA Linux harness capture after the M21 victory (cheat-tainted run, screen evidence only). The 5bb5c941 sheet crosses all three internal cell edges (15/11/22 rows) and the frame shows the cells at x=8,40,72,104 on one row."
+  },
+  "0x00C12FD8": {
+   "label": "Part 1 mission-title consumer (0xE12BF4 table), sheet 0xC12FD8 개전! on the mission briefing",
+   "cells": 2,
+   "cell_w": 8,
+   "cell_h": 4,
+   "first": 0,
+   "frame": "output/qa/screenqa_2026-10-08/p1_trial_b/frames/c56edbd6a630fadfeb128da24221140fa581403fb19964496c9393fd9ee82faf.png",
+   "frame_sha256": "fa3e22a2222cee26f4e04c3d40adc3c014bc9501106ea223c9a108cc0f05ad6e",
+   "rom_sha256": "2feafaeee8b247ac20d8b06edf76d169e6dde5e76358ea1c6b4cc1e14da731e8",
+   "found": [
+    [
+     8,
+     60
+    ],
+    [
+     72,
+     60
+    ]
+   ],
+   "consumer_assets": [
+    "0x00C10B34",
+    "0x00C10DC0",
+    "0x00C1100C",
+    "0x00C112DC",
+    "0x00C11598",
+    "0x00C118A8",
+    "0x00C11B84",
+    "0x00C11D9C",
+    "0x00C1205C",
+    "0x00C122DC",
+    "0x00C12500",
+    "0x00C1275C",
+    "0x00C129E0",
+    "0x00C12BE0",
+    "0x00C12E40",
+    "0x00C12FD8",
+    "0x00C131CC",
+    "0x00C133DC",
+    "0x00C135D8",
+    "0x00C13844",
+    "0x00C13A34",
+    "0x00C13CAC",
+    "0x00C13EE0",
+    "0x00C1420C",
+    "0x00C14488",
+    "0x00C14770",
+    "0x00C14A2C",
+    "0x00C14C9C",
+    "0x00C14EE8",
+    "0x00C1513C",
+    "0x00C15394",
+    "0x00C15594",
+    "0x00C15808",
+    "0x00C15A68",
+    "0x00C15C5C",
+    "0x00C15E00",
+    "0x00C160B8",
+    "0x00C1636C",
+    "0x00C165D8",
+    "0x00C1689C"
+   ],
+   "note": "Linux mGBA capture (output/qa/screenqa_2026-10-08/p1_trial_b, new campaign from the cleared-save menu route; run is cheat-tainted by its save lineage, screen evidence only). Both 64x32 cells located at x=8 and x=72 on one row: every sheet of this table consumer (battle start 0xC10B34, 0xC11D9C, 0xC1205C, mission titles, M19/M20) is drawn edge to edge."
+  }
+ }
+}

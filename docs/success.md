@@ -3954,3 +3954,10 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 검증: `qa_bteam_drift.py --rom V --map-rom V --map temp/integrity_map.json --repoint-manifest temp/repoint_manifest.json`(3340, listed 116, deferred 11, unlisted 0), `qa_integrity_map.py --byte-only`, `qa_part2_render_residuals.py --fail-on-seams`, `phase6_basic_test.py`, `qa_obj_title_cells.py --rom V` PASS. 전체 단위 테스트 957개 중 기준 커밋 대비 신규 실패 없음(`test_room_readability` 2개는 Noto 시절 기대값이라 원래 실패, Linux 기준 커밋에서는 폰트 부재 ERROR로 가려져 있었음).
 - 비교 시트(v12 overlay / v13 / v14): `temp/claude_2026-10-08/fonts_v2/` (`temp/claude_2026-10-08/fonts/make_sheets.py`).
 - 실화면·실기 미검증.
+
+## 2026-10-08 v15 OBJ 제목 연속 배치 실화면 근거
+
+- 후보 `output/game_wars_korean_candidate_fonts_v15.gba` SHA-256 `2feafaeee8b247ac20d8b06edf76d169e6dde5e76358ea1c6b4cc1e14da731e8` (같은 소스 재빌드 바이트 동일).
+- 메뉴·브리핑 재현: `tools/playthrough_capture.py --rom V --harness temp/mgbah_linux --game-save output/qa/screenqa_2026-10-07/p1_cleared_export/game_save.json --game-save-source-rom-sha256 effc6ee8… --out output/qa/screenqa_2026-10-08/p1_v15_menus` + p1_cleared 입력 39구간(`temp/claude_2026-10-08/p1_menus_cmds.txt`), 이어서 `p1_trial_a`(모드 선택→캠페인→처음부터), `p1_trial_b`(A 25회).
+- 증명: `python3 tools/qa_screen_obj_contiguity.py --rom V --frame output/qa/screenqa_2026-10-08/p1_trial_b/frames/c56edbd6….png --asset 0xC12FD8 --cells 2 --cell-w 8 --cell-h 4` → 두 칸 x=8/72, score 1.0. 작전 성공은 `p1_m21_victory_cheat/0153_A_0026513.png`(ROM 5bb5c941)에서 4칸 x=8/40/72/104.
+- 게이트: B팀 listed 116·deferred 11·unlisted 0, phase6, 무결성 byte-only, seam, `qa_obj_title_cells.py`, `qa_visual_regions.run_asset_checks` 31개 PASS. 전체 테스트 959개 중 신규 실패 없음(`test_room_readability` 2개는 기존 실패).

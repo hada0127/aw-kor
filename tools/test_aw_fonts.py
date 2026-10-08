@@ -63,6 +63,28 @@ class FontRuleTests(unittest.TestCase):
             aw_fonts.check_cells(grid, (8,), 't', native=True)
         aw_fonts.check_cells(grid, (8,), 't', native=True, edges=False)
 
+    def test_screen_proof_locates_cells_edge_to_edge(self):
+        import numpy as np
+        import qa_screen_obj_contiguity as prover
+        rng = np.random.default_rng(7)
+        cells = [rng.integers(0, 4, size=(8, 8)) for _ in range(2)]
+        palette = np.array([[0, 0, 0], [255, 0, 0], [0, 255, 0], [0, 0, 255]], dtype=np.uint8)
+        for gap, expected in ((0, True), (3, False)):
+            frame = np.full((24, 40, 3), 200, dtype=np.uint8)
+            for k, cell in enumerate(cells):
+                x0 = 4 + k * (8 + gap)
+                region = frame[5:13, x0:x0 + 8]
+                region[cell > 0] = palette[cell[cell > 0]]
+            found = [prover.locate(frame, cell.tolist()) for cell in cells]
+            xs = [f[1] for f in found]
+            self.assertEqual(xs[1] - xs[0] == 8, expected)
+
+    def test_registered_screen_proofs_cover_their_consumers(self):
+        self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C))
+        for sheet in (0xC10B34, 0xC11D9C, 0xC1205C, 0xC15A68, 0xC15C5C):
+            self.assertEqual(aw_fonts.screen_contiguity(sheet), 'screen:0x00C12FD8')
+        self.assertIsNone(aw_fonts.screen_contiguity(0x5B7930))
+
     @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
     def test_word_cells_never_straddle(self):
         grid = [[0] * 128 for _ in range(32)]

@@ -1172,6 +1172,11 @@ def draw_centered_title_font_text(
     layer.paste(patch, (x, bbox[1]))
 
 
+# 2026-10-08: some headers only fit at <= 16 px (small text -> Galmuri); a font
+# family must not mix on the same kind of screen element, so all headers follow.
+PART1_HEADER_FAMILY_GALMURI = True
+
+
 def draw_part1_clean_menu_label(
     layer: Image.Image,
     text: str,
@@ -1193,10 +1198,13 @@ def draw_part1_clean_menu_label(
             break
     else:
         raise ValueError(f'header text does not fit: {text!r} in {box}')
-    if size <= aw_fonts.GALMURI_MAX_SIZE:
+    if PART1_HEADER_FAMILY_GALMURI or size <= aw_fonts.GALMURI_MAX_SIZE:
         # 2026-10-08 decision: a header this small is small text -> Galmuri at its
-        # native 12 px (Bold, else Condensed), same palette composition. Keep it in
-        # the first 64x32 OBJ cell (x < 64) so no glyph crosses into the 16x32 cell.
+        # native 12 px (Bold, else Condensed), same palette composition. The whole
+        # 80x32 header family (main headers + submenu headers, one per screen in
+        # the same top-left slot) follows its smallest members, so it is all
+        # Galmuri. Keep it in the first 64x32 OBJ cell (x < 64) so no glyph
+        # crosses into the 16x32 cell.
         cell_box = (box[0], box[1], min(box[2], 62), box[3])
         for path in (BODY_BOLD_FONT_PATH, BODY_FONT_PATH):
             font = ImageFont.truetype(str(path), 12)

@@ -7593,12 +7593,13 @@ def patch_part2_mission_start_obj(rom):
     # The original block packs several Japanese labels. On the battle-start
     # screen the unused labels can bleed in around the main banner, so clear the
     # sheet and redraw only the active battle-start text.
+    banner_text = '전투 개시!'
     # Large banner: OkDanDan (2026-10-08 font rule; was Galmuri11-Condensed x2).
-    # Same ink 10 + drop shadow 14 (+1,+1); one word per 64x32 OBJ cell so no
-    # glyph crosses the cell edge.
-    aw_fonts.draw_okdandan_words(pixels, (('전투', (2, 2, 62, 30)), ('개시!', (66, 2, 126, 30))), 26,
-                                 ink=10, shadow=14)
-    aw_fonts.check_cells(pixels, (64,), 'Part 2 battle start banner')
+    # Same ink 10 + drop shadow 14 as the Galmuri version, 1px shadow at +1,+1.
+    aw_fonts.draw_okdandan(pixels, banner_text, (2, 3, 126, 29), 26, ink=10, shadow=14)
+    # Native 戦闘開始 art crosses x=64 (19 rows): cells drawn edge to edge.
+    aw_fonts.check_cells(pixels, (64,), 'Part 2 battle start banner',
+                         native=aw_fonts.obj_canvas(tile_data, 2, 8, 4))
 
     out = bytearray(len(tile_data))
     # The banner is displayed as two 64x32 OBJs: tile 0x00 for the left half
@@ -8253,24 +8254,11 @@ def patch_part2_result_congratulations_obj(rom):
     # tiles 64..95: four 32x16 sprites for the small top title at y=3
     big = Image.new('P', (128, 32), 0)
     small = Image.new('P', (128, 16), 0)
-    # The four 32x32 OBJs of the big title never share a glyph in the native art
-    # (no contiguity proof): one syllable per cell at one size on one line.
-    title_chars = '작전성공'
-    probe = ImageDraw.Draw(Image.new('L', (1, 1)))
-    for size in range(23, 7, -1):
-        font = ImageFont.truetype(font_path, size)
-        top, bottom = aw_fonts.okdandan_line(size, title_chars)
-        boxes = [probe.textbbox((0, 0), ch, font=font, stroke_width=1) for ch in title_chars]
-        if all(b[2] - b[0] + 2 <= 30 for b in boxes) and bottom - top + 2 + 2 <= 30:
-            break
-    draw = ImageDraw.Draw(big)
-    for cell, (ch, b) in enumerate(zip(title_chars, boxes)):
-        x = cell * 32 + (32 - (b[2] - b[0] + 2)) // 2 - b[0]
-        y = (32 - (bottom - top + 4)) // 2 - top + 1
-        draw.text((x + 2, y + 2), ch, font=font, fill=11, stroke_width=1, stroke_fill=15)
-        draw.text((x, y), ch, font=font, fill=1, stroke_width=1, stroke_fill=15)
-    big_grid = [[big.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
-    aw_fonts.check_cells(big_grid, (32, 64, 96), 'Part 2 result success title')
+    draw_centered(big, '작전 성공', 23, fill=1, stroke_fill=15, shadow=11, stroke=1)
+    # The native 作戦成功 never crosses a 32x32 cell, so contiguity comes from a
+    # screen proof (data/obj_cell_contiguity.json, tools/qa_screen_obj_contiguity.py).
+    aw_fonts.check_cells([[big.getpixel((x, y)) for x in range(128)] for y in range(32)], (32, 64, 96),
+                         'Part 1 result 작전 성공', native=aw_fonts.screen_contiguity(off))
     # Small top line: Galmuri (2026-10-08 font rule; was OkDanDan). The large
     # 작전 성공 title above stays OkDanDan.
     draw_centered(small, '축하합니다!', 14, fill=1, stroke_fill=9, shadow=11, stroke=1,
@@ -8397,15 +8385,44 @@ def patch_part2_air_supremacy_title_obj(rom):
     if len(data) != 64 * 32:
         raise AssertionError(f'unexpected Part 2 air supremacy title size at 0x{off:X}: {len(data)}')
 
+    text = '하늘 제패!'
     # 2026-10-08 font rule: large title -> OkDanDan (was AppleSDGothicNeo index 6).
-    # One word per 64x32 OBJ cell so no glyph crosses the cell edge.
-    grid = [[0] * 128 for _ in range(32)]
-    aw_fonts.draw_okdandan_words(grid, (('하늘', (2, 2, 62, 30)), ('제패!', (66, 2, 126, 30))), 26,
-                                 ink=10, outline=14, fill_threshold=190, outline_threshold=70)
-    aw_fonts.check_cells(grid, (64,), 'Part 2 air supremacy title')
-    canvas = Image.new('P', (128, 32), 0)
-    canvas.putdata([v for row in grid for v in row])
+    font_path = aw_fonts.okdandan_path()
 
+    def load_title_font(size):
+        return ImageFont.truetype(font_path, size)
+
+    probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
+    for size in range(24, 11, -1):
+        font = load_title_font(size)
+        bbox = probe.textbbox((0, 0), text, font=font, stroke_width=1)
+        if bbox[2] - bbox[0] <= 124 and bbox[3] - bbox[1] <= 26:
+            break
+
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    x = (128 - tw) // 2 - bbox[0]
+    y = (32 - th) // 2 - bbox[1] + 1
+
+    stroke_mask = Image.new('L', (128, 32), 0)
+    fill_mask = Image.new('L', (128, 32), 0)
+    ImageDraw.Draw(stroke_mask).text((x, y), text, font=font, fill=255, stroke_width=1, stroke_fill=255)
+    ImageDraw.Draw(fill_mask).text((x, y), text, font=font, fill=255)
+
+    canvas = Image.new('P', (128, 32), 0)
+    dst = canvas.load()
+    stroke_px = stroke_mask.load()
+    fill_px = fill_mask.load()
+    for yy in range(32):
+        for xx in range(128):
+            if stroke_px[xx, yy] >= 70:
+                dst[xx, yy] = 14
+            if fill_px[xx, yy] >= 190:
+                dst[xx, yy] = 10
+
+    grid = [[canvas.getpixel((xx, yy)) for xx in range(128)] for yy in range(32)]
+    # Native 空制 art crosses x=64 (14 rows): this consumer draws the cells edge to edge.
+    aw_fonts.check_cells(grid, (64,), 'Part 2 air supremacy title', native=aw_fonts.obj_canvas(data, 2, 8, 4))
     out = bytearray(len(data))
     px = canvas.load()
     for sprite in range(2):

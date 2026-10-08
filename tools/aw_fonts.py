@@ -298,6 +298,28 @@ def obj_canvas(data, cells, cell_w, cell_h, first=0):
     return out
 
 
+def screen_contiguity(asset):
+    """Registered screen proof (data/obj_cell_contiguity.json) that the OBJ
+    cells of this asset, or of the consumer that draws it, are drawn edge to
+    edge. Returns the proof key ('screen:0x...') or None."""
+    import json
+    with open(ROOT / 'data' / 'obj_cell_contiguity.json', encoding='utf-8') as stream:
+        assets = json.load(stream)['assets']
+    name = f'0x{asset:08X}'
+    key = name if name in assets else next(
+        (k for k, v in assets.items() if name in v.get('consumer_assets', ())), None)
+    if key is None:
+        return None
+    entry = assets[key]
+    frame = ROOT / entry['frame']
+    if frame.is_file() and hashlib.sha256(frame.read_bytes()).hexdigest() != entry['frame_sha256']:
+        raise AssertionError(f'screen contiguity proof frame changed for 0x{asset:06X}')
+    xs = [x for x, _ in entry['found']]
+    if any(b - a != entry['cell_w'] * 8 for a, b in zip(xs, xs[1:])) or len({y for _, y in entry['found']}) != 1:
+        raise AssertionError(f'screen contiguity proof is not edge to edge for 0x{asset:06X}')
+    return f'screen:{key}'
+
+
 def straddling_rows(pixels, boundary):
     """Rows whose ink continues across column `boundary` (between two OBJ cells)."""
     return sum(1 for row in pixels if row[boundary - 1] and row[boundary])
@@ -308,11 +330,11 @@ def check_cells(pixels, boundaries, label, native=None, edges=True):
     frame is meant to touch the edge pass edges=False), or straddles an internal
     OBJ cell boundary that the native art never straddles (no proof the cells
     are drawn contiguously). `native` is the original art on the same canvas,
-    or True when contiguity was proven elsewhere (e.g. another sheet of the same
-    consumer)."""
+    True when contiguity was proven elsewhere (e.g. another sheet of the same
+    consumer), or a 'screen:...' proof key from screen_contiguity()."""
     if edges and (any(pixels[0]) or any(pixels[-1]) or any(row[0] or row[-1] for row in pixels)):
         raise AssertionError(f'{label}: ink touches the canvas edge (would be cut)')
     for b in boundaries:
-        proven = native is True or (native and straddling_rows(native, b))
+        proven = native is True or isinstance(native, str) or (native and straddling_rows(native, b))
         if straddling_rows(pixels, b) and not proven:
             raise AssertionError(f'{label}: glyph straddles OBJ cell edge x={b} without native contiguity')
