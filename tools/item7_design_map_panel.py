@@ -16,18 +16,19 @@ On-screen display is unverified (no savestate of the design-map screen; a
 Korean term: 디자인 맵 (translation_for_import 0x00A2CC2C / 0x00B81CC0
 デザインマップ).  Native style kept: white ink 1, gray shadow 12 (C) at the
 lower right, background 9, corner brackets (rows 0..7 and 56..63) untouched.
-Glyphs: Galmuri11-Bold 12px (pixel font, no AA) scaled 2x.
+Glyphs: OkDanDan-Bold, largest size whose 디자인맵 line fits 22 rows, thresholded (2026-10-08 font rule; was
+Galmuri11-Bold 12px scaled 2x).
 """
 import hashlib
 import struct
 from functools import lru_cache
 from pathlib import Path
 
+import aw_fonts
 from lz77_compress import lz77_compress_optimal
 from lz77_scan import lz77_decompress
 
 ROOT = Path(__file__).resolve().parent.parent
-FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 ROM_BASE = 0x08000000
 SIZE = 2560
 CAPACITY = 630
@@ -69,31 +70,21 @@ def source_guard(original):
     return lz77_decompress(original, COPIES[0][0])[0]
 
 
+LINE_CHARS = '디자인맵'
+BODY_ROWS = 22    # the old Galmuri 12px x 2 body
+
+
 @lru_cache(maxsize=None)
 def _mask(text):
-    """2x-scaled Galmuri11-Bold mask; returns (set of (x, y)), width, height."""
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype(str(FONT), 12)
-    cells = []
-    for char in text:
-        image = Image.new('L', (16, 16), 0)
-        ImageDraw.Draw(image).text((0, 0), char, font=font, fill=255)
-        box = image.getbbox()
-        if box is None:
-            raise AssertionError(f'design map glyph missing {char}')
-        pixels = {(x - box[0], y) for y in range(16) for x in range(box[0], box[2])
-                  if image.getpixel((x, y)) > 127}
-        cells.append((pixels, box[2] - box[0]))
+    """OkDanDan-Bold text on the common line (2026-10-08 font rule; was
+    Galmuri11-Bold 12px scaled 2x); returns (set of (x, y)), width, height."""
     ink, cursor = set(), 0
-    for pixels, width in cells:
-        for x, y in pixels:
-            for dx in (0, 1):
-                for dy in (0, 1):
-                    ink.add((cursor + 2 * x + dx, 2 * (y - 1) + dy))
-        cursor += 2 * width + 2
-    width = cursor - 2
-    height = max(y for _, y in ink) + 1
-    return frozenset(ink), width, height
+    for char in text:
+        pixels, width, height = aw_fonts.okdandan_glyph(
+            char, aw_fonts.okdandan_fit_line(BODY_ROWS, LINE_CHARS), chars=LINE_CHARS)
+        ink |= {(cursor + x, y) for x, y in pixels}
+        cursor += width + 2
+    return frozenset(ink), cursor - 2, height
 
 
 def decoded_replacement(original):

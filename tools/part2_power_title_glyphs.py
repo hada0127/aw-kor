@@ -11,9 +11,13 @@ from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
 import struct
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aw_fonts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-FONT = Path.home() / 'Library/Fonts/OkDanDan-Bold.otf'
+FONT = aw_fonts.OKDANDAN  # AW_FONT_DIR / ~/Library/Fonts (Mac) / ~/aw-fonts (Linux)
 FONT_SHA256 = '3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472'
 ORIGINAL_SHA256 = 'a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c'
 ROM_SIZE = 0x1000000

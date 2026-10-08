@@ -3,7 +3,9 @@ import hashlib
 import struct
 from pathlib import Path
 
-from bdf import load_bdf, glyph_grid
+from functools import lru_cache
+
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -24,27 +26,32 @@ def source_guard(original):
         raise AssertionError('Part 1 M19 title source/allocation changed')
 
 
-def render():
-    # Galmuri7 at integer 2x retains the existing small pixel sprite style.
-    # Public native OAM22/23: 64x32, tile0/32, palette6, identity affine matrix.
-    font, _ = load_bdf(str(ROOT / 'reference/fonts/Galmuri7.bdf'))
-    ink, cursor = set(), 24
-    for char in TEXT:
-        if char == ' ':
-            cursor += 8
-            continue
-        grid, width, height, xoffset, yoffset = glyph_grid(font[ord(char)])
-        if not (1 <= width <= 7 and xoffset == 0 and height + yoffset == 7):
-            raise AssertionError('Part 1 M19 title font cell/baseline changed')
-        for y in range(height):
-            for x in range(width):
-                if grid[y][x]:
-                    for dy in (0, 1):
-                        for dx in (0, 1):
-                            ink.add((cursor + 2 * (x + xoffset) + dx, 8 + 2 * y + dy))
-        cursor += 16
+MAX_SIZE, MIN_SIZE = 20, 12
+
+
+def _ink(size):
+    ink, _ = aw_fonts.okdandan_ink(TEXT, (2, 2, 126, 30), 0, size=size)
     if not ink or any(not (1 <= x < 127 and 1 <= y < 31) for x, y in ink):
         raise AssertionError('Part 1 M19 title exceeds native OBJ cells')
+    return ink
+
+
+@lru_cache(maxsize=1)
+def render():
+    # 2026-10-08 font rule: large title -> OkDanDan (was Galmuri7 at 2x). Largest
+    # size <= 20 (native title ink is ~21 rows) whose sheet fits the allocation.
+    # Public native OAM22/23: 64x32, tile0/32, palette6, identity affine matrix.
+    for size in range(MAX_SIZE, MIN_SIZE - 1, -1):
+        try:
+            raw = _sheet(_ink(size))
+        except AssertionError:
+            continue
+        if len(lz77_compress_optimal(raw, vram_safe=True)) <= CAPACITY:
+            return raw
+    raise AssertionError('Part 1 M19 title compressed allocation overflow')
+
+
+def _sheet(ink):
     pixels = [[0] * 128 for _ in range(32)]
     for x, y in ink:
         for dy in (-1, 0, 1):

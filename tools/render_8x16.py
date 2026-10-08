@@ -2,7 +2,10 @@
 """8x16 셀에 풀크기로 알파벳/숫자 렌더링 → top+bottom 페어 8x8 타일로 분할."""
 from PIL import Image, ImageDraw, ImageFont
 
-_FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
+import os as _os
+# 2026-10-08 font rule: small glyphs use Galmuri (was AppleSDGothicNeo).
+_FONT_PATH = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+                          "reference/fonts/Galmuri11-Condensed.ttf")
 
 def render_8x16(ch, ink=10):
     """8x16 픽셀로 글자 렌더링, top tile (8x8) + bot tile (8x8) 반환."""

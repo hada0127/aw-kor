@@ -31,7 +31,7 @@ class OriginalGlyphConsumerTests(unittest.TestCase):
         restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {0xB81B14}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 120)
+        self.assertEqual(len(RESIDUALS), 118)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.

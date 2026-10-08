@@ -19,6 +19,7 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aw_fonts
 from lz77_compress import lz77_compress, lz77_compress_optimal
 from lz77_scan import lz77_decompress
 from bdf import glyph_grid, load_bdf
@@ -108,7 +109,7 @@ PART1_MODE_OPTION_BLOCK_CAPACITY = {
     0x00C0668C: 1260,
     0x00C06B78: 994,
 }
-FONT_PATH = Path.home() / "Library/Fonts/OkDanDan-Bold.otf"
+FONT_PATH = aw_fonts.OKDANDAN  # AW_FONT_DIR / ~/Library/Fonts (Mac) / ~/aw-fonts (Linux)
 BODY_FONT_PATH = Path("reference/fonts/Galmuri11-Condensed.ttf")
 BODY_BOLD_FONT_PATH = Path("reference/fonts/Galmuri11-Bold.ttf")
 # Restore the rounded July lettering while retaining the September coverage,
@@ -335,7 +336,8 @@ def make_prompt_layer() -> Image.Image:
     draw = ImageDraw.Draw(layer)
     text = "시작하기!"
     for size in range(17, 10, -1):
-        font = ImageFont.truetype(str(FONT_PATH), size)
+        # Small prompt: Galmuri (2026-10-08 font rule; legacy helper, not called by the build).
+        font = ImageFont.truetype(str(BODY_BOLD_FONT_PATH), size)
         w, h = text_bbox(draw, text, font, 1)
         if w <= 120 and h <= 14:
             break
@@ -375,7 +377,8 @@ def make_select_layer() -> Image.Image:
     draw = ImageDraw.Draw(layer)
     prompt = "게임 선택"
     for size in range(15, 9, -1):
-        font = ImageFont.truetype(str(FONT_PATH), size)
+        # Small prompt: Galmuri (2026-10-08 font rule; legacy helper, not called by the build).
+        font = ImageFont.truetype(str(BODY_BOLD_FONT_PATH), size)
         w, h = text_bbox(draw, prompt, font, 1)
         if w <= 118 and h <= 14:
             break
@@ -1091,9 +1094,16 @@ def draw_centered_block_text(
     stroke_idx: int,
     aa_idx: int,
     bold: bool = True,
+    large: bool = False,
 ) -> None:
+    """Small text uses Galmuri; large=True (titles) uses OkDanDan, centred by its
+    ink box (2026-10-08 font rule)."""
     draw = ImageDraw.Draw(layer)
-    font_path = BODY_BOLD_FONT_PATH if bold and BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
+    if large:
+        verify_menu_font()
+        font_path = FONT_PATH
+    else:
+        font_path = BODY_BOLD_FONT_PATH if bold and BODY_BOLD_FONT_PATH.exists() else BODY_FONT_PATH
     for size in range(max_size, 6, -1):
         font = ImageFont.truetype(str(font_path), size)
         w, h = text_bbox(draw, text, font, 1)
@@ -1101,6 +1111,10 @@ def draw_centered_block_text(
             break
     x = (box[0] + box[2] - w) // 2
     y = (box[1] + box[3] - h) // 2 - 1
+    if large:
+        ink = draw.textbbox((0, 0), text, font=font, stroke_width=1)
+        x -= ink[0]
+        y -= ink[1] - 1
     paint_index_text_aa(layer, (x, y), text, font, fill_idx, stroke_idx, 1, aa_idx=aa_idx)
 
 
@@ -1115,7 +1129,8 @@ def draw_centered_title_font_text(
     target_min_w: int | None = None,
 ) -> None:
     draw = ImageDraw.Draw(layer)
-    font_path = FONT_PATH if FONT_PATH.exists() else BODY_BOLD_FONT_PATH
+    verify_menu_font()  # large title: OkDanDan only, no silent Galmuri fallback
+    font_path = FONT_PATH
     for size in range(max_size, 8, -1):
         font = ImageFont.truetype(str(font_path), size)
         w, h = text_bbox(draw, text, font, 2)
@@ -1687,7 +1702,7 @@ def make_part1_catherine_block() -> Image.Image:
 
 def make_part1_mission_block() -> Image.Image:
     layer = Image.new("L", (128, 32), 0)
-    draw_centered_block_text(layer, "작전", (0, 0, 128, 32), 28, 4, 1, 3)
+    draw_centered_block_text(layer, "작전", (0, 0, 128, 32), 28, 4, 1, 3, large=True)
     return layer
 
 

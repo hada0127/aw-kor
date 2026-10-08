@@ -7,15 +7,17 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import aw_fonts  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = 1
 GENERATED = {'data/objlabel_sprites.json', 'data/sprite_build_layouts.json'}
 BUILD_METADATA = ('temp/integrity_map.json', 'temp/repoint_manifest.json')
-EXTERNAL_FONTS = [Path.home() / 'Library/Fonts/OkDanDan-Bold.otf',
-                  Path('/System/Library/Fonts/AppleSDGothicNeo.ttc'),
-                  Path('/Library/Fonts/NanumGothicExtraBold.ttf'),
-                  Path('/Library/Fonts/NanumGothicBold.ttf')]
+# Only OkDanDan is external since the 2026-10-08 font rule (Galmuri is in reference/).
+EXTERNAL_FONTS = [aw_fonts.OKDANDAN]
 
 
 def sha(path):

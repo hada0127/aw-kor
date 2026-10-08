@@ -15,7 +15,9 @@ Static RE (original ROM, 2026-10-06 fixH):
 
 The Korean term is 스페셜 브레이크 (translation_for_import 0x00A2DEB2 「스페셜
 브레이크」, 0x00A2E619).  Each line is redrawn in the native hollow style:
-Galmuri11-Bold at its native 12 px, scaled 2x (pixel crisp), body = index 0,
+OkDanDan-Bold, largest size whose line fits 24 rows (2026-10-08 font rule; was
+Galmuri11-Bold 12 px scaled 2x),
+body = index 0,
 2 px outline 5 + one 4-neighbour AA ring 4, centred in its line rectangle.
 Only tiles referenced exclusively by the line cells are rewritten; the shared
 fill tiles 0x16/0x36/0x8E and the tilemap stay untouched.  On-screen result is
@@ -26,6 +28,7 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -41,7 +44,6 @@ SHARED_TILES = (0x16, 0x36, 0x8E)
 PLATE, OUTLINE, AA = 6, 5, 4
 # (Korean, map row0, map col0, map col1 exclusive)
 LINES = (('스페셜', 4, 2, 25), ('브레이크', 8, 5, 28))
-FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 GAP = 4
 
 
@@ -87,19 +89,16 @@ def line_cells(entries, row0, col0, col1):
     return cells
 
 
+LINE_CHARS = '스페셜브레이크'
+BODY_ROWS = 24   # the native 24 px line (old Galmuri 12px x 2 body)
+
+
 @lru_cache(maxsize=None)
 def glyph_mask(char):
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype(str(FONT), 12)
-    image = Image.new('L', (16, 16), 0)
-    ImageDraw.Draw(image).text((0, 0), char, font=font, fill=255)
-    box = image.getbbox()
-    if box is None:
-        raise AssertionError(f'special break glyph missing: {char}')
-    x0, y0, x1, y1 = box
-    small = {(x - x0, y - y0) for y in range(y0, y1) for x in range(x0, x1) if image.getpixel((x, y)) >= 128}
-    return (frozenset((2 * x + dx, 2 * y + dy) for x, y in small for dx in (0, 1) for dy in (0, 1)),
-            2 * (x1 - x0), 2 * (y1 - y0))
+    """OkDanDan-Bold glyph on the common line (2026-10-08 font rule; was
+    Galmuri11-Bold 12px scaled 2x). Returns (set, width, line height)."""
+    return aw_fonts.okdandan_glyph(char, aw_fonts.okdandan_fit_line(BODY_ROWS, LINE_CHARS),
+                                   chars=LINE_CHARS)
 
 
 def render_line(text, width, allowed):

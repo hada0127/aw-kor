@@ -26,7 +26,9 @@ Static RE (original ROM, 2026-10-06 fixH):
 
 Korean (translation_for_import): 승리 (0x00A03F8A あなたの勝利よ -> 네 승리야!),
 무승부 (引き分け; standard term, no CSV row), 패배 (standard term).
-Glyphs: Galmuri11-Bold 12px mask scaled pixel-crisp (WIN/DRAW 3x4, LOSE 2x2),
+Glyphs: OkDanDan-Bold (2026-10-08 font rule; was Galmuri11-Bold 12px scaled
+pixel-crisp) at the largest size whose line fits the old body height (WIN/DRAW
+44 rows, LOSE 22 rows), natural aspect, thresholded,
 white 15 on the band, band-coloured ring above the band, no anti-aliasing.
 On-screen result unverified (static renders only).
 """
@@ -35,12 +37,12 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
 ROOT = Path(__file__).resolve().parent.parent
 ROM_BASE = 0x08000000
-FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 INK = 15
 
 # name, source, literal, decoded size, consumed, (unused), text, band index,
@@ -77,24 +79,25 @@ def _encode(px):
     return bytes(out)
 
 
+LINE_CHARS = '승리!무승부패배..'   # every character the three banners draw
+
+
+@lru_cache(maxsize=None)
+def glyph_size(sy):
+    """Largest OkDanDan size whose common line fits the old 11*sy-row body."""
+    return aw_fonts.okdandan_fit_line(11 * sy, LINE_CHARS)
+
+
 @lru_cache(maxsize=None)
 def glyph_mask(char, sx, sy):
-    """Galmuri11-Bold 12px glyph bitmap scaled by (sx, sy); returns (set, w, h, top)."""
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype(str(FONT), 12)
-    image = Image.new('L', (16, 16), 0)
-    ImageDraw.Draw(image).text((0, 0), char, font=font, fill=255)
-    box = image.getbbox()
-    if box is None:
-        raise AssertionError(f'banner glyph missing: {char}')
-    x0, _, x1, _ = box
-    # Vertical metrics are kept from the font (baseline row 1..11) so '.' sits low.
-    small = {(x - x0, y - 1) for y in range(1, 12) for x in range(x0, x1)
-             if image.getpixel((x, y)) >= 128}
-    if any(y < 0 or y > 10 for _, y in small):
-        raise AssertionError(f'banner glyph outside 11px body: {char}')
-    return frozenset((sx * x + dx, sy * y + dy) for x, y in small for dx in range(sx) for dy in range(sy)), \
-        sx * (x1 - x0), sy * 11
+    """OkDanDan-Bold glyph for the old 11*sy-row body (2026-10-08 font rule; was
+    Galmuri11-Bold 12px scaled pixel-crisp by (sx, sy)). Natural aspect, largest
+    size whose common line fits, so '.' and short syllables keep one baseline.
+    Returns (set, w, h)."""
+    mask, width, height = aw_fonts.okdandan_glyph(char, glyph_size(sy), chars=LINE_CHARS)
+    if height > 11 * sy:
+        raise AssertionError(f'banner glyph outside {11 * sy}px body: {char}')
+    return mask, width, 11 * sy
 
 
 def text_mask(text, sx, sy):

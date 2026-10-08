@@ -22,7 +22,8 @@ tables (same entry counts, delays and terminators) to read
 캠페인 / 클리어!  and  하드 캠페인 / 클리어!.  Unused entries point at a
 blank cell.  Terms: 캠페인 / 하드 캠페인 / 클리어 (translation_for_import
 0x00A2D894 하드 캠페인, 0x00B845BC 하드 캠페인 모드).
-Glyph style follows the native cells: body = Galmuri11-Bold 2x, interior
+Glyph style follows the native cells: body = OkDanDan-Bold 22px (2026-10-08
+font rule; was Galmuri11-Bold 2x; largest size whose line fits 24 rows), interior
 index 1 above row 15 and gradient 2..8 below (2 rows per step), light
 outline 14 (13 where it touches the body only diagonally), outer ring 1.
 Sheet tiles 0..15 / 16..31 are 128x8 1D strips CAMPAIGN RANK / H.CAMPAIGN RANK
@@ -37,6 +38,7 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -66,7 +68,6 @@ NORMAL_LAYOUT = (('캠', 46, LINE1_Y), ('페', 74, LINE1_Y), ('인', 102, LINE1_
 HARD_LAYOUT = (('하', 22, LINE1_Y), ('드', 50, LINE1_Y), ('캠', 92, LINE1_Y),
                ('페', 120, LINE1_Y), ('인', 148, LINE1_Y)) + tuple((c, x, LINE2_Y) for c, x in LINE2)
 
-FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 OUTER, INTERIOR, OUTLINE, OUTLINE_AA = 1, 1, 14, 13
 # Native gradient: rows 15..28 use 2..8 (two rows per index); below stays 8.
 GRADIENT_START = 15
@@ -78,21 +79,16 @@ def _row_index(y):
     return min(8, 2 + (y - GRADIENT_START) // 2)
 
 
+BODY_ROWS = 24    # the old 12px x 2 Galmuri body box
+
+
 @lru_cache(maxsize=None)
-def glyph_mask(char):
-    """Galmuri11-Bold at its native 12px size, scaled 2x (pixel crisp)."""
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype(str(FONT), 12)
-    image = Image.new('L', (16, 16), 0)
-    ImageDraw.Draw(image).text((0, 0), char, font=font, fill=255)
-    box = image.getbbox()
-    if box is None:
-        raise AssertionError(f'campaign clear glyph missing: {char}')
-    x0, y0, x1, y1 = box
-    small = {(x - x0, y - y0) for y in range(y0, y1) for x in range(x0, x1)
-             if image.getpixel((x, y)) >= 128}
-    return frozenset((2 * x + dx, 2 * y + dy) for x, y in small for dx in (0, 1) for dy in (0, 1)), \
-        2 * (x1 - x0), 2 * (y1 - y0)
+def glyph_mask(char, chars=GLYPHS):
+    """OkDanDan-Bold glyph on the common line of `chars` (2026-10-08 font rule;
+    was Galmuri11-Bold 12px scaled 2x): the largest size whose line over the
+    drawn characters fits BODY_ROWS. Returns (ink set, width, line height)."""
+    size = aw_fonts.okdandan_fit_line(BODY_ROWS, chars)
+    return aw_fonts.okdandan_glyph(char, size, chars=chars)
 
 
 @lru_cache(maxsize=None)

@@ -12,7 +12,7 @@ Native style: outline 14 around the body, body indices by row
 4 rows 17..19, 3 rows 20..22, 2 rows 23..25, 1 rows 26..31), light
 anti-aliasing 10..13 on diagonal edges, transparent elsewhere.
 Korean: 결판 (決着 in dialogue: 0x00A06BDC 必ず決着をつけてやる -> 반드시 결판을
-내고 말겠어, 0x00A0726D -> 결판을 내주마).  Glyphs: Galmuri11-Bold 2x (the
+내고 말겠어, 0x00A0726D -> 결판을 내주마).  Glyphs: OkDanDan-Bold on the 결판 line (2026-10-08 font rule; was Galmuri11-Bold 2x) (the
 campaign-clear banner renderer) thickened 1px horizontally, gradient body + 1px
 outline 14, no AA.
 On-screen result unverified (static render only).
@@ -49,10 +49,9 @@ def _row_index(y):
 @lru_cache(maxsize=None)
 def render_cell(char):
     from part1_campaign_clear_banner import glyph_mask
-    mask, width, height = glyph_mask(char)
-    # Thicken vertical strokes by one pixel (horizontal gaps stay open).
-    mask = {(x + dx, y) for x, y in mask for dx in (0, 1)}
-    width += 1
+    # OkDanDan-Bold glyph (2026-10-08 font rule). The 1px stroke thickening the
+    # thin Galmuri 2x glyph needed is dropped: OkDanDan is already bold.
+    mask, width, height = glyph_mask(char, TEXT)
     left, top = (32 - width) // 2, (32 - height) // 2
     body = {(x + left, y + top) for x, y in mask}
     ring = {(x + dx, y + dy) for x, y in body for dx in (-1, 0, 1) for dy in (-1, 0, 1)} - body

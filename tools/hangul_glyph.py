@@ -1,6 +1,8 @@
 """Render Hangul (or any) char -> GBA 8x8 4bpp tile (32 bytes), ink index configurable."""
 from PIL import Image, ImageFont, ImageDraw
-_FONT_PATH="/System/Library/Fonts/AppleSDGothicNeo.ttc"
+import os as _os
+# 2026-10-08 font rule: small glyphs use Galmuri (was AppleSDGothicNeo).
+_FONT_PATH=_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),"reference/fonts/Galmuri11-Condensed.ttf")
 def render_tile(ch, ink=10, size=8, fontsize=8, yoff=0, xoff=0, thresh=90):
     # Render large, autocrop to ink bbox, scale to fill the 8x8 cell -> denser/legible.
     BIG=44

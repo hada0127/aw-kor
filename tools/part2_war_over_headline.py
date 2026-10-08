@@ -20,8 +20,8 @@ the OVER! band (rows 11-13); the IS cells (rows 7-10) become plain paper
 A two-line layout cannot use one band taller than the native 24 px lines, so
 the glyph size is unchanged.  No translation row exists for this English-only
 graphic; 끝났- follows the ending/clear dialogue usage (e.g. 0x00A17950
-なんとか終わったぜ -> 어떻게든 끝났어).  Glyphs: Galmuri11-Bold at its native
-12 px scaled 2x (pixel crisp), ink 14 on the original tile-232 paper pattern,
+なんとか終わったぜ -> 어떻게든 끝났어).  Glyphs: OkDanDan-Bold, largest size whose line fits 24 px (2026-10-08
+font rule; was Galmuri11-Bold 12 px scaled 2x), ink 14 on the original tile-232 paper pattern,
 centred on each line's cells.  Only the 82 exclusive headline tiles are
 rewritten; the tilemap, the photo tiles and 0x5B5D10 stay untouched.
 On-screen result unverified (no savestate of this screen; consumer screen
@@ -32,6 +32,7 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -50,7 +51,6 @@ RECT_COL, RECT_ROW, RECT_W, RECT_H = 15, 4, 12, 10
 INK = 14
 # (text, rect y of the line top, line height, first col, last col exclusive) in map cells
 LINES = (('전쟁은', 0, 24, 16, 26), ('끝났다!', 56, 24, 15, 27))
-FONT = ROOT / 'reference/fonts/Galmuri11-Bold.ttf'
 GAP = 2
 
 
@@ -106,19 +106,16 @@ def headline_cells(entries):
     return cells
 
 
+LINE_CHARS = '전쟁은끝났다!'
+BODY_ROWS = 24   # the native 24 px line (old Galmuri 12px x 2 body)
+
+
 @lru_cache(maxsize=None)
 def glyph_mask(char):
-    from PIL import Image, ImageDraw, ImageFont
-    font = ImageFont.truetype(str(FONT), 12)
-    image = Image.new('L', (16, 16), 0)
-    ImageDraw.Draw(image).text((0, 0), char, font=font, fill=255)
-    box = image.getbbox()
-    if box is None:
-        raise AssertionError(f'war-over glyph missing: {char}')
-    x0, y0, x1, y1 = box
-    small = {(x - x0, y - y0) for y in range(y0, y1) for x in range(x0, x1) if image.getpixel((x, y)) >= 128}
-    return (frozenset((2 * x + dx, 2 * y + dy) for x, y in small for dx in (0, 1) for dy in (0, 1)),
-            2 * (x1 - x0), 2 * (y1 - y0))
+    """OkDanDan-Bold glyph on the common line (2026-10-08 font rule; was
+    Galmuri11-Bold 12px scaled 2x). Returns (set, width, line height)."""
+    return aw_fonts.okdandan_glyph(char, aw_fonts.okdandan_fit_line(BODY_ROWS, LINE_CHARS),
+                                   chars=LINE_CHARS)
 
 
 def ink_points():

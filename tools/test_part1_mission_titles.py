@@ -62,8 +62,12 @@ class MissionTitleTests(unittest.TestCase):
         self.assertFalse(any(ext[512:]))
         tiers = {row[0]: m.layout(row[5], 160 if row[0] == m.EXTENSION_OWNER else 128)[0]
                  for row in m.TITLES}
-        self.assertEqual(tiers[0xC1689C], 'g7x2')
-        self.assertEqual(tiers[0xC13EE0], 'g11')
+        # 2026-10-08 font rule: every title is OkDanDan (was g7x2/g11 Galmuri tiers).
+        self.assertTrue(all(t.startswith('okdandan') for t in tiers.values()))
+        self.assertEqual(tiers[0xC1689C], 'okdandan20')
+        self.assertEqual(tiers[0xC13EE0], 'okdandan20')
+        # Capacity may step a size down, never below the readable floor.
+        self.assertGreaterEqual(min(m.chosen_size(row[0]) for row in m.TITLES), 15)
 
     def test_texts_match_bteam_baseline(self):
         import json

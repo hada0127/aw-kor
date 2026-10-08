@@ -8,7 +8,8 @@ Static RE (original ROM, 2026-10-06 fixH):
   table[army].ptr into VRAM 0x06012000 (OBJ tile 256) and 0x08548E58 into
   0x06012600.  Each label is 1536 B = three 32x32 1D OBJ cells (96x32).
 - RED STAR is already Korean (build_korean_full.patch_part2_redstar_region_obj:
-  Galmuri7 2x, cursor x=13, y=0, ink 4, shadow 7 at (+1,0)/(+1,+1), no plate).
+  OkDanDan-Bold 16px in x 6..89, y 0..15 (2026-10-08 font rule; was Galmuri7 2x),
+  ink 4, shadow 7 at (+1,0)/(+1,+1), no plate).
   The other three use their own ink index in the same palette: blue 13,
   green 15, yellow 14 (the plate/shadow index 7 is shared).
 This module renders 블루문 / 그린어스 / 옐로코멧 (data/proper_nouns.json nations)
@@ -20,7 +21,7 @@ import struct
 from functools import lru_cache
 from pathlib import Path
 
-from bdf import load_bdf, glyph_grid
+import aw_fonts
 from lz77_scan import lz77_decompress
 from lz77_compress import lz77_compress_optimal
 
@@ -30,6 +31,8 @@ TABLE = 0xA3924C
 TABLE_POOL = 0x376F54
 SIZE = 1536
 WIDTH, HEIGHT, SCALE, CURSOR, SHADOW = 96, 32, 2, 13, 7
+# One OkDanDan line over all four region names (red star is drawn by build_korean_full).
+REGION_LINE_CHARS = '레드스타블루문그린어스옐로코멧'
 # (source, pointer, capacity=original consumed, decoded sha256, Korean, ink, English)
 LABELS = (
     (0x5489DC, 0xA39254, 372, 'f3ad36520203a12ce9a52ed119362b665ff85743f3ed09e476bd82af6e1b46d3',
@@ -41,37 +44,12 @@ LABELS = (
 )
 
 
-@lru_cache(maxsize=1)
-def _font():
-    font, _ = load_bdf(str(ROOT / 'reference/fonts/Galmuri7.bdf'))
-    return font
-
-
 def render_pixels(text, ink):
-    """Same algorithm as patch_part2_redstar_region_obj (ink index per army)."""
-    font = _font()
+    """Same call as patch_part2_redstar_region_obj (ink index per army):
+    OkDanDan-Bold on the common line (2026-10-08 font rule; was Galmuri7 2x)."""
     pixels = [[0] * WIDTH for _ in range(HEIGHT)]
-    cursor = CURSOR
-    for ch in text:
-        grid, w, h, xo, yo = glyph_grid(font[ord(ch)])
-        top = 7 - h - yo          # 0 for every glyph used here (red star ignores yo)
-        if top != 0:
-            raise AssertionError(f'army label glyph baseline differs from red star: {ch}')
-        for row in range(h):
-            for col in range(w):
-                if not grid[row][col]:
-                    continue
-                px0, py0 = cursor + (col + xo) * SCALE, row * SCALE
-                for sy in range(SCALE):
-                    for sx in range(SCALE):
-                        px, py = px0 + sx, py0 + sy
-                        for dx, dy in ((1, 1), (1, 0)):
-                            if 0 <= px + dx < WIDTH and 0 <= py + dy < HEIGHT and pixels[py + dy][px + dx] == 0:
-                                pixels[py + dy][px + dx] = SHADOW
-                        if not (0 <= px < WIDTH - 1 and 0 <= py < HEIGHT - 1):
-                            raise AssertionError(f'army label clipped: {text}')
-                        pixels[py][px] = ink
-        cursor += (w + 1) * SCALE
+    aw_fonts.draw_okdandan(pixels, text, (6, 0, 90, 16), 20, ink=ink, shadow=SHADOW,
+                           shadow_offset=((1, 1), (1, 0)), valign='line', line_chars=REGION_LINE_CHARS)
     return pixels
 
 

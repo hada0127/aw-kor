@@ -30,7 +30,8 @@ class TitleTests(unittest.TestCase):
                 if color == 10:
                     ink.append((x, y))
         self.assertEqual(colors, {0, 10, 13, 15})
-        self.assertEqual((min(x for x, _ in ink), max(x for x, _ in ink)), (24, 101))
+        # OkDanDan ink box (2026-10-08 font rule; Galmuri7 2x was (24, 101)).
+        self.assertEqual((min(x for x, _ in ink), max(x for x, _ in ink)), (31, 95))
         self.assertTrue(any(x < 64 for x, _ in ink) and any(x >= 64 for x, _ in ink))
 
     def test_source_and_live_pointer_corruption_rejected(self):

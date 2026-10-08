@@ -20,10 +20,11 @@ def render_4tiles(ch, ink=10):
     img = Image.new("L", (8, 11), 0)
     d = ImageDraw.Draw(img)
     # Use a standard font
-    try:
-        f = ImageFont.truetype("/System/Library/Fonts/AppleSDGothicNeo.ttc", 10)
-    except:
-        f = ImageFont.load_default()
+    # 2026-10-08 font rule: small glyphs use Galmuri (was AppleSDGothicNeo with a
+    # Pillow default-font fallback).
+    import os
+    f = ImageFont.truetype(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                        'reference/fonts/Galmuri11-Condensed.ttf'), 12)
     
     d.text((0, -1), ch, fill=255, font=f)
     px = img.load()
