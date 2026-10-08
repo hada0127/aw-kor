@@ -64,9 +64,9 @@ def check(rom, original):
             issues.append(f'{label}: invalid LZ77 at {off:06X}')
             continue
         canvas = aw_fonts.obj_canvas(dec[0], cells, cw, ch, first)
-        native, note = evidence(original, rom, off, cells, cw, ch, first)
         crossing = [aw_fonts.straddling_rows(canvas, cw * 8 * i) for i in range(1, cells)]
         try:
+            native, note = evidence(original, rom, off, cells, cw, ch, first)
             aw_fonts.check_cells(canvas, [cw * 8 * i for i in range(1, cells)], label, native=native, edges=edges)
             report.append(f'OK {label} {off:06X} crossing={crossing} evidence={note}')
         except AssertionError as exc:
@@ -89,10 +89,14 @@ def check(rom, original):
         main = lz77_decompress(rom, owner)[0]
         ext = lz77_decompress(rom, mt.EXTENSION[0])[0] if owner == mt.EXTENSION_OWNER else None
         bounds = (64, 128) if ext is not None else (64,)
-        proof = aw_fonts.screen_contiguity(owner, rom, final=True) or (f'native-consumer:{at64}/{at128}' if at64 and at128 else None)
         try:
+            screen_proof = aw_fonts.screen_contiguity(owner, rom, final=True)
+            native_proof = bool(at64 and at128)
+            proof = (native_proof if owner == mt.EXTENSION_OWNER else screen_proof or native_proof)
             aw_fonts.check_cells(mt._canvas(main, ext), bounds, f'Part 1 mission title {owner:06X}', native=proof)
-            report.append(f'OK Part 1 mission title {owner:06X} evidence={proof}')
+            note = (f'{screen_proof}+native-consumer:{at64}/{at128}' if owner == mt.EXTENSION_OWNER
+                    else screen_proof or f'native-consumer:{at64}/{at128}')
+            report.append(f'OK Part 1 mission title {owner:06X} evidence={note}')
         except AssertionError as exc:
             issues.append(str(exc))
     for label, off, first, count, cw, ch in CELLS:

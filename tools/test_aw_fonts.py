@@ -62,6 +62,12 @@ class FontRuleTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'canvas edge'):
             aw_fonts.check_cells(grid, (8,), 't', native=True)
         aw_fonts.check_cells(grid, (8,), 't', native=True, edges=False)
+        wide = [[0] * 129 for _ in range(8)]
+        wide[3][127] = wide[3][128] = 1
+        with self.assertRaisesRegex(AssertionError, 'straddles'):
+            aw_fonts.check_cells(wide, (128,), 'extension', native='screen:0x00C12FD8', edges=False)
+        with self.assertRaisesRegex(AssertionError, 'straddles'):
+            aw_fonts.check_cells(wide, (128,), 'extension', native='native-consumer:1/1', edges=False)
 
     def test_screen_proof_locates_cells_edge_to_edge(self):
         import numpy as np
@@ -81,7 +87,14 @@ class FontRuleTests(unittest.TestCase):
 
     @unittest.skipUnless(os.environ.get('AW_TEST_ROM'), 'set AW_TEST_ROM to the candidate under test')
     def test_registered_screen_proofs_cover_their_consumers(self):
+        import json
         rom = Path(os.environ['AW_TEST_ROM']).read_bytes()
+        proof = json.loads((TOOLS.parent / 'data/obj_cell_contiguity.json').read_text())['assets']['0x00C12FD8']
+        self.assertEqual(len(proof['consumer_assets']), 39)
+        for sheet in proof['consumer_assets']:
+            self.assertEqual(aw_fonts.screen_contiguity(int(sheet, 16), rom, final=True),
+                             'screen:0x00C12FD8')
+        self.assertIsNone(aw_fonts.screen_contiguity(0xC12E40, rom, final=True))
         self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C, rom))
         for sheet in (0xC10B34, 0xC11D9C, 0xC1205C, 0xC15A68, 0xC15C5C):
             self.assertEqual(aw_fonts.screen_contiguity(sheet, rom), 'screen:0x00C12FD8')
@@ -93,9 +106,42 @@ class FontRuleTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'consumer changed'):
             aw_fonts.screen_contiguity(0xBFB45C, changed)
         changed = bytearray(rom)
+        changed[0xE12BF4] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'consumer changed'):
+            aw_fonts.screen_contiguity(0xC12FD8, changed, final=True)
+        changed = bytearray(rom)
+        changed[0xE12BF0] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'consumer changed'):
+            aw_fonts.screen_contiguity(0xC12FD8, changed, final=True)
+        changed = bytearray(rom)
         changed[0x100] ^= 1
-        with self.assertRaisesRegex(AssertionError, 'ROM changed'):
+        self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C, changed, final=True))
+        changed = bytearray(rom)
+        changed[0xBFB45C + 8] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'asset changed'):
             aw_fonts.screen_contiguity(0xBFB45C, changed, final=True)
+        changed = bytearray(rom)
+        changed[0xC10B34 + 8] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'asset changed'):
+            aw_fonts.screen_contiguity(0xC10B34, changed, final=True)
+        changed = bytearray(rom)
+        changed[0xC12FD8 + 8] ^= 1
+        self.assertEqual(aw_fonts.screen_contiguity(0xC10B34, changed, final=True),
+                         'screen:0x00C12FD8')
+        with self.assertRaisesRegex(AssertionError, 'asset changed'):
+            aw_fonts.screen_contiguity(0xC12FD8, changed, final=True)
+        changed = bytearray(rom)
+        changed[0xC12E40 + 8] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'asset changed'):
+            aw_fonts.screen_contiguity(0xC1100C, changed, final=True)
+        self.assertEqual(aw_fonts.screen_contiguity(0xC131CC, changed, final=True),
+                         'screen:0x00C12FD8')
+        changed = bytearray(rom)
+        changed[0xC12F58 + 8] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'asset changed'):
+            aw_fonts.screen_contiguity(0xC10B34, changed, final=True)
+        self.assertEqual(aw_fonts.screen_contiguity(0xC131CC, changed, final=True),
+                         'screen:0x00C12FD8')
 
     def test_final_line_height_includes_outline(self):
         self.assertEqual(aw_fonts.drawn_line_height({(0, 2), (1, 15)}, 1, 1), 16)

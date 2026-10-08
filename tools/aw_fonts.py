@@ -352,23 +352,57 @@ def screen_contiguity(asset, rom, final=False):
     if any(b - a != entry['cell_w'] * 8 for a, b in zip(xs, xs[1:])) or len({y for _, y in entry['found']}) != 1:
         raise AssertionError(f'screen contiguity proof is not edge to edge for 0x{asset:06X}')
     if final:
-        rom_sha = hashlib.sha256(rom).hexdigest()
-        if rom_sha != entry['rom_sha256']:
-            raise AssertionError(f'screen contiguity proof ROM changed for 0x{asset:06X}')
         from lz77_scan import lz77_decompress
-        decoded = lz77_decompress(rom, int(key, 16))
-        if decoded is None or hashlib.sha256(decoded[0]).hexdigest() != entry['asset_sha256']:
-            raise AssertionError(f'screen contiguity proof asset changed for 0x{asset:06X}')
-        identity = (key, rom_sha)
-        if identity not in _VERIFIED_SCREEN:
-            from qa_screen_obj_contiguity import prove
-            result = prove(rom, frame, int(key, 16), entry['cells'], entry['cell_w'],
-                           entry['cell_h'], entry['first'])
-            if (not result['contiguous'] or
-                    [None if point is None else [point['x'], point['y']]
-                     for point in result['found']] != entry['found']):
-                raise AssertionError(f'screen contiguity frame does not prove cells for 0x{asset:06X}')
-            _VERIFIED_SCREEN.add(identity)
+
+        def check_asset(off, decoded_sha, raw_sha, expected_size):
+            decoded = lz77_decompress(rom, off)
+            if (decoded is None or len(decoded[0]) != expected_size or
+                    hashlib.sha256(decoded[0]).hexdigest() != decoded_sha or
+                    hashlib.sha256(rom[off:off + decoded[1]]).hexdigest() != raw_sha):
+                raise AssertionError(f'screen contiguity proof asset changed for 0x{off:06X}')
+
+        if name == key:
+            check_asset(asset, entry['asset_sha256'], entry['asset_bytes_sha256'],
+                        entry['decoded_size'])
+        else:
+            decoded_sha = entry['consumer_asset_sha256'].get(name)
+            raw_sha = entry['consumer_asset_bytes_sha256'].get(name)
+            if decoded_sha is None or raw_sha is None:
+                raise AssertionError(f'screen contiguity proof asset metadata missing for {name}')
+            check_asset(asset, decoded_sha, raw_sha, 2048)
+        for dependent in entry.get('dependent_assets', {}).get(name, ()):
+            decoded_sha = entry['consumer_asset_sha256'].get(dependent)
+            raw_sha = entry['consumer_asset_bytes_sha256'].get(dependent)
+            if decoded_sha is None or raw_sha is None:
+                raise AssertionError(f'screen contiguity proof asset metadata missing for {dependent}')
+            check_asset(int(dependent, 16), decoded_sha, raw_sha, 1024)
+        table = entry.get('consumer_table')
+        if table:
+            import struct
+            start, count = table['offset'], table['count']
+            ordered = [struct.unpack_from('<I', rom, start + 4 * i)[0] - 0x08000000
+                       for i in range(count)]
+            pointers = set(ordered)
+            registered = {int(value, 16) for value in entry['consumer_assets']}
+            excluded = {int(value, 16) for value in table['excluded_assets']}
+            if pointers != registered | excluded:
+                raise AssertionError('screen contiguity consumer table does not match registered assets')
+            expected_deps = {f'0x{ordered[i]:08X}': [f'0x{ordered[14 + i]:08X}']
+                             for i in range(14)}
+            if entry.get('dependent_assets') != expected_deps:
+                raise AssertionError('screen contiguity extension dependencies do not match table')
+        if name == key:
+            identity = (key, entry['asset_bytes_sha256'],
+                        tuple(digest for _, _, digest in entry['consumer_guard']))
+            if identity not in _VERIFIED_SCREEN:
+                from qa_screen_obj_contiguity import prove
+                result = prove(rom, frame, int(key, 16), entry['cells'], entry['cell_w'],
+                               entry['cell_h'], entry['first'])
+                if (not result['contiguous'] or
+                        [None if point is None else [point['x'], point['y']]
+                         for point in result['found']] != entry['found']):
+                    raise AssertionError(f'screen contiguity frame does not prove cells for 0x{asset:06X}')
+                _VERIFIED_SCREEN.add(identity)
     return f'screen:{key}'
 
 
@@ -387,6 +421,13 @@ def check_cells(pixels, boundaries, label, native=None, edges=True):
     if edges and (any(pixels[0]) or any(pixels[-1]) or any(row[0] or row[-1] for row in pixels)):
         raise AssertionError(f'{label}: ink touches the canvas edge (would be cut)')
     for b in boundaries:
-        proven = native is True or isinstance(native, str) or (native and straddling_rows(native, b))
+        screen_proven = False
+        if isinstance(native, str) and native.startswith('screen:'):
+            import json
+            with open(ROOT / 'data' / 'obj_cell_contiguity.json', encoding='utf-8') as stream:
+                proof = json.load(stream)['assets'].get(native.removeprefix('screen:'))
+            screen_proven = proof is not None and 0 < b < proof['cells'] * proof['cell_w'] * 8
+        proven = (native is True or screen_proven or
+                  (not isinstance(native, str) and native and straddling_rows(native, b)))
         if straddling_rows(pixels, b) and not proven:
             raise AssertionError(f'{label}: glyph straddles OBJ cell edge x={b} without native contiguity')
