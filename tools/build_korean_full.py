@@ -6425,7 +6425,8 @@ def patch_part2_link_mode_residual_labels(rom):
         box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
         return box[2] - box[0], box[3] - box[1]
 
-    def paint_text(layer, text, box, max_size, fill_idx, stroke_idx=4, aa_idx=2, stroke=0, font_path=None):
+    def paint_text(layer, text, box, max_size, fill_idx, stroke_idx=4, aa_idx=2, stroke=0,
+                   font_path=None, galmuri_max_size=aw_fonts.GALMURI_MAX_SIZE, fallback_used=None):
         if font_path is None:
             font_path = font_bold
         draw = ImageDraw.Draw(layer)
@@ -6434,6 +6435,8 @@ def patch_part2_link_mode_residual_labels(rom):
             w, h = text_bbox(draw, text, font, stroke)
             if w <= box[2] - box[0] and h <= box[3] - box[1]:
                 break
+        else:
+            raise AssertionError(f'Part 2 link logo text does not fit: {text!r}')
         x = box[0] + (box[2] - box[0] - w) // 2
         y = box[1] + (box[3] - box[1] - h) // 2 - 1
 
@@ -6450,13 +6453,17 @@ def patch_part2_link_mode_residual_labels(rom):
             raise AssertionError(f'Part 2 link logo has no visible ink: {text!r}')
         final_height = rows[-1] - rows[0] + 1
         if font_path == aw_fonts.okdandan_path() and final_height <= aw_fonts.GALMURI_MAX_SIZE:
-            return paint_text(layer, text, box, aw_fonts.GALMURI_MAX_SIZE,
-                              fill_idx, stroke_idx, aa_idx, stroke, font_path=font_bold)
+            if fallback_used is not None:
+                fallback_used[0] = True
+            return paint_text(layer, text, box, galmuri_max_size,
+                              fill_idx, stroke_idx, aa_idx, stroke, font_path=font_bold,
+                              galmuri_max_size=galmuri_max_size, fallback_used=fallback_used)
         if font_path == font_bold and final_height > aw_fonts.GALMURI_MAX_SIZE:
             if size <= 7:
                 raise AssertionError(f'Galmuri link logo exceeds small-line height: {text!r}')
             return paint_text(layer, text, box, size - 1, fill_idx, stroke_idx,
-                              aa_idx, stroke, font_path=font_bold)
+                              aa_idx, stroke, font_path=font_bold,
+                              galmuri_max_size=galmuri_max_size, fallback_used=fallback_used)
         for yy in range(layer.height):
             for xx in range(layer.width):
                 if op[xx, yy] >= 96:
@@ -6486,7 +6493,7 @@ def patch_part2_link_mode_residual_labels(rom):
         paint_text(layer, text, (6, 2, 122, 14), 13, fill_idx=1, stroke_idx=4, aa_idx=2, stroke=0, font_path=font_cond)
         return layer
 
-    def make_main(text, max_size=25):
+    def make_main(text, max_size=25, galmuri_max_size=aw_fonts.GALMURI_MAX_SIZE, fallback_used=None):
         layer = Image.new('L', (128, 32), 0)
         draw = ImageDraw.Draw(layer)
         draw.rectangle((0, 3, 127, 28), fill=4)
@@ -6494,16 +6501,20 @@ def patch_part2_link_mode_residual_labels(rom):
         draw.rectangle((0, 26, 127, 28), fill=3)
         # Large logo: OkDanDan (2026-10-08 font rule; was Galmuri11-Bold).
         paint_text(layer, text, (4, 3, 124, 27), max_size, fill_idx=1, stroke_idx=4, aa_idx=2, stroke=1,
-                   font_path=aw_fonts.okdandan_path())
+                   font_path=aw_fonts.okdandan_path(), galmuri_max_size=galmuri_max_size,
+                   fallback_used=fallback_used)
         return layer
 
     top = make_strip('1팩 대전')
     bottom = make_strip('맵 교환')
     source_buf = bytes(buf)
     # Compression retries may use Galmuri once the final drawn line is small.
+    galmuri_retry_size = aw_fonts.GALMURI_MAX_SIZE
+    last_buf = last_comp = None
     for main_size in range(25, 11, -1):
         buf = bytearray(source_buf)
-        main = make_main('멀티팩', main_size)
+        fallback_used = [False]
+        main = make_main('멀티팩', main_size, galmuri_retry_size, fallback_used)
         aw_fonts.check_cells([[main.getpixel((x, y)) for x in range(128)] for y in range(32)], (64,),
                              'Part 2 link-mode logo', edges=False,
                              native=aw_fonts.obj_canvas(source_buf[0x0800:0x1000], 2, 8, 4))
@@ -6521,9 +6532,17 @@ def patch_part2_link_mode_residual_labels(rom):
         ]
         for pos, payload in patches:
             buf[pos:pos + len(payload)] = payload
-        comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+        if buf == last_buf:
+            comp = last_comp
+        else:
+            comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
+            last_buf, last_comp = bytes(buf), comp
         if len(comp) <= consumed:
             break
+        if fallback_used[0]:
+            if galmuri_retry_size <= 7:
+                raise AssertionError(f'Part 2 link-mode LZ77 overflow at minimum Galmuri size: {len(comp)} > {consumed}')
+            galmuri_retry_size -= 1
     else:
         raise AssertionError(f'Part 2 link-mode LZ77 overflow: {len(comp)} > {consumed}')
 

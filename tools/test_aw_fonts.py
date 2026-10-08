@@ -129,20 +129,23 @@ class FontRuleTests(unittest.TestCase):
         cursor = [0]
 
         def track_font(path, size, *args, **kwargs):
-            calls.append(str(path))
+            calls.append((str(path), size))
             return actual_truetype(path, size, *args, **kwargs)
 
         def force_capacity(raw, vram_safe=True):
             attempts.append(calls[cursor[0]:])
             cursor[0] = len(calls)
-            return b'\0' if len(attempts) == 10 else bytes(len(raw) + 1)
+            sizes = [size for path, size in attempts[-1] if path.endswith('Galmuri11-Bold.ttf')]
+            return b'\0' if sizes and max(sizes) < aw_fonts.GALMURI_MAX_SIZE else bytes(len(raw) + 1)
 
         with patch.object(ImageFont, 'truetype', side_effect=track_font), \
              patch.object(lz77_compress, 'lz77_compress_optimal', side_effect=force_capacity), \
              patch.object(build, 'rec_label_layout'):
             build.patch_part2_link_mode_residual_labels(rom)
-        self.assertEqual(len(attempts), 10)  # Retry from size 25 down through 16.
-        self.assertTrue(any(path.endswith('Galmuri11-Bold.ttf') for path in attempts[-1]))
+        def galmuri_sizes(attempt):
+            return [size for path, size in attempt if path.endswith('Galmuri11-Bold.ttf')]
+        self.assertTrue(any(aw_fonts.GALMURI_MAX_SIZE in galmuri_sizes(a) for a in attempts[:-1]))
+        self.assertLess(max(galmuri_sizes(attempts[-1])), aw_fonts.GALMURI_MAX_SIZE)
 
     @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
     def test_word_cells_never_straddle(self):

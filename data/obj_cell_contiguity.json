@@ -8,7 +8,7 @@
       "cell_h": 4,
       "first": 0,
       "frame": "docs/screenshots/FONTS_V16_RESULT_CONTIGUITY_2026-10-08.png",
-      "frame_sha256": "1e195d415b596b100594f451f5245a9b78f5dfa6cb4bd46d1e84a44901131e19",
+      "frame_sha256": "07720a6d7dd94e95bdfece22149e9918718e702cc62c24f4b9f7ab2422d8944b",
       "rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d",
       "found": [
         [
@@ -28,7 +28,7 @@
           22
         ]
       ],
-      "note": "v16 candidate-specific mGBA capture after loading 0148_A_0026015.ss0 from the cheat-tainted 5bb5c941 run before the result transition, then advancing 90 frames. Screen geometry only; all four cells matched the v16 ROM sheet at score 1.0. See output/qa/screenqa_2026-10-08/v16_result/proof.json and harness.log.",
+      "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_result_prebattle_save/game_save.json (source ROM 5bb5c941, save SHA 057f4d27, cheat-tainted), output/qa/screenqa_2026-10-08/v16_coldboot_result_prebattle/baseline.json and exit.json. In-game save was made on source ROM at output/qa/screenqa_2026-10-08/v16_result_prebattle_save_source/resume.checkpoint.json (save dialogue at 0024_A_0021899.png and saving at 0026_A_0022021.png, export run v16_result_prebattle_export_run); v16 Continue resumed before the final attack. Frame 0107_NONE_0005972.png follows the attack and victory dialogue; all four 32x32 cells match v16 ROM sheet at x=9/41/73/105,y=22, score 1.0. No cross-ROM savestate; cheat-tainted screen geometry only, not normal-play victory proof.",
       "consumer_guard": [
         [
           11796480,
@@ -45,7 +45,7 @@
       "cell_h": 4,
       "first": 0,
       "frame": "docs/screenshots/FONTS_V16_MISSION_CONTIGUITY_2026-10-08.png",
-      "frame_sha256": "30f77e134b44f74548e827d9f1696b3fb929eb8fde84bd96d33f5622f6db36f6",
+      "frame_sha256": "aee0457c481ff15ba09ef5acafe7b9921a28bc1e06c29a03c10be13500dec274",
       "rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d",
       "found": [
         [
@@ -99,7 +99,7 @@
         "0x00C165D8",
         "0x00C1689C"
       ],
-      "note": "v16 candidate-specific mGBA capture after loading 0033_NONE_0002329.ss0 from the cheat-tainted p1_trial_b route, then advancing with A for 9 and no key for 40 frames. Both 64x32 cells matched the v16 ROM sheet at x=8/72,y=60, score 1.0. See output/qa/screenqa_2026-10-08/v16_mission/proof.json and harness.log.",
+      "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_coldboot_p1/game_save.json (source ROM effc6ee8, save SHA 678aa8f3, cheat-tainted), baseline.json and exit.json. Frame 0030_A_0002272.png follows in-game Continue and mission briefing transition; both 64x32 cells match v16 ROM sheet at x=8/72,y=60, score 1.0. No cross-ROM savestate.",
       "consumer_guard": [
         [
           11796480,
