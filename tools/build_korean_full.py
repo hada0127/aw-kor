@@ -16232,7 +16232,7 @@ def main():
         (0xA1CBD0, 0xA1CBF6, '공대해 우세가 뒤집히다니', 'part2 air sea advantage row'),
         (0xA1CBF8, 0xA1CBFE, '조금,', 'part2 a little row'),
         (0xA1CCA3, 0xA1CCBB, '헛걸음이었나', 'part2 wasted trip row'),
-        (0xA1CD88, 0xA1CD90, '네놈은,', 'part2 you are row'),
+        (0xA1CD88, 0xA1CD90, '네놈은、', 'part2 you are row'),
         (0xA1CDF4, 0xA1CDFC, '아니,', 'part2 no later row'),
         (0xA1CF91, 0xA1CF9D, '수송선에는,', 'part2 on lander row'),
         (0xA1D146, 0xA1D162, '확실히 쓰러뜨려야 해.', 'part2 must defeat row'),

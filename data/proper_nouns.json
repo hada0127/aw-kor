@@ -1,7 +1,7 @@
 {
   "_readme": "aw-kor 고유명사 통일 사전. 각 행의 `edit` 필드를 채우면 그 한국어로 통일한다(비우면 ko/current 유지). tools/apply_proper_nouns_dict.py 로 translation_for_import.csv 에 적용. freq=대사 등장 횟수, variants=import CSV 관측 표기 분포. muramasa-kor proper_nouns.json 포맷 미러.",
   "counts": {
-    "characters": 12,
+    "characters": 13,
     "nations": 5,
     "places": 4,
     "discovered_candidates": 1,
@@ -127,6 +127,18 @@
       "note": "캐릭터",
       "variants": {
         "헤즈": 4
+      },
+      "edit": ""
+    },
+    {
+      "ja": "ヘルボウズ",
+      "ko": "헬보우즈",
+      "freq": 34,
+      "note": "B팀 기준 표기. 보호 주소 문구는 변경하지 않음.",
+      "variants": {
+        "헬보즈": 7,
+        "헬보우즈": 26,
+        "헬바우즈": 1
       },
       "edit": ""
     }
