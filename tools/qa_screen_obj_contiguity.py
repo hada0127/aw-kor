@@ -60,7 +60,7 @@ def prove(rom, frame_path, asset, cells, cell_w, cell_h, first=0):
         cell = aw_fonts.obj_canvas(data, 1, cell_w, cell_h, first + k * cell_w * cell_h)
         found.append(locate(frame, cell))
     present = [(k, f) for k, f in enumerate(found) if f is not None]
-    ok = bool(present) and all(f[0] >= 0.98 for _, f in present) and len(present) >= 2
+    ok = cells >= 2 and len(present) == cells and all(f[0] >= 0.98 for _, f in present)
     if ok:
         k0, f0 = present[0]
         ok = all(f[1] - f0[1] == (k - k0) * cell_w * 8 and f[2] == f0[2] for k, f in present)

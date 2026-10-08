@@ -60,17 +60,23 @@ class MissionTitleTests(unittest.TestCase):
         ext = m.render(m.EXTENSION[0])
         self.assertTrue(any(ext[:512]))
         self.assertFalse(any(ext[512:]))
-        tiers = {row[0]: m.layout(row[5], 160 if row[0] == m.EXTENSION_OWNER else 128)[0]
-                 for row in m.TITLES}
-        # 2026-10-08 font rule: every title is OkDanDan (was g7x2/g11 Galmuri tiers).
-        self.assertTrue(all(t.startswith('okdandan') for t in tiers.values()))
-        self.assertEqual(tiers[0xC1689C], 'okdandan20')
-        self.assertEqual(tiers[0xC13EE0], 'okdandan20')
-        # Capacity may step a size down; at <= 16 px a title is small text and
-        # falls back to the Galmuri layout (2026-10-08 decision).
         sizes = {row[0]: m.chosen_size(row[0]) for row in m.TITLES}
-        self.assertTrue(all(v is None or v > 16 for v in sizes.values()))
+        for row in m.TITLES:
+            size = sizes[row[0]]
+            if size is not None:
+                ink = m._ink_okdandan(m._text(row[0]), 160 if row[0] == m.EXTENSION_OWNER else 128, size)
+                self.assertGreater(m.aw_fonts.drawn_line_height(ink, 1, 1), 16)
+        self.assertIsNone(sizes[0xC12500])  # 바다 저편에 is small at its fitted size.
+        self.assertEqual(sizes[0xC1689C], 20)
+        self.assertEqual(sizes[0xC13EE0], 20)
         self.assertIsNone(sizes[0xC133DC])   # 하늘의 용사! (506-byte allocation)
+
+    def test_wrong_font_hash_is_not_a_fit_fallback(self):
+        m.chosen_size.cache_clear()
+        with patch.object(m.aw_fonts, 'okdandan_path', side_effect=AssertionError('wrong font hash')):
+            with self.assertRaisesRegex(AssertionError, 'wrong font hash'):
+                m.chosen_size(0xC1689C)
+        m.chosen_size.cache_clear()
 
     def test_texts_match_bteam_baseline(self):
         import json

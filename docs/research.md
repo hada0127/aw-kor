@@ -3834,3 +3834,5 @@ the full-font macOS build remain (unverified).
 - 검사 도구: `tools/qa_obj_title_cells.py --rom ROM` (캔버스 가장자리 잘림 + 근거 없는 칸 경계 통과 + 글자별 칸 테두리 + 2편 미션 글리프 advance).
 
 - 2026-10-08 화면 근거: 1편 임무 브리핑(캠페인 새로 시작, 맥스 경로 1번 임무)에서 0xE12BF4 표 제목 시트 `개전!`(0xC12FD8)이 두 64x32 OBJ를 x=8/72, y=60에 붙여 그린다. 같은 화면의 `작전` 라벨은 0xC18738. 1편 결과 화면 `축하합니다!`/`작전 성공`(0xBFB45C)은 32x32 OBJ 4개를 x=8,40,72,104(y=22)에 붙여 그린다. 1편 80x32 헤더(64x32+16x32)는 메뉴 왼쪽 위 한 자리에 한 개씩 표시된다.
+- 2026-10-08 v16 재확인: 결과 직전 저장 상태를 SHA-256 `540ae75d…` ROM에서 진행한 프레임 `output/qa/screenqa_2026-10-08/v16_result/result.png`를 같은 ROM의 0xBFB45C 시트와 대조했다. 4개 32x32 셀 x=9/41/73/105, y=22, 각 score 1.0으로 연속 배치 확인. 이전 프레임의 x=8/40/72/104와는 1px 다르며, 크로스 ROM 상태 재개 시점의 위치 차이일 수 있다(unverified). 셀 간 거리는 32px으로 동일하다. 크로스 ROM 상태 재개·치트 계보이므로 화면 배치만 입증한다.
+- 같은 v16 ROM에서 임무 시작 직전 상태를 진행한 `output/qa/screenqa_2026-10-08/v16_mission/briefing.png`는 0xC12FD8의 64x32 두 셀을 x=8/72, y=60, 각 score 1.0으로 배치한다. 두 보존 프레임은 `docs/screenshots/FONTS_V16_*_CONTIGUITY_2026-10-08.png`에 있다.

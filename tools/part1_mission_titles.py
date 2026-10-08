@@ -262,7 +262,8 @@ def layout(text, width, max_size=MAX_SIZE):
     for size in range(max_size, MIN_SIZE - 1, -1):
         try:
             ink = _ink_okdandan(text, width, size)
-        except AssertionError:
+            aw_fonts.require_large_line(ink, 1, 1)
+        except (aw_fonts.FontFitError, aw_fonts.SmallLineError):
             continue
         if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in ink):
             raise AssertionError('Part 1 mission title exceeds native OBJ cells')
@@ -272,7 +273,13 @@ def layout(text, width, max_size=MAX_SIZE):
 
 def _pixels(text, width, max_size=MAX_SIZE):
     """max_size None = the Galmuri fallback layout."""
-    _, ink = layout_galmuri(text, width) if max_size is None else layout(text, width, max_size)
+    if max_size is None:
+        _, ink = layout_galmuri(text, width)
+    else:
+        ink = _ink_okdandan(text, width, max_size)
+        aw_fonts.require_large_line(ink, 1, 1)
+        if any(not (1 <= x < width - 1 and 1 <= y < 31) for x, y in ink):
+            raise AssertionError('Part 1 mission title exceeds native OBJ cells')
     pixels = [[0] * width for _ in range(32)]
     for x, y in ink:
         for dy in (-1, 0, 1):
@@ -320,9 +327,11 @@ def chosen_size(owner):
     """Largest OkDanDan size (> 16 px) whose sheet(s) also fit the compressed
     allocation(s); None when only the Galmuri small-text layout fits."""
     text, width = _text(owner), 160 if owner == EXTENSION_OWNER else 128
-    tier, _ = layout(text, width)
-    for size in [*range(int(tier[len('okdandan'):]), MIN_SIZE - 1, -1), None]:
-        sheets = _sheets(text, width, size)
+    for size in [*range(MAX_SIZE, MIN_SIZE - 1, -1), None]:
+        try:
+            sheets = _sheets(text, width, size)
+        except (aw_fonts.FontFitError, aw_fonts.SmallLineError):
+            continue
         if all(len(lz77_compress_optimal(raw, vram_safe=True)) <=
                _capacity(owner if key is None else key) for key, raw in sheets.items()):
             return size   # None: Galmuri fallback

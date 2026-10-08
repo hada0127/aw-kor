@@ -44,8 +44,10 @@ def render():
     # Public native OAM22/23: 64x32, tile0/32, palette6, identity affine matrix.
     for size in range(MAX_SIZE, MIN_SIZE - 1, -1):
         try:
-            raw = _sheet(_ink(size))
-        except AssertionError:
+            ink = _ink(size)
+            aw_fonts.require_large_line(ink, 1, 1)
+            raw = _sheet(ink)
+        except (aw_fonts.FontFitError, aw_fonts.SmallLineError):
             continue
         if len(lz77_compress_optimal(raw, vram_safe=True)) <= CAPACITY:
             return raw
@@ -115,4 +117,3 @@ def verify(rom, regions):
 def generated_matches(rom):
     decoded = lz77_decompress(rom, SOURCE)
     return decoded is not None and decoded[0] == render()
-

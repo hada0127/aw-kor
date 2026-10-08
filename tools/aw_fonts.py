@@ -20,9 +20,31 @@ GALMURI11_CONDENSED = GALMURI_DIR / 'Galmuri11-Condensed.ttf'
 # Official okticon OkDanDan-Bold.otf; the Linux ~/aw-fonts copy (2026-10-08)
 # has this SHA-256, the same value the Mac builds pinned.
 OKDANDAN_SHA256 = '3b48adae2f39018dfa8e3d8264363729f024af9c7eb289dcb0479e6d7ea67472'
-# 2026-10-08 user decision: drawn text whose line (font size) is <= 16 px is
-# small text and uses Galmuri; OkDanDan only above that.
+# Classify the final visible line, after outlines and any resampling.
 GALMURI_MAX_SIZE = 16
+
+
+class FontFitError(AssertionError):
+    """The verified font is too wide/tall for this graphic."""
+
+
+class SmallLineError(AssertionError):
+    """The final OkDanDan line belongs to the Galmuri tier."""
+
+
+def drawn_line_height(ink, margin_top=0, margin_bottom=0):
+    """Final pixel height of a rendered line, including its visible effects."""
+    if not ink:
+        raise AssertionError('drawn line has no ink')
+    ys = [y for _, y in ink]
+    return max(ys) - min(ys) + 1 + margin_top + margin_bottom
+
+
+def require_large_line(ink, margin_top=0, margin_bottom=0):
+    height = drawn_line_height(ink, margin_top, margin_bottom)
+    if height <= GALMURI_MAX_SIZE:
+        raise SmallLineError(f'OkDanDan final drawn line is small: {height}px')
+    return height
 
 
 def font_dir():
@@ -193,7 +215,7 @@ def okdandan_ink(text, box, max_size, min_size=6, threshold=128, align='center',
         if w <= bw and h <= bh:
             break
     else:
-        raise AssertionError(f'OkDanDan cannot fit {text!r} in {bw}x{bh}')
+        raise FontFitError(f'OkDanDan cannot fit {text!r} in {bw}x{bh}')
     x0 = box[0] + {'center': (bw - w) // 2, 'left': 0, 'right': bw - w}[align]
     y0 = box[1] + {'center': (bh - h) // 2, 'top': 0, 'bottom': bh - h}[valign]
     px = hard.load()
@@ -298,7 +320,10 @@ def obj_canvas(data, cells, cell_w, cell_h, first=0):
     return out
 
 
-def screen_contiguity(asset):
+_VERIFIED_SCREEN = set()
+
+
+def screen_contiguity(asset, rom, final=False):
     """Registered screen proof (data/obj_cell_contiguity.json) that the OBJ
     cells of this asset, or of the consumer that draws it, are drawn edge to
     edge. Returns the proof key ('screen:0x...') or None."""
@@ -312,11 +337,38 @@ def screen_contiguity(asset):
         return None
     entry = assets[key]
     frame = ROOT / entry['frame']
-    if frame.is_file() and hashlib.sha256(frame.read_bytes()).hexdigest() != entry['frame_sha256']:
-        raise AssertionError(f'screen contiguity proof frame changed for 0x{asset:06X}')
+    if not frame.is_file() or hashlib.sha256(frame.read_bytes()).hexdigest() != entry['frame_sha256']:
+        raise AssertionError(f'screen contiguity proof evidence missing or changed for 0x{asset:06X}')
+    if len(entry['found']) != entry['cells'] or entry['cells'] < 2 or any(
+            not isinstance(point, list) or len(point) != 2 or
+            not all(isinstance(v, int) for v in point) for point in entry['found']):
+        raise AssertionError(f'screen contiguity proof cell count invalid for 0x{asset:06X}')
+    if len(rom) != 0x1000000:
+        raise AssertionError(f'screen contiguity ROM length changed for 0x{asset:06X}')
+    for start, end, digest in entry['consumer_guard']:
+        if not 0 <= start < end <= len(rom) or hashlib.sha256(rom[start:end]).hexdigest() != digest:
+            raise AssertionError(f'screen contiguity consumer changed for 0x{asset:06X}')
     xs = [x for x, _ in entry['found']]
     if any(b - a != entry['cell_w'] * 8 for a, b in zip(xs, xs[1:])) or len({y for _, y in entry['found']}) != 1:
         raise AssertionError(f'screen contiguity proof is not edge to edge for 0x{asset:06X}')
+    if final:
+        rom_sha = hashlib.sha256(rom).hexdigest()
+        if rom_sha != entry['rom_sha256']:
+            raise AssertionError(f'screen contiguity proof ROM changed for 0x{asset:06X}')
+        from lz77_scan import lz77_decompress
+        decoded = lz77_decompress(rom, int(key, 16))
+        if decoded is None or hashlib.sha256(decoded[0]).hexdigest() != entry['asset_sha256']:
+            raise AssertionError(f'screen contiguity proof asset changed for 0x{asset:06X}')
+        identity = (key, rom_sha)
+        if identity not in _VERIFIED_SCREEN:
+            from qa_screen_obj_contiguity import prove
+            result = prove(rom, frame, int(key, 16), entry['cells'], entry['cell_w'],
+                           entry['cell_h'], entry['first'])
+            if (not result['contiguous'] or
+                    [None if point is None else [point['x'], point['y']]
+                     for point in result['found']] != entry['found']):
+                raise AssertionError(f'screen contiguity frame does not prove cells for 0x{asset:06X}')
+            _VERIFIED_SCREEN.add(identity)
     return f'screen:{key}'
 
 

@@ -50,6 +50,7 @@ BASE_GATES: list[tuple[str, list[str]]] = [
     ("scene-semantics", cmd("tools/audit_scene_semantics.py", "--strict")),
     ("scene-residuals", cmd("tools/audit_scene_residual_scans.py", "--strict")),
     ("visual-regions", visual_region_cmd()),
+    ("obj-title-cells", cmd("tools/qa_obj_title_cells.py", "--rom", "output/game_wars_korean_full.gba")),
     ("phase6-basic", cmd("tools/phase6_basic_test.py", "output/game_wars_korean_full.gba")),
     ("dist-integrity", cmd("tools/verify_dist_integrity.py")),
 ]
@@ -66,6 +67,7 @@ PY_COMPILE_FILES = [
     "tools/qa_part1_dialogue_punctuation.py",
     "tools/qa_transient_overlays.py",
     "tools/qa_scene_screenshot_sanity.py",
+    "tools/qa_obj_title_cells.py",
     "tools/run_release_qa.py",
 ]
 

@@ -35,10 +35,10 @@ TITLES = [
 # last field: check the outer canvas edge (boxed logos touch it by design)
 
 
-def evidence(rom_original, off, cells, cw, ch, first):
+def evidence(rom_original, rom, off, cells, cw, ch, first):
     """Proof the cells are drawn edge to edge: a registered screen capture
     (data/obj_cell_contiguity.json) first, else native art crossing the edge."""
-    proof = aw_fonts.screen_contiguity(off)
+    proof = aw_fonts.screen_contiguity(off, rom, final=True)
     if proof:
         return proof, proof
     native = aw_fonts.obj_canvas(lz77_decompress(rom_original, off)[0], cells, cw, ch, first)
@@ -64,7 +64,7 @@ def check(rom, original):
             issues.append(f'{label}: invalid LZ77 at {off:06X}')
             continue
         canvas = aw_fonts.obj_canvas(dec[0], cells, cw, ch, first)
-        native, note = evidence(original, off, cells, cw, ch, first)
+        native, note = evidence(original, rom, off, cells, cw, ch, first)
         crossing = [aw_fonts.straddling_rows(canvas, cw * 8 * i) for i in range(1, cells)]
         try:
             aw_fonts.check_cells(canvas, [cw * 8 * i for i in range(1, cells)], label, native=native, edges=edges)
@@ -89,7 +89,7 @@ def check(rom, original):
         main = lz77_decompress(rom, owner)[0]
         ext = lz77_decompress(rom, mt.EXTENSION[0])[0] if owner == mt.EXTENSION_OWNER else None
         bounds = (64, 128) if ext is not None else (64,)
-        proof = aw_fonts.screen_contiguity(owner) or (f'native-consumer:{at64}/{at128}' if at64 and at128 else None)
+        proof = aw_fonts.screen_contiguity(owner, rom, final=True) or (f'native-consumer:{at64}/{at128}' if at64 and at128 else None)
         try:
             aw_fonts.check_cells(mt._canvas(main, ext), bounds, f'Part 1 mission title {owner:06X}', native=proof)
             report.append(f'OK Part 1 mission title {owner:06X} evidence={proof}')

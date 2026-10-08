@@ -79,11 +79,70 @@ class FontRuleTests(unittest.TestCase):
             xs = [f[1] for f in found]
             self.assertEqual(xs[1] - xs[0] == 8, expected)
 
+    @unittest.skipUnless(os.environ.get('AW_TEST_ROM'), 'set AW_TEST_ROM to the candidate under test')
     def test_registered_screen_proofs_cover_their_consumers(self):
-        self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C))
+        rom = Path(os.environ['AW_TEST_ROM']).read_bytes()
+        self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C, rom))
         for sheet in (0xC10B34, 0xC11D9C, 0xC1205C, 0xC15A68, 0xC15C5C):
-            self.assertEqual(aw_fonts.screen_contiguity(sheet), 'screen:0x00C12FD8')
-        self.assertIsNone(aw_fonts.screen_contiguity(0x5B7930))
+            self.assertEqual(aw_fonts.screen_contiguity(sheet, rom), 'screen:0x00C12FD8')
+        self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C, rom, final=True))
+        self.assertTrue(aw_fonts.screen_contiguity(0xC12FD8, rom, final=True))
+        self.assertIsNone(aw_fonts.screen_contiguity(0x5B7930, rom))
+        changed = bytearray(rom)
+        changed[0xB512A0] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'consumer changed'):
+            aw_fonts.screen_contiguity(0xBFB45C, changed)
+        changed = bytearray(rom)
+        changed[0x100] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'ROM changed'):
+            aw_fonts.screen_contiguity(0xBFB45C, changed, final=True)
+
+    def test_final_line_height_includes_outline(self):
+        self.assertEqual(aw_fonts.drawn_line_height({(0, 2), (1, 15)}, 1, 1), 16)
+        with self.assertRaisesRegex(AssertionError, 'small'):
+            aw_fonts.require_large_line({(0, 2), (1, 15)}, 1, 1)
+        self.assertEqual(aw_fonts.require_large_line({(0, 2), (1, 16)}, 1, 1), 17)
+
+    def test_sparse_screen_cell_rejects_whole_sheet(self):
+        import numpy as np
+        import qa_screen_obj_contiguity as prover
+        from unittest.mock import patch
+        from PIL import Image
+        from tempfile import TemporaryDirectory
+        with TemporaryDirectory(dir=aw_fonts.ROOT / 'temp') as directory:
+            frame = Path(directory) / 'frame.png'
+            Image.new('RGB', (32, 16)).save(frame)
+            with patch.object(prover, 'lz77_decompress', return_value=(bytes(128), 8)), \
+                 patch.object(prover.aw_fonts, 'obj_canvas', return_value=[[1] * 8 for _ in range(8)]), \
+                 patch.object(prover, 'locate', side_effect=[(1.0, 0, 0), None, (1.0, 16, 0)]):
+                self.assertFalse(prover.prove(bytes(128), frame, 0, 3, 1, 1)['contiguous'])
+
+    def test_link_logo_forced_capacity_switches_to_galmuri(self):
+        from PIL import ImageFont
+        from unittest.mock import patch
+        import build_korean_full as build
+        import lz77_compress
+        original = (aw_fonts.ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+        rom = bytearray(original)
+        actual_truetype = ImageFont.truetype
+        calls, attempts = [], []
+        cursor = [0]
+
+        def track_font(path, size, *args, **kwargs):
+            calls.append(str(path))
+            return actual_truetype(path, size, *args, **kwargs)
+
+        def force_capacity(raw, vram_safe=True):
+            attempts.append(calls[cursor[0]:])
+            cursor[0] = len(calls)
+            return b'\0' if len(attempts) == 10 else bytes(len(raw) + 1)
+
+        with patch.object(ImageFont, 'truetype', side_effect=track_font), \
+             patch.object(lz77_compress, 'lz77_compress_optimal', side_effect=force_capacity), \
+             patch.object(build, 'rec_label_layout'):
+            build.patch_part2_link_mode_residual_labels(rom)
+        self.assertEqual(len(attempts), 10)  # Retry from size 25 down through 16.
+        self.assertTrue(any(path.endswith('Galmuri11-Bold.ttf') for path in attempts[-1]))
 
     @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
     def test_word_cells_never_straddle(self):

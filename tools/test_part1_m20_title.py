@@ -53,6 +53,13 @@ class TitleTests(unittest.TestCase):
                 m.patch(rom, self.original)
         self.assertEqual(rom, self.original)
 
+    def test_forced_capacity_cannot_select_small_okdandan(self):
+        m.render.cache_clear()
+        with patch.object(m, 'lz77_compress_optimal', return_value=bytes(m.CAPACITY + 1)):
+            with self.assertRaisesRegex(AssertionError, 'overflow'):
+                m.render()
+        m.render.cache_clear()
+
     def test_final_snapshot_and_padding_guard(self):
         rom = bytearray(self.original)
         m.patch(rom, self.original)

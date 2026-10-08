@@ -6444,6 +6444,19 @@ def patch_part2_link_mode_residual_labels(rom):
         bd = ImageDraw.Draw(body)
         bd.text((x, y), text, font=font, fill=255)
         op, bp, lp = outline.load(), body.load(), layer.load()
+        rows = [yy for yy in range(layer.height) if any(
+            op[xx, yy] >= 96 or bp[xx, yy] >= 64 for xx in range(layer.width))]
+        if not rows:
+            raise AssertionError(f'Part 2 link logo has no visible ink: {text!r}')
+        final_height = rows[-1] - rows[0] + 1
+        if font_path == aw_fonts.okdandan_path() and final_height <= aw_fonts.GALMURI_MAX_SIZE:
+            return paint_text(layer, text, box, aw_fonts.GALMURI_MAX_SIZE,
+                              fill_idx, stroke_idx, aa_idx, stroke, font_path=font_bold)
+        if font_path == font_bold and final_height > aw_fonts.GALMURI_MAX_SIZE:
+            if size <= 7:
+                raise AssertionError(f'Galmuri link logo exceeds small-line height: {text!r}')
+            return paint_text(layer, text, box, size - 1, fill_idx, stroke_idx,
+                              aa_idx, stroke, font_path=font_bold)
         for yy in range(layer.height):
             for xx in range(layer.width):
                 if op[xx, yy] >= 96:
@@ -6487,8 +6500,7 @@ def patch_part2_link_mode_residual_labels(rom):
     top = make_strip('1팩 대전')
     bottom = make_strip('맵 교환')
     source_buf = bytes(buf)
-    # The OkDanDan logo is stepped down only while the sheet would not
-    # recompress into the native allocation.
+    # Compression retries may use Galmuri once the final drawn line is small.
     for main_size in range(25, 11, -1):
         buf = bytearray(source_buf)
         main = make_main('멀티팩', main_size)
@@ -8258,7 +8270,7 @@ def patch_part2_result_congratulations_obj(rom):
     # The native 作戦成功 never crosses a 32x32 cell, so contiguity comes from a
     # screen proof (data/obj_cell_contiguity.json, tools/qa_screen_obj_contiguity.py).
     aw_fonts.check_cells([[big.getpixel((x, y)) for x in range(128)] for y in range(32)], (32, 64, 96),
-                         'Part 1 result 작전 성공', native=aw_fonts.screen_contiguity(off))
+                         'Part 1 result 작전 성공', native=aw_fonts.screen_contiguity(off, rom))
     # Small top line: Galmuri (2026-10-08 font rule; was OkDanDan). The large
     # 작전 성공 title above stays OkDanDan.
     draw_centered(small, '축하합니다!', 14, fill=1, stroke_fill=9, shadow=11, stroke=1,
@@ -13195,11 +13207,11 @@ def _b84_power_title_glyph_block(ch):
 
     width, height, scale = 16, 32, 4
     big_size = (width * scale, height * scale)
-    # 2026-10-08 font rule: large cut-in title -> OkDanDan (was NanumGothicExtraBold/Bold).
-    font_path = aw_fonts.okdandan_path()
+    # A 16px-wide glyph is reduced fourfold; its final visible line is small.
+    font_path = str(aw_fonts.GALMURI11_BOLD)
     probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
     font = None
-    for size in range(25 * scale, 11 * scale, -2):
+    for size in range(16 * scale, 7 * scale, -2):
         candidate = ImageFont.truetype(font_path, size)
         bbox = probe.textbbox((0, 0), ch, font=candidate, stroke_width=scale)
         # Glyph + outline + the 2px drop shadow stay inside x 1..14, y 1..30.
@@ -13207,7 +13219,7 @@ def _b84_power_title_glyph_block(ch):
             font = candidate
             break
     if font is None:
-        font = ImageFont.truetype(font_path, 12 * scale)
+        font = ImageFont.truetype(font_path, 8 * scale)
         bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
     bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
     tw = bbox[2] - bbox[0] + 2 * scale
