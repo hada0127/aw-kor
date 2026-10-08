@@ -30,6 +30,7 @@ TITLES = [
     ('Part 1 M20', 0xC15C5C, 2, 8, 4, 0, True),
     ('Part 1 result 작전 성공', 0xBFB45C, 4, 4, 4, 0, True),
     ('Part 2 link logo 멀티팩', 0x54E538, 2, 8, 4, 64, False),
+    ('Part 2 recap 작전 일수', 0x5072AC, 2, 4, 2, 0, True),
 ] + [(f'Part 2 mode logo {off:06X}', off, 2, 8, 4, 0, False)
      for off in (0x5B7930, 0x5B7CB0, 0x5B7F38, 0x5B82B4, 0x5B8564, 0x5B8850, 0x5B8B20)]
 # last field: check the outer canvas edge (boxed logos touch it by design)

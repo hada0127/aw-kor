@@ -25,6 +25,21 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_m29_title_approved_exception_is_exact(self):
+        from qa_bteam_drift import APPROVED_EXCEPTIONS, exception_errors
+        baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        self.assertEqual(APPROVED_EXCEPTIONS['0x00A2D814'], ('결전 전', '최종결전!'))
+        self.assertEqual(exception_errors(baseline, baseline['overrides']), [])
+        changed = json.loads(json.dumps(baseline))
+        changed['overrides']['0x00A2D814'] = '결전 전'
+        self.assertIn('0x00A2D814: baseline differs from the approved exception text',
+                      exception_errors(changed, changed['overrides']))
+
+    def test_m29_title_uses_pair_writer_glyphs_only(self):
+        from qa_bteam_drift import original_glyph_encoding
+        self.assertEqual(original_glyph_encoding('최종결전!'), '최종결전！')
+        self.assertNotEqual(original_glyph_encoding('최종결전!'), '결전　전')
+
     def test_name_boundary_spacing_exception_is_exact_and_address_bound(self):
         self.assertTrue(matches_reviewed_bteam_spacing(
             0xDC3C63, '사령관님,료!', '　사령관님、　료！'))

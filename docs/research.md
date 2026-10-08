@@ -3838,3 +3838,7 @@ the full-font macOS build remain (unverified).
 - 같은 v16 ROM에서 임무 시작 직전 상태를 진행한 `output/qa/screenqa_2026-10-08/v16_mission/briefing.png`는 0xC12FD8의 64x32 두 셀을 x=8/72, y=60, 각 score 1.0으로 배치한다. 두 보존 프레임은 `docs/screenshots/FONTS_V16_*_CONTIGUITY_2026-10-08.png`에 있다.
 
 - 2026-10-08 OBJ 화면 증거 재사용 조사: 원본 ROM에서 `0x08BFB45C` 포인터 리터럴은 파일 `0xB512A0` 한 곳, `0x08E12BF4` 포인터 리터럴은 파일 `0xB52D30` 한 곳에 있다(원본 ROM에서 각 리틀엔디언 4바이트 패턴 검색). Thumb `0xB51224` 함수는 결과 자산 리터럴을 읽고 `0x08B0FFE4`를 호출한다. 임무 제목 경로의 `0xB52D02-0xB52D20`은 `0xE12BF4` 63엔트리 표와 바로 앞 `0xE12BF0` 값을 읽고 같은 함수를 호출한다. 표의 고유 자산은 41개(일반 제목 39개·확장 셀 `0xC12E40`·공백 셀 `0xC12F58`)다. 첫 14개 표 엔트리와 14~27번 확장 엔트리를 쌍으로 검사한다. 실제 OAM 배치에 영향을 주는 모든 공유 함수 범위는 아직 미확정(unverified). 기존 `0xB40000-0xB60000` 가드는 과대·과소 범위 가능성이 있으므로 최종 소비자 전용 증명으로 취급하지 않는다.
+
+- 2026-10-08 2편 회상 카드(엔딩 미션 회고): OBJ 시트 LZ77 0x5072AC(1920B, consumed 783, 포인터 0x36C2F8). 1D 타일 0-7/8-15 = 作戦日数(32x16 두 칸, OAM x=58/90 y=54), 16-19 = 日(16x16, x=178), 20-59 = 숫자 0-9(16x16). OBJ 팔레트 0: 6 흰색, 7-11 회색 단계. 근거: effc run19/0378 savestate VRAM/OAM 덤프(`temp/claude_2026-10-08/p2/recap/`).
+- 2편 대사의 제어 0x57은 같은 줄 대기다(0x77과 같은 성격, seam 표 대상 아님). 0x57 앞뒤 한국어 조각은 공백이 없으면 붙어 보인다.
+- 2편 조각 텍스트 우선순위(재배치 시 `_rp_dlg`): 스크립트 행 소유자 > display_overrides > ADDRESS_TEXT_OVERRIDES(TSV) > dialogue_overrides(strip). 말더듬 2글자 dict(`known-story-fragment`)는 정확히 4바이트(예: '네, ', '이  ')여야 한다.

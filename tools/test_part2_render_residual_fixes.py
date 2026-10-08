@@ -134,7 +134,8 @@ class SeamTests(unittest.TestCase):
 
     def test_reviewed_table_covers_cited_regressions(self):
         table = load_seam_decisions()
-        self.assertEqual(len(table), 321)
+        # 2026-10-08: five stutter seams now carry their own '、 ' (part2_ending_qa_rows).
+        self.assertEqual(len(table), 316)
         by_words = {}
         for row in table.values():
             by_words.setdefault((row['prev_word'], row['next_word']), set()).add(row['decision'])

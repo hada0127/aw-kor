@@ -206,8 +206,10 @@ def load_direct_patch_texts(*, include_writer=False):
     # module code or unrelated tuples that merely resemble address rows.
     from part1_ship_help import ROWS as ship_rows
     from part1_submarine_help import ROWS as submarine_rows
+    from part2_ending_qa_rows import ROWS as part2_ending_rows
     external_rows = {'SHIP_HELP_ROWS': ('part1_ship_help', ship_rows),
-                     'SUBMARINE_HELP_ROWS': ('part1_submarine_help', submarine_rows)}
+                     'SUBMARINE_HELP_ROWS': ('part1_submarine_help', submarine_rows),
+                     'PART2_ENDING_QA_ROWS': ('part2_ending_qa_rows', part2_ending_rows)}
     seen_external = set()
     for node in ast.walk(tree):
         if not (isinstance(node, ast.For) and isinstance(node.iter, ast.Name)

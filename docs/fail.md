@@ -1560,3 +1560,9 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 ### 2026-10-08 OBJ 화면 증거 전체 ROM SHA 고정과 소비자 가드 미해결
 
 `data/obj_cell_contiguity.json`의 전체 ROM SHA 고정은 대사만 바꾼 후보도 `qa_obj_title_cells.py`에서 거부했다. 자산의 압축·해제 바이트와 제목 포인터 표를 검사하도록 바꾼 후보에서 v6 게이트는 통과했다. 하지만 기존 `0xB40000-0xB60000` 가드는 실제 loader/OAM 함수의 정확한 범위가 아니다. 제목과 무관한 바이트 변경에도 증명을 잃거나 범위 밖 공유 함수 변경을 놓칠 수 있다. `0xB512A0`/`0xB52D30` 포인터 리터럴만으로 화면 배치 코드 전체가 증명됐다고 간주하지 않는다. 공유 함수의 호출 경로와 OAM 기록을 추적한 뒤 가드를 좁히거나 보강해야 한다.
+
+### 2026-10-08 2편 대사 조각 앞뒤 공백이 반영되지 않은 원인
+
+- `data/dialogue_overrides.json`·`address_text_overrides.tsv`에 앞뒤 공백을 넣어도 재배치 경로(`_rp_dlg`)가 `.strip()` 하므로 사라진다(Codex v7의 ' 우리 그린어스뿐이로군.' 등). 스크립트 행 소유자 텍스트나 playthrough repair 행만 공백을 유지한다.
+- `tools/build_korean_full.py`의 인라인 ADDRESS_TEXT_OVERRIDES는 TSV가 있으면 권위가 아니다(대체값). Codex가 인라인만 고친 0xA1FF09·0xA2D780 등은 ROM에 반영되지 않았다.
+- 치트 런 체크포인트에서 `--export-game-save`는 조상 run01~19 전 프레임을 다시 검증해 10분 넘게 끝나지 않았다. 화면 QA용 이관은 `game_save_evidence.py --anchored --skip-source-frame-check`를 쓴다.

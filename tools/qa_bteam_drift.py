@@ -61,7 +61,7 @@ def load_overrides() -> dict:
 # changing B-team wording needs a reviewed code change of this pin.
 # The 2026-10-07 consensus re-keys two misaligned entries only; see
 # temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
-PINNED_CORE_DIGEST = '902a7394955376af68c1eea20c0d0da7278b42f2a8c58f5f287889ab5a727110'
+PINNED_CORE_DIGEST = '182ff449b977a52074cbc97a05d3d48193c2ae2329ee27d511972b72de7807b7'
 ALIGNMENT_RESTORE_ADDRESSES = frozenset({0x00A19300, 0x00A1B3C8})
 ALIGNMENT_COMPOSITE_NEXT = {0x00A19300: 0x00A1930F}
 ALIGNMENT_LEGACY_KEYS = {
@@ -301,6 +301,7 @@ def matches_alignment_composite(wanted: str, first: str, second: str,
 # one is a reviewed code change. 0xDD0D1A: じょうでき=上出来, user 「제안대로」 2026-10-07.
 APPROVED_EXCEPTIONS = {
     '0x00DD0D1A': ('뭐,자네치고는,상등품이군.', '뭐, 자네치고는 잘했군.'),
+    '0x00A2D814': ('결전 전', '최종결전!'),
 }
 
 
@@ -525,6 +526,11 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             matched = matches_reviewed_bteam_spacing(addr, baseline, actual)
         if not matched:
             matched = round2_width_equivalent(baseline, actual, addr)
+        if not matched and key in APPROVED_EXCEPTIONS and 0xA2D55C <= addr <= 0xA2D8A8:
+            # The approved M29 pair title is drawn by the strict pair-title
+            # writer, which emits the original fullwidth glyphs (！) like the
+            # other FIX_GATE mission titles; words and order stay exact.
+            matched = actual == original_glyph_encoding(baseline)
         if not matched and addr in ROUND2_PREFIX_GLYPH_ROWS and addr in FIX_GATE_ADDRESSES:
             matched = actual == '　' * ROUND2_PREFIX_GLYPH_ROWS[addr] + display_equivalent(baseline, addr)
         if not matched and objective_start is not None:

@@ -739,7 +739,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA13FF7: '이번엔　한번　가　봅시다',
     0xA1BC86: '적　전함　이동　시작!',
     0xA1F805: '각지서　정체불명부대가',
-    0xA1FF2B: '이길　수　있었다',
+    0xA1FF2B: '이길 수 있었던 거다.',
     0xA1FFFF: '이번　전장에서는',
     0xA20157: '이번　전장에서는',
     0xA25926: '육지서　적을　막고',
@@ -895,7 +895,7 @@ ADDRESS_TEXT_OVERRIDES = {
     # Import rows whose Korean field still contained Japanese source text or a
     # pointer-adjacent source fragment. Mirror the final direct-patched ROM text
     # here so automated fit QA tracks the real screen wording.
-    0xA13310: '캐서린 사령,',
+    0xA13310: '캐서린 사령관,',
     0xA1BA93: '분하다!!',
     0xA24EA8: '오랜만입니다.',
     0xA2E238: '말 많은 건 나쁜 버릇!',
@@ -1239,7 +1239,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA0B2F9: '금방 탄이 떨어지니까,',
     0xA0E952: '전투 경험이 있는,',
     0xA2390E: '이 파이프는,',
-    0xA25E2F: '그 정도일까요,',
+    0xA25E2F: '그 정도일까요, ',
     0xA1A9F2: '「흠집 하나 낼 수 없다구」라고 합니다.',
     0xA0A5F1: '갑자기',
     0xA0A77C: '젠장',
@@ -1459,7 +1459,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA15FCF: '나랑 정보 모으자.',
     0xA16650: '나 혼자도 이겼겠지만.',
     0xA1A3F8: '주위가 적뿐인가.',
-    0xA1BF0E: '할 수 없군요.',
+    0xA1BF0E: '아무것도 할 수 없겠군요.',
     0xA1C605: '걱정 마.',
     0xA1CA1C: '적이 공항을 만들었다고?',
     0xA1D294: '할 말이 있다는데.',
@@ -1534,11 +1534,11 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA01FF0: '우뚝 솟은 적 요새.',
     0xA020E0: '발견한 적 연구소',
     0xA020F3: '뜻밖의 아군은?',
-    0xA02110: '결전의 때 왔다',
+    0xA02110: '결전의 때가 왔다',
     0xA021C8: '적 대형미사일의',
     0xA0222C: '기다리는 캐논 3대',
     0xA0225C: '발견한 적 연구소',
-    0xA02288: '결전의 때 왔다',
+    0xA02288: '결전의 때가 왔다',
     0xA02354: '스네이크 함정에 빠졌다',
     0xA0247F: '적 대형미사일 발사를 막아라!',
     0xA039BA: '먼저 공격하는 편이 유리해!',
@@ -1825,7 +1825,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1E2B9: '애초에 네놈이 지휘하면,',
     0xA1E5E3: '너무 느긋하게 일을 벌였을 뿐이다.',
     0xA1E77B: '무슨 일이 있어도 지켜라.',
-    0xA1E944: '우리도 힘 보태고 싶어.',
+    0xA1E944: '우리도 힘을 보태고 싶어.',
     0xA1EBBA: '적 배후로 도는 게 핵심.',
     0xA1EBF6: '조금은 배짱 있어 보이는군.',
     0xA1ECE7: '직접 공격 한 방에',
@@ -1833,7 +1833,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1F274: '힘든 싸움이 될 듯해.',
     0xA1F60A: '어스군은 바다나 하늘서 공격해 보자.',
     0xA1FBF5: '적 오기 전에',
-    0xA1FF09: '아스카 미사일 기지가 있었기에',
+    0xA1FF09: '아스카의 미사일 기지가 있었기에',
     0xA20213: '작은 섬의 두 공장도',
     0xA20267: '확실히 막아 둬!',
     0xA20563: '언제 이런 걸 만들었지.',
@@ -1867,7 +1867,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA256CE: '모두 힘을 합치면',
     0xA25771: '다음엔 쉬게 해줘~',
     0xA259A6: '파이프를 직접 노릴 수 있겠군.',
-    0xA262EF: '코스모랜드 다른 대륙을',
+    0xA262EF: '코스모 랜드나 다른 대륙을',
     0xA26308: '미사일 공격할 작정 같아.',
     0xA264B3: '이대로 아무것도 안 하고 있을',
     0xA264FA: '빨리 끝내야 해.',
@@ -3910,7 +3910,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA19482: '괜찮은　생각　아닌가',
     0xA19553: '파이프　직접　노릴　수도　있어',
     0xA195E3: '우리가 적을 묶는 사이에',
-    0xA19774: '반격　나서나',
+    0xA19774: '반격에 나서는 거지?',
     0xA19871: '제일　눈에　띄는　곳에',
     0xA199CA: '해상전의 나에게',
     0xA21840: '그렇지 않습니다,',
@@ -3920,14 +3920,14 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA19A43: '예정대로　완성되나',
     0xA19A98: '왜그래?',
     0xA19C7F: '요새 완성되면',
-    0xA19DF9: '고통받는걸',
+    0xA19DF9: '고통받는 것을, ',
     0xA1A1E4: '지상　공격력은　크게　떨어져',
     0xA1A2B4: '내해　작은　섬에',
     0xA1A2C8: '집결한　듯합니다',
     0xA1A2EF: '내해를　둘러',
-    0xA1A399: '전멸　전까지는',
-    0xA1A3AA: '무슨　일　날지　모른다',
-    0xA1A3C1: '긴장　늦추지　말라고',
+    0xA1A399: '전멸 전까지는 ',
+    0xA1A3AA: '무슨 일이 일어날지 모른다.',
+    0xA1A3C1: '긴장을 늦추지 말라고',
     0xA1A557: '병사라도',
     0xA1A84C: '무사한　듯합니다',
     0xA1A90F: '그리　안　된다',
@@ -4014,7 +4014,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1EB57: '적　마음대로　안　둔다',
     0xA1EB89: '우리　쪽이　가까워',
     0xA1EC2E: '여기서　적　약점으로　진격',
-    0xA1EDAC: '어리석군',
+    0xA1EDAC: '어리석군.',
     0xA1EE53: '나란　자가',
     0xA1EE66: '이런　꼴이　되다니',
     0xA1E96E: '병력은 못 내도',
@@ -4029,7 +4029,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1FBB1: '원거리　일방　공격은',
     0xA1FBCE: '취향은　아니나',
     0xA1FDD9: '먼저　닿으면',
-    0xA1FE79: '힘　밀렸나',
+    0xA1FE79: '힘에서 밀렸다고?',
     0xA1FF99: '승전　함성　올려라',
     0xA2006E: '다리　막아',
     0xA2009F: '분명　이겨',
@@ -4212,8 +4212,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA26B3D: '왜 내게 묻지 않는가',
     0xA26B28: '타국인에게 묻기 전',
     0xA26C41: '보급 수단을',
-    0xA2728C: '입막는 편이',
-    0xA280A3: '나중 얘기는',
+    0xA2728C: '입을 막는 편이',
+    0xA280A3: '나중 얘기는 ',
     0xA28722: '나도 본국으로',
     0xA28BC3: '각자 집으로 돌려보내',
     0xA294C4: '폭탄',
@@ -4306,7 +4306,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA2D684: '전차대를 격파하라!',
     0xA2D6F0: '푸른 달이여,영원히',
     0xA2D72C: '하시다테 회전',
-    0xA2D780: '바다는　누구것',
+    0xA2D780: '바다는\u3000누구\u3000것',
     0xA2D7C4: '붙잡힌 우군',
     0xA2D9D7: '오늘은　뭘　살래',
     0xA2D9F0: '물건없어',
@@ -4546,7 +4546,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0xA1853B: '언제든 갈 수 있어',
     0xA194EC: '외부 우군에게는',
     0xA199A0: '그렇겠지만',
-    0xA1A3DB: '병사에게 전하라',
+    0xA1A3DB: '병사들에게 전하라.',
     0xA1AF93: '호크 님에게',
     0xA1AFFC: '수리 소요일입니다',
     0xA1D8C3: '모두께 전해줘',
@@ -4628,7 +4628,7 @@ ADDRESS_TEXT_OVERRIDES.update({
     0x9B36E4: '레드스타 패배. 타군 항복도 패배. 정말? 종료 공격 합류 대기 시스템',
     0x9EBF88: '레드스타 패배. 타군 항복도 패배. 정말? 종료 공격 합류 대기 시스템',
     0x9EC040: '대기공격합류항복종료닫기설정',
-    0xA1EDE4: '물건과 죽을만큼',
+    0xA1EDE4: '물건 때문에',
     0xD83138: '0123456789룰칙정찰날씨장군브레이크초기수입매턴수입거점있음없음맑음눈비랜덤',
     0xD75917: '비카가루진동',
     0xD8FFF9: '걸어오는 쪽이',
@@ -13563,6 +13563,10 @@ from part1_submarine_help import ROWS as SUBMARINE_HELP_ROWS
 ADDRESS_TEXT_OVERRIDES.update({a:text for a,e,text in SUBMARINE_HELP_ROWS})
 SCRIPT_PLAIN_OPERAND_SPANS.update({a:e for a,e,text in SUBMARINE_HELP_ROWS})
 PLAYTHROUGH_REPAIR_ROWS = PLAYTHROUGH_REPAIR_ROWS | frozenset(a for a,e,text in SUBMARINE_HELP_ROWS)
+from part2_ending_qa_rows import ROWS as PART2_ENDING_QA_ROWS
+ADDRESS_TEXT_OVERRIDES.update({a: text for a, e, text in PART2_ENDING_QA_ROWS})
+SCRIPT_PLAIN_OPERAND_SPANS.update({a: e for a, e, text in PART2_ENDING_QA_ROWS})
+PLAYTHROUGH_REPAIR_ROWS = PLAYTHROUGH_REPAIR_ROWS | frozenset(a for a, e, text in PART2_ENDING_QA_ROWS)
 # Keep the restoration set separate: PLAYTHROUGH_REPAIR_ROWS names authored
 # direct patches, whose source tuples are audited by the playthrough test.
 # Existing reviewed seam decisions are keyed to these earlier source fragments.
@@ -14151,6 +14155,8 @@ def main():
     st['part2_war_over_headline'] = p2_warover.patch(rom, orig)
     import part2_attack_range_legend as p2_atk_legend
     st['part2_attack_range_legend'] = p2_atk_legend.patch(rom, orig)
+    import part2_recap_labels as p2_recap
+    st['part2_recap_labels'] = p2_recap.patch(rom, orig)
     # candidate6: the WAR IS OVER newspaper (literal 0x36BE98) reads its own original copy of the
     # shared sheet 0x5B5D10; the Korean menu collage stays for the 10 collage-tilemap loaders.
     import part2_war_over_newspaper_sheet as p2_wo_sheet
@@ -14219,12 +14225,12 @@ def main():
         0xA0E82C: '그럼',   # 行っちゃったわ。k[ま、]Wどのみち... control gap
         0xA0EC3C: '여자',   # なかなかやるな、 [女。] repeat
         0xA1120F: '지금',   # [今、] レッドスター本土が...
-        0xA19CB9: '지금',   # [今、] 攻撃をかければ...
+        0xA19CB9: '지금',   # [今、] 攻撃をかければ... (final text: part2_ending_qa_rows)
         0xA1B4FF: '지금',   # [今、] いそがしーんだから...
         0xA1DDD4: '지금',   # [今、] そこを守っている部隊は...
         0xA1E1A0: '지금',   # [今、] 発見したって...
         0xA1FDB7: '보병',   # ミサイル基地は [歩兵] か...
-        0xA1FDBC: '나',     # 歩兵 [か] バズーカ兵...
+        0xA1FDBC: '나',     # 歩兵 [か] バズーカ兵... (final text: part2_ending_qa_rows)
         0xA2257D: '지금',   # [今、] 北の山中に...
         0xA23FFF: '지금',   # [今、] 敗北したばかり...
         0xA24C4D: '지금',   # い、 [今、] ここで勝てば...
@@ -14516,8 +14522,8 @@ def main():
         0xA14F60: '그, ',
         0xA15026: '나, ',
         0xA15604: '뭐, ',
-        0xA15643: '서  ',
-        0xA156F4: '는  ',
+        0xA15643: '그, ',
+        0xA156F4: '네, ',
         0xA158BC: '핫  ',
         0xA158C4: '뭐, ',
         0xA15BA0: '그, ',
@@ -14535,7 +14541,7 @@ def main():
         0xA16760: '핫  ',
         0xA168F4: '뭐, ',
         0xA169C4: '뭐, ',
-        0xA16BEC: '는  ',
+        0xA16BEC: '네, ',
         0xA16D5F: '미안',
         0xA16DB7: '자, ',
         0xA17354: '어, ',
@@ -14553,10 +14559,10 @@ def main():
         0xA194D8: '뭐, ',
         0xA195C4: '그, ',
         0xA19678: '는  ',
-        0xA19EEC: '미안',
+        0xA19EEC: '전, ',
         0xA1AC4F: '또  ',
         0xA1B044: '뭐? ',
-        0xA1B180: '는  ',
+        0xA1B180: '하, ',
         0xA1B464: '서  ',
         0xA1B5C5: '어, ',
         0xA1B6D4: '그는',
@@ -14564,7 +14570,7 @@ def main():
         0xA1B940: '어, ',
         0xA1B9F4: '어? ',
         0xA1BC63: '자, ',
-        0xA1C330: '는  ',
+        0xA1C330: '하, ',
         0xA1CCC0: '아, ',
         0xA1CD80: '어? ',
         0xA1D940: '뭐, ',
@@ -14572,8 +14578,8 @@ def main():
         0xA1E673: '적의',
         0xA1EFE8: '어? ',
         0xA1FAFF: '무! ',
-        0xA1FD04: '서  ',
-        0xA1FE58: '자, ',
+        0xA1FD04: '그, ',
+        0xA1FE58: '세, ',
         0xA1FFCC: '이, ',
         0xA20124: '이, ',
         0xA20398: '핫  ',
@@ -14604,7 +14610,7 @@ def main():
         0xA24B9C: '시, ',
         0xA24C48: '이, ',
         0xA24CA8: '나. ',
-        0xA251AD: '서  ',
+        0xA251AD: '나, ',
         0xA25596: '나는',
         0xA25D7B: '뭐? ',
         0xA25EC5: '뭐, ',
@@ -14613,10 +14619,10 @@ def main():
         0xA2659C: '또  ',
         0xA27082: '까. ',
         0xA271BB: '뭐, ',
-        0xA272CC: '서  ',
+        0xA272CC: '그, ',
         0xA2757C: '는  ',
-        0xA27858: '뭐, ',
-        0xA27908: '이건',
+        0xA27858: '기, ',
+        0xA27908: '이  ',
         0xA27A5A: '네놈',
         0xA27A80: '뭐, ',
         0xA27AA8: '헤, ',
@@ -15929,7 +15935,7 @@ def main():
 
     for faddr, fend, text, label in [
         (0xA1307C, 0xA13082, '저기,', 'part2 hey there row'),
-        (0xA13310, 0xA13320, '캐서린 사령,', 'part2 catherine commander row'),
+        (0xA13310, 0xA13320, '캐서린 사령관,', 'part2 catherine commander row'),
         (0xA1344C, 0xA13458, '료라면,', 'part2 if ryo later row'),
         (0xA1366E, 0xA1367A, '영토쯤,', 'part2 territory row'),
         (0xA136EC, 0xA136F4, '누구냐,', 'part2 who is there row'),
@@ -16048,7 +16054,7 @@ def main():
         (0xA16C48, 0xA16C4E, '...', 'part2 raid ellipsis row'),
         (0xA16D4A, 0xA16D52, '낙승이네', 'part2 easy win row'),
         (0xA16DC5, 0xA16DCD, '돌격!', 'part2 charge row'),
-        (0xA16E1C, 0xA16E24, '오늘이,', 'part2 today is row'),
+        (0xA16E1C, 0xA16E24, '오늘은　', 'part2 today is row'),
         (0xA16E25, 0xA16E2D, '8일째.', 'part2 day eight row'),
         (0xA16E98, 0xA16EA0, '어이,', 'part2 hey row'),
         (0xA16EB8, 0xA16EC4, '빌리 씨!', 'part2 billy sir row'),
@@ -16147,9 +16153,9 @@ def main():
         (0xA19546, 0xA19552, '잘 되면', 'part2 if works row'),
         (0xA195D6, 0xA195E2, '빌리 씨!', 'part2 billy sir exclaim row'),
         (0xA19688, 0xA19698, '이런 이런...', 'part2 oh dear row'),
-        (0xA196F0, 0xA196F8, '남은 건', 'part2 remaining row'),
+        (0xA196F0, 0xA196F8, '남은 건 ', 'part2 remaining row'),
         (0xA1971F, 0xA1972B, '국토대부분을', 'part2 most homeland row'),
-        (0xA19787, 0xA1978D, '그럼,', 'part2 then short row'),
+        (0xA19787, 0xA1978D, '그럼, ', 'part2 then short row'),
         (0xA1981A, 0xA19822, '적은,', 'part2 enemy topic row'),
         (0xA19858, 0xA19860, '그만둬,', 'part2 stop row'),
         (0xA198E2, 0xA198FC, '조금 늦었을 뿐이다.', 'part2 only delayed row'),
@@ -16178,7 +16184,7 @@ def main():
         (0xA1A509, 0xA1A511, '무사해?', 'part2 safe question later row'),
         (0xA1A580, 0xA1A586, '잠깐.', 'part2 wait dot row'),
         (0xA1A588, 0xA1A592, '현 상황은', 'part2 current situation row'),
-        (0xA1A61A, 0xA1A622, '그것도,', 'part2 that too row'),
+        (0xA1A61A, 0xA1A622, '그것도, ', 'part2 that too row'),
         (0xA1A65A, 0xA1A666, '이끌고', 'part2 leading row'),
         (0xA1A6CF, 0xA1A6D7, '포대2문', 'part2 two cannons row'),
         (0xA1A6F7, 0xA1A6FD, '그래.', 'part2 yes dot row'),
@@ -16272,16 +16278,16 @@ def main():
         (0xA1E6B8, 0xA1E6C8, '다가왔나.', 'part2 approaching row'),
         (0xA1E79C, 0xA1E7AA, '아니면,', 'part2 otherwise row'),
         (0xA1E7CC, 0xA1E7D6, '핫...', 'part2 gasp row'),
-        (0xA1E923, 0xA1E929, '이봐,', 'part2 hey old row'),
+        (0xA1E923, 0xA1E929, '이보게, ', 'part2 hey old row'),
         (0xA1E9B5, 0xA1E9BB, '우린', 'part2 we row'),
         (0xA1EBAB, 0xA1EBB9, '캐논 공략과', 'part2 cannon capture row'),
         (0xA1ED7E, 0xA1ED86, '설마,', 'part2 no way row'),
-        (0xA1EDAC, 0xA1EDB4, '어리석군', 'part2 foolish row'),
+        (0xA1EDAC, 0xA1EDB4, '어리석군.', 'part2 foolish row'),
         (0xA1EEEC, 0xA1EEFA, '행방 불명임.', 'part2 missing row'),
         (0xA1EF48, 0xA1EF54, '수고했어.', 'part2 good work row'),
         (0xA1EFB8, 0xA1EFC0, '후우,', 'part2 sigh repeat row'),
         (0xA1EFDF, 0xA1EFE5, '의외.', 'part2 unexpected row'),
-        (0xA1F06C, 0xA1F074, '아앗,', 'part2 ah gasp row'),
+        (0xA1F06C, 0xA1F074, '아앗, ', 'part2 ah gasp row'),
         (0xA1F084, 0xA1F090, '후후후...', 'part2 chuckle row'),
         (0xA1F094, 0xA1F0A0, '하하하...', 'part2 laugh row'),
         (0xA1F0FB, 0xA1F119, '그린어스 사람들 대신', 'part2 green earth people row'),
@@ -16308,7 +16314,7 @@ def main():
         (0xA1FD14, 0xA1FD1A, '만약,', 'part2 if row'),
         (0xA1FD51, 0xA1FD59, '국가수장', 'part2 head of state row'),
         (0xA1FD9B, 0xA1FDA3, '들어!', 'part2 listen row'),
-        (0xA1FDCA, 0xA1FDD8, '사용 가능해.', 'part2 can use row'),
+        (0xA1FDCA, 0xA1FDD8, '으로 사용 가능해.', 'part2 can use row'),
         (0xA1FE33, 0xA1FE3D, '두려워 마.', 'part2 fear not row'),
         (0xA1FE5D, 0xA1FE69, '강해...', 'part2 strong row'),
         (0xA1FECC, 0xA1FEDA, '미안합니다,', 'part2 apology formal row'),
@@ -16495,7 +16501,7 @@ def main():
         (0xA271A1, 0xA271B1, '보여 다오.', 'part2 show me row'),
         (0xA271C0, 0xA271C6, '잠깐!', 'part2 wait exclaim row'),
         (0xA271FC, 0xA2720E, '미사일기지 앞에', 'part2 missile launcher front row'),
-        (0xA27274, 0xA2727A, '그럼,', 'part2 then row'),
+        (0xA27274, 0xA2727A, '그럼, ', 'part2 then row'),
         (0xA272EA, 0xA27300, '미사일 발사대 공격,', 'part2 attack missile launcher row'),
         (0xA27440, 0xA27446, '윽,', 'part2 grunt row'),
         (0xA274F5, 0xA274FB, '전군,', 'part2 all forces row'),
@@ -16508,8 +16514,8 @@ def main():
         (0xA277B0, 0xA277B6, '다음은', 'part2 next is row'),
         (0xA277C8, 0xA277D4, '또다시,', 'part2 yet again row'),
         (0xA2782C, 0xA2783C, '너희 모두도', 'part2 all of you too row'),
-        (0xA2785D, 0xA27863, '잠깐!', 'part2 wait repeat row'),
-        (0xA27865, 0xA2786B, '네놈', 'part2 you bastard short row'),
+        (0xA2785D, 0xA27863, '기다려!', 'part2 wait repeat row'),
+        (0xA27865, 0xA2786B, '네놈, ', 'part2 you bastard short row'),
         (0xA27880, 0xA27894, '자폭할 셈!?', 'part2 self destruct row'),
         (0xA278AD, 0xA278B5, '물러나!', 'part2 fall back row'),
         (0xA2790D, 0xA2791B, '꼬마...', 'part2 kid ellipsis row'),
@@ -16524,9 +16530,9 @@ def main():
         (0xA27E50, 0xA27E56, '뭔가,', 'part2 something row'),
         (0xA27E85, 0xA27E8F, '강자에게,', 'part2 to strong row'),
         (0xA27EA7, 0xA27EB3, '미안...', 'part2 sorry row'),
-        (0xA27ECC, 0xA27ED2, '잠깐!', 'part2 wait second repeat row'),
+        (0xA27ECC, 0xA27ED2, '기다려! ', 'part2 wait second repeat row'),
         (0xA27FC3, 0xA27FD5, '할 말만 하고,', 'part2 say all row'),
-        (0xA280B2, 0xA280B8, '좋아!', 'part2 good exclaim row'),
+        (0xA280B2, 0xA280B8, '됐어!', 'part2 good exclaim row'),
         (0xA280F9, 0xA28103, '축하회다!', 'part2 victory party row'),
         (0xA282D8, 0xA282E6, '그런 말은,', 'part2 stiff talk row'),
         (0xA28304, 0xA28318, '여러 가지 있잖아.', 'part2 many things row'),
@@ -22772,6 +22778,7 @@ def main():
     _p2_atk_legend_final_regions = p2_atk_legend.capture(rom, orig)
     st['part2_attack_range_legend_editor_pixels_changed'] = not p2_atk_legend.generated_matches(rom, orig)
     _p2_wo_sheet_final_regions = p2_wo_sheet.capture(rom, orig)
+    p2_recap.verify(rom, orig)   # no editor overlay for the recap labels
     from part1_result_rank_word import capture as capture_result_rank_word, verify as verify_result_rank_word
     _result_rank_word_final = capture_result_rank_word(rom)
     _campaign_co_final_regions = campaign_co_labels.capture_regions(rom, orig)
@@ -22810,6 +22817,10 @@ def main():
     submarine_source_guard(orig)
     for _a, _e, _text in SUBMARINE_HELP_ROWS:
         patch_script_row(_a, _e, b'', 'submarine help complete context', source_text=_text)
+        required_script_repoints.add(_a)
+    # Part 2 ending-QA fragment repairs: exact text, relocated with their messages.
+    for _a, _e, _text in PART2_ENDING_QA_ROWS:
+        patch_script_row(_a, _e, b'', 'part2 ending QA fragment', source_text=_text)
         required_script_repoints.add(_a)
 
     # 2.9) 짜옹이님 캠페인 대사 단어붙음 해소 — 메시지 재배치(repoint)

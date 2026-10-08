@@ -1135,7 +1135,7 @@
   "0x00A2D7E0": "불의 비",
   "0x00A2D7E8": "데인저 나인",
   "0x00A2D7FC": "호프 대회전!",
-  "0x00A2D814": "결전 전",
+  "0x00A2D814": "최종결전!",
   "0x00A2D828": "에디트 1",
   "0x00A2D838": "에디트 2",
   "0x00A2D848": "에디트 3",
@@ -3357,6 +3357,12 @@
   "0x00EC332A": "사령관 능력 설정"
  },
  "_user_approved_exceptions": {
+  "0x00A2D814": {
+   "from": "결전 전",
+   "to": "최종결전!",
+   "approved": "2026-10-08 user approval in CLAUDE.md (B-team M29 title exception)",
+   "reason": "Match the campaign preview and ラスト・フロント; avoid the repeated M28 title"
+  },
   "0x00DD0D1A": {
    "from": "뭐,자네치고는,상등품이군.",
    "to": "뭐, 자네치고는 잘했군.",
