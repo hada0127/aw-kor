@@ -1,257 +1,351 @@
 {
-  "_doc": "Historical screen frame provenance and byte guards for multi-OBJ title placement. A final proof checks the requested title sheet, its extension sheet where used, the registered pointer table, and a broad code guard. The broad code guard is provisional; see docs/research.md. Other ROM bytes do not enter this check.",
-  "assets": {
-    "0x00BFB45C": {
-      "label": "Part 1 mission result 작전 성공 (big title, 4 x 32x32 OBJ)",
-      "cells": 4,
-      "cell_w": 4,
-      "cell_h": 4,
-      "first": 0,
-      "frame": "docs/screenshots/FONTS_V16_RESULT_CONTIGUITY_2026-10-08.png",
-      "frame_sha256": "07720a6d7dd94e95bdfece22149e9918718e702cc62c24f4b9f7ab2422d8944b",
-      "found": [
-        [
-          9,
-          22
-        ],
-        [
-          41,
-          22
-        ],
-        [
-          73,
-          22
-        ],
-        [
-          105,
-          22
-        ]
-      ],
-      "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_result_prebattle_save/game_save.json (source ROM 5bb5c941, save SHA 057f4d27, cheat-tainted), output/qa/screenqa_2026-10-08/v16_coldboot_result_prebattle/baseline.json and exit.json. In-game save was made on source ROM at output/qa/screenqa_2026-10-08/v16_result_prebattle_save_source/resume.checkpoint.json (save dialogue at 0024_A_0021899.png and saving at 0026_A_0022021.png, export run v16_result_prebattle_export_run); v16 Continue resumed before the final attack. Frame 0107_NONE_0005972.png follows the attack and victory dialogue; all four 32x32 cells match v16 ROM sheet at x=9/41/73/105,y=22, score 1.0. No cross-ROM savestate; cheat-tainted screen geometry only, not normal-play victory proof.",
-      "consumer_guard": [
-        [
-          11796480,
-          11927552,
-          "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
-        ]
-      ],
-      "asset_sha256": "49a1de4d70bf76375c190cf324c4a8e4d10669066b617aa3ac768fd7976229af",
-      "asset_bytes_sha256": "533847757bb175730f062210309d219cb45d9702627583813bc7073f15e52e6d",
-      "decoded_size": 3072,
-      "frame_rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d"
-    },
-    "0x00C12FD8": {
-      "label": "Part 1 mission-title consumer (0xE12BF4 table), sheet 0xC12FD8 개전! on the mission briefing",
-      "cells": 2,
-      "cell_w": 8,
-      "cell_h": 4,
-      "first": 0,
-      "frame": "docs/screenshots/FONTS_V16_MISSION_CONTIGUITY_2026-10-08.png",
-      "frame_sha256": "aee0457c481ff15ba09ef5acafe7b9921a28bc1e06c29a03c10be13500dec274",
-      "found": [
-        [
-          8,
-          60
-        ],
-        [
-          72,
-          60
-        ]
-      ],
-      "consumer_assets": [
-        "0x00C10B34",
-        "0x00C10DC0",
-        "0x00C1100C",
-        "0x00C112DC",
-        "0x00C11598",
-        "0x00C118A8",
-        "0x00C11B84",
-        "0x00C11D9C",
-        "0x00C1205C",
-        "0x00C122DC",
-        "0x00C12500",
-        "0x00C1275C",
-        "0x00C129E0",
-        "0x00C12BE0",
-        "0x00C12FD8",
-        "0x00C131CC",
-        "0x00C133DC",
-        "0x00C135D8",
-        "0x00C13844",
-        "0x00C13A34",
-        "0x00C13CAC",
-        "0x00C13EE0",
-        "0x00C1420C",
-        "0x00C14488",
-        "0x00C14770",
-        "0x00C14A2C",
-        "0x00C14C9C",
-        "0x00C14EE8",
-        "0x00C1513C",
-        "0x00C15394",
-        "0x00C15594",
-        "0x00C15808",
-        "0x00C15A68",
-        "0x00C15C5C",
-        "0x00C15E00",
-        "0x00C160B8",
-        "0x00C1636C",
-        "0x00C165D8",
-        "0x00C1689C"
-      ],
-      "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_coldboot_p1/game_save.json (source ROM effc6ee8, save SHA 678aa8f3, cheat-tainted), baseline.json and exit.json. Frame 0030_A_0002272.png follows in-game Continue and mission briefing transition; both 64x32 cells match v16 ROM sheet at x=8/72,y=60, score 1.0. No cross-ROM savestate.",
-      "consumer_guard": [
-        [
-          11796480,
-          11927552,
-          "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
-        ],
-        [
-          14756848,
-          14757104,
-          "94d1ec2da2850c8fd61d30c400a3e9c283ffb56ce798c58781c3a4bb17407713"
-        ]
-      ],
-      "asset_sha256": "6eb0c2f47fc8d1ff823c83374022e69cf88cb64c746cb655888b217c32c79af5",
-      "consumer_asset_sha256": {
-        "0x00C10B34": "cdc88744c642efc097a8f1c6451bb1104271d51b8724ec1fca885196f50a8f06",
-        "0x00C10DC0": "b98d1cfe3a349bc84794ab02e8701eaea9b860f5fda29c7230003d34efdbe197",
-        "0x00C1100C": "09b60cdc4231d8dcea50dffa870586a9d563873ae59dffe0cbe2dd7ff2def9a9",
-        "0x00C112DC": "5f718f01305bf8cc31500bbdf8101ef9f7da452e86d3d423c5406afe7ca1005a",
-        "0x00C11598": "614678388ce60cd8e15422b617d3ba2dbd33600b866234a6791681b1b627d1c1",
-        "0x00C118A8": "4415dcd017eb191e333ee14ee4163384b555c349ea66187c0176ccdaaf05c752",
-        "0x00C11B84": "f08c02cd4e80d97c6d7ae79c3b91c7eeddec3a7e1c04b52fe83d74975c9f1e0c",
-        "0x00C11D9C": "7576397b23ed73f3a67638d7932c5f548cd284c3cdab663d619ed7e06a662853",
-        "0x00C1205C": "d258ff7efb08e2d48e8b24e69082c7ed6a2bea9ed46f6d46765e5490a9affb09",
-        "0x00C122DC": "d8535f75557efa886b1ff568eea80c74a723ee61755b69f77880550245e91766",
-        "0x00C12500": "3f3b0b4aa1d9df47a3fb8102814939ebaa59f1d05367309931929702f63c9217",
-        "0x00C1275C": "59faf47a83dd96c8cdd68ec3677adcaf1be81b581f24bd58b70d74597026175f",
-        "0x00C129E0": "bd8eb842be90aabbe83b934b3e9c897d6f9bdab30ac1459469e407d1b1ed5b1e",
-        "0x00C12BE0": "bc4e13e7d5a17a33ea5dddada323f7d8c4f773dda4890273133d94259ea058f0",
-        "0x00C12E40": "dc808117ade435fdd684309332c952679a05793853f42a8c1bd6af3b06281c97",
-        "0x00C131CC": "83ed6598eb839be0ee935e9ccab1fdb3c4d381150b48b0fca1d7131e0988ab6e",
-        "0x00C133DC": "20a580e1d2551e83cd69c1015f01bfc4572e65fef61d5486100c8efbba9b4b03",
-        "0x00C135D8": "3aec68289db8463bd00e1209a18624ee7b702031150a21499de622ee3f822f56",
-        "0x00C13844": "6c66812d34275ad2b7c8cdb9cb3532fedc811b16a313474074540d1de438d1c5",
-        "0x00C13A34": "d0966f3fdabe0c18c4fd93455e5b5158b8503ed5984407aaf1b30f1e2a69f73b",
-        "0x00C13CAC": "b9e71fbbadcf9451964af082963dcfb0f6f08aee87c14ba78139bcb35690a986",
-        "0x00C13EE0": "bc838bdc8dbb14b22db3dc25d27a66b95069bde212e246d12d9ff3260b141523",
-        "0x00C1420C": "fbb038f75a5677c12b9b5ca53fe67f412275d851a82e2c49eecba56e25376f43",
-        "0x00C14488": "5bd3884af72d106b18b34adbde5dc466b627a6634fec1aabf8accd3d444f428d",
-        "0x00C14770": "623a0f5fa90b92855056cbfbde7d6e6c1a9377660d2597966aef1ba2e10f1308",
-        "0x00C14A2C": "57eaeafe5219990ca85be2c5be450c02d066b46a7ccdc009f5a00a093a5b0f73",
-        "0x00C14C9C": "3295b2197d4cbd4c5650b31cb2db4eab73584651d126f40998366ee8be082250",
-        "0x00C14EE8": "ae9c7338649d615957e8d4b8a8453d7aa0d894fd621f3f634cbc4e73dcbe6f13",
-        "0x00C1513C": "cf089279c60820139dea78f981ca5422695892132f502e007c1cc52a0f126e37",
-        "0x00C15394": "ebe6ed4665ebfce3f477f1d8081adfdc93db1dba8cc8f984025e567d39eaa904",
-        "0x00C15594": "517c799ab9469f982b45d943fb13c61ed1093e7c0e798c28749bcd2ce2691053",
-        "0x00C15808": "5b2229d54de493c5917c4916febd55d465ac6f8a2e0185a66b3b9c73a704a04c",
-        "0x00C15A68": "f3ce4fcf55466d6e4cc47de210a0331019d45753ee0a2daeb68a5d4fc7ffceb1",
-        "0x00C15C5C": "3a44c480f577f91dff0763c9c1991a36960c538a163f598d8a49da6a61a74fa5",
-        "0x00C15E00": "acf0cfe394f0ab61a8c5793bb671bcacca9b6e4b31bf2fee71f2a9357906124a",
-        "0x00C160B8": "0a757639bba2f016c5f5747f58591e95ba351ab395cb5d1d77a969032de8ea36",
-        "0x00C1636C": "533b4d38d75e70f9538d1e94efb877143d2c5beee640723fb0494b7726976397",
-        "0x00C165D8": "4032a2533a5cff638edc826427f515ef64b757e712c9ab42cf7edfe054dd6e31",
-        "0x00C1689C": "6342038d7cac90b1f86ef0c75cbe2d37221a5751bd05a032975445abc262d78c",
-        "0x00C12F58": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
-      },
-      "asset_bytes_sha256": "4f324fc4b2217fd7267cfb3b74fe8b0d67d504e537ee4e1fd9e7ad533396ccd0",
-      "consumer_asset_bytes_sha256": {
-        "0x00C10B34": "8ea3a34f012d6ce2dcbc80e8f89d4695410c9c979cb80a0b3b61d1fb5c4a4397",
-        "0x00C10DC0": "69006c59b30a5aedb4f6d189a7bc251c42cf42a87f1307314e18898b39b2f343",
-        "0x00C1100C": "923ac10968566885bb6457e7f823752ee5322e3311c78ad88b725c248cd77f61",
-        "0x00C112DC": "8a00d40fbdde5691ac76c1a77a782e2dc1f834158d66461ddb0c4d24a8207527",
-        "0x00C11598": "0a3a104e9dda8e14a2d2a2a830cb72f67cb0178efe0fb3ec01d9c87aaab17b9b",
-        "0x00C118A8": "658f10108e2869d25314d3813aab437207a159669d82c68b6dc330103497ed49",
-        "0x00C11B84": "381e0064cb224635daea52dcd5891adb2e67d25385bb5f08412ce4413736bd79",
-        "0x00C11D9C": "b730565df30f2b87c53682184e6f4a56a40340ec8653ade498483e33ab068b7b",
-        "0x00C1205C": "925d315a46d519bf6ed3b73854f5acf186c7274da04105917c41c619eb2f2ae1",
-        "0x00C122DC": "450e7c72f37ef30412fc3974d3ca46b4481054a1f764c33a17c33ea30524a49e",
-        "0x00C12500": "d813f72b20f96544b1496ed56a4a9e9f1136870e57e5dd7ef1311cd7b4a050c5",
-        "0x00C1275C": "ad2e335011188201cae1f3cbf49fe0e6685ff7acf8fdf9b8e016c7261cef7e47",
-        "0x00C129E0": "22e5cf43f56dbecca45ead45ee971ae071557e85be7690701bf4db737cb1ee42",
-        "0x00C12BE0": "40db10a3e03dd4eb10fb19730673d652438fbb8c04ee756a3685a660ff6b998c",
-        "0x00C12E40": "73064f575c00540d74e0e3f5b2a138a6fbb50361c4ad8b34ab05d781bc0e824f",
-        "0x00C131CC": "dfd6bdbd3b9aa783f2026e03607780e5dab2e4f109b657f1074523002e604377",
-        "0x00C133DC": "09f6cc841551c5d24396245a9c7a39c1574247157c1cbef4f514014d4a6a7ec2",
-        "0x00C135D8": "f5143c849051b5f0761cae73d4d687b59bfa882b9fedd03713fc7d52b1ed48a8",
-        "0x00C13844": "e683ea162d894964049f48ebddf8fc5b43c0747f7513cae91be8d84f01c2a5f8",
-        "0x00C13A34": "8f7549528b94291c7716d777a16a45954c7acfd4cf73015da01654e11da224a5",
-        "0x00C13CAC": "b7525eff3d5d3935118a319a56a6af5b27f7f81c6c811a5d2fc0819f8dda1eb7",
-        "0x00C13EE0": "f80f3cb9394ab570bbacf652044084694a1377a2058eb3d9c56eaab351d61fe2",
-        "0x00C1420C": "646e1b431e4d330e8622c401081f1bcc47cbaf9747bee29831f3d66d8867861c",
-        "0x00C14488": "02c5e16beeaaf18ed09a3b84547da62030be2eb79cfff37ce92f9f53f1c57fff",
-        "0x00C14770": "f32ad226affc167a0fbdf53875c528f159f5852da3d22a5890c3ca69520d67cf",
-        "0x00C14A2C": "01a7d7786382a049db868f875509205b1f8c2a8b9885642e73d7dbf0e682bd73",
-        "0x00C14C9C": "da233c36cbeaa77348240848add8bc744683c66f40b8f21775054e43757acd19",
-        "0x00C14EE8": "6d1f5052518b912625fe0534f8583f01743fc34d9e7755d88f43e0aa478af11c",
-        "0x00C1513C": "ad91e74c79d401762c32c421cc20f395efe16aa7d9c2345c173031f4af57f520",
-        "0x00C15394": "371992dd52a059238ecc4e2db422f959f573a1e38a532681555c08758a53b292",
-        "0x00C15594": "143c62eab36afc741e8eedeeb49f10a72f55c5b44ecd3b376a13c20089553052",
-        "0x00C15808": "efa5a7d8b726604cb209fe22b464e2a4cf5c06d0db9792aa63a8825a5562839e",
-        "0x00C15A68": "800d1a2b6f263c39f872c41f649f6fed0eb8f99f51aff0d6092be2bd48f65569",
-        "0x00C15C5C": "9e1f47b38e28f52b361352b403e973f50eac6e469f1d7b3252a970fd2dce9c0a",
-        "0x00C15E00": "809e2ced758b8f65b31911f1991e13cd61f69921568f91479d8fb8136e588e7f",
-        "0x00C160B8": "168a6b2c9c53464929bc3d42c2153a2f0dd0fe5d05711148ac51026d90700d30",
-        "0x00C1636C": "1ef4a32e9f5cbd5786c335079ee842535975ed04e8106882a51a1652aa60ed43",
-        "0x00C165D8": "85958afed2ada4172196bd504e007a585a6cad09f09f17be62ad786bb172d0f1",
-        "0x00C1689C": "0f8a9c30f2006b712528945b91f43f24a3552ddb1fd68f897098250f40cdcb07",
-        "0x00C12F58": "3c2451d3e0f5b1a598ab8cab6beae858645729fc74f8c1d993274f55e3dbbd41"
-      },
-      "consumer_table": {
-        "offset": 14756852,
-        "count": 63,
-        "excluded_assets": [
-          "0x00C12F58",
-          "0x00C12E40"
-        ]
-      },
-      "dependent_assets": {
-        "0x00C1100C": [
-          "0x00C12E40"
-        ],
-        "0x00C10B34": [
-          "0x00C12F58"
-        ],
-        "0x00C10DC0": [
-          "0x00C12F58"
-        ],
-        "0x00C112DC": [
-          "0x00C12F58"
-        ],
-        "0x00C11598": [
-          "0x00C12F58"
-        ],
-        "0x00C118A8": [
-          "0x00C12F58"
-        ],
-        "0x00C11B84": [
-          "0x00C12F58"
-        ],
-        "0x00C11D9C": [
-          "0x00C12F58"
-        ],
-        "0x00C1205C": [
-          "0x00C12F58"
-        ],
-        "0x00C122DC": [
-          "0x00C12F58"
-        ],
-        "0x00C12500": [
-          "0x00C12F58"
-        ],
-        "0x00C1275C": [
-          "0x00C12F58"
-        ],
-        "0x00C129E0": [
-          "0x00C12F58"
-        ],
-        "0x00C12BE0": [
-          "0x00C12F58"
-        ]
-      },
-      "decoded_size": 2048,
-      "frame_rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d"
-    }
+ "_doc": "Screen frame provenance and byte guards for multi-OBJ title placement. The guard covers the asset literal consumers (0xB40000-0xB60000), the shared OBJ loader 0xB0FFE4 with its helpers/literals (0xB0FF60-0xB10030), the decompressor dispatch table 0xD8263C, the BIOS SWI stubs 0xB7A85C-0xB7A88C and the bx-r2 veneer 0xB7BD18. Runtime OAM placement is not statically bounded (OAM is built through IWRAM/function-pointer paths), so a guard match is only provisional: the final QA (qa_obj_title_cells.py) requires a candidate_proofs entry captured on the exact candidate ROM (fresh screen capture, see tools/qa_screen_obj_contiguity.py). See docs/research.md.",
+ "assets": {
+  "0x00BFB45C": {
+   "label": "Part 1 mission result 작전 성공 (big title, 4 x 32x32 OBJ)",
+   "cells": 4,
+   "cell_w": 4,
+   "cell_h": 4,
+   "first": 0,
+   "frame": "docs/screenshots/FONTS_V16_RESULT_CONTIGUITY_2026-10-08.png",
+   "frame_sha256": "07720a6d7dd94e95bdfece22149e9918718e702cc62c24f4b9f7ab2422d8944b",
+   "found": [
+    [
+     9,
+     22
+    ],
+    [
+     41,
+     22
+    ],
+    [
+     73,
+     22
+    ],
+    [
+     105,
+     22
+    ]
+   ],
+   "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_result_prebattle_save/game_save.json (source ROM 5bb5c941, save SHA 057f4d27, cheat-tainted), output/qa/screenqa_2026-10-08/v16_coldboot_result_prebattle/baseline.json and exit.json. In-game save was made on source ROM at output/qa/screenqa_2026-10-08/v16_result_prebattle_save_source/resume.checkpoint.json (save dialogue at 0024_A_0021899.png and saving at 0026_A_0022021.png, export run v16_result_prebattle_export_run); v16 Continue resumed before the final attack. Frame 0107_NONE_0005972.png follows the attack and victory dialogue; all four 32x32 cells match v16 ROM sheet at x=9/41/73/105,y=22, score 1.0. No cross-ROM savestate; cheat-tainted screen geometry only, not normal-play victory proof.",
+   "consumer_guard": [
+    [
+     11796480,
+     11927552,
+     "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
+    ],
+    [
+     11599712,
+     11599920,
+     "6f720957a40d00849e42692e3de37c144bc6a2578bcedfdbf131796dd0db9d99"
+    ],
+    [
+     12036188,
+     12036236,
+     "983c2c6181b220129a06b5f40fe02f5d042687d80414c76a6105703cc7c9fbdb"
+    ],
+    [
+     12041496,
+     12041500,
+     "b6e741ccff336746fdcf62bc30c37deaa54afc60e5be6f8d1c33cfd2b8184ebc"
+    ],
+    [
+     14165564,
+     14165596,
+     "e9619a5d7f9b42eb31f830afcd63d2615eca318611d00c3f53d77a1a87293281"
+    ]
+   ],
+   "asset_sha256": "49a1de4d70bf76375c190cf324c4a8e4d10669066b617aa3ac768fd7976229af",
+   "asset_bytes_sha256": "533847757bb175730f062210309d219cb45d9702627583813bc7073f15e52e6d",
+   "decoded_size": 3072,
+   "frame_rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d",
+   "candidate_proofs": [
+   {
+     "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+     "frame": "docs/screenshots/PART2_V9_RESULT_CONTIGUITY_2026-10-12.png",
+     "frame_sha256": "07720a6d7dd94e95bdfece22149e9918718e702cc62c24f4b9f7ab2422d8944b",
+     "found": [
+       [
+         9,
+         22
+       ],
+       [
+         41,
+         22
+       ],
+       [
+         73,
+         22
+       ],
+       [
+         105,
+         22
+       ]
+     ],
+     "note": "v9 cold boot using verified cartridge save from v16_result_prebattle_save/game_save.json (source ROM 5bb5c941; cheat-tainted). Captured at output/qa/v9_finish_20261012/result_run/0108_NONE_0005973.png; baseline.json and exit.json bind v9 ROM SHA. No cross-ROM savestate; screen geometry only, not normal-play victory proof.",
+     "capture_run": "output/qa/v9_finish_20261012/result_run",
+     "capture_frame": "0108_NONE_0005973.png",
+     "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+     "capture_checkpoint_sha256": "8885d412177f8c43bc5cfa60e2302c2428750809d5d6a183ff4ca72653cf169d",
+     "capture_baseline_sha256": "311dacd6eab2a95bcef7dc6ef379accffeaf2bcb5d2c30d65c72c86601cd4064"
+   }
+  ]
+  },
+  "0x00C12FD8": {
+   "label": "Part 1 mission-title consumer (0xE12BF4 table), sheet 0xC12FD8 개전! on the mission briefing",
+   "cells": 2,
+   "cell_w": 8,
+   "cell_h": 4,
+   "first": 0,
+   "frame": "docs/screenshots/FONTS_V16_MISSION_CONTIGUITY_2026-10-08.png",
+   "frame_sha256": "aee0457c481ff15ba09ef5acafe7b9921a28bc1e06c29a03c10be13500dec274",
+   "found": [
+    [
+     8,
+     60
+    ],
+    [
+     72,
+     60
+    ]
+   ],
+   "consumer_assets": [
+    "0x00C10B34",
+    "0x00C10DC0",
+    "0x00C1100C",
+    "0x00C112DC",
+    "0x00C11598",
+    "0x00C118A8",
+    "0x00C11B84",
+    "0x00C11D9C",
+    "0x00C1205C",
+    "0x00C122DC",
+    "0x00C12500",
+    "0x00C1275C",
+    "0x00C129E0",
+    "0x00C12BE0",
+    "0x00C12FD8",
+    "0x00C131CC",
+    "0x00C133DC",
+    "0x00C135D8",
+    "0x00C13844",
+    "0x00C13A34",
+    "0x00C13CAC",
+    "0x00C13EE0",
+    "0x00C1420C",
+    "0x00C14488",
+    "0x00C14770",
+    "0x00C14A2C",
+    "0x00C14C9C",
+    "0x00C14EE8",
+    "0x00C1513C",
+    "0x00C15394",
+    "0x00C15594",
+    "0x00C15808",
+    "0x00C15A68",
+    "0x00C15C5C",
+    "0x00C15E00",
+    "0x00C160B8",
+    "0x00C1636C",
+    "0x00C165D8",
+    "0x00C1689C"
+   ],
+   "note": "v16 cold boot using verified game-save transfer: output/qa/screenqa_2026-10-08/v16_coldboot_p1/game_save.json (source ROM effc6ee8, save SHA 678aa8f3, cheat-tainted), baseline.json and exit.json. Frame 0030_A_0002272.png follows in-game Continue and mission briefing transition; both 64x32 cells match v16 ROM sheet at x=8/72,y=60, score 1.0. No cross-ROM savestate.",
+   "consumer_guard": [
+    [
+     11796480,
+     11927552,
+     "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
+    ],
+    [
+     14756848,
+     14757104,
+     "94d1ec2da2850c8fd61d30c400a3e9c283ffb56ce798c58781c3a4bb17407713"
+    ],
+    [
+     11599712,
+     11599920,
+     "6f720957a40d00849e42692e3de37c144bc6a2578bcedfdbf131796dd0db9d99"
+    ],
+    [
+     12036188,
+     12036236,
+     "983c2c6181b220129a06b5f40fe02f5d042687d80414c76a6105703cc7c9fbdb"
+    ],
+    [
+     12041496,
+     12041500,
+     "b6e741ccff336746fdcf62bc30c37deaa54afc60e5be6f8d1c33cfd2b8184ebc"
+    ],
+    [
+     14165564,
+     14165596,
+     "e9619a5d7f9b42eb31f830afcd63d2615eca318611d00c3f53d77a1a87293281"
+    ]
+   ],
+   "asset_sha256": "6eb0c2f47fc8d1ff823c83374022e69cf88cb64c746cb655888b217c32c79af5",
+   "consumer_asset_sha256": {
+    "0x00C10B34": "cdc88744c642efc097a8f1c6451bb1104271d51b8724ec1fca885196f50a8f06",
+    "0x00C10DC0": "b98d1cfe3a349bc84794ab02e8701eaea9b860f5fda29c7230003d34efdbe197",
+    "0x00C1100C": "09b60cdc4231d8dcea50dffa870586a9d563873ae59dffe0cbe2dd7ff2def9a9",
+    "0x00C112DC": "5f718f01305bf8cc31500bbdf8101ef9f7da452e86d3d423c5406afe7ca1005a",
+    "0x00C11598": "614678388ce60cd8e15422b617d3ba2dbd33600b866234a6791681b1b627d1c1",
+    "0x00C118A8": "4415dcd017eb191e333ee14ee4163384b555c349ea66187c0176ccdaaf05c752",
+    "0x00C11B84": "f08c02cd4e80d97c6d7ae79c3b91c7eeddec3a7e1c04b52fe83d74975c9f1e0c",
+    "0x00C11D9C": "7576397b23ed73f3a67638d7932c5f548cd284c3cdab663d619ed7e06a662853",
+    "0x00C1205C": "d258ff7efb08e2d48e8b24e69082c7ed6a2bea9ed46f6d46765e5490a9affb09",
+    "0x00C122DC": "d8535f75557efa886b1ff568eea80c74a723ee61755b69f77880550245e91766",
+    "0x00C12500": "3f3b0b4aa1d9df47a3fb8102814939ebaa59f1d05367309931929702f63c9217",
+    "0x00C1275C": "59faf47a83dd96c8cdd68ec3677adcaf1be81b581f24bd58b70d74597026175f",
+    "0x00C129E0": "bd8eb842be90aabbe83b934b3e9c897d6f9bdab30ac1459469e407d1b1ed5b1e",
+    "0x00C12BE0": "bc4e13e7d5a17a33ea5dddada323f7d8c4f773dda4890273133d94259ea058f0",
+    "0x00C12E40": "dc808117ade435fdd684309332c952679a05793853f42a8c1bd6af3b06281c97",
+    "0x00C131CC": "83ed6598eb839be0ee935e9ccab1fdb3c4d381150b48b0fca1d7131e0988ab6e",
+    "0x00C133DC": "20a580e1d2551e83cd69c1015f01bfc4572e65fef61d5486100c8efbba9b4b03",
+    "0x00C135D8": "3aec68289db8463bd00e1209a18624ee7b702031150a21499de622ee3f822f56",
+    "0x00C13844": "6c66812d34275ad2b7c8cdb9cb3532fedc811b16a313474074540d1de438d1c5",
+    "0x00C13A34": "d0966f3fdabe0c18c4fd93455e5b5158b8503ed5984407aaf1b30f1e2a69f73b",
+    "0x00C13CAC": "b9e71fbbadcf9451964af082963dcfb0f6f08aee87c14ba78139bcb35690a986",
+    "0x00C13EE0": "bc838bdc8dbb14b22db3dc25d27a66b95069bde212e246d12d9ff3260b141523",
+    "0x00C1420C": "fbb038f75a5677c12b9b5ca53fe67f412275d851a82e2c49eecba56e25376f43",
+    "0x00C14488": "5bd3884af72d106b18b34adbde5dc466b627a6634fec1aabf8accd3d444f428d",
+    "0x00C14770": "623a0f5fa90b92855056cbfbde7d6e6c1a9377660d2597966aef1ba2e10f1308",
+    "0x00C14A2C": "57eaeafe5219990ca85be2c5be450c02d066b46a7ccdc009f5a00a093a5b0f73",
+    "0x00C14C9C": "3295b2197d4cbd4c5650b31cb2db4eab73584651d126f40998366ee8be082250",
+    "0x00C14EE8": "ae9c7338649d615957e8d4b8a8453d7aa0d894fd621f3f634cbc4e73dcbe6f13",
+    "0x00C1513C": "cf089279c60820139dea78f981ca5422695892132f502e007c1cc52a0f126e37",
+    "0x00C15394": "ebe6ed4665ebfce3f477f1d8081adfdc93db1dba8cc8f984025e567d39eaa904",
+    "0x00C15594": "517c799ab9469f982b45d943fb13c61ed1093e7c0e798c28749bcd2ce2691053",
+    "0x00C15808": "5b2229d54de493c5917c4916febd55d465ac6f8a2e0185a66b3b9c73a704a04c",
+    "0x00C15A68": "f3ce4fcf55466d6e4cc47de210a0331019d45753ee0a2daeb68a5d4fc7ffceb1",
+    "0x00C15C5C": "3a44c480f577f91dff0763c9c1991a36960c538a163f598d8a49da6a61a74fa5",
+    "0x00C15E00": "acf0cfe394f0ab61a8c5793bb671bcacca9b6e4b31bf2fee71f2a9357906124a",
+    "0x00C160B8": "0a757639bba2f016c5f5747f58591e95ba351ab395cb5d1d77a969032de8ea36",
+    "0x00C1636C": "533b4d38d75e70f9538d1e94efb877143d2c5beee640723fb0494b7726976397",
+    "0x00C165D8": "4032a2533a5cff638edc826427f515ef64b757e712c9ab42cf7edfe054dd6e31",
+    "0x00C1689C": "6342038d7cac90b1f86ef0c75cbe2d37221a5751bd05a032975445abc262d78c",
+    "0x00C12F58": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+   },
+   "asset_bytes_sha256": "4f324fc4b2217fd7267cfb3b74fe8b0d67d504e537ee4e1fd9e7ad533396ccd0",
+   "consumer_asset_bytes_sha256": {
+    "0x00C10B34": "8ea3a34f012d6ce2dcbc80e8f89d4695410c9c979cb80a0b3b61d1fb5c4a4397",
+    "0x00C10DC0": "69006c59b30a5aedb4f6d189a7bc251c42cf42a87f1307314e18898b39b2f343",
+    "0x00C1100C": "923ac10968566885bb6457e7f823752ee5322e3311c78ad88b725c248cd77f61",
+    "0x00C112DC": "8a00d40fbdde5691ac76c1a77a782e2dc1f834158d66461ddb0c4d24a8207527",
+    "0x00C11598": "0a3a104e9dda8e14a2d2a2a830cb72f67cb0178efe0fb3ec01d9c87aaab17b9b",
+    "0x00C118A8": "658f10108e2869d25314d3813aab437207a159669d82c68b6dc330103497ed49",
+    "0x00C11B84": "381e0064cb224635daea52dcd5891adb2e67d25385bb5f08412ce4413736bd79",
+    "0x00C11D9C": "b730565df30f2b87c53682184e6f4a56a40340ec8653ade498483e33ab068b7b",
+    "0x00C1205C": "925d315a46d519bf6ed3b73854f5acf186c7274da04105917c41c619eb2f2ae1",
+    "0x00C122DC": "450e7c72f37ef30412fc3974d3ca46b4481054a1f764c33a17c33ea30524a49e",
+    "0x00C12500": "d813f72b20f96544b1496ed56a4a9e9f1136870e57e5dd7ef1311cd7b4a050c5",
+    "0x00C1275C": "ad2e335011188201cae1f3cbf49fe0e6685ff7acf8fdf9b8e016c7261cef7e47",
+    "0x00C129E0": "22e5cf43f56dbecca45ead45ee971ae071557e85be7690701bf4db737cb1ee42",
+    "0x00C12BE0": "40db10a3e03dd4eb10fb19730673d652438fbb8c04ee756a3685a660ff6b998c",
+    "0x00C12E40": "73064f575c00540d74e0e3f5b2a138a6fbb50361c4ad8b34ab05d781bc0e824f",
+    "0x00C131CC": "dfd6bdbd3b9aa783f2026e03607780e5dab2e4f109b657f1074523002e604377",
+    "0x00C133DC": "09f6cc841551c5d24396245a9c7a39c1574247157c1cbef4f514014d4a6a7ec2",
+    "0x00C135D8": "f5143c849051b5f0761cae73d4d687b59bfa882b9fedd03713fc7d52b1ed48a8",
+    "0x00C13844": "e683ea162d894964049f48ebddf8fc5b43c0747f7513cae91be8d84f01c2a5f8",
+    "0x00C13A34": "8f7549528b94291c7716d777a16a45954c7acfd4cf73015da01654e11da224a5",
+    "0x00C13CAC": "b7525eff3d5d3935118a319a56a6af5b27f7f81c6c811a5d2fc0819f8dda1eb7",
+    "0x00C13EE0": "f80f3cb9394ab570bbacf652044084694a1377a2058eb3d9c56eaab351d61fe2",
+    "0x00C1420C": "646e1b431e4d330e8622c401081f1bcc47cbaf9747bee29831f3d66d8867861c",
+    "0x00C14488": "02c5e16beeaaf18ed09a3b84547da62030be2eb79cfff37ce92f9f53f1c57fff",
+    "0x00C14770": "f32ad226affc167a0fbdf53875c528f159f5852da3d22a5890c3ca69520d67cf",
+    "0x00C14A2C": "01a7d7786382a049db868f875509205b1f8c2a8b9885642e73d7dbf0e682bd73",
+    "0x00C14C9C": "da233c36cbeaa77348240848add8bc744683c66f40b8f21775054e43757acd19",
+    "0x00C14EE8": "6d1f5052518b912625fe0534f8583f01743fc34d9e7755d88f43e0aa478af11c",
+    "0x00C1513C": "ad91e74c79d401762c32c421cc20f395efe16aa7d9c2345c173031f4af57f520",
+    "0x00C15394": "371992dd52a059238ecc4e2db422f959f573a1e38a532681555c08758a53b292",
+    "0x00C15594": "143c62eab36afc741e8eedeeb49f10a72f55c5b44ecd3b376a13c20089553052",
+    "0x00C15808": "efa5a7d8b726604cb209fe22b464e2a4cf5c06d0db9792aa63a8825a5562839e",
+    "0x00C15A68": "800d1a2b6f263c39f872c41f649f6fed0eb8f99f51aff0d6092be2bd48f65569",
+    "0x00C15C5C": "9e1f47b38e28f52b361352b403e973f50eac6e469f1d7b3252a970fd2dce9c0a",
+    "0x00C15E00": "809e2ced758b8f65b31911f1991e13cd61f69921568f91479d8fb8136e588e7f",
+    "0x00C160B8": "168a6b2c9c53464929bc3d42c2153a2f0dd0fe5d05711148ac51026d90700d30",
+    "0x00C1636C": "1ef4a32e9f5cbd5786c335079ee842535975ed04e8106882a51a1652aa60ed43",
+    "0x00C165D8": "85958afed2ada4172196bd504e007a585a6cad09f09f17be62ad786bb172d0f1",
+    "0x00C1689C": "0f8a9c30f2006b712528945b91f43f24a3552ddb1fd68f897098250f40cdcb07",
+    "0x00C12F58": "3c2451d3e0f5b1a598ab8cab6beae858645729fc74f8c1d993274f55e3dbbd41"
+   },
+   "consumer_table": {
+    "offset": 14756852,
+    "count": 63,
+    "excluded_assets": [
+     "0x00C12F58",
+     "0x00C12E40"
+    ]
+   },
+   "dependent_assets": {
+    "0x00C1100C": [
+     "0x00C12E40"
+    ],
+    "0x00C10B34": [
+     "0x00C12F58"
+    ],
+    "0x00C10DC0": [
+     "0x00C12F58"
+    ],
+    "0x00C112DC": [
+     "0x00C12F58"
+    ],
+    "0x00C11598": [
+     "0x00C12F58"
+    ],
+    "0x00C118A8": [
+     "0x00C12F58"
+    ],
+    "0x00C11B84": [
+     "0x00C12F58"
+    ],
+    "0x00C11D9C": [
+     "0x00C12F58"
+    ],
+    "0x00C1205C": [
+     "0x00C12F58"
+    ],
+    "0x00C122DC": [
+     "0x00C12F58"
+    ],
+    "0x00C12500": [
+     "0x00C12F58"
+    ],
+    "0x00C1275C": [
+     "0x00C12F58"
+    ],
+    "0x00C129E0": [
+     "0x00C12F58"
+    ],
+    "0x00C12BE0": [
+     "0x00C12F58"
+    ]
+   },
+   "decoded_size": 2048,
+   "frame_rom_sha256": "540ae75d26a7a9489217de9a825b1343b4a16d8cd1c8da87e89af8a36516366d",
+   "candidate_proofs": [
+   {
+     "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+     "frame": "docs/screenshots/PART2_V9_MISSION_CONTIGUITY_2026-10-12.png",
+     "frame_sha256": "aee0457c481ff15ba09ef5acafe7b9921a28bc1e06c29a03c10be13500dec274",
+     "found": [
+       [
+         8,
+         60
+       ],
+       [
+         72,
+         60
+       ]
+     ],
+     "note": "v9 cold boot using verified cartridge save from v16_coldboot_p1/game_save.json (source ROM effc6ee8; cheat-tainted). Captured at output/qa/v9_finish_20261012/mission_run/0031_A_0002273.png; baseline.json and exit.json bind v9 ROM SHA. No cross-ROM savestate; screen geometry only.",
+     "capture_run": "output/qa/v9_finish_20261012/mission_run",
+     "capture_frame": "0031_A_0002273.png",
+     "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+     "capture_checkpoint_sha256": "97b6651fbb6c2b1086c78f2be092386116ab2960c43f9d15da21ec80286d2343",
+     "capture_baseline_sha256": "884d61fb7644671a8c090ba527d2192b814d472e738df4a2b62c6e3c276d1205"
+   }
+  ]
   }
+ }
 }

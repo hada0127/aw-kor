@@ -1,3 +1,9 @@
+## 2026-10-12 Part 2 v9 candidate verification and OBJ screen proofs
+
+Linux real-font build (`AW_FONT_DIR=/home/taro1/aw-fonts`, `tools/build_korean_full.py --no-sync-outputs`) reproduced `output/game_wars_korean_candidate_part2_20261008_v9.gba` byte-for-byte: SHA-256 `ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7`. Build and gate logs are under `temp/v9_finish_20261012/`. `check_composed_rows` checked 66 repaired fragments, maximum 44 half-cells, over 44: 0; this is a parser measurement assuming the verified `0x31424C` script consumer and a 44-half-cell portrait box, while per-message on-screen fit for all 66 fragments remains (unverified). B-team unlisted drift 0; integrity map 405784 expected bytes, mismatch 0; phase6 and final `qa_obj_title_cells.py` PASS. Ending/font/layout unit tests: 5/12/7 PASS.
+
+Fresh v9 cold boots imported recorded cartridge saves, never savestates. `tools/qa_screen_obj_contiguity.py` matched all cells at score 1.0: 「개전!」 at (8,60)/(72,60), [PNG](screenshots/PART2_V9_MISSION_CONTIGUITY_2026-10-12.png); 「작전 성공」 at (9,22)/(41,22)/(73,22)/(105,22), [PNG](screenshots/PART2_V9_RESULT_CONTIGUITY_2026-10-12.png). `data/obj_cell_contiguity.json` binds both frames to the exact v9 ROM SHA and verifies the preserved capture baselines, checkpoints, and frame ledgers in `output/qa/v9_finish_20261012/`. Source saves are cheat-tainted; these prove screen geometry only, not normal-play victory. Full scene review, hardware testing, and release approval remain open.
+
 ## 2026-09-23 round11 정적 검사와 정상저장 짧은 재현
 
 후보 SHA `09d05990d171709e86f913690b05ecad15f550bd7f944402f2126466ca3c058b`. 11개 개별 대사, 121개 캠페인 제목의 fullwidth 숫자/영문·부호 및 긴 제목 재배치, CO 선택 두 번째 이름 `료`를 반영했다. 원본 native180맵→179제목 포인터 중121만 strict 소비자 범위이며 나머지58은 상위 소비자 미확정으로 남겼다.

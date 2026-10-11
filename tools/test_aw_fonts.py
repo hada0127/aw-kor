@@ -113,6 +113,20 @@ class FontRuleTests(unittest.TestCase):
         changed[0xE12BF0] ^= 1
         with self.assertRaisesRegex(AssertionError, 'consumer changed'):
             aw_fonts.screen_contiguity(0xC12FD8, changed, final=True)
+        # The shared OBJ loader chain (0xB0FFE4 and helpers, dispatch table,
+        # SWI stubs) is part of the guard (Astra 2026-10-08).
+        for address in (0xB0FFE4, 0xB0FFF0, 0xB1001C, 0xD8263C, 0xB7A874, 0xB7BD18):
+            changed = bytearray(rom)
+            changed[address] ^= 1
+            with self.assertRaisesRegex(AssertionError, 'consumer changed'):
+                aw_fonts.screen_contiguity(0xBFB45C, changed)
+            with self.assertRaisesRegex(AssertionError, 'consumer changed'):
+                aw_fonts.screen_contiguity(0xC12FD8, changed, final=True)
+        # Final candidate QA needs a capture on this exact ROM.
+        changed = bytearray(rom)
+        changed[0x100] ^= 1
+        with self.assertRaisesRegex(AssertionError, 'fresh capture'):
+            aw_fonts.screen_contiguity(0xBFB45C, changed, final=True, fresh=True)
         changed = bytearray(rom)
         changed[0x100] ^= 1
         self.assertTrue(aw_fonts.screen_contiguity(0xBFB45C, changed, final=True))
@@ -142,6 +156,21 @@ class FontRuleTests(unittest.TestCase):
             aw_fonts.screen_contiguity(0xC10B34, changed, final=True)
         self.assertEqual(aw_fonts.screen_contiguity(0xC131CC, changed, final=True),
                          'screen:0x00C12FD8')
+
+    @unittest.skipUnless(os.environ.get('AW_TEST_ROM'), 'set AW_TEST_ROM to the candidate under test')
+    def test_fresh_proof_binds_capture_rom_and_endpoint(self):
+        import json
+        import hashlib
+        rom = Path(os.environ['AW_TEST_ROM']).read_bytes()
+        proofs = json.loads((TOOLS.parent / 'data/obj_cell_contiguity.json').read_text())['assets']
+        for key in ('0x00BFB45C', '0x00C12FD8'):
+            proof = proofs[key]['candidate_proofs'][0]
+            aw_fonts._check_candidate_capture(proof, hashlib.sha256(rom).hexdigest())
+            with self.assertRaisesRegex(AssertionError, 'capture ROM differs'):
+                aw_fonts._check_candidate_capture(proof, '0' * 64)
+            changed = dict(proof, capture_checkpoint_sha256='0' * 64)
+            with self.assertRaisesRegex(AssertionError, 'capture receipt changed'):
+                aw_fonts._check_candidate_capture(changed, proof['rom_sha256'])
 
     def test_final_line_height_includes_outline(self):
         self.assertEqual(aw_fonts.drawn_line_height({(0, 2), (1, 15)}, 1, 1), 16)

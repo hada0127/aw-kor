@@ -21,6 +21,9 @@ import aw_fonts  # noqa: E402
 from lz77_scan import lz77_decompress  # noqa: E402
 
 ORIGINAL = ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba'
+# Final candidate QA requires screen proofs captured on the candidate itself
+# (--historical-proofs accepts guarded older frames for interim builds only).
+FRESH = True
 # (label, LZ77 offset, cells, cell_w, cell_h, first tile, native contiguity allowed, check edges)
 TITLES = [
     ('Part 1 battle start 전투 개시!', 0xC10B34, 2, 8, 4, 0, True),
@@ -39,7 +42,7 @@ TITLES = [
 def evidence(rom_original, rom, off, cells, cw, ch, first):
     """Proof the cells are drawn edge to edge: a registered screen capture
     (data/obj_cell_contiguity.json) first, else native art crossing the edge."""
-    proof = aw_fonts.screen_contiguity(off, rom, final=True)
+    proof = aw_fonts.screen_contiguity(off, rom, final=True, fresh=FRESH)
     if proof:
         return proof, proof
     native = aw_fonts.obj_canvas(lz77_decompress(rom_original, off)[0], cells, cw, ch, first)
@@ -91,7 +94,7 @@ def check(rom, original):
         ext = lz77_decompress(rom, mt.EXTENSION[0])[0] if owner == mt.EXTENSION_OWNER else None
         bounds = (64, 128) if ext is not None else (64,)
         try:
-            screen_proof = aw_fonts.screen_contiguity(owner, rom, final=True)
+            screen_proof = aw_fonts.screen_contiguity(owner, rom, final=True, fresh=FRESH)
             native_proof = bool(at64 and at128)
             proof = (native_proof if owner == mt.EXTENSION_OWNER else screen_proof or native_proof)
             aw_fonts.check_cells(mt._canvas(main, ext), bounds, f'Part 1 mission title {owner:06X}', native=proof)
@@ -123,7 +126,11 @@ def check(rom, original):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--rom', required=True)
+    ap.add_argument('--historical-proofs', action='store_true',
+                    help='interim only: accept guarded frames from an earlier ROM (not a final pass)')
     args = ap.parse_args()
+    global FRESH
+    FRESH = not args.historical_proofs
     issues, report = check(Path(args.rom).read_bytes(), ORIGINAL.read_bytes())
     for line in report:
         print(line)

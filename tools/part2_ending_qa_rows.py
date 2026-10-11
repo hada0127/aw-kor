@@ -24,6 +24,7 @@ ROWS = (
     (0xA1FF09, 0xA1FF29, '아스카의 미사일 기지가 있었기에'),  # 96
     (0xA1FF2B, 0xA1FF3B, '이길 수 있었던 거다.'),  # 96 勝利できたのだ。
     (0xA251AD, 0xA251B1, '나, '),  # 101 stutter て(天気)
+    (0xA251C5, 0xA251DB, '분명 그 때문입니다!'),  # 101b そうに決まっています！ (certainty, Astra review)
     (0xA196F0, 0xA196F8, '남은 건 '),  # 103 jam before わが
     (0xA19774, 0xA19784, '반격에 나서는 거지?'),  # 103 反攻に出るのね？
     (0xA19787, 0xA1978D, '그럼, '),  # 103 なら、
@@ -31,8 +32,8 @@ ROWS = (
     (0xA19DF9, 0xA19E05, '고통받는 것을, '),  # 105 苦しむのを、
     (0xA19EDB, 0xA19EEB, '미니 캐논이, '),  # 106 ミニキャノンが、
     (0xA19EEC, 0xA19EF0, '전, '),  # 106 stutter す、
-    (0xA1A399, 0xA1A3A9, '전멸 전까지는 '),  # 107 jam
-    (0xA1A3AA, 0xA1A3C0, '무슨 일이 일어날지 모른다.'),  # 107
+    (0xA1A399, 0xA1A3A9, '전멸 전까진 '),  # 107 jam
+    (0xA1A3AA, 0xA1A3C0, '무슨 일이 생길지 모른다.'),  # 107
     (0xA1A3C1, 0xA1A3D9, '긴장을 늦추지 말라고'),  # 107
     (0xA1A3DB, 0xA1A3EB, '병사들에게 전하라.'),  # 107
     (0xA1A61A, 0xA1A622, '그것도, '),  # 108 それも、
@@ -61,7 +62,7 @@ ROWS = (
     (0xA25D7B, 0xA25D7F, '그 말이야?'),  # 123 と？
     (0xA262DC, 0xA262E2, '그래.'),  # 124 ええ。
     (0xA262E4, 0xA262EE, '아무래도, '),  # 124
-    (0xA262EF, 0xA26307, '코스모 랜드나 다른 대륙을'),  # 124 や
+    (0xA262EF, 0xA26307, '코스모 랜드나 타 대륙을'),  # 124 や
     (0xA27274, 0xA2727A, '그럼, '),  # 128 なら、
     (0xA2727B, 0xA2728B, '먼저 공격해서, '),  # 128
     (0xA2728C, 0xA2729A, '입을 막는 편이'),  # 128
@@ -74,3 +75,115 @@ ROWS = (
     (0xA280A3, 0xA280B1, '나중 얘기는 '),  # 133
     (0xA280B2, 0xA280B8, '됐어!'),  # 133 いい！
 )
+
+
+def check_composed_rows(rom, manifest, max_half_cells=None):
+    """Width gate for the assembled rows: every repaired fragment sits in a
+    relocated message, and the whole display row containing it (fragments
+    joined across 0x57/0x77 same-row waits) fits the portrait text box.
+    Fragment slot checks alone miss rows continued by {57}."""
+    from dialogue_repoint import PORTRAIT_ROW_HALF_CELLS
+    from qa_part2_physical_rows import assemble_rows, tokenize
+    from part2_native_controls import CONSUMER, NativeProfile
+    import build_korean_full as builder
+    import json
+    import struct
+    from pathlib import Path
+    original = Path('original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    limit = PORTRAIT_ROW_HALF_CELLS if max_half_cells is None else max_half_cells
+    if type(limit) is not int or limit <= 0:
+        raise AssertionError('invalid Part 2 row capacity')
+    # The token vocabulary and consume-only semantics are valid only while the
+    # actual ROM still carries the verified 0x31424C script parser.
+    profile = NativeProfile(rom)
+    codes = {s: int(code, 16) for s, code in json.loads(Path(builder.SYLCODE).read_text()).items()}
+    spans = {}
+    span_locations = set()
+    intervals = []
+    for message in manifest:
+        if message.get('status') != 'relocated':
+            continue
+        try:
+            target, size = int(message['new_addr'], 16), message['new_len']
+            if type(size) is not int or not 0 <= target < target + size <= len(rom):
+                raise ValueError('message outside ROM')
+            pointer = int(message['ptr_off'], 16)
+            source, old_size = int(message['msg'], 16), message['old_len']
+            if (type(old_size) is not int or
+                    not 0 <= source < source + old_size <= len(original) or
+                    original.find(b'\x00', source, source + old_size) < 0 or
+                    not 0 <= pointer <= len(original) - 4 or
+                    struct.unpack_from('<I', original, pointer)[0] != source + 0x08000000):
+                raise ValueError('original source/pointer boundary mismatch')
+            if not 0 <= pointer <= len(rom) - 4 or struct.unpack_from('<I', rom, pointer)[0] != target + 0x08000000:
+                raise ValueError('relocation pointer does not target message')
+            intervals.append((target, target + size))
+            for key, pair in message['line_spans'].items():
+                start = int(key, 16)
+                if start in spans or not isinstance(pair, (list, tuple)) or len(pair) != 2:
+                    raise ValueError('duplicate or malformed fragment span')
+                off, length = pair
+                if (type(off) is not int or type(length) is not int or
+                        not 0 <= off < off + length <= size or
+                        not source <= start < source + old_size or
+                        (target, off) in span_locations):
+                    raise ValueError('fragment outside message')
+                spans[start] = (target, size, off, length)
+                span_locations.add((target, off))
+        except (KeyError, TypeError, ValueError) as error:
+            raise AssertionError(f'invalid Part 2 ending-QA manifest span: {error}') from error
+    for left, right in zip(sorted(intervals), sorted(intervals)[1:]):
+        if left[1] > right[0]:
+            raise AssertionError('invalid Part 2 ending-QA manifest span: overlapping relocations')
+    widths, wide = {}, []
+    parsed = {}
+    for start, _end, text in ROWS:
+        if start not in spans:
+            raise AssertionError(f'Part 2 ending-QA row not relocated: 0x{start:06X}')
+        target, size, off, length = spans[start]
+        if target not in parsed:
+            data = bytes(rom[target:target + size])
+            tokens = tokenize(data, consumer=CONSUMER, native_profile=profile)
+            rows, unknown, terminated = assemble_rows(
+                tokens, {}, 'portrait', portrait_capacity=PORTRAIT_ROW_HALF_CELLS,
+                consumer=CONSUMER, native_profile=profile)
+            if unknown or not terminated:
+                raise AssertionError(
+                    f'Part 2 ending-QA malformed/unknown control at 0x{target:06X}: {unknown!r}; terminated={terminated}')
+            # The manifest is a bounded message. Bytes after its first NUL may
+            # only be NUL slot padding; no content may hide beyond the parser.
+            end = tokens[-1]['offset']
+            if any(data[end + 1:]):
+                raise AssertionError(f'Part 2 ending-QA data after terminator at 0x{target:06X}')
+            bounds = []
+            row_start = 0
+            for token in tokens:
+                if token['kind'] in ('newline', 'page', 'end'):
+                    if any(t['kind'] == 'text' for t in tokens if row_start <= t['offset'] < token['offset']):
+                        bounds.append((row_start, token['offset']))
+                    row_start = token['offset'] + 1
+            if len(bounds) != len(rows):
+                raise AssertionError(f'Part 2 ending-QA physical-row mapping failed at 0x{target:06X}')
+            parsed[target] = (tokens, rows, bounds, end)
+        tokens, rows, bounds, end = parsed[target]
+        if off + length > end or not any(lo <= off and off + length <= hi for lo, hi in bounds):
+            raise AssertionError(f'invalid Part 2 ending-QA manifest span: 0x{start:06X}')
+        fragment_tokens = [t for t in tokens if off <= t['offset'] < off + length]
+        if (not fragment_tokens or fragment_tokens[0]['offset'] != off or
+                fragment_tokens[-1]['offset'] + len(bytes.fromhex(fragment_tokens[-1]['raw'])) != off + length or
+                any(t['kind'] not in ('text', 'padding') for t in fragment_tokens)):
+            raise AssertionError(f'invalid Part 2 ending-QA manifest span: 0x{start:06X}')
+        expected = builder.encode_required_full_fidelity(text, codes, {}, start)
+        actual = bytes(rom[target + off:target + off + length])
+        # Seam decisions may append a visible fullwidth separator to the
+        # source fragment. It is still counted by the physical-row parser.
+        if not actual.startswith(expected) or actual[len(expected):].replace(b'\x81\x40', b''):
+            raise AssertionError(f'Part 2 ending-QA fragment payload mismatch: 0x{start:06X}')
+        width = next(row['half_cells'] for row, (lo, hi) in zip(rows, bounds)
+                     if lo <= off and off + length <= hi)
+        if width > limit:
+            wide.append(f'0x{start:06X} {width}>{limit} {text!r}')
+        widths[start] = width
+    if wide:
+        raise AssertionError('Part 2 ending-QA row assembled width exceeds the box: ' + '; '.join(wide))
+    return widths

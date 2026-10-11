@@ -1867,7 +1867,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA256CE: '모두 힘을 합치면',
     0xA25771: '다음엔 쉬게 해줘~',
     0xA259A6: '파이프를 직접 노릴 수 있겠군.',
-    0xA262EF: '코스모 랜드나 다른 대륙을',
+    0xA262EF: '코스모 랜드나 타 대륙을',
     0xA26308: '미사일 공격할 작정 같아.',
     0xA264B3: '이대로 아무것도 안 하고 있을',
     0xA264FA: '빨리 끝내야 해.',
@@ -3925,8 +3925,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1A2B4: '내해　작은　섬에',
     0xA1A2C8: '집결한　듯합니다',
     0xA1A2EF: '내해를　둘러',
-    0xA1A399: '전멸 전까지는 ',
-    0xA1A3AA: '무슨 일이 일어날지 모른다.',
+    0xA1A399: '전멸 전까진 ',
+    0xA1A3AA: '무슨 일이 생길지 모른다.',
     0xA1A3C1: '긴장을 늦추지 말라고',
     0xA1A557: '병사라도',
     0xA1A84C: '무사한　듯합니다',
@@ -23375,6 +23375,8 @@ def main():
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
     verify_required_script_repoints(required_script_repoints - _allowed_script_residuals,
                                     completed_script_repoints)
+    from part2_ending_qa_rows import check_composed_rows as _p2_ending_row_widths
+    st['part2_ending_qa_max_row_half_cells'] = max(_p2_ending_row_widths(rom, _rp_manifest).values())
     verify_part2_campaign_header_keys(rom)
 
     _seam = apply_inplace_part2_seam_spaces(rom, orig, _seam_table, {code: syl for syl, code in syl_to_code.items()})

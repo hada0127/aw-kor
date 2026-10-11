@@ -323,10 +323,54 @@ def obj_canvas(data, cells, cell_w, cell_h, first=0):
 _VERIFIED_SCREEN = set()
 
 
-def screen_contiguity(asset, rom, final=False):
+def _check_candidate_capture(proof, candidate):
+    """Bind a fresh OBJ frame to the captured ROM and its endpoint ledger."""
+    import json
+    from PIL import Image
+
+    run = ROOT / proof['capture_run']
+    frame = run / proof['capture_frame']
+    checkpoint = run / proof['capture_checkpoint']
+    baseline_path = run / 'baseline.json'
+    if (hashlib.sha256(baseline_path.read_bytes()).hexdigest() != proof['capture_baseline_sha256'] or
+            hashlib.sha256(checkpoint.read_bytes()).hexdigest() != proof['capture_checkpoint_sha256']):
+        raise AssertionError('fresh screen proof capture receipt changed')
+    baseline = json.loads(baseline_path.read_text())
+    state = json.loads(checkpoint.read_text())
+    if (baseline['rom_sha256'] != candidate or state['rom_sha256'] != candidate or
+            hashlib.sha256((run / 'baseline.gba').read_bytes()).hexdigest() != candidate or
+            state['baseline_sha256'] != proof['capture_baseline_sha256'] or
+            state['core_frame'] <= 0):
+        raise AssertionError('fresh screen proof capture ROM differs')
+    if (hashlib.sha256(frame.read_bytes()).hexdigest() != proof['frame_sha256'] or
+            hashlib.sha256((ROOT / proof['frame']).read_bytes()).hexdigest() != proof['frame_sha256']):
+        raise AssertionError('fresh screen proof frame differs from capture')
+    ledger = (run / 'frames.jsonl').read_bytes()
+    if (len(ledger) != state['ledger_bytes'] or
+            hashlib.sha256(ledger).hexdigest() != state['ledger_sha256']):
+        raise AssertionError('fresh screen proof capture ledger changed')
+    endpoint = json.loads(ledger.splitlines()[-1])
+    with Image.open(frame) as image:
+        rgb_sha = hashlib.sha256(image.convert('RGB').tobytes()).hexdigest()
+    if endpoint['core_frame'] != state['core_frame'] or endpoint['rgb_sha256'] != rgb_sha:
+        raise AssertionError('fresh screen proof frame is not capture endpoint')
+    actions = [json.loads(line) for line in (run / 'actions.jsonl').read_text().splitlines()]
+    if not any(row.get('status') == 'captured' and
+               Path(row['png']).name == frame.name and
+               Path(row['checkpoint']).name == checkpoint.name and
+               row['end_core_frame'] == state['core_frame'] for row in actions):
+        raise AssertionError('fresh screen proof frame is absent from capture actions')
+
+
+def screen_contiguity(asset, rom, final=False, fresh=False):
     """Registered screen proof (data/obj_cell_contiguity.json) that the OBJ
     cells of this asset, or of the consumer that draws it, are drawn edge to
-    edge. Returns the proof key ('screen:0x...') or None."""
+    edge. Returns the proof key ('screen:0x...') or None.
+
+    The byte guard (consumers, shared loader chain, dispatch table) only makes a
+    historical frame a provisional proof: runtime OAM placement is not
+    statically bounded. fresh=True (final candidate QA) additionally requires a
+    candidate_proofs entry captured on this exact ROM and re-proves it."""
     import json
     with open(ROOT / 'data' / 'obj_cell_contiguity.json', encoding='utf-8') as stream:
         assets = json.load(stream)['assets']
@@ -351,6 +395,24 @@ def screen_contiguity(asset, rom, final=False):
     xs = [x for x, _ in entry['found']]
     if any(b - a != entry['cell_w'] * 8 for a, b in zip(xs, xs[1:])) or len({y for _, y in entry['found']}) != 1:
         raise AssertionError(f'screen contiguity proof is not edge to edge for 0x{asset:06X}')
+    if fresh:
+        from qa_screen_obj_contiguity import prove
+        candidate = hashlib.sha256(bytes(rom)).hexdigest()
+        proofs = [p for p in entry.get('candidate_proofs', []) if p.get('rom_sha256') == candidate]
+        if not proofs:
+            raise AssertionError(f'screen contiguity needs a fresh capture on this candidate for 0x{asset:06X} '
+                                 f'(rom {candidate[:12]})')
+        for proof in proofs:
+            _check_candidate_capture(proof, candidate)
+            proof_frame = ROOT / proof['frame']
+            if (not proof_frame.is_file() or
+                    hashlib.sha256(proof_frame.read_bytes()).hexdigest() != proof['frame_sha256']):
+                raise AssertionError(f'fresh screen proof frame missing or changed for 0x{asset:06X}')
+            result = prove(bytes(rom), proof_frame, int(key, 16), entry['cells'], entry['cell_w'],
+                           entry['cell_h'], entry['first'])
+            found = [None if point is None else [point['x'], point['y']] for point in result['found']]
+            if not result['contiguous'] or found != proof['found']:
+                raise AssertionError(f'fresh screen proof does not show edge-to-edge cells for 0x{asset:06X}')
     if final:
         from lz77_scan import lz77_decompress
 
