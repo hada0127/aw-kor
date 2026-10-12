@@ -895,6 +895,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         if valid_codes is not None:
             _j = 0
             _stray = False
+            _stray_code = None
             while _j < len(new_msg):
                 _bb = new_msg[_j]
                 if (0x81 <= _bb <= 0x9F or 0xE0 <= _bb <= 0xEF) and _j + 1 < len(new_msg):
@@ -904,16 +905,19 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                         (_cc >> 8) in (0x81, 0x82) and (0x40 <= _lo <= 0x7E or 0x80 <= _lo <= 0xFC))
                     if not _ok:
                         _stray = True
+                        _stray_code = f'0x{_cc:04X}@+0x{_j:X}'
                         break
                     _j += 2
                 elif _bb < 0x80 or 0xA1 <= _bb <= 0xDF:
                     _j += 1
                 else:                       # 0x80, 0xA0, 0xF0-0xFF (유효 lead 아님)
                     _stray = True
+                    _stray_code = f'0x{_bb:02X}@+0x{_j:X}'
                     break
             if _stray:
                 stats['skip_stray_code'] = stats.get('skip_stray_code', 0) + 1
-                manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_stray_code'})
+                manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_stray_code',
+                                 'stray_code': _stray_code})
                 continue
 
         # terminator 보존 검증(2026-06-25, codex/agy 보수화): **원본이 0x00 종단인 메시지만** 재배치하고,

@@ -612,6 +612,19 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
             raise ValueError(f'{key}: listed residual metadata or source bytes changed')
         message = messages.get(addr)
         pinned_message = pins.get(addr)
+        if addr == 0xDCFA8E and message and not pinned_message:
+            # This formerly deferred row is now wrapped and fully restored in
+            # its live message. The source-slot residual remains byte-pinned.
+            pos, size = spans[addr]
+            actual = decode_enc(rom[pos:pos + size].replace(b'\x72\x0a\x09', b'\x81\x40'), load_syl())
+            target = int(message['new_addr'], 16)
+            sites = message.get('ptr_sites') or []
+            if (actual != display_equivalent(row['expected_baseline'], addr)
+                    or addr in {int(issue['address'], 16) for issue in issues}
+                    or not sites or any(int.from_bytes(rom[int(site, 16):int(site, 16) + 4],
+                                                      'little') != 0x08000000 + target for site in sites)):
+                raise ValueError(f'{key}: restored relocated baseline or pointer changed')
+            continue
         if bool(message) != bool(pinned_message):
             raise ValueError(f'{key}: active residual mapping or byte pin missing')
         if message:

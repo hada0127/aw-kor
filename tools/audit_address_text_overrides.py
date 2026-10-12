@@ -31,6 +31,119 @@ DIALOGUE_GROUPS = ROOT / "data" / "dialogue_groups.json"
 ADDRESS_TEXT_OVERRIDES_TSV = ROOT / "data" / "address_text_overrides.tsv"
 DEFAULT_REPORT = ROOT / "temp" / "address_text_overrides_audit.json"
 
+# The 21 direct-writer discrepancies recorded in the 2026-10-12 address
+# override investigation. Twenty were dead in-place slots after relocation.
+# Keep this regression cohort explicit; other script rows have independent
+# reviewed source/display policies and are not judged by this comparison.
+SEMANTIC_REGRESSION_ADDRESSES = frozenset({
+    0xA03EB8, 0xA05855, 0xD8FE8A, 0xD9831A, 0xD9E04C,
+    0xDC3038, 0xDC6331, 0xDC655F, 0xDC690D, 0xDC6FC8,
+    0xDC86F9, 0xDC8A0F, 0xDCADA5, 0xDCAFE7, 0xDCB666,
+    0xDCC2F8, 0xDCD329, 0xDCD64D, 0xDCE5CF, 0xDCFAD2,
+    0xDD17D1,
+})
+
+
+def audit_rom_semantics(rom_path: Path, manifest_path: Path,
+                        protected: dict[int, str]) -> dict[str, Any]:
+    """Check direct script owners at their live repointed line spans."""
+    from qa_integrity_map import decode_enc, load_syl
+    from qa_bteam_drift import display_equivalent
+    import qa_text_fit
+    import hashlib
+    import struct
+    from bisect import bisect_right
+    import build_korean_poc as P
+
+    rom = rom_path.read_bytes()
+    original = Path(P.ROM).read_bytes()
+    receipt = json.loads(Path(str(rom_path) + ".build.json").read_text(encoding="utf-8"))
+    if (receipt.get("rom_sha256") != hashlib.sha256(rom).hexdigest()
+            or receipt.get("source_sha256") != hashlib.sha256(original).hexdigest()
+            or receipt.get("build_metadata", {}).get("temp/repoint_manifest.json")
+            != hashlib.sha256(manifest_path.read_bytes()).hexdigest()):
+        raise ValueError("build receipt ROM/source/manifest mismatch")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    # Original pointer targets define message ownership independently of the
+    # supplied relocation records, including when one record is omitted.
+    original_sites: dict[int, list[int]] = defaultdict(list)
+    for site, (pointer,) in enumerate(struct.iter_unpack("<I", original), start=0):
+        target = pointer - 0x08000000
+        if 0 <= target < len(original):
+            original_sites[target].append(site * 4)
+    starts = sorted(original_sites)
+    def owner_of(addr: int) -> int | None:
+        index = bisect_right(starts, addr) - 1
+        return starts[index] if index >= 0 else None
+
+    relocated: dict[int, tuple[int, int, int]] = {}
+    for message in manifest:
+        if message.get("status") != "relocated":
+            continue
+        target = int(message["new_addr"], 16)
+        length = int(message["new_len"])
+        source = int(message["msg"], 16)
+        old_length = int(message["old_len"])
+        sites = message.get("ptr_sites")
+        if (not sites or old_length <= 0 or source < 0
+                or source + old_length > len(original)
+                or target < 0 or target + length > len(rom)):
+            raise ValueError(f"invalid repoint manifest entry: {message['msg']}")
+        for site_hex in sites:
+            site = int(site_hex, 16)
+            if site < 0 or site + 4 > len(rom) or site + 4 > len(original):
+                raise ValueError(f"repoint site outside ROM: {site_hex}")
+            if int.from_bytes(original[site:site + 4], "little") != 0x08000000 + source:
+                raise ValueError(f"original pointer ownership mismatch: {message['msg']} {site_hex}")
+            live_target = int.from_bytes(rom[site:site + 4], "little") - 0x08000000
+            if live_target != target:
+                raise ValueError(f"repoint manifest does not match ROM: {message['msg']} {site_hex}")
+        for key, span in message.get("line_spans", {}).items():
+            offset, size = span
+            if offset < 0 or size <= 0 or offset + size > length:
+                raise ValueError(f"invalid repoint line span: {message['msg']} {key}")
+            addr = int(key, 16)
+            if (addr in SEMANTIC_REGRESSION_ADDRESSES
+                    and (not source <= addr < source + old_length or owner_of(addr) != source)):
+                raise ValueError(f"repoint source ownership mismatch: {message['msg']} {key}")
+            if addr in relocated:
+                raise ValueError(f"duplicate repoint line: {key}")
+            relocated[addr] = (target + offset, size, target)
+
+    codes = load_syl()
+    mismatches = []
+    checked = 0
+    followed = 0
+    direct = qa_text_fit.load_direct_patch_texts(include_writer=True)
+    for addr in sorted(SEMANTIC_REGRESSION_ADDRESSES):
+        if addr not in protected or addr not in direct or direct[addr][2] != "patch_script_row":
+            raise ValueError(f"semantic regression authority missing: 0x{addr:08X}")
+        _end, _text, writer = direct[addr]
+        if writer != "patch_script_row":
+            continue
+        checked += 1
+        if addr in relocated:
+            pos, size, _target = relocated[addr]
+            followed += 1
+        else:
+            owner = owner_of(addr)
+            if owner is not None and any(
+                    original[site:site + 4] != rom[site:site + 4]
+                    for site in original_sites[owner]):
+                raise ValueError(f"missing relocated line span or relocation record: 0x{addr:08X}")
+            pos = addr
+            size = _end - addr
+        if pos < 0 or size <= 0 or pos + size > len(rom):
+            raise ValueError(f"invalid protected ROM span: 0x{addr:08X}")
+        payload = rom[pos:pos + size].rstrip(b" \x00")
+        actual = decode_enc(payload.replace(b"\x72\x0a\x09", b"\x81\x40"), codes).rstrip(" \u3000")
+        wanted = display_equivalent(protected[addr], addr).rstrip(" \u3000")
+        if actual != wanted:
+            mismatches.append({"address": f"0x{addr:08X}", "live_addr": f"0x{pos:08X}",
+                               "expected": short(wanted), "actual": short(actual)})
+    return {"semantic_checked_count": checked, "semantic_relocated_count": followed,
+            "semantic_mismatch_count": len(mismatches), "semantic_mismatches": mismatches[:120]}
+
 
 def norm_addr(value: Any) -> str | None:
     try:
@@ -228,7 +341,8 @@ def relpath(path: Path) -> str:
         return str(path)
 
 
-def build_report() -> dict[str, Any]:
+def build_report(rom_path: Path | None = None,
+                 manifest_path: Path | None = None) -> dict[str, Any]:
     entries = iter_source_entries(BUILD)
     by_addr: dict[int, list[dict[str, Any]]] = defaultdict(list)
     for entry in entries:
@@ -394,6 +508,8 @@ def build_report() -> dict[str, Any]:
                     }
                 )
 
+    semantic = (audit_rom_semantics(rom_path, manifest_path or ROOT / "temp" / "repoint_manifest.json", protected)
+                if rom_path is not None else {})
     return {
         "source": str(BUILD.relative_to(ROOT)),
         "source_entry_count": len(entries),
@@ -426,6 +542,7 @@ def build_report() -> dict[str, Any]:
         "dialogue_groups_protected_count": protected_group_count,
         "dialogue_groups_mismatch_count": len(group_mismatches),
         "dialogue_groups_mismatches": group_mismatches[:120],
+        **semantic,
     }
 
 
@@ -433,9 +550,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--report", default=str(DEFAULT_REPORT))
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--rom", type=Path, help="candidate ROM for live semantic comparison")
+    parser.add_argument("--repoint-manifest", type=Path,
+                        default=ROOT / "temp" / "repoint_manifest.json")
     args = parser.parse_args()
 
-    report = build_report()
+    try:
+        report = build_report(args.rom, args.repoint_manifest)
+    except (OSError, ValueError, KeyError, IndexError, TypeError) as exc:
+        print(f"[FAIL] ADDRESS_TEXT_OVERRIDES evidence mismatch: {exc}", file=sys.stderr)
+        return 1
     report_path = Path(args.report)
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -473,6 +597,10 @@ def main() -> int:
         "- dialogue_groups protected rows: "
         f"{report['dialogue_groups_protected_count']} mismatches: {report['dialogue_groups_mismatch_count']}"
     )
+    if args.rom is not None:
+        print(f"- ROM semantic rows: {report['semantic_checked_count']} "
+              f"(relocated {report['semantic_relocated_count']}) "
+              f"mismatches: {report['semantic_mismatch_count']}")
     print(f"- report: {relpath(report_path)}")
 
     hard_fail = (
@@ -484,6 +612,7 @@ def main() -> int:
         or bool(report["required_data_errors"])
         or report["dialogue_map_mismatch_count"] > 0
         or report["dialogue_groups_mismatch_count"] > 0
+        or report.get("semantic_mismatch_count", 0) > 0
     )
     if args.strict and hard_fail:
         print("[FAIL] ADDRESS_TEXT_OVERRIDES governance violation", file=sys.stderr)

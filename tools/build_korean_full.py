@@ -23280,6 +23280,16 @@ def main():
             if _explicit_line_layouts.keys() & _hellbowz_layout.keys():
                 raise AssertionError('Explicit dialogue layout ownership collision')
             _explicit_line_layouts.update(_hellbowz_layout)
+            # The protected 0xDCFA8E row is wider than the 44-cell Part 1
+            # dialogue limit as one segment. Wrap at its authored fullwidth
+            # space so repointing replaces the original Japanese segment too.
+            _bteam_dcfa8e = BTEAM_ROUND2_RESIDUALS[0xDCFA8E]['expected_baseline']
+            _bteam_parts = _bteam_dcfa8e.split('　')
+            if len(_bteam_parts) != 2:
+                raise AssertionError('0xDCFA8E protected wrap boundary changed')
+            _explicit_line_layouts[0xDCFA8E] = tuple(
+                encode_full_fidelity(part, syl_to_code, unmapped, 0xDCFA8E)
+                for part in _bteam_parts)
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
@@ -23333,9 +23343,12 @@ def main():
     # script relocations still fail the build when missing.
     bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints)
                                     & BTEAM_RESTORE_BASELINE_ROWS)
+    _restored_relocated_residuals = {0xDCFA8E}
+    if not _restored_relocated_residuals <= completed_script_repoints:
+        raise AssertionError('0xDCFA8E protected dialogue was not relocated')
     _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
                                  if entry['reason'].startswith('Script text relocation unproven')
-                                 or (a == 0xD910C6 and a in bteam_script_residuals)}
+                                 or (a == 0xD910C6 and a in bteam_script_residuals)} - _restored_relocated_residuals
     if set(bteam_script_residuals) != _allowed_script_residuals:
         raise AssertionError('unlisted or stale B-team script relocation residual: '
                              f'{sorted(set(bteam_script_residuals) ^ _allowed_script_residuals)}')
@@ -23464,7 +23477,8 @@ def main():
         _target = int(_message['new_addr'], 16)
         for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
             _address = int(_key, 16)
-            if _address not in BTEAM_ROUND2_RESIDUALS or _address == 0xDD010A:
+            if (_address not in BTEAM_ROUND2_RESIDUALS or _address == 0xDD010A
+                    or _address in _restored_relocated_residuals):
                 continue
             _entry = BTEAM_ROUND2_RESIDUALS[_address]
             _raw = bytes.fromhex(_entry['active_payload_hex'] or _entry['payload_hex']).rstrip(b' \x00')
@@ -23797,7 +23811,7 @@ def main():
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
     _expected_residuals = ((set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations)
-                           | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS))
+                           | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS)) - _restored_relocated_residuals
     if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '

@@ -1,5 +1,7 @@
 """The host audit must resolve protected script writers like the builder."""
 import unittest
+import json
+import hashlib
 from pathlib import Path
 import tempfile
 from unittest.mock import patch
@@ -7,9 +9,71 @@ from unittest.mock import patch
 import audit_address_text_overrides as audit
 import build_korean_full as builder
 import qa_text_fit
+import build_korean_poc as P
 
 
 class ProtectedScriptAuditTests(unittest.TestCase):
+    def _semantic_fixture(self, root, *, omit_span=False, omit_record=False,
+                          foreign_owner=False, bad_sha=False):
+        rom_path, manifest_path, original_path = (root/'rom.gba', root/'repoint.json', root/'original.gba')
+        original = bytearray(0x100)
+        original[0x20:0x24] = (0x08000040).to_bytes(4, 'little')
+        original[0x24:0x28] = (0x08000060).to_bytes(4, 'little')
+        original_path.write_bytes(original)
+        rom = bytearray(original)
+        rom[0x20:0x24] = (0x08000080).to_bytes(4, 'little')
+        rom[0x24:0x28] = (0x08000090).to_bytes(4, 'little')
+        rom[0x42:0x44] = b'OK'  # stale in-place copy must never authorize a pass
+        rom[0x82:0x84] = b'OK'
+        rom[0x92:0x94] = b'OK'
+        rom_path.write_bytes(rom)
+        messages = [] if omit_record else [{
+            'msg': '0x000060' if foreign_owner else '0x000040',
+            'status': 'relocated', 'new_addr': '0x000090' if foreign_owner else '0x000080',
+            'old_len': 8, 'new_len': 8,
+            'ptr_sites': ['0x000024'] if foreign_owner else ['0x000020'],
+            'line_spans': {} if omit_span else {'0x000042': [2, 2]},
+        }]
+        manifest_path.write_text(json.dumps(messages))
+        Path(str(rom_path) + '.build.json').write_text(json.dumps({
+            'rom_sha256': hashlib.sha256(rom).hexdigest(),
+            'source_sha256': hashlib.sha256(original).hexdigest(),
+            'build_metadata': {'temp/repoint_manifest.json':
+                               '0' * 64 if bad_sha else hashlib.sha256(manifest_path.read_bytes()).hexdigest()},
+        }))
+        return rom_path, manifest_path, original_path, rom
+
+    def test_semantic_audit_reads_live_repoint_and_rejects_stale_manifest(self):
+        with tempfile.TemporaryDirectory(dir=audit.ROOT/'temp') as directory:
+            root = Path(directory)
+            rom_path, manifest_path, original_path, rom = self._semantic_fixture(root)
+            with patch.object(audit, 'SEMANTIC_REGRESSION_ADDRESSES', frozenset({0x42})), \
+                 patch.object(qa_text_fit, 'load_direct_patch_texts',
+                              return_value={0x42: (0x44, 'OK', 'patch_script_row')}), \
+                 patch.object(P, 'ROM', str(original_path)):
+                report = audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK'})
+                self.assertEqual((report['semantic_relocated_count'], report['semantic_mismatch_count']), (1, 0))
+                rom[0x20:0x24] = (0x08000090).to_bytes(4, 'little')
+                rom_path.write_bytes(rom)
+                with self.assertRaisesRegex(ValueError, 'receipt ROM/source/manifest mismatch'):
+                    audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK'})
+
+    def test_semantic_audit_rejects_missing_and_foreign_relocation_evidence(self):
+        for name, options, reason in (
+            ('omitted span', {'omit_span': True}, 'missing relocated line span'),
+            ('omitted record', {'omit_record': True}, 'missing relocated line span'),
+            ('foreign owner with matching text', {'foreign_owner': True}, 'source ownership mismatch'),
+            ('manifest sha mismatch', {'bad_sha': True}, 'receipt ROM/source/manifest mismatch'),
+        ):
+            with self.subTest(name=name), tempfile.TemporaryDirectory(dir=audit.ROOT/'temp') as directory:
+                rom_path, manifest_path, original_path, _rom = self._semantic_fixture(Path(directory), **options)
+                with patch.object(audit, 'SEMANTIC_REGRESSION_ADDRESSES', frozenset({0x42})), \
+                     patch.object(qa_text_fit, 'load_direct_patch_texts',
+                                  return_value={0x42: (0x44, 'OK', 'patch_script_row')}), \
+                     patch.object(P, 'ROM', str(original_path)), \
+                     self.assertRaisesRegex(ValueError, reason):
+                    audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK'})
+
     def test_two_real_addresses_use_current_authority_not_dead_call_literals(self):
         addresses = (0xD90250, 0xD902DC)
         raw = {a: builder.ADDRESS_TEXT_OVERRIDES[a] for a in addresses}
