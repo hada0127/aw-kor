@@ -24,7 +24,7 @@ FONT_BASE = 0xB974D0
 PART1_DAY_BANNER_LZ77 = 0xEE5E14
 SURRENDER_YESNO_ROW = 0xA34B6C
 SURRENDER_YESNO_LEN = 16
-SURRENDER_YESNO_TEXT = "　예　　　아니오"
+SURRENDER_YESNO_TEXT = "　예　　　아뇨"
 PART1_NAME_SUFFIX_SLOTS = {
     0xDF1F62: "part1 name-control suffix copy 1",
     0xDF1FA2: "part1 name-control suffix copy 2",
@@ -274,22 +274,24 @@ def main() -> int:
     surrender_yesno = {"addr": f"0x{SURRENDER_YESNO_ROW:08X}", "expected_text": SURRENDER_YESNO_TEXT}
     if rom:
         expected = encode_korean_ui(SURRENDER_YESNO_TEXT, load_syllable_codes())
+        expected_slot = expected + b"\x00" * (SURRENDER_YESNO_LEN - len(expected))
         current = rom[SURRENDER_YESNO_ROW:SURRENDER_YESNO_ROW + SURRENDER_YESNO_LEN]
         surrender_yesno.update({
             "expected_hex": expected.hex(),
+            "expected_slot_hex": expected_slot.hex(),
             "current_hex": current.hex(),
             "expected_len": len(expected),
             "slot_len": SURRENDER_YESNO_LEN,
-            "matches": current == expected,
+            "matches": current == expected_slot,
         })
-        if len(expected) != SURRENDER_YESNO_LEN:
+        if len(expected) + 1 > SURRENDER_YESNO_LEN:
             issues.append({
-                "type": "surrender_yesno_expected_not_slot_exact",
+                "type": "surrender_yesno_expected_exceeds_terminated_slot",
                 "addr": f"0x{SURRENDER_YESNO_ROW:08X}",
                 "expected_len": len(expected),
                 "slot_len": SURRENDER_YESNO_LEN,
             })
-        elif current != expected:
+        elif current != expected_slot:
             issues.append({
                 "type": "surrender_yesno_cursor_spacing_regression",
                 "addr": f"0x{SURRENDER_YESNO_ROW:08X}",

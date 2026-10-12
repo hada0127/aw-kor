@@ -4778,6 +4778,22 @@ COMPACT_GLYPH_DICTIONARY_SPECS = [
         'expected_target_count': 11,
     },
 ]
+B84_POWER_DICTIONARY_RELOCATED = 0xFD1000
+B84_POWER_GLYPH_LZ77_RELOCATED = 0xFD2000
+
+
+def b84_full_power_dictionary(dialogue_overrides):
+    """Ordered glyph set for the eleven agreed, unabridged AW1 power names."""
+    spec = COMPACT_GLYPH_DICTIONARY_SPECS[1]
+    targets = sorted(a for a in dialogue_overrides
+                     if _addr_in_ranges(a, spec['target_ranges']))
+    if len(targets) != spec['expected_target_count']:
+        raise AssertionError(f'B84 power target count: {len(targets)}')
+    chars = dict.fromkeys(ch for a in targets
+                          for ch in compact_glyph_display_text(dialogue_overrides[a]))
+    if any(not ('가' <= ch <= '힣') for ch in chars):
+        raise AssertionError('B84 power dictionary contains non-Hangul code')
+    return ''.join(chars)
 
 INTRO_DIRECT_TEXT = {
     # Early name-control intros are compact: text fragment, byte 0x69 for the
@@ -5140,6 +5156,69 @@ def restore_symbol_glyphs(rom, orig):
             rom[off:off + 32] = orig[off:off + 32]
             restored.add(slot)
     return len(restored)
+
+
+PART2_A3_DECIMAL_NODE = 0xFD0000
+PART2_A3_DECIMAL_BUCKET = 0x807790
+PART2_A3_MIDDLE_DOT_NODE = 0x808188
+
+
+def patch_part2_decimal_point_a3(rom, orig):
+    """Give 0x8144 a private node in the Part 2 A3 glyph-cache table."""
+    node_addr = PART2_A3_DECIMAL_NODE
+    bucket = PART2_A3_DECIMAL_BUCKET
+    source = PART2_A3_MIDDLE_DOT_NODE
+    node_ptr = (0x08000000 + node_addr).to_bytes(4, 'little')
+    old_head = bytes(orig[bucket:bucket + 4])
+    if bytes(rom[bucket:bucket + 4]) != old_head:
+        raise AssertionError('Part 2 decimal bucket changed before patch')
+    # The linked bucket for low byte 0x44 has no high-byte 0x81 owner.
+    seen = set()
+    next_ptr = int.from_bytes(old_head, 'little')
+    while next_ptr:
+        off = next_ptr - 0x08000000
+        if off in seen or not (0 <= off <= len(orig) - 72):
+            raise AssertionError('invalid Part 2 decimal glyph chain')
+        seen.add(off)
+        if orig[off + 4] == 0x81:
+            raise AssertionError('Part 2 decimal glyph already has an owner')
+        next_ptr = struct.unpack_from('<I', orig, off)[0]
+    if (bytes(orig[node_addr:node_addr + 72]) != bytes(72)
+            or bytes(rom[node_addr:node_addr + 72]) != bytes(72)
+            or node_ptr in orig or node_ptr in rom):
+        raise AssertionError('Part 2 decimal node is occupied or referenced')
+    middle_dot = bytes(orig[source:source + 72])
+    if middle_dot[4:8] != b'\x81\x08\x00\x00' or not any(middle_dot[8:]):
+        raise AssertionError('Part 2 middle-dot glyph source changed')
+    node = old_head + middle_dot[4:]
+    rom[node_addr:node_addr + 72] = node
+    rom[bucket:bucket + 4] = node_ptr
+    WRITE_LOG.append([node_addr, 72, 72, node.hex(), None, '．', None,
+                      'part2-a3-decimal-glyph'])
+    WRITE_LOG.append([bucket, 4, 4, node_ptr.hex(), None, '．', None,
+                      'part2-a3-decimal-bucket'])
+    # 0x8140 remains the shared blank in the unrelated Part 1 symbol table.
+    if bytes(rom[0xB8027C:0xB8027E]) != bytes(orig[0xB8027C:0xB8027E]):
+        raise AssertionError('Part 1 fullwidth-space mapping changed')
+    return node_addr
+
+
+def verify_part2_decimal_point_a3(rom, orig):
+    expected_node = (bytes(orig[PART2_A3_DECIMAL_BUCKET:PART2_A3_DECIMAL_BUCKET + 4])
+                     + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 72]))
+    expected_head = (0x08000000 + PART2_A3_DECIMAL_NODE).to_bytes(4, 'little')
+    if (bytes(rom[0x52F960:0x52F964]) != bytes(orig[0x52F960:0x52F964])
+            or bytes(rom[PART2_A3_DECIMAL_NODE:PART2_A3_DECIMAL_NODE + 72]) != expected_node
+            or bytes(rom[PART2_A3_DECIMAL_BUCKET:PART2_A3_DECIMAL_BUCKET + 4]) != expected_head):
+        raise AssertionError('Part 2 decimal glyph node changed after insertion')
+    # These are the two 0x8140 symbol-table entries (top and bottom tiles).
+    # Check the completed ROM, since later writers can touch either entry.
+    for offset in (0xB8027C, 0xB8028C):
+        if bytes(rom[offset:offset + 2]) != bytes(orig[offset:offset + 2]):
+            raise AssertionError(f'Part 1 fullwidth-space mapping changed at {offset:#x}')
+    blank_slot = 0xB974D0 + 95 * 32
+    if bytes(rom[blank_slot:blank_slot + 32]) != bytes(32):
+        raise AssertionError('Part 1 fullwidth-space glyph slot 95 is not blank')
 
 
 def restore_backup_utility_tables(rom, orig):
@@ -11679,7 +11758,8 @@ PART1_DIALOG_ASCII_PUNCT = {
     ord('!'): '！'.encode('shift_jis'),
     ord('?'): '？'.encode('shift_jis'),
     ord(','): '、'.encode('shift_jis'),
-    # 0x8144 '．' maps to this game's blank symbol slot.  Use visible '。';
+    # The Part 1 symbol table maps 0x8144 '．' to a blank slot. Use '。'
+    # for general Part 1 punctuation; the Part 2 A3 decimal has its own node.
     # runs of "..." are converted to original-style '・・・' below.
     ord('.'): '。'.encode('shift_jis'),
     ord(':'): '；'.encode('shift_jis'),
@@ -11809,8 +11889,8 @@ def _part1_dialog_safe_punct(enc, slot, addr=None):
     """Part1 dialogue parser renders ASCII punctuation as stray bitmap fragments.
 
     Convert visible ASCII punctuation to two-byte SJIS punctuation when the slot
-    has enough slack.  Do not use 0x8144 ('．'): it resolves to a blank glyph in
-    this font and makes ellipses look like accidental large spaces.  If it does
+    has enough slack. Do not use 0x8144 ('．') in Part 1: its symbol-table
+    glyph is blank. The Part 2 A3 decimal has a separate mapping. If it does
     not fit, return None so encode_fit can try the next, punctuation-dropped
     candidate instead of shipping broken punctuation pixels.
     """
@@ -11999,7 +12079,7 @@ def load_bteam_round2_decisions():
     path = os.path.join(BASE, 'data', 'bteam_round2_decisions.tsv')
     with open(path, 'rb') as stream:
         manifest_digest = hashlib.sha256(stream.read()).hexdigest()
-    if manifest_digest != '6cfb219377f7078b7976a83a40d429a00886b6181346eb422f44770e96047b52':
+    if manifest_digest != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
         raise AssertionError('B-team round-2 decision manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
@@ -13273,41 +13353,69 @@ def _b84_power_title_glyph_block(ch):
     return _grid_to_tiles(grid)
 
 
-def patch_b84_power_title_lz77_source(rom, display_overrides):
+def patch_b84_power_title_lz77_source(rom, orig, dictionary, syl_to_code):
     """Replace the AW1 CO-power source glyph sheet with Korean 16x32 glyphs."""
     from lz77_scan import lz77_decompress
     from lz77_compress import lz77_compress_optimal
 
-    dictionary = derive_compact_glyph_dictionary_texts(display_overrides, strict=True)[0xB842E8]
     if not dictionary:
         raise AssertionError('B84 power title glyph dictionary is empty')
+    if len(dictionary) != 44:
+        raise AssertionError(f'B84 agreed glyph count changed: {len(dictionary)}')
+    old_dict_ptr = struct.pack('<I', 0x08B842E8)
+    old_lz_ptr = struct.pack('<I', 0x08BC9D0C)
+    if (bytes(orig[0xB3C1F8:0xB3C1FC]) != old_dict_ptr
+            or bytes(orig[0xB3C1F4:0xB3C1F8]) != old_lz_ptr
+            or bytes(orig).count(old_dict_ptr) != 1
+            or bytes(orig).count(old_lz_ptr) != 1):
+        raise AssertionError('B84 dictionary or glyph-source pointer ownership changed')
+    # The consumer leaves unmatched cells untouched. Give every 0x8140 space
+    # an explicit all-zero tile block so earlier cut-in art cannot show through.
+    encoded = bytes(encode_text(dictionary, syl_to_code, collections.Counter())) + b'\x81\x40'
+    if len(encoded) != 90 or len(encoded) % 2:
+        raise AssertionError('B84 relocated dictionary length changed')
+    dict_blob = encoded + b'\x00\x00'
+    if (any(orig[B84_POWER_DICTIONARY_RELOCATED:B84_POWER_DICTIONARY_RELOCATED + len(dict_blob)])
+            or any(rom[B84_POWER_DICTIONARY_RELOCATED:B84_POWER_DICTIONARY_RELOCATED + len(dict_blob)])):
+        raise AssertionError('B84 relocated dictionary space occupied')
+    rom[B84_POWER_DICTIONARY_RELOCATED:B84_POWER_DICTIONARY_RELOCATED + len(dict_blob)] = dict_blob
+    struct.pack_into('<I', rom, 0xB3C1F8, 0x08000000 + B84_POWER_DICTIONARY_RELOCATED)
     dec = lz77_decompress(bytes(rom), B84_POWER_GLYPH_LZ77_OFF)
     if dec is None:
         raise AssertionError(f'invalid B84 power title LZ77 block at 0x{B84_POWER_GLYPH_LZ77_OFF:X}')
     raw, consumed = dec
-    required = len(dictionary) * 0x100
-    if required > len(raw):
-        raise AssertionError(f'B84 power title glyph sheet too small: need {required}, got {len(raw)}')
+    required = (len(dictionary) + 1) * 0x100
     buf = bytearray(raw)
+    if required > len(buf):
+        buf.extend(b'\x00' * (required - len(buf)))
     for idx, ch in enumerate(dictionary):
         buf[idx * 0x100:(idx + 1) * 0x100] = _b84_power_title_glyph_block(ch)
+    buf[len(dictionary) * 0x100:required] = bytes(0x100)
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(
-            f'B84 power title glyph LZ77 grew: {len(comp)} > {consumed} at 0x{B84_POWER_GLYPH_LZ77_OFF:X}'
-        )
+    lz_end = B84_POWER_GLYPH_LZ77_RELOCATED + len(comp)
+    if (lz_end > len(rom)
+            or any(orig[B84_POWER_GLYPH_LZ77_RELOCATED:lz_end])
+            or any(rom[B84_POWER_GLYPH_LZ77_RELOCATED:lz_end])):
+        raise AssertionError('B84 relocated glyph-source space occupied')
     roundtrip = lz77_decompress(comp, 0)
     if roundtrip is None or roundtrip[0] != bytes(buf):
         raise AssertionError('B84 power title glyph LZ77 roundtrip mismatch')
-    rom[B84_POWER_GLYPH_LZ77_OFF:B84_POWER_GLYPH_LZ77_OFF + consumed] = (
-        comp + b'\x00' * (consumed - len(comp))
-    )
+    rom[B84_POWER_GLYPH_LZ77_RELOCATED:lz_end] = comp
+    struct.pack_into('<I', rom, 0xB3C1F4, 0x08000000 + B84_POWER_GLYPH_LZ77_RELOCATED)
+    WRITE_LOG.append([B84_POWER_DICTIONARY_RELOCATED, len(dict_blob), len(dict_blob),
+                      dict_blob.hex(), None, dictionary, None, 'b84-power-dictionary-relocated'])
+    WRITE_LOG.append([0xB3C1F8, 4, 4, bytes(rom[0xB3C1F8:0xB3C1FC]).hex(),
+                      None, None, None, 'b84-power-dictionary-pointer'])
+    WRITE_LOG.append([B84_POWER_GLYPH_LZ77_RELOCATED, len(comp), len(comp),
+                      comp.hex(), None, None, None, 'b84-power-glyph-lz77-relocated'])
+    WRITE_LOG.append([0xB3C1F4, 4, 4, bytes(rom[0xB3C1F4:0xB3C1F8]).hex(),
+                      None, None, None, 'b84-power-glyph-pointer'])
     return {
         'glyphs': len(dictionary),
         'raw_bytes': len(raw),
         'compressed': len(comp),
-        'slot': consumed,
-        'lz77_off': '0x%X' % B84_POWER_GLYPH_LZ77_OFF,
+        'slot': len(comp),
+        'lz77_off': '0x%X' % B84_POWER_GLYPH_LZ77_RELOCATED,
     }
 
 
@@ -13738,7 +13846,13 @@ def main():
     written_addrs = set()
     _display_ov = load_display_overrides()
     refresh_compact_glyph_dictionary_overrides(_display_ov, strict=True)
-    st['b84_power_title_lz77_glyphs'] = patch_b84_power_title_lz77_source(rom, _display_ov)['glyphs']
+    _b84_full_names = {
+        int(a, 16): name for a, name in load_dialogue_overrides(
+            os.path.join(BASE, 'data', 'dialogue_overrides.json')).items()
+    }
+    _b84_dictionary = b84_full_power_dictionary(_b84_full_names)
+    st['b84_power_title_lz77_glyphs'] = patch_b84_power_title_lz77_source(
+        rom, orig, _b84_dictionary, syl_to_code)['glyphs']
     # The 0x08B3C184 copy path is a shared compact renderer.  The LZ77 source
     # replacement above is sufficient for the AW1 power-title glyph sheet; a
     # copy-site hook here also intercepts unrelated compact menu strings.
@@ -14009,6 +14123,7 @@ def main():
     # 그리드는 원본 FONT_BASE(bulk-DMA)를 쓰므로 per-char 대화(0x08F00000)와 독립.
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
+    st['part2_a3_decimal_node'] = patch_part2_decimal_point_a3(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['compact_ui_fallback_glyph'] = patch_compact_ui_fallback_glyph(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
@@ -22674,7 +22789,7 @@ def main():
     # with two cursor cells, matching the original "　はい　　いいえ" layout.
     # Preserve the leading/gap cells so the initial no cursor and later left/
     # right cursor redraw use the same positions without covering glyphs.
-    fixed_zero_text_patch(0xA34B6C, 16, '　예　　　아니오')
+    fixed_zero_text_patch(0xA34B6C, 16, '　예　　　아뇨')
 
     # The post-battle save prompt draws two script rows in one box and samples a
     # compact choice row. Keep the prompt as one complete sentence. This UI path
@@ -23213,7 +23328,7 @@ def main():
                                     & BTEAM_RESTORE_BASELINE_ROWS)
     _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
                                  if entry['reason'].startswith('Script text relocation unproven')
-                                 or a == 0xD910C6}
+                                 or (a == 0xD910C6 and a in bteam_script_residuals)}
     if set(bteam_script_residuals) != _allowed_script_residuals:
         raise AssertionError('unlisted or stale B-team script relocation residual: '
                              f'{sorted(set(bteam_script_residuals) ^ _allowed_script_residuals)}')
@@ -23301,6 +23416,9 @@ def main():
         if not _direct_owner:
             continue
         _text = _bteam_display_equivalent(_round2_baseline[f'0x{_address:08X}'], _address)
+        if _address == 0xA34B6C:
+            # The protected words are unchanged; these cells align both cursors.
+            _text = '　예　　　아뇨'
         _encoded = bytes(encode_text(_text, syl_to_code, unmapped, _address))
         _slot = int(_row[1])
         if len(_encoded) > _slot or (_row[7] == 'fixed_zero_text' and len(_encoded) == _slot):
@@ -23537,6 +23655,7 @@ def main():
     # After every writer (incl. sprite overrides): frozen production info labels.
     from part1_production_info_labels import verify_final_rom as verify_production_info_final
     st['part1_production_info_final'] = verify_production_info_final(rom)
+    verify_part2_decimal_point_a3(rom, orig)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     stable_build_inputs(build_inputs_before, snapshot_inputs())
@@ -23602,6 +23721,12 @@ def main():
                 and bteam_retained_equal(_display, _issue['rom_text'], _address)):
             del _restoration_issues[_address]
             _reviewed_restorations.add(_address)
+    _choice_issue = _restoration_issues.get(0xA34B6C)
+    if (_choice_issue is not None
+            and _bteam_baseline['overrides']['0x00A34B6C'] == '예　아뇨'
+            and _choice_issue['rom_text'] == '　예　　　아뇨'):
+        del _restoration_issues[0xA34B6C]
+        _reviewed_restorations.add(0xA34B6C)
     _non_korean = []
     for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS):
         _key = f'0x{_address:08X}'

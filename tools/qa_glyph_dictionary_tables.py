@@ -9,6 +9,7 @@ the dictionary rows, so this script is the corresponding hard gate.
 from __future__ import annotations
 
 import hashlib
+import argparse
 import importlib.util
 import json
 import sys
@@ -170,9 +171,9 @@ def row_slot(row: dict | None) -> int:
         return 0
 
 
-def main() -> int:
-    if not ROM.exists():
-        raise FileNotFoundError(f"required QA input missing: {ROM.relative_to(ROOT)}")
+def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
+    if not rom_path.exists():
+        raise FileNotFoundError(f"required QA input missing: {rom_path}")
     build = load_build_module()
     syl_to_code = {k: int(v, 16) for k, v in load_json_required(Path(build.SYLCODE)).items()}
     dialogue_doc = load_json_required(DIALOGUE_MAP)
@@ -206,17 +207,47 @@ def main() -> int:
         }]
     else:
         issues = []
-    rom = ROM.read_bytes()
+    rom = rom_path.read_bytes()
     results = []
 
     for spec in specs:
-        daddr = spec["dict_addr"]
-        slot = spec["slot"]
-        dictionary_text = derived_dictionaries.get(daddr, "")
+        b84 = spec['label'] == 'part2_b8_compact_power_dictionary'
+        daddr = build.B84_POWER_DICTIONARY_RELOCATED if b84 else spec["dict_addr"]
+        slot = 92 if b84 else spec["slot"]
+        dictionary_text = (build.b84_full_power_dictionary(dialogue_overrides)
+                           if b84 else derived_dictionaries.get(daddr, ""))
+        if b84:
+            original = (ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+            for ref, old, new in ((0xB3C1F8, 0x08B842E8, 0x08000000 + daddr),
+                                  (0xB3C1F4, 0x08BC9D0C,
+                                   0x08000000 + build.B84_POWER_GLYPH_LZ77_RELOCATED)):
+                if (int.from_bytes(original[ref:ref + 4], 'little') != old
+                        or original.count(old.to_bytes(4, 'little')) != 1
+                        or int.from_bytes(rom[ref:ref + 4], 'little') != new):
+                    issues.append({'dict': f'0x{daddr:08X}', 'issue': 'consumer pointer mismatch',
+                                   'pointer_at': f'0x{ref:08X}'})
+            from lz77_scan import lz77_decompress
+            source = lz77_decompress(rom, build.B84_POWER_GLYPH_LZ77_RELOCATED)
+            if (source is None or len(source[0]) < (len(dictionary_text) + 1) * 0x100
+                    or len(source[0]) > 0x3000):
+                issues.append({'dict': f'0x{daddr:08X}',
+                               'issue': 'relocated glyph sheet outside 0x3000 allocation'})
+            elif any(source[0][len(dictionary_text) * 0x100:
+                               (len(dictionary_text) + 1) * 0x100]):
+                issues.append({'dict': f'0x{daddr:08X}', 'issue': 'space glyph is not blank'})
         encoded, level = build.encode_fit(dictionary_text, slot, syl_to_code, Counter(), daddr)
         if encoded is None:
             issues.append({"dict": f"0x{daddr:08X}", "issue": "dictionary overflow"})
             encoded = b""
+        elif b84:
+            encoded += b'\x81\x40'
+            pairs = [encoded[i:i + 2] for i in range(0, len(encoded), 2)]
+            if (len(pairs) != len(dictionary_text) + 1
+                    or pairs[-1] != b'\x81\x40'
+                    or pairs.count(b'\x81\x40') != 1
+                    or len(set(pairs)) != len(pairs)):
+                issues.append({'dict': f'0x{daddr:08X}',
+                               'issue': 'blank glyph index or unique-pair invariant failed'})
         if len(encoded) % 2:
             issues.append({"dict": f"0x{daddr:08X}", "issue": "dictionary odd byte length", "length": len(encoded)})
         bad_leads = [i for i in range(0, len(encoded), 2) if encoded[i] < 0x80]
@@ -259,25 +290,27 @@ def main() -> int:
                 issues.append({"address": f"0x{addr:08X}", "issue": "target missing from dialogue_map"})
             elif row.get("is_noise"):
                 issues.append({"address": f"0x{addr:08X}", "issue": "target marked as noise in dialogue_map"})
-            text = display_overrides[addr]
+            # The 16-byte first entry remains its approved compact label.
+            text = (dialogue_overrides[addr] if b84 and addr != 0xB84E50
+                    else display_overrides[addr])
             whitelist = compact_whitelist.get(addr)
             if whitelist is None:
                 issues.append({"address": f"0x{addr:08X}", "issue": "target missing from compact power display whitelist"})
             else:
-                if whitelist["display_ko"] != text:
+                if whitelist["display_ko"] != display_overrides[addr]:
                     issues.append({
                         "address": f"0x{addr:08X}",
                         "issue": "display override diverges from compact power display whitelist",
-                        "display_override": text,
+                        "display_override": display_overrides[addr],
                         "whitelist_display_ko": whitelist["display_ko"],
                     })
                 address_override = address_text_overrides.get(addr)
-                if address_override is not None and address_override != text:
+                if address_override is not None and address_override != display_overrides[addr]:
                     issues.append({
                         "address": f"0x{addr:08X}",
                         "issue": "ADDRESS_TEXT_OVERRIDES compact target diverges from display override",
                         "address_text_override": address_override,
-                        "display_override": text,
+                        "display_override": display_overrides[addr],
                     })
                 authoritative_full = dialogue_overrides.get(addr)
                 if not authoritative_full:
@@ -295,7 +328,7 @@ def main() -> int:
                     })
             normalized_text = build.normalize_for_fit(text)
             compact_text = compact_display_text(build, text)
-            if normalized_text != compact_text:
+            if not b84 and normalized_text != compact_text:
                 issues.append({
                     "address": f"0x{addr:08X}",
                     "issue": "target contains dropped compact-renderer characters",
@@ -303,10 +336,15 @@ def main() -> int:
                     "normalized": normalized_text,
                     "compact": compact_text,
                 })
-            target_enc = encode_compact(build, text, syl_to_code)
+            target_enc = (build.encode_text(build.normalize_pair_renderer_text(text),
+                                            syl_to_code, Counter()) if b84
+                          else encode_compact(build, text, syl_to_code))
             if len(target_enc) % 2:
                 issues.append({"address": f"0x{addr:08X}", "issue": "target odd byte length", "text": text})
-            missing = sorted({p.hex() for p in (target_enc[i:i + 2] for i in range(0, len(target_enc), 2)) if p not in dictionary_pairs})
+            compact_enc = target_enc if b84 else encode_compact(build, text, syl_to_code)
+            missing = sorted({p.hex() for p in (compact_enc[i:i + 2]
+                                            for i in range(0, len(compact_enc), 2))
+                              if p not in dictionary_pairs})
             if missing:
                 issues.append({
                     "dict": f"0x{daddr:08X}",
@@ -368,8 +406,8 @@ def main() -> int:
         })
 
     report = {
-        "rom": str(ROM.relative_to(ROOT)),
-        "rom_sha256": sha256(ROM) if ROM.exists() else None,
+        "rom": str(rom_path.relative_to(ROOT)),
+        "rom_sha256": sha256(rom_path),
         "dictionary_count": len(specs),
         "compact_power_display_whitelist": str(POWER_DISPLAY_WHITELIST.relative_to(ROOT)),
         "compact_power_display_whitelist_count": len(compact_whitelist),
@@ -377,15 +415,19 @@ def main() -> int:
         "issues": issues,
         "results": results,
     }
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({
         "dictionary_count": len(specs),
         "issue_count": len(issues),
-        "report": str(REPORT.relative_to(ROOT)),
+        "report": str(report_path.relative_to(ROOT)),
     }, ensure_ascii=False))
     return 1 if issues else 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--rom', type=Path, default=ROM)
+    parser.add_argument('--report', type=Path, default=REPORT)
+    args = parser.parse_args()
+    raise SystemExit(main(args.rom, args.report))

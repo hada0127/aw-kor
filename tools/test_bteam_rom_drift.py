@@ -54,6 +54,32 @@ class RomDriftTest(unittest.TestCase):
         self.assertFalse(matches_reviewed_bteam_spacing(
             0xDEECDE, '해상유닛.지상 유닛을', '해상　유닛。공중　유닛을'))
 
+    def test_source_drift_only_accepts_exact_surrender_pair(self):
+        from qa_bteam_drift import BTEAM_SCRIPT_SPACING_REPAIRS
+        baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        original = baseline['overrides']
+        for address, (before, after) in BTEAM_SCRIPT_SPACING_REPAIRS.items():
+            key = f'0x{address:08X}'
+            self.assertEqual(original[key], before)
+            overrides = dict(original)
+            overrides[key] = after
+            self.assertEqual(check(baseline, overrides)['drift'],
+                             [(key, before, after)])
+        key = '0x00DEECDE'
+        overrides = dict(original)
+        overrides[key] = '해상　유닛。지상　유닛을'
+        self.assertEqual(check(baseline, overrides)['drift'],
+                         [(key, original[key], overrides[key])])
+        key = '0x00A34B6C'
+        overrides = dict(original)
+        overrides[key] = '　예　　　아뇨'
+        self.assertEqual(check(baseline, overrides)['drift'], [])
+        for near_miss in ('예　　　아뇨', '　예　　　아뇨　', '　예　　 아뇨'):
+            with self.subTest(near_miss=near_miss):
+                overrides[key] = near_miss
+                self.assertEqual(check(baseline, overrides)['drift'],
+                                 [(key, original[key], near_miss)])
+
     def test_consensus_sets_and_baseline_pin(self):
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
         addresses = {int(x, 16) for x in baseline['overrides']}

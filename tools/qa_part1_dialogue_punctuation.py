@@ -27,10 +27,15 @@ PART1_DIALOG_HI = 0xE10000
 UNSAFE_PUNCT = set(b"!?,.:;()[]{}\"'-/\\+*=#%&@~$")
 SYMBOL_TABLE = 0xB8027C
 FONT_BASE = 0xB974D0
-BLANK_SLOT = 95
+A3_DECIMAL_NODE = 0xFD0000
+A3_MIDDLE_DOT_NODE = 0x808188
+DECIMAL_SOURCE_MESSAGE = 0xA2BC3C
+DECIMAL_RELOCATED_MESSAGE = 0xA5823C
+DECIMAL_GLYPH_ADDRESS = 0xA58250
 VISIBLE_PUNCT_CODES = {
     0x8141: "、",
     0x8142: "。",
+    0x8144: "．",
     0x8145: "・",
     0x8147: "；",
     0x8148: "？",
@@ -49,7 +54,6 @@ VISIBLE_PUNCT_CODES = {
     0x8195: "＆",
 }
 INVISIBLE_PUNCT_CODES = {
-    0x8144: "．",
     0x8146: "：",
     0x8166: "’",
     0x816D: "［",
@@ -76,7 +80,7 @@ def active_text_payloads(integrity, rom):
         for pos in range(addr, addr + (slot if entry[4] is not None else length)):
             owners[pos] = index
     for index, entry in enumerate(integrity):
-        if not isinstance(entry, list) or len(entry) < 8 or not needs_safe_dialogue_punctuation(entry[0]):
+        if not isinstance(entry, list) or len(entry) < 8:
             continue
         addr, length = int(entry[0]), int(entry[2])
         encoded = bytes.fromhex(str(entry[3] or ''))[:length]
@@ -138,6 +142,19 @@ def scan_sjis_punct(payload: bytes, *, extra_codes=()) -> Counter[int]:
     return counts
 
 
+def decimal_positions(payload: bytes, start: int) -> set[int]:
+    positions: set[int] = set()
+    i = 0
+    while i + 1 < len(payload):
+        if 0x81 <= payload[i] <= 0xE2:
+            if payload[i:i + 2] == b'\x81\x44':
+                positions.add(start + i)
+            i += 2
+        else:
+            i += 1
+    return positions
+
+
 def symbol_table_index(sjis: int) -> int:
     return (((sjis + 0xFFFF7EC0) & 0xFFF8) << 1) + (sjis & 7)
 
@@ -154,20 +171,47 @@ def scan_missing_renderer_symbols(payload: bytes, address: int) -> Counter[str]:
 
 
 def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
+    if sjis == 0x8144:
+        root = int.from_bytes(rom[0x52F960:0x52F964], "little") - 0x08000000
+        bucket = root + ((sjis & 0xFF) - 0x40) * 4
+        if (rom[0x52F960:0x52F964] != original[0x52F960:0x52F964]
+                or bucket != 0x807790):
+            return {"consumer": "part2_a3", "slots": [], "nonzero": [],
+                    "matches_original": [], "visible": False, "restored": False}
+        node_ptr = int.from_bytes(rom[bucket:bucket + 4], "little")
+        seen: set[int] = set()
+        node = None
+        while node_ptr:
+            off = node_ptr - 0x08000000
+            if off in seen or off < 0 or off + 72 > len(rom):
+                break
+            seen.add(off)
+            if rom[off + 4] == (sjis >> 8):
+                node = off
+                break
+            node_ptr = int.from_bytes(rom[off:off + 4], "little")
+        if node is None:
+            return {"consumer": "part2_a3", "slots": [], "nonzero": [],
+                    "matches_original": [], "visible": False, "restored": False}
+        tiles = [rom[node + 8:node + 40], rom[node + 40:node + 72]]
+        nonzero = [sum(bool(b) for b in tile) for tile in tiles]
+        expected = original[A3_MIDDLE_DOT_NODE + 4:A3_MIDDLE_DOT_NODE + 72]
+        restored = (node == A3_DECIMAL_NODE
+                    and rom[node + 4:node + 72] == expected
+                    and rom[node:node + 4] == original[bucket:bucket + 4])
+        return {"consumer": "part2_a3", "slots": [node + 8, node + 40],
+                "nonzero": nonzero, "matches_original": [restored, restored],
+                "visible": any(nonzero), "restored": restored}
     idx = symbol_table_index(sjis)
     slots: list[int] = []
     nonzero: list[int] = []
     matches_original: list[bool] = []
     for delta in (0, 8):
         table_off = SYMBOL_TABLE + (idx + delta) * 2
-        if table_off + 2 > len(original):
+        if table_off + 2 > len(rom) or table_off + 2 > len(original):
             continue
-        slot = int.from_bytes(original[table_off:table_off + 2], "little")
+        slot = int.from_bytes(rom[table_off:table_off + 2], "little")
         slots.append(slot)
-        if slot == BLANK_SLOT:
-            nonzero.append(0)
-            matches_original.append(True)
-            continue
         glyph_off = FONT_BASE + slot * 32
         cur = rom[glyph_off:glyph_off + 32]
         orig = original[glyph_off:glyph_off + 32]
@@ -180,6 +224,11 @@ def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
         "visible": any(v > 0 for v in nonzero),
         "restored": all(matches_original),
     }
+
+
+def approved_decimal_consumer(message: int, relocated: int | None = None) -> bool:
+    return message == DECIMAL_SOURCE_MESSAGE and (
+        relocated is None or relocated == DECIMAL_RELOCATED_MESSAGE)
 
 
 def issue_record(
@@ -219,6 +268,21 @@ def main() -> int:
         issues.append({"source": "integrity_map", "type": "invalid_json_shape"})
         integrity = []
 
+    manifest = load_json(REPOINT_MANIFEST, None)
+    if not isinstance(manifest, list):
+        issues.append({"source": "repoint_manifest", "type": "missing_or_invalid_manifest"})
+        manifest = []
+    decimal_relocations = {
+        int(str(item['msg']), 16): int(str(item['new_addr']), 16)
+        for item in manifest
+        if isinstance(item, dict) and item.get('status') == 'relocated'
+        and item.get('msg') and item.get('new_addr')
+    }
+    decimal_targets = {target: source for source, target in decimal_relocations.items()}
+    if decimal_relocations.get(DECIMAL_SOURCE_MESSAGE) != DECIMAL_RELOCATED_MESSAGE:
+        issues.append({"source": "repoint_manifest", "type": "decimal_relocation_missing"})
+    decimal_seen: set[int] = set()
+
     checked_integrity = 0
     sjis_totals: Counter[int] = Counter()
     for entry, addr, payload in active_text_payloads(integrity, rom):
@@ -228,15 +292,33 @@ def main() -> int:
             enc_len = int(entry[2])
         except (TypeError, ValueError):
             continue
-        if not needs_safe_dialogue_punctuation(addr) or enc_len <= 0:
+        if enc_len <= 0:
             continue
         enc_hex = str(entry[3] or "")
         if not enc_hex:
             continue
+        row_addr = int(entry[0])
+        if row_addr in (A3_DECIMAL_NODE, 0x807790) and str(entry[7]).startswith('part2-a3-decimal-'):
+            continue
+        found_decimal = decimal_positions(payload, addr)
+        decimal_count = len(found_decimal)
+        target = row_addr if row_addr in decimal_targets else None
+        approved = (approved_decimal_consumer(decimal_targets[target], target)
+                    if target is not None
+                    else int(entry[0]) not in decimal_relocations
+                    and approved_decimal_consumer(int(entry[0])))
+        if decimal_count and not approved:
+            issues.append(issue_record(source="integrity_map", addr=addr, payload=payload,
+                                       counts=Counter({"decimal_wrong_consumer": decimal_count})))
+        decimal_seen.update(found_decimal)
+        if not needs_safe_dialogue_punctuation(addr):
+            continue
         checked_integrity += 1
         counts = scan_standalone_punct(payload)
         counts.update(scan_missing_renderer_symbols(payload, addr))
-        sjis_totals.update(scan_sjis_punct(payload))
+        symbols = scan_sjis_punct(payload)
+        symbols.pop(0x8144, None)
+        sjis_totals.update(symbols)
         if counts:
             totals.update(counts)
             issues.append(issue_record(
@@ -252,9 +334,6 @@ def main() -> int:
                 },
             ))
 
-    manifest = load_json(REPOINT_MANIFEST, [])
-    if not isinstance(manifest, list):
-        manifest = []
     checked_repoint = 0
     for item in manifest:
         if not isinstance(item, dict) or item.get("status") != "relocated":
@@ -265,13 +344,24 @@ def main() -> int:
             new_len = int(item.get("new_len", 0))
         except (KeyError, TypeError, ValueError):
             continue
-        if not needs_safe_dialogue_punctuation(msg) or new_len <= 0 or not rom:
+        if new_len <= 0 or not rom:
+            continue
+        payload = rom[new_addr:new_addr + new_len]
+        found_decimal = decimal_positions(payload, new_addr)
+        decimal_count = len(found_decimal)
+        decimal_seen.update(found_decimal)
+        if decimal_count and not approved_decimal_consumer(msg, new_addr):
+            issues.append(issue_record(source="repoint_manifest", addr=new_addr, payload=payload,
+                                       counts=Counter({"decimal_wrong_consumer": decimal_count}),
+                                       extra={"msg": f"0x{msg:08X}"}))
+        if not needs_safe_dialogue_punctuation(msg):
             continue
         checked_repoint += 1
-        payload = rom[new_addr:new_addr + new_len]
         counts = scan_standalone_punct(payload, stop_at_nul=False)
         counts.update(scan_missing_renderer_symbols(payload, msg))
-        sjis_totals.update(scan_sjis_punct(payload))
+        symbols = scan_sjis_punct(payload)
+        symbols.pop(0x8144, None)
+        sjis_totals.update(symbols)
         if counts:
             totals.update(counts)
             issues.append(issue_record(
@@ -286,8 +376,15 @@ def main() -> int:
                 },
             ))
 
+    sjis_totals[0x8144] = len(decimal_seen)
     glyph_issues = []
     if rom and original:
+        if rom[DECIMAL_GLYPH_ADDRESS:DECIMAL_GLYPH_ADDRESS + 2] != b'\x81\x44' or DECIMAL_GLYPH_ADDRESS not in decimal_seen:
+            issues.append({"source": "repoint_manifest", "type": "decimal_live_position_missing",
+                           "expected": f"0x{DECIMAL_GLYPH_ADDRESS:08X}"})
+        if sjis_totals[0x8144] != 1:
+            issues.append({"source": "symbol_glyph", "type": "decimal_payload_count",
+                           "expected": 1, "actual": sjis_totals[0x8144]})
         for code, count in sorted(sjis_totals.items()):
             state = glyph_state(rom, original, code)
             if code in INVISIBLE_PUNCT_CODES or not state["visible"] or not state["restored"]:
