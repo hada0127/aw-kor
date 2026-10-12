@@ -1,0 +1,9 @@
+{
+  "status": "closed",
+  "error": null,
+  "last_observed_core_frame": 3489,
+  "committed_core_frame": 3489,
+  "last_good_checkpoint": "/home/taro1/project/aw-kor/temp/help_20261012/capture_b5_run2/resume.checkpoint.json",
+  "cleanup_errors": [],
+  "emulator_exit_code": 0
+}

@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "5e285eb78b6603af6270c0880e90f3d62f31954d9e56eba0262d40a3c15d0697",
+  "frame": "docs/screenshots/part1_compact_help_2026-10-12/0032_NONE_0002120.png",
+  "message": "0x00DFA79A",
+  "observed_line_encoded_half_cells": 34,
+  "observed_fullwidth_glyphs": 17,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 136,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 34,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "34 half-cells visibly fit in the Part1 compact help box; larger capacity is unverified. Both rows are used by other menu messages. Coordinates are estimated from the captured 240x160 frame."
+}
