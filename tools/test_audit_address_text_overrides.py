@@ -166,6 +166,15 @@ for address, end, text, label in [(0x100, 0x108, '대사', 'row')]:
     patch_script_row(address, end, encode_text(text))
 patch_script_row(0x200, 0x208, encode_text('대사'))
 fixed_text_patch(0x200, 8, encode_text('별도'))
+from part1_ship_help import ROWS as SHIP_HELP_ROWS
+from part1_submarine_help import ROWS as SUBMARINE_HELP_ROWS
+from part2_ending_qa_rows import ROWS as PART2_ENDING_QA_ROWS
+for start, end, source_text in SHIP_HELP_ROWS:
+    patch_script_row(start, end, source_text=source_text)
+for start, end, source_text in SUBMARINE_HELP_ROWS:
+    patch_script_row(start, end, source_text=source_text)
+for start, end, source_text in PART2_ENDING_QA_ROWS:
+    patch_script_row(start, end, source_text=source_text)
 ''')
             with patch.object(qa_text_fit, 'BASE', str(root)):
                 default = qa_text_fit.load_direct_patch_texts()
