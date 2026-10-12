@@ -33,6 +33,60 @@ import build_korean_poc as P
 from sprite_relocations import RELOCATIONS, SPRITE_STORAGE_START, resolve_sprite_offset
 
 BASE = P.BASE
+
+
+def validate_co_reflow_spans(payload, spans):
+    """Reject metadata that crosses a row break or cuts a two-byte glyph."""
+    boundaries = {0}
+    row_breaks = set()
+    pos = 0
+    while pos < len(payload):
+        lead = payload[pos]
+        if 0x81 <= lead <= 0x9F or 0xE0 <= lead <= 0xFC:
+            if pos + 1 >= len(payload) or not 0x40 <= payload[pos + 1] <= 0xFC or payload[pos + 1] == 0x7F:
+                raise AssertionError(f'invalid CO pair at {pos}')
+            pos += 2
+        elif lead in (0x20, 0x72, 0x00):
+            if lead == 0x72:
+                row_breaks.add(pos)
+            pos += 1
+        else:
+            raise AssertionError(f'unknown CO control at {pos}: {lead:#x}')
+        boundaries.add(pos)
+    for off, length in spans:
+        if length <= 0 or off not in boundaries or off + length not in boundaries:
+            raise AssertionError(f'CO span splits a glyph: {(off, length)}')
+        if off + length > len(payload) or any(off <= br < off + length for br in row_breaks):
+            raise AssertionError(f'CO span crosses a row: {(off, length)}')
+
+
+def co_reflow_source_spans(source_rows, display_rows, syl_to_code, unmapped):
+    """Map each source row to its actual glyph fragments after page reflow."""
+    source_chars = [(index, char) for index, row in enumerate(source_rows)
+                    for char in row if char != '　']
+    display_chars = [char for row in display_rows for char in row if char != '　']
+    if [char for _, char in source_chars] != display_chars:
+        raise AssertionError('CO reflow changed source glyph order')
+    fragments = [[] for _ in source_rows]
+    display_spans = []
+    cursor = 0
+    glyph = 0
+    for row in display_rows:
+        encoded = bytes(encode_text(row, syl_to_code, unmapped))
+        display_spans.append([cursor, len(encoded)])
+        chars = [(cursor + len(bytes(encode_text(row[:i], syl_to_code, unmapped))),
+                  len(bytes(encode_text(char, syl_to_code, unmapped))), source_chars[glyph + n][0])
+                 for n, (i, char) in enumerate((i, char) for i, char in enumerate(row) if char != '　')]
+        for index in range(len(source_rows)):
+            owned = [(off, size) for off, size, owner in chars if owner == index]
+            if owned:
+                start = owned[0][0]
+                fragments[index].append([start, owned[-1][0] + owned[-1][1] - start])
+        glyph += len(chars)
+        cursor += len(encoded) + 1
+    if any(not parts for parts in fragments):
+        raise AssertionError('CO source row lost all glyphs')
+    return display_spans, fragments
 TRANS = os.path.join(BASE, 'data', 'translation_for_import.csv')
 COMPREHENSIVE_TRANS = os.path.join(BASE, 'data', 'translation_comprehensive.csv')
 FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
@@ -5190,7 +5244,15 @@ def patch_part2_decimal_point_a3(rom, orig):
     middle_dot = bytes(orig[source:source + 72])
     if middle_dot[4:8] != b'\x81\x08\x00\x00' or not any(middle_dot[8:]):
         raise AssertionError('Part 2 middle-dot glyph source changed')
-    node = old_head + middle_dot[4:]
+    # The A3 cache stores two 8x8 4bpp tiles after the eight-byte header.
+    # Fullwidth digits beside this mark use palette index 10 for their body.
+    # A Galmuri-sized 2x2 period belongs on the digit baseline (rows 12-13).
+    glyph = bytearray(64)
+    for y in (12, 13):
+        for x in (3, 4):
+            i = y * 4 + x // 2
+            glyph[i] |= 10 << (4 * (x % 2))
+    node = old_head + middle_dot[4:8] + glyph
     rom[node_addr:node_addr + 72] = node
     rom[bucket:bucket + 4] = node_ptr
     WRITE_LOG.append([node_addr, 72, 72, node.hex(), None, '．', None,
@@ -5204,8 +5266,13 @@ def patch_part2_decimal_point_a3(rom, orig):
 
 
 def verify_part2_decimal_point_a3(rom, orig):
+    glyph = bytearray(64)
+    for y in (12, 13):
+        for x in (3, 4):
+            glyph[y * 4 + x // 2] |= 10 << (4 * (x % 2))
     expected_node = (bytes(orig[PART2_A3_DECIMAL_BUCKET:PART2_A3_DECIMAL_BUCKET + 4])
-                     + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 72]))
+                     + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 8])
+                     + glyph)
     expected_head = (0x08000000 + PART2_A3_DECIMAL_NODE).to_bytes(4, 'little')
     if (bytes(rom[0x52F960:0x52F964]) != bytes(orig[0x52F960:0x52F964])
             or bytes(rom[PART2_A3_DECIMAL_NODE:PART2_A3_DECIMAL_NODE + 72]) != expected_node
@@ -12100,7 +12167,7 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'f7aac0707866d7fca8d7ddb002ddaa03029ae3e51afa8919c42add294b319732':
+        if hashlib.sha256(stream.read()).hexdigest() != 'e8fa553bd8bf434c76948a4cf3753b2577099a6db4e264fc15db4f5ce36278f5':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
@@ -12145,7 +12212,9 @@ def load_bteam_round2_residuals():
             raise AssertionError(f'B-team active residual metadata incomplete: {key}')
         if row['active_text']:
             active = bytes.fromhex(row['active_payload_hex'])
-            if (decode_enc(active, codes) != row['active_text']
+            display_active = (decode_enc(active.replace(b'\x72', b'\x81\x40'), codes)
+                              if address == 0xA2BC3C else decode_enc(active, codes))
+            if (display_active != row['active_text']
                     or not any('가' <= ch <= '힣' for ch in row['active_text'])):
                 raise AssertionError(f'B-team active residual payload invalid: {key}')
         if row['active_follow_hex']:
@@ -12404,6 +12473,9 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
         b = payload[i]
         if payload[i:i + 3] == b'\x72\x0a\x09':
             i += 3
+            continue
+        if address == 0xA2AA08 and i == 22 and b == 0x72:
+            i += 1  # verified CO-panel row break replacing its third space
             continue
         if b == 0 and not any(payload[i:]):
             break  # terminal NUL padding only
@@ -23516,6 +23588,123 @@ def main():
                 WRITE_LOG.append([_follow_pos, len(_follow_bytes), len(_follow_bytes),
                                   _follow_bytes.hex(), None, '늘린다。', None,
                                   'bteam-round2-relocated-follow'])
+    # The native Part 2 CO panel has thirteen visible cells per row.  Replace
+    # one authored fullwidth space with a row control in each overflowing
+    # relocated span; the saved byte becomes ordinary non-drawing padding.
+    _co_panel_breaks = {
+        0xA2AA08: ('보병　계열의　이동력이　１　늘고、', 3),
+    }
+    _co_panel_seen = set()
+    for _message in _rp_manifest:
+        if _message.get('status') != 'relocated':
+            continue
+        _target = int(_message['new_addr'], 16)
+        for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
+            _address = int(_key, 16)
+            if _address not in _co_panel_breaks:
+                continue
+            _text, _space_number = _co_panel_breaks[_address]
+            _pos = _target + _off
+            _before = bytes(rom[_pos:_pos + _span_len])
+            _encoded = bytes(encode_text(_text, syl_to_code, unmapped, _address))
+            if _address in _co_panel_seen or _before.rstrip(b' ') != _encoded:
+                raise AssertionError(f'Part 2 CO panel source changed: 0x{_address:08X}')
+            _space = -1
+            for _ in range(_space_number):
+                _space = _encoded.find(b'\x81\x40', _space + 1)
+                if _space < 0:
+                    raise AssertionError(f'Part 2 CO panel break missing: 0x{_address:08X}')
+            _reflowed = _encoded[:_space] + b'\x72' + _encoded[_space + 2:]
+            _payload = _reflowed + b' ' * (_span_len - len(_reflowed))
+            rom[_pos:_pos + _span_len] = _payload
+            if _address == 0xA2AA08:
+                # The original break follows a comma; its replacement is
+                # non-drawing padding.  Keep the next source row at +35.
+                if rom[_pos + _span_len] != 0x72:
+                    raise AssertionError('protected CO panel separator changed')
+                rom[_pos + _span_len] = 0x20
+                _message['line_spans'][_key][1] = len(_reflowed)
+                WRITE_LOG.append([_pos + _span_len, 1, 1, '20', None,
+                                  '', None, 'part2-co-panel-old-break-padding'])
+            WRITE_LOG.append([_pos, _span_len, _span_len, _payload.hex(), None,
+                              _text, None, 'part2-co-panel-row-break'])
+            _co_panel_seen.add(_address)
+    if _co_panel_seen != _co_panel_breaks.keys():
+        raise AssertionError('Part 2 CO panel break target missing')
+    # These five pages already use all six visible rows.  Reflow the complete
+    # page so an extra control cannot push the last line below the panel.
+    _co_panel_pages = {
+        0xA573BC: (
+            ['덜렁대는　성격　같지만、', '위기때　믿음직하다', '사격의　천재。',
+             '호이프와　사실　좋은　콤비。', '고양이　좋아', '쥐　싫어'],
+            ['덜렁대는　성격　같지만、', '위기때　믿음직하다', '사격의　천재。',
+             '호이프와　사실', '좋은　콤비。', '고양이　좋아　쥐　싫어']),
+        0xA57500: (
+            ['옐로코멧의　국왕。', '상당한　실력자이지만、',
+             '아스카에게　약한　면도・・・', '아스카　좋아', '컴퓨터　싫어'],
+            ['옐로코멧의　국왕。', '상당한　실력자이지만、',
+             '아스카에게　약한', '면도・・・', '아스카　좋아', '컴퓨터　싫어']),
+        0xA577B0: (
+            ['공중　유닛의　운용이', '실력이　좋아서、　다른　사령관',
+             '연료　소모　적고', '공격／방어력도　높다。',
+             '단　해상　유닛의', '공격은　약함。'],
+            ['공중　유닛의', '운용이　실력이　좋아서、',
+             '다른　사령관　연료　소모', '적고　공격／방어력도',
+             '높다。　단　해상　유닛의', '공격은　약함。']),
+        0xA57A14: (
+            ['블랙홀군의　총수', '모든　것은　수수께끼', '워즈　월드란',
+             '다른　세계에서　온　침략자。', '침략　폭발　좋아', '싫어함　평화'],
+            ['블랙홀군의　총수', '모든　것은　수수께끼', '워즈　월드란　다른',
+             '세계에서　온　침략자。', '침략　폭발　좋아', '싫어함　평화']),
+        0xA5852C: (
+            ['전투헬기　공격력　상승', '게다가、　아군　도시　위에、',
+             '체력　９　바주카병', '강하시킨다。', '이　바주카병은',
+             '강하　후　바로　행동　가능'],
+            ['전투헬기　공격력　상승', '게다가、　아군',
+             '도시　위에、　체력　９', '바주카병　강하시킨다。',
+             '이　바주카병은', '강하　후　바로　행동　가능']),
+    }
+    _co_panel_pages_seen = set()
+    for _message in _rp_manifest:
+        _target = int(_message.get('new_addr') or '0', 16)
+        if _target not in _co_panel_pages or _message.get('status') != 'relocated':
+            continue
+        _source_rows, _display_rows = _co_panel_pages[_target]
+        _source_keys = list(_message['line_spans'])
+        _spans = list(_message['line_spans'].values())
+        if len(_spans) != len(_source_rows) or len(_display_rows) != 6:
+            raise AssertionError(f'Part 2 CO panel layout changed: 0x{_target:08X}')
+        for (_off, _length), _text in zip(_spans, _source_rows):
+            _source = bytes(encode_text(_text, syl_to_code, unmapped))
+            if bytes(rom[_target + _off:_target + _off + _length]).rstrip(b' ') != _source:
+                raise AssertionError(f'Part 2 CO panel source changed: 0x{_target:08X}')
+        if ''.join(_source_rows).replace('　', '') != ''.join(_display_rows).replace('　', ''):
+            raise AssertionError(f'Part 2 CO panel wording changed: 0x{_target:08X}')
+        _old = bytes(rom[_target:_target + int(_message['new_len'])])
+        _end = _old.find(b'\x00')
+        _layout = b'\x72'.join(bytes(encode_text(_text, syl_to_code, unmapped))
+                               for _text in _display_rows)
+        if _end < 0 or len(_layout) > _end:
+            raise AssertionError(f'Part 2 CO panel relocation overflow: 0x{_target:08X}')
+        _payload = _layout + b' ' * (_end - len(_layout)) + _old[_end:]
+        rom[_target:_target + len(_old)] = _payload
+        _display_spans, _source_fragments = co_reflow_source_spans(
+            _source_rows, _display_rows, syl_to_code, unmapped)
+        _message['display_line_spans'] = _display_spans
+        _message['source_line_fragments'] = dict(zip(_source_keys, _source_fragments))
+        _message['line_spans'] = {key: parts[0] for key, parts in
+                                  _message['source_line_fragments'].items()}
+        _all_spans = _display_spans + [span for parts in _source_fragments for span in parts]
+        validate_co_reflow_spans(_payload, _all_spans)
+        for _row, (_off, _length) in zip(_display_rows, _display_spans):
+            if bytes(rom[_target + _off:_target + _off + _length]) != bytes(
+                    encode_text(_row, syl_to_code, unmapped)):
+                raise AssertionError(f'CO display span decode mismatch: 0x{_target:08X}')
+        WRITE_LOG.append([_target, len(_old), len(_old), _payload.hex(), None,
+                          'Part 2 CO panel layout', None, 'part2-co-panel-page-reflow'])
+        _co_panel_pages_seen.add(_target)
+    if _co_panel_pages_seen != _co_panel_pages.keys():
+        raise AssertionError('Part 2 CO panel page target missing')
     with open(os.path.join(BASE, 'temp', 'repoint_manifest.json'), 'w', encoding='utf-8') as _stream:
         json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
     for _address in sorted(set(BTEAM_SEAM_RESIDUAL_TEXT) - BTEAM_ROUND2_RESTORE):
@@ -23687,6 +23876,14 @@ def main():
     verify_part2_decimal_point_a3(rom, orig)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
+    from qa_part2_co_panel_width import census as _co_panel_census, LIMIT as _co_panel_limit
+    _co_rows = _co_panel_census(rom)
+    _co_counts = collections.Counter((row['co'], row['page']) for row in _co_rows)
+    _co_overflow = [row for row in _co_rows if row['cells'] > _co_panel_limit]
+    _co_clipped = [(key, count) for key, count in _co_counts.items() if count > 6]
+    if _co_overflow or _co_clipped:
+        raise AssertionError(f'Part 2 CO panel exceeds bounds: {_co_overflow[:3]}, {_co_clipped[:3]}')
+    st['part2_co_panel_rows'] = len(_co_rows)
     stable_build_inputs(build_inputs_before, snapshot_inputs())
     if evidence_sha(build_source) != build_source_sha:
         raise AssertionError('Source ROM changed during build; refusing output')

@@ -58,6 +58,28 @@ class ProtectedScriptAuditTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'receipt ROM/source/manifest mismatch'):
                     audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK'})
 
+    def test_semantic_audit_reconstructs_split_source_row(self):
+        with tempfile.TemporaryDirectory(dir=audit.ROOT/'temp') as directory:
+            rom_path, manifest_path, original_path, rom = self._semantic_fixture(Path(directory))
+            rom[0x86:0x88] = b'AB'
+            rom_path.write_bytes(rom)
+            manifest = json.loads(manifest_path.read_text())
+            manifest[0]['new_len'] = 10
+            manifest[0]['source_line_fragments'] = {'0x000042': [[2, 2], [6, 2]]}
+            manifest_path.write_text(json.dumps(manifest))
+            Path(str(rom_path) + '.build.json').write_text(json.dumps({
+                'rom_sha256': hashlib.sha256(rom).hexdigest(),
+                'source_sha256': hashlib.sha256(original_path.read_bytes()).hexdigest(),
+                'build_metadata': {'temp/repoint_manifest.json':
+                                   hashlib.sha256(manifest_path.read_bytes()).hexdigest()},
+            }))
+            with patch.object(audit, 'SEMANTIC_REGRESSION_ADDRESSES', frozenset({0x42})), \
+                 patch.object(qa_text_fit, 'load_direct_patch_texts',
+                              return_value={0x42: (0x44, 'OK', 'patch_script_row')}), \
+                 patch.object(P, 'ROM', str(original_path)):
+                report = audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK　AB'})
+                self.assertEqual(report['semantic_mismatch_count'], 0)
+
     def test_semantic_audit_rejects_missing_and_foreign_relocation_evidence(self):
         for name, options, reason in (
             ('omitted span', {'omit_span': True}, 'missing relocated line span'),

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Focused final-ROM B-team drift gate tests."""
 import json
+import struct
 import tempfile
 import unittest
 import sys
@@ -17,6 +18,10 @@ from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
                             NEW_STRICT_ADDRESSES, PINNED_CORE_DIGEST, core_digest)
 from qa_bteam_drift import round2_issue_bucket
+from qa_bteam_drift import co_breaks_as_spaces
+from build_korean_full import validate_co_reflow_spans
+from repoint_source_rows import row_bytes as source_row_bytes
+import qa_part2_co_panel_width as co_panel_width
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +31,51 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_co_source_rows_reconstruct_split_and_merged_fragments(self):
+        from qa_integrity_map import decode_enc, load_syl
+        rom_path = ROOT / 'output/game_wars_korean_candidate_20261012_b11.gba'
+        if not rom_path.is_file():
+            self.skipTest('b11 candidate ROM required')
+        rom = rom_path.read_bytes()
+        manifest = json.loads((ROOT / 'temp/repoint_manifest.json').read_text())
+        rows = {
+            '0xA2AAD3': '호이프와　사실　좋은　콤비。',  # split across two display rows
+            '0xA2AAEE': '고양이　좋아',              # merged with the next source row
+            '0xA2AAFB': '쥐　싫어',
+        }
+        for key, wanted in rows.items():
+            with self.subTest(key=key):
+                message = next(m for m in manifest if key in m.get('line_spans', {}))
+                actual = decode_enc(source_row_bytes(rom, message, key), load_syl())
+                self.assertEqual(actual, wanted)
+
+    def test_co_span_rejects_stale_row_and_split_pair(self):
+        payload = b'\x81\x40\x72\x81\x72\x00'
+        validate_co_reflow_spans(payload, [[0, 2], [3, 2]])
+        for stale in ([0, 4], [3, 1]):
+            with self.subTest(stale=stale), self.assertRaises(AssertionError):
+                validate_co_reflow_spans(payload, [stale])
+
+    def test_co_break_is_token_aware(self):
+        self.assertEqual(co_breaks_as_spaces(b'\x81\x72\x72'), b'\x81\x72\x81\x40')
+
+    def test_co_census_rejects_unknown_control_and_reports_limits(self):
+        rom = bytearray(256)
+        struct.pack_into('<H', rom, 0, 2421)
+        struct.pack_into('<I', rom, 4, 0x08000020)
+        with mock.patch.object(co_panel_width, 'CO_COUNT', 1), \
+                mock.patch.object(co_panel_width, 'PAGES', 1), \
+                mock.patch.object(co_panel_width, 'CO_TABLE', 0), \
+                mock.patch.object(co_panel_width, 'MESSAGE_TABLE', -9680):
+            rom[32:34] = b'\x71\x00'
+            with self.assertRaisesRegex(ValueError, 'unsupported control'):
+                co_panel_width.census(rom)
+            rom[32:61] = b'\x81\x40' * 14 + b'\x00'
+            self.assertGreater(co_panel_width.census(rom)[0]['cells'], co_panel_width.LIMIT)
+            rom[32:46] = b'\x72' * 6 + b'\x81\x40\x00' + b'\x00' * 5
+            rows = co_panel_width.census(rom)
+            self.assertEqual(len(rows), 7)
+
     def test_authorized_reflow_requires_bounded_adjacent_spans_and_native_newline(self):
         rom = bytearray(b'\x00' * 64)
         rom[20:29] = b'ABC\x72\x0a\x09DEF'

@@ -8,6 +8,7 @@ active text bytes.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import sys
 from collections import Counter
@@ -31,7 +32,7 @@ A3_DECIMAL_NODE = 0xFD0000
 A3_MIDDLE_DOT_NODE = 0x808188
 DECIMAL_SOURCE_MESSAGE = 0xA2BC3C
 DECIMAL_RELOCATED_MESSAGE = 0xA5823C
-DECIMAL_GLYPH_ADDRESS = 0xA58250
+DECIMAL_GLYPH_ADDRESS = 0xA5824F
 VISIBLE_PUNCT_CODES = {
     0x8141: "、",
     0x8142: "。",
@@ -195,7 +196,11 @@ def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
                     "matches_original": [], "visible": False, "restored": False}
         tiles = [rom[node + 8:node + 40], rom[node + 40:node + 72]]
         nonzero = [sum(bool(b) for b in tile) for tile in tiles]
-        expected = original[A3_MIDDLE_DOT_NODE + 4:A3_MIDDLE_DOT_NODE + 72]
+        glyph = bytearray(64)
+        for y in (12, 13):
+            for x in (3, 4):
+                glyph[y * 4 + x // 2] |= 10 << (4 * (x % 2))
+        expected = original[A3_MIDDLE_DOT_NODE + 4:A3_MIDDLE_DOT_NODE + 8] + glyph
         restored = (node == A3_DECIMAL_NODE
                     and rom[node + 4:node + 72] == expected
                     and rom[node:node + 4] == original[bucket:bucket + 4])
@@ -251,6 +256,12 @@ def issue_record(
 
 
 def main() -> int:
+    global ROM, REPORT
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--rom', type=Path, default=ROM)
+    parser.add_argument('--report', type=Path, default=REPORT)
+    args = parser.parse_args()
+    ROM, REPORT = args.rom.resolve(), args.report.resolve()
     issues: list[dict[str, Any]] = []
     totals: Counter[str] = Counter()
 

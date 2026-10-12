@@ -29,8 +29,24 @@ from pathlib import Path
 
 from qa_integrity_map import decode_enc, fill_pattern, load_syl
 from dialogue_regions import is_part1_dialog_address, is_part2_story_address
+from repoint_source_rows import fragments as source_fragments, row_bytes as source_row_bytes
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def co_breaks_as_spaces(payload):
+    """Replace CO row controls without touching SJIS trail bytes."""
+    result = bytearray()
+    pos = 0
+    while pos < len(payload):
+        lead = payload[pos]
+        if (0x81 <= lead <= 0x9F or 0xE0 <= lead <= 0xFC) and pos + 1 < len(payload):
+            result.extend(payload[pos:pos + 2])
+            pos += 2
+        else:
+            result.extend(b'\x81\x40' if lead == 0x72 else bytes((lead,)))
+            pos += 1
+    return bytes(result)
 OVERRIDES = os.path.join(BASE, 'data', 'dialogue_overrides.json')
 BASELINE = os.path.join(BASE, 'data', 'bteam_baseline.json')
 
@@ -72,8 +88,8 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'f7aac0707866d7fca8d7ddb002ddaa03029ae3e51afa8919c42add294b319732'
-ROUND2_ACTIVE_PINS_DIGEST = 'e702c6c8e0b7fdeee466401555352ddd74d8fbaa3e5b39c18bf4555739bf0a25'
+ROUND2_RESIDUAL_DIGEST = 'e8fa553bd8bf434c76948a4cf3753b2577099a6db4e264fc15db4f5ce36278f5'
+ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -467,7 +483,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                     raise ValueError(f'{key}: overlay changed protected relocated message or pointer')
             bad_sites = [site for site in sites if int.from_bytes(
                 rom[int(site, 16):int(site, 16) + 4], 'little') != 0x08000000 + target]
-            span = m.get('line_spans', {}).get(f'0x{addr:06X}')
+            span = source_fragments(m, f'0x{addr:06X}')
             payload = None
             if bad_sites:
                 actual = '<bad repoint pointer at ' + ', '.join(bad_sites) + '>'
@@ -476,16 +492,17 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                 actual = '<protected row missing from relocated line spans>'
                 cause = 'repoint line mapping missing'
             else:
-                off, length = span
-                if off < 0 or length <= 0 or off + length > int(m['new_len']):
-                    actual = '<invalid relocated line span>'
-                    cause = 'repoint line mapping invalid'
-                else:
-                    payload = rom[target + off:target + off + length]
-                    objective_start = target + off
-                    # A wrapped row may contain this verified internal control.
-                    actual = decode(payload.replace(b'\x72\x0a\x09', b'\x81\x40'), addr).rstrip(' \u3000')
-                    cause = 'relocated row differs from protected baseline'
+                off, _length = span[0]
+                payload = source_row_bytes(rom, m, f'0x{addr:06X}')
+                objective_start = target + off
+                # A wrapped row may contain this verified internal control.
+                display_payload = payload.replace(b'\x72\x0a\x09', b'\x81\x40')
+                if addr in (0xA2AA08, 0xA2BC3C):
+                    # This protected CO sentence uses a native row break
+                    # in place of its authored fullwidth space.
+                    display_payload = co_breaks_as_spaces(display_payload)
+                actual = decode(display_payload, addr).rstrip(' \u3000')
+                cause = 'relocated row differs from protected baseline'
             wanted = display_equivalent(baseline, addr)
             matched = wanted == display_equivalent(actual, addr, actual=True)
             if addr == 0xDCFA8E and m['msg'] == '0xDCFA8C' and payload is not None:
@@ -520,7 +537,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                     for _next_key, (next_off, next_len) in ordered[idx + 1:idx + 3]:
                         if next_len <= 0 or next_off != prior_end:
                             break
-                        parts.append(decode(rom[target + next_off:target + next_off + next_len], addr))
+                        parts.append(decode(source_row_bytes(rom, m, _next_key), addr))
                         prior_end = next_off + next_len
                         if wanted in (display_equivalent(''.join(parts), addr, actual=True),
                                       display_equivalent('　'.join(parts), addr, actual=True)):

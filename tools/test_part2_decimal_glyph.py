@@ -26,6 +26,11 @@ class DecimalGlyphTest(unittest.TestCase):
         self.assertEqual(state['slots'], [0xFD0008, 0xFD0028])
         self.assertTrue(state['visible'])
         self.assertTrue(state['restored'])
+        glyph = rom[0xFD0008:0xFD0048]
+        pixels = {(x, y): (glyph[y * 4 + x // 2] >> (4 * (x % 2))) & 15
+                  for y in range(16) for x in range(8)}
+        self.assertEqual({point: ink for point, ink in pixels.items() if ink},
+                         {(x, y): 10 for y in (12, 13) for x in (3, 4)})
         verify_part2_decimal_point_a3(rom, original)
         rom[0xFD0028] ^= 1
         self.assertFalse(glyph_state(rom, original, 0x8144)['restored'])

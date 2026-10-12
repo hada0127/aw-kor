@@ -22,6 +22,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+from repoint_source_rows import fragments as source_fragments, row_bytes as source_row_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "tools" / "build_korean_full.py"
@@ -98,17 +99,15 @@ def audit_rom_semantics(rom_path: Path, manifest_path: Path,
             live_target = int.from_bytes(rom[site:site + 4], "little") - 0x08000000
             if live_target != target:
                 raise ValueError(f"repoint manifest does not match ROM: {message['msg']} {site_hex}")
-        for key, span in message.get("line_spans", {}).items():
-            offset, size = span
-            if offset < 0 or size <= 0 or offset + size > length:
-                raise ValueError(f"invalid repoint line span: {message['msg']} {key}")
+        for key in message.get("line_spans", {}):
+            spans = source_fragments(message, key)
             addr = int(key, 16)
             if (addr in SEMANTIC_REGRESSION_ADDRESSES
                     and (not source <= addr < source + old_length or owner_of(addr) != source)):
                 raise ValueError(f"repoint source ownership mismatch: {message['msg']} {key}")
             if addr in relocated:
                 raise ValueError(f"duplicate repoint line: {key}")
-            relocated[addr] = (target + offset, size, target)
+            relocated[addr] = (message, key)
 
     codes = load_syl()
     mismatches = []
@@ -123,7 +122,9 @@ def audit_rom_semantics(rom_path: Path, manifest_path: Path,
             continue
         checked += 1
         if addr in relocated:
-            pos, size, _target = relocated[addr]
+            message, key = relocated[addr]
+            pos = int(message['new_addr'], 16) + source_fragments(message, key)[0][0]
+            payload = source_row_bytes(rom, message, key).rstrip(b" \x00")
             followed += 1
         else:
             owner = owner_of(addr)
@@ -133,9 +134,9 @@ def audit_rom_semantics(rom_path: Path, manifest_path: Path,
                 raise ValueError(f"missing relocated line span or relocation record: 0x{addr:08X}")
             pos = addr
             size = _end - addr
-        if pos < 0 or size <= 0 or pos + size > len(rom):
-            raise ValueError(f"invalid protected ROM span: 0x{addr:08X}")
-        payload = rom[pos:pos + size].rstrip(b" \x00")
+            if pos < 0 or size <= 0 or pos + size > len(rom):
+                raise ValueError(f"invalid protected ROM span: 0x{addr:08X}")
+            payload = rom[pos:pos + size].rstrip(b" \x00")
         actual = decode_enc(payload.replace(b"\x72\x0a\x09", b"\x81\x40"), codes).rstrip(" \u3000")
         wanted = display_equivalent(protected[addr], addr).rstrip(" \u3000")
         if actual != wanted:
