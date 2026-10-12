@@ -80,6 +80,32 @@ def text_segment_cells(payload):
     return width
 
 
+def assert_part1_portrait_page_rows(message, payload):
+    """The D8-DD Part 1 portrait consumer has two physical rows per page.
+
+    DE/DF script and help consumers have different layouts; their native
+    multi-row pages must not be judged against the portrait window.
+    """
+    if not 0xD80000 <= message < 0xDE0000:
+        return
+    page = 0
+    rows = 1
+    has_text = False
+    for off, size in _tokens(payload):
+        if size == 2:
+            has_text = True
+        elif payload[off] == 0x72 and payload[off:off + 3] == b'\x72\x0a\x09':
+            rows += 1
+        elif payload[off] == 0x6B:
+            if has_text and rows > 2:
+                raise AssertionError(f'Part 1 portrait page exceeds 2 rows: 0x{message:06X} page {page} rows {rows}')
+            page += 1
+            rows = 1
+            has_text = False
+    if has_text and rows > 2:
+        raise AssertionError(f'Part 1 portrait page exceeds 2 rows: 0x{message:06X} page {page} rows {rows}')
+
+
 def normalize_text_segment(payload, part1, address=None):
     """Normalize a proven text span; callers must never pass control gaps."""
     _conv = bytearray(); _i = 0
@@ -569,7 +595,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      extra_messages=None, skip_messages=None, min_level=6, max_cells=50,
                      max_cells_for_address=None,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
-                     original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None):
+                     original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None,
+                     page_reflows=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -581,6 +608,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
       ≥1개일 때만 재배치한다. 포인터는 ROM 내 정확히 1개(테이블)일 때만.
     """
     line_layouts = line_layouts or {}
+    page_reflows = page_reflows or {}
     stats = collections.Counter()
     manifest = []
     free = free_start
@@ -868,6 +896,22 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             continue
         gap = bytes(rom[cur:me])
         pieces.append(['gap', gap, bytes(orig[cur:me])])
+        if msg in page_reflows:
+            first_addr, second_addr, first_row, second_row = page_reflows[msg]
+            first = next((i for i, p in enumerate(pieces)
+                          if p[0] == 'text' and p[3] == first_addr), None)
+            if (first is None or first + 2 >= len(pieces)
+                    or pieces[first + 1][0] != 'gap'
+                    or pieces[first + 1][1] != b'\x72\x0a\x09'
+                    or pieces[first + 2][0] != 'text'
+                    or pieces[first + 2][3] != second_addr):
+                raise AssertionError(f'Part 1 page reflow source layout changed: 0x{msg:06X}')
+            old_first = pieces[first][1].replace(b'\x72\x0a\x09', b'\x81\x40').rstrip(b'\x20')
+            old_second = pieces[first + 2][1].rstrip(b'\x20')
+            if (old_first + b'\x81\x40' + old_second != first_row + b'\x81\x40' + second_row
+                    or any(text_segment_cells(row) > 44 for row in (first_row, second_row))):
+                raise AssertionError(f'Part 1 page reflow changes text or exceeds row width: 0x{msg:06X}')
+            pieces[first][1], pieces[first + 2][1] = first_row, second_row
         seams_fixed = 0
         if seam_codes is not None and is_part2_story_address(msg):
             seams_fixed, _seam_records = apply_seam_spaces(
@@ -886,6 +930,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             stats['skip_control_changed'] = stats.get('skip_control_changed', 0) + 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_control_changed'})
             continue
+        assert_part1_portrait_page_rows(msg, new_msg)
 
         # ★stray-code 안전게이트(2026-06-25): new_msg의 **모든 2바이트 코드가 렌더 가능**(예약 한글 / 한자테이블 /
         # 전각공백 0x8140 / 전각 기호·영숫자 0x81-0x82)한지 전수 검증. 다른 writer의 slot 경계가 코드를 분할해

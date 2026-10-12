@@ -11,6 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             display_equivalent, round2_width_equivalent,
                             classify_round2_issues,
+                            authorized_dcf_a8c_reflow,
                             reviewed_seam_variants,
                             matches_alignment_composite, matches_reviewed_bteam_spacing,
                             DEFERRED_ADDRESSES, COMPACT_GLYPH_ADDRESSES,
@@ -25,6 +26,31 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_authorized_reflow_requires_bounded_adjacent_spans_and_native_newline(self):
+        rom = bytearray(b'\x00' * 64)
+        rom[20:29] = b'ABC\x72\x0a\x09DEF'
+        message = {'msg': '0xDCFA8C', 'new_addr': '0x14', 'new_len': 9,
+                   'line_spans': {'0xDCFA8E': [0, 3], '0xDCFABB': [6, 3]}}
+        self.assertTrue(authorized_dcf_a8c_reflow(rom, message))
+        for first, continuation, length in (
+                ([1, 3], [6, 3], 9),    # displaced first row
+                ([0, 3], [7, 2], 9),    # displaced continuation
+                ([0, 3], [6, 4], 9),    # continuation exceeds new_len
+                ([0, 3], [6, 3], 8),    # continuation exceeds shortened message
+                ([-1, 4], [6, 3], 9),   # first row starts outside message
+                ([0, 3], [6, 3], 50)): # message exceeds ROM
+            with self.subTest(first=first, continuation=continuation, length=length):
+                changed = json.loads(json.dumps(message))
+                changed['line_spans']['0xDCFA8E'] = first
+                changed['line_spans']['0xDCFABB'] = continuation
+                changed['new_len'] = length
+                self.assertFalse(authorized_dcf_a8c_reflow(rom, changed))
+        for control in (b'\x72\x0a\x00', b'\x72\x09\x09', b'\x00\x0a\x09'):
+            with self.subTest(control=control):
+                changed = bytearray(rom)
+                changed[23:26] = control
+                self.assertFalse(authorized_dcf_a8c_reflow(changed, message))
+
     def test_m29_title_approved_exception_is_exact(self):
         from qa_bteam_drift import APPROVED_EXCEPTIONS, exception_errors
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())

@@ -23290,6 +23290,13 @@ def main():
             _explicit_line_layouts[0xDCFA8E] = tuple(
                 encode_full_fidelity(part, syl_to_code, unmapped, 0xDCFA8E)
                 for part in _bteam_parts)
+            # The message already has a native newline after 0xDCFA8E. Reflow
+            # across that boundary so its first page stays in the two-row box.
+            _dcfa8c_reflow = (
+                0xDCFA8E, 0xDCFABB,
+                encode_full_fidelity('이 싸움의 뒤에 있는 자가　얼마나', syl_to_code, unmapped, 0xDCFA8E),
+                encode_full_fidelity('강적일지도　모르는 거라고！', syl_to_code, unmapped, 0xDCFABB),
+            )
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
@@ -23300,6 +23307,7 @@ def main():
                                | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES | {0xB8319C}),
                 min_level=1, max_cells=50,
                 max_cells_for_address=lambda a: 44 if a in BTEAM_RESTORE_BASELINE_ROWS else 50,
+                page_reflows={0xDCFA8C: _dcfa8c_reflow},
                 valid_codes=frozenset(_rp_valid),
                 seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)

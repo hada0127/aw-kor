@@ -350,6 +350,26 @@ def check(base: dict, overrides: dict, pinned: str = None) -> dict:
     return {'drift': drift, 'missing': missing, 'errors': errors}
 
 
+def authorized_dcf_a8c_reflow(rom: bytes, message: dict) -> bool:
+    """Require the two protected rows to be adjacent across the native newline."""
+    if message.get('msg') != '0xDCFA8C':
+        return False
+    spans = message.get('line_spans', {})
+    first = spans.get('0xDCFA8E')
+    following = spans.get('0xDCFABB')
+    if not first or not following:
+        return False
+    first_off, first_len = first
+    next_off, next_len = following
+    target, new_len = int(message['new_addr'], 16), int(message['new_len'])
+    if (target < 0 or new_len <= 0 or target + new_len > len(rom)
+            or first_off < 0 or first_len <= 0 or first_off + first_len > new_len
+            or next_off < 0 or next_len <= 0 or next_off + next_len > new_len
+            or next_off != first_off + first_len + 3):
+        return False
+    return rom[target + first_off + first_len:target + next_off] == b'\x72\x0a\x09'
+
+
 def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pinned: str = None) -> dict:
     """New baseline from current overrides. Refuses to widen beyond the exceptions."""
     new = dict(base)
@@ -428,6 +448,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     for key, baseline in base['overrides'].items():
         addr = int(key, 16)
         objective_start = None
+        invalid_reflow = False
         i = bisect.bisect_right(starts, addr) - 1
         relocation = relocated[i] if i >= 0 and addr < relocated[i][1] else None
         # Exact writer wins over an earlier padded slot that happens to cover it.
@@ -467,6 +488,19 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                     cause = 'relocated row differs from protected baseline'
             wanted = display_equivalent(baseline, addr)
             matched = wanted == display_equivalent(actual, addr, actual=True)
+            if addr == 0xDCFA8E and m['msg'] == '0xDCFA8C' and payload is not None:
+                if authorized_dcf_a8c_reflow(rom, m):
+                    next_off, next_len = m['line_spans']['0xDCFABB']
+                    first_text = decode(payload, addr).rstrip(' \u3000')
+                    second_text = decode(rom[target + next_off:target + next_off + next_len], addr).rstrip(' \u3000')
+                    matched = (first_text == '이\u3000싸움의\u3000뒤에\u3000있는\u3000자가\u3000얼마나'
+                               and second_text == '강적일지도\u3000모르는\u3000거라고！'
+                               and wanted == display_equivalent('이 싸움의 뒤에 있는 자가　얼마나 강적일지도', addr))
+                else:
+                    matched = False
+                    invalid_reflow = True
+                    cause = 'repoint line mapping invalid'
+                    payload = None
             if not matched and payload is not None and is_part2_story_address(addr):
                 message = int(m['msg'], 16)
                 matched = display_equivalent(actual, addr, actual=True) in reviewed_seam_variants(wanted, message, seams)
@@ -543,6 +577,8 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             matched = round2_objective_equivalent(rom, baseline, actual, addr, objective_start)
         if addr in DEFERRED_ADDRESSES:
             matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
+        if invalid_reflow:
+            matched = False
         if not matched:
             issues.append({'address': key, 'baseline': baseline, 'rom_text': actual,
                            'cause': cause,
@@ -615,11 +651,19 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
         if addr == 0xDCFA8E and message and not pinned_message:
             # This formerly deferred row is now wrapped and fully restored in
             # its live message. The source-slot residual remains byte-pinned.
+            if not authorized_dcf_a8c_reflow(rom, message):
+                raise ValueError(f'{key}: restored relocated reflow layout changed')
             pos, size = spans[addr]
-            actual = decode_enc(rom[pos:pos + size].replace(b'\x72\x0a\x09', b'\x81\x40'), load_syl())
+            actual = decode_enc(rom[pos:pos + size], load_syl()).rstrip(' \u3000')
+            next_off, next_len = message['line_spans']['0xDCFABB']
+            next_actual = decode_enc(rom[int(message['new_addr'], 16) + next_off:
+                                         int(message['new_addr'], 16) + next_off + next_len], load_syl()).rstrip(' \u3000')
             target = int(message['new_addr'], 16)
             sites = message.get('ptr_sites') or []
-            if (actual != display_equivalent(row['expected_baseline'], addr)
+            if (actual != '이\u3000싸움의\u3000뒤에\u3000있는\u3000자가\u3000얼마나'
+                    or next_actual != '강적일지도\u3000모르는\u3000거라고！'
+                    or display_equivalent(row['expected_baseline'], addr) !=
+                    display_equivalent('이 싸움의 뒤에 있는 자가　얼마나 강적일지도', addr)
                     or addr in {int(issue['address'], 16) for issue in issues}
                     or not sites or any(int.from_bytes(rom[int(site, 16):int(site, 16) + 4],
                                                       'little') != 0x08000000 + target for site in sites)):
