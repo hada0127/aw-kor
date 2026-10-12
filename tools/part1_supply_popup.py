@@ -19,7 +19,7 @@ Part 2's sheet 0x4704D4 (pointer 0x327A50) and five pointerless archive copies
 
 Korean terms: 보급 = existing command/menu term (translation_for_import
 0x008052A8 / 0x00805394), 조우 = existing dialogue term for ソウグウ
-(0x00A0EEA7, 0x00D9E0E1, ...).  Glyphs: Galmuri7, black ink (5) with a
+(0x00A0EEA7, 0x00D9E0E1, ...).  Glyphs: native Galmuri7 in seven ink rows, black ink (5) with a
 gray (3) drop shadow on the native white (1) interior, like the first fix.
 Patched live pixels remain unverified on screen.
 """
@@ -77,15 +77,15 @@ def _font():
 
 
 def _ink(text):
-    """Top-aligned Galmuri7 ink pixels, 1px gap between glyphs."""
+    """Native Galmuri7, without anisotropic bitmap resampling."""
     font = _font()
     ink, cursor = set(), 0
     for char in text:
-        grid, width, height, xoffset, _ = glyph_grid(font[ord(char)])
+        grid, width, height, xoffset, yoffset = glyph_grid(font[ord(char)])
+        top = 7 - height - yoffset
         for y in range(height):
             for x in range(width):
-                if grid[y][x]:
-                    ink.add((cursor + x + xoffset, y))
+                if grid[y][x]: ink.add((cursor+x+xoffset,top+y))
         cursor += width + 1
     return ink, cursor - 1
 

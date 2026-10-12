@@ -123,13 +123,12 @@ def decode_cell(raw, index):
 
 def _glyph(ch, font):
     from PIL import Image, ImageDraw, ImageFilter
-    box = font.getbbox(ch)
-    fill = Image.new('L', (box[2] - box[0], box[3] - box[1]))
-    ImageDraw.Draw(fill).text((-box[0], -box[1]), ch, font=font, fill=255)
-    fill = fill.resize((16, 24), Image.Resampling.LANCZOS)
+    from hangul_pixel_fit import glyph, verify_glyph
+    fill = glyph(ch, 16, 24)  # uniform scale; unused allocation stays transparent
+    if verify_glyph(ch, fill)['failures']:
+        raise AssertionError(f'Part 2 power title gap closed: {ch}')
     mask = Image.new('L', (32, 32))
     mask.paste(fill, (8, 4))
-    mask = mask.point(lambda value: 255 if value >= 112 else 0)
     border = mask.filter(ImageFilter.MaxFilter(3))
     pixels = [[1 if mask.getpixel((x, y)) else 14 if border.getpixel((x, y)) else 0
                for x in range(32)] for y in range(32)]

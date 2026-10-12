@@ -205,9 +205,9 @@ def okdandan_ink(text, box, max_size, min_size=6, threshold=128, align='center',
     sizes = [size] if size else range(max_size, min_size - 1, -1)
     for current in sizes:
         font = ImageFont.truetype(okdandan_path(), current)
-        canvas = Image.new('L', (int(font.getlength(text)) + 4 * current, 4 * current), 0)
-        ImageDraw.Draw(canvas).text((current, current), text, font=font, fill=255)
-        hard = canvas.point(lambda v: 255 if v >= threshold else 0)
+        from hangul_pixel_fit import native_mask
+        canvas_size = (int(font.getlength(text)) + len(text) + 4 * current, 4 * current)
+        hard, _ = native_mask(text, font, canvas_size, (current, current), spacing=0)
         ink_box = hard.getbbox()
         if ink_box is None:
             raise AssertionError(f'OkDanDan has no ink for {text!r}')
@@ -327,6 +327,47 @@ def _check_candidate_capture(proof, candidate):
     """Bind a fresh OBJ frame to the captured ROM and its endpoint ledger."""
     import json
     from PIL import Image
+
+    if 'capture_archive' in proof:
+        # Durable, losslessly archived capture records retain the original
+        # ledger/checkpoint hash chain without depending on disposable runs.
+        import base64
+        import zlib
+        archive = proof['capture_archive']
+        records = {}
+        for name in ('baseline', 'checkpoint', 'ledger', 'actions'):
+            raw = zlib.decompress(base64.b64decode(archive[name], validate=True))
+            if hashlib.sha256(raw).hexdigest() != archive[name + '_sha256']:
+                raise AssertionError('archived screen proof receipt changed')
+            records[name] = raw
+        if (archive['baseline_sha256'] != proof['capture_baseline_sha256'] or
+                archive['checkpoint_sha256'] != proof['capture_checkpoint_sha256']):
+            raise AssertionError('archived screen proof capture receipt changed')
+        baseline = json.loads(records['baseline'])
+        state = json.loads(records['checkpoint'])
+        if (baseline['rom_sha256'] != candidate or state['rom_sha256'] != candidate or
+                state['baseline_sha256'] != proof['capture_baseline_sha256'] or
+                state['core_frame'] <= 0):
+            raise AssertionError('archived screen proof capture ROM differs')
+        frame = ROOT / proof['frame']
+        if hashlib.sha256(frame.read_bytes()).hexdigest() != proof['frame_sha256']:
+            raise AssertionError('archived screen proof frame changed')
+        ledger = records['ledger']
+        if (len(ledger) != state['ledger_bytes'] or
+                hashlib.sha256(ledger).hexdigest() != state['ledger_sha256']):
+            raise AssertionError('archived screen proof capture ledger changed')
+        endpoint = json.loads(ledger.splitlines()[-1])
+        with Image.open(frame) as image:
+            rgb_sha = hashlib.sha256(image.convert('RGB').tobytes()).hexdigest()
+        if endpoint['core_frame'] != state['core_frame'] or endpoint['rgb_sha256'] != rgb_sha:
+            raise AssertionError('archived screen proof frame is not capture endpoint')
+        actions = [json.loads(line) for line in records['actions'].splitlines()]
+        if not any(row.get('status') == 'captured' and
+                   Path(row['png']).name == proof['capture_frame'] and
+                   Path(row['checkpoint']).name == proof['capture_checkpoint'] and
+                   row['end_core_frame'] == state['core_frame'] for row in actions):
+            raise AssertionError('archived screen proof frame is absent from capture actions')
+        return
 
     run = ROOT / proof['capture_run']
     frame = run / proof['capture_frame']

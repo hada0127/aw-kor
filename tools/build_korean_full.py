@@ -5889,7 +5889,9 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
-        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=unit_font))
+        # Four-character names retain one clear column between 7px glyphs.
+        # Use the native 11-row condensed design, not the cramped 7-row face.
+        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=font))
 
     compact_unit_labels = [
         (0x466568, '보병'),
@@ -5914,7 +5916,7 @@ def patch_part2_battle_obj_labels(rom):
     ]
     for off, text in compact_unit_labels:
         x = max(0, (32 - len(text) * 8) // 2)
-        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=unit_font))
+        write_tiles(off, render_tiles(text, 32, x=x, y=2, shadow=None, font_obj=font))
 
     # Enemy-turn CO banner name. This is stored as raw 32x8 OBJ tiles, not as
     # SJIS text, so the protected text-table replacement does not reach it.
@@ -6269,37 +6271,38 @@ def patch_part2_mode_menu_obj_labels(rom):
 
     font_bold = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
     font_cond = os.path.join(BASE, 'reference/fonts/Galmuri11-Condensed.ttf')
-    option_font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    option_font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri9.bdf'))
 
     def text_bbox(draw, text, font, stroke=0):
         box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
         return box[2] - box[0], box[3] - box[1]
 
     def paint_text(layer, text, box, max_size, fill_idx, stroke_idx=1, aa_idx=3, stroke=1, font_path=None):
-        draw = ImageDraw.Draw(layer)
-        if font_path is None:
-            font_path = font_bold
+        # Position the ink box, not the font origin: OkDanDan has a nonzero
+        # top bearing. The old origin pushed descenders into the bottom band.
+        font_path = font_path or font_bold
         for size in range(max_size, 7, -1):
             font = ImageFont.truetype(font_path, size)
-            w, h = text_bbox(draw, text, font, stroke)
+            bbox = font.getbbox(text, stroke_width=stroke)
+            w, h = bbox[2] - bbox[0], bbox[3] - bbox[1]
             if w <= box[2] - box[0] and h <= box[3] - box[1]:
                 break
-        x = box[0] + (box[2] - box[0] - w) // 2
-        y = box[1] + (box[3] - box[1] - h) // 2 - 1
-
+        else:
+            raise aw_fonts.FontFitError(f'mode label does not fit: {text!r}')
+        x = box[0] + (box[2] - box[0] - w) // 2 - bbox[0]
+        y = box[1] + (box[3] - box[1] - h) // 2 - bbox[1]
         outline = Image.new('L', layer.size, 0)
-        od = ImageDraw.Draw(outline)
-        od.text((x, y), text, font=font, fill=255, stroke_width=stroke, stroke_fill=255)
+        ImageDraw.Draw(outline).text((x, y), text, font=font, fill=255,
+                                    stroke_width=stroke, stroke_fill=255)
         body = Image.new('L', layer.size, 0)
-        bd = ImageDraw.Draw(body)
-        bd.text((x, y), text, font=font, fill=255)
+        ImageDraw.Draw(body).text((x, y), text, font=font, fill=255)
         op, bp, lp = outline.load(), body.load(), layer.load()
         for yy in range(layer.height):
             for xx in range(layer.width):
-                if op[xx, yy] >= 96:
+                if op[xx, yy] >= 128:
                     lp[xx, yy] = stroke_idx
-                if bp[xx, yy] >= 192:
-                    lp[xx, yy] = fill_idx
+                if bp[xx, yy] >= 128:
+                    lp[xx, yy] = fill_idx(xx) if callable(fill_idx) else fill_idx
                 elif bp[xx, yy] >= 64:
                     lp[xx, yy] = aa_idx
 
@@ -6317,42 +6320,64 @@ def patch_part2_mode_menu_obj_labels(rom):
         total_w = 0
         max_h = 0
         for ch in text:
-            grid, w, h, xo, _yo = glyph_grid(option_font[ord(ch)])
-            glyphs.append((grid, w, h, xo))
+            grid, w, h, xo, yo = glyph_grid(option_font[ord(ch)])
+            glyphs.append((grid, w, h, xo, yo))
             total_w += w + spacing
-            max_h = max(max_h, h)
+            max_h = max(max_h, h + yo)
         total_w -= spacing
+        if total_w > box[2] - box[0] or max_h > box[3] - box[1]:
+            raise aw_fonts.FontFitError(f'mode option does not fit: {text!r}')
         x = box[0] + (box[2] - box[0] - total_w) // 2
         y = box[1] + (box[3] - box[1] - max_h) // 2
         px = layer.load()
-        for grid, w, h, xo in glyphs:
+        for grid, w, h, xo, yo in glyphs:
             for row in range(h):
                 for col in range(w):
                     if not grid[row][col]:
                         continue
                     dx = x + col + xo
-                    dy = y + row
+                    dy = y + max_h - h - yo + row
                     if 0 <= dx < layer.width and 0 <= dy < layer.height:
                         px[dx, dy] = fill_idx
             x += w + spacing
 
-    def make_big_logo(text):
-        layer = make_box(128, 32, border_idx=5, fill_idx=1, inset_idx=3)
-        draw = ImageDraw.Draw(layer)
-        draw.rectangle((0, 27, 127, 31), fill=5)
-        # Large mode logo: OkDanDan (2026-10-08 font rule; was Galmuri11-Bold).
-        paint_text(layer, text, (6, 3, 122, 27), 25, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=1,
-                   font_path=aw_fonts.okdandan_path())
+    def make_big_logo(text, native):
+        # Native 128x32 plate: black frame, white inset, colored lower band.
+        # Original letters have solid fill, with a light edge. Rasterize the
+        # outline font before quantization, never stretch indexed pixels.
+        layer = Image.new('L', (128, 32))
+        layer.putdata([v for row in native for v in row])
+        ImageDraw.Draw(layer).rectangle((4, 2, 123, 21), fill=1)
+        # The seven-row native caption strip cannot hold Galmuri9. Native
+        # Galmuri7 closes the ㅌ/ㄹ/ㅂ counters in these labels; use the approved
+        # blank-strip fallback instead of preserving Japanese or squashing ink.
+        ImageDraw.Draw(layer).rectangle((4, 23, 123, 29), fill=5)
+        from hangul_pixel_fit import plate_line, verify_plate_ink
+        mask, _ = plate_line(text)
+        for y in range(mask.height):
+            for x in range(mask.width):
+                if mask.getpixel((x, y)):
+                    layer.putpixel((6 + x, 2 + y), 5)
+        verify_plate_ink(layer, text)
         return layer
 
     def make_small_button(text):
         layer = make_box(48, 16, border_idx=15, fill_idx=1, inset_idx=2)
-        paint_text(layer, text, (3, 1, 45, 15), 12, fill_idx=5, stroke_idx=1, aa_idx=3, stroke=0, font_path=font_cond)
+        # Galmuri is a bitmap design: render at its native 12px grid.
+        paint_text(layer, text, (3, 1, 45, 15), 12, fill_idx=5, stroke_idx=1,
+                   aa_idx=3, stroke=0, font_path=font_cond)
         return layer
 
     def make_option(text):
-        layer = make_box(128, 16, border_idx=15, fill_idx=1, inset_idx=2)
-        paint_bdf_text(layer, text, (8, 1, 120, 15), fill_idx=4)
+        # Galmuri7 merges complex Hangul counters. Enlarge the native band by
+        # two rows on each side within the same 16px OBJ allocation: 9px ink
+        # plus one clear colored row above/below, retaining both frame colors.
+        layer = Image.new('L', (128, 16), 0)
+        draw = ImageDraw.Draw(layer)
+        draw.rectangle((0, 0, 127, 14), fill=15)
+        draw.rectangle((3, 1, 124, 13), fill=1)
+        draw.rectangle((4, 2, 123, 12), fill=5)
+        paint_bdf_text(layer, text, (4, 3, 124, 12), fill_idx=1)
         return layer
 
     def rect_tiles(layer, x, y, width, height):
@@ -6393,7 +6418,8 @@ def patch_part2_mode_menu_obj_labels(rom):
         (0x5B8850, '트라이얼', 'trial mode logo'),
         (0x5B8B20, '사운드룸', 'sound room logo'),
     ]:
-        logo = make_big_logo(text)
+        native = aw_fonts.obj_canvas(lz77_decompress(rom, off)[0], 2, 8, 4)
+        logo = make_big_logo(text, native)
         # The boxed native logo spans both 64x32 OBJs (contiguous display).
         native = aw_fonts.obj_canvas(lz77_decompress(rom, off)[0], 2, 8, 4)
         aw_fonts.check_cells([[logo.getpixel((x, y)) for x in range(128)] for y in range(32)], (64,),
@@ -8165,9 +8191,13 @@ def patch_part2_result_summary_obj(rom):
         th = bbox[3] - bbox[1]
         x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
         y = box[1] + ((box[3] - box[1]) - th) // 2 - bbox[1]
-        if shadow is not None:
-            draw.text((x + 2, y + 2), text, font=font, fill=shadow, stroke_width=stroke, stroke_fill=shadow)
-        draw.text((x, y), text, font=font, fill=fill, stroke_width=stroke, stroke_fill=stroke_fill)
+        if font_path == title_font_path:
+            from hangul_pixel_fit import paint_native
+            paint_native(layer, text, font, (x, y), fill, outline=stroke_fill, shadow=shadow)
+        else:
+            from hangul_pixel_fit import paint_bitmap
+            paint_bitmap(layer, text, font, (x, y), fill,
+                         outline=stroke_fill if stroke else None, shadow=shadow)
 
     # The title is split into four tile groups by the original renderer. Keep
     # all other tiles in the 1024-tile sheet intact so the score digits and rank
@@ -8257,7 +8287,8 @@ def patch_part2_result_failure_overlay_obj(rom):
         th = bbox[3] - bbox[1]
         x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
         y = ((box[3] - box[1]) - th) // 2 - bbox[1] - 1
-        draw.text((x, y), text, font=font, fill=1, stroke_width=1, stroke_fill=14)
+        from hangul_pixel_fit import paint_native
+        paint_native(layer, text, font, (x, y), fill=1, outline=14)
 
     # Runtime OAM places four 32x32 sprites in a row. The source block stores
     # those four sprite sheets consecutively, each as a 4x4 tile group.
@@ -8323,7 +8354,8 @@ def patch_part2_result_success_overlay_obj(rom):
         th = bbox[3] - bbox[1]
         x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
         y = ((box[3] - box[1]) - th) // 2 - bbox[1] - 1
-        draw.text((x, y), text, font=font, fill=1, stroke_width=1, stroke_fill=14)
+        from hangul_pixel_fit import paint_native
+        paint_native(layer, text, font, (x, y), fill=1, outline=14)
 
     out = bytearray(64 * 32)
     src = layer.load()
@@ -8424,9 +8456,16 @@ def patch_part2_result_congratulations_obj(rom):
         th = bbox[3] - bbox[1]
         x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
         y = box[1] + ((box[3] - box[1]) - th) // 2 - bbox[1]
-        if shadow is not None:
-            draw.text((x + 2, y + 2), text, font=font, fill=shadow, stroke_width=stroke, stroke_fill=stroke_fill)
-        draw.text((x, y), text, font=font, fill=fill, stroke_width=stroke, stroke_fill=stroke_fill)
+        if path is None:
+            from hangul_pixel_fit import paint_native
+            # Reserve the extra integer advance before centering the line.
+            x -= (len(text) - 1) // 2
+            paint_native(img, text, font, (x, y), fill, outline=stroke_fill,
+                         shadow=shadow, shadow_offset=(2, 2))
+        else:
+            if shadow is not None:
+                draw.text((x + 1, y + 1), text, font=font, fill=shadow, stroke_width=stroke, stroke_fill=stroke_fill)
+            draw.text((x, y), text, font=font, fill=fill, stroke_width=stroke, stroke_fill=stroke_fill)
 
     # Runtime uses 1D OBJ mapping:
     # tiles 0..63: four 32x32 sprites for the large title at y=22
@@ -8440,7 +8479,7 @@ def patch_part2_result_congratulations_obj(rom):
                          'Part 1 result 작전 성공', native=aw_fonts.screen_contiguity(off, rom))
     # Small top line: Galmuri (2026-10-08 font rule; was OkDanDan). The large
     # 작전 성공 title above stays OkDanDan.
-    draw_centered(small, '축하합니다!', 14, fill=1, stroke_fill=9, shadow=11, stroke=1,
+    draw_centered(small, '축하합니다!', 12, fill=1, stroke_fill=9, shadow=11, stroke=1,
                   path=str(aw_fonts.GALMURI11_BOLD))
 
     out = bytearray(len(data))
@@ -10201,9 +10240,9 @@ def _mission_title_hangul_glyph(syl):
     box = ImageDraw.Draw(Image.new('L', (1, 1))).textbbox((0, 0), syl, font=font)
     if box[2] <= box[0]:
         raise AssertionError(f'missing mission title glyph: {syl!r}')
-    mask = Image.new('L', (32, 32), 0)
-    ImageDraw.Draw(mask).text(((MISSION_TITLE_HANGUL_ADVANCE - 1 - (box[2] - box[0])) // 2 - box[0], 1),
-                              syl, font=font, fill=255)
+    from hangul_pixel_fit import native_mask
+    mask, _ = native_mask(syl, font, (32, 32),
+        ((MISSION_TITLE_HANGUL_ADVANCE - 1 - (box[2] - box[0])) // 2 - box[0], 1))
     ink = mask.load()
     pixels = [[0] * 32 for _ in range(32)]
     for y in range(32):
@@ -11040,8 +11079,15 @@ def load_direct_script_metadata():
     slots = {a: end - a for a, end in SCRIPT_OPERAND_SPANS.items()}
     members_by_start = {}
     if not os.path.exists(DGROUPS):
-        print(f'WARN: {DGROUPS} missing; direct script slot metadata unavailable', file=sys.stderr)
-        return slots, members_by_start
+        # A fresh checkout has no optional editor export. Use the delivered
+        # projection of the adopted build metadata instead of silently losing
+        # script members and changing message relocation order.
+        with open(os.path.join(BASE, 'data', 'direct_script_metadata.json'), encoding='utf-8') as stream:
+            frozen = json.load(stream)
+        if frozen.get('schema') != 1 or not frozen['slots'] or not frozen['members_by_start']:
+            raise AssertionError('invalid clean-build direct-script metadata')
+        return ({int(a, 16): size for a, size in frozen['slots'].items()},
+                {int(a, 16): rows for a, rows in frozen['members_by_start'].items()})
     try:
         with open(DGROUPS, encoding='utf-8') as stream:
             data = json.load(stream)
@@ -13374,55 +13420,33 @@ def _grid_to_tiles(grid):
     return encode_indices(grid, len(grid[0]), len(grid))
 
 
+@lru_cache(maxsize=1)
+def _b84_power_title_font():
+    from bdf import load_bdf
+    return load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))[0]
+
+
 def _b84_power_title_glyph_block(ch):
     """Render one 16x32 4bpp glyph for the AW1 CO-power title cut-in."""
-    from PIL import Image, ImageDraw, ImageFont
-
-    width, height, scale = 16, 32, 4
-    big_size = (width * scale, height * scale)
-    # A 16px-wide glyph is reduced fourfold; its final visible line is small.
-    font_path = str(aw_fonts.GALMURI11_BOLD)
-    probe = ImageDraw.Draw(Image.new('L', (1, 1), 0))
-    font = None
-    for size in range(16 * scale, 7 * scale, -2):
-        candidate = ImageFont.truetype(font_path, size)
-        bbox = probe.textbbox((0, 0), ch, font=candidate, stroke_width=scale)
-        # Glyph + outline + the 2px drop shadow stay inside x 1..14, y 1..30.
-        if bbox and (bbox[2] - bbox[0]) + 2 * scale <= 14 * scale and (bbox[3] - bbox[1]) + 2 * scale <= 28 * scale:
-            font = candidate
-            break
-    if font is None:
-        font = ImageFont.truetype(font_path, 8 * scale)
-        bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
-    bbox = probe.textbbox((0, 0), ch, font=font, stroke_width=scale)
-    tw = bbox[2] - bbox[0] + 2 * scale
-    th = bbox[3] - bbox[1] + 2 * scale
-    x = (big_size[0] - tw) // 2 - bbox[0]
-    y = (big_size[1] - th) // 2 - bbox[1]
-
-    stroke = Image.new('L', big_size, 0)
-    fill = Image.new('L', big_size, 0)
-    shadow = Image.new('L', big_size, 0)
-    ImageDraw.Draw(shadow).text((x + 2 * scale, y + 2 * scale), ch, font=font, fill=255, stroke_width=scale)
-    ImageDraw.Draw(stroke).text((x, y), ch, font=font, fill=255, stroke_width=scale)
-    ImageDraw.Draw(fill).text((x, y), ch, font=font, fill=255)
-    stroke = stroke.resize((width, height), Image.Resampling.LANCZOS)
-    fill = fill.resize((width, height), Image.Resampling.LANCZOS)
-    shadow = shadow.resize((width, height), Image.Resampling.LANCZOS)
-
-    grid = [[0 for _ in range(width)] for _ in range(height)]
-    for py in range(height):
-        for px in range(width):
-            if shadow.getpixel((px, py)) >= 72:
-                grid[py][px] = 15
-    for py in range(height):
-        for px in range(width):
-            if stroke.getpixel((px, py)) >= 72:
-                grid[py][px] = 14
-    for py in range(height):
-        for px in range(width):
-            if fill.getpixel((px, py)) >= 96:
-                grid[py][px] = 7 if py < 14 else 2
+    from PIL import Image, ImageFilter
+    from hangul_pixel_fit import glyph, verify_glyph
+    width, height = 16, 32
+    body = Image.new('L', (width, height))
+    # The 16px-wide consumer cannot hold natural large OkDanDan lettering.
+    # Use native Galmuri11 for this <=16px line, with the same palette split.
+    from bdf import glyph_grid
+    grid, w, h, xo, yo = glyph_grid(_b84_power_title_font()[ord(ch)])
+    mask = Image.new('L', (w,h))
+    mask.putdata([255 if v else 0 for row in grid for v in row])
+    body.paste(mask, ((width-w)//2, 10))
+    stroke = body.filter(ImageFilter.MaxFilter(3))
+    shadow = Image.new('L', (width, height)); shadow.paste(stroke, (1, 1))
+    grid = [[0] * width for _ in range(height)]
+    for y in range(height):
+        for x in range(width):
+            if shadow.getpixel((x, y)): grid[y][x] = 15
+            if stroke.getpixel((x, y)): grid[y][x] = 14
+            if body.getpixel((x, y)): grid[y][x] = 7 if y < 14 else 2
     aw_fonts.check_cells(grid, (), f'Part 1 power title glyph {ch}')
     return _grid_to_tiles(grid)
 
@@ -13582,7 +13606,8 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
         return {'applied': 0, 'skipped': 0}
     objl = {s['id']: s for s in (objl_specs if objl_specs is not None else OBJLABEL_SPRITES)}
     idx = {}
-    if idx_path is None:
+    default_index = idx_path is None
+    if default_index:
         idx_path = os.path.join(BASE, 'data', 'sprites_index.json')
     if os.path.exists(idx_path):
         try:
@@ -13591,6 +13616,29 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
                 idx[s['id']] = s
         except Exception:
             pass
+
+    if default_index:
+        # These two adopted overrides must build without the optional, generated
+        # editor index. Bind their exact allocations to immutable Japan bytes;
+        # never infer a writable capacity from a candidate's recompressed data.
+        from lz77_scan import lz77_decompress
+        for off, capacity, digest in (
+            (0xC03880, 622, '6af6496c905df213e68f9137ca9e2d9b11813af48b5b06100ff34f7bb90a340a'),
+            (0xC03AF0, 1144, 'b0514671cb09eb38a06bb5d29457a4e2b67c12e2ed1581c23d17125bcf6ecbe1'),
+        ):
+            sid = f'lz77_{off:08X}'
+            if sid not in ov:
+                continue
+            with open(P.ROM, 'rb') as stream:
+                stream.seek(off)
+                source = stream.read(capacity)
+            if hashlib.sha256(source).hexdigest() != digest:
+                raise AssertionError(f'override source allocation changed: {sid}')
+            decoded = lz77_decompress(source, 0)
+            if decoded is None or len(decoded[0]) != 2048 or decoded[1] != capacity:
+                raise AssertionError(f'override source geometry changed: {sid}')
+            idx[sid] = dict(id=sid, offset_int=off, type='lz77',
+                            comp_size=capacity, size=2048)
 
     applied = 0
     skipped = []

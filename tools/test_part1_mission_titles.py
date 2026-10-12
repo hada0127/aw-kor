@@ -68,7 +68,7 @@ class MissionTitleTests(unittest.TestCase):
                 self.assertGreater(m.aw_fonts.drawn_line_height(ink, 1, 1), 16)
         self.assertIsNone(sizes[0xC12500])  # 바다 저편에 is small at its fitted size.
         self.assertEqual(sizes[0xC1689C], 20)
-        self.assertEqual(sizes[0xC13EE0], 20)
+        self.assertEqual(sizes[0xC13EE0], 19)  # pixel-fitted counters require this capacity fit
         self.assertIsNone(sizes[0xC133DC])   # 하늘의 용사! (506-byte allocation)
 
     def test_wrong_font_hash_is_not_a_fit_fallback(self):

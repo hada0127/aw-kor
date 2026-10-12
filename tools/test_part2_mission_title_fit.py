@@ -134,19 +134,27 @@ class MissionTitleFitTests(unittest.TestCase):
         codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
         text = builder.ADDRESS_TEXT_OVERRIDES[0xA2D5C8]
         expected = fit.encode_pair_title(text, codes)
-        self.assertEqual(len(expected), 14)
+        self.assertEqual(text, '내일로의 7일간')
+        self.assertEqual(len(expected), 16)
         for encode in (builder.encode_text, builder.encode_full_fidelity):
             self.assertEqual(encode(text, codes, collections.Counter(), 0xA2D5C8), expected)
-        self.assertEqual(builder.encode_fit(text, 14, codes, collections.Counter(), 0xA2D5C8)[0], expected)
+        self.assertIsNone(builder.encode_fit(text, 14, codes, collections.Counter(), 0xA2D5C8)[0])
         tree = ast.parse(Path(builder.__file__).read_text())
         node = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == 'patch_script_row')
         rom = bytearray(self.original)
         namespace = dict(vars(builder), orig=self.original, rom=rom, syl_to_code=codes,
-                         unmapped=collections.Counter(), direct_script_members={}, _dlg_ov={},
+                         unmapped=collections.Counter(), direct_script_members={},
+                         _dlg_ov={'0x00A2D5C8': text, '0x00A2D028': '승리 라인',
+                                  '0x00A2D7D4': '해 VS 공!'},
                          required_script_repoints=set(), WRITE_LOG=[])
         exec(compile(ast.Module(body=[node], type_ignores=[]), builder.__file__, 'exec'), namespace)
+        before_title = bytes(rom[0xA2D5C8:0xA2D5D8])
         namespace['patch_script_row'](0xA2D5C8, 0xA2D5D6, b'wrong', 'test', source_text=text)
-        self.assertEqual(rom[0xA2D5C8:0xA2D5D8], expected + b'\0\0')
+        # Approved wording is now 16 bytes, so the 14-byte native slot must
+        # remain intact until the existing lossless title relocation step.
+        self.assertEqual(rom[0xA2D5C8:0xA2D5D8], before_title)
+        self.assertIn(0xA2D5C8, namespace['required_script_repoints'])
+        self.assertEqual(namespace['WRITE_LOG'][-1][5], text)
         namespace['patch_script_row'](0xA2D028, 0xA2D038, fit.encode_pair_title('승리 라인', codes), 'test', source_text='승리 라인')
         payload = bytes.fromhex(namespace['WRITE_LOG'][-1][3])
         self.assertEqual(rom[0xA2D028 + len(payload):0xA2D038], bytes(16 - len(payload)))

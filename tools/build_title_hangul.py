@@ -74,7 +74,7 @@ PART1_MODE_OPTION_BLOCKS = [
     ("single_battle", 0x00C0489C, "대전", 30),
     ("new_game", 0x00C04D48, "처음부터", 26),
     ("continue", 0x00C051DC, "계속하기", 26),
-    ("link", 0x00C05658, "통신", 28),
+    ("link", 0x00C05658, "통신!", 28),
     ("map_record", 0x00C05994, "맵 기록", 28),
     ("player_rank", 0x00C05D78, "플레이어 랭크", 22),
     ("single_card", 0x00C06218, "1카드 통신", 28),
@@ -455,17 +455,24 @@ def draw_index_text(
     aa_idx: int | None = None,
     stroke: int = 1,
 ) -> None:
-    draw = ImageDraw.Draw(layer)
-    for size in range(start_size, 12, -1):
-        font = ImageFont.truetype(str(FONT_PATH), size)
-        w, h = text_bbox(draw, text, font, stroke)
-        if w <= max_w and h <= max_h:
-            break
-    x = center_x - w // 2
-    paint_index_text_aa(layer, (x + 1, y + 1), text, font, shadow_idx, shadow_idx, stroke, aa_idx=shadow_idx)
-    paint_index_text_aa(layer, (x, y), text, font, body_idx, outline_idx, stroke, aa_idx=aa_idx)
-    if hi_idx != body_idx:
-        paint_index_text_aa(layer, (x, y - 1), text, font, hi_idx, body_idx, 0, aa_idx=body_idx)
+    from hangul_pixel_fit import line
+    # Single body mask: repainting a shifted whole glyph as a highlight closes
+    # its counters. Bevel only the top-facing edge of the original fill.
+    mask, _ = line(text, max_w - 6, max_h - 7, spacing=2)
+    body = Image.new('L', layer.size)
+    body.paste(mask, (center_x - mask.width // 2, y))
+    inner = body.filter(ImageFilter.MaxFilter(3))
+    contour = inner.filter(ImageFilter.MaxFilter(3))
+    bevel_idx = 2 if outline_idx == 1 else 13
+    shadow = Image.new('L', layer.size); shadow.paste(contour, (1, 1))
+    for yy in range(layer.height):
+        for xx in range(layer.width):
+            if shadow.getpixel((xx, yy)): layer.putpixel((xx, yy), shadow_idx)
+            if contour.getpixel((xx, yy)): layer.putpixel((xx, yy), outline_idx)
+            if inner.getpixel((xx, yy)): layer.putpixel((xx, yy), bevel_idx)
+            if body.getpixel((xx, yy)):
+                top_edge = yy == 0 or not body.getpixel((xx, yy - 1))
+                layer.putpixel((xx, yy), hi_idx if top_edge else body_idx)
 
 
 def draw_select_logo_text(
@@ -482,41 +489,20 @@ def draw_select_logo_text(
     body_stops: tuple[int, ...],
     body_aa_idx: int,
 ) -> None:
-    draw = ImageDraw.Draw(layer)
-    for size in range(start_size, 12, -1):
-        font = ImageFont.truetype(str(FONT_PATH), size)
-        box = draw.textbbox((0, 0), text, font=font, stroke_width=2)
-        w = box[2] - box[0]
-        h = box[3] - box[1]
-        if w <= max_w and h <= max_h:
-            break
-    x = center_x - w // 2 - box[0]
-    yy = y - box[1]
-
-    outer = text_mask_layer(layer.size, text, font, (x, yy), 2)
-    inner = text_mask_layer(layer.size, text, font, (x, yy), 1)
-    body = text_mask_layer(layer.size, text, font, (x, yy), 0)
-    lp = layer.load()
-    op = outer.load()
-    ip = inner.load()
-    bp = body.load()
-    bbox = body.getbbox()
-    if bbox is None:
-        return
-    x0, _y0, x1, _y1 = bbox
-    width = max(1, x1 - x0 - 1)
-    stops = (5, 4, 6, 7, 8)
+    from hangul_pixel_fit import line
+    mask, _ = line(text, max_w - 6, max_h - 6, spacing=2)
+    body = Image.new('L', layer.size)
+    x0 = center_x - mask.width // 2
+    body.paste(mask, (x0, y))
+    inner = body.filter(ImageFilter.MaxFilter(3))
+    outer = inner.filter(ImageFilter.MaxFilter(3))
     for py in range(layer.height):
         for px in range(layer.width):
-            if op[px, py] >= 48:
-                lp[px, py] = outer_idx
-            if ip[px, py] >= 48:
-                lp[px, py] = inner_idx if ip[px, py] >= 128 else inner_aa_idx
-            alpha = bp[px, py]
-            if alpha >= 32:
-                t = max(0.0, min(1.0, (px - x0) / width))
-                idx = body_stops[min(len(body_stops) - 1, int(t * len(body_stops)))]
-                lp[px, py] = idx if alpha >= 128 else body_aa_idx
+            if outer.getpixel((px, py)): layer.putpixel((px, py), outer_idx)
+            if inner.getpixel((px, py)): layer.putpixel((px, py), inner_idx)
+            if body.getpixel((px, py)):
+                stop = min(len(body_stops) - 1, (px - x0) * len(body_stops) // mask.width)
+                layer.putpixel((px, py), body_stops[stop])
 
 
 def index_for_alpha(alpha: int, fill_idx: int, edge_idx: int, aa_idx: int) -> int:
@@ -648,7 +634,7 @@ def make_select_index_layer() -> Image.Image:
         "게임보이 워즈 어드밴스",
         114,
         18,
-        184,
+        180,
         30,
         24,
         outer_idx=15,
@@ -1687,31 +1673,30 @@ def part1_option_render_size(label: str, max_size: int) -> int:
     return min(max_size, 25)
 
 
-def make_part1_option_block(text: str, max_size: int) -> Image.Image:
+def part1_option_body(text: str, max_size: int):
+    """Natural-proportion glyphs within a 22px line, integer spacing."""
+    from hangul_pixel_fit import line
     verify_menu_font()
-    layer = Image.new("L", (128, 32), 0)
-    label = part1_option_display_text(text)
-    if label in {"작전룸", "통신", "대전"}:
-        target_w = {"작전룸": 78, "통신": 62, "대전": 60}[label]
-        draw_part1_option_logo_text(
-            layer,
-            label,
-            (8, 0, 120, 31),
-            min(max_size, 25),
-            stroke_width=2,
-            target_min_w=target_w,
-            supersample_target=True,
-        )
-    else:
-        width_limit = 108 if len(label) >= 6 else 92
-        draw_part1_option_logo_text(
-            layer,
-            label,
-            (8, 0, 120, 31),
-            part1_option_render_size(label, max_size),
-            stroke_width=2,
-            width_limit=width_limit,
-        )
+    width_limit = 108 if len(text) >= 6 else 92
+    font = ImageFont.truetype(str(MENU_FONT_PATH), min(max_size, 28))
+    width = min(width_limit - 4, round(font.getlength(text)) + len(text) - 1)
+    mask, records = line(text, width, 22, spacing=3)
+    body = Image.new('L', (128, 32), 0)
+    origin = ((128 - width) // 2, 4)
+    body.paste(mask, origin)
+    records = [(char, (x0 + origin[0], y0 + origin[1],
+                       x1 + origin[0], y1 + origin[1]))
+               for char, (x0, y0, x1, y1) in records]
+    return body, records
+
+
+def make_part1_option_block(text: str, max_size: int) -> Image.Image:
+    """Native contour/shadow/envelope around pixel-fitted OkDanDan lettering."""
+    layer = Image.new('L', (128, 32), 0)
+    body, _ = part1_option_body(part1_option_display_text(text), max_size)
+    inner = body.filter(ImageFilter.MaxFilter(3))
+    compose_part1_text(layer, inner, body,
+                      [part1_option_gradient_index(y) for y in range(layer.height)])
     return layer
 
 

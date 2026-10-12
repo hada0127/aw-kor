@@ -17,7 +17,7 @@ APPROVED_NAMES = ('기적', '별꿈', '하이퍼수리', '강화', '승리', '�
                   '일도', '배수', '탐색', '반격', '혼', '돌격', '번개돌진', '번개강습',
                   '큰파도', '큰폭풍', '충전', '대폭발', '화염', '대분쇄', '전술', '지휘',
                   '측돌파', '측기습', '흑파도', '흑폭풍')
-GOLDEN_SHA256 = '41eb6a7fb7cdbb6ea6cae6819f34a6efcfaac35beeb0848a12ce44cf70b12b91'
+GOLDEN_SHA256 = '8c71113b704d637ae18aa5491f8bb254e7a345d454fed26d9adfcb00c0aa7d89'
 
 
 class PowerTitleTests(unittest.TestCase):
@@ -62,13 +62,13 @@ class PowerTitleTests(unittest.TestCase):
         self.assertEqual(''.join(old_dictionary[self.dictionary.index(ch)] for ch in '직격'), 'グサ')
 
     def test_patch_changes_only_original_lz_slot_and_roundtrips(self):
-        self.assertEqual(self.result['packed_bytes'], 5966)
-        self.assertEqual(self.result['headroom'], 195)
+        self.assertEqual(self.result['packed_bytes'], 5820)
+        self.assertEqual(self.result['headroom'], 341)
         self.assertEqual(len(self.patched), len(self.base))
         self.assertEqual(self.patched[:titles.OFFSET], self.base[:titles.OFFSET])
         end = titles.OFFSET + titles.SLOT_SIZE
         self.assertEqual(self.patched[end:], self.base[end:])
-        self.assertEqual(titles._decode_bounded(self.patched[titles.OFFSET:end]), (self.rendered, 5966))
+        self.assertEqual(titles._decode_bounded(self.patched[titles.OFFSET:end]), (self.rendered, 5820))
         titles.verify_generated(self.patched, self.original, self.names, self.codes)
 
     def test_source_font_scope_and_existing_writer_are_rejected_without_mutation(self):

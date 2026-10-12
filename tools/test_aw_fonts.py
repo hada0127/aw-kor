@@ -164,13 +164,31 @@ class FontRuleTests(unittest.TestCase):
         rom = Path(os.environ['AW_TEST_ROM']).read_bytes()
         proofs = json.loads((TOOLS.parent / 'data/obj_cell_contiguity.json').read_text())['assets']
         for key in ('0x00BFB45C', '0x00C12FD8'):
-            proof = proofs[key]['candidate_proofs'][0]
-            aw_fonts._check_candidate_capture(proof, hashlib.sha256(rom).hexdigest())
+            # Historical proofs remain registered; bind this test to AW_TEST_ROM.
+            digest = hashlib.sha256(rom).hexdigest()
+            matches = [p for p in proofs[key]['candidate_proofs'] if p['rom_sha256'] == digest]
+            self.assertTrue(matches, (key, digest))
+            proof = matches[-1]
+            aw_fonts._check_candidate_capture(proof, digest)
             with self.assertRaisesRegex(AssertionError, 'capture ROM differs'):
                 aw_fonts._check_candidate_capture(proof, '0' * 64)
             changed = dict(proof, capture_checkpoint_sha256='0' * 64)
             with self.assertRaisesRegex(AssertionError, 'capture receipt changed'):
                 aw_fonts._check_candidate_capture(changed, proof['rom_sha256'])
+
+    def test_archived_capture_records_fail_on_tampering(self):
+        import copy
+        import json
+        records = json.loads((TOOLS.parent / 'data/obj_cell_contiguity.json').read_text())
+        self.assertNotIn('temp/', json.dumps(records))
+        for entry in records['assets'].values():
+            proof = entry['candidate_proofs'][-1]
+            aw_fonts._check_candidate_capture(proof, proof['rom_sha256'])
+            for name in ('baseline', 'checkpoint', 'ledger', 'actions'):
+                changed = copy.deepcopy(proof)
+                changed['capture_archive'][name + '_sha256'] = '0' * 64
+                with self.assertRaisesRegex(AssertionError, 'receipt changed'):
+                    aw_fonts._check_candidate_capture(changed, proof['rom_sha256'])
 
     def test_final_line_height_includes_outline(self):
         self.assertEqual(aw_fonts.drawn_line_height({(0, 2), (1, 15)}, 1, 1), 16)
