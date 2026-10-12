@@ -71,6 +71,17 @@ class Part1InfoPopupRegressions(unittest.TestCase):
         code_map = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())
         expected = bytes.fromhex(code_map['항'][2:] + code_map['구'][2:])
         self.assertEqual(self.rom[0xD85AF4:0xD85AFC], b'\x0a\x09' + expected + b'\x0a\x00')
+        self.assertEqual(self.rom[0xD85AFC:0xD85B04],
+                         b'\x0a\x09' + bytes.fromhex(code_map['교'][2:]) + b'\x0a\x00\0\0')
+        # The popup reads the first bank-1 dictionary segment at 0xD830D0.
+        self.assertEqual(struct.unpack_from('<I', self.rom, 0xB13054)[0], 0x08D830D0)
+        self.assertEqual(self.original[0xD8311C:0xD83120], b'\0\0\0\0')
+        self.assertEqual(self.rom[0xD8311C:0xD83120],
+                         bytes.fromhex(code_map['구'][2:]) + b'\0\0')
+        entries = self.rom[0xD830D0:0xD8311E]
+        codes = [entries[i:i + 2] for i in range(0, len(entries), 2)]
+        for syllable in ('항', '구'):
+            self.assertEqual(codes.count(bytes.fromhex(code_map[syllable][2:])), 1)
 
 
 if __name__ == '__main__':

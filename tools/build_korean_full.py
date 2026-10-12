@@ -22756,6 +22756,21 @@ def main():
     WRITE_LOG.append([0xD85AF6, 6, 6, bytes(rom[0xD85AF6:0xD85AFC]).hex(),
                       None, '항구', None, 'part1-terrain-port-title'])
 
+    # The popup searches the first bank-1 cache segment built from 0xD830D0.
+    # Its 76-byte dictionary has two spare bytes before the terminating NULs;
+    # register 구 there so the search finds it before that segment's terminator.
+    if struct.unpack_from('<I', rom, 0xB13054)[0] != 0x08D830D0:
+        raise AssertionError('unexpected Part 1 terrain cache dictionary pointer')
+    if (bytes(orig[0xD8311C:0xD83120]) != b'\0\0\0\0' or
+            bytes(rom[0xD8311C:0xD83120]) != b'\0\0\0\0'):
+        raise AssertionError('Part 1 terrain cache dictionary has no spare code slot')
+    port_second_code = port_title[2:4]
+    if port_second_code != b'\x88\x79':
+        raise AssertionError('unexpected Part 1 port second syllable code')
+    rom[0xD8311C:0xD8311E] = port_second_code
+    WRITE_LOG.append([0xD8311C, 2, 2, port_second_code.hex(), None,
+                      '구', None, 'part1-terrain-port-cache'])
+
     # This ASCII string belongs to the CP/2P/VS string group; it is not the
     # terrain income consumer. Leave its pointer and bytes unchanged.
     if bytes(orig[0xB82AE8:0xB82AEC]) != b'--\x00\x00':
