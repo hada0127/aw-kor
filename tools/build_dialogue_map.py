@@ -402,6 +402,12 @@ def main():
             }
 
     addr_overrides, source_overrides, text_overrides = load_build_text_overrides()
+    # A direct script writer can replace an import-stage address override.
+    # Resolve those protected rows with the same final-writer policy as the
+    # address audit; source literals in qa_text_fit are not always shipped.
+    import build_korean_full as B
+    from audit_address_text_overrides import load_effective_protected_texts
+    effective_protected, _ = load_effective_protected_texts(dict(B.ADDRESS_TEXT_OVERRIDES))
     direct_patches = load_direct_patch_texts()
     dialogue_overrides = load_dialogue_overrides()
     display_overrides = load_display_overrides()
@@ -460,6 +466,8 @@ def main():
             addr_overrides, source_overrides, text_overrides, direct_patches, dialogue_overrides, display_overrides,
             kind=kind,
         )
+        if addr in effective_protected:
+            ko = effective_protected[addr]
         slot = i_ent["slot"] if i_ent else None
         kind = i_ent["kind"] if i_ent else None
 

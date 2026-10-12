@@ -260,14 +260,14 @@ def build_report() -> dict[str, Any]:
     static_effective: dict[int, str] = {}
     for entry in entries:
         static_effective[entry["addr_int"]] = str(entry["value"] or "")
-    static_mismatches = []
+    inline_mismatches = []
     for addr in sorted(set(runtime) | set(static_effective)):
         if addr in generated_addrs and addr not in static_effective:
             continue
         rv = runtime.get(addr)
         sv = static_effective.get(addr)
         if rv != sv:
-            static_mismatches.append(
+            inline_mismatches.append(
                 {
                     "address": "0x%08X" % addr,
                     "runtime": short(rv),
@@ -292,6 +292,9 @@ def build_report() -> dict[str, Any]:
 
     tsv_entries, tsv_errors = load_tsv_entries(ADDRESS_TEXT_OVERRIDES_TSV)
     runtime_static_only = {addr: text for addr, text in runtime.items() if addr not in generated_addrs}
+    # The builder clears the inline fallback when the TSV is present. Comparing
+    # that dead snapshot with runtime reports valid TSV edits as source drift.
+    static_mismatches = [] if ADDRESS_TEXT_OVERRIDES_TSV.exists() else inline_mismatches
     tsv_mismatches = []
     # Generated glyph-dictionary sources have a separate authority and may
     # remain in the TSV as human-readable source text.
@@ -410,6 +413,8 @@ def build_report() -> dict[str, Any]:
         "tsv_runtime_mismatches": tsv_mismatches[:120],
         "runtime_static_mismatch_count": len(static_mismatches),
         "runtime_static_mismatches": static_mismatches[:120],
+        "inactive_inline_mismatch_count": len(inline_mismatches) if ADDRESS_TEXT_OVERRIDES_TSV.exists() else 0,
+        "inactive_inline_mismatches": inline_mismatches[:120] if ADDRESS_TEXT_OVERRIDES_TSV.exists() else [],
         "required_data_errors": required_errors,
         "dialogue_override_collision_count": overlay_same_count + overlay_diff_count,
         "dialogue_override_same_count": overlay_same_count,
@@ -446,6 +451,7 @@ def main() -> int:
         f"runtime mismatches {report['tsv_runtime_mismatch_count']}"
     )
     print(f"- runtime/static mismatches: {report['runtime_static_mismatch_count']}")
+    print(f"- inactive inline fallback differences: {report['inactive_inline_mismatch_count']}")
     print(
         "- final effective transforms: "
         f"pair-normalized {report['pair_normalized_count']}, "
