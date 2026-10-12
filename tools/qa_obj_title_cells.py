@@ -52,10 +52,27 @@ def evidence(rom_original, rom, off, cells, cw, ch, first):
 
 # (label, LZ77 offset, first tile, count, cell_w, cell_h)
 CELLS = [
-    ('Part 1 power title glyph', 0xBC9D0C, 0, 26, 2, 4),
+    ('Part 1 power title glyph', None, 0, 45, 2, 4),
     ('Part 1 campaign clear cell', 0xC43400, 32, 9, 4, 4),
     ('Part 1 versus settle cell', 0xBFC270, 0, 2, 4, 4),
 ]
+
+
+def power_title_source(rom, count=45, cell_w=2, cell_h=4):
+    """Resolve the glyph sheet used by the Part 1 power-title consumer."""
+    pointer_off = 0xB3C1F4
+    if pointer_off + 4 > len(rom):
+        raise ValueError('Part 1 power title glyph: source pointer is outside ROM')
+    pointer = struct.unpack_from('<I', rom, pointer_off)[0]
+    off = pointer - 0x08000000
+    if pointer < 0x08000000 or off >= len(rom):
+        raise ValueError(f'Part 1 power title glyph: invalid source pointer {pointer:08X}')
+    decoded = lz77_decompress(rom, off)
+    cell_bytes = cell_w * cell_h * 32
+    if (decoded is None or len(decoded[0]) < count * cell_bytes
+            or len(decoded[0]) % cell_bytes):
+        raise ValueError(f'Part 1 power title glyph: invalid source LZ77 at {off:06X}')
+    return off, decoded[0], len(decoded[0]) // cell_bytes
 
 
 def check(rom, original):
@@ -104,7 +121,15 @@ def check(rom, original):
         except AssertionError as exc:
             issues.append(str(exc))
     for label, off, first, count, cw, ch in CELLS:
-        data = lz77_decompress(rom, off)[0]
+        if off is None:
+            try:
+                off, data, count = power_title_source(rom, count, cw, ch)
+                report.append(f'OK {label} source={off:06X} cells={count}')
+            except ValueError as exc:
+                issues.append(str(exc))
+                continue
+        else:
+            data = lz77_decompress(rom, off)[0]
         for i in range(count):
             grid = aw_fonts.obj_canvas(data, 1, cw, ch, first + i * cw * ch)
             if any(grid[0]) or any(grid[-1]) or any(r[0] or r[-1] for r in grid):
