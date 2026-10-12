@@ -101,7 +101,8 @@ def main():
     force_join = set(over.get("join_before", []))      # 이 주소 앞 강제 결합
 
     reals = [l for l in dm["lines"] if not l.get("is_noise") and
-             ((l.get("ja") or "").strip() or addr_int(l['address']) in B.STRUCTURED_SCRIPT_ROWS)]
+             ((l.get("ja") or "").strip() or addr_int(l['address']) in B.STRUCTURED_SCRIPT_ROWS
+              or (l.get('kind') == 'part1-compact-ui' and (l.get('ko') or '').strip()))]
     reals.sort(key=lambda l: addr_int(l["address"]))
 
     groups = []

@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19d_part1_campaign_story_late",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
   "min_score": 7,
   "ranges": [
    {
@@ -16,9 +16,50 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 0,
+     "raw_kana_count": 5,
      "raw_kana_unexplained_count": 0,
-     "raw_kana_observations": [],
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DCBA1A",
+       "length": 8,
+       "text": "イーグル",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCBA1A"
+      },
+      {
+       "offset": "0x00DCBB36",
+       "length": 6,
+       "text": "モップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCBB36"
+      },
+      {
+       "offset": "0x00DCCE86",
+       "length": 6,
+       "text": "モップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCCE86"
+      },
+      {
+       "offset": "0x00DCDEF1",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCDEEB"
+      },
+      {
+       "offset": "0x00DCEA49",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCEA43"
+      }
+     ],
      "raw_kana_unexplained": []
     }
    }
@@ -26,7 +67,7 @@
   "extracted_covered_count": 1082,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 0,
+  "raw_kana_count": 5,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

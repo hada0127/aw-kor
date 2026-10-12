@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19c_part1_campaign_story_mid",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
   "min_score": 7,
   "ranges": [
    {
@@ -16,9 +16,66 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 0,
+     "raw_kana_count": 7,
      "raw_kana_unexplained_count": 0,
-     "raw_kana_observations": [],
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DC2EE6",
+       "length": 8,
+       "text": "ダメージ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC2ECA"
+      },
+      {
+       "offset": "0x00DC3822",
+       "length": 10,
+       "text": "キャサリン",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC3822"
+      },
+      {
+       "offset": "0x00DC3B1E",
+       "length": 6,
+       "text": "ビリー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC3B1E"
+      },
+      {
+       "offset": "0x00DC3B26",
+       "length": 8,
+       "text": "ブレイク",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC3B1E"
+      },
+      {
+       "offset": "0x00DC3C69",
+       "length": 6,
+       "text": "リョウ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC3C63"
+      },
+      {
+       "offset": "0x00DC6F06",
+       "length": 12,
+       "text": "レッドスター",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC6F06"
+      },
+      {
+       "offset": "0x00DC7E9E",
+       "length": 8,
+       "text": "イーグル",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DC7E9A"
+      }
+     ],
      "raw_kana_unexplained": []
     }
    }
@@ -26,7 +83,7 @@
   "extracted_covered_count": 997,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 0,
+  "raw_kana_count": 7,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

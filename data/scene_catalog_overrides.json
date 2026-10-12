@@ -1,5 +1,5 @@
 {
-  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거).",
+  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거). 16_part1_info_screen의 동일 add/remove는 8개 라벨을 기존 scene 또는 저신뢰 제외에서 빼서 미배정 검토로 명시적으로 돌린다.",
   "sprite": {
     "03_select_part2": {
       "add": [
@@ -14,6 +14,10 @@
     }
   },
   "dialogue": {
+    "16_part1_info_screen": {
+      "add": ["g_00DF8B62", "g_00DF8B6A", "g_00DF8B72", "g_00DF8B7A", "g_00DF8B82", "g_00DF8B8A", "g_00DF8B92", "g_00DF8B9A"],
+      "remove": ["g_00DF8B62", "g_00DF8B6A", "g_00DF8B72", "g_00DF8B7A", "g_00DF8B82", "g_00DF8B8A", "g_00DF8B92", "g_00DF8B9A"]
+    },
     "89a_common_battle_surrender_confirm": {
       "add": [
         "g_00A34CB0"
@@ -28,5 +32,15 @@
         "g_00A34DB0"
       ]
     }
+  },
+  "unresolved_dialogue_consumers": {
+    "g_00DF8B62": "Part 1 score screen (tools/part1_compact_ui_strings.py:94); no dedicated catalog screenshot",
+    "g_00DF8B8A": "Part 1 battle-result screen (tools/part1_compact_ui_strings.py:83); no dedicated catalog screenshot",
+    "g_00DF8B72": "Part 1 battle-status screen (tools/part1_compact_ui_strings.py:72); no dedicated catalog screenshot",
+    "g_00DF8B6A": "consumer not documented",
+    "g_00DF8B7A": "battle-status and terrain banks (tools/part1_compact_ui_strings.py:73); screen coverage unresolved",
+    "g_00DF8B82": "battle-status and result banks (tools/part1_compact_ui_strings.py:74); screen coverage unresolved",
+    "g_00DF8B92": "consumer not documented",
+    "g_00DF8B9A": "consumer not documented"
   }
 }

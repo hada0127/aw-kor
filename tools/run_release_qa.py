@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import platform
 import subprocess
 import sys
 import time
@@ -24,8 +26,9 @@ def cmd(*parts: str) -> list[str]:
 
 
 def visual_region_cmd() -> list[str]:
-    harness = ROOT / "temp" / "mgbah"
-    if harness.exists():
+    configured = os.environ.get("MGBA_HARNESS")
+    harness = Path(configured) if configured else ROOT / "temp" / ("mgbah_linux" if platform.system() == "Linux" else "mgbah")
+    if configured or harness.exists():
         return cmd("tools/qa_visual_regions.py", "--harness", str(harness), "--action-menu-save", "")
     return cmd("tools/qa_visual_regions.py")
 

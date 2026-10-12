@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19a_part1_tutorial_story",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
   "min_score": 7,
   "ranges": [
    {
@@ -16,9 +16,42 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 0,
+     "raw_kana_count": 4,
      "raw_kana_unexplained_count": 0,
-     "raw_kana_observations": [],
+     "raw_kana_observations": [
+      {
+       "offset": "0x00D8FAF6",
+       "length": 6,
+       "text": "アララ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00D8FAEE"
+      },
+      {
+       "offset": "0x00D8FB02",
+       "length": 12,
+       "text": "レッドスター",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00D8FAEE"
+      },
+      {
+       "offset": "0x00D8FE6E",
+       "length": 6,
+       "text": "ボタン",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00D8FE6C"
+      },
+      {
+       "offset": "0x00D8FE96",
+       "length": 8,
+       "text": "ダメージ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00D8FE8A"
+      }
+     ],
      "raw_kana_unexplained": []
     }
    }
@@ -26,7 +59,7 @@
   "extracted_covered_count": 1343,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 0,
+  "raw_kana_count": 4,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

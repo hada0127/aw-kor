@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30d_part2_story_green_earth",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
   "min_score": 7,
   "ranges": [
    {
@@ -16,9 +16,42 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 0,
+     "raw_kana_count": 4,
      "raw_kana_unexplained_count": 0,
-     "raw_kana_observations": [],
+     "raw_kana_observations": [
+      {
+       "offset": "0x00A1BAD6",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1BAD4"
+      },
+      {
+       "offset": "0x00A1BB02",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1BB00"
+      },
+      {
+       "offset": "0x00A1BC02",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1BC00"
+      },
+      {
+       "offset": "0x00A1BC6C",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1BC68"
+      }
+     ],
      "raw_kana_unexplained": []
     }
    }
@@ -26,7 +59,7 @@
   "extracted_covered_count": 805,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 0,
+  "raw_kana_count": 4,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

@@ -465,6 +465,10 @@ def main():
 
         region = region_of(addr)
         noise = is_noise(ja) or is_glyph_dictionary_address(addr)
+        # Four live Part 1 compact UI labels have blank extraction-side JA.
+        # Their runtime Korean strings are verified by part1_compact_ui_strings.
+        if addr in {0xDF8B62, 0xDF8B72, 0xDF8B82, 0xDF8B8A} and ko:
+            noise = False
         if kind == 'known-story-fragment':
             noise = False
         # 빌드가 직접 쓴 UI/스크립트 라벨은 원문이 짧은 한자-only여도 실제 표시 문자열이다.

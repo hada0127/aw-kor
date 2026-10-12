@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30g_part2_story_green_earth_late",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
   "min_score": 7,
   "ranges": [
    {
@@ -16,7 +16,7 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 1,
+     "raw_kana_count": 6,
      "raw_kana_unexplained_count": 0,
      "raw_kana_observations": [
       {
@@ -26,6 +26,46 @@
        "allowed": true,
        "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
        "containing_extracted_addr": "0x00A1D349"
+      },
+      {
+       "offset": "0x00A1DE44",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1DE40"
+      },
+      {
+       "offset": "0x00A1EDAC",
+       "length": 4,
+       "text": "バカ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1EDAC"
+      },
+      {
+       "offset": "0x00A1FA14",
+       "length": 10,
+       "text": "ショーグン",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1FA14"
+      },
+      {
+       "offset": "0x00A1FF09",
+       "length": 6,
+       "text": "アスカ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1FF09"
+      },
+      {
+       "offset": "0x00A1FF11",
+       "length": 8,
+       "text": "ミサイル",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1FF09"
       }
      ],
      "raw_kana_unexplained": []
@@ -35,7 +75,7 @@
   "extracted_covered_count": 795,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 1,
+  "raw_kana_count": 6,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

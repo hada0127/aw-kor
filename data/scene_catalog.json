@@ -14,20 +14,20 @@
     "part2"
   ],
   "coverage": {
-    "sprites_total": 1995,
+    "sprites_total": 2014,
     "sprites_assigned": 110,
-    "sprites_unassigned": 1887,
+    "sprites_unassigned": 1906,
     "sprites_unassigned_scan_lz77": 1880,
-    "sprites_unassigned_text_candidate": 6,
+    "sprites_unassigned_text_candidate": 25,
     "sprites_unassigned_font": 1,
     "sprites_excluded_scan_lz77": 1880,
     "sprites_excluded_font": 1,
-    "review_pending_total": 14,
-    "dialogue_excluded_low_confidence": 3367,
-    "dialogue_groups_total": 9577,
-    "dialogue_game_scene_assigned": 6202,
-    "dialogue_assigned": 9569,
-    "dialogue_review_only": 3367,
+    "review_pending_total": 33,
+    "dialogue_excluded_low_confidence": 3368,
+    "dialogue_groups_total": 9580,
+    "dialogue_game_scene_assigned": 6204,
+    "dialogue_assigned": 9572,
+    "dialogue_review_only": 3368,
     "dialogue_unassigned": 8
   },
   "scenes": [
@@ -1563,6 +1563,7 @@
         "g_00D96EAE",
         "g_00D96F3E",
         "g_00D96F66",
+        "g_00D96F74",
         "g_00D96F9E",
         "g_00D96FD2",
         "g_00D96FF2",
@@ -1595,7 +1596,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 175,
+        "dialogue": 176,
         "sprite": 0
       },
       "related_dialogue_scene_ids": [
@@ -5321,7 +5322,7 @@
       },
       "dialogue_ids": [
         "g_00A30164",
-        "g_00A30182",
+        "g_00A3017C",
         "g_00A30198",
         "g_00A301BC",
         "g_00A301D4",
@@ -8968,6 +8969,7 @@
         "g_00A2A288",
         "g_00A2A294",
         "g_00A2A2A0",
+        "g_00A2A2D4",
         "g_00A2A2DC",
         "g_00A2A300",
         "g_00A2A320",
@@ -9049,7 +9051,7 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 138,
+        "dialogue": 139,
         "sprite": 0
       },
       "entrypoint": {
@@ -12928,6 +12930,7 @@
         "g_00B5C485",
         "g_00B7F7D4",
         "g_00B7F89B",
+        "g_00B81924",
         "g_00BC2191",
         "g_00BC2D91",
         "g_00BC2E0C",
@@ -13911,9 +13914,9 @@
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3367,
+        "dialogue": 3368,
         "sprite": 0,
-        "excluded_low_confidence_dialogue": 3367,
+        "excluded_low_confidence_dialogue": 3368,
         "pending_review": 0
       }
     },
@@ -15831,20 +15834,39 @@
         "lz77_009D6268",
         "lz77_00EE6AFC",
         "lz77_00BF2878",
+        "objlabel_p1_terrain_hud",
         "objlabel_p1_result_scores",
+        "objlabel_p1_result_rank_word",
         "objlabel_p1_campaign_hoip",
         "objlabel_p1_campaign_ryo",
+        "objlabel_p1_campaign_max",
+        "objlabel_p1_campaign_domino",
         "objlabel_p1_campaign_billy",
         "objlabel_p1_battle_ryo",
+        "objlabel_p1_battle_max",
+        "objlabel_p1_campaign_catherine",
+        "objlabel_p1_campaign_kikuchiyo",
+        "objlabel_p1_campaign_asuka",
+        "objlabel_p1_campaign_eagle",
+        "objlabel_p1_campaign_mop",
+        "objlabel_p1_campaign_sturm",
+        "objlabel_p1_campaign_sturm_alt",
+        "objlabel_p1_battle_domino",
+        "objlabel_p1_battle_billy",
+        "objlabel_p1_battle_kikuchiyo",
+        "objlabel_p1_battle_asuka",
+        "objlabel_p1_battle_eagle",
+        "objlabel_p1_battle_mop",
+        "objlabel_p1_battle_sturm",
         "objlabel_p2_remaining_days"
       ],
       "counts": {
         "dialogue": 8,
-        "sprite": 1887,
-        "sprite_text_candidate": 6,
+        "sprite": 1906,
+        "sprite_text_candidate": 25,
         "sprite_scan_lz77": 1880,
         "sprite_font": 1,
-        "pending_review": 14,
+        "pending_review": 33,
         "excluded_scan_lz77": 1880,
         "excluded_font": 1
       }

@@ -37,6 +37,14 @@ PART1_NAME_SUFFIX_SLOTS = {
 }
 PART1_NAME_SUFFIX_TEXT = "님"
 PART1_RAW_NAME_CONTROL_SAN = bytes.fromhex("6982b382f1")
+PART1_ORPHAN_SAN_HITS = (0xDC3C62, 0xDCDEEA, 0xDCEA42)
+# The native dialogue reader terminates on NUL. Bound a single message to the
+# 0x1000-byte maximum used by the project's text QA; never accept an open span.
+PART1_NAME_CONTROL_MAX_LEN = 0x1000
+# Script consumers for the three name-control introductions. The old inline
+# copies remain in the ROM after dialogue repointing, but these pointer cells
+# select the text the game actually reads.
+PART1_NAME_CONTROL_POINTERS = (0xDD373C, 0xDE3308, 0xDE4884)
 PART1_YESNO_HOOK_FILE = 0xF10000
 PART1_YESNO_CURSOR_BRANCH_OFF = 0x98
 PART1_YESNO_CURSOR_FIX_OFF = 0x154
@@ -64,6 +72,64 @@ REQUIRED_KANJI_SUBS = {
 
 def read(path: Path) -> bytes:
     return path.read_bytes()
+
+
+def message_span(rom: bytes, target: int) -> tuple[int, int] | None:
+    if not 0 <= target < len(rom):
+        return None
+    end = rom.find(b"\x00", target, min(len(rom), target + PART1_NAME_CONTROL_MAX_LEN))
+    return (target, end + 1) if end >= 0 else None
+
+
+def name_control_san_status(rom: bytes) -> tuple[list[dict[str, Any]], list[int], list[dict[str, Any]], list[int], list[dict[str, Any]]]:
+    rows = []
+    live_hits = []
+    invalid_spans = []
+    for pointer in PART1_NAME_CONTROL_POINTERS:
+        value = struct.unpack_from("<I", rom, pointer)[0] if pointer + 4 <= len(rom) else 0
+        target = value - 0x08000000
+        span = message_span(rom, target) if 0x08000000 <= value < 0x08000000 + len(rom) else None
+        valid = span is not None
+        hit = rom.find(PART1_RAW_NAME_CONTROL_SAN, *span) if span else -1
+        rows.append({"pointer": f"0x{pointer:08X}",
+                     "target": f"0x{target:08X}" if valid else None,
+                     "valid": valid, "live_san": hit >= 0})
+        if not valid:
+            invalid_spans.append({"pointer": f"0x{pointer:08X}", "target_value": f"0x{value:08X}"})
+        elif hit >= 0:
+            live_hits.append(hit)
+
+    # An old inline copy is exempt only while its entire terminated message
+    # has no 4-byte-aligned GBA ROM pointer to any byte within that span.
+    orphan_spans = {}
+    for hit in PART1_ORPHAN_SAN_HITS:
+        start = hit - 2  # native 0A 09 message prefix
+        span = message_span(rom, start)
+        if (span is None or rom[start:hit] != b"\x0a\x09" or
+                not (span[0] <= hit < span[1]) or
+                rom[hit:hit + len(PART1_RAW_NAME_CONTROL_SAN)] != PART1_RAW_NAME_CONTROL_SAN):
+            invalid_spans.append({"orphan_hit": f"0x{hit:08X}", "reason": "missing_or_truncated_message"})
+        else:
+            orphan_spans[hit] = span
+    references = {hit: [] for hit in orphan_spans}
+    for pointer in range(0, len(rom) - 3, 4):
+        value = struct.unpack_from("<I", rom, pointer)[0]
+        if not 0x08000000 <= value < 0x08000000 + len(rom):
+            continue
+        target = value - 0x08000000
+        for hit, (start, end) in orphan_spans.items():
+            if start <= target < end:
+                references[hit].append(pointer)
+    unexplained = []
+    pos = 0
+    while (pos := rom.find(PART1_RAW_NAME_CONTROL_SAN, pos)) >= 0:
+        if pos not in orphan_spans or references[pos]:
+            unexplained.append(pos)
+        pos += 1
+    proof = [{"hit": f"0x{hit:08X}", "span": [f"0x{start:08X}", f"0x{end:08X}"],
+              "references": [f"0x{x:08X}" for x in references[hit]]}
+             for hit, (start, end) in orphan_spans.items()]
+    return rows, live_hits, invalid_spans, unexplained, proof
 
 
 def load_syllable_codes() -> dict[str, int]:
@@ -283,11 +349,18 @@ def main() -> int:
                 "pattern_hex": bad_leading_space.hex(),
                 "hits": [f"0x{x:08X}" for x in bad_hits],
             })
-        if raw_hits:
+        pointer_rows, live_raw_hits, invalid_spans, unexplained_hits, orphan_proof = name_control_san_status(rom)
+        name_suffix_pattern_status["name_control_pointers"] = pointer_rows
+        name_suffix_pattern_status["live_raw_name_control_san_hits"] = [f"0x{x:08X}" for x in live_raw_hits]
+        name_suffix_pattern_status["orphan_proof"] = orphan_proof
+        name_suffix_pattern_status["unexplained_raw_hits"] = [f"0x{x:08X}" for x in unexplained_hits]
+        if invalid_spans:
+            issues.append({"type": "part1_name_control_invalid_message_span", "spans": invalid_spans})
+        if unexplained_hits or live_raw_hits:
             issues.append({
                 "type": "raw_part1_name_control_san_pattern",
                 "pattern_hex": PART1_RAW_NAME_CONTROL_SAN.hex(),
-                "hits": [f"0x{x:08X}" for x in raw_hits],
+                "hits": [f"0x{x:08X}" for x in sorted(set(unexplained_hits + live_raw_hits))],
             })
 
         dialogue_glyphs = json.loads(Path(build.SYLMAP_2350).read_text(encoding="utf-8"))["map"]

@@ -293,7 +293,9 @@ def build_report() -> dict[str, Any]:
     tsv_entries, tsv_errors = load_tsv_entries(ADDRESS_TEXT_OVERRIDES_TSV)
     runtime_static_only = {addr: text for addr, text in runtime.items() if addr not in generated_addrs}
     tsv_mismatches = []
-    for addr in sorted(set(tsv_entries) | set(runtime_static_only)):
+    # Generated glyph-dictionary sources have a separate authority and may
+    # remain in the TSV as human-readable source text.
+    for addr in sorted((set(tsv_entries) | set(runtime_static_only)) - generated_addrs):
         tv = tsv_entries.get(addr)
         rv = runtime_static_only.get(addr)
         if tv != rv:
