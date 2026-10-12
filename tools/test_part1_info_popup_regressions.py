@@ -46,6 +46,9 @@ class Part1InfoPopupRegressions(unittest.TestCase):
             for top in (1, 17):
                 self.assertGreater(sum(new[y][x] == 4 for y in range(top, top + 14)
                                        for x in range(86, 126)), 50)
+                for y in (top + 2, top + 7, top + 12):
+                    self.assertGreater(sum(new[y][x] == 4 for x in range(86, 126)), 0,
+                                       (hex(address), y))
             for y in range(40):
                 for x in range(128):
                     if not (86 <= x < 126 and y < 32):
@@ -55,14 +58,16 @@ class Part1InfoPopupRegressions(unittest.TestCase):
         spec = pixels(lz77_decompress(self.rom, 0xBC7C00)[0][:128], 32)
         for address in (0xBE9A5C, 0xBE989C):
             tab = pixels(self.rom[address:address + 128], 32)
-            self.assertTrue(any(1 in row for row in tab[2:7]))
-            self.assertNotIn(1, tab[1])
-        self.assertNotIn(1, spec[1])
+            self.assertIn(1, tab[1])
+            self.assertIn(1, tab[7])
+            self.assertNotIn(1, tab[0])
+        self.assertIn(1, spec[1])
+        self.assertIn(1, spec[7])
+        self.assertNotIn(1, spec[0])
 
-    def test_income_and_port_title(self):
+    def test_cp_fallback_pointer_and_port_payload(self):
         self.assertEqual(self.rom[0xB82AE8:0xB82AEC], b'--\0\0')
-        self.assertEqual(struct.unpack_from('<I', self.rom, 0xB28AFC)[0], 0x08F3E000)
-        self.assertEqual(self.rom[0xF3E000:0xF3E006], bytes.fromhex('815b815b0000'))
+        self.assertEqual(struct.unpack_from('<I', self.rom, 0xB28AFC)[0], 0x08B82AE8)
         code_map = json.loads((ROOT / 'data/syllable_to_code_2350.json').read_text())
         expected = bytes.fromhex(code_map['항'][2:] + code_map['구'][2:])
         self.assertEqual(self.rom[0xD85AF4:0xD85AFC], b'\x0a\x09' + expected + b'\x0a\x00')

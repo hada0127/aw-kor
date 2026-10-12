@@ -5950,10 +5950,10 @@ def render_32x8_obj_label(font, text, shadow=False, compact=False):
                 if not grid[row][col]:
                     continue
                 px = cursor + col + xo
-                # Part 1 tabs begin above the visible playfield.  The native
-                # lettering occupies rows 2..6; placing seven ink rows from
-                # row 1 loses the first row at the screen edge.
-                py = 2 + (row * 5 // 7) if compact else 1 + row
+                # Measured Part 1 OAM y=0/-1 leaves glyph rows 1..7 visible.
+                # Keep all seven Galmuri rows; vertical squeezing destroys
+                # Hangul strokes. Part 2 uses the same unsqueezed layout.
+                py = 1 + row
                 if shadow and 0 <= px + 1 < 24 and 0 <= py + 1 < 8:
                     pixels[py + 1][px + 1] = 3
                 if 0 <= px < 24 and 0 <= py < 8:
@@ -7402,14 +7402,16 @@ def patch_part1_compact_info_weapon_labels(rom):
         for text, top in (('주포', 1), ('부포', 17)):
             for char_index, char in enumerate(text):
                 grid, w, h, xo, yo = glyph_grid(font[ord(char)])
-                for dy in range(14):
-                    sy = dy * 11 // 14 - yo
-                    if not 0 <= sy < h:
-                        continue
-                    for dx in range(14):
-                        sx = dx * w // 14 - xo
-                        if 0 <= sx < w and grid[sy][sx]:
-                            pixels[top + dy][91 + char_index * 16 + dx] = 4
+                for sy in range(h):
+                    for sx in range(w):
+                        if not grid[sy][sx]:
+                            continue
+                        dx = round((sx + xo) * 14 / w)
+                        dy = round((sy + yo) * 14 / 11)
+                        for yy in (dy, dy + 1):
+                            for xx in (dx, dx + 1):
+                                if 0 <= xx < 14 and 0 <= yy < 14:
+                                    pixels[top + yy][91 + char_index * 16 + xx] = 4
 
         out = bytearray(len(data))
         for tile_idx in range(len(data) // 32):
@@ -22754,24 +22756,14 @@ def main():
     WRITE_LOG.append([0xD85AF6, 6, 6, bytes(rom[0xD85AF6:0xD85AFC]).hex(),
                       None, '항구', None, 'part1-terrain-port-title'])
 
-    # Plain/forest income uses the native ASCII "--" fallback. Preserve its
-    # NUL-terminated source and repoint the one known consumer to a terminated
-    # SJIS long-mark string. The Latin glyph path is blank in this build.
+    # This ASCII string belongs to the CP/2P/VS string group; it is not the
+    # terrain income consumer. Leave its pointer and bytes unchanged.
     if bytes(orig[0xB82AE8:0xB82AEC]) != b'--\x00\x00':
         raise AssertionError('unexpected Part 1 income fallback source')
     if bytes(rom[0xB82AE8:0xB82AEC]) != b'--\x00\x00':
         raise AssertionError('Part 1 income fallback changed before final patch')
-    income_pointer, income_repoint = 0xB28AFC, 0xF3E000
-    if struct.unpack_from('<I', orig, income_pointer)[0] != 0x08B82AE8:
-        raise AssertionError('unexpected Part 1 income fallback pointer')
-    if bytes(orig[income_repoint:income_repoint + 6]) != bytes(6) or bytes(rom[income_repoint:income_repoint + 6]) != bytes(6):
-        raise AssertionError('Part 1 income fallback destination is occupied')
-    rom[income_repoint:income_repoint + 6] = b'\x81\x5b\x81\x5b\x00\x00'
-    struct.pack_into('<I', rom, income_pointer, 0x08000000 + income_repoint)
-    WRITE_LOG.append([income_repoint, 6, 6, '815b815b0000', None, 'ーー', None,
-                      'part1-terrain-income-fallback'])
-    WRITE_LOG.append([income_pointer, 4, 4, bytes(rom[income_pointer:income_pointer + 4]).hex(),
-                      None, 'income fallback pointer', None, 'part1-terrain-income-fallback-pointer'])
+    if struct.unpack_from('<I', rom, 0xB28AFC)[0] != 0x08B82AE8:
+        raise AssertionError('Part 1 CP/2P/VS fallback pointer changed')
 
     # Normal confirm-choice rows have enough room for "예　　아니오" but should
     # not retain ASCII space padding after the Korean text; some UI paths render

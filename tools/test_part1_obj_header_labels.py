@@ -1,6 +1,8 @@
 import unittest
 
 import part1_obj_header_labels as m
+from bdf import load_bdf
+from build_korean_full import render_32x8_obj_label
 
 
 def strip(raw, tiles):
@@ -59,6 +61,15 @@ class HeaderLabelTests(unittest.TestCase):
         for address, tiles, *_ in m.LABELS:
             for start, size in siblings:
                 self.assertTrue(address + tiles * 32 <= start or start + size <= address, hex(address))
+
+    def test_part2_noncompact_info_label_keeps_full_glyph_height(self):
+        font, _ = load_bdf(str(m.ROOT / 'reference/fonts/Galmuri7.bdf'))
+        full = strip(render_32x8_obj_label(font, '정보'), 4)
+        compact = strip(render_32x8_obj_label(font, '정보', compact=True), 4)
+        self.assertEqual(full, compact)
+        self.assertEqual(full[0], [0] * 32)
+        self.assertIn(1, full[1])
+        self.assertIn(1, full[7])
 
 
 if __name__ == '__main__':
