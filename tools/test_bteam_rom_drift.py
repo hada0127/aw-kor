@@ -37,6 +37,16 @@ class RomDriftTest(unittest.TestCase):
         for source, substituted in (('*', '＋'), ('=', '―'), ('@', '＃')):
             self.assertNotEqual(display_equivalent(source, address), substituted)
 
+    def test_profile_punctuation_mutations_are_exact_address_bound(self):
+        address = 0xB83C70  # protected source contains both comma and period
+        self.assertEqual(display_equivalent('가,나.', address), '가、나。')
+        # A different row in the same renderer cannot inherit this exception.
+        self.assertEqual(display_equivalent('가,나.', 0xB83C71), '가，나．')
+        # No protected source row at this address contains these characters.
+        for source, forbidden in (('가:나', '가；나'), ('가[나]', '가（나）'),
+                                  ('가{나}', '가（나）')):
+            self.assertNotEqual(display_equivalent(source, address), forbidden)
+
     def test_co_source_rows_reconstruct_split_and_merged_fragments(self):
         from qa_integrity_map import decode_enc, load_syl
         # The ROM and manifest must come from the same build: relocation targets

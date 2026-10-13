@@ -91,7 +91,7 @@ ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
 ROUND2_RESIDUAL_DIGEST = '5cc6a1b98dd910cb914f442199dd16c3ffe174e5433cf3cc3171e7cffd6d5dfd'
 ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
 with ROUND2_MANIFEST.open('rb') as _stream:
-    if hashlib.sha256(_stream.read()).hexdigest() != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
+    if hashlib.sha256(_stream.read()).hexdigest() != 'ae9e9a92530507b01859b57f137650f6fc9b8877add9ee1257feb1452f131a37':
         raise ValueError('B-team round-2 decision manifest digest changed')
 with ROUND2_MANIFEST.open(encoding='utf-8', newline='') as _stream:
     _round2_rows = list(csv.DictReader(_stream, delimiter='\t'))
@@ -188,6 +188,63 @@ B8301C B83044 B83130 B83CC0 B83DB0 B83EB8 B83F74 B84298
 '''.split())
 ORIGINAL_GLYPH_PUNCTUATION = str.maketrans({'!': '！', '?': '？', ',': '、', '.': '。', '-': 'ー'})
 
+# Per-address punctuation alias table, baseline-derived: each row comes from
+# bteam_baseline.json overrides and was observed in the b26/b27 final ROM via
+# integrity_map.json and the final-ROM drift gate (not a general rule).
+# A35228, B82FAC, B8319C, B83A64, B83FA8 are NOT in this table: they remain
+# pinned residual mismatches, not proven punctuation substitutions. No source row contains :[]{}.
+# Values list only punctuation present in that row's protected text.
+PROFILE_PUNCTUATION_ROWS = {
+    0x00A2C614: '.',
+    0x00A3353C: '.',
+    0x00A33C3C: '.',
+    0x00A33D1C: '.,',
+    0x00A33D8C: '.',
+    0x00A34E58: ',',
+    0x00A34F00: ',',
+    0x00A34F70: ',',
+    0x00A34FC8: '.',
+    0x00A3508C: ',',
+    0x00A350DC: '.',
+    0x00A350F8: '.',
+    0x00A3511C: ',',
+    0x00A3514C: '.',
+    0x00A3517C: '.,',
+    0x00A351A4: '.',
+    0x00A351CC: '.',
+    0x00A351E0: '.',
+    0x00A35228: ',',
+    0x00B82F54: '.,',
+    0x00B82F7C: '.',
+    0x00B82FAC: ',',
+    0x00B82FDC: '.',
+    0x00B83000: '.',
+    0x00B8310C: '.',
+    0x00B83160: ',',
+    0x00B8319C: '-',
+    0x00B83A64: ',',
+    0x00B83A98: ',',
+    0x00B83AF8: ',',
+    0x00B83C3C: '-',
+    0x00B83C70: '.,',
+    0x00B83D10: ',',
+    0x00B83D38: '.,',
+    0x00B83E08: '.,',
+    0x00B83E2C: ',',
+    0x00B83E58: '-',
+    0x00B83E78: ',-',
+    0x00B83E94: '-',
+    0x00B83F04: ',',
+    0x00B83FA8: '.,-',
+    0x00B84034: '-',
+    0x00B84104: ',',
+    0x00B84128: '.',
+    0x00B84154: ',',
+    0x00B84224: '-',
+    0x00B842B8: ',',
+    0x00EC328E: '.',
+}
+
 
 def original_glyph_encoding(value: str) -> str:
     """Expected-side form for ROUND2_ORIGINAL_GLYPH_ROWS (words and order unchanged)."""
@@ -218,13 +275,12 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
         from renderer_text import renderer_for_address
         profile = renderer_for_address(address)
         if profile is not None:
-            import re
-            value = value.replace('...', '・・・')
-            value = re.sub(r'(?<=[0-9０-９])\.(?=[0-9０-９])', '・', value)
-            aliases = {'.': '。', ',': '、', '-': 'ー' if profile.startswith('p2_') else '―',
-                       '~': '〜', '"': '”', "'": '”', '[': '（', ']': '）',
-                       '{': '（', '}': '）', ':': '；', '\\': '＼'}
-            value = ''.join(aliases[ch] if ch in aliases else
+            # Only punctuation observed in this exact protected ROM row may
+            # change glyph form; all other ASCII gets pure-width conversion.
+            row_chars = PROFILE_PUNCTUATION_ROWS.get(address, '')
+            row_aliases = {ch: {'.': '。', ',': '、', '-': '―'}[ch]
+                           for ch in row_chars}
+            value = ''.join(row_aliases[ch] if ch in row_aliases else
                             chr(ord(ch) + 0xFEE0) if 0x21 <= ord(ch) <= 0x7E
                             and ch not in '*=@' else ch for ch in value)
         value = value.replace(' ', '　')

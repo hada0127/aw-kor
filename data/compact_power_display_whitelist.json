@@ -8,7 +8,7 @@
     "0x00A295AC": {"full_ko": "위닝 마치", "display_ko": "승리", "reason": "compact CO power label slot"},
     "0x00A295C0": {"full_ko": "빅토리어스 퍼레이드", "display_ko": "대승", "reason": "compact CO power label slot"},
     "0x00A295D8": {"full_ko": "맥시멈 블로우", "display_ko": "강타", "reason": "compact CO power label slot"},
-    "0x00A295EC": {"full_ko": "스트레이트 블래스트", "display_ko": "직격", "reason": "compact CO power label slot"},
+    "0x00A295EC": {"full_ko": "스트레이트 블래스트", "display_ko": "직격", "reason": "2026-10-13 Fable+Astra D1 RESTORE_BASELINE: dialogue_overrides and B-team baseline retain full authority. Exact-address compact-display residual: the 20-byte inter-entry extent leaves an 18-byte payload slot, which cannot hold the full name's 20 bytes plus NUL; 0x08380564 consumes a 61-cell dictionary and 5B3ECC atlas whose 64 cells cannot cover the full name's five new cells and space. Keep 직격 in this display writer until name relocation plus dictionary/atlas extension is verified on screen; see bteam_round2_residuals.tsv."},
     "0x00A29600": {"full_ko": "장사 스피릿", "display_ko": "상혼", "reason": "compact CO power label slot"},
     "0x00A29618": {"full_ko": "와쇼이 페스타", "display_ko": "축제", "reason": "compact CO power label slot"},
     "0x00A2962C": {"full_ko": "골드 러시", "display_ko": "골드", "reason": "compact CO power label slot"},

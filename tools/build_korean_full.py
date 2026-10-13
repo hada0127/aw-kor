@@ -12335,7 +12335,7 @@ def load_bteam_round2_decisions():
     path = os.path.join(BASE, 'data', 'bteam_round2_decisions.tsv')
     with open(path, 'rb') as stream:
         manifest_digest = hashlib.sha256(stream.read()).hexdigest()
-    if manifest_digest != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
+    if manifest_digest != 'ae9e9a92530507b01859b57f137650f6fc9b8877add9ee1257feb1452f131a37':
         raise AssertionError('B-team round-2 decision manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
