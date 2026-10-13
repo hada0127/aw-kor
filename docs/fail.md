@@ -1570,3 +1570,13 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 - `data/dialogue_overrides.json`·`address_text_overrides.tsv`에 앞뒤 공백을 넣어도 재배치 경로(`_rp_dlg`)가 `.strip()` 하므로 사라진다(Codex v7의 ' 우리 그린어스뿐이로군.' 등). 스크립트 행 소유자 텍스트나 playthrough repair 행만 공백을 유지한다.
 - `tools/build_korean_full.py`의 인라인 ADDRESS_TEXT_OVERRIDES는 TSV가 있으면 권위가 아니다(대체값). Codex가 인라인만 고친 0xA1FF09·0xA2D780 등은 ROM에 반영되지 않았다.
 - 치트 런 체크포인트에서 `--export-game-save`는 조상 run01~19 전 프레임을 다시 검증해 10분 넘게 끝나지 않았다. 화면 QA용 이관은 `game_save_evidence.py --anchored --skip-source-frame-check`를 쓴다.
+
+### 2026-10-13 2편 MODE★SELECT 헤더 b17/b18 실패
+
+- 0x541BB8 아틀라스가 캠페인 그림과 일본판 메뉴 헤더를 같이 공급한다(메뉴 OAM 타일 8–15·72–79가 한국어 캠페인 교체와 겹침). b17은 헤더가 빈칸, 아틀라스 보존 편집도 콜드 부팅에서 빈칸이라 제거. b18도 보호 타일 16개 모두 JP와 달라 빈칸.
+- 원인: 아틀라스 보존만으로는 부족했다. 문자열 0x8FC2AC(MODE★SELECT)가 한글화돼 있었고, 드로어 0x08373D10은 20자 ASCII 알파벳만 그린다. b19에서 문자열·알파벳·로더를 사본으로 분리해 해결(`docs/research.md` 2026-10-13).
+- Hada Sans ExtraBold/Black 20px은 자모가 뭉친다. 모드판은 Bold(+Black 가이드)로 고정.
+
+### 2026-10-13 rev.ng PoC 부분 실패 — Ghidra 사용
+
+- 전체 ROM lift가 0x3924a0 데이터에서 `CodeGenerator.cpp:459` 크래시, 리터럴 풀을 ARM 함수로 오인, segment type 없이 emit-c segfault, SVC 본문 빔, 첫 점프 테이블 소실(`temp/decomp/revng/`). GBA Thumb ROM 디컴파일에는 다시 쓰지 않고 Ghidra(`temp/decomp/ghidra/decomp.sh`)를 쓴다.

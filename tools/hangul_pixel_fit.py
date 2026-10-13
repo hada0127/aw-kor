@@ -230,72 +230,325 @@ def paint_bitmap(layer, text, font, origin, fill, outline=None, shadow=None,
     return records
 
 
-# The seven LARGE mode plates share one 19px ink height and bottom baseline.
-# The native white field ends at y=22; origin y=2 leaves rows 21 and 22 clear.
-PLATE_HEIGHT = 19
-PLATE_ORIGIN = (6, 2)
+# Part 2 LARGE mode plates (2026-10-13 b19): JP lettering treatment with
+# Hada Sans Bold. Measured on the original plates (0x5B7930..0x5B8B20): every
+# JP word fills x=4..123 and y=2..21 (120x20 band). Letter bodies use palette
+# indices 5..12 (one per JP letter, left to right; the menu animates them), and
+# rounded edges use the two light shades 3 and 2 on the white field (index 1).
+# Korean: one 20px cap band, the outline set wider before rasterization
+# (horizontal scale <= PLATE_MAX_WIDTH_SCALE, declared per label so the shape
+# oracle still rejects any other anisotropy), a topology-safe 1px emboldening
+# from the same outline's coverage, x-band body indices 5..12 and AA 2/3.
+PLATE_HEIGHT = 20
+PLATE_ORIGIN = (4, 2)
+PLATE_WIDTH = 120
 PLATE_LABELS = ('캠페인', '자유전', '상점', '편집', '통신', '트라이얼', '사운드룸')
-# At this size the uniform outline closes the second counter of ㅌ/ㄹ.
-# Open a single row without moving the strokes or scaling either axis.
-# The middle bar is necessarily 1px in this seven-row initial; the outer
-# bars and vertical stems retain 2px or more wherever the geometry allows.
-PLATE_CLEAR_PIXELS = {
-    '통': tuple((x, 4) for x in range(4, 9)),
-    '룸': tuple((x, 4) for x in range(3, 8)),
-}
+PLATE_MAX_WIDTH_SCALE = 1.9    # declared wide setting; shape oracle checks it
+PLATE_MIN_GAP = 2
+PLATE_MAX_GAP = 8
+PLATE_AA_LEVELS = ((80, 3), (30, 2))   # guide coverage -> JP edge shade index
+PLATE_BODY_INDICES = tuple(range(5, 13))
 
 
-def plate_glyph(char):
-    source = outline_alpha(char)
-    width = max(1, round(source.width * PLATE_HEIGHT / source.height))
-    mask = glyph(char, width, PLATE_HEIGHT).copy()
-    for xy in PLATE_CLEAR_PIXELS.get(char, ()):
-        if not mask.getpixel(xy):
-            raise aw_fonts.FontFitError(f'plate counter correction drift: {char!r} {xy}')
-        mask.putpixel(xy, 0)
-    return mask
+def plate_body_index(x):
+    """JP x-band body index for an absolute plate column."""
+    return 5 + min(7, max(0, x - PLATE_ORIGIN[0]) * 8 // PLATE_WIDTH)
 
 
-def verify_plate_ink(layer, text):
-    """Compare EVERY final syllable with a complete, unclipped glyph.
+def plate_syllable_indices(text):
+    """JP gives each letter one body index 5..12 left to right (the menu
+    animates them). Each Korean syllable gets the band index of its center
+    column, so the sweep still runs left to right (b20: one index per glyph
+    also keeps the LZ77 payload inside the native allocations)."""
+    _, records = plate_line(text)
+    return [plate_body_index(PLATE_ORIGIN[0] + (a + c) // 2) for _, (a, _, c, _) in records]
 
-    The independent shape oracle additionally checks the unedited font raster.
-    This guard checks bounds and whole-mask equality, including the bottom
-    rows which a tight cropped/reference-height comparison cannot protect.
+
+@lru_cache(maxsize=256)
+def plate_outline_alpha(char):
+    font = ImageFont.truetype(aw_fonts.hadasans_path(), 384)
+    image = Image.new('L', (768, 768))
+    ImageDraw.Draw(image).text((20, 0), char, font=font, fill=255)
+    box = image.point(lambda v: 255 if v >= 128 else 0).getbbox()
+    if box is None:
+        raise aw_fonts.FontFitError(f'empty Hada Sans glyph: {char!r}')
+    return image.crop(box)
+
+
+def _components(pixels):
+    groups = 0
+    pixels = set(pixels)
+    while pixels:
+        stack = [pixels.pop()]
+        groups += 1
+        while stack:
+            x, y = stack.pop()
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    p = (x + dx, y + dy)
+                    if p in pixels:
+                        pixels.remove(p)
+                        stack.append(p)
+    return groups
+
+
+def plate_topology(mask):
+    """(8-connected ink components, enclosed counters) of a binary mask."""
+    w, h = mask.size
+    px = mask.load()
+    ink = {(x, y) for y in range(h) for x in range(w) if px[x, y]}
+    # Background is 4-connected (dual of 8-connected ink); pad one pixel.
+    bg = {(x, y) for y in range(-1, h + 1) for x in range(-1, w + 1) if (x, y) not in ink}
+    regions = 0
+    while bg:
+        stack = [bg.pop()]
+        regions += 1
+        while stack:
+            x, y = stack.pop()
+            for p in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if p in bg:
+                    bg.remove(p)
+                    stack.append(p)
+    return _components(ink), regions - 1
+
+
+@lru_cache(maxsize=256)
+def plate_outline_topology(char):
+    src = plate_outline_alpha(char)
+    probe = src.resize((max(1, src.width // 4), max(1, src.height // 4)), Image.Resampling.BOX)
+    return plate_topology(probe.point(lambda v: 255 if v >= 128 else 0))
+
+
+@lru_cache(maxsize=256)
+def _plate_outline_pair(char):
+    """Bold and Black outlines drawn at the same origin, cropped to one box.
+
+    Returns (bold, black, bold_box) where bold_box is the Bold ink bbox
+    inside the shared union box.
     """
-    mask, records = plate_line(text)
-    ox, oy = PLATE_ORIGIN
-    expected = Image.new('L', layer.size)
-    expected.paste(mask, (ox, oy))
-    actual = layer.point(lambda v: 255 if v == 5 else 0)
-    # Exclude the native colored caption strip, but no main-text row.
-    actual = actual.crop((0, 0, 128, 23))
-    if actual.tobytes() != expected.crop((0, 0, 128, 23)).tobytes():
-        raise aw_fonts.FontFitError(f'clipped or changed plate ink: {text!r}')
-    for char, (a, b, c, d) in records:
-        ref = plate_glyph(char)
-        box = ref.getbbox()
-        if box is None or not (4 <= ox+a+box[0] < ox+a+box[2] <= 124 and
-                               2 <= oy+b+box[1] < oy+b+box[3] <= 21):
-            raise aw_fonts.FontFitError(f'plate glyph outside white field: {char!r}')
-        if actual.crop((ox+a, oy+b, ox+c, oy+d)).tobytes() != ref.tobytes():
-            raise aw_fonts.FontFitError(f'incomplete plate syllable: {char!r}')
-    return records
+    images = []
+    for path in (aw_fonts.hadasans_path(), aw_fonts.hadasans_black_path()):
+        font = ImageFont.truetype(path, 384)
+        image = Image.new('L', (900, 768))
+        ImageDraw.Draw(image).text((60, 0), char, font=font, fill=255)
+        images.append(image)
+    boxes = [im.point(lambda v: 255 if v >= 128 else 0).getbbox() for im in images]
+    if None in boxes:
+        raise aw_fonts.FontFitError(f'empty Hada Sans glyph: {char!r}')
+    bold_box = boxes[0]
+    union = (min(boxes[0][0], boxes[1][0]), bold_box[1], max(boxes[0][2], boxes[1][2]), bold_box[3])
+    inner = (bold_box[0] - union[0], 0, bold_box[2] - union[0], bold_box[3] - bold_box[1])
+    return images[0].crop(union), images[1].crop(union), inner
 
 
-def plate_line(text, width=116, height=PLATE_HEIGHT, spacing=3):
-    """One shared height/baseline, natural aspect ratios, complete syllables."""
-    if height != PLATE_HEIGHT or text not in PLATE_LABELS:
-        raise aw_fonts.FontFitError(f'unsupported LARGE plate profile: {text!r} {height}')
-    glyphs = [plate_glyph(ch) for ch in text]
-    used = sum(g.width for g in glyphs) + spacing * (len(text) - 1)
-    if used > width:
+def plate_glyph_width(char, scale):
+    """Width (px) of the union box at the declared scale (upper bound of ink)."""
+    bold, _, _ = _plate_outline_pair(char)
+    return max(1, round(bold.width * PLATE_HEIGHT * scale / bold.height))
+
+
+def _column_runs(cells, w, h):
+    return [sum(v for v, _, _ in runs([(x, y) in cells for y in range(h)])) for x in range(w)]
+
+
+def _row_runs(cells, w, h):
+    return [sum(v for v, _, _ in runs([(x, y) in cells for x in range(w)])) for y in range(h)]
+
+
+@lru_cache(maxsize=1024)
+def _plate_raster(char, scale):
+    """(body mask, weight-guide coverage), cropped to the body's columns.
+
+    Body = Hada Sans Bold raster at the declared scale, grown toward the
+    Hada Sans Black outline of the same glyph (b20 JP-weight treatment). A
+    guide pixel joins only when it is 4-adjacent to the body, outside every
+    enclosed Bold counter, keeps every column's and row's stroke count (no
+    gap closes, so each gap stays >= 1px) and keeps the outline's 8-connected
+    jamo components and counters. Bold jamo shapes and counters survive.
+    """
+    bold, black, inner = _plate_outline_pair(char)
+    H = PLATE_HEIGHT
+    W = plate_glyph_width(char, scale)
+    strict = bold.resize((W, H), Image.Resampling.LANCZOS).point(lambda v: 255 if v >= 128 else 0)
+    guide = black.resize((W, H), Image.Resampling.LANCZOS)
+    sp, gp = strict.load(), guide.load()
+    body = {(x, y) for y in range(H) for x in range(W) if sp[x, y]}
+
+    def as_mask(cells):
+        mask = Image.new('L', (W, H))
+        for xy in cells:
+            mask.putpixel(xy, 255)
+        return mask
+
+    want = plate_outline_topology(char)
+    if plate_topology(as_mask(body)) != want:
+        raise aw_fonts.FontFitError(f'plate raster merges jamo or counters: {char!r} {scale}')
+    outside = set()
+    stack = [(x, y) for x in range(W) for y in (0, H - 1)] + [(x, y) for y in range(H) for x in (0, W - 1)]
+    stack = [p for p in stack if p not in body]
+    outside.update(stack)
+    while stack:
+        x, y = stack.pop()
+        for q in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= q[0] < W and 0 <= q[1] < H and q not in outside and q not in body:
+                outside.add(q)
+                stack.append(q)
+    cols, rows = _column_runs(body, W, H), _row_runs(body, W, H)
+    cands = sorted(((gp[x, y], -y, -x) for y in range(H) for x in range(W)
+                    if (x, y) not in body and (x, y) in outside and gp[x, y] >= 128), reverse=True)
+    changed = True
+    while changed:
+        changed = False
+        for _, ny, nx in cands:
+            x, y = -nx, -ny
+            if (x, y) in body or not any(q in body for q in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))):
+                continue
+            trial = body | {(x, y)}
+            if (sum(v for v, _, _ in runs([(x, yy) in trial for yy in range(H)])) != cols[x] or
+                    sum(v for v, _, _ in runs([(xx, y) in trial for xx in range(W)])) != rows[y]):
+                continue
+            if plate_topology(as_mask(trial)) != want:
+                continue
+            body = trial
+            changed = True
+    mask = as_mask(body)
+    x0, _, x1, _ = mask.getbbox()
+    return mask.crop((x0, 0, x1, H)), guide.crop((x0, 0, x1, H))
+
+
+def plate_glyph(char, scale=1.0):
+    """Final binary body of one plate syllable (see _plate_raster)."""
+    return _plate_raster(char, scale)[0]
+
+
+def plate_coverage(char, scale):
+    """Weight-guide (Hada Sans Black) coverage aligned with plate_glyph."""
+    return _plate_raster(char, scale)[1]
+
+
+@lru_cache(maxsize=64)
+def plate_width_scale(text):
+    """Widest declared outline scale (<= max) whose line fits 120px."""
+    if text not in PLATE_LABELS:
+        raise aw_fonts.FontFitError(f'unsupported LARGE plate profile: {text!r}')
+    best = None
+    for step in range(100, round(PLATE_MAX_WIDTH_SCALE * 100) + 1):
+        scale = step / 100
+        used = sum(plate_glyph_width(ch, scale) for ch in text) + PLATE_MIN_GAP * (len(text) - 1)
+        if used <= PLATE_WIDTH:
+            best = scale
+    if best is None:
         raise aw_fonts.FontFitError(f'plate cannot fit natural glyphs: {text!r}')
+    return best
+
+
+def plate_line(text, width=PLATE_WIDTH, height=PLATE_HEIGHT):
+    """Body mask and syllable boxes inside the 120x20 band (band coordinates)."""
+    if height != PLATE_HEIGHT or width != PLATE_WIDTH or text not in PLATE_LABELS:
+        raise aw_fonts.FontFitError(f'unsupported LARGE plate profile: {text!r} {height}')
+    scale = plate_width_scale(text)
+    glyphs = [plate_glyph(ch, scale) for ch in text]
+    natural = sum(g.width for g in glyphs)
+    gap = min(PLATE_MAX_GAP, (width - natural) // max(1, len(text) - 1)) if len(text) > 1 else 0
+    if gap < PLATE_MIN_GAP:
+        raise aw_fonts.FontFitError(f'plate cannot fit natural glyphs: {text!r}')
+    used = natural + gap * (len(text) - 1)
     mask = Image.new('L', (width, height))
     x = (width - used) // 2
     records = []
     for ch, ink in zip(text, glyphs):
         mask.paste(ink, (x, 0))
-        records.append((ch, (x, 0, x+ink.width, height)))
-        x += ink.width + spacing
+        records.append((ch, (x, 0, x + ink.width, height)))
+        x += ink.width + gap
     return mask, records
+
+
+def plate_shades(text):
+    """{(x, y): index} JP edge shades (band coordinates), never inside a 1px gap."""
+    mask, records = plate_line(text)
+    scale = plate_width_scale(text)
+    body = mask.load()
+    # Shade only the outer contour: a pixel inside an enclosed counter stays
+    # white (JP shades rounded outer corners, never counter interiors).
+    outside = set()
+    stack = [(x, y) for x in range(mask.width) for y in (0, mask.height - 1)] + \
+            [(x, y) for y in range(mask.height) for x in (0, mask.width - 1)]
+    stack = [p for p in stack if not body[p]]
+    outside.update(stack)
+    while stack:
+        x, y = stack.pop()
+        for p in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+            if 0 <= p[0] < mask.width and 0 <= p[1] < mask.height and p not in outside and not body[p]:
+                outside.add(p)
+                stack.append(p)
+    shades = {}
+    for ch, (a, b, c, d) in records:
+        cov = plate_coverage(ch, scale).load()
+        for y in range(b, d):
+            for x in range(a, c):
+                v = cov[x - a, y - b]
+                if body[x, y] or v < PLATE_AA_LEVELS[-1][0] or (x, y) not in outside:
+                    continue
+                def ink(px, py):
+                    return 0 <= px < mask.width and 0 <= py < mask.height and body[px, py]
+                if (ink(x - 1, y) and ink(x + 1, y)) or (ink(x, y - 1) and ink(x, y + 1)):
+                    continue
+                shades[(x, y)] = next(i for level, i in PLATE_AA_LEVELS if v >= level)
+    return shades
+
+
+def paint_plate(layer, text):
+    """Paint body (per-syllable JP index 5..12) and edge shades (3/2) into a 128x32 layer."""
+    mask, records = plate_line(text)
+    ox, oy = PLATE_ORIGIN
+    px = layer.load()
+    for (x, y), idx in plate_shades(text).items():
+        px[ox + x, oy + y] = idx
+    body = mask.load()
+    for idx, (_, (a, b, c, d)) in zip(plate_syllable_indices(text), records):
+        for y in range(b, d):
+            for x in range(a, c):
+                if body[x, y]:
+                    px[ox + x, oy + y] = idx
+    return records
+
+
+def verify_plate_ink(layer, text):
+    """Compare EVERY final syllable with a complete, unclipped glyph.
+
+    Checks the whole 128x23 text field: body mask (indices 5..12) equals the
+    renderer, each body pixel carries its syllable's JP index, and edge shades 2/3
+    appear only where the renderer placed them.
+    """
+    mask, records = plate_line(text)
+    ox, oy = PLATE_ORIGIN
+    expected = Image.new('L', layer.size)
+    expected.paste(mask, (ox, oy))
+    actual = layer.point(lambda v: 255 if v in PLATE_BODY_INDICES else 0)
+    # Exclude the native colored caption strip, but no main-text row.
+    if actual.crop((0, 0, 128, 23)).tobytes() != expected.crop((0, 0, 128, 23)).tobytes():
+        raise aw_fonts.FontFitError(f'clipped or changed plate ink: {text!r}')
+    shades = {(ox + x, oy + y): i for (x, y), i in plate_shades(text).items()}
+    band = {}
+    for idx, (_, (a, b, c, d)) in zip(plate_syllable_indices(text), records):
+        for x in range(a, c):
+            band[ox + x] = idx
+    for y in range(oy, oy + PLATE_HEIGHT):
+        for x in range(ox, ox + PLATE_WIDTH):
+            v = layer.getpixel((x, y))
+            if v in PLATE_BODY_INDICES and v != band.get(x):
+                raise aw_fonts.FontFitError(f'plate body index changed: {text!r} {(x, y)}')
+            if v in (2, 3) and shades.get((x, y)) != v:
+                raise aw_fonts.FontFitError(f'plate edge shade changed: {text!r} {(x, y)}')
+            if (x, y) in shades and v != shades[(x, y)]:
+                raise aw_fonts.FontFitError(f'plate edge shade missing: {text!r} {(x, y)}')
+    scale = plate_width_scale(text)
+    for char, (a, b, c, d) in records:
+        ref = plate_glyph(char, scale)
+        box = ref.getbbox()
+        if box is None or not (4 <= ox+a+box[0] < ox+a+box[2] <= 124 and
+                               2 <= oy+b+box[1] < oy+b+box[3] <= 22):
+            raise aw_fonts.FontFitError(f'plate glyph outside white field: {char!r}')
+        if actual.crop((ox+a, oy+b, ox+c, oy+d)).tobytes() != ref.tobytes():
+            raise aw_fonts.FontFitError(f'incomplete plate syllable: {char!r}')
+    return records

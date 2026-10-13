@@ -2,7 +2,7 @@
 
 2026-10-08 user font rule (CLAUDE.md): large drawn text (titles, banners,
 headlines, big labels) uses OkDanDan-Bold; small text glyphs use Galmuri
-(reference/fonts). No other font may produce ROM pixels.
+(reference/fonts). Part 2 large mode plates use Hada Sans Bold (2026-10-13 decision).
 
 OkDanDan is not redistributable here, so it is resolved from a font directory:
   AW_FONT_DIR (explicit) > ~/Library/Fonts (macOS, unchanged) > ~/aw-fonts (Linux).
@@ -57,6 +57,33 @@ def font_dir():
 
 
 OKDANDAN = font_dir() / 'OkDanDan-Bold.otf'
+
+# Part 2 large mode plates: Hada Sans Bold (2026-10-13 user decision).
+HADASANS = Path(os.environ.get('AW_HADASANS_FONT', str(Path.home() / '.local/share/fonts/HadaSans/HadaSans-Bold.otf'))).expanduser()
+HADASANS_SHA256 = '213aaecf921e19d71f43b8a7f0c4076d3efa0552c2ecc9ed2d021c6873bdebba'
+
+def hadasans_path():
+    if not HADASANS.is_file():
+        raise FileNotFoundError(f'HadaSans-Bold font not found: {HADASANS} (set AW_HADASANS_FONT)')
+    digest = hashlib.sha256(HADASANS.read_bytes()).hexdigest()
+    if digest != HADASANS_SHA256:
+        raise AssertionError(f'unexpected HadaSans-Bold SHA-256 {digest} at {HADASANS}')
+    return str(HADASANS)
+
+
+# Weight guide for the LARGE mode plates (b20): same family, same OFL licence.
+# Only its coverage steers where Bold strokes may grow; jamo/counters stay Bold's.
+HADASANS_BLACK = Path(os.environ.get('AW_HADASANS_BLACK_FONT', str(HADASANS.with_name('HadaSans-Black.otf')))).expanduser()
+HADASANS_BLACK_SHA256 = '6e80fc2410876192323434584523b9d8e3dfba1a79f8a3d42cd7520631f6b048'
+
+
+def hadasans_black_path():
+    if not HADASANS_BLACK.is_file():
+        raise FileNotFoundError(f'HadaSans-Black font not found: {HADASANS_BLACK} (set AW_HADASANS_BLACK_FONT)')
+    digest = hashlib.sha256(HADASANS_BLACK.read_bytes()).hexdigest()
+    if digest != HADASANS_BLACK_SHA256:
+        raise AssertionError(f'unexpected HadaSans-Black SHA-256 {digest} at {HADASANS_BLACK}')
+    return str(HADASANS_BLACK)
 
 
 def okdandan_path(verify=True):

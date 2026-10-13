@@ -88,7 +88,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'e8fa553bd8bf434c76948a4cf3753b2577099a6db4e264fc15db4f5ce36278f5'
+ROUND2_RESIDUAL_DIGEST = 'ce69d508c5702e6eb134183bc5e96d6128afb62dd6cba490c853be44ee32797b'
 ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':

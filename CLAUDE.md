@@ -60,6 +60,8 @@
 
 - **2026-10-08 사용자 승인(B팀 예외):** 2편 M29 제목(0xA2D814) B팀 문구 「결전 전」은 M28과 중복되고 원문 ラスト・フロント와 맞지 않아, 사용자가 캠페인 미리보기 표기와 같은 「최종결전!」으로 바꾸는 안을 승인했다.
 
+- **2026-10-13 사용자 결정(2편 모드판·헤더):** 2편 큰 모드판 7종은 하다 산스(Hada Sans Bold, OFL, 굵기 보강에 Black 가이드)로 원본 느낌을 살린다. b20 모양 승인, geometry는 `data/part2_mode_plate_geometry.json`에 고정. 헤더(MODE★SELECT 등)는 일본판 영문 그대로 둔다.
+
 ### 토큰·컴퓨터 자원 절약 원칙 (2026-09-23 사용자 지시)
 
 - **임무 시작 조건을 먼저 확정한다(2026-10-02 재발 방지).** 지휘관별 경로의 게임 내 승리·패배 조건, 제한 일수, 보호 대상, 생산 가능 여부를 실제 화면으로 확인하고 기록한 뒤 턴을 종료한다. 공략의 랭크 권장 일수와 강제 제한을 혼동하지 않는다. 제한을 확인하지 못했으면 무제한으로 간주하지 않는다. 적의 숨은 위치·병종을 추측으로 확정하지 않고, 엔딩 진행이 목적일 때 불필요한 전멸·고득점보다 실제 승리 조건을 우선한다.
@@ -129,6 +131,9 @@ DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/mgba -3 output/game_wars_k
 - 런타임 홈/로그와 Tracking ledger는 프로젝트 루트가 아니라 `temp/emucap-emu-home`, `temp/emucap-ledger`를 사용한다.
 - 용도: 사용자 제보 화면을 재현할 때 memory/screen/input/breakpoint를 에이전트가 직접 확인하는 보조 RE 도구.
 - 한계: `emucap`은 v0.4 beta라 인터페이스/동작이 바뀔 수 있다. 기존 `tools/*` + `temp/mgbah` release QA를 대체하지 않는다. 배포 판정은 계속 `verify_dist_integrity.py`와 `run_release_qa.py`를 권위로 삼는다.
+
+### Ghidra 디컴파일 보조
+- `~/.local/opt/ghidra_12.1.4_PUBLIC` (JDK 21). `temp/decomp/ghidra/decomp.sh ADDR` → `temp/decomp/ghidra/out/<ADDR>.c`. 결과는 보조 근거이며 런타임 확인이 필수다.
 
 ### QA 도구 (전체 점검)
 ```bash

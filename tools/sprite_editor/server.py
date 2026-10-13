@@ -116,6 +116,22 @@ def sprite_list():
     d = load_json(INDEX_PATH, {"sprites": []})
     base = d.get("sprites", []) if isinstance(d, dict) else d
     sprites = list(base) + load_objlabel_sprites()
+    alphabet = next((s for s in sprites if sprite_offset_int(s) in PART2_HEADER_ALPHABET_READONLY_OFFSETS
+                     and s.get("type") == "lz77"), None)
+    if alphabet and not any(s.get("id") == PART2_CAMPAIGN_HEADER_COPY_ID for s in sprites):
+        import part2_campaign_header_atlas as _hdr
+        alphabet["readonly"] = True
+        alphabet["desc_override"] = "2편 OBJ 헤더 알파벳(JP 원본, 읽기 전용)"
+        copy = dict(alphabet)
+        copy.update({
+            "id": PART2_CAMPAIGN_HEADER_COPY_ID,
+            "offset": "0x%08X" % _hdr.ATLAS_DEST, "offset_int": _hdr.ATLAS_DEST,
+            "comp_size": _hdr.REGION[1] - _hdr.ATLAS_DEST,
+            "source": "full:part2_campaign_header_atlas(korean copy)",
+            "desc_override": "2편 캠페인 헤더 '캠페인'(한글 알파벳 사본)",
+            "readonly": False, "png": None,
+        })
+        sprites.append(copy)
     select_base = next((s for s in sprites if s.get("id") == SELECT_OBJ_ID), None)
     if select_base:
         for sid, meta in SELECT_VIRTUAL_SPRITES.items():
@@ -488,10 +504,22 @@ def validate_palette(palette):
 def validate_sprite_edit(sp, indices, palette, *, rom_snapshot=None):
     if palette is not None:
         validate_palette(palette)
+    if sp.get("readonly") or sprite_offset_int(sp) in PART2_HEADER_ALPHABET_READONLY_OFFSETS:
+        raise ValueError("JP 헤더 알파벳(0x541BB8)은 읽기 전용입니다 — 캠페인 헤더는 %s 를 편집하세요"
+                         % PART2_CAMPAIGN_HEADER_COPY_ID)
     if not isinstance(indices, list) or not indices or not isinstance(indices[0], list):
         raise ValueError("indices(2D 0..15) 필요")
     h, w = len(indices), len(indices[0])
     enc = encode_indices(indices, w, h)
+    if sprite_offset_int(sp) in PART2_CAMPAIGN_HEADER_OFFSETS:
+        # Same rule as the build (patch_part2_campaign_header_obj): only the
+        # campaign glyphs C/M/P/I/G/N may change, Y stays transparent and every
+        # other letter stays the JP glyph. Reject before anything is saved.
+        import part2_campaign_header_atlas as _hdr
+        try:
+            _hdr.validate_edited_atlas(rom_bytes(), enc)
+        except AssertionError as exc:
+            raise ValueError("캠페인 헤더 사본 편집 거부: %s" % exc) from None
     decoded = decode_from_rom(rom_snapshot, sp) if rom_snapshot is not None else decode_current_indices(sp)
     if decoded is None:
         raise ValueError("현재 ROM에서 편집 대상 타일을 확인할 수 없습니다")
@@ -630,7 +658,12 @@ PART2_SPLASH_LOGO_BG_OFFSETS = {0x004D8AF8}
 PART2_DOMINO_CO_NAME_OFFSETS = {0x0045274C}
 PART2_INTRO_BG_FULLSHEET_OFFSETS = {0x004E0478, 0x004E17C0, 0x004ECD60}
 PART2_PROLOGUE_LOGO_OFFSETS = {0x005BBB3C}
-PART2_CAMPAIGN_HEADER_OFFSETS = {0x00541BB8}
+# b19/b20: 0x541BB8 is the shared JP OBJ header alphabet (MODE*SELECT, LINK*MODE,
+# ...); it is read-only. The campaign header art lives in its Korean copy at
+# 0x2FA100 (tools/part2_campaign_header_atlas.py), read by the campaign callers.
+PART2_HEADER_ALPHABET_READONLY_OFFSETS = {0x00541BB8}
+PART2_CAMPAIGN_HEADER_COPY_ID = "lz77_002FA100"
+PART2_CAMPAIGN_HEADER_OFFSETS = {0x002FA100}
 PART2_REDSTAR_REGION_OFFSETS = {0x005488A0}
 PART2_MISSION_NUMBER_OFFSETS = {0x005A38D4}
 PART2_LETS_GO_OFFSETS = {0x005AF674}

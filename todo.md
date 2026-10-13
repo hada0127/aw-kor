@@ -125,6 +125,19 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
 > 비교 기준/근거: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`.
 
 ## A. 실화면 잔존 결함 0 (최우선 — Codex+Claude 화면 검수). **아직 실잔존 미해결**
+- [ ] **2026-10-13 b17–b21 후속(현재 후보 b21)**: `output/game_wars_korean_candidate_20261013_b21.gba` SHA `53cf7e61fc4389b45b37f57cf989263762d615d22b0b3f0acd6dd144fc4dec0d` (b20과 동일, 직렬 재빌드 `temp/b21_20261013/b21_rebuild.gba` cmp 일치). 미커밋 작업트리.
+  - [x] #105 0xA19E54(→0xA4CBA8) 리플로, #112 0xA1C1BC(→0xA4E038) `？` 추가, 「시간 가면 적」(0xA25EF4), 블랙 캐논 띄어쓰기 통일(라이브 15곳), 0xA1563C 말더듬 띄어쓰기
+  - [x] 전각숫자 ０–９ Galmuri 글리프(1편·2편 A3 테이블), 1편 룰 0xEC30A2(B팀 보호, 띄어쓰기만)
+  - [x] 2편 헤더 10종(MODE★SELECT 등) 일본판 영문 복원(b19~), 큰 모드판 7종 Hada Sans(b20 모양 승인, `data/part2_mode_plate_geometry.json`)
+  - [x] 스프라이트 재작업 커밋 `17cd767`(b16 SHA `15543255…dd498ab1`)
+  - [ ] HARD★캠페인 헤더 화면 미확인(세이브 플래그 0x030040D1 필요)
+  - [ ] 2편 A3 전각숫자 실화면 미확인
+  - [ ] SYOGUN★SELECT / NOW★LOADING / SOUND★ROOM 헤더 화면 미확인
+  - [ ] 사운드룸 모드판 실화면 미확인, 2편 룰 아이콘 「에너…」 미확인
+  - [ ] 0xA295EC 글리프 사전 충돌(기존: `스트레이트 블래스트` vs display override `직격`) — glyph_dictionary 게이트 exit 1
+  - [ ] `test_editor_safety` 2건(preview_follows_actual_pointer…, preview_partial_rom_write_failure…) HEAD에서도 실패 — `output/game_wars_korean_full.gba` 기준 문제, 원인 정리
+  - [ ] `part2_native_controls.py`에 누락 제어코드(0x0D, R, P, Q/h, S, c, m) 반영 검토 — 근거 `docs/research.md` 2026-10-13 0x0831424C 표
+  - [ ] Ghidra 활용 다음 단계: 단어붙음 잔여 117줄의 0xB8/0xEC 핸들러, compact 렌더러 폭 규칙 디컴파일
 - [ ] **사용자 지시 2026-09-21: 양편 엔딩까지 실제 플레이·발견 결함 수정 반복**. 기록 재생만으로 완료하지 않는다. 일반 입력으로 캠페인을 진행하고 임무/턴/화면 검수·수정 ROM 재검증을 기록한다. 시작 기준 SHA `12f65b06…6dfe3b`; 이전 전 프레임 비교 1편 134320/2편 81446 모두 변경 0으로 종료. 새 진행 `output/qa/part1_2026-09-21/run14_to_ending`, `output/qa/part2_2026-09-21/run07_to_ending`. 엔딩은 양편 모두 미도달.
   - 최신 검증 후보 2026-09-22: `part2_native_dash_candidate.gba` SHA756be84d…22897. 2편 A3에 없는815C 대시가 ?로 나오던 결함을 P2 story 개별문자→native815B로 수정; QA누락 보완. 74시험/86수정행/1949재배치 및 정상저장 cold13/16 표시 확인. Claude 추가확정결함 없음. 1편 첫 캠페인 DAY3 능력 안내, 2편 실제미션4 생산화면 진입 중; 양편 엔딩 미도달.
   - 2026-09-22 추가: 1편 캠페인 첫 전투 DAY1 진행. 2편 Max 미션3 DAY6 승리(S300/누계900), 세계지도 정상 저장 완료. 사령관 이름 3개(호이프/료 지도, 료 HUD) 751ea7d4 후보 cold 8/17/18 표시 확인, 8테스트·81수정행·1948재배치 PASS. 1편 승리 조건 설명 35프레임 우측 잘림은 두줄 경계 조정 후 후보 빌드 중. 양편 엔딩 미도달.

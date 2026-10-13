@@ -16,8 +16,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = 1
 GENERATED = {'data/objlabel_sprites.json', 'data/sprite_build_layouts.json'}
 BUILD_METADATA = ('temp/integrity_map.json', 'temp/repoint_manifest.json')
-# Only OkDanDan is external since the 2026-10-08 font rule (Galmuri is in reference/).
-EXTERNAL_FONTS = [aw_fonts.OKDANDAN]
+# External fonts: OkDanDan (2026-10-08 rule) and Hada Sans Bold+Black (Part 2 plates,
+# 2026-10-13); Galmuri is in reference/.
+EXTERNAL_FONTS = [aw_fonts.OKDANDAN, aw_fonts.HADASANS, aw_fonts.HADASANS_BLACK]
 
 
 def sha(path):

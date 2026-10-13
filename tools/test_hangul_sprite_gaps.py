@@ -46,16 +46,16 @@ class HangulGapTest(unittest.TestCase):
             grid = obj_canvas(lz77_decompress(self.rom, off)[0], 2, 8, 4)
             image = Image.new('L', (128, 32)); image.putdata([v for row in grid for v in row])
             _, records = fit.plate_line(text)
-            records = [(c, (a + 6, b + 2, d + 6, e + 2)) for c, (a, b, d, e) in records]
+            ox, oy = fit.PLATE_ORIGIN
+            records = [(c, (a + ox, b + oy, d + ox, e + oy)) for c, (a, b, d, e) in records]
             fit.verify_plate_ink(image, text)
+            scale = fit.plate_width_scale(text)
             for char, box in records:
-                actual = mask_from_indices(image.crop(box), {5})
-                self.assertEqual(actual.tobytes(), fit.plate_glyph(char).tobytes())
-                # The two compressed initials must retain BOTH counters.
-                if char in ('통', '룸'):
-                    self.assertEqual(actual.getpixel((5, 2)), 0)
-                    self.assertEqual(actual.getpixel((5, 4)), 0)
-                    self.assertEqual(actual.getpixel((5, 3)), 255)
+                actual = mask_from_indices(image.crop(box), set(fit.PLATE_BODY_INDICES))
+                self.assertEqual(actual.tobytes(), fit.plate_glyph(char, scale).tobytes())
+                # Final ink keeps the outline's jamo components and counters.
+                self.assertEqual(fit.plate_topology(actual), fit.plate_outline_topology(char),
+                                 (hex(off), char))
 
     def test_small_glyphs_are_exact_native_grid_and_separated(self):
         font, _ = load_bdf(str(Path(__file__).resolve().parents[1] / 'reference/fonts/Galmuri9.bdf'))

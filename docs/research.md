@@ -3842,3 +3842,12 @@ the full-font macOS build remain (unverified).
 - 2026-10-08 2편 회상 카드(엔딩 미션 회고): OBJ 시트 LZ77 0x5072AC(1920B, consumed 783, 포인터 0x36C2F8). 1D 타일 0-7/8-15 = 作戦日数(32x16 두 칸, OAM x=58/90 y=54), 16-19 = 日(16x16, x=178), 20-59 = 숫자 0-9(16x16). OBJ 팔레트 0: 6 흰색, 7-11 회색 단계. 근거: effc run19/0378 savestate VRAM/OAM 덤프(`temp/claude_2026-10-08/p2/recap/`).
 - 2편 대사의 제어 0x57은 같은 줄 대기다(0x77과 같은 성격, seam 표 대상 아님). 0x57 앞뒤 한국어 조각은 공백이 없으면 붙어 보인다.
 - 2편 조각 텍스트 우선순위(재배치 시 `_rp_dlg`): 스크립트 행 소유자 > display_overrides > ADDRESS_TEXT_OVERRIDES(TSV) > dialogue_overrides(strip). 말더듬 2글자 dict(`known-story-fragment`)는 정확히 4바이트(예: '네, ', '이  ')여야 한다.
+
+## 2026-10-13 2편 헤더 알파벳·파서 제어코드 (원본 ROM SHA-256 `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c`)
+
+재현: `temp/decomp/ghidra/decomp.sh ADDR` → `temp/decomp/ghidra/out/<ADDR>.c`. 헤더 항목은 b19 런타임 추적(`temp/b19_20261013/trace/`)으로 확인했고, 나머지 디컴파일 사실은 **Ghidra 정적 디컴파일 근거, 런타임 미확인**이다.
+
+- **헤더 알파벳(추적 확인)**: 0x541BB8 = 2편 헤더용 ASCII 20자 알파벳(글자당 16x32). 폭 표 0x08A38D9C(8B 엔트리, 폭은 +4). 로더 0x08373DEC가 유일한 독자(포인터 리터럴 0x373E7C). 드로어 0x08373D10이 0x0838B434(svc 0xC CpuFastSet)로 OBJ VRAM `0x06010000 + tile*0x20 + i*0x100`에 복사. 호출 19곳 / 문자열 10종(0x8FC2AC MODE★SELECT, 0x8FC2B8 SYOGUN★SELECT 등).
+- **한국어 캠페인 사본(b19~)**: 로더 사본 0x2FA000, 알파벳 사본 0x2FA100, 문자열 0x2FA0A0, 캠페인 호출 0x3772CC/0x3772EE만 사본으로 돌림. HARD 플래그 검사 0x8338BB4(세이브 플래그 0x030040D1).
+- **파서 0x0831424C 제어코드(`out/0831424C.c`)**: 선행 패스 표 0x314270(0x09–0x33, 기본 0x08314332), 본 표 0x314348(0x00–0x77, 기본 0x083147F4). 코드별 핸들러·효과는 해당 .c 참고. 현재 `part2_native_controls.py`에 없는 코드: 0x0D, R, P, Q/h, S, c, m.
+- **정적 xref**: 0x08B80B7C ← 0x08B11BB0, 0x08EFE788. 0x083902E4 ← 0x08313D90(표 4개 0x0838F9E4/0x0838FCE4/0x0838FFE4/0x083902E4).

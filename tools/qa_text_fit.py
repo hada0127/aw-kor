@@ -18,7 +18,7 @@ SAFE_MIN_ADDR = 0x800000
 sys.path.insert(0, os.path.join(BASE, 'tools'))
 from build_korean_full import (
     ADDRESS_TEXT_OVERRIDES,
-    BTEAM_PREVIOUS_KOREAN_TEXT,
+    BTEAM_COMPACT_VERIFIED_ROWS,
     BTEAM_RESTORE_BASELINE_ROWS,
     COMPREHENSIVE_TRANS,
     SOURCE_TEXT_OVERRIDES,
@@ -243,6 +243,42 @@ def load_direct_patch_texts(*, include_writer=False):
     return direct
 
 
+# Compact B-team rows render through dedicated compact glyph writers, so the
+# final bytes do not decode as Korean SJIS. They are exempt only with evidence
+# bound to the inspected ROM: the last write at the address comes from the
+# address's verified compact writer (its consumer), carries Korean text, and
+# the ROM holds exactly that writer's payload. Membership alone never exempts.
+COMPACT_ROW_WRITERS = {
+    **{a: 'part1-compact-ui' for a in (0xB81874, 0xB81B04, 0xB81B14, 0xDF8BBA, 0xDF8BC6, 0xDF8C1A)},
+    **{a: 'part1-battle-menu-font' for a in (0xB82D36, 0xB82D58, 0xB82D6A, 0xB82D82,
+                                              0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6)},
+}
+COMPACT_PADDED_ROWS = frozenset({0xDF8BBA, 0xDF8BC6, 0xDF8C1A})
+
+
+def compact_row_evidence(rom, map_rows, address, rom_text=None):
+    """True only when the inspected ROM carries the verified compact payload."""
+    if address not in BTEAM_COMPACT_VERIFIED_ROWS or COMPACT_ROW_WRITERS.get(address) is None:
+        return False
+    last = None
+    for row in map_rows:
+        if int(row[0]) == address and row[3]:
+            last = row
+    if last is None or last[7] != COMPACT_ROW_WRITERS[address]:
+        return False
+    payload = bytes.fromhex(last[3])
+    if not payload or bytes(rom[address:address + len(payload)]) != payload:
+        return False
+    if not any('가' <= ch <= '힣' for ch in (last[5] or '')):
+        return False
+    if address in COMPACT_PADDED_ROWS and rom_text is not None:
+        from build_korean_full import BTEAM_PREVIOUS_KOREAN_TEXT, bteam_retained_equal
+        previous = BTEAM_PREVIOUS_KOREAN_TEXT.get(address)
+        if previous is not None and not bteam_retained_equal(previous, rom_text, address, compact=True):
+            return False
+    return True
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -419,17 +455,21 @@ def main(argv=None):
         issues = {int(item['address'], 16): item for item in check_rom(
             baseline, args.rom, args.map, args.manifest, args.map_rom)
             if int(item['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
-        from build_korean_full import bteam_retained_equal
+        with open(args.rom, 'rb') as stream:
+            rom_bytes = stream.read()
+        with open(args.map, encoding='utf-8') as stream:
+            map_rows = json.load(stream)
         non_korean = [address for address in sorted(BTEAM_RESTORE_BASELINE_ROWS)
                       if address in issues and
                       not (is_korean_display_row(issues[address]['rom_text']) or
-                           (address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A} and
-                            bteam_retained_equal(BTEAM_PREVIOUS_KOREAN_TEXT[address],
-                                                 issues[address]['rom_text'], address,
-                                                 compact=True)))]
+                           compact_row_evidence(rom_bytes, map_rows, address,
+                                                issues[address]['rom_text']))]
         print(f'final-ROM protected non-Korean: {len(non_korean)}/{len(BTEAM_RESTORE_BASELINE_ROWS)} '
               f'({", ".join(f"0x{a:08X}" for a in non_korean[:20])})')
+        if non_korean:
+            return 1
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

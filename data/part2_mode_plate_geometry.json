@@ -1,0 +1,300 @@
+{
+ "_note": "Part 2 LARGE mode plate geometry pinned from candidate b20 (output/game_wars_korean_candidate_20261013_b20.gba, SHA-256 53cf7e61fc4389b45b37f57cf989263762d615d22b0b3f0acd6dd144fc4dec0d). User approved the b20 plate look on 2026-10-13 (\"b20판 아주 좋아\", direction approved; relayed by the coordinator). Any change to scale, tracking, bbox or pixels needs a new explicit approval and a re-pinned profile.",
+ "approved": "2026-10-13",
+ "source_candidate_sha256": "53cf7e61fc4389b45b37f57cf989263762d615d22b0b3f0acd6dd144fc4dec0d",
+ "fonts": {
+  "HadaSans-Bold.otf": "213aaecf921e19d71f43b8a7f0c4076d3efa0552c2ecc9ed2d021c6873bdebba",
+  "HadaSans-Black.otf": "6e80fc2410876192323434584523b9d8e3dfba1a79f8a3d42cd7520631f6b048"
+ },
+ "band": {
+  "origin": [
+   4,
+   2
+  ],
+  "width": 120,
+  "height": 20
+ },
+ "max_width_scale": 1.9,
+ "max_tracking_px": 8,
+ "labels": {
+  "캠페인": {
+   "asset": "0x5B7930",
+   "width_scale": 1.9,
+   "tracking_px": [
+    8,
+    8
+   ],
+   "ink_bbox_plate": [
+    6,
+    2,
+    121,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     6,
+     2,
+     39,
+     22
+    ],
+    [
+     47,
+     2,
+     80,
+     22
+    ],
+    [
+     88,
+     2,
+     122,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    6,
+    8,
+    11
+   ],
+   "body_mask_sha256": "4ed37f8c147cefe943394594c6f9d250fbaf129525f96dc8200f40d3ffc3feeb",
+   "decompressed_plate_sha256": "1d8bf59e8267495646edb623aec3ab13556a9713e18d9a80fcd2d3b6ab4d0905"
+  },
+  "자유전": {
+   "asset": "0x5B7CB0",
+   "width_scale": 1.9,
+   "tracking_px": [
+    7,
+    7
+   ],
+   "ink_bbox_plate": [
+    4,
+    2,
+    123,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     4,
+     2,
+     40,
+     22
+    ],
+    [
+     47,
+     2,
+     83,
+     22
+    ],
+    [
+     90,
+     2,
+     124,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    6,
+    9,
+    11
+   ],
+   "body_mask_sha256": "e4eecf1200c6049ca7a4dcd456563d41a59d9fd8821c00b092b0f29955864c24",
+   "decompressed_plate_sha256": "166a02b917c34ace37497315efccf7091727d80b08e93c0f999b0a59b9b66606"
+  },
+  "상점": {
+   "asset": "0x5B7F38",
+   "width_scale": 1.9,
+   "tracking_px": [
+    8
+   ],
+   "ink_bbox_plate": [
+    27,
+    2,
+    100,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     27,
+     2,
+     62,
+     22
+    ],
+    [
+     70,
+     2,
+     101,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    7,
+    10
+   ],
+   "body_mask_sha256": "8a3ec80bd35535249f658829bb720f8c67fe979b3c255ad4fa5d4ea5caa5ffeb",
+   "decompressed_plate_sha256": "536865b4cae9e27e23d92fb0c6ac79220fe390e156e4d498e90651a5339f6b6a"
+  },
+  "편집": {
+   "asset": "0x5B82B4",
+   "width_scale": 1.9,
+   "tracking_px": [
+    8
+   ],
+   "ink_bbox_plate": [
+    28,
+    2,
+    98,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     28,
+     2,
+     60,
+     22
+    ],
+    [
+     68,
+     2,
+     99,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    7,
+    10
+   ],
+   "body_mask_sha256": "5b7eb749cc40709284d07adb9816172065536a3e8e38e3cec4809db0cb1c6321",
+   "decompressed_plate_sha256": "1adfbd49b33722568c59cc228aca9c1d829dd16434a7ae1487cae52978a9d06e"
+  },
+  "통신": {
+   "asset": "0x5B8564",
+   "width_scale": 1.9,
+   "tracking_px": [
+    8
+   ],
+   "ink_bbox_plate": [
+    25,
+    2,
+    102,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     25,
+     2,
+     61,
+     22
+    ],
+    [
+     69,
+     2,
+     103,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    7,
+    10
+   ],
+   "body_mask_sha256": "41fca591c29426402064482b2fae870b71b8dc940597a93a5b5881224c93bd61",
+   "decompressed_plate_sha256": "8cc57c8b2e95b0f0fc2f2b881f89a810763ce3e9848362bc53e78169fc91d00c"
+  },
+  "트라이얼": {
+   "asset": "0x5B8850",
+   "width_scale": 1.52,
+   "tracking_px": [
+    2,
+    2,
+    2
+   ],
+   "ink_bbox_plate": [
+    4,
+    2,
+    123,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     4,
+     2,
+     39,
+     22
+    ],
+    [
+     41,
+     2,
+     68,
+     22
+    ],
+    [
+     70,
+     2,
+     95,
+     22
+    ],
+    [
+     97,
+     2,
+     124,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    6,
+    8,
+    10,
+    12
+   ],
+   "body_mask_sha256": "2119a77bcdcc10d06ea47e645863ac1517588cbfe92f299ff8afcf03d7931621",
+   "decompressed_plate_sha256": "6efd4c5489e4d17ba1018120aa3768dea7aa700d3d97b3a84bef7b35361ff8cd"
+  },
+  "사운드룸": {
+   "asset": "0x5B8B20",
+   "width_scale": 1.41,
+   "tracking_px": [
+    2,
+    2,
+    2
+   ],
+   "ink_bbox_plate": [
+    4,
+    2,
+    122,
+    21
+   ],
+   "syllable_boxes_plate": [
+    [
+     4,
+     2,
+     30,
+     22
+    ],
+    [
+     32,
+     2,
+     59,
+     22
+    ],
+    [
+     61,
+     2,
+     94,
+     22
+    ],
+    [
+     96,
+     2,
+     123,
+     22
+    ]
+   ],
+   "syllable_indices": [
+    5,
+    7,
+    9,
+    12
+   ],
+   "body_mask_sha256": "e61af9b12cc0a290eb289c465df6a90432ec0cf8b84d380d31485b5ff7900ab8",
+   "decompressed_plate_sha256": "8d50ef8531cf7a092edd9c1843cb15521ee1c2de5bfbcfc94d6a51664a7a5e3a"
+  }
+ }
+}

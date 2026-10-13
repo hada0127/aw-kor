@@ -3998,7 +3998,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA1B7AC: '퇴각입니까',
     0xA1BB7C: '전쟁을　유리하게',
     0xA1BEB3: '콩 쪽은 어때요?',
-    0xA1C1F6: '그녀는　어쨌지',
+    0xA1C1F6: '그녀는　어쨌지？',
     0xA1C3A9: '싸울　필요　없다',
     0xA1C597: '구호　물자를　가져왔는데',
     0xA1C646: '그런　말은　아니다',
@@ -4198,7 +4198,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xA25907: '먼저　하늘　장악이　유리해',
     0xA25C52: '물자와 자금이 모이는 듯해',
     0xA25DAF: '물자　자금을　모은다면',
-    0xA25EF4: '시간　가면',
+    0xA25EF4: '시간　가면　',
     0xA2601C: '역시　대단해',
     0xA26047: '여긴　간접공격이　유효해',
     0xA26357: '우리　독자　정보도',
@@ -5193,6 +5193,112 @@ def patch_name_grid(rom):
 
 def _symbol_table_index(sjis):
     return (((sjis + 0xFFFF7EC0) & 0xFFF8) << 1) + (sjis & 7)
+
+
+def patch_fullwidth_digit_glyphs(rom):
+    """Use the dialogue Galmuri metrics for fullwidth digits in both renderers."""
+    from render_galmuri_8x16 import render_char
+
+    font_base = 0xB974D0
+    symbol_table = 0xB8027C
+    a3_buckets = 0x807680
+    for digit in range(10):
+        ch = str(digit)
+        code = 0x824F + digit
+        top_slot, bottom_slot = NAME_GRID_SLOTS[ch]
+        top, bottom = render_char(ch)
+        if not any(top) or not any(bottom):
+            raise AssertionError(f'empty Galmuri fullwidth digit {ch}')
+        for slot, tile in ((top_slot, top), (bottom_slot, bottom)):
+            off = font_base + slot * 32
+            rom[off:off + 32] = tile
+            WRITE_LOG.append([off, 32, 32, tile.hex(), None, ch, None,
+                              'galmuri-fullwidth-digit-font'])
+        # The ordinary dialogue symbol table used the shared blank slot 95
+        # as every digit's top half. Give it the name-grid digit's own top.
+        idx = _symbol_table_index(code)
+        for delta, slot in ((0, top_slot), (8, bottom_slot)):
+            off = symbol_table + 2 * (idx + delta)
+            payload = struct.pack('<H', slot)
+            rom[off:off + 2] = payload
+            WRITE_LOG.append([off, 2, 2, payload.hex(), None, ch, None,
+                              'galmuri-fullwidth-digit-table'])
+
+        # Part 2 A3 uses a separate linked glyph cache. Its bucket is indexed
+        # by the low SJIS byte and its node key is the high byte (0x82).
+        bucket = a3_buckets + (code & 0xFF) * 4
+        pointer = struct.unpack_from('<I', rom, bucket)[0]
+        seen = set()
+        while pointer:
+            node = pointer - 0x08000000
+            if node in seen or not (0 <= node <= len(rom) - 72):
+                raise AssertionError(f'invalid A3 digit chain {ch}')
+            seen.add(node)
+            if rom[node + 4] == 0x82:
+                a3_top, a3_bottom = render_char(ch, ink=10)
+                payload = a3_top + a3_bottom
+                rom[node + 8:node + 72] = payload
+                WRITE_LOG.append([node + 8, 64, 64, payload.hex(), None, ch, None,
+                                  'galmuri-fullwidth-digit-a3'])
+                break
+            pointer = struct.unpack_from('<I', rom, node)[0]
+        else:
+            raise AssertionError(f'A3 digit node missing {ch}')
+    return 10
+
+
+def reflow_sea_fortress_prompt(rom, manifest):
+    """Move the M23 clause to the preceding row and reserve the page prompt."""
+    from dialogue_repoint import PORTRAIT_ROW_HALF_CELLS
+    from part2_native_controls import CONSUMER, NativeProfile
+    from qa_part2_physical_rows import assemble_rows, tokenize
+
+    record = next((item for item in manifest if item.get('msg') == '0xA19E54'
+                   and item.get('status') == 'relocated'), None)
+    if record is None:
+        raise AssertionError('M23 intro was not relocated')
+    start = int(record['new_addr'], 16)
+    spans = record['line_spans']
+    newline = start + spans['0xA19E83'][0] - 1
+    next_wait = start + spans['0xA19E8E'][0] - 1
+    if bytes(rom[newline:newline + 1]) != b'\x72' or bytes(rom[next_wait:next_wait + 1]) != b'\x57':
+        raise AssertionError('M23 row controls changed before reflow')
+    rom[newline] = 0x57
+    rom[next_wait] = 0x72
+    for offset, value in ((newline, 0x57), (next_wait, 0x72)):
+        WRITE_LOG.append([offset, 1, 1, f'{value:02x}', None, None, None,
+                          'part2-m23-prompt-row-reflow'])
+
+    payload = bytes(rom[start:start + record['new_len']])
+    profile = NativeProfile(rom)
+    rows, unknown, terminated = assemble_rows(
+        tokenize(payload, consumer=CONSUMER, native_profile=profile), {}, 'portrait',
+        portrait_capacity=PORTRAIT_ROW_HALF_CELLS, consumer=CONSUMER,
+        native_profile=profile)
+    page = [row for row in rows if row['page'] == 1]
+    if (unknown or not terminated or len(page) != 2
+            or page[0]['half_cells'] > PORTRAIT_ROW_HALF_CELLS
+            or page[1]['half_cells'] > PORTRAIT_ROW_HALF_CELLS - 2
+            or page[1]['end_control'] != '6b'):
+        raise AssertionError('M23 reflow leaves no verified page-prompt cell')
+    return [row['half_cells'] for row in page]
+
+
+def patch_colin_stutter_spacing(rom, manifest):
+    """Turn the first stutter's inert padding into a visible Galmuri space."""
+    record = next((item for item in manifest if item.get('msg') == '0xA1563C'
+                   and item.get('status') == 'relocated'), None)
+    if record is None:
+        raise AssertionError('Colin stutter was not relocated')
+    start = int(record['new_addr'], 16)
+    offset, length = record['line_spans']['0xA1563C']
+    at = start + offset + length - 2
+    if bytes(rom[at:at + 2]) != b'\x20\x20':
+        raise AssertionError('Colin stutter padding changed before spacing fix')
+    rom[at:at + 2] = b'\x81\x40'
+    WRITE_LOG.append([at, 2, 2, '8140', None, '　', None,
+                      'part2-colin-stutter-visible-space'])
+    return at
 
 
 def restore_symbol_glyphs(rom, orig):
@@ -6342,9 +6448,10 @@ def patch_part2_mode_menu_obj_labels(rom):
             x += w + spacing
 
     def make_big_logo(text, native):
-        # Native 128x32 plate: black frame, white inset, colored lower band.
-        # Original letters have solid fill, with a light edge. Rasterize the
-        # outline font before quantization, never stretch indexed pixels.
+        # Native 128x32 plate: frame, white 120x20 letter field, colored
+        # caption band. JP treatment (b19): Hada Sans Bold fills the JP 20px cap
+        # band, body pixels carry the JP per-column indices 5..12 and rounded
+        # edges the JP shades 3/2 (see hangul_pixel_fit.paint_plate).
         layer = Image.new('L', (128, 32))
         layer.putdata([v for row in native for v in row])
         ImageDraw.Draw(layer).rectangle((4, 2, 123, 21), fill=1)
@@ -6352,12 +6459,8 @@ def patch_part2_mode_menu_obj_labels(rom):
         # Galmuri7 closes the ㅌ/ㄹ/ㅂ counters in these labels; use the approved
         # blank-strip fallback instead of preserving Japanese or squashing ink.
         ImageDraw.Draw(layer).rectangle((4, 23, 123, 29), fill=5)
-        from hangul_pixel_fit import plate_line, verify_plate_ink
-        mask, _ = plate_line(text)
-        for y in range(mask.height):
-            for x in range(mask.width):
-                if mask.getpixel((x, y)):
-                    layer.putpixel((6 + x, 2 + y), 5)
+        from hangul_pixel_fit import paint_plate, verify_plate_ink
+        paint_plate(layer, text)
         verify_plate_ink(layer, text)
         return layer
 
@@ -8815,16 +8918,12 @@ def patch_common_battle_ascii_labels(rom, syl_to_code, unmapped):
         (0xB84E20, 0x0C, '색적'),
         (0xB84E2C, 0x08, '정리'),
         (0xB84E34, 0x08, '색상'),
-        (0x8FC268, 0x10, '부대설정'),
-        (0x8FC278, 0x10, '규칙설정'),
-        (0x8FC288, 0x0C, '상점'),
-        (0x8FC294, 0x0C, '색상편집'),
-        (0x8FC2A0, 0x0C, '지도선택'),
-        (0x8FC2AC, 0x0C, '모드선택'),
-        (0x8FC2B8, 0x10, '장군선택'),
-        (0x8FC2C8, 0x0C, '통신모드'),
-        (0x8FE5C8, 0x0C, '사운드룸'),
-        (0x817428, 0x10, '불러오는중'),
+        # The OBJ header strings 0x8FC268..0x8FC2C8, 0x8FE5C8 and 0x817428
+        # (TEAM/RULE*SETTING, WARS*SHOP, COLOR*EDIT, MAP/MODE/SYOGUN*SELECT,
+        # LINK*MODE, SOUND*ROOM, NOW*LOADING) stay JP ASCII. Their only consumer
+        # is the header drawer 0x08373D10, which draws ASCII through the
+        # 20-glyph alphabet at 0x541BB8; SJIS Korean here rendered blank
+        # (b11..b19). Guard: part2_campaign_header_atlas.verify_header_strings.
     ]:
         write_slot(off, slot, text)
 
@@ -9850,7 +9949,7 @@ def patch_mapname_fullwidth_ascii(rom, slots):
     return converted
 
 
-def patch_part2_campaign_header_obj(rom):
+def patch_part2_campaign_header_obj(rom, orig, override_path=None, override_snapshot=None):
     """Replace the Part 2 campaign-map OBJ header with a Korean label."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from lz77_compress import lz77_compress
@@ -9915,30 +10014,38 @@ def patch_part2_campaign_header_obj(rom):
     cut = sorted({x for row in pixels for x, v in enumerate(row) if v and x not in visible})
     if cut or any(pixels[0]) or any(pixels[-1]):
         raise AssertionError(f'campaign header glyph ink outside its OBJ windows: {cut[:8]}')
-    off = 0x541BB8
-    dec = lz77_decompress(rom, off)
-    if dec is None:
-        raise AssertionError(f'invalid campaign header LZ77 block at 0x{off:X}')
-    data, consumed = dec
-    if len(data) != 0x1400:
-        raise AssertionError(f'unexpected campaign header block size at 0x{off:X}: {len(data)}')
-    buf = bytearray(len(data))
-    patched = 0
+    # b19: 0x541BB8 is the shared 20-glyph header alphabet (MODE*SELECT and
+    # every English mode header). Keep it byte-identical and give the two
+    # campaign callers their own Korean copy (part2_campaign_header_atlas).
+    import part2_campaign_header_atlas as p2_hdr
+    letters = {0x200: 'C', 0x210: 'M', 0x218: 'P', 0x228: 'I', 0x230: 'G', 0x238: 'N'}
+    if [letters.get(base) for base in sorted(sprite_x)] != ['C', None, 'M', 'P', None, 'I', 'G', 'N']:
+        raise AssertionError('campaign header letter map changed')
+    payloads = {}
     for base_tile, source_off in source_chunks.items():
-        for idx in range(8):
-            buf[source_off + idx * 32:source_off + idx * 32 + 32] = tiles[base_tile + idx]
-            patched += 1
+        ch = letters[base_tile]
+        if p2_hdr.glyph_index(orig, ch) * p2_hdr.GLYPH != source_off:
+            raise AssertionError(f'campaign header glyph {ch} is not chunk 0x{source_off:X}')
+        payloads[ch] = b''.join(tiles[base_tile + idx] for idx in range(8))
+    atlas_raw = p2_hdr.korean_atlas(orig, payloads)
+    # Sprite-editor pixel edit of the Korean copy (id lz77_002FA100) replaces
+    # the generated art here; apply_sprite_overrides skips that id. Only the
+    # campaign glyphs may change, every other letter stays the JP glyph.
+    if override_snapshot is None:
+        override_snapshot = OverrideSnapshot(override_path or os.path.join(BASE, 'data', 'sprites_overrides.json'))
+    if override_snapshot.raw is not None:
+        rec = (override_snapshot.data() or {}).get(p2_hdr.EDITOR_ID)
+        if rec and rec.get('indices'):
+            edited = _grid_to_tiles(rec['indices'])
+            atlas_raw = p2_hdr.validate_edited_atlas(orig, edited)
+    regions = p2_hdr.patch(rom, orig, atlas_raw)
     # WYSIWYG: '캠페인'(3음절). source_chunks가 기록하는 소스 청크 위치(byte//32)별 8타일.
     _camp_tids = []
     for source_off in sorted(source_chunks.values()):
         b = source_off // 32
         _camp_tids += list(range(b, b + 8))
-    rec_label_layout(off, None, [{'text': '캠페인', 'tile_ids': _camp_tids}])
-    comp = lz77_compress(bytes(buf), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'campaign header LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return patched
+    rec_label_layout(p2_hdr.ATLAS_DEST, None, [{'text': '캠페인', 'tile_ids': _camp_tids}])
+    return regions
 
 
 def patch_part2_redstar_region_obj(rom):
@@ -12213,7 +12320,7 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'e8fa553bd8bf434c76948a4cf3753b2577099a6db4e264fc15db4f5ce36278f5':
+        if hashlib.sha256(stream.read()).hexdigest() != 'ce69d508c5702e6eb134183bc5e96d6128afb62dd6cba490c853be44ee32797b':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
@@ -12457,7 +12564,7 @@ BTEAM_PREVIOUS_KOREAN_TEXT = {
     0x00df8c1a: '부대상황',
     0x00dfa6e2: '워즈\u3000코인으로',
     0x00e10d7a: '아주\u3000쉬웠어！',
-    0x00ec30a2: '있음이면\u3000유닛\u3000시야밖\u3000안보임',
+    0x00ec30a2: '있음이면\u3000유닛\u3000시야\u3000밖\u3000안\u3000보임',
     0x00ec312e: '지정일\u3000끝나면\u3000거점\u3000수로\u3000승부',
     0x00ec3162: '지정거점\u3000보유시\u3000우세승리',
     0x00ec3192: '있음이면\u3000사령관\u3000능력\u3000활성',
@@ -13548,8 +13655,30 @@ def patch_b84_power_title_glyphs(rom, display_overrides):
     }
 
 
+class OverrideSnapshot:
+    """One immutable read of data/sprites_overrides.json for a whole build.
+
+    Both the campaign-header pass and apply_sprite_overrides consume the same
+    bytes, and the report hashes exactly those bytes. verify_unchanged() fails
+    the build when the file on disk differs from the snapshot afterwards.
+    """
+
+    def __init__(self, path):
+        self.path = path
+        self.raw = open(path, 'rb').read() if os.path.exists(path) else None
+        self.sha256 = hashlib.sha256(self.raw).hexdigest() if self.raw is not None else None
+
+    def data(self):
+        return json.loads(self.raw.decode('utf-8')) if self.raw is not None else None
+
+    def verify_unchanged(self):
+        now = open(self.path, 'rb').read() if os.path.exists(self.path) else None
+        if now != self.raw:
+            raise AssertionError(f'{self.path} changed during the build; output refused')
+
+
 def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, report_path=None,
-                           power_title_context=None):
+                           power_title_context=None, ov_snapshot=None):
     """스프라이트 편집기 픽셀 편집(data/sprites_overrides.json)을 ROM에 최종 역기록(오버레이).
     오버라이드 없으면 무동작 → 출력 byte-identical. synthetic은 라벨별 perm 역변환,
     lz77은 재압축≤comp_size, raw/font는 size 이내. 적합 실패 시 skip+리포트.
@@ -13583,11 +13712,15 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
         'ok': True,
         'records': [],
     }
-    if not os.path.exists(ov_path):
+    if ov_snapshot is not None:
+        if os.path.abspath(ov_snapshot.path) != os.path.abspath(ov_path):
+            raise AssertionError('override snapshot path differs from override path')
+        report['override_exists'] = ov_snapshot.raw is not None
+    if (ov_snapshot.raw if ov_snapshot is not None else (b'' if os.path.exists(ov_path) else None)) is None:
         _write_report(report)
         return {'applied': 0, 'skipped': 0}
     try:
-        raw = open(ov_path, 'rb').read()
+        raw = ov_snapshot.raw if ov_snapshot is not None else open(ov_path, 'rb').read()
         report['override_sha256'] = hashlib.sha256(raw).hexdigest()
         ov = json.loads(raw.decode('utf-8')) or {}
     except Exception as exc:
@@ -13645,8 +13778,20 @@ def apply_sprite_overrides(rom, objl_specs=None, ov_path=None, idx_path=None, re
     ignored = 0
     expected_writes = []
     dictionary_bindings = {}
+    import part2_campaign_header_atlas as _p2_hdr_ov
     for sid, rec in ov.items():
         rec_report = {'id': sid}
+        if sid == _p2_hdr_ov.EDITOR_ID:
+            ignored += 1
+            rec_report.update({'status': 'ignored', 'reason': 'applied by patch_part2_campaign_header_obj'})
+            report['records'].append(rec_report)
+            continue
+        if sid == 'lz77_%08X' % _p2_hdr_ov.ATLAS:
+            why = 'JP header alphabet is read-only (edit %s)' % _p2_hdr_ov.EDITOR_ID
+            skipped.append((sid, why))
+            rec_report.update({'status': 'skipped', 'reason': why})
+            report['records'].append(rec_report)
+            continue
         grid = rec.get('indices')
         if not grid:
             ignored += 1
@@ -13824,6 +13969,9 @@ def main():
 
     from localization_evidence import snapshot_inputs, stable_build_inputs, write_build_receipt, sha as evidence_sha
     build_inputs_before = snapshot_inputs()
+    # One immutable override snapshot for the header pass, the general sprite
+    # override pass and its report (b21).
+    _override_snapshot = OverrideSnapshot(os.path.join(BASE, 'data', 'sprites_overrides.json'))
 
     orig = bytes(open(P.ROM, 'rb').read())   # 원본 (테이블 소스)
     use_v56 = os.path.abspath(args.base) != os.path.abspath(P.ROM) and os.path.exists(args.base)
@@ -14423,7 +14571,8 @@ def main():
     st['part1_rule_circle_labels'] = patch_part1_rule_circle_labels(rom)
     st['part2_campaign_rule_labels'] = patch_part2_campaign_rule_summary_labels(rom)
     st['part2_campaign_rule_values'] = patch_part2_campaign_rule_value_labels(rom)
-    st['part2_campaign_header'] = patch_part2_campaign_header_obj(rom)
+    _p2_header_regions = patch_part2_campaign_header_obj(rom, orig, override_snapshot=_override_snapshot)
+    st['part2_campaign_header'] = len(_p2_header_regions)
     st['part2_redstar_region'] = patch_part2_redstar_region_obj(rom)
     st['part2_prologue_logo'] = patch_part2_prologue_logo_obj(rom)
     st['world_map_label_tiles'] = patch_world_map_label_tiles(rom)
@@ -16710,7 +16859,7 @@ def main():
         (0xA25D55, 0xA25D5F, '딴 곳으로', 'part2 to another place row'),
         (0xA25EB8, 0xA25EC4, '흐음...', 'part2 hmm row'),
         (0xA25F18, 0xA25F26, '목표는...', 'part2 target is row'),
-        (0xA25F35, 0xA25F51, '3문의 블랙캐논이야.', 'part2 three black cannons row'),
+        (0xA25F35, 0xA25F51, '3문의 블랙 캐논이야.', 'part2 three black cannons row'),
         (0xA25FD4, 0xA25FDA, '흐음.', 'part2 hmm dot row'),
         (0xA2600C, 0xA2601A, '그렇군...', 'part2 I see row'),
         (0xA26106, 0xA26112, '전부...', 'part2 everything row'),
@@ -17068,7 +17217,7 @@ def main():
         (0xA33F0C, 0xA33F18, '신형포로', 'part2 new cannon with row'),
         (0xA34183, 0xA34199, '7일 이내에, 본부 점령,', 'part2 seven day hq row'),
         (0xDFF8C5, 0xDFF8D5, '하지만! 아무래도 ', 'part1 player name leading boundary'),
-        (0xA348F0, 0xA34916, '블랙캐논 3개 격파가 승리', 'part2 black cannon win row'),
+        (0xA348F0, 0xA34916, '블랙 캐논 3개 격파가 승리', 'part2 black cannon win row'),
         (0xA34981, 0xA3498D, '완전 승리!', 'part2 perfect victory row'),
         (0xA34CE8, 0xA34D12, '모드 선택으로 돌아갈까요?', 'part2 return mode select row'),
         (0xA34DD8, 0xA34DEE, '전투 점령 애니', 'part2 battle capture anime row'),
@@ -22967,7 +23116,9 @@ def main():
     purchase_labels.verify_generated(rom, orig)
     terrain_movement.verify_generated(rom, orig)
     _sprite_override_result = apply_sprite_overrides(
-        rom, power_title_context=(_display_ov, syl_to_code))
+        rom, power_title_context=(_display_ov, syl_to_code), ov_snapshot=_override_snapshot)
+    _override_snapshot.verify_unchanged()
+    st['sprite_overrides_sha256'] = _override_snapshot.sha256
     if _sprite_override_result['skipped']:
         raise RuntimeError('스프라이트 편집 적용 실패: temp/sprite_override_report.json을 확인하세요. ROM 출력을 중단합니다.')
     st['sprite_overrides'] = _sprite_override_result['applied']
@@ -23759,6 +23910,8 @@ def main():
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
     verify_required_script_repoints(required_script_repoints - _allowed_script_residuals,
                                     completed_script_repoints)
+    st['part2_m23_prompt_row_half_cells'] = reflow_sea_fortress_prompt(rom, _rp_manifest)
+    st['part2_colin_stutter_space'] = patch_colin_stutter_spacing(rom, _rp_manifest)
     from part2_ending_qa_rows import check_composed_rows as _p2_ending_row_widths
     st['part2_ending_qa_max_row_half_cells'] = max(_p2_ending_row_widths(rom, _rp_manifest).values())
     verify_part2_campaign_header_keys(rom)
@@ -23778,6 +23931,7 @@ def main():
     # shared with the Part 1 name grid. Re-apply the name grid as the final
     # authority so small-kana/long-mark bottom halves cannot leak back in.
     patch_name_grid(rom)
+    st['galmuri_fullwidth_digits'] = patch_fullwidth_digit_glyphs(rom)
 
     # Last text-derived asset writer: later stages only verify and save.
     patch_part1_battle_menu_labels(rom, orig, syl_to_code)
@@ -23858,6 +24012,9 @@ def main():
     p2_warover.verify(rom, _p2_warover_final_regions)
     p2_atk_legend.verify(rom, _p2_atk_legend_final_regions)
     p2_wo_sheet.verify(rom, _p2_wo_sheet_final_regions)
+    import part2_campaign_header_atlas as _p2_hdr_atlas
+    _p2_hdr_atlas.verify(rom, orig, _p2_header_regions)
+    st['part2_header_strings_ascii'] = _p2_hdr_atlas.verify_header_strings(rom)
     verify_result_rank_word(rom, _result_rank_word_final)
     campaign_co_labels.verify_regions(rom, _campaign_co_final_regions)
     factory_tooltip.verify_regions(rom, _factory_tooltip_final_regions)

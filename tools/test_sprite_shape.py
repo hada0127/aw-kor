@@ -1,7 +1,7 @@
 """Adversarial checks independent of the sprite fitter."""
 import unittest
 from PIL import Image
-from qa_sprite_shape import uniform_reference, compare, components
+from qa_sprite_shape import uniform_reference, hada_uniform_reference, compare, compare_plate, components
 
 
 class ShapeTest(unittest.TestCase):
@@ -10,13 +10,38 @@ class ShapeTest(unittest.TestCase):
             self.assertFalse(compare(ch,uniform_reference(ch,20))['failures'],ch)
 
     def test_all_plate_syllables_keep_height_and_natural_aspect(self):
+        import json
+        from pathlib import Path
         from hangul_pixel_fit import plate_line
+        # Declared geometry comes from the pinned, approved profile, never from
+        # the generator's own constants.
+        profile=json.loads((Path(__file__).resolve().parents[1]/'data/part2_mode_plate_geometry.json').read_text(encoding='utf-8'))
         for text in ('캠페인','자유전','상점','편집','통신','트라이얼','사운드룸'):
             mask,records=plate_line(text)
+            scale=profile['labels'][text]['width_scale']
+            self.assertLessEqual(scale, profile['max_width_scale'])
             for ch,box in records:
                 actual=mask.crop(box)
-                self.assertGreaterEqual(actual.getbbox()[3]-actual.getbbox()[1],18)
-                self.assertFalse(compare(ch,actual)['failures'],ch)
+                self.assertGreaterEqual(actual.getbbox()[3]-actual.getbbox()[1],20)
+                self.assertFalse(compare_plate(ch,actual,scale)['failures'],ch)
+                # An undeclared stretch is still rejected.
+                self.assertIn('non-uniform scale', compare_plate(ch,actual,1.0)['failures'])
+
+    def test_plate_oracle_rejects_blob_and_lost_stroke(self):
+        import json
+        from pathlib import Path
+        from hangul_pixel_fit import plate_glyph
+        scale=json.loads((Path(__file__).resolve().parents[1]/'data/part2_mode_plate_geometry.json').read_text(encoding='utf-8'))['labels']['통신']['width_scale']
+        good=plate_glyph('통',scale)
+        blob=good.copy()
+        for y in range(2,7):
+            for x in range(4,good.width-4): blob.putpixel((x,y),255)
+        self.assertTrue(compare_plate('통',blob,scale)['failures'])
+        thin=good.copy()
+        for y in range(thin.height):
+            for x in range(thin.width):
+                if thin.getpixel((x,y)) and (x+y)%2: thin.putpixel((x,y),0)
+        self.assertTrue(compare_plate('통',thin,scale)['failures'])
 
     def test_wide_plate_glyph_rejected(self):
         mask=uniform_reference('상',20)

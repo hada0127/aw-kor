@@ -35,6 +35,12 @@ if hashlib.sha256(before).hexdigest() != args.baseline_sha256.lower():
 if len(rom) != len(original) or hashlib.sha256(original).hexdigest() != power2.ORIGINAL_SHA256:
  parser.error('candidate length or immutable Japan ROM identity changed')
 rows=[];failures=[];unverified=[];assets=set()
+# Pinned, user-approved plate geometry (b20, 2026-10-13); independent of the generator.
+PLATE_PROFILE=json.loads((ROOT/'data/part2_mode_plate_geometry.json').read_text(encoding='utf-8'))
+for _t,_want in PLATE_PROFILE['labels'].items():
+ if fit.plate_width_scale(_t)!=_want['width_scale']:failures.append(dict(asset=_want['asset'],reason='plate scale differs from pinned profile'))
+ if hashlib.sha256(lz77_decompress(rom,int(_want['asset'],16))[0]).hexdigest()!=_want['decompressed_plate_sha256']:
+  failures.append(dict(asset=_want['asset'],reason='final plate differs from pinned approved profile'))
 def image(g):
  im=Image.new('L',(len(g[0]),len(g)));im.putdata([v for r in g for v in r]);return im
 def audit(asset,text,img,records,inks):
@@ -42,9 +48,11 @@ def audit(asset,text,img,records,inks):
  for ch,box in records:
   if not args.shape and not fit.dense_syllable(ch):continue
   crop=img.crop(box);mask=Image.new('L',crop.size);mask.putdata([255 if v in inks else 0 for v in crop.getdata()])
-  result=(shape.compare(ch,mask) if args.shape else fit.verify_glyph(ch,mask))
+  big = asset in {hex(off) for off,_ in BIG}
+  if args.shape and big: result=shape.compare_plate(ch,mask,PLATE_PROFILE['labels'][text]['width_scale'])
+  else: result=(shape.compare(ch,mask) if args.shape else fit.verify_glyph(ch,mask))
   if not args.shape and asset in {hex(off) for off,_ in BIG}:
-   ref=fit.plate_glyph(ch)
+   ref=fit.plate_glyph(ch,fit.plate_width_scale(text))
    result=dict(character=ch,gap_columns=sum(sum(v for v,_,_ in fit.runs([ref.getpixel((x,y)) for y in range(ref.height)]))>=2 for x in range(ref.width)),failures=[] if mask.size==ref.size and mask.tobytes()==ref.tobytes() else ['final plate differs from full glyph with open counters'])
   result.update(asset=asset,label=text,box=box)
   rows.append(result)
@@ -73,7 +81,7 @@ for off,text in BIG:
  except AssertionError as exc:failures.append(dict(asset=hex(off),reason=str(exc)))
  if any(im.getpixel((x,y))!=5 for y in range(23,30) for x in range(4,124)):
   failures.append(dict(asset=hex(off),reason='caption strip is not blank'))
- records=[(c,(a+6,y+2,d+6,e+2)) for c,(a,y,d,e) in records];audit(hex(off),text,im,records,{5})
+ ox,oy=fit.PLATE_ORIGIN;records=[(c,(a+ox,y+oy,d+ox,e+oy)) for c,(a,y,d,e) in records];audit(hex(off),text,im,records,set(fit.PLATE_BODY_INDICES))
 # The whole title layer is packed through its real sprite list and compared
 # with the final ROM; records below test the final visible fill, including bevel.
 repro=bytearray(original);b.patch_title_hangul_assets(repro)

@@ -3987,3 +3987,16 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 회상 카드: `tools/part2_recap_labels.py`(0x5072AC, 포인터 0x36C2F8, 타일 0-15 작전 일수/16-19 일).
 - 실화면: `tools/game_save_evidence.py --anchored --skip-source-frame-check`로 run19 시작 SRAM을 앵커 저장 → v8 cold boot(`p2v8_m29_a/b`) → run19 입력·치트 805개 재생(`p2v8_m29_replay`)으로 엔딩 도달. 크롭 `temp/claude_2026-10-08/p2/screens/`.
 - 게이트: `qa_bteam_drift.py --rom V --map-rom V`(3340, 116/11/0), `qa_part2_render_residuals.py --fail-on-seams`, `qa_obj_title_cells.py`, `phase6_basic_test.py`, `qa_integrity_map.py --byte-only` PASS. 전체 테스트 967개 중 신규 실패 0(`test_room_readability` 2개 등 기존 실패만).
+
+## 2026-10-12 스프라이트 재작업 (b16, 커밋 `17cd767`)
+
+- 후보 b16 SHA-256 `15543255a090195dcd07f56f71055c2fb19be96f25163b873585f980dd498ab1` (b15와 byte-identical, clean `beeae24`에서 재빌드). 제목/로고·1편 캐러셀·임무 배너·결과/CO 파워 아틀라스를 OkDanDan 픽셀 피팅으로 다시 그림, 2편 큰 모드판(0x5B7930..0x5B8B20) 19px 공통 높이, 작은 판·유닛 라벨·보급 팝업은 Galmuri.
+- 게이트: ROM 게이트 6종 + `qa_sprite_art_shapes.py --shape` exit 0, 19개 스위트 230 테스트 PASS, 변이 검사 12건 모두 exit 1(정상 거부). 상세 `temp/sprite_rework_20261012/b16/REPORT.md`, 전후 비교 `temp/sprite_rework_20261012/beforeafter/`, 보존본 `docs/screenshots/sprite_rework_2026-10-12/`.
+
+## 2026-10-13 b17–b21 텍스트·헤더·모드판 수정 (static QA + 부분 실화면)
+
+- 빌드: `nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_candidate_20261013_bNN.gba --no-sync-outputs` (원본 ROM, `AW_FONT_DIR=~/aw-fonts`). SHA: b17 `900448ce…6f6566`, b18 `d2693cfc…750185`, b19 `5d7945ce…ae10b7`, b20=b21 `53cf7e61fc4389b45b37f57cf989263762d615d22b0b3f0acd6dd144fc4dec0d`. b21 직렬 재빌드(`temp/b21_20261013/b21_rebuild.gba`)와 `cmp` 일치(결정적 빌드).
+- 수정: #105 0xA19E54→0xA4CBA8 리플로(마지막 줄 34/44 half-cell), #112 0xA1C1BC→0xA4E038 `？`, 0xA25EF4 「시간 가면 적」, 0xA1563C→0xA49F00 말더듬 띄어쓰기, 블랙 캐논 라이브 payload 15 붙임/15 띄움 → 0/30, 전각 ０–９ Galmuri(1편·2편 A3), 1편 룰 0xEC30A2 띄어쓰기만(B팀, 46B 슬롯), 2편 헤더 10종 영문 복원(로더·알파벳·문자열 사본 0x2FA000/0x2FA100/0x2FA0A0, 캠페인 호출 2곳만 사본으로), 큰 모드판 7종 Hada Sans Bold(geometry 고정 `data/part2_mode_plate_geometry.json`).
+- 게이트(`temp/b21_20261013/gates.tsv`, `run_gates.sh`): integrity/text_fit/punctuation/bteam_drift(115 listed·11 deferred·drift 0)/phase6/sprite_tests/sprite_shapes/review_unittest 0. glyph_dictionary 1(기존 0xA295EC), editor_tests 1(HEAD 기준선 `editor_head_baseline.log`에서도 같은 2건).
+- 리뷰: Astra 전체 리뷰 1회(b20) Blocking 4(compact row 증거, 에디터 저장 검증, geometry 독립 고정, override 스냅샷) → 델타 재리뷰(b21) 4건 모두 RESOLVED, 새 Blocking 없음(`temp/claude_2026-10-13/review_b20.out`, `review_b21_delta.out`).
+- 실화면 프레임(콜드 부팅, b21): `temp/b21_20261013/capture_menu/frames/`, `capture_campaign/frames/`, `capture_digits/frames/`, `capture_p1rule/frames/`, `capture_p1rule2/frames/`(입력 `*_inputs.txt`, 스크립트 `capture_b21.sh`). b19 헤더 비교 `temp/b19_20261013/jp_vs_b19_mode_menu.png`. 대사 수정 화면은 b17 `temp/b17_20261013/capture_m23/0080_A_0006082.png`, `capture_ge3/0110_A_0018260.png`, `capture_m18/0070_A_0005349.png`(치트 경로, 정상 플레이 근거 아님). HARD★캠페인·A3 전각숫자 화면·SOUND★ROOM 등은 미확인(`todo.md`).
