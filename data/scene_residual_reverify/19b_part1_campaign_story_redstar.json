@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19b_part1_campaign_story_redstar",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
   "min_score": 7,
   "ranges": [
    {
@@ -16,7 +16,7 @@
      "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 5,
+     "raw_kana_count": 6,
      "raw_kana_unexplained_count": 0,
      "raw_kana_observations": [
       {
@@ -26,6 +26,14 @@
        "allowed": true,
        "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
        "containing_extracted_addr": "0x00D9B210"
+      },
+      {
+       "offset": "0x00D9EDC0",
+       "length": 8,
+       "text": "カーソル",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00D9EDB6"
       },
       {
        "offset": "0x00D9F3E4",
@@ -67,7 +75,7 @@
   "extracted_covered_count": 1800,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
-  "raw_kana_count": 5,
+  "raw_kana_count": 6,
   "raw_kana_unexplained_count": 0,
   "classification": "clean",
   "hit": null,

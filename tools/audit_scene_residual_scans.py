@@ -21,6 +21,11 @@ ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUT_DIR = ROOT / "temp" / "scene_residual_scan_audit"
 VISUAL_GRADES = {"fresh_savestate", "ground_truth", "stale_state"}
 VISUAL_ROLES = {"primary_current_sha", "supplementary_stale_state"}
+COMM_REQUIRED_SCENES = {
+    "11_part1_world_menu", "12_part1_single_submenus", "13_part1_link_submenus",
+    "23_part2_main_menu", "23a_part2_wars_shop", "23b_part2_comm_multiplayer",
+    "86_common_compact_menu_tables",
+}
 
 
 def load(path: Path, default):
@@ -251,6 +256,7 @@ def validate_visual_reverification(
         add_issue(issues, sid, "visual reverify current_sha_screenshots 없음", row_index=index)
     else:
         primary_count = 0
+        verified_comm_scenes = set()
         for shot_index, shot in enumerate(screenshots):
             if not isinstance(shot, dict):
                 add_issue(
@@ -319,6 +325,26 @@ def validate_visual_reverification(
                     actual=shot.get("provenance_rom_sha256"),
                 )
             scene_id = shot.get("scene_id")
+            if sid == "88_common_comm_labels":
+                try:
+                    from capture_scene_screenshots import validate_recorder_endpoint
+                    source_checkpoint = shot["source_checkpoint"]
+                    if not isinstance(shot["cheat_tainted"], bool):
+                        raise ValueError("cheat_tainted must be Boolean")
+                    state = load(ROOT / source_checkpoint, {})
+                    if state.get("rom_sha256") != current_rom_sha:
+                        raise ValueError("source checkpoint is not current candidate")
+                    validate_recorder_endpoint({
+                        "recorder_endpoint": {"checkpoint": source_checkpoint,
+                                              "frame": path_value, "frame_sha256": shot["sha256"],
+                                              "core_frame": state["core_frame"]},
+                        "cheat_tainted": shot["cheat_tainted"],
+                    }, current_rom_sha)
+                    if scene_id in COMM_REQUIRED_SCENES:
+                        verified_comm_scenes.add(scene_id)
+                except (KeyError, ValueError, OSError, TypeError, json.JSONDecodeError) as exc:
+                    add_issue(issues, sid, "comm label recorder endpoint 불일치",
+                              row_index=index, shot_index=shot_index, error=str(exc))
             if scene_id not in screen_scene_ids:
                 add_issue(
                     issues,
@@ -390,6 +416,9 @@ def validate_visual_reverification(
                 "visual reverify primary_current_sha screenshot 없음",
                 row_index=index,
             )
+        if sid == "88_common_comm_labels":
+            for missing_scene in sorted(COMM_REQUIRED_SCENES - verified_comm_scenes):
+                add_issue(issues, sid, "comm label 필수 scene 증거 없음", scene_id=missing_scene)
 
     for stale in item.get("excluded_stale_artifacts") or []:
         if isinstance(stale, dict) and stale.get("path"):
@@ -405,13 +434,14 @@ def validate_visual_reverification(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--rom", type=Path, default=ROM, help="candidate ROM for provenance checks")
     args = parser.parse_args()
 
     catalog = load(CATALOG, {"scenes": []})
     manifest = load(MANIFEST, {"containers": []})
     scenes = catalog.get("scenes") or []
     scene_by_id = {scene.get("id"): scene for scene in scenes if scene.get("id")}
-    current_rom_sha = sha256(ROM) if ROM.exists() else ""
+    current_rom_sha = sha256(args.rom) if args.rom.exists() else ""
     containers = [scene for scene in scenes if scene.get("scene_role") == "container"]
     screen_scene_ids = {
         scene.get("id")

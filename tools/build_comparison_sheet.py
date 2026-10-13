@@ -132,6 +132,8 @@ def _capture_cache_key(rom: Path, checkpoint: dict, side: str) -> str:
         "mode": checkpoint["mode"],
         "rom_sha256": _sha256(rom),
         "nav": checkpoint.get("nav"),
+        "orig_nav": checkpoint.get("orig_nav"),
+        "orig_refresh": checkpoint.get("orig_refresh"),
         "refresh": checkpoint.get("refresh"),
         "orig_state": checkpoint.get("orig_state"),
         "state": checkpoint.get("state") if side == "patched" else checkpoint.get("orig_state"),
@@ -189,6 +191,10 @@ def capture(
         if cached is not None:
             print(f"  [orig-cache hit] {name}")
             return cached
+    if checkpoint["mode"] == "recorder_endpoint" and side == "patched":
+        from capture_scene_screenshots import import_recorder_endpoint
+        import_recorder_endpoint(checkpoint, shot_dir / "frame.png", _sha256(rom))
+        return Image.open(shot_dir / "frame.png").copy()
     prov: dict = {
         "name": name,
         "scene_id": checkpoint.get("scene_id"),
@@ -220,6 +226,19 @@ def capture(
             driver.loadstate(state_path)
             run_nav(driver, checkpoint.get("refresh", [["frames", 20]]))
             prov["refresh"] = checkpoint.get("refresh", [["frames", 20]])
+        elif checkpoint["mode"] == "recorder_endpoint" and side == "orig":
+            if checkpoint.get("orig_nav"):
+                run_nav(driver, checkpoint["orig_nav"])
+                prov["orig_nav"] = checkpoint["orig_nav"]
+            elif checkpoint.get("orig_state"):
+                state_path = _resolve(checkpoint["orig_state"])
+                prov["state"] = str(state_path)
+                prov["state_sha256"] = _sha256(state_path)
+                driver.frames(1)
+                driver.loadstate(state_path)
+                run_nav(driver, checkpoint.get("orig_refresh", [["frames", 20]]))
+            else:
+                raise ValueError(f"{name}: recorder original reproduction needs orig_nav or orig_state")
         else:
             raise ValueError(f"unknown mode: {checkpoint['mode']!r}")
         img = driver.shot("frame")
@@ -269,7 +288,7 @@ def main() -> None:
     ap.add_argument("--rom", default=str(DEFAULT_PATCHED))
     ap.add_argument("--original", default=str(DEFAULT_ORIGINAL))
     ap.add_argument("--compare", action="store_true", help="원본 vs 패치 나란히")
-    ap.add_argument("--only", choices=["fresh", "savestate"], help="해당 모드만 캡처")
+    ap.add_argument("--only", choices=["fresh", "savestate", "recorder_endpoint"], help="해당 모드만 캡처")
     ap.add_argument("--include-stale", action="store_true",
                     help="savestate(stale-BG) 체크포인트 포함(기본은 fresh ground truth만)")
     ap.add_argument("--out", default=str(ROOT / "temp" / "comparison_sheets"))
@@ -290,6 +309,11 @@ def main() -> None:
         checkpoints = [c for c in checkpoints if not (c["mode"] == "savestate" and c.get("stale_bg"))]
     if not checkpoints:
         raise SystemExit("선택된 체크포인트 없음 (--include-stale 또는 --only savestate 확인)")
+    if args.compare:
+        missing = [ck["name"] for ck in checkpoints
+                   if ck["mode"] != "fresh" and not (ck.get("orig_state") or ck.get("orig_nav"))]
+        if missing:
+            raise SystemExit("--compare 원본 재현 경로 없음: " + ", ".join(missing))
 
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -306,14 +330,11 @@ def main() -> None:
         print(f"[capture] {name} ({ck['mode']}) {note}")
         patched_img = capture(patched, ck, out_dir, harness, "patched")
         if args.compare:
-            if ck["mode"] == "fresh" or ck.get("orig_state"):
-                orig_img = capture(original, ck, out_dir, harness, "orig", orig_cache=orig_cache)
-                pair = Image.new("RGB", (GBA_W * 2 + 4, GBA_H), (60, 60, 60))
-                pair.paste(orig_img, (0, 0))
-                pair.paste(patched_img, (GBA_W + 4, 0))
-                panels.append(panel(pair, f"{name}  [원본|패치]{stale}  {note}", scale=2))
-            else:
-                panels.append(panel(patched_img, f"{name}  [패치]{stale}  {note}", scale=3))
+            orig_img = capture(original, ck, out_dir, harness, "orig", orig_cache=orig_cache)
+            pair = Image.new("RGB", (GBA_W * 2 + 4, GBA_H), (60, 60, 60))
+            pair.paste(orig_img, (0, 0))
+            pair.paste(patched_img, (GBA_W + 4, 0))
+            panels.append(panel(pair, f"{name}  [원본|패치]{stale}  {note}", scale=2))
         else:
             panels.append(panel(patched_img, f"{name}{stale}  {note}", scale=3))
 

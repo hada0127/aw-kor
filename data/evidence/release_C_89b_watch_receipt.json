@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "status": "historical_requires_current_replay",
+  "rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+  "route": "C_3p_surrender",
+  "source_checkpoint": "temp/release_C/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
+  "source_checkpoint_sha256": "d2e95624f058f978b75e1b775cdbd85979a4d275b560669b91aab3c77629f36a",
+  "defeat_frame": "temp/release_C/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
+  "defeat_frame_sha256": "8038c96d80d1cb9edf6c106eacb04f820f68271bf4f4b1da9a68f2797d464b1a",
+  "defeat_core_frame": 4774,
+  "watch_log": "data/evidence/release_C_89b_watch.log",
+  "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e"
+}

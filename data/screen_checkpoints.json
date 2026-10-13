@@ -4,36 +4,63 @@
     {
       "name": "01_coldboot_nintendo",
       "scene_id": "00_coldboot_nintendo",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 01 (nav frames 300): 닌텐도 제공; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B01_coldboot/0002_NONE_0000301.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B01_coldboot/0002_NONE_0000301.checkpoint.json",
+        "frame": "temp/release_C/b28/B01_coldboot/frames/c35448488a17840a969d550e1dda526cc7a8cc159dd57755073e03e617ea9c13.png",
+        "frame_sha256": "26706f28c7fcd0afb510d06e72dd4ae84c7b5742adcbf7cfab24d4f2e04e9937",
+        "core_frame": 301
+      },
+      "orig_nav": [
         [
           "frames",
           300
         ]
-      ],
-      "note": "콜드부트 닌텐도 제공",
-      "capture_path": "temp/scene_screenshots/01_coldboot_nintendo_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "02_common_title",
       "scene_id": "01_common_title",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 02 (nav frames 600): 1+2 title 시작하기!; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B01_coldboot/0003_NONE_0000601.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B01_coldboot/0003_NONE_0000601.checkpoint.json",
+        "frame": "temp/release_C/b28/B01_coldboot/frames/d3409227b5fc3777d207cbbd75281a41e934da277907dbfcae370a72e8be158a.png",
+        "frame_sha256": "a87c37b27d39dba62bf40b21e4bf80615a17b03523ab23db8a964dc95d6f72cf",
+        "core_frame": 601
+      },
+      "orig_nav": [
         [
           "frames",
           600
         ]
-      ],
-      "note": "공통 타이틀 시작하기",
-      "capture_path": "temp/scene_screenshots/02_common_title_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "03_select_part1",
       "scene_id": "02_select_part1",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 03 (1/2 select, Part1 focus); untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0004_START_0000893.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0004_START_0000893.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/8f8dda7f8773475ff529625bb3568c19d9f31554154dc50f3b191412da5d7d00.png",
+        "frame_sha256": "6e2567653711d4be4306f22ac91cd13ecacc205c20f2a5fd97ec760c4b4da90c",
+        "core_frame": 893
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -48,16 +75,24 @@
           "START",
           200
         ]
-      ],
-      "note": "1/2 선택(Part1)",
-      "capture_path": "temp/scene_screenshots/03_select_part1_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "04_part1_title",
       "scene_id": "10_part1_title",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 04 Part1 title 시작하기!; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B04_p1title/0006_START_0001385.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B04_p1title/0006_START_0001385.checkpoint.json",
+        "frame": "temp/release_C/b28/B04_p1title/frames/9b1cde7793ccd69b51dcce1105e4d3ec141e7a394650375d6d36a998f7b3362c.png",
+        "frame_sha256": "15386391770f1efb16d71a1067691a1df2ae9b4b9d75a64e61e45cf841ae7fd5",
+        "core_frame": 1385
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -82,16 +117,24 @@
           "START",
           240
         ]
-      ],
-      "note": "Part1 타이틀",
-      "capture_path": "temp/scene_screenshots/04_part1_title_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "05_select_part2",
       "scene_id": "03_select_part2",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 05 (1/2 select, Part2 focus); untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0005_DOWN_0001019.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0005_DOWN_0001019.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/9feab752902830539332d1c01f1ded4f774b1492dc1a480e8db078a67a46c02c.png",
+        "frame_sha256": "230d7ac130e54a85ad24cee186f594dc3908827e7e3b89e72c3e4e806964a891",
+        "core_frame": 1019
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -111,16 +154,24 @@
           "DOWN",
           120
         ]
-      ],
-      "note": "1/2 선택(Part2)",
-      "capture_path": "temp/scene_screenshots/05_select_part2_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "06_part2_title",
       "scene_id": "22_part2_title",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 06 Part2 title 시작하기!; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0007_START_0001511.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0007_START_0001511.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/d1c5b8cdf1adeca9699d2fe75add3f23df06376ce6609c79a80f99055b886901.png",
+        "frame_sha256": "f58ba12ae8053d52e9b100261ff7e510890a620f38dffd5b8da5a7a8c6a39fbe",
+        "core_frame": 1511
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -150,16 +201,24 @@
           "START",
           240
         ]
-      ],
-      "note": "Part2 타이틀",
-      "capture_path": "temp/scene_screenshots/06_part2_title_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "07_part2_main_menu",
       "scene_id": "23_part2_main_menu",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh untainted alternative for 07 MODE★SELECT (cursor 캠페인, 계속/처음); D comm-label screen",
+      "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B23a_p2shop/0008_A_0001717.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B23a_p2shop/0008_A_0001717.checkpoint.json",
+        "frame": "temp/release_C/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+        "frame_sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f",
+        "core_frame": 1717
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -199,16 +258,24 @@
           "A",
           240
         ]
-      ],
-      "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)",
-      "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "08_part2_prologue_map_text",
       "scene_id": "21a_part2_prologue_story",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 08 prologue map narration (typing mid-line at nav endpoint); untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0010_A_0002249.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0010_A_0002249.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
+        "frame_sha256": "64e4aa38651025651474c23662de335a5be423717451d01e5c3586c4849c0b76",
+        "core_frame": 2249
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -253,15 +320,23 @@
           "A",
           240
         ]
-      ],
-      "note": "Part2 프롤로그 지도/나레이션",
-      "capture_path": "temp/scene_screenshots/08_part2_prologue_map_text_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "09_part2_prologue_hawke_dialog",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 09 (unreferenced by catalog) Hawke 호크는 있나!; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/09_part2_prologue_hawke_dialog_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0012_A_0002741.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0012_A_0002741.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/3f1baa59c2cc1552ba76cd9a008a3c3ede408bad228649384638172ac6b69edd.png",
+        "frame_sha256": "778b32504709929b67a083c4307ef5a8c6059296f4cfee2348d2a2e2f0bc5f3c",
+        "core_frame": 2741
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -316,16 +391,24 @@
           "A",
           240
         ]
-      ],
-      "note": "Part2 프롤로그 호크 대사",
-      "capture_path": "temp/scene_screenshots/09_part2_prologue_hawke_dialog_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "10_part2_region_map_redstar",
       "scene_id": "24a_part2_operation_select",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "note": "[b28 replay of C route] fresh 10 campaign region map 레드스타 + Andy dialogue box; untainted cold boot, no save",
+      "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B03_p2chain/0013_START_0002987.checkpoint.json",
+      "grade": "recorded_b28",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B03_p2chain/0013_START_0002987.checkpoint.json",
+        "frame": "temp/release_C/b28/B03_p2chain/frames/14ce2ff9e9271ca20c9760db6d93a5d9cbad0b5720ad69bec8d70d34ca36b6ce.png",
+        "frame_sha256": "879a2ff1e3731d2b683b26c0c076e4f6694705d774b0e6311f5f67624e4f77eb",
+        "core_frame": 2987
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -385,10 +468,7 @@
           "START",
           240
         ]
-      ],
-      "note": "Part2 레드스타 지역 지도/작전 진입",
-      "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "20_mode_select_menu",
@@ -469,22 +549,41 @@
     },
     {
       "name": "40_part1_name_menu",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh 40 Part1 모드 선택 (작전룸 focus, help 전투 방법을 가르쳐 드려요); D comm-label screen; untainted cold boot, no save",
+      "scene_id": "11_part1_world_menu",
+      "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B40_p1menu/0030_NONE_0004533.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B40_p1menu/0030_NONE_0004533.checkpoint.json",
+        "frame": "temp/release_C/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+        "frame_sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d",
+        "core_frame": 4533
+      },
+      "orig_nav": [
         [
           "part1_menu"
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh nav: Part1 모드 선택 메뉴",
-      "scene_id": "11_part1_world_menu",
-      "capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "41_part1_operation_room",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh 41 Part1 작전룸 OPERATION list (전투 개시/첫 전투/...); untainted cold boot, no save",
+      "scene_id": "15_part1_operation_logos",
+      "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B40_p1menu/0031_A_0004739.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B40_p1menu/0031_A_0004739.checkpoint.json",
+        "frame": "temp/release_C/b28/B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
+        "frame_sha256": "dcdf1219a1fd5438c7686887d0644354d768de3c92adcb6959e542731235273b",
+        "core_frame": 4739
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -633,17 +732,24 @@
           "A",
           200
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh nav: Part1 작전실/작전 메뉴",
-      "scene_id": "15_part1_operation_logos",
-      "capture_path": "temp/scene_screenshots/41_part1_operation_room_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "42_part1_single_battle",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh 42 Part1 싱글 대전 submenu 처음부터; D comm-label screen; untainted cold boot, no save",
+      "scene_id": "12_part1_single_submenus",
+      "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B42_p1single/0032_A_0004845.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B42_p1single/0032_A_0004845.checkpoint.json",
+        "frame": "temp/release_C/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+        "frame_sha256": "2ad319be8218e67482e4859d5334b2fe240ae77ccceb955e32bb87a9768c227d",
+        "core_frame": 4845
+      },
+      "orig_nav": [
         [
           "part1_menu"
         ],
@@ -657,17 +763,24 @@
           "A",
           180
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh nav: Part1 싱글 배틀 하위 메뉴",
-      "scene_id": "12_part1_single_submenus",
-      "capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "43_part1_link",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh 43 Part1 통신 CONNECT submenu (맵 교환/멀티카드 통신/1카드 통신); D comm-label screen; untainted cold boot, no save",
+      "scene_id": "13_part1_link_submenus",
+      "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B43_p1link/0033_A_0004971.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B43_p1link/0033_A_0004971.checkpoint.json",
+        "frame": "temp/release_C/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+        "frame_sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682",
+        "core_frame": 4971
+      },
+      "orig_nav": [
         [
           "part1_menu"
         ],
@@ -686,22 +799,24 @@
           "A",
           180
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh nav: Part1 통신 하위 메뉴",
-      "scene_id": "13_part1_link_submenus",
-      "capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "scene_14_part1_name_input",
-      "mode": "fresh",
-      "grade": "ground_truth",
-      "note": "coldboot fresh replay: Part1 이름 입력 그리드(세이브스테이트 VRAM 미사용)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh scene_14 Part1 name input grid (part1_main_sweep 3); untainted cold boot, no save",
       "scene_id": "14_part1_name_input",
       "capture_path": "temp/scene_screenshots/scene_14_part1_name_input_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json",
-      "nav": [
+      "provenance_path": "temp/release_C/b28/B14_p1sweep/0010_A_0001249.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B14_p1sweep/0010_A_0001249.checkpoint.json",
+        "frame": "temp/release_C/b28/B14_p1sweep/frames/560b405aa3c2dc062a0ae7ae03336034e33b2fc7e78323f6354ff7407e5d0686.png",
+        "frame_sha256": "1045d278678f44144e26798800c72ebc4ea8bf8e9833a3368981be14fcdf9d2a",
+        "core_frame": 1249
+      },
+      "orig_nav": [
         [
           "part1_main_sweep",
           3
@@ -710,45 +825,52 @@
     },
     {
       "name": "scene_16_part1_info_screen",
-      "mode": "savestate",
-      "state": "temp/auto_battle_end/state_007.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified: Part1 전투 유닛/부대 정보 리스트",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_16 Part1 unit/army info list (레드스타 1/13 자금 8000, 종류/체력/연료/탄약 rows 보병/바주카병/경전차/중전차); P1M20 save (untainted, batch-1 run)",
       "scene_id": "16_part1_info_screen",
       "capture_path": "temp/scene_screenshots/scene_16_part1_info_screen_patched/frame.png",
-      "provenance_path": "temp/auto_battle_end/state_007.ss0"
+      "provenance_path": "temp/release_C/b28/H_p1_supply/0038_A_0004010.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/H_p1_supply/0038_A_0004010.checkpoint.json",
+        "frame": "temp/release_C/b28/H_p1_supply/frames/4313a2440985f5741ed0962bf476aed791a8eaf10d203088b0107de0bc585f75.png",
+        "frame_sha256": "91aab37c383a92831d762ef0b27531477f108273c05bf315b5c5a58a4fc7eadf",
+        "core_frame": 4010
+      }
     },
     {
       "name": "scene_17_part1_campaign",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part1 캠페인/모드 로고",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate scene_17 Part1 campaign/operation logo (전투 개시! / 작전 1 over world map) from fresh sweep; cold untainted (match by note only)",
       "scene_id": "17_part1_campaign",
       "capture_path": "temp/scene_screenshots/scene_17_part1_campaign_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_006.ss0"
+      "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0046_B_0003625.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B19a1_p1sweep/0046_B_0003625.checkpoint.json",
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/31e488a0ffbe518a1b3b0aa2bda9a1ec13d801f3592af93535b0f1f68ba649a8.png",
+        "frame_sha256": "a7d72aeb943f703e140cc27b15f178d378b47bd1b340c88fb46335e1ecd6574f",
+        "core_frame": 3625
+      }
     },
     {
       "name": "scene_18_part1_battle",
-      "mode": "fresh",
-      "grade": "ground_truth",
-      "note": "coldboot fresh replay: Part1 전투 1일째 배너(세이브스테이트 VRAM 미사용)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh scene_18 Part1 1일째 작전개시 banner (sweep 43 +33f); untainted cold boot, no save",
       "scene_id": "18_part1_battle",
       "capture_path": "temp/scene_screenshots/scene_18_part1_battle_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json",
-      "nav": [
+      "provenance_path": "temp/release_C/b28/B14_p1sweep/0051_NONE_0003922.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B14_p1sweep/0051_NONE_0003922.checkpoint.json",
+        "frame": "temp/release_C/b28/B14_p1sweep/frames/5bcb1daab7241e0039388ef9b75cbba5bdd4784a5ba7c9350352c6ec5d46cead.png",
+        "frame_sha256": "c9d186920952fc7457b8dc13a755bf746427f8fe77dc4af46fb6b8959d084e45",
+        "core_frame": 3922
+      },
+      "orig_nav": [
         [
           "part1_main_sweep",
           43
@@ -761,13 +883,20 @@
     },
     {
       "name": "scene_19a1_part1_tutorial_opening",
-      "mode": "fresh",
-      "grade": "ground_truth",
-      "note": "coldboot fresh replay: Part1 튜토리얼 초반 대사(타이핑 완료 대기, 세이브스테이트 VRAM 미사용)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh scene_19a1 Part1 tutorial opening 여기는 아라라 지방에서도 특히 시골이야 (sweep 44 +120f); untainted cold boot, no save",
       "scene_id": "19a1_part1_tutorial_opening",
       "capture_path": "temp/scene_screenshots/scene_19a1_part1_tutorial_opening_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json",
-      "nav": [
+      "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0052_NONE_0004075.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B19a1_p1sweep/0052_NONE_0004075.checkpoint.json",
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/cd375d3ede17eefe5e29a991c0455a31231ab9ab96b9496818599bb0fcea91ee.png",
+        "frame_sha256": "b9e7c7aefb0b9f605025f4d85053fb069772937baefd1d86cb82896c885e6b80",
+        "core_frame": 4075
+      },
+      "orig_nav": [
         [
           "part1_main_sweep",
           44
@@ -860,19 +989,19 @@
     },
     {
       "name": "scene_19e1_part1_unit_info_detail_help",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00DECA12 보병계 유닛 상세 설명; direct displayed state from first battle day-2 info probe",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28_direct",
+      "note": "P1 M20 DAY1 battle (P1M20 save, untainted, resumed from b28 H_p1_supply), R on 숲 보병 -> unit info page with help box: 보병계 유닛. / 가장 저렴한 유닛으로, / 점령가능하나 공격력 / 기대할 수 없다. (matches dialogue_groups assembled_ko). Period/comma drawn with the help-box punctuation glyphs (look like 。/、) as in other P1 help frames",
       "scene_id": "19e1_part1_unit_info_detail_help",
       "capture_path": "temp/scene_screenshots/scene_19e1_part1_unit_info_detail_help_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/first_battle_day2_after_info_probe/R_START.ss0"
+      "provenance_path": "temp/release_C/b28/X_19e1_infantry/0002_R_0004150.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/X_19e1_infantry/0002_R_0004150.checkpoint.json",
+        "frame": "temp/release_C/b28/X_19e1_infantry/0002_R_0004150.png",
+        "frame_sha256": "0ec91dec91574286fbe78ea9b3ccc802c01ad494f3a57d7bb417dbc7a3a7b86d",
+        "core_frame": 4150
+      }
     },
     {
       "name": "scene_19e7_part1_hoip_co_weather_help",
@@ -955,125 +1084,116 @@
     },
     {
       "name": "scene_20_part2_intro_newspaper",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh frame scan: Part2 진입 스플래시 로고",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_20 Part2 entry splash NINTENDO PRESENTS + 게임보이 워즈 어드밴스 2 label; cold untainted (identified by catalog note, no old reference image)",
       "scene_id": "20_part2_intro_newspaper",
       "capture_path": "temp/scene_screenshots/scene_20_part2_intro_newspaper_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/04_part2_enter.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0005_A_0002887.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0005_A_0002887.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
+        "frame_sha256": "7233d630883678823275288d3527c7641d37bc97cdfef879ff6a28a0028994f5",
+        "core_frame": 1920
+      }
     },
     {
       "name": "scene_20a_part2_menu_newspaper_bg",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh frame scan: Part2 메뉴 전 신문 배경",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_20a Part2 pre-menu newspaper background (BLUE MOON panel); cold untainted (identified by note)",
       "scene_id": "20a_part2_menu_newspaper_bg",
       "capture_path": "temp/scene_screenshots/scene_20a_part2_menu_newspaper_bg_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_splash_frame_scan/after_A_040.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0005_A_0002887.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0005_A_0002887.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/4a3a754685560a31cef70d911bb1d930fb232f644a6589cdee48e937eaec7a81.png",
+        "frame_sha256": "846e5b056592f92d608a68b522d3e5217b7cbed2042d095b361621f4c3284050",
+        "core_frame": 2130
+      }
     },
     {
       "name": "scene_21_part2_intro_blackhole",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part2 프롤로그/블랙홀 대사",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_21 prologue Black Hole CO line 예전에 나는 이 별에서 전쟁을 일으켜...; cold untainted (identified by note)",
       "scene_id": "21_part2_intro_blackhole",
       "capture_path": "temp/scene_screenshots/scene_21_part2_intro_blackhole_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_003.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0022_A_0017849.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0022_A_0017849.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/0bf98e6c830f56ec32790310f552cbdd12cc7a56679e0d2531a4b8d4bb92bee7.png",
+        "frame_sha256": "fd2b9c1bae79bb700ab3e0fc1ec6a199cab3264d6de8e693b46a562cf43a8dfb",
+        "core_frame": 17849
+      }
     },
     {
       "name": "scene_23a_part2_wars_shop",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0",
-      "refresh": [
-        [
-          "frames",
-          40
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면(대사 타이핑 완료까지 40f)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_23a WARS★SHOP entry (재고 0, 어서 와!) after 120f; cold boot no save untainted; D comm-label screen",
       "scene_id": "23a_part2_wars_shop",
       "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_007.ss0"
+      "provenance_path": "temp/release_C/b28/B23a_p2shop/0016_NONE_0002529.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B23a_p2shop/0016_NONE_0002529.checkpoint.json",
+        "frame": "temp/release_C/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
+        "frame_sha256": "91c74a93c04b44ac5cf47546445bbeecc8d7efbfaba8e775485a6cc9837a9366",
+        "core_frame": 2529
+      }
     },
     {
       "name": "scene_23b_part2_comm_multiplayer",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_23b LINK★MODE submenu (1팩 대전/멀티팩 대전/맵 교환, 멀티팩 focus); cold untainted; D comm-label screen",
       "scene_id": "23b_part2_comm_multiplayer",
       "capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_row_scan/state_011.ss0"
+      "provenance_path": "temp/release_C/b28/B23_p2menu/0012_A_0002071.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B23_p2menu/0012_A_0002071.checkpoint.json",
+        "frame": "temp/release_C/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+        "frame_sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b",
+        "core_frame": 2071
+      }
     },
     {
       "name": "scene_23c_part2_sound_room",
-      "mode": "savestate",
-      "state": "temp/external_saves/loadtempsav_soundroom_matrix/33380/state_006.ss0",
-      "refresh": [
-        [
-          "press",
-          "UP",
-          180
-        ],
-        [
-          "press",
-          "UP",
-          180
-        ],
-        [
-          "press",
-          "UP",
-          180
-        ],
-        [
-          "press",
-          "SELECT",
-          180
-        ],
-        [
-          "press",
-          "A",
-          180
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh redraw from 33380 Part2 menu: 자유전 -> UP×3 상점 -> SELECT 갤러리 -> A, Sound Room track list",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_23c",
       "scene_id": "23c_part2_sound_room",
       "capture_path": "temp/scene_screenshots/scene_23c_part2_sound_room_patched/frame.png",
-      "provenance_path": "temp/external_saves/loadtempsav_soundroom_matrix/33380/state_006.ss0"
+      "provenance_path": "temp/release_C/b28/OJ1_soundroom/0037_A_0006702.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/OJ1_soundroom/0037_A_0006702.checkpoint.json",
+        "frame": "temp/release_C/b28/OJ1_soundroom/frames/214198825238d3a4ae88f14fb53640ec158378d022e9b8e160579362ab4150dc.png",
+        "frame_sha256": "4c660a597d2292fbb6557cc97db6f514d0afd6112c9510443497bb77f54b6483",
+        "core_frame": 6702
+      }
     },
     {
       "name": "scene_24_part2_campaign_map",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_24 campaign map (normal header), from M29 save",
+      "scene_id": "24_part2_campaign_map",
+      "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/Q_syogun/0011_A_0002742.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/Q_syogun/0011_A_0002742.checkpoint.json",
+        "frame": "temp/release_C/b28/Q_syogun/frames/f8434f6310f433a7a0e9609434f11982015884683d7833ac78e49e55595d8978.png",
+        "frame_sha256": "c67e54130815d0d9fa3f5f92c8f804ffca662dd71ec4e6158deccb918c79c218",
+        "core_frame": 2742
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -1218,17 +1338,24 @@
           "A",
           60
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh replay: Part2 자유전 맵 선택→사령관 선택→룰 요약 다이아몬드 라벨 한글 재렌더",
-      "scene_id": "24_part2_campaign_map",
-      "capture_path": "temp/scene_screenshots/scene_24_part2_campaign_map_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "scene_24b_part2_strategic_map_mode4",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] fresh scene_24b free battle TEAM★SETTING 사령관을 고릅니다; untainted cold boot, no save",
+      "scene_id": "24b_part2_strategic_map_mode4",
+      "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/B24b_p2free/0028_A_0002897.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B24b_p2free/0028_A_0002897.checkpoint.json",
+        "frame": "temp/release_C/b28/B24b_p2free/frames/91fe87051f1aaee53fbbc0093ea5cccfbe0c93ea21e4a764bb91b11924c47aba.png",
+        "frame_sha256": "53a8922bfa8e869dd113891494255365ed4fb9789633085ee40e662abfcb3aeb",
+        "core_frame": 2897
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -1363,124 +1490,114 @@
           "A",
           60
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh replay: Part2 자유전 맵 선택 후 사령관 선택 화면",
-      "scene_id": "24b_part2_strategic_map_mode4",
-      "capture_path": "temp/scene_screenshots/scene_24b_part2_strategic_map_mode4_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "scene_25_part2_mission_titles",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: Part2 미션 스탬프/타이틀",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_25 mission title stamp 미션29 최종결전! (tainted M29 save); see also L evidence PK_cold 0072 (미션 1 untainted)",
       "scene_id": "25_part2_mission_titles",
       "capture_path": "temp/scene_screenshots/scene_25_part2_mission_titles_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_014.ss0"
+      "provenance_path": "temp/release_C/b28/N2_p2_ending/0064_NONE_0004270.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/N2_p2_ending/0064_NONE_0004270.checkpoint.json",
+        "frame": "temp/release_C/b28/N2_p2_ending/frames/1260f02bb27cc6b67da2d3a36d76327f2a50328c6290368b9488f17f6bfc07be.png",
+        "frame_sha256": "b040014319681cf9dd0b2dc895dfc4e5a6f62e78b35549acad07938fa8733b3e",
+        "core_frame": 4270
+      }
     },
     {
       "name": "scene_26a_part2_battle_start_overlays",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f060 대표",
-      "scene_id": "26a_part2_battle_start_overlays",
+      "mode": "recorder_endpoint",
+      "grade": "unassigned_mission_title_transition",
+      "note": "C cold-boot recorder frame 37000; no save; untainted.",
       "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlays_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
+      "provenance_path": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+        "frame": "temp/release_C/PK_cold/frames/fe1e46f295aa72027505bbeca2895a4e692d9116e4d6ac645a04bda539ad7a1a.png",
+        "frame_sha256": "84aba9ff0491364d1eeebce21970b6062175dc4a8a6df881c37b0070a4a9b479",
+        "core_frame": 37000
+      }
     },
     {
       "name": "scene_26a_part2_battle_start_overlay_f040",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f040.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f040 회전 도입",
-      "scene_id": "26a_part2_battle_start_overlays",
+      "mode": "recorder_endpoint",
+      "grade": "unassigned_mission_title_transition",
+      "note": "C cold-boot recorder frame 36800; no save; untainted.",
       "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f040_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f040.ss0"
+      "provenance_path": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+        "frame": "temp/release_C/PK_cold/frames/82991d539e11316dff90412e7df63daaf990df65cbc33f299c5578e5a1acf64e.png",
+        "frame_sha256": "2c3e8b5a4a331324d9c09f5239dba12d47e7fe4704c68fa0a87f3f96bc217e92",
+        "core_frame": 36800
+      }
     },
     {
       "name": "scene_26a_part2_battle_start_overlay_f060",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f060 중앙 표시",
-      "scene_id": "26a_part2_battle_start_overlays",
+      "mode": "recorder_endpoint",
+      "grade": "unassigned_mission_title_transition",
+      "note": "C cold-boot recorder frame 37084; no save; untainted.",
       "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f060_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f060.ss0"
+      "provenance_path": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+        "frame": "temp/release_C/PK_cold/frames/38aa78181111c5f1e9bcc5911a4202dcb8f106b8f307e556d722e345fcb2beff.png",
+        "frame_sha256": "7be6a15a2d7d0ef85a41612925584b14a3e84d954e92ade269bc951f638d74a3",
+        "core_frame": 37084
+      }
     },
     {
       "name": "scene_26a_part2_battle_start_overlay_f108",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f108.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f108 축소/퇴장",
-      "scene_id": "26a_part2_battle_start_overlays",
+      "mode": "recorder_endpoint",
+      "grade": "unassigned_mission_title_transition",
+      "note": "C cold-boot recorder frame 37380; fade/exit begins, untainted.",
       "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f108_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f108.ss0"
+      "provenance_path": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+        "frame": "temp/release_C/PK_cold/frames/7c9b7424f1a52ca362c1c08663870d1f88989f5e345782eff973b4093a17f5d1.png",
+        "frame_sha256": "2c130304ab5552d0fa96c7f74727f62917f2e9c3d7ce7b9666bfcefdcc4b8fe1",
+        "core_frame": 37380
+      }
     },
     {
       "name": "scene_26a_part2_battle_start_overlay_f144",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f144.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh replay: Part2 전투 일자/작전개시 affine 오버레이 f144 HUD 복귀",
-      "scene_id": "26a_part2_battle_start_overlays",
+      "mode": "recorder_endpoint",
+      "grade": "unassigned_mission_title_transition",
+      "note": "C cold-boot recorder frame 37500; no save; untainted.",
       "capture_path": "temp/scene_screenshots/scene_26a_part2_battle_start_overlay_f144_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_day_overlay_fine_frames/state_f144.ss0"
+      "provenance_path": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/PK_cold/0072_A_0037569.checkpoint.json",
+        "frame": "temp/release_C/PK_cold/frames/9947afa1cb588846cf0936344a2af83743213db4ac329ab8ed6b271575ecd470.png",
+        "frame_sha256": "197126c717edbf6b6f41792dffcaeada5405c9287c1c375c6c5f9d0aed903007",
+        "core_frame": 37500
+      }
     },
     {
       "name": "scene_27_part2_battle_objlabels",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified: Part2 전투 정보/OBJ 라벨 메뉴",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate scene_27 P2 battle info terrain detail (도로 page: 방어/수입, OBJ unit-move labels 보병/바주카/타이어/전차/비행) (match by note only)",
       "scene_id": "27_part2_battle_objlabels",
       "capture_path": "temp/scene_screenshots/scene_27_part2_battle_objlabels_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_022.ss0"
+      "provenance_path": "temp/release_C/b28/R2_p2_terrain_detail/0031_R_0004768.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/R2_p2_terrain_detail/0031_R_0004768.checkpoint.json",
+        "frame": "temp/release_C/b28/R2_p2_terrain_detail/frames/48bfb50b84790c7ad44448816986821cb5ea5845c340772c918858895e2734a2.png",
+        "frame_sha256": "2ba6440c32249e9801fa3c4853ddcf4df9d648b8a4b0b7aa17631aa94d637e4e",
+        "core_frame": 4768
+      }
     },
     {
       "name": "scene_28_part2_result_status",
@@ -1500,57 +1617,51 @@
     },
     {
       "name": "scene_29_part2_result_summary",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_012.ss0",
-      "refresh": [
-        [
-          "press",
-          "A",
-          120
-        ],
-        [
-          "press",
-          "A",
-          120
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh redraw from pre-result state_012: A,A로 0x59DA5C 현재 ROM 결과 요약 라벨 렌더",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_29 (작전성공 summary 287 S)",
       "scene_id": "29_part2_result_summary",
       "capture_path": "temp/scene_screenshots/scene_29_part2_result_summary_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/first_battle_after_all_enemy_dead_endturn_probe/state_012.ss0"
+      "provenance_path": "temp/release_C/b28/I2_m21_victory/0112_A_0006479.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/I2_m21_victory/0112_A_0006479.checkpoint.json",
+        "frame": "temp/release_C/b28/I2_m21_victory/frames/5a8c040eef6ef7e40e1158d1a42ada5bf133e954f4473bf3b7b21b5325af3a6c.png",
+        "frame_sha256": "3a18ea6e678d73bd80a600b974c1fdbbd3dcec9d23d3f7d67449753103544ad1",
+        "core_frame": 6479
+      }
     },
     {
       "name": "scene_30a1_part2_redstar_story_early",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: g_00A01C90/g_00A01CA3 계열 레드스타 초반 스토리",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_30a1 msg 0xA01C90/0xA01CA3 블랙홀 군의 / 잔당을 격파하라! (text matched to decoded ROM bytes; no watch)",
       "scene_id": "30a1_part2_redstar_story_early",
       "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_010.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/e3b892c4e7cced85bf7b1d9f7bcf3c4d92b71429ff489343c709cecfbaf2ba6b.png",
+        "frame_sha256": "ac6b79d2cdb8179bf886dfafd6301b900242b0b2e1cc477c2868afd01d2e3c9e",
+        "core_frame": 32869
+      }
     },
     {
       "name": "scene_30a1_part2_redstar_story_early_b",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/inspect_30a1_states/state_011/a01.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: 레드스타 초반 후속 대사 (state_011 A01)",
-      "scene_id": "30a1_part2_redstar_story_early",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_30a1_b candidate: early Red Star campaign-map follow-up line 그럼, 바로 출격한다! 적은 어디냐? (match by note only, address unverified)",
+      "scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
       "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_b_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_011/a01.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0035_A_0022555.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0035_A_0022555.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/ae2be4c602e4d5eb71319042a2291cd87a46c2f1e9e30585ca0f58b9fb17a5a0.png",
+        "frame_sha256": "a3d83428fbed4a9fee4b77ee4380445926a6b3e10aa0dcaf6ca85cf572e6a651",
+        "core_frame": 22555
+      }
     },
     {
       "name": "scene_30a1_part2_redstar_story_early_c",
@@ -1714,19 +1825,19 @@
     },
     {
       "name": "scene_30e1_part2_blackhole_missile_approach_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A26D48 미사일 발사대는 완성됐나; exact watch evidence: temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_30e1 msg 0xA26D48 ...캣, 미사일 발사대는 완성됐나? (text matched to decoded ROM bytes; tainted M29 save)",
       "scene_id": "30e1_part2_blackhole_missile_approach_story",
       "capture_path": "temp/scene_screenshots/scene_30e1_part2_blackhole_missile_approach_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30e_a26d48_exact_watch/5759/menu/hit.ss0"
+      "provenance_path": "temp/release_C/b28/N2_p2_ending/0030_A_0002078.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/N2_p2_ending/0030_A_0002078.checkpoint.json",
+        "frame": "temp/release_C/b28/N2_p2_ending/frames/9a628dd3826811c426685a796fd53f502868125f035e8de1e88f2a7b6dfabd30.png",
+        "frame_sha256": "118f53210314b267ae838b2b79c2814c17fbf054e601a5f9c01d6f71219574e6",
+        "core_frame": 2078
+      }
     },
     {
       "name": "scene_30e2_part2_blackhole_final_missile_story",
@@ -1746,35 +1857,35 @@
     },
     {
       "name": "scene_30f2_part2_co_profile_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual screen: Part2 CO 설명/프로필 대사",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_30f2 CO profile page (료: 기계광 활기찬 소년 / 좋아함 기계 / 싫어함 기상, 자금 1000); cold untainted, no cheat (natural route via battle menu)",
       "scene_id": "30f2_part2_co_profile_story",
       "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_036.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0148_A_0060199.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0148_A_0060199.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/8d8b49ec7bd8aa1d3fbac6abed0eb86f53227870d7a37e834f0078f09e49b086.png",
+        "frame_sha256": "1ed18cc7e5d0e1738f3d2c6a0bf092c2f7cdf567368174897890d99653c1700e",
+        "core_frame": 60199
+      }
     },
     {
       "name": "scene_80a_campaign_story_early",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: 캠페인 초반 전투 진입 대사",
-      "scene_id": "80a_campaign_story_early",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_80a candidate: first battle entry dialogue 후, 큰 부대는 막아냈지만 블랙홀 군은 성가신 상대야 (match by note only)",
+      "scene_id": "30a1_part2_redstar_story_early",
       "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_017.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/e70fc882c403128a5755835b70368bc9b813a45ae04f0fe1ce6fc5ae763ceef2.png",
+        "frame_sha256": "5164ca622677fc96232f4a18d18559d24646b976ba3cf4ccc7d22c761f69fb4c",
+        "core_frame": 37931
+      }
     },
     {
       "name": "scene_80b_campaign_story_mid",
@@ -1810,40 +1921,52 @@
     },
     {
       "name": "scene_85_ui_common",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh sweep: 공통 전투 START 메뉴 UI",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for checkpoint scene_85 (registration by W1)",
       "scene_id": "85_ui_common",
       "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_sweep/state_040.ss0"
+      "provenance_path": "temp/release_C/b28/C_3p_surrender/0024_A_0004390.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0024_A_0004390.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/0bfc582ac92a08acefe49df2c47456992bb3b237b1d867f4044490b2a83eb05b.png",
+        "frame_sha256": "37e002c6a6f51b72dadcb963b45bb7b3e6f5e4d1938caafe04a7c05cd93e6a18",
+        "core_frame": 4390
+      }
     },
     {
       "name": "scene_86_common_compact_menu_tables",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_86 compact mode-menu labels (편집/통신/상점/도전/캠페인 rows, 상점 focus, caption 포인트로 쇼핑을 할 수 있습니다); cold untainted; D comm-label screen",
       "scene_id": "86_common_compact_menu_tables",
       "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_menu_focus_scan/state_006.ss0"
+      "provenance_path": "temp/release_C/b28/B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
+        "frame": "temp/release_C/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+        "frame_sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1",
+        "core_frame": 2011
+      }
     },
     {
       "name": "scene_87_common_rule_settings",
-      "mode": "fresh",
-      "nav": [
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_87 (RULE★SETTING) — from save not fresh; fresh route is W1's capture_scene_screenshots",
+      "scene_id": "87_common_rule_settings",
+      "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
+      "provenance_path": "temp/release_C/b28/C_3p_surrender/0020_A_0003354.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0020_A_0003354.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/1be0a2d81a77376841a4b64e8d69753f857485bc57e6e8f8a96019896d2f89cc.png",
+        "frame_sha256": "a38884fa79fc601d7838f1b06441cffad2e5b1ea92a97bbe7b7dc58a9fc8f77d",
+        "core_frame": 3354
+      },
+      "orig_nav": [
         [
           "frames",
           480
@@ -1973,76 +2096,55 @@
           "A",
           60
         ]
-      ],
-      "grade": "ground_truth",
-      "note": "coldboot fresh menu sweep: 정찰/날씨/수입/승리조건 계열 룰 설정 리스트",
-      "scene_id": "87_common_rule_settings",
-      "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
-      "provenance_path": "data/screen_checkpoints.json"
+      ]
     },
     {
       "name": "scene_89_common_battle_system_results",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0",
-      "refresh": [
-        [
-          "press",
-          "B",
-          80
-        ],
-        [
-          "press",
-          "A",
-          100
-        ],
-        [
-          "frames",
-          20
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh battle-system scan: 전투 시스템 메뉴 재오픈 렌더(항복/BGM/애니메 포함)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_89 (시스템 submenu: 처분한다/항복한다/음악 있/표시안함/모드 선택); b28 differs from C; separate b28 visual review required",
       "scene_id": "89_common_battle_system_results",
       "capture_path": "temp/scene_screenshots/scene_89_common_battle_system_results_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/system_surrender_scan_a/state_002.ss0"
+      "provenance_path": "temp/release_C/b28/C_3p_surrender/0027_A_0004524.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0027_A_0004524.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/222c41652bb496c7cc8c9a1017d1a14dc43382f08634d216a6af1d2819fdc87f.png",
+        "frame_sha256": "0aa7081eeb96953ef6768299ab5cccfd8a3a4fb0e1f986b9464c08e514b7b4f7",
+        "core_frame": 4524
+      }
     },
     {
       "name": "scene_89a_common_battle_surrender_confirm",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0",
-      "refresh": [
-        [
-          "frames",
-          20
-        ],
-        [
-          "press",
-          "A",
-          160,
-          8
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh redraw from pre-surrender menu: A 입력으로 항복 확인 대사/선택지 재생성",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] candidate frame for scene_89a (항복하면 지는 게 되지만, 정말 항복할래? ▷예 아뇨)",
       "scene_id": "89a_common_battle_surrender_confirm",
       "capture_path": "temp/scene_screenshots/scene_89a_common_battle_surrender_confirm_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/state_008_sub_down_to_surrender.ss0"
+      "provenance_path": "temp/release_C/b28/C_3p_surrender/0030_LEFT_0004688.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0030_LEFT_0004688.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/a4249f944c4aef942a4667dca9a49a55bce3253112620406388f461155a1b5bf.png",
+        "frame_sha256": "39fe3408d7a986ede8090eb79c42d664df7c98000e835ae2ceafb1b596de0b5f",
+        "core_frame": 4688
+      }
     },
     {
       "name": "scene_89b_common_battle_defeat_comm_messages",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh 3P free-battle surrender route: 실제 중간 패배 메시지(레드스타 군은 패배했습니다)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "[b28 replay of C route] scene_89b = item C frame: 레드스타 군은 패배했습니다!! (3P surrender intermediate defeat); tainted PURCHASED save",
       "scene_id": "89b_common_battle_defeat_comm_messages",
       "capture_path": "temp/scene_screenshots/scene_89b_common_battle_defeat_comm_messages_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_3p_surrender_confirm_fine/state_014_after_f20.ss0"
+      "provenance_path": "temp/release_C/b28/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
+        "frame_sha256": "8038c96d80d1cb9edf6c106eacb04f820f68271bf4f4b1da9a68f2797d464b1a",
+        "core_frame": 4774
+      }
     }
   ]
 }

@@ -15,6 +15,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -95,6 +96,100 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def source_taint(state: dict, baseline: dict, run: Path | None = None) -> bool | None:
+    """Resolve taint monotonically across checkpoint, inherited, and local evidence."""
+    save = baseline.get("initial_game_save")
+    receipt_taint = False
+    if save is not None:
+        receipt_sha = save.get("receipt_sha256")
+        registry = _load(ROOT / "data/game_save_cheat_provenance.json")
+        entry = registry.get("receipts", {}).get(receipt_sha, {})
+        receipt_taint = entry.get("cheat_tainted")
+    if "cheat_inherited" in baseline and not isinstance(baseline["cheat_inherited"], bool):
+        raise ValueError("baseline cheat_inherited must be Boolean")
+    inherited = baseline.get("cheat_inherited") is True or receipt_taint is True
+    local_taint = False
+    if run is not None:
+        from playthrough_capture import evidence_tainted, run_cheat_evidence
+        evidence = run_cheat_evidence(run, state)
+        if not evidence["ledger_verified"]:
+            raise ValueError("checkpoint ledger digest is invalid")
+        local_taint = evidence_tainted(evidence)
+    declared = state.get("cheat_tainted")
+    if "cheat_tainted" in state and not isinstance(declared, bool):
+        raise ValueError("checkpoint cheat_tainted must be Boolean")
+    if declared is False and (inherited or local_taint):
+        raise ValueError("explicit clean taint contradicts inherited, receipt, or local evidence")
+    if declared is True or inherited or local_taint:
+        return True
+    if not isinstance(receipt_taint, bool):
+        return None
+    return False
+
+
+def initial_save_valid(run: Path, baseline: dict) -> bool:
+    save = baseline.get("initial_game_save")
+    if save is None:
+        return True
+    try:
+        if any(Path(save[key]).is_absolute() or ".." in Path(save[key]).parts
+               for key in ("save", "receipt")):
+            return False
+        return (sha256(run / save["save"]) == save["save_sha256"] and
+                sha256(run / save["receipt"]) == save["receipt_sha256"])
+    except (KeyError, OSError):
+        return False
+
+
+def validate_recorder_endpoint(checkpoint: dict, rom_sha: str) -> dict:
+    """Validate the same immutable recorder chain for import and cached acceptance."""
+    from PIL import Image
+
+    endpoint = checkpoint["recorder_endpoint"]
+    source = ROOT / endpoint["frame"]
+    state_path = ROOT / endpoint["checkpoint"]
+    run = state_path.parent
+    state = _load(state_path)
+    baseline_path = run / "baseline.json"
+    baseline = _load(baseline_path)
+    taint = source_taint(state, baseline, run)
+    if (state["rom_sha256"] != rom_sha or baseline["rom_sha256"] != rom_sha or
+            state["baseline_sha256"] != sha256(baseline_path) or
+            not initial_save_valid(run, baseline) or
+            taint is None or taint != checkpoint["cheat_tainted"] or
+            sha256(source) != endpoint["frame_sha256"]):
+        raise ValueError("recorder endpoint ROM, save, frame, or taint mismatch")
+    ledger_path = run / "frames.jsonl"
+    ledger_bytes = ledger_path.read_bytes()
+    prefix_size = state["ledger_bytes"]
+    if not isinstance(prefix_size, int) or prefix_size <= 0 or prefix_size > len(ledger_bytes):
+        raise ValueError("recorder endpoint ledger prefix missing")
+    ledger = ledger_bytes[:prefix_size]
+    if hashlib.sha256(ledger).hexdigest() != state["ledger_sha256"]:
+        raise ValueError("recorder endpoint ledger hash mismatch")
+    rows = [json.loads(line) for line in ledger.splitlines()]
+    core_frame = endpoint.get("core_frame", state["core_frame"])
+    matches = [row for row in rows if row.get("core_frame") == core_frame]
+    if len(matches) != 1:
+        raise ValueError("recorder endpoint absent or duplicated in ledger")
+    if run / matches[0]["image"] != source:
+        actions = run / "actions.jsonl"
+        if not actions.exists() or not any(
+            row.get("status") == "captured" and
+            Path(row.get("png", "")).name == source.name and
+            Path(row.get("checkpoint", "")).name == state_path.name and
+            row.get("end_core_frame") == core_frame
+            for row in map(json.loads, actions.read_text().splitlines())
+        ):
+            raise ValueError("recorder endpoint absent from capture actions")
+    with Image.open(source) as image:
+        if (image.size != (240, 160) or
+                hashlib.sha256(image.convert("RGB").tobytes()).hexdigest() != matches[0]["rgb_sha256"]):
+            raise ValueError("recorder endpoint PNG/RGB mismatch")
+    return {"state_path": state_path, "source": source, "core_frame": core_frame,
+            "taint": taint}
+
+
 def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, str]:
     if not frame.exists() or frame.stat().st_size <= 0:
         return False, "frame 없음"
@@ -107,6 +202,21 @@ def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, 
         return False, "provenance JSON 오류"
     if data.get("rom_sha256") != rom_sha:
         return False, "ROM SHA 불일치"
+    if checkpoint.get("mode") == "recorder_endpoint":
+        endpoint = checkpoint["recorder_endpoint"]
+        try:
+            validated = validate_recorder_endpoint(checkpoint, rom_sha)
+            valid = (data.get("source_frame_sha256") == endpoint["frame_sha256"] and
+                     data.get("source_checkpoint_sha256") == sha256(ROOT / endpoint["checkpoint"]) and
+                     data.get("source_core_frame") == validated["core_frame"] and
+                     data.get("source_frame") == endpoint["frame"] and
+                     data.get("source_checkpoint") == endpoint["checkpoint"] and
+                     data.get("cheat_tainted") == checkpoint["cheat_tainted"] and
+                     sha256(frame) == endpoint["frame_sha256"])
+        except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
+            valid = False
+        if not valid:
+            return False, "recorder endpoint 불일치"
     expected_scene = checkpoint.get("scene_id")
     if expected_scene and data.get("scene_id") != expected_scene:
         return False, "scene_id provenance 불일치"
@@ -122,6 +232,24 @@ def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, 
         if data.get("state_sha256") != sha256(state_path):
             return False, "state SHA 불일치"
     return True, "current"
+
+
+def import_recorder_endpoint(checkpoint: dict, frame: Path, rom_sha: str) -> None:
+    """Import a recorded PNG only after checking its ROM and ledger chain."""
+    endpoint = checkpoint["recorder_endpoint"]
+    validated = validate_recorder_endpoint(checkpoint, rom_sha)
+    source = validated["source"]
+    state_path = validated["state_path"]
+    core_frame = validated["core_frame"]
+    frame.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, frame)
+    (frame.parent / "provenance.json").write_text(json.dumps({
+        "rom_sha256": rom_sha, "scene_id": checkpoint.get("scene_id"),
+        "source_frame": endpoint["frame"], "source_frame_sha256": endpoint["frame_sha256"],
+        "source_checkpoint": endpoint["checkpoint"],
+        "source_checkpoint_sha256": sha256(state_path), "source_core_frame": core_frame,
+        "cheat_tainted": checkpoint["cheat_tainted"],
+    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> None:
@@ -160,7 +288,7 @@ def main() -> None:
     harness = Path(args.harness)
     if not rom.exists():
         raise SystemExit("ROM 없음: " + str(rom))
-    if not harness.exists():
+    if not harness.exists() and any(by_name[name].get("mode") != "recorder_endpoint" for name in names):
         raise SystemExit("mGBA harness 없음: " + str(harness))
     rom_sha = sha256(rom)
     summary = {"rom": str(rom), "harness": str(harness), "captured": [], "skipped": []}
@@ -178,7 +306,10 @@ def main() -> None:
                 continue
             print(f"[recapture] {name}: {reason}")
         print(f"[capture] {name}")
-        capture(rom, checkpoint, out_dir, harness, "patched")
+        if checkpoint.get("mode") == "recorder_endpoint":
+            import_recorder_endpoint(checkpoint, frame, rom_sha)
+        else:
+            capture(rom, checkpoint, out_dir, harness, "patched")
         if not frame.exists() or frame.stat().st_size <= 0:
             raise SystemExit(f"{name}: frame.png 생성 실패")
         prov = frame.parent / "provenance.json"

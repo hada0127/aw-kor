@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+  "frame": "data/evidence/part1_help_b28/0033_NONE_0002121.png",
+  "message": "0x00DFA79A",
+  "observed_line_encoded_half_cells": 34,
+  "observed_fullwidth_glyphs": 17,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 136,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 34,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "b28 replay native frame; RGB-identical to C reference; 34 half-cell visible width"
+}

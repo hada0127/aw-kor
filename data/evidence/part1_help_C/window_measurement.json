@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+  "frame": "data/evidence/part1_help_C/0033_NONE_0002121.png",
+  "message": "0x00DFA79A",
+  "observed_line_encoded_half_cells": 34,
+  "observed_fullwidth_glyphs": 17,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 136,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 34,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "C recorder frame visibly shows 34 half-cells in two rows; no larger width is asserted."
+}

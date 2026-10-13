@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 // Custom logger -> file, so stdout stays clean for command acks.
 static FILE* g_logf;
@@ -64,8 +65,35 @@ static void wpEntered(struct mDebugger* d, enum mDebuggerEntryReason reason, str
 
 static int hexval(int c){ if(c>='0'&&c<='9')return c-'0'; if(c>='a'&&c<='f')return c-'a'+10; if(c>='A'&&c<='F')return c-'A'+10; return -1; }
 
+static int copy_save_for_probe(const char* source, char* target, size_t capacity){
+    const char* dir = getenv("AW_KOR_TEMP_DIR");
+    if(!dir) dir = "temp";
+    if(snprintf(target, capacity, "%s/mgbah_probe_save_XXXXXX", dir) >= (int)capacity) return 0;
+    FILE* input = fopen(source, "rb");
+    if(!input) return 0;
+    int fd = mkstemp(target);
+    if(fd < 0){ fclose(input); return 0; }
+    unsigned char buffer[8192]; size_t n; int ok=1;
+    while((n=fread(buffer,1,sizeof(buffer),input))>0){
+        size_t done=0;
+        while(done<n){
+            ssize_t count=write(fd,buffer+done,n-done);
+            if(count<=0){ ok=0; break; }
+            done+=(size_t)count;
+        }
+        if(!ok) break;
+    }
+    if(ferror(input)) ok=0;
+    fclose(input); close(fd);
+    if(!ok) unlink(target);
+    return ok;
+}
+
 int main(int argc, char** argv){
-    if(argc<2){ fprintf(stderr,"usage: mgbah <rom>\n"); return 1; }
+    if(argc<2 || argc>5 || (argc==5 && strcmp(argv[4],"--write-save") && strcmp(argv[4],"--read-only-save"))){
+        fprintf(stderr,"usage: mgbah <rom> [log [sav [--write-save]]]\n"); return 1;
+    }
+    char probe_save[4096] = {0};
     g_logf = fopen(argc>2?argv[2]:"/tmp/mgba_swi.log","w");
     mLogSetDefaultLogger(&g_logger);
     struct VFile* vf = VFileOpen(argv[1], O_RDONLY);
@@ -79,9 +107,17 @@ int main(int argc, char** argv){
     core->setVideoBuffer(core, vbuf, VW);
     core->loadROM(core, vf);
     if(argc > 3){
-        struct VFile* save = VFileOpen(argv[3], O_RDWR);
+        const char* save_path = argv[3];
+        if(argc<5 || strcmp(argv[4],"--write-save")){
+            if(!copy_save_for_probe(argv[3], probe_save, sizeof(probe_save))){
+                fprintf(stderr,"cannot copy read-only game save\n"); return 1;
+            }
+            save_path = probe_save;
+        }
+        struct VFile* save = VFileOpen(save_path, O_RDWR);
         if(!save || !core->loadSave(core, save)){
             if(save) save->close(save);
+            if(probe_save[0]) unlink(probe_save);
             fprintf(stderr, "cannot load game save\n");
             return 1;
         }
@@ -272,5 +308,6 @@ int main(int argc, char** argv){
         }
         fflush(stdout);
     }
+    if(probe_save[0]) unlink(probe_save);
     return 0;
 }

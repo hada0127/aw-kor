@@ -31,7 +31,7 @@ OUT = ROOT / "temp" / "part1_compact_help_qa.json"
 HELP_START = 0x00DFA64A
 HELP_END_INCLUSIVE = 0x00DFA9E9
 EXPECTED_COUNT = 34
-EXPECTED_CURRENT_VISUAL_EVIDENCE_COUNT = 21
+EXPECTED_CURRENT_VISUAL_EVIDENCE_COUNT = 23
 EXPECTED_SYNTHETIC_RENDER_EVIDENCE_COUNT = 11
 EXPECTED_LIVE_CODE_INJECTION_EVIDENCE_COUNT = 11
 
@@ -44,26 +44,62 @@ MAX_ENCODED_HALF_CELLS = 34
 # in this cold-boot, cartridge-save frame. Keep the larger limit tied to that
 # exact ROM; changed ROMs require a fresh frame or an independently proven
 # byte-identical renderer/window and payload.
-WIDTH_EVIDENCE_ROM_SHA256 = "5e285eb78b6603af6270c0880e90f3d62f31954d9e56eba0262d40a3c15d0697"
-CURRENT_VISUAL_FRAME_DIR = ROOT / "docs/screenshots/part1_compact_help_2026-10-12"
-WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "0032_NONE_0002120.png"
+WIDTH_EVIDENCE_ROM_SHA256 = "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067"
+CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b28"
+WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "0033_NONE_0002121.png"
 EVIDENCE_SHA256 = {
-    "0011_DOWN_0001434.png": "13fa0a5943d91746ce7a77fcad6353048681aef29fa457a7f05a5e08c96487ef",
-    "0012_DOWN_0001455.png": "a21efc7d36e1fbb6f62856621ebae5fc0a6d9733202a21e4a3e6de9d7b83e910",
-    "0013_DOWN_0001476.png": "8b01c3055656db5aee56e67fb0e180d1bb016c9cd3625e3fb444cc2cbff19252",
-    "0014_DOWN_0001497.png": "a010f72f92e79316dba104b169b3b5b37f380ce5b7197ad513d0272441addb7c",
-    "0015_DOWN_0001518.png": "42623bc01cc188cfc155236e202bb2afe5333620ce9dbef3cecb84e061094b4e",
-    "0032_NONE_0002120.png": "b6492cbe207a36a9c953015f6037d828e50da024c7892e4f08bbd408082ed0d4",
-    "0048_NONE_0002818.png": "4366f41ac3dce4748515c62272e641943d5a0f38a72df365082b6dee194c25e8",
-    "0050_NONE_0002879.png": "8266d69991d7a40efc16600c6f9c8f418c563bb637bbc2d08ff1ac5edcb89b87",
-    "0058_NONE_0003304.png": "e15f90edf7a2c3af8417c49ab12efa1bca50205446d13dcede6dcb84d8c48749",
-    "0059_DOWN_0003335.png": "e4951a07f03dfd9dcddd8db113f7adb2e6fe7a64f015a9795174384141bd1abd",
-    "0060_DOWN_0003366.png": "395b58912632893c9d366f4d72bfac270bb12c66942df639221e364f15f73ee8",
-    "baseline.json": "f84c0868ec75b15c24f617ba282baf4ce103da5f1251599d7c1816a04f369f7c",
-    "exit.json": "56d2bd3531ac8313bb88d9f703525357e504f257b3bcc61a9b2b2b66f10329ac",
-    "window_measurement.json": "ba48c6d2395f26acf8a13165c7f7d042933829d6ac64b992ea7f6bdf54709068",
-    "findings.tsv": "647d87304cce3f1faf593ba30e56772eb3a92acc0778a3d6fe05320060291e40",
+    "registration.json": "2bf2343450007aadac794e118016e8263830ce02886d38ee6292895283048bd1",
+    "0059_NONE_0003305.png": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
+    "0016_DOWN_0001519.png": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
+    "0015_DOWN_0001498.png": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
+    "0049_NONE_0002819.png": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
+    "0014_DOWN_0001477.png": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
+    "exit.json": "921737ac42ce9993efce401e85f9e3b544a0e75281c121376a3c6af61ac72995",
+    "window_measurement.json": "2a79bc185ca8ae3f488dd6e0c25bc1e9e0e4b51a50ceefd3190a5c9277986a04",
+    "0013_DOWN_0001456.png": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
+    "0060_DOWN_0003336.png": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
+    "0012_DOWN_0001435.png": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
+    "DFA7BE_0014_NONE_0001625.png": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
+    "findings.tsv": "dc2e81581b9e506cb5444775490ef5e3298909a8faad9a7d2a5dcfe7bdbeac54",
+    "0061_DOWN_0003367.png": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
+    "DFA68C_0077_NONE_0003956.png": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
+    "0051_NONE_0002880.png": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
+    "0033_NONE_0002121.png": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
+    "baseline.json": "72c3abe82c49ec214e9fedbb5c93762218d37a90913d3a5db7d9ff8697891f94"
 }
+
+
+def validate_current_visual_registration(rom_sha: str) -> bool:
+    """Bind copied b28 frames to native checkpoints and C RGB comparison proof."""
+    from PIL import Image
+    try:
+        receipt = json.loads((CURRENT_VISUAL_FRAME_DIR / "registration.json").read_text())
+        comparisons = json.loads((ROOT / receipt["comparison_receipt"]).read_text())
+        if receipt["rom_sha256"] != rom_sha or len(receipt["frames"]) != 13:
+            return False
+        if {row["filename"] for row in receipt["frames"]} != {
+                name for name in EVIDENCE_SHA256 if name.endswith(".png")}:
+            return False
+        for row in receipt["frames"]:
+            frame = CURRENT_VISUAL_FRAME_DIR / row["filename"]
+            native = ROOT / row["b28_frame"]
+            original = ROOT / row["c_reference"]
+            checkpoint = ROOT / row["b28_checkpoint"]
+            comparison = comparisons[row["comparison_route"]]
+            if (not row["rgb_equal_to_C"] or comparison["exit"] != "closed" or
+                    comparison["emu"] != 0 or comparison["diff_frames"] != 0 or
+                    comparison["n_runs"] != 0 or
+                    sha256(frame) != row["sha256"] or sha256(native) != row["sha256"] or
+                    sha256(original) != row["c_reference_sha256"] or
+                    sha256(checkpoint) != row["b28_checkpoint_sha256"] or
+                    json.loads(checkpoint.read_text())["rom_sha256"] != rom_sha):
+                return False
+            with Image.open(frame) as current, Image.open(original) as source:
+                if current.convert("RGB").tobytes() != source.convert("RGB").tobytes():
+                    return False
+    except (OSError, KeyError, ValueError, TypeError, AttributeError):
+        return False
+    return True
 
 # The original line addresses remain source identifiers after dialogue repoint.
 # Every pointer site is checked against the final ROM before reading the payload.
@@ -80,6 +116,7 @@ RELOCATED_HELP_POINTERS = {
 # Direct cold-boot cartridge-save captures for WIDTH_EVIDENCE_ROM_SHA256.
 # The 2026-06-27 captures belong to an older ROM and do not count here.
 CURRENT_VISUAL_EVIDENCE = {
+    0x00DFA68C,
     0x00DFA6AA,
     0x00DFA6CD,
     0x00DFA6E2,
@@ -89,6 +126,7 @@ CURRENT_VISUAL_EVIDENCE = {
     0x00DFA752,
     0x00DFA775,
     0x00DFA79A,
+    0x00DFA7BE,
     0x00DFA7E2,
     0x00DFA7FD,
     0x00DFA80E,
@@ -104,17 +142,19 @@ CURRENT_VISUAL_EVIDENCE = {
 }
 
 CURRENT_VISUAL_FRAMES = {
-    **dict.fromkeys((0x00DFA6AA, 0x00DFA6CD), "0011_DOWN_0001434.png"),
-    **dict.fromkeys((0x00DFA752, 0x00DFA775), "0012_DOWN_0001455.png"),
-    **dict.fromkeys((0x00DFA942, 0x00DFA95B), "0013_DOWN_0001476.png"),
-    **dict.fromkeys((0x00DFA71B, 0x00DFA72E), "0014_DOWN_0001497.png"),
-    **dict.fromkeys((0x00DFA6E2, 0x00DFA6FB), "0015_DOWN_0001518.png"),
-    0x00DFA79A: "0032_NONE_0002120.png",
-    **dict.fromkeys((0x00DFA80E, 0x00DFA829), "0048_NONE_0002818.png"),
-    **dict.fromkeys((0x00DFA7E2, 0x00DFA7FD), "0050_NONE_0002879.png"),
-    **dict.fromkeys((0x00DFA9AE, 0x00DFA9C7), "0058_NONE_0003304.png"),
-    **dict.fromkeys((0x00DFA972, 0x00DFA989), "0059_DOWN_0003335.png"),
-    **dict.fromkeys((0x00DFA9DA, 0x00DFA9E9), "0060_DOWN_0003366.png"),
+    0x00DFA68C: "DFA68C_0077_NONE_0003956.png",
+    0x00DFA7BE: "DFA7BE_0014_NONE_0001625.png",
+    **dict.fromkeys((0x00DFA6AA, 0x00DFA6CD), "0012_DOWN_0001435.png"),
+    **dict.fromkeys((0x00DFA752, 0x00DFA775), "0013_DOWN_0001456.png"),
+    **dict.fromkeys((0x00DFA942, 0x00DFA95B), "0014_DOWN_0001477.png"),
+    **dict.fromkeys((0x00DFA71B, 0x00DFA72E), "0015_DOWN_0001498.png"),
+    **dict.fromkeys((0x00DFA6E2, 0x00DFA6FB), "0016_DOWN_0001519.png"),
+    0x00DFA79A: "0033_NONE_0002121.png",
+    **dict.fromkeys((0x00DFA80E, 0x00DFA829), "0049_NONE_0002819.png"),
+    **dict.fromkeys((0x00DFA7E2, 0x00DFA7FD), "0051_NONE_0002880.png"),
+    **dict.fromkeys((0x00DFA9AE, 0x00DFA9C7), "0059_NONE_0003305.png"),
+    **dict.fromkeys((0x00DFA972, 0x00DFA989), "0060_DOWN_0003336.png"),
+    **dict.fromkeys((0x00DFA9DA, 0x00DFA9E9), "0061_DOWN_0003367.png"),
 }
 
 # 2026-06-28: direct unlock/progress routes for these rows are still missing,
@@ -180,8 +220,7 @@ EVIDENCE_FILES = [
 ]
 
 LIVE_CODE_REPORTS = [
-    ROOT / "docs" / "screenshots" / "part1_compact_help_live_code_injection_2026-06-28" / "report_primary.json",
-    ROOT / "docs" / "screenshots" / "part1_compact_help_live_code_injection_2026-06-28" / "report_player19.json",
+    ROOT / "data" / "evidence" / "part1_help_b28_synthetic" / "report.json",
 ]
 
 
@@ -227,6 +266,23 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def resolved_target_bus(rom: bytes, raw_target: str) -> str:
+    """Resolve the final ROM's help pointer instead of trusting report addresses."""
+    target = int(raw_target, 16)
+    if target not in RELOCATED_HELP_POINTERS:
+        return f"0x{target + 0x08000000:08X}"
+    pointer = struct.unpack_from("<I", rom, RELOCATED_HELP_POINTERS[target][0])[0]
+    if target == 0x00DFA8CB:
+        start = pointer - 0x08000000
+        marker = rom.find(b"\x72\x0A\x09", start, start + 128)
+        if marker < 0:
+            raise ValueError("second relocated line marker missing")
+        pointer = 0x08000000 + marker + 3
+    else:
+        pointer += 2
+    return f"0x{pointer:08X}"
 
 
 def displayed_rows(payload: bytes) -> list[int]:
@@ -387,6 +443,50 @@ def load_live_code_report_targets(
         return set()
     targets: set[int] = set()
     for row in report.get("rows", []):
+        try:
+            trace = ROOT / row["trace"]
+            frame = ROOT / row["frame"]
+            state = ROOT / row["state"]
+            checkpoint = ROOT / row["state_checkpoint"]
+            state_record = json.loads(checkpoint.read_text())
+            if (sha256(trace) != row["trace_sha256"] or
+                    sha256(frame) != row["frame_sha256"] or
+                    sha256(state) != row["state_sha256"] or
+                    sha256(checkpoint) != row["state_checkpoint_sha256"] or
+                    state_record["rom_sha256"] != expected_rom_sha or
+                    state_record["state_sha256"] != row["state_sha256"] or
+                    row["cheat_tainted"] is not True):
+                raise ValueError("trace, frame, state, or taint mismatch")
+            if any(sha256(ROOT / extra["frame"]) != extra["frame_sha256"]
+                   for extra in row.get("additional_frames", [])):
+                raise ValueError("additional frame hash mismatch")
+            for target in row["target_reads"]:
+                visuals = row.get("target_visual_evidence", {}).get(target)
+                if not isinstance(visuals, list) or not visuals:
+                    raise ValueError(f"target {target} has no visual evidence")
+                if any(sha256(ROOT / visual["frame"]) != visual["frame_sha256"]
+                       for visual in visuals):
+                    raise ValueError(f"target {target} visual evidence hash mismatch")
+            declared_visuals = {extra["frame"] for extra in row.get("additional_frames", [])}
+            used_visuals = {v["frame"] for values in row["target_visual_evidence"].values() for v in values}
+            if not used_visuals <= declared_visuals | {row["frame"]}:
+                raise ValueError("target visual frame missing from declared additional_frames")
+            if not declared_visuals <= used_visuals:
+                raise ValueError("additional visual frame not bound to a target")
+            if any(int(row["target_reads"][target], 16) != int(resolved_target_bus(current_rom, target), 16)
+                   for target in row["target_reads"]):
+                raise ValueError("target read does not match ROM-resolved mapping")
+            observed = {token.split("=", 1)[1].upper()
+                        for line in trace.read_text().splitlines()
+                        for token in line.split() if token.startswith("addr=")}
+            if any(str(bus)[2:].upper() not in observed for bus in row["target_reads"].values()):
+                raise ValueError("target read missing from trace")
+            if set(row["target_reads"]) != set((row.get("summary") or {}).get("direct_targets") or []):
+                raise ValueError("target read set mismatch")
+        except (OSError, KeyError, ValueError, TypeError, struct.error) as exc:
+            issues.append({"type": "invalid_live_code_injection_evidence",
+                           "path": str(path.relative_to(ROOT)), "case_id": row.get("case_id"), "error": str(exc)})
+            continue
         summary = row.get("summary") or {}
         for raw_addr in summary.get("direct_targets") or []:
             try:
@@ -446,7 +546,9 @@ def main() -> int:
                          and measurement.get("safe_observed_capacity_half_cells") == MAX_ENCODED_HALF_CELLS
                          and measurement.get("visible_help_rows") == 2
                          and measurement.get("frame") == str(WIDTH_EVIDENCE_FRAME.relative_to(ROOT))
-                         and {"baseline.json", "exit.json", "window_measurement.json", "findings.tsv"} <= valid_evidence)
+                         and {"baseline.json", "exit.json", "window_measurement.json", "findings.tsv",
+                              "registration.json"} <= valid_evidence
+                         and validate_current_visual_registration(rom_sha))
     except (OSError, ValueError, TypeError, AttributeError) as exc:
         capture_valid = False
         issues.append({"type": "current_visual_capture_receipt_unreadable", "error": str(exc)})

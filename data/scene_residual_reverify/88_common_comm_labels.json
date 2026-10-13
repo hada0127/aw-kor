@@ -2,54 +2,162 @@
  {
   "label": "static_residual_reverify::88_common_comm_labels",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
   "min_score": 7,
   "ranges": [
    {
     "range": "0x00EE212C:0x00EE2848",
     "extracted": {
-     "covered_count": 56,
-     "uncovered_count": 1,
-     "same_original_uncovered_count": 1,
-     "current_kind_counts": {
-      "same_original": 1
-     },
+     "covered_count": 0,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
      "residual_candidates": [],
-     "low_score_same_original": [
-      {
-       "offset": "0x00EE2238",
-       "length": 10,
-       "chars": 5,
-       "score": 5,
-       "same_original": true,
-       "current_kind": "same_original",
-       "text": "豎戝贄趁踈"
-      }
-     ]
+     "low_score_same_original": []
     },
     "raw_kana": {
-     "raw_kana_count": 1,
+     "raw_kana_count": 20,
      "raw_kana_unexplained_count": 0,
      "raw_kana_observations": [
+      {
+       "offset": "0x00EE21CC",
+       "length": 10,
+       "text": "キャサリン",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE21CC"
+      },
       {
        "offset": "0x00EE22AC",
        "length": 2,
        "text": "ソ",
        "allowed": true,
-       "reason": "common comm numeric/control table single kana; same as original. Historical menu/focus residual scan found no visible hit; current-sha visual reverification is tracked in data/comm_label_visual_reverify.json.",
+       "reason": "deny_region:link_client_p1_program",
        "containing_extracted_addr": null
+      },
+      {
+       "offset": "0x00EE22F4",
+       "length": 12,
+       "text": "コンピュータ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE22F4"
+      },
+      {
+       "offset": "0x00EE2304",
+       "length": 8,
+       "text": "プレイヤ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE2304"
+      },
+      {
+       "offset": "0x00EE231C",
+       "length": 14,
+       "text": "ブラックホール",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE231C"
+      },
+      {
+       "offset": "0x00EE2420",
+       "length": 4,
+       "text": "ヘリ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE241C"
+      },
+      {
+       "offset": "0x00EE242C",
+       "length": 4,
+       "text": "ヘリ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE2428"
+      },
+      {
+       "offset": "0x00EE2450",
+       "length": 6,
+       "text": "ミサイ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE244C"
+      },
+      {
+       "offset": "0x00EE2478",
+       "length": 8,
+       "text": "ロケット",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE2478"
+      },
+      {
+       "offset": "0x00EE2634",
+       "length": 12,
+       "text": "ダウンロード",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE2634"
+      },
+      {
+       "offset": "0x00EE265C",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE265C"
+      },
+      {
+       "offset": "0x00EE2698",
+       "length": 8,
+       "text": "メニュー",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE268C"
+      },
+      {
+       "offset": "0x00EE26CC",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE26CC"
+      },
+      {
+       "offset": "0x00EE26F4",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE26F4"
+      },
+      {
+       "offset": "0x00EE2744",
+       "length": 6,
+       "text": "エリア",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE273C"
+      },
+      {
+       "offset": "0x00EE2760",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "deny_region:link_client_p1_program",
+       "containing_extracted_addr": "0x00EE275C"
       }
      ],
      "raw_kana_unexplained": []
     }
    }
   ],
-  "extracted_covered_count": 56,
-  "extracted_uncovered_count": 1,
-  "same_original_uncovered_count": 1,
-  "raw_kana_count": 1,
+  "extracted_covered_count": 0,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 20,
   "raw_kana_unexplained_count": 0,
-  "classification": "low_score_same_original_only",
+  "classification": "clean",
   "hit": null,
   "residuals": [],
   "translation_residual": 0

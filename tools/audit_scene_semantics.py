@@ -98,7 +98,9 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/scene_entrypoints/part2_3p_surrender_defeat_probe_v4/defeat_watch.log",
+        "watch_log": "data/evidence/release_C_89b_watch.log",
+        "receipt": "data/evidence/release_C_89b_watch_receipt.json",
+        "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
         "required": "watch log의 addr=08xxxxxx 런타임 hit 그룹을 scene_catalog_overrides.json으로 해당 scene에 연결",
@@ -164,7 +166,9 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--broad-dialogue-threshold", type=int, default=200)
+    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261013_b28.gba"))
     args = ap.parse_args()
+    candidate_sha = sha256(Path(args.rom))
 
     catalog = load(CAT, {"scenes": []})
     checkpoints = load(CHECKPOINTS, {"checkpoints": []}).get("checkpoints", [])
@@ -267,6 +271,35 @@ def main() -> None:
             })
         watch_req = RUNTIME_WATCH_REQUIREMENTS.get(scene_id)
         if watch_req:
+            watch_path = ROOT / watch_req["watch_log"]
+            if not watch_path.is_file() or sha256(watch_path) != watch_req["watch_log_sha256"]:
+                issues.append({"scene": scene_id, "severity": watch_req["severity"],
+                               "issue": "watch log SHA 불일치", "watch_log": watch_req["watch_log"]})
+            try:
+                receipt = load(ROOT / watch_req["receipt"], {})
+                from capture_scene_screenshots import validate_recorder_endpoint
+                state_path = ROOT / receipt["source_checkpoint"]
+                frame_path = ROOT / receipt["defeat_frame"]
+                state = load(state_path, {})
+                endpoint = checkpoint.get("recorder_endpoint") or {}
+                if (receipt["status"] != "current_candidate" or
+                        receipt["rom_sha256"] != candidate_sha or
+                        receipt["route"] != state_path.parent.name or
+                        receipt["source_checkpoint_sha256"] != sha256(state_path) or
+                        receipt["defeat_frame_sha256"] != sha256(frame_path) or
+                        receipt["defeat_core_frame"] != endpoint.get("core_frame") or
+                        receipt["defeat_frame"] != endpoint.get("frame") or
+                        receipt["source_checkpoint"] != endpoint.get("checkpoint") or
+                        receipt["watch_log"] != watch_req["watch_log"] or
+                        receipt["watch_log_sha256"] != sha256(watch_path) or
+                        state["rom_sha256"] != candidate_sha):
+                    raise ValueError("historical or mismatched 89b trace receipt")
+                validate_recorder_endpoint(checkpoint, candidate_sha)
+            except (KeyError, OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+                issues.append({"scene": scene_id, "severity": watch_req["severity"],
+                               "issue": "89b current candidate trace provenance 없음",
+                               "required": "current-candidate watch trace and bound receipt",
+                               "error": str(exc)})
             observed = watch_hit_group_ids(watch_req["watch_log"])
             missing_watch = sorted(watch_req["required_hits"] - observed)
             if missing_watch:

@@ -333,13 +333,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true", help="write evidence files and manifest")
     parser.add_argument("--min-score", type=int, default=7, help="qa_japanese_residuals candidate score gate")
+    parser.add_argument("--rom", type=Path, default=ROM, help="candidate ROM to bind the static scan to")
     args = parser.parse_args()
 
     catalog = load_json(CATALOG)
     manifest = load_json(MANIFEST)
     sync_manifest_containers(manifest, catalog)
     scenes = {scene.get("id"): scene for scene in catalog.get("scenes", []) if scene.get("id")}
-    rom = ROM.read_bytes()
+    rom = args.rom.read_bytes()
     rom_sha = hashlib.sha256(rom).hexdigest()
     found_rows = load_found_rows()
     translations, translation_ranges = J.load_translations(J.DEFAULT_TRANS)

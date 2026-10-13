@@ -2,13 +2,13 @@
  {
   "label": "static_residual_reverify::89a_common_battle_surrender_confirm_common_copies",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
   "min_score": 7,
   "ranges": [
    {
     "range": "0x00EFDAA0:0x00EFDB00",
     "extracted": {
-     "covered_count": 2,
+     "covered_count": 0,
      "uncovered_count": 0,
      "same_original_uncovered_count": 0,
      "current_kind_counts": {},
@@ -23,7 +23,7 @@
     }
    }
   ],
-  "extracted_covered_count": 2,
+  "extracted_covered_count": 0,
   "extracted_uncovered_count": 0,
   "same_original_uncovered_count": 0,
   "raw_kana_count": 0,

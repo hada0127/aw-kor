@@ -1,0 +1,226 @@
+{
+  "rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+  "rows": [
+    {
+      "case_id": "code0",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/code0_trace.log",
+      "trace_sha256": "7f1eefb9b67b372472da995bd0bdcc8eef255591b33ce15b5d960ea3dd516b2e",
+      "frame": "data/evidence/part1_help_C_synthetic/code0.png",
+      "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b",
+      "target_reads": {
+        "0x00DFA64A": "0x08DFA64A",
+        "0x00DFA66B": "0x08DFA66B"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA64A",
+          "0x00DFA66B"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "target_visual_evidence": {
+        "0x00DFA64A": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ],
+        "0x00DFA66B": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "hidden",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/hidden_trace.log",
+      "trace_sha256": "3705ac086d32ef4259cf5d3f0f76d0329426499b89cf9cfedbfaced795fb2537",
+      "frame": "data/evidence/part1_help_C_synthetic/hidden.png",
+      "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058",
+      "target_reads": {
+        "0x00DFA83A": "0x08DFA83A",
+        "0x00DFA84D": "0x08DFA84D",
+        "0x00DFA872": "0x08DFA872",
+        "0x00DFA885": "0x08DFA885"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA83A",
+          "0x00DFA84D",
+          "0x00DFA872",
+          "0x00DFA885"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "additional_frames": [
+        {
+          "frame": "data/evidence/part1_help_C_synthetic/hidden_continue.png",
+          "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+        }
+      ],
+      "target_visual_evidence": {
+        "0x00DFA83A": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/hidden.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ],
+        "0x00DFA84D": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/hidden.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ],
+        "0x00DFA872": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/hidden_continue.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ],
+        "0x00DFA885": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/hidden_continue.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "code16",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/code16_trace.log",
+      "trace_sha256": "85eb309cbc43d3c4162338d123fbadaa8d8c742690fb33d4caf4738ca1352d2a",
+      "frame": "data/evidence/part1_help_C_synthetic/code16.png",
+      "frame_sha256": "932daa67b9877947ecebfd490c524811805896f3a965b3b91b1b6e6e140f2480",
+      "target_reads": {
+        "0x00DFA8AA": "0x08A7C016",
+        "0x00DFA8CB": "0x08A7C039"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8AA",
+          "0x00DFA8CB"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "target_visual_evidence": {
+        "0x00DFA8AA": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code16.png",
+            "frame_sha256": "932daa67b9877947ecebfd490c524811805896f3a965b3b91b1b6e6e140f2480"
+          }
+        ],
+        "0x00DFA8CB": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code16.png",
+            "frame_sha256": "932daa67b9877947ecebfd490c524811805896f3a965b3b91b1b6e6e140f2480"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "code17",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/code17_trace.log",
+      "trace_sha256": "a8edeff7f0535b9c0d25064f3d86d9161061a5382513f5e769a390d51d9bd8a8",
+      "frame": "data/evidence/part1_help_C_synthetic/code17.png",
+      "frame_sha256": "39a81e108405fd37e21d53b5d1115a76381420b87e95b95ef3ecaaad25d35a2b",
+      "target_reads": {
+        "0x00DFA8EA": "0x08A7C05A"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8EA"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "target_visual_evidence": {
+        "0x00DFA8EA": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code17.png",
+            "frame_sha256": "39a81e108405fd37e21d53b5d1115a76381420b87e95b95ef3ecaaad25d35a2b"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "code18",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/code18_trace.log",
+      "trace_sha256": "6d85ea6a421349c484a2b0954ea2ba0ebbfc5c6cdc9ce31ee27ce3a73627b506",
+      "frame": "data/evidence/part1_help_C_synthetic/code18.png",
+      "frame_sha256": "f958793b8331f590cc2d97ed3b1aa9757bef89b7698559021f7a3d90e44ba715",
+      "target_reads": {
+        "0x00DFA90A": "0x08A7C07E"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA90A"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "target_visual_evidence": {
+        "0x00DFA90A": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code18.png",
+            "frame_sha256": "f958793b8331f590cc2d97ed3b1aa9757bef89b7698559021f7a3d90e44ba715"
+          }
+        ]
+      }
+    },
+    {
+      "case_id": "code19",
+      "state": "temp/release_C/F_help_sweep/0012_DOWN_0001435.ss0",
+      "state_sha256": "47eed8f2d58cc7617358474e4f02837ccd7a6722fbe2f27df1c0896a4f7526f2",
+      "trace": "data/evidence/part1_help_C_synthetic/code19_trace.log",
+      "trace_sha256": "2b3e16b84bd6799250945ad8c8cfc083f66781000ff1050b08a8daf504242f60",
+      "frame": "data/evidence/part1_help_C_synthetic/code19.png",
+      "frame_sha256": "882fa9cbc28dfe9ce0595a1b08e7e0e3123e2bcf335d515d40996e880e359e1d",
+      "target_reads": {
+        "0x00DFA926": "0x08A7C0A2"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA926"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "live-code injection rendering only; caller route open",
+      "state_checkpoint": "temp/release_C/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "state_checkpoint_sha256": "8e56a22c55c75cc2bcc9562c55c24b4ae7fa1f415073239382e9bebd5fe4d68c",
+      "target_visual_evidence": {
+        "0x00DFA926": [
+          {
+            "frame": "data/evidence/part1_help_C_synthetic/code19.png",
+            "frame_sha256": "882fa9cbc28dfe9ce0595a1b08e7e0e3123e2bcf335d515d40996e880e359e1d"
+          }
+        ]
+      }
+    }
+  ],
+  "method": "C ROM same-ROM savestate, injected 0x0200002D/2E/2F and 0x02000030..; actual code->pointer lookup and read-watch; frames manually inspected; route coverage open"
+}

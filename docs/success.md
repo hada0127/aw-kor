@@ -4015,3 +4015,9 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 후보 `output/game_wars_korean_candidate_20261013_b26.gba` SHA `ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade`. 빌드: `AW_FONT_DIR=~/aw-fonts memcap -n aw-kor-b26 -- nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_candidate_20261013_b26.gba --no-sync-outputs` (단계 `tools/link_client_font.py`, 텍스트 import 뒤·체크섬 앞).
 - QA: `python3 tools/qa_link_client_font.py --rom output/game_wars_korean_candidate_20261013_b26.gba` → `P2: 58/59 codes, 22 live strings` / `P1: 57/59 codes, 22 live strings` / PASS(exit 0). `AW_TEST_ROM=output/game_wars_korean_candidate_20261013_b26.gba python3 -m unittest tools.test_link_client_font` → 13 OK. 게이트는 테이블 용량·센티널, 코드 등록, 반각 바이트, 제어 순서, 프리로드 페이지, 글리프 픽셀 독립 대조(Galmuri ink 9→0xA, `　！？`는 원본 셀), 소유 범위 밖 바이트·죽은 사본 불변을 본다.
 - 렌더 증거 `temp/b26_20261013/render_contact_b26.png`. 이 하네스는 글리프만 검증하며 메뉴 캐시·표시 순서는 검증하지 않는다. 리뷰 `temp/claude_2026-10-13/review_b26.out`(Blocking 없음).
+
+## 2026-10-13 릴리스 후보 C2(b28) 수정·증거 등록
+
+- 후보 `output/game_wars_korean_candidate_20261013_b28.gba` SHA `e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067`. 0xA298C2/0xA298D2 `음악있음`/`음악없음`, 0xA29A06 `도` 수정, 화면 확인.
+- 33 route b28 재생: 변경 행 외 C와 동일. compact-help·obj-title·residual-scans PASS. 증거 등록 도구 리뷰 지적(Blocking 11 + 델타 B3·B8) 수정, 단위시험 16건 PASS.
+- 보고서 `temp/release_C/{w1_reg1_report.md,b28_report.md,w1_reg3_report.md,w1_reg4_report.md}`, 리뷰 `temp/claude_2026-10-13/{review_b28.out,review_reg3_delta.out}`.

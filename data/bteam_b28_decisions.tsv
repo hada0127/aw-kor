@@ -1,0 +1,4 @@
+address	decision	basis	fable_reason	astra_reason
+0x00A298C2	FIX_GATE	b28 exact-address decision	Icon-row renderer has five cells; 음악 있음 uses five only after removing halfwidth space; retain NUL tail	Observed row width limited to five cells; spacing-only edit
+0x00A298D2	FIX_GATE	b28 exact-address decision	Icon-row renderer has five cells; 음악 없음 uses five only after removing halfwidth space; retain NUL tail	Observed row width limited to five cells; spacing-only edit
+0x00A29A06	FIX_GATE	b28 exact-address decision	Terrain-detail label slot at A29A04..A29A09 was 수都; replace second glyph 都 with 도 at A29A06..07 and retain terminator	Exact two-byte glyph substitution; no slot growth

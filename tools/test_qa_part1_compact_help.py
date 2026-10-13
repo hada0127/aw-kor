@@ -1,4 +1,5 @@
 import contextlib
+import copy
 import io
 import json
 import struct
@@ -15,7 +16,7 @@ import qa_part1_compact_help as gate
 class CompactHelpGateTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.rom = bytearray((gate.ROOT / "output/game_wars_korean_candidate_20261012_b5_v2.gba").read_bytes())
+        cls.rom = bytearray((gate.ROOT / "output/game_wars_korean_candidate_20261013_b28.gba").read_bytes())
 
     def run_gate(self, rom=None, frame_dir=None, live_targets=None):
         with tempfile.TemporaryDirectory(dir=gate.ROOT / "temp") as d:
@@ -25,7 +26,7 @@ class CompactHelpGateTests(unittest.TestCase):
             out = root / "report.json"
             with patch.object(sys, "argv", ["gate", "--rom", str(rom_path), "--out", str(out)]), \
                  patch.object(gate, "CURRENT_VISUAL_FRAME_DIR", frame_dir or gate.CURRENT_VISUAL_FRAME_DIR), \
-                 patch.object(gate, "WIDTH_EVIDENCE_FRAME", (frame_dir or gate.CURRENT_VISUAL_FRAME_DIR) / "0032_NONE_0002120.png"), \
+                 patch.object(gate, "WIDTH_EVIDENCE_FRAME", (frame_dir or gate.CURRENT_VISUAL_FRAME_DIR) / gate.WIDTH_EVIDENCE_FRAME.name), \
                  patch.object(gate, "load_live_code_report_targets", return_value=live_targets if live_targets is not None else set()), \
                  contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
                 code = gate.main()
@@ -56,12 +57,12 @@ class CompactHelpGateTests(unittest.TestCase):
             folder = Path(d)
             for name in gate.EVIDENCE_SHA256:
                 (folder / name).write_bytes((gate.CURRENT_VISUAL_FRAME_DIR / name).read_bytes())
-            (folder / "0032_NONE_0002120.png").write_bytes(b"replacement")
-            (folder / "0011_DOWN_0001434.png").unlink()
+            (folder / gate.WIDTH_EVIDENCE_FRAME.name).write_bytes(b"replacement")
+            (folder / "0012_DOWN_0001435.png").unlink()
             code, report = self.run_gate(frame_dir=folder)
             self.assertEqual(code, 1)
             bad = {i["file"] for i in report["issues"] if i["type"] == "evidence_sha256_mismatch"}
-            self.assertEqual(bad, {"0032_NONE_0002120.png", "0011_DOWN_0001434.png"})
+            self.assertEqual(bad, {gate.WIDTH_EVIDENCE_FRAME.name, "0012_DOWN_0001435.png"})
 
     def test_mismatched_measurement_sha_fails(self):
         with patch.dict(gate.EVIDENCE_SHA256, {"window_measurement.json": "0" * 64}):
@@ -69,12 +70,37 @@ class CompactHelpGateTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("current_visual_capture_receipt_invalid", {i["type"] for i in report["issues"]})
 
-    def test_refreshed_synthetic_still_leaves_two_uncovered(self):
+    def test_refreshed_synthetic_covers_remaining_eleven(self):
         code, report = self.run_gate(live_targets=gate.LIVE_CODE_INJECTION_EVIDENCE)
-        self.assertEqual(code, 1)
-        self.assertEqual(report["render_evidence_missing_addresses"], ["0x00DFA68C", "0x00DFA7BE"])
+        self.assertEqual(code, 0)
+        self.assertEqual(report["render_evidence_missing_addresses"], [])
         self.assertEqual(report["synthetic_render_evidence_count"], 11)
-        self.assertEqual(report["visual_evidence_missing_count"], 13)
+        self.assertEqual(report["visual_evidence_missing_count"], 11)
+
+    def test_real_synthetic_loader_rejects_missing_hidden_frame_and_wrong_mapping(self):
+        source = gate.ROOT / "data/evidence/part1_help_b28_synthetic/report.json"
+        data = json.loads(source.read_text())
+        rom = bytes(self.rom)
+        with tempfile.TemporaryDirectory(dir=gate.ROOT / "temp") as d:
+            path = Path(d) / "report.json"
+            def check(document):
+                path.write_text(json.dumps(document))
+                issues = []
+                targets = gate.load_live_code_report_targets(
+                    path, data["rom_sha256"], rom, issues, [])
+                return targets, issues
+            targets, issues = check(data)
+            self.assertFalse(issues, issues)
+            self.assertEqual(targets, gate.LIVE_CODE_INJECTION_EVIDENCE)
+            missing = copy.deepcopy(data)
+            hidden = next(r for r in missing["rows"] if r["case_id"] == "hidden")
+            hidden["additional_frames"] = []
+            _, issues = check(missing)
+            self.assertIn("invalid_live_code_injection_evidence", {x["type"] for x in issues})
+            wrong = copy.deepcopy(data)
+            next(r for r in wrong["rows"] if r["case_id"] == "code16")["target_reads"]["0x00DFA8AA"] = "0x08A7C018"
+            _, issues = check(wrong)
+            self.assertIn("invalid_live_code_injection_evidence", {x["type"] for x in issues})
 
     def test_truncated_rom_writes_fail_report(self):
         code, report = self.run_gate(rom=b"GBA")

@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import statistics
+from collections import Counter
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -21,6 +22,8 @@ DEFAULT_SHOT_DIR = ROOT / "temp" / "scene_screenshots"
 DEFAULT_MANIFEST = DEFAULT_SHOT_DIR / "manifest.json"
 DEFAULT_OUT = ROOT / "temp" / "scene_screenshots_sanity"
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
+CATALOG = ROOT / "data" / "scene_catalog.json"
+CHECKPOINTS = ROOT / "data" / "screen_checkpoints.json"
 
 KNOWN_LOW_INFO = {
     "01_coldboot_nintendo",
@@ -152,6 +155,9 @@ def main() -> int:
     parser.add_argument("--manifest", default=str(DEFAULT_MANIFEST))
     parser.add_argument("--shot-dir", default=str(DEFAULT_SHOT_DIR))
     parser.add_argument("--out", default=str(DEFAULT_OUT))
+    parser.add_argument("--catalog", default=str(CATALOG))
+    parser.add_argument("--checkpoints", default=str(CHECKPOINTS))
+    parser.add_argument("--rom", default=str(ROM))
     args = parser.parse_args()
 
     manifest_path = Path(args.manifest)
@@ -165,12 +171,46 @@ def main() -> int:
         out_dir = ROOT / out_dir
 
     manifest = load_json(manifest_path)
-    rom_sha = sha256_file(ROM)
-    frames = [shot_dir / f"{name}_patched" / "frame.png" for name in manifest.get("captured", [])]
+    rom_sha = sha256_file(Path(args.rom))
+    catalog = load_json(Path(args.catalog))
+    checkpoints = load_json(Path(args.checkpoints))["checkpoints"]
+    checkpoint_by_name = {c["name"]: c for c in checkpoints}
+    definition_counts = Counter(c["name"] for c in checkpoints)
+    required = set()
+    catalog_owners = Counter()
+    malformed_required = []
+    for scene in catalog.get("scenes", []):
+        if scene.get("capture_required") is not True:
+            continue
+        shot = (scene.get("screenshot") or {}).get("checkpoint")
+        if shot:
+            required.add(shot)
+            catalog_owners[shot] += 1
+        else:
+            malformed_required.append(scene.get("id", "<missing scene id>"))
+        for extra in (scene.get("entrypoint") or {}).get("extra_screenshots") or []:
+            name = extra.get("checkpoint") if isinstance(extra, dict) else extra
+            if name:
+                required.add(name)
+    names = manifest.get("captured", []) + manifest.get("skipped", [])
+    counts = Counter(names)
+    frames = [shot_dir / f"{name}_patched" / "frame.png" for name in sorted(set(names))]
     missing = [str(path.relative_to(ROOT)) for path in frames if not path.exists()]
     rows: list[dict] = []
     issues: list[dict] = [{"checkpoint": path, "issue": "missing_frame"} for path in missing]
+    issues.extend({"scene_id": sid, "issue": "required_scene_missing_checkpoint"}
+                  for sid in malformed_required)
+    issues.extend({"checkpoint": name, "issue": "missing_scene"} for name in sorted(required - counts.keys()))
+    issues.extend({"checkpoint": name, "issue": "duplicate_checkpoint", "count": count}
+                  for name, count in sorted(counts.items()) if count > 1)
+    issues.extend({"checkpoint": name, "issue": "duplicate_checkpoint_definition", "count": count}
+                  for name, count in sorted(definition_counts.items()) if count > 1)
+    issues.extend({"checkpoint": name, "issue": "duplicate_catalog_checkpoint", "count": count}
+                  for name, count in sorted(catalog_owners.items()) if count > 1)
+    issues.extend({"checkpoint": name, "issue": "unknown_checkpoint"}
+                  for name in sorted(counts.keys() - checkpoint_by_name.keys()))
     observations: list[dict] = []
+    from capture_scene_screenshots import current_capture
     for path in frames:
         if not path.exists():
             continue
@@ -178,6 +218,11 @@ def main() -> int:
         rows.append(row)
         issues.extend(row_issues)
         observations.extend(row_observations)
+        checkpoint = checkpoint_by_name.get(row["checkpoint"])
+        if checkpoint:
+            ok, reason = current_capture(path, checkpoint, rom_sha)
+            if not ok:
+                issues.append({"checkpoint": row["checkpoint"], "issue": "invalid_cached_capture", "reason": reason})
 
     contact_pages = write_contact_pages([path for path in frames if path.exists()], out_dir)
     unique_tiles = [row["unique_tiles"] for row in rows]
@@ -186,6 +231,8 @@ def main() -> int:
         "rom_sha256": rom_sha,
         "manifest": str(manifest_path.relative_to(ROOT)),
         "manifest_frame_count": len(frames),
+        "required_checkpoint_count": len(required),
+        "missing_checkpoints": sorted(required - counts.keys()),
         "checked_frame_count": len(rows),
         "skipped": manifest.get("skipped", []),
         "issue_count": len(issues),

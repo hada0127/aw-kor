@@ -1,0 +1,149 @@
+{
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+  "comparison_receipt": "temp/release_C/b28/compare.json",
+  "frames": [
+    {
+      "filename": "0059_NONE_0003305.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0059_NONE_0003305.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0059_NONE_0003305.checkpoint.json",
+      "b28_checkpoint_sha256": "9b83dec3425bd06ea11511fcd5eeb0d591ada343e100e24a1a060414bed30017",
+      "sha256": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0059_NONE_0003305.png",
+      "c_reference_sha256": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0016_DOWN_0001519.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0016_DOWN_0001519.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0016_DOWN_0001519.checkpoint.json",
+      "b28_checkpoint_sha256": "d8442d4cd4c2f60cae437ca6227d1882d72de8cac20255faec8efa2c2394c36e",
+      "sha256": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0016_DOWN_0001519.png",
+      "c_reference_sha256": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0015_DOWN_0001498.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0015_DOWN_0001498.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0015_DOWN_0001498.checkpoint.json",
+      "b28_checkpoint_sha256": "9347c3b861f1c2106df658c2675dd49ce6f8431371c3104f0d346046da64909e",
+      "sha256": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0015_DOWN_0001498.png",
+      "c_reference_sha256": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0049_NONE_0002819.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0049_NONE_0002819.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0049_NONE_0002819.checkpoint.json",
+      "b28_checkpoint_sha256": "4541d9f7afbddfc9b52b79861fb5f54505757d4a9ce1feca1b555136c6cb9b7e",
+      "sha256": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0049_NONE_0002819.png",
+      "c_reference_sha256": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0014_DOWN_0001477.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0014_DOWN_0001477.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0014_DOWN_0001477.checkpoint.json",
+      "b28_checkpoint_sha256": "0ec1d8558df7cb3eea8f449fc8ee5a0b30f3e3faf36026af449ae42078f4ac2d",
+      "sha256": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0014_DOWN_0001477.png",
+      "c_reference_sha256": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0013_DOWN_0001456.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0013_DOWN_0001456.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0013_DOWN_0001456.checkpoint.json",
+      "b28_checkpoint_sha256": "7501d3f6e2137f2d56dd41e4e1691b748fa477cffecd06cb19b0c673345ed345",
+      "sha256": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0013_DOWN_0001456.png",
+      "c_reference_sha256": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0060_DOWN_0003336.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0060_DOWN_0003336.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0060_DOWN_0003336.checkpoint.json",
+      "b28_checkpoint_sha256": "a48572dddcdb9a9e96c122ba2e01622207a893869aad8ac7590d3838ed99b858",
+      "sha256": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0060_DOWN_0003336.png",
+      "c_reference_sha256": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0012_DOWN_0001435.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0012_DOWN_0001435.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "b28_checkpoint_sha256": "d76e0fcb1fddabdc64dad5d37f5cf379777fcbcf7cdc6340016b97f16a41cfc0",
+      "sha256": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0012_DOWN_0001435.png",
+      "c_reference_sha256": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "DFA7BE_0014_NONE_0001625.png",
+      "b28_frame": "temp/release_C/b28/F7BE_b2/0014_NONE_0001625.png",
+      "b28_checkpoint": "temp/release_C/b28/F7BE_b2/0014_NONE_0001625.checkpoint.json",
+      "b28_checkpoint_sha256": "66272b9a0e27a60b9033896dbfa81d9389e441eddce3c9bb4ac64d3436db8fca",
+      "sha256": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/DFA7BE_0014_NONE_0001625.png",
+      "c_reference_sha256": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
+      "comparison_route": "F7BE_b2"
+    },
+    {
+      "filename": "0061_DOWN_0003367.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0061_DOWN_0003367.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0061_DOWN_0003367.checkpoint.json",
+      "b28_checkpoint_sha256": "6593dbf28929db8c18753a4ca84070dc8c06f0c980478297f2f0a42e9312653c",
+      "sha256": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0061_DOWN_0003367.png",
+      "c_reference_sha256": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "DFA68C_0077_NONE_0003956.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0077_NONE_0003956.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0077_NONE_0003956.checkpoint.json",
+      "b28_checkpoint_sha256": "7a2614bce195d2ac61f32a52dceba2d399e605b758554ac55751e33760f584e4",
+      "sha256": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/DFA68C_0077_NONE_0003956.png",
+      "c_reference_sha256": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0051_NONE_0002880.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0051_NONE_0002880.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0051_NONE_0002880.checkpoint.json",
+      "b28_checkpoint_sha256": "824fdcb4f7288feda598df5de83e0d878845433bb5bb0e2d4b32222d25258ef3",
+      "sha256": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0051_NONE_0002880.png",
+      "c_reference_sha256": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
+      "comparison_route": "F_help_sweep"
+    },
+    {
+      "filename": "0033_NONE_0002121.png",
+      "b28_frame": "temp/release_C/b28/F_help_sweep/0033_NONE_0002121.png",
+      "b28_checkpoint": "temp/release_C/b28/F_help_sweep/0033_NONE_0002121.checkpoint.json",
+      "b28_checkpoint_sha256": "f11aae20c62f6278e844ff3a6a0131242cfd0646097275a42f0bc196a8ad8ea2",
+      "sha256": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
+      "rgb_equal_to_C": true,
+      "c_reference": "data/evidence/part1_help_C/0033_NONE_0002121.png",
+      "c_reference_sha256": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
+      "comparison_route": "F_help_sweep"
+    }
+  ]
+}
