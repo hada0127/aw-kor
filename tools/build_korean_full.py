@@ -248,6 +248,19 @@ DENY_REGIONS = [
     # half-open [start, end), so this preserves exactly the 122B found row.
     ('punctuation_width_table_noise', 0xD721B5, 0xD7222F),
     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
+    # Link-play client images (1-cart VS multiboot; temp/linkclient_20261013/plan.md).
+    # The 120-byte charset tables are lookup data, not text; the dead program copies
+    # and stage-1 headers must stay original.  The live programs' strings, table and
+    # glyph sheet are written only by link_client_font (stage before the checksum).
+    ('link_client_charset_table', 0x94298C, 0x94298C + 120),
+    ('link_client_charset_table', 0x97AE40, 0x97AE40 + 120),
+    ('link_client_charset_table', 0x9B36E4, 0x9B36E4 + 120),
+    ('link_client_charset_table', 0x9EBF88, 0x9EBF88 + 120),
+    ('link_client_charset_table', 0xEFAAD4, 0xEFAAD4 + 120),
+    ('link_client_stage1_headers', 0x902A8C, 0x90DC7C),
+    ('link_client_p2_program', 0x90DC7C, 0x9463FC),
+    ('link_client_dead_copies', 0x9463FC, 0x9F0000),
+    ('link_client_p1_program', 0xEC6374, 0xEFE2D8),
     # 추출 노이즈(반복 글리프·그래픽 타일)인데 과거 '깨진 문자열' 마커가 PLACEHOLDER_KO
     # 누락으로 여기 인코딩되어 비트맵을 손상시켰음(2026-06-17 발견·수정). 재유입 영구 차단.
     ('noise_graphics', 0x8A298C, 0x8A299C), ('noise_graphics', 0x8A47CC, 0x8A47DC),
@@ -12608,8 +12621,11 @@ BTEAM_LISTED_WIDE_RESIDUALS = {0xD9009E: 66}
 # dialogue default: A35258/A35280 via 331A80 -> 314A50 (32-tile row) and
 # B830C8 via D8D9AC -> B333FC -> B12910 (26-cell row).
 BTEAM_RESTORED_ROW_HALF_CELLS = {0xA35258: 64, 0xA35280: 64, 0xB830C8: 52}
+# Host-side link-wait sentence.  The client-image copies (0x9298A4, 0x96253C,
+# 0x99ADE0, 0x9D3684, 0xEE27E0) are restored to the original by link_client_font:
+# the client's 59-glyph font cannot draw them and the dead copies stay original.
 LINK_WELCOME_SENTENCES = frozenset({
-    0x9298A4, 0x96253C, 0x99ADE0, 0x9D3684, 0xA34F98, 0xEE27E0,
+    0xA34F98,
 })
 
 
@@ -24250,6 +24266,18 @@ def main():
     from part1_production_info_labels import verify_final_rom as verify_production_info_final
     st['part1_production_info_final'] = verify_production_info_final(rom)
     verify_part2_decimal_point_a3(rom, orig)
+    # Link-play client font (Design A): after every text writer, before the checksum.
+    import link_client_font
+    _lcf_codes = {k: v.to_bytes(2, 'big') for k, v in syl_to_code.items()}
+    _lcf_report = link_client_font.apply(rom, orig, WRITE_LOG, _lcf_codes)
+    st['link_client_font_codes'] = sum(image['codes'] for image in _lcf_report['images'])
+    st['link_client_font_reverted_bytes'] = _lcf_report['reverted_bytes']
+    os.makedirs(os.path.join(BASE, 'temp'), exist_ok=True)
+    with open(os.path.join(BASE, 'temp', 'link_client_font_report.json'), 'w', encoding='utf-8') as _stream:
+        json.dump(_lcf_report, _stream, ensure_ascii=False, indent=1)
+    print('→ link client font: ' + ', '.join(
+        f"{image['image']} {image['codes']}/{image['capacity_codes']} codes" for image in _lcf_report['images'])
+        + f", reverted {_lcf_report['reverted_bytes']} B, dropped {_lcf_report['write_log_dropped']} write-log rows")
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     from qa_part2_co_panel_width import census as _co_panel_census, LIMIT as _co_panel_limit

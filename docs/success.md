@@ -4009,3 +4009,9 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 2편 LINK 판 3종 하다 산스 고해상도 래스터(`tools/part2_link_plates.py`), `qa_sprite_art_shapes --shape`로 윤곽·위상 검사. 콜드부팅 프레임 `temp/b25_20261013/runtime/link_cold/0015/0017/0019_*.png`에서 한글 라벨 확인.
 - B팀: DC67B6 절충(`data/part1_punctuation_decisions.json`), B83C70→A77E4C(DEBAC0), A29CA0→A56B78(A37CE0), A3246C→A5BA20(A387B0). `qa_render_jam`·B팀 drift exit 0. 리뷰 `temp/claude_2026-10-13/review_b24.out`, `review_b25_delta.out`.
 - Ghidra 감사 보조: `tools/ghidra/full_analysis.sh`, `audit_xrefs.py`, `find_iwram_copies.py`(`docs/GHIDRA.md`).
+
+## 2026-10-13 b26 통신 대전 클라이언트 한글 폰트
+
+- 후보 `output/game_wars_korean_candidate_20261013_b26.gba` SHA `ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade`. 빌드: `AW_FONT_DIR=~/aw-fonts memcap -n aw-kor-b26 -- nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_candidate_20261013_b26.gba --no-sync-outputs` (단계 `tools/link_client_font.py`, 텍스트 import 뒤·체크섬 앞).
+- QA: `python3 tools/qa_link_client_font.py --rom output/game_wars_korean_candidate_20261013_b26.gba` → `P2: 58/59 codes, 22 live strings` / `P1: 57/59 codes, 22 live strings` / PASS(exit 0). `AW_TEST_ROM=output/game_wars_korean_candidate_20261013_b26.gba python3 -m unittest tools.test_link_client_font` → 13 OK. 게이트는 테이블 용량·센티널, 코드 등록, 반각 바이트, 제어 순서, 프리로드 페이지, 글리프 픽셀 독립 대조(Galmuri ink 9→0xA, `　！？`는 원본 셀), 소유 범위 밖 바이트·죽은 사본 불변을 본다.
+- 렌더 증거 `temp/b26_20261013/render_contact_b26.png`. 이 하네스는 글리프만 검증하며 메뉴 캐시·표시 순서는 검증하지 않는다. 리뷰 `temp/claude_2026-10-13/review_b26.out`(Blocking 없음).
