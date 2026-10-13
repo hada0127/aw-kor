@@ -1579,4 +1579,4 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 
 ### 2026-10-13 rev.ng PoC 부분 실패 — Ghidra 사용
 
-- 전체 ROM lift가 0x3924a0 데이터에서 `CodeGenerator.cpp:459` 크래시, 리터럴 풀을 ARM 함수로 오인, segment type 없이 emit-c segfault, SVC 본문 빔, 첫 점프 테이블 소실(`temp/decomp/revng/`). GBA Thumb ROM 디컴파일에는 다시 쓰지 않고 Ghidra(`temp/decomp/ghidra/decomp.sh`)를 쓴다.
+- 전체 ROM lift가 0x3924a0 데이터에서 `CodeGenerator.cpp:459` 크래시, 리터럴 풀을 ARM 함수로 오인, segment type 없이 emit-c segfault, SVC 본문 빔, 첫 점프 테이블 소실(`temp/decomp/revng/`). GBA Thumb ROM 디컴파일에는 다시 쓰지 않고 Ghidra(`tools/ghidra/decomp.sh`)를 쓴다.

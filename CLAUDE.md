@@ -133,7 +133,8 @@ DYLD_LIBRARY_PATH=/opt/homebrew/lib /opt/homebrew/bin/mgba -3 output/game_wars_k
 - 한계: `emucap`은 v0.4 beta라 인터페이스/동작이 바뀔 수 있다. 기존 `tools/*` + `temp/mgbah` release QA를 대체하지 않는다. 배포 판정은 계속 `verify_dist_integrity.py`와 `run_release_qa.py`를 권위로 삼는다.
 
 ### Ghidra 디컴파일 보조
-- `~/.local/opt/ghidra_12.1.4_PUBLIC` (JDK 21). `temp/decomp/ghidra/decomp.sh ADDR` → `temp/decomp/ghidra/out/<ADDR>.c`. 결과는 보조 근거이며 런타임 확인이 필수다.
+- `tools/ghidra/decomp.sh ADDR[:t|:a] [xref=0x..] [--rom PATH]` → `temp/decomp/ghidra/out/<ADDR>.c` (Ghidra 12.1.4 + JDK 21, `~/.local/opt`, memcap 내장).
+- 설치·사용·한계는 [`docs/GHIDRA.md`](docs/GHIDRA.md). 결과는 보조 근거이며 런타임 확인이 필수다.
 
 ### QA 도구 (전체 점검)
 ```bash
@@ -216,6 +217,7 @@ aw-kor/
 
 ### docs/ 주요 문서
 - **진행 기준**: 루트 `todo.md` 하나만 사용한다. 구 `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
+- **Ghidra 디컴파일**: `GHIDRA.md`(설치·사용·한계)
 - **계획/리서치 참고**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(구체 구현 로드맵), `research.md`(대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
 - **번역 가이드**: `TRANSLATION_GUIDE.md`, `TRANSLATION_TONE_AND_STORY_GUIDE.md`, `AI_TRANSLATION_REFERENCE.md`, `TRANSLATION_REAUDIT_2026_05_18.md`
 - **폰트(PHASE5-3)**: `PHASE5_3_FONT_ANALYSIS_COMPLETE.md`, `PHASE5_3_FONT_STATUS.md`, `PHASE5_3_ROM_FONT_ANALYSIS.md`
