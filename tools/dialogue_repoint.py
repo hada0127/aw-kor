@@ -596,7 +596,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      max_cells_for_address=None,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
                      original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None,
-                     page_reflows=None):
+                     page_reflows=None, allowed_wide_skips=(), source_text=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -608,9 +608,11 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
       ≥1개일 때만 재배치한다. 포인터는 ROM 내 정확히 1개(테이블)일 때만.
     """
     line_layouts = line_layouts or {}
+    allowed_wide_skips = set(allowed_wide_skips)
     page_reflows = page_reflows or {}
     stats = collections.Counter()
     manifest = []
+    unexpected_wide = set()
     free = free_start
     skip_messages = set(skip_messages or ())
 
@@ -756,7 +758,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # 박스 한계(max_cells, 원본 대사 최대폭 50 관측)를 넘으면 잘림 위험 → 그 라인은 수정 제외
         # (in-place 단어붙음 유지가 폭 안전). repoint가 새 잘림을 만들지 않게 한다.
         fix_addrs = set()
-        skipped_wide = 0
+        skipped_wide = []
         for a, L in lines:
             if fixable(a) and fit_level_dlg(a) >= min_level:
                 layout = line_layouts.get(a)
@@ -768,11 +770,15 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 else:
                     width = cell_width(a)
                 if width > (max_cells_for_address(a) if max_cells_for_address else max_cells):
-                    skipped_wide += 1
+                    skipped_wide.append(a)
                     continue
                 fix_addrs.add(a)
         if skipped_wide:
-            stats['skip_wide_line'] += skipped_wide
+            stats['skip_wide_line'] += len(skipped_wide)
+            manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_wide_line',
+                             'lines': [f'0x{a:06X}' for a in skipped_wide]})
+            unexpected = set(skipped_wide) - allowed_wide_skips
+            unexpected_wide.update(unexpected)
         if not fix_addrs:
             # 2026-06-25 render-jam 허용: fixable 라인이 없어도 **content 사이 반각공백(0x20)**이 있으면
             # 재배치 블롭의 interior 변환(0x20→0x8140)이 화면 단어붙음을 해소하므로 재배치한다.
@@ -996,10 +1002,16 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             'old_len': me - msg, 'new_len': nlen, 'lines': len(lines),
             'fixed': sorted(f'0x{a:06X}' for a in fix_addrs),
             'line_spans': line_spans,
+            'source_spans': {f'0x{a:06X}': length for a, length in lines},
+            'source_texts': {f'0x{a:06X}': (source_text(a) if source_text else
+                              decode_text(fixed_bytes(a) if a in fix_addrs else bytes(rom[a:a + length])))
+                             for a, length in lines},
             'ptr_sites': [f'0x{s:06X}' for s in sites],
             **({'seam_spaces': seams_fixed} if seams_fixed else {}),
         })
 
+    if unexpected_wide:
+        raise AssertionError(f'Unapproved wide dialogue skip: {sorted(hex(a) for a in unexpected_wide)}')
     for record in manifest:
         evidence = pcm_classifications.get(int(record['msg'], 16))
         if evidence is not None:

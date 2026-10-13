@@ -1,97 +1,222 @@
 #!/usr/bin/env python3
-"""QA: 대사(dialogue_overrides=짜옹이님/B팀) 단어붙음/축약 추적 + repoint 해소 효과.
+"""Final-owner spacing audit. Unsupported coverage is reported, never a baseline."""
+import argparse
+import collections
+import hashlib
+import json
+import struct
+from pathlib import Path
 
-기존 qa_text_fit는 dialogue_overrides를 walk에서 누락해 단어붙음 504건을 못 봤다(사각지대).
-이 도구는 dialogue_overrides의 모든 라인에 대해 in-place fit level을 계산하고,
-repoint 매니페스트(temp/repoint_manifest.json)로 해소된 라인을 차감해 **잔여 단어붙음**을 보고한다.
+from qa_integrity_map import decode_enc, load_syl
+from repoint_source_rows import row_bytes, fragments
+from build_korean_full import normalize_korean_terms
 
-  level >= 10 : 공백 제거(단어붙음)   level 6~9 : 축약/부호 폴백
-  repoint로 해소된 라인은 완전충실 렌더 → 잔여에서 제외.
+ROOT = Path(__file__).resolve().parent.parent
+PUNCT = str.maketrans({'！': '!', '？': '?', '。': '.', '、': ',',
+                      '，': ',', '．': '.', '　': ' '})
 
-사용: python3 tools/qa_dialogue_jamming.py [--list]
-종료코드: 잔여 단어붙음이 BASELINE_JAMMED를 **초과**하면 1 (회귀 게이트). --list로 잔여 주소 출력.
-  (현 baseline = Part1/0xB8 분산포인터 미적용 영역 + merged/wide-skip. 이보다 늘면 새 회귀.)
-"""
-import csv, json, os, sys, collections
 
-BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BASE, 'tools'))
-import build_korean_full as B
+def separator_signature(text):
+    # The builder applies this approved terminology rule before encoding.
+    # Country compounds are not evidence of a newly dropped word separator.
+    text = normalize_korean_terms(text.translate(PUNCT)).strip(' \x00▯')
+    chars, boundaries = [], set()
+    for ch in text:
+        if ch == ' ':
+            if chars:
+                boundaries.add(len(chars))
+        else:
+            chars.append(ch)
+    boundaries.discard(len(chars))
+    return ''.join(chars), boundaries
 
-FOUND = os.path.join(BASE, 'data', 'game_wars_found_texts.csv')
-DLG = os.path.join(BASE, 'data', 'dialogue_overrides.json')
-MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 
-# 회귀 게이트 기준: Part2+Part1 repoint 후 잔여 단어붙음(0xB8/0xEC 비-0x19 영역 + merged/wide/multi-ptr
-# skip). 이 값을 '초과'하면 새 회귀로 간주. repoint 영역 확장 시 함께 낮춘다.
-# 2026-06-23: Part1 0x19-커맨드 메시지 repoint로 244→117(안전 강화: 다중참조 의심 메시지 보수적 skip) 감소.
-BASELINE_JAMMED = 117
+def is_jammed(authored, shipped):
+    """Every authored interior separator must survive at the same character boundary."""
+    expected, wanted = separator_signature(authored)
+    actual, present = separator_signature(shipped.replace('\x72\x0a\x09', ' '))
+    return bool(expected and expected == actual and wanted - present)
+
+
+def verify_provenance(rom_path, map_path, manifest_path):
+    receipt = json.loads(Path(str(rom_path) + '.build.json').read_text())
+    sha = lambda path: hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    if receipt.get('schema') != 1 or receipt.get('rom_sha256') != sha(rom_path):
+        raise ValueError('ROM does not match its build receipt')
+    for name, path in (('temp/integrity_map.json', map_path),
+                       ('temp/repoint_manifest.json', manifest_path)):
+        if (receipt.get('build_metadata') or {}).get(name) != sha(path):
+            raise ValueError(f'build metadata provenance mismatch: {path}')
+
+
+def final_owner_spans(writes, rom_size):
+    """Resolve chronological writes by byte ownership, including merged spans.
+
+    Partial owners cannot safely lend their full authored sentence to a fragment.
+    Return them as unsupported instead of treating obsolete CSV slots as owners.
+    """
+    occupied = bytearray(rom_size)
+    owners, unsupported = {}, []
+    for entry in reversed(writes):
+        addr, size = entry[:2]
+        if not isinstance(addr, int) or not isinstance(size, int) or size < 0 or addr < 0 or addr + size > rom_size:
+            raise ValueError(f'owner bounds invalid: {addr!r}, {size!r}')
+        if not size:
+            continue
+        overlap = occupied[addr:addr + size]
+        if entry[5] and any('가' <= c <= '힣' for c in entry[5]):
+            if not any(overlap):
+                owners[addr] = entry
+            elif not all(overlap):
+                unsupported.append((addr, 'partially superseded owner'))
+        occupied[addr:addr + size] = b'\1' * size
+    return owners, unsupported
+
+
+def validate_manifest(rom, manifest, original=None):
+    mapped, ranges, seen_msgs = {}, [], set()
+    targets = {int(m['msg'], 16) for m in manifest if m.get('status') == 'relocated'}
+    original_sites = collections.defaultdict(set)
+    if original is not None:
+        for index, (value,) in enumerate(struct.iter_unpack('<I', original[:len(original) // 4 * 4])):
+            if value - 0x08000000 in targets:
+                original_sites[value - 0x08000000].add(index * 4)
+    for m in manifest:
+        if m.get('status') != 'relocated':
+            continue
+        source, target = int(m['msg'], 16), int(m['new_addr'], 16)
+        old_len, new_len = m['old_len'], m['new_len']
+        if source in seen_msgs:
+            raise ValueError(f'duplicate message 0x{source:X}')
+        seen_msgs.add(source)
+        if min(source, target) < 0 or min(old_len, new_len) <= 0 or max(source + old_len, target + new_len) > len(rom):
+            raise ValueError(f'message bounds invalid: 0x{source:X}')
+        sites = {int(x, 16) for x in m.get('ptr_sites', [])}
+        if not sites or int(m['ptr_off'], 16) not in sites:
+            raise ValueError(f'missing pointer sites: 0x{source:X}')
+        excluded = {int(x, 16) for x in m.get('pointer_classification', {}).get('excluded_sites', [])}
+        if original is not None and sites != original_sites[source] - excluded:
+            raise ValueError(f'incomplete original pointer mapping: 0x{source:X}')
+        for off in sites:
+            if off < 0 or off + 4 > len(rom) or int.from_bytes(rom[off:off + 4], 'little') != 0x08000000 + target:
+                raise ValueError(f'pointer mismatch 0x{off:06X}')
+        spans = m.get('line_spans', {})
+        if len(spans) != m.get('lines') or not set(m.get('fixed', [])) <= spans.keys():
+            raise ValueError(f'incomplete line mapping: 0x{source:X}')
+        # New manifests bind every source owner to its output and authored text.
+        if 'source_spans' not in m or 'source_texts' not in m:
+            raise ValueError(f'missing source owner coverage: 0x{source:X}')
+        if spans.keys() != m['source_spans'].keys() or spans.keys() != m['source_texts'].keys():
+            raise ValueError(f'incomplete source owner mapping: 0x{source:X}')
+        for key in spans:
+            addr = int(key, 16)
+            length = m['source_spans'][key]
+            if not source <= addr < addr + length <= source + old_len or addr in mapped:
+                raise ValueError(f'source span invalid: {key}')
+            for offset, length in fragments(m, key):
+                if offset < 0 or length <= 0 or offset + length > new_len:
+                    raise ValueError(f'payload span out of bounds: {key}')
+            mapped[addr] = m
+        ranges.append((source, source + old_len, target, target + new_len))
+    for column in (0, 2):
+        ordered = sorted((r[column], r[column + 1]) for r in ranges)
+        if any(a[1] > b[0] for a, b in zip(ordered, ordered[1:])):
+            raise ValueError('overlapping relocated message ranges')
+    return mapped, ranges
+
+
+def decode_payload(payload, codes):
+    # Token aware: 0x72 may also be the trail byte of a Hangul glyph.
+    out, i = bytearray(), 0
+    while i < len(payload):
+        b = payload[i]
+        if (0x81 <= b <= 0x9F or 0xE0 <= b <= 0xEF) and i + 1 < len(payload):
+            out.extend(payload[i:i + 2]); i += 2
+        elif payload[i:i + 3] == b'\x72\x0a\x09':
+            out.extend(b'\x81\x40'); i += 3
+        elif b == 0x72:
+            out.extend(b'\x81\x40'); i += 1
+        else:
+            out.append(b); i += 1
+    return decode_enc(out, codes).rstrip(' \u3000\x00▯')
+
+
+def rendered_rows(rom, manifest, writes, original=None):
+    owners, unsupported = final_owner_spans(writes, len(rom))
+    mapped, ranges = validate_manifest(rom, manifest, original)
+    codes = load_syl()
+    rows = []
+    for addr, m in mapped.items():
+        key = f'0x{addr:06X}'
+        payload = row_bytes(rom, m, key)
+        text = m['source_texts'][key]
+        parts = fragments(m, key)
+        target = int(m['new_addr'], 16)
+        # Explicit final writers in the relocated arena supersede source intent.
+        owner = owners.get(target + parts[0][0])
+        if owner and len(parts) == 1 and owner[1] == parts[0][1]:
+            text = owner[5]
+        rows.append(dict(addr=addr, slot=len(payload), intended=text or '',
+                         shipped=decode_payload(payload, codes), relocated=True,
+                         kind='repoint', level=None))
+    for addr, entry in owners.items():
+        containing = [r for r in ranges if r[0] <= addr < r[1]]
+        if containing:
+            if addr not in mapped:
+                unsupported.append((addr, 'source owner merged or superseded by relocated owner'))
+            continue  # Never fall back to stale in-place fragments.
+        if any(lo <= addr < hi for _, _, lo, hi in ranges):
+            continue
+        rows.append(dict(addr=addr, slot=entry[1], intended=entry[5],
+                         shipped=decode_payload(rom[addr:addr + entry[1]], codes),
+                         relocated=False, kind=entry[7], level=entry[6]))
+    return rows, unsupported
+
+
+def check(rom, manifest, writes, original=None):
+    rows, unsupported = rendered_rows(rom, manifest, writes, original)
+    jams = []
+    checked = 0
+    for row in rows:
+        expected, _ = separator_signature(row['intended'])
+        shipped, _ = separator_signature(row['shipped'])
+        if not expected or not any('가' <= ch <= '힣' for ch in expected):
+            unsupported.append((row['addr'], 'no authored Hangul owner'))
+        elif expected != shipped:
+            unsupported.append((row['addr'], 'wording/control/compact encoding differs; spacing comparison unsupported'))
+        else:
+            checked += 1
+            if is_jammed(row['intended'], row['shipped']):
+                jams.append((row['addr'], row['intended'], row['shipped']))
+    return checked, jams, unsupported
 
 
 def main():
-    show = '--list' in sys.argv
-    slots = {}
-    for r in csv.DictReader(open(FOUND, encoding='utf-8', errors='ignore')):
-        try:
-            slots[int((r.get('address') or '').strip(), 16)] = int(r.get('length') or 0)
-        except (ValueError, TypeError):
-            pass
-    dlg = {}
-    for k, v in json.load(open(DLG, encoding='utf-8')).items():
-        try:
-            dlg[int(k, 16) if isinstance(k, str) else int(k)] = (v or '').strip()
-        except (ValueError, TypeError):
-            pass
-    syl = {s: int(c, 16) for s, c in json.load(open(B.SYLCODE, encoding='utf-8')).items()}
-    um = collections.Counter()
-
-    repointed = set()
-    if os.path.exists(MANIFEST):
-        for m in json.load(open(MANIFEST, encoding='utf-8')):
-            if m.get('status') == 'relocated':
-                for fa in m.get('fixed', []):
-                    repointed.add(int(fa, 16))
-
-    levels = collections.Counter()
-    jammed_in, abbr_in = [], []
-    jammed_remain, abbr_remain = [], []
-    for a, ko in dlg.items():
-        if not ko or not any('가' <= ch <= '힣' for ch in ko):
-            continue
-        slot = slots.get(a, 0)
-        if slot <= 0 or a < B.SAFE_MIN_ADDR:
-            continue
-        enc, lvl = B.encode_fit(ko, slot, syl, um)
-        if enc is None:
-            continue
-        levels[lvl] += 1
-        if lvl >= 10:
-            jammed_in.append(a)
-            if a not in repointed:
-                jammed_remain.append(a)
-        elif lvl >= 6:
-            abbr_in.append(a)
-            if a not in repointed:
-                abbr_remain.append(a)
-
-    print('=== 대사(dialogue_overrides) 단어붙음/축약 QA ===')
-    print(f'dialogue 라인(한글·슬롯有): {sum(levels.values())}')
-    print(f'in-place 단어붙음(level>=10): {len(jammed_in)}   축약(6~9): {len(abbr_in)}')
-    print(f'repoint 해소 라인: {len(repointed)}')
-    print(f'→ 잔여 단어붙음: {len(jammed_remain)}   잔여 축약: {len(abbr_remain)}')
-    print('level 분포:', {f'L{k}': levels[k] for k in sorted(levels) if levels[k]})
-    if show:
-        for a in sorted(jammed_remain)[:60]:
-            print(f'  잔여JAM 0x{a:06X} slot={slots.get(a)} ko={dlg[a]!r}')
-    # 회귀 게이트: 잔여 단어붙음이 baseline을 초과하면 새 회귀 → 비정상 종료.
-    if len(jammed_remain) > BASELINE_JAMMED:
-        print(f'\n[FAIL] 잔여 단어붙음 {len(jammed_remain)} > baseline {BASELINE_JAMMED} — '
-              f'새 단어붙음 회귀 발생(또는 repoint 영역 축소). 원인 확인 필요.')
-        return 1
-    print(f'\n[OK] 잔여 단어붙음 {len(jammed_remain)} <= baseline {BASELINE_JAMMED} '
-          f'(Part1/0xB8 분산포인터 영역 + merged/wide-skip — repoint 테이블 확장 시 감소).')
-    return 0
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--rom', type=Path, required=True)
+    ap.add_argument('--map', type=Path, default=ROOT / 'temp/integrity_map.json')
+    ap.add_argument('--manifest', type=Path, required=True)
+    ap.add_argument('--list', action='store_true')
+    ap.add_argument('--json', type=Path)
+    args = ap.parse_args()
+    try:
+        verify_provenance(args.rom, args.map, args.manifest)
+        count, jams, unsupported = check(args.rom.read_bytes(), json.loads(args.manifest.read_text()),
+            json.loads(args.map.read_text()), (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(f'FAIL: {exc}')
+        return 2
+    print(f'final owner rows checked: {count}; final-ROM jams: {len(jams)}; unsupported coverage: {len(unsupported)}')
+    print('Byte spacing audit only; unsupported rows and renderer attribution are not a verified baseline.')
+    if args.list:
+        for a, authored, shipped in jams:
+            print(f'JAM 0x{a:06X}\t{authored}\t{shipped}')
+        for a, reason in unsupported:
+            print(f'UNSUPPORTED 0x{a:06X}\t{reason}')
+    if args.json:
+        args.json.write_text(json.dumps(dict(checked=count, jams=jams, unsupported=unsupported), ensure_ascii=False, indent=2))
+    return int(bool(jams))
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    raise SystemExit(main())

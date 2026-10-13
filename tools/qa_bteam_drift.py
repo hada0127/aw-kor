@@ -88,7 +88,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'ce69d508c5702e6eb134183bc5e96d6128afb62dd6cba490c853be44ee32797b'
+ROUND2_RESIDUAL_DIGEST = '04d2f14a6a022ac7d9fc0280dc98dc3c3e162435369eb63d7fd07631c077bbe5'
 ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
@@ -638,7 +638,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 118 or len(listed) != len(rows):
+    if len(rows) != 114 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:
@@ -665,6 +665,18 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
             raise ValueError(f'{key}: listed residual metadata or source bytes changed')
         message = messages.get(addr)
         pinned_message = pins.get(addr)
+        if addr == 0xDCE89A and message and not pinned_message:
+            pos, size = spans[addr]
+            actual = decode_enc(rom[pos:pos + size].replace(b'\x72\x0a\x09', b'\x81\x40'), load_syl())
+            target = int(message['new_addr'], 16)
+            sites = message.get('ptr_sites') or []
+            if (display_equivalent(row['expected_baseline'], addr) !=
+                    display_equivalent(actual, addr)
+                    or addr in {int(issue['address'], 16) for issue in issues}
+                    or not sites or any(int.from_bytes(rom[int(site, 16):int(site, 16) + 4],
+                                                      'little') != 0x08000000 + target for site in sites)):
+                raise ValueError(f'{key}: restored relocated baseline or pointer changed')
+            continue
         if addr == 0xDCFA8E and message and not pinned_message:
             # This formerly deferred row is now wrapped and fully restored in
             # its live message. The source-slot residual remains byte-pinned.

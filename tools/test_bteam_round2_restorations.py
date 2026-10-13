@@ -28,10 +28,11 @@ def strip_marks(text):
 
 class OriginalGlyphConsumerTests(unittest.TestCase):
     def test_restored_rows_left_the_residual_list_and_pins(self):
-        restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {0xB81B14}
+        restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {
+            0xB81B14, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 118)
+        self.assertEqual(len(RESIDUALS), 114)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.

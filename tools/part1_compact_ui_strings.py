@@ -103,7 +103,7 @@ STRINGS = (
     # C3 rule settings list (group 0xB13090, table 0xB838C8)
     (0xB839F0, 6, '룰　　', '룰', (RULES,), (), None),   # 룰 preloaded via the rules dictionary 0xD83138
     (0xB839C4, 8, '초기수입', '초기수입', (RULES,), (), None),
-    (0xB839B4, 12, '매턴수입　　', '매턴수입', (RULES,), (), None),
+    (0xB839B4, 12, '매　턴　수입', '매턴수입', (RULES,), (), None),
     # C6 compact unit-info weapon fields (group 0xB12EDC, record +8/+0x10)
     (0xB81884, 10, '対潜箕紗炒', '대잠미사일', (UNIT_INFO,), (), '対潜箕紗炒'),
     (0xB818F4, 10, '対地箕紗炒', '대지미사일', (UNIT_INFO,), (), '対地箕紗炒'),

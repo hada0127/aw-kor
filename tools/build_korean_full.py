@@ -12320,13 +12320,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'ce69d508c5702e6eb134183bc5e96d6128afb62dd6cba490c853be44ee32797b':
+        if hashlib.sha256(stream.read()).hexdigest() != '04d2f14a6a022ac7d9fc0280dc98dc3c3e162435369eb63d7fd07631c077bbe5':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 118 or len(result) != len(rows) or
+    if (len(rows) != 114 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
@@ -23289,6 +23289,8 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
+                if a in {0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}:
+                    return _rp_ov(a)  # Fable + Astra b23: full B-team wording.
                 if a in BTEAM_PREVIOUS_KOREAN_TEXT and a not in BTEAM_SCRIPT_SPACING_REPAIRS:
                     return BTEAM_PREVIOUS_KOREAN_TEXT[a]
                 if a in BTEAM_SCRIPT_SPACING_REPAIRS or a in BTEAM_SCRIPT_LAYOUT_REPAIRS:
@@ -23561,6 +23563,26 @@ def main():
             _explicit_line_layouts[0xDCFA8E] = tuple(
                 encode_full_fidelity(part, syl_to_code, unmapped, 0xDCFA8E)
                 for part in _bteam_parts)
+            # Four authored spaces that cannot fit on a single physical row.
+            from dialogue_repoint import text_segment_cells as _rp_cells
+            for _wrap_addr in (0xD969A0, 0xDCD024, 0xDCE89A, 0xDFBF70,
+                               0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA):
+                _whole = _rp_fixed_bytes(_wrap_addr)
+                _limit = 44 if _wrap_addr in BTEAM_RESTORE_BASELINE_ROWS else 50
+                _choices = []
+                _cursor = 0
+                while True:
+                    _cursor = _whole.find(b'\x81\x40', _cursor)
+                    if _cursor < 0:
+                        break
+                    _left, _right = _whole[:_cursor], _whole[_cursor + 2:]
+                    if _left and _right and max(_rp_cells(_left), _rp_cells(_right)) <= _limit:
+                        _choices.append((_left, _right))
+                    _cursor += 2
+                if not _choices:
+                    raise AssertionError(f'No safe authored wrap: 0x{_wrap_addr:06X}')
+                _explicit_line_layouts[_wrap_addr] = min(
+                    _choices, key=lambda pair: abs(_rp_cells(pair[0]) - _rp_cells(pair[1])))
             # The message already has a native newline after 0xDCFA8E. Reflow
             # across that boundary so its first page stays in the two-row box.
             _dcfa8c_reflow = (
@@ -23568,19 +23590,63 @@ def main():
                 encode_full_fidelity('이 싸움의 뒤에 있는 자가　얼마나', syl_to_code, unmapped, 0xDCFA8E),
                 encode_full_fidelity('강적일지도　모르는 거라고！', syl_to_code, unmapped, 0xDCFABB),
             )
+            _b23_reflows = {}
+            for _first, _following, _site in ((0xDCC63A, 0xDCC65D, 0xDE0410),
+                                             (0xDCD9DA, 0xDCD9FD, 0xDE2814)):
+                if (int.from_bytes(orig[_site:_site + 4], 'little') != 0x08000000 + _first - 2
+                        or orig[_site - 4:_site] != b'\x19\0\0\0'):
+                    raise AssertionError('b23 portrait consumer pointer changed')
+                _b23_reflows[_first - 2] = (
+                    _first, _following,
+                    encode_full_fidelity('바다에서　이길 수 있는 사람은', syl_to_code, unmapped, _first),
+                    encode_full_fidelity('거의 없다는 이야기야.', syl_to_code, unmapped, _following))
+            for _first, _site in ((0xD9EDB6, 0xDC0BF0), (0xDCB1BE, 0xDDE190)):
+                if (int.from_bytes(orig[_site:_site + 4], 'little') != 0x08000000 + _first - 2
+                        or orig[_site - 4:_site] != b'\x19\0\0\0'):
+                    raise AssertionError('b23 two-row consumer pointer changed')
+            # Audited b21 wide skips: their shipped rows keep separators or are
+            # explicitly deferred B-team shortening; none is one of the five jams.
+            _allowed_wide_skips = {
+                0xA2C040, 0xA2C0C0, 0xA2C1E8, 0xA2C25C, 0xA2C2F4,
+                0xA2C378, 0xA2C3A8, 0xA2C484, 0xA35280, 0xB83A64,
+                0xD9444E, 0xD94552, 0xD965DE,
+                0xDD010A, 0xDF1EEE, 0xDF207A,
+                0xDF20BA, 0xDF21AE, 0xDF228E, 0xDF239E, 0xDF25FA,
+                0xDF26FE, 0xDF2806, 0xDF28C2, 0xE0F6E2, 0xEC312E,
+                0xEC3246,
+            }
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
                 slots=slots, line_index=_merged_li, table_offsets=[0xA357B4],
                 original_line_starts=_rp_original_starts, line_layouts=_explicit_line_layouts,
+                allowed_wide_skips=_allowed_wide_skips,
                 extra_messages=_rp_extra, free_start=0xA3D000, free_end=SPRITE_STORAGE_START,
                 skip_messages=(set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages
                                | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES | {0xB8319C}),
                 min_level=1, max_cells=50,
                 max_cells_for_address=lambda a: 44 if a in BTEAM_RESTORE_BASELINE_ROWS else 50,
-                page_reflows={0xDCFA8C: _dcfa8c_reflow},
+                page_reflows={0xDCFA8C: _dcfa8c_reflow, **_b23_reflows},
+                source_text=lambda a: _rp_dlg(a) or _rp_script_owners.get(a, (0, None))[1] or _rp_intended.get(a),
                 valid_codes=frozenset(_rp_valid),
                 seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
+            # Preserve original sentence ownership after moving its tail onto
+            # the continuation's physical row. Both drift and spacing QA follow
+            # these exact fragments; no stale source slot supplies display text.
+            for _m in _rp_manifest:
+                if _m.get('status') != 'relocated' or int(_m['msg'], 16) not in _b23_reflows:
+                    continue
+                _first, _following, _, _ = _b23_reflows[int(_m['msg'], 16)]
+                _key, _next_key = f'0x{_first:06X}', f'0x{_following:06X}'
+                _one, _two = _m['line_spans'][_key], _m['line_spans'][_next_key]
+                _tail = encode_full_fidelity('거의 없다는', syl_to_code, unmapped, _first)
+                _prefix_len = len(_tail)
+                _m['source_line_fragments'] = {
+                    _key: [_one, [_two[0], _prefix_len]],
+                    _next_key: [[_two[0] + _prefix_len + 2, _two[1] - _prefix_len - 2]],
+                }
+                _m['display_line_spans'] = [_one, _two]
+                _m['line_spans'][_next_key] = _m['source_line_fragments'][_next_key][0]
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             _rp_fixed_addresses = {int(a, 16) for m in _rp_manifest
                                    if m.get('status') == 'relocated' for a in m.get('fixed', [])}
@@ -23622,7 +23688,7 @@ def main():
     # script relocations still fail the build when missing.
     bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints)
                                     & BTEAM_RESTORE_BASELINE_ROWS)
-    _restored_relocated_residuals = {0xDCFA8E}
+    _restored_relocated_residuals = {0xDCFA8E, 0xDCE89A, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}
     if not _restored_relocated_residuals <= completed_script_repoints:
         raise AssertionError('0xDCFA8E protected dialogue was not relocated')
     _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
@@ -23735,7 +23801,8 @@ def main():
         _target = int(_message['new_addr'], 16)
         for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
             _address = int(_key, 16)
-            if _address not in BTEAM_ROUND2_RESTORE or _address in BTEAM_ROUND2_RESIDUALS:
+            if (_address not in BTEAM_ROUND2_RESTORE or _address in BTEAM_ROUND2_RESIDUALS
+                    or _address in _restored_relocated_residuals):
                 continue
             if _is_round2_pair_title(_address):
                 continue  # Title glyph supply is checked by its own patch below.
@@ -24221,7 +24288,8 @@ def main():
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
     _expected_residuals = ((set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations)
-                           | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS)) - _restored_relocated_residuals
+                           | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS)) - (
+                               _restored_relocated_residuals | {0xB839B4})
     if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '

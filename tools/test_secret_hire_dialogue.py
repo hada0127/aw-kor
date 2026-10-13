@@ -36,8 +36,8 @@ class SecretHireTests(unittest.TestCase):
    line_layouts=layouts)
   return rom,manifest,stats
  def test_real_allocator_requires_explicit_lossless_layout(self):
-  rom,manifest,stats=self.repoint({})
-  self.assertEqual(stats.get('relocated',0),0)
+  with self.assertRaisesRegex(AssertionError,'Unapproved wide dialogue skip'):
+   self.repoint({})
   rom,manifest,stats=self.repoint(S.layout(self.original,self.encode))
   self.assertEqual(stats['relocated'],1)
   self.assertEqual(S.verify(rom,self.original,self.encode)['status'],'PASS')
