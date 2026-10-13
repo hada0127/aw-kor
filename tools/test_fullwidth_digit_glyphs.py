@@ -32,7 +32,7 @@ def assert_digit_glyphs(test, rom):
             test.assertNotIn(node, seen)
             seen.add(node)
             node = struct.unpack_from('<I', rom, node)[0] - 0x08000000
-        test.assertEqual(bytes(rom[node + 8:node + 72]), b''.join(render_char(char, ink=10)), char)
+        test.assertEqual(bytes(rom[node + 6:node + 70]), b''.join(render_char(char, ink=10)), char)
 
 
 class FullwidthDigitGlyphTest(unittest.TestCase):
@@ -47,6 +47,21 @@ class FullwidthDigitGlyphTest(unittest.TestCase):
         if not os.environ.get('AW_TEST_ROM'):
             self.skipTest('AW_TEST_ROM not set')
         assert_digit_glyphs(self, Path(os.environ['AW_TEST_ROM']).read_bytes())
+
+    def test_native_reader_offset_and_shifted_mutation(self):
+        original = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+        # Independent native machine instruction at IWRAM 030060C8:
+        # adds r7,r3,#6. Do not derive this offset from the patcher.
+        self.assertEqual(original[0xA3C82C:0xA3C82E], bytes.fromhex('9f1d'))
+        rom = bytearray(original)
+        patch_name_grid(rom)
+        patch_fullwidth_digit_glyphs(rom)
+        node = struct.unpack_from('<I', rom, 0x807680 + 0x52 * 4)[0] - 0x08000000
+        while rom[node+4] != 0x82:
+            node = struct.unpack_from('<I', rom, node)[0] - 0x08000000
+        rom[node+6:node+72] = bytes(2) + b''.join(render_char('3', ink=10))
+        with self.assertRaises(AssertionError):
+            assert_digit_glyphs(self, rom)
 
 
 if __name__ == '__main__':

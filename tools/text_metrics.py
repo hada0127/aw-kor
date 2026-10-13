@@ -20,8 +20,11 @@ SYLCODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 SYLCODE = os.path.join(BASE, 'data', 'syllable_to_code.json')
 
 
-def encoded_len(text):
+def encoded_len(text, renderer=None):
     """encode_text 바이트 길이와 동일한 예산. (한글2/전각공백2/줄바꿈1/ASCII1/기타2)"""
+    if renderer:
+        from renderer_text import normalize_text
+        text = normalize_text(text, renderer)
     n = 0
     for ch in text or '':
         if '가' <= ch <= '힣':
@@ -37,20 +40,53 @@ def encoded_len(text):
     return n
 
 
-def visual_cells(text):
+def visual_cells(text, renderer=None):
     """반-셀(half-cell) 단위 시각 폭. 한글/전각=2, ASCII/반각공백=1, 줄바꿈=0.
 
     고정폭 대사 렌더(per-char 셀 복사) 기준 근사. 박스 폭(셀) 비교용.
     """
+    if renderer:
+        from renderer_text import normalize_text
+        text = normalize_text(text, renderer)
     w = 0
-    for ch in text or '':
+    for i, ch in enumerate(text or ''):
         if ch == '\n':
+            continue
+        if ch == ' ' and renderer:
+            from renderer_text import P1_SCRIPT, P2_PAIRS
+            # 8px native advancing spaces equal one two-byte glyph cell.
+            w += 2 if renderer == P2_PAIRS or (renderer == P1_SCRIPT and i + 1 < len(text) and ord(text[i + 1]) > 127) else 0
             continue
         if ch == ' ' or (0x20 <= ord(ch) <= 0x7E):
             w += 1
         else:
             w += 2
     return w
+
+
+def encoded_visual_cells(payload, renderer, *, p1_space_hook=False):
+    """Width of actual ROM tokens, distinct from normalized authored text.
+
+    Native parser commands and consume-only ASCII spaces have width zero;
+    tilemap hooks advance a space by one half-cell. Unsafe ASCII has no known
+    glyph width and raises instead of being counted as a visible character.
+    """
+    from renderer_text import COMMANDS, P1_SCRIPT, P2_PAIRS, single_bytes
+    singles = dict(single_bytes(payload))
+    width, i = 0, 0
+    while i < len(payload):
+        if i not in singles:
+            width += 2
+            i += 2
+            continue
+        b = singles[i]
+        if b == 0x20:
+            following = payload[i + 1] if i + 1 < len(payload) else 0
+            width += 2 if renderer == P2_PAIRS or (renderer == P1_SCRIPT and p1_space_hook and 0x81 <= following <= 0xE2) else 0
+        elif b and b not in COMMANDS.get(renderer, ()):
+            raise ValueError(f'unsafe halfwidth glyph: {b:#x}')
+        i += 1
+    return width
 
 
 @lru_cache(maxsize=None)

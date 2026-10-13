@@ -84,7 +84,8 @@ class ArtilleryHelpTests(unittest.TestCase):
         self.assertIn(0xA322A4, required)
         with self.assertRaisesRegex(AssertionError, '0x00A322A4'):
             B.verify_required_script_repoints(required, set())
-        B.verify_required_script_repoints(required, {0xA322A4})
+        # b24 adds relocated B5 restorations (B830C8, A35258, A35280) to the literal set.
+        B.verify_required_script_repoints(required, required)
 
 
 if __name__ == '__main__':

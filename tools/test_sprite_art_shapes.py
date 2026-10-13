@@ -78,6 +78,13 @@ class FinalSpriteMutationTests(unittest.TestCase):
     def test_small_plate_border(self):
         self.reject('small_border', lambda r: self.change_lz_pixel(r, 0x5B8E44), '0x5b8e44')
 
+    def test_link_plate_reverted_to_japanese(self):
+        def mutate(rom):
+            original = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+            _, size = lz77_decompress(original, 0x54E538)
+            rom[0x54E538:0x54E538 + size] = original[0x54E538:0x54E538 + size]
+        self.reject('link_japanese', mutate, '0x54e538')
+
     def test_empty_co1_dictionary(self):
         def mutate(rom):
             pos = struct.unpack_from('<I', rom, 0xB3C1F8)[0] - 0x08000000

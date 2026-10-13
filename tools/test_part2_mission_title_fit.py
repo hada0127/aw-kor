@@ -171,7 +171,8 @@ class MissionTitleFitTests(unittest.TestCase):
             builder.verify_required_script_repoints(namespace['required_script_repoints'], set())
         # Context selection leaves the non-title command and ordinary UI paths.
         self.assertEqual(builder.encode_text('VS 2!', codes, collections.Counter()), b'VS 2!')
-        self.assertEqual(builder.encode_text('2!', codes, collections.Counter(), 0xA01D41), '２'.encode('shift_jis') + b'!')
+        # b24: the 31424C renderer profile also widens authored punctuation.
+        self.assertEqual(builder.encode_text('2!', codes, collections.Counter(), 0xA01D41), '２！'.encode('shift_jis'))
 
     def test_active_relocated_short_glyph_is_registered_after_repoint(self):
         rom = self.fixture()

@@ -88,7 +88,7 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = '04d2f14a6a022ac7d9fc0280dc98dc3c3e162435369eb63d7fd07631c077bbe5'
+ROUND2_RESIDUAL_DIGEST = '5cc6a1b98dd910cb914f442199dd16c3ffe174e5433cf3cc3171e7cffd6d5dfd'
 ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != '19dbc3617c18f0cc5689fe4f2becdbbc255d89f57995ff70b7f6d97d7058a946':
@@ -213,6 +213,20 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
         value = ''.join(chr(ord(ch) + 0xFEE0) if ch.isascii() and ch.isalnum()
                         else ch for ch in value)
     else:
+        # Reviewed aliases only. Builder normalization may grow; the drift
+        # oracle must never inherit a new semantic substitution automatically.
+        from renderer_text import renderer_for_address
+        profile = renderer_for_address(address)
+        if profile is not None:
+            import re
+            value = value.replace('...', '・・・')
+            value = re.sub(r'(?<=[0-9０-９])\.(?=[0-9０-９])', '・', value)
+            aliases = {'.': '。', ',': '、', '-': 'ー' if profile.startswith('p2_') else '―',
+                       '~': '〜', '"': '”', "'": '”', '[': '（', ']': '）',
+                       '{': '（', '}': '）', ':': '；', '\\': '＼'}
+            value = ''.join(aliases[ch] if ch in aliases else
+                            chr(ord(ch) + 0xFEE0) if 0x21 <= ord(ch) <= 0x7E
+                            and ch not in '*=@' else ch for ch in value)
         value = value.replace(' ', '　')
     # This 36-byte Part 1 link preload now carries the complete protected
     # wording.  Its compact consumer uses the SJIS fullwidth period glyph.
@@ -638,7 +652,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 114 or len(listed) != len(rows):
+    if len(rows) != 108 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:

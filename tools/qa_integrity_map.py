@@ -105,7 +105,7 @@ def main():
 
     # --- 1) 바이트 무결성 (last-writer-wins 재구성) ---
     expected = {}   # addr -> byte
-    for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
+    for addr, slot, enc_len, enc_hex, fill, ko, level, kind, *_metadata in wl:
         enc = bytes.fromhex(enc_hex)
         if fill is not None:
             pattern = fill_pattern(fill)
@@ -137,7 +137,7 @@ def main():
     loss_rows = 0
     loss_chars = collections.Counter()
     samples = []
-    for addr, slot, enc_len, enc_hex, fill, ko, level, kind in import_entries:
+    for addr, slot, enc_len, enc_hex, fill, ko, level, kind, *_metadata in import_entries:
         if not ko:
             continue
         ko_p = canon_punct(ko)
@@ -164,7 +164,7 @@ def main():
     mid_import = 0
     mid_other = 0
     mid_samples = []
-    for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
+    for addr, slot, enc_len, enc_hex, fill, ko, level, kind, *_metadata in wl:
         d = decode_enc(bytes.fromhex(enc_hex), code2syl)
         if '・' in d or '·' in d:
             if str(kind).startswith('import'):

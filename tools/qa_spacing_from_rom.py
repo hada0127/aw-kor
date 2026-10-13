@@ -119,6 +119,7 @@ def main():
     ap.add_argument("--map", type=Path, required=True)
     ap.add_argument("--manifest", type=Path, required=True)
     ap.add_argument("--show", type=int, default=12)
+    ap.add_argument("--list", action="store_true", help="show every finding")
     ap.add_argument("--json", help="워크리스트 JSON 덤프 경로")
     args = ap.parse_args()
     try:
@@ -157,7 +158,7 @@ def main():
 
     def dump(title, lst):
         print(f"\n[{title}] {len(lst)}건")
-        for r in lst[: args.show]:
+        for r in lst if args.list else lst[: args.show]:
             print(f"  0x{r['addr']:06X} L{r['level']} {r['kind']} | JA={r['ja'][:22]!r}")
             print(f"      intend={r['intended'][:38]!r}")
             print(f"      ship  ={r['shipped'][:38]!r}")

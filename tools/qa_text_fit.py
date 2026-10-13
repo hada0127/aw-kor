@@ -315,7 +315,8 @@ def main(argv=None):
         if level >= 6:
             # 반각공백/공백 제거 등 레이아웃 손실이 있는 폴백 후보.
             layout_fallback += 1
-        if TM.visual_cells(ko) > TM.visual_cells(ja):
+        from renderer_text import renderer_for_address
+        if TM.visual_cells(ko, renderer_for_address(a)) > TM.visual_cells(ja, renderer_for_address(a)):
             wider += 1
 
     with open(TRANS, newline='', encoding='utf-8') as f:

@@ -49,7 +49,7 @@ def verify_provenance(rom_path, map_path, manifest_path):
             raise ValueError(f'build metadata provenance mismatch: {path}')
 
 
-def final_owner_spans(writes, rom_size):
+def final_owner_spans(writes, rom_size, *, hangul_only=True):
     """Resolve chronological writes by byte ownership, including merged spans.
 
     Partial owners cannot safely lend their full authored sentence to a fragment.
@@ -64,7 +64,7 @@ def final_owner_spans(writes, rom_size):
         if not size:
             continue
         overlap = occupied[addr:addr + size]
-        if entry[5] and any('가' <= c <= '힣' for c in entry[5]):
+        if entry[5] and (not hangul_only or any('가' <= c <= '힣' for c in entry[5])):
             if not any(overlap):
                 owners[addr] = entry
             elif not all(overlap):
@@ -73,7 +73,29 @@ def final_owner_spans(writes, rom_size):
     return owners, unsupported
 
 
-def validate_manifest(rom, manifest, original=None):
+def validate_manifest(rom, manifest, original=None, writes=None):
+    if writes is not None:
+        operations = {}
+        for entry in writes:
+            if not entry[7].startswith('repoint:'):
+                continue
+            source = int(entry[7].split(':', 1)[1], 16)
+            if source in operations or len(entry) < 9:
+                raise ValueError(f'duplicate or unbound relocation write: 0x{source:X}')
+            operations[source] = entry
+        records = [m for m in manifest if m.get('status') == 'relocated']
+        if {int(m['msg'], 16) for m in records} != operations.keys():
+            raise ValueError('relocation write/manifest population mismatch')
+        for m in records:
+            source = int(m['msg'], 16)
+            entry = operations[source]
+            binding = entry[8]
+            if (entry[:2] != [int(m['new_addr'], 16), m['new_len']]
+                    or binding['source'] != source or binding['old_len'] != m['old_len']
+                    or set(binding['ptr_sites']) != {int(s, 16) for s in m['ptr_sites']}):
+                raise ValueError(f'relocation write/manifest destination mismatch: 0x{source:X}')
+            if binding['source_spans'] != m.get('source_spans'):
+                raise ValueError(f'relocation write/source owner mismatch: 0x{source:X}')
     mapped, ranges, seen_msgs = {}, [], set()
     targets = {int(m['msg'], 16) for m in manifest if m.get('status') == 'relocated'}
     original_sites = collections.defaultdict(set)
@@ -143,7 +165,7 @@ def decode_payload(payload, codes):
 
 def rendered_rows(rom, manifest, writes, original=None):
     owners, unsupported = final_owner_spans(writes, len(rom))
-    mapped, ranges = validate_manifest(rom, manifest, original)
+    mapped, ranges = validate_manifest(rom, manifest, original, writes)
     codes = load_syl()
     rows = []
     for addr, m in mapped.items():

@@ -31,6 +31,13 @@ def fixture():
     return rom, original, manifest
 
 
+def relocation_writes(manifest):
+    return [[int(m['new_addr'], 16), m['new_len'], m['new_len'], '', None, None, None,
+             'repoint:' + m['msg'], dict(source=int(m['msg'], 16), old_len=m['old_len'],
+                 ptr_sites=[int(s, 16) for s in m['ptr_sites']],
+                 source_spans=copy.deepcopy(m['source_spans']))] for m in manifest]
+
+
 class DialogueJamTests(unittest.TestCase):
     def test_allowlisted_and_unlisted_wide_skips(self):
         from dialogue_repoint import repoint_messages
@@ -112,12 +119,37 @@ class DialogueJamTests(unittest.TestCase):
         rom, orig, manifest = fixture()
         codes = {value: key for key, value in load_syl().items()}
         rom[66:74] = bytes.fromhex(f'{codes["가"]:04x}8140{codes["나"]:04x}{codes["다"]:04x}')
-        rows, _ = rendered_rows(rom, manifest, [], orig)
+        rows, _ = rendered_rows(rom, manifest, relocation_writes(manifest), orig)
         self.assertEqual(rows[0]['shipped'], '가　나다')
         self.assertTrue(is_jammed(rows[0]['intended'], rows[0]['shipped']))
         import qa_spacing_from_rom as spacing
         with patch.object(spacing, 'verify_provenance'), patch.object(spacing, 'rendered_rows', return_value=(rows, [])):
             self.assertTrue(spacing._is_jam(rows[0]['intended'], rows[0]['shipped']))
+
+    def test_whole_relocation_record_omission_fails(self):
+        rom, orig, manifest = fixture()
+        writes = relocation_writes(manifest)
+        validate_manifest(rom, manifest, orig, writes)
+        with self.assertRaisesRegex(ValueError, 'population mismatch'):
+            rendered_rows(rom, [], writes, orig)
+        with self.assertRaisesRegex(ValueError, 'population mismatch'):
+            rendered_rows(rom, manifest, [], orig)
+
+    def test_consistently_omitted_source_owner_fails(self):
+        rom, orig, manifest = fixture()
+        writes = relocation_writes(manifest)
+        m = manifest[0]
+        m.update(lines=0, fixed=[], line_spans={}, source_spans={}, source_texts={})
+        with self.assertRaisesRegex(ValueError, 'source owner mismatch'):
+            rendered_rows(rom, manifest, writes, orig)
+
+    def test_consistently_changed_destination_fails(self):
+        rom, orig, manifest = fixture()
+        writes = relocation_writes(manifest)
+        manifest[0]['new_addr'] = '0x50'
+        rom[4:8] = rom[8:12] = (0x08000050).to_bytes(4, 'little')
+        with self.assertRaisesRegex(ValueError, 'destination mismatch'):
+            rendered_rows(rom, manifest, writes, orig)
 
     def test_provenance_rejects_other_rom_map_and_manifest(self):
         with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:

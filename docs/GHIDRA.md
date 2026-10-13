@@ -41,5 +41,7 @@ tools/ghidra/decomp.sh --rom output/game_wars_korean_full.gba 0x08F30400   # 패
 - 2026-10-13 b22 스모크: `decomp.sh 0x08373D10` 결과가 이전 `temp/decomp/ghidra/out/08373D10.c`와 바이트 동일.
 - 단어붙음 잔여 분석(`temp/jam_ghidra_20261013/plan.md`): b21 잔여 196행을 소비 렌더러별로 분류해 **실제 붙음은 5건**뿐임을 확인. 0x20을 위치 이동 없이 소비하는 31424C 파서를 쓰는 진짜 잔여는 없었다.
 
+- 2026-10-13 전체 분석·xref 감사: `tools/ghidra/full_analysis.sh`(`scripts/GbaFullAnalysis.java`)로 export를 만든 뒤 `python3 -I tools/ghidra/audit_xrefs.py --ghidra temp/ghidra_audit_20261013/ghidra_export --orig <orig rom> --cand output/<cand>.gba --records <records dir> --out <dir>`. IWRAM 복사 탐색은 `tools/ghidra/find_iwram_copies.py`.
+
 ## rev.ng를 쓰지 않는 이유
 - 전체 ROM lift 크래시, 리터럴 풀 오인, 점프 테이블 소실 등 — [`fail.md` 「2026-10-13 rev.ng PoC 부분 실패 — Ghidra 사용」](fail.md#2026-10-13-revng-poc-부분-실패--ghidra-사용).

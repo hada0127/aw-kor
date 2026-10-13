@@ -23,10 +23,10 @@ class DecimalGlyphTest(unittest.TestCase):
         self.assertEqual(rom[0xB974D0 + 95 * 32:0xB974D0 + 96 * 32], blank)
         state = glyph_state(rom, original, 0x8144)
         self.assertEqual(state['consumer'], 'part2_a3')
-        self.assertEqual(state['slots'], [0xFD0008, 0xFD0028])
+        self.assertEqual(state['slots'], [0xFD0006, 0xFD0026])
         self.assertTrue(state['visible'])
         self.assertTrue(state['restored'])
-        glyph = rom[0xFD0008:0xFD0048]
+        glyph = rom[0xFD0006:0xFD0046]
         pixels = {(x, y): (glyph[y * 4 + x // 2] >> (4 * (x % 2))) & 15
                   for y in range(16) for x in range(8)}
         self.assertEqual({point: ink for point, ink in pixels.items() if ink},

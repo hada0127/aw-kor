@@ -33,6 +33,9 @@ A3_MIDDLE_DOT_NODE = 0x808188
 DECIMAL_SOURCE_MESSAGE = 0xA2BC3C
 DECIMAL_RELOCATED_MESSAGE = 0xA5823C
 DECIMAL_GLYPH_ADDRESS = 0xA5824F
+# b24: free-space targets move when earlier relocations change; the decimal
+# stays at this offset inside the relocated A2BC3C message (from the manifest).
+DECIMAL_GLYPH_OFFSET = DECIMAL_GLYPH_ADDRESS - DECIMAL_RELOCATED_MESSAGE
 VISIBLE_PUNCT_CODES = {
     0x8141: "、",
     0x8142: "。",
@@ -194,17 +197,17 @@ def glyph_state(rom: bytes, original: bytes, sjis: int) -> dict[str, Any]:
         if node is None:
             return {"consumer": "part2_a3", "slots": [], "nonzero": [],
                     "matches_original": [], "visible": False, "restored": False}
-        tiles = [rom[node + 8:node + 40], rom[node + 40:node + 72]]
+        tiles = [rom[node + 6:node + 38], rom[node + 38:node + 70]]
         nonzero = [sum(bool(b) for b in tile) for tile in tiles]
         glyph = bytearray(64)
         for y in (12, 13):
             for x in (3, 4):
                 glyph[y * 4 + x // 2] |= 10 << (4 * (x % 2))
-        expected = original[A3_MIDDLE_DOT_NODE + 4:A3_MIDDLE_DOT_NODE + 8] + glyph
+        expected = original[A3_MIDDLE_DOT_NODE + 4:A3_MIDDLE_DOT_NODE + 6] + glyph + bytes(2)
         restored = (node == A3_DECIMAL_NODE
                     and rom[node + 4:node + 72] == expected
                     and rom[node:node + 4] == original[bucket:bucket + 4])
-        return {"consumer": "part2_a3", "slots": [node + 8, node + 40],
+        return {"consumer": "part2_a3", "slots": [node + 6, node + 38],
                 "nonzero": nonzero, "matches_original": [restored, restored],
                 "visible": any(nonzero), "restored": restored}
     idx = symbol_table_index(sjis)
@@ -273,6 +276,15 @@ def main() -> int:
     original = ORIGINAL.read_bytes() if ORIGINAL.exists() else b""
     if not original:
         issues.append({"source": "original", "type": "missing_original", "path": str(ORIGINAL.relative_to(ROOT))})
+    decisions = json.loads((ROOT / 'data/part1_punctuation_decisions.json').read_text(encoding='utf-8'))
+    if set(decisions) != {'0x00DC67B6'}:
+        issues.append({'source': 'punctuation_decision', 'type': 'decision_scope_changed'})
+    for key, decision in decisions.items():
+        address = int(key, 16)
+        payload = bytes.fromhex(decision['payload_hex'])
+        if (decision['source'] != '너란 녀석은...' or decision['shipped'] != '너란 녀석은・・'
+                or len(payload) != 16 or rom[address:address + 16] != payload):
+            issues.append({'source': 'punctuation_decision', 'type': 'exact_payload_mismatch', 'address': key})
 
     integrity = load_json(INTEGRITY_MAP, [])
     if not isinstance(integrity, list):
@@ -290,8 +302,12 @@ def main() -> int:
         and item.get('msg') and item.get('new_addr')
     }
     decimal_targets = {target: source for source, target in decimal_relocations.items()}
-    if decimal_relocations.get(DECIMAL_SOURCE_MESSAGE) != DECIMAL_RELOCATED_MESSAGE:
+    global DECIMAL_RELOCATED_MESSAGE, DECIMAL_GLYPH_ADDRESS
+    if DECIMAL_SOURCE_MESSAGE not in decimal_relocations:
         issues.append({"source": "repoint_manifest", "type": "decimal_relocation_missing"})
+    else:
+        DECIMAL_RELOCATED_MESSAGE = decimal_relocations[DECIMAL_SOURCE_MESSAGE]
+        DECIMAL_GLYPH_ADDRESS = DECIMAL_RELOCATED_MESSAGE + DECIMAL_GLYPH_OFFSET
     decimal_seen: set[int] = set()
 
     checked_integrity = 0

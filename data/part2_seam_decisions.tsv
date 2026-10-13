@@ -129,14 +129,12 @@ msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reaso
 0x00A0815C	0	？	아직	응！？‖w아직、w여유가있어	응！？␣w아직、w여유가있어	ん！？	まだ、	space	after ！/？, next phrase
 0x00A08388	0	！	맥스	고마워！‖w맥스！w	고마워！␣w맥스！w	ありがとう！	マックス！	space	after ！/？, next phrase
 0x00A085DC	0	！	맥스	도미노！‖w맥스！w	도미노！␣w맥스！w	ドミノ！	マックス！	space	after ！/？, next phrase
-0x00A0897C	5	육상부대는	다가올	위쪽육상부대는‖w다가올때까지	위쪽육상부대는␣w다가올때까지	上の陸上部隊は、	近づいてくるまで	space	separate words; Korean spacing
 0x00A08C6C	1	！	정답	안해요！‖w정답！	안해요！␣w정답！	しませーん！	正解！	space	after ！/？, next phrase
 0x00A08CF4	2	아주	머니	아주‖w머니ww야！	아주w머니ww야！	オ・	バ・	join	wordplay 아주w머니ww야 = 아주머니야 spelled with pauses (JP オ・バ・)
 0x00A08EB8	0	！	적	네！‖w적본부점령노린다면	네！␣w적본부점령노린다면	はい！	　敵本部占領をねらうなら	space	after ！/？, next phrase
 0x00A09034	4	라고	꽤	공격범위w３ー５w라고‖w꽤넓어。	공격범위w３ー５w라고␣w꽤넓어。	と、	かなり広いわ。	space	separate words; Korean spacing
 0x00A09188	0	나가면	호위함	바다에나가면‖w호위함・・・	바다에나가면␣w호위함・・・	かといって海に出れば、	護衛艦・・・	space	separate words; Korean spacing
 0x00A09334	0	공격	간접공격	육지와바다도공격‖w간접공격유닛중	육지와바다도공격␣w간접공격유닛중	陸と海に攻撃できる上、	間接攻撃ユニットの中で	space	separate words; Korean spacing
-0x00A09508	10	항구	는	항구‖w는없으니、w수송차로보급해줘。	항구w는없으니、w수송차로보급해줘。	港・・・	は無いから、	join	particle/ending attaches to the previous word
 0x00A09BD4	7	지도는	어떻게든	이지도는‖w어떻게든	이지도는␣w어떻게든	このマップは、	なんとしてでも	space	separate words; Korean spacing
 0x00A09EC0	1	지금	찬	지금‖w찬만큼은、w평범한브레이크야。	지금␣w찬만큼은、w평범한브레이크야。	今、	たまった分は、	space	separate words; Korean spacing
 0x00A0A064	1	！	당신의	축하해！‖w당신의승리야。	축하해！␣w당신의승리야。	おめでとう！	あなたの勝ちね。	space	after ！/？, next phrase
@@ -144,7 +142,6 @@ msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reaso
 0x00A0A0B8	2	！	끌어내	도미노！‖w끌어내줘。	도미노！␣w끌어내줘。	ドミノ！	引きずり出してあげて。	space	after ！/？, next phrase
 0x00A0A124	1	는	네	아、w는‖w네！	아、w는␣w네！	は、	はい！	space	separate words; Korean spacing
 0x00A0A77C	2	어이	료	어이‖w료	어이␣w료	おい、	リョウ	space	separate words; Korean spacing
-0x00A0A7D4	0	봐	맥스	두고봐‖w맥스。ww간다！	두고봐␣w맥스。ww간다！	見てろ、	マックス。	space	separate words; Korean spacing
 0x00A0A9AC	0	？	이	응？‖w이지도는	응？␣w이지도는	ん？	　このマップは	space	after 응？; 이 = demonstrative (이 지도는)
 0x00A0ABF4	0	！	도시	그렇구나！‖w도시공장점령할때마다	그렇구나！␣w도시공장점령할때마다	なるほど！	都市や工場を占領するたびに	space	after ！/？, next phrase
 0x00A0AF40	0	！	맥스	좋아！‖w맥스、두고봐！	좋아！␣w맥스、두고봐！	よし！	マックスみてろ！	space	after ！/？, next phrase
@@ -166,7 +163,7 @@ msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reaso
 0x00A0B9BC	1	！	정신	전군！‖w정신바짝차려！	전군！␣w정신바짝차려！	全軍！	気ィひきしめていけ！	space	after ！/？, next phrase
 0x00A0BA38	0	！	간다	오오옷！‖w간다！w	오오옷！␣w간다！w	オオオッ！	　いくぞ！	space	after ！/？, next phrase
 0x00A0BA88	0	！	과연	해냈다！‖w과연캐서린이야！	해냈다！␣w과연캐서린이야！	やった！	　さすがはキャサリン！	space	after ！/？, next phrase
-0x00A0BBA4	0	！	맡겨둬	오우！‖w맡겨둬！	오우！␣w맡겨둬！	おう！	　まかしとけ！	space	after ！/？, next phrase
+0x00A0BBA4	0	！	맡겨	오우！‖w맡겨둬！	오우！␣w맡겨둬！	おう！	　まかしとけ！	space	after ！/？, next phrase
 0x00A0BCE8	0	！	어떠냐	맥스！‖w어떠냐！w	맥스！␣w어떠냐！w	マックス！	どうだ！	space	after ！/？, next phrase
 0x00A0BD88	0	？	아아	응？‖w아아、w이건・・・	응？␣w아아、w이건・・・	ん？	　ああ、	space	after ！/？, next phrase
 0x00A0BF10	4	않아	이번	포격이닿지않아‖w이번전투로알았어。	포격이닿지않아␣w이번전투로알았어。	砲撃が届かない事は、	この戦いでわかったわ。	space	separate words; Korean spacing
@@ -231,7 +228,6 @@ msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reaso
 0x00A178D4	1	다음은	이렇게는	다음은‖w이렇게는안되지！ww	다음은␣w이렇게는안되지！ww	次は、	こうはいかないよ！	space	separate words; Korean spacing
 0x00A17B00	0	씨	저기	빌리씨‖w저기・・・w타이어타입이면	빌리씨␣w저기・・・w타이어타입이면	ビリーさん、	あの・・・	space	separate words; Korean spacing
 0x00A17BD0	0	아니	이반	아니‖w이반。ww고마워。ww	아니␣w이반。ww고마워。ww	いいや、	イワン。	space	separate words; Korean spacing
-0x00A17F00	0	종료시	토모니	오늘종료시‖w토모니	오늘종료시␣w토모니	本日終了ト、	トモニ	space	separate words; Korean spacing
 0x00A181D4	2	서	괜찮겠지	서‖w괜찮겠지？w	서␣w괜찮겠지？w	で、	いいんでしょ？	space	separate words; Korean spacing
 0x00A18280	0	？	어느새	어라？‖ww어느새w	어라？␣ww어느새w	あら？	　いつのまにか	space	after ！/？, next phrase
 0x00A18398	0	！	내가	캬하！‖w내가발명한캣플레이트는	캬하！␣w내가발명한캣플레이트는	キャハ！	あたしの発明したキャットプレートは	space	after ！/？, next phrase
@@ -269,7 +265,6 @@ msg	wait_ordinal	prev_word	next_word	before	after	jp_prev	jp_next	decision	reaso
 0x00A203F8	2	몸에	혹시	네몸에‖w혹시일이생기면・・・	네몸에␣w혹시일이생기면・・・	お前の身に	もしものことがおきたら・・・	space	separate words; Korean spacing
 0x00A20478	0	！	저도	정말！‖ww저도、w	정말！␣ww저도、w	もう！	　私だって、	space	after ！/？, next phrase
 0x00A20500	0	！	기다려	！‖w기다려！ww	！␣w기다려！ww	！	　待って！	space	after ！/？, next phrase
-0x00A20B4C	6	번	물러나도록	한번‖w물러나도록할까요。	한번␣w물러나도록할까요。	一度、	退くとしましょうか。	space	separate words; Korean spacing
 0x00A20E30	3	보내	적	정찰차전선에보내‖w적위치를	정찰차전선에보내␣w적위치를	偵察車などを前線に出し、	敵の位置を	space	separate words; Korean spacing
 0x00A20F64	1	전부	우리	전부‖w우리팩토리로	전부␣w우리팩토리로	すべて、	われわれのファクトリーへ	space	separate words; Korean spacing
 0x00A21184	3	공군으로	어떻게든	내공군으로‖w어떻게든되겠지。	내공군으로␣w어떻게든되겠지。	わしの空軍で	なんとかなるじゃろう。	space	separate words; Korean spacing

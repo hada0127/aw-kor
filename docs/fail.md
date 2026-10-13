@@ -1580,3 +1580,11 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 ### 2026-10-13 rev.ng PoC 부분 실패 — Ghidra 사용
 
 - 전체 ROM lift가 0x3924a0 데이터에서 `CodeGenerator.cpp:459` 크래시, 리터럴 풀을 ARM 함수로 오인, segment type 없이 emit-c segfault, SVC 본문 빔, 첫 점프 테이블 소실(`temp/decomp/revng/`). GBA Thumb ROM 디컴파일에는 다시 쓰지 않고 Ghidra(`tools/ghidra/decomp.sh`)를 쓴다.
+
+## 2026-10-13 b24 문제
+
+- **A3 숫자 회귀(b17부터):** 숫자 노드 픽셀을 node+8에서 읽어 2px 밀림. node+6으로 수정(b24). 이후 얇은 Galmuri 숫자라 3P/4P가 `3 P`로 보임 — 남음.
+- **맵 라벨 갱신이 게이트 점프를 덮어씀:** F30614/F3065E 레코드 맵 점프가 사라짐. 갱신 뒤 재기록하도록 수정.
+- **dialogue_repoint가 제어 바이트까지 넓힘:** 재배치 범위가 제어 바이트를 포함해 바뀜. native/현재 operand 정확 가드로 제어 간격 변경을 막음.
+- **0xFD0100 우연한 포인터 일치:** 단순 값 일치를 포인터로 오인. 소비자 근거 없는 일치는 포인터로 취급하지 않는다.
+- b24 첫 시도는 발열 보류로 빌드 자체가 안 됨(BLOCKED) — b25에서 재빌드.

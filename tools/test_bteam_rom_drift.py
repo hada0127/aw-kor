@@ -31,13 +31,23 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_renderer_aliases_do_not_inherit_semantic_substitutions(self):
+        address = 0xB83C70
+        self.assertEqual(display_equivalent('1,2.', address), '１、２。')
+        for source, substituted in (('*', '＋'), ('=', '―'), ('@', '＃')):
+            self.assertNotEqual(display_equivalent(source, address), substituted)
+
     def test_co_source_rows_reconstruct_split_and_merged_fragments(self):
         from qa_integrity_map import decode_enc, load_syl
-        rom_path = ROOT / 'output/game_wars_korean_candidate_20261012_b11.gba'
+        # The ROM and manifest must come from the same build: relocation targets
+        # move between candidates (b24 shifted the CO pages).
+        import os
+        rom_path = Path(os.environ.get('AW_TEST_ROM') or ROOT / 'output/game_wars_korean_candidate_20261012_b11.gba')
+        manifest_path = Path(os.environ.get('AW_TEST_MANIFEST') or ROOT / 'temp/repoint_manifest.json')
         if not rom_path.is_file():
-            self.skipTest('b11 candidate ROM required')
+            self.skipTest('candidate ROM required')
         rom = rom_path.read_bytes()
-        manifest = json.loads((ROOT / 'temp/repoint_manifest.json').read_text())
+        manifest = json.loads(manifest_path.read_text())
         rows = {
             '0xA2AAD3': '호이프와　사실　좋은　콤비。',  # split across two display rows
             '0xA2AAEE': '고양이　좋아',              # merged with the next source row

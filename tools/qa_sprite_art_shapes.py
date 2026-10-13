@@ -75,6 +75,22 @@ plates=bytearray(original);b.patch_part2_mode_menu_obj_labels(plates)
 for off,text in BIG+SMALL:
  same(hex(off),lz77_decompress(rom,off)[0],lz77_decompress(plates,off)[0])
  assets.add(hex(off))
+link_plates=bytearray(original);b.patch_part2_link_mode_residual_labels(link_plates)
+same('0x54e538',lz77_decompress(rom,0x54E538)[0],lz77_decompress(link_plates,0x54E538)[0])
+assets.add('0x54e538')
+if args.shape:
+ from part2_link_plates import canvas,draw_hada_main
+ link_raw=lz77_decompress(rom,0x54E538)[0]
+ for link_off,link_text in ((0,'1팩 대전'),(0x800,'멀티팩 대전'),(0x1000,'맵 교환')):
+  actual=canvas(link_raw,link_off,64,32)
+  _,glyph_boxes=draw_hada_main(link_text,with_records=True)
+  for ch,box in glyph_boxes:
+   mask=actual.crop(box).point(lambda v:255 if v==1 else 0)
+   result=shape.compare(ch,mask,shape.hada_uniform_reference(ch,23))
+   result.update(asset=f'0x54e538+0x{link_off:x}',label=link_text,box=box,
+                 reference='independent Hada Sans outline and glyph topology')
+   rows.append(result)
+   if result['failures']:failures.append(result)
 for off,text in BIG:
  im=image(obj_canvas(lz77_decompress(rom,off)[0],2,8,4));_,records=fit.plate_line(text)
  try:fit.verify_plate_ink(im,text)

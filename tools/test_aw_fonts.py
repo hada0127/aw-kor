@@ -210,7 +210,7 @@ class FontRuleTests(unittest.TestCase):
                  patch.object(prover, 'locate', side_effect=[(1.0, 0, 0), None, (1.0, 16, 0)]):
                 self.assertFalse(prover.prove(bytes(128), frame, 0, 3, 1, 1)['contiguous'])
 
-    def test_link_logo_forced_capacity_switches_to_galmuri(self):
+    def test_link_logo_forced_capacity_fails_closed(self):
         from PIL import ImageFont
         from unittest.mock import patch
         import build_korean_full as build
@@ -218,27 +218,22 @@ class FontRuleTests(unittest.TestCase):
         original = (aw_fonts.ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
         rom = bytearray(original)
         actual_truetype = ImageFont.truetype
-        calls, attempts = [], []
-        cursor = [0]
+        calls = []
 
         def track_font(path, size, *args, **kwargs):
             calls.append((str(path), size))
             return actual_truetype(path, size, *args, **kwargs)
 
         def force_capacity(raw, vram_safe=True):
-            attempts.append(calls[cursor[0]:])
-            cursor[0] = len(calls)
-            sizes = [size for path, size in attempts[-1] if path.endswith('Galmuri11-Bold.ttf')]
-            return b'\0' if sizes and max(sizes) < aw_fonts.GALMURI_MAX_SIZE else bytes(len(raw) + 1)
+            return bytes(len(raw) + 1)
 
         with patch.object(ImageFont, 'truetype', side_effect=track_font), \
              patch.object(lz77_compress, 'lz77_compress_optimal', side_effect=force_capacity), \
              patch.object(build, 'rec_label_layout'):
-            build.patch_part2_link_mode_residual_labels(rom)
-        def galmuri_sizes(attempt):
-            return [size for path, size in attempt if path.endswith('Galmuri11-Bold.ttf')]
-        self.assertTrue(any(aw_fonts.GALMURI_MAX_SIZE in galmuri_sizes(a) for a in attempts[:-1]))
-        self.assertLess(max(galmuri_sizes(attempts[-1])), aw_fonts.GALMURI_MAX_SIZE)
+            with self.assertRaisesRegex(AssertionError, 'LZ77 overflow'):
+                build.patch_part2_link_mode_residual_labels(rom)
+        self.assertEqual(rom, original)
+        self.assertTrue(any(path.endswith('HadaSans-Bold.otf') for path, _ in calls))
 
     @unittest.skipUnless(aw_fonts.OKDANDAN.is_file(), 'OkDanDan-Bold not installed')
     def test_word_cells_never_straddle(self):

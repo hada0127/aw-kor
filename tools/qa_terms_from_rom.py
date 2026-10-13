@@ -55,7 +55,7 @@ def load_shipped(code2syl):
     """integrity_map → 주소별 최종 출하 KO(last-writer-wins)."""
     wl = json.load(open(MAP, encoding="utf-8"))
     final: dict[int, dict] = {}
-    for addr, slot, enc_len, enc_hex, fill, ko, level, kind in wl:
+    for addr, slot, enc_len, enc_hex, fill, ko, level, kind, *_metadata in wl:
         dec = decode_enc(bytes.fromhex(enc_hex), code2syl)
         final[addr] = {"ko": dec, "intended": ko, "level": level, "kind": kind}
     return final

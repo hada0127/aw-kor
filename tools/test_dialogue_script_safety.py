@@ -831,7 +831,7 @@ class ScriptSafetyTests(unittest.TestCase):
         codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
         text = '이번엔 거점 건설,'
         encoded, level = builder.encode_fit(text, 18, codes, collections.Counter(), 0xA01BA9)
-        self.assertEqual(level, 0)
+        self.assertEqual(level, 1)  # Fullwidth punctuation exposes the capacity loss.
         self.assertIsNotNone(builder.dialogue_fit_warning(text, encoded, codes, 0xA01BA9))
         full = builder.encode_full_fidelity(text, codes, collections.Counter(), 0xA01BA9)
         self.assertIsNone(builder.dialogue_fit_warning(text, full, codes, 0xA01BA9))
@@ -843,7 +843,7 @@ class ScriptSafetyTests(unittest.TestCase):
                     text, {}, collections.Counter(), address),
                     b'\x81\x5b' if address == 0xA019F8 else b'\x81\x5c')
 
-    def test_prologue_punctuation_loss_requires_repoint_even_at_level_zero(self):
+    def test_prologue_punctuation_loss_requires_repoint(self):
         from dialogue_regions import needs_safe_dialogue_punctuation
         self.assertEqual(normalize_text_segment(b'\x88\x40!?',
                          needs_safe_dialogue_punctuation(0xA01B98)),
@@ -852,7 +852,7 @@ class ScriptSafetyTests(unittest.TestCase):
         address, text = 0xA01BA9, '이번엔 거점 건설,'
         encoded, level = builder.encode_fit(text, 18, codes, collections.Counter(), address)
         full = builder.encode_full_fidelity(text, codes, collections.Counter(), address)
-        self.assertEqual(level, 0)  # Existing fit fallback hides the lost comma.
+        self.assertEqual(level, 1)
         self.assertTrue(builder.story_requires_lossless_repoint(address, encoded, full))
         self.assertFalse(builder.story_requires_lossless_repoint(address, full, full))
         self.assertFalse(builder.story_requires_lossless_repoint(0xA29388, encoded, full))

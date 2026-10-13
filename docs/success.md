@@ -4000,3 +4000,12 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 게이트(`temp/b21_20261013/gates.tsv`, `run_gates.sh`): integrity/text_fit/punctuation/bteam_drift(115 listed·11 deferred·drift 0)/phase6/sprite_tests/sprite_shapes/review_unittest 0. glyph_dictionary 1(기존 0xA295EC), editor_tests 1(HEAD 기준선 `editor_head_baseline.log`에서도 같은 2건).
 - 리뷰: Astra 전체 리뷰 1회(b20) Blocking 4(compact row 증거, 에디터 저장 검증, geometry 독립 고정, override 스냅샷) → 델타 재리뷰(b21) 4건 모두 RESOLVED, 새 Blocking 없음(`temp/claude_2026-10-13/review_b20.out`, `review_b21_delta.out`).
 - 실화면 프레임(콜드 부팅, b21): `temp/b21_20261013/capture_menu/frames/`, `capture_campaign/frames/`, `capture_digits/frames/`, `capture_p1rule/frames/`, `capture_p1rule2/frames/`(입력 `*_inputs.txt`, 스크립트 `capture_b21.sh`). b19 헤더 비교 `temp/b19_20261013/jp_vs_b19_mode_menu.png`. 대사 수정 화면은 b17 `temp/b17_20261013/capture_m23/0080_A_0006082.png`, `capture_ge3/0110_A_0018260.png`, `capture_m18/0070_A_0005349.png`(치트 경로, 정상 플레이 근거 아님). HARD★캠페인·A3 전각숫자 화면·SOUND★ROOM 등은 미확인(`todo.md`).
+
+## 2026-10-13 b24~b25 반각 ASCII 정규화·A3 숫자·LINK 판·B팀 재배치
+
+- 후보 `output/game_wars_korean_candidate_20261013_b25.gba` SHA `a2c4a209d9a964d1955458e93a20bd11690f02e5813b6836f909dbaaf28cc672`(b24 대체). 빌드: `AW_FONT_DIR=~/aw-fonts memcap -n aw-kor-b25 -- nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_candidate_20261013_b25.gba --no-sync-outputs`. 재빌드 byte-identical, provenance 611 소스 일치.
+- 렌더러별 반각 ASCII를 전각으로 정규화(`tools/renderer_text.py`), 최종 ROM 가드 `tools/qa_renderer_text.py`. 사운드 목록 구분자 전각.
+- A3 숫자 10종·소수점 노드 픽셀 오프셋 node+8→node+6. 이동 픽셀 변이 시험 통과.
+- 2편 LINK 판 3종 하다 산스 고해상도 래스터(`tools/part2_link_plates.py`), `qa_sprite_art_shapes --shape`로 윤곽·위상 검사. 콜드부팅 프레임 `temp/b25_20261013/runtime/link_cold/0015/0017/0019_*.png`에서 한글 라벨 확인.
+- B팀: DC67B6 절충(`data/part1_punctuation_decisions.json`), B83C70→A77E4C(DEBAC0), A29CA0→A56B78(A37CE0), A3246C→A5BA20(A387B0). `qa_render_jam`·B팀 drift exit 0. 리뷰 `temp/claude_2026-10-13/review_b24.out`, `review_b25_delta.out`.
+- Ghidra 감사 보조: `tools/ghidra/full_analysis.sh`, `audit_xrefs.py`, `find_iwram_copies.py`(`docs/GHIDRA.md`).

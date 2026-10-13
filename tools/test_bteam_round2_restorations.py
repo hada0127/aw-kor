@@ -29,10 +29,12 @@ def strip_marks(text):
 class OriginalGlyphConsumerTests(unittest.TestCase):
     def test_restored_rows_left_the_residual_list_and_pins(self):
         restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {
-            0xB81B14, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}
+            0xB81B14, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA,
+            # b24 restorations (B5): relocated full baselines.
+            0xA35258, 0xA35280, 0xB830C8, 0xD94552, 0xD965DE, 0xE0F6E2}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 114)
+        self.assertEqual(len(RESIDUALS), 108)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.
@@ -59,8 +61,8 @@ class OriginalGlyphConsumerTests(unittest.TestCase):
         self.assertEqual(drift.display_equivalent('본부가 2개 이상이고,각 군에', 0xA2C720),
                          '본부가　２개　이상이고、각　군에')
         self.assertEqual(drift.display_equivalent('이 정도려나-?', 0xB83EB8), '이　정도려나ー？')
-        # Rows outside the table keep the previous expectation.
-        self.assertEqual(drift.display_equivalent('그럼,어디.', 0xB83C70), '그럼,어디.')
+        # Rows outside the table follow their renderer's b24 fullwidth normalization.
+        self.assertEqual(drift.display_equivalent('그럼,어디.', 0xB83C70), '그럼、어디。')
 
 
 class CompactConsumerTests(unittest.TestCase):

@@ -1,0 +1,8 @@
+{
+  "0x00DC67B6": {
+    "source": "너란 녀석은...",
+    "shipped": "너란 녀석은・・",
+    "payload_hex": "895c8ae12089708dc08f7e8145814520",
+    "reason": "Approved exact-slot punctuation compromise; words and visible pause retained"
+  }
+}

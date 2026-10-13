@@ -523,7 +523,8 @@ class EditorSafetyTests(unittest.TestCase):
     def test_level_zero_punctuation_loss_is_exposed_by_both_editors(self):
         for function in (DE.validate_build_fit, CE.build_fit_budget):
             result = function('이번엔 거점 건설,', 18, '0x00A01BA9')
-            self.assertEqual(result['fit_level'], 0)
+            # b24: the renderer-normalized fullwidth comma moves this row to level 1.
+            self.assertEqual(result['fit_level'], 1)
             self.assertIn('부호', result['warning'])
 
     def test_unknown_scene_address_is_not_saved(self):

@@ -108,6 +108,11 @@ def assert_part1_portrait_page_rows(message, payload):
 
 def normalize_text_segment(payload, part1, address=None):
     """Normalize a proven text span; callers must never pass control gaps."""
+    from renderer_text import renderer_for_address, normalize_text, COMMANDS
+    profile = renderer_for_address(address)
+    # Single bytes left in a span after encode_text are native parser controls
+    # (style codes 0-3 around 「2보병0」, waits, k/r...): never widen them.
+    native = COMMANDS.get(profile, frozenset())
     _conv = bytearray(); _i = 0
     while _i < len(payload):
         _b = payload[_i]
@@ -127,6 +132,8 @@ def normalize_text_segment(payload, part1, address=None):
             _conv += renderer_safe_symbol(PART1_DIALOG_ASCII_PUNCT[_b], address); _i += 1
         elif _b == 0x2C:
             _conv += b'\x81\x41'; _i += 1
+        elif profile and 0x21 <= _b <= 0x7e and _b not in native:
+            _conv += normalize_text(chr(_b), profile).encode('shift_jis'); _i += 1
         else:
             _conv += bytes([_b]); _i += 1
     return bytes(_conv)
@@ -596,7 +603,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      max_cells_for_address=None,
                      max_header_gap=16, align=4, log=None, valid_codes=None,
                      original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None,
-                     page_reflows=None, allowed_wide_skips=(), source_text=None):
+                     page_reflows=None, allowed_wide_skips=(), source_text=None,
+                     write_log=None):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -876,6 +884,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # Normalize each text span independently. Control gaps must match the
         # original and are copied verbatim; punctuation-like operands are data.
         pieces = []
+        layout_controls = {}
         text_failure = None
         cur = msg
         for a, L in lines:
@@ -890,6 +899,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             parts = line_layouts.get(a, (payload,)) if a in fix_addrs else (payload,)
             normalized_parts = [normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg) for part in parts]
             normalized = b'\x72\x0a\x09'.join(normalized_parts)
+            if a in line_layouts and len(parts) > 1:
+                layout_controls[f'0x{a:06X}'] = (b'\x72\x0a\x09' * (len(parts) - 1)).hex()
             limit = max_cells_for_address(a) if max_cells_for_address else max_cells
             if any(text_segment_cells(part) > limit for part in normalized_parts):
                 text_failure = 'skip_normalized_wide'
@@ -990,6 +1001,15 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         # 포인터 갱신 — 다중포인터면 전 site 갱신(고아 방지)
         for _s in sites:
             struct.pack_into('<I', rom, _s, GBA + new_addr)
+        if write_log is not None:
+            # Record the actual relocation operation independently of the
+            # manifest serializer. QA must reject omitted records/owners even
+            # when the incomplete manifest has a matching build receipt.
+            write_log.append([new_addr, nlen, nlen, '', None, None, None,
+                f'repoint:0x{msg:06X}', {
+                    'source_spans': {f'0x{a:06X}': length for a, length in lines},
+                    'source': msg, 'old_len': me - msg,
+                    'ptr_sites': list(sites)}])
         if len(sites) > 1:
             stats['relocated_multi'] = stats.get('relocated_multi', 0) + 1
         _relocated_msgs.add(msg)
@@ -1002,6 +1022,7 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             'old_len': me - msg, 'new_len': nlen, 'lines': len(lines),
             'fixed': sorted(f'0x{a:06X}' for a in fix_addrs),
             'line_spans': line_spans,
+            'layout_controls': layout_controls,
             'source_spans': {f'0x{a:06X}': length for a, length in lines},
             'source_texts': {f'0x{a:06X}': (source_text(a) if source_text else
                               decode_text(fixed_bytes(a) if a in fix_addrs else bytes(rom[a:a + length])))

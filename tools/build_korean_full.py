@@ -5237,8 +5237,10 @@ def patch_fullwidth_digit_glyphs(rom):
             if rom[node + 4] == 0x82:
                 a3_top, a3_bottom = render_char(ch, ink=10)
                 payload = a3_top + a3_bottom
-                rom[node + 8:node + 72] = payload
-                WRITE_LOG.append([node + 8, 64, 64, payload.hex(), None, ch, None,
+                # Native 030060C8: adds r7,r3,#6, then two 32-byte copies.
+                # The six-byte header is followed by pixels and two pad bytes.
+                rom[node + 6:node + 70] = payload
+                WRITE_LOG.append([node + 6, 64, 64, payload.hex(), None, ch, None,
                                   'galmuri-fullwidth-digit-a3'])
                 break
             pointer = struct.unpack_from('<I', rom, node)[0]
@@ -5350,7 +5352,7 @@ def patch_part2_decimal_point_a3(rom, orig):
     middle_dot = bytes(orig[source:source + 72])
     if middle_dot[4:8] != b'\x81\x08\x00\x00' or not any(middle_dot[8:]):
         raise AssertionError('Part 2 middle-dot glyph source changed')
-    # The A3 cache stores two 8x8 4bpp tiles after the eight-byte header.
+    # 030060C8 reads pixels at node+6, not the padded struct's node+8.
     # Fullwidth digits beside this mark use palette index 10 for their body.
     # A Galmuri-sized 2x2 period belongs on the digit baseline (rows 12-13).
     glyph = bytearray(64)
@@ -5358,7 +5360,7 @@ def patch_part2_decimal_point_a3(rom, orig):
         for x in (3, 4):
             i = y * 4 + x // 2
             glyph[i] |= 10 << (4 * (x % 2))
-    node = old_head + middle_dot[4:8] + glyph
+    node = old_head + middle_dot[4:6] + glyph + bytes(2)
     rom[node_addr:node_addr + 72] = node
     rom[bucket:bucket + 4] = node_ptr
     WRITE_LOG.append([node_addr, 72, 72, node.hex(), None, '．', None,
@@ -5377,8 +5379,8 @@ def verify_part2_decimal_point_a3(rom, orig):
         for x in (3, 4):
             glyph[y * 4 + x // 2] |= 10 << (4 * (x % 2))
     expected_node = (bytes(orig[PART2_A3_DECIMAL_BUCKET:PART2_A3_DECIMAL_BUCKET + 4])
-                     + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 8])
-                     + glyph)
+                     + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 6])
+                     + glyph + bytes(2))
     expected_head = (0x08000000 + PART2_A3_DECIMAL_NODE).to_bytes(4, 'little')
     if (bytes(rom[0x52F960:0x52F964]) != bytes(orig[0x52F960:0x52F964])
             or bytes(rom[PART2_A3_DECIMAL_NODE:PART2_A3_DECIMAL_NODE + 72]) != expected_node
@@ -5803,7 +5805,7 @@ def _part1_map_label_entries(rom, sylmap, syl_to_code):
     return entries
 
 
-def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code):
+def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code, *, refresh=False):
     """Replace Part 1 link-map Korean labels through a local compact hook.
 
     The Part 1 link/single map list renderer does not accept the normal Korean
@@ -5838,7 +5840,9 @@ def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code):
     if PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(hook) > PART1_MAP_LABEL_TABLE_FILE:
         raise AssertionError('Part1 map-label hook overlaps table')
     rom[PART1_SINGLE_MAP_LABEL_HOOK_FILE:PART1_SINGLE_MAP_LABEL_HOOK_FILE + len(hook)] = hook
-    if bytes(rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 12]) != PART1_SINGLE_MAP_LABEL_SITE_EXPECT:
+    expected_site = (_abs_tramp(0, PART1_SINGLE_MAP_LABEL_HOOK_RT) + bytes.fromhex('c046c046')
+                     if refresh else PART1_SINGLE_MAP_LABEL_SITE_EXPECT)
+    if bytes(rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 12]) != expected_site:
         raise AssertionError('unexpected Part1 map-label hook site bytes')
     rom[PART1_SINGLE_MAP_LABEL_SITE:PART1_SINGLE_MAP_LABEL_SITE + 8] = _abs_tramp(0, PART1_SINGLE_MAP_LABEL_HOOK_RT)
     rom[PART1_SINGLE_MAP_LABEL_SITE + 8:PART1_SINGLE_MAP_LABEL_SITE + 12] = bytes.fromhex('c046c046')
@@ -6714,6 +6718,9 @@ def patch_part2_link_mode_residual_labels(rom):
             raise AssertionError(f'Part 2 link logo text does not fit: {text!r}')
         x = box[0] + (box[2] - box[0] - w) // 2
         y = box[1] + (box[3] - box[1] - h) // 2 - 1
+        ink_box = draw.textbbox((0, 0), text, font=font, stroke_width=stroke)
+        x -= ink_box[0]
+        y -= ink_box[1]
 
         outline = Image.new('L', layer.size, 0)
         od = ImageDraw.Draw(outline)
@@ -6774,9 +6781,9 @@ def patch_part2_link_mode_residual_labels(rom):
         draw.rectangle((0, 3, 127, 28), fill=4)
         draw.rectangle((0, 3, 127, 5), fill=1)
         draw.rectangle((0, 26, 127, 28), fill=3)
-        # Large logo: OkDanDan (2026-10-08 font rule; was Galmuri11-Bold).
-        paint_text(layer, text, (4, 3, 124, 27), max_size, fill_idx=1, stroke_idx=4, aa_idx=2, stroke=1,
-                   font_path=aw_fonts.okdandan_path(), galmuri_max_size=galmuri_max_size,
+        # LINK MODE plates use the established small-line Galmuri rule.
+        paint_text(layer, text, (4, 3, 124, 27), min(max_size, 16), fill_idx=1, stroke_idx=4, aa_idx=2, stroke=0,
+                   font_path=font_bold, galmuri_max_size=galmuri_max_size,
                    fallback_used=fallback_used)
         return layer
 
@@ -6807,6 +6814,16 @@ def patch_part2_link_mode_residual_labels(rom):
         ]
         for pos, payload in patches:
             buf[pos:pos + len(payload)] = payload
+        # Every selected plate has its own baked subtitle. Replace the entire
+        # text face using the same small Korean plate design, including the
+        # previously untranslated SINGLE-PAK and TRADE MAPS variants.
+        from part2_link_plates import draw_hada_main
+        for _off, _text in ((0, '1팩 대전'), (0x800, '멀티팩 대전'), (0x1000, '맵 교환')):
+            _main = draw_hada_main(_text)
+            buf[_off:_off + 0x400] = rect_tiles(_main, 0, 0, 64, 32)
+            buf[_off + 0x400:_off + 0x800] = rect_tiles(_main, 64, 0, 64, 32)
+        from part2_link_plates import repair_captions
+        buf = repair_captions(buf)
         if buf == last_buf:
             comp = last_comp
         else:
@@ -6826,14 +6843,11 @@ def patch_part2_link_mode_residual_labels(rom):
         b = pos // 32
         return list(range(b, b + len(payload) // 32))
     rec_label_layout(off, None, [
-        {'text': '1팩 대전', 'tile_ids':
-            _tids(0x1800, patches[0][1]) + _tids(0x1900, patches[1][1])
-            + _tids(0x1A00, patches[2][1]) + _tids(0x1B00, patches[3][1])},
-        {'text': '멀티팩', 'tile_ids':
-            _tids(0x0800, patches[4][1]) + _tids(0x0C00, patches[5][1])},
-        {'text': '맵 교환', 'tile_ids':
-            _tids(0x2000, patches[6][1]) + _tids(0x2100, patches[7][1])
-            + _tids(0x2200, patches[8][1]) + _tids(0x2300, patches[9][1])},
+        {'text': text, 'tile_ids': list(range(start // 32, (start + size) // 32))}
+        for start, size, text in (
+            (0, 0x800, '1팩 대전'), (0x800, 0x800, '멀티팩 대전'),
+            (0x1000, 0x800, '맵 교환'), (0x1800, 0x400, '1팩 대전'),
+            (0x1C00, 0x400, '멀티팩 대전'), (0x2000, 0x400, '맵 교환'))
     ])
     rom[off:off + consumed] = comp + bytes(consumed - len(comp))
     return len(patches)
@@ -11426,6 +11440,13 @@ def verify_editor_icon_layout(orig, rom):
 
 def encode_text(ko, syl_to_code, unmapped, addr=None):
     ko = normalize_korean_terms(ko)
+    from renderer_text import renderer_for_address, normalize_text
+    renderer = renderer_for_address(addr)
+    ko = normalize_text(ko, renderer)
+    if addr is not None and 0xA352B4 <= addr < 0xA357B4:
+        # Sound-room labels run through 31424C, where ASCII spaces do not
+        # advance. Its native fullwidth separators must remain visible.
+        ko = ko.replace(' ', '　')
     # These title consumers read fixed two-byte codes, even for ASCII signs.
     # Select by the authored source address, including the repoint callback.
     from part2_mission_title_fit import is_pair_title, encode_pair_title
@@ -11453,7 +11474,7 @@ def encode_text(ko, syl_to_code, unmapped, addr=None):
         elif 0x20 <= ord(ch) <= 0x7E:
             out += bytes([ord(ch)])
         else:
-            src = FALLBACK.get(ch, ch)
+            src = ch if renderer and ord(ch) >= 0xff01 and ord(ch) <= 0xff5e else FALLBACK.get(ch, ch)
             try:
                 enc = src.encode('shift_jis')
             except Exception:
@@ -12320,13 +12341,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != '04d2f14a6a022ac7d9fc0280dc98dc3c3e162435369eb63d7fd07631c077bbe5':
+        if hashlib.sha256(stream.read()).hexdigest() != '5cc6a1b98dd910cb914f442199dd16c3ffe174e5433cf3cc3171e7cffd6d5dfd':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 114 or len(result) != len(rows) or
+    if (len(rows) != 108 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
@@ -12583,6 +12604,10 @@ BTEAM_COMPACT_VERIFIED_ROWS = frozenset({
     0xB82D36, 0xB82D58, 0xB82D6A, 0xB82D82, 0xB82D9E, 0xB82DAA, 0xB82DB6, 0xB82DC6,
 })
 BTEAM_LISTED_WIDE_RESIDUALS = {0xD9009E: 66}
+# b24 restored rows whose proven native row is wider than the 44 half-cell
+# dialogue default: A35258/A35280 via 331A80 -> 314A50 (32-tile row) and
+# B830C8 via D8D9AC -> B333FC -> B12910 (26-cell row).
+BTEAM_RESTORED_ROW_HALF_CELLS = {0xA35258: 64, 0xA35280: 64, 0xB830C8: 52}
 LINK_WELCOME_SENTENCES = frozenset({
     0x9298A4, 0x96253C, 0x99ADE0, 0x9D3684, 0xA34F98, 0xEE27E0,
 })
@@ -12612,7 +12637,7 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
     from dialogue_repoint import text_segment_cells
     widths = [text_segment_cells(piece.rstrip(b'\x00'))
               for piece in payload.split(b'\x72\x0a\x09')]
-    if not widths or (max(widths) > 44 and
+    if not widths or (max(widths) > BTEAM_RESTORED_ROW_HALF_CELLS.get(address, 44) and
                       BTEAM_LISTED_WIDE_RESIDUALS.get(address) != max(widths)):
         raise AssertionError(f'0x{address:08X}: B-team row exceeds 44 half-cells: {widths}')
     if compact:
@@ -13314,8 +13339,16 @@ def _part2_hook(template, ret):
     struct.pack_into('<I', b, 0x4C, ret)
     return bytes(b)
 
-def _abs_tramp(reg, hook_rt):
+def _abs_tramp(reg, hook_rt, site=0):
     # 8-byte far Thumb trampoline: ldr reg,[pc,#0]; bx reg; .word hook|1
+    if site & 1:
+        raise ValueError('Thumb trampoline site must be halfword aligned')
+    if site & 2:
+        if reg not in (0, 1, 2):
+            raise ValueError(reg)
+        # Align(PC+4,4)+4 == site+6. The literal must be word aligned.
+        return struct.pack('<HHH I', 0x4801 | reg << 8,
+                           0x4700 | reg << 3, 0x46C0, hook_rt | 1)
     if reg == 0:
         return bytes.fromhex('00480047') + struct.pack('<I', hook_rt | 1)
     if reg == 1:
@@ -13341,8 +13374,8 @@ PART2_A3_SPACE_TABLE_ENTRY = 0x3142CC  # first jump table entry for byte 0x20: 0
 PART2_A3_SPACE_TABLE_EXPECT = 0x0831431C
 PART2_SPACE_313_SITE = 0x313FD6
 PART2_SPACE_B11_SITE = 0xB11DFE
-PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a28')
-PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a28')
+PART2_SPACE_313_EXPECT = bytes.fromhex('3078002807d00a2800d0')
+PART2_SPACE_B11_EXPECT = bytes.fromhex('3078002807d00a2800d0')
 PART2_SPACE_A2CC_SITE = 0x31BCFC   # MAP SELECT 리스트 렌더러 루프 top
 PART2_SPACE_A2CC_EXPECT = bytes.fromhex('d620800040440188')
 
@@ -13480,7 +13513,11 @@ def patch_part1_battle_dictionary(rom):
     # All battle menus use the same dictionary lookup.
     # These are NUL-padded strings, with single-byte spaces in settings labels;
     # walking them in fixed pairs would split the Hangul after each space.
-    for address, source_text, _ in PART1_BATTLE_MENU_LABELS:
+    dictionary_consumers = (*PART1_BATTLE_MENU_LABELS,
+                            (0xB818B4, '２〜６距離', None),
+                            (0xB819B8, '３〜５距離', None),
+                            (0xB819DC, '２〜３距離', None))
+    for address, source_text, _ in dictionary_consumers:
         size = len(source_text.encode('shift_jis'))
         raw = bytes(rom[address:address + size])
         i = 0
@@ -14064,10 +14101,10 @@ def main():
     # filler in command-stream dialogue. Advancing it wraps later text into
     # the portrait. Authored word boundaries use the visible SJIS 0x8140.
     # The reserved legacy hook bytes above remain unreferenced.
-    assert bytes(rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8]) == PART2_SPACE_313_EXPECT
-    assert bytes(rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8]) == PART2_SPACE_B11_EXPECT
-    rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_313_RT)
-    rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT)
+    assert bytes(rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 10]) == PART2_SPACE_313_EXPECT
+    assert bytes(rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 10]) == PART2_SPACE_B11_EXPECT
+    rom[PART2_SPACE_313_SITE:PART2_SPACE_313_SITE + 10] = _abs_tramp(0, PART2_HOOK_SPACE_313_RT, PART2_SPACE_313_SITE)
+    rom[PART2_SPACE_B11_SITE:PART2_SPACE_B11_SITE + 10] = _abs_tramp(0, PART2_HOOK_SPACE_B11_RT, PART2_SPACE_B11_SITE)
     rom[PART2_HOOK_SPACE_A2CC_FILE:PART2_HOOK_SPACE_A2CC_FILE + len(PART2_HOOK_SPACE_A2CC)] = PART2_HOOK_SPACE_A2CC
     assert bytes(rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8]) == PART2_SPACE_A2CC_EXPECT
     rom[PART2_SPACE_A2CC_SITE:PART2_SPACE_A2CC_SITE + 8] = _abs_tramp(0, PART2_HOOK_SPACE_A2CC_RT)
@@ -15420,7 +15457,7 @@ def main():
     # These compact UI slots have no verified pointer relocation path. Keep their
     # previous complete writer text and list them as explicit B-team residuals.
     bteam_fixed_ui_residuals = {
-        0xB830C8: ('지도　보낼　상대없어', '34-byte fixed UI slot; baseline needs 38 bytes'),
+        0xB830C8: ('지도　보낼　상대없어', 'temporary source slot only; D8D9AC relocation required, B333FC proves 26-cell row'),
         0xB82D92: ('아군만', '8-byte compact UI slot; baseline exceeds slot'),
     }
     for _address, (_fallback, _reason) in bteam_fixed_ui_residuals.items():
@@ -15515,7 +15552,9 @@ def main():
     from red_unit_intro import ADDRESS as red_intro_address, source_guard as red_intro_source_guard
     red_intro_source_guard(orig)
     from part1_m19_dialogue import ADDRESS as m19_dialogue_address
-    required_script_repoints = {0xA322A4, red_intro_address, m19_dialogue_address}
+    required_script_repoints = {0xA322A4, red_intro_address, m19_dialogue_address, 0xB830C8, 0xA35258, 0xA35280,
+                                0xA32492,
+                                0xA29CA0, 0xB83C70}
 
     def patch_script_row(faddr, fend, payload, label, *, source_text=None):
         reviewed_spacing = (faddr in BTEAM_SCRIPT_SPACING_REPAIRS
@@ -15569,6 +15608,28 @@ def main():
             elif payload is None:
                 raise AssertionError(f'{label} override overflow: {raw_len} > {slot_len}')
             text_for_log = ov
+            if faddr == 0xA29CA0:
+                # Its 14-byte native row cannot hold both fullwidth separators.
+                # Keep the native control boundary until the live pointer moves.
+                payload = bytes(orig[faddr:fend])
+        elif faddr in {0xA31455, 0xA31924, 0xA32492, 0xA33488, 0xA336E4}:
+            # These source rows passed the old ko-dependent renderer audit.
+            # Fullwidth separators fit four slots; the fifth moves with its
+            # complete native message and pointer.
+            expected = {0xA31455: '가장 싼 유닛으로,',
+                        0xA31924: '차량계 유닛.',
+                        0xA32492: '강력한 간접 공격 유닛.',
+                        0xA33488: '해상계 유닛.',
+                        0xA336E4: '해상계 유닛.'}
+            if source_text != expected[faddr]:
+                raise AssertionError(f'Part 2 separator source changed: {faddr:08X}')
+            full = encode_full_fidelity(source_text, syl_to_code, unmapped, faddr)
+            text_for_log = source_text
+            if len(full) <= slot_len:
+                payload = full
+            else:
+                payload = bytes(orig[faddr:fend])
+                required_script_repoints.add(faddr)
         else:
             safe_payload = _part1_dialog_safe_punct(payload, slot_len, faddr)
             if safe_payload is None:
@@ -18326,8 +18387,8 @@ def main():
         (0xD945AA, 0xD945CE, '」시키려면 유닛을 겹치면', 'join stack units row'),
         (0xD945D1, 0xD945D9, '돼', 'join stack tail row'),
         (0xD945DE, 0xD945FA, '그러니 여기로 이동해', 'join move here row'),
-        (0xD94602, 0xD9460A, '이걸로「', 'join success lead row'),
-        (0xD94610, 0xD9461C, '」됐어!', 'join success tail row'),
+        (0xD94602, 0xD9460A, '이걸로 「', 'join success lead row'),
+        (0xD94610, 0xD9461C, '」 됐어!', 'join success tail row'),
         (0xD94627, 0xD94645, '그러면 합류한 두 유닛분', 'join hp units row'),
         (0xD94648, 0xD94664, '각각 체력이 더해져', 'join hp added row'),
         (0xD94669, 0xD9468F, '이렇게 같은 유닛끼리는「', 'join same unit lead row'),
@@ -18419,7 +18480,7 @@ def main():
         (0xD94F36, 0xD94F52, '」 명령이 있지', 'supply command exists row'),
         (0xD94F55, 0xD94F71, '그걸 골라 줄래', 'choose supply row'),
         (0xD94F7C, 0xD94F9A, '하면 행동이 끝나', 'wait ends action row'),
-        (0xD94F9D, 0xD94FA5, '여기는「', 'choose supply retry lead row'),
+        (0xD94F9D, 0xD94FA5, '여기는 「', 'choose supply retry lead row'),
         (0xD94FAB, 0xD94FB9, '」를 골라 줘', 'choose supply retry row'),
         (0xD94FBE, 0xD94FD0, '탄약과 연료 ', 'supply ammo fuel row'),
         (0xD94FD6, 0xD94FE2, '됐어!', 'supply done row'),
@@ -18594,7 +18655,7 @@ def main():
         (0xD95F58, 0xD95F70, ' 완료했어', 'unload success row'),
         (0xD95F7C, 0xD95F86, '」하면 ', 'unload wait lead row'),
         (0xD95F87, 0xD95F8D, '수송차', 'unload wait apc label row'),
-        (0xD95F8E, 0xD95F9A, '와타고있던', 'unload wait passenger row'),
+        (0xD95F8E, 0xD95F9A, '와 타고 있던', 'unload wait passenger row'),
         (0xD95F9D, 0xD95FBB, '유닛 둘 다 대기해', 'unload both wait row'),
         (0xD95FC0, 0xD95FC6, '다만 ', 'transport faster but row'),
         (0xD95FCF, 0xD95FD9, ' 바주카병', 'transport faster bazooka row'),
@@ -21285,7 +21346,7 @@ def main():
         (0xDC674B, 0xDC6761, '한다고 착각한 거야?', 'snow mistaken row'),
         (0xDC6766, 0xDC678A, '이런 어려운 곳이니까', 'snow difficult place lead row'),
         (0xDC678D, 0xDC67B1, '클리어하는 게 즐겁다고 생각해?', 'snow clear fun row'),
-        (0xDC67B6, 0xDC67C6, '너란 녀석은...', 'snow you are row'),
+        (0xDC67B6, 0xDC67C6, '너란 녀석은・・', 'snow you are row'),  # b24: fullwidth ellipsis must fit the 16-byte native slot (no pointer to relocate)
         (0xDC67CB, 0xDC67F5, '용기가 있는 건지 아무 생각 없는 건지', 'snow courage or thoughtless row'),
         (0xDC67F8, 0xDC6812, '가끔 모르겠어', 'snow sometimes cannot tell row'),
         (0xDC681A, 0xDC6842, '으으으... 또 져 버렸다...', 'third lost again row'),
@@ -22655,7 +22716,7 @@ def main():
         (0xDD01CC, 0xDD01E6, '내 군을 빌려 주마!', 'lend army row'),
         (0xDD01EE, 0xDD01FC, '오오, 그래!', 'max thanks row'),
         (0xDD0201, 0xDD0217, '빚은 갚으마 빌리!', 'owe you billy row'),
-        (0xDD021C, 0xDD023E, '그런 거야! 나도 써줘!!', 'use me too row'),
+        (0xDD021C, 0xDD023E, '그런 거야! 나도 써 줘!!', 'use me too row'),
         (0xDD0242, 0xDD0248, '!!!', 'final surprise row'),
         (0xDD024E, 0xDD026A, '이놈! 헬보우즈!!!', 'whip curses hellbowz row'),
         (0xDD0272, 0xDD028E, '왓, 호이프 나리!', 'billy whip sir row'),
@@ -23289,7 +23350,7 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
-                if a in {0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}:
+                if a in {0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}:
                     return _rp_ov(a)  # Fable + Astra b23: full B-team wording.
                 if a in BTEAM_PREVIOUS_KOREAN_TEXT and a not in BTEAM_SCRIPT_SPACING_REPAIRS:
                     return BTEAM_PREVIOUS_KOREAN_TEXT[a]
@@ -23382,7 +23443,8 @@ def main():
 
             def _rp_cell_width(a):
                 # un-jam(완전충실, normalize) 후 시각 폭 — 박스 한계 초과 라인을 수정 제외
-                if needs_safe_dialogue_punctuation(a):
+                from renderer_text import renderer_for_address
+                if needs_safe_dialogue_punctuation(a) or renderer_for_address(a):
                     from dialogue_repoint import text_segment_cells
                     return text_segment_cells(_rp_fixed_bytes(a))
                 text = normalize_for_fit(_rp_dlg(a))
@@ -23401,10 +23463,12 @@ def main():
             # 단축안(사용자 승인 + codex/agy 합의, 박스 ~30자에 맞춰 visual_cells 46): 0xEC312E/0xA2C378
             # "종료되었을 때"→"종료되면", 0xA2C484 "고르는 것으로"→"선택하면", 0xDFD082 "여기서만 하는 얘긴데"→
             # "이건 비밀인데" — dialogue_overrides.json 반영, 재배치 후 fullwidth 공백 렌더로 단어붙음 해소.
-            for _ma, _po in ((0xB81884, 0xD85390), (0xB81A20, 0xD84BCC), (0xB81F04, 0xD8AD5C),
+            for _ma, _po in ((0xA29CA0, 0xA37CE0), (0xA3246C, 0xA387B0),
+                             (0xB83C70, 0xDEBAC0),
+                             (0xB81884, 0xD85390), (0xB81A20, 0xD84BCC), (0xB81F04, 0xD8AD5C),
                              (0xB81F40, 0xD8AC30), (0xB81F70, 0xD8AB7C), (0xB820D8, 0xD8A708),
                              (0xB824F8, 0xD89844), (0xB826FC, 0xD8913C), (0xB828E4, 0xD8B834),
-                             (0xB84BA0, 0xDF07E8), (0xEC3244, 0xB71218), (0xEC312C, 0xEC2714), (0xDEEDD8, 0xDEFAD0), (0xDEE914, 0xDEFA10), (0xDEEB60, 0xDEFA50), (0xDEECDC, 0xDEFA90)):
+                             (0xB830C8, 0xD8D9AC), (0xB84BA0, 0xDF07E8), (0xEC3244, 0xB71218), (0xEC312C, 0xEC2714), (0xDEEDD8, 0xDEFAD0), (0xDEE914, 0xDEFA10), (0xDEEB60, 0xDEFA50), (0xDEECDC, 0xDEFA90)):
                 if struct.unpack_from('<I', orig, _po)[0] == _ma + 0x08000000 and _ma not in _rp_extra:
                     _rp_extra[_ma] = [_po]
 
@@ -23446,6 +23510,20 @@ def main():
             # found_texts에 없는 script row(WRITE_LOG 한글)를 line_index에 병합 → trusted detection + repoint가
             # script row를 보고 재배치(decompose 미정렬 시 안전 skip). found_texts 우선.
             _merged_li = dict(_repoint_line_index(FOUND))
+            # A29CA0's native 3/0 style operand contains a translated two-glyph
+            # span at A29CB0. The CSV starts the next row at A29CB5, so the
+            # ordinary line index would misclassify those five changed bytes as
+            # a control gap and refuse a lossless message relocation.
+            if (orig[0xA29CB0:0xA29CB5] != bytes.fromhex('90e897cc30')
+                    or rom[0xA29CB0:0xA29CB5] != bytes.fromhex('8fcc8b6730')):
+                raise AssertionError('A29CA0 styled occupation operand changed')
+            _merged_li[0xA29CB0] = (5, '占領0')
+            # A3246C likewise embeds 攻撃 as a translated operand between
+            # style codes 3 and 0. It is text, not a mutable control gap.
+            if (orig[0xA32486:0xA3248A] != bytes.fromhex('8d558c82')
+                    or rom[0xA32486:0xA3248A] != bytes.fromhex('886d885e')):
+                raise AssertionError('A3246C styled attack operand changed')
+            _merged_li[0xA32486] = (4, '攻撃')
             for _e in WRITE_LOG:
                 if len(_e) >= 8 and _e[7] == 'known-story-fragment' and _e[0] not in _merged_li:
                     _merged_li[_e[0]] = (_e[1], bytes(orig[_e[0]:_e[0] + _e[1]]).decode('shift_jis'))
@@ -23566,7 +23644,7 @@ def main():
             # Four authored spaces that cannot fit on a single physical row.
             from dialogue_repoint import text_segment_cells as _rp_cells
             for _wrap_addr in (0xD969A0, 0xDCD024, 0xDCE89A, 0xDFBF70,
-                               0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA):
+                               0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xE0F6E2):
                 _whole = _rp_fixed_bytes(_wrap_addr)
                 _limit = 44 if _wrap_addr in BTEAM_RESTORE_BASELINE_ROWS else 50
                 _choices = []
@@ -23600,7 +23678,8 @@ def main():
                     _first, _following,
                     encode_full_fidelity('바다에서　이길 수 있는 사람은', syl_to_code, unmapped, _first),
                     encode_full_fidelity('거의 없다는 이야기야.', syl_to_code, unmapped, _following))
-            for _first, _site in ((0xD9EDB6, 0xDC0BF0), (0xDCB1BE, 0xDDE190)):
+            for _first, _site in ((0xD9EDB6, 0xDC0BF0), (0xDCB1BE, 0xDDE190),
+                                  (0xD94552, 0xDAE004), (0xD965DE, 0xDB1E34), (0xE0F6E2, 0xE0F9F4)):
                 if (int.from_bytes(orig[_site:_site + 4], 'little') != 0x08000000 + _first - 2
                         or orig[_site - 4:_site] != b'\x19\0\0\0'):
                     raise AssertionError('b23 two-row consumer pointer changed')
@@ -23608,12 +23687,16 @@ def main():
             # explicitly deferred B-team shortening; none is one of the five jams.
             _allowed_wide_skips = {
                 0xA2C040, 0xA2C0C0, 0xA2C1E8, 0xA2C25C, 0xA2C2F4,
-                0xA2C378, 0xA2C3A8, 0xA2C484, 0xA35280, 0xB83A64,
-                0xD9444E, 0xD94552, 0xD965DE,
+                0xA2C378, 0xA2C3A8, 0xA2C484, 0xB83A64,
+                0xD9444E,
                 0xDD010A, 0xDF1EEE, 0xDF207A,
                 0xDF20BA, 0xDF21AE, 0xDF228E, 0xDF239E, 0xDF25FA,
-                0xDF26FE, 0xDF2806, 0xDF28C2, 0xE0F6E2, 0xEC312E,
+                0xDF26FE, 0xDF2806, 0xDF28C2, 0xEC312E,
                 0xEC3246,
+                # b24: renderer width model now counts fullwidth separators in
+                # cell_width, so these R3 B-team residuals (in-place baseline,
+                # b23 status skip_normalized_wide) are caught one check earlier.
+                0xA35228, 0xB82FAC, 0xB83FA8,
             }
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
@@ -23625,8 +23708,9 @@ def main():
                 skip_messages=(set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages
                                | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES | {0xB8319C}),
                 min_level=1, max_cells=50,
-                max_cells_for_address=lambda a: 44 if a in BTEAM_RESTORE_BASELINE_ROWS else 50,
+                max_cells_for_address=lambda a: 60 if a in (0xA35258, 0xA35280) else (44 if a in BTEAM_RESTORE_BASELINE_ROWS and a != 0xB830C8 else 50),
                 page_reflows={0xDCFA8C: _dcfa8c_reflow, **_b23_reflows},
+                write_log=WRITE_LOG,
                 source_text=lambda a: _rp_dlg(a) or _rp_script_owners.get(a, (0, None))[1] or _rp_intended.get(a),
                 valid_codes=frozenset(_rp_valid),
                 seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
@@ -23670,10 +23754,6 @@ def main():
                 if any(_start < a + n and a < _end for a, n in PART1_MENU_LABEL_SPANS):
                     raise AssertionError('action label unexpectedly relocated outside its dictionary contract')
             st['repoint_lines'] = _rp_stats.get('lines_fixed', 0)
-            for _m in _rp_manifest:
-                if _m.get('status') == 'relocated':
-                    WRITE_LOG.append([int(_m['new_addr'], 16), _m['new_len'], _m['new_len'],
-                                      '', None, None, None, 'repoint:' + _m['msg']])
             print(f"→ 대사 재배치(repoint): {_rp_stats.get('relocated',0)} msgs, "
                   f"{_rp_stats.get('lines_fixed',0)} lines 단어붙음 해소, "
                   f"merged-skip {_rp_stats.get('skip_merged_fragment',0)}, "
@@ -23688,7 +23768,7 @@ def main():
     # script relocations still fail the build when missing.
     bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints)
                                     & BTEAM_RESTORE_BASELINE_ROWS)
-    _restored_relocated_residuals = {0xDCFA8E, 0xDCE89A, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA}
+    _restored_relocated_residuals = {0xDCFA8E, 0xDCE89A, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}
     if not _restored_relocated_residuals <= completed_script_repoints:
         raise AssertionError('0xDCFA8E protected dialogue was not relocated')
     _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
@@ -23844,6 +23924,8 @@ def main():
             WRITE_LOG.append([_pos, _span_len, _span_len, _payload.hex(), None,
                               _entry['active_text'] or _entry['kept_text'], None,
                               'bteam-round2-relocated-residual'])
+            if _address == 0xA2BC3C:
+                _message.setdefault('layout_controls', {})[_key] = '72'
             if _entry['active_follow_hex']:
                 _follow = _message['line_spans'].get('0xA2BC57')
                 _follow_bytes = bytes.fromhex(_entry['active_follow_hex'])
@@ -23894,35 +23976,38 @@ def main():
                                   '', None, 'part2-co-panel-old-break-padding'])
             WRITE_LOG.append([_pos, _span_len, _span_len, _payload.hex(), None,
                               _text, None, 'part2-co-panel-row-break'])
+            _message.setdefault('layout_controls', {})[_key] = '72'
             _co_panel_seen.add(_address)
     if _co_panel_seen != _co_panel_breaks.keys():
         raise AssertionError('Part 2 CO panel break target missing')
     # These five pages already use all six visible rows.  Reflow the complete
     # page so an extra control cannot push the last line below the panel.
+    # Keyed by relocated source message: free-space targets move whenever an
+    # earlier relocation changes size (b24 shifted every target by 0x12C).
     _co_panel_pages = {
-        0xA573BC: (
+        0xA2AA90: (
             ['덜렁대는　성격　같지만、', '위기때　믿음직하다', '사격의　천재。',
              '호이프와　사실　좋은　콤비。', '고양이　좋아', '쥐　싫어'],
             ['덜렁대는　성격　같지만、', '위기때　믿음직하다', '사격의　천재。',
              '호이프와　사실', '좋은　콤비。', '고양이　좋아　쥐　싫어']),
-        0xA57500: (
+        0xA2ABC0: (
             ['옐로코멧의　국왕。', '상당한　실력자이지만、',
              '아스카에게　약한　면도・・・', '아스카　좋아', '컴퓨터　싫어'],
             ['옐로코멧의　국왕。', '상당한　실력자이지만、',
              '아스카에게　약한', '면도・・・', '아스카　좋아', '컴퓨터　싫어']),
-        0xA577B0: (
+        0xA2AF28: (
             ['공중　유닛의　운용이', '실력이　좋아서、　다른　사령관',
              '연료　소모　적고', '공격／방어력도　높다。',
              '단　해상　유닛의', '공격은　약함。'],
             ['공중　유닛의', '운용이　실력이　좋아서、',
              '다른　사령관　연료　소모', '적고　공격／방어력도',
              '높다。　단　해상　유닛의', '공격은　약함。']),
-        0xA57A14: (
+        0xA2B218: (
             ['블랙홀군의　총수', '모든　것은　수수께끼', '워즈　월드란',
              '다른　세계에서　온　침략자。', '침략　폭발　좋아', '싫어함　평화'],
             ['블랙홀군의　총수', '모든　것은　수수께끼', '워즈　월드란　다른',
              '세계에서　온　침략자。', '침략　폭발　좋아', '싫어함　평화']),
-        0xA5852C: (
+        0xA2BFBC: (
             ['전투헬기　공격력　상승', '게다가、　아군　도시　위에、',
              '체력　９　바주카병', '강하시킨다。', '이　바주카병은',
              '강하　후　바로　행동　가능'],
@@ -23932,10 +24017,11 @@ def main():
     }
     _co_panel_pages_seen = set()
     for _message in _rp_manifest:
-        _target = int(_message.get('new_addr') or '0', 16)
-        if _target not in _co_panel_pages or _message.get('status') != 'relocated':
+        _source_msg = int(_message['msg'], 16)
+        if _source_msg not in _co_panel_pages or _message.get('status') != 'relocated':
             continue
-        _source_rows, _display_rows = _co_panel_pages[_target]
+        _target = int(_message['new_addr'], 16)
+        _source_rows, _display_rows = _co_panel_pages[_source_msg]
         _source_keys = list(_message['line_spans'])
         _spans = list(_message['line_spans'].values())
         if len(_spans) != len(_source_rows) or len(_display_rows) != 6:
@@ -23968,7 +24054,7 @@ def main():
                 raise AssertionError(f'CO display span decode mismatch: 0x{_target:08X}')
         WRITE_LOG.append([_target, len(_old), len(_old), _payload.hex(), None,
                           'Part 2 CO panel layout', None, 'part2-co-panel-page-reflow'])
-        _co_panel_pages_seen.add(_target)
+        _co_panel_pages_seen.add(_source_msg)
     if _co_panel_pages_seen != _co_panel_pages.keys():
         raise AssertionError('Part 2 CO panel page target missing')
     with open(os.path.join(BASE, 'temp', 'repoint_manifest.json'), 'w', encoding='utf-8') as _stream:
@@ -23994,11 +24080,29 @@ def main():
     st['part2_prologue_inline_renderer_spans'] = patch_part2_prologue_inline_renderer_spans(
         rom, syl_to_code, unmapped)
 
+    from renderer_text import normalize_final_inplace
+    st['renderer_normalized_slots'] = len(normalize_final_inplace(rom, orig, WRITE_LOG, _rp_manifest))
+    # Pair expansion changes source-byte positions in the pointer-gated label
+    # hook. Rebuild its derived table from the final normalized strings.
+    patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code, refresh=True)
+    # The refresh rewrites the whole compact hook, including the two record-map
+    # trampoline sites inside it. Re-install exactly those trampolines after
+    # proving the refreshed bytes are the ones they were written over.
+    import part1_record_map_labels as _record_map
+    if (bytes(rom[_record_map.SITE:_record_map.SITE + len(_record_map.EXPECTED)]) != _record_map.EXPECTED
+            or bytes(rom[_record_map.ROW_SITE:_record_map.ROW_SITE + len(_record_map.ROW_EXPECTED)])
+            != _record_map.ROW_EXPECTED):
+        raise AssertionError('refreshed map-label hook changed record-map gate sites')
+    for _address, _payload in RECORD_MAP_WRITES:
+        rom[_address:_address + len(_payload)] = _payload
+
     # Several late glyph/symbol recovery passes can touch the low font slots
     # shared with the Part 1 name grid. Re-apply the name grid as the final
     # authority so small-kana/long-mark bottom halves cannot leak back in.
     patch_name_grid(rom)
     st['galmuri_fullwidth_digits'] = patch_fullwidth_digit_glyphs(rom)
+    from renderer_text import supply_a3_glyphs
+    st['a3_fullwidth_added_glyphs'] = len(supply_a3_glyphs(rom, orig, WRITE_LOG, _rp_manifest))
 
     # Last text-derived asset writer: later stages only verify and save.
     patch_part1_battle_menu_labels(rom, orig, syl_to_code)
@@ -24156,6 +24260,11 @@ def main():
     if _co_overflow or _co_clipped:
         raise AssertionError(f'Part 2 CO panel exceeds bounds: {_co_overflow[:3]}, {_co_clipped[:3]}')
     st['part2_co_panel_rows'] = len(_co_rows)
+    from qa_renderer_text import check as check_renderer_text
+    _renderer_count, _renderer_errors = check_renderer_text(rom, orig, WRITE_LOG, _rp_manifest)
+    if _renderer_errors:
+        raise AssertionError(f'unsafe renderer payloads ({len(_renderer_errors)}): {_renderer_errors[:30]}')
+    st['renderer_payloads_checked'] = _renderer_count
     stable_build_inputs(build_inputs_before, snapshot_inputs())
     if evidence_sha(build_source) != build_source_sha:
         raise AssertionError('Source ROM changed during build; refusing output')
@@ -24275,7 +24384,7 @@ def main():
                                    compact_expected=bytes.fromhex(_row[3]) if _compact
                                    and _address not in _relocated_rows else None)
         _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
-        if not _widths or (max(_widths) > 44 and
+        if not _widths or (max(_widths) > BTEAM_RESTORED_ROW_HALF_CELLS.get(_address, 44) and
                            BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
             _wide_restored.append((f'0x{_address:08X}', _widths))
     if _wide_restored:
