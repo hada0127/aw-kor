@@ -97,7 +97,7 @@ class Spec:
 # (item, ROM file offset, slot bytes, original Japanese, Korean, wording source)
 # Korean = the B-team/b25 wording with punctuation made fullwidth; controls inline.
 _P2_LIVE = (
-    ('preload_page0', 0x942A38, 12, 'はいえ▼', '예아니오▼', 'csv 0x942A38'),
+    ('preload_page0', 0x942A38, 12, 'はいえ▼', '예아뇨▼', 'csv 0x942A38'),
     ('preload_page1', 0x942A44, 40, '待機攻撃合流降伏する終了とじるシステム', '대기공격합류항복종료닫기시스템', 'address_text_overrides 0x942A44'),
     ('preload_page2', 0x942A6C, 8, '攻撃', '공격', 'build control word 0x942A6C'),
     ('label_end', 0x929660, 8, '終了', '종료', 'build command-label'),
@@ -106,7 +106,7 @@ _P2_LIVE = (
     ('label_wait', 0x929680, 8, '待機', '대기', 'build command-label'),
     ('label_join', 0x929688, 8, '合流', '합류', 'build command-label'),
     ('label_attack', 0x929690, 6, '攻撃', '공격', 'build command-label'),
-    ('yesno', 0x942CC4, 17, '　はい　　いいえ', '　예　　　아니오', 'csv 0x942CC4 (option columns kept)'),
+    ('yesno', 0x942CC4, 17, '　はい　　いいえ', '　예　　　아뇨', 'csv 0x942CC4 (option columns kept)'),
     ('defeat_red', 0x9450BC, 36, 'レッドスター軍は敗北しました！！ww', '레드스타군은　패배했습니다！！ww', 'csv 0x9450BC'),
     ('defeat_blue', 0x9450E0, 36, 'ブルームーン軍は敗北しました！！ww', '블루문　군은　패배했습니다！！ww', 'csv 0x9450E0'),
     ('defeat_green', 0x945104, 40, 'グリーンアース軍は敗北しました！！ww', '그린어스군은　패배했습니다！！ww', 'csv 0x945104'),
@@ -122,7 +122,7 @@ _P2_LIVE = (
     ('unit_none', 0x9295B0, 8, 'なし', '없음', 'build unit-opt-label'),
 )
 _P1_LIVE = (
-    ('preload_page0', 0xEFAB80, 12, 'はいえ▼', '예아니오▼', 'csv 0xEFAB80'),
+    ('preload_page0', 0xEFAB80, 12, 'はいえ▼', '예아뇨▼', 'csv 0xEFAB80'),
     ('preload_page1', 0xEFAB8C, 40, '待機攻撃合流降伏する終了とじるシステム', '대기공격합류항복종료닫기시스템', 'csv 0xEFAB8C'),
     ('preload_page2', 0xEFABB4, 8, '攻撃', '공격', 'build control word 0xEFABB4'),
     ('label_end', 0xEE258C, 8, '終了', '종료', 'build control word 0xEE258C'),
@@ -131,7 +131,7 @@ _P1_LIVE = (
     ('label_wait', 0xEE25AC, 8, '待機', '대기', 'build control word 0xEE25AC'),
     ('label_join', 0xEE25B4, 8, '合流', '합류', 'build control word 0xEE25B4'),
     ('label_attack', 0xEE25BC, 6, '攻撃', '공격', 'build control word 0xEE25BC'),
-    ('yesno', 0xEFAE0C, 17, '　はい　　いいえ', '　예　　　아니오', 'csv 0xEFAE0C (option columns kept)'),
+    ('yesno', 0xEFAE0C, 17, '　はい　　いいえ', '　예　　　아뇨', 'csv 0xEFAE0C (option columns kept)'),
     ('defeat_red', 0xEFD8A4, 36, 'レッドスター軍は敗北しました！！ww', '레드스타군은　패배했습니다！！ww', 'csv 0xEFD8A4'),
     ('defeat_blue', 0xEFD8C8, 36, 'ブルームーン軍は敗北しました！！ww', '블루문　군은　패배했습니다！！ww', 'csv 0xEFD8C8'),
     ('defeat_green', 0xEFD8EC, 40, 'グリーンアース軍は敗北しました！！ww', '그린어스군은　패배했습니다！！ww', 'csv 0xEFD8EC'),

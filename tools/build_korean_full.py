@@ -343,17 +343,17 @@ def normalize_korean_terms(text):
     return text.replace('쇼군', '사령관').replace('장군', '사령관')
 
 TEXT_OVERRIDES = {
-    # These 8-byte yes/no slots are not rendered as normal dialogue. The menu
-    # routine samples only the second/fourth glyph positions. Arrange the
-    # compact row so the visible result becomes "예 오" instead of "아 오".
-    '예아니오▼': '　예　오',
-    '예아니오': '　예　오',
-    '예 아니오 ▼': '　예　오',
-    '예 아니오': '　예　오',
-    '예 아니요 ▼': '　예　오',
-    '예 아니요': '　예　오',
-    '예　　아니오': '예  아니오',
-    '예　　아니요': '예  아니오',
+    # These 8-byte yes/no slots are sampled by a compact menu renderer.
+    '예아니오▼': '　예아뇨',
+    '예아니오': '　예아뇨',
+    '예 아니오 ▼': '　예아뇨',
+    '예 아니오': '　예아뇨',
+    '예 아니요 ▼': '　예아뇨',
+    '예 아니요': '　예아뇨',
+    '예아뇨▼': '　예아뇨',
+    '예 아뇨 ▼': '　예아뇨',
+    '예　　아니오': '예  아뇨',
+    '예　　아니요': '예  아뇨',
     # These appear in supplemental rows, but the current glyph table does not
     # include 칫/헉/켬. Normalize them before the fit pass so the report stays
     # actionable and those rows do not fall back to Japanese.
@@ -11888,7 +11888,7 @@ if _EXTERNAL_ADDRESS_TEXT_OVERRIDES is not None:
 PUNCT_DROP = ',.!?:;()[]{}"\''
 
 # 공백 collapse 예외: 메뉴가 글리프 위치를 샘플링하는 예/아니오 트릭 슬롯(이중공백 의도적).
-WS_COLLAPSE_EXEMPT = {'　예　오', '예  아니오', '　예　　　아니오'}
+WS_COLLAPSE_EXEMPT = {'　예아뇨', '예  아뇨', '　예　　　아뇨'}
 
 
 def _shorten(s):
@@ -13265,12 +13265,12 @@ B84_POWER_GLYPH_HOOK = _b84_power_glyph_hook()
 
 def _part1_yesno_hook():
     # The name-confirm compact-choice renderer leaves only fragments of
-    # "예/아니오" in the tilemap. The first entry point wraps the original
+    # "예/아뇨" in the tilemap. The first entry point wraps the original
     # compact update; the second entry point is patched into the per-frame
     # choice cursor routine so loaded save states are repaired without needing a
     # fresh redraw. Both paths share the same overlay routine:
     #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
-    #   - rewrite the visible tilemap row at x8 as "예 아니오"
+    #   - rewrite the visible tilemap row at x8 as "예 아뇨"
     #   - if the original cursor routine cleared the yes cursor at x7, restore
     #     the no cursor at x9 so RIGHT selection is visible instead of being
     #     hidden between the rewritten Korean cells.
@@ -13292,6 +13292,12 @@ def _part1_yesno_hook():
         'd06000061061000664010000e3800000e5800000e7800000e9800000'
     ))
     b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
+    # The overlay copies bitmap tiles directly. E6/E7 must be 뇨, and E8/E9
+    # must be blank; changing only the D8273C preload would leave 니오 visible.
+    b[0x118:0x11C] = struct.pack('<I', KOR_BASE_RT + 185 * 32)  # 뇨 top
+    b[0x120:0x124] = struct.pack('<I', KOR_BASE_RT + 196 * 32)  # 뇨 bottom
+    b[0x128:0x12C] = struct.pack('<I', 0x08F09F20)  # zero tile after glyph blob
+    b[0x130:0x134] = struct.pack('<I', 0x08F09F20)
 
     cursor_fix_off = 0x154
     cursor_fix_rt = PART1_YESNO_HOOK_RT + cursor_fix_off
@@ -14134,6 +14140,7 @@ def main():
     # screen position. Keep the original renderer; extend its dictionary below.
     # Keep the original full-menu renderer: the retired overlay overwrote
     # stock BGM icon tiles 0x1B1..0x1B4 with its cached labels.
+    assert len(blob) == 0x9F20 and rom[0xF09F20:0xF09F40] == bytes(32)
     rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
     rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
@@ -23201,18 +23208,19 @@ def main():
     if struct.unpack_from('<I', rom, 0xB28AFC)[0] != 0x08B82AE8:
         raise AssertionError('Part 1 CP/2P/VS fallback pointer changed')
 
-    # Normal confirm-choice rows have enough room for "예　　아니오" but should
+    # Normal confirm-choice rows have enough room for "예　　아뇨" but should
     # not retain ASCII space padding after the Korean text; some UI paths render
     # those filler bytes as stray pixels.
     for faddr in [
-        0x942CC4,
         0x97B178,
         0x9B3A1C,
         0x9EC2C0,
         0xD835BC,
-        0xEFAE0C,
     ]:
-        fixed_zero_text_patch(faddr, 16, '예　　아니오')
+        fixed_zero_text_patch(faddr, 16, '예　　아뇨')
+    # 0x942A38/0x942CC4 and 0xEFAB80/0xEFAE0C belong to the link-client
+    # images and are written later by link_client_font.apply().
+    fixed_zero_text_patch(0x804FC8, 8, '　예아뇨')
     # The battle-surrender confirmation row is sampled by a compact renderer
     # with two cursor cells, matching the original "　はい　　いいえ" layout.
     # Preserve the leading/gap cells so the initial no cursor and later left/
@@ -23232,14 +23240,16 @@ def main():
     )
     patch_script_row(0xDF294E, 0xDF295E, b'', 'save prompt tail blank row')
     patch_script_row(0xDF29CA, 0xDF29DA, b'', 'save prompt repeat tail blank row')
-    fixed_zero_text_patch(0xD835BC, 16, '　　예　　아니')
+    # The campaign prompt reads this row without the name-confirm tilemap hook.
+    # Fill the complete 16-byte row; the hook still owns name-confirm placement.
+    fixed_zero_text_patch(0xD835BC, 16, '　　예　　아뇨')
 
     # Name-confirm compact choices are not part of the normal CSV path because
-    # nearby UI tables are deny-listed. This order loads 예/오/아/니 tiles; the
-    # tiny tilemap hook above rewrites the visible row to "예 아니오".
-    yesno_name_confirm = encode_text('예오아니', syl_to_code, unmapped)
+    # nearby UI tables are deny-listed. E2/E4/E6/E8 load 예/아/뇨/blank;
+    # the hook writes these tiles to x8/x10/x11/x12 respectively.
+    yesno_name_confirm = encode_text('예아뇨　', syl_to_code, unmapped)
     rom[0xD8273C:0xD8273C + 8] = yesno_name_confirm
-    WRITE_LOG.append([0xD8273C, 8, len(yesno_name_confirm), bytes(yesno_name_confirm).hex(), None, '예오아니', None, 'yesno-name'])
+    WRITE_LOG.append([0xD8273C, 8, len(yesno_name_confirm), bytes(yesno_name_confirm).hex(), None, '예아뇨　', None, 'yesno-name'])
 
     # These suffixes follow the runtime player-name control byte.  The original
     # has no visual gap between the entered name and さん, so keep 님 attached.

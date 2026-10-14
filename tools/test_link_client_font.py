@@ -43,8 +43,10 @@ class LinkClientFontTest(unittest.TestCase):
     def test_yesno_keeps_option_columns(self):
         for spec in L.SPECS:
             item = next(x for x in spec.live if x[0] == 'yesno')
-            self.assertEqual(item[4], '　예　　　아니오')
-            self.assertEqual(len(item[4]), len(item[3]))
+            self.assertEqual(item[4], '　예　　　아뇨')
+            self.assertEqual(item[4].index('예'), item[3].index('はい'))
+            self.assertEqual(item[4].index('아뇨'), item[3].index('いいえ'))
+            self.assertLessEqual(len(item[4]), len(item[3]))
 
     def test_mutation_drop_table_entry(self):
         rom = self.fresh()
