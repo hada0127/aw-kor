@@ -29,6 +29,9 @@ CHECKPOINTS = ROOT / "data" / "screen_checkpoints.json"
 PATCHED_ROM = ROOT / "output" / "game_wars_korean_full.gba"
 OUT_DIR = ROOT / "temp" / "scene_screenshots"
 HARNESS = Path(os.environ.get("MGBA_HARNESS", str(ROOT / "temp" / "mgbah")))
+def is_withdrawn_checkpoint(checkpoint: dict) -> bool:
+    grade = checkpoint.get("grade", "")
+    return isinstance(grade, str) and grade.lower().startswith(("blocked", "withdrawn"))
 
 
 def _load(path: Path) -> dict:
@@ -191,6 +194,8 @@ def validate_recorder_endpoint(checkpoint: dict, rom_sha: str) -> dict:
 
 
 def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, str]:
+    if is_withdrawn_checkpoint(checkpoint):
+        return False, "withdrawn or blocked checkpoint grade"
     if not frame.exists() or frame.stat().st_size <= 0:
         return False, "frame 없음"
     prov = frame.parent / "provenance.json"
@@ -295,6 +300,8 @@ def main() -> None:
 
     for name in names:
         checkpoint = dict(by_name[name])
+        if is_withdrawn_checkpoint(checkpoint):
+            raise SystemExit(f"{name}: withdrawn or blocked checkpoint grade")
         if not checkpoint.get("scene_id") and scene_by_checkpoint.get(name):
             checkpoint["scene_id"] = scene_by_checkpoint[name]
         frame = out_dir / f"{name}_patched" / "frame.png"

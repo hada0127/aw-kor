@@ -98,8 +98,8 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "data/evidence/release_C_89b_watch.log",
-        "receipt": "data/evidence/release_C_89b_watch_receipt.json",
+        "watch_log": "temp/release_C/b28/89b_trace/trace.log",
+        "receipt": "temp/release_C/b28/89b_trace/bound_receipt.json",
         "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
@@ -182,6 +182,11 @@ def main() -> None:
     for scene in semantic_scenes:
         scene_id = scene.get("id")
         screenshot = scene.get("screenshot") or {}
+        if screenshot.get("status") in {"blocked", "defect"}:
+            issues.append({"scene": scene_id, "severity": "critical",
+                           "issue": screenshot["status"].upper(),
+                           "required": screenshot.get("note") or "current candidate evidence required"})
+            continue
         checkpoint_name = screenshot.get("checkpoint")
         checkpoint = checkpoint_by_name.get(checkpoint_name, {})
         capture_path = screenshot.get("capture_path")
@@ -277,12 +282,21 @@ def main() -> None:
                                "issue": "watch log SHA 불일치", "watch_log": watch_req["watch_log"]})
             try:
                 receipt = load(ROOT / watch_req["receipt"], {})
+                source_receipt = load(ROOT / receipt["source_trace_receipt"], {})
                 from capture_scene_screenshots import validate_recorder_endpoint
                 state_path = ROOT / receipt["source_checkpoint"]
                 frame_path = ROOT / receipt["defeat_frame"]
                 state = load(state_path, {})
                 endpoint = checkpoint.get("recorder_endpoint") or {}
-                if (receipt["status"] != "current_candidate" or
+                if (source_receipt["candidate_sha256"] != candidate_sha or
+                        source_receipt["trace"] != watch_req["watch_log"] or
+                        source_receipt["trace_sha256"] != sha256(watch_path) or
+                        source_receipt["hit_count"] != 64 or
+                        source_receipt["all_hits_by_core_frame"] != 4754 or
+                        source_receipt["defeat_core_frame"] != 4774 or
+                        source_receipt["cheat_tainted"] is not True or
+                        receipt["cheat_tainted"] is not True or
+                        receipt["status"] != "current_candidate" or
                         receipt["rom_sha256"] != candidate_sha or
                         receipt["route"] != state_path.parent.name or
                         receipt["source_checkpoint_sha256"] != sha256(state_path) or

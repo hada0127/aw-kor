@@ -8160,42 +8160,87 @@ def patch_part2_lets_go_obj(rom):
 
 
 def patch_part2_battle_start_day_overlay_obj(rom):
-    """Remove the affine-transformed Part 2 battle-start day/start Japanese art."""
+    """Localize the Part 2 affine day/start OBJ sheets, retaining native digits."""
+    from PIL import Image, ImageDraw, ImageFont
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
 
-    blank = bytes(32)
+    from aw_fonts import hadasans_path, hadasans_black_path
+    bold_path, black_path = hadasans_path(), hadasans_black_path()
 
-    def patch_block(off, tile_indices):
+    def glyph_chunk(ch):
+        # The native 32x32 cells use OBJ palette 3: white face (15), grey
+        # antialias (11/6), black outline (13), and dark shadow (9).
+        # JP face ink spans roughly 25..27 by 24..26 pixels per 32px cell.
+        # Rasterize the same high-resolution Bold outline used by the mode
+        # plates; Black supplies only a coverage guide for thicker edges.
+        faces = []
+        for path in (bold_path, black_path):
+            font = ImageFont.truetype(path, 384)
+            probe = Image.new('L', (768, 768), 0)
+            ImageDraw.Draw(probe).text((40, 0), ch, font=font, fill=255)
+            faces.append(probe)
+        boxes = [im.point(lambda v: 255 if v >= 128 else 0).getbbox() for im in faces]
+        if None in boxes:
+            raise AssertionError(f'empty battle day glyph: {ch!r}')
+        box = (min(b[0] for b in boxes), min(b[1] for b in boxes),
+               max(b[2] for b in boxes), max(b[3] for b in boxes))
+        face = faces[0].crop(box).resize((26, 25), Image.Resampling.LANCZOS)
+        guide = faces[1].crop(box).resize((26, 25), Image.Resampling.LANCZOS)
+        canvas = Image.new('L', (32, 32), 0)
+        canvas.paste(face, (2, 3))
+        weight = Image.new('L', (32, 32), 0)
+        weight.paste(guide, (2, 3))
+        from PIL import ImageFilter
+        edge = weight.filter(ImageFilter.MaxFilter(5))
+        shade = Image.new('L', (32, 32), 0)
+        shade.paste(edge.crop((0, 0, 31, 31)), (1, 1))
+        pixels = []
+        for yy in range(32):
+            for xx in range(32):
+                f, e, s = canvas.getpixel((xx, yy)), edge.getpixel((xx, yy)), shade.getpixel((xx, yy))
+                pixels.append(15 if f >= 150 else 11 if f >= 45 else
+                              13 if e >= 90 else 6 if e >= 30 else
+                              9 if s >= 70 else 0)
+        out = bytearray(512)
+        for ty in range(4):
+            for tx in range(4):
+                for row in range(8):
+                    for pair in range(4):
+                        x0, yy = tx * 8 + pair * 2, ty * 8 + row
+                        out[(ty * 4 + tx) * 32 + row * 4 + pair] = (
+                            pixels[yy * 32 + x0] | pixels[yy * 32 + x0 + 1] << 4)
+        return bytes(out)
+
+    glyphs = {ch: glyph_chunk(ch) for ch in '일째작전개시실패'}
+
+    def patch_block(off, first_chunk, label):
         dec = lz77_decompress(rom, off)
         if dec is None:
             raise AssertionError(f'invalid battle-start day overlay LZ77 block at 0x{off:X}')
         data, consumed = dec
         buf = bytearray(data)
-        patched = 0
-        for tile_idx in tile_indices:
-            start = tile_idx * 32
-            if start + 32 > len(buf):
-                raise AssertionError(f'battle-start day overlay tile out of range at 0x{off:X}: {tile_idx}')
-            buf[start:start + 32] = blank
-            patched += 1
+        for index, ch in enumerate(label):
+            start = (first_chunk + index) * 512
+            if start + 512 > len(buf):
+                raise AssertionError(f'battle-start day glyph out of range at 0x{off:X}: {ch}')
+            buf[start:start + 512] = glyphs[ch]
         comp = lz77_compress_optimal(bytes(buf), vram_safe=True)
         if len(comp) > consumed:
             raise AssertionError(f'battle-start day overlay LZ77 overflow at 0x{off:X}: {len(comp)} > {consumed}')
         rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-        return patched
+        return len(label) * 16
 
     patched = 0
-    # The visible "1日目 作戦開始" overlay is split across repeated compressed
-    # OBJ sheets, then affine-transformed at runtime. Replacing it with Hangul in
-    # the source sheets produces unreadable transformed strokes, so the safe
-    # localization step is to remove the Japanese art entirely.
-    patched += patch_block(0x45EC74, list(range(16, 32)) + list(range(160, 288)))
+    # Chunks 0..9 are the native decimal glyphs. The 288-tile sheet has
+    # 日目/作戦開始/失敗 at chunks 10..17. Campaign sheets split 作戦 into a
+    # separate 32-tile block while their main sheets hold 日目/開始.
+    patched += patch_block(0x45EC74, 10, '일째작전개시실패')
     for off in (0x92DF84, 0x966C0C, 0x99F4B0, 0x9D7D54):
-        patched += patch_block(off, list(range(16, 32)) + list(range(160, 224)))
+        patched += patch_block(off, 10, '일째개시')
     for off in (0x92EB5C, 0x9677E4, 0x9A0088, 0x9D892C):
-        patched += patch_block(off, list(range(0, 32)))
+        patched += patch_block(off, 0, '작전')
     return patched
 
 

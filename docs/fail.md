@@ -1599,3 +1599,13 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 - **사고:** 진단 프로브가 하네스 종료 시 SRAM을 되써서 사용자 저장 `output/qa/screenqa_2026-10-13/p1_battle/run1/game.sav`를 덮어씀. 백업에서 byte-identical 복원.
 - **규칙:** 진단·프로브는 원본 저장을 직접 열지 않는다. 하네스 기본값은 저장 복사본 사용/읽기 전용 SRAM이다. 쓰기가 필요하면 명시 옵션과 복사본으로만.
 - **결함(b27):** 2편 시스템 메뉴 `음악 있음`/`음악 없음`의 0x20이 아이콘 행 5칸 중 한 칸을 소비해 글자가 밀림 → 띄어쓰기 제거(b28). 0xA29A06 헤더가 `수都`로 표시 → `도`로 수정.
+
+## 2026-10-14 b29 후보 게이트의 별도 증거 등록 실패
+
+- b29 전체 단위시험은 1110건 중 106건 실패/오류이며, b28 기록의 105건 외 추가 1건은 `test_archived_capture_records_fail_on_tampering`이다. 이 시험은 `data/obj_cell_contiguity.json` 안의 기존 `temp/release_C/b28/...` 캡처 경로를 거부한다. 현재 파일 그대로 b28 ROM을 지정해 단독 재현해도 실패하므로 b29 배너 바이트 원인이 아니다. 증거 등록 파일은 이 작업 범위에서 수정하지 않았다. 로그와 비교는 `temp/release_C/b29/gates/` 및 `temp/release_C/b29_report.md`.
+
+## 2026-10-14 b29r2 첫 빌드 입력 경합
+
+- 첫 빌드는 `stable_build_inputs`에서 `ValueError: Build inputs changed during build; output provenance refused`로 중지됐다. 같은 시간 다른 작업자가 장면 카탈로그 입력을 갱신했다. 최초 시도는 후보 ROM을 만들지 않았다. 입력이 안정된 뒤 재빌드와 독립 재생성의 SHA가 일치했다. 원본 로그: `temp/release_C/b29r2/build.log`.
+- b29r2에서도 광범위 단위시험 `all_unit`은 기존 106개 이름으로 실패했다(신규 이름 0). 기존 증거 등록 관련 실패를 배너 코드의 성공으로 오인하거나 전체 QA 통과로 기록하지 않는다. `temp/release_C/b29r2/gates/all_unit.log`.
+- 기존 3P/캠페인 항복 캡처의 말미 화면과 로그를 조사했으나 `실패` 배너 표시를 확인하지 못했다. 기존 릴리스 C 압축 에뮬레이터 로그 74개에서도 8개 반복 시트의 LZ77 소스 로드가 0건이었다(`temp/release_C/b29r2/day_banner/existing_log_source_scan.txt`). `실패` 실화면과 8개 반복 시트의 소비 경로는 미검증으로 남긴다.

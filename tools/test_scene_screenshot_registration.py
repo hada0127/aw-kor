@@ -130,6 +130,7 @@ class SceneRegistrationTest(unittest.TestCase):
             self.assertTrue((work/'out'/'sheet_compare.png').exists())
 
     def test_missing_stale_endpoint_and_taint_mutations(self):
+        from tools.capture_scene_screenshots import current_capture
         work = ROOT/'temp/w1_scene_registration_test'
         work.mkdir(parents=True, exist_ok=True)
         source = ROOT/'temp/scene_screenshots'/f'{NAME}_patched'
@@ -161,6 +162,9 @@ class SceneRegistrationTest(unittest.TestCase):
         self.assertIn('invalid_cached_capture',run([NAME],broken,original))
         lost=copy.deepcopy(original);lost['cheat_tainted']=False
         self.assertIn('invalid_cached_capture',run([NAME],checkpoint,lost))
+        withdrawn=copy.deepcopy(checkpoint);withdrawn['grade']='blocked_legacy_note_only'
+        self.assertFalse(current_capture(dest/'frame.png', withdrawn, original['rom_sha256'])[0])
+        self.assertIn('withdrawn_checkpoint_required',run([NAME],withdrawn,original))
         (work/'catalog.json').write_text(json.dumps({'scenes':[{'id':'missing','capture_required':True,
                                                                 'screenshot':{}}]}))
         subprocess.run(['python3','tools/qa_scene_screenshot_sanity.py','--rom',

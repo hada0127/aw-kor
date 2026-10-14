@@ -179,8 +179,14 @@ def main() -> int:
     required = set()
     catalog_owners = Counter()
     malformed_required = []
+    blocked = []
     for scene in catalog.get("scenes", []):
         if scene.get("capture_required") is not True:
+            continue
+        status = (scene.get("screenshot") or {}).get("status")
+        if status in {"blocked", "defect"}:
+            blocked.append({"scene_id": scene.get("id"), "issue": status.upper(),
+                            "reason": (scene.get("screenshot") or {}).get("note")})
             continue
         shot = (scene.get("screenshot") or {}).get("checkpoint")
         if shot:
@@ -192,12 +198,18 @@ def main() -> int:
             name = extra.get("checkpoint") if isinstance(extra, dict) else extra
             if name:
                 required.add(name)
-    names = manifest.get("captured", []) + manifest.get("skipped", [])
+    from capture_scene_screenshots import current_capture, is_withdrawn_checkpoint
+    archived = {name for name in manifest.get("captured", []) + manifest.get("skipped", [])
+                if is_withdrawn_checkpoint(checkpoint_by_name.get(name, {}))}
+    names = [name for name in manifest.get("captured", []) + manifest.get("skipped", [])
+             if name not in archived]
     counts = Counter(names)
     frames = [shot_dir / f"{name}_patched" / "frame.png" for name in sorted(set(names))]
     missing = [str(path.relative_to(ROOT)) for path in frames if not path.exists()]
     rows: list[dict] = []
-    issues: list[dict] = [{"checkpoint": path, "issue": "missing_frame"} for path in missing]
+    issues: list[dict] = blocked + [{"checkpoint": path, "issue": "missing_frame"} for path in missing]
+    issues.extend({"checkpoint": name, "issue": "withdrawn_checkpoint_required"}
+                  for name in sorted(archived & required))
     issues.extend({"scene_id": sid, "issue": "required_scene_missing_checkpoint"}
                   for sid in malformed_required)
     issues.extend({"checkpoint": name, "issue": "missing_scene"} for name in sorted(required - counts.keys()))
@@ -209,8 +221,10 @@ def main() -> int:
                   for name, count in sorted(catalog_owners.items()) if count > 1)
     issues.extend({"checkpoint": name, "issue": "unknown_checkpoint"}
                   for name in sorted(counts.keys() - checkpoint_by_name.keys()))
-    observations: list[dict] = []
-    from capture_scene_screenshots import current_capture
+    observations: list[dict] = [
+        {"checkpoint": name, "note": "withdrawn capture archived in manifest; excluded from active evidence"}
+        for name in sorted(archived)
+    ]
     for path in frames:
         if not path.exists():
             continue

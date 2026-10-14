@@ -23,11 +23,11 @@
     "sprites_excluded_scan_lz77": 1880,
     "sprites_excluded_font": 1,
     "review_pending_total": 33,
-    "dialogue_excluded_low_confidence": 3368,
+    "dialogue_excluded_low_confidence": 3647,
     "dialogue_groups_total": 9580,
-    "dialogue_game_scene_assigned": 6204,
+    "dialogue_game_scene_assigned": 5925,
     "dialogue_assigned": 9572,
-    "dialogue_review_only": 3368,
+    "dialogue_review_only": 3647,
     "dialogue_unassigned": 8
   },
   "scenes": [
@@ -554,182 +554,14 @@
         "source_contains": []
       },
       "dialogue_ids": [
-        "g_00805AE0",
-        "g_009292A0",
-        "g_009292A8",
-        "g_00929398",
-        "g_009293A4",
-        "g_009293B0",
-        "g_009293BC",
-        "g_009293C8",
-        "g_009293D8",
-        "g_009293E4",
-        "g_009293F0",
-        "g_00929400",
-        "g_00929414",
-        "g_00929424",
-        "g_00929434",
-        "g_009294F0",
-        "g_009294FC",
-        "g_00929508",
-        "g_00929520",
-        "g_00929538",
-        "g_00929544",
-        "g_0092954C",
-        "g_00929560",
-        "g_00929568",
-        "g_0092958C",
-        "g_0092959C",
-        "g_00929668",
-        "g_00929674",
-        "g_009296F8",
-        "g_00929720",
-        "g_00929750",
-        "g_00929774",
-        "g_00929790",
-        "g_009297B8",
-        "g_009297E0",
-        "g_00929800",
-        "g_00929820",
-        "g_0092983C",
-        "g_00929860",
-        "g_00929880",
-        "g_009298A4",
-        "g_009298D4",
-        "g_009298FC",
-        "g_00961F28",
-        "g_00961F30",
-        "g_00962020",
-        "g_0096202C",
-        "g_00962038",
-        "g_00962044",
-        "g_00962050",
-        "g_00962060",
-        "g_0096206C",
-        "g_00962078",
-        "g_00962088",
-        "g_0096209C",
-        "g_009620AC",
-        "g_009620BC",
-        "g_00962178",
-        "g_00962184",
-        "g_00962190",
-        "g_009621A8",
-        "g_009621C0",
-        "g_009621CC",
-        "g_009621D4",
-        "g_009621E8",
-        "g_009621F0",
-        "g_00962214",
-        "g_00962224",
-        "g_009622F0",
-        "g_009622FC",
-        "g_00962390",
-        "g_009623B8",
-        "g_009623E8",
-        "g_0096240C",
-        "g_00962428",
-        "g_00962450",
-        "g_00962478",
-        "g_00962498",
-        "g_009624B8",
-        "g_009624D4",
-        "g_009624F8",
-        "g_00962518",
-        "g_0096253C",
-        "g_0096256C",
-        "g_00962594",
-        "g_0099A7CC",
-        "g_0099A7D4",
-        "g_0099A8C4",
-        "g_0099A8D0",
-        "g_0099A8DC",
-        "g_0099A8E8",
-        "g_0099A8F4",
-        "g_0099A904",
-        "g_0099A910",
-        "g_0099A91C",
-        "g_0099A92C",
-        "g_0099A940",
-        "g_0099A950",
-        "g_0099A960",
-        "g_0099AA1C",
-        "g_0099AA28",
-        "g_0099AA34",
-        "g_0099AA4C",
-        "g_0099AA64",
-        "g_0099AA70",
-        "g_0099AA78",
-        "g_0099AA8C",
-        "g_0099AA94",
-        "g_0099AAB8",
-        "g_0099AAC8",
-        "g_0099AB94",
-        "g_0099ABA0",
-        "g_0099AC34",
-        "g_0099AC5C",
-        "g_0099AC8C",
-        "g_0099ACB0",
-        "g_0099ACCC",
-        "g_0099ACF4",
-        "g_0099AD1C",
-        "g_0099AD3C",
-        "g_0099AD5C",
-        "g_0099AD78",
-        "g_0099AD9C",
-        "g_0099ADBC",
-        "g_0099ADE0",
-        "g_0099AE10",
-        "g_0099AE38",
-        "g_009D3070",
-        "g_009D3078",
-        "g_009D3168",
-        "g_009D3174",
-        "g_009D3180",
-        "g_009D318C",
-        "g_009D3198",
-        "g_009D31A8",
-        "g_009D31B4",
-        "g_009D31C0",
-        "g_009D31D0",
-        "g_009D31E4",
-        "g_009D31F4",
-        "g_009D3204",
-        "g_009D32C0",
-        "g_009D32CC",
-        "g_009D32D8",
-        "g_009D32F0",
-        "g_009D3308",
-        "g_009D3314",
-        "g_009D331C",
-        "g_009D3330",
-        "g_009D3338",
-        "g_009D335C",
-        "g_009D336C",
-        "g_009D3438",
-        "g_009D3444",
-        "g_009D34D8",
-        "g_009D3500",
-        "g_009D3530",
-        "g_009D3554",
-        "g_009D3570",
-        "g_009D3598",
-        "g_009D35C0",
-        "g_009D35E0",
-        "g_009D3600",
-        "g_009D361C",
-        "g_009D3640",
-        "g_009D3660",
-        "g_009D3684",
-        "g_009D36B4",
-        "g_009D36DC"
+        "g_00805AE0"
       ],
       "sprite_ids": [
         "lz77_00C1A564",
         "lz77_00C1AC60"
       ],
       "counts": {
-        "dialogue": 169,
+        "dialogue": 1,
         "sprite": 2
       },
       "entrypoint": {
@@ -1350,17 +1182,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
-        "url": "/scene_shots/scene_19a2_part1_heavy_tank_advice_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+        "status": "blocked",
+        "note": "no current b28 save"
       },
       "dialogue_filter": {
         "regions": [
@@ -1398,12 +1224,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
-        "screenshot": "scene_19a2_part1_heavy_tank_advice_story",
-        "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
-        "source_state": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+        "note": "no current b28 save",
+        "extra_screenshots": []
       }
     },
     {
@@ -1640,17 +1462,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
-        "url": "/scene_shots/scene_19b2_part1_hoip_landing_setup_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+        "status": "blocked",
+        "note": "no current b28 save"
       },
       "dialogue_filter": {
         "regions": [
@@ -1675,12 +1491,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
-        "screenshot": "scene_19b2_part1_hoip_landing_setup_story",
-        "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
-        "source_state": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+        "note": "no current b28 save",
+        "extra_screenshots": []
       }
     },
     {
@@ -1693,17 +1505,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
-        "url": "/scene_shots/scene_19b1_part1_hoip_ambush_weather_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
+        "status": "blocked",
+        "note": "no current b28 save"
       },
       "dialogue_filter": {
         "regions": [
@@ -1738,12 +1544,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
-        "screenshot": "scene_19b1_part1_hoip_ambush_weather_story",
-        "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
-        "source_state": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
+        "note": "no current b28 save",
+        "extra_screenshots": []
       }
     },
     {
@@ -2123,17 +1925,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
-        "url": "/scene_shots/scene_19c1_part1_mid_campaign_radio_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
+        "status": "blocked",
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704..."
       },
       "dialogue_filter": {
         "regions": [
@@ -2217,12 +2013,14 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
-        "screenshot": "scene_19c1_part1_mid_campaign_radio_story",
-        "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
-        "source_state": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+        "extra_screenshots": []
+      },
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/first_cleared/f007464.png",
+        "frame_sha256": "0ff5b4ca01007da7ec0fdf74c0f3b473f16ff1de8a0d320579958aa2b29c67d3",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
       }
     },
     {
@@ -2235,17 +2033,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19c2_part1_mid_fog_map_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19c2_part1_mid_fog_map_story",
-        "url": "/scene_shots/scene_19c2_part1_mid_fog_map_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+        "status": "blocked",
+        "note": "no current b28 save"
       },
       "dialogue_filter": {
         "regions": [
@@ -2275,12 +2067,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19c2_part1_mid_fog_map_story",
-        "screenshot": "scene_19c2_part1_mid_fog_map_story",
-        "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
-        "source_state": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+        "note": "no current b28 save",
+        "extra_screenshots": []
       }
     },
     {
@@ -3251,17 +3039,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
-        "url": "/scene_shots/scene_19e7_part1_hoip_co_weather_help.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "fresh redraw from 2111_front route: A,A 재진입으로 0xDF7452/0xDF7482 현재 ROM 대사 렌더",
-        "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0"
+        "status": "blocked",
+        "note": "no current b28 save"
       },
       "dialogue_filter": {
         "regions": [
@@ -3293,12 +3075,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
-        "screenshot": "scene_19e7_part1_hoip_co_weather_help",
-        "note": "fresh redraw from 2111_front route: A,A 재진입으로 0xDF7452/0xDF7482 현재 ROM 대사 렌더",
-        "source_state": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0",
-        "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0"
+        "note": "no current b28 save",
+        "extra_screenshots": []
       }
     },
     {
@@ -3316,12 +3094,12 @@
       "screenshot": {
         "checkpoint": "scene_19e6_part1_unit_help_late",
         "url": "/scene_shots/scene_19e6_part1_unit_help_late.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "verified visual text: g_00DF5D62 계열 유닛/작전 설명 후반 대사",
+        "note": "scene_19e6_part1_unit_help_late: P1 operation room tutorial briefing (Catherine) 커서 조작부터 / 공격방법도 설명이야; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
         "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+        "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3418,7 +3196,7 @@
       "entrypoint": {
         "checkpoint": "scene_19e6_part1_unit_help_late",
         "screenshot": "scene_19e6_part1_unit_help_late",
-        "note": "verified visual text: g_00DF5D62/g_00DF5E12 계열 유닛/작전 설명 후반 대사; exact watch evidence: temp/scene_entrypoints/part1_19e6_primary_watch_current, temp/scene_entrypoints/part1_19e6_exact_watch_current",
+        "note": "scene_19e6_part1_unit_help_late: P1 operation room tutorial briefing (Catherine) 커서 조작부터 / 공격방법도 설명이야; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
         "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0",
         "extra_screenshots": [
           {
@@ -3429,7 +3207,9 @@
           }
         ],
         "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+        "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+        "cheat_tainted": false
       }
     },
     {
@@ -3605,12 +3385,12 @@
       "screenshot": {
         "checkpoint": "scene_19f_part1_extra_story",
         "url": "/scene_shots/scene_19f_part1_extra_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "fresh redraw from step_016: A 재진입으로 0xDF9516/0xDF953B 현재 ROM 대사 렌더",
+        "note": "scene_19f_part1_extra_story: P1 campaign map pre-mission dialogue, old man CO line 레드스타 군? (JA レッドスター軍？). Located by b28 parser-breakpoint trace (tr/p1_E_mission: DFF08A read in emulated chunk 1200-1500); frame chosen from ledger after typing completes",
         "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0"
+        "provenance_path": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -3659,10 +3439,12 @@
       "entrypoint": {
         "checkpoint": "scene_19f_part1_extra_story",
         "screenshot": "scene_19f_part1_extra_story",
-        "note": "fresh redraw from step_016: A 재진입으로 0xDF9516/0xDF953B 현재 ROM 대사 렌더",
+        "note": "scene_19f_part1_extra_story: P1 campaign map pre-mission dialogue, old man CO line 레드스타 군? (JA レッドスター軍？). Located by b28 parser-breakpoint trace (tr/p1_E_mission: DFF08A read in emulated chunk 1200-1500); frame chosen from ledger after typing completes",
         "source_state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0",
         "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0"
+        "provenance_path": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -5262,11 +5044,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_26a_part2_battle_start_overlays",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "status": "missing",
-        "note": "Unresolved: matching runtime scene phases/dialogue not captured."
+        "status": "defect",
+        "note": "b28 P2 1日目/作戦開始 OBJ VRAM tiles 487-598 zero; temp/release_C/b28/26a_day_banner/"
       },
       "dialogue_filter": {
         "regions": []
@@ -5283,8 +5065,29 @@
         "sprite": 1
       },
       "entrypoint": {
-        "note": "Unresolved: matching runtime scene phases/dialogue not captured.",
+        "note": "P1 and sprite animation phases catalogued in batch4; P2 banner defect blocks PASS",
         "extra_screenshots": []
+      },
+      "evidence": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "sprite_phases": [
+          "temp/release_C/b28/B19a1_p1sweep/frames/f95e46bf5f947e757b92af9df1392fa41b2a25cbd4d11d7efff0cd2f99a22c15.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/26725208fd35f6c54bd89b9614fd02e76101f8a7dc3e26ba9d5c7324ba839201.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/863db895241a109de8b25260a50c271d3f47530c81140a4a2cf1f2fbfd8f4f7c.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/df91f1370dc764d5e1b095feb5caec1f1b4defee19a9958d0c4aefb336ec4c8a.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/3661b6a311592f276d102e588e8c3ab097b895c651264bb8e6a9db0d937b3cde.png"
+        ],
+        "p1_day_banner": [
+          "temp/release_C/b28/F7BE_a/frames/a0b8bde2894be48b207d8bc7b82116e0ae954cebe689177321d546f609ea1a87.png",
+          "temp/release_C/b28/F7BE_a/frames/2987e3af9d54139db7c844c6a6bce124209a554c68cbdad13f3cc23f6129e551.png",
+          "temp/release_C/b28/F7BE_a/frames/c8ef78a74a117cfde945703d470b35e9110de20c28c9a17d22373625714205ab.png",
+          "temp/release_C/b28/F7BE_a/frames/d2faac3e4bbb06c80bb52811dcae7c1bacf1d18aa26ccd75a42763447550d107.png",
+          "temp/release_C/b28/F7BE_a/frames/1f3e1dab0f456bc24c1745a86ea3db6a89817ce056915c74ad4daaf0dd5e1278.png",
+          "temp/release_C/b28/F7BE_a/frames/89b9713d269cc46169a41b11432efd06533b90d6d5b75df688b952de3ab5ca6a.png"
+        ],
+        "p2_defect": "temp/release_C/b28/C_3p_surrender/frames/f41b6e588bee944327d7fefc220625728fcaf96b0a4cb7c15117fba265f9232f.png",
+        "defect_evidence": "temp/release_C/b28/26a_day_banner/",
+        "sprite_id": "lz77_00C10B34"
       },
       "related_dialogue_scene_ids": [
         "30a1_part2_redstar_story_early"
@@ -5300,17 +5103,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "30_battle_attack",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "30_battle_attack",
-        "url": "/scene_shots/30_battle_attack.png",
-        "mode": "savestate",
-        "grade": "stale_state",
-        "status": "capturable",
-        "note": "전투 공격 진입",
-        "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
-        "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
+        "status": "blocked",
+        "note": "all b28 routes have battle animation off; attack labels not recorded"
       },
       "dialogue_filter": {
         "regions": [
@@ -5475,12 +5272,8 @@
         "sprite": 2
       },
       "entrypoint": {
-        "checkpoint": "30_battle_attack",
-        "screenshot": "30_battle_attack",
-        "note": "기존 전투 공격/데미지 예측 라벨",
-        "source_state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
-        "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
-        "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
+        "note": "all b28 routes have battle animation off; attack labels not recorded",
+        "extra_screenshots": []
       }
     },
     {
@@ -5708,17 +5501,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_28_part2_result_status",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_28_part2_result_status",
-        "url": "/scene_shots/scene_28_part2_result_status.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
-        "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
+        "status": "blocked",
+        "note": "defeat route not run on b28"
       },
       "dialogue_filter": {
         "regions": []
@@ -5741,12 +5528,8 @@
         "sprite": 7
       },
       "entrypoint": {
-        "checkpoint": "scene_28_part2_result_status",
-        "screenshot": "scene_28_part2_result_status",
-        "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
-        "source_state": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0",
-        "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
+        "note": "defeat route not run on b28",
+        "extra_screenshots": []
       }
     },
     {
@@ -6008,22 +5791,18 @@
       "entrypoint": {
         "checkpoint": "scene_30a1_part2_redstar_story_early",
         "screenshot": "scene_30a1_part2_redstar_story_early",
-        "note": "[b28 replay of C route] scene_80a candidate: first battle entry dialogue 후, 큰 부대는 막아냈지만 블랙홀 군은 성가신 상대야 (match by note only)",
+        "note": "b28 recorded Red Star early story frame 32869; 80a core 37931 mapping withdrawn",
         "extra_screenshots": [
           {
             "checkpoint": "scene_30a1_part2_redstar_story_early_c",
             "label": "블랙홀 군 잔당 안내",
             "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_c_patched/frame.png",
             "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0"
-          },
-          {
-            "checkpoint": "scene_80a_campaign_story_early",
-            "label": "g_00A02628..A0266B recorded dialogue"
           }
         ],
         "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
-        "provenance_path": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
-        "source_endpoint": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
+        "provenance_path": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
         "cheat_tainted": false
       }
     },
@@ -6228,12 +6007,12 @@
       "screenshot": {
         "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
         "url": "/scene_shots/scene_30b1_part2_redstar_liberation_macro_briefing_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+        "note": "scene_30b1_part2_redstar_liberation_macro_briefing_story: campaign map briefing (Max) 도미노, 캐서린한테서 / 호출이 있었다고 들었어!; cold boot P2 campaign, no save; read of 0xA0E398.. confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/pk_cold/hits.json (emulated chunks 20700-21300). Supersedes note-only 30a1_b candidate at 22555",
         "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0"
+        "provenance_path": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -6311,20 +6090,13 @@
       "entrypoint": {
         "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
         "screenshot": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
-        "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+        "note": "scene_30b1_part2_redstar_liberation_macro_briefing_story: campaign map briefing (Max) 도미노, 캐서린한테서 / 호출이 있었다고 들었어!; cold boot P2 campaign, no save; read of 0xA0E398.. confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/pk_cold/hits.json (emulated chunks 20700-21300). Supersedes note-only 30a1_b candidate at 22555",
         "source_state": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
         "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
-        "extra_screenshots": [
-          {
-            "checkpoint": "scene_30a1_part2_redstar_story_early_b",
-            "label": "g_00A0E464..A0E484 recorded dialogue"
-          },
-          {
-            "checkpoint": "scene_30a1_part2_redstar_story_early_b",
-            "label": "g_00A0E464..A0E484 recorded dialogue"
-          }
-        ]
+        "provenance_path": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
+        "extra_screenshots": [],
+        "source_endpoint": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
+        "cheat_tainted": false
       }
     },
     {
@@ -6725,12 +6497,12 @@
       "screenshot": {
         "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
         "url": "/scene_shots/scene_30c1_part2_yellowcomet_north_invasion_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+        "note": "scene_30c1_part2_yellowcomet_north_invasion_story: mission intro dialogue 뭐라고! 우리 북방에 / 블랙홀 군이 나타났다고?; cold boot anchor_run08 SRAM (copied, read-only source verified unchanged) + inputs_run08 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run08/hits.json",
         "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -6809,10 +6581,12 @@
       "entrypoint": {
         "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
         "screenshot": "scene_30c1_part2_yellowcomet_north_invasion_story",
-        "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+        "note": "scene_30c1_part2_yellowcomet_north_invasion_story: mission intro dialogue 뭐라고! 우리 북방에 / 블랙홀 군이 나타났다고?; cold boot anchor_run08 SRAM (copied, read-only source verified unchanged) + inputs_run08 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run08/hits.json",
         "source_state": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0",
         "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -7297,12 +7071,12 @@
       "screenshot": {
         "checkpoint": "scene_30d2_part2_green_earth_story_late",
         "url": "/scene_shots/scene_30d2_part2_green_earth_story_late.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+        "note": "scene_30d2_part2_green_earth_story_late: mission intro dialogue 적 상황은 어떤가?; cold boot anchor_run14 SRAM (copied, read-only source verified unchanged) + inputs_run14 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run14/hits.json",
         "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+        "provenance_path": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -7454,10 +7228,12 @@
       "entrypoint": {
         "checkpoint": "scene_30d2_part2_green_earth_story_late",
         "screenshot": "scene_30d2_part2_green_earth_story_late",
-        "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+        "note": "scene_30d2_part2_green_earth_story_late: mission intro dialogue 적 상황은 어떤가?; cold boot anchor_run14 SRAM (copied, read-only source verified unchanged) + inputs_run14 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run14/hits.json",
         "source_state": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0",
         "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+        "provenance_path": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -7644,12 +7420,12 @@
       "screenshot": {
         "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
         "url": "/scene_shots/scene_30g0_part2_green_earth_reinforcement_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+        "note": "scene_30g0_part2_green_earth_reinforcement_story: mission intro dialogue 캣, 공항은 완성된 거냐?; cold boot anchor_run16 SRAM (copied, read-only source verified unchanged) + inputs_run16 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run16/hits.json",
         "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -7748,10 +7524,12 @@
       "entrypoint": {
         "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
         "screenshot": "scene_30g0_part2_green_earth_reinforcement_story",
-        "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+        "note": "scene_30g0_part2_green_earth_reinforcement_story: mission intro dialogue 캣, 공항은 완성된 거냐?; cold boot anchor_run16 SRAM (copied, read-only source verified unchanged) + inputs_run16 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run16/hits.json",
         "source_state": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0",
         "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -7764,17 +7542,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
-        "url": "/scene_shots/scene_30g1_part2_green_earth_volcano_sortie_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+        "status": "blocked",
+        "note": "branch mission unverified"
       },
       "dialogue_filter": {
         "regions": [
@@ -7816,12 +7588,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
-        "screenshot": "scene_30g1_part2_green_earth_volcano_sortie_story",
-        "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-        "source_state": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+        "note": "branch mission unverified",
+        "extra_screenshots": []
       }
     },
     {
@@ -7834,17 +7602,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
-        "url": "/scene_shots/scene_30g2_part2_green_earth_volcano_lava_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+        "status": "blocked",
+        "note": "branch mission unverified"
       },
       "dialogue_filter": {
         "regions": [
@@ -7912,12 +7674,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
-        "screenshot": "scene_30g2_part2_green_earth_volcano_lava_story",
-        "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-        "source_state": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+        "note": "branch mission unverified",
+        "extra_screenshots": []
       }
     },
     {
@@ -7935,12 +7693,12 @@
       "screenshot": {
         "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
         "url": "/scene_shots/scene_30g3_part2_green_earth_suspicious_area_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+        "note": "scene_30g3_part2_green_earth_suspicious_area_story: mission intro dialogue 이 부근 상황은 어떤가, / 아스카?; cold boot anchor_run10 SRAM (copied, source verified unchanged) + inputs_run10 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run10/hits.json",
         "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -7987,10 +7745,12 @@
       "entrypoint": {
         "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
         "screenshot": "scene_30g3_part2_green_earth_suspicious_area_story",
-        "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+        "note": "scene_30g3_part2_green_earth_suspicious_area_story: mission intro dialogue 이 부근 상황은 어떤가, / 아스카?; cold boot anchor_run10 SRAM (copied, source verified unchanged) + inputs_run10 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run10/hits.json",
         "source_state": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0",
         "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -8167,17 +7927,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-        "url": "/scene_shots/scene_30e4_part2_blackhole_yellowcomet_fortress_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
-        "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
+        "status": "blocked",
+        "note": "branch mission unverified"
       },
       "dialogue_filter": {
         "regions": [
@@ -8246,12 +8000,8 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-        "screenshot": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-        "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
-        "source_state": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0",
-        "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
+        "note": "branch mission unverified",
+        "extra_screenshots": []
       }
     },
     {
@@ -8264,17 +8014,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-        "url": "/scene_shots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
-        "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+        "status": "blocked",
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704..."
       },
       "dialogue_filter": {
         "regions": [
@@ -8315,12 +8059,14 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-        "screenshot": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-        "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
-        "source_state": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0",
-        "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+        "extra_screenshots": []
+      },
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/yellow/f002844.png",
+        "frame_sha256": "8ba17b06b3aa3dcd0956d47616f626d2d1698ba7d72803ba950cc7bf085ccdc3",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
       }
     },
     {
@@ -8407,12 +8153,12 @@
       "screenshot": {
         "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
         "url": "/scene_shots/scene_30e2_part2_blackhole_final_missile_story.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
+        "mode": "recorder_endpoint",
+        "grade": "recorded_b28",
         "status": "capturable",
-        "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+        "note": "scene_30e2_part2_blackhole_final_missile_story: mission intro dialogue 아스카만이 아니야.; cold boot anchor_run19 SRAM (copied, source verified unchanged) + inputs_run19 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run19/hits.json",
         "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json"
       },
       "dialogue_filter": {
         "regions": [
@@ -8517,10 +8263,12 @@
       "entrypoint": {
         "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
         "screenshot": "scene_30e2_part2_blackhole_final_missile_story",
-        "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+        "note": "scene_30e2_part2_blackhole_final_missile_story: mission intro dialogue 아스카만이 아니야.; cold boot anchor_run19 SRAM (copied, source verified unchanged) + inputs_run19 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run19/hits.json",
         "source_state": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0",
         "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+        "provenance_path": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+        "source_endpoint": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+        "cheat_tainted": true
       }
     },
     {
@@ -9280,11 +9028,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_80a_campaign_story_early",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "status": "missing",
-        "note": "Unresolved: matching runtime scene phases/dialogue not captured."
+        "status": "blocked",
+        "note": "old PK core 37931 mapping is wrong (note only); no P1 save reaching E00xxx dialogue on this PC"
       },
       "dialogue_filter": {
         "regions": [
@@ -9431,7 +9179,7 @@
         "sprite": 0
       },
       "entrypoint": {
-        "note": "Unresolved: matching runtime scene phases/dialogue not captured.",
+        "note": "old PK core 37931 mapping is wrong (note only); no P1 save reaching E00xxx dialogue on this PC",
         "extra_screenshots": []
       }
     },
@@ -9445,17 +9193,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_80b_campaign_story_mid",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_80b_campaign_story_mid",
-        "url": "/scene_shots/scene_80b_campaign_story_mid.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "fresh sweep: 캠페인 중반 전투 대사",
-        "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
+        "status": "blocked",
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704..."
       },
       "dialogue_filter": {
         "regions": [
@@ -9614,12 +9356,14 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_80b_campaign_story_mid",
-        "screenshot": "scene_80b_campaign_story_mid",
-        "note": "fresh sweep: 캠페인 중반 전투 대사",
-        "source_state": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0",
-        "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+        "extra_screenshots": []
+      },
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/m16/f003720.png",
+        "frame_sha256": "289888ef3d4f49d1f5a4c2abe3b83d7ca63655bc1773e8dcec0012229b1b72e4",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
       }
     },
     {
@@ -9632,17 +9376,11 @@
       "capture_required": true,
       "canvas": null,
       "canvas_status": "none",
-      "checkpoint": "scene_80c_campaign_story_late",
-      "checkpoint_exists": true,
+      "checkpoint": null,
+      "checkpoint_exists": false,
       "screenshot": {
-        "checkpoint": "scene_80c_campaign_story_late",
-        "url": "/scene_shots/scene_80c_campaign_story_late.png",
-        "mode": "savestate",
-        "grade": "fresh_savestate",
-        "status": "capturable",
-        "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
-        "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
+        "status": "blocked",
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704..."
       },
       "dialogue_filter": {
         "regions": [
@@ -9858,12 +9596,14 @@
         "sprite": 0
       },
       "entrypoint": {
-        "checkpoint": "scene_80c_campaign_story_late",
-        "screenshot": "scene_80c_campaign_story_late",
-        "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
-        "source_state": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0",
-        "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
-        "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
+        "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+        "extra_screenshots": []
+      },
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/m16/f006300.png",
+        "frame_sha256": "06a50990dc68348e36cf44da513a2a5720adc4cc93cff89a47e1263583875020",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
       }
     },
     {
@@ -9933,67 +9673,13 @@
           "check_label"
         ]
       },
-      "dialogue_ids": [
-        "g_0094298C",
-        "g_00942A38",
-        "g_00942A44",
-        "g_00942CC4",
-        "g_009450BC",
-        "g_009450E0",
-        "g_00945104",
-        "g_0094512C",
-        "g_00945154",
-        "g_009452B8",
-        "g_009452D9",
-        "g_009455D5",
-        "g_009455EC",
-        "g_0097AE40",
-        "g_0097AEEC",
-        "g_0097AEF8",
-        "g_0097B178",
-        "g_0097D8D8",
-        "g_0097D8FC",
-        "g_0097D920",
-        "g_0097D948",
-        "g_0097D970",
-        "g_0097DAD4",
-        "g_0097DAF5",
-        "g_0097DDF1",
-        "g_0097DE08",
-        "g_009B1FF9",
-        "g_009B36E4",
-        "g_009B3790",
-        "g_009B379C",
-        "g_009B3A1C",
-        "g_009B617C",
-        "g_009B61A0",
-        "g_009B61C4",
-        "g_009B61EC",
-        "g_009B6214",
-        "g_009B6378",
-        "g_009B6399",
-        "g_009B6695",
-        "g_009B66AC",
-        "g_009EBF88",
-        "g_009EC034",
-        "g_009EC040",
-        "g_009EC2C0",
-        "g_009EEA20",
-        "g_009EEA44",
-        "g_009EEA68",
-        "g_009EEA90",
-        "g_009EEAB8",
-        "g_009EEC1C",
-        "g_009EEC3D",
-        "g_009EEF39",
-        "g_009EEF50"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [
         "lz77_0048EFF0",
         "lz77_00C1BAA0"
       ],
       "counts": {
-        "dialogue": 53,
+        "dialogue": 0,
         "sprite": 2
       },
       "entrypoint": {
@@ -10217,56 +9903,10 @@
       "sprite_filter": {
         "source_contains": []
       },
-      "dialogue_ids": [
-        "g_00EE212C",
-        "g_00EE2138",
-        "g_00EE2144",
-        "g_00EE21C4",
-        "g_00EE21CC",
-        "g_00EE22C4",
-        "g_00EE22D0",
-        "g_00EE22DC",
-        "g_00EE22E8",
-        "g_00EE22F4",
-        "g_00EE2304",
-        "g_00EE2310",
-        "g_00EE231C",
-        "g_00EE232C",
-        "g_00EE2340",
-        "g_00EE2350",
-        "g_00EE2360",
-        "g_00EE241C",
-        "g_00EE2428",
-        "g_00EE2434",
-        "g_00EE244C",
-        "g_00EE2464",
-        "g_00EE2470",
-        "g_00EE2478",
-        "g_00EE248C",
-        "g_00EE2494",
-        "g_00EE24B8",
-        "g_00EE24C8",
-        "g_00EE2594",
-        "g_00EE25A0",
-        "g_00EE2634",
-        "g_00EE265C",
-        "g_00EE268C",
-        "g_00EE26B0",
-        "g_00EE26CC",
-        "g_00EE26F4",
-        "g_00EE271C",
-        "g_00EE273C",
-        "g_00EE275C",
-        "g_00EE2778",
-        "g_00EE279C",
-        "g_00EE27BC",
-        "g_00EE27E0",
-        "g_00EE2810",
-        "g_00EE2838"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 45,
+        "dialogue": 0,
         "sprite": 0
       }
     },
@@ -10306,15 +9946,10 @@
       "sprite_filter": {
         "source_contains": []
       },
-      "dialogue_ids": [
-        "g_00EFAAD4",
-        "g_00EFAB80",
-        "g_00EFAB8C",
-        "g_00EFAE0C"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 4,
+        "dialogue": 0,
         "sprite": 0
       },
       "entrypoint": {
@@ -10417,13 +10052,10 @@
       "sprite_filter": {
         "source_contains": []
       },
-      "dialogue_ids": [
-        "g_00EFDAA0",
-        "g_00EFDAC1"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 2,
+        "dialogue": 0,
         "sprite": 0
       }
     },
@@ -10525,18 +10157,10 @@
       "sprite_filter": {
         "source_contains": []
       },
-      "dialogue_ids": [
-        "g_00EFD8A4",
-        "g_00EFD8C8",
-        "g_00EFD8EC",
-        "g_00EFD914",
-        "g_00EFD93C",
-        "g_00EFDDBD",
-        "g_00EFDDD4"
-      ],
+      "dialogue_ids": [],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 7,
+        "dialogue": 0,
         "sprite": 0
       }
     },
@@ -12604,7 +12228,49 @@
         "g_0090BA1C",
         "g_0090DC4A",
         "g_009173CB",
+        "g_009292A0",
+        "g_009292A8",
         "g_00929308",
+        "g_00929398",
+        "g_009293A4",
+        "g_009293B0",
+        "g_009293BC",
+        "g_009293C8",
+        "g_009293D8",
+        "g_009293E4",
+        "g_009293F0",
+        "g_00929400",
+        "g_00929414",
+        "g_00929424",
+        "g_00929434",
+        "g_009294F0",
+        "g_009294FC",
+        "g_00929508",
+        "g_00929520",
+        "g_00929538",
+        "g_00929544",
+        "g_0092954C",
+        "g_00929560",
+        "g_00929568",
+        "g_0092958C",
+        "g_0092959C",
+        "g_00929668",
+        "g_00929674",
+        "g_009296F8",
+        "g_00929720",
+        "g_00929750",
+        "g_00929774",
+        "g_00929790",
+        "g_009297B8",
+        "g_009297E0",
+        "g_00929800",
+        "g_00929820",
+        "g_0092983C",
+        "g_00929860",
+        "g_00929880",
+        "g_009298A4",
+        "g_009298D4",
+        "g_009298FC",
         "g_0093C8D7",
         "g_0093DA12",
         "g_00940C62",
@@ -12655,8 +12321,63 @@
         "g_009424FC",
         "g_0094259E",
         "g_009425D4",
+        "g_0094298C",
+        "g_00942A38",
+        "g_00942A44",
+        "g_00942CC4",
+        "g_009450BC",
+        "g_009450E0",
+        "g_00945104",
+        "g_0094512C",
+        "g_00945154",
+        "g_009452B8",
+        "g_009452D9",
+        "g_009455D5",
+        "g_009455EC",
         "g_0094FE33",
+        "g_00961F28",
+        "g_00961F30",
         "g_00961F90",
+        "g_00962020",
+        "g_0096202C",
+        "g_00962038",
+        "g_00962044",
+        "g_00962050",
+        "g_00962060",
+        "g_0096206C",
+        "g_00962078",
+        "g_00962088",
+        "g_0096209C",
+        "g_009620AC",
+        "g_009620BC",
+        "g_00962178",
+        "g_00962184",
+        "g_00962190",
+        "g_009621A8",
+        "g_009621C0",
+        "g_009621CC",
+        "g_009621D4",
+        "g_009621E8",
+        "g_009621F0",
+        "g_00962214",
+        "g_00962224",
+        "g_009622F0",
+        "g_009622FC",
+        "g_00962390",
+        "g_009623B8",
+        "g_009623E8",
+        "g_0096240C",
+        "g_00962428",
+        "g_00962450",
+        "g_00962478",
+        "g_00962498",
+        "g_009624B8",
+        "g_009624D4",
+        "g_009624F8",
+        "g_00962518",
+        "g_0096253C",
+        "g_0096256C",
+        "g_00962594",
         "g_00974D8B",
         "g_00975EC6",
         "g_00979116",
@@ -12707,8 +12428,63 @@
         "g_0097A9B0",
         "g_0097AA52",
         "g_0097AA88",
+        "g_0097AE40",
+        "g_0097AEEC",
+        "g_0097AEF8",
+        "g_0097B178",
+        "g_0097D8D8",
+        "g_0097D8FC",
+        "g_0097D920",
+        "g_0097D948",
+        "g_0097D970",
+        "g_0097DAD4",
+        "g_0097DAF5",
+        "g_0097DDF1",
+        "g_0097DE08",
         "g_009886D7",
+        "g_0099A7CC",
+        "g_0099A7D4",
         "g_0099A834",
+        "g_0099A8C4",
+        "g_0099A8D0",
+        "g_0099A8DC",
+        "g_0099A8E8",
+        "g_0099A8F4",
+        "g_0099A904",
+        "g_0099A910",
+        "g_0099A91C",
+        "g_0099A92C",
+        "g_0099A940",
+        "g_0099A950",
+        "g_0099A960",
+        "g_0099AA1C",
+        "g_0099AA28",
+        "g_0099AA34",
+        "g_0099AA4C",
+        "g_0099AA64",
+        "g_0099AA70",
+        "g_0099AA78",
+        "g_0099AA8C",
+        "g_0099AA94",
+        "g_0099AAB8",
+        "g_0099AAC8",
+        "g_0099AB94",
+        "g_0099ABA0",
+        "g_0099AC34",
+        "g_0099AC5C",
+        "g_0099AC8C",
+        "g_0099ACB0",
+        "g_0099ACCC",
+        "g_0099ACF4",
+        "g_0099AD1C",
+        "g_0099AD3C",
+        "g_0099AD5C",
+        "g_0099AD78",
+        "g_0099AD9C",
+        "g_0099ADBC",
+        "g_0099ADE0",
+        "g_0099AE10",
+        "g_0099AE38",
         "g_009AD62F",
         "g_009AE76A",
         "g_009B19BA",
@@ -12739,6 +12515,7 @@
         "g_009B1B14",
         "g_009B1E8C",
         "g_009B1EFD",
+        "g_009B1FF9",
         "g_009B2025",
         "g_009B20E7",
         "g_009B20F7",
@@ -12758,8 +12535,63 @@
         "g_009B3254",
         "g_009B32F6",
         "g_009B332C",
+        "g_009B36E4",
+        "g_009B3790",
+        "g_009B379C",
+        "g_009B3A1C",
+        "g_009B617C",
+        "g_009B61A0",
+        "g_009B61C4",
+        "g_009B61EC",
+        "g_009B6214",
+        "g_009B6378",
+        "g_009B6399",
+        "g_009B6695",
+        "g_009B66AC",
         "g_009C0F7B",
+        "g_009D3070",
+        "g_009D3078",
         "g_009D30D8",
+        "g_009D3168",
+        "g_009D3174",
+        "g_009D3180",
+        "g_009D318C",
+        "g_009D3198",
+        "g_009D31A8",
+        "g_009D31B4",
+        "g_009D31C0",
+        "g_009D31D0",
+        "g_009D31E4",
+        "g_009D31F4",
+        "g_009D3204",
+        "g_009D32C0",
+        "g_009D32CC",
+        "g_009D32D8",
+        "g_009D32F0",
+        "g_009D3308",
+        "g_009D3314",
+        "g_009D331C",
+        "g_009D3330",
+        "g_009D3338",
+        "g_009D335C",
+        "g_009D336C",
+        "g_009D3438",
+        "g_009D3444",
+        "g_009D34D8",
+        "g_009D3500",
+        "g_009D3530",
+        "g_009D3554",
+        "g_009D3570",
+        "g_009D3598",
+        "g_009D35C0",
+        "g_009D35E0",
+        "g_009D3600",
+        "g_009D361C",
+        "g_009D3640",
+        "g_009D3660",
+        "g_009D3684",
+        "g_009D36B4",
+        "g_009D36DC",
         "g_009E5ED3",
         "g_009E700E",
         "g_009EA25E",
@@ -12810,6 +12642,19 @@
         "g_009EBAF8",
         "g_009EBB9A",
         "g_009EBBD0",
+        "g_009EBF88",
+        "g_009EC034",
+        "g_009EC040",
+        "g_009EC2C0",
+        "g_009EEA20",
+        "g_009EEA44",
+        "g_009EEA68",
+        "g_009EEA90",
+        "g_009EEAB8",
+        "g_009EEC1C",
+        "g_009EEC3D",
+        "g_009EEF39",
+        "g_009EEF50",
         "g_00A2CFF8",
         "g_00A2D008",
         "g_00A2D018",
@@ -13879,7 +13724,52 @@
         "g_00E92A98",
         "g_00EA4469",
         "g_00ECFFB3",
+        "g_00EE212C",
+        "g_00EE2138",
+        "g_00EE2144",
+        "g_00EE21C4",
+        "g_00EE21CC",
         "g_00EE2238",
+        "g_00EE22C4",
+        "g_00EE22D0",
+        "g_00EE22DC",
+        "g_00EE22E8",
+        "g_00EE22F4",
+        "g_00EE2304",
+        "g_00EE2310",
+        "g_00EE231C",
+        "g_00EE232C",
+        "g_00EE2340",
+        "g_00EE2350",
+        "g_00EE2360",
+        "g_00EE241C",
+        "g_00EE2428",
+        "g_00EE2434",
+        "g_00EE244C",
+        "g_00EE2464",
+        "g_00EE2470",
+        "g_00EE2478",
+        "g_00EE248C",
+        "g_00EE2494",
+        "g_00EE24B8",
+        "g_00EE24C8",
+        "g_00EE2594",
+        "g_00EE25A0",
+        "g_00EE2634",
+        "g_00EE265C",
+        "g_00EE268C",
+        "g_00EE26B0",
+        "g_00EE26CC",
+        "g_00EE26F4",
+        "g_00EE271C",
+        "g_00EE273C",
+        "g_00EE275C",
+        "g_00EE2778",
+        "g_00EE279C",
+        "g_00EE27BC",
+        "g_00EE27E0",
+        "g_00EE2810",
+        "g_00EE2838",
         "g_00EF4A1F",
         "g_00EF5B5A",
         "g_00EF8DAA",
@@ -13930,13 +13820,26 @@
         "g_00EFA644",
         "g_00EFA6E6",
         "g_00EFA71C",
+        "g_00EFAAD4",
+        "g_00EFAB80",
+        "g_00EFAB8C",
+        "g_00EFAE0C",
+        "g_00EFD8A4",
+        "g_00EFD8C8",
+        "g_00EFD8EC",
+        "g_00EFD914",
+        "g_00EFD93C",
+        "g_00EFDAA0",
+        "g_00EFDAC1",
+        "g_00EFDDBD",
+        "g_00EFDDD4",
         "g_00FE12C6"
       ],
       "sprite_ids": [],
       "counts": {
-        "dialogue": 3368,
+        "dialogue": 3647,
         "sprite": 0,
-        "excluded_low_confidence_dialogue": 3368,
+        "excluded_low_confidence_dialogue": 3647,
         "pending_review": 0
       }
     },

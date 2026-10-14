@@ -2,7 +2,7 @@
   "schema_version": 1,
   "source_candidate_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
   "target_candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
-  "registered_by": "W1 batch4; W2 b28 replay",
+  "registered_by": "W1 reg5; W2 batch4",
   "verified_screen_matches": 40,
   "screen_checkpoints": {
     "B-85": "scene_85_ui_common",
@@ -1443,9 +1443,10 @@
         "frame": "temp/release_C/b28/PK_cold/frames/ae2be4c602e4d5eb71319042a2291cd87a46c2f1e9e30585ca0f58b9fb17a5a0.png",
         "frame_sha256": "a3d83428fbed4a9fee4b77ee4380445926a6b3e10aa0dcaf6ca85cf572e6a651",
         "cheat_tainted": false,
-        "status": "rgb_equal_to_C",
+        "status": "BLOCKED",
         "comparison_receipt": "temp/release_C/b28/compare.json",
-        "rgb_identical_to_c": true
+        "rgb_identical_to_c": true,
+        "reason": "legacy note-only mapping is wrong or unverified; superseded by W2 batch4"
       },
       "registered_by": "W2 batch2"
     },
@@ -1468,9 +1469,10 @@
         "frame": "temp/release_C/b28/PK_cold/frames/e70fc882c403128a5755835b70368bc9b813a45ae04f0fe1ce6fc5ae763ceef2.png",
         "frame_sha256": "5164ca622677fc96232f4a18d18559d24646b976ba3cf4ccc7d22c761f69fb4c",
         "cheat_tainted": false,
-        "status": "rgb_equal_to_C",
+        "status": "BLOCKED",
         "comparison_receipt": "temp/release_C/b28/compare.json",
-        "rgb_identical_to_c": true
+        "rgb_identical_to_c": true,
+        "reason": "legacy note-only mapping is wrong or unverified; superseded by W2 batch4"
       },
       "registered_by": "W2 batch2"
     },
@@ -2276,6 +2278,562 @@
         "status": "phase_identity_unverified",
         "comparison_receipt": "temp/release_C/b28/compare.json",
         "rgb_identical_to_c": null
+      }
+    },
+    {
+      "key": "C-89b-trace|batch4",
+      "item_id": "C-89b-trace",
+      "input_route": "temp/release_C/research/inputs/C_p2_3p_surrender.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
+        "frame_sha256": "8038c96d80d1cb9edf6c106eacb04f820f68271bf4f4b1da9a68f2797d464b1a",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/C_3p_surrender/frames.jsonl",
+          "ledger_sha256": "1f11332d44fdfe81e7da78eb6a55ed42f31b5949778724fef04306c437ae029d",
+          "ledger_bytes": 991979,
+          "core_frame": 4774
+        },
+        "claim_scope": "scene_89b fresh b28 watch: watchaddr 08A34D18 32 r -> 64 hits (pc 0831425A/08314336 lr 083148F3, 08F30284/86 lr 0831BBED), reads during core_frame 4724..4754, defeat frame 4774 레드스타 군은 패배했습니다!!; probe shot RGB==ledger",
+        "reason": "PASS: intermediate defeat message with portrait, not confirm dialog"
+      }
+    },
+    {
+      "key": "26a-P1-f2264|batch4",
+      "item_id": "26a-P1-f2264",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/a0b8bde2894be48b207d8bc7b82116e0ae954cebe689177321d546f609ea1a87.png",
+        "frame_sha256": "7c8bfabd490024d50d6f1114c9042aad4ee8030484b7b403c43da2819abb33f9",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2264
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): rotation intro (1일째 rotating in); JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "26a-P1-f2284|batch4",
+      "item_id": "26a-P1-f2284",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/2987e3af9d54139db7c844c6a6bce124209a554c68cbdad13f3cc23f6129e551.png",
+        "frame_sha256": "4be5867bee84cbdc3b240718aff788d29a8ffb34cd9634eb89aa2b3c06eebff2",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2284
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): rotation intro (작전개시 rotating in); JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "26a-P1-f2300|batch4",
+      "item_id": "26a-P1-f2300",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/c8ef78a74a117cfde945703d470b35e9110de20c28c9a17d22373625714205ab.png",
+        "frame_sha256": "474da6d9b17a87294c53baf45a0ff9a70ad1c0c2818328379b24ec78ca23f3c4",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2300
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): centered/full display; JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "26a-P1-f2330|batch4",
+      "item_id": "26a-P1-f2330",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/89b9713d269cc46169a41b11432efd06533b90d6d5b75df688b952de3ab5ca6a.png",
+        "frame_sha256": "bd792737252b06665e3e5ebd75518743eb86130be1fc86f0e31baa67e4f593e8",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2330
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): battle HUD restored (DAY 1 panel); JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "26a-P2-DEFECT|batch4",
+      "item_id": "26a-P2-DEFECT",
+      "input_route": "temp/release_C/research/inputs/C_p2_3p_surrender.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/C_3p_surrender/frames/f41b6e588bee944327d7fefc220625728fcaf96b0a4cb7c15117fba265f9232f.png",
+        "frame_sha256": "471207fd51e0791f8b7151eb2e6986b94d3046456253b0c41a0eec731fcc17d7",
+        "cheat_tainted": true,
+        "status": "DEFECT",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/C_3p_surrender/frames.jsonl",
+          "ledger_sha256": "1f11332d44fdfe81e7da78eb6a55ed42f31b5949778724fef04306c437ae029d",
+          "ledger_bytes": 991979,
+          "core_frame": 3820
+        },
+        "claim_scope": "DEFECT: Part 2 battle-start day banner (1日目/作戦開始 equivalent) not drawn on b28: band only. JP same route/save shows banner at same frames. OAM entries 16-22 present (32x32, tiles 487..598) but OBJ VRAM for those tiles is all zero on b28 (JP non-zero). Also missing on PK_cold campaign M1 (core 42312-42400) and on effc6ee8/fonts_v17/part2_v9/final builds.",
+        "reason": "FAIL: Part 2 day/start overlay absent"
+      }
+    },
+    {
+      "key": "26a-P1-f2322|batch4",
+      "item_id": "26a-P1-f2322",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/d2faac3e4bbb06c80bb52811dcae7c1bacf1d18aa26ccd75a42763447550d107.png",
+        "frame_sha256": "a7f90a72548a1310f804d84c2f68c696565e61250b9a1584cfbd33424cbcc649",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2322
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): last banner frame (exit is a 1-frame cut at 2323, same as JP); JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "26a-P1-f2323|batch4",
+      "item_id": "26a-P1-f2323",
+      "input_route": "temp/release_C/inputs/F7BE_a_create_suspend.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": "temp/release_C/b28/F7BE_a/0020_A_0002321.checkpoint.json",
+        "frame": "temp/release_C/b28/F7BE_a/frames/1f3e1dab0f456bc24c1745a86ea3db6a89817ce056915c74ad4daaf0dd5e1278.png",
+        "frame_sha256": "bcd37f33c9c9cebfbb9aec073f722d28dfe0469e721b8f7acbb5ccd46f2d48b1",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/F7BE_a/frames.jsonl",
+          "ledger_sha256": "155f457a5fb2adeffac7973e8a45693de70d797f393efc123e6a68e82cfa76ac",
+          "ledger_bytes": 735595,
+          "core_frame": 2323
+        },
+        "claim_scope": "26a phase candidate (PART 1 versus battle start, not Part 2): banner removed (exit), HUD not yet drawn; JP probe on same save/route shows same phase timing",
+        "reason": "PASS P1 visual; NOTE catalog 26a is part2 scope and Part 2 day banner is MISSING on b28 (see 26a-P2-DEFECT)"
+      }
+    },
+    {
+      "key": "B-19f|batch4",
+      "item_id": "B-19f",
+      "input_route": "temp/v9_finish_20261012/mission_inputs.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
+        "frame_sha256": "c40cf134f87abe3a11ddd68c709dfddb6d224a4d8c1f68f7633edb2cecdcdaf6",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/E_mission/frames.jsonl",
+          "ledger_sha256": "28c9e0f46610ab78e2369f39b5bf00c9d16a7f724f40e08171bdf868a0e67abe",
+          "ledger_bytes": 458039,
+          "core_frame": 1408
+        },
+        "claim_scope": "scene_19f_part1_extra_story: P1 campaign map pre-mission dialogue, old man CO line 레드스타 군? (JA レッドスター軍？). Located by b28 parser-breakpoint trace (tr/p1_E_mission: DFF08A read in emulated chunk 1200-1500); frame chosen from ledger after typing completes",
+        "reason": "PASS: 레드스타 군? fully typed, ▼ prompt, no clipping (tainted P1FINAL save lineage)"
+      }
+    },
+    {
+      "key": "26a-C10B34-f3540|batch4",
+      "item_id": "26a-C10B34-f3540",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/f95e46bf5f947e757b92af9df1392fa41b2a25cbd4d11d7efff0cd2f99a22c15.png",
+        "frame_sha256": "3da51ca3c73959b7303fee23861ab4114445674b076e5ed8f19e4142dfa577b3",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3540
+        },
+        "claim_scope": "26a_part2_battle_start_overlays candidate phase (introduction + centered display: 전투 개시! appears at full size (RGB-identical to steady frames 3562..3740)); cold boot P1 campaign mission 1 (part1_main_sweep policy), untainted, no save",
+        "reason": "PASS visual: Korean 전투 개시! glyphs intact in all phases; mid-rotation frames show expected flip distortion"
+      }
+    },
+    {
+      "key": "26a-C10B34-f3546|batch4",
+      "item_id": "26a-C10B34-f3546",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/26725208fd35f6c54bd89b9614fd02e76101f8a7dc3e26ba9d5c7324ba839201.png",
+        "frame_sha256": "1b1e59783f414c90d8e4abebfa68f71e033c45ca2f9b25b043eacacd39beebe5",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3546
+        },
+        "claim_scope": "26a_part2_battle_start_overlays candidate phase (rotation: sprite flipped edge-on (vertical squash)); cold boot P1 campaign mission 1 (part1_main_sweep policy), untainted, no save",
+        "reason": "PASS visual: Korean 전투 개시! glyphs intact in all phases; mid-rotation frames show expected flip distortion"
+      }
+    },
+    {
+      "key": "26a-C10B34-f3550|batch4",
+      "item_id": "26a-C10B34-f3550",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/863db895241a109de8b25260a50c271d3f47530c81140a4a2cf1f2fbfd8f4f7c.png",
+        "frame_sha256": "27f9fd9635976d76bf9c09763d5307e07c53a45d62a87504459cccf63a316513",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3550
+        },
+        "claim_scope": "26a_part2_battle_start_overlays candidate phase (rotation: mid-flip (mirrored rows)); cold boot P1 campaign mission 1 (part1_main_sweep policy), untainted, no save",
+        "reason": "PASS visual: Korean 전투 개시! glyphs intact in all phases; mid-rotation frames show expected flip distortion"
+      }
+    },
+    {
+      "key": "26a-C10B34-f3744|batch4",
+      "item_id": "26a-C10B34-f3744",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/df91f1370dc764d5e1b095feb5caec1f1b4defee19a9958d0c4aefb336ec4c8a.png",
+        "frame_sha256": "f33666cf0b84b952e03521456b28a36d4511ff540117231fc88ce431043822e6",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3744
+        },
+        "claim_scope": "26a_part2_battle_start_overlays candidate phase (exit: screen wipe begins, overlay leaving); cold boot P1 campaign mission 1 (part1_main_sweep policy), untainted, no save",
+        "reason": "PASS visual: Korean 전투 개시! glyphs intact in all phases; mid-rotation frames show expected flip distortion"
+      }
+    },
+    {
+      "key": "26a-C10B34-f3896|batch4",
+      "item_id": "26a-C10B34-f3896",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/3661b6a311592f276d102e588e8c3ab097b895c651264bb8e6a9db0d937b3cde.png",
+        "frame_sha256": "abcda5f358487e9743bd239fcd7f57016107f8f3aa9c6c895ba17654c60bfd1e",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3896
+        },
+        "claim_scope": "26a_part2_battle_start_overlays candidate phase (battle HUD restored (DAY 1 panel); NOTE day banner 1일째 was skipped by sweep A press at 3890); cold boot P1 campaign mission 1 (part1_main_sweep policy), untainted, no save",
+        "reason": "PASS visual: Korean 전투 개시! glyphs intact in all phases; mid-rotation frames show expected flip distortion"
+      }
+    },
+    {
+      "key": "B-19e6|batch4",
+      "item_id": "B-19e6",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/25642576b638e7e38aa4b2b1bf7c0c0d6240b8b6064aab09a660df85007c8435.png",
+        "frame_sha256": "ef62aad7c876072cf34ea4ed81b33ebba7981a92630b3cc1b9ce9fc9bcb0b6a8",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3250
+        },
+        "claim_scope": "scene_19e6_part1_unit_help_late: P1 operation room tutorial briefing (Catherine) 커서 조작부터 / 공격방법도 설명이야; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
+        "reason": "PASS: fully typed line with ▼, no clipping"
+      }
+    },
+    {
+      "key": "B-19e6_b|batch4",
+      "item_id": "B-19e6_b",
+      "input_route": "temp/release_C/inputs/B/B19a1_p1sweep.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/5e32c3ad019883305325e8744753eb46e924187cae42e242108b5679a49328b3.png",
+        "frame_sha256": "b7b8943f9b96f7579a264b8d2519536cf3bf822d2f3766f6b4cb039493e13d51",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/B19a1_p1sweep/frames.jsonl",
+          "ledger_sha256": "f6b9c5f18138044468c5598d1deb6e8ac5ac3fc9339c461e9602430e1ef366e2",
+          "ledger_bytes": 2370527,
+          "core_frame": 3352
+        },
+        "claim_scope": "scene_19e6_part1_unit_help_late_b: P1 operation room tutorial briefing (Catherine) 당신에게는, 코스모 랜드에 대해 / 해 줄게.; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
+        "reason": "PASS: fully typed line with ▼, no clipping"
+      }
+    },
+    {
+      "key": "B-30c1|batch4",
+      "item_id": "B-30c1",
+      "input_route": "temp/release_C/work/w2b4/inputs/story_run08.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
+        "frame_sha256": "a88c0ec7b2d6ebb83a2cdd3df4bf8ba8bbb8f1e259c359ecb2aaedd24ce97bf1",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/S30c1_run08/frames.jsonl",
+          "ledger_sha256": "bd28746efcd53992d238022164de70213ef3739299b4e595ee31134d4f148217",
+          "ledger_bytes": 1357569,
+          "core_frame": 2920
+        },
+        "claim_scope": "scene_30c1_part2_yellowcomet_north_invasion_story: mission intro dialogue 뭐라고! 우리 북방에 / 블랙홀 군이 나타났다고?; cold boot anchor_run08 SRAM (copied, read-only source verified unchanged) + inputs_run08 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run08/hits.json",
+        "reason": "PASS: line fully typed with ▽, no clipping/overlap"
+      }
+    },
+    {
+      "key": "B-30d2|batch4",
+      "item_id": "B-30d2",
+      "input_route": "temp/release_C/work/w2b4/inputs/story_run14.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
+        "frame_sha256": "d8818417976325af913032a1bb1b659ab70a117fb07db070b0e5bfa9cd8cc6dc",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/S30d2_run14/frames.jsonl",
+          "ledger_sha256": "edb35d371ff589084b43bff47451ae95826ab279bafdc396039de353c42be372",
+          "ledger_bytes": 1150339,
+          "core_frame": 2840
+        },
+        "claim_scope": "scene_30d2_part2_green_earth_story_late: mission intro dialogue 적 상황은 어떤가?; cold boot anchor_run14 SRAM (copied, read-only source verified unchanged) + inputs_run14 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run14/hits.json",
+        "reason": "PASS: line fully typed with ▽, no clipping/overlap"
+      }
+    },
+    {
+      "key": "B-30g0|batch4",
+      "item_id": "B-30g0",
+      "input_route": "temp/release_C/work/w2b4/inputs/story_run16.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
+        "frame_sha256": "5f11e7efc99cf25c4822a755394b2d2968be485a7e3f017c7477281723d80623",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/S30g0_run16/frames.jsonl",
+          "ledger_sha256": "7e475d19776817e200b270ba8eab0d0233bc5b9a9bf5b0e44c65b886b0edc5f2",
+          "ledger_bytes": 759453,
+          "core_frame": 2800
+        },
+        "claim_scope": "scene_30g0_part2_green_earth_reinforcement_story: mission intro dialogue 캣, 공항은 완성된 거냐?; cold boot anchor_run16 SRAM (copied, read-only source verified unchanged) + inputs_run16 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run16/hits.json",
+        "reason": "PASS: line fully typed with ▽, no clipping/overlap"
+      }
+    },
+    {
+      "key": "B-30g3|batch4",
+      "item_id": "B-30g3",
+      "input_route": "temp/release_C/work/w2b4/inputs/story_run10.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
+        "frame_sha256": "0d5a9d6052c88376d5178e43d60170b35beeb6715222121f764f9a0ed9e68cc3",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/S30g3_run10/frames.jsonl",
+          "ledger_sha256": "52f62cd16a2cbf6a5a8db7584c4cefbfc0f4225e597bd8d089b11b8361656f6f",
+          "ledger_bytes": 3097585,
+          "core_frame": 8440
+        },
+        "claim_scope": "scene_30g3_part2_green_earth_suspicious_area_story: mission intro dialogue 이 부근 상황은 어떤가, / 아스카?; cold boot anchor_run10 SRAM (copied, source verified unchanged) + inputs_run10 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run10/hits.json",
+        "reason": "PASS: line fully typed with ▽, no clipping/overlap"
+      }
+    },
+    {
+      "key": "B-30e2|batch4",
+      "item_id": "B-30e2",
+      "input_route": "temp/release_C/work/w2b4/inputs/story_run19.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
+        "frame_sha256": "4c5a08b1a777108f2e7170bc9e2bbc2ac62f0c093e4495616256133f7da63e43",
+        "cheat_tainted": true,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/S30e2_run19/frames.jsonl",
+          "ledger_sha256": "de93b9a838ef4a55b2a78a65c36f8232278213254459153cad9cbcafa6414a75",
+          "ledger_bytes": 3457086,
+          "core_frame": 5876
+        },
+        "claim_scope": "scene_30e2_part2_blackhole_final_missile_story: mission intro dialogue 아스카만이 아니야.; cold boot anchor_run19 SRAM (copied, source verified unchanged) + inputs_run19 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run19/hits.json",
+        "reason": "PASS: line fully typed with ▽, no clipping/overlap"
+      }
+    },
+    {
+      "key": "B-30e3|batch4",
+      "item_id": "B-30e3",
+      "input_route": "temp/release_C/work/w2b4/inputs/p2_generic_A80.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/story_probe/yellow/f002844.png",
+        "frame_sha256": "8ba17b06b3aa3dcd0956d47616f626d2d1698ba7d72803ba950cc7bf085ccdc3",
+        "cheat_tainted": false,
+        "status": "BLOCKED",
+        "ledger_reference": null,
+        "claim_scope": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story: 현지에서 모은 물자는, / 어떻게 되어 있습니까?; read address confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/gen_50974e6f/hits.json. DIAGNOSTIC PROBE FRAME, NOT a recorder ledger: legacy receipt output/qa/part2_2026-09-30/yellow_route_cold is cartridge-save-from-recorded-checkpoint-v1 bound to a macOS harness (sha 12874704...) so playthrough_capture/anchored re-export are refused on Linux; recorder capture needs Mac",
+        "reason": "PASS visual (probe)"
+      }
+    },
+    {
+      "key": "B-19c1|batch4",
+      "item_id": "B-19c1",
+      "input_route": "temp/release_C/work/w2b4/inputs/p1_generic_A80.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/story_probe/first_cleared/f007464.png",
+        "frame_sha256": "0ff5b4ca01007da7ec0fdf74c0f3b473f16ff1de8a0d320579958aa2b29c67d3",
+        "cheat_tainted": false,
+        "status": "BLOCKED",
+        "ledger_reference": null,
+        "claim_scope": "scene_19c1_part1_mid_campaign_radio_story: [이름]님, 료! / 들려요?; read address confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/g1_ee32771f/hits.json. DIAGNOSTIC PROBE FRAME, NOT a recorder ledger: legacy receipt output/qa/part1_2026-09-22/campaign_first_cleared_cold_live is cartridge-save-from-recorded-checkpoint-v1 bound to a macOS harness (sha 12874704...) so playthrough_capture/anchored re-export are refused on Linux; recorder capture needs Mac",
+        "reason": "PASS visual (probe)"
+      }
+    },
+    {
+      "key": "B-80b|batch4",
+      "item_id": "B-80b",
+      "input_route": "temp/release_C/work/w2b4/inputs/p1_generic_A80.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/story_probe/m16/f003720.png",
+        "frame_sha256": "289888ef3d4f49d1f5a4c2abe3b83d7ca63655bc1773e8dcec0012229b1b72e4",
+        "cheat_tainted": false,
+        "status": "BLOCKED",
+        "ledger_reference": null,
+        "claim_scope": "scene_80b_campaign_story_mid: 모프! / 이래서는 또 당할거야!; read address confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/g1_ac505169/hits.json. DIAGNOSTIC PROBE FRAME, NOT a recorder ledger: legacy receipt output/qa/part1_2026-10-02/m16_candidate_sram is cartridge-save-from-recorded-checkpoint-v1 bound to a macOS harness (sha 12874704...) so playthrough_capture/anchored re-export are refused on Linux; recorder capture needs Mac",
+        "reason": "PASS visual (probe)"
+      }
+    },
+    {
+      "key": "B-80c|batch4",
+      "item_id": "B-80c",
+      "input_route": "temp/release_C/work/w2b4/inputs/p1_generic_A80.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/story_probe/m16/f006300.png",
+        "frame_sha256": "06a50990dc68348e36cf44da513a2a5720adc4cc93cff89a47e1263583875020",
+        "cheat_tainted": false,
+        "status": "BLOCKED",
+        "ledger_reference": null,
+        "claim_scope": "scene_80c_campaign_story_late: 내가 간다! / ▷예 아니; read address confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/g1_ac505169/hits.json. DIAGNOSTIC PROBE FRAME, NOT a recorder ledger: legacy receipt output/qa/part1_2026-10-02/m16_candidate_sram is cartridge-save-from-recorded-checkpoint-v1 bound to a macOS harness (sha 12874704...) so playthrough_capture/anchored re-export are refused on Linux; recorder capture needs Mac",
+        "reason": "PASS visual (probe); NOTE yes/no shows 아니 (vs 아니요 elsewhere) - check slot (unverified defect)"
+      }
+    },
+    {
+      "key": "B-30b1|batch4",
+      "item_id": "B-30b1",
+      "input_route": "temp/release_C/research/inputs/P_K_p2_coldboot_digits_supply.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
+        "frame_sha256": "725898ef989d1442a96879dd6571c6ecade3eaf6062b46ddd59d7be8ab8d8e3a",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/PK_cold/frames.jsonl",
+          "ledger_sha256": "e74a9a347365aed3b508675573b3cfa02589f4d340e2d2b051f1c67e69270846",
+          "ledger_bytes": 15549513,
+          "core_frame": 21100
+        },
+        "claim_scope": "scene_30b1_part2_redstar_liberation_macro_briefing_story: campaign map briefing (Max) 도미노, 캐서린한테서 / 호출이 있었다고 들었어!; cold boot P2 campaign, no save; read of 0xA0E398.. confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/pk_cold/hits.json (emulated chunks 20700-21300). Supersedes note-only 30a1_b candidate at 22555",
+        "reason": "PASS: line fully typed with ▽, no clipping"
+      }
+    },
+    {
+      "key": "B-30a1_c|batch4",
+      "item_id": "B-30a1_c",
+      "input_route": "temp/release_C/research/inputs/P_K_p2_coldboot_digits_supply.txt",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "checkpoint": null,
+        "frame": "temp/release_C/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
+        "frame_sha256": "718ec899b90e25a059f6512ca246a7209ba85cb425561b550202f71d27663674",
+        "cheat_tainted": false,
+        "status": "PASS",
+        "ledger_reference": {
+          "ledger": "temp/release_C/b28/PK_cold/frames.jsonl",
+          "ledger_sha256": "e74a9a347365aed3b508675573b3cfa02589f4d340e2d2b051f1c67e69270846",
+          "ledger_bytes": 15549513,
+          "core_frame": 19700
+        },
+        "claim_scope": "scene_30a1_part2_redstar_story_early_c: prologue Black Hole briefing (Hawke) 그 점은, 안심하세요. / 각 사령관에게 명했습니다.; distinct from 30a1 main frame (0xA01C90, core 32869); cold boot, no save; read confirmed by b28 parser trace (chunks 18900-19800)",
+        "reason": "PASS: fully typed with ▽, no clipping"
+      }
+    },
+    {
+      "key": "30_battle_attack|BLOCKED",
+      "item_id": "30_battle_attack",
+      "replay": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED",
+        "reason": "all routes have battle animation off"
       }
     }
   ],

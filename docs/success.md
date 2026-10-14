@@ -4021,3 +4021,15 @@ tools/linux_overlay_build.sh --no-publish          # candidate stays in temp/lin
 - 후보 `output/game_wars_korean_candidate_20261013_b28.gba` SHA `e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067`. 0xA298C2/0xA298D2 `음악있음`/`음악없음`, 0xA29A06 `도` 수정, 화면 확인.
 - 33 route b28 재생: 변경 행 외 C와 동일. compact-help·obj-title·residual-scans PASS. 증거 등록 도구 리뷰 지적(Blocking 11 + 델타 B3·B8) 수정, 단위시험 16건 PASS.
 - 보고서 `temp/release_C/{w1_reg1_report.md,b28_report.md,w1_reg3_report.md,w1_reg4_report.md}`, 리뷰 `temp/claude_2026-10-13/{review_b28.out,review_reg3_delta.out}`.
+
+## 2026-10-14 2편 전투 시작 일차 배너(b29 후보)
+
+- 원본 ROM에서 별도 빌드한 `output/game_wars_korean_candidate_20261014_b29.gba` SHA-256 `056563ce159579c4303e32b062f33fa6e6a81f78fadfca2aaa28c8d470561f91`. `tools/build_korean_full.py`가 0x45EC74와 8개 관련 LZ77 시트의 일본어 셀을 OkDanDan 한글로 바꾼다. 기본 숫자 0–9는 원본과 동일하다. 모든 재압축 결과가 원래 소비 크기 안에 들어가며 b28 대비 변경 바이트는 해당 9개 슬롯 안에만 있다.
+- JP·후보 동일 콜드부트 입력의 3P 자유대전/PK 캠페인 M1 전투 시작 단계 시트 `temp/release_C/b29/day_banner/{c3p,pk}_jp_vs_b29.png`에서 중앙과 회전 과정의 `1일째 / 작전개시` 가독성을 확인했다. 기타 8개 시트가 쓰이는 구체적 장면은 미검증이며, 전체 게이트 결과는 `temp/release_C/b29_report.md`에 기록한다.
+
+## 2026-10-14 2편 전투 시작 배너 b29r2 (Hada Sans Bold)
+
+- 원본 ROM에서 `output/game_wars_korean_candidate_20261014_b29r2.gba`를 빌드했고 독립 재생성 `temp/release_C/b29r2/repro.gba`와 SHA-256 `500a7af7e2b04fb45c78acda80e9aedd6062e5ccbc82ea36da4879c81bc87e73`이 일치했다. b29 대비 8,531 변경 바이트는 9개 원래 배너 압축 슬롯 안에만 있다.
+- `temp/release_C/b29r2/day_banner/{c3p,pk}_jp_vs_b29r2.png` 및 `{c3p,pk}_center_3x.png`: 원본과 동일한 콜드부트 입력으로 3P 자유대전·PK M1 중앙/회전 프레임을 캡처했다. 32px 셀당 Hada Sans Bold 본문 확대, 원래 숫자 글리프 유지, 흰/회색/검정/그림자 인덱스 유지가 화면에서 확인된다. 양쪽 실행 로그가 `0x0845EC74` 로드를 기록한다.
+- `AW_FONT_DIR=/home/taro1/aw-fonts python3 -m unittest discover -s tools -p test_part2_battle_day_banner.py -v` → 2 tests OK. 셀별 해시와 흰색 잉크 범위, 숫자 불변, 압축 용량, 빈칸/교환/팔레트 변조 거부를 검사한다. 나머지 시트 소비자와 `실패` 표시 실화면은 미검증이다.
+- b29와 동일한 20개 게이트를 b29r2 입력으로 재생했다. 19개 exit 0, `all_unit` exit 1이며 1110 tests에서 failures=10/errors=96/skipped=4. b29의 106개 이름과 완전히 같고 신규 실패 이름은 없다. 원문 명령·출력·종료코드는 `temp/release_C/b29r2/gates/{results.json,*.log}`.

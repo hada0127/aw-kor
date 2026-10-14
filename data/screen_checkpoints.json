@@ -1031,56 +1031,51 @@
     },
     {
       "name": "scene_19e6_part1_unit_help_late",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: g_00DF5D62 계열 유닛/작전 설명 후반 대사",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_19e6_part1_unit_help_late: P1 operation room tutorial briefing (Catherine) 커서 조작부터 / 공격방법도 설명이야; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
       "scene_id": "19e6_part1_unit_help_late",
       "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+      "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/25642576b638e7e38aa4b2b1bf7c0c0d6240b8b6064aab09a660df85007c8435.png",
+        "frame_sha256": "ef62aad7c876072cf34ea4ed81b33ebba7981a92630b3cc1b9ce9fc9bcb0b6a8",
+        "core_frame": 3250
+      }
     },
     {
       "name": "scene_19e6_part1_unit_help_late_b",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_19e6_exact_watch_current/part1_main_sweep_current/state_007/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: g_00DF5E12 계열 유닛/작전 설명 후속 대사; exact watch evidence: temp/scene_entrypoints/part1_19e6_exact_watch_current/part1_main_sweep_current/state_007/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_19e6_part1_unit_help_late_b: P1 operation room tutorial briefing (Catherine) 당신에게는, 코스모 랜드에 대해 / 해 줄게.; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
       "scene_id": "19e6_part1_unit_help_late",
       "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_b_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19e6_exact_watch_current/part1_main_sweep_current/state_007/hit.ss0"
+      "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0042_A_0003361.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/B19a1_p1sweep/0042_A_0003361.checkpoint.json",
+        "frame": "temp/release_C/b28/B19a1_p1sweep/frames/5e32c3ad019883305325e8744753eb46e924187cae42e242108b5679a49328b3.png",
+        "frame_sha256": "b7b8943f9b96f7579a264b8d2519536cf3bf822d2f3766f6b4cb039493e13d51",
+        "core_frame": 3352
+      }
     },
     {
       "name": "scene_19f_part1_extra_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0",
-      "refresh": [
-        [
-          "frames",
-          20
-        ],
-        [
-          "press",
-          "A",
-          90
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "fresh redraw from step_016: A 재진입으로 0xDF9516/0xDF953B 현재 ROM 대사 렌더",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_19f_part1_extra_story: P1 campaign map pre-mission dialogue, old man CO line 레드스타 군? (JA レッドスター軍？). Located by b28 parser-breakpoint trace (tr/p1_E_mission: DFF08A read in emulated chunk 1200-1500); frame chosen from ledger after typing completes",
       "scene_id": "19f_part1_extra_story",
       "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0"
+      "provenance_path": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+        "frame": "temp/release_C/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
+        "frame_sha256": "c40cf134f87abe3a11ddd68c709dfddb6d224a4d8c1f68f7633edb2cecdcdaf6",
+        "core_frame": 1408
+      }
     },
     {
       "name": "scene_20_part2_intro_newspaper",
@@ -1650,7 +1645,7 @@
     {
       "name": "scene_30a1_part2_redstar_story_early_b",
       "mode": "recorder_endpoint",
-      "grade": "recorded_b28",
+      "grade": "blocked_legacy_note_only",
       "note": "[b28 replay of C route] scene_30a1_b candidate: early Red Star campaign-map follow-up line 그럼, 바로 출격한다! 적은 어디냐? (match by note only, address unverified)",
       "scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
       "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_b_patched/frame.png",
@@ -1665,83 +1660,83 @@
     },
     {
       "name": "scene_30a1_part2_redstar_story_early_c",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "verified visual text: 블랙홀 군 잔당 안내 (state_018 A02)",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30a1_part2_redstar_story_early_c: prologue Black Hole briefing (Hawke) 그 점은, 안심하세요. / 각 사령관에게 명했습니다.; distinct from 30a1 main frame (0xA01C90, core 32869); cold boot, no save; read confirmed by b28 parser trace (chunks 18900-19800)",
       "scene_id": "30a1_part2_redstar_story_early",
       "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_c_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0028_A_0020021.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0028_A_0020021.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
+        "frame_sha256": "718ec899b90e25a059f6512ca246a7209ba85cb425561b550202f71d27663674",
+        "core_frame": 19700
+      }
     },
     {
       "name": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A0E398 레드스타 해방 후 매크로랜드 브리핑; exact watch evidence: temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30b1_part2_redstar_liberation_macro_briefing_story: campaign map briefing (Max) 도미노, 캐서린한테서 / 호출이 있었다고 들었어!; cold boot P2 campaign, no save; read of 0xA0E398.. confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/pk_cold/hits.json (emulated chunks 20700-21300). Supersedes note-only 30a1_b candidate at 22555",
       "scene_id": "30b1_part2_redstar_liberation_macro_briefing_story",
       "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0"
+      "provenance_path": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
+      "cheat_tainted": false,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
+        "frame": "temp/release_C/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
+        "frame_sha256": "725898ef989d1442a96879dd6571c6ecade3eaf6062b46ddd59d7be8ab8d8e3a",
+        "core_frame": 21100
+      }
     },
     {
       "name": "scene_30c1_part2_yellowcomet_north_invasion_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30c1_part2_yellowcomet_north_invasion_story: mission intro dialogue 뭐라고! 우리 북방에 / 블랙홀 군이 나타났다고?; cold boot anchor_run08 SRAM (copied, read-only source verified unchanged) + inputs_run08 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run08/hits.json",
       "scene_id": "30c1_part2_yellowcomet_north_invasion_story",
       "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+        "frame": "temp/release_C/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
+        "frame_sha256": "a88c0ec7b2d6ebb83a2cdd3df4bf8ba8bbb8f1e259c359ecb2aaedd24ce97bf1",
+        "core_frame": 2920
+      }
     },
     {
       "name": "scene_30d2_part2_green_earth_story_late",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30d2_part2_green_earth_story_late: mission intro dialogue 적 상황은 어떤가?; cold boot anchor_run14 SRAM (copied, read-only source verified unchanged) + inputs_run14 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run14/hits.json",
       "scene_id": "30d2_part2_green_earth_story_late",
       "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+      "provenance_path": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+        "frame": "temp/release_C/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
+        "frame_sha256": "d8818417976325af913032a1bb1b659ab70a117fb07db070b0e5bfa9cd8cc6dc",
+        "core_frame": 2840
+      }
     },
     {
       "name": "scene_30g0_part2_green_earth_reinforcement_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30g0_part2_green_earth_reinforcement_story: mission intro dialogue 캣, 공항은 완성된 거냐?; cold boot anchor_run16 SRAM (copied, read-only source verified unchanged) + inputs_run16 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run16/hits.json",
       "scene_id": "30g0_part2_green_earth_reinforcement_story",
       "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+        "frame": "temp/release_C/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
+        "frame_sha256": "5f11e7efc99cf25c4822a755394b2d2968be485a7e3f017c7477281723d80623",
+        "core_frame": 2800
+      }
     },
     {
       "name": "scene_30g1_part2_green_earth_volcano_sortie_story",
@@ -1777,19 +1772,19 @@
     },
     {
       "name": "scene_30g3_part2_green_earth_suspicious_area_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30g3_part2_green_earth_suspicious_area_story: mission intro dialogue 이 부근 상황은 어떤가, / 아스카?; cold boot anchor_run10 SRAM (copied, source verified unchanged) + inputs_run10 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run10/hits.json",
       "scene_id": "30g3_part2_green_earth_suspicious_area_story",
       "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+        "frame": "temp/release_C/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
+        "frame_sha256": "0d5a9d6052c88376d5178e43d60170b35beeb6715222121f764f9a0ed9e68cc3",
+        "core_frame": 8440
+      }
     },
     {
       "name": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
@@ -1841,19 +1836,19 @@
     },
     {
       "name": "scene_30e2_part2_blackhole_final_missile_story",
-      "mode": "savestate",
-      "state": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0",
-      "refresh": [
-        [
-          "frames",
-          1
-        ]
-      ],
-      "grade": "fresh_savestate",
-      "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+      "mode": "recorder_endpoint",
+      "grade": "recorded_b28",
+      "note": "scene_30e2_part2_blackhole_final_missile_story: mission intro dialogue 아스카만이 아니야.; cold boot anchor_run19 SRAM (copied, source verified unchanged) + inputs_run19 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run19/hits.json",
       "scene_id": "30e2_part2_blackhole_final_missile_story",
       "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+      "cheat_tainted": true,
+      "recorder_endpoint": {
+        "checkpoint": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+        "frame": "temp/release_C/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
+        "frame_sha256": "4c5a08b1a777108f2e7170bc9e2bbc2ac62f0c093e4495616256133f7da63e43",
+        "core_frame": 5876
+      }
     },
     {
       "name": "scene_30f2_part2_co_profile_story",
@@ -1874,7 +1869,7 @@
     {
       "name": "scene_80a_campaign_story_early",
       "mode": "recorder_endpoint",
-      "grade": "recorded_b28",
+      "grade": "blocked_legacy_note_only",
       "note": "[b28 replay of C route] scene_80a candidate: first battle entry dialogue 후, 큰 부대는 막아냈지만 블랙홀 군은 성가신 상대야 (match by note only)",
       "scene_id": "30a1_part2_redstar_story_early",
       "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",

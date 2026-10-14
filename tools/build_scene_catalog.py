@@ -1040,23 +1040,31 @@ def main():
                           "note": container_reason,
                           "capture_path": None, "provenance_path": None}
         else:
-            checkpoint = entrypoint.get("checkpoint") or sc.get("canvas")
-            checkpoint_exists = bool(checkpoint and checkpoint in chk_ids)
-            shot_checkpoint = entrypoint.get("screenshot") or sc.get("screenshot") or checkpoint
-            shot = chk_by_id.get(shot_checkpoint)
-            if shot:
-                shot_grade = shot.get("grade") or ("stale_state" if shot.get("stale_bg") else "ground_truth")
-                screenshot = {"checkpoint": shot_checkpoint,
-                              "url": f"/scene_shots/{shot_checkpoint}.png",
-                              "mode": shot.get("mode"), "grade": shot_grade,
-                              "status": "capturable", "note": shot.get("note", ""),
-                              "capture_path": shot.get("capture_path") or checkpoint_capture_path(shot_checkpoint),
-                              "provenance_path": shot.get("provenance_path") or checkpoint_provenance_path(shot, entrypoint)}
+            blocked_status = entrypoint.get("status")
+            if blocked_status in {"blocked", "defect"}:
+                checkpoint = None
+                checkpoint_exists = False
+                shot_checkpoint = None
+                shot = None
+                screenshot = {"status": blocked_status, "note": entrypoint.get("note", "")}
             else:
-                screenshot = {"checkpoint": shot_checkpoint, "url": None, "mode": None,
-                              "grade": "missing_checkpoint", "status": "missing_checkpoint", "note": "",
-                              "capture_path": checkpoint_capture_path(shot_checkpoint),
-                              "provenance_path": checkpoint_provenance_path(None, entrypoint)}
+                checkpoint = entrypoint.get("checkpoint") or sc.get("canvas")
+                checkpoint_exists = bool(checkpoint and checkpoint in chk_ids)
+                shot_checkpoint = entrypoint.get("screenshot") or sc.get("screenshot") or checkpoint
+                shot = chk_by_id.get(shot_checkpoint)
+                if shot:
+                    shot_grade = shot.get("grade") or ("stale_state" if shot.get("stale_bg") else "ground_truth")
+                    screenshot = {"checkpoint": shot_checkpoint,
+                                  "url": f"/scene_shots/{shot_checkpoint}.png",
+                                  "mode": shot.get("mode"), "grade": shot_grade,
+                                  "status": "capturable", "note": shot.get("note", ""),
+                                  "capture_path": shot.get("capture_path") or checkpoint_capture_path(shot_checkpoint),
+                                  "provenance_path": shot.get("provenance_path") or checkpoint_provenance_path(shot, entrypoint)}
+                else:
+                    screenshot = {"checkpoint": shot_checkpoint, "url": None, "mode": None,
+                                  "grade": "missing_checkpoint", "status": "missing_checkpoint", "note": "",
+                                  "capture_path": checkpoint_capture_path(shot_checkpoint),
+                                  "provenance_path": checkpoint_provenance_path(None, entrypoint)}
         # 실캡처 canvas = 레지스트리에서 checkpoint→canvas로 도출(지원 키만).
         preview = None if is_container else (pv_by_chk.get(checkpoint) or pv_by_chk.get(sc["id"]))
         if preview not in pv_keys:
@@ -1078,7 +1086,11 @@ def main():
             "counts": {"dialogue": len(dl_bucket[sc["id"]]), "sprite": len(sp_bucket[sc["id"]])},
         }
         if not is_container and (entrypoint or (shot and shot.get("mode") == "fresh")):
-            out_entrypoint = dict(entrypoint)
+            out_entrypoint = {k: v for k, v in entrypoint.items()
+                              if k not in {"status", "evidence", "diagnostic_probe", "entrypoint_note"}}
+            if entrypoint.get("status") in {"blocked", "defect"}:
+                out_entrypoint = {"note": entrypoint.get("entrypoint_note", entrypoint.get("note", "")),
+                                  "extra_screenshots": []}
             if shot and shot.get("mode") == "fresh":
                 out_entrypoint = {
                     "checkpoint": shot_checkpoint,
@@ -1088,6 +1100,9 @@ def main():
                     "provenance_path": shot.get("provenance_path") or _rel(CHK),
                 }
             out_scene["entrypoint"] = out_entrypoint
+        for evidence_key in ("evidence", "diagnostic_probe"):
+            if evidence_key in entrypoint:
+                out_scene[evidence_key] = entrypoint[evidence_key]
         if sc.get("related_dialogue_scene_ids"):
             out_scene["related_dialogue_scene_ids"] = sc["related_dialogue_scene_ids"]
         out_scenes.append(out_scene)

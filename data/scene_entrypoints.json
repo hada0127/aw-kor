@@ -141,44 +141,30 @@
       "cheat_tainted": false
     },
     "19a2_part1_heavy_tank_advice_story": {
-      "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
-      "screenshot": "scene_19a2_part1_heavy_tank_advice_story",
-      "note": "validated visual text: g_00D965DE 하지만 전투는 정면승부만이 아니야; exact watch evidence: temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/watch.log",
-      "source_state": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19b_d965de_exact_watch/2113_front/after_route/hit.ss0"
+      "status": "blocked",
+      "note": "no current b28 save"
     },
     "19b1_part1_hoip_ambush_weather_story": {
-      "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
-      "screenshot": "scene_19b1_part1_hoip_ambush_weather_story",
-      "note": "validated visual text: g_00D9CBCE 나쁜 예감이 들어; exact watch evidence: temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/watch.log",
-      "source_state": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19b_d9cbce_exact_watch/2111_front/after_route/hit.ss0"
+      "status": "blocked",
+      "note": "no current b28 save"
     },
     "19b2_part1_hoip_landing_setup_story": {
-      "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
-      "screenshot": "scene_19b2_part1_hoip_landing_setup_story",
-      "note": "validated visual text: g_00D9A26A 호이프 부대가 상륙하기 전; exact watch evidence: temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/watch.log",
-      "source_state": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19b_19d_exact_watch_v1/11186_front/after_route/hit.ss0"
+      "status": "blocked",
+      "note": "no current b28 save"
     },
     "19c1_part1_mid_campaign_radio_story": {
-      "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
-      "screenshot": "scene_19c1_part1_mid_campaign_radio_story",
-      "note": "validated visual text: g_00DC2937 사령관님, 료! 들려요; exact watch evidence: temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/watch.log",
-      "source_state": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19c_dc2937_group_watch_repro/2112_front_a5/mode_up_base/hit.ss0"
+      "status": "blocked",
+      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/first_cleared/f007464.png",
+        "frame_sha256": "0ff5b4ca01007da7ec0fdf74c0f3b473f16ff1de8a0d320579958aa2b29c67d3",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
+      }
     },
     "19c2_part1_mid_fog_map_story": {
-      "checkpoint": "scene_19c2_part1_mid_fog_map_story",
-      "screenshot": "scene_19c2_part1_mid_fog_map_story",
-      "note": "validated visual text: g_00DC4C02 색적 맵인가; exact watch evidence: temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/watch.log",
-      "source_state": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_19cd_direct_fast_20260622/cases/2111_front_a5__mode_up_base/hit.ss0"
+      "status": "blocked",
+      "note": "no current b28 save"
     },
     "19e1_part1_unit_info_detail_help": {
       "checkpoint": "scene_19e1_part1_unit_info_detail_help",
@@ -190,17 +176,13 @@
       "cheat_tainted": false
     },
     "19e7_part1_hoip_co_weather_help": {
-      "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
-      "screenshot": "scene_19e7_part1_hoip_co_weather_help",
-      "note": "fresh redraw from 2111_front route: A,A 재진입으로 0xDF7452/0xDF7482 현재 ROM 대사 렌더",
-      "source_state": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0",
-      "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_aw1_save_placement_probe_a5/2111_front/after_route.ss0"
+      "status": "blocked",
+      "note": "no current b28 save"
     },
     "19e6_part1_unit_help_late": {
       "checkpoint": "scene_19e6_part1_unit_help_late",
       "screenshot": "scene_19e6_part1_unit_help_late",
-      "note": "verified visual text: g_00DF5D62/g_00DF5E12 계열 유닛/작전 설명 후반 대사; exact watch evidence: temp/scene_entrypoints/part1_19e6_primary_watch_current, temp/scene_entrypoints/part1_19e6_exact_watch_current",
+      "note": "scene_19e6_part1_unit_help_late: P1 operation room tutorial briefing (Catherine) 커서 조작부터 / 공격방법도 설명이야; read address confirmed by b28 parser breakpoint trace tr/p1sweep800 (chunk 3000-3600, same cold-boot sweep inputs); untainted",
       "source_state": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0",
       "extra_screenshots": [
         {
@@ -211,15 +193,19 @@
         }
       ],
       "capture_path": "temp/scene_screenshots/scene_19e6_part1_unit_help_late_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_current/state_008.ss0"
+      "provenance_path": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+      "cheat_tainted": false
     },
     "19f_part1_extra_story": {
       "checkpoint": "scene_19f_part1_extra_story",
       "screenshot": "scene_19f_part1_extra_story",
-      "note": "fresh redraw from step_016: A 재진입으로 0xDF9516/0xDF953B 현재 ROM 대사 렌더",
+      "note": "scene_19f_part1_extra_story: P1 campaign map pre-mission dialogue, old man CO line 레드스타 군? (JA レッドスター軍？). Located by b28 parser-breakpoint trace (tr/p1_E_mission: DFF08A read in emulated chunk 1200-1500); frame chosen from ledger after typing completes",
       "source_state": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0",
       "capture_path": "temp/scene_screenshots/scene_19f_part1_extra_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part1_main_sweep_stepstates/step_016.ss0"
+      "provenance_path": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+      "cheat_tainted": true
     },
     "20_part2_intro_newspaper": {
       "checkpoint": "scene_20_part2_intro_newspaper",
@@ -339,16 +325,34 @@
       "cheat_tainted": true
     },
     "26a_part2_battle_start_overlays": {
-      "note": "Unresolved: matching runtime scene phases/dialogue not captured.",
-      "extra_screenshots": []
+      "status": "defect",
+      "note": "b28 P2 1日目/作戦開始 OBJ VRAM tiles 487-598 zero; temp/release_C/b28/26a_day_banner/",
+      "evidence": {
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "sprite_phases": [
+          "temp/release_C/b28/B19a1_p1sweep/frames/f95e46bf5f947e757b92af9df1392fa41b2a25cbd4d11d7efff0cd2f99a22c15.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/26725208fd35f6c54bd89b9614fd02e76101f8a7dc3e26ba9d5c7324ba839201.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/863db895241a109de8b25260a50c271d3f47530c81140a4a2cf1f2fbfd8f4f7c.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/df91f1370dc764d5e1b095feb5caec1f1b4defee19a9958d0c4aefb336ec4c8a.png",
+          "temp/release_C/b28/B19a1_p1sweep/frames/3661b6a311592f276d102e588e8c3ab097b895c651264bb8e6a9db0d937b3cde.png"
+        ],
+        "p1_day_banner": [
+          "temp/release_C/b28/F7BE_a/frames/a0b8bde2894be48b207d8bc7b82116e0ae954cebe689177321d546f609ea1a87.png",
+          "temp/release_C/b28/F7BE_a/frames/2987e3af9d54139db7c844c6a6bce124209a554c68cbdad13f3cc23f6129e551.png",
+          "temp/release_C/b28/F7BE_a/frames/c8ef78a74a117cfde945703d470b35e9110de20c28c9a17d22373625714205ab.png",
+          "temp/release_C/b28/F7BE_a/frames/d2faac3e4bbb06c80bb52811dcae7c1bacf1d18aa26ccd75a42763447550d107.png",
+          "temp/release_C/b28/F7BE_a/frames/1f3e1dab0f456bc24c1745a86ea3db6a89817ce056915c74ad4daaf0dd5e1278.png",
+          "temp/release_C/b28/F7BE_a/frames/89b9713d269cc46169a41b11432efd06533b90d6d5b75df688b952de3ab5ca6a.png"
+        ],
+        "p2_defect": "temp/release_C/b28/C_3p_surrender/frames/f41b6e588bee944327d7fefc220625728fcaf96b0a4cb7c15117fba265f9232f.png",
+        "defect_evidence": "temp/release_C/b28/26a_day_banner/",
+        "sprite_id": "lz77_00C10B34"
+      },
+      "entrypoint_note": "P1 and sprite animation phases catalogued in batch4; P2 banner defect blocks PASS"
     },
     "26_part2_battle_labels": {
-      "checkpoint": "30_battle_attack",
-      "screenshot": "30_battle_attack",
-      "note": "기존 전투 공격/데미지 예측 라벨",
-      "source_state": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0",
-      "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
-      "provenance_path": "temp/battle_crash_smoke_20260607/attack_probe_a/final.ss0"
+      "status": "blocked",
+      "note": "all b28 routes have battle animation off; attack labels not recorded"
     },
     "27_part2_battle_objlabels": {
       "checkpoint": "scene_27_part2_battle_objlabels",
@@ -360,12 +364,8 @@
       "cheat_tainted": true
     },
     "28_part2_result_status": {
-      "checkpoint": "scene_28_part2_result_status",
-      "screenshot": "scene_28_part2_result_status",
-      "note": "fresh battle progression: 실제 MISSION FAILED 결과 오버레이",
-      "source_state": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0",
-      "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/result_status_candidate_recapture/state_0043_recap.ss0"
+      "status": "blocked",
+      "note": "defeat route not run on b28"
     },
     "29_part2_result_summary": {
       "checkpoint": "scene_29_part2_result_summary",
@@ -379,103 +379,92 @@
     "30a1_part2_redstar_story_early": {
       "checkpoint": "scene_30a1_part2_redstar_story_early",
       "screenshot": "scene_30a1_part2_redstar_story_early",
-      "note": "[b28 replay of C route] scene_80a candidate: first battle entry dialogue 후, 큰 부대는 막아냈지만 블랙홀 군은 성가신 상대야 (match by note only)",
+      "note": "b28 recorded Red Star early story frame 32869; 80a core 37931 mapping withdrawn",
       "extra_screenshots": [
         {
           "checkpoint": "scene_30a1_part2_redstar_story_early_c",
           "label": "블랙홀 군 잔당 안내",
           "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_c_patched/frame.png",
           "provenance_path": "temp/scene_entrypoints/inspect_30a1_states/state_018/a02.ss0"
-        },
-        {
-          "checkpoint": "scene_80a_campaign_story_early",
-          "label": "g_00A02628..A0266B recorded dialogue"
         }
       ],
       "capture_path": "temp/scene_screenshots/scene_30a1_part2_redstar_story_early_patched/frame.png",
-      "provenance_path": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
-      "source_endpoint": "temp/release_C/b28/PK_cold/0073_A_0037931.checkpoint.json",
+      "provenance_path": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/PK_cold/0062_A_0032869.checkpoint.json",
       "cheat_tainted": false
     },
     "30b1_part2_redstar_liberation_macro_briefing_story": {
       "checkpoint": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
       "screenshot": "scene_30b1_part2_redstar_liberation_macro_briefing_story",
-      "note": "[b28 replay of C route] scene_30a1_b candidate: early Red Star campaign-map follow-up line 그럼, 바로 출격한다! 적은 어디냐? (match by note only, address unverified)",
+      "note": "scene_30b1_part2_redstar_liberation_macro_briefing_story: campaign map briefing (Max) 도미노, 캐서린한테서 / 호출이 있었다고 들었어!; cold boot P2 campaign, no save; read of 0xA0E398.. confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/pk_cold/hits.json (emulated chunks 20700-21300). Supersedes note-only 30a1_b candidate at 22555",
       "source_state": "temp/scene_entrypoints/part2_30b30c_direct_a_scriptfirst_watch_v1/3285_off0f000/menu/hit.ss0",
       "capture_path": "temp/scene_screenshots/scene_30b1_part2_redstar_liberation_macro_briefing_story_patched/frame.png",
-      "provenance_path": "temp/release_C/b28/PK_cold/0035_A_0022555.checkpoint.json",
-      "extra_screenshots": [
-        {
-          "checkpoint": "scene_30a1_part2_redstar_story_early_b",
-          "label": "g_00A0E464..A0E484 recorded dialogue"
-        }
-      ],
-      "source_endpoint": "temp/release_C/b28/PK_cold/0035_A_0022555.checkpoint.json",
+      "provenance_path": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
+      "extra_screenshots": [],
+      "source_endpoint": "temp/release_C/b28/PK_cold/0031_A_0021107.checkpoint.json",
       "cheat_tainted": false
     },
     "30c1_part2_yellowcomet_north_invasion_story": {
       "checkpoint": "scene_30c1_part2_yellowcomet_north_invasion_story",
       "screenshot": "scene_30c1_part2_yellowcomet_north_invasion_story",
-      "note": "validated visual text: g_00A15240 우리나라 북방에 블랙홀 군이 나타났다고; exact watch evidence: temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/watch.log",
+      "note": "scene_30c1_part2_yellowcomet_north_invasion_story: mission intro dialogue 뭐라고! 우리 북방에 / 블랙홀 군이 나타났다고?; cold boot anchor_run08 SRAM (copied, read-only source verified unchanged) + inputs_run08 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run08/hits.json",
       "source_state": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0",
       "capture_path": "temp/scene_screenshots/scene_30c1_part2_yellowcomet_north_invasion_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30c_a15240_exact_watch/base_2821_010_1000/step_01/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+      "cheat_tainted": true
     },
     "30d2_part2_green_earth_story_late": {
       "checkpoint": "scene_30d2_part2_green_earth_story_late",
       "screenshot": "scene_30d2_part2_green_earth_story_late",
-      "note": "validated visual text: g_00A1BF24 그린어스 전반 후반 대사; A19688 first-entry line still tracked separately",
+      "note": "scene_30d2_part2_green_earth_story_late: mission intro dialogue 적 상황은 어떤가?; cold boot anchor_run14 SRAM (copied, read-only source verified unchanged) + inputs_run14 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run14/hits.json",
       "source_state": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0",
       "capture_path": "temp/scene_screenshots/scene_30d2_part2_green_earth_story_late_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30d_green_intro_flag_variants_v3/clone_off0e/step_32.ss0"
+      "provenance_path": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+      "cheat_tainted": true
     },
     "30g0_part2_green_earth_reinforcement_story": {
       "checkpoint": "scene_30g0_part2_green_earth_reinforcement_story",
       "screenshot": "scene_30g0_part2_green_earth_reinforcement_story",
-      "note": "validated visual text: g_00A1C06C 모두, 힘내; pointer-table watch evidence: temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/watch.log",
+      "note": "scene_30g0_part2_green_earth_reinforcement_story: mission intro dialogue 캣, 공항은 완성된 거냐?; cold boot anchor_run16 SRAM (copied, read-only source verified unchanged) + inputs_run16 prefix (truncated); message read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run16/hits.json",
       "source_state": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0",
       "capture_path": "temp/scene_screenshots/scene_30g0_part2_green_earth_reinforcement_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30dg30f_parent_ptr_watch_v1/temp__scene_entrypoints__part2_30d_elevated_sector_states_all_saves__5719_off09000__menu.ss0/none_direct_a96/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+      "cheat_tainted": true
     },
     "30g1_part2_green_earth_volcano_sortie_story": {
-      "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
-      "screenshot": "scene_30g1_part2_green_earth_volcano_sortie_story",
-      "note": "validated visual text: g_00A1D244 호크, 콩이 와 있어; exact watch evidence: temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-      "source_state": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30g_a1d244_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      "status": "blocked",
+      "note": "branch mission unverified"
     },
     "30g2_part2_green_earth_volcano_lava_story": {
-      "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
-      "screenshot": "scene_30g2_part2_green_earth_volcano_lava_story",
-      "note": "validated visual text: g_00A1D550 적이 화산 근처에 출격; exact watch evidence: temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/watch.log",
-      "source_state": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30g_volcano_extended_exact_watch/8496_off0e000__R02_U02__a18/after_moves/hit.ss0"
+      "status": "blocked",
+      "note": "branch mission unverified"
     },
     "30g3_part2_green_earth_suspicious_area_story": {
       "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
       "screenshot": "scene_30g3_part2_green_earth_suspicious_area_story",
-      "note": "validated visual text: g_00A1FAD8 이 부근 상황은 어떤가; exact watch evidence: temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/watch.log",
+      "note": "scene_30g3_part2_green_earth_suspicious_area_story: mission intro dialogue 이 부근 상황은 어떤가, / 아스카?; cold boot anchor_run10 SRAM (copied, source verified unchanged) + inputs_run10 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run10/hits.json",
       "source_state": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0",
       "capture_path": "temp/scene_screenshots/scene_30g3_part2_green_earth_suspicious_area_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30g_a1fad8_exact_watch_retry/base_2821_010_1000/step_01/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+      "cheat_tainted": true
     },
     "30e4_part2_blackhole_yellowcomet_fortress_story": {
-      "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-      "screenshot": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
-      "note": "validated visual text: g_00A202D4 대형 요새/스네이크 브리핑; break evidence: temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/break.log",
-      "source_state": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0",
-      "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30c_breakscan_yellow_map_v1/R_D_015/final.ss0"
+      "status": "blocked",
+      "note": "branch mission unverified"
     },
     "30e3_part2_blackhole_yellowcomet_supply_briefing_story": {
-      "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-      "screenshot": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-      "note": "validated visual text: g_00A20F38 현지에서 모은 물자는; exact watch evidence: temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/watch.log",
-      "source_state": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0",
-      "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_next_major_exact_watch_20260622/a20f38_from_L006/hit.ss0"
+      "status": "blocked",
+      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/yellow/f002844.png",
+        "frame_sha256": "8ba17b06b3aa3dcd0956d47616f626d2d1698ba7d72803ba950cc7bf085ccdc3",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
+      }
     },
     "30e1_part2_blackhole_missile_approach_story": {
       "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
@@ -489,10 +478,12 @@
     "30e2_part2_blackhole_final_missile_story": {
       "checkpoint": "scene_30e2_part2_blackhole_final_missile_story",
       "screenshot": "scene_30e2_part2_blackhole_final_missile_story",
-      "note": "validated visual text: g_00A27024 아스카만이 아니야; exact watch evidence: temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/watch.log",
+      "note": "scene_30e2_part2_blackhole_final_missile_story: mission intro dialogue 아스카만이 아니야.; cold boot anchor_run19 SRAM (copied, source verified unchanged) + inputs_run19 (truncated); read confirmed by b28 parser breakpoint trace temp/release_C/work/w2b4/tr/run19/hits.json",
       "source_state": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0",
       "capture_path": "temp/scene_screenshots/scene_30e2_part2_blackhole_final_missile_story_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_30e_a27024_exact_watch/RIGHT/after_A/hit.ss0"
+      "provenance_path": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+      "source_endpoint": "temp/release_C/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+      "cheat_tainted": true
     },
     "30f2_part2_co_profile_story": {
       "checkpoint": "scene_30f2_part2_co_profile_story",
@@ -504,24 +495,28 @@
       "cheat_tainted": false
     },
     "80a_campaign_story_early": {
-      "note": "Unresolved: matching runtime scene phases/dialogue not captured.",
-      "extra_screenshots": []
+      "status": "blocked",
+      "note": "old PK core 37931 mapping is wrong (note only); no P1 save reaching E00xxx dialogue on this PC"
     },
     "80b_campaign_story_mid": {
-      "checkpoint": "scene_80b_campaign_story_mid",
-      "screenshot": "scene_80b_campaign_story_mid",
-      "note": "fresh sweep: 캠페인 중반 전투 대사",
-      "source_state": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0",
-      "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/part2_main_sweep/state_019.ss0"
+      "status": "blocked",
+      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/m16/f003720.png",
+        "frame_sha256": "289888ef3d4f49d1f5a4c2abe3b83d7ca63655bc1773e8dcec0012229b1b72e4",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
+      }
     },
     "80c_campaign_story_late": {
-      "checkpoint": "scene_80c_campaign_story_late",
-      "screenshot": "scene_80c_campaign_story_late",
-      "note": "fresh redraw: 캠페인 후반 CO 프로필/설정 대사",
-      "source_state": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0",
-      "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
-      "provenance_path": "temp/scene_entrypoints/scene80c_after_kong_row_patch/state_DOWN_UP.ss0"
+      "status": "blocked",
+      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "diagnostic_probe": {
+        "frame": "temp/release_C/b28/story_probe/m16/f006300.png",
+        "frame_sha256": "06a50990dc68348e36cf44da513a2a5720adc4cc93cff89a47e1263583875020",
+        "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "status": "BLOCKED"
+      }
     },
     "85_ui_common": {
       "checkpoint": "scene_85_ui_common",
