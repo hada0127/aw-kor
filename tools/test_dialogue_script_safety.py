@@ -379,7 +379,9 @@ class ScriptSafetyTests(unittest.TestCase):
         for raw in glyphs:
             self.assertEqual(len(raw), 512)
             self.assertTrue(any(raw))
-            self.assertTrue(set(v for byte in raw for v in (byte & 15, byte >> 4)) <= {0, 6, 10})
+            indices = set(v for byte in raw for v in (byte & 15, byte >> 4))
+            self.assertTrue(indices <= {0, 5, 6, 10})
+            self.assertIn(5, indices)  # b30 black rim around the Hada Bold face
             for y in range(32):
                 for x in range(24, 32):
                     pos = (y // 8 * 4 + x // 8) * 32 + (y % 8) * 4 + (x % 8) // 2

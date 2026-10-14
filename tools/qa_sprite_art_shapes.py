@@ -5,7 +5,70 @@ It is not proof of all game assets or human-readable semantics of every jamo.
 """
 import sys,json,hashlib,struct
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+
+
+def compact_hada_shape(char, raw):
+ """Independent Hada topology oracle in the approved 20x22/19px cell.
+
+ The font outlines supply the reference ink. The declared 23-to-19 cell
+ sampling only places that ink; no production glyph or compact_glyph output
+ supplies expected pixels or topology.
+ """
+ import aw_fonts
+ import qa_sprite_shape as shape
+ from aw_fonts import obj_canvas
+ layers=[]
+ for path in (aw_fonts.hadasans_path(),aw_fonts.hadasans_black_path()):
+  high=Image.new('L',(768,768))
+  ImageDraw.Draw(high).text((40,0),char,font=ImageFont.truetype(path,384),fill=255)
+  layers.append(high)
+ boxes=[layer.point(lambda v:255 if v>=128 else 0).getbbox() for layer in layers]
+ if None in boxes:raise AssertionError('missing pinned Hada outline: '+char)
+ box=tuple(fn(b[i] for b in boxes) for i,fn in enumerate((min,min,max,max)))
+ face=layers[0].crop(box).resize((20,22),Image.Resampling.LANCZOS).point(lambda v:255 if v>=128 else 0)
+ guide=layers[1].crop(box).resize((20,22),Image.Resampling.LANCZOS)
+ font_face=Image.new('L',(32,32));font_face.paste(face,(1,3))
+ rim=Image.new('L',(32,32));rim.paste(guide,(1,3));rim=rim.filter(ImageFilter.MaxFilter(3))
+ edge=rim.point(lambda v:255 if v>=128 else 0).getbbox()
+ if edge is None:raise AssertionError('blank pinned Hada outline: '+char)
+ # The rim's native one-pixel shadow extends the source cell by one pixel.
+ left,right=edge[0],edge[2]
+ width=right-left+1;target=min(19,width);start=min(left,19-target)
+ reference=Image.new('L',(32,32))
+ for x in range(target):
+  source_x=left+min(width-1,(2*x+1)*width//(2*target))
+  for y in range(32):reference.putpixel((start+x,y),font_face.getpixel((source_x,y)))
+ actual_grid=obj_canvas(raw,1,4,4)
+ actual=Image.new('L',(32,32))
+ actual.putdata([255 if value==6 else 0 for row in actual_grid for value in row])
+ full_ink=[(x,y) for y,row in enumerate(actual_grid) for x,value in enumerate(row) if value]
+ failures=[]
+ if not full_ink or max(x for x,_ in full_ink)>=19 or max(y for _,y in full_ink)>=32:
+  failures.append('compact mission-title ink outside 19px cell or blank')
+ if actual.getbbox() is None:
+  failures.append('compact mission-title face blank')
+  return dict(character=char,failures=failures,gap_columns=0)
+ result=shape.compare(char,actual,reference)
+ failures.extend(result['failures'])
+ # Each reference jamo component must retain its own strokes. This also
+ # catches a dropped attached stroke that leaves the component count intact.
+ ref_pixels=shape._cells(reference);actual_pixels=shape._cells(actual)
+ for component in shape.components(reference):
+  if len(component & actual_pixels)<.9*len(component):
+   failures.append('Hada component stroke missing')
+   break
+ def strokes(cells,axis,n):
+  values=[(n,y) in cells for y in range(32)] if axis=='x' else [(x,n) in cells for x in range(32)]
+  return sum(value and (i==0 or not values[i-1]) for i,value in enumerate(values))
+ gaps=[]
+ for axis in ('x','y'):
+  for n in range(32):
+   expected=strokes(ref_pixels,axis,n)
+   if expected>=2 and strokes(actual_pixels,axis,n)<expected:gaps.append((axis,n))
+ if gaps:failures.append('Hada jamo stroke gap removed')
+ result.update(failures=failures,gap_columns=sum(strokes(ref_pixels,'x',x)>=2 for x in range(32)),closed_lines=gaps[:8],reference='independent pinned Hada Sans Bold/Black topology; approved 20x22 raster and 19px cell')
+ return result
 import argparse
 parser=argparse.ArgumentParser()
 parser.add_argument('rom',type=Path)
@@ -43,6 +106,26 @@ for _t,_want in PLATE_PROFILE['labels'].items():
   failures.append(dict(asset=_want['asset'],reason='final plate differs from pinned approved profile'))
 def image(g):
  im=Image.new('L',(len(g[0]),len(g)));im.putdata([v for r in g for v in r]);return im
+def audit_hada_mission_glyph(asset,ch,raw):
+ # Raster consistency at the user-approved 20x22 Bold/Black union geometry.
+ # This check does not establish topology preservation through resizing.
+ import aw_fonts
+ layers=[]
+ for path in (aw_fonts.hadasans_path(),aw_fonts.hadasans_black_path()):
+  font=ImageFont.truetype(path,384)
+  layer=Image.new('L',(768,768));ImageDraw.Draw(layer).text((40,0),ch,font=font,fill=255)
+  layers.append(layer)
+ boxes=[layer.point(lambda v:255 if v>=128 else 0).getbbox() for layer in layers]
+ box=(min(z[0] for z in boxes),min(z[1] for z in boxes),max(z[2] for z in boxes),max(z[3] for z in boxes))
+ ref=layers[0].crop(box).resize((20,22),Image.Resampling.LANCZOS).point(lambda v:255 if v>=128 else 0)
+ actual=image(obj_canvas(raw,1,4,4)).point(lambda v:255 if v==6 else 0)
+ actual=actual.crop(actual.getbbox())
+ ref=ref.crop(ref.getbbox())
+ if args.shape:result=shape.compare(ch,actual,reference=ref)
+ else:result=dict(character=ch,gap_columns=sum(sum(v for v,_,_ in fit.runs([ref.getpixel((x,y)) for y in range(ref.height)]))>=2 for x in range(ref.width)),failures=[] if actual.size==ref.size and actual.tobytes()==ref.tobytes() else ['Hada Bold face differs from pinned outline'])
+ result.update(asset=asset,label=ch,reference='pinned Hada Sans Bold 20x22 raster consistency')
+ rows.append(result);assets.add(asset)
+ if result['failures']:failures.append(result)
 def audit(asset,text,img,records,inks):
  assets.add(asset)
  for ch,box in records:
@@ -173,8 +256,8 @@ for code,reserved,ptr,adv in tables['private']:
   ch=unicodedata.normalize('NFKC',code.to_bytes(2,'big').decode('shift_jis'))
   expected=b._mission_title_hangul_glyph(ch) if len(ch)==1 and ch.isascii() and ch.isalnum() else b._mission_title_blank_glyph()
   same(hex(off),raw,expected);assets.add(hex(off));continue
- ch=codes[code];off=ptr-0x8000000;raw=lz77_decompress(rom,off)[0];captures.clear();expected=b._mission_title_hangul_glyph(ch);same(hex(off),raw,expected)
- mask,records=captures[-1];audit(hex(off),ch,image(obj_canvas(raw,1,4,4)),records,{6})
+ ch=codes[code];off=ptr-0x8000000;raw=lz77_decompress(rom,off)[0];expected=b._mission_title_hangul_glyph(ch);same(hex(off),raw,expected)
+ audit_hada_mission_glyph(hex(off),ch,raw)
 # Compact long-title copies retain whole source columns, including every y gap.
 if [e[0] for e in tables['compact']] != [e[0] for e in tables['private']]:
  raise AssertionError('expected compact population differs from base')
@@ -190,7 +273,10 @@ for code,reserved,ptr,adv in tables['compact']:
  same(hex(off),actual,compact_glyph(source));assets.add(hex(off))
  ch=codes.get(code)
  if ch and args.shape:
-  im=image(obj_canvas(actual,1,4,4));audit(hex(off),ch,im,[(ch,(0,0,32,32))],{6})
+  result=compact_hada_shape(ch,actual)
+  result.update(asset=hex(off),label=ch)
+  rows.append(result)
+  if result['failures']:failures.append(result)
  if not ch or not fit.dense_syllable(ch):continue
  grid=obj_canvas(source,1,4,4);out=obj_canvas(actual,1,4,4)
  xs=[x for row in grid for x,v in enumerate(row) if v]
@@ -349,5 +435,5 @@ for asset,layer,xy,text,font,fill,inks,fontmode in small_calls:
    result=shape.compare(ch,actual,expected);result.update(asset=asset,label=text,box=box,reference=Path(font.path).name+':'+str(font.size))
    rows.append(result)
    if result['failures']:failures.append(result)
-report=dict(baseline_sha256=args.baseline_sha256,expected_table_entries={k:len(v) for k,v in tables.items()},rom_sha256=hashlib.sha256(rom).hexdigest(),assets_checked=len(assets),checked_assets=sorted(assets),glyph_checks=len(rows),gap_columns=sum(r['gap_columns'] for r in rows),failures=failures,unverified=unverified,checks=rows,limits='Independent uniform-outline/BDF comparison when --shape; final raster column gaps otherwise. Exact full-payload binding to final ROM. Human recognition and runtime palette/animation variants still require visual review.')
+report=dict(baseline_sha256=args.baseline_sha256,expected_table_entries={k:len(v) for k,v in tables.items()},rom_sha256=hashlib.sha256(rom).hexdigest(),assets_checked=len(assets),checked_assets=sorted(assets),glyph_checks=len(rows),gap_columns=sum(r['gap_columns'] for r in rows),failures=failures,unverified=unverified,checks=rows,limits='Independent Hada compact topology and other uniform-outline/BDF comparison when --shape; approved 20x22 Hada base raster consistency and final raster column gaps otherwise. Exact full-payload binding to final ROM. Human recognition and runtime palette/animation variants still require visual review.')
 args.report.write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps({k:v if k not in ('failures','unverified') else len(v) for k,v in report.items() if k not in ('checks','checked_assets')},ensure_ascii=False));raise SystemExit(bool(failures or unverified))

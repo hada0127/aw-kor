@@ -10395,11 +10395,10 @@ def _lz77_literal_block(raw):
     return bytes(out)
 
 
-# 2026-10-08 font rule: the large mission-title glyphs use OkDanDan (were
-# Galmuri11 x2). One fixed size keeps every syllable on a common baseline: at
-# 21px every KS X 1001 syllable is <= 22px wide and spans rows 2..25 from the
-# origin, so ink + 1px shadow stay inside the 24px advance and the 32x32 cell.
+# Fullwidth Latin and digits retain their existing OkDanDan art. The 2026-10-14
+# decision changes only Hangul in the private Part 2 mission-title glyph table.
 MISSION_TITLE_FONT_SIZE = 21
+MISSION_TITLE_HADA_SIZE = 23
 
 
 @lru_cache(maxsize=1)
@@ -10408,31 +10407,61 @@ def _mission_title_font():
     return ImageFont.truetype(aw_fonts.okdandan_path(), MISSION_TITLE_FONT_SIZE)
 
 
+@lru_cache(maxsize=1)
+def _mission_title_hangul_fonts():
+    from PIL import ImageFont
+    return (ImageFont.truetype(aw_fonts.hadasans_path(), MISSION_TITLE_HADA_SIZE),
+            ImageFont.truetype(aw_fonts.hadasans_black_path(), MISSION_TITLE_HADA_SIZE))
+
+
 def _mission_title_hangul_glyph(syl):
-    """Native 32x32 OBJ cell, with a 21px OkDanDan body and the source palette."""
-    from PIL import Image, ImageDraw
-    font = _mission_title_font()
+    """Native 32x32 OBJ cell; Hada Bold Hangul with Black outline guide."""
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
     # Callers pass Hangul syllables or ASCII letters/digits; anything else would
     # silently draw the font's .notdef box.
     if len(syl) != 1 or not ('가' <= syl <= '힣' or (syl.isascii() and syl.isalnum())):
         raise AssertionError(f'missing mission title glyph: {syl!r}')
-    box = ImageDraw.Draw(Image.new('L', (1, 1))).textbbox((0, 0), syl, font=font)
-    if box[2] <= box[0]:
-        raise AssertionError(f'missing mission title glyph: {syl!r}')
-    from hangul_pixel_fit import native_mask
-    mask, _ = native_mask(syl, font, (32, 32),
-        ((MISSION_TITLE_HANGUL_ADVANCE - 1 - (box[2] - box[0])) // 2 - box[0], 1))
-    ink = mask.load()
+    if '가' <= syl <= '힣':
+        # Normalize each high-resolution outline to the native 24px advance.
+        # Black only determines the thicker rim; the visible face stays Bold.
+        bold, black = _mission_title_hangul_fonts()
+        layers = []
+        for font in (bold, black):
+            high_font = ImageFont.truetype(font.path, 384)
+            layer = Image.new('L', (768, 768))
+            ImageDraw.Draw(layer).text((40, 0), syl, font=high_font, fill=255)
+            layers.append(layer)
+        boxes = [layer.point(lambda v: 255 if v >= 128 else 0).getbbox() for layer in layers]
+        if None in boxes:
+            raise AssertionError(f'missing mission title glyph: {syl!r}')
+        box = (min(b[0] for b in boxes), min(b[1] for b in boxes),
+               max(b[2] for b in boxes), max(b[3] for b in boxes))
+        face = Image.new('L', (32, 32))
+        guide = Image.new('L', (32, 32))
+        face.paste(layers[0].crop(box).resize((20, 22), Image.Resampling.LANCZOS), (1, 3))
+        guide.paste(layers[1].crop(box).resize((20, 22), Image.Resampling.LANCZOS), (1, 3))
+        edge = guide.filter(ImageFilter.MaxFilter(3))
+    else:
+        # Preserve the pre-b30 Latin/digit glyph path byte for byte.
+        font = _mission_title_font()
+        box = ImageDraw.Draw(Image.new('L', (1, 1))).textbbox((0, 0), syl, font=font)
+        if box[2] <= box[0]:
+            raise AssertionError(f'missing mission title glyph: {syl!r}')
+        from hangul_pixel_fit import native_mask
+        face, _ = native_mask(syl, font, (32, 32),
+            ((MISSION_TITLE_HANGUL_ADVANCE - 1 - (box[2] - box[0])) // 2 - box[0], 1))
+        edge = face
+    ink, border = face.load(), edge.load()
     pixels = [[0] * 32 for _ in range(32)]
     for y in range(32):
         for x in range(32):
-            if ink[x, y] < 128:
+            if border[x, y] < 128:
                 continue
             if not (0 <= x < MISSION_TITLE_HANGUL_ADVANCE - 1 and 0 <= y < 31):
                 raise AssertionError(f'mission title glyph outside OBJ cell: {syl}')
             if not pixels[y + 1][x + 1]:
                 pixels[y + 1][x + 1] = 10
-            pixels[y][x] = 6
+            pixels[y][x] = 6 if ink[x, y] >= 128 else 5
     result = bytearray(512)
     for y in range(32):
         for x in range(32):

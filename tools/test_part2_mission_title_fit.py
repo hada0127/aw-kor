@@ -2,14 +2,144 @@ import struct
 import json
 import ast
 import collections
+import hashlib
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 import build_korean_full as builder
 import part2_mission_title_fit as fit
+import aw_fonts
+import qa_sprite_shape as sprite_shape
+
+
+def compact_shape_oracle():
+    """Load the gate's pure oracle without running its command-line audit."""
+    path = Path(__file__).with_name('qa_sprite_art_shapes.py')
+    tree = ast.parse(path.read_text())
+    node = next(n for n in tree.body if isinstance(n, ast.FunctionDef)
+                and n.name == 'compact_hada_shape')
+    namespace = dict(Image=Image, ImageDraw=ImageDraw, ImageFont=ImageFont,
+                     ImageFilter=ImageFilter)
+    exec(compile(ast.Module(body=[node], type_ignores=[]), str(path), 'exec'), namespace)
+    return namespace['compact_hada_shape']
+
+
+class CompactShapeOracleTests(unittest.TestCase):
+    @staticmethod
+    def mutate(raw, changes):
+        result = bytearray(raw)
+        for x, y, value in changes:
+            index = (y // 8 * 4 + x // 8) * 32 + (y % 8) * 4 + x % 8 // 2
+            shift = 4 * (x % 2)
+            result[index] = (result[index] & ~(15 << shift)) | (value << shift)
+        return bytes(result)
+
+    @staticmethod
+    def face(raw):
+        from aw_fonts import obj_canvas
+        return {(x, y) for y, row in enumerate(obj_canvas(raw, 1, 4, 4))
+                for x, value in enumerate(row) if value == 6}
+
+    def test_approved_compact_population_and_corruptions(self):
+        check = compact_shape_oracle()
+        raw = fit.compact_glyph(builder._mission_title_hangul_glyph('막'))
+        self.assertEqual(check('막', raw)['failures'], [])
+        face = self.face(raw)
+        mask = Image.new('L', (32, 32))
+        for point in face:
+            mask.putpixel(point, 255)
+        parts = sprite_shape.components(mask)
+        self.assertGreaterEqual(len(parts), 2)
+
+        runs = []
+        for y in range(32):
+            xs = {x for x, yy in face if yy == y}
+            for x in xs:
+                if x - 1 not in xs:
+                    run = []
+                    while x in xs:
+                        run.append((x, y, 0))
+                        x += 1
+                    runs.append(run)
+        dropped = self.mutate(raw, max(runs, key=len))
+        self.assertIn('Hada component stroke missing', check('막', dropped)['failures'])
+
+        # Join two formerly separate jamo with a face-index bridge.
+        a, b = min(((a, b) for a in parts[0] for b in parts[1]),
+                   key=lambda pair: abs(pair[0][0]-pair[1][0])+abs(pair[0][1]-pair[1][1]))
+        bridge = []
+        x, y = a
+        while x != b[0]:
+            x += 1 if b[0] > x else -1
+            bridge.append((x, y, 6))
+        while y != b[1]:
+            y += 1 if b[1] > y else -1
+            bridge.append((x, y, 6))
+        self.assertIn('split/merged/stray components',
+                      check('막', self.mutate(raw, bridge))['failures'])
+
+        # Fill an internal vertical gap between two face strokes.
+        gaps = []
+        for x in range(19):
+            ys = sorted(y for xx, y in face if xx == x)
+            for lo, hi in zip(ys, ys[1:]):
+                if hi - lo > 1:
+                    gaps.append((x, lo, hi))
+        self.assertTrue(gaps)
+        x, lo, hi = max(gaps, key=lambda gap: gap[2]-gap[1])
+        filled = self.mutate(raw, [(x, y, 6) for y in range(lo+1, hi)])
+        self.assertIn('Hada jamo stroke gap removed', check('막', filled)['failures'])
 
 
 class MissionTitleFitTests(unittest.TestCase):
+    def test_hangul_glyph_uses_pinned_hada_fonts(self):
+        bold, guide = builder._mission_title_hangul_fonts()
+        self.assertEqual(hashlib.sha256(Path(bold.path).read_bytes()).hexdigest(), aw_fonts.HADASANS_SHA256)
+        self.assertEqual(hashlib.sha256(Path(guide.path).read_bytes()).hexdigest(), aw_fonts.HADASANS_BLACK_SHA256)
+        self.assertNotEqual(Path(bold.path), Path(builder._mission_title_font().path))
+        with patch.object(builder, '_mission_title_hangul_fonts', side_effect=FileNotFoundError('Hada missing')):
+            with self.assertRaisesRegex(FileNotFoundError, 'Hada missing'):
+                builder._mission_title_hangul_glyph('한')
+
+    def test_hangul_glyph_ink_bounds_and_glyph_payload_hashes(self):
+        titles = {
+            '레드스타 진군!': 'c6376f19ef96d391b4a4954c58d95ac97d6ad836f06c1d856a4a7015a2d1bd49',
+            '최종결전!': 'bfc602aa1d15d000a1f2f159475479a3be74d906e66f6b1f22ea47a9123a512e',
+            '검은 악마를 막아라!': '8ee82faa835a01afb192396fc873734387cd4a7c1da21347ace84b32e5616834',
+        }
+        for title, expected in titles.items():
+            raw = bytearray()
+            for char in title:
+                if not '가' <= char <= '힣':
+                    continue  # space and punctuation retain their native table entries
+                glyph = builder._mission_title_hangul_glyph(char)
+                face, all_ink = [], []
+                for y in range(32):
+                    for x in range(32):
+                        a = (y // 8 * 4 + x // 8) * 32 + y % 8 * 4 + x % 8 // 2
+                        value = glyph[a] >> (4 * (x % 2)) & 15
+                        if value == 6:
+                            face.append((x, y))
+                        if value:
+                            all_ink.append((x, y))
+                self.assertTrue(face, char)
+                width = max(x for x, _ in face) - min(x for x, _ in face) + 1
+                height = max(y for _, y in face) - min(y for _, y in face) + 1
+                self.assertTrue(19 <= width <= 21, (char, width))
+                self.assertEqual(height, 22, char)
+                self.assertLess(max(x for x, _ in all_ink), 24)
+                self.assertLess(max(y for _, y in all_ink), 32)
+                if len(title) > 9:
+                    glyph = fit.compact_glyph(glyph)
+                    compact_x = [x for y in range(32) for x in range(32)
+                                 if glyph[(y // 8 * 4 + x // 8) * 32 + y % 8 * 4 + x % 8 // 2]
+                                 >> (4 * (x % 2)) & 15]
+                    self.assertLess(max(compact_x), 19)
+                raw.extend(glyph)
+            self.assertEqual(hashlib.sha256(raw).hexdigest(), expected, title)
+
     @classmethod
     def setUpClass(cls):
         cls.original = Path(builder.P.ROM).read_bytes()
