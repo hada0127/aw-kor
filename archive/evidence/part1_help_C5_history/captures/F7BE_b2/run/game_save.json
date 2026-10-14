@@ -1,0 +1,16 @@
+{
+  "rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+  "libmgba_sha256": "b39c307dd143df0639187bedd798c80d76424f09a1692293b57d8cd49c5c4834",
+  "core_frame": 3647,
+  "state_sha256": "9ec5a17d1cec1cf616de638934d32407d2668ddefca76adc64386741b1611d38",
+  "kind": "cartridge-save-from-recorded-checkpoint-v1",
+  "save": "game.sav",
+  "save_sha256": "f3d143111ee24c7a00e780cd3881f36306b14f4cb523ad65de1655e3a6816cb1",
+  "source_checkpoint": "/home/taro1/project/aw-kor/temp/release_C/F7BE_a/resume.checkpoint.json",
+  "source_checkpoint_sha256": "f37046ccbbbc0203bf7166da064156668f714665d361079e5e1340da6a73432d",
+  "source_harness_sha256": "e1f91a65ccb58c1b1c4d479a890fadd30da549f25b3d6e477e9270fa1e798d43",
+  "export_harness_sha256": "e1f91a65ccb58c1b1c4d479a890fadd30da549f25b3d6e477e9270fa1e798d43",
+  "evidence_scope": "Cartridge bytes at source frame, possibly from an earlier in-game save. Game acceptance and saved progress require observed in-game Continue; no scene or ending approval",
+  "cheat_tainted": false,
+  "cheat_provenance": "full-frame-chain"
+}

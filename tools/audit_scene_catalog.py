@@ -107,6 +107,29 @@ def is_curated_patch_sprite(sp: dict) -> bool:
     return src.startswith("full:patch_") or src.startswith("title:")
 
 
+def classify_unassigned_coverage(coverage: dict, review_scene: dict) -> tuple[list[dict], list[dict]]:
+    """Keep dialogue and pending sprite review blockers distinct in reports."""
+    dialogue_unassigned = int(coverage.get("dialogue_unassigned") or 0)
+    review_dialogue = len(review_scene.get("dialogue_ids") or [])
+    pending_total = int(coverage.get("review_pending_total") or 0)
+    sprite_candidates = int(coverage.get("sprites_unassigned_text_candidate") or 0)
+    dialogue_issues = []
+    if dialogue_unassigned:
+        dialogue_issues.append({
+            "coverage_dialogue_unassigned": dialogue_unassigned,
+            "review_scene_dialogue": review_dialogue,
+            "issue": "실제 scene/review 사유에 수렴하지 않은 대사가 남음",
+        })
+    sprite_issues = []
+    if pending_total or sprite_candidates:
+        sprite_issues.append({
+            "pending_review_total": pending_total,
+            "sprite_text_candidate": sprite_candidates,
+            "issue": "UI 에디터 검토 필요 스프라이트가 남음",
+        })
+    return dialogue_issues, sprite_issues
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true", help="critical issue가 있으면 exit 1")
@@ -204,26 +227,10 @@ def main() -> None:
         if not row["note"]:
             container_contract_issues.append({**row, "issue": "container 제외 사유가 비어 있음"})
 
-    dialogue_unassigned = int(coverage.get("dialogue_unassigned") or 0)
     pending_review_total = int(coverage.get("review_pending_total") or 0)
-    sprite_text_candidate = int(coverage.get("sprites_unassigned_text_candidate") or 0)
     unassigned_review_scene = scene_by_id.get("99_unassigned_review") or {}
-    unassigned_review_dialogue = len(unassigned_review_scene.get("dialogue_ids") or [])
-    unassigned_dialogue_issue = []
-    if dialogue_unassigned:
-        unassigned_dialogue_issue.append({
-            "coverage_dialogue_unassigned": dialogue_unassigned,
-            "review_scene_dialogue": unassigned_review_dialogue,
-            "issue": "실제 scene/review 사유에 수렴하지 않은 대사가 남음",
-        })
-    if pending_review_total or sprite_text_candidate:
-        unassigned_dialogue_issue.append({
-            "coverage_dialogue_unassigned": dialogue_unassigned,
-            "review_scene_dialogue": unassigned_review_dialogue,
-            "pending_review_total": pending_review_total,
-            "sprite_text_candidate": sprite_text_candidate,
-            "issue": "UI 에디터 검토 필요 항목이 0이 아님",
-        })
+    unassigned_dialogue_issue, pending_sprite_issue = classify_unassigned_coverage(
+        coverage, unassigned_review_scene)
 
     screenshot_issues = []
     screenshot_use = Counter()
@@ -282,6 +289,7 @@ def main() -> None:
         "unassigned_curated_patch_sprites": unassigned_curated,
         "missing_virtual_select_sprites": missing_virtual_select,
         "unassigned_dialogue_groups": unassigned_dialogue_issue,
+        "pending_sprite_reviews": pending_sprite_issue,
         "missing_dialogue_ids": missing_dialogue_ids,
         "duplicate_dialogue_ids": duplicate_dialogue_ids,
         "count_mismatches": count_mismatches,
@@ -295,6 +303,7 @@ def main() -> None:
         len(unassigned_curated)
         + len(missing_virtual_select)
         + len(unassigned_dialogue_issue)
+        + len(pending_sprite_issue)
         + len(missing_dialogue_ids)
         + len(duplicate_dialogue_ids)
         + len(count_mismatches)
@@ -353,6 +362,13 @@ def main() -> None:
                 f"- coverage dialogue_unassigned={x['coverage_dialogue_unassigned']} "
                 f"99_unassigned_review dialogue={x['review_scene_dialogue']}: {x['issue']}"
             )
+        lines.append("")
+    if pending_sprite_issue:
+        lines.append("## Critical: Pending Sprite Reviews")
+        for x in pending_sprite_issue:
+            lines.append(
+                f"- review_pending_total={x['pending_review_total']} "
+                f"sprites_unassigned_text_candidate={x['sprite_text_candidate']}: {x['issue']}")
         lines.append("")
     if missing_dialogue_ids:
         lines.append("## Critical: Missing Dialogue Group IDs")

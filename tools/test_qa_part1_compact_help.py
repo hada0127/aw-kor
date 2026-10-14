@@ -16,7 +16,7 @@ import qa_part1_compact_help as gate
 class CompactHelpGateTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.rom = bytearray((gate.ROOT / "output/game_wars_korean_candidate_20261013_b28.gba").read_bytes())
+        cls.rom = bytearray((gate.ROOT / "output/game_wars_korean_candidate_20261014_b31.gba").read_bytes())
 
     def run_gate(self, rom=None, frame_dir=None, live_targets=None):
         with tempfile.TemporaryDirectory(dir=gate.ROOT / "temp") as d:
@@ -78,7 +78,7 @@ class CompactHelpGateTests(unittest.TestCase):
         self.assertEqual(report["visual_evidence_missing_count"], 11)
 
     def test_real_synthetic_loader_rejects_missing_hidden_frame_and_wrong_mapping(self):
-        source = gate.ROOT / "data/evidence/part1_help_b28_synthetic/report.json"
+        source = gate.ROOT / "data/evidence/part1_help_C5_synthetic/report.json"
         data = json.loads(source.read_text())
         rom = bytes(self.rom)
         with tempfile.TemporaryDirectory(dir=gate.ROOT / "temp") as d:

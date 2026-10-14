@@ -28,6 +28,16 @@ COMM_REQUIRED_SCENES = {
 }
 
 
+def completed_visual_verdict(shot: dict) -> bool:
+    verdict = shot.get("visual_result")
+    return (isinstance(verdict, dict) and
+            verdict.get("status") in {"pass", "defect"} and
+            isinstance(verdict.get("reviewer"), str) and
+            bool(verdict["reviewer"].strip()) and
+            isinstance(verdict.get("frame_refs"), list) and
+            shot.get("path") in verdict["frame_refs"])
+
+
 def load(path: Path, default):
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else default
 
@@ -340,7 +350,7 @@ def validate_visual_reverification(
                                               "core_frame": state["core_frame"]},
                         "cheat_tainted": shot["cheat_tainted"],
                     }, current_rom_sha)
-                    if scene_id in COMM_REQUIRED_SCENES:
+                    if scene_id in COMM_REQUIRED_SCENES and completed_visual_verdict(shot) and shot["visual_result"]["status"] == "pass":
                         verified_comm_scenes.add(scene_id)
                 except (KeyError, ValueError, OSError, TypeError, json.JSONDecodeError) as exc:
                     add_issue(issues, sid, "comm label recorder endpoint 불일치",
@@ -355,15 +365,18 @@ def validate_visual_reverification(
                     shot_index=shot_index,
                     scene_id=scene_id,
                 )
-            if "visual_result" not in shot:
+            if not completed_visual_verdict(shot):
                 add_issue(
                     issues,
                     sid,
-                    "visual reverify screenshot visual_result 없음",
+                    "visual reverify screenshot completed per-frame visual_result 없음",
                     path=rel(shot_path),
                     row_index=index,
                     shot_index=shot_index,
                 )
+            elif shot["visual_result"]["status"] == "defect":
+                add_issue(issues, sid, "visual reverify screenshot defect", path=rel(shot_path),
+                          row_index=index, shot_index=shot_index)
             grade = shot.get("grade")
             role = shot.get("evidence_role")
             if grade not in VISUAL_GRADES:

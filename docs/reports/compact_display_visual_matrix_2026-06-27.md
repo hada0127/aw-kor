@@ -1,6 +1,6 @@
 # Compact Display Visual Matrix
 
-- ROM SHA: `59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62`
+- ROM SHA: `416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2`
 - Contact sheet: `docs/screenshots/e12_compact_display_matrix_2026-06-27/current_representative_contact.png`
 
 This report separates static byte/editor coverage from target-level runtime/source proof.
@@ -10,54 +10,47 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 | Group | Targets | Editor | Screen scene | Current capture | Container-only | Static ext ptr | Target runtime/source proof |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| A2 CO power profile compact names | 36 | 36 | 1 | 0 | 35 | 36 | 0 |
+| A2 CO power profile compact names | 36 | 36 | 1 | 1 | 35 | 36 | 0 |
 | B84 compact CO power names | 11 | 11 | 0 | 0 | 11 | 11 | 0 |
-| B8 compact display table bucket | 459 | 459 | 0 | 0 | 459 | 390 | 13 |
+| B8 compact display table bucket | 460 | 460 | 0 | 0 | 459 | 367 | 6 |
 
 ## Current Representative Screens
 
-- `23_part2_main_menu`: current=False path=`temp/scene_screenshots/07_part2_main_menu_patched/frame.png` reason=rom_sha_mismatch
-- `23a_part2_wars_shop`: current=False path=`temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png` reason=rom_sha_mismatch
-- `86_common_compact_menu_tables`: current=False path=`temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png` reason=rom_sha_mismatch
-- `30f2_part2_co_profile_story`: current=False path=`temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png` reason=rom_sha_mismatch
-- `26_part2_battle_labels`: current=False path=`temp/scene_screenshots/30_battle_attack_patched/frame.png` reason=rom_sha_mismatch
-- `24a_part2_operation_select`: current=False path=`temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png` reason=rom_sha_mismatch
-- `85_ui_common`: current=False path=`temp/scene_screenshots/scene_85_ui_common_patched/frame.png` reason=rom_sha_mismatch
-- `87_common_rule_settings`: current=False path=`temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png` reason=rom_sha_mismatch
+- `23_part2_main_menu`: current=True path=`temp/scene_screenshots/07_part2_main_menu_patched/frame.png` reason=current
+- `23a_part2_wars_shop`: current=True path=`temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png` reason=current
+- `86_common_compact_menu_tables`: current=True path=`temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png` reason=current
+- `30f2_part2_co_profile_story`: current=True path=`temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png` reason=current
+- `26_part2_battle_labels`: current=False path=`None` reason=no_capture_path
+- `24a_part2_operation_select`: current=True path=`temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png` reason=current
+- `85_ui_common`: current=True path=`temp/scene_screenshots/scene_85_ui_common_patched/frame.png` reason=current
+- `87_common_rule_settings`: current=True path=`temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png` reason=current
 
 ## Renderer Trace
 
-- trace_present=True current=True rom_sha=`59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62` cases=10 hits=1760 direct=0 breakpoints=55 code_context=True path=`data/compact_display_renderer_trace.json`
+- trace_present=True current=True rom_sha=`416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2` cases=3 hits=1922 direct=0 breakpoints=55 code_context=True path=`data/compact_display_renderer_trace.json`
 
 ## Static Code Context
 
-- code_context_present=True current=True rom_sha=`59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62` path=`data/compact_display_code_context.json` literal_entries=695 breakpoint_candidates=24 function_candidates=18
+- code_context_present=True current=True rom_sha=`416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2` path=`data/compact_display_code_context.json` literal_entries=658 breakpoint_candidates=24 function_candidates=18
 
 ## Manual Visual Evidence
 
-- manual_present=True path=`data/compact_display_manual_visual_evidence.json` current=13 accepted=13 invalid=0 stale=0 note=Manual visual evidence is target-level only when the entry is for the current ROM SHA, has a positive pixel diff, has a durable contact sheet, and the group/address matches a matrix target. Mutation proof establishes live source provenance, not full visual-integrity coverage.
-- accepted_by_group_scene={'b8_compact_display_table_all::15_part1_operation_logos': 13}
-- accepted_by_checkpoint={'41_part1_operation_room': 4, '41_part1_operation_room_plus_10steps_288ebbc326': 3, '41_part1_operation_room_plus_13steps_eba0d9ed13': 1, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 2, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 1, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 2}
-- `0x00B81FDC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=77 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png`
-- `0x00B81FF4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=49 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_mutation_contact.png`
-- `0x00B8200C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=66 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png`
-- `0x00B82018` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=54 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_mutation_contact.png`
-- `0x00B81FAC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=47 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png`
-- `0x00B81FC4` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=267 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png`
-- `0x00B81F80` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=82 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png`
-- `0x00B81F70` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=43 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png`
-- `0x00B81F98` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=246 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png`
-- `0x00B81F40` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=67 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png`
-- `0x00B81F4C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=77 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png`
-- `0x00B81F5C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=70 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png`
-- `0x00B81F38` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_13steps_eba0d9ed13 diff_pixels=58 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png`
+- manual_present=True path=`data/compact_display_manual_visual_evidence.json` current=6 accepted=6 invalid=0 stale=0 note=Manual visual evidence is target-level only when the entry is for the current ROM SHA, has a positive pixel diff, has a durable contact sheet, and the group/address matches a matrix target. Mutation proof establishes live source provenance, not full visual-integrity coverage.
+- accepted_by_group_scene={'b8_compact_display_table_all::15_part1_operation_logos': 6}
+- accepted_by_checkpoint={'41_part1_operation_room': 2, '41_part1_operation_room_plus_10steps_288ebbc326': 2, '41_part1_operation_room_plus_13steps_eba0d9ed13': 1, '41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120': 1}
+- `0x00B81FDC` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=47 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png`
+- `0x00B8200C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room diff_pixels=31 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png`
+- `0x00B81F98` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120 diff_pixels=43 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png`
+- `0x00B81F4C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=44 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png`
+- `0x00B81F5C` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_10steps_288ebbc326 diff_pixels=44 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png`
+- `0x00B81F38` b8_compact_display_table_all: current=True accepted=True errors=[] type=single_address_mutation_pixel_diff checkpoint=41_part1_operation_room_plus_13steps_eba0d9ed13 diff_pixels=30 contact=`docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png`
 
 ## Static Pointer Xrefs
 
 - xref_present=True path=`data/compact_display_xref_analysis.json`
 - `a2_co_power_profile_display_overrides`: targets=36 ptr_targets=36 external_ptr_targets=36 second_level_targets=0
 - `b84_compact_power_display_overrides`: targets=11 ptr_targets=11 external_ptr_targets=11 second_level_targets=1
-- `b8_compact_display_table_all`: targets=459 ptr_targets=406 external_ptr_targets=390 second_level_targets=8
+- `b8_compact_display_table_all`: targets=460 ptr_targets=382 external_ptr_targets=367 second_level_targets=7
 
 ## Read-Watch Probes
 
@@ -97,13 +90,13 @@ A current screen scene proves the scene was captured on this ROM, but does not b
 
 ## Remaining E12 Gap
 
-- Target runtime/source proof count is currently 13; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
+- Target runtime/source proof count is currently 6; this includes provenance such as trace, read-watch, or mutation proof, and is still far from full target coverage.
 - Static pointer xrefs are provenance only: they show table reachability candidates, not screen rendering.
 - Current renderer-trace probes now include observed B8 operation-room reader breakpoints and therefore have breakpoint hits, but direct target register hits remain 0. The hits are a trace positive control for that Part1 path, not A2/B84/Part2-B8-HUD evidence.
 - A fresh-route general-text positive control (`0x00A01970`) produced ROM read-watch hits, and the Part1 operation-room B8 live-source probe also produced target reads. The remaining 0-hit routes are therefore not a blanket harness failure.
 - A2 now has 0 target runtime/source proof(s) from a selected-record CO-id RAM-field probe. This is synthetic source provenance, not natural all-CO route coverage or 36 per-power screen captures.
 - B84 now has 0 target runtime/source proof(s) from current-ROM read-watch probes. Stale older B84 selector proofs are listed above but are not counted until regenerated for this ROM SHA.
-- B8 now has 13 target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and most B8 targets still lack target-level provenance.
+- B8 now has 6 target runtime/source proof(s), currently from Part1 operation-title mutation source proofs, but this does not prove full visual layout quality, and most B8 targets still lack target-level provenance.
 - Current read-watch probes over the fresh main route, B8 battle/menu/shop/comm candidates, and external shop/profile state candidates still leave Part2-B8-HUD target reads unresolved; these are route/subset negatives, not global non-use proof.
 - The remaining 0-hit pattern also leaves source-address/dead-copy hypotheses unresolved for the unproven B8 targets; additional B8 runtime renders must be tied back through target reads, mutation diffs, or WRAM/VRAM/DMA write chains.
 - B8 entries are editor-visible through container scene `23d_part2_b8_compact_display_tables`, but need real screen entrypoints or corrected renderer PCs that exercise unit/weapon/shop/break labels.

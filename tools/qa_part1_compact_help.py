@@ -44,37 +44,37 @@ MAX_ENCODED_HALF_CELLS = 34
 # in this cold-boot, cartridge-save frame. Keep the larger limit tied to that
 # exact ROM; changed ROMs require a fresh frame or an independently proven
 # byte-identical renderer/window and payload.
-WIDTH_EVIDENCE_ROM_SHA256 = "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067"
-CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b28"
+WIDTH_EVIDENCE_ROM_SHA256 = "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2"
+CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_C5"
 WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "0033_NONE_0002121.png"
 EVIDENCE_SHA256 = {
-    "registration.json": "2bf2343450007aadac794e118016e8263830ce02886d38ee6292895283048bd1",
+    "registration.json": "41ea8706df770f0c66ff74fd31c9386ff543bac1e9eb1f5f1c21c50e8e6de70a",
     "0059_NONE_0003305.png": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
     "0016_DOWN_0001519.png": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
     "0015_DOWN_0001498.png": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
     "0049_NONE_0002819.png": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
     "0014_DOWN_0001477.png": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
-    "exit.json": "921737ac42ce9993efce401e85f9e3b544a0e75281c121376a3c6af61ac72995",
-    "window_measurement.json": "2a79bc185ca8ae3f488dd6e0c25bc1e9e0e4b51a50ceefd3190a5c9277986a04",
+    "exit.json": "2ad837e81418eef16055494f43e66b4bd05d07eb326a301dc5374936d824f837",
+    "window_measurement.json": "62611f1ad60e56c577aa80585561c1f019644c1dfa5d94a6b3197243761057ab",
     "0013_DOWN_0001456.png": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
     "0060_DOWN_0003336.png": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
     "0012_DOWN_0001435.png": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
     "DFA7BE_0014_NONE_0001625.png": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
-    "findings.tsv": "dc2e81581b9e506cb5444775490ef5e3298909a8faad9a7d2a5dcfe7bdbeac54",
+    "findings.tsv": "d35bcb3daf89e2fbc5369af2f6ebf1e2e91860cf3ae4009a8dc2de1c60a7544e",
     "0061_DOWN_0003367.png": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
     "DFA68C_0077_NONE_0003956.png": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
     "0051_NONE_0002880.png": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
     "0033_NONE_0002121.png": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
-    "baseline.json": "72c3abe82c49ec214e9fedbb5c93762218d37a90913d3a5db7d9ff8697891f94"
+    "baseline.json": "3f0bf4f5e3a8abd6967ca822465fd8bfe863354f0a8a4072c60f15564754ce97"
 }
 
 
 def validate_current_visual_registration(rom_sha: str) -> bool:
-    """Bind copied b28 frames to native checkpoints and C RGB comparison proof."""
+    """Bind each direct frame to a closed native C5 cold-boot capture."""
     from PIL import Image
+    from capture_scene_screenshots import validate_recorder_endpoint
     try:
         receipt = json.loads((CURRENT_VISUAL_FRAME_DIR / "registration.json").read_text())
-        comparisons = json.loads((ROOT / receipt["comparison_receipt"]).read_text())
         if receipt["rom_sha256"] != rom_sha or len(receipt["frames"]) != 13:
             return False
         if {row["filename"] for row in receipt["frames"]} != {
@@ -82,19 +82,24 @@ def validate_current_visual_registration(rom_sha: str) -> bool:
             return False
         for row in receipt["frames"]:
             frame = CURRENT_VISUAL_FRAME_DIR / row["filename"]
-            native = ROOT / row["b28_frame"]
-            original = ROOT / row["c_reference"]
-            checkpoint = ROOT / row["b28_checkpoint"]
-            comparison = comparisons[row["comparison_route"]]
-            if (not row["rgb_equal_to_C"] or comparison["exit"] != "closed" or
-                    comparison["emu"] != 0 or comparison["diff_frames"] != 0 or
-                    comparison["n_runs"] != 0 or
+            native = ROOT / row["native_frame"]
+            checkpoint = ROOT / row["native_checkpoint"]
+            status = json.loads((ROOT / row["capture_exit"]).read_text())
+            if (status["status"] != "closed" or status["emulator_exit_code"] != 0 or
                     sha256(frame) != row["sha256"] or sha256(native) != row["sha256"] or
-                    sha256(original) != row["c_reference_sha256"] or
-                    sha256(checkpoint) != row["b28_checkpoint_sha256"] or
+                    sha256(checkpoint) != row["native_checkpoint_sha256"] or
                     json.loads(checkpoint.read_text())["rom_sha256"] != rom_sha):
                 return False
-            with Image.open(frame) as current, Image.open(original) as source:
+            validate_recorder_endpoint({
+                "recorder_endpoint": {
+                    "checkpoint": row["native_checkpoint"],
+                    "frame": row["native_frame"],
+                    "frame_sha256": row["sha256"],
+                    "core_frame": json.loads(checkpoint.read_text())["core_frame"],
+                },
+                "cheat_tainted": False,
+            }, rom_sha)
+            with Image.open(frame) as current, Image.open(native) as source:
                 if current.convert("RGB").tobytes() != source.convert("RGB").tobytes():
                     return False
     except (OSError, KeyError, ValueError, TypeError, AttributeError):
@@ -220,7 +225,7 @@ EVIDENCE_FILES = [
 ]
 
 LIVE_CODE_REPORTS = [
-    ROOT / "data" / "evidence" / "part1_help_b28_synthetic" / "report.json",
+    ROOT / "data" / "evidence" / "part1_help_C5_synthetic" / "report.json",
 ]
 
 

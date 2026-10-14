@@ -1,0 +1,598 @@
+{
+  "scope": "Historical C5/b31 dependencies only; b32r3 rebinding pending. game.sav files are recorder-local copied test SRAM, not external user saves.",
+  "source_prefix": "temp/release_C/relgate3/",
+  "archive_prefix": "archive/evidence/part1_help_C5_history/",
+  "source_bytes": 8825225,
+  "files": [
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/0012_A_0002071.checkpoint.json",
+      "size": 606,
+      "sha256": "66ff8fe170d3a25632ca048e5ca339e7dc63d67a44f46e5a6bdeb00ab90c88f7"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/0012_A_0002071.ss0",
+      "size": 45475,
+      "sha256": "b72cada5183be7362ff86886237434de1c111309584740e7c390b222839676de"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/actions.jsonl",
+      "size": 20079,
+      "sha256": "f65ba1215edd9f013e21d0ac086fff9338489745fe173f8cac0389f4cc37730c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/baseline.json",
+      "size": 953,
+      "sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/emulator.log.archive.json",
+      "size": 490,
+      "sha256": "ae61e36273022c568a9388829507bc1c62a9c9f8b621ecf7cf3861432a962526"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/emulator.log.gz",
+      "size": 177374,
+      "sha256": "a3f2917488a1683c6969023d22285b69297e8f9c4c516fe454c363e71f8c795a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/exit.json",
+      "size": 288,
+      "sha256": "c1eeebad5c05eb1f67b7d2cbbdf4dfbb18737e4e183872769738257821ad895e"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/frames.jsonl",
+      "size": 843237,
+      "sha256": "9a49ab9b93e1e4cf815883ead01e1d414047833160fb2daeee1c836935ddf317"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23_p2menu/run/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+      "size": 5708,
+      "sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0008_A_0001717.checkpoint.json",
+      "size": 606,
+      "sha256": "6c0f59e7fdceef2a67a22d1b5c07b5b9f9e26f3491300d9fe909c796e22a0054"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0008_A_0001717.ss0",
+      "size": 47807,
+      "sha256": "3b619ccb3db4bfa1ceb1519f6f9c5bd83d509a091051cb0a84f25de8e0a1ffa3"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0012_DOWN_0002011.checkpoint.json",
+      "size": 609,
+      "sha256": "fedc10a76609b7935d2dc581313d4148b40faad2a62617a56025f2f16cd67c2a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0012_DOWN_0002011.ss0",
+      "size": 47936,
+      "sha256": "21e686e83370d890cfc89565aaa7778fca0efdaa72cf20b0697bd8d987c5b497"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0016_NONE_0002529.checkpoint.json",
+      "size": 609,
+      "sha256": "09739e501de03624e318680d65eec45b131d3c63059cf75ab237bb7493d3df72"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/0016_NONE_0002529.ss0",
+      "size": 50988,
+      "sha256": "6c90987156cb46fd9ba85a024cf01824f17b14413d3436f0f8fa5587c2ae4032"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/actions.jsonl",
+      "size": 12928,
+      "sha256": "b4f6aed62128ae40994ed11a09da944fbc974cbec330b9b8c2606684f657b074"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/baseline.json",
+      "size": 953,
+      "sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/emulator.log.archive.json",
+      "size": 490,
+      "sha256": "bfe39040332693496c6f3248376cc08c397be46b916a35cff0145a53c3f9480a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/emulator.log.gz",
+      "size": 187669,
+      "sha256": "e91b67660691dca3fd1e09e8e73d853c12a8c59ab4555c88ab1e165dd142171a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/exit.json",
+      "size": 289,
+      "sha256": "1a7dc96f366aeb0598a273a4a3de6b13de986e903005a7f08988e2f2ffb06a25"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/frames.jsonl",
+      "size": 561981,
+      "sha256": "92ec634b07debf22f7015c7ddefbabd08bdccc0da2863a2bee920a43413e9155"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+      "size": 7058,
+      "sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+      "size": 7051,
+      "sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B23a_p2shop/run/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
+      "size": 5628,
+      "sha256": "91c74a93c04b44ac5cf47546445bbeecc8d7efbfaba8e775485a6cc9837a9366"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/0030_NONE_0004533.checkpoint.json",
+      "size": 609,
+      "sha256": "4351ea8d333167bda6c075349ebf079390829086a56e220f9a9b26802f2bc274"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/0030_NONE_0004533.ss0",
+      "size": 54730,
+      "sha256": "ece3cdde6e905de2d59b2f3a1a307a842912bfac3b3b0aa849679ddbe5d0b22b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/actions.jsonl",
+      "size": 19489,
+      "sha256": "4e4cec11558f1915a08e97b23f45804ff270b513d0d8b8a17131149bfacd4ee7"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/baseline.json",
+      "size": 953,
+      "sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/emulator.log.archive.json",
+      "size": 489,
+      "sha256": "5fbcf7c221c8974ce591aa180cc0d88004c36bc01036f77ca2187107beda148c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/emulator.log.gz",
+      "size": 87241,
+      "sha256": "0254088bcc2141e50153a2a7b15fd358949dfecca56ecd02cf1f919543688c91"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/exit.json",
+      "size": 288,
+      "sha256": "36e885fcb97fd499e3cd89973c717e4cac07ed9efadcb5a4f7bcf30aa9a60361"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/frames.jsonl",
+      "size": 956171,
+      "sha256": "63a8525056ee0b4e3d0c9cc12f6933c82f7582daaab4381616ac085e9523b39c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B40_p1menu/run/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+      "size": 7901,
+      "sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/0032_A_0004845.checkpoint.json",
+      "size": 606,
+      "sha256": "12723129b4c0bc8749ee671452b6af57f90a8a997137a060932b2f899f54854c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/0032_A_0004845.ss0",
+      "size": 54318,
+      "sha256": "1eb9f1542ecba94f1441403fa960c27259d1ee001ac3896763b1e891d2e3dd85"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/actions.jsonl",
+      "size": 20232,
+      "sha256": "a876c86a240bd18d972b2b0c3641d4f08da17e94ef0398f596f3529b17888eb3"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/baseline.json",
+      "size": 953,
+      "sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/emulator.log.archive.json",
+      "size": 490,
+      "sha256": "87fd288efd084cf92009b4bc654c8713467b56b153602a8f5205b4c9905da514"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/emulator.log.gz",
+      "size": 101899,
+      "sha256": "41fdb4074c25db5fb5a8f7c35f5649dbfdd3c974ad0c484b3ba0df822a84b737"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/exit.json",
+      "size": 290,
+      "sha256": "6ff1d3182a9eba092f792b0327844a36fa9b3d34cea0b7ac3c1c1067ef51e02c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/frames.jsonl",
+      "size": 977595,
+      "sha256": "55fff7de44df61032a9651d5fbfe752acc56831e433a439e16f00b5842e16d99"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B42_p1single/run/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+      "size": 6903,
+      "sha256": "2ad319be8218e67482e4859d5334b2fe240ae77ccceb955e32bb87a9768c227d"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/0033_A_0004971.checkpoint.json",
+      "size": 607,
+      "sha256": "f10f5da0936dc5ae18c965cb6d063c684b27f5bf72a60d2400e895fefef56db1"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/0033_A_0004971.ss0",
+      "size": 56362,
+      "sha256": "de6479c1fbf285d5d2138b1c0283aa022f42e68916fa6dc8d90ef591c1426270"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/actions.jsonl",
+      "size": 20667,
+      "sha256": "32572efea9c04a510b2683be5ea74eea6bd56e3d180ea699ec538617dda534e5"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/baseline.json",
+      "size": 953,
+      "sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/emulator.log.archive.json",
+      "size": 490,
+      "sha256": "501224ce871903b5673df458fe751e94e3d8931c7380f8f5be87c30128d98a85"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/emulator.log.gz",
+      "size": 110762,
+      "sha256": "461c0fb4952e9e0bd8900378000a1a8275417d4d4ff0131aa28cbee3a5a23399"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/exit.json",
+      "size": 288,
+      "sha256": "c4d469066d78825097a8e5f2bba8ea61e8549f4f7ce5400c5459bda5b87e89f6"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/frames.jsonl",
+      "size": 1003059,
+      "sha256": "8b392afa22133f5f41f200e4dafd2d37b93c873f4d96459671cfa1b3cc4b2e43"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/B43_p1link/run/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+      "size": 7894,
+      "sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/0014_NONE_0001625.checkpoint.json",
+      "size": 609,
+      "sha256": "64633251a28abe4fa13b90dab7dc63ebfe255b26198db763f77f149cb80a51ec"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/0014_NONE_0001625.png",
+      "size": 13260,
+      "sha256": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/0014_NONE_0001625.ss0",
+      "size": 62049,
+      "sha256": "552fe375fc61a05f9fb00d3419d0c5df7a30c448931591f40d76617b44d0485a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/actions.jsonl",
+      "size": 12717,
+      "sha256": "02830ed5cee8ce5d86ced8afd1bed6d316cfffaa9b385cbd2369fe8a88610c33"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/baseline.json",
+      "size": 1521,
+      "sha256": "d1216076640bd22626e07fea13a27cd91213e83f8be30c638873e425fc464c52"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/emulator.log.archive.json",
+      "size": 489,
+      "sha256": "06c0dbf7cc82a93dafedba4e1c029177a6b530f600b07abc656ad61ae9acce16"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/emulator.log.gz",
+      "size": 65003,
+      "sha256": "aa7e96ba788ed679d11bcfc613668a5b6c1b89f9b9b22a5d64c335fae0ad5f08"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/exit.json",
+      "size": 285,
+      "sha256": "d8739431766ab01b774d4a602d88471b419cb07826ab7c749d4059182931db80"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/frames.jsonl",
+      "size": 382294,
+      "sha256": "821de345488178a3ef8e544e34d6725c25da72ddd1cf427be32882e3f9e0f3ba"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/game.sav",
+      "size": 131072,
+      "sha256": "f3d143111ee24c7a00e780cd3881f36306b14f4cb523ad65de1655e3a6816cb1"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/game_save.json",
+      "size": 1093,
+      "sha256": "a55f38d71e615462e2f7fff5ab9f21e483902b85c6bf3cae2427d9877998c268"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F7BE_b2/run/loaded_game.sav",
+      "size": 131072,
+      "sha256": "f3d143111ee24c7a00e780cd3881f36306b14f4cb523ad65de1655e3a6816cb1"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0012_DOWN_0001435.checkpoint.json",
+      "size": 609,
+      "sha256": "7e565821a1cb588c11a3c0f658ba7825599e7dd6e461f02a846ef4ae63cff86b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0012_DOWN_0001435.png",
+      "size": 15421,
+      "sha256": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0012_DOWN_0001435.ss0",
+      "size": 65216,
+      "sha256": "994d489ea0cb6828ce0597551bff82a2ff749ea285e38d9dc01bc549f20cad16"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0013_DOWN_0001456.checkpoint.json",
+      "size": 609,
+      "sha256": "ef4ae178e2dfc2c721f384cb82d7ed57d6a1ba736170c9809eb98e487bd8d51c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0013_DOWN_0001456.png",
+      "size": 15230,
+      "sha256": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0013_DOWN_0001456.ss0",
+      "size": 63164,
+      "sha256": "ee8e96938861b1f32216713d2562f8ed40d6e3507e12060c63585443fbf1391d"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0014_DOWN_0001477.checkpoint.json",
+      "size": 609,
+      "sha256": "a6ba59d638161b247e206dc987a354bbf2364e8e873876c1e96d0b0d70a65339"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0014_DOWN_0001477.png",
+      "size": 14275,
+      "sha256": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0014_DOWN_0001477.ss0",
+      "size": 61702,
+      "sha256": "007190712d190ace723a46b6d89d3238ec5b53e17579f6d0852d74817172ef6b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0015_DOWN_0001498.checkpoint.json",
+      "size": 609,
+      "sha256": "6ed3ec9082a9a839ffe4258b5baa9125e9c9d0065284e97ce1c43a0416ac1ce3"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0015_DOWN_0001498.png",
+      "size": 13757,
+      "sha256": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0015_DOWN_0001498.ss0",
+      "size": 63462,
+      "sha256": "bc4ea546b00a7b52b8e02e0571d86881d57dc0c0ccdeed5403e28857984ca22d"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0016_DOWN_0001519.checkpoint.json",
+      "size": 609,
+      "sha256": "1e7ffaf00b96260b286a02ff0b826d9a20d21e939a428e18241be8f24e3b91ee"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0016_DOWN_0001519.png",
+      "size": 14373,
+      "sha256": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0016_DOWN_0001519.ss0",
+      "size": 63523,
+      "sha256": "95ecdbd059a86a740a648b27a72775779ab6df17e23c33fcb1ebecc88f2bcd1b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0033_NONE_0002121.checkpoint.json",
+      "size": 609,
+      "sha256": "95d457dda52065b8ad38aaf3244c934abb34e73ed773ee64d60bbdc0e412170d"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0033_NONE_0002121.png",
+      "size": 13357,
+      "sha256": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0033_NONE_0002121.ss0",
+      "size": 62166,
+      "sha256": "d67aa88ae4df3ba8c89f9c6edd64642f83c3a342c5a805b9348c389905a04c1c"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0049_NONE_0002819.checkpoint.json",
+      "size": 609,
+      "sha256": "b176b17f28415f588323580f7ef142159fd116b75c79d2b3b566e2a8e8163ba0"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0049_NONE_0002819.png",
+      "size": 12944,
+      "sha256": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0049_NONE_0002819.ss0",
+      "size": 59712,
+      "sha256": "0ec182e6e87184302a374d956bbaabd9219e7951156c0d228c8afaf12f056226"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0051_NONE_0002880.checkpoint.json",
+      "size": 609,
+      "sha256": "63715fda09f432b55013dcd9a763f041540a02e270f0224eda3fdfeeba87eafa"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0051_NONE_0002880.png",
+      "size": 13411,
+      "sha256": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0051_NONE_0002880.ss0",
+      "size": 61126,
+      "sha256": "95f760f828d15144255c66dac2287cf6f99bba3d657b758df49b8d36956411bc"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0059_NONE_0003305.checkpoint.json",
+      "size": 609,
+      "sha256": "9f3bb853fec3c4ffc7e7cf6a6150d0de9ca5f85002df8efcd75ae98f60ce6179"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0059_NONE_0003305.png",
+      "size": 14524,
+      "sha256": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0059_NONE_0003305.ss0",
+      "size": 62914,
+      "sha256": "2ef478e4dca7dc62f22ad7df606f4d1e796c8e9a0bb28ff2b81eeec8ed9028e0"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0060_DOWN_0003336.checkpoint.json",
+      "size": 609,
+      "sha256": "4f55f8f2963ebc710617beeb94accff4ba8c02a3742aef8b10809cc1eb6410e9"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0060_DOWN_0003336.png",
+      "size": 14477,
+      "sha256": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0060_DOWN_0003336.ss0",
+      "size": 63529,
+      "sha256": "0d8783c8dbaec1f4221d7d3114f495771ff29dace7d6400774dd86d7d3795b7e"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0061_DOWN_0003367.checkpoint.json",
+      "size": 609,
+      "sha256": "75b36d309f38d3a19dca1376ac0ba939987b6cd07420732734ccf324f3889739"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0061_DOWN_0003367.png",
+      "size": 14984,
+      "sha256": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0061_DOWN_0003367.ss0",
+      "size": 63059,
+      "sha256": "47a085358d06f382a7884ec6112c83783df6dac535b42109be2ec0e7b872a3fd"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0077_NONE_0003956.checkpoint.json",
+      "size": 609,
+      "sha256": "a2bbf67d961067c8be38d5c270e1862925716130ab058927bef1ed395c67b255"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0077_NONE_0003956.png",
+      "size": 14051,
+      "sha256": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/0077_NONE_0003956.ss0",
+      "size": 64070,
+      "sha256": "a1d7b81015f1ae819e6682452fe4d7af57714920b36b759af5fd49182840a95b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/actions.jsonl",
+      "size": 54378,
+      "sha256": "b81d96ba8a642d406efcedbbfd1a20c87da53b322a3449d209e051f3ed3a168a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/baseline.json",
+      "size": 1732,
+      "sha256": "3f0bf4f5e3a8abd6967ca822465fd8bfe863354f0a8a4072c60f15564754ce97"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/emulator.log.archive.json",
+      "size": 490,
+      "sha256": "c449b75db73d1e6c21ea7f880988f56573464c91732ab14b476b28554db53d65"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/emulator.log.gz",
+      "size": 195344,
+      "sha256": "76ff3d510bdb63b289fd746641a01d59ae1ddf0e5c11b6d85df90a83724b8b0a"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/exit.json",
+      "size": 290,
+      "sha256": "2ad837e81418eef16055494f43e66b4bd05d07eb326a301dc5374936d824f837"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/frames.jsonl",
+      "size": 847346,
+      "sha256": "677cfa983496bb65587f34f7ea537c875a10ab62ad7aae8cba938258450d3635"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/game.sav",
+      "size": 131072,
+      "sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/game_save.json",
+      "size": 1250,
+      "sha256": "b5045dc9590db42a3006854bcab31b82a8b963de3334e438bc04f206668376d2"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/captures/F_help_sweep/run/loaded_game.sav",
+      "size": 131072,
+      "sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/code0/recipe.in",
+      "size": 631,
+      "sha256": "b72d195f1411c690719501436b5a71c63b06052f657b21b9ec079010f6b337a7"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/code16/recipe.in",
+      "size": 664,
+      "sha256": "c3356faadc9d07984bbc0a4637e6f195d785794cba91ea3f118444282bf41681"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/code17/recipe.in",
+      "size": 664,
+      "sha256": "6c7665db442b3d5f5f42490416a8f9d4c76daa56d61d5891e24724e3bb81eda7"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/code18/recipe.in",
+      "size": 664,
+      "sha256": "f791e23df99ccc184558179e3075bd61a30f7756f99e9996709f3afece741b37"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/code19/recipe.in",
+      "size": 664,
+      "sha256": "161143c8e34207405256ea5261bc6510543193675539619e8b00d6441d8eddce"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/hidden/recipe.in",
+      "size": 761,
+      "sha256": "ee82d1291937af8029cc8290211b95e51bfe5b131240a63b4589933cac4b2832"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/native_state.checkpoint.json",
+      "size": 609,
+      "sha256": "7e565821a1cb588c11a3c0f658ba7825599e7dd6e461f02a846ef4ae63cff86b"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/native_state.ss0",
+      "size": 65216,
+      "sha256": "994d489ea0cb6828ce0597551bff82a2ff749ea285e38d9dc01bc549f20cad16"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/report.json",
+      "size": 9771,
+      "sha256": "2e0c65f6b9d5a8190fffa48a959a58ff6ed6f51d9fad55257f39c39d439cdc96"
+    },
+    {
+      "path": "archive/evidence/part1_help_C5_history/synth/seed.sav",
+      "size": 131072,
+      "sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51"
+    }
+  ]
+}

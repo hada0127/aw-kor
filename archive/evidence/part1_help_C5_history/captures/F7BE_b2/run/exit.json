@@ -1,0 +1,9 @@
+{
+  "status": "closed",
+  "error": null,
+  "last_observed_core_frame": 1898,
+  "committed_core_frame": 1898,
+  "last_good_checkpoint": "/home/taro1/project/aw-kor/temp/release_C/relgate3/captures/F7BE_b2/run/resume.checkpoint.json",
+  "cleanup_errors": [],
+  "emulator_exit_code": 0
+}

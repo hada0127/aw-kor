@@ -1,5 +1,5 @@
 {
-  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거). 16_part1_info_screen의 동일 add/remove는 8개 라벨을 기존 scene 또는 저신뢰 제외에서 빼서 미배정 검토로 명시적으로 돌린다.",
+  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거). DF8B6A/92/9A는 소비자 미확정으로 review backlog에 둔다. 실화면별 전수 확인은 미완료.",
   "sprite": {
     "03_select_part2": {
       "add": [
@@ -15,8 +15,11 @@
   },
   "dialogue": {
     "16_part1_info_screen": {
-      "add": ["g_00DF8B62", "g_00DF8B6A", "g_00DF8B72", "g_00DF8B7A", "g_00DF8B82", "g_00DF8B8A", "g_00DF8B92", "g_00DF8B9A"],
-      "remove": ["g_00DF8B62", "g_00DF8B6A", "g_00DF8B72", "g_00DF8B7A", "g_00DF8B82", "g_00DF8B8A", "g_00DF8B92", "g_00DF8B9A"]
+      "add": ["g_00DF8B72", "g_00DF8B7A", "g_00DF8B82"],
+      "remove": []
+    },
+    "18_part1_battle": {
+      "add": ["g_00DF8B62", "g_00DF8B8A"]
     },
     "89a_common_battle_surrender_confirm": {
       "add": [
@@ -33,14 +36,14 @@
       ]
     }
   },
-  "unresolved_dialogue_consumers": {
-    "g_00DF8B62": "Part 1 score screen (tools/part1_compact_ui_strings.py:94); no dedicated catalog screenshot",
-    "g_00DF8B8A": "Part 1 battle-result screen (tools/part1_compact_ui_strings.py:83); no dedicated catalog screenshot",
-    "g_00DF8B72": "Part 1 battle-status screen (tools/part1_compact_ui_strings.py:72); no dedicated catalog screenshot",
-    "g_00DF8B6A": "consumer not documented",
-    "g_00DF8B7A": "battle-status and terrain banks (tools/part1_compact_ui_strings.py:73); screen coverage unresolved",
-    "g_00DF8B82": "battle-status and result banks (tools/part1_compact_ui_strings.py:74); screen coverage unresolved",
-    "g_00DF8B92": "consumer not documented",
-    "g_00DF8B9A": "consumer not documented"
+  "dialogue_consumer_evidence": {
+    "g_00DF8B62": "Part 1 score screen, dictionary 0xBE7308, native draw 0xB4CAE4 (tools/part1_compact_ui_strings.py:94); grouped with battle results; no dedicated C5 score screenshot",
+    "g_00DF8B6A": "Count suffix immediately after score label at 0xDF8B62; likely score/result counter (inference); no C5 runtime watch",
+    "g_00DF8B72": "Part 1 battle-status screen, bank 0xB12F90 (tools/part1_compact_ui_strings.py:72)",
+    "g_00DF8B7A": "Part 1 battle-status and terrain banks (tools/part1_compact_ui_strings.py:73)",
+    "g_00DF8B82": "Part 1 battle-status and result banks (tools/part1_compact_ui_strings.py:74); primary catalog owner is information/status",
+    "g_00DF8B8A": "Part 1 battle-result screen, bank 0xB12FC0 (tools/part1_compact_ui_strings.py:83); no dedicated C5 result screenshot",
+    "g_00DF8B92": "Defense label adjacent to status/terrain fields; likely Part 1 information screen (inference); no C5 runtime watch",
+    "g_00DF8B9A": "Recovery label adjacent to status/terrain fields; likely Part 1 information screen (inference); no C5 runtime watch"
   }
 }

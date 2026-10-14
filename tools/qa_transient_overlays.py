@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from render_galmuri_8x16 import render_char
+
 ROOT = Path(__file__).resolve().parents[1]
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
 ORIGINAL = ROOT / "original" / "Game Boy Wars Advance 1+2 (Japan).gba"
@@ -72,6 +74,11 @@ REQUIRED_KANJI_SUBS = {
 
 def read(path: Path) -> bytes:
     return path.read_bytes()
+
+
+def digit_tile_status(current: bytes, expected: bytes, source: bytes | None) -> tuple[bool, bool]:
+    """Reject both corrupted tiles and the superseded Japanese ROM artwork."""
+    return current == expected, source is None or current != source
 
 
 def message_span(rom: bytes, target: int) -> tuple[int, int] | None:
@@ -378,23 +385,29 @@ def main() -> int:
 
         def add_grid_check(label: str, slots: tuple[int, int], source: str) -> None:
             if label not in dialogue_glyphs:
-                if label.isdigit() and original:
-                    for half, font_slot in (("top", slots[0]), ("bot", slots[1])):
+                if label.isdigit():
+                    for (half, font_slot), expected in zip(
+                        (("top", slots[0]), ("bot", slots[1])), render_char(label)
+                    ):
                         current = font_tile_bytes(rom, font_slot)
-                        expected = font_tile_bytes(original, font_slot)
+                        source_tile = font_tile_bytes(original, font_slot) if original else None
+                        matches, differs = digit_tile_status(current, expected, source_tile)
                         row = {
                             "label": label,
                             "source": source,
                             "half": half,
                             "font_slot": font_slot,
-                            "matches_original_dialogue_digit": current == expected,
+                            "matches_galmuri_digit": matches,
+                            "differs_from_original": differs,
                         }
                         digit_checks.append(row)
                         if current != expected:
                             issues.append({
-                                "type": "part1_name_grid_digit_not_original_dialogue_font",
+                                "type": "part1_name_grid_digit_not_galmuri_font",
                                 **row,
                             })
+                        if original and not row["differs_from_original"]:
+                            issues.append({"type": "part1_name_grid_digit_still_original", **row})
                     return
                 if label:
                     top = font_tile_bytes(rom, slots[0])
@@ -446,8 +459,8 @@ def main() -> int:
         name_grid_dialogue_font_status = {
             "checked_tiles": len(checks),
             "mismatches": [row for row in checks if not row["matches"]],
-            "digit_original_tiles": len(digit_checks),
-            "digit_mismatches": [row for row in digit_checks if not row["matches_original_dialogue_digit"]],
+            "digit_galmuri_tiles": len(digit_checks),
+            "digit_mismatches": [row for row in digit_checks if not row["matches_galmuri_digit"]],
             "fallback_16px_checks": fallback_checks,
             "fallback_top_only": [row for row in fallback_checks if not row["has_bottom_pixels"]],
         }

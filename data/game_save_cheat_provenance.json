@@ -1,6 +1,6 @@
 {
- "note": "Reviewed cheat provenance for game-save receipts whose source checkpoint is not available on this PC and that carry no cheat flag. Every listed receipt was booted by a run whose baseline.json predates the test-only cheat tooling (commit 4fe9e18, 2026-10-07T08:32+09:00), or is one of the 2026-10-06 anchored chain roots documented in docs/PLAYTHROUGH_QA_PROTOCOL.md; recorders of that time had no RAM-write path. Unlisted receipts without verifiable provenance are treated as cheat-tainted.",
- "generated": "2026-10-07 by Claude code worker (baseline mtime < cheat commit time); keyed by receipt SHA-256; only receipts whose source checkpoint is unavailable here",
+ "note": "Reviewed cheat provenance keyed by game-save receipt SHA-256. The original entries were anchored to pre-cheat-tooling recorder chains or the 2026-10-06 roots in docs/PLAYTHROUGH_QA_PROTOCOL.md. The RELGATE-3 F7BE_b2 entry has an available source checkpoint; its checkpoint/state hashes and source recorder taint were verified clean before registration. Unlisted receipts without verifiable provenance are treated as cheat-tainted.",
+ "generated": "Initial entries: 2026-10-07 by Claude code worker; F7BE_b2 entry: RELGATE-3 2026-10-14",
  "receipts": {
   "1747cd8d91c40bb85b90d6b7f81b324251df93f896dd8e8774e84954da93e44c": {
    "cheat_tainted": false,
@@ -113,6 +113,10 @@
   "a4608bbc90cc8bf9f1bae4bc21d6e6f107a11f54bfd972f4da7c935f422f4e33": {
    "cheat_tainted": false,
    "basis": "pre-cheat-tooling (cartridge-save-from-recorded-checkpoint-v1); output/qa/part1_2026-09-23/day7_candidate_cold_live, output/qa/part1_2026-09-23/day7_defense_retry, output/qa/part1_2026-09-23/day7_original_replay, output/qa/part1_2026-09-23/round2_name_boundary_replay"
+  },
+  "a55f38d71e615462e2f7fff5ab9f21e483902b85c6bf3cae2427d9877998c268": {
+   "cheat_tainted": false,
+   "basis": "RELGATE-3: F7BE_b2 cartridge-save receipt; source F7BE_a checkpoint SHA/state match, source_taint=False on verified recorder chain; no local cheat writes"
   },
   "a9c878a0de331b4393a30ca5607045a67baaa4329f2d9ae06ed45932b4675372": {
    "cheat_tainted": false,

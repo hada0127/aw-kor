@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "raw_sha256": "b888d73e6c8cce4c498a3d1b7a760358f4a441b0e77a40750209bf4945867162",
+  "raw_bytes": 3095438,
+  "restored_sha256": "b888d73e6c8cce4c498a3d1b7a760358f4a441b0e77a40750209bf4945867162",
+  "restored_bytes": 3095438,
+  "archive_sha256": "a3f2917488a1683c6969023d22285b69297e8f9c4c516fe454c363e71f8c795a",
+  "archive_bytes": 177374,
+  "archive": "emulator.log.gz",
+  "scope": "Exact bytes received from native FIFO; producer/session closed successfully"
+}

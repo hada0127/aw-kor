@@ -1,0 +1,9 @@
+{
+  "status": "closed",
+  "error": null,
+  "last_observed_core_frame": 2787,
+  "committed_core_frame": 2787,
+  "last_good_checkpoint": "/home/taro1/project/aw-kor/temp/release_C/relgate3/captures/B23a_p2shop/run/resume.checkpoint.json",
+  "cleanup_errors": [],
+  "emulator_exit_code": 0
+}

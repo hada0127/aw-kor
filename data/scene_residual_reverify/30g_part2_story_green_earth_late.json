@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30g_part2_story_green_earth_late",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
   "min_score": 7,
   "ranges": [
    {

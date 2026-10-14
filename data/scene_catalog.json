@@ -22,13 +22,13 @@
     "sprites_unassigned_font": 1,
     "sprites_excluded_scan_lz77": 1880,
     "sprites_excluded_font": 1,
-    "review_pending_total": 33,
+    "review_pending_total": 28,
     "dialogue_excluded_low_confidence": 3647,
     "dialogue_groups_total": 9580,
-    "dialogue_game_scene_assigned": 5925,
-    "dialogue_assigned": 9572,
+    "dialogue_game_scene_assigned": 5930,
+    "dialogue_assigned": 9577,
     "dialogue_review_only": 3647,
-    "dialogue_unassigned": 8
+    "dialogue_unassigned": 3
   },
   "scenes": [
     {
@@ -849,7 +849,10 @@
         "g_00DF8BF6",
         "g_00DF8C02",
         "g_00DF8C0E",
-        "g_00DF8C1A"
+        "g_00DF8C1A",
+        "g_00DF8B72",
+        "g_00DF8B7A",
+        "g_00DF8B82"
       ],
       "sprite_ids": [
         "lz77_004310D4",
@@ -861,7 +864,7 @@
         "lz77_00BC7C00"
       ],
       "counts": {
-        "dialogue": 6,
+        "dialogue": 9,
         "sprite": 7
       },
       "entrypoint": {
@@ -1005,14 +1008,16 @@
         "g_00DF2CAC",
         "g_00DF2CB8",
         "g_00DF2CC0",
-        "g_00DF2CCC"
+        "g_00DF2CCC",
+        "g_00DF8B62",
+        "g_00DF8B8A"
       ],
       "sprite_ids": [
         "lz77_00EE5E14",
         "lz77_00BD4FBC"
       ],
       "counts": {
-        "dialogue": 31,
+        "dialogue": 33,
         "sprite": 2
       },
       "entrypoint": {
@@ -13915,12 +13920,7 @@
       "dialogue_filter": {},
       "sprite_filter": {},
       "dialogue_ids": [
-        "g_00DF8B62",
         "g_00DF8B6A",
-        "g_00DF8B72",
-        "g_00DF8B7A",
-        "g_00DF8B82",
-        "g_00DF8B8A",
         "g_00DF8B92",
         "g_00DF8B9A"
       ],
@@ -15833,12 +15833,12 @@
         "objlabel_p2_remaining_days"
       ],
       "counts": {
-        "dialogue": 8,
+        "dialogue": 3,
         "sprite": 1906,
         "sprite_text_candidate": 25,
         "sprite_scan_lz77": 1880,
         "sprite_font": 1,
-        "pending_review": 33,
+        "pending_review": 28,
         "excluded_scan_lz77": 1880,
         "excluded_font": 1
       }

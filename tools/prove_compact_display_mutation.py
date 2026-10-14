@@ -319,6 +319,11 @@ def main() -> int:
     contact_dir.mkdir(parents=True, exist_ok=True)
 
     checkpoint = dict(checkpoint_by_name(args.checkpoint))
+    if checkpoint.get("mode") == "recorder_endpoint" and checkpoint.get("orig_nav"):
+        # Mutation evidence needs two live captures from this ROM. Importing
+        # the recorder endpoint frame would hide any single-address change.
+        checkpoint["mode"] = "fresh"
+        checkpoint["nav"] = checkpoint["orig_nav"]
     if args.append_nav_step:
         if checkpoint.get("mode") != "fresh":
             raise SystemExit("--append-nav-step only supports fresh checkpoints")

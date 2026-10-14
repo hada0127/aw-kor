@@ -1,0 +1,11 @@
+{
+  "baseline_sha256": "8f1c17837e495b807e29cbe6c16ee6e68e10e6821207e7082039f9002e6ada2b",
+  "core_frame": 1717,
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "harness_sha256": "e1f91a65ccb58c1b1c4d479a890fadd30da549f25b3d6e477e9270fa1e798d43",
+  "libmgba_sha256": "b39c307dd143df0639187bedd798c80d76424f09a1692293b57d8cd49c5c4834",
+  "state": "0008_A_0001717.ss0",
+  "state_sha256": "3b619ccb3db4bfa1ceb1519f6f9c5bd83d509a091051cb0a84f25de8e0a1ffa3",
+  "ledger_sha256": "f51fcb4e434a11bebd5fb8a290075df7c250615da32451f7c002abfa331e9fd3",
+  "ledger_bytes": 345739
+}

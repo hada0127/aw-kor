@@ -1,0 +1,39 @@
+{
+  "schema_version": 4,
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "harness_sha256": "e1f91a65ccb58c1b1c4d479a890fadd30da549f25b3d6e477e9270fa1e798d43",
+  "recorder_sha256": "bc92594faccaabf9d78d4545e3ee993bcc4492d5bee39bef9509b851f34b16a2",
+  "libmgba_sha256": "b39c307dd143df0639187bedd798c80d76424f09a1692293b57d8cd49c5c4834",
+  "parent_checkpoint": null,
+  "parent_checkpoint_sha256": null,
+  "initial_core_frame": 0,
+  "capture": "every frame, lossless RGB-equivalent PNG, no audio",
+  "visual_review": "pending",
+  "min_free_gib": 12.0,
+  "png_compress_level": 3,
+  "contact_sheets": false,
+  "frame_png_encoding": "exact-palette-or-rgb-v1",
+  "frame_png_encoder_sha256": "e0c7b9e051f3f39c102b7a112560d4002c525607910cf0374b6de93a01e67af3",
+  "pillow_version": "12.3.0",
+  "emulator_log": {
+    "format": "gzip-fifo-v1",
+    "archive": "emulator.log.gz",
+    "receipt": "emulator.log.archive.json"
+  },
+  "initial_game_save": {
+    "save": "game.sav",
+    "save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "receipt": "game_save.json",
+    "receipt_sha256": "b5045dc9590db42a3006854bcab31b82a8b963de3334e438bc04f206668376d2",
+    "loaded_copy": "loaded_game.sav",
+    "migration": {
+      "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
+      "target_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2"
+    },
+    "emulator_port": {
+      "source_harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+      "source_libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad"
+    },
+    "cheat_provenance": "registry"
+  }
+}

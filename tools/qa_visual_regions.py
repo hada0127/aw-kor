@@ -82,13 +82,45 @@ PART1_MENU_PRENAV = [
 PART1_MENU_ADVANCE_A_PRESSES = 16
 START_PROMPT_CROP = (56, 96, 184, 124)
 PART1_OPTION_LAYER_SHA256 = {
-    # 2026-09-23 OkDanDan restoration with September AA/shadow composition.
-    # Candidate a290f200: actual ROM tiles and cold-menu captures verified.
-    # These hashes are over the 128x32 indexed layer bytes, before LZ77 packing.
-    "operation_room": "2c859b05237c4d400db550661b16fb84a08fb3ad53f8e465222887b38af56104",
-    "link": "4495683f9b61dfb257c83ba7a4de4bb0f0d3fe084c425f39c581c18f5f29e7ed",
-    "single_battle": "2f0bec0c9c452c60e8a02d34dc7690ee5001daa14780f9b6b0a6ea316a78cb8a",
+    # Fable approved the C5 Korean art after viewing RELGATE-3 comparisons.
+    # Linux real-font C5 SHA-256 416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2.
+    # Hashes cover the 128x32 indexed layers before LZ77 packing; wars_shop
+    # also matches the decompressed C5 ROM option asset at 0x00C03F68.
+    "operation_room": "ba5641f155fc31ceff45211c27bfd060f34eb084a8f80e707d4049718d20015f",
+    "link": "569247b514094928f26e3d20fb2e110e4cf226771f7840994e8015dc246e4c4e",
+    "single_battle": "13003c5491e940e6bef0d0b1b2d474e9a89d4d7aab8e9785ad8b411eee25efd9",
+    "wars_shop": "aab89d57e89f1ef294703dfb44c57a09ecdc64a97b11f6bd79a45d6b9d70a76c",
 }
+# 2026-10-14 user-approved mock variant A: 「어드밴스 워즈」 in OkDanDan.
+# Crops isolate the five logo placements from prompts and separate TM/2 sprites.
+# Bounds are the existing text OBJ footprint; minimum heights follow the
+# achievable JP-like ink size in variant A within those fixed cells.
+TITLE_LOGO_GOLDENS = {
+    "shared": ((0, 0, 240, 75), (20, 20, 212, 52), 27, "f649bac8724a63ad0cf4bacd3b694d605c372480c0f91177fc0dbac44899b19a"),
+    "select_top": ((0, 0, 220, 75), (12, 4, 204, 52), 28, "a31a0661c7c79b2e6bd0eb571747df06429e3cfa5fc70c2b0f86b1e1863295ed"),
+    "select_bottom": ((0, 80, 220, 135), (24, 92, 216, 124), 30, "32d91a5e750ff2a0e7a81d726245f122dd44b0ad6ab661968cb09ecdda06e3ac"),
+    "part1": ((0, 0, 240, 75), (16, 12, 224, 60), 33, "17991e9d48a5d71b05736aff2e59eb756ef90e9a399a10935f48633119bdb261"),
+    "part2": ((0, 0, 240, 75), (16, 20, 208, 52), 30, "2144b39767a62a8ef607a3684999be2b1bffcf43764a4b22c0142e38ec62db1f"),
+}
+
+
+def assert_title_logo_golden(name: str, layer: Image.Image) -> str:
+    crop_box, footprint, min_height, golden_sha = TITLE_LOGO_GOLDENS[name]
+    crop = layer.crop(crop_box)
+    bbox = crop.getbbox()
+    if bbox is None:
+        raise AssertionError(f"{name} title logo: blank")
+    x0, y0, x1, y1 = (bbox[0] + crop_box[0], bbox[1] + crop_box[1],
+                      bbox[2] + crop_box[0], bbox[3] + crop_box[1])
+    fx0, fy0, fx1, fy1 = footprint
+    if not (fx0 <= x0 < x1 <= fx1 and fy0 <= y0 < y1 <= fy1):
+        raise AssertionError(f"{name} title logo: outside text OBJ footprint {(x0, y0, x1, y1)}")
+    if y1 - y0 < min_height:
+        raise AssertionError(f"{name} title logo: height {y1-y0} < {min_height}")
+    digest = hashlib.sha256(crop.tobytes()).hexdigest()
+    if digest != golden_sha:
+        raise AssertionError(f"{name} title logo: layer hash changed {digest} != {golden_sha}")
+    return f"bbox={(x0, y0, x1, y1)}:sha256={digest}"
 # The short 기록 header keeps its original footer and has 27 colored pixels
 # with the approved OkDanDan face (previous Noto: 53). Cold saved-game menu
 # observation at C1A81C confirmed both Korean syllables and RECORD are intact.
@@ -225,7 +257,9 @@ def assert_part1_option_logo_palette(label: str, layer: Image.Image) -> str:
         if value:
             counts[int(value)] = counts.get(int(value), 0) + 1
     values = set(counts)
-    missing = sorted({1, 9, 10, 14} - values)
+    # The approved C5 상점 ROM plate uses 2/3/4/5/6/9/10/14, without index 1.
+    required = {2, 3, 4, 5, 6, 9, 10, 14} if label == "part1 option wars_shop" else {1, 9, 10, 14}
+    missing = sorted(required - values)
     if missing:
         raise AssertionError(f"{label}: missing Part1 option logo indices {missing}, values={sorted(values)}")
     extra = sorted(values - {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14})
@@ -336,7 +370,12 @@ def run_asset_checks() -> list[str]:
     try:
         title_layer = th.make_title_index_layer()
         select_layer = th.make_select_index_layer()
+        part1_layer = th.make_part1_index_layer()
         part2_layer = th.make_part2_index_layer()
+        for name, layer in (("shared", title_layer), ("select_top", select_layer),
+                            ("select_bottom", select_layer), ("part1", part1_layer),
+                            ("part2", part2_layer)):
+            checked.append(f"asset:title_logo:{name}:{assert_title_logo_golden(name, layer)}")
         top = assert_select_logo_style(
             "select top Korean logo",
             select_layer,
@@ -348,8 +387,8 @@ def run_asset_checks() -> list[str]:
             center_max=118,
             x1_max=204,
             min_w=176,
-            min_h=22,
-            min_body_pixels=860,
+            min_h=28,
+            min_body_pixels=1000,
         )
         bottom = assert_select_logo_style(
             "select bottom Korean logo",
@@ -361,6 +400,8 @@ def run_asset_checks() -> list[str]:
             center_min=117,
             center_max=126,
             x1_max=219,
+            min_h=30,
+            min_body_pixels=1000,
         )
         top_tm = assert_tm_pattern("select top TM", th.make_select_top_tm_overlay_layer(), (201, 26, 219, 38))
         part1_tm = assert_tm_pattern("part1 title TM", th.make_part1_tm_overlay_layer(), (210, 33, 229, 45))
@@ -376,8 +417,8 @@ def run_asset_checks() -> list[str]:
             center_max=121,
             x1_max=208,
             min_w=176,
-            min_h=22,
-            min_body_pixels=860,
+            min_h=30,
+            min_body_pixels=1000,
         )
         checked.append(f"asset:select_top_logo:{top}")
         checked.append(f"asset:select_bottom_logo:{bottom}")

@@ -505,6 +505,44 @@ def draw_select_logo_text(
                 layer.putpixel((px, py), body_stops[stop])
 
 
+def draw_mock_a_logo(layer: Image.Image, text: str, box: tuple[int, int, int, int],
+                     outline_idx: int, pale_idx: int, body_idx: int,
+                     highlight_idx: int, shadow_idx: int) -> None:
+    """Encode the approved mock A's resized OkDanDan mask and four paint passes."""
+    from PIL import ImageFont
+    import aw_fonts
+
+    font = ImageFont.truetype(str(aw_fonts.okdandan_path()), 96)
+    source = Image.new('L', (int(font.getlength(text)) + 192, 288), 0)
+    ImageDraw.Draw(source).text((48, 48), text, font=font, fill=255)
+    source = source.crop(source.getbbox())
+    x0, y0, x1, y1 = box
+    width = x1 - x0 - 6
+    if text == '어드밴스워즈':
+        spaced = Image.new('L', (int(font.getlength('어드밴스 워즈')) + 192, 288), 0)
+        ImageDraw.Draw(spaced).text((48, 48), '어드밴스 워즈', font=font, fill=255)
+        width = round(width * source.width / spaced.crop(spaced.getbbox()).width)
+    mask = source.resize((width, y1 - y0 - 6), Image.Resampling.LANCZOS)
+    mask = mask.point(lambda v: 255 if v >= 112 else 0)
+    body = Image.new('L', layer.size, 0)
+    body.paste(mask, (x0 + 3, y0 + 3))
+    outer = body.filter(ImageFilter.MaxFilter(5))
+    inner = body.filter(ImageFilter.MaxFilter(3))
+    shadow = Image.new('L', layer.size, 0)
+    shadow.paste(outer, (1, 1))
+    for yy in range(max(0, y0), min(layer.height, y1 + 2)):
+        for xx in range(max(0, x0), min(layer.width, x1 + 2)):
+            if shadow.getpixel((xx, yy)):
+                layer.putpixel((xx, yy), shadow_idx)
+            if outer.getpixel((xx, yy)):
+                layer.putpixel((xx, yy), outline_idx)
+            if inner.getpixel((xx, yy)):
+                layer.putpixel((xx, yy), pale_idx)
+            if body.getpixel((xx, yy)):
+                top = yy == 0 or not body.getpixel((xx, yy - 1))
+                layer.putpixel((xx, yy), highlight_idx if top else body_idx)
+
+
 def index_for_alpha(alpha: int, fill_idx: int, edge_idx: int, aa_idx: int) -> int:
     if alpha >= 192:
         return fill_idx
@@ -622,41 +660,17 @@ def paint_index_text_crisp(
 
 def make_title_index_layer() -> Image.Image:
     layer = Image.new("L", (240, 160), 0)
-    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 26, 190, 30, 25, 1, 11, 4, 4, aa_idx=10, stroke=1)
+    draw_mock_a_logo(layer, "어드밴스워즈", (23, 24, 211, 53), 1, 10, 4, 6, 11)
+    # The text OBJ row ends at y=51; the mock's last shadow row is not loaded.
+    layer.paste(0, (0, 52, 240, 53))
     draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
 
 
 def make_select_index_layer() -> Image.Image:
     layer = Image.new("L", (240, 160), 0)
-    draw_select_logo_text(
-        layer,
-        "게임보이 워즈 어드밴스",
-        114,
-        18,
-        180,
-        30,
-        24,
-        outer_idx=15,
-        inner_idx=1,
-        inner_aa_idx=13,
-        body_stops=(10, 8, 6, 4, 2),
-        body_aa_idx=9,
-    )
-    draw_select_logo_text(
-        layer,
-        "게임보이 워즈 어드밴스",
-        121,
-        96,
-        188,
-        31,
-        24,
-        outer_idx=1,
-        inner_idx=15,
-        inner_aa_idx=14,
-        body_stops=(5, 4, 6, 7, 8),
-        body_aa_idx=9,
-    )
+    draw_mock_a_logo(layer, "어드밴스 워즈", (17, 14, 204, 52), 15, 1, 6, 2, 15)
+    draw_mock_a_logo(layer, "어드밴스 워즈", (25, 91, 212, 124), 1, 15, 6, 8, 1)
     draw_prompt_plain_index(layer, "게임 선택", (20, 144, 144, 160), 6, 1, 10, aa_idx=15)
     return layer
 
@@ -666,27 +680,14 @@ def make_part1_index_layer() -> Image.Image:
     # Part 1 uses a different OBJ palette from 1+2/Part 2. Stable title-frame
     # sampling shows: dark outline=15, gray shade=14, orange body=8..12,
     # yellow highlight=2..3.
-    draw_index_text(layer, "게임보이 워즈 어드밴스", 116, 24, 200, 34, 27, 15, 14, 8, 2, aa_idx=10, stroke=1)
+    draw_mock_a_logo(layer, "어드밴스 워즈", (17, 18, 207, 60), 15, 10, 8, 2, 14)
     draw_part1_start_index(layer, "시작하기!", (75, 107, 171, 123))
     return layer
 
 
 def make_part2_index_layer() -> Image.Image:
     layer = Image.new("L", (240, 160), 0)
-    draw_select_logo_text(
-        layer,
-        "게임보이 워즈 어드밴스",
-        116,
-        25,
-        184,
-        28,
-        24,
-        outer_idx=1,
-        inner_idx=15,
-        inner_aa_idx=14,
-        body_stops=(5, 4, 6, 7, 8),
-        body_aa_idx=9,
-    )
+    draw_mock_a_logo(layer, "어드밴스 워즈", (19, 21, 207, 52), 1, 15, 6, 8, 1)
     draw_part2_start_index(layer, "시작하기!", PART2_STYLE_START_BOX)
     return layer
 
@@ -903,27 +904,24 @@ def patch_sprite_screen_mask_rows(
                     tile_data[bi] = (tile_data[bi] & 0xF0) | fill
 
 
-def make_title_residual_overlay_layer() -> Image.Image:
-    layer = Image.new("L", (240, 160), 0)
-    draw = ImageDraw.Draw(layer)
-    draw.rectangle((52, 9, 190, 27), fill=8)
-    draw_centered_block_text(layer, "한글판", (52, 10, 190, 25), 12, 15, 10, 9)
-    return layer
-
-
 def patch_title_residual_tiles(tile_data: bytearray) -> None:
-    patch_sprite_overlay_pixels(tile_data, make_title_residual_overlay_layer(), TITLE_BACKDROP_SPRITES)
+    # The original backdrop sprites carry the English subtitle here. Index 0
+    # reveals the camouflage BG without introducing a solid-color badge box.
+    patch_sprite_screen_rects(tile_data, ((52, 9, 191, 28, 0),), TITLE_BACKDROP_SPRITES)
     patch_sprite_screen_rects(tile_data, ((208, 40, 230, 55, 0),), TITLE_BACKDROP_SPRITES)
+    patch_sprite_overlay_pixels(tile_data, make_tm_pattern_layer(213, 35), TITLE_BACKDROP_SPRITES)
 
 
 def patch_select_residual_tiles(tile_data: bytearray) -> None:
+    # Sprite 22 carries the lower logo TM and overlaps the subtitle's trailing 2.
+    subtitle_sprites = tuple(sprite for sprite in SELECT_RESIDUAL_SPRITES if sprite[0] != 22)
     patch_sprite_screen_rects(
         tile_data,
         (
             (200, 28, 221, 36, 0),
-            (56, 124, 184, 141, 0),
+            (56, 124, 200, 141, 0),
         ),
-        SELECT_RESIDUAL_SPRITES,
+        subtitle_sprites,
     )
 
 

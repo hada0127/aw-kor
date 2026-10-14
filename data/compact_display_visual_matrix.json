@@ -1,19 +1,19 @@
 {
  "tool": "tools/build_compact_display_visual_matrix.py",
- "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+ "rom": "output/game_wars_korean_candidate_20261014_b31.gba",
+ "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
  "glyph_dictionary_qa": {
   "path": "temp/glyph_dictionary_qa.json",
   "issue_count": 0,
-  "rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c"
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2"
  },
  "renderer_trace": {
   "path": "data/compact_display_renderer_trace.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-  "case_count": 10,
-  "hit_count": 1760,
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "case_count": 3,
+  "hit_count": 1922,
   "direct_target_hit_count": 0,
   "breakpoint_count": 55,
   "code_context_breakpoints_enabled": true,
@@ -24,7 +24,7 @@
   "path": "data/compact_display_xref_analysis.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
   "groups": [
    {
     "id": "a2_co_power_profile_display_overrides",
@@ -52,18 +52,18 @@
    },
    {
     "id": "b8_compact_display_table_all",
-    "target_count": 459,
-    "with_pointer_refs": 406,
-    "with_external_pointer_refs": 390,
-    "with_second_level_refs": 8,
-    "pointer_ref_total": 634,
-    "external_pointer_ref_total": 617,
+    "target_count": 460,
+    "with_pointer_refs": 382,
+    "with_external_pointer_refs": 367,
+    "with_second_level_refs": 7,
+    "pointer_ref_total": 597,
+    "external_pointer_ref_total": 581,
     "pointer_ref_buckets": {
-     "part1_or_table": 291,
-     "code_or_static": 6,
-     "0xF30000": 171,
-     "b8_internal": 17,
-     "part2_table": 149
+     "part1_or_table": 275,
+     "code_or_static": 7,
+     "0xF30000": 158,
+     "b8_internal": 16,
+     "part2_table": 141
     }
    }
   ],
@@ -73,9 +73,9 @@
   "path": "data/compact_display_code_context.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-  "literal_entry_count": 695,
-  "derived_table_head_ref_count": 681,
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "literal_entry_count": 658,
+  "derived_table_head_ref_count": 644,
   "breakpoint_candidate_count": 24,
   "function_candidate_count": 18,
   "literal_entries_with_loads_by_group": {
@@ -88,25 +88,23 @@
  "manual_visual_evidence": {
   "path": "data/compact_display_manual_visual_evidence.json",
   "present": true,
-  "source_sha256": "15afb5352d24913e94993b84752bc885fa45f69731063eb799c658373b1a3969",
-  "current_count": 13,
-  "accepted_count": 13,
+  "source_sha256": "1f52e707bfe1efdc1621e94d6014719619b706b0728fab6a7e1d56f2cb75f566",
+  "current_count": 6,
+  "accepted_count": 6,
   "invalid_count": 0,
   "stale_count": 0,
   "unmatched_current_count": 0,
   "accepted_by_scene": {
-   "15_part1_operation_logos": 13
+   "15_part1_operation_logos": 6
   },
   "accepted_by_checkpoint": {
-   "41_part1_operation_room": 4,
-   "41_part1_operation_room_plus_10steps_288ebbc326": 3,
+   "41_part1_operation_room": 2,
+   "41_part1_operation_room_plus_10steps_288ebbc326": 2,
    "41_part1_operation_room_plus_13steps_eba0d9ed13": 1,
-   "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120": 2,
-   "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120": 1,
-   "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120": 2
+   "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120": 1
   },
   "accepted_by_group_scene": {
-   "b8_compact_display_table_all::15_part1_operation_logos": 13
+   "b8_compact_display_table_all::15_part1_operation_logos": 6
   },
   "entries": [
    {
@@ -114,22 +112,22 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
-    "base_text": "고물 전차 출격",
-    "mutation_text": "검증 전차 출격",
+    "base_text": "싸워라　고물　전차！",
+    "mutation_text": "검워라　고물　전차！",
     "slot": 20,
-    "encoded_hex": "8856905281408fc890b4814090f8885e",
-    "base_encoded_hex": "88668c6c81408fc890b4814090f8885e",
-    "old_hex": "88668c6c81408fc890b4814090f8885e20202020",
-    "new_hex": "8856905281408fc890b4814090f8885e20202020",
-    "contact_sheet_sha256": "5c15b73d780630b9f8da174528f51308ad7e5f52b274483b4d423fdbbfc82307",
-    "pixel_diff_count": 77,
+    "encoded_hex": "88568f6c8adf814088668c6c81408fc890b48149",
+    "base_encoded_hex": "8e5b8f6c8adf814088668c6c81408fc890b48149",
+    "old_hex": "8e5b8f6c8adf814088668c6c81408fc890b48149",
+    "new_hex": "88568f6c8adf814088668c6c81408fc890b48149",
+    "contact_sheet_sha256": "0a038180afab37134b9e286db5b298d9c0e5430b4b45e4f0d06b5ba9d73fca93",
+    "pixel_diff_count": 47,
     "diff_bbox": [
      9,
      91,
-     24,
+     16,
      102
     ],
     "expected_diff_box": [
@@ -141,61 +139,16 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down0/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_diff_mask.png",
-    "diff_mask_sha256": "61117de73fe4493661993ad425da46aa5440ada868403949f44f2ebe21c986c7",
+    "diff_mask_sha256": "f992ac3a55df11d22d66fc02618cd48315535da34343462c8afa1ea8323423a1",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81FDC produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81FF4",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "전선 기지 확보",
-    "mutation_text": "검증 기지 확보",
-    "slot": 20,
-    "encoded_hex": "885690528140888f9054814092ed8d46",
-    "base_encoded_hex": "8fc88dc28140888f9054814092ed8d46",
-    "old_hex": "8fc88dc28140888f9054814092ed8d4620202020",
-    "new_hex": "885690528140888f9054814092ed8d4620202020",
-    "contact_sheet_sha256": "b088e42729f2021be59969861446f9b9c96acbfb7c72a2226ee434c3d23bf916",
-    "pixel_diff_count": 49,
-    "diff_bbox": [
-     10,
-     75,
-     24,
-     86
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_diff_mask.png",
-    "diff_mask_sha256": "fcb58a001996c5ce60d0aafbd74eb406a97364a9706c8e7a300438a1eb0b1980",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81FF4 produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
    },
@@ -204,22 +157,22 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "첫 전투",
-    "mutation_text": "시험전투",
+    "mutation_text": "검 전투",
     "slot": 8,
-    "encoded_hex": "8e4f92c98fc891f4",
+    "encoded_hex": "885681408fc891f4",
     "base_encoded_hex": "90dc81408fc891f4",
     "old_hex": "90dc81408fc891f4",
-    "new_hex": "8e4f92c98fc891f4",
-    "contact_sheet_sha256": "20b6d4a4f5475e6042b78c4bb1d0d4f3637431e99bf037e03693ed32fe4a6449",
-    "pixel_diff_count": 66,
+    "new_hex": "885681408fc891f4",
+    "contact_sheet_sha256": "ab3cd890e064060fe7ad86bc60ce48442c737954ec464855ed571bf2b4933eba",
+    "pixel_diff_count": 31,
     "diff_bbox": [
      9,
      59,
-     24,
+     16,
      70
     ],
     "expected_diff_box": [
@@ -231,241 +184,16 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down0/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_diff_mask.png",
-    "diff_mask_sha256": "93f92625d049607a447bdd77ef1db0bae1d62f7eab39a0e57a32653b21bb01d9",
+    "diff_mask_sha256": "523a55a9c7a260d13d3c99a42538c9d02276da0d65e1507fa11cad3e6f503503",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B8200C produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B82018",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "전투 개시",
-    "mutation_text": "검증 개시",
-    "slot": 10,
-    "encoded_hex": "885690528140884e8e4f",
-    "base_encoded_hex": "8fc891f48140884e8e4f",
-    "old_hex": "8fc891f48140884e8e4f",
-    "new_hex": "885690528140884e8e4f",
-    "contact_sheet_sha256": "1c7c98d7ab6c7e15016ccd5067c68dde8b92e240dce77c264720f459a36bd363",
-    "pixel_diff_count": 54,
-    "diff_bbox": [
-     10,
-     43,
-     24,
-     54
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_diff_mask.png",
-    "diff_mask_sha256": "f03e5b1c8f7750af7adda934c765f8510dc7b1e6561ac285ad42247db5bd34cc",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B82018 produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81FAC",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "최강 중전차",
-    "mutation_text": "검증 중전차",
-    "slot": 20,
-    "encoded_hex": "8856905281408fef8fc890b4",
-    "base_encoded_hex": "90eb884981408fef8fc890b4",
-    "old_hex": "90eb884981408fef8fc890b42020202020202020",
-    "new_hex": "8856905281408fef8fc890b42020202020202020",
-    "contact_sheet_sha256": "53ff708eae77c882870b5ca26ac92dbd87f49e585e65d250d591a003a3eb4f20",
-    "pixel_diff_count": 47,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_diff_mask.png",
-    "diff_mask_sha256": "89496ff251ed49575720c8be215ed7d264a0c85bfb2b4808e01818716806dc3b",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81FAC produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81FC4",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "적 부대 격파",
-    "mutation_text": "검증 부대 격파",
-    "slot": 20,
-    "encoded_hex": "8856905281408d5689f48140885e9259",
-    "base_encoded_hex": "8fc781408d5689f48140885e9259",
-    "old_hex": "8fc781408d5689f48140885e9259202020202020",
-    "new_hex": "8856905281408d5689f48140885e925920202020",
-    "contact_sheet_sha256": "5b3ecc305de2bf71385231829e27ed53641f2aee1a835c29e7c70683546b31f6",
-    "pixel_diff_count": 267,
-    "diff_bbox": [
-     10,
-     75,
-     72,
-     86
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_diff_mask.png",
-    "diff_mask_sha256": "a6e41155dd06169aac5707a65616397b0cc235b146137c41b154019af451b0ab",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81FC4 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F80",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "하늘의 적",
-    "mutation_text": "검증의 적",
-    "slot": 22,
-    "encoded_hex": "885690528fa181408fc7",
-    "base_encoded_hex": "92a989cc8fa181408fc7",
-    "old_hex": "92a989cc8fa181408fc7202020202020202020202020",
-    "new_hex": "885690528fa181408fc7202020202020202020202020",
-    "contact_sheet_sha256": "2eb35c98d3dc6b6663db5269fc43aaea4aca5424d35aee48c4655a76891df5c2",
-    "pixel_diff_count": 82,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_diff_mask.png",
-    "diff_mask_sha256": "2761d970ad037ee3352b8593a1e76d87cef403d5e327ae6051258fa5ebb250b3",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F80 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F70",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "대공 제압",
-    "mutation_text": "검증 제압",
-    "slot": 14,
-    "encoded_hex": "8856905281408fd48eae",
-    "base_encoded_hex": "89f4886d81408fd48eae",
-    "old_hex": "89f4886d81408fd48eae20202020",
-    "new_hex": "8856905281408fd48eae20202020",
-    "contact_sheet_sha256": "bb55cc4aaee699946e6c220866f41987b1828604a82e191d460c686633b89afb",
-    "pixel_diff_count": 43,
-    "diff_bbox": [
-     9,
-     91,
-     23,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_diff_mask.png",
-    "diff_mask_sha256": "6a6c260160b1cfdb234ba6b944c8daa7804ee319ff2ba648d8e2e85b5b69fa13",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F70 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
    },
@@ -474,22 +202,22 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
-    "base_text": "드래곤 플라이",
-    "mutation_text": "검증 플라이",
+    "base_text": "드래곤플라이！",
+    "mutation_text": "검래곤플라이！",
     "slot": 16,
-    "encoded_hex": "88569052814092a08adf8fa2",
-    "base_encoded_hex": "8a7c8aec8868814092a08adf8fa2",
-    "old_hex": "8a7c8aec8868814092a08adf8fa22020",
-    "new_hex": "88569052814092a08adf8fa220202020",
-    "contact_sheet_sha256": "05fe171d2d57504a01fa4f3ef133b53a827efb59b7f538799ad724867e118270",
-    "pixel_diff_count": 246,
+    "encoded_hex": "88568aec886892a08adf8fa28149",
+    "base_encoded_hex": "8a7c8aec886892a08adf8fa28149",
+    "old_hex": "8a7c8aec886892a08adf8fa281492020",
+    "new_hex": "88568aec886892a08adf8fa281492020",
+    "contact_sheet_sha256": "59c6054b7c3426866c42651d27c6ab5d451d573253df81f4688f7b5b6638fa96",
+    "pixel_diff_count": 43,
     "diff_bbox": [
      9,
      59,
-     64,
+     16,
      70
     ],
     "expected_diff_box": [
@@ -501,61 +229,16 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down7/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_diff_mask.png",
-    "diff_mask_sha256": "f414ec8b77332349f3a55be4ac149346e25425cf370a3ca6ca9e63eb5152194f",
+    "diff_mask_sha256": "c7f103ff3c92cfbbe978c380252ab991c0f62cbd53cba757e0208af578b37ab7",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-    "accepted": true,
-    "validation_errors": []
-   },
-   {
-    "address": "0x00B81F40",
-    "group": "b8_compact_display_table_all",
-    "type": "single_address_mutation_pixel_diff",
-    "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
-    "scene_id": "15_part1_operation_logos",
-    "base_text": "은빛 세계",
-    "mutation_text": "검증 세계",
-    "slot": 10,
-    "encoded_hex": "8856905281408dcf8865",
-    "base_encoded_hex": "8f7e8d6d81408dcf8865",
-    "old_hex": "8f7e8d6d81408dcf8865",
-    "new_hex": "8856905281408dcf8865",
-    "contact_sheet_sha256": "05361e5f2dd5c44dc663a4588542f51a1e4b296ad94d33fb6d6a9bbc70da0a89",
-    "pixel_diff_count": 67,
-    "diff_bbox": [
-     9,
-     91,
-     24,
-     102
-    ],
-    "expected_diff_box": [
-     0,
-     32,
-     80,
-     104
-    ],
-    "diff_bbox_within_expected_box": true,
-    "null_control": {
-     "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
-     "pixel_diff_count": 0,
-     "diff_bbox": null,
-     "deterministic": true
-    },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_diff_mask.png",
-    "diff_mask_sha256": "0452eff567f5f1f8bd225155d182390c4deb29ca063b77f757477c4ab4a8141b",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png",
-    "note": "Single-address mutation at 0x00B81F40 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
    },
@@ -564,22 +247,22 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
-    "base_text": "바다 너머",
-    "mutation_text": "검증 너머",
+    "base_text": "바다 저편에",
+    "mutation_text": "검다 저편에",
     "slot": 12,
-    "encoded_hex": "885690528140895c8be3",
-    "base_encoded_hex": "8ca689e28140895c8be3",
-    "old_hex": "8ca689e28140895c8be32020",
-    "new_hex": "885690528140895c8be32020",
-    "contact_sheet_sha256": "1bea389a30e780980385e700e19d7c99e20226e08dbfa7a36874e1f3f475f98f",
-    "pixel_diff_count": 77,
+    "encoded_hex": "885689e281408fc6926f8ed3",
+    "base_encoded_hex": "8ca689e281408fc6926f8ed3",
+    "old_hex": "8ca689e281408fc6926f8ed3",
+    "new_hex": "885689e281408fc6926f8ed3",
+    "contact_sheet_sha256": "0f48c566be5ef0a150859d138464a50433167cf19fe02a69c8cf4b13968849bc",
+    "pixel_diff_count": 44,
     "diff_bbox": [
      9,
      75,
-     23,
+     16,
      86
     ],
     "expected_diff_box": [
@@ -591,14 +274,14 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down10/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_diff_mask.png",
-    "diff_mask_sha256": "ef7c7c26bf462135fea5ac4647f2e9b3fd8c4fa2830c2362b4734f089de302b8",
+    "diff_mask_sha256": "d1f6ec6bbccdc14d173df3416459501eba401b98dd7c70f23a3973cf73464538",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
@@ -609,22 +292,22 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
-    "base_text": "도그 파이트",
-    "mutation_text": "검증 파이트",
+    "base_text": "도그　파이트！",
+    "mutation_text": "검그　파이트！",
     "slot": 16,
-    "encoded_hex": "88569052814092598fa291f9",
-    "base_encoded_hex": "8a5a8887814092598fa291f9",
-    "old_hex": "8a5a8887814092598fa291f920202020",
-    "new_hex": "88569052814092598fa291f920202020",
-    "contact_sheet_sha256": "268031330049a0f24a2d80f56470fc874c55b9ac3942488a9d7aed8e46312fcb",
-    "pixel_diff_count": 70,
+    "encoded_hex": "88568887814092598fa291f98149",
+    "base_encoded_hex": "8a5a8887814092598fa291f98149",
+    "old_hex": "8a5a8887814092598fa291f981492020",
+    "new_hex": "88568887814092598fa291f981492020",
+    "contact_sheet_sha256": "7ae519c08b99f2238d6025a200be05bc3247489517c814deba409e4970b61fcf",
+    "pixel_diff_count": 44,
     "diff_bbox": [
      9,
      59,
-     24,
+     16,
      70
     ],
     "expected_diff_box": [
@@ -636,14 +319,14 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down10/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_diff_mask.png",
-    "diff_mask_sha256": "f4f4fa1abb566ef64f0189d74c97872d3c01cbc4a52db883eb6977140fbec5d1",
+    "diff_mask_sha256": "c1972535013794bae6f3909cffc627eee423d3e32a4c8d3d562cacf7d443f548",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
@@ -654,23 +337,23 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
     "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
     "scene_id": "15_part1_operation_logos",
     "base_text": "결전",
-    "mutation_text": "검증",
+    "mutation_text": "검전",
     "slot": 6,
-    "encoded_hex": "88569052",
+    "encoded_hex": "88568fc8",
     "base_encoded_hex": "88608fc8",
     "old_hex": "88608fc82020",
-    "new_hex": "885690522020",
-    "contact_sheet_sha256": "daa89101d83ee592decac343757b15ee987b5eb0ffff0b2e68e8e7777535bdb7",
-    "pixel_diff_count": 58,
+    "new_hex": "88568fc82020",
+    "contact_sheet_sha256": "6642304feb222d68e4e1756961b068dcb7ba043d27e16ae3f2784316a42943d5",
+    "pixel_diff_count": 30,
     "diff_bbox": [
      9,
-     91,
-     24,
-     102
+     92,
+     16,
+     101
     ],
     "expected_diff_box": [
      0,
@@ -681,14 +364,14 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-     "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/relgate2/manual_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+     "diff_mask": "temp/release_C/relgate2/manual_down13/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
     "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_diff_mask.png",
-    "diff_mask_sha256": "2636769427848d3dea04714c0f6c34053fcfaf666e4abcf00c953e6a6120d031",
+    "diff_mask_sha256": "efc7d590df3b7f7a714237e910760e7aa79ba5177408fddde0ebdc4fd93d4198",
     "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
@@ -5310,7 +4993,7 @@
     "expected_count_match": true,
     "editor_exposed": 36,
     "screen_scene_assigned": 1,
-    "current_screen_capture_assigned": 0,
+    "current_screen_capture_assigned": 1,
     "container_only": 35,
     "no_scene": 0,
     "direct_target_visual_evidence": 0,
@@ -5322,7 +5005,7 @@
      "address": "0x00A2955C",
      "ja": "ミラクルチャンス",
      "ko": "기적",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A2955C",
@@ -5364,7 +5047,7 @@
      "address": "0x00A29570",
      "ja": "レッドスタードリーム",
      "ko": "별꿈",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A29570",
@@ -5406,7 +5089,7 @@
      "address": "0x00A29588",
      "ja": "ハイパーリペア",
      "ko": "하이퍼수리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 14,
      "group_id": "g_00A29588",
@@ -5448,7 +5131,7 @@
      "address": "0x00A29598",
      "ja": "ハイアップグレード",
      "ko": "강화",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 18,
      "group_id": "g_00A29598",
@@ -5490,7 +5173,7 @@
      "address": "0x00A295AC",
      "ja": "ウィニングマーチ",
      "ko": "승리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A295AC",
@@ -5532,7 +5215,7 @@
      "address": "0x00A295C0",
      "ja": "ビクトリアスパレード",
      "ko": "대승",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A295C0",
@@ -5574,7 +5257,7 @@
      "address": "0x00A295D8",
      "ja": "マキシマムブロウ",
      "ko": "강타",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A295D8",
@@ -5616,7 +5299,7 @@
      "address": "0x00A295EC",
      "ja": "ストレートブラスト",
      "ko": "직격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 18,
      "group_id": "g_00A295EC",
@@ -5658,7 +5341,7 @@
      "address": "0x00A29600",
      "ja": "ショーバイスピリット",
      "ko": "상혼",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A29600",
@@ -5742,7 +5425,7 @@
      "address": "0x00A2962C",
      "ja": "ゴールドラッシュ",
      "ko": "골드",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A2962C",
@@ -5784,7 +5467,7 @@
      "address": "0x00A29640",
      "ja": "パワーオブマネー",
      "ko": "재력",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A29640",
@@ -5826,7 +5509,7 @@
      "address": "0x00A29654",
      "ja": "テクニカルスナイプ",
      "ko": "저격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 18,
      "group_id": "g_00A29654",
@@ -5868,7 +5551,7 @@
      "address": "0x00A29668",
      "ja": "ワールドワイドスナイプ",
      "ko": "원저격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 22,
      "group_id": "g_00A29668",
@@ -5910,7 +5593,7 @@
      "address": "0x00A29680",
      "ja": "スノウホワイト",
      "ko": "설백",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 14,
      "group_id": "g_00A29680",
@@ -5952,7 +5635,7 @@
      "address": "0x00A29690",
      "ja": "ブリザードブロウ",
      "ko": "눈보라",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A29690",
@@ -5993,7 +5676,7 @@
     {
      "address": "0x00A296A4",
      "ja": "イットーリョーダン",
-     "ko": "일도",
+     "ko": "일도양단",
      "kind": "dialogue-override",
      "region": "part2",
      "slot": 18,
@@ -6035,7 +5718,7 @@
     {
      "address": "0x00A296B8",
      "ja": "ハイスイノジン",
-     "ko": "배수",
+     "ko": "배수진",
      "kind": "dialogue-override",
      "region": "part2",
      "slot": 14,
@@ -6078,7 +5761,7 @@
      "address": "0x00A296C8",
      "ja": "ワンダーサーチ",
      "ko": "탐색",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 14,
      "group_id": "g_00A296C8",
@@ -6120,7 +5803,7 @@
      "address": "0x00A296D8",
      "ja": "カウンターブレイク",
      "ko": "반격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 18,
      "group_id": "g_00A296D8",
@@ -6162,7 +5845,7 @@
      "address": "0x00A296EC",
      "ja": "ヤマトダマシイ",
      "ko": "혼",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 14,
      "group_id": "g_00A296EC",
@@ -6204,7 +5887,7 @@
      "address": "0x00A296FC",
      "ja": "サムライダイブ",
      "ko": "돌격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 14,
      "group_id": "g_00A296FC",
@@ -6246,7 +5929,7 @@
      "address": "0x00A2970C",
      "ja": "ライトニングドライブ",
      "ko": "번개돌진",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A2970C",
@@ -6288,7 +5971,7 @@
      "address": "0x00A29724",
      "ja": "ライトニングアサルト",
      "ko": "번개강습",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A29724",
@@ -6330,7 +6013,7 @@
      "address": "0x00A2973C",
      "ja": "ジャイアントウェーブ",
      "ko": "큰파도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A2973C",
@@ -6372,7 +6055,7 @@
      "address": "0x00A29754",
      "ja": "ジャイアントストーム",
      "ko": "큰폭풍",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A29754",
@@ -6414,7 +6097,7 @@
      "address": "0x00A2976C",
      "ja": "スーパーチャージ",
      "ko": "충전",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A2976C",
@@ -6456,7 +6139,7 @@
      "address": "0x00A29780",
      "ja": "ビッグバンチャージ",
      "ko": "대폭발",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 18,
      "group_id": "g_00A29780",
@@ -6498,7 +6181,7 @@
      "address": "0x00A29794",
      "ja": "バーニングブロウ",
      "ko": "화염",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A29794",
@@ -6540,7 +6223,7 @@
      "address": "0x00A297A8",
      "ja": "ギガントブレイク",
      "ko": "대분쇄",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A297A8",
@@ -6582,7 +6265,7 @@
      "address": "0x00A297BC",
      "ja": "ハイパータクティクス",
      "ko": "전술",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A297BC",
@@ -6624,7 +6307,7 @@
      "address": "0x00A297D4",
      "ja": "ハイグレードコマンド",
      "ko": "지휘",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 20,
      "group_id": "g_00A297D4",
@@ -6666,7 +6349,7 @@
      "address": "0x00A297EC",
      "ja": "サイドスルー",
      "ko": "측돌파",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 12,
      "group_id": "g_00A297EC",
@@ -6708,7 +6391,7 @@
      "address": "0x00A297FC",
      "ja": "サイドワインダー",
      "ko": "측기습",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A297FC",
@@ -6750,7 +6433,7 @@
      "address": "0x00A29810",
      "ja": "ブラックウェーブ",
      "ko": "흑파도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A29810",
@@ -6792,13 +6475,13 @@
      "address": "0x00A29824",
      "ja": "ブラックストーム",
      "ko": "흑폭풍",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "part2",
      "slot": 16,
      "group_id": "g_00A29824",
      "editor_exposed": true,
      "screen_scene_assigned": true,
-     "current_screen_capture_assigned": false,
+     "current_screen_capture_assigned": true,
      "container_only": false,
      "scene_evidence": [
       {
@@ -6806,13 +6489,13 @@
        "role": "screen",
        "capture_required": true,
        "screenshot_status": "capturable",
-       "screenshot_grade": "fresh_savestate",
+       "screenshot_grade": "recorded_b31",
        "current_capture": {
-        "current": false,
+        "current": true,
         "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
         "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-        "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-        "reason": "rom_sha_mismatch"
+        "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+        "reason": "current"
        }
       }
      ],
@@ -6831,7 +6514,7 @@
       ],
       "second_level_refs": []
      },
-     "evidence_level": "screen_scene_stale_or_missing"
+     "evidence_level": "current_screen_scene"
     }
    ]
   },
@@ -6903,7 +6586,7 @@
      "address": "0x00B84E64",
      "ja": "ジャイアントウェーブ",
      "ko": "큰파도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B84E64",
@@ -6945,7 +6628,7 @@
      "address": "0x00B84E7C",
      "ja": "ライトニングアサルト",
      "ko": "번개강습",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B84E7C",
@@ -6987,7 +6670,7 @@
      "address": "0x00B84E94",
      "ja": "ワンダーサーチ",
      "ko": "탐색",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84E94",
@@ -7029,7 +6712,7 @@
      "address": "0x00B84EA4",
      "ja": "イットーリョーダン",
      "ko": "일도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B84EA4",
@@ -7071,7 +6754,7 @@
      "address": "0x00B84EB8",
      "ja": "テクニカルスナイプ",
      "ko": "저격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B84EB8",
@@ -7113,7 +6796,7 @@
      "address": "0x00B84ECC",
      "ja": "ウィニングマーチ",
      "ko": "승리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84ECC",
@@ -7155,7 +6838,7 @@
      "address": "0x00B84EE0",
      "ja": "スノウホワイト",
      "ko": "설백",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84EE0",
@@ -7197,7 +6880,7 @@
      "address": "0x00B84EF0",
      "ja": "マキシマムブロウ",
      "ko": "강타",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84EF0",
@@ -7239,7 +6922,7 @@
      "address": "0x00B84F04",
      "ja": "ハイパーリペア",
      "ko": "하이퍼수리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84F04",
@@ -7281,7 +6964,7 @@
      "address": "0x00B84F14",
      "ja": "ミラクルチャンス",
      "ko": "기적",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84F14",
@@ -7332,24 +7015,24 @@
    ],
    "source": "data/dialogue_groups.json",
    "summary": {
-    "expected_count": 459,
-    "target_count": 459,
+    "expected_count": 460,
+    "target_count": 460,
     "expected_count_match": true,
-    "editor_exposed": 459,
+    "editor_exposed": 460,
     "screen_scene_assigned": 0,
     "current_screen_capture_assigned": 0,
     "container_only": 459,
     "no_scene": 0,
-    "direct_target_visual_evidence": 13,
-    "static_pointer_refs": 406,
-    "static_external_pointer_refs": 390
+    "direct_target_visual_evidence": 6,
+    "static_pointer_refs": 382,
+    "static_external_pointer_refs": 367
    },
    "targets": [
     {
      "address": "0x00B81840",
      "ja": "腺酢維癇",
      "ko": "잠수함",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81840",
@@ -7391,7 +7074,7 @@
      "address": "0x00B81854",
      "ja": "湯楚得銭",
      "ko": "수송선",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81854",
@@ -7475,7 +7158,7 @@
      "address": "0x00B81874",
      "ja": "対空マシンガン",
      "ko": "대공 머신건",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B81874",
@@ -7516,8 +7199,8 @@
     {
      "address": "0x00B81884",
      "ja": "対潜箕紗炒",
-     "ko": "대잠미사일",
-     "kind": "import-addr-override",
+     "ko": "대잠 미사일",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81884",
@@ -7545,12 +7228,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D85390"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -7559,7 +7240,7 @@
      "address": "0x00B81890",
      "ja": "娯餌亥癇",
      "ko": "호위함",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81890",
@@ -7642,8 +7323,8 @@
     {
      "address": "0x00B818B4",
      "ja": "２〜６距離",
-     "ko": "2-6거리",
-     "kind": "import-addr-override",
+     "ko": "2～6거리",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B818B4",
@@ -7685,7 +7366,7 @@
      "address": "0x00B818C0",
      "ja": "洗寡牟",
      "ko": "전함",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B818C0",
@@ -7727,7 +7408,7 @@
      "address": "0x00B818D0",
      "ja": "湯楚芋屁璃",
      "ko": "수송헬기",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B818D0",
@@ -7854,7 +7535,7 @@
      "address": "0x00B818F4",
      "ja": "対地箕紗炒",
      "ko": "대지미사일",
-     "kind": "import-addr-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B818F4",
@@ -7896,7 +7577,7 @@
      "address": "0x00B81900",
      "ja": "洗賭羽屁璃",
      "ko": "전투헬기",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81900",
@@ -8020,10 +7701,52 @@
      "evidence_level": "container_only"
     },
     {
+     "address": "0x00B81924",
+     "ja": "",
+     "ko": "폭탄",
+     "kind": "part1-compact-ui",
+     "region": "font",
+     "slot": 4,
+     "group_id": "g_00B81924",
+     "editor_exposed": true,
+     "screen_scene_assigned": false,
+     "current_screen_capture_assigned": false,
+     "container_only": false,
+     "scene_evidence": [
+      {
+       "id": "98_extraction_noise_review",
+       "role": "excluded",
+       "capture_required": false,
+       "screenshot_status": "excluded",
+       "screenshot_grade": "not_a_scene",
+       "current_capture": {
+        "current": false,
+        "reason": "container"
+       }
+      }
+     ],
+     "direct_target_visual_evidence": false,
+     "renderer_trace_evidence": [],
+     "read_watch_evidence": [],
+     "manual_visual_evidence": [],
+     "runtime_source_proof_modes": [],
+     "synthetic_runtime_source_proof": false,
+     "static_pointer_xrefs": {
+      "pointer_ref_count": 1,
+      "external_pointer_ref_count": 1,
+      "second_level_ref_count": 0,
+      "external_pointer_refs": [
+       "0x00D850FC"
+      ],
+      "second_level_refs": []
+     },
+     "evidence_level": "no_scene"
+    },
+    {
      "address": "0x00B8192C",
      "ja": "麦夏軌忌",
      "ko": "폭격기",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B8192C",
@@ -8108,7 +7831,7 @@
      "address": "0x00B81950",
      "ja": "洗賭菟忌",
      "ko": "전투기",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81950",
@@ -8193,7 +7916,7 @@
      "address": "0x00B81970",
      "ja": "対空箕紗炒",
      "ko": "대공미사일",
-     "kind": "import-addr-override",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81970",
@@ -8280,7 +8003,7 @@
      "address": "0x00B81988",
      "ja": "バルカン砲",
      "ko": "발칸포",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81988",
@@ -8322,7 +8045,7 @@
      "address": "0x00B81994",
      "ja": "鯛倶迂煎奢",
      "ko": "대공전차",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81994",
@@ -8405,8 +8128,8 @@
     {
      "address": "0x00B819B8",
      "ja": "３〜５距離",
-     "ko": "3-5거리",
-     "kind": "import-addr-override",
+     "ko": "3～5거리",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B819B8",
@@ -8449,7 +8172,7 @@
      "address": "0x00B819C4",
      "ja": "ロケット砲",
      "ko": "로켓포",
-     "kind": "dialogue-override",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B819C4",
@@ -8535,8 +8258,8 @@
     {
      "address": "0x00B819DC",
      "ja": "２〜３距離",
-     "ko": "2-3거리",
-     "kind": "import-addr-override",
+     "ko": "2～3거리",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B819DC",
@@ -8578,7 +8301,7 @@
      "address": "0x00B819E8",
      "ja": "キャノン砲",
      "ko": "캐논포",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B819E8",
@@ -8621,7 +8344,7 @@
      "address": "0x00B819F4",
      "ja": "磁蘇卯鳳",
      "ko": "자주포",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B819F4",
@@ -8706,7 +8429,7 @@
      "address": "0x00B81A14",
      "ja": "湯楚宇奢",
      "ko": "보급차",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81A14",
@@ -8747,10 +8470,10 @@
     {
      "address": "0x00B81A20",
      "ja": "補給輸送車",
-     "ko": "보급수송차",
-     "kind": "import-addr-override",
+     "ko": "보급 수송차",
+     "kind": null,
      "region": "font",
-     "slot": 10,
+     "slot": null,
      "group_id": "g_00B81A20",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -8776,12 +8499,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D84BCC"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -8876,7 +8597,7 @@
      "address": "0x00B81A40",
      "ja": "邸鎖津奢",
      "ko": "정찰차",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81A40",
@@ -8960,7 +8681,7 @@
      "address": "0x00B81A60",
      "ja": "軽戦車砲",
      "ko": "경전차포",
-     "kind": "import-addr-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81A60",
@@ -9002,7 +8723,7 @@
      "address": "0x00B81A6C",
      "ja": "卦揖煎奢",
      "ko": "경전차",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81A6C",
@@ -9086,7 +8807,7 @@
      "address": "0x00B81A94",
      "ja": "重戦車砲",
      "ko": "중전차포",
-     "kind": "import-addr-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81A94",
@@ -9128,7 +8849,7 @@
      "address": "0x00B81AA0",
      "ja": "呪鵜煎奢",
      "ko": "중전차",
-     "kind": "fixed_zero_text",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B81AA0",
@@ -9212,7 +8933,7 @@
      "address": "0x00B81AC0",
      "ja": "バズーカ砲",
      "ko": "바주카포",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81AC0",
@@ -9254,7 +8975,7 @@
      "address": "0x00B81ACC",
      "ja": "バズーカ兵",
      "ko": "바주카병",
-     "kind": "dialogue-override",
+     "kind": "part1-unit-compact-name",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81ACC",
@@ -9381,7 +9102,7 @@
      "address": "0x00B81B04",
      "ja": "マシンガン",
      "ko": "머신건",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81B04",
@@ -9427,8 +9148,8 @@
     {
      "address": "0x00B81B14",
      "ja": "装備していません",
-     "ko": "장비 없음",
-     "kind": "import-addr-override",
+     "ko": "미장비",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B81B14",
@@ -9548,12 +9269,13 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 3,
-      "external_pointer_ref_count": 3,
+      "pointer_ref_count": 4,
+      "external_pointer_ref_count": 4,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88CA0",
        "0x00F306F0",
+       "0x00F30748",
        "0x00F30818"
       ],
       "second_level_refs": []
@@ -9810,7 +9532,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88C88",
-       "0x00F30888"
+       "0x00F30898"
       ],
       "second_level_refs": []
      },
@@ -9853,7 +9575,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88C84",
-       "0x00F308A8"
+       "0x00F308B8"
       ],
       "second_level_refs": []
      },
@@ -9896,7 +9618,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88C80",
-       "0x00F308B8"
+       "0x00F308C8"
       ],
       "second_level_refs": []
      },
@@ -9939,7 +9661,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88C7C",
-       "0x00F308D0"
+       "0x00F308E0"
       ],
       "second_level_refs": []
      },
@@ -9982,7 +9704,7 @@
       "second_level_ref_count": 1,
       "external_pointer_refs": [
        "0x00D88C78",
-       "0x00F308E8"
+       "0x00F308F8"
       ],
       "second_level_refs": [
        "0x00B43C80"
@@ -10030,7 +9752,7 @@
        "0x00D8B608",
        "0x00D8B6BC",
        "0x00D8B770",
-       "0x00F30908"
+       "0x00F30918"
       ],
       "second_level_refs": []
      },
@@ -10076,7 +9798,7 @@
        "0x00D8B5CC",
        "0x00D8B680",
        "0x00D8B734",
-       "0x00F30920"
+       "0x00F30930"
       ],
       "second_level_refs": []
      },
@@ -10122,7 +9844,7 @@
        "0x00D8B590",
        "0x00D8B644",
        "0x00D8B6F8",
-       "0x00F30938"
+       "0x00F30948"
       ],
       "second_level_refs": []
      },
@@ -10131,8 +9853,8 @@
     {
      "address": "0x00B81D80",
      "ja": "最強のライバル！",
-     "ko": "최강 라이벌",
-     "kind": "import-csv",
+     "ko": "최강의 라이벌!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B81D80",
@@ -10165,7 +9887,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B4A0",
-       "0x00F30950"
+       "0x00F30960"
       ],
       "second_level_refs": []
      },
@@ -10174,8 +9896,8 @@
     {
      "address": "0x00B81D94",
      "ja": "決着！シッコクノモリ！",
-     "ko": "칠흑숲 결전",
-     "kind": "import-csv",
+     "ko": "결판! 칠흑의 숲!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 22,
      "group_id": "g_00B81D94",
@@ -10208,7 +9930,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B464",
-       "0x00F30978"
+       "0x00F30990"
       ],
       "second_level_refs": []
      },
@@ -10217,7 +9939,7 @@
     {
      "address": "0x00B81DB4",
      "ja": "２人のリョウ",
-     "ko": "두 명의 료",
+     "ko": "2명의 료",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 12,
@@ -10246,12 +9968,11 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 1,
+      "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
-       "0x00D8B3EC",
-       "0x00F309A0"
+       "0x00D8B3EC"
       ],
       "second_level_refs": []
      },
@@ -10260,7 +9981,7 @@
     {
      "address": "0x00B81DC4",
      "ja": "戦いのうしろで",
-     "ko": "싸움 뒤편에서",
+     "ko": "전투 뒤에서",
      "kind": "import-csv",
      "region": "font",
      "slot": 14,
@@ -10296,7 +10017,7 @@
        "0x00D8B338",
        "0x00D8B374",
        "0x00D8B3B0",
-       "0x00F309C0"
+       "0x00F309D8"
       ],
       "second_level_refs": []
      },
@@ -10305,8 +10026,8 @@
     {
      "address": "0x00B81DD4",
      "ja": "おおいなるつばさ！",
-     "ko": "거대 날개",
-     "kind": "import-csv",
+     "ko": "거대한 날개!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B81DD4",
@@ -10341,7 +10062,7 @@
        "0x00D8B284",
        "0x00D8B2C0",
        "0x00D8B2FC",
-       "0x00F309F0"
+       "0x00F30A00"
       ],
       "second_level_refs": []
      },
@@ -10386,7 +10107,7 @@
        "0x00D8B1D0",
        "0x00D8B20C",
        "0x00D8B248",
-       "0x00F30A10"
+       "0x00F30A28"
       ],
       "second_level_refs": []
      },
@@ -10395,8 +10116,8 @@
     {
      "address": "0x00B81DF0",
      "ja": "キャプテン・モップ！",
-     "ko": "캡틴 모프",
-     "kind": "import-csv",
+     "ko": "캡틴 모프!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B81DF0",
@@ -10431,7 +10152,7 @@
        "0x00D8B11C",
        "0x00D8B158",
        "0x00D8B194",
-       "0x00F30A20"
+       "0x00F30A38"
       ],
       "second_level_refs": []
      },
@@ -10440,10 +10161,10 @@
     {
      "address": "0x00B81E08",
      "ja": "アスカのねらい！",
-     "ko": "아스카 목표",
-     "kind": "import-csv",
+     "ko": "아스카의 노림수!",
+     "kind": null,
      "region": "font",
-     "slot": 16,
+     "slot": null,
      "group_id": "g_00B81E08",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10469,13 +10190,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8B0E0",
-       "0x00F30A40"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10483,10 +10201,10 @@
     {
      "address": "0x00B81E1C",
      "ja": "ドミノの能力！",
-     "ko": "도미노 능력",
-     "kind": "import-addr-override",
+     "ko": "도미노의 능력!",
+     "kind": null,
      "region": "font",
-     "slot": 14,
+     "slot": null,
      "group_id": "g_00B81E1C",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10512,13 +10230,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8B0A4",
-       "0x00F30A68"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10526,8 +10241,8 @@
     {
      "address": "0x00B81E2C",
      "ja": "分断作戦！",
-     "ko": "분단 작전",
-     "kind": "import-addr-override",
+     "ko": "분단 작전!",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B81E2C",
@@ -10560,7 +10275,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B068",
-       "0x00F30A90"
+       "0x00F30A58"
       ],
       "second_level_refs": []
      },
@@ -10569,8 +10284,8 @@
     {
      "address": "0x00B81E38",
      "ja": "キクチヨのまちがい？",
-     "ko": "키쿠치요 실수",
-     "kind": "import-csv",
+     "ko": "키쿠치요의 실수?",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B81E38",
@@ -10603,7 +10318,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B02C",
-       "0x00F30AB0"
+       "0x00F30A78"
       ],
       "second_level_refs": []
      },
@@ -10612,10 +10327,10 @@
     {
      "address": "0x00B81E50",
      "ja": "最強！キクチヨ部隊",
-     "ko": "최강 키쿠치요부대",
-     "kind": "import-csv",
+     "ko": "최강! 키쿠치요 부대",
+     "kind": null,
      "region": "font",
-     "slot": 18,
+     "slot": null,
      "group_id": "g_00B81E50",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10641,13 +10356,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AFF0",
-       "0x00F30AE0"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10655,8 +10367,8 @@
     {
      "address": "0x00B81E64",
      "ja": "キクチヨけんざん！",
-     "ko": "키쿠치요 등장",
-     "kind": "import-csv",
+     "ko": "키쿠치요 등장!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B81E64",
@@ -10689,7 +10401,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AFB4",
-       "0x00F30B20"
+       "0x00F30AB0"
       ],
       "second_level_refs": []
      },
@@ -10698,10 +10410,10 @@
     {
      "address": "0x00B81E78",
      "ja": "特殊部隊長ドミノ！",
-     "ko": "특수부대 도미노",
-     "kind": "import-csv",
+     "ko": "특수 부대장 도미노!",
+     "kind": null,
      "region": "font",
-     "slot": 18,
+     "slot": null,
      "group_id": "g_00B81E78",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10727,13 +10439,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AF78",
-       "0x00F30B50"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10741,10 +10450,10 @@
     {
      "address": "0x00B81E8C",
      "ja": "３人の過去",
-     "ko": "세명 과거",
-     "kind": "import-addr-override",
+     "ko": "3명의 과거",
+     "kind": null,
      "region": "font",
-     "slot": 10,
+     "slot": null,
      "group_id": "g_00B81E8C",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10770,13 +10479,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AF3C",
-       "0x00F30B88"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10784,10 +10490,10 @@
     {
      "address": "0x00B81E98",
      "ja": "雪の中の戦い！",
-     "ko": "설원 전투",
-     "kind": "import-csv",
+     "ko": "눈 속의 싸움!",
+     "kind": null,
      "region": "font",
-     "slot": 14,
+     "slot": null,
      "group_id": "g_00B81E98",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -10813,13 +10519,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AF00",
-       "0x00F30BA8"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -10827,8 +10530,8 @@
     {
      "address": "0x00B81EA8",
      "ja": "スナイパー！",
-     "ko": "스나이퍼",
-     "kind": "import-csv",
+     "ko": "스나이퍼!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B81EA8",
@@ -10861,7 +10564,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AEC4",
-       "0x00F30BC8"
+       "0x00F30AE0"
       ],
       "second_level_refs": []
      },
@@ -10870,8 +10573,8 @@
     {
      "address": "0x00B81EB8",
      "ja": "ホイップ海軍ターボ！",
-     "ko": "호이프 해군 터보",
-     "kind": "import-csv",
+     "ko": "호이프 해군 터보!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B81EB8",
@@ -10904,7 +10607,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AE4C",
-       "0x00F30BE8"
+       "0x00F30B00"
       ],
       "second_level_refs": []
      },
@@ -10913,8 +10616,8 @@
     {
      "address": "0x00B81ED0",
      "ja": "ホイップ海軍！",
-     "ko": "호이프 해군",
-     "kind": "import-addr-override",
+     "ko": "호이프 해군!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B81ED0",
@@ -10947,7 +10650,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AE10",
-       "0x00F30C20"
+       "0x00F30B38"
       ],
       "second_level_refs": []
      },
@@ -10956,8 +10659,8 @@
     {
      "address": "0x00B81EE0",
      "ja": "マックスの弱点！？",
-     "ko": "맥스 약점",
-     "kind": "import-csv",
+     "ko": "맥스의 약점!?",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B81EE0",
@@ -10990,7 +10693,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8ADD4",
-       "0x00F30C48"
+       "0x00F30B60"
       ],
       "second_level_refs": []
      },
@@ -10999,8 +10702,8 @@
     {
      "address": "0x00B81EF4",
      "ja": "マックス出撃！",
-     "ko": "맥스 출격",
-     "kind": "import-addr-override",
+     "ko": "맥스 출격!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B81EF4",
@@ -11034,7 +10737,7 @@
       "external_pointer_refs": [
        "0x00D8AD98",
        "0x00D8AE88",
-       "0x00F30C68"
+       "0x00F30B88"
       ],
       "second_level_refs": []
      },
@@ -11043,10 +10746,10 @@
     {
      "address": "0x00B81F04",
      "ja": "空の勇者！",
-     "ko": "하늘 용사",
-     "kind": "import-addr-override",
+     "ko": "하늘의 용사!",
+     "kind": null,
      "region": "font",
-     "slot": 10,
+     "slot": null,
      "group_id": "g_00B81F04",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11072,13 +10775,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AD5C",
-       "0x00F30C88"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -11086,8 +10786,8 @@
     {
      "address": "0x00B81F10",
      "ja": "ガンファイター！",
-     "ko": "건 파이터",
-     "kind": "import-csv",
+     "ko": "건 파이터!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B81F10",
@@ -11120,7 +10820,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AD20",
-       "0x00F30CA8"
+       "0x00F30BA8"
       ],
       "second_level_refs": []
      },
@@ -11163,7 +10863,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8ACE4",
-       "0x00F30CC8"
+       "0x00F30BC8"
       ],
       "second_level_refs": []
      },
@@ -11206,7 +10906,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8ACA8",
-       "0x00F30CD8"
+       "0x00F30BD8"
       ],
       "second_level_refs": []
      },
@@ -11246,23 +10946,23 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
        "scene_id": "15_part1_operation_logos",
        "base_text": "결전",
-       "mutation_text": "검증",
+       "mutation_text": "검전",
        "slot": 6,
-       "encoded_hex": "88569052",
+       "encoded_hex": "88568fc8",
        "base_encoded_hex": "88608fc8",
        "old_hex": "88608fc82020",
-       "new_hex": "885690522020",
-       "contact_sheet_sha256": "daa89101d83ee592decac343757b15ee987b5eb0ffff0b2e68e8e7777535bdb7",
-       "pixel_diff_count": 58,
+       "new_hex": "88568fc82020",
+       "contact_sheet_sha256": "6642304feb222d68e4e1756961b068dcb7ba043d27e16ae3f2784316a42943d5",
+       "pixel_diff_count": 30,
        "diff_bbox": [
         9,
-        91,
-        24,
-        102
+        92,
+        16,
+        101
        ],
        "expected_diff_box": [
         0,
@@ -11273,14 +10973,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down13_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down13/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_diff_mask.png",
-       "diff_mask_sha256": "2636769427848d3dea04714c0f6c34053fcfaf666e4abcf00c953e6a6120d031",
+       "diff_mask_sha256": "efc7d590df3b7f7a714237e910760e7aa79ba5177408fddde0ebdc4fd93d4198",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F38_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -11295,7 +10995,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AC6C",
-       "0x00F30CF8"
+       "0x00F30BF8"
       ],
       "second_level_refs": []
      },
@@ -11304,10 +11004,10 @@
     {
      "address": "0x00B81F40",
      "ja": "白銀の世界",
-     "ko": "은빛 세계",
-     "kind": "import-addr-override",
+     "ko": "백은의 세계",
+     "kind": null,
      "region": "font",
-     "slot": 10,
+     "slot": null,
      "group_id": "g_00B81F40",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11326,74 +11026,25 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81F40",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "은빛 세계",
-       "mutation_text": "검증 세계",
-       "slot": 10,
-       "encoded_hex": "8856905281408dcf8865",
-       "base_encoded_hex": "8f7e8d6d81408dcf8865",
-       "old_hex": "8f7e8d6d81408dcf8865",
-       "new_hex": "8856905281408dcf8865",
-       "contact_sheet_sha256": "05361e5f2dd5c44dc663a4588542f51a1e4b296ad94d33fb6d6a9bbc70da0a89",
-       "pixel_diff_count": 67,
-       "diff_bbox": [
-        9,
-        91,
-        24,
-        102
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_diff_mask.png",
-       "diff_mask_sha256": "0452eff567f5f1f8bd225155d182390c4deb29ca063b77f757477c4ab4a8141b",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F40_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81F40 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AC30",
-       "0x00F30D08"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B81F4C",
      "ja": "海のむこうに",
-     "ko": "바다 너머",
+     "ko": "바다 저편에",
      "kind": "import-csv",
      "region": "font",
      "slot": 12,
@@ -11424,22 +11075,22 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
-       "base_text": "바다 너머",
-       "mutation_text": "검증 너머",
+       "base_text": "바다 저편에",
+       "mutation_text": "검다 저편에",
        "slot": 12,
-       "encoded_hex": "885690528140895c8be3",
-       "base_encoded_hex": "8ca689e28140895c8be3",
-       "old_hex": "8ca689e28140895c8be32020",
-       "new_hex": "885690528140895c8be32020",
-       "contact_sheet_sha256": "1bea389a30e780980385e700e19d7c99e20226e08dbfa7a36874e1f3f475f98f",
-       "pixel_diff_count": 77,
+       "encoded_hex": "885689e281408fc6926f8ed3",
+       "base_encoded_hex": "8ca689e281408fc6926f8ed3",
+       "old_hex": "8ca689e281408fc6926f8ed3",
+       "new_hex": "885689e281408fc6926f8ed3",
+       "contact_sheet_sha256": "0f48c566be5ef0a150859d138464a50433167cf19fe02a69c8cf4b13968849bc",
+       "pixel_diff_count": 44,
        "diff_bbox": [
         9,
         75,
-        23,
+        16,
         86
        ],
        "expected_diff_box": [
@@ -11451,14 +11102,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_diff_mask.png",
-       "diff_mask_sha256": "ef7c7c26bf462135fea5ac4647f2e9b3fd8c4fa2830c2362b4734f089de302b8",
+       "diff_mask_sha256": "d1f6ec6bbccdc14d173df3416459501eba401b98dd7c70f23a3973cf73464538",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -11473,7 +11124,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8ABF4",
-       "0x00F30D28"
+       "0x00F30C08"
       ],
       "second_level_refs": []
      },
@@ -11482,8 +11133,8 @@
     {
      "address": "0x00B81F5C",
      "ja": "ドッグファイト！",
-     "ko": "도그 파이트",
-     "kind": "import-csv",
+     "ko": "도그 파이트!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B81F5C",
@@ -11513,22 +11164,22 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
-       "base_text": "도그 파이트",
-       "mutation_text": "검증 파이트",
+       "base_text": "도그　파이트！",
+       "mutation_text": "검그　파이트！",
        "slot": 16,
-       "encoded_hex": "88569052814092598fa291f9",
-       "base_encoded_hex": "8a5a8887814092598fa291f9",
-       "old_hex": "8a5a8887814092598fa291f920202020",
-       "new_hex": "88569052814092598fa291f920202020",
-       "contact_sheet_sha256": "268031330049a0f24a2d80f56470fc874c55b9ac3942488a9d7aed8e46312fcb",
-       "pixel_diff_count": 70,
+       "encoded_hex": "88568887814092598fa291f98149",
+       "base_encoded_hex": "8a5a8887814092598fa291f98149",
+       "old_hex": "8a5a8887814092598fa291f981492020",
+       "new_hex": "88568887814092598fa291f981492020",
+       "contact_sheet_sha256": "7ae519c08b99f2238d6025a200be05bc3247489517c814deba409e4970b61fcf",
+       "pixel_diff_count": 44,
        "diff_bbox": [
         9,
         59,
-        24,
+        16,
         70
        ],
        "expected_diff_box": [
@@ -11540,14 +11191,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down10_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_diff_mask.png",
-       "diff_mask_sha256": "f4f4fa1abb566ef64f0189d74c97872d3c01cbc4a52db883eb6977140fbec5d1",
+       "diff_mask_sha256": "c1972535013794bae6f3909cffc627eee423d3e32a4c8d3d562cacf7d443f548",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -11562,7 +11213,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8ABB8",
-       "0x00F30D48"
+       "0x00F30C30"
       ],
       "second_level_refs": []
      },
@@ -11571,10 +11222,10 @@
     {
      "address": "0x00B81F70",
      "ja": "大空を制せよ！",
-     "ko": "대공 제압",
-     "kind": "import-csv",
+     "ko": "대공을 제압하라!",
+     "kind": null,
      "region": "font",
-     "slot": 14,
+     "slot": null,
      "group_id": "g_00B81F70",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11593,77 +11244,28 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81F70",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "대공 제압",
-       "mutation_text": "검증 제압",
-       "slot": 14,
-       "encoded_hex": "8856905281408fd48eae",
-       "base_encoded_hex": "89f4886d81408fd48eae",
-       "old_hex": "89f4886d81408fd48eae20202020",
-       "new_hex": "8856905281408fd48eae20202020",
-       "contact_sheet_sha256": "bb55cc4aaee699946e6c220866f41987b1828604a82e191d460c686633b89afb",
-       "pixel_diff_count": 43,
-       "diff_bbox": [
-        9,
-        91,
-        23,
-        102
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_diff_mask.png",
-       "diff_mask_sha256": "6a6c260160b1cfdb234ba6b944c8daa7804ee319ff2ba648d8e2e85b5b69fa13",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F70_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81F70 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AB7C",
-       "0x00F30D70"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B81F80",
      "ja": "空から来るものは・・・",
-     "ko": "하늘의 적",
-     "kind": "import-csv",
+     "ko": "하늘에서 오는 건・・・",
+     "kind": null,
      "region": "font",
-     "slot": 22,
+     "slot": null,
      "group_id": "g_00B81F80",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11682,75 +11284,26 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81F80",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "하늘의 적",
-       "mutation_text": "검증의 적",
-       "slot": 22,
-       "encoded_hex": "885690528fa181408fc7",
-       "base_encoded_hex": "92a989cc8fa181408fc7",
-       "old_hex": "92a989cc8fa181408fc7202020202020202020202020",
-       "new_hex": "885690528fa181408fc7202020202020202020202020",
-       "contact_sheet_sha256": "2eb35c98d3dc6b6663db5269fc43aaea4aca5424d35aee48c4655a76891df5c2",
-       "pixel_diff_count": 82,
-       "diff_bbox": [
-        9,
-        91,
-        24,
-        102
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down6_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_diff_mask.png",
-       "diff_mask_sha256": "2761d970ad037ee3352b8593a1e76d87cef403d5e327ae6051258fa5ebb250b3",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F80_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81F80 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AB40",
-       "0x00F30D90"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B81F98",
      "ja": "ドラゴンフライ！",
-     "ko": "드래곤 플라이",
-     "kind": "import-csv",
+     "ko": "드래곤플라이!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B81F98",
@@ -11780,22 +11333,22 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
-       "base_text": "드래곤 플라이",
-       "mutation_text": "검증 플라이",
+       "base_text": "드래곤플라이！",
+       "mutation_text": "검래곤플라이！",
        "slot": 16,
-       "encoded_hex": "88569052814092a08adf8fa2",
-       "base_encoded_hex": "8a7c8aec8868814092a08adf8fa2",
-       "old_hex": "8a7c8aec8868814092a08adf8fa22020",
-       "new_hex": "88569052814092a08adf8fa220202020",
-       "contact_sheet_sha256": "05fe171d2d57504a01fa4f3ef133b53a827efb59b7f538799ad724867e118270",
-       "pixel_diff_count": 246,
+       "encoded_hex": "88568aec886892a08adf8fa28149",
+       "base_encoded_hex": "8a7c8aec886892a08adf8fa28149",
+       "old_hex": "8a7c8aec886892a08adf8fa281492020",
+       "new_hex": "88568aec886892a08adf8fa281492020",
+       "contact_sheet_sha256": "59c6054b7c3426866c42651d27c6ab5d451d573253df81f4688f7b5b6638fa96",
+       "pixel_diff_count": 43,
        "diff_bbox": [
         9,
         59,
-        64,
+        16,
         70
        ],
        "expected_diff_box": [
@@ -11807,14 +11360,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down7_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down7/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_diff_mask.png",
-       "diff_mask_sha256": "f414ec8b77332349f3a55be4ac149346e25425cf370a3ca6ca9e63eb5152194f",
+       "diff_mask_sha256": "c7f103ff3c92cfbbe978c380252ab991c0f62cbd53cba757e0208af578b37ab7",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81F98_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -11829,7 +11382,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AB04",
-       "0x00F30DB0"
+       "0x00F30C58"
       ],
       "second_level_refs": []
      },
@@ -11838,10 +11391,10 @@
     {
      "address": "0x00B81FAC",
      "ja": "地上最強！重戦車！！",
-     "ko": "최강 중전차",
-     "kind": "import-csv",
+     "ko": "지상 최강! 중전차!!",
+     "kind": null,
      "region": "font",
-     "slot": 20,
+     "slot": null,
      "group_id": "g_00B81FAC",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11860,77 +11413,28 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81FAC",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "최강 중전차",
-       "mutation_text": "검증 중전차",
-       "slot": 20,
-       "encoded_hex": "8856905281408fef8fc890b4",
-       "base_encoded_hex": "90eb884981408fef8fc890b4",
-       "old_hex": "90eb884981408fef8fc890b42020202020202020",
-       "new_hex": "8856905281408fef8fc890b42020202020202020",
-       "contact_sheet_sha256": "53ff708eae77c882870b5ca26ac92dbd87f49e585e65d250d591a003a3eb4f20",
-       "pixel_diff_count": 47,
-       "diff_bbox": [
-        9,
-        91,
-        24,
-        102
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_diff_mask.png",
-       "diff_mask_sha256": "89496ff251ed49575720c8be215ed7d264a0c85bfb2b4808e01818716806dc3b",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FAC_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81FAC produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AAC8",
-       "0x00F30DE0"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B81FC4",
      "ja": "敵部隊をやっつけろ！",
-     "ko": "적 부대 격파",
-     "kind": "import-csv",
+     "ko": "적 부대를 해치워라!",
+     "kind": null,
      "region": "font",
-     "slot": 20,
+     "slot": null,
      "group_id": "g_00B81FC4",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -11949,75 +11453,26 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81FC4",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "적 부대 격파",
-       "mutation_text": "검증 부대 격파",
-       "slot": 20,
-       "encoded_hex": "8856905281408d5689f48140885e9259",
-       "base_encoded_hex": "8fc781408d5689f48140885e9259",
-       "old_hex": "8fc781408d5689f48140885e9259202020202020",
-       "new_hex": "8856905281408d5689f48140885e925920202020",
-       "contact_sheet_sha256": "5b3ecc305de2bf71385231829e27ed53641f2aee1a835c29e7c70683546b31f6",
-       "pixel_diff_count": 267,
-       "diff_bbox": [
-        10,
-        75,
-        72,
-        86
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_down4_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_diff_mask.png",
-       "diff_mask_sha256": "a6e41155dd06169aac5707a65616397b0cc235b146137c41b154019af451b0ab",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FC4_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81FC4 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AA8C",
-       "0x00F30E08"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B81FDC",
      "ja": "戦え　ポンコツ戦車！",
-     "ko": "고물 전차 출격",
-     "kind": "import-csv",
+     "ko": "싸워라　고물 전차!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B81FDC",
@@ -12047,22 +11502,22 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
-       "base_text": "고물 전차 출격",
-       "mutation_text": "검증 전차 출격",
+       "base_text": "싸워라　고물　전차！",
+       "mutation_text": "검워라　고물　전차！",
        "slot": 20,
-       "encoded_hex": "8856905281408fc890b4814090f8885e",
-       "base_encoded_hex": "88668c6c81408fc890b4814090f8885e",
-       "old_hex": "88668c6c81408fc890b4814090f8885e20202020",
-       "new_hex": "8856905281408fc890b4814090f8885e20202020",
-       "contact_sheet_sha256": "5c15b73d780630b9f8da174528f51308ad7e5f52b274483b4d423fdbbfc82307",
-       "pixel_diff_count": 77,
+       "encoded_hex": "88568f6c8adf814088668c6c81408fc890b48149",
+       "base_encoded_hex": "8e5b8f6c8adf814088668c6c81408fc890b48149",
+       "old_hex": "8e5b8f6c8adf814088668c6c81408fc890b48149",
+       "new_hex": "88568f6c8adf814088668c6c81408fc890b48149",
+       "contact_sheet_sha256": "0a038180afab37134b9e286db5b298d9c0e5430b4b45e4f0d06b5ba9d73fca93",
+       "pixel_diff_count": 47,
        "diff_bbox": [
         9,
         91,
-        24,
+        16,
         102
        ],
        "expected_diff_box": [
@@ -12074,14 +11529,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down0/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_diff_mask.png",
-       "diff_mask_sha256": "61117de73fe4493661993ad425da46aa5440ada868403949f44f2ebe21c986c7",
+       "diff_mask_sha256": "f992ac3a55df11d22d66fc02618cd48315535da34343462c8afa1ea8323423a1",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81FDC produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -12096,7 +11551,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8AA50",
-       "0x00F30E30"
+       "0x00F30C88"
       ],
       "second_level_refs": []
      },
@@ -12105,10 +11560,10 @@
     {
      "address": "0x00B81FF4",
      "ja": "前線基地を確保せよ！",
-     "ko": "전선 기지 확보",
-     "kind": "import-csv",
+     "ko": "전선 기지를 확보하라!",
+     "kind": null,
      "region": "font",
-     "slot": 20,
+     "slot": null,
      "group_id": "g_00B81FF4",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -12127,69 +11582,20 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B81FF4",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "전선 기지 확보",
-       "mutation_text": "검증 기지 확보",
-       "slot": 20,
-       "encoded_hex": "885690528140888f9054814092ed8d46",
-       "base_encoded_hex": "8fc88dc28140888f9054814092ed8d46",
-       "old_hex": "8fc88dc28140888f9054814092ed8d4620202020",
-       "new_hex": "885690528140888f9054814092ed8d4620202020",
-       "contact_sheet_sha256": "b088e42729f2021be59969861446f9b9c96acbfb7c72a2226ee434c3d23bf916",
-       "pixel_diff_count": 49,
-       "diff_bbox": [
-        10,
-        75,
-        24,
-        86
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_diff_mask.png",
-       "diff_mask_sha256": "fcb58a001996c5ce60d0aafbd74eb406a97364a9706c8e7a300438a1eb0b1980",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B81FF4_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B81FF4 produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 2,
-      "external_pointer_ref_count": 2,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8AA14",
-       "0x00F30E60"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B8200C",
@@ -12225,22 +11631,22 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+       "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "첫 전투",
-       "mutation_text": "시험전투",
+       "mutation_text": "검 전투",
        "slot": 8,
-       "encoded_hex": "8e4f92c98fc891f4",
+       "encoded_hex": "885681408fc891f4",
        "base_encoded_hex": "90dc81408fc891f4",
        "old_hex": "90dc81408fc891f4",
-       "new_hex": "8e4f92c98fc891f4",
-       "contact_sheet_sha256": "20b6d4a4f5475e6042b78c4bb1d0d4f3637431e99bf037e03693ed32fe4a6449",
-       "pixel_diff_count": 66,
+       "new_hex": "885681408fc891f4",
+       "contact_sheet_sha256": "ab3cd890e064060fe7ad86bc60ce48442c737954ec464855ed571bf2b4933eba",
+       "pixel_diff_count": 31,
        "diff_bbox": [
         9,
         59,
-        24,
+        16,
         70
        ],
        "expected_diff_box": [
@@ -12252,14 +11658,14 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/relgate2/manual_down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/release_C/relgate2/manual_down0/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
        "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_diff_mask.png",
-       "diff_mask_sha256": "93f92625d049607a447bdd77ef1db0bae1d62f7eab39a0e57a32653b21bb01d9",
+       "diff_mask_sha256": "523a55a9c7a260d13d3c99a42538c9d02276da0d65e1507fa11cad3e6f503503",
        "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B8200C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B8200C produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
@@ -12274,7 +11680,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A9D8",
-       "0x00F30E90"
+       "0x00F30CC0"
       ],
       "second_level_refs": []
      },
@@ -12283,8 +11689,8 @@
     {
      "address": "0x00B82018",
      "ja": "戦闘開始！",
-     "ko": "전투 개시",
-     "kind": "import-addr-override",
+     "ko": "전투 개시!",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B82018",
@@ -12305,56 +11711,10 @@
        }
       }
      ],
-     "direct_target_visual_evidence": true,
+     "direct_target_visual_evidence": false,
      "renderer_trace_evidence": [],
      "read_watch_evidence": [],
-     "manual_visual_evidence": [
-      {
-       "address": "0x00B82018",
-       "group": "b8_compact_display_table_all",
-       "type": "single_address_mutation_pixel_diff",
-       "current_rom": true,
-       "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-       "checkpoint": "41_part1_operation_room",
-       "scene_id": "15_part1_operation_logos",
-       "base_text": "전투 개시",
-       "mutation_text": "검증 개시",
-       "slot": 10,
-       "encoded_hex": "885690528140884e8e4f",
-       "base_encoded_hex": "8fc891f48140884e8e4f",
-       "old_hex": "8fc891f48140884e8e4f",
-       "new_hex": "885690528140884e8e4f",
-       "contact_sheet_sha256": "1c7c98d7ab6c7e15016ccd5067c68dde8b92e240dce77c264720f459a36bd363",
-       "pixel_diff_count": 54,
-       "diff_bbox": [
-        10,
-        43,
-        24,
-        54
-       ],
-       "expected_diff_box": [
-        0,
-        32,
-        80,
-        104
-       ],
-       "diff_bbox_within_expected_box": true,
-       "null_control": {
-        "enabled": true,
-        "base_repeat_frame": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/e12_b8_operation_mutations_current_20260706_base_59c/base_repeat_diff_mask.png",
-        "pixel_diff_count": 0,
-        "diff_bbox": null,
-        "deterministic": true
-       },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_diff_mask.png",
-       "diff_mask_sha256": "f03e5b1c8f7750af7adda934c765f8510dc7b1e6561ac285ad42247db5bd34cc",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-06-27/b8_compact_display_table_all_00B82018_mutation_contact.png",
-       "note": "Single-address mutation at 0x00B82018 produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
-       "accepted": true,
-       "validation_errors": []
-      }
-     ],
+     "manual_visual_evidence": [],
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
@@ -12363,11 +11723,11 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A99C",
-       "0x00F30EA8"
+       "0x00F30CD8"
       ],
       "second_level_refs": []
      },
-     "evidence_level": "manual_visual_mutation"
+     "evidence_level": "container_only"
     },
     {
      "address": "0x00B82024",
@@ -12406,7 +11766,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A960",
-       "0x00F30EC8"
+       "0x00F30CF8"
       ],
       "second_level_refs": []
      },
@@ -12449,7 +11809,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A924",
-       "0x00F30EF0"
+       "0x00F30D20"
       ],
       "second_level_refs": []
      },
@@ -12492,7 +11852,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A8E8",
-       "0x00F30F20"
+       "0x00F30D50"
       ],
       "second_level_refs": []
      },
@@ -12535,7 +11895,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A8AC",
-       "0x00F30F40"
+       "0x00F30D70"
       ],
       "second_level_refs": []
      },
@@ -12578,7 +11938,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A870",
-       "0x00F30F68"
+       "0x00F30D98"
       ],
       "second_level_refs": []
      },
@@ -12621,7 +11981,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A834",
-       "0x00F30F88"
+       "0x00F30DB8"
       ],
       "second_level_refs": []
      },
@@ -12664,7 +12024,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A7F8",
-       "0x00F30FB8"
+       "0x00F30DE8"
       ],
       "second_level_refs": []
      },
@@ -12707,7 +12067,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A7BC",
-       "0x00F30FD8"
+       "0x00F30E08"
       ],
       "second_level_refs": []
      },
@@ -12750,7 +12110,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A780",
-       "0x00F30FF8"
+       "0x00F30E28"
       ],
       "second_level_refs": []
      },
@@ -12793,7 +12153,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A744",
-       "0x00F31018"
+       "0x00F30E48"
       ],
       "second_level_refs": []
      },
@@ -12835,7 +12195,7 @@
       "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
-       "0x00F31040"
+       "0x00F30E70"
       ],
       "second_level_refs": []
      },
@@ -12878,7 +12238,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A6CC",
-       "0x00F31070"
+       "0x00F30EA0"
       ],
       "second_level_refs": []
      },
@@ -12921,7 +12281,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A690",
-       "0x00F31090"
+       "0x00F30EC0"
       ],
       "second_level_refs": []
      },
@@ -12964,7 +12324,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A654",
-       "0x00F310C0"
+       "0x00F30EF0"
       ],
       "second_level_refs": []
      },
@@ -13007,7 +12367,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A618",
-       "0x00F310E0"
+       "0x00F30F10"
       ],
       "second_level_refs": []
      },
@@ -13050,7 +12410,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A5DC",
-       "0x00F31100"
+       "0x00F30F30"
       ],
       "second_level_refs": []
      },
@@ -13093,7 +12453,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A5A0",
-       "0x00F31118"
+       "0x00F30F48"
       ],
       "second_level_refs": []
      },
@@ -13136,7 +12496,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A564",
-       "0x00F31130"
+       "0x00F30F60"
       ],
       "second_level_refs": []
      },
@@ -13179,7 +12539,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A528",
-       "0x00F31158"
+       "0x00F30F88"
       ],
       "second_level_refs": []
      },
@@ -13219,14 +12579,12 @@
      "static_pointer_xrefs": {
       "pointer_ref_count": 2,
       "external_pointer_ref_count": 2,
-      "second_level_ref_count": 1,
+      "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A4EC",
-       "0x00F31170"
+       "0x00F30FA0"
       ],
-      "second_level_refs": [
-       "0x008E9067"
-      ]
+      "second_level_refs": []
      },
      "evidence_level": "container_only"
     },
@@ -13267,7 +12625,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A4B0",
-       "0x00F31190"
+       "0x00F30FC0"
       ],
       "second_level_refs": []
      },
@@ -13310,7 +12668,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A474",
-       "0x00F311B8"
+       "0x00F30FE8"
       ],
       "second_level_refs": []
      },
@@ -13353,7 +12711,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A438",
-       "0x00F311E0"
+       "0x00F31010"
       ],
       "second_level_refs": []
      },
@@ -13396,7 +12754,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A3FC",
-       "0x00F31200"
+       "0x00F31030"
       ],
       "second_level_refs": []
      },
@@ -13439,7 +12797,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A3C0",
-       "0x00F31230"
+       "0x00F31060"
       ],
       "second_level_refs": []
      },
@@ -13482,7 +12840,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A384",
-       "0x00F31248"
+       "0x00F31078"
       ],
       "second_level_refs": []
      },
@@ -13525,7 +12883,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A348",
-       "0x00F31260"
+       "0x00F31090"
       ],
       "second_level_refs": []
      },
@@ -13568,7 +12926,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A30C",
-       "0x00F31288"
+       "0x00F310B8"
       ],
       "second_level_refs": []
      },
@@ -13611,7 +12969,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A2D0",
-       "0x00F312A8"
+       "0x00F310D8"
       ],
       "second_level_refs": []
      },
@@ -13654,7 +13012,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A294",
-       "0x00F312C8"
+       "0x00F310F8"
       ],
       "second_level_refs": []
      },
@@ -13697,7 +13055,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A258",
-       "0x00F312F0"
+       "0x00F31120"
       ],
       "second_level_refs": []
      },
@@ -13740,7 +13098,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A21C",
-       "0x00F31308"
+       "0x00F31138"
       ],
       "second_level_refs": []
      },
@@ -13783,7 +13141,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A1E0",
-       "0x00F31330"
+       "0x00F31160"
       ],
       "second_level_refs": []
      },
@@ -13826,7 +13184,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A1A4",
-       "0x00F31348"
+       "0x00F31178"
       ],
       "second_level_refs": []
      },
@@ -13869,7 +13227,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A168",
-       "0x00F31360"
+       "0x00F31190"
       ],
       "second_level_refs": []
      },
@@ -13912,7 +13270,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A12C",
-       "0x00F31388"
+       "0x00F311B8"
       ],
       "second_level_refs": []
      },
@@ -13955,7 +13313,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A0F0",
-       "0x00F313A8"
+       "0x00F311D8"
       ],
       "second_level_refs": []
      },
@@ -13998,7 +13356,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A0B4",
-       "0x00F313C0"
+       "0x00F311F0"
       ],
       "second_level_refs": []
      },
@@ -14041,7 +13399,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A078",
-       "0x00F313E8"
+       "0x00F31218"
       ],
       "second_level_refs": []
      },
@@ -14084,7 +13442,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A03C",
-       "0x00F31408"
+       "0x00F31238"
       ],
       "second_level_refs": []
      },
@@ -14127,7 +13485,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8A000",
-       "0x00F31420"
+       "0x00F31250"
       ],
       "second_level_refs": []
      },
@@ -14170,7 +13528,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89FC4",
-       "0x00F31448"
+       "0x00F31278"
       ],
       "second_level_refs": []
      },
@@ -14213,7 +13571,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89F88",
-       "0x00F31468"
+       "0x00F31298"
       ],
       "second_level_refs": []
      },
@@ -14256,7 +13614,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89F4C",
-       "0x00F31490"
+       "0x00F312C0"
       ],
       "second_level_refs": []
      },
@@ -14299,7 +13657,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89F10",
-       "0x00F314B8"
+       "0x00F312E8"
       ],
       "second_level_refs": []
      },
@@ -14342,7 +13700,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89ED4",
-       "0x00F314E8"
+       "0x00F31318"
       ],
       "second_level_refs": []
      },
@@ -14385,7 +13743,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89E98",
-       "0x00F31508"
+       "0x00F31338"
       ],
       "second_level_refs": []
      },
@@ -14428,7 +13786,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89E5C",
-       "0x00F31528"
+       "0x00F31358"
       ],
       "second_level_refs": []
      },
@@ -14471,7 +13829,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89E20",
-       "0x00F31540"
+       "0x00F31370"
       ],
       "second_level_refs": []
      },
@@ -14514,7 +13872,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89DE4",
-       "0x00F31568"
+       "0x00F31398"
       ],
       "second_level_refs": []
      },
@@ -14557,7 +13915,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89DA8",
-       "0x00F31590"
+       "0x00F313C0"
       ],
       "second_level_refs": []
      },
@@ -14600,7 +13958,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89D6C",
-       "0x00F315B8"
+       "0x00F313E8"
       ],
       "second_level_refs": []
      },
@@ -14643,7 +14001,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89D30",
-       "0x00F315E0"
+       "0x00F31410"
       ],
       "second_level_refs": []
      },
@@ -14686,7 +14044,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89CF4",
-       "0x00F31600"
+       "0x00F31430"
       ],
       "second_level_refs": []
      },
@@ -14729,7 +14087,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89CB8",
-       "0x00F31628"
+       "0x00F31458"
       ],
       "second_level_refs": []
      },
@@ -14772,7 +14130,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89C7C",
-       "0x00F31650"
+       "0x00F31480"
       ],
       "second_level_refs": []
      },
@@ -14815,7 +14173,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89C40",
-       "0x00F31670"
+       "0x00F314A0"
       ],
       "second_level_refs": []
      },
@@ -14858,7 +14216,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89C04",
-       "0x00F31698"
+       "0x00F314C8"
       ],
       "second_level_refs": []
      },
@@ -14901,7 +14259,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89BC8",
-       "0x00F316B0"
+       "0x00F314E0"
       ],
       "second_level_refs": []
      },
@@ -14944,7 +14302,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89B8C",
-       "0x00F316D0"
+       "0x00F31500"
       ],
       "second_level_refs": []
      },
@@ -14987,7 +14345,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89B50",
-       "0x00F316F0"
+       "0x00F31520"
       ],
       "second_level_refs": []
      },
@@ -15030,7 +14388,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89B14",
-       "0x00F31718"
+       "0x00F31548"
       ],
       "second_level_refs": []
      },
@@ -15073,7 +14431,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89AD8",
-       "0x00F31738"
+       "0x00F31568"
       ],
       "second_level_refs": []
      },
@@ -15116,7 +14474,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89A9C",
-       "0x00F31758"
+       "0x00F31588"
       ],
       "second_level_refs": []
      },
@@ -15159,7 +14517,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89A60",
-       "0x00F31778"
+       "0x00F315A8"
       ],
       "second_level_refs": []
      },
@@ -15202,7 +14560,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89A24",
-       "0x00F31790"
+       "0x00F315C0"
       ],
       "second_level_refs": []
      },
@@ -15245,7 +14603,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D899E8",
-       "0x00F317A8"
+       "0x00F315D8"
       ],
       "second_level_refs": []
      },
@@ -15288,7 +14646,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D899AC",
-       "0x00F317C8"
+       "0x00F315F8"
       ],
       "second_level_refs": []
      },
@@ -15330,7 +14688,7 @@
       "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
-       "0x00F317E8"
+       "0x00F31618"
       ],
       "second_level_refs": []
      },
@@ -15373,7 +14731,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89934",
-       "0x00F31818"
+       "0x00F31648"
       ],
       "second_level_refs": []
      },
@@ -15416,7 +14774,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D898F8",
-       "0x00F31848"
+       "0x00F31678"
       ],
       "second_level_refs": []
      },
@@ -15459,7 +14817,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D898BC",
-       "0x00F31868"
+       "0x00F31698"
       ],
       "second_level_refs": []
      },
@@ -15502,7 +14860,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89880",
-       "0x00F31890"
+       "0x00F316C0"
       ],
       "second_level_refs": []
      },
@@ -15544,7 +14902,7 @@
       "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
-       "0x00F318A8"
+       "0x00F316D8"
       ],
       "second_level_refs": []
      },
@@ -15587,7 +14945,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89808",
-       "0x00F318E0"
+       "0x00F31710"
       ],
       "second_level_refs": []
      },
@@ -15630,7 +14988,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D897CC",
-       "0x00F31900"
+       "0x00F31730"
       ],
       "second_level_refs": []
      },
@@ -15673,7 +15031,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89790",
-       "0x00F31920"
+       "0x00F31750"
       ],
       "second_level_refs": []
      },
@@ -15716,7 +15074,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89754",
-       "0x00F31948"
+       "0x00F31778"
       ],
       "second_level_refs": []
      },
@@ -15759,7 +15117,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89718",
-       "0x00F31968"
+       "0x00F31798"
       ],
       "second_level_refs": []
      },
@@ -15802,7 +15160,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D896DC",
-       "0x00F31990"
+       "0x00F317C0"
       ],
       "second_level_refs": []
      },
@@ -15845,7 +15203,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D896A0",
-       "0x00F319B0"
+       "0x00F317E0"
       ],
       "second_level_refs": []
      },
@@ -15888,7 +15246,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89664",
-       "0x00F319C8"
+       "0x00F317F8"
       ],
       "second_level_refs": []
      },
@@ -15931,7 +15289,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89628",
-       "0x00F319F0"
+       "0x00F31820"
       ],
       "second_level_refs": []
      },
@@ -15974,7 +15332,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D895EC",
-       "0x00F31A10"
+       "0x00F31840"
       ],
       "second_level_refs": []
      },
@@ -16017,7 +15375,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D895B0",
-       "0x00F31A30"
+       "0x00F31860"
       ],
       "second_level_refs": []
      },
@@ -16060,7 +15418,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89574",
-       "0x00F31A58"
+       "0x00F31888"
       ],
       "second_level_refs": []
      },
@@ -16103,7 +15461,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89538",
-       "0x00F31A78"
+       "0x00F318A8"
       ],
       "second_level_refs": []
      },
@@ -16146,7 +15504,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D894FC",
-       "0x00F31AA0"
+       "0x00F318D0"
       ],
       "second_level_refs": []
      },
@@ -16189,7 +15547,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D894C0",
-       "0x00F31AD8"
+       "0x00F31908"
       ],
       "second_level_refs": []
      },
@@ -16232,7 +15590,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89484",
-       "0x00F31AF0"
+       "0x00F31920"
       ],
       "second_level_refs": []
      },
@@ -16275,7 +15633,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89448",
-       "0x00F31B08"
+       "0x00F31938"
       ],
       "second_level_refs": []
      },
@@ -16318,7 +15676,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8940C",
-       "0x00F31B28"
+       "0x00F31958"
       ],
       "second_level_refs": []
      },
@@ -16361,7 +15719,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D893D0",
-       "0x00F31B48"
+       "0x00F31978"
       ],
       "second_level_refs": []
      },
@@ -16404,7 +15762,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89394",
-       "0x00F31B68"
+       "0x00F31998"
       ],
       "second_level_refs": []
      },
@@ -16447,7 +15805,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89358",
-       "0x00F31B88"
+       "0x00F319B8"
       ],
       "second_level_refs": []
      },
@@ -16490,7 +15848,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8931C",
-       "0x00F31BA0"
+       "0x00F319D0"
       ],
       "second_level_refs": []
      },
@@ -16533,7 +15891,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D892E0",
-       "0x00F31BC0"
+       "0x00F319F0"
       ],
       "second_level_refs": []
      },
@@ -16543,7 +15901,7 @@
      "address": "0x00B826A8",
      "ja": "カレハトウ",
      "ko": "마른잎섬",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B826A8",
@@ -16576,7 +15934,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D892A4",
-       "0x00F31BE8"
+       "0x00F31A18"
       ],
       "second_level_refs": []
      },
@@ -16619,7 +15977,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89268",
-       "0x00F31C08"
+       "0x00F31A38"
       ],
       "second_level_refs": []
      },
@@ -16662,7 +16020,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8922C",
-       "0x00F31C30"
+       "0x00F31A60"
       ],
       "second_level_refs": []
      },
@@ -16705,7 +16063,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D891F0",
-       "0x00F31C50"
+       "0x00F31A80"
       ],
       "second_level_refs": []
      },
@@ -16748,7 +16106,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D891B4",
-       "0x00F31C70"
+       "0x00F31AA0"
       ],
       "second_level_refs": []
      },
@@ -16791,7 +16149,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89178",
-       "0x00F31C90"
+       "0x00F31AC0"
       ],
       "second_level_refs": []
      },
@@ -16833,7 +16191,7 @@
       "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
       "external_pointer_refs": [
-       "0x00F31CA8"
+       "0x00F31AD8"
       ],
       "second_level_refs": []
      },
@@ -16876,7 +16234,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89100",
-       "0x00F31CD8"
+       "0x00F31B08"
       ],
       "second_level_refs": []
      },
@@ -16919,7 +16277,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D890C4",
-       "0x00F31D00"
+       "0x00F31B30"
       ],
       "second_level_refs": []
      },
@@ -16962,7 +16320,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89088",
-       "0x00F31D28"
+       "0x00F31B58"
       ],
       "second_level_refs": []
      },
@@ -17005,7 +16363,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8904C",
-       "0x00F31D50"
+       "0x00F31B80"
       ],
       "second_level_refs": []
      },
@@ -17048,7 +16406,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D89010",
-       "0x00F31D60"
+       "0x00F31B90"
       ],
       "second_level_refs": []
      },
@@ -17091,7 +16449,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88FD4",
-       "0x00F31D80"
+       "0x00F31BB0"
       ],
       "second_level_refs": []
      },
@@ -17134,7 +16492,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88F98",
-       "0x00F31DA0"
+       "0x00F31BD0"
       ],
       "second_level_refs": []
      },
@@ -17144,7 +16502,7 @@
      "address": "0x00B8277C",
      "ja": "タマタマジマ",
      "ko": "타마타마섬",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B8277C",
@@ -17177,7 +16535,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88F5C",
-       "0x00F31DB8"
+       "0x00F31BE8"
       ],
       "second_level_refs": []
      },
@@ -17220,7 +16578,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88F20",
-       "0x00F31DE0"
+       "0x00F31C10"
       ],
       "second_level_refs": []
      },
@@ -17263,7 +16621,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88EE4",
-       "0x00F31E00"
+       "0x00F31C30"
       ],
       "second_level_refs": []
      },
@@ -17273,7 +16631,7 @@
      "address": "0x00B827AC",
      "ja": "ソラマメジマ",
      "ko": "소라마메섬",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B827AC",
@@ -17306,7 +16664,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D88EA8",
-       "0x00F31E18"
+       "0x00F31C48"
       ],
       "second_level_refs": []
      },
@@ -17315,7 +16673,7 @@
     {
      "address": "0x00B827D0",
      "ja": "つうしん４",
-     "ko": "통신4",
+     "ko": "통신 4",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 10,
@@ -17349,7 +16707,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B7CC",
-       "0x00F31E40"
+       "0x00F31C70"
       ],
       "second_level_refs": []
      },
@@ -17358,7 +16716,7 @@
     {
      "address": "0x00B827DC",
      "ja": "つうしん３",
-     "ko": "통신3",
+     "ko": "통신 3",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 10,
@@ -17392,7 +16750,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B7C8",
-       "0x00F31E50"
+       "0x00F31C80"
       ],
       "second_level_refs": []
      },
@@ -17401,7 +16759,7 @@
     {
      "address": "0x00B827E8",
      "ja": "つうしん２",
-     "ko": "통신2",
+     "ko": "통신 2",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 10,
@@ -17435,7 +16793,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B7C4",
-       "0x00F31E60"
+       "0x00F31C90"
       ],
       "second_level_refs": []
      },
@@ -17444,7 +16802,7 @@
     {
      "address": "0x00B827F4",
      "ja": "つうしん１",
-     "ko": "통신1",
+     "ko": "통신 1",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 10,
@@ -17478,7 +16836,7 @@
       "second_level_ref_count": 0,
       "external_pointer_refs": [
        "0x00D8B7C0",
-       "0x00F31E70"
+       "0x00F31CA0"
       ],
       "second_level_refs": []
      },
@@ -17698,10 +17056,10 @@
     {
      "address": "0x00B828E4",
      "ja": "対空自走砲",
-     "ko": "대공자주포",
-     "kind": "import-addr-override",
+     "ko": "대공 자주포",
+     "kind": null,
      "region": "font",
-     "slot": 10,
+     "slot": null,
      "group_id": "g_00B828E4",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -17727,12 +17085,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8B834"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -17909,7 +17265,7 @@
      "address": "0x00B82CF6",
      "ja": "システム",
      "ko": "시스템",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82CF6",
@@ -17949,7 +17305,7 @@
      "address": "0x00B82D02",
      "ja": "セーブ",
      "ko": "저장",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B82D02",
@@ -17989,7 +17345,7 @@
      "address": "0x00B82D0E",
      "ja": "ブレイク",
      "ko": "브레이크",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D0E",
@@ -18029,7 +17385,7 @@
      "address": "0x00B82D2A",
      "ja": "ルール",
      "ko": "룰",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B82D2A",
@@ -18069,7 +17425,7 @@
      "address": "0x00B82D36",
      "ja": "ショーグン",
      "ko": "사령관",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B82D36",
@@ -18109,7 +17465,7 @@
      "address": "0x00B82D4E",
      "ja": "勝利条件",
      "ko": "승리조건",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D4E",
@@ -18149,7 +17505,7 @@
      "address": "0x00B82D58",
      "ja": "マップをぬける",
      "ko": "나가기",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B82D58",
@@ -18191,7 +17547,7 @@
      "address": "0x00B82D6A",
      "ja": "降伏する",
      "ko": "항복한다",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D6A",
@@ -18231,7 +17587,7 @@
      "address": "0x00B82D76",
      "ja": "処分する",
      "ko": "처분",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D76",
@@ -18270,8 +17626,8 @@
     {
      "address": "0x00B82D82",
      "ja": "アニメなし",
-     "ko": "표시 안함",
-     "kind": "fixed_zero_text",
+     "ko": "애니메 무",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B82D82",
@@ -18311,7 +17667,7 @@
      "address": "0x00B82D92",
      "ja": "アニメＣ",
      "ko": "애니메 Ｃ",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D92",
@@ -18351,7 +17707,7 @@
      "address": "0x00B82D9E",
      "ja": "アニメＢ",
      "ko": "애니메 B",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82D9E",
@@ -18391,7 +17747,7 @@
      "address": "0x00B82DAA",
      "ja": "アニメＡ",
      "ko": "애니메 A",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B82DAA",
@@ -18431,7 +17787,7 @@
      "address": "0x00B82DB6",
      "ja": "ＢＧＭなし",
      "ko": "배경음 무",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B82DB6",
@@ -18471,7 +17827,7 @@
      "address": "0x00B82DC6",
      "ja": "ＢＧＭあり",
      "ko": "배경음 유",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B82DC6",
@@ -18511,7 +17867,7 @@
      "address": "0x00B82DD6",
      "ja": "うかぶ",
      "ko": "부상",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B82DD6",
@@ -18551,7 +17907,7 @@
      "address": "0x00B82DE2",
      "ja": "もぐる",
      "ko": "잠수",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B82DE2",
@@ -18591,7 +17947,7 @@
      "address": "0x00B82E26",
      "ja": "大占領",
      "ko": "대점령",
-     "kind": "fixed_zero_text",
+     "kind": "part1-battle-menu-font",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B82E26",
@@ -18714,8 +18070,8 @@
     {
      "address": "0x00B82FAC",
      "ja": "マップを保存中よ、でんげんを切らないでね！！",
-     "ko": "저장 중 전원 끄지 마",
-     "kind": "import-csv",
+     "ko": "맵을 저장 중이야,전원을 끄지 말아 줘!!",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 44,
      "group_id": "g_00B82FAC",
@@ -18989,12 +18345,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8D9B4"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -19003,10 +18357,52 @@
      "address": "0x00B830AC",
      "ja": "送るマップを選んでね！！",
      "ko": "보낼 맵을 골라 줘!!",
-     "kind": "fixed_zero_text",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 24,
      "group_id": "g_00B830AC",
+     "editor_exposed": true,
+     "screen_scene_assigned": false,
+     "current_screen_capture_assigned": false,
+     "container_only": true,
+     "scene_evidence": [
+      {
+       "id": "23d_part2_b8_compact_display_tables",
+       "role": "container",
+       "capture_required": false,
+       "screenshot_status": "container",
+       "screenshot_grade": "not_a_scene",
+       "current_capture": {
+        "current": false,
+        "reason": "container"
+       }
+      }
+     ],
+     "direct_target_visual_evidence": false,
+     "renderer_trace_evidence": [],
+     "read_watch_evidence": [],
+     "manual_visual_evidence": [],
+     "runtime_source_proof_modes": [],
+     "synthetic_runtime_source_proof": false,
+     "static_pointer_xrefs": {
+      "pointer_ref_count": 1,
+      "external_pointer_ref_count": 1,
+      "second_level_ref_count": 0,
+      "external_pointer_refs": [
+       "0x00D8D9B0"
+      ],
+      "second_level_refs": []
+     },
+     "evidence_level": "container_only"
+    },
+    {
+     "address": "0x00B830C8",
+     "ja": "マップを送れる人が誰もいないわ！！",
+     "ko": "맵을 보낼 수 있는 사람이 아무도 없어!!",
+     "kind": "bteam-round2-residual",
+     "region": "font",
+     "slot": 34,
+     "group_id": "g_00B830C8",
      "editor_exposed": true,
      "screen_scene_assigned": false,
      "current_screen_capture_assigned": false,
@@ -19035,48 +18431,6 @@
       "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
       "external_pointer_refs": [],
-      "second_level_refs": []
-     },
-     "evidence_level": "container_only"
-    },
-    {
-     "address": "0x00B830C8",
-     "ja": "マップを送れる人が誰もいないわ！！",
-     "ko": "지도　보낼　상대없어",
-     "kind": "fixed_zero_text",
-     "region": "font",
-     "slot": 34,
-     "group_id": "g_00B830C8",
-     "editor_exposed": true,
-     "screen_scene_assigned": false,
-     "current_screen_capture_assigned": false,
-     "container_only": true,
-     "scene_evidence": [
-      {
-       "id": "23d_part2_b8_compact_display_tables",
-       "role": "container",
-       "capture_required": false,
-       "screenshot_status": "container",
-       "screenshot_grade": "not_a_scene",
-       "current_capture": {
-        "current": false,
-        "reason": "container"
-       }
-      }
-     ],
-     "direct_target_visual_evidence": false,
-     "renderer_trace_evidence": [],
-     "read_watch_evidence": [],
-     "manual_visual_evidence": [],
-     "runtime_source_proof_modes": [],
-     "synthetic_runtime_source_proof": false,
-     "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
-      "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00D8D9AC"
-      ],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -19164,8 +18518,8 @@
     {
      "address": "0x00B83130",
      "ja": "おともだちがそろったら、スタートを押してね！！",
-     "ko": "친구들이 모이면 시작 버튼 눌러줘!",
-     "kind": "import-csv",
+     "ko": "친구가 모이면,스타트를 눌러 줘!!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 46,
      "group_id": "g_00B83130",
@@ -19289,7 +18643,7 @@
      "address": "0x00B8319C",
      "ja": "ヴー！？・未接続準備中",
      "ko": "부-!?・미접속 준비 중",
-     "kind": "fixed_zero_text",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 22,
      "group_id": "g_00B8319C",
@@ -19317,10 +18671,12 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 0,
-      "external_pointer_ref_count": 0,
+      "pointer_ref_count": 1,
+      "external_pointer_ref_count": 1,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [],
+      "external_pointer_refs": [
+       "0x00B32E14"
+      ],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -19370,7 +18726,7 @@
     {
      "address": "0x00B831C4",
      "ja": "準備中",
-     "ko": "준비중",
+     "ko": "준비 중",
      "kind": "fixed_zero_text",
      "region": "font",
      "slot": 6,
@@ -19399,7 +18755,7 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
+      "pointer_ref_count": 0,
       "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
       "external_pointer_refs": [],
@@ -19410,7 +18766,7 @@
     {
      "address": "0x00B831CC",
      "ja": "接続エラー",
-     "ko": "준비 중",
+     "ko": "접속 오류",
      "kind": "dialogue-override",
      "region": "font",
      "slot": 10,
@@ -19490,8 +18846,8 @@
     {
      "address": "0x00B8322C",
      "ja": "てんそうですしばらくお待ちください。",
-     "ko": "전송 중. 잠시 기다려 주세요.",
-     "kind": "import-csv",
+     "ko": "전송입니다 잠시 기다려 주십시오.",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 36,
      "group_id": "g_00B8322C",
@@ -19533,7 +18889,7 @@
      "address": "0x00B83254",
      "ja": "てんそう中です。",
      "ko": "전송 중입니다.",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B83254",
@@ -19575,7 +18931,7 @@
      "address": "0x00B83268",
      "ja": "しばらくお待ちください。",
      "ko": "잠시 기다려 주십시오.",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 24,
      "group_id": "g_00B83268",
@@ -20079,7 +19435,7 @@
     {
      "address": "0x00B83830",
      "ja": "つづきから",
-     "ko": "이어하기",
+     "ko": "이어서",
      "kind": "import-addr-override",
      "region": "font",
      "slot": 10,
@@ -20407,8 +19763,8 @@
     {
      "address": "0x00B839B4",
      "ja": "毎ターン収入",
-     "ko": "매턴수입합계",
-     "kind": "opt-label",
+     "ko": "매 턴 수입",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B839B4",
@@ -20448,7 +19804,7 @@
      "address": "0x00B839C4",
      "ja": "初回収入",
      "ko": "초회수입",
-     "kind": "opt-label",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 8,
      "group_id": "g_00B839C4",
@@ -20568,7 +19924,7 @@
      "address": "0x00B839F0",
      "ja": "ルール",
      "ko": "룰",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 6,
      "group_id": "g_00B839F0",
@@ -20654,8 +20010,8 @@
     {
      "address": "0x00B83A64",
      "ja": "やれやれ、ここまではしたくなかったんだがな！",
-     "ko": "여기까진 안 하려 했는데",
-     "kind": "import-csv",
+     "ko": "이런 이런,여기까지는 하고 싶지 않았는데 말이야!",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 44,
      "group_id": "g_00B83A64",
@@ -20737,7 +20093,7 @@
      "address": "0x00B83AC8",
      "ja": "ふっふっふ・・・このときをまっておったわ！",
      "ko": "훗훗후・・・이때를 기다리고 있었다!",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 42,
      "group_id": "g_00B83AC8",
@@ -21181,12 +20537,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DEBAC0"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -21223,12 +20577,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DEBAB8"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -21278,8 +20630,8 @@
     {
      "address": "0x00B83CC0",
      "ja": "キクチヨ特戦部隊の本当の力、見せてくれるわ！",
-     "ko": "키쿠치요 특전부대 힘을 보여 주마!",
-     "kind": "import-csv",
+     "ko": "키쿠치요 특전 부대의 진짜 힘,보여주마!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 44,
      "group_id": "g_00B83CC0",
@@ -21524,10 +20876,10 @@
     {
      "address": "0x00B83DB0",
      "ja": "ドミノの能力、ユニットの場所は・・・と。",
-     "ko": "도미노 능력, 유닛 위치는...",
-     "kind": "import-csv",
+     "ko": "도미노의 능력,유닛의 장소는・・・하고.",
+     "kind": null,
      "region": "font",
-     "slot": 40,
+     "slot": null,
      "group_id": "g_00B83DB0",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -21553,12 +20905,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DEBB30"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -21567,7 +20917,7 @@
      "address": "0x00B83DE0",
      "ja": "アスカぁ・・・かくごなさいっ！！！",
      "ko": "아스카・・・각오해라!!!",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 34,
      "group_id": "g_00B83DE0",
@@ -21820,8 +21170,8 @@
     {
      "address": "0x00B83EB8",
      "ja": "こんなとこかなー？",
-     "ko": "이 정도면 됐나?",
-     "kind": "import-csv",
+     "ko": "이 정도려나-?",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B83EB8",
@@ -22026,8 +21376,8 @@
     {
      "address": "0x00B83F74",
      "ja": "イーグル！あんたいいかげんにしなさいっ！！！",
-     "ko": "이글! 너 적당히 좀 해!!!",
-     "kind": "import-csv",
+     "ko": "이글!당신 적당히 좀 해!!!",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 44,
      "group_id": "g_00B83F74",
@@ -22068,8 +21418,8 @@
     {
      "address": "0x00B83FA8",
      "ja": "なんとかまにあったなー、よかったよかった。",
-     "ko": "시간 맞췄네, 다행이다 다행이야.",
-     "kind": "import-csv",
+     "ko": "어떻게든 늦지 않았네-,다행이다 다행이야.",
+     "kind": "bteam-round2-residual",
      "region": "font",
      "slot": 42,
      "group_id": "g_00B83FA8",
@@ -22181,12 +21531,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DEBC08"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -22525,7 +21873,7 @@
      "address": "0x00B84128",
      "ja": "・・・・。",
      "ko": "・・・・.",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 10,
      "group_id": "g_00B84128",
@@ -22897,7 +22245,7 @@
      "address": "0x00B84238",
      "ja": "きさまはやりすぎた・・・くたばれ！",
      "ko": "네 녀석은 너무했어・・・뒈져라!",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 34,
      "group_id": "g_00B84238",
@@ -23020,10 +22368,10 @@
     {
      "address": "0x00B84298",
      "ja": "わが最強の力、うけてみよ！",
-     "ko": "최강　힘을　받아라!",
-     "kind": "import-csv",
+     "ko": "나의 최강의 힘,받아 보아라!",
+     "kind": null,
      "region": "font",
-     "slot": 26,
+     "slot": null,
      "group_id": "g_00B84298",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -23049,12 +22397,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DEBC60"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -24720,7 +24066,7 @@
     {
      "address": "0x00B848BC",
      "ja": "テングノハナのちず",
-     "ko": "텐구노하나 지도",
+     "ko": "텐구의 코의 지도",
      "kind": "import-csv",
      "region": "font",
      "slot": 18,
@@ -25434,10 +24780,10 @@
     {
      "address": "0x00B84A48",
      "ja": "ジャバラコウソクのちず",
-     "ko": "아코디언　도로　지도",
-     "kind": "import-csv",
+     "ko": "주름진 고속도로의 지도",
+     "kind": null,
      "region": "font",
-     "slot": 22,
+     "slot": null,
      "group_id": "g_00B84A48",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -25463,12 +24809,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DF0950"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -26062,10 +25406,10 @@
     {
      "address": "0x00B84BA0",
      "ja": "チエノワジマのちず",
-     "ko": "지혜고리섬　지도",
-     "kind": "import-csv",
+     "ko": "지혜의 고리 섬의 지도",
+     "kind": null,
      "region": "font",
-     "slot": 18,
+     "slot": null,
      "group_id": "g_00B84BA0",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -26091,12 +25435,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DF07E8"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -26104,10 +25446,10 @@
     {
      "address": "0x00B84BB4",
      "ja": "コツブジマのちず",
-     "ko": "코츠부섬 지도",
-     "kind": "import-csv",
+     "ko": "알갱이 섬의 지도",
+     "kind": null,
      "region": "font",
-     "slot": 16,
+     "slot": null,
      "group_id": "g_00B84BB4",
      "editor_exposed": true,
      "screen_scene_assigned": false,
@@ -26133,12 +25475,10 @@
      "runtime_source_proof_modes": [],
      "synthetic_runtime_source_proof": false,
      "static_pointer_xrefs": {
-      "pointer_ref_count": 1,
-      "external_pointer_ref_count": 1,
+      "pointer_ref_count": 0,
+      "external_pointer_ref_count": 0,
       "second_level_ref_count": 0,
-      "external_pointer_refs": [
-       "0x00DF07D0"
-      ],
+      "external_pointer_refs": [],
       "second_level_refs": []
      },
      "evidence_level": "container_only"
@@ -26703,7 +26043,7 @@
      "address": "0x00B84E64",
      "ja": "ジャイアントウェーブ",
      "ko": "큰파도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B84E64",
@@ -26745,7 +26085,7 @@
      "address": "0x00B84E7C",
      "ja": "ライトニングアサルト",
      "ko": "번개강습",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 20,
      "group_id": "g_00B84E7C",
@@ -26787,7 +26127,7 @@
      "address": "0x00B84E94",
      "ja": "ワンダーサーチ",
      "ko": "탐색",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84E94",
@@ -26829,7 +26169,7 @@
      "address": "0x00B84EA4",
      "ja": "イットーリョーダン",
      "ko": "일도",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B84EA4",
@@ -26871,7 +26211,7 @@
      "address": "0x00B84EB8",
      "ja": "テクニカルスナイプ",
      "ko": "저격",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 18,
      "group_id": "g_00B84EB8",
@@ -26913,7 +26253,7 @@
      "address": "0x00B84ECC",
      "ja": "ウィニングマーチ",
      "ko": "승리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84ECC",
@@ -26955,7 +26295,7 @@
      "address": "0x00B84EE0",
      "ja": "スノウホワイト",
      "ko": "설백",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84EE0",
@@ -26997,7 +26337,7 @@
      "address": "0x00B84EF0",
      "ja": "マキシマムブロウ",
      "ko": "강타",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84EF0",
@@ -27039,7 +26379,7 @@
      "address": "0x00B84F04",
      "ja": "ハイパーリペア",
      "ko": "하이퍼수리",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84F04",
@@ -27081,7 +26421,7 @@
      "address": "0x00B84F14",
      "ja": "ミラクルチャンス",
      "ko": "기적",
-     "kind": "dialogue-override",
+     "kind": "bteam-round2-baseline",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84F14",
@@ -27126,7 +26466,7 @@
      "address": "0x00B84F28",
      "ja": "ブラックホール",
      "ko": "블랙홀",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84F28",
@@ -27168,7 +26508,7 @@
      "address": "0x00B84F38",
      "ja": "イエローコメット",
      "ko": "옐로코멧",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 16,
      "group_id": "g_00B84F38",
@@ -27210,7 +26550,7 @@
      "address": "0x00B84F4C",
      "ja": "グリーンアース",
      "ko": "그린어스",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 14,
      "group_id": "g_00B84F4C",
@@ -27252,7 +26592,7 @@
      "address": "0x00B84F5C",
      "ja": "ブルームーン",
      "ko": "블루문",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B84F5C",
@@ -27294,7 +26634,7 @@
      "address": "0x00B84F6C",
      "ja": "レッドスター",
      "ko": "레드스타",
-     "kind": "dialogue-override",
+     "kind": "part1-compact-ui",
      "region": "font",
      "slot": 12,
      "group_id": "g_00B84F6C",
@@ -27345,11 +26685,11 @@
     "sprite": 14
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
-    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27361,11 +26701,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
-    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27377,11 +26717,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
-    "provenance_rom_sha256": "b20bdfdfb074c830302261cd9a80dffe3ec1e776b7c7526c5dff1c70c028e81c",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27389,15 +26729,15 @@
    "present": true,
    "title": "2편 CO 설명/프로필 대사",
    "counts": {
-    "dialogue": 138,
+    "dialogue": 139,
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27410,10 +26750,7 @@
    },
    "capture": {
     "current": false,
-    "capture_path": "temp/scene_screenshots/30_battle_attack_patched/frame.png",
-    "provenance_path": "temp/scene_screenshots/30_battle_attack_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-    "reason": "rom_sha_mismatch"
+    "reason": "no_capture_path"
    }
   },
   {
@@ -27425,11 +26762,11 @@
     "sprite": 3
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27437,15 +26774,15 @@
    "present": true,
    "title": "공통 UI 라벨/대사",
    "counts": {
-    "dialogue": 53,
+    "dialogue": 0,
     "sprite": 2
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_85_ui_common_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   },
   {
@@ -27457,11 +26794,11 @@
     "sprite": 0
    },
    "capture": {
-    "current": false,
+    "current": true,
     "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/provenance.json",
-    "provenance_rom_sha256": "10c32a4710fcb3e8e0b41de03003021e82d36c10593627058f380b68562611d5",
-    "reason": "rom_sha_mismatch"
+    "provenance_rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+    "reason": "current"
    }
   }
  ],

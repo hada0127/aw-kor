@@ -1,0 +1,21 @@
+{
+  "kind": "cartridge-save-anchored-v1",
+  "schema": 1,
+  "save": "game.sav",
+  "save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+  "save_size": 131072,
+  "save_storage": [
+    "FLASH1M"
+  ],
+  "rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
+  "libmgba_sha256": "c5a8a94f605ee89adf6e0c7080edf55cbf8b34c82d86a102f98010bc5b77b4ad",
+  "harness_sha256": "12874704c21f92d0ec03b1f70c72f9b5df539bde02741b41e66daa447cc86c24",
+  "source_checkpoint": "/Users/tarucy/project/aw-kor/output/qa/part1_2026-10-06/m20_anchor_run/resume.checkpoint.json",
+  "source_checkpoint_sha256": "6bed3dd9d6ca1991778b51d4443d485f6ce4994d5e18fbf7cbc4436f4d4f4113",
+  "source_core_frame": 35271,
+  "source_state_sha256": "fbf9b9c4e268e8da6f156508669763412bd823eef19298ecaf7374c52f02e566",
+  "source_chain_verification": "full-frame-chain",
+  "created_at": "2026-10-06T09:00:04+00:00",
+  "reason": "2026-10-06 chain cut: Part1 M20 DAY1 fresh start (Max) in-game save",
+  "evidence_scope": "Chain root after the 2026-10-06 evidence-chain cut. Source checkpoint fields are informational and never re-verified. Cartridge bytes only; game acceptance requires observed in-game Continue; no scene or ending approval"
+}

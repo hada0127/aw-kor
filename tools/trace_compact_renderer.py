@@ -305,6 +305,11 @@ def run_screen_checkpoint(name: str, checkpoint: dict, rom: Path, harness: Path,
         if checkpoint["mode"] == "fresh":
             run_nav(driver, checkpoint["nav"])
             prov["nav"] = checkpoint["nav"]
+        elif checkpoint["mode"] == "recorder_endpoint" and checkpoint.get("orig_nav"):
+            # Replay the recorded route on this ROM; the stored frame belongs
+            # to another capture and cannot serve as a current-ROM trace.
+            run_nav(driver, checkpoint["orig_nav"])
+            prov["nav"] = checkpoint["orig_nav"]
         elif checkpoint["mode"] == "savestate":
             state_path = resolve(checkpoint["state"])
             driver.loadstate(state_path)
@@ -392,6 +397,8 @@ def main() -> int:
                     help="screen_checkpoints.json name. Defaults to a small E12 probe set.")
     ap.add_argument("--freshrender-name", action="append", default=[],
                     help="freshrender_checkpoints.json name. Defaults to CO profile refresh probes.")
+    ap.add_argument("--no-freshrender", action="store_true",
+                    help="Skip saved-state probes when their state files are unavailable.")
     args = ap.parse_args()
 
     rom = resolve(args.rom)
@@ -410,7 +417,7 @@ def main() -> int:
     screen_by_name = {row["name"]: row for row in load(SCREEN_CHECKPOINTS).get("checkpoints", [])}
     fresh_by_name = {row["name"]: row for row in load(FRESHRENDER_CHECKPOINTS).get("checkpoints", [])}
     screen_names = args.screen_checkpoint or DEFAULT_SCREEN_CHECKPOINTS
-    freshrender_names = args.freshrender_name or DEFAULT_FRESHRENDER
+    freshrender_names = [] if args.no_freshrender else (args.freshrender_name or DEFAULT_FRESHRENDER)
 
     cases = []
     for name in screen_names:

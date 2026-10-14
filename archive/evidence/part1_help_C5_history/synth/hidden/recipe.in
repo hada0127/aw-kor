@@ -1,0 +1,20 @@
+loadstate /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/native_state.ss0
+dumpmem 0200002C 12 /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/before.bin
+w8 0200002C 00040400
+w8 02000030 05060506
+dumpmem 0200002C 12 /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/injected.bin
+watchaddr 08DFA64A 928 r /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/trace.log
+keys 0
+frames 6
+shot /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/hidden.raw
+keys 128
+frames 2
+keys 0
+frames 18
+shot /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/hidden_next.raw
+keys 64
+frames 2
+keys 0
+frames 18
+shot /home/taro1/project/aw-kor/temp/release_C/relgate3/synth/hidden/hidden_continue.raw
+quit

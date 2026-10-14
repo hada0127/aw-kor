@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "frame": "data/evidence/part1_help_C5/0033_NONE_0002121.png",
+  "message": "0x00DFA79A",
+  "observed_line_encoded_half_cells": 34,
+  "observed_fullwidth_glyphs": 17,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 136,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 34,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "C5-native cold-boot cartridge-save frame; RGB-identical to measured b28 frame"
+}

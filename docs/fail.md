@@ -1609,3 +1609,16 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 - 첫 빌드는 `stable_build_inputs`에서 `ValueError: Build inputs changed during build; output provenance refused`로 중지됐다. 같은 시간 다른 작업자가 장면 카탈로그 입력을 갱신했다. 최초 시도는 후보 ROM을 만들지 않았다. 입력이 안정된 뒤 재빌드와 독립 재생성의 SHA가 일치했다. 원본 로그: `temp/release_C/b29r2/build.log`.
 - b29r2에서도 광범위 단위시험 `all_unit`은 기존 106개 이름으로 실패했다(신규 이름 0). 기존 증거 등록 관련 실패를 배너 코드의 성공으로 오인하거나 전체 QA 통과로 기록하지 않는다. `temp/release_C/b29r2/gates/all_unit.log`.
 - 기존 3P/캠페인 항복 캡처의 말미 화면과 로그를 조사했으나 `실패` 배너 표시를 확인하지 못했다. 기존 릴리스 C 압축 에뮬레이터 로그 74개에서도 8개 반복 시트의 LZ77 소스 로드가 0건이었다(`temp/release_C/b29r2/day_banner/existing_log_source_scan.txt`). `실패` 실화면과 8개 반복 시트의 소비 경로는 미검증으로 남긴다.
+
+## 2026-10-14 C5 RELGATE-2 과거 수동 증거 13건의 재사용 불가
+
+- 이전 SHA `59c99084…`의 operation-room 13개 변이 증거를 C5로 재라벨하지 않았다. 6개 원주소(`0xB81FF4`, `0xB81FAC`, `0xB81FC4`, `0xB81F80`, `0xB81F70`, `0xB81F40`)는 C5에서 원본 일본어 슬롯으로 남았고 해당 주소 포인터 참조 0건이다. `0xB82018`은 포인터 참조 2건이지만 현재 콜드부트 경로에서 변이 픽셀 차이 0건이다. 나머지 6건만 C5 수동 증거로 인정했다. 추가 6개 후보(`0xB82024`, `0xB82038`, `0xB8204C`, `0xB81F10`, `0xB81F24`, `0xB81F2C`)도 조사한 operation-room 경로에서는 픽셀 차이 0건이었다. 이는 다른 경로의 비사용 증명이 아니다.
+- prepackage 22개 직접 게이트 중 8개가 C5에서 여전히 실패한다. 배포 준비 완료로 표기하지 않는다. 명령·종료코드·로그와 구체 원인은 `temp/release_C/relgate2_report.md`.
+- 관련 단위시험 `PYTHONPATH=tools python3 -m unittest tools.test_part2_bomber_weapon_label`은 6건 중 1건 fixture 오류(`bteam_fixed_ui_residuals` 미정의 `NameError`)로 exit 1. 이번 검증 범위 밖의 B팀 코드·시험 fixture는 수정하지 않았다. 로그 `temp/release_C/relgate2/bomber_label_test.log`.
+
+## 2026-10-15 RELGATE-5 unresolved release evidence
+
+- The seven C5 communication-label frames have no completed per-frame visual verdict. Their `visual_result.status` is `pending`; strict residual audit now rejects them. Neither this historical C5/b31 evidence nor the catalog assigns coverage to b32r3/b32r4.
+- Three compact dialogue consumers (`g_00DF8B6A`, `g_00DF8B92`, `g_00DF8B9A`) remain unassigned because scene ownership was inferred without runtime evidence. The regenerated catalog reports `dialogue_unassigned=3`, `review_pending_total=28`; strict catalog audit fails. The next phase must obtain consumer proof or leave the backlog open.
+- `audit_scene_residual_scans.py --strict --rom output/game_wars_korean_candidate_20261015_b32r3.gba` exits 1 with 47 critical findings, including C5 ROM SHA mismatch and seven pending visual verdicts. The historical evidence is archived for checkout portability, not rebound to b32r3.
+- C5/b31 residual strict audit also remains red (15 critical): one scan-results SHA mismatch plus seven pending visual verdicts and seven required-scene findings. No missing archived recorder endpoint was reported. This task does not claim a release gate pass.

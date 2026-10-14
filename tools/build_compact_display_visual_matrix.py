@@ -58,7 +58,9 @@ GROUP_SPECS = [
         "id": "b8_compact_display_table_all",
         "title": "B8 compact display table bucket",
         "ranges": [(0xB81800, 0xB85000)],
-        "expected_count": 459,
+        # Includes the 0xB81924 Part1 unit-info bomber label: its native
+        # pointer survives at 0xD850FC and the bank uses Korean glyph aliases.
+        "expected_count": 460,
         "source": "data/dialogue_groups.json",
     },
 ]
