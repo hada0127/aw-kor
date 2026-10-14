@@ -16,6 +16,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CAT = ROOT / "data" / "scene_catalog.json"
 CHECKPOINTS = ROOT / "data" / "screen_checkpoints.json"
+REGISTRATION = ROOT / "data" / "release_C_evidence_registration.json"
 OUT_DIR = ROOT / "temp" / "scene_semantic_audit"
 
 REVIEW_IDS = {"98_extraction_noise_review", "99_unassigned_review"}
@@ -98,8 +99,8 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/release_C/b28/89b_trace/trace.log",
-        "receipt": "temp/release_C/b28/89b_trace/bound_receipt.json",
+        "watch_log": "temp/release_C/b31/89b_trace/trace.log",
+        "receipt": "temp/release_C/b31/89b_trace/bound_receipt.json",
         "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
@@ -144,6 +145,23 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def active_registration_records(path: Path, candidate_sha: str) -> list[dict]:
+    """Read only current-candidate evidence; historical records are never active."""
+    registration = load(path, {})
+    if (registration.get("target_candidate_sha256") != candidate_sha
+            or registration.get("current_candidate_sha256") != candidate_sha):
+        raise ValueError("registration target/current candidate SHA does not match ROM")
+    records = registration.get("records")
+    history = registration.get("history", {}).get("records")
+    if not isinstance(records, list) or not isinstance(history, list):
+        raise ValueError("registration requires separate active records and history")
+    if any(r.get("replay", {}).get("candidate_sha256") != candidate_sha for r in records):
+        raise ValueError("active registration record is bound to another candidate")
+    if any(r.get("replay", {}).get("candidate_sha256") == candidate_sha for r in history):
+        raise ValueError("current-candidate registration record is hidden in history")
+    return records
+
+
 def watch_hit_group_ids(log_path: str) -> set[str]:
     path = ROOT / log_path
     if not path.exists():
@@ -166,9 +184,10 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--broad-dialogue-threshold", type=int, default=200)
-    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261013_b28.gba"))
+    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261014_b31.gba"))
     args = ap.parse_args()
     candidate_sha = sha256(Path(args.rom))
+    active_records = active_registration_records(REGISTRATION, candidate_sha)
 
     catalog = load(CAT, {"scenes": []})
     checkpoints = load(CHECKPOINTS, {"checkpoints": []}).get("checkpoints", [])
@@ -387,6 +406,7 @@ def main() -> None:
                            "required": "container 사유와 not_a_scene 상태를 명시"})
 
     summary = {
+        "registration_active_count": len(active_records),
         "scene_count": len(semantic_scenes),
         "container_count": len(container_rows),
         "container_dialogue_count": sum(row["dialogue_count"] for row in container_rows),

@@ -164,6 +164,64 @@
           "capture_checkpoint_sha256": "ae29754e6bd59776677d41cef9ef14662c927fd31fb7fe62532c234e2c004cb9",
           "capture_baseline_sha256": "7d8947a85f7930e80ba7bbb5458e1303e85bb06a19fdba78e46f991cf39ced30",
           "capture_run": "temp/release_C/b28/E_result"
+        },
+        {
+          "rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+          "frame": "temp/release_C/b30/w2b5/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b30 direct recorder cold boot; inherited cheat taint, geometry only",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "c53be742a113b57c32be721c2b3d81ea99de5b930fb5a6d6af2380c5ca73670b",
+          "capture_baseline_sha256": "96e194b2de7ebfd585629b91d5fccf8815a76de0802181fbd64505b74a21f60e",
+          "capture_run": "temp/release_C/b30/w2b5/E_result"
+        },
+        {
+          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "frame": "temp/release_C/b31/reg7/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b31 direct recorder cold boot; inherited cheat taint, geometry only",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "b6919bfcd2d53bfd936416ff041077b4086de1a06d22376a50e9845878ee9047",
+          "capture_baseline_sha256": "3ba47a5efc1b69c94e9435678f7c1e2ccf172706743f7c47c1d958afcd27f18d",
+          "capture_run": "temp/release_C/b31/reg7/E_result"
         }
       ]
     },
@@ -480,6 +538,48 @@
           "capture_checkpoint_sha256": "bd42377009a9104f5fb1e37ddc3ac0e87899a3a4c6dfd4a77e7e967e0ab5dfd7",
           "capture_baseline_sha256": "7a316dabf834d352b2c2492af31c90914eb07722db73e2c27c433ab9ace1ba5a",
           "capture_run": "temp/release_C/b28/E_mission"
+        },
+        {
+          "rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+          "frame": "temp/release_C/b30/w2b5/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b30 direct recorder cold boot; inherited cheat taint, geometry only",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "30221068f926d7244e8cd8f248744eef4efc90918d954ab7f6c02a2dd0e027a9",
+          "capture_baseline_sha256": "b9c83bdaf79445afd2cb620800bc88cb94db3efc9e0790ea7f939283078cde1b",
+          "capture_run": "temp/release_C/b30/w2b5/E_mission"
+        },
+        {
+          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "frame": "temp/release_C/b31/reg7/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b31 direct recorder cold boot; inherited cheat taint, geometry only",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "c5b29e44f4a3b851bcb84c8b319fb82e8f9119182980de5838010676064b7011",
+          "capture_baseline_sha256": "66cca77b87b745da45ec0e84a1e7c30130118621913658dafc5a973ad237de65",
+          "capture_run": "temp/release_C/b31/reg7/E_mission"
         }
       ]
     }
