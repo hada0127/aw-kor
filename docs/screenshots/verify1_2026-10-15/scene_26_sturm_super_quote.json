@@ -1,0 +1,17 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/verify1_sturm/full_meter_probe/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/verify1_sturm/full_meter_probe/0022_A_0002724.png",
+  "source_ledger": "temp/release_C/verify1_sturm/full_meter_probe/frames.jsonl",
+  "core_frame": 2724,
+  "rgb_sha256": "34a52cd2f25061b87e7ee1591c12639cd91e43332950e31d78d05c1e4d612574",
+  "png_sha256": "94b5b248e99b60bb180b1f2728c2f49e162bf4d40a035c99d5dc7a7c5853ca99",
+  "menu_frame": "docs/screenshots/verify1_2026-10-15/scene_26_sturm_super_available.png",
+  "menu_core_frame": 2621,
+  "menu_png_sha256": "8db112c17dbe7dddf7502c8a5931eea7694f1430f2713c6e0cd3adecd458a373",
+  "cheat_tainted": true,
+  "exact_visible_korean": "살아 돌아가지 못해!",
+  "rom_text_address": "0xA30AFC",
+  "claim_scope": "Synthetic Sturm ID 10 and full 32-bit CO charge trigger Super CO Power quote; screen rendering only; direct read-watch unverified"
+}

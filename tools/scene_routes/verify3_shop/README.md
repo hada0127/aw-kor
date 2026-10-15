@@ -1,0 +1,9 @@
+# Wars Shop suffix visual comparison (b32r5)
+
+`g_00DF8B6A` is `장` (`0x8FC2`) in release ROM `7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a`. The Part 1 shop list reads its two bytes (104 watched reads in `temp/release_C/verify2_shop/watch.log`), but the released native screenshot shows only the price digit `4` in four rows.
+
+## b35 resolution (2026-10-15)
+
+The b32r5 regression above is historical. Candidate b35 (`7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36`) changed the compact glyph preload at `0xBE7368..69` from `96 87` (`枚`) to `8F C2` (`장`). A fresh cold boot from a private copy of the same cartridge save replayed `tools/scene_routes/15_part1_shop/probe.py` on b35. Its read-watch logged 104 suffix-byte reads and four shop-help control reads, and its native frame visibly renders `4장` on all four price rows. The active PASS frame and receipt are `docs/screenshots/rebind2_2026-10-15/part1_shop_4jang.png` and `part1_shop_4jang.json`. The save remains cheat-tainted; this proves screen rendering on that route.
+
+Run `memcap -n aw-kor-verify3 -- nice -n 15 python3 tools/scene_routes/verify3_shop/original_probe.py` to cold boot the original cartridge ROM from the same copied save and replay the same input route. The original frame shows `4枚` on the corresponding rows. Original frame, release crop, nearest-neighbor crop coordinates, hashes, ROM hashes, save hash, and exit codes are recorded in `docs/screenshots/verify3_2026-10-15/shop_suffix_regression.json`. The copied save is conservatively `cheat_tainted`. The matching row geometry and native original `枚` make the missing release `장` a visual regression. The release ROM has `8F C2` (`장`) in the suffix string at `0xDF8B68`, but still `96 87` (`枚`) in its one-cell preload at `0xBE7368`; original ROM has `96 87` in both. This is the likely failure mechanism, pending direct runtime preload tracing. No ROM was changed.

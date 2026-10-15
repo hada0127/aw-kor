@@ -1,0 +1,144 @@
+{
+  "rom": "output/game_wars_korean_candidate_20261015_b35.gba",
+  "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+  "bios": {
+    "path": "temp/bios/gba_bios.bin (user-supplied, git-ignored, not copied)",
+    "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
+    "used_by": "both cores"
+  },
+  "emulator": "system libmgba 0.10.5 + tools/mgba_link_harness.c (single-threaded deterministic SIO driver)",
+  "harness_source_sha256": "2f772243f99a7cfd17ffe7a9b1fb45e8564feda7984941a6fac78199b794feec",
+  "transfer": "native: host cartridge game code handshake + real-BIOS SWI 0x25 to an empty-slot client booting the real BIOS; stage-one then receives the P2 payload over Normal-32 by game code",
+  "cheat_tainted": false,
+  "host_save": null,
+  "runs": {
+    "link8": {
+      "dir": "temp/release_C/verify4b/link8",
+      "exit": 0,
+      "note": "cold host from nav savestate (LINK★MODE), continuous through MultiBoot and P2 send to map select"
+    },
+    "link9": {
+      "dir": "temp/release_C/verify4b/link9",
+      "exit": 0,
+      "resumed_from_paired_savestate": "link8 host_end.ss0+client_end.ss0"
+    },
+    "link11": {
+      "dir": "temp/release_C/verify4b/link11",
+      "exit": 0,
+      "resumed_from_paired_savestate": "link8 host_end.ss0+client_end.ss0"
+    }
+  },
+  "sio_trace_summary": [
+    "6200/0000",
+    "14x 6200/7202",
+    "6102/7202",
+    "0x60 header halfwords, slave 6002..0102",
+    "6200/0002",
+    "6202/7202 idle (START prompt)",
+    "63C1/7202",
+    "63C1/7397",
+    "64A6/73F2",
+    "SWI 0x25 data 0ED8/73BA, CB8A/00C0, BE8E/00C2 ...",
+    "Normal-32 x61515 (P2 payload)"
+  ],
+  "host_rom_reads": {
+    "0x088FED9C stage-one header": "frames 2256-2257 PC 0x08363C8E/94",
+    "0x08902A80 stage-one tail": "frame 2696 PC 0x000029B2/29C8 (BIOS SWI 0x25)",
+    "0x0890DC7C payload0 start": "frame 2761 PC 0x08333A06",
+    "0x0892DF84": "frame 2762 PC 0x08333A06",
+    "0x0892EB5C": "frame 2762 PC 0x08333A06",
+    "0x08966C0C,0x089677E4,0x0899F4B0,0x089A0088,0x089D7D54,0x089D892C": "0 reads"
+  },
+  "client_ewram_payload": {
+    "dump": "temp/release_C/verify4b/link8/client_ewram.bin",
+    "sha256": "0ff9a1bbcb116288c85138f2e2cae281dcd1399040abea3009ac29fcf19b50d2",
+    "payload0_0x90DC7C_0x9463FC": "byte-exact 231296/231296 at 0x02000000",
+    "payload1..3": "no match"
+  },
+  "client_sheet_consumption": {
+    "SWI 0x12 LZ77UnCompVram": [
+      "r0=0x02020308 -> 0x06009000 (= ROM 0x92DF84)",
+      "r0=0x02020EE0 -> 0x0600AC00 (= ROM 0x92EB5C)"
+    ],
+    "read_watch": "client frame 3655: 0x02020308 and 0x02020EE0 read by PC 0x02000DB4 then BIOS 0x000011A4"
+  },
+  "client_banner_frame": {
+    "path": "docs/screenshots/verify4_2026-10-15/part2_onepak_client_day1_banner_b35.png",
+    "sha256": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+    "zoom": "docs/screenshots/verify4_2026-10-15/part2_onepak_client_day1_banner_b35_zoom3x.png",
+    "visible_text": "1일째 / 작전개시",
+    "complete_glyphs": true,
+    "template_match_sheet_0x92DF84_0x92EB5C": {
+      "일": {
+        "x": 88,
+        "y": 32,
+        "matched": 743,
+        "opaque": 846,
+        "score": 0.878251
+      },
+      "째": {
+        "x": 112,
+        "y": 32,
+        "matched": 791,
+        "opaque": 791,
+        "score": 1.0
+      },
+      "개": {
+        "x": 144,
+        "y": 64,
+        "matched": 765,
+        "opaque": 765,
+        "score": 1.0
+      },
+      "시": {
+        "x": 176,
+        "y": 64,
+        "matched": 679,
+        "opaque": 679,
+        "score": 1.0
+      },
+      "작": {
+        "x": 80,
+        "y": 64,
+        "matched": 728,
+        "opaque": 728,
+        "score": 1.0
+      },
+      "전": {
+        "x": 112,
+        "y": 64,
+        "matched": 843,
+        "opaque": 843,
+        "score": 1.0
+      }
+    },
+    "note": "째/작/전/개/시 exact 1.0; 일 0.878: all 103 mismatches at cell columns 24-30 = overlap by the 째 sprite at x=112 (banner palette colours)"
+  },
+  "host_banner_frame": {
+    "path": "docs/screenshots/verify4_2026-10-15/part2_onepak_host_day1_banner_b35.png",
+    "sha256": "7d97f7362b26efb0a13b555a115beb3b7aeac56294952ba1356123da28b296e4"
+  },
+  "finding_stage1_loader_untranslated": {
+    "path": "docs/screenshots/verify4_2026-10-15/part2_onepak_client_stage1_loader_ja_b35.png",
+    "sha256": "0f644c077ab04933032d746ceae707346c6c37d2c9a2b2736ec32a70ee224df9",
+    "zoom": "docs/screenshots/verify4_2026-10-15/part2_onepak_client_stage1_loader_ja_b35_zoom3x.png",
+    "visible_text": "スイッチを切ったり、ケーブルを抜いたりしないでください。",
+    "host_shows": "스위치를 끄거나 케이블을 뽑지 마세요.",
+    "cause": "stage-one image 0x8FED9C..0x902A8C is byte-identical to the Japanese original (Part 1 stage-one 0xEC3EE0..0xEC6374 too)"
+  },
+  "other_frames": {
+    "client_wait": "docs/screenshots/verify4_2026-10-15/part2_onepak_client_wait_b35.png",
+    "host_map_select": "docs/screenshots/verify4_2026-10-15/part2_onepak_host_map_select_b35.png"
+  },
+  "compact_row_0x08804FC8_CF": {
+    "host_reads": 0,
+    "phases": "LINK★MODE→1팩 대전 handshake, header, START, SWI 0x25, P2 send, map select, battle start + day-1 banner (link1-link11)",
+    "positive_controls": "stage-one/payload ROM reads above",
+    "client_copy": "row bytes 81 40 8E EC 8E 9B 89 AF absent from all embedded payloads (VERIFY-4)"
+  },
+  "static_reference_scan": {
+    "0x08391400..0C literal pool": "stage-one [0x088FED9C,0x08902A8C) and P2 [0x0890DC7C,0x089463FC) only",
+    "payload1..3 bases 0x9463FC/0x97ECA0/0x9B7544 (+0xC0)": "no absolute literal references (0x089463FC only as payload0 end)",
+    "Part 1 link": "stage-one 0x08EC3EE0, payload 0x08EC6374 (pool 0xB34B1C/24, 0xB34DA8)"
+  }
+}

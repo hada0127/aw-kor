@@ -1,0 +1,9 @@
+# Part 1 Wars Shop suffix consumer (`g_00DF8B6A`)
+
+ROM: `output/game_wars_korean_full.gba`, SHA-256 `7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a`.
+
+Cold boot from the copied cartridge save `temp/release_C/rebind1/help/F_help_sweep/game.sav` (131072 bytes, SHA-256 `d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51`). Its migration receipt is `temp/release_C/rebind1/help/F_help_sweep/game_save.json`; source ROM SHA-256 is `e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf`. Classify this route `cheat_tainted` conservatively because the save was migrated from another ROM. No savestate or RAM cheat is loaded by this probe.
+
+Run `memcap -n aw-kor-verify2 -- nice -n 15 python3 tools/scene_routes/15_part1_shop/probe.py`. The script replays the recorded inputs in `temp/release_C/rebind1/help/F_help_sweep/actions.jsonl` through segment 16, from the main menu to the shop help, then presses `A` to enter the shop and advances its dialogue/list. It records all input step frame counts, read watches for `0x08DF8B68..0x08DF8B6F` and shop help positive control `0x08DFA6E2..0x08DFA6E3`, and 33 screen captures in `temp/release_C/verify2_shop/`.
+
+Exit code 0. At core frame 1519, shop help control has four reads and the target has zero. At core frame 3153, the native shop list shows map names and prices, with 16 target-byte reads; at frame 4518, 104 target-byte reads. Raw watch log SHA-256: `2b46821975ef62b18a15a25a7ce19d74bc7a6183f0479ba8264289a2fc035762`. Registered receipt: `docs/screenshots/verify2_2026-10-15/shop_consumer.json`; screenshot: `docs/screenshots/verify2_2026-10-15/part1_shop_list.png` (SHA-256 `edbd7a09d113600c6b7c4433eab1e973149ca2dfd05d65c8c354dded26f45230`). The exact `장` glyph is not visually distinguishable in the list screenshot (unverified).

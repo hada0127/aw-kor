@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "classification": "no natural-route promotions; 11 synthetic-only windows remain unverified",
+  "target_window_ids": [
+    "0xDFA64A",
+    "0xDFA66B",
+    "0xDFA83A",
+    "0xDFA84D",
+    "0xDFA872",
+    "0xDFA885",
+    "0xDFA8AA",
+    "0xDFA8CB",
+    "0xDFA8EA",
+    "0xDFA90A",
+    "0xDFA926"
+  ],
+  "code_to_current_rom_watch": {
+    "0": "0x08DFA64A",
+    "5": "0x08DFA83A",
+    "6": "0x08DFA872",
+    "16": "0x08A7C016",
+    "17": "0x08A7C05A",
+    "18": "0x08A7C07E",
+    "19": "0x08A7C0A2"
+  },
+  "routes": [
+    {
+      "route": "F_help_sweep",
+      "source_save": "temp/release_C/rebind1/help/F_help_sweep/game.sav",
+      "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "cheat_tainted": true,
+      "trace_root": "temp/release_C/verify2_part1_help/F_help_sweep",
+      "watch_log_sha256": "fbe81a29ec941db11da0982379546d85c3620475a7589cb544946e25bd3be019",
+      "control_address": "0x08DFA6E2",
+      "control_reads": 4,
+      "target_reads_by_code": {
+        "0": 0,
+        "5": 0,
+        "6": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0
+      },
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_help_shop_control.png",
+      "screenshot_sha256": "87e00fd8df50a62172ba1b0fb440308ae453b63f415aa435604ae477467a8cb4",
+      "core_frame": 3956,
+      "emulator_exit_code": 0
+    },
+    {
+      "route": "F7BE_b2",
+      "source_save": "temp/release_C/rebind1/help/F7BE_b2/game.sav",
+      "source_save_sha256": "f3d143111ee24c7a00e780cd3881f36306b14f4cb523ad65de1655e3a6816cb1",
+      "cheat_tainted": true,
+      "trace_root": "temp/release_C/verify2_part1_help/F7BE_b2",
+      "watch_log_sha256": "afbcf8dca347dd2361e132ef5f63c42871be34c63f3b19e985c87e6621651cda",
+      "control_address": "0x08A7BFEE",
+      "control_reads": 4,
+      "target_reads_by_code": {
+        "0": 0,
+        "5": 0,
+        "6": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0
+      },
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_help_vs_control.png",
+      "screenshot_sha256": "442c22ab28d31cdef7e6c21f63e437e41326575cc27b54f7850d88f7e07c2375",
+      "core_frame": 1625,
+      "emulator_exit_code": 0
+    }
+  ]
+}

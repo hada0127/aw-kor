@@ -44,28 +44,28 @@ MAX_ENCODED_HALF_CELLS = 34
 # in this cold-boot, cartridge-save frame. Keep the larger limit tied to that
 # exact ROM; changed ROMs require a fresh frame or an independently proven
 # byte-identical renderer/window and payload.
-WIDTH_EVIDENCE_ROM_SHA256 = "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a"
-CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b32r5"
+WIDTH_EVIDENCE_ROM_SHA256 = "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1"
+CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b36r3"
 WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "0033_NONE_0002121.png"
 EVIDENCE_SHA256 = {
-    "registration.json": "91c1d8ffb38b5b36fab6f475eeb992ea3099d4b7168a1592ccc3e60dc14608a1",
+    "registration.json": "4b018b68665d936c4423ce9759901a36aae355d457162a85ff96c71c4b64ca33",
     "0059_NONE_0003305.png": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
     "0016_DOWN_0001519.png": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
     "0015_DOWN_0001498.png": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
     "0049_NONE_0002819.png": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
     "0014_DOWN_0001477.png": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
-    "exit.json": "ea9f5face13b2b2c214e84ade3964db20e10e17ad3f9fb1c33d80d238eabe095",
-    "window_measurement.json": "4763d1c889971c6983d996d79739c248775905c5cab2e5ad0608a3bfcd929c94",
+    "exit.json": "c5bd6dbb5bc748bbe3df9d9a7aa7d5bd3d10e4166717e2978ec0a5c086c56289",
+    "window_measurement.json": "3b72f53db6fd3df1766104c1cb641fe9d55a7d5ba1046bdc344ea3a824ea7ca6",
     "0013_DOWN_0001456.png": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
     "0060_DOWN_0003336.png": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
     "0012_DOWN_0001435.png": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
     "DFA7BE_0014_NONE_0001625.png": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
-    "findings.tsv": "e6d640d6141f4600c612663c9405790a58a4607c5afa0ab5939d4a9460aec1f9",
+    "findings.tsv": "8cee62d134afb17a86df205b3237e0c4973d05bc5bf63a9704a1b43e7fc7bdd7",
     "0061_DOWN_0003367.png": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
     "DFA68C_0077_NONE_0003956.png": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
     "0051_NONE_0002880.png": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
     "0033_NONE_0002121.png": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
-    "baseline.json": "09598fad4badb161fae41bcb37095a0abda6b691bf16cf1530baf72d23af0a9e"
+    "baseline.json": "1cd5048b808ce36a59b915e50d023bff8f4e11322cdba79048112cbac21fe8f0"
 }
 
 
@@ -225,7 +225,7 @@ EVIDENCE_FILES = [
 ]
 
 LIVE_CODE_REPORTS = [
-    ROOT / "data" / "evidence" / "part1_help_b32r5_synthetic" / "report.json",
+    ROOT / "data" / "evidence" / "part1_help_b36r3_synthetic" / "report.json",
 ]
 
 

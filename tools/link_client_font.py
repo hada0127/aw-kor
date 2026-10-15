@@ -52,6 +52,8 @@ ASSET_LZ77 = (
     0x92BF3C, 0x965BC4, 0x99E468, 0x9D6D0C, 0xEE7720,
     # patch_part2_battle_start_day_overlay_obj
     0x92DF84, 0x966C0C, 0x99F4B0, 0x9D7D54, 0x92EB5C, 0x9677E4, 0x9A0088, 0x9D892C,
+    # link_stage1_graphics: campaign payload failure overlays
+    0x92EE50, 0x967AD8, 0x9A037C, 0x9D8C20,
     # patch_part1_compact_info_weapon_labels
     0x92F0F4, 0x967D7C, 0x9A0620, 0x9D8EC4,
     # patch_part2_result_success_overlay_obj

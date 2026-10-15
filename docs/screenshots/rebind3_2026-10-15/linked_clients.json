@@ -1,0 +1,224 @@
+{
+  "schema": 1,
+  "candidate_rom": "output/game_wars_korean_candidate_20261015_b36r3.gba",
+  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "bios_path": "temp/bios/gba_bios.bin",
+  "client_cartridge_slot_empty": true,
+  "cheat_tainted": false,
+  "route_receipts": {
+    "part1_transfer": {
+      "path": "temp/release_C/rebind3/link/part1/transfer/receipt.json",
+      "sha256": "0e6b58cafe4e8a1f70bdb5551c8a2572cd586165e84ec4035afe3e082bdcb32d",
+      "exit_code": 0
+    },
+    "part1_day": {
+      "path": "temp/release_C/rebind3/link/part1/day_probe/receipt.json",
+      "sha256": "a06324cda7a8a6011a7f2dbd6950bc9f3d0ee7a56b3e65b40aeb7cb202fe4093",
+      "exit_code": 0
+    },
+    "part2_transfer": {
+      "path": "temp/release_C/rebind3/link/part2/transfer/receipt.json",
+      "sha256": "9c921fb0a8256fb8bcb93f481804dd9ac2d9814f3406666c96441dfd19cf8e17",
+      "exit_code": 0
+    },
+    "part2_day": {
+      "path": "temp/release_C/rebind3/link/part2/day_banner/receipt.json",
+      "sha256": "460d873373467ad05041a1bd9f56fae9a9ee00e3fd9e3bc8ef0d361bdaf88437",
+      "exit_code": 0
+    }
+  },
+  "payloads": {
+    "part1": {
+      "rom_offset_start": "0xEC6374",
+      "rom_offset_end": "0xEFE2D8",
+      "byte_exact_length": 229220,
+      "ewram_dump": "temp/release_C/rebind3/link/part1/transfer/client_ewram.bin",
+      "ewram_dump_sha256": "145a81d8ee79d217518cf44f87b94634ae80a208ae6d90a400a46af6bda3aea8"
+    },
+    "part2": {
+      "rom_offset_start": "0x90DC7C",
+      "rom_offset_end": "0x9463FC",
+      "byte_exact_length": 231296,
+      "ewram_dump": "temp/release_C/rebind3/link/part2/transfer/client_ewram.bin",
+      "ewram_dump_sha256": "3b54632f5314f866334f8a1c76bf8f86739ab1cb2a2c5c7d57223ac2136b2a71"
+    }
+  },
+  "screens": {
+    "part1_loader": {
+      "frame": "docs/screenshots/rebind3_2026-10-15/part1_loader_b36r3.png",
+      "frame_sha256": "4e88bd1a3efe0c20ae8d4aa7c0c803849925367975be7ab673092d9f3e1ece4c",
+      "source_frame": "temp/release_C/rebind3/link/part1/transfer/client_00_p1.png",
+      "rgb_equal_to_history": true,
+      "historical_frame": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r3_client_loader_ko.png"
+    },
+    "part1_day1": {
+      "frame": "docs/screenshots/rebind3_2026-10-15/part1_day1_b36r3.png",
+      "frame_sha256": "428741b01b4250764d2f00920648ab0856dd53b1413e57d950464ba615e8cc07",
+      "source_frame": "temp/release_C/rebind3/link/part1/day_probe/after_start_client_p1.png",
+      "rgb_equal_to_history": true,
+      "historical_frame": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r3_client_day1.png"
+    },
+    "part2_loader": {
+      "frame": "docs/screenshots/rebind3_2026-10-15/part2_loader_b36r3.png",
+      "frame_sha256": "65b99a2ebbb9ed19896b86ea2a55401f5985aeb206574b86245dd5931a41bc0f",
+      "source_frame": "temp/release_C/rebind3/link/part2/transfer/client_01_p1.png",
+      "rgb_equal_to_history": true,
+      "historical_frame": "docs/screenshots/b36_multiboot_2026-10-15/part2_b36r2_client_loader_ko.png"
+    },
+    "part2_day1": {
+      "frame": "docs/screenshots/rebind3_2026-10-15/part2_day1_b36r3.png",
+      "frame_sha256": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+      "source_frame": "temp/release_C/rebind3/link/part2/day_banner/client_16_p1.png",
+      "rgb_equal_to_history": true,
+      "historical_frame": "docs/screenshots/b36_multiboot_2026-10-15/part2_b36r2_client_day1.png"
+    }
+  },
+  "live_part2_sheet_assets": [
+    {
+      "rom_offset": "0x92DF84",
+      "kind": "Part 2 day-banner main sheet (LZ77, payload0)",
+      "status": "live_runtime_proven_b36r3",
+      "cheat_tainted": false,
+      "evidence": "docs/screenshots/rebind3_2026-10-15/linked_clients.json",
+      "frame": "docs/screenshots/rebind3_2026-10-15/part2_day1_b36r3.png",
+      "frame_sha256": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+      "proof": "native one-pak link; host read 0x0892DF84 while sending payload0; client EWRAM payload0 byte-exact; client SWI 0x12 r0=0x02020308; frame match 째/개/시 1.0, 일 0.878 (째 overlap)",
+      "visible_text": "1일째 / 작전개시",
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "historical_b35_evidence": "docs/screenshots/verify4_2026-10-15/part2_onepak_native_link.json",
+      "read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/live_main_sheet_watch.log",
+        "watch_sha256": "e4c9ff97e85870ae6be72b3ff5a0abff276a61f41016df5bcbfaa2d517cedd69",
+        "address": "0x0892DF84",
+        "hits": 2
+      }
+    },
+    {
+      "rom_offset": "0x92EB5C",
+      "kind": "Part 2 day-banner word sheet (LZ77, payload0)",
+      "status": "live_runtime_proven_b36r3",
+      "cheat_tainted": false,
+      "evidence": "docs/screenshots/rebind3_2026-10-15/linked_clients.json",
+      "frame": "docs/screenshots/rebind3_2026-10-15/part2_day1_b36r3.png",
+      "frame_sha256": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+      "proof": "host read 0x0892EB5C while sending payload0; client SWI 0x12 r0=0x02020EE0; frame match 작/전 1.0",
+      "visible_text": "작전개시",
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "historical_b35_evidence": "docs/screenshots/verify4_2026-10-15/part2_onepak_native_link.json",
+      "read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/live_word_sheet_watch.log",
+        "watch_sha256": "39ed794454b02e96b591fa22497e877f1791e72bb0cf2a0d817fd894f7b29d35",
+        "address": "0x0892EB5C",
+        "hits": 2
+      }
+    }
+  ],
+  "alternate_part2_sheet_assets": [
+    {
+      "rom_offset": "0x966C0C",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/08966C0C_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08966C0C",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    },
+    {
+      "rom_offset": "0x9677E4",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/089677E4_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x089677E4",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    },
+    {
+      "rom_offset": "0x99F4B0",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/0899F4B0_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x0899F4B0",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    },
+    {
+      "rom_offset": "0x9A0088",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/089A0088_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x089A0088",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    },
+    {
+      "rom_offset": "0x9D7D54",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/089D7D54_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x089D7D54",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    },
+    {
+      "rom_offset": "0x9D892C",
+      "status": "unverified_global_reachability",
+      "detail": "payload1..3 not sent in Part 2 one-pak 2P session (0 host reads); no absolute literal reference to payload1..3 bases found; global deadness unverified",
+      "bounded_b36r3_read_watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/089D892C_alternate_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x089D892C",
+        "hits": 0
+      },
+      "bounded_result": "no host read in this Part 2 two-player one-pak route; payload0 only"
+    }
+  ],
+  "client_sheet_read_watch": {
+    "path": "temp/release_C/rebind3/link/part2/transfer/client_sheet_watch.log",
+    "hits": 6,
+    "sha256": "6aa1c869a95d770579b04933f1ea28aeaa30b307e5a00915ca966f3489b14c1b"
+  },
+  "compact_row_0x08804FC8_bounded_watches": {
+    "part1": {
+      "watch_log": "temp/release_C/rebind3/link/part1/transfer/host_row_watch.log",
+      "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "address": "0x08804FC8",
+      "hits": 0
+    },
+    "part2": {
+      "watch_log": "temp/release_C/rebind3/link/part2/transfer/host_row_watch.log",
+      "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "address": "0x08804FC8",
+      "hits": 0
+    }
+  },
+  "historical_evidence": [
+    "temp/release_C/verify4b/registration_candidates.json",
+    "docs/screenshots/verify4_2026-10-15/part2_onepak_native_link.json",
+    "docs/screenshots/b36_multiboot_2026-10-15/evidence.json",
+    "docs/screenshots/b36_multiboot_2026-10-15/b36r2_evidence.json",
+    "docs/screenshots/b36_multiboot_2026-10-15/b36r3_evidence.json"
+  ],
+  "invalid_history": [
+    "temp/release_C/rebind3/link_cross_rom_invalid",
+    "docs/screenshots/b36_multiboot_2026-10-15/b36r3_evidence.json"
+  ],
+  "limits": [
+    "alternate payload sheets have no proven runtime consumer",
+    "transfer-error branches were not exercised"
+  ]
+}

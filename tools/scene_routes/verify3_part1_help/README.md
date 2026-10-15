@@ -1,0 +1,7 @@
+# Part 1 compact-help root-menu reachability (b32r5)
+
+Run `python3 tools/scene_routes/verify3_part1_help/static_scan.py` against the fixed release ROM SHA-256 `7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a`. Its machine-readable output is `temp/release_C/verify3/help_menu_graph.json`.
+
+Ghidra `temp/release_C/verify2_ghidra/08B3ED10.c` shows a 20-byte node stride and code emission from byte `+0` after callback `+4` returns 1 or 2. `08B3EDC4.c` initializes pointer `0x03004198` to root table `0x08DEFFC4`. `08B3EE20.c` follows child pointer `+12`; `08B3EE8C.c` follows back pointer `+16`. `08B3EDE4.c` and `08B3EECC.c` read the same current table. Ghidra `xref=0x03004198` on b32r5 lists these functions and no second explicit initializer. `08B4AF08.c` indexes the help pointer table by `code & 0x7F`.
+
+The root graph has five tables and codes `[1,2,3,4,7,10,13,14,15,20,21,22,23,26,27,28,29]`. It cannot emit target codes 0, 5, 6, or 16–19 from immutable ROM nodes. The only valid nodes for 16–19 in this menu region are at detached `0x08DF01A4`; there is no exact 32-bit ROM pointer to that table. A full ROM scan finds no node with code 0/5/6 and a callback in the `0x08B3E700..0x08B3EC00` menu family. This proves nonreachability in the fixed ROM root-menu graph, not a universal claim about undiscovered RAM-built menus or writes through indirect pointers. Consequently, the 11 associated help windows stay synthetic-only; no natural capture was registered.

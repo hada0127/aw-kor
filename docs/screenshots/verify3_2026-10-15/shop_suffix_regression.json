@@ -1,0 +1,29 @@
+{
+  "status": "visual_regression",
+  "target": "g_00DF8B6A / Wars Shop price suffix",
+  "original_rom_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+  "release_rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save": "temp/release_C/rebind1/help/F_help_sweep/game.sav",
+  "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+  "route": "tools/scene_routes/verify3_shop/original_probe.py and tools/scene_routes/15_part1_shop/probe.py",
+  "cheat_tainted": true,
+  "original_emulator_exit_code": 0,
+  "release_emulator_exit_code": 0,
+  "crop_box_xyxy": [
+    106,
+    39,
+    139,
+    105
+  ],
+  "scale": 8,
+  "resampling": "nearest",
+  "original_frame": "docs/screenshots/verify3_2026-10-15/original_shop_list.png",
+  "original_frame_sha256": "528684ef17108eb1e7ca4e4f4a607418948444774fe5a1aeccc71ed7762f4823",
+  "release_frame": "docs/screenshots/verify2_2026-10-15/part1_shop_list.png",
+  "release_frame_sha256": "edbd7a09d113600c6b7c4433eab1e973149ca2dfd05d65c8c354dded26f45230",
+  "original_zoom": "docs/screenshots/verify3_2026-10-15/original_shop_rows_zoom.png",
+  "original_zoom_sha256": "b930ebe58124145c04416f78c4dfaec99c606059bc4b1ffa6ad2cc33c96b586e",
+  "release_zoom": "docs/screenshots/verify3_2026-10-15/b32r5_shop_rows_zoom.png",
+  "release_zoom_sha256": "2af88cdc1897757f019b89815457494f9a89c76ba2de9f5af98e5992ee35a6b2",
+  "observation": "Original shop rows visibly render 4枚; same-route release rows show 4 with no visible 장 to the right."
+}

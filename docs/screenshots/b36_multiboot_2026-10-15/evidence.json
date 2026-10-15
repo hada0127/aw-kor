@@ -1,0 +1,48 @@
+{
+  "candidate_path": "output/game_wars_korean_candidate_20261015_b36.gba",
+  "candidate_sha256": "eca0d05e01a703da0dd00e98b519cb40e24f3026ee703c882bc15918fcdbd180",
+  "bios_path": "temp/bios/gba_bios.bin",
+  "bios_sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
+  "harness_source_sha256": "2f772243f99a7cfd17ffe7a9b1fb45e8564feda7984941a6fac78199b794feec",
+  "native_bios_client_cartridge_empty": true,
+  "screens_sha256": {
+    "part1_b35_client_loader_jp.png": "e5f11afebc69f62def72fce8fa68c7f9a55257d8225f80c970380321ab0465e3",
+    "part1_b36_client_day1.png": "428741b01b4250764d2f00920648ab0856dd53b1413e57d950464ba615e8cc07",
+    "part1_b36_client_loader_ko.png": "64d9531f55a49473bae2eb65ad5bd666c5a750d9bc096aadd5c9358fa14238cc",
+    "part1_b36_error_synthetic.png": "0aab1abb2b7379267781dfa156b2e27bc1287ab28ededdc25a74c8635f803161",
+    "part2_b35_client_loader_jp.png": "4b992c36633474ffdd6be40bd01fae2f577d52a46b7e541d39e75730ef34b03e",
+    "part2_b36_client_day1.png": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+    "part2_b36_client_loader_ko.png": "ca072243685aaa5ed5349b0a9cc504f7c40abae3e2884da2eb7887916a5f780d",
+    "part2_b36_error_synthetic.png": "b90b9225e29c6e9faf887e03d6a0c84e0cf73dff790c54cbc16af9383621feee"
+  },
+  "runs": {
+    "part1": {
+      "transfer_receipt": "temp/release_C/b36/part1_link_outline/transfer/receipt.json",
+      "day_receipt": "temp/release_C/b36/part1_link_outline/day_probe/receipt.json",
+      "transfer_exit_code": 0,
+      "day_exit_code": 0,
+      "client_payload_range": [
+        "0xec6374",
+        "0xefe2d8"
+      ],
+      "client_payload_bytes": 229220,
+      "client_payload_exact": true
+    },
+    "part2": {
+      "transfer_receipt": "temp/release_C/b36/part2_link_outline/transfer/receipt.json",
+      "day_receipt": "temp/release_C/b36/part2_link_outline/day_banner/receipt.json",
+      "transfer_exit_code": 0,
+      "day_exit_code": 0,
+      "client_payload_range": [
+        "0x90dc7c",
+        "0x9463fc"
+      ],
+      "client_payload_bytes": 231296,
+      "client_payload_exact": true
+    }
+  },
+  "error_screen_images": "synthetic renders only; failure branch not exercised",
+  "evidence_status": "invalid_history_cross_rom_savestate",
+  "invalid_reason": "Link host loaded a savestate made from a different ROM; these captures do not prove the declared candidate route.",
+  "replacement": "docs/screenshots/rebind3_2026-10-15/linked_clients.json"
+}

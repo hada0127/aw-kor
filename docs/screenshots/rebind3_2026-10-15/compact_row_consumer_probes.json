@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "target_range": "0x08804FC8..0x08804FCF",
+  "status": "bounded_routes_no_consumer_observed",
+  "global_deadness": "unverified",
+  "routes": [
+    {
+      "route": "part1_name_confirm",
+      "receipt": "temp/release_C/rebind3/verify2_compact_name/receipt.json",
+      "receipt_sha256": "774cdc8066f0f106c44eff1448e1459043f67541044a4229e9495a9828dd163c",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 8,
+      "cheat_tainted": false,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_save_confirm",
+      "receipt": "temp/release_C/rebind3/verify2_compact_part1_save/receipt.json",
+      "receipt_sha256": "3256ee7b2a759cbe248bf49d2aa5304068f536dae4be3973813ed2e28be8f5af",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_shop_buy_confirm",
+      "receipt": "temp/release_C/rebind3/verify2_compact_shop/events.json",
+      "receipt_sha256": "69db488c46934029c0cbafee9566d8c59976a81e811401fe83ab81263f450d09",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 104,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_surrender_confirm",
+      "receipt": "temp/release_C/rebind3/verify2_compact_part2/receipt.json",
+      "receipt_sha256": "a30e6f961870bad0e84bb0e6e4b578f2ef11fd0dc03a2603b3fd6d9e085d4be3",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 37,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_cable_setup",
+      "receipt": "temp/release_C/rebind3/verify2_compact_link/receipt.json",
+      "receipt_sha256": "16d9028f96028559a66b643b34509c8f35a2e4a9904d2c5d6c223bb31ba5b98e",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 20,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_delete_confirm",
+      "receipt": "temp/release_C/rebind3/verify4_delete_hold/part1/receipt.json",
+      "receipt_sha256": "7161af8723d4c67e5961129ef4480c0ac77cb832a9227507f052eecaa4dbe1e0",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_delete_confirm",
+      "receipt": "temp/release_C/rebind3/verify4_delete_hold/part2/receipt.json",
+      "receipt_sha256": "c1918f9c736ebce4abb6401092c8282bd62df17a5c53e7c98458bb035966d414",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_real_bios_link_host",
+      "receipt": "temp/release_C/rebind3/link/part1/transfer/receipt.json",
+      "receipt_sha256": "0e6b58cafe4e8a1f70bdb5551c8a2572cd586165e84ec4035afe3e082bdcb32d",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "stage1": {
+          "path": "temp/release_C/rebind3/link/part1/transfer/stage1_read.log",
+          "sha256": "ab0a11000de91ac18836445e2c6b28308884c4011a1cfd333b02aec68c36fc70",
+          "hits": 4
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/rebind3/link/part1/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    },
+    {
+      "route": "part2_real_bios_link_host",
+      "receipt": "temp/release_C/rebind3/link/part2/transfer/receipt.json",
+      "receipt_sha256": "9c921fb0a8256fb8bcb93f481804dd9ac2d9814f3406666c96441dfd19cf8e17",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "main_sheet": {
+          "watch_log": "temp/release_C/rebind3/link/part2/transfer/live_main_sheet_watch.log",
+          "watch_sha256": "e4c9ff97e85870ae6be72b3ff5a0abff276a61f41016df5bcbfaa2d517cedd69",
+          "address": "0x0892DF84",
+          "hits": 2
+        },
+        "word_sheet": {
+          "watch_log": "temp/release_C/rebind3/link/part2/transfer/live_word_sheet_watch.log",
+          "watch_sha256": "39ed794454b02e96b591fa22497e877f1791e72bb0cf2a0d817fd894f7b29d35",
+          "address": "0x0892EB5C",
+          "hits": 2
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/rebind3/link/part2/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    }
+  ],
+  "historical_b35_receipts": [
+    "docs/screenshots/verify2_2026-10-15/compact_row_coverage.json",
+    "docs/screenshots/verify4_2026-10-15/delete_confirmations.json",
+    "temp/release_C/verify4b/registration_candidates.json"
+  ],
+  "cheat_tainted_preserved": true
+}

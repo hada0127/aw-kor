@@ -1,0 +1,13 @@
+{
+  "scene_id": "80a_campaign_story_early",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6f_scene19c2_cold2/0105_A_0012873.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene19c2_cold2/0105_A_0012873.png",
+  "source_ledger": "temp/release_C/w2b6f_scene19c2_cold2/frames.jsonl",
+  "core_frame": 12873,
+  "rgb_sha256": "b511d4fb8c3decded4927d41ffd619384f5905612c86d5ea6e2715d4c42b837d",
+  "png_sha256": "79f3914b71284c2377549c77f90ab9d67d41e12d2850c4480cc2130d9e30ab1c",
+  "cheat_tainted": true,
+  "exact_visible_korean": "많이 기다렸지!",
+  "claim_scope": "P1 Max arrival group 0xE0075A screen rendering only; direct runtime read-watch unverified"
+}

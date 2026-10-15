@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "classification": "bounded negative only; consumer/dead globally unverified",
+  "rom_pointer_scan": "temp/release_C/verify2_fc8_pointer_scan.json",
+  "routes": [
+    {
+      "route": "part1_name_confirm",
+      "trace_root": "temp/release_C/verify2_compact_name",
+      "watch_log_sha256": "3421723ff62adf95ae8053c7cacc85ee6b6607fae28d2d1ccedeb302c6d1d0d4",
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_name_confirm.png",
+      "screenshot_sha256": "210c29f7ced5ba569da3c5edf7f65b597f90960e62c6231b3a70d5ae2e635263",
+      "target_address": "0x08804FC8..0x08804FCF",
+      "target_reads": 0,
+      "positive_control_address": "0x08D835BC",
+      "positive_control_reads": 8,
+      "core_frame": 2340,
+      "emulator_exit_code": 0
+    },
+    {
+      "route": "part1_shop_buy_confirm",
+      "trace_root": "temp/release_C/verify2_compact_shop",
+      "watch_log_sha256": "c0c997584879110f6b4e29816ba280b0ede4e02f408fc04bc583b6e7441207d8",
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_shop_buy_confirm.png",
+      "screenshot_sha256": "0e8faf42b495ff99fad3a041b23a34cea9cde8d02b79284dbf9a165ed3475c6b",
+      "target_address": "0x08804FC8..0x08804FCF",
+      "target_reads": 0,
+      "positive_control_address": "0x08DF8B6A",
+      "positive_control_reads": 20,
+      "core_frame": 3426,
+      "emulator_exit_code": 0
+    },
+    {
+      "route": "part2_surrender_confirm",
+      "trace_root": "temp/release_C/verify2_compact_part2",
+      "watch_log_sha256": "93f3e9eaa8fe58ed8a1098ce01da836ff2a8d86a7d3843d8130559d5bcf148ae",
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part2_surrender_confirm.png",
+      "screenshot_sha256": "4201762996a847a9d6187fa1d5326bab654e169f11f817f2ee50c466ad1df14d",
+      "target_address": "0x08804FC8..0x08804FCF",
+      "target_reads": 0,
+      "positive_control_address": "0x08A34B6C",
+      "positive_control_reads": 37,
+      "core_frame": 4688,
+      "emulator_exit_code": 0
+    },
+    {
+      "route": "part1_save_confirm",
+      "trace_root": "temp/release_C/verify2_compact_part1_save",
+      "watch_log_sha256": "afbcf8dca347dd2361e132ef5f63c42871be34c63f3b19e985c87e6621651cda",
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_save_confirm.png",
+      "screenshot_sha256": "c3ce3897b5c718d9f8efda5a8b3eb1e33ce734f71b110327cab6121ac4f4693c",
+      "target_address": "0x08804FC8..0x08804FCF",
+      "target_reads": 0,
+      "core_frame": 2555,
+      "emulator_exit_code": 0,
+      "source_save_sha256": "f3d143111ee24c7a00e780cd3881f36306b14f4cb523ad65de1655e3a6816cb1",
+      "cheat_tainted": true,
+      "positive_control_address": "0x08A7BFEE",
+      "positive_control_reads": 4
+    },
+    {
+      "route": "part1_cable_setup",
+      "trace_root": "temp/release_C/verify2_compact_link",
+      "watch_log_sha256": "aa0021b22e1e600069a17d93647426701642bfcc30ef7c44e33f02e09d3269d6",
+      "screenshot": "docs/screenshots/verify2_2026-10-15/part1_cable_setup.png",
+      "screenshot_sha256": "d65aa5c64eb32664070c064c705074ca1df16c5462a40b1395405f2248fe88c1",
+      "target_address": "0x08804FC8..0x08804FCF",
+      "target_reads": 0,
+      "core_frame": 3312,
+      "emulator_exit_code": 0,
+      "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "cheat_tainted": true,
+      "positive_control_addresses": {
+        "20": "0x08DFA942",
+        "21": "0x08DFA972",
+        "22": "0x08DFA9AE",
+        "23": "0x08DFA9DA"
+      },
+      "positive_control_reads": {
+        "20": 12,
+        "21": 0,
+        "22": 4,
+        "23": 0
+      },
+      "scope": "cable setup reached; actual linked client handshake not established"
+    }
+  ]
+}

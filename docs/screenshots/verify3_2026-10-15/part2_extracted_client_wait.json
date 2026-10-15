@@ -1,0 +1,14 @@
+{
+  "status": "extracted_client_wait_only",
+  "active_runtime_registration": false,
+  "cheat_tainted": false,
+  "release_cartridge_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "extracted_client": "temp/release_C/verify1_multiboot/client0.bin",
+  "extracted_client_sha256": "c3bdbbb635c04e68a0ecdaa465132dd436d6524c89f737aa9134d6b4e053a649",
+  "entry_pc": "0x02000000",
+  "core_frame": 180,
+  "emulator_exit_code": 0,
+  "frame": "docs/screenshots/verify3_2026-10-15/part2_extracted_client_wait.png",
+  "frame_sha256": "7c8d219805b03c26072e27089a2a4cae07a7e99c0cf90acd21169e87d2ee458c",
+  "claim": "Extracted client boots to WAIT; no cartridge link or day banner proven."
+}

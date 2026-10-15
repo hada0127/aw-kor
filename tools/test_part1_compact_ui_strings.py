@@ -143,11 +143,38 @@ class CompactUiStringTests(unittest.TestCase):
         self.assertNotIn('存', spec)
         self.assertIn('존', spec)
 
+    def test_shop_suffix_patch_loads_its_display_code(self):
+        rom = self.compact_rom()
+        rom[0xDF8B6A:0xDF8B6C] = M.encode_spec('장', self.syl)
+        M.patch(rom, self.original, self.syl, builder.NAME_GRID_SLOTS.values())
+        code = self.syl['장'].to_bytes(2, 'big')
+        self.assertEqual(bytes(rom[0xDF8B68:0xDF8B70]), b'\x0a\x09' + code + b'\x0a\x00\x00\x00')
+        self.assertEqual(bytes(rom[0xBE7368:0xBE736C]), code + b'\x00\x00')
+        self.assertIn(code, M.loaded_codes(rom, None, (0xBE7368,)))
+        self.assertEqual(M.decode_cell(rom, self.original, code,
+                                       builder.PART2_UI_KANJI_GLYPH_SUBS, render_char,
+                                       {value: key for key, value in self.syl.items()},
+                                       M._kanji_slots(self.original)), '장')
+
     @unittest.skipUnless(os.environ.get('COMPACT_UI_ROM'), 'set COMPACT_UI_ROM to a built ROM')
     def test_built_rom(self):
         rom = Path(os.environ['COMPACT_UI_ROM']).read_bytes()
         report = M.verify(rom, self.original, self.syl, builder.PART2_UI_KANJI_GLYPH_SUBS, render_char)
         self.assertEqual(len(report), len(M.STRINGS))
+        code = self.syl['장'].to_bytes(2, 'big')
+        self.assertEqual(rom[0xDF8B68:0xDF8B70], b'\x0a\x09' + code + b'\x0a\x00\x00\x00')
+        self.assertEqual(rom[0xBE7368:0xBE736C], code + b'\x00\x00')
+        glyph = json.loads((ROOT / 'data/syllable_to_glyph_2350.json').read_text())['map']['장']
+        record = code + struct.pack('<HH', glyph['top'] | 0x8000, glyph['bot'] | 0x8000)
+        self.assertIn(record, rom[builder.P.NEW_TBL_FILE:builder.P.NEW_TBL_FILE + 0x10000])
+        for tile in (glyph['top'], glyph['bot']):
+            start = builder.KOR_GLYPH_FILE + tile * 32
+            self.assertNotEqual(rom[start:start + 32], bytes(32))
+        missing = bytearray(rom)
+        missing[0xBE7368:0xBE736A] = '枚'.encode('shift_jis')
+        with self.assertRaisesRegex(AssertionError, '0xDF8B6A.*not preloaded'):
+            M.verify(missing, self.original, self.syl, builder.PART2_UI_KANJI_GLYPH_SUBS,
+                     render_char)
         # The link-status table pointers are followed (a repointed row is still checked):
         # pointing the 接続エラー row at the 準備中 text must fail.
         broken = bytearray(rom)

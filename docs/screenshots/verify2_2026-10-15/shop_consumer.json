@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "route_script": "tools/scene_routes/15_part1_shop/probe.py",
+  "source_save": "temp/release_C/rebind1/help/F_help_sweep/game.sav",
+  "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+  "source_receipt": "temp/release_C/rebind1/help/F_help_sweep/game_save.json",
+  "classification": "cheat_tainted (conservative; migrated cartridge save)",
+  "emulator_exit_code": 0,
+  "watch_log": "temp/release_C/verify2_shop/watch.log",
+  "watch_log_sha256": "2b46821975ef62b18a15a25a7ce19d74bc7a6183f0479ba8264289a2fc035762",
+  "positive_control": {
+    "address": "0x08DFA6E2..0x08DFA6E3",
+    "count_before_shop_menu": 4,
+    "menu_core_frame": 1519
+  },
+  "target": {
+    "address": "0x08DF8B6A..0x08DF8B6B",
+    "count_before_shop_list": 0,
+    "count_at_shop_list": 16,
+    "shop_list_core_frame": 3153,
+    "count_final": 104
+  },
+  "screenshots": [
+    {
+      "path": "docs/screenshots/verify2_2026-10-15/part1_shop_menu.png",
+      "sha256": "87e00fd8df50a62172ba1b0fb440308ae453b63f415aa435604ae477467a8cb4",
+      "core_frame": 1519
+    },
+    {
+      "path": "docs/screenshots/verify2_2026-10-15/part1_shop_list.png",
+      "sha256": "edbd7a09d113600c6b7c4433eab1e973149ca2dfd05d65c8c354dded26f45230",
+      "core_frame": 3153
+    }
+  ],
+  "visual_note": "Shop list and prices visible. Exact suffix glyph is not visually distinguishable in the screenshot (unverified)."
+}

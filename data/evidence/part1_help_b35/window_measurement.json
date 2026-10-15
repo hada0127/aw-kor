@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+  "frame": "data/evidence/part1_help_b35/0033_NONE_0002121.png",
+  "message": "0x00DFA79A",
+  "observed_line_encoded_half_cells": 34,
+  "observed_fullwidth_glyphs": 17,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 136,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 34,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "b35 native cold boot; RGB-identical to measured b32r5 frame"
+}

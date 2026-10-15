@@ -1,0 +1,652 @@
+{
+  "candidate_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "revision": "b36r3",
+  "scene_id": "26_part2_battle_labels",
+  "classification": "cheat_tainted_screen_evidence",
+  "scope": "One CO Power quote asset per listed CO ID; synthetic CO-ID writes do not prove native campaign availability",
+  "entries": [
+    {
+      "co_id": 0,
+      "co": "Nell",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co00_synthetic_inputs.txt",
+      "route_sha256": "1c5fa1c4498f968625c31f9eaa5dbf9046a94a5f158139223cf10ef95f05b3b2",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co00/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co00/frames/1765d00b4c3c9ad8f35429dc737bc2bcb0c447a81f35fa2e1fd488050f82d755.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "99af8d2ed118e66d798c7726740cd972545c479c92a78358c5248dbe5b08d5cf",
+      "frame_sha256": "c53c9a6444cfbd3197626f3535ad749fa6daa7ad1a807ac1d47d5f287a3ca481",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_nell_synthetic.png",
+      "png_sha256": "c53c9a6444cfbd3197626f3535ad749fa6daa7ad1a807ac1d47d5f287a3ca481",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30198",
+        "0xA301A6"
+      ],
+      "visible_quote": "조금 더 / 즐겨보죠!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co00/frames.jsonl",
+        "ledger_sha256": "7db52751dd301c889eb9555acd5f822f7973f64951faf1608b507f13004d5a9b",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co00_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co00_synthetic_sourcefix/frames/1765d00b4c3c9ad8f35429dc737bc2bcb0c447a81f35fa2e1fd488050f82d755.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 1,
+      "co": "Andy",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co01_synthetic_inputs.txt",
+      "route_sha256": "c9fd360cc5429a6524ef82a4b201165a92407865f156c9de981a84b919732bcc",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co01/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co01/frames/51062f8ac7ff0f3407b87e530a65cb3351abaffee75e44138b53a5b33c6d25fe.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "065a691bfba64581f5fc2c91359c818317435de821594900a6d62c6bb5050d58",
+      "frame_sha256": "aee0bc389222f3033dac4f2b4f42158f85e545b6c67f01b6f8606adb2b02604d",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_andy_synthetic.png",
+      "png_sha256": "aee0bc389222f3033dac4f2b4f42158f85e545b6c67f01b6f8606adb2b02604d",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30264"
+      ],
+      "visible_quote": "화끈하게 가자고오-!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co01/frames.jsonl",
+        "ledger_sha256": "bc802ee427666a43f65ea06b1a8159507d56c66d2092ecd6c1e28988f321c951",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co01_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co01_synthetic_sourcefix/frames/51062f8ac7ff0f3407b87e530a65cb3351abaffee75e44138b53a5b33c6d25fe.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 2,
+      "co": "Max",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co02_synthetic_inputs.txt",
+      "route_sha256": "cb64be83ff8bea492782b0e562238d589b9642381a72ab0790389eb76cad70e9",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co02/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co02/frames/e2d8e0c38077995e603f8f9fe057c615d51398f1aaf0369a07b4e8de877f0d79.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "0c3a21e01f320e4fa0f91ec6638ae5993c0ec3a629c91c7861e71c800fd4db37",
+      "frame_sha256": "ab80345f9f0e36c363b71b755a0b81fa650b3f9f1075a1c76ebf89edcce4b6fa",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_max_synthetic.png",
+      "png_sha256": "ab80345f9f0e36c363b71b755a0b81fa650b3f9f1075a1c76ebf89edcce4b6fa",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30348"
+      ],
+      "visible_quote": "이 몸에게 대들면 다칠 텐데!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co02/frames.jsonl",
+        "ledger_sha256": "1529f636a387e5df226683f9a8a7517589998ec5725b9b38bc34e2027210c020",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co02_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co02_synthetic_sourcefix/frames/e2d8e0c38077995e603f8f9fe057c615d51398f1aaf0369a07b4e8de877f0d79.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 3,
+      "co": "Olaf",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co03_synthetic_inputs.txt",
+      "route_sha256": "5f482273e1e2bc66045fe19771a1ae34e3b1f5b5cf6a4175b26f81e59ca42543",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co03/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co03/frames/aa5d5779649793d85d3d15788b7752109fe992455f5fe6a5828ae0dd28d20366.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "8160f826f02a21686e7eaa7e26e62a701d065cdccb308c2db3186c20baefcfd4",
+      "frame_sha256": "87094b0198e10a73b982f767ee538ccd3d66f476072e15a4e30ae6bdcc477b62",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_olaf_synthetic.png",
+      "png_sha256": "87094b0198e10a73b982f767ee538ccd3d66f476072e15a4e30ae6bdcc477b62",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA304F0",
+        "0xA30504"
+      ],
+      "visible_quote": "이 몸에게 덤빈 것 / 후회하게 해주마!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co03/frames.jsonl",
+        "ledger_sha256": "4b1ef006a1f60cba8ef8c48fc35b33a12130e3ffd81326c3e30cf7c3ad9f09e1",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co03_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co03_synthetic_sourcefix/frames/aa5d5779649793d85d3d15788b7752109fe992455f5fe6a5828ae0dd28d20366.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 4,
+      "co": "Sami",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co04_synthetic_inputs.txt",
+      "route_sha256": "178f56d9f6f9249c24f902f6a6244def8ae585712e6f45dd6521bd7f4d851597",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co04/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co04/frames/ebe51df11638fb78ce07e04d10da3a064c1444dc6edc8bc1528366378fc399d5.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "82ed9b50630d44ddf7cdda176d1e5ec5bbda73be0395688299a8adfad31846e3",
+      "frame_sha256": "e2403367d3d0ae0980031be4f9e09bb0c67981940717130d17d0206f174881a7",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_sami_synthetic.png",
+      "png_sha256": "e2403367d3d0ae0980031be4f9e09bb0c67981940717130d17d0206f174881a7",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30404"
+      ],
+      "visible_quote": "좋-아! 이걸로 결정하겠어!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co04/frames.jsonl",
+        "ledger_sha256": "0006f9371be7007de89544bcf337ac6d09637b0a8d986e85f464d6ba4b81d31c",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co04_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co04_synthetic_sourcefix/frames/ebe51df11638fb78ce07e04d10da3a064c1444dc6edc8bc1528366378fc399d5.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 5,
+      "co": "Grit",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co05_synthetic_inputs.txt",
+      "route_sha256": "b5673e7a68369df403e48303e0757a5da72178958a4b597a82a0b8d5619e52bd",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co05/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co05/frames/c75a48c61533951f3bdfa5031c4ff3b5056d5870fc8ddbc63c74da36903383e6.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "308c988808cb07fd1f9bdde22b83323959b94cfd6422801c5b0ea2fe3aaecc5e",
+      "frame_sha256": "4344e574a415f5c2cd3a4ec80ad12b6ad6948af6471588b7bb648bc34ed21546",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_grit_synthetic.png",
+      "png_sha256": "4344e574a415f5c2cd3a4ec80ad12b6ad6948af6471588b7bb648bc34ed21546",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA305FC",
+        "0xA3060E"
+      ],
+      "visible_quote": "노린 사냥감은 / 놓치지 않아!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co05/frames.jsonl",
+        "ledger_sha256": "7f99b6b6954f6923d5651e02b77f9517f34259d8a3081ef528898239c1951154",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co05_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co05_synthetic_sourcefix/frames/c75a48c61533951f3bdfa5031c4ff3b5056d5870fc8ddbc63c74da36903383e6.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 7,
+      "co": "Sonja",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co07_synthetic_inputs.txt",
+      "route_sha256": "39b362abba59dbcebbbe5f9d36c3673dc79517fc0df34f754c72b7e425a559ec",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co07/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co07/frames/e7b7bb5c900acecbafc59ad714e555cd5eab2144889e665937c8f5a8b3b23726.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "ba1a27e8f9c4852fb59520ad2d2189a3f4d59dfbe244ac9314a300826ba128f5",
+      "frame_sha256": "0060cee29d5c79e7ac37a96b4f4b23500fb4dfa1aec1660cf83f95808a97c388",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_sonja_synthetic.png",
+      "png_sha256": "0060cee29d5c79e7ac37a96b4f4b23500fb4dfa1aec1660cf83f95808a97c388",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30820",
+        "0xA3084C"
+      ],
+      "visible_quote": "아버지 선생님 옐로코멧의 모두들 / 내게 힘을!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co07/frames.jsonl",
+        "ledger_sha256": "34f18656060ae5bff03d6d7d45a7fd8e979f3e00f4eeb9a0476242aac494cb98",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co07_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co07_synthetic_sourcefix/frames/e7b7bb5c900acecbafc59ad714e555cd5eab2144889e665937c8f5a8b3b23726.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 8,
+      "co": "Eagle",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co08_synthetic_inputs.txt",
+      "route_sha256": "320c19b3ae9764b330f3be979eb09fde800cbbeb9f2a622070efc5e67576acfa",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co08/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co08/frames/52dacc37b0ea1c689ecd2e0a92bc1a199f0b493f8b35a2f4552a28126cb8dc44.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "185b12f40c6afa524041d5d85453bc42372d23f520907c3e31109f1ca546d2eb",
+      "frame_sha256": "b66b0d8ea113c9a4a2b195757f33a7723c8ed153341a92130ffbe4bac1b560fc",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_eagle_synthetic.png",
+      "png_sha256": "b66b0d8ea113c9a4a2b195757f33a7723c8ed153341a92130ffbe4bac1b560fc",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30930",
+        "0xA30942"
+      ],
+      "visible_quote": "전기 공격 준비! / 녀석들에게 후회할 틈도 주지마!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co08/frames.jsonl",
+        "ledger_sha256": "70a895f4db5f26a2684a007ea403ae5fe1f36de470af4dc2508e1c055b5f6805",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co08_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co08_synthetic_sourcefix/frames/52dacc37b0ea1c689ecd2e0a92bc1a199f0b493f8b35a2f4552a28126cb8dc44.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 9,
+      "co": "Drake",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co09_synthetic_inputs.txt",
+      "route_sha256": "38433ce65d14e0b1e7bf1a53b3be0bf1a6054607613364f41f15bd43a9b89bdb",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co09/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co09/frames/97a8eb542db0fc9fac4df435e5031fca71ac71b16c62e48eba95ba0caf4c1033.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "292b2a41e142bf97e58ef25a09afeaf95e10249251608677c6412d1438369251",
+      "frame_sha256": "5a149679fa8ec3b6046c0cfdee97991e516560af78e601bfce6d90b9be109b03",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_drake_synthetic.png",
+      "png_sha256": "5a149679fa8ec3b6046c0cfdee97991e516560af78e601bfce6d90b9be109b03",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30A28",
+        "0xA30A34"
+      ],
+      "visible_quote": "나라도 / 좋은 모습 보여주겠어!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co09/frames.jsonl",
+        "ledger_sha256": "ac7af417916bfdce62432c296d00ae068d580ad4d72d3f715c5d718cc903aa1c",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co09_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co09_synthetic_sourcefix/frames/97a8eb542db0fc9fac4df435e5031fca71ac71b16c62e48eba95ba0caf4c1033.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 11,
+      "co": "Flak",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co11_synthetic_inputs.txt",
+      "route_sha256": "4f4d936e4854fd21ca1de2629f3a4567231d7e513ec950b9b386a2627e870f9d",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co11/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co11/frames/14cac4ca6383c7884692c08e22b32c16d6e406079d3683877edd77f8f56c4da8.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "5b984bd9b5f32bd4370f9687e7d9d64ea1c96bdaca985dcbd3a776b879d2ee09",
+      "frame_sha256": "4deafab6efd34f5a3ea9157723f3c9d6036404aff3a6998f1f972ad3eac01bc0",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_flak_synthetic.png",
+      "png_sha256": "4deafab6efd34f5a3ea9157723f3c9d6036404aff3a6998f1f972ad3eac01bc0",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30BF0"
+      ],
+      "visible_quote": "때려 부숴주마아-!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co11/frames.jsonl",
+        "ledger_sha256": "3602efa093a3c3f57a4a462e14b950f42844b985b449505afc7e7bb73615b945",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co11_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co11_synthetic_sourcefix/frames/14cac4ca6383c7884692c08e22b32c16d6e406079d3683877edd77f8f56c4da8.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 12,
+      "co": "Lash",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co12_synthetic_inputs.txt",
+      "route_sha256": "401ca4ed3e35d9e620f5cbac3d23bc16d0660595f6a942747a4b32ee2b6c3e8f",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co12/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co12/frames/34ced385c2d69b68c08e112adc63af63137c8260fcb66fc3b40eccbab885e87d.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "5a9e67150f29cf469224e4a6da9617a74f48adf865f9efe26450699622a15902",
+      "frame_sha256": "6a9a098b3d632533dc595d5ec88f5bb57ea3995714986a3ca3276f23b1931fd1",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_lash_synthetic.png",
+      "png_sha256": "6a9a098b3d632533dc595d5ec88f5bb57ea3995714986a3ca3276f23b1931fd1",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30CD4",
+        "0xA30CE4"
+      ],
+      "visible_quote": "정말- 질렸어! / 눈에 거슬려, 사라져!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co12/frames.jsonl",
+        "ledger_sha256": "3484ccb0b7e1924eaf581813a7a5afab71d4d83ec96b081ab6045fc59739afe1",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co12_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co12_synthetic_sourcefix/frames/34ced385c2d69b68c08e112adc63af63137c8260fcb66fc3b40eccbab885e87d.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 13,
+      "co": "Adder",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co13_synthetic_inputs.txt",
+      "route_sha256": "0ad6952f0e4b098d92d9fb7f4397465103c197906d81ab3498f43445f573080a",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co13/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co13/frames/1784301fc02596a6e3ce319fd6b909be76c09789c32349448f5c8a06b55fa067.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "170cdcae5874a68a81945d14ded0db793e9a8dbf30cb336d9a517651a3d1dfcd",
+      "frame_sha256": "8e912cf05fecdf3d80d0c3311e18300e4fbe0a2210c461e93061c931fff35da1",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_adder_synthetic.png",
+      "png_sha256": "8e912cf05fecdf3d80d0c3311e18300e4fbe0a2210c461e93061c931fff35da1",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30E08",
+        "0xA30E1C"
+      ],
+      "visible_quote": "큭큭큭・・・ / 조금은 즐겁게 해주세요!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co13/frames.jsonl",
+        "ledger_sha256": "9f88e776292264a675378e66bf8657a46cb5359cc1f9091bb4af4b212f26b3f2",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co13_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co13_synthetic_sourcefix/frames/1784301fc02596a6e3ce319fd6b909be76c09789c32349448f5c8a06b55fa067.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 14,
+      "co": "Hawke",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co14_synthetic_inputs.txt",
+      "route_sha256": "54ccd06e477c86a894789fd906dda45ca9497c1c12914221dd28cc0f7398ce6c",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co14/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co14/frames/dfe9471b63d52a2156f7277be1648257615d45ee204efe6b9958abcbbdb57785.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "e54a6a4259341aab1fe83664ac7006a970537d6e80363e26a798605cdd6bb72c",
+      "frame_sha256": "6c4765200d2f4e04e9d7e17a9a7774cc8ffbc2b8e65745aebcedbf5039e14b2f",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_hawke_synthetic.png",
+      "png_sha256": "6c4765200d2f4e04e9d7e17a9a7774cc8ffbc2b8e65745aebcedbf5039e14b2f",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA30F10",
+        "0xA30F34"
+      ],
+      "visible_quote": "・・・나를 여기까지 몰아붙인 것 / 칭찬해 주지・・・",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co14/frames.jsonl",
+        "ledger_sha256": "024e97de31782bf5c1a7897b2cc913b46d468715beeb55248f159617f9eceeea",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co14_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co14_synthetic_sourcefix/frames/dfe9471b63d52a2156f7277be1648257615d45ee204efe6b9958abcbbdb57785.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 15,
+      "co": "Hachi",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co15_synthetic_inputs.txt",
+      "route_sha256": "71f2bac3b8758d89d3505b03b31a4c458f7067ab7373b424fb1324fd02c3e1f1",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co15/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co15/frames/aecf3507b13a9fdfea200d6fc934007642371dd39df1f108a25dbff36fb47a3d.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "22c4924a0d2b1241425b56bde7d1259d96ed5dadc41a99fd8dc164ad92f918fa",
+      "frame_sha256": "88ceb6a37be1078d6f7423a7fafe05cab43c937863901326867b9edd006caff6",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_hachi_synthetic.png",
+      "png_sha256": "88ceb6a37be1078d6f7423a7fafe05cab43c937863901326867b9edd006caff6",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA3103C",
+        "0xA31054"
+      ],
+      "visible_quote": "내가 최강의 사령관 / 하치 님이다!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co15/frames.jsonl",
+        "ledger_sha256": "480e3d2101e7f2111a8159608813be27fe100703d9f1d52d6a98b2a1d3e9a63e",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co15_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co15_synthetic_sourcefix/frames/aecf3507b13a9fdfea200d6fc934007642371dd39df1f108a25dbff36fb47a3d.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 16,
+      "co": "Colin",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co16_synthetic_inputs.txt",
+      "route_sha256": "557de51532ea4fe3e5c30cb06a73895d05e989150bf8de2a32c356c48712a039",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co16/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co16/frames/58b885eef2c7ef5647b70206bb220ecc56afd29e64220810762dbaf4fc0d0c73.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "c3101487cb219dfd80fc132871e0d54be862c85d472fb479d701c7c5e9ba754c",
+      "frame_sha256": "f20d475d61ab4839089a14d5e5354d816cbfc088a71183e34d8ae092d8f73343",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_colin_synthetic.png",
+      "png_sha256": "f20d475d61ab4839089a14d5e5354d816cbfc088a71183e34d8ae092d8f73343",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA31130"
+      ],
+      "visible_quote": "돈보다 나은 건 없습니다!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co16/frames.jsonl",
+        "ledger_sha256": "90dc5bee71ddb9ab06dedfe9ab7e1e00efac42bbf886bce1da267cdd70dcc9d0",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co16_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co16_synthetic_sourcefix/frames/58b885eef2c7ef5647b70206bb220ecc56afd29e64220810762dbaf4fc0d0c73.png",
+      "rgb_identical_to_b32r5": true
+    },
+    {
+      "co_id": 17,
+      "co": "Jess",
+      "native_saved_co": false,
+      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+      "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+      "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+      "route": "tools/scene_routes/26_part2_co_power_quote/co17_synthetic_inputs.txt",
+      "route_sha256": "245d89b3cd8c307f2256ecb956da226ea653b05f7cd4b61c0be199ddd3c6fd10",
+      "source_checkpoint": "temp/release_C/rebind3/co_gallery/co17/0022_A_0002724.checkpoint.json",
+      "source_frame": "temp/release_C/rebind3/co_gallery/co17/frames/57cefdc870bbcee2e3782f92a80d84e8375c9c175cb504a933e9c054c4166a0e.png",
+      "core_frame": 2724,
+      "checkpoint_sha256": "66d6cc64488950f0c71d0529161d1e2d4bbf5c556011ce7587ae2739a3551383",
+      "frame_sha256": "04455b0f51da3733f5e6b310d09b423ef04657626ca5b71e9355c11497ac4749",
+      "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_jess_synthetic.png",
+      "png_sha256": "04455b0f51da3733f5e6b310d09b423ef04657626ca5b71e9355c11497ac4749",
+      "cheat_tainted": true,
+      "source_addresses": [
+        "0xA31230",
+        "0xA31254"
+      ],
+      "visible_quote": "결코 얕보지는 않아・・・ / 어떤 적이든 전력으로 간다!",
+      "visual_result": "exact text shown; no visible clipping or replacement glyph",
+      "source_match": "static exact text; direct runtime read-watch unverified",
+      "ledger_reference": {
+        "ledger": "temp/release_C/rebind3/co_gallery/co17/frames.jsonl",
+        "ledger_sha256": "2185af016609a525fa4ebe6ad7bc050608a5e333895bb8f5cf0b887abf70d9ff",
+        "ledger_bytes": 611975
+      },
+      "exit_code": 0,
+      "run_status": "closed",
+      "revision": "b36r3",
+      "source_b32r5_checkpoint": "temp/release_C/w2b6f_co17_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+      "source_b32r5_frame": "temp/release_C/w2b6f_co17_synthetic_sourcefix/frames/57cefdc870bbcee2e3782f92a80d84e8375c9c175cb504a933e9c054c4166a0e.png",
+      "rgb_identical_to_b32r5": true
+    }
+  ],
+  "native_evidence": [
+    {
+      "co_id": 1,
+      "co": "Andy",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_andy_native.png",
+      "visible_quote": "화끈하게 가자고오-!",
+      "source_addresses": [
+        "0xA30264"
+      ],
+      "source_rom_sha256": "18a1b5b5911cea317db15f1da1e498307cbe58dc17cc513f572b93effb209610"
+    },
+    {
+      "co_id": 2,
+      "co": "Max",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_max_native.png",
+      "visible_quote": "힘겨루기라면 지지 않아!",
+      "source_addresses": [
+        "0xA3036C"
+      ],
+      "source_rom_sha256": "5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5"
+    },
+    {
+      "co_id": 3,
+      "co": "Olaf",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_olaf_native.png",
+      "visible_quote": "이 몸에게 덤빈 것 / 후회하게 해주마!",
+      "source_addresses": [
+        "0xA304F0",
+        "0xA30504"
+      ],
+      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb"
+    },
+    {
+      "co_id": 4,
+      "co": "Sami",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_sami_native.png",
+      "visible_quote": "간다-!",
+      "source_addresses": [
+        "0xA303D8"
+      ],
+      "source_rom_sha256": "17dff0c0af7a91afcefdfe80b1bf7f4e88f0ef12da2e1b6560eaf9d591d0e0e9"
+    },
+    {
+      "co_id": 6,
+      "co": "Kanbei",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_battle_labels.png",
+      "visible_quote": "간다! 각오해라!",
+      "source_addresses": [
+        "0xA306EC"
+      ]
+    },
+    {
+      "co_id": 18,
+      "co": "Sensei",
+      "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_sensei.png",
+      "visible_quote": "홋홋호 / 이쯤서 크게 승부다",
+      "source_addresses": [
+        "0xA31368",
+        "0xA31374"
+      ]
+    }
+  ],
+  "not_reached": [
+    {
+      "co_id": 10,
+      "co": "Sturm",
+      "reason": "Friendly-side menu omitted CO Power after gauge writes; no quote captured"
+    }
+  ],
+  "sturm_static_only": "temp/release_C/finreg_sturm_static.json",
+  "runtime_coverage": "18/19 CO IDs; Sturm ID 10 unverified runtime",
+  "history_gallery": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_gallery.json"
+}

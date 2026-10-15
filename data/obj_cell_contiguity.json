@@ -251,6 +251,66 @@
           "capture_checkpoint_sha256": "fdd14e1e3c985357ddeb2834ef2891fb7e1362526c953dc4cd060b15dcc5adea",
           "capture_baseline_sha256": "2a548ab2890881c6b8076d29f68956130de4de70e91d574596e568f9414e79ac",
           "capture_run": "temp/release_C/rebind1/obj/E_result"
+        },
+        {
+          "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+          "frame": "temp/release_C/rebind2/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b35 direct cold-boot recorder capture; RGB-identical to b32r5; inherited save taint",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "42f0c1d6e7b376e57e990ca25bbf93215409a41d6ee644637f7a5a70dcd73821",
+          "capture_baseline_sha256": "bf739fac80d471edb14313bec8b4194982f607a4e4ec436106d9be0dcda7c51f",
+          "capture_run": "temp/release_C/rebind2/obj/E_result",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+          "frame": "temp/release_C/rebind3/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b36r3 direct cold-boot recorder capture; RGB-identical to b32r5; inherited save taint",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "4336cc9a6b94a30fdfcc001c78b74806bb731af026caff2f8d3b3bf7154bc707",
+          "capture_baseline_sha256": "a9e0dc7255adb6982c23ee3b34b429d13ddf818c9e86cc5607f323b925d37ad1",
+          "capture_run": "temp/release_C/rebind3/obj/E_result",
+          "cheat_tainted": true
         }
       ]
     },
@@ -630,6 +690,50 @@
           "capture_checkpoint_sha256": "1f80f86c7fd6437ff8812863405cea48a38b4ab9fb1cd10d55e0014634a4c9e0",
           "capture_baseline_sha256": "a23ddde6dd1e16441bcc12b423716f4c474268bbcdbd368c73a597b761038ebe",
           "capture_run": "temp/release_C/rebind1/obj/E_mission"
+        },
+        {
+          "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+          "frame": "temp/release_C/rebind2/obj/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b35 direct cold-boot recorder capture; RGB-identical to b32r5; inherited save taint",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "dd5a1cd71d3f36e923c47ee3497143eb8c902c3424d7e0c86c597486971a71d4",
+          "capture_baseline_sha256": "82e9b32116733ed5fa9d7e60fbeed51ff76c3889c427f31609487e2b1dbc3515",
+          "capture_run": "temp/release_C/rebind2/obj/E_mission",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+          "frame": "temp/release_C/rebind3/obj/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b36r3 direct cold-boot recorder capture; RGB-identical to b32r5; inherited save taint",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "ed8f2961072d5a3135680a8b9f24c3f8705f435a3722c67f43f12426e25af7cf",
+          "capture_baseline_sha256": "02ce7211fa321e5439febbf17305a6ff9750c666588d0fa2e878ad32ff933506",
+          "capture_run": "temp/release_C/rebind3/obj/E_mission",
+          "cheat_tainted": true
         }
       ]
     }

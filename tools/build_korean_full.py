@@ -14645,6 +14645,8 @@ def main():
     st['part1_obj_header_labels'] = header_labels.patch(rom, orig)
     import link_error_bitmaps as link_error
     st['link_error_bitmaps'] = link_error.patch(rom, orig)
+    import link_stage1_graphics as link_stage1
+    st['link_stage1_graphics'] = link_stage1.patch(rom, orig)
     import item7_part1_co_profile_labels as i7_co_profile
     st['item7_co_profile_labels'] = i7_co_profile.patch(rom, orig)
     import item7_part2_editor_labels as i7_p2_editor
@@ -23308,6 +23310,7 @@ def main():
     st['part1_obj_header_labels_editor_pixels_changed'] = not header_labels.generated_matches(rom, orig)
     _link_error_final_regions = link_error.capture(rom, orig)
     st['link_error_bitmaps_editor_pixels_changed'] = not link_error.generated_matches(rom)
+    link_stage1.verify(rom, orig)
     _i7_co_profile_regions = i7_co_profile.capture(rom, orig)
     _i7_p2_editor_regions = i7_p2_editor.capture(rom, orig)
     _i7_design_map_regions = i7_design_map.capture(rom, orig)

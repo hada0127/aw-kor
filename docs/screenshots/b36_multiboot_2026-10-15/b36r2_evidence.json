@@ -1,0 +1,48 @@
+{
+  "rom": "output/game_wars_korean_candidate_20261015_b36r2.gba",
+  "rom_sha256": "a648d40ea11a7cd40232da15f5475f8a24341163e9555634cb218dd1eac2035c",
+  "bios_path": "temp/bios/gba_bios.bin",
+  "bios_sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
+  "client_slot": "empty",
+  "transfer": "real BIOS MultiBoot, two mGBA cores",
+  "part1_payload_bytes": 229220,
+  "part2_payload_bytes": 231296,
+  "client_payloads_byte_exact": true,
+  "images": [
+    {
+      "key": "part1_loader",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r2_client_loader_ko.png",
+      "png_sha256": "6405dd7a769ccb353490baec2f2dfb60cc907ebc435fbaadc33323b4e327a8bb",
+      "exact_visible_text": "NOW LOADING.. / 잠시만 / 기다려줘! / 스위치를 끄거나 케이블을 뽑지 마세요.",
+      "receipt": "temp/release_C/b36r2/part1_link_outline/transfer/receipt.json",
+      "emulator_exit_code": 0
+    },
+    {
+      "key": "part1_day1",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r2_client_day1.png",
+      "png_sha256": "428741b01b4250764d2f00920648ab0856dd53b1413e57d950464ba615e8cc07",
+      "exact_visible_text": "1일째",
+      "receipt": "temp/release_C/b36r2/part1_link_outline/day_probe/receipt.json",
+      "emulator_exit_code": 0
+    },
+    {
+      "key": "part2_loader",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part2_b36r2_client_loader_ko.png",
+      "png_sha256": "65b99a2ebbb9ed19896b86ea2a55401f5985aeb206574b86245dd5931a41bc0f",
+      "exact_visible_text": "NOW★LOADING / 스위치를 끄거나 케이블을 뽑지 마세요.",
+      "receipt": "temp/release_C/b36r2/part2_link_outline/transfer/receipt.json",
+      "emulator_exit_code": 0
+    },
+    {
+      "key": "part2_day1",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part2_b36r2_client_day1.png",
+      "png_sha256": "e4ec3ad946ee29f6017891624f530e0f86853ceda57597efd12586e40f382d2c",
+      "exact_visible_text": "1일째 / 작전 개시",
+      "receipt": "temp/release_C/b36r2/part2_link_outline/day_banner/receipt.json",
+      "emulator_exit_code": 0
+    }
+  ],
+  "evidence_status": "invalid_history_cross_rom_savestate",
+  "invalid_reason": "Link host loaded a savestate made from a different ROM; these captures do not prove the declared candidate route.",
+  "replacement": "docs/screenshots/rebind3_2026-10-15/linked_clients.json"
+}

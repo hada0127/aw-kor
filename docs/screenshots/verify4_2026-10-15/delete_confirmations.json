@@ -1,0 +1,28 @@
+{
+  "part1": {
+    "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+    "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "private_save_before_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "private_save_after_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "cheat_tainted": true,
+    "emulator_exit_code": 0,
+    "frame": "OK framecounter 936",
+    "target_reads": 0,
+    "positive_control_reads": 6,
+    "screenshot_sha256": "4db079c9a85140b81898fdbf8ca86642cdb5dd5366b30baa36617af1849f60fe",
+    "source_receipt": "temp/release_C/verify4/delete_hold/part1/receipt.json"
+  },
+  "part2": {
+    "rom_sha256": "7e4a3a9e6602b3fe1b82853420ee6ff46ed43b5c6ef2f0d058b71b97eb1c0a36",
+    "source_save_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "private_save_before_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+    "private_save_after_sha256": "0ab4e3f3c9f41c900463caa14d029b2d1f801a680d0d50235de9025850633a15",
+    "cheat_tainted": true,
+    "emulator_exit_code": 0,
+    "frame": "OK framecounter 968",
+    "target_reads": 0,
+    "positive_control_reads": 6,
+    "screenshot_sha256": "d0daf3b600841e233afd7f37fb78a686bb3e55a74719584779c1fc1a169a50b4",
+    "source_receipt": "temp/release_C/verify4/delete_hold/part2/receipt.json"
+  }
+}

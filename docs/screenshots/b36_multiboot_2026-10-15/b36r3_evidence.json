@@ -1,0 +1,43 @@
+{
+  "rom": "output/game_wars_korean_candidate_20261015_b36r3.gba",
+  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "bios_path": "temp/bios/gba_bios.bin",
+  "bios_sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
+  "client_slot": "empty",
+  "transfer": "real BIOS MultiBoot, two mGBA cores",
+  "part1_payload_bytes": 229220,
+  "client_payload_byte_exact": true,
+  "images": [
+    {
+      "key": "part1_loader",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r3_client_loader_ko.png",
+      "png_sha256": "4e88bd1a3efe0c20ae8d4aa7c0c803849925367975be7ab673092d9f3e1ece4c",
+      "receipt": "temp/release_C/b36r3/part1_link_outline/transfer/receipt.json",
+      "emulator_exit_code": 0
+    },
+    {
+      "key": "part1_day1",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r3_client_day1.png",
+      "png_sha256": "428741b01b4250764d2f00920648ab0856dd53b1413e57d950464ba615e8cc07",
+      "receipt": "temp/release_C/b36r3/part1_link_outline/day_probe/receipt.json",
+      "emulator_exit_code": 0
+    },
+    {
+      "key": "part1_loader_bubble_4x",
+      "png": "docs/screenshots/b36_multiboot_2026-10-15/part1_b36r3_loader_bubble_4x.png",
+      "png_sha256": "74d0679deecd7b216fed25b7dae01f2e2f9d5b64003f6e881bc2057198f17c61",
+      "crop_xyxy": [
+        95,
+        55,
+        165,
+        95
+      ],
+      "scale": 4,
+      "method": "nearest-neighbor",
+      "source": "part1_b36r3_client_loader_ko.png"
+    }
+  ],
+  "evidence_status": "invalid_history_cross_rom_savestate",
+  "invalid_reason": "Link host loaded a savestate made from a different ROM; these captures do not prove the declared candidate route.",
+  "replacement": "docs/screenshots/rebind3_2026-10-15/linked_clients.json"
+}

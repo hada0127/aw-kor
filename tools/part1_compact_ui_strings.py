@@ -92,6 +92,9 @@ STRINGS = (
     (0xB84F6C, 12, '令駄寸多', '레드스타', (UNIT_LIST, STATUS, RESULT, RESULT_ALT), (), None),
     # C8 score screen (bank 0xBE7308 loaded in fn 0xB4C668, drawn in fn 0xB4CAE4)
     (0xDF8B62, 2, '日', '일', (), (0xBE7308,), '日'),
+    # C9 Wars Shop price row (fn 0xB4D544): 0xB4D910 points at the one-cell
+    # append below. The suffix is read from 0xDF8B68 but needs its code loaded.
+    (0xDF8B6A, 2, None, '장', (), (0xBE7368,), '枚'),
     (0xDF8BF6, 8, None, '획득', (), (0xBE7308,), None),
     (0xDF8C02, 8, None, '종합', (), (0xBE7308,), None),
     # C5 unit list "no equipment" (fn 0xB46E80, group 0xB12F5C)
@@ -142,6 +145,7 @@ APPENDS = (
     # Native 拠点全滅ふさんか？ preloaded the kana of the old ふさんか label. Its か cell
     # now preloads the reserved 가 for 불참가 (same pair count/positions, ？ kept).
     (0xBE701C, 18, '拠点全滅ふさん가？'),
+    (0xBE7368, 2, '장'),             # Wars Shop price suffix preload (native 枚)
     (0xB8319C, 22, '미접속준비중　오류'),    # pairs only; 오류 for the 接続エラー row (접속 오류)
     # Glyph preload, not displayed prose. Keep one space code and add 중 for B83254.
     (0xB8322C, 36, '전송중입니다　잠시기다려　주십시오。'),

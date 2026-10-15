@@ -1,0 +1,29 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "co_id": 18,
+  "co": "Sensei",
+  "native_saved_co": true,
+  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "source_endpoint": "temp/release_C/rebind3/co_native/sensei/0023_NONE_0002746.checkpoint.json",
+  "source_frame": "temp/release_C/rebind3/co_native/sensei/frames/3d83cc554d47b7a99a3e633eb583941b9a49d49c12d9bf46b43952afca7288f8.png",
+  "core_frame": 2746,
+  "png_sha256": "965b8e6d192719c81385cabea122372d2ae8db955574cafbd066e3129b21bc93",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA31368",
+    "0xA31374"
+  ],
+  "visual_result": "홋홋호 / 이쯤서 크게 승부다; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "route": "tools/scene_routes/26_part2_co_power_quote/sensei_inputs.txt",
+  "route_sha256": "37bf4a435a171f8620f6121e984dc618a7b074666e948aa852af80f68db284b4",
+  "exit_code": 0,
+  "historical_b32r5_receipt": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_sensei.json",
+  "source_ledger": "temp/release_C/rebind3/co_native/sensei/frames.jsonl",
+  "checkpoint_sha256": "65a2b5c8890f81ebfa7043d1180e6f91cab0a4406eb74375a2732eb75f17184d",
+  "frame_sha256": "965b8e6d192719c81385cabea122372d2ae8db955574cafbd066e3129b21bc93",
+  "rgb_identical_to_b32r5": true,
+  "png": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_sensei.png"
+}
