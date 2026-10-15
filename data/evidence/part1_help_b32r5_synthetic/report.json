@@ -1,0 +1,269 @@
+{
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "rows": [
+    {
+      "case_id": "code0",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/code0_trace.log",
+      "trace_sha256": "1156459095376fb4f075e06887a78bf1f5b1dd5f3910e52958baaefeed3416ed",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/code0.png",
+      "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b",
+      "target_reads": {
+        "0x00DFA64A": "0x08DFA64A",
+        "0x00DFA66B": "0x08DFA66B"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA64A",
+          "0x00DFA66B"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "target_visual_evidence": {
+        "0x00DFA64A": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ],
+        "0x00DFA66B": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/code0/recipe.in",
+      "recipe_sha256": "959ad2bc302255dce417f0a922268e78c5c0af093b0ea0fe961f83e05ccafdfd",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "hidden",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/hidden_trace.log",
+      "trace_sha256": "3705ac086d32ef4259cf5d3f0f76d0329426499b89cf9cfedbfaced795fb2537",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/hidden.png",
+      "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6",
+      "target_reads": {
+        "0x00DFA83A": "0x08DFA83A",
+        "0x00DFA84D": "0x08DFA84D",
+        "0x00DFA872": "0x08DFA872",
+        "0x00DFA885": "0x08DFA885"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA83A",
+          "0x00DFA84D",
+          "0x00DFA872",
+          "0x00DFA885"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "additional_frames": [
+        {
+          "frame": "data/evidence/part1_help_b32r5_synthetic/hidden_continue.png",
+          "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+        }
+      ],
+      "target_visual_evidence": {
+        "0x00DFA83A": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/hidden.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ],
+        "0x00DFA84D": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/hidden.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ],
+        "0x00DFA872": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/hidden_continue.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ],
+        "0x00DFA885": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/hidden_continue.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/hidden/recipe.in",
+      "recipe_sha256": "3aaf12cb3aee8f348d9532458bf4623e92be9f56819de658dab34e55fe6c56d2",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0
+    },
+    {
+      "case_id": "code16",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/code16_trace.log",
+      "trace_sha256": "85eb309cbc43d3c4162338d123fbadaa8d8c742690fb33d4caf4738ca1352d2a",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/code16.png",
+      "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1",
+      "target_reads": {
+        "0x00DFA8AA": "0x08A7C016",
+        "0x00DFA8CB": "0x08A7C039"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8AA",
+          "0x00DFA8CB"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "target_visual_evidence": {
+        "0x00DFA8AA": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code16.png",
+            "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1"
+          }
+        ],
+        "0x00DFA8CB": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code16.png",
+            "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/code16/recipe.in",
+      "recipe_sha256": "cf585bb934760dfe2c6f428d6659311537d0981a60844f662c1e29b4991303e1",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code17",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/code17_trace.log",
+      "trace_sha256": "7951bbded435c924013a4f54f41f03db9734ad7f6cb49f2055d7ebeac69a1939",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/code17.png",
+      "frame_sha256": "39a81e108405fd37e21d53b5d1115a76381420b87e95b95ef3ecaaad25d35a2b",
+      "target_reads": {
+        "0x00DFA8EA": "0x08A7C05A"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8EA"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "target_visual_evidence": {
+        "0x00DFA8EA": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code17.png",
+            "frame_sha256": "39a81e108405fd37e21d53b5d1115a76381420b87e95b95ef3ecaaad25d35a2b"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/code17/recipe.in",
+      "recipe_sha256": "faed2156f268372172e32c45a4bb57ed8aac97ec695f71da725bca47dd502f17",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code18",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/code18_trace.log",
+      "trace_sha256": "6d85ea6a421349c484a2b0954ea2ba0ebbfc5c6cdc9ce31ee27ce3a73627b506",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/code18.png",
+      "frame_sha256": "58579ad6e1b728d5caf82a790e3d537da3ca8a9f71faa169bfb2373933d34091",
+      "target_reads": {
+        "0x00DFA90A": "0x08A7C07E"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA90A"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "target_visual_evidence": {
+        "0x00DFA90A": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code18.png",
+            "frame_sha256": "58579ad6e1b728d5caf82a790e3d537da3ca8a9f71faa169bfb2373933d34091"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/code18/recipe.in",
+      "recipe_sha256": "9d1965c84d4ec7daa28b1fd29ff879cc0032b5b482122fa1b9b9ba98c7490a8b",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code19",
+      "state": "temp/release_C/rebind1/help_synth/native_state.ss0",
+      "state_sha256": "8674e4ec3e68c83cd647b38238b0375d3fba5ba485fbc7040d2faf31fc5315f0",
+      "trace": "data/evidence/part1_help_b32r5_synthetic/code19_trace.log",
+      "trace_sha256": "2b3e16b84bd6799250945ad8c8cfc083f66781000ff1050b08a8daf504242f60",
+      "frame": "data/evidence/part1_help_b32r5_synthetic/code19.png",
+      "frame_sha256": "557cb749c30290b5625c0acafcc0a4075bb5976fee522f76e396ecbc639a187a",
+      "target_reads": {
+        "0x00DFA926": "0x08A7C0A2"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA926"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b32r5-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/rebind1/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "target_visual_evidence": {
+        "0x00DFA926": [
+          {
+            "frame": "data/evidence/part1_help_b32r5_synthetic/code19.png",
+            "frame_sha256": "557cb749c30290b5625c0acafcc0a4075bb5976fee522f76e396ecbc639a187a"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/rebind1/help_synth/code19/recipe.in",
+      "recipe_sha256": "e454acf78991988fbb8e995358511af2a9fdd318d4c47a4d9335814aa9fbfdf1",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    }
+  ],
+  "method": "fresh b32r5 replay state and copied read-only SRAM; injected menu item codes; ROM read watch and per-target visual frames; rendering only",
+  "replay_ledger": "temp/release_C/rebind1/help/F_help_sweep/frames.jsonl",
+  "runner_receipt": "temp/release_C/rebind1/help_synth/report.json"
+}

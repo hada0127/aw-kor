@@ -15,6 +15,34 @@ NAME = 'scene_85_ui_common'
 
 
 class SceneRegistrationTest(unittest.TestCase):
+    def test_b32r5_fifteen_reconciled_scenes_are_captured(self):
+        expected = {
+            'scene_19a2_part1_heavy_tank_advice_story',
+            'scene_19b1_part1_hoip_ambush_weather_story',
+            'scene_19b2_part1_hoip_landing_setup_story',
+            'scene_19c1_part1_mid_campaign_radio_story',
+            'scene_19c2_part1_mid_fog_map_story',
+            'scene_19e7_part1_hoip_co_weather_help',
+            'scene_26_part2_battle_labels',
+            'scene_28_part2_result_status',
+            'scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story',
+            'scene_30e4_part2_blackhole_yellowcomet_fortress_story',
+            'scene_30g1_part2_green_earth_volcano_sortie_story',
+            'scene_30g2_part2_green_earth_volcano_lava_story',
+            'scene_80a_campaign_story_early',
+            'scene_80b_campaign_story_mid',
+            'scene_80c_campaign_story_late',
+        }
+        manifest = json.loads((ROOT/'temp/scene_screenshots/manifest.json').read_text())
+        self.assertEqual(len(expected), 15)
+        self.assertEqual(set(manifest['captured'][55:]), expected)
+        self.assertEqual(manifest['skipped'], [])
+        checkpoints = {x['name']: x for x in json.loads(
+            (ROOT/'data/screen_checkpoints.json').read_text())['checkpoints']}
+        for name in expected:
+            self.assertIn(name, checkpoints)
+            self.assertEqual(checkpoints[name]['grade'], 'recorded_b32r5')
+
     def test_legacy_save_taint_requires_pinned_receipt(self):
         from tools.capture_scene_screenshots import initial_save_valid, source_taint
         run = ROOT/'temp/release_C/H_p1_supply'

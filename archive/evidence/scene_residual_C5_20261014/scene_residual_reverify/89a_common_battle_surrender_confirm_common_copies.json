@@ -1,0 +1,36 @@
+[
+ {
+  "label": "static_residual_reverify::89a_common_battle_surrender_confirm_common_copies",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00EFDAA0:0x00EFDB00",
+    "extracted": {
+     "covered_count": 0,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 0,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 0,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 0,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

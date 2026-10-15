@@ -1,0 +1,32 @@
+{
+  "co_id": 5,
+  "co": "Grit",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co05_synthetic_inputs.txt",
+  "route_sha256": "b5673e7a68369df403e48303e0757a5da72178958a4b597a82a0b8d5619e52bd",
+  "source_checkpoint": "temp/release_C/w2b6f_co05_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co05_synthetic_sourcefix/frames/c75a48c61533951f3bdfa5031c4ff3b5056d5870fc8ddbc63c74da36903383e6.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "7de1591665c108f18dc191867a333ec66edceb6d2669c5eed165a62075c2986d",
+  "frame_sha256": "4344e574a415f5c2cd3a4ec80ad12b6ad6948af6471588b7bb648bc34ed21546",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_grit_synthetic.png",
+  "png_sha256": "4344e574a415f5c2cd3a4ec80ad12b6ad6948af6471588b7bb648bc34ed21546",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA305FC",
+    "0xA3060E"
+  ],
+  "visible_quote": "노린 사냥감은 / 놓치지 않아!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co05_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "7f99b6b6954f6923d5651e02b77f9517f34259d8a3081ef528898239c1951154",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

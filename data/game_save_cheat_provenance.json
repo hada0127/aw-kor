@@ -1,4 +1,8 @@
 {
+ "schema_version": 2,
+ "provenance_classes": {
+  "legacy_unverified_sram": {"cheat_tainted": true, "evidence_scope": "Screen QA only; never normal-play victory or ending evidence; claimed_origin is informational"}
+ },
  "note": "Reviewed cheat provenance keyed by game-save receipt SHA-256. The original entries were anchored to pre-cheat-tooling recorder chains or the 2026-10-06 roots in docs/PLAYTHROUGH_QA_PROTOCOL.md. The RELGATE-3 F7BE_b2 entry has an available source checkpoint; its checkpoint/state hashes and source recorder taint were verified clean before registration. Unlisted receipts without verifiable provenance are treated as cheat-tainted.",
  "generated": "Initial entries: 2026-10-07 by Claude code worker; F7BE_b2 entry: RELGATE-3 2026-10-14",
  "receipts": {

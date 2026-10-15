@@ -1,0 +1,26 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "co_id": 4,
+  "co": "Sami",
+  "native_saved_co": true,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "2f13157d40bdb3c381a941e13a8d72cf959e095be9f226ab540858d04c740529",
+  "source_rom_sha256": "17dff0c0af7a91afcefdfe80b1bf7f4e88f0ef12da2e1b6560eaf9d591d0e0e9",
+  "source_endpoint": "temp/release_C/w2b6f_scene26_sami_native_quote2/0022_A_0002660.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene26_sami_native_quote2/frames/af35659ca8261b0bcb9c834a2c4d17142f5129d0e61d1b076d47d035abacdeed.png",
+  "core_frame": 2660,
+  "checkpoint_sha256": "8458d9f951ea22d0c1b1754ecc921ec734eb1608d511143d07368d9ae2145d1d",
+  "frame_sha256": "929aed4633765e22d53e9295b946ca9c93c4de2f53df536a16b9af225eaa70d5",
+  "png_sha256": "929aed4633765e22d53e9295b946ca9c93c4de2f53df536a16b9af225eaa70d5",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA303D8"
+  ],
+  "visible_quote": "간다-!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "route": "tools/scene_routes/26_part2_co_power_quote/sami_native_quote_inputs.txt",
+  "route_sha256": "12d52779ed2e71f69e22fe52960c167a07df0428ba6bbd7b36292cf788349614",
+  "exit_code": 0,
+  "run_status": "closed"
+}

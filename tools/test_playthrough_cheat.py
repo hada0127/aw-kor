@@ -1,7 +1,9 @@
 """Test-only RAM cheats are recorded per frame and taint every descendant (2026-10-07 user decision)."""
 import json
+import hashlib
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -95,6 +97,37 @@ class CheatTests(unittest.TestCase):
     def checkpoints(self, run):
         return {p.name: json.loads(p.read_text()) for p in run.glob('*.checkpoint.json')}
 
+    def rewrite_ledger_for_verify(self, run, mutate):
+        """Rehash a deliberately forged committed prefix to isolate taint validation."""
+        cp_path = run / 'resume.checkpoint.json'
+        cp = json.loads(cp_path.read_text())
+        ledger = run / 'frames.jsonl'
+        rows = [json.loads(line) for line in ledger.read_text().splitlines()]
+        mutate(rows)
+        raw = ''.join(json.dumps(row) + '\n' for row in rows).encode()
+        ledger.write_bytes(raw)
+        cp['ledger_bytes'] = len(raw)
+        cp['ledger_sha256'] = hashlib.sha256(raw).hexdigest()
+        return cp_path, cp
+
+    def test_schema5_cheat_row_requires_marker(self):
+        run, _ = self.record([('act', 1), ('cmd', 'cheat w8 02000000 01'), ('act', 2)])
+        (run / P.CHEAT_MARKER).unlink()
+        cp_path = run / 'resume.checkpoint.json'
+        with self.assertRaisesRegex(RuntimeError, 'marker'):
+            P.verify_parent(cp_path, json.loads(cp_path.read_text()))
+
+    def test_schema5_taint_cannot_drop_after_cheat_row(self):
+        run, _ = self.record([('act', 1), ('cmd', 'cheat w8 02000000 01'), ('act', 2)])
+        cp_path, cp = self.rewrite_ledger_for_verify(run, lambda rows: rows[-1].pop('cheat_tainted'))
+        with self.assertRaisesRegex(RuntimeError, 'Cheat taint missing'):
+            P.verify_parent(cp_path, cp)
+
+    def test_schema5_valid_sticky_taint(self):
+        run, _ = self.record([('act', 1), ('cmd', 'cheat w8 02000000 01'), ('act', 2)])
+        cp_path = run / 'resume.checkpoint.json'
+        P.verify_parent(cp_path, json.loads(cp_path.read_text()))
+
     def test_parse_cheat_write_limits(self):
         self.assertEqual(P.parse_cheat_write('w16', '0x0201A13C', '6400'),
                          {'op': 'w16', 'addr': '0201A13C', 'hex': '6400'})
@@ -121,6 +154,8 @@ class CheatTests(unittest.TestCase):
         rows = [json.loads(l) for l in (run / 'frames.jsonl').read_text().splitlines()]
         cheat_frames = [r['core_frame'] for r in rows if 'cheat' in r]
         self.assertEqual(cheat_frames, [4, 5, 6])
+        self.assertTrue(all(r.get('cheat_tainted') is True for r in rows if r['core_frame'] >= 4))
+        self.assertTrue(all('cheat_tainted' not in r for r in rows if r['core_frame'] < 4))
         self.assertEqual(len(rows[3]['cheat']), 2)          # one-shot + freeze on the first frame
         self.assertEqual(rows[4]['cheat'], [{'op': 'w16', 'addr': '02000010', 'hex': '6400'}])
         writes = [json.loads(l) for l in Path(str(run / 'emulator.log') + '.writes').read_text().splitlines()]
@@ -155,7 +190,10 @@ class CheatTests(unittest.TestCase):
         self.assertTrue(result['cheat_tainted'])
         self.assertTrue(json.loads((run2 / 'baseline.json').read_text())['cheat_inherited'])
         self.assertTrue(all(cp.get('cheat_tainted') for cp in self.checkpoints(run2).values()))
-        self.assertNotIn('cheat', (run2 / 'frames.jsonl').read_text())
+        rows = [json.loads(l) for l in (run2 / 'frames.jsonl').read_text().splitlines()]
+        self.assertTrue(all(r.get('cheat_tainted') is True and 'cheat' not in r for r in rows))
+        cp = self.checkpoints(run2)['resume.checkpoint.json']
+        self.assertEqual(cp['ledger_sha256'], P.sha(run2 / 'frames.jsonl'))
         self.assertFalse(status(run2 / 'resume.checkpoint.json')['normal_play'])
         cp_path = run2 / 'resume.checkpoint.json'
         cp = json.loads(cp_path.read_text())
@@ -185,6 +223,85 @@ class CheatTests(unittest.TestCase):
                     G.verify_receipt(receipt, verify_frames=False, expected_rom_sha256=P.sha(self.rom),
                                      expected_harness_sha256=P.sha(self.harness),
                                      expected_libmgba_sha256=P.sha(G.LIBMGBA.resolve()))
+
+    def test_legacy_import_rejects_sha_mismatch_and_forces_taint_through_export(self):
+        source = self.root / 'standalone.sav'
+        source.write_bytes(bytes(range(256)) * 128)
+        with self.assertRaisesRegex(ValueError, 'SHA-256 mismatch'):
+            G.import_unverified_sram(source, self.root / 'bad_import',
+                save_sha256='0' * 64, source_rom_sha256=P.sha(self.rom),
+                provenance_note='source checkpoint unavailable', target_rom=self.rom)
+        self.assertFalse((self.root / 'bad_import').exists())
+        run, result = self.record([('act', 2)], out=self.root / 'legacy_run',
+            import_legacy_game_save=source, legacy_save_sha256=P.sha(source),
+            legacy_source_rom_sha256=P.sha(self.rom),
+            legacy_provenance_note='source checkpoint unavailable',
+            legacy_claimed_origin='old Mac receipt reference')
+        self.assertTrue(result['cheat_tainted'])
+        receipt = json.loads((run / 'game_save.json').read_text())
+        self.assertEqual(receipt['kind'], G.UNVERIFIED_SRAM_KIND)
+        self.assertEqual(receipt['claimed_origin'], 'old Mac receipt reference')
+        self.assertNotIn('source_checkpoint', receipt)
+        self.assertTrue(all(r.get('cheat_tainted') is True for r in
+            map(json.loads, (run / 'frames.jsonl').read_text().splitlines())))
+        P.verify_parent(run / 'resume.checkpoint.json', self.checkpoints(run)['resume.checkpoint.json'])
+        child, _ = self.record([('act', 1)], out=self.root / 'legacy_child',
+                               resume=run / 'resume.checkpoint.json')
+        self.assertTrue(all(c.get('cheat_tainted') for c in self.checkpoints(child).values()))
+        with patch('builtins.print'):
+            exported = G.export(run / 'resume.checkpoint.json', self.harness, self.root / 'legacy_export')
+        self.assertTrue(json.loads(exported.read_text())['cheat_tainted'])
+        mutated = dict(receipt, cheat_tainted=False)
+        (run / 'game_save.json').write_text(json.dumps(mutated))
+        with self.assertRaisesRegex(ValueError, 'cannot be clean'):
+            G.receipt_cheat_status(mutated, P.sha(run / 'game_save.json'))
+
+    def test_normal_export_path_stays_clean(self):
+        run, _ = self.record([('act', 1)], out=self.root / 'normal_source')
+        with patch('builtins.print'):
+            exported = G.export(run / 'resume.checkpoint.json', self.harness, self.root / 'normal_export')
+        receipt = json.loads(exported.read_text())
+        self.assertEqual(receipt['kind'], G.LEGACY_KIND)
+        self.assertIs(receipt['cheat_tainted'], False)
+
+    def test_legacy_cli_cold_boot_and_scene_taint_gate(self):
+        from capture_scene_screenshots import source_taint
+        source = self.root / 'legacy with spaces.sav'
+        source.write_bytes(bytes(range(256)) * 128)
+        run = self.root / 'legacy_cli'
+        command = [sys.executable, str(P.ROOT / 'tools/playthrough_capture.py'),
+                   '--rom', str(self.rom), '--harness', str(self.harness), '--out', str(run),
+                   '--import-legacy-game-save', str(source), '--legacy-save-sha256', P.sha(source),
+                   '--legacy-source-rom-sha256', 'a' * 64,
+                   '--legacy-provenance-note', 'unavailable Mac checkpoint',
+                   '--legacy-claimed-origin', 'old receipt path', '--min-free-gib', '1',
+                   '--no-contact-sheets']
+        done = subprocess.run(command, input='quit\n', text=True, capture_output=True, timeout=30)
+        self.assertEqual(done.returncode, 0, done.stderr)
+        baseline = json.loads((run / 'baseline.json').read_text())
+        self.assertEqual(baseline['initial_game_save']['migration'],
+                         {'source_rom_sha256': 'a' * 64, 'target_rom_sha256': P.sha(self.rom)})
+        cp = self.checkpoints(run)['resume.checkpoint.json']
+        self.assertTrue(source_taint(cp, baseline, run))
+        self.assertTrue(all(r.get('cheat_tainted') is True for r in
+            map(json.loads, (run / 'frames.jsonl').read_text().splitlines())))
+        from qa_scene_screenshot_sanity import frame_metrics
+        shot = run / 'frame.png'
+        shutil.copyfile(next((run / 'frames').glob('*.png')), shot)
+        (run / 'provenance.json').write_text(json.dumps({
+            'rom_sha256': P.sha(self.rom), 'provenance_class': G.UNVERIFIED_SRAM_KIND,
+            'cheat_tainted': False}))
+        _, issues, _ = frame_metrics(shot, P.sha(self.rom))
+        self.assertIn('legacy_sram_taint_missing', [i['issue'] for i in issues])
+        from tools.audit_scene_semantics import active_registration_records
+        registration = run / 'registration.json'
+        registration.write_text(json.dumps({'target_candidate_sha256': P.sha(self.rom),
+            'current_candidate_sha256': P.sha(self.rom),
+            'records': [{'replay': {'candidate_sha256': P.sha(self.rom),
+                                    'checkpoint': str(run / 'resume.checkpoint.json'),
+                                    'cheat_tainted': False}}], 'history': {'records': []}}))
+        with self.assertRaisesRegex(ValueError, 'must be cheat-tainted'):
+            active_registration_records(registration, P.sha(self.rom))
 
     def test_normal_checkpoint_before_first_cheat_stays_normal(self):
         run, _ = self.record([('act', 2), ('cmd', 'freeze w8 02000000 01'), ('act', 1)])
@@ -401,7 +518,8 @@ class CheatTests(unittest.TestCase):
     def test_skip_source_check_follows_parent_ancestry(self):
         run1, _ = self.record([('cmd', 'cheat w8 02000000 01'), ('act', 1)], out=self.root / 'anc_parent')
         run2, _ = self.record([('act', 2)], out=self.root / 'anc_child', resume=run1 / 'resume.checkpoint.json')
-        self.assertNotIn('cheat', (run2 / 'frames.jsonl').read_text())   # no local writes
+        self.assertTrue(all('cheat' not in json.loads(line)
+                            for line in (run2 / 'frames.jsonl').read_text().splitlines()))   # no local writes
         self.strip_inheritance(run2)
         with patch('builtins.print'), self.assertRaisesRegex(ValueError, 'Cheat taint dropped'):
             G.export_anchored(run2 / 'resume.checkpoint.json', self.harness, self.root / 'anc1', reason='x',

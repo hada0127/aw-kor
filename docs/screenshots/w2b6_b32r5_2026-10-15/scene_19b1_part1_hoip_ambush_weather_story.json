@@ -1,0 +1,11 @@
+{
+  "scene_id": "19b1_part1_hoip_ambush_weather_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_p1_stage12_follow/0016_A_0006270.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_p1_stage12_follow/frames/5c40b01c7a026a03644730f75bb14a114a68107084a8dec89bb4eccab8d1b4c4.png",
+  "core_frame": 6270,
+  "png_sha256": "f5b19e4c78d8e8b7ec80609168e692d091e643755ea135cb6d21bb5eb716bceb",
+  "cheat_tainted": false,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 Operation Room 백운의 세계 battle opening (0xD9CBCE): 안 좋은 예감이 들어요."
+}

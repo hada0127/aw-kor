@@ -1,0 +1,11 @@
+{
+  "scene_id": "30g1_part2_green_earth_volcano_sortie_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_run16_volcano_follow/0011_A_0003295.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_run16_volcano_follow/frames/b66df885efbf83ba273d13ed63746ceb7b19b896268e46e9062e0a068e0c8ee2.png",
+  "core_frame": 3295,
+  "png_sha256": "34505d4c4086aa2fc5a163418e2dc1c9c7e5fb095daea5a7538878a76d1319a9",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Green Earth volcano sortie briefing (0xA1D244): 출격한다고 들었다."
+}

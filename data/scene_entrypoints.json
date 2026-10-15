@@ -141,30 +141,55 @@
       "cheat_tainted": false
     },
     "19a2_part1_heavy_tank_advice_story": {
-      "status": "blocked",
-      "note": "no current b28 save"
+      "note": "Part 1 Operation Room heavy-tank mission opening (0xD965DE): 하지만, 전투는 정면승부만 / 있는 게 아니에요.; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; fresh cartridge cold boot; no save or RAM writes",
+      "checkpoint": "scene_19a2_part1_heavy_tank_advice_story",
+      "screenshot": "scene_19a2_part1_heavy_tank_advice_story",
+      "capture_path": "temp/scene_screenshots/scene_19a2_part1_heavy_tank_advice_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_p1_train6_follow/0022_A_0006061.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_p1_train6_follow/0022_A_0006061.checkpoint.json",
+      "cheat_tainted": false
     },
     "19b1_part1_hoip_ambush_weather_story": {
-      "status": "blocked",
-      "note": "no current b28 save"
+      "note": "Part 1 Operation Room 백운의 세계 battle opening (0xD9CBCE): 안 좋은 예감이 들어요.; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; fresh cartridge cold boot; no save or RAM writes",
+      "checkpoint": "scene_19b1_part1_hoip_ambush_weather_story",
+      "screenshot": "scene_19b1_part1_hoip_ambush_weather_story",
+      "capture_path": "temp/scene_screenshots/scene_19b1_part1_hoip_ambush_weather_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_p1_stage12_follow/0016_A_0006270.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_p1_stage12_follow/0016_A_0006270.checkpoint.json",
+      "cheat_tainted": false
     },
     "19b2_part1_hoip_landing_setup_story": {
-      "status": "blocked",
-      "note": "no current b28 save"
+      "note": "Part 1 Operation Room 도그 파이트 battle opening (0xD9A26A group): 호이프 부대가 상륙하기 전 / 먼저 배치했어.; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; fresh cartridge cold boot; no save or RAM writes",
+      "checkpoint": "scene_19b2_part1_hoip_landing_setup_story",
+      "screenshot": "scene_19b2_part1_hoip_landing_setup_story",
+      "capture_path": "temp/scene_screenshots/scene_19b2_part1_hoip_landing_setup_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_p1_stage10_follow/0021_A_0006082.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_p1_stage10_follow/0021_A_0006082.checkpoint.json",
+      "cheat_tainted": false
     },
     "19c1_part1_mid_campaign_radio_story": {
-      "status": "blocked",
-      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "note": "Part 1 mid-campaign radio dialogue: 아니, 료! 틀렸어?; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM tainted",
       "diagnostic_probe": {
         "frame": "temp/release_C/b28/story_probe/first_cleared/f007464.png",
         "frame_sha256": "0ff5b4ca01007da7ec0fdf74c0f3b473f16ff1de8a0d320579958aa2b29c67d3",
         "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
         "status": "BLOCKED"
-      }
+      },
+      "checkpoint": "scene_19c1_part1_mid_campaign_radio_story",
+      "screenshot": "scene_19c1_part1_mid_campaign_radio_story",
+      "capture_path": "temp/scene_screenshots/scene_19c1_part1_mid_campaign_radio_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6b/S19c1/0038_A_0007584.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6b/S19c1/0038_A_0007584.checkpoint.json",
+      "cheat_tainted": true
     },
     "19c2_part1_mid_fog_map_story": {
-      "status": "blocked",
-      "note": "no current b28 save"
+      "note": "Part 1 mission 5M Sniper! fog-map opening: 색적 맵인가・・・. (row 0xDC4C02); cold-booted legacy SRAM, two logged HQ-capture victories; cheat-tainted screen QA",
+      "checkpoint": "scene_19c2_part1_mid_fog_map_story",
+      "screenshot": "scene_19c2_part1_mid_fog_map_story",
+      "capture_path": "temp/scene_screenshots/scene_19c2_part1_mid_fog_map_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6f_scene19c2_cold2/0345_A_0056131.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6f_scene19c2_cold2/0345_A_0056131.checkpoint.json",
+      "cheat_tainted": true
     },
     "19e1_part1_unit_info_detail_help": {
       "checkpoint": "scene_19e1_part1_unit_info_detail_help",
@@ -176,8 +201,13 @@
       "cheat_tainted": false
     },
     "19e7_part1_hoip_co_weather_help": {
-      "status": "blocked",
-      "note": "no current b28 save"
+      "note": "Part 1 Climate Status briefing (0xDF7452/0xDF7482): 오늘은 작전 전에 호이프 사령관에 대해 / 사령관님께 말할게요; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; fresh cartridge cold boot; no save or RAM writes",
+      "checkpoint": "scene_19e7_part1_hoip_co_weather_help",
+      "screenshot": "scene_19e7_part1_hoip_co_weather_help",
+      "capture_path": "temp/scene_screenshots/scene_19e7_part1_hoip_co_weather_help_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_19e7_cold/0044_A_0005096.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_19e7_cold/0044_A_0005096.checkpoint.json",
+      "cheat_tainted": false
     },
     "19e6_part1_unit_help_late": {
       "checkpoint": "scene_19e6_part1_unit_help_late",
@@ -395,8 +425,13 @@
       "provenance_path": "temp/release_C/b31/reg7/PK_fixed/0094_NONE_0042340.checkpoint.json"
     },
     "26_part2_battle_labels": {
-      "status": "blocked",
-      "note": "all b28 routes have battle animation off; attack labels not recorded"
+      "note": "Part 2 CO Power gallery: 18/19 CO IDs visibly captured on b32r5 with cheat-tainted native/synthetic routes; Sturm ID 10 static address/encoded bytes/glyph check only (unverified runtime). Main checkpoint shows Kanbei quote.",
+      "checkpoint": "scene_26_part2_battle_labels",
+      "screenshot": "scene_26_part2_battle_labels",
+      "capture_path": "temp/scene_screenshots/scene_26_part2_battle_labels_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/0133_A_0015167.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/0133_A_0015167.checkpoint.json",
+      "cheat_tainted": true
     },
     "27_part2_battle_objlabels": {
       "checkpoint": "scene_27_part2_battle_objlabels",
@@ -408,8 +443,59 @@
       "cheat_tainted": true
     },
     "28_part2_result_status": {
-      "status": "blocked",
-      "note": "defeat route not run on b28"
+      "note": "Part 2 campaign failure overlay: 작전실패; settled core 6250 passes live-sheet visual review; legacy SRAM cheat-tainted",
+      "checkpoint": "scene_28_part2_result_status",
+      "screenshot": "scene_28_part2_result_status",
+      "capture_path": "temp/scene_screenshots/scene_28_part2_result_status_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6c_scene28_cold/0043_A_0006224.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6c_scene28_cold/0043_A_0006224.checkpoint.json",
+      "cheat_tainted": true,
+      "evidence": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "settled_png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_PASS.png",
+        "settled_png_sha256": "e8bb592d3622c79ffe66434b57ab55c26b41e97900d0580f12f7227d968f8561",
+        "settled_core_frame": 6250,
+        "animation_ledger": "temp/release_C/w2b6f_scene28_extended/frames.jsonl",
+        "live_sheet_rom_offset": "0x45EC74",
+        "live_white_face_bounds": {
+          "작": [
+            3,
+            3,
+            27,
+            27
+          ],
+          "전": [
+            3,
+            3,
+            27,
+            27
+          ],
+          "실": [
+            3,
+            3,
+            27,
+            27
+          ],
+          "패": [
+            2,
+            3,
+            27,
+            27
+          ]
+        },
+        "jp_and_candidate_sprite_origins_y": [
+          64,
+          62,
+          60,
+          64
+        ],
+        "classification": "pass; cheat_tainted screen QA",
+        "superseded_evidence": {
+          "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_superseded_not_defect.png",
+          "png_sha256": "e8bb592d3622c79ffe66434b57ab55c26b41e97900d0580f12f7227d968f8561",
+          "classification": "superseded: not a defect. Live 0x45EC74 cells have white-face bounds (3,3)-(27,27) for 작/전/실 and (2,3)-(27,27) for 패. The 13 px bbox was measured on unused 0xBFBB54/0xEE8F68 sheets. Affine y-wave origins 64/62/60/64 match JP 作戦失敗 at core 6250."
+        }
+      }
     },
     "29_part2_result_summary": {
       "checkpoint": "scene_29_part2_result_summary",
@@ -479,12 +565,22 @@
       "cheat_tainted": true
     },
     "30g1_part2_green_earth_volcano_sortie_story": {
-      "status": "blocked",
-      "note": "branch mission unverified"
+      "note": "Green Earth volcano sortie briefing (0xA1D244): 출격한다고 들었다.; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM imported from source ROM effc6ee...; cheat-tainted descendant; no RAM write in this route",
+      "checkpoint": "scene_30g1_part2_green_earth_volcano_sortie_story",
+      "screenshot": "scene_30g1_part2_green_earth_volcano_sortie_story",
+      "capture_path": "temp/scene_screenshots/scene_30g1_part2_green_earth_volcano_sortie_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_run16_volcano_follow/0011_A_0003295.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_run16_volcano_follow/0011_A_0003295.checkpoint.json",
+      "cheat_tainted": true
     },
     "30g2_part2_green_earth_volcano_lava_story": {
-      "status": "blocked",
-      "note": "branch mission unverified"
+      "note": "Green Earth volcano day-2 lava tactical explanation (0xA1D788/0xA1D7A4): 화산에서 뿜는 용암은 / 일정한 패턴이 있는 듯해.; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM provenance unverified, cheat-tainted descendant",
+      "checkpoint": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "screenshot": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "capture_path": "temp/scene_screenshots/scene_30g2_part2_green_earth_volcano_lava_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_volcano_day2dialog/0001_NONE_0008033.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_volcano_day2dialog/0001_NONE_0008033.checkpoint.json",
+      "cheat_tainted": true
     },
     "30g3_part2_green_earth_suspicious_area_story": {
       "checkpoint": "scene_30g3_part2_green_earth_suspicious_area_story",
@@ -497,18 +593,28 @@
       "cheat_tainted": true
     },
     "30e4_part2_blackhole_yellowcomet_fortress_story": {
-      "status": "blocked",
-      "note": "branch mission unverified"
+      "note": "Part 2 C17 Show Stopper fortress world-map opening: 여기에, 적이 있는 거냐? (dialogue rows 0xA202D4/0xA202DE); cold-booted legacy SRAM and selected C17 flag; inherited cheat-tainted screen QA",
+      "checkpoint": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+      "screenshot": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+      "capture_path": "temp/scene_screenshots/scene_30e4_part2_blackhole_yellowcomet_fortress_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6f_scene30e4_sourcefix/0031_NONE_0003029.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6f_scene30e4_sourcefix/0031_NONE_0003029.checkpoint.json",
+      "cheat_tainted": true
     },
     "30e3_part2_blackhole_yellowcomet_supply_briefing_story": {
-      "status": "blocked",
-      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "note": "Part 2 Yellow Comet supply briefing: 현재에서 모은 물자는, 어떻게 되어 있습니까?; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM tainted",
       "diagnostic_probe": {
         "frame": "temp/release_C/b28/story_probe/yellow/f002844.png",
         "frame_sha256": "8ba17b06b3aa3dcd0956d47616f626d2d1698ba7d72803ba950cc7bf085ccdc3",
         "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
         "status": "BLOCKED"
-      }
+      },
+      "checkpoint": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "screenshot": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+      "capture_path": "temp/scene_screenshots/scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6b/S30e3/0016_A_0002859.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6b/S30e3/0016_A_0002859.checkpoint.json",
+      "cheat_tainted": true
     },
     "30e1_part2_blackhole_missile_approach_story": {
       "checkpoint": "scene_30e1_part2_blackhole_missile_approach_story",
@@ -539,28 +645,43 @@
       "cheat_tainted": false
     },
     "80a_campaign_story_early": {
-      "status": "blocked",
-      "note": "old PK core 37931 mapping is wrong (note only); no P1 save reaching E00xxx dialogue on this PC"
+      "note": "P1 campaign mission 3 Air Ace! opening (0xE00166 group): 이런 곳에 레드스타의 부대가 / 나타날 줄이야.; surrender and retry from legacy M3 save; Max arrival at 0xE0075A remains unverified; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM imported from source ROM 51b10dcf...; cheat-tainted descendant; no RAM write in this route",
+      "checkpoint": "scene_80a_campaign_story_early",
+      "screenshot": "scene_80a_campaign_story_early",
+      "capture_path": "temp/scene_screenshots/scene_80a_campaign_story_early_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6e_80a_fullreplay/0046_A_0006193.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6e_80a_fullreplay/0046_A_0006193.checkpoint.json",
+      "cheat_tainted": true
     },
     "80b_campaign_story_mid": {
-      "status": "blocked",
-      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "note": "Part 1 campaign mid-story dialogue on campaign map; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM tainted",
       "diagnostic_probe": {
         "frame": "temp/release_C/b28/story_probe/m16/f003720.png",
         "frame_sha256": "289888ef3d4f49d1f5a4c2abe3b83d7ca63655bc1773e8dcec0012229b1b72e4",
         "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
         "status": "BLOCKED"
-      }
+      },
+      "checkpoint": "scene_80b_campaign_story_mid",
+      "screenshot": "scene_80b_campaign_story_mid",
+      "capture_path": "temp/scene_screenshots/scene_80b_campaign_story_mid_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6b/S80bc/0013_A_0003784.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6b/S80bc/0013_A_0003784.checkpoint.json",
+      "cheat_tainted": true
     },
     "80c_campaign_story_late": {
-      "status": "blocked",
-      "note": "diagnostic probe only; recorder capture requires Mac harness 12874704...",
+      "note": "Part 1 campaign late-story dialogue on campaign map; visual inspection: readable Korean, no visible replacement glyph, JP residue, or clipping; legacy SRAM tainted",
       "diagnostic_probe": {
         "frame": "temp/release_C/b28/story_probe/m16/f006300.png",
         "frame_sha256": "06a50990dc68348e36cf44da513a2a5720adc4cc93cff89a47e1263583875020",
         "candidate_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
         "status": "BLOCKED"
-      }
+      },
+      "checkpoint": "scene_80c_campaign_story_late",
+      "screenshot": "scene_80c_campaign_story_late",
+      "capture_path": "temp/scene_screenshots/scene_80c_campaign_story_late_patched/frame.png",
+      "provenance_path": "temp/release_C/w2b6b/S80bc/0030_A_0006368.checkpoint.json",
+      "source_endpoint": "temp/release_C/w2b6b/S80bc/0030_A_0006368.checkpoint.json",
+      "cheat_tainted": true
     },
     "85_ui_common": {
       "checkpoint": "scene_85_ui_common",

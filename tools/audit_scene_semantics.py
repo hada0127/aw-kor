@@ -99,8 +99,8 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/release_C/b31/89b_trace/trace.log",
-        "receipt": "temp/release_C/b31/89b_trace/bound_receipt.json",
+        "watch_log": "temp/release_C/rebind1/89b_trace/trace.log",
+        "receipt": "temp/release_C/rebind1/89b_trace/bound_receipt.json",
         "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
@@ -159,6 +159,21 @@ def active_registration_records(path: Path, candidate_sha: str) -> list[dict]:
         raise ValueError("active registration record is bound to another candidate")
     if any(r.get("replay", {}).get("candidate_sha256") == candidate_sha for r in history):
         raise ValueError("current-candidate registration record is hidden in history")
+    # Legacy standalone SRAM is usable for screen evidence, never clean progress.
+    for record in records:
+        replay = record.get("replay", {})
+        checkpoint = replay.get("checkpoint")
+        if not checkpoint:
+            continue
+        path_to_checkpoint = (ROOT / checkpoint).resolve()
+        if not path_to_checkpoint.is_relative_to(ROOT):
+            raise ValueError("registration checkpoint escapes repository")
+        baseline_path = path_to_checkpoint.parent / "baseline.json"
+        if not baseline_path.is_file():
+            continue
+        seed = (load(baseline_path, {}).get("initial_game_save") or {})
+        if seed.get("provenance_class") == "legacy_unverified_sram" and replay.get("cheat_tainted") is not True:
+            raise ValueError("legacy_unverified_sram registration must be cheat-tainted")
     return records
 
 
@@ -184,7 +199,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--broad-dialogue-threshold", type=int, default=200)
-    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261014_b31.gba"))
+    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261015_b32r5.gba"))
     args = ap.parse_args()
     candidate_sha = sha256(Path(args.rom))
     active_records = active_registration_records(REGISTRATION, candidate_sha)

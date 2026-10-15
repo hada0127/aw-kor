@@ -1,0 +1,12 @@
+{
+  "scene_id": "19c2_part1_mid_fog_map_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6f_scene19c2_cold2/0345_A_0056131.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene19c2_cold2/frames/5ddbdd2d9334a0aa20700bd6a2406dc966fe022a05642cb1e3b106e87daf34e2.png",
+  "core_frame": 56131,
+  "png_sha256": "2a2045d65547f2605e65261637e858e8c8eaf70b5abab7582c317dc73740bae2",
+  "cheat_tainted": true,
+  "visual_result": "readable 색적 맵인가・・・.; no visible clipping or replacement glyph",
+  "claim_scope": "Part 1 mission 5M Sniper! fog-map opening: 색적 맵인가・・・. (row 0xDC4C02)",
+  "source_address": "0xDC4C02 (exact text match; direct runtime read watch unverified)"
+}

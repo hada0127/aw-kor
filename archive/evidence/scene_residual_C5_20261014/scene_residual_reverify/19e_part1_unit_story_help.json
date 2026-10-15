@@ -1,0 +1,199 @@
+[
+ {
+  "label": "static_residual_reverify::19e_part1_unit_story_help",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00DE9000:0x00DF0000",
+    "extracted": {
+     "covered_count": 598,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 12,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DE9D90",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DE9D8E"
+      },
+      {
+       "offset": "0x00DE9F4C",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DE9F4A"
+      },
+      {
+       "offset": "0x00DEA138",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEA136"
+      },
+      {
+       "offset": "0x00DEA378",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEA376"
+      },
+      {
+       "offset": "0x00DEA54C",
+       "length": 6,
+       "text": "マップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEA54A"
+      },
+      {
+       "offset": "0x00DED00E",
+       "length": 6,
+       "text": "タイプ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DED00A"
+      },
+      {
+       "offset": "0x00DEE8D7",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEE8D1"
+      },
+      {
+       "offset": "0x00DEEB7D",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEEB7B"
+      },
+      {
+       "offset": "0x00DEEB9A",
+       "length": 4,
+       "text": "ヘリ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEEB90"
+      },
+      {
+       "offset": "0x00DEED2D",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEED2D"
+      },
+      {
+       "offset": "0x00DEEFFA",
+       "length": 6,
+       "text": "タイプ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEEFF6"
+      },
+      {
+       "offset": "0x00DEF0B4",
+       "length": 6,
+       "text": "タイプ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DEF0B2"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   },
+   {
+    "range": "0x00DF0000:0x00DF8000",
+    "extracted": {
+     "covered_count": 606,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 6,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DF2966",
+       "length": 6,
+       "text": "セーブ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF2966"
+      },
+      {
+       "offset": "0x00DF3334",
+       "length": 4,
+       "text": "ミス",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF332A"
+      },
+      {
+       "offset": "0x00DF33C7",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF33B7"
+      },
+      {
+       "offset": "0x00DF36A3",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF369F"
+      },
+      {
+       "offset": "0x00DF6146",
+       "length": 6,
+       "text": "アララ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF6146"
+      },
+      {
+       "offset": "0x00DF7042",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DF7032"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 1204,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 18,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

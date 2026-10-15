@@ -1,0 +1,178 @@
+{
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "method": "b32r5 native cold boot, copied cartridge saves",
+  "frames": [
+    {
+      "filename": "0012_DOWN_0001435.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0012_DOWN_0001435.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "native_checkpoint_sha256": "6f3572f711242ed7ede23bbfed9e291d1337698e325fbdfd1e7cd5f63da76c2f",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0013_DOWN_0001456.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0013_DOWN_0001456.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0013_DOWN_0001456.checkpoint.json",
+      "native_checkpoint_sha256": "42b86eb1fae937621e90eaaeb3fecb48982defa06edb5ab8066c66e70e7478ce",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0014_DOWN_0001477.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0014_DOWN_0001477.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0014_DOWN_0001477.checkpoint.json",
+      "native_checkpoint_sha256": "dc1356d5074009d5ff9427137b7de837c696f52373cb074502b81c1ab01051fb",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0015_DOWN_0001498.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0015_DOWN_0001498.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0015_DOWN_0001498.checkpoint.json",
+      "native_checkpoint_sha256": "ae4e849ad7489ca98e18e0d4ec55103c5145ac921efa4a579c2ddcf59c4d6521",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0016_DOWN_0001519.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0016_DOWN_0001519.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0016_DOWN_0001519.checkpoint.json",
+      "native_checkpoint_sha256": "7973ef258c8b2be01598949fb893dba4a12075b598b3d588dcb69f403b57717c",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0033_NONE_0002121.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0033_NONE_0002121.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0033_NONE_0002121.checkpoint.json",
+      "native_checkpoint_sha256": "d8af25210c7dd315bca8379af6d56edb0baaf0a07d0ed157c2ec4f1d1e8e9df6",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0049_NONE_0002819.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0049_NONE_0002819.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0049_NONE_0002819.checkpoint.json",
+      "native_checkpoint_sha256": "2e4428c0fe0980c00da2dff3624cecaa53e8350ec041c829c490ad9ce01f2b3d",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0051_NONE_0002880.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0051_NONE_0002880.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0051_NONE_0002880.checkpoint.json",
+      "native_checkpoint_sha256": "f00d079d90e5bd6a30dbafcf276b6b490af3933eccdae512f466a2ad948f6e26",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0059_NONE_0003305.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0059_NONE_0003305.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0059_NONE_0003305.checkpoint.json",
+      "native_checkpoint_sha256": "6a5eab99805d5fd9c46b1360ce85b7d5acf31bb5783d6535881f1daa302588f5",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0060_DOWN_0003336.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0060_DOWN_0003336.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0060_DOWN_0003336.checkpoint.json",
+      "native_checkpoint_sha256": "e84259a14ccc659a10d813aafb1a86afff76897fa0ad9e3937a2f0e89ff14cd3",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0061_DOWN_0003367.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0061_DOWN_0003367.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0061_DOWN_0003367.checkpoint.json",
+      "native_checkpoint_sha256": "2bc10d1a5b0bdf7e9b8d54f4865b76aea37b75ba4255ebcbdecd45f2a647b35c",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "DFA68C_0077_NONE_0003956.png",
+      "native_frame": "temp/release_C/rebind1/help/F_help_sweep/0077_NONE_0003956.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F_help_sweep/0077_NONE_0003956.checkpoint.json",
+      "native_checkpoint_sha256": "c88d6f50658fb50f24affec6326972b9bed1eeb3b94848866af64bb1b1a7e1e5",
+      "capture_exit": "temp/release_C/rebind1/help/F_help_sweep/exit.json",
+      "sha256": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "DFA7BE_0014_NONE_0001625.png",
+      "native_frame": "temp/release_C/rebind1/help/F7BE_b2/0014_NONE_0001625.png",
+      "native_checkpoint": "temp/release_C/rebind1/help/F7BE_b2/0014_NONE_0001625.checkpoint.json",
+      "native_checkpoint_sha256": "b878006a32db595ed04d867afd6a8d37cb93d1af176c3c7916704fbefd7ca987",
+      "capture_exit": "temp/release_C/rebind1/help/F7BE_b2/exit.json",
+      "sha256": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
+      "rgb_equal_to_C5": true
+    }
+  ],
+  "comparison_to_C5": [
+    {
+      "filename": "0012_DOWN_0001435.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0013_DOWN_0001456.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0014_DOWN_0001477.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0015_DOWN_0001498.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0016_DOWN_0001519.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0033_NONE_0002121.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0049_NONE_0002819.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0051_NONE_0002880.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0059_NONE_0003305.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0060_DOWN_0003336.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "0061_DOWN_0003367.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "DFA68C_0077_NONE_0003956.png",
+      "rgb_equal_to_C5": true
+    },
+    {
+      "filename": "DFA7BE_0014_NONE_0001625.png",
+      "rgb_equal_to_C5": true
+    }
+  ],
+  "evidence_scope": "13 native frames; 23 directly visible help addresses; width carried only with exact RGB equality"
+}

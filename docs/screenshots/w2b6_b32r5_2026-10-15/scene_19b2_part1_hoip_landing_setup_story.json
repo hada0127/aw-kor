@@ -1,0 +1,11 @@
+{
+  "scene_id": "19b2_part1_hoip_landing_setup_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_p1_stage10_follow/0021_A_0006082.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_p1_stage10_follow/frames/549564bcb6c106002e818726cd814fd6dc9f9c69465efdc0b863b4b58dd51482.png",
+  "core_frame": 6082,
+  "png_sha256": "05e8d7062bd476ec02a8f151253640cd0465e0b827b8e3e837219888283618a6",
+  "cheat_tainted": false,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 Operation Room 도그 파이트 battle opening (0xD9A26A group): 호이프 부대가 상륙하기 전 / 먼저 배치했어."
+}

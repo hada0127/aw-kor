@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::19a_part1_tutorial_story",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
   "min_score": 7,
   "ranges": [
    {

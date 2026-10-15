@@ -1,0 +1,11 @@
+{
+  "scene_id": "19c1_part1_mid_campaign_radio_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6b/S19c1/0038_A_0007584.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6b/S19c1/frames/51b6cdc7764091cb7f642d0a1be2f3e60003bd89e914540bd9e2670e7888147f.png",
+  "core_frame": 7584,
+  "png_sha256": "7565471fdee995b194188f579df787cbff333c67e2a24bd59d50d548a9e77034",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 mid-campaign radio dialogue: 아님、 료! / 들려요?"
+}

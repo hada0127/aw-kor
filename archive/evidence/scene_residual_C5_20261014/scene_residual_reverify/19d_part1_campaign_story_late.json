@@ -1,0 +1,77 @@
+[
+ {
+  "label": "static_residual_reverify::19d_part1_campaign_story_late",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00DCA000:0x00DD2000",
+    "extracted": {
+     "covered_count": 1082,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 5,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00DCBA1A",
+       "length": 8,
+       "text": "イーグル",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCBA1A"
+      },
+      {
+       "offset": "0x00DCBB36",
+       "length": 6,
+       "text": "モップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCBB36"
+      },
+      {
+       "offset": "0x00DCCE86",
+       "length": 6,
+       "text": "モップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCCE86"
+      },
+      {
+       "offset": "0x00DCDEF1",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCDEEB"
+      },
+      {
+       "offset": "0x00DCEA49",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00DCEA43"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 1082,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 5,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

@@ -67,6 +67,8 @@ def frame_metrics(path: Path, rom_sha: str) -> tuple[dict, list[dict], list[dict
         "frame": str(path.relative_to(ROOT)),
         "provenance": str(prov_path.relative_to(ROOT)),
         "provenance_rom_sha256": provenance.get("rom_sha256"),
+        "provenance_class": provenance.get("provenance_class"),
+        "cheat_tainted": provenance.get("cheat_tainted"),
         "size": [w, h],
         "unique_colors": colors,
         "unique_tiles": len(tile_hashes),
@@ -101,6 +103,8 @@ def frame_metrics(path: Path, rom_sha: str) -> tuple[dict, list[dict], list[dict
             "issue": "stale_provenance",
             "value": provenance.get("rom_sha256"),
         })
+    if provenance.get("provenance_class") == "legacy_unverified_sram" and provenance.get("cheat_tainted") is not True:
+        issues.append({"checkpoint": name, "issue": "legacy_sram_taint_missing"})
     if total - black < 1000:
         issues.append({"checkpoint": name, "issue": "near_blank", "value": total - black})
     return row, issues, observations

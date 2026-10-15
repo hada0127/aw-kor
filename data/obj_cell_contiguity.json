@@ -222,6 +222,35 @@
           "capture_checkpoint_sha256": "b6919bfcd2d53bfd936416ff041077b4086de1a06d22376a50e9845878ee9047",
           "capture_baseline_sha256": "3ba47a5efc1b69c94e9435678f7c1e2ccf172706743f7c47c1d958afcd27f18d",
           "capture_run": "temp/release_C/b31/reg7/E_result"
+        },
+        {
+          "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+          "frame": "temp/release_C/rebind1/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b32r5 direct cold-boot recorder capture; screen geometry; save taint inherited",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "fdd14e1e3c985357ddeb2834ef2891fb7e1362526c953dc4cd060b15dcc5adea",
+          "capture_baseline_sha256": "2a548ab2890881c6b8076d29f68956130de4de70e91d574596e568f9414e79ac",
+          "capture_run": "temp/release_C/rebind1/obj/E_result"
         }
       ]
     },
@@ -580,6 +609,27 @@
           "capture_checkpoint_sha256": "c5b29e44f4a3b851bcb84c8b319fb82e8f9119182980de5838010676064b7011",
           "capture_baseline_sha256": "66cca77b87b745da45ec0e84a1e7c30130118621913658dafc5a973ad237de65",
           "capture_run": "temp/release_C/b31/reg7/E_mission"
+        },
+        {
+          "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+          "frame": "temp/release_C/rebind1/obj/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b32r5 direct cold-boot recorder capture; screen geometry; save taint inherited",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "1f80f86c7fd6437ff8812863405cea48a38b4ab9fb1cd10d55e0014634a4c9e0",
+          "capture_baseline_sha256": "a23ddde6dd1e16441bcc12b423716f4c474268bbcdbd368c73a597b761038ebe",
+          "capture_run": "temp/release_C/rebind1/obj/E_mission"
         }
       ]
     }

@@ -1,0 +1,11 @@
+{
+  "scene_id": "19a2_part1_heavy_tank_advice_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_p1_train6_follow/0022_A_0006061.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_p1_train6_follow/frames/4ce8b0314603df21b72f9f820be5422f8fc39b98d0490be30493e2f173f74595.png",
+  "core_frame": 6061,
+  "png_sha256": "c634f5cfaeaa29a7a2c855bce17896c7c742fb150aeedf9d0249b619e20d0a45",
+  "cheat_tainted": false,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 Operation Room heavy-tank mission opening (0xD965DE): 하지만, 전투는 정면승부만 / 있는 게 아니에요."
+}

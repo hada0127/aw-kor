@@ -1,0 +1,32 @@
+{
+  "co_id": 9,
+  "co": "Drake",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co09_synthetic_inputs.txt",
+  "route_sha256": "38433ce65d14e0b1e7bf1a53b3be0bf1a6054607613364f41f15bd43a9b89bdb",
+  "source_checkpoint": "temp/release_C/w2b6f_co09_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co09_synthetic_sourcefix/frames/97a8eb542db0fc9fac4df435e5031fca71ac71b16c62e48eba95ba0caf4c1033.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "13714f667f22fd638f8b6acd6ae775e9f61179dfeca6be1d610e6524fa72ac66",
+  "frame_sha256": "5a149679fa8ec3b6046c0cfdee97991e516560af78e601bfce6d90b9be109b03",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_drake_synthetic.png",
+  "png_sha256": "5a149679fa8ec3b6046c0cfdee97991e516560af78e601bfce6d90b9be109b03",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30A28",
+    "0xA30A34"
+  ],
+  "visible_quote": "나라도 / 좋은 모습 보여주겠어!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co09_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "ac7af417916bfdce62432c296d00ae068d580ad4d72d3f715c5d718cc903aa1c",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

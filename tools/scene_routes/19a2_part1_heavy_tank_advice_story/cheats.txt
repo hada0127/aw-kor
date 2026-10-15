@@ -1,0 +1,1 @@
+None. Clean cartridge cold boot; no source SRAM and no RAM writes.

@@ -1,0 +1,1 @@
+No RAM writes on this route. Evidence is cheat_tainted=true because the imported legacy SRAM provenance is unverified.

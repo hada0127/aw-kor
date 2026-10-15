@@ -23,6 +23,10 @@
 
 ---
 
+## 2026-10-15 — b32r5 scene 26 M21 adjacent-unit probe
+
+ROM SHA-256 `7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a`; source same-ROM checkpoint `temp/release_C/w2b6b/I2battle_legacy/0012_NONE_0003042.checkpoint.json`. Cursor reads at `0x030034F4/0x030034F6` matched `(9,19)` → `(8,17)` → `(3,1)` after recorded inputs. Selecting the top-map unit at `(3,1)` and confirming produced only `대기` at core 3517 (`temp/release_C/w2b6c_m21_menu/0002_A_0003517.png`), without `공격` or a battle label. Adjacent differently colored sprites did not establish an attackable enemy. The prior W2b6-B unit-coordinate RAM edit also failed to update map occupancy. Do not register these frames for scene 26 or reuse this coordinate alone as a teleport recipe. See `temp/release_C/w2b6c_report.md`.
+
 ## [2026-10-07] Part 1 정보창 정적 검사만으로 UI 수정 판정 실패
 
 수입 `ーー`를 CP/2P/VS 문자열로 재지정한 수정은 대상 소비자를 잘못 짚어 철회했다(`b093507`). 정보/비용 탭을 7행에서 5행으로 압축한 수정도 실화면 가독성이 나빠 7행으로 복원했다. 정적 검사 통과만으로 UI 수정을 완료 처리하지 않는다. 해당 소비자 화면의 전후 증거를 확인한 뒤 판정한다.
@@ -1622,3 +1626,19 @@ as proof of correct glyphs, meaning, layout, or complete baseline restoration.
 - Three compact dialogue consumers (`g_00DF8B6A`, `g_00DF8B92`, `g_00DF8B9A`) remain unassigned because scene ownership was inferred without runtime evidence. The regenerated catalog reports `dialogue_unassigned=3`, `review_pending_total=28`; strict catalog audit fails. The next phase must obtain consumer proof or leave the backlog open.
 - `audit_scene_residual_scans.py --strict --rom output/game_wars_korean_candidate_20261015_b32r3.gba` exits 1 with 47 critical findings, including C5 ROM SHA mismatch and seven pending visual verdicts. The historical evidence is archived for checkout portability, not rebound to b32r3.
 - C5/b31 residual strict audit also remains red (15 critical): one scan-results SHA mismatch plus seven pending visual verdicts and seven required-scene findings. No missing archived recorder endpoint was reported. This task does not claim a release gate pass.
+
+### W2b6-E route probes still open (2026-10-15)
+- On the b32r5 Green Earth rescue map loaded from legacy `anchor_run15.sav`, zeroing the first byte of all 34 Black Hole unit records in group 128 at `0x02022584`-based 12-byte table and ending turn did **not** trigger victory by core 7817. The writes and captures are in `temp/release_C/w2b6e_run15_zero_enemy2/` and `temp/release_C/w2b6e_run15_endturn/`. Do not treat unit-HP zeroing alone as an instant-win route; the map objective or victory state still needs verification.
+- `anchor_run11.sav` entered a different Yellow Comet map path; direct `A` and short direction probes did not reach the 30e4 fortress dialogue. The Green Earth run15 short probes entered the rescue route rather than the volcano branch. The validated volcano branch starts from run16 and selects the northern marker; see `temp/release_C/w2b6e_report.md`.
+- The P1 mission-3 day-48 legacy save (`g1_da9d97cf.sav`) also resisted the proposed instant-win shortcut. Zeroing the first byte of eight selected enemy unit records at `0x0201A448` and ending turn did not trigger victory by core 8509; a later dump showed 11 nonzero first bytes before this write, so the first probe was incomplete. The logged writes and frames are in `temp/release_C/w2b6e_p1_m3_enemy_zero/`, `w2b6e_p1_m3_endturn_fix/`, and `w2b6e_p1_m3_waitvictory/`. A subsequent full enemy group wipe still failed by core 8210 (`w2b6e_p1_m3_clear_records/`, `w2b6e_p1_m3_clear_wait/`). These writes are not validated mission-progress routes.
+- W2b6-E b32r5 장면 증거 19c2/26/30e4는 끝내 등록하지 못했다. 22개 P1 `g1_*` 레거시 SRAM을 콜드부트하고 9개 전투 저장에서 게임 항복/재도전을 시험했지만 19c2의 `0xDC4C02` 색적 대사는 나오지 않았다. P2 실제 공격 애니메이션은 표시됐으나 26 카탈로그의 `0xA30164..0xA313FC` 범위는 일반 공격 예측 라벨이 아니라 CO 발언으로 보이며, 그 대사는 실화면에서 확인되지 않았다. 30e4에 가까운 Yellow Comet 저장은 이미 영토 완료 상태이거나 팩토리 목적을 열어 요새 대사 `0xA202D4`를 보여주지 않았다. 진단 경로·이미지·한계는 `temp/release_C/w2b6e_report.md`에 남겼다. 현 b32r5 엄격 게이트는 `BLOCKED` 3건 외에도 89b 현재 후보 추적 출처 및 과거 캡처 무효/누락 문제로 실패한다.
+
+### W2b6-F scene 28 failure overlay glyph size (2026-10-15)
+
+Candidate b32r5 `작전실패` OBJ overlay has a visible settled-frame defect: `패` is shorter than `작전실`. Cold-boot replay `temp/release_C/w2b6f_scene28_extended/` shows it at cores 6224, 6250, and 6280; every ledger frame 6100–6380 was visually reviewed in `temp/release_C/w2b6f_scene28_contact_01.png` through `_06.png`, with no later growth of `패`; `docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_DEFECT.png` preserves core 6250. The two Japanese source OBJ blocks at `0xBFBB54` and `0xEE8F68` each use four 32×32 glyph sprites; the candidate `패` pixels occupy only y=8..20, while the first three occupy y=5..23/24. See `temp/release_C/w2b6f_report.md` and the route README. The previous scene-28 no-defect assessment is withdrawn. No code fix was attempted in this worker's scope.
+
+### b34: 작전실패 「패」 size — not a defect (2026-10-15)
+
+Not a defect; registered frame 6224 was mid-animation (affine wave), settled frame 6250 matches JP; live sheet 0x45EC74; failure/success sheets 0xBFBB54/0xEE8F68 not used by this scene; b34 reverted, candidate output/game_wars_korean_candidate_20261015_b34.gba is obsolete.
+
+- 2026-10-15 FIN-REG correction: the earlier claim that scene 28 has a smaller `패` was wrong. Its 13 px bounding box came from unused OBJ sheets `0xBFBB54`/`0xEE8F68`; the live sheet `0x45EC74` has matching 25 px white faces, and its staggered affine y wave matches Japanese `作戦失敗` at core 6250. The former defect PNG is retained as superseded evidence.

@@ -108,6 +108,17 @@ def source_taint(state: dict, baseline: dict, run: Path | None = None) -> bool |
         registry = _load(ROOT / "data/game_save_cheat_provenance.json")
         entry = registry.get("receipts", {}).get(receipt_sha, {})
         receipt_taint = entry.get("cheat_tainted")
+        if run is not None:
+            from game_save_evidence import UNVERIFIED_SRAM_KIND, receipt_cheat_status
+            receipt_path = run / save.get("receipt", "game_save.json")
+            if receipt_path.is_file() and sha256(receipt_path) == receipt_sha:
+                receipt = _load(receipt_path)
+                if receipt.get("kind") == UNVERIFIED_SRAM_KIND:
+                    if save.get("provenance_class") != UNVERIFIED_SRAM_KIND:
+                        raise ValueError("legacy SRAM provenance class missing")
+                    receipt_taint = receipt_cheat_status(receipt, receipt_sha)["tainted"]
+                elif save.get("provenance_class") == UNVERIFIED_SRAM_KIND:
+                    raise ValueError("legacy SRAM provenance class mismatches receipt")
     if "cheat_inherited" in baseline and not isinstance(baseline["cheat_inherited"], bool):
         raise ValueError("baseline cheat_inherited must be Boolean")
     inherited = baseline.get("cheat_inherited") is True or receipt_taint is True
@@ -190,7 +201,8 @@ def validate_recorder_endpoint(checkpoint: dict, rom_sha: str) -> dict:
                 hashlib.sha256(image.convert("RGB").tobytes()).hexdigest() != matches[0]["rgb_sha256"]):
             raise ValueError("recorder endpoint PNG/RGB mismatch")
     return {"state_path": state_path, "source": source, "core_frame": core_frame,
-            "taint": taint}
+            "taint": taint,
+            "provenance_class": (baseline.get("initial_game_save") or {}).get("provenance_class")}
 
 
 def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, str]:
@@ -217,6 +229,7 @@ def current_capture(frame: Path, checkpoint: dict, rom_sha: str) -> tuple[bool, 
                      data.get("source_frame") == endpoint["frame"] and
                      data.get("source_checkpoint") == endpoint["checkpoint"] and
                      data.get("cheat_tainted") == checkpoint["cheat_tainted"] and
+                     data.get("provenance_class") == validated["provenance_class"] and
                      sha256(frame) == endpoint["frame_sha256"])
         except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError):
             valid = False
@@ -248,13 +261,17 @@ def import_recorder_endpoint(checkpoint: dict, frame: Path, rom_sha: str) -> Non
     core_frame = validated["core_frame"]
     frame.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, frame)
-    (frame.parent / "provenance.json").write_text(json.dumps({
+    provenance = {
         "rom_sha256": rom_sha, "scene_id": checkpoint.get("scene_id"),
         "source_frame": endpoint["frame"], "source_frame_sha256": endpoint["frame_sha256"],
         "source_checkpoint": endpoint["checkpoint"],
         "source_checkpoint_sha256": sha256(state_path), "source_core_frame": core_frame,
         "cheat_tainted": checkpoint["cheat_tainted"],
-    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    }
+    if validated["provenance_class"] is not None:
+        provenance["provenance_class"] = validated["provenance_class"]
+    (frame.parent / "provenance.json").write_text(json.dumps(
+        provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> None:

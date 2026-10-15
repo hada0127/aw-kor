@@ -1,0 +1,26 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "co_id": 1,
+  "co": "Andy",
+  "native_saved_co": true,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "29d329d7fa9339713a4c93eff6538d05decbbb8b1fadd903a67ebacae849829f",
+  "source_rom_sha256": "18a1b5b5911cea317db15f1da1e498307cbe58dc17cc513f572b93effb209610",
+  "source_endpoint": "temp/release_C/w2b6f_scene26_andy_native/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene26_andy_native/frames/550c9f1434705f1bd232dde9c48f9e283da5530ae06a2eeb4c7d671ca6ecec0f.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "41202c72d7f7ea3a5340982a66ea143a4b9c77053ca07e4196c035b5ee1633a1",
+  "frame_sha256": "0e63c44e664023b3e3972febb9e9b69ebf5a01bab47218f24e05efdafae9da45",
+  "png_sha256": "0e63c44e664023b3e3972febb9e9b69ebf5a01bab47218f24e05efdafae9da45",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30264"
+  ],
+  "visible_quote": "화끈하게 가자고오-!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "route": "tools/scene_routes/26_part2_co_power_quote/andy_native_inputs.txt",
+  "route_sha256": "37bf4a435a171f8620f6121e984dc618a7b074666e948aa852af80f68db284b4",
+  "exit_code": 0,
+  "run_status": "closed"
+}

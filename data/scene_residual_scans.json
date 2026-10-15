@@ -1,431 +1,441 @@
 {
-  "_doc": "scene_role=container address bucket의 실제 화면 잔여 여부 검증 manifest. tools/audit_scene_residual_scans.py가 결과 파일의 case/hit 수와 known split hit를 감사한다.",
-  "version": 1,
-  "generated_on": "2026-06-22",
-  "containers": [
+ "_doc": "scene_role=container address bucket의 실제 화면 잔여 여부 검증 manifest. tools/audit_scene_residual_scans.py가 결과 파일의 case/hit 수와 known split hit를 감사한다.",
+ "version": 1,
+ "generated_on": "2026-06-22",
+ "containers": [
+  {
+   "container_scene_id": "19a_part1_tutorial_story",
+   "container_ranges": [
+    "0x00D8F000:0x00D98000"
+   ],
+   "related_screen_scene_ids": [
+    "19a1_part1_tutorial_opening",
+    "19a2_part1_heavy_tank_advice_story"
+   ],
+   "evidence": [
     {
-      "container_scene_id": "19a_part1_tutorial_story",
-      "container_ranges": [
-        "0x00D8F000:0x00D98000"
-      ],
-      "related_screen_scene_ids": [
-        "19a1_part1_tutorial_opening",
-        "19a2_part1_heavy_tank_advice_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/19a_part1_tutorial_story.json",
-          "result_sha256": "e282b26c86648eb9649fa0be82b7def5e826925f93b2f4829ba1a0be499a04c5",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19b_part1_campaign_story_redstar",
-      "container_ranges": [
-        "0x00D98000:0x00DA5000"
-      ],
-      "related_screen_scene_ids": [
-        "19b2_part1_hoip_landing_setup_story",
-        "19b1_part1_hoip_ambush_weather_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
-          "result_sha256": "2ec3207dc296056d21b861ab9b26aa23d6c475e54bb8293e4e4043f7e1b3b6ed",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19c_part1_campaign_story_mid",
-      "container_ranges": [
-        "0x00DC2900:0x00DCA000"
-      ],
-      "related_screen_scene_ids": [
-        "19c1_part1_mid_campaign_radio_story",
-        "19c2_part1_mid_fog_map_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/19c_part1_campaign_story_mid.json",
-          "result_sha256": "8284717a08a7c9a5fbf07189be875c037729bda53b8b2cc012339e884f604f57",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19d_part1_campaign_story_late",
-      "container_ranges": [
-        "0x00DCA000:0x00DD2000"
-      ],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/19d_part1_campaign_story_late.json",
-          "result_sha256": "cb2b84e41946ff5d0bea1f7f39c5c2ddeebde442f3aa7fd1c927fde883656ba3",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "19e_part1_unit_story_help",
-      "container_ranges": [
-        "0x00DE9000:0x00DF0000",
-        "0x00DF0000:0x00DF8000"
-      ],
-      "related_screen_scene_ids": [
-        "19e1_part1_unit_info_detail_help",
-        "19e7_part1_hoip_co_weather_help",
-        "19e6_part1_unit_help_late"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/19e_part1_unit_story_help.json",
-          "result_sha256": "a2f81dfc0bc3fd68c947e19449c7624934cad7b6d6e4cade7f5bdc582c33f006",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30a_part2_story_opening_redstar",
-      "container_ranges": [
-        "0x00A01C00:0x00A08000"
-      ],
-      "related_screen_scene_ids": [
-        "30a1_part2_redstar_story_early"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30a_part2_story_opening_redstar.json",
-          "result_sha256": "f7c9a0767c6d80106921f286651bc3e6c2cd5d94b3d3600e6d34bec2fb4f22d0",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30b_part2_story_bluemoon",
-      "container_ranges": [
-        "0x00A08000:0x00A10000"
-      ],
-      "related_screen_scene_ids": [
-        "30b1_part2_redstar_liberation_macro_briefing_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30b_part2_story_bluemoon.json",
-          "result_sha256": "a55d6fc3ba79002c88a4d1bf19cab0ec50fdd3e793ec8f3402dc35eca26858a6",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30c_part2_story_yellow_comet",
-      "container_ranges": [
-        "0x00A10000:0x00A18000"
-      ],
-      "related_screen_scene_ids": [
-        "30c1_part2_yellowcomet_north_invasion_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30c_part2_story_yellow_comet.json",
-          "result_sha256": "c43bca328c68234466ee3f58f54d5f9ecb8536ba37912bc4d04df5528a758616",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30d_part2_story_green_earth",
-      "container_ranges": [
-        "0x00A18000:0x00A1C06C"
-      ],
-      "related_screen_scene_ids": [
-        "30d2_part2_green_earth_story_late"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30d_part2_story_green_earth.json",
-          "result_sha256": "f685415a547668a6498fba2df2813774f70ac3d8065c844a2484b71d3c1ca7d1",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30g_part2_story_green_earth_late",
-      "container_ranges": [
-        "0x00A1C06C:0x00A20000"
-      ],
-      "related_screen_scene_ids": [
-        "30g0_part2_green_earth_reinforcement_story",
-        "30g1_part2_green_earth_volcano_sortie_story",
-        "30g2_part2_green_earth_volcano_lava_story",
-        "30g3_part2_green_earth_suspicious_area_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30g_part2_story_green_earth_late.json",
-          "result_sha256": "0643329c879169d9c85f15fce4ddbcbc62c78f1b2316913c3c3c17ef4c933d31",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30e_part2_story_blackhole_late",
-      "container_ranges": [
-        "0x00A20000:0x00A28000"
-      ],
-      "related_screen_scene_ids": [
-        "30e4_part2_blackhole_yellowcomet_fortress_story",
-        "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
-        "30e1_part2_blackhole_missile_approach_story",
-        "30e2_part2_blackhole_final_missile_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30e_part2_story_blackhole_late.json",
-          "result_sha256": "1650a6cc3a3f3e3e90a1df646e21e22ca2606ad504d5b0c6c5f352d2d7a22aec",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "30f_part2_story_final_and_co",
-      "container_ranges": [
-        "0x00A28000:0x00A2C000"
-      ],
-      "related_screen_scene_ids": [
-        "30f2_part2_co_profile_story"
-      ],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/30f_part2_story_final_and_co.json",
-          "result_sha256": "fd4faab3311235b86e9e2dbc38fe681d5b3ee049337b008907ecfa99ce329673",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "88_common_comm_labels",
-      "container_ranges": [
-        "0x00EE212C:0x00EE2848"
-      ],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "method": "extracted_text_residual_reverification",
-          "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
-          "result_sha256": "b7ccff20fc972368a3f3e6a5451f7b15fbbb785c89829bc53af263aa68560d80",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
-          "historical_dynamic_scan": "git"
-        },
-        {
-          "method": "current_sha_visual_reverification",
-          "result_path": "data/comm_label_visual_reverify.json",
-          "result_sha256": "d25c3686e19faeb85655d44e0f9603091123e8f108663dcea0e6e9196a0c2ff9",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "note": "2026-10-14 C5 seven native cold-boot communication screens; visual review pending"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "89a_common_battle_surrender_confirm_common_copies",
-      "container_ranges": [
-        "0x00EFDAA0:0x00EFDB00"
-      ],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "result_path": "data/scene_residual_reverify/89a_common_battle_surrender_confirm_common_copies.json",
-          "result_sha256": "858def2bf52e4a2cd8fb52261892838934979390e08c1fe92728a5dbec7643e3",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "method": "extracted_text_residual_reverification",
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "89b_common_battle_defeat_comm_messages_common_copies",
-      "container_ranges": [
-        "0x00EFD8A4:0x00EFDA00",
-        "0x00EFDDBD:0x00EFDE00"
-      ],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "result_path": "data/scene_residual_reverify/89b_common_battle_defeat_comm_messages_common_copies.json",
-          "result_sha256": "d72b8d73a92c7775d406870ac75a200c26cbf620ffb5a95ccec94966f929d66c",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "method": "extracted_text_residual_reverification",
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
-        }
-      ]
-    },
-    {
-      "container_scene_id": "23d_part2_b8_compact_display_tables",
-      "container_ranges": [
-        "0x00B81800:0x00B85000"
-      ],
-      "related_screen_scene_ids": [],
-      "evidence": [
-        {
-          "result_path": "data/scene_residual_reverify/23d_part2_b8_compact_display_tables.json",
-          "result_sha256": "f31a7f5a87411dcb7ce21acd62f6b4f7ce7093b10878e99d33100d9237b28d54",
-          "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-          "expected_cases": 1,
-          "expected_hit_count": 0,
-          "method": "extracted_text_residual_reverification",
-          "note": "2026-10-14 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
-        }
-      ]
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/19a_part1_tutorial_story.json",
+     "result_sha256": "1576e09e5b88d4feac23fe68dab9e97f12309fe8e65be693d1339437057118af",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
     }
-  ],
-  "reverified_2026_06_24": {
-    "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
-    "method": "static_residual_reverification",
-    "note": "evidence를 현재 ROM 정적 재검증으로 교체(agy 정직성 지적 반영). 구 동적 result의 rom_sha 가식 제거."
+   ]
   },
-  "reverified_2026_06_25_a5c": {
-    "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
-    "method": "static_residual_reverification",
-    "note": "A5c 단어붙음 재배치(jam 102→19)로 ROM 변경 → 재스탬프"
+  {
+   "container_scene_id": "19b_part1_campaign_story_redstar",
+   "container_ranges": [
+    "0x00D98000:0x00DA5000"
+   ],
+   "related_screen_scene_ids": [
+    "19b2_part1_hoip_landing_setup_story",
+    "19b1_part1_hoip_ambush_weather_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
+     "result_sha256": "1bb4309fa33bd04f8082867529bc0a8efea907a1ac41dc7e00ca8a06d1c95101",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_a5c_hardened": {
-    "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed"
+  {
+   "container_scene_id": "19c_part1_campaign_story_mid",
+   "container_ranges": [
+    "0x00DC2900:0x00DCA000"
+   ],
+   "related_screen_scene_ids": [
+    "19c1_part1_mid_campaign_radio_story",
+    "19c2_part1_mid_fog_map_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/19c_part1_campaign_story_mid.json",
+     "result_sha256": "dc3f8c306d8532928d44c8ffd9448ec6630f3edb8e2d91c8eae0b4067bfba282",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_a5c_orphan": {
-    "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b"
+  {
+   "container_scene_id": "19d_part1_campaign_story_late",
+   "container_ranges": [
+    "0x00DCA000:0x00DD2000"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/19d_part1_campaign_story_late.json",
+     "result_sha256": "04808c37286bf95ae5a8c0b215816d7d00941fdf9265b9b0dea8b006cc7ecfb6",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_718": {
-    "rom_sha256": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942"
+  {
+   "container_scene_id": "19e_part1_unit_story_help",
+   "container_ranges": [
+    "0x00DE9000:0x00DF0000",
+    "0x00DF0000:0x00DF8000"
+   ],
+   "related_screen_scene_ids": [
+    "19e1_part1_unit_info_detail_help",
+    "19e7_part1_hoip_co_weather_help",
+    "19e6_part1_unit_help_late"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/19e_part1_unit_story_help.json",
+     "result_sha256": "d675925a54c8b37b31b91a4acb87a4568c6cdb64c5bf8a9fc1189d8c91c50d34",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_06_26": {
-    "rom_sha256": "19a2ea7102df707194ec2993b48a0cd0e5fe029cba6443bd76dffa4392e8c00d",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30a_part2_story_opening_redstar",
+   "container_ranges": [
+    "0x00A01C00:0x00A08000"
+   ],
+   "related_screen_scene_ids": [
+    "30a1_part2_redstar_story_early"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30a_part2_story_opening_redstar.json",
+     "result_sha256": "6658ca0741898dd4b5e5634c4ef32720cc1236e43534f59610e5f59a280348b8",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_06_27": {
-    "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30b_part2_story_bluemoon",
+   "container_ranges": [
+    "0x00A08000:0x00A10000"
+   ],
+   "related_screen_scene_ids": [
+    "30b1_part2_redstar_liberation_macro_briefing_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30b_part2_story_bluemoon.json",
+     "result_sha256": "b3db6542f48a5094e0c62c492a2ec30992253684385984b112db6656d9a93f44",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_06_28": {
-    "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30c_part2_story_yellow_comet",
+   "container_ranges": [
+    "0x00A10000:0x00A18000"
+   ],
+   "related_screen_scene_ids": [
+    "30c1_part2_yellowcomet_north_invasion_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30c_part2_story_yellow_comet.json",
+     "result_sha256": "bfac3f2baf007c4a9c47e0107f3459a672f47f50d557ff12df4c8d4fd9c75842",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_06_29": {
-    "rom_sha256": "f19bac0b0fec24a0e2442df361f2697f1899456c0b52bf1f54eb01142bfa7c9e",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30d_part2_story_green_earth",
+   "container_ranges": [
+    "0x00A18000:0x00A1C06C"
+   ],
+   "related_screen_scene_ids": [
+    "30d2_part2_green_earth_story_late"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30d_part2_story_green_earth.json",
+     "result_sha256": "e53fe3d9f074d8fe6b96e7e36f8259e182b8ab2646a3b78386e574510265154b",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_06_30": {
-    "rom_sha256": "ed8d0934444b7c687c8ae83658ba9a40eac4dc54f7b12e47e2966af72faa4731",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30g_part2_story_green_earth_late",
+   "container_ranges": [
+    "0x00A1C06C:0x00A20000"
+   ],
+   "related_screen_scene_ids": [
+    "30g0_part2_green_earth_reinforcement_story",
+    "30g1_part2_green_earth_volcano_sortie_story",
+    "30g2_part2_green_earth_volcano_lava_story",
+    "30g3_part2_green_earth_suspicious_area_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30g_part2_story_green_earth_late.json",
+     "result_sha256": "2b96d2d8f088ef2f791babfbabf568213648bae855de900e699a0aae8d62b995",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_07_01": {
-    "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30e_part2_story_blackhole_late",
+   "container_ranges": [
+    "0x00A20000:0x00A28000"
+   ],
+   "related_screen_scene_ids": [
+    "30e4_part2_blackhole_yellowcomet_fortress_story",
+    "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+    "30e1_part2_blackhole_missile_approach_story",
+    "30e2_part2_blackhole_final_missile_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30e_part2_story_blackhole_late.json",
+     "result_sha256": "9c292e1217c6323cc01bdd3528a5da59cf3d2210d60e2710f0de51cb6c895dc7",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_07_02": {
-    "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "30f_part2_story_final_and_co",
+   "container_ranges": [
+    "0x00A28000:0x00A2C000"
+   ],
+   "related_screen_scene_ids": [
+    "30f2_part2_co_profile_story"
+   ],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/30f_part2_story_final_and_co.json",
+     "result_sha256": "37bb1c6f7a53457c3be78010065b4d3ef7254ac7f2572c38e7be39be5efde8fe",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    }
+   ]
   },
-  "reverified_2026_07_05": {
-    "rom_sha256": "c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "88_common_comm_labels",
+   "container_ranges": [
+    "0x00EE212C:0x00EE2848"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "method": "extracted_text_residual_reverification",
+     "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
+     "result_sha256": "721f44f7ea3df50d1b7c5f07dd18377ea9788fc8a15870009e49c64e9ce89d33",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "historical_dynamic_scan": "git"
+    },
+    {
+     "method": "current_sha_visual_reverification",
+     "result_path": "data/comm_label_visual_reverify_b32r5.json",
+     "result_sha256": "e08bec8292e95cd8b784406b147e7e9e68a3a90d26b1b65b8fd1d21e351b21b6",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "note": "2026-10-15 b32r5 seven native cold-boot communication frames; per-frame visual review completed",
+     "historical_result": {
+      "result_path": "data/comm_label_visual_reverify.json",
+      "result_sha256": "d25c3686e19faeb85655d44e0f9603091123e8f108663dcea0e6e9196a0c2ff9",
+      "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2"
+     }
+    }
+   ]
   },
-  "reverified_2026_07_06": {
-    "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "89a_common_battle_surrender_confirm_common_copies",
+   "container_ranges": [
+    "0x00EFDAA0:0x00EFDB00"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "result_path": "data/scene_residual_reverify/89a_common_battle_surrender_confirm_common_copies.json",
+     "result_sha256": "6743d479009669e7f4ddedb7b570c7dbdad75e7187b9a98f056029a2cceebed8",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "method": "extracted_text_residual_reverification",
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+    }
+   ]
   },
-  "reverified_2026_10_12": {
-    "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "89b_common_battle_defeat_comm_messages_common_copies",
+   "container_ranges": [
+    "0x00EFD8A4:0x00EFDA00",
+    "0x00EFDDBD:0x00EFDE00"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "result_path": "data/scene_residual_reverify/89b_common_battle_defeat_comm_messages_common_copies.json",
+     "result_sha256": "ac2cb920ef403bb388b74df15d89771d2b339d7065f6a715c4b2f98f006cc024",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "method": "extracted_text_residual_reverification",
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+    }
+   ]
   },
-  "reverified_2026_10_13": {
-    "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
-  },
-  "reverified_2026_10_14": {
-    "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-    "method": "extracted_text_residual_reverification",
-    "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+  {
+   "container_scene_id": "23d_part2_b8_compact_display_tables",
+   "container_ranges": [
+    "0x00B81800:0x00B85000"
+   ],
+   "related_screen_scene_ids": [],
+   "evidence": [
+    {
+     "result_path": "data/scene_residual_reverify/23d_part2_b8_compact_display_tables.json",
+     "result_sha256": "7dcd92e1ccd6f325ba7b57d27231063941d1e88fef730daa2d54236cb40270dd",
+     "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+     "expected_cases": 1,
+     "expected_hit_count": 0,
+     "method": "extracted_text_residual_reverification",
+     "note": "2026-10-15 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+    }
+   ]
   }
+ ],
+ "reverified_2026_06_24": {
+  "rom_sha256": "b27ba3d089b29b47a7e0490b9693733ecdaa4a9b3fcb28faa3ed45ca1828b6a4",
+  "method": "static_residual_reverification",
+  "note": "evidence를 현재 ROM 정적 재검증으로 교체(agy 정직성 지적 반영). 구 동적 result의 rom_sha 가식 제거."
+ },
+ "reverified_2026_06_25_a5c": {
+  "rom_sha256": "f09d111fdd7897ed0a4ff7f9eca24fff8b12887806e2990007ceb705f9d526e9",
+  "method": "static_residual_reverification",
+  "note": "A5c 단어붙음 재배치(jam 102→19)로 ROM 변경 → 재스탬프"
+ },
+ "reverified_a5c_hardened": {
+  "rom_sha256": "84ec5fdeb15288e6610e88772bb535f0ef9e7422694334bbb5fa50452a28e2ed"
+ },
+ "reverified_a5c_orphan": {
+  "rom_sha256": "006b12cdf0d20c0594cbf84caf376fff5c1eb49b6e1412240f302b6c7900238b"
+ },
+ "reverified_718": {
+  "rom_sha256": "71ab0d6a6a2cb07694a287f12bed850db31be528e099e185ea0f07468ba75942"
+ },
+ "reverified_2026_06_26": {
+  "rom_sha256": "19a2ea7102df707194ec2993b48a0cd0e5fe029cba6443bd76dffa4392e8c00d",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_06_27": {
+  "rom_sha256": "fb760c651b0e036afb7e3b725291f13bfe489613f8c0b075110c2094ab2c5093",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_06_28": {
+  "rom_sha256": "05f2271543e548fa79ce832c9d736a68f413de8728dbe6b4e4f5548ead0bbf59",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_06_29": {
+  "rom_sha256": "f19bac0b0fec24a0e2442df361f2697f1899456c0b52bf1f54eb01142bfa7c9e",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_06_30": {
+  "rom_sha256": "ed8d0934444b7c687c8ae83658ba9a40eac4dc54f7b12e47e2966af72faa4731",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_07_01": {
+  "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_07_02": {
+  "rom_sha256": "506a06a87ddb95fad4810dd11e18b3a5fef3df9d0cc52e025e518091b1c98e10",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_07_05": {
+  "rom_sha256": "c4147740cc057537bb50ca25c17578d7c89ecc080c13472d99ac1335400b6e72",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_07_06": {
+  "rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_10_12": {
+  "rom_sha256": "ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_10_13": {
+  "rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_10_14": {
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_10_15": {
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ }
 }

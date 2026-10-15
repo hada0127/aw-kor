@@ -1,0 +1,11 @@
+{
+  "scene_id": "19e7_part1_hoip_co_weather_help",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_19e7_cold/0044_A_0005096.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_19e7_cold/frames/fb7a137275a31c03d07d024902c092b5a261b845bc3c42215da1fe74295ff942.png",
+  "core_frame": 5096,
+  "png_sha256": "3393e8adb4f2df7a5da0702228bd2940b535a1045f591b3b226cdc4ab491f107",
+  "cheat_tainted": false,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 Climate Status briefing (0xDF7452/0xDF7482): 오늘은 작전 전에 호이프 사령관에 대해 / 사령관님께 말할게요"
+}

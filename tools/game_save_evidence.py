@@ -26,7 +26,8 @@ from emu_platform import LIBMGBA, harness_env
 VALID_SAVE_SIZES = {512, 8192, 32768, 65536, 131072}
 LEGACY_KIND = 'cartridge-save-from-recorded-checkpoint-v1'
 ANCHORED_KIND = 'cartridge-save-anchored-v1'
-RECEIPT_KINDS = {LEGACY_KIND, ANCHORED_KIND}
+UNVERIFIED_SRAM_KIND = 'legacy_unverified_sram'
+RECEIPT_KINDS = {LEGACY_KIND, ANCHORED_KIND, UNVERIFIED_SRAM_KIND}
 STORAGE_PATTERN = rb'(FLASH1M|FLASH512|FLASH|SRAM_F|SRAM|EEPROM)_V[0-9]{3}'
 STORAGE_CAPACITIES = {b'FLASH1M': {131072}, b'FLASH512': {65536}, b'FLASH': {65536},
                       b'SRAM': {32768}, b'SRAM_F': {32768}, b'EEPROM': {512, 8192}}
@@ -45,6 +46,13 @@ def load_cheat_registry(path=None):
         data = json.loads(Path(path or CHEAT_REGISTRY).read_text(encoding='utf-8'))
     except FileNotFoundError:
         return {}
+    if 'schema_version' in data:
+        classes = data.get('provenance_classes')
+        if (type(data['schema_version']) is not int or data['schema_version'] != 2
+                or not isinstance(classes, dict) or set(classes) != {UNVERIFIED_SRAM_KIND}
+                or not isinstance(classes[UNVERIFIED_SRAM_KIND], dict)
+                or classes[UNVERIFIED_SRAM_KIND].get('cheat_tainted') is not True):
+            raise ValueError('Game-save cheat provenance classes are malformed')
     entries = data.get('receipts')
     if not isinstance(entries, dict):
         raise ValueError('Game-save cheat provenance registry is malformed')
@@ -52,6 +60,10 @@ def load_cheat_registry(path=None):
         if (not is_sha256(key) or not isinstance(entry, dict) or type(entry.get('cheat_tainted')) is not bool
                 or not isinstance(entry.get('basis'), str) or not entry['basis'].strip()):
             raise ValueError('Game-save cheat provenance registry entry is malformed')
+        if entry.get('provenance_class') == UNVERIFIED_SRAM_KIND and entry['cheat_tainted'] is not True:
+            raise ValueError('Legacy unverified SRAM cannot be clean')
+        if entry.get('provenance_class') not in (None, UNVERIFIED_SRAM_KIND):
+            raise ValueError('Unknown game-save provenance class')
     return entries
 
 
@@ -153,6 +165,10 @@ def receipt_cheat_status(record, receipt_sha256, *, _depth=0):
     registry or the export-time attestation log. Everything else is tainted.
     """
     flag = record.get('cheat_tainted')
+    if record.get('kind') == UNVERIFIED_SRAM_KIND:
+        if flag is not True or record.get('cheat_provenance') != UNVERIFIED_SRAM_KIND:
+            raise ValueError('Legacy unverified SRAM cannot be clean')
+        return {'tainted': True, 'basis': UNVERIFIED_SRAM_KIND}
     if 'cheat_tainted' in record and type(flag) is not bool:
         raise ValueError('Game-save cheat flag is malformed')
     if flag is False and record.get('cheat_provenance') not in CHEAT_PROVENANCE_MODES:
@@ -238,6 +254,25 @@ def verify_anchored_record(record, saved, *, expected_harness_sha256, expected_l
         raise ValueError('Game-save contains only uniform fill bytes')
 
 
+def verify_unverified_sram(record, saved):
+    """Verify bytes and declared identity, without claiming an absent source chain."""
+    required = {'kind', 'schema', 'save', 'save_sha256', 'save_size', 'rom_sha256',
+                'provenance_note', 'claimed_origin', 'cheat_tainted', 'cheat_provenance'}
+    if (set(record) != required or record['kind'] != UNVERIFIED_SRAM_KIND or
+            type(record['schema']) is not int or record['schema'] != 1
+            or record['save'] != 'game.sav' or not is_sha256(record['save_sha256'])
+            or not is_sha256(record['rom_sha256']) or type(record['save_size']) is not int
+            or not isinstance(record['provenance_note'], str) or not record['provenance_note'].strip()
+            or (record['claimed_origin'] is not None and
+                (not isinstance(record['claimed_origin'], str) or not record['claimed_origin'].strip()))
+            or record['cheat_tainted'] is not True
+            or record['cheat_provenance'] != UNVERIFIED_SRAM_KIND):
+        raise ValueError('Legacy unverified SRAM receipt is malformed')
+    if (saved.stat().st_size not in VALID_SAVE_SIZES or saved.stat().st_size != record['save_size']
+            or sha(saved) != record['save_sha256'] or len(set(saved.read_bytes())) <= 1):
+        raise ValueError('Legacy unverified SRAM bytes do not match receipt')
+
+
 def contained_file(root, name):
     path = (root / name).resolve()
     if not path.is_relative_to(root.resolve()) or path == root.resolve():
@@ -258,6 +293,10 @@ def verify_receipt(path, *, verify_frames=True, expected_rom_sha256=None,
     if not isinstance(record.get('save'), str):
         raise ValueError('Game-save receipt is malformed: save')
     saved = contained_file(path.parent, record['save'])
+    if record['kind'] == UNVERIFIED_SRAM_KIND:
+        verify_unverified_sram(record, saved)
+        receipt_cheat_status(record, sha(path))
+        return saved, record
     if record['kind'] == ANCHORED_KIND:
         # Evidence-chain cut: verify_frames/frame_cache intentionally unused.
         verify_anchored_record(record, saved, expected_harness_sha256=expected_harness_sha256,
@@ -301,6 +340,8 @@ def verify_recorded_seed(root, baseline):
     receipt = json.loads(contained_file(root, seed['receipt']).read_text())
     if receipt.get('kind') not in RECEIPT_KINDS:
         raise ValueError('Unknown recorded game-save receipt')
+    if seed.get('provenance_class') != (UNVERIFIED_SRAM_KIND if receipt['kind'] == UNVERIFIED_SRAM_KIND else None):
+        raise ValueError('Recorded game-save provenance class mismatch')
     if receipt['save_sha256'] != seed['save_sha256']:
         raise ValueError('Recorded game-save receipt mismatch')
     port = seed.get('emulator_port')
@@ -320,6 +361,8 @@ def verify_recorded_seed(root, baseline):
         verify_anchored_record(receipt, contained_file(root, seed['save']),
                                expected_harness_sha256=expected_harness,
                                expected_libmgba_sha256=expected_lib)
+    elif receipt['kind'] == UNVERIFIED_SRAM_KIND:
+        verify_unverified_sram(receipt, contained_file(root, seed['save']))
     # Raises on malformed/dropped flags; verify_parent enforces inheritance of the result.
     status = receipt_cheat_status(receipt, seed['receipt_sha256'])
     target = baseline.get('rom_sha256')
@@ -333,6 +376,37 @@ def verify_recorded_seed(root, baseline):
     elif seed.get('migration') is not None:
         raise ValueError('Unexpected recorded game-save migration')
     return status
+
+
+def import_unverified_sram(source, out, *, save_sha256, source_rom_sha256,
+                           provenance_note, claimed_origin=None, target_rom=None):
+    """Copy standalone SRAM to a new evidence root; caller must cold-boot it."""
+    source, out = Path(source).resolve(), Path(out).resolve()
+    if (not is_sha256(save_sha256) or not is_sha256(source_rom_sha256)
+            or not isinstance(provenance_note, str) or not provenance_note.strip()):
+        raise ValueError('Legacy import requires SHA-256 values and a provenance note')
+    if not source.is_file() or sha(source) != save_sha256:
+        raise ValueError('Legacy SRAM SHA-256 mismatch')
+    if source.stat().st_size not in VALID_SAVE_SIZES or len(set(source.read_bytes())) <= 1:
+        raise ValueError('Legacy SRAM size or contents are invalid')
+    if target_rom is not None:
+        target_types = rom_storage_types(target_rom)
+        if len(target_types) != 1 or source.stat().st_size not in STORAGE_CAPACITIES[next(iter(target_types))]:
+            raise ValueError('Legacy SRAM size does not match target ROM storage')
+    if out.exists():
+        raise ValueError('Legacy import evidence directory must be new')
+    out.mkdir(parents=True)
+    shutil.copyfile(source, out / 'game.sav')
+    if sha(out / 'game.sav') != save_sha256:
+        raise ValueError('Legacy SRAM copy mismatch')
+    receipt = {'kind': UNVERIFIED_SRAM_KIND, 'schema': 1, 'save': 'game.sav',
+               'save_sha256': save_sha256, 'save_size': source.stat().st_size,
+               'rom_sha256': source_rom_sha256, 'provenance_note': provenance_note.strip(),
+               'claimed_origin': claimed_origin, 'cheat_tainted': True,
+               'cheat_provenance': UNVERIFIED_SRAM_KIND}
+    save_json(out / 'game_save.json', receipt)
+    verify_receipt(out / 'game_save.json', expected_rom_sha256=source_rom_sha256)
+    return out / 'game_save.json'
 
 
 def dump_checkpoint_save(checkpoint_path, checkpoint, harness, out):

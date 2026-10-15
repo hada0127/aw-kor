@@ -1,0 +1,31 @@
+{
+  "co_id": 11,
+  "co": "Flak",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co11_synthetic_inputs.txt",
+  "route_sha256": "4f4d936e4854fd21ca1de2629f3a4567231d7e513ec950b9b386a2627e870f9d",
+  "source_checkpoint": "temp/release_C/w2b6f_co11_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co11_synthetic_sourcefix/frames/14cac4ca6383c7884692c08e22b32c16d6e406079d3683877edd77f8f56c4da8.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "0b2433c840b745c49ed6d3881db919b633bb722664ce41a5cb1ede92a110f9a8",
+  "frame_sha256": "4deafab6efd34f5a3ea9157723f3c9d6036404aff3a6998f1f972ad3eac01bc0",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_flak_synthetic.png",
+  "png_sha256": "4deafab6efd34f5a3ea9157723f3c9d6036404aff3a6998f1f972ad3eac01bc0",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30BF0"
+  ],
+  "visible_quote": "때려 부숴주마아-!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co11_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "3602efa093a3c3f57a4a462e14b950f42844b985b449505afc7e7bb73615b945",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

@@ -1,5 +1,5 @@
 {
-  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거). DF8B6A/92/9A는 소비자 미확정으로 review backlog에 둔다. 실화면별 전수 확인은 미완료.",
+  "_doc": "scene_catalog 수동 보정. tools/build_scene_catalog.py가 자동 배정 후 이 파일로 덮어쓴다. sprite[scene_id]={add:[sprite_id...],remove:[sprite_id...]}, dialogue[scene_id]={add:[group_id...],remove:[group_id...]}. 자동 배정 오탐 교정/누락 보강용(대사는 add 시 타 scene에서 자동 제거). DF8B92/9A는 런타임 소비자 확인으로 scene 16에 배정했다. DF8B6A는 unreached_dialogue 경고 증거를 유지하며 런타임 소비자는 미확정이다. 실화면별 전수 확인은 미완료.",
   "sprite": {
     "03_select_part2": {
       "add": [
@@ -11,15 +11,61 @@
       "add": [
         "objlabel_p2_terrain_movement"
       ]
+    },
+    "18_part1_battle": {
+      "add": [
+        "objlabel_p1_terrain_hud",
+        "objlabel_p1_result_scores",
+        "objlabel_p1_result_rank_word",
+        "objlabel_p1_battle_ryo",
+        "objlabel_p1_battle_max",
+        "objlabel_p1_battle_domino",
+        "objlabel_p1_battle_billy",
+        "objlabel_p1_battle_kikuchiyo",
+        "objlabel_p1_battle_asuka",
+        "objlabel_p1_battle_eagle",
+        "objlabel_p1_battle_mop",
+        "objlabel_p1_battle_sturm"
+      ]
+    },
+    "17_part1_campaign": {
+      "add": [
+        "objlabel_p1_campaign_hoip",
+        "objlabel_p1_campaign_ryo",
+        "objlabel_p1_campaign_max",
+        "objlabel_p1_campaign_domino",
+        "objlabel_p1_campaign_billy",
+        "objlabel_p1_campaign_catherine",
+        "objlabel_p1_campaign_kikuchiyo",
+        "objlabel_p1_campaign_asuka",
+        "objlabel_p1_campaign_eagle",
+        "objlabel_p1_campaign_mop",
+        "objlabel_p1_campaign_sturm",
+        "objlabel_p1_campaign_sturm_alt"
+      ]
+    },
+    "24_part2_campaign_map": {
+      "add": [
+        "objlabel_p2_remaining_days"
+      ]
     }
   },
   "dialogue": {
     "16_part1_info_screen": {
-      "add": ["g_00DF8B72", "g_00DF8B7A", "g_00DF8B82"],
+      "add": [
+        "g_00DF8B72",
+        "g_00DF8B7A",
+        "g_00DF8B82",
+        "g_00DF8B92",
+        "g_00DF8B9A"
+      ],
       "remove": []
     },
     "18_part1_battle": {
-      "add": ["g_00DF8B62", "g_00DF8B8A"]
+      "add": [
+        "g_00DF8B62",
+        "g_00DF8B8A"
+      ]
     },
     "89a_common_battle_surrender_confirm": {
       "add": [
@@ -38,12 +84,79 @@
   },
   "dialogue_consumer_evidence": {
     "g_00DF8B62": "Part 1 score screen, dictionary 0xBE7308, native draw 0xB4CAE4 (tools/part1_compact_ui_strings.py:94); grouped with battle results; no dedicated C5 score screenshot",
-    "g_00DF8B6A": "Count suffix immediately after score label at 0xDF8B62; likely score/result counter (inference); no C5 runtime watch",
+    "g_00DF8B6A": "Unproven. b32r5 Part 1 victory/result route from temp/release_C/rebind1/obj/E_result/0108_NONE_0005973.ss0 through 12 A presses: 0x08DF8B62 (neighbor 日/일) read 7 times; 0x08DF8B6A read 0 times. Frame sequence temp/release_C/sprapply_score_steps/montage.png, raw watch temp/release_C/sprapply_score_steps/watch.log. Result panel shown then transition to next mission; count suffix may have another consumer. FIN-REG b32r5 result-card R/L variant watch: temp/release_C/finreg_score_variant2/state_temp__release_C__rebind1__obj__E_result__0108_NONE_0005973.ss0/watch.log; 0x08DF8B62 read 7 events (3 exact-address), 0x08DF8B6A read 0; same-screen frame beside log. Category unreached_dialogue remains a warning, not consumer proof. FIN-FIX validated probe: temp/release_C/finfix_score_probe/receipt.json, control core 6520, full 2-byte target watch clear.",
     "g_00DF8B72": "Part 1 battle-status screen, bank 0xB12F90 (tools/part1_compact_ui_strings.py:72)",
     "g_00DF8B7A": "Part 1 battle-status and terrain banks (tools/part1_compact_ui_strings.py:73)",
     "g_00DF8B82": "Part 1 battle-status and result banks (tools/part1_compact_ui_strings.py:74); primary catalog owner is information/status",
     "g_00DF8B8A": "Part 1 battle-result screen, bank 0xB12FC0 (tools/part1_compact_ui_strings.py:83); no dedicated C5 result screenshot",
-    "g_00DF8B92": "Defense label adjacent to status/terrain fields; likely Part 1 information screen (inference); no C5 runtime watch",
-    "g_00DF8B9A": "Recovery label adjacent to status/terrain fields; likely Part 1 information screen (inference); no C5 runtime watch"
-  }
+    "g_00DF8B92": "Part 1 terrain info redraw from b32r5 state temp/release_C/rebind1/runs/H_p1_supply/0032_R_0003818.ss0; press R; frame temp/release_C/sprapply_terrainframe/state_temp__release_C__rebind1__runs__H_p1_supply__0032_R_0003818.ss0/frame.png; watch temp/release_C/sprapply_terrainframe/state_temp__release_C__rebind1__runs__H_p1_supply__0032_R_0003818.ss0/watch.log: 0x08DF8B92 read 8 times, positive control 0x08DF8B7A read 8 times.",
+    "g_00DF8B9A": "Part 1 city terrain information redraw from b32r5 state temp/release_C/rebind1/runs/H_p1_supply/0031_RIGHT_0003776.ss0; LEFT, LEFT, R; frame temp/release_C/sprapply_cityframe/state_temp__release_C__rebind1__runs__H_p1_supply__0031_RIGHT_0003776.ss0/frame.png; watch temp/release_C/sprapply_cityframe/state_temp__release_C__rebind1__runs__H_p1_supply__0031_RIGHT_0003776.ss0/watch.log: 0x08DF8B9A read 8 times, positive control 0x08DF8B7A read 8 times."
+  },
+  "sprite_review_evidence": {
+    "objlabel_p1_terrain_hud": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_result_scores": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_result_rank_word": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_hoip": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_ryo": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_max": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_domino": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_billy": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_ryo": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_max": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_catherine": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_kikuchiyo": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_asuka": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_eagle": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_mop": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_sturm": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_campaign_sturm_alt": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_domino": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_billy": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_kikuchiyo": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_asuka": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_eagle": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_mop": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p1_battle_sturm": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue",
+    "objlabel_p2_remaining_days": "visual review: Fable 2026-10-15, sheet temp/release_C/sprrev/sheet.png, translated, no JP residue"
+  },
+  "unreached_dialogue": [
+    {
+      "group_id": "g_00DF8B6A",
+      "routes": [
+        {
+          "route_id": "part1_result_card_a8_r_l_select",
+          "source_state": "temp/release_C/rebind1/obj/E_result/0108_NONE_0005973.ss0",
+          "source_state_sha256": "18b296e35fab2ec02eb453acffd3f678dfbbb684237454e55a37f69927e5f6b7",
+          "recorder_checkpoint": "temp/release_C/rebind1/obj/E_result/0108_NONE_0005973.checkpoint.json",
+          "recorder_checkpoint_sha256": "fdd14e1e3c985357ddeb2834ef2891fb7e1362526c953dc4cd060b15dcc5adea",
+          "step_keys": [
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "A",
+            "R",
+            "L",
+            "SELECT"
+          ]
+        }
+      ],
+      "watch_logs": [
+        {
+          "path": "temp/release_C/finfix_score_probe/watch.log",
+          "screen": "temp/release_C/finfix_score_probe/control_frame.png",
+          "capture_core_frame": 6520,
+          "receipt": "temp/release_C/finfix_score_probe/receipt.json",
+          "receipt_sha256": "7098341d1e7ca673cafc4c6f2a2b993e2b1a9a2b4d315e7160948ab640ccd425",
+          "target_address": "0x08DF8B6A",
+          "positive_control_address": "0x08DF8B62"
+        }
+      ],
+      "reviewer": "FIN-REG code worker, 2026-10-15",
+      "rationale": "b32r5 result-card A/R/L/SELECT route from recorder state at core 5973. Installed read watches cover all 2 bytes of the target and control. Positive control hit at core 6520; no target-span hit in this bounded route. Other consumers remain unverified."
+    }
+  ]
 }

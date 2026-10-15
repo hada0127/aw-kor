@@ -1,0 +1,31 @@
+{
+  "co_id": 1,
+  "co": "Andy",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co01_synthetic_inputs.txt",
+  "route_sha256": "c9fd360cc5429a6524ef82a4b201165a92407865f156c9de981a84b919732bcc",
+  "source_checkpoint": "temp/release_C/w2b6f_co01_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co01_synthetic_sourcefix/frames/51062f8ac7ff0f3407b87e530a65cb3351abaffee75e44138b53a5b33c6d25fe.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "e0204a82ef266f7be43d90f2e3416ecf998f066214387c4ce61e7817d4ebcd0e",
+  "frame_sha256": "aee0bc389222f3033dac4f2b4f42158f85e545b6c67f01b6f8606adb2b02604d",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_andy_synthetic.png",
+  "png_sha256": "aee0bc389222f3033dac4f2b4f42158f85e545b6c67f01b6f8606adb2b02604d",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30264"
+  ],
+  "visible_quote": "화끈하게 가자고오-!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co01_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "bc802ee427666a43f65ea06b1a8159507d56c66d2092ecd6c1e28988f321c951",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

@@ -1,0 +1,31 @@
+{
+  "co_id": 2,
+  "co": "Max",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co02_synthetic_inputs.txt",
+  "route_sha256": "cb64be83ff8bea492782b0e562238d589b9642381a72ab0790389eb76cad70e9",
+  "source_checkpoint": "temp/release_C/w2b6f_co02_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co02_synthetic_sourcefix/frames/e2d8e0c38077995e603f8f9fe057c615d51398f1aaf0369a07b4e8de877f0d79.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "3afcfb2d4269faec43291c6e82a04eaa266be9d3d9a594873458e89887fe80d3",
+  "frame_sha256": "ab80345f9f0e36c363b71b755a0b81fa650b3f9f1075a1c76ebf89edcce4b6fa",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_max_synthetic.png",
+  "png_sha256": "ab80345f9f0e36c363b71b755a0b81fa650b3f9f1075a1c76ebf89edcce4b6fa",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30348"
+  ],
+  "visible_quote": "이 몸에게 대들면 다칠 텐데!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co02_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "1529f636a387e5df226683f9a8a7517589998ec5725b9b38bc34e2027210c020",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

@@ -1,0 +1,13 @@
+{
+  "scene_id": "30e4_part2_blackhole_yellowcomet_fortress_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6f_scene30e4_sourcefix/0031_NONE_0003029.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene30e4_sourcefix/frames/6411cc05fc76c4e0f8f7fe30f38e495232c1deef68743f85dd28cb331b079c49.png",
+  "core_frame": 3029,
+  "png_sha256": "1e804982dad50312a14ea949b45f603ecd54e72fbf0369a1e51e39d55f03fcd6",
+  "cheat_tainted": true,
+  "visual_result": "readable 여기에, 적이 있는 거냐?; no visible clipping or replacement glyph",
+  "claim_scope": "Part 2 C17 Show Stopper fortress world-map opening: 여기에, 적이 있는 거냐? (dialogue rows 0xA202D4/0xA202DE)",
+  "source_address": "0xA202D4/0xA202DE (exact text match and candidate pointer at 0xA371EC; direct read watch unverified)",
+  "source_rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863"
+}

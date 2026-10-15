@@ -1,0 +1,27 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "co_id": 3,
+  "co": "Olaf",
+  "native_saved_co": true,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "09112f41228b4bbb161987a97f9f975c421473167c06d03cd2aeca309a6097de",
+  "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+  "source_endpoint": "temp/release_C/w2b6f_scene26_olaf_native/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene26_olaf_native/frames/d14d9b584d418132364c708a3d39ceac6360d9373edf1d59855144a764ddbdb3.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "13d1f5f8d399b826bbc51c28e294f9ab7c19b51ab547643ecc049e511b3c056a",
+  "frame_sha256": "087f9c8e70e3ad5a0ac2c785ae3035cc39531fc1dedd96d377f51e34316e5753",
+  "png_sha256": "087f9c8e70e3ad5a0ac2c785ae3035cc39531fc1dedd96d377f51e34316e5753",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA304F0",
+    "0xA30504"
+  ],
+  "visible_quote": "이 몸에게 덤빈 것 / 후회하게 해주마!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "route": "tools/scene_routes/26_part2_co_power_quote/olaf_native_inputs.txt",
+  "route_sha256": "37bf4a435a171f8620f6121e984dc618a7b074666e948aa852af80f68db284b4",
+  "exit_code": 0,
+  "run_status": "closed"
+}

@@ -1,0 +1,32 @@
+{
+  "co_id": 12,
+  "co": "Lash",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co12_synthetic_inputs.txt",
+  "route_sha256": "401ca4ed3e35d9e620f5cbac3d23bc16d0660595f6a942747a4b32ee2b6c3e8f",
+  "source_checkpoint": "temp/release_C/w2b6f_co12_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co12_synthetic_sourcefix/frames/34ced385c2d69b68c08e112adc63af63137c8260fcb66fc3b40eccbab885e87d.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "1d75fe4ab088898b174390c85294acc9e2c85d7e268fa64cbbd7749747762a8f",
+  "frame_sha256": "6a9a098b3d632533dc595d5ec88f5bb57ea3995714986a3ca3276f23b1931fd1",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_lash_synthetic.png",
+  "png_sha256": "6a9a098b3d632533dc595d5ec88f5bb57ea3995714986a3ca3276f23b1931fd1",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30CD4",
+    "0xA30CE4"
+  ],
+  "visible_quote": "정말- 질렸어! / 눈에 거슬려, 사라져!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co12_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "3484ccb0b7e1924eaf581813a7a5afab71d4d83ec96b081ab6045fc59739afe1",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

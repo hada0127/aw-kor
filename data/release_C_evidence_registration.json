@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "source_candidate_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-  "target_candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-  "registered_by": "W1 reg5; W2 batch4; W2b5; W1-reg7",
-  "verified_screen_matches": 40,
+  "target_candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "registered_by": "W2b6-B b32r5",
+  "verified_screen_matches": 0,
   "screen_checkpoints": {
     "B-85": "scene_85_ui_common",
     "B-89": "scene_89_common_battle_system_results",
@@ -46,1185 +46,627 @@
     "B-27cand": "scene_27_part2_battle_objlabels",
     "B-16": "scene_16_part1_info_screen",
     "B-17cand": "scene_17_part1_campaign",
-    "scene_19e1-cand": "scene_19e1_part1_unit_info_detail_help"
+    "scene_19e1-cand": "scene_19e1_part1_unit_info_detail_help",
+    "scene_19c1_part1_mid_campaign_radio_story-b32r5": "scene_19c1_part1_mid_campaign_radio_story",
+    "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story-b32r5": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+    "scene_80b_campaign_story_mid-b32r5": "scene_80b_campaign_story_mid",
+    "scene_80c_campaign_story_late-b32r5": "scene_80c_campaign_story_late",
+    "scene_28_part2_result_status-b32r5": "scene_28_part2_result_status",
+    "scene_19e7_part1_hoip_co_weather_help-b32r5": "scene_19e7_part1_hoip_co_weather_help",
+    "scene_30g1_part2_green_earth_volcano_sortie_story-b32r5": "scene_30g1_part2_green_earth_volcano_sortie_story",
+    "scene_30g2_part2_green_earth_volcano_lava_story-b32r5": "scene_30g2_part2_green_earth_volcano_lava_story",
+    "scene_19a2_part1_heavy_tank_advice_story-b32r5": "scene_19a2_part1_heavy_tank_advice_story",
+    "scene_19b1_part1_hoip_ambush_weather_story-b32r5": "scene_19b1_part1_hoip_ambush_weather_story",
+    "scene_19b2_part1_hoip_landing_setup_story-b32r5": "scene_19b2_part1_hoip_landing_setup_story",
+    "scene_80a_campaign_story_early-b32r5": "scene_80a_campaign_story_early",
+    "scene_26_part2_battle_labels-b32r5": "scene_26_part2_battle_labels",
+    "scene_30e4_part2_blackhole_yellowcomet_fortress_story-b32r5": "scene_30e4_part2_blackhole_yellowcomet_fortress_story",
+    "scene_19c2_part1_mid_fog_map_story-b32r5": "scene_19c2_part1_mid_fog_map_story"
   },
   "records": [
     {
-      "key": "26a-b31-C3P-3800|temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "item_id": "26a-b31-C3P-3800",
-      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+      "key": "scene_19c1_part1_mid_campaign_radio_story-b32r5|temp/release_C/w2b6b/S19c1/actions.jsonl",
+      "item_id": "scene_19c1_part1_mid_campaign_radio_story-b32r5",
+      "input_route": "temp/release_C/w2b6b/S19c1/actions.jsonl",
+      "source_rom_sha256": "756be84d9b33898faed0c78573ee2cf4e29bcb88c91368806e2c81576c422897",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/C3P/0019_A_0003800.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/C3P/frames/9b97f2acf21c649d29ec47270890a0772ec8ba63dc90e1e393704e3f486ce24e.png",
-        "frame_sha256": "ef8e506aaecb95eb1e014d9b7ac5ed12196b209049480095287995311c29edf6",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6b/S19c1/0038_A_0007584.checkpoint.json",
+        "frame": "temp/release_C/w2b6b/S19c1/frames/51b6cdc7764091cb7f642d0a1be2f3e60003bd89e914540bd9e2670e7888147f.png",
+        "frame_sha256": "7565471fdee995b194188f579df787cbff333c67e2a24bd59d50d548a9e77034",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "rgb_identical_to_c": null,
+        "claim_scope": "Part 1 mid-campaign radio dialogue: 아님、 료! / 들려요?"
       }
     },
     {
-      "key": "26a-b31-C3P-3820|temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "item_id": "26a-b31-C3P-3820",
-      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+      "key": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story-b32r5|temp/release_C/w2b6b/S30e3/actions.jsonl",
+      "item_id": "scene_30e3_part2_blackhole_yellowcomet_supply_briefing_story-b32r5",
+      "input_route": "temp/release_C/w2b6b/S30e3/actions.jsonl",
+      "source_rom_sha256": "18a1b5b5911cea317db15f1da1e498307cbe58dc17cc513f572b93effb209610",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/C3P/0020_NONE_0003820.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/C3P/frames/34e8a4f840b53c61ce8886c8eb2a92441ef904998760b8bb83c311b5f4e41328.png",
-        "frame_sha256": "1a3e4ac24329f2b6ef1f0e83db5fd39f71921d929fdb7c4bf6cddaaf9b0d09ec",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6b/S30e3/0016_A_0002859.checkpoint.json",
+        "frame": "temp/release_C/w2b6b/S30e3/frames/3cbc4f8ec7ffd90e55c0305c09cae042700b85c5978acf6a38812e49d03b909f.png",
+        "frame_sha256": "ef7165b25a2eed835b2dc11dbaaffe47e590940f95ebc7c2cc5722116ea9edcc",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-C3P-3840|temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "item_id": "26a-b31-C3P-3840",
-      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+      "key": "scene_80b_campaign_story_mid-b32r5|temp/release_C/w2b6b/S80bc/actions.jsonl",
+      "item_id": "scene_80b_campaign_story_mid-b32r5",
+      "input_route": "temp/release_C/w2b6b/S80bc/actions.jsonl",
+      "source_rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/C3P/0021_NONE_0003840.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/C3P/frames/9b856d8b895bad84edee12c94ecc229802569ae3bc65cb961503acc4986c8fc4.png",
-        "frame_sha256": "fabe84c3bb9cdc5c38750dbb9276cf2be6a295e3abdde5cf71df2b63e3bc7017",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6b/S80bc/0013_A_0003784.checkpoint.json",
+        "frame": "temp/release_C/w2b6b/S80bc/frames/8ca8c57cb3822c5e0d0d01cc300fd7bd1a5c0f85eef9d77b558f0f1048e3dbb7.png",
+        "frame_sha256": "19c540edfecfa2e8e1852f0e65c40d3f27a571be5072a10ea88cf8ad35397240",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-C3P-3860|temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "item_id": "26a-b31-C3P-3860",
-      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+      "key": "scene_80c_campaign_story_late-b32r5|temp/release_C/w2b6b/S80bc/actions.jsonl",
+      "item_id": "scene_80c_campaign_story_late-b32r5",
+      "input_route": "temp/release_C/w2b6b/S80bc/actions.jsonl",
+      "source_rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/C3P/0022_NONE_0003860.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/C3P/frames/10f08874dd4d8f5a7923fbee42bb90fcfabe3ef8b82c0b023f3eb8bede090dfb.png",
-        "frame_sha256": "f4091bfa083cf7f0eb323b5b084a1284f9c607e71b53f90834e50365fd2bd127",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6b/S80bc/0030_A_0006368.checkpoint.json",
+        "frame": "temp/release_C/w2b6b/S80bc/frames/8b2cf265097455541207f7db4e14f5db5cf23b342919471fd222bd3971a2bbd1.png",
+        "frame_sha256": "2eb8dabc03cad2997cedda7cd6945c5c53ca365f394c1780bd83d6e7103b79cd",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-C3P-3880|temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "item_id": "26a-b31-C3P-3880",
-      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+      "key": "scene_28_part2_result_status-b32r5|temp/release_C/w2b6c_scene28_cold/actions.jsonl",
+      "item_id": "scene_28_part2_result_status-b32r5",
+      "input_route": "temp/release_C/w2b6c_scene28_cold/actions.jsonl",
+      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/C3P/0023_NONE_0003880.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/C3P/frames/c4dd4f2f4cc3d7b3ebb5a510760b211bc82282679f83fd43f0ab2d613bbda08c.png",
-        "frame_sha256": "9edbe49d3923359df55360376b6a6c32cca7a1b7bb0476e0ee0f44dad87c1d23",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6c_scene28_cold/0043_A_0006224.checkpoint.json",
+        "frame": "temp/release_C/w2b6c_scene28_cold/frames/2eab92f1412d0eff04e18f52bdf62b21288cefd28eee66cd71924507ddd3bd30.png",
+        "frame_sha256": "4a66bfec64d8aa06db0d92b775c25b45848b28835f7fe2167fb8d30cd4b72ae8",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "rgb_identical_to_c": null,
+        "visual_status": "PASS",
+        "settled_frame": {
+          "core_frame": 6250,
+          "ledger": "temp/release_C/w2b6f_scene28_extended/frames.jsonl",
+          "frame": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_PASS.png",
+          "frame_sha256": "e8bb592d3622c79ffe66434b57ab55c26b41e97900d0580f12f7227d968f8561",
+          "cheat_tainted": true
+        },
+        "superseded_defect_png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_superseded_not_defect.png"
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36881|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36881",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_19e7_part1_hoip_co_weather_help-b32r5|temp/release_C/w2b6e_19e7_cold/actions.jsonl",
+      "item_id": "scene_19e7_part1_hoip_co_weather_help-b32r5",
+      "input_route": "temp/release_C/w2b6e_19e7_cold/actions.jsonl",
+      "source_rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0071_A_0036881.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/5c71509673077cd10f393b8feb824ae0ed1b24761807d344e3c4f9ba1113955d.png",
-        "frame_sha256": "c8ff9c91245107d585e9e800c93f0a8008ce3282054b5eb438c23f271bf33e7b",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_19e7_cold/0044_A_0005096.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_19e7_cold/frames/fb7a137275a31c03d07d024902c092b5a261b845bc3c42215da1fe74295ff942.png",
+        "frame_sha256": "3393e8adb4f2df7a5da0702228bd2940b535a1045f591b3b226cdc4ab491f107",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36901|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36901",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_30g1_part2_green_earth_volcano_sortie_story-b32r5|temp/release_C/w2b6e_run16_volcano_follow/actions.jsonl",
+      "item_id": "scene_30g1_part2_green_earth_volcano_sortie_story-b32r5",
+      "input_route": "temp/release_C/w2b6e_run16_volcano_follow/actions.jsonl",
+      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0072_NONE_0036901.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/1cdfc639eb8b214ff703ec1936226a478d3b0008a82f1a506ca97f0badcc03ec.png",
-        "frame_sha256": "44b8fbe2258ed7c97f289fcdec0f541ea9a3dfa1eeb40baffd8bf408750e42fe",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_run16_volcano_follow/0011_A_0003295.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_run16_volcano_follow/frames/b66df885efbf83ba273d13ed63746ceb7b19b896268e46e9062e0a068e0c8ee2.png",
+        "frame_sha256": "34505d4c4086aa2fc5a163418e2dc1c9c7e5fb095daea5a7538878a76d1319a9",
+        "cheat_tainted": true,
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36921|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36921",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_30g2_part2_green_earth_volcano_lava_story-b32r5|temp/release_C/w2b6e_volcano_day2dialog/actions.jsonl",
+      "item_id": "scene_30g2_part2_green_earth_volcano_lava_story-b32r5",
+      "input_route": "temp/release_C/w2b6e_volcano_day2dialog/actions.jsonl",
+      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0073_NONE_0036921.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/debac243661b77c68c770a1c881a3dc8c49009ede0a5a5c96866ef75af3e034d.png",
-        "frame_sha256": "402aa934c4d1be977c72eb508ff9d2983b785d3f448c0b620d2c6fdc8d93e7be",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_volcano_day2dialog/0001_NONE_0008033.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_volcano_day2dialog/frames/787c6f4d605525e7e75465ce3cd918e36852f9b11a65f9408ea6b99e6e314353.png",
+        "frame_sha256": "753f282f15be0336fde7a8de01d65db3817cfd433a5d9768457d7a92c28a8439",
+        "cheat_tainted": true,
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36941|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36941",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_19a2_part1_heavy_tank_advice_story-b32r5|temp/release_C/w2b6e_p1_train6_follow/actions.jsonl",
+      "item_id": "scene_19a2_part1_heavy_tank_advice_story-b32r5",
+      "input_route": "temp/release_C/w2b6e_p1_train6_follow/actions.jsonl",
+      "source_rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0074_NONE_0036941.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/c8c3ea76b8f182afe9a810bca820a672d076db4b78ecc56daadcff9ac49c809e.png",
-        "frame_sha256": "c71223f72a4f7347f6fcb3bc33caa31b1ce5a67857bbc603a1362416afb17e34",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_p1_train6_follow/0022_A_0006061.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_p1_train6_follow/frames/4ce8b0314603df21b72f9f820be5422f8fc39b98d0490be30493e2f173f74595.png",
+        "frame_sha256": "c634f5cfaeaa29a7a2c855bce17896c7c742fb150aeedf9d0249b619e20d0a45",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36961|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36961",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_19b1_part1_hoip_ambush_weather_story-b32r5|temp/release_C/w2b6e_p1_stage12_follow/actions.jsonl",
+      "item_id": "scene_19b1_part1_hoip_ambush_weather_story-b32r5",
+      "input_route": "temp/release_C/w2b6e_p1_stage12_follow/actions.jsonl",
+      "source_rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0075_NONE_0036961.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/2b1702903ceeaaf46b0a7deaa2d58c87724d85e57c790de95c893171aab11683.png",
-        "frame_sha256": "5ccafc9c6c41b01ffadc3159c2ea077bdebdf088a58d6cc0dc12198b01d68401",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_p1_stage12_follow/0016_A_0006270.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_p1_stage12_follow/frames/5c40b01c7a026a03644730f75bb14a114a68107084a8dec89bb4eccab8d1b4c4.png",
+        "frame_sha256": "f5b19e4c78d8e8b7ec80609168e692d091e643755ea135cb6d21bb5eb716bceb",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-36981|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-36981",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_19b2_part1_hoip_landing_setup_story-b32r5|temp/release_C/w2b6e_p1_stage10_follow/actions.jsonl",
+      "item_id": "scene_19b2_part1_hoip_landing_setup_story-b32r5",
+      "input_route": "temp/release_C/w2b6e_p1_stage10_follow/actions.jsonl",
+      "source_rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0076_NONE_0036981.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/4ede10c110830b278f77f79cc730518727a19099673a2a84ee2d7a07e9265f25.png",
-        "frame_sha256": "34e434a9b718cb847f2313160e3d253f61775ffbdc5adbb919604c0220f583e7",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_p1_stage10_follow/0021_A_0006082.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_p1_stage10_follow/frames/549564bcb6c106002e818726cd814fd6dc9f9c69465efdc0b863b4b58dd51482.png",
+        "frame_sha256": "05e8d7062bd476ec02a8f151253640cd0465e0b827b8e3e837219888283618a6",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-37001|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-37001",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
+      "key": "scene_80a_campaign_story_early-b32r5|temp/release_C/w2b6e_80a_fullreplay/actions.jsonl",
+      "item_id": "scene_80a_campaign_story_early-b32r5",
+      "input_route": "temp/release_C/w2b6e_80a_fullreplay/actions.jsonl",
+      "source_rom_sha256": "51b10dcf48204be4762c3c262c6a9de0de87fb014d7e0043742e7db02fff7d98",
       "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0077_NONE_0037001.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/c78c390ae2c0af1b702af02d44365a493da6a1290c76b7ef97b2bdf975aa3639.png",
-        "frame_sha256": "c796b6f2227d6e0964d340a7d7455b84bcfb4534d29a15487a9dcb72e51ff712",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6e_80a_fullreplay/0046_A_0006193.checkpoint.json",
+        "frame": "temp/release_C/w2b6e_80a_fullreplay/frames/fcfffec1514082b173b9081e003fe7d08677739a194ab2c2e03423e9c7193019.png",
+        "frame_sha256": "46bad71618d7d29b9206398dcde25512fcf217ee2c99ce47c206a840a1022069",
+        "cheat_tainted": true,
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "26a-b31-PK_fixed-42261|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42261",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0091_A_0042261.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/9589a3985a5b9cafb467be74197e53d00ac93c2f4a722d68a1d5fa6cd62057ce.png",
-        "frame_sha256": "7e0cb813e16441d51329ef6d97aa4bd9dda9e50daf32103d9b178023b5428653",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42312|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42312",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0093_A_0042312.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/feb8a4701fa6e3834a021dd6a177852f513013e243e7e9fed99e5e8bd99e3b53.png",
-        "frame_sha256": "bdbbf9b6fa0c321e6456f2d765c5301576345936f3611734986810d1b1d7e97f",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42340|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42340",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0094_NONE_0042340.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/21383bc62e647bbccd0bc4d570d29ba6fdbc049841a0774849b92bb340c09893.png",
-        "frame_sha256": "cc3ab869c39e92f372447211ac6e6bb358fcbf607e03709be31bf776a1a6d0af",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42380|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42380",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0095_NONE_0042380.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/eb8dfb87bb0f9658c5350eace9137f03a9bb174ad73a3a84dfc5654ae87fe38d.png",
-        "frame_sha256": "43512606bad8c658aaa25282b9081ee6b1a804599213856be7bf6f7386d3dad4",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42400|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42400",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0096_NONE_0042400.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/14039902e25759e891574086e2643342057bbcb64ffcac72f87578db87c8f753.png",
-        "frame_sha256": "88f766edbebfb2b7565e2a1236614b5097080fdf57ad63d4382560e78e390834",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42421|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42421",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0097_NONE_0042421.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/9e361924446608abd201345f38d130647b1a17cc7c0bec34aaaa7df4adb31966.png",
-        "frame_sha256": "e7e0703621fea381642349c324ba42cc6e919f97a339c5238781b0da1919f0b1",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "26a-b31-PK_fixed-42481|temp/release_C/b30/w2b5/pk_inputs.txt",
-      "item_id": "26a-b31-PK_fixed-42481",
-      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
-      "source_rom_sha256": null,
-      "source_capture": null,
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0098_NONE_0042481.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/PK_fixed/frames/994efdf36d6b3a2bdda7d17d3a1beaf74dafccf84a6186bfedd6492f571237a2.png",
-        "frame_sha256": "0d5af4c75874d25f41fa25622c898cbf380b59a18f9ea1d5133e4f8679d3fff4",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "01_coldboot_nintendo|reg7-b31",
-      "item_id": "01_coldboot_nintendo-b31",
-      "input_route": "temp/release_C/b28/B01_coldboot/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B01_coldboot/frames/c35448488a17840a969d550e1dda526cc7a8cc159dd57755073e03e617ea9c13.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B01_coldboot/0002_NONE_0000301.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B01_coldboot/frames/c35448488a17840a969d550e1dda526cc7a8cc159dd57755073e03e617ea9c13.png",
-        "frame_sha256": "26706f28c7fcd0afb510d06e72dd4ae84c7b5742adcbf7cfab24d4f2e04e9937",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "02_common_title|reg7-b31",
-      "item_id": "02_common_title-b31",
-      "input_route": "temp/release_C/b28/B01_coldboot/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B01_coldboot/frames/d3409227b5fc3777d207cbbd75281a41e934da277907dbfcae370a72e8be158a.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B01_coldboot/0003_NONE_0000601.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B01_coldboot/frames/d3409227b5fc3777d207cbbd75281a41e934da277907dbfcae370a72e8be158a.png",
-        "frame_sha256": "a87c37b27d39dba62bf40b21e4bf80615a17b03523ab23db8a964dc95d6f72cf",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "03_select_part1|reg7-b31",
-      "item_id": "03_select_part1-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/8f8dda7f8773475ff529625bb3568c19d9f31554154dc50f3b191412da5d7d00.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0004_START_0000893.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/8f8dda7f8773475ff529625bb3568c19d9f31554154dc50f3b191412da5d7d00.png",
-        "frame_sha256": "6e2567653711d4be4306f22ac91cd13ecacc205c20f2a5fd97ec760c4b4da90c",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "04_part1_title|reg7-b31",
-      "item_id": "04_part1_title-b31",
-      "input_route": "temp/release_C/b28/B04_p1title/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B04_p1title/frames/9b1cde7793ccd69b51dcce1105e4d3ec141e7a394650375d6d36a998f7b3362c.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B04_p1title/0006_START_0001385.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B04_p1title/frames/9b1cde7793ccd69b51dcce1105e4d3ec141e7a394650375d6d36a998f7b3362c.png",
-        "frame_sha256": "15386391770f1efb16d71a1067691a1df2ae9b4b9d75a64e61e45cf841ae7fd5",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "05_select_part2|reg7-b31",
-      "item_id": "05_select_part2-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/9feab752902830539332d1c01f1ded4f774b1492dc1a480e8db078a67a46c02c.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0005_DOWN_0001019.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/9feab752902830539332d1c01f1ded4f774b1492dc1a480e8db078a67a46c02c.png",
-        "frame_sha256": "230d7ac130e54a85ad24cee186f594dc3908827e7e3b89e72c3e4e806964a891",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "06_part2_title|reg7-b31",
-      "item_id": "06_part2_title-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/d1c5b8cdf1adeca9699d2fe75add3f23df06376ce6609c79a80f99055b886901.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0007_START_0001511.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/d1c5b8cdf1adeca9699d2fe75add3f23df06376ce6609c79a80f99055b886901.png",
-        "frame_sha256": "f58ba12ae8053d52e9b100261ff7e510890a620f38dffd5b8da5a7a8c6a39fbe",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "07_part2_main_menu|reg7-b31",
-      "item_id": "07_part2_main_menu-b31",
-      "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0008_A_0001717.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
-        "frame_sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "08_part2_prologue_map_text|reg7-b31",
-      "item_id": "08_part2_prologue_map_text-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0010_A_0002249.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
-        "frame_sha256": "64e4aa38651025651474c23662de335a5be423717451d01e5c3586c4849c0b76",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "09_part2_prologue_hawke_dialog|reg7-b31",
-      "item_id": "09_part2_prologue_hawke_dialog-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/3f1baa59c2cc1552ba76cd9a008a3c3ede408bad228649384638172ac6b69edd.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0012_A_0002741.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/3f1baa59c2cc1552ba76cd9a008a3c3ede408bad228649384638172ac6b69edd.png",
-        "frame_sha256": "778b32504709929b67a083c4307ef5a8c6059296f4cfee2348d2a2e2f0bc5f3c",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "10_part2_region_map_redstar|reg7-b31",
-      "item_id": "10_part2_region_map_redstar-b31",
-      "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B03_p2chain/frames/14ce2ff9e9271ca20c9760db6d93a5d9cbad0b5720ad69bec8d70d34ca36b6ce.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0013_START_0002987.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/14ce2ff9e9271ca20c9760db6d93a5d9cbad0b5720ad69bec8d70d34ca36b6ce.png",
-        "frame_sha256": "879a2ff1e3731d2b683b26c0c076e4f6694705d774b0e6311f5f67624e4f77eb",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "40_part1_name_menu|reg7-b31",
-      "item_id": "40_part1_name_menu-b31",
-      "input_route": "temp/release_C/b28/B40_p1menu/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B40_p1menu/0030_NONE_0004533.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
-        "frame_sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "41_part1_operation_room|reg7-b31",
-      "item_id": "41_part1_operation_room-b31",
-      "input_route": "temp/release_C/b28/B40_p1menu/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B40_p1menu/0031_A_0004739.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
-        "frame_sha256": "dcdf1219a1fd5438c7686887d0644354d768de3c92adcb6959e542731235273b",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "42_part1_single_battle|reg7-b31",
-      "item_id": "42_part1_single_battle-b31",
-      "input_route": "temp/release_C/b28/B42_p1single/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B42_p1single/0032_A_0004845.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
-        "frame_sha256": "2ad319be8218e67482e4859d5334b2fe240ae77ccceb955e32bb87a9768c227d",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "43_part1_link|reg7-b31",
-      "item_id": "43_part1_link-b31",
-      "input_route": "temp/release_C/b28/B43_p1link/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B43_p1link/0033_A_0004971.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
-        "frame_sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_14_part1_name_input|reg7-b31",
-      "item_id": "scene_14_part1_name_input-b31",
-      "input_route": "temp/release_C/b28/B14_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B14_p1sweep/frames/560b405aa3c2dc062a0ae7ae03336034e33b2fc7e78323f6354ff7407e5d0686.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B14_p1sweep/0010_A_0001249.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B14_p1sweep/frames/560b405aa3c2dc062a0ae7ae03336034e33b2fc7e78323f6354ff7407e5d0686.png",
-        "frame_sha256": "1045d278678f44144e26798800c72ebc4ea8bf8e9833a3368981be14fcdf9d2a",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_16_part1_info_screen|reg7-b31",
-      "item_id": "scene_16_part1_info_screen-b31",
-      "input_route": "temp/release_C/b28/H_p1_supply/actions.jsonl",
+      "key": "scene_26_part2_battle_labels-b32r5|temp/release_C/w2b6f_scene26_kanbei_sourcefix/actions.jsonl",
+      "item_id": "scene_26_part2_battle_labels-b32r5",
+      "input_route": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/actions.jsonl",
       "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
-      "source_capture": "temp/release_C/b28/H_p1_supply/frames/4313a2440985f5741ed0962bf476aed791a8eaf10d203088b0107de0bc585f75.png",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/H_p1_supply/0038_A_0004010.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/H_p1_supply/frames/4313a2440985f5741ed0962bf476aed791a8eaf10d203088b0107de0bc585f75.png",
-        "frame_sha256": "91aab37c383a92831d762ef0b27531477f108273c05bf315b5c5a58a4fc7eadf",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/0133_A_0015167.checkpoint.json",
+        "frame": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/frames/a9a81e9bccc55e53ca75dd3ee1f60cd20870f35e05b10ee8d3c1b62c0cd02b4e.png",
+        "frame_sha256": "af7db3d2ffd773417322cd7c506b819c40a72086be50f8b758cf0de90972e7be",
+        "cheat_tainted": true,
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "scene_17_part1_campaign|reg7-b31",
-      "item_id": "scene_17_part1_campaign-b31",
-      "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/31e488a0ffbe518a1b3b0aa2bda9a1ec13d801f3592af93535b0f1f68ba649a8.png",
+      "key": "26a-b30-C3P-3800-b32r5|temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "item_id": "26a-b30-C3P-3800-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0046_B_0003625.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/31e488a0ffbe518a1b3b0aa2bda9a1ec13d801f3592af93535b0f1f68ba649a8.png",
-        "frame_sha256": "a7d72aeb943f703e140cc27b15f178d378b47bd1b340c88fb46335e1ecd6574f",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_18_part1_battle|reg7-b31",
-      "item_id": "scene_18_part1_battle-b31",
-      "input_route": "temp/release_C/b28/B14_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B14_p1sweep/frames/5bcb1daab7241e0039388ef9b75cbba5bdd4784a5ba7c9350352c6ec5d46cead.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B14_p1sweep/0051_NONE_0003922.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B14_p1sweep/frames/5bcb1daab7241e0039388ef9b75cbba5bdd4784a5ba7c9350352c6ec5d46cead.png",
-        "frame_sha256": "c9d186920952fc7457b8dc13a755bf746427f8fe77dc4af46fb6b8959d084e45",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_19a1_part1_tutorial_opening|reg7-b31",
-      "item_id": "scene_19a1_part1_tutorial_opening-b31",
-      "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/cd375d3ede17eefe5e29a991c0455a31231ab9ab96b9496818599bb0fcea91ee.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0052_NONE_0004075.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/cd375d3ede17eefe5e29a991c0455a31231ab9ab96b9496818599bb0fcea91ee.png",
-        "frame_sha256": "b9e7c7aefb0b9f605025f4d85053fb069772937baefd1d86cb82896c885e6b80",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_19e1_part1_unit_info_detail_help|reg7-b31",
-      "item_id": "scene_19e1_part1_unit_info_detail_help-b31",
-      "input_route": "temp/release_C/b31/reg7/X_19e1_coldboot_inputs.txt",
-      "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
-      "source_capture": "temp/release_C/b28/X_19e1_infantry/0002_R_0004150.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/X_19e1_infantry_coldboot/0047_R_0004150.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/X_19e1_infantry_coldboot/frames/46a0752e09bf0acc9e7719ca145bed3216a86655819d7ad9058440bb74001b87.png",
-        "frame_sha256": "e243e6aec54547531d42cb98994bcacc4b6ae6deed4d931d0648d3eca5ad6354",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/C3P/0019_A_0003800.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/C3P/0019_A_0003800.png",
+        "frame_sha256": "1fe53195875e34b105ed6d789aaa305581faba3e29fbcb6fe47ac45d17549aa6",
+        "cheat_tainted": true,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
         "rgb_identical_to_c": null,
-        "route_note": "Cold boot with H_p1_supply verified SRAM, replay H through core 4107 then X inputs through core 4256; no cross-ROM savestate."
+        "claim_scope": "P2 3P free battle day banner; exact recorder core frame"
       }
     },
     {
-      "key": "scene_19e6_part1_unit_help_late|reg7-b31",
-      "item_id": "scene_19e6_part1_unit_help_late-b31",
-      "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/25642576b638e7e38aa4b2b1bf7c0c0d6240b8b6064aab09a660df85007c8435.png",
+      "key": "26a-b30-C3P-3820-b32r5|temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "item_id": "26a-b30-C3P-3820-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/a30bb0029482ca274d1d341e88076ac249cb75da6c0c751101800c643ae29fbe.png",
-        "frame_sha256": "0f946ac29dac2842e239509f0448effe3b61c05e670dfe1857ec37c930efa968",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/C3P/0020_NONE_0003820.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/C3P/0020_NONE_0003820.png",
+        "frame_sha256": "656b339f54b65bf015be19f255bcfce5803bb632e56529c02a6263c4c406ebd5",
+        "cheat_tainted": true,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
         "rgb_identical_to_c": null,
-        "visual_delta_from_b28_fraction": 0.099115,
-        "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        "claim_scope": "P2 3P free battle day banner; exact recorder core frame"
       }
     },
     {
-      "key": "scene_19e6_part1_unit_help_late_b|reg7-b31",
-      "item_id": "scene_19e6_part1_unit_help_late_b-b31",
-      "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/5e32c3ad019883305325e8744753eb46e924187cae42e242108b5679a49328b3.png",
+      "key": "26a-b30-C3P-3840-b32r5|temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "item_id": "26a-b30-C3P-3840-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0042_A_0003361.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/65db69eaa5ad212f092ec20a71a9e5174173e33ccb3a429229174d5ce25762ce.png",
-        "frame_sha256": "3c149b4ae2b815291b360a86e9d0c135b63ed86b5c3918bf8e8656b9e289608a",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/C3P/0021_NONE_0003840.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/C3P/0021_NONE_0003840.png",
+        "frame_sha256": "24d3adc5aa2b1aebe7088211d60eb8add550adabf86eb9cbf6c938a0b4bb39ff",
+        "cheat_tainted": true,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
         "rgb_identical_to_c": null,
-        "visual_delta_from_b28_fraction": 0.093438,
-        "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        "claim_scope": "P2 3P free battle day banner; exact recorder core frame"
       }
     },
     {
-      "key": "scene_19f_part1_extra_story|reg7-b31",
-      "item_id": "scene_19f_part1_extra_story-b31",
-      "input_route": "temp/release_C/b28/E_mission/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
+      "key": "26a-b30-C3P-3860-b32r5|temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "item_id": "26a-b30-C3P-3860-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/E_mission/0013_NONE_0001416.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
-        "frame_sha256": "c40cf134f87abe3a11ddd68c709dfddb6d224a4d8c1f68f7633edb2cecdcdaf6",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/C3P/0022_NONE_0003860.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/C3P/0022_NONE_0003860.png",
+        "frame_sha256": "22fd1fc35ec0afa595088a946b122a72b48dd5bf192ec441c040461ace49cf92",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_20_part2_intro_newspaper|reg7-b31",
-      "item_id": "scene_20_part2_intro_newspaper-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0005_A_0002887.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
-        "frame_sha256": "7233d630883678823275288d3527c7641d37bc97cdfef879ff6a28a0028994f5",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_20a_part2_menu_newspaper_bg|reg7-b31",
-      "item_id": "scene_20a_part2_menu_newspaper_bg-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/4a3a754685560a31cef70d911bb1d930fb232f644a6589cdee48e937eaec7a81.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0005_A_0002887.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/4a3a754685560a31cef70d911bb1d930fb232f644a6589cdee48e937eaec7a81.png",
-        "frame_sha256": "846e5b056592f92d608a68b522d3e5217b7cbed2042d095b361621f4c3284050",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_21_part2_intro_blackhole|reg7-b31",
-      "item_id": "scene_21_part2_intro_blackhole-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/0bf98e6c830f56ec32790310f552cbdd12cc7a56679e0d2531a4b8d4bb92bee7.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0022_A_0017849.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/0bf98e6c830f56ec32790310f552cbdd12cc7a56679e0d2531a4b8d4bb92bee7.png",
-        "frame_sha256": "fd2b9c1bae79bb700ab3e0fc1ec6a199cab3264d6de8e693b46a562cf43a8dfb",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_23a_part2_wars_shop|reg7-b31",
-      "item_id": "scene_23a_part2_wars_shop-b31",
-      "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0016_NONE_0002529.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
-        "frame_sha256": "91c74a93c04b44ac5cf47546445bbeecc8d7efbfaba8e775485a6cc9837a9366",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_23b_part2_comm_multiplayer|reg7-b31",
-      "item_id": "scene_23b_part2_comm_multiplayer-b31",
-      "input_route": "temp/release_C/b28/B23_p2menu/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B23_p2menu/0012_A_0002071.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
-        "frame_sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_23c_part2_sound_room|reg7-b31",
-      "item_id": "scene_23c_part2_sound_room-b31",
-      "input_route": "temp/release_C/b28/OJ1_soundroom/actions.jsonl",
-      "source_rom_sha256": "4abb1c7e95016f1412fe857c76d0937c6585ba598d6454844644e3b7a079a252",
-      "source_capture": "temp/release_C/b28/OJ1_soundroom/frames/214198825238d3a4ae88f14fb53640ec158378d022e9b8e160579362ab4150dc.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/OJ1_soundroom/0037_A_0006702.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/OJ1_soundroom/frames/214198825238d3a4ae88f14fb53640ec158378d022e9b8e160579362ab4150dc.png",
-        "frame_sha256": "4c660a597d2292fbb6557cc97db6f514d0afd6112c9510443497bb77f54b6483",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_24_part2_campaign_map|reg7-b31",
-      "item_id": "scene_24_part2_campaign_map-b31",
-      "input_route": "temp/release_C/b28/Q_syogun/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/Q_syogun/frames/f8434f6310f433a7a0e9609434f11982015884683d7833ac78e49e55595d8978.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/Q_syogun/0011_A_0002742.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/Q_syogun/frames/f8434f6310f433a7a0e9609434f11982015884683d7833ac78e49e55595d8978.png",
-        "frame_sha256": "c67e54130815d0d9fa3f5f92c8f804ffca662dd71ec4e6158deccb918c79c218",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_24b_part2_strategic_map_mode4|reg7-b31",
-      "item_id": "scene_24b_part2_strategic_map_mode4-b31",
-      "input_route": "temp/release_C/b28/B24b_p2free/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B24b_p2free/frames/91fe87051f1aaee53fbbc0093ea5cccfbe0c93ea21e4a764bb91b11924c47aba.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B24b_p2free/0028_A_0002897.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B24b_p2free/frames/91fe87051f1aaee53fbbc0093ea5cccfbe0c93ea21e4a764bb91b11924c47aba.png",
-        "frame_sha256": "53a8922bfa8e869dd113891494255365ed4fb9789633085ee40e662abfcb3aeb",
-        "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_25_part2_mission_titles|reg7-b31",
-      "item_id": "scene_25_part2_mission_titles-b31",
-      "input_route": "temp/release_C/b28/N2_p2_ending/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/N2_p2_ending/frames/1260f02bb27cc6b67da2d3a36d76327f2a50328c6290368b9488f17f6bfc07be.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/N2_p2_ending/0064_NONE_0004270.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/N2_p2_ending/frames/d949cb86508078b6100e3a4e80b7a19f61f922ddb207318f065719e5b3ac02e3.png",
-        "frame_sha256": "f57fa17656d7acf5ccdd06745f2265d9d8de02c49d8625b6ed8194557e82c846",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
         "rgb_identical_to_c": null,
-        "visual_delta_from_b28_fraction": 0.044792,
-        "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        "claim_scope": "P2 3P free battle day banner; exact recorder core frame"
       }
     },
     {
-      "key": "scene_27_part2_battle_objlabels|reg7-b31",
-      "item_id": "scene_27_part2_battle_objlabels-b31",
-      "input_route": "temp/release_C/b28/R2_p2_terrain_detail/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/R2_p2_terrain_detail/frames/48bfb50b84790c7ad44448816986821cb5ea5845c340772c918858895e2734a2.png",
+      "key": "26a-b30-C3P-3880-b32r5|temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "item_id": "26a-b30-C3P-3880-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/R2_p2_terrain_detail/0031_R_0004768.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/R2_p2_terrain_detail/frames/48bfb50b84790c7ad44448816986821cb5ea5845c340772c918858895e2734a2.png",
-        "frame_sha256": "2ba6440c32249e9801fa3c4853ddcf4df9d648b8a4b0b7aa17631aa94d637e4e",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/C3P/0023_NONE_0003880.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/C3P/0023_NONE_0003880.png",
+        "frame_sha256": "6d23cb6d4a683d875befdc67ea27c48e396c0cf8ba949f361083fbbb2cb3838f",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 3P free battle day banner; exact recorder core frame"
       }
     },
     {
-      "key": "scene_29_part2_result_summary|reg7-b31",
-      "item_id": "scene_29_part2_result_summary-b31",
-      "input_route": "temp/release_C/b28/I2_m21_victory/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/I2_m21_victory/frames/5a8c040eef6ef7e40e1158d1a42ada5bf133e954f4473bf3b7b21b5325af3a6c.png",
+      "key": "26a-b30-PK_fixed-36881-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36881-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/I2_m21_victory/0112_A_0006479.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/I2_m21_victory/frames/5a8c040eef6ef7e40e1158d1a42ada5bf133e954f4473bf3b7b21b5325af3a6c.png",
-        "frame_sha256": "3a18ea6e678d73bd80a600b974c1fdbbd3dcec9d23d3f7d67449753103544ad1",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30a1_part2_redstar_story_early|reg7-b31",
-      "item_id": "scene_30a1_part2_redstar_story_early-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/e3b892c4e7cced85bf7b1d9f7bcf3c4d92b71429ff489343c709cecfbaf2ba6b.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0062_A_0032869.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/e3b892c4e7cced85bf7b1d9f7bcf3c4d92b71429ff489343c709cecfbaf2ba6b.png",
-        "frame_sha256": "ac6b79d2cdb8179bf886dfafd6301b900242b0b2e1cc477c2868afd01d2e3c9e",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0071_A_0036881.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0071_A_0036881.png",
+        "frame_sha256": "1b32629f0731e8e4593f0c58ffbe343714e76bfcf9795b12e76c374cd76c6e65",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
       }
     },
     {
-      "key": "scene_30a1_part2_redstar_story_early_c|reg7-b31",
-      "item_id": "scene_30a1_part2_redstar_story_early_c-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
+      "key": "26a-b30-PK_fixed-36901-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36901-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0028_A_0020021.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
-        "frame_sha256": "718ec899b90e25a059f6512ca246a7209ba85cb425561b550202f71d27663674",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0072_NONE_0036901.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0072_NONE_0036901.png",
+        "frame_sha256": "e181fa3e29629b999eef4ed355cf9f17851899792802196d0060d4f7909596e6",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
       }
     },
     {
-      "key": "scene_30b1_part2_redstar_liberation_macro_briefing_story|reg7-b31",
-      "item_id": "scene_30b1_part2_redstar_liberation_macro_briefing_story-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
+      "key": "26a-b30-PK_fixed-36921-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36921-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0031_A_0021107.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
-        "frame_sha256": "725898ef989d1442a96879dd6571c6ecade3eaf6062b46ddd59d7be8ab8d8e3a",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0073_NONE_0036921.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0073_NONE_0036921.png",
+        "frame_sha256": "94a7e03cac586fcfa2ef2b46fb8252265958c5fe4428b7227ac52d6934a353ae",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
       }
     },
     {
-      "key": "scene_30c1_part2_yellowcomet_north_invasion_story|reg7-b31",
-      "item_id": "scene_30c1_part2_yellowcomet_north_invasion_story-b31",
-      "input_route": "temp/release_C/b28/S30c1_run08/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
+      "key": "26a-b30-PK_fixed-36941-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36941-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
-        "frame_sha256": "a88c0ec7b2d6ebb83a2cdd3df4bf8ba8bbb8f1e259c359ecb2aaedd24ce97bf1",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30d2_part2_green_earth_story_late|reg7-b31",
-      "item_id": "scene_30d2_part2_green_earth_story_late-b31",
-      "input_route": "temp/release_C/b28/S30d2_run14/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
-        "frame_sha256": "d8818417976325af913032a1bb1b659ab70a117fb07db070b0e5bfa9cd8cc6dc",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30g0_part2_green_earth_reinforcement_story|reg7-b31",
-      "item_id": "scene_30g0_part2_green_earth_reinforcement_story-b31",
-      "input_route": "temp/release_C/b28/S30g0_run16/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
-        "frame_sha256": "5f11e7efc99cf25c4822a755394b2d2968be485a7e3f017c7477281723d80623",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30g3_part2_green_earth_suspicious_area_story|reg7-b31",
-      "item_id": "scene_30g3_part2_green_earth_suspicious_area_story-b31",
-      "input_route": "temp/release_C/b28/S30g3_run10/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
-        "frame_sha256": "0d5a9d6052c88376d5178e43d60170b35beeb6715222121f764f9a0ed9e68cc3",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30e1_part2_blackhole_missile_approach_story|reg7-b31",
-      "item_id": "scene_30e1_part2_blackhole_missile_approach_story-b31",
-      "input_route": "temp/release_C/b28/N2_p2_ending/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/N2_p2_ending/frames/9a628dd3826811c426685a796fd53f502868125f035e8de1e88f2a7b6dfabd30.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/N2_p2_ending/0030_A_0002078.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/N2_p2_ending/frames/9a628dd3826811c426685a796fd53f502868125f035e8de1e88f2a7b6dfabd30.png",
-        "frame_sha256": "118f53210314b267ae838b2b79c2814c17fbf054e601a5f9c01d6f71219574e6",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30e2_part2_blackhole_final_missile_story|reg7-b31",
-      "item_id": "scene_30e2_part2_blackhole_final_missile_story-b31",
-      "input_route": "temp/release_C/b28/S30e2_run19/actions.jsonl",
-      "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
-      "source_capture": "temp/release_C/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
-        "frame_sha256": "4c5a08b1a777108f2e7170bc9e2bbc2ac62f0c093e4495616256133f7da63e43",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_30f2_part2_co_profile_story|reg7-b31",
-      "item_id": "scene_30f2_part2_co_profile_story-b31",
-      "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/PK_cold/frames/8d8b49ec7bd8aa1d3fbac6abed0eb86f53227870d7a37e834f0078f09e49b086.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0148_A_0060199.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/8d8b49ec7bd8aa1d3fbac6abed0eb86f53227870d7a37e834f0078f09e49b086.png",
-        "frame_sha256": "1ed18cc7e5d0e1738f3d2c6a0bf092c2f7cdf567368174897890d99653c1700e",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0074_NONE_0036941.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0074_NONE_0036941.png",
+        "frame_sha256": "70470f66a22c2724c9f639768f26ee60531a69d34f6517024070809ba7ac9f46",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
       }
     },
     {
-      "key": "scene_85_ui_common|reg7-b31",
-      "item_id": "scene_85_ui_common-b31",
-      "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/C_3p_surrender/frames/0bfc582ac92a08acefe49df2c47456992bb3b237b1d867f4044490b2a83eb05b.png",
+      "key": "26a-b30-PK_fixed-36961-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36961-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0024_A_0004390.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/0bfc582ac92a08acefe49df2c47456992bb3b237b1d867f4044490b2a83eb05b.png",
-        "frame_sha256": "37e002c6a6f51b72dadcb963b45bb7b3e6f5e4d1938caafe04a7c05cd93e6a18",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_86_common_compact_menu_tables|reg7-b31",
-      "item_id": "scene_86_common_compact_menu_tables-b31",
-      "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
-      "source_rom_sha256": null,
-      "source_capture": "temp/release_C/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
-        "frame_sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0075_NONE_0036961.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0075_NONE_0036961.png",
+        "frame_sha256": "ea840e1d6739095fc5c0209edca0d3dd055df08f9d3e2e7c7e6b6dff043f6fea",
         "cheat_tainted": false,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-36981-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-36981-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0076_NONE_0036981.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0076_NONE_0036981.png",
+        "frame_sha256": "0949dca24ac657e71302d51bb13bc2c87b2a4044d4c90d059af05930bf78c5a1",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-37001-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-37001-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0077_NONE_0037001.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0077_NONE_0037001.png",
+        "frame_sha256": "c9b08645f810fef85ce8b0d35a13f917496c6a24f0bdf7882dccf2e18858e6d1",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 title intro; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42261-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42261-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0091_A_0042261.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0091_A_0042261.png",
+        "frame_sha256": "a8114cbf3d9d5dfe2a5b619283e4d04e411765600ef2db88a21a3ae7bf45d2f9",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42312-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42312-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0093_A_0042312.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0093_A_0042312.png",
+        "frame_sha256": "58836bb45471a2de1589ffe02b346d16153424d638175ffc9ce1d4ca75fe8a2a",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42340-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42340-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0094_NONE_0042340.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0094_NONE_0042340.png",
+        "frame_sha256": "99317e5bb2ab2da2ab6f4b93cdbda5d003f05a02c0efa13d07de6240585d9ebd",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42380-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42380-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0095_NONE_0042380.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0095_NONE_0042380.png",
+        "frame_sha256": "a8154fc34f75a06390965ed0dbe46319c5a285c4916342c45d9f7536f88a4f7b",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42400-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42400-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0096_NONE_0042400.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0096_NONE_0042400.png",
+        "frame_sha256": "f0d4411fc6eddd0398992953af5eb179ed883093d0b7aabf2a1043ffa7b6678f",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42421-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42421-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0097_NONE_0042421.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0097_NONE_0042421.png",
+        "frame_sha256": "eb295c2beadad3167426e1bebeb79a48127f2e0d8c189efd1e1e374b2111b199",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "26a-b30-PK_fixed-42481-b32r5|temp/release_C/b30/w2b5/pk_inputs.txt",
+      "item_id": "26a-b30-PK_fixed-42481-b32r5",
+      "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+      "source_rom_sha256": "aead6f2d715743b32a0f0009ca4351a025b3cab4fbd64ca473300f3338e71560",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/rebind1/b30_26a/PK_fixed/0098_NONE_0042481.checkpoint.json",
+        "frame": "temp/release_C/rebind1/b30_26a/PK_fixed/0098_NONE_0042481.png",
+        "frame_sha256": "affb161b04652d9f9a68ffb3d05cb24f92914041631ed52222d4bde7c683f8d7",
+        "cheat_tainted": false,
+        "status": "current_candidate_direct_rgb_identical_to_b30",
+        "comparison_receipt": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+        "rgb_identical_to_c": null,
+        "claim_scope": "P2 campaign M1 day banner; exact recorder core frame"
+      }
+    },
+    {
+      "key": "scene_30e4_part2_blackhole_yellowcomet_fortress_story-b32r5|temp/release_C/w2b6f_scene30e4_sourcefix/actions.jsonl",
+      "item_id": "scene_30e4_part2_blackhole_yellowcomet_fortress_story-b32r5",
+      "input_route": "temp/release_C/w2b6f_scene30e4_sourcefix/actions.jsonl",
+      "source_rom_sha256": "9c925cad0a20238d44436774dc7541542d65b6c8c181c090a94b0314b0b4c863",
+      "source_capture": null,
+      "replay": {
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6f_scene30e4_sourcefix/0031_NONE_0003029.checkpoint.json",
+        "frame": "temp/release_C/w2b6f_scene30e4_sourcefix/frames/6411cc05fc76c4e0f8f7fe30f38e495232c1deef68743f85dd28cb331b079c49.png",
+        "frame_sha256": "1e804982dad50312a14ea949b45f603ecd54e72fbf0369a1e51e39d55f03fcd6",
+        "cheat_tainted": true,
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
     },
     {
-      "key": "scene_87_common_rule_settings|reg7-b31",
-      "item_id": "scene_87_common_rule_settings-b31",
-      "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/C_3p_surrender/frames/1be0a2d81a77376841a4b64e8d69753f857485bc57e6e8f8a96019896d2f89cc.png",
+      "key": "scene_19c2_part1_mid_fog_map_story-b32r5|temp/release_C/w2b6f_scene19c2_cold2/actions.jsonl",
+      "item_id": "scene_19c2_part1_mid_fog_map_story-b32r5",
+      "input_route": "temp/release_C/w2b6f_scene19c2_cold2/actions.jsonl",
+      "source_rom_sha256": "51b10dcf48204be4762c3c262c6a9de0de87fb014d7e0043742e7db02fff7d98",
+      "source_capture": null,
       "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0020_A_0003354.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/1be0a2d81a77376841a4b64e8d69753f857485bc57e6e8f8a96019896d2f89cc.png",
-        "frame_sha256": "a38884fa79fc601d7838f1b06441cffad2e5b1ea92a97bbe7b7dc58a9fc8f77d",
+        "candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+        "checkpoint": "temp/release_C/w2b6f_scene19c2_cold2/0345_A_0056131.checkpoint.json",
+        "frame": "temp/release_C/w2b6f_scene19c2_cold2/frames/5ddbdd2d9334a0aa20700bd6a2406dc966fe022a05642cb1e3b106e87daf34e2.png",
+        "frame_sha256": "2a2045d65547f2605e65261637e858e8c8eaf70b5abab7582c317dc73740bae2",
         "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_89_common_battle_system_results|reg7-b31",
-      "item_id": "scene_89_common_battle_system_results-b31",
-      "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/C_3p_surrender/frames/222c41652bb496c7cc8c9a1017d1a14dc43382f08634d216a6af1d2819fdc87f.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0027_A_0004524.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/222c41652bb496c7cc8c9a1017d1a14dc43382f08634d216a6af1d2819fdc87f.png",
-        "frame_sha256": "0aa7081eeb96953ef6768299ab5cccfd8a3a4fb0e1f986b9464c08e514b7b4f7",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_89a_common_battle_surrender_confirm|reg7-b31",
-      "item_id": "scene_89a_common_battle_surrender_confirm-b31",
-      "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/C_3p_surrender/frames/a4249f944c4aef942a4667dca9a49a55bce3253112620406388f461155a1b5bf.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0030_LEFT_0004688.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/a4249f944c4aef942a4667dca9a49a55bce3253112620406388f461155a1b5bf.png",
-        "frame_sha256": "39fe3408d7a986ede8090eb79c42d664df7c98000e835ae2ceafb1b596de0b5f",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
-        "comparison_receipt": null,
-        "rgb_identical_to_c": null
-      }
-    },
-    {
-      "key": "scene_89b_common_battle_defeat_comm_messages|reg7-b31",
-      "item_id": "scene_89b_common_battle_defeat_comm_messages-b31",
-      "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
-      "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
-      "source_capture": "temp/release_C/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
-      "replay": {
-        "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
-        "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
-        "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
-        "frame_sha256": "8038c96d80d1cb9edf6c106eacb04f820f68271bf4f4b1da9a68f2797d464b1a",
-        "cheat_tainted": true,
-        "status": "current_candidate_direct_unreviewed",
+        "status": "current_candidate_cheat_tainted_reviewed",
         "comparison_receipt": null,
         "rgb_identical_to_c": null
       }
@@ -1286,7 +728,7 @@
     "scene_89a_common_battle_surrender_confirm",
     "scene_89b_common_battle_defeat_comm_messages"
   ],
-  "current_candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "current_candidate_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
   "history": {
     "note": "Prior-candidate evidence retained for provenance; excluded from active registration.",
     "records": [
@@ -4399,7 +3841,1190 @@
           "comparison_receipt": null,
           "rgb_identical_to_c": null
         }
+      },
+      {
+        "key": "26a-b31-C3P-3800|temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "item_id": "26a-b31-C3P-3800",
+        "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/C3P/0019_A_0003800.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/C3P/frames/9b97f2acf21c649d29ec47270890a0772ec8ba63dc90e1e393704e3f486ce24e.png",
+          "frame_sha256": "ef8e506aaecb95eb1e014d9b7ac5ed12196b209049480095287995311c29edf6",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-C3P-3820|temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "item_id": "26a-b31-C3P-3820",
+        "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/C3P/0020_NONE_0003820.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/C3P/frames/34e8a4f840b53c61ce8886c8eb2a92441ef904998760b8bb83c311b5f4e41328.png",
+          "frame_sha256": "1a3e4ac24329f2b6ef1f0e83db5fd39f71921d929fdb7c4bf6cddaaf9b0d09ec",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-C3P-3840|temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "item_id": "26a-b31-C3P-3840",
+        "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/C3P/0021_NONE_0003840.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/C3P/frames/9b856d8b895bad84edee12c94ecc229802569ae3bc65cb961503acc4986c8fc4.png",
+          "frame_sha256": "fabe84c3bb9cdc5c38750dbb9276cf2be6a295e3abdde5cf71df2b63e3bc7017",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-C3P-3860|temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "item_id": "26a-b31-C3P-3860",
+        "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/C3P/0022_NONE_0003860.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/C3P/frames/10f08874dd4d8f5a7923fbee42bb90fcfabe3ef8b82c0b023f3eb8bede090dfb.png",
+          "frame_sha256": "f4091bfa083cf7f0eb323b5b084a1284f9c607e71b53f90834e50365fd2bd127",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-C3P-3880|temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "item_id": "26a-b31-C3P-3880",
+        "input_route": "temp/release_C/b30/w2b5/c3p_inputs.txt",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/C3P/0023_NONE_0003880.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/C3P/frames/c4dd4f2f4cc3d7b3ebb5a510760b211bc82282679f83fd43f0ab2d613bbda08c.png",
+          "frame_sha256": "9edbe49d3923359df55360376b6a6c32cca7a1b7bb0476e0ee0f44dad87c1d23",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36881|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36881",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0071_A_0036881.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/5c71509673077cd10f393b8feb824ae0ed1b24761807d344e3c4f9ba1113955d.png",
+          "frame_sha256": "c8ff9c91245107d585e9e800c93f0a8008ce3282054b5eb438c23f271bf33e7b",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36901|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36901",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0072_NONE_0036901.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/1cdfc639eb8b214ff703ec1936226a478d3b0008a82f1a506ca97f0badcc03ec.png",
+          "frame_sha256": "44b8fbe2258ed7c97f289fcdec0f541ea9a3dfa1eeb40baffd8bf408750e42fe",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36921|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36921",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0073_NONE_0036921.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/debac243661b77c68c770a1c881a3dc8c49009ede0a5a5c96866ef75af3e034d.png",
+          "frame_sha256": "402aa934c4d1be977c72eb508ff9d2983b785d3f448c0b620d2c6fdc8d93e7be",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36941|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36941",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0074_NONE_0036941.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/c8c3ea76b8f182afe9a810bca820a672d076db4b78ecc56daadcff9ac49c809e.png",
+          "frame_sha256": "c71223f72a4f7347f6fcb3bc33caa31b1ce5a67857bbc603a1362416afb17e34",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36961|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36961",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0075_NONE_0036961.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/2b1702903ceeaaf46b0a7deaa2d58c87724d85e57c790de95c893171aab11683.png",
+          "frame_sha256": "5ccafc9c6c41b01ffadc3159c2ea077bdebdf088a58d6cc0dc12198b01d68401",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-36981|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-36981",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0076_NONE_0036981.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/4ede10c110830b278f77f79cc730518727a19099673a2a84ee2d7a07e9265f25.png",
+          "frame_sha256": "34e434a9b718cb847f2313160e3d253f61775ffbdc5adbb919604c0220f583e7",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-37001|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-37001",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0077_NONE_0037001.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/c78c390ae2c0af1b702af02d44365a493da6a1290c76b7ef97b2bdf975aa3639.png",
+          "frame_sha256": "c796b6f2227d6e0964d340a7d7455b84bcfb4534d29a15487a9dcb72e51ff712",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42261|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42261",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0091_A_0042261.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/9589a3985a5b9cafb467be74197e53d00ac93c2f4a722d68a1d5fa6cd62057ce.png",
+          "frame_sha256": "7e0cb813e16441d51329ef6d97aa4bd9dda9e50daf32103d9b178023b5428653",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42312|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42312",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0093_A_0042312.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/feb8a4701fa6e3834a021dd6a177852f513013e243e7e9fed99e5e8bd99e3b53.png",
+          "frame_sha256": "bdbbf9b6fa0c321e6456f2d765c5301576345936f3611734986810d1b1d7e97f",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42340|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42340",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0094_NONE_0042340.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/21383bc62e647bbccd0bc4d570d29ba6fdbc049841a0774849b92bb340c09893.png",
+          "frame_sha256": "cc3ab869c39e92f372447211ac6e6bb358fcbf607e03709be31bf776a1a6d0af",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42380|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42380",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0095_NONE_0042380.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/eb8dfb87bb0f9658c5350eace9137f03a9bb174ad73a3a84dfc5654ae87fe38d.png",
+          "frame_sha256": "43512606bad8c658aaa25282b9081ee6b1a804599213856be7bf6f7386d3dad4",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42400|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42400",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0096_NONE_0042400.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/14039902e25759e891574086e2643342057bbcb64ffcac72f87578db87c8f753.png",
+          "frame_sha256": "88f766edbebfb2b7565e2a1236614b5097080fdf57ad63d4382560e78e390834",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42421|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42421",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0097_NONE_0042421.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/9e361924446608abd201345f38d130647b1a17cc7c0bec34aaaa7df4adb31966.png",
+          "frame_sha256": "e7e0703621fea381642349c324ba42cc6e919f97a339c5238781b0da1919f0b1",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "26a-b31-PK_fixed-42481|temp/release_C/b30/w2b5/pk_inputs.txt",
+        "item_id": "26a-b31-PK_fixed-42481",
+        "input_route": "temp/release_C/b30/w2b5/pk_inputs.txt",
+        "source_rom_sha256": null,
+        "source_capture": null,
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/PK_fixed/0098_NONE_0042481.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/PK_fixed/frames/994efdf36d6b3a2bdda7d17d3a1beaf74dafccf84a6186bfedd6492f571237a2.png",
+          "frame_sha256": "0d5af4c75874d25f41fa25622c898cbf380b59a18f9ea1d5133e4f8679d3fff4",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "01_coldboot_nintendo|reg7-b31",
+        "item_id": "01_coldboot_nintendo-b31",
+        "input_route": "temp/release_C/b28/B01_coldboot/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B01_coldboot/frames/c35448488a17840a969d550e1dda526cc7a8cc159dd57755073e03e617ea9c13.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B01_coldboot/0002_NONE_0000301.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B01_coldboot/frames/c35448488a17840a969d550e1dda526cc7a8cc159dd57755073e03e617ea9c13.png",
+          "frame_sha256": "26706f28c7fcd0afb510d06e72dd4ae84c7b5742adcbf7cfab24d4f2e04e9937",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "02_common_title|reg7-b31",
+        "item_id": "02_common_title-b31",
+        "input_route": "temp/release_C/b28/B01_coldboot/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B01_coldboot/frames/d3409227b5fc3777d207cbbd75281a41e934da277907dbfcae370a72e8be158a.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B01_coldboot/0003_NONE_0000601.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B01_coldboot/frames/d3409227b5fc3777d207cbbd75281a41e934da277907dbfcae370a72e8be158a.png",
+          "frame_sha256": "a87c37b27d39dba62bf40b21e4bf80615a17b03523ab23db8a964dc95d6f72cf",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "03_select_part1|reg7-b31",
+        "item_id": "03_select_part1-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/8f8dda7f8773475ff529625bb3568c19d9f31554154dc50f3b191412da5d7d00.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0004_START_0000893.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/8f8dda7f8773475ff529625bb3568c19d9f31554154dc50f3b191412da5d7d00.png",
+          "frame_sha256": "6e2567653711d4be4306f22ac91cd13ecacc205c20f2a5fd97ec760c4b4da90c",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "04_part1_title|reg7-b31",
+        "item_id": "04_part1_title-b31",
+        "input_route": "temp/release_C/b28/B04_p1title/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B04_p1title/frames/9b1cde7793ccd69b51dcce1105e4d3ec141e7a394650375d6d36a998f7b3362c.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B04_p1title/0006_START_0001385.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B04_p1title/frames/9b1cde7793ccd69b51dcce1105e4d3ec141e7a394650375d6d36a998f7b3362c.png",
+          "frame_sha256": "15386391770f1efb16d71a1067691a1df2ae9b4b9d75a64e61e45cf841ae7fd5",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "05_select_part2|reg7-b31",
+        "item_id": "05_select_part2-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/9feab752902830539332d1c01f1ded4f774b1492dc1a480e8db078a67a46c02c.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0005_DOWN_0001019.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/9feab752902830539332d1c01f1ded4f774b1492dc1a480e8db078a67a46c02c.png",
+          "frame_sha256": "230d7ac130e54a85ad24cee186f594dc3908827e7e3b89e72c3e4e806964a891",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "06_part2_title|reg7-b31",
+        "item_id": "06_part2_title-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/d1c5b8cdf1adeca9699d2fe75add3f23df06376ce6609c79a80f99055b886901.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0007_START_0001511.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/d1c5b8cdf1adeca9699d2fe75add3f23df06376ce6609c79a80f99055b886901.png",
+          "frame_sha256": "f58ba12ae8053d52e9b100261ff7e510890a620f38dffd5b8da5a7a8c6a39fbe",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "07_part2_main_menu|reg7-b31",
+        "item_id": "07_part2_main_menu-b31",
+        "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0008_A_0001717.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+          "frame_sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "08_part2_prologue_map_text|reg7-b31",
+        "item_id": "08_part2_prologue_map_text-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0010_A_0002249.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
+          "frame_sha256": "64e4aa38651025651474c23662de335a5be423717451d01e5c3586c4849c0b76",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "09_part2_prologue_hawke_dialog|reg7-b31",
+        "item_id": "09_part2_prologue_hawke_dialog-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/3f1baa59c2cc1552ba76cd9a008a3c3ede408bad228649384638172ac6b69edd.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0012_A_0002741.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/3f1baa59c2cc1552ba76cd9a008a3c3ede408bad228649384638172ac6b69edd.png",
+          "frame_sha256": "778b32504709929b67a083c4307ef5a8c6059296f4cfee2348d2a2e2f0bc5f3c",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "10_part2_region_map_redstar|reg7-b31",
+        "item_id": "10_part2_region_map_redstar-b31",
+        "input_route": "temp/release_C/b28/B03_p2chain/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B03_p2chain/frames/14ce2ff9e9271ca20c9760db6d93a5d9cbad0b5720ad69bec8d70d34ca36b6ce.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B03_p2chain/0013_START_0002987.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B03_p2chain/frames/14ce2ff9e9271ca20c9760db6d93a5d9cbad0b5720ad69bec8d70d34ca36b6ce.png",
+          "frame_sha256": "879a2ff1e3731d2b683b26c0c076e4f6694705d774b0e6311f5f67624e4f77eb",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "40_part1_name_menu|reg7-b31",
+        "item_id": "40_part1_name_menu-b31",
+        "input_route": "temp/release_C/b28/B40_p1menu/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B40_p1menu/0030_NONE_0004533.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+          "frame_sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "41_part1_operation_room|reg7-b31",
+        "item_id": "41_part1_operation_room-b31",
+        "input_route": "temp/release_C/b28/B40_p1menu/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B40_p1menu/0031_A_0004739.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
+          "frame_sha256": "dcdf1219a1fd5438c7686887d0644354d768de3c92adcb6959e542731235273b",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "42_part1_single_battle|reg7-b31",
+        "item_id": "42_part1_single_battle-b31",
+        "input_route": "temp/release_C/b28/B42_p1single/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B42_p1single/0032_A_0004845.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+          "frame_sha256": "2ad319be8218e67482e4859d5334b2fe240ae77ccceb955e32bb87a9768c227d",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "43_part1_link|reg7-b31",
+        "item_id": "43_part1_link-b31",
+        "input_route": "temp/release_C/b28/B43_p1link/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B43_p1link/0033_A_0004971.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+          "frame_sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_14_part1_name_input|reg7-b31",
+        "item_id": "scene_14_part1_name_input-b31",
+        "input_route": "temp/release_C/b28/B14_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B14_p1sweep/frames/560b405aa3c2dc062a0ae7ae03336034e33b2fc7e78323f6354ff7407e5d0686.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B14_p1sweep/0010_A_0001249.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B14_p1sweep/frames/560b405aa3c2dc062a0ae7ae03336034e33b2fc7e78323f6354ff7407e5d0686.png",
+          "frame_sha256": "1045d278678f44144e26798800c72ebc4ea8bf8e9833a3368981be14fcdf9d2a",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_16_part1_info_screen|reg7-b31",
+        "item_id": "scene_16_part1_info_screen-b31",
+        "input_route": "temp/release_C/b28/H_p1_supply/actions.jsonl",
+        "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
+        "source_capture": "temp/release_C/b28/H_p1_supply/frames/4313a2440985f5741ed0962bf476aed791a8eaf10d203088b0107de0bc585f75.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/H_p1_supply/0038_A_0004010.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/H_p1_supply/frames/4313a2440985f5741ed0962bf476aed791a8eaf10d203088b0107de0bc585f75.png",
+          "frame_sha256": "91aab37c383a92831d762ef0b27531477f108273c05bf315b5c5a58a4fc7eadf",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_17_part1_campaign|reg7-b31",
+        "item_id": "scene_17_part1_campaign-b31",
+        "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/31e488a0ffbe518a1b3b0aa2bda9a1ec13d801f3592af93535b0f1f68ba649a8.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0046_B_0003625.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/31e488a0ffbe518a1b3b0aa2bda9a1ec13d801f3592af93535b0f1f68ba649a8.png",
+          "frame_sha256": "a7d72aeb943f703e140cc27b15f178d378b47bd1b340c88fb46335e1ecd6574f",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_18_part1_battle|reg7-b31",
+        "item_id": "scene_18_part1_battle-b31",
+        "input_route": "temp/release_C/b28/B14_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B14_p1sweep/frames/5bcb1daab7241e0039388ef9b75cbba5bdd4784a5ba7c9350352c6ec5d46cead.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B14_p1sweep/0051_NONE_0003922.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B14_p1sweep/frames/5bcb1daab7241e0039388ef9b75cbba5bdd4784a5ba7c9350352c6ec5d46cead.png",
+          "frame_sha256": "c9d186920952fc7457b8dc13a755bf746427f8fe77dc4af46fb6b8959d084e45",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_19a1_part1_tutorial_opening|reg7-b31",
+        "item_id": "scene_19a1_part1_tutorial_opening-b31",
+        "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/cd375d3ede17eefe5e29a991c0455a31231ab9ab96b9496818599bb0fcea91ee.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0052_NONE_0004075.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/cd375d3ede17eefe5e29a991c0455a31231ab9ab96b9496818599bb0fcea91ee.png",
+          "frame_sha256": "b9e7c7aefb0b9f605025f4d85053fb069772937baefd1d86cb82896c885e6b80",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_19e1_part1_unit_info_detail_help|reg7-b31",
+        "item_id": "scene_19e1_part1_unit_info_detail_help-b31",
+        "input_route": "temp/release_C/b31/reg7/X_19e1_coldboot_inputs.txt",
+        "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf",
+        "source_capture": "temp/release_C/b28/X_19e1_infantry/0002_R_0004150.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/X_19e1_infantry_coldboot/0047_R_0004150.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/X_19e1_infantry_coldboot/frames/46a0752e09bf0acc9e7719ca145bed3216a86655819d7ad9058440bb74001b87.png",
+          "frame_sha256": "e243e6aec54547531d42cb98994bcacc4b6ae6deed4d931d0648d3eca5ad6354",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null,
+          "route_note": "Cold boot with H_p1_supply verified SRAM, replay H through core 4107 then X inputs through core 4256; no cross-ROM savestate."
+        }
+      },
+      {
+        "key": "scene_19e6_part1_unit_help_late|reg7-b31",
+        "item_id": "scene_19e6_part1_unit_help_late-b31",
+        "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/25642576b638e7e38aa4b2b1bf7c0c0d6240b8b6064aab09a660df85007c8435.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/a30bb0029482ca274d1d341e88076ac249cb75da6c0c751101800c643ae29fbe.png",
+          "frame_sha256": "0f946ac29dac2842e239509f0448effe3b61c05e670dfe1857ec37c930efa968",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null,
+          "visual_delta_from_b28_fraction": 0.099115,
+          "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        }
+      },
+      {
+        "key": "scene_19e6_part1_unit_help_late_b|reg7-b31",
+        "item_id": "scene_19e6_part1_unit_help_late_b-b31",
+        "input_route": "temp/release_C/b28/B19a1_p1sweep/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B19a1_p1sweep/frames/5e32c3ad019883305325e8744753eb46e924187cae42e242108b5679a49328b3.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/0042_A_0003361.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B19a1_p1sweep/frames/65db69eaa5ad212f092ec20a71a9e5174173e33ccb3a429229174d5ce25762ce.png",
+          "frame_sha256": "3c149b4ae2b815291b360a86e9d0c135b63ed86b5c3918bf8e8656b9e289608a",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null,
+          "visual_delta_from_b28_fraction": 0.093438,
+          "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        }
+      },
+      {
+        "key": "scene_19f_part1_extra_story|reg7-b31",
+        "item_id": "scene_19f_part1_extra_story-b31",
+        "input_route": "temp/release_C/b28/E_mission/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/E_mission/0013_NONE_0001416.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/E_mission/frames/3ebc056350ad546e3a03ee15ee8ed3270072c8a5c87dff7c74740e2f21d3aab3.png",
+          "frame_sha256": "c40cf134f87abe3a11ddd68c709dfddb6d224a4d8c1f68f7633edb2cecdcdaf6",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_20_part2_intro_newspaper|reg7-b31",
+        "item_id": "scene_20_part2_intro_newspaper-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0005_A_0002887.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
+          "frame_sha256": "7233d630883678823275288d3527c7641d37bc97cdfef879ff6a28a0028994f5",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_20a_part2_menu_newspaper_bg|reg7-b31",
+        "item_id": "scene_20a_part2_menu_newspaper_bg-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/4a3a754685560a31cef70d911bb1d930fb232f644a6589cdee48e937eaec7a81.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0005_A_0002887.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/4a3a754685560a31cef70d911bb1d930fb232f644a6589cdee48e937eaec7a81.png",
+          "frame_sha256": "846e5b056592f92d608a68b522d3e5217b7cbed2042d095b361621f4c3284050",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_21_part2_intro_blackhole|reg7-b31",
+        "item_id": "scene_21_part2_intro_blackhole-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/0bf98e6c830f56ec32790310f552cbdd12cc7a56679e0d2531a4b8d4bb92bee7.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0022_A_0017849.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/0bf98e6c830f56ec32790310f552cbdd12cc7a56679e0d2531a4b8d4bb92bee7.png",
+          "frame_sha256": "fd2b9c1bae79bb700ab3e0fc1ec6a199cab3264d6de8e693b46a562cf43a8dfb",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_23a_part2_wars_shop|reg7-b31",
+        "item_id": "scene_23a_part2_wars_shop-b31",
+        "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0016_NONE_0002529.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
+          "frame_sha256": "91c74a93c04b44ac5cf47546445bbeecc8d7efbfaba8e775485a6cc9837a9366",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_23b_part2_comm_multiplayer|reg7-b31",
+        "item_id": "scene_23b_part2_comm_multiplayer-b31",
+        "input_route": "temp/release_C/b28/B23_p2menu/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B23_p2menu/0012_A_0002071.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+          "frame_sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_23c_part2_sound_room|reg7-b31",
+        "item_id": "scene_23c_part2_sound_room-b31",
+        "input_route": "temp/release_C/b28/OJ1_soundroom/actions.jsonl",
+        "source_rom_sha256": "4abb1c7e95016f1412fe857c76d0937c6585ba598d6454844644e3b7a079a252",
+        "source_capture": "temp/release_C/b28/OJ1_soundroom/frames/214198825238d3a4ae88f14fb53640ec158378d022e9b8e160579362ab4150dc.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/OJ1_soundroom/0037_A_0006702.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/OJ1_soundroom/frames/214198825238d3a4ae88f14fb53640ec158378d022e9b8e160579362ab4150dc.png",
+          "frame_sha256": "4c660a597d2292fbb6557cc97db6f514d0afd6112c9510443497bb77f54b6483",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_24_part2_campaign_map|reg7-b31",
+        "item_id": "scene_24_part2_campaign_map-b31",
+        "input_route": "temp/release_C/b28/Q_syogun/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/Q_syogun/frames/f8434f6310f433a7a0e9609434f11982015884683d7833ac78e49e55595d8978.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/Q_syogun/0011_A_0002742.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/Q_syogun/frames/f8434f6310f433a7a0e9609434f11982015884683d7833ac78e49e55595d8978.png",
+          "frame_sha256": "c67e54130815d0d9fa3f5f92c8f804ffca662dd71ec4e6158deccb918c79c218",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_24b_part2_strategic_map_mode4|reg7-b31",
+        "item_id": "scene_24b_part2_strategic_map_mode4-b31",
+        "input_route": "temp/release_C/b28/B24b_p2free/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B24b_p2free/frames/91fe87051f1aaee53fbbc0093ea5cccfbe0c93ea21e4a764bb91b11924c47aba.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B24b_p2free/0028_A_0002897.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B24b_p2free/frames/91fe87051f1aaee53fbbc0093ea5cccfbe0c93ea21e4a764bb91b11924c47aba.png",
+          "frame_sha256": "53a8922bfa8e869dd113891494255365ed4fb9789633085ee40e662abfcb3aeb",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_25_part2_mission_titles|reg7-b31",
+        "item_id": "scene_25_part2_mission_titles-b31",
+        "input_route": "temp/release_C/b28/N2_p2_ending/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/N2_p2_ending/frames/1260f02bb27cc6b67da2d3a36d76327f2a50328c6290368b9488f17f6bfc07be.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/N2_p2_ending/0064_NONE_0004270.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/N2_p2_ending/frames/d949cb86508078b6100e3a4e80b7a19f61f922ddb207318f065719e5b3ac02e3.png",
+          "frame_sha256": "f57fa17656d7acf5ccdd06745f2265d9d8de02c49d8625b6ed8194557e82c846",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null,
+          "visual_delta_from_b28_fraction": 0.044792,
+          "visual_result": "same route and scene; changed rendered pixels, manually inspected"
+        }
+      },
+      {
+        "key": "scene_27_part2_battle_objlabels|reg7-b31",
+        "item_id": "scene_27_part2_battle_objlabels-b31",
+        "input_route": "temp/release_C/b28/R2_p2_terrain_detail/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/R2_p2_terrain_detail/frames/48bfb50b84790c7ad44448816986821cb5ea5845c340772c918858895e2734a2.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/R2_p2_terrain_detail/0031_R_0004768.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/R2_p2_terrain_detail/frames/48bfb50b84790c7ad44448816986821cb5ea5845c340772c918858895e2734a2.png",
+          "frame_sha256": "2ba6440c32249e9801fa3c4853ddcf4df9d648b8a4b0b7aa17631aa94d637e4e",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_29_part2_result_summary|reg7-b31",
+        "item_id": "scene_29_part2_result_summary-b31",
+        "input_route": "temp/release_C/b28/I2_m21_victory/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/I2_m21_victory/frames/5a8c040eef6ef7e40e1158d1a42ada5bf133e954f4473bf3b7b21b5325af3a6c.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/I2_m21_victory/0112_A_0006479.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/I2_m21_victory/frames/5a8c040eef6ef7e40e1158d1a42ada5bf133e954f4473bf3b7b21b5325af3a6c.png",
+          "frame_sha256": "3a18ea6e678d73bd80a600b974c1fdbbd3dcec9d23d3f7d67449753103544ad1",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30a1_part2_redstar_story_early|reg7-b31",
+        "item_id": "scene_30a1_part2_redstar_story_early-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/e3b892c4e7cced85bf7b1d9f7bcf3c4d92b71429ff489343c709cecfbaf2ba6b.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0062_A_0032869.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/e3b892c4e7cced85bf7b1d9f7bcf3c4d92b71429ff489343c709cecfbaf2ba6b.png",
+          "frame_sha256": "ac6b79d2cdb8179bf886dfafd6301b900242b0b2e1cc477c2868afd01d2e3c9e",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30a1_part2_redstar_story_early_c|reg7-b31",
+        "item_id": "scene_30a1_part2_redstar_story_early_c-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0028_A_0020021.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/85c35f5c3c0947a7fb1e954a5574f89c92760e3c45031dcc3021b2f29b40679c.png",
+          "frame_sha256": "718ec899b90e25a059f6512ca246a7209ba85cb425561b550202f71d27663674",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30b1_part2_redstar_liberation_macro_briefing_story|reg7-b31",
+        "item_id": "scene_30b1_part2_redstar_liberation_macro_briefing_story-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0031_A_0021107.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/a1fe7e9a2f3ca59b700496f67f26ec2aea1d7c151a224c8cc0e17c03b591071a.png",
+          "frame_sha256": "725898ef989d1442a96879dd6571c6ecade3eaf6062b46ddd59d7be8ab8d8e3a",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30c1_part2_yellowcomet_north_invasion_story|reg7-b31",
+        "item_id": "scene_30c1_part2_yellowcomet_north_invasion_story-b31",
+        "input_route": "temp/release_C/b28/S30c1_run08/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/S30c1_run08/0020_A_0002949.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/S30c1_run08/frames/3ab8411c9c007c0d46b0c98ce8b1f067468e3bdd6d8584d28aeab2a3ca0e8b95.png",
+          "frame_sha256": "a88c0ec7b2d6ebb83a2cdd3df4bf8ba8bbb8f1e259c359ecb2aaedd24ce97bf1",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30d2_part2_green_earth_story_late|reg7-b31",
+        "item_id": "scene_30d2_part2_green_earth_story_late-b31",
+        "input_route": "temp/release_C/b28/S30d2_run14/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/S30d2_run14/0020_A_0002883.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/S30d2_run14/frames/e8c21ca8627faee66fa0866dbc1fb661711efc1e8d0fa54e02f4f64ad887127f.png",
+          "frame_sha256": "d8818417976325af913032a1bb1b659ab70a117fb07db070b0e5bfa9cd8cc6dc",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30g0_part2_green_earth_reinforcement_story|reg7-b31",
+        "item_id": "scene_30g0_part2_green_earth_reinforcement_story-b31",
+        "input_route": "temp/release_C/b28/S30g0_run16/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/S30g0_run16/0019_A_0002853.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/S30g0_run16/frames/60a24544a8e74e2fbe21c970ee307a1d666c2c38ff6ea4bf9e7490f5594a31dd.png",
+          "frame_sha256": "5f11e7efc99cf25c4822a755394b2d2968be485a7e3f017c7477281723d80623",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30g3_part2_green_earth_suspicious_area_story|reg7-b31",
+        "item_id": "scene_30g3_part2_green_earth_suspicious_area_story-b31",
+        "input_route": "temp/release_C/b28/S30g3_run10/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/S30g3_run10/0125_LEFT_0008456.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/S30g3_run10/frames/311d602fae4630bfbb71e1a0e555064ea601210b8ce91be4742cc2ccc57ac05f.png",
+          "frame_sha256": "0d5a9d6052c88376d5178e43d60170b35beeb6715222121f764f9a0ed9e68cc3",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30e1_part2_blackhole_missile_approach_story|reg7-b31",
+        "item_id": "scene_30e1_part2_blackhole_missile_approach_story-b31",
+        "input_route": "temp/release_C/b28/N2_p2_ending/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/N2_p2_ending/frames/9a628dd3826811c426685a796fd53f502868125f035e8de1e88f2a7b6dfabd30.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/N2_p2_ending/0030_A_0002078.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/N2_p2_ending/frames/9a628dd3826811c426685a796fd53f502868125f035e8de1e88f2a7b6dfabd30.png",
+          "frame_sha256": "118f53210314b267ae838b2b79c2814c17fbf054e601a5f9c01d6f71219574e6",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30e2_part2_blackhole_final_missile_story|reg7-b31",
+        "item_id": "scene_30e2_part2_blackhole_final_missile_story-b31",
+        "input_route": "temp/release_C/b28/S30e2_run19/actions.jsonl",
+        "source_rom_sha256": "effc6ee8680a98057b87d3d2acd95b1de8a613dd60ba4310a9b76b271faa74cb",
+        "source_capture": "temp/release_C/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/S30e2_run19/0068_A_0005876.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/S30e2_run19/frames/07ee047ed18429d3c726ec723e2c8825df322df0bf6245f91710ce063a1f9329.png",
+          "frame_sha256": "4c5a08b1a777108f2e7170bc9e2bbc2ac62f0c093e4495616256133f7da63e43",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_30f2_part2_co_profile_story|reg7-b31",
+        "item_id": "scene_30f2_part2_co_profile_story-b31",
+        "input_route": "temp/release_C/b28/PK_cold/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/PK_cold/frames/8d8b49ec7bd8aa1d3fbac6abed0eb86f53227870d7a37e834f0078f09e49b086.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/PK_cold/0148_A_0060199.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/PK_cold/frames/8d8b49ec7bd8aa1d3fbac6abed0eb86f53227870d7a37e834f0078f09e49b086.png",
+          "frame_sha256": "1ed18cc7e5d0e1738f3d2c6a0bf092c2f7cdf567368174897890d99653c1700e",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_85_ui_common|reg7-b31",
+        "item_id": "scene_85_ui_common-b31",
+        "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/C_3p_surrender/frames/0bfc582ac92a08acefe49df2c47456992bb3b237b1d867f4044490b2a83eb05b.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0024_A_0004390.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/0bfc582ac92a08acefe49df2c47456992bb3b237b1d867f4044490b2a83eb05b.png",
+          "frame_sha256": "37e002c6a6f51b72dadcb963b45bb7b3e6f5e4d1938caafe04a7c05cd93e6a18",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_86_common_compact_menu_tables|reg7-b31",
+        "item_id": "scene_86_common_compact_menu_tables-b31",
+        "input_route": "temp/release_C/b28/B23a_p2shop/actions.jsonl",
+        "source_rom_sha256": null,
+        "source_capture": "temp/release_C/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+          "frame_sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1",
+          "cheat_tainted": false,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_87_common_rule_settings|reg7-b31",
+        "item_id": "scene_87_common_rule_settings-b31",
+        "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/C_3p_surrender/frames/1be0a2d81a77376841a4b64e8d69753f857485bc57e6e8f8a96019896d2f89cc.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0020_A_0003354.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/1be0a2d81a77376841a4b64e8d69753f857485bc57e6e8f8a96019896d2f89cc.png",
+          "frame_sha256": "a38884fa79fc601d7838f1b06441cffad2e5b1ea92a97bbe7b7dc58a9fc8f77d",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_89_common_battle_system_results|reg7-b31",
+        "item_id": "scene_89_common_battle_system_results-b31",
+        "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/C_3p_surrender/frames/222c41652bb496c7cc8c9a1017d1a14dc43382f08634d216a6af1d2819fdc87f.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0027_A_0004524.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/222c41652bb496c7cc8c9a1017d1a14dc43382f08634d216a6af1d2819fdc87f.png",
+          "frame_sha256": "0aa7081eeb96953ef6768299ab5cccfd8a3a4fb0e1f986b9464c08e514b7b4f7",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_89a_common_battle_surrender_confirm|reg7-b31",
+        "item_id": "scene_89a_common_battle_surrender_confirm-b31",
+        "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/C_3p_surrender/frames/a4249f944c4aef942a4667dca9a49a55bce3253112620406388f461155a1b5bf.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0030_LEFT_0004688.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/a4249f944c4aef942a4667dca9a49a55bce3253112620406388f461155a1b5bf.png",
+          "frame_sha256": "39fe3408d7a986ede8090eb79c42d664df7c98000e835ae2ceafb1b596de0b5f",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
+      },
+      {
+        "key": "scene_89b_common_battle_defeat_comm_messages|reg7-b31",
+        "item_id": "scene_89b_common_battle_defeat_comm_messages-b31",
+        "input_route": "temp/release_C/b28/C_3p_surrender/actions.jsonl",
+        "source_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+        "source_capture": "temp/release_C/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
+        "replay": {
+          "candidate_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+          "checkpoint": "temp/release_C/b31/reg7/b28/C_3p_surrender/0032_NONE_0004916.checkpoint.json",
+          "frame": "temp/release_C/b31/reg7/b28/C_3p_surrender/frames/e5ba90e56651fa7f5eec0d700a90cb1b939ef5b7fcba1d8392ff5829050b7be9.png",
+          "frame_sha256": "8038c96d80d1cb9edf6c106eacb04f820f68271bf4f4b1da9a68f2797d464b1a",
+          "cheat_tainted": true,
+          "status": "current_candidate_direct_unreviewed",
+          "comparison_receipt": null,
+          "rgb_identical_to_c": null
+        }
       }
     ]
-  }
+  },
+  "b32r5_evidence_index": "temp/release_C/evidence_index_b32r5.jsonl",
+  "b32r5_26a_b30_evidence_index": "temp/release_C/rebind1/evidence_index_b30_26a_b32r5.jsonl",
+  "b32r5_26a_b30_evidence_index_sha256": "a61a345c44ccd9b4c9996b4a7af197875856ff1b0a3b10dee518087917e08f29"
 }

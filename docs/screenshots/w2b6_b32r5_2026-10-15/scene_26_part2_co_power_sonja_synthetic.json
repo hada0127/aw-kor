@@ -1,0 +1,32 @@
+{
+  "co_id": 7,
+  "co": "Sonja",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co07_synthetic_inputs.txt",
+  "route_sha256": "39b362abba59dbcebbbe5f9d36c3673dc79517fc0df34f754c72b7e425a559ec",
+  "source_checkpoint": "temp/release_C/w2b6f_co07_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co07_synthetic_sourcefix/frames/e7b7bb5c900acecbafc59ad714e555cd5eab2144889e665937c8f5a8b3b23726.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "40dd15e64aa549f918aac822417f60d4c3a6fd9a9d1b9d6c6f457b216c9e6e06",
+  "frame_sha256": "0060cee29d5c79e7ac37a96b4f4b23500fb4dfa1aec1660cf83f95808a97c388",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_sonja_synthetic.png",
+  "png_sha256": "0060cee29d5c79e7ac37a96b4f4b23500fb4dfa1aec1660cf83f95808a97c388",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30820",
+    "0xA3084C"
+  ],
+  "visible_quote": "아버지 선생님 옐로코멧의 모두들 / 내게 힘을!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co07_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "34f18656060ae5bff03d6d7d45a7fd8e979f3e00f4eeb9a0476242aac494cb98",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

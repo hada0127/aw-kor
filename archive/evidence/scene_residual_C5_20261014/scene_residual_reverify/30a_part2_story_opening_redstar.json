@@ -1,0 +1,165 @@
+[
+ {
+  "label": "static_residual_reverify::30a_part2_story_opening_redstar",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00A01C00:0x00A08000",
+    "extracted": {
+     "covered_count": 1199,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 18,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00A01EDA",
+       "length": 8,
+       "text": "キャット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A01ED0"
+      },
+      {
+       "offset": "0x00A0236D",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A0236D"
+      },
+      {
+       "offset": "0x00A0238E",
+       "length": 6,
+       "text": "モップ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A0237C"
+      },
+      {
+       "offset": "0x00A043A8",
+       "length": 10,
+       "text": "キャサリン",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A043A8"
+      },
+      {
+       "offset": "0x00A04575",
+       "length": 4,
+       "text": "モン",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A0456D"
+      },
+      {
+       "offset": "0x00A047C0",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A047C0"
+      },
+      {
+       "offset": "0x00A0586A",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05868"
+      },
+      {
+       "offset": "0x00A05907",
+       "length": 8,
+       "text": "バズーカ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A058EF"
+      },
+      {
+       "offset": "0x00A05A7E",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05A78"
+      },
+      {
+       "offset": "0x00A05AD7",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05ACD"
+      },
+      {
+       "offset": "0x00A05CA3",
+       "length": 4,
+       "text": "ヤツ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05C93"
+      },
+      {
+       "offset": "0x00A05E10",
+       "length": 8,
+       "text": "マックス",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05E10"
+      },
+      {
+       "offset": "0x00A05F98",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05F96"
+      },
+      {
+       "offset": "0x00A05FA4",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A05F96"
+      },
+      {
+       "offset": "0x00A061D2",
+       "length": 4,
+       "text": "ヘリ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A061CE"
+      },
+      {
+       "offset": "0x00A06396",
+       "length": 4,
+       "text": "ヘリ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A06392"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 1199,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 18,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

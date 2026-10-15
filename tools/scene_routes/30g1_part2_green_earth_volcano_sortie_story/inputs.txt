@@ -1,0 +1,36 @@
+note prefix boot
+NONE 300
+NONE 300
+note prefix title A
+A 120 8
+note prefix part2
+DOWN 20 3
+A 180 8
+NONE 240
+NONE 360
+NONE 420
+A 180 8
+A 90 8
+note prefix campaign continue
+DOWN 18 3
+A 120 8
+A 140 8
+note select northern volcano marker
+NONE 2 0
+NONE 1 0
+RIGHT 20 6
+UP 20 6
+A 100 8
+A 100 8
+NONE 1 0
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+A 45 3
+quit

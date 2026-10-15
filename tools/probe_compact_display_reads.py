@@ -151,7 +151,8 @@ def classify_watch_addr(addr: int, targets: dict[int, dict], spans: dict[str, li
     }
 
 
-def parse_watch_log(path: Path, targets: dict[int, dict], spans: dict[str, list[dict]]) -> list[dict]:
+def parse_watch_log(path: Path, targets: dict[int, dict], spans: dict[str, list[dict]],
+                    exact_offsets: list[int] | None = None, exact_size: int = 4) -> list[dict]:
     if not path.exists():
         return []
     hits: list[dict] = []
@@ -164,6 +165,12 @@ def parse_watch_log(path: Path, targets: dict[int, dict], spans: dict[str, list[
             for key, value in match.groupdict().items()
         }
         row["source"] = classify_watch_addr(row["addr"], targets, spans)
+        for offset in exact_offsets or []:
+            if offset <= rom_offset(row["addr"]) < offset + exact_size:
+                row["source"].update({"target_span_match": True,
+                                      "target_start": f"0x{offset:08X}",
+                                      "kind": "exact_watch"})
+                break
         row["raw"] = line
         hits.append(row)
     return hits
@@ -242,6 +249,19 @@ def parse_state_steps(values: list[str]) -> list[list]:
     return steps
 
 
+def recorder_endpoint_state(checkpoint: dict, rom_sha256: str) -> Path:
+    """Resolve a recorder endpoint to its same-ROM state, rejecting stale captures."""
+    endpoint = checkpoint.get("recorder_endpoint") or {}
+    receipt = resolve(endpoint["checkpoint"])
+    metadata = load(receipt)
+    if metadata.get("rom_sha256") != rom_sha256:
+        raise ValueError(f"recorder endpoint ROM mismatch: {receipt}")
+    state = receipt.parent / metadata["state"]
+    if not state.is_file() or sha256(state) != metadata.get("state_sha256"):
+        raise ValueError(f"recorder endpoint state missing or hash mismatch: {state}")
+    return state
+
+
 def summarize_hits(hits: list[dict]) -> dict:
     by_group: dict[str, int] = {}
     by_pc: dict[str, int] = {}
@@ -318,7 +338,7 @@ def run_state_case(
         image.save(case_dir / "frame.png")
     finally:
         driver.close()
-    hits = parse_watch_log(log_path, targets, spans)
+    hits = parse_watch_log(log_path, targets, spans, target_offsets, exact_size)
     return {
         **prov,
         "frame": rel(case_dir / "frame.png"),
@@ -366,8 +386,10 @@ def run_screen_case(
             prov["nav"] = checkpoint["nav"]
             if screen_steps:
                 run_nav(driver, screen_steps)
-        elif checkpoint["mode"] == "savestate":
-            state_path = resolve(checkpoint["state"])
+        elif checkpoint["mode"] in ("savestate", "recorder_endpoint"):
+            state_path = (recorder_endpoint_state(checkpoint, sha256(rom))
+                          if checkpoint["mode"] == "recorder_endpoint"
+                          else resolve(checkpoint["state"]))
             driver.loadstate(state_path)
             driver.frames(1)
             prov["watch_mode"], prov["watches"] = setup_watches(
@@ -389,7 +411,7 @@ def run_screen_case(
         image.save(case_dir / "frame.png")
     finally:
         driver.close()
-    hits = parse_watch_log(log_path, targets, spans)
+    hits = parse_watch_log(log_path, targets, spans, target_offsets, exact_size)
     return {
         **prov,
         "frame": rel(case_dir / "frame.png"),
@@ -442,7 +464,7 @@ def run_freshrender_case(
         image.save(case_dir / "frame.png")
     finally:
         driver.close()
-    hits = parse_watch_log(log_path, targets, spans)
+    hits = parse_watch_log(log_path, targets, spans, target_offsets, exact_size)
     return {
         **prov,
         "frame": rel(case_dir / "frame.png"),

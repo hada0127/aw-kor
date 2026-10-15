@@ -1,0 +1,16 @@
+{
+  "scene_id": "28_part2_result_status",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6c_scene28_cold/0043_A_0006224.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6c_scene28_cold/frames/2eab92f1412d0eff04e18f52bdf62b21288cefd28eee66cd71924507ddd3bd30.png",
+  "core_frame": 6224,
+  "png_sha256": "4a66bfec64d8aa06db0d92b775c25b45848b28835f7fe2167fb8d30cd4b72ae8",
+  "cheat_tainted": true,
+  "visual_result": "PASS: settled core 6250; live 0x45EC74 white-face bounds match the Japanese overlay geometry; cheat_tainted",
+  "claim_scope": "Part 2 campaign failure overlay: 작전실패",
+  "settled_pass_evidence": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_PASS.png",
+  "superseded_evidence": {
+    "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_28_part2_result_status_settled_superseded_not_defect.png",
+    "classification": "superseded: not a defect. Live 0x45EC74 cells have white-face bounds (3,3)-(27,27) for 작/전/실 and (2,3)-(27,27) for 패. The 13 px bbox was measured on unused 0xBFBB54/0xEE8F68 sheets. Affine y-wave origins 64/62/60/64 match JP 作戦失敗 at core 6250."
+  }
+}

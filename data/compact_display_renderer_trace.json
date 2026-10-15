@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
- "rom": "output/game_wars_korean_candidate_20261014_b31.gba",
- "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
- "git_commit": "c20e9e7",
+ "rom": "output/game_wars_korean_candidate_20261015_b32r5.gba",
+ "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+ "git_commit": "f94e690",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -372,7 +372,7 @@
    "aliases": []
   }
  ],
- "code_context_json": "data/compact_display_code_context.json",
+ "code_context_json": "temp/release_C/rebind1/compact_code_context.json",
  "code_context_breakpoints_enabled": true,
  "target_count": 496,
  "case_count": 3,
@@ -385,7 +385,7 @@
    "name": "07_part2_main_menu",
    "mode": "recorder_endpoint",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/release_C/relgate2/trace/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind1/compact_trace_v2/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/release_C/relgate2/trace/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/release_C/rebind1/compact_trace_v2/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,7 +862,7 @@
    "name": "scene_87_common_rule_settings",
    "mode": "recorder_endpoint",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/release_C/relgate2/trace/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind1/compact_trace_v2/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1418,7 +1418,7 @@
      60
     ]
    ],
-   "frame": "temp/release_C/relgate2/trace/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/release_C/rebind1/compact_trace_v2/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -1542,7 +1542,7 @@
    "name": "41_part1_operation_room",
    "mode": "recorder_endpoint",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/release_C/relgate2/trace/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind1/compact_trace_v2/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2117,7 +2117,7 @@
      200
     ]
    ],
-   "frame": "temp/release_C/relgate2/trace/screen_41_part1_operation_room/frame.png",
+   "frame": "temp/release_C/rebind1/compact_trace_v2/screen_41_part1_operation_room/frame.png",
    "hit_count": 1918,
    "direct_target_hits": [],
    "hits": [

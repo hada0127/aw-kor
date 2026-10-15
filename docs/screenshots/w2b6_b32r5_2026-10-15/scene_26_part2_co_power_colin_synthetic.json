@@ -1,0 +1,31 @@
+{
+  "co_id": 16,
+  "co": "Colin",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co16_synthetic_inputs.txt",
+  "route_sha256": "557de51532ea4fe3e5c30cb06a73895d05e989150bf8de2a32c356c48712a039",
+  "source_checkpoint": "temp/release_C/w2b6f_co16_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co16_synthetic_sourcefix/frames/58b885eef2c7ef5647b70206bb220ecc56afd29e64220810762dbaf4fc0d0c73.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "564acc555166d78dfbacc0b470c1b7a7be15f21126865beb43968985e6bd0834",
+  "frame_sha256": "f20d475d61ab4839089a14d5e5354d816cbfc088a71183e34d8ae092d8f73343",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_colin_synthetic.png",
+  "png_sha256": "f20d475d61ab4839089a14d5e5354d816cbfc088a71183e34d8ae092d8f73343",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA31130"
+  ],
+  "visible_quote": "돈보다 나은 건 없습니다!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co16_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "90dc5bee71ddb9ab06dedfe9ab7e1e00efac42bbf886bce1da267cdd70dcc9d0",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

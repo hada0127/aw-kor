@@ -1,0 +1,157 @@
+[
+ {
+  "label": "static_residual_reverify::30c_part2_story_yellow_comet",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00A10000:0x00A18000",
+    "extracted": {
+     "covered_count": 1646,
+     "uncovered_count": 0,
+     "same_original_uncovered_count": 0,
+     "current_kind_counts": {},
+     "residual_candidates": [],
+     "low_score_same_original": []
+    },
+    "raw_kana": {
+     "raw_kana_count": 15,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00A10EE4",
+       "length": 6,
+       "text": "ケンカ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A10EDC"
+      },
+      {
+       "offset": "0x00A113A3",
+       "length": 8,
+       "text": "ーーーー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1139F"
+      },
+      {
+       "offset": "0x00A138D2",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A138D0"
+      },
+      {
+       "offset": "0x00A13A27",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A13A21"
+      },
+      {
+       "offset": "0x00A157BE",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A157BC"
+      },
+      {
+       "offset": "0x00A1591A",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A15918"
+      },
+      {
+       "offset": "0x00A16B86",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "single-kana byte-boundary observation inside extracted row",
+       "containing_extracted_addr": "0x00A16B84"
+      },
+      {
+       "offset": "0x00A16CC2",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A16CB8"
+      },
+      {
+       "offset": "0x00A16CD2",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A16CC6"
+      },
+      {
+       "offset": "0x00A16E9A",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A16E98"
+      },
+      {
+       "offset": "0x00A1757E",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A1757C"
+      },
+      {
+       "offset": "0x00A175E6",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A175E4"
+      },
+      {
+       "offset": "0x00A176DC",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A176D4"
+      },
+      {
+       "offset": "0x00A17EEB",
+       "length": 4,
+       "text": "アト",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A17EEB"
+      },
+      {
+       "offset": "0x00A17F08",
+       "length": 2,
+       "text": "ト",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00A17F00"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 1646,
+  "extracted_uncovered_count": 0,
+  "same_original_uncovered_count": 0,
+  "raw_kana_count": 15,
+  "raw_kana_unexplained_count": 0,
+  "classification": "clean",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

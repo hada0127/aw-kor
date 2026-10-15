@@ -1,0 +1,130 @@
+[
+ {
+  "label": "static_residual_reverify::23d_part2_b8_compact_display_tables",
+  "method": "extracted_text_residual_reverification",
+  "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
+  "min_score": 7,
+  "ranges": [
+   {
+    "range": "0x00B81800:0x00B85000",
+    "extracted": {
+     "covered_count": 454,
+     "uncovered_count": 2,
+     "same_original_uncovered_count": 1,
+     "current_kind_counts": {
+      "same_original": 1,
+      "changed_hangul": 1
+     },
+     "residual_candidates": [],
+     "low_score_same_original": [
+      {
+       "offset": "0x00B81BE0",
+       "length": 10,
+       "chars": 5,
+       "score": 5,
+       "same_original": true,
+       "current_kind": "same_original",
+       "text": "豎戝贄趁踈"
+      }
+     ]
+    },
+    "raw_kana": {
+     "raw_kana_count": 10,
+     "raw_kana_unexplained_count": 0,
+     "raw_kana_observations": [
+      {
+       "offset": "0x00B81E08",
+       "length": 6,
+       "text": "アスカ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B81E08"
+      },
+      {
+       "offset": "0x00B81E1C",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B81E1C"
+      },
+      {
+       "offset": "0x00B81E56",
+       "length": 8,
+       "text": "キクチヨ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B81E50"
+      },
+      {
+       "offset": "0x00B81E82",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B81E78"
+      },
+      {
+       "offset": "0x00B83DB0",
+       "length": 6,
+       "text": "ドミノ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B83DB0"
+      },
+      {
+       "offset": "0x00B83DBE",
+       "length": 8,
+       "text": "ユニット",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B83DB0"
+      },
+      {
+       "offset": "0x00B83EC4",
+       "length": 2,
+       "text": "ー",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B83EB8"
+      },
+      {
+       "offset": "0x00B84A48",
+       "length": 16,
+       "text": "ジャバラコウソク",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B84A48"
+      },
+      {
+       "offset": "0x00B84BA0",
+       "length": 12,
+       "text": "チエノワジマ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B84BA0"
+      },
+      {
+       "offset": "0x00B84BB4",
+       "length": 10,
+       "text": "コツブジマ",
+       "allowed": true,
+       "reason": "inside_covered_extracted_row_or_custom_encoding_boundary",
+       "containing_extracted_addr": "0x00B84BB4"
+      }
+     ],
+     "raw_kana_unexplained": []
+    }
+   }
+  ],
+  "extracted_covered_count": 454,
+  "extracted_uncovered_count": 2,
+  "same_original_uncovered_count": 1,
+  "raw_kana_count": 10,
+  "raw_kana_unexplained_count": 0,
+  "classification": "low_score_same_original_only",
+  "hit": null,
+  "residuals": [],
+  "translation_residual": 0
+ }
+]

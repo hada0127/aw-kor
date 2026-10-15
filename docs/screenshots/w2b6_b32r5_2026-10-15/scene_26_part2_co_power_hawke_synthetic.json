@@ -1,0 +1,32 @@
+{
+  "co_id": 14,
+  "co": "Hawke",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co14_synthetic_inputs.txt",
+  "route_sha256": "54ccd06e477c86a894789fd906dda45ca9497c1c12914221dd28cc0f7398ce6c",
+  "source_checkpoint": "temp/release_C/w2b6f_co14_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co14_synthetic_sourcefix/frames/dfe9471b63d52a2156f7277be1648257615d45ee204efe6b9958abcbbdb57785.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "5abfa91dc33d50597711abd36053973731aa505fa6ecd66918c4b7d1acfa90c4",
+  "frame_sha256": "6c4765200d2f4e04e9d7e17a9a7774cc8ffbc2b8e65745aebcedbf5039e14b2f",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_hawke_synthetic.png",
+  "png_sha256": "6c4765200d2f4e04e9d7e17a9a7774cc8ffbc2b8e65745aebcedbf5039e14b2f",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30F10",
+    "0xA30F34"
+  ],
+  "visible_quote": "・・・나를 여기까지 몰아붙인 것 / 칭찬해 주지・・・",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co14_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "024e97de31782bf5c1a7897b2cc913b46d468715beeb55248f159617f9eceeea",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

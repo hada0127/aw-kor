@@ -1,0 +1,32 @@
+{
+  "co_id": 15,
+  "co": "Hachi",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co15_synthetic_inputs.txt",
+  "route_sha256": "71f2bac3b8758d89d3505b03b31a4c458f7067ab7373b424fb1324fd02c3e1f1",
+  "source_checkpoint": "temp/release_C/w2b6f_co15_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co15_synthetic_sourcefix/frames/aecf3507b13a9fdfea200d6fc934007642371dd39df1f108a25dbff36fb47a3d.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "b27d1a19690fa3da50c9815b54a4dc2a08be85ee68b37874c38d12274fe4e6eb",
+  "frame_sha256": "88ceb6a37be1078d6f7423a7fafe05cab43c937863901326867b9edd006caff6",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_hachi_synthetic.png",
+  "png_sha256": "88ceb6a37be1078d6f7423a7fafe05cab43c937863901326867b9edd006caff6",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA3103C",
+    "0xA31054"
+  ],
+  "visible_quote": "내가 최강의 사령관 / 하치 님이다!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co15_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "480e3d2101e7f2111a8159608813be27fe100703d9f1d52d6a98b2a1d3e9a63e",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

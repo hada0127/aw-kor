@@ -1,0 +1,32 @@
+{
+  "co_id": 17,
+  "co": "Jess",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co17_synthetic_inputs.txt",
+  "route_sha256": "245d89b3cd8c307f2256ecb956da226ea653b05f7cd4b61c0be199ddd3c6fd10",
+  "source_checkpoint": "temp/release_C/w2b6f_co17_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co17_synthetic_sourcefix/frames/57cefdc870bbcee2e3782f92a80d84e8375c9c175cb504a933e9c054c4166a0e.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "d5e6b3a0387052171328ac0079f0f66e8e63e100ef7429149c4bc400a70b680b",
+  "frame_sha256": "04455b0f51da3733f5e6b310d09b423ef04657626ca5b71e9355c11497ac4749",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_jess_synthetic.png",
+  "png_sha256": "04455b0f51da3733f5e6b310d09b423ef04657626ca5b71e9355c11497ac4749",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA31230",
+    "0xA31254"
+  ],
+  "visible_quote": "결코 얕보지는 않아・・・ / 어떤 적이든 전력으로 간다!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co17_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "2185af016609a525fa4ebe6ad7bc050608a5e333895bb8f5cf0b887abf70d9ff",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

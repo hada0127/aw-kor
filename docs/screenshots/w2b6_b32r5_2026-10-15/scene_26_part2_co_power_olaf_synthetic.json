@@ -1,0 +1,32 @@
+{
+  "co_id": 3,
+  "co": "Olaf",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co03_synthetic_inputs.txt",
+  "route_sha256": "5f482273e1e2bc66045fe19771a1ae34e3b1f5b5cf6a4175b26f81e59ca42543",
+  "source_checkpoint": "temp/release_C/w2b6f_co03_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co03_synthetic_sourcefix/frames/aa5d5779649793d85d3d15788b7752109fe992455f5fe6a5828ae0dd28d20366.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "ed6dd597d9872aa7032b83522b5b2ca189744634ea827ad4c03befe01992e34b",
+  "frame_sha256": "87094b0198e10a73b982f767ee538ccd3d66f476072e15a4e30ae6bdcc477b62",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_olaf_synthetic.png",
+  "png_sha256": "87094b0198e10a73b982f767ee538ccd3d66f476072e15a4e30ae6bdcc477b62",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA304F0",
+    "0xA30504"
+  ],
+  "visible_quote": "이 몸에게 덤빈 것 / 후회하게 해주마!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co03_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "4b1ef006a1f60cba8ef8c48fc35b33a12130e3ffd81326c3e30cf7c3ad9f09e1",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

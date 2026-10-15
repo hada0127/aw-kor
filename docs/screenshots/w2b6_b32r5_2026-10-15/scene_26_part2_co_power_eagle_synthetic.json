@@ -1,0 +1,32 @@
+{
+  "co_id": 8,
+  "co": "Eagle",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co08_synthetic_inputs.txt",
+  "route_sha256": "320c19b3ae9764b330f3be979eb09fde800cbbeb9f2a622070efc5e67576acfa",
+  "source_checkpoint": "temp/release_C/w2b6f_co08_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co08_synthetic_sourcefix/frames/52dacc37b0ea1c689ecd2e0a92bc1a199f0b493f8b35a2f4552a28126cb8dc44.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "f0ac93cde4a249d6e0f56b293a38a4cc60c18528a1c5a45c75d1933fcbe2f6f5",
+  "frame_sha256": "b66b0d8ea113c9a4a2b195757f33a7723c8ed153341a92130ffbe4bac1b560fc",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_eagle_synthetic.png",
+  "png_sha256": "b66b0d8ea113c9a4a2b195757f33a7723c8ed153341a92130ffbe4bac1b560fc",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30930",
+    "0xA30942"
+  ],
+  "visible_quote": "전기 공격 준비! / 녀석들에게 후회할 틈도 주지마!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co08_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "70a895f4db5f26a2684a007ea403ae5fe1f36de470af4dc2508e1c055b5f6805",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

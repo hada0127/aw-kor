@@ -1,0 +1,11 @@
+{
+  "scene_id": "80b_campaign_story_mid",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6b/S80bc/0013_A_0003784.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6b/S80bc/frames/8ca8c57cb3822c5e0d0d01cc300fd7bd1a5c0f85eef9d77b558f0f1048e3dbb7.png",
+  "core_frame": 3784,
+  "png_sha256": "19c540edfecfa2e8e1852f0e65c40d3f27a571be5072a10ea88cf8ad35397240",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 1 campaign mid-story dialogue on campaign map"
+}

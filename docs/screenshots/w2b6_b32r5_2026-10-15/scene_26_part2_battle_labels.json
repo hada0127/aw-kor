@@ -1,0 +1,13 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/0133_A_0015167.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_scene26_kanbei_sourcefix/frames/a9a81e9bccc55e53ca75dd3ee1f60cd20870f35e05b10ee8d3c1b62c0cd02b4e.png",
+  "core_frame": 15167,
+  "png_sha256": "af7db3d2ffd773417322cd7c506b819c40a72086be50f8b758cf0de90972e7be",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean quote; no visible clipping or replacement glyph",
+  "claim_scope": "Part 2 CO Power activation quote: 간다! 각오해라! (dialogue row 0xA306EC); one native CO, not full 0xA30164..0xA313FC coverage",
+  "source_address": "0xA306EC (exact text match and candidate pointer at 0xA385AC; direct read watch unverified)",
+  "source_rom_sha256": "e49637655dea5d81c76f358e967ba38383298f68edaa74d5c0738373e408ecdf"
+}

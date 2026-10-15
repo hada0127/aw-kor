@@ -1,0 +1,32 @@
+{
+  "co_id": 13,
+  "co": "Adder",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co13_synthetic_inputs.txt",
+  "route_sha256": "0ad6952f0e4b098d92d9fb7f4397465103c197906d81ab3498f43445f573080a",
+  "source_checkpoint": "temp/release_C/w2b6f_co13_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co13_synthetic_sourcefix/frames/1784301fc02596a6e3ce319fd6b909be76c09789c32349448f5c8a06b55fa067.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "809cb57e2f04cef9c016139df6be89f5e1bbb1cfad36e8b22247446ada459e25",
+  "frame_sha256": "8e912cf05fecdf3d80d0c3311e18300e4fbe0a2210c461e93061c931fff35da1",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_adder_synthetic.png",
+  "png_sha256": "8e912cf05fecdf3d80d0c3311e18300e4fbe0a2210c461e93061c931fff35da1",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30E08",
+    "0xA30E1C"
+  ],
+  "visible_quote": "큭큭큭・・・ / 조금은 즐겁게 해주세요!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co13_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "9f88e776292264a675378e66bf8657a46cb5359cc1f9091bb4af4b212f26b3f2",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

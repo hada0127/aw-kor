@@ -78,6 +78,19 @@ class GameSaveEvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'bytes do not match'):
             verify_receipt(self.receipt, verify_frames=False)
 
+    def test_unverified_sram_registry_class_cannot_claim_clean(self):
+        registry = self.root / 'registry.json'
+        data = {'schema_version': 2, 'provenance_classes': {
+            G.UNVERIFIED_SRAM_KIND: {'cheat_tainted': True}},
+            'receipts': {'a' * 64: {'provenance_class': G.UNVERIFIED_SRAM_KIND,
+                                    'cheat_tainted': False, 'basis': 'forged clean'}}}
+        registry.write_text(json.dumps(data))
+        with self.assertRaisesRegex(ValueError, 'cannot be clean'):
+            G.load_cheat_registry(registry)
+        data['receipts']['a' * 64]['cheat_tainted'] = True
+        registry.write_text(json.dumps(data))
+        self.assertTrue(G.load_cheat_registry(registry)['a' * 64]['cheat_tainted'])
+
     def test_changed_source_state_or_rom_is_rejected(self):
         for name in ('state.ss0', 'baseline.gba'):
             with self.subTest(name=name):

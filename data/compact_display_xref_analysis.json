@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
- "rom": "output/game_wars_korean_candidate_20261014_b31.gba",
- "rom_sha256": "416a1c50d048b4f21b9defa023e11df701e7bcd3a81cecaeb2c9518245a384c2",
- "git_commit": "c20e9e7",
+ "rom": "output/game_wars_korean_candidate_20261015_b32r5.gba",
+ "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+ "git_commit": "f94e690",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -6848,7 +6848,7 @@
      "dialogue_group_id": "g_00B830C8",
      "ko": "맵을 보낼 수 있는 사람이 아무도 없어!!",
      "ja": "マップを送れる人が誰もいないわ！！",
-     "kind": "bteam-round2-residual",
+     "kind": "fixed_zero_text",
      "pointer_ref_count": 0,
      "external_pointer_ref_count": 0,
      "pointer_refs": [],
@@ -7833,7 +7833,7 @@
      "dialogue_group_id": "g_00B83C3C",
      "ko": "여기서 질 수는　없는 것이다아-앗!!!",
      "ja": "ここでまけるわけには　いかぬのじゃーっ！！！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 1,
      "external_pointer_ref_count": 1,
      "pointer_refs": [
@@ -8091,7 +8091,7 @@
      "dialogue_group_id": "g_00B83E58",
      "ko": "내 능력은 강하다고-!",
      "ja": "ぼくの能力は強いぞーっ！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 3,
      "external_pointer_ref_count": 3,
      "pointer_refs": [
@@ -8116,7 +8116,7 @@
      "dialogue_group_id": "g_00B83E78",
      "ko": "좋-아,작전대로!",
      "ja": "よーし、作戦どおり！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 1,
      "external_pointer_ref_count": 1,
      "pointer_refs": [
@@ -8137,7 +8137,7 @@
      "dialogue_group_id": "g_00B83E94",
      "ko": "이걸로 꽤 유리해졌어-!",
      "ja": "これでかなり有利になったぞー！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 1,
      "external_pointer_ref_count": 1,
      "pointer_refs": [
@@ -8344,7 +8344,7 @@
      "dialogue_group_id": "g_00B84034",
      "ko": "좋-았어!",
      "ja": "よーっし！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 1,
      "external_pointer_ref_count": 1,
      "pointer_refs": [
@@ -8629,7 +8629,7 @@
      "dialogue_group_id": "g_00B84224",
      "ko": "맡-겨줘-!",
      "ja": "まーかせてー！",
-     "kind": "dialogue-override",
+     "kind": "renderer-normalization",
      "pointer_ref_count": 1,
      "external_pointer_ref_count": 1,
      "pointer_refs": [

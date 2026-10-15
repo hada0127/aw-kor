@@ -1,0 +1,11 @@
+{
+  "scene_id": "30g2_part2_green_earth_volcano_lava_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_volcano_day2dialog/0001_NONE_0008033.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_volcano_day2dialog/frames/787c6f4d605525e7e75465ce3cd918e36852f9b11a65f9408ea6b99e6e314353.png",
+  "core_frame": 8033,
+  "png_sha256": "753f282f15be0336fde7a8de01d65db3817cfd433a5d9768457d7a92c28a8439",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Green Earth volcano day-2 lava tactical explanation (0xA1D788/0xA1D7A4): 화산에서 뿜는 용암은 / 일정한 패턴이 있는 듯해."
+}

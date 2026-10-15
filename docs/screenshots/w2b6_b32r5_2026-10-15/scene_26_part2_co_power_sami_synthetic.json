@@ -1,0 +1,31 @@
+{
+  "co_id": 4,
+  "co": "Sami",
+  "native_saved_co": false,
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_save_sha256": "53cc66707c25a62430fd769ae01f2acb6fd49780c40ce103498126bff07accc6",
+  "source_rom_sha256": "6ae381d560ae55de469cc1ecb709468eff668a38e8a428bd195e8e0b135b5cb3",
+  "route": "tools/scene_routes/26_part2_co_power_quote/co04_synthetic_inputs.txt",
+  "route_sha256": "178f56d9f6f9249c24f902f6a6244def8ae585712e6f45dd6521bd7f4d851597",
+  "source_checkpoint": "temp/release_C/w2b6f_co04_synthetic_sourcefix/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6f_co04_synthetic_sourcefix/frames/ebe51df11638fb78ce07e04d10da3a064c1444dc6edc8bc1528366378fc399d5.png",
+  "core_frame": 2724,
+  "checkpoint_sha256": "206b34b78c332fecd0047fc6da1851668b4a818bc13faa8f16028b44dd55122a",
+  "frame_sha256": "e2403367d3d0ae0980031be4f9e09bb0c67981940717130d17d0206f174881a7",
+  "png": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_sami_synthetic.png",
+  "png_sha256": "e2403367d3d0ae0980031be4f9e09bb0c67981940717130d17d0206f174881a7",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA30404"
+  ],
+  "visible_quote": "좋-아! 이걸로 결정하겠어!",
+  "visual_result": "exact text shown; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "ledger_reference": {
+    "ledger": "temp/release_C/w2b6f_co04_synthetic_sourcefix/frames.jsonl",
+    "ledger_sha256": "0006f9371be7007de89544bcf337ac6d09637b0a8d986e85f464d6ba4b81d31c",
+    "ledger_bytes": 611975
+  },
+  "exit_code": 0,
+  "run_status": "closed"
+}

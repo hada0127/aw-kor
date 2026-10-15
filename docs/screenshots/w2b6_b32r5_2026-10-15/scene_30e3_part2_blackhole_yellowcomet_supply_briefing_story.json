@@ -1,0 +1,11 @@
+{
+  "scene_id": "30e3_part2_blackhole_yellowcomet_supply_briefing_story",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6b/S30e3/0016_A_0002859.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6b/S30e3/frames/3cbc4f8ec7ffd90e55c0305c09cae042700b85c5978acf6a38812e49d03b909f.png",
+  "core_frame": 2859,
+  "png_sha256": "ef7165b25a2eed835b2dc11dbaaffe47e590940f95ebc7c2cc5722116ea9edcc",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "Part 2 Yellow Comet supply briefing: 현재에서 모은 물자는, 어떻게 되어 있습니까?"
+}

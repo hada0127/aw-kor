@@ -380,11 +380,20 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
         raise RuntimeError('Parent ledger hash mismatch')
     frame = baseline['initial_core_frame']
     checked = set()
+    first_cheat = None
+    if marker_path.exists():
+        first_cheat = marker['first_dispatch_core_frame']
+    sticky_taint = inherited is True
+    first_ledger_cheat = None
     for line in prefix.splitlines():
         row = json.loads(line)
         frame = (frame + 1) & 0xffffffff
         if row['core_frame'] != frame:
             raise RuntimeError('Parent ledger frame discontinuity')
+        if 'cheat_tainted' in row and row['cheat_tainted'] is not True:
+            raise RuntimeError('Malformed frame cheat taint flag')
+        if row.get('cheat_tainted') is True and not checkpoint_cheat_tainted(checkpoint):
+            raise RuntimeError('Cheat-tainted frame requires a cheat-tainted checkpoint')
         if transport_proof_rgb is not None and frame == ((baseline['initial_core_frame'] + 1) & 0xffffffff):
             if row.get('rgb_sha256') != transport_proof_rgb or row.get('image') != 'frames/' + transport_proof_rgb + '.png':
                 raise RuntimeError('Frame transport proof does not match first ledger frame')
@@ -397,6 +406,21 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
                     raise RuntimeError('Malformed cheat ledger row')
             if not checkpoint_cheat_tainted(checkpoint):
                 raise RuntimeError('Cheat ledger rows require a cheat-tainted checkpoint')
+            if first_ledger_cheat is None:
+                first_ledger_cheat = frame
+            sticky_taint = True
+        if row.get('cheat_tainted') is True:
+            sticky_taint = True
+            if first_cheat is None and inherited is not True:
+                raise RuntimeError('Cheat-tainted frame missing dispatch marker')
+            if inherited is not True and frame < first_cheat:
+                raise RuntimeError('Frame cheat taint predates dispatch marker')
+        if baseline.get('schema_version', 1) >= 5:
+            if 'cheat' in row and first_cheat is None:
+                raise RuntimeError('Cheat ledger row missing dispatch marker')
+            if sticky_taint or (first_cheat is not None and frame >= first_cheat):
+                if row.get('cheat_tainted') is not True:
+                    raise RuntimeError('Cheat taint missing from frame ledger row')
         image_path = (root / row['image']).resolve()
         if not image_path.is_relative_to(root):
             raise RuntimeError('Parent image path escapes run')
@@ -411,6 +435,11 @@ def verify_parent(checkpoint_path, checkpoint, _visited=None, *, frame_cache=Non
             checked.add(identity)
     if frame != checkpoint['core_frame']:
         raise RuntimeError('Parent ledger does not reach checkpoint')
+    if (baseline.get('schema_version', 1) >= 5 and first_cheat is not None
+            and first_cheat <= checkpoint['core_frame'] and first_ledger_cheat is None):
+        raise RuntimeError('Cheat dispatch marker has no matching ledger write')
+    if baseline.get('schema_version', 1) >= 5 and first_ledger_cheat is not None and first_cheat != first_ledger_cheat:
+        raise RuntimeError('Cheat dispatch marker does not match first ledger write')
 
 
 def frame_module_source(module, name):
@@ -462,11 +491,22 @@ class Recorder:
             self.lib_sha = sha(LIBMGBA.resolve())
             seed = None
             game_save = args.game_save
+            if getattr(args, 'import_legacy_game_save', None):
+                from game_save_evidence import import_unverified_sram
+                game_save = import_unverified_sram(
+                    args.import_legacy_game_save, self.out / 'legacy_import',
+                    save_sha256=args.legacy_save_sha256,
+                    source_rom_sha256=args.legacy_source_rom_sha256,
+                    provenance_note=args.legacy_provenance_note,
+                    claimed_origin=getattr(args, 'legacy_claimed_origin', None),
+                    target_rom=self.out / 'baseline.gba')
             if game_save:
                 if args.resume:
                     raise ValueError('Game-save boot and emulator-state resume are mutually exclusive')
-                from game_save_evidence import verify_receipt, ANCHORED_KIND
+                from game_save_evidence import verify_receipt, ANCHORED_KIND, UNVERIFIED_SRAM_KIND
                 migration_source = getattr(args, 'game_save_source_rom_sha256', None)
+                if getattr(args, 'import_legacy_game_save', None) and args.legacy_source_rom_sha256 != self.rom_sha:
+                    migration_source = args.legacy_source_rom_sha256
                 emulator_port = None
                 expected_harness, expected_lib = self.harness_sha, self.lib_sha
                 if getattr(args, 'game_save_emulator_port', False):
@@ -491,10 +531,15 @@ class Recorder:
                     if receipt['kind'] == ANCHORED_KIND:
                         verify_migration_storage(None, self.out / 'baseline.gba', saved.stat().st_size,
                                                  source_types={t.encode() for t in receipt['save_storage']})
-                    else:
+                    elif receipt['kind'] != UNVERIFIED_SRAM_KIND:
                         verify_migration_storage(Path(receipt['source_checkpoint']).parent / 'baseline.gba',
                                                  self.out / 'baseline.gba', saved.stat().st_size)
-                if receipt['libmgba_sha256'] != expected_lib:
+                if receipt['kind'] == UNVERIFIED_SRAM_KIND:
+                    from game_save_evidence import rom_storage_types, STORAGE_CAPACITIES
+                    target_types = rom_storage_types(self.out / 'baseline.gba')
+                    if len(target_types) != 1 or saved.stat().st_size not in STORAGE_CAPACITIES[next(iter(target_types))]:
+                        raise ValueError('Legacy SRAM size does not match target ROM storage')
+                if receipt['kind'] != UNVERIFIED_SRAM_KIND and receipt['libmgba_sha256'] != expected_lib:
                     raise ValueError('Game-save origin uses a different emulator library')
                 shutil.copyfile(saved, self.out / 'game.sav')
                 shutil.copyfile(game_save, self.out / 'game_save.json')
@@ -502,6 +547,8 @@ class Recorder:
                 seed = {'save': 'game.sav', 'save_sha256': receipt['save_sha256'],
                         'receipt': 'game_save.json', 'receipt_sha256': sha(game_save),
                         'loaded_copy': 'loaded_game.sav'}
+                if receipt['kind'] == UNVERIFIED_SRAM_KIND:
+                    seed['provenance_class'] = UNVERIFIED_SRAM_KIND
                 if migration_source is not None:
                     seed['migration'] = {'source_rom_sha256': migration_source,
                                          'target_rom_sha256': self.rom_sha}
@@ -565,7 +612,7 @@ class Recorder:
                     raise RuntimeError('Cold boot did not load the exact game-save bytes at frame zero')
             if parent and self.counter != parent['core_frame']:
                 raise RuntimeError('Resume frame counter mismatch')
-            metadata = {'schema_version': 4, 'rom_sha256': self.rom_sha, 'harness_sha256': self.harness_sha,
+            metadata = {'schema_version': 5, 'rom_sha256': self.rom_sha, 'harness_sha256': self.harness_sha,
                         'recorder_sha256': sha(Path(__file__)),
                         'libmgba_sha256': self.lib_sha, 'parent_checkpoint': str(args.resume.resolve()) if parent else None,
                         'parent_checkpoint_sha256': sha(args.resume) if parent else None,
@@ -789,6 +836,8 @@ class Recorder:
             self.seen.add(digest)
             self.pending_png.append(path)
         row = {'core_frame': self.counter, 'keys': key, 'image': rel, 'rgb_sha256': digest}
+        if getattr(self, 'cheat_tainted', False):
+            row['cheat_tainted'] = True
         if cheats:
             row['cheat'] = cheats
         self.ledger.write(json.dumps(row) + '\n')
@@ -1078,6 +1127,11 @@ def main():
     start.add_argument('--export-game-save', type=Path, help='Opt-in same-process verified SRAM export then cold boot; recheck PNG bytes while reusing bounded RGB proofs')
     parser.add_argument('--export-game-save-out', type=Path, help='New evidence directory required with --export-game-save')
     start.add_argument('--game-save', type=Path, help='Verified game_save_evidence.py receipt; cold boot with cartridge save. An anchored receipt (--anchored export) starts a new chain root that never re-verifies the source run')
+    start.add_argument('--import-legacy-game-save', type=Path, help='Standalone legacy cartridge SRAM; creates an explicitly unverified, cheat-tainted receipt and cold-boots its bytes')
+    parser.add_argument('--legacy-save-sha256', help='Required exact SHA-256 of imported SRAM bytes')
+    parser.add_argument('--legacy-source-rom-sha256', help='Required claimed source ROM SHA-256')
+    parser.add_argument('--legacy-provenance-note', help='Required note describing provenance limits')
+    parser.add_argument('--legacy-claimed-origin', help='Optional old receipt reference, recorded only as claimed_origin')
     parser.add_argument('--game-save-source-rom-sha256', help='Explicit source SHA-256 for normal SRAM migration to a compatible patch ROM; never migrates emulator states')
     parser.add_argument('--game-save-emulator-port', action='store_true',
                         help='Explicit opt-in: boot an anchored game-save with a different harness/libmgba build '
@@ -1101,6 +1155,13 @@ def main():
         parser.error('--game-save-source-rom-sha256 requires --game-save')
     if args.game_save_emulator_port and not args.game_save:
         parser.error('--game-save-emulator-port requires --game-save')
+    legacy_fields = (args.legacy_save_sha256, args.legacy_source_rom_sha256,
+                     args.legacy_provenance_note)
+    if args.import_legacy_game_save:
+        if not all(legacy_fields) or args.game_save_source_rom_sha256 or args.game_save_emulator_port:
+            parser.error('Legacy import requires all legacy SHA/note fields and cannot use normal save migration/port flags')
+    elif any(legacy_fields) or args.legacy_claimed_origin:
+        parser.error('Legacy SHA/note/origin fields require --import-legacy-game-save')
     if args.min_free_gib < 1 or args.timeout <= 0:
         parser.error('Reserve must be >= 1 GiB and timeout positive')
     # The existing harness protocol splits paths at whitespace.

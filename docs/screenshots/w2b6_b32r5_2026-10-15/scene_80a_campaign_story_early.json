@@ -1,0 +1,11 @@
+{
+  "scene_id": "80a_campaign_story_early",
+  "rom_sha256": "7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a",
+  "source_endpoint": "temp/release_C/w2b6e_80a_fullreplay/0046_A_0006193.checkpoint.json",
+  "source_frame": "temp/release_C/w2b6e_80a_fullreplay/frames/fcfffec1514082b173b9081e003fe7d08677739a194ab2c2e03423e9c7193019.png",
+  "core_frame": 6193,
+  "png_sha256": "46bad71618d7d29b9206398dcde25512fcf217ee2c99ce47c206a840a1022069",
+  "cheat_tainted": true,
+  "visual_result": "readable Korean; no visible defects",
+  "claim_scope": "P1 campaign mission 3 Air Ace! opening (0xE00166 group): 이런 곳에 레드스타의 부대가 / 나타날 줄이야.; surrender and retry from legacy M3 save; Max arrival at 0xE0075A remains unverified"
+}
