@@ -126,6 +126,8 @@
 RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp/review_prompt.md`).
 과거 완료(scene 에디터 Phase 0~8 등)는 success.md + git history.
 
+> **2026-10-15 릴리스 후보 b32r5 정식 빌드 완료** (SHA-256 `7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a`, `output/` full/final/title_test 동일): `run_release_qa.py`·`verify_dist_integrity.py` PASS, `dist/game_wars_korean_full_2026-10-15.bps/.ips` 생성(배포·공개는 안 함). **남은 것:** 실기 테스트(이 PC BLOCKED), 정상 플레이 엔딩 증거(현 장면 증거 다수 cheat_tainted), Sturm CO 파워 런타임 미확인, g_00DF8B6A 소비처 미확인, 0x804FC8 소비처 미확인, 1편 도움말 11건 합성 증거만, 영문판 타이틀 비교(ROM 없음).
+
 > **2026-10-14 후보 C3 = b29r2** (`output/game_wars_korean_candidate_20261014_b29r2.gba`, SHA-256 `500a7af7e2b04fb45c78acda80e9aedd6062e5ccbc82ea36da4879c81bc87e73`): 2편 일수 배너를 사용자 승인 Hada Sans Bold로 수정했다. W2 batch 4 및 W1-reg5/reg6 증거 등록 후 scene gate는 **15 BLOCKED + 1 DEFECT**이며, 26a 결함은 b29r2 캡처에 다시 등록해야 한다. catalog drift 279그룹은 기존 재배정으로 수용했다(`dfc31f9`의 link-client deny 범위가 client 문자열을 `98_extraction_noise_review`로 보냄). **OPEN:** `실패` 접미부와 대체 배너 시트 8개의 런타임 소비 미검증. **다음 b30:** 사용자 결정(2026-10-14)에 따라 2편 임무 제목 글리프를 Hada Sans Bold로 확대한다. 앞선 목업에서 Hada Sans라고 적힌 행은 실제로 OkDanDan 렌더였으므로 진짜 Hada Sans 결과를 승인용으로 보여줘야 한다.
 
 ---

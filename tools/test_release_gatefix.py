@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import qa_transient_overlays as overlays
 import run_release_qa as release
+import verify_dist_integrity as integrity
 
 
 class NameControlPointerTests(unittest.TestCase):
@@ -72,6 +73,22 @@ class HarnessSelectionTests(unittest.TestCase):
             self.assertNotIn('mgbah_linux', command)
         with patch.dict(release.os.environ, {'MGBA_HARNESS': '/custom/harness'}):
             self.assertIn('/custom/harness', release.visual_region_cmd())
+
+    def test_nested_dist_gate_uses_same_platform_and_override(self):
+        with patch.object(release.platform, 'system', return_value='Linux'), \
+             patch.object(Path, 'exists', return_value=True), \
+             patch.dict(release.os.environ, {}, clear=True):
+            self.assertEqual(integrity.visual_region_gate_args(),
+                             ['--harness', str(release.ROOT / 'temp/mgbah_linux'), '--action-menu-save', ''])
+        with patch.object(release.platform, 'system', return_value='Darwin'), \
+             patch.object(Path, 'exists', return_value=True), \
+             patch.dict(release.os.environ, {}, clear=True):
+            self.assertEqual(integrity.visual_region_gate_args(),
+                             ['--harness', str(release.ROOT / 'temp/mgbah'), '--action-menu-save', ''])
+        with patch.dict(release.os.environ, {'MGBA_HARNESS': '/custom/harness'}), \
+             patch.object(Path, 'exists', return_value=False):
+            self.assertEqual(integrity.visual_region_gate_args(),
+                             ['--harness', '/custom/harness', '--action-menu-save', ''])
 
 
 if __name__ == '__main__':

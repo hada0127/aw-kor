@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.join(BASE, 'tools'))
 from make_bps import apply_bps          # noqa: E402
 from make_ips import apply_ips          # noqa: E402
 from lz77_scan import lz77_decompress   # noqa: E402
+from run_release_qa import visual_region_harness  # noqa: E402
 from PIL import Image                   # noqa: E402
 
 ORIGINAL = os.path.join(BASE, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
@@ -63,7 +64,9 @@ SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
     {
         'label': 'scene_89 music menu source',
         'source_addr': 0x00A298C2,
-        'expected_hex': '8f838ea081408fb38f8300',
+        # b28 FIX_GATE: the five-cell icon row requires 음악있음 (no space).
+        # See data/bteam_b28_decisions.tsv and test_b28_system_menu_terrain_bytes.py.
+        'expected_hex': '8f838ea08fb38f83000000',
         'max_nul_terminated_len': 11,
     },
     {
@@ -73,7 +76,6 @@ SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
         'max_nul_terminated_len': 10,
     },
 ]
-PROJECT_MGBA_HARNESS = os.path.join(BASE, 'temp', 'mgbah')
 
 
 def sha256(data):
@@ -469,9 +471,10 @@ def verify_part1_map_label_hook(current, current_sha):
 
 
 def visual_region_gate_args():
-    """Use the project-local mGBA harness instead of /tmp when it is present."""
-    if os.path.exists(PROJECT_MGBA_HARNESS):
-        return ['--harness', PROJECT_MGBA_HARNESS, '--action-menu-save', '']
+    """Use the same selected harness as the release QA visual-region gate."""
+    harness, configured = visual_region_harness()
+    if configured or harness.exists():
+        return ['--harness', str(harness), '--action-menu-save', '']
     return []
 
 

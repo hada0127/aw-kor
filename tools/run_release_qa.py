@@ -25,9 +25,15 @@ def cmd(*parts: str) -> list[str]:
     return [sys.executable, *parts]
 
 
-def visual_region_cmd() -> list[str]:
+def visual_region_harness() -> tuple[Path, bool]:
+    """Return the platform harness and whether MGBA_HARNESS explicitly selected it."""
     configured = os.environ.get("MGBA_HARNESS")
     harness = Path(configured) if configured else ROOT / "temp" / ("mgbah_linux" if platform.system() == "Linux" else "mgbah")
+    return harness, bool(configured)
+
+
+def visual_region_cmd() -> list[str]:
+    harness, configured = visual_region_harness()
     if configured or harness.exists():
         return cmd("tools/qa_visual_regions.py", "--harness", str(harness), "--action-menu-save", "")
     return cmd("tools/qa_visual_regions.py")
