@@ -141,6 +141,8 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
 > 비교 기준/근거: `docs/reports/COMPARISON_AND_GAP_CLOSE_2026-06-24.md`.
 
 ## A. 실화면 잔존 결함 0 (최우선 — Codex+Claude 화면 검수). **아직 실잔존 미해결**
+- [x] **2026-10-16 릴리스 후보 b36r3 정식 빌드**: SHA `f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1` (full/final/title_test 동일). `run_release_qa.py`(24 결과 실패 0)·`verify_dist_integrity.py` PASS, BPS 단독 적용 SHA 일치. dist 2026-10-16 BPS/IPS 생성(배포·공개 안 함).
+  - [ ] 남은 미검증: 실기 테스트(이 PC BLOCKED), 정상 플레이 엔딩 증거, 6개 대체 배너 시트 전역 도달, 0x804FC8 전역 도달, 1편 도움말 11건 자연 경로, 통신 전송 실패/결과 화면 런타임, Sturm 정상 플레이 CO 파워, 잠긴 ??? 맵 이름.
 - [ ] **2026-10-13 b17–b21 후속(현재 후보 b21)**: `output/game_wars_korean_candidate_20261013_b21.gba` SHA `53cf7e61fc4389b45b37f57cf989263762d615d22b0b3f0acd6dd144fc4dec0d` (b20과 동일, 직렬 재빌드 `temp/b21_20261013/b21_rebuild.gba` cmp 일치). 미커밋 작업트리.
   - [x] #105 0xA19E54(→0xA4CBA8) 리플로, #112 0xA1C1BC(→0xA4E038) `？` 추가, 「시간 가면 적」(0xA25EF4), 블랙 캐논 띄어쓰기 통일(라이브 15곳), 0xA1563C 말더듬 띄어쓰기
   - [x] 전각숫자 ０–９ Galmuri 글리프(1편·2편 A3 테이블), 1편 룰 0xEC30A2(B팀 보호, 띄어쓰기만)

@@ -49,7 +49,7 @@ REPOINT_MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 SYLLABLE_TO_CODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 SYLLABLE_TO_GLYPH_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 PART1_MAP_LABEL_SWEEP_REPORT = os.path.join(
-    BASE, 'docs', 'screenshots', 'part1_link_map_list_full_sweep_2026-10-15_b32r5', 'report.json'
+    BASE, 'docs', 'screenshots', 'part1_link_map_list_full_sweep_2026-10-16_b36r3', 'report.json'
 )
 PART1_MAP_LABEL_SITE = 0x00B1319C
 PART1_MAP_LABEL_SITE_BYTES = bytes.fromhex('004800470106f308c046c046')
