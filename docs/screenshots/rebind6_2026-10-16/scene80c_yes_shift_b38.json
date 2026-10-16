@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "observed_delta",
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "scene": "scene_80c_campaign_story_late",
+  "cold_boot": true,
+  "cheat_tainted": true,
+  "source_checkpoint": "temp/release_C/rebind6/runs/g40_g40_g40_g40_S80bc/0030_A_0006368.checkpoint.json",
+  "source_checkpoint_sha256": "8c8e831c75e46000033cc0e0e098e0af198a9750fd20c634d6770acfe334d647",
+  "frame": "docs/screenshots/rebind6_2026-10-16/scene80c_yes_shift_b38.png",
+  "frame_sha256": "abf0cbf51103016c45003a16f5159e78398be553b3267a4a434e0973036f7265",
+  "source_frame": "temp/release_C/rebind6/runs/g40_g40_g40_g40_S80bc/frames/1e8dd1f73b2d7bd9f2b88fce85684d5af1e741f9d0de56d53d7e90dd808a01c2.png",
+  "source_frame_sha256": "abf0cbf51103016c45003a16f5159e78398be553b3267a4a434e0973036f7265",
+  "historical_b37_frame": "temp/release_C/rebind5/runs/g40_g40_g40_S80bc/frames/8b2cf265097455541207f7db4e14f5db5cf23b342919471fd222bd3971a2bbd1.png",
+  "historical_b37_sha256": "2eb8dabc03cad2997cedda7cd6945c5c53ca365f394c1780bd83d6e7103b79cd",
+  "comparison": "temp/release_C/rebind6/active_endpoint_comparison.json",
+  "comparison_sha256": "b46fe5f22851cd5d3665c1e97918223174915ae78417021d26211517ce084f14",
+  "changed_pixels_vs_b37": 84,
+  "changed_bbox_vs_b37": [
+    65,
+    139,
+    80,
+    150
+  ],
+  "observed_pixel_change": "The white 예 glyph moved exactly 8 pixels left; all other RGB pixels match b37.",
+  "claim_scope": "This one cheat-tainted Part 1 late-story yes/no frame; intended shared placement outside name-confirm is unverified.",
+  "user_decision": {
+    "date": "2026-10-16",
+    "decision": "KEEP",
+    "summary": "Keep the 80c placement: '예' sits 8px left of b37, toward JP '▷はい' layout.",
+    "cursor_qa": {
+      "report": "temp/b38/s80c_cursor/report.md",
+      "verdict": "PASS",
+      "cheat_tainted": true,
+      "findings": "cursor positions identical to b37/JP; cursor-to-예 gap 3px vs JP 2px; no glyph overlap; stable"
+    },
+    "still_unverified": [
+      "underlying cause of the 8px shift",
+      "one-frame cursor-before-text onset at f6239"
+    ]
+  }
+}

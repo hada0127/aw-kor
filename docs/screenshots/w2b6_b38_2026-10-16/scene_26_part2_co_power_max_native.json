@@ -1,0 +1,32 @@
+{
+  "scene_id": "26_part2_battle_labels",
+  "co_id": 2,
+  "co": "Max",
+  "native_saved_co": true,
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "source_save_sha256": "1d1e0935ac8a6808a67dfc0d8d84681bbb3656ca43ce1552ed480025aea4381a",
+  "source_rom_sha256": "5886d44541409fe4dd50f2113d014650311a81c79579c3479f375c5cc4eda7d5",
+  "source_endpoint": "temp/release_C/rebind6/co_native/max_native/0022_A_0002724.checkpoint.json",
+  "source_frame": "temp/release_C/rebind6/co_native/max_native/frames/9556e8ecae2df21bd4feb0d07483c32c57c7e64c75ec0c15afe4b0a299977d57.png",
+  "core_frame": 2724,
+  "png_sha256": "369d24b856ea1e03efb0e8d900217896ebaf9d4a2f4fa98295d3043e7edd7b04",
+  "cheat_tainted": true,
+  "source_addresses": [
+    "0xA3036C"
+  ],
+  "visual_result": "힘겨루기라면 지지 않아!; no visible clipping or replacement glyph",
+  "source_match": "static exact text; direct runtime read-watch unverified",
+  "route": "tools/scene_routes/26_part2_co_power_quote/max_native_inputs.txt",
+  "route_sha256": "37bf4a435a171f8620f6121e984dc618a7b074666e948aa852af80f68db284b4",
+  "exit_code": 0,
+  "historical_b32r5_receipt": "docs/screenshots/w2b6_b32r5_2026-10-15/scene_26_part2_co_power_max_native.json",
+  "source_ledger": "temp/release_C/rebind6/co_native/max_native/frames.jsonl",
+  "checkpoint_sha256": "02fc36c22389ed85da78999d256605134be0528a7b077bf94e0642a503e7ae08",
+  "frame_sha256": "369d24b856ea1e03efb0e8d900217896ebaf9d4a2f4fa98295d3043e7edd7b04",
+  "rgb_identical_to_b32r5": true,
+  "png": "docs/screenshots/w2b6_b38_2026-10-16/scene_26_part2_co_power_max_native.png",
+  "historical_b36r3_receipt": "docs/screenshots/w2b6_b36r3_2026-10-15/scene_26_part2_co_power_max_native.json",
+  "rgb_identical_to_b36r3": true,
+  "historical_b37_receipt": "docs/screenshots/w2b6_b37_2026-10-16/scene_26_part2_co_power_max_native.json",
+  "rgb_identical_to_b37": true
+}

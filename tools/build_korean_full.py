@@ -2316,7 +2316,7 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '혹시, 이 게임은 처음이신가요?',
-    0xDF8EFF: '게임보이 워즈에는',
+    0xDF8EFF: '어드밴스 워즈에는',
     0xDF8F26: '여러 모드가 있어',
     0xDF8F3F: '게임보이 한 대로',
     0xDF8F83: '친구와 연결해서',
@@ -2332,7 +2332,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF90CE: '위부터 작전 골라줘.',
     0xDF90F6: '첫 작전은 전투 개시야!',
     0xDF911F: '그럼 시작할게.',
-    0xDF9149: '게임보이 워즈에서는',
+    0xDF9149: '어드밴스 워즈에서는',
     0xDF9174: '내가 작전룸에서',
     0xDF91A3: '바뀐 규칙까지',
     0xDF91E3: '이전 워즈를 해 봤어도',
@@ -2351,8 +2351,8 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF941A: '위부터 작전을 골라.',
     0xDF9446: '첫 작전은 전투 개시야!',
     0xDF946F: '그럼 힘내!',
-    0xDF948E: '그렇다면, 간단하게 게임보이 워즈에',
-    0xDF94BB: '게임보이 워즈에는',
+    0xDF948E: '그렇다면, 간단하게 어드밴스 워즈에',
+    0xDF94BB: '어드밴스 워즈에는',
     0xDF94D6: '여러 모드가 있어.',
     0xDF94FD: '먼저 한 대 대전,',
     0xDF9516: '게임보이 한 대로',
@@ -7238,6 +7238,8 @@ def patch_part2_splash_logo_bg(rom):
             if w <= 166 and h <= 13:
                 break
         x = (176 - w) // 2
+        if y is None:
+            y = (32 - h) // 2 - draw.textbbox((0, 0), text, font=font)[1]
         mask = Image.new('L', layer.size, 0)
         md = ImageDraw.Draw(mask)
         md.text((x, y), text, font=font, fill=255)
@@ -7252,8 +7254,7 @@ def patch_part2_splash_logo_bg(rom):
                 elif a >= 32:
                     lp[xx, yy] = 4
 
-    paint_line('게임보이 워즈', 3, 14)
-    paint_line('어드밴스 2', 17, 13)
+    paint_line('어드밴스 워즈 2', None, 14)
 
     out = bytearray()
     px = layer.load()
@@ -13199,6 +13200,17 @@ B84_POWER_GLYPH_COPY_EXPECT = bytes.fromhex('500800023818')
 B84_POWER_GLYPH_COPY_CONTINUE_RT = 0x08B3C212
 B84_POWER_GLYPH_COPY_FN_RT = 0x08B0FF70
 PART1_YESNO_HOOK_FILE = 0xF10000
+PART1_YESNO_WIDE_CURSOR_FILE = 0xF10200
+PART1_YESNO_WIDE_CURSOR_RT = 0x08F10200
+PART1_YESNO_ROW_DISPATCH_FILE = 0xF10280
+PART1_YESNO_TOP_DISPATCH_RT = 0x08F10280
+PART1_YESNO_BOTTOM_DISPATCH_RT = 0x08F102C0
+PART1_YESNO_ROW_SOURCE_FILE = 0xF10320
+PART1_YESNO_ROW_SOURCE_RT = 0x08F10320
+PART1_YESNO_NAME_ROW_FILE = 0xF10380
+PART1_YESNO_NAME_ROW_RT = 0x08F10380
+PART1_YESNO_CURSOR_FIX_FILE = 0xF103A0
+PART1_YESNO_CURSOR_FIX_RT = 0x08F103A0
 PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
 PART2_HOOK_BOT_313_RT = 0x08F30160
@@ -13214,6 +13226,8 @@ PART1_YESNO_FRAME_HOOK_RT = PART1_YESNO_HOOK_RT + 0x0C
 PART1_NAME_TRIM_HOOK_RT = 0x08F10180
 PART1_YESNO_CALL_SITE = 0xB18D2C
 PART1_YESNO_CALL_EXPECT = bytes.fromhex('fff7c8ff')  # bl 0x08B18CC0
+PART1_YESNO_ROW_SOURCE_CALL_SITE = 0xB18D26
+PART1_YESNO_ROW_SOURCE_CALL_EXPECT = bytes.fromhex('faf7f9f9')  # bl 0x08B1311C
 PART1_YESNO_ORIG_FN = 0x08B18CC0
 PART1_YESNO_FRAME_CALL_SITE = 0xB18D40
 PART1_YESNO_FRAME_CALL_EXPECT = bytes.fromhex('10b5041c1e21605e')  # function prologue + first ldrsh
@@ -13279,10 +13293,10 @@ def _part1_yesno_hook():
     # choice cursor routine so loaded save states are repaired without needing a
     # fresh redraw. Both paths share the same overlay routine:
     #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
-    #   - rewrite the visible tilemap row at x8 as "예 아뇨"
-    #   - if the original cursor routine cleared the yes cursor at x7, restore
-    #     the no cursor at x9 so RIGHT selection is visible instead of being
-    #     hidden between the rewritten Korean cells.
+    #   - select the original compact row for shared prompts and the native
+    #     wide geometry only for the name-entry owning object
+    #   - restore the no cursor at x9 for legacy prompts or x11 for the
+    #     name-wide row when the original routine cleared the yes cursor.
     b = bytearray(bytes.fromhex(
         'ffb5'
         '18f360de'  # bl original compact-choice update (patched below)
@@ -13301,6 +13315,9 @@ def _part1_yesno_hook():
         'd06000061061000664010000e3800000e5800000e7800000e9800000'
     ))
     b[2:6] = _thumb_bl(PART1_YESNO_HOOK_RT + 2, PART1_YESNO_ORIG_FN)
+    b[6:10] = _thumb_bl(PART1_YESNO_HOOK_RT + 6, PART1_YESNO_WIDE_CURSOR_RT)
+    b[0x8E:0x92] = _thumb_bl(PART1_YESNO_HOOK_RT + 0x8E, PART1_YESNO_TOP_DISPATCH_RT)
+    b[0x94:0x98] = _thumb_bl(PART1_YESNO_HOOK_RT + 0x94, PART1_YESNO_BOTTOM_DISPATCH_RT)
     # The overlay copies bitmap tiles directly. E6/E7 must be 뇨, and E8/E9
     # must be blank; changing only the D8273C preload would leave 니오 visible.
     b[0x118:0x11C] = struct.pack('<I', KOR_BASE_RT + 185 * 32)  # 뇨 top
@@ -13308,27 +13325,50 @@ def _part1_yesno_hook():
     b[0x128:0x12C] = struct.pack('<I', 0x08F09F20)  # zero tile after glyph blob
     b[0x130:0x134] = struct.pack('<I', 0x08F09F20)
 
-    cursor_fix_off = 0x154
-    cursor_fix_rt = PART1_YESNO_HOOK_RT + cursor_fix_off
-    b[0x98:0x9A] = _thumb_b(PART1_YESNO_HOOK_RT + 0x98, cursor_fix_rt)
-    cursor_fix = bytes.fromhex(
-        '0448'      # ldr r0, =0x060060CE ; top yes-cursor cell x7
-        '0188'      # ldrh r1, [r0]
-        '044a'      # ldr r2, =0xA1BA ; cursor top tile
-        '9142'      # cmp r1, r2
-        '03d0'      # beq done_pop ; yes is selected, keep x9 blank
-        '8280'      # strh r2, [r0,#4] ; no-cursor top cell x9
-        '0348'      # ldr r0, =0x0600610E ; bottom yes-cursor cell x7
-        '044a'      # ldr r2, =0xA1BB ; cursor bottom tile
-        '8280'      # strh r2, [r0,#4] ; no-cursor bottom cell x9
-        'ffbd'      # done_pop: pop {r0-r7,pc}
-    ) + struct.pack('<I', 0x060060CE) + struct.pack('<I', 0x0000A1BA) + struct.pack('<I', 0x0600610E) + struct.pack('<I', 0x0000A1BB)
-    assert len(cursor_fix) == 36
-    assert all(value == 0 for value in b[cursor_fix_off:cursor_fix_off + len(cursor_fix)])
-    b[cursor_fix_off:cursor_fix_off + len(cursor_fix)] = cursor_fix
+    b[0x98:0x9A] = _thumb_b(PART1_YESNO_HOOK_RT + 0x98, PART1_YESNO_CURSOR_FIX_RT)
     return bytes(b)
 
 PART1_YESNO_HOOK = _part1_yesno_hook()
+
+# The call-site compact update briefly puts its cursor in the no column even
+# while the native shadow has yes selected. Normalize that first VRAM frame,
+# then call the same overlay used by the per-frame handler.
+# Assembled from tools/asm/part1_yesno_wide_cursor.s at 0x08F10200.
+PART1_YESNO_WIDE_CURSOR = bytes.fromhex(
+    '00b50198c16b064a914205d10548064901800648064901800198'
+    'fff703ff00bd0828ec08ce600006baa100000e610006bba10000'
+)
+assert len(PART1_YESNO_WIDE_CURSOR) == 52
+
+# Assembled from tools/asm/part1_yesno_row_dispatch.s at 0x08F10280.
+# Both entry points inspect the overlay's saved current object, not sort r7.
+PART1_YESNO_ROW_DISPATCH = bytes.fromhex(
+    '0db4039ad26b1d498a4201d005a100e007a106230a8802800230'
+    '0231013bf9d10dbc7047e2806401e480e680e8806401e2806401'
+    '64016401e480e680000000000db4039ad26b0d498a4201d005a1'
+    '00e007a106230a88028002300231013bf9d10dbc7047e3806401'
+    'e580e780e9806401e380640164016401e580e7800828ec08'
+)
+assert len(PART1_YESNO_ROW_DISPATCH) == 128
+
+# The native compact renderer reads its row before the overlay. Select a
+# separate wide row only for the name-entry owner, preserving D835BC
+# and the original geometry of save/shop prompts.
+# Assembled from tools/asm/part1_yesno_row_source.s at 0x08F10320.
+PART1_YESNO_ROW_SOURCE = bytes.fromhex(
+    '10b582b0e46b06498c4200d1054b049c0094059c0194'
+    '002102f4f0fe02b010bd0828ec088003f108'
+)
+PART1_YESNO_NAME_ROW = bytes.fromhex('81408eec8140814081408e9b89af0000')
+assert len(PART1_YESNO_ROW_SOURCE) == 40
+
+# Assembled from tools/asm/part1_yesno_cursor_fix.s at 0x08F103A0.
+PART1_YESNO_CURSOR_FIX = bytes.fromhex(
+    '08480188084a91420ad004230099c96b064ca14200d15b00c252'
+    '0548054ac252ffbdc046ce600006baa100000828ec080e610006'
+    'bba10000'
+)
+assert len(PART1_YESNO_CURSOR_FIX) == 56
 
 # Assembled for ARM7TDMI Thumb. Patch offset 0x4c with the Thumb return address.
 PART2_HOOK_TOP_TEMPLATE = bytes.fromhex(
@@ -14151,6 +14191,16 @@ def main():
     # stock BGM icon tiles 0x1B1..0x1B4 with its cached labels.
     assert len(blob) == 0x9F20 and rom[0xF09F20:0xF09F40] == bytes(32)
     rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
+    assert rom[PART1_YESNO_WIDE_CURSOR_FILE:PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR)] == bytes(len(PART1_YESNO_WIDE_CURSOR))
+    rom[PART1_YESNO_WIDE_CURSOR_FILE:PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR)] = PART1_YESNO_WIDE_CURSOR
+    assert rom[PART1_YESNO_ROW_DISPATCH_FILE:PART1_YESNO_ROW_DISPATCH_FILE + len(PART1_YESNO_ROW_DISPATCH)] == bytes(len(PART1_YESNO_ROW_DISPATCH))
+    rom[PART1_YESNO_ROW_DISPATCH_FILE:PART1_YESNO_ROW_DISPATCH_FILE + len(PART1_YESNO_ROW_DISPATCH)] = PART1_YESNO_ROW_DISPATCH
+    assert rom[PART1_YESNO_ROW_SOURCE_FILE:PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE)] == bytes(len(PART1_YESNO_ROW_SOURCE))
+    rom[PART1_YESNO_ROW_SOURCE_FILE:PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE)] = PART1_YESNO_ROW_SOURCE
+    assert rom[PART1_YESNO_NAME_ROW_FILE:PART1_YESNO_NAME_ROW_FILE + len(PART1_YESNO_NAME_ROW)] == bytes(len(PART1_YESNO_NAME_ROW))
+    rom[PART1_YESNO_NAME_ROW_FILE:PART1_YESNO_NAME_ROW_FILE + len(PART1_YESNO_NAME_ROW)] = PART1_YESNO_NAME_ROW
+    assert rom[PART1_YESNO_CURSOR_FIX_FILE:PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX)] == bytes(len(PART1_YESNO_CURSOR_FIX))
+    rom[PART1_YESNO_CURSOR_FIX_FILE:PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX)] = PART1_YESNO_CURSOR_FIX
     rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0
@@ -14232,6 +14282,8 @@ def main():
     # the compact renderer hook table is derived from the final B8 source bytes.
     assert bytes(rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4]) == PART1_YESNO_CALL_EXPECT
     rom[PART1_YESNO_CALL_SITE:PART1_YESNO_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_CALL_SITE, PART1_YESNO_HOOK_RT)
+    assert bytes(rom[PART1_YESNO_ROW_SOURCE_CALL_SITE:PART1_YESNO_ROW_SOURCE_CALL_SITE + 4]) == PART1_YESNO_ROW_SOURCE_CALL_EXPECT
+    rom[PART1_YESNO_ROW_SOURCE_CALL_SITE:PART1_YESNO_ROW_SOURCE_CALL_SITE + 4] = _thumb_bl(0x08000000 + PART1_YESNO_ROW_SOURCE_CALL_SITE, PART1_YESNO_ROW_SOURCE_RT)
     assert bytes(rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8]) == PART1_YESNO_FRAME_CALL_EXPECT
     rom[PART1_YESNO_FRAME_CALL_SITE:PART1_YESNO_FRAME_CALL_SITE + 8] = (
         bytes.fromhex('004b1847') + struct.pack('<I', PART1_YESNO_FRAME_HOOK_RT | 1)
@@ -15663,7 +15715,10 @@ def main():
     from part1_m19_dialogue import ADDRESS as m19_dialogue_address
     required_script_repoints = {0xA322A4, red_intro_address, m19_dialogue_address, 0xB830C8, 0xA35258, 0xA35280,
                                 0xA32492,
-                                0xA29CA0, 0xB83C70}
+                                0xA29CA0, 0xB83C70,
+                                # Approved rename must replace the old payload
+                                # inside these already-relocated tutorial pages.
+                                0xDF9149, 0xDF948E, 0xDF94D6}
 
     def patch_script_row(faddr, fend, payload, label, *, source_text=None):
         reviewed_spacing = (faddr in BTEAM_SCRIPT_SPACING_REPAIRS
@@ -23251,8 +23306,8 @@ def main():
     )
     patch_script_row(0xDF294E, 0xDF295E, b'', 'save prompt tail blank row')
     patch_script_row(0xDF29CA, 0xDF29DA, b'', 'save prompt repeat tail blank row')
-    # The campaign prompt reads this row without the name-confirm tilemap hook.
-    # Fill the complete 16-byte row; the hook still owns name-confirm placement.
+    # The campaign save prompt also reads this shared row. Keep its compact
+    # geometry; the name object's separate row source owns only the wide layout.
     fixed_zero_text_patch(0xD835BC, 16, '　　예　　아뇨')
 
     # Name-confirm compact choices are not part of the normal CSV path because
@@ -23463,6 +23518,11 @@ def main():
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
+                if a in {0xDF8E16, 0xDF8EFF, 0xDF9149, 0xDF948E, 0xDF94D6}:
+                    # The approved rename is the new source authority for
+                    # these rows, including messages already owned by an
+                    # older multi-row relocation.
+                    return _rp_ov(a)
                 if a in {0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}:
                     return _rp_ov(a)  # Fable + Astra b23: full B-team wording.
                 if a in BTEAM_PREVIOUS_KOREAN_TEXT and a not in BTEAM_SCRIPT_SPACING_REPAIRS:

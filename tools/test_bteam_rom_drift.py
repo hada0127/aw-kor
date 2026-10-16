@@ -125,6 +125,10 @@ class RomDriftTest(unittest.TestCase):
         from qa_bteam_drift import APPROVED_EXCEPTIONS, exception_errors
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
         self.assertEqual(APPROVED_EXCEPTIONS['0x00A2D814'], ('결전 전', '최종결전!'))
+        self.assertEqual(APPROVED_EXCEPTIONS['0x00DF8E16'],
+                         ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'))
+        self.assertEqual(APPROVED_EXCEPTIONS['0x00DF948E'],
+                         ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'))
         self.assertEqual(exception_errors(baseline, baseline['overrides']), [])
         changed = json.loads(json.dumps(baseline))
         changed['overrides']['0x00A2D814'] = '결전 전'

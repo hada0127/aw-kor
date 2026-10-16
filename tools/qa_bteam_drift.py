@@ -77,7 +77,7 @@ def load_overrides() -> dict:
 # changing B-team wording needs a reviewed code change of this pin.
 # The 2026-10-07 consensus re-keys two misaligned entries only; see
 # temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
-PINNED_CORE_DIGEST = '182ff449b977a52074cbc97a05d3d48193c2ae2329ee27d511972b72de7807b7'
+PINNED_CORE_DIGEST = '6e6f0d946f534497202a61491731093c025b32116bbcc6208f553b4d67dde884'
 ALIGNMENT_RESTORE_ADDRESSES = frozenset({0x00A19300, 0x00A1B3C8})
 ALIGNMENT_COMPOSITE_NEXT = {0x00A19300: 0x00A1930F}
 ALIGNMENT_LEGACY_KEYS = {
@@ -390,6 +390,8 @@ def matches_alignment_composite(wanted: str, first: str, second: str,
 APPROVED_EXCEPTIONS = {
     '0x00DD0D1A': ('뭐,자네치고는,상등품이군.', '뭐, 자네치고는 잘했군.'),
     '0x00A2D814': ('결전 전', '최종결전!'),
+    '0x00DF8E16': ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'),
+    '0x00DF948E': ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'),
 }
 
 

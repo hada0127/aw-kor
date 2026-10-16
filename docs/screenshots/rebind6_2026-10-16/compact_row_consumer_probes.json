@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "target_range": "0x08804FC8..0x08804FCF",
+  "status": "bounded_routes_no_consumer_observed",
+  "global_deadness": "unverified",
+  "routes": [
+    {
+      "route": "part1_name_confirm",
+      "receipt": "temp/release_C/rebind6/verify2_compact_name/receipt.json",
+      "receipt_sha256": "5fd29e0ad0e81b7b0c6c7b5be4b4e7af1050ebb8bd92941937f78e3cd405fe63",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 30,
+      "cheat_tainted": false,
+      "claim": "bounded route only; global reachability unverified",
+      "positive_control_kind": "native b38 wide-choice row read at 0x08F10380"
+    },
+    {
+      "route": "part1_save_confirm",
+      "receipt": "temp/release_C/rebind6/verify2_compact_part1_save/receipt.json",
+      "receipt_sha256": "ec8edbf8a81d42ea2015f3b69a21ea900fcb339a8a4b21fef4fc093096f8ad4f",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_shop_buy_confirm",
+      "receipt": "temp/release_C/rebind6/verify2_compact_shop/events.json",
+      "receipt_sha256": "ab327a6b0f42e8f4d59aa064000291ba29440563cb7c73bda8ba9826936683eb",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 104,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_surrender_confirm",
+      "receipt": "temp/release_C/rebind6/verify2_compact_part2/receipt.json",
+      "receipt_sha256": "d53d80458dddd5d346570f23284a5ae75f7a564fcca9b75f144dd9a2aa61b102",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 37,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_cable_setup",
+      "receipt": "temp/release_C/rebind6/verify2_compact_link/receipt.json",
+      "receipt_sha256": "280506bfbbdd8ca1d58983535f367429511e23c4b49d9882fd529c5286e67110",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 20,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_delete_confirm",
+      "receipt": "temp/release_C/rebind6/verify4_delete_hold/part1/receipt.json",
+      "receipt_sha256": "eb0fae21996dfdd3185aa463413791254382e54d3458c59e197527c4f32a449e",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_delete_confirm",
+      "receipt": "temp/release_C/rebind6/verify4_delete_hold/part2/receipt.json",
+      "receipt_sha256": "246fc6c79b669effd966143616e302d40aa868be1789870ed73177493acab540",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_real_bios_link_host",
+      "receipt": "temp/release_C/rebind6/link/part1/transfer/receipt.json",
+      "receipt_sha256": "a96a5c914ae4265cdda1e84c97afcb376896aca61d917e11ae612cb9604757fd",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "stage1": {
+          "path": "temp/release_C/rebind6/link/part1/transfer/stage1_read.log",
+          "sha256": "7ee0a7bc44cfee77f32d039b2031868ef84b4c6ec2101f64652f6ad3566f9b61",
+          "hits": 4
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/rebind6/link/part1/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    },
+    {
+      "route": "part2_real_bios_link_host",
+      "receipt": "temp/release_C/rebind6/link/part2/transfer/receipt.json",
+      "receipt_sha256": "80563cbf02999d826a2b349e1f581922c9368eff67bfc5df58e6272079b3c0a9",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "main_sheet": {
+          "watch_log": "temp/release_C/rebind6/link/part2/transfer/live_main_sheet_watch.log",
+          "watch_sha256": "777e98a614827e8e59df073013277f0d8d80a8059813ba060ec29748dc381d49",
+          "address": "0x0892DF84",
+          "hits": 2
+        },
+        "word_sheet": {
+          "watch_log": "temp/release_C/rebind6/link/part2/transfer/live_word_sheet_watch.log",
+          "watch_sha256": "a650fb1fc9140ab4b57094c3420f9b9f70f22e970a403e5aeeadaee4466ddc4b",
+          "address": "0x0892EB5C",
+          "hits": 2
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/rebind6/link/part2/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    }
+  ],
+  "historical_b37_receipts": [
+    "docs/screenshots/rebind5_2026-10-16/compact_row_consumer_probes.json"
+  ],
+  "historical_b36r3_receipts": [
+    "docs/screenshots/rebind3_2026-10-15/compact_row_consumer_probes.json",
+    "docs/screenshots/verify2_2026-10-15/compact_row_coverage.json",
+    "docs/screenshots/verify4_2026-10-15/delete_confirmations.json",
+    "temp/release_C/verify4b/registration_candidates.json"
+  ],
+  "cheat_tainted_preserved": true
+}

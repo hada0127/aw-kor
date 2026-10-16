@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "active_pass",
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "cold_boot": true,
+  "cartridge_save": null,
+  "cheat_tainted": false,
+  "emulator_exit_code": 0,
+  "native_receipt": "temp/release_C/rebind6/verify2_compact_name/receipt.json",
+  "native_receipt_sha256": "5fd29e0ad0e81b7b0c6c7b5be4b4e7af1050ebb8bd92941937f78e3cd405fe63",
+  "historical_b37_receipt": "temp/release_C/rebind5/verify2_compact_name/receipt.json",
+  "historical_b37_receipt_sha256": "9faaeb4d30e3503b502797f0a1c3c19efcdbbdfa004722148065592fa00fd53c",
+  "claim_scope": "Part 1 name-confirm yes/no row at three bounded cold-boot frames; visible b38 layout differs from b37; native wide row at 0x08F10380 has positive reads, while the target compact row has zero reads.",
+  "frames": [
+    {
+      "core_frame": 2340,
+      "frame": "docs/screenshots/rebind6_2026-10-16/part1_name_confirm_f2340_b38.png",
+      "frame_sha256": "c28c085d06e8b73899e444435fd436e3d12b11f2fceb100405348b9607493f1c",
+      "source_frame": "temp/release_C/rebind6/verify2_compact_name/f2340.png",
+      "source_frame_sha256": "c28c085d06e8b73899e444435fd436e3d12b11f2fceb100405348b9607493f1c",
+      "historical_b37_frame": "temp/release_C/rebind5/verify2_compact_name/f2340.png",
+      "historical_b37_sha256": "210c29f7ced5ba569da3c5edf7f65b597f90960e62c6231b3a70d5ae2e635263",
+      "changed_pixels_vs_b37": 110,
+      "changed_bbox_vs_b37": [
+        81,
+        139,
+        112,
+        150
+      ],
+      "target_reads": 0,
+      "old_shared_choice_reads": 0,
+      "native_wide_choice_reads": 30
+    },
+    {
+      "core_frame": 2372,
+      "frame": "docs/screenshots/rebind6_2026-10-16/part1_name_confirm_f2372_b38.png",
+      "frame_sha256": "9bdf358de56019fe4e0a3338dc1576442665ac6bea858f944e1daf91d60b320b",
+      "source_frame": "temp/release_C/rebind6/verify2_compact_name/f2372.png",
+      "source_frame_sha256": "9bdf358de56019fe4e0a3338dc1576442665ac6bea858f944e1daf91d60b320b",
+      "historical_b37_frame": "temp/release_C/rebind5/verify2_compact_name/f2372.png",
+      "historical_b37_sha256": "8f1391acb4a3e282fd5dcbbdee594c0d79b57c36b2489b5544452f1d6b758cc3",
+      "changed_pixels_vs_b37": 150,
+      "changed_bbox_vs_b37": [
+        73,
+        139,
+        112,
+        150
+      ],
+      "target_reads": 0,
+      "old_shared_choice_reads": 0,
+      "native_wide_choice_reads": 30
+    },
+    {
+      "core_frame": 2404,
+      "frame": "docs/screenshots/rebind6_2026-10-16/part1_name_confirm_f2404_b38.png",
+      "frame_sha256": "b0c51dd186301e7a4bb961a2dd6547b6eb699f740704b365b98eb3dafa28cf99",
+      "source_frame": "temp/release_C/rebind6/verify2_compact_name/f2404.png",
+      "source_frame_sha256": "b0c51dd186301e7a4bb961a2dd6547b6eb699f740704b365b98eb3dafa28cf99",
+      "historical_b37_frame": "temp/release_C/rebind5/verify2_compact_name/f2404.png",
+      "historical_b37_sha256": "969722904b6bee5340c41e6c631d37a3a664fb29f3a7d73f79157bde91c216e4",
+      "changed_pixels_vs_b37": 110,
+      "changed_bbox_vs_b37": [
+        81,
+        139,
+        112,
+        150
+      ],
+      "target_reads": 0,
+      "old_shared_choice_reads": 0,
+      "native_wide_choice_reads": 30
+    }
+  ]
+}

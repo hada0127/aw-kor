@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "status": "active_pass",
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "cold_boot": true,
+  "cartridge_save": null,
+  "cheat_tainted": false,
+  "source_actions": "temp/release_C/rebind5/runs/g10_g10_g10_B19a1_p1sweep/actions.jsonl",
+  "claim_scope": "Five selected b38 tutorial frames with target-line ROM read-watch hits; visual text fragments checked on these frames only.",
+  "frames": [
+    {
+      "address": "0x00DF8E16",
+      "mode": "yes",
+      "label": "s009",
+      "visible_text_fragment": "어드밴스 워즈에",
+      "read_hits_cumulative": 114,
+      "core_frame": 1183,
+      "frame": "docs/screenshots/rebind6_2026-10-16/tutorial_DF8E16.png",
+      "frame_sha256": "8523210322a66ed1f901bebd0cd6980f78b083f6a0d47e5e7dc47bd842596914",
+      "source_frame": "temp/release_C/rebind6/tutorial_watch_yes/s009.png",
+      "source_frame_sha256": "8523210322a66ed1f901bebd0cd6980f78b083f6a0d47e5e7dc47bd842596914",
+      "run_receipt": "temp/release_C/rebind6/tutorial_watch_yes/receipt.json",
+      "run_receipt_sha256": "fafb8bf12755e2853d550d306dd13fd905bce22f3de7247f05167c3618ff3c2f"
+    },
+    {
+      "address": "0x00DF8EFF",
+      "mode": "yes",
+      "label": "s024",
+      "visible_text_fragment": "어드밴스 워즈에는",
+      "read_hits_cumulative": 109,
+      "core_frame": 2173,
+      "frame": "docs/screenshots/rebind6_2026-10-16/tutorial_DF8EFF.png",
+      "frame_sha256": "20862951fb6095a84f5b2e88ffa31feb15f75237ca3e51f8bd0b37bf48449a96",
+      "source_frame": "temp/release_C/rebind6/tutorial_watch_yes/s024.png",
+      "source_frame_sha256": "20862951fb6095a84f5b2e88ffa31feb15f75237ca3e51f8bd0b37bf48449a96",
+      "run_receipt": "temp/release_C/rebind6/tutorial_watch_yes/receipt.json",
+      "run_receipt_sha256": "fafb8bf12755e2853d550d306dd13fd905bce22f3de7247f05167c3618ff3c2f"
+    },
+    {
+      "address": "0x00DF9149",
+      "mode": "no_long",
+      "label": "after_00",
+      "visible_text_fragment": "어드밴스 워즈에서는",
+      "read_hits_cumulative": 60,
+      "core_frame": 2329,
+      "frame": "docs/screenshots/rebind6_2026-10-16/tutorial_DF9149.png",
+      "frame_sha256": "02b5b029d8b18b5e9c779be76eed0de86585e4ef58d5abb40a6abe858602bbb2",
+      "source_frame": "temp/release_C/rebind6/tutorial_watch_no_long/after_00.png",
+      "source_frame_sha256": "02b5b029d8b18b5e9c779be76eed0de86585e4ef58d5abb40a6abe858602bbb2",
+      "run_receipt": "temp/release_C/rebind6/tutorial_watch_no_long/receipt.json",
+      "run_receipt_sha256": "f97c39165c643c3fbf59193b35dff6887b2cee4f2c230dbf158207d268ad0ab3"
+    },
+    {
+      "address": "0x00DF948E",
+      "mode": "no_second",
+      "label": "second_choose_no",
+      "visible_text_fragment": "어드밴스 워즈에",
+      "read_hits_cumulative": 114,
+      "core_frame": 2845,
+      "frame": "docs/screenshots/rebind6_2026-10-16/tutorial_DF948E.png",
+      "frame_sha256": "ac6f2bd0df69aad0020861fa4e64704fdd3e57a127c2a170619f27a97db6b2c0",
+      "source_frame": "temp/release_C/rebind6/tutorial_watch_no_second/second_choose_no.png",
+      "source_frame_sha256": "ac6f2bd0df69aad0020861fa4e64704fdd3e57a127c2a170619f27a97db6b2c0",
+      "run_receipt": "temp/release_C/rebind6/tutorial_watch_no_second/receipt.json",
+      "run_receipt_sha256": "409f7cf2208fb8a185e6e167134b5411feb8fd98f1f265a48fb1452a7045dcac"
+    },
+    {
+      "address": "0x00DF94D6",
+      "mode": "no_second",
+      "label": "branch_00",
+      "visible_text_fragment": "어드밴스 워즈에는 여러",
+      "read_hits_cumulative": 72,
+      "core_frame": 2941,
+      "frame": "docs/screenshots/rebind6_2026-10-16/tutorial_DF94D6.png",
+      "frame_sha256": "81b32674b519fdd5817759b065d1dd6257d7c88522f7aef379d7967e9ab184d0",
+      "source_frame": "temp/release_C/rebind6/tutorial_watch_no_second/branch_00.png",
+      "source_frame_sha256": "81b32674b519fdd5817759b065d1dd6257d7c88522f7aef379d7967e9ab184d0",
+      "run_receipt": "temp/release_C/rebind6/tutorial_watch_no_second/receipt.json",
+      "run_receipt_sha256": "409f7cf2208fb8a185e6e167134b5411feb8fd98f1f265a48fb1452a7045dcac"
+    }
+  ]
+}

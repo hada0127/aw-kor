@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "routes": {
+    "part1": {
+      "receipt": "temp/release_C/rebind6/verify5/error_part1/receipt.json",
+      "receipt_sha256": "0b7b4ebe13eef2024f0c05958c5c4ce00adfda8e44a12d47d84b63f11c906434",
+      "client_detached_after_host_frames": 250,
+      "cheat_tainted": false,
+      "emulator_exit_code": 0,
+      "screens": [
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part1_host_transfer_p0.png",
+          "sha256": "d2d2889c8cd5dab60e63810d786f82ba9007cee7523995bf87eb4ac9dd4bc3a4",
+          "source": "temp/release_C/rebind6/verify5/error_part1/host_transfer_p0.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_host_transfer_p0.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part1_host_transfer_p0.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part1_client_transfer_p1.png",
+          "sha256": "4e88bd1a3efe0c20ae8d4aa7c0c803849925367975be7ab673092d9f3e1ece4c",
+          "source": "temp/release_C/rebind6/verify5/error_part1/client_transfer_p1.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_client_transfer_p1.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part1_client_transfer_p1.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part1_host_detached_120_p0.png",
+          "sha256": "2cf574b49f89ec702e7d7915ee6b1b956f54d605377f6f8cc9242c13735a81c4",
+          "source": "temp/release_C/rebind6/verify5/error_part1/host_detached_120_p0.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_host_detached_120_p0.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part1_host_detached_120_p0.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part1_client_detached_720_p1.png",
+          "sha256": "2cf574b49f89ec702e7d7915ee6b1b956f54d605377f6f8cc9242c13735a81c4",
+          "source": "temp/release_C/rebind6/verify5/error_part1/client_detached_720_p1.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_client_detached_720_p1.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part1_client_detached_720_p1.png",
+          "rgb_equal_to_b37": true
+        }
+      ],
+      "observed_error_lines": [
+        "데이터 전송 실패",
+        "다시 시도해 주세요."
+      ],
+      "historical_b36r3_receipt": "temp/release_C/verify5/link_error_part1/receipt.json",
+      "historical_b37_receipt": "temp/release_C/rebind5/verify5/error_part1/receipt.json"
+    },
+    "part2": {
+      "receipt": "temp/release_C/rebind6/verify5/error_part2/receipt.json",
+      "receipt_sha256": "9f0aecd1132241f86e58076c34495ac3db105dece909383c906f85a85448689f",
+      "client_detached_after_host_frames": 500,
+      "cheat_tainted": false,
+      "emulator_exit_code": 0,
+      "screens": [
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part2_host_transfer_p0.png",
+          "sha256": "f07265de3b4609a79ebe32f589a5e883e5b32a5b0ad2f6c79d73fb91bec9148a",
+          "source": "temp/release_C/rebind6/verify5/error_part2/host_transfer_p0.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_host_transfer_p0.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part2_host_transfer_p0.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part2_client_transfer_p1.png",
+          "sha256": "65b99a2ebbb9ed19896b86ea2a55401f5985aeb206574b86245dd5931a41bc0f",
+          "source": "temp/release_C/rebind6/verify5/error_part2/client_transfer_p1.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_client_transfer_p1.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part2_client_transfer_p1.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part2_host_detached_120_p0.png",
+          "sha256": "2cf574b49f89ec702e7d7915ee6b1b956f54d605377f6f8cc9242c13735a81c4",
+          "source": "temp/release_C/rebind6/verify5/error_part2/host_detached_120_p0.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_host_detached_120_p0.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part2_host_detached_120_p0.png",
+          "rgb_equal_to_b37": true
+        },
+        {
+          "path": "docs/screenshots/verify5_b38_2026-10-16/part2_client_detached_720_p1.png",
+          "sha256": "2cf574b49f89ec702e7d7915ee6b1b956f54d605377f6f8cc9242c13735a81c4",
+          "source": "temp/release_C/rebind6/verify5/error_part2/client_detached_720_p1.png",
+          "historical_b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_client_detached_720_p1.png",
+          "rgb_equal_to_b36r3": true,
+          "historical_b37_frame": "docs/screenshots/verify5_b37_2026-10-16/part2_client_detached_720_p1.png",
+          "rgb_equal_to_b37": true
+        }
+      ],
+      "observed_error_lines": [
+        "데이터 전송 실패",
+        "다시 시도해 주세요."
+      ],
+      "historical_b36r3_receipt": "temp/release_C/verify5/link_error_part2_mid/receipt.json",
+      "historical_b37_receipt": "temp/release_C/rebind5/verify5/error_part2/receipt.json"
+    }
+  },
+  "historical_b36r3_report": "docs/screenshots/verify5_2026-10-16/link_transfer_error.json",
+  "historical_b37_report": "docs/screenshots/verify5_b37_2026-10-16/link_transfer_error.json"
+}

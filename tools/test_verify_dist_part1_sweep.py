@@ -11,7 +11,7 @@ import verify_dist_integrity as gate
 class Part1SweepEvidenceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        candidate = Path(gate.BASE) / 'output/game_wars_korean_candidate_20261016_b37.gba'
+        candidate = Path(gate.BASE) / 'output/game_wars_korean_candidate_20261016_b38.gba'
         if not candidate.is_file():
             raise unittest.SkipTest(f'b37 candidate missing: {candidate}')
         cls.rom = candidate.read_bytes()

@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "active_pass",
+  "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "scene": "scene_20_part2_intro_newspaper",
+  "cold_boot": true,
+  "cheat_tainted": false,
+  "emulator_exit_code": 0,
+  "core_frame": 1920,
+  "source_checkpoint": "temp/release_C/rebind6/runs/g19_g19_g19_g19_PK_cold/0005_A_0002887.checkpoint.json",
+  "source_checkpoint_sha256": "308cc61b7f257e70e6550aefb903ac460c9f6cdc2b3ca3b953209819a82588e0",
+  "source_ledger": "temp/release_C/rebind6/runs/g19_g19_g19_g19_PK_cold/frames.jsonl",
+  "source_ledger_sha256": "da0f3af45757a438c873b5d32fe31e5aafddd7e9083e9b84902ee2b55cc1e9a2",
+  "source_frame": "temp/release_C/rebind6/runs/g19_g19_g19_g19_PK_cold/frames/63864188092bc08f4ea81111d4450740b726b65eb87b7b95c5611f3343fa5983.png",
+  "source_frame_sha256": "35d8935c7661fe1bc5e08acf4b1ab549bb7f1a4ec00647f0b8ac04562b5e7ae1",
+  "frame": "docs/screenshots/rebind6_2026-10-16/part2_splash_b38.png",
+  "frame_sha256": "35d8935c7661fe1bc5e08acf4b1ab549bb7f1a4ec00647f0b8ac04562b5e7ae1",
+  "comparison": "temp/release_C/rebind6/splash_comparison.json",
+  "comparison_sha256": "1ec03ed2469b82e19ee7d50efdca97124e88014c34739f19c4e5b5e3f042b85b",
+  "historical_b37_frame": "temp/release_C/rebind5/runs/g19_g19_g19_PK_cold/frames/5313bbea2d59eb6d3ee29c6d25919b7049a96b8d005a6879afcc9879bbbe4247.png",
+  "changed_pixels_vs_b37": 1454,
+  "changed_bbox_vs_b37": [
+    66,
+    67,
+    171,
+    93
+  ],
+  "visible_text": "어드밴스 워즈 2",
+  "claim_scope": "Fresh b38 cold-boot frame at core 1920; visual text and expected RGB difference from b37 splash."
+}

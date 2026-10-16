@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""VERIFY-5: interrupt a cold-boot real-BIOS one-cart transfer on b37."""
+"""VERIFY-5: interrupt a cold-boot real-BIOS one-cart transfer on b38."""
 import argparse
 import sys
 from pathlib import Path
@@ -8,8 +8,8 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "tools/scene_routes/verify4_link"))
 import biolink as b  # noqa: E402
 
-b.ROM = ROOT / "output/game_wars_korean_candidate_20261016_b37.gba"
-b.ROM_SHA = "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8"
+b.ROM = ROOT / "output/game_wars_korean_candidate_20261016_b38.gba"
+b.ROM_SHA = "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6"
 
 
 def run(part: int, out: Path) -> None:

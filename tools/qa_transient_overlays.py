@@ -48,12 +48,35 @@ PART1_NAME_CONTROL_MAX_LEN = 0x1000
 # select the text the game actually reads.
 PART1_NAME_CONTROL_POINTERS = (0xDD373C, 0xDE3308, 0xDE4884)
 PART1_YESNO_HOOK_FILE = 0xF10000
+PART1_YESNO_WIDE_BRANCH = bytes.fromhex('00f0fbf8')
+PART1_YESNO_WIDE_CURSOR_FILE = 0xF10200
+PART1_YESNO_WIDE_CURSOR = bytes.fromhex(
+    '00b50198c16b064a914205d10548064901800648064901800198'
+    'fff703ff00bd0828ec08ce600006baa100000e610006bba10000'
+)
+PART1_YESNO_ROW_DISPATCH_FILE = 0xF10280
+PART1_YESNO_ROW_DISPATCH = bytes.fromhex(
+    '0db4039ad26b1d498a4201d005a100e007a106230a8802800230'
+    '0231013bf9d10dbc7047e2806401e480e680e8806401e2806401'
+    '64016401e480e680000000000db4039ad26b0d498a4201d005a1'
+    '00e007a106230a88028002300231013bf9d10dbc7047e3806401'
+    'e580e780e9806401e380640164016401e580e7800828ec08'
+)
+PART1_YESNO_ROW_SOURCE_FILE = 0xF10320
+PART1_YESNO_ROW_SOURCE = bytes.fromhex(
+    '10b582b0e46b06498c4200d1054b049c0094059c0194'
+    '002102f4f0fe02b010bd0828ec088003f108'
+)
+PART1_YESNO_NAME_ROW_FILE = 0xF10380
+PART1_YESNO_NAME_ROW = bytes.fromhex('81408eec8140814081408e9b89af0000')
 PART1_YESNO_CURSOR_BRANCH_OFF = 0x98
-PART1_YESNO_CURSOR_FIX_OFF = 0x154
-PART1_YESNO_CURSOR_BRANCH = bytes.fromhex("5ce0")
+PART1_YESNO_CURSOR_FIX_OFF = 0x3A0
+PART1_YESNO_CURSOR_BRANCH = bytes.fromhex("82e1")
 PART1_YESNO_CURSOR_FIX = bytes.fromhex(
-    "04480188044a914203d082800348044a8280ffbd"
-) + struct.pack("<I", 0x060060CE) + struct.pack("<I", 0x0000A1BA) + struct.pack("<I", 0x0600610E) + struct.pack("<I", 0x0000A1BB)
+    '08480188084a91420ad004230099c96b064ca14200d15b00c252'
+    '0548054ac252ffbdc046ce600006baa100000828ec080e610006'
+    'bba10000'
+)
 
 RAW_TITLE_PATTERNS = {
     "part1 opening battle title": "序盤戦".encode("shift_jis"),
@@ -280,6 +303,27 @@ def main() -> int:
 
     surrender_yesno = {"addr": f"0x{SURRENDER_YESNO_ROW:08X}", "expected_text": SURRENDER_YESNO_TEXT}
     if rom:
+        wide_branch = rom[PART1_YESNO_HOOK_FILE + 6:PART1_YESNO_HOOK_FILE + 10]
+        wide_cursor = rom[PART1_YESNO_WIDE_CURSOR_FILE:PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR)]
+        row_dispatch = rom[PART1_YESNO_ROW_DISPATCH_FILE:PART1_YESNO_ROW_DISPATCH_FILE + len(PART1_YESNO_ROW_DISPATCH)]
+        row_source = rom[PART1_YESNO_ROW_SOURCE_FILE:PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE)]
+        name_row = rom[PART1_YESNO_NAME_ROW_FILE:PART1_YESNO_NAME_ROW_FILE + len(PART1_YESNO_NAME_ROW)]
+        row_calls = rom[PART1_YESNO_HOOK_FILE + 0x8E:PART1_YESNO_HOOK_FILE + 0x98]
+        expected_calls = bytes.fromhex('00f0f7f82a4800f014f9')
+        source_call = rom[0xB18D26:0xB18D2A]
+        if (wide_branch != PART1_YESNO_WIDE_BRANCH or wide_cursor != PART1_YESNO_WIDE_CURSOR
+                or row_dispatch != PART1_YESNO_ROW_DISPATCH or row_calls != expected_calls
+                or row_source != PART1_YESNO_ROW_SOURCE or name_row != PART1_YESNO_NAME_ROW
+                or source_call != bytes.fromhex('f7f3fbfa')):
+            issues.append({
+                "type": "part1_name_yesno_wide_overlay_missing",
+                "branch_matches": wide_branch == PART1_YESNO_WIDE_BRANCH,
+                "cursor_matches": wide_cursor == PART1_YESNO_WIDE_CURSOR,
+                "row_dispatch_matches": row_dispatch == PART1_YESNO_ROW_DISPATCH,
+                "row_calls_match": row_calls == expected_calls,
+                "source_matches": row_source == PART1_YESNO_ROW_SOURCE,
+                "source_call_matches": source_call == bytes.fromhex('f7f3fbfa'),
+            })
         expected = encode_korean_ui(SURRENDER_YESNO_TEXT, load_syllable_codes())
         expected_slot = expected + b"\x00" * (SURRENDER_YESNO_LEN - len(expected))
         current = rom[SURRENDER_YESNO_ROW:SURRENDER_YESNO_ROW + SURRENDER_YESNO_LEN]
