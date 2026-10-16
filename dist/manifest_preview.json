@@ -3,7 +3,7 @@
   "date": "2026-10-16",
   "status": "hash-bound prepackage QA pass; full runtime/voice/hardware approval not implied",
   "release_highlights": [
-    "b37 fixes missing names in the unlocked Part 1 link map list."
+    "b38 retains the b37 unlocked Part 1 link-map name fix; it stabilizes the Part 1 name-confirm 예/아뇨 row in one Japanese-layout row, adjusts the shared campaign prompt cursor placement, renames five Part 1 tutorial lines to 어드밴스 워즈, and renames the Part 2 splash to 어드밴스 워즈 2."
   ],
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
@@ -15,39 +15,40 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "7f98b994",
-    "sha1": "380d8f2c756d0a677791b0c0fb800a1b7e7c3f83",
-    "sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8"
+    "crc32": "422b38cd",
+    "sha1": "7d2a9107233785a1a99becc482d0cdbe574b5f8a",
+    "sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6"
   },
   "output_rom": {
     "canonical": "game_wars_korean_full.gba",
-    "sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+    "sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
     "legacy_variants": []
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-10-16.bps",
-    "size": 1250654,
+    "size": 1250885,
     "crc32": "2144df1c",
-    "sha1": "7b3cff6da18b71824f926c1f5aaf7ffc9ad3ccbc",
-    "sha256": "3356bc7394ee2e910cb1ba174f440c04cd1ef8188b36ee9a0cab15360aca352e",
+    "sha1": "bcb59e08d2cd0edd729d816471cd69d5de0d1192",
+    "sha256": "f31a76b45bbe28c5e8eccad4b7ba534450da6d57c9867424e41d0f240d1ab930",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-10-16.ips",
-    "size": 1457571,
-    "crc32": "6c2a948b",
-    "sha1": "ca01d80e01b321e37ba1ea6fed7b9666be07fda8",
-    "sha256": "f3ccf4a23857db123acc88eda055ed9a1565ae0ecc5d45679ec87046c651b3c8",
+    "size": 1457794,
+    "crc32": "943f7f36",
+    "sha1": "17896df48d5decbd9c0c3ab4e6f273bdb3bc8eae",
+    "sha256": "29cf1a2c13d4d5cceb44cb2abf03d1ec03f38bb48e59e0d30748bc88e55bc4f2",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
   "validation": {
     "qa_evidence": {
-      "report_digest": "498bb0346072561788605b11ae9b64da77c1c54f5c17d8ea0912354f5e625377",
-      "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
-      "inputs_digest": "1343eedbf7c6748a6ae5a64b6d6166c62ec490035f1573b5946794ab808fda12",
+      "report_digest": "4bf3216ea81037457fb49788730e5eb052ea28137a1fdcbb676cb7adffac74c4",
+      "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+      "inputs_digest": "506fc1451f98e69a74df8528f2b36710ebf82692bd76c65f7e2c75654077d260",
       "gate_labels": [
         "address-overrides",
+        "build",
         "csv-integrity",
         "csv-override-shadow",
         "glyph-dictionary",

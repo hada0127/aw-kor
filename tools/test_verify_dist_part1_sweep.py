@@ -1,4 +1,4 @@
-"""Part1 map-label evidence must include both b37 save conditions."""
+"""Part1 map-label evidence must include both b38 save conditions."""
 import json
 import tempfile
 import unittest
@@ -13,7 +13,7 @@ class Part1SweepEvidenceTest(unittest.TestCase):
     def setUpClass(cls):
         candidate = Path(gate.BASE) / 'output/game_wars_korean_candidate_20261016_b38.gba'
         if not candidate.is_file():
-            raise unittest.SkipTest(f'b37 candidate missing: {candidate}')
+            raise unittest.SkipTest(f'b38 candidate missing: {candidate}')
         cls.rom = candidate.read_bytes()
         cls.rom_sha = gate.sha256(cls.rom)
 

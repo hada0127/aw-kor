@@ -19,8 +19,13 @@ BASE = Path(__file__).resolve().parents[1]
 SOURCE_ROM = BASE / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'
 TARGET_ROM = BASE / 'output' / 'game_wars_korean_full.gba'
 DIST = BASE / 'dist'
-B37_ROM_SHA256 = 'c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8'
-B37_MAP_FIX = 'b37 fixes missing names in the unlocked Part 1 link map list.'
+B38_ROM_SHA256 = 'c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6'
+B38_RELEASE_HIGHLIGHT = (
+    'b38 retains the b37 unlocked Part 1 link-map name fix; it stabilizes the '
+    'Part 1 name-confirm 예/아뇨 row in one Japanese-layout row, adjusts the shared '
+    'campaign prompt cursor placement, renames five Part 1 tutorial lines to '
+    '어드밴스 워즈, and renames the Part 2 splash to 어드밴스 워즈 2.'
+)
 
 
 def digest(data):
@@ -35,7 +40,7 @@ def digest(data):
 
 
 def write_readme(path, patch_stem, target_info, release_highlight):
-    highlight_line = f'- Candidate: b37; {release_highlight}' if release_highlight else ''
+    highlight_line = f'- Candidate: b38; {release_highlight}' if release_highlight else ''
     path.write_text(
         f"""# Game Boy Wars Advance 1+2 Korean Patch
 
@@ -67,8 +72,8 @@ for compatibility, but BPS is preferred because it records source/target CRCs.
 def write_release_notes(path, release_date, patch_stem, source_info, target_info, release_highlight):
     highlight_details = (
         f'{release_highlight}\n'
-        'The unlocked map-list captures used a cheat-tainted save: they verify display '
-        'with maps unlocked, not normal-play unlocking.'
+        'The unlocked map-list and shared campaign-prompt captures used cheat-tainted '
+        'saves: they verify those displays, not normal-play unlocking or progression.'
     ) if release_highlight else ''
     unverified_details = (
         'Alternate banner-sheet and `0x804FC8` consumer reachability, natural access '
@@ -94,7 +99,7 @@ passed for this artifact. BPS/IPS round trips were checked during packaging.
 These checks do not establish full-campaign, character-voice, or real-hardware
 approval; those scopes remain tracked separately in `todo.md`.
 {unverified_details}
-""",
+""".rstrip() + '\n',
         encoding='utf-8',
     )
 
@@ -122,7 +127,7 @@ def main():
     target = TARGET_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
-    release_highlight = B37_MAP_FIX if target_info['sha256'] == B37_ROM_SHA256 else ''
+    release_highlight = B38_RELEASE_HIGHLIGHT if target_info['sha256'] == B38_ROM_SHA256 else ''
 
     bps = make_bps(source, target)
     ips = make_ips(source, target)
