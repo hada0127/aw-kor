@@ -14,6 +14,9 @@ record_map_gate:
     adds r0, #0x60
     cmp r7, r0
     beq accepted
+    ldr r0, link_scroll_live
+    cmp r7, r0
+    beq accepted
     ldr r0, rejected
     bx r0
 accepted:
@@ -24,6 +27,7 @@ accepted:
     .align 2
 single_live: .word 0x03000F20
 record_live: .word 0x03001220
+link_scroll_live: .word 0x030010A0
 rejected: .word 0x08F306DD
 source_start: .word 0x08B81CA0
 resumed: .word 0x08F3061D
@@ -58,7 +62,7 @@ record_row_gate:
     ldr r0, record_cell_resume
     bx r0
 single_rows:
-    cmp r1, #6
+    cmp r1, #8
     bhs hook_exit
     // Restore the overwritten row calculation, including the CMP flags.
     adds r0, r6, #0

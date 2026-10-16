@@ -311,6 +311,36 @@
           "capture_baseline_sha256": "a9e0dc7255adb6982c23ee3b34b429d13ddf818c9e86cc5607f323b925d37ad1",
           "capture_run": "temp/release_C/rebind3/obj/E_result",
           "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+          "frame": "temp/release_C/rebind5/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "b37 direct cold-boot recorder capture; RGB-identical to b36r3; inherited save taint",
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "acf07cc314abb6d50900df6917210198bcbcb8f7407b10a51f68dbe25ecbb6ed",
+          "capture_baseline_sha256": "eb140e84a0d7582f139671c26cc4aed24ee7e59ece88b4c3307b7b2dbb285f2e",
+          "capture_run": "temp/release_C/rebind5/obj/E_result",
+          "cheat_tainted": true
         }
       ]
     },
@@ -733,6 +763,28 @@
           "capture_checkpoint_sha256": "ed8f2961072d5a3135680a8b9f24c3f8705f435a3722c67f43f12426e25af7cf",
           "capture_baseline_sha256": "02ce7211fa321e5439febbf17305a6ff9750c666588d0fa2e878ad32ff933506",
           "capture_run": "temp/release_C/rebind3/obj/E_mission",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+          "frame": "temp/release_C/rebind5/obj/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "b37 direct cold-boot recorder capture; RGB-identical to b36r3; inherited save taint",
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "c5b38511e052469792d0c2029eecc02fc73d18e90dd36259c6f6eeb2e0190238",
+          "capture_baseline_sha256": "6ce51cb6b46b8f228ba54cd1b56824d1b14a8391371634f05f915d706542fb81",
+          "capture_run": "temp/release_C/rebind5/obj/E_mission",
           "cheat_tainted": true
         }
       ]

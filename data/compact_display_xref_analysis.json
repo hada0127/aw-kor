@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
- "rom": "output/game_wars_korean_candidate_20261015_b36r3.gba",
- "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
- "git_commit": "43aa265",
+ "rom": "output/game_wars_korean_candidate_20261016_b37.gba",
+ "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+ "git_commit": "5630ab1",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -2177,13 +2177,13 @@
      "pointer_refs": [
       "0x00D88CA0",
       "0x00F306F0",
-      "0x00F30748",
+      "0x00F30754",
       "0x00F30818"
      ],
      "external_pointer_refs": [
       "0x00D88CA0",
       "0x00F306F0",
-      "0x00F30748",
+      "0x00F30754",
       "0x00F30818"
      ],
      "pointer_ref_buckets": {

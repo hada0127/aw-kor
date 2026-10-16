@@ -53,25 +53,25 @@ class Link:
                 raise ValueError('loadstate requires player and path')
             path = Path(parts[2])
             meta = path.with_name(path.name + '.provenance.json')
-            if meta.is_file():
-                record = json.loads(meta.read_text())
-                if record.get('rom_sha256') != ROM_SHA or record.get('state_sha256') != sha(path):
-                    raise ValueError(f'savestate provenance mismatch: {path}')
-                producer = ROOT / record.get('producer_receipt', '')
-                producer_record = json.loads(producer.read_text()) if producer.is_file() else {}
-                receipt_matches = (record.get('bios_sha256') == BIOS_SHA and
-                                   producer_record.get('rom_sha256') == ROM_SHA and
-                                   producer_record.get('emulator_exit_code') == 0 and
-                                   producer_record.get('cheat_tainted') is False and
-                                   any(saved.get('path') == str(path.relative_to(ROOT))
-                                       for saved in producer_record.get('saved_states', [])))
-                tainted = record.get('cheat_tainted') is not False or not receipt_matches
-            else:
-                tainted = True
+            if not meta.is_file():
+                raise ValueError(f'savestate provenance missing: {path}')
+            record = json.loads(meta.read_text())
+            state_sha = sha(path)
+            if record.get('rom_sha256') != ROM_SHA or record.get('state_sha256') != state_sha:
+                raise ValueError(f'savestate provenance mismatch: {path}')
+            producer = ROOT / record.get('producer_receipt', '')
+            producer_record = json.loads(producer.read_text()) if producer.is_file() else {}
+            receipt_matches = (record.get('bios_sha256') == BIOS_SHA and
+                               producer_record.get('rom_sha256') == ROM_SHA and
+                               producer_record.get('emulator_exit_code') == 0 and
+                               producer_record.get('cheat_tainted') is False and
+                               any(saved.get('path') == str(path.relative_to(ROOT))
+                                   for saved in producer_record.get('saved_states', [])))
+            tainted = record.get('cheat_tainted') is not False or not receipt_matches
             self.cheat_tainted |= tainted
-            self.state_loads.append({'path': str(path.relative_to(ROOT)), 'sha256': sha(path),
-                                     'provenance': str(meta.relative_to(ROOT)) if meta.is_file() else None,
-                                     'provenance_sha256': sha(meta) if meta.is_file() else None,
+            self.state_loads.append({'path': str(path.relative_to(ROOT)), 'sha256': state_sha,
+                                     'provenance': str(meta.relative_to(ROOT)),
+                                     'provenance_sha256': sha(meta),
                                      'cheat_tainted': tainted})
         self.proc.stdin.write(line + "\n")
         self.proc.stdin.flush()
@@ -132,3 +132,16 @@ class Link:
         (self.out / "receipt.json").write_text(json.dumps(receipt, indent=2, ensure_ascii=False) + "\n")
         print("EXIT", code, flush=True)
         return code
+
+
+def finish_checked(link, extra):
+    """Fail on emulator shutdown errors while preserving a route's first error."""
+    route_failed = sys.exc_info()[0] is not None
+    try:
+        code = link.finish(extra)
+    except Exception:
+        if not route_failed:
+            raise
+        return
+    if code and not route_failed:
+        raise RuntimeError(f'emulator exited with status {code}')

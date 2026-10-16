@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "defect_id": "DEFECT-VERIFY5-MAP-001",
+  "status": "open",
+  "cheat_tainted": true,
+  "source_save_receipt": "temp/release_C/verify5/all_maps_unlocked.json",
+  "source_save_sha256": "47e38ba46604a90368ff74306901eabd09de53432d8e7fa71990470b865d7c6c",
+  "patched_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "original_rom_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+  "sweep_report": "docs/screenshots/verify5_2026-10-16/map_sweep_unlocked/report.json",
+  "frames": [
+    {
+      "side": "ko",
+      "step": 0,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ko_step_000.png",
+      "sha256": "68251ab510a8fcd49c39769998c65a94b1a370125e7cea4d461f4e7868e446f8",
+      "source": "temp/release_C/verify5/map_sweep_unlocked/frames/step_000.png"
+    },
+    {
+      "side": "ko",
+      "step": 4,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ko_step_004.png",
+      "sha256": "c2e9652274c17dd75137d962789815ff5654ed59e52b4ff3c86df8a0f5259dc0",
+      "source": "temp/release_C/verify5/map_sweep_unlocked/frames/step_004.png"
+    },
+    {
+      "side": "ko",
+      "step": 5,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ko_step_005.png",
+      "sha256": "10af20b0c4d8cb44cd9dc2b88c3227c037c998dff11bdbec800e0a4244d6dbdd",
+      "source": "temp/release_C/verify5/map_sweep_unlocked/frames/step_005.png"
+    },
+    {
+      "side": "ko",
+      "step": 6,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ko_step_006.png",
+      "sha256": "cf863c63618de64cac4c572455b4c05f48b1e817805e0535f9b69d472dd6707c",
+      "source": "temp/release_C/verify5/map_sweep_unlocked/frames/step_006.png"
+    },
+    {
+      "side": "ja",
+      "step": 0,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ja_step_000.png",
+      "sha256": "80c3b66e7f1d9caac1df822cf821a5dca305ce4ee04ca4cda39d28bd4bd5e93c",
+      "source": "temp/release_C/verify5/orig_map_probe/step_000.png"
+    },
+    {
+      "side": "ja",
+      "step": 4,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ja_step_004.png",
+      "sha256": "b827aac39f13724b8700b5e24e4c84f7d08c1b9c35ec8e67dc1e1677caee559f",
+      "source": "temp/release_C/verify5/orig_map_probe/step_004.png"
+    },
+    {
+      "side": "ja",
+      "step": 5,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ja_step_005.png",
+      "sha256": "c12a6a1f7192c07aa22d4c48378b917038508a3735a4dfaa5984503bef1c8e7d",
+      "source": "temp/release_C/verify5/orig_map_probe/step_005.png"
+    },
+    {
+      "side": "ja",
+      "step": 6,
+      "path": "docs/screenshots/verify5_2026-10-16/map_defect_ja_step_006.png",
+      "sha256": "774ad9b410dfeb33ca493034f9f9fca078e8629f61b5842da7e7c64fbcf3aa2d",
+      "source": "temp/release_C/verify5/orig_map_probe/step_006.png"
+    }
+  ],
+  "observed": "Korean map-list row for ツキノワウンガ is blank at step 4; from step 5 onward the entire visible name list is blank while map previews change. The original ROM with the same private save displays names at these steps.",
+  "expected_translations": {
+    "0x00B824F8": "반달가슴곰 운하",
+    "0x00B824EC": "렌치 섬"
+  }
+}

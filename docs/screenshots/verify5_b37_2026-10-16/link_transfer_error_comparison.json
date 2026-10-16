@@ -1,0 +1,50 @@
+[
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_host_transfer_p0.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part1/host_transfer_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_client_transfer_p1.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part1/client_transfer_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_host_detached_120_p0.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part1/host_detached_120_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part1_client_detached_720_p1.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part1/client_detached_720_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_host_transfer_p0.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part2/host_transfer_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_client_transfer_p1.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part2/client_transfer_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_host_detached_120_p0.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part2/host_detached_120_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b36r3_frame": "docs/screenshots/verify5_2026-10-16/part2_client_detached_720_p1.png",
+    "b37_frame": "temp/release_C/rebind5/verify5/error_part2/client_detached_720_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  }
+]

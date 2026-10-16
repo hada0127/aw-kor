@@ -3234,6 +3234,33 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   따라서 이것은 map-list renderer hook의 scroll 안정성과 table/current-SHA 동기화 증거이지,
   156개 B8 맵명 row가 모두 natural visual route에서 노출됐다는 증거가 아니다.
 
+### 2026-10-16 unlocked link map-list correction (b37)
+
+- b36r3의 잠금 해제 저장(`temp/release_C/verify5/all_maps_unlocked.sav`, SHA-256 `47e38ba4…`)에서
+  5번째 행 `반달가슴곰 운하`와 스크롤 뒤의 모든 행·분류 제목이 비었다. `0x08B1319C` 실행 로그에서
+  그 행은 B8 사본이 아니라 `0x08A5D0B4` 문자열을 읽고, 첫 스크롤은 `r7=0x030010A0`으로
+  다시 그리는 것을 확인했다. 기존 hook은 B8/placeholder와 `0x03000F20`만 허용했다.
+- 해제 목록의 관측 문자열은 최대 8글자 셀인데 기존 private 배치는 행당 6셀뿐이었다.
+  `tools/build_korean_full.py`와 `tools/part1_record_map_labels.py`가 A5의
+  `0xA5D0B4..0xA5D0EC` 음절을 source table에 추가하고, `0x030010A0`을 단일/통신 목록
+  상태로 허용하며, 6행×8셀 + 분류 제목 8셀 = 56글자/112타일을 배치한다.
+- VRAM 실험에서 `0x280..`은 큰 맵 미리보기와 충돌했고, `0x300..0x37F`는 BG2/BG3
+  타일맵 VRAM과 겹쳤다. 원본 ROM에서 네 분류의 진입 및 20-step 화면 8개를 덤프해
+  `0x0D0..0x13F` 112타일이 모두 변화 없고 BG0/BG1 tilemap에서 참조되지 않음을 확인했다.
+  b37은 그 구간만 private glyph window로 사용한다. 기록 화면의 `0x280..0x2EF` 배치는
+  별도 상태에서 유지한다.
+- b37 SHA-256 `c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8`에서
+  네 분류(R 및 L 경로)와 잠금 상태를 각각 180-step 캡처했다:
+  `docs/screenshots/b37_map_names_2026-10-16/`. b36r3의 빈 행·제목은 복원됐고,
+  큰 4인용 미리보기도 시각적으로 정상이다. 원래 저장은 치트 오염이므로 정상 진행 증거가 아니다.
+  b36r3 4분류 hook trace의 관측 한글 소스 350곳은 b37 table에서 350/350 조회됐다.
+- 최종 b37 빌드 두 번은 `cmp` 일치(SHA 위와 동일). b36r3 대비 변경은
+  `0xF30626..0xF307D4` hook/gate 64바이트, `0xF31CB0..0xF31D47` 테이블
+  131바이트, `0xF31F80..0xF31FDB` 새 gate 83바이트뿐이다(총 278바이트).
+  최종 ROM으로 네 분류 및 잠금 상태를 각각 다시 180-step 재생했고, 각 보고서의
+  ROM·스크린샷 해시를 재검증했다. `tools/test_part1_record_map_labels.py`는
+  B8 맵명 범위 115개(네 링크 분류의 이름 포함)와 네 분류 제목의 최대 8셀/112타일 예산을 검사한다.
+
 ## [2026-06-28] 89a 항복 확인 선택지 `아▷오` 실화면 결함 원인/수정
 
 - **증상**: 70개 scene screenshot 전수 contact 확인 중

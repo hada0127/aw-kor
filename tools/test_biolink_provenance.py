@@ -7,6 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scene_routes.verify4_link import biolink, bios_nav
+from scene_routes.verify5_link import battle_probe, error_probe, step
 
 
 class FakeProcess:
@@ -30,19 +31,23 @@ class LinkProvenanceTest(unittest.TestCase):
         link.saved_states = []
         return link
 
-    def test_unknown_and_mismatched_state(self):
+    def test_missing_and_foreign_rom_state_are_rejected_before_load(self):
         with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:
             folder = Path(raw)
             state = folder / 'state.ss0'
             state.write_bytes(b'state')
             link = self.make_link(folder)
-            link.cmd(f'loadstate 0 {state}')
-            self.assertTrue(link.cheat_tainted)
-            self.assertTrue(link.state_loads[0]['cheat_tainted'])
+            with self.assertRaisesRegex(ValueError, 'provenance missing'):
+                link.cmd(f'loadstate 0 {state}')
+            self.assertEqual(link.proc.stdin.getvalue(), '')
+            self.assertEqual(link.state_loads, [])
             state.with_name(state.name + '.provenance.json').write_text(json.dumps({
                 'rom_sha256': 'wrong', 'state_sha256': biolink.sha(state), 'cheat_tainted': False}))
+            link = self.make_link(folder)
             with self.assertRaisesRegex(ValueError, 'provenance mismatch'):
-                self.make_link(folder).cmd(f'loadstate 0 {state}')
+                link.cmd(f'loadstate 0 {state}')
+            self.assertEqual(link.proc.stdin.getvalue(), '')
+            self.assertEqual(link.state_loads, [])
 
     def test_checked_same_rom_state_remains_clean(self):
         with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:
@@ -62,6 +67,52 @@ class LinkProvenanceTest(unittest.TestCase):
             link = self.make_link(folder)
             link.cmd(f'loadstate 0 {state}')
             self.assertFalse(link.cheat_tainted)
+            self.assertEqual(link.state_loads[0]['cheat_tainted'], False)
+            self.assertIn('loadstate 0', link.proc.stdin.getvalue())
+
+    def test_matching_rom_inherits_taint(self):
+        with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:
+            folder = Path(raw)
+            state = folder / 'state.ss0'
+            state.write_bytes(b'tainted state')
+            state.with_name(state.name + '.provenance.json').write_text(json.dumps({
+                'rom_sha256': biolink.ROM_SHA, 'state_sha256': biolink.sha(state),
+                'cheat_tainted': True}))
+            link = self.make_link(folder)
+            link.cmd(f'loadstate 0 {state}')
+            self.assertTrue(link.cheat_tainted)
+            self.assertTrue(link.state_loads[0]['cheat_tainted'])
+
+    def test_verify5_drivers_propagate_finish_status_and_preserve_route_error(self):
+        class FakeLink:
+            fail_status = False
+
+            def __init__(self, out):
+                pass
+
+            def cmd(self, line):
+                if self.fail_status and line == 'status':
+                    raise ValueError('route failed')
+
+            def capture(self, *args, **kwargs):
+                pass
+
+            def press(self, *args, **kwargs):
+                pass
+
+            def finish(self, extra):
+                return 7
+
+        for module, args in ((step, (Path('temp/unused'), [])),
+                             (battle_probe, (1, Path('temp/unused'))),
+                             (error_probe, (1, Path('temp/unused')))):
+            with self.subTest(module=module.__name__), patch.object(module.b, 'Link', FakeLink):
+                with self.assertRaisesRegex(RuntimeError, 'emulator exited with status 7'):
+                    module.run(*args)
+        FakeLink.fail_status = True
+        with patch.object(step.b, 'Link', FakeLink):
+            with self.assertRaisesRegex(ValueError, 'route failed'):
+                step.run(Path('temp/unused'), [])
 
     def test_mutating_command_taints(self):
         with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:

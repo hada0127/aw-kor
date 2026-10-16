@@ -1,5 +1,9 @@
 > Current candidate: b36r3 (`f3148d4f…4ecf1`). The corrected cold-boot link evidence and remaining limits are recorded in “b36r3 link evidence provenance correction” below; earlier link manifests are invalid history.
 
+## 2026-10-16 b37 별도 후보: 잠금 해제 1편 링크 맵 이름 복원
+
+`tools/build_korean_full.py --out output/game_wars_korean_candidate_20261016_b37.gba --no-sync-outputs`를 원본 ROM에서 두 번 실행해 `cmp` 일치, SHA-256 `c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8`을 얻었다. `tools/capture_part1_link_map_list_sweep.py`로 같은 잠금 해제 SRAM(SHA `47e38ba4…`)을 써서 네 분류(R 0/1/2, L -1)와 잠금 상태를 각각 180-step 재생했다. 각 보고서의 ROM·스크린샷 해시 일치, 화면의 한글 이름·분류 제목 표시, 잠금 상태 `미공개` 표시를 확인했다. 원본 일본판/b36r3/b37 비교와 전체 접촉 시트는 `docs/screenshots/b37_map_names_2026-10-16/`; 재실행 명령·결과는 `temp/release_C/b37_report.md`에 있다. 이 SRAM은 치트로 해제한 것이며 정상 플레이 해제 증거는 아니다. canonical ROM과 배포 패치는 b36r3 그대로다.
+
 ## 2026-10-12 Part 2 v9 candidate verification and OBJ screen proofs
 
 Linux real-font build (`AW_FONT_DIR=/home/taro1/aw-fonts`, `tools/build_korean_full.py --no-sync-outputs`) reproduced `output/game_wars_korean_candidate_part2_20261008_v9.gba` byte-for-byte: SHA-256 `ab5a4a996bfcf9f1f45838c3c8cfd9674fbdc5b034c26d85421295874835fcd7`. Build and gate logs are under `temp/v9_finish_20261012/`. `check_composed_rows` checked 66 repaired fragments, maximum 44 half-cells, over 44: 0; this is a parser measurement assuming the verified `0x31424C` script consumer and a 44-half-cell portrait box, while per-message on-screen fit for all 66 fragments remains (unverified). B-team unlisted drift 0; integrity map 405784 expected bytes, mismatch 0; phase6 and final `qa_obj_title_cells.py` PASS. Ending/font/layout unit tests: 5/12/7 PASS.

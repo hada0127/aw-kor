@@ -5800,21 +5800,18 @@ def _part1_map_label_entries(rom, sylmap, syl_to_code):
     for idx, ch in enumerate('미공개'):
         add_entry(0x08DF8C2A + idx * 2, ch)
 
-    start, end = PART1_MAP_LABEL_SOURCE_RANGE
-    pos = start
-    while pos + 1 < end:
-        b0 = rom[pos]
-        if b0 == 0:
-            pos += 1
-            continue
-        if b0 == 0x20:
-            pos += 1
-            continue
-        code = (b0 << 8) | rom[pos + 1]
-        ch = code_to_syllable.get(code)
-        if ch is not None:
-            add_entry(0x08000000 + pos, ch)
-        pos += 2
+    for start, end in (PART1_MAP_LABEL_SOURCE_RANGE, PART1_MAP_LABEL_A5_SOURCE_RANGE):
+        pos = start
+        while pos + 1 < end:
+            b0 = rom[pos]
+            if b0 == 0 or b0 == 0x20:
+                pos += 1
+                continue
+            code = (b0 << 8) | rom[pos + 1]
+            ch = code_to_syllable.get(code)
+            if ch is not None:
+                add_entry(0x08000000 + pos, ch)
+            pos += 2
     return entries
 
 
@@ -5839,14 +5836,19 @@ def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code, *, refresh=Fal
     rom[off:off + slot] = raw
     WRITE_LOG.append([off, slot, slot, raw.hex(), None, '미공개', 0, 'part1-single-map-unknown-label'])
 
+    required_tiles = (PART1_MAP_LABEL_LIST_ROWS * PART1_MAP_LABEL_LIST_COLUMNS
+                      + PART1_MAP_LABEL_CATEGORY_COLUMNS) * 2
+    if PART1_MAP_LABEL_PRIVATE_TILE_BASE + required_tiles > PART1_MAP_LABEL_PRIVATE_TILE_END:
+        raise AssertionError('Part1 link map-label tile budget overflow')
+
     entries = _part1_map_label_entries(rom, sylmap, syl_to_code)
     table = bytearray()
     for source_rt, top, bot in entries:
         table += struct.pack('<IHH', source_rt, top, bot)
     table_end = PART1_MAP_LABEL_TABLE_FILE + len(table)
-    if table_end > B84_POWER_GLYPH_BLOCK_FILE:
+    if table_end > PART1_MAP_LABEL_SOURCE_GATE_FILE:
         raise AssertionError(
-            f'Part1 map-label table overlaps B84 glyph block: 0x{table_end:X} > 0x{B84_POWER_GLYPH_BLOCK_FILE:X}'
+            f'Part1 map-label table overlaps source gate: 0x{table_end:X} > 0x{PART1_MAP_LABEL_SOURCE_GATE_FILE:X}'
         )
     rom[PART1_MAP_LABEL_TABLE_FILE:table_end] = table
     hook = _part1_map_label_hook(PART1_MAP_LABEL_TABLE_RT + len(table))
@@ -13150,18 +13152,25 @@ PART1_SINGLE_MAP_LABEL_SITE_EXPECT = bytes.fromhex('381c211c524608f0c7fee6e7')
 PART1_MAP_LABEL_TABLE_FILE = HOOK_FILE + 0x800
 PART1_MAP_LABEL_TABLE_RT = 0x08F30800
 PART1_MAP_LABEL_SOURCE_RANGE = (0xB81CA0, 0xB82800)
+PART1_MAP_LABEL_A5_SOURCE_RANGE = (0xA5D0B4, 0xA5D0EC)
+PART1_MAP_LABEL_SOURCE_GATE_FILE = 0xF31F80
+PART1_MAP_LABEL_LIST_ROWS = 6
+PART1_MAP_LABEL_LIST_COLUMNS = 8
+PART1_MAP_LABEL_CATEGORY_COLUMNS = 8
+PART1_MAP_LABEL_PRIVATE_TILE_BASE = 0xD0
+PART1_MAP_LABEL_PRIVATE_TILE_END = 0x140
 PART1_MAP_LABEL_HOOK_TEMPLATE = bytes.fromhex(
     # r2 still carries the current source pointer at hook entry. Run the
-    # original compact renderer first, then overlay only B8 link-map labels and
-    # the locked-map placeholder through a source-pointer table. Only the live
-    # map-list state 0x03000F20 is overlaid; the alternate state draws hidden
-    # buffers with the same cell coordinates and would otherwise overwrite the
-    # shared glyph tiles. The private tile window is 0x3A8..0x3FB: page0 gets
-    # 6 rows x 6 visible Hangul cells, page1 only the colliding top row.
+    # original compact renderer first, then overlay B8/A5 link-map labels and
+    # the locked-map placeholder through a source-pointer table. Live states
+    # 0x03000F20 and 0x030010A0 are overlaid; hidden state 0x03000F80 would
+    # overwrite shared glyph tiles at the same cell coordinates. The 112
+    # private tiles occupy 0x0D0..0x13F, stable and unreferenced across the
+    # four unlocked map categories.
     'f0b4151c261c381c211c5246354b9e46354b18473548874260d13548854202d33448854209d3'
     '3448854206d00230854203d00230854200d050e0304c304fbc424cd22068854201d00834f8e'
     '7a288e388311c49081f20014005293fd3053906293cd2301cc00907252840062836d2351ced'
-    '0a01273d40002d05d1c50040002d1a281c401803e0002828d1081c243040001c4909183088'
+    '0a01273d40002d05d1c500c046c046281c401803e0002828d1081c303040001c4909183088'
     '1c4d284008433080301c403007882f400d1c01352f430780174d49016d18164e5201b61808'
     '273068286004360435013ff9d1114e5b01f61808273068286004360435013ff9d1f0bc0d4'
     '800470000'
@@ -13173,7 +13182,7 @@ PART1_MAP_LABEL_HOOK_TEMPLATE = bytes.fromhex(
     '2a8cdf08'  # .word 0x08DF8C2A (locked-map placeholder source)
     '0010f308'  # .word table start, patched by _part1_map_label_hook()
     '1010f308'  # .word table end, patched by _part1_map_label_hook()
-    'a8030000'  # .word 0x000003A8 (private tile base)
+    'd0000000'  # .word 0x000000D0 (private tile base)
     '00fc0000'  # .word 0x0000FC00 (tilemap attribute mask)
     '00000006'  # .word 0x06000000 (VRAM charblock)
     '0000f008'  # .word 0x08F00000 (KOR_BASE_RT)

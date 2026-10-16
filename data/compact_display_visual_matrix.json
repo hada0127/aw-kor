@@ -1,30 +1,30 @@
 {
  "tool": "tools/build_compact_display_visual_matrix.py",
- "rom": "output/game_wars_korean_candidate_20261015_b36r3.gba",
- "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+ "rom": "output/game_wars_korean_candidate_20261016_b37.gba",
+ "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
  "glyph_dictionary_qa": {
-  "path": "temp/release_C/rebind3/glyph_dictionary_qa.json",
+  "path": "temp/release_C/rebind5/glyph_dictionary_qa.json",
   "issue_count": 0,
-  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1"
+  "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8"
  },
  "renderer_trace": {
   "path": "data/compact_display_renderer_trace.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
   "case_count": 3,
-  "hit_count": 1922,
+  "hit_count": 1923,
   "direct_target_hit_count": 0,
   "breakpoint_count": 55,
   "code_context_breakpoints_enabled": true,
-  "code_context_json": "temp/release_C/rebind3/compact_code_context.json",
+  "code_context_json": "temp/release_C/rebind5/compact_code_context.json",
   "strict_note": "Only direct_target_hits count as E12 visual provenance. A zero-hit case is a route/function-candidate negative result, not proof that the table is globally unused. direct_target_hits require an exact compact target address in r0-r7; range_register_hits are investigation leads only."
  },
  "xref_analysis": {
   "path": "data/compact_display_xref_analysis.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
   "groups": [
    {
     "id": "a2_co_power_profile_display_overrides",
@@ -73,7 +73,7 @@
   "path": "data/compact_display_code_context.json",
   "present": true,
   "current_rom": true,
-  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
   "literal_entry_count": 658,
   "derived_table_head_ref_count": 644,
   "breakpoint_candidate_count": 24,
@@ -88,7 +88,7 @@
  "manual_visual_evidence": {
   "path": "data/compact_display_manual_visual_evidence.json",
   "present": true,
-  "source_sha256": "d4d722be432ba6e0dad461ab91de3036721c249d312459fecadeec12d0025629",
+  "source_sha256": "498bf23045395af8b60592bd81f1d940bd1a1952c49fb3b921ee66fb982c529c",
   "current_count": 6,
   "accepted_count": 6,
   "invalid_count": 0,
@@ -112,7 +112,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "싸워라　고물　전차！",
@@ -139,15 +139,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down0/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down0/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81FDC_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81FDC_diff_mask.png",
     "diff_mask_sha256": "f992ac3a55df11d22d66fc02618cd48315535da34343462c8afa1ea8323423a1",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81FDC produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -157,7 +157,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room",
     "scene_id": "15_part1_operation_logos",
     "base_text": "첫 전투",
@@ -184,15 +184,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down0/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down0/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B8200C_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B8200C_diff_mask.png",
     "diff_mask_sha256": "523a55a9c7a260d13d3c99a42538c9d02276da0d65e1507fa11cad3e6f503503",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B8200C_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B8200C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B8200C produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -202,7 +202,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
     "scene_id": "15_part1_operation_logos",
     "base_text": "드래곤플라이！",
@@ -229,15 +229,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down7/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down7/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F98_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F98_diff_mask.png",
     "diff_mask_sha256": "c7f103ff3c92cfbbe978c380252ab991c0f62cbd53cba757e0208af578b37ab7",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F98_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F98_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -247,7 +247,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "바다 저편에",
@@ -274,15 +274,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down10/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down10/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F4C_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F4C_diff_mask.png",
     "diff_mask_sha256": "d1f6ec6bbccdc14d173df3416459501eba401b98dd7c70f23a3973cf73464538",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -292,7 +292,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
     "scene_id": "15_part1_operation_logos",
     "base_text": "도그　파이트！",
@@ -319,15 +319,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down10/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down10/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F5C_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F5C_diff_mask.png",
     "diff_mask_sha256": "c1972535013794bae6f3909cffc627eee423d3e32a4c8d3d562cacf7d443f548",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -337,7 +337,7 @@
     "group": "b8_compact_display_table_all",
     "type": "single_address_mutation_pixel_diff",
     "current_rom": true,
-    "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
     "scene_id": "15_part1_operation_logos",
     "base_text": "결전",
@@ -364,15 +364,15 @@
     "diff_bbox_within_expected_box": true,
     "null_control": {
      "enabled": true,
-     "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-     "diff_mask": "temp/release_C/rebind3/manual_compact/down13/base_repeat_diff_mask.png",
+     "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+     "diff_mask": "temp/release_C/rebind5/manual_compact/down13/base_repeat_diff_mask.png",
      "pixel_diff_count": 0,
      "diff_bbox": null,
      "deterministic": true
     },
-    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F38_diff_mask.png",
+    "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F38_diff_mask.png",
     "diff_mask_sha256": "efc7d590df3b7f7a714237e910760e7aa79ba5177408fddde0ebdc4fd93d4198",
-    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F38_mutation_contact.png",
+    "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F38_mutation_contact.png",
     "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
     "accepted": true,
     "validation_errors": []
@@ -6489,12 +6489,12 @@
        "role": "screen",
        "capture_required": true,
        "screenshot_status": "capturable",
-       "screenshot_grade": "recorded_b36r3",
+       "screenshot_grade": "recorded_b37",
        "current_capture": {
         "current": true,
         "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
         "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-        "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+        "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
         "reason": "current"
        }
       }
@@ -9275,7 +9275,7 @@
       "external_pointer_refs": [
        "0x00D88CA0",
        "0x00F306F0",
-       "0x00F30748",
+       "0x00F30754",
        "0x00F30818"
       ],
       "second_level_refs": []
@@ -10946,7 +10946,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room_plus_13steps_eba0d9ed13",
        "scene_id": "15_part1_operation_logos",
        "base_text": "결전",
@@ -10973,15 +10973,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down13/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down13/base_repeat_capture/41_part1_operation_room_plus_13steps_eba0d9ed13_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down13/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F38_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F38_diff_mask.png",
        "diff_mask_sha256": "efc7d590df3b7f7a714237e910760e7aa79ba5177408fddde0ebdc4fd93d4198",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F38_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F38_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F38 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_13steps_eba0d9ed13. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -11075,7 +11075,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "바다 저편에",
@@ -11102,15 +11102,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F4C_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F4C_diff_mask.png",
        "diff_mask_sha256": "d1f6ec6bbccdc14d173df3416459501eba401b98dd7c70f23a3973cf73464538",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F4C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F4C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -11164,7 +11164,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room_plus_10steps_288ebbc326",
        "scene_id": "15_part1_operation_logos",
        "base_text": "도그　파이트！",
@@ -11191,15 +11191,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down10/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down10/base_repeat_capture/41_part1_operation_room_plus_10steps_288ebbc326_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down10/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F5C_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F5C_diff_mask.png",
        "diff_mask_sha256": "c1972535013794bae6f3909cffc627eee423d3e32a4c8d3d562cacf7d443f548",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F5C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F5C produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_10steps_288ebbc326. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -11333,7 +11333,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120",
        "scene_id": "15_part1_operation_logos",
        "base_text": "드래곤플라이！",
@@ -11360,15 +11360,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down7/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down7/base_repeat_capture/41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down7/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F98_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F98_diff_mask.png",
        "diff_mask_sha256": "c7f103ff3c92cfbbe978c380252ab991c0f62cbd53cba757e0208af578b37ab7",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81F98_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81F98_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81F98 produced a localized pixel diff on checkpoint 41_part1_operation_room_plus_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120_press_DOWN_120. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -11502,7 +11502,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "싸워라　고물　전차！",
@@ -11529,15 +11529,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down0/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down0/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81FDC_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81FDC_diff_mask.png",
        "diff_mask_sha256": "f992ac3a55df11d22d66fc02618cd48315535da34343462c8afa1ea8323423a1",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B81FDC_mutation_contact.png",
        "note": "Single-address mutation at 0x00B81FDC produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -11631,7 +11631,7 @@
        "group": "b8_compact_display_table_all",
        "type": "single_address_mutation_pixel_diff",
        "current_rom": true,
-       "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+       "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
        "checkpoint": "41_part1_operation_room",
        "scene_id": "15_part1_operation_logos",
        "base_text": "첫 전투",
@@ -11658,15 +11658,15 @@
        "diff_bbox_within_expected_box": true,
        "null_control": {
         "enabled": true,
-        "base_repeat_frame": "temp/release_C/rebind3/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
-        "diff_mask": "temp/release_C/rebind3/manual_compact/down0/base_repeat_diff_mask.png",
+        "base_repeat_frame": "temp/release_C/rebind5/manual_compact/down0/base_repeat_capture/41_part1_operation_room_patched/frame.png",
+        "diff_mask": "temp/release_C/rebind5/manual_compact/down0/base_repeat_diff_mask.png",
         "pixel_diff_count": 0,
         "diff_bbox": null,
         "deterministic": true
        },
-       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B8200C_diff_mask.png",
+       "diff_mask": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B8200C_diff_mask.png",
        "diff_mask_sha256": "523a55a9c7a260d13d3c99a42538c9d02276da0d65e1507fa11cad3e6f503503",
-       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/b8_compact_display_table_all_00B8200C_mutation_contact.png",
+       "contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/b8_compact_display_table_all_00B8200C_mutation_contact.png",
        "note": "Single-address mutation at 0x00B8200C produced a localized pixel diff on checkpoint 41_part1_operation_room. This proves this b8_compact_display_table_all address is a live screen source on that route, not a dead copy.",
        "accepted": true,
        "validation_errors": []
@@ -26688,7 +26688,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26704,7 +26704,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26720,7 +26720,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26736,7 +26736,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_30f2_part2_co_profile_story_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26752,7 +26752,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_26_part2_battle_labels_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_26_part2_battle_labels_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26768,7 +26768,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/10_part2_region_map_redstar_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26784,7 +26784,7 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_85_ui_common_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_85_ui_common_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   },
@@ -26800,12 +26800,12 @@
     "current": true,
     "capture_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/frame.png",
     "provenance_path": "temp/scene_screenshots/scene_87_common_rule_settings_patched/provenance.json",
-    "provenance_rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "provenance_rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "reason": "current"
    }
   }
  ],
- "representative_contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-15_b36r3/current_representative_contact.png",
+ "representative_contact_sheet": "docs/screenshots/e12_compact_display_matrix_2026-10-16_b37/current_representative_contact.png",
  "limitations": [
   "current_screen_capture_assigned means the owning screen scene has a current capture, not that this exact target is visible.",
   "direct_target_visual_evidence is a compatibility field for target-level runtime/source proof. It may be set by renderer trace, read-watch direct hit, or manual mutation proof; mutation proof establishes live source provenance, not full visual-integrity coverage."

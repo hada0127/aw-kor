@@ -109,7 +109,8 @@ def build_sheet(panels: list[Image.Image], cols: int, out_path: Path) -> None:
     sheet.save(out_path)
 
 
-def capture_sweep(rom: Path, harness: Path, work: Path, steps: int) -> tuple[list[dict], list[Path], list[Path]]:
+def capture_sweep(rom: Path, harness: Path, work: Path, steps: int,
+                  save: Path | None = None, category_index: int = 0) -> tuple[list[dict], list[Path], list[Path]]:
     frames_dir = work / "frames"
     crops_dir = work / "crops"
     frames_dir.mkdir(parents=True, exist_ok=True)
@@ -118,14 +119,24 @@ def capture_sweep(rom: Path, harness: Path, work: Path, steps: int) -> tuple[lis
     metrics: list[dict] = []
     frame_paths: list[Path] = []
     crop_paths: list[Path] = []
-    driver = MGBADriver(rom, work, harness)
+    driver = MGBADriver(rom, work, harness, save)
     try:
-        drive_part1_menu_from_coldboot(driver)
-        driver.press("DOWN", after=120)
+        if save is None:
+            drive_part1_menu_from_coldboot(driver)
+        else:
+            # A valid existing cartridge save skips name entry. Stop at MODE SELECT;
+            # the no-save helper's later A presses would load the saved campaign.
+            driver.frames(480)
+            for key in ("A", "START", "A", "START", "A"):
+                driver.press(key, after=120)
+            driver.press("DOWN", after=120)  # operation room
+        driver.press("DOWN", after=120)  # saved: versus; fresh: versus
         driver.press("A", after=180)
         driver.press("DOWN", after=120)
         driver.press("A", after=180)
         driver.frames(30)
+        for _ in range(abs(category_index)):
+            driver.press("R" if category_index > 0 else "L", after=120)
 
         for step in range(steps):
             img = driver.shot(f"sweep_{step:03d}")
@@ -150,6 +161,9 @@ def main() -> int:
     ap.add_argument("--work", default=str(DEFAULT_WORK))
     ap.add_argument("--docs", default=str(DEFAULT_DOCS))
     ap.add_argument("--steps", type=int, default=180)
+    ap.add_argument("--save", type=Path, help="Private 128 KiB cartridge SRAM; harness copies it before use")
+    ap.add_argument("--category-index", type=int, default=0,
+                    help="R presses (negative: L presses) after entering MAP SELECT")
     args = ap.parse_args()
 
     source_rom = Path(args.rom)
@@ -160,13 +174,19 @@ def main() -> int:
         raise SystemExit(f"ROM missing: {source_rom}")
     if not harness.exists():
         raise SystemExit(f"mGBA harness missing: {harness}")
+    if args.save is not None and (not args.save.is_file() or args.save.stat().st_size != 0x20000):
+        raise SystemExit("--save must be an existing 128 KiB cartridge SRAM")
 
     work.mkdir(parents=True, exist_ok=True)
     docs.mkdir(parents=True, exist_ok=True)
     isolated_rom = work / "current_isolated.gba"
     shutil.copy2(source_rom, isolated_rom)
 
-    metrics, frame_paths, crop_paths = capture_sweep(isolated_rom, harness, work, args.steps)
+    save_sha = sha256(args.save) if args.save is not None else None
+    metrics, frame_paths, crop_paths = capture_sweep(
+        isolated_rom, harness, work, args.steps, args.save, args.category_index)
+    if args.save is not None and sha256(args.save) != save_sha:
+        raise AssertionError("input save changed during read-only sweep")
     unique = len({row["crop_sha256"] for row in metrics})
     low_bright_steps = [
         row["step"] for row in metrics if int(row["bright_pixels"]) < LOW_BRIGHT_THRESHOLD
@@ -201,14 +221,16 @@ def main() -> int:
         "rom": rel(isolated_rom),
         "rom_sha256": sha256(isolated_rom),
         "source_rom_sha256": sha256(source_rom),
-        "route": [
-            "part1_menu_from_coldboot",
-            "DOWN",
-            "A",
-            "DOWN",
-            "A",
-            "then DOWN after each screenshot",
-        ],
+        "source_save": rel(args.save) if args.save is not None else None,
+        "source_save_sha256": save_sha,
+        "category_index": args.category_index,
+        "cheat_tainted": args.save is not None,
+        "route": (["part1_saved_menu_from_coldboot", "DOWN", "DOWN", "A", "DOWN", "A"]
+                  if args.save is not None else
+                  ["part1_menu_from_coldboot", "DOWN", "A", "DOWN", "A"])
+                 + ([f"{'R' if args.category_index > 0 else 'L'} x{abs(args.category_index)}"]
+                    if args.category_index else [])
+                 + ["then DOWN after each screenshot"],
         "step_count": args.steps,
         "unique_list_crop_count": unique,
         "duplicate_list_crop_count": args.steps - unique,

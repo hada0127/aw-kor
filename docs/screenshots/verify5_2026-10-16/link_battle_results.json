@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+  "outcome_trigger": "Native in-game client surrender; no memory writes",
+  "routes": {
+    "part1_result": {
+      "receipt": "temp/release_C/verify5/battle_part1_result_yes/receipt.json",
+      "receipt_sha256": "12bb234b4c0ef96f1baf96f42e3650d6c86cd3e95780d5d0ef910805efa67800",
+      "emulator_exit_code": 0,
+      "cheat_tainted": false,
+      "images": [
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_client_dialog_p1.png",
+          "sha256": "174ecfff6878ff0a7272d69b09bbfa286a6e13e38769074bbb4f583e3983fa5f",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/client_dialog_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_client_yes_focus_p1.png",
+          "sha256": "acc94a694f1ead39f75395257d84d92fd6d05fa5005bd40d4630a0ae7551fbc0",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/client_yes_focus_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_host_00_p0.png",
+          "sha256": "470ff2f708eb2a50730fe5c31f4bec9e614f5506d5bb7d8a38439ffe74c2bdc1",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/host_00_p0.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_client_00_p1.png",
+          "sha256": "f3144ebb5b410e967735fc6be6d716d3832bfd73c24934ac6228d7b0499a9dad",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/client_00_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_host_02_p0.png",
+          "sha256": "6011d87bc0faf9182c0b5d286e1303796806274d726bdd99ba149aeb580c1433",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/host_02_p0.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_result_client_02_p1.png",
+          "sha256": "afefd335f2e60a32c99bbaac3ab24a14df52c8e645f8db579734715d16540444",
+          "source": "temp/release_C/verify5/battle_part1_result_yes/client_02_p1.png"
+        }
+      ]
+    },
+    "part2_result": {
+      "receipt": "temp/release_C/verify5/battle_part2_result_yes/receipt.json",
+      "receipt_sha256": "276c10104e0711407ef081abdf1cab5a3047f8bf9f93c84a091575866bb42e56",
+      "emulator_exit_code": 0,
+      "cheat_tainted": false,
+      "images": [
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_client_dialog_p1.png",
+          "sha256": "8e6d487578996cfafecfd897c435ea995921b925dbf280ba7136f4b460c8a294",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/client_dialog_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_client_yes_focus_p1.png",
+          "sha256": "d8255e810a56f4e9d51bf66af94aacbe65f7826d94811a850e055d6a7f361b78",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/client_yes_focus_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_host_00_p0.png",
+          "sha256": "470ff2f708eb2a50730fe5c31f4bec9e614f5506d5bb7d8a38439ffe74c2bdc1",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/host_00_p0.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_client_00_p1.png",
+          "sha256": "8db5f9efe1ee6ea5518f2e1ad6696c45bf4a7465d36524708335e344b94a5a76",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/client_00_p1.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_host_02_p0.png",
+          "sha256": "38b7497ed8dd34be480cf3328c60005b9cac12e7ac4f415e82af9a175b79d8c2",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/host_02_p0.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_result_client_02_p1.png",
+          "sha256": "1aaaed34a3bbf270da3707d1414a42de4c995d2f2e87d6f17e6c19286adfae76",
+          "source": "temp/release_C/verify5/battle_part2_result_yes/client_02_p1.png"
+        }
+      ]
+    },
+    "part2_client_day2": {
+      "receipt": "temp/release_C/verify5/battle_part2_client_day2_retry/receipt.json",
+      "receipt_sha256": "ddf452ba8ed20330c5a37f7b67fa34c0bd1e313e887dbad8d09ff4eac4c2e308",
+      "emulator_exit_code": 0,
+      "cheat_tainted": false,
+      "images": [
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_client_day2_host_after_p0.png",
+          "sha256": "64502705d0f2d5598980b894a587ca41f392116604e6558b6c1e6ee19769b4de",
+          "source": "temp/release_C/verify5/battle_part2_client_day2_retry/host_after_p0.png"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part2_client_day2_client_after_p1.png",
+          "sha256": "fe53f23fdb053b3b5879b2eb36bebe99ae6150d5562f9e24fc17d8cae6d7b54c",
+          "source": "temp/release_C/verify5/battle_part2_client_day2_retry/client_after_p1.png"
+        }
+      ]
+    },
+    "part1_client_day2": {
+      "receipt": "temp/release_C/verify5/battle_part1_client_day2_frames/receipt.json",
+      "receipt_sha256": "48b58d30b1829d31ced16ef38f5bcb43a194a1f20a8bc665a7b4fa3734d66888",
+      "predecessor_receipt": "temp/release_C/verify5/battle_part1_client_endturn/receipt.json",
+      "predecessor_receipt_sha256": "90f7540aa4046362121320dcd50ce39310449eb073c47b7ad3a6f49e397f94a5",
+      "emulator_exit_code": 0,
+      "cheat_tainted": false,
+      "images": [
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_client_day2_f070_p1.png",
+          "sha256": "434b0f6cfc242fcd4c45b8f76e88422ca8063b4611d77240b6df47d4d0e2fa0c",
+          "source": "temp/release_C/verify5/battle_part1_client_day2_frames/client_f070_p1.png",
+          "observed_text": null
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_client_day2_f100_p1.png",
+          "sha256": "c5788343db29a3f22371a1c199e8f84eb8f4e95870e564b45d5712713659c912",
+          "source": "temp/release_C/verify5/battle_part1_client_day2_frames/client_f100_p1.png",
+          "observed_text": "2일째 / 작전개시"
+        },
+        {
+          "path": "docs/screenshots/verify5_2026-10-16/part1_client_day2_f150_p1.png",
+          "sha256": "184f18de78a073f8b6066e2f53d34524f04c2bb4693bb027ad2ebcecaec8bbc5",
+          "source": "temp/release_C/verify5/battle_part1_client_day2_frames/client_f150_p1.png",
+          "observed_text": null
+        }
+      ],
+      "observed_text": [
+        "2일째",
+        "작전개시"
+      ]
+    }
+  }
+}

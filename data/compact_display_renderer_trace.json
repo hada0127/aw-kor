@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
- "rom": "output/game_wars_korean_candidate_20261015_b36r3.gba",
- "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
- "git_commit": "43aa265",
+ "rom": "output/game_wars_korean_candidate_20261016_b37.gba",
+ "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+ "git_commit": "5630ab1",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -372,11 +372,11 @@
    "aliases": []
   }
  ],
- "code_context_json": "temp/release_C/rebind3/compact_code_context.json",
+ "code_context_json": "temp/release_C/rebind5/compact_code_context.json",
  "code_context_breakpoints_enabled": true,
  "target_count": 496,
  "case_count": 3,
- "hit_count": 1922,
+ "hit_count": 1923,
  "direct_target_hit_count": 0,
  "direct_hits": [],
  "cases": [
@@ -385,7 +385,7 @@
    "name": "07_part2_main_menu",
    "mode": "recorder_endpoint",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/release_C/rebind3/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind5/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/release_C/rebind3/compact_trace_runs/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/release_C/rebind5/compact_trace_runs/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,7 +862,7 @@
    "name": "scene_87_common_rule_settings",
    "mode": "recorder_endpoint",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/release_C/rebind3/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind5/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1418,7 +1418,7 @@
      60
     ]
    ],
-   "frame": "temp/release_C/rebind3/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/release_C/rebind5/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -1542,7 +1542,7 @@
    "name": "41_part1_operation_room",
    "mode": "recorder_endpoint",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/release_C/rebind3/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/release_C/rebind5/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2117,8 +2117,8 @@
      200
     ]
    ],
-   "frame": "temp/release_C/rebind3/compact_trace_runs/screen_41_part1_operation_room/frame.png",
-   "hit_count": 1918,
+   "frame": "temp/release_C/rebind5/compact_trace_runs/screen_41_part1_operation_room/frame.png",
+   "hit_count": 1919,
    "direct_target_hits": [],
    "hits": [
     {
@@ -7722,7 +7722,7 @@
      "raw": "199 BP r0=00008983 r1=00000100 r2=00008A83 r3=00000030 r4=08BE71DE r5=000001FE r6=02010ADA r7=00000001 sp=03007AFC lr=08B1BF0D pc=08B12ABE"
     }
    ],
-   "truncated_hits": 1718
+   "truncated_hits": 1719
   }
  ],
  "strict_note": "Only direct_target_hits count as E12 visual provenance. A zero-hit case is a route/function-candidate negative result, not proof that the table is globally unused. direct_target_hits require an exact compact target address in r0-r7; range_register_hits are investigation leads only."

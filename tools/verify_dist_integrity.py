@@ -49,6 +49,12 @@ REPOINT_MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 SYLLABLE_TO_CODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 SYLLABLE_TO_GLYPH_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 PART1_MAP_LABEL_SWEEP_REPORT = os.path.join(
+    BASE, 'docs', 'screenshots', 'b37_map_names_2026-10-16', 'unlocked_cat0', 'report.json'
+)
+PART1_MAP_LABEL_LOCKED_SWEEP_REPORT = os.path.join(
+    BASE, 'docs', 'screenshots', 'b37_map_names_2026-10-16', 'locked', 'report.json'
+)
+PART1_MAP_LABEL_LEGACY_SWEEP_REPORT = os.path.join(
     BASE, 'docs', 'screenshots', 'part1_link_map_list_full_sweep_2026-10-16_b36r3', 'report.json'
 )
 PART1_MAP_LABEL_SITE = 0x00B1319C
@@ -56,7 +62,7 @@ PART1_MAP_LABEL_SITE_BYTES = bytes.fromhex('004800470106f308c046c046')
 PART1_MAP_LABEL_HOOK_FILE = 0x00F30600
 PART1_MAP_LABEL_TABLE_FILE = 0x00F30800
 PART1_MAP_LABEL_TABLE_RT = 0x08F30800
-PART1_MAP_LABEL_TABLE_LIMIT = 0x00F32000
+PART1_MAP_LABEL_TABLE_LIMIT = 0x00F31F80
 PART1_MAP_LABEL_SOURCE_RANGE = (0x00B81CA0, 0x00B82800)
 PART1_MAP_LABEL_PLACEHOLDER_RT = 0x08DF8C2A
 B84_POWER_GLYPH_HOOK_FILE = 0x00F30780
@@ -326,7 +332,7 @@ def verify_scene89_system_menu_sources(current):
     return True, ', '.join(details)
 
 
-def load_part1_map_label_expected_table(current):
+def load_part1_map_label_expected_table(current, *, include_a5=False):
     code_map = json.load(open(SYLLABLE_TO_CODE_2350, encoding='utf-8'))
     glyph_map = json.load(open(SYLLABLE_TO_GLYPH_2350, encoding='utf-8'))
     glyph_map = glyph_map.get('map', glyph_map)
@@ -348,20 +354,23 @@ def load_part1_map_label_expected_table(current):
     for idx, syllable in enumerate('미공개'):
         add_entry(PART1_MAP_LABEL_PLACEHOLDER_RT + idx * 2, syllable)
 
-    start, end = PART1_MAP_LABEL_SOURCE_RANGE
-    pos = start
-    while pos + 1 < end:
-        b0 = current[pos]
-        # Mirror build_korean_full.py exactly: this compact source range contains
-        # single-byte padding/space bytes interleaved with 2-byte Korean codes.
-        if b0 == 0 or b0 == 0x20:
-            pos += 1
-            continue
-        code = (b0 << 8) | current[pos + 1]
-        syllable = code_to_syllable.get(code)
-        if syllable is not None:
-            add_entry(0x08000000 + pos, syllable)
-        pos += 2
+    ranges = [PART1_MAP_LABEL_SOURCE_RANGE]
+    if include_a5:
+        ranges.append((0xA5D0B4, 0xA5D0EC))
+    for start, end in ranges:
+        pos = start
+        while pos + 1 < end:
+            b0 = current[pos]
+            # Mirror build_korean_full.py: single-byte padding and spaces are
+            # interleaved with two-byte Korean codes in these compact sources.
+            if b0 == 0 or b0 == 0x20:
+                pos += 1
+                continue
+            code = (b0 << 8) | current[pos + 1]
+            syllable = code_to_syllable.get(code)
+            if syllable is not None:
+                add_entry(0x08000000 + pos, syllable)
+            pos += 2
 
     payload = bytearray()
     for source_rt, top, bot in entries:
@@ -369,47 +378,13 @@ def load_part1_map_label_expected_table(current):
     return bytes(payload), entries
 
 
-def verify_part1_map_label_hook(current, current_sha):
-    if current is None:
-        return False, 'current ROM unavailable'
-    site = current[PART1_MAP_LABEL_SITE:PART1_MAP_LABEL_SITE + len(PART1_MAP_LABEL_SITE_BYTES)]
-    if site != PART1_MAP_LABEL_SITE_BYTES:
-        return False, (
-            f'hook site bytes changed at 0x{PART1_MAP_LABEL_SITE:08X}: '
-            f'expected={PART1_MAP_LABEL_SITE_BYTES.hex()} actual={site.hex()}'
-        )
-    if B84_POWER_GLYPH_HOOK_FILE < PART1_MAP_LABEL_HOOK_FILE + 280:
-        return False, 'Part1 map-label hook overlaps B84 power-title hook slot'
-
+def verify_part1_map_label_sweep_report(sweep_report, current_sha):
+    """Bind one map-list sweep and its contact sheets to the selected ROM."""
+    if not os.path.exists(sweep_report):
+        return False, f'sweep report missing: {sweep_report}'
     try:
-        expected_table, entries = load_part1_map_label_expected_table(current)
-    except Exception as e:
-        return False, f'expected table rebuild failed: {e}'
-    table_end = PART1_MAP_LABEL_TABLE_FILE + len(expected_table)
-    if table_end > PART1_MAP_LABEL_TABLE_LIMIT:
-        return False, (
-            f'table overflow: end=0x{table_end:08X} limit=0x{PART1_MAP_LABEL_TABLE_LIMIT:08X}'
-        )
-    actual_table = current[PART1_MAP_LABEL_TABLE_FILE:table_end]
-    if actual_table != expected_table:
-        return False, 'hook table does not match current B8 source bytes/glyph map'
-
-    hook = current[PART1_MAP_LABEL_HOOK_FILE:PART1_MAP_LABEL_TABLE_FILE]
-    table_start_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT)
-    table_end_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT + len(expected_table))
-    if table_start_lit not in hook:
-        return False, 'hook literal table start missing'
-    if table_end_lit not in hook:
-        return False, 'hook literal table end missing'
-    private_tile_lit = struct.pack('<I', 0x000003A8)
-    if private_tile_lit not in hook:
-        return False, 'hook private tile base literal 0x3A8 missing'
-
-    sweep_msg = 'sweep report not checked'
-    if not os.path.exists(PART1_MAP_LABEL_SWEEP_REPORT):
-        return False, f'sweep report missing: {PART1_MAP_LABEL_SWEEP_REPORT}'
-    try:
-        report = json.load(open(PART1_MAP_LABEL_SWEEP_REPORT, encoding='utf-8'))
+        with open(sweep_report, encoding='utf-8') as source:
+            report = json.load(source)
     except Exception as e:
         return False, f'sweep report JSON load failed: {e}'
     if report.get('rom_sha256') != current_sha or report.get('source_rom_sha256') != current_sha:
@@ -451,8 +426,15 @@ def verify_part1_map_label_hook(current, current_sha):
         )
     if report.get('low_bright_steps'):
         return False, f'sweep low-bright frames present: {report.get("low_bright_steps")}'
+    docs = report.get('docs')
+    expected_docs = {'list_sweep_page1', 'list_sweep_page2', 'list_sweep_page3', 'full_frame_every10'}
+    if not isinstance(docs, dict):
+        return False, 'sweep contact sheets missing: docs is not an object'
+    missing_docs = sorted(key for key in expected_docs if not isinstance(docs.get(key), str) or not docs[key])
+    if missing_docs:
+        return False, f'sweep contact sheets missing: {missing_docs}'
     doc_hashes = report.get('docs_sha256') or {}
-    for label, rel in (report.get('docs') or {}).items():
+    for label, rel in docs.items():
         path = os.path.join(BASE, rel)
         if not os.path.exists(path):
             return False, f'sweep artifact missing: {label} {rel}'
@@ -462,11 +444,73 @@ def verify_part1_map_label_hook(current, current_sha):
         actual_hash = sha256(read(path))
         if actual_hash != expected_hash:
             return False, f'sweep artifact hash mismatch: {label} {rel}'
-    sweep_msg = f'sweep_steps={step_count}, frame_crop_unique={unique_metric_count}'
+    return True, f'sweep_steps={step_count}, frame_crop_unique={unique_metric_count}'
 
+
+def verify_part1_map_label_hook(current, current_sha):
+    if current is None:
+        return False, 'current ROM unavailable'
+    site = current[PART1_MAP_LABEL_SITE:PART1_MAP_LABEL_SITE + len(PART1_MAP_LABEL_SITE_BYTES)]
+    if site != PART1_MAP_LABEL_SITE_BYTES:
+        return False, (
+            f'hook site bytes changed at 0x{PART1_MAP_LABEL_SITE:08X}: '
+            f'expected={PART1_MAP_LABEL_SITE_BYTES.hex()} actual={site.hex()}'
+        )
+    if B84_POWER_GLYPH_HOOK_FILE < PART1_MAP_LABEL_HOOK_FILE + 280:
+        return False, 'Part1 map-label hook overlaps B84 power-title hook slot'
+
+    tile_base = struct.unpack_from('<I', current, PART1_MAP_LABEL_HOOK_FILE + 0x104)[0]
+    if tile_base not in (0x0D0, 0x3A8):
+        return False, f'unrecognized Part1 map-label tile base 0x{tile_base:X}'
+    is_b37 = tile_base == 0x0D0
+    table_limit = PART1_MAP_LABEL_TABLE_LIMIT if is_b37 else 0x00F32000
+    sweep_reports = (
+        [('locked', PART1_MAP_LABEL_LOCKED_SWEEP_REPORT),
+         ('unlocked_cat0', PART1_MAP_LABEL_SWEEP_REPORT)] if is_b37 else
+        [('legacy', PART1_MAP_LABEL_LEGACY_SWEEP_REPORT)]
+    )
+    try:
+        expected_table, entries = load_part1_map_label_expected_table(current, include_a5=is_b37)
+    except Exception as e:
+        return False, f'expected table rebuild failed: {e}'
+    table_end = PART1_MAP_LABEL_TABLE_FILE + len(expected_table)
+    if table_end > table_limit:
+        return False, (
+            f'table overflow: end=0x{table_end:08X} limit=0x{table_limit:08X}'
+        )
+    actual_table = current[PART1_MAP_LABEL_TABLE_FILE:table_end]
+    if actual_table != expected_table:
+        return False, 'hook table does not match current map-label source bytes/glyph map'
+
+    hook = current[PART1_MAP_LABEL_HOOK_FILE:PART1_MAP_LABEL_TABLE_FILE]
+    table_start_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT)
+    table_end_lit = struct.pack('<I', PART1_MAP_LABEL_TABLE_RT + len(expected_table))
+    if table_start_lit not in hook:
+        return False, 'hook literal table start missing'
+    if table_end_lit not in hook:
+        return False, 'hook literal table end missing'
+    private_tile_lit = struct.pack('<I', tile_base)
+    if private_tile_lit not in hook:
+        return False, f'hook private tile base literal 0x{tile_base:X} missing'
+    if is_b37:
+        try:
+            from part1_record_map_labels import verify as verify_record_map_labels
+            verify_record_map_labels(current)
+        except Exception as e:
+            return False, f'Part1 map-label state/source/row gates invalid: {e}'
+
+    sweep_messages = []
+    for label, sweep_report in sweep_reports:
+        sweep_ok, sweep_msg = verify_part1_map_label_sweep_report(sweep_report, current_sha)
+        if not sweep_ok:
+            return False, f'{label} {sweep_msg}'
+        sweep_messages.append(f'{label}: {sweep_msg}')
+
+    a5_entries = sum(0x08A5D0B4 <= source < 0x08A5D0EC for source, _, _ in entries)
     return True, (
-        f'entries={len(entries)}, b8_entries={len(entries) - 3}, '
-        f'table=0x{PART1_MAP_LABEL_TABLE_FILE:06X}..0x{table_end:06X}, {sweep_msg}'
+        f'entries={len(entries)}, b8_entries={len(entries) - 3 - a5_entries}, a5_entries={a5_entries}, '
+        f'table=0x{PART1_MAP_LABEL_TABLE_FILE:06X}..0x{table_end:06X}, '
+        + ', '.join(sweep_messages)
     )
 
 
