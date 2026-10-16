@@ -19,6 +19,8 @@ BASE = Path(__file__).resolve().parents[1]
 SOURCE_ROM = BASE / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'
 TARGET_ROM = BASE / 'output' / 'game_wars_korean_full.gba'
 DIST = BASE / 'dist'
+B37_ROM_SHA256 = 'c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8'
+B37_MAP_FIX = 'b37 fixes missing names in the unlocked Part 1 link map list.'
 
 
 def digest(data):
@@ -32,7 +34,8 @@ def digest(data):
     }
 
 
-def write_readme(path, patch_stem, target_info):
+def write_readme(path, patch_stem, target_info, release_highlight):
+    highlight_line = f'- Candidate: b37; {release_highlight}' if release_highlight else ''
     path.write_text(
         f"""# Game Boy Wars Advance 1+2 Korean Patch
 
@@ -44,6 +47,7 @@ distributed here; build outputs stay under `output/`.
 - Patch set: `{patch_stem}.bps` / `{patch_stem}.ips`
 - Target ROM SHA-256: `{target_info['sha256']}`
 - Target size: {target_info['size']} bytes
+{highlight_line}
 
 Apply the BPS patch to `Game Boy Wars Advance 1+2 (Japan).gba`. IPS is included
 for compatibility, but BPS is preferred because it records source/target CRCs.
@@ -60,7 +64,17 @@ for compatibility, but BPS is preferred because it records source/target CRCs.
     )
 
 
-def write_release_notes(path, release_date, patch_stem, source_info, target_info):
+def write_release_notes(path, release_date, patch_stem, source_info, target_info, release_highlight):
+    highlight_details = (
+        f'{release_highlight}\n'
+        'The unlocked map-list captures used a cheat-tainted save: they verify display '
+        'with maps unlocked, not normal-play unlocking.'
+    ) if release_highlight else ''
+    unverified_details = (
+        'Alternate banner-sheet and `0x804FC8` consumer reachability, natural access '
+        'to 11 Part 1 help windows, normal-play Sturm CO power, and hidden locked-map '
+        'names remain unverified.'
+    ) if release_highlight else ''
     path.write_text(
         f"""# Korean Patch Release Notes
 
@@ -73,10 +87,13 @@ Generated from the current `output/game_wars_korean_full.gba` build.
 - BPS patch: `{patch_stem}.bps`
 - IPS patch: `{patch_stem}.ips`
 
+{highlight_details}
+
 The hash-bound prepackage QA checks listed in manifest.validation.qa_evidence
 passed for this artifact. BPS/IPS round trips were checked during packaging.
 These checks do not establish full-campaign, character-voice, or real-hardware
 approval; those scopes remain tracked separately in `todo.md`.
+{unverified_details}
 """,
         encoding='utf-8',
     )
@@ -105,6 +122,7 @@ def main():
     target = TARGET_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
+    release_highlight = B37_MAP_FIX if target_info['sha256'] == B37_ROM_SHA256 else ''
 
     bps = make_bps(source, target)
     ips = make_ips(source, target)
@@ -131,6 +149,7 @@ def main():
         'name': 'Game Boy Wars Advance 1+2 — 한글화',
         'date': args.date,
         'status': 'hash-bound prepackage QA pass; full runtime/voice/hardware approval not implied',
+        'release_highlights': [release_highlight] if release_highlight else [],
         'source_rom': {
             'name': SOURCE_ROM.name,
             **source_info,
@@ -164,9 +183,9 @@ def main():
     }
     for path in (DIST / 'manifest.json', DIST / 'manifest_preview.json'):
         path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    write_readme(DIST / 'README.md', stem, target_info)
+    write_readme(DIST / 'README.md', stem, target_info, release_highlight)
     for path in (DIST / 'RELEASE_NOTES.md', DIST / 'RELEASE_NOTES_preview.md'):
-        write_release_notes(path, args.date, stem, source_info, target_info)
+        write_release_notes(path, args.date, stem, source_info, target_info, release_highlight)
 
     print(f'BPS: {bps_path} size={len(bps)} round-trip=OK')
     print(f'IPS: {ips_path} size={len(ips)} round-trip=OK')

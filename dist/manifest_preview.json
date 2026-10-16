@@ -2,6 +2,9 @@
   "name": "Game Boy Wars Advance 1+2 — 한글화",
   "date": "2026-10-16",
   "status": "hash-bound prepackage QA pass; full runtime/voice/hardware approval not implied",
+  "release_highlights": [
+    "b37 fixes missing names in the unlocked Part 1 link map list."
+  ],
   "source_rom": {
     "name": "Game Boy Wars Advance 1+2 (Japan).gba",
     "size": 16777216,
@@ -12,37 +15,37 @@
   "patched_rom": {
     "name": "game_wars_korean_full.gba",
     "size": 16777216,
-    "crc32": "3665a889",
-    "sha1": "140413c720e2fab1401a45348ba10ad45e14b608",
-    "sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1"
+    "crc32": "7f98b994",
+    "sha1": "380d8f2c756d0a677791b0c0fb800a1b7e7c3f83",
+    "sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8"
   },
   "output_rom": {
     "canonical": "game_wars_korean_full.gba",
-    "sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
+    "sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
     "legacy_variants": []
   },
   "bps_patch": {
     "file": "game_wars_korean_full_2026-10-16.bps",
-    "size": 1250370,
+    "size": 1250654,
     "crc32": "2144df1c",
-    "sha1": "ec2843f588c699028f35401cb6a78fbdae0fc686",
-    "sha256": "eee962933a21f13033b194392ea8218b914136771f07e8678437e6e780094f48",
+    "sha1": "7b3cff6da18b71824f926c1f5aaf7ffc9ad3ccbc",
+    "sha256": "3356bc7394ee2e910cb1ba174f440c04cd1ef8188b36ee9a0cab15360aca352e",
     "round_trip": "OK"
   },
   "ips_patch": {
     "file": "game_wars_korean_full_2026-10-16.ips",
-    "size": 1457208,
-    "crc32": "be0c74bf",
-    "sha1": "65648db68781c021dff9d3ccf8af89b8b3b995ba",
-    "sha256": "496bc3a199b838c6d9d97f63076a0e5905792fa98809a6779b4963c8fd635285",
+    "size": 1457571,
+    "crc32": "6c2a948b",
+    "sha1": "ca01d80e01b321e37ba1ea6fed7b9666be07fda8",
+    "sha256": "f3ccf4a23857db123acc88eda055ed9a1565ae0ecc5d45679ec87046c651b3c8",
     "round_trip": "OK",
     "note": "BPS is preferred because it records source and target CRCs."
   },
   "validation": {
     "qa_evidence": {
-      "report_digest": "9403a292dbe89d5e3ec16450ec2c2fc96cf56240be65cc3e9ad6af280d5ace61",
-      "rom_sha256": "f3148d4f933f16132ba9cc36d629129f7aabdce80b7eed88549c5ba702f4ecf1",
-      "inputs_digest": "52b0e81af9e918638f25bc1f34bf0a2c8a20ed24db9c668db895f9942e965286",
+      "report_digest": "498bb0346072561788605b11ae9b64da77c1c54f5c17d8ea0912354f5e625377",
+      "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8",
+      "inputs_digest": "1343eedbf7c6748a6ae5a64b6d6166c62ec490035f1573b5946794ab808fda12",
       "gate_labels": [
         "address-overrides",
         "csv-integrity",
