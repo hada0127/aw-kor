@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "source_rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "scene": "scene_20_part2_intro_newspaper",
+  "frame": "docs/screenshots/canon8_2026-10-18/part2_splash_b39.png",
+  "frame_sha256": "35d8935c7661fe1bc5e08acf4b1ab549bb7f1a4ec00647f0b8ac04562b5e7ae1",
+  "source_frame": "temp/release_C/canon8/runs/g19_g19_g19_g19_g19_PK_cold/frames/63864188092bc08f4ea81111d4450740b726b65eb87b7b95c5611f3343fa5983.png",
+  "source_checkpoint": "temp/release_C/canon8/runs/g19_g19_g19_g19_g19_PK_cold/0005_A_0002887.checkpoint.json",
+  "source_checkpoint_sha256": "7f97dccfc29b87f7a1ff607112194d85df65cb509fab13b6d406dba0daf5711e",
+  "comparison": "temp/release_C/canon8/active_endpoint_comparison.json",
+  "comparison_sha256": "956ea3a80c3efcc88c030fd3eaed21ee7fb18adccc9136562feffe840a401a75",
+  "changed_pixels_vs_b38": 0,
+  "cheat_tainted": false,
+  "emulator_exit_code": 0,
+  "claim_scope": "Part 2 splash still reads 어드밴스 워즈 2; exact endpoint RGB equality to b38."
+}

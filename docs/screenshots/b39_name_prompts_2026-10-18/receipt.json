@@ -1,0 +1,85 @@
+{
+  "scope": "Part 1 name-confirm and first-time prompts only; mGBA real-BIOS cold boots, WARS intro skipped or full",
+  "analysis": "temp/b39/routes_analysis_r2.json",
+  "route_results": "temp/b39/routes_run_r2.json",
+  "screens": [
+    {
+      "route": "b39_bios_skip400",
+      "prompt": "name",
+      "frame_index": 177,
+      "source": "temp/b39/routes/b39_bios_skip400/frames.npz",
+      "source_sha256": "d1fb75bc17871176008bbbfb1aca290c954a4dca75f0fcaffc41d66cbeceb2f1",
+      "image": "docs/screenshots/b39_name_prompts_2026-10-18/b39_bios_skip400_name.png",
+      "image_sha256": "49348f1e92c949d29f48b3e7f7071ef7b9dae1cbee74968cefb51bcad92d0088",
+      "cold_boot": true,
+      "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
+    },
+    {
+      "route": "b39_bios_skip400",
+      "prompt": "first_time",
+      "frame_index": 405,
+      "source": "temp/b39/routes/b39_bios_skip400/frames.npz",
+      "source_sha256": "d1fb75bc17871176008bbbfb1aca290c954a4dca75f0fcaffc41d66cbeceb2f1",
+      "image": "docs/screenshots/b39_name_prompts_2026-10-18/b39_bios_skip400_first_time.png",
+      "image_sha256": "f967c755f00768056a2fe6c403acff8114a38510ebc026ac47c20be955cc3a0e",
+      "cold_boot": true,
+      "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
+    },
+    {
+      "route": "b39_bios_full",
+      "prompt": "name",
+      "frame_index": 177,
+      "source": "temp/b39/routes/b39_bios_full/frames.npz",
+      "source_sha256": "de1f8c0ebb341c56881f3ea4dc1a2a0c44f6bbc7bd528a861c9ae61801783623",
+      "image": "docs/screenshots/b39_name_prompts_2026-10-18/b39_bios_full_name.png",
+      "image_sha256": "49348f1e92c949d29f48b3e7f7071ef7b9dae1cbee74968cefb51bcad92d0088",
+      "cold_boot": true,
+      "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
+    },
+    {
+      "route": "b39_bios_full",
+      "prompt": "first_time",
+      "frame_index": 405,
+      "source": "temp/b39/routes/b39_bios_full/frames.npz",
+      "source_sha256": "de1f8c0ebb341c56881f3ea4dc1a2a0c44f6bbc7bd528a861c9ae61801783623",
+      "image": "docs/screenshots/b39_name_prompts_2026-10-18/b39_bios_full_first_time.png",
+      "image_sha256": "f967c755f00768056a2fe6c403acff8114a38510ebc026ac47c20be955cc3a0e",
+      "cold_boot": true,
+      "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
+    }
+  ],
+  "device_evidence": "temp/b38_shake/iphone/b39r2/ (iPhone RetroArch mGBA c758314; five confirmations; only these screens checked)",
+  "device_sheets": [
+    {
+      "source": "temp/b38_shake/iphone/b39r2/sheet_A1_zoom.png",
+      "source_sha256": "a095ba113d9128e1c0b4ba2f58fd8c91ee8907dbe6b71b7efcd894bfe59b25e1",
+      "published": "docs/screenshots/b39_name_prompts_2026-10-18/iphone_sheet_A1_zoom.png",
+      "published_sha256": "a095ba113d9128e1c0b4ba2f58fd8c91ee8907dbe6b71b7efcd894bfe59b25e1"
+    },
+    {
+      "source": "temp/b38_shake/iphone/b39r2/sheet_A2_zoom.png",
+      "source_sha256": "40a55f1ccef9f839198dee4369c80d0cb663d41b334ec7babe9f5d4d51f4bfc4",
+      "published": "docs/screenshots/b39_name_prompts_2026-10-18/iphone_sheet_A2_zoom.png",
+      "published_sha256": "40a55f1ccef9f839198dee4369c80d0cb663d41b334ec7babe9f5d4d51f4bfc4"
+    },
+    {
+      "source": "temp/b38_shake/iphone/b39r2/sheet_A3_zoom.png",
+      "source_sha256": "4abfd6dda1eb8c53f4ea3d8e52853996f2d1fcdaf9b716bbc8e23b3b455ae399",
+      "published": "docs/screenshots/b39_name_prompts_2026-10-18/iphone_sheet_A3_zoom.png",
+      "published_sha256": "4abfd6dda1eb8c53f4ea3d8e52853996f2d1fcdaf9b716bbc8e23b3b455ae399"
+    },
+    {
+      "source": "temp/b38_shake/iphone/b39r2/sheet_B1_zoom.png",
+      "source_sha256": "24581c8572f848c6e9700e6b7ca95e19496b1c71f21f711693bd096c2c7400ec",
+      "published": "docs/screenshots/b39_name_prompts_2026-10-18/iphone_sheet_B1_zoom.png",
+      "published_sha256": "24581c8572f848c6e9700e6b7ca95e19496b1c71f21f711693bd096c2c7400ec"
+    },
+    {
+      "source": "temp/b38_shake/iphone/b39r2/sheet_B3_zoom.png",
+      "source_sha256": "af0e01d74152cd9e6d3a0e18c707e35b311c841b5c3e3f54a83022126226b897",
+      "published": "docs/screenshots/b39_name_prompts_2026-10-18/iphone_sheet_B3_zoom.png",
+      "published_sha256": "af0e01d74152cd9e6d3a0e18c707e35b311c841b5c3e3f54a83022126226b897"
+    }
+  ],
+  "device_scope": "iPhone RetroArch mGBA c758314: WARS intro skipped and full intro, five confirmations on Part 1 name-confirm and first-time screens only; no full-game or real-GBA claim"
+}

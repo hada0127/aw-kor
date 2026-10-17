@@ -10,7 +10,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-ROM = 'output/game_wars_korean_candidate_20261016_b38.gba'
+ROM = 'output/game_wars_korean_candidate_20261017_b39.gba'
 sys.path.insert(0, str(ROOT/'tools'))
 
 
@@ -30,7 +30,7 @@ class SceneGateBlockedTest(unittest.TestCase):
                        if cp['name'] == early['checkpoint'])
         self.assertEqual(early['source_endpoint'], early['provenance_path'])
         self.assertEqual(current['recorder_endpoint']['checkpoint'],
-                         'temp/release_C/rebind6/runs/g19_g19_g19_g19_PK_cold/0062_A_0032869.checkpoint.json')
+                         'temp/release_C/canon8/runs/g19_g19_g19_g19_g19_PK_cold/0062_A_0032869.checkpoint.json')
         withdrawn = {'scene_30a1_part2_redstar_story_early_b', 'scene_80a_campaign_story_early'}
         for row in source.values():
             self.assertFalse(withdrawn & {x.get('checkpoint') if isinstance(x, dict) else x
@@ -71,21 +71,21 @@ class SceneGateBlockedTest(unittest.TestCase):
         self.assertTrue(records['B-19f']['replay']['cheat_tainted'])
         self.assertTrue(records['C-89b-trace']['replay']['cheat_tainted'])
 
-    def test_active_registration_is_bound_to_b38_and_excludes_history(self):
+    def test_active_registration_is_bound_to_b39_and_excludes_history(self):
         from tools.audit_scene_semantics import active_registration_records
         path = ROOT/'data/release_C_evidence_registration.json'
         reg = json.loads(path.read_text())
-        b38 = 'c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6'
-        active = active_registration_records(path, b38)
-        self.assertEqual(reg['target_candidate_sha256'], b38)
+        b39 = '7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217'
+        active = active_registration_records(path, b39)
+        self.assertEqual(reg['target_candidate_sha256'], b39)
         self.assertEqual(len(active), 34)
-        self.assertTrue(all(r['replay']['candidate_sha256'] == b38 for r in active))
-        self.assertEqual(len(reg['history']['records']), 344)
+        self.assertTrue(all(r['replay']['candidate_sha256'] == b39 for r in active))
+        self.assertEqual(len(reg['history']['records']), 378)
         self.assertFalse({r['key'] for r in active} &
                          {r['key'] for r in reg['history']['records']})
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-') for r in active), 19)
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-')
-                             for r in reg['history']['records']), 95)
+                             for r in reg['history']['records']), 114)
         self.assertFalse(any(r['item_id'].startswith('26a-b31-') for r in active))
         for r in active:
             self.assertEqual(r['key'].split('|', 1)[1], r['input_route'])

@@ -17,12 +17,71 @@ class FakeProcess:
 
 
 class LinkProvenanceTest(unittest.TestCase):
+    def test_verify5_battle_routes_load_clean_b39_transfer_states(self):
+        class RecordingLink:
+            commands = []
+
+            def __init__(self, out):
+                self.commands = []
+                RecordingLink.commands.append(self.commands)
+
+            def cmd(self, line):
+                self.commands.append(line)
+
+            def capture(self, *args, **kwargs):
+                pass
+
+            def press(self, *args, **kwargs):
+                pass
+
+        with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:
+            fixture_root = Path(raw)
+            for part in (1, 2):
+                source = fixture_root / f'temp/release_C/canon8/link/part{part}/transfer'
+                source.mkdir(parents=True)
+                states = [source / name for name in ('host_end.ss0', 'client_end.ss0')]
+                for state in states:
+                    state.write_bytes(f'b39 part {part} {state.name}'.encode())
+                receipt = source / 'receipt.json'
+                receipt.write_text(json.dumps({
+                    'rom_sha256': battle_probe.b.ROM_SHA, 'emulator_exit_code': 0,
+                    'cheat_tainted': False,
+                    'saved_states': [{'path': str(state.relative_to(fixture_root))}
+                                     for state in states]}))
+                for state in states:
+                    state.with_name(state.name + '.provenance.json').write_text(json.dumps({
+                        'rom_sha256': battle_probe.b.ROM_SHA,
+                        'bios_sha256': biolink.BIOS_SHA,
+                        'state_sha256': biolink.sha(state), 'cheat_tainted': False,
+                        'producer_receipt': str(receipt.relative_to(fixture_root))}))
+            with patch.object(battle_probe, 'ROOT', fixture_root), patch.object(
+                    battle_probe.b, 'Link', RecordingLink), patch.object(
+                    battle_probe.b, 'finish_checked'):
+                for part in (1, 2):
+                    battle_probe.run(part, Path('temp/unused'))
+            for part in (1, 2):
+                with self.subTest(part=part):
+                    source = fixture_root / f'temp/release_C/canon8/link/part{part}/transfer'
+                    expected = [f'loadstate 0 {source / "host_end.ss0"}',
+                                f'loadstate 1 {source / "client_end.ss0"}']
+                    actual = [line for line in RecordingLink.commands[part - 1]
+                              if line.startswith('loadstate ')]
+                    self.assertEqual(actual, expected)
+                    link = self.make_link(fixture_root, battle_probe.b)
+                    with patch.object(battle_probe.b, 'ROOT', fixture_root):
+                        for line in actual:
+                            link.cmd(line)
+                    self.assertFalse(link.cheat_tainted)
+                    self.assertEqual(len(link.state_loads), 2)
+                    self.assertTrue(all(not load['cheat_tainted']
+                                        for load in link.state_loads))
+
     def test_host_save_cannot_bypass_provenance(self):
         with self.assertRaises(TypeError):
             biolink.Link(Path('temp/unused'), host_save='untracked.sav')
 
-    def make_link(self, folder):
-        link = biolink.Link.__new__(biolink.Link)
+    def make_link(self, folder, driver=biolink):
+        link = driver.Link.__new__(driver.Link)
         link.proc = FakeProcess()
         link.out = folder
         link.transcript = []

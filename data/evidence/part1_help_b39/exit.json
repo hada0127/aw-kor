@@ -1,0 +1,9 @@
+{
+  "status": "closed",
+  "error": null,
+  "last_observed_core_frame": 3956,
+  "committed_core_frame": 3956,
+  "last_good_checkpoint": "/home/taro1/project/aw-kor/temp/release_C/canon8/help/F_help_sweep/resume.checkpoint.json",
+  "cleanup_errors": [],
+  "emulator_exit_code": 0
+}

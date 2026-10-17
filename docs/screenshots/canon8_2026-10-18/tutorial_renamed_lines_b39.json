@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "status": "active_pass",
+  "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "cold_boot": true,
+  "cartridge_save": null,
+  "cheat_tainted": false,
+  "source_actions": "temp/release_C/rebind6/runs/g10_g10_g10_B19a1_p1sweep/actions.jsonl",
+  "claim_scope": "Five selected b39 tutorial frames with target-line ROM read-watch hits; visual text fragments checked on these frames only.",
+  "frames": [
+    {
+      "address": "0x00DF8E16",
+      "mode": "yes",
+      "label": "s009",
+      "visible_text_fragment": "어드밴스 워즈에",
+      "read_hits_cumulative": 114,
+      "core_frame": 1183,
+      "frame": "docs/screenshots/canon8_2026-10-18/tutorial_DF8E16.png",
+      "frame_sha256": "8523210322a66ed1f901bebd0cd6980f78b083f6a0d47e5e7dc47bd842596914",
+      "source_frame": "temp/release_C/canon8/tutorial_watch_yes/s009.png",
+      "source_frame_sha256": "8523210322a66ed1f901bebd0cd6980f78b083f6a0d47e5e7dc47bd842596914",
+      "run_receipt": "temp/release_C/canon8/tutorial_watch_yes/receipt.json",
+      "run_receipt_sha256": "3a810bcd0b7b0493858402c20ef2ec6b2776c596716f40597fdeb7ec3a0b6df6"
+    },
+    {
+      "address": "0x00DF8EFF",
+      "mode": "yes",
+      "label": "s024",
+      "visible_text_fragment": "어드밴스 워즈에는",
+      "read_hits_cumulative": 109,
+      "core_frame": 2173,
+      "frame": "docs/screenshots/canon8_2026-10-18/tutorial_DF8EFF.png",
+      "frame_sha256": "20862951fb6095a84f5b2e88ffa31feb15f75237ca3e51f8bd0b37bf48449a96",
+      "source_frame": "temp/release_C/canon8/tutorial_watch_yes/s024.png",
+      "source_frame_sha256": "20862951fb6095a84f5b2e88ffa31feb15f75237ca3e51f8bd0b37bf48449a96",
+      "run_receipt": "temp/release_C/canon8/tutorial_watch_yes/receipt.json",
+      "run_receipt_sha256": "3a810bcd0b7b0493858402c20ef2ec6b2776c596716f40597fdeb7ec3a0b6df6"
+    },
+    {
+      "address": "0x00DF9149",
+      "mode": "no_long",
+      "label": "after_00",
+      "visible_text_fragment": "어드밴스 워즈에서는",
+      "read_hits_cumulative": 60,
+      "core_frame": 2329,
+      "frame": "docs/screenshots/canon8_2026-10-18/tutorial_DF9149.png",
+      "frame_sha256": "02b5b029d8b18b5e9c779be76eed0de86585e4ef58d5abb40a6abe858602bbb2",
+      "source_frame": "temp/release_C/canon8/tutorial_watch_no_long/after_00.png",
+      "source_frame_sha256": "02b5b029d8b18b5e9c779be76eed0de86585e4ef58d5abb40a6abe858602bbb2",
+      "run_receipt": "temp/release_C/canon8/tutorial_watch_no_long/receipt.json",
+      "run_receipt_sha256": "39d8bdc55311fa24924f678e1d3567f9b567d72c4d97e8620f7e6b856f0a6fc9"
+    },
+    {
+      "address": "0x00DF948E",
+      "mode": "no_second",
+      "label": "second_choose_no",
+      "visible_text_fragment": "어드밴스 워즈에",
+      "read_hits_cumulative": 114,
+      "core_frame": 2845,
+      "frame": "docs/screenshots/canon8_2026-10-18/tutorial_DF948E.png",
+      "frame_sha256": "ac6f2bd0df69aad0020861fa4e64704fdd3e57a127c2a170619f27a97db6b2c0",
+      "source_frame": "temp/release_C/canon8/tutorial_watch_no_second/second_choose_no.png",
+      "source_frame_sha256": "ac6f2bd0df69aad0020861fa4e64704fdd3e57a127c2a170619f27a97db6b2c0",
+      "run_receipt": "temp/release_C/canon8/tutorial_watch_no_second/receipt.json",
+      "run_receipt_sha256": "aebce5c93a1d24abf8fb8371ef907520e4964c12b8fd04612e21d5d20d76a44f"
+    },
+    {
+      "address": "0x00DF94D6",
+      "mode": "no_second",
+      "label": "branch_00",
+      "visible_text_fragment": "어드밴스 워즈에는 여러",
+      "read_hits_cumulative": 72,
+      "core_frame": 2941,
+      "frame": "docs/screenshots/canon8_2026-10-18/tutorial_DF94D6.png",
+      "frame_sha256": "81b32674b519fdd5817759b065d1dd6257d7c88522f7aef379d7967e9ab184d0",
+      "source_frame": "temp/release_C/canon8/tutorial_watch_no_second/branch_00.png",
+      "source_frame_sha256": "81b32674b519fdd5817759b065d1dd6257d7c88522f7aef379d7967e9ab184d0",
+      "run_receipt": "temp/release_C/canon8/tutorial_watch_no_second/receipt.json",
+      "run_receipt_sha256": "aebce5c93a1d24abf8fb8371ef907520e4964c12b8fd04612e21d5d20d76a44f"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "target_range": "0x08804FC8..0x08804FCF",
+  "status": "bounded_routes_no_consumer_observed",
+  "global_deadness": "unverified",
+  "routes": [
+    {
+      "route": "part1_name_confirm",
+      "receipt": "temp/release_C/canon8/verify2_compact_name/receipt.json",
+      "receipt_sha256": "fa7fd7ca7dbd94ace59f93d7dcc7639089bdb64bcc415bc3dbfa03561fabf113",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 30,
+      "cheat_tainted": false,
+      "claim": "bounded route only; global reachability unverified",
+      "positive_control_kind": "native b39 wide-choice row read at 0x08F10380"
+    },
+    {
+      "route": "part1_save_confirm",
+      "receipt": "temp/release_C/canon8/verify2_compact_part1_save/receipt.json",
+      "receipt_sha256": "8cb009fc9c11042217ea50c08b0812af261d7774675e6e77e3c656988c3a903f",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_shop_buy_confirm",
+      "receipt": "temp/release_C/canon8/verify2_compact_shop/events.json",
+      "receipt_sha256": "3bd8f0a54dfe3386380dec4d6c6fe89b6a8dce12d5579a750298f36c60daf486",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 104,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_surrender_confirm",
+      "receipt": "temp/release_C/canon8/verify2_compact_part2/receipt.json",
+      "receipt_sha256": "1d5c0924fd3c46577cd54aa3c75a6e14b7c48d3e1e986745444388e7bcf2c598",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 37,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_cable_setup",
+      "receipt": "temp/release_C/canon8/verify2_compact_link/receipt.json",
+      "receipt_sha256": "51aea15aee81de00b7f618b5e714b6a38517b2f54ef813accdef8d66e14adb9b",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 20,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_delete_confirm",
+      "receipt": "temp/release_C/canon8/verify4_delete_hold/part1/receipt.json",
+      "receipt_sha256": "0b7ee9d64045717bfcc067c45c14724873f79fa94421030cb338d8d5a20fee80",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_delete_confirm",
+      "receipt": "temp/release_C/canon8/verify4_delete_hold/part2/receipt.json",
+      "receipt_sha256": "1176c07d883a73d456315f1d74003f6e9e2e789d6c6673e30b96e83881bb4045",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_real_bios_link_host",
+      "receipt": "temp/release_C/canon8/link/part1/transfer/receipt.json",
+      "receipt_sha256": "654c3062dbe24111d601b0b8542694fc223cf0d76201cc54496b70e66209a99e",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "stage1": {
+          "path": "temp/release_C/canon8/link/part1/transfer/stage1_read.log",
+          "sha256": "7ee0a7bc44cfee77f32d039b2031868ef84b4c6ec2101f64652f6ad3566f9b61",
+          "hits": 4
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/canon8/link/part1/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    },
+    {
+      "route": "part2_real_bios_link_host",
+      "receipt": "temp/release_C/canon8/link/part2/transfer/receipt.json",
+      "receipt_sha256": "c91d593d4052b80d5fa5576c12f1dfc79e09ed4b2d807ba615172ecc9e0df120",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "main_sheet": {
+          "watch_log": "temp/release_C/canon8/link/part2/transfer/live_main_sheet_watch.log",
+          "watch_sha256": "777e98a614827e8e59df073013277f0d8d80a8059813ba060ec29748dc381d49",
+          "address": "0x0892DF84",
+          "hits": 2
+        },
+        "word_sheet": {
+          "watch_log": "temp/release_C/canon8/link/part2/transfer/live_word_sheet_watch.log",
+          "watch_sha256": "a650fb1fc9140ab4b57094c3420f9b9f70f22e970a403e5aeeadaee4466ddc4b",
+          "address": "0x0892EB5C",
+          "hits": 2
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/canon8/link/part2/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    }
+  ],
+  "historical_b38_receipts": [
+    "docs/screenshots/rebind6_2026-10-16/compact_row_consumer_probes.json"
+  ],
+  "historical_b36r3_receipts": [
+    "docs/screenshots/rebind3_2026-10-15/compact_row_consumer_probes.json",
+    "docs/screenshots/verify2_2026-10-15/compact_row_coverage.json",
+    "docs/screenshots/verify4_2026-10-15/delete_confirmations.json",
+    "temp/release_C/verify4b/registration_candidates.json"
+  ],
+  "cheat_tainted_preserved": true
+}

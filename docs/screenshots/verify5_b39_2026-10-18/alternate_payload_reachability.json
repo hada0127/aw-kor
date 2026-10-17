@@ -1,0 +1,178 @@
+{
+  "schema": 1,
+  "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "source_table_0x08391400": {
+    "0x00391400": "0x088FED9C",
+    "0x00391404": "0x08902A8C",
+    "0x00391408": "0x0890DC7C",
+    "0x0039140C": "0x089463FC"
+  },
+  "part2_onecart_state_callbacks": {
+    "stage_one": "0x083336A9 at ROM 0x8178B0",
+    "payload_copy": "0x08333985 at ROM 0x8178E8"
+  },
+  "part2_payload_copy": {
+    "function": "0x08333984",
+    "source": "0x0890DC7C via table 0x08391408",
+    "end_exclusive": "0x089463FC via table 0x0839140C",
+    "dma_words": 57824,
+    "dma_bytes": 231296,
+    "index_or_alternate_source_branch_found": false
+  },
+  "part1_onecart_state_callbacks": {
+    "stage_one": "0x08B34ACD at ROM 0xD8E26C",
+    "payload_copy": "0x08B34DCD at ROM 0xD8E29C"
+  },
+  "part1_payload_copy": {
+    "function_body": "0x08B34CC4..0x08B35395",
+    "source": "0x08EC6374",
+    "end_exclusive": "0x08EFE2D8",
+    "dma_words": 57305,
+    "dma_bytes": 229220
+  },
+  "alternate_payload_start_pointer_counts": {
+    "0x089463FC": 1,
+    "0x0897ECA0": 0,
+    "0x089B7544": 0
+  },
+  "alternate_sheet_exact_pointer_counts": {
+    "0x08966C0C": 0,
+    "0x089677E4": 0,
+    "0x0899F4B0": 0,
+    "0x089A0088": 0,
+    "0x089D7D54": 0,
+    "0x089D892C": 0
+  },
+  "live_link_receipt": "docs/screenshots/canon8_2026-10-18/linked_clients.json",
+  "assessment": "No identified Part 1 or Part 2 one-cart sender has an alternate payload source; Part 2 sender always copies payload0. Payloads1-3 are unread in the executed 2P one-cart route. Multi-cart paths and arbitrary computed source pointers are not exhaustively traced, so global dead-copy status remains unverified.",
+  "globally_dead_proven": false,
+  "historical_b36r3_report": "docs/screenshots/verify5_2026-10-16/alternate_payload_reachability.json",
+  "historical_b36r3_disassembly": [
+    {
+      "path": "temp/decomp/ghidra/out/f3148d4f933f/08333984.c",
+      "sha256": "82a1c23984335c9ffaa9445a2a38618d441953387c036950e417aa5dca7ab6ba"
+    },
+    {
+      "path": "temp/decomp/ghidra/out/f3148d4f933f/083336A8.c",
+      "sha256": "bfc0e55406d5fe2b38861aa0a74ed7bcfed7fe13b7b77a404ef042d82976b9d7"
+    },
+    {
+      "path": "temp/decomp/ghidra/out/f3148d4f933f/08B34ACC.c",
+      "sha256": "d539ef86ae79fcb9d644c2314009829b563c90f8006ef9f7461317a056bd16e3"
+    },
+    {
+      "path": "temp/decomp/ghidra/out/f3148d4f933f/08B34D80.c",
+      "sha256": "be8be4ec7957900f36a1413bf3d550f3ecfa425c3304ae606997b8cc23fedc8c"
+    }
+  ],
+  "b37_static_byte_identity_regions": [
+    {
+      "start": "0x391400",
+      "end_exclusive": "0x391410",
+      "sha256": "abd95cdc78f5bfa4a95487c861cea6424881d1db81fafa1596393afe874d46e3"
+    },
+    {
+      "start": "0x8178B0",
+      "end_exclusive": "0x817900",
+      "sha256": "0b0e0cdbcf81957dbfeb156f0dc4c597ab8cab1bb9ac6f63b21b294771fdb973"
+    },
+    {
+      "start": "0xD8E26C",
+      "end_exclusive": "0xD8E2C0",
+      "sha256": "a5b4fd5d5c20e600753f13fea07491963cea70ab5cf55e833657d72804a9ec30"
+    },
+    {
+      "start": "0xEC6374",
+      "end_exclusive": "0xEFE2D8",
+      "sha256": "de623fe8cfa1252763760bb67f3c198939618f4d73feb2024b6cf1375f292981"
+    },
+    {
+      "start": "0x90DC7C",
+      "end_exclusive": "0x9463FC",
+      "sha256": "19862318a5b1f9593a7de5cff704ab24ab3686bf5279b064143cae553402ed78"
+    }
+  ],
+  "alternate_sheet_b37_bounded_host_read_hits": {
+    "0x966C0C": 0,
+    "0x9677E4": 0,
+    "0x99F4B0": 0,
+    "0x9A0088": 0,
+    "0x9D7D54": 0,
+    "0x9D892C": 0
+  },
+  "b37_disassembly_status": "not rerun; static sender bytes equal b36r3",
+  "historical_b37_report": "docs/screenshots/verify5_b37_2026-10-16/alternate_payload_reachability.json",
+  "b38_static_byte_identity_regions": [
+    {
+      "start": "0x391400",
+      "end_exclusive": "0x391410",
+      "sha256": "abd95cdc78f5bfa4a95487c861cea6424881d1db81fafa1596393afe874d46e3"
+    },
+    {
+      "start": "0x8178B0",
+      "end_exclusive": "0x817900",
+      "sha256": "0b0e0cdbcf81957dbfeb156f0dc4c597ab8cab1bb9ac6f63b21b294771fdb973"
+    },
+    {
+      "start": "0xD8E26C",
+      "end_exclusive": "0xD8E2C0",
+      "sha256": "a5b4fd5d5c20e600753f13fea07491963cea70ab5cf55e833657d72804a9ec30"
+    },
+    {
+      "start": "0xEC6374",
+      "end_exclusive": "0xEFE2D8",
+      "sha256": "de623fe8cfa1252763760bb67f3c198939618f4d73feb2024b6cf1375f292981"
+    },
+    {
+      "start": "0x90DC7C",
+      "end_exclusive": "0x9463FC",
+      "sha256": "19862318a5b1f9593a7de5cff704ab24ab3686bf5279b064143cae553402ed78"
+    }
+  ],
+  "alternate_sheet_b38_bounded_host_read_hits": {
+    "0x966C0C": 0,
+    "0x9677E4": 0,
+    "0x99F4B0": 0,
+    "0x9A0088": 0,
+    "0x9D7D54": 0,
+    "0x9D892C": 0
+  },
+  "b38_disassembly_status": "not rerun; static sender bytes equal b37",
+  "historical_b38_report": "docs/screenshots/verify5_b38_2026-10-16/alternate_payload_reachability.json",
+  "b39_static_byte_identity_regions": [
+    {
+      "start": "0x391400",
+      "end_exclusive": "0x391410",
+      "sha256": "abd95cdc78f5bfa4a95487c861cea6424881d1db81fafa1596393afe874d46e3"
+    },
+    {
+      "start": "0x8178B0",
+      "end_exclusive": "0x817900",
+      "sha256": "0b0e0cdbcf81957dbfeb156f0dc4c597ab8cab1bb9ac6f63b21b294771fdb973"
+    },
+    {
+      "start": "0xD8E26C",
+      "end_exclusive": "0xD8E2C0",
+      "sha256": "a5b4fd5d5c20e600753f13fea07491963cea70ab5cf55e833657d72804a9ec30"
+    },
+    {
+      "start": "0xEC6374",
+      "end_exclusive": "0xEFE2D8",
+      "sha256": "de623fe8cfa1252763760bb67f3c198939618f4d73feb2024b6cf1375f292981"
+    },
+    {
+      "start": "0x90DC7C",
+      "end_exclusive": "0x9463FC",
+      "sha256": "19862318a5b1f9593a7de5cff704ab24ab3686bf5279b064143cae553402ed78"
+    }
+  ],
+  "alternate_sheet_b39_bounded_host_read_hits": {
+    "0x966C0C": 0,
+    "0x9677E4": 0,
+    "0x99F4B0": 0,
+    "0x9A0088": 0,
+    "0x9D7D54": 0,
+    "0x9D892C": 0
+  },
+  "b39_disassembly_status": "not rerun; static sender bytes equal b38"
+}

@@ -15,7 +15,7 @@ NAME = 'scene_85_ui_common'
 
 
 class SceneRegistrationTest(unittest.TestCase):
-    def test_b38_fifteen_reconciled_scenes_are_captured(self):
+    def test_b39_fifteen_reconciled_scenes_are_captured(self):
         expected = {
             'scene_19a2_part1_heavy_tank_advice_story',
             'scene_19b1_part1_hoip_ambush_weather_story',
@@ -41,7 +41,7 @@ class SceneRegistrationTest(unittest.TestCase):
             (ROOT/'data/screen_checkpoints.json').read_text())['checkpoints']}
         for name in expected:
             self.assertIn(name, checkpoints)
-            self.assertEqual(checkpoints[name]['grade'], 'recorded_b38')
+            self.assertEqual(checkpoints[name]['grade'], 'recorded_b39')
 
     def test_legacy_save_taint_requires_pinned_receipt(self):
         from tools.capture_scene_screenshots import initial_save_valid, source_taint

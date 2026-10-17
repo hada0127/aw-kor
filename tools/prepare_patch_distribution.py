@@ -19,12 +19,10 @@ BASE = Path(__file__).resolve().parents[1]
 SOURCE_ROM = BASE / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'
 TARGET_ROM = BASE / 'output' / 'game_wars_korean_full.gba'
 DIST = BASE / 'dist'
-B38_ROM_SHA256 = 'c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6'
-B38_RELEASE_HIGHLIGHT = (
-    'b38 retains the b37 unlocked Part 1 link-map name fix; it stabilizes the '
-    'Part 1 name-confirm 예/아뇨 row in one Japanese-layout row, adjusts the shared '
-    'campaign prompt cursor placement, renames five Part 1 tutorial lines to '
-    '어드밴스 워즈, and renames the Part 2 splash to 어드밴스 워즈 2.'
+B39_ROM_SHA256 = '7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217'
+B39_RELEASE_HIGHLIGHT = (
+    'b39 retains the b38 changes and fixes the Part 1 name-confirm / first-time '
+    '예/아뇨 row shaking when the WARS intro is skipped.'
 )
 
 
@@ -40,7 +38,7 @@ def digest(data):
 
 
 def write_readme(path, patch_stem, target_info, release_highlight):
-    highlight_line = f'- Candidate: b38; {release_highlight}' if release_highlight else ''
+    highlight_line = f'- Candidate: b39; {release_highlight}' if release_highlight else ''
     path.write_text(
         f"""# Game Boy Wars Advance 1+2 Korean Patch
 
@@ -73,7 +71,11 @@ def write_release_notes(path, release_date, patch_stem, source_info, target_info
     highlight_details = (
         f'{release_highlight}\n'
         'The unlocked map-list and shared campaign-prompt captures used cheat-tainted '
-        'saves: they verify those displays, not normal-play unlocking or progression.'
+        'saves: they verify those displays, not normal-play unlocking or progression.\n'
+        'On iPhone RetroArch mGBA c758314, five b39 r2 confirmations covered the '
+        'Part 1 name-confirm and first-time prompts after both a skipped and full '
+        'WARS intro (`docs/screenshots/b39_name_prompts_2026-10-18/receipt.json`). Only those screens were checked '
+        'on device; real GBA hardware remains unverified.'
     ) if release_highlight else ''
     unverified_details = (
         'Alternate banner-sheet and `0x804FC8` consumer reachability, natural access '
@@ -127,7 +129,7 @@ def main():
     target = TARGET_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
-    release_highlight = B38_RELEASE_HIGHLIGHT if target_info['sha256'] == B38_ROM_SHA256 else ''
+    release_highlight = B39_RELEASE_HIGHLIGHT if target_info['sha256'] == B39_ROM_SHA256 else ''
 
     bps = make_bps(source, target)
     ips = make_ips(source, target)

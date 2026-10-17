@@ -16,11 +16,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/19a_part1_tutorial_story.json",
-     "result_sha256": "08b348ab42a7ae673b4e87482413b2e97770930d2ea93921238885b7ee6a1303",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "524f133c72f48783bb71b0d3143d7327611d900790ade90e50d7fabb7d4c4099",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -38,11 +38,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/19b_part1_campaign_story_redstar.json",
-     "result_sha256": "a620b7ebae2caab4642b5d5ebc657ea42d389d543ff5eb469d206b2e60d392d8",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "948f06843467516d40ff1267fdc0a20e8da2a15459c261a64eb326d687f78902",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -60,11 +60,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/19c_part1_campaign_story_mid.json",
-     "result_sha256": "2741c9c40386ec8f0c03910d00787c24ef7db7c26d77592b19a4e022341f9c4b",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "2fb686be838b73b305fe061e6c89344df9fc84fad379438c809f02139d6f0a57",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -79,11 +79,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/19d_part1_campaign_story_late.json",
-     "result_sha256": "8bdc7e1c7f79841982354b0c3233a78005fc4d4f2bc603a0424c8d3bced28d52",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "b3f048624df38877220f0a00aadfedff160642e35675c835d59844154afb162a",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -103,11 +103,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/19e_part1_unit_story_help.json",
-     "result_sha256": "d401e05a39d4bcc204b555c563ad40601ce111d92f51dae29e23af731c3f3c1c",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "9f929f463a311e337ae817dfb1a174bf554645b2abff6b7be4791deac5dfad02",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -124,11 +124,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30a_part2_story_opening_redstar.json",
-     "result_sha256": "338cc7e3b528be249f03497bb2c4b3ebb26668cd84511087f6ffcf5dddd41eee",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "98fa3212eda3a24cbcd282db7a5f3a8bec8db57b0439dfe6d4e7706c56ed94d4",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -145,11 +145,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30b_part2_story_bluemoon.json",
-     "result_sha256": "6b6f9cc7a85acc04e8f2509408c0bad73bfb0b0931157863efcdbe0dff6b6b95",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "af9ee6f25a39c7135f081d4e51dddbbd73b136dcbf3f0af9f283eedbdce12d64",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -166,11 +166,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30c_part2_story_yellow_comet.json",
-     "result_sha256": "24edb718b839911ad23fd7b0306503989cdf66462c8d19218eacc1e1189e6b36",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "a990c59d4b4e99718bb6880efd4d23e591b95f11cde571e37f518d7615c5a7fa",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -187,11 +187,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30d_part2_story_green_earth.json",
-     "result_sha256": "b4fad3795379121606a2b6b8fdbcc72445a8bdd112931a74907fff31fc28fb3c",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "ca271360901906cab2a4a82a46f1b75cbc6b436bc5cd25ae0477e9471e5fff69",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -211,11 +211,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30g_part2_story_green_earth_late.json",
-     "result_sha256": "9743667cf5e8cad7621049612c4dab4dbf8a4d7146f1e5d0d3ce1c55cec6a019",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "091a4b35499c2d0f8ce139d8f2a94afeab3c0fb24666a0e39229f2d7b68f370f",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -235,11 +235,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30e_part2_story_blackhole_late.json",
-     "result_sha256": "d86745686bb7d7b3b14388f72360a56cd59bfd5baa6b4e1a9e980597da37dbb5",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "602b46291be627abd3b29e2ed5f2aa921f7a41c6e82a325049607ff54974b13b",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -256,11 +256,11 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/30f_part2_story_final_and_co.json",
-     "result_sha256": "1d2fce8ec7f48306bfa4a5adeb7cb5341ccf6cb4c7eb78787232651b0ce2fc04",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "fd84bb0ad84ed4abb26a67adc77d4e37ba38e741b121e8fa4a42259d85c7d37d",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     }
    ]
@@ -275,25 +275,25 @@
     {
      "method": "extracted_text_residual_reverification",
      "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
-     "result_sha256": "91376c6eed98759274be108175639ac4404c33e14d107f74ed5b8bb09527f8aa",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "27e588abdb6273d164a85b8c2369712079563b014136cf0c1a435e1e26086051",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)",
      "historical_dynamic_scan": "git"
     },
     {
      "method": "current_sha_visual_reverification",
-     "result_path": "data/comm_label_visual_reverify_b38.json",
-     "result_sha256": "c5cd1ff520d8285ba0445254f456901fe414ac4ce2cc042a7fdfcbfbacb1ff18",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_path": "data/comm_label_visual_reverify_b39.json",
+     "result_sha256": "f9f03f4d7ea9d4c5b739a3ee62960bd0b2839737957f7dc3527e4c4a6b5b7c72",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
-     "note": "2026-10-16 b38 seven native cold-boot communication frames; exact RGB equality to reviewed b37 frames",
+     "note": "2026-10-18 b39 seven native cold-boot communication frames; exact RGB equality to reviewed b38 frames",
      "historical_result": {
-      "result_path": "data/comm_label_visual_reverify_b37.json",
-      "result_sha256": "732ffeef1c3d355bae6264ce11de93428a3732fe54138a5a52cb896407aaf454",
-      "rom_sha256": "c8a9468cd0bb7673705f1d3a1532610ec32f17eb608fe25d0d586f4244dfa5e8"
+      "result_path": "data/comm_label_visual_reverify_b38.json",
+      "result_sha256": "c5cd1ff520d8285ba0445254f456901fe414ac4ce2cc042a7fdfcbfbacb1ff18",
+      "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6"
      }
     }
    ]
@@ -307,12 +307,12 @@
    "evidence": [
     {
      "result_path": "data/scene_residual_reverify/89a_common_battle_surrender_confirm_common_copies.json",
-     "result_sha256": "152512a8b054817267a54e31d018f1cf8d9e03c21ab0439c54cb6aca3ef6f3af",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "688c2553b499c1fb0751ea12c3013f47cd8b3b9aa1f9d8bb833c936fde98a973",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
      "method": "extracted_text_residual_reverification",
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
     }
    ]
   },
@@ -326,12 +326,12 @@
    "evidence": [
     {
      "result_path": "data/scene_residual_reverify/89b_common_battle_defeat_comm_messages_common_copies.json",
-     "result_sha256": "0e60729c213e583d6a88efcd950c0fb6a4ebe8d721330c28a40c1247aa2af421",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "4bb0250329d44b210c081b03b0d1ef4f3b00c1c4ee71c54210775cc96ce9c6a9",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
      "method": "extracted_text_residual_reverification",
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
     }
    ]
   },
@@ -344,12 +344,12 @@
    "evidence": [
     {
      "result_path": "data/scene_residual_reverify/23d_part2_b8_compact_display_tables.json",
-     "result_sha256": "b4c43ec79a164138b6091cb9b8cb82401607fadc99609e07aada996287dfd94f",
-     "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+     "result_sha256": "05f11420d7bf7b50bee0a4575f4c1f7cb45e0c69d63a3d50b1cae3808b5173df",
+     "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
      "expected_cases": 1,
      "expected_hit_count": 0,
      "method": "extracted_text_residual_reverification",
-     "note": "2026-10-16 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
+     "note": "2026-10-18 current ROM extracted-text residual reverify (min_score=7; raw kana observations retained)"
     }
    ]
   }
@@ -440,6 +440,11 @@
  },
  "reverified_2026_10_16": {
   "rom_sha256": "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6",
+  "method": "extracted_text_residual_reverification",
+  "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
+ },
+ "reverified_2026_10_18": {
+  "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
   "method": "extracted_text_residual_reverification",
   "note": "tools/reverify_scene_residual_scans.py --write --min-score 7"
  }

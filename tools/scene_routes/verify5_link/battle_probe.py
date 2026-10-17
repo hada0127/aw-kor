@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""VERIFY-5: continue b38's paired real-BIOS one-cart state into battle."""
+"""VERIFY-5: continue b39's paired real-BIOS one-cart state into battle."""
 import argparse
 import sys
 from pathlib import Path
@@ -8,12 +8,12 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "tools/scene_routes/verify4_link"))
 import biolink as b  # noqa: E402
 
-b.ROM = ROOT / "output/game_wars_korean_candidate_20261016_b38.gba"
-b.ROM_SHA = "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6"
+b.ROM = ROOT / "output/game_wars_korean_candidate_20261017_b39.gba"
+b.ROM_SHA = "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
 
 
 def run(part: int, out: Path) -> None:
-    src = ROOT / f"temp/release_C/rebind6/link/part{part}/transfer"
+    src = ROOT / f"temp/release_C/canon8/link/part{part}/transfer"
     link = b.Link(out)
     try:
         link.cmd("link off")

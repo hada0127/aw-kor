@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SHA-pinned b38 two-core step driver. Tokens match verify4 bios_nav plus w16/w32."""
+"""SHA-pinned b39 two-core step driver. Tokens match verify4 bios_nav plus w16/w32."""
 import sys
 from pathlib import Path
 
@@ -7,8 +7,8 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "tools/scene_routes/verify4_link"))
 import biolink as b  # noqa: E402
 
-b.ROM = ROOT / "output/game_wars_korean_candidate_20261016_b38.gba"
-b.ROM_SHA = "c089305111b92e4dc0c78da3bd1d699e994b4e597d875682ffca80a6acfbf9c6"
+b.ROM = ROOT / "output/game_wars_korean_candidate_20261017_b39.gba"
+b.ROM_SHA = "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
 
 
 def run(out, tokens):
@@ -45,7 +45,7 @@ def run(out, tokens):
         link.cmd("status")
         link.cmd("sio")
     finally:
-        b.finish_checked(link, {"route": "VERIFY-5 b38 paired step", "tokens": tokens,
+        b.finish_checked(link, {"route": "VERIFY-5 b39 paired step", "tokens": tokens,
                                 "cheat_tainted": False})
 
 
