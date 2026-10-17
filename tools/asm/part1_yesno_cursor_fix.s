@@ -8,11 +8,9 @@ part1_yesno_cursor_fix:
     cmp r1, r2
     beq done
     movs r3, #4          @ legacy no cursor x9
-    ldr r1, [sp]         @ overlay's saved current object
-    ldr r1, [r1, #0x3c]
-    ldr r4, =0x08EC2808
-    cmp r1, r4
-    bne legacy
+    bl part1_yesno_prompt_id
+    cmp r1, #0
+    beq legacy
     lsls r3, r3, #1     @ name-wide no cursor x11
 legacy:
     strh r2, [r0, r3]

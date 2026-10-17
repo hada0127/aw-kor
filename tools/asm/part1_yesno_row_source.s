@@ -4,10 +4,9 @@
 part1_yesno_row_source:
     push {r4,lr}
     sub sp, #8
-    ldr r4, [r4, #0x3c]   @ name entry object's layout source
-    ldr r1, =0x08EC2808  @ excludes save/shop objects sharing callbacks
-    cmp r4, r1
-    bne 1f
+    bl part1_yesno_prompt_id @ r1=1 only for name/tutorial script
+    cmp r1, #0
+    beq 1f
     ldr r3, =0x08F10380  @ native wide row; shared prompts retain D835BC
 1:  ldr r4, [sp, #16]     @ original fifth argument
     str r4, [sp]

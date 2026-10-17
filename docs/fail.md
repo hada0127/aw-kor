@@ -1642,3 +1642,7 @@ Candidate b32r5 `작전실패` OBJ overlay has a visible settled-frame defect: `
 Not a defect; registered frame 6224 was mid-animation (affine wave), settled frame 6250 matches JP; live sheet 0x45EC74; failure/success sheets 0xBFBB54/0xEE8F68 not used by this scene; b34 reverted, candidate output/game_wars_korean_candidate_20261015_b34.gba is obsolete.
 
 - 2026-10-15 FIN-REG correction: the earlier claim that scene 28 has a smaller `패` was wrong. Its 13 px bounding box came from unused OBJ sheets `0xBFBB54`/`0xEE8F68`; the live sheet `0x45EC74` has matching 25 px white faces, and its staggered affine y wave matches Japanese `作戦失敗` at core 6250. The former defect PNG is retained as superseded evidence.
+
+### b39 unoptimized dialogue-VM pool scan altered one 80c animation frame (2026-10-18)
+
+The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `f029.png`; the liveness-corrected but unoptimized candidate `e44c8403…` left four pixels at `(232..235,5)`. On `e44c8403…`, the 80c wide-cursor helper returned 744 CPU cycles after b38 and moved from scanline 0 to 1. The optimized candidate uses live-slot fast checks with a full-scan fallback; its return delay is 268 cycles, remains on scanline 0, and all 154 compared 80c images match b38. Preserve the earlier captures and timing trace as the reason not to restore the repeated full-pool lookup: `temp/b39/r1_evidence/`, `temp/b39/80c_animation_sequence_r3.png`, `temp/b39/timing_80c_b39r3/events.log`, and `temp/b39/80c_timing_analysis_r4.json`.

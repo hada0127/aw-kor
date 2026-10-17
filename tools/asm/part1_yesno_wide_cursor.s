@@ -3,11 +3,9 @@
 .global part1_yesno_wide_cursor
 part1_yesno_wide_cursor:
     push {lr}
-    ldr r0, [sp, #4]     @ wrapper's saved current object
-    ldr r1, [r0, #0x3c]
-    ldr r2, =0x08EC2808
-    cmp r1, r2
-    bne call_overlay
+    bl part1_yesno_prompt_id
+    cmp r1, #0
+    beq call_overlay
     ldr r0, =0x060060CE   @ name-confirm x7 top
     ldr r1, =0x0000A1BA
     strh r1, [r0]
