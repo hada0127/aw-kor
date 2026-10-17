@@ -13211,7 +13211,8 @@ PART1_YESNO_NAME_ROW_FILE = 0xF10380
 PART1_YESNO_NAME_ROW_RT = 0x08F10380
 PART1_YESNO_CURSOR_FIX_FILE = 0xF103A0
 PART1_YESNO_CURSOR_FIX_RT = 0x08F103A0
-PART1_YESNO_PROMPT_ID_FILE = 0xF10400
+PART1_YESNO_UNUSED_CLASSIFIER_FILE = 0xF10400
+PART1_YESNO_UNUSED_CLASSIFIER_LEN = 136
 PART1_NAME_TRIM_HOOK_FILE = 0xF10180
 PART2_HOOK_TOP_313_RT = 0x08F30100
 PART2_HOOK_BOT_313_RT = 0x08F30160
@@ -13288,16 +13289,14 @@ def _b84_power_glyph_hook():
 B84_POWER_GLYPH_HOOK = _b84_power_glyph_hook()
 
 def _part1_yesno_hook():
-    # The name-confirm compact-choice renderer leaves only fragments of
-    # "예/아뇨" in the tilemap. The first entry point wraps the original
+    # The compact-choice renderer leaves only fragments of "예/아뇨" in the
+    # tilemap. The first entry point wraps the original
     # compact update; the second entry point is patched into the per-frame
     # choice cursor routine so loaded save states are repaired without needing a
     # fresh redraw. Both paths share the same overlay routine:
     #   - refresh glyph-cache tiles E2..E9 from KOR_BASE
-    #   - select the original compact row for shared prompts and the native
-    #     wide geometry for name/tutorial and the approved campaign 80c script
-    #   - restore the no cursor at x9 for legacy prompts or x11 for the
-    #     name-wide row when the original routine cleared the yes cursor.
+    #   - draw the wide row for every Part 1 dialogue yes/no prompt
+    #   - copy both native shadow cursor slots only after the wide row is ready.
     b = bytearray(bytes.fromhex(
         'ffb5'
         '18f360de'  # bl original compact-choice update (patched below)
@@ -13327,55 +13326,47 @@ def _part1_yesno_hook():
     b[0x130:0x134] = struct.pack('<I', 0x08F09F20)
 
     b[0x98:0x9A] = _thumb_b(PART1_YESNO_HOOK_RT + 0x98, PART1_YESNO_CURSOR_FIX_RT)
+    # The old compact top/bottom writers have no remaining callers. Keep their
+    # address range reserved so later literals and hook offsets do not move.
+    b[0xAA:0xE0] = bytes(0x36)
     return bytes(b)
 
 PART1_YESNO_HOOK = _part1_yesno_hook()
 
-# The call-site compact update briefly puts its cursor in the no column even
-# while the native shadow has yes selected. Normalize that first VRAM frame,
-# then call the same overlay used by the per-frame handler.
+# The opening helper only forwards the host. The overlay first checks row
+# readiness and writes the wide cells, then copies native shadow cursor slots.
 # Assembled from tools/asm/part1_yesno_wide_cursor.s at 0x08F10200.
 PART1_YESNO_WIDE_CURSOR = bytes.fromhex(
-    '00b500f0fdf8002905d00548054901800548064901800198fff704ff00bdc046'
-    'ce600006baa100000e610006bba10000'
+    '00b50198fff70eff00bd'
 )
-assert len(PART1_YESNO_WIDE_CURSOR) == 48
+assert len(PART1_YESNO_WIDE_CURSOR) == 10
 
 # Assembled from tools/asm/part1_yesno_row_dispatch.s at 0x08F10280.
-# Both entry points use the shared dialogue-VM script classifier.
+# Both entry points draw only the wide layout.
 PART1_YESNO_ROW_DISPATCH = bytes.fromhex(
-    '0db500f0bdf8002901d105a100e007a106230a88028002300231013bf9d10dbd'
-    'e2806401e480e680e8806401e280640164016401e480e6800000000000000000'
-    '0db500f09df8002901d105a100e007a106230a88028002300231013bf9d10dbd'
-    'e3806401e580e780e9806401e380640164016401e580e7800000000000000000'
+    '0db504a106230a88028002300231013bf9d10dbde280640164016401e480e6800000000000000000'
+    '0000000000000000000000000000000000000000000000000db504a106230a88028002300231013b'
+    'f9d10dbde380640164016401e580e780000000000000000000000000000000000000000000000000'
+    '0000000000000000'
 )
 assert len(PART1_YESNO_ROW_DISPATCH) == 128
 
-# The native compact renderer reads its row before the overlay. Select a
-# separate wide row only for the name/tutorial and campaign 80c scripts, preserving D835BC
-# and the original geometry of save/shop prompts.
+# The native renderer reads its row before the overlay. Supply the same wide
+# row to every Part 1 prompt so the shadow copy cannot restore a compact row.
 # Assembled from tools/asm/part1_yesno_row_source.s at 0x08F10320.
 PART1_YESNO_ROW_SOURCE = bytes.fromhex(
-    '10b582b000f06cf8002900d0044b049c0094059c0194002102f4f0fe02b010bd'
-    '8003f108'
+    '10b582b0044b049c0094059c0194002102f4f4fe02b010bd8003f108'
 )
 PART1_YESNO_NAME_ROW = bytes.fromhex('81408eec8140814081408e9b89af0000')
-assert len(PART1_YESNO_ROW_SOURCE) == 36
+assert len(PART1_YESNO_ROW_SOURCE) == 28
 
 # Assembled from tools/asm/part1_yesno_cursor_fix.s at 0x08F103A0.
 PART1_YESNO_CURSOR_FIX = bytes.fromhex(
-    '07480188074a914209d0042300f028f8002900d05b00c2520348044ac252ffbd'
-    'ce600006baa100000e610006bba10000'
+    '00988069054902880a8002890a814030403102880a8002890a81ffbdce600006'
 )
-assert len(PART1_YESNO_CURSOR_FIX) == 48
+assert len(PART1_YESNO_CURSOR_FIX) == 32
 
-PART1_YESNO_PROMPT_ID = bytes.fromhex(
-    '1db5194b194800f024f8002910d1184800f01ff800290bd11648174a0468002c02d04468'
-    '9c4203d060309042f6d30ee0046a124be31a012b07d9114be31a012b03d9104be31a012b'
-    '01d801211dbd00211dbd0468002c02d044689c4201d00021704701217047c046fc26d808'
-    'a0100003e00f0003000e0003001d0003118edf08d38edf08c604e108'
-)
-assert len(PART1_YESNO_PROMPT_ID) == 136
+# The old script classifier is unused. Guard its reserved area as free space.
 
 # Assembled for ARM7TDMI Thumb. Patch offset 0x4c with the Thumb return address.
 PART2_HOOK_TOP_TEMPLATE = bytes.fromhex(
@@ -14199,17 +14190,19 @@ def main():
     assert len(blob) == 0x9F20 and rom[0xF09F20:0xF09F40] == bytes(32)
     rom[PART1_YESNO_HOOK_FILE:PART1_YESNO_HOOK_FILE + len(PART1_YESNO_HOOK)] = PART1_YESNO_HOOK
     assert rom[PART1_YESNO_WIDE_CURSOR_FILE:PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR)] == bytes(len(PART1_YESNO_WIDE_CURSOR))
+    assert rom[PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR):PART1_YESNO_WIDE_CURSOR_FILE + 48] == bytes(48 - len(PART1_YESNO_WIDE_CURSOR))
     rom[PART1_YESNO_WIDE_CURSOR_FILE:PART1_YESNO_WIDE_CURSOR_FILE + len(PART1_YESNO_WIDE_CURSOR)] = PART1_YESNO_WIDE_CURSOR
     assert rom[PART1_YESNO_ROW_DISPATCH_FILE:PART1_YESNO_ROW_DISPATCH_FILE + len(PART1_YESNO_ROW_DISPATCH)] == bytes(len(PART1_YESNO_ROW_DISPATCH))
     rom[PART1_YESNO_ROW_DISPATCH_FILE:PART1_YESNO_ROW_DISPATCH_FILE + len(PART1_YESNO_ROW_DISPATCH)] = PART1_YESNO_ROW_DISPATCH
     assert rom[PART1_YESNO_ROW_SOURCE_FILE:PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE)] == bytes(len(PART1_YESNO_ROW_SOURCE))
+    assert rom[PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE):PART1_YESNO_ROW_SOURCE_FILE + 36] == bytes(36 - len(PART1_YESNO_ROW_SOURCE))
     rom[PART1_YESNO_ROW_SOURCE_FILE:PART1_YESNO_ROW_SOURCE_FILE + len(PART1_YESNO_ROW_SOURCE)] = PART1_YESNO_ROW_SOURCE
     assert rom[PART1_YESNO_NAME_ROW_FILE:PART1_YESNO_NAME_ROW_FILE + len(PART1_YESNO_NAME_ROW)] == bytes(len(PART1_YESNO_NAME_ROW))
     rom[PART1_YESNO_NAME_ROW_FILE:PART1_YESNO_NAME_ROW_FILE + len(PART1_YESNO_NAME_ROW)] = PART1_YESNO_NAME_ROW
     assert rom[PART1_YESNO_CURSOR_FIX_FILE:PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX)] == bytes(len(PART1_YESNO_CURSOR_FIX))
+    assert rom[PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX):PART1_YESNO_CURSOR_FIX_FILE + 48] == bytes(48 - len(PART1_YESNO_CURSOR_FIX))
     rom[PART1_YESNO_CURSOR_FIX_FILE:PART1_YESNO_CURSOR_FIX_FILE + len(PART1_YESNO_CURSOR_FIX)] = PART1_YESNO_CURSOR_FIX
-    assert rom[PART1_YESNO_PROMPT_ID_FILE:PART1_YESNO_PROMPT_ID_FILE + len(PART1_YESNO_PROMPT_ID)] == bytes(len(PART1_YESNO_PROMPT_ID))
-    rom[PART1_YESNO_PROMPT_ID_FILE:PART1_YESNO_PROMPT_ID_FILE + len(PART1_YESNO_PROMPT_ID)] = PART1_YESNO_PROMPT_ID
+    assert rom[PART1_YESNO_UNUSED_CLASSIFIER_FILE:PART1_YESNO_UNUSED_CLASSIFIER_FILE + PART1_YESNO_UNUSED_CLASSIFIER_LEN] == bytes(PART1_YESNO_UNUSED_CLASSIFIER_LEN)
     rom[PART1_NAME_TRIM_HOOK_FILE:PART1_NAME_TRIM_HOOK_FILE + len(PART1_NAME_TRIM_HOOK)] = PART1_NAME_TRIM_HOOK
     # 3) FONT_BASE 리터럴(0xEFE97C)을 hook_top|1 로 교체 (top·bot 둘 다 이 리터럴로 base 로드)
     assert struct.unpack('<I', rom[P.LIT_FONTBASE:P.LIT_FONTBASE + 4])[0] == 0x08B974D0

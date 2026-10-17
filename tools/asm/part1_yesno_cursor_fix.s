@@ -2,21 +2,21 @@
 .thumb
 .global part1_yesno_cursor_fix
 part1_yesno_cursor_fix:
-    ldr r0, =0x060060CE   @ yes cursor, top
-    ldrh r1, [r0]
-    ldr r2, =0x0000A1BA
-    cmp r1, r2
-    beq done
-    movs r3, #4          @ legacy no cursor x9
-    bl part1_yesno_prompt_id
-    cmp r1, #0
-    beq legacy
-    lsls r3, r3, #1     @ name-wide no cursor x11
-legacy:
-    strh r2, [r0, r3]
-    ldr r0, =0x0600610E
-    ldr r2, =0x0000A1BB
-    strh r2, [r0, r3]
-done:
+    @ Called only after the overlay's row-ready check and wide row writes.
+    @ Native 0x08B18CC0 has already cleared both slots in [host+0x18]
+    @ and chosen x7/x11 using [host+0x1E]. Copy both cursor halves.
+    ldr r0, [sp]        @ overlay's saved host pointer
+    ldr r0, [r0, #0x18] @ native shadow row
+    ldr r1, =0x060060CE @ visible x7 top
+    ldrh r2, [r0]
+    strh r2, [r1]
+    ldrh r2, [r0, #8]
+    strh r2, [r1, #8]
+    adds r0, #0x40
+    adds r1, #0x40
+    ldrh r2, [r0]
+    strh r2, [r1]
+    ldrh r2, [r0, #8]
+    strh r2, [r1, #8]
     pop {r0-r7,pc}      @ restore original overlay registers
     .align 2
