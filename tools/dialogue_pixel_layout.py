@@ -326,6 +326,11 @@ def p2_consumers(original):
     for n in range(5):
         site=0x5420D8+2*n
         add(struct.unpack_from('<H',original,site)[0],('p2_territory_label',72,1),'376A2C/376B08 territory panel',site)
+    # These master-table entries have no attributed caller in the opcode,
+    # result-selector or CO-reference inventories. Their story-pool address
+    # alone does not prove a portrait window. Do not invent its dimensions.
+    for index in (0x337,0x368,0x4C7,0x4CB,0x4CC,0x7AD,0x7AF,0x7B0):
+        add(index,('p2_unverified_consumer',None,None),'master-table entry only; caller unverified')
     return out
 
 
@@ -473,7 +478,7 @@ def _source_signature(raw, game):
     return b''.join(result)
 
 
-def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *, allow_paging=False):
+def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *, allow_paging=False, allow_spacing_changes=False, allow_growth=False, allow_blank_rows=False):
     """Apply reviewed row strings, preserving glyph and non-layout controls.
 
     Invisible wait/style/icon/name instructions keep their original position
@@ -481,6 +486,8 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
     Existing source ownership follows every moved glyph for downstream QA.
     """
     tokens=tokenize(payload,game,glyphs)
+    if any(t['kind']=='unknown' for t in tokens):
+        raise ValueError('cannot reflow unknown native instruction')
     for t in tokens:
         t['owner']=None
         for key,parts in (owner_spans or {}).items():
@@ -508,9 +515,13 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
         if before!=spec['before']:
             raise ValueError(f'reviewed before rows changed: page {page}')
         after=spec['after']
-        if not after or any(not isinstance(s,str) or not s for s in after):
+        if not after or any(not isinstance(s,str) or (not s and not allow_blank_rows) for s in after):
             raise ValueError('empty repair rows')
         visible=[];spaces={};controls={};ordered={};old_breaks=set();index=0
+        header_formats=set()
+        for t in ts:
+            if t['kind']!='format':break
+            header_formats.add(id(t))
         for t in ts[:-1]:
             if t['advance'] and t['kind']!='space':
                 visible.append(t);index+=1
@@ -519,7 +530,8 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
                 ordered.setdefault(index,[]).append(t)
             elif t['kind']=='newline':
                 old_breaks.add(index)
-            elif t['kind'] not in ('format','padding'):
+            elif (t['kind'] not in ('format','padding') or
+                  allow_spacing_changes and t['kind']=='format' and id(t) not in header_formats):
                 controls.setdefault(index,[]).append(t)
                 ordered.setdefault(index,[]).append(t)
         layout={};breaks={};events={};index=0
@@ -538,7 +550,8 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
         if index!=len(visible):
             raise ValueError('reflow dropped final glyphs')
         for at,old in spaces.items():
-            if layout.get(at,0)!=len(old) and at not in breaks and at not in (0,len(visible)):
+            if (not allow_spacing_changes and layout.get(at,0)!=len(old)
+                    and at not in breaks and at not in (0,len(visible))):
                 raise ValueError(f'reflow changed an authored interior separator at glyph {at}')
         # A yes/no row occupies a physical row even though it has no text pair.
         tail_choice=any(t['kind']=='choice' for t in controls.get(len(visible),[]))
@@ -559,6 +572,11 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
             for t in ordered.get(at,[]):
                 if t['kind']=='space':ordinal+=1
                 else:controls_by_space.append((ordinal,t))
+            deferred=[]
+            if allow_spacing_changes and at==len(visible) and tail_choice and at in old_breaks:
+                choice_index=next(i for i,(_,t) in enumerate(controls_by_space) if t['kind']=='choice')
+                deferred=controls_by_space[choice_index:]
+                controls_by_space=controls_by_space[:choice_index]
             consumed=0;control=0
             for event in events.get(at,[]):
                 while control<len(controls_by_space) and controls_by_space[control][0]<=consumed:
@@ -571,23 +589,48 @@ def reflow_message(payload, game, glyphs, changes, max_rows, owner_spans=None, *
                 else:
                     emitted.append(dict(raw=b'\x6b' if event=='page' else b'\x72',kind=event,owner=None))
             emitted.extend(t for _,t in controls_by_space[control:])
+            emitted.extend(t for _,t in deferred)
             if at<len(visible):emitted.append(visible[at])
         emitted.append(ts[-1])
+    if allow_spacing_changes and owner_spans:
+        # Legacy manifests include authored rows whose entire current payload
+        # is non-drawing padding (the historical missing wording stays visible
+        # as unsupported to owner QA). Keep these source keys alive as terminal
+        # padding rather than deleting their provenance or inventing prose.
+        alive={t['owner'] for t in emitted}
+        carried=[]
+        for key in owner_spans:
+            if key in alive:continue
+            owned=[t for t in tokens if t['owner']==key]
+            if not owned or any(t['kind'] not in ('padding','space','format','newline') for t in owned):
+                raise ValueError('cannot retire a non-layout source owner')
+            carried.append(dict(raw=b' '*sum(len(t['raw']) for t in owned),kind='padding',owner=key))
+        if carried:
+            terminal=emitted.pop()
+            if terminal['kind']!='end':raise ValueError('missing terminal for provenance padding')
+            emitted.extend(carried);emitted.append(terminal)
     # Reclaim only non-drawing padding. Keep the pointer allocation and bound.
     native_tail=payload[tokens[-1]['offset']+1:]
     raw=b''.join(t['raw'] for t in emitted)+native_tail
-    if len(raw)>len(payload):
+    if len(raw)>len(payload) and not allow_growth:
         raise ValueError(f'reflow needs {len(raw)-len(payload)} extra bytes')
-    padding=len(payload)-len(raw)
+    padding=max(0,len(payload)-len(raw))
     if padding:
         terminal=emitted.pop()
         if terminal['kind']!='end':raise ValueError('missing reflow end')
         emitted.extend([dict(raw=b' '*padding,kind='padding',owner=None),terminal])
     raw=b''.join(t['raw'] for t in emitted)+native_tail
     # All waits, styles, dynamic names, icons, speed and choices stay ordered.
-    protected=lambda ts:[t['raw'] for t in ts if t['kind'] not in
-                          ('glyph','space','padding','format','newline','page','end')]
-    if protected(tokens)!=protected(tokenize(raw,game,glyphs)):
+    layout_kinds=('glyph','space','padding','newline','page','end')+(() if allow_spacing_changes else ('format',))
+    protected=lambda ts:[t['raw'] for t in ts if t['kind'] not in layout_kinds]
+    def anchored(ts):
+        index=0; result=[]
+        for t in ts:
+            if t['advance'] and t['kind']!='space':index+=1
+            if t['kind'] not in layout_kinds:
+                result.append((index,t['raw']))
+        return result
+    if protected(tokens)!=protected(tokenize(raw,game,glyphs)) or anchored(tokens)!=anchored(tokenize(raw,game,glyphs)):
         raise ValueError('reflow changed non-layout native instructions')
     parts={key:[] for key in (owner_spans or {})};offset=0
     for t in emitted:

@@ -12752,9 +12752,11 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
                            compact_expected=None):
     """Validate final text bytes, before a lossy display decoder can hide damage."""
     from dialogue_repoint import text_segment_cells
+    from dialogue_spacing import reviewed_bteam_half_cells
+    _spacing_limit=reviewed_bteam_half_cells(address,payload)
     widths = [text_segment_cells(piece.rstrip(b'\x00'))
               for piece in payload.split(b'\x72\x0a\x09')]
-    if not widths or (max(widths) > BTEAM_RESTORED_ROW_HALF_CELLS.get(address, 44) and
+    if not widths or (max(widths) > max(BTEAM_RESTORED_ROW_HALF_CELLS.get(address, 44),_spacing_limit) and
                       BTEAM_LISTED_WIDE_RESIDUALS.get(address) != max(widths)):
         raise AssertionError(f'0x{address:08X}: B-team row exceeds 44 half-cells: {widths}')
     if compact:
@@ -12798,6 +12800,12 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
                 raise AssertionError(f'0x{address:08X}: interior halfwidth space at +{i}')
             i += 1
             continue
+        if b in (9,10,13):
+            from dialogue_spacing import reviewed_bteam_rows
+            _spacing_row=reviewed_bteam_rows().get(address)
+            if _spacing_row and payload.hex() in _spacing_row['final_fragment_hex']:
+                i += 1
+                continue
         if 0x30 <= b <= 0x39 or b == 0x2D:
             i += 1
             continue
@@ -12806,6 +12814,9 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
 
 def bteam_retained_equal(expected, actual, address, *, compact=False):
     """Compare displayed wording, accepting only renderer punctuation equivalents."""
+    from dialogue_spacing import reviewed_bteam_match
+    if reviewed_bteam_match(address, expected, actual, restored=False):
+        return True
     if compact:
         return address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A} and actual == expected + '倶倶'
     fold = str.maketrans({'、': ',', '。': '.', '！': '!', '？': '?',
@@ -24478,13 +24489,22 @@ def _build(args, publication):
         f"{image['image']} {image['codes']}/{image['capacity_codes']} codes" for image in _lcf_report['images'])
         + f", reverted {_lcf_report['reverted_bytes']} B, dropped {_lcf_report['write_log_dropped']} write-log rows")
     if not args.no_repoint_dialogue:
-        # Actual native-window/font audit after every text/font writer. Repairs
-        # preserve allocation, glyph wording and source-row ownership; only reviewed
-        # line/page boundaries and fixed-caption padding change.
+        # Final native-window/font audit. The original b41 repairs keep their
+        # allocations; the subsequent finite spacing ledger may grow guarded
+        # relocations while preserving wording and source ownership.
         from dialogue_pixel_layout import apply_repairs as apply_pixel_layout, audit as audit_pixel_layout
         with open(os.path.join(BASE, 'data', 'dialogue_layout_repairs.json'), encoding='utf-8') as _stream:
             _layout_repairs = json.load(_stream)
         _layout_applied = apply_pixel_layout(rom, orig, _rp_manifest, WRITE_LOG, _layout_repairs)
+        from dialogue_spacing import apply_repairs as apply_dialogue_spacing, verify as verify_dialogue_spacing
+        _spacing_applied = apply_dialogue_spacing(rom, orig, _rp_manifest, WRITE_LOG)
+        st['dialogue_spacing_pages'] = verify_dialogue_spacing(rom, orig, _rp_manifest)
+        st['dialogue_spacing_messages'] = len(_spacing_applied)
+        # The apology message keeps its exact first page while its later
+        # pages receive reviewed spacing. Check its active pointer/prefix again.
+        st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address), _rp_manifest)
+        with open(os.path.join(BASE, 'temp', 'dialogue_spacing_applied.json'), 'w', encoding='utf-8') as _stream:
+            json.dump(_spacing_applied, _stream, ensure_ascii=False, indent=1)
         with open(staged_manifest, 'w', encoding='utf-8') as _stream:
             json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
         _pixel_audit = audit_pixel_layout(orig, rom, _rp_manifest)
@@ -24637,7 +24657,12 @@ def _build(args, publication):
                        for piece in bytes(rom[_target+off:_target+off+size]).split(b'\x72\x0a\x09')]
         else:
             _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
-        if not _widths or (max(_widths) > BTEAM_RESTORED_ROW_HALF_CELLS.get(_address, 44) and
+        from dialogue_spacing import reviewed_bteam_half_cells, verify_reviewed_owner_bytes
+        _spacing_limit=0
+        if (_address in _relocated_rows and reviewed_bteam_half_cells(_address)>44
+                and verify_reviewed_owner_bytes(rom,_message,_address)):
+            _spacing_limit=reviewed_bteam_half_cells(_address)
+        if not _widths or (max(_widths) > max(BTEAM_RESTORED_ROW_HALF_CELLS.get(_address, 44),_spacing_limit) and
                            BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
             _wide_restored.append((f'0x{_address:08X}', _widths))
     if _wide_restored:
@@ -24677,6 +24702,15 @@ def _build(args, publication):
             if _address not in _relocated_rows:
                 raise AssertionError(f'B-team active residual lost relocation: 0x{_address:08X}')
             _message, (_off, _length) = _relocated_rows[_address]
+            from dialogue_spacing import verify_reviewed_owner_bytes
+            if verify_reviewed_owner_bytes(rom, _message, _address):
+                # Exact final fragments from the finite spacing ledger replace
+                # only the superseded active byte layout. Native source bytes
+                # and retained residual wording were checked just above.
+                if _entry['active_follow_hex']:
+                    if _source_row_bytes(rom,_message,'0xA2BC57') != bytes.fromhex(_entry['active_follow_hex']):
+                        raise AssertionError('A2BC3C complete baseline continuation changed')
+                continue
             _raw = bytes.fromhex(_entry['active_payload_hex'])
             _slack = _length - len(_raw)
             if _slack < 0:

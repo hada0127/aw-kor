@@ -75,6 +75,17 @@ def final_owner_spans(writes, rom_size, *, hangul_only=True):
 
 def validate_manifest(rom, manifest, original=None, writes=None):
     if writes is not None:
+        for index,entry in enumerate(writes):
+            if entry[7]!='dialogue-spacing-final-intent':continue
+            if len(entry)<9:raise ValueError('unbound final spacing intent')
+            evidence=entry[8];prior=evidence.get('prior_write_index')
+            if type(prior)is not int or not 0<=prior<index:
+                raise ValueError('invalid final spacing intent history index')
+            old=writes[prior]
+            digest=hashlib.sha256(json.dumps(old,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
+            if (digest!=evidence['prior_write_sha256'] or old[5]!=evidence['authored_before']
+                    or ''.join((entry[5] or '').split())!=''.join((old[5] or '').split())):
+                raise ValueError('final spacing intent changes historical authored wording')
         operations = {}
         for entry in writes:
             if not entry[7].startswith('repoint:'):
@@ -144,6 +155,15 @@ def validate_manifest(rom, manifest, original=None, writes=None):
         ordered = sorted((r[column], r[column + 1]) for r in ranges)
         if any(a[1] > b[0] for a, b in zip(ordered, ordered[1:])):
             raise ValueError('overlapping relocated message ranges')
+    for entry in writes or ():
+        if entry[7]!='dialogue-spacing-final-intent':continue
+        evidence=entry[8];address=evidence['source_address'];m=mapped.get(address)
+        if m is None:raise ValueError('final spacing intent has no mapped source')
+        key=f'0x{address:06X}';parts=fragments(m,key);lo=parts[0][0];hi=max(off+size for off,size in parts)
+        if (evidence['fragments']!=parts or entry[0]!=int(m['new_addr'],16)+lo or entry[1]!=hi-lo
+                or any(off<hi and lo<off+size for other in m['line_spans'] if other!=key
+                       for off,size in fragments(m,other))):
+            raise ValueError('final spacing intent envelope/source mismatch')
     return mapped, ranges
 
 
@@ -158,6 +178,8 @@ def decode_payload(payload, codes):
             out.extend(b'\x81\x40'); i += 3
         elif b == 0x72:
             out.extend(b'\x81\x40'); i += 1
+        elif b in (9,10,13):
+            i += 1  # native non-drawing format instructions, not missing glyphs
         else:
             out.append(b); i += 1
     return decode_enc(out, codes).rstrip(' \u3000\x00▯')
@@ -176,7 +198,14 @@ def rendered_rows(rom, manifest, writes, original=None):
         target = int(m['new_addr'], 16)
         # Explicit final writers in the relocated arena supersede source intent.
         owner = owners.get(target + parts[0][0])
-        if owner and len(parts) == 1 and owner[1] == parts[0][1]:
+        bounded_multi=(owner and len(owner)>8 and owner[7]=='dialogue-spacing-final-intent'
+                       and owner[8].get('source_address')==addr
+                       and owner[8].get('fragments')==parts
+                       and owner[1]==max(off+size for off,size in parts)-parts[0][0]
+                       and not any(off<parts[0][0]+owner[1] and parts[0][0]<off+size
+                                   for other in m['line_spans'] if other!=key
+                                   for off,size in fragments(m,other)))
+        if owner and (len(parts) == 1 and owner[1] == parts[0][1] or bounded_multi):
             text = owner[5]
         rows.append(dict(addr=addr, slot=len(payload), intended=text or '',
                          shipped=decode_payload(payload, codes), relocated=True,

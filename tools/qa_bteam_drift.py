@@ -31,6 +31,14 @@ from qa_integrity_map import decode_enc, fill_pattern, load_syl
 from dialogue_regions import is_part1_dialog_address, is_part2_story_address
 from repoint_source_rows import fragments as source_fragments, row_bytes as source_row_bytes
 
+
+def script_format_bytes(payload, address):
+    """Drop non-drawing format instructions only for attributed script rows."""
+    from renderer_text import renderer_for_address,P1_SCRIPT,P2_SCRIPT,single_bytes
+    if renderer_for_address(address) not in (P1_SCRIPT,P2_SCRIPT):return payload
+    remove={off for off,b in single_bytes(payload) if b in (9,10,13)}
+    return bytes(b for off,b in enumerate(payload) if off not in remove)
+
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -365,6 +373,9 @@ def matches_reviewed_bteam_spacing(address: int, baseline: str, actual: str) -> 
     """Accept only an individually reviewed whitespace repair at its source row."""
     if address == 0xA34B6C:
         return baseline == '예　아뇨' and actual == '　예　　　아뇨'
+    from dialogue_spacing import reviewed_bteam_match
+    if reviewed_bteam_match(address,baseline,actual,restored=True):
+        return True
     repair = BTEAM_SCRIPT_SPACING_REPAIRS.get(address)
     return (repair is not None and baseline == repair[0]
             and display_equivalent(actual, address, actual=True)
@@ -483,7 +494,7 @@ def accept(base: dict, overrides: dict, *, allow_bteam_changes: bool = False, pi
 
 
 def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
-              map_rom_path: str | None = None) -> list[dict]:
+              map_rom_path: str | None = None, *, observations=None) -> list[dict]:
     """Compare protected text with final ROM bytes, including relocated messages.
 
     Relocation metadata records each original line's final byte span. Reject
@@ -575,6 +586,7 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                 objective_start = target + off
                 # A wrapped row may contain this verified internal control.
                 display_payload = payload.replace(b'\x72\x0a\x09', b'\x81\x40')
+                display_payload = script_format_bytes(display_payload, addr)
                 if addr in (0xA2AA08, 0xA2BC3C):
                     # This protected CO sentence uses a native row break
                     # in place of its authored fullwidth space.
@@ -685,6 +697,8 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             matched = False  # Reviewed decision withholds acceptance, even on a later ROM.
         if invalid_reflow:
             matched = False
+        if observations is not None:
+            observations.append(dict(address=key,baseline=baseline,actual=actual,matched=matched))
         if not matched:
             issues.append({'address': key, 'baseline': baseline, 'rom_text': actual,
                            'cause': cause,
@@ -787,15 +801,17 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
                                                       'little') != 0x08000000 + target for site in sites)):
                 raise ValueError(f'{key}: restored relocated baseline or pointer changed')
             continue
-        if bool(message) != bool(pinned_message):
+        from dialogue_spacing import reviewed_message_pin, verify_reviewed_owner_bytes
+        reviewed = bool(message) and reviewed_message_pin(rom,message,pinned_message)
+        if bool(message) != bool(pinned_message) and not reviewed:
             raise ValueError(f'{key}: active residual mapping or byte pin missing')
         if message:
             target = int(message['new_addr'], 16)
             length = int(message['new_len'])
             off, span_length = message['line_spans'][f'0x{addr:06X}']
             if (off < 0 or span_length <= 0 or off + span_length > length
-                    or len(bytes.fromhex(pinned_message)) != length
-                    or rom[target:target + length].hex() != pinned_message):
+                    or (not reviewed and (len(bytes.fromhex(pinned_message)) != length
+                    or rom[target:target + length].hex() != pinned_message))):
                 raise ValueError(f'{key}: active residual message bytes or span changed')
             sites = message.get('ptr_sites') or []
             if not sites or any(int.from_bytes(rom[int(site, 16):int(site, 16) + 4],
@@ -808,13 +824,13 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
             active = bytes.fromhex(row['active_payload_hex'])
             pair_title = 0xA2D55C <= addr <= 0xA2D8A8
             padding = (b'\x00' if pair_title else b' ') * (length - len(active))
-            if len(active) > length or rom[pos:pos + length] != active + padding:
+            if (len(active) > length or rom[pos:pos + length] != active + padding) and not (
+                    reviewed and verify_reviewed_owner_bytes(rom,message,addr)):
                 raise ValueError(f'{key}: active residual bytes changed')
             if row['active_follow_hex']:
-                follow = spans.get(0xA2BC57)
                 expected_follow = bytes.fromhex(row['active_follow_hex'])
-                if addr != 0xA2BC3C or follow is None or follow[1] != len(expected_follow) or \
-                        rom[follow[0]:follow[0] + follow[1]] != expected_follow:
+                from repoint_source_rows import row_bytes
+                if addr != 0xA2BC3C or row_bytes(rom,message,'0xA2BC57') != expected_follow:
                     raise ValueError(f'{key}: residual continuation bytes changed')
     expected_residuals, deferred, unlisted = [], [], []
     listed_addresses = set(listed)

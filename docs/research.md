@@ -4042,3 +4042,13 @@ The first b40 candidate (`e12ab875…`) accidentally pinned only 32 of each 40-b
 - 원 제보는 D9E1A0 페이지7 / D9E345 / VM포인터DBF7F0. 원문 22글리프44B 뒤720A09, 다음 문장까지 직접 읽어 복원했다. 정상 키 입력 cold boot로 전체 문장과 지도 조작 복귀를 확인했다.
 - native 창·폰트·최대 이름48px·라벨 예약 영역·제어 보존 기준과 새 도구는 `docs/dialogue_layout.md`를 따른다. 실제 대사98개/기존페이지102개, 페이지 경계17개 수정. 카탈로그 제목/엔딩 OBJ 장식 별도 검증.
 - 후보와 세부 전수 분모·미검증·치트 오염·최종 빌드/리뷰 상태는 `temp/b41_dialogue_audit/REPORT.md` 및 JSON 영수증을 따른다. 이 기록은 전 장면 정상 플레이/엔딩/설치 승인이 아니다.
+
+### 2026-10-18 b41 띄어쓰기 후속: 실제 소비자와 입력 권위
+
+`data/dialogue_spacing_repairs.json`은 기존98개 b41 배치 뒤에 적용하는 정확한 before/after SHA 계약이다. 비공백 glyph raw 및 비배치/format 토큰의 상대 anchor는 보존하고, 오래된 source_texts의 어휘가 다르면 덮어쓰지 않는다. 원래 원문·CSV·선택 writer·출하·후속의 추적은 `temp/spacing_followup/pipeline_trace.json`에 있다. 국가명 TERM_REPLACEMENTS의 정본 붙임5행은 공백 압축 결함이 아니다.
+
+P2 IDs337/368/4C7/4CB/4CC/7AD/7AF/7B0는 master table만 확인됐고 실제 caller 미확인이다. 종전 story 주소 구간 fallback으로 초상176×2를 가정하면 안 된다. 7개 재배치 보류, A192BC의 맥스 님의→맥스님의만 기존2행/다른 바이트 순서 그대로 단조 축소했다. 미확인13개·상태 의존16개·알려진 가로스크롤 도움18메시지(16표시행)를 각각 분리한다. 확정 초상 분모는4371이다.
+
+native DEFD80 화면은 B3E638→B3E65A→B12910, (48,16)에서192×8행/빈 행5다. 실제 최종 maxNAME48px 화면은 `temp/spacing_followup/runtime/{before,after_F}/narration_render_fenced/`이다. 새 부팅 정상 메뉴 진입 뒤 이벤트와 이름 버퍼를 명시적으로 강제한 QA이며 자연 엔딩 진행으로 주장하지 않는다. native wait를 모두 건너뛰거나 VM cursor만 확인하면 GPU에 glyph가 반영되기 전 장면을 완료로 오인할 수 있어 마지막 glyph 이후2+16프레임을 진행하고 실제 NAME6칸/마지막 행/빈행 pixel을 확인했다. mGBA trace의 관측 PC는 이 Thumb 경로에서 함수 진입+2로 나타나므로 B3E63A/B12912 등을 확인했다.
+
+inline Qn은 현재 행의 앞선 text advance를 cursor/선택지 좌표에 더해야 한다. DF2A2C 항복 확인은 이전72px→후속24px이므로 cursor128/160→80/112이며 원래64px reserved row의47px ink/기본No/좌우 전환은 동일하다. 정상 새 부팅 튜토리얼→필드 메뉴→시스템→항복 입력으로 paired NPZ를 캡처했다. intro VM에 이 문장만 강제해 상위 창과 겹친 시도는 최종 증거에서 제외했다. 다른16개 변경 choice는 QA 강제 입력으로 분리하며, 바이트가 동일한47개 소비자와 shared hook/font는 회귀 차분에 포함했다.

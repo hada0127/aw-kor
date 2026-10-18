@@ -85,17 +85,34 @@ def halfwidth_violations(payload, renderer, native=b'', *, added_controls=b''):
     Padding spaces are not visible glyphs and do not grant letters/digits a pass.
     """
     allowed = COMMANDS.get(renderer, frozenset())
-    counts = Counter(b for _, b in single_bytes(native) if b in allowed)
+    def units(raw):
+        singles=dict(single_bytes(raw));i=0
+        while i<len(raw):
+            if i not in singles:i+=2;continue
+            b=raw[i];n=1
+            if renderer in COMMANDS and i+1<len(raw):
+                icons=b'MC' if renderer==P1_SCRIPT else b'mc'
+                if (b in b'QHq' and raw[i+1] in b'YNyn'
+                        or b in b'sS' and raw[i+1] in b'0123456789_'
+                        or b in icons):n=2
+            yield i,bytes(raw[i:i+n])
+            i+=n
+    counts = Counter(raw for _,raw in units(native) if raw[0] in allowed)
     additions = Counter(added_controls)
     if additions.keys() - set(b'rk\x09\x0a'):
         raise ValueError('unrecognized recorded layout control')
     bad = []
-    for offset, byte in single_bytes(payload):
+    for offset, raw in units(payload):
+        byte=raw[0]
+        if len(raw)==2:
+            if counts[raw]:counts[raw]-=1;continue
+            bad.extend((offset+i,b) for i,b in enumerate(raw))
+            continue
         if byte in (0, 0x20):
             continue
-        if byte in allowed and (counts[byte] or additions[byte]):
-            if counts[byte]:
-                counts[byte] -= 1
+        if byte in allowed and (counts[raw] or additions[byte]):
+            if counts[raw]:
+                counts[raw] -= 1
             else:
                 additions[byte] -= 1
             continue

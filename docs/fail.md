@@ -1653,3 +1653,10 @@ The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `
 - 104px 결과 대사에 새 K 페이지/clear hook을 넣는 계획은 채택하지 않았다. 기존 2행에 문구와 부호를 보존해 배치한다.
 - P2 첫 정상 임무를 map55라고 추정한 임시 기록은 오인이다. 경계 RAM 관측은 raw ID138이며 map55/A2CFB0은 별도 강제 title-only 증거로 분리한다.
 - 빌드 마지막 검증 전에 canonical ROM을 교체하던 실패 경로를 발견해 staged publication으로 수정했다. 실제 최종 B팀 실패 주입 및 교체 후 fsync 실패 검사를 추가했다.
+
+### 2026-10-18 후속 QA 문맥/표시 완료 판정의 실패
+
+- intro portrait가 살아 있는 동안 서술 함수 B3E638만 호출하거나 native event를 임의 slot에 넣으면 오래된 portrait 요청/box가 겹친다. trace가 native draw를 통과해도 전체8행의 화면 합격이 아니다. 동일 ROM을 새 부팅해 정상 field/system menu의 깨끗한 native task anchor에서 원래 event를 실행해 대체했다.
+- VM cursor가 마지막 glyph를 지났다는 사실만으로 즉시 screenshot을 합격 처리하면 NAME나 마지막 행이 VRAM 반영 전으로 보일 수 있다. native wait와2+16프레임 fence 및 실제 glyph/빈행 검사를 추가했다. 최종 채택은 `narration_render_fenced`만이다.
+- inline Qn에 고정 x56/88의 cursor 분석을 적용하거나 intro의 상위 창을 강제문장과 함께 살아 있게 두면 거짓 회귀/겹침을 관측한다. actual row advance를 반영하고 DF2A2C는 정상 항복 경로의 전후 NPZ/상태1→0→1/지도복귀로 검증했다.
+- 위 임시 시도들은 `temp/spacing_followup/runtime_attempt_dispositions.json`에서 제외했다. trace-only `passed` 영수증이 있어도 전체 화면 완료 증거로 쓰지 않는다. ROM을 이 QA 문맥 문제에 맞춰 수정하지 않았다.

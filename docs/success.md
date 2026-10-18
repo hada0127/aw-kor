@@ -4136,3 +4136,11 @@ Candidate `7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217` was
 - 원 제보는 D9E1A0 페이지7 / D9E345 / VM포인터DBF7F0. 원문 22글리프44B 뒤720A09, 다음 문장까지 직접 읽어 복원했다. 정상 키 입력 cold boot로 전체 문장과 지도 조작 복귀를 확인했다.
 - native 창·폰트·최대 이름48px·라벨 예약 영역·제어 보존 기준과 새 도구는 `docs/dialogue_layout.md`를 따른다. 실제 대사98개/기존페이지102개, 페이지 경계17개 수정. 카탈로그 제목/엔딩 OBJ 장식 별도 검증.
 - 후보와 세부 전수 분모·미검증·치트 오염·최종 빌드/리뷰 상태는 `temp/b41_dialogue_audit/REPORT.md` 및 JSON 영수증을 따른다. 이 기록은 전 장면 정상 플레이/엔딩/설치 승인이 아니다.
+
+### 2026-10-18 b41 설치 이후 띄어쓰기·이름 후속 (Astra full→delta 승인)
+
+기존 b41 설치 readback82de89a8/사용자 저장570파일 보존 영수증을 읽고 전용 worktree에서 후속 조사했다. script5173/기존8529페이지, 어절 제안1830개 문장별 심사(1195승인/635거절), 이름 추가110페이지. 최종1152메시지/1316페이지, 종결부호 기준1350개 띄어쓰기 변화 구간. 고정인명/NAME+조사·독립호칭·님·호격 기준을 통일하고 원래 glyph/비배치 제어/말투/어휘를 보존했다.
+
+확정 프로필에서 overflow/row/parser/glyph/caption0. unknown13·state16·scrolling18은 별도. B팀394영향행(실제138띄어쓰기행), baseline불변/기존114잔여/새drift0. 바이트 차분108095개 모두 승인 payload/포인터이며 미설명0, 다른4021script/408UI 불변. F/G 빌드 ROM SHA `1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`, CRC3A1085BC. 자연R/2편 도움/항복·강제 maxNAME/실제 native8행·CO 필드·변경17choice를 전후 검증했다. 세부 의미와 범위는 `temp/spacing_followup/REPORT.md` 및 최종 INSTALL-READY 영수증을 따른다. 아직 Mac 후속 설치를 주장하지 않는다.
+
+Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/high, exit0): B1/B2/B3 fixed, 필수 차단0, SHA1c23b091의 비공개 Mac 설치 인계 허용. 실제 폰 설치는 Mac의 별도 영수증을 따른다.

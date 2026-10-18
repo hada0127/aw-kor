@@ -21,7 +21,7 @@ def help_payload(original,encode):
  if text_segment_cells(text)>50:raise ValueError('Map help full text exceeds width')
  return text+original[0xD8207C:0xD82080]
 
-def verify(rom,original,encode):
+def verify(rom,original,encode,manifest=None):
  expected=help_payload(original,encode)
  target=struct.unpack_from('<I',rom,0xD7EDD4)[0]-0x08000000
  if target%4 or not 0xA3D000<=target<target+len(expected)<=SPRITE_STORAGE_START:
@@ -34,6 +34,17 @@ def verify(rom,original,encode):
   raise ValueError('Map help approved text/control mismatch')
  apology=encode(APOLOGY,0xD8F6FE)
  if len(apology)!=8:raise ValueError('Apology must preserve complete approved text')
+ relocated=[m for m in (manifest or []) if int(m['msg'],16)==0xD8F6FC and m.get('status')=='relocated']
+ if relocated:
+  from dialogue_spacing import has_reviewed_source
+  if len(relocated)!=1 or not has_reviewed_source(0xD8F6FC):raise ValueError('Unreviewed apology relocation')
+  m=relocated[0];active=int(m['new_addr'],16)
+  prefix=bytes(original[0xD8F6FC:0xD8F6FE])+apology+b' '*8+bytes(original[0xD8F70E:0xD8F711])
+  if (active%4 or not 0xA3D000<=active<active+m['new_len']<=SPRITE_STORAGE_START
+      or struct.unpack_from('<I',rom,0xDA4CB8)[0]!=active+0x08000000
+      or bytes(rom[active:active+len(prefix)])!=prefix):
+   raise ValueError('Relocated apology first-page text/control/pointer changed')
+  return {'status':'PASS','help_target':hex(target),'apology_target':hex(active),'live_pixels_verified':False}
  # Existing encode_fit writer fills unused slot bytes with ASCII spaces;
  # these are padding after the complete text, not replacement glyphs.
  if bytes(rom[0xD8F6FE:0xD8F70E])!=apology+b' '*8:
