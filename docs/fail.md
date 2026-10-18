@@ -1646,3 +1646,10 @@ Not a defect; registered frame 6224 was mid-animation (affine wave), settled fra
 ### b39 unoptimized dialogue-VM pool scan altered one 80c animation frame (2026-10-18)
 
 The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `f029.png`; the liveness-corrected but unoptimized candidate `e44c8403…` left four pixels at `(232..235,5)`. On `e44c8403…`, the 80c wide-cursor helper returned 744 CPU cycles after b38 and moved from scanline 0 to 1. The optimized candidate uses live-slot fast checks with a full-scan fallback; its return delay is 268 cycles, remains on scanline 0, and all 154 compared 80c images match b38. Preserve the earlier captures and timing trace as the reason not to restore the repeated full-pool lookup: `temp/b39/r1_evidence/`, `temp/b39/80c_animation_sequence_r3.png`, `temp/b39/timing_80c_b39r3/events.log`, and `temp/b39/80c_timing_analysis_r4.json`.
+
+## 2026-10-18 b41 조사 중 폐기한 가정
+
+- 36B620을 맵 선택 창으로 보던 가정은 폐기했다. 실제 경로는 36C3F8→36B7F0의 엔딩 기록 롤이며 뱅크당 9 OBJ 슬롯 뒤 장식이 있다. 10/11개 글리프를 그대로 풀거나 단순 화면 폭만 보는 수정은 안전하지 않다.
+- 104px 결과 대사에 새 K 페이지/clear hook을 넣는 계획은 채택하지 않았다. 기존 2행에 문구와 부호를 보존해 배치한다.
+- P2 첫 정상 임무를 map55라고 추정한 임시 기록은 오인이다. 경계 RAM 관측은 raw ID138이며 map55/A2CFB0은 별도 강제 title-only 증거로 분리한다.
+- 빌드 마지막 검증 전에 canonical ROM을 교체하던 실패 경로를 발견해 staged publication으로 수정했다. 실제 최종 B팀 실패 주입 및 교체 후 fsync 실패 검사를 추가했다.

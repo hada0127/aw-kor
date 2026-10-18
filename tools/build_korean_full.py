@@ -171,8 +171,11 @@ def require_font(path, label):
 # pairs and expect NUL-terminated fixed entries. Padding these with ASCII spaces
 # creates bogus 0x2020 pairs; using Korean reserved codes without extending the
 # renderer's private glyph table can hang the battle transition.
+from part2_mission_title_fit import NATIVE_TITLES as _native_map_titles
 PAIR_RENDERER_REGIONS = [
     ('part2_map_mission_title_table', 0xA2D000, 0xA2D8B0),
+    *[('part2_native_map_title', int(row['source'], 16), int(row['source_end'], 16))
+      for row in _native_map_titles if int(row['source'], 16) < 0xA2D000],
 ]
 COMPACT_GLYPH_DICTIONARY_REGIONS = [
     ('part2_co_power_profile_dictionary', 0xA3B880, 0xA3B880 + 122),
@@ -10536,7 +10539,15 @@ def patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code, *, evid
 
     def add_entry(code, raw_glyph, adv=0x1A):
         ptr = MISSION_TITLE_GLYPH_RT + len(glyph_blob)
-        comp = _lz77_literal_block(raw_glyph)
+        # The full native map-name catalogue needs more glyphs than the old
+        # literal-only pool. Compress new relocated assets, retaining exact
+        # decoded pixels and the native VRAM-safe LZ77 format.
+        from lz77_compress import lz77_compress
+        from lz77_scan import lz77_decompress
+        comp = lz77_compress(raw_glyph, vram_safe=True)
+        decoded = lz77_decompress(comp, 0)
+        if decoded is None or decoded[0] != raw_glyph:
+            raise AssertionError('mission-title glyph compression changed pixels')
         glyph_blob.extend(comp)
         while len(glyph_blob) % 4:
             glyph_blob.append(0)
@@ -11578,6 +11589,19 @@ def encode_text(ko, syl_to_code, unmapped, addr=None):
             else:
                 unmapped[ch] += 1   # 렌더 불가 문자 → drop
     return bytes(out)
+
+
+def unencodable_import_field(text, syl_to_code, address):
+    """A non-Korean CSV field must not become blank/partial ROM data.
+
+    Extraction noise and untranslated Japanese are not authored Korean. Keep
+    the base bytes if this encoder cannot represent their complete text.
+    """
+    if any('가' <= ch <= '힣' for ch in text):
+        return {}
+    dropped = collections.Counter()
+    encode_text(text, syl_to_code, dropped, address)
+    return dict(dropped)
 
 
 def patch_name_honorific_fragments(rom, original, syl_to_code, unmapped):
@@ -14146,7 +14170,15 @@ def main():
     ap.add_argument('--no-repoint-dialogue', action='store_true',
                     help='짜옹이님 대사 단어붙음 해소용 메시지 재배치(repoint)를 끕니다(디버그용).')
     args = ap.parse_args()
+    from build_publication import BuildPublication
+    with BuildPublication(os.path.join(BASE,'temp')) as publication:
+        return _build(args,publication)
 
+
+def _build(args, publication):
+    staged_rom = publication.path('candidate.gba')
+    staged_manifest = publication.path('repoint_manifest.json')
+    staged_integrity = publication.path('integrity_map.json')
     from localization_evidence import snapshot_inputs, stable_build_inputs, write_build_receipt, sha as evidence_sha
     build_inputs_before = snapshot_inputs()
     # One immutable override snapshot for the header pass, the general sprite
@@ -14311,6 +14343,7 @@ def main():
     report = []
     seen_import_addrs = set()
     written_addrs = set()
+    _preserved_imports = []
     _display_ov = load_display_overrides()
     refresh_compact_glyph_dictionary_overrides(_display_ov, strict=True)
     _b84_full_names = {
@@ -14363,6 +14396,13 @@ def main():
             pair_renderer = in_region(PAIR_RENDERER_REGIONS, a, a + slot)
             if pair_renderer:
                 ko = normalize_pair_renderer_text(ko)
+            dropped_import = unencodable_import_field(ko,syl_to_code,a)
+            if dropped_import:
+                _preserved_imports.append(dict(address=f'{a:08X}',length=slot,
+                                                input_text=ko,dropped=dropped_import,
+                                                retained_sha256=hashlib.sha256(bytes(rom[a:a+slot])).hexdigest()))
+                st['unencodable_import_preserved'] += 1
+                continue
             enc, level = encode_fit(ko, slot, syl_to_code, unmapped, a)
             if enc is None:
                 st['overflow'] += 1
@@ -23933,7 +23973,7 @@ def main():
                   f"{_rp_stats.get('lines_fixed',0)} lines 단어붙음 해소, "
                   f"merged-skip {_rp_stats.get('skip_merged_fragment',0)}, "
                   f"free {_rp_stats.get('free_used',0)}/{_rp_stats.get('free_avail',0)}B")
-            _rp_path = os.path.join(BASE, 'temp', 'repoint_manifest.json')
+            _rp_path = os.fspath(staged_manifest)
             json.dump(_rp_manifest, open(_rp_path, 'w'), ensure_ascii=False, indent=1)
         except Exception as _rp_err:
             raise AssertionError(f'dialogue repoint failed: {_rp_err}')
@@ -24232,7 +24272,7 @@ def main():
         _co_panel_pages_seen.add(_source_msg)
     if _co_panel_pages_seen != _co_panel_pages.keys():
         raise AssertionError('Part 2 CO panel page target missing')
-    with open(os.path.join(BASE, 'temp', 'repoint_manifest.json'), 'w', encoding='utf-8') as _stream:
+    with open(staged_manifest, 'w', encoding='utf-8') as _stream:
         json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
     for _address in sorted(set(BTEAM_SEAM_RESIDUAL_TEXT) - BTEAM_ROUND2_RESTORE):
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
@@ -24437,6 +24477,26 @@ def main():
     print('→ link client font: ' + ', '.join(
         f"{image['image']} {image['codes']}/{image['capacity_codes']} codes" for image in _lcf_report['images'])
         + f", reverted {_lcf_report['reverted_bytes']} B, dropped {_lcf_report['write_log_dropped']} write-log rows")
+    if not args.no_repoint_dialogue:
+        # Actual native-window/font audit after every text/font writer. Repairs
+        # preserve allocation, glyph wording and source-row ownership; only reviewed
+        # line/page boundaries and fixed-caption padding change.
+        from dialogue_pixel_layout import apply_repairs as apply_pixel_layout, audit as audit_pixel_layout
+        with open(os.path.join(BASE, 'data', 'dialogue_layout_repairs.json'), encoding='utf-8') as _stream:
+            _layout_repairs = json.load(_stream)
+        _layout_applied = apply_pixel_layout(rom, orig, _rp_manifest, WRITE_LOG, _layout_repairs)
+        with open(staged_manifest, 'w', encoding='utf-8') as _stream:
+            json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
+        _pixel_audit = audit_pixel_layout(orig, rom, _rp_manifest)
+        _pixel_bad = {key: _pixel_audit['summary'][key] for key in
+                      ('overflows', 'row_overflows', 'parser_errors', 'glyph_errors', 'caption_overlaps')
+                      if _pixel_audit['summary'][key]}
+        if _pixel_bad:
+            raise AssertionError(f'Final dialogue pixel layout failed: {_pixel_bad}')
+        st['dialogue_layout_repairs'] = len(_layout_applied)
+        st['dialogue_native_messages'] = _pixel_audit['summary']['physical_messages']
+        with open(os.path.join(BASE, 'temp', 'dialogue_layout_applied.json'), 'w', encoding='utf-8') as _stream:
+            json.dump(_layout_applied, _stream, ensure_ascii=False, indent=1)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     from qa_part2_co_panel_width import census as _co_panel_census, LIMIT as _co_panel_limit
@@ -24455,29 +24515,24 @@ def main():
     stable_build_inputs(build_inputs_before, snapshot_inputs())
     if evidence_sha(build_source) != build_source_sha:
         raise AssertionError('Source ROM changed during build; refusing output')
-    os.makedirs(os.path.dirname(args.out), exist_ok=True)
     from editor_storage import atomic_write_bytes
-    atomic_write_bytes(args.out, rom)
+    atomic_write_bytes(staged_rom,rom)
     synced_legacy_outputs = []
     default_out = CANONICAL_OUTPUT
     default_base = os.path.abspath(P.ROM)
     if (not args.no_sync_outputs
             and os.path.abspath(args.out) == os.path.abspath(default_out)
             and os.path.abspath(args.base) == default_base):
-        for peer in LEGACY_OUTPUTS:
-            atomic_write_bytes(peer, rom)
-            synced_legacy_outputs.append(peer)
+        synced_legacy_outputs.extend(LEGACY_OUTPUTS)
 
-    report_dir = os.path.dirname(args.report)
-    if report_dir:
-        os.makedirs(report_dir, exist_ok=True)
-    with open(args.report, 'w', newline='') as f:
+    staged_report = publication.path('encode_report.csv')
+    with open(staged_report, 'w', newline='') as f:
         w = csv.writer(f); w.writerow(['address', 'korean', 'encoded_len', 'slot_len'])
         for r in report:
             w.writerow(r)
 
     # 무결성맵(Phase C-min) 덤프: 텍스트 write 실행 순서 그대로. QA가 last-writer-wins로 ROM 대조.
-    intg_path = os.path.join(BASE, 'temp', 'integrity_map.json')
+    intg_path = os.fspath(staged_integrity)
     os.makedirs(os.path.dirname(intg_path), exist_ok=True)
     with open(intg_path, 'w', encoding='utf-8') as f:
         json.dump(WRITE_LOG, f, ensure_ascii=False)
@@ -24489,13 +24544,12 @@ def main():
     from qa_bteam_drift import check_rom as _check_bteam_rom, BASELINE as _bteam_baseline_path
     from dialogue_repoint import text_segment_cells as _text_segment_cells
     from qa_integrity_map import load_syl as _load_bteam_codes
-    with open(args.out, 'rb') as _stream:
+    with open(staged_rom, 'rb') as _stream:
         if hashlib.sha256(_stream.read()).digest() != hashlib.sha256(rom).digest():
             raise AssertionError('B-team final-ROM check input differs from in-memory ROM')
     with open(_bteam_baseline_path, encoding='utf-8') as _stream:
         _bteam_baseline = json.load(_stream)
-    _bteam_issues = _check_bteam_rom(_bteam_baseline, args.out, intg_path,
-                                    os.path.join(BASE, 'temp', 'repoint_manifest.json'))
+    _bteam_issues = _check_bteam_rom(_bteam_baseline, staged_rom, intg_path, staged_manifest)
     _restoration_issues = {int(issue['address'], 16): issue for issue in _bteam_issues
                            if int(issue['address'], 16) in BTEAM_RESTORE_BASELINE_ROWS}
     # A reviewed name-boundary spacing exception is a restored display row,
@@ -24553,9 +24607,9 @@ def main():
     for _address in sorted(BTEAM_RESTORE_BASELINE_ROWS):
         _compact = _address in BTEAM_COMPACT_VERIFIED_ROWS
         if _address in _relocated_rows:
+            from repoint_source_rows import row_bytes as _source_row_bytes, fragments as _source_fragments
             _message, (_off, _length) = _relocated_rows[_address]
-            _pos = int(_message['new_addr'], 16) + _off
-            _payload = bytes(rom[_pos:_pos + _length])
+            _payload = _source_row_bytes(rom, _message, f'0x{_address:06X}')
             if _address not in _restoration_issues:
                 _restored_relocated += 1
         else:
@@ -24567,10 +24621,22 @@ def main():
                                             'bteam-round2-compact-residual'}:
                 raise AssertionError(f'B-team compact writer changed: 0x{_address:08X}')
         if _address not in BTEAM_ROUND2_RESIDUALS:
-            validate_bteam_payload(_payload, _code2syl, _address, compact=_compact,
-                                   compact_expected=bytes.fromhex(_row[3]) if _compact
-                                   and _address not in _relocated_rows else None)
-        _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
+            if _address in _relocated_rows:
+                _target = int(_message['new_addr'], 16)
+                for _off, _size in _source_fragments(_message, f'0x{_address:06X}'):
+                    validate_bteam_payload(bytes(rom[_target+_off:_target+_off+_size]),
+                                           _code2syl, _address, compact=_compact)
+            else:
+                validate_bteam_payload(_payload, _code2syl, _address, compact=_compact,
+                                       compact_expected=bytes.fromhex(_row[3]) if _compact else None)
+        if _address in _relocated_rows:
+            _display_parts = _source_fragments(_message, f'0x{_address:06X}')
+            _target = int(_message['new_addr'], 16)
+            _widths = [_text_segment_cells(piece.rstrip(b'\x00'))
+                       for off, size in _display_parts
+                       for piece in bytes(rom[_target+off:_target+off+size]).split(b'\x72\x0a\x09')]
+        else:
+            _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
         if not _widths or (max(_widths) > BTEAM_RESTORED_ROW_HALF_CELLS.get(_address, 44) and
                            BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
             _wide_restored.append((f'0x{_address:08X}', _widths))
@@ -24671,18 +24737,38 @@ def main():
                    '재생성: build_korean_full.py', 'sprites': objl_sprites}, f, ensure_ascii=False, indent=1)
     print(f'→ OBJ 라벨 합성 스프라이트 {objl_path} ({len(objl_sprites)} sprites)')
 
+    with open(os.path.join(BASE,'temp','encoding_warning_summary.json'),'w',encoding='utf-8') as _stream:
+        json.dump(dict(unmapped=dict(unmapped),preserved_imports=_preserved_imports,
+                       fallback_levels={str(i):st[f'level{i}'] for i in range(6,12)},
+                       scope='Encoder-attempt counts; final native payload/owner classification is separate'),
+                  _stream,ensure_ascii=False,indent=2)
+    print(f"→ unencodable non-Korean CSV fields: preserved {len(_preserved_imports)} base spans")
     print(f'=== 인코딩 통계 (base={"v56_polished" if use_v56 else "original"}) ===')
     for k in ['editor_intents', 'editor_intent_stale', 'dialogue_overrides', 'override_jam_skipped', 'dialogue_override_protected_skip', 'rows', 'written', 'level0', 'level1', 'level2', 'level3', 'level4', 'level5', 'overflow', 'deny', 'skip_v56', 'no_ko', 'code_region', 'no_slot', 'bad_addr', 'oob', 'supp_written', 'supp_level0', 'supp_level1', 'supp_level2', 'supp_level3', 'supp_level4', 'supp_level5', 'supp_overflow', 'grid_glyphs', 'symbol_glyphs', 'part2_ui_kanji_glyphs', 'compact_ui_fallback_glyph', 'part2_ui_context_tokens', 'part1_single_map_unknown_label', 'part2_obj_labels', 'part2_status_header_labels', 'part2_info_screen_obj_labels', 'part1_full_info_spec_obj_label', 'part1_damage_forecast_label', 'part2_damage_label', 'part2_mode_menu_obj_labels', 'part2_sound_room_control_labels', 'part2_link_mode_residual_labels', 'part2_menu_newspaper_bg', 'common_nintendo_presents_bg', 'part2_splash_logo_bg', 'part2_intro_blackhole_bg', 'part2_intro_campaign_residual_graphics', 'part2_intro_ascii_name_residuals', 'part1_intro_map_bitmap_labels', 'part1_operation_room_bg_labels', 'part1_battle_day_banner', 'part1_info_screen_bg_labels', 'part1_compact_info_weapon_labels', 'part1_check_label', 'part1_name_ui_labels', 'part2_command_menu_icon', 'part2_action_menu_icon_labels', 'part2_mission_obj', 'part2_operation_prompt_labels', 'part2_lets_go_obj', 'part2_battle_start_day_overlay', 'part2_mission_number', 'part2_bg_mission_word', 'part2_result_summary', 'part2_result_success_overlay', 'part2_result_failure_overlay', 'part2_result_congratulations', 'part2_air_mission_title', 'part2_air_supremacy_title', 'part2_level_label', 'part2_check_label', 'part2_companion_hud', 'part1_day_hud', 'part2_funds_hud', 'residual_ascii_labels', 'common_battle_ascii_labels', 'battle_defense_label_tiles', 'backup_utility_tables', 'part2_domino_co_name', 'part1_rule_circle_labels', 'part2_campaign_header', 'part2_redstar_region', 'part2_prologue_logo', 'part2_prologue_inline_renderer_spans', 'world_map_label_tiles', 'title_hangul_assets', 'name_honorifics', 'pair_title_glyphs', 'b84_power_title_lz77_glyphs', 'b84_power_title_glyphs', 'part2_power_title_glyphs', 'sprite_overrides', 'sprite_overrides_skipped', 'sprite_overrides_ignored']:
         print(f'  {k}: {st[k]}')
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
     print(f'  punct_strip_fallback(level>=6): {sum(st[f"level{i}"] for i in range(6, 12))}')
+    # All validators, input/source guards and receipt generation must succeed
+    # before accepted outputs or their metadata can change.
+    write_build_receipt(staged_rom, build_source, build_inputs_before,
+                        snapshot_inputs(), build_source_sha,
+                        repoint_enabled=not args.no_repoint_dialogue,
+                        metadata_paths={'temp/integrity_map.json':staged_integrity,
+                                        'temp/repoint_manifest.json':staged_manifest})
+    from localization_evidence import receipt_path
+    _receipt = receipt_path(staged_rom).read_bytes()
+    _destinations = [args.out,*synced_legacy_outputs]
+    publication.publish([
+        (os.path.join(BASE,'temp','integrity_map.json'),staged_integrity.read_bytes()),
+        (os.path.join(BASE,'temp','repoint_manifest.json'),staged_manifest.read_bytes()),
+        (args.report,staged_report.read_bytes()),
+        *[(path,rom) for path in _destinations],
+        *[(receipt_path(path),_receipt) for path in _destinations],
+    ])
     print(f'→ {args.out} (16MB, chk recomputed), overflow 리포트 {args.report}')
     for peer in synced_legacy_outputs:
         print(f'→ synced legacy output {peer}')
-    write_build_receipt(args.out, build_source, build_inputs_before,
-                        snapshot_inputs(), build_source_sha,
-                        repoint_enabled=not args.no_repoint_dialogue)
 
 
 if __name__ == '__main__':

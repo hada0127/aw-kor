@@ -4130,3 +4130,9 @@ The earlier b36/b36r2/b36r3 link captures in `docs/screenshots/b36_multiboot_202
 ### b39 Part 1 name confirmation after WARS intro skip (2026-10-18)
 
 Candidate `7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217` was built twice, byte-identically, from the original ROM without synchronizing protected outputs. In eight cold-boot HLE/real-BIOS routes (intro skip at 3, 6.7, or 10 seconds, and full intro), the name and first-time choice rows each passed the focused single-large-change check and settled to wide text at x66–111; RIGHT/LEFT changed only cursor pixels. A separate cold-boot two-character `아아` route captured No → editor → START frame by frame; its reopened text region became final at frame 41 and stayed unchanged through frame 104. Save, shop, and Part 2 surrender captures match b38 RGB (95/95, 103/103, 110/110 images); the campaign 80c opening, all intermediate frames, and RIGHT match b38 RGB (154/154). The eight-module suite passed 82 tests; B-team drift, strict address audit, and transient overlay gates passed. Exact commands and receipts are in `temp/b39/code_report_r2.md`. Physical-device behavior and a direct in-game stale-slot RAM-poke test remain `(unverified)`; the candidate-ROM Thumb payload passed seven synthetic pool tests instead.
+
+## 2026-10-18 b41 검증된 배치 수정
+
+- 원 제보는 D9E1A0 페이지7 / D9E345 / VM포인터DBF7F0. 원문 22글리프44B 뒤720A09, 다음 문장까지 직접 읽어 복원했다. 정상 키 입력 cold boot로 전체 문장과 지도 조작 복귀를 확인했다.
+- native 창·폰트·최대 이름48px·라벨 예약 영역·제어 보존 기준과 새 도구는 `docs/dialogue_layout.md`를 따른다. 실제 대사98개/기존페이지102개, 페이지 경계17개 수정. 카탈로그 제목/엔딩 OBJ 장식 별도 검증.
+- 후보와 세부 전수 분모·미검증·치트 오염·최종 빌드/리뷰 상태는 `temp/b41_dialogue_audit/REPORT.md` 및 JSON 영수증을 따른다. 이 기록은 전 장면 정상 플레이/엔딩/설치 승인이 아니다.

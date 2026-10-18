@@ -5,7 +5,9 @@ renderer glyph advances. Short titles keep that path; long titles use 20px
 cells and ink contained within 19px. Unknown longer source titles fail build.
 """
 import hashlib
+import json
 import struct
+from pathlib import Path
 
 from lz77_scan import lz77_decompress
 
@@ -23,6 +25,11 @@ CODE = bytes.fromhex(
     'd20002e0820012189200e021891a009600480047b9ce37083188092903d842001218'
     'd20002e0820012189200e021891a009701480047c04619cf3708'
 )
+# Additional ending-record loader, assembled after the unchanged old prefix.
+CODE += bytes.fromhex('08bcf0b584b00090019102920393164c2568002d03d0a84205d02034f8e7134ffff7bfff16e0606803994901104a8918104ffff7b6ff019920890880029a0132a67a002527000c37785d50550135b542fad3300004b0f0bc02bc8e460004000c2064054a054908470064f608e5c4370800000106c11c3108c4d68f0849b63608')
+MAP_DESCRIPTORS = 0xF66400
+MAP_SITE = (0x36B63C, bytes.fromhex('10f052ff0004000c2064124a'), BASE + 0xC4)
+
 SITES = (
     (0x37C7E4, bytes.fromhex('49460091002100228023fff779fe0004'), BASE),
     (0x37CEAC, bytes.fromhex('42001218d200e021891a0096'), BASE + 0x7C),
@@ -31,10 +38,18 @@ SITES = (
 
 TITLE_START = 0xA2D000
 TITLE_END = 0xA2D8B0
+NATIVE_TITLES = json.loads((Path(__file__).resolve().parents[1] /
+                           'data/native_part2_titles.json').read_text())['titles']
+NATIVE_TITLE_SOURCES = frozenset(int(row['source'],16) for row in NATIVE_TITLES)
+NATIVE_TITLE_POINTERS_BY_MAP = {map_id:int(row['pointer'],16)
+                              for row in NATIVE_TITLES for map_id in row['map_ids']}
+if (len(NATIVE_TITLES)!=179 or len(NATIVE_TITLE_SOURCES)!=179
+        or set(NATIVE_TITLE_POINTERS_BY_MAP)!=set(range(180))):
+    raise ValueError('invalid native map-title source catalogue')
 
 
 def is_pair_title(address):
-    return address is not None and TITLE_START <= address < TITLE_END
+    return address is not None and (TITLE_START <= address < TITLE_END or address in NATIVE_TITLE_SOURCES)
 
 
 def valid_pair(code):
@@ -113,16 +128,23 @@ def active_titles(original, rom):
             raise AssertionError('mission title descriptor index changed')
         index = struct.unpack_from('<H', original, field)[0]
         pointer = 0xA357B4 + index * 4
+        if pointer != NATIVE_TITLE_POINTERS_BY_MAP[map_id]:
+            raise AssertionError('native map-title descriptor differs from source catalogue')
         if not 0xA38084 <= pointer <= 0xA3834C:
             raise AssertionError('mission title descriptor points outside title table')
         pointers.add(pointer)
     for pointer in sorted(pointers):
         old = struct.unpack_from('<I', original, pointer)[0] - 0x08000000
+        if not any(int(row['pointer'],16)==pointer and int(row['source'],16)==old for row in NATIVE_TITLES):
+            raise AssertionError('native map-title pointer/source differs from catalogue')
         address = struct.unpack_from('<I', rom, pointer)[0] - 0x08000000
         if not 0 <= address < len(rom):
             raise AssertionError('mission title pointer outside ROM')
         # An in-place string may shrink, but must never consume its neighbour.
         original_end = original.find(b'\0', old)
+        source_row = next(row for row in NATIVE_TITLES if int(row['pointer'],16)==pointer)
+        if original_end != int(source_row['source_end'],16):
+            raise AssertionError('native map-title source span differs from catalogue')
         limit = original_end + 1 if address == old else len(rom)
         if original_end < 0:
             raise AssertionError('source mission title has no terminator')
@@ -149,6 +171,76 @@ def active_titles(original, rom):
     return result
 
 
+def glyph_pixels(raw):
+    if len(raw) != 512:
+        raise AssertionError('map-title glyph is not 32x32 4bpp')
+    return [[(raw[(y//8*4+x//8)*32+y%8*4+x%8//2] >> (4*(x%2))) & 15
+             for x in range(32)] for y in range(32)]
+
+
+def tile_pixels(pixels):
+    raw = bytearray(512)
+    for y, row in enumerate(pixels):
+        for x, value in enumerate(row):
+            raw[(y//8*4+x//8)*32+y%8*4+x%8//2] |= value << (4*(x%2))
+    return bytes(raw)
+
+
+def map_title_raster(codes, glyphs, advances, spacing):
+    """Preserve native glyph pixels; compose long titles into native OBJ slots.
+
+    Only a title exceeding the screen uses the already established compact
+    mission glyphs. Chunking changes neither the resulting raster nor its gaps.
+    The nine-slot bank ends exactly where native decoration tiles begin.
+    """
+    count = len(codes)
+    native_gap = spacing[count]
+    native_span = sum(advances[c] for c in codes) + (count-1)*native_gap
+    compact = native_span > 240
+    widths = [20 if compact else advances[c] for c in codes]
+    gap = 0 if compact else native_gap
+    span = sum(widths) + (count-1)*gap
+    if not 0 < span <= 240:
+        raise AssertionError('map title does not fit native viewport')
+    pixels = [[0]*span for _ in range(32)]
+    x0 = 0
+    for code, advance in zip(codes, widths):
+        raw = compact_glyph(glyphs[code]) if compact else glyphs[code]
+        for y, row in enumerate(glyph_pixels(raw)):
+            for x, value in enumerate(row):
+                if value:
+                    if x0+x >= span:
+                        raise AssertionError('map-title ink exceeds measured span')
+                    if not pixels[y][x0+x]:
+                        pixels[y][x0+x] = value
+        x0 += advance + gap
+    chunks = (span+31)//32
+    if chunks > 9:
+        raise AssertionError('map-title raster exceeds native nine-slot bank')
+    data = b''.join(tile_pixels([row[i*32:(i+1)*32] + [0]*max(0,(i+1)*32-span)
+                                for row in pixels]) for i in range(chunks))
+    # The native layout adds its own spacing for the returned OBJ count.
+    # Compensate that spacing in advance entries, keeping chunk origins at 32px.
+    chunk_gap = spacing[chunks]
+    returned_widths = [32-chunk_gap]*(chunks-1) + [span-32*(chunks-1)]
+    total = sum(returned_widths)
+    x = (240-(total+(chunks-1)*chunk_gap))//2
+    origins = [x]
+    for width in returned_widths[:-1]:
+        origins.append(origins[-1]+width+chunk_gap)
+    if origins != [x+32*i for i in range(chunks)]:
+        raise AssertionError('native map-title chunk placement differs from raster')
+    rebuilt = [sum((glyph_pixels(data[i*512:(i+1)*512])[y] for i in range(chunks)), [])[:span]
+               for y in range(32)]
+    if rebuilt != pixels:
+        raise AssertionError('map-title chunking changed rendered pixels')
+    return data, dict(source_codes=count, native_span=native_span, span=span,
+                      compact=compact, chunks=chunks, sum_width=total,
+                      widths=returned_widths, x=x,
+                      raster_sha256=hashlib.sha256(bytes(sum(pixels,[]))).hexdigest(),
+                      bank_tiles=chunks*16, decoration_tile=0x90)
+
+
 def patch(rom, original, literal_compress):
     for start, end, expected in (
         (0x324E04, 0x324E44, 'd64bf0587285b9353690a378c0b277a29192c41b4bcf699c1fed86d76852ce89'),
@@ -160,7 +252,14 @@ def patch(rom, original, literal_compress):
         raise AssertionError('mission title layout source reservation changed')
     if bytes(rom[BASE:END]) != original[BASE:END]:
         raise AssertionError('mission title layout reservation already occupied')
-    for address, expected, _ in SITES:
+    for start, end, expected in (
+        (0x36B5D8,0x36B8B8,'15f486220e2f8b98334ed19ec7649ea39258aef2e159001ea04e2a095b4c0c89'),
+        (0x8FD6C4,0x8FD6DC,'98c7f9b12c8ecffb5cf3939c67c76d7925c2c4506a74b63c54514752d14f764d'),
+        (0x37C4E4,0x37C548,'cfb03da30fae3710a59a87f388d6f9ab41386960ee3b6c827e92027745d494a2'),
+    ):
+        if hashlib.sha256(original[start:end]).hexdigest()!=expected or rom[start:end]!=original[start:end]:
+            raise AssertionError('native map-title consumer geometry changed')
+    for address, expected, _ in (*SITES, MAP_SITE):
         if original[address:address + len(expected)] != expected or bytes(rom[address:address + len(expected)]) != expected:
             raise AssertionError(f'mission title layout hook site changed: {address:08X}')
     titles = active_titles(original, rom)
@@ -179,6 +278,7 @@ def patch(rom, original, literal_compress):
     seen = set()
     dedup = {}
     rom_bytes = bytes(rom)
+    native_glyphs, advances = {}, {}
     for entry in entries:
         code, _, pointer, advance = struct.unpack('<HHII', entry)
         if code in seen:
@@ -192,6 +292,8 @@ def patch(rom, original, literal_compress):
                 raise AssertionError(f'mission title glyph cannot decompress: {code:04X}')
             if code in (needed | strict_needed) and code != 0x8140 and not any(decoded[0]):
                 raise AssertionError(f'mission title has blank visible glyph: {code:04X}')
+        if code in needed | strict_needed:
+            native_glyphs[code], advances[code] = decoded[0], advance
         if code in needed:
             raw = compact_glyph(decoded[0])
             if raw not in dedup:
@@ -206,9 +308,36 @@ def patch(rom, original, literal_compress):
     if (needed | strict_needed) - seen:
         raise AssertionError('mission title contains an unregistered glyph')
     table.extend(bytes(12))
-    if BASE + len(CODE) > TABLE or TABLE + len(table) > GLYPHS or GLYPHS + len(glyphs) > END:
+    spacing = struct.unpack_from('<12H', original, 0x8FD6C4)
+    descriptors = bytearray()
+    map_layouts = []
+    for pointer, address, codes, _ in titles:
+        if len(codes) <= 9:
+            # These retain the complete native path, including user-map names.
+            span = sum(advances[c] for c in codes)+(len(codes)-1)*spacing[len(codes)]
+            if not 0 < span <= 240:
+                raise AssertionError('short map title exceeds native viewport')
+            continue
+        raw, layout = map_title_raster(codes, native_glyphs, advances, spacing)
+        compressed = literal_compress(raw)
+        target = 0x08000000 + GLYPHS + len(glyphs)
+        glyphs.extend(compressed)
+        while len(glyphs)%4:
+            glyphs.append(0)
+        descriptor = bytearray(32)
+        struct.pack_into('<IIHB', descriptor, 0, address+0x08000000, target,
+                         layout['sum_width'], layout['chunks'])
+        descriptor[12:12+layout['chunks']] = bytes(layout['widths'])
+        descriptors.extend(descriptor)
+        layout.update(pointer=f'{pointer:08X}', target=f'{address:08X}',
+                      source=f'{struct.unpack_from("<I",original,pointer)[0]-0x08000000:08X}')
+        map_layouts.append(layout)
+    descriptors.extend(bytes(32))
+    if (BASE + len(CODE) > MAP_DESCRIPTORS or MAP_DESCRIPTORS + len(descriptors) > TABLE
+            or TABLE + len(table) > GLYPHS or GLYPHS + len(glyphs) > END):
         raise AssertionError('mission title fitting assets overlap reservation')
     rom[BASE:BASE + len(CODE)] = CODE
+    rom[MAP_DESCRIPTORS:MAP_DESCRIPTORS+len(descriptors)] = descriptors
     rom[TABLE:TABLE + len(table)] = table
     rom[GLYPHS:GLYPHS + len(glyphs)] = glyphs
     regions = [(BASE, bytes(rom[BASE:END]))]
@@ -219,7 +348,15 @@ def patch(rom, original, literal_compress):
         replacement = trampoline + bytes.fromhex('c046') * ((len(expected) - 8) // 2)
         rom[address:address + len(expected)] = replacement
         regions.append((address, replacement))
+    address, expected, target = MAP_SITE
+    # r1/r2/r3 are all live. Preserve r3 around this dedicated far jump.
+    replacement = bytes.fromhex('08b4014b1847c046') + struct.pack('<I',0x08000001+target)
+    if len(replacement)!=len(expected):
+        raise AssertionError('map-title trampoline size differs from guarded site')
+    rom[address:address+len(replacement)] = replacement
+    regions.append((address,replacement))
     for pointer, address, _, raw in titles:
         regions.extend(((pointer, bytes(rom[pointer:pointer + 4])), (address, raw)))
     return tuple(regions), {'titles': len(titles), 'long_titles': sum(len(x[2]) > 9 for x in titles),
-                            'compact_codes': len(needed), 'glyph_bytes': len(glyphs)}
+                            'compact_codes': len(needed), 'glyph_bytes': len(glyphs),
+                            'map_layouts': map_layouts}

@@ -1,0 +1,2290 @@
+[
+  {
+    "game": "p1",
+    "source": "0xB83A98",
+    "before_sha256": "f309ebe000dba766325b5a199188cc439351772a14c03a5184a86fab3d1fa4f3",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "이　몸의　２회　행동을、견뎌낼　수　있겠느냐！？"
+        ],
+        "after": [
+          "이　몸의　２회　행동을、견뎌낼",
+          "수　있겠느냐！？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD8F920",
+    "before_sha256": "741a569de0e0dcf6c9e5afacaf975c6f737f664791d9b36592b8eef9625e0a75",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "이　보병이　적에게　가장　가까운　곳은　여기네"
+        ],
+        "after": [
+          "이　보병이　적에게　가장",
+          "가까운　곳은　여기네"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9009C",
+    "before_sha256": "a172ebfde75aa378ff353780bf1729fce5b99749a061d98aa27227da360201a3",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "이　적　유닛은、이제　한　번　정도　공격을하면、해치울　수　있어。"
+        ],
+        "after": [
+          "이　적　유닛은、이제　한　번　정도",
+          "공격을하면、해치울　수　있어。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD903B8",
+    "before_sha256": "d6de61e9da7dbadacc2a1e80dbb163d0ec24b93070b9bc065a60085404e5197d",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "적의　남은　병력은　１유닛。　이쪽은　２유닛。"
+        ],
+        "after": [
+          "적의　남은　병력은",
+          "１유닛。　이쪽은　２유닛。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD915E8",
+    "before_sha256": "a0a4c1100674a32286372b6c760e2d69f081b8ac7a541799a462ce6337bd0af3",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 2,
+        "before": [
+          "이　”지형　효과”는　어쨌든、”이동　코스트”는",
+          "유닛에　따라　달라져요。"
+        ],
+        "after": [
+          "이　”지형　효과”는　어쨌든、",
+          "”이동　코스트”는　유닛에　따라　달라져요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD95224",
+    "before_sha256": "5899a7752ac1b67346da39ed0d8d5b29b8b3ed5b58553510486fb31e03e10687",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "그래요！　그리고　다시　한번　Ａ　버튼을　눌러서",
+          "커맨드를　꺼내　주겠어요？"
+        ],
+        "after": [
+          "그래요！　그리고　다시　한번　Ａ　버튼을",
+          "눌러서　커맨드를　꺼내　주겠어요？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD96144",
+    "before_sha256": "41bfa4d6042a28b8ec37250d0c1b4f14de6a3a57bbec6a938103d82c05b64427",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "우선은、여기의　２개의　도시를　지키고　싶네요。"
+        ],
+        "after": [
+          "우선은、여기의　２개의",
+          "도시를　지키고　싶네요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD99288",
+    "before_sha256": "ad207e8f2ee944c89acf1218ffaea76dfb155c570c1a8f18cb0bbe7f8988cda1",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 2,
+        "before": [
+          "연료　정도는　기합으로　어떻게　안　되는　거냐！"
+        ],
+        "after": [
+          "연료　정도는　기합으로",
+          "어떻게　안　되는　거냐！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9A080",
+    "before_sha256": "58603e7b1e1852cb6a64f62598397cfc992886fb20794136c71ab25f04393613",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "으으음・・・이번엔　나갈　기회가　없었다・・・"
+        ],
+        "after": [
+          "으으음・・・이번엔　나갈",
+          "기회가　없었다・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9D5CC",
+    "before_sha256": "3ff8a8a73dcfa90a3b9cbc6cf8421fb123481bf47cf92818186c99daffddf5d2",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "호이프의　능력은　눈을　내리게　하는　거예요。"
+        ],
+        "after": [
+          "호이프의　능력은　눈을",
+          "내리게　하는　거예요。"
+        ]
+      },
+      {
+        "page": 1,
+        "before": [
+          "눈이　내리고　있는　동안은　행동하기　어려우니까",
+          "가능한　한　뭉쳐　있는　편이　좋아요。"
+        ],
+        "after": [
+          "눈이　내리고　있는　동안은",
+          "행동하기　어려우니까　가능한",
+          "한　뭉쳐　있는　편이　좋아요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9DC74",
+    "before_sha256": "1380484af6c849b8873c214d58d4aee521aaee584c0316a4a02dcb6dfc6b5176",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "이　지형　숲은　옆에　갈　때까지",
+          "뭐가　있는지　모른다　는　특수한　지형이에요。"
+        ],
+        "after": [
+          "이　지형　숲은　옆에　갈　때까지　뭐가",
+          "있는지　모른다　는　특수한　지형이에요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9DD54",
+    "before_sha256": "37d8fbb4d5cae93d78fa0f4d5ebf04c5d96d19ef461e84c077d2d57ef52e636e",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "참고로、이　지형　”암초”도、”숲”과　같이",
+          "옆에　가기　전까지는　모른다、는　지형이에요。"
+        ],
+        "after": [
+          "참고로、이　지형　”암초”도、”숲”과",
+          "같이　옆에　가기　전까지는",
+          "모른다、는　지형이에요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9E1A0",
+    "before_sha256": "4b8a425c135708ba5bd276573052d637b508c56a9ad146e58d5ad35749c57452",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 7,
+        "before": [
+          "Ｒ　버튼을　누른　뒤、이어서　십자　버튼의　아래를",
+          "눌러봐요。"
+        ],
+        "after": [
+          "Ｒ　버튼을　누른　뒤、이어서",
+          "십자　버튼의　아래를　눌러봐요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xD9EB84",
+    "before_sha256": "a3434f680398987cbb9dce8a877682a76fc5c563bb49ee68b0ad6e9e20f53515",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "라고　할　때는、똑바로　커서를　움직여서",
+          "이동할　곳에서　Ａ　버튼、이라는　게　보통이죠。"
+        ],
+        "after": [
+          "라고　할　때는、똑바로　커서를",
+          "움직여서　이동할　곳에서　Ａ",
+          "버튼、이라는　게　보통이죠。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC32F4",
+    "before_sha256": "b32de95e19e937f47d185b1619a02b058addf85b948ef6b6529cef887e77a049",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "눈이　내리기　시작하면、거의　움직일　수　없어요。"
+        ],
+        "after": [
+          "눈이　내리기　시작하면、거의",
+          "움직일　수　없어요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC33F8",
+    "before_sha256": "10fb3b13949e996146a4733b26b6fce4ecb9d18ed13d450629d076a7d9c5b651",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "<NAME>사령관님에게는　설명하지　않았지만、",
+          "료는　알고　있을　거에요。"
+        ],
+        "after": [
+          "<NAME>사령관님에게는　설명하지",
+          "않았지만、　료는　알고　있을　거에요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC3B1C",
+    "before_sha256": "68c7496b81ad9ed3a2a534bd89d743ff3d280a7b21659c7ec35652fcb75bd506",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "그러니까、브레이크　게이지가　차기　전에、가능한",
+          "만큼　간접　공격　유닛을　해치워　버리는　거야"
+        ],
+        "after": [
+          "그러니까、브레이크　게이지가",
+          "차기　전에、가능한　만큼　간접",
+          "공격　유닛을　해치워　버리는　거야"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC44DC",
+    "before_sha256": "aaffefd4354d790ef49180127c3155e1d3a47940e8fa057627290018fca0edfd",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "・・・뭐、본인이　납득하고　있다면　상관없나。"
+        ],
+        "after": [
+          "・・・뭐、본인이　납득하고",
+          "있다면　상관없나。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC4D78",
+    "before_sha256": "1e2ca3c94d47a979d3540248063c61fd81868ff3c6ce7ba98355133fc4570eb2",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "시야가　넓은　정찰차　같은　걸",
+          "앞으로　내보내서　앞을　보면서　나아가면　돼。"
+        ],
+        "after": [
+          "시야가　넓은　정찰차　같은　걸　앞으로",
+          "내보내서　앞을　보면서　나아가면　돼。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC55E0",
+    "before_sha256": "eed77792cff41e6497415a966f1d6026aaaff70464fdcbc204ec4325994048e1",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "료는　처음부터　영문을　알　수　없는　녀석이라고",
+          "생각했지만、당신도　그럴　줄이야・・・"
+        ],
+        "after": [
+          "료는　처음부터　영문을",
+          "알　수　없는　녀석이라고",
+          "생각했지만、당신도　그럴　줄이야・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC6000",
+    "before_sha256": "55614087be3382cc1a8dd0ddfe08b09959c87b6a39b7cf4ee35e6d80eeecb60d",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "시야가　넓은　정찰차　같은　걸",
+          "앞으로　내보내서　앞을　보면서　나아가면　돼。"
+        ],
+        "after": [
+          "시야가　넓은　정찰차　같은　걸　앞으로",
+          "내보내서　앞을　보면서　나아가면　돼。"
+        ]
+      },
+      {
+        "page": 3,
+        "before": [
+          "숲에　숨어　있으면　공격받지　않으니까　말이야。"
+        ],
+        "after": [
+          "숲에　숨어　있으면",
+          "공격받지　않으니까　말이야。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC72D4",
+    "before_sha256": "311bb8c6a819903918cbe5c67dfadf654d91284b46529778646a93af3bacf194",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "・・・그런데　어째서　료는　알고　있는　거야？"
+        ],
+        "after": [
+          "・・・그런데　어째서",
+          "료는　알고　있는　거야？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC7F70",
+    "before_sha256": "8cc1961a09181ed9e0b07c88db885f75de3636a7ee113a6bb27ac25456a8c60e",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "적이　사령관　브레이크를　쓰기　전에〉적의",
+          "주력을　해치울　수　있을지　없을지가　승부예요。"
+        ],
+        "after": [
+          "적이　사령관　브레이크를　쓰기",
+          "전에〉적의　주력을　해치울　수",
+          "있을지　없을지가　승부예요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC86C8",
+    "before_sha256": "104f4e4f5fe9e86cda0b33b27c74c468ca2c1febf2c19817e4557ca666f18f46",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "처음에는　일정　피해를　감수하더라도",
+          "생각으로　간접　공격　유닛을　해치우는　거야。"
+        ],
+        "after": [
+          "처음에는　일정　피해를",
+          "감수하더라도　생각으로　간접",
+          "공격　유닛을　해치우는　거야。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDC9CB0",
+    "before_sha256": "0cc8d63f3b39ebd74aa1276d53ed1b415f1cddb5166d21cdc07d3ca7f527d96f",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 3,
+        "before": [
+          "상당히　공격을　피할　수　있을　거라고　생각해。"
+        ],
+        "after": [
+          "상당히　공격을　피할　수",
+          "있을　거라고　생각해。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDCC8A0",
+    "before_sha256": "eb41fc3cb27e5bf4a34bf9e9064d8ae1c9dc71a2a31d25f23fbac6be34f8c3c3",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 2,
+        "before": [
+          "사령관을　료로　하는　것도　좋을지도　몰라요？"
+        ],
+        "after": [
+          "사령관을　료로　하는",
+          "것도　좋을지도　몰라요？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDCCA84",
+    "before_sha256": "43b4fda78ad6beb767354119631cc02fcc35070457c73ab5dab9dfa95f4f8c03",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "그러니까、가능한　한　빨리　해치워버리지　않으면",
+          "우리의　패배야！"
+        ],
+        "after": [
+          "그러니까、가능한　한　빨리",
+          "해치워버리지　않으면　우리의　패배야！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDCD340",
+    "before_sha256": "76c1a2ff3f7f11df6eadb66f4211dac4242ef024d1a4119a5538a43c76799912",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "게다가　수송선이　당하면　끝",
+          "이라는　맵으로　맞서　싸워오고　있고　말이야。"
+        ],
+        "after": [
+          "게다가　수송선이　당하면　끝이라는",
+          "맵으로　맞서　싸워오고　있고　말이야。"
+        ]
+      },
+      {
+        "page": 2,
+        "before": [
+          "하지만　진심으로　싸우지　않으면　안　되는　이유도",
+          "있는　거겠지。"
+        ],
+        "after": [
+          "하지만　진심으로　싸우지　않으면",
+          "안　되는　이유도　있는　거겠지。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDCF86C",
+    "before_sha256": "753149fce8095b22fa27266871d6dff5a1ec883ed27150b294029444ad7bc081",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "그것보다、이　녀석을　먼저　해치워　버리자고！"
+        ],
+        "after": [
+          "그것보다、이　녀석을",
+          "먼저　해치워　버리자고！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDD0FA4",
+    "before_sha256": "311b9d57fe40fa11bc85610af94af5b5eb9f63c27145c204a7bcf743feb10f81",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "뭐、악의는　없으니까　말이지、이　사람의　경우는。"
+        ],
+        "after": [
+          "뭐、악의는　없으니까",
+          "말이지、이　사람의　경우는。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDD1BB8",
+    "before_sha256": "319e1497ce43155488b5c4edf009050f1f08916a7eb875d150fb6efc68f97c42",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "사령관이　명령을　내리면、사령관은",
+          "능력을　쓰는　것만　생각하고　있으면　된다・・・"
+        ],
+        "after": [
+          "사령관이　명령을　내리면、사령관은　능력을",
+          "쓰는　것만　생각하고　있으면　된다・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDED950",
+    "before_sha256": "afb9adf2a30bee4196a3432e0868114eed2ffcff778565322ff72bc332cb96da",
+    "profile": "p1_unit_help",
+    "limit_px": 112,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "시야。",
+          "숫자는　그　범위。",
+          "색적으로공격하려면、",
+          "다른　유닛　시야가　필요하다。"
+        ],
+        "after": [
+          "시야。　숫자는　그　범위。",
+          "색적으로공격하려면、",
+          "다른　유닛",
+          "시야가　필요하다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDEEA20",
+    "before_sha256": "c602599c3284211b0ac7b250d8bf63957ff5e66d2c81f9b791d2b074bfd24550",
+    "profile": "p1_unit_help",
+    "limit_px": 112,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "캐논포의、보병　계열에",
+          "대한　공격력。",
+          "공격력은、　강한　편에　든다。"
+        ],
+        "after": [
+          "캐논포의、보병　계열에",
+          "대한　공격력。　공격력은、",
+          "강한　편에　든다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDEF0B0",
+    "before_sha256": "38a66153311499041e91ed86c636dffeef9216f0d4aeb94facb24a1d013ba8ea",
+    "profile": "p1_unit_help",
+    "limit_px": 112,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "선박　타입의　이동이　가능하다。",
+          "숫자는　이동력。",
+          "바다／암초　이동　가능"
+        ],
+        "after": [
+          "선박　타입의　이동이",
+          "가능하다。　숫자는　이동력。",
+          "바다／암초　이동　가능"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF2D50",
+    "before_sha256": "428ce5abfbf3fb1dc27746903f57adb50bedeec8779f029f6dfff6bd5e6073c4",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "하이퍼　리페어！",
+          "　",
+          "전　유닛의　ＨＰ를",
+          "２씩　보충　가능。"
+        ],
+        "after": [
+          "　　　하이퍼　리페어！",
+          "　",
+          "전　유닛의　ＨＰ를",
+          "２씩　보충　가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF2DA4",
+    "before_sha256": "4b2cfeb2dc9731b0fc6f8588bc30f75f1a142e65f5626f48c4a9438e20347b31",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "밝고　활기찬　게　장점인　소년。",
+          "음식은　다　좋아함。",
+          "기계",
+          "새벽형",
+          "기계라면",
+          "나한테　맡겨！"
+        ],
+        "after": [
+          "밝고　활기찬　게　장점인",
+          "소년。　음식은　다　좋아함。",
+          "　　　　　기계",
+          "　　　　　새벽형",
+          "기계라면",
+          "나한테　맡겨！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF2E28",
+    "before_sha256": "424cb91475b5666691238585c0821bf90631c993113d69719eaf3609b3a00549",
+    "profile": "p1_co_ability",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "　",
+          "　보병、바주카병능력이",
+          "높은　것　외에、　수송할　유닛",
+          "의　이동력　높음。",
+          "그　외의　직접　공격　유닛",
+          "의　공격력　낮음。"
+        ],
+        "after": [
+          "　",
+          "　보병、바주카병능력이",
+          "높은　것　외에、　수송할",
+          "유닛의　이동력　높음。",
+          "그　외의　직접　공격",
+          "유닛의　공격력　낮음。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF2EB8",
+    "before_sha256": "c837b1361626b1f4b2a05dce61341ace04c6a2651c5ef53f0c4137a1649dbeeb",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "위닝　마치！",
+          "　보병、바주카병의",
+          "이동력　증가。",
+          "게다가、보병、바주카병가",
+          "이동　가능한　지형　이동",
+          "코스트가　모두　１이　된다。"
+        ],
+        "after": [
+          "　　　위닝　마치！",
+          "　보병、바주카병의",
+          "이동력　증가。",
+          "게다가、보병、바주카병가",
+          "이동　가능한　지형　이동",
+          "코스트가　모두　１이　된다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF2F60",
+    "before_sha256": "d8781d3b43ff19cdfd550b0b1644114836eb4e0215859b4c667bdc07541941d4",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "특수　부대　출신。",
+          "책임감이　강하다。",
+          "딸기　쇼트케이크",
+          "나약한　남자",
+          "잘　부탁해！",
+          "　"
+        ],
+        "after": [
+          "특수　부대　출신。",
+          "책임감이　강하다。",
+          "　　　　　딸기　쇼트케이크",
+          "　　　　　나약한　남자",
+          "잘　부탁해！",
+          "　"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF305C",
+    "before_sha256": "39d7f579fb4e4c32e05f4cbab79d5a3fc3ecca04df27a23d6c2a8947c0671605",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "맥시멈　블로우！",
+          "　",
+          "직접　공격　유닛의",
+          "능력이　더욱　올라간다。"
+        ],
+        "after": [
+          "　　　맥시멈　블로우！",
+          "　",
+          "직접　공격　유닛의",
+          "능력이　더욱　올라간다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF30B8",
+    "before_sha256": "4b1366ffcf0e030753ad0a4ca58daa20b3fdb4906d7af6f4d9af18b4e1cd79f1",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "료　일행의　믿음직한",
+          "형님。",
+          "강한　녀석",
+          "공부",
+          "내가　나설　차례군！",
+          "　"
+        ],
+        "after": [
+          "료　일행의　믿음직한",
+          "형님。",
+          "　　　　　강한　녀석",
+          "　　　　　공부",
+          "내가　나설　차례군！",
+          "　"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3190",
+    "before_sha256": "29b6518ec5d5c391634b15c56064f99a0e4383c3f443a82938edbd74f2261127",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "미라클　찬스！",
+          "　",
+          "평소보다　더욱",
+          "럭키한　일이　일어날지도",
+          "모른다？？？"
+        ],
+        "after": [
+          "　　　미라클　찬스！",
+          "　",
+          "평소보다　더욱",
+          "럭키한　일이　일어날지도",
+          "모른다？？？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF31F4",
+    "before_sha256": "35b5063b865371c07d616fe670527c712be0aa3f8f4479cc94cd9af8e264abe4",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "사실　상당한　실력자。",
+          "화나게　하면・・・",
+          "손가는　학생",
+          "호이프",
+          "가끔　내　이야기도",
+          "물어보러　와。"
+        ],
+        "after": [
+          "사실　상당한　실력자。",
+          "화나게　하면・・・",
+          "　　　　　손가는　학생",
+          "　　　　　호이프",
+          "가끔　내　이야기도",
+          "물어보러　와。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF32EC",
+    "before_sha256": "9ab9e29bc807c8ce2386139687d54347d739a31b6a6be854d9b5ca852f147c5c",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "스노우　화이트！",
+          "　",
+          "날씨를　눈으로　바꾼다。"
+        ],
+        "after": [
+          "　　　스노우　화이트！",
+          "　",
+          "날씨를　눈으로　바꾼다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3328",
+    "before_sha256": "2fca9e2f4294fa46228ba240da877c11095e7101b64d442a05535f4c9071f8c5",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "하는　일에　실수는　많지만、",
+          "본인은　매우　진지。",
+          "난로",
+          "카레",
+          "이　몸의　힘！",
+          "뼈저리게　느끼거라！"
+        ],
+        "after": [
+          "하는　일에　실수는　많지만、",
+          "본인은　매우　진지。",
+          "　　　　　난로",
+          "　　　　　카레",
+          "이　몸의　힘！",
+          "뼈저리게　느끼거라！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF341C",
+    "before_sha256": "9c2d0a9ed83a51e346ff8ea6e44ec2bd680d9f12a92f069a47b47bade4c61c12",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "테크니컬　스나이프！",
+          "　",
+          "간접　공격　유닛의",
+          "공격력이　올라가고、",
+          "사거리도　늘어"
+        ],
+        "after": [
+          "　　　테크니컬　스나이프！",
+          "　",
+          "간접　공격　유닛의",
+          "공격력이　올라가고、",
+          "사거리도　늘어"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF348C",
+    "before_sha256": "c6d97ba19183d81b6db267b50c820fb65ed3aed0c414fa67710c1264a6926c1d",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "사실은　매우　의지가　된다。",
+          "사격의　천재。",
+          "고양이",
+          "쥐",
+          "뭐　편하게　가자고。"
+        ],
+        "after": [
+          "사실은　매우　의지가　된다。",
+          "사격의　천재。",
+          "　　　　　고양이",
+          "　　　　　쥐",
+          "뭐　편하게　가자고。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3558",
+    "before_sha256": "ef4d6b3fe8b8bdfc1073278c6798f471256a7f77682479861c543bb7d94636c6",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "라이트닝　어설트！",
+          "대기한　유닛을　다시",
+          "한　번　더　행동　가능",
+          "보병와바주카병외",
+          "브레이크　중인　유닛",
+          "능력이　떨어져　버린다。"
+        ],
+        "after": [
+          "　　　라이트닝　어설트！",
+          "대기한　유닛을　다시",
+          "한　번　더　행동　가능",
+          "보병와바주카병외",
+          "브레이크　중인　유닛",
+          "능력이　떨어져　버린다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3608",
+    "before_sha256": "38d657eb11ac7d74087cfcb087e4702e16c85827b752d0c0e103c997a71ce11b",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "최강의　에이스　파일럿。",
+          "사실은　맥주병。",
+          "유품인　고글",
+          "수영",
+          "이　몸에게　대들겠다는",
+          "건가・・・？"
+        ],
+        "after": [
+          "최강의　에이스　파일럿。",
+          "사실은　맥주병。",
+          "　　　　　유품인　고글",
+          "　　　　　수영",
+          "이　몸에게　대들겠다는",
+          "건가・・・？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF371C",
+    "before_sha256": "b309290cfee9cfdc6f00513f97f9722c2e912d01c7f9f1dfd44d080da17dec9e",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "자이언트　웨이브！",
+          "　",
+          "적　전원에게　대미지를　준다。"
+        ],
+        "after": [
+          "　　　자이언트　웨이브！",
+          "　",
+          "적　전원에게　대미지를",
+          "준다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3764",
+    "before_sha256": "b228e51678db0da04b795097dd87d26642c6056d6ccdd15f93a0279209742623",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "느긋이　천천히",
+          "신조",
+          "해상",
+          "높은　곳",
+          "그렇게　서두르지　말고",
+          "느긋하게　가자。"
+        ],
+        "after": [
+          "느긋이　천천히",
+          "신조",
+          "　　　　　해상",
+          "　　　　　높은　곳",
+          "그렇게　서두르지　말고",
+          "느긋하게　가자。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3848",
+    "before_sha256": "a70a3647d1bda3c83e6ccac220fb7b5ff1d4b0d29e30d21773601c4c1f0d1ed8",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "일도양단！",
+          "　",
+          "공격력、방어력이　더욱",
+          "올라간다。"
+        ],
+        "after": [
+          "　　　일도양단！",
+          "　",
+          "공격력、방어력이　더욱",
+          "올라간다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3898",
+    "before_sha256": "4199f31da304032ad61ae4a93225b7fa9dfdcca897c854ae7d8f6b25061bfc98",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "자신을　진정한　사무라이라",
+          "굳게믿고의심안해",
+          "아스카",
+          "컴퓨터",
+          "사무라이의　정신을",
+          "보여　주마！"
+        ],
+        "after": [
+          "자신을　진정한　사무라이라",
+          "굳게믿고의심안해",
+          "　　　　　아스카",
+          "　　　　　컴퓨터",
+          "사무라이의　정신을",
+          "보여　주마！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3994",
+    "before_sha256": "e4104a91c5e192d2524d47b68ac975b00ef283b45c2de2f6e43c70cac2595a75",
+    "profile": "p1_co_break",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "원더　서치！",
+          "시야가　더욱　올라간다。",
+          "게다가　시야　내라면、숲",
+          "이나　암초　같은　지형의",
+          "적　유닛도、　볼　수가",
+          "가능。"
+        ],
+        "after": [
+          "　　　원더　서치！",
+          "시야가　더욱　올라간다。",
+          "게다가　시야　내라면、숲",
+          "이나　암초　같은　지형의",
+          "적　유닛도、　볼　수가",
+          "가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3A30",
+    "before_sha256": "45e387541dce3fc1c99d1a1ba5edd66d0710ab7625bdbb32abe6e1d7a77dbe3f",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "키쿠치요의　딸。",
+          "아버지　안　닮은　천재",
+          "컴퓨터",
+          "송충이",
+          "싸움은、정보를　쥔　쪽이",
+          "이겨야　해"
+        ],
+        "after": [
+          "키쿠치요의　딸。",
+          "아버지　안　닮은　천재",
+          "　　　　　컴퓨터",
+          "　　　　　송충이",
+          "싸움은、정보를　쥔　쪽이",
+          "이겨야　해"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF3AF8",
+    "before_sha256": "33e385a2c51089529f62dfc7df875968117e3d4e34a9603b180d7d9fc92ecdf8",
+    "profile": "p1_co_bio",
+    "limit_px": 112,
+    "rows_per_page": 6,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "모든　것이　수수께끼에　싸여",
+          "있다。",
+          "미상",
+          "미상",
+          "・・・　。"
+        ],
+        "after": [
+          "모든　것이　수수께끼에　싸여",
+          "있다。",
+          "　　　　　미상",
+          "　　　　　미상",
+          "・・・　。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF4328",
+    "before_sha256": "401f9e2c33d56eef962b701d9056dbf31b721cf79fc57598250d06476e8d1299",
+    "profile": "p1_co_comment",
+    "limit_px": 120,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "보병　계열을　다루는　게　특기인",
+          "타입。",
+          "보병　외　직접　공격은",
+          "질색。"
+        ],
+        "after": [
+          "보병　계열을　다루는　게",
+          "특기인　타입。",
+          "보병　외　직접　공격은",
+          "질색。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF5778",
+    "before_sha256": "775273f03d4f4056856e380c98a706d636edc6dd54962d809c173e721438fcab",
+    "profile": "p1_info_panel",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "평범한　마을。",
+          "아군이　점령　중이면、",
+          "육상　유닛　보충、　보급이",
+          "있다。"
+        ],
+        "after": [
+          "평범한　마을。",
+          "아군이　점령　중이면、",
+          "육상　유닛　보충、",
+          "보급이　있다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF5878",
+    "before_sha256": "01ad1ac9618a7822e46668257dc708be6c0aa1c01bcb62cf67674e872497238d",
+    "profile": "p1_info_panel",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "공항이　있는　도시。",
+          "아군이　점령하고　있다면、",
+          "공중　유닛　생산／보충",
+          "보급　가능。"
+        ],
+        "after": [
+          "공항이　있는　도시。",
+          "아군이　점령하고",
+          "있다면、　공중　유닛",
+          "생산／보충　보급　가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF58D8",
+    "before_sha256": "e5e18262784cec6eaed4315b13fc178461b4dba528206467836e0bad8aabe7eb",
+    "profile": "p1_info_panel",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "항구가　있는　도시。",
+          "아군이　점령하고　있다면、",
+          "해상　유닛　생산／보충",
+          "보급　가능。"
+        ],
+        "after": [
+          "항구가　있는　도시。",
+          "아군이　점령하고",
+          "있다면、　해상　유닛",
+          "생산／보충　보급　가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF59CC",
+    "before_sha256": "e89e867f9d46cef82d0bced9a2b4108ee295c5da28beddd7802acf89c2b7692f",
+    "profile": "p1_info_panel",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "공장이　있는　도시。",
+          "아군이　점령하고　있다면、",
+          "육상　유닛　생산과",
+          "보충／보급　가능"
+        ],
+        "after": [
+          "공장이　있는　도시。",
+          "아군이　점령하고",
+          "있다면、　육상　유닛",
+          "생산과　보충／보급　가능"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF6498",
+    "before_sha256": "e06818d028101bbdb74011d0709eb44526013ef081cdcf006cd2f5a5ec450adf",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "하지만　지금、우리　레드스타국에는",
+          "호이프　사령관과　싸울　만한　사람이　없어요。"
+        ],
+        "after": [
+          "하지만　지금、우리　레드스타국에는　호이프",
+          "사령관과　싸울　만한　사람이　없어요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF6574",
+    "before_sha256": "24cbe33b71d6446ac0b41cf2bd958e5758b874b711cfe0e7733431c2d3401e6b",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 2,
+        "before": [
+          "이　부대를　구출해　합류하고、　흩어진　요새",
+          "를　점령하는　게、<NAME>씨의　역할이야。"
+        ],
+        "after": [
+          "이　부대를　구출해　합류하고、",
+          "흩어진　요새를　점령하는",
+          "게、<NAME>씨의　역할이야。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF67B8",
+    "before_sha256": "81911c7b59309141c6f362c8801f875d057e4047a3d68e3ef0b85b9df1435ffe",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "다만・・・　전선에서　쓰던자주포를",
+          "그냥　이쪽에　넘겨준　것뿐인　모양이라서・・・"
+        ],
+        "after": [
+          "다만・・・　전선에서　쓰던　자주포를　그냥",
+          "이쪽에　넘겨준　것뿐인　모양이라서・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDF913C",
+    "before_sha256": "6fd7608d1a28f1f2a55b051596c1a863c1cbabf7316225d58897804380f1fac5",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "어드밴스　워즈에서는",
+          "내가　”작전룸”에서　전투법을　알려주고　있어"
+        ],
+        "after": [
+          "어드밴스　워즈에서는　내가",
+          "”작전룸”에서　전투법을　알려주고　있어"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDFA798",
+    "before_sha256": "fa38f17180aa6823ec965002335479ddf0ef742655926b3d69d5b8747adccd10",
+    "profile": "p1_menu_help",
+    "limit_px": 128,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "처음부터　대전을　할　수　있어요。"
+        ],
+        "after": [
+          "처음부터　대전을",
+          "할　수　있어요。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDFB214",
+    "before_sha256": "ee3d79027e79e0a9471fc7cc3bb8b0f920e63b3eaef443248df5397abb36510b",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 6,
+        "before": [
+          "자세한　건・・・　뭐、　일단　사　보면　알겠지！"
+        ],
+        "after": [
+          "자세한　건・・・　뭐、",
+          "일단　사　보면　알겠지！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDFB678",
+    "before_sha256": "1b21ef8641303884c0a5f274c4a3038c69f9cce9de311e91b1e83de247f7e296",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "우리　가게에서　물건을　사고　싶으면、”캠페인”",
+          "이나”트라이얼”을　진행해！"
+        ],
+        "after": [
+          "우리　가게에서　물건을",
+          "사고　싶으면、”캠페인”",
+          "이나”트라이얼”을　진행해！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xDFC434",
+    "before_sha256": "7d3fbef5a444286a5f64e49ab5d869d63145e1ce0330cb0d7feabeb306cb68f9",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 6,
+        "before": [
+          "뭐、비에　약하다、라는　점도　있지만　말이야！"
+        ],
+        "after": [
+          "뭐、비에　약하다、라는",
+          "점도　있지만　말이야！"
+        ]
+      },
+      {
+        "page": 8,
+        "before": [
+          "그　녀석도　예전엔・・・　아차、　내　얘기군！"
+        ],
+        "after": [
+          "그　녀석도　예전엔・・・",
+          "아차、　내　얘기군！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xE0A828",
+    "before_sha256": "4e11a371bd6dd96daba020bcf5bea0d1f565c0f4013b431c9567fd6b182529c5",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "그러니까　레드스타와도　싸워두지　않으면　안　돼。"
+        ],
+        "after": [
+          "그러니까　레드스타와도",
+          "싸워두지　않으면　안　돼。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xE0C9AC",
+    "before_sha256": "f1272ecb87bf5891e59b4a7a47963ced5cfc13f74aac07b27c07da601df85bda",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "좀　더　차분히　상황을　보지　않으면　위험해。"
+        ],
+        "after": [
+          "좀　더　차분히　상황을",
+          "보지　않으면　위험해。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p1",
+    "source": "0xE0CAD4",
+    "before_sha256": "4e11a371bd6dd96daba020bcf5bea0d1f565c0f4013b431c9567fd6b182529c5",
+    "profile": "p1_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "그러니까　레드스타와도　싸워두지　않으면　안　돼。"
+        ],
+        "after": [
+          "그러니까　레드스타와도",
+          "싸워두지　않으면　안　돼。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA0AB20",
+    "before_sha256": "854220cf6d9ab550e3aed1f3554323be3a1cbb44a87a283bcecf2b2279d3e1d6",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "그　안의、６０００이라는　숫자가　군자금이야。"
+        ],
+        "after": [
+          "그　안의、６０００이라는",
+          "숫자가　군자금이야。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA11DDC",
+    "before_sha256": "91dd43b9dba4db8b0646225f7ec4fc20ee868ca903370e5af5675f0a045e4093",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "흥、　나한테",
+          "시시한　수는　통하지　않아！"
+        ],
+        "after": [
+          "흥、　나한테　시시한",
+          "수는　통하지　않아！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA199B0",
+    "before_sha256": "cd3ab66b40a94fb0c497a694f35d487bfb8475c3f2c1451935ef00a559ce204e",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "근데、공중전의　이글、해상전의　나에게",
+          "지상전의　한나가　합류하면、두려울　게　없다。"
+        ],
+        "after": [
+          "근데、공중전의　이글、해상전의",
+          "나에게　지상전의　한나가",
+          "합류하면、두려울　게　없다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA1BBD4",
+    "before_sha256": "332b8ca50f7aa1ac331687e164b44bbc3c12d104f726e42c22d0f1137c1eb93b",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "하지만、아직　육지에서　싸우고　있는　부대가・・・"
+        ],
+        "after": [
+          "하지만、아직　육지에서",
+          "싸우고　있는　부대가・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA1C75C",
+    "before_sha256": "52fcd3dee936c0c921aab2d07cc8484c784e73e7bf2ddabbf18b29cd6e422e24",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "적　마음대로　하게　두진　않겠어。"
+        ],
+        "after": [
+          "적　마음대로　하게",
+          "두진　않겠어。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA1D444",
+    "before_sha256": "a205e3607d98ac8616fca8c41a7c832fbf11e91f9843c06e7aa1ac37399558b7",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "그렇군。결국은、자신을　위한　얘기인가。",
+          "위험하다느니　어쩐다느니　걱정하는　척하면서。"
+        ],
+        "after": [
+          "그렇군。결국은、자신을　위한",
+          "얘기인가。　위험하다느니",
+          "어쩐다느니　걱정하는　척하면서。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA1E4D0",
+    "before_sha256": "d2aca023baabbdd13f45605a41dcfec92068364ad08271ecb8f60ac081737884",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "근데、색적　안에서는　행동하기　힘들어。",
+          "시야를　확보하면서　신중하게　전진해야　한다。"
+        ],
+        "after": [
+          "근데、색적　안에서는　행동하기",
+          "힘들어。　시야를　확보하면서",
+          "신중하게　전진해야　한다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA1F338",
+    "before_sha256": "5a5c47f714a90a3b019e118ee3d540b36714388e9e634771d62ad51beb61483a",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "드디어　여기까지・・・길었어。",
+          "길었어。"
+        ],
+        "after": [
+          "드디어　여기까지・・・",
+          "길었어。　길었어。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA22708",
+    "before_sha256": "b8e356055ecb930fb249145ea4d56796ba4f374220f191881cfe05d7144db1aa",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "내가　가는　길에　적은　없다！"
+        ],
+        "after": [
+          "내가　가는　길에",
+          "적은　없다！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA29C24",
+    "before_sha256": "983d5805603b9c136aaa1647bfbd5e4f710da2d42faa47781935ab6b3be77f46",
+    "profile": "p2_terrain_help",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "평범한　마을。",
+          "아군이　점령하고　있다면、",
+          "육상　유닛　회복　보급이",
+          "가능"
+        ],
+        "after": [
+          "평범한　마을。",
+          "아군이　점령하고",
+          "있다면、　육상　유닛",
+          "회복　보급이　가능"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA29CE8",
+    "before_sha256": "7fa65481db2203ca3c6dc6ee21532bbea277bae2a20ae21c10cde81d28dab9a2",
+    "profile": "p2_terrain_help",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "공항　도시",
+          "아군이　점령하고　있다면、",
+          "공중　유닛　생산　회복",
+          "보급　가능。"
+        ],
+        "after": [
+          "공항　도시",
+          "아군이　점령하고",
+          "있다면、공중　유닛",
+          "생산　회복　보급　가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA29D38",
+    "before_sha256": "83b21681bae9f5cc4adf89897ccaabdf62c5584cca3bf92ca5c641574cd35038",
+    "profile": "p2_terrain_help",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "항구　도시",
+          "아군이　점령하고　있다면、",
+          "해상　유닛　생산　회복",
+          "보급　가능。"
+        ],
+        "after": [
+          "항구　도시",
+          "아군이　점령하고",
+          "있다면、해상　유닛",
+          "생산　회복　보급　가능。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA29E08",
+    "before_sha256": "14c3bc1c903bc985581ba8bb16c9ddfd5bdc3d990017922e7306dd1f23492134",
+    "profile": "p2_terrain_help",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "공장　보유　도시",
+          "아군이　점령하고　있다면、",
+          "육상　유닛　생산과",
+          "회복　보급　가능"
+        ],
+        "after": [
+          "공장　보유　도시",
+          "아군이　점령하고",
+          "있다면、육상　유닛",
+          "생산과　회복　보급　가능"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2A0F8",
+    "before_sha256": "e28a767b86d040307dd99b7f7e17157a3b1715cdcd2419542b5af317637cc213",
+    "profile": "p2_terrain_help",
+    "limit_px": 96,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "워즈　월드에",
+          "여러　개　있는　큰　화산。",
+          "가끔　화산탄을　뿜는다。",
+          "모든　유닛　진입　불가。"
+        ],
+        "after": [
+          "워즈　월드에　여러　개",
+          "있는　큰　화산。",
+          "가끔　화산탄을　뿜는다。",
+          "모든　유닛　진입　불가。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2C6A8",
+    "before_sha256": "9636ca97b69d5fe0e06ebf842c030af681c16a34c90e49f04ee176ff247f7110",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "”도움말”에는、　조작　방법、　플레이　조건이나",
+          "플레이　방법이　적혀　있으니　꼭　읽어　줘。"
+        ],
+        "after": [
+          "”도움말”에는、　조작　방법、",
+          "플레이　조건이나　플레이　방법이",
+          "적혀　있으니　꼭　읽어　줘。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2DA5C",
+    "before_sha256": "a706400ae0ad2d85a64ec704ca27430072c83330183f72ae0892f327870f6674",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "우리　가게에서　물건을　사고　싶으면、「캠페인」",
+          "이나　「트라이얼」에서、벌어오도록　하게！"
+        ],
+        "after": [
+          "우리　가게에서　물건을　사고",
+          "싶으면、「캠페인」　이나",
+          "「트라이얼」에서、벌어오도록　하게！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2E5A0",
+    "before_sha256": "cc7ecca79759771c0f5284199e2f8a9a3f56b64307dc24b4cb17c4436d2199bb",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 6,
+        "before": [
+          "평소　공격력이　낮으니까　유닛　수로",
+          "승부를　걸지、　브레이크를　위해　돈을　모을지、"
+        ],
+        "after": [
+          "평소　공격력이　낮으니까　유닛　수로　승부를",
+          "걸지、　브레이크를　위해　돈을　모을지、"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2E848",
+    "before_sha256": "03d15986c4bec749cc7195de74d66b48a101e0aa878315d9bb0e66faa3ba92eb",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 1,
+        "before": [
+          "캣은　알고　있나？",
+          "그래・・・　봄버헤드의　그　여자아이　말이야！"
+        ],
+        "after": [
+          "캣은　알고　있나？　그래・・・",
+          "봄버헤드의　그　여자아이　말이야！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2F758",
+    "before_sha256": "76c0a1ba231f0547d500e3d8dbc6bd50f2c94f8f085ce4023a842d0a295aa432",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "트라이얼의　새로운　맵",
+          "「첫눈에　반한　섬」을　고를　수　있게　된다네！"
+        ],
+        "after": [
+          "트라이얼의　새로운　맵",
+          "「첫눈에　반한　섬」을",
+          "고를　수　있게　된다네！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2FA90",
+    "before_sha256": "7ef18f69a5ce67045e531dc772fc911acb2d0a7af055eed05e9f06477a402415",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "프리　배틀　「４Ｐ　맵」의　새로운　맵",
+          "「파이프의　폭풍」을　고를　수　있게　된다네！"
+        ],
+        "after": [
+          "프리　배틀　「４Ｐ　맵」의",
+          "새로운　맵　「파이프의　폭풍」을",
+          "고를　수　있게　된다네！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA2FB3C",
+    "before_sha256": "f2bc1fba9aa2e80fa18ee68d93e4546e8ef9200d9c588415e0e0d690da3c71a3",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "프리　배틀　「초기　배치」의　새로운　맵",
+          "「보병　서바이벌」을　고를　수　있게　된다네！"
+        ],
+        "after": [
+          "프리　배틀　「초기　배치」의",
+          "새로운　맵　「보병　서바이벌」을",
+          "고를　수　있게　된다네！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA300BC",
+    "before_sha256": "2db1f52cfedc1e3ce380af0fa8bc0d98118ea8411f25c9baa35729328205de01",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "꺄하하・・・",
+          "어라？　벌써　부서진　거야？"
+        ],
+        "after": [
+          "꺄하하・・・　어라？",
+          "벌써　부서진　거야？"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA300E8",
+    "before_sha256": "a872f67f97bc2ab141f12674cecdfd0c0118f29f29602d5f7c44f01845291b83",
+    "profile": "p2_result_quote",
+    "limit_px": 104,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "큭큭큭・・・",
+          "뭐、제가　상대여서는요・・・"
+        ],
+        "after": [
+          "큭큭큭・・・　뭐、제가",
+          "상대여서는요・・・"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA31154",
+    "before_sha256": "686a6863ec5f4bcf2abd6dd1e945d1aef18abe834996ec4eeb5bb3097a503611",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "신인이라고　해서　바보　취급　하지　말아　주세요！"
+        ],
+        "after": [
+          "신인이라고　해서　바보",
+          "취급　하지　말아　주세요！"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA32FF0",
+    "before_sha256": "67543f5e7263503d2bfe3d888387fff79e80b709a2c4de8b3862e321bb2e6b47",
+    "profile": "p2_unit_help",
+    "limit_px": 112,
+    "rows_per_page": 4,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "대지　미사일로、",
+          "함선계　공격력",
+          "호위함과는　호각이지만、",
+          "그　외엔　별로　강하지　않다。"
+        ],
+        "after": [
+          "대지　미사일로、　함선계",
+          "공격력　호위함과는",
+          "호각이지만、　그　외엔",
+          "별로　강하지　않다。"
+        ]
+      }
+    ]
+  },
+  {
+    "game": "p2",
+    "source": "0xA34784",
+    "before_sha256": "fa33fcc3c554c601bfccc4a7acd03fdc08ffe049b15b4902b4cdc71f78bb9733",
+    "profile": "p2_portrait",
+    "limit_px": 176,
+    "rows_per_page": 2,
+    "pages": [
+      {
+        "page": 0,
+        "before": [
+          "레이저포　４개　격파나",
+          "본부를　점령하면　승리야！　도미노를　도와줘！"
+        ],
+        "after": [
+          "레이저포　４개　격파나　본부를",
+          "점령하면　승리야！　도미노를　도와줘！"
+        ]
+      }
+    ]
+  }
+]

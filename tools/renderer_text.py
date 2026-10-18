@@ -20,6 +20,10 @@ COMMANDS = {
 def renderer_for_address(address):
     if address is None:
         return None
+    if 0xA298E0 <= address < 0xA29904:
+        # Animation menu IDs 914/915/916: native m-icon prefix, then the
+        # pair cache at 31BC78/31BBDC. A/B must match the native fullwidth C.
+        return P2_SCRIPT
     if is_part1_dialog_address(address):
         return P1_SCRIPT
     if is_part2_story_address(address):

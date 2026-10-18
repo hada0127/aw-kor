@@ -260,6 +260,12 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
     """
     if actual:
         return value
+    from part2_mission_title_fit import is_pair_title
+    if is_pair_title(address):
+        # Every active native map name is a strict two-byte glyph stream.
+        # Preserve each authored character, changing only its width form.
+        return ''.join('　' if ch == ' ' else chr(ord(ch)+0xFEE0)
+                       if 0x21 <= ord(ch) <= 0x7E else ch for ch in value)
     if address in ROUND2_ORIGINAL_GLYPH_ROWS:
         return original_glyph_encoding(value)
     dialogue = is_part2_story_address(address) or is_part1_dialog_address(address)
@@ -631,6 +637,17 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
                 payload = rom[addr:enc_end].split(b'\x77\x72', 1)[0]
                 actual = decode(payload, addr, row[7]).rstrip(' \u3000')
             matched = display_equivalent(actual, addr, actual=True) == display_equivalent(baseline, addr)
+            if not matched and row[7]=='dialogue-pixel-layout-source':
+                # Native CO Break titles reserve three blank cells for a
+                # separately drawn OBJ caption. Validate that exact reservation
+                # from the immutable original, then compare the complete title.
+                original=Path(BASE,'original','Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+                title_sources={int.from_bytes(original[base+0x18:base+0x1C],'little')-0x08000000+2
+                               for base in range(0xDF3B54,0xDF3CD4,0x20)}
+                matched=(addr in title_sources and row_start==addr
+                         and original[addr:addr+6]==b'\x81\x40'*3
+                         and actual.startswith('\u3000'*3)
+                         and display_equivalent(actual[3:],addr,actual=True)==display_equivalent(baseline,addr))
             if not matched and addr in seams and is_part2_story_address(addr):
                 matched = display_equivalent(actual, addr, actual=True) in reviewed_seam_variants(
                     display_equivalent(baseline, addr), addr, seams)

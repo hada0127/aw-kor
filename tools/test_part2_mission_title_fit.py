@@ -175,7 +175,7 @@ class MissionTitleFitTests(unittest.TestCase):
             fit.active_titles(self.original, rom)
 
     def test_hook_or_reserved_area_drift_fails_before_writes(self):
-        for address in (fit.BASE, *(a for a, _, _ in fit.SITES)):
+        for address in (fit.BASE, *(a for a, _, _ in (*fit.SITES, fit.MAP_SITE))):
             rom = bytearray(self.original)
             rom[address] ^= 1
             before = bytes(rom)
@@ -205,7 +205,7 @@ class MissionTitleFitTests(unittest.TestCase):
             self.assertEqual(rom[start:start + len(expected)], expected)
         restored = bytearray(rom)
         restored[fit.BASE:fit.END] = before[fit.BASE:fit.END]
-        for address, expected, _ in fit.SITES:
+        for address, expected, _ in (*fit.SITES, fit.MAP_SITE):
             restored[address:address + len(expected)] = before[address:address + len(expected)]
         self.assertEqual(restored, before)
 
@@ -343,8 +343,8 @@ class MissionTitleFitTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'partial code'):
             fit.active_titles(self.original, rom)
 
-    def test_non_strict_long_title_cannot_use_blank_compact_art(self):
-        self.assertFalse(fit.is_pair_title(struct.unpack_from('<I', self.original, 0xA38084)[0] - 0x08000000))
+    def test_newly_catalogued_long_title_cannot_use_blank_compact_art(self):
+        self.assertTrue(fit.is_pair_title(struct.unpack_from('<I', self.original, 0xA38084)[0] - 0x08000000))
         rom = self.fixture()
         struct.pack_into('<I', rom, 0xA38084, 0x08F71300)
         rom[0xF71300:0xF71315] = b'\x88\x41'*10+b'\0'
@@ -353,6 +353,64 @@ class MissionTitleFitTests(unittest.TestCase):
         rom[0xF43000:0xF43000+len(raw)] = raw
         with self.assertRaisesRegex(AssertionError, 'blank visible glyph'):
             fit.patch(rom, self.original, builder._lz77_literal_block)
+
+    def test_catalogued_names_use_all_writer_padding_and_lossless_guards(self):
+        codes = {'도':0x8840,'넛':0x8841,'섬':0x8842}
+        start = 0xA2CC4C
+        payload = fit.encode_pair_title('도넛 섬', codes)
+        rom = bytearray(self.original)
+        builder.write_slot_text(rom,start,12,payload,'도넛 섬',0,'test')
+        self.assertEqual(rom[start:start+12],payload+bytes(4))
+        self.assertTrue(builder.in_region(builder.PAIR_RENDERER_REGIONS,start,start+12))
+        for row in fit.NATIVE_TITLES:
+            a,z = int(row['source'],16),int(row['source_end'],16)
+            self.assertTrue(fit.is_pair_title(a))
+            self.assertTrue(builder.in_region(builder.PAIR_RENDERER_REGIONS,a,z))
+        from qa_bteam_drift import display_equivalent
+        self.assertEqual(display_equivalent('VS 2!',start),'ＶＳ　２！')
+        self.assertNotEqual(display_equivalent('VS 2!',start),'ＶＳ２！')
+
+    def test_chunked_raster_preserves_native_geometry_and_decoration_banks(self):
+        glyph = builder._mission_title_hangul_glyph('해')
+        spacing = struct.unpack_from('<12H',self.original,0x8FD6C4)
+        # 10-code: native 24px glyphs, two 12px spaces, final 26px sign.
+        # 11-code: same font/spacing exceeds screen, using existing compact art.
+        for codes,expected in (([1]*7+[2]*2+[3],(227,8,False,6)),
+                               ([1]*8+[2]*2+[3],(220,7,True,10))):
+            raw, report = fit.map_title_raster(codes,{1:glyph,2:bytes(512),3:glyph},
+                                               {1:24,2:12,3:26},spacing)
+            self.assertEqual((report['span'],report['chunks'],report['compact'],report['x']),expected)
+            self.assertEqual(len(raw),report['chunks']*512)
+            self.assertEqual(report['sum_width']+(report['chunks']-1)*spacing[report['chunks']],report['span'])
+            for bank in (0,0xD0):
+                self.assertLessEqual(bank+report['bank_tiles'],bank+0x90)
+            # Transparent tail must not create glyph fragments in unused pixels.
+            last = fit.glyph_pixels(raw[-512:]);tail = report['span']%32
+            self.assertTrue(all(not any(row[tail:]) for row in last))
+
+    def test_final_rom_gate_detects_corrupt_composite_and_trampoline(self):
+        from qa_native_title_layout import audit
+        rom = self.fixture()
+        fit.patch(rom,self.original,builder._lz77_literal_block)
+        struct.pack_into('<I',rom,0x37C548,0x08F40000)
+        self.assertEqual(audit(self.original,rom)['map_composites'],2)
+        for address in (fit.MAP_DESCRIPTORS+12,fit.MAP_SITE[0]):
+            damaged=bytearray(rom);damaged[address]^=1
+            with self.assertRaises(ValueError):audit(self.original,damaged)
+
+    def test_catalogue_drift_and_map_consumer_drift_fail_before_writes(self):
+        with patch.object(fit,'NATIVE_TITLE_POINTERS_BY_MAP',{**fit.NATIVE_TITLE_POINTERS_BY_MAP,0:0xA38088}):
+            with self.assertRaisesRegex(AssertionError,'descriptor differs'):
+                fit.active_titles(self.original,self.fixture_for_catalogue())
+        rom = self.fixture()
+        rom[0x36B7A0] ^= 1
+        before = bytes(rom)
+        with self.assertRaisesRegex(AssertionError,'consumer geometry'):
+            fit.patch(rom,self.original,builder._lz77_literal_block)
+        self.assertEqual(rom,before)
+
+    def fixture_for_catalogue(self):
+        return bytearray(self.original)
 
     def test_title_outside_old_filter_is_validated(self):
         rom = self.fixture()

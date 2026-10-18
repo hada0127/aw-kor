@@ -62,10 +62,12 @@ def receipt_path(rom):
     return Path(str(rom) + '.build.json')
 
 
-def snapshot_build_metadata():
+def snapshot_build_metadata(paths=None):
     # These files define which payloads several QA gates inspect. Bind them to
     # the producing build so another candidate cannot silently replace them.
-    return {name: sha(ROOT / name) for name in BUILD_METADATA}
+    if paths is not None and set(paths)!=set(BUILD_METADATA):
+        raise ValueError('staged build metadata keys differ from canonical metadata')
+    return {name: sha(paths[name] if paths is not None else ROOT/name) for name in BUILD_METADATA}
 
 
 def stable_build_inputs(before, after):
@@ -76,7 +78,7 @@ def stable_build_inputs(before, after):
         raise ValueError('Build inputs changed during build; output provenance refused')
 
 
-def write_build_receipt(rom, source, before, after, source_sha_before, *, repoint_enabled=True):
+def write_build_receipt(rom, source, before, after, source_sha_before, *, repoint_enabled=True, metadata_paths=None):
     stable_build_inputs(before, after)
     if sha(source) != source_sha_before:
         raise ValueError('Source ROM changed during build')
@@ -84,7 +86,7 @@ def write_build_receipt(rom, source, before, after, source_sha_before, *, repoin
              'source_sha256': source_sha_before, 'rom_sha256': sha(rom),
              'inputs_before': before, 'inputs_after': after,
              'repoint_enabled': repoint_enabled,
-             'build_metadata': snapshot_build_metadata() if repoint_enabled else None}
+             'build_metadata': snapshot_build_metadata(metadata_paths) if repoint_enabled else None}
     write_json(receipt_path(rom), value)
 
 

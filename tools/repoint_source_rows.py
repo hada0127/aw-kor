@@ -25,5 +25,12 @@ def row_bytes(rom, message, key):
     target = int(message['new_addr'], 16)
     if target < 0 or target + int(message['new_len']) > len(rom):
         raise ValueError(f'repoint target outside ROM: {message["msg"]}')
-    return b'\x81\x40'.join(bytes(rom[target + off:target + off + length])
-                           for off, length in parts)
+    joins=message.get('source_fragment_joiners', {}).get(key, ['8140']*(len(parts)-1))
+    if (not isinstance(joins,list) or len(joins)!=len(parts)-1
+            or any(not isinstance(j,str) or j not in ('','8140') for j in joins)):
+        raise ValueError(f'invalid repoint fragment separators: {message["msg"]} {key}')
+    result=bytearray()
+    for i,(off,length) in enumerate(parts):
+        if i:result.extend(bytes.fromhex(joins[i-1]))
+        result.extend(rom[target+off:target+off+length])
+    return bytes(result)
