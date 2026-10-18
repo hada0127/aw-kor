@@ -1,0 +1,269 @@
+{
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "rows": [
+    {
+      "case_id": "code0",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/code0_trace.log",
+      "trace_sha256": "1156459095376fb4f075e06887a78bf1f5b1dd5f3910e52958baaefeed3416ed",
+      "frame": "data/evidence/part1_help_b42_synthetic/code0.png",
+      "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b",
+      "target_reads": {
+        "0x00DFA64A": "0x08DFA64A",
+        "0x00DFA66B": "0x08DFA66B"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA64A",
+          "0x00DFA66B"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "target_visual_evidence": {
+        "0x00DFA64A": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ],
+        "0x00DFA66B": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code0.png",
+            "frame_sha256": "bcb71e3fe8fea0d9168737c662d7e5b1ac89e0d3e7fcdf1bc0e44211033a788b"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/code0/recipe.in",
+      "recipe_sha256": "08c79687dce8e4bb23daa70e5862e80a7e917faa401f18c3e5c1683e2b389084",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "hidden",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/hidden_trace.log",
+      "trace_sha256": "3705ac086d32ef4259cf5d3f0f76d0329426499b89cf9cfedbfaced795fb2537",
+      "frame": "data/evidence/part1_help_b42_synthetic/hidden.png",
+      "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6",
+      "target_reads": {
+        "0x00DFA83A": "0x08DFA83A",
+        "0x00DFA84D": "0x08DFA84D",
+        "0x00DFA872": "0x08DFA872",
+        "0x00DFA885": "0x08DFA885"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA83A",
+          "0x00DFA84D",
+          "0x00DFA872",
+          "0x00DFA885"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "additional_frames": [
+        {
+          "frame": "data/evidence/part1_help_b42_synthetic/hidden_continue.png",
+          "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+        }
+      ],
+      "target_visual_evidence": {
+        "0x00DFA83A": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/hidden.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ],
+        "0x00DFA84D": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/hidden.png",
+            "frame_sha256": "fdd33d7256c4df1ea49ed90b57595f2ceb3c9f704a834f1f71c43fb97f63eab6"
+          }
+        ],
+        "0x00DFA872": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/hidden_continue.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ],
+        "0x00DFA885": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/hidden_continue.png",
+            "frame_sha256": "e61088942276c013685820e8addc276bf442fecf6421ab2409e24164c3c45058"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/hidden/recipe.in",
+      "recipe_sha256": "04c75850d27e8847c61e186051379481a8cc17733326d6e97dc371221345cb3b",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0
+    },
+    {
+      "case_id": "code16",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/code16_trace.log",
+      "trace_sha256": "8c5b5ecb3abe639c46ac60037156fe4debd049c19dd98ec0d14d4dee0bc17b08",
+      "frame": "data/evidence/part1_help_b42_synthetic/code16.png",
+      "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1",
+      "target_reads": {
+        "0x00DFA8AA": "0x08A7BFEE",
+        "0x00DFA8CB": "0x08A7C011"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8AA",
+          "0x00DFA8CB"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "target_visual_evidence": {
+        "0x00DFA8AA": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code16.png",
+            "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1"
+          }
+        ],
+        "0x00DFA8CB": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code16.png",
+            "frame_sha256": "d41c5d4942f992bb4d40eaaeb85043f733ffca683e4ad34b84e830b1216635c1"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/code16/recipe.in",
+      "recipe_sha256": "82e3656b692aeb0644a7cd7c30e8d5460ccb2f9953606920af13aaeae01d76d0",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code17",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/code17_trace.log",
+      "trace_sha256": "4c889f2b55f4852edbf3ae00b7708d828cd11e07b71cb2b05377c7f3a824d992",
+      "frame": "data/evidence/part1_help_b42_synthetic/code17.png",
+      "frame_sha256": "778a294827944eae16354946497f3e4e0bf8879a1fafe4768617951f0ea22231",
+      "target_reads": {
+        "0x00DFA8EA": "0x08A86712"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA8EA"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "target_visual_evidence": {
+        "0x00DFA8EA": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code17.png",
+            "frame_sha256": "778a294827944eae16354946497f3e4e0bf8879a1fafe4768617951f0ea22231"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/code17/recipe.in",
+      "recipe_sha256": "58ef0e393b148b64121abdbb62d19e29afae063a3a88986781eb3bde605c7295",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code18",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/code18_trace.log",
+      "trace_sha256": "2f8761b44863a75d047ed05673ed2072e0c3a70f7979448d17fefa05b38944dd",
+      "frame": "data/evidence/part1_help_b42_synthetic/code18.png",
+      "frame_sha256": "901fa8af9eaba016be3c4f6b43e6fc7a866ca3da9dbcb9e9a68abca5a5b56e4c",
+      "target_reads": {
+        "0x00DFA90A": "0x08A86736"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA90A"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "target_visual_evidence": {
+        "0x00DFA90A": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code18.png",
+            "frame_sha256": "901fa8af9eaba016be3c4f6b43e6fc7a866ca3da9dbcb9e9a68abca5a5b56e4c"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/code18/recipe.in",
+      "recipe_sha256": "b7b7313e58ad519fb53978760a129f0f261f384e9ad76f629cf4a552f084b40a",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    },
+    {
+      "case_id": "code19",
+      "state": "temp/release_C/canon9/help_synth/native_state.ss0",
+      "state_sha256": "d662fcc10d3aabe526f4a789c598ad4f2abf8aa3ee815387c9c7164a016cb689",
+      "trace": "data/evidence/part1_help_b42_synthetic/code19_trace.log",
+      "trace_sha256": "8c4f52d3715c9efae23019542f54fc5f3256f3d3bd824bfbfd30ff1201c47a2c",
+      "frame": "data/evidence/part1_help_b42_synthetic/code19.png",
+      "frame_sha256": "ec79fce8cc267510c01805d96cfe23b524eda883ae5f3442bde659b7bec8d1ca",
+      "target_reads": {
+        "0x00DFA926": "0x08A8675A"
+      },
+      "summary": {
+        "direct_targets": [
+          "0x00DFA926"
+        ]
+      },
+      "cheat_tainted": true,
+      "scope": "b42-native savestate, live code injection, rendering only; normal route open",
+      "state_checkpoint": "temp/release_C/canon9/help_synth/native_state.checkpoint.json",
+      "state_checkpoint_sha256": "e8566aae383235d6fe9e83b104ff9c8449cd75180907f48d3e1ecb94753dc7e6",
+      "target_visual_evidence": {
+        "0x00DFA926": [
+          {
+            "frame": "data/evidence/part1_help_b42_synthetic/code19.png",
+            "frame_sha256": "ec79fce8cc267510c01805d96cfe23b524eda883ae5f3442bde659b7bec8d1ca"
+          }
+        ]
+      },
+      "recipe": "temp/release_C/canon9/help_synth/code19/recipe.in",
+      "recipe_sha256": "937a9cdd29d02488c99f4bcd78d3df511443ef59b3020ea9d761c045cf9733d3",
+      "save_copy_sha256": "d1210b1d8fe444a3cc84eb8ae272c0076375107f93ce97b37d786f0efc2e9d51",
+      "read_only_save": true,
+      "run_status": "closed",
+      "exit_code": 0,
+      "additional_frames": []
+    }
+  ],
+  "method": "fresh b42 replay state and copied read-only SRAM; injected menu item codes; ROM read watch and per-target visual frames; rendering only",
+  "replay_ledger": "temp/release_C/canon9/help/F_help_sweep/frames.jsonl",
+  "runner_receipt": "temp/release_C/canon9/help_synth/report.json"
+}

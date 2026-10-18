@@ -280,6 +280,7 @@ EDITOR_VISIBLE_FONT_DIALOGUE_RANGES = [
     (0xB81800, 0xB85000),
 ]
 from glyph_dictionary_sources import is_glyph_dictionary_address
+from part2_mission_title_fit import NATIVE_TITLE_SOURCES
 
 
 def _editor_visible_font_dialogue(addr):
@@ -300,6 +301,11 @@ def _review_only_dialogue(group, guards):
     region = group.get("region")
     if region == "font" and not _editor_visible_font_dialogue(_member_addr_slot(members[0], guards)[0]):
         return True
+
+    # These source addresses are native map titles. Their pair-renderer ROM
+    # protection is independent of whether they belong to a game scene.
+    if region == "part2" and _member_addr_slot(members[0], guards)[0] in NATIVE_TITLE_SOURCES:
+        return False
 
     statuses = [_member_build_status(m, guards) for m in members]
     if statuses and all(s in {"under_safe_min", "no_slot"} for s in statuses):

@@ -3034,6 +3034,8 @@ byte ptr만 +1=잼). content char(>0x77)는 0x8b12634에서 return 1.
   이 게이트는 `0x00A536B6`/`0x00A536DE` proof-critical bytes와 NUL 위치를 확인하며,
   현재 `11/11`, `10/10`으로 PASS한다. source payload가 이동하거나 문구를 바꾸면 이 proof와
   guard를 함께 갱신해야 한다.
+- **2026-10-19 b42 재검증:** 위 `애니메 A` 10바이트는 b39 문구 길이였고, 독립적으로 입증된 버퍼 상한은 아니었다. b42는 끝 `A`를 전각 `Ａ`(`82 60`)로 바꿔 NUL 포함 11바이트다. b42 cold-boot 재생에서 만든 동일 ROM 상태를 이어받아 메뉴를 열면 ROM `0x00A56A5A` read가 잡히고, `0x03002CDE..0x03002CE8`에 11바이트가 복사된 뒤 다음 메뉴 마커 `01`이 `0x03002CE9`에 있다. 화면의 `애니메 A`와 이웃 행은 이 상태에서 깨짐 없이 보인다. `docs/screenshots/b42_system_menu_2026-10-19/receipt.json`에 ROM/state/덤프/화면 해시를 묶었다. 음악 행의 11바이트 인접 경계는 그대로이며, 새 증거는 이 b42 메뉴 상태의 애니메 11바이트 허용 범위에 한정된다.
+  추가로 동일 치트 표시 카트리지 저장을 b42에서 직접 cold boot하여 입력 30개 후 `애니메 A`와 이웃 행을 다시 캡처했다. `receipt.json`의 `coldboot_replay`가 입력표·체크포인트·종료 영수증·전후 화면 SHA를 기록한다. 정상 진행 증거는 아니다.
 - **증거**: `docs/screenshots/e12_system_menu_source_redirect_2026-06-28/report.json`,
   `temp/e12_system_menu_source_compare_20260628.json`,
   `temp/e12_system_menu_source_redirect_mutation_20260628/summary.json`,

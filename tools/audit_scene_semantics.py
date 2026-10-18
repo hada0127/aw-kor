@@ -99,8 +99,8 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/release_C/canon8/89b_trace/trace.log",
-        "receipt": "temp/release_C/canon8/89b_trace/bound_receipt.json",
+        "watch_log": "temp/release_C/canon9/89b_trace/trace.log",
+        "receipt": "temp/release_C/canon9/89b_trace/bound_receipt.json",
         "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",
@@ -199,7 +199,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--broad-dialogue-threshold", type=int, default=200)
-    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261017_b39.gba"))
+    ap.add_argument("--rom", default=str(ROOT / "output/game_wars_korean_candidate_20261019_b42.gba"))
     args = ap.parse_args()
     candidate_sha = sha256(Path(args.rom))
     active_records = active_registration_records(REGISTRATION, candidate_sha)

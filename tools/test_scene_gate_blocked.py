@@ -10,11 +10,40 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-ROM = 'output/game_wars_korean_candidate_20261017_b39.gba'
+ROM = 'output/game_wars_korean_candidate_20261019_b42.gba'
 sys.path.insert(0, str(ROOT/'tools'))
 
 
 class SceneGateBlockedTest(unittest.TestCase):
+    def test_native_part2_titles_keep_game_scene_membership_and_pair_protection(self):
+        from tools import build_scene_catalog as build
+        groups = json.loads((ROOT/'data/dialogue_groups.json').read_text())['groups']
+        native = {
+            group['group_id']: int(group['members'][0]['address'], 16)
+            for group in groups
+            if int(group['members'][0]['address'], 16) in build.NATIVE_TITLE_SOURCES
+        }
+        self.assertEqual(len(native), 179)
+        self.assertEqual(set(native.values()), build.NATIVE_TITLE_SOURCES)
+        guards = build._load_build_guards()
+        for group in groups:
+            if group['group_id'] in native:
+                self.assertEqual(build._member_build_status(group['members'][0], guards), 'pair')
+
+        catalog = json.loads((ROOT/'data/scene_catalog.json').read_text())
+        placements = {
+            group_id: scene['id']
+            for scene in catalog['scenes']
+            for group_id in scene['dialogue_ids']
+            if group_id in native
+        }
+        self.assertEqual(len(placements), len(native))
+        self.assertEqual(placements, {
+            group_id: ('23_part2_main_menu' if address < 0xA2D000
+                       else '24_part2_campaign_map')
+            for group_id, address in native.items()
+        })
+
     def test_catalog_regeneration_preserves_current_evidence(self):
         from tools import build_scene_catalog as build
         source = json.loads((ROOT/'data/scene_entrypoints.json').read_text())['scenes']
@@ -30,7 +59,7 @@ class SceneGateBlockedTest(unittest.TestCase):
                        if cp['name'] == early['checkpoint'])
         self.assertEqual(early['source_endpoint'], early['provenance_path'])
         self.assertEqual(current['recorder_endpoint']['checkpoint'],
-                         'temp/release_C/canon8/runs/g19_g19_g19_g19_g19_PK_cold/0062_A_0032869.checkpoint.json')
+                         'temp/release_C/canon9/runs/g19_g19_g19_g19_g19_g19_PK_cold/0062_A_0032869.checkpoint.json')
         withdrawn = {'scene_30a1_part2_redstar_story_early_b', 'scene_80a_campaign_story_early'}
         for row in source.values():
             self.assertFalse(withdrawn & {x.get('checkpoint') if isinstance(x, dict) else x
@@ -71,21 +100,21 @@ class SceneGateBlockedTest(unittest.TestCase):
         self.assertTrue(records['B-19f']['replay']['cheat_tainted'])
         self.assertTrue(records['C-89b-trace']['replay']['cheat_tainted'])
 
-    def test_active_registration_is_bound_to_b39_and_excludes_history(self):
+    def test_active_registration_is_bound_to_b42_and_excludes_history(self):
         from tools.audit_scene_semantics import active_registration_records
         path = ROOT/'data/release_C_evidence_registration.json'
         reg = json.loads(path.read_text())
-        b39 = '7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217'
-        active = active_registration_records(path, b39)
-        self.assertEqual(reg['target_candidate_sha256'], b39)
+        b42 = '1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf'
+        active = active_registration_records(path, b42)
+        self.assertEqual(reg['target_candidate_sha256'], b42)
         self.assertEqual(len(active), 34)
-        self.assertTrue(all(r['replay']['candidate_sha256'] == b39 for r in active))
-        self.assertEqual(len(reg['history']['records']), 378)
+        self.assertTrue(all(r['replay']['candidate_sha256'] == b42 for r in active))
+        self.assertEqual(len(reg['history']['records']), 412)
         self.assertFalse({r['key'] for r in active} &
                          {r['key'] for r in reg['history']['records']})
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-') for r in active), 19)
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-')
-                             for r in reg['history']['records']), 114)
+                             for r in reg['history']['records']), 133)
         self.assertFalse(any(r['item_id'].startswith('26a-b31-') for r in active))
         for r in active:
             self.assertEqual(r['key'].split('|', 1)[1], r['input_route'])

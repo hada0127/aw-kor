@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
- "rom": "output/game_wars_korean_candidate_20261017_b39.gba",
- "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
- "git_commit": "76c3fb4",
+ "rom": "output/game_wars_korean_candidate_20261019_b42.gba",
+ "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+ "git_commit": "2b88cc9",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",
@@ -997,17 +997,17 @@
    ],
    "summary": {
     "target_count": 460,
-    "with_pointer_refs": 382,
-    "with_external_pointer_refs": 367,
+    "with_pointer_refs": 373,
+    "with_external_pointer_refs": 359,
     "with_second_level_refs": 7,
-    "pointer_ref_total": 597,
-    "external_pointer_ref_total": 581,
+    "pointer_ref_total": 587,
+    "external_pointer_ref_total": 573,
     "pointer_ref_buckets": {
      "part1_or_table": 275,
      "code_or_static": 7,
      "0xF30000": 158,
-     "b8_internal": 16,
-     "part2_table": 141
+     "b8_internal": 14,
+     "part2_table": 133
     }
    },
    "targets": [
@@ -7027,16 +7027,11 @@
      "ko": "접속중",
      "ja": "接続中",
      "kind": "fixed_zero_text",
-     "pointer_ref_count": 2,
+     "pointer_ref_count": 0,
      "external_pointer_ref_count": 0,
-     "pointer_refs": [
-      "0x00B831EC",
-      "0x00B831F0"
-     ],
+     "pointer_refs": [],
      "external_pointer_refs": [],
-     "pointer_ref_buckets": {
-      "b8_internal": 2
-     },
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -7792,17 +7787,11 @@
      "ko": "내 진심을 보여주마!",
      "ja": "オレの本気を見せてやるぜ！",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBA80"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBA80"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -7813,17 +7802,11 @@
      "ko": "잠깐 진심 좀 내볼까!",
      "ja": "ちょっくら本気を出させてもらうぜ！",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBA98"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBA98"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -7906,17 +7889,11 @@
      "ko": "키쿠치요 특전 부대의 진짜 힘,보여주마!",
      "ja": "キクチヨ特戦部隊の本当の力、見せてくれるわ！",
      "kind": "bteam-round2-baseline",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBAE0"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBAE0"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -7927,17 +7904,11 @@
      "ko": "두 동강을 내주마!",
      "ja": "たたき切ってくれるわ！",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBAF0"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBAF0"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -8366,17 +8337,11 @@
      "ko": "얼른　끝내버리겠어!",
      "ja": "さっさと　おわらすわよっ！",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBC18"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBC18"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -8387,17 +8352,11 @@
      "ko": "브레이크 모드 기동",
      "ja": "・・・ぶれいくもーど　キドウ・・・",
      "kind": "import-addr-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBC40"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBC40"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -8423,17 +8382,11 @@
      "ko": "진짜라면 몰라도 카피 따위에",
      "ja": "ホンモノならともかく、コピーごときに",
      "kind": "import-csv",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBC38"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBC38"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },
@@ -8501,17 +8454,11 @@
      "ko": "이걸 받아봐라!",
      "ja": "こいつをうけてみな！",
      "kind": "dialogue-override",
-     "pointer_ref_count": 1,
-     "external_pointer_ref_count": 1,
-     "pointer_refs": [
-      "0x00DEBCA0"
-     ],
-     "external_pointer_refs": [
-      "0x00DEBCA0"
-     ],
-     "pointer_ref_buckets": {
-      "part2_table": 1
-     },
+     "pointer_ref_count": 0,
+     "external_pointer_ref_count": 0,
+     "pointer_refs": [],
+     "external_pointer_refs": [],
+     "pointer_ref_buckets": {},
      "second_level_ref_count": 0,
      "second_level_refs": []
     },

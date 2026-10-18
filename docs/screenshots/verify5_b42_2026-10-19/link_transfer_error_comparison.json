@@ -1,0 +1,50 @@
+[
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part1_host_transfer_p0.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part1/host_transfer_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part1_client_transfer_p1.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part1/client_transfer_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part1_host_detached_120_p0.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part1/host_detached_120_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part1_client_detached_720_p1.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part1/client_detached_720_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part2_host_transfer_p0.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part2/host_transfer_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part2_client_transfer_p1.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part2/client_transfer_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part2_host_detached_120_p0.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part2/host_detached_120_p0.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  },
+  {
+    "b39_frame": "docs/screenshots/verify5_b39_2026-10-18/part2_client_detached_720_p1.png",
+    "b42_frame": "temp/release_C/canon9/verify5/error_part2/client_detached_720_p1.png",
+    "changed_pixels": 0,
+    "status": "RGB-equal"
+  }
+]

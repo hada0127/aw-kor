@@ -979,6 +979,7 @@ read-watch를 시도했다.
   바로 다음 행 `애니메`가 `0x03002CDA`에서 시작한다. follow-up agy 리뷰가 이 인접 버퍼 한계를 지적해,
   `tools/verify_dist_integrity.py`에 `scene_89 system-menu source/IWRAM guard`를 추가했다.
   현재 gate는 `0x00A536B6=11/11`, `0x00A536DE=10/10`으로 PASS하며, source byte 변경이나 NUL 초과 시 fail한다.
+  **2026-10-19 갱신:** 이 `애니메` 10바이트는 b39 source 길이로, 독립적인 버퍼 상한은 아니었다. b42 동일 ROM 메뉴 연속 실행에서 전각 `Ａ`의 11바이트 문자열이 IWRAM에 복사되고 다음 마커가 뒤따르며 화면도 정상인 것을 확인했다(`docs/screenshots/b42_system_menu_2026-10-19/receipt.json`). 같은 치트 표시 카트리지 저장에서 b42를 직접 cold boot한 화면도 이 문구와 이웃 행을 다시 확인했다. 현재 게이트는 정확한 b42 payload와 11바이트 NUL 위치를 검사한다. 음악 행의 인접 버퍼 11바이트 상한은 유지한다.
 - **판정**: 이 route의 visible system-menu label source는 A2 copy다. B8 `0x00B82D76/2D6A/2D58`는
   이 화면의 source 증거가 아니며, `음악 있음/애니메` source도 A2/B8 fixed row가 아니라
   repoint payload → IWRAM menu buffer 경로다. 같은 scene_89 시스템 메뉴에서 동일 B8 duplicate/A2 fixed-row

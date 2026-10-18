@@ -8,6 +8,10 @@
 
 ---
 
+## 2026-10-19 정본 배포본
+
+현재 로컬 정본은 b42 SHA-256 `1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`다. 2026-10-19 BPS/IPS와 검증 범위는 `temp/release_C/canon9/report.md`, 진행·미검증 항목은 `todo.md`를 따른다. 공개 업로드는 하지 않았다.
+
 ## 2026-10-18 대사 잘림 조사
 
 최신 b41 후보의 구현·검사 범위는 `docs/dialogue_layout.md`, 진행 상태는 `todo.md`, 실제 빌드/화면/Astra 증거는 `temp/b41_dialogue_audit/REPORT.md`를 따른다. 미검증 소비자와 추출 행을 모든 화면 PASS로 바꾸지 않는다. 사용자 지시에 따라 Claude weekly limit을 기다리지 않고 Astra full→delta 절차를 사용하며, Mac Codex만 최신 사용자 저장을 보존해 실제 아이폰에 설치한다.

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "source_rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "scene": "scene_80c_campaign_story_late",
+  "frame": "docs/screenshots/canon9_2026-10-19/scene80c_b42.png",
+  "frame_sha256": "abf0cbf51103016c45003a16f5159e78398be553b3267a4a434e0973036f7265",
+  "source_frame": "temp/release_C/canon9/runs/g40_g40_g40_g40_g40_g40_S80bc/frames/1e8dd1f73b2d7bd9f2b88fce85684d5af1e741f9d0de56d53d7e90dd808a01c2.png",
+  "source_checkpoint": "temp/release_C/canon9/runs/g40_g40_g40_g40_g40_g40_S80bc/0030_A_0006368.checkpoint.json",
+  "source_checkpoint_sha256": "30886e1b7a237015e45def3be68d3821653b443140b999ec24191ea062baa675",
+  "comparison": "temp/release_C/canon9/active_endpoint_comparison.json",
+  "comparison_sha256": "d17050de1c6b016bfd0e20cc1c37fbc23a810cd3c5ef2e263edd294c129e909f",
+  "changed_pixels_vs_b39": 0,
+  "cheat_tainted": true,
+  "emulator_exit_code": 0,
+  "claim_scope": "Part 1 scene 80c yes/no display: direct b42 cold-boot endpoint capture; inherited save is cheat-tainted."
+}

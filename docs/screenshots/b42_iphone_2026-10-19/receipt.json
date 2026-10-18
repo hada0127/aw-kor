@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "candidate_rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "source_report": "temp/b38_shake/iphone/b40r2/dialogue-clipping/spacing-followup/install-evidence/b42-install-20261019-040815/report.md",
+  "scope": "iPhone RetroArch ROM readback, cold boot, Part 1 title, mode menu, War Room list, existing SRAM preserved",
+  "checked_frames": [
+    {
+      "frame": "docs/screenshots/b42_iphone_2026-10-19/20_boot_12s.png",
+      "sha256": "edaf15747fc95d512c72d1925c62a881019bf1a40cb4f10979e5483660a09150"
+    },
+    {
+      "frame": "docs/screenshots/b42_iphone_2026-10-19/24_p1_title_game.png",
+      "sha256": "343e45d829486a094f706431bf511c68a1f3aec3df6dfb62ccd765f3c5e0f038"
+    },
+    {
+      "frame": "docs/screenshots/b42_iphone_2026-10-19/25_p1_menu_game.png",
+      "sha256": "eee8eb3c5530fe4949ce49c9fd6742eb4533ab7d458afdaa9000bbba9baed27c"
+    },
+    {
+      "frame": "docs/screenshots/b42_iphone_2026-10-19/26_warroom_menu_game.png",
+      "sha256": "6104f87de374afa365ff3c3059824c4c4b1f55d86dc4baab42fde5758c91bafa"
+    }
+  ],
+  "not_checked": "All b42 dialogue and Part 1 yes/no prompts on device; real GBA hardware; full campaign",
+  "source_install_result": "PASS after passcode unblock; source report includes the initial blocked attempt",
+  "source_report_sha256": "3d570b6c189d4ce125dc1c14f2ab7b8d30db16634913f00bc4b383919f3856e7"
+}

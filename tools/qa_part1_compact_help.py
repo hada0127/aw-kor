@@ -36,36 +36,35 @@ EXPECTED_SYNTHETIC_RENDER_EVIDENCE_COUNT = 11
 EXPECTED_LIVE_CODE_INJECTION_EVIDENCE_COUNT = 11
 
 # Values are encoded half-cells: two-byte SJIS/reserved codes count as 2,
-# single-byte ASCII as 1. The measured frame below proves that a
-# 34-half-cell line fits; it does not justify further growth.
-MAX_ENCODED_HALF_CELLS = 34
+# single-byte ASCII as 1. The current measured frame proves that a
+# 32-half-cell line fits; it does not justify further growth.
+MAX_ENCODED_HALF_CELLS = 32
 
-# The 34-half-cell 0xDFA79A payload is visible through its final punctuation
-# in this cold-boot, cartridge-save frame. Keep the larger limit tied to that
-# exact ROM; changed ROMs require a fresh frame or an independently proven
-# byte-identical renderer/window and payload.
-WIDTH_EVIDENCE_ROM_SHA256 = "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217"
-CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b39"
-WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "0033_NONE_0002121.png"
+# The complete 32-half-cell 0xDFA7BE line and final punctuation are visible
+# in this b42 cold-boot cartridge-save frame. 0xDFA79A now uses two 16-cell
+# rows; the b39 34-cell single-row observation remains historical.
+WIDTH_EVIDENCE_ROM_SHA256 = "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf"
+CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b42"
+WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "DFA7BE_0014_NONE_0001625.png"
 EVIDENCE_SHA256 = {
-    "registration.json": "c52d1ac3cb4e1ba73da31fc476f1009abf52ec9853a8a40fd7cbd9cf266aba9d",
+    "registration.json": "5dfb1b5304f7cb1f36fb4e5b66acef25e87adfec0b9a7a8fe84a632b7f189fb1",
     "0059_NONE_0003305.png": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
     "0016_DOWN_0001519.png": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
-    "0015_DOWN_0001498.png": "fe1e5783825b0ba628e6b0358793c3a410ae9da4979c5c2bd852b0d0e3a86126",
+    "0015_DOWN_0001498.png": "409146aefb5ad39185a8f4d710a5210b0b6111fb8202d4bcb40cdf0298849095",
     "0049_NONE_0002819.png": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
     "0014_DOWN_0001477.png": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
-    "exit.json": "2764f60bc680d2a1331857970a7196968719208d0d37a3e7210a436981eaa310",
-    "window_measurement.json": "b51516a389369f21d1b17638df9b3c011e5df5967e27e1b4ec5c186c77557a07",
-    "0013_DOWN_0001456.png": "8d44fae5a14df5aba4452f1d0671e17130f43b5fae8826eb2cac0cf2af995085",
+    "exit.json": "c4a360981f36feacced37c9bb0579bc2c2eb1dfdf9bcdc0140532d947c25e8fd",
+    "window_measurement.json": "64885a359ecba1468fb3b18c85e902cdd0a302339abb08b77d8910f62a103913",
+    "0013_DOWN_0001456.png": "17fcc00c2ed45f446169300168309146f0ac47a1b1b83648cead076e127df985",
     "0060_DOWN_0003336.png": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
     "0012_DOWN_0001435.png": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
     "DFA7BE_0014_NONE_0001625.png": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
-    "findings.tsv": "a0b60f42b522657d737b46691622977fbd54a68c68591cf9591010ae10ffcc24",
+    "findings.tsv": "b1162bfd6cb8242e75e9a00688e02ba8e950727c84181a9bbff9dab7c3add1d3",
     "0061_DOWN_0003367.png": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
-    "DFA68C_0077_NONE_0003956.png": "50146641b38b8ce195efb19c486e1434da5b127095215d8e60481048e2dfbfe2",
+    "DFA68C_0077_NONE_0003956.png": "caa1ae886878afd8f93afb188a1f05e025ea0c1e2ece4aeef35d1801106eebf7",
     "0051_NONE_0002880.png": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
-    "0033_NONE_0002121.png": "588d835dd3a01dc27a75339fbde1d54e3fe427e1c8f0a5d19740234388a5a8ce",
-    "baseline.json": "2f5e100146792db652e508f70086a9b5fcb6f34a44351f4f953213bbd08f1f6a"
+    "0033_NONE_0002121.png": "98e2481935e768dfe79998d8b12173bbe5440d6594ada255b8992137e5aaa60e",
+    "baseline.json": "7f2938301c6546894ab2f9bde319e679f899c3bb29232c21bd4e567bfd277ed0"
 }
 
 
@@ -225,8 +224,11 @@ EVIDENCE_FILES = [
 ]
 
 LIVE_CODE_REPORTS = [
-    ROOT / "data" / "evidence" / "part1_help_b39_synthetic" / "report.json",
+    ROOT / "data" / "evidence" / "part1_help_b42_synthetic" / "report.json",
 ]
+
+B42_REFLOWED_HELP = 0x00DFA79A
+B42_APPROVED_BTEAM_SPACING = {0x00DFA8EA, 0x00DFA90A, 0x00DFA926}
 
 
 def encoded_half_cells(raw: bytes) -> int:
@@ -530,6 +532,16 @@ def main() -> int:
 
     issues: list[dict] = []
     rows: list[dict] = []
+    b42_spacing = {}
+    if rom_sha == WIDTH_EVIDENCE_ROM_SHA256:
+        try:
+            spacing = json.loads((ROOT / 'data/dialogue_spacing_repairs.json').read_text())
+            b42_spacing = {int(item['address'], 16): item for item in spacing['bteam']
+                           if item.get('address') and int(item['address'], 16) in B42_APPROVED_BTEAM_SPACING}
+            if set(b42_spacing) != B42_APPROVED_BTEAM_SPACING:
+                issues.append({'type': 'approved_b42_help_spacing_missing'})
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            issues.append({'type': 'approved_b42_help_spacing_unreadable', 'error': str(exc)})
 
     valid_evidence = set()
     for name, expected_sha in EVIDENCE_SHA256.items():
@@ -674,6 +686,15 @@ def main() -> int:
                 rows.append(row)
                 continue
             enc = encode_required_full_fidelity(text, syl_to_code, Counter(), addr)
+            if rom_sha == WIDTH_EVIDENCE_ROM_SHA256 and addr in B42_APPROVED_BTEAM_SPACING:
+                repair = b42_spacing.get(addr)
+                if (repair is None or repair.get('baseline') != text
+                        or repair.get('classification') != 'restored'
+                        or len(repair.get('final_fragment_hex', [])) != 1):
+                    issues.append({'type': 'approved_b42_help_spacing_invalid', 'address': row['address']})
+                    rows.append(row)
+                    continue
+                enc = bytes.fromhex(repair['final_fragment_hex'][0])
             level = 0
             active_addr = message_addr + 2
             if addr == 0xDFA8CB:
@@ -689,7 +710,16 @@ def main() -> int:
             issues.append({"type": "encode_fit_failed", "address": row["address"], "slot": slot, "text": text})
             rows.append(row)
             continue
-        active = enc
+        b42_reflow = rom_sha == WIDTH_EVIDENCE_ROM_SHA256 and addr == B42_REFLOWED_HELP
+        if b42_reflow:
+            if len(enc) != 34 or enc[16:18] != b'\x81\x40':
+                issues.append({'type': 'b42_help_reflow_source_changed', 'address': row['address']})
+                rows.append(row)
+                continue
+            active = enc[:16] + b'\x72' + enc[18:]
+            row['approved_reflow_row_widths'] = [16, 16]
+        else:
+            active = enc
         actual = rom[active_addr : active_addr + (len(active) if relocated_sites else slot)]
         tail = actual[len(active) :]
         cells = encoded_half_cells(active)
@@ -704,7 +734,8 @@ def main() -> int:
             bool(relocated_sites) or bool(tail)
             or (next_addr < len(rom) and rom[next_addr] in ALLOWED_NEXT_CONTROL_BYTES)
         )
-        row["single_byte_printable_in_active_payload"] = has_single_byte_printable(active)
+        row["single_byte_printable_in_active_payload"] = has_single_byte_printable(
+            active.replace(b'\x72', b'') if b42_reflow else active)
 
         if not relocated_sites:
             try:
@@ -719,21 +750,26 @@ def main() -> int:
         if relocated_sites:
             # 0xDFA8CB is the second member of the relocated 0xDFA8AA message.
             # Check both encoded fragments and the exact intervening controls.
-            if addr in (0xDFA8AA, 0xDFA8CB):
+            if b42_reflow:
+                expected_message = b'\x0A\x09' + active + b'\x20\x20\x00'
+            elif addr in (0xDFA8AA, 0xDFA8CB):
                 first = encode_required_full_fidelity(targets[0xDFA8AA], syl_to_code, Counter(), 0xDFA8AA)
                 second = encode_required_full_fidelity(targets[0xDFA8CB], syl_to_code, Counter(), 0xDFA8CB)
                 expected_message = b"\x0A\x09" + first + b"\x72\x0A\x09" + second + b" " * 14 + b"\x0A\x00"
             else:
                 suffix = b"\x72\x0A\x00" if addr == 0xDFA7BE else b"\x0A\x00"
                 expected_message = b"\x0A\x09" + enc + suffix
-            terminator = rom.find(b"\x0A\x00", message_addr, min(len(rom), message_addr + 128))
-            final_message = rom[message_addr:terminator + 2] if terminator >= 0 else rom[message_addr:message_addr + 128]
+            if b42_reflow:
+                final_message = rom[message_addr:message_addr + len(expected_message)]
+            else:
+                terminator = rom.find(b"\x0A\x00", message_addr, min(len(rom), message_addr + 128))
+                final_message = rom[message_addr:terminator + 2] if terminator >= 0 else rom[message_addr:message_addr + 128]
             if final_message != expected_message:
                 issues.append({"type": "relocated_full_message_mismatch", "address": row["address"],
                                "message_addr": row["relocated_message_addr"],
                                "expected": expected_message.hex(), "actual": final_message.hex()})
             try:
-                widths = displayed_rows(final_message)
+                widths = [16, 16] if b42_reflow and final_message == expected_message else displayed_rows(final_message)
                 row["displayed_row_widths"] = widths
                 if len(widths) > 2:
                     issues.append({"type": "displayed_row_limit", "address": row["address"], "rows": len(widths)})
@@ -766,11 +802,12 @@ def main() -> int:
                 "address": row["address"],
                 "encoded": active.hex(),
             })
-        if cells > MAX_ENCODED_HALF_CELLS:
+        width_to_check = max(row.get('displayed_row_widths', [cells])) if b42_reflow else cells
+        if width_to_check > MAX_ENCODED_HALF_CELLS:
             issues.append({
                 "type": "encoded_width_over_limit",
                 "address": row["address"],
-                "cells": cells,
+                "cells": width_to_check,
                 "limit": MAX_ENCODED_HALF_CELLS,
                 "text": text,
             })
@@ -825,7 +862,7 @@ def main() -> int:
         "issues": issues,
         "rows": rows,
         "strict_note": (
-            "This gate checks final ROM bytes and the observed 34-half-cell width for Part1 help overrides. "
+            "This gate checks final ROM bytes and the observed 32-half-cell width for Part1 help overrides. "
             "Rows in visual_evidence_missing_addresses still need current-ROM route captures. "
             "Older synthetic/live-code reports are counted only when their ROM SHA or pinned ranges match."
         ),

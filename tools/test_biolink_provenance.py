@@ -17,7 +17,7 @@ class FakeProcess:
 
 
 class LinkProvenanceTest(unittest.TestCase):
-    def test_verify5_battle_routes_load_clean_b39_transfer_states(self):
+    def test_verify5_battle_routes_load_clean_b42_transfer_states(self):
         class RecordingLink:
             commands = []
 
@@ -37,11 +37,11 @@ class LinkProvenanceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=biolink.ROOT / 'temp') as raw:
             fixture_root = Path(raw)
             for part in (1, 2):
-                source = fixture_root / f'temp/release_C/canon8/link/part{part}/transfer'
+                source = fixture_root / f'temp/release_C/canon9/link/part{part}/transfer'
                 source.mkdir(parents=True)
                 states = [source / name for name in ('host_end.ss0', 'client_end.ss0')]
                 for state in states:
-                    state.write_bytes(f'b39 part {part} {state.name}'.encode())
+                    state.write_bytes(f'b42 part {part} {state.name}'.encode())
                 receipt = source / 'receipt.json'
                 receipt.write_text(json.dumps({
                     'rom_sha256': battle_probe.b.ROM_SHA, 'emulator_exit_code': 0,
@@ -61,7 +61,7 @@ class LinkProvenanceTest(unittest.TestCase):
                     battle_probe.run(part, Path('temp/unused'))
             for part in (1, 2):
                 with self.subTest(part=part):
-                    source = fixture_root / f'temp/release_C/canon8/link/part{part}/transfer'
+                    source = fixture_root / f'temp/release_C/canon9/link/part{part}/transfer'
                     expected = [f'loadstate 0 {source / "host_end.ss0"}',
                                 f'loadstate 1 {source / "client_end.ss0"}']
                     actual = [line for line in RecordingLink.commands[part - 1]

@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "b42_rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "b42_source_receipt": "temp/release_C/canon9/b42_intro/source_receipt.json",
+  "b42_source_npz": "temp/release_C/canon9/b42_intro/intro_frames.npz",
+  "b42_source_npz_sha256": "92f2f7e9dbab28e4fc30bd28420e5cc9b14d32e7802780e86356c9ad82c0e868",
+  "historical_b40_source": "temp/b40/audit/runs/",
+  "frames": [
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_name_row_frame_020.png",
+      "sha256": "d127c1b43c8fef331f5dbbce33a944eabc6e1e36866c7198bc99d968b780dd69",
+      "source_npz_key": "name",
+      "source_frame": 20,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_name_row_frame_050.png",
+      "sha256": "377837b969142e5711ae80366f262b7c977f004e7faee871d261a8e48ceca75d",
+      "source_npz_key": "name",
+      "source_frame": 50,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_name_row_frame_090.png",
+      "sha256": "c845e09d9f0c392797029844abbcd46bf94ff4574a3877cabbdf36f12277fb10",
+      "source_npz_key": "name",
+      "source_frame": 90,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_first_time_row_frame_020.png",
+      "sha256": "d127c1b43c8fef331f5dbbce33a944eabc6e1e36866c7198bc99d968b780dd69",
+      "source_npz_key": "first_time",
+      "source_frame": 20,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_first_time_row_frame_050.png",
+      "sha256": "e2c300a7f6099112ca5aadf7c80b3ce7f3a67023de5333147863877d5a92bf11",
+      "source_npz_key": "first_time",
+      "source_frame": 50,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/b42_first_time_row_frame_090.png",
+      "sha256": "c845e09d9f0c392797029844abbcd46bf94ff4574a3877cabbdf36f12277fb10",
+      "source_npz_key": "first_time",
+      "source_frame": 90,
+      "scope": "b42 cold-boot WARS-skip row regression"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/history_b40_save.png",
+      "sha256": "f7c500dd442195e180b951cbc12d6d606ff6ce274a0610cbc2ddae8c4243b684",
+      "scope": "historical b40 cold-boot capture only; cartridge-save provenance varies; not b42 visual evidence"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/history_b40_shop.png",
+      "sha256": "4a08846dbc74a0d181e80e515342de115420153eca2062b282d0bfb048c9a4b0",
+      "scope": "historical b40 cold-boot capture only; cartridge-save provenance varies; not b42 visual evidence"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/history_b40_mode_return.png",
+      "sha256": "3d9b1ca1f23bf8a8ce5adebb294c422da2a80e8d6cd0421e01be81353a9a3a18",
+      "scope": "historical b40 cold-boot capture only; cartridge-save provenance varies; not b42 visual evidence"
+    },
+    {
+      "frame": "docs/screenshots/b42_yesno_2026-10-19/history_b40_hint.png",
+      "sha256": "bfb6cef27c2feafdabb014727e6a2fabfb52e3bc8847a3eecdf59cff6e0605fe",
+      "scope": "historical b40 cold-boot capture only; cartridge-save provenance varies; not b42 visual evidence"
+    }
+  ],
+  "limit": "b42 row crops cover only name and first-time WARS-skip prompts; other b40 screens shown as history",
+  "historical_b40_rom_sha256": "f1f183347e68480c55061377e74e21dbb8b86b95403c9db5d19ef072305c8be3",
+  "historical_b40_report": "temp/b40/code_report_r2.md",
+  "b42_source_receipt_sha256": "562d215118658374acb892e4f07fbf733168c4a29e49ff25fa8ca1b7d9f41101"
+}

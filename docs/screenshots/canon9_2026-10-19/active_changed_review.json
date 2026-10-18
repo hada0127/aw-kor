@@ -1,0 +1,140 @@
+{
+  "schema": 1,
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "comparison": "temp/release_C/canon9/active_endpoint_comparison.json",
+  "scope": "11 changed selected screen endpoints only; dialogue-route frame timing does not prove every page or natural-play coverage",
+  "screens": [
+    {
+      "name": "08_part2_prologue_map_text",
+      "b39_frame": "temp/release_C/canon8/runs/g02_g02_g02_g02_g02_B03_p2chain/frames/ef8fe9066ec7fa17d32ec97ea96c8b865445d118e25d56af06ec65945897ac68.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_08_part2_prologue_map_text.png",
+      "b42_frame_sha256": "ed4c7f11def4c72e98634badb8f19f91b25b020a4498dc0c96a495fd4bc8e423",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g02_g02_g02_g02_g02_g02_B03_p2chain/0010_A_0002249.checkpoint.json",
+      "b42_core_frame": 2249,
+      "changed_pixels": 192,
+      "review": "selected_frame_visual_review",
+      "note": "Part 2 map text differs locally; no visible clipping in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "41_part1_operation_room",
+      "b39_frame": "temp/release_C/canon8/runs/g05_g05_g05_g05_g05_B40_p1menu/frames/c34f752cf3334f82a15be6f8c91875229a8db5a154fdaa974ccb14cff6675520.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_41_part1_operation_room.png",
+      "b42_frame_sha256": "353ab4e2d1312134cfb79af1392d3c6afc53b18a46d2e996c1bae3cb277dd679",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g05_g05_g05_g05_g05_g05_B40_p1menu/0031_A_0004739.checkpoint.json",
+      "b42_core_frame": 4739,
+      "changed_pixels": 580,
+      "review": "selected_frame_visual_review",
+      "note": "Operation-room dialogue differs locally; no visible clipping or sprite damage in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "42_part1_single_battle",
+      "b39_frame": "temp/release_C/canon8/runs/g06_g06_g06_g06_g06_B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_42_part1_single_battle.png",
+      "b42_frame_sha256": "24d192f3a0307265efe809c62c14cfe7faa0871a119c46f111b1ea8cd412470c",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g06_g06_g06_g06_g06_g06_B42_p1single/0032_A_0004845.checkpoint.json",
+      "b42_core_frame": 4845,
+      "changed_pixels": 298,
+      "review": "selected_frame_visual_review",
+      "note": "Single-battle prompt text differs locally; no visible clipping or sprite damage in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19e6_part1_unit_help_late",
+      "b39_frame": "temp/release_C/canon8/runs/g10_g10_g10_g10_g10_B19a1_p1sweep/frames/a30bb0029482ca274d1d341e88076ac249cb75da6c0c751101800c643ae29fbe.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19e6_part1_unit_help_late.png",
+      "b42_frame_sha256": "390f3f0590ad886bc3450089b424788a9a7f91cc13767271f54666b66aa38100",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g10_g10_g10_g10_g10_g10_B19a1_p1sweep/0041_UP_0003295.checkpoint.json",
+      "b42_core_frame": 3250,
+      "changed_pixels": 580,
+      "review": "selected_frame_visual_review",
+      "note": "Operation-room help dialogue differs locally; no visible clipping in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19a2_part1_heavy_tank_advice_story",
+      "b39_frame": "temp/release_C/canon8/runs/g11_g11_g11_g11_g11_w2b6e_p1_train6_follow/frames/4ce8b0314603df21b72f9f820be5422f8fc39b98d0490be30493e2f173f74595.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19a2_part1_heavy_tank_advice_story.png",
+      "b42_frame_sha256": "07c16bf2754a31fe1801396207e01bca42b0fdefc35aa818135fee521dc10c15",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g11_g11_g11_g11_g11_g11_w2b6e_p1_train6_follow/0061_A_0006061.checkpoint.json",
+      "b42_core_frame": 6061,
+      "changed_pixels": 758,
+      "review": "selected_frame_visual_review",
+      "note": "Story dialogue page differs at the inherited timing; selected b42 frame remains in the scene and fits the box.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19b1_part1_hoip_ambush_weather_story",
+      "b39_frame": "temp/release_C/canon8/runs/g12_g12_g12_g12_g12_w2b6e_p1_stage12_follow/frames/5c40b01c7a026a03644730f75bb14a114a68107084a8dec89bb4eccab8d1b4c4.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19b1_part1_hoip_ambush_weather_story.png",
+      "b42_frame_sha256": "2931e5e02833255db0b2d146482fc01fe0264191fd52cffcb519a893327519d2",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g12_g12_g12_g12_g12_g12_w2b6e_p1_stage12_follow/0068_A_0006270.checkpoint.json",
+      "b42_core_frame": 6270,
+      "changed_pixels": 608,
+      "review": "selected_frame_visual_review",
+      "note": "Story dialogue page differs at the inherited timing; selected b42 frame remains in the scene and fits the box.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19b2_part1_hoip_landing_setup_story",
+      "b39_frame": "temp/release_C/canon8/runs/g13_g13_g13_g13_g13_w2b6e_p1_stage10_follow/frames/549564bcb6c106002e818726cd814fd6dc9f9c69465efdc0b863b4b58dd51482.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19b2_part1_hoip_landing_setup_story.png",
+      "b42_frame_sha256": "52247473af0b4395b1d67dd5f9f833a1e928dffcb2a4d2cb1abb3ec3d70897bd",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g13_g13_g13_g13_g13_g13_w2b6e_p1_stage10_follow/0064_A_0006082.checkpoint.json",
+      "b42_core_frame": 6082,
+      "changed_pixels": 1687,
+      "review": "selected_frame_visual_review",
+      "note": "Story dialogue page differs at the inherited timing; selected b42 frame remains in the scene and fits the box.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19e1_part1_unit_info_detail_help",
+      "b39_frame": "temp/release_C/canon8/runs/g16_g16_g16_g16_g16_X_19e1_infantry_coldboot/frames/46a0752e09bf0acc9e7719ca145bed3216a86655819d7ad9058440bb74001b87.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19e1_part1_unit_info_detail_help.png",
+      "b42_frame_sha256": "27ebe57e032df4e3ba9630116d659189fbf2f39ee4d724ab89bdcfa88b25b86c",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g16_g16_g16_g16_g16_g16_X_19e1_infantry_coldboot/0047_R_0004150.checkpoint.json",
+      "b42_core_frame": 4150,
+      "changed_pixels": 1160,
+      "review": "selected_frame_visual_review",
+      "note": "Unit-help text differs locally; no visible clipping or icon damage in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_19e7_part1_hoip_co_weather_help",
+      "b39_frame": "temp/release_C/canon8/runs/g17_g17_g17_g17_g17_w2b6e_19e7_cold/frames/fb7a137275a31c03d07d024902c092b5a261b845bc3c42215da1fe74295ff942.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_19e7_part1_hoip_co_weather_help.png",
+      "b42_frame_sha256": "09aad675c9c3a0f88d186b39483838896a14079d6156937d7f26979096fa6cc7",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g17_g17_g17_g17_g17_g17_w2b6e_19e7_cold/0044_A_0005096.checkpoint.json",
+      "b42_core_frame": 5096,
+      "changed_pixels": 431,
+      "review": "selected_frame_visual_review",
+      "note": "Weather-help dialogue differs locally; no visible clipping in selected frame.",
+      "route_adjustment": null
+    },
+    {
+      "name": "scene_30g2_part2_green_earth_volcano_lava_story",
+      "b39_frame": "temp/release_C/canon8/runs/g34_g34_g34_g34_g34_w2b6e_volcano_day2dialog/frames/787c6f4d605525e7e75465ce3cd918e36852f9b11a65f9408ea6b99e6e314353.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_30g2_part2_green_earth_volcano_lava_story.png",
+      "b42_frame_sha256": "57adc52953980cde5726cd986df70d0887d4a6ccea0d06fa6e256cd59e4a90bd",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g34_dialogue_fixed/0126_NONE_0008116.checkpoint.json",
+      "b42_core_frame": 8116,
+      "changed_pixels": 686,
+      "review": "selected_frame_visual_review",
+      "note": "Corrected cold-boot input reaches day-two lava dialogue; selected frame fits the box. The inherited input timing landed on a map menu and was rejected.",
+      "route_adjustment": "b42 dialogue timing required one additional menu-opening A before the four DOWN inputs; fresh cold boot reaches day-two lava dialogue"
+    },
+    {
+      "name": "scene_80b_campaign_story_mid",
+      "b39_frame": "temp/release_C/canon8/runs/g40_g40_g40_g40_g40_S80bc/frames/8ca8c57cb3822c5e0d0d01cc300fd7bd1a5c0f85eef9d77b558f0f1048e3dbb7.png",
+      "b42_frame": "docs/screenshots/canon9_2026-10-19/active_changed_scene_80b_campaign_story_mid.png",
+      "b42_frame_sha256": "4cfc7f63df7a52c309daeb7304c86ea4a1f339084488cf7757655e6e49cb8f4a",
+      "b42_checkpoint": "temp/release_C/canon9/runs/g40_g40_g40_g40_g40_g40_S80bc/0013_A_0003784.checkpoint.json",
+      "b42_core_frame": 3784,
+      "changed_pixels": 642,
+      "review": "selected_frame_visual_review",
+      "note": "Campaign dialogue differs locally; no visible clipping in selected frame.",
+      "route_adjustment": null
+    }
+  ]
+}

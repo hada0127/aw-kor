@@ -19,10 +19,11 @@ BASE = Path(__file__).resolve().parents[1]
 SOURCE_ROM = BASE / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'
 TARGET_ROM = BASE / 'output' / 'game_wars_korean_full.gba'
 DIST = BASE / 'dist'
-B39_ROM_SHA256 = '7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217'
-B39_RELEASE_HIGHLIGHT = (
-    'b39 retains the b38 changes and fixes the Part 1 name-confirm / first-time '
-    '예/아뇨 row shaking when the WARS intro is skipped.'
+B42_ROM_SHA256 = '1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf'
+B42_RELEASE_HIGHLIGHT = (
+    'b40 uses the wide 예/아뇨 row for every Part 1 prompt; b41 reflows dialogue '
+    'windows without losing text; b42 restores natural word spacing and applies '
+    'consistent spacing to names and titles.'
 )
 
 
@@ -38,7 +39,7 @@ def digest(data):
 
 
 def write_readme(path, patch_stem, target_info, release_highlight):
-    highlight_line = f'- Candidate: b39; {release_highlight}' if release_highlight else ''
+    highlight_line = f'- Candidate: b42; {release_highlight}' if release_highlight else ''
     path.write_text(
         f"""# Game Boy Wars Advance 1+2 Korean Patch
 
@@ -72,15 +73,18 @@ def write_release_notes(path, release_date, patch_stem, source_info, target_info
         f'{release_highlight}\n'
         'The unlocked map-list and shared campaign-prompt captures used cheat-tainted '
         'saves: they verify those displays, not normal-play unlocking or progression.\n'
-        'On iPhone RetroArch mGBA c758314, five b39 r2 confirmations covered the '
-        'Part 1 name-confirm and first-time prompts after both a skipped and full '
-        'WARS intro (`docs/screenshots/b39_name_prompts_2026-10-18/receipt.json`). Only those screens were checked '
-        'on device; real GBA hardware remains unverified.'
+        'On iPhone RetroArch, the b42 ROM was read back and cold-booted through the '
+        'Part 1 title, mode menu, and War Room list; the existing save was preserved '
+        '(`docs/screenshots/b42_iphone_2026-10-19/receipt.json`). This device check '
+        'does not cover all changed dialogue or every 예/아뇨 prompt. Real GBA hardware remains unverified.'
     ) if release_highlight else ''
     unverified_details = (
         'Alternate banner-sheet and `0x804FC8` consumer reachability, natural access '
         'to 11 Part 1 help windows, normal-play Sturm CO power, and hidden locked-map '
-        'names remain unverified.'
+        'names remain unverified. For b42 dialogue, 13 unknown consumers, 16 '
+        'state-dependent messages, 18 horizontal-scroll help messages, and seven '
+        'withheld relocations remain outside the fixed-window pass. Forced QA is '
+        'not natural-route verification.'
     ) if release_highlight else ''
     path.write_text(
         f"""# Korean Patch Release Notes
@@ -129,7 +133,7 @@ def main():
     target = TARGET_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
-    release_highlight = B39_RELEASE_HIGHLIGHT if target_info['sha256'] == B39_ROM_SHA256 else ''
+    release_highlight = B42_RELEASE_HIGHLIGHT if target_info['sha256'] == B42_ROM_SHA256 else ''
 
     bps = make_bps(source, target)
     ips = make_ips(source, target)

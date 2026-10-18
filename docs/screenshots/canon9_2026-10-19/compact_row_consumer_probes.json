@@ -1,0 +1,148 @@
+{
+  "schema": 1,
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "target_range": "0x08804FC8..0x08804FCF",
+  "status": "bounded_routes_no_consumer_observed",
+  "global_deadness": "unverified",
+  "routes": [
+    {
+      "route": "part1_name_confirm",
+      "receipt": "temp/release_C/canon9/verify2_compact_name/receipt.json",
+      "receipt_sha256": "a637eab73476ddd077109e1afeb698215dc6250ef91911b25e9cc317808d0bf6",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 30,
+      "cheat_tainted": false,
+      "claim": "bounded route only; global reachability unverified",
+      "positive_control_kind": "native b42 wide-choice row read at 0x08F10380"
+    },
+    {
+      "route": "part1_save_confirm",
+      "receipt": "temp/release_C/canon9/verify2_compact_part1_save/receipt.json",
+      "receipt_sha256": "3777404928af92a7dd055d15ad3d80a2ea1c11a02a948e735fe726939d98185e",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_shop_buy_confirm",
+      "receipt": "temp/release_C/canon9/verify2_compact_shop/events.json",
+      "receipt_sha256": "2db327cf3a761b88803a687ab162749706aa9bb4025d1da3268b367ae0969a8a",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 104,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_surrender_confirm",
+      "receipt": "temp/release_C/canon9/verify2_compact_part2/receipt.json",
+      "receipt_sha256": "18ead354a8b140acdef83f01c4526a1165a11469aa019078f725b9fdcf4f7bd4",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 37,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_cable_setup",
+      "receipt": "temp/release_C/canon9/verify2_compact_link/receipt.json",
+      "receipt_sha256": "78860910a5411bbdcf4f346516e074371b8ec9f0a78a583408abea3eba1f9bde",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 20,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_delete_confirm",
+      "receipt": "temp/release_C/canon9/verify4_delete_hold/part1/receipt.json",
+      "receipt_sha256": "9979574a0f43891f133571efddfd9ecae83d8f7f1d8276ffc98ad400df5dd76c",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part2_delete_confirm",
+      "receipt": "temp/release_C/canon9/verify4_delete_hold/part2/receipt.json",
+      "receipt_sha256": "1886f583bb83db100ef7893091b1726544fdb36b066ae678f9087cb7bb23b274",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 6,
+      "cheat_tainted": true,
+      "claim": "bounded route only; global reachability unverified"
+    },
+    {
+      "route": "part1_real_bios_link_host",
+      "receipt": "temp/release_C/canon9/link/part1/transfer/receipt.json",
+      "receipt_sha256": "170cb3041c2c535c196edfbffbcf50d3fc43112efe42015aa683b2bfc17a6fed",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "stage1": {
+          "path": "temp/release_C/canon9/link/part1/transfer/stage1_read.log",
+          "sha256": "38fd32b2fe3e9fcde858e8a0f7651cfc3225a73bc51916e5738f56ed12264a74",
+          "hits": 4
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/canon9/link/part1/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    },
+    {
+      "route": "part2_real_bios_link_host",
+      "receipt": "temp/release_C/canon9/link/part2/transfer/receipt.json",
+      "receipt_sha256": "cb0ea23f8144632828458816660ad65d0107c500d974ec2f2f7745042726ab86",
+      "emulator_exit_code": 0,
+      "target_reads": 0,
+      "positive_control_reads": 4,
+      "positive_control_kind": "actual host read-watch events",
+      "positive_control_watches": {
+        "main_sheet": {
+          "watch_log": "temp/release_C/canon9/link/part2/transfer/live_main_sheet_watch.log",
+          "watch_sha256": "777e98a614827e8e59df073013277f0d8d80a8059813ba060ec29748dc381d49",
+          "address": "0x0892DF84",
+          "hits": 2
+        },
+        "word_sheet": {
+          "watch_log": "temp/release_C/canon9/link/part2/transfer/live_word_sheet_watch.log",
+          "watch_sha256": "a650fb1fc9140ab4b57094c3420f9b9f70f22e970a403e5aeeadaee4466ddc4b",
+          "address": "0x0892EB5C",
+          "hits": 2
+        }
+      },
+      "cheat_tainted": false,
+      "watch": {
+        "watch_log": "temp/release_C/canon9/link/part2/transfer/host_row_watch.log",
+        "watch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "address": "0x08804FC8",
+        "hits": 0
+      },
+      "claim": "bounded link route only; global reachability unverified"
+    }
+  ],
+  "historical_b39_receipts": [
+    "docs/screenshots/canon8_2026-10-18/compact_row_consumer_probes.json"
+  ],
+  "historical_b38_receipts": [
+    "docs/screenshots/rebind6_2026-10-16/compact_row_consumer_probes.json"
+  ],
+  "historical_b36r3_receipts": [
+    "docs/screenshots/rebind3_2026-10-15/compact_row_consumer_probes.json",
+    "docs/screenshots/verify2_2026-10-15/compact_row_coverage.json",
+    "docs/screenshots/verify4_2026-10-15/delete_confirmations.json",
+    "temp/release_C/verify4b/registration_candidates.json"
+  ],
+  "cheat_tainted_preserved": true
+}

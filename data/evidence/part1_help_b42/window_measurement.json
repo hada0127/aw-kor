@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "frame": "data/evidence/part1_help_b42/DFA7BE_0014_NONE_0001625.png",
+  "message": "0x00DFA7BE",
+  "observed_line_encoded_half_cells": 32,
+  "observed_fullwidth_glyphs": 16,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 128,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 32,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "b42 native cold boot: the full 32-half-cell DFA7BE line and final punctuation fit in one help row. The reflowed DFA79A uses two 16-half-cell rows; b39 34-cell proof is historical only."
+}

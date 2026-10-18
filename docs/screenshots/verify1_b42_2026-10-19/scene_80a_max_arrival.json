@@ -1,0 +1,22 @@
+{
+  "scene_id": "80a_campaign_story_early",
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "source_endpoint": "temp/release_C/canon9/verify1/max_arrival/0105_A_0012873.checkpoint.json",
+  "source_frame": "temp/release_C/canon9/verify1/max_arrival/frames/b511d4fb8c3decded4927d41ffd619384f5905612c86d5ea6e2715d4c42b837d.png",
+  "source_ledger": "temp/release_C/canon9/verify1/max_arrival/frames.jsonl",
+  "core_frame": 12873,
+  "rgb_sha256": "b511d4fb8c3decded4927d41ffd619384f5905612c86d5ea6e2715d4c42b837d",
+  "png_sha256": "5e9c40237910b99707e732cab273c47e84c81b44e5c37c7a3f60a948a6fd0e73",
+  "cheat_tainted": true,
+  "exact_visible_korean": "많이 기다렸지!",
+  "claim_scope": "P1 Max arrival group 0xE0075A screen rendering only; direct runtime read-watch unverified",
+  "historical_b32r5_receipt": "docs/screenshots/verify1_2026-10-15/scene_80a_max_arrival.json",
+  "rgb_identical_to_b32r5": true,
+  "frame": "docs/screenshots/verify1_b42_2026-10-19/scene_80a_max_arrival.png",
+  "historical_b36r3_receipt": "docs/screenshots/verify1_b36r3_2026-10-15/scene_80a_max_arrival.json",
+  "rgb_identical_to_b36r3": true,
+  "historical_b37_receipt": "docs/screenshots/verify1_b37_2026-10-16/scene_80a_max_arrival.json",
+  "rgb_identical_to_b37": true,
+  "historical_b38_receipt": "docs/screenshots/verify1_b38_2026-10-16/scene_80a_max_arrival.json",
+  "rgb_identical_to_b38": true
+}

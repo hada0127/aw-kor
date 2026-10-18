@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "source_rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
+  "scene": "scene_20_part2_intro_newspaper",
+  "frame": "docs/screenshots/canon9_2026-10-19/part2_splash_b42.png",
+  "frame_sha256": "35d8935c7661fe1bc5e08acf4b1ab549bb7f1a4ec00647f0b8ac04562b5e7ae1",
+  "source_frame": "temp/release_C/canon9/runs/g19_g19_g19_g19_g19_g19_PK_cold/frames/63864188092bc08f4ea81111d4450740b726b65eb87b7b95c5611f3343fa5983.png",
+  "source_checkpoint": "temp/release_C/canon9/runs/g19_g19_g19_g19_g19_g19_PK_cold/0005_A_0002887.checkpoint.json",
+  "source_checkpoint_sha256": "0e635655275feeab1ce2c90f8cd944f988ea43be0a18f5da2da9ec55b9405200",
+  "comparison": "temp/release_C/canon9/active_endpoint_comparison.json",
+  "comparison_sha256": "d17050de1c6b016bfd0e20cc1c37fbc23a810cd3c5ef2e263edd294c129e909f",
+  "changed_pixels_vs_b39": 0,
+  "cheat_tainted": false,
+  "emulator_exit_code": 0,
+  "claim_scope": "Part 2 splash still reads 어드밴스 워즈 2; direct b42 cold-boot endpoint capture."
+}

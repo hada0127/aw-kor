@@ -49,10 +49,10 @@ REPOINT_MANIFEST = os.path.join(BASE, 'temp', 'repoint_manifest.json')
 SYLLABLE_TO_CODE_2350 = os.path.join(BASE, 'data', 'syllable_to_code_2350.json')
 SYLLABLE_TO_GLYPH_2350 = os.path.join(BASE, 'data', 'syllable_to_glyph_2350.json')
 PART1_MAP_LABEL_SWEEP_REPORT = os.path.join(
-    BASE, 'docs', 'screenshots', 'b39_map_names_2026-10-18', 'unlocked_cat0', 'report.json'
+    BASE, 'docs', 'screenshots', 'b42_map_names_2026-10-19', 'unlocked_cat0', 'report.json'
 )
 PART1_MAP_LABEL_LOCKED_SWEEP_REPORT = os.path.join(
-    BASE, 'docs', 'screenshots', 'b39_map_names_2026-10-18', 'locked', 'report.json'
+    BASE, 'docs', 'screenshots', 'b42_map_names_2026-10-19', 'locked', 'report.json'
 )
 PART1_MAP_LABEL_LEGACY_SWEEP_REPORT = os.path.join(
     BASE, 'docs', 'screenshots', 'part1_link_map_list_full_sweep_2026-10-16_b36r3', 'report.json'
@@ -78,8 +78,11 @@ SCENE89_SYSTEM_MENU_SOURCE_LIMITS = [
     {
         'label': 'scene_89 anime menu source',
         'source_addr': 0x00A298E2,
-        'expected_hex': '8eb789d48bed81404100',
-        'max_nul_terminated_len': 10,
+        # CANON-9 b42: the fullwidth A occupies two bytes. Same-ROM menu
+        # continuation shows all 11 bytes at IWRAM 0x03002CDE..2CE8,
+        # followed by the next menu marker at 0x03002CE9; see receipt.
+        'expected_hex': '8eb789d48bed8140826000',
+        'max_nul_terminated_len': 11,
     },
 ]
 
@@ -299,9 +302,10 @@ def verify_compact_display_visual_matrix(current_sha):
 def verify_scene89_system_menu_sources(current):
     """Guard the route-local source proof for battle-system music/anime rows.
 
-    These payloads are copied into an adjacent IWRAM menu buffer:
-    music starts at 0x03002CCF and anime starts at 0x03002CDA. The music string
-    therefore has an 11-byte NUL-terminated hard limit on this route.
+    Music starts at 0x03002CCF and the adjacent anime row can start at
+    0x03002CDA, giving music an 11-byte hard limit. The b42 anime payload's
+    11-byte extent was separately checked in the current-ROM menu continuation
+    at docs/screenshots/b42_system_menu_2026-10-19/receipt.json.
     """
     if current is None:
         return False, 'current ROM unavailable'

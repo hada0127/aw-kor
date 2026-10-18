@@ -1,4 +1,8 @@
-> Current candidate: b36r3 (`f3148d4f…4ecf1`). The corrected cold-boot link evidence and remaining limits are recorded in “b36r3 link evidence provenance correction” below; earlier link manifests are invalid history.
+> Current canonical local build: b42 (`1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`); the dated patch package and remaining limits are in `temp/release_C/canon9/report.md`. Earlier b36r3 link evidence remains historical and its cross-ROM state manifests remain invalid.
+
+## 2026-10-19 b42 canonical evidence and package
+
+The original-ROM build reproduced the reviewed b42 candidate byte-for-byte. Fresh b42 cold-boot replay re-registered 71 screen checkpoints, 34 active release records, and the ancillary help, OBJ, map, shop, link, tutorial, compact-display, and communication evidence. Changed dialogue screens were captured on b42; exact RGB carry-over was used only for unchanged frames or bounded unchanged regions. Cartridge saves were copied with their taint flags; no cross-ROM savestate was loaded. The scene 89 `애니메 A` menu was also recaptured by direct b42 cold boot from a copied, cheat-tainted cartridge save; the ROM read/IWRAM source proof and screen hashes are in `docs/screenshots/b42_system_menu_2026-10-19/receipt.json`. The 2026-10-19 BPS/IPS package and verification results are recorded in `temp/release_C/canon9/report.md`. This evidence does not establish natural-route coverage for forced QA, full normal-play campaigns, or real GBA hardware.
 
 ## 2026-10-16 b37 별도 후보: 잠금 해제 1편 링크 맵 이름 복원
 

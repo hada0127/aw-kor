@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
- "rom": "output/game_wars_korean_candidate_20261017_b39.gba",
- "rom_sha256": "7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217",
- "git_commit": "76c3fb4",
+ "rom": "output/game_wars_korean_candidate_20261019_b42.gba",
+ "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+ "git_commit": "2b88cc9",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -372,11 +372,11 @@
    "aliases": []
   }
  ],
- "code_context_json": "temp/release_C/canon8/compact_code_context.json",
+ "code_context_json": "temp/release_C/canon9/compact_code_context.json",
  "code_context_breakpoints_enabled": true,
  "target_count": 496,
  "case_count": 3,
- "hit_count": 1923,
+ "hit_count": 1942,
  "direct_target_hit_count": 0,
  "direct_hits": [],
  "cases": [
@@ -385,7 +385,7 @@
    "name": "07_part2_main_menu",
    "mode": "recorder_endpoint",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/release_C/canon8/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon9/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/release_C/canon8/compact_trace_runs/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/release_C/canon9/compact_trace_runs/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,7 +862,7 @@
    "name": "scene_87_common_rule_settings",
    "mode": "recorder_endpoint",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/release_C/canon8/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon9/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1418,7 +1418,7 @@
      60
     ]
    ],
-   "frame": "temp/release_C/canon8/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/release_C/canon9/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -1542,7 +1542,7 @@
    "name": "41_part1_operation_room",
    "mode": "recorder_endpoint",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/release_C/canon8/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon9/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2117,8 +2117,8 @@
      200
     ]
    ],
-   "frame": "temp/release_C/canon8/compact_trace_runs/screen_41_part1_operation_room/frame.png",
-   "hit_count": 1919,
+   "frame": "temp/release_C/canon9/compact_trace_runs/screen_41_part1_operation_room/frame.png",
+   "hit_count": 1938,
    "direct_target_hits": [],
    "hits": [
     {
@@ -7722,7 +7722,7 @@
      "raw": "199 BP r0=00008983 r1=00000100 r2=00008A83 r3=00000030 r4=08BE71DE r5=000001FE r6=02010ADA r7=00000001 sp=03007AFC lr=08B1BF0D pc=08B12ABE"
     }
    ],
-   "truncated_hits": 1719
+   "truncated_hits": 1738
   }
  ],
  "strict_note": "Only direct_target_hits count as E12 visual provenance. A zero-hit case is a route/function-candidate negative result, not proof that the table is globally unused. direct_target_hits require an exact compact target address in r0-r7; range_register_hits are investigation leads only."

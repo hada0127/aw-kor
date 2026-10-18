@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "provenance_checkpoint": "temp/release_C/canon9/runs/g41_g41_g41_g41_g41_g41_C_3p_surrender/0027_A_0004524.checkpoint.json",
+  "provenance_checkpoint_sha256": "1e4e0c3b7556715545f1eb53b0477424843c4fef26c5ef209367e9624924ed42",
+  "same_rom_state_sha256": "52720366a9434e2931f5358cd95853cdffd2d3eb5bd15b4a8666ac773ba9ccdb",
+  "cheat_tainted": true,
+  "scope": "same-b42 state continuation from cold-boot replay; menu render and IWRAM source-bound proof only, not natural-route progression",
+  "emulator_exit_code": 0,
+  "recipe": "temp/release_C/canon9/scene89_probe/nav/recipe.in",
+  "recipe_sha256": "0fcc38db50e77174a74bdccaa4514e647732a9ec240f1e92aff5a4174ea6813b",
+  "rom_read_watch": "temp/release_C/canon9/scene89_probe/nav/watch_rom.log",
+  "rom_read_watch_sha256": "4d9b76e9b42126f053825937158e8778e093e42dbd7249d1d5de5932662f6de5",
+  "iwram_dump": "temp/release_C/canon9/scene89_probe/nav/action.bin",
+  "iwram_dump_sha256": "90bc867fb47fc196b9bf4dd0f1be14a0a831fedc3419e8235aa35a441e9bc3da",
+  "anime_source_file_offset": "0x00A56A5A",
+  "anime_iwram_offset": "0x03002CDE",
+  "anime_payload_hex": "8eb789d48bed8140826000",
+  "nul_terminated_bytes": 11,
+  "next_marker_iwram_offset": "0x03002CE9",
+  "next_marker_byte": "0x01",
+  "screenshots": [
+    {
+      "path": "docs/screenshots/b42_system_menu_2026-10-19/down3.png",
+      "sha256": "8d3241d0a981ba280f3a3043f66c84ae5466345eba5d791cfeb10ea40919adcc"
+    },
+    {
+      "path": "docs/screenshots/b42_system_menu_2026-10-19/action.png",
+      "sha256": "bc0a7ab59c5da500c1d1cda2fbdbfaea35be4f25dc7b2978ac003e93191d81af"
+    }
+  ],
+  "visual_review": "The b42 menu shows the full 애니메 A label and adjacent rows without visible corruption in this tested state.",
+  "coldboot_replay": {
+    "scope": "direct cold boot from copied cartridge save, no cross-ROM savestate; menu rendering only, cheat-tainted unlocks",
+    "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+    "source_cartridge_save_sha256": "0a964addd4ca5f7f01806b8f38e0b93dd3541e8c2fbb178d0bed7cfadada0d04",
+    "source_cartridge_rom_sha256": "ffb84168317ff8b43481c705bb579a228459ca7fd141657bde68d1c8f3991ade",
+    "input_recipe": "temp/release_C/canon9/scene89_coldboot_r2_inputs.txt",
+    "input_recipe_sha256": "8271f3741f813379a71c9183ad34c8d46627f2b3048a29a57ef75e7c0fc28e5b",
+    "checkpoint": "temp/release_C/canon9/scene89_coldboot_r2/0031_A_0004634.checkpoint.json",
+    "checkpoint_sha256": "c38afde6fcaacc79474f9320acfa93b09608869445c3701196917052a196b58f",
+    "state_sha256": "7b34c84cfa7712e8dd4aadeb1b4576f68299f305a715771fb2199c45a38485a3",
+    "cheat_tainted": true,
+    "exit_receipt": "temp/release_C/canon9/scene89_coldboot_r2/exit.json",
+    "exit_receipt_sha256": "c1a034a99b7fe4012d31a9156384460ccece56d9ebfd40177e20ae0c97692785",
+    "emulator_exit_code": 0,
+    "before_frame": "docs/screenshots/b42_system_menu_2026-10-19/coldboot_before.png",
+    "before_frame_sha256": "42b35f5359f5a911e9efb49b07d32303e28f3bbeaf054d84dad6178de0b08005",
+    "action_frame": "docs/screenshots/b42_system_menu_2026-10-19/coldboot_action.png",
+    "action_frame_sha256": "88b364eb2d61dccb020a948c91e59fa29f1768a1187aabdd49147ac6d3d9b1c7",
+    "visual_review": "Full 애니메 A label and adjacent menu rows visible without clipping or corruption."
+  }
+}

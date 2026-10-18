@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "candidate_rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "source_revision": "2b88cc934cde98618c48e92340f2ccc9427daba3",
+  "source_report": "temp/b38_shake/iphone/b40r2/dialogue-clipping/spacing-followup/REPORT.md",
+  "source_index": "temp/b38_shake/iphone/b40r2/dialogue-clipping/spacing-followup/evidence_index.json",
+  "frames": [
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_full2_page_3.png",
+      "sha256": "b4cf51178422f820118b7931bd6eb01a3952a31834b295b4c1831257048e6502",
+      "mode": "forced QA",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_kanbei_co_kanbei_bio_forced.png",
+      "sha256": "8cea1ed6de8a7511e862a76aef7cf228d6f9ead926411643d0ecfaaa0f088a35",
+      "mode": "QA save and RAM unlock",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_name48_page_1.png",
+      "sha256": "3b0061e615eb6a8d69cadb378756fa1c04169fdb13d68224a7366c1d5cebdd45",
+      "mode": "forced dialogue VM; normal name entry",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_name48_page_2.png",
+      "sha256": "1626e1e6fe1d34668a48910255443a3637a4fa5bec63ce8468fbf7ab9e61b5c4",
+      "mode": "forced dialogue VM; normal name entry",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_narration_render_fenced_narration_native_fenced.png",
+      "sha256": "f0b22e50b491eb445e8a9ebac9fedaed1b5e5eae13fe250becaf4f42a9dc7961",
+      "mode": "forced native event and NAME",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_natural_R_user_dialogue_fixed.png",
+      "sha256": "7ee2a6cb3d620f926ff6032651c396bb91be064a5881c31046f6569234d300cf",
+      "mode": "normal input",
+      "natural_route_verified": true
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_p2_fresh_complete_unit_description_final.png",
+      "sha256": "be6b906e8ff13ff945a8cabd8ca4800bd0e847f02f9d9eed6c276fd8e19dbd59",
+      "mode": "normal input",
+      "natural_route_verified": true
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_roomy2_spare_page_0.png",
+      "sha256": "4779465b0b32285b15671f8f6d53e6a6ccd5989f9036491f5c472d5143984fc0",
+      "mode": "forced dialogue VM; normal name entry",
+      "natural_route_verified": false
+    },
+    {
+      "frame": "docs/screenshots/b42_dialogue_2026-10-19/after_F_sami_co_sami_break_native.png",
+      "sha256": "e6dbb73c80a236a2cd967aec81871b781ab9ad19ac105e2aea60816fec0742dd",
+      "mode": "QA save",
+      "natural_route_verified": false
+    }
+  ],
+  "claim": "Representative b42 dialogue rendering on mGBA; forced QA stays labeled and does not establish natural-route reachability",
+  "source_report_sha256": "ff2f6a960c53a305d25c4052ae427a9afc1514e1bb6a1865604668c4f986bc66",
+  "source_index_sha256": "f43db400e5044b594961dc0fda7d6ff8c37d48f23a1649b594447d47a1ca67d3",
+  "source_package": "temp/b38_shake/iphone/b40r2/dialogue-clipping/spacing-followup/aw-kor-b42-2b88cc9-1c23b091.tar.gz",
+  "source_package_sha256": "285bf7c3d11628d30e20567788a5853ab558be27ad61fabf9f08dbb242df830a"
+}

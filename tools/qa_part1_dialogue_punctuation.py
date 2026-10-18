@@ -86,6 +86,10 @@ def active_text_payloads(integrity, rom):
     for index, entry in enumerate(integrity):
         if not isinstance(entry, list) or len(entry) < 8:
             continue
+        # Pointer writes still own their four bytes above, so they mask stale
+        # text, but their little-endian address bytes are not rendered glyphs.
+        if entry[7] == "dialogue-spacing-pointer":
+            continue
         addr, length = int(entry[0]), int(entry[2])
         encoded = bytes.fromhex(str(entry[3] or ''))[:length]
         offset = 0
