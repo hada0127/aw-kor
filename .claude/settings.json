@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"[Codex+Claude 리뷰 규칙] 작업/RE 완료 또는 막힘 시 commit 전에 상대 CLI로 엄격한 읽기 전용 리뷰를 수행하고 타당한 지적을 수정한다(전체 리뷰 1회 + 델타 재리뷰 최대 1회).\"}'"
+            "command": "echo '{\"systemMessage\":\"[Codex+Claude 리뷰 규칙] 작업/RE 완료 또는 막힘 시 commit 전에 상대 CLI로 엄격한 읽기 전용 리뷰를 수행하고 타당한 지적을 수정한다. 1차 full에서 전부 지적받고, 필수·Critical 수정 시에만 delta 재리뷰(회차 상한 없음, delta 연속 2회 미승인→복구 full 1회→또 연속 2회 미승인 시 사용자 보고).\"}'"
           }
         ]
       }
