@@ -85,7 +85,7 @@ def load_overrides() -> dict:
 # changing B-team wording needs a reviewed code change of this pin.
 # The 2026-10-07 consensus re-keys two misaligned entries only; see
 # temp/claude_2026-10-07/plan/bteam_final_decisions.tsv.
-PINNED_CORE_DIGEST = '6e6f0d946f534497202a61491731093c025b32116bbcc6208f553b4d67dde884'
+PINNED_CORE_DIGEST = '2d44431b1d6c2c3a114d861b962b51935ea8349569f911f018894d4a99aae9de'
 ALIGNMENT_RESTORE_ADDRESSES = frozenset({0x00A19300, 0x00A1B3C8})
 ALIGNMENT_COMPOSITE_NEXT = {0x00A19300: 0x00A1930F}
 ALIGNMENT_LEGACY_KEYS = {
@@ -405,6 +405,15 @@ def matches_alignment_composite(wanted: str, first: str, second: str,
 # baseline's _user_approved_exceptions must equal this table; adding or editing
 # one is a reviewed code change. 0xDD0D1A: じょうでき=上出来, user 「제안대로」 2026-10-07.
 APPROVED_EXCEPTIONS = {
+    '0x00A34F70': ('엔트리 중이야,잠시 기다려 줘!!', '엔트리 중이야, 잠시 기다려 줘!!'),
+    '0x00A34F98': ('친구가 모이면,스타트를 눌러 줘!!', '친구가 모이면, 스타트를 눌러 줘!!'),
+    '0x00A3508C': ('맵을 송신 중이야,잠시 기다려 줘!!', '맵을 송신 중이야, 잠시 기다려 줘!!'),
+    '0x00A350B4': ('맵을 수신 중이야,잠시 기다려 줘!!', '맵을 수신 중이야, 잠시 기다려 줘!!'),
+    '0x00A350DC': ('종료했어.시작한다!!', '종료했어. 시작한다!!'),
+    '0x00A350F8': ('종료했어.메뉴로 돌아갈게.', '종료했어. 메뉴로 돌아갈게.'),
+    '0x00A3511C': ('맵을 저장 중이야,전원을 끄지 말아 줘!!', '맵을 저장 중이야, 전원을 끄지 말아 줘!!'),
+    '0x00A3514C': ('다운로드 준비 중이야.잠시 기다려 줘!!', '다운로드 준비 중이야. 잠시 기다려 줘!!'),
+    '0x00A3517C': ('접속이 안 되네,메뉴로 돌아갈게.', '접속이 안 되네, 메뉴로 돌아갈게.'),
     '0x00DD0D1A': ('뭐,자네치고는,상등품이군.', '뭐, 자네치고는 잘했군.'),
     '0x00A2D814': ('결전 전', '최종결전!'),
     '0x00DF8E16': ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'),

@@ -15,11 +15,81 @@ ROOT = Path(__file__).resolve().parents[1]
 GROUP = 'g_00DF8B6A'
 ROM_SHA = '7c6f15fad29fab2a4d0a40becaffe06380cb2a4231a77f452e69a42ad611d78a'
 
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
 
 class UnreachedDialogueTest(unittest.TestCase):
     def setUp(self):
-        self.record = json.loads((ROOT/'data/scene_catalog_overrides.json').read_text())[
-            'unreached_dialogue'][0]
+        directory = TemporaryDirectory(dir=ROOT/'temp')
+        self.addCleanup(directory.cleanup)
+        work = Path(directory.name)
+        relative = lambda path: str(path.relative_to(ROOT))
+        state = work/'source.ss0'
+        state.write_bytes(b'test-only state')
+        checkpoint = work/'checkpoint.json'
+        checkpoint.write_text(json.dumps({
+            'rom_sha256': ROM_SHA, 'state': state.name,
+            'state_sha256': digest(state), 'core_frame': 5973,
+        }))
+        log = work/'watch.log'
+        lines = [
+            f'{i} addr=08DF8B62 pc=08000000 lr=08000000 r0=00000000 '
+            'r1=00000000 old=00000000 new=00000000' for i in range(4)
+        ]
+        log.write_text('\n'.join(lines) + '\n')
+        events = work/'frame_events.jsonl'
+        events.write_text(''.join(json.dumps({
+            'log_line': i, 'core_frame': 6520, 'raw': line,
+        }) + '\n' for i, line in enumerate(lines)))
+        frame = work/'control_frame.png'
+        Image.new('RGB', (240, 160), (0, 0, 0)).save(frame)
+        route_id = 'fixture_result_card'
+        receipt = {
+            'schema': 1, 'route_id': route_id, 'rom_sha256': ROM_SHA,
+            'source_state': relative(state), 'source_state_sha256': digest(state),
+            'recorder_checkpoint': relative(checkpoint),
+            'recorder_checkpoint_sha256': digest(checkpoint),
+            'watch_log': relative(log), 'watch_log_sha256': digest(log),
+            'frame_event_log': relative(events), 'frame_event_log_sha256': digest(events),
+            'control_frame': relative(frame), 'control_frame_sha256': digest(frame),
+            'target_span': ['0x08DF8B6A', '0x08DF8B6C'],
+            'control_span': ['0x08DF8B62', '0x08DF8B64'],
+            'watch_setup': [
+                {'gba_start': '0x08DF8B6A', 'size': 2, 'mode': 'r',
+                 'command': f'watchaddr 08DF8B6A 2 r {log}',
+                 'response': 'OK watchaddr 08DF8B6A len=2 set=2'},
+                {'gba_start': '0x08DF8B62', 'size': 2, 'mode': 'r',
+                 'command': 'watchaddr 08DF8B62 2 r KEEP',
+                 'response': 'OK watchaddr 08DF8B62 len=2 set=2'},
+            ],
+            'steps': [{'key': 'A', 'start_frame': 5975, 'end_frame': 6577}],
+            'first_watched_frame': 5975, 'last_watched_frame': 6577,
+            'control_hits': [{'log_line': i, 'core_frame': 6520, 'route_id': route_id}
+                             for i in range(4)],
+            'control_frame_core_frame': 6520,
+        }
+        receipt_path = work/'receipt.json'
+        receipt_path.write_text(json.dumps(receipt))
+        self.record = {
+            'group_id': GROUP,
+            'routes': [{
+                'route_id': route_id, 'source_state': relative(state),
+                'source_state_sha256': digest(state),
+                'recorder_checkpoint': relative(checkpoint),
+                'recorder_checkpoint_sha256': digest(checkpoint),
+                'step_keys': ['A'],
+            }],
+            'watch_logs': [{
+                'path': relative(log), 'screen': relative(frame),
+                'capture_core_frame': 6520, 'receipt': relative(receipt_path),
+                'receipt_sha256': digest(receipt_path),
+                'target_address': '0x08DF8B6A',
+                'positive_control_address': '0x08DF8B62',
+            }],
+            'reviewer': 'test fixture',
+            'rationale': 'A complete bounded negative probe with a positive control.',
+        }
 
     def classify(self, record=None, rom_sha=ROM_SHA):
         return classify_unreached_dialogue([GROUP], [record or self.record], rom_sha)

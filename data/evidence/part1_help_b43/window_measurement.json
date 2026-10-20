@@ -1,0 +1,21 @@
+{
+  "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
+  "frame": "data/evidence/part1_help_b43/DFA7BE_0014_NONE_0001625.png",
+  "message": "0x00DFA7BE",
+  "observed_line_encoded_half_cells": 32,
+  "observed_fullwidth_glyphs": 16,
+  "observed_advance_px_per_glyph": 8,
+  "observed_text_occupancy_px": 128,
+  "help_panel_approx_x_px": [
+    8,
+    153
+  ],
+  "help_panel_inner_approx_x_px": [
+    10,
+    151
+  ],
+  "safe_observed_capacity_half_cells": 32,
+  "visible_help_rows": 2,
+  "row_pitch_approx_px": 15,
+  "scope": "b43 native cold-boot frame; decoded RGB identical to the reviewed b42 32-half-cell width proof."
+}

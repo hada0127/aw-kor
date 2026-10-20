@@ -1,4 +1,4 @@
-"""Part1 map-label evidence must include both b42 save conditions."""
+"""Part1 map-label evidence must include both current-ROM save conditions."""
 import json
 import tempfile
 import unittest
@@ -11,9 +11,9 @@ import verify_dist_integrity as gate
 class Part1SweepEvidenceTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        candidate = Path(gate.BASE) / 'output/game_wars_korean_candidate_20261019_b42.gba'
+        candidate = Path(gate.BASE) / 'output/game_wars_korean_full.gba'
         if not candidate.is_file():
-            raise unittest.SkipTest(f'b42 candidate missing: {candidate}')
+            raise unittest.SkipTest(f'canonical ROM missing: {candidate}')
         cls.rom = candidate.read_bytes()
         cls.rom_sha = gate.sha256(cls.rom)
 

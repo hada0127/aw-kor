@@ -1,4 +1,10 @@
-## 2026-10-19 b42 정본 배포본 갱신
+## 2026-10-19 b43 정본 배포본 갱신
+
+- 정본 `output/game_wars_korean_{full,final,title_test}.gba`와 2026-10-19 BPS/IPS의 대상 SHA-256은 `488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34`, CRC32는 `A53BFA40`이다. b42의 화면·대사 수정에 사용자 승인 Link 상태 문구 9줄의 문장부호 뒤 공백을 더했다. 빌드·게이트·최종 SHA 화면 증거 범위는 `temp/release_C/canon10/report.md`를 따른다. 공개 업로드는 하지 않았다.
+- b42 iPhone RetroArch 설치 확인은 b42 증거로 보존한다. b43의 iPhone·실제 GBA 설치와 양편 일반 플레이 엔딩은 미검증이다. 강제 Link 화면은 `cheat_tainted` 표시 증거이며 자연 경로 검증으로 세지 않는다.
+- **계속 미검증:** 대사 소비자 미확인 13, 상태 의존 16, 가로 스크롤 도움말 18문구, 재배치 보류 7. 실제 GBA 하드웨어, 정상 플레이 양편 엔딩·전체 장면, 치트 표시 저장의 정상 해금도 미검증이다.
+
+## 2026-10-19 b42 정본 배포본 갱신 (이력)
 
 - 정본 `output/game_wars_korean_{full,final,title_test}.gba`와 2026-10-19 BPS/IPS의 대상 SHA-256은 `1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`다. b39는 이력으로 보존한다. b40의 1편 전체 예/아뇨 넓은 행, b41의 대사창 재배치(문구 손실 없음), b42의 자연스러운 어절·이름/직함 띄어쓰기를 포함한다. 근거와 실제 게이트 결과는 `temp/release_C/canon9/report.md`에 기록한다. 공개 업로드는 하지 않았다.
 - b42 iPhone RetroArch 설치 확인은 ROM readback, 1편 타이틀·모드 메뉴·작전룸 목록, 기존 저장 보존에 한정된다(`docs/screenshots/b42_iphone_2026-10-19/receipt.json`). 변경된 대사 전체와 모든 예/아뇨 화면을 iPhone에서 확인한 것은 아니다. 로컬 cold-boot 화면·치트 표시 저장의 범위는 각각의 영수증을 따른다.

@@ -114,6 +114,13 @@ def audit_rom_semantics(rom_path: Path, manifest_path: Path,
     checked = 0
     followed = 0
     direct = qa_text_fit.load_direct_patch_texts(include_writer=True)
+    # The reviewed 2026-10-18 spacing repair runs after the direct source row.
+    # Audit its exact final text instead of the pre-reflow direct-writer value.
+    spacing_rows = json.loads((ROOT / 'data/dialogue_spacing_repairs.json').read_text())['messages']
+    approved_dcae = next((row for row in spacing_rows if row.get('source') == '00DCAEFC'), None)
+    if (approved_dcae is None or
+            approved_dcae['final_pages'][-1][-1] != '먼저 １２ 거점 점령하는 거야！'):
+        raise ValueError('approved 0xDCAFE7 spacing repair changed')
     for addr in sorted(SEMANTIC_REGRESSION_ADDRESSES):
         if addr not in protected or addr not in direct or direct[addr][2] != "patch_script_row":
             raise ValueError(f"semantic regression authority missing: 0x{addr:08X}")
@@ -139,6 +146,8 @@ def audit_rom_semantics(rom_path: Path, manifest_path: Path,
             payload = rom[pos:pos + size].rstrip(b" \x00")
         actual = decode_enc(payload.replace(b"\x72\x0a\x09", b"\x81\x40"), codes).rstrip(" \u3000")
         wanted = display_equivalent(protected[addr], addr).rstrip(" \u3000")
+        if addr == 0xDCAFE7 and protected[addr] == '먼저 12거점 점령하는 거야!':
+            wanted = display_equivalent(approved_dcae['final_pages'][-1][-1], addr).rstrip(" \u3000")
         if actual != wanted:
             mismatches.append({"address": f"0x{addr:08X}", "live_addr": f"0x{pos:08X}",
                                "expected": short(wanted), "actual": short(actual)})

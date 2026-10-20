@@ -2,6 +2,8 @@
 
 이 프로젝트에 기여하고 싶으신가요? 환영합니다! 아래 가이드를 따라 참여하실 수 있습니다.
 
+> 도구(편집기·빌드·QA) 사용법은 [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md), 배포본 검증은 [`docs/REVIEWER_GUIDE.md`](docs/REVIEWER_GUIDE.md)에 있습니다. 루트 `README.md`는 최종 패치 사용자용 안내입니다.
+
 ## 기여 방법
 
 ### 1. 프로젝트 포크 및 클론
@@ -276,8 +278,10 @@ aw-kor/
 │   └── pointers_1.csv
 ├── translation/          # 번역 파일
 ├── output/               # 생성된 ROM
-└── README.md
+└── README.md             # 최종 패치 사용자용 안내
 ```
+
+도구 사용법·현재 프로젝트 구조는 [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md), 배포본 검증은 [`docs/REVIEWER_GUIDE.md`](docs/REVIEWER_GUIDE.md)를 보세요.
 
 ## 질문 및 지원
 

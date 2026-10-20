@@ -93,6 +93,10 @@ class TitleB32Tests(unittest.TestCase):
         self.assertEqual(draw.call_count, 5)
         self.assertEqual([call.args[1] for call in draw.call_args_list],
                          ["어드밴스워즈"] + ["어드밴스 워즈"] * 4)
+        self.assertEqual([call.args[2] for call in draw.call_args_list],
+                         [(23, 24, 211, 53), (17, 14, 204, 52),
+                          (25, 91, 212, 124), (17, 18, 207, 60),
+                          (19, 21, 207, 52)])
         for name, layer in layers.items():
             with self.subTest(name=name):
                 self.assertIn("sha256=", visual.assert_title_logo_golden(name, layer))

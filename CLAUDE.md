@@ -10,7 +10,7 @@
 
 ## 2026-10-19 정본 배포본
 
-현재 로컬 정본은 b42 SHA-256 `1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`다. 2026-10-19 BPS/IPS와 검증 범위는 `temp/release_C/canon9/report.md`, 진행·미검증 항목은 `todo.md`를 따른다. 공개 업로드는 하지 않았다.
+현재 로컬 정본은 b43 SHA-256 `488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34`다. 2026-10-19 BPS/IPS와 검증 범위는 `temp/release_C/canon10/report.md`, 진행·미검증 항목은 `todo.md`를 따른다. 공개 업로드는 하지 않았다.
 
 ## 2026-10-18 대사 잘림 조사
 
@@ -60,6 +60,10 @@
 - API 설정 요청 자체는 게임 진행 재개 권한으로 해석하지 않았다. 이후 사용자가 게임 자동 진행 파일럿을 명시적으로 재개했고, RAM·디스크 여유도 계속 확인한다.
 
 ### 2026-10 사용자 결정
+
+- **2026-10-19 사용자 승인(B팀 예외):** Link ID 3242(0xA34F70) 「엔트리 중이야,잠시 기다려 줘!!」→「엔트리 중이야, 잠시 기다려 줘!!」, ID 3243(0xA34F98) 「친구가 모이면,스타트를 눌러 줘!!」→「친구가 모이면, 스타트를 눌러 줘!!」의 쉼표 뒤 공백 1개씩을 승인했다(「둘 다 고쳐」). 다른 문구는 변경하지 않는다.
+
+- **2026-10-19 사용자 승인(B팀 예외·추가 7줄):** Part 2 Link ID 3250–3256(0xA3508C, 0xA350B4, 0xA350DC, 0xA350F8, 0xA3511C, 0xA3514C, 0xA3517C)의 기존 B팀 문구에서 문장부호 뒤에 공백 1개씩 추가한다(「7줄 다 고쳐」). 정확한 변경 전후 문구는 `data/bteam_baseline.json`의 `_user_approved_exceptions`에 고정한다. 다른 문구는 변경하지 않는다.
 
 - **2026-10-18 사용자 결정(1편 예/아뇨 배치):** 1편의 모든 예/아뇨 선택지는 원본처럼 넓은 한 가지 배치 「▷예    아뇨」를 사용한다. 저장·상점·모드 복귀·힌트·튜토리얼·맵 에디터의 좁은 배치도 이 배치로 바꾼다. 2편은 해당하지 않는다.
 
@@ -177,7 +181,7 @@ python3 tools/sprite_editor/server.py    # :8781 스프라이트 4bpp 픽셀 페
 ```
 aw-kor/
 ├── CLAUDE.md              # (이 파일) 작업 지침 + 구조 안내
-├── README.md              # 프로젝트 개요
+├── README.md              # 최종 패치 사용자용 안내 (개발·검수 문서는 docs/DEVELOPER_GUIDE.md, docs/REVIEWER_GUIDE.md)
 ├── CONTRIBUTING.md        # 기여 가이드
 ├── requirements.txt       # Python 의존성
 ├── .project-config.json   # 프로젝트 설정
@@ -219,7 +223,7 @@ aw-kor/
 ├── temp/                  # ★임시 작업 공간 (git-ignored) — 디버그 ROM/스크린샷/덤프
 │
 ├── dist/                  # 배포본 (패치/manifest/릴리스 문서; ROM은 output/에서 재생성)
-│   ├── *.bps, *.ips, manifest*.json, RELEASE_NOTES*.md, README.md
+│   ├── *.bps, *.ips, manifest*.json, RELEASE_NOTES*.md, README.md(사용자용, prepare_patch_distribution.py 생성), README_KO.md(README.md 안내)
 │
 ├── docs/                  # 문서 (상세 아래)
 │   └── reports/           # 진행/세션 리포트 (이전 루트의 상태 MD들)
@@ -234,6 +238,7 @@ aw-kor/
 
 ### docs/ 주요 문서
 - **진행 기준**: 루트 `todo.md` 하나만 사용한다. 구 `docs/plan.md`와 `.claude/todo.md`는 되살리지 않는다.
+- **개발·검수 안내**: `DEVELOPER_GUIDE.md`(환경·편집기·빌드·QA 도구·구조, 구 루트 README 내용), `REVIEWER_GUIDE.md`(배포본 검증·게이트·증거 위치·미검증 범위)
 - **Ghidra 디컴파일**: `GHIDRA.md`(설치·사용·한계)
 - **계획/리서치 참고**: `DIALOGUE_KOREAN_IMPLEMENTATION_PLAN.md`(구체 구현 로드맵), `research.md`(대화 렌더 파이프라인 완전 RE — 맨 끝), `muramasa_reference/`(무라마사 QA 도구 이식 출처), `FONT_HACK_RESEARCH_2026_05_21.md`(구 계획), `rom_analysis_guide.md`, `tbl_format_guide.md`, `translation_process.md`
 - **번역 가이드**: `TRANSLATION_GUIDE.md`, `TRANSLATION_TONE_AND_STORY_GUIDE.md`, `AI_TRANSLATION_REFERENCE.md`, `TRANSLATION_REAUDIT_2026_05_18.md`

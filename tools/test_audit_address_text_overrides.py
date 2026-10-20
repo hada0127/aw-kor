@@ -80,6 +80,39 @@ class ProtectedScriptAuditTests(unittest.TestCase):
                 report = audit.audit_rom_semantics(rom_path, manifest_path, {0x42: 'OK　AB'})
                 self.assertEqual(report['semantic_mismatch_count'], 0)
 
+    def test_approved_dacafe7_final_text_is_exact(self):
+        # Exercise the actual semantic-audit exception on its protected address.
+        address = 0xDCAFE7
+        with tempfile.TemporaryDirectory(dir=audit.ROOT/'temp') as directory:
+            root = Path(directory)
+            original_path, rom_path, manifest_path = (root/'original.gba', root/'rom.gba', root/'repoint.json')
+            original = bytes((address + 67) & ~3)
+            rom = bytearray(original)
+            rom[address:address + 2] = b'OK'
+            original_path.write_bytes(original)
+            rom_path.write_bytes(rom)
+            manifest_path.write_text('[]')
+            Path(str(rom_path) + '.build.json').write_text(json.dumps({
+                'rom_sha256': hashlib.sha256(rom).hexdigest(),
+                'source_sha256': hashlib.sha256(original).hexdigest(),
+                'build_metadata': {'temp/repoint_manifest.json':
+                                   hashlib.sha256(manifest_path.read_bytes()).hexdigest()},
+            }))
+            for actual, expected_mismatches in (
+                ('먼저　１２　거점　점령하는　거야！', 0),
+                ('먼저　１２거점　점령하는　거야！', 1),
+                ('먼저　１２　거점　지키는　거야！', 1),
+            ):
+                with self.subTest(actual=actual), \
+                     patch.object(audit, 'SEMANTIC_REGRESSION_ADDRESSES', frozenset({address})), \
+                     patch.object(qa_text_fit, 'load_direct_patch_texts',
+                                  return_value={address: (address + 2, 'old source', 'patch_script_row')}), \
+                     patch('qa_integrity_map.decode_enc', return_value=actual), \
+                     patch.object(P, 'ROM', str(original_path)):
+                    report = audit.audit_rom_semantics(
+                        rom_path, manifest_path, {address: '먼저 12거점 점령하는 거야!'})
+                self.assertEqual(report['semantic_mismatch_count'], expected_mismatches, report)
+
     def test_semantic_audit_rejects_missing_and_foreign_relocation_evidence(self):
         for name, options, reason in (
             ('omitted span', {'omit_span': True}, 'missing relocated line span'),

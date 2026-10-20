@@ -78,6 +78,9 @@ class FinalSpriteMutationTests(unittest.TestCase):
     def test_small_plate_border(self):
         self.reject('small_border', lambda r: self.change_lz_pixel(r, 0x5B8E44), '0x5b8e44')
 
+    def test_title_logo_payload(self):
+        self.reject('title_logo', lambda r: self.change_lz_pixel(r, 0x22B2C), '0x22b2c')
+
     def test_link_plate_reverted_to_japanese(self):
         def mutate(rom):
             original = (ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()

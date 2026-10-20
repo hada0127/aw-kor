@@ -52,7 +52,7 @@ class RomDriftTest(unittest.TestCase):
         # The ROM and manifest must come from the same build: relocation targets
         # move between candidates (b24 shifted the CO pages).
         import os
-        rom_path = Path(os.environ.get('AW_TEST_ROM') or ROOT / 'output/game_wars_korean_candidate_20261012_b11.gba')
+        rom_path = Path(os.environ.get('AW_TEST_ROM') or ROOT / 'output/game_wars_korean_full.gba')
         manifest_path = Path(os.environ.get('AW_TEST_MANIFEST') or ROOT / 'temp/repoint_manifest.json')
         if not rom_path.is_file():
             self.skipTest('candidate ROM required')
@@ -124,6 +124,22 @@ class RomDriftTest(unittest.TestCase):
     def test_m29_title_approved_exception_is_exact(self):
         from qa_bteam_drift import APPROVED_EXCEPTIONS, exception_errors
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        self.assertEqual(APPROVED_EXCEPTIONS['0x00A34F70'],
+                         ('엔트리 중이야,잠시 기다려 줘!!', '엔트리 중이야, 잠시 기다려 줘!!'))
+        self.assertEqual(APPROVED_EXCEPTIONS['0x00A34F98'],
+                         ('친구가 모이면,스타트를 눌러 줘!!', '친구가 모이면, 스타트를 눌러 줘!!'))
+        link_spacing = {
+            '0x00A3508C': ('맵을 송신 중이야,잠시 기다려 줘!!', '맵을 송신 중이야, 잠시 기다려 줘!!'),
+            '0x00A350B4': ('맵을 수신 중이야,잠시 기다려 줘!!', '맵을 수신 중이야, 잠시 기다려 줘!!'),
+            '0x00A350DC': ('종료했어.시작한다!!', '종료했어. 시작한다!!'),
+            '0x00A350F8': ('종료했어.메뉴로 돌아갈게.', '종료했어. 메뉴로 돌아갈게.'),
+            '0x00A3511C': ('맵을 저장 중이야,전원을 끄지 말아 줘!!', '맵을 저장 중이야, 전원을 끄지 말아 줘!!'),
+            '0x00A3514C': ('다운로드 준비 중이야.잠시 기다려 줘!!', '다운로드 준비 중이야. 잠시 기다려 줘!!'),
+            '0x00A3517C': ('접속이 안 되네,메뉴로 돌아갈게.', '접속이 안 되네, 메뉴로 돌아갈게.'),
+        }
+        for address, pair in link_spacing.items():
+            with self.subTest(address=address):
+                self.assertEqual(APPROVED_EXCEPTIONS[address], pair)
         self.assertEqual(APPROVED_EXCEPTIONS['0x00A2D814'], ('결전 전', '최종결전!'))
         self.assertEqual(APPROVED_EXCEPTIONS['0x00DF8E16'],
                          ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'))

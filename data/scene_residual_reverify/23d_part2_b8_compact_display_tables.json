@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::23d_part2_b8_compact_display_tables",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf",
+  "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
   "min_score": 7,
   "ranges": [
    {

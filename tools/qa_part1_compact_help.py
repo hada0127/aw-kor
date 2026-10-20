@@ -41,30 +41,30 @@ EXPECTED_LIVE_CODE_INJECTION_EVIDENCE_COUNT = 11
 MAX_ENCODED_HALF_CELLS = 32
 
 # The complete 32-half-cell 0xDFA7BE line and final punctuation are visible
-# in this b42 cold-boot cartridge-save frame. 0xDFA79A now uses two 16-cell
+# in this b43 cold-boot cartridge-save frame. 0xDFA79A uses two 16-cell
 # rows; the b39 34-cell single-row observation remains historical.
-WIDTH_EVIDENCE_ROM_SHA256 = "1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf"
-CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b42"
+WIDTH_EVIDENCE_ROM_SHA256 = "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34"
+CURRENT_VISUAL_FRAME_DIR = ROOT / "data/evidence/part1_help_b43"
 WIDTH_EVIDENCE_FRAME = CURRENT_VISUAL_FRAME_DIR / "DFA7BE_0014_NONE_0001625.png"
 EVIDENCE_SHA256 = {
-    "registration.json": "5dfb1b5304f7cb1f36fb4e5b66acef25e87adfec0b9a7a8fe84a632b7f189fb1",
+    "registration.json": "bb5cba895745840e8fb1d2be3a06171e196b55064d49f56ec2f6cba67179deec",
     "0059_NONE_0003305.png": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
     "0016_DOWN_0001519.png": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
     "0015_DOWN_0001498.png": "409146aefb5ad39185a8f4d710a5210b0b6111fb8202d4bcb40cdf0298849095",
     "0049_NONE_0002819.png": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
     "0014_DOWN_0001477.png": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
-    "exit.json": "c4a360981f36feacced37c9bb0579bc2c2eb1dfdf9bcdc0140532d947c25e8fd",
-    "window_measurement.json": "64885a359ecba1468fb3b18c85e902cdd0a302339abb08b77d8910f62a103913",
+    "exit.json": "dcee2d49b68418a8af27a43cf59a849e4a6d085048459519e3bb83c2fa71f15b",
+    "window_measurement.json": "3faa4114eebcb754633ea2f98676a553885eed81be6f52096502d1042d3f01be",
     "0013_DOWN_0001456.png": "17fcc00c2ed45f446169300168309146f0ac47a1b1b83648cead076e127df985",
     "0060_DOWN_0003336.png": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
     "0012_DOWN_0001435.png": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
     "DFA7BE_0014_NONE_0001625.png": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
-    "findings.tsv": "b1162bfd6cb8242e75e9a00688e02ba8e950727c84181a9bbff9dab7c3add1d3",
+    "findings.tsv": "c948366934d0053296bac5d1df72611487fb9c110746494d7aedcf51cdc3a906",
     "0061_DOWN_0003367.png": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
     "DFA68C_0077_NONE_0003956.png": "caa1ae886878afd8f93afb188a1f05e025ea0c1e2ece4aeef35d1801106eebf7",
     "0051_NONE_0002880.png": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
     "0033_NONE_0002121.png": "98e2481935e768dfe79998d8b12173bbe5440d6594ada255b8992137e5aaa60e",
-    "baseline.json": "7f2938301c6546894ab2f9bde319e679f899c3bb29232c21bd4e567bfd277ed0"
+    "baseline.json": "5a5c06d4500a51fed67e7f6b7a682229e9af556b43c7fba89dc04671ecc0a222"
 }
 
 
@@ -224,7 +224,7 @@ EVIDENCE_FILES = [
 ]
 
 LIVE_CODE_REPORTS = [
-    ROOT / "data" / "evidence" / "part1_help_b42_synthetic" / "report.json",
+    ROOT / "data" / "evidence" / "part1_help_b43_synthetic" / "report.json",
 ]
 
 B42_REFLOWED_HELP = 0x00DFA79A

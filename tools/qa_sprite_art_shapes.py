@@ -83,6 +83,7 @@ C=Path(__file__).resolve().parents[1];ROOT=C;OUT=args.report.parent;sys.path.ins
 import qa_sprite_shape as shape
 import hangul_pixel_fit as fit
 import build_title_hangul as t
+from qa_visual_regions import assert_title_logo_golden
 import build_korean_full as b
 import part1_mission_titles as mt
 import part1_m19_title as m19
@@ -182,14 +183,20 @@ for off,text in BIG:
   failures.append(dict(asset=hex(off),reason='caption strip is not blank'))
  ox,oy=fit.PLATE_ORIGIN;records=[(c,(a+ox,y+oy,d+ox,e+oy)) for c,(a,y,d,e) in records];audit(hex(off),text,im,records,set(fit.PLATE_BODY_INDICES))
 # The whole title layer is packed through its real sprite list and compared
-# with the final ROM; records below test the final visible fill, including bevel.
+# with the final ROM. The approved OkDanDan logo is rendered as one resized
+# mask, so the old per-glyph fit.line() boxes do not describe its final ink.
+# Pinned crop hashes and footprints cover all five approved logo placements.
 repro=bytearray(original);b.patch_title_hangul_assets(repro)
-text='게임보이 워즈 어드밴스'
-for off,func,lines in [(t.TITLE_OBJ_LZ77_OFF,t.make_title_index_layer,[(116,26,190,30,{4})]),(t.SELECT_OBJ_LZ77_OFF,t.make_select_index_layer,[(114,18,180,30,{10,8,6,4,2}),(121,96,188,31,{5,4,6,7,8})]),(t.PART1_TITLE_OBJ_LZ77_OFF,t.make_part1_index_layer,[(116,24,200,34,{8,2})]),(t.PART2_TITLE_OBJ_LZ77_OFF,t.make_part2_index_layer,[(116,25,184,28,{5,4,6,7,8})])]:
+for off,func,logos in [(t.TITLE_OBJ_LZ77_OFF,t.make_title_index_layer,(('shared','어드밴스워즈',(23,24,211,53)),)),(t.SELECT_OBJ_LZ77_OFF,t.make_select_index_layer,(('select_top','어드밴스 워즈',(17,14,204,52)),('select_bottom','어드밴스 워즈',(25,91,212,124)))),(t.PART1_TITLE_OBJ_LZ77_OFF,t.make_part1_index_layer,(('part1','어드밴스 워즈',(17,18,207,60)),)),(t.PART2_TITLE_OBJ_LZ77_OFF,t.make_part2_index_layer,(('part2','어드밴스 워즈',(19,21,207,52)),))]:
  same(hex(off),lz77_decompress(rom,off)[0],lz77_decompress(repro,off)[0]);im=func()
- for center,y,w,h,inks in lines:
-  mask,records=fit.line(text,w-6,h-(7 if off in (t.TITLE_OBJ_LZ77_OFF,t.PART1_TITLE_OBJ_LZ77_OFF) else 6),2);dx=center-mask.width//2;dy=y
-  audit(hex(off),text,im,[(ch,(a+dx,bb+dy,c+dx,d+dy)) for ch,(a,bb,c,d) in records],inks)
+ for name,text,box in logos:
+  try:
+   evidence=assert_title_logo_golden(name,im)
+  except AssertionError as exc:
+   failures.append(dict(asset=hex(off),label=text,box=box,reason=str(exc)))
+  else:
+   rows.append(dict(asset=hex(off),label=text,box=box,reference='approved OkDanDan logo footprint and crop SHA-256',evidence=evidence,gap_columns=0,failures=[]))
+  assets.add(hex(off))
 # Recover per-glyph coordinates from the same native baseline operation;
 # validate the final ROM's ink, after outline/shadow composition.
 old_native=fit.native_mask;captures=[]

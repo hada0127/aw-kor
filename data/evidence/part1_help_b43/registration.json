@@ -1,0 +1,138 @@
+{
+  "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
+  "method": "b43 native cold boot from private cartridge-save copies",
+  "frames": [
+    {
+      "filename": "0012_DOWN_0001435.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0012_DOWN_0001435.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0012_DOWN_0001435.checkpoint.json",
+      "native_checkpoint_sha256": "e563b3f276c85851108061e2701f6cc172eda7f1600286c3e9d11d6d036d18e1",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "51ec46e0b6e00bcf0f7eea6c93e0c9a54e9286e3b11948eb70ba6d148162b852",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0013_DOWN_0001456.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0013_DOWN_0001456.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0013_DOWN_0001456.checkpoint.json",
+      "native_checkpoint_sha256": "bc7f71b5ca54179bf382f4b1aee7106b6901d2fd86b5455deb827d72ec56888b",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "17fcc00c2ed45f446169300168309146f0ac47a1b1b83648cead076e127df985",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0014_DOWN_0001477.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0014_DOWN_0001477.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0014_DOWN_0001477.checkpoint.json",
+      "native_checkpoint_sha256": "204436e0ccfadf6ec9493c0d047873439bcc49abe97f32f14dbbd8cb1da385c0",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "eb033d3e9b04a58fbf46020e5ae8c9aa152d14dd16467b6b40e17351699f3318",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0015_DOWN_0001498.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0015_DOWN_0001498.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0015_DOWN_0001498.checkpoint.json",
+      "native_checkpoint_sha256": "fcfd69d64cf4f42b9d046e2a84a738e2d60bd936ab2e7f241bcfc8118e224791",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "409146aefb5ad39185a8f4d710a5210b0b6111fb8202d4bcb40cdf0298849095",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0016_DOWN_0001519.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0016_DOWN_0001519.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0016_DOWN_0001519.checkpoint.json",
+      "native_checkpoint_sha256": "cf5af2409197ffa2831d6bce4d5fc5c9c364a436db0d89741585a4a76483002f",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "ca31724fc8cd4cca983e98a8937e1a636187e5eae3e34b22bbb4a25131dd33d6",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0033_NONE_0002121.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0033_NONE_0002121.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0033_NONE_0002121.checkpoint.json",
+      "native_checkpoint_sha256": "b78ddc708b969645b2eeecff0ff00fde2eaa72ebc51b692a4c7d5d60f4a303da",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "98e2481935e768dfe79998d8b12173bbe5440d6594ada255b8992137e5aaa60e",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0049_NONE_0002819.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0049_NONE_0002819.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0049_NONE_0002819.checkpoint.json",
+      "native_checkpoint_sha256": "2eb4ca4aac2a04d525b563bb0b095df933000f266e016e1cc91b73438d186d32",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "ed1d251a171c5d63f195c284c5259e89c222dde094a3195115bf333a219a2ed3",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0051_NONE_0002880.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0051_NONE_0002880.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0051_NONE_0002880.checkpoint.json",
+      "native_checkpoint_sha256": "4f328766493b605f9794f237dc7d5355b6ce945f2cf77339e02704f715e9bc0b",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "5484f669251b1c9c2f9faec066a355786599a33603e4abdb43f88cb2de4cdaad",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0059_NONE_0003305.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0059_NONE_0003305.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0059_NONE_0003305.checkpoint.json",
+      "native_checkpoint_sha256": "b87f51c04ec14e98fbfecf05c0e5633597b137d83f9cc0d0f432d66bff71d631",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "fc71a34481f80dd08ab54abef5aeeb0b65aeb0420106fc59ede2e88038961cc2",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0060_DOWN_0003336.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0060_DOWN_0003336.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0060_DOWN_0003336.checkpoint.json",
+      "native_checkpoint_sha256": "f664a005d0f2c190d92b4b974896cb802f85974aff32d65eec2be249b9800d88",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "9357952cfb23f28b422269ca3e2130c777fa6a45ec6a9e413654ed8ebbb5e1a5",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "0061_DOWN_0003367.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0061_DOWN_0003367.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0061_DOWN_0003367.checkpoint.json",
+      "native_checkpoint_sha256": "86a58dab07c484e35debfeac45f7bfee228cabd847e03d125467edfbb9a3dc84",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "c7934e58bcb780b8c40e2378615f0fd2a832500c90735f07a9f597a42c3bbbe1",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "DFA68C_0077_NONE_0003956.png",
+      "native_frame": "temp/release_C/canon10/help/F_help_sweep/0077_NONE_0003956.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F_help_sweep/0077_NONE_0003956.checkpoint.json",
+      "native_checkpoint_sha256": "f9a86cdb2556dcdd80efeefc18af998208e7e146051fef16f3b503742bcfc99f",
+      "capture_exit": "temp/release_C/canon10/help/F_help_sweep/exit.json",
+      "sha256": "caa1ae886878afd8f93afb188a1f05e025ea0c1e2ece4aeef35d1801106eebf7",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    },
+    {
+      "filename": "DFA7BE_0014_NONE_0001625.png",
+      "native_frame": "temp/release_C/canon10/help/F7BE_b2/0014_NONE_0001625.png",
+      "native_checkpoint": "temp/release_C/canon10/help/F7BE_b2/0014_NONE_0001625.checkpoint.json",
+      "native_checkpoint_sha256": "a214ff15a8abae126499219354e3976a4221de84b0f74e55e8fa5cb8ed4d4dee",
+      "capture_exit": "temp/release_C/canon10/help/F7BE_b2/exit.json",
+      "sha256": "699e4b470a8ad321241c0ba29630c84388755e62a1050872d76009f0bdc5de94",
+      "rgb_equal_to_b42": true,
+      "changed_pixels": 0
+    }
+  ],
+  "historical_b42_registration": "data/evidence/part1_help_b42/registration.json",
+  "evidence_scope": "13 native frames; 23 direct help addresses; all decoded RGB-identical to reviewed b42; synthetic rendering tracked separately."
+}
