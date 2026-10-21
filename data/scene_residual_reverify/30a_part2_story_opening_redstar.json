@@ -2,7 +2,7 @@
  {
   "label": "static_residual_reverify::30a_part2_story_opening_redstar",
   "method": "extracted_text_residual_reverification",
-  "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
+  "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
   "min_score": 7,
   "ranges": [
    {

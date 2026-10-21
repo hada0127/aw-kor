@@ -1,3 +1,8 @@
+## 2026-10-21 b44 정본 배포본 갱신
+
+- 정본 `output/game_wars_korean_{full,final,title_test}.gba`의 대상 SHA-256은 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`, CRC32는 `8064DD7B`이다. 대화 끝 ▼ 커서를 마지막 글자에서 오른쪽으로 1px 띄웠다. 배포와 검증 범위는 `temp/release_C/canon11/report.md`를 따른다. 공개 업로드는 하지 않았다.
+- b42 iPhone 확인은 이전 판 증거로 보존한다. b43·b44의 iPhone 설치, b44의 실제 GBA 설치와 양편 일반 플레이 엔딩은 미검증이다.
+
 ## 2026-10-19 b43 정본 배포본 갱신
 
 - 정본 `output/game_wars_korean_{full,final,title_test}.gba`와 2026-10-19 BPS/IPS의 대상 SHA-256은 `488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34`, CRC32는 `A53BFA40`이다. b42의 화면·대사 수정에 사용자 승인 Link 상태 문구 9줄의 문장부호 뒤 공백을 더했다. 빌드·게이트·최종 SHA 화면 증거 범위는 `temp/release_C/canon10/report.md`를 따른다. 공개 업로드는 하지 않았다.

@@ -99,8 +99,8 @@ ANIMATION_FRAME_REQUIREMENTS = {
 RUNTIME_WATCH_REQUIREMENTS = {
     "89b_common_battle_defeat_comm_messages": {
         "severity": "critical",
-        "watch_log": "temp/release_C/canon10/89b_trace/trace.log",
-        "receipt": "temp/release_C/canon10/89b_trace/bound_receipt.json",
+        "watch_log": "temp/release_C/canon11/89b_trace/trace.log",
+        "receipt": "temp/release_C/canon11/89b_trace/bound_receipt.json",
         "watch_log_sha256": "25b2b4256bcd76c72ce7368c1306b1b7ebf041081c252390e4e4366ebb4dff6e",
         "required_hits": {"g_00A34D18"},
         "issue": "실제 3P surrender defeat 캡처의 watch hit 주소가 scene dialogue_ids에 없음",

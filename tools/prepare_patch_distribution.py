@@ -41,6 +41,17 @@ B43_USER_HIGHLIGHT_KO = (
     '대사 띄어쓰기를 자연스럽게 되살리고 이름·칭호 띄어쓰기를 통일했습니다. '
     '이번 판은 Link 상태 문구의 띄어쓰기를 고쳤습니다. 남은 대사 항목의 검증 범위는 릴리스 노트를 확인하세요.'
 )
+B44_ROM_SHA256 = '1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02'
+B44_RELEASE_HIGHLIGHT = (
+    B42_RELEASE_HIGHLIGHT.rstrip('.') + '; b43 corrects the Link status-line spacing; '
+    'b44 moves the dialogue end ▼ cursor one pixel farther from the final '
+    'character. Remaining dialogue items retain their recorded verification limits.'
+)
+B44_USER_HIGHLIGHT_KO = (
+    B42_USER_HIGHLIGHT_KO + ' 앞선 판의 Link 상태 문구 띄어쓰기 수정도 포함합니다. '
+    '이번 판은 대화 끝 ▼ 커서를 마지막 글자에서 오른쪽으로 1픽셀 띄웠습니다. '
+    '남은 대사 항목의 검증 범위는 릴리스 노트를 확인하세요.'
+)
 
 
 def digest(data):
@@ -166,7 +177,7 @@ def write_release_notes(path, release_date, patch_stem, source_info, target_info
     unverified_details = (
         'Alternate banner-sheet and `0x804FC8` consumer reachability, natural access '
         'to 11 Part 1 help windows, normal-play Sturm CO power, and hidden locked-map '
-        'names remain unverified. For b43 dialogue, 13 unknown consumers, 16 '
+        'names remain unverified. For dialogue, 13 unknown consumers, 16 '
         'state-dependent messages, 18 horizontal-scroll help messages, and seven '
         'withheld relocations remain outside the fixed-window pass. Forced QA is '
         'not natural-route verification.'
@@ -218,7 +229,9 @@ def main():
     target = TARGET_ROM.read_bytes()
     source_info = digest(source)
     target_info = digest(target)
-    if target_info['sha256'] == B43_ROM_SHA256:
+    if target_info['sha256'] == B44_ROM_SHA256:
+        release_highlight, user_highlight = B44_RELEASE_HIGHLIGHT, B44_USER_HIGHLIGHT_KO
+    elif target_info['sha256'] == B43_ROM_SHA256:
         release_highlight, user_highlight = B43_RELEASE_HIGHLIGHT, B43_USER_HIGHLIGHT_KO
     elif target_info['sha256'] == B42_ROM_SHA256:
         release_highlight, user_highlight = B42_RELEASE_HIGHLIGHT, B42_USER_HIGHLIGHT_KO

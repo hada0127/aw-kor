@@ -1,9 +1,9 @@
 {
  "tool": "tools/analyze_compact_display_code_context.py",
- "rom": "output/game_wars_korean_candidate_20261019_b43.gba",
- "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
- "git_commit": "5f5dba5",
- "source": "temp/release_C/canon10/compact_xref.json",
+ "rom": "output/game_wars_korean_candidate_20261021_b44.gba",
+ "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+ "git_commit": "1591ec5",
+ "source": "temp/release_C/canon11/compact_xref.json",
  "summary": {
   "literal_entry_count": 650,
   "derived_table_head_ref_count": 636,

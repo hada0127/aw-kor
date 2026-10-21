@@ -1,5 +1,6 @@
 """Current candidate scene gates must distinguish unresolved evidence from capture passes."""
 import copy
+import hashlib
 from collections import Counter
 import json
 import subprocess
@@ -59,7 +60,7 @@ class SceneGateBlockedTest(unittest.TestCase):
                        if cp['name'] == early['checkpoint'])
         self.assertEqual(early['source_endpoint'], early['provenance_path'])
         self.assertEqual(current['recorder_endpoint']['checkpoint'], early['source_endpoint'])
-        self.assertTrue(early['source_endpoint'].startswith('temp/release_C/canon10/runs/'))
+        self.assertTrue(early['source_endpoint'].startswith('temp/release_C/canon11/runs/'))
         withdrawn = {'scene_30a1_part2_redstar_story_early_b', 'scene_80a_campaign_story_early'}
         for row in source.values():
             self.assertFalse(withdrawn & {x.get('checkpoint') if isinstance(x, dict) else x
@@ -100,25 +101,49 @@ class SceneGateBlockedTest(unittest.TestCase):
         self.assertTrue(records['B-19f']['replay']['cheat_tainted'])
         self.assertTrue(records['C-89b-trace']['replay']['cheat_tainted'])
 
-    def test_active_registration_is_bound_to_b43_and_excludes_history(self):
+    def test_active_registration_is_bound_to_b44_and_excludes_history(self):
         from tools.audit_scene_semantics import active_registration_records
         path = ROOT/'data/release_C_evidence_registration.json'
         reg = json.loads(path.read_text())
-        b43 = '488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34'
-        active = active_registration_records(path, b43)
-        self.assertEqual(reg['target_candidate_sha256'], b43)
-        self.assertEqual(reg['current_candidate_sha256'], b43)
+        b44 = '1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02'
+        active = active_registration_records(path, b44)
+        self.assertEqual(reg['target_candidate_sha256'], b44)
+        self.assertEqual(reg['current_candidate_sha256'], b44)
         self.assertEqual(len(active), 34)
-        self.assertTrue(all(r['replay']['candidate_sha256'] == b43 for r in active))
-        self.assertEqual(len(reg['history']['records']), 446)
+        self.assertTrue(all(r['replay']['candidate_sha256'] == b44 for r in active))
+        self.assertEqual(len(reg['history']['records']), 480)
         self.assertFalse({r['key'] for r in active} &
                          {r['key'] for r in reg['history']['records']})
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-') for r in active), 19)
         self.assertEqual(sum(r['item_id'].startswith('26a-b30-')
-                             for r in reg['history']['records']), 152)
+                             for r in reg['history']['records']), 171)
         self.assertFalse(any(r['item_id'].startswith('26a-b31-') for r in active))
         for r in active:
             self.assertEqual(r['key'].split('|', 1)[1], r['input_route'])
+
+    def test_cursor_delta_records_claim_no_pixel_identity(self):
+        reg = json.loads((ROOT/'data/release_C_evidence_registration.json').read_text())
+        delta = [r for r in reg['records'] if r['replay'].get('cursor_only_delta_to_b43')]
+        self.assertEqual(len(delta), 13)
+        for record in delta:
+            claims = {k: v for k, v in record['replay'].items()
+                      if k.startswith('rgb_identical_to_') and v is True}
+            self.assertEqual(claims, {}, record['item_id'])
+        comm = json.loads((ROOT/'data/comm_label_visual_reverify_b44.json').read_text())[0]
+        cursor = [s for s in comm['current_sha_screenshots'] if 'cursor' in s['registered_by']]
+        self.assertEqual([s['scene_id'] for s in cursor], ['23a_part2_wars_shop'])
+        for shot in cursor:
+            self.assertNotIn('RGB-identical', shot['visual_result']['note'])
+        scans = json.loads((ROOT/'data/scene_residual_scans.json').read_text())
+        container = next(c for c in scans['containers']
+                         if c['container_scene_id'] == '88_common_comm_labels')
+        visual = next(e for e in container['evidence']
+                      if e['method'] == 'current_sha_visual_reverification')
+        self.assertIn('6 decoded RGB-identical', visual['note'])
+        self.assertIn('1 differ only by the 1px-right dialogue', visual['note'])
+        historical = visual['historical_b43_result']
+        path = ROOT/historical['result_path']
+        self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), historical['result_sha256'])
 
     def test_synthetic_defect_survives_generation_and_both_gates(self):
         from tools import audit_scene_semantics as audit

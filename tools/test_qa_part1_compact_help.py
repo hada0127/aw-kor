@@ -78,7 +78,7 @@ class CompactHelpGateTests(unittest.TestCase):
         self.assertEqual(report["visual_evidence_missing_count"], 11)
 
     def test_real_synthetic_loader_rejects_missing_hidden_frame_and_wrong_mapping(self):
-        source = gate.ROOT / "data/evidence/part1_help_b43_synthetic/report.json"
+        source = gate.ROOT / "data/evidence/part1_help_b44_synthetic/report.json"
         data = json.loads(source.read_text())
         rom = bytes(self.rom)
         with tempfile.TemporaryDirectory(dir=gate.ROOT / "temp") as d:

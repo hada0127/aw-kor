@@ -24,17 +24,17 @@
 
 날짜가 더 이른 `.bps/.ips` 는 예전 판 기록입니다. 현재 정본은 `manifest.json` 의 `bps_patch.file` 입니다.
 
-### 현재 정본 (2026-10-19 판)
+### 현재 정본 (2026-10-21 판)
 
 | 항목 | 값 |
 |---|---|
-| 후보 | b43 |
+| 후보 | b44 |
 | 원본 ROM | `Game Boy Wars Advance 1+2 (Japan).gba`, 16777216 B, CRC32 `49ee1fdd`, SHA-256 `a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c` |
-| 결과 ROM | 16777216 B, CRC32 `a53bfa40`, SHA-256 `488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34` |
-| BPS | `game_wars_korean_full_2026-10-19.bps` |
-| IPS | `game_wars_korean_full_2026-10-19.ips` |
+| 결과 ROM | 16777216 B, CRC32 `8064dd7b`, SHA-256 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02` |
+| BPS | `game_wars_korean_full_2026-10-21.bps` |
+| IPS | `game_wars_korean_full_2026-10-21.ips` |
 
-b43 변경 요약(manifest `release_highlights`): b40 은 1편 모든 예/아뇨 질문에 넓은 행을 쓰고, b41 은 글자 손실 없이 대사 창 줄바꿈을 다시 맞추고, b42 는 자연스러운 띄어쓰기를 되살리고 이름·칭호 띄어쓰기를 통일한다. b43 은 사용자 승인 Link 상태 문구 9줄의 문장부호 뒤 공백을 고친다.
+b44 변경 요약(manifest `release_highlights`): b40 은 1편 모든 예/아뇨 질문에 넓은 행을 쓰고, b41 은 글자 손실 없이 대사 창 줄바꿈을 다시 맞추고, b42 는 자연스러운 띄어쓰기를 되살리고 이름·칭호 띄어쓰기를 통일한다. b43 은 사용자 승인 Link 상태 문구 9줄의 문장부호 뒤 공백을 고친다. b44 는 대화 끝 ▼ 커서를 마지막 글자에서 오른쪽으로 1px 띄운다.
 
 값은 이 문서보다 `dist/manifest.json` 이 정본입니다. 새 릴리스 뒤 이 표가 어긋나면 manifest 를 따르고 표를 고칩니다.
 
@@ -71,7 +71,7 @@ python3 tools/prepare_patch_distribution.py --date <YYYY-MM-DD>
   - IPS 왕복: 원본 ROM + IPS == 최신 한글 ROM
   - 기존 정본 `output/game_wars_korean_full.gba` 를 사용한다
 - `manifest*.json`, `README.md`, `RELEASE_NOTES*.md` 를 함께 다시 씁니다. `dist/README.md` 를 손으로 고치면 다음 패키징 때 덮어쓰이므로, 문구는 `write_readme()` 에서 고칩니다.
-- 사용자용 변경 요약은 결과 ROM SHA 가 b42 또는 b43 정본일 때만 넣습니다(`B42_ROM_SHA256`, `B43_ROM_SHA256`). 다른 ROM 으로 패키징하면 요약 줄이 빠집니다.
+- 사용자용 변경 요약은 결과 ROM SHA 가 b42, b43 또는 b44 정본일 때만 넣습니다(`B42_ROM_SHA256`, `B43_ROM_SHA256`, `B44_ROM_SHA256`). 다른 ROM 으로 패키징하면 요약 줄이 빠집니다.
 
 ---
 
@@ -80,11 +80,11 @@ python3 tools/prepare_patch_distribution.py --date <YYYY-MM-DD>
 ```bash
 sha256sum "original/Game Boy Wars Advance 1+2 (Japan).gba"   # == manifest.source_rom.sha256
 sha256sum output/game_wars_korean_full.gba                   # == manifest.patched_rom.sha256
-sha256sum dist/game_wars_korean_full_2026-10-19.bps           # == manifest.bps_patch.sha256
+sha256sum dist/game_wars_korean_full_2026-10-21.bps           # == manifest.bps_patch.sha256
 
 # 사용자 경로 그대로: 임시 폴더에서 적용기 실행
 mkdir -p temp/apply_check && cp dist/apply_patch.py dist/manifest.json \
-  dist/game_wars_korean_full_2026-10-19.bps temp/apply_check/
+  dist/game_wars_korean_full_2026-10-21.bps temp/apply_check/
 python3 temp/apply_check/apply_patch.py "original/Game Boy Wars Advance 1+2 (Japan).gba" \
   temp/apply_check/korean.gba
 ```
@@ -113,12 +113,12 @@ python3 temp/apply_check/apply_patch.py "original/Game Boy Wars Advance 1+2 (Jap
 ## 5. 통과가 뜻하지 않는 것 (미검증 범위)
 
 prepackage QA·왕복 검사 통과는 **나열된 검사만** 통과했다는 뜻입니다. 전체 캠페인, 캐릭터 말투, 실기 승인을 뜻하지 않습니다.
-2026-10-19 판(b43) 기준 미검증 범위(`dist/RELEASE_NOTES.md` 와 같음):
+2026-10-21 판(b44) 기준 미검증 범위(`dist/RELEASE_NOTES.md` 와 같음):
 
 - **실제 GBA 하드웨어:** 미검증. iPhone RetroArch 에서 b42 ROM 을 읽어 1편 타이틀 → 모드 메뉴 → War Room 목록까지 콜드부트했고 기존 세이브가 보존됐다(`docs/screenshots/b42_iphone_2026-10-19/receipt.json`). 이 기기 확인은 바뀐 대사 전부나 모든 예/아뇨 질문을 덮지 않는다.
 - **치트 사용 증거:** 해금된 맵 목록·공통 캠페인 질문 캡처는 치트 저장으로 만들었다. 그 화면 표시만 확인하며 정상 플레이 해금·진행을 증명하지 않는다. 치트 구간은 정상 승리·엔딩 도달로 세지 않는다.
 - **도달 미확인:** 다른 배너 시트와 `0x804FC8` 소비자 도달, 1편 도움말 창 11개의 자연 진입, 정상 플레이 Sturm CO 필살기, 잠긴 맵의 숨은 이름.
-- **b43 대사 고정창 검사 밖:** 소비자 미상 13건, 상태 의존 메시지 16건, 가로 스크롤 도움말 18건, 보류된 재배치 7건.
+- **대사 고정창 검사 밖:** 소비자 미상 13건, 상태 의존 메시지 16건, 가로 스크롤 도움말 18건, 보류된 재배치 7건.
 - **강제 QA는 자연 경로 검증이 아니다.** 강제 렌더·RAM 조작으로 본 화면은 표시 확인일 뿐이다.
 - 두 편 모두 정상 플레이로 엔딩까지의 전 장면 검수는 끝나지 않았다(`todo.md` 기준).
 

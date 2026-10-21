@@ -1,0 +1,387 @@
+[
+  {
+    "label": "visual_reverify::88_common_comm_labels",
+    "method": "current_sha_visual_reverification",
+    "generated_on": "2026-10-21",
+    "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+    "container_scene_id": "88_common_comm_labels",
+    "container_range": "0x00EE212C:0x00EE2848",
+    "target_raw_kana": {
+      "offset": "0x00EE22AC",
+      "text": "ソ",
+      "classification": "common comm numeric/control table single kana; same as original"
+    },
+    "static_residual_reverify": {
+      "result_path": "data/scene_residual_reverify/88_common_comm_labels.json",
+      "result_sha256": "d192b8885bb0e20a11e211b18f36963e15bdb372e9b390ac4aab709d8c325a84",
+      "residual_count": 0,
+      "raw_kana_unexplained_count": 0
+    },
+    "historical_dynamic_scan": {
+      "result_path": "data/scene_residual_reverify/88_common_comm_labels_dynamic_scan_results.json",
+      "result_sha256": "12d078bd0fd7330f9b1b135d1a79d3bd559c50d1167f7491134535fa82014c9d",
+      "case_count": 1967,
+      "state_count": 281,
+      "hit_count": 0,
+      "break_size_nonzero": 0,
+      "state_prefix_counts": {
+        "temp/scene_entrypoints/part1_menu_sweep": 119,
+        "temp/scene_entrypoints/part2_menu_focus_scan": 707,
+        "temp/scene_entrypoints/part2_menu_row_scan": 819,
+        "temp/scene_entrypoints/part2_menu_sweep": 322
+      },
+      "policies": [
+        "a128",
+        "down_a96",
+        "left_a96",
+        "right_a96",
+        "start_a96",
+        "up_a96",
+        "wait_a96"
+      ]
+    },
+    "current_sha_screenshots": [
+      {
+        "path": "temp/release_C/canon11/runs/g05_g05_g05_g05_g05_g05_g05_g05_B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+        "scene_id": "11_part1_world_menu",
+        "sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g05_g05_g05_g05_g05_g05_g05_g05_B40_p1menu/0030_NONE_0004533.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 40 Part1 모드 선택 (작전룸 focus, help 전투 방법을 가르쳐 드려요); D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g05_g05_g05_g05_g05_g05_g05_g05_B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g06_g06_g06_g06_g06_g06_g06_g06_B42_p1single/frames/df5b4f53d94501284b00fb586660f809b7153026a3fb192b6fbec51d0f96b02c.png",
+        "scene_id": "12_part1_single_submenus",
+        "sha256": "24d192f3a0307265efe809c62c14cfe7faa0871a119c46f111b1ea8cd412470c",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g06_g06_g06_g06_g06_g06_g06_g06_B42_p1single/0032_A_0004845.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 42 Part1 싱글 대전 submenu 처음부터; D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g06_g06_g06_g06_g06_g06_g06_g06_B42_p1single/frames/df5b4f53d94501284b00fb586660f809b7153026a3fb192b6fbec51d0f96b02c.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g07_g07_g07_g07_g07_g07_g07_g07_B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+        "scene_id": "13_part1_link_submenus",
+        "sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g07_g07_g07_g07_g07_g07_g07_g07_B43_p1link/0033_A_0004971.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 43 Part1 통신 CONNECT submenu (맵 교환/멀티카드 통신/1카드 통신); D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g07_g07_g07_g07_g07_g07_g07_g07_B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+        "scene_id": "23_part2_main_menu",
+        "sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/0008_A_0001717.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh untainted alternative for 07 MODE★SELECT (cursor 캠페인, 계속/처음); D comm-label screen",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/d6e4b6a4e01c26cb373258b765fade807dd4dc6e52999d82c7480128fa80ae14.png",
+        "scene_id": "23a_part2_wars_shop",
+        "sha256": "d380f7d676e773d6c5772cbc3b8bf85ac470aecc9bc4a288927c54fb3c50e295",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; equals reviewed b43 frame except the 1px-right ▼ cursor",
+        "source_checkpoint": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/0016_NONE_0002529.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_23a WARS★SHOP entry (재고 0, 어서 와!) after 120f; cold boot no save untainted; D comm-label screen",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/d6e4b6a4e01c26cb373258b765fade807dd4dc6e52999d82c7480128fa80ae14.png"
+          ],
+          "note": "Fresh b44 cold-boot frame differs from the reviewed b43 frame only by the dialogue ▼ cursor shifted 1px right."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g20_g20_g20_g20_g20_g20_g20_g20_B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+        "scene_id": "23b_part2_comm_multiplayer",
+        "sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g20_g20_g20_g20_g20_g20_g20_g20_B23_p2menu/0012_A_0002071.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_23b LINK★MODE submenu (1팩 대전/멀티팩 대전/맵 교환, 멀티팩 focus); cold untainted; D comm-label screen",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g20_g20_g20_g20_g20_g20_g20_g20_B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      },
+      {
+        "path": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+        "scene_id": "86_common_compact_menu_tables",
+        "sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "CANON-11 b44 cold-boot replay; decoded RGB equals reviewed b43 frame",
+        "source_checkpoint": "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_86 compact mode-menu labels (편집/통신/상점/도전/캠페인 rows, 상점 focus, caption 포인트로 쇼핑을 할 수 있습니다); cold untainted; D comm-label screen",
+        "provenance_rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+        "visual_result": {
+          "status": "pass",
+          "reviewer": "CANON-11 exact RGB comparison with reviewed b43 frame",
+          "frame_refs": [
+            "temp/release_C/canon11/runs/g04_g04_g04_g04_g04_g04_g04_g04_B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png"
+          ],
+          "note": "Fresh b44 cold-boot frame is decoded RGB-identical to the reviewed b43 frame."
+        }
+      }
+    ],
+    "scene_editor_artifacts": [
+      {
+        "artifact": "scene_88_common_comm_labels_patched/frame.png",
+        "role": "legacy/stale-prone bucket screenshot not used as primary evidence"
+      }
+    ],
+    "note": "Seven C5-native cold-boot menu/shop/communication frames; static C5 residual scan zero.",
+    "recapture_note": "b28 replay registered; C verdict transfers only for seven RGB-equal screens.",
+    "historical_screenshots": [
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/11_part1_world_menu.png",
+        "scene_id": "11_part1_world_menu",
+        "sha256": "277478befc2efe75e89088e297120ccaf1beb7becb2366c705ab8c34a9a6e7eb",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "coldboot fresh nav: Part1 모드 선택 메뉴",
+        "source_capture_path": "temp/scene_screenshots/40_part1_name_menu_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/40_part1_name_menu_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/12_part1_single_submenus.png",
+        "scene_id": "12_part1_single_submenus",
+        "sha256": "9393d65d4853ebf8fccb11a279638e35bed5dffb03a2ff0fd1b7b37e716be606",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "coldboot fresh nav: Part1 싱글 배틀 하위 메뉴",
+        "source_capture_path": "temp/scene_screenshots/42_part1_single_battle_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/42_part1_single_battle_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/13_part1_link_submenus.png",
+        "scene_id": "13_part1_link_submenus",
+        "sha256": "bb14de3124fff047fc0e5ae5f04747703d53df2342b075ad3130ff018ec30f1a",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "coldboot fresh nav: Part1 통신 하위 메뉴",
+        "source_capture_path": "temp/scene_screenshots/43_part1_link_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/43_part1_link_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/23_part2_main_menu.png",
+        "scene_id": "23_part2_main_menu",
+        "sha256": "8424c61254c53772cb2bc663beaf60ce86f4214c261973ee291cc5615856d98b",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "note": "Part2 메인 메뉴+CO 인사말(A3 ? 결함 추적)",
+        "source_capture_path": "temp/scene_screenshots/07_part2_main_menu_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/07_part2_main_menu_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/23a_part2_wars_shop.png",
+        "scene_id": "23a_part2_wars_shop",
+        "sha256": "e6515cec97a8cb07cc17e062a52d82f51c7fd3556b02305708698de3c588b8db",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "fresh menu focus scan: Part2 워즈 숍 직접 진입 화면(대사 타이핑 완료까지 40f)",
+        "source_capture_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/scene_23a_part2_wars_shop_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/23b_part2_comm_multiplayer.png",
+        "scene_id": "23b_part2_comm_multiplayer",
+        "sha256": "86d811deebcb0ee2dc008ee7215be9aa1501f0775375d10bbba1f0dee666e93f",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "fresh menu row scan: Part2 통신 멀티팩 하위 메뉴",
+        "source_capture_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/scene_23b_part2_comm_multiplayer_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      },
+      {
+        "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/86_common_compact_menu_tables.png",
+        "scene_id": "86_common_compact_menu_tables",
+        "sha256": "ec08df5411a02c45387f2e9c34061d1a67f41d1372e199af0085737fe503e19c",
+        "grade": "fresh_savestate",
+        "evidence_role": "primary_current_sha",
+        "note": "fresh menu focus scan: 공통 모드/상점/통신 압축 메뉴 라벨",
+        "source_capture_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/frame.png",
+        "provenance_rom_sha256": "59c9908479dec9b114a540937d56cbd137d4f706d2385fd782dad09c398cdc62",
+        "provenance_path": "temp/scene_screenshots/scene_86_common_compact_menu_tables_patched/provenance.json",
+        "visual_result": "no visible ソ; Korean menu/communication labels rendered"
+      }
+    ],
+    "historical_contact_sheet": {
+      "path": "docs/screenshots/e8_comm_label_reverify_2026-06-28/contact.png",
+      "sha256": "71d7afa0ed4ad29f371e648fa95907879e964b5d7f889603f779425c4bf631ac"
+    },
+    "historical_b28_screenshots": [
+      {
+        "path": "temp/release_C/b28/B40_p1menu/frames/00da499ed46e02aab47b638d51161153245bc2ed30e2d3d8fb25eff856322607.png",
+        "scene_id": "11_part1_world_menu",
+        "sha256": "282e380dca1aea9ee7fbbb9b08eb7184b7b792f6984dbc65fff9a05a211bd24d",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B40_p1menu/0030_NONE_0004533.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 40 Part1 모드 선택 (작전룸 focus, help 전투 방법을 가르쳐 드려요); D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B42_p1single/frames/66c8a9602970bdd9cc02da98a99873b1fb62cb6ab833ff0ba40d835aed1b094d.png",
+        "scene_id": "12_part1_single_submenus",
+        "sha256": "2ad319be8218e67482e4859d5334b2fe240ae77ccceb955e32bb87a9768c227d",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B42_p1single/0032_A_0004845.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 42 Part1 싱글 대전 submenu 처음부터; D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B43_p1link/frames/9a7f402e04efb70c2f1a264602e674ee0b2b0e9bbca3218c7374f95dbc4e492d.png",
+        "scene_id": "13_part1_link_submenus",
+        "sha256": "100e5989b8e4365332f01e17ddfa95feaffec50077ae51f68c6f8fc46aaef682",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B43_p1link/0033_A_0004971.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh 43 Part1 통신 CONNECT submenu (맵 교환/멀티카드 통신/1카드 통신); D comm-label screen; untainted cold boot, no save",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B23a_p2shop/frames/37c4325256b9bb22a14b108e58844f1219929eefa5c4adf1ce803ba96d569c69.png",
+        "scene_id": "23_part2_main_menu",
+        "sha256": "583f9d8a8bed2c81166f7ec374c3c84db9e49ace67c5c3e6c1935ba72856f77f",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B23a_p2shop/0008_A_0001717.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] fresh untainted alternative for 07 MODE★SELECT (cursor 캠페인, 계속/처음); D comm-label screen",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B23a_p2shop/frames/d52c4c58450da56e7a6985298e1bf786f86fb859b64245f6ceb742e04d3233db.png",
+        "scene_id": "23a_part2_wars_shop",
+        "sha256": "91c74a93c04b44ac5cf47546445bbeecc8d7efbfaba8e775485a6cc9837a9366",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B23a_p2shop/0016_NONE_0002529.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_23a WARS★SHOP entry (재고 0, 어서 와!) after 120f; cold boot no save untainted; D comm-label screen",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B23_p2menu/frames/19d2795f887fe978ece6716b130cd47f67646983626ce348f2e17614d7b87754.png",
+        "scene_id": "23b_part2_comm_multiplayer",
+        "sha256": "e396cfbae5f41edab5cf832322f09e9a9df6d39e8b55143503ef17f20163940b",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B23_p2menu/0012_A_0002071.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_23b LINK★MODE submenu (1팩 대전/멀티팩 대전/맵 교환, 멀티팩 focus); cold untainted; D comm-label screen",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      },
+      {
+        "path": "temp/release_C/b28/B23a_p2shop/frames/7581459b8dae1e3d43dd3eb18e5fb2fc5ae6c8f9b79a14530b497ec40dd71d8a.png",
+        "scene_id": "86_common_compact_menu_tables",
+        "sha256": "3d306751ea27fbd55fc81a6d4becf347f2717be60a25e99fc3474f0d929003f1",
+        "grade": "ground_truth",
+        "evidence_role": "primary_current_sha",
+        "registered_by": "W1 batch4; W2 b28 replay",
+        "source_checkpoint": "temp/release_C/b28/B23a_p2shop/0012_DOWN_0002011.checkpoint.json",
+        "cheat_tainted": false,
+        "note": "[b28 replay of C route] scene_86 compact mode-menu labels (편집/통신/상점/도전/캠페인 rows, 상점 focus, caption 포인트로 쇼핑을 할 수 있습니다); cold untainted; D comm-label screen",
+        "provenance_rom_sha256": "e00646e63eff4ff9828f12595675e3a10ee93e4d7da88b7c4a8e5f9921497067",
+        "visual_result": "RGB-identical to reviewed C frame (compare.json)"
+      }
+    ],
+    "evidence_scope": "historical C5/b31; b44 current-candidate frames registered above",
+    "historical_c5_visual_record": "data/comm_label_visual_reverify.json",
+    "historical_b32r5_visual_record": "data/comm_label_visual_reverify_b32r5.json",
+    "historical_b35_visual_record": "data/comm_label_visual_reverify_b35.json",
+    "historical_b36r3_visual_record": "data/comm_label_visual_reverify_b36r3.json",
+    "historical_b37_visual_record": "data/comm_label_visual_reverify_b37.json",
+    "historical_b38_visual_record": "data/comm_label_visual_reverify_b38.json",
+    "historical_b39_visual_record": "data/comm_label_visual_reverify_b39.json",
+    "historical_b42_visual_record": "data/comm_label_visual_reverify_b42.json",
+    "historical_b43_visual_record": "data/comm_label_visual_reverify_b43.json"
+  }
+]

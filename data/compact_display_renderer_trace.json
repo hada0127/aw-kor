@@ -1,8 +1,8 @@
 {
  "tool": "tools/trace_compact_renderer.py",
  "rom": "output/game_wars_korean_full.gba",
- "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
- "git_commit": "5f5dba5",
+ "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+ "git_commit": "1591ec5",
  "breakpoints": [
   {
    "addr": 137889124,
@@ -372,7 +372,7 @@
    "aliases": []
   }
  ],
- "code_context_json": "temp/release_C/canon10/compact_code_context.json",
+ "code_context_json": "temp/release_C/canon11/compact_code_context.json",
  "code_context_breakpoints_enabled": true,
  "target_count": 496,
  "case_count": 3,
@@ -385,7 +385,7 @@
    "name": "07_part2_main_menu",
    "mode": "recorder_endpoint",
    "scene_id": "23_part2_main_menu",
-   "breakpoint_log": "temp/release_C/canon10/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon11/compact_trace_runs/screen_07_part2_main_menu/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -851,7 +851,7 @@
      240
     ]
    ],
-   "frame": "temp/release_C/canon10/compact_trace_runs/screen_07_part2_main_menu/frame.png",
+   "frame": "temp/release_C/canon11/compact_trace_runs/screen_07_part2_main_menu/frame.png",
    "hit_count": 0,
    "direct_target_hits": [],
    "hits": [],
@@ -862,7 +862,7 @@
    "name": "scene_87_common_rule_settings",
    "mode": "recorder_endpoint",
    "scene_id": "87_common_rule_settings",
-   "breakpoint_log": "temp/release_C/canon10/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon11/compact_trace_runs/screen_scene_87_common_rule_settings/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -1418,7 +1418,7 @@
      60
     ]
    ],
-   "frame": "temp/release_C/canon10/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
+   "frame": "temp/release_C/canon11/compact_trace_runs/screen_scene_87_common_rule_settings/frame.png",
    "hit_count": 4,
    "direct_target_hits": [],
    "hits": [
@@ -1542,7 +1542,7 @@
    "name": "41_part1_operation_room",
    "mode": "recorder_endpoint",
    "scene_id": "15_part1_operation_logos",
-   "breakpoint_log": "temp/release_C/canon10/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
+   "breakpoint_log": "temp/release_C/canon11/compact_trace_runs/screen_41_part1_operation_room/breakpoints.log",
    "breakpoints": [
     {
      "addr": 137889124,
@@ -2117,7 +2117,7 @@
      200
     ]
    ],
-   "frame": "temp/release_C/canon10/compact_trace_runs/screen_41_part1_operation_room/frame.png",
+   "frame": "temp/release_C/canon11/compact_trace_runs/screen_41_part1_operation_room/frame.png",
    "hit_count": 1938,
    "direct_target_hits": [],
    "hits": [

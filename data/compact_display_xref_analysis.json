@@ -1,8 +1,8 @@
 {
  "tool": "tools/analyze_compact_display_xrefs.py",
- "rom": "output/game_wars_korean_candidate_20261019_b43.gba",
- "rom_sha256": "488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34",
- "git_commit": "5f5dba5",
+ "rom": "output/game_wars_korean_candidate_20261021_b44.gba",
+ "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+ "git_commit": "1591ec5",
  "groups": [
   {
    "id": "a2_co_power_profile_display_overrides",

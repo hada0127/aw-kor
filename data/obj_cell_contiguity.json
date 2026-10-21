@@ -463,6 +463,37 @@
           "capture_baseline_sha256": "81fd2de4e85cf145e8ece66b6f8641a9a11adb001376cb04efcd029ba5815208",
           "capture_run": "temp/release_C/canon10/obj/E_result",
           "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+          "frame": "temp/release_C/canon11/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "CANON-11 b44 direct cold-boot recorder capture; inherited save taint; decoded RGB equal to reviewed b43 frame",
+          "rgb_identical_to_b43": true,
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "dfa431b62b124e83dbcac264ecbe70509b1813eca9588a8745b029c388a717dc",
+          "capture_baseline_sha256": "a8c974319371598f4d3fbe14227dacfd9240020dd6a9ceaade1d81d815d5d5e3",
+          "capture_run": "temp/release_C/canon11/obj/E_result",
+          "cheat_tainted": true
         }
       ]
     },
@@ -997,6 +1028,29 @@
           "capture_checkpoint_sha256": "c596c11ff0825e25eb68f9c5d4fff3f372316b00fe92af711f8cadcbee9d4f06",
           "capture_baseline_sha256": "c4156c23f8d75701ad42a94d4828324e8074344c5c1d1433f93cf6e0265d2cde",
           "capture_run": "temp/release_C/canon10/obj/E_mission",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02",
+          "frame": "temp/release_C/canon11/obj/E_mission/0031_A_0002273.png",
+          "frame_sha256": "71c0435cef354308d699718258f107b9cc6caa5d84995932cc8245620dee9a0e",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "CANON-11 b44 direct cold-boot recorder capture; inherited save taint; decoded RGB equal to reviewed b43 frame",
+          "rgb_identical_to_b43": true,
+          "capture_frame": "0031_A_0002273.png",
+          "capture_checkpoint": "0031_A_0002273.checkpoint.json",
+          "capture_checkpoint_sha256": "48e554144585a2a7c354a0099c55739ed9eb8f4a7ba1805a90cb747259beaab9",
+          "capture_baseline_sha256": "c6597a58c1d49ce157aae897de3f4e682e1c3624c3cb65e3377d132782d5df47",
+          "capture_run": "temp/release_C/canon11/obj/E_mission",
           "cheat_tainted": true
         }
       ]

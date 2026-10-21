@@ -4054,3 +4054,11 @@ P2 IDs337/368/4C7/4CB/4CC/7AD/7AF/7B0는 master table만 확인됐고 실제 cal
 native DEFD80 화면은 B3E638→B3E65A→B12910, (48,16)에서192×8행/빈 행5다. 실제 최종 maxNAME48px 화면은 `temp/spacing_followup/runtime/{before,after_F}/narration_render_fenced/`이다. 새 부팅 정상 메뉴 진입 뒤 이벤트와 이름 버퍼를 명시적으로 강제한 QA이며 자연 엔딩 진행으로 주장하지 않는다. native wait를 모두 건너뛰거나 VM cursor만 확인하면 GPU에 glyph가 반영되기 전 장면을 완료로 오인할 수 있어 마지막 glyph 이후2+16프레임을 진행하고 실제 NAME6칸/마지막 행/빈행 pixel을 확인했다. mGBA trace의 관측 PC는 이 Thumb 경로에서 함수 진입+2로 나타나므로 B3E63A/B12912 등을 확인했다.
 
 inline Qn은 현재 행의 앞선 text advance를 cursor/선택지 좌표에 더해야 한다. DF2A2C 항복 확인은 이전72px→후속24px이므로 cursor128/160→80/112이며 원래64px reserved row의47px ink/기본No/좌우 전환은 동일하다. 정상 새 부팅 튜토리얼→필드 메뉴→시스템→항복 입력으로 paired NPZ를 캡처했다. intro VM에 이 문장만 강제해 상위 창과 겹친 시도는 최종 증거에서 제외했다. 다른16개 변경 choice는 QA 강제 입력으로 분리하며, 바이트가 동일한47개 소비자와 shared hook/font는 회귀 차분에 포함했다.
+
+## 2026-10-21 b44 대사 ▼ 커서 타일 런타임 소스
+
+- b43 정본 SHA `488094f77a823648907c48e1647d2f53f356c5d70dfd39a8d1c3b4419aa03e34`에서 저장상태 없이 새 부팅 입력 재생. 재현 경로와 VRAM/IO/화면/쓰기 감시는 `temp/right_margin_20261021/b44/`.
+- 1편 환영 대화(`p1_welcome_b43/14`)와 초상 대사(`p1_portrait_b43/99`): BG0 charbase 0, tilemap 항목 `0xA1B9`, VRAM 타일 `0x1B9`/주소 `0x06003720`. 타일 32B는 ROM 비압축 4bpp `0xB97370`과 동일. 로더 포인터는 ROM `0xB38CF4`; VRAM write trace의 ROM 종료 포인터 `0xB97390/B0/D0`가 세 애니메이션 프레임의 시작 `0xB97370/90/B0`을 확인한다. 잉크 열 0..6, 7열 비어 있음. 처음 검색된 `0xB97394/B8`은 4B 겹침으로 생긴 동일 바이트 패턴이지 프레임 경계가 아니다.
+- 2편 대사(`p2_dialogue_b43/20`): BG0 charbase 0, ▼ VRAM 타일 `0x208`/주소 `0x06004100`. 화면의 32B는 ROM 비압축 4bpp `0x4703D4`와 동일. 로더 포인터는 `0x336C8C`→`0x4703B4`. VRAM write trace의 ROM 종료 포인터 `0x4703D4/3F4/414`가 `0x4703B4/D4/F4` 세 애니메이션 프레임을 확인한다. 세 프레임 모두 잉크 열 0..6, 7열 비어 있음.
+- `0x3A99EC`의 닮은 그림은 해당 2편 대사 VRAM 소스가 아니다. 이 조사에서는 건드리지 않는다. 1편의 RIGHT/예·아뇨 `0xA1BA/0xA1BB`도 별도 타일이다. 조사 범위 밖의 모든 소비자에 대한 전수 증명은 아니다.
+- 원본 ROM의 32-bit 리틀엔디언 직접 포인터 검색에서 `0x08B97370`은 `0xB38CF4` 한 곳, `0x084703B4`는 `0x336C8C` 한 곳만 나온다. 같은 로더를 여러 화면에서 호출할 수 있으므로 이것만으로 소비자 전수를 보증하지는 않는다.

@@ -4148,3 +4148,11 @@ Candidate `7e00df656ffe7b1b0b8b236c24e30c178467860f8ff92e2072071a0497c7f217` was
 확정 프로필에서 overflow/row/parser/glyph/caption0. unknown13·state16·scrolling18은 별도. B팀394영향행(실제138띄어쓰기행), baseline불변/기존114잔여/새drift0. 바이트 차분108095개 모두 승인 payload/포인터이며 미설명0, 다른4021script/408UI 불변. F/G 빌드 ROM SHA `1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`, CRC3A1085BC. 자연R/2편 도움/항복·강제 maxNAME/실제 native8행·CO 필드·변경17choice를 전후 검증했다. 세부 의미와 범위는 `temp/spacing_followup/REPORT.md` 및 최종 INSTALL-READY 영수증을 따른다. 아직 Mac 후속 설치를 주장하지 않는다.
 
 Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/high, exit0): B1/B2/B3 fixed, 필수 차단0, SHA1c23b091의 비공개 Mac 설치 인계 허용. 실제 폰 설치는 Mac의 별도 영수증을 따른다.
+
+### b44 대사 대기 ▼ 1px 이동 후보 (2026-10-21)
+
+정본 b43에서 저장상태 없이 1편 초상 대사·환영 대사·도움말과 2편 대사를 새 부팅으로 재생해 BG0 ▼ 소스를 확인했다. 1편은 비압축 4bpp 세 프레임 `0xB97370/90/B0`→VRAM 타일 `0x1B9`, 2편은 `0x4703B4/D4/F4`→타일 `0x208`이다. 모든 프레임의 7열이 비어 있어 6프레임 그림만 셀 내부에서 정확히 오른쪽 1px 이동했다. 최종 후보 `output/game_wars_korean_candidate_20261021_b44.gba` SHA-256 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`, CRC32 `8064dd7b`; b43과 다른 96바이트 전부 해당 프레임 안이다. 짝 화면 네 개의 ▼ 외 픽셀은 동일하고, 마지막 글자와 ▼ 사이 빈 픽셀은 각각 초상 4→5, 환영 3→4, 2편 3→4, 도움말 0→1이다. 근거·명령·로그·PNG는 `temp/right_margin_20261021/b44/report.md`. 1편 도움말은 대사 밖 공유 소비자이고 이 화면에서 이동 외 시각 변화는 없다. 전체 텍스트 무결성 검사의 부호소실 3085/中점잔존 1035는 b43에서도 같으며 byte-only와 기본 ROM 검사는 통과했다. 다른 미방문 소비자 전수와 실기 검증은 `(unverified)`이다. 정본 3종은 그대로다.
+
+### b44 정본 승격·2026-10-21 배포본 (CANON-11, 2026-10-22)
+
+사용자 결정(「응 변경해」)으로 b44를 정본으로 올렸다. 작업 트리에서 `tools/build_korean_full.py`를 다시 빌드해 full/final/title_test 세 파일 모두 SHA-256 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`(CRC32 `8064DD7B`)로 결정적 재현을 확인했다. 정본 증거 44개 경로를 b44에서 저장상태 이식 없이 새로 재생했고, 105개 끝 화면 중 65개는 b43과 RGB 동일, 40개는 ▼ 커서만 정확히 오른쪽 1px 이동(각 23px)이며 다른 차이는 0이다. 도움말 직접 13장·합성 13장·comm 7장(1장 커서만 차이)·compact 18장·OBJ 2장·89b 추적(SHA 동일)·지도 이름 180+180장을 b44로 다시 등록했다. `run_release_qa.py --build --dist-date 2026-10-21` PASS(25/25), `verify_dist_integrity.py` PASS, BPS/IPS/xdelta 복원 SHA 일치, 스프라이트 감사 normal/shape 실패 0, 집중 테스트 99개·8모듈 88개 OK. 명령·종료코드·해시는 `temp/release_C/canon11/report.md`. 실기·iPhone 설치·양편 엔딩은 미검증이다.

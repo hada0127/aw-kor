@@ -14186,6 +14186,30 @@ def main():
         return _build(args,publication)
 
 
+def shift_dialogue_wait_cursor_right(rom, source_rom):
+    """Move the two native ▼ tile sets one pixel within their 8px cells."""
+    # Both games cycle three vertically offset frames through one BG0 tile.
+    # The frames have 32-byte strides. Overlapping byte matches at +0x24
+    # are not frame boundaries.
+    offsets = (0xB97370, 0xB97390, 0xB973B0,
+               0x4703B4, 0x4703D4, 0x4703F4)
+    expected = {offset: bytes(source_rom[offset:offset + 32]) for offset in offsets}
+    for offset, tile in expected.items():
+        if len(tile) != 32 or rom[offset:offset + 32] != tile:
+            raise AssertionError(f'dialogue ▼ source changed at 0x{offset:06X}')
+        moved = bytearray(32)
+        for y in range(8):
+            for x in range(8):
+                value = (tile[y * 4 + x // 2] >> (4 * (x % 2))) & 15
+                if x == 7:
+                    if value:
+                        raise AssertionError(f'dialogue ▼ ink would clip at 0x{offset:06X}')
+                    continue
+                dst = y * 4 + (x + 1) // 2
+                moved[dst] |= value << (4 * ((x + 1) % 2))
+        rom[offset:offset + 32] = moved
+
+
 def _build(args, publication):
     staged_rom = publication.path('candidate.gba')
     staged_manifest = publication.path('repoint_manifest.json')
@@ -24517,6 +24541,7 @@ def _build(args, publication):
         st['dialogue_native_messages'] = _pixel_audit['summary']['physical_messages']
         with open(os.path.join(BASE, 'temp', 'dialogue_layout_applied.json'), 'w', encoding='utf-8') as _stream:
             json.dump(_layout_applied, _stream, ensure_ascii=False, indent=1)
+    shift_dialogue_wait_cursor_right(rom, orig)
     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
     assert len(rom) == 0x1000000
     from qa_part2_co_panel_width import census as _co_panel_census, LIMIT as _co_panel_limit
