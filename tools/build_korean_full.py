@@ -14296,14 +14296,34 @@ def _build(args, publication):
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(GLYPH_BLOB_2350, 'rb').read()   # T1: 2350자 글리프(기존 prefix-identical)
     rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
-    # The shared top tile for 작/장/잠 and the other ㅈ+ㅏ syllables joins
-    # the ㅈ crossbar to the ㅏ stem at small UI scale. Open one pixel of
-    # space between them so the battle-menu 작 cannot resemble 짝.
+    # Galmuri's ㅈ crossbar joins the following vowel in these deduplicated
+    # top tiles at game scale. Open the single joining pixel for every such
+    # ㅈ tile. Tile 119 also serves ㄲ glyphs, so give 자 its own top tile.
     from render_galmuri_8x16 import render_char
-    jieut_a_top = KOR_GLYPH_FILE + 599 * 32
-    if bytes(rom[jieut_a_top:jieut_a_top + 32]) != render_char('작')[0]:
-        raise AssertionError('shared ㅈ+ㅏ top glyph changed')
-    rom[jieut_a_top + 3 * 4 + 5 // 2] &= 0x0F  # row 3, x 5
+    _jieut_map = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']
+    _joined_jieut_tops = {119, 599, 600, 602, 620, 1118, 1119, 1120,
+                          1121, 1130, 1131, 1132}
+    _found_jieut_tops = {
+        glyph['top'] for ch, glyph in _jieut_map.items()
+        if (ord(ch) - 0xAC00) // 588 == 12
+        and tuple((blob[glyph['top'] * 32 + 3 * 4 + x // 2]
+                   >> (4 * (x % 2))) & 15 for x in range(8))
+        == (0, 9, 9, 9, 9, 9, 9, 0)
+    }
+    if _found_jieut_tops != _joined_jieut_tops:
+        raise AssertionError(f'joined ㅈ top-tile inventory changed: {_found_jieut_tops}')
+    if blob[119 * 32:120 * 32] != render_char('자')[0]:
+        raise AssertionError('자 shared top glyph changed')
+    _private_ja = 1274  # tile 1273 at F09F20 is the existing zero tile
+    _private_ja_offset = KOR_GLYPH_FILE + _private_ja * 32
+    if rom[_private_ja_offset:_private_ja_offset + 32] != bytes(32):
+        raise AssertionError('private 자 top tile is occupied')
+    _ja_top = bytearray(render_char('자')[0])
+    _ja_top[3 * 4 + 5 // 2] &= 0x0F
+    rom[_private_ja_offset:_private_ja_offset + 32] = _ja_top
+    for _tile in sorted(_joined_jieut_tops - {119}):
+        _offset = KOR_GLYPH_FILE + _tile * 32 + 3 * 4 + 5 // 2
+        rom[_offset] &= 0x0F
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
     rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES
@@ -14347,6 +14367,9 @@ def _build(args, publication):
     rom[LIT_TRAMP_BOT:LIT_TRAMP_BOT + 4] = TRAMP_BOT_BYTES
 
     sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']   # T1: 2350자
+    if sylmap['자']['top'] != 119:
+        raise AssertionError('자 glyph mapping changed')
+    sylmap['자']['top'] = _private_ja
     syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
 
     # 회귀 가드(2026-06-16): A3 글리프캐시 렌더러 hook은 예약-한글 코드를 [min,max] 범위로

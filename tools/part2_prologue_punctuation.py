@@ -35,6 +35,64 @@ PUNCTUATION = (
     (0xA01C78, 14, '。', True),
 )
 
+# These three commas are followed by more text on the same physical row.
+# A bare 0x20 is swallowed by the native parser; 0x8140 advances visibly.
+SAME_ROW_COMMAS = (0xA019AB, 0xA01A94, 0xA01C10)
+
+
+def _insert_drawn_space(rom: bytearray, manifest: list[dict], writes: list[list],
+                        source: int, comma: int) -> None:
+    if source == 0xA019AB:
+        message = next(m for m in manifest if m.get('msg') == '0xA01970'
+                       and m.get('status') == 'relocated')
+        start, size = int(message['new_addr'], 16), message['new_len']
+    else:
+        start = source
+        end = rom.index(0, start) + 1
+        size = end - start
+        message = None
+    old = bytes(rom[start:start + size])
+    offset = comma + 2 - start
+    tail = b'\x6b\x00' if old.endswith(b'\x6b\x00') else b'\x00'
+    pad_end = size - len(tail)
+    if (old[offset:offset + 1] != b'\x77'
+            or old[pad_end - 2:pad_end] != b'\x20\x20'
+            or old[pad_end:] != tail):
+        raise AssertionError(f'prologue comma seam/padding changed: {source:#x}')
+    new = old[:offset] + b'\x81\x40' + old[offset:pad_end - 2] + tail
+    if len(new) != size or new[offset:offset + 3] != b'\x81\x40\x77':
+        raise AssertionError(f'prologue space changed message size: {source:#x}')
+    rom[start:start + size] = new
+    if message is not None:
+        # Preserve each source fragment's authored bytes; the new cell sits
+        # between the comma fragment and the following wait control.
+        for key, spans in message['source_line_fragments'].items():
+            for span in spans:
+                if offset <= span[0] < pad_end - 2:
+                    span[0] += 2
+                elif span[0] < offset < span[0] + span[1]:
+                    raise AssertionError(f'prologue space splits source fragment: {key}')
+            message['line_spans'][key] = spans[0]
+        for owner in writes:
+            if owner[7] != 'dialogue-spacing-final-intent' or len(owner) < 9:
+                continue
+            key = f"0x{owner[8]['source_address']:06X}"
+            spans = message['source_line_fragments'].get(key)
+            if spans is None:
+                continue
+            lo = spans[0][0]
+            hi = max(pos + length for pos, length in spans)
+            owner[0], owner[1], owner[2] = start + lo, hi - lo, hi - lo
+            owner[3] = new[lo:hi].hex()
+            owner[8]['fragments'] = [span.copy() for span in spans]
+        writes.append([start, size, size, new.hex(), None, None, None,
+                       'part2-prologue-drawn-comma-space', {'source_address': source}])
+    else:
+        # In-place lines may have separate old writers. A final whole-message
+        # owner keeps the shifted control/space sequence atomic for renderer QA.
+        writes.append([start, size, size, new.hex(), None, None, None,
+                       'part2-prologue-drawn-comma-space', {'source_address': source}])
+
 
 def patch(rom: bytearray, manifest: list[dict], writes: list[list]) -> list[dict]:
     live = {int(key, 16): m for m in manifest if m.get('status') == 'relocated'
@@ -87,6 +145,12 @@ def patch(rom: bytearray, manifest: list[dict], writes: list[list]) -> list[dict
             owner[3] = raw.hex()
             if isinstance(owner[5], str):
                 owner[5] = owner[5].replace('、', '，').replace('。', '．')
-    return [{'source': f'0x{source:08X}', 'target': f'0x{target:08X}',
+    for source in SAME_ROW_COMMAS:
+        comma = next(target for current, target, _, _ in edits if current == source)
+        _insert_drawn_space(rom, manifest, writes, source, comma)
+    # The last in-place message gained a two-byte drawn space after A01C10.
+    # Its subsequent punctuation moved by two bytes within the same slot.
+    return [{'source': f'0x{source:08X}',
+             'target': f'0x{target + (2 if source in (0xA01C1B, 0xA01C2A, 0xA01C59) else 0):08X}',
              'before_hex': old.hex(), 'after_hex': new.hex()}
             for source, target, old, new in edits]

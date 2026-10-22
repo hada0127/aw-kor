@@ -4188,3 +4188,7 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 ## 2026-10-23 Part 2 프롤로그 부호 후보 (정본 아님)
 
 - 사용자 승인 범위의 일본식 문장부호 21곳을 서양식 쉼표/마침표 글리프로 교체했다. 프롤로그 콜드부트 동일 입력에서 원본/후보 화면을 비교했고 후보의 부호가 표시됐다. 빌드, Phase 6, B-team drift, byte integrity, text fit은 통과했다. 전체 integrity의 기존 번역 데이터 경고는 남아 있다. 상세 결과와 미검증 화면은 `temp/evidence_20261023/SWEEP2_REPORT.md`를 따른다.
+
+### 2026-10-23 Part 2 프롤로그 간격·ㅈ 자형 Sweep 3 후보
+
+`output/game_wars_korean_p2_sweep3.gba` SHA-256 `d8000bd5f8669cc54e530c7fd374265535f97ed313a10c0c59597f77e3b48996`를 원본 ROM에서 두 번 동일하게 빌드했다. 프롤로그의 이어지는 쉼표 세 곳 뒤에 그려지는 전각 공백을 넣었고, ㅈ 윗타일 접합 픽셀을 일관되게 비웠다. `자`는 ㄲ와 공유하던 원본 타일을 보존하기 위해 전용 타일을 썼다. B팀 원문은 바뀌지 않았으며 21곳 부호·3곳 공백 바이트 감사, Phase 6·무결성 byte-only·text fit, 프롤로그 콜드부트, 2편 전투 메뉴/저장 확인, 1편 전투 메뉴 화면을 확인했다. 전체 무결성 검사는 기존 부호소실 3085행/中점잔존 1035행으로 exit 1이다. 실기·아이폰 및 미도달 장면은 미검증이다. 명령·종료코드·전후 화면은 `temp/evidence_20261023/SWEEP2_REPORT.md` Sweep 3을 따른다.
