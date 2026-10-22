@@ -24398,6 +24398,16 @@ def _build(args, publication):
     WRITE_LOG.extend(_compact_ui_rows)
     st['part1_compact_ui_strings'] = len(compact_ui_strings.verify(
         rom, orig, syl_to_code, PART2_UI_KANJI_GLYPH_SUBS, _unit_compact_render_char))
+    import part1_editor_help_dictionary as editor_help_dictionary
+    st['part1_editor_help_dictionary'] = editor_help_dictionary.patch(rom, orig)
+    _help_payload = editor_help_dictionary.dictionary(rom)
+    for _address, _data in (
+        (editor_help_dictionary.DICTIONARY_OFFSET, _help_payload),
+        (editor_help_dictionary.HOOK_OFFSET, editor_help_dictionary.HOOK),
+        (editor_help_dictionary.SITE, editor_help_dictionary.SITE_PATCH),
+    ):
+        WRITE_LOG.append([_address, len(_data), len(_data), _data.hex(), None,
+                          None, None, 'part1-editor-help-dictionary'])
     verify_part2_mission_number_font(rom, orig)
     # Fit title assets only after message repointing establishes final text.
     import part2_mission_title_fit
@@ -24836,6 +24846,7 @@ def _build(args, publication):
     if unmapped:
         print(f'  unmapped chars ({len(unmapped)}): {dict(unmapped.most_common(10))}')
     print(f'  punct_strip_fallback(level>=6): {sum(st[f"level{i}"] for i in range(6, 12))}')
+    editor_help_dictionary.verify(rom)
     # All validators, input/source guards and receipt generation must succeed
     # before accepted outputs or their metadata can change.
     write_build_receipt(staged_rom, build_source, build_inputs_before,
