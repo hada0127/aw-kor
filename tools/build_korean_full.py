@@ -7848,7 +7848,7 @@ def patch_part1_name_ui_labels(rom):
 
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
-    width, height = 16, 24
+    width, height = 16, 16
     pixels = [[0] * width for _ in range(height)]
 
     def put(x, y, value):
@@ -7856,39 +7856,26 @@ def patch_part2_command_menu_co_icon(rom):
             pixels[y][x] = value
 
     # Palette bank A on this menu uses 1=light, 3=mid shadow, 4=dark outline.
-    shield_rows = {
-        3: (6, 9),
-        4: (5, 10),
-        5: (4, 11),
-        6: (4, 11),
-        7: (3, 12),
-        8: (3, 12),
-        9: (3, 12),
-        10: (3, 12),
-        11: (4, 11),
-        12: (4, 11),
-        13: (5, 10),
-        14: (5, 10),
-        15: (6, 9),
-        16: (7, 8),
-    }
+    shield_rows = {1: (6, 9), 2: (5, 10), 3: (4, 11), 4: (3, 12),
+                   5: (3, 12), 6: (3, 12), 7: (3, 12), 8: (3, 12),
+                   9: (4, 11), 10: (4, 11), 11: (5, 10), 12: (6, 9),
+                   13: (7, 8)}
     for y, (x0, x1) in shield_rows.items():
         for x in range(x0, x1 + 1):
             put(x + 1, y + 1, 3)
     for y, (x0, x1) in shield_rows.items():
         for x in range(x0, x1 + 1):
-            border = x in (x0, x1) or y in (3, 16)
+            border = x in (x0, x1) or y in (1, 13)
             put(x, y, 4 if border else 2)
-    for x, y in [(8, 6), (8, 7), (8, 8), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (7, 10), (8, 10), (9, 10), (8, 11), (8, 12)]:
+    for x, y in [(8, 4), (8, 5), (8, 6), (6, 7), (7, 7), (8, 7),
+                 (9, 7), (10, 7), (7, 8), (8, 8), (9, 8), (8, 9), (8, 10)]:
         put(x, y, 1)
 
     offsets = {
-        (0, 0): 0x454154,
-        (1, 0): 0x454174,
-        (0, 1): 0x453794,
-        (1, 1): 0x4537B4,
-        (0, 2): 0x4537D4,
-        (1, 2): 0x4537F4,
+        (0, 0): 0x454114,
+        (1, 0): 0x454134,
+        (0, 1): 0x454154,
+        (1, 1): 0x454174,
     }
     for (tx, ty), off in offsets.items():
         tile = bytearray(32)
@@ -10198,31 +10185,29 @@ def patch_part2_prologue_logo_obj(rom):
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))
     width, height = 96, 16
     pixels = [[0] * width for _ in range(height)]
 
-    cursor = 6
-    y0 = 1
+    letters = [glyph_grid(font[ord(ch)]) for ch in '프롤로그']
     scale_x = 2
-    scale_y = 2
-    for ch in '프롤로그':
-        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+    total_width = sum((glyph[1] + 1) * scale_x for glyph in letters) - scale_x
+    cursor = (width - total_width) // 2
+    y0 = 2
+    for grid, w, h, xo, _yo in letters:
         for row in range(h):
             for col in range(w):
                 if not grid[row][col]:
                     continue
                 px0 = cursor + (col + xo) * scale_x
-                py0 = y0 + row * scale_y
-                for sy in range(scale_y):
-                    for sx in range(scale_x):
-                        px = px0 + sx
-                        py = py0 + sy
-                        for dx, dy in ((1, 1), (1, 0), (0, 1)):
-                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
-                                pixels[py + dy][px + dx] = 7
-                        if 0 <= px < width and 0 <= py < height:
-                            pixels[py][px] = 11
+                py = y0 + row
+                for sx in range(scale_x):
+                    px = px0 + sx
+                    for dx, dy in ((1, 1), (1, 0), (0, 1)):
+                        if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                            pixels[py + dy][px + dx] = 7
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = 11
         cursor += (w + 1) * scale_x
 
     off = 0x5BBB3C
@@ -14789,6 +14774,8 @@ def _build(args, publication):
     st['item7_co_profile_labels'] = i7_co_profile.patch(rom, orig)
     import item7_part2_editor_labels as i7_p2_editor
     st['item7_part2_editor_labels'] = i7_p2_editor.patch(rom, orig)
+    st['part2_editor_select_caption'] = i7_p2_editor.patch_select_caption(rom, orig)
+    st['part2_editor_small_captions'] = i7_p2_editor.patch_small_captions(rom, orig)
     import item7_design_map_panel as i7_design_map
     st['item7_design_map_panel'] = i7_design_map.patch(rom, orig)
     import item7_multiboot_factory_tooltip as i7_mb_tooltip

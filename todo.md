@@ -1,3 +1,9 @@
+## 2026-10-23 Part 2 화면 보수 Round 2 후보
+
+- 프롤로그 제목 OBJ, 전투 명령 메뉴 첫 아이콘/둘째 아이콘 복원, 지도 편집기 `SELECT 메뉴`·`남음`·`지형`은 별도 후보 `output/game_wars_korean_p2_round2_editor.gba`에서 실화면 확인했다. 상세 경로와 제한은 `temp/evidence_20261023/REPORT.md` Round 2.
+- 사용자 5.png는 2편 지도 편집기에서도 재현됐다. Round 1의 1편 단독 귀속 판단은 취소한다. 4.png의 `???` 지도 목록은 이번 2편 자유전 목록에서 재현되지 않았다.
+- 미완료: 2편 점령 애니메이션 `점령` 그림 소스/완료 변종, 프롤로그 배경 지도 라벨 시각 품질, `작전` 글자 시각 판독성, 편집기 지형 이름칸의 사용자 제보 좌표 재현, War Room·Stats·Options·Sound room·Battle Maps shop 및 전투 각 하위 페이지의 원본/후보 동일 상태 전수 비교. 확인하지 않은 화면은 완료로 세지 않는다.
+
 ## 2026-10-21 b44 정본 배포본 갱신
 
 - 정본 `output/game_wars_korean_{full,final,title_test}.gba`의 대상 SHA-256은 `1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`, CRC32는 `8064DD7B`이다. 대화 끝 ▼ 커서를 마지막 글자에서 오른쪽으로 1px 띄웠다. 배포와 검증 범위는 `temp/release_C/canon11/report.md`를 따른다. 공개 업로드는 하지 않았다.

@@ -1,6 +1,7 @@
 """Part 2 map-editor OBJ captions (raw OBJ family 2, table 0x807190).
 
 Native IDs (family 2 base 0x456114, sizes from 0x8071C0):
+  142 0x458774 8x2 tiles (two 32x16 cells)       SELECT メニュー -> SELECT 메뉴
   143 0x458974 6x2 tiles (32x16 cell + 16x16 cell) プレイOK! -> 플레이 OK!
   144 0x458AF4 4x1 tiles (32x8)                     タテ      -> 세로
   145 0x458B74 4x1 tiles (32x8)                     ヨコ      -> 가로
@@ -32,6 +33,12 @@ LABELS = (
 )
 PLATE, TAB_INK = 1, 14
 BUTTON_BG, BUTTON_INK, BUTTON_OUTLINE = 12, 1, 15
+SELECT_CAPTION_OFFSET = 0x458774
+SELECT_CAPTION_SHA256 = 'f18a60acab9b9c777258a2aa3abf4bf39d05c261676702dea3b9e2fcd72154e4'
+SMALL_CAPTIONS = (
+    (84, 0x456A14, 3, '73a65905c910bedc22d29f9bf9d9a904fe425137cdf80fc99dc1aa9d50209006', '남음'),
+    (169, 0x45A4B4, 4, 'c24259816e31c275a5a959055145258fd9ba60203e987980e85208e60b38d337', '지형'),
+)
 
 
 @lru_cache(maxsize=1)
@@ -131,6 +138,73 @@ def render(original, native_id):
 def expected_regions(original):
     source_guard(original)
     return [(offset, render(original, native_id)) for native_id, offset, *_ in LABELS]
+
+
+def patch_select_caption(rom, original):
+    """Replace only the Japanese word on editor OBJ ID 142's SELECT plate."""
+    source_guard(original)
+    off = SELECT_CAPTION_OFFSET
+    source = bytes(original[off:off + 16 * 32])
+    if hashlib.sha256(source).hexdigest() != SELECT_CAPTION_SHA256:
+        raise AssertionError('Part 2 editor SELECT caption source changed')
+    ink, text_width = _ink('메뉴')
+    if text_width > 25 or any(y > 6 for _, y in ink):
+        raise AssertionError('Part 2 editor SELECT caption does not fit')
+    data = bytearray(source)
+
+    def put(x, y, value):
+        cell = x // 32
+        local_x = x % 32
+        tile = (y // 8) * 4 + local_x // 8
+        index = cell * 256 + tile * 32 + (y % 8) * 4 + (local_x % 8) // 2
+        shift = 4 * (local_x % 2)
+        data[index] = (data[index] & ~(15 << shift)) | (value << shift)
+
+    # Keep the outer plate and SELECT button; redraw its 26x7 right-hand label.
+    for y in range(4, 11):
+        for x in range(36, 62):
+            put(x, y, 1)
+    left = 36 + (26 - text_width) // 2
+    for x, y in ink:
+        put(left + x, 4 + y, 15)
+    result = bytes(data)
+    if bytes(rom[off:off + len(result)]) not in (source, result):
+        raise AssertionError('Part 2 editor SELECT caption conflicts with an earlier writer')
+    rom[off:off + len(result)] = result
+    return 1
+
+
+def patch_small_captions(rom, original):
+    """Replace the remaining-count and terrain captions in the editor HUD."""
+    source_guard(original)
+    for native_id, off, tiles, digest, text in SMALL_CAPTIONS:
+        source = bytes(original[off:off + tiles * 32])
+        if hashlib.sha256(source).hexdigest() != digest:
+            raise AssertionError(f'Part 2 editor caption source changed: {native_id}')
+        width = tiles * 8
+        pixels = [[0] * width for _ in range(8)]
+        ink, text_width = _ink(text)
+        if text_width + 2 > width or any(y > 6 for _, y in ink):
+            raise AssertionError(f'Part 2 editor caption does not fit: {native_id}')
+        left = (width - text_width) // 2
+        body = {(left + x, y) for x, y in ink}
+        for x, y in body:
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    px, py = x + dx, y + dy
+                    if 0 <= px < width and 0 <= py < 8:
+                        pixels[py][px] = 15
+        for x, y in body:
+            pixels[y][x] = 1
+        result = bytearray(tiles * 32)
+        for y in range(8):
+            for x in range(width):
+                index = (x // 8) * 32 + y * 4 + (x % 8) // 2
+                result[index] |= pixels[y][x] << (4 * (x % 2))
+        if bytes(rom[off:off + len(result)]) not in (source, bytes(result)):
+            raise AssertionError(f'Part 2 editor caption conflicts with an earlier writer: {native_id}')
+        rom[off:off + len(result)] = result
+    return len(SMALL_CAPTIONS)
 
 
 def patch(rom, original):

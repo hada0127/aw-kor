@@ -1,5 +1,9 @@
 > Current canonical local build: b44 (`1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`). The Part 2 prologue fix below is a separate candidate, not the canonical release.
 
+## 2026-10-23 Part 2 화면 보수 Round 2 후보
+
+후보 `output/game_wars_korean_p2_round2_editor.gba` SHA-256 `8daf315b3cda57121a4e41490d6471a84f879ee595213a60e93d80887cb524f1`에서 프롤로그 OBJ 제목(`0x5BBB3C`)의 2배 세로 확대를 Galmuri11 원래 높이로 바꿨다. 전투 명령 메뉴의 첫 아이콘은 실제 BG0 타일 `0x204..0x207` 대응 원본 주소 `0x454114..0x454174`만 수정했다. 기존 패치가 첫 아이콘 아래 2타일과 둘째 아이콘 4타일을 섞어 덮던 오류를 바로잡았다. 지도 편집기 OBJ ID142/84/169를 각각 `SELECT 메뉴`·`남음`·`지형`으로 그렸다. 원본/후보 동일 콜드부트 경로 및 저장을 사용한 mGBA 프레임, 검증 결과, 미완료 범위는 `temp/evidence_20261023/REPORT.md` Round 2에 기록했다. 점령 애니메이션, 프롤로그 흐린 지도 라벨, 전 메뉴 전수 검수는 미완료다.
+
 ## 2026-10-23 Part 2 프롤로그 두 화면 줄 배치 후보 검증
 
 `data/dialogue_spacing_repairs.json`의 `0xA01970` 내레이션과 `0xA01AB0` 목표 대사의 reviewed `after` 행이 b44 화면에서 각각 「매크로/랜드」 분리와 첫 행 우측 넘침을 만들었다. 같은 한글 글리프 순서를 보존하면서 줄 경계만 조정했다. 원본 ROM 빌드 후보 `output/game_wars_korean_p2_20261023.gba` SHA-256 `f2f8b1c2de1f1dc9bea0c19fca2ee96880451d7d5ee92419548ee55d6e823482`는 b44와 두 relocated 메시지의 27바이트만 다르다. 콜드부트 mGBA 전후 프레임 `temp/evidence_20261023/{before,after}/prologue_{11,17}.png`에서 두 줄 배치가 정상임을 확인했다. 빌드·phase6·qa_text_fit·무결성 바이트 게이트·관련 122개 단위시험 통과. 전체 `qa_integrity_map.py`의 기존 부호소실 3085행/중점잔존 1035행은 b44와 동일하게 FAIL이며 이 후보의 새 결함으로 집계하지 않는다. 로고·배경 라벨·2편 점령 애니메이션과 미캡처 메뉴는 미완료; 상세는 `temp/evidence_20261023/REPORT.md`.
