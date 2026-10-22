@@ -1,3 +1,9 @@
+## 2026-10-23 Part 2 프롤로그 배경 지명 잉크
+
+- 프롤로그 배경 지명은 `patch_world_map_label_tiles`가 `0x54214C`와 `0x5AAA68` LZ77 시트의 8px Galmuri7 타일로 그린다. 큰 `월드맵` 제목은 별도 호출에서 index 12를 명시한다.
+- 작은 지명의 기존 index 12는 프롤로그 색조 오버레이 아래에서 매우 흐리다. 동일 콜드부트 `prologue_11` 비교에서 지명만 index 15로 바꾸면 더 선명하다. 일반 `MAP★SELECT`에서도 같은 두 시트의 글자가 더 밝아지는 것을 확인했다. 비교 화면은 `temp/evidence_20261023/round6_bright_comparison.png`이며 세부 명령·출구 코드는 `REPORT.md` Round 6에 기록한다.
+- 같은 SRAM의 2편 트라이얼 `MAP★SELECT`를 40행 아래로 탐색하면 원본 ROM의 잠긴 지도 행은 `??????`, 후보는 `미상`으로 나온다. 따라서 사용자 4.png의 `???`만으로 1편 화면이라고 단정할 수 없다. 화면 경로는 `REPORT.md` Round 6 지도 목록 행에 기록했다.
+
 ## 2026-09-23 추가 소비 경로 확인 (대사 후보 검증·기록 화면 수정 진행 중)
 
 - 잔여 lossless 8행을 별도 조사했다. 7행의 원본 메시지 시작(`DA17A0`, `DA32E8`, `DA4090`, `DEEE4C`, `DEF518`, `DF60D8`, `DF77A0`)과 이후 16바이트에는 ROM 전체에서 절대 포인터가 발견되지 않았다. 이것만으로 미사용이라고 단정하지 않는다. `DCE8F0`의 4개 포인터 바이트 중 `DE4324`는 실제 `0x19` 명령 뒤이며, 나머지 `1202F0/6A3A68/CFDAD0`는 주변까지 동일한 큰 데이터 블록 안에 있다. 음성 샘플 헤더·voice pointer로 보이는 구조도 찾았지만 소비 경로 확인 전 오탐으로 제외하지 않는다. 근거: `temp/part2_2026-09-23/lossless_remaining_analysis.json`, `pointer_collision_wave_hypothesis.json`.

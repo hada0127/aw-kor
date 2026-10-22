@@ -7858,7 +7858,7 @@ def patch_part1_name_ui_labels(rom):
 
 def patch_part2_command_menu_co_icon(rom):
     """Replace the tiny Part 2 command-menu CO icon with neutral badge art."""
-    width, height = 16, 24
+    width, height = 16, 16
     pixels = [[0] * width for _ in range(height)]
 
     def put(x, y, value):
@@ -7866,39 +7866,26 @@ def patch_part2_command_menu_co_icon(rom):
             pixels[y][x] = value
 
     # Palette bank A on this menu uses 1=light, 3=mid shadow, 4=dark outline.
-    shield_rows = {
-        3: (6, 9),
-        4: (5, 10),
-        5: (4, 11),
-        6: (4, 11),
-        7: (3, 12),
-        8: (3, 12),
-        9: (3, 12),
-        10: (3, 12),
-        11: (4, 11),
-        12: (4, 11),
-        13: (5, 10),
-        14: (5, 10),
-        15: (6, 9),
-        16: (7, 8),
-    }
+    shield_rows = {1: (6, 9), 2: (5, 10), 3: (4, 11), 4: (3, 12),
+                   5: (3, 12), 6: (3, 12), 7: (3, 12), 8: (3, 12),
+                   9: (4, 11), 10: (4, 11), 11: (5, 10), 12: (6, 9),
+                   13: (7, 8)}
     for y, (x0, x1) in shield_rows.items():
         for x in range(x0, x1 + 1):
             put(x + 1, y + 1, 3)
     for y, (x0, x1) in shield_rows.items():
         for x in range(x0, x1 + 1):
-            border = x in (x0, x1) or y in (3, 16)
+            border = x in (x0, x1) or y in (1, 13)
             put(x, y, 4 if border else 2)
-    for x, y in [(8, 6), (8, 7), (8, 8), (6, 9), (7, 9), (8, 9), (9, 9), (10, 9), (7, 10), (8, 10), (9, 10), (8, 11), (8, 12)]:
+    for x, y in [(8, 4), (8, 5), (8, 6), (6, 7), (7, 7), (8, 7),
+                 (9, 7), (10, 7), (7, 8), (8, 8), (9, 8), (8, 9), (8, 10)]:
         put(x, y, 1)
 
     offsets = {
-        (0, 0): 0x454154,
-        (1, 0): 0x454174,
-        (0, 1): 0x453794,
-        (1, 1): 0x4537B4,
-        (0, 2): 0x4537D4,
-        (1, 2): 0x4537F4,
+        (0, 0): 0x454114,
+        (1, 0): 0x454134,
+        (0, 1): 0x454154,
+        (1, 1): 0x454174,
     }
     for (tx, ty), off in offsets.items():
         tile = bytearray(32)
@@ -10210,31 +10197,29 @@ def patch_part2_prologue_logo_obj(rom):
     from lz77_compress import lz77_compress
     from lz77_scan import lz77_decompress
 
-    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri7.bdf'))
+    font, _ = load_bdf(os.path.join(BASE, 'reference/fonts/Galmuri11.bdf'))
     width, height = 96, 16
     pixels = [[0] * width for _ in range(height)]
 
-    cursor = 6
-    y0 = 1
+    letters = [glyph_grid(font[ord(ch)]) for ch in '프롤로그']
     scale_x = 2
-    scale_y = 2
-    for ch in '프롤로그':
-        grid, w, h, xo, _yo = glyph_grid(font[ord(ch)])
+    total_width = sum((glyph[1] + 1) * scale_x for glyph in letters) - scale_x
+    cursor = (width - total_width) // 2
+    y0 = 2
+    for grid, w, h, xo, _yo in letters:
         for row in range(h):
             for col in range(w):
                 if not grid[row][col]:
                     continue
                 px0 = cursor + (col + xo) * scale_x
-                py0 = y0 + row * scale_y
-                for sy in range(scale_y):
-                    for sx in range(scale_x):
-                        px = px0 + sx
-                        py = py0 + sy
-                        for dx, dy in ((1, 1), (1, 0), (0, 1)):
-                            if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
-                                pixels[py + dy][px + dx] = 7
-                        if 0 <= px < width and 0 <= py < height:
-                            pixels[py][px] = 11
+                py = y0 + row
+                for sx in range(scale_x):
+                    px = px0 + sx
+                    for dx, dy in ((1, 1), (1, 0), (0, 1)):
+                        if 0 <= px + dx < width and 0 <= py + dy < height and pixels[py + dy][px + dx] == 0:
+                            pixels[py + dy][px + dx] = 7
+                    if 0 <= px < width and 0 <= py < height:
+                        pixels[py][px] = 11
         cursor += (w + 1) * scale_x
 
     off = 0x5BBB3C
@@ -10330,7 +10315,7 @@ def patch_world_map_label_tiles(rom):
 
     def put_label(buf, data, tile_ids, text, x=0):
         pixels = blank_pixels(data, len(tile_ids) * 8, 8)
-        draw_text(pixels, text, x)
+        draw_text(pixels, text, x, ink=15)
         raw = pack_tiles(pixels)
         for idx, tile_id in enumerate(tile_ids):
             start = tile_id * 32
@@ -14252,6 +14237,14 @@ def _build(args, publication):
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(GLYPH_BLOB_2350, 'rb').read()   # T1: 2350자 글리프(기존 prefix-identical)
     rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
+    # The shared top tile for 작/장/잠 and the other ㅈ+ㅏ syllables joins
+    # the ㅈ crossbar to the ㅏ stem at small UI scale. Open one pixel of
+    # space between them so the battle-menu 작 cannot resemble 짝.
+    from render_galmuri_8x16 import render_char
+    jieut_a_top = KOR_GLYPH_FILE + 599 * 32
+    if bytes(rom[jieut_a_top:jieut_a_top + 32]) != render_char('작')[0]:
+        raise AssertionError('shared ㅈ+ㅏ top glyph changed')
+    rom[jieut_a_top + 3 * 4 + 5 // 2] &= 0x0F  # row 3, x 5
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
     rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES
@@ -14806,6 +14799,8 @@ def _build(args, publication):
     st['part1_editor_obj_labels'] = part1_editor_obj_labels.patch(rom, orig)
     import part1_capture_word_obj
     st['part1_capture_word_obj'] = part1_capture_word_obj.patch(rom, orig)
+    st['part2_editor_select_caption'] = i7_p2_editor.patch_select_caption(rom, orig)
+    st['part2_editor_small_captions'] = i7_p2_editor.patch_small_captions(rom, orig)
     import item7_design_map_panel as i7_design_map
     st['item7_design_map_panel'] = i7_design_map.patch(rom, orig)
     import item7_multiboot_factory_tooltip as i7_mb_tooltip
@@ -14827,6 +14822,8 @@ def _build(args, publication):
     st['part2_shogun_select_label'] = p2_shogun_sel.patch(rom, orig)
     import part2_special_break_banner as p2_spbreak
     st['part2_special_break_banner'] = p2_spbreak.patch(rom, orig)
+    import part2_capture_banner as p2_capture
+    st['part2_capture_banner'] = p2_capture.patch(rom, orig)
     import part2_war_over_headline as p2_warover
     st['part2_war_over_headline'] = p2_warover.patch(rom, orig)
     import part2_attack_range_legend as p2_atk_legend
@@ -24465,6 +24462,7 @@ def _build(args, publication):
     p2_camp_rank.verify(rom, _p2_camp_rank_final_regions)
     p2_shogun_sel.verify(rom, _p2_shogun_sel_final_regions)
     p2_spbreak.verify(rom, _p2_spbreak_final_regions)
+    p2_capture.verify(rom, orig)
     p2_warover.verify(rom, _p2_warover_final_regions)
     p2_atk_legend.verify(rom, _p2_atk_legend_final_regions)
     p2_wo_sheet.verify(rom, _p2_wo_sheet_final_regions)

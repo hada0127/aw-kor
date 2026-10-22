@@ -3,6 +3,27 @@
 - 트라이얼 `MAP SELECT`의 첫 목록·스크롤에서 맵명이 비는 문제와 싱글 대전 룰 원형 라벨/값이 연하게 보이는 문제를 수정했다. 후보 ROM과 원본/수정 실화면·게이트 결과는 `temp/evidence_20261023/REPORT.md` Round 2를 따른다. b44 정본은 그대로다.
 - Round 3 후보에서 1편 맵 디자인 `채움` 행·파일 하위 메뉴 공란과 점령 애니메이션 `占領!`을 고쳤다. 원본/후보 같은 상태 화면과 빌드·QA 근거는 `temp/evidence_20261023/REPORT.md` Round 3에 있다. 편집기 도움말 본문 깨짐, 제보의 정확한 잠금 `???` 목록 상태, 전 메뉴/하위 페이지 전수는 미완료다. 정본 b44는 그대로다.
 - Round 5 후보에서 1편 맵 디자인 도움말 두 페이지의 누락 글리프를 화면별 사전 로드로 복원했다. 같은 저장으로 두 페이지를 원본·직전 후보·신규 후보에서 캡처했고 편집기/SELECT/파일/정보/채움 화면 회귀 차이는 0이다. 후보 SHA·검증·남은 범위는 `temp/evidence_20261023/REPORT.md` Round 5를 따른다. 제보의 정확한 잠금 `???` 상태와 전 메뉴 전수는 여전히 미완료다.
+## 2026-10-23 Part 2 화면 보수 Round 6
+
+- [x] 프롤로그의 작은 배경 지명만 Galmuri7 팔레트 잉크 12→15로 밝히고, 프롤로그 및 공용 월드맵 화면에서 전후 비교했다. 후보·명령·화면 경로는 `temp/evidence_20261023/REPORT.md` Round 6.
+- [x] 트라이얼 지도 목록과 기록 오버레이, 3명 CO 선택, 전투 시스템 설정, 상점 재고·구매 확인, 사운드룸 46곡, 일자 배너, S랭크 결과를 후보 실화면에서 표본 확인했다. 잠긴 지도 이름은 `미상`으로 보인다.
+- [x] 원본 2편 트라이얼의 잠긴 지도 행에서도 `??????`를 재현했다. 이전 Round 1–5의 사용자 4.png 1편 단독 추정은 확정 근거가 아니다. 사용자 사진의 정확한 진입 상태는 계속 미확인이다.
+- [ ] 해금된 CO 전체, 다른 지도/상점 상태, 실제 iPhone·GBA 화면 및 정상 플레이 경로는 별도 검증한다. 저장·state를 사용한 화면 증거를 정상 플레이 완료로 세지 않는다.
+
+## 2026-10-23 Part 2 점령 완료 컷인 Round 4
+
+- [x] 2편 `占領!` OBJ 소스 `0x47F79C`를 실화면 VRAM/OAM과 원본 ROM 대조로 확인하고 `점령!`으로 교체, 에뮬레이터 완료 프레임 확인. 증거는 `temp/evidence_20261023/REPORT.md` Round 4.
+- [ ] Round 1~3에서 미도달한 다른 2편 화면과 실제 기기에서 이 후보의 동작 확인.
+
+## 2026-10-23 Part 2 화면 보수 Round 3 후보
+
+- 후보 `output/game_wars_korean_p2_round3.gba`에서 2편 지도 편집기 잔여 수 표기를 `남음`에서 `남은`으로 통일했고 실화면에서 확인했다. 전투 메뉴 `작`은 공유 갈무리 ㅈ+ㅏ 윗타일의 접합 픽셀 1개를 지워 실제 화면의 해당 픽셀 변경을 확인했으나, 4배 확대에서 확실히 `작`으로 판독되는지는 미완료다. 점령 애니메이션과 나머지 미도달 화면은 완료로 세지 않는다. 증거와 제한은 `temp/evidence_20261023/REPORT.md` Round 3.
+
+## 2026-10-23 Part 2 화면 보수 Round 2 후보
+
+- 프롤로그 제목 OBJ, 전투 명령 메뉴 첫 아이콘/둘째 아이콘 복원, 지도 편집기 `SELECT 메뉴`·`남음`·`지형`은 별도 후보 `output/game_wars_korean_p2_round2_editor.gba`에서 실화면 확인했다. 상세 경로와 제한은 `temp/evidence_20261023/REPORT.md` Round 2.
+- 사용자 5.png는 2편 지도 편집기에서도 재현됐다. Round 1의 1편 단독 귀속 판단은 취소한다. 4.png의 `???` 지도 목록은 이번 2편 자유전 목록에서 재현되지 않았다.
+- 미완료: 2편 점령 애니메이션 `점령` 그림 소스/완료 변종, 프롤로그 배경 지도 라벨 시각 품질, `작전` 글자 시각 판독성, 편집기 지형 이름칸의 사용자 제보 좌표 재현, War Room·Stats·Options·Sound room·Battle Maps shop 및 전투 각 하위 페이지의 원본/후보 동일 상태 전수 비교. 확인하지 않은 화면은 완료로 세지 않는다.
 
 ## 2026-10-21 b44 정본 배포본 갱신
 
@@ -173,6 +194,8 @@
 이 파일 하나가 현재 진행 기준이다. 완료=`docs/success.md`, 실패/dead-end=`docs/fail.md`,
 RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp/review_prompt.md`).
 과거 완료(scene 에디터 Phase 0~8 등)는 success.md + git history.
+
+> **2026-10-23 2편 프롤로그 화면 후보 (정본 b44 유지):** `data/dialogue_spacing_repairs.json`의 두 줄 배치(0xA01970/0xA01AB0)를 수정한 후보 `output/game_wars_korean_p2_20261023.gba` SHA `f2f8b1c2…823482`. 같은 콜드부트 경로 전후 11/17번 프레임에서 내레이션 단어 분리와 목표 대사 넘침이 해소됨. `temp/evidence_20261023/REPORT.md` 참조. **남음:** 2편 프롤로그 로고·희미한 지도 라벨, 점령 애니메이션의 일본어 그림 글자, 비캠페인 메뉴 미캡처 경로. 정본/배포본 갱신 전 이 화면들을 별도 검증한다.
 
 
 > **2026-10-14 후보 C3 = b29r2** (`output/game_wars_korean_candidate_20261014_b29r2.gba`, SHA-256 `500a7af7e2b04fb45c78acda80e9aedd6062e5ccbc82ea36da4879c81bc87e73`): 2편 일수 배너를 사용자 승인 Hada Sans Bold로 수정했다. W2 batch 4 및 W1-reg5/reg6 증거 등록 후 scene gate는 **15 BLOCKED + 1 DEFECT**이며, 26a 결함은 b29r2 캡처에 다시 등록해야 한다. catalog drift 279그룹은 기존 재배정으로 수용했다(`dfc31f9`의 link-client deny 범위가 client 문자열을 `98_extraction_noise_review`로 보냄). **OPEN:** `실패` 접미부와 대체 배너 시트 8개의 런타임 소비 미검증. **다음 b30:** 사용자 결정(2026-10-14)에 따라 2편 임무 제목 글리프를 Hada Sans Bold로 확대한다. 앞선 목업에서 Hada Sans라고 적힌 행은 실제로 OkDanDan 렌더였으므로 진짜 Hada Sans 결과를 승인용으로 보여줘야 한다.
@@ -1736,3 +1759,7 @@ RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp
 
 - Part 1 `맵 디자인` small OBJ captions and `SELECT` header: candidate fix in `tools/part1_editor_obj_labels.py`; exact verification and candidate ROM are in `temp/evidence_20261023/REPORT.md`. This is a worktree candidate, not the canonical b44 release.
 - Still open from the user report: Part 1 War Room `???` map-name route and capture animation sprite have no exact current-ROM screen reproduction in this worktree. The editor terrain name below the building icon also needs a separate visual/consumer check. Screenshots 1/2/3 are Part 2 paths; screenshot 5 is Part 1 editor. Do not treat the mode-menu sweep as coverage of all unlocked Part 1 menus.
+## 2026-10-23 Part 2 점령 컷인 Round 5
+
+- [x] `점령!` 완료 컷인을 원본 64×32 폭에 가깝게 키우고 원본 팔레트의 어두운 테두리·하단 그림자를 적용했다. 후보 `output/game_wars_korean_p2_round5.gba` SHA-256 `f615c70865367ae2d08ce8036e3a554d7df0bf90f664b897af8f011f6b9c1c7c`; 완료 프레임과 4배 크롭은 `temp/evidence_20261023/REPORT.md` Round 5에 기록했다.
+- [ ] 2편 전적·옵션·사운드 룸·배틀 맵 상점·결과 등 미도달 화면 및 프롤로그 희미한 배경 글자, 편집기 지형명 사용자 좌표, 실제 기기 화면은 계속 미검증이다. 이번 라우트의 2편 지도 목록·전투 시스템 하위 메뉴·저장 확인창 표본에서 새 일본어는 보이지 않았다.

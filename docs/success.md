@@ -1,4 +1,30 @@
-> Current canonical local build: b42 (`1c23b09160a9f7e491c8d2de8782e80200a13fb4238aec92999728b0282b1fbf`); the dated patch package and remaining limits are in `temp/release_C/canon9/report.md`. Earlier b36r3 link evidence remains historical and its cross-ROM state manifests remain invalid.
+> Current canonical local build: b44 (`1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`). The Part 2 fixes below are separate candidates, not the canonical release.
+
+## 2026-10-23 Part 2 프롤로그 지도 라벨 Round 6 후보
+
+- `tools/build_korean_full.py`의 `patch_world_map_label_tiles`에서 작은 Galmuri7 지명만 팔레트 index 15로 그렸다. 큰 `월드맵` 제목은 기존 index 12를 유지했다. 원본 `0x54214C`, `0x5AAA68` 두 LZ77 시트의 같은 지명 타일만 바뀐다. 후보 `output/game_wars_korean_p2_round6.gba` SHA-256 `a48edc74930eecc12e5d1db93e8a1fb8c70b43d853ddbdf64580f482faa7d332`.
+- mGBA 콜드부트 프롤로그 `prologue_11.png`와 트라이얼 `MAP★SELECT`에서 기존 후보와 수정 후보의 같은 입력·화면을 비교했다. 프롤로그의 흐린 배경 글자가 더 선명해지고 일반 지도 화면도 판독 가능하다. 상세 화면·QA·제한은 `temp/evidence_20261023/REPORT.md` Round 6.
+
+## 2026-10-23 Part 2 점령 완료 그림 Round 5 후보
+
+- Round 4의 `점령!` 컷인을 원본 64×32 OBJ에 가까운 폭으로 확대하고 원본 팔레트 인덱스 1–6의 어두운 외곽선·그림자·분홍 명암을 사용했다. `output/game_wars_korean_p2_round5.gba` SHA-256 `f615c70865367ae2d08ce8036e3a554d7df0bf90f664b897af8f011f6b9c1c7c`. 실화면 4배 비교와 130프레임 영역 검사는 `temp/evidence_20261023/REPORT.md` Round 5 참조. 2편 지도 목록·전투 시스템/저장 확인창 일부를 추가로 표본 확인했지만 나머지 화면 전수 통과는 아니다.
+
+## 2026-10-23 Part 2 점령 완료 그림 Round 4 후보
+
+- 2편 점령 완료 컷인의 일본어 `占領!`는 `0x47F79C` LZ77 OBJ 시트의 마지막 64×32 구간이다. 실화면 OBJ tile 519의 32타일이 이 구간과 전부 일치하며 원본 ROM 포인터는 `0x341334` 한 곳이다. 앞의 점령 창 두 구간을 보존하고 OkDanDan-Bold `점령!` 그림으로 교체했다. 후보 `output/game_wars_korean_p2_round4_capture.gba` SHA-256 `babcf4fd50217596567ecffb9c137d347403cc92fb9eb0589cb786fce9f2327f`; 완료 애니메이션의 전후 실화면은 `temp/evidence_20261023/capture_runtime/` 및 `REPORT.md` Round 4에 보존한다. 기존 미도달 메뉴와 실제 기기 검증은 별개 미완료다.
+
+
+## 2026-10-23 Part 2 화면 보수 Round 3 후보
+
+후보 `output/game_wars_korean_p2_round3.gba` SHA-256 `c25cdde043a7e34ada40bdcfeede8a20b586356f7527ed9f1f9e8e7fb8f18641`에서 지도 편집기 OBJ ID84를 `남은`으로 바꿔 실화면에서 확인했다. 전투 메뉴 `작`의 공유 갈무리 윗타일에서 ㅈ/ㅏ 사이 접합 픽셀 하나를 떼어 실제 화면의 해당 픽셀 변경을 확인했다. 4배 확대 판독성은 미확정이며 점령 애니메이션과 미도달 화면도 완료로 세지 않는다. 세부 증거는 `temp/evidence_20261023/REPORT.md` Round 3.
+
+## 2026-10-23 Part 2 화면 보수 Round 2 후보
+
+후보 `output/game_wars_korean_p2_round2_editor.gba` SHA-256 `8daf315b3cda57121a4e41490d6471a84f879ee595213a60e93d80887cb524f1`에서 프롤로그 OBJ 제목(`0x5BBB3C`)의 2배 세로 확대를 Galmuri11 원래 높이로 바꿨다. 전투 명령 메뉴의 첫 아이콘은 실제 BG0 타일 `0x204..0x207` 대응 원본 주소 `0x454114..0x454174`만 수정했다. 기존 패치가 첫 아이콘 아래 2타일과 둘째 아이콘 4타일을 섞어 덮던 오류를 바로잡았다. 지도 편집기 OBJ ID142/84/169를 각각 `SELECT 메뉴`·`남음`·`지형`으로 그렸다. 원본/후보 동일 콜드부트 경로 및 저장을 사용한 mGBA 프레임, 검증 결과, 미완료 범위는 `temp/evidence_20261023/REPORT.md` Round 2에 기록했다. 점령 애니메이션, 프롤로그 흐린 지도 라벨, 전 메뉴 전수 검수는 미완료다.
+
+## 2026-10-23 Part 2 프롤로그 두 화면 줄 배치 후보 검증
+
+`data/dialogue_spacing_repairs.json`의 `0xA01970` 내레이션과 `0xA01AB0` 목표 대사의 reviewed `after` 행이 b44 화면에서 각각 「매크로/랜드」 분리와 첫 행 우측 넘침을 만들었다. 같은 한글 글리프 순서를 보존하면서 줄 경계만 조정했다. 원본 ROM 빌드 후보 `output/game_wars_korean_p2_20261023.gba` SHA-256 `f2f8b1c2de1f1dc9bea0c19fca2ee96880451d7d5ee92419548ee55d6e823482`는 b44와 두 relocated 메시지의 27바이트만 다르다. 콜드부트 mGBA 전후 프레임 `temp/evidence_20261023/{before,after}/prologue_{11,17}.png`에서 두 줄 배치가 정상임을 확인했다. 빌드·phase6·qa_text_fit·무결성 바이트 게이트·관련 122개 단위시험 통과. 전체 `qa_integrity_map.py`의 기존 부호소실 3085행/중점잔존 1035행은 b44와 동일하게 FAIL이며 이 후보의 새 결함으로 집계하지 않는다. 로고·배경 라벨·2편 점령 애니메이션과 미캡처 메뉴는 미완료; 상세는 `temp/evidence_20261023/REPORT.md`.
 
 ## 2026-10-19 b42 canonical evidence and package
 
