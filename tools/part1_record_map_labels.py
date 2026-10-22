@@ -1,11 +1,13 @@
-"""Allow the observed record-menu live state through the compact map hook.
+"""Allow observed map-list live states through the compact map hook.
 
 The single/link list renders with state 0x03000F20 initially and 0x030010A0
-when scrolling; map records use 0x03001220 initially and 0x03001280 on scroll.
+when scrolling; Trial MAP SELECT also uses 0x03000EC0 and 0x03001040.
+Map records use 0x03001220 initially and 0x03001280 on scroll.
 Both initialize a hidden 0x03000F80 buffer first. Keep rejecting that hidden
 buffer. Single/link uses eight cells in six rows plus the category title;
 records use seven cells in an eight-row EWRAM ring and a separate 112-tile
-BG character window.
+BG character window. Trial MAP SELECT redraws through 0x03000EC0 after its
+first 0x03000F20 pass; both passes need the single/link row layout.
 """
 import hashlib
 import struct
@@ -19,8 +21,9 @@ EXPECTED = bytes.fromhex('3548874260d13548')
 GATE = 0xF30720
 # tools/asm/part1_record_map_gate.s. All targets preserve Thumb state.
 CODE = bytes.fromhex(
-    '084887420ad00848874207d06030874204d00648874201d005480047'
-    '0548064b1847c046200f000320120003a0100003dd06f308a01cb8081d06f308'
+    '0b48874210d0603887420dd0094887420ad06030874207d0'
+    '0748874204d06038874201d0054800470548064b1847c046'
+    '200f000320120003a0100003dd06f308a01cb8081d06f308'
 )
 TRAMPOLINE = bytes.fromhex('00480047') + struct.pack('<I', 0x08000000 + GATE + 1)
 SOURCE_SITE = 0xF30626
@@ -34,7 +37,8 @@ SOURCE_GATE_CODE = bytes.fromhex(
 )
 ROW_STATE_GATE = 0xF31FC0
 ROW_STATE_GATE_CODE = bytes.fromhex(
-    '039f0348874201d00248004702480047a0100003a907f308d507f308'
+    '039f0648874207d06038874204d00448874201d00348004703480047'
+    'a0100003c00e0003a907f308d507f308'
 )
 ROW_SITE = 0xF3065E
 ROW_EXPECTED = bytes.fromhex('06293cd2301cc009072528400628')
@@ -87,7 +91,7 @@ def patch(rom, original):
             raise AssertionError('record map gate allocation is not pristine')
     for address, payload in WRITES:
         rom[address:address + len(payload)] = payload
-    return {'states': ['0x03000F20', '0x030010A0', '0x03001220', '0x03001280'], 'hidden_state_rejected': '0x03000F80',
+    return {'states': ['0x03000F20', '0x03000EC0', '0x030010A0', '0x03001040', '0x03001220', '0x03001280'], 'hidden_state_rejected': '0x03000F80',
             'record_tiles': ['0x280', '0x2EF'],
             'single_link_tiles': ['0x0D0', '0x13F'],
             'writes': [{'offset': hex(a), 'size': len(raw),

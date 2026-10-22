@@ -9924,6 +9924,8 @@ def patch_part2_campaign_rule_value_labels(rom):
 # 화면 OBJ tile index와 직접 대응한다.
 PART1_RULE_CIRCLE_LZ77_OFF = 0x00C2C6EC
 PART1_RULE_CIRCLE_SIG = '131a4e7eac41a812'
+# The Part 1 circle OBJ palette renders index 5 as dark ink; index 15 is pale.
+PART1_RULE_CIRCLE_INK = 5
 PART1_RULE_CIRCLE_LABELS = [
     (80, '정찰'),
     (88, '날씨'),
@@ -9964,11 +9966,11 @@ def patch_part1_rule_circle_labels(rom):
     buf = bytearray(data)
     for tile, ko in PART1_RULE_CIRCLE_LABELS:
         off = tile * 32
-        label = _render_rule_label_obj(ko)
+        label = _render_rule_label_obj(ko, ink=PART1_RULE_CIRCLE_INK)
         buf[off:off + len(label)] = label
     for tile, ko in PART1_RULE_CIRCLE_VALUES:
         off = tile * 32
-        value = _render_value_obj(ko, 4)
+        value = _render_value_obj(ko, 4, ink=PART1_RULE_CIRCLE_INK)
         buf[off:off + len(value)] = value
 
     comp = lz77_compress_optimal(bytes(buf), vram_safe=True)

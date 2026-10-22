@@ -41,6 +41,12 @@ link_row_state_gate:
     ldr r0, scroll_live
     cmp r7, r0
     beq single_rows
+    subs r0, #0x60
+    cmp r7, r0
+    beq single_rows
+    ldr r0, trial_live
+    cmp r7, r0
+    beq single_rows
     ldr r0, old_row_gate
     bx r0
 single_rows:
@@ -48,5 +54,6 @@ single_rows:
     bx r0
 .align 2
 scroll_live: .word 0x030010A0
+trial_live: .word 0x03000EC0
 old_row_gate: .word 0x08F307A9
 single_row_resume: .word 0x08F307D5

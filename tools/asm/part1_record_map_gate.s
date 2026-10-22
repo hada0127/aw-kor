@@ -8,6 +8,10 @@ record_map_gate:
     ldr r0, single_live
     cmp r7, r0
     beq accepted
+    // Trial MAP SELECT redraws the same visible rows through 03000EC0.
+    subs r0, #0x60
+    cmp r7, r0
+    beq accepted
     ldr r0, record_live
     cmp r7, r0
     beq accepted
@@ -15,6 +19,10 @@ record_map_gate:
     cmp r7, r0
     beq accepted
     ldr r0, link_scroll_live
+    cmp r7, r0
+    beq accepted
+    // Trial scroll uses the buffer immediately before the link scroll state.
+    subs r0, #0x60
     cmp r7, r0
     beq accepted
     ldr r0, rejected
