@@ -1664,3 +1664,5 @@ The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `
 ### 2026-10-23 1편 맵 편집기 도움말 본문 (Round 3 미해결)
 
 파일/채움용 `0x03000F80` + `D8244C..D824AD` 소스 게이트를 도움말에 재사용할 수 없다. 도움말은 별도 상태 `0x03000E60`, 소스 `D82124..D821E8`로 첫 페이지에 렌더러 81회를 호출한다. 최종 후보 화면에도 글리프 누락·간격 불균형이 남는다. 짧은 메뉴의 112 타일 풀을 본문에 무조건 공유하면 영역을 침범하므로 도움말별 타일/행 배치 조사 후 수정해야 한다. 추적·원본/후보 화면: `temp/evidence_20261023/round3/help_trace/parser.log`, `round3/editor_integrated_pair/{original,round3}/help/entered.png`.
+
+Round 4에서 DOWN/UP으로 도움말 두 페이지를 원본/후보 같은 SRAM으로 모두 확인했다. 두 페이지 모두 후보의 한글 글리프 누락·띄어진 간격이 남아 있다(`temp/evidence_20261023/round4/help_controls/`). 추가 본문 훅은 설치하지 않았다. 사용자 `???` 화면과 같은 잠금 SRAM도 없어서, 열린 SRAM의 트라이얼 분류 화면만으로 원본 `???`를 정상 placeholder라고 판정하지 않는다.
