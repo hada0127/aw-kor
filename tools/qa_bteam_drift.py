@@ -422,11 +422,17 @@ APPROVED_EXCEPTIONS = {
     '0x00DF948E': ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'),
 }
 
+# Exact user-approved Part 2 prologue renderer exceptions.  These rows record
+# the full visible before/after text; the original protected source baseline
+# and the authored dialogue overrides remain unchanged.
+PROLOGUE_RENDERER_EXCEPTION_DIGEST = '61a87dcacc53d16ff7b99f107dea74d6cb376ab02e51a2999b823774b06f902b'
+
 
 def core_digest(base: dict) -> str:
     exceptions = base.get('_user_approved_exceptions', {})
     core = {k: v for k, v in base.get('overrides', {}).items()
-            if k not in exceptions or exceptions[k].get('display_only')}
+            if k not in exceptions or exceptions[k].get('display_only')
+            or exceptions[k].get('renderer_only')}
     return hashlib.sha256(json.dumps(core, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
@@ -434,8 +440,16 @@ def exception_errors(base: dict, overrides: dict) -> list:
     """Each exception is valid only for its exact (address, from, to) tuple."""
     errors = []
     recorded = base.get('_user_approved_exceptions', {})
-    if {a: (e.get('from'), e.get('to')) for a, e in recorded.items() if isinstance(e, dict)} != APPROVED_EXCEPTIONS:
+    ordinary = {a: (e.get('from'), e.get('to')) for a, e in recorded.items()
+                if isinstance(e, dict) and not e.get('renderer_only')}
+    renderer = {a: (e.get('from'), e.get('to')) for a, e in recorded.items()
+                if isinstance(e, dict) and e.get('renderer_only')}
+    if ordinary != APPROVED_EXCEPTIONS:
         errors.append('baseline exceptions differ from the approved (address, from, to) table')
+    renderer_digest = hashlib.sha256(json.dumps(renderer, ensure_ascii=False,
+                                                sort_keys=True).encode()).hexdigest()
+    if len(renderer) != 21 or renderer_digest != PROLOGUE_RENDERER_EXCEPTION_DIGEST:
+        errors.append('Part 2 prologue renderer exceptions differ from the approved text')
     for addr, exc in recorded.items():
         if isinstance(exc, dict) and bool(exc.get('display_only')) != (addr in ('0x00D82498', '0x00D8246A')):
             errors.append(f'{addr}: display-only status differs from approval')
@@ -443,6 +457,11 @@ def exception_errors(base: dict, overrides: dict) -> list:
         if (not isinstance(exc, dict) or not exc.get('approved') or not exc.get('from')
                 or not exc.get('to') or exc['from'] == exc['to']):
             errors.append(f'{addr}: malformed user-approved exception')
+            continue
+        if exc.get('renderer_only'):
+            expected = exc['from'].replace('、', '，').replace('。', '．')
+            if exc['to'] != expected or exc['from'] == expected or exc.get('display_only'):
+                errors.append(f'{addr}: unapproved prologue renderer transformation')
             continue
         if exc.get('display_only'):
             if addr not in ('0x00D82498', '0x00D8246A'):
@@ -705,6 +724,10 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             cause = 'protected address has no final text write evidence'
         if not matched:
             matched = matches_reviewed_bteam_spacing(addr, baseline, actual)
+        if not matched and key in base.get('_user_approved_exceptions', {}):
+            exception = base['_user_approved_exceptions'][key]
+            if exception.get('renderer_only'):
+                matched = actual == exception['to']
         if not matched:
             matched = round2_width_equivalent(baseline, actual, addr)
         if not matched and key in APPROVED_EXCEPTIONS and 0xA2D55C <= addr <= 0xA2D8A8:

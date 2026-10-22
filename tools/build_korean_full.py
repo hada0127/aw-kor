@@ -5339,6 +5339,65 @@ def restore_symbol_glyphs(rom, orig):
 PART2_A3_DECIMAL_NODE = 0xFD0000
 PART2_A3_DECIMAL_BUCKET = 0x807790
 PART2_A3_MIDDLE_DOT_NODE = 0x808188
+PART2_A3_COMMA_NODE = 0xFD0050
+PART2_A3_COMMA_BUCKET = 0x80778C
+
+
+def part2_prologue_comma_node(rom, orig):
+    """Add Galmuri's comma at the Part 2 A3 0x8143 glyph-cache key."""
+    from render_galmuri_8x16 import render_char
+    node_addr = PART2_A3_COMMA_NODE
+    bucket = PART2_A3_COMMA_BUCKET
+    old_head = bytes(orig[bucket:bucket + 4])
+    if bytes(rom[bucket:bucket + 4]) != old_head:
+        raise AssertionError('Part 2 comma bucket changed before patch')
+    pointer = int.from_bytes(old_head, 'little')
+    seen = set()
+    while pointer:
+        off = pointer - 0x08000000
+        if off in seen or not 0 <= off <= len(orig) - 72:
+            raise AssertionError('invalid Part 2 comma glyph chain')
+        seen.add(off)
+        if orig[off + 4] == 0x81:
+            raise AssertionError('Part 2 comma glyph already has an owner')
+        pointer = struct.unpack_from('<I', orig, off)[0]
+    if (any(orig[node_addr:node_addr + 72]) or any(rom[node_addr:node_addr + 72])
+            or (0x08000000 + node_addr).to_bytes(4, 'little') in orig):
+        raise AssertionError('Part 2 comma node storage is occupied')
+    source = b''.join(render_char(',', ink=10))
+    pixels = [(x, y) for y in range(16) for x in range(8)
+              if (source[(y // 8) * 32 + (y % 8) * 4 + x // 2] >> (4 * (x % 2))) & 15]
+    if pixels != [(2, 3), (1, 4)]:
+        raise AssertionError('Galmuri comma source pixels changed')
+    glyph = bytearray(64)
+    for x, y in pixels:
+        x += 2
+        y += 9
+        glyph[(y // 8) * 32 + (y % 8) * 4 + x // 2] |= 10 << (4 * (x % 2))
+    node = old_head + bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 6]) + glyph + bytes(2)
+    if node[4:6] != b'\x81\x08' or len(node) != 72:
+        raise AssertionError('Part 2 comma node header changed')
+    node_ptr = (0x08000000 + node_addr).to_bytes(4, 'little')
+    rom[node_addr:node_addr + 72] = node
+    rom[bucket:bucket + 4] = node_ptr
+    WRITE_LOG.append([node_addr, 72, 72, node.hex(), None, '，', None,
+                      'part2-prologue-comma-a3'])
+    WRITE_LOG.append([bucket, 4, 4, node_ptr.hex(), None, '，', None,
+                      'part2-prologue-comma-bucket'])
+    return node_addr
+
+
+def verify_part2_prologue_comma_node(rom, orig):
+    from dialogue_pixel_layout import Glyphs
+    if (struct.unpack_from('<I', rom, PART2_A3_COMMA_BUCKET)[0]
+            != 0x08000000 + PART2_A3_COMMA_NODE
+            or struct.unpack_from('<I', rom, PART2_A3_COMMA_NODE)[0]
+            != struct.unpack_from('<I', orig, PART2_A3_COMMA_BUCKET)[0]):
+        raise AssertionError('Part 2 comma glyph chain changed after insertion')
+    glyph = Glyphs(bytes(rom)).bitmap(b'\x81\x43', 'p2')
+    ink = {(x, y) for y, row in enumerate(glyph) for x, value in enumerate(row) if value}
+    if ink != {(4, 12), (3, 13)}:
+        raise AssertionError('Part 2 Galmuri comma pixels changed')
 
 
 def patch_part2_decimal_point_a3(rom, orig):
@@ -14672,6 +14731,7 @@ def _build(args, publication):
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
     st['part2_a3_decimal_node'] = patch_part2_decimal_point_a3(rom, orig)
+    st['part2_a3_prologue_comma_node'] = part2_prologue_comma_node(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
     st['compact_ui_fallback_glyph'] = patch_compact_ui_fallback_glyph(rom, orig)
     st['part2_ui_context_tokens'] = patch_part2_ui_context_tokens(rom)
@@ -24536,6 +24596,7 @@ def _build(args, publication):
     from part1_production_info_labels import verify_final_rom as verify_production_info_final
     st['part1_production_info_final'] = verify_production_info_final(rom)
     verify_part2_decimal_point_a3(rom, orig)
+    verify_part2_prologue_comma_node(rom, orig)
     # Link-play client font (Design A): after every text writer, before the checksum.
     import link_client_font
     _lcf_codes = {k: v.to_bytes(2, 'big') for k, v in syl_to_code.items()}
@@ -24560,6 +24621,9 @@ def _build(args, publication):
         _spacing_applied = apply_dialogue_spacing(rom, orig, _rp_manifest, WRITE_LOG)
         st['dialogue_spacing_pages'] = verify_dialogue_spacing(rom, orig, _rp_manifest)
         st['dialogue_spacing_messages'] = len(_spacing_applied)
+        import part2_prologue_punctuation
+        st['part2_prologue_approved_punctuation'] = part2_prologue_punctuation.patch(
+            rom, _rp_manifest, WRITE_LOG)
         # The apology message keeps its exact first page while its later
         # pages receive reviewed spacing. Check its active pointer/prefix again.
         st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address), _rp_manifest)

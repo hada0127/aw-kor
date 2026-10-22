@@ -4185,3 +4185,6 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 ### 2026-10-23 1편 맵 편집기 메뉴·점령 OBJ 후보 (Round 3)
 
 `tools/build_korean_full.py --out output/game_wars_korean_p1_round3_capture_20261023.gba --no-sync-outputs`로 원본 ROM 기반 후보 SHA-256 `bde9ecac8cdff27263d66411ccc2768797eabb13dcae1c434a29be9cc769934e`를 재생성했다. 맵 편집기 `0x08B1319C`의 `0x03000F80` 상태에서 `D8244C..D824AD` 소스만 허용하는 표시 훅을 적용해 파일의 `로드/세이브/이름`, 상위 `채움` 행을 원본/이전 후보/최종 후보 동일 저장 상태로 비교했다. B팀 소스 `D82498`의 `정보`와 `이름 입력`은 수정하지 않았다. 1편 점령 카드의 raw OBJ `BC3CEC..BC3F6B`를 40×32 내 OkDanDan-Bold `점령!`로 바꾸고 원본/최종 동일 캡처 경로를 확인했다. 캡처 경로는 애니메이션 RAM `0x0201248A=01`을 설정한 치트 보조 증거다. `phase6_basic_test`, `qa_text_fit`, 무결성 byte-only 통과, 12 단위 테스트 통과. 일반 무결성 QA의 기존 부호소실3085/中점1035는 여전히 exit1이다. 재생 명령·화면·제한은 `temp/evidence_20261023/REPORT.md` Round 3 참조. 도움말 본문과 제보의 정확한 `???` 상태는 통과 주장하지 않는다.
+## 2026-10-23 Part 2 프롤로그 부호 후보 (정본 아님)
+
+- 사용자 승인 범위의 일본식 문장부호 21곳을 서양식 쉼표/마침표 글리프로 교체했다. 프롤로그 콜드부트 동일 입력에서 원본/후보 화면을 비교했고 후보의 부호가 표시됐다. 빌드, Phase 6, B-team drift, byte integrity, text fit은 통과했다. 전체 integrity의 기존 번역 데이터 경고는 남아 있다. 상세 결과와 미검증 화면은 `temp/evidence_20261023/SWEEP2_REPORT.md`를 따른다.
