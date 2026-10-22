@@ -168,6 +168,8 @@
 RE 사실=`docs/research.md`. 막힘/완료 시 Codex+Claude 엄격 리뷰(`temp/review_prompt.md`).
 과거 완료(scene 에디터 Phase 0~8 등)는 success.md + git history.
 
+> **2026-10-23 2편 프롤로그 화면 후보 (정본 b44 유지):** `data/dialogue_spacing_repairs.json`의 두 줄 배치(0xA01970/0xA01AB0)를 수정한 후보 `output/game_wars_korean_p2_20261023.gba` SHA `f2f8b1c2…823482`. 같은 콜드부트 경로 전후 11/17번 프레임에서 내레이션 단어 분리와 목표 대사 넘침이 해소됨. `temp/evidence_20261023/REPORT.md` 참조. **남음:** 2편 프롤로그 로고·희미한 지도 라벨, 점령 애니메이션의 일본어 그림 글자, 비캠페인 메뉴 미캡처 경로. 정본/배포본 갱신 전 이 화면들을 별도 검증한다.
+
 
 > **2026-10-14 후보 C3 = b29r2** (`output/game_wars_korean_candidate_20261014_b29r2.gba`, SHA-256 `500a7af7e2b04fb45c78acda80e9aedd6062e5ccbc82ea36da4879c81bc87e73`): 2편 일수 배너를 사용자 승인 Hada Sans Bold로 수정했다. W2 batch 4 및 W1-reg5/reg6 증거 등록 후 scene gate는 **15 BLOCKED + 1 DEFECT**이며, 26a 결함은 b29r2 캡처에 다시 등록해야 한다. catalog drift 279그룹은 기존 재배정으로 수용했다(`dfc31f9`의 link-client deny 범위가 client 문자열을 `98_extraction_noise_review`로 보냄). **OPEN:** `실패` 접미부와 대체 배너 시트 8개의 런타임 소비 미검증. **다음 b30:** 사용자 결정(2026-10-14)에 따라 2편 임무 제목 글리프를 Hada Sans Bold로 확대한다. 앞선 목업에서 Hada Sans라고 적힌 행은 실제로 OkDanDan 렌더였으므로 진짜 Hada Sans 결과를 승인용으로 보여줘야 한다.
 

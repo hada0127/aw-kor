@@ -34089,7 +34089,7 @@
    "before_sha256": "9c8199699dc5742e1aefff58c4cd56fac13f0c7bf3fc8489c09181614ad36fb4",
    "before_target": "00A01970",
    "before_bytes": 133,
-   "after_sha256": "ba27cb214fc9e5232e1ab4c39d3805bb34a4e3091f5128e2452fdf2730099cef",
+   "after_sha256": "24b1c68d61645ea958d7cfaaa881690cba9406e3ed4827831159f24bfedbdfb6",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -34101,31 +34101,27 @@
       "손길이　뻗고　있었다・・・"
      ],
      "after": [
-      "워즈 월드의 대륙 하나、 매크로",
-      "랜드。 이",
-      "땅에、지금 침략자 블랙홀 군의",
+      "워즈 월드의 대륙 하나、",
+      "매크로 랜드。",
+      "이 땅에、지금 침략자 블랙홀 군의",
       "손길이 뻗고 있었다・・・"
      ]
     }
    ],
    "final_pages": [
     [
-     "워즈 월드의 대륙 하나、 매크로",
-     "랜드。 이",
-     "땅에、지금 침략자 블랙홀 군의",
+     "워즈 월드의 대륙 하나、",
+     "매크로 랜드。",
+     "이 땅에、지금 침략자 블랙홀 군의",
      "손길이 뻗고 있었다・・・"
     ]
    ],
    "source_fragment_joiners": {
     "0xA01970": [],
     "0xA01992": [],
-    "0xA01994": [
-     "8140"
-    ],
+    "0xA01994": [],
     "0xA019A2": [],
-    "0xA019AB": [
-     "8140"
-    ],
+    "0xA019AB": [],
     "0xA019B5": [],
     "0xA019B6": [],
     "0xA019BA": [],
@@ -34186,7 +34182,7 @@
    "before_sha256": "f291d7a2e31b3be19d1d6f0da91cabd67931befe1ae43ee9bc66df340bce1bf5",
    "before_target": "00A01AB0",
    "before_bytes": 88,
-   "after_sha256": "fbc754c3b63edefa8fb699c98c0be61eb809efb0dc63891ff064f4ee01347fef",
+   "after_sha256": "564cac6e3115fe647d681bac57f4decb9c3d897ed368ac3d7f8809e0499d9a4a",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -34196,24 +34192,22 @@
       "블랙홀군　거점으로・・・"
      ],
      "after": [
-      "매크로 랜드를 워즈 월드 안에서 블랙홀 군",
-      "거점으로・・・"
+      "매크로 랜드를 워즈 월드 안에서",
+      "블랙홀 군 거점으로・・・"
      ]
     }
    ],
    "final_pages": [
     [
-     "매크로 랜드를 워즈 월드 안에서 블랙홀 군",
-     "거점으로・・・"
+     "매크로 랜드를 워즈 월드 안에서",
+     "블랙홀 군 거점으로・・・"
     ]
    ],
    "source_fragment_joiners": {
     "0xA01AB0": [],
     "0xA01AC0": [],
     "0xA01AC1": [],
-    "0xA01ADE": [
-     "8140"
-    ],
+    "0xA01ADE": [],
     "0xA01B06": [
      "8140"
     ]
