@@ -10303,7 +10303,7 @@ def patch_world_map_label_tiles(rom):
 
     def put_label(buf, data, tile_ids, text, x=0):
         pixels = blank_pixels(data, len(tile_ids) * 8, 8)
-        draw_text(pixels, text, x)
+        draw_text(pixels, text, x, ink=15)
         raw = pack_tiles(pixels)
         for idx, tile_id in enumerate(tile_ids):
             start = tile_id * 32
