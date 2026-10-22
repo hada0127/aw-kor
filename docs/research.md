@@ -4062,3 +4062,6 @@ inline Qn은 현재 행의 앞선 text advance를 cursor/선택지 좌표에 더
 - 2편 대사(`p2_dialogue_b43/20`): BG0 charbase 0, ▼ VRAM 타일 `0x208`/주소 `0x06004100`. 화면의 32B는 ROM 비압축 4bpp `0x4703D4`와 동일. 로더 포인터는 `0x336C8C`→`0x4703B4`. VRAM write trace의 ROM 종료 포인터 `0x4703D4/3F4/414`가 `0x4703B4/D4/F4` 세 애니메이션 프레임을 확인한다. 세 프레임 모두 잉크 열 0..6, 7열 비어 있음.
 - `0x3A99EC`의 닮은 그림은 해당 2편 대사 VRAM 소스가 아니다. 이 조사에서는 건드리지 않는다. 1편의 RIGHT/예·아뇨 `0xA1BA/0xA1BB`도 별도 타일이다. 조사 범위 밖의 모든 소비자에 대한 전수 증명은 아니다.
 - 원본 ROM의 32-bit 리틀엔디언 직접 포인터 검색에서 `0x08B97370`은 `0xB38CF4` 한 곳, `0x084703B4`는 `0x336C8C` 한 곳만 나온다. 같은 로더를 여러 화면에서 호출할 수 있으므로 이것만으로 소비자 전수를 보증하지는 않는다.
+## 2026-10-23 Part 1 map editor OBJ labels
+
+- b44 Part 1 `맵 디자인` emulator route (mode menu DOWN×4, A, intro A×9, existing unlocked SRAM copy) shows the raw OBJ captions at OAM 20/21 (`のこり`, ROM `B7E0F0..B7E14F`), 24 (`チケイ`, `B7EA50..B7EACF`), 33/34 (`ヨコ`/`タテ`, `B7F190`/`B7F150`), and 31/32 (`SELECT メニュー`, `B7EDD0..B7EFCF`). These are distinct from the Part 2 editor assets at `458xxx` despite the same visual design. `tools/part1_editor_obj_labels.py` redraws the five captions with Galmuri7, preserving the native SELECT key art. Before/after captures: `temp/evidence_20261023/part1_editor/a8.png` and `temp/evidence_20261023/final_screen/editor.png`; exact ROM and QA evidence are recorded in `temp/evidence_20261023/REPORT.md`.

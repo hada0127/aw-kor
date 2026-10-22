@@ -14789,6 +14789,8 @@ def _build(args, publication):
     st['item7_co_profile_labels'] = i7_co_profile.patch(rom, orig)
     import item7_part2_editor_labels as i7_p2_editor
     st['item7_part2_editor_labels'] = i7_p2_editor.patch(rom, orig)
+    import part1_editor_obj_labels
+    st['part1_editor_obj_labels'] = part1_editor_obj_labels.patch(rom, orig)
     import item7_design_map_panel as i7_design_map
     st['item7_design_map_panel'] = i7_design_map.patch(rom, orig)
     import item7_multiboot_factory_tooltip as i7_mb_tooltip
