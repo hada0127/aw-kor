@@ -14224,6 +14224,14 @@ def _build(args, publication):
     # 1) 한글 글리프 블롭 → KOR_BASE(0xF00000)
     blob = open(GLYPH_BLOB_2350, 'rb').read()   # T1: 2350자 글리프(기존 prefix-identical)
     rom[KOR_GLYPH_FILE:KOR_GLYPH_FILE + len(blob)] = blob
+    # The shared top tile for 작/장/잠 and the other ㅈ+ㅏ syllables joins
+    # the ㅈ crossbar to the ㅏ stem at small UI scale. Open one pixel of
+    # space between them so the battle-menu 작 cannot resemble 짝.
+    from render_galmuri_8x16 import render_char
+    jieut_a_top = KOR_GLYPH_FILE + 599 * 32
+    if bytes(rom[jieut_a_top:jieut_a_top + 32]) != render_char('작')[0]:
+        raise AssertionError('shared ㅈ+ㅏ top glyph changed')
+    rom[jieut_a_top + 3 * 4 + 5 // 2] &= 0x0F  # row 3, x 5
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
     rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES

@@ -1,5 +1,9 @@
 > Current canonical local build: b44 (`1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`). The Part 2 prologue fix below is a separate candidate, not the canonical release.
 
+## 2026-10-23 Part 2 화면 보수 Round 3 후보
+
+후보 `output/game_wars_korean_p2_round3.gba` SHA-256 `c25cdde043a7e34ada40bdcfeede8a20b586356f7527ed9f1f9e8e7fb8f18641`에서 지도 편집기 OBJ ID84를 `남은`으로 바꿔 실화면에서 확인했다. 전투 메뉴 `작`의 공유 갈무리 윗타일에서 ㅈ/ㅏ 사이 접합 픽셀 하나를 떼어 실제 화면의 해당 픽셀 변경을 확인했다. 4배 확대 판독성은 미확정이며 점령 애니메이션과 미도달 화면도 완료로 세지 않는다. 세부 증거는 `temp/evidence_20261023/REPORT.md` Round 3.
+
 ## 2026-10-23 Part 2 화면 보수 Round 2 후보
 
 후보 `output/game_wars_korean_p2_round2_editor.gba` SHA-256 `8daf315b3cda57121a4e41490d6471a84f879ee595213a60e93d80887cb524f1`에서 프롤로그 OBJ 제목(`0x5BBB3C`)의 2배 세로 확대를 Galmuri11 원래 높이로 바꿨다. 전투 명령 메뉴의 첫 아이콘은 실제 BG0 타일 `0x204..0x207` 대응 원본 주소 `0x454114..0x454174`만 수정했다. 기존 패치가 첫 아이콘 아래 2타일과 둘째 아이콘 4타일을 섞어 덮던 오류를 바로잡았다. 지도 편집기 OBJ ID142/84/169를 각각 `SELECT 메뉴`·`남음`·`지형`으로 그렸다. 원본/후보 동일 콜드부트 경로 및 저장을 사용한 mGBA 프레임, 검증 결과, 미완료 범위는 `temp/evidence_20261023/REPORT.md` Round 2에 기록했다. 점령 애니메이션, 프롤로그 흐린 지도 라벨, 전 메뉴 전수 검수는 미완료다.

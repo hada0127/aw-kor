@@ -1,3 +1,7 @@
+## 2026-10-23 Part 2 화면 보수 Round 3 후보
+
+- 후보 `output/game_wars_korean_p2_round3.gba`에서 2편 지도 편집기 잔여 수 표기를 `남음`에서 `남은`으로 통일했고 실화면에서 확인했다. 전투 메뉴 `작`은 공유 갈무리 ㅈ+ㅏ 윗타일의 접합 픽셀 1개를 지워 실제 화면의 해당 픽셀 변경을 확인했으나, 4배 확대에서 확실히 `작`으로 판독되는지는 미완료다. 점령 애니메이션과 나머지 미도달 화면은 완료로 세지 않는다. 증거와 제한은 `temp/evidence_20261023/REPORT.md` Round 3.
+
 ## 2026-10-23 Part 2 화면 보수 Round 2 후보
 
 - 프롤로그 제목 OBJ, 전투 명령 메뉴 첫 아이콘/둘째 아이콘 복원, 지도 편집기 `SELECT 메뉴`·`남음`·`지형`은 별도 후보 `output/game_wars_korean_p2_round2_editor.gba`에서 실화면 확인했다. 상세 경로와 제한은 `temp/evidence_20261023/REPORT.md` Round 2.
