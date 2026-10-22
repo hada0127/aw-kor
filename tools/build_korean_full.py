@@ -14805,6 +14805,8 @@ def _build(args, publication):
     st['part2_shogun_select_label'] = p2_shogun_sel.patch(rom, orig)
     import part2_special_break_banner as p2_spbreak
     st['part2_special_break_banner'] = p2_spbreak.patch(rom, orig)
+    import part2_capture_banner as p2_capture
+    st['part2_capture_banner'] = p2_capture.patch(rom, orig)
     import part2_war_over_headline as p2_warover
     st['part2_war_over_headline'] = p2_warover.patch(rom, orig)
     import part2_attack_range_legend as p2_atk_legend
@@ -24425,6 +24427,7 @@ def _build(args, publication):
     p2_camp_rank.verify(rom, _p2_camp_rank_final_regions)
     p2_shogun_sel.verify(rom, _p2_shogun_sel_final_regions)
     p2_spbreak.verify(rom, _p2_spbreak_final_regions)
+    p2_capture.verify(rom, orig)
     p2_warover.verify(rom, _p2_warover_final_regions)
     p2_atk_legend.verify(rom, _p2_atk_legend_final_regions)
     p2_wo_sheet.verify(rom, _p2_wo_sheet_final_regions)
