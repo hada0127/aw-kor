@@ -14324,6 +14324,28 @@ def _build(args, publication):
     for _tile in sorted(_joined_jieut_tops - {119}):
         _offset = KOR_GLYPH_FILE + _tile * 32 + 3 * 4 + 5 // 2
         rom[_offset] &= 0x0F
+    # In ㅏ/ㅑ cells the vowel begins at x=6. Move only the consonant's
+    # upper pixels left one column: x=4 and x=5 then remain empty before the
+    # stem even when the renderer draws its one-pixel right shadow. The
+    # 8-pixel cell cannot fit the exact five-column 지 bar, two blank columns,
+    # and the ㅏ stem/tick together; this is a four-column approximation.
+    # ㅐ/ㅒ already have a separated consonant and a two-stem vowel in the
+    # source Galmuri cell; moving their narrower consonant loses its shape.
+    _left_jieut_tops = {119, 599, 600, 602, 1118, 1119, 1120, 1121}
+    _private_ja_tile = rom[_private_ja_offset:_private_ja_offset + 32]
+    for _tile in sorted(_left_jieut_tops):
+        _offset = _private_ja_offset if _tile == 119 else KOR_GLYPH_FILE + _tile * 32
+        _source = bytes(_private_ja_tile if _tile == 119 else rom[_offset:_offset + 32])
+        for _y in range(3, 8):
+            _row = [_source[_y * 4 + _x // 2] >> (4 * (_x % 2)) & 15 for _x in range(8)]
+            for _x in range(5):
+                _dest_x = _x - 1
+                if _dest_x >= 0:
+                    _byte = _offset + _y * 4 + _dest_x // 2
+                    _mask = 15 << (4 * (_dest_x % 2))
+                    rom[_byte] = (rom[_byte] & ~_mask) | (_row[_x] << (4 * (_dest_x % 2)))
+            _byte = _offset + _y * 4 + 4 // 2
+            rom[_byte] &= 0xF0
     # 2) ASM hook 코드 → hook_top@0xF30000, hook_bot@0xF30030
     rom[HOOK_FILE:HOOK_FILE + len(HOOK_TOP_BYTES)] = HOOK_TOP_BYTES
     rom[HOOK_BOT_FILE:HOOK_BOT_FILE + len(HOOK_BOT_BYTES)] = HOOK_BOT_BYTES
