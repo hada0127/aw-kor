@@ -1,5 +1,9 @@
 > Current canonical local build: b44 (`1ac68443d8fa48ef50a5a73290f94d65ff90997b4e6f38bc60410c9d424c6f02`). The Part 2 fixes below are separate candidates, not the canonical release.
 
+## 2026-10-23 Part 2 점령 완료 그림 Round 5 후보
+
+- Round 4의 `점령!` 컷인을 원본 64×32 OBJ에 가까운 폭으로 확대하고 원본 팔레트 인덱스 1–6의 어두운 외곽선·그림자·분홍 명암을 사용했다. `output/game_wars_korean_p2_round5.gba` SHA-256 `f615c70865367ae2d08ce8036e3a554d7df0bf90f664b897af8f011f6b9c1c7c`. 실화면 4배 비교와 130프레임 영역 검사는 `temp/evidence_20261023/REPORT.md` Round 5 참조. 2편 지도 목록·전투 시스템/저장 확인창 일부를 추가로 표본 확인했지만 나머지 화면 전수 통과는 아니다.
+
 ## 2026-10-23 Part 2 점령 완료 그림 Round 4 후보
 
 - 2편 점령 완료 컷인의 일본어 `占領!`는 `0x47F79C` LZ77 OBJ 시트의 마지막 64×32 구간이다. 실화면 OBJ tile 519의 32타일이 이 구간과 전부 일치하며 원본 ROM 포인터는 `0x341334` 한 곳이다. 앞의 점령 창 두 구간을 보존하고 OkDanDan-Bold `점령!` 그림으로 교체했다. 후보 `output/game_wars_korean_p2_round4_capture.gba` SHA-256 `babcf4fd50217596567ecffb9c137d347403cc92fb9eb0589cb786fce9f2327f`; 완료 애니메이션의 전후 실화면은 `temp/evidence_20261023/capture_runtime/` 및 `REPORT.md` Round 4에 보존한다. 기존 미도달 메뉴와 실제 기기 검증은 별개 미완료다.

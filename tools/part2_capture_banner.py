@@ -36,11 +36,18 @@ def _source(original):
 
 
 def _picture():
-    font, box = aw_fonts.fit_okdandan(TEXT, 48, 22, 28, min_size=20)
+    font, box = aw_fonts.fit_okdandan(TEXT, 53, 23, 34, min_size=20)
     mask = Image.new('L', (64, 32))
     x = (64 - (box[2] - box[0])) // 2 - box[0]
     y = (32 - (box[3] - box[1])) // 2 - box[1]
     ImageDraw.Draw(mask).text((x, y), TEXT, font=font, fill=255)
+    ink_box = mask.getbbox()
+    if ink_box is None:
+        raise AssertionError('empty capture title')
+    # Match the native 占領! banner's nearly full 64-pixel horizontal span.
+    wide = mask.crop(ink_box).resize((55, ink_box[3] - ink_box[1]), Image.Resampling.NEAREST)
+    mask = Image.new('L', (64, 32))
+    mask.paste(wide, ((64 - 55) // 2, ink_box[1]))
     body = {(x, y) for y in range(32) for x in range(64) if mask.getpixel((x, y)) >= 96}
     aw_fonts.require_large_line(body, margin_top=3, margin_bottom=3)
     if not body:
@@ -49,14 +56,25 @@ def _picture():
         return {(x + dx, y + dy) for x, y in points
                 for dx in (-1, 0, 1) for dy in (-1, 0, 1)
                 if dx or dy} - points
+    # The native cut-in uses a dark outside edge, a second dark shade,
+    # and a light face with pink shading. Keep those palette roles.
     near1 = ring(body)
     near2 = ring(body | near1)
     near3 = ring(body | near1 | near2)
     pixels = [[0] * 64 for _ in range(32)]
-    for points, color in ((near3, 1), (near2, 3), (near1, 5), (body, 6)):
+    for px, py in body | near1 | near2 | near3:
+        if px + 1 < 64 and py + 2 < 32:
+            pixels[py + 2][px + 1] = 1
+    for points, color in ((near3, 1), (near2, 2), (near1, 3), (body, 6)):
         for px, py in points:
             if 0 <= px < 64 and 0 <= py < 32:
                 pixels[py][px] = color
+    # Lower-right face shading is present in the native kanji picture.
+    for px, py in body:
+        if (px, py + 1) not in body:
+            pixels[py][px] = 4
+        elif (px, py + 2) not in body:
+            pixels[py][px] = 5
     if any(pixels[y][x] for y in (0, 31) for x in range(64)):
         raise AssertionError('capture title touches vertical OBJ edge')
     out = bytearray(1024)
