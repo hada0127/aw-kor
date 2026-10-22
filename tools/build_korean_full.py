@@ -5811,15 +5811,15 @@ def _part1_map_label_entries(rom, sylmap, syl_to_code):
             if b0 == 0 or b0 == 0x20:
                 pos += 1
                 continue
-            # The editor's original 名前 command is displayed as 이름. The
-            # protected B-team source says 이름 입력; leave it byte-identical.
+            # 2026-10-23 user-approved display-only exception (CLAUDE.md):
+            # show 名前 as 이름 within the editor cell; source bytes stay intact.
             if pos in (0xD8246A, 0xD8246C):
                 pos += 2
                 continue
             code = (b0 << 8) | rom[pos + 1]
             ch = code_to_syllable.get(code)
-            # Protected source D82498 says 정보; the original visible editor
-            # command is ぬりつぶし. Only its display glyphs become 채움.
+            # 2026-10-23 user-approved display-only exception (CLAUDE.md):
+            # show ぬりつぶし as 채움; protected 정보 source bytes stay intact.
             if 0xD82498 <= pos < 0xD8249C:
                 ch = '채움'[(pos - 0xD82498) // 2]
             if ch is not None:

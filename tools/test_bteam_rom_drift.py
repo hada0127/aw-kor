@@ -209,6 +209,18 @@ class RomDriftTest(unittest.TestCase):
         self.assertEqual(baseline['overrides']['0x00A19300'], '이걸로 좀조용해지겠지.')
         self.assertEqual(baseline['overrides']['0x00A1B3C8'], '어떡할까요?')
 
+    def test_editor_display_approvals_keep_source_protected(self):
+        baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        self.assertEqual(core_digest(baseline), PINNED_CORE_DIGEST)
+        self.assertEqual(check(baseline, baseline['overrides'])['errors'], [])
+        changed = dict(baseline['overrides'])
+        changed['0x00D82498'] = '채움'
+        self.assertIn(('0x00D82498', '정보', '채움'), check(baseline, changed)['drift'])
+        self.assertTrue(check(baseline, changed)['errors'])
+        tampered = json.loads(json.dumps(baseline, ensure_ascii=False))
+        tampered['_user_approved_exceptions']['0x00D8246A']['display_only'] = False
+        self.assertTrue(check(tampered, tampered['overrides'])['errors'])
+
     def test_alignment_legacy_alias_must_match_exact_text(self):
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
         overrides = {'0x00A19324': '이걸로 좀조용해지겠지.',

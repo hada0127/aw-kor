@@ -405,6 +405,8 @@ def matches_alignment_composite(wanted: str, first: str, second: str,
 # baseline's _user_approved_exceptions must equal this table; adding or editing
 # one is a reviewed code change. 0xDD0D1A: じょうでき=上出来, user 「제안대로」 2026-10-07.
 APPROVED_EXCEPTIONS = {
+    '0x00D82498': ('정보', '채움'),  # display only; source bytes stay protected
+    '0x00D8246A': ('이름 입력', '이름'),  # display only; no baseline override at this key
     '0x00A34F70': ('엔트리 중이야,잠시 기다려 줘!!', '엔트리 중이야, 잠시 기다려 줘!!'),
     '0x00A34F98': ('친구가 모이면,스타트를 눌러 줘!!', '친구가 모이면, 스타트를 눌러 줘!!'),
     '0x00A3508C': ('맵을 송신 중이야,잠시 기다려 줘!!', '맵을 송신 중이야, 잠시 기다려 줘!!'),
@@ -423,7 +425,8 @@ APPROVED_EXCEPTIONS = {
 
 def core_digest(base: dict) -> str:
     exceptions = base.get('_user_approved_exceptions', {})
-    core = {k: v for k, v in base.get('overrides', {}).items() if k not in exceptions}
+    core = {k: v for k, v in base.get('overrides', {}).items()
+            if k not in exceptions or exceptions[k].get('display_only')}
     return hashlib.sha256(json.dumps(core, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
@@ -434,9 +437,20 @@ def exception_errors(base: dict, overrides: dict) -> list:
     if {a: (e.get('from'), e.get('to')) for a, e in recorded.items() if isinstance(e, dict)} != APPROVED_EXCEPTIONS:
         errors.append('baseline exceptions differ from the approved (address, from, to) table')
     for addr, exc in recorded.items():
+        if isinstance(exc, dict) and bool(exc.get('display_only')) != (addr in ('0x00D82498', '0x00D8246A')):
+            errors.append(f'{addr}: display-only status differs from approval')
+    for addr, exc in recorded.items():
         if (not isinstance(exc, dict) or not exc.get('approved') or not exc.get('from')
                 or not exc.get('to') or exc['from'] == exc['to']):
             errors.append(f'{addr}: malformed user-approved exception')
+            continue
+        if exc.get('display_only'):
+            if addr not in ('0x00D82498', '0x00D8246A'):
+                errors.append(f'{addr}: unapproved display-only exception')
+            if addr in base.get('overrides', {}) and base['overrides'][addr] != exc['from']:
+                errors.append(f'{addr}: display-only exception changed baseline source')
+            if addr in overrides and addr in base.get('overrides', {}) and overrides[addr] != exc['from']:
+                errors.append(f'{addr}: display-only exception changed override source')
             continue
         if base.get('overrides', {}).get(addr) != exc['to']:
             errors.append(f'{addr}: baseline differs from the approved exception text')

@@ -3357,6 +3357,8 @@
   "0x00EC332A": "사령관 능력 설정"
  },
  "_user_approved_exceptions": {
+  "0x00D82498": {"from": "정보", "to": "채움", "display_only": true, "approved": "2026-10-23 user reply 「둘 다 승인」 (CLAUDE.md 「2026-10-23 사용자 승인」)", "reason": "Editor Fill display glyphs only; protected source bytes remain 정보"},
+  "0x00D8246A": {"from": "이름 입력", "to": "이름", "display_only": true, "approved": "2026-10-23 user reply 「둘 다 승인」 (CLAUDE.md 「2026-10-23 사용자 승인」)", "reason": "Editor Name display glyphs only; source bytes remain unchanged"},
   "0x00A3508C": {"from": "맵을 송신 중이야,잠시 기다려 줘!!", "to": "맵을 송신 중이야, 잠시 기다려 줘!!", "approved": "2026-10-19 user reply 「7줄 다 고쳐」 in session (recorded in CLAUDE.md 「2026-10-19 사용자 승인(B팀 예외)」)", "reason": "Add exactly one space after punctuation in the Part 2 Link status row"},
   "0x00A350B4": {"from": "맵을 수신 중이야,잠시 기다려 줘!!", "to": "맵을 수신 중이야, 잠시 기다려 줘!!", "approved": "2026-10-19 user reply 「7줄 다 고쳐」 in session (recorded in CLAUDE.md 「2026-10-19 사용자 승인(B팀 예외)」)", "reason": "Add exactly one space after punctuation in the Part 2 Link status row"},
   "0x00A350DC": {"from": "종료했어.시작한다!!", "to": "종료했어. 시작한다!!", "approved": "2026-10-19 user reply 「7줄 다 고쳐」 in session (recorded in CLAUDE.md 「2026-10-19 사용자 승인(B팀 예외)」)", "reason": "Add exactly one space after punctuation in the Part 2 Link status row"},
