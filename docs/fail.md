@@ -1661,3 +1661,6 @@ The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `
 - VM cursor가 마지막 glyph를 지났다는 사실만으로 즉시 screenshot을 합격 처리하면 NAME나 마지막 행이 VRAM 반영 전으로 보일 수 있다. native wait와2+16프레임 fence 및 실제 glyph/빈행 검사를 추가했다. 최종 채택은 `narration_render_fenced`만이다.
 - inline Qn에 고정 x56/88의 cursor 분석을 적용하거나 intro의 상위 창을 강제문장과 함께 살아 있게 두면 거짓 회귀/겹침을 관측한다. actual row advance를 반영하고 DF2A2C는 정상 항복 경로의 전후 NPZ/상태1→0→1/지도복귀로 검증했다.
 - 위 임시 시도들은 `temp/spacing_followup/runtime_attempt_dispositions.json`에서 제외했다. trace-only `passed` 영수증이 있어도 전체 화면 완료 증거로 쓰지 않는다. ROM을 이 QA 문맥 문제에 맞춰 수정하지 않았다.
+### 2026-10-23 1편 맵 편집기 도움말 본문 (Round 3 미해결)
+
+파일/채움용 `0x03000F80` + `D8244C..D824AD` 소스 게이트를 도움말에 재사용할 수 없다. 도움말은 별도 상태 `0x03000E60`, 소스 `D82124..D821E8`로 첫 페이지에 렌더러 81회를 호출한다. 최종 후보 화면에도 글리프 누락·간격 불균형이 남는다. 짧은 메뉴의 112 타일 풀을 본문에 무조건 공유하면 영역을 침범하므로 도움말별 타일/행 배치 조사 후 수정해야 한다. 추적·원본/후보 화면: `temp/evidence_20261023/round3/help_trace/parser.log`, `round3/editor_integrated_pair/{original,round3}/help/entered.png`.

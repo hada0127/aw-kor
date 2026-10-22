@@ -67,7 +67,8 @@ class RecordMapGateTests(unittest.TestCase):
 
     def test_all_a5_link_source_cells_fit_the_table(self):
         start, end = builder.PART1_MAP_LABEL_A5_SOURCE_RANGE
-        rom = bytearray(builder.PART1_MAP_LABEL_SOURCE_RANGE[1])
+        rom = bytearray(max(builder.PART1_MAP_LABEL_SOURCE_RANGE[1],
+                            builder.PART1_EDITOR_CAPTION_SOURCE_RANGE[1]))
         for address in range(start, end, 2):
             rom[address:address + 2] = b'\x88\x40'
         glyphs = {ch: {'top': 1, 'bot': 2} for ch in '미공개반'}

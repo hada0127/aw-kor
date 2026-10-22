@@ -5803,15 +5803,25 @@ def _part1_map_label_entries(rom, sylmap, syl_to_code):
     for idx, ch in enumerate('미공개'):
         add_entry(0x08DF8C2A + idx * 2, ch)
 
-    for start, end in (PART1_MAP_LABEL_SOURCE_RANGE, PART1_MAP_LABEL_A5_SOURCE_RANGE):
+    for start, end in (PART1_MAP_LABEL_SOURCE_RANGE, PART1_MAP_LABEL_A5_SOURCE_RANGE,
+                       PART1_EDITOR_CAPTION_SOURCE_RANGE):
         pos = start
         while pos + 1 < end:
             b0 = rom[pos]
             if b0 == 0 or b0 == 0x20:
                 pos += 1
                 continue
+            # The editor's original 名前 command is displayed as 이름. The
+            # protected B-team source says 이름 입력; leave it byte-identical.
+            if pos in (0xD8246A, 0xD8246C):
+                pos += 2
+                continue
             code = (b0 << 8) | rom[pos + 1]
             ch = code_to_syllable.get(code)
+            # Protected source D82498 says 정보; the original visible editor
+            # command is ぬりつぶし. Only its display glyphs become 채움.
+            if 0xD82498 <= pos < 0xD8249C:
+                ch = '채움'[(pos - 0xD82498) // 2]
             if ch is not None:
                 add_entry(0x08000000 + pos, ch)
             pos += 2
@@ -5849,9 +5859,9 @@ def patch_part1_single_map_labels(rom, orig, sylmap, syl_to_code, *, refresh=Fal
     for source_rt, top, bot in entries:
         table += struct.pack('<IHH', source_rt, top, bot)
     table_end = PART1_MAP_LABEL_TABLE_FILE + len(table)
-    if table_end > PART1_MAP_LABEL_SOURCE_GATE_FILE:
+    if table_end > 0xF31E00:
         raise AssertionError(
-            f'Part1 map-label table overlaps source gate: 0x{table_end:X} > 0x{PART1_MAP_LABEL_SOURCE_GATE_FILE:X}'
+            f'Part1 map-label table overlaps editor gate: 0x{table_end:X} > 0xF31E00'
         )
     rom[PART1_MAP_LABEL_TABLE_FILE:table_end] = table
     hook = _part1_map_label_hook(PART1_MAP_LABEL_TABLE_RT + len(table))
@@ -13191,6 +13201,7 @@ PART1_MAP_LABEL_TABLE_FILE = HOOK_FILE + 0x800
 PART1_MAP_LABEL_TABLE_RT = 0x08F30800
 PART1_MAP_LABEL_SOURCE_RANGE = (0xB81CA0, 0xB82800)
 PART1_MAP_LABEL_A5_SOURCE_RANGE = (0xA5D0B4, 0xA5D0EC)
+PART1_EDITOR_CAPTION_SOURCE_RANGE = (0xD8244C, 0xD824AE)
 PART1_MAP_LABEL_SOURCE_GATE_FILE = 0xF31F80
 PART1_MAP_LABEL_LIST_ROWS = 6
 PART1_MAP_LABEL_LIST_COLUMNS = 8
@@ -14793,6 +14804,8 @@ def _build(args, publication):
     st['item7_part2_editor_labels'] = i7_p2_editor.patch(rom, orig)
     import part1_editor_obj_labels
     st['part1_editor_obj_labels'] = part1_editor_obj_labels.patch(rom, orig)
+    import part1_capture_word_obj
+    st['part1_capture_word_obj'] = part1_capture_word_obj.patch(rom, orig)
     import item7_design_map_panel as i7_design_map
     st['item7_design_map_panel'] = i7_design_map.patch(rom, orig)
     import item7_multiboot_factory_tooltip as i7_mb_tooltip
@@ -24349,6 +24362,14 @@ def _build(args, publication):
         raise AssertionError('refreshed map-label hook changed record-map gate sites')
     for _address, _payload in RECORD_MAP_WRITES:
         rom[_address:_address + len(_payload)] = _payload
+    import part1_editor_compact_labels as _editor_compact
+    st['part1_editor_compact_labels'] = _editor_compact.patch(rom, orig)
+    WRITE_LOG.append([_editor_compact.CODE_OFFSET, len(_editor_compact.CODE),
+                      len(_editor_compact.CODE), _editor_compact.CODE.hex(), None,
+                      None, None, 'part1-editor-compact-gate'])
+    for _address, (_, _target) in _editor_compact.REPLACES.items():
+        WRITE_LOG.append([_address, 4, 4, struct.pack('<I', _target).hex(), None,
+                          None, None, 'part1-editor-compact-gate'])
 
     # Several late glyph/symbol recovery passes can touch the low font slots
     # shared with the Part 1 name grid. Re-apply the name grid as the final
@@ -24449,7 +24470,10 @@ def _build(args, publication):
     compact_ui_strings.verify(rom, orig, syl_to_code, PART2_UI_KANJI_GLYPH_SUBS, _unit_compact_render_char)
     supply_popup.verify(rom, orig)
     remaining_days.verify_regions(rom, _remaining_days_final_regions)
-    verify_record_map_labels(rom)
+    verify_record_map_labels(rom, {address: struct.pack('<I', target)
+                                   for address, (_, target) in _editor_compact.REPLACES.items()})
+    _editor_compact.verify(rom)
+    part1_capture_word_obj.verify(rom, orig)
     unit_type_labels.verify_regions(rom, _unit_type_final_regions)
     purchase_labels.verify_regions(rom, _purchase_final_regions)
     terrain_movement.verify_regions(rom, orig, _terrain_movement_final_regions)

@@ -98,7 +98,13 @@ def patch(rom, original):
                         'sha256': hashlib.sha256(raw).hexdigest()} for a, raw in WRITES]}
 
 
-def verify(rom):
+def verify(rom, overlays=None):
+    overlays = overlays or {}
     for address, expected in WRITES:
-        if bytes(rom[address:address + len(expected)]) != expected:
+        actual_expected = bytearray(expected)
+        for overlay_address, overlay in overlays.items():
+            if address <= overlay_address and overlay_address + len(overlay) <= address + len(expected):
+                at = overlay_address - address
+                actual_expected[at:at + len(overlay)] = overlay
+        if bytes(rom[address:address + len(expected)]) != actual_expected:
             raise AssertionError(f'record map gate overwritten at {address:#x}')
