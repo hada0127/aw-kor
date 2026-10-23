@@ -90,8 +90,24 @@ def _insert_drawn_space(rom: bytearray, manifest: list[dict], writes: list[list]
     else:
         # In-place lines may have separate old writers. A final whole-message
         # owner keeps the shifted control/space sequence atomic for renderer QA.
+        # Preserve the authored row boundaries as final-ROM offsets too: the
+        # original per-row writers predate this two-byte insertion.
+        source_rows = ((0xA01A94,) if source == 0xA01A94 else
+                       (0xA01C10, 0xA01C1B, 0xA01C2A, 0xA01C59))
+        fragments = {}
+        for address in source_rows:
+            row = next((row for row in writes if row[0] == address and row[3]
+                        and row[7] != 'part2-prologue-drawn-comma-space'), None)
+            if row is None:
+                raise AssertionError(f'prologue source writer missing: {address:#x}')
+            relative = address - start + (2 if address > source else 0)
+            length = int(row[2])
+            if relative < 0 or relative + length > size:
+                raise AssertionError(f'prologue source span outside message: {address:#x}')
+            fragments[f'0x{address:06X}'] = [relative, length]
         writes.append([start, size, size, new.hex(), None, None, None,
-                       'part2-prologue-drawn-comma-space', {'source_address': source}])
+                       'part2-prologue-drawn-comma-space',
+                       {'source_address': source, 'source_line_fragments': fragments}])
 
 
 def patch(rom: bytearray, manifest: list[dict], writes: list[list]) -> list[dict]:

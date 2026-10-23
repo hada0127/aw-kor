@@ -19,8 +19,10 @@ from qa_bteam_drift import (check, check_rom, compact_glyph_map, decode_compact,
                             NEW_STRICT_ADDRESSES, PINNED_CORE_DIGEST, core_digest)
 from qa_bteam_drift import round2_issue_bucket
 from qa_bteam_drift import co_breaks_as_spaces
+from qa_bteam_drift import script_format_bytes
 from build_korean_full import validate_co_reflow_spans
 from repoint_source_rows import row_bytes as source_row_bytes
+from part2_prologue_punctuation import PUNCTUATION
 import qa_part2_co_panel_width as co_panel_width
 
 
@@ -31,6 +33,80 @@ GLYPH = CODE.to_bytes(2, 'big')
 
 
 class RomDriftTest(unittest.TestCase):
+    def test_all_approved_prologue_rows_decode_exactly_from_final_rom(self):
+        import os
+        from qa_integrity_map import decode_enc, load_syl
+        rom_path = Path(os.environ.get('AW_TEST_ROM') or ROOT / 'output/game_wars_korean_p2_reviewfix3.gba')
+        map_path = Path(os.environ.get('AW_TEST_MAP') or ROOT / 'temp/integrity_map.json')
+        manifest_path = Path(os.environ.get('AW_TEST_MANIFEST') or ROOT / 'temp/repoint_manifest.json')
+        if not rom_path.is_file():
+            self.skipTest('matching candidate ROM required')
+        rom = rom_path.read_bytes()
+        writes = json.loads(map_path.read_text())
+        manifest = json.loads(manifest_path.read_text())
+        exceptions = json.loads((ROOT / 'data/bteam_baseline.json').read_text())['_user_approved_exceptions']
+        self.assertEqual(len(PUNCTUATION), 21)
+        for address, _, _, relocated in PUNCTUATION:
+            key = f'0x{address:08X}'
+            with self.subTest(address=key):
+                self.assertIn(key, exceptions)
+                if relocated:
+                    message = next(m for m in manifest if m.get('status') == 'relocated'
+                                   and f'0x{address:06X}' in m.get('line_spans', {}))
+                    payload = source_row_bytes(rom, message, f'0x{address:06X}')
+                else:
+                    owner = next((row for row in writes
+                                  if row[7] == 'part2-prologue-drawn-comma-space'
+                                  and len(row) > 8 and f'0x{address:06X}' in
+                                  row[8].get('source_line_fragments', {})), None)
+                    if owner:
+                        offset, length = owner[8]['source_line_fragments'][f'0x{address:06X}']
+                        payload = rom[owner[0] + offset:owner[0] + offset + length]
+                    else:
+                        inline = next((row for row in writes
+                                       if row[7] == 'part2-prologue-inline-renderer'
+                                       and row[0] == address), None)
+                        if inline:
+                            payload = rom[address:address + inline[2]].split(b'\x77\x72', 1)[0]
+                        else:
+                            row = next(row for row in writes if row[0] == address and row[3])
+                            payload = rom[address:address + row[2]]
+                actual = decode_enc(script_format_bytes(payload, address), load_syl()).rstrip(' \u3000')
+                self.assertEqual(actual, exceptions[key]['to'])
+
+    def test_prologue_final_rom_gate_rejects_unapproved_word_mutation(self):
+        import os
+        rom_path = Path(os.environ.get('AW_TEST_ROM') or ROOT / 'output/game_wars_korean_p2_reviewfix3.gba')
+        map_path = Path(os.environ.get('AW_TEST_MAP') or ROOT / 'temp/integrity_map.json')
+        manifest_path = Path(os.environ.get('AW_TEST_MANIFEST') or ROOT / 'temp/repoint_manifest.json')
+        if not rom_path.is_file():
+            self.skipTest('matching candidate ROM required')
+        base = json.loads((ROOT / 'data/bteam_baseline.json').read_text())
+        rom = bytearray(rom_path.read_bytes())
+        writes = json.loads(map_path.read_text())
+        address = 0xA01A94  # protected and owned by the final whole-message write
+        from qa_integrity_map import load_syl
+        codes = load_syl()
+        old = bytes(rom[address:address + 2])
+        replacement = next(code.to_bytes(2, 'big') for code, syllable in codes.items()
+                           if syllable == '각')
+        self.assertNotEqual(old, replacement)
+        rom[address:address + 2] = replacement
+        for row in writes:
+            if row[3] and row[0] <= address and address + 2 <= row[0] + len(bytes.fromhex(row[3])):
+                encoded = bytearray.fromhex(row[3])
+                offset = address - row[0]
+                encoded[offset:offset + 2] = replacement
+                row[3] = encoded.hex()
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as temporary:
+            candidate = Path(temporary) / 'mutated.gba'
+            mapping = Path(temporary) / 'integrity_map.json'
+            candidate.write_bytes(rom)
+            mapping.write_text(json.dumps(writes))
+            issues = check_rom(base, str(candidate), str(mapping), str(manifest_path))
+        self.assertTrue(any(item['address'] == '0x00A01A94' and
+                            '각' in item['rom_text'] for item in issues))
+
     def test_renderer_aliases_do_not_inherit_semantic_substitutions(self):
         address = 0xB83C70
         self.assertEqual(display_equivalent('1,2.', address), '１、２。')

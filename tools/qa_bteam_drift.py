@@ -560,6 +560,17 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
         hi = bisect.bisect_left(protected_addrs, start + slot, lo)
         for covered in protected_addrs[lo:hi]:
             covering[covered] = row
+    in_place_fragments = {}
+    for row in writes:
+        if row[7] != 'part2-prologue-drawn-comma-space' or len(row) < 9:
+            continue
+        for key, span in row[8].get('source_line_fragments', {}).items():
+            address = int(key, 16)
+            offset, length = span
+            if (address in in_place_fragments or offset < 0 or length <= 0
+                    or offset + length > int(row[2])):
+                raise ValueError(f'{key}: invalid prologue final source fragment')
+            in_place_fragments[address] = (row, offset, length)
     expected = {}
     for addr, slot, _enc_len, enc_hex, fill, *_rest in writes:
         enc = bytes.fromhex(enc_hex)
@@ -599,7 +610,8 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
         i = bisect.bisect_right(starts, addr) - 1
         relocation = relocated[i] if i >= 0 and addr < relocated[i][1] else None
         # Exact writer wins over an earlier padded slot that happens to cover it.
-        row = by_addr.get(addr) or covering.get(addr)
+        row = (in_place_fragments[addr][0] if addr in in_place_fragments
+               else by_addr.get(addr) or covering.get(addr))
         if relocation:
             m = relocation[2]
             target = int(m['new_addr'], 16)
@@ -682,7 +694,13 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
             enc_end = row_start + int(row[2])
             if map_rom_path and rom[addr:row_start + int(row[1])] != map_rom[addr:row_start + int(row[1])]:
                 raise ValueError(f'{key}: overlay changed protected in-place slot')
-            actual = decode(rom[addr:max(addr, enc_end)], addr, row[7])
+            if addr in in_place_fragments:
+                _owner, offset, length = in_place_fragments[addr]
+                objective_start = row_start + offset
+                payload = rom[objective_start:objective_start + length]
+            else:
+                payload = rom[addr:max(addr, enc_end)]
+            actual = decode(payload, addr, row[7])
             if addr != 0xD9159E:
                 actual = actual.rstrip(' \u3000')
             if row[7] == 'part2-prologue-inline-renderer':
