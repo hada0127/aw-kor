@@ -1,8 +1,8 @@
 ## 2026-10-23 이름 입력 한글 조합 Phase A (ROM 비의존)
 
 - [x] 승인 PLAN v3의 참조 조합기·테스트·명세를 준비했다. 지정 두 명령 exit 0, 13개 테스트·11,172음절 검사: 매핑 2350/도달 2345/중간 후보 누락 5. 계약·검증 대상 해시·실제 출력은 `docs/reports/name_grid_2026-10-23/COMPOSITION_SPEC.md`에 기록했다.
-- [ ] 총괄의 Astra 구현 검토·필요 수정·커밋/push. 이 구현 워커는 커밋/push·추가 리뷰를 하지 않았다.
-- [ ] 자산 복구는 company 경유 요청 후 대기 중. 원본 ROM·b44·저장·route/evidence·mgbah의 복구 및 SHA 대조 후 런타임 조사, 별도 Fable 계획 + Astra 승인으로 Phase B에 진입한다. **ROM 통합·이름 입력 기능 완료 아님**. 공유 A3 가나 보존·네 소비자·실화면·실기·cold reload 검증은 남아 있다.
+- [x] Astra full 구현 검토 승인(Critical·필수·Nit 0, FYI `[receipt]` 1). 구현 commit `ad2ec49ca3e9b9ce8028ac751102bed0118dbb4d`, tree `fcf486b9dd4c0166f734c3c3ea961811a5ebf970`; 작업 브랜치 `sweep3-p2-20261023c` push 완료(총괄 인계). prose의 `unknown` 영수증과 구분한 실제 실행 모델·effort·exit·시각, 복구 목록과 다음 단계는 `docs/reports/name_grid_2026-10-23/PHASE_A_STATUS.md`에 보존했다. **ROM-free 부분완료이며 미병합·미배포**다.
+- [ ] **전체 이름 입력 기능 BLOCKED** — nyarch 연결·ROM·사용자 세이브·route 자료 미복구. company로 요청 전달 완료, 회신 대기 중. 원본 ROM·b44·저장·route/evidence·mgbah의 복구 및 SHA 대조 후 런타임 조사, 별도 Fable 계획 + Astra 승인으로 Phase B에 진입한다. **ROM 통합·이름 입력 기능 완료 아님**. 공유 A3 가나 보존·네 소비자·실화면·실기·cold reload 검증은 남아 있다.
 
 ## 2026-10-23 Part 2 화면 Sweep 3 후보 (배포 전)
 

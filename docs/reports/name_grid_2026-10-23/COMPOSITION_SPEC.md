@@ -4,7 +4,7 @@
 
 이 문서는 **ROM 비의존 순수 Python 참조 모델**의 계약과 검증 결과다. 이름 입력 기능의 ROM 통합 완료를 뜻하지 않는다. `tools/hangul_compose.py`와 `tools/test_hangul_compose.py`만 구현했고, 빌더·ROM·ASM·글리프·코드 할당·dist·사용자 저장은 변경하지 않았다. 코드 표 내보내기나 ROM 레이아웃 파일도 만들지 않는다.
 
-승인 원문은 `temp/name-grid-resume/PLAN-v3.md`, SHA-256 `8e0d10339ec45664bf15b3cd970e2335d3dbdcdfdbf8df6cb851f63e009bf69c`다. 보고서 `PLAN-REVIEW-v3.md`의 `CONTEXT: match`, `AUTHOR: fable`, `VERDICT: APPROVE`와 파일 해시를 대조했다. 구현 후 Astra 검토·커밋·push는 총괄 담당이며 아직 이 작업에서 수행하지 않았다. T0 자산 복구는 company 경유 요청 후 대기 중이다. 이 문서는 자산 복구를 증명하지 않는다.
+승인 원문은 `temp/name-grid-resume/PLAN-v3.md`, SHA-256 `8e0d10339ec45664bf15b3cd970e2335d3dbdcdfdbf8df6cb851f63e009bf69c`다. 보고서 `PLAN-REVIEW-v3.md`의 `CONTEXT: match`, `AUTHOR: fable`, `VERDICT: APPROVE`와 파일 해시를 대조했다. Astra full 구현 검토는 승인됐고(Critical·필수·Nit 0, FYI `[receipt]` 1), 총괄이 구현 commit `ad2ec49ca3e9b9ce8028ac751102bed0118dbb4d`를 작업 브랜치에 push 완료했다고 인계했다. main 미병합·미배포이며 이번 문서 종료 정리의 커밋·push·검토도 총괄 담당이다. 검토 대상과 실제 실행 메타데이터는 [PHASE_A_STATUS.md](PHASE_A_STATUS.md)에 영구 연결했다. T0 자산 복구는 company 경유 요청 후 대기 중이다. 이 문서는 자산 복구를 증명하지 않는다.
 
 ## 상태와 문자 집합
 
@@ -99,7 +99,7 @@
 
 ## 실행 증거
 
-검증 기준 HEAD는 `a692987bd2313150631b5f02ba16d9e82a3d11bf`, 브랜치는 `sweep3-p2-20261023c`다. 미커밋 구현 파일을 아래 SHA-256으로 식별한다. Python은 `Python 3.9.6`이다. 최초 타입 주석 평가 오류를 `from __future__ import annotations`로 해결한 뒤 아래 두 명령을 다시 실행했다.
+당시 테스트 실행 기준 HEAD는 `a692987bd2313150631b5f02ba16d9e82a3d11bf`, 브랜치는 `sweep3-p2-20261023c`다. 당시 미커밋 구현 파일은 아래 SHA-256으로 식별하며, 이후 구현 commit `ad2ec49ca3e9b9ce8028ac751102bed0118dbb4d`에 보존됐다. Astra는 기준 HEAD에서 staged 6개 파일을 full 검토해 승인했다. 총괄이 기록한 검토 tree `fcf486b9dd4c0166f734c3c3ea961811a5ebf970`는 해당 구현 commit의 tree와 일치한다. 이번 종료 정리는 문서만 변경하며 테스트는 재실행하지 않았다. Python은 `Python 3.9.6`이다. 최초 타입 주석 평가 오류를 `from __future__ import annotations`로 해결한 뒤 아래 두 명령을 다시 실행했다.
 
 | 파일 | SHA-256 |
 |---|---|
