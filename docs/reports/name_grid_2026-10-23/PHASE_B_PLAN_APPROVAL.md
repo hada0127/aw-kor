@@ -24,10 +24,13 @@
 
 full → delta → delta 뒤 미승인이라 레포 규칙대로 합의(consensus) 회차로 넘어갔다. 3회차 v3의 첫 재검수는 출력 형식 오류(exit 7)로 무효였고, 같은 후보로 다시 돌려 published 됐다.
 
-## 3. 이 승인이 뜻하지 않는 것
+## 3. 계획 승인과 최종 코드 리뷰·소스 반영의 구분
 
-- 이 승인은 **계획**에 대한 것이다. 구현 코드의 최종 Astra 리뷰(PLAN §4.5 T7, `REVIEW-MODE: full`)는 별도이며 이 문서를 쓰는 시점에 **아직 진행하지 않았다(pending)**.
-- secret-scan·커밋·push·main 병합도 pending이다. 총괄이 T7 뒤 이 절을 정정한다.
+- **작성 당시 이력:** 이 승인은 **계획**에 대한 것이며, 당시 구현 코드의 최종 Astra 리뷰(PLAN §4.5 T7, `REVIEW-MODE: full`)·secret-scan·커밋·push·main 병합은 **pending**이었다. 계획 승인을 코드 승인으로 집계하지 않았다.
+- **2026-10-23 T7 마감:** 별도 Astra 코드 리뷰 full→delta2 최종 판정은 **승인, 신규 Critical·필수 지적 없음**이다. 원문·manifest-v3·patch SHA와 실제 모델/effort는 [`PHASE_B_CODE_REVIEW.md`](PHASE_B_CODE_REVIEW.md)에 보존했다.
+- 소스 반영 commit `4baba1f346c105d72a439f9af164f175a72544a0`의 feature push·main fast-forward·origin/main push 완료 및 승인 manifest-v3 350파일과 commit blob 동일 확인은 총괄의 [`ROOT_PROOF.json`](../../../temp/name-grid-phaseB/closeout/ROOT_PROOF.json)과 최종 브리프를 근거로 한다. 문서 마감 워커의 서버에는 `.git`가 없어 Git 조상 관계를 직접 확인하지 않았다. proof에서 feature/local main/origin main이 같은 commit이므로 소스 반영은 동일성으로 확인된다.
+- secret scan: staged 350/range 360파일, 후보 176건으로 **scanner RC1**. 전부 수동 오탐 판정, 미해결 0·시크릿 0이며 제외·우회 없음(총괄 기록 인용).
+- 이 commit은 T7 소스 반영 이력이다. 문서 마감 워커는 별도 변경을 미커밋 상태로 인계했으며 미래 commit SHA를 부여하지 않았다. 정본 b44·별도 후보·full/final/title_test 비동기화·재배포 제외·실기 미검증·Link BLOCKED·5음절 도달 한계는 [`PHASE_B_QA.md`](PHASE_B_QA.md) 그대로다.
 
 ## 4. 수행 주체 — 「이 pc 하네스대로」
 

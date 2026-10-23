@@ -43,8 +43,9 @@
 - 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다(Phase B에서 확인: 끝 공백은 native trim, 중간 공백은 유지 — `PHASE_B_RE.md` §5).
 - Phase A 준비·테스트는 ROM 통합 완료가 아니다. (이력) 작성 당시에는 자산 복구 대기였고, 2026-10-23 Phase B에서 복구·조사·승인 계획을 거쳐 ROM 통합 후보를 만들었다(아래). 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
 
-## 2026-10-23 이름 입력 조합 Phase B (2편 맵 에디터 · 후보, 미병합)
+## 2026-10-23 이름 입력 조합 Phase B (2편 맵 에디터 · 소스 main 반영, ROM은 별도 후보)
 
+- 소스 반영 commit `4baba1f346c105d72a439f9af164f175a72544a0`: Astra 최종 코드 리뷰 full→delta2 승인(Critical·필수 지적 없음), feature push·main fast-forward·origin/main push 완료를 총괄의 ROOT_PROOF로 확인했다. secret scan은 RC1(후보 176건 전부 수동 오탐 판정, 미해결 0·시크릿 0)이다. 리뷰 원문·대상 해시·확인 출처는 [`PHASE_B_CODE_REVIEW.md`](docs/reports/name_grid_2026-10-23/PHASE_B_CODE_REVIEW.md)에 있다. 문서 마감 워커의 서버에는 `.git`가 없어 직접 Git 검증은 하지 않았다. 위 Phase A의 리뷰·커밋 대기는 당시 이력이다.
 - 원본 ROM·폰트 복구 완료. RE·계획 승인·QA 정본은 `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`·`PHASE_B_PLAN_APPROVAL.md`·`PHASE_B_QA.md`, 증거 색인은 `evidence/INDEX.md`다.
 - 리뷰 판정: 쓰기는 `tools/build_korean_full.py`의 `NAME_COMPOSE_WRITES` 10영역 + A3 표 end 리터럴 4곳뿐이다. 후보−baseline diff가 그 밖이면 결함이다. native 공유 선택표 `0x83FAF6`·표시표 `0x83FE40`·행 포인터 `0x34AC24..38`·공유 A3 가나 그림은 원형 유지(바꾸면 mode0 navigation·2편 대사 대시가 깨진다). 훅은 S1/S2/S3/D1 바이트 4곳 + P1 포인터 1곳(원본 expect 대조)뿐이고, 객체 0x80·tail `+70..+7F` ABI는 `PHASE_B_RE.md` §4를 따른다.
 - 계약: 최대 8자·글자당 2바이트, 2350 밖 중간 후보는 원자 거부(대체 금지), 9번째는 `no_slot`(native의 8번째 덮어쓰기 금지), 지우기는 자모부터, 미완성 확인·공백 거부, `가카`는 확인→No 복귀로 확정한다. 2350 중 뢨·썅·쏀·쓩·쭁 5음절은 일반 키열로 도달할 수 없다(알려진 한계).

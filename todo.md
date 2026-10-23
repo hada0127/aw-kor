@@ -3,7 +3,7 @@
 - [x] 원본 ROM·폰트 복구, b44 재생성(`1ac68443…6f02`), 현 소스 baseline(`ebbca0ba…3a8a`), 원본·baseline·b44 런타임 조사 7건과 mode-scope 조사. 옛 세이브는 없고 정상 키로 새 세이브를 만들었다. 근거 `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`.
 - [x] PLAN-v5 `60a7574a…21b4` Astra consensus APPROVE(`implementationAllowed`). 수행은 사용자 「이 pc 하네스대로」에 따라 로컬 Claude Opus 5.5/high. 기록 `PHASE_B_PLAN_APPROVAL.md`.
 - [x] T1~T5 완료: 자모 자산·조합 코어·빌더 통합·후보 `output/game_wars_korean_namecompose_20261023.gba`(`1ac790a9…e1eb`, `--no-sync-outputs`) 빌드·5관문(잔여 집합 신규 0)·공식 mGBA 0.10.5 런타임 15케이스 PASS(그리드 실제 키 8자 → 저장 → 별도 cold reload → Versus, 실ROM BP 레지스터 계약). 명령·exit·증거 `PHASE_B_QA.md`, 영구 증거 `evidence/INDEX.md`.
-- [ ] 최종 Astra 코드 리뷰(full→delta) → 최종 tree/ROM 대조 → secret-scan → 커밋·push → main 병합(T7, 총괄). 이 항목 전에는 미병합 후보다.
+- [x] T7(총괄): 최종 Astra 코드 리뷰 full→delta2 승인(Critical·필수 지적 없음), 승인 manifest-v3 350파일과 commit blob 동일 확인, 소스 반영 commit `4baba1f346c105d72a439f9af164f175a72544a0`의 feature push·main fast-forward·origin/main push 완료. secret scan은 staged 350/range 360파일, RC1(후보 176건 전부 수동 오탐 판정, 미해결 0·시크릿 0)이다. 서버의 현재 생산 파일은 manifest-v3·T4/T5 해시 기록과 대조했고 후보 SHA는 `1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb`다. Git·push는 `.git` 없는 서버에서 재검증하지 않고 총괄 ROOT_PROOF를 인용한다. [`최종 코드 리뷰·소스 이력`](docs/reports/name_grid_2026-10-23/PHASE_B_CODE_REVIEW.md) 참조. 아래 Phase A·연구 당시의 미병합·T7 대기는 과거 상태이며 현재 소스 상태는 이 항목을 따른다. 문서 마감 워커는 별도 변경을 미커밋 상태로 총괄에게 인계했다. ROM은 별도 후보이며 정본 b44·재배포 범위는 그대로다.
 - [ ] 실기(GBA 하드웨어) 확인. Link(2코어 하네스 client가 full ROM을 못 읽음)는 BLOCKED이며 이번 범위 밖이다.
 - [ ] 알려진 한계 유지: 2350 중 뢨·썅·쏀·쓩·쭁은 일반 키열로 도달 불가. b44/dist 재배포·full/final/title_test 동기화는 별도 결정.
 

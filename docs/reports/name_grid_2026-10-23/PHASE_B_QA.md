@@ -2,7 +2,7 @@
 
 작성 2026-10-23. 승인 계획 `PLAN-v5.md` sha `60a7574a…21b4`([`PHASE_B_PLAN_APPROVAL.md`](PHASE_B_PLAN_APPROVAL.md)). RE 근거는 [`PHASE_B_RE.md`](PHASE_B_RE.md)다. 아래 링크의 증거는 [`evidence/`](evidence/)에 temp 원본과 바이트 동일하게 복사했다. 출처 경로·SHA·크기는 [`evidence/INDEX.md`](evidence/INDEX.md)·[`evidence/index.json`](evidence/index.json)에 있다. ROM·카트리지 세이브·savestate는 커밋하지 않고 SHA만 적는다.
 
-**상태: T1~T5의 최종 채택 실행은 전부 exit 0, T5 15개 케이스 PASS(케이스 13은 T7-FIX1 정정 실행 기준, §4).** 첫 실패·재시도 이력(text-fit 첫 EXIT 3, T5 `cases.py` 묶음·`case15.py analyze`·하네스 빌드의 첫 exit 1 등)은 §3·§4와 각 보고서에 그대로 남겼다. 실기(GBA 하드웨어)는 미검증이고 Link는 BLOCKED다. 최종 Astra 코드 리뷰·secret-scan·커밋·main 병합은 **pending**이다(PLAN §4.5 T7, 총괄 진행).
+**상태: T1~T5의 최종 채택 실행은 전부 exit 0, T5 15개 케이스 PASS(케이스 13은 T7-FIX1 정정 실행 기준, §4).** 첫 실패·재시도 이력(text-fit 첫 EXIT 3, T5 `cases.py` 묶음·`case15.py analyze`·하네스 빌드의 첫 exit 1 등)은 §3·§4와 각 보고서에 그대로 남겼다. 실기(GBA 하드웨어)는 미검증이고 Link는 BLOCKED다. 작성 당시 최종 Astra 코드 리뷰·secret-scan·커밋·main 병합은 pending이었다. **T7 현재 상태:** 별도 Astra full→delta2 최종 코드 리뷰 승인(Critical·필수 지적 없음), 소스 반영 commit `4baba1f346c105d72a439f9af164f175a72544a0`의 feature push·main fast-forward·origin/main push 완료는 총괄 ROOT_PROOF 기준이다. secret scan은 후보 176건 때문에 RC1이며 전부 수동 오탐 판정·미해결 0·시크릿 0이다. 문서 마감 워커는 서버에서 Git을 직접 검증하지 않았다. 원문·대상 manifest·확인 출처는 [`PHASE_B_CODE_REVIEW.md`](PHASE_B_CODE_REVIEW.md). 문서 마감 워커가 인계한 변경은 소스 커밋과 별도이며 정본 b44·재배포 제외·full/final/title_test 비동기화는 그대로다.
 
 ## 1. 대상 식별
 
@@ -16,11 +16,15 @@
 | 빌드 입력 snapshot manifest(3,206 파일) | `e6c9fcf8b8b53c6abd68c8cbc73da24fab149bf4ed13424c3fd5e42f38e21b66` — [`t4/snapshot_manifest.json`](evidence/t4/snapshot_manifest.json) |
 | blob `CODE_SHA`(2,739B) | `8dd9460864ad3b0f9703ce12c80667323935b8055f9c8966e6aa023fae6c3b2f` |
 
-기준 HEAD `90908180938c2bf40ee38dea43c4c1304b09df8a` + 미커밋 입력 15개. 후보는 baseline과 b44 둘 다 아니다(새 ignored 파일). `output/game_wars_korean_{full,final,title_test}.gba`는 이 체크아웃에 없고, 새 후보를 거기에 동기화하지 않았다(`--no-sync-outputs`). `dist/`·b44는 바꾸지 않았고 재배포하지 않았다.
+T4/T5 실행 당시 기준 HEAD `90908180938c2bf40ee38dea43c4c1304b09df8a` + 당시 미커밋 입력 15개(검증 입력 이력이며 현재 Git 기준이 아니다). 후보는 baseline과 b44 둘 다 아니다(새 ignored 파일). `output/game_wars_korean_{full,final,title_test}.gba`는 이 체크아웃에 없고, 새 후보를 거기에 동기화하지 않았다(`--no-sync-outputs`). `dist/`·b44는 바꾸지 않았고 재배포하지 않았다.
 
 blob `SOURCE_SHA`: `core.c` `aa99b4ca…9a01`, `tramp.s` `6c30f451…2f9d`, `image.ld` `40ce99f4…2a5e`, `gen_tables.py` `112dcdaa…78a4`, `build_image.py` `bec403f8…10a1c9`, `hangul_compose.py` `7f442ca1…b2d4`, `data/jamo_to_code_40.json` `628404ed…b7e9`, 생성 `tables.h` `26ceeeb9…0f9c`, `grid.inc` `d3cbcf60…bee9`.
 
 생산 파일 SHA(T4 snapshot 입력 = T6 시점 작업트리, T6에서 다시 계산해 동일): `tools/build_korean_full.py` `be43e4ab…3229` · `tools/part2_native_controls.py` `88a6d8a2…f61f` · `tools/test_part2_native_controls.py` `faf421d2…d1bd` · `tools/part2_name_compose_blob.py` `3313d3d8…3c16` · `tools/gen_jamo_assets.py` `e7a36dbf…27e3` · `tools/test_jamo_assets.py` `434e148b…bee8` · `tools/test_name_compose_core.py` `bbe99bbc…a137` · `tools/test_part2_name_compose_build.py` `ce00d1a6…dd20` · `data/jamo_glyphs_40.bin` `1417db5c…4980`. **T7-FIX1(Astra full-v1 F3)**: 이 가운데 테스트 파일 `tools/test_part2_name_compose_build.py`만 임시 폴더를 레포 `temp/`로 고정하도록 바뀌어 `63a17421…c689`가 됐다. ROM을 만드는 코드·데이터·blob은 그대로라 후보를 다시 빌드하지 않았다. 생산·후보 불변의 독립 근거는 기존 [`sha-before.txt`](evidence/t7-fix1/sha-before.txt)·[`sha-after.txt`](evidence/t7-fix1/sha-after.txt)(테스트 파일 1행만 다름)와 [`T7-FIX1 보고서`](evidence/t7-fix1/REPORT.md)의 `validate_t7.py` 출력 기록이다. 부모 `temp/name-grid-phaseB/final-review/manifest-v2.json`도 `T4_differences`를 이 테스트 파일 1개로 기록한다. **T7-FIX2 F4 정정:** 과거 보조 비교의 RC0 성공 및 그 성공을 근거로 한 차이 범위 주장은 철회한다. 보존 [`compare_t4_snapshot.log`](evidence/t7-fix1/compare_t4_snapshot.log)는 최초 단순 비교의 `DIFFERENT`·`MISSING []`·**RC=1** 원문이다. 보존 `.py`는 이후 수정본(`DIFF_VS_T4` 등 출력)이라 이 로그와 동일 실행의 소스로 연결하지 않는다. 후속 RC0 실행은 원문 로그가 없어 `(unverified)`이며 판정 근거에서 제외한다. 원시 로그·스크립트는 수정·재실행하지 않았다. 다른 15case·F3의 실제 RC0 로그는 그대로 유효하다.
+
+### T7 최종 소스·리뷰 대상 연결
+
+승인 manifest-v3 SHA-256 `b681903ad8e1cca376316c3573dd121a28759e002f3cbf9649d88786afd7ab29`의 350파일은 문서 마감 전 이 서버 파일과 전부 일치했다. T4 snapshot의 tools/data 1,151파일과의 차이는 위 F3 테스트 파일 1개뿐이며, ROM 생산 코드·자산은 T4/T5 검증 입력 그대로다. 기존 sha-after 25행과 후보 SHA도 일치했다. 승인 대상 350파일과 소스 반영 commit blob의 동일성은 총괄 브리프의 실제 확인 결과를 인용한다. 서버는 commit 객체를 직접 읽지 않았다. `_mirror-manifest.json`·`SOURCE_REVISION.json`은 v2 당시 이력이며 최신 소스 기준으로 사용하지 않는다. 문서 마감 후에는 이 문서 등 허용된 문서만 승인 manifest와 달라진다. 실제 문서 링크·해시·생산 불변 검사 출력은 [`closeout/REPORT.md`](../../../temp/name-grid-phaseB/closeout/REPORT.md)에 보존한다.
 
 ## 2. T1~T3 (자산·코어·빌더)
 
