@@ -329,3 +329,10 @@ aw-kor/
 ### 2026-10-02 연속 진행 디스크 운영값
 
 QA 프로토콜의 기본 하한은10GiB이며 실행별 설정이 가능하다. 약15GiB에서 반복 중단된 원인은 이번 실행의 추가 보수값15GiB였고 사용자 고정 요구가 아니다. 후속 정상 플레이는 `--min-free-gib 12.0`으로 설정하고13GiB부터 증가량/외부사용을 점검한다. 500MiB 증가마다 자원 상태를 확인하며12GiB 하드 중단은 유지한다. 이전15GiB 가드 실패/미완료 증거는 그대로 보존하며 완료로 바꾸지 않는다. 코드나 체크포인트를 조작해 실행 중 가드를 우회하지 않고 정상 재시작 옵션으로 적용한다.
+
+## 2026-10-23 이름 입력 조합 Phase A
+
+- ROM 비의존 참조 모델은 `tools/hangul_compose.py`, 검증은 `python3 -I tools/test_hangul_compose.py`와 `python3 -I tools/hangul_compose.py --report`다. 계약·해시·실제 출력은 `docs/reports/name_grid_2026-10-23/COMPOSITION_SPEC.md`를 따른다.
+- 2350 밖 후보 키는 대체 없이 원자적으로 거부한다. committed/active를 분리하고 8번째 active 편집을 허용한다. 미완성 confirm/space는 거부하며 자모를 유지한다. 저장은 committed만 정확히 16바이트다.
+- 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다.
+- Phase A 준비·테스트는 ROM 통합 완료가 아니다. 자산 복구는 company 경유 요청 후 대기 중이다. T0 복구·런타임 조사·별도 Fable 계획 및 Astra 승인 전에는 빌더/ROM/ASM/글리프/코드 할당을 변경하지 않는다. 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
