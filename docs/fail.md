@@ -1674,3 +1674,7 @@ Round 4에서 DOWN/UP으로 도움말 두 페이지를 원본/후보 같은 SRAM
 ## 2026-10-23 Part 2 Link 로컬 2코어 접속 미재현
 
 - 2편 Link 케이블 전투는 `mgba_link_harness` 2코어 HLE 시험에서 연결되지 않았다. 후보 호스트는 통신 대기, 클라이언트 화면은 백색이며 `xfer_multi=0 xfer_normal=0`/client SIO mode 8이었다(`temp/evidence_20261023/sweep3_link_pair_candidate/commands.log`, exit 0). 본 시험은 실기/BIOS MultiBoot 검증이 아니다.
+
+## 2026-10-23 Part 2 이름 그림 공유 회귀
+
+- `0x809CD6`의 `ー`→`으` 그림 교체는 전역 A3 `0x815B` 노드를 바꾸므로 `0xA0A833`의 `준비됐어-.` 대사 대시까지 오염한다. 나머지 55개 가나도 같은 전역 탐색표를 사용하며 정적 스캔에서 41개에 추가 텍스트 소비 가능성이 보였다. Review fix 5에서 56개 교체를 모두 빌드에서 보류했다. 이름 입력 전용 렌더/저장 이름 소비자를 분리하기 전에는 다시 켜지 않는다.

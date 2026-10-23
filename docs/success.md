@@ -4195,7 +4195,11 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 
 ## 2026-10-23 Part 2 디자인 맵 이름 입력 문자표 후보
 
-- 원본/후보 동일한 냉부팅 입력을 `temp/evidence_20261023/route_inputs/sweep3_design_name_confirm_inputs.txt`로 재생했다. `tools/build_korean_full.py`의 `patch_part2_design_name_grid_glyphs`가 56개 원본 가나 글리프의 그림을 Galmuri 8×16 한글 음가로 바꾼다. 문자코드/저장 형식은 바꾸지 않아 5글자 입력 미리보기와 확인 대화가 정상 출력된다. 양편 문자표·미리보기·확인·편집기 복귀는 `temp/evidence_20261023/sweep3_name_grid_fixed_contact.png`, 입력 이름의 저장·냉부팅 재표시·맵 로드는 `temp/evidence_20261023/sweep3_name_persistence_contact.png`, 명령 종료코드는 각 `round2_routes/sweep3_name_confirm_{original,candidate}/sweep3_design_name_confirm/commands.log`의 `exit=0`이다.
+- 원본/후보 동일한 냉부팅 입력을 `temp/evidence_20261023/route_inputs/sweep3_design_name_confirm_inputs.txt`로 재생했다. 당시 시험 후보의 `patch_part2_design_name_grid_glyphs`가 56개 원본 가나 글리프의 그림을 Galmuri 8×16 한글 음가로 바꿨다. 문자코드/저장 형식은 바꾸지 않아 5글자 입력 미리보기와 확인 대화가 정상 출력된다. 양편 문자표·미리보기·확인·편집기 복귀는 `temp/evidence_20261023/sweep3_name_grid_fixed_contact.png`, 입력 이름의 저장·냉부팅 재표시·맵 로드는 `temp/evidence_20261023/sweep3_name_persistence_contact.png`, 명령 종료코드는 각 `round2_routes/sweep3_name_confirm_{original,candidate}/sweep3_design_name_confirm/commands.log`의 `exit=0`이다.
 - 후보 `output/game_wars_korean_p2_sweep3_worker.gba` SHA-256 `627c8960570f2feacc9d176f284eda4a21197dce8f588aa3c9ca323200b80329`. 전체 빌드와 phase6·무결성 byte-only·text-fit은 종료 0, 무결성 full은 기존 부호소실 3085행·중점잔존 1035행으로 종료 1이다. 상세 명령과 남은 화면 차단은 `temp/evidence_20261023/SWEEP3_REPORT.md`를 따른다. 예전 후보 대비 프롤로그 6프레임, 전투 메뉴/저장 2프레임, 상점 구매 1프레임은 픽셀 동일했다. 실제 GBA/iPhone 확인과 다른 이름 문자열·렌더러는 미검증이다.
 
 - 같은 Sweep 3에서 2편 Link `1팩 대전` 선택 화면과 통신 대기 화면을 원본/후보 동일 키입력으로 캡처했다(`temp/evidence_20261023/sweep3_link_onepak_contact.png`, 양편 `round2_routes/sweep3_link_onepak_{original,candidate}/sweep3_link_singlepak/commands.log` exit 0). 케이블 전투 자체는 확인하지 못했다.
+
+### 2026-10-23 Review fix 5 정정
+
+- 위 2편 디자인 맵 이름 그림 교체는 시험 후보의 화면 증거다. 0x815B `ー` 그림이 2편 대사 대시와 공유된 사실이 확인되어 현 빌드에서 56개 교체를 모두 제외했다. 현 빌드의 이름 문자표 한글화 성공으로 집계하지 않는다. 정적 소비자 조사와 잔여 범위는 `temp/evidence_20261023/SWEEP3_REPORT.md` Review fix 5를 따른다.

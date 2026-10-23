@@ -5207,48 +5207,6 @@ def patch_name_grid(rom):
     return len(NAME_GRID_SLOTS)
 
 
-def patch_part2_design_name_grid_glyphs(rom, original):
-    """Draw Hangul in the Part 2 Design Maps name grid and entered-name preview.
-
-    The editor stores the original kana codes as name characters. Replacing its
-    charset at 0x83FE41 displays Hangul in the grid but makes the preview show
-    question marks. These raw 8x16 glyphs are used by both surfaces, so leave
-    the charset and stored codes intact and replace their pictures instead.
-    The offsets were matched byte-for-byte from the live name-grid VRAM tiles.
-    """
-    from render_galmuri_8x16 import render_char
-
-    rows = (
-        ('アイウエオ', '아이우에오', (0x807C36, 0x807E2E, 0x8081D6, 0x80845E, 0x80872E)),
-        ('カキクケコ', '카키쿠케코', (0x808896, 0x808B66, 0x808D5E, 0x80902E, 0x80926E)),
-        ('サシスセソ', '사시스세소', (0x8095CE, 0x80977E, 0x809A96, 0x809BFE, 0x809DF6)),
-        ('タチツテト', '타치츠테토', (0x80A0C6, 0x80A3DE, 0x80A73E, 0x80A97E, 0x80AC96)),
-        ('ナニヌネノ', '나니누네노', (0x80AF1E, 0x80B1A6, 0x80B30E, 0x80B42E, 0x80B5DE)),
-        ('ハヒフヘホ', '하히후헤호', (0x80B746, 0x80BB7E, 0x80BFB6, 0x80C3EE, 0x80C826)),
-        ('マミムメモ', '마미무메모', (0x80CA1E, 0x80CAF6, 0x80CC16, 0x80CCEE, 0x80CDC6)),
-        ('ヤユヨ', '야유요', (0x80CFBE, 0x80D16E, 0x80D3AE)),
-        ('ラリルレロ', '라리루레로', (0x80D55E, 0x80D67E, 0x80D7E6, 0x80D9DE, 0x80DA6E)),
-        ('ワヲン', '와오응', (0x80DCAE, 0x80DEEE, 0x80DFC6)),
-        ('ァィゥェォ', '아이우에오', (0x807ACE, 0x807D9E, 0x807FDE, 0x8082F6, 0x8085C6)),
-        ('ッャュョー', '읏야유요으', (0x80A61E, 0x80CEE6, 0x80D096, 0x80D246, 0x809CD6)),
-    )
-    count = 0
-    for kana, hangul, offsets in rows:
-        assert len(kana) == len(hangul) == len(offsets)
-        for source, target, off in zip(kana, hangul, offsets):
-            if rom[off:off + 64] != original[off:off + 64]:
-                raise AssertionError(f'Part 2 name glyph source changed: {source} at 0x{off:X}')
-            top, bottom = render_char(target)
-            if not any(top) or not any(bottom):
-                raise AssertionError(f'empty Part 2 name glyph: {source} -> {target}')
-            data = top + bottom
-            rom[off:off + 64] = data
-            WRITE_LOG.append([off, 64, 64, data.hex(), None, target, None,
-                              'part2-design-name-glyph'])
-            count += 1
-    return count
-
-
 def _symbol_table_index(sjis):
     return (((sjis + 0xFFFF7EC0) & 0xFFF8) << 1) + (sjis & 7)
 
@@ -24519,7 +24477,9 @@ def _build(args, publication):
     # shared with the Part 1 name grid. Re-apply the name grid as the final
     # authority so small-kana/long-mark bottom halves cannot leak back in.
     patch_name_grid(rom)
-    st['part2_design_name_glyphs'] = patch_part2_design_name_grid_glyphs(rom, orig)
+    # The A3 glyph nodes also serve dialogue/menu text. Do not apply the
+    # name-grid picture swap until its consumers can be isolated.
+    st['part2_design_name_glyphs'] = 0
     st['galmuri_fullwidth_digits'] = patch_fullwidth_digit_glyphs(rom)
     from renderer_text import supply_a3_glyphs
     st['a3_fullwidth_added_glyphs'] = len(supply_a3_glyphs(rom, orig, WRITE_LOG, _rp_manifest))
