@@ -1,0 +1,118 @@
+..F.....F.......EE........EEF.E..F....
+======================================================================
+ERROR: test_icon_layout_gate_follows_relocated_pointer (__main__.EditorSafetyTests.test_icon_layout_gate_follows_relocated_pointer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 403, in test_icon_layout_gate_follows_relocated_pointer
+    original = preview_capture.ORIG_ROM.read_bytes()
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/original/Game Boy Wars Advance 1+2 (Japan).gba'
+
+======================================================================
+ERROR: test_icon_menu_layout_prefix_is_not_translated_or_counted_as_free_space (__main__.EditorSafetyTests.test_icon_menu_layout_prefix_is_not_translated_or_counted_as_free_space)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 418, in test_icon_menu_layout_prefix_is_not_translated_or_counted_as_free_space
+    original = preview_capture.ORIG_ROM.read_bytes()
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/original/Game Boy Wars Advance 1+2 (Japan).gba'
+
+======================================================================
+ERROR: test_preview_follows_actual_pointer_and_preserves_control (__main__.EditorSafetyTests.test_preview_follows_actual_pointer_and_preserves_control)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 581, in test_preview_follows_actual_pointer_and_preserves_control
+    rom = path.read_bytes()
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/original/Game Boy Wars Advance 1+2 (Japan).gba'
+
+======================================================================
+ERROR: test_preview_named_cache_tracks_text_and_keeps_requested_sweep_frames (__main__.EditorSafetyTests.test_preview_named_cache_tracks_text_and_keeps_requested_sweep_frames)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 327, in test_preview_named_cache_tracks_text_and_keeps_requested_sweep_frames
+    first = preview_capture.capture('가', canvas='test', out_name='named.png')
+            ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/preview_capture.py", line 262, in capture
+    source_bytes = base_rom.read_bytes()
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/output/game_wars_korean_full.gba'
+
+======================================================================
+ERROR: test_result_score_patch_changes_only_owned_atlas_entries (__main__.EditorSafetyTests.test_result_score_patch_changes_only_owned_atlas_entries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 252, in test_result_score_patch_changes_only_owned_atlas_entries
+    original = preview_capture.ORIG_ROM.read_bytes()
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 777, in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 771, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/original/Game Boy Wars Advance 1+2 (Japan).gba'
+
+======================================================================
+FAIL: test_bteam_noop_compares_current_value_not_baseline (__main__.EditorSafetyTests.test_bteam_noop_compares_current_value_not_baseline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 224, in test_bteam_noop_compares_current_value_not_baseline
+    self.assertTrue(same.get('ok'), same)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'ok': False, 'error': '0x00A29390 없음'}
+
+======================================================================
+FAIL: test_display_authority_is_visible_and_rejects_both_save_endpoints (__main__.EditorSafetyTests.test_display_authority_is_visible_and_rejects_both_save_endpoints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 125, in test_display_authority_is_visible_and_rejects_both_save_endpoints
+    self.assertIn('전용 표시', result['error'])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '전용 표시' not found in '0x00A2C1B8 없음'
+
+======================================================================
+FAIL: test_preview_partial_rom_write_failure_cleans_its_directory (__main__.EditorSafetyTests.test_preview_partial_rom_write_failure_cleans_its_directory)
+----------------------------------------------------------------------
+FileNotFoundError: [Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/output/game_wars_korean_full.gba'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 380, in test_preview_partial_rom_write_failure_cleans_its_directory
+    with self.assertRaisesRegex(OSError, 'injected disk write'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "injected disk write" does not match "[Errno 2] No such file or directory: '/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/output/game_wars_korean_full.gba'"
+
+======================================================================
+FAIL: test_structured_command_rows_reject_fragment_saves_without_writes (__main__.EditorSafetyTests.test_structured_command_rows_reject_fragment_saves_without_writes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_editor_safety.py", line 74, in test_structured_command_rows_reject_fragment_saves_without_writes
+    self.assertIn('복합 대사', result['error'])
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '복합 대사' not found in '0x00D8FD5A 없음'
+
+----------------------------------------------------------------------
+Ran 38 tests in 5.615s
+
+FAILED (failures=4, errors=5)

@@ -1,10 +1,12 @@
-"""ROM-free regressions for lossless title fit and its editor consumers."""
+"""ROM-free regressions for lossless title fit and editor budget helpers."""
 import collections
+import ast
 import importlib.util
 import json
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'tools'))
@@ -41,7 +43,7 @@ class PairTitleFitContractTests(unittest.TestCase):
         # Catalogued titles outside the old A2D000 band need the same policy.
         for address in NATIVE_TITLE_SOURCES:
             text = B.BTEAM_PREVIOUS_KOREAN_TEXT.get(address, '해 VS 공!')
-            expected = B.encode_required_full_fidelity(text, self.codes, collections.Counter(), address)
+            expected = encode_pair_title(B.normalize_korean_terms(text), self.codes)
             with self.subTest(address=hex(address)):
                 self.assertEqual(B.encode_fit(text, len(expected) - 1, self.codes,
                                               collections.Counter(), address), (None, 99))
@@ -60,13 +62,64 @@ class PairTitleFitContractTests(unittest.TestCase):
                 self.assertEqual(B.encode_fit(text, len(exact), self.codes, collections.Counter(), address),
                                  (exact, 0))
 
-    def test_both_editors_reject_recorded_title_overflow(self):
+    def test_both_editor_budget_helpers_report_title_overflow(self):
         dialogue = load_editor('dialogue_editor')
         scene = load_editor('scene_editor')
         for slot, fits in ((10, False), (14, True)):
             with self.subTest(slot=slot):
                 self.assertEqual(dialogue.validate_build_fit('해 VS 공!', slot, '0xA2D7D4')['ok'], fits)
                 self.assertEqual(scene.build_fit_budget('해 VS 공!', slot, '0xA2D7D4')['fits'], fits)
+
+    def test_title_whitespace_and_punctuation_use_independent_pairs(self):
+        address = 0xA2D7D4
+        for text in ('해  VS 공!', ' 해　 VS  공!　', '해[]{};▼・공!'):
+            expected = encode_pair_title(text, self.codes)
+            with self.subTest(text=text):
+                for encode in (B.encode_full_fidelity, B.encode_required_full_fidelity):
+                    self.assertEqual(encode(text, self.codes, collections.Counter(), address), expected)
+                self.assertEqual(B.encode_fit(text, len(expected), self.codes,
+                                              collections.Counter(), address), (expected, 0))
+                self.assertEqual(B.encode_fit(text, len(expected) - 1, self.codes,
+                                              collections.Counter(), address), (None, 99))
+        self.assertEqual(encode_pair_title(' 　[]{};▼・', self.codes),
+                         bytes.fromhex('81408140816d816e816f8170814781a58145'))
+
+    def test_title_unsupported_input_is_rejected_without_deletion(self):
+        for text in ('해·공!', '해\t공!', '해\n공!', '해😀공!', '해힣공!'):
+            for encode in (B.encode_full_fidelity, B.encode_required_full_fidelity):
+                with self.subTest(text=text, encoder=encode.__name__):
+                    with self.assertRaises(AssertionError):
+                        encode(text, self.codes, collections.Counter(), 0xA2D7D4)
+            with self.assertRaises(AssertionError):
+                B.encode_fit(text, 100, self.codes, collections.Counter(), 0xA2D7D4)
+
+    def test_fit_keeps_protected_title_authority(self):
+        address = 0xA2D7D4
+        # Synthetic authority exercises precedence without editing approved data.
+        text = '해  VS 공!'
+        expected = encode_pair_title(text, self.codes)
+        with patch.dict(B.BTEAM_PREVIOUS_KOREAN_TEXT, {address: text}):
+            self.assertEqual(B.encode_fit('무시할 입력😀', len(expected), self.codes,
+                                          collections.Counter(), address), (expected, 0))
+
+    def test_repoint_callbacks_use_exact_pairs_and_require_relocation(self):
+        tree = ast.parse(Path(B.__file__).read_text())
+        nodes = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)
+                 and n.name in ('_rp_fixed_bytes', '_rp_fit_level')]
+        address = 0xA2D7D4
+        for text in ('해  VS 공!', '해　 VS 공!', '해[]{};▼・공!'):
+            expected = encode_pair_title(text, self.codes)
+            ns = dict(vars(B), _rp_dlg=lambda a: text, syl_to_code=self.codes,
+                      unmapped=collections.Counter(), slots={address: len(expected) - 2},
+                      required_script_repoints=set(), _rp_inplace_jammed=lambda a: False)
+            exec(compile(ast.Module(body=nodes, type_ignores=[]), B.__file__, 'exec'), ns)
+            self.assertEqual(ns['_rp_fixed_bytes'](address), expected)
+            self.assertEqual(ns['_rp_fit_level'](address), 6)
+            self.assertEqual(ns['required_script_repoints'], {address})
+            ns['slots'][address] = len(expected)
+            ns['required_script_repoints'].clear()
+            self.assertEqual(ns['_rp_fit_level'](address), 0)
+            self.assertEqual(ns['required_script_repoints'], set())
 
     def test_non_title_fit_policy_is_unchanged(self):
         payload, level = B.encode_fit('가 나입니다()', 6, self.codes, collections.Counter(), 0x800000)

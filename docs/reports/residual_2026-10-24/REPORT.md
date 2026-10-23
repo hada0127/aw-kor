@@ -21,11 +21,11 @@ B팀의 결정 분류는 RESTORE_BASELINE 97, DEFER 11, NEW_STRICT_MISMATCH 5, A
 
 ## 선택한 결함과 수정
 
-`encode_fit('해 VS 공!', 10, ..., 0xA2D7D4)`가 level10, `92bb82758272886d8149`를 반환했다. 두 공백을 지운 `해ＶＳ공！`이므로 제목 보존 계약을 위반한다. 완전한 두 바이트 제목은 14바이트다. 두 실제 소비 함수 `dialogue_editor.server.validate_build_fit`와 `scene_editor.server.build_fit_budget`가 이것을 저장 가능으로 판정했다. `dialogue_fit_warning`은 제목 경로에 경고도 주지 않는다.
+`encode_fit('해 VS 공!', 10, ..., 0xA2D7D4)`가 level10, `92bb82758272886d8149`를 반환했다. 두 공백을 지운 `해ＶＳ공！`이므로 제목 보존 계약을 위반한다. 완전한 두 바이트 제목은 14바이트다. 두 실제 소비 함수 `dialogue_editor.server.validate_build_fit`와 `scene_editor.server.build_fit_budget`가 이것을 슬롯 예산 내로 판정했다. 실제 저장 API는 변경 전부터 각각 `protected_render_region` / `deny_pair_status`로 해당 제목 영역을 fit 호출 전에 거절하며, 그룹 저장도 단건 dry-run을 먼저 거친다. `dialogue_fit_warning`은 제목 경로에 경고도 주지 않는다.
 
-기존 `patch_script_row`와 repointer는 이미 제목 전체를 보존하고 재배치를 요구한다. 공용 fit 경로도 기존 `is_pair_title` 판정과 `encode_required_full_fidelity`를 사용하도록 1개 조건을 넓혔다. 제목이 슬롯을 넘으면 `(None, 99)`를 반환한다. 제목·공백·부호·폰트·임계값·재배치 로직은 바꾸지 않았다.
+기존 `patch_script_row`와 repointer는 이미 제목 전체를 보존하고 재배치를 요구한다. 공용 fit 경로도 기존 `is_pair_title` 판정과 `encode_required_full_fidelity`를 사용하도록 1개 조건을 넓혔다. 제목이 슬롯을 넘으면 `(None, 99)`를 반환한다. 당시 변경은 제목 문구·폰트·임계값·재배치 로직을 바꾸지 않았다. 아래 F1 후속 수정은 제목 full-fidelity에 남아 있던 정규화 손실도 차단한다.
 
-실제 전체 검사에서 바뀐 호출은 아래 네 개뿐이다. 기존 최종 ROM에 이 네 제목이 손실되어 있다고 주장하지 않는다. **입력/편집기 판정의 실제 결함 수정**이며 최종 ROM 재배치 보존 여부는 후속 검증 대상이다.
+실제 전체 검사에서 바뀐 호출은 아래 네 개뿐이다. 기존 최종 ROM에 이 네 제목이 손실되어 있다고 주장하지 않는다. **공용 fit 및 편집기 예산 보조 함수의 손실 허용 수정**이며 최종 ROM 재배치 보존 여부는 후속 검증 대상이다.
 
 | 주소 | 문구 | 슬롯 | 수정 전 | 수정 후 |
 |---|---|---:|---|---|
@@ -56,3 +56,9 @@ B팀의 결정 분류는 RESTORE_BASELINE 97, DEFER 11, NEW_STRICT_MISMATCH 5, A
 - **독립 리뷰 PENDING**: OPERATING-CONTRACT.md의 월요일08:00 전 Claude 금지, 이 dispatch의 nested worker 금지를 준수했다. 총괄이 별도 Codex/Astra 리뷰를 배정해야 한다. 자체 점검을 독립 승인으로 세지 않는다.
 - **최종 ROM/런타임 검증 PENDING**: 원본 ROM은 확보했으므로 자산 부재로 막혔다고 주장하지 않는다. 이번 bounded increment에서 후보 빌드·최종 B팀/포인터 검사·원본 대비 화면 캡처는 미실행이다. 후보 배포/최종 완료 주장은 이 검증과 리뷰가 끝날 때까지 차단한다. b44/output/dist는 불변이다.
 - 총괄 통신: 지정 heartbeat 명령이 실제 CLI 실행 identity를 coordinator로 판정하여 exit 1로 거절됐다. 다른 발신자를 사칭하지 않았다. 마지막 worker_done도 지정 명령을 정확히 한 번 시도하고 거절 시 오류를 보고한다.
+
+## F1/F2 후속 수정 (2026-10-24)
+
+전체 리뷰 `6d846d9`의 F1/F2를 반영했다. 제목 full-fidelity는 승인 용어 변환을 유지한 strict pair 인코더를 직접 사용하여 반복/혼합 공백 및 지원 부호를 보존하고 미지원 입력을 거부한다. 직접 writer·repoint는 같은 helper를 사용하며 기존 source/override 선택 권위를 유지한다. 비제목 정규화와 저장 보호 게이트는 변경하지 않았다.
+
+테스트 이름은 편집기 **예산 보조 함수** 검증으로 한정했다. 실제 저장을 허용하던 결함을 고쳤다는 주장은 철회한다. 이전 실행 로그·집계는 당시 이력이며 새 증거는 `temp/residual_fix_20261024/`와 [후속 증거](fix_evidence/REPORT.md)에 따로 기록한다. 독립 델타 리뷰·후보 ROM/실화면 검증은 대기 중이다.

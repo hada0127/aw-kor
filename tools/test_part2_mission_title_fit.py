@@ -297,6 +297,15 @@ class MissionTitleFitTests(unittest.TestCase):
         self.assertEqual(rom[start:end + 2], before)
         self.assertIn(start, namespace['required_script_repoints'])
         self.assertEqual(namespace['WRITE_LOG'][-1][5], text)
+        # Shared full-fidelity writer preserves mixed/repeated spaces and signs.
+        for text in ('해  VS 공!', '해　 VS 공!', '해[]{};▼・공!'):
+            namespace['_dlg_ov']['0x00A2D7D4'] = text
+            namespace['patch_script_row'](start, end, b'wrong', 'test', source_text='ignored')
+            self.assertEqual(rom[start:end + 2], before)
+            self.assertEqual(namespace['WRITE_LOG'][-1][5], text)
+            self.assertIn(start, namespace['required_script_repoints'])
+            self.assertEqual(builder.encode_full_fidelity(text, codes, collections.Counter(), start),
+                             fit.encode_pair_title(text, codes))
         with self.assertRaisesRegex(AssertionError, 'required script relocation failed'):
             builder.verify_required_script_repoints(namespace['required_script_repoints'], set())
         # Context selection leaves the non-title command and ordinary UI paths.

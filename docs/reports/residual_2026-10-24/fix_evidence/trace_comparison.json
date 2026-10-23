@@ -1,0 +1,52 @@
+{
+  "calls": 18584,
+  "before": {
+    "overflow": {
+      "events": 277,
+      "addresses": 263
+    },
+    "wider": {
+      "events": 507,
+      "addresses": 507
+    },
+    "layout_loss": {
+      "events": 151,
+      "addresses": 151
+    }
+  },
+  "after": {
+    "overflow": {
+      "events": 277,
+      "addresses": 263
+    },
+    "wider": {
+      "events": 507,
+      "addresses": 507
+    },
+    "layout_loss": {
+      "events": 151,
+      "addresses": 151
+    }
+  },
+  "changes": [
+    {
+      "before": {
+        "a": 10671732,
+        "ko": "토이・박스",
+        "ja": "トイ・ボックス",
+        "slot_override": null,
+        "level": 0,
+        "enc": "91eb8fa281408cac8e47"
+      },
+      "after": {
+        "a": 10671732,
+        "ko": "토이・박스",
+        "ja": "トイ・ボックス",
+        "slot_override": null,
+        "level": 0,
+        "enc": "91eb8fa281458cac8e47"
+      }
+    }
+  ],
+  "non_title_calls_unchanged": 18396
+}

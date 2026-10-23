@@ -12899,8 +12899,8 @@ def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
         ko = BTEAM_PREVIOUS_KOREAN_TEXT[addr]
     from part2_mission_title_fit import is_pair_title
     # Native title consumers require complete two-byte text. Match the direct
-    # title writer/repoint contract here too: editor save gates must not accept
-    # a smaller slot by silently deleting title spaces or punctuation.
+    # title writer/repoint contract here too: budget helpers must not report
+    # a smaller slot as fitting by deleting title spaces or punctuation.
     if addr in BTEAM_RESTORE_BASELINE_ROWS or is_pair_title(addr):
         exact = encode_required_full_fidelity(ko, syl_to_code, unmapped, addr)
         return (exact, 0) if len(exact) <= slot else (None, 99)
@@ -12973,12 +12973,18 @@ def _dialogue_fullwidth_alnum_text(text):
 def encode_full_fidelity(ko, syl_to_code, unmapped, addr=None):
     """슬롯 제약 없이 완전충실(부호 보존) 인코딩 — repoint 재배치용.
 
-    encode_fit의 정규화는 동일하게 적용하되 _fit_candidates의 슬롯-축소(부호/공백 제거)는
+    제목은 승인 용어 변환 후 strict pair 인코딩한다. 비제목은
+    encode_fit의 정규화를 동일하게 적용하되 _fit_candidates의 슬롯-축소(부호/공백 제거)는
     거치지 않는다 → 단어붙음/축약 없는 원문 그대로.
 
     ★2026-06-25 전각공백(0x8140) 사용: 대사 렌더러는 글리프 폭 단위 전진이라 반각공백(0x20)을
     스킵(화면 잼)하므로, 재배치(free space=폭 여유)는 반드시 전각으로 복원해 **화면에서 공백이 보이게** 한다.
     """
+    # Titles are authored pairs, not dialogue: preserve each space and sign.
+    # Source/override authority stays with the callers; retain approved terms.
+    from part2_mission_title_fit import is_pair_title, encode_pair_title
+    if is_pair_title(addr):
+        return encode_pair_title(normalize_korean_terms(ko), syl_to_code)
     # Repointed messages are free-space text, so use 2-byte punctuation where
     # compact renderers can lose byte alignment on ASCII separators.
     text = normalize_for_fit(ko, preserve_corner_quotes=is_part2_story_address(addr))

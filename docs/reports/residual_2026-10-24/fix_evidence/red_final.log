@@ -1,0 +1,88 @@
+..F...FFFFFFF
+======================================================================
+FAIL: test_fit_keeps_protected_title_authority (__main__.PairTitleFitContractTests.test_fit_keeps_protected_title_authority)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 102, in test_fit_keeps_protected_title_authority
+    self.assertEqual(B.encode_fit('무시할 입력😀', len(expected), self.codes,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                  collections.Counter(), address), (expected, 0))
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (b'\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I', 0) != (b'\x92\xbb\x81@\x81@\x82u\x82r\x81@\x88m\x81I', 0)
+
+First differing element 0:
+b'\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I'
+b'\x92\xbb\x81@\x81@\x82u\x82r\x81@\x88m\x81I'
+
+- (b'\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I', 0)
++ (b'\x92\xbb\x81@\x81@\x82u\x82r\x81@\x88m\x81I', 0)
+?            +++++
+
+
+======================================================================
+FAIL: test_repoint_callbacks_use_exact_pairs_and_require_relocation (__main__.PairTitleFitContractTests.test_repoint_callbacks_use_exact_pairs_and_require_relocation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 116, in test_repoint_callbacks_use_exact_pairs_and_require_relocation
+    self.assertEqual(ns['_rp_fixed_bytes'](address), expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I' != b'\x92\xbb\x81@\x81@\x82u\x82r\x81@\x88m\x81I'
+
+======================================================================
+FAIL: test_title_unsupported_input_is_rejected_without_deletion (__main__.PairTitleFitContractTests.test_title_unsupported_input_is_rejected_without_deletion) (text='해·공!', encoder='encode_full_fidelity')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 91, in test_title_unsupported_input_is_rejected_without_deletion
+    with self.assertRaises(AssertionError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_title_unsupported_input_is_rejected_without_deletion (__main__.PairTitleFitContractTests.test_title_unsupported_input_is_rejected_without_deletion) (text='해·공!', encoder='encode_required_full_fidelity')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 91, in test_title_unsupported_input_is_rejected_without_deletion
+    with self.assertRaises(AssertionError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_title_unsupported_input_is_rejected_without_deletion (__main__.PairTitleFitContractTests.test_title_unsupported_input_is_rejected_without_deletion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 93, in test_title_unsupported_input_is_rejected_without_deletion
+    with self.assertRaises(AssertionError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: AssertionError not raised
+
+======================================================================
+FAIL: test_title_whitespace_and_punctuation_use_independent_pairs (__main__.PairTitleFitContractTests.test_title_whitespace_and_punctuation_use_independent_pairs) (text='해  VS 공!')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 79, in test_title_whitespace_and_punctuation_use_independent_pairs
+    self.assertEqual(encode(text, self.codes, collections.Counter(), address), expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I' != b'\x92\xbb\x81@\x81@\x82u\x82r\x81@\x88m\x81I'
+
+======================================================================
+FAIL: test_title_whitespace_and_punctuation_use_independent_pairs (__main__.PairTitleFitContractTests.test_title_whitespace_and_punctuation_use_independent_pairs) (text=' 해\u3000 VS  공!\u3000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 79, in test_title_whitespace_and_punctuation_use_independent_pairs
+    self.assertEqual(encode(text, self.codes, collections.Counter(), address), expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'\x81@\x92\xbb\x81@\x82u\x82r\x81@\x88m\x81I\x81@' != b'\x81@\x92\xbb\x81@\x81@\x82u\x82r\x81@\x81@\x88m\x81I\x81@'
+
+======================================================================
+FAIL: test_title_whitespace_and_punctuation_use_independent_pairs (__main__.PairTitleFitContractTests.test_title_whitespace_and_punctuation_use_independent_pairs) (text='해[]{};▼・공!')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024/tools/test_pair_title_fit_contract.py", line 79, in test_title_whitespace_and_punctuation_use_independent_pairs
+    self.assertEqual(encode(text, self.codes, collections.Counter(), address), expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'\x92\xbb\x81@\x88m\x81I' != b'\x92\xbb\x81m\x81n\x81o\x81p\x81G\x81\xa5\x81E\x88m\x81I'
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.371s
+
+FAILED (failures=8)

@@ -1,0 +1,19 @@
+test_all_native_title_sources_reject_lossy_fit (test_pair_title_fit_contract.PairTitleFitContractTests.test_all_native_title_sources_reject_lossy_fit) ... ok
+test_both_editor_budget_helpers_report_title_overflow (test_pair_title_fit_contract.PairTitleFitContractTests.test_both_editor_budget_helpers_report_title_overflow) ... ok
+test_fit_keeps_protected_title_authority (test_pair_title_fit_contract.PairTitleFitContractTests.test_fit_keeps_protected_title_authority) ... ok
+test_non_title_fit_policy_is_unchanged (test_pair_title_fit_contract.PairTitleFitContractTests.test_non_title_fit_policy_is_unchanged) ... ok
+test_recorded_sea_vs_air_title_cannot_fit_by_losing_spaces (test_pair_title_fit_contract.PairTitleFitContractTests.test_recorded_sea_vs_air_title_cannot_fit_by_losing_spaces) ... ok
+test_recorded_titles_cannot_fit_by_losing_exclamation (test_pair_title_fit_contract.PairTitleFitContractTests.test_recorded_titles_cannot_fit_by_losing_exclamation) ... ok
+test_repoint_callbacks_use_exact_pairs_and_require_relocation (test_pair_title_fit_contract.PairTitleFitContractTests.test_repoint_callbacks_use_exact_pairs_and_require_relocation) ... ok
+test_title_unsupported_input_is_rejected_without_deletion (test_pair_title_fit_contract.PairTitleFitContractTests.test_title_unsupported_input_is_rejected_without_deletion) ... ok
+test_title_whitespace_and_punctuation_use_independent_pairs (test_pair_title_fit_contract.PairTitleFitContractTests.test_title_whitespace_and_punctuation_use_independent_pairs) ... ok
+test_actual_level12_encoding_is_counted_alongside_overflow (test_qa_text_fit_cli.TextFitCliTests.test_actual_level12_encoding_is_counted_alongside_overflow) ... ok
+test_help_does_not_scan_translation_data (test_qa_text_fit_cli.TextFitCliTests.test_help_does_not_scan_translation_data) ... ok
+test_unknown_option_does_not_start_scan (test_qa_text_fit_cli.TextFitCliTests.test_unknown_option_does_not_start_scan) ... ok
+test_builder_encoding_and_actual_direct_writer_keep_title_pairs (test_part2_mission_title_fit.MissionTitleFitTests.test_builder_encoding_and_actual_direct_writer_keep_title_pairs) ... ok
+test_title_encoder_preserves_digits_letters_signs_and_full_spacing (test_part2_mission_title_fit.MissionTitleFitTests.test_title_encoder_preserves_digits_letters_signs_and_full_spacing) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.639s
+
+OK

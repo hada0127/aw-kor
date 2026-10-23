@@ -1,0 +1,5 @@
+{
+  "tools/build_korean_full.py": "8b9bba586781bb73cc2f4f85220b7552c3130a22bede3b79abfc45486d6bc241",
+  "tools/test_pair_title_fit_contract.py": "9f584498752f44704f34f8d9ea9c056bee3301e16663a230a08894e15e19d372",
+  "tools/test_editor_safety.py": "be0df88ee2ede520d0badb2fde6c4be730b11c596c8e85f6b09a36f007230bf3"
+}

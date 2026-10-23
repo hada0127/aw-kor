@@ -17,3 +17,5 @@ Path('temp/residual_20261024/trace.json').write_text(json.dumps(records,ensure_a
 print(buf.getvalue()); print('rc',rc)
 for r in records:
  if r['level'] and 6<=r['level']<=12: print(hex(r['a']),r['level'],r['ko'])
+
+sys.exit(rc)
