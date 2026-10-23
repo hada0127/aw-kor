@@ -12897,7 +12897,11 @@ def encode_fit(ko, slot, syl_to_code, unmapped, addr=None):
     """
     if addr in BTEAM_PREVIOUS_KOREAN_TEXT:
         ko = BTEAM_PREVIOUS_KOREAN_TEXT[addr]
-    if addr in BTEAM_RESTORE_BASELINE_ROWS:
+    from part2_mission_title_fit import is_pair_title
+    # Native title consumers require complete two-byte text. Match the direct
+    # title writer/repoint contract here too: editor save gates must not accept
+    # a smaller slot by silently deleting title spaces or punctuation.
+    if addr in BTEAM_RESTORE_BASELINE_ROWS or is_pair_title(addr):
         exact = encode_required_full_fidelity(ko, syl_to_code, unmapped, addr)
         return (exact, 0) if len(exact) <= slot else (None, 99)
     normalized = normalize_for_fit(ko, preserve_corner_quotes=is_part2_story_address(addr))

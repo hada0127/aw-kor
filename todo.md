@@ -1,3 +1,8 @@
+## 2026-10-24 잔여 첫 증분 (격리 후보·독립 리뷰 대기)
+
+- 제목 `A2D7D4` 공백과 `A2D61C/A2D698/A2D5A0` 느낌표를 삭제해 슬롯 성공으로 처리하던 공용 인코더/두 편집기 판정을 수정했다. 관련 10회귀 통과, 최종 ROM/실화면·독립 리뷰는 미실행이다. [집합·전후 증거](docs/reports/residual_2026-10-24/REPORT.md).
+- 기준 overflow 273이벤트/259주소·wider 507·layout-loss 152를 재구성했다. 수정 후 overflow 277/263, wider 507, layout-loss 151이며 이를 최종 ROM 잔여 해결로 세지 않는다. B팀 114·b44·dist·이름 입력 기능은 그대로다.
+
 ## 2026-10-23 이름 입력 한글 조합 Phase B (2편 맵 에디터, ROM 통합 후보)
 
 - [x] 원본 ROM·폰트 복구, b44 재생성(`1ac68443…6f02`), 현 소스 baseline(`ebbca0ba…3a8a`), 원본·baseline·b44 런타임 조사 7건과 mode-scope 조사. 옛 세이브는 없고 정상 키로 새 세이브를 만들었다. 근거 `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`.
