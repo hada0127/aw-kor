@@ -1666,3 +1666,11 @@ The first b39 review snapshot `b2d2961b…` left a six-pixel difference at 80c `
 파일/채움용 `0x03000F80` + `D8244C..D824AD` 소스 게이트를 도움말에 재사용할 수 없다. 도움말은 별도 상태 `0x03000E60`, 소스 `D82124..D821E8`로 첫 페이지에 렌더러 81회를 호출한다. 최종 후보 화면에도 글리프 누락·간격 불균형이 남는다. 짧은 메뉴의 112 타일 풀을 본문에 무조건 공유하면 영역을 침범하므로 도움말별 타일/행 배치 조사 후 수정해야 한다. 추적·원본/후보 화면: `temp/evidence_20261023/round3/help_trace/parser.log`, `round3/editor_integrated_pair/{original,round3}/help/entered.png`.
 
 Round 4에서 DOWN/UP으로 도움말 두 페이지를 원본/후보 같은 SRAM으로 모두 확인했다. 두 페이지 모두 후보의 한글 글리프 누락·띄어진 간격이 남아 있다(`temp/evidence_20261023/round4/help_controls/`). 추가 본문 훅은 설치하지 않았다. 사용자 `???` 화면과 같은 잠금 SRAM도 없어서, 열린 SRAM의 트라이얼 분류 화면만으로 원본 `???`를 정상 placeholder라고 판정하지 않는다.
+
+## 2026-10-23 Part 2 디자인 맵 이름 입력 SJIS 표 직접 교체 실패
+
+- ROM `0x83FE41`의 선택 가능 가나 코드를 한국어 예약코드나 전각 라틴 코드로 바꾸면 문자표 자체는 바뀌지만 입력 미리보기가 `?????`로 나온다(`temp/evidence_20261023/round2_routes/sweep3_probe_hangul/sweep3_design_name_typing/50_A.png`). 이 방법을 재시도하지 말고 원래 코드와 8×16 그림을 분리해 다룬다. 현재 후보의 그림 교체는 시험 화면에서 작동하지만 저장 이름의 다른 소비자·실기 표시는 별도 확인이 필요하다.
+
+## 2026-10-23 Part 2 Link 로컬 2코어 접속 미재현
+
+- 2편 Link 케이블 전투는 `mgba_link_harness` 2코어 HLE 시험에서 연결되지 않았다. 후보 호스트는 통신 대기, 클라이언트 화면은 백색이며 `xfer_multi=0 xfer_normal=0`/client SIO mode 8이었다(`temp/evidence_20261023/sweep3_link_pair_candidate/commands.log`, exit 0). 본 시험은 실기/BIOS MultiBoot 검증이 아니다.
