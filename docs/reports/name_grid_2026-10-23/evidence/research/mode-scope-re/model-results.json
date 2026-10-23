@@ -1,0 +1,358 @@
+{
+  "full8": {
+    "keys": "ㄱㅏㄴㅏㄷㅏㄹㅏㅁㅏㅂㅏㅅㅏㅇㅏㄴ",
+    "steps": [
+      {
+        "key": "ㄱ",
+        "accepted": true,
+        "reason": null,
+        "preview": "ㄱ",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가",
+        "atomic": null
+      },
+      {
+        "key": "ㄴ",
+        "accepted": true,
+        "reason": null,
+        "preview": "간",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나",
+        "atomic": null
+      },
+      {
+        "key": "ㄷ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가낟",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다",
+        "atomic": null
+      },
+      {
+        "key": "ㄹ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나달",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라",
+        "atomic": null
+      },
+      {
+        "key": "ㅁ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다람",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마",
+        "atomic": null
+      },
+      {
+        "key": "ㅂ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라맙",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마바",
+        "atomic": null
+      },
+      {
+        "key": "ㅅ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마밧",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마바사",
+        "atomic": null
+      },
+      {
+        "key": "ㅇ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마바상",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마바사아",
+        "atomic": null
+      },
+      {
+        "key": "ㄴ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가나다라마바사안",
+        "atomic": null
+      },
+      {
+        "key": "ㄱ",
+        "accepted": false,
+        "reason": "no_slot",
+        "atomic": true,
+        "preview": "가나다라마바사안"
+      }
+    ],
+    "confirmed": "가나다라마바사안",
+    "serialize": "884088e989e28adf8bc38ca68da98ea2"
+  },
+  "한글": {
+    "keys": "ㅎㅏㄴㄱㅡㄹ",
+    "steps": [
+      {
+        "key": "ㅎ",
+        "accepted": true,
+        "reason": null,
+        "preview": "ㅎ",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "하",
+        "atomic": null
+      },
+      {
+        "key": "ㄴ",
+        "accepted": true,
+        "reason": null,
+        "preview": "한",
+        "atomic": null
+      },
+      {
+        "key": "ㄱ",
+        "accepted": true,
+        "reason": null,
+        "preview": "한ㄱ",
+        "atomic": null
+      },
+      {
+        "key": "ㅡ",
+        "accepted": true,
+        "reason": null,
+        "preview": "한그",
+        "atomic": null
+      },
+      {
+        "key": "ㄹ",
+        "accepted": true,
+        "reason": null,
+        "preview": "한글",
+        "atomic": null
+      }
+    ],
+    "confirmed": "한글",
+    "serialize": "92af888a000000000000000000000000"
+  },
+  "강철": {
+    "keys": "ㄱㅏㅇㅊㅓㄹ",
+    "steps": [
+      {
+        "key": "ㄱ",
+        "accepted": true,
+        "reason": null,
+        "preview": "ㄱ",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가",
+        "atomic": null
+      },
+      {
+        "key": "ㅇ",
+        "accepted": true,
+        "reason": null,
+        "preview": "강",
+        "atomic": null
+      },
+      {
+        "key": "ㅊ",
+        "accepted": true,
+        "reason": null,
+        "preview": "강ㅊ",
+        "atomic": null
+      },
+      {
+        "key": "ㅓ",
+        "accepted": true,
+        "reason": null,
+        "preview": "강처",
+        "atomic": null
+      },
+      {
+        "key": "ㄹ",
+        "accepted": true,
+        "reason": null,
+        "preview": "강철",
+        "atomic": null
+      }
+    ],
+    "confirmed": "강철",
+    "serialize": "884990d3000000000000000000000000"
+  },
+  "붉은달": {
+    "keys": "ㅂㅜㄹㄱㅇㅡㄴㄷㅏㄹ",
+    "steps": [
+      {
+        "key": "ㅂ",
+        "accepted": true,
+        "reason": null,
+        "preview": "ㅂ",
+        "atomic": null
+      },
+      {
+        "key": "ㅜ",
+        "accepted": true,
+        "reason": null,
+        "preview": "부",
+        "atomic": null
+      },
+      {
+        "key": "ㄹ",
+        "accepted": true,
+        "reason": null,
+        "preview": "불",
+        "atomic": null
+      },
+      {
+        "key": "ㄱ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉",
+        "atomic": null
+      },
+      {
+        "key": "ㅇ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉ㅇ",
+        "atomic": null
+      },
+      {
+        "key": "ㅡ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉으",
+        "atomic": null
+      },
+      {
+        "key": "ㄴ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉은",
+        "atomic": null
+      },
+      {
+        "key": "ㄷ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉은ㄷ",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉은다",
+        "atomic": null
+      },
+      {
+        "key": "ㄹ",
+        "accepted": true,
+        "reason": null,
+        "preview": "붉은달",
+        "atomic": null
+      }
+    ],
+    "confirmed": "붉은달",
+    "serialize": "8d5c8f7e89e700000000000000000000"
+  },
+  "가한-auto": {
+    "keys": "ㄱㅏㅎㅏㄴ",
+    "steps": [
+      {
+        "key": "ㄱ",
+        "accepted": true,
+        "reason": null,
+        "preview": "ㄱ",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가",
+        "atomic": null
+      },
+      {
+        "key": "ㅎ",
+        "accepted": true,
+        "reason": null,
+        "preview": "갛",
+        "atomic": null
+      },
+      {
+        "key": "ㅏ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가하",
+        "atomic": null
+      },
+      {
+        "key": "ㄴ",
+        "accepted": true,
+        "reason": null,
+        "preview": "가한",
+        "atomic": null
+      }
+    ],
+    "final": "가한",
+    "gah_in_2350": 34893
+  },
+  "가카": {
+    "keys": "ㄱㅏ [confirm] ㅋㅏ",
+    "boundary": "가",
+    "final": "가카",
+    "native_No": "model has no native dialog; runtime probe separate"
+  }
+}

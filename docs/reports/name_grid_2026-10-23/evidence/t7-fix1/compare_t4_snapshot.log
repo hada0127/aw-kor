@@ -1,0 +1,4 @@
+T4_SNAPSHOT_FILES 3206 head 90908180938c2bf40ee38dea43c4c1304b09df8a
+DIFFERENT ['AGENTS.md', 'CLAUDE.md', 'docs/fail.md', 'docs/research.md', 'docs/success.md', 'todo.md', 'tools/test_part2_name_compose_build.py']
+MISSING []
+RC=1

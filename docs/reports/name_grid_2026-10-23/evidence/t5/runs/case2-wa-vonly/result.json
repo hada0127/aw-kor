@@ -1,0 +1,23 @@
+{
+ "case": "case2-wa-vonly",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "e3460000000000000000000000000000",
+   "expect": "e346"
+  },
+  {
+   "jamo": "ㅘ",
+   "src": "08f0a660",
+   "vram": "06002620",
+   "ok": true,
+   "got_sha": "ba125cc1bcd0e7f1a4ba168273e0bf44dfff6928954d443f70836ae94c6aedac",
+   "want_sha": "ba125cc1bcd0e7f1a4ba168273e0bf44dfff6928954d443f70836ae94c6aedac"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case2-wa-vonly"
+}

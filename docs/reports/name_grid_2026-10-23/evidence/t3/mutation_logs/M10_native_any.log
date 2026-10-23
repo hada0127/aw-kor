@@ -1,0 +1,101 @@
+.......
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f208a443f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f9520840880000a7e200000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0578417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184761f952084088000052e300000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000053e300000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e200000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f2089544f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f2089444f308ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f2089444f208fe7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) (region='0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f952084088000052e300000000f2089444f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000001')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 55, in test_name_compose_a3_hook_version_is_exact
+    with self.assertRaises(N.NativeConsumerError):profile(region)
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_tampered_table_handler_callback_or_hook_is_rejected (__main__.NativePart2Tests) (address='0xa3c7e8')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 37, in test_tampered_table_handler_callback_or_hook_is_rejected
+    with self.assertRaises(N.NativeConsumerError):N.NativeProfile(bytes(rom))
+AssertionError: NativeConsumerError not raised
+
+======================================================================
+FAIL: test_tampered_table_handler_callback_or_hook_is_rejected (__main__.NativePart2Tests) (address='0xf30280')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_native_controls.py", line 37, in test_tampered_table_handler_callback_or_hook_is_rejected
+    with self.assertRaises(N.NativeConsumerError):N.NativeProfile(bytes(rom))
+AssertionError: NativeConsumerError not raised
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.741s
+
+FAILED (failures=12)

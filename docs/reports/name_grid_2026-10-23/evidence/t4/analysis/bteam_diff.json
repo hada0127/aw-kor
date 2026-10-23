@@ -1,0 +1,15 @@
+{
+ "baseline": 114,
+ "candidate": 114,
+ "baseline_unique_keys": 114,
+ "candidate_unique_keys": 114,
+ "new": [],
+ "gone": [],
+ "full_record_identical": true,
+ "decisions_candidate": {
+  "DEFER": 11,
+  "ALIGNMENT_RESTORE": 1,
+  "RESTORE_BASELINE": 97,
+  "NEW_STRICT_MISMATCH": 5
+ }
+}

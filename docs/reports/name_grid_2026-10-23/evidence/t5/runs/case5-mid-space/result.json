@@ -1,0 +1,17 @@
+{
+ "case": "case5-mid-space",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "stored prefix/trim",
+   "ok": true,
+   "dest": "8840814088e900000000000000000000",
+   "prefix": "8840814088e9",
+   "errors": [],
+   "question_x67": 2
+  }
+ ],
+ "notes": [],
+ "run": "runs/case5-mid-space"
+}

@@ -1,0 +1,42 @@
+{
+ "case": "case3",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "START incomplete",
+   "ok": true,
+   "x67": 0,
+   "cursor": [
+    14,
+    5
+   ],
+   "bp_seq": [
+    "S2",
+    "tramp_confirm",
+    "nc_confirm",
+    "ret_nc_confirm",
+    "sound"
+   ]
+  },
+  {
+   "name": "OK cell incomplete",
+   "ok": true,
+   "x67": 0,
+   "bp_seq": [
+    "S2",
+    "tramp_confirm",
+    "nc_confirm",
+    "ret_nc_confirm",
+    "sound"
+   ]
+  },
+  {
+   "name": "destination unchanged",
+   "ok": true,
+   "dest": "00000000000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case3"
+}

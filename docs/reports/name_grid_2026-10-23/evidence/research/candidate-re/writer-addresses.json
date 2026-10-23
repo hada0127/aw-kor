@@ -1,0 +1,182 @@
+[
+  {
+    "name": "KOR_GLYPH_FILE",
+    "start": "0xf00000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART1_YESNO_HOOK_FILE",
+    "start": "0xf10000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART1_NAME_TRIM_HOOK_FILE",
+    "start": "0xf10180",
+    "end": "0xf101c6",
+    "size": 70
+  },
+  {
+    "name": "PART1_YESNO_WIDE_CURSOR_FILE",
+    "start": "0xf10200",
+    "end": "0xf1020a",
+    "size": 10
+  },
+  {
+    "name": "PART1_YESNO_ROW_DISPATCH_FILE",
+    "start": "0xf10280",
+    "end": "0xf10300",
+    "size": 128
+  },
+  {
+    "name": "PART1_YESNO_ROW_SOURCE_FILE",
+    "start": "0xf10320",
+    "end": "0xf1033c",
+    "size": 28
+  },
+  {
+    "name": "PART1_YESNO_NAME_ROW_FILE",
+    "start": "0xf10380",
+    "end": "0xf10390",
+    "size": 16
+  },
+  {
+    "name": "PART1_YESNO_CURSOR_FIX_FILE",
+    "start": "0xf103a0",
+    "end": "0xf103c0",
+    "size": 32
+  },
+  {
+    "name": "PART1_YESNO_UNUSED_CLASSIFIER_FILE",
+    "start": "0xf10400",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "HOOK_FILE",
+    "start": "0xf30000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "HOOK_BOT_FILE",
+    "start": "0xf30030",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART2_HOOK_TOP_313_FILE",
+    "start": "0xf30100",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART2_HOOK_BOT_313_FILE",
+    "start": "0xf30160",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART2_HOOK_TOP_B11_FILE",
+    "start": "0xf301c0",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART2_HOOK_BOT_B11_FILE",
+    "start": "0xf30220",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART2_HOOK_A3_FILE",
+    "start": "0xf30280",
+    "end": "0xf30324",
+    "size": 164
+  },
+  {
+    "name": "PART2_HOOK_A3_SPACE_FILE",
+    "start": "0xf30340",
+    "end": "0xf3035c",
+    "size": 28
+  },
+  {
+    "name": "PART2_HOOK_SPACE_313_FILE",
+    "start": "0xf30360",
+    "end": "0xf3039c",
+    "size": 60
+  },
+  {
+    "name": "PART2_HOOK_SPACE_B11_FILE",
+    "start": "0xf303a0",
+    "end": "0xf303dc",
+    "size": 60
+  },
+  {
+    "name": "PART2_HOOK_SPACE_A2CC_FILE",
+    "start": "0xf30400",
+    "end": "0xf30438",
+    "size": 56
+  },
+  {
+    "name": "PART1_DIALOG_SPACE_HOOK_FILE",
+    "start": "0xf30500",
+    "end": "0xf30524",
+    "size": 36
+  },
+  {
+    "name": "PART1_DIALOG_RENDER_HOOK_FILE",
+    "start": "0xf30540",
+    "end": "0xf30570",
+    "size": 48
+  },
+  {
+    "name": "PART1_SINGLE_MAP_LABEL_HOOK_FILE",
+    "start": "0xf30600",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "B84_POWER_GLYPH_HOOK_FILE",
+    "start": "0xf30780",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART1_MAP_LABEL_TABLE_FILE",
+    "start": "0xf30800",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART1_MAP_LABEL_SOURCE_GATE_FILE",
+    "start": "0xf31f80",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "B84_POWER_GLYPH_BLOCK_FILE",
+    "start": "0xf32000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "PART1_BATTLE_DICTIONARY_FILE",
+    "start": "0xf3f000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "MISSION_TITLE_TABLE_FILE",
+    "start": "0xf40000",
+    "end": null,
+    "size": null
+  },
+  {
+    "name": "MISSION_TITLE_GLYPH_FILE",
+    "start": "0xf42000",
+    "end": null,
+    "size": null
+  }
+]

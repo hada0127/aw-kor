@@ -1,0 +1,20 @@
+{
+ "case": "case2-달가",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "89e78840000000000000000000000000",
+   "expect": "89e78840"
+  },
+  {
+   "name": "닭 intermediate",
+   "ok": true,
+   "live": "96480000000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case2-달가"
+}

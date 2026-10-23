@@ -1,0 +1,31 @@
+{
+ "case": "case12",
+ "build": [
+  {
+   "name": "full8 name kept in saved valid map",
+   "ok": true,
+   "offsets": [
+    "0x11504",
+    "0x15504",
+    "0x17504",
+    "0x1f504"
+   ],
+   "sha256": "b70ea22e3aaaa59569f529a6e4d7458d7421c55dbff19f472cd2ca7282aec692"
+  }
+ ],
+ "run_build": "runs/case12-build",
+ "cold": [
+  {
+   "name": "category5: A3 glyph copies for all 8 syllables after switching to category 5",
+   "ok": true,
+   "missing": [],
+   "copies_in_window": 12
+  }
+ ],
+ "run_cold": "runs/case12-cold-versus",
+ "pass_automatic": true,
+ "needs_visual": [
+  "runs/case12-build/valid-map.png (two HQ + factories)",
+  "runs/case12-cold-versus/category5.png (가나다라마바사안 in design-map list)"
+ ]
+}

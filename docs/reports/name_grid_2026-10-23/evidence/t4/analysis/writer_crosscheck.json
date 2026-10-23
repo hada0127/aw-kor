@@ -1,0 +1,150 @@
+{
+ "inputs_sha256": {
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/candidate-re/integrity-ranges.json": "5b8fb95efdae3e2986ca5b89fd9be9de3332dec11ef3f693b4748a9b42ea2f8d",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/candidate-re/writer-addresses.json": "6b9818d4754066ce389c7e393e253de68bd08fb9ba1d1fdf95df96cd82a03126",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/candidate-re/direct-writers.json": "16c91e97a92b038bfefad0e556e6363e6bed8c2c3eca4c8ea5af999c6c0d8ead",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/temp/integrity_map.json": "eb0da58c7a1c9a15a7b50324ba135cfb0ec196dfcea9a2d66ad77c30ef82b025",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/temp/repoint_manifest.json": "a7cf6fc17184c6dcbd754bf0e566beb308c0bdc850d153f1167a508fe3de53ee",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/baseline-build/source/temp/integrity_map.json": "eb0da58c7a1c9a15a7b50324ba135cfb0ec196dfcea9a2d66ad77c30ef82b025",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/baseline-build/source/temp/repoint_manifest.json": "a7cf6fc17184c6dcbd754bf0e566beb308c0bdc850d153f1167a508fe3de53ee"
+ },
+ "regions": [
+  {
+   "name": "F70000..F77800",
+   "start": "0xf70000",
+   "end": "0xf77800",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "jamo_tiles",
+   "start": "0xf09f60",
+   "end": "0xf0a960",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "nc_dense",
+   "start": "0xf70000",
+   "end": "0xf75748",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "nc_image",
+   "start": "0xf75800",
+   "end": "0xf77800",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "a3_table_tail",
+   "start": "0xf243a4",
+   "end": "0xf24494",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "a3_max",
+   "start": "0xf30304",
+   "end": "0xf30308",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": [
+    [
+     "PART2_HOOK_A3_FILE",
+     "0xf30280",
+     "0xf30324"
+    ]
+   ]
+  },
+  {
+   "name": "s1_press",
+   "start": "0x34b0bc",
+   "end": "0x34b0c6",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "s2_confirm",
+   "start": "0x34b084",
+   "end": "0x34b08c",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "s3_backspace",
+   "start": "0x34b20e",
+   "end": "0x34b218",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "d1_display",
+   "start": "0x34ab3c",
+   "end": "0x34ab44",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  },
+  {
+   "name": "p1_alloc",
+   "start": "0x83fd58",
+   "end": "0x83fd5c",
+   "integrity_baseline": [],
+   "integrity_candidate": [],
+   "manifest_baseline": [],
+   "manifest_candidate": [],
+   "writer_addresses": []
+  }
+ ],
+ "integrity_map_identical_to_baseline": true,
+ "repoint_manifest_identical_to_baseline": true,
+ "direct_writers": {
+  "baseline_count": 190,
+  "candidate_count": 192,
+  "added": [
+   {
+    "line": 13679,
+    "source": "struct.pack_into('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_MAX_OFF, new_max)",
+    "function": "_name_compose_a3_max"
+   },
+   {
+    "line": 13805,
+    "source": "rom[start:end] = expected[name]",
+    "function": "_part2_name_compose"
+   }
+  ],
+  "removed": [],
+  "added_all_owned": true
+ },
+ "conflict_free": true
+}

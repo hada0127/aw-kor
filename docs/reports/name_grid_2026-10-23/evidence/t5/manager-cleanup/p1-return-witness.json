@@ -1,0 +1,22 @@
+{
+  "source": "temp/name-grid-phaseB/t5-runtime/runs/case15-pending/bp.log",
+  "source_sha256": "1288228a58dc98c1a001bd2c9e8879c28dbdb6f6493aecb18edcaebba808abcf",
+  "witnesses": [
+    {
+      "entry": "257 BP r0=03001590 r1=08F75A81 r2=03001470 r3=03001470 r4=03001590 r5=03001594 r6=08805BA0 r7=00000001 r8=03001470 r9=0000007F r10=00000003 r11=00000000 sp=03007D0C lr=083162A3 pc=08F75A82",
+      "caller_return": "261 BP r0=083162A3 r1=02003080 r2=000000FF r3=00000000 r4=03001590 r5=03001594 r6=08805BA0 r7=00000001 r8=03001470 r9=0000007F r10=00000003 r11=00000000 sp=03007D0C lr=08315317 pc=083162A4",
+      "equal": {
+        "r4": true,
+        "r5": true,
+        "r6": true,
+        "r7": true,
+        "r8": true,
+        "r9": true,
+        "r10": true,
+        "r11": true,
+        "sp": true
+      },
+      "r0_equals_entry_lr": true
+    }
+  ]
+}

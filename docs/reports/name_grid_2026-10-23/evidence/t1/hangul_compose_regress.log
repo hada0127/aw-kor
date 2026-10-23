@@ -1,0 +1,5 @@
+$ python3 -I tools/test_hangul_compose.py
+random_operations=20000 seed=20261023 rejections=17522
+exhaustive=11172 reached=2345 rejected=8827 supported_unreachable=5
+migration_rejection_cases=1712 example=('간', 'ㅒ', '가', '냬')
+exit=0

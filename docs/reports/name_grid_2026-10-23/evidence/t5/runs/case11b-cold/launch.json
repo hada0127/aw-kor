@@ -1,0 +1,25 @@
+{
+ "tag": "case11b-cold",
+ "argv": [
+  "nice",
+  "-n",
+  "15",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/harness/mgbah-t5",
+  "/Users/konest/project/aw-kor/output/game_wars_korean_namecompose_20261023.gba",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/emulator.log",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/input.sav",
+  "--read-only-save"
+ ],
+ "cwd": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-cold",
+ "rom": "/Users/konest/project/aw-kor/output/game_wars_korean_namecompose_20261023.gba",
+ "rom_sha256": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb",
+ "save_source": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-save/case11b.sav",
+ "save_source_sha256": "43ae680ee22810a522ea84ca454c3b1340b15543614562cf93b61e87ccfa7606",
+ "harness_sha256": "0427fc405f917654298ca9cb55fd8e87c49625c1b220f4e3050202c5fb5c2fd2",
+ "library_sha256": "83744c60e737a114c54447e84c5b50fd173cbdf135bdc4dd2b7b0839e4c960da",
+ "env": {
+  "TMPDIR": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/",
+  "AW_KOR_TEMP_DIR": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case11b-cold",
+  "DYLD_LIBRARY_PATH": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build"
+ }
+}

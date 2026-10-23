@@ -1,12 +1,21 @@
+## 2026-10-23 이름 입력 한글 조합 Phase B (2편 맵 에디터, ROM 통합 후보)
+
+- [x] 원본 ROM·폰트 복구, b44 재생성(`1ac68443…6f02`), 현 소스 baseline(`ebbca0ba…3a8a`), 원본·baseline·b44 런타임 조사 7건과 mode-scope 조사. 옛 세이브는 없고 정상 키로 새 세이브를 만들었다. 근거 `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`.
+- [x] PLAN-v5 `60a7574a…21b4` Astra consensus APPROVE(`implementationAllowed`). 수행은 사용자 「이 pc 하네스대로」에 따라 로컬 Claude Opus 5.5/high. 기록 `PHASE_B_PLAN_APPROVAL.md`.
+- [x] T1~T5 완료: 자모 자산·조합 코어·빌더 통합·후보 `output/game_wars_korean_namecompose_20261023.gba`(`1ac790a9…e1eb`, `--no-sync-outputs`) 빌드·5관문(잔여 집합 신규 0)·공식 mGBA 0.10.5 런타임 15케이스 PASS(그리드 실제 키 8자 → 저장 → 별도 cold reload → Versus, 실ROM BP 레지스터 계약). 명령·exit·증거 `PHASE_B_QA.md`, 영구 증거 `evidence/INDEX.md`.
+- [ ] 최종 Astra 코드 리뷰(full→delta) → 최종 tree/ROM 대조 → secret-scan → 커밋·push → main 병합(T7, 총괄). 이 항목 전에는 미병합 후보다.
+- [ ] 실기(GBA 하드웨어) 확인. Link(2코어 하네스 client가 full ROM을 못 읽음)는 BLOCKED이며 이번 범위 밖이다.
+- [ ] 알려진 한계 유지: 2350 중 뢨·썅·쏀·쓩·쭁은 일반 키열로 도달 불가. b44/dist 재배포·full/final/title_test 동기화는 별도 결정.
+
 ## 2026-10-23 이름 입력 한글 조합 Phase A (ROM 비의존)
 
 - [x] 승인 PLAN v3의 참조 조합기·테스트·명세를 준비했다. 지정 두 명령 exit 0, 13개 테스트·11,172음절 검사: 매핑 2350/도달 2345/중간 후보 누락 5. 계약·검증 대상 해시·실제 출력은 `docs/reports/name_grid_2026-10-23/COMPOSITION_SPEC.md`에 기록했다.
 - [x] Astra full 구현 검토 승인(Critical·필수·Nit 0, FYI `[receipt]` 1). 구현 commit `ad2ec49ca3e9b9ce8028ac751102bed0118dbb4d`, tree `fcf486b9dd4c0166f734c3c3ea961811a5ebf970`; 작업 브랜치 `sweep3-p2-20261023c` push 완료(총괄 인계). prose의 `unknown` 영수증과 구분한 실제 실행 모델·effort·exit·시각, 복구 목록과 다음 단계는 `docs/reports/name_grid_2026-10-23/PHASE_A_STATUS.md`에 보존했다. **ROM-free 부분완료이며 미병합·미배포**다.
-- [ ] **전체 이름 입력 기능 BLOCKED** — nyarch 연결·ROM·사용자 세이브·route 자료 미복구. company로 요청 전달 완료, 회신 대기 중. 원본 ROM·b44·저장·route/evidence·mgbah의 복구 및 SHA 대조 후 런타임 조사, 별도 Fable 계획 + Astra 승인으로 Phase B에 진입한다. **ROM 통합·이름 입력 기능 완료 아님**. 공유 A3 가나 보존·네 소비자·실화면·실기·cold reload 검증은 남아 있다.
+- [x] (이력, 2026-10-23 Phase B에서 해소) **전체 이름 입력 기능 BLOCKED** — nyarch 연결·ROM·사용자 세이브·route 자료 미복구. company로 요청 전달 완료, 회신 대기 중. 원본 ROM·b44·저장·route/evidence·mgbah의 복구 및 SHA 대조 후 런타임 조사, 별도 Fable 계획 + Astra 승인으로 Phase B에 진입한다. **ROM 통합·이름 입력 기능 완료 아님**. 공유 A3 가나 보존·네 소비자·실화면·실기·cold reload 검증은 남아 있다.
 
 ## 2026-10-23 Part 2 화면 Sweep 3 후보 (배포 전)
 
-- [ ] 디자인 맵 이름 입력 56개 그림 교체는 시험 후보에서 문자표·미리보기·저장 재표시까지 캡처했으나, 공유 A3 글리프 0x815B가 2편 대사 대시를 망가뜨리는 회귀가 확인되어 Review fix 5에서 빌드 적용을 보류했다. 나머지 가나도 공유 소비자를 격리한 뒤 다시 구현·캡처해야 한다. 기존 시험 증거는 `temp/evidence_20261023/SWEEP3_REPORT.md`에 보존한다.
+- **(폐기된 접근 · 이력 — 통과 아님)** 디자인 맵 이름 입력 56개 그림 교체는 시험 후보에서 문자표·미리보기·저장 재표시까지 캡처했으나, 공유 A3 글리프 0x815B가 2편 대사 대시를 망가뜨리는 회귀가 확인되어 Review fix 5에서 빌드 적용을 보류했다. 이 공유 가나 그림 교체 방식은 다시 구현하지 않는다. 2026-10-23 Phase B가 mode1 디자인 맵 이름 그리드를 사설 자모 표로 대체했고 공유 가나 그림은 원형 유지한다(`docs/reports/name_grid_2026-10-23/PHASE_B_RE.md` §3·§7, 기능 자체는 위 Phase B의 T7 대기). 실패 증거는 `temp/evidence_20261023/SWEEP3_REPORT.md`와 `docs/fail.md` 「2026-10-23 Part 2 이름 그림 공유 회귀」에 보존한다.
 - [ ] Day 2, 전체 CO/유닛/지형·기록·편집 팔레트·케이블 전투·게임오버/미션 클리어의 원본/후보 동일 상태 캡처를 완료한다. 실제 iPhone 4배 판독도 확인한다. 치트 경로는 테스트 전용으로만 센다.
 
 ## 2026-10-23 Part 2 프롤로그 간격·ㅈ 자형 Sweep 3 후보

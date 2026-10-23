@@ -1,0 +1,8 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/qa_bteam_drift.py --rom output/game_wars_korean_namecompose_20261023.gba --map temp/integrity_map.json --repoint-manifest temp/repoint_manifest.json --json temp/candidate_bteam_details.json
+B팀 최종 ROM 검사: 3340개, mismatch 114개 (listed residual 103, deferred 11, unlisted 0)
+  [DEFERRED] 0x00A0A9B1, 0x00A1AFFC, 0x00A1B194, 0x00A1B81C, 0x00A29840, 0x00A29A2C, 0x00A29A54, 0x00A29A84, 0x00B81E2C, 0x00B82018, 0x00B84E50
+B팀 보호 주소: 3340
+DRIFT(우발적 변형 의심): 0  / MISSING(override 삭제됨): 0
+[HARD-OK] B팀 권위문 drift 0
+
+EXIT 0

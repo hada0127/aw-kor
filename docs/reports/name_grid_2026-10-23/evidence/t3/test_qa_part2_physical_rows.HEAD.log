@@ -1,0 +1,30 @@
+.............
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='png_only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/head/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='consumer_only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/head/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='both')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/head/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+----------------------------------------------------------------------
+Ran 14 tests in 4.349s
+
+FAILED (failures=3)
+test_qa_part2_physical_rows @HEAD EXIT 1

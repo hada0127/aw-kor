@@ -1,0 +1,22 @@
+{
+ "case": "case5-literals",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "space after incomplete rejected",
+   "ok": true
+  },
+  {
+   "name": "digit after incomplete rejected",
+   "ok": true
+  },
+  {
+   "name": "final live 가␣1！",
+   "ok": true,
+   "live": "88408140825081490000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case5-literals"
+}

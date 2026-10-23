@@ -1,0 +1,510 @@
+{
+ "note": "minimal T5 evidence for T6 docs/reports/.../evidence/ (no ROM, no cartridge saves). Save files are listed in summary only by sha256.",
+ "files": [
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/t5lib.py",
+   "sha256": "a426a8f66a03b6f86e623dce4cfd05ef83d5bcc1fbe4946d9fdec27f3be1e843",
+   "bytes": 17382
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/cases.py",
+   "sha256": "45f6561b22b8c1484f1fa192ff39d2886bfca24ea075212abcf6942e1bfde7bf",
+   "bytes": 17414
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case11.py",
+   "sha256": "3fa595d2e0d18f96bad46d5bd93631a48a7f7dc6218510e821c87cb7a1132f9e",
+   "bytes": 6962
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case12.py",
+   "sha256": "c25bef6a940c15073f7bfedbc6e83226170a3f1af298762a54372d93487ada1d",
+   "bytes": 3960
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case14.py",
+   "sha256": "619f0344a75bc696c13cbba1a140cf9e3d5661f112795eb3c1a0ff8a98dd9932",
+   "bytes": 5236
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case15.py",
+   "sha256": "824d031f50a0598a633fd5e072f969ec08ab2bde4057436f8076adcc7c2a97a1",
+   "bytes": 12252
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case15_rowseq.py",
+   "sha256": "33c538fb5a5867d0b7cb245d5d48acd7e6e15006565db17fb0a120ea9204769e",
+   "bytes": 1035
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case15_mode0_vs_baseline.py",
+   "sha256": "d76ef197a5d87f3d0eb6924d5211c20ac020b8278889196eedf8739ee6a667d6",
+   "bytes": 1969
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/verify.py",
+   "sha256": "287db5ba148a5e2c4f63560b87d3a40ad464b5804ec6096243459037fda90ef3",
+   "bytes": 9869
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/protect.py",
+   "sha256": "d40c0cf81a0d9a7ca4bcf876ac6bd6eb45542345a6c60160019bf5e9bd572668",
+   "bytes": 2030
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/prep_fresh.py",
+   "sha256": "b1bf3a655d9bf0019ae3f687ff3e197c1a1785102d84fdb8c9989a6192246692",
+   "bytes": 1167
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/prep_legacy.py",
+   "sha256": "b18854353d5daed30c330d403e6a10ad9c12dd66ef86e17dcfd61cd725d44ab4",
+   "bytes": 1256
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/explore.py",
+   "sha256": "e746287d72309c7c4c1e8533274008bc471a00c15deb4c26dabf550b0ae7991c",
+   "bytes": 502
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/expectations.json",
+   "sha256": "9394e6fac55062ab69b65f2dbe56d1cc79d29a457a19706980763b9e4c2a8ecc",
+   "bytes": 1415
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/summary.json",
+   "sha256": "3e01dd881d029f1cfb333e24195acf26554b4497a6c9f7a5d132051028b51e93",
+   "bytes": 7296
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case12-result.json",
+   "sha256": "4aebe3676ee7121df0ace72cc6931a00f6983133e2e4a5ead30efb109dc48b40",
+   "bytes": 712
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case15-contracts.json",
+   "sha256": "382345c41ca954045b9b8f9872fca3ff28b70772f63574557b54370d304eb8b5",
+   "bytes": 18519
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/case15-rowseq.json",
+   "sha256": "1378610c7431553e8c5e878e88d5753376878e726d9f7f1d95796c2545ee2225",
+   "bytes": 1367
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/processes.jsonl",
+   "sha256": "923c8bdada2ceb9702a62f9ecf17acf4708cff4d345fa370861f260388105b6b",
+   "bytes": 28435
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/REPORT.md",
+   "sha256": "37326b309525225e03fd206d4bc1da4c73c50233ebeb5be3492e5d08decd001b",
+   "bytes": 16855
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/harness/harness.diff",
+   "sha256": "a71c253aa7e3f838feceaed255b56147ae2f99f60090e34e3766e9ec177643ae",
+   "bytes": 920
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/harness/build.json",
+   "sha256": "9e2cb7469bdfd54a40c196f0cee8872ab97a7aeec5d56da54c5a6657188089bd",
+   "bytes": 3353
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/harness/build.py",
+   "sha256": "799271ae6ac02c903dfa4433dc3b9525ab88102f93f33ad1b3d3d21d0fcda3d8",
+   "bytes": 1390
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/harness/mgba_harness_t5.c",
+   "sha256": "863786403f82a615761ea7506b3d34e06ffafad7842c183e7a9b6900417f1b65",
+   "bytes": 15013
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/harness/flags_make_defines.txt",
+   "sha256": "146c34dc1f2ff6cf3b57be702c153077971309fad3e12495b47bec6a71603101",
+   "bytes": 459
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/routes/candidate-fresh-to-name.route",
+   "sha256": "2abb2cda374e564501923ca3320d8455f88025332c2120e7e5e38aa2f0977e6e",
+   "bytes": 913
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/routes/legacy-cold-to-name.route",
+   "sha256": "7ea1ffa25887aea96c7b99389a155ce8d870cf277de4a73487c0ecd8081251fd",
+   "bytes": 1138
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/routes/legacy-cold-to-editor.route",
+   "sha256": "2a733cea349525e76f1aa35bfedd42874409f027836a8ab87b8612c022059213",
+   "bytes": 902
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/routes/fresh3-keys.route",
+   "sha256": "cc742bf50318716db59ee03e8a66629f8a13f826e9ddbf7e8cc2770e29ae46a9",
+   "bytes": 912
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/protected-before.json",
+   "sha256": "9b3afa34eb6937630cd517e4a66b07432432ec10343816626ed5935ef0e92c3d",
+   "bytes": 61799
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/protected-after.json",
+   "sha256": "9b3afa34eb6937630cd517e4a66b07432432ec10343816626ed5935ef0e92c3d",
+   "bytes": 61799
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-강철/result.json",
+   "sha256": "54581567cbe6b083d9ef5f03cd007dedfedd8aeaf82af2f449a80b2bef36bab5",
+   "bytes": 464
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-강철/steps.jsonl",
+   "sha256": "e01219ef987c4d7b865a6c47d9f1b30d6b41da026056eaa1067af6528a29197c",
+   "bytes": 2813
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-강철/preview.png",
+   "sha256": "70098122612616542024147ac8b5e9fca104b5b33e9177d3db9a4503a390c116",
+   "bytes": 14607
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-강철/vram-ㄱ.bin",
+   "sha256": "67f5d9d60292a3ae249ae1250725609d5879c664a3ced4f67025ec325b85ef82",
+   "bytes": 64
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-vowel/result.json",
+   "sha256": "4239589bd557968f3d8c93fc29a72e94bac14144002c77cdae85c2a47db2bac2",
+   "bytes": 367
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-vowel/vram-ㅏ.bin",
+   "sha256": "ec517ac8ce2ad0f3d9e323bcb9b2487dc29cf216e0ff7c4910c16e639d04e9f1",
+   "bytes": 64
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case1-vowel/preview-a.png",
+   "sha256": "51f510f32794da5b0a7b90bb5226e558e4d676b272d58ef6df7f26ffcac8a42e",
+   "bytes": 14323
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case2-wa-vonly/result.json",
+   "sha256": "4f128b775722478bbf20bea009a41aa3513b5465c3cddf91d0d541107b4d1f49",
+   "bytes": 489
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case2-wa-vonly/vram-ㅘ.bin",
+   "sha256": "ba125cc1bcd0e7f1a4ba168273e0bf44dfff6928954d443f70836ae94c6aedac",
+   "bytes": 64
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case2-wa-vonly/preview.png",
+   "sha256": "7e830ca5fe133b74407f1e872eed855a1d68fa76d398889792756a6287360cfc",
+   "bytes": 14387
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/result.json",
+   "sha256": "83d207d70a4bf92da44322054144a4dc61d7a72ac0069d15bb39646e3ba96d75",
+   "bytes": 944
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/steps.jsonl",
+   "sha256": "ebbceabd90534191810f0e6af5e194e2d3f74d236d36c24f438cda71577b7e6a",
+   "bytes": 11208
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/commands.jsonl",
+   "sha256": "3ba4ab950f23b64ea8cb7788b6f918602639fb72251cb41cc8c30fec15926bda",
+   "bytes": 147165
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/full8.png",
+   "sha256": "ca2dc37806fe63582816ee777b8fec6bb924362af749acc12bf6c374acfc8a37",
+   "bytes": 14534
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/sv-confirm.png",
+   "sha256": "f90a89c47b080a30039dad68fea474dfbc180e8c25b89318c32eb9476ef17e94",
+   "bytes": 14827
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/sv-done.png",
+   "sha256": "09ef53479f5e14dd25eb4c0a75d9336c18e5a227a54067bfcbbc08e25648329b",
+   "bytes": 17447
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/confirm-destination.bin",
+   "sha256": "2105f35c6da26adba0a6100ba1bfea99af8b90ccd289e1af29050b4e2d20ad86",
+   "bytes": 16
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/bp.log",
+   "sha256": "5220b6ee72fd35fd5febd38afa3b693faec133ffd8126269794c2d53728891ff",
+   "bytes": 483200
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/launch.json",
+   "sha256": "b1acbacbfa7068553a34965d311dda6e1c472860aa5f5ca3909711727a6a16b0",
+   "bytes": 1129
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-save/exit.json",
+   "sha256": "f2e23d1da4c8b090df27585ce7fa5b9a92ec8d0a6b8942a62d692a67f6257d23",
+   "bytes": 27
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/result.json",
+   "sha256": "57045d2a0e2e8e988d721f6de3471ad5712adb80e236aa87b8d6895ad1f2ad6d",
+   "bytes": 707
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/commands.jsonl",
+   "sha256": "bc9d4a4f8b771e055ce689d32c1ee9ade7de7499e82ff37ba1e193d00629249d",
+   "bytes": 15619
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/cold-list.png",
+   "sha256": "230b39da82fb426cca819ed6591312e752ccf3d38b163742e19857f8c115d06c",
+   "bytes": 16615
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/reentry.png",
+   "sha256": "942d8b57a8f7324b571729d611222fc72f4283c6c9c711318053f9df57fbabac",
+   "bytes": 14448
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/reentry-obj.bin",
+   "sha256": "e20a7aef51ff336490e4616a98c78ddbf2b954147fcfe408dc5bf1fbfa3fb8f3",
+   "bytes": 128
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/list-name-0200B204.bin",
+   "sha256": "2105f35c6da26adba0a6100ba1bfea99af8b90ccd289e1af29050b4e2d20ad86",
+   "bytes": 16
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/launch.json",
+   "sha256": "1c1c7fea1ce2392b4dbd3b42b9e06f68ee824dd501737dabd6d44998e12f05ee",
+   "bytes": 1397
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11a-cold/exit.json",
+   "sha256": "3b5aa170b90b40ea272ac1d6fe2c6919ccb8dd762bc8a161c8aa68644c7c6d45",
+   "bytes": 27
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/result.json",
+   "sha256": "59d82d4aa83fe13f854d49d5ea2218dad51cd18d1d58485d2e917e72c421282d",
+   "bytes": 1080
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/commands.jsonl",
+   "sha256": "fbe5014f7898a74a239a27df286e0deb381a26d53069e2b1d24f5c43b40d1434",
+   "bytes": 158296
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/sv-confirm.png",
+   "sha256": "9fd593b6b2d2d6ae5a7fa53131a133453c0c4a4372af20e05f6f0f42428850f7",
+   "bytes": 13709
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/sv-yes-selected.png",
+   "sha256": "24139cb8a4ad8a6bcfedbaeb42943299399a44548abfe48668d12b73e7a515d0",
+   "bytes": 13711
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/confirm-destination.bin",
+   "sha256": "2105f35c6da26adba0a6100ba1bfea99af8b90ccd289e1af29050b4e2d20ad86",
+   "bytes": 16
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/launch.json",
+   "sha256": "4235502e4c22f06498c3fe589dbb3b8419080523ada33d1472bc60a9c6b72621",
+   "bytes": 1394
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-save/exit.json",
+   "sha256": "64363c8e94f2a6a21e620883851f5c5a8f1a3099d925636975a02b76ed7d2b87",
+   "bytes": 27
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/result.json",
+   "sha256": "f1659cf3a9d64084564b681ab28ec1a72415ab5f40a640a584dcb10cf1576e2e",
+   "bytes": 707
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/commands.jsonl",
+   "sha256": "947377f29d9dbba6df31b1d484dff157f656abde14f58a301b717de084b5eb18",
+   "bytes": 15617
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/cold-list.png",
+   "sha256": "021cccccf1c406703a8de2a518aa9c3262c579b3782a966b770e19efd54fa287",
+   "bytes": 16633
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/reentry.png",
+   "sha256": "942d8b57a8f7324b571729d611222fc72f4283c6c9c711318053f9df57fbabac",
+   "bytes": 14448
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/reentry-obj.bin",
+   "sha256": "e20a7aef51ff336490e4616a98c78ddbf2b954147fcfe408dc5bf1fbfa3fb8f3",
+   "bytes": 128
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/launch.json",
+   "sha256": "2c9138b2e63f2190fcd7ec9be7fc0a33eae4e2d11d23009834027560a327a988",
+   "bytes": 1397
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case11b-cold/exit.json",
+   "sha256": "3b5aa170b90b40ea272ac1d6fe2c6919ccb8dd762bc8a161c8aa68644c7c6d45",
+   "bytes": 27
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-build/valid-map.png",
+   "sha256": "29ccdc19df31ddf080e1589f982df880e6f3a311e627bc398b4607b73d7f3e9d",
+   "bytes": 19030
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-build/commands.jsonl",
+   "sha256": "342a95e13314a78a00df4a2d362e95ddc3838fcf67017da168b543761a497868",
+   "bytes": 24322
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-build/launch.json",
+   "sha256": "a640a3b80718f02cbee6918eb4d5ad88a2789ea611137717b31a2b66fb10665d",
+   "bytes": 1397
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-cold-versus/category5.png",
+   "sha256": "42f983fdcdfb74619aff03999e8661e41a6ae5bc9ed33d10e35c808417e781e8",
+   "bytes": 13947
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-cold-versus/selected.png",
+   "sha256": "02f5bda8d6b2d7e41281a4a932e34fcc08182c6872a0f19f359b582c1c4b5746",
+   "bytes": 16179
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-cold-versus/commands.jsonl",
+   "sha256": "5eb11a605d0d2160cd3006cf71e4663eaa3f13791d8c401ac61ffd15df4fef7c",
+   "bytes": 15873
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case12-cold-versus/launch.json",
+   "sha256": "0af9d1b8a15b1f5f34df47901d112f15874ae7d28a2dc7d868a909a7c857b7ad",
+   "bytes": 1438
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case13/result.json",
+   "sha256": "a6fab0cb3fe6d761d80ae619a93891baa0d0754713f1c27f5211ddc5561b6489",
+   "bytes": 638
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case13/steps.jsonl",
+   "sha256": "d5a9cfbd132b1f0125dea824c9612d7670beee678ad88cfb59359abf279ab2f1",
+   "bytes": 3562
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case13b-candidate-legacy-kana/result.json",
+   "sha256": "7a6125d0f615499ac6439e1039412039449b1a3360dd6251c7819cc6976847f7",
+   "bytes": 1730
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case13b-candidate-legacy-kana/cand-dakuten.png",
+   "sha256": "b4c931e0eb6e053b129e4b77cdcdf609b1d81558b0bd19e640040134e7b6194b",
+   "bytes": 14644
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case14-original/result.json",
+   "sha256": "7a7cc5474072b6b5a752c0715686e4baca7f695b3ae11f2c0d2b60cbae783c40",
+   "bytes": 1424
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case14-original/one-a.png",
+   "sha256": "b50299a0df22dd5254ecb0a490537ab2b1e8a3b2f778d12d4148cf04b95131f9",
+   "bytes": 22742
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case14-original/orig-dakuten.png",
+   "sha256": "7d15c7a1193f5d8cc5d615780c64391d6c95a18de8aae2a8b6a5fb16ae700330",
+   "bytes": 22224
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case14-original/launch.json",
+   "sha256": "605b922b9d789bd03bbf6fc72a319b61204744f45f3d282a7c647b2843934123",
+   "bytes": 1140
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-mode1/bp.log",
+   "sha256": "f42923dc66337c16289b0e74be5e1f6508b598f36ec39406b08b016dac004cad",
+   "bytes": 677206
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-mode1/notes.json",
+   "sha256": "cf98714d8f80284170ea4038dd7f4cf52c42215531d49767cdc7efee706b9413",
+   "bytes": 285
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-mode0-SYNTHETIC/bp.log",
+   "sha256": "7c43638da533842eaa9db8123b91afde27922c127daeb24d688b93c57dcf62cf",
+   "bytes": 704315
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-mode0-SYNTHETIC/notes.json",
+   "sha256": "2c055245766f5e355f9c8bbc12d64f2367e17075aec652125b7bfa4ca30fd420",
+   "bytes": 325
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-mode0-SYNTHETIC/after-a.png",
+   "sha256": "c181d095476ad2e71b46a58678a8d1ee89aac9164f457bbc262d49681a061a03",
+   "bytes": 16160
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-baseline-native/result.json",
+   "sha256": "4c4cd7e7c3ecad6fba0a479021037ce23049921ef74965f8ab003c5943465fdb",
+   "bytes": 457
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-baseline-native/after-a.png",
+   "sha256": "35505d5e98114ddadd768eb07c67a943e775c459c5e85f09a56f3ce5a0cd0981",
+   "bytes": 16045
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/case15-pending/bp.log",
+   "sha256": "1288228a58dc98c1a001bd2c9e8879c28dbdb6f6493aecb18edcaebba808abcf",
+   "bytes": 49597
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.png",
+   "sha256": "17d57bc0a65f2bbd91dd0c3e85c6d25539a068b3f7a03bdde9c16d8c5377158a",
+   "bytes": 14791
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/bp.log",
+   "sha256": "6d762ab1045f8b645001aab68dd0963a8e72a8ab23814fe04f1b82d0caa7e9d5",
+   "bytes": 113479
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/commands.jsonl",
+   "sha256": "4a334a8e449df3f401b48ef4bb48063ed61bd516a9b0742df00d7eaa6a71417d",
+   "bytes": 14669
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/prep-legacy/reentry.png",
+   "sha256": "439dda470c95854b81a090acf500eed955ec9fe5d3d517b4d22a3bac2794151b",
+   "bytes": 14243
+  },
+  {
+   "path": "temp/name-grid-phaseB/t5-runtime/runs/prep-legacy/commands.jsonl",
+   "sha256": "da43348ab3625cf7595fd96d65571d3c7618e07b4fa8067d12294a2785fcf754",
+   "bytes": 16429
+  }
+ ]
+}

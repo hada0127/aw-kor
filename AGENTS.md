@@ -40,5 +40,13 @@
 
 - ROM 비의존 참조 모델은 `tools/hangul_compose.py`, 검증은 `python3 -I tools/test_hangul_compose.py`와 `python3 -I tools/hangul_compose.py --report`다. 계약·해시·실제 출력은 `docs/reports/name_grid_2026-10-23/COMPOSITION_SPEC.md`를 따른다.
 - 2350 밖 후보 키는 대체 없이 원자적으로 거부한다. committed/active를 분리하고 8번째 active 편집을 허용한다. 미완성 confirm/space는 거부하며 자모를 유지한다. 저장은 committed만 정확히 16바이트다.
-- 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다.
-- Phase A 준비·테스트는 ROM 통합 완료가 아니다. 자산 복구는 company 경유 요청 후 대기 중이다. T0 복구·런타임 조사·별도 Fable 계획 및 Astra 승인 전에는 빌더/ROM/ASM/글리프/코드 할당을 변경하지 않는다. 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
+- 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다(Phase B에서 확인: 끝 공백은 native trim, 중간 공백은 유지 — `PHASE_B_RE.md` §5).
+- Phase A 준비·테스트는 ROM 통합 완료가 아니다. (이력) 작성 당시에는 자산 복구 대기였고, 2026-10-23 Phase B에서 복구·조사·승인 계획을 거쳐 ROM 통합 후보를 만들었다(아래). 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
+
+## 2026-10-23 이름 입력 조합 Phase B (2편 맵 에디터 · 후보, 미병합)
+
+- 원본 ROM·폰트 복구 완료. RE·계획 승인·QA 정본은 `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`·`PHASE_B_PLAN_APPROVAL.md`·`PHASE_B_QA.md`, 증거 색인은 `evidence/INDEX.md`다.
+- 리뷰 판정: 쓰기는 `tools/build_korean_full.py`의 `NAME_COMPOSE_WRITES` 10영역 + A3 표 end 리터럴 4곳뿐이다. 후보−baseline diff가 그 밖이면 결함이다. native 공유 선택표 `0x83FAF6`·표시표 `0x83FE40`·행 포인터 `0x34AC24..38`·공유 A3 가나 그림은 원형 유지(바꾸면 mode0 navigation·2편 대사 대시가 깨진다). 훅은 S1/S2/S3/D1 바이트 4곳 + P1 포인터 1곳(원본 expect 대조)뿐이고, 객체 0x80·tail `+70..+7F` ABI는 `PHASE_B_RE.md` §4를 따른다.
+- 계약: 최대 8자·글자당 2바이트, 2350 밖 중간 후보는 원자 거부(대체 금지), 9번째는 `no_slot`(native의 8번째 덮어쓰기 금지), 지우기는 자모부터, 미완성 확인·공백 거부, `가카`는 확인→No 복귀로 확정한다. 2350 중 뢨·썅·쏀·쓩·쭁 5음절은 일반 키열로 도달할 수 없다(알려진 한계).
+- 자모 40코드 `data/jamo_to_code_40.json`·글리프 `data/jamo_glyphs_40.bin`이 정본이다(`python3 tools/gen_jamo_assets.py --check`). `tools/part2_name_compose_blob.py`는 생성물이라 소스를 바꾸면 `python3 tools/name_compose/build_image.py`로 다시 만들고 `--check`가 일치해야 한다. 일반 빌드는 컴파일러가 필요 없다.
+- 후보 `output/game_wars_korean_namecompose_20261023.gba`(`1ac790a9…e1eb`)는 `--out … --no-sync-outputs` 별도 산출물이다. full/final/title_test 동기화와 b44/dist 재배포는 범위 밖이고 정본은 여전히 b44다. 실기 미검증, Link BLOCKED.

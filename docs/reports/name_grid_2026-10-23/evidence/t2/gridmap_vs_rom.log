@@ -1,0 +1,8 @@
+row 0 0x83fe40 36 ROM==grid-map
+row 1 0x83fe64 36 ROM==grid-map
+row 2 0x83fe88 36 ROM==grid-map
+row 3 0x83feac 24 ROM==grid-map
+row 4 0x83fec4 24 ROM==grid-map
+row 5 0x83fedc 24 ROM==grid-map
+selection 90 ROM==grid-map
+EXIT 0

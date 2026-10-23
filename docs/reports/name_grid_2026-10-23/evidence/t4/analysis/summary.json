@@ -1,0 +1,91 @@
+{
+ "candidate_sha256": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb",
+ "baseline_sha256": "ebbca0babca25e4ed9d77c88af0b159fab567c9e8d708bd69a46f281e38a3a8a",
+ "original_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+ "diff": {
+  "diff_bytes": 8156,
+  "subset_ok": true,
+  "all_payload_match": true,
+  "all_regions_changed": true,
+  "end_literals_ok": true,
+  "fixed_ok": true,
+  "module_cross_check": {
+   "module_dense_eq": true,
+   "module_tiles_eq": true
+  }
+ },
+ "a3": {
+  "jamo_all_ok": true,
+  "jamo_baseline_states": {
+   "range": 40
+  },
+  "syllables_changed": 0,
+  "literals_candidate": [
+   "0x8840",
+   "0xe352",
+   "0x8f20000",
+   "0x8f24494",
+   "0x7fff",
+   "0x8f00000"
+  ]
+ },
+ "shared_glyph": {
+  "codes": 72,
+  "present": 72,
+  "absent_both": 0,
+  "absent_codes": [],
+  "mismatch": [],
+  "dash_815B": {
+   "node": "0x809cd0",
+   "glyph_sha256": "be419dc0b96ddc2fa1d67385f46909c1ea950eafaeba5fa59816cde935bc2bba",
+   "same_as_baseline": true
+  }
+ },
+ "crosscheck": {
+  "conflict_free_integrity_manifest_and_owned_writers": true,
+  "writer_address_overlaps": {
+   "a3_max": [
+    [
+     "PART2_HOOK_A3_FILE",
+     "0xf30280",
+     "0xf30324"
+    ]
+   ]
+  },
+  "integrity_map_identical_to_baseline": true,
+  "repoint_manifest_identical_to_baseline": true,
+  "direct_writers": {
+   "baseline_count": 190,
+   "candidate_count": 192,
+   "added": [
+    [
+     13679,
+     "_name_compose_a3_max",
+     "struct.pack_into('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_MAX_OFF, new_max)"
+    ],
+    [
+     13805,
+     "_part2_name_compose",
+     "rom[start:end] = expected[name]"
+    ]
+   ],
+   "removed": [],
+   "added_all_owned": true
+  }
+ },
+ "bteam": {
+  "baseline": 114,
+  "candidate": 114,
+  "baseline_unique_keys": 114,
+  "candidate_unique_keys": 114,
+  "new": [],
+  "gone": [],
+  "full_record_identical": true,
+  "decisions_candidate": {
+   "DEFER": 11,
+   "ALIGNMENT_RESTORE": 1,
+   "RESTORE_BASELINE": 97,
+   "NEW_STRICT_MISMATCH": 5
+  }
+ }
+}

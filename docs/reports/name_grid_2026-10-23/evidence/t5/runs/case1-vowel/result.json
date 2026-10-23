@@ -1,0 +1,17 @@
+{
+ "case": "case1-vowel",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "jamo": "ㅏ",
+   "src": "08f0a420",
+   "vram": "06002620",
+   "ok": true,
+   "got_sha": "ec517ac8ce2ad0f3d9e323bcb9b2487dc29cf216e0ff7c4910c16e639d04e9f1",
+   "want_sha": "ec517ac8ce2ad0f3d9e323bcb9b2487dc29cf216e0ff7c4910c16e639d04e9f1"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case1-vowel"
+}

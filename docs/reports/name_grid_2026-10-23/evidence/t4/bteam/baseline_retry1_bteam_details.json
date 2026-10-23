@@ -1,0 +1,800 @@
+[
+  {
+    "address": "0x00A0A9B1",
+    "baseline": "응?",
+    "rom_text": "이　지도는",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A19300",
+    "baseline": "이걸로 좀조용해지겠지.",
+    "rom_text": "이걸로　조금은",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A19300; source='이걸로\\u3000조금은'",
+    "decision": "ALIGNMENT_RESTORE"
+  },
+  {
+    "address": "0x00A1AFFC",
+    "baseline": "에-,",
+    "rom_text": "수리　소요일입니다",
+    "cause": "final in-place writer import-csv level=0 at 0x00A1AFFC; source='수리 소요일입니다'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A1B194",
+    "baseline": "네,",
+    "rom_text": "전함　접안　통신이　들어왔어。",
+    "cause": "final in-place writer import-csv level=0 at 0x00A1B194; source='전함 접안 통신이 들어왔어.'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A1B81C",
+    "baseline": "옛,",
+    "rom_text": "이기고　물러난다・・・？",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A2955C",
+    "baseline": "미라클 찬스",
+    "rom_text": "기적",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2955C; source='기적'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29570",
+    "baseline": "레드스타 드림",
+    "rom_text": "별꿈",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29570; source='별꿈'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29588",
+    "baseline": "하이퍼 리페어",
+    "rom_text": "하이퍼수리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29588; source='하이퍼수리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29598",
+    "baseline": "하이 업그레이드",
+    "rom_text": "강화",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29598; source='강화'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A295AC",
+    "baseline": "위닝 마치",
+    "rom_text": "승리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A295AC; source='승리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A295C0",
+    "baseline": "빅토리어스 퍼레이드",
+    "rom_text": "대승",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A295C0; source='대승'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A295D8",
+    "baseline": "맥시멈 블로우",
+    "rom_text": "강타",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A295D8; source='강타'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A295EC",
+    "baseline": "스트레이트 블래스트",
+    "rom_text": "직격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A295EC; source='직격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29600",
+    "baseline": "장사 스피릿",
+    "rom_text": "상혼",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29600; source='상혼'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2962C",
+    "baseline": "골드 러시",
+    "rom_text": "골드",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2962C; source='골드'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29640",
+    "baseline": "파워 오브 머니",
+    "rom_text": "재력",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29640; source='재력'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29654",
+    "baseline": "테크니컬 스나이프",
+    "rom_text": "저격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29654; source='저격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29668",
+    "baseline": "월드 와이드 스나이프",
+    "rom_text": "원저격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29668; source='원저격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29680",
+    "baseline": "스노우 화이트",
+    "rom_text": "설백",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29680; source='설백'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29690",
+    "baseline": "블리자드 블로우",
+    "rom_text": "눈보라",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29690; source='눈보라'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A296C8",
+    "baseline": "원더 서치",
+    "rom_text": "탐색",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A296C8; source='탐색'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A296D8",
+    "baseline": "카운터 브레이크",
+    "rom_text": "반격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A296D8; source='반격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A296EC",
+    "baseline": "야마토 다마시",
+    "rom_text": "혼",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A296EC; source='혼'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A296FC",
+    "baseline": "사무라이 다이브",
+    "rom_text": "돌격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A296FC; source='돌격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2970C",
+    "baseline": "라이트닝 드라이브",
+    "rom_text": "번개돌진",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2970C; source='번개돌진'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29724",
+    "baseline": "라이트닝 어설트",
+    "rom_text": "번개강습",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29724; source='번개강습'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2973C",
+    "baseline": "자이언트 웨이브",
+    "rom_text": "큰파도",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2973C; source='큰파도'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29754",
+    "baseline": "자이언트 스톰",
+    "rom_text": "큰폭풍",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29754; source='큰폭풍'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2976C",
+    "baseline": "슈퍼 차지",
+    "rom_text": "충전",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2976C; source='충전'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29780",
+    "baseline": "빅뱅 차지",
+    "rom_text": "대폭발",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29780; source='대폭발'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29794",
+    "baseline": "버닝 블로우",
+    "rom_text": "화염",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29794; source='화염'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A297A8",
+    "baseline": "기간트 브레이크",
+    "rom_text": "대분쇄",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A297A8; source='대분쇄'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A297BC",
+    "baseline": "하이퍼 택틱스",
+    "rom_text": "전술",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A297BC; source='전술'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A297D4",
+    "baseline": "하이 그레이드 커맨드",
+    "rom_text": "지휘",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A297D4; source='지휘'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A297EC",
+    "baseline": "사이드 스루",
+    "rom_text": "측돌파",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A297EC; source='측돌파'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A297FC",
+    "baseline": "사이드 와인더",
+    "rom_text": "측기습",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A297FC; source='측기습'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29810",
+    "baseline": "블랙 웨이브",
+    "rom_text": "흑파도",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29810; source='흑파도'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29824",
+    "baseline": "블랙 스톰",
+    "rom_text": "흑폭풍",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29824; source='흑폭풍'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29840",
+    "baseline": "없음",
+    "rom_text": "메테오강타",
+    "cause": "final in-place writer fixed_zero_text level=None at 0x00A29840; source='메테오강타'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A29906",
+    "baseline": "애니메 무",
+    "rom_text": "표시안함",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29906; source='표시안함'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29A2C",
+    "baseline": "공장",
+    "rom_text": "파이프",
+    "cause": "final in-place writer fixed_zero_text level=None at 0x00A29A2C; source='파이프'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A29A34",
+    "baseline": "미사일 기지",
+    "rom_text": "미사일기지",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29A34; source='미사일기지'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29A54",
+    "baseline": "연구소",
+    "rom_text": "미니캐논",
+    "cause": "final in-place writer fixed_zero_text level=None at 0x00A29A54; source='미니캐논'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A29A70",
+    "baseline": "레이저 포",
+    "rom_text": "레이저포",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A29A70; source='레이저포'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A29A84",
+    "baseline": "화산",
+    "rom_text": "팩토리",
+    "cause": "final in-place writer fixed_zero_text level=None at 0x00A29A84; source='팩토리'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00A2BC3C",
+    "baseline": "현재의 군자금을 1.5배로늘린다.",
+    "rom_text": "현재의　군자금을　１．５　배로",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C040",
+    "baseline": "스토리를 즐기면서 플레이할 수 있는 모드입니다",
+    "rom_text": "스토리를　즐기며　플레이하는　모드",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C040; source='스토리를\\u3000즐기며\\u3000플레이하는\\u3000모드'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C0C0",
+    "baseline": "자유롭게 설정을 정해,친구와 컴퓨터와 대전합니다",
+    "rom_text": "설정을　정해　친구나　컴퓨터와　대전합니다",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C0C0; source='설정을\\u3000정해\\u3000친구나\\u3000컴퓨터와\\u3000대전합니다'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C1B8",
+    "baseline": "획득한 포인트로,여러 가지 쇼핑을 할 수 있습니다",
+    "rom_text": "포인트로　쇼핑을　할　수　있습니다",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C1B8; source='포인트로\\u3000쇼핑을\\u3000할\\u3000수\\u3000있습니다'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C1E8",
+    "baseline": "맵을 만들거나,사령관의 컬러를 설정할 수 있습니다",
+    "rom_text": "지도　제작과　사령관　색상　설정　가능",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C1E8; source='지도\\u3000제작과\\u3000사령관\\u3000색상\\u3000설정\\u3000가능'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C25C",
+    "baseline": "친구와 연결해서,대전이나 맵 교환을 할 수 있습니다",
+    "rom_text": "친구와　연결해　대전／지도　교환　가능",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C25C; source='친구와\\u3000연결해\\u3000대전／지도\\u3000교환\\u3000가능'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C2F4",
+    "baseline": "있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다",
+    "rom_text": "있음으로　하면　유닛　시야　밖이　안　보임",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C2F4; source='있음으로\\u3000하면\\u3000유닛\\u3000시야\\u3000밖이\\u3000안\\u3000보임'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C378",
+    "baseline": "지정일이 종료되면 소유 거점 수로 결판을 냅니다",
+    "rom_text": "지정일　끝나면　거점　수로　승부",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C378; source='지정일\\u3000끝나면\\u3000거점\\u3000수로\\u3000승부'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C3A8",
+    "baseline": "지정 거점 수를 소유한 시점에서 우세 승리가 됩니다",
+    "rom_text": "지정　거점　보유　시　우세　승리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C3A8; source='지정\\u3000거점\\u3000보유\\u3000시\\u3000우세\\u3000승리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C484",
+    "baseline": "같은 팀을 선택하면 동맹국을 설정할 수 있습니다",
+    "rom_text": "같은　팀　선택　시　동맹국　설정",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C484; source='같은\\u3000팀\\u3000선택\\u3000시\\u3000동맹국\\u3000설정'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C748",
+    "baseline": "병종 또는 생산 거점이 1개 이상 필요합니다.",
+    "rom_text": "병종　또는　생산　거점　하나　이상　필요",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C748; source='병종\\u3000또는\\u3000생산\\u3000거점\\u3000하나\\u3000이상\\u3000필요'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C7DC",
+    "baseline": "선택 중인 지형,병종을 배치합니다.",
+    "rom_text": "선택　중인　지형　병종을　배치합니다",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2C7DC; source='선택\\u3000중인\\u3000지형\\u3000병종을\\u3000배치합니다'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2C804",
+    "baseline": "커서 위치의 지형,병종을 선택합니다.",
+    "rom_text": "커서　위치의　지형　병종을　선택합니다",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2CA38",
+    "baseline": "로드",
+    "rom_text": "　　로드",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2CA38; source='\\u3000\\u3000로드'",
+    "decision": "NEW_STRICT_MISMATCH"
+  },
+  {
+    "address": "0x00A2CA44",
+    "baseline": "세이브",
+    "rom_text": "　　세이브",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2CA44; source='\\u3000\\u3000세이브'",
+    "decision": "NEW_STRICT_MISMATCH"
+  },
+  {
+    "address": "0x00A2CA60",
+    "baseline": "파일",
+    "rom_text": "　　파일",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2CA60; source='\\u3000\\u3000파일'",
+    "decision": "NEW_STRICT_MISMATCH"
+  },
+  {
+    "address": "0x00A2CA70",
+    "baseline": "도움말",
+    "rom_text": "　　도움말",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A2CA70; source='\\u3000\\u3000도움말'",
+    "decision": "NEW_STRICT_MISMATCH"
+  },
+  {
+    "address": "0x00A2D5C8",
+    "baseline": "내일로의 7일간",
+    "rom_text": "내일로　７일간",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2D650",
+    "baseline": "내일로의 7일간",
+    "rom_text": "내일향한　７일",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2D684",
+    "baseline": "전차대를 격파하라!",
+    "rom_text": "전차대　격파",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2D6AC",
+    "baseline": "검은 악마를 막아라!",
+    "rom_text": "검은　악마를　막아！",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A2D6F0",
+    "baseline": "푸른 달이여,영원히",
+    "rom_text": "푸른달　영원히",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00A35228",
+    "baseline": "하나의 카트리지로,모두와 대전할 수 있습니다",
+    "rom_text": "하나의　카트리지로　대전　가능",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00A35228; source='하나의\\u3000카트리지로\\u3000대전\\u3000가능'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B81874",
+    "baseline": "대공 머신건",
+    "rom_text": "대공기관총",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00B81874; source='대공기관총'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B818B4",
+    "baseline": "2～6거리",
+    "rom_text": "２―６거리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B818B4; source='２―６거리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B819B8",
+    "baseline": "3～5거리",
+    "rom_text": "３―５거리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B819B8; source='３―５거리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B819DC",
+    "baseline": "2～3거리",
+    "rom_text": "２―３거리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B819DC; source='２―３거리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B81B04",
+    "baseline": "머신건",
+    "rom_text": "기관총",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00B81B04; source='기관총'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B81E2C",
+    "baseline": "분단 작전!",
+    "rom_text": "분단　작전",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B81E2C; source='분단\\u3000작전'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00B82018",
+    "baseline": "전투 개시!",
+    "rom_text": "전투　개시",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B82018; source='전투\\u3000개시'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00B826A8",
+    "baseline": "마른 잎 섬",
+    "rom_text": "마른잎섬",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B826A8; source='마른잎섬'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B8277C",
+    "baseline": "타마 타마 섬",
+    "rom_text": "타마타마섬",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B8277C; source='타마타마섬'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B827AC",
+    "baseline": "소라 마메 섬",
+    "rom_text": "소라마메섬",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B827AC; source='소라마메섬'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B82D58",
+    "baseline": "모드 선택",
+    "rom_text": "나가기",
+    "cause": "final in-place writer part1-battle-menu-font level=None at 0x00B82D58; source='나가기'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B82D92",
+    "baseline": "애니메 Ｃ",
+    "rom_text": "아군만",
+    "cause": "final in-place writer part1-battle-menu-font level=None at 0x00B82D92; source='아군만'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B82D9E",
+    "baseline": "애니메 B",
+    "rom_text": "전투만",
+    "cause": "final in-place writer part1-battle-menu-font level=None at 0x00B82D9E; source='전투만'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B82DAA",
+    "baseline": "애니메 A",
+    "rom_text": "전체표시",
+    "cause": "final in-place writer part1-battle-menu-font level=None at 0x00B82DAA; source='전체표시'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B82FAC",
+    "baseline": "맵을 저장 중이야,전원을 끄지 말아 줘!!",
+    "rom_text": "저장　중　전원　끄지　마",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B82FAC; source='저장\\u3000중\\u3000전원\\u3000끄지\\u3000마'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B830AC",
+    "baseline": "보낼 맵을 골라 줘!!",
+    "rom_text": "보낼 지도를 골라",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B830AC; source='보낼 지도를 골라'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B8319C",
+    "baseline": "부-!?・미접속 준비 중",
+    "rom_text": "미접속준비중　오류",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00B8319C; source='미접속준비중\\u3000오류'",
+    "decision": "NEW_STRICT_MISMATCH"
+  },
+  {
+    "address": "0x00B8322C",
+    "baseline": "전송입니다 잠시 기다려 주십시오.",
+    "rom_text": "전송중입니다　잠시기다려　주십시오。",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00B8322C; source='전송중입니다\\u3000잠시기다려\\u3000주십시오。'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B83A64",
+    "baseline": "이런 이런,여기까지는 하고 싶지 않았는데 말이야!",
+    "rom_text": "여기까진　안　하려　했는데",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B83A64; source='여기까진\\u3000안\\u3000하려\\u3000했는데'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B83FA8",
+    "baseline": "어떻게든 늦지 않았네-,다행이다 다행이야.",
+    "rom_text": "시간　맞췄네、　다행이다　다행이야。",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00B83FA8; source='시간\\u3000맞췄네、\\u3000다행이다\\u3000다행이야。'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00B84E50",
+    "baseline": "메테오 스트라이크",
+    "rom_text": "메테오",
+    "cause": "final in-place writer dialogue-override level=0 at 0x00B84E50; source='메테오'",
+    "decision": "DEFER"
+  },
+  {
+    "address": "0x00D8215C",
+    "baseline": "병종 또는 생산 거점이 1개 이상 필요합니다.",
+    "rom_text": "병종　또는　생산　거점　하나　이상　필요",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00D8215C; source='병종\\u3000또는\\u3000생산\\u3000거점\\u3000하나\\u3000이상\\u3000필요'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00D821F0",
+    "baseline": "선택 중인 지형,병종을 배치합니다.",
+    "rom_text": "선택　중인　지형　병종을　배치합니다",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00D821F0; source='선택\\u3000중인\\u3000지형\\u3000병종을\\u3000배치합니다'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00D82218",
+    "baseline": "커서 위치의 지형,병종을 선택합니다.",
+    "rom_text": "커서　위치의　지형　병종을　선택합니다",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00D9009E",
+    "baseline": "이 적 유닛은,이제 한 번 정도 공격을",
+    "rom_text": "이　적　유닛은、　이제　한　번　정",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00D910C6",
+    "baseline": "여기로 이동하지 않으면",
+    "rom_text": "여기　안　가면　공격",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00D910C6; source='여기\\u3000안\\u3000가면\\u3000공격'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00D9444E",
+    "baseline": "매일 2HP씩 보충하고 있다고는 해도,지금",
+    "rom_text": "매일　２ＨＰ씩　보충돼도　지금의",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DD010A",
+    "baseline": "이 녀석이 모든 것을,조종하고 있었던 거로군!",
+    "rom_text": "이　녀석이　모든　것을　조종하고　있었군",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF1EEE",
+    "baseline": "여기는,수도 점령,혹은 적 전멸로 승리예요!",
+    "rom_text": "수도　점령／적　전멸　승리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF1EEE; source='수도\\u3000점령／적\\u3000전멸\\u3000승리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF207A",
+    "baseline": "승리조건은,수도 점령,혹은 적 전멸이에요!",
+    "rom_text": "승리　조건은　수도　점령　또는　적　전멸",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF207A; source='승리\\u3000조건은\\u3000수도\\u3000점령\\u3000또는\\u3000적\\u3000전멸'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF20BA",
+    "baseline": "수도 점령,적 전멸 어느 쪽으로든 이길 수 있어요!",
+    "rom_text": "수도　점령／적　전멸　승리",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF21AE",
+    "baseline": "수도 점령이나 적 전멸로,이길 수 있어요!",
+    "rom_text": "수도　점령이나　적　전멸로　승리！",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF21AE; source='수도\\u3000점령이나\\u3000적\\u3000전멸로\\u3000승리！'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF228E",
+    "baseline": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+    "rom_text": "먼저　많이　점령한　쪽　승리",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF239E",
+    "baseline": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+    "rom_text": "먼저　많이　점령한　쪽이　승리！",
+    "cause": "relocated row differs from protected baseline",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF25FA",
+    "baseline": "수도 점령이나 적 전멸로 이길 수 있어요!",
+    "rom_text": "수도　점령이나　적　전멸로　승리！",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF25FA; source='수도\\u3000점령이나\\u3000적\\u3000전멸로\\u3000승리！'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF26FE",
+    "baseline": "수도 점령이나,적 전멸로 이길 수 있어요!",
+    "rom_text": "수도　점령／적　전멸　승리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF26FE; source='수도\\u3000점령／적\\u3000전멸\\u3000승리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF2806",
+    "baseline": "수도 점령이나,적 전멸로 이길 수 있어요!",
+    "rom_text": "수도　점령이나　적　전멸로　승리！",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF2806; source='수도\\u3000점령이나\\u3000적\\u3000전멸로\\u3000승리！'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF28C2",
+    "baseline": "여기는,수도 점령,혹은 적 전멸로 승리예요!",
+    "rom_text": "수도　점령　또는　적　전멸로　승리！",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00DF28C2; source='수도\\u3000점령\\u3000또는\\u3000적\\u3000전멸로\\u3000승리！'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF8BBA",
+    "baseline": "유닛",
+    "rom_text": "부대倶倶",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00DF8BBA; source='부대'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00DF8C1A",
+    "baseline": "유닛상황",
+    "rom_text": "부대상황倶倶",
+    "cause": "final in-place writer part1-compact-ui level=None at 0x00DF8C1A; source='부대상황'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00E10D7A",
+    "baseline": "식은 죽 먹기지!",
+    "rom_text": "아주　쉬웠어！",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00E10D7A; source='아주\\u3000쉬웠어！'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00EC30A2",
+    "baseline": "있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다",
+    "rom_text": "있음이면　유닛　시야　밖　안　보임",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00EC30A2; source='있음이면\\u3000유닛\\u3000시야\\u3000밖\\u3000안\\u3000보임'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00EC312E",
+    "baseline": "지정일이 종료되면 소유 거점 수로 결판을 냅니다",
+    "rom_text": "지정일　끝나면　거점　수로　승부",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00EC312E; source='지정일\\u3000끝나면\\u3000거점\\u3000수로\\u3000승부'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00EC3162",
+    "baseline": "지정 거점 수를 소유한 시점에서 우세 승리가 됩니다",
+    "rom_text": "지정거점　보유시　우세승리",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00EC3162; source='지정거점\\u3000보유시\\u3000우세승리'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00EC3192",
+    "baseline": "있음으로 하면 사령관 능력이 유효해집니다",
+    "rom_text": "있음이면　사령관　능력　활성",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00EC3192; source='있음이면\\u3000사령관\\u3000능력\\u3000활성'",
+    "decision": "RESTORE_BASELINE"
+  },
+  {
+    "address": "0x00EC3246",
+    "baseline": "같은 깃발을 가지는 것으로 팀을 설정할 수 있습니다",
+    "rom_text": "같은　깃발이면　같은　팀",
+    "cause": "final in-place writer bteam-round2-residual level=None at 0x00EC3246; source='같은\\u3000깃발이면\\u3000같은\\u3000팀'",
+    "decision": "RESTORE_BASELINE"
+  }
+]

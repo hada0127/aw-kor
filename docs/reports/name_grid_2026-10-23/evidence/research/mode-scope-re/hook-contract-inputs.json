@@ -1,0 +1,56 @@
+[
+  {
+    "name": "display-block",
+    "file_offset": "0x34ab3c",
+    "bus": "0x834ab3c",
+    "expected": "2268394b80263602"
+  },
+  {
+    "name": "dispatch-base",
+    "file_offset": "0x34afae",
+    "bus": "0x834afae",
+    "expected": "0d4b1c680d4a16683568"
+  },
+  {
+    "name": "native-append-base",
+    "file_offset": "0x34ae1e",
+    "bus": "0x834ae1e",
+    "expected": "0f4e"
+  },
+  {
+    "name": "move-before",
+    "file_offset": "0x34b2c8",
+    "bus": "0x834b2c8",
+    "expected": "134b"
+  },
+  {
+    "name": "move-after",
+    "file_offset": "0x34b338",
+    "bus": "0x834b338",
+    "expected": "134b"
+  },
+  {
+    "name": "mode0-cancel-skip",
+    "file_offset": "0x34b3c0",
+    "bus": "0x834b3c0",
+    "expected": "1d4a"
+  },
+  {
+    "name": "cursor-class",
+    "file_offset": "0x34b470",
+    "bus": "0x834b470",
+    "expected": "234a"
+  },
+  {
+    "name": "constructor-callback",
+    "file_offset": "0x83fd78",
+    "bus": "0x883fd78",
+    "expected": "fda93408"
+  },
+  {
+    "name": "input-loop-function-pointer",
+    "file_offset": "0x83fde0",
+    "bus": "0x883fde0",
+    "expected": "41b43408"
+  }
+]

@@ -1,0 +1,15 @@
+{
+ "case": "case2-한가",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "92af8840000000000000000000000000",
+   "expect": "92af8840"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case2-한가"
+}

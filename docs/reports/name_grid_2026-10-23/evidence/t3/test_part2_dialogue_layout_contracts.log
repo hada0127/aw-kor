@@ -1,0 +1,13 @@
+test_both_complete_text_contracts_pass_with_native_controls (__main__.DialogueLayoutContractsTests) ... ok
+test_late_text_or_wait_corruption_is_blocked (__main__.DialogueLayoutContractsTests) ... ok
+test_missing_duplicate_or_skipped_relocation_is_blocked (__main__.DialogueLayoutContractsTests) ... ok
+test_native_consumer_changes_are_blocked (__main__.DialogueLayoutContractsTests) ... ok
+test_numeric_first_row_reaches_real_script_owner_without_truncation (__main__.DialogueLayoutContractsTests) ... ok
+test_wait_moved_inside_text_is_blocked_even_with_same_control_count (__main__.DialogueLayoutContractsTests) ... ok
+test_wrong_source_pointer_target_and_truncation_are_blocked (__main__.DialogueLayoutContractsTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.648s
+
+OK
+test_part2_dialogue_layout_contracts EXIT 0

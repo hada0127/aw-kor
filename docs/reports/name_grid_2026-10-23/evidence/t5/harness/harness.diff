@@ -1,0 +1,13 @@
+--- tools/mgba_harness.c	2026-10-23 13:19:48
++++ temp/name-grid-phaseB/t5-runtime/harness/mgba_harness_t5.c	2026-10-23 18:17:38
+@@ -56,8 +56,8 @@
+     } else if (reason == DEBUGGER_ENTER_BREAKPOINT && s_wpf) {
+         uint32_t r[16]; char nm[4];
+         for (int i=0;i<16;i++){ snprintf(nm,4,"r%d",i); r[i]=0; core->readRegister(core,nm,&r[i]); }
+-        fprintf(s_wpf, "%d BP r0=%08X r1=%08X r2=%08X r3=%08X r4=%08X r5=%08X r6=%08X r7=%08X sp=%08X lr=%08X pc=%08X\n",
+-                s_wp_order++, r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[13],r[14],r[15]);
++        fprintf(s_wpf, "%d BP r0=%08X r1=%08X r2=%08X r3=%08X r4=%08X r5=%08X r6=%08X r7=%08X r8=%08X r9=%08X r10=%08X r11=%08X sp=%08X lr=%08X pc=%08X\n",
++                s_wp_order++, r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[13],r[14],r[15]);
+         fflush(s_wpf);
+     }
+     d->state = DEBUGGER_RUNNING; // resume immediately

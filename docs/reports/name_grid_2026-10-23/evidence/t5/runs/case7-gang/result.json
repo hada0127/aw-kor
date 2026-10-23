@@ -1,0 +1,13 @@
+{
+ "case": "case7-gang",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "empty after 3 B",
+   "ok": true
+  }
+ ],
+ "notes": [],
+ "run": "runs/case7-gang"
+}

@@ -1,0 +1,51 @@
+{
+  "fields": [
+    "color_t.size",
+    "mCore.size",
+    "mCore.board",
+    "mCore.attachDebugger",
+    "mCore.savedataClone",
+    "mDebugger.size",
+    "mDebuggerEntryInfo.size",
+    "GBA.size",
+    "GBA.memory",
+    "GBA.sio",
+    "GBA.timing",
+    "GBASIO.size",
+    "GBASIODriver.size",
+    "mTimingEvent.size"
+  ],
+  "library": [
+    "4",
+    "2408",
+    "8",
+    "2296",
+    "2336",
+    "152",
+    "32",
+    "7344",
+    "32",
+    "6288",
+    "6496",
+    "200",
+    "48",
+    "40"
+  ],
+  "harness": [
+    "4",
+    "2408",
+    "8",
+    "2296",
+    "2336",
+    "152",
+    "32",
+    "7344",
+    "32",
+    "6288",
+    "6496",
+    "200",
+    "48",
+    "40"
+  ],
+  "equal": true
+}

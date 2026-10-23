@@ -1,0 +1,17 @@
+{
+ "case": "case9",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "legacy reload len8 active0",
+   "ok": true
+  },
+  {
+   "name": "ア×7 + ㄱ active",
+   "ok": true
+  }
+ ],
+ "notes": [],
+ "run": "runs/case9"
+}

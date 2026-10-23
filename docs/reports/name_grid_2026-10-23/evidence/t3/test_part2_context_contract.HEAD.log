@@ -1,0 +1,20 @@
+.....E..
+======================================================================
+ERROR: test_teacher_import_and_regenerated_editor_map_match_authority (__main__.ContextContractTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/head/tools/test_part2_context_contract.py", line 143, in test_teacher_import_and_regenerated_editor_map_match_authority
+    mapped = json.loads(Path(B.BASE, 'data/dialogue_map.json').read_text())['lines']
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1256, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1242, in open
+    return io.open(self, mode, buffering, encoding, errors, newline,
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/pathlib.py", line 1110, in _opener
+    return self._accessor.open(self, flags, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/head/data/dialogue_map.json'
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.860s
+
+FAILED (errors=1)
+test_part2_context_contract @HEAD EXIT 1

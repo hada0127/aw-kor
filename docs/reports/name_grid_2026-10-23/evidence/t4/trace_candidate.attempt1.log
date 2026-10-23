@@ -1,0 +1,5 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 -I -B trace_text_fit.py <candidate-source> ...
+{"source": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source", "main_return": 0, "check_text_calls": 18584, "unreturned": 0, "printed": {"overflow": 273, "wider": 507}, "foreign_modules": ["/Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/trace_text_fit.py"]}
+overflow {'events': 273, 'unique_addresses': 259, 'count_matches_printed': False}
+wider {'events': 507, 'unique_addresses': 507, 'count_matches_printed': True}
+EXIT 3

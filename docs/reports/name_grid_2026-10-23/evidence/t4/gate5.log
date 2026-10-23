@@ -1,0 +1,4 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/qa_part2_name_grid_shared_glyph.py output/game_wars_korean_namecompose_20261023.gba
+PASS shared Part 2 dash 0x815B pixels: be419dc0b96ddc2fa1d67385f46909c1ea950eafaeba5fa59816cde935bc2bba
+
+EXIT 0

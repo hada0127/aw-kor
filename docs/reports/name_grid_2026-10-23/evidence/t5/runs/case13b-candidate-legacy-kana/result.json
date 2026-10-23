@@ -1,0 +1,89 @@
+{
+ "case": "case13b-candidate-legacy-kana",
+ "pass": true,
+ "checks": [
+  {
+   "name": "candidate legacy re-entry ア×7カ len8 active0",
+   "ok": true,
+   "live": "8341834183418341834183418341834a"
+  },
+  {
+   "name": "legacy kana dakuten == original",
+   "ok": true,
+   "candidate": {
+    "input": "dakuten",
+    "live16": "8341834183418341834183418341834b",
+    "len": 8,
+    "tail": "00ffff00",
+    "sounds": [
+     "65"
+    ],
+    "changed": true
+   },
+   "original": {
+    "input": "dakuten",
+    "live16": "8341834183418341834183418341834b",
+    "len": 8,
+    "tail": "00000000",
+    "sounds": [
+     "65"
+    ],
+    "changed": true
+   }
+  },
+  {
+   "name": "legacy kana R == original",
+   "ok": true,
+   "candidate": {
+    "input": "R",
+    "live16": "8341834183418341834183418341834a",
+    "len": 8,
+    "tail": "00ffff00",
+    "sounds": [
+     "65"
+    ],
+    "changed": true
+   },
+   "original": {
+    "input": "R",
+    "live16": "8341834183418341834183418341834a",
+    "len": 8,
+    "tail": "00000000",
+    "sounds": [
+     "65"
+    ],
+    "changed": true
+   }
+  },
+  {
+   "name": "legacy kana handakuten == original",
+   "ok": true,
+   "candidate": {
+    "input": "handakuten",
+    "live16": "8341834183418341834183418341834a",
+    "len": 8,
+    "tail": "00ffff00",
+    "sounds": [
+     "68"
+    ],
+    "changed": false
+   },
+   "original": {
+    "input": "handakuten",
+    "live16": "8341834183418341834183418341834a",
+    "len": 8,
+    "tail": "00000000",
+    "sounds": [
+     "68"
+    ],
+    "changed": false
+   }
+  },
+  {
+   "name": "dakuten actually converted カ->ガ (not a no-op comparison)",
+   "ok": true,
+   "live": "8341834183418341834183418341834b"
+  }
+ ],
+ "run": "runs/case13b-candidate-legacy-kana"
+}

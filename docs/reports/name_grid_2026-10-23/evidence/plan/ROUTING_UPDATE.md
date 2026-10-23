@@ -1,0 +1,1 @@
+2026-10-23 사용자 최신 결정(company 경유): “이 pc 하네스대로”. 이전 주말 Codex 전용 지시보다 이 맥 harness-route 판정이 우선이다. code provider=claude면 harness-run code/로컬Claude Agent로, codex면harness-codex로실행한다. riskhigh effort하향금지. 정책편집/route위조/우회금지,작업경계마다route재확인. 승인PLAN-v5의수행주체Codex전용문장은이최신결정으로대체되며설계/검증/범위는변경없다. 리뷰는고정Astra/read-only유지. 이결정은이미승인된사용자지시이며재확인요청불필요.

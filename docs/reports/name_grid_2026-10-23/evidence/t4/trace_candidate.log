@@ -1,0 +1,5 @@
+$ nice -n 15 /Applications/Xcode.app/Contents/Developer/usr/bin/python3 -I -B trace_text_fit.py /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source output/game_wars_korean_namecompose_20261023.gba temp/integrity_map.json temp/repoint_manifest.json analysis/textfit_candidate.json
+{"source": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source", "main_return": 0, "check_text_calls": 18584, "unreturned": 0, "printed": {"overflow": 273, "wider": 507}, "foreign_modules": []}
+overflow {'events': 273, 'unique_addresses': 259, 'repeated': {'0xA06620': 2, '0xA07330': 2, '0xA074AC': 2, '0xA08930': 2, '0xA08B98': 2, '0xA090A4': 2, '0xA0BC9C': 2, '0xA250EC': 2, '0xD9F3E2': 2, '0xDC3822': 2, '0xDC4466': 3, '0xDCDEEB': 2, '0xDCEA43': 2}, 'count_matches_printed': True}
+wider {'events': 507, 'unique_addresses': 507, 'repeated': {}, 'count_matches_printed': True}
+EXIT 0

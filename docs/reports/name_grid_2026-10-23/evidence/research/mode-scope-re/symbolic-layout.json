@@ -1,0 +1,542 @@
+[
+  {
+    "x": 0,
+    "y": 0,
+    "proposed_symbolic_label": "ㄱ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 0,
+    "proposed_symbolic_label": "ㄲ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 0,
+    "proposed_symbolic_label": "ㄴ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 0,
+    "proposed_symbolic_label": "ㄷ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 0,
+    "proposed_symbolic_label": "ㄸ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 0,
+    "proposed_symbolic_label": "ㄹ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 0,
+    "proposed_symbolic_label": "ㅁ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 0,
+    "proposed_symbolic_label": "ㅂ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 0,
+    "proposed_symbolic_label": "ㅃ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 0,
+    "proposed_symbolic_label": "ㅅ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 0,
+    "proposed_symbolic_label": "824f",
+    "wide_button_class": 0
+  },
+  {
+    "x": 11,
+    "y": 0,
+    "proposed_symbolic_label": "8250",
+    "wide_button_class": 0
+  },
+  {
+    "x": 12,
+    "y": 0,
+    "proposed_symbolic_label": "8251",
+    "wide_button_class": 0
+  },
+  {
+    "x": 13,
+    "y": 0,
+    "proposed_symbolic_label": "8252",
+    "wide_button_class": 0
+  },
+  {
+    "x": 14,
+    "y": 0,
+    "proposed_symbolic_label": "8253",
+    "wide_button_class": 0
+  },
+  {
+    "x": 0,
+    "y": 1,
+    "proposed_symbolic_label": "ㅆ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 1,
+    "proposed_symbolic_label": "ㅇ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 1,
+    "proposed_symbolic_label": "ㅈ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 1,
+    "proposed_symbolic_label": "ㅉ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 1,
+    "proposed_symbolic_label": "ㅊ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 1,
+    "proposed_symbolic_label": "ㅋ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 1,
+    "proposed_symbolic_label": "ㅌ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 1,
+    "proposed_symbolic_label": "ㅍ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 1,
+    "proposed_symbolic_label": "ㅎ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 1,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 1,
+    "proposed_symbolic_label": "8254",
+    "wide_button_class": 0
+  },
+  {
+    "x": 11,
+    "y": 1,
+    "proposed_symbolic_label": "8255",
+    "wide_button_class": 0
+  },
+  {
+    "x": 12,
+    "y": 1,
+    "proposed_symbolic_label": "8256",
+    "wide_button_class": 0
+  },
+  {
+    "x": 13,
+    "y": 1,
+    "proposed_symbolic_label": "8257",
+    "wide_button_class": 0
+  },
+  {
+    "x": 14,
+    "y": 1,
+    "proposed_symbolic_label": "8258",
+    "wide_button_class": 0
+  },
+  {
+    "x": 0,
+    "y": 2,
+    "proposed_symbolic_label": "ㅏ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 2,
+    "proposed_symbolic_label": "ㅐ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 2,
+    "proposed_symbolic_label": "ㅑ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 2,
+    "proposed_symbolic_label": "ㅒ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 2,
+    "proposed_symbolic_label": "ㅓ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 2,
+    "proposed_symbolic_label": "ㅔ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 2,
+    "proposed_symbolic_label": "ㅕ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 2,
+    "proposed_symbolic_label": "ㅖ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 2,
+    "proposed_symbolic_label": "ㅗ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 2,
+    "proposed_symbolic_label": "ㅛ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 2,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 11,
+    "y": 2,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 12,
+    "y": 2,
+    "proposed_symbolic_label": "8145",
+    "wide_button_class": 0
+  },
+  {
+    "x": 13,
+    "y": 2,
+    "proposed_symbolic_label": "8149",
+    "wide_button_class": 0
+  },
+  {
+    "x": 14,
+    "y": 2,
+    "proposed_symbolic_label": "8148",
+    "wide_button_class": 0
+  },
+  {
+    "x": 0,
+    "y": 3,
+    "proposed_symbolic_label": "ㅜ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 3,
+    "proposed_symbolic_label": "ㅠ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 3,
+    "proposed_symbolic_label": "ㅡ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 3,
+    "proposed_symbolic_label": "ㅣ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 3,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 3,
+    "proposed_symbolic_label": "6363",
+    "wide_button_class": 99
+  },
+  {
+    "x": 11,
+    "y": 3,
+    "proposed_symbolic_label": "6363",
+    "wide_button_class": 99
+  },
+  {
+    "x": 12,
+    "y": 3,
+    "proposed_symbolic_label": "6363",
+    "wide_button_class": 99
+  },
+  {
+    "x": 13,
+    "y": 3,
+    "proposed_symbolic_label": "6363",
+    "wide_button_class": 99
+  },
+  {
+    "x": 14,
+    "y": 3,
+    "proposed_symbolic_label": "6363",
+    "wide_button_class": 99
+  },
+  {
+    "x": 0,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 4,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 4,
+    "proposed_symbolic_label": "6262",
+    "wide_button_class": 98
+  },
+  {
+    "x": 11,
+    "y": 4,
+    "proposed_symbolic_label": "6262",
+    "wide_button_class": 98
+  },
+  {
+    "x": 12,
+    "y": 4,
+    "proposed_symbolic_label": "6262",
+    "wide_button_class": 98
+  },
+  {
+    "x": 13,
+    "y": 4,
+    "proposed_symbolic_label": "6262",
+    "wide_button_class": 98
+  },
+  {
+    "x": 14,
+    "y": 4,
+    "proposed_symbolic_label": "6262",
+    "wide_button_class": 98
+  },
+  {
+    "x": 0,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 1,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 2,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 3,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 4,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 5,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 6,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 7,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 8,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 9,
+    "y": 5,
+    "proposed_symbolic_label": " ",
+    "wide_button_class": 0
+  },
+  {
+    "x": 10,
+    "y": 5,
+    "proposed_symbolic_label": "6565",
+    "wide_button_class": 101
+  },
+  {
+    "x": 11,
+    "y": 5,
+    "proposed_symbolic_label": "6565",
+    "wide_button_class": 101
+  },
+  {
+    "x": 12,
+    "y": 5,
+    "proposed_symbolic_label": "6565",
+    "wide_button_class": 101
+  },
+  {
+    "x": 13,
+    "y": 5,
+    "proposed_symbolic_label": "6565",
+    "wide_button_class": 101
+  },
+  {
+    "x": 14,
+    "y": 5,
+    "proposed_symbolic_label": "6565",
+    "wide_button_class": 101
+  }
+]

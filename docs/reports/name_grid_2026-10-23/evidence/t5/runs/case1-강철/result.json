@@ -1,0 +1,22 @@
+{
+ "case": "case1-강철",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "jamo": "ㄱ",
+   "src": "08f09f60",
+   "vram": "06002620",
+   "ok": true,
+   "got_sha": "67f5d9d60292a3ae249ae1250725609d5879c664a3ced4f67025ec325b85ef82",
+   "want_sha": "67f5d9d60292a3ae249ae1250725609d5879c664a3ced4f67025ec325b85ef82"
+  },
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "884990d3000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case1-강철"
+}

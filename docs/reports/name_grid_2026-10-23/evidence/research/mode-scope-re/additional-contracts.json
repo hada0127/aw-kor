@@ -1,0 +1,26 @@
+[
+  {
+    "name": "private-all-move-before",
+    "file_offset": "0x34b2c8",
+    "bus": "0x834b2c8",
+    "expected": "134b4c4620680268"
+  },
+  {
+    "name": "private-all-move-after",
+    "file_offset": "0x34b338",
+    "bus": "0x834b338",
+    "expected": "134b494608680268"
+  },
+  {
+    "name": "private-all-cursor",
+    "file_offset": "0x34b470",
+    "bus": "0x834b470",
+    "expected": "234a2020195e0801"
+  },
+  {
+    "name": "cursor-loop-callback",
+    "file_offset": "0x83fd28",
+    "bus": "0x883fd28",
+    "expected": "55b43408"
+  }
+]

@@ -1,0 +1,49 @@
+DISPLAY_ROW 0 0x883fe40 literal 0x834ac24 pairs 17 xy [6, 6]
+DISPLAY_ROW 1 0x883fe64 literal 0x834ac28 pairs 17 xy [6, 8]
+DISPLAY_ROW 2 0x883fe88 literal 0x834ac2c pairs 17 xy [6, 10]
+DISPLAY_ROW 3 0x883feac literal 0x834ac30 pairs 11 xy [6, 12]
+DISPLAY_ROW 4 0x883fec4 literal 0x834ac34 pairs 11 xy [6, 14]
+DISPLAY_ROW 5 0x883fedc literal 0x834ac38 pairs 11 xy [6, 16]
+SELECT_TO_DISPLAY x=0..14: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16]
+X_OFFSETS [0, 8, 16, 24, 32, 48, 56, 64, 72, 80, 97, 105, 113, 121, 129] Y_OFFSETS [0, 16, 32, 48, 64, 80]
+WIDE_ACTION 3 [(10, '6363'), (11, '6363'), (12, '6363'), (13, '6363'), (14, '6363')]
+WIDE_ACTION 4 [(10, '6262'), (11, '6262'), (12, '6262'), (13, '6262'), (14, '6262')]
+WIDE_ACTION 5 [(10, '6565'), (11, '6565'), (12, '6565'), (13, '6565'), (14, '6565')]
+ORIGINAL_EQUALS_BASELINE_SELECTION True
+ORIGINAL_EQUALS_BASELINE_DISPLAY True
+WIDE_BUTTON_CLASS_INVARIANT 90 cells (symbolic proposal; jamo code high-bit precondition)
+CONTRACT display-block 0x34ab3c 2268394b80263602
+CONTRACT dispatch-base 0x34afae 0d4b1c680d4a16683568
+CONTRACT native-append-base 0x34ae1e 0f4e
+CONTRACT move-before 0x34b2c8 134b
+CONTRACT move-after 0x34b338 134b
+CONTRACT mode0-cancel-skip 0x34b3c0 1d4a
+CONTRACT cursor-class 0x34b470 234a
+CONTRACT constructor-callback 0x83fd78 fda93408
+CONTRACT input-loop-function-pointer 0x83fde0 41b43408
+MODEL full8 ㄱㅏㄴㅏㄷㅏㄹㅏㅁㅏㅂㅏㅅㅏㅇㅏㄴ => 가나다라마바사안 accepted 17 committed 7 active 안
+MODEL full8 next ㄱ accepted=False reason=no_slot atomic=True
+MODEL full8 confirm bytes16 884088e989e28adf8bc38ca68da98ea2
+MODEL 한글 ㅎㅏㄴㄱㅡㄹ => 한글 accepted 6 committed 1 active 글
+MODEL 한글 confirm bytes16 92af888a000000000000000000000000
+MODEL 강철 ㄱㅏㅇㅊㅓㄹ => 강철 accepted 6 committed 1 active 철
+MODEL 강철 confirm bytes16 884990d3000000000000000000000000
+MODEL 붉은달 ㅂㅜㄹㄱㅇㅡㄴㄷㅏㄹ => 붉은달 accepted 10 committed 2 active 달
+MODEL 붉은달 confirm bytes16 8d5c8f7e89e700000000000000000000
+MODEL 가한-auto ㄱㅏㅎㅏㄴ => 가한 accepted 5 committed 1 active 한
+MODEL 가-prefix ㄱㅏ => 가 accepted 2 committed 0 active 가
+MODEL 가+ㅋ accepted=False reason=not_in_2350 atomic=True
+MODEL ㄱㅏ [confirm] ㅋㅏ => 가카
+STATIC_MODEL_ASSERTIONS_OK
+MODE 1 90_NATIVE_DISPATCH_AND_CURSOR_READS_MATCH (mode0 synthetic; coordinates synthetic both)
+MODE 0 90_NATIVE_DISPATCH_AND_CURSOR_READS_MATCH (mode0 synthetic; coordinates synthetic both)
+PRECONSTRUCTOR_RAM_PAIR_DIFF_ONLY_0x60
+CONSTRUCTOR_MODE 1 SIX_NATIVE_ROW_POINTERS_AND_84_A3_PAIR_POINTERS_MATCH (synthetic RAM pair)
+CONSTRUCTOR_MODE 0 SIX_NATIVE_ROW_POINTERS_AND_84_A3_PAIR_POINTERS_MATCH (synthetic RAM pair)
+NATIVE_OK_RIGHT_A_NO: NAME_LEN_DEST_UNCHANGED; NEXT_LEFT_A_APPENDS; ACTIVE_COMMIT_IS_FUTURE_HOOK_CONTRACT
+EMULATOR_EXITS {'native-no': 0, 'mode1': 0, 'entry-split': 0, 'mode0': 0, 'constructor-mode1': 0, 'constructor-mode0': 0, 'native-no2': 0, 'entry-pending': 0, 'cold': 0}
+PROTECTED_HASHES_UNCHANGED 117
+TRACKED_STATUS_CLEAN GIT_DIFF_EXIT0
+HEAD 90908180938c2bf40ee38dea43c4c1304b09df8a
+OWNED_LOG_LSOF_EXIT 1 STDOUT '' STDERR ''
+SPIKE_EVIDENCE_VERIFIED

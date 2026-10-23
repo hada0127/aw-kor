@@ -1,0 +1,308 @@
+diff --git a/tools/build_korean_full.py b/tools/build_korean_full.py
+index 6af337b..a71fee3 100644
+--- a/tools/build_korean_full.py
++++ b/tools/build_korean_full.py
+@@ -250,6 +250,7 @@ DENY_REGIONS = [
+     # record, corrupting 119/122 bytes of the original table. DENY_REGIONS uses
+     # half-open [start, end), so this preserves exactly the 122B found row.
+     ('punctuation_width_table_noise', 0xD721B5, 0xD7222F),
++    ('part2_name_compose', 0xF70000, 0xF77800),           # 2편 이름 조합 nc_dense·코드 이미지(PLAN-v5 §1.8)
+     ('korean_data',     0xF00000, 0x1000000),             # 내가 주입한 글리프/테이블 영역
+     # Link-play client images (1-cart VS multiboot; temp/linkclient_20261013/plan.md).
+     # The 120-byte charset tables are lookup data, not text; the dead program copies
+@@ -13603,6 +13604,208 @@ PART2_PATCHES = [
+     ('tilemap_B11', 0xB11E24, 0xB11E28, 0xB11DE0, 0xB11DF0, PART2_HOOK_TOP_B11_RT, PART2_HOOK_BOT_B11_RT),
+ ]
+ 
++# 2편 맵 에디터 이름 입력 두벌식 조합(PLAN-v5 §1.3~1.8). 파일 오프셋, 반열린 [start, end).
++# 이 기능이 쓰는 영역의 단일 정본. 표 end 리터럴 4곳은 기존 표 확장 경로가 늘어난 길이로 쓴다.
++NAME_COMPOSE_WRITES = (
++    ('jamo_tiles', 0xF09F60, 0xF0A960),     # 자모 40 top/bot = tile 1275..1354
++    ('nc_dense', 0xF70000, 0xF75748),       # (L*21+V)*28+T → u16 LE 코드, 0=없음
++    ('nc_image', 0xF75800, 0xF77800),       # 코드 이미지(상한 8,192B, 남는 칸 0)
++    ('a3_table_tail', 0xF243A4, 0xF24494),  # A3 표 자모 40 엔트리
++    ('a3_max', 0xF30304, 0xF30308),         # A3 hook max 리터럴
++    ('s1_press', 0x34B0BC, 0x34B0C6),
++    ('s2_confirm', 0x34B084, 0x34B08C),
++    ('s3_backspace', 0x34B20E, 0x34B218),
++    ('d1_display', 0x34AB3C, 0x34AB44),
++    ('p1_alloc', 0x83FD58, 0x83FD5C),
++)
++NAME_COMPOSE_REGIONS = {name: (start, end) for name, start, end in NAME_COMPOSE_WRITES}
++NAME_COMPOSE_END_LITERALS = (0xEFE974, 0xF3030C, 0x314000, 0xB11E28)
++assert NAME_COMPOSE_END_LITERALS == (
++    P.LIT_TBL_END, PART2_HOOK_A3_FILE + PART2_HOOK_A3_TABLE_END_OFF,
++    *(row[2] for row in PART2_PATCHES))
++# 원본 inline 사이트(§1.5): 이름, 원본 바이트. 교체 바이트는 _name_compose_payload.
++NAME_COMPOSE_SITES = (
++    ('s1_press', bytes.fromhex('6520f0f7b9fcfff79dfe')),
++    ('s2_confirm', bytes.fromhex('fff728ffcee10000')),
++    ('s3_backspace', bytes.fromhex('01381070fff725fefff7')),
++    ('d1_display', bytes.fromhex('2268394b80263602')),
++    ('p1_alloc', bytes.fromhex('71b93408')),
++)
++# 바꾸지 않는 이웃 콜백 포인터: constructor FD78 · 입력 루프 FDE0 · 커서 루프 FD28.
++NAME_COMPOSE_KEEP = ((0x83FD78, bytes.fromhex('fda93408')), (0x83FDE0, bytes.fromhex('41b43408')),
++                     (0x83FD28, bytes.fromhex('55b43408')))
++PART2_HOOK_A3_MAX_OFF = 0x84            # 앞 0x80 = min 0x8840, 뒤 0x90 = bit15 mask
++assert PART2_HOOK_A3[0x80:0x88] == bytes.fromhex('40880000a7e20000')
++assert PART2_HOOK_A3[0x90:0x94] == bytes.fromhex('ff7f0000')
++NAME_COMPOSE_TABLE_ENTRIES = (536, 2350, 40)   # 원본 한자 · 2350 음절 · 자모
++
++
++def _name_compose_inputs(orig, syl_to_code):
++    """자모 코드·코드 이미지를 읽고 검증한다(캐시 없음). 실패 시 ValueError."""
++    import gen_jamo_assets as jamo
++    import part2_name_compose_blob as blob
++    from build_korean2350 import extend_pool
++    codes = jamo.load_jamo_codes(jamo.OUT_CODES, SYLCODE)
++    values = set(codes.values())
++    if values & set(syl_to_code.values()):
++        raise ValueError('jamo codes overlap the 2350 syllable codes')
++    outside = sorted(values - set(extend_pool(orig)))
++    if outside:
++        raise ValueError('jamo codes outside the original reserved pool: '
++                         + ', '.join(f'0x{c:04X}' for c in outside))
++    with open(jamo.OUT_CODES, 'rb') as f:
++        if hashlib.sha256(f.read()).hexdigest() != blob.SOURCE_SHA['data/jamo_to_code_40.json']:
++            raise ValueError('jamo code JSON differs from the one compiled into the name-compose image')
++    blob.verify_code()
++    stale = blob.check_sources()
++    if stale:
++        raise ValueError('name-compose image is stale (tools/name_compose/build_image.py): '
++                         + ', '.join(stale))
++    image = NAME_COMPOSE_REGIONS
++    if ((blob.IMAGE_RT, blob.DENSE_RT) != (0x08000000 + image['nc_image'][0], 0x08000000 + image['nc_dense'][0])
++            or blob.DENSE_BYTES != image['nc_dense'][1] - image['nc_dense'][0]
++            or len(blob.CODE) > min(blob.IMAGE_MAX, image['nc_image'][1] - image['nc_image'][0])):
++        raise ValueError(f'name-compose image layout/size invalid ({len(blob.CODE)}B)')
++    return codes
++
++
++def _name_compose_a3_max(rom, syl_to_code, orig):
++    """A3 hook max 리터럴(F30304)을 2350+자모 최대 코드로 넓힌다. 실패 시 ValueError·rom 불변."""
++    codes = _name_compose_inputs(orig, syl_to_code)
++    # 생성 단계: hook 이 막 기록된 PART2_HOOK_A3 그대로여야 한다(max 0xE2A7, 표 end 0, min/mask).
++    if bytes(rom[PART2_HOOK_A3_FILE:PART2_HOOK_A3_FILE + len(PART2_HOOK_A3)]) != PART2_HOOK_A3:
++        raise ValueError('A3 hook differs from the generated payload before the name-compose max')
++    new_max = max(*syl_to_code.values(), *codes.values())
++    struct.pack_into('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_MAX_OFF, new_max)
++    # 회귀 가드(2026-06-16): A3는 [min,max] 밖 코드를 한글로 보지 않는다. 기록된 값을 다시 읽는다.
++    written = struct.unpack_from('<I', rom, PART2_HOOK_A3_FILE + PART2_HOOK_A3_MAX_OFF)[0]
++    if written < max(*syl_to_code.values(), *codes.values()):
++        raise AssertionError(f'A3 hook max code 0x{written:X} < 실제 최대 예약코드')
++    return written
++
++
++def _name_compose_table_tail(rom, new_tbl, orig_tbl, sylmap, syl_to_code, orig):
++    """2350 표 뒤에 붙일 자모 40 엔트리(240B)를 돌려준다. new_tbl·rom 은 바꾸지 않는다."""
++    import gen_jamo_assets as jamo
++    codes = _name_compose_inputs(orig, syl_to_code)
++    base, syllables, _ = NAME_COMPOSE_TABLE_ENTRIES
++    if sylmap['자']['top'] != 1274:
++        raise ValueError('자 top is not the private tile 1274')
++    expected = bytearray(orig_tbl)
++    for s in sorted(sylmap):
++        code = syl_to_code[s]
++        expected += bytes([code >> 8, code & 0xFF]) + struct.pack(
++            '<HH', sylmap[s]['top'] | 0x8000, sylmap[s]['bot'] | 0x8000)
++    if len(orig_tbl) != base * 6 or len(sylmap) != syllables or bytes(new_tbl) != bytes(expected):
++        raise ValueError('A3 table is not the generated 536+2350 stage before the jamo tail')
++    tail_start, tail_end = NAME_COMPOSE_REGIONS['a3_table_tail']
++    if P.NEW_TBL_FILE + len(new_tbl) != tail_start or any(rom[tail_start:tail_end]):
++        raise ValueError('A3 table jamo tail region is not the empty slot after the 2350 entries')
++    tail = jamo.jamo_table_entries(sylmap, codes)
++    if len(tail) != tail_end - tail_start:
++        raise ValueError('A3 table jamo tail size mismatch')
++    return tail
++
++
++def _name_compose_payload(syl_to_code):
++    """_part2_name_compose 가 쓰는 영역별 바이트(이름 → bytes)."""
++    import gen_jamo_assets as jamo
++    import part2_name_compose_blob as blob
++    payload = {
++        'jamo_tiles': jamo.jamo_tiles(jamo.OUT_GLYPHS),
++        'nc_dense': jamo.dense_table(syl_to_code),
++        'nc_image': blob.CODE + bytes(blob.IMAGE_MAX - len(blob.CODE)),
++        's1_press': _abs_tramp(0, blob.entry('nc_tramp_press')) + bytes.fromhex('c046'),
++        's2_confirm': _abs_tramp(0, blob.entry('nc_tramp_confirm')),
++        's3_backspace': _abs_tramp(0, blob.entry('nc_tramp_backspace'), 0x34B20E),
++        'd1_display': bytes.fromhex('004b1847') + struct.pack('<I', blob.entry('nc_tramp_display')),
++        'p1_alloc': struct.pack('<I', blob.entry('nc_alloc')),
++    }
++    regions = NAME_COMPOSE_REGIONS
++    for name, data in payload.items():
++        if len(data) != regions[name][1] - regions[name][0]:
++            raise ValueError(f'name-compose payload {name} size {len(data)} mismatch')
++    return payload
++
++
++def _name_compose_expected(syl_to_code, codes):
++    """영역 이름 → 최종 기대 바이트(앞 단계 A3 max·표 tail 포함)."""
++    import gen_jamo_assets as jamo
++    sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']
++    sylmap['자']['top'] = 1274
++    expected = _name_compose_payload(syl_to_code)
++    expected['a3_table_tail'] = jamo.jamo_table_entries(sylmap, codes)
++    expected['a3_max'] = struct.pack('<I', max(*syl_to_code.values(), *codes.values()))
++    return expected
++
++
++def _name_compose_mismatches(rom, expected, names):
++    """names 영역의 기대 바이트 불일치 + A3 min/mask/start · end 리터럴 4곳 · 이웃 포인터 검사."""
++    bad = [name for name, start, end in NAME_COMPOSE_WRITES
++           if name in names and bytes(rom[start:end]) != expected[name]]
++    hook = PART2_HOOK_A3_FILE
++    if (bytes(rom[hook + 0x80:hook + 0x84]) != PART2_HOOK_A3[0x80:0x84]
++            or bytes(rom[hook + 0x90:hook + 0x94]) != PART2_HOOK_A3[0x90:0x94]
++            or struct.unpack_from('<I', rom, hook + PART2_HOOK_A3_TABLE_START_OFF)[0] != P.NEW_TBL_RT):
++        bad.append('a3_min_mask_start')
++    table_end = P.NEW_TBL_RT + sum(NAME_COMPOSE_TABLE_ENTRIES) * 6
++    for literal in NAME_COMPOSE_END_LITERALS:
++        if struct.unpack_from('<I', rom, literal)[0] != table_end:
++            bad.append(f'end_literal_0x{literal:X}')
++    for start, value in NAME_COMPOSE_KEEP:
++        if bytes(rom[start:start + 4]) != value:
++            bad.append(f'keep_0x{start:X}')
++    return bad
++
++
++def _verify_part2_name_compose(rom, orig):
++    """최종 payload 필수 대조. 불일치 영역이 하나라도 있으면 AssertionError."""
++    syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
++    expected = _name_compose_expected(syl_to_code, _name_compose_inputs(orig, syl_to_code))
++    bad = _name_compose_mismatches(rom, expected, {name for name, _, _ in NAME_COMPOSE_WRITES})
++    if bad:
++        raise AssertionError('name-compose final payload mismatch: ' + ', '.join(bad))
++    import part2_name_compose_blob as blob
++    return {'code_bytes': len(blob.CODE), 'code_sha256': blob.CODE_SHA,
++            'a3_max': f'0x{struct.unpack("<I", expected["a3_max"])[0]:04X}',
++            'table_end': f'0x{P.NEW_TBL_RT + sum(NAME_COMPOSE_TABLE_ENTRIES) * 6:08X}'}
++
++
++def _part2_name_compose(rom, orig):
++    """자모 타일·nc_dense·코드 이미지와 S1~S3·D1·P1 훅을 쓴다(PLAN-v5 T3).
++
++    A3 max·표 tail·end 리터럴은 앞 단계(_name_compose_a3_max·_name_compose_table_tail)가 이미
++    썼어야 한다. 사전조건을 모두 확인한 뒤에만 쓴다 — 실패하면 ValueError, rom 불변.
++    """
++    syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
++    expected = _name_compose_expected(syl_to_code, _name_compose_inputs(orig, syl_to_code))
++    regions = NAME_COMPOSE_REGIONS
++    errors = [f'{name}: earlier stage mismatch' for name in
++              _name_compose_mismatches(rom, expected, {'a3_table_tail', 'a3_max'})]
++    for name, original in NAME_COMPOSE_SITES:
++        start, end = regions[name]
++        if bytes(orig[start:end]) != original:
++            errors.append(f'{name}: original ROM differs from expect')
++        if bytes(rom[start:end]) != original:
++            errors.append(f'{name}: site already changed')
++    for start, value in NAME_COMPOSE_KEEP:
++        if bytes(orig[start:start + 4]) != value:
++            errors.append(f'keep pointer 0x{start:X}: original ROM differs from expect')
++    if any(rom[regions['jamo_tiles'][0]:regions['jamo_tiles'][1]]):
++        errors.append('jamo_tiles: region not empty')
++    # nc_dense·이미지와 그 사이 틈(F75748..F75800)까지 비어 있어야 한다.
++    if any(rom[regions['nc_dense'][0]:regions['nc_image'][1]]):
++        errors.append('F70000..F77800 not empty')
++    if any(rom[0xF09F20:0xF09F40]) or not any(rom[0xF09F40:0xF09F60]):
++        errors.append('tile 1273 blank / 1274 private 자 changed')
++    if errors:
++        raise ValueError('name-compose preconditions failed: ' + '; '.join(errors))
++    for name, start, end in NAME_COMPOSE_WRITES:
++        if name not in ('a3_table_tail', 'a3_max'):
++            rom[start:end] = expected[name]
++    return _verify_part2_name_compose(rom, orig)
++
++
+ PART2_A3_TRAMP_SITE = 0xA3C7E8
+ PART2_A3_TRAMP_EXPECT = bytes.fromhex('047840780e4a3f28')
+ PART2_A3_SPACE_TABLE_ENTRY = 0x3142CC  # first jump table entry for byte 0x20: 0x08314270 + (0x20 - 0x09) * 4
+@@ -14397,12 +14600,8 @@ def _build(args, publication):
+     # 회귀 가드(2026-06-16): A3 글리프캐시 렌더러 hook은 예약-한글 코드를 [min,max] 범위로
+     # 1차 판별한다(PART2_HOOK_A3의 0x8840..max 리터럴). max가 실제 2350 최대 코드보다 작으면
+     # 그 위 음절은 A3에서 '?'로 깨진다(과거 0x9369=1030 한정 버그). 코드맵이 바뀌면 hook 동기화 강제.
+-    _a3_max = struct.unpack('<I', PART2_HOOK_A3[PART2_HOOK_A3.index(bytes.fromhex('40880000')) + 4:
+-                                              PART2_HOOK_A3.index(bytes.fromhex('40880000')) + 8])[0]
+-    if max(syl_to_code.values()) > _a3_max:
+-        raise AssertionError(
+-            f'A3 hook max code 0x{_a3_max:X} < 실제 최대 예약코드 0x{max(syl_to_code.values()):X} — '
+-            f'PART2_HOOK_A3 max 리터럴을 갱신하라(2350 확장분이 A3에서 깨짐).')
++    # 2편 이름 조합 자모 40(0xE2A8..)까지 포함해 기록된 F30304 값을 다시 읽어 대조한다.
++    _name_compose_a3_max(rom, syl_to_code, orig)
+ 
+     # 5) 테이블 확장 — 원본 한자 테이블 + 한글 엔트리(idx에 bit15 마커 → hook이 KOR_BASE 사용)
+     syllables = sorted(sylmap.keys())
+@@ -14414,6 +14613,8 @@ def _build(args, publication):
+         bot = sylmap[s]['bot'] | 0x8000
+         new_tbl += bytes([code >> 8, code & 0xFF]) + struct.pack('<H', top) + struct.pack('<H', bot)
+     _assert_relocated_korean_indices(new_tbl, sylmap, syl_to_code)
++    # 2편 이름 조합 자모 40 엔트리 → 0xF243A4..0xF24494. 아래 end 리터럴 4곳이 늘어난 길이를 쓴다.
++    new_tbl += _name_compose_table_tail(rom, new_tbl, orig_tbl, sylmap, syl_to_code, orig)
+     rom[P.NEW_TBL_FILE:P.NEW_TBL_FILE + len(new_tbl)] = new_tbl
+     P.patch_word(rom, P.LIT_TBL_START, P.NEW_TBL_RT)
+     P.patch_word(rom, P.LIT_TBL_END, P.NEW_TBL_RT + len(new_tbl))
+@@ -24689,6 +24890,7 @@ def _build(args, publication):
+         st['dialogue_native_messages'] = _pixel_audit['summary']['physical_messages']
+         with open(os.path.join(BASE, 'temp', 'dialogue_layout_applied.json'), 'w', encoding='utf-8') as _stream:
+             json.dump(_layout_applied, _stream, ensure_ascii=False, indent=1)
++    st['part2_name_compose'] = _part2_name_compose(rom, orig)
+     shift_dialogue_wait_cursor_right(rom, orig)
+     rom[0xBD] = (-(0x19 + sum(rom[0xA0:0xBD]))) & 0xFF
+     assert len(rom) == 0x1000000
+diff --git a/tools/part2_native_controls.py b/tools/part2_native_controls.py
+index 8ad7213..1a1a776 100644
+--- a/tools/part2_native_controls.py
++++ b/tools/part2_native_controls.py
+@@ -20,6 +20,11 @@ NATIVE_REGIONS['newline'] = {'start': 3229078, 'end': 3229118, 'sha256': 'e99c0b
+ 
+ PATCH_REGIONS = {'a3_glyph_trampoline': {'start': 10733544, 'end': 10733552, 'sha256': 'de24a9960f799c6bfbe64f9337e781b9ddfa49475b19ec86e385fd4ed581c585'}, 'a3_glyph_hook': {'start': 15925888, 'end': 15926080, 'sha256': 'ed6ef6982d315dcc00fe0c628d6f700c48718c9953665dd8963ed3a0d5c2fddf'}, 'space_313_trampoline': {'start': 3227606, 'end': 3227616, 'sha256': '1c8093a8bde3848bbd523c2dc33286f29e9fbb31fd86214286476507e5bc8af6'}, 'space_313_hook': {'start': 15926112, 'end': 15926172, 'sha256': 'ef575db9896f1b6fecf7fbc0259244ee73e88effbc56b073198cc53ec7cb0132'}, 'space_b11_trampoline': {'start': 11607550, 'end': 11607560, 'sha256': '1a49138f2b550c540419a7b5adad147e8272e912f3b72dd26b5a95405116dc6d'}, 'space_b11_hook': {'start': 15926176, 'end': 15926236, 'sha256': 'f1424c9eec9df0bb012e5b2ce0cb9098f07e1412ec8a334bcf3b9bafe8c0ae16'}}
+ 
++# The only other accepted A3 hook: the reviewed bytes above with just the max code
++# (+0x84 = 0xE352, 2350 + name-compose jamo) and table end (+0x8C = 0x08F24494)
++# literals widened (PLAN-v5 §1.7). Exact hashes only; nothing is normalized.
++PATCH_REGION_VERSIONS = {'a3_glyph_hook': ('a36e078dc12a77facf3d6b130b7375e071622678180577105713345b499b9cd2',)}
++
+ class NativeConsumerError(ValueError):
+     pass
+ 
+@@ -47,7 +52,8 @@ def verify_patch_connections(rom, names=None):
+     result={}
+     for name in (names if names is not None else PATCH_REGIONS):
+         spec=PATCH_REGIONS[name];actual=sha(rom[spec['start']:spec['end']])
+-        if actual!=spec['sha256']:raise NativeConsumerError('P2 patched hook changed: '+name)
++        if actual!=spec['sha256'] and actual not in PATCH_REGION_VERSIONS.get(name,()):
++            raise NativeConsumerError('P2 patched hook changed: '+name)
+         result[name]=actual
+     return result
+ 
+diff --git a/tools/test_part2_native_controls.py b/tools/test_part2_native_controls.py
+index 0bcf1b0..78de10f 100644
+--- a/tools/test_part2_native_controls.py
++++ b/tools/test_part2_native_controls.py
+@@ -36,6 +36,24 @@ class NativePart2Tests(unittest.TestCase):
+                 rom=bytearray(self.rom);rom[a]^=1
+                 with self.assertRaises(N.NativeConsumerError):N.NativeProfile(bytes(rom))
+ 
++    def test_name_compose_a3_hook_version_is_exact(self):
++        # PLAN-v5 §1.7 widens only the max (+0x84) and table end (+0x8C) literals.
++        base=0xF30280;hook=bytearray(bytes.fromhex(HOOK_FIXTURE[base]))
++        new=bytearray(hook);struct.pack_into('<I',new,0x84,0xE352);struct.pack_into('<I',new,0x8C,0x08F24494)
++        self.assertEqual(N.sha(new),N.PATCH_REGION_VERSIONS['a3_glyph_hook'][0])
++        def profile(region):
++            rom=bytearray(self.rom);rom[base:base+len(region)]=region;return N.NativeProfile(bytes(rom))
++        self.assertEqual(profile(hook).connections['a3_glyph_hook'],N.PATCH_REGIONS['a3_glyph_hook']['sha256'])
++        self.assertEqual(profile(new).connections['a3_glyph_hook'],N.sha(new))
++        only_max=bytearray(hook);only_max[0x84:0x88]=new[0x84:0x88]
++        only_end=bytearray(hook);only_end[0x8C:0x90]=new[0x8C:0x90]
++        bad=[only_max,only_end]
++        for offset in (0x00,0x7C,0x84,0x85,0x8C,0x8E,0x90,0xBF):  # opcode·page·max·end·mask·tail
++            region=bytearray(new);region[offset]^=1;bad.append(region)
++        for region in bad:
++            with self.subTest(region=region.hex()):
++                with self.assertRaises(N.NativeConsumerError):profile(region)
++
+     def test_unknown_scope_does_not_promote_aliases_or_padding(self):
+         raw=bytes.fromhex('88402088415788404b00')
+         tokens=Q.tokenize(raw)

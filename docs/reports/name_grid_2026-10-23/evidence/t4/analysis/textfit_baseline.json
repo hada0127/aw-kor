@@ -1,0 +1,7051 @@
+{
+ "source": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/baseline-build/source",
+ "qa_text_fit": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/baseline-build/source/tools/qa_text_fit.py",
+ "foreign_modules": [],
+ "main_return": 0,
+ "check_text_calls": 18584,
+ "unreturned": 0,
+ "printed": {
+  "overflow": 273,
+  "wider": 507
+ },
+ "stdout": "written(한글 인코딩): 18311\nfit levels: level0=16563, level1=1551, level2=27, level3=12, level4=6, level5=0, level6=68, level7=31, level8=1, level9=1, level10=35, level11=14, level12=2\nlayout-loss fallback(level>=6, 재배치 검토): 152\noverflow(슬롯초과 skip→원문): 273\nno_ko: 0, intentional_blank_override: 7, code_region: 2165, no_slot: 0, deny/data-skip: 393\nvisual-wider than JA: 507 (2.8%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)\nfinal-ROM protected non-Korean: 0/485 ()\n",
+ "overflow": {
+  "events": 273,
+  "unique_addresses": 259,
+  "set_with_multiplicity": {
+   "0xA01B98": 1,
+   "0xA01C78": 1,
+   "0xA0237C": 1,
+   "0xA043A8": 1,
+   "0xA0511F": 1,
+   "0xA05454": 1,
+   "0xA05DE6": 1,
+   "0xA05E68": 1,
+   "0xA06620": 2,
+   "0xA06974": 1,
+   "0xA07330": 2,
+   "0xA074AC": 2,
+   "0xA08470": 1,
+   "0xA08930": 2,
+   "0xA08B98": 2,
+   "0xA090A4": 2,
+   "0xA0922C": 1,
+   "0xA09D8A": 1,
+   "0xA0BC9C": 2,
+   "0xA10EDC": 1,
+   "0xA152F0": 1,
+   "0xA153F0": 1,
+   "0xA1597C": 1,
+   "0xA16094": 1,
+   "0xA1C104": 1,
+   "0xA1C75C": 1,
+   "0xA1C8E8": 1,
+   "0xA1CA1C": 1,
+   "0xA1CC5C": 1,
+   "0xA1D294": 1,
+   "0xA1EDF8": 1,
+   "0xA1FA14": 1,
+   "0xA20F38": 1,
+   "0xA22708": 1,
+   "0xA229CC": 1,
+   "0xA24518": 1,
+   "0xA24784": 1,
+   "0xA24804": 1,
+   "0xA24AAC": 1,
+   "0xA24B68": 1,
+   "0xA250EC": 2,
+   "0xA259CC": 1,
+   "0xA262B0": 1,
+   "0xA26704": 1,
+   "0xA26BEC": 1,
+   "0xA2AA08": 1,
+   "0xA2BC3C": 1,
+   "0xA2C040": 1,
+   "0xA2C0C0": 1,
+   "0xA2C1E8": 1,
+   "0xA2C238": 1,
+   "0xA2C25C": 1,
+   "0xA2C2F4": 1,
+   "0xA2C378": 1,
+   "0xA2C3A8": 1,
+   "0xA2C440": 1,
+   "0xA2C45C": 1,
+   "0xA2C484": 1,
+   "0xA2C5AC": 1,
+   "0xA2C5C8": 1,
+   "0xA2C644": 1,
+   "0xA2C804": 1,
+   "0xA2C950": 1,
+   "0xA2C9B4": 1,
+   "0xA2CA10": 1,
+   "0xA2CABC": 1,
+   "0xA2D5C8": 1,
+   "0xA2D650": 1,
+   "0xA2D684": 1,
+   "0xA2D6AC": 1,
+   "0xA2D6F0": 1,
+   "0xA2D72C": 1,
+   "0xA2D73C": 1,
+   "0xA302AC": 1,
+   "0xA304A8": 1,
+   "0xA30620": 1,
+   "0xA30640": 1,
+   "0xA30860": 1,
+   "0xA3088C": 1,
+   "0xA30904": 1,
+   "0xA30930": 1,
+   "0xA30968": 1,
+   "0xA30A6C": 1,
+   "0xA30D5C": 1,
+   "0xA30DCC": 1,
+   "0xA30E74": 1,
+   "0xA30EDC": 1,
+   "0xA313FC": 1,
+   "0xA34E98": 1,
+   "0xA34FEC": 1,
+   "0xA350B4": 1,
+   "0xA35228": 1,
+   "0xA35258": 1,
+   "0xA35280": 1,
+   "0xB81884": 1,
+   "0xB81A20": 1,
+   "0xB81E08": 1,
+   "0xB81E1C": 1,
+   "0xB81E50": 1,
+   "0xB81E78": 1,
+   "0xB81E8C": 1,
+   "0xB81E98": 1,
+   "0xB81F04": 1,
+   "0xB81F40": 1,
+   "0xB81F70": 1,
+   "0xB81F80": 1,
+   "0xB81FAC": 1,
+   "0xB81FC4": 1,
+   "0xB81FF4": 1,
+   "0xB828E4": 1,
+   "0xB82D92": 1,
+   "0xB82D9E": 1,
+   "0xB82DAA": 1,
+   "0xB82FAC": 1,
+   "0xB8301C": 1,
+   "0xB83044": 1,
+   "0xB830C8": 1,
+   "0xB83A64": 1,
+   "0xB83DB0": 1,
+   "0xB83FA8": 1,
+   "0xB84298": 1,
+   "0xB84A48": 1,
+   "0xB84BA0": 1,
+   "0xB84BB4": 1,
+   "0xD82218": 1,
+   "0xD82364": 1,
+   "0xD823C8": 1,
+   "0xD82424": 1,
+   "0xD824B0": 1,
+   "0xD8F55E": 1,
+   "0xD9219E": 1,
+   "0xD9287C": 1,
+   "0xD9444E": 1,
+   "0xD94552": 1,
+   "0xD95EF2": 1,
+   "0xD965DE": 1,
+   "0xD96F66": 1,
+   "0xD98136": 1,
+   "0xD9B210": 1,
+   "0xD9C4B2": 1,
+   "0xD9EB86": 1,
+   "0xD9EDB6": 1,
+   "0xD9F3E2": 2,
+   "0xDA0616": 1,
+   "0xDA0802": 1,
+   "0xDC2ECA": 1,
+   "0xDC3822": 2,
+   "0xDC3B1E": 1,
+   "0xDC3C63": 1,
+   "0xDC4466": 3,
+   "0xDC50C2": 1,
+   "0xDC611A": 1,
+   "0xDC6F06": 1,
+   "0xDC7E9A": 1,
+   "0xDCB1BE": 1,
+   "0xDCBA1A": 1,
+   "0xDCBB36": 1,
+   "0xDCC622": 1,
+   "0xDCC63A": 1,
+   "0xDCCE86": 1,
+   "0xDCD9C2": 1,
+   "0xDCD9DA": 1,
+   "0xDCDEEB": 2,
+   "0xDCE89A": 1,
+   "0xDCEA43": 2,
+   "0xDCFA8E": 1,
+   "0xDD0036": 1,
+   "0xDD010A": 1,
+   "0xDD054A": 1,
+   "0xDE9D8E": 1,
+   "0xDE9F4A": 1,
+   "0xDEA136": 1,
+   "0xDEA376": 1,
+   "0xDEA54A": 1,
+   "0xDEB85E": 1,
+   "0xDEB93A": 1,
+   "0xDED00A": 1,
+   "0xDED38A": 1,
+   "0xDED65A": 1,
+   "0xDEE3EA": 1,
+   "0xDEE442": 1,
+   "0xDEE496": 1,
+   "0xDEE7AA": 1,
+   "0xDEEFF6": 1,
+   "0xDEF0B2": 1,
+   "0xDEF3E2": 1,
+   "0xDF1EEE": 1,
+   "0xDF2026": 1,
+   "0xDF207A": 1,
+   "0xDF20BA": 1,
+   "0xDF217E": 1,
+   "0xDF21AE": 1,
+   "0xDF21EE": 1,
+   "0xDF228E": 1,
+   "0xDF239E": 1,
+   "0xDF25FA": 1,
+   "0xDF266E": 1,
+   "0xDF26FE": 1,
+   "0xDF2806": 1,
+   "0xDF285A": 1,
+   "0xDF28C2": 1,
+   "0xDF2966": 1,
+   "0xDF2DA6": 1,
+   "0xDF3287": 1,
+   "0xDF332A": 1,
+   "0xDF33B7": 1,
+   "0xDF369F": 1,
+   "0xDF3AFA": 1,
+   "0xDF422E": 1,
+   "0xDF437A": 1,
+   "0xDF44F6": 1,
+   "0xDF587B": 1,
+   "0xDF58DB": 1,
+   "0xDF59CF": 1,
+   "0xDF6146": 1,
+   "0xDF6E0E": 1,
+   "0xDF7032": 1,
+   "0xDF77DE": 1,
+   "0xDF8DB2": 1,
+   "0xDF8E16": 1,
+   "0xDF8E6E": 1,
+   "0xDF92CA": 1,
+   "0xDFA616": 1,
+   "0xDFA79A": 1,
+   "0xDFA7BE": 1,
+   "0xDFA8AA": 1,
+   "0xDFA8EA": 1,
+   "0xDFA90A": 1,
+   "0xDFA926": 1,
+   "0xDFB4F2": 1,
+   "0xDFB56A": 1,
+   "0xDFB982": 1,
+   "0xDFCFDE": 1,
+   "0xDFD0B6": 1,
+   "0xDFD1B2": 1,
+   "0xE0112E": 1,
+   "0xE0374E": 1,
+   "0xE03852": 1,
+   "0xE05A32": 1,
+   "0xE0630A": 1,
+   "0xE07CA6": 1,
+   "0xE08DFC": 1,
+   "0xE0A028": 1,
+   "0xE0B0CC": 1,
+   "0xE0C0F2": 1,
+   "0xE0C2D4": 1,
+   "0xE0D378": 1,
+   "0xE0E592": 1,
+   "0xE0E614": 1,
+   "0xE0EFD2": 1,
+   "0xE0F6E2": 1,
+   "0xE0F772": 1,
+   "0xE0FF0C": 1,
+   "0xE10D7A": 1,
+   "0xEC30A2": 1,
+   "0xEC312E": 1,
+   "0xEC3162": 1,
+   "0xEC3192": 1,
+   "0xEC3246": 1
+  },
+  "repeated": {
+   "0xA06620": 2,
+   "0xA07330": 2,
+   "0xA074AC": 2,
+   "0xA08930": 2,
+   "0xA08B98": 2,
+   "0xA090A4": 2,
+   "0xA0BC9C": 2,
+   "0xA250EC": 2,
+   "0xD9F3E2": 2,
+   "0xDC3822": 2,
+   "0xDC4466": 3,
+   "0xDCDEEB": 2,
+   "0xDCEA43": 2
+  },
+  "count_matches_printed": true
+ },
+ "wider": {
+  "events": 507,
+  "unique_addresses": 507,
+  "set_with_multiplicity": {
+   "0xA01BA9": 1,
+   "0xA04612": 1,
+   "0xA04715": 1,
+   "0xA050C1": 1,
+   "0xA0536E": 1,
+   "0xA057A4": 1,
+   "0xA058C2": 1,
+   "0xA060C5": 1,
+   "0xA061EB": 1,
+   "0xA06888": 1,
+   "0xA07901": 1,
+   "0xA07B1F": 1,
+   "0xA07F7C": 1,
+   "0xA087BC": 1,
+   "0xA0887F": 1,
+   "0xA08987": 1,
+   "0xA0964B": 1,
+   "0xA0A888": 1,
+   "0xA0AFA0": 1,
+   "0xA0D75C": 1,
+   "0xA0F27A": 1,
+   "0xA0FBF4": 1,
+   "0xA10654": 1,
+   "0xA11363": 1,
+   "0xA129D0": 1,
+   "0xA12BF4": 1,
+   "0xA1453F": 1,
+   "0xA14B0C": 1,
+   "0xA155AD": 1,
+   "0xA15648": 1,
+   "0xA15E8C": 1,
+   "0xA164AD": 1,
+   "0xA17243": 1,
+   "0xA17828": 1,
+   "0xA17EEB": 1,
+   "0xA19774": 1,
+   "0xA19DF9": 1,
+   "0xA1A3DB": 1,
+   "0xA1B81C": 1,
+   "0xA1BF0E": 1,
+   "0xA1D45A": 1,
+   "0xA1E923": 1,
+   "0xA1EDAC": 1,
+   "0xA1F204": 1,
+   "0xA1FC4C": 1,
+   "0xA1FD09": 1,
+   "0xA1FDCA": 1,
+   "0xA1FE79": 1,
+   "0xA1FF2B": 1,
+   "0xA20A9A": 1,
+   "0xA20D3C": 1,
+   "0xA21733": 1,
+   "0xA2185B": 1,
+   "0xA219AB": 1,
+   "0xA21B7A": 1,
+   "0xA21E2E": 1,
+   "0xA23647": 1,
+   "0xA24573": 1,
+   "0xA245B7": 1,
+   "0xA24854": 1,
+   "0xA26DAC": 1,
+   "0xA2785D": 1,
+   "0xA27ECC": 1,
+   "0xA27F7D": 1,
+   "0xA289D2": 1,
+   "0xA2E21F": 1,
+   "0xB82F7C": 1,
+   "0xB8306C": 1,
+   "0xB830EC": 1,
+   "0xB83160": 1,
+   "0xB83188": 1,
+   "0xB83870": 1,
+   "0xB8387C": 1,
+   "0xB838A4": 1,
+   "0xB838B0": 1,
+   "0xB838BC": 1,
+   "0xB83A3C": 1,
+   "0xB83A98": 1,
+   "0xB83BAC": 1,
+   "0xB83C70": 1,
+   "0xB83CA8": 1,
+   "0xB83D38": 1,
+   "0xB83D98": 1,
+   "0xB83F58": 1,
+   "0xB83FF8": 1,
+   "0xB84104": 1,
+   "0xB841E4": 1,
+   "0xB84238": 1,
+   "0xD82058": 1,
+   "0xD820BC": 1,
+   "0xD8215C": 1,
+   "0xD82384": 1,
+   "0xD823A8": 1,
+   "0xD8F30E": 1,
+   "0xD8F3B6": 1,
+   "0xD8F6CF": 1,
+   "0xD8F92C": 1,
+   "0xD8FAEE": 1,
+   "0xD8FCC9": 1,
+   "0xD8FE6C": 1,
+   "0xD900C9": 1,
+   "0xD90317": 1,
+   "0xD911A9": 1,
+   "0xD91383": 1,
+   "0xD9141F": 1,
+   "0xD918D3": 1,
+   "0xD944BE": 1,
+   "0xD94602": 1,
+   "0xD94B6E": 1,
+   "0xD94F9D": 1,
+   "0xD95F8E": 1,
+   "0xD9628C": 1,
+   "0xD9AAAC": 1,
+   "0xD9B4EF": 1,
+   "0xD9CFC1": 1,
+   "0xD9D145": 1,
+   "0xD9D876": 1,
+   "0xD9DF51": 1,
+   "0xD9E10C": 1,
+   "0xD9E522": 1,
+   "0xD9E71C": 1,
+   "0xD9F36D": 1,
+   "0xD9FF3E": 1,
+   "0xDA0A1F": 1,
+   "0xDA187B": 1,
+   "0xDA2313": 1,
+   "0xDA237F": 1,
+   "0xDA3140": 1,
+   "0xDA342D": 1,
+   "0xDA3538": 1,
+   "0xDA35F0": 1,
+   "0xDA368F": 1,
+   "0xDA3B4B": 1,
+   "0xDA3CD1": 1,
+   "0xDC2E06": 1,
+   "0xDC39E8": 1,
+   "0xDC3DBD": 1,
+   "0xDC427F": 1,
+   "0xDC42EB": 1,
+   "0xDC4B8A": 1,
+   "0xDC4F4E": 1,
+   "0xDC5021": 1,
+   "0xDC53D6": 1,
+   "0xDC559E": 1,
+   "0xDC5D83": 1,
+   "0xDC6342": 1,
+   "0xDC6376": 1,
+   "0xDC65BA": 1,
+   "0xDC7D4F": 1,
+   "0xDC8372": 1,
+   "0xDC8F66": 1,
+   "0xDC9E02": 1,
+   "0xDCA062": 1,
+   "0xDCA4C2": 1,
+   "0xDCA862": 1,
+   "0xDCB632": 1,
+   "0xDCCAC8": 1,
+   "0xDCED17": 1,
+   "0xDCF535": 1,
+   "0xDCF56E": 1,
+   "0xDCFDE8": 1,
+   "0xDCFE92": 1,
+   "0xDCFFCA": 1,
+   "0xDD0137": 1,
+   "0xDD02E8": 1,
+   "0xDD0795": 1,
+   "0xDD0C29": 1,
+   "0xDD0CBF": 1,
+   "0xDD136F": 1,
+   "0xDD13B2": 1,
+   "0xDD1CF0": 1,
+   "0xDEA58B": 1,
+   "0xDEA5D5": 1,
+   "0xDEB8FE": 1,
+   "0xDEB916": 1,
+   "0xDEB95A": 1,
+   "0xDECB35": 1,
+   "0xDECCB5": 1,
+   "0xDECFCD": 1,
+   "0xDED1F6": 1,
+   "0xDED20D": 1,
+   "0xDED23A": 1,
+   "0xDED24F": 1,
+   "0xDED275": 1,
+   "0xDED2A3": 1,
+   "0xDED2F6": 1,
+   "0xDED33E": 1,
+   "0xDED35B": 1,
+   "0xDED3B2": 1,
+   "0xDED3FE": 1,
+   "0xDED45E": 1,
+   "0xDED535": 1,
+   "0xDED5BE": 1,
+   "0xDED606": 1,
+   "0xDED623": 1,
+   "0xDED6D2": 1,
+   "0xDED73A": 1,
+   "0xDED7A5": 1,
+   "0xDED8EA": 1,
+   "0xDED8FF": 1,
+   "0xDED965": 1,
+   "0xDED995": 1,
+   "0xDEDA17": 1,
+   "0xDEDA7E": 1,
+   "0xDEDAD1": 1,
+   "0xDEDAEC": 1,
+   "0xDEDB02": 1,
+   "0xDEDB17": 1,
+   "0xDEDB75": 1,
+   "0xDEDC47": 1,
+   "0xDEDCCD": 1,
+   "0xDEDD35": 1,
+   "0xDEDDB0": 1,
+   "0xDEDEDD": 1,
+   "0xDEDFE0": 1,
+   "0xDEDFF3": 1,
+   "0xDEE006": 1,
+   "0xDEE04A": 1,
+   "0xDEE0D6": 1,
+   "0xDEE19F": 1,
+   "0xDEE1B6": 1,
+   "0xDEE1FA": 1,
+   "0xDEE211": 1,
+   "0xDEE3B5": 1,
+   "0xDEE45B": 1,
+   "0xDEE506": 1,
+   "0xDEE595": 1,
+   "0xDEE5CE": 1,
+   "0xDEE612": 1,
+   "0xDEE629": 1,
+   "0xDEE71F": 1,
+   "0xDEE73A": 1,
+   "0xDEE7EB": 1,
+   "0xDEE8D1": 1,
+   "0xDEE931": 1,
+   "0xDEEA22": 1,
+   "0xDEEA4E": 1,
+   "0xDEEA72": 1,
+   "0xDEEA91": 1,
+   "0xDEEAAE": 1,
+   "0xDEEB38": 1,
+   "0xDEEB7B": 1,
+   "0xDEEB90": 1,
+   "0xDEECB1": 1,
+   "0xDEED2D": 1,
+   "0xDEED59": 1,
+   "0xDEEDF8": 1,
+   "0xDEEE61": 1,
+   "0xDEEFA9": 1,
+   "0xDEF0FA": 1,
+   "0xDEF111": 1,
+   "0xDEF169": 1,
+   "0xDEF17C": 1,
+   "0xDEF1B5": 1,
+   "0xDEF250": 1,
+   "0xDEF2A8": 1,
+   "0xDEF300": 1,
+   "0xDEF3FB": 1,
+   "0xDEF4C6": 1,
+   "0xDEF533": 1,
+   "0xDEFDA7": 1,
+   "0xDF1EA6": 1,
+   "0xDF1F2E": 1,
+   "0xDF1F6E": 1,
+   "0xDF215F": 1,
+   "0xDF233B": 1,
+   "0xDF23CD": 1,
+   "0xDF2453": 1,
+   "0xDF247A": 1,
+   "0xDF24EA": 1,
+   "0xDF25C4": 1,
+   "0xDF2A4D": 1,
+   "0xDF2C1C": 1,
+   "0xDF2DC3": 1,
+   "0xDF2E50": 1,
+   "0xDF2E6F": 1,
+   "0xDF2E84": 1,
+   "0xDF2EA1": 1,
+   "0xDF2F28": 1,
+   "0xDF2F43": 1,
+   "0xDF2FE3": 1,
+   "0xDF3000": 1,
+   "0xDF3049": 1,
+   "0xDF3178": 1,
+   "0xDF32AF": 1,
+   "0xDF32CE": 1,
+   "0xDF3402": 1,
+   "0xDF345D": 1,
+   "0xDF34AD": 1,
+   "0xDF34BE": 1,
+   "0xDF3503": 1,
+   "0xDF3683": 1,
+   "0xDF36BC": 1,
+   "0xDF3742": 1,
+   "0xDF3815": 1,
+   "0xDF3830": 1,
+   "0xDF386C": 1,
+   "0xDF3961": 1,
+   "0xDF3978": 1,
+   "0xDF39CC": 1,
+   "0xDF425A": 1,
+   "0xDF4478": 1,
+   "0xDF44B9": 1,
+   "0xDF453F": 1,
+   "0xDF56EB": 1,
+   "0xDF577B": 1,
+   "0xDF57A7": 1,
+   "0xDF57E5": 1,
+   "0xDF580F": 1,
+   "0xDF5863": 1,
+   "0xDF588F": 1,
+   "0xDF58ED": 1,
+   "0xDF59B9": 1,
+   "0xDF59E3": 1,
+   "0xDF5A67": 1,
+   "0xDF60C6": 1,
+   "0xDF6118": 1,
+   "0xDF6263": 1,
+   "0xDF627C": 1,
+   "0xDF6404": 1,
+   "0xDF646D": 1,
+   "0xDF65C6": 1,
+   "0xDF65F1": 1,
+   "0xDF661E": 1,
+   "0xDF662F": 1,
+   "0xDF6642": 1,
+   "0xDF66C0": 1,
+   "0xDF66E3": 1,
+   "0xDF67EB": 1,
+   "0xDF68E0": 1,
+   "0xDF6A66": 1,
+   "0xDF6C36": 1,
+   "0xDF6D67": 1,
+   "0xDF6E46": 1,
+   "0xDF706E": 1,
+   "0xDF70D2": 1,
+   "0xDF71C9": 1,
+   "0xDF72B8": 1,
+   "0xDF7371": 1,
+   "0xDF740E": 1,
+   "0xDF74F2": 1,
+   "0xDF75DA": 1,
+   "0xDF762A": 1,
+   "0xDF77A2": 1,
+   "0xDF9174": 1,
+   "0xDF91D0": 1,
+   "0xDF9594": 1,
+   "0xDF969A": 1,
+   "0xDFAF03": 1,
+   "0xDFAF43": 1,
+   "0xDFB2E3": 1,
+   "0xDFB361": 1,
+   "0xDFB3BD": 1,
+   "0xDFB3E8": 1,
+   "0xDFB42A": 1,
+   "0xDFB4A8": 1,
+   "0xDFB4D7": 1,
+   "0xDFB501": 1,
+   "0xDFB517": 1,
+   "0xDFB54B": 1,
+   "0xDFB644": 1,
+   "0xDFB695": 1,
+   "0xDFB723": 1,
+   "0xDFB809": 1,
+   "0xDFB87A": 1,
+   "0xDFB8C7": 1,
+   "0xDFBA02": 1,
+   "0xDFBA3E": 1,
+   "0xDFBB13": 1,
+   "0xDFBB41": 1,
+   "0xDFBB98": 1,
+   "0xDFBD6D": 1,
+   "0xDFBD86": 1,
+   "0xDFBDDB": 1,
+   "0xDFBE42": 1,
+   "0xDFBE9A": 1,
+   "0xDFBEC3": 1,
+   "0xDFBF70": 1,
+   "0xDFC0BB": 1,
+   "0xDFC115": 1,
+   "0xDFC159": 1,
+   "0xDFC180": 1,
+   "0xDFC215": 1,
+   "0xDFC2F3": 1,
+   "0xDFC3CE": 1,
+   "0xDFC436": 1,
+   "0xDFC44F": 1,
+   "0xDFC4A1": 1,
+   "0xDFC5DE": 1,
+   "0xDFC775": 1,
+   "0xDFC7DB": 1,
+   "0xDFC8FA": 1,
+   "0xDFC940": 1,
+   "0xDFC9A5": 1,
+   "0xDFCA93": 1,
+   "0xDFCADD": 1,
+   "0xDFCCA4": 1,
+   "0xDFCDBD": 1,
+   "0xDFCDEC": 1,
+   "0xDFCE86": 1,
+   "0xDFCEF1": 1,
+   "0xDFCF8A": 1,
+   "0xDFCFB6": 1,
+   "0xDFD006": 1,
+   "0xDFD031": 1,
+   "0xDFD082": 1,
+   "0xDFD0DF": 1,
+   "0xDFD133": 1,
+   "0xDFD162": 1,
+   "0xDFD402": 1,
+   "0xDFD556": 1,
+   "0xDFD5CE": 1,
+   "0xDFF0BE": 1,
+   "0xDFF104": 1,
+   "0xDFF1AD": 1,
+   "0xDFF222": 1,
+   "0xDFF7BE": 1,
+   "0xDFF872": 1,
+   "0xDFF8C5": 1,
+   "0xDFF8E7": 1,
+   "0xDFF910": 1,
+   "0xDFF9F6": 1,
+   "0xE007D3": 1,
+   "0xE00813": 1,
+   "0xE00A50": 1,
+   "0xE0187B": 1,
+   "0xE018C6": 1,
+   "0xE018F9": 1,
+   "0xE01FF7": 1,
+   "0xE020A0": 1,
+   "0xE0270E": 1,
+   "0xE027C7": 1,
+   "0xE02816": 1,
+   "0xE02894": 1,
+   "0xE02944": 1,
+   "0xE03056": 1,
+   "0xE03157": 1,
+   "0xE03835": 1,
+   "0xE038A6": 1,
+   "0xE038D6": 1,
+   "0xE03934": 1,
+   "0xE04162": 1,
+   "0xE04F5E": 1,
+   "0xE04FC3": 1,
+   "0xE0508C": 1,
+   "0xE051B7": 1,
+   "0xE05205": 1,
+   "0xE05975": 1,
+   "0xE059A2": 1,
+   "0xE05A15": 1,
+   "0xE05A53": 1,
+   "0xE05B42": 1,
+   "0xE062C4": 1,
+   "0xE06329": 1,
+   "0xE06369": 1,
+   "0xE063A1": 1,
+   "0xE063BE": 1,
+   "0xE063E7": 1,
+   "0xE06B05": 1,
+   "0xE07B3A": 1,
+   "0xE07BAA": 1,
+   "0xE07CC7": 1,
+   "0xE07DA2": 1,
+   "0xE08433": 1,
+   "0xE08533": 1,
+   "0xE08634": 1,
+   "0xE08D06": 1,
+   "0xE094C9": 1,
+   "0xE094DE": 1,
+   "0xE0953E": 1,
+   "0xE09E26": 1,
+   "0xE09E96": 1,
+   "0xE09F92": 1,
+   "0xE0A096": 1,
+   "0xE0A6E7": 1,
+   "0xE0B11A": 1,
+   "0xE0B795": 1,
+   "0xE0B7AA": 1,
+   "0xE0B7F5": 1,
+   "0xE0B80A": 1,
+   "0xE0C0D2": 1,
+   "0xE0C142": 1,
+   "0xE0C15A": 1,
+   "0xE0C23E": 1,
+   "0xE0C25F": 1,
+   "0xE0C993": 1,
+   "0xE0C9D3": 1,
+   "0xE0D282": 1,
+   "0xE0DA41": 1,
+   "0xE0DA56": 1,
+   "0xE0DAB6": 1,
+   "0xE0E3FA": 1,
+   "0xE0E495": 1,
+   "0xE0E4D7": 1,
+   "0xE0E62F": 1,
+   "0xE0E6C2": 1,
+   "0xE0EE2C": 1,
+   "0xE0EF11": 1,
+   "0xE0EF2C": 1,
+   "0xE0EFB2": 1,
+   "0xE0F73E": 1,
+   "0xE0FED9": 1,
+   "0xE0FF6A": 1,
+   "0xE10E5A": 1,
+   "0xE10FB2": 1,
+   "0xE10FDD": 1,
+   "0xE110B2": 1
+  },
+  "repeated": {},
+  "count_matches_printed": true
+ },
+ "events": [
+  {
+   "address": "0xA01B98",
+   "type": "overflow",
+   "ko": "같은 실패는 하지 않겠다。",
+   "ja": "同じ失敗はせぬ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA01BA9",
+   "type": "wider",
+   "ko": "이번엔 거점을 세우고、",
+   "ja": "今度は拠点を作り、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0237C",
+   "type": "overflow",
+   "ko": "특기인 해군으로 다가오는 모프,",
+   "ja": "得意の海軍でせまるモップ、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA043A8",
+   "type": "overflow",
+   "ko": "캐서린 사령관님!",
+   "ja": "キャサリン司令！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0511F",
+   "type": "overflow",
+   "ko": "　버튼을 누르면、",
+   "ja": "を押せば、",
+   "slot_override": 10,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0536E",
+   "type": "wider",
+   "ko": "회복시키지 않으면...!",
+   "ja": "回復させないと・・・！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA05454",
+   "type": "overflow",
+   "ko": "도시나 본부 위라면 지형 효과도 높고,",
+   "ja": "都市や本部の上なら地形効果も高いし、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA057A4",
+   "type": "wider",
+   "ko": "무슨 목적으로...!",
+   "ja": "何の目的で・・・！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA05DE6",
+   "type": "overflow",
+   "ko": "저 녀석을 쓰러뜨리는 거야。",
+   "ja": "あいつを倒すのよ。",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA05E68",
+   "type": "overflow",
+   "ko": "같은 걸 쓰는 건 오랜만이지 않아?",
+   "ja": "なんかを使うのは久しぶりじゃない？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA06974",
+   "type": "overflow",
+   "ko": "HP는 10을 넘을 수는 없는 건가?",
+   "ja": "ＨＰは１０をこえる事はないのか？",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA07901",
+   "type": "wider",
+   "ko": " 갈 수 있습니다!",
+   "ja": "いけます！",
+   "slot_override": 10,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA08470",
+   "type": "overflow",
+   "ko": "여기서 나를 이겼다고 해서,",
+   "ja": "ここでオレに勝ったからって、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0887F",
+   "type": "wider",
+   "ko": "어려울지도 모르겠네...",
+   "ja": "むずかしいかもね・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0922C",
+   "type": "overflow",
+   "ko": "이동력을 믿고 도망치는 것도 좋지만,",
+   "ja": "移動力にまかせて逃げるのもいいけど、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA09D8A",
+   "type": "overflow",
+   "ko": "항구에서 대기하거나",
+   "ja": "港で待機するか",
+   "slot_override": 14,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0AFA0",
+   "type": "wider",
+   "ko": "이 정도쯤이야...!",
+   "ja": "これぐらい・・・！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0F27A",
+   "type": "wider",
+   "ko": "미안해. 하지만・・・",
+   "ja": "けどよ・・・",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA0FBF4",
+   "type": "wider",
+   "ko": "쓰러뜨린다...",
+   "ja": "しとめる・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA10654",
+   "type": "wider",
+   "ko": "그러니까...",
+   "ja": "だから・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA10EDC",
+   "type": "overflow",
+   "ko": "걸어온 싸움은 받아주지!",
+   "ja": "うられたケンカは買う！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA129D0",
+   "type": "wider",
+   "ko": "기대하고 있겠습니다...",
+   "ja": "期待していますよ・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA152F0",
+   "type": "overflow",
+   "ko": "그러니까 그런 거 아님까?",
+   "ja": "だからじゃないっすか？",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA153F0",
+   "type": "overflow",
+   "ko": "감탄하고 있을 때냐!",
+   "ja": "感心しとる場合か！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA155AD",
+   "type": "wider",
+   "ko": "그렇긴 하다만...",
+   "ja": "そうじゃが・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA15648",
+   "type": "wider",
+   "ko": "그렇지만,",
+   "ja": "ですが、",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1597C",
+   "type": "overflow",
+   "ko": "정말로 적은 퇴각한 건가?",
+   "ja": "本当に敵は退却したの？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA16094",
+   "type": "overflow",
+   "ko": "방금 말한 대로야.",
+   "ja": "今言ったとおりだ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA164AD",
+   "type": "wider",
+   "ko": "벌써 7일째인가...",
+   "ja": "もう７日目か・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA19774",
+   "type": "wider",
+   "ko": "반격에 나서는 거지?",
+   "ja": "反攻に出るのね？",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA19DF9",
+   "type": "wider",
+   "ko": "고통받는 것을, ",
+   "ja": "苦しむのを、",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1A3DB",
+   "type": "wider",
+   "ko": "병사들에게 전하라.",
+   "ja": "兵たちに伝えよ。",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1B81C",
+   "type": "wider",
+   "ko": "이기고 물러난다...?",
+   "ja": "勝って退く・・・か。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1BF0E",
+   "type": "wider",
+   "ko": "아무것도 할 수 없겠군요.",
+   "ja": "なにもできませんね。",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1C104",
+   "type": "overflow",
+   "ko": "우리에게 항복을 권하고 있습니다.",
+   "ja": "われわれに降伏をすすめています。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1C75C",
+   "type": "overflow",
+   "ko": "적 마음대로 하게 두진 않겠어.",
+   "ja": "敵の好きにはさせないさ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1C8E8",
+   "type": "overflow",
+   "ko": "왜 그러지?",
+   "ja": "どうした？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1CA1C",
+   "type": "overflow",
+   "ko": "적이 공항을 만들었다고?",
+   "ja": "敵が空港を作ったって？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1CC5C",
+   "type": "overflow",
+   "ko": "적은,전면 퇴각한 듯합니다.",
+   "ja": "敵は、全面退却したようです。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1D294",
+   "type": "overflow",
+   "ko": "할 말이 있다는데.",
+   "ja": "話があるってさ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1D45A",
+   "type": "wider",
+   "ko": "자신을 위한 얘기인가.",
+   "ja": "自分のための話か。",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1EDF8",
+   "type": "overflow",
+   "ko": "죽을 만큼 몰락하진 않았다.",
+   "ja": "落ちぶれてはおらぬ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1F204",
+   "type": "wider",
+   "ko": "파이프 끝에는...",
+   "ja": "パイプの先・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1FA14",
+   "type": "overflow",
+   "ko": "사령관이 3명 있으면 상황에 따른",
+   "ja": "ショーグンが３人いれば",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1FE79",
+   "type": "wider",
+   "ko": "힘에서 밀렸다고?",
+   "ja": "力負けだと？",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA1FF2B",
+   "type": "wider",
+   "ko": "이길 수 있었던 거다.",
+   "ja": "勝利できたのだ。",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA20A9A",
+   "type": "wider",
+   "ko": "소문의 그곳이군...",
+   "ja": "うわさの所ね・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA20F38",
+   "type": "overflow",
+   "ko": "현지에서 모은 물자는,",
+   "ja": "現地で集めた物資は、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA21733",
+   "type": "wider",
+   "ko": "대단한 사람이었어...",
+   "ja": "すごい人だった・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA21B7A",
+   "type": "wider",
+   "ko": "어떻게 쓰지?",
+   "ja": "どう使う？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA21E2E",
+   "type": "wider",
+   "ko": "내버려 둘 수는 없다.",
+   "ja": "放ってはおけぬ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA22708",
+   "type": "overflow",
+   "ko": "내가 가는 길에 적은 없다!",
+   "ja": "わが行く道に敵はなし！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA229CC",
+   "type": "overflow",
+   "ko": "하지만 말이다,",
+   "ja": "しかしの、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24518",
+   "type": "overflow",
+   "ko": "내일 공격으로 어떻게든 하지 않으면,",
+   "ja": "明日の攻撃で何とかしないと、",
+   "slot_override": 28,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24573",
+   "type": "wider",
+   "ko": "17일째인가...",
+   "ja": "１７日目か・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA245B7",
+   "type": "wider",
+   "ko": "벌써 17일째인가.",
+   "ja": "もう１７日目か。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24784",
+   "type": "overflow",
+   "ko": "이름도 말하지 않고 가버리다니",
+   "ja": "名前も言わずに行ってしまうとは",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24804",
+   "type": "overflow",
+   "ko": "내 최강 부대는,",
+   "ja": "わが最強部隊は、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24854",
+   "type": "wider",
+   "ko": "신형 전차인가...",
+   "ja": "新型戦車か・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24AAC",
+   "type": "overflow",
+   "ko": "이 나라에서 그 녀석들을 몰아낼 때까지,",
+   "ja": "この国からあやつらを追い出すまで、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA24B68",
+   "type": "overflow",
+   "ko": "예정보다 늦어지는 것 같다만,",
+   "ja": "予定よりおくれているようだが、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA259CC",
+   "type": "overflow",
+   "ko": "이번에야말로 이겨야만 한다!",
+   "ja": "今度こそ勝たねばならん！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA262B0",
+   "type": "overflow",
+   "ko": "적이 미사일 발사대를 만들고 있다,",
+   "ja": "敵がミサイル発射台を作っている、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA26704",
+   "type": "overflow",
+   "ko": "다음도 지지 않아!",
+   "ja": "次も負けないぞ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA26BEC",
+   "type": "overflow",
+   "ko": "남의 말을 듣지 못할까!",
+   "ja": "人の話を聞かんか！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2AA08",
+   "type": "overflow",
+   "ko": "보병 계열의 이동력이 1 늘고,",
+   "ja": "歩兵系の移動力が１増え、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2BC3C",
+   "type": "overflow",
+   "ko": "현재의 군자금을 1.5배로늘린다.",
+   "ja": "現在の軍資金を１・５ばいに",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C040",
+   "type": "overflow",
+   "ko": "스토리를 즐기면서 플레이할 수 있는 모드입니다",
+   "ja": "ストーリーを楽しみながらプレイできるモードです",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C0C0",
+   "type": "overflow",
+   "ko": "자유롭게 설정을 정해,친구와 컴퓨터와 대전합니다",
+   "ja": "自由に設定を決め、友達やコンピュータと対戦します",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C1E8",
+   "type": "overflow",
+   "ko": "맵을 만들거나,사령관의 컬러를 설정할 수 있습니다",
+   "ja": "マップを作ったり、ショーグンのカラーを設定できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C238",
+   "type": "overflow",
+   "ko": "사령관의 컬러를 설정할 수 있습니다",
+   "ja": "ショーグンのカラーを設定できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C25C",
+   "type": "overflow",
+   "ko": "친구와 연결해서,대전이나 맵 교환을 할 수 있습니다",
+   "ja": "友達とつないで、対戦やマップのこうかんができます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C2F4",
+   "type": "overflow",
+   "ko": "있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다",
+   "ja": "アリにするとユニットの視界外が見えなくなります",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C378",
+   "type": "overflow",
+   "ko": "지정일이 종료되면 소유 거점 수로 결판을 냅니다",
+   "ja": "指定日が終了した時に所有拠点数で決着をつけます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C3A8",
+   "type": "overflow",
+   "ko": "지정 거점 수를 소유한 시점에서 우세 승리가 됩니다",
+   "ja": "指定拠点数を所有した時点で優勢勝利となります",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C440",
+   "type": "overflow",
+   "ko": "전투 애니메이션만 표시합니다",
+   "ja": "戦闘アニメのみ表示します",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C45C",
+   "type": "overflow",
+   "ko": "플레이어만 전투 애니메이션을 표시합니다",
+   "ja": "プレイヤーのみ戦闘アニメを表示します",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C484",
+   "type": "overflow",
+   "ko": "같은 팀을 선택하면 동맹국을 설정할 수 있습니다",
+   "ja": "同じチームを選ぶ事でどうめい国を設定できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C5AC",
+   "type": "overflow",
+   "ko": "전투 애니메이션만 표시합니다",
+   "ja": "戦闘アニメのみ表示します",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C5C8",
+   "type": "overflow",
+   "ko": "플레이어만 전투 애니메이션을 표시합니다",
+   "ja": "プレイヤーのみ戦闘アニメを表示します",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C644",
+   "type": "overflow",
+   "ko": "만드는 방법은 「도움말」에 적혀 있어요.",
+   "ja": "作り方は「ヘルプ」に書いてあります。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C804",
+   "type": "overflow",
+   "ko": "커서 위치의 지형 병종을 선택합니다",
+   "ja": "カーソルの地形、兵種を選択します。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C950",
+   "type": "overflow",
+   "ko": "바다로 전체를 채우시겠습니까?",
+   "ja": "海で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2C9B4",
+   "type": "overflow",
+   "ko": "숲으로 전체를 채우시겠습니까?",
+   "ja": "森で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2CA10",
+   "type": "overflow",
+   "ko": "저장하지 않았는데 종료하시겠습니까?",
+   "ja": "セーブしていないけど終了しますか？",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2CABC",
+   "type": "overflow",
+   "ko": "연타하는 걸 정말 좋아하는구나.",
+   "ja": "れんだするのがよほど好きなのね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D650",
+   "type": "overflow",
+   "ko": "내일로의 7일간",
+   "ja": "明日への７日間",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D684",
+   "type": "overflow",
+   "ko": "전차대를 격파하라!",
+   "ja": "戦車隊を撃破せよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D6AC",
+   "type": "overflow",
+   "ko": "검은 악마를 막아라!",
+   "ja": "黒い悪魔を止めろ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D6F0",
+   "type": "overflow",
+   "ko": "푸른 달이여,영원히",
+   "ja": "青い月よ、永遠に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D72C",
+   "type": "overflow",
+   "ko": "하시다테 회전",
+   "ja": "ハシダテ会戦",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D73C",
+   "type": "overflow",
+   "ko": "지켜야 할 것",
+   "ja": "守るべきもの",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2E21F",
+   "type": "wider",
+   "ko": "...아차, 큰일 날 뻔했네!",
+   "ja": "・・・おっと、いけねえ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA302AC",
+   "type": "overflow",
+   "ko": "이게 내 싸움 방식이다!",
+   "ja": "これがぼくの戦い方だ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA304A8",
+   "type": "overflow",
+   "ko": "하늘이여!　이 몸의 목소리를 듣거라!",
+   "ja": "天よ！　わがはいの声を聞くのじゃ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30620",
+   "type": "overflow",
+   "ko": "어디로 도망쳐도 소용없다고!",
+   "ja": "どこに逃げてもムダだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30640",
+   "type": "overflow",
+   "ko": "너무 화나게 하지 마!",
+   "ja": "あんまり怒らすなよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30860",
+   "type": "overflow",
+   "ko": "힘이 전부가 아니라는 것　보여주겠어!",
+   "ja": "力が全てではないこと　見せてあげるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA3088C",
+   "type": "overflow",
+   "ko": "내 싸움 방식　흉내 내게 두지 않아!",
+   "ja": "私の戦い方　まねはさせない！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30904",
+   "type": "overflow",
+   "ko": "송사리에겐 볼일 없다・・・",
+   "ja": "ザコに用はない・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30930",
+   "type": "overflow",
+   "ko": "전기　공격 준비!",
+   "ja": "全機　攻撃用意！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30968",
+   "type": "overflow",
+   "ko": "싸움은 스피드가 생명이다!",
+   "ja": "戦いはスピードが命だ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30A6C",
+   "type": "overflow",
+   "ko": "배를 다루는 거라면 지지 않아!",
+   "ja": "船のあつかいなら負けない！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30D5C",
+   "type": "overflow",
+   "ko": "정말-　따끔따끔 시끄러워!",
+   "ja": "もー　チクチクうるさい！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30DCC",
+   "type": "overflow",
+   "ko": "그　공포에 질린 표정",
+   "ja": "その　きょうふの表情",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30E74",
+   "type": "overflow",
+   "ko": "나와 싸울 수 있었던 것・・・",
+   "ja": "私と戦えた事・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA30EDC",
+   "type": "overflow",
+   "ko": "・・・이걸로 마지막이다.",
+   "ja": "・・・これで最後だ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA313FC",
+   "type": "overflow",
+   "ko": "전쟁은 아무것도 낳지 않아・・・",
+   "ja": "戦争は何も生み出さん・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA34E98",
+   "type": "overflow",
+   "ko": "미사일 발사처를 선택해 주세요",
+   "ja": "ミサイル発射先を選んでください",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA34FEC",
+   "type": "overflow",
+   "ko": "맵을 보낼 사람을 골라 줘!!",
+   "ja": "マップを送る人を選んでね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA350B4",
+   "type": "overflow",
+   "ko": "맵을 수신 중이야, 잠시 기다려 줘!!",
+   "ja": "マップを受信中よ、しばらく待ってね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA35228",
+   "type": "overflow",
+   "ko": "하나의 카트리지로,모두와 대전할 수 있습니다",
+   "ja": "ひとつのカートリッジで、みんなと対戦できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA35258",
+   "type": "overflow",
+   "ko": "친구와 케이블로 연결해서 대전할 수 있습니다",
+   "ja": "友達とケーブルでつないで対戦できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA35280",
+   "type": "overflow",
+   "ko": "친구와 케이블을 연결해서 맵 교환을 할 수 있습니다",
+   "ja": "友達とケーブルをつないでマップこうかんができます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81E08",
+   "type": "overflow",
+   "ko": "아스카의 노림수!",
+   "ja": "アスカのねらい！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81E50",
+   "type": "overflow",
+   "ko": "최강! 키쿠치요 부대",
+   "ja": "最強！キクチヨ部隊",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81E78",
+   "type": "overflow",
+   "ko": "특수 부대장 도미노!",
+   "ja": "特殊部隊長ドミノ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81E98",
+   "type": "overflow",
+   "ko": "눈 속의 싸움!",
+   "ja": "雪の中の戦い！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81F70",
+   "type": "overflow",
+   "ko": "대공을 제압하라!",
+   "ja": "大空を制せよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81F80",
+   "type": "overflow",
+   "ko": "하늘에서 오는 건・・・",
+   "ja": "空から来るものは・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81FAC",
+   "type": "overflow",
+   "ko": "지상 최강! 중전차!!",
+   "ja": "地上最強！重戦車！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81FC4",
+   "type": "overflow",
+   "ko": "적 부대를 해치워라!",
+   "ja": "敵部隊をやっつけろ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB81FF4",
+   "type": "overflow",
+   "ko": "전선 기지를 확보하라!",
+   "ja": "前線基地を確保せよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB82D92",
+   "type": "overflow",
+   "ko": "애니메 Ｃ",
+   "ja": "アニメＣ",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB82D9E",
+   "type": "overflow",
+   "ko": "애니메 B",
+   "ja": "アニメＢ",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB82DAA",
+   "type": "overflow",
+   "ko": "애니메 A",
+   "ja": "アニメＡ",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB82F7C",
+   "type": "wider",
+   "ko": "다운로드를 준비 중이야. 잠깐만 기다려!!",
+   "ja": "ダウンロードの準備中よ。しばらく待ってね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB82FAC",
+   "type": "overflow",
+   "ko": "맵을 저장 중이야,전원을 끄지 말아 줘!!",
+   "ja": "マップを保存中よ、でんげんを切らないでね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB8301C",
+   "type": "overflow",
+   "ko": "맵을 수신 중이야,잠시 기다려 줘!!",
+   "ja": "マップを受信中よ、しばらく待ってね！！",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83044",
+   "type": "overflow",
+   "ko": "맵을 송신 중이야,잠시 기다려 줘!!",
+   "ja": "マップを送信中よ、しばらく待ってね！！",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB8306C",
+   "type": "wider",
+   "ko": "준비될 때까지 기다려 줘!!",
+   "ja": "準備ができるまで待ってね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB830C8",
+   "type": "overflow",
+   "ko": "맵을 보낼 수 있는 사람이 아무도 없어!!",
+   "ja": "マップを送れる人が誰もいないわ！！",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB830EC",
+   "type": "wider",
+   "ko": "지도을 보낼 사람을 골라줘!!",
+   "ja": "マップを送る人を選んでね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83160",
+   "type": "wider",
+   "ko": "엔트리 중이야, 잠시 기다려 줘!!",
+   "ja": "エントリー中よ、しばらく待ってね！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83188",
+   "type": "wider",
+   "ko": "통신 준비 중!!!",
+   "ja": "通信準備中よ！！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83A3C",
+   "type": "wider",
+   "ko": "하늘이여! 나의 목소리를 들어라!",
+   "ja": "天よ！　わがはいの声を聞くのじゃ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83A64",
+   "type": "overflow",
+   "ko": "이런 이런,여기까지는 하고 싶지 않았는데 말이야!",
+   "ja": "やれやれ、ここまではしたくなかったんだがな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83A98",
+   "type": "wider",
+   "ko": "이 나의 2회 행동을 견딜 수 있겠나!?",
+   "ja": "このおれの２回行動に、たえられるかっ！？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83BAC",
+   "type": "wider",
+   "ko": "적 따위 없느니라!!!",
+   "ja": "敵などおらぬわ！！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83C70",
+   "type": "wider",
+   "ko": "자, 그럼.",
+   "ja": "さて、と。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83CA8",
+   "type": "wider",
+   "ko": "봐주지 않을 거야!",
+   "ja": "てかげんしないぞ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83D38",
+   "type": "wider",
+   "ko": "이걸로 정보를 더 쉽게 모을 수 있겠네.",
+   "ja": "これで、さらに情報があつめやすくなるわね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83D98",
+   "type": "wider",
+   "ko": "운도 여기까지다!",
+   "ja": "うんのつきだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83DB0",
+   "type": "overflow",
+   "ko": "도미노의 능력,유닛의 장소는・・・하고.",
+   "ja": "ドミノの能力、ユニットの場所は・・・と。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83F58",
+   "type": "wider",
+   "ko": "어쩔 수 없지, 간다!",
+   "ja": "しかたない、いくぞ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83FA8",
+   "type": "overflow",
+   "ko": "어떻게든 늦지 않았네-,다행이다 다행이야.",
+   "ja": "なんとかまにあったなー、よかったよかった。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB83FF8",
+   "type": "wider",
+   "ko": "여기까진 하고 싶지 않았는데...",
+   "ja": "ここまではしたくなかったけど・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84104",
+   "type": "wider",
+   "ko": "복제 따위에게, 질까 보냐!",
+   "ja": "コピーなんかに、負けるかっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB841E4",
+   "type": "wider",
+   "ko": "남의 친구를 다치게 한 죄...",
+   "ja": "ひとの友達を傷つけたつみ・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84238",
+   "type": "wider",
+   "ko": "네놈은 너무 지나쳤다... 뒈져라!",
+   "ja": "きさまはやりすぎた・・・くたばれ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84298",
+   "type": "overflow",
+   "ko": "나의 최강의 힘,받아 보아라!",
+   "ja": "わが最強の力、うけてみよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84A48",
+   "type": "overflow",
+   "ko": "주름진 고속도로의 지도",
+   "ja": "ジャバラコウソクのちず",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84BA0",
+   "type": "overflow",
+   "ko": "지혜의 고리 섬의 지도",
+   "ja": "チエノワジマのちず",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xB84BB4",
+   "type": "overflow",
+   "ko": "알갱이 섬의 지도",
+   "ja": "コツブジマのちず",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD82058",
+   "type": "wider",
+   "ko": "만드는 방법은 「도움말」에 적혀 있어요.",
+   "ja": "作り方は「ヘルプ」に書いてあります。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD820BC",
+   "type": "wider",
+   "ko": "「도움말」에는 조작 방법, 플레이 조건과",
+   "ja": "「ヘルプ」には、そうさ方法、あそべる条件や",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8215C",
+   "type": "wider",
+   "ko": "병종 또는 생산 거점 하나 이상 필요",
+   "ja": "兵種または生産拠点が１つ以上必要です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD82218",
+   "type": "overflow",
+   "ko": "커서 위치의 지형 병종을 선택합니다",
+   "ja": "カーソルの地形、兵種を選択します。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD82364",
+   "type": "overflow",
+   "ko": "바다로 전체를 채우시겠습니까?",
+   "ja": "海で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD82384",
+   "type": "wider",
+   "ko": "평지로 전체를 칠하시겠습니까?",
+   "ja": "平地で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD823A8",
+   "type": "wider",
+   "ko": "산으로 전체를 칠하겠습니까?",
+   "ja": "山で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD823C8",
+   "type": "overflow",
+   "ko": "숲으로 전체를 채우시겠습니까?",
+   "ja": "森で全体をぬりつぶしますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD82424",
+   "type": "overflow",
+   "ko": "저장하지 않았는데 종료하시겠습니까?",
+   "ja": "セーブしていないけど終了しますか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD824B0",
+   "type": "overflow",
+   "ko": "연타하는 걸 정말 좋아하는구나.",
+   "ja": "れんだするのがよほど好きなのね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8F30E",
+   "type": "wider",
+   "ko": "여기는 아라라 지방에서도 특히 시골이야.",
+   "ja": "ここは　アララ地方でも、とくにイナカなの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8F3B6",
+   "type": "wider",
+   "ko": "이 빨간색이　당신의 유닛이에요.",
+   "ja": "この赤色が　あなたのユニットね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8F55E",
+   "type": "overflow",
+   "ko": "거기가 아니에요.",
+   "ja": "そこじゃないわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8F6CF",
+   "type": "wider",
+   "ko": "커서를 여기에 두고 A버튼으로 이동이야.",
+   "ja": "カーソルをここにおいて　Ａボタンで移動よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8F92C",
+   "type": "wider",
+   "ko": "이 적에게 가장 가까운 곳은  여기네",
+   "ja": "が敵に一番近づくには　ここかここね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8FAEE",
+   "type": "wider",
+   "ko": "뭐라고?! 아라라 지방에 레드스타 군이",
+   "ja": "なに？！アララ地方にレッドスター軍が",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8FCC9",
+   "type": "wider",
+   "ko": "여기로 이동해 줘.",
+   "ja": "ここに移動してね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD8FE6C",
+   "type": "wider",
+   "ko": "Ａ 버튼으로 전투 시작해！",
+   "ja": "Ａボタンで戦闘開始よ！",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD900C9",
+   "type": "wider",
+   "ko": "하면, 해치워 버릴 수 있어.",
+   "ja": "すれば、やっつけちゃえるわよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD90317",
+   "type": "wider",
+   "ko": "을 해 줘.",
+   "ja": "をしてね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD911A9",
+   "type": "wider",
+   "ko": "의 HP를 비교해 봐.",
+   "ja": "のＨＰをくらべてみて。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD91383",
+   "type": "wider",
+   "ko": "을 해 줘.",
+   "ja": "をしてね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9141F",
+   "type": "wider",
+   "ko": "하는 거야!",
+   "ja": "するのよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD918D3",
+   "type": "wider",
+   "ko": "하면 반드시 이길 수 있어!",
+   "ja": "をしたら、かならず勝てるわ！",
+   "slot_override": 28,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9219E",
+   "type": "overflow",
+   "ko": "여기로 이동해 주지 않겠어요?",
+   "ja": "ここに移動してくれないかしら？",
+   "slot_override": 30,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9287C",
+   "type": "overflow",
+   "ko": "점령은 잊어버리기 십상이죠.",
+   "ja": "は忘れがちになるものよ。",
+   "slot_override": 24,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9444E",
+   "type": "overflow",
+   "ko": "매일 2HP씩 보충하고 있다고는 해도,지금",
+   "ja": "毎日２ＨＰずつ補充しているとはいえ、今の",
+   "slot_override": 40,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD944BE",
+   "type": "wider",
+   "ko": "합류(유닛 합치기)",
+   "ja": "合流（ごうりゅう）",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD94552",
+   "type": "overflow",
+   "ko": "그래요!　여기에 커서를 맞춰서 이동이에요!",
+   "ja": "そう！　ここにカーソルを合わせて移動よ！",
+   "slot_override": 40,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD94602",
+   "type": "wider",
+   "ko": "이걸로 「",
+   "ja": "これで「",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD94B6E",
+   "type": "wider",
+   "ko": "그렇다면 봐주지 않겠다. 다음엔",
+   "ja": "ならば、ようしゃはせん！次こそは",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD94F9D",
+   "type": "wider",
+   "ko": "여기는 「",
+   "ja": "ここは「",
+   "slot_override": 8,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD95EF2",
+   "type": "overflow",
+   "ko": "지금은 여기에 내려줬으면 해요.",
+   "ja": "今はここにおろしてほしいの。",
+   "slot_override": 28,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD95F8E",
+   "type": "wider",
+   "ko": "와 타고 있던",
+   "ja": "と乗っていた",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9628C",
+   "type": "wider",
+   "ko": " 못 하는걸.",
+   "ja": "できないの。",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD965DE",
+   "type": "overflow",
+   "ko": "하지만,전투는 정면승부만 있는 게 아니에요.",
+   "ja": "でも、戦いは正面からだけではないわ。",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD96F66",
+   "type": "overflow",
+   "ko": "그럼,우선은 이 보병을",
+   "ja": "じゃあ、まずはこの",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD98136",
+   "type": "overflow",
+   "ko": "그 병력을 전멸?!",
+   "ja": "あの兵力を全滅？！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9AAAC",
+   "type": "wider",
+   "ko": "는 공격받지 않게 됐어!",
+   "ja": "は攻撃されなくなったわ！",
+   "slot_override": 24,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9B210",
+   "type": "overflow",
+   "ko": "전함은 간접공격을 하는 유닛이에요.",
+   "ja": "は間接攻撃をするユニットなの。",
+   "slot_override": 30,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9B4EF",
+   "type": "wider",
+   "ko": "해상 유닛을 상대로",
+   "ja": "海ユニットに対して",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9C4B2",
+   "type": "overflow",
+   "ko": "이번엔 해전인가・・・",
+   "ja": "今回は海戦か・・・",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9CFC1",
+   "type": "wider",
+   "ko": "는 이동 비용 1로 갈 수 있지?",
+   "ja": "は移動コスト「１」で進めたわよね？",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9D145",
+   "type": "wider",
+   "ko": "시간이 부족하다...",
+   "ja": "じかんが足りぬ・・・",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9D876",
+   "type": "wider",
+   "ko": "하지만... 중립 도시와 적 도시는",
+   "ja": "だけれど・・・中立都市と敵軍都市は",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9DF51",
+   "type": "wider",
+   "ko": "시야가 좋은 게 매력이야。",
+   "ja": "よいのが　みりょくよね！",
+   "slot_override": 24,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9E10C",
+   "type": "wider",
+   "ko": "아무것도 못 하고 끝날 뿐 아니라",
+   "ja": "何もできずに終わってしまうばかりか",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9E522",
+   "type": "wider",
+   "ko": "그리고... 내 이야기도 마지막이야",
+   "ja": "そして・・・私の話も　これが最後よ。",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9E71C",
+   "type": "wider",
+   "ko": "잘 부탁해!",
+   "ja": "よろしく！",
+   "slot_override": 10,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9EB86",
+   "type": "overflow",
+   "ko": "여기로 이동시키고 싶다!",
+   "ja": "ここに移動させたい！",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9EDB6",
+   "type": "overflow",
+   "ko": "예를 들어,커서를 이렇게 움직이는 거예요!",
+   "ja": "たとえば、カーソルをこう動かすの！",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xD9F36D",
+   "type": "wider",
+   "ko": "...보고 싶었던 적 없어?",
+   "ja": "・・・と思ったことはない？",
+   "slot_override": 26,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA0616",
+   "type": "overflow",
+   "ko": "공항에서의 「생산」이네요.",
+   "ja": "空港での「生産」ね。",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA0802",
+   "type": "overflow",
+   "ko": "항구에서의 「생산」이네요.",
+   "ja": "港での「生産」ね。",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA0A1F",
+   "type": "wider",
+   "ko": "그래도 괜찮아??",
+   "ja": "それでもいい？？",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA2313",
+   "type": "wider",
+   "ko": "한 번 더 들을래?",
+   "ja": "もう一度受けたい？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA237F",
+   "type": "wider",
+   "ko": "여기 승리 조건은「",
+   "ja": "ここの勝利条件は「",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA3140",
+   "type": "wider",
+   "ko": "지형 방어력 잘 보고,",
+   "ja": "地形防御力をよく見て、",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA342D",
+   "type": "wider",
+   "ko": "한 번 더 들을래?",
+   "ja": "もう一度受けたい？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA3538",
+   "type": "wider",
+   "ko": "「공격과 전략 2」를 듣고 난 뒤를 추천해",
+   "ja": "「攻撃と戦略２」を聞いてからをお勧めするわ。",
+   "slot_override": 44,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA35F0",
+   "type": "wider",
+   "ko": "----------22문자----------",
+   "ja": "ーーーーーーーーー２２文字ーーーーーーーーー",
+   "slot_override": 44,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA368F",
+   "type": "wider",
+   "ko": "여기 승리조건은「수도 점령」이야 하지만,",
+   "ja": "ここの勝利条件は「首都占領」なの。だけど、",
+   "slot_override": 42,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA3B4B",
+   "type": "wider",
+   "ko": "알 수 없는,",
+   "ja": "分からない、",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDA3CD1",
+   "type": "wider",
+   "ko": "「다리」는 지형 방어력과 이동 비용이",
+   "ja": "「橋」は、地形防御力、移動コストともに",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC2E06",
+   "type": "wider",
+   "ko": "브레이크 게이지가 찬 것 같네!",
+   "ja": "ブレイクゲージがたまったようね！",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC2ECA",
+   "type": "overflow",
+   "ko": "전 부대를 수리할 수 있으니까,대미지를",
+   "ja": "全部隊を修理できるんだから、ダメージを",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC39E8",
+   "type": "wider",
+   "ko": "얼마 안 됐지?",
+   "ja": "ばかりだな？",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC3B1E",
+   "type": "overflow",
+   "ko": "빌리는 브레이크 중에는,간접공격의",
+   "ja": "ビリーはブレイク中には、間接攻撃の",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC3C63",
+   "type": "overflow",
+   "ko": " 사령관님, 료!",
+   "ja": "さん、リョウ！",
+   "slot_override": 14,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC3DBD",
+   "type": "wider",
+   "ko": "독립 행동하는 공중 부대가 있나 봐!",
+   "ja": "独立で行動してる空部隊があるらしいの！",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC427F",
+   "type": "wider",
+   "ko": "공장은 육상, 항구는 해상 유닛을",
+   "ja": "工場は陸ユニット、港は海ユニットの",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC42EB",
+   "type": "wider",
+   "ko": "하지만 사령관은 능력이 없으면",
+   "ja": "だが、ショーグンは能力がなきゃ",
+   "slot_override": 30,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC4B8A",
+   "type": "wider",
+   "ko": "전 부대로 수도를 지키러 가!",
+   "ja": "全部隊で首都を守りに行くのよ！",
+   "slot_override": 30,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC4F4E",
+   "type": "wider",
+   "ko": "해상 유닛으로는 공격 못 하는데요...",
+   "ja": "海ユニットでは攻撃できねえんですが・・・",
+   "slot_override": 40,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC5021",
+   "type": "wider",
+   "ko": "말입니다...",
+   "ja": "ですし・・・",
+   "slot_override": 12,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC50C2",
+   "type": "overflow",
+   "ko": "무슨 수를 써서라도　놈들을,",
+   "ja": "何としても　やつらを、",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC53D6",
+   "type": "wider",
+   "ko": "하러 가면 「호이프 해군」",
+   "ja": "しにいけば「ホイップ海軍」",
+   "slot_override": 26,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC559E",
+   "type": "wider",
+   "ko": "님도 눈 좋아?",
+   "ja": "も雪がすきか！",
+   "slot_override": 14,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC5D83",
+   "type": "wider",
+   "ko": "난 할 수 있어!",
+   "ja": "オレはやれるぜ！",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC611A",
+   "type": "overflow",
+   "ko": "그렇게 생각한다면　아직 멀었군.",
+   "ja": "そう思うなら　まだまだだな。",
+   "slot_override": 28,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC6342",
+   "type": "wider",
+   "ko": "기 기다려! 빌리!",
+   "ja": "ま　まて！ビリー！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC6376",
+   "type": "wider",
+   "ko": "왜 저 녀석이???",
+   "ja": "なぜあいつが？？？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC65BA",
+   "type": "wider",
+   "ko": "그래... 공장과 우리 수도까지 포함해",
+   "ja": "そう・・・工場やこちらの首都もふくめて、",
+   "slot_override": 40,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC6F06",
+   "type": "overflow",
+   "ko": "레드스타를 나간 이유란 게",
+   "ja": "レッドスターをでた理由って",
+   "slot_override": 26,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC7D4F",
+   "type": "wider",
+   "ko": "내가 졌단 말인가...",
+   "ja": "おれは負けたのか・・・",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC7E9A",
+   "type": "overflow",
+   "ko": "이 이글　다음에 싸울 때는 전력을",
+   "ja": "このイーグル　次に戦うときは全力を",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC8372",
+   "type": "wider",
+   "ko": "공격받지 않는 건 키쿠치요 능력 덕이래!",
+   "ja": "のは　キクチヨのその能力のおかげだってな！",
+   "slot_override": 42,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC8F66",
+   "type": "wider",
+   "ko": "공항은 공중 유닛을 만들 수 있어!",
+   "ja": "空港は空ユニットの生産ができるんだ！",
+   "slot_override": 36,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDC9E02",
+   "type": "wider",
+   "ko": "...그런 것치곤 건강해 보이네???",
+   "ja": "・・・それにしちゃ、元気そうよね？？？",
+   "slot_override": 38,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCA062",
+   "type": "wider",
+   "ko": "...어때? 뭔가 찾았어?",
+   "ja": "・・・どう？何かつかめた？",
+   "slot_override": 26,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCA4C2",
+   "type": "wider",
+   "ko": "지금은 아직... 말 못 해",
+   "ja": "今はまだ・・・いえないわ。",
+   "slot_override": 26,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCA862",
+   "type": "wider",
+   "ko": "이걸로 마지막이네...",
+   "ja": "これで　さいごね・・・",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCB1BE",
+   "type": "overflow",
+   "ko": "바다에서 이길 수 있는 사람은,거의 없다는 이야기야.",
+   "ja": "海で勝てる人は、なかなかいないという話よ。",
+   "slot_override": 42,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCBA1A",
+   "type": "overflow",
+   "ko": "이글과 싸우는 것도,벌써 3번째인가.",
+   "ja": "イーグルと戦うのも、もう３回目か。",
+   "slot_override": 34,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCBB36",
+   "type": "overflow",
+   "ko": "모프는 그렇게 말했지만",
+   "ja": "モップはああ言ったが",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCC622",
+   "type": "overflow",
+   "ko": "뭔가 알고 있는 건가?",
+   "ja": "何かしってるのか？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCC63A",
+   "type": "overflow",
+   "ko": "바다에서　이길 수 있는 사람은　거의 없다는",
+   "ja": "海で　勝てる人は　なかなかいない",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCCAC8",
+   "type": "wider",
+   "ko": "그래... 15일 안에",
+   "ja": "そう・・・１５日以内に",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCCE86",
+   "type": "overflow",
+   "ko": "모프는 그렇게 말했지만",
+   "ja": "モップはああ言ったが",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCD9C2",
+   "type": "overflow",
+   "ko": "뭔가 알고 있는 건가?",
+   "ja": "何か知ってるのか？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCD9DA",
+   "type": "overflow",
+   "ko": "바다에서　이길 수 있는 사람은　거의 없다는",
+   "ja": "海で　勝てる人は　なかなかいない",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCE89A",
+   "type": "overflow",
+   "ko": "그렇게 생각하면　료가 했다고는 생각하기 힘들군.",
+   "ja": "そう考えると　リョウがやったとはおもえんな。",
+   "slot_override": 44,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCF535",
+   "type": "wider",
+   "ko": "어떻게 된 거야?!",
+   "ja": "どうなってるの？！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCFA8E",
+   "type": "overflow",
+   "ko": "이 싸움의 뒤에 있는 자가　얼마나 강적일지도",
+   "ja": "この戦いの後ろにいるものが　どんな強敵かも",
+   "slot_override": 42,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCFDE8",
+   "type": "wider",
+   "ko": "아스카가 위험해!!!",
+   "ja": "アスカが危ない！！！",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCFE92",
+   "type": "wider",
+   "ko": "적도 줄어들 거야.",
+   "ja": "敵もへってくるわ。",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDCFFCA",
+   "type": "wider",
+   "ko": "...아스카에게 이런 짓을 한 건",
+   "ja": "・・・アスカにこんなことしたのは",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD0036",
+   "type": "overflow",
+   "ko": "누가 도망칠 줄 알고!",
+   "ja": "だれが逃げるもんか！",
+   "slot_override": 20,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD010A",
+   "type": "overflow",
+   "ko": "이 녀석이 모든 것을,조종하고 있었던 거로군!",
+   "ja": "こいつがすべてを、あやつっていたんだな！",
+   "slot_override": 40,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD0137",
+   "type": "wider",
+   "ko": "용서 못해!",
+   "ja": "ゆるせん！",
+   "slot_override": 10,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD02E8",
+   "type": "wider",
+   "ko": "있었던 거구나!!!",
+   "ja": "おったのだな！！！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD054A",
+   "type": "overflow",
+   "ko": "신경 쓰이는 거라니?",
+   "ja": "気になることって？",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD0795",
+   "type": "wider",
+   "ko": "그리고 이 부대를 전하러 왔어.",
+   "ja": "あと、この軍をとどけにきたんだ。",
+   "slot_override": 32,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD0C29",
+   "type": "wider",
+   "ko": "으... 난 지지 않아!",
+   "ja": "わ・・・われは負けぬ！",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD0CBF",
+   "type": "wider",
+   "ko": "끝장을 내 주마!!!",
+   "ja": "わたしてやる！！！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD136F",
+   "type": "wider",
+   "ko": "무사해서 다행이야...",
+   "ja": "ぶじでよかった・・・・",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDD13B2",
+   "type": "wider",
+   "ko": "하, 하지만...",
+   "ja": "し　しかし・・・",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDE9D8E",
+   "type": "overflow",
+   "ko": "1번째 맵입니다.",
+   "ja": "１マップ目です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDE9F4A",
+   "type": "overflow",
+   "ko": "2번째 맵입니다.",
+   "ja": "２マップ目です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEA136",
+   "type": "overflow",
+   "ko": "3번째 맵입니다.",
+   "ja": "３マップ目です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEA376",
+   "type": "overflow",
+   "ko": "4번째 맵입니다.",
+   "ja": "４マップ目です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEA54A",
+   "type": "overflow",
+   "ko": "5번째 맵입니다.",
+   "ja": "５マップ目です。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEA58B",
+   "type": "wider",
+   "ko": "그리고 아군 거점의 방어야.",
+   "ja": "そしてみかたの拠点の防衛よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEA5D5",
+   "type": "wider",
+   "ko": "거점을 만들 수 있게 됐어.",
+   "ja": "拠点をつくることができたの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEB85E",
+   "type": "overflow",
+   "ko": "하늘이여!　이 몸의 목소리를 듣거라!",
+   "ja": "天よ！　わがはいの声を聞くのじゃ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEB8FE",
+   "type": "wider",
+   "ko": "진심으로 가겠어.",
+   "ja": "本気でいくわよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEB916",
+   "type": "wider",
+   "ko": "이 몸에게 적 따윈 없다!",
+   "ja": "このおれに　敵などいない！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEB93A",
+   "type": "overflow",
+   "ko": "바다의 힘을　보여주지!",
+   "ja": "海の力を　みせてやる！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEB95A",
+   "type": "wider",
+   "ko": "나의 힘, 똑똑히 알게 되리라!!!",
+   "ja": "われの力、思い知るがよいわ！！！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDECB35",
+   "type": "wider",
+   "ko": "이동력 자체가 낮다.",
+   "ja": "移動力自体が少ない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDECCB5",
+   "type": "wider",
+   "ko": "고, 공격력도 높다.",
+   "ja": "でき、攻撃力も高い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDECFCD",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED00A",
+   "type": "overflow",
+   "ko": "차량 타입의 이동이 가능.",
+   "ja": "車両タイプの移動ができる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED1F6",
+   "type": "wider",
+   "ko": "가벼운 전차. 가격도",
+   "ja": "身軽な戦車。ねだんも",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED20D",
+   "type": "wider",
+   "ko": "가격도 싸고, 이동력이",
+   "ja": "安く、移動力があるため",
+   "slot_override": 22,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED23A",
+   "type": "wider",
+   "ko": "전차 타입의 이동.",
+   "ja": "戦車タイプの移動。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED24F",
+   "type": "wider",
+   "ko": "숫자는 이동력.",
+   "ja": "数字は移動力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED275",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED2A3",
+   "type": "wider",
+   "ko": "치고는 넓음.",
+   "ja": "しては広め。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED2F6",
+   "type": "wider",
+   "ko": "경전차포의 탄수.",
+   "ja": "軽戦車砲の弾数。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED33E",
+   "type": "wider",
+   "ko": "경전차포의, 보병계 이외의",
+   "ja": "軽戦車砲での、歩兵系以外の",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED35B",
+   "type": "wider",
+   "ko": "육상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED38A",
+   "type": "overflow",
+   "ko": "경전차포의,선박 계열에",
+   "ja": "軽戦車砲での、船系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED3B2",
+   "type": "wider",
+   "ko": "그리 강하지 않음.",
+   "ja": "そんなに強くない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED3FE",
+   "type": "wider",
+   "ko": "의 「잠수」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED45E",
+   "type": "wider",
+   "ko": "높은 피해를 줄 수 있다.",
+   "ja": "高いダメージを与えられる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED535",
+   "type": "wider",
+   "ko": "그럭저럭 강하다.",
+   "ja": "それなりに強い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED5BE",
+   "type": "wider",
+   "ko": "중전차포의 탄수.",
+   "ja": "重戦車砲の弾数。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED606",
+   "type": "wider",
+   "ko": "중전차포의, 보병계 이외의",
+   "ja": "重戦車砲での、歩兵系以外の",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED623",
+   "type": "wider",
+   "ko": "육상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED65A",
+   "type": "overflow",
+   "ko": "중전차포의,선박 계열에",
+   "ja": "重戦車砲での、船系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED6D2",
+   "type": "wider",
+   "ko": "의 「잠수」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED73A",
+   "type": "wider",
+   "ko": "의 그것보다,",
+   "ja": "のそれより、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED7A5",
+   "type": "wider",
+   "ko": "탄이 떨어지면 이게 된다.",
+   "ja": "タマがきれたらこれになる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED8EA",
+   "type": "wider",
+   "ko": "전차 타입의 이동.",
+   "ja": "戦車タイプの移動。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED8FF",
+   "type": "wider",
+   "ko": "숫자는 이동력.",
+   "ja": "数字は移動力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED965",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDED995",
+   "type": "wider",
+   "ko": "다른 유닛 시야가 필요하다.",
+   "ja": "ほかのユニットの視界がいる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDA17",
+   "type": "wider",
+   "ko": "탄약이 떨어지면, 주포",
+   "ja": "タマがなくなると、主砲",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDA7E",
+   "type": "wider",
+   "ko": "「2」 사거리에",
+   "ja": "「２」の射程に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDAD1",
+   "type": "wider",
+   "ko": "강력한 간접 공격 유닛.",
+   "ja": "強力な間接攻撃ユニット。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDAEC",
+   "type": "wider",
+   "ko": "공격 범위 넓음.",
+   "ja": "攻撃範囲も広い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDB02",
+   "type": "wider",
+   "ko": "차량 타입의 이동.",
+   "ja": "車両タイプの移動。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDB17",
+   "type": "wider",
+   "ko": "숫자는 이동력.",
+   "ja": "数字は移動力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDB75",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDC47",
+   "type": "wider",
+   "ko": "이 범위의 지상 유닛,",
+   "ja": "この範囲の陸ユニット、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDCCD",
+   "type": "wider",
+   "ko": "육상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDD35",
+   "type": "wider",
+   "ko": "에 대한 공격력.",
+   "ja": "に対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDDB0",
+   "type": "wider",
+   "ko": "유닛에 강하지만, 전차",
+   "ja": "ユニットに強いが、戦車",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDEDD",
+   "type": "wider",
+   "ko": "지상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDFE0",
+   "type": "wider",
+   "ko": "시야가 넓은 점도",
+   "ja": "視界が広いことも",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEDFF3",
+   "type": "wider",
+   "ko": "놓칠 순 없지.",
+   "ja": "みのがせない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE006",
+   "type": "wider",
+   "ko": "주포의 대공 미사일.",
+   "ja": "主砲の対空ミサイル。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE04A",
+   "type": "wider",
+   "ko": "대공 미사일의 탄수.",
+   "ja": "対空ミサイルの弾数。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE0D6",
+   "type": "wider",
+   "ko": "대공미사일로, 비행기 계열에",
+   "ja": "対空ミサイルでの、飛行機系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE19F",
+   "type": "wider",
+   "ko": "이동력을 자랑한다.",
+   "ja": "移動力をほこる。",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE1B6",
+   "type": "wider",
+   "ko": "주포의 대공 미사일.",
+   "ja": "主砲の対空ミサイル。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE1FA",
+   "type": "wider",
+   "ko": "대공 미사일의 탄수.",
+   "ja": "対空ミサイルの弾数。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE211",
+   "type": "wider",
+   "ko": "탄약이 떨어지면, 주포",
+   "ja": "タマがなくなると、主砲",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE3B5",
+   "type": "wider",
+   "ko": "탄약이 떨어지면, 주포",
+   "ja": "タマがなくなると、主砲",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE3EA",
+   "type": "overflow",
+   "ko": "폭탄의,보병 계열에",
+   "ja": "爆弾での、歩兵系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE442",
+   "type": "overflow",
+   "ko": "폭탄의,보병 계열 이외의",
+   "ja": "爆弾での、歩兵系以外の",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE45B",
+   "type": "wider",
+   "ko": "육상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE496",
+   "type": "overflow",
+   "ko": "폭탄의,선박 계열에",
+   "ja": "爆弾での、船系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE506",
+   "type": "wider",
+   "ko": "의 「잠항」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE595",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE5CE",
+   "type": "wider",
+   "ko": "주포의 대지 미사일.",
+   "ja": "主砲の対地ミサイル。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE612",
+   "type": "wider",
+   "ko": "대지 미사일의 탄수.",
+   "ja": "対地ミサイルの弾数。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE629",
+   "type": "wider",
+   "ko": "탄약이 떨어지면, 주포",
+   "ja": "タマがなくなると、主砲",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE71F",
+   "type": "wider",
+   "ko": "에 대한 공격력.",
+   "ja": "に対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE73A",
+   "type": "wider",
+   "ko": "의 「잠항」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE7AA",
+   "type": "overflow",
+   "ko": "부포의,보병 계열에",
+   "ja": "副砲での、歩兵系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE7EB",
+   "type": "wider",
+   "ko": "지상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE8D1",
+   "type": "wider",
+   "ko": "운반하기 위한 유닛.",
+   "ja": "ためのユニット。",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEE931",
+   "type": "wider",
+   "ko": "보다 넓은 공격",
+   "ja": "よりも広い攻撃",
+   "slot_override": 14,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEA22",
+   "type": "wider",
+   "ko": "캐논포의, 보병계에 대한",
+   "ja": "キャノン砲での、歩兵系に",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEA4E",
+   "type": "wider",
+   "ko": "공격력은, 강한 편에 든다.",
+   "ja": "攻撃力は、強いうちに入る。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEA72",
+   "type": "wider",
+   "ko": "캐논포로, 보병 계열 이외의",
+   "ja": "キャノン砲での、歩兵系以外の",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEA91",
+   "type": "wider",
+   "ko": "지상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEAAE",
+   "type": "wider",
+   "ko": "공격력은 높은 편.",
+   "ja": "攻撃力は高いほう。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEB38",
+   "type": "wider",
+   "ko": "의 「잠수」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEB7B",
+   "type": "wider",
+   "ko": "공중 유닛에 강함.",
+   "ja": "空ユニットに強い。",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEB90",
+   "type": "wider",
+   "ko": "그 밖에, 헬기를",
+   "ja": "そのほか、ヘリを",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEECB1",
+   "type": "wider",
+   "ko": "에 대한 공격력.",
+   "ja": "に対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEED59",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEE61",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEFA9",
+   "type": "wider",
+   "ko": "가능. 숫자는 이동력.",
+   "ja": "できる。数字は移動力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEEFF6",
+   "type": "overflow",
+   "ko": "차량 타입의 이동이 가능.",
+   "ja": "車両タイプの移動ができる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF0B2",
+   "type": "overflow",
+   "ko": "선박 타입의 이동이 가능하다.",
+   "ja": "船タイプの移動ができる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF0FA",
+   "type": "wider",
+   "ko": "수송선 타입의 이동.",
+   "ja": "輸送船タイプの移動。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF111",
+   "type": "wider",
+   "ko": "숫자는 이동력.",
+   "ja": "数字は移動力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF169",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF17C",
+   "type": "wider",
+   "ko": "산에 오르면, 범위가",
+   "ja": "山にのぼると、範囲が",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF1B5",
+   "type": "wider",
+   "ko": "숫자는 그 범위.",
+   "ja": "数字はその範囲。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF250",
+   "type": "wider",
+   "ko": "매 턴 5 소모한다.",
+   "ja": "毎ターン５消費する。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF2A8",
+   "type": "wider",
+   "ko": "매 턴 2 소모한다.",
+   "ja": "毎ターン２消費する。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF300",
+   "type": "wider",
+   "ko": "매 턴 1 소비한다.",
+   "ja": "毎ターン１消費する。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF3E2",
+   "type": "overflow",
+   "ko": "주포의,보병 계열 이외의",
+   "ja": "主砲での、歩兵系以外の",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF3FB",
+   "type": "wider",
+   "ko": "지상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF4C6",
+   "type": "wider",
+   "ko": "의 「잠수」 시에는",
+   "ja": "の「もぐる」時には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEF533",
+   "type": "wider",
+   "ko": "육상 유닛에 대한 공격력.",
+   "ja": "陸ユニットに対する攻撃力。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDEFDA7",
+   "type": "wider",
+   "ko": "나라의 일부를 되찾았다.",
+   "ja": "国の一部をとりかえした。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF1EA6",
+   "type": "wider",
+   "ko": "이 지도은 수도 점령, 또는 적 전멸로",
+   "ja": "このマップは、首都占領、もしくは敵全滅で",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF1EEE",
+   "type": "overflow",
+   "ko": "여기는,수도 점령,혹은 적 전멸로 승리예요!",
+   "ja": "ここは、首都占領、もしくは敵全滅で勝利よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF1F2E",
+   "type": "wider",
+   "ko": "수도 점령 또는 적 전멸로 승리.",
+   "ja": "首都占領、もしくは敵全滅で勝利よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF1F6E",
+   "type": "wider",
+   "ko": "수도 점령 또는 적 전멸로 승리.",
+   "ja": "首都占領、または敵全滅で勝利なの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2026",
+   "type": "overflow",
+   "ko": "수도 점령,또는 적 전멸로 승리예요!",
+   "ja": "首都占領、または敵全滅で勝利なの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF207A",
+   "type": "overflow",
+   "ko": "승리조건은,수도 점령,혹은 적 전멸이에요!",
+   "ja": "勝利条件は、首都占領、もしくは敵全滅よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF20BA",
+   "type": "overflow",
+   "ko": "수도 점령,적 전멸 어느 쪽으로든 이길 수 있어요!",
+   "ja": "首都占領、敵全滅のどちらかで勝てるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF215F",
+   "type": "wider",
+   "ko": "먼저 12거점 점령을 해!",
+   "ja": "先に１２拠点占領をしてね！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF217E",
+   "type": "overflow",
+   "ko": "수도 점령이나 적 전멸로 승리야.",
+   "ja": "首都占領か敵全滅で勝利よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF21AE",
+   "type": "overflow",
+   "ko": "수도 점령이나 적 전멸로,이길 수 있어요!",
+   "ja": "首都占領か敵全滅で、勝つことができるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF21EE",
+   "type": "overflow",
+   "ko": "수도 점령,혹은 적 전멸로 승리예요!",
+   "ja": "首都占領、もしくは敵全滅で勝利よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF228E",
+   "type": "overflow",
+   "ko": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+   "ja": "ここは、先にたくさん占領したほうが勝ちなの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF233B",
+   "type": "wider",
+   "ko": "거점 16개를 점령해!",
+   "ja": "１６拠点占領してね！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF239E",
+   "type": "overflow",
+   "ko": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+   "ja": "ここは、先にたくさん占領したほうが勝ちなの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF23CD",
+   "type": "wider",
+   "ko": "그래... 12거점 점령하는 거야!",
+   "ja": "そう・・・１２拠点占領するのよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2453",
+   "type": "wider",
+   "ko": "맞아... 15거점 점령하는 거야!",
+   "ja": "そう・・・１５拠点占領するのよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF247A",
+   "type": "wider",
+   "ko": "이 지도은 10일 동안",
+   "ja": "このマップは、１０日間",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF24EA",
+   "type": "wider",
+   "ko": "이 지도에서는 15일 안에 적을 전멸시키면",
+   "ja": "このマップでは、１５日以内に敵を全滅させると",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF25C4",
+   "type": "wider",
+   "ko": "시점에서 패배가 되어 버려!",
+   "ja": "じてんで負けになっちゃうの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF25FA",
+   "type": "overflow",
+   "ko": "수도 점령이나 적 전멸로 이길 수 있어요!",
+   "ja": "首都占領か敵全滅で勝つことができるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF266E",
+   "type": "overflow",
+   "ko": "수도 점령,혹은 적 전멸로 승리예요!",
+   "ja": "首都占領、もしくは敵全滅で勝利よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF26FE",
+   "type": "overflow",
+   "ko": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "ja": "首都占領か、敵全滅で勝つことができるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2806",
+   "type": "overflow",
+   "ko": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "ja": "首都占領や、敵全滅で勝つことができるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF285A",
+   "type": "overflow",
+   "ko": "수도 점령,혹은 적 전멸로 승리예요!",
+   "ja": "首都占領、もしくは敵全滅で勝利ね！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF28C2",
+   "type": "overflow",
+   "ko": "여기는,수도 점령,혹은 적 전멸로 승리예요!",
+   "ja": "ここは、首都占領、もしくは敵全滅で勝利よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2966",
+   "type": "overflow",
+   "ko": "저장 중입니다.전원을 끄지 말아 줘요.",
+   "ja": "セーブ中です。でんげんを切らないでね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2A4D",
+   "type": "wider",
+   "ko": "정말 항복할거야?",
+   "ja": "本当に降伏する？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2C1C",
+   "type": "wider",
+   "ko": "유닛 최대 수 50대에 도달했으므로,",
+   "ja": "ユニット最大数５０台に達しているので、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2DA6",
+   "type": "overflow",
+   "ko": "밝고 활기찬 게 장점인 소년.",
+   "ja": "明るく元気がとりえの少年。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2DC3",
+   "type": "wider",
+   "ko": "음식은 뭐든지 좋아한다.",
+   "ja": "食べ物は、なんでも好き。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2E50",
+   "type": "wider",
+   "ko": "높은 것 외에, 수송할 유닛",
+   "ja": "高いほか、輸送するユニット",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2E6F",
+   "type": "wider",
+   "ko": "의 이동력 높음.",
+   "ja": "の移動力が高い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2E84",
+   "type": "wider",
+   "ko": "그 외의 직접 공격 유닛",
+   "ja": "その他の直接攻撃ユニット",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2EA1",
+   "type": "wider",
+   "ko": "의 공격력 낮음.",
+   "ja": "の攻撃力は低い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2F28",
+   "type": "wider",
+   "ko": "이동 가능한 지형 이동",
+   "ja": "移動できる地形の、移動",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2F43",
+   "type": "wider",
+   "ko": "코스트가 모두 1이 된다.",
+   "ja": "コストがすべて１になる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF2FE3",
+   "type": "wider",
+   "ko": "직접공격이 가능한 유닛의",
+   "ja": "直接攻撃できるユニットの",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3000",
+   "type": "wider",
+   "ko": "공격력이 높다.",
+   "ja": "攻撃力が高い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3049",
+   "type": "wider",
+   "ko": "사거리 짧음.",
+   "ja": "射程も短い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3178",
+   "type": "wider",
+   "ko": "일이 자주 생긴다.",
+   "ja": "ことがよくおきる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3287",
+   "type": "overflow",
+   "ko": "비에 약하고,눈에 강한",
+   "ja": "雨に弱く、雪に強い",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF32AF",
+   "type": "wider",
+   "ko": "그 외의 능력은, 특히 약해",
+   "ja": "その他の能力は、とくに弱い",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF32CE",
+   "type": "wider",
+   "ko": "약한 곳도 강한 곳도 없다.",
+   "ja": "ところも強いところもない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF332A",
+   "type": "overflow",
+   "ko": "하는 일에 실수는 많지만,",
+   "ja": "やることにミスは多いが、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF33B7",
+   "type": "overflow",
+   "ko": "간접공격할 수 있는 유닛의",
+   "ja": "間接攻撃できるユニットの",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3402",
+   "type": "wider",
+   "ko": "유닛 공격력이 낮다.",
+   "ja": "ットの攻撃力が低い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF345D",
+   "type": "wider",
+   "ko": "공격력이 올라가는 데다,",
+   "ja": "攻撃力がアップするほか、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF34AD",
+   "type": "wider",
+   "ko": "사격의 천재.",
+   "ja": "射撃の天才。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF34BE",
+   "type": "wider",
+   "ko": "고양이",
+   "ja": "ネコ",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3503",
+   "type": "wider",
+   "ko": "공중 유닛의 공격력이",
+   "ja": "空ユニットの攻撃力が",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3683",
+   "type": "wider",
+   "ko": "라는 건가...?",
+   "ja": "いうのか・・・？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF369F",
+   "type": "overflow",
+   "ko": "해상유닛의 능력이 강하다.",
+   "ja": "海ユニットの能力が強い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF36BC",
+   "type": "wider",
+   "ko": "게다가, 바다 유닛만 지형",
+   "ja": "さらに、海ユニットのみ地形",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3742",
+   "type": "wider",
+   "ko": "적 전원에게 피해를 준다.",
+   "ja": "敵全員にダメージを与える。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3815",
+   "type": "wider",
+   "ko": "하지만 유닛을 생산하는",
+   "ja": "が、ユニットを生産する",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3830",
+   "type": "wider",
+   "ko": "때의 가격이 높다.",
+   "ja": "ときの値段が高い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF386C",
+   "type": "wider",
+   "ko": "공격력과 방어력이 더욱",
+   "ja": "攻撃力、守備力がさらに",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3961",
+   "type": "wider",
+   "ko": "상대에게 안 보인다",
+   "ja": "あいてに見せない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3978",
+   "type": "wider",
+   "ko": "다만 왠지 운이 나쁘다.",
+   "ja": "ただ、なぜか運が悪い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF39CC",
+   "type": "wider",
+   "ko": "게다가 시야 안이라면, 숲",
+   "ja": "さらに視界内であれば、森",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF3AFA",
+   "type": "overflow",
+   "ko": "모든 것이 수수께끼에 싸여",
+   "ja": "すべてがなぞにつつまれて",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF422E",
+   "type": "overflow",
+   "ko": "특별히 약한 점도 없는",
+   "ja": "とくに弱いところもない",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF425A",
+   "type": "wider",
+   "ko": "왠지 운이 좋다.",
+   "ja": "なぜか運がよい。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF437A",
+   "type": "overflow",
+   "ko": "간접공격의 사거리가 길다.",
+   "ja": "間接攻撃の射程がながい。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF4478",
+   "type": "wider",
+   "ko": "하지만, 해상 유닛의",
+   "ja": "しかし、海ユニットの",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF44B9",
+   "type": "wider",
+   "ko": "공중 유닛은 서툴다.",
+   "ja": "空ユニットはニガテ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF44F6",
+   "type": "overflow",
+   "ko": "모든 능력이 강하다.",
+   "ja": "全ての能力が強い。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF453F",
+   "type": "wider",
+   "ko": "모두 1이 된다.",
+   "ja": "すべて１になる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF56EB",
+   "type": "wider",
+   "ko": "발견되지 않는다. 단,",
+   "ja": "見つからない。ただし、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF577B",
+   "type": "wider",
+   "ko": "평범한 마을.",
+   "ja": "ふつうの町。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF57A7",
+   "type": "wider",
+   "ko": "육상 유닛 보충, 보급이",
+   "ja": "陸ユニットの補充　補給が",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF57E5",
+   "type": "wider",
+   "ko": "해상, 공중 유닛만이",
+   "ja": "海　空ユニットだけが",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF580F",
+   "type": "wider",
+   "ko": "각 군 본거지.",
+   "ja": "各軍の本拠地。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF5863",
+   "type": "wider",
+   "ko": "하늘은 없습니다.",
+   "ja": "そらはないです。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF587B",
+   "type": "overflow",
+   "ko": "공항이 있는 도시.",
+   "ja": "空港をもつ都市。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF588F",
+   "type": "wider",
+   "ko": "아군이 점령하고 있다면,",
+   "ja": "味方が占領しているなら、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF58DB",
+   "type": "overflow",
+   "ko": "항구가 있는 도시.",
+   "ja": "港をもつ都市。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF58ED",
+   "type": "wider",
+   "ko": "아군이 점령하고 있다면,",
+   "ja": "味方が占領しているなら、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF59B9",
+   "type": "wider",
+   "ko": "지형 효과 없음.",
+   "ja": "地形効果はない。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF59CF",
+   "type": "overflow",
+   "ko": "공장이 있는 도시.",
+   "ja": "工場をもつ都市。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF59E3",
+   "type": "wider",
+   "ko": "아군이 점령하고 있다면,",
+   "ja": "味方が占領しているなら、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF5A67",
+   "type": "wider",
+   "ko": "찾을 수 없어. 다만,",
+   "ja": "見つからない。ただし、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF60C6",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ　出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6118",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6146",
+   "type": "overflow",
+   "ko": "아라라 산중에 적의 부대가 확인되었어요.",
+   "ja": "アララ山中で敵の部隊が確認されたの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6263",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF627C",
+   "type": "wider",
+   "ko": "의 설명이야.",
+   "ja": "の説明なの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6404",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF646D",
+   "type": "wider",
+   "ko": "호이프 사령관도 진지해질 거라고 생각해.",
+   "ja": "ホイップショーグンも本気になると思うわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF65C6",
+   "type": "wider",
+   "ko": "사령관이 이끄는 부대에 질 것 같아.",
+   "ja": "ショーグンひきいる部隊に負けそうなの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF65F1",
+   "type": "wider",
+   "ko": "이 부대를 구출해 합류하고, 흩어진 요새",
+   "ja": "この部隊を救出し、合流して、チリヂリトリデ",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF661E",
+   "type": "wider",
+   "ko": "을 점령하는 게,",
+   "ja": "を占領するのが、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF662F",
+   "type": "wider",
+   "ko": "씨의 역할이야.",
+   "ja": "さんの役目よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6642",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF66C0",
+   "type": "wider",
+   "ko": "나라 윗사람도 만족하고 있어.",
+   "ja": "国の、上の人も満足しているわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF66E3",
+   "type": "wider",
+   "ko": "지금까지는, 적의 배치에 뒤처지고 있었",
+   "ja": "今までは、敵の配備に　おくれをとっていた",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF67EB",
+   "type": "wider",
+   "ko": "그냥 이쪽에 넘겨준 것뿐인 모양이라서...",
+   "ja": "ままこちらにくださっただけ、らしいから・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF68E0",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6A66",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6C36",
+   "type": "wider",
+   "ko": "공중 유닛의 연료에 대한 설명이야.",
+   "ja": "空ユニットの燃料についての説明なの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6D67",
+   "type": "wider",
+   "ko": "행방불명이 되었어요.",
+   "ja": "行方不明になったの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6E0E",
+   "type": "overflow",
+   "ko": "아니　아무것도 아니에요.",
+   "ja": "ううん　何でもないわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF6E46",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF7032",
+   "type": "overflow",
+   "ko": "항상 적보다 안 좋은 유닛밖에 없어서",
+   "ja": "いつも敵より悪いユニットしかいなくて",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF706E",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF70D2",
+   "type": "wider",
+   "ko": "좋은 소식이야!",
+   "ja": "いいしらせよ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF71C9",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF72B8",
+   "type": "wider",
+   "ko": "여기 새로 등장하는 해상 유닛이야.",
+   "ja": "ここで新しく登場する、海ユニットよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF7371",
+   "type": "wider",
+   "ko": "쓸 수 없어.",
+   "ja": "使えないわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF740E",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF74F2",
+   "type": "wider",
+   "ko": "성격이나 병사 운용은 차치하고",
+   "ja": "性格とか　兵の使い方はともかく",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF75DA",
+   "type": "wider",
+   "ko": "조금만 더 하면, 블루문 군을 여기서",
+   "ja": "もうすこしで、ブルームーン軍をここから",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF762A",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF77A2",
+   "type": "wider",
+   "ko": "자, 출격이야!",
+   "ja": "さあ、出撃よ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF77DE",
+   "type": "overflow",
+   "ko": "이건,더 자세히 알고 싶은 사람",
+   "ja": "ここは、もっとくわしく知りたい人",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF8DB2",
+   "type": "overflow",
+   "ko": "당신의 이름을 알려주세요.",
+   "ja": "あなたの名前をおしえてね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF8E16",
+   "type": "overflow",
+   "ko": "어드밴스 워즈에 오신 걸 환영해요!",
+   "ja": "ゲームボーイウォーズへようこそ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF8E6E",
+   "type": "overflow",
+   "ko": "레드스타의 사령관,캐서린이에요.",
+   "ja": "レッドスター国のショーグン、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF9174",
+   "type": "wider",
+   "ko": "내가 「작전룸」에서 전투법을 알려주고 있어",
+   "ja": "「サクセンルーム」で戦い方を教えているの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF91D0",
+   "type": "wider",
+   "ko": "포함해서 말야.",
+   "ja": "ふくめて、ね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF92CA",
+   "type": "overflow",
+   "ko": "그게 좋겠다고 생각해요!",
+   "ja": "それがいいと思うわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF9594",
+   "type": "wider",
+   "ko": "그러면, 내가 전투법을 가르쳐주는",
+   "ja": "それから、私が戦い方を教えている、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDF969A",
+   "type": "wider",
+   "ko": "어머, 역시 그만두시나요?",
+   "ja": "あら、やっぱりやめるの？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA616",
+   "type": "overflow",
+   "ko": "점수를 겨뤄보세요!",
+   "ja": "点数をきそってね！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA79A",
+   "type": "overflow",
+   "ko": "처음부터 대전을 할 수 있어요.",
+   "ja": "はじめからタイセンができるわよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA7BE",
+   "type": "overflow",
+   "ko": "이어서 대전을 할 수 있어요.",
+   "ja": "つづきからタイセンができるわ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA8AA",
+   "type": "overflow",
+   "ko": "혼자서 대전을 하는 곳이에요.",
+   "ja": "１人でタイセンをするところよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA8EA",
+   "type": "overflow",
+   "ko": "2인 대전을 하는 곳이에요.",
+   "ja": "２人タイセンをするところよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA90A",
+   "type": "overflow",
+   "ko": "3인 대전을 할 수 있어요.",
+   "ja": "３人タイセンができるの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFA926",
+   "type": "overflow",
+   "ko": "4인 대전을 하고 싶나요?",
+   "ja": "４人タイセンをしたいの？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFAF03",
+   "type": "wider",
+   "ko": "쓸 수 있는 돈이야！",
+   "ja": "で使えるお金なの！",
+   "slot_override": 18,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFAF43",
+   "type": "wider",
+   "ko": "점장님, 하치 씨가 가르쳐 줄 거야!",
+   "ja": "てんちょう、ハチさんが教えてくれるわ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB2E3",
+   "type": "wider",
+   "ko": "나머지는... 그래, '케이스'도",
+   "ja": "あとは・・・そうだな、「ケース」も",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB361",
+   "type": "wider",
+   "ko": "자세한 건... 뭐, 일단 사 보면 알겠지!",
+   "ja": "くわしいことは・・・ま、買ってみるんだな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB3BD",
+   "type": "wider",
+   "ko": "어떤 조건을 만족하면, 새로운 사령관도",
+   "ja": "ある条件を満たしたら、新しくショーグンも",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB3E8",
+   "type": "wider",
+   "ko": "고용할 수 있게 된다!",
+   "ja": "やとえるようになるぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB42A",
+   "type": "wider",
+   "ko": "이란 거지!",
+   "ja": "ことだな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB4A8",
+   "type": "wider",
+   "ko": "오늘은 뭐가 필요하니?",
+   "ja": "今日は何がいるんだい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB4D7",
+   "type": "wider",
+   "ko": "오늘은 뭐가 필요하니?",
+   "ja": "今日は何がいるんだい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB4F2",
+   "type": "overflow",
+   "ko": "아무것도 없어.",
+   "ja": "何もないよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB501",
+   "type": "wider",
+   "ko": "전부 팔려 버렸어.",
+   "ja": "全部売れちまった。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB517",
+   "type": "wider",
+   "ko": "이것도 내 실력이라는 거지.",
+   "ja": "これもワシの実力ってやつよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB54B",
+   "type": "wider",
+   "ko": "우리 가게엔 뭐든 있어.",
+   "ja": "ウチにないものはないよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB56A",
+   "type": "overflow",
+   "ko": "뭐야, 아직 뭔가가 남았나,캐서・・・",
+   "ja": "なんだ、まだ何か用か、キャサ・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB644",
+   "type": "wider",
+   "ko": "방금 얘긴 없던 거야",
+   "ja": "さっきの話はナシだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB695",
+   "type": "wider",
+   "ko": "우리 가게에서 물건을 사고 싶다면 「캠페인」",
+   "ja": "ウチでモノを買いたいんなら、「キャンペーン」",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB723",
+   "type": "wider",
+   "ko": "그러고 보니 「케이스」를 사 본 적 있나?",
+   "ja": "そうそう、「ケース」を買ったことはあるかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB809",
+   "type": "wider",
+   "ko": "여기서만 말하는데, 우리는 사령관을",
+   "ja": "ここだけの話、うちではショーグンを",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB87A",
+   "type": "wider",
+   "ko": "말할 수 없네.",
+   "ja": "言えねえなあ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB8C7",
+   "type": "wider",
+   "ko": "자, 뭐가 필요하지?",
+   "ja": "さあ、なにがいる？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFB982",
+   "type": "overflow",
+   "ko": "열심히 하고 있는 모양이구만.",
+   "ja": "がんばっているようだな。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBA02",
+   "type": "wider",
+   "ko": "뭔가 늘었을지도 모르겠는데?",
+   "ja": "何かふえてるかもしれないぜ？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBA3E",
+   "type": "wider",
+   "ko": "자, 장사 시작이다! 천천히 둘러보고 가!",
+   "ja": "さあ、ショウバイだ！ゆっくりしていきな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBB13",
+   "type": "wider",
+   "ko": "아차, 안 되지!",
+   "ja": "おっといけねえ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBB41",
+   "type": "wider",
+   "ko": "자, 뭐가 필요해?",
+   "ja": "さあ、なにがいる？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBB98",
+   "type": "wider",
+   "ko": "언제나 같은 사령관이면, 재미가 없잖아!",
+   "ja": "いつも、同じショーグンじゃ、げいがないぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBD6D",
+   "type": "wider",
+   "ko": "한번 해 보는 거야!",
+   "ja": "やってみることだな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBD86",
+   "type": "wider",
+   "ko": "자, 척척 벌어 우리 가게에서",
+   "ja": "さあ、どんどんかせいで、ウチで",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBDDB",
+   "type": "wider",
+   "ko": "「사령관 브레이크」는 제대로 다루고 있나?",
+   "ja": "「ショーグンブレイク」は、使いこなしてるか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBE42",
+   "type": "wider",
+   "ko": "하지만, 그 효과 외에, 쓴 날에는",
+   "ja": "だが、その効果のほかに、使った日には",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBE9A",
+   "type": "wider",
+   "ko": "그러니까 료도 쓰기 나름에 따라서는,",
+   "ja": "だからリョウでも、使いようによっちゃ、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBEC3",
+   "type": "wider",
+   "ko": "공격에 쓸 수 있어!",
+   "ja": "攻撃に使えるんだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFBF70",
+   "type": "wider",
+   "ko": "쓰기 어렵다거나, 약하다고 생각하진 않냐?",
+   "ja": "使いにくいとか、弱いとか思っちゃいないか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC0BB",
+   "type": "wider",
+   "ko": "간접 공격 유닛은 결코 약하지 않아!",
+   "ja": "間接攻撃ユニットは弱くもなんともねえ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC115",
+   "type": "wider",
+   "ko": "해치우는 것도 효과적인 전투 방식이지!",
+   "ja": "やっつける、というのも有効な戦い方だぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC159",
+   "type": "wider",
+   "ko": "도미노 사령관은, 브레이크 게이지가",
+   "ja": "ドミノショーグンは、ブレイクゲージが",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC180",
+   "type": "wider",
+   "ko": "쉽게 모이는 거야!",
+   "ja": "たまりやすいんだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC215",
+   "type": "wider",
+   "ko": "자, 장사 시작이다!",
+   "ja": "さあ、ショウバイだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC2F3",
+   "type": "wider",
+   "ko": "사령관과 같은 방식으로 싸우면 안 돼!",
+   "ja": "ショーグンと同じ戦い方じゃ、だめだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC3CE",
+   "type": "wider",
+   "ko": "뭐, 나도 젊었을 때는... 이런 얘긴",
+   "ja": "ま、ワシも若いころは・・・こんな話は",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC436",
+   "type": "wider",
+   "ko": "어이, 이기고 있나?",
+   "ja": "よう、勝ってるかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC44F",
+   "type": "wider",
+   "ko": "호이프 사령관에 대해서는 알고 있나?",
+   "ja": "ホイップショーグンのことは知ってるか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC4A1",
+   "type": "wider",
+   "ko": "...라고 생각하는 거 아니야?",
+   "ja": "・・・なんて思っちゃいないかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC5DE",
+   "type": "wider",
+   "ko": "그 녀석도 예전엔... 아차, 내 얘기군!",
+   "ja": "やつもむかしは・・・おっと、こっちの話だ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC775",
+   "type": "wider",
+   "ko": "자, 장사 시작이다!",
+   "ja": "さあ、ショウバイだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC7DB",
+   "type": "wider",
+   "ko": "에 대해서는 알고 있나?",
+   "ja": "のことは、知ってるかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC8FA",
+   "type": "wider",
+   "ko": "여어, 열심히 하는구나!",
+   "ja": "よう、せいがでるねえ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC940",
+   "type": "wider",
+   "ko": "이야기는, 들어본 적 있어?",
+   "ja": "の話は、聞いたことあるかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFC9A5",
+   "type": "wider",
+   "ko": "무엇보다 다른 사령관들과 달리 눈에 보이게",
+   "ja": "なにせほかのショーグンとちがって、目に見えて",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCA93",
+   "type": "wider",
+   "ko": "능숙한 사령관이 다뤘을 때의 아스카는,",
+   "ja": "うまいシレイが使ったときのアスカは、",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCADD",
+   "type": "wider",
+   "ko": "자, 이야기는 이 정도다!",
+   "ja": "さあ、話はこれくらいだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCCA4",
+   "type": "wider",
+   "ko": "연료가 줄어들지.",
+   "ja": "燃料がへるよな。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCDBD",
+   "type": "wider",
+   "ko": "해상 유닛에 강하고, 공중 유닛에 약해.",
+   "ja": "海ユニットがトクイで、空ユニットがニガテ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCDEC",
+   "type": "wider",
+   "ko": "그리고, 브레이크가 전체에 피해... 라는",
+   "ja": "で、ブレイクが全体にダメージ・・・っていう",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCE86",
+   "type": "wider",
+   "ko": "반드시 비가 내리는 건 아니지만, 뭐",
+   "ja": "かくじつに雨が降るわけじゃねぇが、まあ",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCEF1",
+   "type": "wider",
+   "ko": "이제 장사로 넘어가자!",
+   "ja": "ショウバイにうつるぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCF8A",
+   "type": "wider",
+   "ko": "빌리 사령관을 고용하고 싶은 건가?",
+   "ja": "ビリーショーグンをやといたいのかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCFB6",
+   "type": "wider",
+   "ko": "키쿠치요 사령관을 고용하는 거지?",
+   "ja": "キクチヨショーグンをやとうんだな？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFCFDE",
+   "type": "overflow",
+   "ko": "아스카 사령관을 고용할 수 있다네!",
+   "ja": "アスカショーグンがやとえるんだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD006",
+   "type": "wider",
+   "ko": "오우! 모프 사령관을 쓰고 싶은 건가?",
+   "ja": "おう！モップショーグンを使いたいのかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD031",
+   "type": "wider",
+   "ko": "그럼, 고용해 가는 거구나!",
+   "ja": "じゃ、やとっていくんだな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD082",
+   "type": "wider",
+   "ko": "이건 비밀인데, 그 헬보우즈를 고용할 수 있다네!",
+   "ja": "ここだけの話、あのヘルボウズがやとえるんだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD0B6",
+   "type": "overflow",
+   "ko": "대전 맵에서 싸울 수 있는 맵 케이스다!",
+   "ja": "タイセンマップで戦えるマップケースだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD0DF",
+   "type": "wider",
+   "ko": "지금이면 지도도 몇 개 끼워주겠네!",
+   "ja": "今ならマップも　いくつかつけるが？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD133",
+   "type": "wider",
+   "ko": "그래! 거의 모든 지도이 들어 있다고!",
+   "ja": "だぜ！ほとんどのマップがはいってらぁな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD162",
+   "type": "wider",
+   "ko": "「트라이얼」 모드에서 싸우고 있던 곳을",
+   "ja": "「トライアル」モードで戦っていたところを",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD1B2",
+   "type": "overflow",
+   "ko": "3인 대전을 할 수 있는 맵 케이스라네!",
+   "ja": "３人タイセンができるマップケースだな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD402",
+   "type": "wider",
+   "ko": "백지도군! 맵 디자인에 쓸 수 있어!",
+   "ja": "白地図だな！マップデザインで使えるぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD556",
+   "type": "wider",
+   "ko": "또 얼굴 보러 와라!",
+   "ja": "またカオ見せろよな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFD5CE",
+   "type": "wider",
+   "ko": "저장하고 갈 텐가?",
+   "ja": "保存していくかい？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF0BE",
+   "type": "wider",
+   "ko": "...하지만, 이상하지 않나?",
+   "ja": "・・・しかし、みょうじゃな？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF104",
+   "type": "wider",
+   "ko": "안 될 거야.",
+   "ja": "いかんはず。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF1AD",
+   "type": "wider",
+   "ko": "새 사령관이라면 말이지!",
+   "ja": "新しいショーグンではな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF222",
+   "type": "wider",
+   "ko": "!앞으로 잘 부탁해!",
+   "ja": "！これからよろしく！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF7BE",
+   "type": "wider",
+   "ko": "「나리」라니 무슨 소리냐!",
+   "ja": "「だんな」とは何ごとじゃ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF872",
+   "type": "wider",
+   "ko": "그 땅에 나타났다!",
+   "ja": "れいの地に現れた！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF8C5",
+   "type": "wider",
+   "ko": "하지만! 아무래도 ",
+   "ja": "しかし！どうやら",
+   "slot_override": 16,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF8E7",
+   "type": "wider",
+   "ko": "사령관과 힘을 합치고 있는 모양이야!",
+   "ja": "ショーグンと力を合わせているらしい！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF910",
+   "type": "wider",
+   "ko": "방심할 수는 없소!",
+   "ja": "ゆだんはできぬぞ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xDFF9F6",
+   "type": "wider",
+   "ko": "얼른 가지 않으면...",
+   "ja": "さっさといかんと・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE007D3",
+   "type": "wider",
+   "ko": "도우러 왔다! 잘 부탁해!",
+   "ja": "助けにきたぜ！よろしくな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE00813",
+   "type": "wider",
+   "ko": "어떤 힘을 가지고 있지?",
+   "ja": "どんなチカラがあるんだ？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE00A50",
+   "type": "wider",
+   "ko": "이쪽 루트는 만만치 않아 보이는군!",
+   "ja": "こっちのルートは、てごわそうだなっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0112E",
+   "type": "overflow",
+   "ko": "뭐,여러 가지 있어서 말이야.",
+   "ja": "ま、いろいろあってな。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0187B",
+   "type": "wider",
+   "ko": "씨, 그리고 모두들!",
+   "ja": "さん、それにみんな！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE018C6",
+   "type": "wider",
+   "ko": "그렇게 허둥대다니.",
+   "ja": "そんなにあわてて。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE018F9",
+   "type": "wider",
+   "ko": "호이프의 최강 부대, 「호이프 해군」이",
+   "ja": "ホイップの最強部隊、「ホイップ海軍」が",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE01FF7",
+   "type": "wider",
+   "ko": "하지만 말이야!",
+   "ja": "だがしかーし！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE020A0",
+   "type": "wider",
+   "ko": "하긴 할 건데...",
+   "ja": "するんだが・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0270E",
+   "type": "wider",
+   "ko": "'뭡니까'라니 무슨 소리냐!",
+   "ja": "「何ですか」とは何事じゃ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE027C7",
+   "type": "wider",
+   "ko": "라면 말하지.",
+   "ja": "ではいうぞ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE02816",
+   "type": "wider",
+   "ko": "네놈을 위해 유닛은 마련해 두었다.",
+   "ja": "きさま用にユニットは用立てておいた。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE02944",
+   "type": "wider",
+   "ko": "나라면 이 정도는 식은 죽 먹기지!",
+   "ja": "オレならこのていど　らくしょうだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE03056",
+   "type": "wider",
+   "ko": "이, 이놈이라는 녀석은...",
+   "ja": "き、きさまというやつは・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE03157",
+   "type": "wider",
+   "ko": "춥지 않은 거냐?",
+   "ja": "さむくないのか？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0374E",
+   "type": "overflow",
+   "ko": "아무래도　다음 적은 빌리인 모양이군.",
+   "ja": "どうやら　次の敵はビリーのようだな。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE03835",
+   "type": "wider",
+   "ko": "그런 녀석이었는데...",
+   "ja": "やつだったんだが・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE03852",
+   "type": "overflow",
+   "ko": "그래서 캐서린은 알고 있었던 건가.",
+   "ja": "それでキャサリンは知ってたのか。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE038A6",
+   "type": "wider",
+   "ko": "그건 오히려 내가 묻고 싶을 정도라고.",
+   "ja": "それは　オレのほうが聞きたいくらいだぜ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE038D6",
+   "type": "wider",
+   "ko": "그러니까 료, 부탁한다!",
+   "ja": "だから　リョウ。たのむ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE03934",
+   "type": "wider",
+   "ko": "빌리는 내가 상대하겠다!",
+   "ja": "ビリーとは　オレがやる！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE04162",
+   "type": "wider",
+   "ko": "그래그래, 그리고 정보 하나야.",
+   "ja": "そうそう、それから１つ情報よ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE04F5E",
+   "type": "wider",
+   "ko": "「상황은?」 하고 묻는 거야.",
+   "ja": "「状況は？」って聞いてるの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE04FC3",
+   "type": "wider",
+   "ko": "전투는, 정보를 쥔 쪽이 이기는 거야.",
+   "ja": "戦いは、情報をにぎったほうが勝つのよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0508C",
+   "type": "wider",
+   "ko": "지금 그들은 여기에 있어.",
+   "ja": "今、かれらはここにいるの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE051B7",
+   "type": "wider",
+   "ko": "준비 안 하면, 상대는 공장을...",
+   "ja": "用意しないと、あいては工場を・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE05975",
+   "type": "wider",
+   "ko": "공격을 버텨 내다니.",
+   "ja": "攻撃をしのぐとはね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE059A2",
+   "type": "wider",
+   "ko": "이봐, 한심한 소리 내지 마!",
+   "ja": "ほら、なさけない声ださないの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE05A15",
+   "type": "wider",
+   "ko": "하지만, 어떻게 해야...",
+   "ja": "だが、どうすれば・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE05A32",
+   "type": "overflow",
+   "ko": "상대가 생산 거점을 가지고 있다면",
+   "ja": "あいてが生産拠点をもってるなら",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE05A53",
+   "type": "wider",
+   "ko": "이쪽도 준비하면 되는 거야.",
+   "ja": "こっちも用意すればいいのよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE05B42",
+   "type": "wider",
+   "ko": "제대로 좋은 위치에 배치할 수 있을까???",
+   "ja": "ちゃんと　いいばしょにおけるかしら？？？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE062C4",
+   "type": "wider",
+   "ko": "상대를 잘못 만났네.",
+   "ja": "相手が悪かったわね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0630A",
+   "type": "overflow",
+   "ko": "아,아스카에게 그런 위험한 짓을",
+   "ja": "あ、アスカにそんな危険なこと",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE06329",
+   "type": "wider",
+   "ko": "그렇게 둘 수는 없다!",
+   "ja": "させるわけにはいかぬ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE06369",
+   "type": "wider",
+   "ko": "저 녀석에게...",
+   "ja": "あやつに・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE063A1",
+   "type": "wider",
+   "ko": "작전도 있으니까, 말이야.",
+   "ja": "作戦もあることだし、ね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE063BE",
+   "type": "wider",
+   "ko": "그, 하지만...",
+   "ja": "し、しかし・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE063E7",
+   "type": "wider",
+   "ko": "위험해지면 바로 도망쳐 올 테니까.",
+   "ja": "あぶなくなったらすぐにげてくるから。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE06B05",
+   "type": "wider",
+   "ko": "...맥스! 당신 왜 자고 있는 거야!",
+   "ja": "・・・マックス！　あなたなんでねてるの！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE07B3A",
+   "type": "wider",
+   "ko": "햇볕이라도 쬐지 않을래?",
+   "ja": "ひなたぼっこでもしない？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE07BAA",
+   "type": "wider",
+   "ko": "헤에, 그렇구나.",
+   "ja": "へー　そーなの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE07CA6",
+   "type": "overflow",
+   "ko": "・・・아무래도 저 녀석과 이야기하면",
+   "ja": "・・・どうもあいつと話してると",
+   "slot_override": 30,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE07CC7",
+   "type": "wider",
+   "ko": "페이스가 흔들려...",
+   "ja": "調子がくるう・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE07DA2",
+   "type": "wider",
+   "ko": "내 손에 걸리면 이 정도쯤이야!",
+   "ja": "オレにかかれば　こんなもんだっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE08433",
+   "type": "wider",
+   "ko": "빨리 하지 않으면...",
+   "ja": "はやくしないと・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE08533",
+   "type": "wider",
+   "ko": "이 싸움 자체가 누군가에게 꾸며진 거야.",
+   "ja": "この戦いそのものが、だれかにしくまれてる。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE08634",
+   "type": "wider",
+   "ko": "난 이쪽으로 가고 싶다고!",
+   "ja": "オレはこっちに行きたいぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE08D06",
+   "type": "wider",
+   "ko": "생각하지만 좀처럼 안 되네.",
+   "ja": "おもうんだけど　なかなかね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE08DFC",
+   "type": "overflow",
+   "ko": "언제든지 나갈 수 있다고!",
+   "ja": "いつでもでられるぜっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE094C9",
+   "type": "wider",
+   "ko": "다른 사람이야.",
+   "ja": "べつのひとよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE094DE",
+   "type": "wider",
+   "ko": "뭔가 알고 있는 거야?!",
+   "ja": "何か知ってるのかっ？！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0953E",
+   "type": "wider",
+   "ko": "그, 하지만...",
+   "ja": "し　しかし・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE09E26",
+   "type": "wider",
+   "ko": "햇볕이라도 쬐지 않을래?",
+   "ja": "ひなたぼっこでもしない？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE09E96",
+   "type": "wider",
+   "ko": "헤에, 그런 거야.",
+   "ja": "へー　そーなの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE09F92",
+   "type": "wider",
+   "ko": "...아무래도 저 녀석과 얘기하면",
+   "ja": "・・・どうもあいつと話してると",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0A028",
+   "type": "overflow",
+   "ko": "미안하군・・・지금까지 잤지만　이제",
+   "ja": "すまねえ・・・今までねてたが　もう",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0A096",
+   "type": "wider",
+   "ko": "내 손에 걸리면 이 정도쯤이야!",
+   "ja": "オレにかかれば　こんなもんだっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0A6E7",
+   "type": "wider",
+   "ko": "빨리 하지 않으면...",
+   "ja": "はやくしないと・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B0CC",
+   "type": "overflow",
+   "ko": "언제든지 나갈 수 있다고!",
+   "ja": "いつでもでられるぜっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B11A",
+   "type": "wider",
+   "ko": "...다들 너무해...",
+   "ja": "・・・みんなして・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B795",
+   "type": "wider",
+   "ko": "다른 사람이야.",
+   "ja": "べつのひとよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B7AA",
+   "type": "wider",
+   "ko": "뭔가 알고 있는 거야?!",
+   "ja": "何か知ってるのかっ？！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B7F5",
+   "type": "wider",
+   "ko": "따라오지 않아?",
+   "ja": "ついてこない？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0B80A",
+   "type": "wider",
+   "ko": "하, 하지만・・・",
+   "ja": "し　しかし・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C0D2",
+   "type": "wider",
+   "ko": "햇볕이라도 쬐지 않을래?",
+   "ja": "ひなたぼっこでもしない？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C0F2",
+   "type": "overflow",
+   "ko": "무슨 태평한 소리를 하는 건가!",
+   "ja": "何をのんきなことをいってるのだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C142",
+   "type": "wider",
+   "ko": "헤에, 그런 거야.",
+   "ja": "へー　そーなの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C15A",
+   "type": "wider",
+   "ko": "그, 그런 거였어...",
+   "ja": "そ　そーなのって・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C23E",
+   "type": "wider",
+   "ko": "...아무래도 저 녀석과 얘기하면",
+   "ja": "・・・どうもあいつと話してると",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C25F",
+   "type": "wider",
+   "ko": "감이 흐트러지네...",
+   "ja": "調子がくるう・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C2D4",
+   "type": "overflow",
+   "ko": "미안하군・・・지금까지 잤지만　이제",
+   "ja": "すまねえ・・・今までねてたが　もう",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C993",
+   "type": "wider",
+   "ko": "서두르지 않으면...",
+   "ja": "はやくしないと・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0C9D3",
+   "type": "wider",
+   "ko": "상황을 더 차분히 살피지 않으면 위험해.",
+   "ja": "もっとじっくりことを見ないと　あぶないよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0D282",
+   "type": "wider",
+   "ko": "생각하지만 좀처럼 안 되네.",
+   "ja": "おもうんだけど　なかなかね。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0D378",
+   "type": "overflow",
+   "ko": "언제든지 나갈 수 있다고!",
+   "ja": "いつでもでられるぜっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0DA41",
+   "type": "wider",
+   "ko": "다른 사람이야.",
+   "ja": "べつのひとよ。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0DA56",
+   "type": "wider",
+   "ko": "뭔가 알고 있는 거냐?!",
+   "ja": "何か知ってるのかっ？！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E3FA",
+   "type": "wider",
+   "ko": "...그러고 보니...",
+   "ja": "・・・そういえば・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E495",
+   "type": "wider",
+   "ko": "우글우글 몰려 있잖아!",
+   "ja": "うじゃうじゃいやがる！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E4D7",
+   "type": "wider",
+   "ko": "복제 인간을 만들 수 있나 봐.",
+   "ja": "コピーした人間を作れるらしいの。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E592",
+   "type": "overflow",
+   "ko": "이런 녀석들을　그냥 둘 수 있겠냐!",
+   "ja": "こんなやつらを　のばなしにできるか！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E614",
+   "type": "overflow",
+   "ko": "이미 누군가　싸우고 있어!",
+   "ja": "もうだれか　戦っている！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E62F",
+   "type": "wider",
+   "ko": "구하는 거야!",
+   "ja": "助けるんだ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0E6C2",
+   "type": "wider",
+   "ko": "료우의 복제인가... 제법이군",
+   "ja": "リョウのコピーか・・・なかなか",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0EE2C",
+   "type": "wider",
+   "ko": "무리는 하지 않을게.",
+   "ja": "ムチャはしないから。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0EF11",
+   "type": "wider",
+   "ko": "도움이 될 테니까...",
+   "ja": "役に立つからね・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0EF2C",
+   "type": "wider",
+   "ko": "시간이 없다, 서두르자!",
+   "ja": "じかんがない　いそぐぞ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0EFB2",
+   "type": "wider",
+   "ko": "이 녀석이 아니었던 거야?!",
+   "ja": "こいつじゃなかったのかっ？！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0EFD2",
+   "type": "overflow",
+   "ko": "빨리　흑막을 해치우지 않으면",
+   "ja": "はやく　黒幕をやっつけないと",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0F6E2",
+   "type": "overflow",
+   "ko": "작전을 짜는 것밖에 재주가 없는　계집애가.",
+   "ja": "作戦をねることしか能のない　こむすめが。",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0F73E",
+   "type": "wider",
+   "ko": "그, 그럴 수가?!",
+   "ja": "そ　そんなっ？！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0F772",
+   "type": "overflow",
+   "ko": "마지막의 마지막에 작전을 그르쳤구나・・・",
+   "ja": "最後の最後でさくせんをあやまったな・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0FED9",
+   "type": "wider",
+   "ko": "하고 싶었어!",
+   "ja": "したかった！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0FF0C",
+   "type": "overflow",
+   "ko": "언제든지 나갈 수 있다고!",
+   "ja": "いつでもでられるぜっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE0FF6A",
+   "type": "wider",
+   "ko": "...아직 더 갈 수 있다고!",
+   "ja": "・・・まだまだいけるぜっ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE10D7A",
+   "type": "overflow",
+   "ko": "식은 죽 먹기지!",
+   "ja": "らくしょうだぜ！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE10E5A",
+   "type": "wider",
+   "ko": "감히 내게 맞서다니・・・",
+   "ja": "われにたてつくとは・・・",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE10FB2",
+   "type": "wider",
+   "ko": "어떤 지도이든 랭크가 매겨지니, 친구와",
+   "ja": "どのマップでもランクがつくので、お友達と",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE10FDD",
+   "type": "wider",
+   "ko": "비교해 보는 것도, 재밌을지도?",
+   "ja": "くらべてみるのも、楽しいかもよ？",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xE110B2",
+   "type": "wider",
+   "ko": "좋은 느낌이네!",
+   "ja": "いいかんじね！",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xEC30A2",
+   "type": "overflow",
+   "ko": "있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다",
+   "ja": "アリにするとユニットの視界外が見えなくなります",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xEC312E",
+   "type": "overflow",
+   "ko": "지정일이 종료되면 소유 거점 수로 결판을 냅니다",
+   "ja": "指定日が終了した時に所有拠点数で決着をつけます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xEC3162",
+   "type": "overflow",
+   "ko": "지정 거점 수를 소유한 시점에서 우세 승리가 됩니다",
+   "ja": "指定拠点数を所有した時点で優勢勝利となります",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xEC3192",
+   "type": "overflow",
+   "ko": "있음으로 하면 사령관 능력이 유효해집니다",
+   "ja": "アリにするとショーグン能力が有効になります",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xEC3246",
+   "type": "overflow",
+   "ko": "같은 깃발을 가지는 것으로 팀을 설정할 수 있습니다",
+   "ja": "同じハタを持つことでチームを設定できます",
+   "slot_override": null,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA2D5C8",
+   "type": "overflow",
+   "ko": "내일로의 7일간",
+   "ja": "明日への７日間",
+   "slot_override": 14,
+   "caller_line": 360
+  },
+  {
+   "address": "0xA01C78",
+   "type": "overflow",
+   "ko": "기대하고 있다.",
+   "ja": "期待している。",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA04612",
+   "type": "wider",
+   "ko": "무사하면、　",
+   "ja": "無傷なら、",
+   "slot_override": 10,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA04715",
+   "type": "wider",
+   "ko": "좋아。　",
+   "ja": "よし、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA050C1",
+   "type": "wider",
+   "ko": "그리고　",
+   "ja": "あと、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA058C2",
+   "type": "wider",
+   "ko": "아이네...",
+   "ja": "コね・・・",
+   "slot_override": 10,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA060C5",
+   "type": "wider",
+   "ko": "간접 공격 따위　",
+   "ja": "間接なんか、",
+   "slot_override": 14,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA061EB",
+   "type": "wider",
+   "ko": "보병과　",
+   "ja": "歩兵や",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA06620",
+   "type": "overflow",
+   "ko": "B를 눌러야 한다",
+   "ja": "Ｂを押す",
+   "slot_override": 8,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA06888",
+   "type": "wider",
+   "ko": "합류해서　",
+   "ja": "合流して",
+   "slot_override": 8,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA07330",
+   "type": "overflow",
+   "ko": "알겠습니다・・・",
+   "ja": "了解・・・",
+   "slot_override": 10,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA074AC",
+   "type": "overflow",
+   "ko": "적 부대에 폭격기・・・",
+   "ja": "敵の部隊に爆撃機・・・",
+   "slot_override": 22,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA07B1F",
+   "type": "wider",
+   "ko": " 지금, ",
+   "ja": "今、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA08930",
+   "type": "overflow",
+   "ko": "이번에는",
+   "ja": "今回は",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA08987",
+   "type": "wider",
+   "ko": "유감이야...",
+   "ja": "残念よ・・・",
+   "slot_override": 12,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA08B98",
+   "type": "overflow",
+   "ko": "하지만 도미노,",
+   "ja": "でもドミノ、",
+   "slot_override": 12,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA090A4",
+   "type": "overflow",
+   "ko": "자주포의 강화 유닛이라고,",
+   "ja": "自走砲の強化ユニットと、",
+   "slot_override": 24,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA0964B",
+   "type": "wider",
+   "ko": "항구...",
+   "ja": "港・・・",
+   "slot_override": 8,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA0A888",
+   "type": "wider",
+   "ko": "나중에　",
+   "ja": "後で、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA0BC9C",
+   "type": "overflow",
+   "ko": "몇 번이나　",
+   "ja": "何度、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA1E923",
+   "type": "wider",
+   "ko": "이보게, ",
+   "ja": "のう、",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA1EDAC",
+   "type": "wider",
+   "ko": "어리석군.",
+   "ja": "バカな。",
+   "slot_override": 8,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA1FD09",
+   "type": "wider",
+   "ko": "그래도...",
+   "ja": "でも・・・",
+   "slot_override": 10,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA1FDCA",
+   "type": "wider",
+   "ko": "으로 사용 가능해.",
+   "ja": "で使用可能よ。",
+   "slot_override": 14,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA2185B",
+   "type": "wider",
+   "ko": "선생님!",
+   "ja": "先生！",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA219AB",
+   "type": "wider",
+   "ko": "선생님!",
+   "ja": "先生！",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA2785D",
+   "type": "wider",
+   "ko": "기다려!",
+   "ja": "まて！",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xA27ECC",
+   "type": "wider",
+   "ko": "기다려! ",
+   "ja": "まて！",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81884",
+   "type": "overflow",
+   "ko": "대잠 미사일",
+   "ja": "対潜箕紗炒",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81A20",
+   "type": "overflow",
+   "ko": "보급 수송차",
+   "ja": "補給輸送車",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81E1C",
+   "type": "overflow",
+   "ko": "도미노의 능력!",
+   "ja": "ドミノの能力！",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81E8C",
+   "type": "overflow",
+   "ko": "3명의 과거",
+   "ja": "３人の過去",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81F04",
+   "type": "overflow",
+   "ko": "하늘의 용사!",
+   "ja": "空の勇者！",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB81F40",
+   "type": "overflow",
+   "ko": "백은의 세계",
+   "ja": "白銀の世界",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xB828E4",
+   "type": "overflow",
+   "ko": "대공 자주포",
+   "ja": "対空自走砲",
+   "slot_override": null,
+   "caller_line": 376
+  },
+  {
+   "address": "0xD9F3E2",
+   "type": "overflow",
+   "ko": "Ｌ 버튼이네요.",
+   "ja": "Ｌボタンね。",
+   "slot_override": 12,
+   "caller_line": 376
+  },
+  {
+   "address": "0xD9FF3E",
+   "type": "wider",
+   "ko": "다시 한 번,",
+   "ja": "もういちど、",
+   "slot_override": 12,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDC3822",
+   "type": "overflow",
+   "ko": "캐서린・・・꽤 당황하던데・・・",
+   "ja": "キャサリン　あせってたな・・・",
+   "slot_override": 30,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDC4466",
+   "type": "overflow",
+   "ko": "바다엔 전함!",
+   "ja": "海に戦艦！",
+   "slot_override": 10,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDCDEEB",
+   "type": "overflow",
+   "ko": "사령관님,도미노!",
+   "ja": "さん、ドミノ！",
+   "slot_override": 14,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDCEA43",
+   "type": "overflow",
+   "ko": "사령관님,도미노!",
+   "ja": "さん、ドミノ！",
+   "slot_override": 14,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDEED2D",
+   "type": "wider",
+   "ko": "유닛도 함께 사라진다.",
+   "ja": "ユニットもなくなる。",
+   "slot_override": 20,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDEEDF8",
+   "type": "wider",
+   "ko": "잠수함,",
+   "ja": "潜水艦",
+   "slot_override": 6,
+   "caller_line": 376
+  },
+  {
+   "address": "0xDC4466",
+   "type": "overflow",
+   "ko": "바다엔 전함!",
+   "ja": "海に戦艦！",
+   "slot_override": 10,
+   "caller_line": 401
+  },
+  {
+   "address": "0xDCB632",
+   "type": "wider",
+   "ko": "10일이야!",
+   "ja": "１０日よ！",
+   "slot_override": 10,
+   "caller_line": 401
+  },
+  {
+   "address": "0xDCED17",
+   "type": "wider",
+   "ko": "중전차가...",
+   "ja": "いるし・・・",
+   "slot_override": 12,
+   "caller_line": 401
+  },
+  {
+   "address": "0xDCF56E",
+   "type": "wider",
+   "ko": "아, 그래.",
+   "ja": "あ、ああ。",
+   "slot_override": 10,
+   "caller_line": 401
+  },
+  {
+   "address": "0xA07F7C",
+   "type": "wider",
+   "ko": "각지에서!?",
+   "ja": "各地で！？",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA087BC",
+   "type": "wider",
+   "ko": "각지에서!?",
+   "ja": "各地で！？",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA0D75C",
+   "type": "wider",
+   "ko": "사실은...",
+   "ja": "実は・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA11363",
+   "type": "wider",
+   "ko": "어떻게...",
+   "ja": "どう・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA12BF4",
+   "type": "wider",
+   "ko": "사실은...",
+   "ja": "実は・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA1453F",
+   "type": "wider",
+   "ko": "누구냐...",
+   "ja": "誰だ・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA14B0C",
+   "type": "wider",
+   "ko": "하지만...",
+   "ja": "だが・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA17828",
+   "type": "wider",
+   "ko": "거짓말...",
+   "ja": "うそ・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA20D3C",
+   "type": "wider",
+   "ko": "거짓말...",
+   "ja": "うそ・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA250EC",
+   "type": "overflow",
+   "ko": "2대1이라면",
+   "ja": "二対一なら",
+   "slot_override": 10,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA27F7D",
+   "type": "wider",
+   "ko": "하지만...",
+   "ja": "だが・・・",
+   "slot_override": null,
+   "caller_line": 433
+  },
+  {
+   "address": "0xA06620",
+   "type": "overflow",
+   "ko": "B를 눌러야 한다",
+   "ja": "Ｂを押す",
+   "slot_override": 8,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA07330",
+   "type": "overflow",
+   "ko": "알겠습니다・・・",
+   "ja": "了解・・・",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA074AC",
+   "type": "overflow",
+   "ko": "적 부대에 폭격기・・・",
+   "ja": "敵の部隊に爆撃機・・・",
+   "slot_override": 22,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA08930",
+   "type": "overflow",
+   "ko": "이번에는",
+   "ja": "今回は",
+   "slot_override": 6,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA08B98",
+   "type": "overflow",
+   "ko": "하지만 도미노,",
+   "ja": "でもドミノ、",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA090A4",
+   "type": "overflow",
+   "ko": "자주포의 강화 유닛이라고,",
+   "ja": "自走砲の強化ユニットと、",
+   "slot_override": 24,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA0BC9C",
+   "type": "overflow",
+   "ko": "몇 번이나　",
+   "ja": "何度、",
+   "slot_override": 6,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA15E8C",
+   "type": "wider",
+   "ko": "뭐란 말이냐...",
+   "ja": "なんじゃ・・・",
+   "slot_override": 14,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA17243",
+   "type": "wider",
+   "ko": "지금이야...",
+   "ja": "今こそ・・・",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA17EEB",
+   "type": "wider",
+   "ko": "앞으로 15일...",
+   "ja": "アト１５日・・・",
+   "slot_override": 16,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA1FC4C",
+   "type": "wider",
+   "ko": "거짓말...!?",
+   "ja": "うそ・・・！？",
+   "slot_override": 14,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA23647",
+   "type": "wider",
+   "ko": "하지만...!",
+   "ja": "でも・・・！",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA250EC",
+   "type": "overflow",
+   "ko": "2대1이라면",
+   "ja": "二対一なら",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA26DAC",
+   "type": "wider",
+   "ko": "앞으로 3...",
+   "ja": "あと３・・・",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xA289D2",
+   "type": "wider",
+   "ko": "지금까지...",
+   "ja": "今まで・・・",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xB83870",
+   "type": "wider",
+   "ko": "　　　있음",
+   "ja": "アリ",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xB8387C",
+   "type": "wider",
+   "ko": "　　　없음",
+   "ja": "ナシ",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xB838A4",
+   "type": "wider",
+   "ko": "　　　　비",
+   "ja": "アメ",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xB838B0",
+   "type": "wider",
+   "ko": "　　　　눈",
+   "ja": "ユキ",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xB838BC",
+   "type": "wider",
+   "ko": "　　　맑음",
+   "ja": "ハレ",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xD9F3E2",
+   "type": "overflow",
+   "ko": "Ｌ 버튼이네요.",
+   "ja": "Ｌボタンね。",
+   "slot_override": 12,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDA187B",
+   "type": "wider",
+   "ko": "」가 1개,",
+   "ja": "」が１つ、",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDC3822",
+   "type": "overflow",
+   "ko": "캐서린・・・꽤 당황하던데・・・",
+   "ja": "キャサリン　あせってたな・・・",
+   "slot_override": 30,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDC4466",
+   "type": "overflow",
+   "ko": "바다엔 전함!",
+   "ja": "海に戦艦！",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDCDEEB",
+   "type": "overflow",
+   "ko": "사령관님,도미노!",
+   "ja": "さん、ドミノ！",
+   "slot_override": 14,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDCEA43",
+   "type": "overflow",
+   "ko": "사령관님,도미노!",
+   "ja": "さん、ドミノ！",
+   "slot_override": 14,
+   "caller_line": 443
+  },
+  {
+   "address": "0xDD1CF0",
+   "type": "wider",
+   "ko": "하지만...",
+   "ja": "だが・・・",
+   "slot_override": 10,
+   "caller_line": 443
+  },
+  {
+   "address": "0xE02894",
+   "type": "wider",
+   "ko": "의 부대가...",
+   "ja": "の部隊が・・・",
+   "slot_override": 14,
+   "caller_line": 443
+  },
+  {
+   "address": "0xE05205",
+   "type": "wider",
+   "ko": "무리 안 하면 좋겠지만...",
+   "ja": "ムリしなきゃいいけど・・・",
+   "slot_override": 26,
+   "caller_line": 443
+  },
+  {
+   "address": "0xE0DAB6",
+   "type": "wider",
+   "ko": "하, 하지만...",
+   "ja": "し　しかし・・・",
+   "slot_override": 16,
+   "caller_line": 443
+  }
+ ]
+}

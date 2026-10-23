@@ -1,0 +1,79 @@
+{
+ "case": "case14-original",
+ "pass": true,
+ "checks": [
+  {
+   "name": "original 1-key control: ア appended via native S1/AE00",
+   "ok": true,
+   "live": "83410000000000000000000000000000",
+   "bp": [
+    "S1",
+    "sound",
+    "AE00_append",
+    "RET_B0C6"
+   ]
+  },
+  {
+   "name": "original ア×7カ typed",
+   "ok": true,
+   "live": "8341834183418341834183418341834a"
+  },
+  {
+   "name": "original destination",
+   "ok": true,
+   "dest": "8341834183418341834183418341834a"
+  },
+  {
+   "name": "original save has ア×7カ",
+   "ok": true
+  },
+  {
+   "name": "original re-entry name",
+   "ok": true,
+   "live": "8341834183418341834183418341834a"
+  }
+ ],
+ "notes": [
+  {
+   "save_sha256": "602471dfde3e517583875dcf50c8204c6e0169d794819646b2a0359eee0c371e",
+   "offsets": [
+    "0x1e504"
+   ]
+  },
+  {
+   "sequence": [
+    {
+     "input": "dakuten",
+     "live16": "8341834183418341834183418341834b",
+     "len": 8,
+     "tail": "00000000",
+     "sounds": [
+      "65"
+     ],
+     "changed": true
+    },
+    {
+     "input": "R",
+     "live16": "8341834183418341834183418341834a",
+     "len": 8,
+     "tail": "00000000",
+     "sounds": [
+      "65"
+     ],
+     "changed": true
+    },
+    {
+     "input": "handakuten",
+     "live16": "8341834183418341834183418341834a",
+     "len": 8,
+     "tail": "00000000",
+     "sounds": [
+      "68"
+     ],
+     "changed": false
+    }
+   ]
+  }
+ ],
+ "run": "runs/case14-original"
+}

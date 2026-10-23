@@ -1,0 +1,56 @@
+PROTECTED_UNCHANGED True
+GLYPH_FIRST_GA_MATCH True
+candidate-actual-trade {"exit": 0}
+candidate-cold-fixed {"exit": 0}
+candidate-cold-versus {"exit": 0}
+candidate-design {"exit": 0}
+candidate-exit {"exit": 0}
+candidate-link-trade {"exit": 0}
+candidate-list-memory {"exit": 0}
+candidate-name-watch {"exit": 0}
+candidate-parser {"exit": 0}
+candidate-trade-confirmed {"exit": 0}
+candidate-trade-final {"exit": 0}
+candidate-trade-wait {"exit": 0}
+candidate-valid {"exit": 0}
+candidate-versus-trace {"exit": 0}
+candidate-versus-watch {"exit": 0}
+original-actual-trade {"exit": 0}
+original-buildmap {"exit": 0}
+original-cold-versus {"exit": 0}
+original-color {"exit": 0}
+original-dual {"exit": 0}
+original-editor {"exit": 0}
+original-finalmap {"exit": 0}
+original-link-multipak {"exit": 0}
+original-link-trade {"exit": 0}
+original-palette {"exit": 0}
+original-place {"exit": 0}
+original-redfix {"exit": 0}
+original-select {"exit": 0}
+original-single {"exit": 0}
+original-valid {"exit": 0}
+original-versus {"exit": 0}
+GIT_EXIT 0 STDOUT '' STDERR ''
+LSOF_EXIT 1 STDOUT '' STDERR ''
+CLEANUP_EXIT 0 STDOUT '세션 codex-01a16763-98cb-7ea1-bd8c-dae43d5e228b · mode=block · D1(막음) 0건 · 보고 0건 · D1 검사 실패 → 막지 않음: meta/keep/기록(D1 기록 누락(d1_incomplete)), B10(증거 읽기 실패:wt_seq lock) · 보고 검사 일부 실패: evidence(windows.log 공유 락 실패), evidence(창 기록 누락 4건(락 실패)) · 참고: 프로세스 검사 불가(ps 실행 거부 errno=1 — 샌드박스로 추정)\n' STDERR ''
+original-link-trade
+OK status host=1957 client=1957 t=549473574,549473573 xfer_multi=0 xfer_normal=0 watch=0,0
+OK sio p0 mode=2 node=2 siocnt=6007 rcnt=0000 send=EDCB multi=0000,0000 | p1 mode=8 node=-1 siocnt=0000 rcnt=8000 send=0000 multi=0000,0000
+EXIT 0
+original-actual-trade
+OK status host=1982 client=1982 t=556495983,556495973 xfer_multi=0 xfer_normal=0 watch=0,0
+OK sio p0 mode=2 node=2 siocnt=6007 rcnt=0000 send=EDCB multi=0000,0000 | p1 mode=8 node=-1 siocnt=0000 rcnt=8000 send=0000 multi=0000,0000
+EXIT 0
+candidate-link-trade
+OK status host=1957 client=1957 t=549473582,549473573 xfer_multi=0 xfer_normal=0 watch=0,0
+OK sio p0 mode=2 node=2 siocnt=6007 rcnt=0000 send=EDCB multi=0000,0000 | p1 mode=8 node=-1 siocnt=0000 rcnt=8000 send=0000 multi=0000,0000
+EXIT 0
+candidate-trade-confirmed
+OK status host=2943 client=2943 t=826437033,826437029 xfer_multi=0 xfer_normal=0 watch=0,0
+OK sio p0 mode=2 node=2 siocnt=6007 rcnt=0000 send=EDCB multi=0000,0000 | p1 mode=8 node=-1 siocnt=0000 rcnt=8000 send=0000 multi=0000,0000
+EXIT 0
+original-single
+OK status host=1982 client=1982 t=556495979,556495973 xfer_multi=0 xfer_normal=0 watch=0,0
+OK sio p0 mode=2 node=2 siocnt=2007 rcnt=0000 send=0000 multi=0000,0000 | p1 mode=8 node=-1 siocnt=0000 rcnt=8000 send=0000 multi=0000,0000
+EXIT 0

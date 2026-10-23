@@ -1,0 +1,6 @@
+{
+  "reason": "Explicit analysis contact sheet created by T5 worker outside repository temp; coordinator moved only exact owned file after worker settlement.",
+  "sha256": "1368d4b89046df8d299e598471dccbfa7fbd5b9167a58bc0ff7759558b7905d1",
+  "source_removed": true,
+  "destination": "temp/name-grid-phaseB/manager-cleanup/c11.png"
+}

@@ -1,0 +1,27 @@
+{
+ "synthetic": true,
+ "ram_writes": [
+  "w8 02003070 00  (SYNTHETIC mode0)"
+ ],
+ "mode_byte": 0,
+ "guidance_A_presses": 2,
+ "steps": {
+  "ready": [
+   0,
+   "0000000000000000"
+  ],
+  "A(0,0)": [
+   1,
+   "8341000000000000"
+  ],
+  "B": [
+   0,
+   "0000000000000000"
+  ],
+  "START": [
+   0,
+   2
+  ]
+ },
+ "native_like": true
+}

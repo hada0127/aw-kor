@@ -1,0 +1,21 @@
+--- temp/name-grid-phaseB/t3-builder/test_part2_name_compose_build.py.snapshot	2026-10-23 17:57:22
++++ tools/test_part2_name_compose_build.py	2026-10-23 19:17:43
+@@ -8,7 +8,6 @@
+ import contextlib
+ import hashlib
+ import json
+-import os
+ import struct
+ import sys
+ import tempfile
+@@ -395,7 +394,9 @@
+         swapped['ㄱ'], swapped['ㄲ'] = codes['ㄲ'], codes['ㄱ']
+         not_pool = dict(codes, **{'ㄱ': f'0x{outside:04X}'})
+         in_2350 = dict(codes, **{'ㄱ': f'0x{self.syl["가"]:04X}'})
+-        with tempfile.TemporaryDirectory(dir=os.environ.get('TMPDIR')) as tmp:
++        tmp_root = ROOT / 'temp'
++        tmp_root.mkdir(exist_ok=True)
++        with tempfile.TemporaryDirectory(dir=tmp_root) as tmp:
+             for label, value, needle in (('swapped', swapped, 'compiled'), ('outside pool', not_pool, 'pool'),
+                                          ('2350 overlap', in_2350, '2350')):
+                 with self.subTest(json=label):

@@ -1,0 +1,160 @@
+{"frame": 0, "command": "break 08314eb0 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/bp.log", "output": "OK break 08314EB0 ok=1 hasBreakpoints=1", "sec": 0.01}
+{"frame": 0, "command": "break 08315300 KEEP", "output": "OK break 08315300 ok=1 hasBreakpoints=1", "sec": 0.001}
+{"frame": 0, "command": "break 0833ba34 KEEP", "output": "OK break 0833BA34 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ab3c KEEP", "output": "OK break 0834AB3C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ab44 KEEP", "output": "OK break 0834AB44 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834aba2 KEEP", "output": "OK break 0834ABA2 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ae00 KEEP", "output": "OK break 0834AE00 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834aed8 KEEP", "output": "OK break 0834AED8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b084 KEEP", "output": "OK break 0834B084 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b0bc KEEP", "output": "OK break 0834B0BC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b0c6 KEEP", "output": "OK break 0834B0C6 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b20e KEEP", "output": "OK break 0834B20E ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b21a KEEP", "output": "OK break 0834B21A ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b428 KEEP", "output": "OK break 0834B428 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f302d8 KEEP", "output": "OK break 08F302D8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75800 KEEP", "output": "OK break 08F75800 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f7584c KEEP", "output": "OK break 08F7584C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f758d4 KEEP", "output": "OK break 08F758D4 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f758fc KEEP", "output": "OK break 08F758FC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f7594c KEEP", "output": "OK break 08F7594C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75974 KEEP", "output": "OK break 08F75974 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f759b0 KEEP", "output": "OK break 08F759B0 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75a80 KEEP", "output": "OK break 08F75A80 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75a8c KEEP", "output": "OK break 08F75A8C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75aa6 KEEP", "output": "OK break 08F75AA6 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75ab8 KEEP", "output": "OK break 08F75AB8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75edc KEEP", "output": "OK break 08F75EDC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75f68 KEEP", "output": "OK break 08F75F68 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 240, "command": "frames 240", "output": "OK frames 240", "sec": 0.429}
+{"frame": 600, "command": "frames 360", "output": "OK frames 360", "sec": 0.715}
+{"frame": 600, "command": "keys 8", "output": "OK keys 8", "sec": 0.0}
+{"frame": 601, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 601, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 625, "command": "frames 24", "output": "OK frames 24", "sec": 0.066}
+{"frame": 745, "command": "frames 120", "output": "OK frames 120", "sec": 0.311}
+{"frame": 745, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 746, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 746, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 770, "command": "frames 24", "output": "OK frames 24", "sec": 0.052}
+{"frame": 770, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 771, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 771, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 921, "command": "frames 150", "output": "OK frames 150", "sec": 0.324}
+{"frame": 921, "command": "keys 8", "output": "OK keys 8", "sec": 0.0}
+{"frame": 922, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 922, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1042, "command": "frames 120", "output": "OK frames 120", "sec": 0.246}
+{"frame": 1042, "command": "keys 8", "output": "OK keys 8", "sec": 0.0}
+{"frame": 1043, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1043, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1223, "command": "frames 180", "output": "OK frames 180", "sec": 0.448}
+{"frame": 1223, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 1224, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1224, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1284, "command": "frames 60", "output": "OK frames 60", "sec": 0.158}
+{"frame": 1284, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 1285, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1285, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1345, "command": "frames 60", "output": "OK frames 60", "sec": 0.142}
+{"frame": 1345, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 1346, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 1346, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1466, "command": "frames 120", "output": "OK frames 120", "sec": 0.336}
+{"frame": 1466, "command": "keys 1", "output": "OK keys 1", "sec": 0.001}
+{"frame": 1467, "command": "frames 1", "output": "OK frames 1", "sec": 0.005}
+{"frame": 1467, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1587, "command": "frames 120", "output": "OK frames 120", "sec": 0.294}
+{"frame": 1587, "command": "keys 8", "output": "OK keys 8", "sec": 0.0}
+{"frame": 1588, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1588, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1618, "command": "frames 30", "output": "OK frames 30", "sec": 0.062}
+{"frame": 1798, "command": "frames 180", "output": "OK frames 180", "sec": 0.378}
+{"frame": 1798, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 1799, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1799, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1859, "command": "frames 60", "output": "OK frames 60", "sec": 0.123}
+{"frame": 1859, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 1860, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1860, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 1980, "command": "frames 120", "output": "OK frames 120", "sec": 0.247}
+{"frame": 1980, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 1981, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 1981, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2101, "command": "frames 120", "output": "OK frames 120", "sec": 0.268}
+{"frame": 2101, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2102, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2102, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2222, "command": "frames 120", "output": "OK frames 120", "sec": 0.269}
+{"frame": 2222, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2223, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2223, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2343, "command": "frames 120", "output": "OK frames 120", "sec": 0.301}
+{"frame": 2343, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2344, "command": "frames 1", "output": "OK frames 1", "sec": 0.007}
+{"frame": 2344, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2464, "command": "frames 120", "output": "OK frames 120", "sec": 0.288}
+{"frame": 2464, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2465, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2465, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2585, "command": "frames 120", "output": "OK frames 120", "sec": 0.287}
+{"frame": 2585, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2586, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2586, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2706, "command": "frames 120", "output": "OK frames 120", "sec": 0.246}
+{"frame": 2706, "command": "keys 8", "output": "OK keys 8", "sec": 0.0}
+{"frame": 2707, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 2707, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2731, "command": "frames 24", "output": "OK frames 24", "sec": 0.05}
+{"frame": 2731, "command": "keys 2", "output": "OK keys 2", "sec": 0.0}
+{"frame": 2732, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 2732, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2756, "command": "frames 24", "output": "OK frames 24", "sec": 0.051}
+{"frame": 2756, "command": "keys 4", "output": "OK keys 4", "sec": 0.0}
+{"frame": 2757, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2757, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2781, "command": "frames 24", "output": "OK frames 24", "sec": 0.051}
+{"frame": 2781, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2782, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 2782, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2806, "command": "frames 24", "output": "OK frames 24", "sec": 0.054}
+{"frame": 2806, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 2807, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 2807, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2831, "command": "frames 24", "output": "OK frames 24", "sec": 0.071}
+{"frame": 2831, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 2832, "command": "frames 1", "output": "OK frames 1", "sec": 0.004}
+{"frame": 2832, "command": "keys 0", "output": "OK keys 0", "sec": 0.001}
+{"frame": 2856, "command": "frames 24", "output": "OK frames 24", "sec": 0.053}
+{"frame": 2856, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 2857, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 2857, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 2881, "command": "frames 24", "output": "OK frames 24", "sec": 0.055}
+{"frame": 2941, "command": "frames 60", "output": "OK frames 60", "sec": 0.134}
+{"frame": 3061, "command": "frames 120", "output": "OK frames 120", "sec": 0.292}
+{"frame": 3061, "command": "shot /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.raw", "output": "OK shot 240 160", "sec": 0.001}
+{"frame": 3061, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 3061, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry-obj.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 3061, "command": "savestate /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.ss0", "output": "OK savestate /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.ss0 ok=1", "sec": 0.009}
+{"frame": 3061, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 3062, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 3062, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 3122, "command": "frames 60", "output": "OK frames 60", "sec": 0.127}
+{"frame": 3122, "command": "shot /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a1.raw", "output": "OK shot 240 160", "sec": 0.001}
+{"frame": 3122, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 3122, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a1-obj.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 3122, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 3123, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 3123, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 3183, "command": "frames 60", "output": "OK frames 60", "sec": 0.152}
+{"frame": 3183, "command": "shot /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a2.raw", "output": "OK shot 240 160", "sec": 0.001}
+{"frame": 3183, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 3183, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a2-obj.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 3183, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 3184, "command": "frames 1", "output": "OK frames 1", "sec": 0.003}
+{"frame": 3184, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 3244, "command": "frames 60", "output": "OK frames 60", "sec": 0.149}
+{"frame": 3244, "command": "shot /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a3.raw", "output": "OK shot 240 160", "sec": 0.001}
+{"frame": 3244, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 3244, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/after-a3-obj.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 3244, "command": "quit", "output": "OK quit", "sec": 0.0}

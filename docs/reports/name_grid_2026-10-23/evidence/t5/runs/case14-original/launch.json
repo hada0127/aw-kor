@@ -1,0 +1,23 @@
+{
+ "tag": "case14-original",
+ "argv": [
+  "nice",
+  "-n",
+  "15",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/harness/mgbah-t5",
+  "/Users/konest/project/aw-kor/original/Game Boy Wars Advance 1+2 (Japan).gba",
+  "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case14-original/emulator.log"
+ ],
+ "cwd": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case14-original",
+ "rom": "/Users/konest/project/aw-kor/original/Game Boy Wars Advance 1+2 (Japan).gba",
+ "rom_sha256": "a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c",
+ "save_source": null,
+ "save_source_sha256": null,
+ "harness_sha256": "0427fc405f917654298ca9cb55fd8e87c49625c1b220f4e3050202c5fb5c2fd2",
+ "library_sha256": "83744c60e737a114c54447e84c5b50fd173cbdf135bdc4dd2b7b0839e4c960da",
+ "env": {
+  "TMPDIR": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case14-original/",
+  "AW_KOR_TEMP_DIR": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case14-original",
+  "DYLD_LIBRARY_PATH": "/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build"
+ }
+}

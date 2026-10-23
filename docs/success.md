@@ -4203,3 +4203,9 @@ Astra 최종 델타 `temp/spacing_followup/astra_delta1_review.md`(gpt-6-astra/h
 ### 2026-10-23 Review fix 5 정정
 
 - 위 2편 디자인 맵 이름 그림 교체는 시험 후보의 화면 증거다. 0x815B `ー` 그림이 2편 대사 대시와 공유된 사실이 확인되어 현 빌드에서 56개 교체를 모두 제외했다. 현 빌드의 이름 문자표 한글화 성공으로 집계하지 않는다. 정적 소비자 조사와 잔여 범위는 `temp/evidence_20261023/SWEEP3_REPORT.md` Review fix 5를 따른다.
+
+## 2026-10-23 Part 2 디자인 맵 이름 입력 두벌식 조합 (Phase B 후보, 미병합)
+
+- 후보 `output/game_wars_korean_namecompose_20261023.gba` SHA-256 `1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb`을 원본 기반으로 `--out … --no-sync-outputs` 빌드했다. 5관문 exit 0이고, baseline 대비 diff 8,156B는 전부 `NAME_COMPOSE_WRITES` + A3 end 리터럴 4곳 안이다. B팀·text-fit 잔여 집합 신규 0, 공유 A3 가나 72코드 그림 동일.
+- 공식 mGBA 0.10.5에서 그리드 실제 키로 `한글`·`강철`·`붉은달`·받침 이동·복합 모음·2350 밖 원자 거부·지우기·취소·legacy 가나 재진입을 확인했다. full8 `가나다라마바사안`(키 17개, 9번째 거부)은 전원 투입부터 정상 키만으로 저장했고, 별도 프로세스 cold reload와 Versus 디자인 맵 목록에서 같은 16B를 확인했다. 훅 진입·복귀 레지스터/스택 계약 위반 0. 15케이스 PASS.
+- 명령·exit·증거 링크: [`docs/reports/name_grid_2026-10-23/PHASE_B_QA.md`](reports/name_grid_2026-10-23/PHASE_B_QA.md). 실기 미검증, Link BLOCKED, 최종 코드 리뷰·main 병합 전이다.

@@ -20,6 +20,11 @@ NATIVE_REGIONS['newline'] = {'start': 3229078, 'end': 3229118, 'sha256': 'e99c0b
 
 PATCH_REGIONS = {'a3_glyph_trampoline': {'start': 10733544, 'end': 10733552, 'sha256': 'de24a9960f799c6bfbe64f9337e781b9ddfa49475b19ec86e385fd4ed581c585'}, 'a3_glyph_hook': {'start': 15925888, 'end': 15926080, 'sha256': 'ed6ef6982d315dcc00fe0c628d6f700c48718c9953665dd8963ed3a0d5c2fddf'}, 'space_313_trampoline': {'start': 3227606, 'end': 3227616, 'sha256': '1c8093a8bde3848bbd523c2dc33286f29e9fbb31fd86214286476507e5bc8af6'}, 'space_313_hook': {'start': 15926112, 'end': 15926172, 'sha256': 'ef575db9896f1b6fecf7fbc0259244ee73e88effbc56b073198cc53ec7cb0132'}, 'space_b11_trampoline': {'start': 11607550, 'end': 11607560, 'sha256': '1a49138f2b550c540419a7b5adad147e8272e912f3b72dd26b5a95405116dc6d'}, 'space_b11_hook': {'start': 15926176, 'end': 15926236, 'sha256': 'f1424c9eec9df0bb012e5b2ce0cb9098f07e1412ec8a334bcf3b9bafe8c0ae16'}}
 
+# The only other accepted A3 hook: the reviewed bytes above with just the max code
+# (+0x84 = 0xE352, 2350 + name-compose jamo) and table end (+0x8C = 0x08F24494)
+# literals widened (PLAN-v5 §1.7). Exact hashes only; nothing is normalized.
+PATCH_REGION_VERSIONS = {'a3_glyph_hook': ('a36e078dc12a77facf3d6b130b7375e071622678180577105713345b499b9cd2',)}
+
 class NativeConsumerError(ValueError):
     pass
 
@@ -47,7 +52,8 @@ def verify_patch_connections(rom, names=None):
     result={}
     for name in (names if names is not None else PATCH_REGIONS):
         spec=PATCH_REGIONS[name];actual=sha(rom[spec['start']:spec['end']])
-        if actual!=spec['sha256']:raise NativeConsumerError('P2 patched hook changed: '+name)
+        if actual!=spec['sha256'] and actual not in PATCH_REGION_VERSIONS.get(name,()):
+            raise NativeConsumerError('P2 patched hook changed: '+name)
         result[name]=actual
     return result
 

@@ -1,0 +1,14 @@
+{
+ "case": "case1-한글",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "92af888a000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case1-한글"
+}

@@ -1,0 +1,545 @@
+{
+ "hook_literals_candidate": [
+  "0x8840",
+  "0xe352",
+  "0x8f20000",
+  "0x8f24494",
+  "0x7fff",
+  "0x8f00000"
+ ],
+ "hook_literals_baseline": [
+  "0x8840",
+  "0xe2a7",
+  "0x8f20000",
+  "0x8f243a4",
+  "0x7fff",
+  "0x8f00000"
+ ],
+ "jamo": [
+  {
+   "jamo": "ㄱ",
+   "code": "0xe2a8",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1275,
+    1276
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㄲ",
+   "code": "0xe2ab",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1277,
+    1278
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㄴ",
+   "code": "0xe2ad",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1279,
+    1280
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㄷ",
+   "code": "0xe2ae",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1281,
+    1282
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㄸ",
+   "code": "0xe2af",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1283,
+    1284
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㄹ",
+   "code": "0xe2b0",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1285,
+    1286
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅁ",
+   "code": "0xe2b1",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1287,
+    1288
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅂ",
+   "code": "0xe2b2",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1289,
+    1290
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅃ",
+   "code": "0xe2b8",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1291,
+    1292
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅅ",
+   "code": "0xe2b9",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1293,
+    1294
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅆ",
+   "code": "0xe2bd",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1295,
+    1296
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅇ",
+   "code": "0xe2be",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1297,
+    1298
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅈ",
+   "code": "0xe2bf",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1299,
+    1300
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅉ",
+   "code": "0xe2c3",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1301,
+    1302
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅊ",
+   "code": "0xe2c4",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1303,
+    1304
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅋ",
+   "code": "0xe2c5",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1305,
+    1306
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅌ",
+   "code": "0xe2c6",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1307,
+    1308
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅍ",
+   "code": "0xe2ca",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1309,
+    1310
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅎ",
+   "code": "0xe2cb",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1311,
+    1312
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅏ",
+   "code": "0xe2cc",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1313,
+    1314
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅐ",
+   "code": "0xe2ee",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1315,
+    1316
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅑ",
+   "code": "0xe2f4",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1317,
+    1318
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅒ",
+   "code": "0xe2f6",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1319,
+    1320
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅓ",
+   "code": "0xe2fc",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1321,
+    1322
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅔ",
+   "code": "0xe341",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1323,
+    1324
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅕ",
+   "code": "0xe343",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1325,
+    1326
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅖ",
+   "code": "0xe344",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1327,
+    1328
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅗ",
+   "code": "0xe345",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1329,
+    1330
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅘ",
+   "code": "0xe346",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1331,
+    1332
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅙ",
+   "code": "0xe347",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1333,
+    1334
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅚ",
+   "code": "0xe348",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1335,
+    1336
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅛ",
+   "code": "0xe349",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1337,
+    1338
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅜ",
+   "code": "0xe34a",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1339,
+    1340
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅝ",
+   "code": "0xe34b",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1341,
+    1342
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅞ",
+   "code": "0xe34c",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1343,
+    1344
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅟ",
+   "code": "0xe34d",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1345,
+    1346
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅠ",
+   "code": "0xe34e",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1347,
+    1348
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅡ",
+   "code": "0xe34f",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1349,
+    1350
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅢ",
+   "code": "0xe351",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1351,
+    1352
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  },
+  {
+   "jamo": "ㅣ",
+   "code": "0xe352",
+   "candidate": "ok",
+   "baseline": "range",
+   "tiles": [
+    1353,
+    1354
+   ],
+   "dup": 1,
+   "glyph_eq_bin": true,
+   "ink": true
+  }
+ ],
+ "jamo_all_ok": true,
+ "jamo_baseline_states": {
+  "range": 40
+ },
+ "syllables_2350_resolution_changed": []
+}

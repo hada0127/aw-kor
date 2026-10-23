@@ -1,0 +1,110 @@
+{
+ "case": "case13",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "dakuten on Korean active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ]
+  },
+  {
+   "name": "handakuten on Korean active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ]
+  },
+  {
+   "name": "R on Korean active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ]
+  },
+  {
+   "name": "B: 가 -> incomplete ㄱ",
+   "ok": true,
+   "sounds": [
+    "66"
+   ]
+  },
+  {
+   "name": "ㄱ state after B",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "ㄱ state before dakuten-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "ㄱ state after dakuten-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "dakuten-incomplete on jamo active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ],
+   "unchanged": true
+  },
+  {
+   "name": "ㄱ state before handakuten-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "ㄱ state after handakuten-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "handakuten-incomplete on jamo active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ],
+   "unchanged": true
+  },
+  {
+   "name": "ㄱ state before R-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "ㄱ state after R-incomplete",
+   "live16": "e2a80000000000000000000000000000",
+   "len": 1,
+   "tail": "0100ff00000000000000000000000000",
+   "ok": true
+  },
+  {
+   "name": "R-incomplete on jamo active",
+   "ok": true,
+   "sounds": [
+    "68"
+   ],
+   "unchanged": true
+  }
+ ],
+ "notes": [],
+ "run": "runs/case13"
+}

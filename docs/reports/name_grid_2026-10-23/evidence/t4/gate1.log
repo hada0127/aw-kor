@@ -1,0 +1,40 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/phase6_basic_test.py output/game_wars_korean_namecompose_20261023.gba
+============================================================
+PHASE 6: QA Testing - Pre-flight Checks
+============================================================
+
+[Check 1] ROM Integrity Tests...
+  File exists: True
+  File size correct: True
+  Header valid: True
+  Checksum valid: True
+  Korean text detected: True
+  Japanese text detected: True
+    Korean sequences found: 320,514
+    Japanese sequences found: 1,330,175
+
+[Check 2] Translation Status...
+  Total texts: 28,347
+  Translated: 17,758
+  Progress: 62.6%
+
+============================================================
+[Assessment] Ready for PHASE 6?
+============================================================
+
+[OK] ROM passed pre-flight checks
+
+Expected Behavior:
+  - ROM should load in VisualBoyAdvance M
+  - Game Wars title screen should appear
+  - ~17758 menu items in Korean
+  - Remaining Japanese is expected only in protected data/graphics or manually skipped areas
+
+Next Steps:
+  1. Open ROM in VisualBoyAdvance M:
+     /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/original/Visualboy Advance M v2.1.4.x64.exe
+  2. Load ROM: /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/output/game_wars_korean_namecompose_20261023.gba
+  3. Verify game loads and shows Korean text
+  4. Run through PHASE 6 test checklist
+
+EXIT 0

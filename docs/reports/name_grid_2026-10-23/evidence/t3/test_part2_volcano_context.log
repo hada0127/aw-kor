@@ -1,0 +1,12 @@
+test_control_and_pointer_corruption_rejected (__main__.VolcanoContextTests) ... ok
+test_first_person_regression_rejected (__main__.VolcanoContextTests) ... ok
+test_missing_duplicate_and_overlong_manifest_rejected (__main__.VolcanoContextTests) ... ok
+test_relocated_benefit_and_in_place_imperative (__main__.VolcanoContextTests) ... ok
+test_same_controls_but_shifted_wait_rejected (__main__.VolcanoContextTests) ... ok
+test_self_interest_meaning_regression_rejected (__main__.VolcanoContextTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.119s
+
+OK
+test_part2_volcano_context EXIT 0

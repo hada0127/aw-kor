@@ -334,5 +334,13 @@ QA 프로토콜의 기본 하한은10GiB이며 실행별 설정이 가능하다.
 
 - ROM 비의존 참조 모델은 `tools/hangul_compose.py`, 검증은 `python3 -I tools/test_hangul_compose.py`와 `python3 -I tools/hangul_compose.py --report`다. 계약·해시·실제 출력은 `docs/reports/name_grid_2026-10-23/COMPOSITION_SPEC.md`를 따른다.
 - 2350 밖 후보 키는 대체 없이 원자적으로 거부한다. committed/active를 분리하고 8번째 active 편집을 허용한다. 미완성 confirm/space는 거부하며 자모를 유지한다. 저장은 committed만 정확히 16바이트다.
-- 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다.
-- Phase A 준비·테스트는 ROM 통합 완료가 아니다. 자산 복구는 company 경유 요청 후 대기 중이다. T0 복구·런타임 조사·별도 Fable 계획 및 Astra 승인 전에는 빌더/ROM/ASM/글리프/코드 할당을 변경하지 않는다. 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
+- 매핑 2350개와 키열 도달 2345개(중간 후보 누락 5개)를 구분한다. 이 수치는 참조 모델 결과이며 ROM 동작 보장이 아니다. 공백 0x8140의 네이티브 저장 의미도 unverified다(Phase B에서 확인: 끝 공백은 native trim, 중간 공백은 유지 — `PHASE_B_RE.md` §5).
+- Phase A 준비·테스트는 ROM 통합 완료가 아니다. (이력) 작성 당시에는 자산 복구 대기였고, 2026-10-23 Phase B에서 복구·조사·승인 계획을 거쳐 ROM 통합 후보를 만들었다(아래). 공유 A3 가나 그림을 보존한다. 구현 후 리뷰·커밋은 총괄이 맡는다.
+
+## 2026-10-23 이름 입력 조합 Phase B (2편 맵 에디터 · 후보, 미병합)
+
+- 원본 ROM·폰트를 복구했고(옛 세이브·nyarch는 여전히 없음, 정상 키로 새 세이브를 만들었다) 승인 PLAN-v5대로 T1~T5를 끝냈다. 최종 Astra 리뷰·커밋·main 병합은 총괄 T7이다. 상세: `docs/reports/name_grid_2026-10-23/PHASE_B_RE.md`(주소·ABI), `PHASE_B_PLAN_APPROVAL.md`, `PHASE_B_QA.md`(명령·exit·15케이스), 증거 `evidence/INDEX.md`.
+- 후보 빌드: `nice -n 15 python3 tools/build_korean_full.py --out output/game_wars_korean_namecompose_20261023.gba --no-sync-outputs --report temp/encode_report.csv`. 빌더가 tracked `data/` 두 파일을 다시 쓰므로 T4처럼 snapshot에서 빌드한다. full/final/title_test와 동기화하지 않으며(이 체크아웃엔 셋 다 없다) b44/dist 재배포는 범위 밖이다.
+- 정본·재생성: 자모 `data/jamo_to_code_40.json`·`data/jamo_glyphs_40.bin` ← `python3 tools/gen_jamo_assets.py`(검증 `--check`). 코드 이미지 `tools/part2_name_compose_blob.py` ← `python3 tools/name_compose/build_image.py`(검증 `--check`, clang + `arm-none-eabi-binutils` 필요). 일반 빌드는 blob만 import한다(컴파일러 불요). 테스트: `test_jamo_assets.py`·`test_name_compose_core.py`·`test_part2_name_compose_build.py`·`test_part2_native_controls.py`.
+- 쓰기 정본은 `NAME_COMPOSE_WRITES`(10영역)이고 A3 max `0xE352`·표 끝 `0x08F24494`(end 리터럴 4곳)가 같이 늘어난다. 훅은 S1/S2/S3/D1 + P1 다섯 곳, 이름 객체는 0x80(tail `+70..+7F`)이다. native 선택표·표시표·행 포인터·공유 A3 가나 그림은 바꾸지 않는다(mode1 전용 사설 표만 이미지 안에 둔다).
+- 계약: 8자·2바이트, 2350 밖 중간 후보 원자 거부, 9번째 `no_slot`, 자모부터 삭제, 미완성 확인·공백 거부, `가한`은 자동 조합(갛 경유), `가카`는 확인→No 복귀로 확정. 도달 불가 5음절: 뢨·썅·쏀·쓩·쭁.

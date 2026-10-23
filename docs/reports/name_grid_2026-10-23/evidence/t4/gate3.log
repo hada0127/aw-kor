@@ -1,0 +1,10 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/qa_text_fit.py --rom output/game_wars_korean_namecompose_20261023.gba --map temp/integrity_map.json --manifest temp/repoint_manifest.json
+written(한글 인코딩): 18311
+fit levels: level0=16563, level1=1551, level2=27, level3=12, level4=6, level5=0, level6=68, level7=31, level8=1, level9=1, level10=35, level11=14, level12=2
+layout-loss fallback(level>=6, 재배치 검토): 152
+overflow(슬롯초과 skip→원문): 273
+no_ko: 0, intentional_blank_override: 7, code_region: 2165, no_slot: 0, deny/data-skip: 393
+visual-wider than JA: 507 (2.8%) — 박스폭 잠재리스크(대부분 ≤1글자/노이즈)
+final-ROM protected non-Korean: 0/485 ()
+
+EXIT 0

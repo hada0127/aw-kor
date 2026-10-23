@@ -1,0 +1,74 @@
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13780: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_code_2350.json' mode='r' encoding='utf-8'>
+  syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13734: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_glyph_2350.json' mode='r' encoding='utf-8'>
+  sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13763: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_code_2350.json' mode='r' encoding='utf-8'>
+  syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...............
+======================================================================
+FAIL: test_table_tail_stage (__main__.NameComposeBuildTests) (table_byte=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 344, in test_table_tail_stage
+    reject(self.a3_stage(), bad, orig_tbl, sylmap)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 336, in reject
+    self.assertRejectsUnchanged(B._name_compose_table_tail, rom, new_tbl, orig_tbl, sylmap,
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_table_tail_stage (__main__.NameComposeBuildTests) (table_byte=3216)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 344, in test_table_tail_stage
+    reject(self.a3_stage(), bad, orig_tbl, sylmap)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 336, in reject
+    self.assertRejectsUnchanged(B._name_compose_table_tail, rom, new_tbl, orig_tbl, sylmap,
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_table_tail_stage (__main__.NameComposeBuildTests) (table_byte=3219)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 344, in test_table_tail_stage
+    reject(self.a3_stage(), bad, orig_tbl, sylmap)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 336, in reject
+    self.assertRejectsUnchanged(B._name_compose_table_tail, rom, new_tbl, orig_tbl, sylmap,
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_table_tail_stage (__main__.NameComposeBuildTests) (table_byte=17315)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 344, in test_table_tail_stage
+    reject(self.a3_stage(), bad, orig_tbl, sylmap)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 336, in reject
+    self.assertRejectsUnchanged(B._name_compose_table_tail, rom, new_tbl, orig_tbl, sylmap,
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_table_tail_stage (__main__.NameComposeBuildTests) (case='orig table changed')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 348, in test_table_tail_stage
+    reject(self.a3_stage(), new_tbl, orig_tbl[:-1] + bytes([orig_tbl[-1] ^ 1]), sylmap)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 336, in reject
+    self.assertRejectsUnchanged(B._name_compose_table_tail, rom, new_tbl, orig_tbl, sylmap,
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+----------------------------------------------------------------------
+Ran 16 tests in 20.023s
+
+FAILED (failures=5)

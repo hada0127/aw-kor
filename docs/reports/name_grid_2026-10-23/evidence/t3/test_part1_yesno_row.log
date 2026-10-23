@@ -1,0 +1,13 @@
+test_audit_metadata_rom_binding (test_part1_yesno_row.Part1YesNoRowTest) ... ok
+test_live_yesno_payloads (test_part1_yesno_row.Part1YesNoRowTest) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.005s
+
+OK
+test_part1_yesno_row(unittest, AW_TEST_ROM=baseline) EXIT 0
+PASS: unconditional wide Part 1 yes/no payloads and overlay cells
+test_part1_yesno_row.py baseline EXIT 0
+fixture sha 1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb
+PASS: unconditional wide Part 1 yes/no payloads and overlay cells
+test_part1_yesno_row.py <T3 fixture candidate> EXIT 0

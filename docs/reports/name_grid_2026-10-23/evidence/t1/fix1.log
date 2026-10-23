@@ -1,0 +1,15 @@
+# T1 fix1 — jamo_table_entries 경계를 실제 빌더 호출에 맞춤 (2026-10-23)
+원인: build_korean_full.py:14317 _private_ja=1274, :14395 sylmap['자']['top']=1274 뒤 엔트리를 붙인다.
+     패치된 sylmap의 max tile = 1274. 구 가드 `max_tile >= FIRST_TILE-2(1273)` → 정상 호출이 ValueError.
+수정: 가드를 `max_tile >= FIRST_TILE(1275)` 로 좁힘. 1273(빈 타일)·1274(사설 자)는 기존 영역으로 허용, 1275+ 자모 영역 충돌만 거부.
+테스트: test_rejects_reserved_tile_collision(1273 거부) 제거 →
+        test_accepts_builder_private_ja(자 top=1274 패치 sylmap 성공, 출력이 미패치와 동일)
+        test_rejects_jamo_tile_collision(1275·1354 거부) 추가.
+source SHA-256 (전→후):
+  tools/gen_jamo_assets.py  cea26186de57ef5878668586817f8645b86239302bfe2cdef9ea4d4793604f54 → e7a36dbfb00d5d48ec40a5ab078490d03d31c722ec6c91de914c13d0531927e3
+  tools/test_jamo_assets.py eab2fb18c6414dcfe47fb565bc7b8e782e0cdc631b9f2bb1cb03780fda4193be → 434e148b620cac078df44730aac2ccfd4a8079124c52846ba1ae0cc11bcbbee8
+자산 바이트 불변:
+  data/jamo_to_code_40.json 628404ed7bbb567872108431f30c76fd8824acebbe3049ac4031923eeda2b7e9 (전후 동일)
+  data/jamo_glyphs_40.bin   1417db5cb058782f3cd3f133cead8da711de47e3185bbfaf900ad8841f7c4980 (전후 동일)
+명령/출력: fix1_test.log (Ran 15 tests OK exit=0), fix1_check.log (OK jamo assets byte-identical exit=0)
+git diff --stat: 빈 출력(tracked 변경 0). untracked는 기존 4파일뿐.

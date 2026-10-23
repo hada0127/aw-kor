@@ -1,0 +1,15 @@
+test_bounded_historical_proof_rejects_glyph_only_and_stale_payload (__main__.NativePart2Tests) ... ok
+test_confirmed_capacity_requires_consumer_and_native_profile (__main__.NativePart2Tests) ... ok
+test_exact_current_relocated_proof_accepts_only_bounded_parser_reads (__main__.NativePart2Tests) ... ok
+test_malformed_consumer_evidence_is_rejected (__main__.NativePart2Tests) ... ok
+test_name_compose_a3_hook_version_is_exact (__main__.NativePart2Tests) ... ok
+test_native_wait_alias_page_alias_and_no_advance_spaces (__main__.NativePart2Tests) ... ok
+test_tampered_table_handler_callback_or_hook_is_rejected (__main__.NativePart2Tests) ... ok
+test_unknown_scope_does_not_promote_aliases_or_padding (__main__.NativePart2Tests) ... ok
+test_verified_stream_preserves_same_row_across_wait_and_format (__main__.NativePart2Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.851s
+
+OK
+test_part2_native_controls EXIT 0

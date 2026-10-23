@@ -1,0 +1,243 @@
+{"frame": 0, "command": "break 08314eb0 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/bp.log", "output": "OK break 08314EB0 ok=1 hasBreakpoints=1", "sec": 0.018}
+{"frame": 0, "command": "break 08315300 KEEP", "output": "OK break 08315300 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0833ba34 KEEP", "output": "OK break 0833BA34 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ab3c KEEP", "output": "OK break 0834AB3C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ab44 KEEP", "output": "OK break 0834AB44 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834aba2 KEEP", "output": "OK break 0834ABA2 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834ae00 KEEP", "output": "OK break 0834AE00 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834aed8 KEEP", "output": "OK break 0834AED8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b084 KEEP", "output": "OK break 0834B084 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b0bc KEEP", "output": "OK break 0834B0BC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b0c6 KEEP", "output": "OK break 0834B0C6 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b20e KEEP", "output": "OK break 0834B20E ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b21a KEEP", "output": "OK break 0834B21A ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 0834b428 KEEP", "output": "OK break 0834B428 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f302d8 KEEP", "output": "OK break 08F302D8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75800 KEEP", "output": "OK break 08F75800 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f7584c KEEP", "output": "OK break 08F7584C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f758d4 KEEP", "output": "OK break 08F758D4 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f758fc KEEP", "output": "OK break 08F758FC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f7594c KEEP", "output": "OK break 08F7594C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75974 KEEP", "output": "OK break 08F75974 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f759b0 KEEP", "output": "OK break 08F759B0 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75a80 KEEP", "output": "OK break 08F75A80 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75a8c KEEP", "output": "OK break 08F75A8C ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75aa6 KEEP", "output": "OK break 08F75AA6 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75ab8 KEEP", "output": "OK break 08F75AB8 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75edc KEEP", "output": "OK break 08F75EDC ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "break 08f75f68 KEEP", "output": "OK break 08F75F68 ok=1 hasBreakpoints=1", "sec": 0.0}
+{"frame": 0, "command": "loadstate /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.ss0", "output": "OK loadstate /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.ss0 ok=1", "sec": 0.002}
+{"frame": 0, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 1, "command": "frames 1", "output": "OK frames 1", "sec": 0.002}
+{"frame": 1, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 61, "command": "frames 60", "output": "OK frames 60", "sec": 0.074}
+{"frame": 61, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 61, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/start-obj.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 61, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 61, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 61, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 61, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 61, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 62, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 62, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 86, "command": "frames 24", "output": "OK frames 24", "sec": 0.031}
+{"frame": 86, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 86, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 86, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 86, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 86, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 86, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 86, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 87, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 87, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 97, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 97, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 97, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 97, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 97, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 97, "command": "keys 128", "output": "OK keys 128", "sec": 0.0}
+{"frame": 98, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 98, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 108, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 108, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 108, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 108, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 108, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 108, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 109, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 109, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 133, "command": "frames 24", "output": "OK frames 24", "sec": 0.031}
+{"frame": 133, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 133, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 133, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 133, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 133, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 133, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 133, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 134, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 134, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 144, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 144, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 144, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 144, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 144, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 144, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 145, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 145, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 155, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 155, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 155, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 155, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 155, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 155, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 156, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 156, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 166, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 166, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 166, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 166, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 166, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 166, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 167, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 167, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 177, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 177, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 177, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 177, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 177, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 177, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 178, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 178, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 188, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 188, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 188, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 188, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 188, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 188, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 189, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 189, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 199, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 199, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 199, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 199, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 199, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 199, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 200, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 200, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 210, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 210, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 210, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 210, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 210, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 210, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 211, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 211, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 221, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 221, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 221, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 221, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 221, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 221, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 222, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 222, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 232, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 232, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 232, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 232, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 232, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 232, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 233, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 233, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 243, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 243, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 243, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 243, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 243, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 243, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 244, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 244, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 268, "command": "frames 24", "output": "OK frames 24", "sec": 0.031}
+{"frame": 268, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 268, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 268, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 268, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 268, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 268, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 268, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 269, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 269, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 279, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 279, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 279, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 279, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 279, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 279, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 280, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 280, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 304, "command": "frames 24", "output": "OK frames 24", "sec": 0.031}
+{"frame": 304, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 304, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 304, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 304, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 304, "command": "keys 256", "output": "OK keys 256", "sec": 0.0}
+{"frame": 305, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 305, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 329, "command": "frames 24", "output": "OK frames 24", "sec": 0.03}
+{"frame": 329, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 329, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 329, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 329, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 329, "command": "keys 2", "output": "OK keys 2", "sec": 0.0}
+{"frame": 330, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 330, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 354, "command": "frames 24", "output": "OK frames 24", "sec": 0.032}
+{"frame": 354, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 354, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 354, "command": "keys 32", "output": "OK keys 32", "sec": 0.0}
+{"frame": 355, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 355, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 365, "command": "frames 10", "output": "OK frames 10", "sec": 0.013}
+{"frame": 365, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 365, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 365, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 365, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 365, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 366, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 366, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 390, "command": "frames 24", "output": "OK frames 24", "sec": 0.032}
+{"frame": 390, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 390, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 390, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 390, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 390, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 390, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 390, "command": "keys 16", "output": "OK keys 16", "sec": 0.0}
+{"frame": 391, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 391, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 401, "command": "frames 10", "output": "OK frames 10", "sec": 0.014}
+{"frame": 401, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 401, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 401, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 401, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 401, "command": "keys 1", "output": "OK keys 1", "sec": 0.0}
+{"frame": 402, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 402, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 426, "command": "frames 24", "output": "OK frames 24", "sec": 0.032}
+{"frame": 426, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 426, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 426, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 426, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 426, "command": "keys 256", "output": "OK keys 256", "sec": 0.0}
+{"frame": 427, "command": "frames 1", "output": "OK frames 1", "sec": 0.001}
+{"frame": 427, "command": "keys 0", "output": "OK keys 0", "sec": 0.0}
+{"frame": 451, "command": "frames 24", "output": "OK frames 24", "sec": 0.032}
+{"frame": 451, "command": "dumpmem 03004650 4 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 4", "sec": 0.0}
+{"frame": 451, "command": "dumpmem 02003010 128 /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/_scratch.bin", "output": "OK dumpmem 128", "sec": 0.0}
+{"frame": 451, "command": "shot /Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case13/after.raw", "output": "OK shot 240 160", "sec": 0.0}
+{"frame": 451, "command": "quit", "output": "OK quit", "sec": 0.0}

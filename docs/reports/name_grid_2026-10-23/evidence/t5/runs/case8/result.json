@@ -1,0 +1,37 @@
+{
+ "case": "case8",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "destination unchanged after cancel",
+   "ok": true,
+   "dest0": "00000000000000000000000000000000",
+   "dest": "00000000000000000000000000000000"
+  },
+  {
+   "name": "name object freed/pointer state after cancel",
+   "ok": true,
+   "ptr": "02003010"
+  },
+  {
+   "name": "reentry tail initial",
+   "ok": true,
+   "tail": "00ffff00000000000000000000000000",
+   "len": 0,
+   "live": "00000000000000000000000000000000"
+  },
+  {
+   "name": "reentry live == destination prefix",
+   "ok": true
+  },
+  {
+   "name": "nc_alloc ran twice (entry + reentry)",
+   "ok": true,
+   "note": "fresh state was loaded after first alloc; expect exactly 1 in this process (re-entry)",
+   "count": 1
+  }
+ ],
+ "notes": [],
+ "run": "runs/case8"
+}

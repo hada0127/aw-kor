@@ -1,0 +1,30 @@
+.............
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='png_only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='consumer_only')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+======================================================================
+FAIL: test_cli_requires_separate_consumer_and_png_evidence (__main__.PhysicalRowsTests) (case='both')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/tools/test_qa_part2_physical_rows.py", line 268, in test_cli_requires_separate_consumer_and_png_evidence
+    self.assertEqual(report['native_title_unverified_pointers'],58)
+AssertionError: 0 != 58
+
+----------------------------------------------------------------------
+Ran 14 tests in 6.988s
+
+FAILED (failures=3)
+test_qa_part2_physical_rows EXIT 1 (HEAD에서도 같은 실패: test_qa_part2_physical_rows.HEAD.log)

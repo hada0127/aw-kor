@@ -1,0 +1,26 @@
+PROTECTED_HASHES_UNCHANGED 45
+NAME16 884092af888a884092af888a884092af
+NATIVE_SAVE16 884092af888a884092af888a884092af OFFSET 0x1f504 SHA256 9e3ab43b99f3ded2c868674adab727c7a0fe651e99e7441ab7a89fab681c86d0
+candidate-eight-reload COLD_NAME16_MATCH length=8 slots=8 bytes=16
+b44-eight-reload COLD_NAME16_MATCH length=8 slots=8 bytes=16
+IWRAM_COPY_0x174_MATCH TRAMP_03006084_TO_08F30281
+VRAM_CACHE_GA_HAN_GEUL_3x64_MATCH_ROM_GLYPHS
+READY_AND_SAVE_HEADING_NAME16_MATCH
+HARNESS_EXIT0 heading-final
+HARNESS_EXIT0 candidate-cold
+HARNESS_EXIT0 candidate-render
+HARNESS_EXIT0 candidate-save
+HARNESS_EXIT0 candidate-reload
+HARNESS_EXIT0 b44-cold
+HARNESS_EXIT0 candidate-reload-exact
+HARNESS_EXIT0 b44-reload-exact
+HARNESS_EXIT0 eight-save
+HARNESS_EXIT0 candidate-eight-reload
+HARNESS_EXIT0 b44-eight-reload
+HARNESS_EXIT0 consumers-final
+HARNESS_EXIT0 lifecycle
+HARNESS_EXIT0 focused-render
+INTERRUPTED_EXPERIMENT candidate-probe exit=-2 wrapper=130
+TRACKED_STATUS_CLEAN
+GIT_DIFF_EXIT0
+UNVERIFIED production integration, jamo renderer, Link/Versus custom names, all 2350 glyphs, hardware, final allocation approval, linker pipeline

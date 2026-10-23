@@ -1,0 +1,51 @@
+{
+ "case1": {
+  "한글": "92af888a",
+  "강철": "884990d3",
+  "붉은달": "8d5c8f7e89e7",
+  "vram": "ㄱ,ㅏ (and ㅘ in case2) 64B == ROM jamo tile 1275+2i/1276+2i"
+ },
+ "case2": {
+  "한가": "92af8840",
+  "달가": "89e78840",
+  "ㅘ_vonly": "e346",
+  "와": "8f4c",
+  "가한": "884092af"
+ },
+ "case3": {
+  "incomplete_confirm": "ㄱ active; START and OK cell -> +0x67 stays 0, sound 68, live/dest unchanged"
+ },
+ "case4": {
+  "개+ㄷ": "reject, live=개 active",
+  "간+ㅒ": "reject, live=간 active",
+  "가+ㅋ": "reject, live=가 active"
+ },
+ "case5": {
+  "literals": "space/1/！ accepted after complete syllable, rejected after incomplete jamo",
+  "가␣나 stored": "8840814088e9 then 00",
+  "가␣ stored": "8840 then 00 (trailing space trimmed)"
+ },
+ "case6": {
+  "full8": "884088e989e28adf8bc38ca68da98ea2",
+  "accepted_keys": 17,
+  "ninth_ㄱ": "no_slot reject, 8th 안 unchanged"
+ },
+ "case7": {
+  "강→가→ㄱ→빈": "tail/live per model at each B",
+  "committed 가 B": "whole syllable removed"
+ },
+ "case8": {
+  "cancel Yes": "editor, destination unchanged",
+  "reentry tail": "00ffff00 + 12x00, live==destination"
+ },
+ "case9": {
+  "legacy": "len8 active0 -> B -> len7 -> ㄱ -> len8 active1"
+ },
+ "case10": {
+  "가 OK No A": "가 committed active0 dest unchanged",
+  "가카": "88409163"
+ },
+ "case13": {
+  "dakuten/handakuten/R with Korean active": "sound 68, live unchanged"
+ }
+}

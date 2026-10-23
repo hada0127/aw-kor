@@ -1,0 +1,7 @@
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/qa_integrity_map.py --rom output/game_wars_korean_namecompose_20261023.gba --map temp/integrity_map.json --byte-only
+=== 무결성맵 QA: game_wars_korean_namecompose_20261023.gba vs integrity_map.json (40055 writes) ===
+[OK] 바이트 무결성: 기대 577856바이트 중 불일치 0
+
+=== 결과: PASS / 바이트OK ===
+
+EXIT 0

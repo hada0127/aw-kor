@@ -1,0 +1,39 @@
+{
+  "start": "0x8f20000",
+  "end": "0x8f243a4",
+  "bytes": 17316,
+  "entries": 2886,
+  "trampoline": "004a10478102f308",
+  "representatives": [
+    {
+      "char": "가",
+      "code": "0x8840",
+      "entries": [
+        {
+          "address": "0x8f20c90",
+          "bytes": "884000800180"
+        }
+      ]
+    },
+    {
+      "char": "글",
+      "code": "0x888a",
+      "entries": [
+        {
+          "address": "0x8f21020",
+          "bytes": "888a4c800780"
+        }
+      ]
+    },
+    {
+      "char": "한",
+      "code": "0x92af",
+      "entries": [
+        {
+          "address": "0x8f2405c",
+          "bytes": "92aff2820382"
+        }
+      ]
+    }
+  ]
+}

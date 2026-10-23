@@ -1,0 +1,274 @@
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13780: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_code_2350.json' mode='r' encoding='utf-8'>
+  syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13734: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_glyph_2350.json' mode='r' encoding='utf-8'>
+  sylmap = json.load(open(SYLMAP_2350, encoding='utf-8'))['map']
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py:13763: ResourceWarning: unclosed file <_io.TextIOWrapper name='/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/data/syllable_to_code_2350.json' mode='r' encoding='utf-8'>
+  syl_to_code = {s: int(c, 16) for s, c in json.load(open(SYLCODE, encoding='utf-8')).items()}
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+.............
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf09f60')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf0a95f')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf70000')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf75747')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf75750')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf75800')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf777ff')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_occupied_regions (__main__.NameComposeBuildTests) (offset='0xf09f20')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 286, in test_compose_rejects_occupied_regions
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (orig_site='s1_press')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 270, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, self.compose_stage(), bytes(orig))
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (rom_site='s1_press')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 274, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (orig_site='s2_confirm')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 270, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, self.compose_stage(), bytes(orig))
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (rom_site='s2_confirm')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 274, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (orig_site='s3_backspace')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 270, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, self.compose_stage(), bytes(orig))
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (rom_site='s3_backspace')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 274, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (orig_site='d1_display')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 270, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, self.compose_stage(), bytes(orig))
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (rom_site='d1_display')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 274, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (orig_site='p1_alloc')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 270, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, self.compose_stage(), bytes(orig))
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (rom_site='p1_alloc')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 274, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (keep='0x83fd78')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 279, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783214 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789796 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (keep='0x83fde0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 279, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783214 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789796 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_rejects_tampered_original_or_current_site (__main__.NameComposeBuildTests) (keep='0x83fd28')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 279, in test_compose_rejects_tampered_original_or_current_site
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783214 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789796 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_requires_earlier_stages (__main__.NameComposeBuildTests) (case='a3_max_not_widened')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 299, in test_compose_requires_earlier_stages
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783217 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789799 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_requires_earlier_stages (__main__.NameComposeBuildTests) (case='tail_missing')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 299, in test_compose_requires_earlier_stages
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783396 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789978 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_requires_earlier_stages (__main__.NameComposeBuildTests) (case='end_literal_old')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 299, in test_compose_requires_earlier_stages
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783214 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789796 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_requires_earlier_stages (__main__.NameComposeBuildTests) (case='a3_mask')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 299, in test_compose_requires_earlier_stages
+    self.assertRejectsUnchanged(B._part2_name_compose, rom, self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 121, in assertRejectsUnchanged
+    self.assertEqual(bytes(rom), before, 'failed stage must leave rom unchanged')
+AssertionError: b'.\x[11851650 chars]@\xfa\x00K\x18G\xb1Y\xf7\x08\x00\x96\x00%\x01\[43783211 chars]\x00' != b'.\x[11851650 chars]@\xfa"h9K\x80&6\x02\x00\x96\x00%\x01\x95\x06 \[43789793 chars]\x00' : failed stage must leave rom unchanged
+
+======================================================================
+FAIL: test_compose_requires_earlier_stages (__main__.NameComposeBuildTests) (case='twice')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 301, in test_compose_requires_earlier_stages
+    self.assertRejectsUnchanged(B._part2_name_compose, bytearray(self.candidate), self.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 120, in assertRejectsUnchanged
+    func(rom, *args)
+AssertionError: (<class 'ValueError'>, <class 'AssertionError'>) not raised
+
+----------------------------------------------------------------------
+Ran 16 tests in 30.637s
+
+FAILED (failures=26)

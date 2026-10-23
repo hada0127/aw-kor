@@ -1,0 +1,13 @@
+{
+ "case": "case7-committed",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "committed 가 deleted by one B",
+   "ok": true
+  }
+ ],
+ "notes": [],
+ "run": "runs/case7-committed"
+}

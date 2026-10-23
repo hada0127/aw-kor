@@ -1,0 +1,36 @@
+{
+ "overflow": {
+  "baseline_events": 273,
+  "candidate_events": 273,
+  "baseline_keys": 259,
+  "candidate_keys": 259,
+  "new_keys": [],
+  "gone_keys": [],
+  "multiplicity_changed": [],
+  "printed_baseline": 273,
+  "printed_candidate": 273
+ },
+ "wider": {
+  "baseline_events": 507,
+  "candidate_events": 507,
+  "baseline_keys": 507,
+  "candidate_keys": 507,
+  "new_keys": [],
+  "gone_keys": [],
+  "multiplicity_changed": [],
+  "printed_baseline": 507,
+  "printed_candidate": 507
+ },
+ "full_event_lists_identical": true,
+ "repeated_caller_lines": [
+  376,
+  401,
+  433,
+  443
+ ],
+ "input_sha256": {
+  "analysis/textfit_baseline.json": "faf4813982742697a609bfb6c1a75e0b87867b043d51199830fc0d6c6a7e2de8",
+  "analysis/textfit_candidate.json": "5bc7c62b979f0da522fdf9aef6d052607d417cf0f6c24e0c8e7a3f02fa76b802"
+ },
+ "pass": true
+}

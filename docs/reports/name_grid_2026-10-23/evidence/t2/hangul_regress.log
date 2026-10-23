@@ -1,0 +1,22 @@
+test_all_final_clusters (__main__.CompositionTests) ... ok
+test_backspace_stages_and_loaded (__main__.CompositionTests) ... ok
+test_compound_vowels (__main__.CompositionTests) ... ok
+test_deterministic_sequences (__main__.CompositionTests) ... ok
+test_eighth_slot_and_boundaries (__main__.CompositionTests) ... ok
+test_exhaustive_syllables (__main__.CompositionTests) ... ok
+test_fixed_words_and_migration (__main__.CompositionTests) ... ok
+test_incomplete_and_invalid (__main__.CompositionTests) ... ok
+test_migration_rejection_atomicity (__main__.CompositionTests) ... ok
+test_new_active_boundaries (__main__.CompositionTests) ... ok
+test_serialization_load_reset (__main__.CompositionTests) ... ok
+test_strict_rejection_counterexamples (__main__.CompositionTests) ... ok
+test_table_and_inventory (__main__.CompositionTests) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.546s
+
+OK
+random_operations=20000 seed=20261023 rejections=17522
+exhaustive=11172 reached=2345 rejected=8827 supported_unreachable=5
+migration_rejection_cases=1712 example=('간', 'ㅒ', '가', '냬')
+EXIT 0

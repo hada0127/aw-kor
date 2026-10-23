@@ -1,0 +1,56 @@
+[
+  {
+    "command": "python3 .../prepare.py",
+    "exit": 0,
+    "evidence": "protected-before.json / original-*.log / baseline-*.log"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../probe.py",
+    "exit": 0,
+    "evidence": "cold.log / cold/exit.json"
+  },
+  {
+    "command": "python3 -I .../static_model.py (first run)",
+    "exit": 1,
+    "evidence": "static-model-attempt1.log",
+    "reason": "prior review claim 가+ㅎ rejection contradicted actual table; corrected premise, no model change"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../runtime_cases.py (first run)",
+    "exit": 1,
+    "evidence": "runtime-cases-attempt1.log / native-no/",
+    "reason": "baseline question defaults Yes, not No; emulator exit 0; corrected to RIGHT then A"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../runtime_cases.py (native_no only, revised)",
+    "exit": 0,
+    "evidence": "runtime-cases.log / native-no2/"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../constructor_probe.py",
+    "exit": 0,
+    "evidence": "constructor-probe.log / entry-split/",
+    "reason": "two-frame observation too early; no constructor hit; retained as inconclusive"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../entry_pending.py",
+    "exit": 0,
+    "evidence": "entry-pending.log / entry-pending/"
+  },
+  {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 .../constructor_modes.py",
+    "exit": 0,
+    "evidence": "constructor-modes.log / constructor-mode0/ / constructor-mode1/"
+  },
+  {
+    "command": "python3 -I .../verify.py",
+    "exit": 0,
+    "evidence": "verification.log"
+  },
+  {
+    "command": "harness-session-check status",
+    "exit": 0,
+    "evidence": "cleanup.log",
+    "reason": "D1=0; partial wt_seq/windows lock failures; ps denied; not a complete process audit"
+  }
+]

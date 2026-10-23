@@ -1,0 +1,7 @@
+VERIFIED: 원본 SHA/크기, 정상 키 새저장, cold reload 8자, 9번째 덮어쓰기, 중간 공백 보존/끝 공백 제거, 취소, IWRAM 복사 일치
+ROM_SHA256 a8ad7c7d2a48b4ce4d7a5da408121e9640206ed9f040c0ac967b6c6b2413831c
+NEW_SAVE_SHA256 d6e2651201c497139a4235034ed5d922816e1c2d2dd3c487ebf87d553ceeb481
+HARNESS_SHA256 dfcd4c76b2d60940383e34d2027860763f4139a82819c484d37afab74dfac614
+LIBMGBA_SHA256 eccdd98390afbe198259bde4550f4a7dc54b706edb0172a562b03de3c521fff1
+TRACKED_STATUS: clean
+NOT_VERIFIED: 한글 ROM hook, safe scratch, 모든 소비자, Link handshake, b44 동등성, upstream source commit

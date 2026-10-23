@@ -1,0 +1,27 @@
+case3 PASS [{"name": "START incomplete", "ok": true, "x67": 0, "cursor": [14, 5], "bp_seq": ["S2", "tramp_confirm", "nc_confirm", "ret_nc_confirm", "sound"]}, {"name": "OK cell incomplete", "ok": true, "x67": 0, "bp_seq": ["S2", "tramp_confirm", "nc_confirm", "ret_nc_confirm", "sound"]}, {"name": "destination unchanged", "ok": true, "dest": "00000000000000000000000000000000"}] []
+case4-개+ㄷ PASS [{"name": "last key rejected (model)", "ok": true, "model": {"accepted": false, "reason": "not_in_2350"}, "sounds": ["68"]}] []
+case4-간+ㅒ PASS [{"name": "last key rejected (model)", "ok": true, "model": {"accepted": false, "reason": "not_in_2350"}, "sounds": ["68"]}] []
+case4-가+ㅋ PASS [{"name": "last key rejected (model)", "ok": true, "model": {"accepted": false, "reason": "not_in_2350"}, "sounds": ["68"]}] []
+case5-literals PASS [{"name": "space after incomplete rejected", "ok": true}, {"name": "digit after incomplete rejected", "ok": true}, {"name": "final live 가␣1！", "ok": true, "live": "88408140825081490000000000000000"}] []
+case5-mid-space FAIL [{"name": "stored prefix/trim", "ok": false, "dest": "00000000000000000000000000000000", "prefix": "8840814088e9", "errors": ["prefix 00000000000000000000000000000000 !startswith 8840814088e9"], "question_x67": 2}] []
+case5-trail-space FAIL [{"name": "stored prefix/trim", "ok": false, "dest": "00000000000000000000000000000000", "prefix": "8840", "errors": ["prefix 00000000000000000000000000000000 !startswith 8840"], "question_x67": 2}] []
+case7-gang PASS [{"name": "empty after 3 B", "ok": true}] []
+case7-committed PASS [{"name": "committed 가 deleted by one B", "ok": true}] []
+case8 FAIL [{"name": "destination unchanged after cancel", "ok": true, "dest0": "00000000000000000000000000000000", "dest": "00000000000000000000000000000000"}, {"name": "name object freed/pointer state after cancel", "ok": true, "ptr": "02003010"}, {"name": "reentry tail initial", "ok": false, "tail": "01000000000000000000000000000000", "len": 1, "live": "88400000000000000000000000000000"}, {"name": "reentry live == destination prefix", "ok": false}, {"name": "nc_alloc ran twice (entry + reentry)", "ok": false, "note": "fresh state was loaded after first alloc; expect exactly 1 in this process (re-entry []
+case9 PASS [{"name": "legacy reload len8 active0", "ok": true}, {"name": "ア×7 + ㄱ active", "ok": true}] []
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/cases.py", line 381, in <module>
+    CASES[k]()
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/cases.py", line 336, in case10
+    c.jamos('ㅋㅏ')
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/t5lib.py", line 370, in jamos
+    return [self.jamo(j) for j in seq]
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/t5lib.py", line 370, in <listcomp>
+    return [self.jamo(j) for j in seq]
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/t5lib.py", line 365, in jamo
+    pos, trail, m = self.press_cell(x, y)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/t5lib.py", line 357, in press_cell
+    pos, trail = self.e.move_to(x, y)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/t5lib.py", line 227, in move_to
+    raise RuntimeError(f'cursor did not move from {(x, y)} key {k}')
+RuntimeError: cursor did not move from (10, 5) key 64

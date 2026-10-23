@@ -1,0 +1,21 @@
+test_deterministic (__main__.DenseTable) ... ok
+test_missing_are_zero (__main__.DenseTable) ... ok
+test_size_and_exact_codes (__main__.DenseTable) ... ok
+test_disjoint_and_range (__main__.JamoCodes) ... ok
+test_first_codes (__main__.JamoCodes) ... ok
+test_fixed_sha (__main__.JamoCodes) ... ok
+test_order_count_unique (__main__.JamoCodes) ... ok
+test_pool_membership_and_selection (__main__.JamoCodes) ... ok
+test_regeneration_byte_identical (__main__.JamoCodes) ... ok
+test_rejects_overlap_and_order (__main__.JamoCodes) ... ok
+test_matches_render (__main__.JamoGlyphs) ... ok
+test_size_sha_ink (__main__.JamoGlyphs) ... ok
+test_accepts_builder_private_ja (__main__.TableEntries) ... ok
+test_entries (__main__.TableEntries) ... ok
+test_rejects_jamo_tile_collision (__main__.TableEntries) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.335s
+
+OK
+test_jamo_assets EXIT 0

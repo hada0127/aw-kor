@@ -1,0 +1,7 @@
+build.log EXIT 0
+gate1.log EXIT 0
+gate2.log EXIT 0
+gate3.log EXIT 0
+gate4.log EXIT 0
+gate5.log EXIT 0
+{"blocked": null, "build_exit": 0, "gate_exits": [0, 0, 0, 0, 0], "candidate_sha256": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb", "published_sha256": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb", "snapshot_changed": [], "parent_inputs_unchanged": true, "parent_status_unchanged": true, "protected_unchanged": true}

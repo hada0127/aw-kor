@@ -1,0 +1,20 @@
+{
+ "case": "case2-가한",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "884092af000000000000000000000000",
+   "expect": "884092af"
+  },
+  {
+   "name": "갛 intermediate",
+   "ok": true,
+   "live": "884d0000000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case2-가한"
+}

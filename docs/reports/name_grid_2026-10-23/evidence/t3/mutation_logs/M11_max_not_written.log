@@ -1,0 +1,19 @@
+E
+======================================================================
+ERROR: setUpClass (__main__.NameComposeBuildTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 74, in setUpClass
+    cls.candidate, cls.summary = cls.build_candidate()
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 113, in build_candidate
+    rom = cls.compose_stage()
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/test_part2_name_compose_build.py", line 105, in compose_stage
+    B._name_compose_a3_max(rom, cls.syl, cls.orig)
+  File "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t3-builder/tmp/mut/tools/build_korean_full.py", line 13683, in _name_compose_a3_max
+    raise AssertionError(f'A3 hook max code 0x{written:X} < 실제 최대 예약코드')
+AssertionError: A3 hook max code 0xE2A7 < 실제 최대 예약코드
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.178s
+
+FAILED (errors=1)

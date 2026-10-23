@@ -1,0 +1,283 @@
+{
+ "candidate": "/Users/konest/project/aw-kor/output/game_wars_korean_namecompose_20261023.gba",
+ "candidate_sha256": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb",
+ "cases": {
+  "1": {
+   "status": "PASS",
+   "evidence": [
+    "case1-vowel",
+    "case1-강철",
+    "case1-붉은달",
+    "case1-한글"
+   ],
+   "note": "한글/강철/붉은달 grid keys, per-step live==Composer, VRAM 64B ㄱ/ㅏ (ㅘ in case2)"
+  },
+  "2": {
+   "status": "PASS",
+   "evidence": [
+    "case2-wa-vonly",
+    "case2-가한",
+    "case2-달가",
+    "case2-와",
+    "case2-한가"
+   ],
+   "note": "한가, 닭+ㅏ→달가, V-only ㅗㅏ→ㅘ, reset ㅇㅗㅏ→와, 가한 via 갛"
+  },
+  "3": {
+   "status": "PASS",
+   "evidence": [
+    "case3"
+   ],
+   "note": ""
+  },
+  "4": {
+   "status": "PASS",
+   "evidence": [
+    "case4-가+ㅋ",
+    "case4-간+ㅒ",
+    "case4-개+ㄷ"
+   ],
+   "note": ""
+  },
+  "5": {
+   "status": "PASS",
+   "evidence": [
+    "case5-literals",
+    "case5-mid-space",
+    "case5-trail-space"
+   ],
+   "note": ""
+  },
+  "6": {
+   "status": "PASS",
+   "evidence": [
+    "case11a-save",
+    "case11b-save"
+   ],
+   "note": "full8 typed twice (blank cart / overwrite), 17 accepted, 9th rejected, stored 16B"
+  },
+  "7": {
+   "status": "PASS",
+   "evidence": [
+    "case7-committed",
+    "case7-gang"
+   ],
+   "note": ""
+  },
+  "8": {
+   "status": "PASS",
+   "evidence": [
+    "case8"
+   ],
+   "note": ""
+  },
+  "9": {
+   "status": "PASS",
+   "evidence": [
+    "case9"
+   ],
+   "note": ""
+  },
+  "10": {
+   "status": "PASS",
+   "evidence": [
+    "case10"
+   ],
+   "note": ""
+  },
+  "11": {
+   "status": "PASS",
+   "evidence": [
+    "case11a-save",
+    "case11a-cold",
+    "case11b-save",
+    "case11b-cold"
+   ],
+   "note": "power-on normal keys only; separate cold processes"
+  },
+  "12": {
+   "status": "PASS",
+   "evidence": [
+    "case12-build",
+    "case12-cold-versus",
+    "case12-result.json"
+   ],
+   "note": "automatic: name kept in valid-map save + A3 copies of all 8 syllables on category5; visual: valid-map.png, category5.png, selected.png (TEAM SETTING) checked by worker"
+  },
+  "13": {
+   "status": "PASS",
+   "evidence": [
+    "case13",
+    "case13b-candidate-legacy-kana"
+   ],
+   "note": "Korean/jamo active: dakuten/handakuten/R -> sound 68, live unchanged; legacy カ: dakuten/R/handakuten == original ROM"
+  },
+  "14": {
+   "status": "PASS",
+   "evidence": [
+    "case14-original"
+   ],
+   "note": ""
+  },
+  "15": {
+   "status": "PASS",
+   "evidence": [
+    "case15-contracts.json",
+    "case15-rowseq.json",
+    "case15-pending",
+    "case15-mode1",
+    "case15-mode0-SYNTHETIC",
+    "case15-baseline-native"
+   ],
+   "note": "contract errors 0; totals {'S1/mode1/c_ret0': 116, 'S2/mode1/c_ret0': 6, 'P1/modeNone': 9, 'D1/mode1': 9, 'S1/mode1/c_ret1': 11, 'S3/mode1/c_ret0': 17, 'D1/mode0': 1, 'S1/mode0': 1, 'S3/mode0': 1, 'S2/mode0': 1, 'S2/mode1/c_ret1': 2}; rowdraw stack args via rw watch True; mode0 is SYNTHETIC (w8 obj+0x60:=0 in pending state)"
+  }
+ },
+ "hygiene": {
+  "candidate_sha_now": "1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb",
+  "candidate_sha_ok": true,
+  "unended_processes": [],
+  "live_harness_pids": [],
+  "nonzero_exits": {
+   "prep-fresh:81685": null
+  },
+  "loadstate_sources": [
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/case15-pending/pending.ss0",
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-fresh/name-entry.ss0",
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/runs/prep-legacy/legacy-name.ss0"
+  ],
+  "loadstate_all_t5_owned": true,
+  "ram_writes": [
+   [
+    "case15-mode0-SYNTHETIC",
+    "w8 02003070 00"
+   ]
+  ],
+  "ram_writes_only_synthetic_mode0": true,
+  "leftover_probe_saves": []
+ },
+ "hygiene_ok": true,
+ "harness": {
+  "argv": [
+   "clang",
+   "-g",
+   "-DENABLE_SCRIPTING",
+   "-DHAVE_CRC32",
+   "-DHAVE_FREELOCALE",
+   "-DHAVE_FUTIMENS",
+   "-DHAVE_FUTIMES",
+   "-DHAVE_LOCALE",
+   "-DHAVE_LOCALTIME_R",
+   "-DHAVE_NEWLOCALE",
+   "-DHAVE_PTHREAD_CREATE",
+   "-DHAVE_PTHREAD_SETNAME_NP",
+   "-DHAVE_SETLOCALE",
+   "-DHAVE_SNPRINTF_L",
+   "-DHAVE_STRDUP",
+   "-DHAVE_STRLCPY",
+   "-DHAVE_STRNDUP",
+   "-DHAVE_STRTOF_L",
+   "-DHAVE_USELOCALE",
+   "-DHAVE_VASPRINTF",
+   "-DHAVE_XLOCALE",
+   "-DMGBA_DLL",
+   "-DM_CORE_GB",
+   "-DM_CORE_GBA",
+   "-DUSE_DEBUGGERS",
+   "-DUSE_MINIZIP",
+   "-DUSE_PNG",
+   "-DUSE_PTHREADS",
+   "-DUSE_ZLIB",
+   "-D_DARWIN_C_SOURCE",
+   "-Dmgba_EXPORTS",
+   "-I/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build/include",
+   "-I/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/mgba-0.10.5/include",
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/harness/mgba_harness_t5.c",
+   "-L/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build",
+   "-lmgba",
+   "-Wl,-rpath,@executable_path/build",
+   "-o",
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/t5-runtime/harness/mgbah-t5"
+  ],
+  "reference_argv": [
+   "clang",
+   "-g",
+   "-DENABLE_SCRIPTING",
+   "-DHAVE_CRC32",
+   "-DHAVE_FREELOCALE",
+   "-DHAVE_FUTIMENS",
+   "-DHAVE_FUTIMES",
+   "-DHAVE_LOCALE",
+   "-DHAVE_LOCALTIME_R",
+   "-DHAVE_NEWLOCALE",
+   "-DHAVE_PTHREAD_CREATE",
+   "-DHAVE_PTHREAD_SETNAME_NP",
+   "-DHAVE_SETLOCALE",
+   "-DHAVE_SNPRINTF_L",
+   "-DHAVE_STRDUP",
+   "-DHAVE_STRLCPY",
+   "-DHAVE_STRNDUP",
+   "-DHAVE_STRTOF_L",
+   "-DHAVE_USELOCALE",
+   "-DHAVE_VASPRINTF",
+   "-DHAVE_XLOCALE",
+   "-DMGBA_DLL",
+   "-DM_CORE_GB",
+   "-DM_CORE_GBA",
+   "-DUSE_DEBUGGERS",
+   "-DUSE_MINIZIP",
+   "-DUSE_PNG",
+   "-DUSE_PTHREADS",
+   "-DUSE_ZLIB",
+   "-D_DARWIN_C_SOURCE",
+   "-Dmgba_EXPORTS",
+   "-I/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build/include",
+   "-I/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/mgba-0.10.5/include",
+   "/Users/konest/project/aw-kor/tools/mgba_harness.c",
+   "-L/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/build",
+   "-lmgba",
+   "-Wl,-rpath,@executable_path/build",
+   "-o",
+   "/Users/konest/project/aw-kor/temp/name-grid-phaseB/official-mgba/mgbah"
+  ],
+  "exit": 0,
+  "stdout": null,
+  "stderr": "",
+  "defines": [
+   "-DENABLE_SCRIPTING",
+   "-DHAVE_CRC32",
+   "-DHAVE_FREELOCALE",
+   "-DHAVE_FUTIMENS",
+   "-DHAVE_FUTIMES",
+   "-DHAVE_LOCALE",
+   "-DHAVE_LOCALTIME_R",
+   "-DHAVE_NEWLOCALE",
+   "-DHAVE_PTHREAD_CREATE",
+   "-DHAVE_PTHREAD_SETNAME_NP",
+   "-DHAVE_SETLOCALE",
+   "-DHAVE_SNPRINTF_L",
+   "-DHAVE_STRDUP",
+   "-DHAVE_STRLCPY",
+   "-DHAVE_STRNDUP",
+   "-DHAVE_STRTOF_L",
+   "-DHAVE_USELOCALE",
+   "-DHAVE_VASPRINTF",
+   "-DHAVE_XLOCALE",
+   "-DMGBA_DLL",
+   "-DM_CORE_GB",
+   "-DM_CORE_GBA",
+   "-DUSE_DEBUGGERS",
+   "-DUSE_MINIZIP",
+   "-DUSE_PNG",
+   "-DUSE_PTHREADS",
+   "-DUSE_ZLIB",
+   "-D_DARWIN_C_SOURCE",
+   "-Dmgba_EXPORTS"
+  ],
+  "n_defines": 29,
+  "source_sha256": "863786403f82a615761ea7506b3d34e06ffafad7842c183e7a9b6900417f1b65",
+  "original_source_sha256": "1894c25c5621492312ec663ae241703f0e8ed6615293555a118cb88eb06ca96f",
+  "binary_sha256": "0427fc405f917654298ca9cb55fd8e87c49625c1b220f4e3050202c5fb5c2fd2",
+  "library_sha256": "83744c60e737a114c54447e84c5b50fd173cbdf135bdc4dd2b7b0839e4c960da",
+  "official_mgbah_sha256": "05e1f8f12dede208a3b06ebc37236325ad8ba8bb109d6be0a7ffb718a32ad21c"
+ }
+}

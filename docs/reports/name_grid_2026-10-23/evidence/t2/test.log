@@ -1,0 +1,22 @@
+test_atomic_rejections_and_migrations (__main__.CoreBehaviour) ... ok
+test_compound_vowels_and_clusters_reverse (__main__.CoreBehaviour) ... ok
+test_exhaustive_11172_standard_keys (__main__.CoreBehaviour) ... ok
+test_fixed_model_cases (__main__.CoreBehaviour) ... ok
+test_full8_ninth_rejected_and_eighth_active_edit (__main__.CoreBehaviour) ... ok
+test_model_results_constants_match_research_file (__main__.CoreBehaviour) ... ok
+test_random_20000_ops_match_model (__main__.CoreBehaviour) ... ok
+test_reverse_delete_incomplete_reject_literal_legacy (__main__.CoreBehaviour) ... ok
+test_blob_code_and_sources_guard (__main__.ImageAndBlob) ... ok
+test_classification_identity_and_native_row_format (__main__.ImageAndBlob) ... ok
+test_private_selection_and_rows_match_plan (__main__.ImageAndBlob) ... ok
+test_toolchain_regenerates_identical_blob (__main__.ImageAndBlob) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.843s
+
+OK
+exhaustive=11172 reached=2345 rejected=8827 supported_unreachable=5 뢨썅쏀쓩쭁
+random_operations=20000 seed=20261023 applied=19193 rejected=12349
+selector_cells=90 display_rows=6 match
+image_bytes=2739 insns=968 code_sha=8dd9460864ad3b0f9703ce12c80667323935b8055f9c8966e6aa023fae6c3b2f
+EXIT 0

@@ -1,0 +1,27 @@
+# T6 one-shot aggregation of stored T5 evidence (no emulator)
+# cwd=/Users/konest/project/aw-kor
+# argv=['python3', '-B', 'temp/name-grid-phaseB/t5-runtime/verify.py']
+# start=2026-10-23T09:44:48.709883+00:00
+# end=2026-10-23T09:44:48.919970+00:00
+# returncode=0
+## STDOUT
+case  1: PASS  한글/강철/붉은달 grid keys, per-step live==Composer, VRAM 64B ㄱ/ㅏ (ㅘ in case2)
+case  2: PASS  한가, 닭+ㅏ→달가, V-only ㅗㅏ→ㅘ, reset ㅇㅗㅏ→와, 가한 via 갛
+case  3: PASS  
+case  4: PASS  
+case  5: PASS  
+case  6: PASS  full8 typed twice (blank cart / overwrite), 17 accepted, 9th rejected, stored 16B
+case  7: PASS  
+case  8: PASS  
+case  9: PASS  
+case 10: PASS  
+case 11: PASS  power-on normal keys only; separate cold processes
+case 12: PASS  automatic: name kept in valid-map save + A3 copies of all 8 syllables on category5; visual: valid-map.png, cat
+case 13: PASS  Korean/jamo active: dakuten/handakuten/R -> sound 68, live unchanged; legacy カ: dakuten/R/handakuten == origin
+case 14: PASS  
+case 15: PASS  contract errors 0; totals {'S1/mode1/c_ret0': 117, 'S2/mode1/c_ret0': 6, 'P1/modeNone': 9, 'D1/mode1': 9, 'S1/
+hygiene OK {'candidate_sha_now': '1ac790a9bd173f14d7a4880be95b8ffe3983bc84dfd8f848faff9c5c4575e1eb', 'candidate_sha_ok': True, 'unended_processes': [], 'live_harness_pids': [], 'nonzero_exits': {'prep-fresh:81685': None}, 'loadstate_all_t5_owned': True, 'ram_writes': [('case15-mode0-SYNTHETIC', 'w8 02003070 00')], 'ram_writes_only_synthetic_mode0': True, 'leftover_probe_saves': []}
+T5_RESULT PASS missing evidence: []
+
+## STDERR
+

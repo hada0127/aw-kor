@@ -1,0 +1,14 @@
+{
+ "case": "case1-붉은달",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "final live",
+   "ok": true,
+   "live": "8d5c8f7e89e700000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case1-붉은달"
+}

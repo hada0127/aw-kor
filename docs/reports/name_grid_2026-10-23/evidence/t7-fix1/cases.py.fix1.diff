@@ -1,0 +1,45 @@
+--- temp/name-grid-phaseB/t7-fix1/pre-fix/cases.py	2026-10-23 18:27:19
++++ temp/name-grid-phaseB/t5-runtime/cases.py	2026-10-23 19:18:59
+@@ -359,15 +359,34 @@
+         e.tap(RK, 24)
+         r = c.record('R', None, hc.Result(False, 'legacy-kana'), before, c.snap(), {'bp_from': m}, expect_sound='68')
+         checks.append({'name': 'R on Korean active', 'ok': not r['errors'], 'sounds': r['sounds']})
+-        c.jamo('ㄱ')  # incomplete active
+-        for label, cell in [('dakuten-incomplete', (10, 2)), ('handakuten-incomplete', (11, 2))]:
++        # T7-FIX1 (Astra full-v1 F1): B turns active 가 into incomplete ㄱ (the old c.jamo('ㄱ') made 각, a complete syllable).
++        def jamo_state(o, where):
++            # incomplete active ㄱ: slot0 E2A8, slot1 0000, len 1, tail 01 00 FF 00 + 12x00
++            st = {'name': f'ㄱ state {where}', 'live16': o[OFF_SLOT:OFF_SLOT + 16].hex(), 'len': o[OFF_LEN], 'tail': o[OFF_TAIL:OFF_TAIL + 16].hex()}
++            st['ok'] = (o[OFF_SLOT:OFF_SLOT + 4] == bytes.fromhex('e2a80000') and o[OFF_LEN] == 1
++                        and o[OFF_TAIL:OFF_TAIL + 4] == bytes.fromhex('0100ff00') and o[OFF_TAIL + 4:OFF_TAIL + 16] == bytes(12))
++            return st
++        r = c.backspace()
++        checks.append({'name': 'B: 가 -> incomplete ㄱ', 'ok': not r['errors'], 'sounds': r['sounds']})
++        checks.append(jamo_state(c.snap()[1], 'after B'))
++        def jamo_op(label, do):
+             before = c.snap()
+-            pos, trail, m = c.press_cell(*cell)
+-            r = c.record(label, None, hc.Result(False, 'legacy-kana'), before, c.snap(), {'bp_from': m, 'cell': pos}, expect_sound='68')
+-            checks.append({'name': label, 'ok': not r['errors'], 'sounds': r['sounds']})
+-        before = c.snap(); m = e.bp_mark(); e.tap(RK, 24)
+-        r = c.record('R-incomplete', None, hc.Result(False, 'legacy-kana'), before, c.snap(), {'bp_from': m}, expect_sound='68')
+-        checks.append({'name': 'R on jamo active', 'ok': not r['errors'], 'sounds': r['sounds']})
++            checks.append(jamo_state(before[1], 'before ' + label))
++            extra = do()
++            after = c.snap()
++            r = c.record(label, None, hc.Result(False, 'legacy-kana'), before, after, extra, expect_sound='68')
++            checks.append(jamo_state(after[1], 'after ' + label))
++            same = before[1][0x2C:0x3C] == after[1][0x2C:0x3C] and before[1][OFF_LEN] == after[1][OFF_LEN] and before[1][0x70:0x80] == after[1][0x70:0x80]
++            checks.append({'name': label + ' on jamo active', 'ok': not r['errors'] and same and '68' in r['sounds'], 'sounds': r['sounds'], 'unchanged': same})
++        for label, cell in [('dakuten-incomplete', (10, 2)), ('handakuten-incomplete', (11, 2))]:
++            def do(cell=cell):
++                pos, trail, m = c.press_cell(*cell)
++                return {'bp_from': m, 'cell': pos}
++            jamo_op(label, do)
++        def do_r():
++            m = e.bp_mark(); e.tap(RK, 24)
++            return {'bp_from': m}
++        jamo_op('R-incomplete', do_r)
+         e.shot('after')
+     finally:
+         e.close()

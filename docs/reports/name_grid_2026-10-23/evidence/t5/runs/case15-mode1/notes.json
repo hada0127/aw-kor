@@ -1,0 +1,25 @@
+{
+ "synthetic": false,
+ "ram_writes": [],
+ "mode_byte": 1,
+ "guidance_A_presses": 1,
+ "steps": {
+  "ready": [
+   0,
+   "0000000000000000"
+  ],
+  "A(0,0)": [
+   1,
+   "e2a8000000000000"
+  ],
+  "B": [
+   0,
+   "0000000000000000"
+  ],
+  "START": [
+   0,
+   2
+  ]
+ },
+ "mode1_like": true
+}

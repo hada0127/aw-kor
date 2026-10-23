@@ -1,0 +1,11 @@
+ELF file size=4708; .image offset=0x1000; size=34; raw length=34
+ELF .image bytes == objcopy raw: PASS; relocation sections=0; alloc sections=.image only
+proof_entry: ELF symbol=0x08f70011; Thumbbit=1; raw offset=0x10; function size=14
+proof_leaf: ELF symbol=0x08f70001; Thumbbit=1; raw offset=0x0; function size=16
+ELF entry=0x08f70011; Thumbbit=1; named undefined symbols=0
+SHA256 sample.c (361 bytes) af31f3ace9bdb3c96b34f018a8b85d74e94710236cbbc8c7ff2f83a8d1b458e7
+SHA256 sample.ld (333 bytes) 6b925860a6eb1d62dbdab7fbfac82c45cc4a3df60cc01033841d8a8c815b6d55
+SHA256 sample.o (1028 bytes) eecdac285e2b7b8e30458fd4849295d918562f8650bd2d1a964d85c274f553e2
+SHA256 sample.elf (4708 bytes) 3af0a85d9205595dc29c2a9bc6838379688f9b3340146acdbfe4d6b62f204991
+SHA256 sample.bin (34 bytes) 21abdf12525b4993b70dca3b5102f46ca50e3e89f23964ef4638bd25ab0f19dd
+EXIT 0

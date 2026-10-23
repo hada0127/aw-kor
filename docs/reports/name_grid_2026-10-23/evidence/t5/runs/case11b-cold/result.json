@@ -1,0 +1,35 @@
+{
+ "case": "case11b-cold",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "cold load list name string 16B",
+   "ok": true,
+   "got": "884088e989e28adf8bc38ca68da98ea2"
+  },
+  {
+   "name": "cold name re-entry live 16B/len8/active0",
+   "ok": true,
+   "live": "884088e989e28adf8bc38ca68da98ea2",
+   "len": 8,
+   "tail": "00ffff00000000000000000000000000"
+  },
+  {
+   "name": "cold destination 16B",
+   "ok": true,
+   "dest": "884088e989e28adf8bc38ca68da98ea2",
+   "dest_addr": "0200b09c"
+  },
+  {
+   "name": "final A at 8 committed rejected (no_slot), unchanged",
+   "ok": true
+  },
+  {
+   "name": "cold run: no loadstate/w8/w16",
+   "ok": true
+  }
+ ],
+ "notes": [],
+ "run": "runs/case11b-cold"
+}

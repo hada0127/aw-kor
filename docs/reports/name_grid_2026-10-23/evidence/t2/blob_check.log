@@ -1,0 +1,13 @@
+image 2739B sha 8dd9460864ad3b0f9703ce12c80667323935b8055f9c8966e6aa023fae6c3b2f insns 968
+  nc_press +0x02B8 rt 0x08F75AB8
+  nc_confirm +0x06DC rt 0x08F75EDC
+  nc_backspace +0x0768 rt 0x08F75F68
+  nc_tramp_press +0x0000 rt 0x08F75800
+  nc_tramp_confirm +0x00D4 rt 0x08F758D4
+  nc_tramp_backspace +0x014C rt 0x08F7594C
+  nc_tramp_display +0x01B0 rt 0x08F759B0
+  nc_alloc +0x0280 rt 0x08F75A80
+  nc_sel_priv +0x0888 rt 0x08F76088
+  nc_row_priv +0x093C rt 0x08F7613C
+OK blob byte-identical
+EXIT 0

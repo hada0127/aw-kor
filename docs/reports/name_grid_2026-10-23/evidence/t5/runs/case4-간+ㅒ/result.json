@@ -1,0 +1,20 @@
+{
+ "case": "case4-간+ㅒ",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "last key rejected (model)",
+   "ok": true,
+   "model": {
+    "accepted": false,
+    "reason": "not_in_2350"
+   },
+   "sounds": [
+    "68"
+   ]
+  }
+ ],
+ "notes": [],
+ "run": "runs/case4-간+ㅒ"
+}

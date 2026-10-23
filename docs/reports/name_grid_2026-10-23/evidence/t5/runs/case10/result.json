@@ -1,0 +1,25 @@
+{
+ "case": "case10",
+ "pass": true,
+ "failures": [],
+ "checks": [
+  {
+   "name": "question opened, 가 committed",
+   "ok": true,
+   "x67": 2
+  },
+  {
+   "name": "after No: 가 committed active0 dest unchanged",
+   "ok": true,
+   "live": "88400000000000000000000000000000",
+   "dest": "00000000000000000000000000000000"
+  },
+  {
+   "name": "가카",
+   "ok": true,
+   "live": "88409163000000000000000000000000"
+  }
+ ],
+ "notes": [],
+ "run": "runs/case10"
+}

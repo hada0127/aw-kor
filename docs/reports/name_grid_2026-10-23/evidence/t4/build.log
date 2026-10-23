@@ -1,0 +1,225 @@
+$ nice -n 15 /Applications/Xcode.app/Contents/Developer/usr/bin/python3 tools/build_korean_full.py --out output/game_wars_korean_namecompose_20261023.gba --no-sync-outputs --report temp/encode_report.csv
+→ 1편 생산 정보 이동 라벨: v0 변경90/아이콘가림19, v1 변경89/아이콘가림21, v2 변경97/아이콘가림25, v3 변경94/아이콘가림28, v4 변경101/아이콘가림28, v5 변경97/아이콘가림31, v6 변경99/아이콘가림22, v7 변경89/아이콘가림4
+BTEAM RESTORE RESIDUAL 0x00B830C8: temporary source slot only; D8D9AC relocation required, B333FC proves 26-cell row; retained '지도\u3000보낼\u3000상대없어'
+BTEAM RESTORE RESIDUAL 0x00B82D92: 8-byte compact UI slot; baseline exceeds slot; retained '아군만'
+→ 스프라이트 편집 적용(overrides): 2 applied, 0 skipped
+→ 스프라이트 편집 리포트 /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/temp/sprite_override_report.json (applied 2, skipped 0, ignored 0)
+WARN: 11 lossless dialogue requests were not relocated; see temp/repoint_lossless_requests.json
+→ 대사 재배치(repoint): 2524 msgs, 2824 lines 단어붙음 해소, merged-skip 0, free 276628/794624B
+BTEAM RESTORE RESIDUAL 0x00A19300: R1: composite continuation differs; original ownership and full restoration are unproved
+BTEAM RESTORE RESIDUAL 0x00A2955C: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '미라클 찬스' needs 4 new cell(s) [미클찬스] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 12B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29570: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '레드스타 드림' needs 3 new cell(s) [레스림] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29588: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '하이퍼 리페어' needs 2 new cell(s) [페어] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29598: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '하이 업그레이드' needs 3 new cell(s) [업그레] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A295AC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '위닝 마치' needs 4 new cell(s) [위닝마치] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A295C0: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '빅토리어스 퍼레이드' needs 5 new cell(s) [빅토어스레] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 20B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A295D8: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '맥시멈 블로우' needs 6 new cell(s) [맥시멈블로우] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A295EC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '스트레이트 블래스트' needs 5 new cell(s) [스트레블래] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 20B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29600: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '장사 스피릿' needs 5 new cell(s) [장사스피릿] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 12B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A2962C: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '골드 러시' needs 2 new cell(s) [러시] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29640: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '파워 오브 머니' needs 5 new cell(s) [워오브머니] and 2 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29654: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '테크니컬 스나이프' needs 7 new cell(s) [테크니컬스나프] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 18B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29668: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '월드 와이드 스나이프' needs 5 new cell(s) [월와스나프] and 2 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 22B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29680: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '스노우 화이트' needs 4 new cell(s) [스노우트] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29690: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '블리자드 블로우' needs 4 new cell(s) [블자로우] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A296C8: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '원더 서치' needs 3 new cell(s) [더서치] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A296D8: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '카운터 브레이크' needs 6 new cell(s) [카운터브레크] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A296EC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '야마토 다마시' needs 5 new cell(s) [야마토다시] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A296FC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '사무라이 다이브' needs 4 new cell(s) [사무다브] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A2970C: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '라이트닝 드라이브' needs 3 new cell(s) [트닝브] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 18B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29724: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '라이트닝 어설트' needs 3 new cell(s) [트닝어] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A2973C: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '자이언트 웨이브' needs 5 new cell(s) [자언트웨브] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29754: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '자이언트 스톰' needs 5 new cell(s) [자언트스톰] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A2976C: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '슈퍼 차지' needs 2 new cell(s) [슈차] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29780: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '빅뱅 차지' needs 3 new cell(s) [빅뱅차] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29794: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '버닝 블로우' needs 5 new cell(s) [버닝블로우] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 12B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A297A8: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '기간트 브레이크' needs 5 new cell(s) [간트브레크] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 16B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A297BC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '하이퍼 택틱스' needs 3 new cell(s) [택틱스] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A297D4: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '하이 그레이드 커맨드' needs 4 new cell(s) [그레커맨] and 2 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 22B + NUL vs 24B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A297EC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '사이드 스루' needs 3 new cell(s) [사스루] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 12B + NUL vs 16B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A297FC: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '사이드 와인더' needs 4 new cell(s) [사와인더] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 14B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29810: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '블랙 웨이브' needs 4 new cell(s) [블랙웨브] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 12B + NUL vs 20B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29824: R3: Part 2 CO-power name drawn by the 0x08380564 cut-in, which copies 32x32 cells of the 5B3ECC atlas only for codes in the 61-cell A3B880 dictionary (59 cells used after restoring 일도양단/배수진; all 36 B-team names need 87 unique syllables). '블랙 스톰' needs 4 new cell(s) [블랙스톰] and 1 fullwidth space(s) (0x8140 has no dictionary cell; the consumer's behaviour for codes outside the dictionary is unproven without an emulator run); 10B + NUL vs 12B name slot. Real OkDanDan rendering is no longer the blocker (2026-10-08 Linux fonts); an atlas/consumer extension verified on screen is.
+BTEAM RESTORE RESIDUAL 0x00A29906: R1: full baseline occupies entire NUL-terminated fixed slot; prior candidate Korean retained
+BTEAM RESTORE RESIDUAL 0x00A29A34: R1: full-width baseline leaves no NUL terminator in fixed slot; retain prior candidate Korean bytes [0x00A29A34: protected '미사일 기지', retained '미사일기지', native slot 12B]
+BTEAM RESTORE RESIDUAL 0x00A29A70: R1: full-width baseline leaves no NUL terminator in fixed slot; retain prior candidate Korean bytes [0x00A29A70: protected '레이저 포', retained '레이저포', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00A2BC3C: R1: prior Korean source; complete baseline split across two script rows with fullwidth decimal glyph, no single-row proof
+BTEAM RESTORE RESIDUAL 0x00A2C040: R3: consumer-safe fullwidth baseline needs 50 bytes > 46-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C0C0: R3: consumer-safe fullwidth baseline needs 52 bytes > 48-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C1B8: R3: consumer-safe fullwidth baseline needs 54 bytes > 46-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00A2C1E8: R3: consumer-safe fullwidth baseline needs 54 bytes > 50-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C25C: R3: consumer-safe fullwidth baseline needs 56 bytes > 48-byte native slot; no verified relocation/pointer update for this address [0x00A2C25C: protected '친구와 연결해서,대전이나 맵 교환을 할 수 있습니다', retained '친구와\u3000연결해\u3000대전／지도\u3000교환\u3000가능', native slot 48B]
+BTEAM RESTORE RESIDUAL 0x00A2C2F4: R3: consumer-safe fullwidth baseline needs 56 bytes > 46-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C378: R3: consumer-safe fullwidth baseline needs 52 bytes > 46-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C3A8: R3: consumer-safe fullwidth baseline needs 56 bytes > 44-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C484: R3: consumer-safe fullwidth baseline needs 52 bytes > 44-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2C748: R3: consumer-safe fullwidth baseline needs 50 bytes > 44-byte native slot; this address has no verified relocation/pointer update [0x00A2C748: protected '병종 또는 생산 거점이 1개 이상 필요합니다.', retained '병종\u3000또는\u3000생산\u3000거점\u3000하나\u3000이상\u3000필요', native slot 44B]
+BTEAM RESTORE RESIDUAL 0x00A2C7DC: R3: consumer-safe original-glyph form (、。 like the original ROM) needs 38B > native 36B slot; ASCII punctuation unproven for this consumer
+BTEAM RESTORE RESIDUAL 0x00A2C804: R3: consumer-safe original-glyph form needs 40B > relocated 38B span; ASCII punctuation unproven for this consumer
+BTEAM RESTORE RESIDUAL 0x00A2CA38: R3: menu row starts with two fullwidth alignment cells (0x8140 x2); removing them changes this row’s icon/text origin, which has no verified consumer adjustment [0x00A2CA38: protected '로드', retained '\u3000\u3000로드', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00A2CA44: R3: menu row starts with two fullwidth alignment cells (0x8140 x2); removing them changes this row’s icon/text origin, which has no verified consumer adjustment [0x00A2CA44: protected '세이브', retained '\u3000\u3000세이브', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00A2CA60: R3: menu row starts with two fullwidth alignment cells (0x8140 x2); removing them changes this row’s icon/text origin, which has no verified consumer adjustment [0x00A2CA60: protected '파일', retained '\u3000\u3000파일', native slot 12B]
+BTEAM RESTORE RESIDUAL 0x00A2CA70: R3: menu row starts with two fullwidth alignment cells (0x8140 x2); removing them changes this row’s icon/text origin, which has no verified consumer adjustment [0x00A2CA70: protected '도움말', retained '\u3000\u3000도움말', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00A2D5C8: R3: consumer-safe fullwidth baseline needs 16 bytes > 14-byte native slot; this address has no verified relocation/pointer update [0x00A2D5C8: protected '내일로의 7일간', retained '내일로\u3000７일간', native slot 14B]
+BTEAM RESTORE RESIDUAL 0x00A2D650: R3: consumer-safe fullwidth baseline needs 16 bytes > 14-byte native slot; this address has no verified relocation/pointer update [0x00A2D650: protected '내일로의 7일간', retained '내일향한\u3000７일', native slot 14B]
+BTEAM RESTORE RESIDUAL 0x00A2D684: R3: consumer-safe fullwidth baseline needs 20 bytes > 18-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00A2D6AC: R3: consumer-safe fullwidth baseline needs 22 bytes > 18-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00A2D6F0: R3: consumer-safe fullwidth baseline needs 20 bytes > 16-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00A35228: R3: consumer-safe fullwidth baseline needs 48 bytes > 44-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00B81874: R3: compact UNIT_INFO banks preload no code for 머; needs a new dictionary pad cell + glyph (part1_compact_ui_strings) [0x00B81874: protected '대공 머신건', retained '대공기관총', native slot 14B]
+BTEAM RESTORE RESIDUAL 0x00B818B4: R3: UNIT_INFO compact bank 0xB12EDC lacks SJIS 0x8160 (～/〜); restoring the range mark needs a verified preload edit [0x00B818B4: protected '2～6거리', retained '2-6거리', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B819B8: R3: UNIT_INFO compact bank 0xB12EDC lacks SJIS 0x8160 (～/〜); restoring the range mark needs a verified preload edit [0x00B819B8: protected '3～5거리', retained '3-5거리', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B819DC: R3: UNIT_INFO compact bank 0xB12EDC lacks SJIS 0x8160 (～/〜); restoring the range mark needs a verified preload edit [0x00B819DC: protected '2～3거리', retained '2-3거리', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B81B04: R3: compact UNIT_INFO banks preload no code for 머; needs a new dictionary pad cell + glyph (part1_compact_ui_strings) [0x00B81B04: protected '머신건', retained '기관총', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B81E2C: R3: consumer-safe fullwidth baseline needs 12 bytes > 10-byte native slot; this address has no verified relocation/pointer update [0x00B81E2C: protected '분단 작전!', retained '분단\u3000작전', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B82018: R3: consumer-safe fullwidth baseline needs 12 bytes > 10-byte native slot; this address has no verified relocation/pointer update [0x00B82018: protected '전투 개시!', retained '전투\u3000개시', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B826A8: R3: consumer-safe fullwidth baseline needs 12 bytes > 10-byte native slot; this address has no verified relocation/pointer update [0x00B826A8: protected '마른 잎 섬', retained '마른잎섬', native slot 10B]
+BTEAM RESTORE RESIDUAL 0x00B8277C: R3: consumer-safe fullwidth baseline needs 14 bytes > 12-byte native slot; this address has no verified relocation/pointer update [0x00B8277C: protected '타마 타마 섬', retained '타마타마섬', native slot 12B]
+BTEAM RESTORE RESIDUAL 0x00B827AC: R3: consumer-safe fullwidth baseline needs 14 bytes > 12-byte native slot; this address has no verified relocation/pointer update [0x00B827AC: protected '소라 마메 섬', retained '소라마메섬', native slot 12B]
+BTEAM RESTORE RESIDUAL 0x00B82D58: R3: compact menu row currently selects 나가기; protected 모드 선택 names a different action and its callback binding is unverified
+BTEAM RESTORE RESIDUAL 0x00B82D92: R3: consumer-safe fullwidth baseline needs 10 bytes > 8-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00B82D9E: R3: compact battle-menu row needs 10/8 bytes; changing source code requires glyph-bank preload proof for this address [0x00B82D9E: protected '애니메 B', retained '전투만', native slot 8B]
+BTEAM RESTORE RESIDUAL 0x00B82DAA: R3: compact battle-menu row needs 10/8 bytes; changing source code requires glyph-bank preload proof for this address [0x00B82DAA: protected '애니메 A', retained '전체표시', native slot 8B]
+BTEAM RESTORE RESIDUAL 0x00B82FAC: R3: consumer-safe fullwidth baseline needs 46 bytes > 44-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00B830AC: R3: consumer-safe fullwidth form (원본 글리프 ！) needs 24B = whole 24B NUL-terminated fixed slot; no terminator room, ASCII ! rejected by payload validation
+BTEAM RESTORE RESIDUAL 0x00B8319C: R1: nontext compact glyph preload; native pointer 0xB32E14 must stay at B8319C for link-status consumer
+BTEAM RESTORE RESIDUAL 0x00B8322C: R1: this 36-byte object is a glyph preload list, not displayed prose; 중 is required by the visible B83254 sentence
+BTEAM RESTORE RESIDUAL 0x00B839B4: R3 correction: static 0x08B1311C parser reads 0x8140; b22 writes authored spaces in 12/12 bytes; screen result unverified
+BTEAM RESTORE RESIDUAL 0x00B83A64: R3: consumer-safe fullwidth baseline needs 54 bytes > 44-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00B83FA8: R3: consumer-safe fullwidth baseline needs 46 bytes > 42-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00D8215C: R3: consumer-safe fullwidth baseline needs 50 bytes > 44-byte native slot; this address has no verified relocation/pointer update [0x00D8215C: protected '병종 또는 생산 거점이 1개 이상 필요합니다.', retained '병종\u3000또는\u3000생산\u3000거점\u3000하나\u3000이상\u3000필요', native slot 44B]
+BTEAM RESTORE RESIDUAL 0x00D821F0: R3: consumer-safe fullwidth baseline needs 38 bytes > 36-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00D82218: R3: consumer-safe fullwidth baseline needs 40 bytes > 34-byte native slot; no verified relocation/pointer update for this address
+BTEAM RESTORE RESIDUAL 0x00D9009E: R1: source row is a Korean fragment continued by the following script bytes; full baseline has no proven single-slot write or relocation
+BTEAM RESTORE RESIDUAL 0x00D910C6: R2: prior candidate Korean had duplicated 공격 and rebuilt tail exposed Japanese; corrected complete Korean composite in 42-byte script slot
+BTEAM RESTORE RESIDUAL 0x00D9444E: Script text relocation unproven: R3: consumer-safe fullwidth baseline needs 46 bytes > 40-byte native slot; this address has no verified relocation/pointer update [0x00D9444E: protected '매일 2HP씩 보충하고 있다고는 해도,지금', retained '매일\u3000２ＨＰ씩\u3000보충돼도\u3000지금의', native slot 40B]
+BTEAM RESTORE RESIDUAL 0x00DCE89A: Script text relocation unproven: R3: consumer-safe fullwidth baseline needs 52 bytes > 44-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00DCFA8E: Script text relocation unproven: R3: consumer-safe fullwidth baseline needs 48 bytes > 42-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00DD010A: Script text relocation unproven: R3: consumer-safe fullwidth baseline needs 50 bytes > 40-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00DF1EEE: R3: consumer-safe fullwidth baseline needs 48 bytes > 42-byte native slot; this address has no verified relocation/pointer update [0x00DF1EEE: protected '여기는,수도 점령,혹은 적 전멸로 승리예요!', retained '수도\u3000점령／적\u3000전멸\u3000승리', native slot 42B]
+BTEAM RESTORE RESIDUAL 0x00DF207A: R2: prior candidate was Japanese; restored exact Korean slot bytes from output/game_wars_korean_full.gba
+BTEAM RESTORE RESIDUAL 0x00DF20BA: R3: consumer-safe fullwidth baseline needs 56 bytes > 38-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00DF21AE: R3: consumer-safe fullwidth baseline needs 46 bytes > 40-byte native slot; this address has no verified relocation/pointer update [0x00DF21AE: protected '수도 점령이나 적 전멸로,이길 수 있어요!', retained '수도\u3000점령이나\u3000적\u3000전멸로\u3000승리！', native slot 40B]
+BTEAM RESTORE RESIDUAL 0x00DF228E: R3: consumer-safe fullwidth baseline needs 46 bytes > 44-byte native slot; this address has no verified relocation/pointer update [0x00DF228E: protected '여기는,먼저 많이 점령하는 쪽이 승리예요!', retained '먼저\u3000많이\u3000점령한\u3000쪽\u3000승리', native slot 44B]
+BTEAM RESTORE RESIDUAL 0x00DF239E: R3: consumer-safe fullwidth baseline needs 46 bytes > 44-byte native slot; this address has no verified relocation/pointer update [0x00DF239E: protected '여기는,먼저 많이 점령하는 쪽이 승리예요!', retained '먼저\u3000많이\u3000점령한\u3000쪽이\u3000승리！', native slot 44B]
+BTEAM RESTORE RESIDUAL 0x00DF25FA: R3: consumer-safe fullwidth baseline needs 46 bytes > 38-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00DF26FE: R3: consumer-safe fullwidth baseline needs 46 bytes > 40-byte native slot; this address has no verified relocation/pointer update [0x00DF26FE: protected '수도 점령이나,적 전멸로 이길 수 있어요!', retained '수도\u3000점령／적\u3000전멸\u3000승리', native slot 40B]
+BTEAM RESTORE RESIDUAL 0x00DF2806: R3: consumer-safe fullwidth baseline needs 46 bytes > 40-byte native slot; this address has no verified relocation/pointer update [0x00DF2806: protected '수도 점령이나,적 전멸로 이길 수 있어요!', retained '수도\u3000점령이나\u3000적\u3000전멸로\u3000승리！', native slot 40B]
+BTEAM RESTORE RESIDUAL 0x00DF28C2: R3: consumer-safe fullwidth baseline needs 48 bytes > 42-byte native slot; this address has no verified relocation/pointer update [0x00DF28C2: protected '여기는,수도 점령,혹은 적 전멸로 승리예요!', retained '수도\u3000점령\u3000또는\u3000적\u3000전멸로\u3000승리！', native slot 42B]
+BTEAM RESTORE RESIDUAL 0x00DF8BBA: R3: STATUS/RESULT compact banks lack reserved codes 0x8F78/0x89DE for 유닛; adding both requires verified shared-prefix cache indexes
+BTEAM RESTORE RESIDUAL 0x00DF8C1A: R3: RESULT compact bank lacks reserved codes 0x8F78/0x89DE/0x8DB3/0x92F5 for 유닛상황; no four verified spare preload cells
+BTEAM RESTORE RESIDUAL 0x00E10D7A: R3: consumer-safe fullwidth baseline needs 18 bytes > 16-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00EC30A2: R3: consumer-safe fullwidth baseline needs 56 bytes > 46-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00EC312E: R3: consumer-safe fullwidth baseline needs 52 bytes > 46-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00EC3162: R3: consumer-safe fullwidth baseline needs 56 bytes > 44-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00EC3192: R3: consumer-safe fullwidth baseline needs 44 bytes > 42-byte native slot; this address has no verified relocation/pointer update
+BTEAM RESTORE RESIDUAL 0x00EC3246: R3: consumer-safe fullwidth baseline needs 56 bytes > 40-byte native slot; this address has no verified relocation/pointer update
+→ 2편 조각 이음매 공백(검수표): 제자리 73건, 최종 미적용 space 0, join 30건, defer 2건
+Mission title legacy blank compatibility codes: 
+→ link client font: P2 58/59 codes, P1 57/59 codes, reverted 1081 B, dropped 35 write-log rows
+→ 무결성맵 /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/temp/build-stage-erw1m589/integrity_map.json (40055 text writes)
+→ B-team restoration: in-place 127, relocated 259, residual kept-Korean 99
+→ 스프라이트 빌드레이아웃 /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/data/sprite_build_layouts.json (57 blocks)
+→ OBJ 라벨 합성 스프라이트 /Users/konest/project/aw-kor/temp/name-grid-phaseB/namecompose-build/source/data/objlabel_sprites.json (34 sprites)
+→ unencodable non-Korean CSV fields: preserved 37 base spans
+=== 인코딩 통계 (base=original) ===
+  editor_intents: 11
+  editor_intent_stale: 0
+  dialogue_overrides: 6470
+  override_jam_skipped: 75
+  dialogue_override_protected_skip: 1218
+  rows: 17758
+  written: 16485
+  level0: 13842
+  level1: 1985
+  level2: 73
+  level3: 48
+  level4: 33
+  level5: 2
+  overflow: 353
+  deny: 393
+  skip_v56: 0
+  no_ko: 0
+  code_region: 2165
+  no_slot: 0
+  bad_addr: 0
+  oob: 0
+  supp_written: 802
+  supp_level0: 759
+  supp_level1: 43
+  supp_level2: 0
+  supp_level3: 0
+  supp_level4: 0
+  supp_level5: 0
+  supp_overflow: 1
+  grid_glyphs: 62
+  symbol_glyphs: 25
+  part2_ui_kanji_glyphs: 270
+  compact_ui_fallback_glyph: 1
+  part2_ui_context_tokens: 370
+  part1_single_map_unknown_label: {'placeholder': 3, 'entries': 676, 'table_bytes': 5408}
+  part2_obj_labels: 79
+  part2_status_header_labels: 8
+  part2_info_screen_obj_labels: 4
+  part1_full_info_spec_obj_label: 4
+  part1_damage_forecast_label: 1
+  part2_damage_label: 1
+  part2_mode_menu_obj_labels: 46
+  part2_sound_room_control_labels: 4
+  part2_link_mode_residual_labels: 10
+  part2_menu_newspaper_bg: 256
+  common_nintendo_presents_bg: 384
+  part2_splash_logo_bg: 88
+  part2_intro_blackhole_bg: 357
+  part2_intro_campaign_residual_graphics: 287
+  part2_intro_ascii_name_residuals: 2
+  part1_intro_map_bitmap_labels: 0
+  part1_operation_room_bg_labels: 0
+  part1_battle_day_banner: 96
+  part1_info_screen_bg_labels: 5
+  part1_compact_info_weapon_labels: 2
+  part1_check_label: 6
+  part1_name_ui_labels: 8
+  part2_command_menu_icon: 4
+  part2_action_menu_icon_labels: 0
+  part2_mission_obj: 1
+  part2_operation_prompt_labels: 58
+  part2_lets_go_obj: 1
+  part2_battle_start_day_overlay: 512
+  part2_mission_number: 24
+  part2_bg_mission_word: 0
+  part2_result_summary: 1
+  part2_result_success_overlay: 5
+  part2_result_failure_overlay: 2
+  part2_result_congratulations: 1
+  part2_air_mission_title: 1
+  part2_air_supremacy_title: 1
+  part2_level_label: 4
+  part2_check_label: 10
+  part2_companion_hud: 1
+  part1_day_hud: 1
+  part2_funds_hud: 32
+  residual_ascii_labels: 14
+  common_battle_ascii_labels: 284
+  battle_defense_label_tiles: 10
+  backup_utility_tables: 0
+  part2_domino_co_name: 19
+  part1_rule_circle_labels: {'labels': 7, 'values': 9, 'compressed': 3896, 'slot': 4792}
+  part2_campaign_header: 7
+  part2_redstar_region: 48
+  part2_prologue_logo: 24
+  part2_prologue_inline_renderer_spans: 2
+  world_map_label_tiles: 150
+  title_hangul_assets: 48
+  name_honorifics: 4
+  pair_title_glyphs: 277
+  b84_power_title_lz77_glyphs: 44
+  b84_power_title_glyphs: {'glyphs': 44, 'method': 'lz77_source_only', 'copy_site_hook': 'disabled_shared_renderer'}
+  part2_power_title_glyphs: {'glyphs': 59, 'names': 36, 'offset': '0x5b3ecc', 'packed_bytes': 5842, 'slot_bytes': 6161, 'headroom': 319, 'method': 'dictionary_ordered_lz77_source_only'}
+  sprite_overrides: 2
+  sprite_overrides_skipped: 0
+  sprite_overrides_ignored: 0
+  punct_strip_fallback(level>=6): 500
+→ output/game_wars_korean_namecompose_20261023.gba (16MB, chk recomputed), overflow 리포트 temp/encode_report.csv
+
+EXIT 0

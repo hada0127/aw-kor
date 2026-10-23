@@ -36,6 +36,24 @@ class NativePart2Tests(unittest.TestCase):
                 rom=bytearray(self.rom);rom[a]^=1
                 with self.assertRaises(N.NativeConsumerError):N.NativeProfile(bytes(rom))
 
+    def test_name_compose_a3_hook_version_is_exact(self):
+        # PLAN-v5 §1.7 widens only the max (+0x84) and table end (+0x8C) literals.
+        base=0xF30280;hook=bytearray(bytes.fromhex(HOOK_FIXTURE[base]))
+        new=bytearray(hook);struct.pack_into('<I',new,0x84,0xE352);struct.pack_into('<I',new,0x8C,0x08F24494)
+        self.assertEqual(N.sha(new),N.PATCH_REGION_VERSIONS['a3_glyph_hook'][0])
+        def profile(region):
+            rom=bytearray(self.rom);rom[base:base+len(region)]=region;return N.NativeProfile(bytes(rom))
+        self.assertEqual(profile(hook).connections['a3_glyph_hook'],N.PATCH_REGIONS['a3_glyph_hook']['sha256'])
+        self.assertEqual(profile(new).connections['a3_glyph_hook'],N.sha(new))
+        only_max=bytearray(hook);only_max[0x84:0x88]=new[0x84:0x88]
+        only_end=bytearray(hook);only_end[0x8C:0x90]=new[0x8C:0x90]
+        bad=[only_max,only_end]
+        for offset in (0x00,0x7C,0x84,0x85,0x8C,0x8E,0x90,0xBF):  # opcode·page·max·end·mask·tail
+            region=bytearray(new);region[offset]^=1;bad.append(region)
+        for region in bad:
+            with self.subTest(region=region.hex()):
+                with self.assertRaises(N.NativeConsumerError):profile(region)
+
     def test_unknown_scope_does_not_promote_aliases_or_padding(self):
         raw=bytes.fromhex('88402088415788404b00')
         tokens=Q.tokenize(raw)
