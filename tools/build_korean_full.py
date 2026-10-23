@@ -10446,6 +10446,7 @@ MISSION_TITLE_GLYPH_FILE = 0xF42000
 MISSION_TITLE_GLYPH_RT = 0x08F42000
 MISSION_TITLE_HANGUL_ADVANCE = 24  # 22px body + shadow/spacing; native OBJ is 32px.
 MISSION_TITLE_SPACE_ADVANCE = 12   # Half the Hangul cell advance.
+MISSION_TITLE_COMMA_ADVANCE = 12   # Includes the comma's one-pixel shadow.
 
 
 def _lz77_literal_block(raw):
@@ -10480,10 +10481,12 @@ def _mission_title_hangul_fonts():
 def _mission_title_hangul_glyph(syl):
     """Native 32x32 OBJ cell; Hada Bold Hangul with Black outline guide."""
     from PIL import Image, ImageDraw, ImageFilter, ImageFont
-    # Callers pass Hangul syllables or ASCII letters/digits; anything else would
+    # Callers pass Hangul syllables, ASCII letters/digits, or the restored comma;
+    # anything else would
     # silently draw the font's .notdef box.
-    if len(syl) != 1 or not ('가' <= syl <= '힣' or (syl.isascii() and syl.isalnum())):
+    if len(syl) != 1 or not ('가' <= syl <= '힣' or (syl.isascii() and syl.isalnum()) or syl == ','):
         raise AssertionError(f'missing mission title glyph: {syl!r}')
+    advance = MISSION_TITLE_COMMA_ADVANCE if syl == ',' else MISSION_TITLE_HANGUL_ADVANCE
     if '가' <= syl <= '힣':
         # Normalize each high-resolution outline to the native 24px advance.
         # Black only determines the thicker rim; the visible face stays Bold.
@@ -10512,7 +10515,7 @@ def _mission_title_hangul_glyph(syl):
             raise AssertionError(f'missing mission title glyph: {syl!r}')
         from hangul_pixel_fit import native_mask
         face, _ = native_mask(syl, font, (32, 32),
-            ((MISSION_TITLE_HANGUL_ADVANCE - 1 - (box[2] - box[0])) // 2 - box[0], 1))
+            ((advance - 1 - (box[2] - box[0])) // 2 - box[0], 1))
         edge = face
     ink, border = face.load(), edge.load()
     pixels = [[0] * 32 for _ in range(32)]
@@ -10520,7 +10523,7 @@ def _mission_title_hangul_glyph(syl):
         for x in range(32):
             if border[x, y] < 128:
                 continue
-            if not (0 <= x < MISSION_TITLE_HANGUL_ADVANCE - 1 and 0 <= y < 31):
+            if not (0 <= x < advance - 1 and 0 <= y < 31):
                 raise AssertionError(f'mission title glyph outside OBJ cell: {syl}')
             if not pixels[y + 1][x + 1]:
                 pixels[y + 1][x + 1] = 10
@@ -10613,6 +10616,9 @@ def patch_pair_renderer_title_glyph_table(rom, orig, slots, syl_to_code, *, evid
     for code in sorted(needed - existing):
         if code == 0x8140:
             add_entry(code, _mission_title_blank_glyph(), adv=MISSION_TITLE_SPACE_ADVANCE)
+            continue
+        if code == 0x8143:
+            add_entry(code, _mission_title_hangul_glyph(','), adv=MISSION_TITLE_COMMA_ADVANCE)
             continue
         syl = code_to_syl.get(code)
         if syl:
@@ -12512,13 +12518,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != '5cc6a1b98dd910cb914f442199dd16c3ffe174e5433cf3cc3171e7cffd6d5dfd':
+        if hashlib.sha256(stream.read()).hexdigest() != 'ae057731cc8e92dae1d210a8390c6740b4eac4f66db84ec08e94b1e5951452f4':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 108 or len(result) != len(rows) or
+    if (len(rows) != 103 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
@@ -24730,7 +24736,7 @@ def _build(args, publication):
     mission_title_evidence = {}
     st['pair_title_glyphs'] = patch_pair_renderer_title_glyph_table(
         rom, orig, slots, syl_to_code, evidence=mission_title_evidence)
-    fit_regions, fit_report = part2_mission_title_fit.patch(rom, orig, _lz77_literal_block)
+    fit_regions, fit_report = part2_mission_title_fit.patch(rom, orig, part2_mission_title_fit.compress_asset)
     mission_title_evidence['regions'] += fit_regions
     title_evidence_report = {
         'title_fit': fit_report,

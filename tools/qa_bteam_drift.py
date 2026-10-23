@@ -96,8 +96,8 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = '5cc6a1b98dd910cb914f442199dd16c3ffe174e5433cf3cc3171e7cffd6d5dfd'
-ROUND2_ACTIVE_PINS_DIGEST = '40bccc4c5d2d6c88fecffa5794deb176c5de56f6ce5220e44116e3678d836dca'
+ROUND2_RESIDUAL_DIGEST = 'ae057731cc8e92dae1d210a8390c6740b4eac4f66db84ec08e94b1e5951452f4'
+ROUND2_ACTIVE_PINS_DIGEST = '17a3624e3c8e6117e6e8a645fbd2375f6b6b87a32134dae4b55949d39144873f'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != 'ae9e9a92530507b01859b57f137650f6fc9b8877add9ee1257feb1452f131a37':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -805,7 +805,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 108 or len(listed) != len(rows):
+    if len(rows) != 103 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:

@@ -94,6 +94,59 @@ class CompactShapeOracleTests(unittest.TestCase):
 
 
 class MissionTitleFitTests(unittest.TestCase):
+    def test_comma_pixels_and_advance_fit_native_obj(self):
+        raw = builder._mission_title_hangul_glyph(',')
+        self.assertEqual(len(raw), 512)
+        # Independent OBJ decoder, also used by the sprite shape oracle.
+        pixels = aw_fonts.obj_canvas(raw, 1, 4, 4)
+        ink = [(x, y) for y, row in enumerate(pixels) for x, v in enumerate(row) if v]
+        self.assertTrue(ink)
+        self.assertEqual({v for row in pixels for v in row}, {0, 6, 10})
+        self.assertLess(max(x for x, y in ink), builder.MISSION_TITLE_COMMA_ADVANCE)
+        self.assertGreater(min(y for x, y in ink), 16)  # baseline comma, not a raised dot
+        self.assertLess(max(y for x, y in ink), 32)
+        self.assertEqual(fit.compact_glyph(raw), raw)
+        for unsupported in ('', '.', '，', ',,', '😀'):
+            with self.subTest(unsupported=unsupported), self.assertRaises(AssertionError):
+                builder._mission_title_hangul_glyph(unsupported)
+
+    def test_restored_comma_title_registers_and_survives_layout(self):
+        from lz77_scan import lz77_decompress
+        codes = {k: int(v, 16) for k, v in json.loads(Path(builder.SYLCODE).read_text()).items()}
+        text = '푸른 달이여,영원히'
+        payload = fit.encode_pair_title(text, codes) + b'\0'
+        self.assertEqual(payload[12:14], bytes.fromhex('8143'))
+        for sample in (payload, bytes.fromhex('814300'), bytes.fromhex('81438143814000')):
+            with self.subTest(payload=sample.hex()):
+                rom = self.fixture()
+                pointer, destination = 0xA38304, 0xF71300
+                struct.pack_into('<I', rom, pointer, destination + 0x08000000)
+                rom[destination:destination + len(sample)] = sample
+                evidence = {}
+                builder.patch_pair_renderer_title_glyph_table(rom, self.original, {}, codes, evidence=evidence)
+                entries = {}
+                for a in range(0xF40000, 0xF42000, 12):
+                    c, _, p, advance = struct.unpack_from('<HHII', rom, a)
+                    if not p:
+                        break
+                    entries[c] = (p, advance)
+                p, advance = entries[0x8143]
+                self.assertEqual(advance, 12)
+                self.assertEqual(p % 4, 0)
+                decoded = lz77_decompress(bytes(rom), p - 0x08000000)[0]
+                self.assertEqual(decoded, builder._mission_title_hangul_glyph(','))
+                self.assertTrue(any(decoded))
+                self.assertNotIn('8143', evidence['legacy_blank_sources'])
+                # Original native entries, including other punctuation, stay byte-identical.
+                self.assertEqual(rom[0xF40000:0xF40000 + 144 * 12],
+                                 self.original[0xA3AF04:0xA3AF04 + 144 * 12])
+                fit.patch(rom, self.original, builder._lz77_literal_block)
+                builder.verify_pair_renderer_title_glyph_table(rom, evidence)
+                self.assertEqual(rom[destination:destination + len(sample)], sample)
+                self.assertIn((pointer, destination, tuple(int.from_bytes(sample[i:i+2], 'big')
+                                  for i in range(0, len(sample)-1, 2)), sample),
+                              fit.active_titles(self.original, rom))
+
     def test_hangul_glyph_uses_pinned_hada_fonts(self):
         bold, guide = builder._mission_title_hangul_fonts()
         self.assertEqual(hashlib.sha256(Path(bold.path).read_bytes()).hexdigest(), aw_fonts.HADASANS_SHA256)

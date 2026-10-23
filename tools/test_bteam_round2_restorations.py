@@ -34,7 +34,7 @@ class OriginalGlyphConsumerTests(unittest.TestCase):
             0xA35258, 0xA35280, 0xB830C8, 0xD94552, 0xD965DE, 0xE0F6E2}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 108)
+        self.assertEqual(len(RESIDUALS), 103)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.

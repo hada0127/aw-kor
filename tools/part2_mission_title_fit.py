@@ -10,6 +10,8 @@ import struct
 from pathlib import Path
 
 from lz77_scan import lz77_decompress
+from lz77_compress import lz77_compress
+from part1_mission_titles import verify_vram_stream
 
 BASE = 0xF66000
 TABLE = 0xF66800
@@ -241,6 +243,20 @@ def map_title_raster(codes, glyphs, advances, spacing):
                       bank_tiles=chunks*16, decoration_tile=0x90)
 
 
+def compress_asset(raw):
+    """Preserve pixels in the native type-0x10, halfword-VRAM format.
+
+    Both loaders call 0x08311CC1, which dispatches these VRAM destinations
+    to BIOS LZ77UnCompVram (SWI 0x12). No allocation or decoded size changes.
+    """
+    compressed = lz77_compress(raw, vram_safe=True)
+    verify_vram_stream(compressed, len(raw), 'mission title fitting')
+    decoded = lz77_decompress(compressed, 0)
+    if decoded is None or decoded[0] != raw:
+        raise AssertionError('mission title fitting compression changed pixels')
+    return compressed
+
+
 def patch(rom, original, literal_compress):
     for start, end, expected in (
         (0x324E04, 0x324E44, 'd64bf0587285b9353690a378c0b277a29192c41b4bcf699c1fed86d76852ce89'),
@@ -335,7 +351,13 @@ def patch(rom, original, literal_compress):
     descriptors.extend(bytes(32))
     if (BASE + len(CODE) > MAP_DESCRIPTORS or MAP_DESCRIPTORS + len(descriptors) > TABLE
             or TABLE + len(table) > GLYPHS or GLYPHS + len(glyphs) > END):
-        raise AssertionError('mission title fitting assets overlap reservation')
+        sizes = (('code', BASE, len(CODE), MAP_DESCRIPTORS),
+                 ('descriptors', MAP_DESCRIPTORS, len(descriptors), TABLE),
+                 ('table', TABLE, len(table), GLYPHS),
+                 ('glyphs', GLYPHS, len(glyphs), END))
+        detail = '; '.join(f'{name}: {size}B end={start+size:08X} limit={limit:08X}'
+                           for name, start, size, limit in sizes)
+        raise AssertionError(f'mission title fitting assets overlap reservation: {detail}')
     rom[BASE:BASE + len(CODE)] = CODE
     rom[MAP_DESCRIPTORS:MAP_DESCRIPTORS+len(descriptors)] = descriptors
     rom[TABLE:TABLE + len(table)] = table
