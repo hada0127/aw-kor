@@ -14,7 +14,7 @@ PARENT = (0x03000F20, 0x03000EC0, 0x030010A0,
           0x03001040, 0x03001220, 0x03001280)
 # The prototype's exact lookup has 18 editor keys; a range hit alone is insufficient.
 KEYS = (0x4C, 0x4E, 0x58, 0x5A, 0x5C, 0x64, 0x66, 0x74, 0x76,
-        0x84, 0x86, 0x88, 0x92, 0x94, 0x98, 0x9A, 0xAA, 0xAC)
+        0x84, 0x86, 0x88, 0x92, 0x94, 0x98, 0x9E, 0xAA, 0xAC)
 KEYS = {0x08D82400 + offset for offset in KEYS}
 
 
@@ -58,16 +58,18 @@ class EditorCompactGateTests(unittest.TestCase):
         for address, (old, _) in editor.REPLACES.items():
             struct.pack_into('<I', self.rom, address, old)
         struct.pack_into('<I', self.rom, editor.LEGACY_ROW_SITE, editor.LEGACY_ROW_TARGET)
+        struct.pack_into('<I', self.rom, editor.LEGACY_LOOKUP_LITERAL,
+                         editor.LEGACY_LOOKUP_TARGET)
 
     def test_payload_matches_linked_editor_gate(self):
         self.assertEqual(len(editor.CODE), 236)
         self.assertEqual(hashlib.sha256(editor.CODE).hexdigest(),
-                         'e0d0d47078282b8fbbd3c627f52d09ac377133b1364ec06385c05cc5943454d1')
+                         '9d9662da832257e0b14528f25566ae7a9d846b4d11cb2b7b2bfd800fcd11cc80')
         self.assertIn(struct.pack('<I', 0x08D8244C), editor.CODE)
         self.assertIn(struct.pack('<I', 0x02012E0A), editor.CODE)
-        # Thumb-1 B at 08F31E98 must reach the old native row fallback.
-        self.assertEqual(struct.unpack_from('<H', editor.CODE, 0x98)[0], 0xE092)
-        self.assertEqual(0x08F31E9C + ((0xE092 & 0x7FF) << 1),
+        # Thumb-1 B at 08F31E9E must reach the old native row fallback.
+        self.assertEqual(struct.unpack_from('<H', editor.CODE, 0x9E)[0], 0xE08F)
+        self.assertEqual(0x08F31EA2 + ((0xE08F & 0x7FF) << 1),
                          0x08F31FC0)
 
     def test_patch_is_guarded_confined_and_final_checked(self):
@@ -79,14 +81,15 @@ class EditorCompactGateTests(unittest.TestCase):
             allowed.update(range(address, address + 4))
         self.assertTrue(all(a == b or index in allowed
                             for index, (a, b) in enumerate(zip(before, self.rom))))
-        for at in (editor.CODE_OFFSET, editor.RETURN_SITE, *editor.REPLACES):
+        for at in (editor.CODE_OFFSET, editor.RETURN_SITE,
+                   editor.LEGACY_LOOKUP_LITERAL, *editor.REPLACES):
             self.rom[at] ^= 1
             with self.assertRaisesRegex(AssertionError, 'overwritten'):
                 editor.verify(self.rom)
             self.rom[at] ^= 1
 
     def test_atomic_failures(self):
-        for kind in ('occupied', 'predecessor', 'legacy', 'return', 'original', 'truncated', 'reinstall'):
+        for kind in ('occupied', 'predecessor', 'legacy', 'lookup', 'return', 'original', 'truncated', 'reinstall'):
             with self.subTest(kind=kind):
                 rom = bytearray(self.rom)
                 original = self.original
@@ -96,6 +99,8 @@ class EditorCompactGateTests(unittest.TestCase):
                     rom[next(iter(editor.REPLACES))] ^= 1
                 elif kind == 'legacy':
                     rom[editor.LEGACY_ROW_SITE] ^= 1
+                elif kind == 'lookup':
+                    rom[editor.LEGACY_LOOKUP_LITERAL] ^= 1
                 elif kind == 'return':
                     rom[editor.RETURN_SITE] ^= 1
                 elif kind == 'original':

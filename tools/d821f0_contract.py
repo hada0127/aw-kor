@@ -213,8 +213,8 @@ def append(original, rom, manifest, write_log, **kwargs):
 # Only the two editor-hook spans have an exact second digest for the current
 # 236B consumer gate. All other accepted0916 pins remain unchanged.
 EDITOR_GATE_PINS = {
-    0xF30600: 'd035ee2233905ce7093c1e4c5d2e52eef514202df5f9bf9ac8c765d4bc1f9a05',
-    0xF31E00: '831e7ddfa1a1ba0576001207f7f6df294a77415e276806d7a9b367f6b9058e72',
+    0xF30600: '6e5283af9ed2584b1d4e4329700df5abab2f807b13cee2408eb252a969835749',
+    0xF31E00: '46c6e9bffe30b22963827b05201b21c948a73e8502ee0ee82f519a683887130a',
 }
 CURRENT_PINS = (
     (0xB12A58,0xB12CB4,'e1db2185d7f9179f0cfca847134434d0f3ce1889dfb80fb578814f04a852f4aa'),

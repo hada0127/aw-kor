@@ -22,9 +22,8 @@ editor_source_entry:
     // source order, using matching display-glyph table entries.
     cmp r0,#0x10
     beq lookup
+    // 0x3c falls through the high-range subtraction and stays unshifted.
     cmp r0,#0x3c
-    beq lookup
-    cmp r0,#0x3e
     blo shift
     subs r0,#0x4c
     cmp r0,#4
@@ -42,6 +41,7 @@ lookup:
     bx r0
 .thumb_func
 editor_first_row_entry:
+    // Keep the non-editor path out of the editor pool predicate entirely.
     ldr r0, source_base
     subs r0,r5,r0
     cmp r0,#0x62
@@ -83,12 +83,21 @@ row_origin_ready:
     movs r0,#0x81
     lsls r0,r0,#8
     adds r0,#0x64
+    // The information and exit icons occupy the first two cells of rows 2
+    // and 4. Native rendering has shifted their caption to column two; do
+    // not erase those icon cells while removing stale text on other rows.
+    cmp r7,#2
+    beq icon_row
+    cmp r7,#4
+    beq icon_row
     subs r4,r6,#4
     strh r0,[r4]
-    strh r0,[r6]
     adds r4,#0x40
     strh r0,[r4]
-    adds r4,#4
+icon_row:
+    strh r0,[r6]
+    movs r4,r6
+    adds r4,#0x40
     strh r0,[r4]
     lsls r0,r7,#3
     adds r0,r0,r1
@@ -105,8 +114,8 @@ reject:
     adds r0,#0xa2
     bx r0
 legacy:
-    // Thumb-1 B at 08F31E98: PC 08F31E9C + 0x124 = 08F31FC0.
-    .hword 0xe092
+    // Thumb-1 B at 08F31E9E: PC 08F31EA2 + 0x11E = 08F31FC0.
+    .hword 0xe08f
 .thumb_func
 predicate:
     // r0=P; r5=S; r1-r7/LR/high/SP preserved, r0=boolean.
@@ -150,5 +159,7 @@ code_end:
 source_base: .word 0x08d8244c
 pool_base: .word 0x03000e00
 cell_base: .word 0x02012e0a
-lookup_target: .word 0x08f3063b
+// The native record-map tail already owns this exact literal at F31FB8.
+// Reuse it to keep the editor gate inside its 236-byte allocation.
+.equ lookup_target, editor_source_entry + 0x1b8
 blob_end:
