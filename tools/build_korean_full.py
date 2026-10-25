@@ -5878,6 +5878,30 @@ def _part1_map_label_entries(rom, sylmap, syl_to_code):
                 continue
             code = (b0 << 8) | rom[pos + 1]
             ch = code_to_syllable.get(code)
+            # File's three-glyph Save row has the same native third-cell
+            # overwrite as the main-menu Help row. The gate emits the first
+            # and third display cells in reverse source order.
+            if pos == 0xD82458:
+                if ch != '세':
+                    raise AssertionError('editor File Save source58 changed')
+                ch = '브'
+            elif pos == 0xD8245C:
+                if ch != '브':
+                    raise AssertionError('editor File Save source5C changed')
+                ch = '세'
+            # The compact renderer draws each native cell before its overlay.
+            # Help's third native cell reuses column two, so the editor gate
+            # emits source84 at column four and source88 at column two. Swap
+            # their display glyphs to keep the visible order 도움말. ROM source
+            # text and the protected B-team wording remain unchanged.
+            if pos == 0xD82484:
+                if ch != '도':
+                    raise AssertionError('editor Help source84 changed')
+                ch = '말'
+            elif pos == 0xD82488:
+                if ch != '말':
+                    raise AssertionError('editor Help source88 changed')
+                ch = '도'
             # 2026-10-23 user-approved display-only exception (CLAUDE.md):
             # show ぬりつぶし as 채움; protected 정보 source bytes stay intact.
             if 0xD82498 <= pos < 0xD8249C:
@@ -13297,6 +13321,8 @@ PART1_MAP_LABEL_TABLE_FILE = HOOK_FILE + 0x800
 PART1_MAP_LABEL_TABLE_RT = 0x08F30800
 PART1_MAP_LABEL_SOURCE_RANGE = (0xB81CA0, 0xB82800)
 PART1_MAP_LABEL_A5_SOURCE_RANGE = (0xA5D0B4, 0xA5D0EC)
+# File submenu captions occupy the lower half of each 0x80-byte row. The
+# editor gate normalizes that row arithmetic while keeping its physical cell.
 PART1_EDITOR_CAPTION_SOURCE_RANGE = (0xD8244C, 0xD824AE)
 PART1_MAP_LABEL_SOURCE_GATE_FILE = 0xF31F80
 PART1_MAP_LABEL_LIST_ROWS = 6

@@ -32,13 +32,18 @@ def predicate(p, source, owner=0, dst=DEST, post=None):
 def consume(p, source, cell, column, **fields):
     if not predicate(p, source, **fields) or source not in KEYS:
         return None
-    shift = 4 if source < 0x08D82474 or 0x08D82498 <= source < 0x08D8249C else 0
+    delta_source = source - 0x08D8244C
+    shift = (0 if delta_source in (0x10, 0x3C) else
+             8 if delta_source in (0x0C, 0x38) else
+             4 if delta_source < 0x3E or 0x4C <= delta_source < 0x50 else 0)
     cell += shift
     delta = (cell - CELL) & 0xFFFFFFFF
+    if source < 0x08D82474:
+        delta = (delta - 0x40) & 0xFFFFFFFF
     row = delta >> 7
-    if row >= 5 or column >= 8 or (delta & 0x7F) != 2 * column:
+    if row >= 5 or not 2 <= column < 8 or (delta & 0x7F) != 2 * column:
         return None
-    return row * 8 + column
+    return 0xD8 + row * 8 + column
 
 
 class EditorCompactGateTests(unittest.TestCase):
@@ -54,12 +59,16 @@ class EditorCompactGateTests(unittest.TestCase):
             struct.pack_into('<I', self.rom, address, old)
         struct.pack_into('<I', self.rom, editor.LEGACY_ROW_SITE, editor.LEGACY_ROW_TARGET)
 
-    def test_payload_matches_reviewed_prototype(self):
+    def test_payload_matches_linked_editor_gate(self):
         self.assertEqual(len(editor.CODE), 236)
         self.assertEqual(hashlib.sha256(editor.CODE).hexdigest(),
-                         '9219a1c3eae0a83bb1c41319b6ba21b4b540412d557523a1d4443dade399aa78')
-        self.assertEqual(editor.CODE[0xBC:0xC0], struct.pack('<I', 0x08D8244C))
-        self.assertEqual(editor.CODE[0xDC:], bytes(16))
+                         'e0d0d47078282b8fbbd3c627f52d09ac377133b1364ec06385c05cc5943454d1')
+        self.assertIn(struct.pack('<I', 0x08D8244C), editor.CODE)
+        self.assertIn(struct.pack('<I', 0x02012E0A), editor.CODE)
+        # Thumb-1 B at 08F31E98 must reach the old native row fallback.
+        self.assertEqual(struct.unpack_from('<H', editor.CODE, 0x98)[0], 0xE092)
+        self.assertEqual(0x08F31E9C + ((0xE092 & 0x7FF) << 1),
+                         0x08F31FC0)
 
     def test_patch_is_guarded_confined_and_final_checked(self):
         before = bytes(self.rom)
@@ -115,14 +124,19 @@ class EditorCompactGateTests(unittest.TestCase):
     def test_all_slots_parent_states_and_exact_lookup(self):
         for i in range(40):
             p = POOL + i * 0x60
-            self.assertEqual(consume(p, SOURCE, CELL, 0), 0)
+            self.assertEqual(consume(p, SOURCE, CELL, 2), 0xDA)
         for p in PARENT:
-            self.assertEqual(consume(p, SOURCE, CELL, 0), 0)
-        self.assertEqual(consume(0x03000F80, SOURCE, CELL, 0), 0)
-        self.assertEqual(consume(0x03000FE0, SOURCE, CELL, 0), 0)
+            self.assertEqual(consume(p, SOURCE, CELL, 2), 0xDA)
+        self.assertEqual(consume(0x03000F80, SOURCE, CELL, 2), 0xDA)
+        self.assertEqual(consume(0x03000FE0, SOURCE, CELL, 2), 0xDA)
         for key in KEYS:
-            cell = CELL - (4 if key < 0x08D82474 or 0x08D82498 <= key < 0x08D8249C else 0)
-            self.assertEqual(consume(POOL, key, cell, 0), 0)
+            delta = key - 0x08D8244C
+            cell = CELL + (0x44 if delta == 0x10 else
+                           0x40 if delta < 0x28 else
+                           4 if delta == 0x3C else
+                           0 if delta < 0x3E or 0x4C <= delta < 0x50 else 4)
+            column = 4 if delta in (0x0C, 0x38) else 2
+            self.assertEqual(consume(POOL, key, cell, column), 0xD8 + column)
         self.assertIsNone(consume(POOL, 0x08D82472, CELL, 0))
         self.assertIsNone(consume(POOL, 0x08D824A8, CELL, 0))
 
@@ -140,17 +154,23 @@ class EditorCompactGateTests(unittest.TestCase):
 
     def test_rows_columns_underflow_and_shift_once(self):
         for row in (0, 4):
-            for col in (0, 7):
-                self.assertEqual(consume(POOL, SOURCE, CELL + row * 0x80 + col * 2, col),
-                                 row * 8 + col)
-        for cell, col in ((CELL - 2, 0), (CELL + 5 * 0x80, 0),
+            for col in (2, 7):
+                self.assertEqual(consume(POOL, SOURCE, CELL + row * 0x80 + (col-2) * 2, col),
+                                 0xD8 + row * 8 + col)
+        for cell, col in ((CELL - 2, 1), (CELL + 5 * 0x80, 2),
                           (CELL + 16, 8), (CELL + 1, 0),
                           (CELL + 0x40, 0), (CELL + 2, 0),
                           (0x02022E0A, 0)):
             self.assertIsNone(consume(POOL, SOURCE, cell, col))
-        self.assertEqual(consume(POOL, 0x08D8244C, CELL - 4, 0), 0)
-        self.assertEqual(consume(POOL, 0x08D82498, CELL - 4, 0), 0)
+        self.assertIsNone(consume(POOL, 0x08D8244C, CELL, 2))
+        self.assertEqual(consume(POOL, 0x08D8244C, CELL + 0x40, 2), 0xDA)
+        self.assertIsNone(consume(POOL, SOURCE, CELL + 0x40, 2))
+        self.assertEqual(consume(POOL, 0x08D82498, CELL, 2), 0xDA)
         self.assertIsNone(consume(POOL, 0x08D82498, CELL, 0))
+        self.assertEqual(consume(POOL, 0x08D82484, CELL, 4), 0xDC)
+        self.assertEqual(consume(POOL, 0x08D82488, CELL + 4, 2), 0xDA)
+        self.assertEqual(consume(POOL, 0x08D82458, CELL + 0x40, 4), 0xDC)
+        self.assertEqual(consume(POOL, 0x08D8245C, CELL + 0x44, 2), 0xDA)
 
 
 if __name__ == '__main__':

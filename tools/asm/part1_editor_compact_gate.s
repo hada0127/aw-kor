@@ -8,25 +8,37 @@ editor_source_entry:
     push {r1,lr}
     movs r0,r7
     bl predicate
-    cmp r0,#0
     pop {r1}
     pop {r0}
     mov lr,r0
     beq reject
     ldr r0, source_base
     subs r0,r5,r0
-    cmp r0,#0x28
+    // The Japanese menu reserves two cells for the icon. The Korean source
+    // uses those cells for text; shift all File/Help captions as well as the
+    // existing File-submenu and Fill captions into the visible text column.
+    // In the two three-glyph labels (File Save, Help), the third native glyph
+    // would overwrite the first overlay; draw those two labels in reverse
+    // source order, using matching display-glyph table entries.
+    cmp r0,#0x10
+    beq lookup
+    cmp r0,#0x3c
+    beq lookup
+    cmp r0,#0x3e
     blo shift
     subs r0,#0x4c
     cmp r0,#4
     bhs lookup
 shift:
     adds r6,#4
+    cmp r0,#0x0c
+    beq extra_shift
+    cmp r0,#0x38
+    bne lookup
+extra_shift:
+    adds r6,#4
 lookup:
     ldr r0, lookup_target
-    bx r0
-reject:
-    ldr r0, native_target
     bx r0
 .thumb_func
 editor_first_row_entry:
@@ -37,41 +49,64 @@ editor_first_row_entry:
     ldr r0,[sp,#12]
     push {r1,lr}
     bl predicate
-    cmp r0,#0
     pop {r1}
     pop {r0}
     mov lr,r0
     beq reject
-    push {r7}
     ldr r0, cell_base
     subs r0,r6,r0
+    // File-submenu cells occupy the lower half of each 0x80-byte row.
+    // Normalize the row arithmetic only; r6 remains the physical destination.
+    ldr r7, source_base
+    subs r7,r5,r7
+    cmp r7,#0x28
+    bhs row_origin_ready
+    subs r0,#0x40
+row_origin_ready:
     // Underflow is also >= 5 after unsigned right shift.
     lsrs r7,r0,#7
     cmp r7,#5
     bhs row_fail
     // delta low 7 bits must equal 2*column and column < 8.
-    cmp r1,#8
+    // r4 is the exhausted table pointer and F3068E never reads it again.
+    subs r4,r1,#2
+    cmp r4,#6
     bhs row_fail
     lsls r0,r0,#25
     lsrs r0,r0,#25
-    lsls r7,r1,#1
-    cmp r0,r7
+    lsls r4,r1,#1
+    cmp r0,r4
     bne row_fail
-    ldr r0, cell_base
-    subs r0,r6,r0
-    lsrs r0,r0,#7
-    lsls r0,r0,#3
+    // Native compact rendering has already populated the source cell. Clear
+    // it and give the destination the same palette 8 attribute as the native
+    // Korean caption. Both tilemap lines must be updated before F3068E.
+    movs r0,#0x81
+    lsls r0,r0,#8
+    adds r0,#0x64
+    subs r4,r6,#4
+    strh r0,[r4]
+    strh r0,[r6]
+    adds r4,#0x40
+    strh r0,[r4]
+    adds r4,#4
+    strh r0,[r4]
+    lsls r0,r7,#3
     adds r0,r0,r1
-    pop {r7}
+    // F3068E computes 0xD0 + 2*index. Editor glyphs use 0x280..0x2CF,
+    // which the record renderer owns only while its own screen is active.
+    adds r0,#0xd8
     // r7 is dead table-end scratch here, as in the original row gate.
-    ldr r7, cell_target
+    ldr r7, lookup_target
+    adds r7,#0x54
     bx r7
 row_fail:
-    pop {r7}
-    b reject
-legacy:
-    ldr r0, legacy_target
+reject:
+    ldr r0, lookup_target
+    adds r0,#0xa2
     bx r0
+legacy:
+    // Thumb-1 B at 08F31E98: PC 08F31E9C + 0x124 = 08F31FC0.
+    .hword 0xe092
 .thumb_func
 predicate:
     // r0=P; r5=S; r1-r7/LR/high/SP preserved, r0=boolean.
@@ -79,23 +114,20 @@ predicate:
     movs r2,r0
     ldr r1, pool_base
     subs r0,r0,r1
-    movs r1,#0xf0
-    lsls r1,r1,#4
-    cmp r0,r1
+    lsrs r1,r0,#8
+    cmp r1,#0x0f
     bhs no
 align_loop:
-    cmp r0,#0x60
-    blo align_end
     subs r0,#0x60
-    b align_loop
-align_end:
-    cmp r0,#0
+    bhs align_loop
+    adds r0,#0x60
     bne no
     ldr r0,[r2]
     cmp r0,#0
     bne no
     ldr r0,[r2,#0x28]
-    ldr r1, buffer_base
+    ldr r1, cell_base
+    subs r1,#0xc6
     cmp r0,r1
     bne no
     ldr r1, source_base
@@ -117,10 +149,6 @@ code_end:
 .balign 4
 source_base: .word 0x08d8244c
 pool_base: .word 0x03000e00
-buffer_base: .word 0x02012d44
 cell_base: .word 0x02012e0a
 lookup_target: .word 0x08f3063b
-native_target: .word 0x08f306dd
-legacy_target: .word 0x08f31fc1
-cell_target: .word 0x08f3068f
 blob_end:

@@ -210,11 +210,11 @@ def append(original, rom, manifest, write_log, **kwargs):
 # existing decoder/overlay/glyph resources. B05968 is excluded for repoint;
 # unrelated jamo tiles F09F60..F0A960 are written later by name-compose.
 # The separate final whole-ROM gate preserves those tiles against accepted0916.
-# Only the two editor-hook spans have an exact second digest for the reviewed
+# Only the two editor-hook spans have an exact second digest for the current
 # 236B consumer gate. All other accepted0916 pins remain unchanged.
 EDITOR_GATE_PINS = {
-    0xF30600: '8e1be6a9c6b316b6f672be5459b8067b1d03851f400380c0d0e0e0001c0ac6a2',
-    0xF31E00: 'c39fa8b43660b1cfe068d831e27d51fbb491bd820d654a15a444429e6aeedd5f',
+    0xF30600: 'd035ee2233905ce7093c1e4c5d2e52eef514202df5f9bf9ac8c765d4bc1f9a05',
+    0xF31E00: '831e7ddfa1a1ba0576001207f7f6df294a77415e276806d7a9b367f6b9058e72',
 }
 CURRENT_PINS = (
     (0xB12A58,0xB12CB4,'e1db2185d7f9179f0cfca847134434d0f3ce1889dfb80fb578814f04a852f4aa'),
