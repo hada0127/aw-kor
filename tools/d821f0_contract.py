@@ -80,9 +80,21 @@ def source_owners(manifest):
 
 
 def check_current_pins(rom):
+    gate_variants = []
     for start,end,digest in CURRENT_PINS:
-        if sha256(rom[start:end]).hexdigest() != digest:
+        actual = sha256(rom[start:end]).hexdigest()
+        if start in EDITOR_GATE_PINS and actual == EDITOR_GATE_PINS[start]:
+            gate_variants.append('editor')
+        elif actual == digest:
+            if start in EDITOR_GATE_PINS:
+                gate_variants.append('accepted0916')
+        else:
             raise AssertionError(f'D821F0 current source/consumer pin {start:#x}')
+    if len(set(gate_variants)) != 1:
+        raise AssertionError('D821F0 editor gate pin variants mixed')
+    if gate_variants[0] == 'editor':
+        from part1_editor_compact_labels import verify as verify_editor_gate
+        verify_editor_gate(rom)
     from part1_editor_help_dictionary import verify, dictionary
     verify(rom)  # fixed source hashes, exact 70-entry order and loader
     codes = {dictionary(rom)[i:i+2] for i in range(0,140,2)}
@@ -198,6 +210,12 @@ def append(original, rom, manifest, write_log, **kwargs):
 # existing decoder/overlay/glyph resources. B05968 is excluded for repoint;
 # unrelated jamo tiles F09F60..F0A960 are written later by name-compose.
 # The separate final whole-ROM gate preserves those tiles against accepted0916.
+# Only the two editor-hook spans have an exact second digest for the reviewed
+# 236B consumer gate. All other accepted0916 pins remain unchanged.
+EDITOR_GATE_PINS = {
+    0xF30600: '8e1be6a9c6b316b6f672be5459b8067b1d03851f400380c0d0e0e0001c0ac6a2',
+    0xF31E00: 'c39fa8b43660b1cfe068d831e27d51fbb491bd820d654a15a444429e6aeedd5f',
+}
 CURRENT_PINS = (
     (0xB12A58,0xB12CB4,'e1db2185d7f9179f0cfca847134434d0f3ce1889dfb80fb578814f04a852f4aa'),
     (0xB10E34,0xB10E88,'2f4fff798b4b740cc6c02e8156bef98ba12a46b7fe4a542f8edbccd6c932fae4'),

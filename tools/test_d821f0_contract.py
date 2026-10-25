@@ -146,6 +146,27 @@ class ContractTests(unittest.TestCase):
                 self.reject(lambda o,r,m,w,k:r.__setitem__(slice(c.SITE,c.SITE+4),
                     (0x08000000+target).to_bytes(4,'little')))
 
+    def test_editor_consumer_variant_is_exact_and_not_mixed(self):
+        import struct
+        import part1_editor_compact_labels as editor
+        _,rom,_,_,_=self.fresh()
+        rom[editor.CODE_OFFSET:editor.CODE_OFFSET+len(editor.CODE)]=editor.CODE
+        for address,(_,target) in editor.REPLACES.items():
+            struct.pack_into('<I',rom,address,target)
+        struct.pack_into('<I',rom,editor.LEGACY_ROW_SITE,editor.LEGACY_ROW_TARGET)
+        self.assertEqual(bytes(rom[editor.RETURN_SITE:editor.RETURN_SITE+22]),
+                         editor.RETURN_OLD)
+        c.check_current_pins(rom)
+        for address in (editor.CODE_OFFSET,editor.RETURN_SITE,editor.LEGACY_ROW_SITE):
+            with self.subTest(address=hex(address)):
+                damaged=bytearray(rom);damaged[address]^=1
+                with self.assertRaises(AssertionError):c.check_current_pins(damaged)
+        mixed=bytearray(rom)
+        _,old,_,_,_=self.fresh()
+        mixed[0xF30600:0xF30800]=old[0xF30600:0xF30800]
+        with self.assertRaisesRegex(AssertionError,'variants mixed'):
+            c.check_current_pins(mixed)
+
     def test_new_aligned_aliases_start_interior_tail(self):
         for site in (0x100,0xF80000):
             for target in (c.MESSAGE,c.MESSAGE+1,c.MESSAGE+36,c.END-1):

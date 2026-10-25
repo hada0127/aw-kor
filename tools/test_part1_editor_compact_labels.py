@@ -1,21 +1,67 @@
+import hashlib
 import struct
 import unittest
 
 import part1_editor_compact_labels as editor
 import part1_record_map_labels as record
 
+POOL = 0x03000E00
+END = 0x03001D00
+SOURCE = 0x08D82474
+DEST = 0x02012D44
+CELL = 0x02012E0A
+PARENT = (0x03000F20, 0x03000EC0, 0x030010A0,
+          0x03001040, 0x03001220, 0x03001280)
+# The prototype's exact lookup has 18 editor keys; a range hit alone is insufficient.
+KEYS = (0x4C, 0x4E, 0x58, 0x5A, 0x5C, 0x64, 0x66, 0x74, 0x76,
+        0x84, 0x86, 0x88, 0x92, 0x94, 0x98, 0x9A, 0xAA, 0xAC)
+KEYS = {0x08D82400 + offset for offset in KEYS}
+
+
+def predicate(p, source, owner=0, dst=DEST, post=None):
+    # Mirrors the assembled predicate's ordered comparisons. Do not dereference
+    # the synthetic slot until the range and stride checks have passed.
+    delta = (p - POOL) & 0xFFFFFFFF
+    if delta >= 0xF00 or delta % 0x60:
+        return False
+    return (owner == 0 and dst == DEST and
+            0x08D8244C <= source < 0x08D824AE and
+            (source + 2 if post is None else post) == source + 2)
+
+
+def consume(p, source, cell, column, **fields):
+    if not predicate(p, source, **fields) or source not in KEYS:
+        return None
+    shift = 4 if source < 0x08D82474 or 0x08D82498 <= source < 0x08D8249C else 0
+    cell += shift
+    delta = (cell - CELL) & 0xFFFFFFFF
+    row = delta >> 7
+    if row >= 5 or column >= 8 or (delta & 0x7F) != 2 * column:
+        return None
+    return row * 8 + column
+
 
 class EditorCompactGateTests(unittest.TestCase):
     def setUp(self):
-        self.original = bytes(max(editor.CODE_OFFSET + len(editor.CODE),
-                                  max(editor.REPLACES) + 4,
-                                  max(address + len(payload)
-                                      for address, payload in record.WRITES)))
+        size = max(editor.CODE_OFFSET + len(editor.CODE),
+                   max(editor.REPLACES) + 4,
+                   max(address + len(payload) for address, payload in record.WRITES))
+        original = bytearray(size)
+        original[editor.RETURN_SITE:editor.RETURN_SITE + 22] = editor.RETURN_OLD
+        self.original = bytes(original)
         self.rom = bytearray(self.original)
         for address, (old, _) in editor.REPLACES.items():
             struct.pack_into('<I', self.rom, address, old)
+        struct.pack_into('<I', self.rom, editor.LEGACY_ROW_SITE, editor.LEGACY_ROW_TARGET)
 
-    def test_patch_is_guarded_and_confined(self):
+    def test_payload_matches_reviewed_prototype(self):
+        self.assertEqual(len(editor.CODE), 236)
+        self.assertEqual(hashlib.sha256(editor.CODE).hexdigest(),
+                         '9219a1c3eae0a83bb1c41319b6ba21b4b540412d557523a1d4443dade399aa78')
+        self.assertEqual(editor.CODE[0xBC:0xC0], struct.pack('<I', 0x08D8244C))
+        self.assertEqual(editor.CODE[0xDC:], bytes(16))
+
+    def test_patch_is_guarded_confined_and_final_checked(self):
         before = bytes(self.rom)
         editor.patch(self.rom, self.original)
         editor.verify(self.rom)
@@ -24,33 +70,87 @@ class EditorCompactGateTests(unittest.TestCase):
             allowed.update(range(address, address + 4))
         self.assertTrue(all(a == b or index in allowed
                             for index, (a, b) in enumerate(zip(before, self.rom))))
+        for at in (editor.CODE_OFFSET, editor.RETURN_SITE, *editor.REPLACES):
+            self.rom[at] ^= 1
+            with self.assertRaisesRegex(AssertionError, 'overwritten'):
+                editor.verify(self.rom)
+            self.rom[at] ^= 1
 
-    def test_occupied_allocation_and_changed_predecessor_fail_atomically(self):
-        self.rom[editor.CODE_OFFSET + 1] = 1
-        before = bytes(self.rom)
-        with self.assertRaisesRegex(AssertionError, 'allocation occupied'):
-            editor.patch(self.rom, self.original)
-        self.assertEqual(bytes(self.rom), before)
-        self.rom[editor.CODE_OFFSET + 1] = 0
-        address = next(iter(editor.REPLACES))
-        self.rom[address] ^= 1
-        before = bytes(self.rom)
-        with self.assertRaisesRegex(AssertionError, 'predecessor changed'):
-            editor.patch(self.rom, self.original)
-        self.assertEqual(bytes(self.rom), before)
+    def test_atomic_failures(self):
+        for kind in ('occupied', 'predecessor', 'legacy', 'return', 'original', 'truncated', 'reinstall'):
+            with self.subTest(kind=kind):
+                rom = bytearray(self.rom)
+                original = self.original
+                if kind == 'occupied':
+                    rom[editor.CODE_OFFSET + 1] = 1
+                elif kind == 'predecessor':
+                    rom[next(iter(editor.REPLACES))] ^= 1
+                elif kind == 'legacy':
+                    rom[editor.LEGACY_ROW_SITE] ^= 1
+                elif kind == 'return':
+                    rom[editor.RETURN_SITE] ^= 1
+                elif kind == 'original':
+                    original = bytearray(original)
+                    original[editor.CODE_OFFSET] = 1
+                elif kind == 'truncated':
+                    rom = rom[:-1]
+                elif kind == 'reinstall':
+                    editor.patch(rom, original)
+                before = bytes(rom)
+                with self.assertRaises(AssertionError):
+                    editor.patch(rom, original)
+                self.assertEqual(bytes(rom), before)
 
-    def test_existing_gate_verifier_accepts_only_declared_literal_changes(self):
+    def test_record_overlay_contract(self):
+        for address, payload in record.WRITES:
+            self.rom[address:address + len(payload)] = payload
+        editor.patch(self.rom, self.original)
         overlays = {address: struct.pack('<I', target)
                     for address, (_, target) in editor.REPLACES.items()}
-        # Construct the exact Round 2 gate bytes, then overlay the editor
-        # targets. This checks the shared gate verifier's integration contract.
-        for address, payload in record.WRITES:
-            if address + len(payload) <= len(self.rom):
-                self.rom[address:address + len(payload)] = payload
-        editor.patch(self.rom, self.original)
         record.verify(self.rom, overlays)
+        self.assertEqual(struct.unpack_from('<I', self.rom, 0xF31FE4)[0], 0x08F307A9)
         with self.assertRaisesRegex(AssertionError, 'overwritten'):
             record.verify(self.rom)
+
+    def test_all_slots_parent_states_and_exact_lookup(self):
+        for i in range(40):
+            p = POOL + i * 0x60
+            self.assertEqual(consume(p, SOURCE, CELL, 0), 0)
+        for p in PARENT:
+            self.assertEqual(consume(p, SOURCE, CELL, 0), 0)
+        self.assertEqual(consume(0x03000F80, SOURCE, CELL, 0), 0)
+        self.assertEqual(consume(0x03000FE0, SOURCE, CELL, 0), 0)
+        for key in KEYS:
+            cell = CELL - (4 if key < 0x08D82474 or 0x08D82498 <= key < 0x08D8249C else 0)
+            self.assertEqual(consume(POOL, key, cell, 0), 0)
+        self.assertIsNone(consume(POOL, 0x08D82472, CELL, 0))
+        self.assertIsNone(consume(POOL, 0x08D824A8, CELL, 0))
+
+    def test_no_out_of_pool_dereference_and_single_field_rejections(self):
+        for p in (POOL - 0x60, POOL - 1, END, END + 0x60,
+                  POOL + 1, POOL + 0x20, POOL + 0x40,
+                  0x03000DA0, 0x02000E00, 0xFFFFFFFF):
+            self.assertFalse(predicate(p, SOURCE))
+        for fields in ({'owner': 1}, {'dst': DEST + 2}, {'dst': 0x02022D44},
+                       {'post': SOURCE}, {'post': SOURCE + 4}):
+            self.assertIsNone(consume(POOL, SOURCE, CELL, 0, **fields))
+        for source in (0x08D8244B, 0x08D824AE, 0x08D824A5):
+            self.assertIsNone(consume(POOL, source, CELL, 0))
+        self.assertTrue(predicate(END - 0x60, 0x08D824AC))
+
+    def test_rows_columns_underflow_and_shift_once(self):
+        for row in (0, 4):
+            for col in (0, 7):
+                self.assertEqual(consume(POOL, SOURCE, CELL + row * 0x80 + col * 2, col),
+                                 row * 8 + col)
+        for cell, col in ((CELL - 2, 0), (CELL + 5 * 0x80, 0),
+                          (CELL + 16, 8), (CELL + 1, 0),
+                          (CELL + 0x40, 0), (CELL + 2, 0),
+                          (0x02022E0A, 0)):
+            self.assertIsNone(consume(POOL, SOURCE, cell, col))
+        self.assertEqual(consume(POOL, 0x08D8244C, CELL - 4, 0), 0)
+        self.assertEqual(consume(POOL, 0x08D82498, CELL - 4, 0), 0)
+        self.assertIsNone(consume(POOL, 0x08D82498, CELL, 0))
 
 
 if __name__ == '__main__':
