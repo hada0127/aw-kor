@@ -152,9 +152,10 @@ class EditorCompactGateTests(unittest.TestCase):
             self.assertFalse(predicate(p, SOURCE))
         for fields in ({'owner': 1}, {'dst': DEST + 2}, {'dst': 0x02022D44},
                        {'post': SOURCE}, {'post': SOURCE + 4}):
-            self.assertIsNone(consume(POOL, SOURCE, CELL, 0, **fields))
+            self.assertFalse(predicate(POOL, SOURCE, **fields))
+            self.assertIsNone(consume(POOL, SOURCE, CELL, 2, **fields))
         for source in (0x08D8244B, 0x08D824AE, 0x08D824A5):
-            self.assertIsNone(consume(POOL, source, CELL, 0))
+            self.assertIsNone(consume(POOL, source, CELL, 2))
         self.assertTrue(predicate(END - 0x60, 0x08D824AC))
 
     def test_rows_columns_underflow_and_shift_once(self):
@@ -162,10 +163,12 @@ class EditorCompactGateTests(unittest.TestCase):
             for col in (2, 7):
                 self.assertEqual(consume(POOL, SOURCE, CELL + row * 0x80 + (col-2) * 2, col),
                                  0xD8 + row * 8 + col)
-        for cell, col in ((CELL - 2, 1), (CELL + 5 * 0x80, 2),
-                          (CELL + 16, 8), (CELL + 1, 0),
-                          (CELL + 0x40, 0), (CELL + 2, 0),
-                          (0x02022E0A, 0)):
+        # Each tuple differs from the passing (POOL, SOURCE, CELL, 2)
+        # in one coordinate or column only.
+        for cell, col in ((CELL - 6, 2), (CELL + 5 * 0x80, 2),
+                          (CELL, 1), (CELL, 8), (CELL + 1, 2),
+                          (CELL + 0x40, 2), (CELL + 2, 2),
+                          (0x02022E0A, 2)):
             self.assertIsNone(consume(POOL, SOURCE, cell, col))
         self.assertIsNone(consume(POOL, 0x08D8244C, CELL, 2))
         self.assertEqual(consume(POOL, 0x08D8244C, CELL + 0x40, 2), 0xDA)

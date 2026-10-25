@@ -102,7 +102,10 @@ icon_row:
     lsls r0,r7,#3
     adds r0,r0,r1
     // F3068E computes 0xD0 + 2*index. Editor glyphs use 0x280..0x2CF,
-    // which the record renderer owns only while its own screen is active.
+    // The record renderer reinitializes these tiles on entry: normal-input
+    // editor -> Records capture restores 0x280..0x2EF to build1031 bytes.
+    // Trial/Versus/name entry have no charblock-0 references; editor reentry
+    // redraws the 22 caption cells.
     adds r0,#0xd8
     // r7 is dead table-end scratch here, as in the original row gate.
     ldr r7, lookup_target
