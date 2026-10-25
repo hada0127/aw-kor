@@ -1,0 +1,123 @@
+{
+  "thumb": {
+    "command": [
+      "env",
+      "PYTHONPATH=temp/gate_pydeps",
+      "python3",
+      "-B",
+      "temp/gate_thumb_fixture.py",
+      "temp/evidence_gate_fix1_0220/thumb_cases.json"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/thumb.log"
+  },
+  "editor_test": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/test_part1_editor_compact_labels.py"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/editor_test.log"
+  },
+  "record_test": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/test_part1_record_map_labels.py"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/record_test.log"
+  },
+  "d821f0_test": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/test_d821f0_contract.py"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/d821f0_test.log"
+  },
+  "phase6": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/phase6_basic_test.py",
+      "output/game_wars_korean_gate_r3_0126.gba"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/phase6.log"
+  },
+  "integrity_bytes": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/qa_integrity_map.py",
+      "--rom",
+      "output/game_wars_korean_gate_r3_0126.gba",
+      "--map",
+      "temp/integrity_map.json",
+      "--byte-only"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/integrity_bytes.log"
+  },
+  "integrity_full": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/qa_integrity_map.py",
+      "--rom",
+      "output/game_wars_korean_gate_r3_0126.gba",
+      "--map",
+      "temp/integrity_map.json"
+    ],
+    "exit_code": 1,
+    "log": "temp/evidence_gate_fix1_0220/integrity_full.log"
+  },
+  "text_fit": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/qa_text_fit.py",
+      "--rom",
+      "output/game_wars_korean_gate_r3_0126.gba",
+      "--map",
+      "temp/integrity_map.json",
+      "--manifest",
+      "temp/repoint_manifest.json"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/text_fit.log",
+    "initial_exit_code": 1,
+    "setup": "temporary original/ symlink to verified immutable source ROM; removed in finally"
+  },
+  "bteam": {
+    "command": [
+      "python3",
+      "-B",
+      "tools/qa_bteam_drift.py",
+      "--rom",
+      "output/game_wars_korean_gate_r3_0126.gba",
+      "--map",
+      "temp/integrity_map.json",
+      "--repoint-manifest",
+      "temp/repoint_manifest.json",
+      "--json",
+      "temp/evidence_gate_fix1_0220/bteam.json"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/bteam.log",
+    "initial_exit_code": 1,
+    "setup": "temporary original/ symlink to verified immutable source ROM; removed in finally"
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "log": "temp/evidence_gate_fix1_0220/diff_check.log"
+  }
+}

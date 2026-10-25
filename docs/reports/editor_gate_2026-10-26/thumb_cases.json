@@ -1,0 +1,2899 @@
+{
+  "rom_sha": "4fd453daf1ac0d065ecd322fa71943e7ee53e69ba7abfd3984fd9e41c2db210d",
+  "unicorn": "2.1.4",
+  "cases": [
+    {
+      "name": "source_slot_0",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 51,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_0",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 80,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_1",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 53,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_1",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 82,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_2",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 55,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_2",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 84,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_3",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 57,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_3",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 86,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_4",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 59,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_4",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 88,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_5",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 61,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_5",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 90,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_6",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 63,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_6",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 92,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_7",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 65,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_7",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 94,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_8",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 67,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_8",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 96,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_9",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 69,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_9",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 98,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_10",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 71,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_10",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 100,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_11",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 73,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_11",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 102,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_12",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 75,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_12",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 104,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_13",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 77,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_13",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 106,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_14",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 79,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_14",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 108,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_15",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 81,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_15",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 110,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_16",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 83,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_16",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 112,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_17",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 85,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_17",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 114,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_18",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 87,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_18",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 116,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_19",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 89,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_19",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 118,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_20",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 91,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_20",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 120,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_21",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 93,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_21",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 122,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_22",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 95,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_22",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 124,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_23",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 97,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_23",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 126,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_24",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 99,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_24",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 128,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_25",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 101,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_25",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 130,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_26",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 103,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_26",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 132,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_27",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 105,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_27",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 134,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_28",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 107,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_28",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 136,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_29",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 109,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_29",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 138,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_30",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 111,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_30",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 140,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_31",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 113,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_31",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 142,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_32",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 115,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_32",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 144,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_33",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 117,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_33",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 146,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_34",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 119,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_34",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 148,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_35",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 121,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_35",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 150,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_36",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 123,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_36",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 152,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_37",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 125,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_37",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 154,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_38",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 127,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_38",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 156,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "source_slot_39",
+      "entry": "0x8f31e00",
+      "stop": "0x8f3063a",
+      "instructions": 129,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f3063b",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "row_slot_39",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 158,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_0",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 86,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_1",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 84,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_2",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 94,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_3",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 92,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_4",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 102,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "parent_5",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 104,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000da0",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000da0",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000dff",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000dff",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000da0",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000da0",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000e01",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000e01",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 28,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000e20",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000e20",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 28,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03000e40",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03000e40",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 28,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03001d00",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03001d00",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_03001d60",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_03001d60",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_02000e00",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_02000e00",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_source_ffffffff",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 20,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "invalid_row_ffffffff",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 24,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_owner",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 27,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_row_owner",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 31,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_dst_adjacent",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 32,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_row_dst_adjacent",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 36,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_dst_page",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 32,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_row_dst_page",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 36,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_post_same",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 40,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_row_post_same",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 44,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_post_plus4",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 40,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_row_post_plus4",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 44,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_source_below",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 36,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "guard_source_source_above",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 36,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "boundary_r0_c2",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 80,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e"
+      ],
+      "r0": "0xda",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "boundary_r0_c7",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 80,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e14",
+        "0x2012e54",
+        "0x2012e18",
+        "0x2012e58"
+      ],
+      "nonstack_writes": [
+        "0x2012e14",
+        "0x2012e54",
+        "0x2012e18",
+        "0x2012e58"
+      ],
+      "r0": "0xdf",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "boundary_r4_c2",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 76,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x201300e",
+        "0x201304e"
+      ],
+      "nonstack_writes": [
+        "0x201300e",
+        "0x201304e"
+      ],
+      "r0": "0xfa",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "boundary_r4_c7",
+      "entry": "0x8f31e32",
+      "stop": "0x8f3068e",
+      "instructions": 76,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2013018",
+        "0x2013058"
+      ],
+      "nonstack_writes": [
+        "0x2013018",
+        "0x2013058"
+      ],
+      "r0": "0xff",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "underflow",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 54,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "past_row",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 54,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "col_low",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 57,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "col_high",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 57,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "odd",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 62,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "half_row",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306dc",
+      "instructions": 62,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_0",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307a8",
+      "instructions": 17,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307a9",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_1",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307d4",
+      "instructions": 17,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307d5",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_2",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307d4",
+      "instructions": 11,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307d5",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_3",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307d4",
+      "instructions": 14,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307d5",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_4",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307a8",
+      "instructions": 17,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307a9",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "native_parent_5",
+      "entry": "0x8f31e32",
+      "stop": "0x8f307a8",
+      "instructions": 17,
+      "writes": [],
+      "nonstack_writes": [],
+      "r0": "0x8f307a9",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "full_lookup_row_03000e00",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 5089,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "r0": "0x0",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "full_lookup_row_03000f80",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 5105,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "r0": "0x0",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "full_lookup_row_03000fe0",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 5109,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "r0": "0x0",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "full_lookup_row_03001ca0",
+      "entry": "0x8f31e00",
+      "stop": "0x8f306dc",
+      "instructions": 5245,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "r0": "0x0",
+      "sp": "0x3007f00",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "return_after_row",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306de",
+      "instructions": 204,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4",
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "nonstack_writes": [
+        "0x2012e0a",
+        "0x2012e4a",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x2012e0e",
+        "0x2012e4e",
+        "0x6005080",
+        "0x6005084",
+        "0x6005088",
+        "0x600508c",
+        "0x6005090",
+        "0x6005094",
+        "0x6005098",
+        "0x600509c",
+        "0x60050a0",
+        "0x60050a4",
+        "0x60050a8",
+        "0x60050ac",
+        "0x60050b0",
+        "0x60050b4",
+        "0x60050b8",
+        "0x60050bc"
+      ],
+      "r0": "0x9009000",
+      "sp": "0x3007f10",
+      "lr": "0x8001235"
+    },
+    {
+      "name": "return_after_reject",
+      "entry": "0x8f31e32",
+      "stop": "0x8f306de",
+      "instructions": 32,
+      "writes": [
+        "0x3007ef8",
+        "0x3007efc",
+        "0x3007ef0",
+        "0x3007ef4"
+      ],
+      "nonstack_writes": [],
+      "r0": "0x8f306dd",
+      "sp": "0x3007f10",
+      "lr": "0x8001235"
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "menu": {
+    "pixel_diff_bbox": [
+      25,
+      27,
+      64,
+      86
+    ],
+    "record_tile_range_equal": false,
+    "record_tile_range_diff_bytes": 704,
+    "record_tile_sha_candidate": "f1817c85f43189b35b80104df6c905d73fefc2042abf1314d15284ba2a91c4f1",
+    "record_tile_sha_build1031": "b629039bad5e02e998c95189a8e43151f6a5e4e6f5c8833960d809004a6fd47d",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 22
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 15,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 31,
+        "private_refs": null
+      }
+    ]
+  },
+  "record_map_a": {
+    "pixel_diff_bbox": null,
+    "record_tile_range_equal": true,
+    "record_tile_range_diff_bytes": 0,
+    "record_tile_sha_candidate": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "record_tile_sha_build1031": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 42
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 12,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 13,
+        "private_refs": null
+      }
+    ]
+  },
+  "trial_a": {
+    "pixel_diff_bbox": null,
+    "record_tile_range_equal": true,
+    "record_tile_range_diff_bytes": 0,
+    "record_tile_sha_candidate": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "record_tile_sha_build1031": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 0
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 12,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 13,
+        "private_refs": null
+      }
+    ]
+  },
+  "versus_next": {
+    "pixel_diff_bbox": null,
+    "record_tile_range_equal": true,
+    "record_tile_range_diff_bytes": 0,
+    "record_tile_sha_candidate": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "record_tile_sha_build1031": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 0
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 12,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 13,
+        "private_refs": null
+      }
+    ]
+  },
+  "reentry_menu": {
+    "pixel_diff_bbox": [
+      25,
+      27,
+      64,
+      86
+    ],
+    "record_tile_range_equal": false,
+    "record_tile_range_diff_bytes": 605,
+    "record_tile_sha_candidate": "c28a8f27af4691e52d142ce435aa07a354d3ba85b14868e0fc2098f3e8d35556",
+    "record_tile_sha_build1031": "b5565949288a4a903cbf5867842c4d8978ba7ab18bf81c20be8e290c4b1c1848",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 22
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 15,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 31,
+        "private_refs": null
+      }
+    ]
+  },
+  "name_entry_a": {
+    "pixel_diff_bbox": null,
+    "record_tile_range_equal": false,
+    "record_tile_range_diff_bytes": 507,
+    "record_tile_sha_candidate": "c30b2b756615fd83c2b4c4def0e508dc27cfab4c55eeb4fc7e244372fc1ce038",
+    "record_tile_sha_build1031": "d957321e43eb69232307659b7282ec1c0d8fa01efff4e8996585962dd1943108",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 12,
+        "private_refs": 0
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 13,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 31,
+        "private_refs": null
+      }
+    ]
+  },
+  "name_return_menu": {
+    "pixel_diff_bbox": [
+      25,
+      27,
+      64,
+      86
+    ],
+    "record_tile_range_equal": false,
+    "record_tile_range_diff_bytes": 642,
+    "record_tile_sha_candidate": "02841b94bcaaa2985c9cc4ec5792bd2a2cd48eeaf7634f994e5ca0e06459ecd1",
+    "record_tile_sha_build1031": "d957321e43eb69232307659b7282ec1c0d8fa01efff4e8996585962dd1943108",
+    "active_bg_refs": [
+      {
+        "bg": 0,
+        "charblock": 0,
+        "screenblock": 14,
+        "private_refs": 22
+      },
+      {
+        "bg": 1,
+        "charblock": 0,
+        "screenblock": 30,
+        "private_refs": 0
+      },
+      {
+        "bg": 2,
+        "charblock": 2,
+        "screenblock": 15,
+        "private_refs": null
+      },
+      {
+        "bg": 3,
+        "charblock": 2,
+        "screenblock": 31,
+        "private_refs": null
+      }
+    ]
+  },
+  "candidate_route": {
+    "rom_sha": "4fd453daf1ac0d065ecd322fa71943e7ee53e69ba7abfd3984fd9e41c2db210d",
+    "exit_code": 0,
+    "command_count": 829
+  },
+  "build1031_route": {
+    "rom_sha": "b4e41398a1b87ae35e913cb54b9a9f1a06da070eed818dbf18a124370ec18a9f",
+    "exit_code": 0,
+    "command_count": 829
+  }
+}
