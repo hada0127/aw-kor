@@ -1,0 +1,57 @@
+# Worktree archive 2026-10-26
+
+Removed worktrees (all commits already in main c31c8fa). Their gitignored output/, temp/, data/ files were moved (not deleted) to `output/archive_worktrees_20261026/<name>/` in the main checkout (gitignored, local only).
+
+| name | worktree | branch | head | archived size |
+|---|---|---|---|---|
+| int | `/home/taro1/project/aw-kor-wt/int` | `fix/menus-integrated-20261023` | a8e5e5e | 168M |
+| p1 | `/home/taro1/project/aw-kor-wt/p1` | `sweep-p1-20261023b` | 2ae4f23 | 3.7G |
+| p2 | `/home/taro1/project/aw-kor-wt/p2` | `sweep3-p2-20261023c` | a692987 | 24G |
+| weekend | `/home/taro1/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024` | `hada0127/weekend-aw-kor-residual-20261024` | c31c8fa | 2.5G |
+
+Path mapping: `~/project/aw-kor-wt/p2/temp/X` → `output/archive_worktrees_20261026/p2/temp/X` (same for int, p1; weekend = `~/orca/workspaces/aw-kor/weekend-aw-kor-residual-20261024`). Branches are kept.
+
+## ROM SHA-256
+
+```
+c9969d84434d43526ffdf5d289189138c185a60d813d33d3518842a924739b03  int/output/game_wars_korean_int_20261023.gba
+c9969d84434d43526ffdf5d289189138c185a60d813d33d3518842a924739b03  int/output/game_wars_korean_int_20261023b.gba
+c9969d84434d43526ffdf5d289189138c185a60d813d33d3518842a924739b03  int/output/game_wars_korean_int_20261023b_repeat.gba
+3faaeeeb33f678868da0127a29d32dcdf4d5d5eac097f87fb275cebcbe7032cf  p1/output/game_wars_korean_p1_editor_20261023.gba
+8a6b81f67da321fad3752283dded7dfaa390888a1314b56d6f957feadeec49a1  p1/output/game_wars_korean_p1_round2_20261023.gba
+af99e01bec03cc1bc6ab048db562a3c1a8382b21cfb1706f64ad18661a769da5  p1/output/game_wars_korean_p1_round2_final_20261023.gba
+5b8fa189429d8a97af3d00119f23691f7347f8a077d2590069386ad9be978b4c  p1/output/game_wars_korean_p1_round2_product_20261023.gba
+bde9ecac8cdff27263d66411ccc2768797eabb13dcae1c434a29be9cc769934e  p1/output/game_wars_korean_p1_round3_capture_20261023.gba
+18c01bfe0987f5246a6b51b361d388daa7671f6e791711c9a1b8fd33037455b3  p1/output/game_wars_korean_p1_round3_editor_20261023.gba
+ffe5feef79603d3a30321ae6828913b813d39465b4e2b8e851730d63d9bd9d97  p1/output/game_wars_korean_p1_round3_final_20261023.gba
+bde9ecac8cdff27263d66411ccc2768797eabb13dcae1c434a29be9cc769934e  p1/output/game_wars_korean_p1_round4_20261023.gba
+c26fcdd0f73819bf51c08fb09a7c691a0f14e4e9fc49b81722fa1775a2e7c929  p1/output/game_wars_korean_p1_round5_conditional_probe.gba
+685b831b08f264f39bb522b4a590562c502c2cfd84be82fc96555cd829d0c17d  p1/output/game_wars_korean_p1_round5_help_20261023.gba
+f2a6d43d2d0f3640123eb4dcb6d0f943204a0370f5773467f056147bd78a7949  p1/output/game_wars_korean_p1_round5_help_only_probe.gba
+7008c9c6637618c8e51fa5b8c9d3f2fb621f9c58fa4f2f433eb94c581bb94c89  p1/output/game_wars_korean_p1_round5_page1_probe.gba
+deaba179c03eeae7c19103350b0ccc7a7b9315ce450d9651b3750fe0b70f0fcd  p1/output/game_wars_korean_p1_round5_probe.gba
+bddce5093f7924678b4b5c751f1f4edd7fd925b53caeccf20cc10faa503110ba  p1/output/game_wars_korean_p1_round5_union_probe.gba
+c9969d84434d43526ffdf5d289189138c185a60d813d33d3518842a924739b03  p1/output/game_wars_korean_p1_sweep2_20261023.gba
+f2f8b1c2de1f1dc9bea0c19fca2ee96880451d7d5ee92419548ee55d6e823482  p2/output/game_wars_korean_p2_20261023.gba
+db0d07c221359f1be839942de3d0cab77e2699cea3ed30cf9ec502d07c786f46  p2/output/game_wars_korean_p2_review5.gba
+db0d07c221359f1be839942de3d0cab77e2699cea3ed30cf9ec502d07c786f46  p2/output/game_wars_korean_p2_reviewfix3.gba
+156db354cefaea9ae4b6ea4736a45f8d2bb9df07dd1f5e70d2aa6c91da58c33f  p2/output/game_wars_korean_p2_round2.gba
+8daf315b3cda57121a4e41490d6471a84f879ee595213a60e93d80887cb524f1  p2/output/game_wars_korean_p2_round2_editor.gba
+b2b5641229015830d9a658e8802d9a2a9125aa45c88e37b90a6cdf547406f9bd  p2/output/game_wars_korean_p2_round2_final.gba
+c25cdde043a7e34ada40bdcfeede8a20b586356f7527ed9f1f9e8e7fb8f18641  p2/output/game_wars_korean_p2_round3.gba
+babcf4fd50217596567ecffb9c137d347403cc92fb9eb0589cb786fce9f2327f  p2/output/game_wars_korean_p2_round4_capture.gba
+f615c70865367ae2d08ce8036e3a554d7df0bf90f664b897af8f011f6b9c1c7c  p2/output/game_wars_korean_p2_round5.gba
+a48edc74930eecc12e5d1db93e8a1fb8c70b43d853ddbdf64580f482faa7d332  p2/output/game_wars_korean_p2_round6.gba
+a48edc74930eecc12e5d1db93e8a1fb8c70b43d853ddbdf64580f482faa7d332  p2/output/game_wars_korean_p2_round6_bright.gba
+352499b1d6ede59a2294c36ab0e91d927cebbe4ebb196e78ebe304835b8035ef  p2/output/game_wars_korean_p2_sweep2.gba
+d8000bd5f8669cc54e530c7fd374265535f97ed313a10c0c59597f77e3b48996  p2/output/game_wars_korean_p2_sweep3.gba
+d8000bd5f8669cc54e530c7fd374265535f97ed313a10c0c59597f77e3b48996  p2/output/game_wars_korean_p2_sweep3_repro.gba
+627c8960570f2feacc9d176f284eda4a21197dce8f588aa3c9ca323200b80329  p2/output/game_wars_korean_p2_sweep3_worker.gba
+627c8960570f2feacc9d176f284eda4a21197dce8f588aa3c9ca323200b80329  p2/output/game_wars_korean_p2_sweep3b_worker.gba
+f5c032317b289cbedb8306d127e782da42ccd4a2968e458ede1cb696979ad773  p2/output/game_wars_korean_p2_sweep4.gba
+db0d07c221359f1be839942de3d0cab77e2699cea3ed30cf9ec502d07c786f46  p2/output/game_wars_korean_p2_sweep5.gba
+eee1b660c1913d16449c84143cfb0573b1eb4142a13274233c3867e581dea140  weekend/output/game_wars_korean_gate_0008.gba
+211ea8ecccf71055d27e45377ce397210b7a2ec56737ba72e4237b567fb52d5f  weekend/output/game_wars_korean_gate_r2_0041.gba
+4fd453daf1ac0d065ecd322fa71943e7ee53e69ba7abfd3984fd9e41c2db210d  weekend/output/game_wars_korean_gate_r3_0126.gba
+4fd453daf1ac0d065ecd322fa71943e7ee53e69ba7abfd3984fd9e41c2db210d  weekend/output/game_wars_korean_gate_repro.gba
+```
