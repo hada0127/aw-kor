@@ -96,8 +96,8 @@ ALIGNMENT_LEGACY_KEYS = {
 # Exact round-2 deferrals; previously deferred addresses with a reviewed
 # restore decision must no longer be forced to fail after restoration.
 ROUND2_MANIFEST = Path(BASE, 'data', 'bteam_round2_decisions.tsv')
-ROUND2_RESIDUAL_DIGEST = 'ae057731cc8e92dae1d210a8390c6740b4eac4f66db84ec08e94b1e5951452f4'
-ROUND2_ACTIVE_PINS_DIGEST = '17a3624e3c8e6117e6e8a645fbd2375f6b6b87a32134dae4b55949d39144873f'
+ROUND2_RESIDUAL_DIGEST = '7d3c76b92b4d6ce30fd79331d54c65468988daa0e16fed07c4de1fd5261d01e1'
+ROUND2_ACTIVE_PINS_DIGEST = 'eab2fa69a949253974305293e28c1ed5952708fed0a2a162b4e619541cf2be4f'
 with ROUND2_MANIFEST.open('rb') as _stream:
     if hashlib.sha256(_stream.read()).hexdigest() != 'ae9e9a92530507b01859b57f137650f6fc9b8877add9ee1257feb1452f131a37':
         raise ValueError('B-team round-2 decision manifest digest changed')
@@ -605,6 +605,22 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     issues = []
     for key, baseline in base['overrides'].items():
         addr = int(key, 16)
+        if addr == 0xD821F0:
+            # Neither retained source36 nor stale line spans can prove the display.
+            from d821f0_contract import final as check_d821f0_display
+            try:
+                check_d821f0_display(rom, manifest, writes)
+                if map_rom_path:
+                    check_d821f0_display(map_rom, manifest, writes)
+            except AssertionError as exc:
+                issues.append(dict(address=key,baseline=baseline,
+                    rom_text='<invalid D821F0 display contract>',
+                    cause='repoint line mapping invalid',decision='RESTORE_BASELINE',
+                    detail=str(exc)))
+                if observations is not None:
+                    observations.append(dict(address=key,baseline=baseline,
+                        actual='<invalid D821F0 display contract>',matched=False))
+                continue
         objective_start = None
         invalid_reflow = False
         i = bisect.bisect_right(starts, addr) - 1
@@ -805,7 +821,7 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     listed = {int(row['address'], 16): row for row in rows}
-    if len(rows) != 103 or len(listed) != len(rows):
+    if len(rows) != 87 or len(listed) != len(rows):
         raise ValueError('B-team residual list count or addresses changed')
     pins_path = Path(BASE, 'data', 'bteam_round2_active_pins.json')
     if hashlib.sha256(pins_path.read_bytes()).hexdigest() != ROUND2_ACTIVE_PINS_DIGEST:

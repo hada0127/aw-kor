@@ -14,6 +14,109 @@ from dialogue_repoint import apply_script_span_ownership, repoint_messages, norm
 
 
 class ScriptSafetyTests(unittest.TestCase):
+    def dd0108_fixture(self, reflow=True, mutate=None):
+        original = bytearray(b'\xff' * 0xE10000)
+        # Exact native message and its show-message consumer, independently pinned.
+        original[0xDD0108:0xDD0144] = bytes.fromhex(
+            '0a0982b182a282c282aa82b782d782c482f0814182a082e282c282c182c482a282bd82f182be82c88149'
+            '720a090a0982e482e982b982f181496b0a00')
+        original[0xDE7058:0xDE7060] = bytes.fromhex('190000000801dd08')
+        codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
+        enc = lambda t, a: builder.encode_required_full_fidelity(t, codes, collections.Counter(), a)
+        layout, flow = builder.dd0108_page_reflow(original, enc)
+        full = {0xDD010A: enc('이 녀석이 모든 것을,조종하고 있었던 거로군!', 0xDD010A),
+                0xDD0137: enc('용서 못 해!', 0xDD0137)}
+        source = ast.parse(Path(builder.__file__).read_text())
+        node = next(n for n in ast.walk(source) if isinstance(n, ast.FunctionDef) and n.name == '_rp_dlg')
+        authored = json.loads((Path(builder.BASE) / 'data/dialogue_overrides.json').read_text())
+        namespace = {'_rp_ov': lambda a: authored[f'0x{a:08X}']}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), '<actual scoped selector>', 'exec'), namespace)
+        for address, expected in full.items():
+            self.assertEqual(enc(namespace['_rp_dlg'](address), address), expected)
+        self.assertEqual([text_segment_cells(x) for x in layout], [24, 26])
+        self.assertEqual(b''.join(layout), full[0xDD010A])
+        rom = bytearray(original)
+        # Reproduce the previous lossy 40-byte active-source payload.
+        rom[0xDD010A:0xDD0132] = enc('이 녀석이 모든 것을 조종하고 있었군', 0xDD010A)
+        if mutate:
+            flow = mutate(flow)
+        manifest, stats = repoint_messages(
+            rom, original, fixable=lambda a: True, fixed_bytes=full.__getitem__,
+            fit_level_dlg=lambda a: 6, decode_text=lambda raw: '문장',
+            cell_width=lambda a: text_segment_cells(full[a]), max_cells=44, slots={},
+            line_index={0xDD010A: (40, '첫 문장'), 0xDD0137: (10, '동반 문장')},
+            table_offsets=[], extra_messages={0xDD0108: [0xDE705C]},
+            free_start=0xA3D000, free_end=0xA40000,
+            line_layouts={0xDD010A: layout} if reflow else {},
+            page_reflows={0xDD0108: flow} if reflow else {})
+        builder.dd0108_source_fragments(manifest)
+        return original, rom, manifest[0], full, stats
+
+    def test_dd0108_actual_repointer_preserves_both_sources_and_controls(self):
+        from repoint_source_rows import row_bytes
+        original, rom, m, full, stats = self.dd0108_fixture()
+        self.assertEqual(stats['relocated'], 1)
+        self.assertEqual(m['ptr_sites'], ['0xDE705C'])
+        self.assertEqual(int.from_bytes(rom[0xDE705C:0xDE7060], 'little'), 0x08A3D000)
+        self.assertEqual(m['old_len'], 60)
+        self.assertEqual(m['new_len'], 76)
+        self.assertEqual(m['display_line_spans'], [[2, 24], [31, 42]])
+        payload = rom[0xA3D000:0xA3D000 + m['new_len']]
+        self.assertEqual(payload[:2], original[0xDD0108:0xDD010A])
+        self.assertEqual(payload[26:31], original[0xDD0132:0xDD0137])
+        self.assertEqual(payload[73:], original[0xDD0141:0xDD0144])
+        for addr, expected in full.items():
+            self.assertEqual(row_bytes(rom, m, f'0x{addr:06X}'), expected)
+        self.assertEqual(payload[57:59], b'\x81\x40')  # display-only sentence separator
+        self.assertNotIn(0xDD010A, builder.BTEAM_ROUND2_RESIDUALS)
+        self.assertNotIn(0xDD010A, builder.BTEAM_PREVIOUS_KOREAN_TEXT)
+
+    def test_dd0108_native_fixture_matches_original(self):
+        original, _, _, _, _ = self.dd0108_fixture()
+        native = Path(builder.P.ROM).read_bytes()
+        self.assertEqual(original[0xDD0108:0xDD0144], native[0xDD0108:0xDD0144])
+        self.assertEqual(original[0xDE7058:0xDE7060], native[0xDE7058:0xDE7060])
+
+    def test_dd0108_three_rows_are_rejected(self):
+        from dialogue_repoint import assert_part1_portrait_page_rows
+        _, _, _, full, _ = self.dd0108_fixture()
+        page = b'\x0a\x09' + full[0xDD010A][:24] + b'\x72\x0a\x09' + full[0xDD010A][24:]
+        page += b'\x72\x0a\x09\x0a\x09' + full[0xDD0137] + b'\x6b\x0a\0'
+        with self.assertRaisesRegex(AssertionError, 'rows 3'):
+            assert_part1_portrait_page_rows(0xDD0108, page)
+
+    def test_dd0108_old_wide_path_and_lost_punctuation_fail(self):
+        with self.assertRaisesRegex(AssertionError, 'Unapproved wide'):
+            self.dd0108_fixture(reflow=False)
+        for position in (22, -2):  # first comma / final companion exclamation
+            def mutate(flow):
+                values = list(flow)
+                row = 2 if position == 22 else 3
+                data = values[row]
+                values[row] = data[:position] + data[position + 2:] if position >= 0 else data[:-2]
+                return tuple(values)
+            with self.subTest(position=position), self.assertRaisesRegex(AssertionError, 'changes text'):
+                self.dd0108_fixture(mutate=mutate)
+
+    def test_dd0108_native_pointer_and_fragment_mapping_fail_closed(self):
+        from repoint_source_rows import row_bytes
+        original, rom, m, full, _ = self.dd0108_fixture()
+        for offset in (0xDE7058, 0xDE705C, 0xDD0132, 0xDD0141):
+            changed = bytearray(original)
+            changed[offset] ^= 1
+            with self.assertRaisesRegex(AssertionError, 'native pointer/control'):
+                builder.dd0108_page_reflow(changed, lambda t, a: b'')
+        for field, value in (('line_spans', {'0xDD010A': [2, 24], '0xDD0137': [32, 42]}),
+                             ('ptr_sites', ['0xDE7060'])):
+            changed = json.loads(json.dumps(m))
+            changed[field] = value
+            with self.assertRaisesRegex(AssertionError, 'fragment/pointer'):
+                builder.dd0108_source_fragments([changed])
+        changed = json.loads(json.dumps(m))
+        changed['source_line_fragments']['0xDD010A'][1] = [75, 26]
+        with self.assertRaisesRegex(ValueError, 'invalid repoint source fragments'):
+            row_bytes(rom, changed, '0xDD010A')
+
     def test_observed_mission_boundaries_resolve_to_exact_protected_text(self):
         original = Path(builder.P.ROM).read_bytes()
         dialogue = json.loads((Path(builder.BASE) / 'data/dialogue_overrides.json').read_text())

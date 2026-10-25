@@ -190,6 +190,9 @@ def p1_consumers(original):
         for site in range(0xB2EDC4,0xB2EF00,4):
             if original[site:site+4]==word:add(site,('p1_animation_help',88,2),'B2ED18 animation help')
     for site in (0xB2F780,):add(site,('p1_portrait',176,2),'B2F778 production cap')
+    # EC2708 index5 -> r6 -> B71204/B12910; non-opcode table consumer.
+    add(0xEC2714,('p1_link_notice',208,1),'B711BE table index3 / B71204 instructions')
+    add(0xEC271C,('p1_link_notice',208,1),'B711BE table index5 / B71204 instructions')
     for site in (0xB71218,0xB78568,*range(0xEC3E10,0xEC3E38,4)):
         add(site,('p1_link_notice',208,1),'B71204/B78554/B784D8 instructions')
     return entries

@@ -604,7 +604,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                      max_header_gap=16, align=4, log=None, valid_codes=None,
                      original_line_starts=None, line_layouts=None, seam_codes=None, seam_table=None,
                      page_reflows=None, allowed_wide_skips=(), source_text=None,
-                     write_log=None):
+                     write_log=None, require_e10d78=False, require_df28c0=False, require_ec3190=False,
+                     require_b82fac=False, require_ec312c=False, require_d821f0=False):
     """rom(bytearray)에 재배치 적용. 반환: (manifest list, stats dict).
 
     **안전 설계(짜옹이님 per-line 대사만 복원)**:
@@ -617,6 +618,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
     """
     line_layouts = line_layouts or {}
     allowed_wide_skips = set(allowed_wide_skips)
+    # Optional fifth field preserves the authored separator at the moved wrap
+    # (empty for DD0108 after its comma); legacy four-field layouts use a space.
     page_reflows = page_reflows or {}
     stats = collections.Counter()
     manifest = []
@@ -667,6 +670,10 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         term = msg
         while term < nxt and orig[term] != 0x00:
             term += 1
+        if msg == 0xDF2804:
+            # Scoped native82 contract: the two following zeros are alignment, not tail.
+            # source_lines validates exact source/hash/end before any write.
+            return term + 1 if term < nxt else nxt
         if term < nxt:
             # 0x00 런 끝까지 포함(연속 패딩 0x00). 다음 라인은 0x00 뒤부터.
             e = term
@@ -732,6 +739,117 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             referenced_targets.add(_tgt)
     _sorted_ref = sorted(referenced_targets)
 
+    # Scoped contract errors must precede even an earlier unrelated relocation.
+    df1eec_plan = None
+    if 0xDF1EEC in all_targets or {0xDF1EEE, 0xDF1F1B} & line_index.keys():
+        from df1eec_contract import preflight, FIRST, MESSAGE, SITE
+        if (MESSAGE not in all_targets or MESSAGE in skip_messages or FIRST in allowed_wide_skips
+                or [(off, tbl) for off, msg, tbl in table_entries if msg == MESSAGE] != [(SITE, None)]):
+            raise AssertionError('DF1EEC missing/duplicate/disabled script consumer')
+        df1eec_plan = preflight(
+            orig, rom, msg_lines.get(MESSAGE, []), span_of(MESSAGE), ptr_sites(MESSAGE),
+            fixed_bytes, source_text, fixable, fit_level_dlg,
+            line_layouts.get(FIRST), page_reflows.get(MESSAGE))
+        if not (0 <= free_start < free_end <= len(rom) and free_end-free_start >= 74 and align > 0):
+            raise AssertionError('DF1EEC allocation range/capacity invalid')
+        assert_part1_portrait_page_rows(MESSAGE, df1eec_plan[0])
+
+    df28c0_plan = None
+    if require_df28c0 or 0xDF28C0 in all_targets or {0xDF28C2, 0xDF28EF} & line_index.keys():
+        from df28c0_contract import preflight, FIRST, MESSAGE, SITE
+        if (MESSAGE not in all_targets or MESSAGE in skip_messages or FIRST in allowed_wide_skips
+                or [(off, tbl) for off, msg, tbl in table_entries if msg == MESSAGE] != [(SITE, None)]
+                or min_level > 6 or max_header_gap < 2):
+            raise AssertionError('DF28C0 missing/duplicate/disabled script consumer')
+        df28c0_plan = preflight(orig, rom, msg_lines.get(MESSAGE, []), span_of(MESSAGE),
+            ptr_sites(MESSAGE), fixed_bytes, source_text, fixable, fit_level_dlg,
+            line_layouts.get(FIRST), page_reflows.get(MESSAGE))
+        if not (0 <= free_start < free_end <= len(rom) and free_end-free_start >= 66 and align > 0):
+            raise AssertionError('DF28C0 allocation range/capacity invalid')
+        assert_part1_portrait_page_rows(MESSAGE, df28c0_plan[0])
+
+    e10d78_plan = None
+    if require_e10d78 or 0xE10D78 in all_targets or 0xE10D7A in line_index:
+        from e10d78_contract import preflight, FIRST, MESSAGE, SITE
+        if (MESSAGE not in all_targets or MESSAGE in skip_messages or FIRST in allowed_wide_skips
+                or [(off, tbl) for off, msg, tbl in table_entries if msg == MESSAGE] != [(SITE, None)]
+                or FIRST in line_layouts or MESSAGE in page_reflows
+                or min_level > 99 or max_header_gap < 2
+                or cell_width(FIRST) > (max_cells_for_address(FIRST) if max_cells_for_address else max_cells)):
+            raise AssertionError('E10D78 missing/duplicate/disabled script consumer')
+        e10d78_plan = preflight(orig, rom, msg_lines.get(MESSAGE, []), span_of(MESSAGE),
+            ptr_sites(MESSAGE), fixed_bytes, source_text, fixable, fit_level_dlg)
+        if not (0 <= free_start < free_end <= len(rom) and free_end-free_start >= 22 and align > 0):
+            raise AssertionError('E10D78 allocation range/capacity invalid')
+        if valid_codes is not None:
+            from e10d78_contract import ROW
+            if any(int.from_bytes(ROW[i:i+2], 'big') not in valid_codes
+                   for i in range(0,len(ROW),2) if ROW[i] not in (0x81,0x82)):
+                raise AssertionError('E10D78 required glyph code missing')
+        assert_part1_portrait_page_rows(MESSAGE, e10d78_plan[0])
+
+    ec3190_plan = None
+    if require_ec3190 or 0xEC3190 in all_targets or 0xEC3192 in line_index:
+        from ec3190_contract import preflight, FIRST, MESSAGE, SITE
+        if (MESSAGE not in all_targets or MESSAGE in skip_messages or FIRST in allowed_wide_skips
+                or [(off, tbl) for off, msg, tbl in table_entries if msg == MESSAGE] != [(SITE, None)]
+                or FIRST in line_layouts or MESSAGE in page_reflows
+                or min_level > 99 or max_header_gap < 2
+                or cell_width(FIRST) > (max_cells_for_address(FIRST) if max_cells_for_address else max_cells)):
+            raise AssertionError('EC3190 missing/duplicate/disabled script consumer')
+        ec3190_plan = preflight(orig, rom, msg_lines.get(MESSAGE, []), span_of(MESSAGE),
+            ptr_sites(MESSAGE), fixed_bytes, source_text, fixable, fit_level_dlg)
+        if not (0 <= free_start < free_end <= len(rom) and free_end-free_start >= 50 and align == 4 and free_start % align == 0):
+            raise AssertionError('EC3190 allocation range/capacity invalid')
+        if valid_codes is not None:
+            from ec3190_contract import ROW
+            if any(int.from_bytes(ROW[i:i+2], 'big') not in valid_codes
+                   for i in range(0,len(ROW),2) if ROW[i] not in (0x81,0x82)):
+                raise AssertionError('EC3190 required glyph code missing')
+        if cell_width(FIRST) != 44:
+            raise AssertionError('EC3190 exact 44-cell source changed')
+
+    if require_b82fac:
+        from b82fac_contract import MESSAGE, SITE, APPEND, ARENA_END, ROW, TEXT
+        if (table_offsets or extra_messages != {MESSAGE:[SITE]} or skip_messages
+                or line_index.keys() != {MESSAGE} or msg_lines.get(MESSAGE) != [(MESSAGE,44)]
+                or span_of(MESSAGE) != MESSAGE+48 or ptr_sites(MESSAGE) != [SITE]
+                or slots != {MESSAGE:44} or free_start != APPEND or free_end != ARENA_END
+                or align != 4 or line_layouts or page_reflows or seam_table or seam_codes
+                or source_text is None or source_text(MESSAGE) != TEXT
+                or fixed_bytes(MESSAGE) != ROW or not fixable(MESSAGE)
+                or fit_level_dlg(MESSAGE) != 99 or cell_width(MESSAGE) != 46
+                or max_cells_for_address is None or max_cells_for_address(MESSAGE) != 52):
+            raise AssertionError('B82FAC scoped allocator input changed')
+
+    if require_ec312c:
+        from ec312c_contract import MESSAGE, FIRST, END, SITE, APPEND, ARENA_END, ROW, TEXT
+        if (require_b82fac or table_offsets or extra_messages != {MESSAGE:[SITE]} or skip_messages
+                or line_index.keys() != {FIRST} or msg_lines.get(MESSAGE) != [(FIRST,46)]
+                or span_of(MESSAGE) != END or ptr_sites(MESSAGE) != [SITE]
+                or slots != {FIRST:46} or free_start != APPEND or free_end != ARENA_END
+                or align != 4 or line_layouts or page_reflows or seam_table or seam_codes
+                or source_text is None or source_text(FIRST) != TEXT
+                or fixed_bytes(FIRST) != ROW or not fixable(FIRST)
+                or fit_level_dlg(FIRST) != 99 or cell_width(FIRST) != 52
+                or max_cells_for_address is None or max_cells_for_address(FIRST) != 52):
+            raise AssertionError('EC312C scoped allocator input changed')
+
+    if require_d821f0:
+        from d821f0_contract import MESSAGE, END, SITE, APPEND, ARENA_END, ROW, TEXT, NATIVE, CURRENT
+        if (require_b82fac or require_ec312c or require_ec3190 or require_df28c0 or require_e10d78
+                or table_offsets or extra_messages != {MESSAGE:[SITE]} or skip_messages
+                or line_index.keys() != {MESSAGE} or msg_lines.get(MESSAGE) != [(MESSAGE,36)]
+                or span_of(MESSAGE) != END or ptr_sites(MESSAGE) != [SITE]
+                or slots != {MESSAGE:36} or free_start != APPEND or free_end != ARENA_END
+                or align != 4 or line_layouts or page_reflows or seam_table or seam_codes
+                or source_text is None or source_text(MESSAGE) != TEXT
+                or fixed_bytes(MESSAGE) != ROW or not fixable(MESSAGE)
+                or fit_level_dlg(MESSAGE) != 99 or cell_width(MESSAGE) != 38
+                or max_cells_for_address is None or max_cells_for_address(MESSAGE) != 44
+                or bytes(orig[MESSAGE:END]) != NATIVE or bytes(rom[MESSAGE:END]) != CURRENT):
+            raise AssertionError('D821F0 scoped allocator input changed')
+
     # 재배치 대상: 라인 중 하나라도 완전충실 인코딩이 슬롯 초과(=in-place 열화) + 한글 포함
     _relocated_msgs = set()   # Process each message once, including skipped messages.
     for ptr_off, msg, _tbl in sorted(table_entries, key=lambda e: (e[0], e[1], -1 if e[2] is None else e[2])):
@@ -743,6 +861,34 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_forced'})
             continue
         lines = msg_lines.get(msg, [])
+        if msg == 0xDF228C:
+            from df228c_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF239C:
+            from df239c_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF2078:
+            from df2078_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF21AC:
+            from df21ac_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF25F8:
+            from df25f8_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF26FC:
+            from df26fc_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
+        if msg == 0xDF2804:
+            from df2804_contract import source_lines
+            lines = source_lines(orig, rom, lines, span_of(msg), ptr_sites(msg),
+                                 fixed_bytes, source_text)
         if not lines:
             continue
         # 고아 포인터 가드(agy 2026-06-25): 메시지 **span 내 임의 중간주소**(시작 외)를 참조하는 포인터가
@@ -772,7 +918,8 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
                 layout = line_layouts.get(a)
                 if layout is not None:
                     if (len(layout) != 2 or any(not part or any(b < 0x20 for b in part) for part in layout)
-                            or b'\x81\x40'.join(layout) != fixed_bytes(a)):
+                            or (page_reflows[msg][4] if msg in page_reflows and len(page_reflows[msg]) == 5
+                                and page_reflows[msg][0] == a else b'\x81\x40').join(layout) != fixed_bytes(a)):
                         raise ValueError('Explicit line layout must preserve exact full text')
                     width = max(text_segment_cells(normalize_text_segment(part, needs_safe_dialogue_punctuation(msg), msg)) for part in layout)
                 else:
@@ -914,18 +1061,23 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
         gap = bytes(rom[cur:me])
         pieces.append(['gap', gap, bytes(orig[cur:me])])
         if msg in page_reflows:
-            first_addr, second_addr, first_row, second_row = page_reflows[msg]
+            first_addr, second_addr, first_row, second_row = page_reflows[msg][:4]
+            wrap_joiner = page_reflows[msg][4] if len(page_reflows[msg]) == 5 else b'\x81\x40'
+            if wrap_joiner not in (b'', b'\x81\x40'):
+                raise ValueError('Unsupported page reflow wrap joiner')
             first = next((i for i, p in enumerate(pieces)
                           if p[0] == 'text' and p[3] == first_addr), None)
             if (first is None or first + 2 >= len(pieces)
                     or pieces[first + 1][0] != 'gap'
-                    or pieces[first + 1][1] != b'\x72\x0a\x09'
+                    or pieces[first + 1][1] != (b'\x72\x0a\x09\x0a\x09'
+                        if (msg, first_addr, second_addr) == (0xDD0108, 0xDD010A, 0xDD0137)
+                        else b'\x72\x0a\x09')
                     or pieces[first + 2][0] != 'text'
                     or pieces[first + 2][3] != second_addr):
                 raise AssertionError(f'Part 1 page reflow source layout changed: 0x{msg:06X}')
-            old_first = pieces[first][1].replace(b'\x72\x0a\x09', b'\x81\x40').rstrip(b'\x20')
+            old_first = pieces[first][1].replace(b'\x72\x0a\x09', wrap_joiner).rstrip(b'\x20')
             old_second = pieces[first + 2][1].rstrip(b'\x20')
-            if (old_first + b'\x81\x40' + old_second != first_row + b'\x81\x40' + second_row
+            if (old_first + b'\x81\x40' + old_second != first_row + wrap_joiner + second_row
                     or any(text_segment_cells(row) > 44 for row in (first_row, second_row))):
                 raise AssertionError(f'Part 1 page reflow changes text or exceeds row width: 0x{msg:06X}')
             pieces[first][1], pieces[first + 2][1] = first_row, second_row
@@ -947,6 +1099,33 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             stats['skip_control_changed'] = stats.get('skip_control_changed', 0) + 1
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_control_changed'})
             continue
+        if require_d821f0:
+            from d821f0_contract import ROW
+            if bytes(new_msg) != ROW + b'\0'*4:
+                raise AssertionError('D821F0 native tail4/body38 changed before scoped tail2')
+            new_msg = new_msg[:-2]  # Only this adopted display owns NUL2, not native NUL4.
+
+        if msg == 0xDF228C:
+            from df228c_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF239C:
+            from df239c_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF2078:
+            from df2078_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF21AC:
+            from df21ac_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF25F8:
+            from df25f8_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF26FC:
+            from df26fc_contract import validate_payload
+            validate_payload(new_msg)
+        if msg == 0xDF2804:
+            from df2804_contract import validate_payload
+            validate_payload(new_msg)
         assert_part1_portrait_page_rows(msg, new_msg)
 
         # ★stray-code 안전게이트(2026-06-25): new_msg의 **모든 2바이트 코드가 렌더 가능**(예약 한글 / 한자테이블 /
@@ -990,6 +1169,95 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             manifest.append({'msg': f'0x{msg:06X}', 'status': 'skip_no_terminator'})
             continue
 
+        if msg == 0xDF1EEC:
+            # Generic reflow must produce the preflight's exact bytes. Semantic
+            # ownership differs from physical rows; use the prevalidated record.
+            if df1eec_plan is None or bytes(new_msg) != df1eec_plan[0]:
+                raise AssertionError('DF1EEC prepared reflow changed')
+            new_msg = df1eec_plan[0]
+
+        if msg == 0xE10D78:
+            from e10d78_contract import validate
+            scoped_record = dict(msg=f'0x{msg:06X}', status='relocated',
+                ptr_off=f'0x{ptr_off:06X}', old_len=me-msg, new_len=len(new_msg), lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs), line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}': length for a,length in lines},
+                source_texts={f'0x{a:06X}': source_text(a) for a,length in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces': seams_fixed} if seams_fixed else {}))
+            if e10d78_plan is None or (bytes(new_msg), scoped_record) != e10d78_plan:
+                raise AssertionError('E10D78 prepared payload/metadata changed')
+            validate(new_msg, scoped_record)
+
+        if msg == 0xEC3190:
+            from ec3190_contract import validate
+            scoped_record = dict(msg=f'0x{msg:06X}', status='relocated',
+                ptr_off=f'0x{ptr_off:06X}', old_len=me-msg, new_len=len(new_msg), lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs), line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}': length for a,length in lines},
+                source_texts={f'0x{a:06X}': source_text(a) for a,length in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces': seams_fixed} if seams_fixed else {}))
+            if ec3190_plan is None or (bytes(new_msg), scoped_record) != ec3190_plan:
+                raise AssertionError('EC3190 prepared payload/metadata changed')
+            validate(new_msg, scoped_record)
+
+        if msg == 0xDF28C0:
+            from df28c0_contract import validate_generated
+            scoped_record = dict(msg=f'0x{msg:06X}', status='relocated',
+                ptr_off=f'0x{ptr_off:06X}', old_len=me-msg, new_len=len(new_msg), lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs), line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}': length for a,length in lines},
+                source_texts={f'0x{a:06X}': source_text(a) for a,length in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces': seams_fixed} if seams_fixed else {}))
+            validate_generated(bytes(new_msg), scoped_record, df28c0_plan)
+
+        if require_b82fac:
+            from b82fac_contract import validate
+            validate(new_msg, dict(msg=f'0x{msg:06X}',status='relocated',
+                ptr_off=f'0x{ptr_off:06X}',new_addr=f'0x{free:06X}',
+                old_len=me-msg,new_len=len(new_msg),lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs),line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}':n for a,n in lines},
+                source_texts={f'0x{a:06X}':source_text(a) for a,n in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces':seams_fixed} if seams_fixed else {})))
+
+        if require_ec312c:
+            from ec312c_contract import validate
+            validate(new_msg, dict(msg=f'0x{msg:06X}',status='relocated',
+                ptr_off=f'0x{ptr_off:06X}',new_addr=f'0x{free:06X}',
+                old_len=me-msg,new_len=len(new_msg),lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs),line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}':n for a,n in lines},
+                source_texts={f'0x{a:06X}':source_text(a) for a,n in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces':seams_fixed} if seams_fixed else {})))
+
+            if (free + len(new_msg) + 3) & ~3 > free_end:
+                raise AssertionError('EC312C aligned capacity exhausted')
+
+        if require_d821f0:
+            from d821f0_contract import validate
+            validate(new_msg, dict(msg=f'0x{msg:06X}',status='relocated',
+                ptr_off=f'0x{ptr_off:06X}',new_addr=f'0x{free:06X}',
+                old_len=me-msg,new_len=len(new_msg),lines=len(lines),
+                fixed=sorted(f'0x{a:06X}' for a in fix_addrs),line_spans=line_spans,
+                layout_controls=layout_controls,
+                source_spans={f'0x{a:06X}':n for a,n in lines},
+                source_texts={f'0x{a:06X}':source_text(a) for a,n in lines},
+                ptr_sites=[f'0x{s:06X}' for s in sites],
+                **({'seam_spaces':seams_fixed} if seams_fixed else {})))
+
+            if (free + len(new_msg) + 3) & ~3 > free_end:
+                raise AssertionError('D821F0 aligned capacity exhausted')
+
         nlen = len(new_msg)
         if free + nlen > free_end:
             raise AssertionError('repoint free-space exhausted')
@@ -1030,6 +1298,24 @@ def repoint_messages(rom, orig, *, fixable, fixed_bytes, fit_level_dlg, decode_t
             'ptr_sites': [f'0x{s:06X}' for s in sites],
             **({'seam_spaces': seams_fixed} if seams_fixed else {}),
         })
+
+        if msg == 0xDF1EEC:
+            manifest[-1] = dict(df1eec_plan[1], new_addr=f'0x{new_addr:06X}')
+
+        if msg == 0xDF28C0:
+            manifest[-1] = dict(df28c0_plan[1], new_addr=f'0x{new_addr:06X}')
+
+    if df28c0_plan is not None:
+        from df28c0_contract import assert_manifest
+        assert_manifest(manifest)
+
+    if e10d78_plan is not None:
+        from e10d78_contract import assert_manifest
+        assert_manifest(manifest)
+
+    if ec3190_plan is not None:
+        from ec3190_contract import assert_manifest
+        assert_manifest(manifest)
 
     if unexpected_wide:
         raise AssertionError(f'Unapproved wide dialogue skip: {sorted(hex(a) for a in unexpected_wide)}')

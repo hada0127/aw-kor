@@ -12518,13 +12518,13 @@ BTEAM_ROUND2_RESTORE = frozenset(a for a, d in BTEAM_ROUND2_DECISIONS.items()
 def load_bteam_round2_residuals():
     path = os.path.join(BASE, 'data', 'bteam_round2_residuals.tsv')
     with open(path, 'rb') as stream:
-        if hashlib.sha256(stream.read()).hexdigest() != 'ae057731cc8e92dae1d210a8390c6740b4eac4f66db84ec08e94b1e5951452f4':
+        if hashlib.sha256(stream.read()).hexdigest() != '7d3c76b92b4d6ce30fd79331d54c65468988daa0e16fed07c4de1fd5261d01e1':
             raise AssertionError('B-team round-2 residual manifest digest changed')
     with open(path, newline='', encoding='utf-8') as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     result = {int(row['address'], 16): row for row in rows}
     extra = {0xA19300, 0xA2CA38, 0xA2CA44, 0xA2CA60, 0xA2CA70, 0xB82D58}
-    if (len(rows) != 103 or len(result) != len(rows) or
+    if (len(rows) != 87 or len(result) != len(rows) or
             not set(result) <= BTEAM_RESTORE_BASELINE_ROWS | extra or
             not extra <= set(result)):
         raise AssertionError('B-team round-2 residual address list changed')
@@ -12579,6 +12579,36 @@ BTEAM_D910C6_COMPOSITE = bytes.fromhex(
     '8ed8888f81408ea2814088408bf58140886d885e8f818140'
     '92b081408def81408ecd8ec38f5a81422020')
 
+def dd0108_page_reflow(original, encode):
+    """Address-scoped native two-row layout; no authored separator at comma."""
+    if (original[0xDE7058:0xDE705C] != b'\x19\0\0\0'
+            or int.from_bytes(original[0xDE705C:0xDE7060], 'little') != 0x08DD0108
+            or original[0xDD0108:0xDD010A] != b'\x0a\x09'
+            or original[0xDD0132:0xDD0137] != b'\x72\x0a\x09\x0a\x09'
+            or original[0xDD0141:0xDD0144] != b'\x6b\x0a\0'):
+        raise AssertionError('DD0108 native pointer/control boundary changed')
+    left = encode('이 녀석이 모든 것을,', 0xDD010A)
+    tail = encode('조종하고 있었던 거로군!', 0xDD010A)
+    companion = encode('용서 못 해!', 0xDD0137)
+    return (left, tail), (0xDD010A, 0xDD0137, left, tail + b'\x81\x40' + companion, b'')
+
+
+def dd0108_source_fragments(manifest):
+    messages = [m for m in manifest if m.get('status') == 'relocated' and m['msg'] == '0xDD0108']
+    if len(messages) != 1:
+        raise AssertionError('DD0108 protected dialogue was not relocated')
+    m = messages[0]
+    one, two = m['line_spans']['0xDD010A'], m['line_spans']['0xDD0137']
+    if one != [2, 24] or two != [31, 42] or m['ptr_sites'] != ['0xDE705C']:
+        raise AssertionError('DD0108 source fragment/pointer layout changed')
+    m.get('layout_controls', {}).pop('0xDD010A', None)
+    m['display_line_spans'] = [one[:], two[:]]
+    m['source_line_fragments'] = {'0xDD010A': [one[:], [two[0], 26]],
+                                  '0xDD0137': [[two[0] + 28, 14]]}
+    m['source_fragment_joiners'] = {'0xDD010A': [''], '0xDD0137': []}
+    m['line_spans']['0xDD0137'] = [two[0] + 28, 14]
+
+
 # Korean fallback from candidate 93759193 (commit 9b58175). Entries with
 # compact-glyph placeholders use the prior writer's Korean source instead of
 # undecodable display tokens. Each address remains a RESTORE_BASELINE residual.
@@ -12588,8 +12618,6 @@ BTEAM_PREVIOUS_KOREAN_TEXT = {
     0x00df1eee: '수도　점령／적　전멸　승리',
     0x00df207a: '승리　조건은　수도　점령　또는　적　전멸！',
     0x00df21ae: '수도　점령이나　적　전멸로　승리！',
-    0x00df228e: '먼저　많이　점령한　쪽　승리',
-    0x00df239e: '먼저　많이　점령한　쪽이　승리！',
     0x00df25fa: '수도　점령이나　적　전멸로　승리！',
     0x00df26fe: '수도　점령／적　전멸　승리',
     0x00df2806: '수도　점령이나　적　전멸로　승리！',
@@ -12602,7 +12630,6 @@ BTEAM_PREVIOUS_KOREAN_TEXT = {
     0x00dcc63a: '바다에서　이길　사람은　드물어',
     0x00dcd9da: '바다에서　이길　사람은　드물어',
     0x00dcfa8e: '이　싸움　뒤의　적이　얼마나　강한지도',
-    0x00dd010a: '이　녀석이　모든　것을　조종하고　있었군',
     0x00a03734: '저기',
     0x00a03c9c: '네\u3000보병이',
     0x00a229cc: '하지만',
@@ -12768,6 +12795,9 @@ BTEAM_PREVIOUS_KOREAN_TEXT = {
     0x00ec3192: '있음이면\u3000사령관\u3000능력\u3000활성',
     0x00ec3246: '같은\u3000깃발이면\u3000같은\u3000팀',
 }
+# Korean fallback from candidate 93759193 (commit 9b58175). Entries with
+# compact-glyph placeholders use the prior writer's Korean source instead of
+# undecodable display tokens. Each address remains a RESTORE_BASELINE residual.
 BTEAM_PREVIOUS_KOREAN_TEXT = {address: text for address, text in BTEAM_PREVIOUS_KOREAN_TEXT.items()
                               if address not in BTEAM_ROUND2_RESTORE}
 if not BTEAM_PREVIOUS_KOREAN_TEXT.keys() <= BTEAM_RESTORE_BASELINE_ROWS:
@@ -12784,7 +12814,7 @@ BTEAM_LISTED_WIDE_RESIDUALS = {0xD9009E: 66}
 # b24 restored rows whose proven native row is wider than the 44 half-cell
 # dialogue default: A35258/A35280 via 331A80 -> 314A50 (32-tile row) and
 # B830C8 via D8D9AC -> B333FC -> B12910 (26-cell row).
-BTEAM_RESTORED_ROW_HALF_CELLS = {0xA35258: 64, 0xA35280: 64, 0xB830C8: 52}
+BTEAM_RESTORED_ROW_HALF_CELLS = {0xA35258: 64, 0xA35280: 64, 0xB830C8: 52, 0xB82FAC: 52}
 # Host-side link-wait sentence.  The client-image copies (0x9298A4, 0x96253C,
 # 0x99ADE0, 0x9D3684, 0xEE27E0) are restored to the original by link_client_font:
 # the client's 59-glyph font cannot draw them and the dead copies stay original.
@@ -12814,9 +12844,14 @@ def verify_link_welcome_sentences(rom, last_writes):
 def validate_bteam_payload(payload, code2syl, address, *, compact=False,
                            compact_expected=None):
     """Validate final text bytes, before a lossy display decoder can hide damage."""
+    if address == 0xB82FAC:
+        from b82fac_contract import validate_row
+        validate_row(payload)
     from dialogue_repoint import text_segment_cells
     from dialogue_spacing import reviewed_bteam_half_cells
-    _spacing_limit=reviewed_bteam_half_cells(address,payload)
+    from ec312c_contract import exact_half_cells
+    _spacing_limit=max(reviewed_bteam_half_cells(address,payload),
+                       exact_half_cells(address,payload))
     widths = [text_segment_cells(piece.rstrip(b'\x00'))
               for piece in payload.split(b'\x72\x0a\x09')]
     if not widths or (max(widths) > max(BTEAM_RESTORED_ROW_HALF_CELLS.get(address, 44),_spacing_limit) and
@@ -14487,6 +14522,12 @@ def shift_dialogue_wait_cursor_right(rom, source_rom):
 
 
 def _build(args, publication):
+    from b82fac_contract import require_enabled
+    require_enabled(not args.no_repoint_dialogue)
+    from d821f0_contract import require_enabled as _d821f0_require_enabled
+    _d821f0_require_enabled(not args.no_repoint_dialogue)
+    from ec312c_contract import require_enabled as _ec312c_require_enabled
+    _ec312c_require_enabled(not args.no_repoint_dialogue)
     staged_rom = publication.path('candidate.gba')
     staged_manifest = publication.path('repoint_manifest.json')
     staged_integrity = publication.path('integrity_map.json')
@@ -23611,7 +23652,6 @@ def _build(args, publication):
         (0xB831D8, 6, '접속중'),
         (0xB8301C, 38, '맵을 수신 중이야,잠시 기다려 줘!!'),
         (0xB83044, 38, '맵을 송신 중이야,잠시 기다려 줘!!'),
-        (0xB830AC, 24, '보낼 맵을 골라 줘!!'),
         (0xB830C8, 34, '맵을 보낼 수 있는 사람이 아무도 없어!!'),
         (0xB8319C, 22, '미접속 준비 중'),
         # The six `시작을 눌러` addresses are +24 inside their respective
@@ -23925,12 +23965,47 @@ def _build(args, publication):
                 return (_dlg_ov.get(f'0x{a:08X}') or _dlg_ov.get(f'{a:X}') or _dlg_ov.get(str(a)) or '').strip()
 
             def _rp_fixable(a):
+                if a in (0xDF28C2, 0xDF28EF):
+                    return True
+                if a in (0xDF1EEE, 0xDF1F1B):
+                    return True
+                if a in (0xDD010A, 0xDD0137, 0xDF228E, 0xDF22BD, 0xDF239E, 0xDF23CD, 0xDF207A, 0xDF20A5, 0xDF21AE, 0xDF21D9, 0xDF25FA, 0xDF2623, 0xDF26FE, 0xDF2729, 0xDF2806, 0xDF2831):
+                    return True  # Both native spans belong to the scoped protected reflow.
                 if a in _rp_fixed_fragments and a not in _rp_script_owners:
                     return False  # Preserve the emitted fixed fragment, including intentional blanks.
                 v = _rp_dlg(a)
                 return bool(v and v.strip() and any('가' <= ch <= '힣' for ch in v))
 
             def _rp_dlg(a):
+                if a in (0xDF28C2, 0xDF28EF):
+                    from df28c0_contract import TEXTS
+                    return TEXTS[a]  # Scoped source GO; runtime remains deferred.
+                if a in (0xDF1EEE, 0xDF1F1B):
+                    from df1eec_contract import TEXTS
+                    return TEXTS[a]  # Precedes the preserved legacy shortening dictionary.
+                if a in (0xDF2806, 0xDF2831):
+                    from df2804_contract import TEXTS
+                    return TEXTS[a]  # Source conditional GO; runtime DEFER remains.
+                if a in (0xDF26FE, 0xDF2729):
+                    from df26fc_contract import TEXTS
+                    return TEXTS[a]  # Conditional source contract; runtime unverified.
+                if a in (0xDF25FA, 0xDF2623):
+                    from df25f8_contract import TEXTS
+                    return TEXTS[a]  # Conditional source-only GO; runtime remains unverified.
+                if a in (0xDF21AE, 0xDF21D9):
+                    from df21ac_contract import TEXTS
+                    return TEXTS[a]  # Exact approved sentence and CSV companion.
+                if a in (0xDF207A, 0xDF20A5):
+                    from df2078_contract import TEXTS
+                    return TEXTS[a]  # Approved first row and live authoritative companion.
+                if a in (0xDF239E, 0xDF23CD):
+                    from df239c_contract import TEXTS
+                    return TEXTS[a]  # Approved authored punctuation, not prior live loss.
+                if a in (0xDF228E, 0xDF22BD):
+                    from df228c_contract import TEXTS
+                    return TEXTS[a]  # Scoped coordinator decision; global precedence is unchanged.
+                if a in (0xDD010A, 0xDD0137):
+                    return _rp_ov(a)  # Preserve each independent authored sentence.
                 if a in {0xDF8E16, 0xDF8EFF, 0xDF9149, 0xDF948E, 0xDF94D6}:
                     # The approved rename is the new source authority for
                     # these rows, including messages already owned by an
@@ -24007,6 +24082,23 @@ def _build(args, publication):
             _rp_lossless_requested = set()
 
             def _rp_fit_level(a):
+                if a in (0xDF28C2, 0xDF28EF):
+                    enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped, a)
+                    # Preserve the ordinary predicate BEFORE scoped force-fit.
+                    if (enc is not None and lvl < 6 and needs_safe_dialogue_punctuation(a)
+                            and story_requires_lossless_repoint(a, enc, _rp_fixed_bytes(a))):
+                        _rp_lossless_requested.add(a)
+                    return 99 if a == 0xDF28C2 else 6
+                if a in (0xDF1EEE, 0xDF1F1B):
+                    # Forced relocation must still record the ordinary lossless
+                    # request; fulfillment is accounted from the manifest below.
+                    enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped, a)
+                    if (enc is not None and lvl < 6 and needs_safe_dialogue_punctuation(a)
+                            and story_requires_lossless_repoint(a, enc, _rp_fixed_bytes(a))):
+                        _rp_lossless_requested.add(a)
+                    return 6
+                if a in (0xDF228E, 0xDF22BD, 0xDF239E, 0xDF23CD, 0xDF207A, 0xDF20A5, 0xDF21AE, 0xDF21D9, 0xDF25FA, 0xDF2623, 0xDF26FE, 0xDF2729, 0xDF2806, 0xDF2831):
+                    return 6  # Both exact source spans participate in the guarded relocation.
                 enc, lvl = encode_fit(_rp_dlg(a), slots.get(a, 0), syl_to_code, unmapped, a)
                 base = 99 if enc is None else lvl
                 if in_region(PAIR_RENDERER_REGIONS, a, a + 1) and enc != _rp_fixed_bytes(a):
@@ -24028,6 +24120,10 @@ def _build(args, publication):
             from dialogue_repoint import scan_command_messages as _rp_scan_cmd
 
             def _rp_cell_width(a):
+                if a == 0xEC3192:
+                    # This table consumer emits four fullwidth spaces (44 cells).
+                    from dialogue_repoint import text_segment_cells
+                    return text_segment_cells(_rp_fixed_bytes(a))
                 # un-jam(완전충실, normalize) 후 시각 폭 — 박스 한계 초과 라인을 수정 제외
                 from renderer_text import renderer_for_address
                 if needs_safe_dialogue_punctuation(a) or renderer_for_address(a):
@@ -24049,7 +24145,7 @@ def _build(args, publication):
             # 단축안(사용자 승인 + codex/agy 합의, 박스 ~30자에 맞춰 visual_cells 46): 0xEC312E/0xA2C378
             # "종료되었을 때"→"종료되면", 0xA2C484 "고르는 것으로"→"선택하면", 0xDFD082 "여기서만 하는 얘긴데"→
             # "이건 비밀인데" — dialogue_overrides.json 반영, 재배치 후 fullwidth 공백 렌더로 단어붙음 해소.
-            for _ma, _po in ((0xA29CA0, 0xA37CE0), (0xA3246C, 0xA387B0),
+            for _ma, _po in ((0xEC3190, 0xEC271C), (0xE10D78, 0xE114F8), (0xA29CA0, 0xA37CE0), (0xA3246C, 0xA387B0),
                              (0xB83C70, 0xDEBAC0),
                              (0xB81884, 0xD85390), (0xB81A20, 0xD84BCC), (0xB81F04, 0xD8AD5C),
                              (0xB81F40, 0xD8AC30), (0xB81F70, 0xD8AB7C), (0xB820D8, 0xD8A708),
@@ -24254,6 +24350,12 @@ def _build(args, publication):
                 encode_full_fidelity('이 싸움의 뒤에 있는 자가　얼마나', syl_to_code, unmapped, 0xDCFA8E),
                 encode_full_fidelity('강적일지도　모르는 거라고！', syl_to_code, unmapped, 0xDCFABB),
             )
+            _dd_layout, _dd_reflow = dd0108_page_reflow(orig, _m19_encode)
+            _explicit_line_layouts[0xDD010A] = _dd_layout
+            from df1eec_contract import LAYOUT as _df1eec_layout, REFLOW as _df1eec_reflow
+            _explicit_line_layouts[0xDF1EEE] = _df1eec_layout
+            from df28c0_contract import LAYOUT as _df28c0_layout, REFLOW as _df28c0_reflow
+            _explicit_line_layouts[0xDF28C2] = _df28c0_layout
             _b23_reflows = {}
             for _first, _following, _site in ((0xDCC63A, 0xDCC65D, 0xDE0410),
                                              (0xDCD9DA, 0xDCD9FD, 0xDE2814)):
@@ -24275,15 +24377,15 @@ def _build(args, publication):
                 0xA2C040, 0xA2C0C0, 0xA2C1E8, 0xA2C25C, 0xA2C2F4,
                 0xA2C378, 0xA2C3A8, 0xA2C484, 0xB83A64,
                 0xD9444E,
-                0xDD010A, 0xDF1EEE, 0xDF207A,
-                0xDF20BA, 0xDF21AE, 0xDF228E, 0xDF239E, 0xDF25FA,
-                0xDF26FE, 0xDF2806, 0xDF28C2, 0xEC312E,
+                0xDF20BA,
+                0xEC312E,
                 0xEC3246,
                 # b24: renderer width model now counts fullwidth separators in
                 # cell_width, so these R3 B-team residuals (in-place baseline,
                 # b23 status skip_normalized_wide) are caught one check earlier.
                 0xA35228, 0xB82FAC, 0xB83FA8,
             }
+            from dialogue_spacing import reviewed_bteam_half_cells
             _rp_manifest, _rp_stats = repoint_messages(
                 rom, orig, fixable=_rp_fixable, fixed_bytes=_rp_fixed_bytes,
                 fit_level_dlg=_rp_fit_level, decode_text=_rp_decode, cell_width=_rp_cell_width,
@@ -24294,9 +24396,9 @@ def _build(args, publication):
                 skip_messages=(set(PART2_PROLOGUE_REPOINT_SKIP_MESSAGES) | _rp_unsafe_messages
                                | PART2_NATIVE_NUL_REPOINT_SKIP_MESSAGES | {0xB8319C}),
                 min_level=1, max_cells=50,
-                max_cells_for_address=lambda a: 60 if a in (0xA35258, 0xA35280) else (44 if a in BTEAM_RESTORE_BASELINE_ROWS and a != 0xB830C8 else 50),
-                page_reflows={0xDCFA8C: _dcfa8c_reflow, **_b23_reflows},
-                write_log=WRITE_LOG,
+                max_cells_for_address=lambda a: reviewed_bteam_half_cells(a, _rp_fixed_bytes(a)) if a in (0xDF228E, 0xDF239E, 0xDF207A, 0xDF21AE, 0xDF25FA, 0xDF26FE, 0xDF2806) else (60 if a in (0xA35258, 0xA35280) else (44 if a in BTEAM_RESTORE_BASELINE_ROWS and a != 0xB830C8 else 50)),
+                page_reflows={0xDF28C0: _df28c0_reflow, 0xDF1EEC: _df1eec_reflow, 0xDCFA8C: _dcfa8c_reflow, 0xDD0108: _dd_reflow, **_b23_reflows},
+                write_log=WRITE_LOG, require_e10d78=True, require_df28c0=True, require_ec3190=True,
                 source_text=lambda a: _rp_dlg(a) or _rp_script_owners.get(a, (0, None))[1] or _rp_intended.get(a),
                 valid_codes=frozenset(_rp_valid),
                 seam_codes={code: syl for syl, code in syl_to_code.items()}, seam_table=_seam_table)
@@ -24317,11 +24419,21 @@ def _build(args, publication):
                 }
                 _m['display_line_spans'] = [_one, _two]
                 _m['line_spans'][_next_key] = _m['source_line_fragments'][_next_key][0]
+            from e10d78_contract import assert_manifest as _assert_e10d78_manifest
+            _assert_e10d78_manifest(_rp_manifest)
+            from df28c0_contract import assert_manifest as _assert_df28c0_manifest
+            _assert_df28c0_manifest(_rp_manifest)
+            from ec3190_contract import assert_manifest as _assert_ec3190_manifest
+            _assert_ec3190_manifest(_rp_manifest)
+            dd0108_source_fragments(_rp_manifest)
             st['repoint_msgs'] = _rp_stats.get('relocated', 0)
             _rp_fixed_addresses = {int(a, 16) for m in _rp_manifest
                                    if m.get('status') == 'relocated' for a in m.get('fixed', [])}
             completed_script_repoints = _rp_fixed_addresses
             _rp_unfulfilled = sorted(_rp_lossless_requested - _rp_fixed_addresses)
+            _b82fac_lossless_before = {
+                'requested': [f'0x{a:08X}' for a in sorted(_rp_lossless_requested)],
+                'unfulfilled': [f'0x{a:08X}' for a in _rp_unfulfilled]}
             st['repoint_lossless_requested'] = len(_rp_lossless_requested)
             st['repoint_lossless_unfulfilled'] = len(_rp_unfulfilled)
             st['repoint_free_used'] = _rp_stats.get('free_used', 0)
@@ -24352,9 +24464,15 @@ def _build(args, publication):
     # The current guarded repointer could not prove these specific B-team rows.
     # Record their unresolved ROM output; all other required
     # script relocations still fail the build when missing.
-    bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints)
+    from b82fac_contract import pending_requirements as _b82fac_pending_requirements
+    _b82fac_pending = _b82fac_pending_requirements(required_script_repoints, completed_script_repoints)
+    from ec312c_contract import pending_requirements as _ec312c_pending_requirements
+    _ec312c_pending = _ec312c_pending_requirements(required_script_repoints, completed_script_repoints)
+    from d821f0_contract import pending_requirements as _d821f0_pending_requirements
+    _d821f0_pending = _d821f0_pending_requirements(required_script_repoints, completed_script_repoints)
+    bteam_script_residuals = sorted((required_script_repoints - completed_script_repoints - _b82fac_pending - _ec312c_pending - _d821f0_pending)
                                     & BTEAM_RESTORE_BASELINE_ROWS)
-    _restored_relocated_residuals = {0xDCFA8E, 0xDCE89A, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}
+    _restored_relocated_residuals = {0xEC3192, 0xDF28C2, 0xE10D7A, 0xDF1EEE, 0xDF2806, 0xDF26FE, 0xDF25FA, 0xDF21AE, 0xDF207A, 0xDF239E, 0xDF228E, 0xDD010A, 0xDCFA8E, 0xDCE89A, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}
     if not _restored_relocated_residuals <= completed_script_repoints:
         raise AssertionError('0xDCFA8E protected dialogue was not relocated')
     _allowed_script_residuals = {a for a, entry in BTEAM_ROUND2_RESIDUALS.items()
@@ -24365,7 +24483,20 @@ def _build(args, publication):
                              f'{sorted(set(bteam_script_residuals) ^ _allowed_script_residuals)}')
     # The listed slots retain the exact Korean bytes from the prior candidate.
     # Each is an explicit unresolved exception, never an implicit shortening.
-    for _address, _entry in sorted(BTEAM_ROUND2_RESIDUALS.items()):
+    for _address in sorted(set(BTEAM_ROUND2_RESIDUALS) | {0xB82FAC, 0xEC312E, 0xD821F0}):
+        if _address == 0xB82FAC:
+            from b82fac_contract import retain_native as _b82fac_retain_native
+            _b82fac_retain_native(orig, rom, WRITE_LOG)
+            continue
+        if _address == 0xEC312E:
+            from ec312c_contract import retain_native as _ec312c_retain_native
+            _ec312c_retain_native(orig, rom, WRITE_LOG)
+            continue
+        if _address == 0xD821F0:
+            from d821f0_contract import retain_native as _d821f0_retain_native
+            _d821f0_retain_native(orig, rom, WRITE_LOG)
+            continue
+        _entry = BTEAM_ROUND2_RESIDUALS[_address]
         _payload = bytes.fromhex(_entry['payload_hex'])
         rom[_address:_address + len(_payload)] = _payload
         _encoded = _payload.rstrip(b' \x00')
@@ -24396,20 +24527,6 @@ def _build(args, publication):
     WRITE_LOG.append([0xD910C6, len(_d910_source), len(_d910_source),
                       _d910_source.hex(), None, _d910_entry['kept_text'], None,
                       'bteam-round2-residual'])
-    # DD010A has an active relocated consumer. The old source slot alone is
-    # dead for this message; restore the proven earlier Korean bytes there too.
-    _dd_entry = BTEAM_ROUND2_RESIDUALS[0xDD010A]
-    _dd_repoint = [m for m in _rp_manifest if m.get('status') == 'relocated'
-                   and m.get('msg') == '0xDD0108']
-    if len(_dd_repoint) != 1 or _dd_repoint[0]['line_spans'].get('0xDD010A') != [2, 40]:
-        raise AssertionError('DD010A relocated consumer layout changed')
-    _dd_target = int(_dd_repoint[0]['new_addr'], 16) + 2
-    _dd_payload = bytes.fromhex(_dd_entry['payload_hex'])
-    if len(_dd_payload) != 40:
-        raise AssertionError('DD010A Korean fallback no longer fits relocated span')
-    rom[_dd_target:_dd_target + 40] = _dd_payload
-    WRITE_LOG.append([_dd_target, 40, 40, _dd_payload.hex(), None,
-                      _dd_entry['kept_text'], None, 'bteam-round2-relocated-korean'])
     # Restore complete protected wording where a final in-place text writer
     # proves ownership and the renderer's encoded form fits its native slot.
     from qa_bteam_drift import display_equivalent as _bteam_display_equivalent
@@ -24433,6 +24550,13 @@ def _build(args, publication):
     _round2_relocated = {int(key, 16) for message in _rp_manifest
                          if message.get('status') == 'relocated'
                          for key in message.get('line_spans', {})}
+    from b830ac_contract import preflight as _b830ac_preflight, final as _b830ac_final
+    # Validate before the generic loop can silently skip a missing owner or fit.
+    _b830ac_text = _round2_baseline.get('0x00B830AC')
+    _b830ac_encoded = bytes(encode_text(
+        _bteam_display_equivalent(_b830ac_text, 0xB830AC), syl_to_code, unmapped, 0xB830AC))
+    _b830ac_preflight(orig, rom, _round2_final_writes.get(0xB830AC),
+                      _b830ac_text, _b830ac_encoded)
     for _address in sorted(BTEAM_ROUND2_RESTORE - set(BTEAM_ROUND2_RESIDUALS)
                            - _round2_relocated):
         if _address in LINK_WELCOME_SENTENCES or 0xA2955C <= _address < 0xA29830:
@@ -24460,6 +24584,7 @@ def _build(args, publication):
         rom[_address:_address + _slot] = _encoded + bytes([_fill]) * (_slot - len(_encoded))
         WRITE_LOG.append([_address, _slot, len(_encoded), _encoded.hex(), _fill,
                           _text, None, 'bteam-round2-baseline'])
+    _b830ac_final(rom, WRITE_LOG)
     from part2_mission_title_fit import is_pair_title as _is_round2_pair_title
     for _message in _rp_manifest:
         if _message.get('status') != 'relocated':
@@ -24489,7 +24614,7 @@ def _build(args, publication):
         _target = int(_message['new_addr'], 16)
         for _key, (_off, _span_len) in _message.get('line_spans', {}).items():
             _address = int(_key, 16)
-            if (_address not in BTEAM_ROUND2_RESIDUALS or _address == 0xDD010A
+            if (_address not in BTEAM_ROUND2_RESIDUALS
                     or _address in _restored_relocated_residuals):
                 continue
             _entry = BTEAM_ROUND2_RESIDUALS[_address]
@@ -24647,7 +24772,7 @@ def _build(args, publication):
         json.dump(_rp_manifest, _stream, ensure_ascii=False, indent=1)
     for _address in sorted(set(BTEAM_SEAM_RESIDUAL_TEXT) - BTEAM_ROUND2_RESTORE):
         print(f'BTEAM RESTORE RESIDUAL 0x{_address:08X}: reviewed seam decision would be stale')
-    verify_required_script_repoints(required_script_repoints - _allowed_script_residuals,
+    verify_required_script_repoints(required_script_repoints - _allowed_script_residuals - _b82fac_pending - _ec312c_pending - _d821f0_pending,
                                     completed_script_repoints)
     st['part2_m23_prompt_row_half_cells'] = reflow_sea_fortress_prompt(rom, _rp_manifest)
     st['part2_colin_stutter_space'] = patch_colin_stutter_spacing(rom, _rp_manifest)
@@ -24886,6 +25011,49 @@ def _build(args, publication):
         _spacing_applied = apply_dialogue_spacing(rom, orig, _rp_manifest, WRITE_LOG)
         st['dialogue_spacing_pages'] = verify_dialogue_spacing(rom, orig, _rp_manifest)
         st['dialogue_spacing_messages'] = len(_spacing_applied)
+        # Append only after all existing allocations (including spacing) settle.
+        import b82fac_contract as _b82fac
+        st['b82fac_late_append'] = _b82fac.append(orig, rom, _rp_manifest, WRITE_LOG,
+            line_index=_merged_li, slots=slots,
+            source_text=lambda a: _rp_dlg(a) or _rp_script_owners.get(a, (0, None))[1] or _rp_intended.get(a),
+            fixed_bytes=_rp_fixed_bytes, valid_codes=frozenset(_rp_valid))
+        _b82fac.close_requirements(rom, _rp_manifest, WRITE_LOG, required_script_repoints,
+                                   completed_script_repoints, _b82fac_pending)
+        _restored_relocated_residuals.add(0xB82FAC)
+        import ec312c_contract as _ec312c
+        st['ec312c_late_append'] = _ec312c.append(orig, rom, _rp_manifest, WRITE_LOG,
+            line_index=_merged_li, slots=slots,
+            source_text=lambda a: _rp_dlg(a) or _rp_script_owners.get(a, (0, None))[1] or _rp_intended.get(a),
+            fixed_bytes=_rp_fixed_bytes, valid_codes=frozenset(_rp_valid))
+        _ec312c.check_pins(orig, rom, final=True)
+        _ec312c.close_requirements(rom, _rp_manifest, WRITE_LOG, required_script_repoints,
+                                  completed_script_repoints, _ec312c_pending)
+        _restored_relocated_residuals.add(0xEC312E)
+        import d821f0_contract as _d821f0
+        st['d821f0_late_append'] = _d821f0.append(orig, rom, _rp_manifest, WRITE_LOG,
+            line_index=_merged_li, slots=slots,
+            source_text=lambda a: _round2_baseline.get(f'0x{a:08X}'),
+            fixed_bytes=lambda a: bytes(encode_full_fidelity(
+                _round2_baseline[f'0x{a:08X}'], syl_to_code, unmapped, a)),
+            valid_codes=frozenset(_rp_valid))
+        _d821f0.check_pins(orig, rom, final=True)
+        _d821f0.close_requirements(rom, _rp_manifest, WRITE_LOG, required_script_repoints,
+                                  completed_script_repoints, _d821f0_pending)
+        _restored_relocated_residuals.add(0xD821F0)
+        verify_required_script_repoints(required_script_repoints - _allowed_script_residuals,
+                                        completed_script_repoints)
+        from qa_b82fac_preservation import lossless as _b82fac_lossless
+        _b82fac_lossless(_b82fac_lossless_before, {
+            'requested': [f'0x{a:08X}' for a in sorted(_rp_lossless_requested)],
+            'unfulfilled': [f'0x{a:08X}' for a in _rp_unfulfilled]}, _rp_manifest)
+        from qa_ec312c_preservation import lossless as _ec312c_lossless
+        _ec312c_lossless(_b82fac_lossless_before, {
+            'requested': [f'0x{a:08X}' for a in sorted(_rp_lossless_requested)],
+            'unfulfilled': [f'0x{a:08X}' for a in _rp_unfulfilled]}, _rp_manifest)
+        from qa_d821f0_preservation import lossless as _d821f0_lossless
+        _d821f0_lossless(_b82fac_lossless_before, {
+            'requested': [f'0x{a:08X}' for a in sorted(_rp_lossless_requested)],
+            'unfulfilled': [f'0x{a:08X}' for a in _rp_unfulfilled]}, _rp_manifest)
         import part2_prologue_punctuation
         st['part2_prologue_approved_punctuation'] = part2_prologue_punctuation.patch(
             rom, _rp_manifest, WRITE_LOG)
@@ -24923,6 +25091,12 @@ def _build(args, publication):
     if _renderer_errors:
         raise AssertionError(f'unsafe renderer payloads ({len(_renderer_errors)}): {_renderer_errors[:30]}')
     st['renderer_payloads_checked'] = _renderer_count
+    _b82fac.final(rom, _rp_manifest, WRITE_LOG)
+    _b82fac.check_pins(orig, rom, final=True)
+    _ec312c.final(rom, _rp_manifest, WRITE_LOG)
+    _ec312c.check_pins(orig, rom, final=True)
+    _d821f0.final(rom, _rp_manifest, WRITE_LOG)
+    _d821f0.check_pins(orig, rom, final=True)
     stable_build_inputs(build_inputs_before, snapshot_inputs())
     if evidence_sha(build_source) != build_source_sha:
         raise AssertionError('Source ROM changed during build; refusing output')
@@ -25009,6 +25183,7 @@ def _build(args, publication):
             for _key, _span in _message.get('line_spans', {}).items():
                 _relocated_rows[int(_key, 16)] = (_message, _span)
     _last_writes = {int(row[0]): row for row in WRITE_LOG if row[3]}
+    _b830ac_final(rom, WRITE_LOG)
     if bytes(rom[0xD910C6:0xD910F0]) != BTEAM_D910C6_COMPOSITE:
         raise AssertionError('D910C6 Korean script continuation was overwritten')
     verify_link_welcome_sentences(rom, _last_writes)
@@ -25053,6 +25228,10 @@ def _build(args, publication):
         if (_address in _relocated_rows and reviewed_bteam_half_cells(_address)>44
                 and verify_reviewed_owner_bytes(rom,_message,_address)):
             _spacing_limit=reviewed_bteam_half_cells(_address)
+        if _address == 0xEC312E:
+            _ec312c.final(rom, _rp_manifest, WRITE_LOG)
+            _ec312c.check_pins(orig, rom, final=True)
+            _spacing_limit=max(_spacing_limit, _ec312c.exact_half_cells(_address, _payload))
         if not _widths or (max(_widths) > max(BTEAM_RESTORED_ROW_HALF_CELLS.get(_address, 44),_spacing_limit) and
                            BTEAM_LISTED_WIDE_RESIDUALS.get(_address) != max(_widths)):
             _wide_restored.append((f'0x{_address:08X}', _widths))

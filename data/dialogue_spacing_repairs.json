@@ -22421,45 +22421,6 @@
    ]
   },
   {
-   "source": "00DD0108",
-   "profile": "p1_portrait",
-   "before_sha256": "e3e5d4001199b0213ac81ff70b491bcd278db19737de49d7acb4a8385662dc21",
-   "before_target": "00A768B8",
-   "before_bytes": 62,
-   "after_sha256": "de90db42b4359df552d0a536fa05162d5ca85c8064b19ec11c64bff8ae5bbeb8",
-   "mode": "reviewed_spacing_reflow",
-   "pages": [
-    {
-     "page": 0,
-     "before": [
-      "이　녀석이　모든　것을　조종하고　있었군",
-      "용서　못해！"
-     ],
-     "after": [
-      "이 녀석이 모든 것을 조종하고 있었군 용서",
-      "못 해！"
-     ]
-    }
-   ],
-   "final_pages": [
-    [
-     "이 녀석이 모든 것을 조종하고 있었군 용서",
-     "못 해！"
-    ]
-   ],
-   "source_fragment_joiners": {
-    "0xDD010A": [],
-    "0xDD0137": [
-     "8140"
-    ]
-   },
-   "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
-   "review_indices": [
-    650
-   ]
-  },
-  {
    "source": "00DD0384",
    "profile": "p1_portrait",
    "before_sha256": "a016597ea033e86533f8078270b6ca0ff1721cdbb2eb46e5d7fb190aeea4aa6c",
@@ -27137,48 +27098,6 @@
    ]
   },
   {
-   "source": "00DF228C",
-   "profile": "p1_portrait",
-   "before_sha256": "2a5d0df761cde36a39fad3375ec75bc05e3d57431de126c91793ee46446cec42",
-   "before_target": "00DF228C",
-   "before_bytes": 80,
-   "after_sha256": "a7e7ca689dd0f9053bce0adfb923f9c5b2110f609c15ea054650a87163cadb56",
-   "mode": "reviewed_spacing_reflow",
-   "pages": [
-    {
-     "page": 0,
-     "before": [
-      "먼저　많이　점령한　쪽　승리",
-      "먼저　１５거점을　점령해！"
-     ],
-     "after": [
-      "먼저 많이 점령한 쪽 승리 먼저 １５",
-      "거점을 점령해！"
-     ]
-    }
-   ],
-   "final_pages": [
-    [
-     "먼저 많이 점령한 쪽 승리 먼저 １５",
-     "거점을 점령해！"
-    ]
-   ],
-   "source_fragment_joiners": {
-    "0xDF228E": [],
-    "0xDF22BD": [
-     "8140"
-    ],
-    "0xDF22D9": [
-     "8140"
-    ]
-   },
-   "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
-   "review_indices": [
-    778
-   ]
-  },
-  {
    "source": "00DF22DC",
    "profile": "p1_portrait",
    "before_sha256": "7bf4960afaba53625be3c34322ec19192265e8164b50557667d0c85645cc1f4a",
@@ -27257,48 +27176,6 @@
    "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
    "review_indices": [
     779
-   ]
-  },
-  {
-   "source": "00DF239C",
-   "profile": "p1_portrait",
-   "before_sha256": "3730051121f4653710d464368d21a2fad023d0a1a7732090eb4bd75ee277c5bc",
-   "before_target": "00DF239C",
-   "before_bytes": 84,
-   "after_sha256": "870c5965b74b8e9d7e66cbbcf0509c15794b2bf10793183bd93af3c0adaa050a",
-   "mode": "reviewed_spacing_reflow",
-   "pages": [
-    {
-     "page": 0,
-     "before": [
-      "먼저　많이　점령한　쪽이　승리！",
-      "그래１２거점을　점령하는　거예요"
-     ],
-     "after": [
-      "먼저 많이 점령한 쪽이 승리！ 그래 １２",
-      "거점을 점령하는 거예요"
-     ]
-    }
-   ],
-   "final_pages": [
-    [
-     "먼저 많이 점령한 쪽이 승리！ 그래 １２",
-     "거점을 점령하는 거예요"
-    ]
-   ],
-   "source_fragment_joiners": {
-    "0xDF239E": [],
-    "0xDF23CD": [
-     "8140"
-    ],
-    "0xDF23ED": [
-     "8140"
-    ]
-   },
-   "reviewer": "gpt-6.1-sol/high",
-   "scope": "사용자 승인 2026-10-18 자연스러운 띄어쓰기 및 이름 규칙; 문장별 전후 검토",
-   "review_indices": [
-    780
    ]
   },
   {
@@ -61229,25 +61106,6 @@
    ]
   },
   {
-   "address": "0x00DD010A",
-   "baseline": "이 녀석이 모든 것을,조종하고 있었던 거로군!",
-   "before": "이　녀석이　모든　것을　조종하고　있었군",
-   "after": "이　녀석이　모든　것을　조종하고　있었군",
-   "classification": "retained-residual",
-   "retained_authorities": [
-    "이　녀석이　모든　것을　조종하고　있었군"
-   ],
-   "final_fragment_hex": [
-    "8fa2814089708dc08fa281408bfc8a7e814088588f8181408fd98fe092a9886681408fb38ecf887b"
-   ],
-   "reviewer": "gpt-6.1-sol/high",
-   "reason": "사용자 2026-10-18 띄어쓰기/이름 규칙 한정 명시 승인. 문장별 심사와 glyph/제어 불변을 별도 원장으로 검증. 보호 기준 원문은 불변.",
-   "profile": "p1_portrait",
-   "final_fragment_half_cells": [
-    40
-   ]
-  },
-  {
    "address": "0x00DD041E",
    "baseline": "내 딸에게 손을 댄 건",
    "before": "내　딸에게　손을　댄　건",
@@ -61777,6 +61635,91 @@
    ]
   },
   {
+   "address": "0x00DF207A",
+   "baseline": "승리조건은,수도 점령,혹은 적 전멸이에요!",
+   "before": "승리조건은、수도　점령、혹은　적　전멸이에요！",
+   "after": "승리조건은、수도　점령、혹은　적　전멸이에요！",
+   "classification": "restored",
+   "retained_authorities": [],
+   "final_fragment_hex": [
+    "8e4d8bb78fd988548f7e81418def8a5a81408fcc8b67814192e48f7e81408fc781408fc88bf78fa28ed38f5a8149"
+   ],
+   "reviewer": "Codex 자체 정적 검토; 독립 리뷰 대기",
+   "reason": "2026-10-24 승인 첫 문장 및 live companion 힘내요! 유지. 원본 64B와 두 owner, 첫 행 개행 및 tail 제어 전용 계약. 독립 리뷰 및 실제 빌드 대기.",
+   "profile": "p1_portrait",
+   "final_fragment_half_cells": [
+    46
+   ]
+  },
+  {
+   "address": "0x00DF2806",
+   "baseline": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "before": "수도　점령이나、적　전멸로　이길　수　있어요！",
+   "after": "수도　점령이나、적　전멸로　이길　수　있어요！",
+   "classification": "restored",
+   "retained_authorities": [],
+   "final_fragment_hex": [
+    "8def8a5a81408fcc8b678fa288e981418fc781408fc88bf78b6981408fa2889181408def81408fb38ec38f5a8149"
+   ],
+   "reviewer": "aw-planreview0206 conditional GO; independent code review pending",
+   "reason": "DF2804 단일 소스 구현 conditional GO, runtime DEFER 유지. 과거 RELOCATE/DEFER 이력 불변; native82B/payload80B, final override companion 및 tail3/padding2 계약.",
+   "profile": "p1_portrait",
+   "final_fragment_half_cells": [
+    46
+   ]
+  },
+  {
+   "address": "0x00DF26FE",
+   "baseline": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "before": "수도　점령이나、적　전멸로　이길　수　있어요！",
+   "after": "수도　점령이나、적　전멸로　이길　수　있어요！",
+   "classification": "restored",
+   "retained_authorities": [],
+   "final_fragment_hex": [
+    "8def8a5a81408fcc8b678fa288e981418fc781408fc88bf78b6981408fa2889181408def81408fb38ec38f5a8149"
+   ],
+   "reviewer": "aw-planreview0051 conditional GO; coordinator adoption",
+   "reason": "DF26FC 단일 소스 복원 계약. 과거 Fable RELOCATE / Astra DEFER 불일치 유지; 실화면 미검증.",
+   "profile": "p1_portrait",
+   "final_fragment_half_cells": [
+    46
+   ]
+  },
+  {
+   "address": "0x00DF25FA",
+   "baseline": "수도 점령이나 적 전멸로 이길 수 있어요!",
+   "before": "수도　점령이나　적　전멸로　이길　수　있어요！",
+   "after": "수도　점령이나　적　전멸로　이길　수　있어요！",
+   "classification": "restored",
+   "retained_authorities": [],
+   "final_fragment_hex": [
+    "8def8a5a81408fcc8b678fa288e981408fc781408fc88bf78b6981408fa2889181408def81408fb38ec38f5a8149"
+   ],
+   "reviewer": "Codex 자체 정적 검토; 독립 코드 리뷰 대기",
+   "reason": "2026-10-24 conditional GO source-only: native60/output64, 첫 행46B 및 지지 마!10B, native newline/tail3 보존. Fable RELOCATE/Astra DEFER 이력 불일치 유지; 실제 빌드·런타임 미검증.",
+   "profile": "p1_portrait",
+   "final_fragment_half_cells": [
+    46
+   ]
+  },
+  {
+   "address": "0x00DF21AE",
+   "baseline": "수도 점령이나 적 전멸로,이길 수 있어요!",
+   "before": "수도　점령이나　적　전멸로、이길　수　있어요！",
+   "after": "수도　점령이나　적　전멸로、이길　수　있어요！",
+   "classification": "restored",
+   "retained_authorities": [],
+   "final_fragment_hex": [
+    "8def8a5a81408fcc8b678fa288e981408fc781408fc88bf78b6981418fa2889181408def81408fb38ec38f5a8149"
+   ],
+   "reviewer": "Codex 자체 정적 검토; 독립 리뷰 대기",
+   "reason": "2026-10-24 총괄 source-only 결정: native64/output62, 첫 문장46B와 companion 힘내!6B 및 기존 제어 보존. 독립 리뷰·실제 빌드·런타임 미검증.",
+   "profile": "p1_portrait",
+   "final_fragment_half_cells": [
+    46
+   ]
+  },
+  {
    "address": "0x00DF20BA",
    "baseline": "수도 점령,적 전멸 어느 쪽으로든 이길 수 있어요!",
    "before": "수도　점령／적　전멸　승리",
@@ -61817,20 +61760,18 @@
   {
    "address": "0x00DF228E",
    "baseline": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
-   "before": "먼저　많이　점령한　쪽　승리",
-   "after": "먼저　많이　점령한　쪽　승리",
-   "classification": "retained-residual",
-   "retained_authorities": [
-    "먼저　많이　점령한　쪽　승리"
-   ],
+   "before": "여기는、먼저　많이　점령하는　쪽이　승리예요！",
+   "after": "여기는、먼저　많이　점령하는　쪽이　승리예요！",
+   "classification": "restored",
+   "retained_authorities": [],
    "final_fragment_hex": [
-    "8be68fc681408bc78fa281408fcc8b6792af8140907a81408e4d8bb7"
+    "8ed8888f89c881418be68fc681408bc78fa281408fcc8b6792a989c88140907a8fa281408e4d8bb78eec8f5a8149"
    ],
    "reviewer": "gpt-6.1-sol/high",
-   "reason": "사용자 2026-10-18 띄어쓰기/이름 규칙 한정 명시 승인. 문장별 심사와 glyph/제어 불변을 별도 원장으로 검증. 보호 기준 원문은 불변.",
+   "reason": "2026-10-24 총괄 결정: B팀 첫 문장 복원, 현 companion 유지. 기존 첫 행 개행 프로필 적용; 이전 축약문 spacing 재분할 계약 제거. 독립 리뷰 및 빌드 대기.",
    "profile": "p1_portrait",
    "final_fragment_half_cells": [
-    28
+    46
    ]
   },
   {
@@ -61853,20 +61794,18 @@
   {
    "address": "0x00DF239E",
    "baseline": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
-   "before": "먼저　많이　점령한　쪽이　승리！",
-   "after": "먼저　많이　점령한　쪽이　승리！",
-   "classification": "retained-residual",
-   "retained_authorities": [
-    "먼저　많이　점령한　쪽이　승리！"
-   ],
+   "before": "여기는、먼저　많이　점령하는　쪽이　승리예요！",
+   "after": "여기는、먼저　많이　점령하는　쪽이　승리예요！",
+   "classification": "restored",
+   "retained_authorities": [],
    "final_fragment_hex": [
-    "8be68fc681408bc78fa281408fcc8b6792af8140907a8fa281408e4d8bb78149"
+    "8ed8888f89c881418be68fc681408bc78fa281408fcc8b6792a989c88140907a8fa281408e4d8bb78eec8f5a8149"
    ],
    "reviewer": "gpt-6.1-sol/high",
-   "reason": "사용자 2026-10-18 띄어쓰기/이름 규칙 한정 명시 승인. 문장별 심사와 glyph/제어 불변을 별도 원장으로 검증. 보호 기준 원문은 불변.",
+   "reason": "2026-10-24 총괄 결정: 승인 첫 문장 및 authored companion 부호 복원. 두 텍스트 span, tail 제어 전용; 이전 spacing 재분할 계약 제거. 독립 리뷰 및 빌드 대기.",
    "profile": "p1_portrait",
    "final_fragment_half_cells": [
-    32
+    46
    ]
   },
   {

@@ -12,6 +12,65 @@ class Labels:
 
 
 class SpacingTests(unittest.TestCase):
+    def test_dd0108_repointer_survives_downstream_spacing(self):
+        from test_dialogue_script_safety import ScriptSafetyTests
+        from dialogue_spacing import load_ledger, verify, reviewed_bteam_rows, reviewed_bteam_half_cells
+        from dialogue_repoint import text_segment_cells
+        from repoint_source_rows import row_bytes
+        from build_korean_full import validate_bteam_payload
+        from qa_integrity_map import load_syl
+
+        original, rom, record, full, _ = ScriptSafetyTests().dd0108_fixture()
+        # Exercise the real batch writer with a second, growing repair: an
+        # empty no-op alone would not test allocation/metadata side effects.
+        small_original, small_rom, other_records, writes, _, neighbor = self.fixture()
+        original[:1024] = small_original
+        rom[:1024] = small_rom
+        manifest = [record] + other_records
+        target = int(record['new_addr'], 16)
+        writes.append([target, record['new_len'], record['new_len'], '', None, None, None,
+                       'repoint:0xDD0108', dict(source_spans=record['source_spans'],
+                       source=0xDD0108, old_len=record['old_len'], ptr_sites=[0xDE705C])])
+        ledger = load_ledger()
+        ledger['messages'] = [r for r in ledger['messages'] if int(r['source'], 16) == 0xDD0108]
+        ledger['messages'] += neighbor['messages']
+        ledger['messages'][-1]['final_pages'] = [['あ い']]
+        # Inventory/font construction require a whole product ROM; isolate
+        # those inputs only. apply_repairs, reflow, pins and verify stay real.
+        def inventory(original, rom, manifest):
+            return [dict(source=int(m['msg'], 16), target=int(m['new_addr'], 16),
+                         payload=bytes(rom[int(m['new_addr'], 16):int(m['new_addr'], 16)+m['new_len']]),
+                         relocated=m, game='p1', script=True, profile=('p1_portrait',176,2))
+                    for m in manifest]
+
+        before = (bytes(rom[target:target+record['new_len']]), copy.deepcopy(record),
+                  bytes(rom[0xDE7058:0xDE7060]))
+        with patch('dialogue_spacing.Glyphs', return_value=Labels()), \
+             patch('dialogue_spacing.inventory', side_effect=inventory):
+            applied = apply_repairs(rom, original, manifest, writes, ledger)
+            self.assertEqual([r['source'] for r in applied], ['000100'])
+            self.assertEqual(verify(rom, original, manifest, ledger), 1)
+            self.assertGreater(int(other_records[0]['new_addr'], 16), target)
+            self.assertEqual((bytes(rom[target:target+record['new_len']]), record,
+                              bytes(rom[0xDE7058:0xDE7060])), before)
+            # Reintroducing the obsolete contract must still fail closed,
+            # before any neighbor, ROM, manifest or write-log mutation.
+            stale = dict(messages=[dict(source='00DD0108', profile='p1_portrait',
+                         before_sha256='e3e5d4001199b0213ac81ff70b491bcd278db19737de49d7acb4a8385662dc21')])
+            unchanged = (bytes(rom), copy.deepcopy(manifest), copy.deepcopy(writes))
+            with self.assertRaisesRegex(ValueError, 'stale spacing specification 0xdd0108'):
+                apply_repairs(rom, original, manifest, writes, stale)
+            self.assertEqual((bytes(rom), manifest, writes), unchanged)
+        for address, expected in full.items():
+            self.assertEqual(row_bytes(rom, record, f'0x{address:06X}'), expected)
+            for off,size in record['source_line_fragments'][f'0x{address:06X}']:
+                validate_bteam_payload(bytes(rom[target+off:target+off+size]), load_syl(), address)
+        self.assertEqual([text_segment_cells(rom[target+off:target+off+size])
+                          for off,size in record['display_line_spans']], [24,42])
+        self.assertEqual(record['source_fragment_joiners'], {'0xDD010A':[''], '0xDD0137':[]})
+        self.assertNotIn(0xDD010A, reviewed_bteam_rows())
+        self.assertEqual(reviewed_bteam_half_cells(0xDD010A), 0)
+
     def test_unknown_consumer_allows_only_monotone_space_removal(self):
         from dialogue_spacing import monotone_reflow
         raw='あ　い'.encode('shift_jis')+b'  r'+'う'.encode('shift_jis')+b'\0'

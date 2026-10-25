@@ -398,12 +398,40 @@ class RomDriftTest(unittest.TestCase):
                              'new_len': len(data), 'line_spans': spans, 'ptr_sites': [hex(site)]})
         return rom, manifest
 
+    def test_dd0108_repointer_full_sources_pass_drift_and_mutations_fail(self):
+        from test_dialogue_script_safety import ScriptSafetyTests
+        _, rom, message, _, _ = ScriptSafetyTests().dd0108_fixture()
+        base = {'overrides': {'0x00DD010A': '이 녀석이 모든 것을,조종하고 있었던 거로군!',
+                              '0x00DD0137': '용서 못 해!'}}
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            paths = [Path(tmp) / name for name in ('fixture.gba', 'map.json', 'manifest.json')]
+            paths[1].write_text('[]')
+            def check(data, record):
+                paths[0].write_bytes(data)
+                paths[2].write_text(json.dumps([record]))
+                return check_rom(base, *map(str, paths))
+            self.assertEqual(check(rom, message), [])
+            target = int(message['new_addr'], 16)
+            for off in (target + 24, target + 55, target + 71, target + 4):
+                changed = bytearray(rom)
+                changed[off:off+2] = b'\x81\x49' if off == target + 4 else b'\x81\x40'  # comma, both !, or word separator loss
+                self.assertTrue(check(changed, message))
+            changed = bytearray(rom)
+            changed[0xDE705C] ^= 1
+            self.assertTrue(all(r['cause'] == 'repoint pointer mismatch' for r in check(changed, message)))
+            wrong = json.loads(json.dumps(message))
+            wrong['source_line_fragments']['0xDD010A'][1] = [33, 26]
+            self.assertTrue(check(rom, wrong))
+            wrong = json.loads(json.dumps(message))
+            wrong['source_fragment_joiners']['0xDD010A'] = ['8140']
+            self.assertTrue(check(rom, wrong))
+
     def test_round2_byte_pointer_mapping_mutations(self):
         base = json.loads((ROOT / 'data/bteam_baseline.json').read_text(encoding='utf-8'))
         rom, manifest = self.round2_fixture()
         deferred = [{'address': f'0x{address:08X}', 'cause': 'reviewed deferral'}
                     for address in DEFERRED_ADDRESSES]
-        addr = 0xDD010A
+        addr = 0xD82218
         issue = {'address': f'0x{addr:08X}', 'cause': 'relocated row differs from protected baseline'}
         message = next(m for m in manifest if f'0x{addr:06X}' in m['line_spans'])
         target = int(message['new_addr'], 16)

@@ -10,7 +10,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import qa_bteam_drift as drift
 
 ROOT = Path(__file__).resolve().parents[1]
-ORIG = (ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+ORIG = Path(os.environ.get('AW_NATIVE_ROM',
+    str(ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba'))).read_bytes()
 BASE = json.loads((ROOT / 'data' / 'bteam_baseline.json').read_text(encoding='utf-8'))['overrides']
 RESIDUALS = {int(r['address'], 16): r for r in csv.DictReader(
     (ROOT / 'data' / 'bteam_round2_residuals.tsv').open(encoding='utf-8'), delimiter='\t')}
@@ -29,12 +30,20 @@ def strip_marks(text):
 class OriginalGlyphConsumerTests(unittest.TestCase):
     def test_restored_rows_left_the_residual_list_and_pins(self):
         restored = drift.ROUND2_ORIGINAL_GLYPH_ROWS | set(BATTLE_MENU_RESTORED) | {
-            0xB81B14, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA,
+            0xB81B14, 0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xDD010A, 0xDF228E, 0xDF239E, 0xDF207A, 0xDF21AE, 0xDF25FA, 0xDF26FE, 0xDF2806,
             # b24 restorations (B5): relocated full baselines.
             0xA35258, 0xA35280, 0xB830C8, 0xD94552, 0xD965DE, 0xE0F6E2}
         self.assertFalse(restored & set(RESIDUALS))
         self.assertFalse(restored & PINS)
-        self.assertEqual(len(RESIDUALS), 103)
+        self.assertEqual(len(RESIDUALS), 87)
+        self.assertNotIn(0xD821F0, RESIDUALS)
+        self.assertNotIn(0xEC312E, RESIDUALS)
+        self.assertNotIn(0xDF1EEE, RESIDUALS)
+        self.assertNotIn(0xE10D7A, RESIDUALS)
+        self.assertNotIn(0xDF28C2, RESIDUALS)
+        self.assertNotIn(0xEC3192, RESIDUALS)
+        self.assertNotIn(0xB830AC, RESIDUALS)
+        self.assertNotIn(0xB82FAC, RESIDUALS)
 
     def test_original_rows_used_fullwidth_glyphs(self):
         # The consumer drew these exact SJIS punctuation codes in the original game.
