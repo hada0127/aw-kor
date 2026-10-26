@@ -8526,50 +8526,142 @@ def patch_part2_result_summary_obj(rom):
     return 1
 
 
-def patch_part2_result_failure_overlay_obj(rom):
-    """Redraw the Part 2 operation-failure OBJ overlay in Korean."""
+def _part2_result_banner_art(native, text, *, cracked=False):
+    """Four native 32px OBJ cells, retaining the source's indexed color ramp."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from PIL import Image, ImageDraw, ImageFont
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    from aw_fonts import hadasans_path, hadasans_black_path
 
-    width, height = 128, 32
-    layer = Image.new('P', (width, height), 0)
-    draw = ImageDraw.Draw(layer)
-    font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
+    if len(native) != 64 * 32 or len(text) != 4:
+        raise AssertionError('unexpected Part 2 result banner geometry')
+    # Native face colors are indices 9..1 from lavender at the top to yellow
+    # at the bottom. Derive the exact row stops from the source sheet; its OBJ
+    # palette stays untouched. Index 14 is the native dark brown outline.
+    rows = []
+    for y in range(32):
+        counts = collections.Counter()
+        for sprite in range(4):
+            for x in range(32):
+                tile = sprite * 16 + (y // 8) * 4 + x // 8
+                b = native[tile * 32 + (y % 8) * 4 + (x % 8) // 2]
+                idx = (b >> (4 * (x % 2))) & 15
+                if 1 <= idx <= 9:
+                    counts[idx] += 1
+        rows.append(counts.most_common(1)[0][0] if counts else (9 if y < 16 else 1))
+    outline_seen = any((b & 15) == 14 or (b >> 4) == 14 for b in native)
+    if rows != sorted(rows, reverse=True) or not outline_seen:
+        raise AssertionError('unexpected Part 2 result banner gradient/outline')
 
-    for i, text in enumerate('작전실패'):
-        box = (i * 32, 0, i * 32 + 32, height)
-        for size in range(24, 10, -1):
-            font = ImageFont.truetype(font_path, size)
-            bbox = draw.textbbox((0, 0), text, font=font, stroke_width=1)
-            if bbox[2] - bbox[0] <= 30 and bbox[3] - bbox[1] <= 30:
-                break
-        tw = bbox[2] - bbox[0]
-        th = bbox[3] - bbox[1]
-        x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
-        y = ((box[3] - box[1]) - th) // 2 - bbox[1] - 1
-        from hangul_pixel_fit import paint_native
-        paint_native(layer, text, font, (x, y), fill=1, outline=14)
+    # The two native sheets share the first two Japanese glyphs. Their changed
+    # pixels identify the failure-only fractures without guessing from color
+    # alone: 5 forms white streaks outside the y=15..16 white highlight band,
+    # 10/11 are brown/lavender fracture marks, 13 dark chips, and isolated 0s
+    # are missing pieces. Keep this damage in the same cell coordinates.
+    chip = [[0] * 32 for _ in range(4)]
+    if cracked:
+        from lz77_scan import lz77_decompress
+        with open(P.ROM, 'rb') as stream:
+            original = stream.read()
+        intact = lz77_decompress(original, 0x930520)[0]
+        def sample(data, sprite, x, y):
+            tile = sprite * 16 + (y // 8) * 4 + x // 8
+            b = data[tile * 32 + (y % 8) * 4 + (x % 8) // 2]
+            return (b >> (4 * (x % 2))) & 15
+        for sprite in range(4):
+            for y in range(32):
+                for x in range(32):
+                    here = sample(native, sprite, x, y)
+                    if here in (5, 10, 11, 13) and (here != 5 or y not in (15, 16)):
+                        chip[sprite][y] |= here << (x * 4)
+                    elif sprite < 2 and here == 0 and sample(intact, sprite, x, y):
+                        chip[sprite][y] |= 15 << (x * 4)
 
-    # Runtime OAM places four 32x32 sprites in a row. The source block stores
-    # those four sprite sheets consecutively, each as a 4x4 tile group.
     out = bytearray(64 * 32)
-    src = layer.load()
-    for sprite in range(4):
+    for sprite, ch in enumerate(text):
+        layers = []
+        for path in (hadasans_path(), hadasans_black_path()):
+            font = ImageFont.truetype(path, 384)
+            probe = Image.new('L', (768, 768), 0)
+            ImageDraw.Draw(probe).text((40, 0), ch, font=font, fill=255)
+            layers.append(probe)
+        boxes = [im.point(lambda v: 255 if v >= 128 else 0).getbbox() for im in layers]
+        if None in boxes:
+            raise AssertionError(f'empty Part 2 result glyph: {ch!r}')
+        box = (min(b[0] for b in boxes), min(b[1] for b in boxes),
+               max(b[2] for b in boxes), max(b[3] for b in boxes))
+        face = Image.new('L', (32, 32), 0)
+        face.paste(layers[0].crop(box).resize((27, 27), Image.Resampling.LANCZOS), (2, 2))
+        face = face.point(lambda v: 255 if v >= 110 else 0)
+        if cracked:
+            # Remove small pieces of the face at source fracture crossings.
+            # Outlining happens afterward, so the brown border wraps every
+            # notch instead of continuing across a missing piece.
+            cut = []
+            for y in range(1, 31):
+                for x in range(1, 31):
+                    if not face.getpixel((x, y)):
+                        continue
+                    if not any(not face.getpixel((x + dx, y + dy))
+                               for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))):
+                        continue
+                    damage = (chip[sprite][y] >> (x * 4)) & 15
+                    nearby_fracture = any(
+                        ((chip[sprite][y + dy] >> ((x + dx) * 4)) & 15)
+                        in (5, 10, 11, 13)
+                        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))
+                    )
+                    if (damage in (5, 15) or
+                            damage in (10, 11, 13) and nearby_fracture and
+                            (x + y + sprite) % 2 == 0):
+                        cut.append((x, y))
+            for point in cut:
+                face.putpixel(point, 0)
+        # A 3x3 dilation adds exactly one pixel around the binary face.
+        edge = face.filter(ImageFilter.MaxFilter(3))
+        white_crack = set()
+        if cracked:
+            # Hangul and Japanese strokes differ. Project the native white
+            # streaks to the nearest surviving face pixel (at most 3px),
+            # preserving their row and diagonal direction where possible.
+            for y in range(32):
+                if y in (15, 16):
+                    continue
+                for x in range(32):
+                    if (chip[sprite][y] >> (x * 4)) & 15 != 5:
+                        continue
+                    near = [(abs(xx-x)+2*abs(yy-y), abs(yy-y), abs(xx-x), xx, yy)
+                            for yy in range(max(0, y-1), min(32, y+2))
+                            for xx in range(max(0, x-3), min(32, x+4))
+                            if face.getpixel((xx, yy))]
+                    if near:
+                        _, _, _, xx, yy = min(near)
+                        white_crack.add((xx, yy))
         for ty in range(4):
             for tx in range(4):
                 tile_idx = sprite * 16 + ty * 4 + tx
-                sx = sprite * 32 + tx * 8
-                sy = ty * 8
                 for row in range(8):
                     for col in range(8):
-                        value = src[sx + col, sy + row] & 0x0F
+                        x, y = tx * 8 + col, ty * 8 + row
+                        value = rows[y] if face.getpixel((x, y)) else 14 if edge.getpixel((x, y)) else 0
+                        if cracked and face.getpixel((x, y)):
+                            damage = (chip[sprite][y] >> (x * 4)) & 15
+                            if (x, y) in white_crack:
+                                value = 5
+                            elif damage in (10, 11, 13):
+                                value = damage
                         bi = tile_idx * 32 + row * 4 + col // 2
                         if col & 1:
                             out[bi] |= value << 4
                         else:
                             out[bi] |= value
+    return bytes(out)
+
+
+def patch_part2_result_failure_overlay_obj(rom):
+    """Redraw the Part 2 operation-failure OBJ overlay in Korean."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from lz77_compress import lz77_compress_optimal
+    from lz77_scan import lz77_decompress
 
     patched = 0
     # WYSIWYG: '작전실패' = 4개의 32x32 OBJ(스프라이트 s = 글자 s, 각 16타일 4x4).
@@ -8582,8 +8674,9 @@ def patch_part2_result_failure_overlay_obj(rom):
         if dec is None:
             raise AssertionError(f'invalid Part 2 failure overlay LZ77 block at 0x{off:X}')
         data, consumed = dec
-        if len(data) != len(out):
+        if len(data) != 64 * 32:
             raise AssertionError(f'unexpected Part 2 failure overlay size at 0x{off:X}: {len(data)}')
+        out = _part2_result_banner_art(data, '작전실패', cracked=True)
         rec_label_layout(off, None, _fail_labels)
         comp = lz77_compress_optimal(bytes(out), vram_safe=True)
         if len(comp) > consumed:
@@ -8596,45 +8689,8 @@ def patch_part2_result_failure_overlay_obj(rom):
 def patch_part2_result_success_overlay_obj(rom):
     """Redraw the Part 2 operation-success OBJ overlay in Korean."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from PIL import Image, ImageDraw, ImageFont
     from lz77_compress import lz77_compress_optimal
     from lz77_scan import lz77_decompress
-
-    width, height = 128, 32
-    layer = Image.new('P', (width, height), 0)
-    draw = ImageDraw.Draw(layer)
-    font_path = require_font(OKDANDAN_FONT, 'OkDanDan')
-
-    for i, text in enumerate('작전성공'):
-        box = (i * 32, 0, i * 32 + 32, height)
-        for size in range(24, 10, -1):
-            font = ImageFont.truetype(font_path, size)
-            bbox = draw.textbbox((0, 0), text, font=font, stroke_width=1)
-            if bbox[2] - bbox[0] <= 30 and bbox[3] - bbox[1] <= 30:
-                break
-        tw = bbox[2] - bbox[0]
-        th = bbox[3] - bbox[1]
-        x = box[0] + ((box[2] - box[0]) - tw) // 2 - bbox[0]
-        y = ((box[3] - box[1]) - th) // 2 - bbox[1] - 1
-        from hangul_pixel_fit import paint_native
-        paint_native(layer, text, font, (x, y), fill=1, outline=14)
-
-    out = bytearray(64 * 32)
-    src = layer.load()
-    for sprite in range(4):
-        for ty in range(4):
-            for tx in range(4):
-                tile_idx = sprite * 16 + ty * 4 + tx
-                sx = sprite * 32 + tx * 8
-                sy = ty * 8
-                for row in range(8):
-                    for col in range(8):
-                        value = src[sx + col, sy + row] & 0x0F
-                        bi = tile_idx * 32 + row * 4 + col // 2
-                        if col & 1:
-                            out[bi] |= value << 4
-                        else:
-                            out[bi] |= value
 
     patched = 0
     # WYSIWYG: '작전성공' = 4개의 32x32 OBJ(스프라이트 s = 글자 s, 각 16타일 4x4).
@@ -8647,8 +8703,9 @@ def patch_part2_result_success_overlay_obj(rom):
         if dec is None:
             raise AssertionError(f'invalid Part 2 success overlay LZ77 block at 0x{off:X}')
         data, consumed = dec
-        if len(data) != len(out):
+        if len(data) != 64 * 32:
             raise AssertionError(f'unexpected Part 2 success overlay size at 0x{off:X}: {len(data)}')
+        out = _part2_result_banner_art(data, '작전성공')
         rec_label_layout(off, None, _success_labels)
         comp = lz77_compress_optimal(bytes(out), vram_safe=True)
         if len(comp) > consumed:
