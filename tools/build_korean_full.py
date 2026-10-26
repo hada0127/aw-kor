@@ -6080,7 +6080,7 @@ def patch_part2_battle_obj_labels(rom):
         (0x466068, '화산'),
         (0x466168, '레이저'),
         (0x466268, '팩토리'),
-        (0x466368, 'A레이저'),
+        (0x466368, '헬레이저'),
         (0x466468, '통행불가'),
     ]
     for off, text in compact_terrain_labels:
