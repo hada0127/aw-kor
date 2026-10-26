@@ -2,6 +2,7 @@ import struct
 import unittest
 
 import part2_war_over_newspaper_sheet as m
+from build_korean_full import patch_part2_menu_newspaper_bg
 from lz77_scan import lz77_decompress
 
 ROM_BASE = 0x08000000
@@ -69,13 +70,23 @@ class WarOverNewspaperSheetTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             m.patch(bytearray(original), original)
 
-    def test_menu_patched_sheet_does_not_reach_war_over(self):
-        # whatever is written at 0x5B5D10 (menu collage), the WAR IS OVER loader reads the original copy
+    def test_shared_source_mutation_does_not_reach_war_over(self):
+        # WAR IS OVER still reads its original copy if another writer changes the shared source
         rom = bytearray(self.original)
         rom[m.SOURCE + 8:m.SOURCE + 40] = bytes(32)
         m.patch(rom, self.original)
         target = struct.unpack_from('<I', rom, m.LITERAL)[0] - ROM_BASE
         self.assertEqual(lz77_decompress(rom, target)[0], lz77_decompress(self.original, m.SOURCE)[0])
+
+    def test_shared_source_restored_from_modified_base(self):
+        rom = bytearray(self.original)
+        before, after = m.SOURCE - 1, m.SOURCE + m.SOURCE_SIZE
+        rom[m.SOURCE:after] = bytes([0xA5]) * m.SOURCE_SIZE
+        self.assertEqual(patch_part2_menu_newspaper_bg(rom, self.original), 0)
+        self.assertEqual(rom[m.SOURCE:after], self.original[m.SOURCE:after])
+        self.assertEqual(rom[before], self.original[before])
+        self.assertEqual(rom[after], self.original[after])
+        self.assertEqual(rom, self.original)
 
 
 if __name__ == '__main__':

@@ -2,23 +2,22 @@
 
 Static RE (original ROM, 2026-10-06 candidate6):
 - LZ77 0x5B5D10 (8192 B = 256 BG tiles, 6666 B compressed) is the shared
-  newspaper sheet.  build_korean_full.patch_part2_menu_newspaper_bg redraws all
-  256 tiles as a linear 128x128 Korean collage for the mode-menu newspaper.
+  original newspaper sheet. The 2026-10-26 user decision keeps it unchanged.
 - 11 literals reference the sheet.  Ten of them load it together with the
   collage tilemap 0x5B58E0 (savestates: screen block 0xF800, char block 0x8000)
-  and keep the Korean collage: literals 0x334028, 0x33DDB0, 0x349364, 0x36F7C8,
+  and keep the original collage: literals 0x334028, 0x33DDB0, 0x349364, 0x36F7C8,
   0x36FA40, 0x374CE0, 0x381EF8, 0x388934, and the two intro newspapers
   0x3699C0 / 0x369E6C (sheet -> 0x06002800, 0x5B58E0 entries + 0x140).
   0x4E00BC / 0x4E02E4 loaded next to the intro sheet are 8-bit affine maps of
   the light-beam tiles 0x4DFF70, not sheet users.
-  They all keep the Korean collage.
+  They all keep the original collage.
 - The only consumer with its own arrangement is the WAR IS OVER newspaper:
   0x0836BDB4 ldr r0, =0x085B5D10 (literal 0x36BE98) -> 0x06008000, with tiles
   0x508EC0 -> 0x0600CC00 and tilemap 0x509D6C (810 cells use 66 sheet tiles:
   masthead 201..215/233..247, text lines 168..175, frames 227..232, photo
-  24..31/56..63/88..95).  With the collage those cells render as stripes.
+  24..31/56..63/88..95).  The original sheet now also remains at the shared source.
 
-Fix: copy the original compressed sheet to 0x2F8000 (0xFF padding of the
+Existing relocation: copy the original compressed sheet to 0x2F8000 (0xFF padding of the
 original ROM, no word in the original ROM points into 0x082F8000..+6668) and
 repoint only literal 0x36BE98.  The masthead 'WARS WORLD PAPER' and the small
 text lines of that newspaper stay as in the original (decorative logo/texture).

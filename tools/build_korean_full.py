@@ -6965,106 +6965,12 @@ def patch_part2_link_mode_residual_labels(rom):
     return len(patches)
 
 
-def patch_part2_menu_newspaper_bg(rom):
-    """Replace the Part 2 mode-menu newspaper collage with non-Latin BG art."""
-    # The sheet is shared by 11 loaders.  Ten draw it through the collage tilemap 0x5B58E0 and get this
-    # art; the WAR IS OVER newspaper (tilemap 0x509D6C) is repointed to an original copy by
-    # part2_war_over_newspaper_sheet (candidate6).
-    from PIL import Image, ImageDraw, ImageFont
-    from lz77_compress import lz77_compress_optimal
-    from lz77_scan import lz77_decompress
-
-    off = 0x5B5D10
-    dec = lz77_decompress(rom, off)
-    if dec is None:
-        raise AssertionError(f'invalid Part 2 menu newspaper LZ77 block at 0x{off:X}')
-    data, consumed = dec
-    if len(data) != 0x2000:
-        raise AssertionError(f'unexpected Part 2 menu newspaper size at 0x{off:X}: {len(data)}')
-
-    width = height = 128
-    layer = Image.new('L', (width, height), 1)
-    draw = ImageDraw.Draw(layer)
-    draw.rectangle((0, 0, width - 1, height - 1), fill=1)
-
-    for x in (0, 42, 84, 127):
-        draw.line((x, 0, x, height), fill=11)
-    for y in (0, 20, 42, 64, 86, 108, 127):
-        draw.line((0, y, width, y), fill=11)
-    for y in (4, 25, 47, 69, 91, 113):
-        draw.rectangle((3, y, 39, y + 3), fill=7)
-        draw.rectangle((45, y, 80, y + 2), fill=9)
-        draw.rectangle((88, y, 124, y + 2), fill=7)
-    for y in range(12, 124, 7):
-        draw.line((5, y, 38, y), fill=4)
-        draw.line((47, y, 80, y), fill=4)
-        draw.line((90, y, 124, y), fill=4)
-
-    draw.rectangle((6, 26, 36, 55), outline=12, fill=3)
-    draw.polygon(((9, 53), (20, 33), (35, 53)), fill=10)
-    draw.ellipse((50, 74, 78, 100), outline=13, fill=5)
-    draw.rectangle((89, 30, 121, 58), outline=12, fill=2)
-    draw.line((92, 55, 118, 34), fill=13, width=2)
-    draw.rectangle((6, 83, 38, 105), outline=12, fill=6)
-    draw.arc((7, 84, 37, 115), 190, 350, fill=13, width=2)
-
-    font_path = os.path.join(BASE, 'reference/fonts/Galmuri11-Bold.ttf')
-    font = ImageFont.truetype(font_path, 9)
-    small_font = ImageFont.truetype(font_path, 8)
-
-    def paint_text(text, xy, font_obj, fill=13):
-        mask = Image.new('L', (width, height), 0)
-        md = ImageDraw.Draw(mask)
-        md.text(xy, text, font=font_obj, fill=255)
-        mp = mask.load()
-        lp = layer.load()
-        for yy in range(height):
-            for xx in range(width):
-                if mp[xx, yy] > 96:
-                    lp[xx, yy] = fill
-
-    paint_text('워즈 신문', (43, 4), font, 13)
-    for text, xy in (
-        ('레드스타', (4, 65)),
-        ('블루문', (45, 65)),
-        ('그린어스', (85, 65)),
-        ('옐로코멧', (4, 108)),
-        ('전황 속보', (45, 108)),
-        ('작전 소식', (85, 108)),
-    ):
-        paint_text(text, xy, small_font, 12)
-
-    px = layer.load()
-    out = bytearray()
-    for ty in range(16):
-        for tx in range(16):
-            for row in range(8):
-                for col_pair in range(4):
-                    lo = int(px[tx * 8 + col_pair * 2, ty * 8 + row]) & 0x0F
-                    hi = int(px[tx * 8 + col_pair * 2 + 1, ty * 8 + row]) & 0x0F
-                    out.append(lo | (hi << 4))
-
-    # WYSIWYG: 128x128 BG(16x16 타일). 각 텍스트가 그려진 픽셀박스를 덮는 타일행/열을 기록.
-    # 텍스트는 (x,y)에 9px/8px 폰트로 좌상단 정렬. 폭은 글자수*8 + 여유로 근사.
-    def _box_tids(x, y, text, ch_w=8):
-        tx0 = x // 8
-        tx1 = min(16, (x + len(text) * ch_w + 7) // 8)
-        ty0 = y // 8
-        return [ty0 * 16 + tx for tx in range(tx0, tx1)]
-    rec_label_layout(off, None, [
-        {'text': '워즈 신문', 'tile_ids': _box_tids(43, 4, '워즈 신문', 9)},
-        {'text': '레드스타', 'tile_ids': _box_tids(4, 65, '레드스타')},
-        {'text': '블루문', 'tile_ids': _box_tids(45, 65, '블루문')},
-        {'text': '그린어스', 'tile_ids': _box_tids(85, 65, '그린어스')},
-        {'text': '옐로코멧', 'tile_ids': _box_tids(4, 108, '옐로코멧')},
-        {'text': '전황 속보', 'tile_ids': _box_tids(45, 108, '전황 속보')},
-        {'text': '작전 소식', 'tile_ids': _box_tids(85, 108, '작전 소식')},
-    ])
-    comp = lz77_compress_optimal(bytes(out), vram_safe=True)
-    if len(comp) > consumed:
-        raise AssertionError(f'Part 2 menu newspaper LZ77 overflow: {len(comp)} > {consumed}')
-    rom[off:off + consumed] = comp + bytes(consumed - len(comp))
-    return len(out) // 32
+def patch_part2_menu_newspaper_bg(rom, orig):
+    """Restore the original Part 2 newspaper sheet; preserve its shared tilemap."""
+    # User chose option A on 2026-10-26: the English headlines remain decorative.
+    off, size = 0x5B5D10, 6666
+    rom[off:off + size] = orig[off:off + size]
+    return 0
 
 
 def patch_common_nintendo_presents_bg(rom):
@@ -15158,7 +15064,7 @@ def _build(args, publication):
     st['part2_mode_menu_obj_labels'] = patch_part2_mode_menu_obj_labels(rom)
     st['part2_sound_room_control_labels'] = patch_part2_sound_room_control_labels(rom)
     st['part2_link_mode_residual_labels'] = patch_part2_link_mode_residual_labels(rom)
-    st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom)
+    st['part2_menu_newspaper_bg'] = patch_part2_menu_newspaper_bg(rom, orig)
     st['part2_op_select_country_bg'] = patch_part2_operation_select_country_bg(rom)
     # Mode4 풀스크린 전략지도(0xC2FD70/0xC30EE8) 영어 지명 한글화. 표시 확정(fresh-run SWI
     # 로그: LZ77→EWRAM→DMA 0x06000000/0x06004B00 = Mode4 fb). 실측 라벨 3건만(레드스타 궁전/
@@ -15276,8 +15182,7 @@ def _build(args, publication):
     st['part2_attack_range_legend'] = p2_atk_legend.patch(rom, orig)
     import part2_recap_labels as p2_recap
     st['part2_recap_labels'] = p2_recap.patch(rom, orig)
-    # candidate6: the WAR IS OVER newspaper (literal 0x36BE98) reads its own original copy of the
-    # shared sheet 0x5B5D10; the Korean menu collage stays for the 10 collage-tilemap loaders.
+    # Keep the existing WAR IS OVER relocation; both it and the menu now use original art.
     import part2_war_over_newspaper_sheet as p2_wo_sheet
     st['part2_war_over_newspaper_sheet'] = p2_wo_sheet.patch(rom, orig)
     for _source, _, _, _, _text, _ in rank_labels:
