@@ -1682,5 +1682,6 @@ Round 4에서 DOWN/UP으로 도움말 두 페이지를 원본/후보 같은 SRAM
 ## 2026-10-23 Phase B 조사 중 확인한 막다른 길
 
 - Link: 위 「로컬 2코어 접속 미재현」의 원인은 `tools/mgba_link_harness.c`가 client를 `GBALoadMB`(앞 256KiB만 EWRAM)로 읽어 full cartridge client가 부팅하지 않는 데 있다. 원본·후보 모두 같고 IRQ 문제가 아니다. client full ROM 로드 경로 없이 재시도하지 않는다([`PHASE_B_RE.md`](reports/name_grid_2026-10-23/PHASE_B_RE.md) §9).
+- 2026-10-26 보충: 위 제약은 당시 하네스에 해당한다. 현재 소스에는 두 카트리지용 `--rom2 CLIENT_ROM`이 있으며, linked state 재개에는 `savepair/loadpair`를 사용한다. 예전 `savestate/loadstate` 개별 코어 명령은 링크 안전성을 보장하지 않는다. W3의 b43+ staged replay 실패는 이를 사용한 경로이며, 당시 ROM 자체 결함의 증거가 아니다. 새 경로의 검증 결과는 `temp/unseen_20261026/w9/REPORT_r2.md`를 따른다. 같은 실행의 화면 일치가 별도 프로세스의 CPU 위상 동일성까지 증명하지는 않는다.
 - `qa_text_fit` overflow 출력 수(273)는 `check_text` 이벤트 수이고 고유 주소 수(259)가 아니다. 13주소가 같은 인자로 여러 번 불린다. 「고유 주소 수 = 출력 수」를 요구한 첫 비교는 EXIT 3이었다. 이벤트 수·고유 (주소, 유형) 집합·발생 횟수를 따로 대조한다([`PHASE_B_QA.md`](reports/name_grid_2026-10-23/PHASE_B_QA.md) §3).
 - 하네스: 생성된 mGBA `flags.h`만 따르면 라이브러리 실제 `C_DEFINES`(`ENABLE_DIRECTORIES` 등)와 struct 배치가 달라 SIGSEGV가 난다. `flags.make`의 `C_DEFINES` 전체를 쓴다. macOS에서 `nice`(SIP 보호 바이너리)를 거치면 `DYLD_LIBRARY_PATH`가 지워져 dyld 실패가 난다. 실행 파일 rpath `@executable_path/build`가 공식 build 폴더를 가리키도록 symlink를 둔다(T5 `harness/build`).

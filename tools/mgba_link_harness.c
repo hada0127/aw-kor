@@ -2,10 +2,11 @@
 // Build (Linux, system libmgba 0.10.5):
 //   cc -O2 -Wall -Wextra tools/mgba_link_harness.c -lmgba -o temp/release_C/verify4b/mgba_link_harness
 // Usage:
-//   mgba_link_harness [--bios PATH] [--host-skip-bios] HOST_ROM CLIENT_MB_OR_- LOG_FILE [HOST_SAVE_SOURCE]
+//   mgba_link_harness [--bios PATH] [--host-skip-bios] [--rom2 PATH] HOST_ROM CLIENT_MB_OR_- LOG_FILE [HOST_SAVE_SOURCE]
 // With --bios both cores load that BIOS file (real BIOS SWIs, incl. MultiBoot SWI 0x25).
-// CLIENT '-' leaves the client cartridge slot empty: with a BIOS it boots the
-// BIOS and waits for a native MultiBoot download from the host.
+// CLIENT '-' leaves the client cartridge slot empty by default: with a BIOS it
+// waits for native MultiBoot. With --rom2, '-' is required and the second core
+// instead boots that full cartridge.
 //
 // SIO: a deterministic in-process driver replaces mGBA's threaded lockstep.
 // Both cores are interleaved by global cycle count in slices bounded by a
@@ -20,7 +21,9 @@
 // next frame boundary, then capture); dumpmem PLAYER ADDR LEN FILE;
 // w16/w32 PLAYER ADDR VALUE; setreg PLAYER NAME VALUE; regs PLAYER;
 // watchaddr PLAYER ADDR LEN r|w|a LOG_FILE|KEEP; siotrace FILE; status; sio;
-// savestate/loadstate PLAYER FILE; loadmb FILE (cheat fallback); quit.
+// savepair/loadpair FILE (link-safe; savepair requires destination on the
+// same filesystem as repository temp/); savestate/loadstate PLAYER FILE
+// (legacy, not link-safe); loadmb FILE (cheat fallback); quit.
 #include <mgba/flags.h>
 #include <mgba/core/core.h>
 #include <mgba/core/config.h>
@@ -37,6 +40,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -84,6 +88,44 @@ static struct mTimingEvent xfer_event;
 static int xfer_active, xfer_mode;
 static uint16_t xfer_multi[4];
 static uint32_t xfer_normal[2];
+
+#define PAIR_VERSION 4
+typedef struct PairHeader {
+    char magic[8];
+    uint32_t version, size;
+    uint64_t state_size[2];
+    uint64_t state_hash[2];
+    int64_t base[2];
+    int32_t tick_left[2], xfer_left;
+    int32_t linked, xfer_active, xfer_mode;
+    int32_t node_mode[2][2];
+    uint16_t siocnt[2], rcnt[2];
+    uint16_t keys_active[2];
+    uint16_t sio_data[2][6]; // IO words 0x120..0x12B, including SIOMLT_SEND
+    uint16_t multi[4];
+    uint32_t normal[2];
+    uint64_t multi_count, normal_count;
+    uint64_t header_hash;
+} PairHeader;
+
+static uint64_t hash_buffer(const void* data, size_t size) {
+    const unsigned char* bytes=data;
+    uint64_t h=UINT64_C(14695981039346656037);
+    for (size_t i=0;i<size;i++) { h^=bytes[i]; h*=UINT64_C(1099511628211); }
+    return h;
+}
+
+static uint64_t hash_file(FILE* f, uint64_t size) {
+    uint64_t h=UINT64_C(14695981039346656037);
+    unsigned char buf[8192];
+    while (size) {
+        size_t n=size<sizeof(buf)?(size_t)size:sizeof(buf);
+        if (fread(buf,1,n,f)!=n) return 0;
+        for (size_t i=0;i<n;i++) { h^=buf[i]; h*=UINT64_C(1099511628211); }
+        size-=n;
+    }
+    return h;
+}
 
 static struct GBA* gba_of(Player* p) { return (struct GBA*)p->core->board; }
 static uint64_t now_of(Player* p) { return p->core?mTimingGlobalTime(&gba_of(p)->timing):0; }
@@ -361,7 +403,7 @@ static int setup_core(Player* p, int id, const char* rom_path, const char* mb_pa
             fprintf(stderr,"BIOS load failed for player %d\n",id); return 0;
         }
     }
-    if (id==0) {
+    if (id==0 || (id==1 && !mb_path)) {
         if (!p->core->loadROM(p->core,vf)) return 0;
         if (save_path) {
             struct VFile* sv=VFileOpen(save_path,O_RDWR);
@@ -383,7 +425,7 @@ static int setup_core(Player* p, int id, const char* rom_path, const char* mb_pa
 static int clone_save(const char* source) {
     if (!source) return 1;
     FILE* in=fopen(source,"rb"); if (!in) return 0;
-    snprintf(private_save,sizeof(private_save),"temp/release_C/verify4b/save_probe_XXXXXX");
+    strcpy(private_save,"temp/save_probe_XXXXXX");
     int fd=mkstemp(private_save); if (fd<0) {fclose(in);return 0;}
     unsigned char block[8192]; size_t n; int ok=1;
     while ((n=fread(block,1,sizeof(block),in))>0) {
@@ -394,30 +436,268 @@ static int clone_save(const char* source) {
     if (!ok) {unlink(private_save); private_save[0]=0;}
     return ok;
 }
+static void cleanup_private_save(void) {
+    if (private_save[0]) { unlink(private_save); private_save[0]=0; }
+}
+static int temporary_state(char path[64]) {
+    strcpy(path,"temp/mgba_link_state_XXXXXX");
+    int fd=mkstemp(path);
+    if (fd>=0) close(fd);
+    return fd>=0;
+}
+static int copy_bytes(FILE* in, FILE* out, uint64_t size) {
+    unsigned char buf[8192];
+    while (size) {
+        size_t n=size<sizeof(buf)?(size_t)size:sizeof(buf);
+        if (fread(buf,1,n,in)!=n || fwrite(buf,1,n,out)!=n) return 0;
+        size-=n;
+    }
+    return 1;
+}
+typedef struct PairCheckpoint {
+    PairHeader header;
+    unsigned char* state[2];
+    size_t state_size[2];
+    unsigned char* savedata[2];
+    size_t savedata_size[2];
+} PairCheckpoint;
+
+static void free_checkpoint(PairCheckpoint* c) {
+    for (int i=0;i<2;i++) { free(c->state[i]); free(c->savedata[i]); }
+}
+
+static void capture_driver(PairHeader* h) {
+    h->linked=linked; h->xfer_active=xfer_active; h->xfer_mode=xfer_mode;
+    h->xfer_left=xfer_active ? mTimingUntil(&gba_of(&players[0])->timing,&xfer_event) : 0;
+    h->multi_count=transfers_multi; h->normal_count=transfers_normal;
+    memcpy(h->multi,xfer_multi,sizeof(h->multi));
+    memcpy(h->normal,xfer_normal,sizeof(h->normal));
+    for (int i=0;i<2;i++) {
+        Player* p=&players[i]; struct GBASIO* sio=&gba_of(p)->sio;
+        h->base[i]=time_base[i]; h->siocnt[i]=sio->siocnt; h->rcnt[i]=sio->rcnt;
+        h->keys_active[i]=gba_of(p)->keysActive;
+        memcpy(h->sio_data[i],&gba_of(p)->memory.io[REG_SIOMULTI0>>1],sizeof(h->sio_data[i]));
+        h->node_mode[i][0]=p->multi_node.mode;
+        h->node_mode[i][1]=p->normal_node.mode;
+        h->tick_left[i]=mTimingUntil(&gba_of(p)->timing,&p->tick);
+    }
+}
+
+static void apply_driver(const PairHeader* h) {
+    linked=h->linked;
+    for (int i=0;i<2;i++) {
+        Player* p=&players[i]; struct GBASIO* sio=&gba_of(p)->sio;
+        p->multi_node.mode=h->node_mode[i][0]; p->normal_node.mode=h->node_mode[i][1];
+        sio->activeDriver=p->multi_node.mode>=0 ? &p->multi_node.d :
+                          p->normal_node.mode>=0 ? &p->normal_node.d : NULL;
+        sio->siocnt=h->siocnt[i]; sio->rcnt=h->rcnt[i];
+        memcpy(&gba_of(p)->memory.io[REG_SIOMULTI0>>1],h->sio_data[i],sizeof(h->sio_data[i]));
+        gba_of(p)->keysActive=h->keys_active[i];
+        time_base[i]=h->base[i];
+        struct mTiming* tm=&gba_of(p)->timing;
+        if (mTimingIsScheduled(tm,&p->tick)) mTimingDeschedule(tm,&p->tick);
+        mTimingSchedule(tm,&p->tick,h->tick_left[i]);
+    }
+    struct mTiming* tm=&gba_of(&players[0])->timing;
+    if (mTimingIsScheduled(tm,&xfer_event)) mTimingDeschedule(tm,&xfer_event);
+    xfer_active=h->xfer_active; xfer_mode=h->xfer_mode;
+    memcpy(xfer_multi,h->multi,sizeof(xfer_multi));
+    memcpy(xfer_normal,h->normal,sizeof(xfer_normal));
+    transfers_multi=h->multi_count; transfers_normal=h->normal_count;
+    if (xfer_active) mTimingSchedule(tm,&xfer_event,h->xfer_left);
+}
+
+static int capture_checkpoint(PairCheckpoint* c) {
+    capture_driver(&c->header);
+    if (c->header.tick_left[0]<0 || c->header.tick_left[1]<0 ||
+        c->header.xfer_left<0) return 0;
+    for (int i=0;i<2;i++) {
+        struct GBASavedata* save=&gba_of(&players[i])->memory.savedata;
+        c->savedata_size[i]=GBASavedataSize(save);
+        if (c->savedata_size[i] && save->data) {
+            c->savedata[i]=malloc(c->savedata_size[i]);
+            if (!c->savedata[i]) return 0;
+            memcpy(c->savedata[i],save->data,c->savedata_size[i]);
+        } else c->savedata_size[i]=0;
+        struct VFile* f=VFileMemChunk(NULL,0);
+        if (!f) return 0;
+        int saved=mCoreSaveStateNamed(players[i].core,f,SAVESTATE_ALL);
+        ssize_t size=f->size(f);
+        if (!saved || size<=0 || size>64*1024*1024 || f->seek(f,0,SEEK_SET)<0) {
+            f->close(f); return 0;
+        }
+        c->state[i]=malloc((size_t)size);
+        if (!c->state[i] || f->read(f,c->state[i],(size_t)size)!=size) {
+            f->close(f); return 0;
+        }
+        c->state_size[i]=(size_t)size;
+        f->close(f);
+    }
+    return 1;
+}
+
+static int restore_checkpoint(const PairCheckpoint* c) {
+    int restored=1;
+    for (int i=0;i<2;i++) {
+        struct VFile* f=VFileFromConstMemory(c->state[i],c->state_size[i]);
+        int loaded=f && mCoreLoadStateNamed(players[i].core,f,SAVESTATE_ALL);
+        if (f) f->close(f);
+        if (!loaded) restored=0;
+    }
+    apply_driver(&c->header);
+    // SAVESTATE_ALL may write through mGBA's MAP_SHARED save mapping.
+    for (int i=0;i<2;i++) {
+        struct GBASavedata* save=&gba_of(&players[i])->memory.savedata;
+        if (c->savedata_size[i]) {
+            if (!save->data || GBASavedataSize(save)!=c->savedata_size[i]) restored=0;
+            else memcpy(save->data,c->savedata[i],c->savedata_size[i]);
+        }
+    }
+    return restored;
+}
+static int pair_state(const char* path, int loading) {
+    char scratch[2][64]={{0},{0}};
+    char pair_tmp[64]={0};
+    PairCheckpoint checkpoint={0};
+    FILE* pair=NULL;
+    PairHeader h={0};
+    int ok=0, mutated=0;
+    if (!path) return 0;
+    if (loading) {
+        pair=fopen(path,"rb");
+        if (!pair || fread(&h,sizeof(h),1,pair)!=1 ||
+            memcmp(h.magic,"MGLPAIR",8) || h.version!=PAIR_VERSION || h.size!=sizeof(h) ||
+            h.header_hash!=hash_buffer(&h,offsetof(PairHeader,header_hash)) ||
+            !h.state_size[0] || !h.state_size[1] ||
+            h.state_size[0]>64*1024*1024 || h.state_size[1]>64*1024*1024 ||
+            h.linked<0 || h.linked>1 || h.xfer_active<0 || h.xfer_active>1 ||
+            (h.xfer_active && (h.xfer_left<0 ||
+                h.xfer_left>GBASIOCyclesPerTransfer[0][1])) ||
+            (!h.xfer_active && h.xfer_left!=0) ||
+            (h.xfer_active && h.xfer_mode!=SIO_MULTI &&
+             h.xfer_mode!=SIO_NORMAL_8 && h.xfer_mode!=SIO_NORMAL_32) ||
+            h.tick_left[0]<0 || h.tick_left[0]>TICK ||
+            h.tick_left[1]<0 || h.tick_left[1]>TICK) goto done;
+        for (int i=0;i<2;i++) {
+            int m=h.node_mode[i][0], n=h.node_mode[i][1];
+            if ((m!=-1 && m!=SIO_MULTI) ||
+                (n!=-1 && n!=SIO_NORMAL_8 && n!=SIO_NORMAL_32) ||
+                (m!=-1 && n!=-1) || (h.keys_active[i]&~0x3FF)) goto done;
+        }
+        if (h.xfer_active) {
+            int max_delay;
+            if (h.xfer_mode==SIO_MULTI) {
+                if (h.node_mode[0][0]!=SIO_MULTI) goto done;
+                max_delay=GBASIOCyclesPerTransfer[GBASIOMultiplayerGetBaud(h.siocnt[0])][1];
+            } else {
+                if (h.node_mode[0][1]!=h.xfer_mode) goto done;
+                max_delay=(h.xfer_mode==SIO_NORMAL_32?32:8)*((h.siocnt[0]&2)?8:64);
+            }
+            if (h.xfer_left>max_delay) goto done;
+        }
+        for (int i=0;i<2;i++) {
+            if (!temporary_state(scratch[i])) goto done;
+            FILE* out=fopen(scratch[i],"wb");
+            if (!out) goto done;
+            int copied=copy_bytes(pair,out,h.state_size[i]);
+            if (fclose(out) || !copied) goto done;
+            FILE* verify=fopen(scratch[i],"rb");
+            if (!verify) goto done;
+            uint64_t hash=hash_file(verify,h.state_size[i]);
+            fclose(verify);
+            if (!hash || hash!=h.state_hash[i]) goto done;
+        }
+        if (fgetc(pair)!=EOF || ferror(pair)) goto done;
+        // Capture both cores, mapped savedata and link state before either load.
+        if (!capture_checkpoint(&checkpoint)) goto done;
+        for (int i=0;i<2;i++) {
+            struct VFile* f=VFileOpen(scratch[i],O_RDONLY);
+            mutated=1; // mCoreLoadStateNamed can alter savedata even on failure
+            int loaded=f && mCoreLoadStateNamed(players[i].core,f,SAVESTATE_ALL);
+            if (f) f->close(f);
+            if (!loaded) goto done;
+        }
+        apply_driver(&h);
+    } else {
+        memcpy(h.magic,"MGLPAIR",8); h.version=PAIR_VERSION; h.size=sizeof(h);
+        capture_driver(&h);
+        if (h.xfer_left<0) goto done;
+        for (int i=0;i<2;i++) {
+            Player* p=&players[i];
+            if (h.tick_left[i]<0 || !temporary_state(scratch[i])) goto done;
+            struct VFile* f=VFileOpen(scratch[i],O_WRONLY|O_TRUNC);
+            int saved=f && mCoreSaveStateNamed(p->core,f,SAVESTATE_ALL);
+            if (f) f->close(f);
+            struct stat st;
+            if (!saved || stat(scratch[i],&st) || st.st_size<=0) goto done;
+            h.state_size[i]=st.st_size;
+            FILE* in=fopen(scratch[i],"rb");
+            if (!in) goto done;
+            h.state_hash[i]=hash_file(in,h.state_size[i]);
+            fclose(in);
+            if (!h.state_hash[i]) goto done;
+        }
+        h.header_hash=hash_buffer(&h,offsetof(PairHeader,header_hash));
+        strcpy(pair_tmp,"temp/mgba_link_pair_XXXXXX");
+        int fd=mkstemp(pair_tmp);
+        if (fd<0) goto done;
+        pair=fdopen(fd,"wb");
+        if (!pair) {close(fd); goto done;}
+        if (fwrite(&h,sizeof(h),1,pair)!=1) goto done;
+        for (int i=0;i<2;i++) {
+            FILE* in=fopen(scratch[i],"rb");
+            if (!in) goto done;
+            int copied=copy_bytes(in,pair,h.state_size[i]);
+            fclose(in);
+            if (!copied) goto done;
+        }
+        if (fflush(pair) || fsync(fileno(pair))) goto done;
+        if (fclose(pair)) { pair=NULL; goto done; }
+        pair=NULL;
+        if (rename(pair_tmp,path)) goto done;
+        pair_tmp[0]=0;
+    }
+    ok=1;
+done:
+    if (pair) fclose(pair);
+    for (int i=0;i<2;i++) if (scratch[i][0]) unlink(scratch[i]);
+    if (pair_tmp[0]) unlink(pair_tmp);
+    if (loading && !ok && mutated) {
+        if (!restore_checkpoint(&checkpoint)) {
+            fprintf(stderr,"FATAL loadpair rollback failed\n");
+            exit(3);
+        }
+    }
+    free_checkpoint(&checkpoint);
+    return ok;
+}
 int main(int argc, char** argv) {
-    const char* bios=NULL; int host_skip=0;
+    const char* bios=NULL, *rom2=NULL; int host_skip=0;
     int a=1;
     while (a<argc && !strncmp(argv[a],"--",2)) {
         if (!strcmp(argv[a],"--bios") && a+1<argc) { bios=argv[a+1]; a+=2; }
+        else if (!strcmp(argv[a],"--rom2") && a+1<argc) { rom2=argv[a+1]; a+=2; }
         else if (!strcmp(argv[a],"--host-skip-bios")) { host_skip=1; a++; }
         else { fprintf(stderr,"unknown option %s\n",argv[a]); return 2; }
     }
     int rest=argc-a;
     if (rest<3 || rest>4) {
-        fprintf(stderr,"usage: %s [--bios PATH] [--host-skip-bios] HOST_ROM CLIENT_MB_OR_- LOG_FILE [HOST_SAVE_COPY]\n",argv[0]);
+        fprintf(stderr,"usage: %s [--bios PATH] [--host-skip-bios] [--rom2 PATH] HOST_ROM CLIENT_MB_OR_- LOG_FILE [HOST_SAVE_COPY]\n",argv[0]);
         return 2;
     }
     const char* rom=argv[a]; const char* mb=argv[a+1]; const char* logp=argv[a+2];
+    if (rom2 && strcmp(mb,"-")) { fprintf(stderr,"--rom2 requires CLIENT_MB_OR_- to be -\n"); return 2; }
     const char* save=rest==4?argv[a+3]:NULL;
     if (save && !clone_save(save)) { fprintf(stderr,"cannot clone host save\n"); return 2; }
+    if (save && atexit(cleanup_private_save)) { cleanup_private_save(); return 2; }
     log_file=fopen(logp,"w"); if (!log_file) return 2;
     mLogSetDefaultLogger(&logger);
     xfer_event.context=NULL; xfer_event.callback=finish_transfer; xfer_event.name="link xfer"; xfer_event.priority=0x80;
     if (!setup_core(&players[0],0,rom,NULL,save?private_save:NULL,bios,host_skip) ||
-        !setup_core(&players[1],1,rom,mb,NULL,bios,0)) {
+        !setup_core(&players[1],1,rom2?rom2:rom,rom2?NULL:mb,NULL,bios,0)) {
         fprintf(stderr,"failed to initialize cores\n"); return 2;
     }
-    fprintf(stderr,"READY 2 cores; client=%s; bios=%s; host save=%s\n",mb,bios?bios:"HLE",save?"private copy":"none");
+    fprintf(stderr,"READY 2 cores; client=%s; bios=%s; host save=%s\n",rom2?"cartridge":mb,bios?bios:"HLE",save?"private copy":"none");
     char line[4096];
     while (fgets(line,sizeof(line),stdin)) {
         char* cmd=strtok(line," \t\r\n"); if (!cmd) continue;
@@ -466,6 +746,11 @@ int main(int argc, char** argv) {
             }
             printf("%s %s %d frame=%u\n",shot(&players[id],path)?"OK":"ERR",cmd,id,
                    players[id].core->frameCounter(players[id].core));
+        } else if (!strcmp(cmd,"savepair") || !strcmp(cmd,"loadpair")) {
+            char* path=strtok(NULL," \t\r\n");
+            int loading=!strcmp(cmd,"loadpair");
+            int ok=pair_state(path,loading);
+            printf("%s %s %s xfer_active=%d\n",ok?"OK":"ERR",cmd,path?path:"(null)",xfer_active);
         } else if (!strcmp(cmd,"savestate") || !strcmp(cmd,"loadstate")) {
             int loading=!strcmp(cmd,"loadstate");
             char* x=strtok(NULL," \t\r\n"),*path=strtok(NULL," \t\r\n");
@@ -531,11 +816,12 @@ int main(int argc, char** argv) {
             players[id].core->readRegister(players[id].core,"cpsr",&cpsr);
             printf("OK regs %d pc=%08X sp=%08X lr=%08X cpsr=%08X\n",id,pc,sp,lr,cpsr);
         } else if (!strcmp(cmd,"status")) {
-            printf("OK status host=%u client=%u t=%llu,%llu xfer_multi=%lu xfer_normal=%lu watch=%u,%u\n",
+            printf("OK status host=%u client=%u t=%llu,%llu xfer_multi=%lu xfer_normal=%lu watch=%u,%u keys=%u,%u xfer_active=%d\n",
                    players[0].core->frameCounter(players[0].core),
                    players[1].core->frameCounter(players[1].core),
                    (unsigned long long)now_of(&players[0]),(unsigned long long)now_of(&players[1]),
-                   transfers_multi,transfers_normal,players[0].watch_count,players[1].watch_count);
+                   transfers_multi,transfers_normal,players[0].watch_count,players[1].watch_count,
+                   gba_of(&players[0])->keysActive,gba_of(&players[1])->keysActive,xfer_active);
         } else if (!strcmp(cmd,"sio")) {
             char buf[2][160];
             for (int id=0;id<2;id++) {
@@ -556,6 +842,6 @@ int main(int argc, char** argv) {
         for (unsigned j=0;j<i;j++) if (players[id].watches[j].file==file) prior=1;
         if (!prior) fclose(file);
     }
-    if (private_save[0]) unlink(private_save);
+    cleanup_private_save();
     return 0;
 }
