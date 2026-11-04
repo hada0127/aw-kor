@@ -12,10 +12,16 @@ END, SITE = 0xD82218, 0xB05968
 KEY = SOURCE_KEY = '0xD821F0'
 ARENA_START, ARENA_END, HIGH_WATER = 0xA3D000, 0xAFF000, 0xA8D822
 APPEND = (HIGH_WATER + 3) & ~3
-TEXT = '선택 중인 지형,병종을 배치합니다.'
+# plan_C B-pin (2026-11-04 user, tools/bpin_contract.py): the late append writes the
+# reviewed row. SOURCE_* stay the upstream source authority/encoding preflight binds.
+# dialogue_repoint pins this row at 38 bytes, so the 36-byte reviewed row keeps one
+# trailing blank cell (8140).
+SOURCE_TEXT = '선택 중인 지형,병종을 배치합니다.'
+TEXT = '선택한 지형, 병종을 배치합니다.'
 NATIVE = bytes.fromhex('914991f082b582c482a282e9926e8c60814195ba8eed82f0947a927582b582dc82b7814200000000')
 CURRENT = bytes.fromhex('8dc291d781408fef8fa58140905492dc81408d438fe08f8181408ccc915492b489d489e200000000')
-ROW = bytes.fromhex('8dc291d781408fef8fa58140905492dc81418d438fe08f8181408ccc915492b489d489e28142')
+SOURCE_ROW = bytes.fromhex('8dc291d781408fef8fa58140905492dc81418d438fe08f8181408ccc915492b489d489e28142')
+ROW = bytes.fromhex('8dc291d792af8140905492dc814181408d438fe08f8181408ccc915492b489d489e281428140')
 PAYLOAD = ROW + b'\0\0'
 PROFILE = ('p1_editor_help',152,1)
 RETAINED_WRITER = 'd821f0-retained-native'
@@ -97,7 +103,8 @@ def check_current_pins(rom):
         verify_editor_gate(rom)
     from part1_editor_help_dictionary import verify, dictionary
     verify(rom)  # fixed source hashes, exact 70-entry order and loader
-    codes = {dictionary(rom)[i:i+2] for i in range(0,140,2)}
+    help_codes = dictionary(rom)
+    codes = {help_codes[i:i+2] for i in range(0,len(help_codes)-2,2)}
     if not {ROW[i:i+2] for i in range(0,38,2)} - {b'\x81\x40'} <= codes:
         raise AssertionError('D821F0 Help dictionary lacks required glyph')
 
@@ -132,8 +139,8 @@ def preflight(original, rom, manifest, write_log, *, line_index, slots,
             or not arena_start <= APPEND < APPEND+40 <= arena_end <= len(rom)):
         raise AssertionError('D821F0 scoped arena/alignment/capacity changed')
     if ([(a,item[0]) for a,item in line_index.items() if MESSAGE <= a < END] != [(FIRST,36)]
-            or slots.get(FIRST) != 36 or source_text(FIRST) != TEXT
-            or bytes(fixed_bytes(FIRST)) != ROW):
+            or slots.get(FIRST) != 36 or source_text(FIRST) != SOURCE_TEXT
+            or bytes(fixed_bytes(FIRST)) != SOURCE_ROW):
         raise AssertionError('D821F0 source36/full authority38 changed')
     if valid_codes is None or not {int.from_bytes(ROW[i:i+2],'big') for i in range(0,38,2)
                                   if ROW[i] != 0x81} <= set(valid_codes):
@@ -225,8 +232,9 @@ CURRENT_PINS = (
     (0xD832CC,0xD832D4,'f27b1b63e6d93f457bbdf85166d8f4d0307372155b7cd6f7c806977a84c80e58'),
     (0xB0584C,0xB058E0,'4674e7f0e7523d87939128b21eca30a059997111dc1c1803ad7670af371da2a4'),
     (0xB1BEAC,0xB1BF48,'07fa5011b089a1a6ce66284aa7b69b5b6bbe089ce4943829418dc6b85a7d5809'),
-    (0xD82124,0xD821EA,'4126b746da5ad3bf06ca1f1e413b013a0064437c8d5e635145bfa05a6b2c7459'),
-    (0xD821F0,0xD82292,'333b2daa2e08e44281396689ef4776d8a99162e1b53b8de33d98c85ca0dc5141'),
+    # plan_C B-pin: reviewed native Help rows + D82218 retained source (bpin_contract).
+    (0xD82124,0xD821EA,'5fb7c9ecabda9e9455c01ada064c7d2062f037f350d54cb7f743fd3e6f30fd4f'),
+    (0xD821F0,0xD82292,'63cf4137a1ebc3c70de35419fc2b6eb05c651b2d9c1c36d873e1fec0436ea49b'),
     (0xD81C24,0xD81CFE,'063f0602773c7dc3be14eda80885164d469fd8bd48b6a427a34051754e4537be'),
     (0xB058F8,0xB05964,'8dabcd4fef8db6075548f1ae418253af538cae350573c69d28dff3cd67cbecaf'),
     (0xB0597C,0xB05BC0,'20bcfc13415ab32f3f7903ca8cf69c04639d5592e4e9e914f787797ecb79d492'),
@@ -235,7 +243,8 @@ CURRENT_PINS = (
     (0xEFE5E4,0xEFE698,'7fd7adc86e8f9ca89d66d0d96f2393d0d8ffadeaddeeda9427c9c724bb66627f'),
     (0xF30600,0xF30800,'708d168279bc67ee2302a1df30805c97813a27cdc956b7aa04839b4274ce0ee5'),
     (0xF31E00,0xF32000,'b7f08292c6ab3deec8694695e2ba577d998d653442b2adf62241b228a00b5883'),
-    (0xF51000,0xF5108E,'2d4ed20de2c1735d99066235997254e00f0095cb0da8b7cd0d643b6fba340cc2'),
+    # plan_C B-pin: 66-code Help dictionary (was 70) + zero tail of the 0x8E allocation.
+    (0xF51000,0xF5108E,'67c9d99035c9adc55f61390514c0713954f684fe253be4d91aa55ba22ec46fa6'),
     (0xF51200,0xF51238,'72deef4beab2d53a524f42eb9b850714b09f8d62d3fff2596bb87696e4e4ed11'),
     (0xB12CB4,0xB12CBC,'fe1ef3d4978ca627e5884cd0f0daf9275eb9b29fadae9686846d878f76f136ef'),
     (0xD81D30,0xD81D80,'ceb6d4c358669559163f04ece4218bbfbd11c577ef7f2af2d07191d05fa11355'),

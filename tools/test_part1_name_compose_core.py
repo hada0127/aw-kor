@@ -13,6 +13,8 @@ T2b(p1.c, -DNC1_HOST 로 가짜 확장표·사전 캐시·VRAM 배열에 연결)
   ⑥ nc1_pad 경계(len=0/3/max, max 6/8, +0x2C+max*2 밖 불변) ⑦ 한글/비한글 치환(i≥len·bit15 아님·표 없음은 원 코드)
   ⑧ placeholder 재사용(같은 칸 두 번) ⑨ 캐시 부재 시 치환 안 함·VRAM 무변경 ⑩ 업로드 바이트 = KOR_BASE 원본(리맵 없음)
   ⑪ host 33 자모 업로드·tail 초기화·max>8 절단.
+  L3(2026-11-04 fixB) legacy host 코드 칸 → placeholder 에 FONT_BASE 원래 글리프(가타카나 표·확장표 비-bit15),
+  host 아닌 가나·해석 불가 host 는 원 코드 · 원본/빌드 ROM 리터럴 대조 · T0 런타임 사전 VRAM 과 42코드 일치.
 ROM 삽입·실게임 동작은 범위 밖(T3~T6).
 """
 import contextlib
@@ -41,6 +43,8 @@ from gen_jamo_assets import dense_table, load_jamo_codes  # noqa: E402
 ORIGINAL = os.path.join(ROOT, 'original', 'Game Boy Wars Advance 1+2 (Japan).gba')
 CORE_C = os.path.join(TOOLS, 'name_compose', 'core.c')
 T0_CONFIG = os.path.join(ROOT, 'temp', 'fix_20261104', 'p1compose', 't0', 'p1_config.json')
+T0_BASE_ROM = os.path.join(ROOT, 'temp', 'fix_20261104', 're', 'base.gba')          # T0 런타임 기준 ROM
+T0_DICT_VRAM = os.path.join(ROOT, 'temp', 'fix_20261104', 'p1compose', 't0', 'r1_dict', 'vram.bin')
 P1_SEL_FILE = 0xDF9F5C                          # 1편 native 선택표 (P1_NAME_RE §2.3)
 SPACE = hc.SPACE_CODE
 LITERALS = (0x824F, 0x8250, 0x8251, 0x8252, 0x8253, 0x8254, 0x8255, 0x8256, 0x8257, 0x8258,
@@ -569,6 +573,17 @@ class T0Values(unittest.TestCase):
 P1_C = os.path.join(TOOLS, 'name_compose_p1', 'p1.c')
 VRAM_HALFWORDS = 0x8000                       # 64 KiB (charblock 0..3)
 FAKE_TILE_START = 0x10                        # 0 이 아닌 tile_start 로 식 검증
+FAKE_KANA_BASE = 1500                         # 가짜 가타카나 표: kana[k] = FAKE_KANA_BASE + k
+KANA_ENTRIES = 0xB0                           # 0x8340..0x8397 의 kidx 최대 0xA7 + 8
+
+
+def fake_font(slot):
+    return bytes(((slot * 53) + j * 7 + 3) & 0xFF ^ 0x5A for j in range(32))
+
+
+def kana_kidx(code):
+    """native 변환 0x08EFE788 의 가타카나 index — p1.c 와 독립 계산."""
+    return ((code - 0x8140) // 8) * 16 + code % 8 - 0x400
 
 
 def fake_glyph(tile):
@@ -591,6 +606,7 @@ class P1Lib:
             f.write('#include <stdint.h>\n'
                     'const uint8_t *nc1_h_tbl_start, *nc1_h_tbl_end, *nc1_h_kor, *nc1_h_cache;\n'
                     'volatile uint16_t *nc1_h_vram;\n'
+                    'const uint8_t *nc1_h_font, *nc1_h_kana;\n'
                     f'const uint8_t nc1_host_tab[{len(host_tab)}] = {{{", ".join(str(b) for b in host_tab)}}};\n'
                     f'const uint8_t nc1_placeholders[{len(ph)}] = {{{", ".join(str(b) for b in ph)}}};\n')
         lib = os.path.join(d, 'libp1.so')
@@ -600,6 +616,7 @@ class P1Lib:
         u, p = ctypes.c_uint, ctypes.c_char_p
         for fn, args, res in (('nc1_pad', [p], None), ('nc1_tail_init', [p], None),
                               ('nc1_korean_tiles', [u, ctypes.POINTER(u), ctypes.POINTER(u)], u),
+                              ('nc1_font_tiles', [u, ctypes.POINTER(u), ctypes.POINTER(u)], u),
                               ('nc1_cache_tile', [u], ctypes.c_int), ('nc1_upload', [u, u, u], None),
                               ('nc1_upload_hosts', [], None), ('nc1_display_init', [p], None),
                               ('nc1_preview_codes', [p, p], u)):
@@ -626,7 +643,14 @@ class P1Lib:
         self.cache = ctypes.create_string_buffer(0x620)
         self.vram = (ctypes.c_uint16 * VRAM_HALFWORDS)()
         self.set_dictionary(self.default_dictionary())
-        for name, obj in (('nc1_h_tbl_start', self.tbl), ('nc1_h_kor', self.kor), ('nc1_h_cache', self.cache)):
+        # 가짜 FONT_BASE·가타카나 슬롯 표(L3). 확장표 비-bit15 엔트리의 top/bot 도 FONT 슬롯이다.
+        nfont = FAKE_KANA_BASE + KANA_ENTRIES + 4
+        self.font = ctypes.create_string_buffer(b''.join(fake_font(t) for t in range(nfont)), 32 * nfont)
+        self.kana = ctypes.create_string_buffer(
+            b''.join((FAKE_KANA_BASE + k).to_bytes(2, 'little') for k in range(KANA_ENTRIES)), 2 * KANA_ENTRIES)
+        self.font_slots = {c: (t, b) for c, t, b in ents if not t & 0x8000}
+        for name, obj in (('nc1_h_tbl_start', self.tbl), ('nc1_h_kor', self.kor), ('nc1_h_cache', self.cache),
+                          ('nc1_h_font', self.font), ('nc1_h_kana', self.kana)):
             ctypes.c_void_p.in_dll(self.lib, name).value = ctypes.addressof(obj)
         ctypes.c_void_p.in_dll(self.lib, 'nc1_h_tbl_end').value = ctypes.addressof(self.tbl) + self.tbl_len
         ctypes.c_void_p.in_dll(self.lib, 'nc1_h_vram').value = ctypes.addressof(self.vram)
@@ -662,6 +686,17 @@ class P1Lib:
     def glyph(self, code):
         t, b = self.syl_tiles[code]
         return fake_glyph(t) + fake_glyph(b)
+
+    def font_glyph(self, code):
+        """host 코드의 원래 FONT_BASE 글리프(가짜 표 기준, p1.c 와 독립 계산). 해석 불가면 None."""
+        if 0x8340 <= code <= 0x8397:
+            k = kana_kidx(code)
+            t, b = FAKE_KANA_BASE + k, FAKE_KANA_BASE + k + 8
+        elif code in self.font_slots:
+            t, b = self.font_slots[code]
+        else:
+            return None
+        return fake_font(t) + fake_font(b)
 
     def call(self, fn, buf, *args):
         cbuf = ctypes.create_string_buffer(bytes(buf), len(buf))
@@ -766,14 +801,17 @@ class P1Helpers(unittest.TestCase):
             got = [int.from_bytes(out[2 * i:2 * i + 2], 'big') for i in range(n)]
             want = []
             for i, c in enumerate(slots[:max_slots]):
-                korean = c in self.p1.syl_tiles
-                want.append(g1.PLACEHOLDERS[i] if korean and i < length else c)
+                legacy = c in g1.HOST_CODES and self.p1.font_glyph(c) is not None     # L3
+                drawn = (c in self.p1.syl_tiles or legacy) and i < length
+                want.append(g1.PLACEHOLDERS[i] if drawn else c)
             self.assertEqual(got, want, (max_slots, length))
             self.assertEqual(out[2 * n:], b'\xCC' * (16 - 2 * n))
             for i, c in enumerate(slots[:max_slots]):
                 tile = self.p1.tile_of(g1.PLACEHOLDERS[i])
                 if c in self.p1.syl_tiles and i < length:
                     self.assertEqual(self.p1.vram_bytes(tile), self.p1.glyph(c), (max_slots, i))
+                elif c in g1.HOST_CODES and i < length:
+                    self.assertEqual(self.p1.vram_bytes(tile), self.p1.font_glyph(c), (max_slots, i))
                 else:
                     self.assertEqual(self.p1.vram_bytes(tile), b'\xA5' * 64, (max_slots, i))
             for h in g1.HOST_CODES:                     # host 타일은 미리보기가 건드리지 않음
@@ -850,6 +888,93 @@ class P1Helpers(unittest.TestCase):
         self.assertEqual(written, expect_tiles)
         for p in g1.PLACEHOLDERS:
             self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(p)), b'\xA5' * 64)
+
+    # L3 legacy host 코드
+    def test_l3_font_tiles(self):
+        top, bot = ctypes.c_uint(0xDEAD), ctypes.c_uint(0xBEEF)
+        f = self.p1.lib.nc1_font_tiles
+        for code in (0x8340, 0x8341, 0x834B, 0x8394, 0x8396, 0x8397):        # 가타카나 전 범위 경계
+            self.assertEqual(f(code, ctypes.byref(top), ctypes.byref(bot)), 1, hex(code))
+            k = kana_kidx(code)
+            self.assertEqual((top.value, bot.value), (FAKE_KANA_BASE + k, FAKE_KANA_BASE + k + 8), hex(code))
+        self.assertEqual(kana_kidx(0x8341), 1)
+        self.assertEqual(f(0x95BD, ctypes.byref(top), ctypes.byref(bot)), 1)  # 확장표 비-bit15
+        self.assertEqual((top.value, bot.value), (0x0200, 0x0201))
+        for code in (self.syl('가'), self.codes['ㄱ'], 0x8E71, 0x833F, 0x8398, SPACE, 0x824F):
+            top.value = bot.value = 0x1234                                    # bit15 / 표 없음 / 범위 밖
+            self.assertEqual(f(code, ctypes.byref(top), ctypes.byref(bot)), 0, hex(code))
+            self.assertEqual((top.value, bot.value), (0x1234, 0x1234), hex(code))
+
+    def test_l3_legacy_host_preview(self):
+        ga, vu = 0x834B, 0x8394                         # ガ(host) · ヴ(host 아님, 사전 타일 그대로)
+        slots = [ga, vu, self.syl('가'), 0x95BD, 0x8E71, 0x8366, SPACE, SPACE]
+        buf = obj_with(slots, 6, 8)
+        n, out = self.p1.preview(buf)
+        self.assertTrue(self.p1.assert_obj_unchanged)
+        got = [int.from_bytes(out[2 * i:2 * i + 2], 'big') for i in range(n)]
+        P = g1.PLACEHOLDERS
+        self.assertEqual(got, [P[0], vu, P[2], P[3], 0x8E71, P[5], SPACE, SPACE])
+        self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(P[0])), self.p1.font_glyph(ga))
+        self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(P[2])), self.p1.glyph(self.syl('가')))
+        self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(P[3])), self.p1.font_glyph(0x95BD))
+        self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(P[5])), self.p1.font_glyph(0x8366))
+        vram = self.p1.vram_all()
+        written = {i // 64 for i in range(0, len(vram), 2) if vram[i:i + 2] != b'\xA5\xA5'}
+        self.assertEqual(written, {(self.p1.tile_of(P[i]) * 32) // 64 for i in (0, 2, 3, 5)})
+        for h in g1.HOST_CODES:                         # host 자모 라벨 타일은 건드리지 않음
+            self.assertEqual(self.p1.vram_bytes(self.p1.tile_of(h)), b'\xA5' * 64)
+        self.p1.clear_vram()                            # len 밖 host 는 그리지 않음
+        n, out = self.p1.preview(obj_with([ga] * 6, 0, 6))
+        self.assertEqual(out[:12], ga.to_bytes(2, 'big') * 6)
+        self.assertEqual(self.p1.vram_all(), b'\xA5' * (2 * VRAM_HALFWORDS))
+
+
+class FontLiterals(unittest.TestCase):
+    """L3 FONT_CONFIG 가 원본·T0 ROM 의 실제 리터럴과 같고, 그 규칙의 글리프가 T0 런타임 사전 타일과 같은지."""
+
+    def check_rom(self, rom):
+        import struct
+        for key, off in g1.FONT_LITERALS.items():
+            self.assertEqual(struct.unpack_from('<I', rom, off)[0], g1.FONT_CONFIG[key], key)
+
+    @unittest.skipUnless(os.path.exists(ORIGINAL), 'original ROM absent')
+    def test_literals_original(self):
+        with open(ORIGINAL, 'rb') as f:
+            rom = f.read()
+        self.check_rom(rom)
+        import struct
+        self.assertEqual(struct.unpack_from('<I', rom, 0xEFE97C)[0], g1.FONT_CONFIG['font_base'])  # native 변환 리터럴
+
+    @unittest.skipUnless(os.path.exists(T0_BASE_ROM) and os.path.exists(T0_DICT_VRAM), 'T0 evidence absent')
+    def test_rule_matches_t0_runtime_dictionary(self):
+        import struct
+        with open(T0_BASE_ROM, 'rb') as f:
+            rom = f.read()
+        with open(T0_DICT_VRAM, 'rb') as f:
+            vram = f.read()
+        self.check_rom(rom)
+        font = g1.FONT_CONFIG['font_base'] - 0x08000000
+        kana = g1.FONT_CONFIG['font_kana_table'] - 0x08000000
+        tbl_s, tbl_e = (struct.unpack_from('<I', rom, o)[0] - 0x08000000 for o in (0xEFE970, 0xEFE974))
+        flat = [c for lst in rom_dictionary(rom) for c in lst]
+
+        def slots(code):
+            if 0x8340 <= code <= 0x8397:
+                k = kana_kidx(code)
+                return tuple(struct.unpack_from('<H', rom, kana + 2 * i)[0] for i in (k, k + 8))
+            for p in range(tbl_s, tbl_e, 6):
+                if rom[p:p + 2] == code.to_bytes(2, 'big'):
+                    t, b = struct.unpack_from('<HH', rom, p + 2)
+                    return None if t & 0x8000 else (t, b)
+            return None
+
+        codes = list(g1.HOST_CODES) + list(g1.PLACEHOLDERS) + [0x8394]
+        for code in codes:
+            t, b = slots(code)
+            tile = 2 * flat.index(code)                 # T0: bank 1 tile_start 0
+            self.assertEqual(vram[tile * 32:tile * 32 + 64],
+                             rom[font + t * 32:font + t * 32 + 32] + rom[font + b * 32:font + b * 32 + 32], hex(code))
+        print(f't0_dictionary_match={len(codes)}')
 
 
 if __name__ == '__main__':

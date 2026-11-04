@@ -17,11 +17,11 @@ class ReturnQuestionTests(unittest.TestCase):
  def test_level_zero_complete_polite_question_both_native_slots(self):
   rom=self.fixture();self.assertEqual(Q.verify(rom,self.original,self.encode)['status'],'PASS')
   for start,end,pointer in Q.ROWS:
-   payload,_=self.encode(Q.TEXT,end-start,start);old,_=self.encode('모드 선택으로 돌아갈까?',end-start,start)
-   self.assertNotEqual(payload,old);self.assertIn(self.codes['요'].to_bytes(2,'big'),payload)
+   payload,_=self.encode(Q.TEXT,end-start,start);old,_=self.encode('모드 선택으로 돌아갈까요?',end-start,start)
+   self.assertNotEqual(payload,old);self.assertNotIn(self.codes['요'].to_bytes(2,'big'),payload)
  def test_old_informal_wording_rejected(self):
   for start,end,pointer in Q.ROWS:
-   rom=self.fixture();payload,_=self.encode('모드 선택으로 돌아갈까?',end-start,start);rom[start:end]=payload+b' '*(end-start-len(payload))
+   rom=self.fixture();payload,_=self.encode('모드 선택으로 돌아갈까요?',end-start,start);rom[start:end]=payload+b' '*(end-start-len(payload))
    with self.assertRaisesRegex(ValueError,'approved text'):Q.verify(rom,self.original,self.encode)
  def test_original_and_final_control_pointer_guards(self):
   for start,end,pointer in Q.ROWS:
@@ -36,9 +36,14 @@ class ReturnQuestionTests(unittest.TestCase):
  def test_authorities_match_approved_unchanged_baseline_and_writer(self):
   root=Path(B.BASE);ov=json.loads((root/'data/dialogue_overrides.json').read_text());base=json.loads((root/'data/bteam_baseline.json').read_text())['overrides']
   with (root/'data/translation_for_import.csv').open() as stream:rows={int(r['address'],16):r for r in csv.DictReader(stream)}
+  # plan_C B-pin: source data/writer keep the B-team text; the B-pin writer ships Q.TEXT.
+  import bpin_contract
+  approvals=bpin_contract.bteam_approvals()
   for start,end,pointer in Q.ROWS:
-   self.assertEqual(ov[f'0x{start:08X}'],Q.TEXT);self.assertEqual(base[f'0x{start:08X}'],Q.TEXT);self.assertEqual(rows[start]['korean'],Q.TEXT);self.assertEqual(int(rows[start]['length']),len(Q.TEXT.encode()))
+   key=f'0x{start:08X}';old=approvals[key]['baseline']
+   self.assertEqual(approvals[key]['to'],Q.TEXT);self.assertEqual(bpin_contract.text(start),Q.TEXT)
+   self.assertEqual(ov[key],old);self.assertEqual(base[key],old);self.assertEqual(rows[start]['korean'],old);self.assertEqual(int(rows[start]['length']),len(old.encode()))
   tree=ast.parse(Path(B.__file__).read_text());writers=[n for n in ast.walk(tree) if isinstance(n,ast.Tuple) and len(n.elts)>=3 and isinstance(n.elts[0],ast.Constant) and n.elts[0].value==0xA34CE8 and isinstance(n.elts[2],ast.Constant)]
-  self.assertTrue(writers);self.assertTrue(all(n.elts[2].value==Q.TEXT for n in writers))
+  self.assertTrue(writers);self.assertTrue(all(n.elts[2].value==approvals['0x00A34CE8']['baseline'] for n in writers))
 
 if __name__=='__main__':unittest.main()

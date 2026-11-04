@@ -47,13 +47,22 @@ class M19DialogueTests(unittest.TestCase):
         self.assertEqual(stats['relocated'], 1, manifest)
         B.verify_required_script_repoints({M.ADDRESS},
             {int(a, 16) for m in manifest if m.get('status') == 'relocated' for a in m.get('fixed', [])})
+        # plan_C B-pin writer: the reviewed final message replaces the repoint-stage one
+        # in the same allocation (tools/bpin_contract.py).
+        import bpin_contract
+        self.assertEqual(expected, bytes.fromhex(bpin_contract.MESSAGES[M.START]['old']))
+        final = M.final_payload(self.original, self.encode)
+        self.assertEqual(final, bytes.fromhex(bpin_contract.MESSAGES[M.START]['new']))
+        target = struct.unpack_from('<I', rom, M.POINTER)[0] - 0x08000000
+        rom[target:target + len(final)] = final
         return rom, expected
 
     def test_real_repointer_exact_text_pages_following_row_and_width(self):
         rom, expected = self.relocate()
         result = M.verify(rom, self.original, expected, self.encode)
-        self.assertEqual(result['row_pixels'], [104, 88])
+        self.assertEqual(result['row_pixels'], [136, 80])
         self.assertEqual(len(expected), 159)
+        self.assertEqual(len(M.final_payload(self.original, self.encode)), 159)
         self.assertEqual(' '.join(M.ROWS), M.TEXT)
         self.assertEqual(rom[M.START:M.END], self.fixture()[M.START:M.END])
         self.assertEqual(expected.count(b'\x72\x0a\x09'), 2)

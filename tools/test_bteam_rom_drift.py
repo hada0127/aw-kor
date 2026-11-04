@@ -45,6 +45,13 @@ class RomDriftTest(unittest.TestCase):
         writes = json.loads(map_path.read_text())
         manifest = json.loads(manifest_path.read_text())
         exceptions = json.loads((ROOT / 'data/bteam_baseline.json').read_text())['_user_approved_exceptions']
+        # plan_C B-pin (2026-11-04 user): rows of the reviewed A01A0C/A01C10 messages ship the
+        # reviewed wording with the same approved 、。->，． glyphs (bpin_contract).
+        import bpin_contract
+        reviewed = {'0x00A01A1A': '헬보우즈님．', '0x00A01C10': '그\u3000점은，',
+                    '0x00A01C1B': '염려\u3000마십시오．', '0x00A01C2A': '사령관들에게\u3000명했습니다．',
+                    '0x00A01C59': '곧\u3000모일\u3000겁니다．'}
+        self.assertIn(0xA01C10, bpin_contract.MESSAGES)
         self.assertEqual(len(PUNCTUATION), 21)
         for address, _, _, relocated in PUNCTUATION:
             key = f'0x{address:08X}'
@@ -55,8 +62,9 @@ class RomDriftTest(unittest.TestCase):
                                    and f'0x{address:06X}' in m.get('line_spans', {}))
                     payload = source_row_bytes(rom, message, f'0x{address:06X}')
                 else:
-                    owner = next((row for row in writes
-                                  if row[7] == 'part2-prologue-drawn-comma-space'
+                    owner = next((row for row in reversed(writes)
+                                  if row[7] in ('part2-prologue-drawn-comma-space',
+                                                bpin_contract.NATIVE_WRITER)
                                   and len(row) > 8 and f'0x{address:06X}' in
                                   row[8].get('source_line_fragments', {})), None)
                     if owner:
@@ -72,6 +80,9 @@ class RomDriftTest(unittest.TestCase):
                             row = next(row for row in writes if row[0] == address and row[3])
                             payload = rom[address:address + row[2]]
                 actual = decode_enc(script_format_bytes(payload, address), load_syl()).rstrip(' \u3000')
+                if key in reviewed:
+                    self.assertEqual(actual.lstrip('\u3000'), reviewed[key])
+                    continue
                 self.assertEqual(actual, exceptions[key]['to'])
 
     def test_prologue_final_rom_gate_rejects_unapproved_word_mutation(self):
@@ -134,10 +145,12 @@ class RomDriftTest(unittest.TestCase):
             self.skipTest('candidate ROM required')
         rom = rom_path.read_bytes()
         manifest = json.loads(manifest_path.read_text())
+        # plan_C B-pin reviewed CO page (0xA2AA90, bpin_contract): A2AAD3 still spans two
+        # display rows; A2AAEE/A2AAFB share the last row.
         rows = {
-            '0xA2AAD3': '호이프와　사실　좋은　콤비。',  # split across two display rows
-            '0xA2AAEE': '고양이　좋아',              # merged with the next source row
-            '0xA2AAFB': '쥐　싫어',
+            '0xA2AAD3': '실은　손발이　잘　맞는다。　좋아함　고양이',  # split across two display rows
+            '0xA2AAEE': '싫어함',
+            '0xA2AAFB': '　쥐',
         }
         for key, wanted in rows.items():
             with self.subTest(key=key):
@@ -218,9 +231,9 @@ class RomDriftTest(unittest.TestCase):
                 self.assertEqual(APPROVED_EXCEPTIONS[address], pair)
         self.assertEqual(APPROVED_EXCEPTIONS['0x00A2D814'], ('결전 전', '최종결전!'))
         self.assertEqual(APPROVED_EXCEPTIONS['0x00DF8E16'],
-                         ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'))
+                         ('게임보이 워즈에 오신 걸 환영해요!', '게임보이 워즈 어드밴스에 어서 와!'))
         self.assertEqual(APPROVED_EXCEPTIONS['0x00DF948E'],
-                         ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'))
+                         ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 게임보이 워즈 어드밴스에'))
         self.assertEqual(exception_errors(baseline, baseline['overrides']), [])
         changed = json.loads(json.dumps(baseline))
         changed['overrides']['0x00A2D814'] = '결전 전'
@@ -338,8 +351,17 @@ class RomDriftTest(unittest.TestCase):
                             display_equivalent('A B', address))
         self.assertNotEqual(display_equivalent('A!B', address),
                             display_equivalent('AB', address))
-        self.assertNotEqual(display_equivalent('・・・・', address),
-                            display_equivalent('・・・', address, actual=True))
+        # fixB J (E3): 3-5 dots ship as one 「…」 (0x8163); 1-2 stay middle dots.
+        self.assertEqual(display_equivalent('・・・・', address),
+                         display_equivalent('…', address, actual=True))
+        self.assertEqual(display_equivalent('가...나', address),
+                         display_equivalent('가…나', address, actual=True))
+        self.assertEqual(display_equivalent('・・・・・・', address),
+                         display_equivalent('……', address, actual=True))
+        self.assertNotEqual(display_equivalent('・・', address),
+                            display_equivalent('…', address, actual=True))
+        self.assertNotEqual(display_equivalent('・・・', address),
+                            display_equivalent('……', address, actual=True))
 
     def test_round2_width_alias_is_address_bound_and_keeps_every_character(self):
         address = 0xA2D55C
@@ -428,12 +450,30 @@ class RomDriftTest(unittest.TestCase):
             wrong['source_fragment_joiners']['0xDD010A'] = ['8140']
             self.assertTrue(check(rom, wrong))
 
+    def test_bpin_rows_leave_the_round2_byte_pins(self):
+        # plan_C B-pin: listed residual rows the B-pin writer rewrites are not
+        # byte-pinned any more; check_rom requires their approved `to` instead.
+        import bpin_contract
+        base = json.loads((ROOT / 'data/bteam_baseline.json').read_text(encoding='utf-8'))
+        rom, manifest = self.round2_fixture()
+        deferred = [{'address': f'0x{address:08X}', 'cause': 'reviewed deferral'}
+                    for address in DEFERRED_ADDRESSES]
+        self.assertIn('0x00D82218', bpin_contract.bteam_approvals())
+        changed = bytearray(rom)
+        changed[0xD82218] ^= 1
+        with tempfile.TemporaryDirectory(dir=ROOT / 'temp') as tmp:
+            rom_path, map_path = Path(tmp) / 'rom.gba', Path(tmp) / 'manifest.json'
+            rom_path.write_bytes(bytes(changed))
+            map_path.write_text(json.dumps(manifest))
+            classify_round2_issues(deferred, base, str(rom_path), str(map_path))
+
     def test_round2_byte_pointer_mapping_mutations(self):
         base = json.loads((ROOT / 'data/bteam_baseline.json').read_text(encoding='utf-8'))
         rom, manifest = self.round2_fixture()
         deferred = [{'address': f'0x{address:08X}', 'cause': 'reviewed deferral'}
                     for address in DEFERRED_ADDRESSES]
-        addr = 0xD82218
+        # 0xD82218 (the former example) is a plan_C B-pin row now; A2C804 keeps an active pin.
+        addr = 0xA2C804
         issue = {'address': f'0x{addr:08X}', 'cause': 'relocated row differs from protected baseline'}
         message = next(m for m in manifest if f'0x{addr:06X}' in m['line_spans'])
         target = int(message['new_addr'], 16)
@@ -466,7 +506,7 @@ class RomDriftTest(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, pattern):
                     classify(changed, manifest)
             # Active line bytes and the A2BC3C continuation are pinned too.
-            for key, pattern in (('0x00D82218', 'message bytes or span changed'),
+            for key, pattern in (('0x00A2C804', 'message bytes or span changed'),
                                  ('0x00A2BC3C', 'message bytes or span changed')):
                 pinned = next(m for m in manifest if m['msg'] == f'0x{int(key, 16):06X}')
                 changed = bytearray(rom)

@@ -29782,10 +29782,10 @@
   {
    "source": "00DF948C",
    "profile": "p1_portrait",
-   "before_sha256": "19e4549b3780d51e651b0738226cdcdf4ed7bda6a6672303f6da4a450cfac242",
-   "before_target": "00A7BD84",
+   "before_sha256": "5af6a2a48f205fdeaa607b9efc94b6185c216326eedd9237274dbbe7dabd3b3b",
+   "before_target": "00A7C09C",
    "before_bytes": 442,
-   "after_sha256": "2cc6e4fe51780148ae2ccba7614ae040d4b29382b0d1858d4a26010776724b39",
+   "after_sha256": "fe013867db7be31ca2a8e8016995f1ca59d0430dbf077e61eefec8019b05a98e",
    "mode": "reviewed_spacing_reflow",
    "pages": [
     {
@@ -29813,7 +29813,7 @@
    ],
    "final_pages": [
     [
-     "그렇다면、 간단하게 어드밴스 워즈에",
+     "그렇다면、 게임보이 워즈 어드밴스에",
      "대해서 설명할게。"
     ],
     [
@@ -62152,13 +62152,13 @@
   },
   {
    "address": "0x00DF948E",
-   "baseline": "그렇다면, 간단하게 어드밴스 워즈에",
-   "before": "그렇다면、　간단하게　어드밴스　워즈에",
-   "after": "그렇다면、　간단하게　어드밴스　워즈에",
+   "baseline": "그렇다면, 게임보이 워즈 어드밴스에",
+   "before": "그렇다면、　게임보이　워즈　어드밴스에",
+   "after": "그렇다면、　게임보이　워즈　어드밴스에",
    "classification": "restored",
    "retained_authorities": [],
    "final_fragment_hex": [
-    "88878b5889e28bf581418140884289e592a9885a81408ec38a7c8ccf8e4781408f6c8ffc8ed3"
+    "88878b5889e28bf581418140885a8faf8d468fa281408f6c8ffc81408ec38a7c8ccf8e478ed3"
    ],
    "reviewer": "gpt-6.1-sol/high",
    "reason": "사용자 2026-10-18 띄어쓰기/이름 규칙 한정 명시 승인. 문장별 심사와 glyph/제어 불변을 별도 원장으로 검증. 보호 기준 원문은 불변.",

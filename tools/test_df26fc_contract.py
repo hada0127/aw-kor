@@ -13,6 +13,15 @@ from df26fc_contract import MESSAGE, FIRST, COMPANION, TAIL, TEXTS, ROWS, NATIVE
 from dialogue_repoint import repoint_messages, text_segment_cells
 from dialogue_spacing import reviewed_bteam_half_cells, load_ledger
 
+# fixB (plan_C W3): the full build rewrites this message through the W3 overlay and its B-team
+# rows are ledger-owned (data/bteam_approved_rewrites.json). This fixture writes the contract's own
+# text, so check_rom runs it against an empty approval ledger; the real ledger stays authoritative
+# for the final ROM gate (qa_bteam_drift --rom).
+_EMPTY_LEDGER = b'{"entries": {}}'
+NO_W3_LEDGER = dict(ledger_bytes=_EMPTY_LEDGER,
+                    ledger_pinned=__import__("hashlib").sha256(_EMPTY_LEDGER).hexdigest())
+
+
 
 class DF26FCTests(unittest.TestCase):
     def fixture(self, mutation=None):
@@ -192,7 +201,7 @@ class DF26FCTests(unittest.TestCase):
                 return read_text(path, *args, **kwargs)
             with patch.object(Path, 'read_bytes', lambda path: bytes(data) if str(path) == 'fixture-rom' else read_bytes(path)), \
                  patch.object(Path, 'read_text', text):
-                return check_rom(base, 'fixture-rom', 'fixture-writes', 'fixture-manifest')
+                return check_rom(base, 'fixture-rom', 'fixture-writes', 'fixture-manifest', **NO_W3_LEDGER)
         self.assertEqual(check(rom, record), [])
         target = int(record['new_addr'], 16)
         for offset in (6, 46, 85):  # first-row space, first !, companion !

@@ -14,6 +14,8 @@
  *   +0x73 T        종성 인덱스 0..27
  *   +0x74..+0x7F   0 (쓰지 않음)
  * 반환: 0 = 수락(상태 갱신), 1 = 거부(obj 불변).
+ *   완성 음절 + 자음에서 받침을 붙인 결과가 2350 밖이면 현재 음절을 확정하고 그 자음으로 새 글자를
+ *   시작한다(0, 2026-11-04 F). 슬롯이 없으면 1(no_slot). 모음 쪽(종성 이동) 2350 밖은 그대로 1.
  */
 #include <stdint.h>
 #include "tables.h"
@@ -166,13 +168,10 @@ int nc_press(uint8_t *obj, uint16_t cell)
     }
     cur = lookup(l, v, t);
     if (jl != NC_NONE) {                         /* 완성 + 자음 */
-        if (t) {
-            comb = final_cluster(t, jl);
-            if (comb != NC_NONE)
-                return commit(obj, c, 0, 0, 0, 1, l, v, comb);
-        } else if (NC_T_OF_L[jl]) {
-            return commit(obj, c, 0, 0, 0, 1, l, v, NC_T_OF_L[jl]);
-        }
+        comb = t ? final_cluster(t, jl) : (NC_T_OF_L[jl] ? NC_T_OF_L[jl] : NC_NONE);
+        if (comb != NC_NONE && lookup(l, v, comb) != 0)
+            return commit(obj, c, 0, 0, 0, 1, l, v, comb);
+        /* 받침 불가 또는 받침을 붙이면 2350 밖: 현재 확정 + 새 초성(슬롯 없으면 commit 이 거부) */
         return commit(obj, c, 1, cur, 0, 1, jl, NC_NONE, 0);
     }
     if (!t) {                                    /* 완성(받침 없음) + 모음 */

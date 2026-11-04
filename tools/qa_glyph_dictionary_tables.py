@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """QA for compact CO power-name glyph dictionaries.
 
-The dictionaries at 0xA3B880 and 0xB842E8 are not display strings. Runtime
+The dictionaries at 0xA3B880 and 0xB842E8 are not display strings. Since fixB H
+the Part 2 cut-in reads its 64-entry dictionary through the literals listed in
+part2_power_title_glyphs (0xFD0160); this QA follows the ROM literal and also
+checks the native 61-entry slot. 0xB842E8 is read at its 0xFD1000 relocation. Runtime
 renderers scan target power-name text as two-byte code pairs and look each pair
 up in these compact glyph dictionaries. Static line-width QA intentionally skips
 the dictionary rows, so this script is the corresponding hard gate.
@@ -114,6 +117,14 @@ def load_power_display_whitelist_required() -> dict[int, dict]:
     return out
 
 
+def display_path(path: Path) -> str:
+    path = Path(path).resolve()
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
 def pair_hex(data: bytes) -> list[str]:
     return [data[i:i + 2].hex() for i in range(0, len(data), 2)]
 
@@ -171,6 +182,67 @@ def row_slot(row: dict | None) -> int:
         return 0
 
 
+def power_dictionary_location(rom: bytes, spec: dict, issues: list[dict]) -> tuple[int, int, int | None]:
+    """(address, slot, native_slot) of the live Part 2 cut-in power dictionary.
+
+    A relocated build (part2_power_title_glyphs.DICTIONARY, 64 entries) returns
+    the relocated slot plus the native slot size, whose first entries the
+    builder keeps for stale readers. A ROM whose literals still point at the
+    native slot is checked there with the native size.
+    """
+    import struct
+    import part2_power_title_glyphs as pt
+    native = spec["dict_addr"]
+    native_slot = spec.get("native_slot", pt.NATIVE_DICTIONARY_SIZE)
+    if native != pt.NATIVE_DICTIONARY or native_slot != pt.NATIVE_DICTIONARY_SIZE:
+        issues.append({"dict": f"0x{native:08X}",
+                       "issue": "builder native power dictionary spec differs from part2_power_title_glyphs"})
+    targets = {struct.unpack_from('<I', rom, a)[0] - 0x08000000 for a in pt.DICTIONARY_LITERALS}
+    if len(targets) != 1:
+        issues.append({"dict": f"0x{native:08X}", "issue": "power dictionary literals disagree",
+                       "literals": {f"0x{a:08X}": f"0x{struct.unpack_from('<I', rom, a)[0]:08X}"
+                                    for a in pt.DICTIONARY_LITERALS}})
+        return native, native_slot, None
+    target = targets.pop()
+    original = (ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    native_ptr = (0x08000000 + native).to_bytes(4, 'little')
+    if (any(original[a:a + 4] != native_ptr for a in pt.DICTIONARY_LITERALS)
+            or original.count(native_ptr) != len(pt.DICTIONARY_LITERALS)):
+        issues.append({"dict": f"0x{native:08X}", "issue": "original power dictionary literal ownership changed"})
+    if target == native:
+        issues.append({"dict": f"0x{native:08X}",
+                       "issue": "power dictionary loader not relocated (native 61-entry slot)"})
+        return native, native_slot, None
+    if target != pt.DICTIONARY:
+        issues.append({"dict": f"0x{target:08X}", "issue": "power dictionary literal points outside the relocated dictionary",
+                       "expected": f"0x{pt.DICTIONARY:08X}"})
+    if spec["slot"] != pt.DICTIONARY_SIZE or pt.DICTIONARY_SIZE != 2 * pt.MAX_GLYPHS:
+        issues.append({"dict": f"0x{target:08X}", "issue": "builder power dictionary slot differs from part2_power_title_glyphs",
+                       "spec_slot": spec["slot"], "module_slot": pt.DICTIONARY_SIZE, "max_glyphs": pt.MAX_GLYPHS})
+    if rom[target + pt.DICTIONARY_SIZE:target + pt.DICTIONARY_SIZE + 2] != b'\0\0':
+        issues.append({"dict": f"0x{target:08X}", "issue": "relocated power dictionary lacks its NUL halfword"})
+    return target, pt.DICTIONARY_SIZE, native_slot
+
+
+def check_power_native_slot(rom: bytes, spec: dict, encoded: bytes, native_slot: int,
+                            daddr: int, issues: list[dict]) -> None:
+    """The native slot keeps the first native_slot/2 entries and its terminator."""
+    import part2_power_title_glyphs as pt
+    native = spec["dict_addr"]
+    if len(encoded) // 2 > pt.MAX_GLYPHS:
+        issues.append({"dict": f"0x{daddr:08X}", "issue": "power dictionary exceeds atlas maximum",
+                       "pairs": len(encoded) // 2, "max": pt.MAX_GLYPHS})
+    head = encoded[:native_slot]
+    if rom[native:native + len(head)] != head:
+        issues.append({"dict": f"0x{native:08X}", "issue": "native power dictionary slot lost its leading entries"})
+    require_zero_tail(issues, label="native dictionary", address=native,
+                      slot_bytes=rom[native:native + native_slot], used_len=len(head), slot=native_slot)
+    original = (ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
+    end = native + native_slot
+    if rom[end:end + 2] != original[end:end + 2]:
+        issues.append({"dict": f"0x{native:08X}", "issue": "native power dictionary terminator changed"})
+
+
 def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
     if not rom_path.exists():
         raise FileNotFoundError(f"required QA input missing: {rom_path}")
@@ -212,10 +284,17 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
 
     for spec in specs:
         b84 = spec['label'] == 'part2_b8_compact_power_dictionary'
+        power = spec['label'] == 'part2_co_power_profile_dictionary'
         daddr = build.B84_POWER_DICTIONARY_RELOCATED if b84 else spec["dict_addr"]
         slot = 92 if b84 else spec["slot"]
+        native_slot = None
+        if power:
+            # fixB H: the cut-in loader reads the dictionary through two literals
+            # (part2_power_title_glyphs.DICTIONARY_LITERALS). Follow the ROM's
+            # literal, cross-checked against the module constants.
+            daddr, slot, native_slot = power_dictionary_location(rom, spec, issues)
         dictionary_text = (build.b84_full_power_dictionary(dialogue_overrides)
-                           if b84 else derived_dictionaries.get(daddr, ""))
+                           if b84 else derived_dictionaries.get(spec["dict_addr"], ""))
         if b84:
             original = (ROOT / 'original' / 'Game Boy Wars Advance 1+2 (Japan).gba').read_bytes()
             for ref, old, new in ((0xB3C1F8, 0x08B842E8, 0x08000000 + daddr),
@@ -235,7 +314,10 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
             elif any(source[0][len(dictionary_text) * 0x100:
                                (len(dictionary_text) + 1) * 0x100]):
                 issues.append({'dict': f'0x{daddr:08X}', 'issue': 'space glyph is not blank'})
-        encoded, level = build.encode_fit(dictionary_text, slot, syl_to_code, Counter(), daddr)
+        # Encoding rules are keyed by the builder's dictionary address (the
+        # relocated cut-in dictionary is written from the native spec).
+        encoded, level = build.encode_fit(dictionary_text, slot, syl_to_code, Counter(),
+                                          spec["dict_addr"] if power else daddr)
         if encoded is None:
             issues.append({"dict": f"0x{daddr:08X}", "issue": "dictionary overflow"})
             encoded = b""
@@ -255,6 +337,8 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
             issues.append({"dict": f"0x{daddr:08X}", "issue": "dictionary single-byte/ASCII lead", "offsets": bad_leads[:8]})
         if rom[daddr:daddr + len(encoded)] != encoded:
             issues.append({"dict": f"0x{daddr:08X}", "issue": "output ROM dictionary bytes mismatch"})
+        if power and native_slot is not None:
+            check_power_native_slot(rom, spec, encoded, native_slot, daddr, issues)
         require_zero_tail(
             issues,
             label="dictionary",
@@ -393,6 +477,7 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
         results.append({
             "label": spec["label"],
             "dict_addr": f"0x{daddr:08X}",
+            "native_dict_addr": f"0x{spec['dict_addr']:08X}" if power else None,
             "slot": slot,
             "level": level,
             "derived_text": dictionary_text,
@@ -406,7 +491,7 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
         })
 
     report = {
-        "rom": str(rom_path.relative_to(ROOT)),
+        "rom": display_path(rom_path),
         "rom_sha256": sha256(rom_path),
         "dictionary_count": len(specs),
         "compact_power_display_whitelist": str(POWER_DISPLAY_WHITELIST.relative_to(ROOT)),
@@ -420,7 +505,7 @@ def main(rom_path: Path = ROM, report_path: Path = REPORT) -> int:
     print(json.dumps({
         "dictionary_count": len(specs),
         "issue_count": len(issues),
-        "report": str(report_path.relative_to(ROOT)),
+        "report": display_path(report_path),
     }, ensure_ascii=False))
     return 1 if issues else 0
 

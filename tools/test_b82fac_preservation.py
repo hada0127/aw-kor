@@ -62,7 +62,7 @@ class PreservationTests(unittest.TestCase):
     def test_lossless_full_arrays_and_recomputation(self):
         _,m,_=self.after
         requested=[f'0x{0xD00000+i*2:08X}' for i in range(1701)]
-        missing=[f'0x{0xE00000+i*2:08X}' for i in range(9)]
+        missing=[f'0x{0xE00000+i*2:08X}' for i in range(3)]  # build 1704/1701/3 (3 unrelocated lossless requests)
         data=dict(requested=requested+missing,unfulfilled=missing)
         q.lossless(data,copy.deepcopy(data),m)
         for key in ('requested','unfulfilled'):

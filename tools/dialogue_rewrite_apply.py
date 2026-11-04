@@ -53,6 +53,7 @@ GLOSSARY = ROOT / 'data/proper_nouns.json'
 SYLCODE = ROOT / 'data/syllable_to_code_2350.json'
 ORIGINAL = ROOT / 'original/Game Boy Wars Advance 1+2 (Japan).gba'
 FOUND = ROOT / 'data/game_wars_found_texts.csv'
+GEOMETRY = ROOT / 'data/dialogue_consumer_geometry.json'
 GBA = 0x08000000
 SCHEMA = 1
 # Existing guarded dialogue pool; 0xAFF000.. belongs to relocated sprites.
@@ -75,6 +76,8 @@ LOCKING_NATIVE_TAGS = ('retained', 'bteam-round2', 'prologue', 'co-panel', 'coli
 BTEAM_POLICY_TAGS = ('bteam-round2-baseline', 'bteam-round2-relocated-baseline')
 # Prologue envelopes are animation-bound; scrolling/unverified have no window.
 LOCKED_SOURCES = {0xA01970: 'p2 prologue animation envelopes'}
+# Part 1 kana keyword glyphs a rewrite may drop ({kw-:っ}); see render().
+DROPPABLE_KW = ('っ', 'ッ')
 EXTERNAL_ONLY_NAMES = ('앤디', '사미', '올라프', '그릿', '콜린', '사샤', '칸베이', '소냐',
                        '드레이크', '제스', '스텀', '플랙', '래시', '애더', '호크', '센세이',
                        '하치', '이글', '넬')
@@ -234,7 +237,15 @@ def reviewed_wide_rows():
 
 
 def reviewed_wide_row_issues(payload, fragments):
-    """Reject issues for reviewed wide B-team rows whose final bytes a rewrite changes."""
+    """Reject issues for reviewed wide B-team rows whose final bytes a rewrite changes.
+
+    The reviewed 45/46 half-cell allowance exists only for the exact reviewed
+    bytes. A rewrite that brings every displayed piece of the row back within the
+    standard 44 half-cell B-team cap no longer needs it and is admitted; the
+    builder's post-overlay restoration check must then apply the plain 44 cap to
+    a W3-superseded row instead of verify_reviewed_owner_bytes (plan_C B, lane B).
+    """
+    from dialogue_repoint import text_segment_cells
     wide = reviewed_wide_rows()
     issues = []
     for key in sorted(fragments):
@@ -242,10 +253,18 @@ def reviewed_wide_row_issues(payload, fragments):
         if wanted is None:
             continue
         got = [bytes(payload[off:off + size]).hex() for off, size in fragments[key]]
-        if got != wanted:
+        if got == wanted:
+            continue
+        widths = [text_segment_cells(piece.rstrip(b'\x00'))
+                  for off, size in fragments[key]
+                  for piece in bytes(payload[off:off + size]).split(b'\x72\x0a\x09')]
+        if max(widths, default=0) > 44:
             issues.append(dict(code='pinned', severity='reject',
                                detail=f'{key}: reviewed B-team wide row exact bytes '
-                                      '(dialogue_spacing.verify_reviewed_owner_bytes)'))
+                                      f'(dialogue_spacing.verify_reviewed_owner_bytes); rewrite {max(widths)}>44 half-cells'))
+        else:
+            issues.append(dict(code='reviewed_wide_row_superseded', severity='note',
+                               detail=f'{key}: reviewed wide row rewritten within 44 half-cells ({max(widths)})'))
     return issues
 
 
@@ -281,8 +300,20 @@ def round2_pinned_rows():
         with (ROOT / 'data/bteam_round2_residuals.tsv').open(encoding='utf-8', newline='') as stream:
             rows = {int(r['address'], 16) for r in csv.DictReader(stream, delimiter='\t')}
         pins = json.loads((ROOT / 'data/bteam_round2_active_pins.json').read_text(encoding='utf-8'))
-        _ROUND2_PINNED = sorted(rows | {int(k, 16) for k in pins})
+        _ROUND2_PINNED = sorted((rows | {int(k, 16) for k in pins}) - round2_released_rows())
     return _ROUND2_PINNED
+
+
+def round2_released_rows():
+    """Round-2 residual rows released from the byte pin (plan_C B, 2026-11-04 user).
+
+    data/bteam_round2_pin_release.json maps 0x%08X -> {to, message, ...}; the W3
+    overlay rewrites the released row's message and qa_bteam_drift checks ``to``.
+    """
+    path = ROOT / 'data/bteam_round2_pin_release.json'
+    if not path.exists():
+        return set()
+    return {int(k, 16) for k in json.loads(path.read_text(encoding='utf-8')) if k.startswith('0x')}
 
 
 def exception_rows():
@@ -296,6 +327,98 @@ def exception_rows():
     import qa_bteam_drift as drift
     recorded = json.loads(BASELINE.read_text(encoding='utf-8')).get('_user_approved_exceptions', {})
     return set(drift.APPROVED_EXCEPTIONS) | set(recorded)
+
+
+def _shows_exception(address, actual):
+    """True if ``actual`` is what qa_bteam_drift expects for an approved exception row."""
+    import qa_bteam_drift as drift
+    recorded = json.loads(BASELINE.read_text(encoding='utf-8')).get('_user_approved_exceptions', {})
+    wanted = [entry.get('to') for entry in (recorded.get(address),) if isinstance(entry, dict)]
+    if address in drift.APPROVED_EXCEPTIONS:
+        wanted.append(drift.APPROVED_EXCEPTIONS[address][1])
+    addr = int(address, 16)
+    return any(isinstance(to, str) and drift.display_equivalent(to, addr) == actual for to in wanted)
+
+
+# Profiles dialogue_pixel_layout leaves without a confirmed window.
+UNVERIFIED_PROFILES = ('p2_unverified_consumer', 'p2_link_state_dependent')
+_GEOMETRY = None
+
+
+def consumer_geometry(path=None):
+    """Declared consumer geometry for messages the pixel inventory leaves unverified.
+
+    ``data/dialogue_consumer_geometry.json`` (plan_C section 3) maps
+    ``"0xSTART-0xEND"`` (native source range, END exclusive) to
+    ``{renderer, line_px, lines, evidence[, row_px, group, basis]}``.
+    ``line_px``/``lines`` bound every physical row/page; ``row_px`` (optional)
+    bounds the n-th physical row of the message individually. An entry with
+    ``renderer`` null (unattributed consumer, inferred bounds) is recorded but
+    unlocks nothing (apply_consumer_geometry skips it). Returns sorted
+    ``(start, end, entry)``; a malformed file raises instead of loosening a lock.
+    """
+    global _GEOMETRY
+    if path is None and _GEOMETRY is not None:
+        return _GEOMETRY
+    src = Path(path) if path else GEOMETRY
+    out = []
+    if src.exists():
+        doc = json.loads(src.read_text(encoding='utf-8'))
+        for key, entry in doc.items():
+            if key.startswith('_'):
+                continue
+            match = re.fullmatch(r'0x([0-9A-Fa-f]+)-0x([0-9A-Fa-f]+)', key)
+            if not match:
+                raise ValueError(f'consumer geometry key {key!r}')
+            lo, hi = int(match[1], 16), int(match[2], 16)
+            px, rows = entry.get('line_px'), entry.get('lines')
+            row_px = entry.get('row_px')
+            if (lo >= hi or not isinstance(px, int) or not isinstance(rows, int) or px <= 0 or rows <= 0
+                    or not entry.get('evidence')
+                    or (row_px is not None and (not isinstance(row_px, list) or not row_px
+                                                or any(not isinstance(v, int) or v < 0 or v > px
+                                                       for v in row_px)))):
+                raise ValueError(f'consumer geometry entry {key} is incomplete')
+            out.append((lo, hi, entry))
+        out.sort(key=lambda r: r[0])
+        for (a, b, _), (c, _, _) in zip(out, out[1:]):
+            if c < b:
+                raise ValueError(f'consumer geometry ranges overlap at {c:#x}')
+    if path is None:
+        _GEOMETRY = out
+    return out
+
+
+def declared_geometry(source, geometry=None):
+    """The geometry entry whose range holds ``source`` (or None)."""
+    for lo, hi, entry in (consumer_geometry() if geometry is None else geometry):
+        if lo <= source < hi:
+            return entry
+    return None
+
+
+def apply_consumer_geometry(messages, geometry=None):
+    """Give unverified-window messages their declared geometry, in place.
+
+    Only messages whose inventory profile has no window (``width``/``rows`` None
+    or an UNVERIFIED_PROFILES name) are touched; a declared range never
+    overrides a measured profile. The original profile stays in
+    ``m['native_profile']``; ``m['row_px']`` carries per-row bounds.
+    An entry without an attributed ``renderer`` (bounds inferred from other
+    consumers) is skipped: its message keeps the unverified profile, so
+    lock_reason() still returns ``consumer_geometry_unverified`` (fixB C1 review #2).
+    """
+    for m in messages:
+        name, width, rows = m['profile']
+        if not (width is None or rows is None or name in UNVERIFIED_PROFILES):
+            continue
+        entry = declared_geometry(m['source'], geometry)
+        if entry is None or not entry.get('renderer'):
+            continue
+        m['native_profile'] = m['profile']
+        m['profile'] = ('declared:' + str(entry.get('group') or 'consumer'), entry['line_px'], entry['lines'])
+        m['row_px'] = list(entry['row_px']) if entry.get('row_px') is not None else None
+    return messages
 
 
 def _intersections(ranges, lo, hi):
@@ -314,7 +437,7 @@ class Baseline:
         self.manifest = manifest
         self.writes = writes
         self.glyphs = Glyphs(bytes(rom))
-        self.messages = {m['source']: m for m in inventory(original, rom, manifest)}
+        self.messages = {m['source']: m for m in apply_consumer_geometry(inventory(original, rom, manifest))}
         self.pins = pinned_ranges()
         self._hits = None
         self._referenced = None
@@ -470,7 +593,7 @@ def lock_reason(base, m):
     if contract:
         return 'pinned:' + contract
     name, width, rows = m['profile']
-    if width is None or rows is None or name in ('p2_unverified_consumer', 'p2_link_state_dependent'):
+    if width is None or rows is None or name in UNVERIFIED_PROFILES:
         return 'consumer_geometry_unverified'
     if name == 'p1_editor_help':
         return 'pinned:D821F0 Help dictionary consumer'
@@ -490,9 +613,10 @@ def lock_reason(base, m):
     k = bisect.bisect_left(pinned, m['source'])
     if k < len(pinned) and pinned[k] < native_end:
         return 'pinned:B-team round-2 residual byte pin'
+    released = {a for a in round2_released_rows() if m['source'] <= a < native_end}
     for index in base.overlapping_writes(m['target'], m['target'] + len(m['payload'])):
         tag = str(base.writes[index][7])
-        if tag in BTEAM_POLICY_TAGS:
+        if tag in BTEAM_POLICY_TAGS or (released and tag.startswith('bteam-round2')):
             continue
         if record:
             if not tag.startswith(STANDARD_ARENA_TAGS):
@@ -580,10 +704,13 @@ def _owner_text(pieces, phs, key, texts=None):
 
 # ------------------------------------------------------------------------ encode
 
-def _encode_piece(text, encode, source):
+def _encode_piece(text, encode, source, keep_lead=0):
     match = re.match(r'^(\s*)(.*?)(\s*)$', text, re.S)
     lead, core, trail = match.groups()
-    raw = b'\x81\x40' if lead else b''
+    # A run of N>1 leading fullwidth spaces is kept only when the piece already
+    # started with exactly that run (Part 1 CO bio caption indents, 5 cells).
+    raw = (b'\x81\x40' * keep_lead if keep_lead > 1 and len(lead) == keep_lead
+           else b'\x81\x40' if lead else b'')
     if core:
         raw += encode(core, source)
     if trail:
@@ -600,10 +727,22 @@ def render(tpl, ko, encode, unowned=None):
     ``dict(piece, before, after)``. Such a message must be written whole to the
     overlay arena (``plan_overlay`` never keeps it in its slot). Placeholders and
     controls stay fixed in order and count either way; inserting text into an
-    empty unowned position is still refused.
+    empty unowned position is still refused, except next to a style control
+    (``{s2}|{s3}`` .. ``{s0}``): a keyword or its particle may be written into
+    an empty emphasis slot. A Part 1 small-tsu keyword glyph (``{kw:っ}``,
+    ``{kw:ッ}``; a Japanese glottal-stop mark with no Korean reading) may be
+    dropped by writing ``{kw-:っ}`` in its place. Both are listed in
+    ``unowned`` and therefore force the whole-message arena write.
     """
     names = PH_RE.findall(ko)
-    if names != tpl.names:
+    dropped = set()
+    for k, (got, want) in enumerate(zip(names, tpl.names)):
+        if got != want and got.startswith('{kw-:') and want == '{kw:' + got[5:]:
+            if got[5:-1] not in DROPPABLE_KW or unowned is None:
+                raise RewriteError('placeholder_mismatch', f'{got} cannot be dropped')
+            dropped.add(k)
+    if [want if k in dropped else got for k, (got, want) in enumerate(zip(names, tpl.names))] \
+            != tpl.names or len(names) != len(tpl.names):
         raise RewriteError('placeholder_mismatch', f'{len(names)} vs {len(tpl.names)}')
     texts = PH_RE.split(ko)
     if any('{' in t or '}' in t for t in texts):
@@ -611,17 +750,25 @@ def render(tpl, ko, encode, unowned=None):
     source = tpl.m['source']
     out = bytearray()
     spans = []
+
+    def styled(i):
+        near = [tpl.phs[j]['name'] for j in (i - 1, i) if 0 <= j < len(tpl.phs)]
+        return any(re.fullmatch(r'\{s\d\}', n) for n in near)
+
     for i, piece in enumerate(tpl.pieces):
         new = texts[i]
         if fold(new) == fold(piece['text']):
             raw = piece['raw']
         else:
             if piece['owner'] is None:
-                if unowned is None or not piece['raw']:
+                if unowned is None or not (piece['raw'] or styled(i)):
                     raise RewriteError('unowned_segment_changed', f'piece {i}')
                 unowned.append(dict(piece=i, before=fold(piece['text']), after=new))
+            lead = 0
+            while piece['raw'][2 * lead:2 * lead + 2] == b'\x81\x40':
+                lead += 1
             try:
-                raw = _encode_piece(new, encode, source)
+                raw = _encode_piece(new, encode, source, lead)
             except (ValueError, KeyError) as exc:
                 raise RewriteError('unencodable', str(exc))
             if tpl.m['game'] == 'p1':
@@ -636,6 +783,9 @@ def render(tpl, ko, encode, unowned=None):
         out += raw
         if i < len(tpl.phs):
             ph = tpl.phs[i]
+            if i in dropped:
+                unowned.append(dict(piece=i, before=ph['name'], after=''))
+                continue
             spans.append((len(out), len(ph['raw']), ph['owner'], ph['kind']))
             out += ph['raw']
     for off, size, owner in tpl.tail_owners:
@@ -672,17 +822,33 @@ def render(tpl, ko, encode, unowned=None):
 def layout_issues(payload, m, glyphs):
     """The final builder pixel audit's row rules for one message."""
     from dialogue_pixel_layout import tokenize, physical_rows
+    from korean_punct_glyphs import compact_ellipsis_bytes
     name, limit, max_rows = m['profile']
     issues = []
+    # The builder's final ellipsis stage (compact_dialogue_ellipsis) turns runs of
+    # 3+ 「・」 into 「…」 with undrawn 0x20 padding before the audited final bytes;
+    # measure that shipped form (fixB C1/C2: no portrait window has a 184px first row).
+    compacted = compact_ellipsis_bytes(payload)[0]
+    # 「…」 0x8163 is supplied by that stage; a baseline without it measures the cell as full ink.
+    supplied = b'\x81\x63' if compacted != bytes(payload) else None
+    payload = compacted
     try:
         tokens = tokenize(payload, m['game'], glyphs)
     except ValueError as exc:
         return [f'parse:{exc}'], 0
     widest = 0
-    for row in physical_rows(tokens):
+    row_px = m.get('row_px')
+    for ordinal, row in enumerate(physical_rows(tokens)):
         row_limit = limit
-        if name in ('p1_portrait', 'p2_portrait') and row['line'] == 0 and row['end']['kind'] == 'newline':
-            row_limit += 8
+        if row_px is not None:
+            # Declared per-row bound (renderer unknown): the n-th row keeps its
+            # native JP width cap; an extra row has no bound and is refused.
+            if ordinal >= len(row_px):
+                issues.append(f'row_overflow:p{row["page"]}l{row["line"]} row {ordinal}>={len(row_px)} declared')
+                row_limit = 0
+            else:
+                row_limit = row_px[ordinal]
+        # No 184px first-row allowance in p1_portrait/p2_portrait (dialogue_pixel_layout.audit).
         if name == 'p2_result_quote' and row['end']['raw'] in (b'k', b'K'):
             row_limit -= 8
         advance = ink = 0
@@ -691,8 +857,11 @@ def layout_issues(payload, m, glyphs):
                 try:
                     bitmap = glyphs.bitmap(t['raw'], m['game'])
                 except ValueError as exc:
-                    issues.append(f'glyph:{exc}')
-                    bitmap = ()
+                    if t['raw'] == supplied:
+                        bitmap = [[1] * t['advance']]
+                    else:
+                        issues.append(f'glyph:{exc}')
+                        bitmap = ()
                 xs = [x for y in bitmap for x, v in enumerate(y) if v]
                 if xs:
                     ink = max(ink, advance + max(xs) + 1)
@@ -867,9 +1036,17 @@ def apply_overlay(original, rom, manifest, writes, rewrites, encode, *, arena_en
             else:
                 manifest.append(updated)
             writes.append(binding)
-        rom[target:target + len(payload)] = payload
-        writes.append([target, len(payload), len(payload), payload.hex(), None, None, None,
-                       'dialogue-rewrite-final'])
+        if target == old_target and len(payload) < old_size:
+            # Same-slot shrink: the whole old allocation is zero-padded and owned by
+            # this write (slot=old_size, fill 0x00), so no tail byte of the previous
+            # writer survives as a half SJIS token (S3: 0xA6A844, 499 shrinks).
+            rom[target:target + old_size] = payload + bytes(old_size - len(payload))
+            writes.append([target, old_size, len(payload), payload.hex(), 0x00, None, None,
+                           'dialogue-rewrite-final'])
+        else:
+            rom[target:target + len(payload)] = payload
+            writes.append([target, len(payload), len(payload), payload.hex(), None, None, None,
+                           'dialogue-rewrite-final'])
         if target != old_target:
             for site in p['sites']:
                 raw = struct.pack('<I', GBA + target)
@@ -1005,8 +1182,10 @@ def validate_message(tpl, ko, *, encode, syl_to_code, glossary, external, jp, cu
     issues.extend(external_issues(ko, external))  # 5
     if normalize_korean_terms(plain) != plain:  # 6
         reject('term_conflict', 'normalize_korean_terms changes the text')
-    if any(word in plain for word in ('게임보이 워즈', '게임보이워즈')):
-        reject('term_conflict', '어드밴스 워즈 표기')
+    # 2026-11-04 user (temp/fix_20261104/inputs.md msg9): the in-game title is
+    # 「게임보이 워즈 어드밴스」 again; the 2026-10-16 「어드밴스 워즈」 form is refused.
+    if '어드밴스워즈' in ''.join(plain.split()):
+        reject('term_conflict', '게임보이 워즈 어드밴스 표기')
     if any(ph.startswith('{q:') for ph in tpl.names) and re.search('아니오|아니요', plain):
         reject('term_conflict', '예/아뇨 표기')
     sylset = set(syl_to_code)
@@ -1058,8 +1237,10 @@ def displayed_row_text(authored, actual, address, baseline=None):
     the authored text is aligned to the display and only two writer facts are
     absorbed: a fullwidth space the encoder keeps (a piece's leading space,
     e.g. after {W}) and a glyph form that folds to the authored punctuation
-    (e.g. '.' shipped as 。 where display_equivalent predicts ．). Anything
-    else returns None: the row would fail the final B-team ROM gate.
+    (e.g. '.' shipped as 。 where display_equivalent predicts ．), plus an
+    authored '...' that ships as the 「・・・」 run the final byte stage compacts
+    to 「…」 (fixB J). Anything else returns None: the row would fail the final
+    B-team ROM gate.
     """
     from qa_bteam_drift import display_equivalent as shown
     if baseline is not None and shown(baseline, address) == actual:
@@ -1076,6 +1257,14 @@ def displayed_row_text(authored, actual, address, baseline=None):
         seg = actual[pos:pos + len(want)]
         if seg == want:
             out.append(token)
+        elif token == '...' and shown('\u30fb\u30fb\u30fb', address) != want \
+                and actual[pos:pos + len(shown('\u30fb\u30fb\u30fb', address))] == shown('\u30fb\u30fb\u30fb', address):
+            # fixB J: outside the dialogue writers '...' ships as the \u300c\u30fb\u30fb\u30fb\u300d run the final
+            # byte stage compacts to \u300c\u2026\u300d; keep the shipped run so the ledger row folds the same.
+            out.append('\u30fb\u30fb\u30fb')
+            pos += len(shown('\u30fb\u30fb\u30fb', address))
+            i += 1
+            continue
         elif actual[pos:pos + 1] == '\u3000' and not token.isspace():
             out.append(' ')
             pos += 1
@@ -1116,9 +1305,20 @@ def bteam_payload_issue(payload, fragments, key):
     return None
 
 
-def bteam_owner_texts(payload, fragments, joiners, owner_texts, bteam):
-    """(owner_texts, issues) with every B-team row text equal to its ROM display."""
+def bteam_owner_texts(payload, fragments, joiners, owner_texts, bteam, source=None):
+    """(owner_texts, issues) with every B-team row text equal to its ROM display.
+
+    ``source`` is the rewritten message. In the Part 2 prologue range the builder's
+    ``part2_prologue_punctuation.patch_rewritten`` turns every 、/。 of a rewritten
+    message into the approved 「，」「．」 (2026-10-23 user approval) right after this
+    overlay, and the final B-team gate reads those bytes; compare the same bytes.
+    """
     texts, issues = dict(owner_texts), []
+    shipped = payload
+    if source is not None:
+        from part2_prologue_punctuation import in_prologue, rewritten_payload
+        if in_prologue(source):
+            shipped = rewritten_payload(payload)
     for key in sorted(owner_texts):
         address = key8(int(key, 16))
         if address not in bteam or key not in fragments:
@@ -1128,11 +1328,21 @@ def bteam_owner_texts(payload, fragments, joiners, owner_texts, bteam):
             issues.append(dict(code='bteam_payload', severity='reject', detail=f'{key}: {problem}'))
             continue
         try:
-            actual = row_display(payload, fragments, joiners, key)
+            actual = row_display(shipped, fragments, joiners, key)
         except ValueError as exc:
             issues.append(dict(code='bteam_display_mismatch', severity='reject', detail=f'{key}: {exc}'))
             continue
+        # fixB J: the builder's final byte stage turns 3-5 「・」 into 「…」 after this overlay;
+        # check_rom reads the row through display_equivalent(actual=True). Fold the same way.
+        import qa_bteam_drift as drift
+        actual = drift.display_equivalent(actual, int(key, 16), actual=True)
         text = displayed_row_text(owner_texts[key], actual, int(key, 16), bteam[address])
+        if (text is not None and text != bteam[address] and address in exception_rows()
+                and _shows_exception(address, actual)):
+            # Row left exactly as the user-approved exception shows it (e.g. a
+            # renderer-only prologue 。→． row): no change, so no ledger entry.
+            texts[key] = bteam[address]
+            continue
         if text is not None and text != bteam[address] and address in exception_rows():
             issues.append(dict(code='bteam_exception_row', severity='reject',
                                detail=f'{key}: user-approved exception row ({address}); '
@@ -1244,7 +1454,11 @@ def _load_baseline(args):
             raise SystemExit('baseline ROM was built with a non-empty rewrite overlay; use the frozen W2 baseline')
     manifest = json.loads(Path(args.manifest).read_text(encoding='utf-8'))
     writes = json.loads(Path(args.map).read_text(encoding='utf-8'))
-    return Baseline(original, rom, manifest, writes)
+    # fixB J: the builder applies this overlay before its final 「・・・」->「…」 byte stage,
+    # so the W3 baseline is the exact pre-compaction ROM (transform verified per entry).
+    from korean_punct_glyphs import restore_precompaction
+    rom, writes = restore_precompaction(bytes(rom), writes)
+    return Baseline(original, bytearray(rom), manifest, writes)
 
 
 def _read_json(path):
@@ -1308,7 +1522,8 @@ def cmd_apply(args):
                 jp=jp, current_ko=tpl.text, glyphs=base.glyphs)
             if payload is not None:
                 issues.extend(reviewed_wide_row_issues(payload, fragments))
-                owner_texts, display = bteam_owner_texts(payload, fragments, joiners, owner_texts, bteam)
+                owner_texts, display = bteam_owner_texts(payload, fragments, joiners, owner_texts, bteam,
+                                                          source=source)
                 issues.extend(display)
             row['issues'] = issues
             if any(i['severity'] == 'reject' for i in issues):

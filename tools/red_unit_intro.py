@@ -7,7 +7,7 @@ from sprite_relocations import SPRITE_STORAGE_START
 
 START, ADDRESS, TEXT_END, END = 0xD8F3B4, 0xD8F3B6, 0xD8F3D6, 0xD8F3DC
 POINTER = 0xDA45D8
-TEXT = '이 빨간색이　당신의 유닛이에요.'
+TEXT = '여기 이 빨간색이 네 유닛이야.'  # plan_C B-pin banmal (2026-11-04 user)
 SOURCE_SHA = 'ae49d8bc1890a14d6752293889b53fc8edd7ac1423c9a2550b818f0470a3a521'
 
 

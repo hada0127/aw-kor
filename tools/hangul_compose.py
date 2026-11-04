@@ -109,13 +109,14 @@ class Composer:
                 return Result(False, 'invalid_transition')
             return self._apply(self.committed.copy(), Active(V=V_LIST.index(combined)))
         if consonant:
+            # 받침(또는 겹받침)이 될 수 없거나, 붙인 음절이 2350 밖이면 현재 음절을 확정하고
+            # 그 자음으로 새 글자를 시작한다(2026-11-04 F). 슬롯이 없으면 no_slot, 상태 불변.
             if a.T:
                 combined = FINAL_CLUSTERS.get((T_LIST[a.T], jamo))
-                if combined is not None:
-                    return self._apply(self.committed.copy(), Active(a.L, a.V, T_LIST.index(combined)))
-                return self._advance(Active(L=L_LIST.index(jamo)))
-            if jamo in T_LIST:
-                return self._apply(self.committed.copy(), Active(a.L, a.V, T_LIST.index(jamo)))
+            else:
+                combined = jamo if jamo in T_LIST else None
+            if combined is not None and code_for(self.table, a.L, a.V, T_LIST.index(combined)) is not None:
+                return self._apply(self.committed.copy(), Active(a.L, a.V, T_LIST.index(combined)))
             return self._advance(Active(L=L_LIST.index(jamo)))
         if not a.T:
             combined = COMPOUND_VOWELS.get((V_LIST[a.V], jamo))

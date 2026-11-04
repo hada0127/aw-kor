@@ -41,7 +41,11 @@ class ProtectedHelpApologyTests(unittest.TestCase):
  def test_individual_source_authorities_match_baseline(self):
   root=Path(B.BASE);base=json.loads((root/'data/bteam_baseline.json').read_text())['overrides'];ov=json.loads((root/'data/dialogue_overrides.json').read_text())
   with (root/'data/translation_for_import.csv').open(encoding='utf-8') as f:csvrows={r['address']:r for r in csv.DictReader(f)}
-  for address,text in ((0xD82058,C.HELP),(0xD8F6FE,C.APOLOGY)):
+  # plan_C B-pin: the apology row keeps its B-team source text; the B-pin writer ships APOLOGY.
+  import bpin_contract
+  approval=bpin_contract.bteam_approvals()['0x00D8F6FE']
+  self.assertEqual(approval['to'],C.APOLOGY);self.assertEqual(bpin_contract.text(0xD8F6FC,'0xD8F6FE'),C.APOLOGY)
+  for address,text in ((0xD82058,C.HELP),(0xD8F6FE,approval['baseline'])):
    key=f'0x{address:08X}';self.assertEqual(base[key],text);self.assertEqual(ov[key],text);self.assertEqual(csvrows[key]['korean'],text);self.assertEqual(int(csvrows[key]['length']),len(text.encode()))
   self.assertEqual(B.ADDRESS_TEXT_OVERRIDES[0xD82058],C.HELP)
 

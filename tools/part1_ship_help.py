@@ -23,16 +23,25 @@ MESSAGES=(
       visible=('해상 유닛。지상 유닛을','두 유닛 탑재 가능。','수송 중 파괴되면 안의','유닛도 함께 사라진다。')),
 )
 ROWS=tuple(row for message in MESSAGES for row in message['rows'])
+# plan_C B-pin (2026-11-04 user, tools/bpin_contract.py): reviewed final wording.
+# ROWS above stay the source-writer rows (ADDRESS_TEXT_OVERRIDES); the B-pin writer
+# replaces the escort message after repointing, so verify() checks these rows.
+FINAL_ROWS={
+ 'escort':((0xDEEB62,0xDEEB6E,'해상 유닛. '),(0xDEEB6F,0xDEEB75,'잠수함'),
+           (0xDEEB76,0xDEEB78,'과'),(0xDEEB7B,0xDEEB8D,'공중 유닛에 강하다.'),
+           (0xDEEB90,0xDEEBA0,'헬기 두 유닛을'),(0xDEEBA3,0xDEEBB9,'탑재할 수 있다.')),
+}
+FINAL_VISIBLE={'escort':('해상 유닛。 잠수함과','공중 유닛에 강하다。','헬기 두 유닛을','탑재할 수 있다。')}
 
 def source_guard(original):
  for m in MESSAGES:
   if hashlib.sha256(original[m['source']:m['end']]).hexdigest()!=m['sha'] or struct.unpack_from('<I',original,m['pointer'])[0]!=0x08000000+m['source']:
    raise ValueError('Ship help original source/pointer changed: '+m['name'])
 
-def expected_payload(original,encode,m):
+def expected_payload(original,encode,m,rows=None):
  source_guard(original)
  result=bytearray();cur=m['source']
- for start,end,text in m['rows']:
+ for start,end,text in (m['rows'] if rows is None else rows):
   result+=original[cur:start]
   result+=normalize_text_segment(encode(text,start),True,start)
   cur=end
@@ -42,7 +51,7 @@ def expected_payload(original,encode,m):
 def verify(rom,original,manifest,encode):
  result=[]
  for m in MESSAGES:
-  expected=expected_payload(original,encode,m)
+  expected=expected_payload(original,encode,m,FINAL_ROWS.get(m['name']))
   entries=[entry for entry in manifest if int(entry['msg'],16)==m['source']]
   if len(entries)!=1 or entries[0]['status']!='relocated':raise ValueError('Ship help relocation missing/duplicate: '+m['name'])
   entry=entries[0];target=int(entry['new_addr'],16)
@@ -51,5 +60,6 @@ def verify(rom,original,manifest,encode):
    raise ValueError('Ship help relocation bounds/ownership changed: '+m['name'])
   if struct.unpack_from('<I',rom,m['pointer'])[0]!=target+0x08000000:raise ValueError('Ship help final pointer changed: '+m['name'])
   if bytes(rom[target:target+len(expected)])!=expected:raise ValueError('Ship help text/control/style changed: '+m['name'])
-  result.append({'name':m['name'],'source':hex(m['source']),'target':hex(target),'rows':m['visible']})
+  result.append({'name':m['name'],'source':hex(m['source']),'target':hex(target),
+                 'rows':FINAL_VISIBLE.get(m['name'],m['visible'])})
  return {'status':'PASS','messages':result,'native_consumer_verified':False,'pixels_verified':False}

@@ -40,6 +40,13 @@ def fixture():
     rom = bytearray(original)
     for a,b,digest in c.CURRENT_PINS:
         rom[a:b] = current[a:b]
+    # plan_C B-pin (2026-11-04 user): reviewed native Help rows, the D82218 retained
+    # source and the Help dictionary derived from them replace the accepted bytes.
+    import bpin_contract
+    import part1_editor_help_dictionary as help_dictionary
+    bpin_contract.help_source_rows(rom)
+    payload = help_dictionary.dictionary(rom)
+    rom[help_dictionary.DICTIONARY_OFFSET:0xF5108E] = payload.ljust(0xF5108E-help_dictionary.DICTIONARY_OFFSET, b'\0')
     # accepted0916 predates the reviewed 2026-11-04 Part 1 trim-hook fix (PLAN B
     # T1): replace exactly that retired hook, then require the production pin.
     if bytes(rom[TRIM_HOOK:TRIM_HOOK+len(RETIRED_TRIM_HOOK)]) != RETIRED_TRIM_HOOK:
@@ -67,8 +74,8 @@ def fixture():
                     '선택 중인 지형 병종을 배치합니다',0,writer])
     c.retain_native(original,rom,log)
     options=dict(line_index={c.FIRST:(36,'選択している地形、兵種を配置します。')},
-        slots={c.FIRST:36},source_text=lambda a:c.TEXT,fixed_bytes=lambda a:c.ROW,
-        valid_codes={int.from_bytes(c.ROW[i:i+2],'big') for i in range(0,38,2)})
+        slots={c.FIRST:36},source_text=lambda a:c.SOURCE_TEXT,fixed_bytes=lambda a:c.SOURCE_ROW,
+        valid_codes={int.from_bytes(raw[i:i+2],'big') for raw in (c.ROW,c.SOURCE_ROW) for i in range(0,38,2)})
     return original,rom,manifest,log,options
 
 
@@ -111,12 +118,14 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(len(rows),1)
         self.assertEqual(sum(t['advance'] for t in rows[0]['tokens']),152)
         import part1_editor_help_dictionary as d
-        codes=[d.dictionary(r)[i:i+2] for i in range(0,140,2)]
+        codes=[d.dictionary(r)[i:i+2] for i in range(0,2*d.CODE_COUNT,2)]
         for i in range(0xD81C24,0xD81CFC,2):
             pair=bytes(r[i:i+2])
             if pair not in codes:codes.append(pair)
-        self.assertEqual(len(codes),73)
-        self.assertEqual(0x0E+len(codes)*2-1,0x9F)
+        # plan_C B-pin: 66 Help codes (was 70) + 3 editor pairs; last tile 0x97 <= 0x9F.
+        self.assertEqual(len(codes),69)
+        self.assertEqual(0x0E+len(codes)*2-1,0x97)
+        self.assertLessEqual(0x0E+len(codes)*2-1,0x9F)
 
     def test_source_provenance_authority_capacity_owners_and_fallback(self):
         changes={
@@ -126,10 +135,12 @@ class ContractTests(unittest.TestCase):
             'source36':lambda o,r,m,w,k:k.update(line_index={c.FIRST:(38,'')}),
             'slot44':lambda o,r,m,w,k:k.update(slots={c.FIRST:44}),
             'extra-row':lambda o,r,m,w,k:k['line_index'].update({c.FIRST+2:(2,'')}),
-            'authority':lambda o,r,m,w,k:k.update(source_text=lambda a:c.TEXT.replace(',',' ')),
+            'authority':lambda o,r,m,w,k:k.update(source_text=lambda a:c.SOURCE_TEXT.replace(',',' ')),
+            'display-as-source':lambda o,r,m,w,k:k.update(source_text=lambda a:c.TEXT),
             'source-as-display':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.CURRENT[:36]),
-            'period':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW[:-2]),
-            'space':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW[:4]+c.ROW[6:]),
+            'period':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.SOURCE_ROW[:-2]),
+            'space':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.SOURCE_ROW[:4]+c.SOURCE_ROW[6:]),
+            'reviewed-row-as-source':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW),
             'glyph':lambda o,r,m,w,k:k.update(valid_codes=set()),
             'high-water':lambda o,r,m,w,k:m[-1].update(new_len=2),
             'count':lambda o,r,m,w,k:m.pop(),
@@ -249,7 +260,7 @@ class ContractTests(unittest.TestCase):
         def raw(path):return bytes(r) if str(path)=='fixture-rom' else read_bytes(path)
         def check():
             with patch.object(Path,'read_bytes',raw),patch.object(Path,'read_text',text):
-                return drift.check_rom({'overrides':{'0x00D821F0':c.TEXT}},
+                return drift.check_rom({'overrides':{'0x00D821F0':c.SOURCE_TEXT}},
                     'fixture-rom','fixture-map','fixture-manifest')
         self.assertEqual(check()[0]['cause'],'repoint line mapping invalid')
         c.append(o,r,m,w,**k);selected.append(m[-1]);self.assertEqual(check(),[])
@@ -264,14 +275,16 @@ class ContractTests(unittest.TestCase):
         import build_korean_full as b
         syl=json.loads((Path(b.BASE)/'data/syllable_to_code_2350.json').read_text())
         syl={k:int(v,16) if isinstance(v,str) else int(v) for k,v in syl.items()}
-        self.assertEqual(bytes(b.encode_full_fidelity(c.TEXT,syl,set(),c.FIRST)),c.ROW)
+        self.assertEqual(bytes(b.encode_full_fidelity(c.SOURCE_TEXT,syl,set(),c.FIRST)),c.SOURCE_ROW)
+        # plan_C B-pin reviewed row keeps the 38-byte extent with one trailing blank cell.
+        self.assertEqual(bytes(b.encode_full_fidelity(c.TEXT,syl,set(),c.FIRST))+b'\x81\x40',c.ROW)
         source=Path(b.__file__).read_text()
         self.assertLess(source.index("st['ec312c_late_append']"),source.index("st['d821f0_late_append']"))
         self.assertLess(source.index("st['d821f0_late_append']"),source.index('_pixel_audit = audit_pixel_layout'))
         self.assertLess(source.index('_d821f0.close_requirements('),source.index('_restored_relocated_residuals.add(0xD821F0)'))
         self.assertNotIn(c.FIRST,b.BTEAM_ROUND2_RESIDUALS)
         self.assertNotIn(c.FIRST,b.BTEAM_RESTORED_ROW_HALF_CELLS)
-        self.assertEqual(json.loads((Path(b.BASE)/'data/bteam_baseline.json').read_text())['overrides']['0x00D821F0'],c.TEXT)
+        self.assertEqual(json.loads((Path(b.BASE)/'data/bteam_baseline.json').read_text())['overrides']['0x00D821F0'],c.SOURCE_TEXT)
         from dialogue_repoint import _line_index
         self.assertEqual(_line_index(b.FOUND)[c.FIRST][0],36)
 

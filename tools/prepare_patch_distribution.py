@@ -69,7 +69,7 @@ def write_readme(path, release_date, patch_stem, source_info, target_info, user_
     """User-facing Korean patch README. Developer/reviewer notes: docs/REVIEWER_GUIDE.md."""
     highlight_block = f'\n이번 판에서 바뀐 점: {user_highlight}\n' if user_highlight else ''
     path.write_text(
-        f"""# 어드밴스 워즈 1+2 한글 패치 — 적용 안내
+        f"""# 게임보이 워즈 어드밴스 1+2 한글 패치 — 적용 안내
 
 일본판 GBA 게임 **Game Boy Wars Advance 1+2** ROM을 한글판으로 바꾸는 패치입니다.
 저작권 문제로 **게임 ROM은 들어 있지 않습니다.** 본인이 정당하게 가진 일본판 ROM을 준비하세요.

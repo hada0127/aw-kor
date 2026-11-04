@@ -250,10 +250,17 @@ class CoreBehaviour(unittest.TestCase):
         self.assertEqual(self.keys(buf, comp, 'ㄱ', '9th'), [1])          # no_slot 원자
         self.assertEqual(self.keys(buf, comp, '<', 'edit back'), [0])     # 8번째 active 역삭제
         self.assertEqual(self.h.preview(buf), '가나다라마바사아')
+        buf, comp = self.h.fresh()                                       # 8번째 요+ㅎ: 자동 확정 자리 없음
+        self.keys(buf, comp, 'ㄱㅏㄴㅏㄷㅏㄹㅏㅁㅏㅂㅏㅅㅏㅇㅛ', 'full8 yo')
+        self.assertEqual(self.keys(buf, comp, 'ㅎ', '9th auto'), [1])     # no_slot 원자(요 유지)
+        self.assertEqual(self.h.preview(buf), '가나다라마바사요')
 
     def test_atomic_rejections_and_migrations(self):
-        cases = [('ㄱㅏㅋ', [0, 0, 1], '가'),           # 가+ㅋ 갘 표 밖 → 원자 거부
-                 ('ㄱㅐㄷ', [0, 0, 1], '개'),           # 갣 표 밖
+        cases = [('ㄱㅏㅋ', [0, 0, 0], '가ㅋ'),          # 갘 표 밖 → 가 확정 + 새 ㅋ (2026-11-04 F)
+                 ('ㄱㅐㄷ', [0, 0, 0], '개ㄷ'),          # 갣 표 밖 → 개 확정 + 새 ㄷ
+                 ('ㄱㅐㄷㅏ', [0] * 4, '개다'),
+                 ('ㅇㅛㅎㅏ', [0] * 4, '요하'),           # 욯 표 밖
+                 ('ㄱㅏㄱㅅㅏ', [0] * 5, '각사'),         # 겹받침 갃 표 밖
                  ('ㄱㅏㄴㅒ', [0, 0, 0, 1], '간'),       # 냬 표 밖 → 간 보존
                  ('ㅎㅏㄴㄱㅏ', [0] * 5, '한가'),
                  ('ㄷㅏㄹㄱㅏ', [0] * 5, '달가'),

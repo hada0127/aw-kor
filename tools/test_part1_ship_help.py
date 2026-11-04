@@ -21,14 +21,21 @@ class ShipHelpTests(unittest.TestCase):
  def fixture(self):
   rom=bytearray(self.original);texts={a:t for a,e,t in H.ROWS}
   manifest,_=repoint_messages(rom,self.original,fixable=lambda a:a in texts,fixed_bytes=lambda a:self.encode(texts[a],a),fit_level_dlg=lambda a:6,decode_text=self.decode,cell_width=lambda a:len(texts[a])*2,slots={a:e-a for a,e,t in H.ROWS},line_index={a:(e-a,self.original[a:e].decode('shift_jis')) for a,e,t in H.ROWS},table_offsets=[],extra_messages={m['source']:[m['pointer']] for m in H.MESSAGES},free_start=0xA3D000,free_end=0xA3E000)
+  # plan_C B-pin writer: reviewed final rows replace the escort message in its allocation.
+  for m in H.MESSAGES:
+   if m['name'] not in H.FINAL_ROWS:continue
+   entry=next(e for e in manifest if int(e['msg'],16)==m['source']);target=int(entry['new_addr'],16)
+   final=H.expected_payload(self.original,self.encode,m,H.FINAL_ROWS[m['name']])
+   self.assertLessEqual(len(final),(entry['new_len']+3)//4*4)
+   rom[target:target+max(len(final),entry['new_len'])]=final+bytes(max(0,entry['new_len']-len(final)));entry['new_len']=len(final)
   return rom,manifest
  def test_actual_repointer_complete_rows_controls_and_only_owned_ranges(self):
   rom,manifest=self.fixture();self.assertEqual(H.verify(rom,self.original,manifest,self.encode)['status'],'PASS');allowed=set()
   for m in H.MESSAGES:
-   payload=H.expected_payload(self.original,self.encode,m);text=self.decode(payload)
+   payload=H.expected_payload(self.original,self.encode,m,H.FINAL_ROWS.get(m['name']));text=self.decode(payload)
    rows=text.split('\x0a\x00',1)[0].split('r')
    rows=tuple(row.replace('\x0a\x09','').replace('2','').replace('0','').replace('\u3000',' ') for row in rows)
-   self.assertEqual(rows,m['visible']);self.assertTrue(all(visual_cells(row.replace(' ','\u3000'))<=24 for row in rows));self.assertNotIn(b'\x20',payload)
+   self.assertEqual(rows,H.FINAL_VISIBLE.get(m['name'],m['visible']));self.assertTrue(all(visual_cells(row.replace(' ','\u3000'))<=24 for row in rows));self.assertNotIn(b'\x20',payload)
    def controls(raw):
     result=[];i=0
     while i<len(raw):
@@ -54,7 +61,7 @@ class ShipHelpTests(unittest.TestCase):
  def test_each_message_pointer_text_and_style_mutation_fail(self):
   rom,manifest=self.fixture()
   for m in H.MESSAGES:
-   target=struct.unpack_from('<I',rom,m['pointer'])[0]-0x08000000;payload=H.expected_payload(self.original,self.encode,m)
+   target=struct.unpack_from('<I',rom,m['pointer'])[0]-0x08000000;payload=H.expected_payload(self.original,self.encode,m,H.FINAL_ROWS.get(m['name']))
    offsets=[0,1,2,payload.index(b'\x72')]
    if b'\x32' in payload:offsets.append(payload.index(b'\x32'))
    for a in [m['pointer']]+[target+offset for offset in offsets]:

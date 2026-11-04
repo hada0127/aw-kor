@@ -13,6 +13,15 @@ import df28c0_contract as c
 from dialogue_repoint import repoint_messages, text_segment_cells
 from repoint_source_rows import row_bytes
 
+# fixB (plan_C W3): the full build rewrites this message through the W3 overlay and its B-team
+# rows are ledger-owned (data/bteam_approved_rewrites.json). This fixture writes the contract's own
+# text, so check_rom runs it against an empty approval ledger; the real ledger stays authoritative
+# for the final ROM gate (qa_bteam_drift --rom).
+_EMPTY_LEDGER = b'{"entries": {}}'
+NO_W3_LEDGER = dict(ledger_bytes=_EMPTY_LEDGER,
+                    ledger_pinned=__import__("hashlib").sha256(_EMPTY_LEDGER).hexdigest())
+
+
 
 class ContractTests(unittest.TestCase):
     def prepare_fixture(self, mutation=None, callbacks=None):
@@ -179,7 +188,7 @@ class ContractTests(unittest.TestCase):
             if str(p)=='fixture-writes':return json.dumps(writes[1:])
             return read_text(p,*a,**kw)
         with patch.object(Path,'read_bytes',lambda p:bytes(rom) if str(p)=='fixture-rom' else read_bytes(p)),patch.object(Path,'read_text',text):
-            self.assertEqual(check_rom({'overrides':{f'0x{a:08X}':t for a,t in c.TEXTS.items()}},'fixture-rom','fixture-writes','fixture-manifest'),[])
+            self.assertEqual(check_rom({'overrides':{f'0x{a:08X}':t for a,t in c.TEXTS.items()}},'fixture-rom','fixture-writes','fixture-manifest',**NO_W3_LEDGER),[])
 
 
     def test_downstream_spacing_keeps_restoration_and_rejects_old_contract(self):

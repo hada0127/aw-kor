@@ -43,9 +43,17 @@ def reviewed_bteam_rows():
     return {int(r['address'],16):r for r in load_ledger().get('bteam',[])}
 
 
+def _ellipsis_fold(text):
+    # fixB J (E3): the final pass ships 3-5 「・」 as one 「…」 and pads the freed
+    # bytes with undrawn 0x20 at the row-fragment end.
+    from korean_punct_glyphs import compact_ellipsis_text
+    text=compact_ellipsis_text(text)
+    return text.replace(' ','') if '…' in text else text
+
+
 def reviewed_bteam_match(address, expected, actual, *, restored):
     row=reviewed_bteam_rows().get(address)
-    if row is None or actual!=row['after']:return False
+    if row is None or (actual!=row['after'] and _ellipsis_fold(actual)!=_ellipsis_fold(row['after'])):return False
     if restored:
         return row['classification']=='restored' and expected==row['baseline']
     return (row['classification']=='retained-residual'
@@ -470,8 +478,13 @@ def apply_repairs(rom, original, manifest, writes, ledger=None):
     return report
 
 
-def verify(rom, original, manifest, ledger=None):
+def verify(rom, original, manifest, ledger=None, writes=None):
+    """Reviewed after-bytes/pages. ``writes`` (final integrity map): check a final
+    ROM in its exact pre-ellipsis-compaction form (plan_C J decision (a))."""
     ledger = load_ledger() if ledger is None else ledger
+    if writes is not None:
+        from korean_punct_glyphs import restore_precompaction
+        rom = restore_precompaction(rom, writes)[0]
     messages={m['source']:m for m in inventory(original,rom,manifest)}
     glyphs=Glyphs(bytes(rom));checked=0
     for spec in ledger['messages']:

@@ -16,6 +16,12 @@
  *   +cache_tile_off u16 = tile_start. 코드 i 의 타일 = tile_start + 2i(top), +1(bottom).
  * VRAM 타일 t = vram_charblock + t*32 (4bpp 8x8, 리맵 없음 NR-2).
  * 확장 한자표 엔트리 6B = [code BE][top u16 LE][bot u16 LE]. 한글/자모는 top bit15, 글리프 = kor_base + (idx&0x7FFF)*32.
+ *
+ * L3(2026-11-04 fixB): host 코드(탁음 가나 25·숨은 한자 뒤 8)의 사전 타일은 자모 라벨로 덮여 있어서, 그 코드가
+ * 든 legacy 이름은 NAME 박스에 자모로 보였다. 미리보기는 host 코드 칸도 placeholder 타일에 원래 FONT_BASE 글리프를
+ * 올려 그린다. 슬롯은 native 변환(0x08EFE788)과 같은 규칙: 가타카나(0x8340..0x8397)는 가나 표
+ * (font_kana_table, = *(0x08B80278)) [kidx]/[kidx+8], kidx = ((code-0x8140)&~7)*2 + (code&7) - 0x400,
+ * 그 밖은 확장 한자표의 비-bit15 엔트리(top/bot = FONT_BASE 슬롯). 사전 로더처럼 raw 복사(리맵 없음, T0 NR-2).
  */
 #include <stdint.h>
 #include "p1_config.h"
@@ -38,6 +44,8 @@
 #define SPACE_LO   0x40u
 #define PREVIEW_MAX 8u          /* placeholder 수 = mode1 max */
 #define KOREAN_MARKER 0x8000u
+#define KATA_FIRST 0x8340u
+#define KATA_LAST  0x8397u
 
 extern const uint8_t nc1_host_tab[];        /* 33 x {u8 jamo index, u8 0, u16 host LE} (grid_p1.inc) */
 extern const uint8_t nc1_placeholders[];    /* 8 x u16 LE (grid_p1.inc) */
@@ -48,22 +56,29 @@ extern const uint8_t *nc1_h_tbl_end;
 extern const uint8_t *nc1_h_kor;
 extern const uint8_t *nc1_h_cache;
 extern volatile uint16_t *nc1_h_vram;
+extern const uint8_t *nc1_h_font;
+extern const uint8_t *nc1_h_kana;
 #define TBL_START nc1_h_tbl_start
 #define TBL_END   nc1_h_tbl_end
 #define KOR       nc1_h_kor
 #define CACHE     nc1_h_cache
 #define VRAM      nc1_h_vram
+#define FONT      nc1_h_font
+#define KANA      nc1_h_kana
 #else
 #define TBL_START ((const uint8_t *)NC1_TBL_START)
 #define TBL_END   ((const uint8_t *)NC1_TBL_END)
 #define KOR       ((const uint8_t *)NC1_KOR_BASE)
 #define CACHE     ((const uint8_t *)(NC1_CACHE_BASE))
 #define VRAM      ((volatile uint16_t *)NC1_VRAM_CHARBLOCK)
+#define FONT      ((const uint8_t *)NC1_FONT_BASE)
+#define KANA      ((const uint8_t *)NC1_FONT_KANA_TABLE)
 #endif
 
 void nc1_pad(uint8_t *obj);
 void nc1_tail_init(uint8_t *obj);
 unsigned nc1_korean_tiles(unsigned code, unsigned *top, unsigned *bot);
+unsigned nc1_font_tiles(unsigned code, unsigned *top, unsigned *bot);
 int nc1_cache_tile(unsigned code);
 void nc1_upload(unsigned vram_tile, unsigned top, unsigned bot);
 void nc1_upload_hosts(void);
@@ -101,24 +116,65 @@ void nc1_tail_init(uint8_t *obj)
     obj[OFF_TAIL + 2u] = 0xFF;
 }
 
-/* 확장 한자표에서 code 를 찾는다. bit15(한글/자모) 엔트리면 top·bot = 글리프 타일 index(&0x7FFF), 1 반환. */
-unsigned nc1_korean_tiles(unsigned code, unsigned *top, unsigned *bot)
+static unsigned u16le(const uint8_t *p)
+{
+    return p[0] | ((unsigned)p[1] << 8);
+}
+
+/* 확장 한자표에서 code 의 첫 엔트리(없으면 0). native 변환처럼 처음 맞는 엔트리에서 멈춘다. */
+static const uint8_t *table_entry(unsigned code)
 {
     const uint8_t *p = TBL_START;
     const uint8_t *end = TBL_END;
     unsigned hi = (code >> 8) & 0xFFu, lo = code & 0xFFu;
 
-    for (; p + 6 <= end; p += 6) {
-        if (p[0] == hi && p[1] == lo) {
-            unsigned t = p[2] | ((unsigned)p[3] << 8);
-            unsigned b = p[4] | ((unsigned)p[5] << 8);
-            if (!(t & KOREAN_MARKER))
-                return 0;
-            *top = t & 0x7FFFu;
-            *bot = b & 0x7FFFu;
-            return 1;
-        }
+    for (; p + 6 <= end; p += 6)
+        if (p[0] == hi && p[1] == lo)
+            return p;
+    return 0;
+}
+
+/* 확장 한자표에서 code 를 찾는다. bit15(한글/자모) 엔트리면 top·bot = 글리프 타일 index(&0x7FFF), 1 반환. */
+unsigned nc1_korean_tiles(unsigned code, unsigned *top, unsigned *bot)
+{
+    const uint8_t *p = table_entry(code);
+    unsigned t;
+
+    if (!p)
+        return 0;
+    t = u16le(p + 2);
+    if (!(t & KOREAN_MARKER))
+        return 0;
+    *top = t & 0x7FFFu;
+    *bot = u16le(p + 4) & 0x7FFFu;
+    return 1;
+}
+
+/* L3: FONT_BASE 슬롯 top·bot(native 변환 규칙). 가타카나 또는 확장표 비-bit15 엔트리면 1, 그 외 0. */
+unsigned nc1_font_tiles(unsigned code, unsigned *top, unsigned *bot)
+{
+    const uint8_t *p;
+
+    if (code >= KATA_FIRST && code <= KATA_LAST) {
+        unsigned k = (((code - 0x8140u) & 0xFFF8u) << 1) + (code & 7u) - 0x400u;
+        *top = u16le(KANA + 2u * k);
+        *bot = u16le(KANA + 2u * (k + 8u));
+        return 1;
     }
+    p = table_entry(code);
+    if (!p || (u16le(p + 2) & KOREAN_MARKER))
+        return 0;
+    *top = u16le(p + 2);
+    *bot = u16le(p + 4);
+    return 1;
+}
+
+static unsigned is_host(unsigned code)
+{
+    unsigned i;
+    for (i = 0; i < NC1_HOST_COUNT; i++)
+        if (u16le(nc1_host_tab + 4u * i + 2u) == code)
+            return 1;
     return 0;
 }
 
@@ -145,12 +201,17 @@ static void copy_tile(volatile uint16_t *dst, const uint8_t *src)
         dst[i] = (uint16_t)(src[2u * i] | ((unsigned)src[2u * i + 1u] << 8));
 }
 
+static void upload_from(const uint8_t *base, unsigned vram_tile, unsigned top, unsigned bot)
+{
+    volatile uint16_t *dst = VRAM + vram_tile * 16u;
+    copy_tile(dst, base + top * 32u);
+    copy_tile(dst + 16, base + bot * 32u);
+}
+
 /* KOR_BASE 글리프 top/bot(32B 씩)를 VRAM 타일 vram_tile, vram_tile+1 로 16비트 저장 32회. */
 void nc1_upload(unsigned vram_tile, unsigned top, unsigned bot)
 {
-    volatile uint16_t *dst = VRAM + vram_tile * 16u;
-    copy_tile(dst, KOR + top * 32u);
-    copy_tile(dst + 16, KOR + bot * 32u);
+    upload_from(KOR, vram_tile, top, bot);
 }
 
 /* 그리드 자모 라벨: host 코드의 사전 타일에 자모 타일(jamo_first_tile + 2*index, +1)을 한 번 복사. */
@@ -159,7 +220,7 @@ void nc1_upload_hosts(void)
     unsigned i;
     for (i = 0; i < NC1_HOST_COUNT; i++) {
         const uint8_t *e = nc1_host_tab + 4u * i;
-        unsigned host = e[2] | ((unsigned)e[3] << 8);
+        unsigned host = u16le(e + 2);
         int tile = nc1_cache_tile(host);
         if (tile >= 0)
             nc1_upload((unsigned)tile, NC1_JAMO_FIRST_TILE + 2u * e[0], NC1_JAMO_FIRST_TILE + 2u * e[0] + 1u);
@@ -175,8 +236,9 @@ void nc1_display_init(uint8_t *obj)
 
 /*
  * H5 미리보기 코드: 칸 i(0..min(max,8)-1)마다 out[2i..2i+1] = 그릴 코드(BE).
- * i < len 이고 한글(확장표 bit15)이면 placeholder[i] 의 사전 타일에 그 글리프를 올리고 placeholder 를 낸다.
- * 그 외(숫자·기호·공백·legacy 가나, 또는 placeholder 가 사전에 없을 때)는 slot 바이트 그대로. 반환 = 칸 수.
+ * i < len 이고 한글(확장표 bit15)이면 placeholder[i] 의 사전 타일에 그 KOR_BASE 글리프를, host 코드(legacy 탁음
+ * 가나·숨은 한자 — L3)이면 원래 FONT_BASE 글리프를 올리고 placeholder 를 낸다.
+ * 그 외(숫자·기호·공백·host 아닌 legacy 가나, 또는 placeholder 가 사전에 없을 때)는 slot 바이트 그대로. 반환 = 칸 수.
  */
 unsigned nc1_preview_codes(const uint8_t *obj, uint8_t out[16])
 {
@@ -185,11 +247,18 @@ unsigned nc1_preview_codes(const uint8_t *obj, uint8_t out[16])
     for (i = 0; i < n; i++) {
         unsigned code = slot_code(obj, i);
         unsigned top, bot;
-        if (i < len && nc1_korean_tiles(code, &top, &bot)) {
-            unsigned ph = nc1_placeholders[2u * i] | ((unsigned)nc1_placeholders[2u * i + 1u] << 8);
+        const uint8_t *src = 0;
+        if (i < len) {
+            if (nc1_korean_tiles(code, &top, &bot))
+                src = KOR;
+            else if (is_host(code) && nc1_font_tiles(code, &top, &bot))
+                src = FONT;
+        }
+        if (src) {
+            unsigned ph = u16le(nc1_placeholders + 2u * i);
             int tile = nc1_cache_tile(ph);
             if (tile >= 0) {
-                nc1_upload((unsigned)tile, top, bot);
+                upload_from(src, (unsigned)tile, top, bot);
                 code = ph;
             }
         }

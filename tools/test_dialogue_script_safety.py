@@ -816,8 +816,23 @@ class ScriptSafetyTests(unittest.TestCase):
         end, text = patches[0xD92850]
         self.assertEqual(end, 0xD92870)
         self.assertIn('Ａ', text)
+        self.assertTrue(text.endswith('눌러。'))
         codes = {s: int(c, 16) for s, c in json.loads(Path(builder.SYLCODE).read_text()).items()}
-        self.assertEqual(len(builder.encode_full_fidelity(text, codes, collections.Counter(), 0xD92850)), 32)
+        payload = builder.encode_full_fidelity(text, codes, collections.Counter(), 0xD92850)
+        # Reviewed 반말 wording (눌러요→눌러) is 30 bytes; the script-row writer pads the
+        # 32-byte slot with FILL_BYTE and the 0x6B control at 0xD92870 must survive.
+        self.assertEqual(len(payload), 30)
+        self.assertFalse(builder.in_region(builder.PAIR_RENDERER_REGIONS, 0xD92850, 0xD92870))
+        self.assertEqual(builder.FILL_BYTE, 0x20)
+        rom = bytearray(original)
+        rom[0xD92850:0xD92870] = payload + bytes([builder.FILL_BYTE]) * (32 - len(payload))
+        self.assertEqual(bytes(rom[0xD9286E:0xD92870]), b'\x20\x20')
+        self.assertEqual(original[0xD92870], 0x6B)
+        self.assertEqual(rom[0xD92870:0xD92878], original[0xD92870:0xD92878])
+        builder.verify_repaired_message_controls(original, rom)
+        rom[0xD92870] = 0x20
+        with self.assertRaisesRegex(AssertionError, 'repaired message control changed'):
+            builder.verify_repaired_message_controls(original, rom)
         for addr in (0xD92733, 0xD9280E):
             end, text = patches[addr]
             self.assertTrue(text.endswith('　'))

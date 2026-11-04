@@ -1,4 +1,6 @@
-# 이름 입력 한글 조합 — Phase A 참조 명세 (2026-10-23)
+# 이름 입력 한글 조합 — Phase A 참조 명세 (2026-10-23, 2026-11-04 받침 자동 확정 갱신)
+
+> **2026-11-04 갱신(fixB F, 사용자 「남은 한계 다 해결」):** 받침을 붙인 음절이 2350 밖이면 거부하지 않고 현재 음절을 확정한 뒤 그 자음으로 새 글자를 시작한다(예 `요+ㅎ → 요ㅎ`, `개+ㄷ → 개ㄷ`). 모음 쪽(종성 이동·복합 모음)의 2350 밖은 그대로 원자 거부다. 두 편(1편 이름·2편 맵 에디터)이 같은 `core.c` 를 쓰므로 같이 바뀐다. 아래 표·예시는 갱신한 계약이고, 변경 내용·검증은 맨 끝 「2026-11-04 변경」 절에 있다. 그 사이의 Phase A 실행 증거는 당시 기록으로 남긴다.
 
 ## 범위와 상태
 
@@ -12,7 +14,7 @@
 - `Active`는 불변 객체이며 L·V는 없는 경우 `None`, T는 받침 없음 `0`이다. 인덱스는 Unicode §3.12의 L 19·V 21·T 28 순서다. 완성 문자는 `0xAC00 + (L*21+V)*28+T`로 구한다.
 - 선택 자모 33개: `ㄱ ㄲ ㄴ ㄷ ㄸ ㄹ ㅁ ㅂ ㅃ ㅅ ㅆ ㅇ ㅈ ㅉ ㅊ ㅋ ㅌ ㅍ ㅎ`, `ㅏ ㅐ ㅑ ㅒ ㅓ ㅔ ㅕ ㅖ ㅗ ㅛ ㅜ ㅠ ㅡ ㅣ`. 된소리는 별도 선택한다.
 - 미리보기 자모 40개는 위 33개와 `ㅘ ㅙ ㅚ ㅝ ㅞ ㅟ ㅢ`다. Unicode 호환 자모이며 ROM 사설 코드가 아니다. 겹받침은 완성 음절 안에서만 사용한다.
-- 완성 후보는 읽기 전용 `data/syllable_to_code_2350.json`의 키를 조회한다. 후보가 없으면 `not_in_2350`으로 **키 전체를 거부**한다. 다른 음절로 대체하거나 확정 후 새 초성으로 바꾸지 않는다.
+- 완성 후보는 읽기 전용 `data/syllable_to_code_2350.json`의 키를 조회한다. 다른 음절로 대체하지 않는다. 모음 쪽 후보가 없으면 `not_in_2350`으로 **키 전체를 거부**한다. 받침 쪽 후보(L+V+c, 겹받침)가 없으면 2026-11-04부터 현재 음절을 확정하고 c 로 새 L-only 를 시작한다(슬롯 없으면 `no_slot`).
 
 ## 전이
 
@@ -23,12 +25,12 @@
 | 없음 | 새 L-only (슬롯 필요) | 새 V-only (슬롯 필요) |
 | L-only | `incomplete` 거부 | L+v 조회 후 적용 |
 | V-only | `incomplete` 거부 | 복합 가능하면 V-only 갱신, 불가하면 `invalid_transition` 거부 |
-| L+V | 종성 가능한 c면 L+V+c 조회. 조회 실패 시 그대로 거부. 종성 불가 ㄸ·ㅃ·ㅉ만 현재 음절 확정 + 새 L-only (슬롯 필요) | 복합 가능하면 L+V' 조회. 불가하면 현재 음절 확정 + 새 V-only (슬롯 필요) |
-| L+V+T | 겹받침 가능하면 새 완성 후보 조회. 불가하면 현재 확정 + 새 L-only (슬롯 필요) | 홑 T는 앞 L+V / 새 T→L+v. 겹 T=(t1,t2)는 앞 L+V+t1 / 새 t2→L+v. **앞·새 음절 모두** 조회하고 두 슬롯 확보 후 함께 적용 |
+| L+V | 종성 가능한 c이고 L+V+c 가 표에 있으면 받침으로 적용. 종성 불가(ㄸ·ㅃ·ㅉ)이거나 L+V+c 가 표 밖이면 현재 음절 확정 + 새 L-only (슬롯 필요, 2026-11-04) | 복합 가능하면 L+V' 조회(표 밖이면 `not_in_2350` 거부). 불가하면 현재 음절 확정 + 새 V-only (슬롯 필요) |
+| L+V+T | 겹받침이 되고 그 음절이 표에 있으면 겹받침 적용. 겹받침 불가이거나 표 밖(예 「갃」)이면 현재 확정 + 새 L-only (슬롯 필요) | 홑 T는 앞 L+V / 새 T→L+v. 겹 T=(t1,t2)는 앞 L+V+t1 / 새 t2→L+v. **앞·새 음절 모두** 조회하고 두 슬롯 확보 후 함께 적용(하나라도 표 밖이면 `not_in_2350` 거부) |
 
 종성 이동 예: `한+ㅏ → 하나`, `한+ㄱ+ㅏ → 한가`, `닭+ㅏ → 달가`, `값+ㅣ → 갑시`. `ㄴ+ㄱ`은 겹받침이 아니므로 `한+ㄱ`에서 한을 확정한다. 외부 리서치의 `한+ㄱ+ㅏ → 하나` 예시는 잘못된 것이며 채택하지 않았다.
 
-`ㄱ,ㅐ,ㄷ`은 `개`에서 `갣`이 표 밖이므로 마지막 ㄷ을 거부한다. `개` 확정 + 새 ㄷ으로 진행하지 않는다. `간+ㅒ`도 새 `냬`가 표 밖이므로 `가`만 확정하지 않고 `간`을 그대로 보존한다.
+`ㄱ,ㅐ,ㄷ`은 `갣`이 표 밖이므로 `개` 확정 + 새 ㄷ(`개ㄷ`)이 되고, 이어 ㅏ 를 누르면 `개다`다(2026-11-04 이전에는 ㄷ을 거부했다). `요+ㅎ → 요ㅎ → 요하`, `각+ㅅ → 각ㅅ`(「갃」 표 밖)도 같다. 8번째 칸이 active 인 상태의 `요+ㅎ` 는 새 글자 자리가 없어 `no_slot` 거부, `요` 유지다. 모음 쪽은 바뀌지 않았다: `간+ㅒ`는 새 `냬`가 표 밖이므로 `가`만 확정하지 않고 `간`을 그대로 보존한다.
 
 | 작업 | 계약 |
 |---|---|
@@ -147,3 +149,44 @@ T0 원본 ROM·b44·사용자 세이브·route/evidence·mgbah 복구와 해시 
 - 후보 ROM·같은 빌드 map/manifest·기준 ROM SHA·동일 상태 화면을 지정한 QA 및 Python↔ASM 전이 대조를 어떻게 재현할 것인가?
 
 실화면·실기·저장 후 cold reload·소비자 회귀·공유 글리프 게이트는 **아직 안 돌렸다 (unverified)**. Phase A 준비를 전체 이름 입력 완료로 집계하지 않는다. 이번 문서와 AGENTS.md·CLAUDE.md·todo.md에 후속 계약을 반영했다. 새 ROM RE 사실이나 검증된 ROM 성공/실패는 없으므로 research/success/fail 이력은 변경하지 않았다.
+
+## 2026-11-04 변경 — 받침 2350 밖 자동 확정 (fixB F) · 1편 legacy 이름 표시 (L3)
+
+근거: 사용자 「남은 한계 다 해결」(2026-11-04), `temp/fix_20261104/plan_C.md` F·L3, 승인 `plan_C_approval.md`. 실기 검증은 범위 밖이다.
+
+**계약(두 편 공통, `tools/hangul_compose.py` ↔ `tools/name_compose/core.c` 같은 분기):**
+
+| 상황 | 이전 | 지금 |
+|---|---|---|
+| `L+V` + 자음 c, `L+V+c` 표 밖 (`요+ㅎ`, `개+ㄷ`) | `not_in_2350` 거부 | 현재 음절 확정 + 새 L-only(c). 반환 0 |
+| `L+V+T` + 자음 c, 겹받침은 되지만 표 밖 (`각+ㅅ` → 「갃」) | `not_in_2350` 거부 | 현재 확정 + 새 L-only(c). 반환 0 |
+| 위 두 경우에 새 글자 칸이 없음(8칸째 active, 1편 mode0 은 6칸째) | — | `no_slot` 거부(반환 1), 상태 불변 |
+| 모음 쪽 표 밖(복합 모음 `로+ㅐ`, 종성 이동 `간+ㅒ`) | 거부 | **그대로 원자 거부** |
+
+반환 코드 표는 바뀌지 않았다(`core.c` 머리 주석: 0 수락 · 1 거부). 도달 불가 5음절(뢨·썅·쏀·쓩·쭁)은 모두 모음 쪽 누락이라 그대로다(`--report`: mapped 2350 · reachable 2345 · unreachable 5).
+
+**L3(1편만, `tools/name_compose_p1/p1.c` H5 미리보기):** host 코드(탁음 가나 25 · 숨은 한자 뒤 8)의 사전 타일은 그리드 자모 라벨로 덮여 있어서, 그런 글자가 든 예전(legacy) 이름은 NAME 박스에 자모로 보였다. 이제 칸 코드가 host 면 placeholder 타일에 원래 FONT_BASE 글리프를 올려 그린다. 슬롯은 native 변환 0x08EFE788 과 같은 규칙: 가타카나 0x8340..0x8397 은 가나 표 `*(0x08B80278)=0x08B8087C` 의 `[kidx]/[kidx+8]`(kidx = ((code-0x8140)&~7)*2 + (code&7) - 0x400), 그 밖은 확장 한자표의 비-bit15 엔트리. 주소는 `gen_tables_p1.FONT_CONFIG`(빌더가 대조하는 `CONFIG` 와 분리). host 가 아닌 가나(ヴ 등)는 원래 사전 타일 그대로다.
+
+**툴체인:** 2편 이미지(`tools/name_compose/build_image.py`)도 1편처럼 clang 23.1.1 + ld.lld 23.1.1(ELF + `--oformat binary`, readelf/nm/objdump 검사는 Python 대체)로 옮겼다. 검사 함수는 `build_image.py` 가 정본이고 `build_image_p1.py` 가 import 한다. 툴체인만 바뀐 경우의 바이트 차이는 core.c 컴파일 결과·심볼 주소뿐이었다(tramp.s 명령 인코딩 동일, HEAD core.c 를 새 툴체인으로 빌드해 대조). 2편 blob 바이트는 바뀌었고 런타임으로 확인했다.
+
+| 산출물 | CODE 크기 / SHA-256 |
+|---|---|
+| `tools/part2_name_compose_blob.py` (0x08F75800) | 2,739B / `0d71c4829ef3dd7f44eb8c1c18a7ec58d967dbf4c3d6ff5a5e59e037d8362239` |
+| `tools/part1_name_compose_blob.py` (0x08F77800) | 3,759B / `4a6732a8c1cd0fb8637f940ccf576955286f0376aee66190ef626cf41e4650cf` |
+
+**검증(2026-11-04, 이 PC Python 3.14):**
+
+```text
+$ python3 -I tools/test_hangul_compose.py          → Ran 14 tests, OK
+random_operations=20000 seed=20261023 rejections=17234
+exhaustive=11172 reached=2345 rejected=1400 advanced=7427 supported_unreachable=5
+migration_rejection_cases=1712 example=('간', 'ㅒ', '가', '냬')
+$ python3 -I tools/test_name_compose_core.py       → Ran 12 tests, OK (skipped=1: 연구 JSON 없음; 툴체인 재생성 일치 포함)
+$ python3 -I tools/test_part1_name_compose_core.py → Ran 33 tests, OK (skipped=1); t0_dictionary_match=42
+$ python3 tools/name_compose/build_image.py --check       → OK blob byte-identical
+$ python3 tools/name_compose_p1/build_image_p1.py --check → OK blob byte-identical
+$ python3 -B tools/test_part1_name_compose_build.py --rom <lane N 스냅샷 ROM> → Ran 21, OK (skipped=1: --base 없음)
+$ python3 -B tools/test_part2_name_compose_build.py → skipped=16 (baseline ROM 없음 — fixA 게이트와 같음)
+```
+
+런타임(lane N 스냅샷 ROM `35179029…ae7289` = HEAD `d8d6a24` + 이 변경만, 헤드리스 mgbah, 정상 키): 2편 「강철」 live `884990d3` len 2(G8 동일) · 2편 `ㅇㅛㅎㅏㄱㅐㄷㅏ` → `요ㅎ`→`요하`→`하개`→`개ㄷ`→`요하개다`, 스텝마다 참조 모델과 같음 · 1편 `ㅂㅏㄴㄱㅏㅇㅜㅓㅇㅛㅎㅏㄴㄱㅡㄹ` 확인 없이 연속 입력 → 「반가워요한글」 저장 12B + 인사말 「반가워, 반가워요한글님!」 · 1편 `개다` · 1편 6칸째 `요+ㅎ` `no_slot`(거부음) · 1편 「강철」. L3: CHEAT(jpfam 해금 SRAM 사본) + SYNTHETIC(dest 에 「ガヴ가」 w8) → mode1 NAME 박스 ガ=placeholder 타일·FONT_BASE 슬롯 121/149 바이트 일치, ヴ=native 사전 타일, 가=KOR 글리프. 증거: `temp/fix_20261104/fixB/N/F/`(result.json·스크린샷·`sheet_L3_F1.png`), 로그 `temp/fix_20261104/fixB/N/logs/`.

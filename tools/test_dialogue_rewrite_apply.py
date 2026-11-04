@@ -161,6 +161,11 @@ class SyntheticTests(unittest.TestCase):
         self.assertIsNone(dra.displayed_row_text('뭐야?', '뭐냐？', 0xA27A85))
         self.assertIsNone(dra.displayed_row_text('뭐 야?', '뭐야？', 0xA27A85))
         self.assertIsNone(dra.displayed_row_text('뭐야?', 'W뭐야？', 0xA27A85))
+        # fixB J: outside the dialogue writers '...' ships as a compacted 「・・・」 run (B12074 consumer).
+        self.assertEqual(qbd.display_equivalent('후후후・・・ 이때를!', 0xB83AC8), '후후후…\u3000이때를！')
+        self.assertEqual(dra.displayed_row_text('후후후... 이때를!', '후후후…\u3000이때를！', 0xB83AC8),
+                         '후후후・・・ 이때를!')
+        self.assertIsNone(dra.displayed_row_text('후후후... 이때를!', '후후후…\u3000이때다！', 0xB83AC8))
 
     def test_ledger_skips_unchanged_bteam_rows(self):
         """A B-team row whose rewritten text equals its baseline never enters the ledger."""
@@ -224,6 +229,10 @@ class SyntheticTests(unittest.TestCase):
         self.assertEqual([i['code'] for i in issues], ['pinned'])
         self.assertIn('reviewed B-team wide row exact bytes', issues[0]['detail'])
         self.assertEqual(dra.reviewed_wide_row_issues(payload, {'0xA02590': [(0, 2)]}), [])
+        # plan_C B: a rewrite back within the plain 44 half-cell cap is admitted (note only)
+        short = b'\x81\x40' + bytes.fromhex(wide[row][0])[:20]
+        issues = dra.reviewed_wide_row_issues(short, {key: [(2, 20)]})
+        self.assertEqual([(i['code'], i['severity']) for i in issues], [('reviewed_wide_row_superseded', 'note')])
 
     def test_exception_rows_include_renderer_only(self):
         """qa_bteam_drift refuses a ledger entry on every recorded exception, renderer-only included."""
@@ -246,6 +255,69 @@ class SyntheticTests(unittest.TestCase):
             'from': overrides[key], 'to': '음．', 'batch': 'b', 'reviewed_by': 'r', 'review_ref': 'x'}}})
         self.assertTrue(any('overlaps an individually approved exception' in e
                             for e in qbd.ledger_errors(baseline, overrides, raw, dra.sha(raw))))
+
+    def test_bteam_row_display_folds_final_ellipsis(self):
+        """fixB J: a rendered 「・・・」 row compares as the 「…」 check_rom reads (actual=True fold)."""
+        from unittest import mock
+        overrides = json.loads(dra.BASELINE.read_text(encoding='utf-8'))['overrides']
+        key, row = '0xA025C4', '0x00A025C4'
+        self.assertIn('・・・', overrides[row])
+        frags = {key: [(0, 0)]}
+        cases = {'・・・어쩔　수　없군。': overrides[row],     # shipped pre-compaction run, baseline wording
+                 '・・・어쩔　수　없다。': None}               # wording change is still refused
+        for rendered, want in cases.items():
+            with mock.patch.object(dra, 'bteam_payload_issue', return_value=None), \
+                    mock.patch.object(dra, 'row_display', return_value=rendered):
+                texts, issues = dra.bteam_owner_texts(b'', frags, {}, {key: overrides[row]}, overrides)
+            if want is None:
+                self.assertEqual([i['code'] for i in issues], ['bteam_display_mismatch'])
+            else:
+                self.assertEqual((issues, texts[key]), ([], want))
+
+    def test_unattributed_geometry_keeps_lock(self):
+        """fixB C1 review #2: renderer-null geometry never unlocks a message."""
+        def message(profile):
+            return dict(source=0xA00004, script=True, pair_title=False, profile=profile)
+        for native in (('p2_unverified_consumer', None, None), ('p2_link_state_dependent', None, None)):
+            for renderer, unlocked in ((None, False), ('', False), ('0x08314BBE', True)):
+                geometry = [(0xA00000, 0xA00010, dict(renderer=renderer, line_px=104, lines=2,
+                                                      row_px=[104, 88], evidence=['t'], group='g'))]
+                m = message(native)
+                dra.apply_consumer_geometry([m], geometry)
+                if unlocked:
+                    self.assertEqual(m['profile'], ('declared:g', 104, 2))
+                    self.assertEqual(m['row_px'], [104, 88])
+                else:
+                    self.assertEqual(m['profile'], native)
+                    self.assertNotIn('row_px', m)
+                    self.assertEqual(dra.lock_reason(None, m), 'consumer_geometry_unverified')
+
+    def test_portrait_first_row_limit_and_ellipsis_measure(self):
+        """fixB C1/C2: no portrait first row gets a 184px allowance; 「・・・」 is measured compacted."""
+        class Glyphs:
+            def bitmap(self, pair, game): return [[1] * 8]
+            def text(self, pair): return pair.decode('shift_jis')
+        glyph, dot = b'\x82\xa0', b'\x81\x45'
+        def issues(game, body):
+            m = dict(game=game, source=0xA00000, profile=(game + '_portrait', 176, 2))
+            return dra.layout_issues(body + b'r' + glyph + b'\0', m, Glyphs())[0]
+        self.assertTrue(any('overflow' in i for i in issues('p2', glyph * 23)))
+        self.assertTrue(any('overflow' in i for i in issues('p1', glyph * 23)))
+        self.assertEqual(issues('p1', glyph * 22), [])
+        self.assertEqual(issues('p2', glyph * 22), [])
+        # 20 glyphs + 3 dots = 23 cells raw, 21 cells after the builder's ellipsis stage.
+        self.assertEqual(issues('p2', glyph * 20 + dot * 3), [])
+
+    def test_shipped_unattributed_geometry_entries_stay_locked(self):
+        """The 13 renderer-null entries of data/dialogue_consumer_geometry.json unlock nothing."""
+        entries = [(lo, hi, e) for lo, hi, e in dra.consumer_geometry() if not e.get('renderer')]
+        self.assertEqual(sorted(e['id'] for _, _, e in entries),
+                         sorted(['0x337', '0x368', '0x4c7', '0x4cb', '0x4cc', '0x7ad', '0x7af', '0x7b0',
+                                 '0xb45', '0xcb9', '0xcba', '0xcbb', '0xcbc']))
+        for lo, _, _ in entries:
+            m = dict(source=lo, script=True, pair_title=False, profile=('p2_unverified_consumer', None, None))
+            dra.apply_consumer_geometry([m])
+            self.assertEqual(dra.lock_reason(None, m), 'consumer_geometry_unverified')
 
 
 @unittest.skipUnless(HAVE_BASE, 'frozen baseline candidate not available')
@@ -336,6 +408,29 @@ class OverlayTests(unittest.TestCase):
         self.assertEqual(tags.count('dialogue-rewrite-final'), 4)
         self.assertEqual(tags.count('dialogue-rewrite-pointer'), 1 + 2 + len(self.base.messages[P1_NATIVE]['sites']))
 
+    def test_same_slot_shrink_owns_whole_old_allocation(self):
+        """S3 (fixB): a shorter same-slot rewrite zero-pads and owns the old tail."""
+        from qa_part1_dialogue_punctuation import active_text_payloads
+        m = self.base.messages[P2_SAME_SLOT]
+        old_size = len(m['payload'])
+        rom, manifest, writes, stats = self.run_overlay(self.doc(P2_SAME_SLOT))
+        self.assertEqual(stats['same_slot'], 1)
+        target = m['target']
+        final = [w for w in writes[len(self.base.writes):] if w[7] == 'dialogue-rewrite-final']
+        self.assertEqual(len(final), 1)
+        payload = bytes.fromhex(final[0][3])
+        self.assertLess(len(payload), old_size)
+        self.assertEqual(final[0][:3], [target, old_size, len(payload)])
+        self.assertEqual(final[0][4], 0x00)
+        self.assertEqual(bytes(rom[target:target + old_size]), payload + bytes(old_size - len(payload)))
+        rec = self.record(manifest, P2_SAME_SLOT)
+        self.assertEqual(rec['new_len'], len(payload))  # binding = real message; ownership = old slot
+        # no surviving half token of the previous writer inside the old allocation
+        lo, hi = target, target + old_size
+        region = [w for w in writes if w[0] < hi and lo < w[0] + max(int(w[1]), int(w[2]))]
+        for _entry, _start, _payload in active_text_payloads(region, bytes(rom)):
+            pass
+
     def test_deterministic(self):
         doc = self.doc(P2_SAME_SLOT, P2_NATIVE, P1_MULTI, P1_NATIVE)
         a = self.run_overlay(doc)
@@ -409,6 +504,11 @@ class OverlayTests(unittest.TestCase):
         self.assertIn('placeholder_mismatch', codes(tpl.text.replace('{k}', '')))
         self.assertIn('outside_2350', codes(edit(tpl, '생각보다', '햏보다')))
         self.assertIn('term_conflict', codes(edit(tpl, '생각보다', '장군보다')))
+        # 2026-11-04 user (inputs.md msg9): title is 게임보이 워즈 어드밴스 again.
+        self.assertNotIn('term_conflict', codes(edit(tpl, '생각보다', '게임보이 워즈 어드밴스보다')))
+        for old in ('어드밴스 워즈보다', '어드밴스　워즈보다', '어드밴스워즈보다'):
+            with self.subTest(old=old):
+                self.assertIn('term_conflict', codes(edit(tpl, '생각보다', old)))
         self.assertIn('lint_hex_token', codes(edit(tpl, '생각보다', '0x1234보다')))
         self.assertIn('latin_text', codes(edit(tpl, '생각보다', 'OK보다')))
         self.assertIn('external_name', codes(edit(tpl, '생각보다', '앤디보다')))
@@ -509,13 +609,91 @@ class OverlayTests(unittest.TestCase):
         self.assertNotEqual(int(record['new_addr'], 16), tpl.m['target'])
         self.assertTrue([w for w in writes if w[7] == 'dialogue-rewrite-retired-allocation'
                          and w[0] == tpl.m['target']])
-        # Inserting text at an empty unowned position stays refused.
-        empty = next((i for i, p in enumerate(tpl.pieces) if p['owner'] is None and not p['raw']), None)
+        # Inserting text at an empty unowned position stays refused (unless it
+        # touches a style control: see test_empty_style_slot_and_kana_drop).
+        styled = lambda i: any(tpl.phs[j]['name'] in ('{s0}', '{s2}', '{s3}')
+                               for j in (i - 1, i) if 0 <= j < len(tpl.phs))
+        empty = next((i for i, p in enumerate(tpl.pieces)
+                      if p['owner'] is None and not p['raw'] and not styled(i)), None)
         if empty is not None:
             texts = dra.PH_RE.split(tpl.text)
             texts[empty] = '가'
             with self.assertRaises(dra.RewriteError):
                 dra.render(tpl, join(texts), self.encode, [])
+
+    def test_empty_style_slot_and_kana_drop(self):
+        """plan_C B (2026-11-04): an empty emphasis slot may take its keyword, a
+        Part 1 small-tsu kana token may be dropped; both force the arena write."""
+        def styled(tpl, i):
+            return any(tpl.phs[j]['name'] in ('{s0}', '{s2}', '{s3}') for j in (i - 1, i) if 0 <= j < len(tpl.phs))
+        def join(tpl, parts):
+            return ''.join(t + (tpl.names[i] if i < len(tpl.names) else '') for i, t in enumerate(parts))
+        tpl = self.tpl(0xD961A0)  # 「그리고{s2}{s0} …」: empty unowned {s2}..{s0}
+        slot = next(i for i, p in enumerate(tpl.pieces)
+                    if p['owner'] is None and not p['raw'] and i and tpl.phs[i - 1]['name'] == '{s2}')
+        self.assertTrue(styled(tpl, slot))
+        texts = dra.PH_RE.split(tpl.text)
+        texts[slot] = '자주포'
+        ko = join(tpl, texts)
+        with self.assertRaises(dra.RewriteError):
+            dra.render(tpl, ko, self.encode)            # no unowned list: still refused
+        unowned = []
+        payload = dra.render(tpl, ko, self.encode, unowned)[0]
+        self.assertEqual([u['piece'] for u in unowned], [slot])
+        self.assertEqual(len(payload), len(tpl.m['payload']) + len(self.encode('자주포', tpl.m['source'])))
+        doc = {'schema': 1, 'messages': {dra.key6(0xD961A0): self.entry(0xD961A0, ko)}}
+        self.assertFalse(dra.plan_overlay(self.base, doc, self.encode)['plans'][0]['same_slot'])
+        tpl = self.tpl(0xDC5244)  # 「뭐라고{kw:っ}?!」
+        self.assertEqual(tpl.names.count('{kw:っ}'), 2)
+        ko = tpl.text.replace('{kw:っ}', '{kw-:っ}')
+        with self.assertRaises(dra.RewriteError):
+            dra.render(tpl, ko, self.encode)
+        unowned = []
+        payload = dra.render(tpl, ko, self.encode, unowned)[0]
+        self.assertEqual(len(payload), len(tpl.m['payload']) - 4)  # two 2-byte kana dropped
+        self.assertEqual(len(unowned), 2)
+        with self.assertRaises(dra.RewriteError):     # only small tsu may be dropped
+            dra.render(tpl, ko.replace('{kw-:っ}', '{kw-:ア}', 1), self.encode, [])
+
+    def test_caption_indent_kept(self):
+        """A changed CO-bio caption row keeps its 5-cell leading indent (0xDF3764 「海」)."""
+        tpl = self.tpl(0xDF3764)
+        ko = tpl.text.replace('해상', '바다', 1)
+        payload = dra.render(tpl, ko, self.encode, [])[0]
+        self.assertEqual(len(payload), len(tpl.m['payload']))
+        self.assertEqual(dra.layout_issues(payload, tpl.m, self.base.glyphs)[0], [])
+
+    def test_exception_row_left_as_approved(self):
+        """A rewrite of 0xA01B08 that keeps the user-approved 「음．」 row adds no ledger row."""
+        bteam = json.loads(dra.BASELINE.read_text(encoding='utf-8'))['overrides']
+        tpl = self.tpl(0xA01B08)
+        ko = '음.{k}예전에{w} 나는{w} 이 별에서 전쟁을 일으켜,{w}{r}그 틈을 타 공략하려 했지만 실패했다.{k}'
+        payload, fragments, joiners, texts = dra.render(tpl, ko, self.encode, [])
+        raw_texts = dict(texts)
+        texts, issues = dra.bteam_owner_texts(payload, fragments, joiners, texts, bteam)
+        self.assertEqual(issues, [])
+        self.assertEqual(texts['0xA01B08'], bteam['0x00A01B08'])
+        self.assertEqual(dra.ledger_rows(dict(bteam_rows=['0xA01B08'], owner_texts=texts), bteam), {})
+        # Read as the builder ships it (patch_rewritten 、/。 -> ，/．): same outcome.
+        texts, issues = dra.bteam_owner_texts(payload, fragments, joiners, raw_texts, bteam, source=0xA01B08)
+        self.assertEqual(issues, [])
+        self.assertEqual(texts['0xA01B08'], bteam['0x00A01B08'])
+
+    def test_prologue_rewrite_compared_as_shipped(self):
+        """fixB C2: 0xA019F8 is read after patch_rewritten, where the final gate reads it."""
+        bteam = json.loads(dra.BASELINE.read_text(encoding='utf-8'))['overrides']
+        tpl = self.tpl(0xA019F8)
+        payload, fragments, joiners, texts = dra.render(tpl, '호크, 거기 있느냐!{k}', self.encode, [])
+        _, issues = dra.bteam_owner_texts(payload, fragments, joiners, dict(texts), bteam)
+        self.assertEqual([i['code'] for i in issues], ['bteam_display_mismatch'])  # pre-stage bytes
+        texts, issues = dra.bteam_owner_texts(payload, fragments, joiners, texts, bteam, source=0xA019F8)
+        self.assertEqual(issues, [])
+        self.assertEqual(texts['0xA019F8'], '호크, 거기 있느냐!')
+        # A different wording still has to match the shipped display exactly.
+        payload, fragments, joiners, texts = dra.render(tpl, '호크, 거기 있느냐!{k}', self.encode, [])
+        texts['0xA019F8'] = '호크. 거기 있느냐!'
+        _, issues = dra.bteam_owner_texts(payload, fragments, joiners, texts, bteam, source=0xA019F8)
+        self.assertEqual([i['code'] for i in issues], ['bteam_display_mismatch'])
 
     def test_superseded_spacing_intent(self):
         intents = [w for w in self.base.writes if w[7] == 'dialogue-spacing-final-intent' and len(w) > 8]
@@ -664,12 +842,25 @@ class Wave2ExcludedTests(unittest.TestCase):
                                   '--rewrites', str(rewrites), '--ledger', str(ledger), '--report-dir',
                                   str(tmp / 'rep'), '--batches', *dirs], capture_output=True, text=True)
             self.assertEqual(res.returncode, 0, res.stdout + res.stderr)
-            self.assertIn('accepted 0,', res.stdout)
-            self.assertEqual(dra.load_rewrites(rewrites)['messages'], {})
-            self.assertEqual(ledger.read_bytes(), ledger_bytes)
             log = {int(r['id'], 16): r for r in json.loads((tmp / 'rep/apply_log.json').read_text())}
+            accepted = {s for s, r in log.items() if r['status'] == 'accepted'}
+            self.assertIn(f'accepted {len(accepted)},', res.stdout)
+            self.assertEqual({int(k, 16) for k in dra.load_rewrites(rewrites)['messages']}, accepted)
+            if not accepted:
+                self.assertEqual(ledger.read_bytes(), ledger_bytes)
         self.assertEqual(set(log), ids)
+        # plan_C B (2026-11-04): contract-owned messages stay refused; a reviewed
+        # wide row rewritten back within 44 half-cells, and an exception row the
+        # rewrite leaves exactly as approved, are admitted.
+        for source in accepted:
+            self.assertNotIn(source, W2_CONTRACT_IDS)
+            codes = {i['code'] for i in log[source]['issues']}
+            if source in W2_WIDE_ROWS:
+                self.assertIn('reviewed_wide_row_superseded', codes, hex(source))
+            self.assertNotIn('bteam_exception_row', codes, hex(source))
         for source, row in log.items():
+            if source in accepted:
+                continue
             self.assertEqual(row['status'], 'rejected', hex(source))
             first = next(i for i in row['issues'] if i['severity'] == 'reject')
             self.assertNotEqual(first['code'], 'wave_excluded')

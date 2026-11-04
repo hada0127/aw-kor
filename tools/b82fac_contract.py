@@ -10,10 +10,14 @@ import sys
 MESSAGE, END, SITE = 0xB82FAC, 0xB82FDC, 0xD8D9CC
 ARENA_START, ARENA_END, HIGH_WATER = 0xA3D000, 0xAFF000, 0xA8D7B1
 APPEND = (HIGH_WATER + 3) & ~3
-TEXT = '맵을 저장 중이야,전원을 끄지 말아 줘!!'
+# plan_C B-pin (2026-11-04 user, tools/bpin_contract.py): the late append writes the
+# reviewed 46-byte row; SOURCE_* stay the upstream authority/encoding preflight binds.
+SOURCE_TEXT = '맵을 저장 중이야,전원을 끄지 말아 줘!!'
+TEXT = '맵 저장 중이야. 전원을 끄지 말아 줘!!'
 NATIVE = bytes.fromhex('837d8362837682f095db91b6928682e6814182c582f182b082f182f090d882e782c882a282c582cb8149814900000000')
 CURRENT = bytes.fromhex('8fc68fc281408fef81408fc88f6d814088d2905481408bc3202020202020202020202020202020202020202000000000')
-ROW = bytes.fromhex('8bd98f8181408fc68fc281408fef8fa28eba81418fc88f6d8f81814088d2905481408bca8e9b81408ff181498149')
+SOURCE_ROW = bytes.fromhex('8bd98f8181408fc68fc281408fef8fa28eba81418fc88f6d8f81814088d2905481408bca8e9b81408ff181498149')
+ROW = bytes.fromhex('8bd981408fc68fc281408fef8fa28eba814281408fc88f6d8f81814088d2905481408bca8e9b81408ff181498149')
 PAYLOAD = ROW + NATIVE[-4:]
 KEY = '0xB82FAC'
 METADATA = dict(msg=KEY, status='relocated', ptr_off='0xD8D9CC',
@@ -126,11 +130,13 @@ def preflight(original, rom, manifest, write_log, *, line_index, slots,
         raise AssertionError('B82FAC scoped arena/high-water/align/capacity')
     lines = [(a, item[0]) for a,item in line_index.items() if MESSAGE <= a < END]
     if (lines != [(MESSAGE,44)] or slots.get(MESSAGE) != 44
-            or source_text(MESSAGE) != TEXT):
+            or source_text(MESSAGE) != SOURCE_TEXT):
         raise AssertionError('B82FAC source44/authority/line ownership')
-    validate_row(fixed_bytes(MESSAGE))
+    if bytes(fixed_bytes(MESSAGE)) != SOURCE_ROW:
+        raise AssertionError('B82FAC exact 46B source row required')
     codes = {int.from_bytes(ROW[i:i+2],'big') for i in range(0,46,2)}
-    if valid_codes is None or not (codes - {0x8140,0x8141,0x8149}) <= set(valid_codes):
+    # Native SJIS punctuation (space, comma, period, '!') is not a Hangul table code.
+    if valid_codes is None or not (codes - {0x8140,0x8141,0x8142,0x8149}) <= set(valid_codes):
         raise AssertionError('B82FAC missing required glyph')
     words = array.array('I'); words.frombytes(original[:len(original)//4*4])
     if sys.byteorder != 'little': words.byteswap()

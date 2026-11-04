@@ -26,6 +26,20 @@ TEACHER_SOURCES = (
 )
 
 
+# plan_C B-pin reviewed wording (2026-11-04 user, tools/bpin_contract.py).
+TEACHER_FIRST_PAGE = '그렇지　않습니다、　선생님！'
+# A199B0 final rows/joins after the B-pin writer replaced the reviewed
+# pixel-layout re-wrap (late stage); ROWS above stay the source authority the
+# layout repair is bound to.
+FINAL_ROWS = (
+    (0, 0, '근데、　공중전의　이글과　해상전의'),
+    (0, 1, '나에게　지상전의　한나가'),
+    (1, 0, '합류하면　두려울　게　없어。'),
+    (2, 0, '자、　우리　나라를　되찾자！'),
+)
+FINAL_JOINS = (('근데、', '근데、　공중전의　이글과'), (), ('합류하면',), ('자、', '자、　우리　나라를'))
+
+
 def _fold(text):
     """Wording signature: every space (incl. U+3000) removed."""
     return ''.join(text.split())
@@ -142,7 +156,7 @@ def verify_teacher_context(rom, original, manifest, syllable_codes):
         first = tokenize(payload[:page] + b'\0', **options)
         rows, unknown, terminated = assemble_rows(first, codes, 'story_layout_unverified', **options)
         if (unknown or not terminated or len(rows) != 1
-                or rows[0]['text'] != '그렇지　않습니다、선생님！'
+                or rows[0]['text'] != TEACHER_FIRST_PAGE
                 or not rows[0]['controls_understood']
                 or tuple(j['left'] for j in rows[0]['same_row_joins']) != ('그렇지　않습니다、',)):
             raise ValueError('Teacher reassurance complete first-page context changed')
@@ -186,6 +200,25 @@ def verify(rom, original, manifest, syllable_codes, layout_repairs=None):
         ('자、', '자、우리　나라를、'),
     )
     reflowed = layout_rows(SOURCE, ROWS, layout_repairs)
+    import bpin_contract
+    if SOURCE in bpin_contract.MESSAGES and (m.get('rewrite') or {}).get('bpin'):
+        # Final state: the B-pin writer owns the whole message in its allocation.
+        # Native control kinds stay those of the message it replaced; every wait
+        # keeps its original byte; rows/joins are the reviewed final wording.
+        replaced = bytes.fromhex(bpin_contract.MESSAGES[SOURCE]['old'])
+        rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
+        if (unknown or not terminated or any(not r['controls_understood'] for r in rows)
+                or tuple((r['page'], r['line'], r['text']) for r in rows) != FINAL_ROWS
+                or tuple(tuple(j['left'] for j in r['same_row_joins']) for r in rows) != FINAL_JOINS):
+            raise ValueError('A199B0 reviewed final context text changed')
+        if (controls(tokens) != controls(tokenize(replaced, **options))
+                or [t['raw'] for t in tokens if t['kind'] == 'same_row']
+                != [t['raw'] for t in tokenize(old, **options) if t['kind'] == 'same_row']):
+            raise ValueError('A199B0 source control sequence changed under 31424c interpretation')
+        return {'source': f'0x{SOURCE:08X}', 'target': f'0x{target:08X}',
+                'payload_sha256': hashlib.sha256(payload).hexdigest(), 'layout': 'bpin_reviewed_final',
+                'native_consumer_verified': False, 'pixels_verified': False,
+                'scope': 'reviewed final text/control regression under 31424c interpretation; native consumer unverified; pixels unverified'}
     if reflowed is not None:
         rows, unknown, terminated = assemble_rows(tokens, codes, 'story_layout_unverified', **options)
         if unknown or not terminated:

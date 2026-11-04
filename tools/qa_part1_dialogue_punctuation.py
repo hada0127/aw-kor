@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 from dialogue_regions import PART1_DIALOG_RANGES, PART2_STORY_RANGES, is_part1_dialog_address, is_part2_story_address, needs_safe_dialogue_punctuation
 from korean_punct_glyphs import symbol_tile_ok
+from part2_prologue_punctuation import in_prologue, live_prologue_spans, remaining_japanese
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM = ROOT / "output" / "game_wars_korean_full.gba"
@@ -71,6 +72,11 @@ INVISIBLE_PUNCT_CODES = {
 }
 
 
+# Pointer writes (spacing repoint, W3 overlay repoint): four little-endian
+# address bytes, never rendered text.
+POINTER_KINDS = ("dialogue-spacing-pointer", "dialogue-rewrite-pointer")
+
+
 def in_part1_dialog(addr: int) -> bool:
     return is_part1_dialog_address(addr)
 
@@ -89,7 +95,7 @@ def active_text_payloads(integrity, rom):
             continue
         # Pointer writes still own their four bytes above, so they mask stale
         # text, but their little-endian address bytes are not rendered glyphs.
-        if entry[7] == "dialogue-spacing-pointer":
+        if entry[7] in POINTER_KINDS:
             continue
         addr, length = int(entry[0]), int(entry[2])
         encoded = bytes.fromhex(str(entry[3] or ''))[:length]
@@ -111,6 +117,28 @@ def active_text_payloads(integrity, rom):
             offset += size
         if payload:
             yield entry, run_start, bytes(payload)
+
+
+def display_path(path: Path) -> str:
+    """Repo-relative path when inside the repo, else the absolute path (external candidate ROMs)."""
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def decision_display(payload: bytes) -> str:
+    """Visible text of a decision payload (trailing slot padding removed)."""
+    from qa_bteam_drift import decode_enc, load_syl
+    return decode_enc(payload, load_syl()).rstrip(' \u3000')
+
+
+def decision_source_ok(source: str, shipped: str) -> bool:
+    """The shipped display keeps every authored word; only spaces and the
+    approved pause glyphs (「・」 runs, 「…」) may differ."""
+    def words(text: str) -> str:
+        return ''.join(ch for ch in text if ch not in ' \u3000.・…')
+    return words(source) == words(shipped)
 
 
 def load_json(path: Path, default: Any) -> Any:
@@ -275,21 +303,24 @@ def main() -> int:
     totals: Counter[str] = Counter()
 
     if not ROM.exists():
-        issues.append({"source": "rom", "type": "missing_rom", "path": str(ROM.relative_to(ROOT))})
+        issues.append({"source": "rom", "type": "missing_rom", "path": display_path(ROM)})
         rom = b""
     else:
         rom = ROM.read_bytes()
     original = ORIGINAL.read_bytes() if ORIGINAL.exists() else b""
     if not original:
-        issues.append({"source": "original", "type": "missing_original", "path": str(ORIGINAL.relative_to(ROOT))})
+        issues.append({"source": "original", "type": "missing_original", "path": display_path(ORIGINAL)})
     decisions = json.loads((ROOT / 'data/part1_punctuation_decisions.json').read_text(encoding='utf-8'))
     if set(decisions) != {'0x00DC67B6'}:
         issues.append({'source': 'punctuation_decision', 'type': 'decision_scope_changed'})
     for key, decision in decisions.items():
         address = int(key, 16)
         payload = bytes.fromhex(decision['payload_hex'])
-        if (decision['source'] != '너란 녀석은...' or decision['shipped'] != '너란 녀석은・・'
-                or len(payload) != 16 or rom[address:address + 16] != payload):
+        # The record names the authored source, the exact 16-byte native slot
+        # payload and its display; all three must agree with the final ROM.
+        if (len(payload) != 16 or rom[address:address + 16] != payload
+                or decision_display(payload) != decision['shipped']
+                or not decision_source_ok(decision["source"], decision["shipped"])):
             issues.append({'source': 'punctuation_decision', 'type': 'exact_payload_mismatch', 'address': key})
 
     integrity = load_json(INTEGRITY_MAP, [])
@@ -315,6 +346,17 @@ def main() -> int:
         DECIMAL_RELOCATED_MESSAGE = decimal_relocations[DECIMAL_SOURCE_MESSAGE]
         DECIMAL_GLYPH_ADDRESS = DECIMAL_RELOCATED_MESSAGE + DECIMAL_GLYPH_OFFSET
     decimal_seen: set[int] = set()
+    # 2026-10-23 user approval: the Part 2 prologue shows 「．」 (A3 decimal node)
+    # for 「。」. Its in-place script (live or retired by a relocation) and every
+    # relocated copy of a prologue message may carry 0x8144; nothing else may.
+    prologue_spans = [(lo, hi) for lo, hi, owner in live_prologue_spans(manifest) if owner != 'in-place']
+
+    def prologue_decimal(position: int) -> bool:
+        return in_prologue(position) or any(lo <= position < hi for lo, hi in prologue_spans)
+    if rom:
+        for address, owner, glyph in remaining_japanese(rom, manifest):
+            issues.append({"source": "prologue_punctuation", "type": "japanese_mark_rendered",
+                           "address": f"0x{address:08X}", "owner": owner, "glyph": glyph})
 
     checked_integrity = 0
     sjis_totals: Counter[int] = Counter()
@@ -333,7 +375,7 @@ def main() -> int:
         row_addr = int(entry[0])
         if row_addr in (A3_DECIMAL_NODE, 0x807790) and str(entry[7]).startswith('part2-a3-decimal-'):
             continue
-        found_decimal = decimal_positions(payload, addr)
+        found_decimal = {p for p in decimal_positions(payload, addr) if not prologue_decimal(p)}
         decimal_count = len(found_decimal)
         target = row_addr if row_addr in decimal_targets else None
         approved = (approved_decimal_consumer(decimal_targets[target], target)
@@ -380,7 +422,7 @@ def main() -> int:
         if new_len <= 0 or not rom:
             continue
         payload = rom[new_addr:new_addr + new_len]
-        found_decimal = decimal_positions(payload, new_addr)
+        found_decimal = {p for p in decimal_positions(payload, new_addr) if not prologue_decimal(p)}
         decimal_count = len(found_decimal)
         decimal_seen.update(found_decimal)
         if decimal_count and not approved_decimal_consumer(msg, new_addr):
@@ -430,7 +472,7 @@ def main() -> int:
     issues.extend({"source": "symbol_glyph", **issue} for issue in glyph_issues)
 
     report = {
-        "rom": str(ROM.relative_to(ROOT)),
+        "rom": display_path(ROM),
         "part1_dialog_range": [f"0x{PART1_DIALOG_LO:08X}", f"0x{PART1_DIALOG_HI:08X}"],
         "part1_dialog_ranges": [[f"0x{start:08X}", f"0x{end:08X}"] for start, end in PART1_DIALOG_RANGES],
         "part2_story_ranges": [[f"0x{start:08X}", f"0x{end:08X}"] for start, end in PART2_STORY_RANGES],
@@ -458,7 +500,7 @@ def main() -> int:
         "issue_count": len(issues),
         "issue_totals": dict(sorted(totals.items())),
         "glyph_issue_count": len(glyph_issues),
-        "report": str(REPORT.relative_to(ROOT)),
+        "report": display_path(REPORT),
     }, ensure_ascii=False))
     if issues:
         for issue in issues[:20]:

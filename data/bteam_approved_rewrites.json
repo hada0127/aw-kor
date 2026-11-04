@@ -1626,6 +1626,102 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "아이고,"
   },
+  "0x00A2C040": {
+   "batch": "p2-system.1",
+   "from": "스토리를 즐기면서 플레이할 수 있는 모드입니다",
+   "message": "0xA2C040",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "스토리를 즐기면서 플레이하는 모드입니다"
+  },
+  "0x00A2C0C0": {
+   "batch": "p2-system.1",
+   "from": "자유롭게 설정을 정해,친구와 컴퓨터와 대전합니다",
+   "message": "0xA2C0C0",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "자유롭게 설정해 친구나 컴퓨터와 대전합니다"
+  },
+  "0x00A2C144": {
+   "batch": "p2-system.1",
+   "from": "컴퓨터와 대전하여,점수가 기록됩니다",
+   "message": "0xA2C144",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "컴퓨터와 대전하고 점수가 기록됩니다"
+  },
+  "0x00A2C1B8": {
+   "batch": "p2-system.1",
+   "from": "획득한 포인트로,여러 가지 쇼핑을 할 수 있습니다",
+   "message": "0xA2C1B8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "획득한 포인트로 여러 가지를 살 수 있습니다"
+  },
+  "0x00A2C1E8": {
+   "batch": "p2-system.1",
+   "from": "맵을 만들거나,사령관의 컬러를 설정할 수 있습니다",
+   "message": "0xA2C1E8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "맵 제작과 사령관 컬러 설정을 할 수 있습니다"
+  },
+  "0x00A2C25C": {
+   "batch": "p2-system.1",
+   "from": "친구와 연결해서,대전이나 맵 교환을 할 수 있습니다",
+   "message": "0xA2C25C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "친구와 연결해 대전이나 맵 교환이 가능합니다"
+  },
+  "0x00A2C290": {
+   "batch": "p2-system.1",
+   "from": "셀렉트 버튼으로 하드 캠페인과 전환됩니다",
+   "message": "0xA2C290",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "셀렉트를 누르면 하드 캠페인으로 바뀝니다"
+  },
+  "0x00A2C2C4": {
+   "batch": "p2-system.1",
+   "from": "셀렉트 버튼으로 사운드 룸과 전환됩니다",
+   "message": "0xA2C2C4",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "셀렉트를 누르면 사운드 룸으로 바뀝니다"
+  },
+  "0x00A2C2F4": {
+   "batch": "p2-system.1",
+   "from": "있음으로 하면 유닛의 시야 밖이 보이지 않게 됩니다",
+   "message": "0xA2C2F4",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "있음으로 하면 유닛 시야 밖이 안 보입니다"
+  },
+  "0x00A2C378": {
+   "batch": "p2-system.1",
+   "from": "지정일이 종료되면 소유 거점 수로 결판을 냅니다",
+   "message": "0xA2C378",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "지정일이 끝나면 거점 수로 승부를 가립니다"
+  },
+  "0x00A2C3A8": {
+   "batch": "p2-system.1",
+   "from": "지정 거점 수를 소유한 시점에서 우세 승리가 됩니다",
+   "message": "0xA2C3A8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "지정한 수의 거점을 가지면 우세 승리입니다"
+  },
+  "0x00A2C484": {
+   "batch": "p2-system.1",
+   "from": "같은 팀을 선택하면 동맹국을 설정할 수 있습니다",
+   "message": "0xA2C484",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "같은 팀을 고르면 동맹을 맺을 수 있습니다"
+  },
   "0x00A2C950": {
    "batch": "p2-system.2",
    "from": "바다로 전체를 채우시겠습니까?",
@@ -2098,6 +2194,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "제법 괜찮은 싸움이었지만..."
   },
+  "0x00A3353C": {
+   "batch": "p2-system.4",
+   "from": "부포인 대공 머신건.",
+   "message": "0xA3353C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.4/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "부포인 대공 기관총."
+  },
   "0x00A33D1C": {
    "batch": "p2-system.4",
    "from": "주포의,선박에 대한공격력.",
@@ -2105,6 +2209,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.4/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "주포의 함선에 대한"
+  },
+  "0x00A33D8C": {
+   "batch": "p2-system.4",
+   "from": "부포인 머신건.",
+   "message": "0xA33D8C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.4/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "부포인 기관총."
   },
   "0x00A3415C": {
    "batch": "p2-system.4",
@@ -2154,13 +2266,29 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "어머, 역시 그만두시나요?"
   },
+  "0x00A3504C": {
+   "batch": "p2-system.5",
+   "from": "저장할 에리어를 골라 줘!!",
+   "message": "0xA3504C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.5/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "저장할 영역을 골라 줘!!"
+  },
+  "0x00A35228": {
+   "batch": "p2-system.5",
+   "from": "하나의 카트리지로,모두와 대전할 수 있습니다",
+   "message": "0xA35228",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.5/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "카트리지 하나로 다 같이 대전할 수 있습니다"
+  },
   "0x00A35680": {
    "batch": "p2-system.5",
    "from": "40　WARＳ2 오프닝",
    "message": "0xA35680",
    "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.5/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "40 어드밴스 워즈 2 오프닝"
+   "to": "40 워즈 2 오프닝"
   },
   "0x00A356A0": {
    "batch": "p2-system.5",
@@ -2176,7 +2304,7 @@
    "message": "0xA35718",
    "review_ref": "temp/fix_20261104/humanizer/batches/p2-system.5/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "45 어드밴스 워즈 2 엔딩"
+   "to": "45 워즈 2 엔딩"
   },
   "0x00B81F40": {
    "batch": "p1-system.1",
@@ -2209,6 +2337,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-system.1/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "반달 섬"
+  },
+  "0x00B83A64": {
+   "batch": "p1-system.1",
+   "from": "이런 이런,여기까지는 하고 싶지 않았는데 말이야!",
+   "message": "0xB83A64",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "에휴, 여기까지는 안 하려고 했는데!"
   },
   "0x00B83A98": {
    "batch": "p1-system.1",
@@ -2370,6 +2506,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "이글! 너 적당히 좀 해!!!"
   },
+  "0x00B83FA8": {
+   "batch": "p1-system.1",
+   "from": "어떻게든 늦지 않았네-,다행이다 다행이야.",
+   "message": "0xB83FA8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-system.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "겨우 시간 맞췄네, 다행이다 다행이야."
+  },
   "0x00B83FD8": {
    "batch": "p1-system.1",
    "from": "모프 사령관!승부다!",
@@ -2506,6 +2650,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "이걸로 적에게 대미지를 줬어!"
   },
+  "0x00D9009E": {
+   "batch": "p1-campaign.1",
+   "from": "이 적 유닛은,이제 한 번 정도 공격을",
+   "message": "0xD9009C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "이 적 유닛은"
+  },
   "0x00D9018E": {
    "batch": "p1-campaign.1",
    "from": "그걸 고르면 행동을 끝내버려요.",
@@ -2585,6 +2737,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.1/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "지금까지와 조금 다른 점, 눈치챘어?"
+  },
+  "0x00D910C6": {
+   "batch": "p1-campaign.1",
+   "from": "여기로 이동하지 않으면",
+   "message": "0xD910C4",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.1/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "여기로 가지 않으면"
   },
   "0x00D912AE": {
    "batch": "p1-campaign.1",
@@ -2865,6 +3025,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.2/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "네 차례야."
+  },
+  "0x00D9444E": {
+   "batch": "p1-campaign.2",
+   "from": "매일 2HP씩 보충하고 있다고는 해도,지금",
+   "message": "0xD9444C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.2/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "매일 2HP씩 보충돼도 지금"
   },
   "0x00D94552": {
    "batch": "p1-campaign.2",
@@ -3528,7 +3696,7 @@
    "message": "0xD9E69C",
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.4/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "앞으로 너한테 명령을 내려 줄"
+   "to": "앞으로 네게 명령을 내려 줄"
   },
   "0x00D9E72E": {
    "batch": "p1-campaign.4",
@@ -4242,6 +4410,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "..."
   },
+  "0x00DC5246": {
+   "batch": "p1-campaign.5",
+   "from": "뭐라고っ?!",
+   "message": "0xDC5244",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.5/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "뭐라고?!"
+  },
   "0x00DC5436": {
    "batch": "p1-campaign.5",
    "from": "이런 이런.",
@@ -4321,14 +4497,6 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.5/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "대단해―! 나라면 저렇게 대미지를"
-  },
-  "0x00DC5D12": {
-   "batch": "p1-campaign.5",
-   "from": "・・・・",
-   "message": "0xDC5D10",
-   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.5/review.json",
-   "reviewed_by": "codex gpt-6-astra medium",
-   "to": "..."
   },
   "0x00DC5D22": {
    "batch": "p1-campaign.5",
@@ -5298,14 +5466,6 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "여기는 레드스타에게 아주"
   },
-  "0x00DCB0BA": {
-   "batch": "p1-campaign.7",
-   "from": "・・・・",
-   "message": "0xDCB0B8",
-   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.7/review.json",
-   "reviewed_by": "codex gpt-6-astra medium",
-   "to": "..."
-  },
   "0x00DCB106": {
    "batch": "p1-campaign.7",
    "from": "그럼 어디.",
@@ -6026,6 +6186,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "아니, 도미노 사령관."
   },
+  "0x00DCFA8E": {
+   "batch": "p1-campaign.8",
+   "from": "이 싸움의 뒤에 있는 자가　얼마나 강적일지도",
+   "message": "0xDCFA8C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.8/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "이 싸움 뒤에 있는 자가 얼마나"
+  },
   "0x00DCFB72": {
    "batch": "p1-campaign.8",
    "from": "대부분의 적은　이글에게 맡겨버리면",
@@ -6057,14 +6225,6 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.8/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "응, 아마 틀림없을 거야!"
-  },
-  "0x00DCFCCA": {
-   "batch": "p1-campaign.8",
-   "from": "・・・・・",
-   "message": "0xDCFCC8",
-   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.8/review.json",
-   "reviewed_by": "codex gpt-6-astra medium",
-   "to": "..."
   },
   "0x00DCFCDA": {
    "batch": "p1-campaign.8",
@@ -6650,13 +6810,21 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "차량 타입으로 이동한다."
   },
+  "0x00DED082": {
+   "batch": "p1-campaign.9",
+   "from": "부포인 머신건.",
+   "message": "0xDED080",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.9/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "부포인 기관총."
+  },
   "0x00DED0DA": {
    "batch": "p1-campaign.9",
    "from": "부포인 머신건의,",
    "message": "0xDED0D8",
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.9/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "부포인 머신건의"
+   "to": "부포인 기관총의"
   },
   "0x00DED2F6": {
    "batch": "p1-campaign.9",
@@ -6858,13 +7026,21 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "캐논포의 선박 계열에"
   },
+  "0x00DEEC1A": {
+   "batch": "p1-campaign.9",
+   "from": "부포인 대공 머신건.",
+   "message": "0xDEEC18",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.9/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "부포인 대공 기관총."
+  },
   "0x00DEEC36": {
    "batch": "p1-campaign.9",
    "from": "대공 머신건의,헬기 계열에",
    "message": "0xDEEC34",
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.9/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "대공 머신건의 헬기 계열에"
+   "to": "대공 기관총의 헬기 계열에"
   },
   "0x00DEEC92": {
    "batch": "p1-campaign.9",
@@ -6872,7 +7048,7 @@
    "message": "0xDEEC90",
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.9/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
-   "to": "대공 머신건의 비행기 계열"
+   "to": "대공 기관총의 비행기 계열에"
   },
   "0x00DEEFF6": {
    "batch": "p1-campaign.10",
@@ -6897,6 +7073,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "보병 계열 외의 지상"
+  },
+  "0x00DEF5FA": {
+   "batch": "p1-campaign.10",
+   "from": "부포인 머신건.",
+   "message": "0xDEF5F8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "부포인 기관총."
   },
   "0x00DEFD82": {
    "batch": "p1-campaign.10",
@@ -6938,6 +7122,22 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "수도 점령 아니면 적 전멸로 승리야!"
   },
+  "0x00DF207A": {
+   "batch": "p1-campaign.10",
+   "from": "승리조건은,수도 점령,혹은 적 전멸이에요!",
+   "message": "0xDF2078",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "승리 조건은 수도 점령이나 적 전멸이야!"
+  },
+  "0x00DF20BA": {
+   "batch": "p1-campaign.10",
+   "from": "수도 점령,적 전멸 어느 쪽으로든 이길 수 있어요!",
+   "message": "0xDF20B8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "수도 점령／적 전멸로 이겨!"
+  },
   "0x00DF2132": {
    "batch": "p1-campaign.10",
    "from": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
@@ -6945,6 +7145,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "여기선 먼저 많이 점령하는 쪽이 승리야!"
+  },
+  "0x00DF21AE": {
+   "batch": "p1-campaign.10",
+   "from": "수도 점령이나 적 전멸로,이길 수 있어요!",
+   "message": "0xDF21AC",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "수도 점령이나 적 전멸이면 이겨!"
   },
   "0x00DF21EE": {
    "batch": "p1-campaign.10",
@@ -6954,6 +7162,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "수도 점령이든 적 전멸이든 승리야!"
   },
+  "0x00DF228E": {
+   "batch": "p1-campaign.10",
+   "from": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+   "message": "0xDF228C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "여기는 먼저 많이 점령하는 쪽이 이겨!"
+  },
   "0x00DF2316": {
    "batch": "p1-campaign.10",
    "from": "먼저 많이 점령하는 쪽이 승리예요!",
@@ -6961,6 +7177,14 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "먼저 많이 점령하는 쪽이 이겨!"
+  },
+  "0x00DF239E": {
+   "batch": "p1-campaign.10",
+   "from": "여기는,먼저 많이 점령하는 쪽이 승리예요!",
+   "message": "0xDF239C",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "여기는 먼저 많이 점령하는 쪽이 이겨!"
   },
   "0x00DF242E": {
    "batch": "p1-campaign.10",
@@ -6978,6 +7202,14 @@
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "이 맵에서는 15일 안에 적을 전멸시키면"
   },
+  "0x00DF25FA": {
+   "batch": "p1-campaign.10",
+   "from": "수도 점령이나 적 전멸로 이길 수 있어요!",
+   "message": "0xDF25F8",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "수도 점령이나 적 전멸이면 이겨!"
+  },
   "0x00DF2636": {
    "batch": "p1-campaign.10",
    "from": "여기는,적을 전멸시키면 승리예요!",
@@ -6993,6 +7225,22 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "수도 점령 아니면 적 전멸로 승리야!"
+  },
+  "0x00DF26FE": {
+   "batch": "p1-campaign.10",
+   "from": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "message": "0xDF26FC",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "수도 점령이나 적 전멸로 이길 수 있어!"
+  },
+  "0x00DF2806": {
+   "batch": "p1-campaign.10",
+   "from": "수도 점령이나,적 전멸로 이길 수 있어요!",
+   "message": "0xDF2804",
+   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.10/review.json",
+   "reviewed_by": "codex gpt-6-astra medium",
+   "to": "수도 점령이나 적 전멸로 이길 수 있어!"
   },
   "0x00DF285A": {
    "batch": "p1-campaign.10",
@@ -8121,14 +8369,6 @@
    "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.13/review.json",
    "reviewed_by": "codex gpt-6-astra medium",
    "to": "확실히, 아버지의 특전 부대라면"
-  },
-  "0x00E062DE": {
-   "batch": "p1-campaign.13",
-   "from": "・・・・",
-   "message": "0xE062DC",
-   "review_ref": "temp/fix_20261104/humanizer/batches/p1-campaign.13/review.json",
-   "reviewed_by": "codex gpt-6-astra medium",
-   "to": "..."
   },
   "0x00E0630A": {
    "batch": "p1-campaign.13",

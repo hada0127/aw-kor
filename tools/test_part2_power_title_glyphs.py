@@ -35,7 +35,9 @@ class PowerTitleTests(unittest.TestCase):
         encode = lambda s: b''.join(cls.codes[ch].to_bytes(2, 'big') for ch in s)
         for a, end in zip(addresses, (*addresses[1:], titles.NAMES_END)):
             cls.base[a:end] = encode(cls.names[a]).ljust(end - a, b'\0')
-        cls.base[titles.DICTIONARY:titles.DICTIONARY + titles.DICTIONARY_SIZE] = encode(cls.dictionary).ljust(titles.DICTIONARY_SIZE, b'\0')
+        # fixB H: the live dictionary is relocated (64-glyph capacity) and both
+        # consumer literals point at it.
+        titles.relocate_dictionary(cls.base, cls.original, cls.names, cls.codes)
         cls.raw = titles.source(cls.original)
         cls.rendered = titles.render(cls.raw, cls.dictionary)
         cls.patched = bytearray(cls.base)
@@ -57,7 +59,7 @@ class PowerTitleTests(unittest.TestCase):
             self.assertTrue(all(7 <= x <= 24 and 3 <= y <= 28 for x, y in occupied))
         self.assertEqual(len(distinct), 57)
         # This observed regression is a glyph-index mismatch, not a sound effect.
-        old_dictionary = self.original[titles.DICTIONARY:titles.DICTIONARY + 122].decode('shift_jis')
+        old_dictionary = self.original[titles.NATIVE_DICTIONARY:titles.NATIVE_DICTIONARY + 122].decode('shift_jis')
         self.assertEqual(''.join(old_dictionary[self.dictionary.index(ch)] for ch in '강타'), 'ドン')
         self.assertEqual(''.join(old_dictionary[self.dictionary.index(ch)] for ch in '직격'), 'グサ')
 
@@ -116,7 +118,7 @@ class PowerTitleTests(unittest.TestCase):
             titles.bind_dictionary(self.base, names, self.codes)
         names = dict(self.names)
         names[titles.NAMES_START] = '기 적'
-        with self.assertRaisesRegex(AssertionError, '1..61 unique Hangul'):
+        with self.assertRaisesRegex(AssertionError, '1..64 unique Hangul'):
             titles.bind_dictionary(self.base, names, self.codes)
         for code in (self.codes['적'], 0x2040, 0x8840 + 0x3F):
             codes = dict(self.codes)
@@ -146,9 +148,10 @@ class PowerTitleTests(unittest.TestCase):
                 result = titles.patch(rom, self.original, names, self.codes)
                 self.assertEqual(result['glyphs'], 58)
                 titles.verify_generated(rom, self.original, names, self.codes)
-        # At 61 entries the renderer terminates on the adjacent native NUL.
+        # At the 64-entry capacity the renderer terminates on the relocated
+        # dictionary's own NUL halfword (fixB H), checked with the dictionary.
         rom[titles.DICTIONARY + titles.DICTIONARY_SIZE] = 1
-        with self.assertRaisesRegex(AssertionError, 'consumer/pointer/palette/neighbor'):
+        with self.assertRaisesRegex(AssertionError, 'dictionary differs'):
             titles.bind_dictionary(rom, names, self.codes)
 
     def test_compression_overflow_malformed_and_unsafe_streams_are_rejected(self):
@@ -207,6 +210,27 @@ class PowerTitleTests(unittest.TestCase):
         self.assertEqual(rom[titles.OFFSET:titles.OFFSET + titles.SLOT_SIZE], regions[titles.OFFSET])
         with self.assertRaisesRegex(AssertionError, 'skipped'):
             titles.capture_regions(rom, self.original, self.names, self.codes, editor_result={'skipped': 1})
+
+
+    def test_yamato_to_matches_neighbour_scale_and_legacy_cells_are_unchanged(self):
+        # fixB 8_toh: 토 (height-limited) is drawn at 다's font scale, not stretched
+        # to 24 px; every other syllable keeps the legacy per-glyph fit.
+        from hangul_pixel_fit import glyph, outline_alpha
+        dictionary = ''.join(dict.fromkeys(''.join(APPROVED_NAMES[:20] + ('야마토다마시이',) + APPROVED_NAMES[20:])))
+        self.assertTrue(set('야마토다시') <= set(dictionary) and len(dictionary) <= titles.MAX_GLYPHS)
+        rendered = titles.render(self.raw, dictionary)
+        by_char = {ch: titles.decode_cell(self.rendered, i) for i, ch in enumerate(self.dictionary)}
+        for i, ch in enumerate(dictionary):
+            cell = titles.decode_cell(rendered, i)
+            if ch in by_char:
+                self.assertEqual(cell, by_char[ch], ch)
+            if ch != '토':
+                self.assertEqual(titles._fill(ch).tobytes(), glyph(ch, 16, 24).tobytes(), ch)
+        to = titles._fill('토').getbbox()
+        src, ref = outline_alpha('토'), outline_alpha('다')
+        self.assertEqual(to[3] - to[1], round(src.height * 16 / ref.width))
+        self.assertLess(to[3] - to[1], 24)
+        self.assertEqual(titles._fill('다').getbbox()[2] - titles._fill('다').getbbox()[0], 16)
 
 
 if __name__ == '__main__':

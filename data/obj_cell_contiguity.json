@@ -1,5 +1,5 @@
 {
-  "_doc": "Screen frame provenance and byte guards for multi-OBJ title placement. The guard covers the asset literal consumers (0xB40000-0xB60000), the shared OBJ loader 0xB0FFE4 with its helpers/literals (0xB0FF60-0xB10030), the decompressor dispatch table 0xD8263C, the BIOS SWI stubs 0xB7A85C-0xB7A88C and the bx-r2 veneer 0xB7BD18. Runtime OAM placement is not statically bounded (OAM is built through IWRAM/function-pointer paths), so a guard match is only provisional: the final QA (qa_obj_title_cells.py) requires a candidate_proofs entry captured on the exact candidate ROM (fresh screen capture, see tools/qa_screen_obj_contiguity.py). See docs/research.md.",
+  "_doc": "Screen frame provenance and byte guards for multi-OBJ title placement. The guard covers the asset literal consumers (0xB40000-0xB60000 minus the Part 1 name-screen routines 0xB487A0-0xB4990C; fixB G-b 2026-11-04, spike S3: the Phase C name-compose hooks h1..h7 0xB488FE..0xB4985C live there and none of the 10 OBJ title consumer functions overlaps that span; both remaining halves equal the original, b44 and fixA bytes), the shared OBJ loader 0xB0FFE4 with its helpers/literals (0xB0FF60-0xB10030), the decompressor dispatch table 0xD8263C, the BIOS SWI stubs 0xB7A85C-0xB7A88C and the bx-r2 veneer 0xB7BD18. Runtime OAM placement is not statically bounded (OAM is built through IWRAM/function-pointer paths), so a guard match is only provisional: the final QA (qa_obj_title_cells.py) requires a candidate_proofs entry captured on the exact candidate ROM (fresh screen capture, see tools/qa_screen_obj_contiguity.py). See docs/research.md.",
   "assets": {
     "0x00BFB45C": {
       "label": "Part 1 mission result 작전 성공 (big title, 4 x 32x32 OBJ)",
@@ -31,8 +31,13 @@
       "consumer_guard": [
         [
           11796480,
+          11831200,
+          "fe3c677374d34364e1f60ef0d8650464b4cca46abe73ce857a21396cd3f0f282"
+        ],
+        [
+          11835660,
           11927552,
-          "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
+          "e80afd7d2f4e8e727932bd919ae108c66eeea85e75cb17eca42106ae843399a8"
         ],
         [
           11599712,
@@ -494,6 +499,130 @@
           "capture_baseline_sha256": "a8c974319371598f4d3fbe14227dacfd9240020dd6a9ceaade1d81d815d5d5e3",
           "capture_run": "temp/release_C/canon11/obj/E_result",
           "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "2ddb55365be13021f0b3ef5fd786b9b7869fc887b4d37a4795ef439a44cb9c6b",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_result/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "fixB final (2026-11-04) direct cold-boot recorder capture of the canon11 route (E_result); inherited save taint; decoded RGB equal to the b44 canon11 frame",
+          "rgb_identical_to_b44": true,
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "9917fb7c96ee8ac1d65f81e84616b6757348ec289635587d4c1fe11d896815be",
+          "capture_baseline_sha256": "03a86e842bb781b5b29c67cc27bb6a810fbd365cf5a0aa49d8b2f5d7482e3a89",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_result",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "c547bc760aeb49b50db7ca53aaf1818444fc87b25ee6d906dfb28b3bd0d81b33",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_result_C1/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "fixB C1 candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_result_C1); inherited save taint; decoded RGB equal to the b44 canon11 frame",
+          "rgb_identical_to_b44": true,
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "b323ce3711b289a06d5d5c18b78ed4932f05a51ca746f7517e67bc5e6a717936",
+          "capture_baseline_sha256": "64e47dda139995adc77ad89eafecf46cb384f1c214366faf5552281c535a5412",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_result_C1",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "e02375407df91023f091c60596a2036f78e2c5e4f40c1e2bbe49388de20a8c61",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_result_C1b/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "fixB C1b candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_result_C1b); inherited save taint; decoded RGB equal to the b44 canon11 frame",
+          "rgb_identical_to_b44": true,
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "bd1473eac9f777ddbc2c696de5235c1c31a03ae7933c21283a26289ec2ec79a4",
+          "capture_baseline_sha256": "144f51238ae3dfafb3c86fa6b963f1f21ba034b35007a5929d52c25527b0fe99",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_result_C1b",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "0983d1eb93b12f09d5536a26807077f61ed1b8ecca1449e60c0f3cbd9bb9d1a8",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_result_C2/0108_NONE_0005973.png",
+          "frame_sha256": "fa4726c89a14cc3790deaa97140d6852c24fec965b7d2fea49032fc9fd046932",
+          "found": [
+            [
+              9,
+              22
+            ],
+            [
+              41,
+              22
+            ],
+            [
+              73,
+              22
+            ],
+            [
+              105,
+              22
+            ]
+          ],
+          "note": "fixB C2 candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_result_C2); inherited save taint; decoded RGB equal to the b44 canon11 frame",
+          "rgb_identical_to_b44": true,
+          "capture_frame": "0108_NONE_0005973.png",
+          "capture_checkpoint": "0108_NONE_0005973.checkpoint.json",
+          "capture_checkpoint_sha256": "962b20e5e29db16fedd3fa9f781d3122c9746b5c61d34b5cdf4ef5e6bc499b98",
+          "capture_baseline_sha256": "b8653d3fbbd9af4121e7b35bf51e85418a958e77ec048ec57584f6529919d1de",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_result_C2",
+          "cheat_tainted": true
         }
       ]
     },
@@ -560,8 +689,13 @@
       "consumer_guard": [
         [
           11796480,
+          11831200,
+          "fe3c677374d34364e1f60ef0d8650464b4cca46abe73ce857a21396cd3f0f282"
+        ],
+        [
+          11835660,
           11927552,
-          "5830c45e87756abd20a8e0ec3d5c21bf90b38fa8896e358467c35ec8ca215c4a"
+          "e80afd7d2f4e8e727932bd919ae108c66eeea85e75cb17eca42106ae843399a8"
         ],
         [
           14756848,
@@ -1051,6 +1185,98 @@
           "capture_checkpoint_sha256": "48e554144585a2a7c354a0099c55739ed9eb8f4a7ba1805a90cb747259beaab9",
           "capture_baseline_sha256": "c6597a58c1d49ce157aae897de3f4e682e1c3624c3cb65e3377d132782d5df47",
           "capture_run": "temp/release_C/canon11/obj/E_mission",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "2ddb55365be13021f0b3ef5fd786b9b7869fc887b4d37a4795ef439a44cb9c6b",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_mission_fixB/0032_NONE_0002580.png",
+          "frame_sha256": "fc8fafec851064fbfbda0de4c3d207e9efbf109bb12874e8a88bac440f0268aa",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "fixB final (2026-11-04) direct cold-boot recorder capture of the canon11 route (E_mission_fixB); inherited save taint; decoded RGB differs from the b44 canon11 frame (re-proved)",
+          "rgb_identical_to_b44": false,
+          "capture_frame": "0032_NONE_0002580.png",
+          "capture_checkpoint": "0032_NONE_0002580.checkpoint.json",
+          "capture_checkpoint_sha256": "dbdb09e6c0890512dcd119432acb283709baa2c7e38c891060d2141c5fa53dc9",
+          "capture_baseline_sha256": "6c7c9b87242dcb97e0c095f6d04b293853495cd814ef365345ada5fa061846e5",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_mission_fixB",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "c547bc760aeb49b50db7ca53aaf1818444fc87b25ee6d906dfb28b3bd0d81b33",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C1/0032_NONE_0002580.png",
+          "frame_sha256": "fc8fafec851064fbfbda0de4c3d207e9efbf109bb12874e8a88bac440f0268aa",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "fixB C1 candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_mission_fixB_C1); inherited save taint; decoded RGB differs from the b44 canon11 frame (re-proved)",
+          "rgb_identical_to_b44": false,
+          "capture_frame": "0032_NONE_0002580.png",
+          "capture_checkpoint": "0032_NONE_0002580.checkpoint.json",
+          "capture_checkpoint_sha256": "eba60635d2995471d3f74f2d8d5b58bfdafdf59bbe8a4c323ae4b2f8e146aed6",
+          "capture_baseline_sha256": "f88310d3a81d6132a56c243fe911251b1180462fcb4ae4956b2db39d94ba343c",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C1",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "e02375407df91023f091c60596a2036f78e2c5e4f40c1e2bbe49388de20a8c61",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C1b/0032_NONE_0002580.png",
+          "frame_sha256": "fc8fafec851064fbfbda0de4c3d207e9efbf109bb12874e8a88bac440f0268aa",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "fixB C1b candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_mission_fixB_C1b); inherited save taint; decoded RGB differs from the b44 canon11 frame (re-proved)",
+          "rgb_identical_to_b44": false,
+          "capture_frame": "0032_NONE_0002580.png",
+          "capture_checkpoint": "0032_NONE_0002580.checkpoint.json",
+          "capture_checkpoint_sha256": "5823ed7593dbe4d72dc4a53726530c062355bdb3eefdad4cbb7647b46f0573b1",
+          "capture_baseline_sha256": "5c9fb79ce38677e220600ec1f44c9da3a1a68ada7e72090f4fbbfcfc769f62ae",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C1b",
+          "cheat_tainted": true
+        },
+        {
+          "rom_sha256": "0983d1eb93b12f09d5536a26807077f61ed1b8ecca1449e60c0f3cbd9bb9d1a8",
+          "frame": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C2/0032_NONE_0002580.png",
+          "frame_sha256": "fc8fafec851064fbfbda0de4c3d207e9efbf109bb12874e8a88bac440f0268aa",
+          "found": [
+            [
+              8,
+              60
+            ],
+            [
+              72,
+              60
+            ]
+          ],
+          "note": "fixB C2 candidate (2026-11-05) direct cold-boot recorder capture of the canon11 route (E_mission_fixB_C2); inherited save taint; decoded RGB differs from the b44 canon11 frame (re-proved)",
+          "rgb_identical_to_b44": false,
+          "capture_frame": "0032_NONE_0002580.png",
+          "capture_checkpoint": "0032_NONE_0002580.checkpoint.json",
+          "capture_checkpoint_sha256": "14dfe78f5b0c711dc608a6bfc3ce05e9c9f629d1f0e36cf937a7607eeabab9bc",
+          "capture_baseline_sha256": "14ea1b469e910ce954e56172a3bccb027fcd4b969eb100824b6f214d083b1c75",
+          "capture_run": "temp/fix_20261104/fixB/final/obj/E_mission_fixB_C2",
           "cheat_tainted": true
         }
       ]

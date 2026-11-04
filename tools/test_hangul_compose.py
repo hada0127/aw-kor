@@ -178,10 +178,11 @@ class CompositionTests(unittest.TestCase):
         self.assertEqual(c.preview()[-2:], [('code', TABLE['가']), ('code', 0x8140)])
 
     def test_strict_rejection_counterexamples(self):
-        self.assertNotIn('갣', TABLE)
-        c = self.composer('ㄱㅐ')
-        self.reject(c, lambda: c.press('ㄷ'), 'not_in_2350')
-        self.assertEqual(c.preview(), [('active', '개')])
+        # 모음 쪽 2350 밖은 원자 거부 유지(받침 쪽은 test_final_outside_2350_auto_advance).
+        self.assertNotIn('뢔', TABLE)
+        c = self.composer('ㄹㅗ')
+        self.reject(c, lambda: c.press('ㅐ'), 'not_in_2350')
+        self.assertEqual(c.preview(), [('active', '로')])
         examples = {'뢨': '뢔', '썅': '쌰', '쏀': '쎼', '쓩': '쓔', '쭁': '쬬'}
         report = hc.reachability_report(TABLE)
         for target, missing in examples.items():
@@ -195,6 +196,33 @@ class CompositionTests(unittest.TestCase):
                     self.reject(c, lambda: c.press(key), 'not_in_2350')
                     break
                 self.assertTrue(c.press(key).accepted)
+
+    def test_final_outside_2350_auto_advance(self):
+        # 2026-11-04 F: 받침을 붙인 음절이 2350 밖이면 현재 음절 확정 + 그 자음으로 새 글자.
+        for word in ('욯', '갣', '갃'):
+            self.assertNotIn(word, TABLE)
+        c = self.composer('ㅇㅛㅎ')
+        self.assertEqual(c.preview(), [('code', TABLE['요']), ('active', 'ㅎ')])
+        self.type(c, 'ㅏ')
+        self.assertEqual(self.text(c), '요하')
+        c = self.composer('ㄱㅐㄷ')
+        self.assertEqual(c.preview(), [('code', TABLE['개']), ('active', 'ㄷ')])
+        self.type(c, 'ㅏ')
+        self.assertEqual(self.text(c), '개다')
+        c = self.composer('ㄱㅏㄱㅅ')                   # 겹받침 가능하지만 「갃」은 표 밖
+        self.assertEqual(c.preview(), [('code', TABLE['각']), ('active', 'ㅅ')])
+        self.type(c, 'ㅏ')
+        self.assertEqual(self.text(c), '각사')
+        c = self.composer('ㅂㅏㄴㄱㅏㅇㅜㅓㅇㅛㅎㅏㄴㄱㅡㄹ')   # 확인 없이 연속 입력
+        self.assertEqual(self.text(c), '반가워요한글')
+        self.assertEqual(c.confirm(), hc.Result(True))
+        self.assertEqual(c.serialize(), b''.join(TABLE[ch].to_bytes(2, 'big') for ch in '반가워요한글').ljust(16, b'\0'))
+        c = self.composer()                              # 8번째 칸이 active 면 새 글자 자리가 없다
+        c.load([TABLE['가']] * 7)
+        self.type(c, 'ㅇㅛ')
+        self.reject(c, lambda: c.press('ㅎ'), 'no_slot')
+        self.assertEqual(c.preview()[-1], ('active', '요'))
+        self.assertEqual(self.composer('ㄱㅏㅎ').preview(), [('active', '갛')])   # 표 안이면 기존대로 받침
 
     def test_migration_rejection_atomicity(self):
         cases = []
@@ -249,15 +277,22 @@ class CompositionTests(unittest.TestCase):
     def test_exhaustive_syllables(self):
         reachable = set()
         missing_supported = {}
-        rejected = 0
+        rejected = advanced = 0
         for n in range(11172):
             char = chr(0xAC00 + n)
             keys, candidates = oracle(char)
             c = self.composer()
-            for key, candidate in zip(keys, candidates):
+            for i, (key, candidate) in enumerate(zip(keys, candidates)):
                 if candidate is not None and candidate not in TABLE:
-                    self.reject(c, lambda: c.press(key), 'not_in_2350')
-                    rejected += 1
+                    if key in INITIALS and i >= 2:       # 받침 키: 앞 음절 확정 + 새 초성(F)
+                        before = c.preview()
+                        self.assertTrue(c.press(key).accepted, (char, key))
+                        self.assertEqual(c.preview(), [('code', TABLE[before[-1][1]]), ('active', key)],
+                                         (char, key))
+                        advanced += 1
+                    else:
+                        self.reject(c, lambda: c.press(key), 'not_in_2350')
+                        rejected += 1
                     break
                 self.assertTrue(c.press(key).accepted, (char, key))
             else:
@@ -273,7 +308,8 @@ class CompositionTests(unittest.TestCase):
         self.assertEqual(report['reachable'], len(reachable))
         self.assertEqual(report['mapped'], 2350)
         self.assertEqual(reachable, set(TABLE) - set(missing_supported))
-        print(f'exhaustive=11172 reached={len(reachable)} rejected={rejected} supported_unreachable={len(missing_supported)}')
+        print(f'exhaustive=11172 reached={len(reachable)} rejected={rejected} advanced={advanced} '
+              f'supported_unreachable={len(missing_supported)}')
 
     def test_deterministic_sequences(self):
         rng = random.Random(20261023)

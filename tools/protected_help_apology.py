@@ -4,7 +4,7 @@ import struct
 from dialogue_repoint import normalize_text_segment, text_segment_cells
 from sprite_relocations import SPRITE_STORAGE_START
 HELP='만드는 방법은 「도움말」에 적혀 있어요.'
-APOLOGY='미안해요'
+APOLOGY='미안해.'  # plan_C B-pin banmal (2026-11-04 user)
 SPECS=((0xD82058,0xD82080,0xD7EDD4,'6f354effccdda336d3b70a756656dda038ec9d4cf7ead8608ed61374ea52100a'),
        (0xD8F6FC,0xD8F711,0xDA4CB8,'13b08b1b54ca0e87928993e62b6676e5edd92d88d9a26c1360f214ef7321dd94'))
 
@@ -39,7 +39,9 @@ def verify(rom,original,encode,manifest=None):
   from dialogue_spacing import has_reviewed_source
   if len(relocated)!=1 or not has_reviewed_source(0xD8F6FC):raise ValueError('Unreviewed apology relocation')
   m=relocated[0];active=int(m['new_addr'],16)
-  prefix=bytes(original[0xD8F6FC:0xD8F6FE])+apology+b' '*8+bytes(original[0xD8F70E:0xD8F711])
+  # Reviewed relocated first page (plan_C B-pin): the 8-byte apology is followed
+  # directly by its native wait/newline controls (no slot padding).
+  prefix=bytes(original[0xD8F6FC:0xD8F6FE])+apology+bytes(original[0xD8F70E:0xD8F711])
   if (active%4 or not 0xA3D000<=active<active+m['new_len']<=SPRITE_STORAGE_START
       or struct.unpack_from('<I',rom,0xDA4CB8)[0]!=active+0x08000000
       or bytes(rom[active:active+len(prefix)])!=prefix):

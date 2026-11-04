@@ -30,7 +30,8 @@ class DialogueLayoutContractsTests(unittest.TestCase):
             # A1F9D8 has one. Neither wait may disappear during repair.
             first = encode(c['rows'][0])
             if source == 0xA1F944:
-                first = first[:14] + b'\x77' + first[14:]
+                cut = len(encode(c['first_row_wait_prefixes'][0]))
+                first = first[:cut] + b'\x77' + first[cut:]
             payload = prefix + first + b'\x77\x72' + encode(c['rows'][1]) + b'\x6b\0'
             rom[target:target + len(payload)] = payload
             struct.pack_into('<I', rom, c['pointer'], target + 0x08000000)
@@ -42,7 +43,7 @@ class DialogueLayoutContractsTests(unittest.TestCase):
     def test_both_complete_text_contracts_pass_with_native_controls(self):
         rom, records = self.fixture()
         self.assertEqual([r['row_half_cells'] for r in L.verify(rom, self.original, records, self.codes)],
-                         [[32, 36], [36, 34]])
+                         [[42, 30], [24, 44]])  # plan_C B-pin reviewed rows
 
     def test_missing_duplicate_or_skipped_relocation_is_blocked(self):
         rom, records = self.fixture()

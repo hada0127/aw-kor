@@ -110,6 +110,13 @@ class RendererTextTests(unittest.TestCase):
         decisions = json.loads((root / 'data/part1_punctuation_decisions.json').read_text())
         self.assertEqual(set(decisions), {'0x00DC67B6'})
         decision = decisions['0x00DC67B6']
-        self.assertEqual(decision['source'], '너란 녀석은...')
-        self.assertEqual(decision['shipped'], '너란 녀석은・・')
-        self.assertEqual(len(bytes.fromhex(decision['payload_hex'])), 16)
+        self.assertEqual(decision['source'], '너 말이야...')
+        self.assertEqual(decision['shipped'], '너　말이야…')
+        payload = bytes.fromhex(decision['payload_hex'])
+        self.assertEqual(len(payload), 16)
+        # fixB J: one 「…」 (0x8163) cell, freed bytes padded with 0x20.
+        self.assertEqual(payload[10:], bytes.fromhex('816320202020'))
+        from qa_part1_dialogue_punctuation import decision_display, decision_source_ok
+        self.assertEqual(decision_display(payload), decision['shipped'])
+        self.assertTrue(decision_source_ok(decision['source'], decision['shipped']))
+        self.assertFalse(decision_source_ok('너란 녀석은...', decision['shipped']))

@@ -1,7 +1,10 @@
-"""Restore the reviewed polite return-to-mode question without changing its slots."""
+"""Reviewed return-to-mode question (both games) without changing its slots.
+
+Wording: plan_C B-pin banmal (2026-11-04 user, tools/bpin_contract.py).
+"""
 import hashlib
 import struct
-TEXT='모드 선택으로 돌아갈까요?'
+TEXT='모드 선택으로 돌아갈까?'
 SOURCE_SHA='ba97e07752e4a2e8fb522e4c50d3f6037b6d4304204de9e5fb6b1abb30893e60'
 ROWS=((0xDF2A64,0xDF2A8E,0xD8CA40),(0xA34CE8,0xA34D12,0xA38A04))
 

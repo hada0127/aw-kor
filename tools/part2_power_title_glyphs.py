@@ -5,6 +5,13 @@ cell from the 5B3ECC atlas. Updating only the dictionary made 강타 select the
 original ド/ン cells. The native consumer, palette and pointers stay intact.
 Only the active dictionary cells change (57 in the approved default); a later explicit sprite
 editor overlay may replace the asset and is captured for the final guard.
+
+fixB H (2026-11-04, spike S4): 「야마토다마시이」 needs 64 glyphs, the atlas's physical
+maximum, but the native dictionary slot A3B880 holds only 61 (122 B before the
+A3B8FA terminator). The dictionary moves to free space DICTIONARY (64 x 2 B +
+NUL halfword) and both consumer literals (0x3806FC, 0x381300) point there.
+The native slot keeps the first 61 entries (builder text writer), so a stale
+reader would still map them to the right atlas cells.
 """
 from functools import lru_cache
 from hashlib import sha256
@@ -24,15 +31,24 @@ ROM_SIZE = 0x1000000
 OFFSET, SLOT_SIZE, RAW_SIZE = 0x5B3ECC, 6161, 32768
 RAW_SHA256 = 'b601d62a378e3854067c15f09e024a98f1d1b0437d25f505797f01655bf68bd7'
 ASSET_ID = 'lz77_005B3ECC'
-DICTIONARY, DICTIONARY_SIZE, MAX_GLYPHS = 0xA3B880, 122, 61
+NATIVE_DICTIONARY, NATIVE_DICTIONARY_SIZE = 0xA3B880, 122
+DICTIONARY, DICTIONARY_SIZE, MAX_GLYPHS = 0xFD0160, 128, 64
+DICTIONARY_LITERALS = (0x3806FC, 0x381300)
 NAMES_START, NAMES_END, NAME_POINTERS = 0xA2955C, 0xA29830, 0xA37B3C
+# Native digests of the two literal-pool regions before the dictionary move.
+NATIVE_LITERAL_GUARDS = (
+    (0x3806A8, 0x58, '196eb8a6fd4959e1136c449f233fbdcfd617ec9d0866ed3073d15167c2f03851'),
+    (0x381234, 0xD0, '3b29f8e9793b24db7ee3b44034f8791086fec641e2b7c95add07f202b34a41fe'),
+)
 # Native consumers, two atlas pointers, palette, neighboring data, name pointers.
+# 0x3806A8/0x381234 digests are the native code with only the two dictionary
+# literals changed to DICTIONARY.
 GUARDS = (
     (0x380564, 0xEC, 'f9fb9090dac028158e96c3c8f1823a8dc2a4344c166e62a69399a17f9108926f'),
-    (0x3806A8, 0x58, '196eb8a6fd4959e1136c449f233fbdcfd617ec9d0866ed3073d15167c2f03851'),
+    (0x3806A8, 0x58, '4bb218b9236aa9213b3700a451e43c05004098c674db12175a5b328eaa04a27f'),
     (0x38118C, 0x18, '72cfae6085257a5f0ccc21369f5031dfed67ba630eda72be96a3f27e0d67c818'),
     (0x38121C, 0xC, 'bd8fb931b0dc3e6d11108bd116853c91f03165bb02b96f89a6a34f5201dc3bfe'),
-    (0x381234, 0xD0, '3b29f8e9793b24db7ee3b44034f8791086fec641e2b7c95add07f202b34a41fe'),
+    (0x381234, 0xD0, '54e449ff9c1c660e1f2fd13162c328d37f180c2b8746d3531d727afe52245f98'),
     (0x5B3EBC, 0x10, '4b0c2404daddaba57120378648d3dcaf0e0498579748e2127eb0bfc624914475'),
     (0x5B56DD, 0x20, '2c7c5e1889322476f239cd8607469abe6c2106277a82898bc99583855e8a9dfb'),
     (0x5B5720, 0x20, '7573b09439c2fab8edaa2adad209439c78aea429072c3ccb8c964cd26a4df32e'),
@@ -67,20 +83,14 @@ def _font_bytes():
     return data
 
 
-def bind_dictionary(rom, display_names, syllable_codes):
-    """Match all actual ROM names and dictionary to the builder's display data.
-
-    Call after the text writers, before the sprite editor. There is no separate
-    hard-coded Korean dictionary to drift from data/display_overrides.json.
-    """
-    _guard_current(rom)
+def _ordered_pairs(rom, display_names, syllable_codes):
     addresses = tuple(p - 0x08000000 for p in struct.unpack_from('<36I', rom, NAME_POINTERS))
     names = {a: t for a, t in display_names.items() if NAMES_START <= a < NAMES_END}
     if set(names) != set(addresses):
         raise AssertionError('Part 2 power title requires the exact 36 display-name addresses')
     ordered = ''.join(dict.fromkeys(''.join(names[a] for a in addresses)))
     if (not 1 <= len(ordered) <= MAX_GLYPHS or any(not '가' <= ch <= '힣' for ch in ordered)):
-        raise AssertionError('Part 2 power title dictionary must have 1..61 unique Hangul glyphs')
+        raise AssertionError(f'Part 2 power title dictionary must have 1..{MAX_GLYPHS} unique Hangul glyphs')
     try:
         pairs = [int(syllable_codes[ch]).to_bytes(2, 'big') for ch in ordered]
     except (KeyError, ValueError, OverflowError, TypeError) as exc:
@@ -88,9 +98,53 @@ def bind_dictionary(rom, display_names, syllable_codes):
     if (len(set(pairs)) != len(pairs) or any(not (0x81 <= p[0] <= 0x9F or 0xE0 <= p[0] <= 0xEF)
                                            or not (0x40 <= p[1] <= 0xFC and p[1] != 0x7F) for p in pairs)):
         raise AssertionError('Part 2 power title needs unique native two-byte dictionary codes')
+    return addresses, names, ordered, pairs
+
+
+def relocate_dictionary(rom, original, display_names, syllable_codes):
+    """Write the 64-entry dictionary to DICTIONARY and repoint both literals.
+
+    Returns [(address, bytes, label)] for the builder's write log.
+    """
+    _, _, _, pairs = _ordered_pairs(rom, display_names, syllable_codes)
+    blob = b''.join(pairs).ljust(DICTIONARY_SIZE, b'\0') + b'\0\0'
+    native_ptr = struct.pack('<I', 0x08000000 + NATIVE_DICTIONARY)
+    new_ptr = struct.pack('<I', 0x08000000 + DICTIONARY)
+    for address, size, digest in NATIVE_LITERAL_GUARDS:
+        if (sha256(original[address:address + size]).hexdigest() != digest
+                or bytes(rom[address:address + size]) != bytes(original[address:address + size])):
+            raise AssertionError(f'Part 2 power title dictionary literal pool changed: {address:X}')
+    if (any(bytes(original[a:a + 4]) != native_ptr for a in DICTIONARY_LITERALS)
+            or bytes(original).count(native_ptr) != len(DICTIONARY_LITERALS)):
+        raise AssertionError('Part 2 power title native dictionary literal ownership changed')
+    if (any(original[DICTIONARY:DICTIONARY + len(blob)]) or any(rom[DICTIONARY:DICTIONARY + len(blob)])
+            or new_ptr in original or new_ptr in rom):
+        raise AssertionError('Part 2 power title relocated dictionary space occupied or referenced')
+    rom[DICTIONARY:DICTIONARY + len(blob)] = blob
+    writes = [(DICTIONARY, blob, 'part2-power-title-dictionary-relocated')]
+    for address in DICTIONARY_LITERALS:
+        rom[address:address + 4] = new_ptr
+        writes.append((address, new_ptr, 'part2-power-title-dictionary-literal'))
+    _guard_current(rom)
+    return writes
+
+
+def bind_dictionary(rom, display_names, syllable_codes):
+    """Match all actual ROM names and dictionary to the builder's display data.
+
+    Call after the text writers and relocate_dictionary(), before the sprite
+    editor. There is no separate hard-coded Korean dictionary to drift from
+    data/display_overrides.json.
+    """
+    _guard_current(rom)
+    addresses, names, ordered, pairs = _ordered_pairs(rom, display_names, syllable_codes)
     encoded = dict(zip(ordered, pairs))
-    if bytes(rom[DICTIONARY:DICTIONARY + DICTIONARY_SIZE]) != b''.join(pairs).ljust(DICTIONARY_SIZE, b'\0'):
+    if (bytes(rom[DICTIONARY:DICTIONARY + DICTIONARY_SIZE]) != b''.join(pairs).ljust(DICTIONARY_SIZE, b'\0')
+            or bytes(rom[DICTIONARY + DICTIONARY_SIZE:DICTIONARY + DICTIONARY_SIZE + 2]) != b'\0\0'):
         raise AssertionError('Part 2 power title ROM dictionary differs from display names')
+    new_ptr = struct.pack('<I', 0x08000000 + DICTIONARY)
+    if any(bytes(rom[a:a + 4]) != new_ptr for a in DICTIONARY_LITERALS):
+        raise AssertionError('Part 2 power title dictionary literal is not the relocated dictionary')
     for a, end in zip(addresses, (*addresses[1:], NAMES_END)):
         text = names[a]
         if not text or len(text) > 12:
@@ -121,10 +175,42 @@ def decode_cell(raw, index):
     return pixels
 
 
+# fixB 8_toh (2026-11-04): the per-glyph fit below scales each syllable until it
+# fills 16 px wide OR 24 px high. Narrow horizontal-vowel syllables (토 = 185 x 279
+# source px) hit 24 px first and come out at ~1.5x the font scale of their
+# width-limited neighbours (야/마/다 ~10 px high), so 토 looked enlarged in
+# 「야마토다마시이」. Syllables added by fixB H that are height-limited are instead
+# drawn at the width-fit font scale of REFERENCE_SYLLABLE (다, its neighbour), i.e.
+# the same point size. The approved pre-H cells keep the legacy fit unchanged
+# (pixel identical); among the new syllables only 토 is height-limited.
+H_ADDED_SYLLABLES = frozenset('야마토다시')
+REFERENCE_SYLLABLE = '다'
+
+
+def _fit_scale(ch):
+    from hangul_pixel_fit import outline_alpha
+    source = outline_alpha(ch)
+    return source, min(16 / source.width, 24 / source.height)
+
+
+def _fill(ch):
+    from PIL import Image
+    from hangul_pixel_fit import glyph
+    source, scale = _fit_scale(ch)
+    if ch not in H_ADDED_SYLLABLES or 16 / source.width <= 24 / source.height:
+        return glyph(ch, 16, 24)  # uniform scale; unused allocation stays transparent
+    scale = min(scale, _fit_scale(REFERENCE_SYLLABLE)[1])
+    w, h = max(1, round(source.width * scale)), max(1, round(source.height * scale))
+    mask = source.resize((w, h), Image.Resampling.LANCZOS).point(lambda v: 255 if v >= 128 else 0)
+    result = Image.new('L', (16, 24))
+    result.paste(mask, ((16 - w) // 2, (24 - h) // 2))
+    return result
+
+
 def _glyph(ch, font):
     from PIL import Image, ImageDraw, ImageFilter
-    from hangul_pixel_fit import glyph, verify_glyph
-    fill = glyph(ch, 16, 24)  # uniform scale; unused allocation stays transparent
+    from hangul_pixel_fit import verify_glyph
+    fill = _fill(ch)
     if verify_glyph(ch, fill)['failures']:
         raise AssertionError(f'Part 2 power title gap closed: {ch}')
     mask = Image.new('L', (32, 32))
@@ -266,7 +352,7 @@ def capture_regions(rom, original, display_names, syllable_codes, *, editor_resu
 
 def _snapshot_extents():
     return {**{a: size for a, size, _ in GUARDS}, OFFSET: SLOT_SIZE,
-            DICTIONARY: DICTIONARY_SIZE, NAMES_START: NAMES_END - NAMES_START}
+            DICTIONARY: DICTIONARY_SIZE + 2, NAMES_START: NAMES_END - NAMES_START}
 
 
 def verify_regions(rom, regions):

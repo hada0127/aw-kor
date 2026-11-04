@@ -14,10 +14,13 @@ ROOT=next(p for p in Path(__file__).resolve().parents if (p/'original').is_dir()
 HOOK_FIXTURE={10733544: '004a10478102f308', 15925888: '0478417804911d4a3f2932d923020b431b4eb3422dd31b4eb3422ad81a4e1b4fbe4226d232781202707802439a4201d00636f5e7708802041bd5b188144b1840194040014901134a801889180c1c6d01114aad18061c2f1c0fce0fc70fce0fc7261c20352f1c0fce0fc70fce0fc70b4800470498014a3f28094b184760f9520840880000a7e200000000f208a443f208ff7f00000000f00800000006c16100038d60000300000000000000000000000000000000000000000000000000000000'}
 
 # Reviewed colour-remapped A3 glyph copy at 0x08F30440 (60 bytes), the callee of
-# the 2026-11-04 colour-hook version (temp/fix_20261104/re/highlight/asm/color_copy.bin).
+# the 2026-11-04 colour-hook version (fixB K: temp/fix_20261104/fixB/K/asm/color_copy.bin,
+# always ink 9 -> 10+c). COLOR_COPY_C0_PLAIN is the superseded callee that copied c==0 unchanged.
 COLOR_COPY_FILE=0xF30440
-COLOR_COPY=bytes.fromhex('061c2f1c4b4601332022102a00d1261c30880236012b0cd000210500cd402d072d0f092d'
-                         '02d11d008d40401904311029f3d138800237013ae7d17047')
+COLOR_COPY=bytes.fromhex('061c2f1c4b4601332022102a00d1261c3088023600210500cd402d072d0f092d'
+                         '02d11d008d40401904311029f3d138800237013ae9d17047c046c046')
+COLOR_COPY_C0_PLAIN=bytes.fromhex('061c2f1c4b4601332022102a00d1261c30880236012b0cd000210500cd402d072d0f092d'
+                                  '02d11d008d40401904311029f3d138800237013ae7d17047')
 
 class NativePart2Tests(unittest.TestCase):
     @classmethod
@@ -94,7 +97,7 @@ class NativePart2Tests(unittest.TestCase):
                          (COLOR_COPY_FILE,COLOR_COPY_FILE+len(COLOR_COPY)))
         N.NativeProfile(install(new,COLOR_COPY))
         bad={'missing_zero':bytes(len(COLOR_COPY)),'missing_ff':b'\xff'*len(COLOR_COPY),
-             'truncated':COLOR_COPY[:-2]+b'\0\0'}
+             'truncated':COLOR_COPY[:-2]+b'\0\0','c0_plain_copy_superseded':COLOR_COPY_C0_PLAIN}
         for offset in (0,1,0x20,len(COLOR_COPY)-2,len(COLOR_COPY)-1):
             tampered=bytearray(COLOR_COPY);tampered[offset]^=1;bad[f'flip_{offset:#x}']=bytes(tampered)
         for name,callee in bad.items():

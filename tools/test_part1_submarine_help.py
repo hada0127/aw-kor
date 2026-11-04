@@ -22,6 +22,17 @@ class SubmarineHelpTests(unittest.TestCase):
  def fixture(self):
   rom=bytearray(self.original);texts={a:t for a,e,t in H.ROWS}
   manifest,_=repoint_messages(rom,self.original,fixable=lambda a:a in texts,fixed_bytes=lambda a:self.encode(texts[a],a),fit_level_dlg=lambda a:6,decode_text=self.decode,cell_width=lambda a:len(texts[a])*2,slots={a:e-a for a,e,t in H.ROWS},line_index={a:(e-a,self.original[a:e].decode('shift_jis')) for a,e,t in H.ROWS},table_offsets=[],extra_messages={H.SOURCE:[H.POINTER]},free_start=0xA3D000,free_end=0xA3E000)
+  # plan_C B-pin late writer (fixB C1 review #1): the reviewed final rows keep the
+  # row-3 sentence space and outgrow the repointer allocation, so they move to a
+  # fresh allocation at the aligned high water and the pointer follows.
+  source=H.expected_payload(self.original,self.encode,final=False);self.assertEqual(source[:2],b'\x0a\x09')
+  entry=manifest[0];target=int(entry['new_addr'],16);final=H.expected_payload(self.original,self.encode)
+  self.assertEqual(bytes(rom[target:target+len(source)]),source);self.assertEqual(entry['new_len'],len(source))
+  self.assertGreater(len(final),(entry['new_len']+3)//4*4)
+  self.assertTrue(H.verify(rom,self.original,manifest,self.encode,final=False)['status']=='PASS')
+  fresh=(target+entry['new_len']+3)&~3;self.assertEqual(set(self.original[fresh:fresh+len(final)]),{0xFF})
+  rom[fresh:fresh+len(final)]=final;struct.pack_into('<I',rom,H.POINTER,0x08000000+fresh)
+  entry.update(new_addr=f'0x{fresh:06X}',new_len=len(final));self.fresh=(target,fresh)
   return rom,manifest
  def test_actual_repointer_preserves_four_rows_controls_and_complete_text(self):
   rom,manifest=self.fixture();r=H.verify(rom,self.original,manifest,self.encode);self.assertEqual(r['status'],'PASS')
@@ -30,11 +41,52 @@ class SubmarineHelpTests(unittest.TestCase):
   for row in text.split('r\n\t'):
    for control in ['\n','\t','\x00','0','2','3']:row=row.replace(control,'')
    visible.append(row.replace('　',' '))
-  self.assertEqual(visible,['해상 유닛。”잠수”하면','잠수함、 호위함에만','공격받는다。 인접한','적이 없으면 안 보인다'])
-  self.assertEqual(len(visible),4);self.assertTrue(all(len(row)<=12 for row in visible))
-  outside=bytearray(rom);entry=manifest[0];target=int(entry['new_addr'],16)
-  outside[target:target+entry['new_len']]=self.original[target:target+entry['new_len']];outside[H.POINTER:H.POINTER+4]=self.original[H.POINTER:H.POINTER+4]
+  self.assertEqual(visible,list(H.FINAL_VISIBLE_ROWS))
+  self.assertEqual(len(visible),4);self.assertTrue(all(len(row)<=14 for row in visible))  # p1_unit_help 112px = 14 cells (plan_C B-pin row 4 uses 13)
+  self.assertIn('공격받는다。 인접한',H.FINAL_VISIBLE_ROWS)  # sentence space kept (fixB C1 review #1)
+  outside=bytearray(rom);old,fresh=self.fresh;end=fresh+manifest[0]['new_len']
+  outside[old:end]=self.original[old:end];outside[H.POINTER:H.POINTER+4]=self.original[H.POINTER:H.POINTER+4]
   self.assertEqual(outside,self.original)
+ def test_bpin_entry_matches_contract_and_moves(self):
+  import bpin_contract as P
+  e=P.MESSAGES[H.SOURCE];old,new=bytes.fromhex(e['old']),bytes.fromhex(e['new'])
+  self.assertEqual(new,H.expected_payload(self.original,self.encode))
+  self.assertEqual(old,H.expected_payload(self.original,self.encode,final=False))
+  self.assertEqual((e['stage'],e['kind'],e['from'],e['target']),('late','relocated',0xA799D0,0xA8D84C))
+  self.assertGreater(len(new),P._align4(len(old)))
+  for a,s,t in H.FINAL_ROWS:
+   key=f'0x{a:06X}';off,size=e['fragments'][key][0]
+   self.assertEqual(e['owner_texts'][key],t.replace('。','.'))
+   self.assertEqual(new[off:off+size],bytes(self.encode(t,a)))
+ def test_bpin_late_growth_moves_and_repoints(self):
+  import bpin_contract as P
+  from unittest import mock
+  e=P.MESSAGES[H.SOURCE];old,new=bytes.fromhex(e['old']),bytes.fromhex(e['new'])
+  def state():
+   rom=bytearray(self.original);rom[e['from']:e['from']+len(old)]=old;struct.pack_into('<I',rom,H.POINTER,0x08000000+e['from'])
+   manifest=[dict(msg='0xDEEDD8',status='relocated',new_addr=f"0x{e['from']:06X}",new_len=len(old),ptr_off='0xDEFAD0',
+                  old_len=H.END-H.SOURCE,ptr_sites=['0xDEFAD0']),
+             dict(msg='0xD821F0',status='relocated',new_addr='0xA8D824',new_len=38)]
+   writes=[[e['from'],len(old),len(old),'',None,None,None,'repoint:0xDEEDD8',dict(source=H.SOURCE,ptr_sites=[H.POINTER])],
+           [0xA8D824,40,38,'',None,None,None,'d821f0-late-append']]
+   return rom,manifest,writes
+  with mock.patch.object(P,'MESSAGES',{H.SOURCE:e}):
+   rom,manifest,writes=state()
+   self.assertEqual(P.apply('late',rom,self.original,manifest,writes),1)
+   self.assertEqual(struct.unpack_from('<I',rom,H.POINTER)[0],0x08000000+0xA8D84C)
+   self.assertEqual(bytes(rom[0xA8D84C:0xA8D84C+len(new)]),new);self.assertEqual(bytes(rom[e['from']:e['from']+len(old)]),old)
+   self.assertEqual((manifest[0]['new_addr'],manifest[0]['new_len'],manifest[0]['rewrite']['previous_target']),('0xA8D84C',len(new),'0xA799D0'))
+   self.assertEqual(sorted(w[7] for w in writes if w[0]==0xA8D84C),['bpin-contract-final','repoint:0xDEEDD8'])
+   self.assertEqual([w[7] for w in writes if w[0]==e['from']],['dialogue-rewrite-retired-allocation'])
+   self.assertEqual([w[7] for w in writes if w[0]==H.POINTER],['dialogue-rewrite-pointer'])
+   self.assertEqual(H.verify(rom,self.original,manifest,self.encode)['status'],'PASS')
+   # stale source payload, moved high water, occupied fresh slot and stale pointer reject
+   for mutate in (lambda r,m,w:r.__setitem__(e['from']+5,r[e['from']+5]^1),
+                  lambda r,m,w:m[1].update(new_len=50),
+                  lambda r,m,w:r.__setitem__(0xA8D850,0),
+                  lambda r,m,w:struct.pack_into('<I',r,H.POINTER,0x08000000+e['from']+4)):
+    rom,manifest,writes=state();mutate(rom,manifest,writes)
+    with self.assertRaises(AssertionError):P.apply('late',rom,self.original,manifest,writes)
  def test_original_source_and_pointer_drift_reject(self):
   for address in [H.SOURCE,H.SOURCE+16,H.POINTER]:
    original=bytearray(self.original);original[address]^=1

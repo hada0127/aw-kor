@@ -29,9 +29,12 @@ PATCH_REGION_VERSIONS = {'a3_glyph_hook': ('a36e078dc12a77facf3d6b130b7375e07162
                                            '6e0048c89dba9dc733259ec1508b66d5658b52d1d95c28893962622d4ede2779')}
 # A hook version that calls out of its hashed region is accepted only together
 # with the exact callee bytes. The colour-hook version's `bl 0x08F30440` targets
-# the 60-byte colour-remapped copy (temp/fix_20261104/re/highlight/asm/color_copy.bin,
+# the 60-byte colour-remapped copy (temp/fix_20261104/fixB/K/asm/color_copy.bin,
 # builder PART2_HOOK_A3_COLOR). Older hook versions carry their copy inline.
-A3_COLOR_COPY = {'start': 15926336, 'end': 15926396, 'sha256': '2e7a8100ef9da50937754f9b2bed9362d094d47a8abd81ef4681bd48c79aac22'}
+# fixB K (2026-11-04): always ink 9 -> 10+c (the c==0 plain-copy branch is gone, so plain
+# Korean text uses the native A3 ink index 10). The c==0-copy callee
+# (sha 2e7a8100...aac22) is no longer accepted.
+A3_COLOR_COPY = {'start': 15926336, 'end': 15926396, 'sha256': '8ca08d9acdc9438fbb3981037cccfa114728197407fe90854ba21de5af307169'}
 PATCH_VERSION_CALLEES = {('a3_glyph_hook', PATCH_REGION_VERSIONS['a3_glyph_hook'][1]):
                          (('a3_color_copy', A3_COLOR_COPY),)}
 

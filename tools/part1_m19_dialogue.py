@@ -15,6 +15,15 @@ APPROVED_NEIGHBORS = {
     0xDCF635: '싸움을 걸어왔던 거구나!',
     0xDCF683: NEXT_TEXT,
 }
+# plan_C B-pin (2026-11-04 user, tools/bpin_contract.py): reviewed final wording.
+# ROWS/APPROVED_NEIGHBORS above stay the repoint-stage layout and source authority;
+# the B-pin writer replaces the relocated message afterwards, so verify() checks these.
+FINAL_ROWS = {
+    0xDCF60A: ('그래서 다른 사령관들도 레드스타에게',),
+    0xDCF635: ('시비를 걸어왔던 거구나!',),
+    ADDRESS: ('누군지는 모르겠지만, 이젠 정말', '머리끝까지 화났어!'),
+    0xDCF683: ('각오해 두라고-!',),
+}
 SOURCE_SHA = 'c0ce5ed04b779fd22ed39ba811e5eb5b5593eb485432cbdde22b09114a78fae8'
 # Portrait text begins at x56. Keep an 8px right margin in a 240px screen.
 # The existing Part1 fullwidth advance model is 8px (qa_pixel_width.py).
@@ -73,8 +82,31 @@ def expected_before_repoint(rom, original, encode):
     return bytes(result)
 
 
+def final_payload(original, encode):
+    """Reviewed final message: native page/newline controls, B-pin rows, no slot padding."""
+    source_guard(original)
+    result = bytearray()
+    cursor = START
+    for address, length in SPANS:
+        result += original[cursor:address]
+        parts = [normalize_text_segment(encode(text, address), True, START) for text in FINAL_ROWS[address]]
+        if (any(not part or any(b < 0x20 for b in part) for part in parts)
+                or any(text_segment_cells(part) * 4 > MAX_ROW_PIXELS for part in parts)):
+            raise ValueError('M19 reviewed portrait row text/control/width invalid')
+        result += b'\x72\x0a\x09'.join(parts)
+        cursor = address + length
+    result += original[cursor:END]
+    return bytes(result)
+
+
 def verify(rom, original, expected_payload, encode):
+    import bpin_contract
     rows = layout(original, encode)[ADDRESS]
+    # The repoint-stage payload is exactly what the B-pin writer replaced.
+    if bytes(expected_payload) != bytes.fromhex(bpin_contract.MESSAGES[START]['old']):
+        raise ValueError('M19 repoint-stage payload differs from the B-pin stale guard')
+    expected_payload = final_payload(original, encode)
+    rows = tuple(normalize_text_segment(encode(text, ADDRESS), True, START) for text in FINAL_ROWS[ADDRESS])
     if bytes(rom[POINTER - 4:POINTER]) != b'\x19\0\0\0':
         raise ValueError('M19 final command opcode changed')
     target = struct.unpack_from('<I', rom, POINTER)[0] - 0x08000000
@@ -83,6 +115,6 @@ def verify(rom, original, expected_payload, encode):
         raise ValueError('M19 dialogue requires bounded aligned relocation')
     if bytes(rom[target:target + len(expected_payload)]) != expected_payload:
         raise ValueError('M19 final wording/pages/other rows mismatch')
-    return {'status': 'PASS', 'target': hex(target), 'rows': list(ROWS),
-            'row_pixels': [text_segment_cells(normalize_text_segment(row, True, START)) * 4 for row in rows],
+    return {'status': 'PASS', 'target': hex(target), 'rows': list(FINAL_ROWS[ADDRESS]),
+            'row_pixels': [text_segment_cells(row) * 4 for row in rows],
             'live_pixels_verified': False}

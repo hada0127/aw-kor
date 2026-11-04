@@ -278,7 +278,7 @@ def load_glossary(original, rom, glyphs):
             issues.append(f'P2 CO name {jp} decodes to {ko!r} shared with {by_ko[ko]} (glossary entry withheld)')
             continue
         g.setdefault(jp, ko)
-    g.setdefault('ゲームボーイウォーズ', '어드밴스 워즈')
+    g.setdefault('ゲームボーイウォーズ', '게임보이 워즈 어드밴스')  # 2026-11-04 user (inputs.md msg9)
     return g, names, issues
 
 
@@ -411,6 +411,10 @@ def load_template_api(original, rom, manifest, map_path):
 def collect(original, rom, manifest, map_path, punct_path=DEFAULT_PUNCT):
     glyphs = Glyphs(rom)
     inv = inventory(original, rom, manifest)
+    # Declared consumer geometry (data/dialogue_consumer_geometry.json) replaces
+    # an unverified window exactly as the apply tool does (same function).
+    from dialogue_rewrite_apply import apply_consumer_geometry
+    apply_consumer_geometry(inv)
     msgs = {}
     for m in inv:
         if not m['script'] or m['pair_title']:
@@ -421,7 +425,8 @@ def collect(original, rom, manifest, map_path, punct_path=DEFAULT_PUNCT):
             msgs[key]['sites'] = sorted(set(msgs[key]['sites']) | set(m['sites']))
             continue
         msgs[key] = dict(part=part, source=m['source'], target=m['target'], sites=list(m['sites']),
-                         profile=m['profile'], relocated=m['relocated'])
+                         profile=m['profile'], relocated=m['relocated'], row_px=m.get('row_px'),
+                         native_profile=m.get('native_profile'))
     p2_ids = defaultdict(list)
     for i, p in enumerate(struct.unpack_from('<%dI' % P2_COUNT, original, P2_TABLE)):
         p2_ids[p-GBA].append(i)
@@ -473,6 +478,9 @@ def build_messages(original, rom, manifest, map_path, punct_path=DEFAULT_PUNCT, 
         rec['window_px'] = px
         rec['max_cells_per_row'] = px // 8 if px else None
         rec['max_rows'] = rows_max
+        if m.get('native_profile'):
+            rec['geometry'] = dict(source='data/dialogue_consumer_geometry.json',
+                                   native_profile=m['native_profile'][0], row_px=m.get('row_px'))
         # decomposition
         try:
             ko_d = decompose(payload, game, glyphs, ' ')
@@ -555,13 +563,15 @@ def build_messages(original, rom, manifest, map_path, punct_path=DEFAULT_PUNCT, 
         rec['jp_payload_hex'] = original[s:e].hex()
         # per physical row widths (current KO)
         krows = []
-        for row in physical_rows(ko_d['tokens']):
+        row_px = m.get('row_px')
+        for ordinal, row in enumerate(physical_rows(ko_d['tokens'])):
             adv = sum(t['advance'] for t in row['tokens'])
             choice = any(t['kind'] == 'choice' for t in row['tokens'])
             lim = px
+            if row_px is not None:
+                lim = row_px[ordinal] if ordinal < len(row_px) else 0
             if lim is not None:
-                if name in ('p1_portrait', 'p2_portrait') and row['line'] == 0 and row['end']['kind'] == 'newline':
-                    lim += 8
+                # p1_portrait/p2_portrait: no 184px first row (dialogue_pixel_layout.audit)
                 if name == 'p2_result_quote' and row['end']['raw'] in (b'k', b'K'):
                     lim -= 8
             used = adv + (64 if choice else 0)

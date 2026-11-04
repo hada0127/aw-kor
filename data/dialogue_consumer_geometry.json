@@ -1,0 +1,775 @@
+{
+ "_doc": "Consumer geometry for Part 2 messages whose window the pixel inventory (dialogue_pixel_layout.profile) leaves unverified. Key = native source range 0xSTART-0xEND (END exclusive, includes the 0x00 terminator). line_px/lines bound every physical row / rows per page; optional row_px bounds the n-th physical row of the message (used px = advance + 64 per choice, as dialogue_rewrite_apply.layout_issues). renderer null = consumer not attributed: the row records the S2 inferred bound (min(native JP row, 104) per row and the native row count; 104 = common bound of 37B140 result quote 104x2 and opcode19 portrait 176x2) but unlocks nothing: apply_consumer_geometry skips it, so the message stays consumer_geometry_unverified until an attributed renderer is recorded (fixB C1 review #2). Read by tools/dialogue_rewrite_apply.py (lock_reason/layout_issues) and tools/dialogue_sentence_export.py. Spike: temp/fix_20261104/fixB/S2/geometry.json, plan temp/fix_20261104/plan_C.md B/§3.",
+ "_spike_rom_fixA_sha256": "f9129a621d85a39f1b85387b76a4c724c1c095afdde6188b5e363ee5143607c8",
+ "0xA2C040-0xA2C06F": {
+  "id": "0x9c1",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C070-0xA2C095": {
+  "id": "0x9c2",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C098-0xA2C0BD": {
+  "id": "0x9c3",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C0C0-0xA2C0F1": {
+  "id": "0x9c4",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C0F4-0xA2C119": {
+  "id": "0x9c5",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C11C-0xA2C141": {
+  "id": "0x9c6",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C144-0xA2C16D": {
+  "id": "0x9c7",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C170-0xA2C193": {
+  "id": "0x9c8",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C194-0xA2C1B7": {
+  "id": "0x9c9",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C1B8-0xA2C1E7": {
+  "id": "0x9ca",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C1E8-0xA2C21B": {
+  "id": "0x9cb",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C21C-0xA2C237": {
+  "id": "0x9cc",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C238-0xA2C259": {
+  "id": "0x9cd",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C25C-0xA2C28D": {
+  "id": "0x9ce",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "runtime: master-table read + screen",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C290-0xA2C2C3": {
+  "id": "0x9cf",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA2C2C4-0xA2C2F3": {
+  "id": "0x9d0",
+  "group": "p2_mode_help_marquee",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95) -> A3 0x0300605C via 0x0831BBDC; per-frame scroll callback 0x08385114; selector table 0x08A3C10C..0x08A3C13C",
+  "layer": "BG0 (BG0CNT 0x0E00: cbb0 sbb14, 256x256), map rows 18-19 (y=144..159), glyph tiles from 0x040, 2 tiles per 8px column; horizontal marquee over a 32-column (256px) ring",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "native JP max of this table group = 200px (0xA2C1E8, 0xA2C290) renders in this consumer; ring hard bound 256px (unverified above 200)",
+  "observed": "static: same selector table A3C10C, not displayed in probe route",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/mode_00.png",
+   "temp/fix_20261104/fixB/S2/probe_jp/mode_00.png"
+  ]
+ },
+ "0xA34F5C-0xA34F6F": {
+  "id": "0xca9",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 0 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "runtime: read + screen (LINK★MODE idle, no partner)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA34F70-0xA34F95": {
+  "id": "0xcaa",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 1 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA34F98-0xA34FC7": {
+  "id": "0xcab",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 2 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA34FC8-0xA34FEB": {
+  "id": "0xcac",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 3 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA34FEC-0xA35009": {
+  "id": "0xcad",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 4 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3500C-0xA3502F": {
+  "id": "0xcae",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 5 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA35030-0xA35049": {
+  "id": "0xcaf",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 6 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3504C-0xA35069": {
+  "id": "0xcb0",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 7 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3506C-0xA35089": {
+  "id": "0xcb1",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 8 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 192,
+  "lines": 1,
+  "basis": "earlier note: transfer index8..11 visible 192px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3508C-0xA350B3": {
+  "id": "0xcb2",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 9 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 192,
+  "lines": 1,
+  "basis": "earlier note: transfer index8..11 visible 192px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA350B4-0xA350DB": {
+  "id": "0xcb3",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 10 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 192,
+  "lines": 1,
+  "basis": "earlier note: transfer index8..11 visible 192px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA350DC-0xA350F7": {
+  "id": "0xcb4",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 11 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 192,
+  "lines": 1,
+  "basis": "earlier note: transfer index8..11 visible 192px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA350F8-0xA35119": {
+  "id": "0xcb5",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 12 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3511C-0xA35149": {
+  "id": "0xcb6",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 13 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3514C-0xA35179": {
+  "id": "0xcb7",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 14 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA3517C-0xA351A3": {
+  "id": "0xcb8",
+  "group": "p2_link_marquee_0x816EC6",
+  "renderer": "0x08314BBE",
+  "renderer_detail": "0x08314BBE fetch (lr 0x08314A95); ID table 0x08816EC6 index 15 (331A80 backing per dialogue_pixel_layout)",
+  "layer": "LINK★MODE bottom marquee (same bar as mode help)",
+  "line_px": 200,
+  "lines": 1,
+  "basis": "same marquee as mode help; native JP max of 0x816EC6 group = 184px",
+  "observed": "static only: same ID table; needs link partner (unverified)",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/probe_fixA/table_reads.json",
+   "temp/fix_20261104/fixB/S2/probe_fixA/link_a1_w2.png"
+  ]
+ },
+ "0xA351A4-0xA351CB": {
+  "id": "0xcb9",
+  "group": "p2_link_transfer_unattributed",
+  "renderer": null,
+  "line_px": 104,
+  "lines": 1,
+  "row_px": [
+   104
+  ],
+  "native_row_px": [
+   152
+  ],
+  "basis": "renderer unattributed (no static ID site found (not in 0x816EC6 table); not displayed without a link partner); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json"
+  ]
+ },
+ "0xA351CC-0xA351DD": {
+  "id": "0xcba",
+  "group": "p2_link_transfer_unattributed",
+  "renderer": null,
+  "line_px": 64,
+  "lines": 1,
+  "row_px": [
+   64
+  ],
+  "native_row_px": [
+   64
+  ],
+  "basis": "renderer unattributed (no static ID site found (not in 0x816EC6 table); not displayed without a link partner); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json"
+  ]
+ },
+ "0xA351E0-0xA351F9": {
+  "id": "0xcbb",
+  "group": "p2_link_transfer_unattributed",
+  "renderer": null,
+  "line_px": 96,
+  "lines": 1,
+  "row_px": [
+   96
+  ],
+  "native_row_px": [
+   96
+  ],
+  "basis": "renderer unattributed (no static ID site found (not in 0x816EC6 table); not displayed without a link partner); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json"
+  ]
+ },
+ "0xA351FC-0xA35228": {
+  "id": "0xcbc",
+  "group": "p2_link_transfer_unattributed",
+  "renderer": null,
+  "line_px": 88,
+  "lines": 2,
+  "row_px": [
+   88,
+   72
+  ],
+  "native_row_px": [
+   88,
+   72
+  ],
+  "basis": "renderer unattributed (no static ID site found (not in 0x816EC6 table); not displayed without a link partner); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json"
+  ]
+ },
+ "0xA12428-0xA12450": {
+  "id": "0x337",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 72,
+  "lines": 2,
+  "row_px": [
+   72,
+   64
+  ],
+  "native_row_px": [
+   72,
+   64
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA13128-0xA13205": {
+  "id": "0x368",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 104,
+  "lines": 2,
+  "row_px": [
+   80,
+   104,
+   104,
+   80,
+   104,
+   88,
+   104,
+   56,
+   72
+  ],
+  "native_row_px": [
+   80,
+   112,
+   128,
+   80,
+   104,
+   88,
+   120,
+   56,
+   72
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA192BC-0xA192E2": {
+  "id": "0x4c7",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 104,
+  "lines": 2,
+  "row_px": [
+   32,
+   104
+  ],
+  "native_row_px": [
+   32,
+   112
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA19350-0xA19370": {
+  "id": "0x4cb",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 88,
+  "lines": 2,
+  "row_px": [
+   32,
+   88
+  ],
+  "native_row_px": [
+   32,
+   88
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA19370-0xA193A8": {
+  "id": "0x4cc",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 104,
+  "lines": 2,
+  "row_px": [
+   104,
+   96
+  ],
+  "native_row_px": [
+   120,
+   96
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA25738-0xA2574F": {
+  "id": "0x7ad",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 88,
+  "lines": 1,
+  "row_px": [
+   88
+  ],
+  "native_row_px": [
+   88
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA25768-0xA25786": {
+  "id": "0x7af",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 80,
+  "lines": 2,
+  "row_px": [
+   32,
+   80
+  ],
+  "native_row_px": [
+   32,
+   80
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA25788-0xA257BA": {
+  "id": "0x7b0",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 104,
+  "lines": 2,
+  "row_px": [
+   104,
+   88
+  ],
+  "native_row_px": [
+   104,
+   88
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ },
+ "0xA2FE58-0xA2FE6E": {
+  "id": "0xb45",
+  "group": "p2_campaign_unattributed",
+  "renderer": null,
+  "line_px": 72,
+  "lines": 2,
+  "row_px": [
+   72,
+   64
+  ],
+  "native_row_px": [
+   72,
+   64
+  ],
+  "basis": "renderer unattributed (no static reference: no opcode19/1A record, no code literal, no movs/lsl immediate, no 37B140 selector case (S2/id_scan.json, S2/dis_37B1E0.txt); neighbours are 37B140 result quotes (104x2) or opcode19 portraits (176x2)); bound min(native JP row, 104) per row, native row count",
+  "evidence": [
+   "temp/fix_20261104/fixB/S2/geometry.json",
+   "temp/fix_20261104/fixB/S2/id_scan.json",
+   "temp/fix_20261104/fixB/S2/dis_37B1E0.txt"
+  ]
+ }
+}

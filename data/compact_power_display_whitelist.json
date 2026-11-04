@@ -21,7 +21,7 @@
     "0x00A296B8": {"full_ko": "배수진", "display_ko": "배수진", "reason": "B-team name restored 2026-10-08 (fits the slot and the 61-cell power-title atlas)"},
     "0x00A296C8": {"full_ko": "원더 서치", "display_ko": "탐색", "reason": "compact CO power label slot"},
     "0x00A296D8": {"full_ko": "카운터 브레이크", "display_ko": "반격", "reason": "compact CO power label slot"},
-    "0x00A296EC": {"full_ko": "야마토 다마시", "display_ko": "혼", "reason": "compact CO power label slot"},
+    "0x00A296EC": {"full_ko": "야마토 다마시", "display_ko": "야마토다마시이", "reason": "2026-11-04 plan_C H (spike S4): full name without the space, 14 B in the 16 B slot; dictionary relocated to 64 glyphs (atlas maximum, part2_power_title_glyphs.DICTIONARY)"},
     "0x00A296FC": {"full_ko": "사무라이 다이브", "display_ko": "돌격", "reason": "compact CO power label slot"},
     "0x00A2970C": {"full_ko": "라이트닝 드라이브", "display_ko": "번개돌진", "reason": "compact CO power label slot"},
     "0x00A29724": {"full_ko": "라이트닝 어설트", "display_ko": "번개강습", "reason": "compact CO power label slot"},

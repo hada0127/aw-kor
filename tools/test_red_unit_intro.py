@@ -88,7 +88,11 @@ class RedUnitIntroTests(unittest.TestCase):
     def test_authoritative_sources_match_unchanged_protected_baseline(self):
         key = f'0x{R.ADDRESS:08X}'
         baseline = json.loads((ROOT / 'data/bteam_baseline.json').read_text())['overrides'][key]
-        self.assertEqual(R.TEXT, baseline)
+        # plan_C B-pin: source data keep the B-team text; the B-pin writer ships R.TEXT.
+        import bpin_contract
+        approval = bpin_contract.bteam_approvals()[key]
+        self.assertEqual((approval['baseline'], approval['to']), (baseline, R.TEXT))
+        self.assertEqual(bpin_contract.text(R.START), R.TEXT)
         self.assertEqual(json.loads((ROOT / 'data/dialogue_overrides.json').read_text())[key], baseline)
         with open(ROOT / 'data/translation_for_import.csv') as stream:
             rows = [r for r in csv.DictReader(stream) if r['address'] == key]

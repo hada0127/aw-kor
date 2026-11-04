@@ -4,7 +4,7 @@ import struct
 from dialogue_repoint import normalize_text_segment,text_segment_cells
 from sprite_relocations import SPRITE_STORAGE_START
 FIRST='너, 혹시 이 게임은 처음이니?'
-CANCEL='어머, 역시 그만두시나요?'
+CANCEL='어머, 역시 그만두려고?'  # plan_C B-pin banmal (2026-11-04 user)
 SPECS=((0xDF8EAC,0xDF8ED8,0xDF9CAC,'952df6e4e1205f6df11f8cab7fcbea83c503610b356749e2d043791910cc35d4'),
        (0xDF9698,0xDF96BC,0xDF9AFC,'20c3a432dd48b7f5527893208056c270d9bd4d01e8750ce1a5a4e140e6bc96c1'))
 def source_guard(original):

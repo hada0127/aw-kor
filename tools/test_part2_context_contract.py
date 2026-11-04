@@ -114,7 +114,8 @@ class ContextContractTests(unittest.TestCase):
         manifest = []
         for i, (source, pointer, old_len, _, _) in enumerate(C.TEACHER_SOURCES):
             first = (bytes(B.encode_full_fidelity('그렇지 않습니다,', self.codes, Counter(), source))
-                     + b'\x77' + bytes(B.encode_full_fidelity('선생님!', self.codes, Counter(), source)) + b'\x6b')
+                     + b'\x77' + bytes(B.encode_full_fidelity(' 선생님!', self.codes, Counter(), source)) + b'\x6b')
+            # plan_C B-pin reviewed first page: a drawn space follows the wait.
             payload = first + self.original[source + 34:source + old_len]
             target = 0xA3D000 + i * 512
             rom[target:target + len(payload)] = payload
@@ -122,6 +123,28 @@ class ContextContractTests(unittest.TestCase):
             manifest.append({'msg': hex(source), 'status': 'relocated', 'ptr_off': hex(pointer),
                              'new_addr': hex(target), 'old_len': old_len, 'new_len': len(payload)})
         return rom, manifest
+
+    def test_bpin_final_a199b0_rows_waits_and_controls(self):
+        # plan_C B-pin: the reviewed final message (bpin_contract) owns A199B0 after
+        # the late stage; rows/joins are exact and every wait keeps its byte.
+        import bpin_contract
+        entry = bpin_contract.MESSAGES[C.SOURCE]
+        rom = bytearray(self.original)
+        for address, raw in HOOK_FIXTURE.items():
+            rom[address:address + len(bytes.fromhex(raw))] = bytes.fromhex(raw)
+        new = bytes.fromhex(entry['new'])
+        target = 0xA3D000
+        rom[target:target + len(new)] = new
+        struct.pack_into('<I', rom, C.POINTER, target + 0x08000000)
+        manifest = [{'msg': hex(C.SOURCE), 'status': 'relocated', 'ptr_off': hex(C.POINTER),
+                     'new_addr': hex(target), 'old_len': C.OLD_LEN, 'new_len': len(new),
+                     'rewrite': {'bpin': True}}]
+        self.assertEqual(C.verify(rom, self.original, manifest, self.codes)['layout'], 'bpin_reviewed_final')
+        wait = target + new.index(b'\x57')
+        for position, value in ((wait, 0x77), (target + 2, rom[target + 2] ^ 1)):
+            changed = bytearray(rom); changed[position] = value
+            with self.assertRaises(ValueError):
+                C.verify(changed, self.original, manifest, self.codes)
 
     def test_teacher_first_page_keeps_wait_and_polite_reassurance(self):
         rom, manifest = self.teacher_fixture()

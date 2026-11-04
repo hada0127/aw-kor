@@ -39,7 +39,12 @@ class PoliteChoiceTests(unittest.TestCase):
  def test_authorities_preserve_approved_baseline(self):
   root=Path(B.BASE);base=json.loads((root/'data/bteam_baseline.json').read_text())['overrides'];ov=json.loads((root/'data/dialogue_overrides.json').read_text())
   with (root/'data/translation_for_import.csv').open(encoding='utf-8') as f:rows={r['address']:r for r in csv.DictReader(f)}
-  for address,text in ((0xDF8EAE,C.FIRST),(0xDF969A,C.CANCEL)):
-   key=f'0x{address:08X}';self.assertEqual(base[key],text);self.assertEqual(ov[key],text);self.assertEqual(rows[key]['korean'],text);self.assertEqual(int(rows[key]['length']),len(text.encode()))
+  key='0x00DF8EAE';text=C.FIRST
+  self.assertEqual(base[key],text);self.assertEqual(ov[key],text);self.assertEqual(rows[key]['korean'],text);self.assertEqual(int(rows[key]['length']),len(text.encode()))
+  # plan_C B-pin: the cancel row keeps its B-team source text; the B-pin writer ships CANCEL.
+  import bpin_contract
+  key='0x00DF969A';approval=bpin_contract.bteam_approvals()[key];old=approval['baseline']
+  self.assertEqual(approval['to'],C.CANCEL);self.assertEqual(bpin_contract.text(0xDF9698),C.CANCEL)
+  self.assertEqual(base[key],old);self.assertEqual(ov[key],old);self.assertEqual(rows[key]['korean'],old);self.assertEqual(int(rows[key]['length']),len(old.encode()))
   self.assertEqual(B.ADDRESS_TEXT_OVERRIDES[0xDF8EAE],C.FIRST)
 if __name__=='__main__':unittest.main()

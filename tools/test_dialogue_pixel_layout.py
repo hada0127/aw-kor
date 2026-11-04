@@ -77,4 +77,77 @@ class LayoutTests(unittest.TestCase):
         with self.assertRaises(ValueError):row_bytes(rom,m,'0x10')
 
 
+class DeclaredGeometryAuditTests(unittest.TestCase):
+    """plan_C B: data/dialogue_consumer_geometry.json bounds unverified windows."""
+
+    def audit(self, rewritten, renderer='0x08000000'):
+        from unittest.mock import patch
+        import dialogue_pixel_layout as L
+        # 4 two-byte glyphs = 32px on one row; one declared row of 24px.
+        payload = b'\x82\xa0' * 4 + b'\0'
+        message = dict(game='p2', source=0xA00000, target=0xA00000, payload=payload, script=True,
+                       sites=[0x100], profile=('p2_unverified_consumer', None, None))
+        manifest = [dict(msg='0xA00000', status='relocated', new_addr='0xA00000', new_len=len(payload),
+                         **({'rewrite': {'batch': 'w3'}} if rewritten else {}))]
+        geometry = [(0xA00000, 0xA00010, dict(renderer=renderer, line_px=200, lines=1, row_px=[24],
+                                              evidence='t', group='g'))]
+
+        class Glyphs:
+            def __init__(self, rom): pass
+            def bitmap(self, pair, game): return [[1] * 8]
+            def text(self, pair): return pair.decode('shift_jis')
+        with patch.object(L, 'inventory', return_value=[message]), patch.object(L, 'Glyphs', Glyphs):
+            return L.audit(bytes(0xA01980), bytes(0xA01980), manifest, geometry)['summary']
+
+    def test_overlay_written_declared_message_overflow_is_fatal(self):
+        summary = self.audit(rewritten=True)
+        self.assertEqual(summary['overflows'], 1)
+        self.assertEqual(summary['declared_geometry_messages'], 1)
+        self.assertEqual(summary['unverified_consumer_messages'], 1)
+
+    def test_legacy_declared_overflow_is_fatal(self):
+        """fixB C1 review #2: no legacy-text exemption for attributed geometry."""
+        summary = self.audit(rewritten=False)
+        self.assertEqual(summary['overflows'], 1)
+        self.assertNotIn('declared_legacy_overflows', summary)
+        self.assertEqual(summary['declared_geometry_messages'], 1)
+
+    def test_unattributed_geometry_is_not_applied(self):
+        """renderer null: inferred bounds stay out; the message remains unverified."""
+        for rewritten in (False, True):
+            summary = self.audit(rewritten=rewritten, renderer=None)
+            self.assertEqual(summary['declared_geometry_messages'], 0)
+            self.assertEqual(summary['overflows'], 0)
+            self.assertEqual(summary['unverified_consumer_messages'], 1)
+
+
+class PortraitFirstRowTests(unittest.TestCase):
+    """fixB C1/C2: a 23-cell (184px) first portrait row is an overflow in both parts."""
+
+    def audit(self, game, profile):
+        from unittest.mock import patch
+        import dialogue_pixel_layout as L
+        # 23 two-byte glyphs (184px) + newline + one glyph + terminator.
+        payload = b'\x82\xa0' * 23 + b'r' + b'\x82\xa0' + b'\0'
+        message = dict(game=game, source=0xA00000, target=0xA00000, payload=payload, script=True,
+                       sites=[0x100], profile=(profile, 176, 2))
+
+        class Glyphs:
+            def __init__(self, rom): pass
+            def bitmap(self, pair, game): return [[1] * 8]
+            def text(self, pair): return pair.decode('shift_jis')
+        with patch.object(L, 'inventory', return_value=[message]), patch.object(L, 'Glyphs', Glyphs):
+            return L.audit(bytes(0xA01980), bytes(0xA01980), [], [])
+
+    def test_part2_first_row_184_overflows(self):
+        result = self.audit('p2', 'p2_portrait')
+        self.assertEqual(result['summary']['overflows'], 1)
+        self.assertEqual(result['rows'][0]['limit_px'], 176)
+
+    def test_part1_first_row_184_overflows(self):
+        result = self.audit('p1', 'p1_portrait')
+        self.assertEqual(result['summary']['overflows'], 1)
+        self.assertEqual(result['rows'][0]['limit_px'], 176)
+
+
 if __name__=='__main__':unittest.main()

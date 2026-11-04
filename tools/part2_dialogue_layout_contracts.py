@@ -15,14 +15,15 @@ CONTRACTS = {
     0xA1F944: {
         'pointer': 0xA37170, 'old_len': 104,
         'source_sha256': 'bdd8fb5cd2e0cf5fe7d94a9f0488883ea3f254fb898bbb15ddd4a499c05cbbaf',
-        'rows': ('・・・하지만、그렇게도　말할　수', '없게　된　모양이구나、　키쿠치요여。'),
-        'first_row_wait_prefixes': ('・・・하지만、', '・・・하지만、그렇게도　말할　수'),
+        # plan_C B-pin reviewed wording (2026-11-04 user, tools/bpin_contract.py).
+        'rows': ('・・・허나、　그리　한가한　소리　할　때가', '아닌　모양이구먼、　키쿠치요。'),
+        'first_row_wait_prefixes': ('・・・허나、', '・・・허나、　그리　한가한　소리　할　때가'),
     },
     0xA1F9D8: {
         'pointer': 0xA37178, 'old_len': 124,
         'source_sha256': '4efb344a31e4d2734954e43934365b0eb16a72a2b58b5ebac87d1059aa2762cc',
-        'rows': ('사령관이　３명　있으면　상황에　따른', '작전　행동을　기대할　수　있어요！'),
-        'first_row_wait_prefixes': ('사령관이　３명　있으면　상황에　따른',),
+        'rows': ('사령관이　셋이나　있으면', '상황에　맞는　작전을　펼칠　수　있을　거야！'),
+        'first_row_wait_prefixes': ('사령관이　셋이나　있으면',),
     },
 }
 

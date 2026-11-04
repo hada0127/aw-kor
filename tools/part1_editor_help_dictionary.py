@@ -17,10 +17,14 @@ HOOK = bytes.fromhex(
     '0e2904d1074a954201d1074800e007480022012310b400f003f810bc'
     '054b1847034c2047000e00030010f5087832d808dd2bb108bf2cb108'
 )
+# plan_C B-pin (2026-11-04 user, tools/bpin_contract.py): reviewed native Help rows and
+# the D82218 retained source (놓, 릅) -> 66 codes. The tile budget below allows 72.
 SOURCE_SPANS = (
-    (0xD82124, 0xD821EA, '4126b746da5ad3bf06ca1f1e413b013a0064437c8d5e635145bfa05a6b2c7459'),
-    (0xD821F0, 0xD82292, '333b2daa2e08e44281396689ef4776d8a99162e1b53b8de33d98c85ca0dc5141'),
+    (0xD82124, 0xD821EA, '5fb7c9ecabda9e9455c01ada064c7d2062f037f350d54cb7f743fd3e6f30fd4f'),
+    (0xD821F0, 0xD82292, '63cf4137a1ebc3c70de35419fc2b6eb05c651b2d9c1c36d873e1fec0436ea49b'),
 )
+CODE_COUNT = 66
+MAX_CODES = 72  # 0x0E + 2*72 = 0x9E < 0xA0
 
 
 def dictionary(rom):
@@ -39,7 +43,7 @@ def dictionary(rom):
                 raise AssertionError(f'Part 1 editor Help invalid code at {address:#x}')
             codes.append(code)
             seen.add(code)
-    if len(codes) != 70:
+    if len(codes) != CODE_COUNT or len(codes) > MAX_CODES:
         raise AssertionError(f'Part 1 editor Help glyph count changed: {len(codes)}')
     # Live Help starts bank 1 at tile 0x0E; the last Help tile stays below 0xA0.
     if 0x0E + len(codes) * 2 >= 0xA0:
@@ -59,7 +63,7 @@ def patch(rom, original):
     rom[DICTIONARY_OFFSET:DICTIONARY_OFFSET + len(payload)] = payload
     rom[HOOK_OFFSET:HOOK_OFFSET + len(HOOK)] = HOOK
     rom[SITE:SITE + len(SITE_PATCH)] = SITE_PATCH
-    return {'codes': 70, 'dictionary_bytes': len(payload), 'hook_bytes': len(HOOK),
+    return {'codes': len(payload) // 2 - 1, 'dictionary_bytes': len(payload), 'hook_bytes': len(HOOK),
             'source_spans': [f'{a:08X}..{b:08X}' for a, b, _ in SOURCE_SPANS]}
 
 

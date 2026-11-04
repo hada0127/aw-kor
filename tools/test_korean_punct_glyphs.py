@@ -133,5 +133,104 @@ class KoreanPunctGlyphTest(unittest.TestCase):
         builder.verify_korean_punct_glyphs(self.rom, self.original)
 
 
+class EllipsisGlyphTest(unittest.TestCase):
+    """fixB J (plan_C E3): one-cell 「…」 0x8163 glyph and the run rule."""
+
+    def setUp(self):
+        if not SOURCE.exists():
+            self.skipTest('source ROM absent')
+        self.original = SOURCE.read_bytes()
+        self.rom = bytearray(self.original)
+        builder.patch_name_grid(self.rom)
+        builder.restore_symbol_glyphs(self.rom, self.original)
+
+    def test_glyph_written_only_at_owned_locations(self):
+        before = bytes(self.rom)
+        self.assertEqual(builder.patch_ellipsis_glyph(self.rom, self.original), 1)
+        tile = bytes.fromhex('000a0a0a') + bytes(28)
+        slot = builder.ELLIPSIS_P1_BOTTOM_SLOT
+        self.assertEqual(self.rom[FONT + slot * 32:FONT + slot * 32 + 32], tile)
+        for table in (0xB8027C, 0x38F9E4):
+            self.assertEqual(struct.unpack_from('<H', self.rom, table + 67 * 2)[0], 95)
+            self.assertEqual(struct.unpack_from('<H', self.rom, table + 75 * 2)[0], slot)
+        node = 0xFD00A0
+        self.assertEqual(self.rom[node:node + 4], self.original[0x807680 + 0x63 * 4:0x807680 + 0x63 * 4 + 4])
+        self.assertEqual(self.rom[node + 4:node + 6], b'\x81\x08')
+        self.assertEqual(self.rom[node + 6:node + 70], bytes(32) + tile)
+        self.assertEqual(struct.unpack_from('<I', self.rom, 0x807680 + 0x63 * 4)[0], 0x08FD00A0)
+        allowed = set(range(FONT + slot * 32, FONT + slot * 32 + 32))
+        allowed |= {0xB8027C + 150, 0xB8027C + 151, 0x38F9E4 + 150, 0x38F9E4 + 151}
+        allowed |= set(range(node, node + 72)) | set(range(0x807680 + 0x63 * 4, 0x807680 + 0x63 * 4 + 4))
+        changed = {i for i in range(len(before)) if before[i] != self.rom[i]}
+        self.assertTrue(changed)
+        self.assertLessEqual(changed, allowed)
+        # Shared blank, middle dot 0x8145 (P1 slots + A3 node) untouched.
+        self.assertEqual(self.rom[FONT + 95 * 32:FONT + 96 * 32], bytes(32))
+        self.assertEqual(self.rom[0x808188:0x808188 + 72], self.original[0x808188:0x808188 + 72])
+        for game in ('p1', 'p2'):
+            self.assertEqual(ink(self.rom, 0x8163, game), {(2, 8): 10, (4, 8): 10, (6, 8): 10})
+            self.assertEqual(ink(self.rom, 0x8145, game), ink(self.original, 0x8145, game))
+        builder.verify_ellipsis_glyph(self.rom, self.original)
+
+    def test_rejects_occupied_slot_node_or_table(self):
+        for mutate in (lambda r: r.__setitem__(FONT + 255 * 32 + 3, 1),
+                       lambda r: struct.pack_into('<H', r, 0xB8027C + 75 * 2, 96),
+                       lambda r: struct.pack_into('<H', r, 0x38F9E4 + 75 * 2, 96),
+                       lambda r: r.__setitem__(0xFD00A0 + 10, 1)):
+            rom = bytearray(self.rom)
+            mutate(rom)
+            with self.assertRaises(AssertionError):
+                builder.patch_ellipsis_glyph(rom, self.original)
+
+    def test_precompaction_restore_checks_the_exact_transform(self):
+        # plan_C J decision (a): byte-pinning verifiers see the logged
+        # pre-compaction bytes; the logged transform must be exact.
+        import korean_punct_glyphs as K
+        dot, gly = b'\x81\x45', b'\x88\x9f'
+        before = gly + dot * 3 + gly
+        after, segments = K.compact_ellipsis_bytes(before)
+        self.assertEqual(segments, [(0, len(before))])
+        rom = bytearray(64)
+        rom[8:8 + len(before)] = after
+        entry = [8, len(before), len(before), after.hex(), None, '…', None, K.COMPACT_WRITER,
+                 {'before_hex': before.hex()}]
+        other = [0, 2, 2, '0000', None, None, None, 'other']
+        restored, kept = K.restore_precompaction(bytes(rom), [other, entry])
+        self.assertEqual(restored[8:8 + len(before)], before)
+        self.assertEqual(kept, [other])
+        for broken in (entry[:8],
+                       entry[:8] + [{'before_hex': (gly + dot * 2 + gly + b'  ').hex()}],
+                       entry[:8] + [{'before_hex': before[:-2].hex()}]):
+            with self.assertRaises(ValueError):
+                K.restore_precompaction(bytes(rom), [broken])
+        changed = bytearray(rom); changed[10] ^= 1
+        with self.assertRaises(ValueError):
+            K.restore_precompaction(bytes(changed), [entry])
+        with self.assertRaises(ValueError):
+            K.restore_precompaction(bytes(rom), [entry, entry])
+
+    def test_run_rule_bytes(self):
+        import korean_punct_glyphs as k
+        dot, ell = b'\x81\x45', b'\x81\x63'
+        han = b'\x88\x87'
+        for n, cells in ((1, 0), (2, 0), (3, 1), (4, 1), (5, 1), (6, 2), (7, 2)):
+            raw = b'\x0a\x09' + han + dot * n + han + b'\x72\x0a\x00'
+            new, segs = k.compact_ellipsis_bytes(raw)
+            self.assertEqual(len(new), len(raw))
+            if cells:
+                body = han + ell * cells + han
+                self.assertEqual(new, b'\x0a\x09' + body + b'\x20' * (len(raw) - 5 - len(body)) + b'\x72\x0a\x00')
+                self.assertEqual(segs, [(2, len(raw) - 5)])
+            else:
+                self.assertEqual((new, segs), (raw, []))
+        # Controls and other segments never move; a 0x45 trail of another code is not a dot.
+        raw = b'\x88\x81\x45\x81\x45\x81\x45\x6b' + dot * 3 + b'\x00'
+        new, segs = k.compact_ellipsis_bytes(raw)
+        # 88 81 | 45 | 81 45 | 81 45 | 6b: only two real dots before the control.
+        self.assertEqual(new, raw[:8] + ell + b'\x20' * 4 + b'\x00')
+        self.assertEqual(k.compact_ellipsis_text('가・나 ・・ 다・・・라 ・・・・・ ・・・・・・'),
+                         '가・나 ・・ 다…라 … ……')
+
+
 if __name__ == '__main__':
     unittest.main()

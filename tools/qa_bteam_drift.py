@@ -276,9 +276,23 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
 
     The ROM side stays literal: a halfwidth space or punctuation byte in a
     dialogue renderer must not pass as its visible fullwidth counterpart.
+
+    fixB J (2026-11-04, plan_C E3): in dialogue consumers the builder's final
+    byte stage turns runs of 3-5 「・」 into one 「…」 (0x8163) and 6+ into two.
+    Both sides fold to that form so a row the pass skipped (exact-byte pins)
+    and a compacted row compare equal; 1-2 dots stay middle dots.
     """
+    from korean_punct_glyphs import compact_ellipsis_text
+    from renderer_text import renderer_for_address, P1_SCRIPT, P2_SCRIPT
+    # Same scope as build_korean_full.compact_dialogue_ellipsis: both script consumers.
+    ellipsis_scope = renderer_for_address(address) in (P1_SCRIPT, P2_SCRIPT)
     if actual:
-        return value
+        if not ellipsis_scope:
+            return value
+        value = compact_ellipsis_text(value)
+        # The compaction pass pads the freed bytes with 0x20 at the end of the
+        # row fragment (drawn as nothing by both script consumers).
+        return value.replace(' ', '') if '…' in value else value
     from part2_mission_title_fit import is_pair_title
     if is_pair_title(address):
         # Every active native map name is a strict two-byte glyph stream.
@@ -286,7 +300,8 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
         return ''.join('　' if ch == ' ' else chr(ord(ch)+0xFEE0)
                        if 0x21 <= ord(ch) <= 0x7E else ch for ch in value)
     if address in ROUND2_ORIGINAL_GLYPH_ROWS:
-        return original_glyph_encoding(value)
+        value = original_glyph_encoding(value)
+        return compact_ellipsis_text(value) if ellipsis_scope else value
     dialogue = is_part2_story_address(address) or is_part1_dialog_address(address)
     if dialogue:
         # The dialogue writer promotes authored ASCII to visible SJIS glyphs.
@@ -319,7 +334,14 @@ def display_equivalent(value: str, address: int, *, actual: bool = False) -> str
                             '-': '―', '「': '”', '」': '”'})
     elif is_part2_story_address(address):
         punctuation.update({'!': '！', '?': '？', ',': '、', '.': '。', '-': 'ー'})
-    return value.translate(str.maketrans(punctuation))
+        from part2_prologue_punctuation import in_prologue
+        if in_prologue(address):
+            # 2026-10-23 user approval: the Part 2 prologue shows Korean 「，」「．」
+            # (builder: part2_prologue_punctuation.patch / patch_rewritten).
+            # Expected side only; the ROM side stays literal.
+            punctuation.update({',': '，', '.': '．', '、': '，', '。': '．'})
+    value = value.translate(str.maketrans(punctuation))
+    return compact_ellipsis_text(value) if ellipsis_scope else value
 
 
 def round2_width_equivalent(baseline: str, actual: str, address: int) -> bool:
@@ -429,8 +451,9 @@ APPROVED_EXCEPTIONS = {
     '0x00A3517C': ('접속이 안 되네,메뉴로 돌아갈게.', '접속이 안 되네, 메뉴로 돌아갈게.'),
     '0x00DD0D1A': ('뭐,자네치고는,상등품이군.', '뭐, 자네치고는 잘했군.'),
     '0x00A2D814': ('결전 전', '최종결전!'),
-    '0x00DF8E16': ('게임보이 워즈에 오신 걸 환영해요!', '어드밴스 워즈에 오신 걸 환영해요!'),
-    '0x00DF948E': ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 간단하게 어드밴스 워즈에'),
+    # 2026-11-04 user (inputs.md msg9): title restored to 게임보이 워즈 어드밴스 (supersedes 2026-10-16).
+    '0x00DF8E16': ('게임보이 워즈에 오신 걸 환영해요!', '게임보이 워즈 어드밴스에 어서 와!'),
+    '0x00DF948E': ('그렇다면, 간단하게 게임보이 워즈에', '그렇다면, 게임보이 워즈 어드밴스에'),
     # 2026-11-04 user (temp/fix_20261104/inputs.md msg3/5): EXT_COMPARE defects.
     '0x00DF5E12': ('당신에게는,코스모 랜드에 대해', '코스모 랜드에 대해'),
     '0x00A1B469': ('그건 안 돼.', '하지만요...'),
@@ -501,7 +524,7 @@ def exception_errors(base: dict, overrides: dict) -> list:
 # (address, from=baseline, to=current override). The ledger file bytes are
 # pinned here, so adding or editing an entry is a reviewed code change.
 APPROVED_REWRITE_LEDGER = os.path.join(BASE, 'data', 'bteam_approved_rewrites.json')
-APPROVED_REWRITE_LEDGER_DIGEST = 'af0c08a004594b0acf7edf658d786750f5f920282fb2d9f112e3a1ed3b26d0ab'
+APPROVED_REWRITE_LEDGER_DIGEST = '4e1313a7b1a2a29d9868f8b3661772244ff605b661a37670ade6e4154862114e'
 LEDGER_REQUIRED_FIELDS = ('from', 'to', 'batch', 'reviewed_by', 'review_ref')
 
 
@@ -701,11 +724,29 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
     if hashlib.sha256(ledger_bytes).hexdigest() != ledger_pinned:
         raise ValueError('approved rewrite ledger digest mismatch')
     approved_rewrites = ledger_entries(ledger_bytes)
+    # plan_C B-pin (2026-11-04 user): rows of contract-pinned messages whose reviewed
+    # wording the builder's B-pin writer ships (tools/bpin_contract.py). They are
+    # ledger-owned like W3 rows: only the approved "to" passes, never the baseline.
+    from bpin_contract import bteam_approvals
+    approved_rewrites = dict(approved_rewrites)
+    for _key, _entry in bteam_approvals().items():
+        if _key in approved_rewrites:
+            raise ValueError(f'{_key}: B-pin approval overlaps the approved rewrite ledger')
+        approved_rewrites[_key] = {'from': _entry['baseline'], 'to': _entry['to'],
+                                   'batch': _entry['batch'], 'review_ref': _entry['review_ref']}
     rom = Path(rom_path).read_bytes()
     map_rom = Path(map_rom_path).read_bytes() if map_rom_path else rom
     if len(map_rom) != len(rom):
         raise ValueError('ROM and map ROM lengths differ')
     writes = json.loads(Path(map_path).read_text(encoding='utf-8'))
+    # plan_C J decision (a): protected rows are read in their exact pre-ellipsis-
+    # compaction form; restore_precompaction verifies every logged 「・・・」->「…」
+    # transform against the final ROM first (display_equivalent folds stay as is).
+    from korean_punct_glyphs import restore_precompaction
+    final_rom = rom
+    rom, writes = restore_precompaction(rom, writes)
+    map_rom = rom if map_rom is final_rom else restore_precompaction(map_rom, json.loads(
+        Path(map_path).read_text(encoding='utf-8')))[0]
     manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
     by_addr = {int(row[0]): row for row in writes if row[3]}
     protected_addrs = sorted(int(key, 16) for key in base['overrides'])
@@ -720,13 +761,16 @@ def check_rom(base: dict, rom_path: str, map_path: str, manifest_path: str,
         for covered in protected_addrs[lo:hi]:
             covering[covered] = row
     in_place_fragments = {}
+    from bpin_contract import NATIVE_WRITER as _bpin_native_writer
     for row in writes:
-        if row[7] != 'part2-prologue-drawn-comma-space' or len(row) < 9:
+        if row[7] not in ('part2-prologue-drawn-comma-space', _bpin_native_writer) or len(row) < 9:
             continue
+        bpin_owner = row[7] == _bpin_native_writer
         for key, span in row[8].get('source_line_fragments', {}).items():
             address = int(key, 16)
             offset, length = span
-            if (address in in_place_fragments or offset < 0 or length <= 0
+            # A later B-pin whole-message owner supersedes the prologue writer's spans.
+            if ((address in in_place_fragments and not bpin_owner) or offset < 0 or length <= 0
                     or offset + length > int(row[2])):
                 raise ValueError(f'{key}: invalid prologue final source fragment')
             in_place_fragments[address] = (row, offset, length)
@@ -986,8 +1030,24 @@ def round2_issue_bucket(issue: dict, listed: set[int]) -> str:
     return 'unlisted'
 
 
+ROUND2_PIN_RELEASE = Path(BASE, 'data', 'bteam_round2_pin_release.json')
+
+
+def round2_pin_release() -> dict:
+    """Rows released from the round-2 byte pin (lane T, plan_C B, 2026-11-04 user)."""
+    if not ROUND2_PIN_RELEASE.exists():
+        return {}
+    data = json.loads(ROUND2_PIN_RELEASE.read_text(encoding='utf-8'))
+    released = {k: v for k, v in data.items() if not k.startswith('_')}
+    for key, value in released.items():
+        if (not key.startswith('0x') or len(key) != 10 or not isinstance(value, dict)
+                or not isinstance(value.get('to'), str) or not value.get('approved')):
+            raise ValueError(f'{key}: invalid round-2 pin release entry')
+    return released
+
+
 def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
-                           manifest_path: str) -> tuple[list[dict], list[dict], list[dict]]:
+                           manifest_path: str, map_path: str = None) -> tuple[list[dict], list[dict], list[dict]]:
     """Count only byte-pinned listed residuals and exact reviewed deferrals as expected."""
     path = Path(BASE, 'data', 'bteam_round2_residuals.tsv')
     if hashlib.sha256(path.read_bytes()).hexdigest() != ROUND2_RESIDUAL_DIGEST:
@@ -1003,6 +1063,11 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
     pins = {int(key, 16): value for key, value in json.loads(
         pins_path.read_text(encoding='utf-8')).items()}
     rom = Path(rom_path).read_bytes()
+    if map_path:
+        # plan_C J decision (a): residual byte pins and reviewed after-hashes are
+        # checked on the exact pre-ellipsis-compaction bytes (transform verified).
+        from korean_punct_glyphs import restore_precompaction
+        rom = restore_precompaction(rom, json.loads(Path(map_path).read_text(encoding='utf-8')))[0]
     manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
     spans = {}
     messages = {}
@@ -1014,8 +1079,26 @@ def classify_round2_issues(issues: list[dict], base: dict, rom_path: str,
                     raise ValueError(f'0x{address:08X}: duplicate relocated line mapping')
                 spans[address] = (int(message['new_addr'], 16) + offset, length)
                 messages[address] = message
+    released = round2_pin_release()
+    from bpin_contract import bteam_approvals
+    bpin_rows = bteam_approvals()
     for addr, row in listed.items():
         key = f'0x{addr:08X}'
+        if key in bpin_rows:
+            # plan_C B-pin: the builder's B-pin writer owns the row; check_rom
+            # treats it as ledger-owned and requires its approved `to`.
+            continue
+        if key in released:
+            # plan_C B (2026-11-04 user): released from the byte pin; the W3
+            # overlay owns the row and the ROM must show the release `to`.
+            if addr in spans:
+                pos, size = spans[addr]
+                actual = decode_enc(rom[pos:pos + size].replace(b'\x72\x0a\x09', b'\x81\x40'),
+                                    load_syl()).rstrip(' \u3000')
+                if (display_equivalent(actual, addr, actual=True).replace('\u3000', ' ').strip()
+                        != display_equivalent(released[key]['to'], addr).replace('\u3000', ' ').strip()):
+                    raise ValueError(f'{key}: released residual row does not show its approved text')
+            continue
         payload = bytes.fromhex(row['payload_hex'])
         if (key not in base['overrides'] or row['expected_baseline'] != base['overrides'][key]
                 or not row['reason'] or not payload or rom[addr:addr + len(payload)] != payload):
@@ -1157,7 +1240,7 @@ def main() -> None:
             Path(args.json).write_text(json.dumps(issues, ensure_ascii=False, indent=2), encoding='utf-8')
         try:
             residuals, deferred, unlisted = classify_round2_issues(
-                issues, base, args.rom, args.repoint_manifest)
+                issues, base, args.rom, args.repoint_manifest, args.map)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             print(f'[HARD-FAIL] ROM residual classification error: {exc}', file=sys.stderr)
             sys.exit(1)

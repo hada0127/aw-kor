@@ -34,8 +34,8 @@ def fixture():
     manifest.insert(101,dict(msg='0xB83FA8',status='skip_wide_line',lines=['0xB83FA8']))
     c.retain_native(original,rom,log)
     options=dict(line_index={c.MESSAGE:(44,'source Japanese')},slots={c.MESSAGE:44},
-        source_text=lambda a:c.TEXT,fixed_bytes=lambda a:c.ROW,
-        valid_codes={int.from_bytes(c.ROW[i:i+2],'big') for i in range(0,46,2)})
+        source_text=lambda a:c.SOURCE_TEXT,fixed_bytes=lambda a:c.SOURCE_ROW,
+        valid_codes={int.from_bytes(raw[i:i+2],'big') for raw in (c.ROW,c.SOURCE_ROW) for i in range(0,46,2)})
     return original,rom,manifest,log,options
 
 
@@ -95,7 +95,7 @@ class ContractTests(unittest.TestCase):
             return bytes(r) if str(path)=='fixture-rom' else read_bytes(path)
         def check():
             with patch.object(Path,'read_bytes',raw),patch.object(Path,'read_text',text):
-                return drift.check_rom({'overrides':{'0x00B82FAC':c.TEXT}},
+                return drift.check_rom({'overrides':{'0x00B82FAC':c.SOURCE_TEXT}},
                     'fixture-rom','fixture-map','fixture-manifest')
         self.assertEqual([issue['address'] for issue in check()],['0x00B82FAC'])
         c.append(o,r,m,w,**k);selected.append(m[-1])
@@ -132,9 +132,11 @@ class ContractTests(unittest.TestCase):
             'missing-source':lambda o,r,m,w,k:k.update(line_index={}),
             'second-row':lambda o,r,m,w,k:k.update(line_index={c.MESSAGE:(44,''),c.MESSAGE+2:(2,'')}),
             'slot46':lambda o,r,m,w,k:k.update(slots={c.MESSAGE:46}),
-            'authority':lambda o,r,m,w,k:k.update(source_text=lambda a:c.TEXT+'!'),
-            'longer':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW+b'\x81\x49'),
-            'control':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW[:-1]+b'\x72'),
+            'authority':lambda o,r,m,w,k:k.update(source_text=lambda a:c.SOURCE_TEXT+'!'),
+            'display-as-source':lambda o,r,m,w,k:k.update(source_text=lambda a:c.TEXT),
+            'longer':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.SOURCE_ROW+b'\x81\x49'),
+            'control':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.SOURCE_ROW[:-1]+b'\x72'),
+            'reviewed-row-as-source':lambda o,r,m,w,k:k.update(fixed_bytes=lambda a:c.ROW),
             'glyph':lambda o,r,m,w,k:k.update(valid_codes=set()),
             'high-water':lambda o,r,m,w,k:m[-1].update(new_len=5),
             'arena-start':lambda o,r,m,w,k:k.update(arena_start=c.ARENA_START+4),
@@ -191,8 +193,10 @@ class ContractTests(unittest.TestCase):
         import build_korean_full as b
         tree,ns=Existing().callbacks()
         ns['slots']={c.MESSAGE:44};ns['_rp_bteam']={c.MESSAGE}
-        self.assertEqual(ns['_rp_dlg'](c.MESSAGE),c.TEXT)
-        self.assertEqual(ns['_rp_fixed_bytes'](c.MESSAGE),c.ROW)
+        # plan_C B-pin: the upstream authority stays the B-team text (SOURCE_*);
+        # the late append writes the reviewed ROW.
+        self.assertEqual(ns['_rp_dlg'](c.MESSAGE),c.SOURCE_TEXT)
+        self.assertEqual(ns['_rp_fixed_bytes'](c.MESSAGE),c.SOURCE_ROW)
         self.assertTrue(ns['_rp_fixable'](c.MESSAGE))
         self.assertEqual(ns['_rp_fit_level'](c.MESSAGE),99)
         self.assertEqual(ns['_rp_cell_width'](c.MESSAGE),46)
@@ -205,11 +209,11 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(limit(c.MESSAGE),44)
         self.assertNotIn(c.MESSAGE,ns['required_script_repoints'])
         baseline=json.loads((Path(b.BASE)/'data/bteam_baseline.json').read_text())
-        self.assertEqual(baseline['overrides']['0x00B82FAC'],c.TEXT)
-        self.assertEqual(ns['_dlg_ov']['0x00B82FAC'],c.TEXT)
+        self.assertEqual(baseline['overrides']['0x00B82FAC'],c.SOURCE_TEXT)
+        self.assertEqual(ns['_dlg_ov']['0x00B82FAC'],c.SOURCE_TEXT)
         with (Path(b.BASE)/'data/translation_for_import.csv').open() as stream:
             row=next(r for r in csv.DictReader(stream) if int(r['address'],16)==c.MESSAGE)
-        self.assertEqual(row['korean'],c.TEXT)
+        self.assertEqual(row['korean'],c.SOURCE_TEXT)
         from dialogue_repoint import _line_index
         self.assertEqual(_line_index(b.FOUND)[c.MESSAGE][0],44)
 
@@ -219,6 +223,7 @@ class ContractTests(unittest.TestCase):
         syl={k:int(v,16) if isinstance(v,str) else int(v) for k,v in syl.items()}
         raw=b.encode_full_fidelity(c.TEXT,syl,set(),c.MESSAGE)
         self.assertEqual(bytes(raw),c.ROW)
+        self.assertEqual(bytes(b.encode_full_fidelity(c.SOURCE_TEXT,syl,set(),c.MESSAGE)),c.SOURCE_ROW)
         b.validate_bteam_payload(c.ROW,{v:k for k,v in syl.items()},c.MESSAGE)
         for raw in (c.ROW+b'\x81\x49',c.ROW+b'\x72\x0a\x09'+c.ROW):
             with self.assertRaises(AssertionError):b.validate_bteam_payload(raw,{},c.MESSAGE)

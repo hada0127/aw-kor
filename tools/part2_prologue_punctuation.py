@@ -170,3 +170,107 @@ def patch(rom: bytearray, manifest: list[dict], writes: list[list]) -> list[dict
              'target': f'0x{target + (2 if source in (0xA01C1B, 0xA01C2A, 0xA01C59) else 0):08X}',
              'before_hex': old.hex(), 'after_hex': new.hex()}
             for source, target, old, new in edits]
+
+
+# Native extent of the Part 2 prologue script: the first approved row through
+# the end of the last approved message (0xA01C78, 16 bytes).  The approval
+# (2026-10-23) covers its on-screen punctuation: 「、」「。」 show as 「，」「．」.
+PROLOGUE_RANGE = (0xA01970, 0xA01C88)
+JAPANESE_TO_APPROVED = {'、'.encode('shift_jis'): '，'.encode('shift_jis'),
+                        '。'.encode('shift_jis'): '．'.encode('shift_jis')}
+
+
+def in_prologue(address: int) -> bool:
+    return PROLOGUE_RANGE[0] <= address < PROLOGUE_RANGE[1]
+
+
+def glyph_tokens(payload: bytes, base: int = 0):
+    """(address, two-byte code) of every SJIS-lead token in a script payload."""
+    i = 0
+    while i < len(payload):
+        if 0x81 <= payload[i] <= 0xE2 and i + 1 < len(payload):
+            yield base + i, bytes(payload[i:i + 2])
+            i += 2
+        else:
+            i += 1
+
+
+def live_prologue_spans(manifest: list[dict]) -> list[tuple[int, int, str]]:
+    """(start, end, owner) byte ranges the final ROM renders as prologue script.
+
+    Relocated prologue messages render from their manifest copy (repoint or
+    W3 overlay); the retired source bytes are skipped. Every other byte of
+    ``PROLOGUE_RANGE`` stays in place.
+    """
+    spans, retired = [], []
+    for message in manifest:
+        if not isinstance(message, dict) or message.get('status') != 'relocated':
+            continue
+        source = int(str(message.get('msg')), 16)
+        if not in_prologue(source):
+            continue
+        start = int(message['new_addr'], 16)
+        spans.append((start, start + int(message['new_len']), message['msg']))
+        retired.append((source, source + int(message.get('old_len') or 0)))
+    cursor = PROLOGUE_RANGE[0]
+    for lo, hi in sorted(retired) + [(PROLOGUE_RANGE[1], PROLOGUE_RANGE[1])]:
+        if cursor < lo:
+            spans.append((cursor, lo, 'in-place'))
+        cursor = max(cursor, hi)
+    return sorted(spans)
+
+
+def approved_punctuation_edits(payload: bytes, base: int = 0):
+    """(address, old code, approved code) for every 、/。 glyph token of ``payload``."""
+    for target, code in glyph_tokens(payload, base):
+        new = JAPANESE_TO_APPROVED.get(code)
+        if new is not None:
+            yield target, code, new
+
+
+def rewritten_payload(payload: bytes) -> bytes:
+    """``payload`` as ``patch_rewritten`` ships it: a W3-rewritten prologue message.
+
+    dialogue_rewrite_apply compares a proposed overlay with the B-team display
+    the final ROM gate reads; that gate sees the bytes after this stage.
+    """
+    out = bytearray(payload)
+    for target, _code, new in approved_punctuation_edits(payload):
+        out[target:target + 2] = new
+    return bytes(out)
+
+
+def patch_rewritten(rom: bytearray, manifest: list[dict], writes: list[list]) -> list[dict]:
+    """After the W3 overlay: keep the approved ，/． in prologue messages it rewrote.
+
+    The overlay re-encodes every changed piece and the encoder writes ','/'.'
+    as 、/。 (the Part 2 script parser rejects ASCII 0x2C/0x2E), so a rewritten
+    prologue row, or a comma the rewrite added, would show the Japanese marks
+    again. Unchanged pieces keep the bytes ``patch`` wrote. Only messages with
+    a manifest ``rewrite`` are touched; each change is a two-byte final owner.
+    """
+    edits = []
+    for message in manifest:
+        if (not isinstance(message, dict) or message.get('status') != 'relocated'
+                or not message.get('rewrite') or not in_prologue(int(str(message.get('msg')), 16))):
+            continue
+        start = int(message['new_addr'], 16)
+        payload = bytes(rom[start:start + int(message['new_len'])])
+        for target, code, new in approved_punctuation_edits(payload, start):
+            rom[target:target + 2] = new
+            writes.append([target, 2, 2, new.hex(), None,
+                           f'{code.decode("shift_jis")} → {new.decode("shift_jis")}', None,
+                           'part2-prologue-approved-punctuation',
+                           {'source_address': int(str(message['msg']), 16),
+                            'old_hex': code.hex(), 'stage': 'after-w3'}])
+            edits.append({'message': message['msg'], 'target': f'0x{target:08X}',
+                          'before_hex': code.hex(), 'after_hex': new.hex()})
+    return edits
+
+
+def remaining_japanese(rom: bytes, manifest: list[dict]) -> list[tuple[int, str, str]]:
+    """(address, owner, glyph) of every 、/。 the final ROM still renders in the prologue."""
+    return [(address, owner, code.decode('shift_jis'))
+            for start, end, owner in live_prologue_spans(manifest)
+            for address, code in glyph_tokens(rom[start:end], start)
+            if code in JAPANESE_TO_APPROVED]

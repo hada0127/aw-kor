@@ -2275,6 +2275,9 @@ ADDRESS_TEXT_OVERRIDES = {
     0xB828F0: '열차포',
     0xB828F8: '보급차',
     0xB82900: '신형전차',
+    # 0xB82914 中戦車 keeps 「중전차」 like 重戦車 (0xB81AAC): table 0xD8B800 idx4 is an unused
+    # unit (empty unit record, table getter 0x08B24B58 has no caller; plan_C S4, 2026-11-04
+    # orchestrator decision), so the two never meet on one screen.
     0xB82914: '중전차',
     0xB830C8: '맵을 보낼 수 있는 사람이 아무도 없어!!',
     0xB839D0: '사령브레이크',
@@ -2321,6 +2324,9 @@ ADDRESS_TEXT_OVERRIDES = {
     # Part 1 opening tutorial after name confirm. Keep these short because this
     # text engine reuses tiny fixed fragments and wraps poorly with long words.
     0xDF8EAE: '너, 혹시 이 게임은 처음이니?',
+    # 0xDF8EFF/0xDF9149/0xDF94BB keep their old pinned-length text here: the B82FAC/EC312C/D821F0
+    # relocation arena pins forbid lengthening (lane T for_laneB.md); the W3 overlay owns their
+    # final 「게임보이 워즈 어드밴스」 wording (2026-11-04 user, inputs.md msg9).
     0xDF8EFF: '어드밴스 워즈에는',
     0xDF8F26: '여러 모드가 있어',
     0xDF8F3F: '게임보이 한 대로',
@@ -2356,7 +2362,7 @@ ADDRESS_TEXT_OVERRIDES = {
     0xDF941A: '위부터 작전을 골라.',
     0xDF9446: '첫 작전은 전투 개시야!',
     0xDF946F: '그럼 힘내!',
-    0xDF948E: '그렇다면, 간단하게 어드밴스 워즈에',
+    0xDF948E: '그렇다면, 게임보이 워즈 어드밴스에',
     0xDF94BB: '어드밴스 워즈에는',
     0xDF94D6: '여러 모드가 있어.',
     0xDF94FD: '먼저 한 대 대전,',
@@ -4838,7 +4844,11 @@ COMPACT_GLYPH_DICTIONARY_SPECS = [
     {
         'label': 'part2_co_power_profile_dictionary',
         'dict_addr': 0xA3B880,
-        'slot': 122,
+        # fixB H: 64 glyphs (야마토다마시이) = the atlas maximum. The live
+        # dictionary moves to part2_power_title_glyphs.DICTIONARY (128 B + NUL);
+        # the native 122 B slot keeps the first 61 entries (same atlas cells).
+        'slot': 128,
+        'native_slot': 122,
         'target_ranges': [(0xA2955C, 0xA29830)],
         'expected_target_count': 36,
     },
@@ -5498,6 +5508,227 @@ def verify_korean_punct_glyphs(rom, orig):
     if bytes(rom[blank:blank + 32]) != bytes(32):
         raise AssertionError('P1 shared blank slot 95 is not blank')
     _check_korean_punct_ownership(rom)
+
+
+# fixB J (plan_C §1 J, E3): one-cell 「…」 at 0x8163. Glyph tables/node below,
+# text compaction in compact_dialogue_ellipsis() (final byte stage).
+ELLIPSIS_CODE = _korean_punct.ELLIPSIS
+ELLIPSIS_SYMBOL_TABLES = _korean_punct.ELLIPSIS_SYMBOL_TABLES
+ELLIPSIS_SYMBOL_INDEX = _korean_punct.ELLIPSIS_SYMBOL_INDEX
+ELLIPSIS_P1_BOTTOM_SLOT = _korean_punct.ELLIPSIS_P1_BOTTOM_SLOT
+ELLIPSIS_A3_NODE = _korean_punct.ELLIPSIS_A3_NODE
+ELLIPSIS_A3_BUCKET = _korean_punct.ELLIPSIS_A3_BUCKET
+
+
+def _ellipsis_entries(table):
+    top = table + 2 * ELLIPSIS_SYMBOL_INDEX
+    return top, top + 16  # bottom entry = index + 8
+
+
+def patch_ellipsis_glyph(rom, orig):
+    """Give 0x8163 a visible one-cell 「…」 in P1 (both symbol tables) and P2 A3."""
+    slot_off = KOREAN_PUNCT_FONT_BASE + ELLIPSIS_P1_BOTTOM_SLOT * 32
+    if bytes(orig[slot_off:slot_off + 32]) != bytes(32) or bytes(rom[slot_off:slot_off + 32]) != bytes(32):
+        raise AssertionError(f'P1 ellipsis slot {ELLIPSIS_P1_BOTTOM_SLOT} is not blank')
+    if ELLIPSIS_P1_BOTTOM_SLOT in _korean_punct_symbol_slot_owners(rom):
+        raise AssertionError(f'P1 ellipsis slot {ELLIPSIS_P1_BOTTOM_SLOT} already has an owner')
+    blank = KOREAN_PUNCT_P1_TOP_BLANK.to_bytes(2, 'little')
+    for table in ELLIPSIS_SYMBOL_TABLES:
+        for entry in _ellipsis_entries(table):
+            if bytes(orig[entry:entry + 2]) != blank or bytes(rom[entry:entry + 2]) != blank:
+                raise AssertionError(f'P1 ellipsis symbol entry {entry:#x} is not the shared blank')
+    if bytes(orig[0x38F9D8:0x38F9DC]) != (0x08000000 + 0x38F9E4).to_bytes(4, 'little'):
+        raise AssertionError('313 symbol-table copy pointer moved')
+    # P2 A3: no 0x81 owner in bucket 0x63, node storage free and unreferenced.
+    node_addr, bucket = ELLIPSIS_A3_NODE, ELLIPSIS_A3_BUCKET
+    old_head = bytes(orig[bucket:bucket + 4])
+    if bytes(rom[bucket:bucket + 4]) != old_head:
+        raise AssertionError('Part 2 ellipsis bucket changed before patch')
+    pointer = int.from_bytes(old_head, 'little')
+    seen = set()
+    while pointer:
+        off = pointer - 0x08000000
+        if off in seen or not 0 <= off <= len(orig) - 72:
+            raise AssertionError('invalid Part 2 ellipsis glyph chain')
+        seen.add(off)
+        if orig[off + 4] == 0x81:
+            raise AssertionError('Part 2 ellipsis glyph already has an owner')
+        pointer = struct.unpack_from('<I', orig, off)[0]
+    node_ptr = (0x08000000 + node_addr).to_bytes(4, 'little')
+    if (any(orig[node_addr:node_addr + 72]) or any(rom[node_addr:node_addr + 72])
+            or node_ptr in orig or node_ptr in rom):
+        raise AssertionError('Part 2 ellipsis node storage is occupied or referenced')
+    tile = _korean_punct.ellipsis_bottom_tile()
+    rom[slot_off:slot_off + 32] = tile
+    WRITE_LOG.append([slot_off, 32, 32, tile.hex(), None, '…', None, 'ellipsis-p1-font'])
+    slot = ELLIPSIS_P1_BOTTOM_SLOT.to_bytes(2, 'little')
+    for table in ELLIPSIS_SYMBOL_TABLES:
+        entry = _ellipsis_entries(table)[1]
+        rom[entry:entry + 2] = slot
+        WRITE_LOG.append([entry, 2, 2, slot.hex(), None, '…', None, 'ellipsis-p1-symbol-table'])
+    header = bytes(orig[PART2_A3_MIDDLE_DOT_NODE + 4:PART2_A3_MIDDLE_DOT_NODE + 6])
+    node = old_head + header + bytes(32) + tile + bytes(2)
+    if header != b'\x81\x08' or len(node) != 72:
+        raise AssertionError('Part 2 ellipsis node header changed')
+    rom[node_addr:node_addr + 72] = node
+    rom[bucket:bucket + 4] = node_ptr
+    WRITE_LOG.append([node_addr, 72, 72, node.hex(), None, '…', None, 'ellipsis-a3-node'])
+    WRITE_LOG.append([bucket, 4, 4, node_ptr.hex(), None, '…', None, 'ellipsis-a3-bucket'])
+    return 1
+
+
+def verify_ellipsis_glyph(rom, orig):
+    from dialogue_pixel_layout import Glyphs
+    glyphs = Glyphs(bytes(rom))
+    expected = {(x, y): KOREAN_PUNCT_INK for x, y in _korean_punct.ELLIPSIS_PIXELS}
+    for game in ('p1', 'p2'):
+        bitmap = glyphs.bitmap(ELLIPSIS_CODE.to_bytes(2, 'big'), game)
+        ink = {(x, y): v for y, row in enumerate(bitmap) for x, v in enumerate(row) if v}
+        if ink != expected:
+            raise AssertionError(f'ellipsis 0x8163 {game} pixels changed')
+    blank = KOREAN_PUNCT_P1_TOP_BLANK.to_bytes(2, 'little')
+    slot = ELLIPSIS_P1_BOTTOM_SLOT.to_bytes(2, 'little')
+    for table in ELLIPSIS_SYMBOL_TABLES:
+        top, bottom = _ellipsis_entries(table)
+        if bytes(rom[top:top + 2]) != blank or bytes(rom[bottom:bottom + 2]) != slot:
+            raise AssertionError(f'ellipsis symbol entries changed in table {table:#x}')
+    sharers = _korean_punct_symbol_slot_owners(rom).get(ELLIPSIS_P1_BOTTOM_SLOT, [])
+    if sharers != [_ellipsis_entries(ELLIPSIS_SYMBOL_TABLES[0])[1]]:
+        raise AssertionError(f'P1 ellipsis slot {ELLIPSIS_P1_BOTTOM_SLOT} is shared: {sharers}')
+    if _korean_punct_a3_owners(rom).get(ELLIPSIS_A3_NODE) != [(ELLIPSIS_CODE & 0xFF, ELLIPSIS_CODE >> 8)]:
+        raise AssertionError('A3 ellipsis node is not owned by 0x8163 alone')
+    if (struct.unpack_from('<I', rom, ELLIPSIS_A3_NODE)[0]
+            != struct.unpack_from('<I', orig, ELLIPSIS_A3_BUCKET)[0] or rom[ELLIPSIS_A3_NODE + 5] != 8):
+        raise AssertionError('A3 ellipsis node chain/advance changed')
+    blank_slot = KOREAN_PUNCT_FONT_BASE + KOREAN_PUNCT_P1_TOP_BLANK * 32
+    if bytes(rom[blank_slot:blank_slot + 32]) != bytes(32):
+        raise AssertionError('P1 shared blank slot 95 is not blank')
+
+
+def ellipsis_compaction_exclusions():
+    """Byte ranges owned by exact-byte pins (B-pin contracts, plan_C step 7).
+
+    Their pinned bytes stay as they are until those contracts take new
+    expected text; the compaction pass skips any segment that touches them.
+    """
+    ranges = []
+    import d821f0_contract, b82fac_contract, ec312c_contract
+    for start, end, _ in d821f0_contract.CURRENT_PINS:
+        ranges.append((start, end))
+    for pins in (b82fac_contract.PINS, ec312c_contract.PINS):
+        for start, values in pins.items():
+            size = max(len(v) for v in values if v is not None)
+            ranges.append((start, start + size))
+    return ranges
+
+
+def compact_dialogue_ellipsis(rom, manifest, write_log):
+    """fixB J: final byte stage, runs of 3+ 「・」 -> 「…」 in dialogue payloads.
+
+    Covers every text writer (CSV, overrides, B-team raw bytes, spacing,
+    layout, W3 overlay) because it reads the final bytes. Scope: the two
+    script consumers by source address (renderer_text P1_SCRIPT = B12074
+    per-char path via symbol table 0xB8027C, P2_SCRIPT = 31424C/A3 node);
+    relocated messages are tokenized from their new start, in-place rows from
+    their text write start. Pair titles, OBJ titles, compact UI and other
+    renderers, retired copies and exact-byte pinned ranges keep 「・・・」.
+    """
+    from renderer_text import renderer_for_address, P1_SCRIPT, P2_SCRIPT
+    excluded = ellipsis_compaction_exclusions()
+
+    def script(address):
+        return renderer_for_address(address) in (P1_SCRIPT, P2_SCRIPT)
+
+    def blocked(start, end):
+        return any(start < e and s < end for s, e in excluded)
+
+    # Windows are single rows, so the freed bytes become padding at the end of
+    # that row (like slot fill) and no row start or control moves.
+    windows = []  # (token_start, change_lo, change_hi)
+    relocated_sources = []
+    for message in manifest:
+        if message.get('status') != 'relocated':
+            continue
+        source = int(message['msg'], 16)
+        relocated_sources.append((source, source + int(message.get('old_len') or 0)))
+        if not script(source):
+            continue
+        base = int(message['new_addr'], 16)
+        spans = message.get('line_spans') or {}
+        fragments = message.get('source_line_fragments') or {}
+        if spans:
+            for key, span in spans.items():
+                for off, size in (fragments.get(key) or [span]):
+                    windows.append((base + off, base + off, base + off + size))
+        else:
+            windows.append((base, base, base + int(message['new_len'])))
+    from renderer_text import final_text_spans
+    for address, size, owner, owner_size in final_text_spans(write_log, len(rom)):
+        if not script(owner) or any(s <= owner < e for s, e in relocated_sources):
+            continue
+        windows.append((owner, address, address + size))
+    changed = 0
+    for token_start, lo, hi in sorted(set(windows)):
+        if blocked(lo, hi):
+            continue
+        new, segments = _korean_punct.compact_ellipsis_bytes(bytes(rom[token_start:hi]))
+        for seg_off, seg_len in segments:
+            a, b = token_start + seg_off, token_start + seg_off + seg_len
+            if a < lo:
+                continue  # segment starts in an older owner's bytes
+            if bytes(rom[a:b]) == new[seg_off:seg_off + seg_len]:
+                continue
+            # plan_C J/spacing decision (a): keep the exact pre-compaction bytes so
+            # byte-pinning verifiers can check the pre-compaction form plus this
+            # transform (korean_punct_glyphs.restore_precompaction).
+            before = bytes(rom[a:b])
+            rom[a:b] = new[seg_off:seg_off + seg_len]
+            write_log.append([a, seg_len, seg_len, new[seg_off:seg_off + seg_len].hex(), None,
+                              '…', None, _korean_punct.COMPACT_WRITER, {'before_hex': before.hex()}])
+            changed += 1
+    return changed
+
+
+# fixB I (plan_C §1 I, spike S5): tutorial page P071 「この{歩兵}の上で{Ａボタン}を押してみて。」
+# at 0xDA11CC. Its row slots (の上で 6 B, Ａボタン 8 B) cannot hold 「위에서」 with both word
+# boundaries, the page is not a 0x19 message and has no pointer (two-tab lesson group read in
+# sequence), so it cannot be relocated. One writer owns the whole 46-byte message instead:
+# same start, same length, same terminator; the colour controls 32/30/33/30 move with
+# their words. Text (2026-11-04 coordinator, lane T wording): 「이 보병 위에서 A버튼 눌러 봐.」
+P071_MESSAGE = 0xDA11CC
+P071_NATIVE = bytes.fromhex(
+    '0a090982b182cc3295e095ba3082cc8fe382c5338260837b835e83933082f0899f82b582c482dd82c481426b0a00')
+P071_TEXT = '이 보병 위에서 A버튼 눌러 봐.'
+P071_PARTS = ((None, '이 '), (0x32, '보병'), (0x30, ' 위에서 '), (0x33, 'A버튼'), (0x30, ' 눌러 봐.'))
+
+
+def p071_payload(syl_to_code):
+    sym = {' ': b'\x81\x40', 'A': b'\x82\x60', '.': b'\x81\x42'}
+    out = bytearray(b'\x0a\x09\x09')
+    for control, text in P071_PARTS:
+        if control is not None:
+            out.append(control)
+        for ch in text:
+            out += sym[ch] if ch in sym else int(syl_to_code[ch]).to_bytes(2, 'big')
+    out += b'\x6b\x0a\x00'
+    if len(out) != len(P071_NATIVE) or ''.join(t for _, t in P071_PARTS) != P071_TEXT:
+        raise AssertionError(f'P071 message must keep its native 46-byte extent: {len(out)}')
+    return bytes(out)
+
+
+def patch_p071_message(rom, orig, syl_to_code):
+    end = P071_MESSAGE + len(P071_NATIVE)
+    if bytes(orig[P071_MESSAGE:end]) != P071_NATIVE or bytes(orig[end:end + 2]) != b'\x00\x00':
+        raise AssertionError('P071 native message/terminator changed')
+    payload = p071_payload(syl_to_code)
+    # Hangul/fullwidth tokens here have no byte below 0x80, so this lists the controls.
+    if [b for b in payload if b in (0x0A, 0x09, 0x30, 0x32, 0x33, 0x6B, 0x00)] != \
+            [0x0A, 0x09, 0x09, 0x32, 0x30, 0x33, 0x30, 0x6B, 0x0A, 0x00]:
+        raise AssertionError('P071 control sequence changed')
+    rom[P071_MESSAGE:end] = payload
+    WRITE_LOG.append([P071_MESSAGE, len(payload), len(payload), payload.hex(), None, P071_TEXT, None,
+                      'p071-message'])
+    return payload
 
 
 PART2_A3_DECIMAL_NODE = 0xFD0000
@@ -7420,7 +7651,10 @@ def patch_part2_splash_logo_bg(rom):
                 elif a >= 32:
                     lp[xx, yy] = 4
 
-    paint_line('어드밴스 워즈 2', None, 14)
+    # 2026-11-04 user decision (temp/fix_20261104/inputs.md msg9): in-game title
+    # is 「게임보이 워즈 어드밴스」 again (supersedes 2026-10-16 「어드밴스 워즈 2」).
+    # One line first (plan_C A); fits at size 13 (155x12 px <= 166x13).
+    paint_line('게임보이 워즈 어드밴스 2', None, 14)
 
     out = bytearray()
     px = layer.load()
@@ -12317,7 +12551,9 @@ def refresh_compact_glyph_dictionary_overrides(display_overrides=None, *, strict
     if display_overrides is None:
         display_overrides = load_display_overrides()
     derived = derive_compact_glyph_dictionary_texts(display_overrides, strict=strict)
-    ADDRESS_TEXT_OVERRIDES.update(derived)
+    for spec in COMPACT_GLYPH_DICTIONARY_SPECS:
+        text = derived[spec['dict_addr']]
+        ADDRESS_TEXT_OVERRIDES[spec['dict_addr']] = text[:spec.get('native_slot', spec['slot']) // 2]
     return derived
 
 
@@ -13014,10 +13250,12 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
             raise AssertionError(f'0x{address:08X}: compact final bytes differ from verified writer')
         return  # Both compact verifiers run before this final-ROM pass.
     i = 0
+    _segment_ellipsis = False
     while i < len(payload):
         b = payload[i]
         if payload[i:i + 3] == b'\x72\x0a\x09':
             i += 3
+            _segment_ellipsis = False
             continue
         if address == 0xA2AA08 and i == 22 and b == 0x72:
             i += 1  # verified CO-panel row break replacing its third space
@@ -13029,6 +13267,8 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
                 raise AssertionError(f'0x{address:08X}: incomplete SJIS token at +{i}')
             pair = payload[i:i + 2]
             code = int.from_bytes(pair, 'big')
+            if code == 0x8163:
+                _segment_ellipsis = True
             if code not in code2syl:
                 try:
                     ch = pair.decode('shift_jis')
@@ -13043,10 +13283,18 @@ def validate_bteam_payload(payload, code2syl, address, *, compact=False,
             i += 2
             continue
         if b == 0x20:
-            if address not in {0xB8301C, 0xB83044, 0xB830AC} and any(
+            end = i
+            while end < len(payload) and payload[end] == 0x20:
+                end += 1
+            # fixB J: the final ellipsis pass pads a compacted segment with 0x20
+            # right before its own control (same as slot padding); allowed only
+            # in a segment that holds a 0x8163 「…」 token.
+            ellipsis_pad = (_segment_ellipsis and end < len(payload)
+                            and payload[end] in (0x72, 0x6B, 0x77, 0x57, 0x4B, 0x0A, 0x09, 0x0D))
+            if address not in {0xB8301C, 0xB83044, 0xB830AC} and not ellipsis_pad and any(
                     x not in (0, 0x20) for x in payload[i + 1:]):
                 raise AssertionError(f'0x{address:08X}: interior halfwidth space at +{i}')
-            i += 1
+            i = end if ellipsis_pad else i + 1
             continue
         if b in (9,10,13):
             from dialogue_spacing import reviewed_bteam_rows
@@ -13069,8 +13317,11 @@ def bteam_retained_equal(expected, actual, address, *, compact=False):
         return address in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A} and actual == expected + '倶倶'
     fold = str.maketrans({'、': ',', '。': '.', '！': '!', '？': '?',
                           '”': '"', '“': '"'})
+    from korean_punct_glyphs import compact_ellipsis_text
+
     def norm(value):
-        return value.translate(fold).replace('・・・', '...')
+        # fixB J (E3): 3-5 「・」 ship as one 「…」, 6+ as two; fold both forms.
+        return compact_ellipsis_text(value.translate(fold)).replace('…', '...')
     if address not in {0xB8301C, 0xB83044, 0xB830AC}:
         expected = expected.replace(' ', '　')
     return norm(expected) == norm(actual)
@@ -13719,12 +13970,14 @@ PART2_HOOK_A3 = bytes.fromhex(
 # state+0x2E(색 c=0..3)를 정하고 0x0831BBDC→A3(IWRAM 0x0300605C)에 r2=c 로 넘긴다. 원본 A3 는
 # r9=c 로 두고 잉크 nibble 10 을 10+c 로 바꿔 VRAM 에 쓴다(BG 팔레트 8: 12=빨강, 13=파랑).
 # 한글 경로(PART2_HOOK_A3)는 KOR_BASE 글리프(잉크 nibble 9)를 ldmia/stmia 로 그대로 복사해 색이
-# 사라졌다. 이 루틴은 c!=0 이면 nibble 9 를 10+c 로(9+(c+1)) 바꾸고, c==0 이면 그대로 복사한다
-# (기존 출력과 바이트 동일). 입력 r0=윗 글리프, r4=아랫 글리프, r5=VRAM 대상, r9=c. BG VRAM 은
-# 바이트 쓰기가 안 되므로 halfword 로 쓴다. 소스: temp/fix_20261104/re/highlight/asm/color_copy.s
+# 사라졌다. 이 루틴은 항상 nibble 9 를 10+c 로(9+(c+1)) 바꾼다. fixB K(2026-11-04 plan_C §1 K):
+# c==0 그대로 복사 분기를 없애 일반 글자도 잉크 10(일본판 A3 와 같은 팔레트 인덱스)으로 쓴다.
+# 입력 r0=윗 글리프, r4=아랫 글리프, r5=VRAM 대상, r9=c. BG VRAM 은 바이트 쓰기가 안 되므로
+# halfword 로 쓴다. 끝 nop 2개는 검토된 60B 영역 크기 유지용 패딩.
+# 소스: temp/fix_20261104/fixB/K/asm/color_copy.s (이전판 temp/fix_20261104/re/highlight/asm/color_copy.s).
 PART2_HOOK_A3_COLOR = bytes.fromhex(
-    '061c2f1c4b4601332022102a00d1261c30880236012b0cd000210500cd402d072d0f092d'
-    '02d11d008d40401904311029f3d138800237013ae7d17047'
+    '061c2f1c4b4601332022102a00d1261c3088023600210500cd402d072d0f092d'
+    '02d11d008d40401904311029f3d138800237013ae9d17047c046c046'
 )
 assert len(PART2_HOOK_A3_COLOR) == 60
 _a3_bl_off = PART2_HOOK_A3_COLOR_RT - (PART2_HOOK_A3_RT + 0x54 + 4)
@@ -15445,6 +15698,7 @@ def _build(args, publication):
     st['grid_glyphs'] = patch_name_grid(rom)
     st['symbol_glyphs'] = restore_symbol_glyphs(rom, orig)
     st['korean_punct_glyphs'] = patch_korean_punct_glyphs(rom, orig)
+    st['ellipsis_glyph'] = patch_ellipsis_glyph(rom, orig)
     st['part2_a3_decimal_node'] = patch_part2_decimal_point_a3(rom, orig)
     st['part2_a3_prologue_comma_node'] = part2_prologue_comma_node(rom, orig)
     st['part2_ui_kanji_glyphs'] = patch_part2_ui_kanji_glyphs(rom, orig)
@@ -19098,9 +19352,10 @@ def _build(args, publication):
         (0xD927D9, 0xD927F3, '제대로　해내거라！！！', 'enemy do well row'),
         (0xD927FA, 0xD92808, '네 차례야', 'your turn capture row'),
         (0xD9280E, 0xD9281E, '잊기　전에　', 'before forget row'),
-        (0xD92824, 0xD92830, '을　끝내자', 'finish capture lead row'),
+        # plan_C B (lane T 0xD9280C native_owner_unproven, Astra delta accept): Catherine 반말.
+        (0xD92824, 0xD92830, '을　끝내자！', 'finish capture lead row'),
         (0xD92833, 0xD92841, '', 'finish capture tail row'),
-        (0xD92850, 0xD92870, '을　고르고　Ａ　버튼을　눌러요。', 'finish capture select row'),
+        (0xD92850, 0xD92870, '을　고르고　Ａ　버튼을　눌러。', 'finish capture select row'),
         (0xD9287C, 0xD92894, '점령은 잊어버리기 십상이죠.', 'capture easy forget row'),
     ]:
         patch_script_row(faddr, fend, encode_text(text, syl_to_code, unmapped, faddr), label, source_text=text)
@@ -24205,6 +24460,8 @@ def _build(args, publication):
     # 스프라이트 편집기 픽셀 편집 최종 오버레이(라벨 자동그리기 이후 = 편집이 우선).
     # 오버라이드 없으면 무동작 → 출력 byte-identical.
     import part2_power_title_glyphs as power_titles
+    for _address, _blob, _label in power_titles.relocate_dictionary(rom, orig, _display_ov, syl_to_code):
+        WRITE_LOG.append([_address, len(_blob), len(_blob), _blob.hex(), None, None, None, _label])
     st['part2_power_title_glyphs'] = power_titles.patch(rom, orig, _display_ov, syl_to_code)
     power_titles.verify_generated(rom, orig, _display_ov, syl_to_code)
     unit_type_labels.verify(rom, orig)
@@ -24421,9 +24678,11 @@ def _build(args, publication):
                 if a in (0xDD010A, 0xDD0137):
                     return _rp_ov(a)  # Preserve each independent authored sentence.
                 if a in {0xDF8E16, 0xDF8EFF, 0xDF9149, 0xDF948E, 0xDF94D6}:
-                    # The approved rename is the new source authority for
+                    # The approved title wording is the source authority for
                     # these rows, including messages already owned by an
-                    # older multi-row relocation.
+                    # older multi-row relocation. 2026-11-04 user decision
+                    # (temp/fix_20261104/inputs.md msg9): 「게임보이 워즈 어드밴스」,
+                    # superseding the 2026-10-16 「어드밴스 워즈」 rename.
                     return _rp_ov(a)
                 if a in {0xD9EDB6, 0xDCB1BE, 0xDCC63A, 0xDCD9DA, 0xD94552, 0xD965DE, 0xB830C8, 0xA35258, 0xA35280, 0xE0F6E2}:
                     return _rp_ov(a)  # Fable + Astra b23: full B-team wording.
@@ -24898,6 +25157,13 @@ def _build(args, publication):
     # The listed slots retain the exact Korean bytes from the prior candidate.
     # Each is an explicit unresolved exception, never an implicit shortening.
     for _address in sorted(set(BTEAM_ROUND2_RESIDUALS) | {0xB82FAC, 0xEC312E, 0xD821F0}):
+        if _address == 0xA296EC:
+            # fixB H (2026-11-04, plan_C S4): the Yamamoto power name now ships in
+            # full (「야마토다마시이」, display writer + relocated 64-glyph dictionary);
+            # the 「혼」 residual no longer applies. Its round-2 pin is released via
+            # data/bteam_round2_pin_release.json (lane T file). Other released rows
+            # keep their residual bytes here; the W3 overlay replaces them later.
+            continue
         if _address == 0xB82FAC:
             from b82fac_contract import retain_native as _b82fac_retain_native
             _b82fac_retain_native(orig, rom, WRITE_LOG)
@@ -25259,6 +25525,15 @@ def _build(args, publication):
     WRITE_LOG.extend(_compact_ui_rows)
     st['part1_compact_ui_strings'] = len(compact_ui_strings.verify(
         rom, orig, syl_to_code, PART2_UI_KANJI_GLYPH_SUBS, _unit_compact_render_char))
+    # plan_C B-pin (fixB step 7, 2026-11-04 user): reviewed wording of the
+    # contract-pinned messages (tools/bpin_contract.py). The early stage runs
+    # after every source writer of those messages and before the Help
+    # dictionary below derives its glyphs from the native Help rows.
+    import bpin_contract as _bpin
+    if not args.no_repoint_dialogue:
+        st['bpin_early'] = _bpin.apply(
+            'early', rom, orig, _rp_manifest, WRITE_LOG,
+            encode=lambda text, address: encode_required_full_fidelity(text, syl_to_code, unmapped, address))
     import part1_editor_help_dictionary as editor_help_dictionary
     st['part1_editor_help_dictionary'] = editor_help_dictionary.patch(rom, orig)
     _help_payload = editor_help_dictionary.dictionary(rom)
@@ -25354,8 +25629,8 @@ def _build(args, publication):
     st['part2_dialogue_layout_contracts'] = verify_dialogue_layout_contracts(
         rom, orig, _rp_manifest if not args.no_repoint_dialogue else [], syl_to_code)
     from part2_context_contract import verify as verify_context_contract
-    st['part2_context_contract'] = verify_context_contract(
-        rom, orig, _rp_manifest if not args.no_repoint_dialogue else [], syl_to_code)
+    # A199B0 (layout ledger) gets its B-pin wording in the late stage; its
+    # contract runs with the other text contracts before and after the W3 overlay.
     from part2_context_contract import verify_teacher_context
     st['part2_teacher_context_contract'] = verify_teacher_context(
         rom, orig, _rp_manifest if not args.no_repoint_dialogue else [], syl_to_code)
@@ -25370,7 +25645,8 @@ def _build(args, publication):
     st['part1_m19_dialogue_contract'] = m19_dialogue.verify(rom, orig, _m19_expected_payload, _m19_encode)
     st['part1_hellbowz_ending_contract'] = hellbowz_ending.verify(rom, orig, _hellbowz_expected_payload, _m19_encode)
     from protected_help_apology import verify as verify_protected_help_apology
-    st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address))
+    # D8F6FC (spacing ledger) gets its B-pin wording in the late stage; the
+    # contract is checked right after it (below) and before/after the W3 overlay.
     from map_design_intro import verify as verify_map_design_intro
     st['map_design_intro_contract'] = verify_map_design_intro(rom, orig, lambda text, size, address: encode_fit(text, size, syl_to_code, unmapped, address))
     from return_mode_question import verify as verify_return_mode_question
@@ -25380,8 +25656,11 @@ def _build(args, publication):
     st['part1_ship_help_contract'] = verify_ship_help(
         rom, orig, _rp_manifest, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address))
     from part1_submarine_help import verify as verify_submarine_help
+    # fixB C1 review #1: the reviewed 110B payload lands in the B-pin late stage
+    # (fresh allocation); here the repointer's source-row payload is still live.
     st['part1_submarine_help_contract'] = verify_submarine_help(
-        rom, orig, _rp_manifest, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address))
+        rom, orig, _rp_manifest, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address),
+        final=False)
     from part2_volcano_context import verify as verify_volcano_context
     st['part2_volcano_context_contract'] = verify_volcano_context(
         rom, orig, _rp_manifest if not args.no_repoint_dialogue else [], syl_to_code)
@@ -25402,6 +25681,7 @@ def _build(args, publication):
     verify_part2_decimal_point_a3(rom, orig)
     verify_part2_prologue_comma_node(rom, orig)
     verify_korean_punct_glyphs(rom, orig)
+    verify_ellipsis_glyph(rom, orig)
     # Link-play client font (Design A): after every text writer, before the checksum.
     import link_client_font
     _lcf_codes = {k: v.to_bytes(2, 'big') for k, v in syl_to_code.items()}
@@ -25472,6 +25752,9 @@ def _build(args, publication):
         import part2_prologue_punctuation
         st['part2_prologue_approved_punctuation'] = part2_prologue_punctuation.patch(
             rom, _rp_manifest, WRITE_LOG)
+        # plan_C B-pin late stage: messages whose spacing, pixel-layout or
+        # prologue-punctuation writers above own the bytes the reviewed wording replaces.
+        st['bpin_late'] = _bpin.apply('late', rom, orig, _rp_manifest, WRITE_LOG)
         # The apology message keeps its exact first page while its later
         # pages receive reviewed spacing. Check its active pointer/prefix again.
         st['protected_help_apology_contract'] = verify_protected_help_apology(rom, orig, lambda text, address: encode_full_fidelity(text, syl_to_code, unmapped, address), _rp_manifest)
@@ -25517,9 +25800,21 @@ def _build(args, publication):
         _pre_overlay = {_name: _check() for _name, _check in _rewrite_contracts}
         _hb_before = _pre_overlay['hellbowz_ending']
         st['dialogue_rewrites'] = apply_dialogue_rewrites(rom, orig, _rp_manifest, WRITE_LOG, syl_to_code)
+        # 2026-10-23 approval: the overlay re-encodes rewritten prologue pieces with 、/。;
+        # restore the approved 「，」「．」 in those messages (two-byte final owners).
+        st['part2_prologue_w3_punctuation'] = part2_prologue_punctuation.patch_rewritten(
+            rom, _rp_manifest, WRITE_LOG)
+        _prologue_japanese = part2_prologue_punctuation.remaining_japanese(rom, _rp_manifest)
+        if _prologue_japanese:
+            raise AssertionError(f'Part 2 prologue still renders 、/。: {_prologue_japanese[:8]}')
         for _name, _check in _rewrite_contracts:
             _check()
         st['dialogue_rewrites']['contracts_rechecked'] = [n for n, _ in _rewrite_contracts]
+        st['bpin_final'] = _bpin.verify(rom, _rp_manifest)
+        # fixB I: whole-message owner of P071 (after the overlay, so it is the final owner).
+        patch_p071_message(rom, orig, syl_to_code)
+        # fixB J: after the W3 overlay (last text writer), before the pixel/renderer audits.
+        st['ellipsis_compacted_segments'] = compact_dialogue_ellipsis(rom, _rp_manifest, WRITE_LOG)
         print(f"→ 대사 재작성 overlay: {st['dialogue_rewrites']}")
         with open(os.path.join(BASE, 'temp', 'dialogue_spacing_applied.json'), 'w', encoding='utf-8') as _stream:
             json.dump(_spacing_applied, _stream, ensure_ascii=False, indent=1)
@@ -25533,6 +25828,10 @@ def _build(args, publication):
             raise AssertionError(f'Final dialogue pixel layout failed: {_pixel_bad}')
         st['dialogue_layout_repairs'] = len(_layout_applied)
         st['dialogue_native_messages'] = _pixel_audit['summary']['physical_messages']
+        # plan_C B: declared consumer geometry (data/dialogue_consumer_geometry.json, attributed
+        # renderers only) is audited above; every declared-message overflow is fatal like any row.
+        st['dialogue_declared_geometry'] = {key: _pixel_audit['summary'][key] for key in (
+            'declared_geometry_messages', 'unverified_consumer_messages', 'state_dependent_messages')}
         with open(os.path.join(BASE, 'temp', 'dialogue_layout_applied.json'), 'w', encoding='utf-8') as _stream:
             json.dump(_layout_applied, _stream, ensure_ascii=False, indent=1)
     st['part2_name_compose'] = _part2_name_compose(rom, orig)
@@ -25712,7 +26011,21 @@ def _build(args, publication):
             _widths = [_text_segment_cells(piece.rstrip(b'\x00')) for piece in _payload.split(b'\x72\x0a\x09')]
         from dialogue_spacing import reviewed_bteam_half_cells, verify_reviewed_owner_bytes
         _spacing_limit=0
-        if (_address in _relocated_rows and reviewed_bteam_half_cells(_address)>44
+        # plan_C B (lane T for_laneB §3): a reviewed wide row whose message the W3
+        # overlay replaced (manifest 'rewrite') no longer owns those reviewed bytes;
+        # it gets the plain 44 half-cell cap instead of the reviewed-bytes check.
+        _w3_superseded = _address in _relocated_rows and bool(_message.get('rewrite'))
+        if _w3_superseded:
+            # lane T final (plan_C §2.4): a W3-rewritten row in a wider non-portrait consumer
+            # (p2_instruction 208px, p2_link_marquee 256px, declared marquee 200px ...) is bounded
+            # by that consumer window, which the final pixel audit above already enforces per
+            # physical row (fatal for rewritten messages). 44 half-cells is the 176px portrait window.
+            _w3_window = min((_r['limit_px'] for _r in _pixel_audit['rows']
+                              if int(_r['source'], 16) == int(_message['msg'], 16) and _r['limit_px']
+                              and _r['profile'] not in ('p1_portrait', 'p2_portrait', 'p2_result_quote')),
+                             default=0)
+            _spacing_limit = max(_spacing_limit, _w3_window // 4)
+        if (_address in _relocated_rows and not _w3_superseded and reviewed_bteam_half_cells(_address)>44
                 and verify_reviewed_owner_bytes(rom,_message,_address)):
             _spacing_limit=reviewed_bteam_half_cells(_address)
         if _address == 0xEC312E:
@@ -25731,14 +26044,24 @@ def _build(args, publication):
         'reason': issue['cause'],
         'listed_width_half_cells': BTEAM_LISTED_WIDE_RESIDUALS.get(address),
     } for address, issue in sorted(_restoration_issues.items())]
+    # plan_C B-pin rows ship their approved wording (ledger-owned in check_rom),
+    # so they are no longer retained previous-Korean/round-2 residuals.
+    _bpin_rows = {int(key, 16) for key in _bpin.bteam_approvals()}
+    # lane T final (plan_C §2.4): a released round-2 row whose message the W3 overlay
+    # rewrote ships its ledger `to` (checked by qa_bteam_drift), so it is no longer an
+    # expected residual. A released row the overlay did not reach stays expected.
+    from qa_bteam_drift import round2_pin_release as _round2_pin_release_rows
+    _w3_released_rows = {int(key, 16) for key in _round2_pin_release_rows()
+                         if int(key, 16) in _relocated_rows
+                         and _relocated_rows[int(key, 16)][0].get('rewrite')}
     _expected_residuals = ((set(BTEAM_PREVIOUS_KOREAN_TEXT) - _reviewed_restorations)
                            | (set(BTEAM_ROUND2_RESIDUALS) & BTEAM_RESTORE_BASELINE_ROWS)) - (
-                               _restored_relocated_residuals | {0xB839B4})
+                               _restored_relocated_residuals | {0xB839B4} | _bpin_rows | _w3_released_rows)
     if set(_restoration_issues) != _expected_residuals:
         raise AssertionError('B-team previous-Korean fallback and final residual addresses differ: '
                              f'map-only={sorted(_expected_residuals - set(_restoration_issues))[:10]}, '
                              f'residual-only={sorted(set(_restoration_issues) - _expected_residuals)[:10]}')
-    if not BTEAM_LISTED_WIDE_RESIDUALS.keys() <= _restoration_issues.keys():
+    if not (BTEAM_LISTED_WIDE_RESIDUALS.keys() - _w3_released_rows) <= _restoration_issues.keys():
         raise AssertionError('Listed wide B-team row is not a residual')
     _wrong_residual = [(f'0x{a:08X}', BTEAM_PREVIOUS_KOREAN_TEXT[a], issue['rom_text'])
                        for a, issue in sorted(_restoration_issues.items())
@@ -25747,7 +26070,11 @@ def _build(args, publication):
                                                    compact=a in {0xDF8BBA, 0xDF8BC6, 0xDF8C1A})]
     if _wrong_residual:
         raise AssertionError(f'B-team residual differs from retained Korean: {_wrong_residual[:20]}')
+    from qa_bteam_drift import round2_pin_release as _round2_pin_release
+    _round2_released = {int(key, 16) for key in _round2_pin_release()}
     for _address, _entry in BTEAM_ROUND2_RESIDUALS.items():
+        if _address in _round2_released or _address in _bpin_rows:
+            continue  # plan_C B: released / B-pin row; qa_bteam_drift checks its approved `to`
         _payload = bytes.fromhex(_entry['payload_hex'])
         _issue = _restoration_issues.get(_address)
         if (bytes(rom[_address:_address + len(_payload)]) != _payload

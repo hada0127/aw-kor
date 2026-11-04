@@ -187,7 +187,7 @@ for off,text in BIG:
 # mask, so the old per-glyph fit.line() boxes do not describe its final ink.
 # Pinned crop hashes and footprints cover all five approved logo placements.
 repro=bytearray(original);b.patch_title_hangul_assets(repro)
-for off,func,logos in [(t.TITLE_OBJ_LZ77_OFF,t.make_title_index_layer,(('shared','어드밴스워즈',(23,24,211,53)),)),(t.SELECT_OBJ_LZ77_OFF,t.make_select_index_layer,(('select_top','어드밴스 워즈',(17,14,204,52)),('select_bottom','어드밴스 워즈',(25,91,212,124)))),(t.PART1_TITLE_OBJ_LZ77_OFF,t.make_part1_index_layer,(('part1','어드밴스 워즈',(17,18,207,60)),)),(t.PART2_TITLE_OBJ_LZ77_OFF,t.make_part2_index_layer,(('part2','어드밴스 워즈',(19,21,207,52)),))]:
+for off,func,logos in [(t.TITLE_OBJ_LZ77_OFF,t.make_title_index_layer,(('shared','게임보이 워즈 어드밴스',(23,24,211,53)),)),(t.SELECT_OBJ_LZ77_OFF,t.make_select_index_layer,(('select_top','게임보이 워즈 어드밴스',(17,14,204,52)),('select_bottom','게임보이 워즈 어드밴스',(25,91,212,124)))),(t.PART1_TITLE_OBJ_LZ77_OFF,t.make_part1_index_layer,(('part1','게임보이 워즈 어드밴스',(17,18,207,60)),)),(t.PART2_TITLE_OBJ_LZ77_OFF,t.make_part2_index_layer,(('part2','게임보이 워즈 어드밴스',(19,21,207,52)),))]:
  same(hex(off),lz77_decompress(rom,off)[0],lz77_decompress(repro,off)[0]);im=func()
  for name,text,box in logos:
   try:

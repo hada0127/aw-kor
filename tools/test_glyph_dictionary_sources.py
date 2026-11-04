@@ -35,14 +35,27 @@ class DictionarySourceTests(unittest.TestCase):
         from unittest.mock import patch
         from dialogue_editor import server as DE
         from scene_editor import server as CE
+        # known_fragment_addresses() reads the untracked, regenerated data/dialogue_map.json
+        # (scene_editor loads its own copy of the dialogue editor module as CE.DE, so patching
+        # load_json does not reach it). Pin it empty so the glyph-dictionary guard itself is what
+        # rejects; then, with the local map in effect, the save must still be rejected.
         for address in ('0x00D83254', '0x00D83106'):
             for module in (DE, CE):
-                handler = object.__new__(module.Handler)
-                with patch.object(module, 'load_json', return_value={'lines': [{'address': address}]}), \
-                     patch.object(module, '_LOCK', threading.RLock()):
-                    result = handler._save_line({'address': address, 'ko': '문장으로 오인'})
-                self.assertFalse(result['ok'])
-                self.assertIn('글리프 등록용 사전', result['error'])
+                de = DE if module is DE else CE.DE
+                for isolate in (True, False):
+                    handler = object.__new__(module.Handler)
+                    with patch.object(module, 'load_json', return_value={'lines': [{'address': address}]}), \
+                         patch.object(module, '_LOCK', threading.RLock()), \
+                         patch.object(de, 'known_fragment_addresses',
+                                      (lambda: frozenset()) if isolate else de.known_fragment_addresses):
+                        result = handler._save_line({'address': address, 'ko': '문장으로 오인'})
+                    self.assertFalse(result['ok'])
+                    if isolate:
+                        self.assertIn('글리프 등록용 사전', result['error'])
+            with patch.object(CE.DE, 'known_fragment_addresses', lambda: frozenset()):
+                budget = CE.line_budget({'address': address, 'slot': 12})
+            self.assertFalse(budget['editable'])
+            self.assertIn('글리프 등록용 사전', budget['reason'])
             self.assertFalse(CE.line_budget({'address': address, 'slot': 12})['editable'])
 
 

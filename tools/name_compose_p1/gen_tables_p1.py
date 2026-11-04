@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """1편 이름 조합(Phase C, PLAN B T2a)의 생성 include 세 개를 만든다.
 
-Part 2 SOURCE 파일(tools/name_compose/*, tools/hangul_compose.py)은 import 만 한다 — 1바이트도 고치지 않는다
-(PLAN B D0: 고치면 tools/part2_name_compose_blob.py 가 stale 로 빌드 실패).
+Part 2 SOURCE 파일(tools/name_compose/*, tools/hangul_compose.py)은 import 만 한다(PLAN B D0). 그 파일을 고치면
+tools/part2_name_compose_blob.py 가 stale 이 되므로 두 편 이미지를 함께 다시 만든다(2026-11-04 fixB F 부터 2편도
+clang + ld.lld 로 재생성 가능).
 
 정본(이 파일 밖에 같은 값을 다시 적지 않는다):
   - 사설 그리드 레이아웃·선택표: tools/name_compose/gen_tables.py (PRIVATE_GRID·selection_grid)
@@ -14,7 +15,7 @@ Part 2 SOURCE 파일(tools/name_compose/*, tools/hangul_compose.py)은 import �
                   `#define NC_MAX_SLOTS ((unsigned)obj[0x62])` 로 바꾼 것(core.c 는 commit(obj,…) 안에서만 씀)
   - grid_p1.inc : nc_sel_priv(6x15 u16 BE, Part 2 와 같은 바이트) · nc_row_priv_0..5(1편 행 형식
                   `0A 09`+쌍+`0A 00 00 00`, 자모 자리는 host 코드) · nc1_host_tab · nc1_placeholders
-  - p1_config.h : CONFIG → #define
+  - p1_config.h : CONFIG + FONT_CONFIG → #define
 
 nc1_host_tab 형식(엔트리 4B, 33개, .balign 4): [u8 자모 index(PREVIEW_JAMO 순, 타일 = jamo_first_tile+2*index)]
   [u8 0] [u16 host 코드, little-endian .hword]. nc1_placeholders: 8 × u16 little-endian .hword.
@@ -80,6 +81,16 @@ CONFIG = {
 }
 CONFIG_KEYS = tuple(CONFIG)
 OPTIONAL_NONE = ('pal_remap',)      # None 이 유효값인 키
+
+# L3(2026-11-04 fixB): legacy host 코드 미리보기용 FONT_BASE 경로. native 변환(0x08EFE788)이 쓰는 값이다 —
+# FONT_BASE(원본 변환 리터럴 0xEFE97C 값; 한글 빌드는 그 리터럴을 훅으로 바꾸므로 같은 값을 가진 bulk 프리로드
+# 리터럴 0xB11B74 로 대조)와 가타카나 슬롯 표 포인터(파일 0xB80278). CONFIG(빌더가 키 집합을 대조)와 분리해
+# p1_config.h 에만 낸다. test_part1_name_compose_core 가 원본·빌드 ROM 의 두 리터럴과 대조한다.
+FONT_CONFIG = {
+    'font_base': 0x08B974D0,
+    'font_kana_table': 0x08B8087C,
+}
+FONT_LITERALS = {'font_base': 0xB11B74, 'font_kana_table': 0xB80278}   # 값이 들어 있는 ROM 파일 오프셋
 
 # 1편 native 행 y2 의 x10/x11 표시는 8168/814B(원본 0x08DF8C88). Part 2 의 814A 는 1편 사전 목록에 없어
 # 빈칸으로 그려지므로 1편 native 표시 코드를 그대로 쓴다(PLAN B D7 「사전에 있을 때」 조건의 확인 결과).
@@ -209,6 +220,8 @@ def config_h(cfg=None):
                 out.append('#define NC1_PAL_REMAP_TABLE { ' + ', '.join(str(n) for n in v) + ' }\n')
         else:
             out.append(f'#define {name} 0x{v:08X}u\n')
+    for k, v in FONT_CONFIG.items():
+        out.append(f'#define NC1_{k.upper()} 0x{v:08X}u\n')
     out.append(f'#define NC1_HOST_COUNT {len(SELECTABLE)}u\n#define NC1_PLACEHOLDER_COUNT {len(PLACEHOLDERS)}u\n')
     out.append('#endif\n')
     return ''.join(out).encode('utf-8')

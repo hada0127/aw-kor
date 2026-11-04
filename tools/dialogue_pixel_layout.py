@@ -386,8 +386,21 @@ def physical_rows(tokens):
     return rows
 
 
-def audit(original, rom, manifest):
+def audit(original, rom, manifest, geometry=None):
+    """Static row/page/glyph audit of every native script message.
+
+    plan_C B (fixB step 7): messages whose window this inventory leaves
+    unverified get their declared consumer geometry from
+    data/dialogue_consumer_geometry.json (dialogue_rewrite_apply.apply_consumer_geometry;
+    ``geometry`` overrides the file for tests). Their rows are checked against
+    ``line_px``/``lines`` and the per-row ``row_px`` bounds. Overflow of such a
+    message is fatal (``overflows``/``row_overflows``) whoever wrote its text
+    (no legacy-text exemption, fixB C1 review #2). Entries without an attributed
+    renderer are not applied, so those messages stay unverified.
+    """
     glyphs=Glyphs(rom); messages=inventory(original,rom,manifest)
+    from dialogue_rewrite_apply import apply_consumer_geometry
+    apply_consumer_geometry(messages, geometry)
     prologue_native=original[0xA01970:original.find(b'\0',0xA01970)+1]
     prologue_envelopes={(r['page'],r['line']):sum(t['advance'] for t in r['tokens'])
                         for r in physical_rows(tokenize(prologue_native,'p2'))}
@@ -404,14 +417,21 @@ def audit(original, rom, manifest):
         if unknown:
             errors.append(dict(source=hex(m['source']),unknown=[(t['offset'],t['raw'].hex()) for t in unknown]))
         name,limit,max_rows=m['profile']
-        for row in physical_rows(tokens):
+        declared=name.startswith('declared:')
+        row_px=m.get('row_px')
+        for ordinal,row in enumerate(physical_rows(tokens)):
             row_limit = limit
+            if row_px is not None:
+                # Declared per-row bound (renderer unknown): an extra row has no bound.
+                row_limit = row_px[ordinal] if ordinal < len(row_px) else 0
             if m['game']=='p2' and m['source']==0xA01970:
                 # All four shipped rows remain inside the original tile-write
                 # envelopes, including its animated foreground reservation.
                 row_limit=prologue_envelopes.get((row['page'],row['line']),0)
-            if name in ('p1_portrait','p2_portrait') and row['line'] == 0 and row['end']['kind'] == 'newline':
-                row_limit += 8  # next tile is on the following row; no wait arrow here
+            # No 184px first-row allowance in either portrait window: text starts at x=57, so a
+            # 23rd cell reaches the screen edge x=239 (Part 2 fixB C1: msg 0x7B, C1evidence
+            # d_yield/y03.png). Part 1 (fixB C2, temp/fix_20261104/fixB/C2): the text panel ends
+            # at x=230 and 0xD94874/0xDC76A4/0xDF2314 ink runs to x=239, 0xD8FE00 to x=234.
             if name=='p2_result_quote' and row['end']['raw'] in (b'k',b'K'):
                 row_limit-=8
             advance=0; ink_end=0; row_glyph_errors=[]
@@ -449,17 +469,20 @@ def audit(original, rom, manifest):
                              caption_reservation_px=caption,caption_overlap=leading<caption,
                              overflow=row_limit is not None and max(advance,ink_end,choice_end)>row_limit,
                              row_overflow=max_rows is not None and row['line']>=max_rows,
+                             declared=declared,
                              glyph_errors=row_glyph_errors))
     return dict(summary=dict(native_references=sum(len(m['sites']) for m in messages),
                              physical_messages=len(messages),script_messages=sum(m['script'] for m in messages),
                              excluded_pair_ui_messages=len(excluded),physical_rows=len(rows),
                              profiles=dict(Counter(r['profile'] for r in rows)),glyph_codes=len(seen_glyphs),
-                             overflows=sum(r['overflow'] for r in rows),row_overflows=sum(r['row_overflow'] for r in rows),
+                             overflows=sum(r['overflow'] for r in rows),
+                             row_overflows=sum(r['row_overflow'] for r in rows),
+                             declared_geometry_messages=sum(m['script'] and m['profile'][0].startswith('declared:') for m in messages),
                              parser_errors=len(errors),glyph_errors=len(glyph_errors),
                              choice_rows=sum(bool(r['choice_reservation_px']) for r in rows),
                              caption_overlaps=sum(r['caption_overlap'] for r in rows),
-                             unverified_consumer_messages=sum(m['script'] and m['profile'][0]=='p2_unverified_consumer' for m in messages),
-                             state_dependent_messages=sum(m['script'] and m['profile'][0]=='p2_link_state_dependent' for m in messages),
+                             unverified_consumer_messages=sum(m['script'] and m.get('native_profile',m['profile'])[0]=='p2_unverified_consumer' for m in messages),
+                             state_dependent_messages=sum(m['script'] and m.get('native_profile',m['profile'])[0]=='p2_link_state_dependent' for m in messages),
                              runtime_claim='static native reference/font audit; contextual playback recorded separately'),
                 rows=rows,errors=errors,glyph_errors=[dict(game=k[0],code=k[1],error=v) for k,v in glyph_errors.items()],
                 excluded=excluded,rom_sha256=sha(rom),original_sha256=sha(original))

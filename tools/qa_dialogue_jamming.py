@@ -237,6 +237,10 @@ def has_hangul(text):
 
 
 def rendered_rows(rom, manifest, writes, original=None):
+    # plan_C J decision (a): spacing is audited on the exact pre-compaction form;
+    # restore_precompaction also checks every logged 「・・・」->「…」 transform.
+    from korean_punct_glyphs import restore_precompaction
+    rom, writes = restore_precompaction(rom, writes)
     owners, unsupported = final_owner_spans(writes, len(rom), skip_superseded=True)
     mapped, ranges = validate_manifest(rom, manifest, original, writes)
     codes = load_syl()
